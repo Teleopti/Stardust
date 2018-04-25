@@ -13,18 +13,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 {
 	public class GlobalSearchTestAttribute : IoCTestAttribute
 	{
-		protected override void Setup(ISystem system, IIocConfiguration configuration)
+		protected override void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddModule(new WebModule(configuration, null));
+			extend.AddModule(new WebModule(configuration, null));
 
-		    system.AddService<FakeStorage>();
-		    system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
-			system.UseTestDouble<FakeUnitOfWorkFactory>().For<IUnitOfWorkFactory>();
-			system.UseTestDouble(new FakeToggleManager(Domain.FeatureFlags.Toggles.Wfm_WebPlan_Pilot_46815)).For<IToggleManager>();
-			system.UseTestDouble<FakeNextPlanningPeriodProvider>().For<INextPlanningPeriodProvider>();
-			system.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
-			system.UseTestDouble<FakePersonFinderReadOnlyRepository>().For<IPersonFinderReadOnlyRepository>();
-			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
+		    extend.AddService<FakeStorage>();
+		}
+
+		protected override void Isolate(IIsolate isolate)
+		{
+		    isolate.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
+			isolate.UseTestDouble<FakeUnitOfWorkFactory>().For<IUnitOfWorkFactory>();
+			isolate.UseTestDouble(new FakeToggleManager(Domain.FeatureFlags.Toggles.Wfm_WebPlan_Pilot_46815)).For<IToggleManager>();
+			isolate.UseTestDouble<FakeNextPlanningPeriodProvider>().For<INextPlanningPeriodProvider>();
+			isolate.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
+			isolate.UseTestDouble<FakePersonFinderReadOnlyRepository>().For<IPersonFinderReadOnlyRepository>();
+			isolate.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 		}
 	}
 }

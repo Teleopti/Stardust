@@ -11,15 +11,15 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Skill
 {
 	[DomainTest]
-	public class SkillViewModelBuilderTest : ISetup
+	public class SkillViewModelBuilderTest : IIsolateSystem
 	{
 		public FakeSkillRepository SkillRepository;
 		public SkillViewModelBuilder Target;
 		public FakeUserUiCulture UiCulture;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble(new FakeUserUiCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserUiCulture>();
+			isolate.UseTestDouble(new FakeUserUiCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserUiCulture>();
 		}
 
 		[Test]

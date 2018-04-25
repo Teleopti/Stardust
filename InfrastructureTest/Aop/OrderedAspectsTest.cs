@@ -9,7 +9,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.InfrastructureTest.Aop
 {
 	[DomainTest]
-	public class OrderedAspectsTest : ISetup
+	public class OrderedAspectsTest : IIsolateSystem, IExtendSystem
 	{
 		public AspectedType Target;
 		private static IList<string> startResult;
@@ -100,15 +100,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 				endResult.Add("end3");
 			}
 		}
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
+		{
+			extend.AddService<AspectedType>();
+			extend.AddService<Aspect1>();
+			extend.AddService<Aspect2>();
+			extend.AddService<Aspect3>();
+		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
 			startResult = new List<string>();
 			endResult = new List<string>();
-			system.AddService<AspectedType>();
-			system.AddService<Aspect1>();
-			system.AddService<Aspect2>();
-			system.AddService<Aspect3>();
 		}
 	}
 }

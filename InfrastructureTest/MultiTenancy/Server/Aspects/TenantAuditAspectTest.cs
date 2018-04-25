@@ -16,19 +16,23 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Aspects
 {
 	[TestFixture]
 	[UnitOfWorkTest]
-	public class TenantAuditAspectTest : ISetup
+	public class TenantAuditAspectTest : IIsolateSystem, IExtendSystem
 	{
 		public TestAuditService Target;
 		public TenantUnitOfWorkManager _tenantUnitOfWorkManager;
 		public ITenantUnitOfWork TenantUnitOfWork;
 		public ICurrentHttpContext CurrentHttpContext;
 
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<TestAuditService>();
-			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
-			system.UseTestDouble<FakeCurrentHttpContext>().For<ICurrentHttpContext>();
+			extend.AddService<TestAuditService>();
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
+			isolate.UseTestDouble<FakeCurrentHttpContext>().For<ICurrentHttpContext>();
 		}
 		
 		[Test]

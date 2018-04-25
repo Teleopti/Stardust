@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 	[Toggle(Toggles.ETL_EventbasedDate_39562)]
 	[TestFixture]
 	[DomainTest]
-	public class PersonPeriodMapTests : ISetup
+	public class PersonPeriodMapTests : IExtendSystem
 	{
 		public FakeAnalyticsSkillRepository AnalyticsSkillRepository;
 		public PersonPeriodTransformer Target;
@@ -37,9 +37,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			SkillCode = Guid.NewGuid()
 		};
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<PersonPeriodTransformer>();
+			extend.AddService<PersonPeriodTransformer>();
 		}
 
 		private void setupTests()

@@ -12,14 +12,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 {
 	[TestFixture]
 	[DomainTest]
-	public class AnalyticsPersonPeriodSkillsUpdaterTests : ISetup
+	public class AnalyticsPersonPeriodSkillsUpdaterTests : IExtendSystem
 	{
 		public AnalyticsPersonPeriodSkillsUpdater Target;
 		public IAnalyticsSkillRepository AnalyticsSkillRepository;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<AnalyticsPersonPeriodSkillsUpdater>();
+			extend.AddService<AnalyticsPersonPeriodSkillsUpdater>();
 		}
 
 		private void createSkills()

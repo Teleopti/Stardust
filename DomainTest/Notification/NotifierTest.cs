@@ -23,7 +23,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.Notification
 {
 	[DomainTest]
-	public class NotifierTest : ISetup
+	public class NotifierTest : IIsolateSystem
 	{
 		public FakeNotificationSender Sender;
 		public Notifier Target;
@@ -194,17 +194,17 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			}
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<Notifier>().For<INotifier>();
-			system.UseTestDouble<MultipleNotificationSenderFactory>().For<INotificationSenderFactory>();
-			system.UseTestDouble<NotifyAppSubscriptions>().For<NotifyAppSubscriptions>();
-			system.UseTestDouble<NotificationChecker>().For<INotificationChecker>();
-			system.UseTestDouble<FakeNotificationSender>().For<INotificationSender>();
-			system.UseTestDouble<FakeNotificationConfigReader>().For<INotificationConfigReader>();
-			system.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
-			system.UseTestDouble<FakeHttpServer>().For<IHttpServer>();
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<Notifier>().For<INotifier>();
+			isolate.UseTestDouble<MultipleNotificationSenderFactory>().For<INotificationSenderFactory>();
+			isolate.UseTestDouble<NotifyAppSubscriptions>().For<NotifyAppSubscriptions>();
+			isolate.UseTestDouble<NotificationChecker>().For<INotificationChecker>();
+			isolate.UseTestDouble<FakeNotificationSender>().For<INotificationSender>();
+			isolate.UseTestDouble<FakeNotificationConfigReader>().For<INotificationConfigReader>();
+			isolate.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
+			isolate.UseTestDouble<FakeHttpServer>().For<IHttpServer>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 		}
 	}
 

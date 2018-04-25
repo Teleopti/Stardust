@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 {
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_SpeedUpEvents_74996)]
-	public class AnalyticsFactScheduleTimeMapperCacheTest : ISetup
+	public class AnalyticsFactScheduleTimeMapperCacheTest : IIsolateSystem
 	{
 		public AnalyticsAbsenceMapper Target;
 		public AnalyticsAbsenceRepositoryCountNumberOfCalls AnalyticsAbsenceRepository;
@@ -45,9 +45,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				.Should().Be.EqualTo(2);
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<AnalyticsAbsenceRepositoryCountNumberOfCalls>().For<IAnalyticsAbsenceRepository>();
+			isolate.UseTestDouble<AnalyticsAbsenceRepositoryCountNumberOfCalls>().For<IAnalyticsAbsenceRepository>();
 		}
 
 		public class AnalyticsAbsenceRepositoryCountNumberOfCalls : IAnalyticsAbsenceRepository

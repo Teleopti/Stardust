@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
 	[TestFixture]
 	[InfrastructureTest]
-	public class HangfireEventShortNameSerializationTest : ISetup
+	public class HangfireEventShortNameSerializationTest : IExtendSystem
 	{
 		public FakeHangfireEventClient JobClient;
 		public IEventPublisher Publisher;
@@ -26,10 +26,10 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		public IJsonSerializer Serializer;
 		public IJsonDeserializer Deserializer;
 		public FakeHandler Handler;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<FakeHandler>();
+			extend.AddService<FakeHandler>();
 		}
 
 		[Test]

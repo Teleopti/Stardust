@@ -20,17 +20,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Controller
 {
 
 	[TestFixture, DomainTest]
-	public class ScheduleAuditTrailControllerTest : ISetup
+	public class ScheduleAuditTrailControllerTest : IIsolateSystem, IExtendSystem
 	{
 		public ScheduleAuditTrailController Target;
 		public FakeTeamRepository TeamRepository;
 		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
 		public Global.FakePermissionProvider PermissionProvider;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+	
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<ScheduleAuditTrailController>();
-			system.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
+			extend.AddService<ScheduleAuditTrailController>();
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
 		}
 
 		[Test]

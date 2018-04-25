@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 {
 	[TestFixture]
 	[PrincipalAndStateTest]
-	public class FatClientOptimizationEventPublishingTest : ISetup, ISetupConfiguration
+	public class FatClientOptimizationEventPublishingTest : IIsolateSystem, ISetupConfiguration
 	{
 		public ICurrentUnitOfWorkFactory Uow;
 		public FakeEventPublisher EventsPublisher;
@@ -32,9 +32,9 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 			args.OptimizeScheduleChangedEvents_DontUseFromWeb = true;
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+			isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 		}
 		
 		[Test]

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 {
 	[TestFixture]
 	[DomainTest]
-	public class WorkflowControlSetPresenterTest : ISetup
+	public class WorkflowControlSetPresenterTest : IIsolateSystem
 	{
 		public FakeWorkflowControlSetRepository WorkflowControlSetRepository;
 		public FakeUnitOfWorkFactory UnitOfWorkFactory;
@@ -37,9 +37,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		private WorkflowControlSetPresenter _target;
 		private WorkflowControlSetView _view;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeUnitOfWorkFactory>().For<IUnitOfWorkFactory>();
+			isolate.UseTestDouble<FakeUnitOfWorkFactory>().For<IUnitOfWorkFactory>();
 		}
 
 		[TearDown]

@@ -14,18 +14,18 @@ using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 {
 	[TestFixture, DomainTest]
-	public class FavoriteSearchProviderTest: ISetup
+	public class FavoriteSearchProviderTest: IIsolateSystem
 	{
 		public IFavoriteSearchProvider Target;
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeFavoriteSearchRepository FavoriteSearchRepository;
 
 		private IPerson me;
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FavoriteSearchProvider>().For<IFavoriteSearchProvider>();
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			system.UseTestDouble<FakeFavoriteSearchRepository>().For<IFavoriteSearchRepository>();
+			isolate.UseTestDouble<FavoriteSearchProvider>().For<IFavoriteSearchProvider>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<FakeFavoriteSearchRepository>().For<IFavoriteSearchRepository>();
 		}
 
 		[Test]

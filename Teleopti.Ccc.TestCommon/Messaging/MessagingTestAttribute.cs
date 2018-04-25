@@ -20,18 +20,18 @@ namespace Teleopti.Ccc.TestCommon.Messaging
 			return config;
 		}
 
-		protected override void Setup(ISystem system, IIocConfiguration configuration)
+		protected override void Isolate(IIsolate isolate)
 		{
-			base.Setup(system, configuration);
+			base.Isolate(isolate);
 
-			system.UseTestDouble(new FakeUrl("http://someserver/")).For<IMessageBrokerUrl>();
-			system.UseTestDouble<MessageBrokerServerBridge>().For<IHttpServer>();
-			system.UseTestDouble(new FakeCurrentDatasource(new DataSourceState())).For<ICurrentDataSource>();
-			system.UseTestDouble(new FakeCurrentBusinessUnit()).For<ICurrentBusinessUnit>();
+			isolate.UseTestDouble(new FakeUrl("http://someserver/")).For<IMessageBrokerUrl>();
+			isolate.UseTestDouble<MessageBrokerServerBridge>().For<IHttpServer>();
+			isolate.UseTestDouble(new FakeCurrentDatasource(new DataSourceState())).For<ICurrentDataSource>();
+			isolate.UseTestDouble(new FakeCurrentBusinessUnit()).For<ICurrentBusinessUnit>();
 			
-			system.UseTestDouble<FakeMessageBrokerUnitOfWorkScope>().For<IMessageBrokerUnitOfWorkScope>();
-			system.UseTestDouble<FakeSignalR>().For<ISignalR>();
-			system.UseTestDouble<FakeMailboxRepository>().For<IMailboxRepository>();
+			isolate.UseTestDouble<FakeMessageBrokerUnitOfWorkScope>().For<IMessageBrokerUnitOfWorkScope>();
+			isolate.UseTestDouble<FakeSignalR>().For<ISignalR>();
+			isolate.UseTestDouble<FakeMailboxRepository>().For<IMailboxRepository>();
 		}
 	}
 }

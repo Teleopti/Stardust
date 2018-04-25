@@ -22,7 +22,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 {
 	[TestFixture, MyTimeWebTest]
-	public class ShiftTradeScheduleViewModelMapperByFakeTest : ISetup
+	public class ShiftTradeScheduleViewModelMapperByFakeTest : IIsolateSystem
 	{
 		public IShiftTradeScheduleViewModelMapper Mapper;
 		public IPersonRepository PersonRepository;
@@ -32,9 +32,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakePeopleForShiftTradeFinder PeopleForShiftTradeFinder;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakePeopleForShiftTradeFinder>().For<IPeopleForShiftTradeFinder>();
+			isolate.UseTestDouble<FakePeopleForShiftTradeFinder>().For<IPeopleForShiftTradeFinder>();
 		}
 
 		protected void setUpData()

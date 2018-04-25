@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 {
 	[TestFixture]
 	[ScheduleDictionaryPersistTest]
-	public class ScheduleChangedMessageDictionaryPersisterTest : ISetup
+	public class ScheduleChangedMessageDictionaryPersisterTest : IIsolateSystem
 	{
 		public FakeMessageSender MessageSender;
 		public IScheduleDictionaryPersister Target;
@@ -27,9 +27,9 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 		public ICurrentBusinessUnit BusinessUnit;
 		public FakeInitiatorIdentifier InitiatorIdentifier;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeInitiatorIdentifier>().For<IInitiatorIdentifier>();
+			isolate.UseTestDouble<FakeInitiatorIdentifier>().For<IInitiatorIdentifier>();
 		}
 
 		[Test]

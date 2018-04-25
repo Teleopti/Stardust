@@ -23,7 +23,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Intraday
 {
 	[DomainTest]
-	public class PerformanceViewModelCreatorTest : ISetup
+	public class PerformanceViewModelCreatorTest : IIsolateSystem
 	{
 		public PerformanceViewModelCreator Target;
 		public MutableNow Now;
@@ -41,9 +41,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		private readonly ServiceAgreement _slaTwoHours =
 			new ServiceAgreement(new ServiceLevel(new Percent(1), 7200), new Percent(0), new Percent(1));
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
+			isolate.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
 			_staffingViewModelCreatorTestHelper = new StaffingViewModelCreatorTestHelper(StaffingCalculatorService);
 		}
 

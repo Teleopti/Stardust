@@ -12,14 +12,18 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.Aop
 {
 	[DomainTest]
-	public class LogInfoAspectTest : ISetup
+	public class LogInfoAspectTest : IIsolateSystem, IExtendSystem
 	{
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<Service>();
+			extend.AddService<Service>();
+		}
+		
+		public void Isolate(IIsolate isolate)
+		{
 			var log = new LogSpy();
-			system.UseTestDouble(log).For<ILog>();
-			system.UseTestDouble(new FakeLogManager(log)).For<ILogManager>();
+			isolate.UseTestDouble(log).For<ILog>();
+			isolate.UseTestDouble(new FakeLogManager(log)).For<ILogManager>();
 		}
 
 		public LogSpy Logger;
@@ -155,7 +159,6 @@ namespace Teleopti.Ccc.DomainTest.Aop
 
 			Logger.InfoMessage.Should().Contain("Lazy");
 		}
-		
 	}
 
 	public class Service

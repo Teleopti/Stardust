@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
 	[TestFixture]
-	public class CancelAbsenceRequestCommandHandlerEventTest :ISetup
+	public class CancelAbsenceRequestCommandHandlerEventTest :IIsolateSystem, IExtendSystem
 	{
 		public CancelAbsenceRequestCommandHandler Target;
 		public ScheduleChangedEventDetector ScheduleChangedEventDetector;
@@ -60,26 +60,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private IPerson person;
 		private IAbsence absence;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IIocConfiguration configuration)
+		{	
+			extend.AddService<CancelAbsenceRequestCommandHandler>();	
+		}
+		
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<ScheduleChangedEventDetector>().For<IHandleEvent<ScheduleChangedEvent>>();
-			system.UseTestDouble<PersonAbsenceRemover>().For<IPersonAbsenceRemover>(); 
-			system.UseTestDouble<SaveSchedulePartService>().For<ISaveSchedulePartService>();
-			system.UseTestDouble<PersonAbsenceCreator>().For<IPersonAbsenceCreator>();		
-			system.UseTestDouble<PersonRequestAuthorizationCheckerConfigurable>().For<IPersonRequestCheckAuthorization>();
-			system.UseTestDouble<ApprovalServiceForTest>().For<IRequestApprovalService>();
-			system.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
-			system.UseTestDouble<FakePersonRequestRepository>().For<IPersonRequestRepository>();
-			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
-			system.UseTestDouble<CancelAbsenceRequestCommandValidator>().For<ICancelAbsenceRequestCommandValidator>();
-			system.UseTestDouble<WriteProtectedScheduleCommandValidator>().For<IWriteProtectedScheduleCommandValidator>();
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			system.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
-			system.UseTestDouble<FakeScheduleDifferenceSaver_DoNotUse>().For<IScheduleDifferenceSaver>();
-			system.UseTestDouble<FakeEventHandler>().For<FakeEventHandler>();
+			isolate.UseTestDouble<ScheduleChangedEventDetector>().For<IHandleEvent<ScheduleChangedEvent>>();
+			isolate.UseTestDouble<PersonAbsenceRemover>().For<IPersonAbsenceRemover>(); 
+			isolate.UseTestDouble<SaveSchedulePartService>().For<ISaveSchedulePartService>();
+			isolate.UseTestDouble<PersonAbsenceCreator>().For<IPersonAbsenceCreator>();		
+			isolate.UseTestDouble<PersonRequestAuthorizationCheckerConfigurable>().For<IPersonRequestCheckAuthorization>();
+			isolate.UseTestDouble<ApprovalServiceForTest>().For<IRequestApprovalService>();
+			isolate.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
+			isolate.UseTestDouble<FakePersonRequestRepository>().For<IPersonRequestRepository>();
+			isolate.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
+			isolate.UseTestDouble<CancelAbsenceRequestCommandValidator>().For<ICancelAbsenceRequestCommandValidator>();
+			isolate.UseTestDouble<WriteProtectedScheduleCommandValidator>().For<IWriteProtectedScheduleCommandValidator>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
+			isolate.UseTestDouble<FakeScheduleDifferenceSaver_DoNotUse>().For<IScheduleDifferenceSaver>();
+			isolate.UseTestDouble<FakeEventHandler>().For<FakeEventHandler>();
 			var userCulture = new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture());
-			system.UseTestDouble(userCulture).For<IUserCulture>();			
-			system.AddService<CancelAbsenceRequestCommandHandler>();			
+			isolate.UseTestDouble(userCulture).For<IUserCulture>();				
 		}
 		
 		private void commonSetup()

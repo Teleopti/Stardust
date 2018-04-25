@@ -15,15 +15,15 @@ using Teleopti.Wfm.Administration.Models;
 namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 {
 	[TenantTest]
-	public class AdminAccessTokenRepositoryTest : ISetup
+	public class AdminAccessTokenRepositoryTest : IIsolateSystem
 	{
 		public ITenantUnitOfWork TenantUnitOfWork;
 		public AccountController AccountController;
 		public MutableNow Now;
 		
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<MutableNow>().For<INow>();
+			isolate.UseTestDouble<MutableNow>().For<INow>();
 		}
 		[Test]
 		public void AccessTokenShouldBecomeInvalidAfter41Minutes()

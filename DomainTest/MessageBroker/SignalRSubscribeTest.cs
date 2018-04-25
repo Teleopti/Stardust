@@ -14,17 +14,17 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker
 {
 	[TestFixture]
 	[MessagingTest]
-	public class SignalRSubscribeTest : ISetup
+	public class SignalRSubscribeTest : IIsolateSystem
 	{
 		public IMessageBrokerServer Server;
 		public FakeSignalR SignalR;
 		public FakeCurrentDatasource Datasource;
 		public FakeCurrentBusinessUnit BusinessUnit;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble(new FakeCurrentDatasource(new DataSourceState())).For<ICurrentDataSource>();
-			system.UseTestDouble(new FakeCurrentBusinessUnit()).For<ICurrentBusinessUnit>();
+			isolate.UseTestDouble(new FakeCurrentDatasource(new DataSourceState())).For<ICurrentDataSource>();
+			isolate.UseTestDouble(new FakeCurrentBusinessUnit()).For<ICurrentBusinessUnit>();
 		}
 		
 		[Test]

@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 	[Toggle(Toggles.ETL_EventbasedDate_39562)]
 	[TestFixture(true)]
 	[TestFixture(false)]
-	public class AnalyticsScheduleChangeUpdaterTest : ISetup, IConfigureToggleManager
+	public class AnalyticsScheduleChangeUpdaterTest : IIsolateSystem, IConfigureToggleManager
 	{
 		private readonly bool _resourcePlannerSpeedUpEvents48769;
 		public AnalyticsScheduleChangeUpdater Target;
@@ -102,9 +102,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 				toggleManager.Enable(Toggles.ResourcePlanner_SpeedUpEvents_48769);
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<fakeAwayAnalyticsStuffTooHardToSetItUp>()
+			isolate.UseTestDouble<fakeAwayAnalyticsStuffTooHardToSetItUp>()
 				.For<IAnalyticsScheduleRepository, IIntervalLengthFetcher, IAnalyticsPersonPeriodRepository, IAnalyticsScenarioRepository>();
 		}
 

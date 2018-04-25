@@ -26,7 +26,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 {
 	[DomainTest]
-	public class MaxSeatMustNotDependOnStateHolderTest : ISetup
+	public class MaxSeatMustNotDependOnStateHolderTest : IIsolateSystem
 	{
 		public MaxSeatOptimization Target;
 		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
@@ -100,9 +100,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			});
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<schedulerStateHolderThatThrows>().For<ISchedulerStateHolder, ISchedulingResultStateHolder>();
+			isolate.UseTestDouble<schedulerStateHolderThatThrows>().For<ISchedulerStateHolder, ISchedulingResultStateHolder>();
 		}
 
 

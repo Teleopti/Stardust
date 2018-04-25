@@ -20,39 +20,42 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.IoC
 {
 	class OutboundTestAttribute : IoCTestAttribute
 	{
-		protected override void Setup(ISystem system, IIocConfiguration configuration)
+		protected override void Extend(IExtend extend, IIocConfiguration configuration)
+		{
+			extend.AddModule(new WebModule(configuration, null));
+			extend.AddModule(new OutboundAreaModule(false));
+			extend.AddService<FakeStorage>();
+		}
+
+		protected override void Isolate(IIsolate isolate)
 		{
 			var principalAuthorization = new FullPermission();
 			CurrentAuthorization.DefaultTo(principalAuthorization);
 
-			system.AddModule(new WebModule(configuration, null));
-			system.AddModule(new OutboundAreaModule(false));
-
-			system.AddService<FakeStorage>();
-			system.UseTestDouble(new FakeScenarioRepository(new Scenario("Default") {DefaultScenario = true}))
+			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("Default") {DefaultScenario = true}))
 				.For<IScenarioRepository>();
-			system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
-			system.UseTestDouble<FakeWorkloadRepository>().For<IWorkloadRepository>();
-			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
-			system.UseTestDouble<FakeSkillDayRepository>().For<ISkillDayRepository>();
-			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
-			system.UseTestDouble<FakeAbsenceRepository>().For<IAbsenceRepository>();
-			system.UseTestDouble<FakeDayOffTemplateRepository>().For<IDayOffTemplateRepository>();
-			system.UseTestDouble<FakeShiftCategoryRepository>().For<IShiftCategoryRepository>();
-			system.UseTestDouble<FakeContractRepository>().For<IContractRepository>();
-			system.UseTestDouble<FakeContractScheduleRepository>().For<IContractScheduleRepository>();
-			system.UseTestDouble<FakeScheduleTagRepository>().For<IScheduleTagRepository>();
-			system.UseTestDouble<FakeWorkflowControlSetRepository>().For<IWorkflowControlSetRepository>();
-			system.UseTestDouble<FakePartTimePercentageRepository>().For<IPartTimePercentageRepository>();
-			system.UseTestDouble<FakeMultiplicatorDefinitionSetRepository>().For<IMultiplicatorDefinitionSetRepository>();
-			system.UseTestDouble<FakeCampaignRepository>().For<IOutboundCampaignRepository>();
-			system.UseTestDouble<FakeRepositoryFactory>().For<IRepositoryFactory>();
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
-			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
-			system.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
-			system.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>();
-			system.UseTestDouble<FakeOutboundScheduledResourcesCacher>().For<IOutboundScheduledResourcesCacher>();
+			isolate.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
+			isolate.UseTestDouble<FakeWorkloadRepository>().For<IWorkloadRepository>();
+			isolate.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
+			isolate.UseTestDouble<FakeSkillDayRepository>().For<ISkillDayRepository>();
+			isolate.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
+			isolate.UseTestDouble<FakeAbsenceRepository>().For<IAbsenceRepository>();
+			isolate.UseTestDouble<FakeDayOffTemplateRepository>().For<IDayOffTemplateRepository>();
+			isolate.UseTestDouble<FakeShiftCategoryRepository>().For<IShiftCategoryRepository>();
+			isolate.UseTestDouble<FakeContractRepository>().For<IContractRepository>();
+			isolate.UseTestDouble<FakeContractScheduleRepository>().For<IContractScheduleRepository>();
+			isolate.UseTestDouble<FakeScheduleTagRepository>().For<IScheduleTagRepository>();
+			isolate.UseTestDouble<FakeWorkflowControlSetRepository>().For<IWorkflowControlSetRepository>();
+			isolate.UseTestDouble<FakePartTimePercentageRepository>().For<IPartTimePercentageRepository>();
+			isolate.UseTestDouble<FakeMultiplicatorDefinitionSetRepository>().For<IMultiplicatorDefinitionSetRepository>();
+			isolate.UseTestDouble<FakeCampaignRepository>().For<IOutboundCampaignRepository>();
+			isolate.UseTestDouble<FakeRepositoryFactory>().For<IRepositoryFactory>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
+			isolate.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
+			isolate.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
+			isolate.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>();
+			isolate.UseTestDouble<FakeOutboundScheduledResourcesCacher>().For<IOutboundScheduledResourcesCacher>();
 		}
 	}
 }

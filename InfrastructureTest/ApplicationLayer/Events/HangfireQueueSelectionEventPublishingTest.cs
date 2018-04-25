@@ -10,14 +10,14 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
 	[TestFixture]
 	[HangfireTest]
-	public class HangfireQueueSelectionEventPublishingTest : ISetup
+	public class HangfireQueueSelectionEventPublishingTest : IExtendSystem
 	{
 		public HangfireUtilities Hangfire;
 		public IEventPublisher Publisher;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<QueuingHandler>();
+			extend.AddService<QueuingHandler>();
 		}
 
 		[Test]

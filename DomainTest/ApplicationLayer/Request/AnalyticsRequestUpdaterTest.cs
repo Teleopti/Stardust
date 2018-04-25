@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 {
 	[TestFixture]
 	[DomainTest]
-	public class AnalyticsRequestUpdaterTest : ISetup
+	public class AnalyticsRequestUpdaterTest : IExtendSystem
 	{
 		public AnalyticsRequestUpdater Target;
 		public IPersonRequestRepository PersonRequestRepository;
@@ -33,9 +33,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 		public IAnalyticsAbsenceRepository AnalyticsAbsenceRepository;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<AnalyticsRequestUpdater>();
+			extend.AddService<AnalyticsRequestUpdater>();
 		}
 
 		[Test]

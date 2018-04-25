@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
 	[TestFixture]
 	[MyTimeWebTest]
-	public class RequestsShiftTradeBulletinBoardControllerTest : ISetup
+	public class RequestsShiftTradeBulletinBoardControllerTest : IIsolateSystem
 	{
 		public RequestsShiftTradeBulletinBoardController Target;
 		public FakePersonRequestRepository PersonRequestRepository;
@@ -34,9 +34,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakePersonScheduleDayReadModelFinder PersonScheduleDayReadModelFinder;
 		public ITeamRepository TeamRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakePeopleForShiftTradeFinder>().For<IPeopleForShiftTradeFinder>();
+			isolate.UseTestDouble<FakePeopleForShiftTradeFinder>().For<IPeopleForShiftTradeFinder>();
 		}
 
 		[Test]

@@ -15,7 +15,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 {
 	[DomainTest]
-	public class ShiftStartTimeProviderTest : ISetup
+	public class ShiftStartTimeProviderTest : IIsolateSystem
 	{
 		public IShiftStartTimeProvider ShiftStartTimeProvider;
 		public ICurrentScenario CurrentScenario;
@@ -23,9 +23,9 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		public FakeActivityRepository FakeActivityRepository;
 		public FakePersonAbsenceRepository PersonAbsenceRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble(new FakeScenarioRepository(new Scenario("default") { DefaultScenario = true }))
+			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("default") { DefaultScenario = true }))
 				.For<IScenarioRepository>();
 		}
 

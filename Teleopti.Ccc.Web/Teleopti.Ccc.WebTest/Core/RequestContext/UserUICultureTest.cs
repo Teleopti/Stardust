@@ -11,16 +11,16 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.WebTest.Core.RequestContext
 {
 	[IoCTest]
-	public class UserUiCultureTest : ISetup
+	public class UserUiCultureTest : IIsolateSystem
 	{
 		public IUserUiCulture Target;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
 			var person = PersonFactory.CreatePerson();
 			person.PermissionInformation.SetUICulture(CultureInfo.GetCultureInfo(1053));
 			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("name", null, null, null, null), person);
-			system.UseTestDouble(new FakeCurrentTeleoptiPrincipal(principal)).For<ICurrentTeleoptiPrincipal>();
+			isolate.UseTestDouble(new FakeCurrentTeleoptiPrincipal(principal)).For<ICurrentTeleoptiPrincipal>();
 		}
 
 		[Test]

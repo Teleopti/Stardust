@@ -18,7 +18,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {
 	[DomainTest]
-	public class NewNightlyRestRuleTest : ISetup
+	public class NewNightlyRestRuleTest : IIsolateSystem
 	{
 		public IScheduleStorage ScheduleStorage;
 		public ICurrentScenario Scenario;
@@ -26,11 +26,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
 		private DateOnly personPeriodStartDate = new DateOnly(2010, 1, 1);
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble(new FakeScenarioRepository(new Scenario("default") { DefaultScenario = true }))
+			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("default") { DefaultScenario = true }))
 				.For<IScenarioRepository>();
-			system.UseTestDouble<NewNightlyRestRule>().For<NewNightlyRestRule>();
+			isolate.UseTestDouble<NewNightlyRestRule>().For<NewNightlyRestRule>();
 		}
 
 		[Test]

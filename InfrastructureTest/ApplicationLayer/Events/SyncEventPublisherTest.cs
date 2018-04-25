@@ -17,17 +17,21 @@ using AggregateException = System.AggregateException;
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
 	[InfrastructureTest]
-	public class SyncEventPublisherTest : ISetup
+	public class SyncEventPublisherTest : IIsolateSystem, IExtendSystem
 	{
 		public IEventPublisher Publisher;
 		public TestHandler Handler;
 		public IDataSourceScope DataSource;
 		public FakeDataSourceForTenant DataSources;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeDataSourceForTenant>().For<IDataSourceForTenant>();
-			system.AddService<TestHandler>();
+			extend.AddService<TestHandler>();
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FakeDataSourceForTenant>().For<IDataSourceForTenant>();
 		}
 
 		[Test]

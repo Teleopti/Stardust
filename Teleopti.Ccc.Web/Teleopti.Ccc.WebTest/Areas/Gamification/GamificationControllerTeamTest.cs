@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 {
 	[TestFixture]
 	[DomainTest]
-	public class GamificationControllerTeamTest : ISetup
+	public class GamificationControllerTeamTest : IExtendSystem
 	{
 		public FakeGamificationSettingRepository GamificationSettingRepository;
 		public FakeTeamGamificationSettingRepository TeamGamificationSettingRepository;
@@ -26,10 +26,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 		public FakeSiteRepository SiteRepository;
 		public GamificationController Target;
 		
-		
-		public void Setup(ISystem system, IIocConfiguration configuration)
+				
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddModule(new WebModule(configuration, null));
+			extend.AddModule(new WebModule(configuration, null));
 		}
 		
 		[Test]

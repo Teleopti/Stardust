@@ -19,7 +19,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Intraday
 {
 	[DomainTest]
-	public class StaffingViewModelCreatorEmailTest : ISetup
+	public class StaffingViewModelCreatorEmailTest : IIsolateSystem
 	{
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
@@ -40,9 +40,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 		private const int minutesPerInterval = 15;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
+			isolate.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
 			_staffingViewModelCreatorTestHelper = new StaffingViewModelCreatorTestHelper(StaffingCalculatorServiceFacade);
 		}
 

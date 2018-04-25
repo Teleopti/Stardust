@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 {
 	[DomainTest]
 	[TestFixture]
-	public class AbsenceRequestWaitlistProviderTest : ISetup
+	public class AbsenceRequestWaitlistProviderTest : IIsolateSystem
 	{
 		public IPersonRepository PersonRepository;
 		public IPersonRequestRepository PersonRequestRepository;
@@ -30,9 +30,9 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 		private WorkflowControlSet _workflowControlSet;
 		private DateTime baseTime;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakePersonRepositoryLegacy2>().For<IPersonRepository>();
+			isolate.UseTestDouble<FakePersonRepositoryLegacy2>().For<IPersonRepository>();
 
 			_absence = AbsenceFactory.CreateAbsence("Holiday");
 

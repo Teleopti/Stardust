@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 {
 
 	[TestFixture, DomainTest]
-	public class GroupPageViewModelFactoryTest : ISetup
+	public class GroupPageViewModelFactoryTest : IIsolateSystem, IExtendSystem
 	{
 		public GroupPageViewModelFactory Target;
 		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
@@ -31,15 +31,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 		public FakeOptionalColumnRepository OptionalColumnRepository;
 		public FakePersonRepository PersonRepository;
 		public ITeamRepository TeamRepository;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<UserTextTranslator>().For<IUserTextTranslator>();
-			system.UseTestDouble<FakeUserUiCulture>().For<IUserUiCulture>();
-			system.AddService<GroupPageViewModelFactory>();
-			system.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			system.UseTestDouble<FakeOptionalColumnRepository>().For<IOptionalColumnRepository>();
+			extend.AddService<GroupPageViewModelFactory>();
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<UserTextTranslator>().For<IUserTextTranslator>();
+			isolate.UseTestDouble<FakeUserUiCulture>().For<IUserUiCulture>();
+			isolate.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<FakeOptionalColumnRepository>().For<IOptionalColumnRepository>();
 		}
 
 

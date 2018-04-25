@@ -15,7 +15,7 @@ using Teleopti.Wfm.Administration.Core;
 namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 {
 	[TenantTest]
-	public class GenerateRtaKeyForTenant : ISetup
+	public class GenerateRtaKeyForTenant : IIsolateSystem
 	{
 		public DatabaseController Database;
 		public ImportController Import;
@@ -23,13 +23,13 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		public ITenantUnitOfWork TenantUnitOfWork;
 		public TestPollutionCleaner TestPollutionCleaner;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<DatabaseHelperWrapperFake>().For<IDatabaseHelperWrapper>();
-			system.UseTestDouble<CheckDatabaseVersionsFake>().For<ICheckDatabaseVersions>();
-			system.UseTestDouble<UpdateCrossDatabaseViewFake>().For<IUpdateCrossDatabaseView>();
-			system.UseTestDouble<GetImportUsersFake>().For<IGetImportUsers>();
-			system.UseTestDouble<CreateBusinessUnitFake>().For<ICreateBusinessUnit>();
+			isolate.UseTestDouble<DatabaseHelperWrapperFake>().For<IDatabaseHelperWrapper>();
+			isolate.UseTestDouble<CheckDatabaseVersionsFake>().For<ICheckDatabaseVersions>();
+			isolate.UseTestDouble<UpdateCrossDatabaseViewFake>().For<IUpdateCrossDatabaseView>();
+			isolate.UseTestDouble<GetImportUsersFake>().For<IGetImportUsers>();
+			isolate.UseTestDouble<CreateBusinessUnitFake>().For<ICreateBusinessUnit>();
 		}
 		
 		[Test]

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
 	[TestFixture]
 	[InfrastructureTest]
-	public class HangfireEventPublishingTest : ISetup
+	public class HangfireEventPublishingTest : IIsolateSystem, IExtendSystem
 	{
 		public FakeHangfireEventClient JobClient;
 		public IEventPublisher Target;
@@ -26,18 +26,22 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		public IJsonDeserializer Deserializer;
 		public FakeDataSourceForTenant DataSources;
 		public IDataSourceScope DataSource;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeHangfireEventClient>().For<IHangfireEventClient>();
-			system.UseTestDouble<FakeDataSourceForTenant>().For<IDataSourceForTenant>();
+			extend.AddService<TestHandler>();
+			extend.AddService<TestMultiHandler1>();
+			extend.AddService<TestMultiHandler2>();
+			extend.AddService<TestAspectedHandler>();
+			extend.AddService<TestBothBusHandler>();
+			extend.AddService<TestBothHangfireHandler>();
+		}
 
-			system.AddService<TestHandler>();
-			system.AddService<TestMultiHandler1>();
-			system.AddService<TestMultiHandler2>();
-			system.AddService<TestAspectedHandler>();
-			system.AddService<TestBothBusHandler>();
-			system.AddService<TestBothHangfireHandler>();
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FakeHangfireEventClient>().For<IHangfireEventClient>();
+			isolate.UseTestDouble<FakeDataSourceForTenant>().For<IDataSourceForTenant>();
+
 		}
 
 		[Test]

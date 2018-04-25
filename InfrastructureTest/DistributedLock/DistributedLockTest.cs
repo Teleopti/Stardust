@@ -11,15 +11,15 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 {
 	[TestFixture]
 	[InfrastructureTest]
-	public class DistributedLockTest : ISetup
+	public class DistributedLockTest : IExtendSystem
 	{
 		public IDistributedLockAcquirer Target;
 		public FakeConfigReader ConfigReader;
 		public Lock1 Lock1Proxy;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<Lock1>();
+			extend.AddService<Lock1>();
 		}
 		
 		[Test]

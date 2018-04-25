@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 {
 	[TestFixture]
 	[DomainTest]
-	public class BuildInGroupsAnalyticsUpdaterTest : ISetup
+	public class BuildInGroupsAnalyticsUpdaterTest : IExtendSystem
 	{
 		public BuildInGroupsAnalyticsUpdater Target;
 		public IAnalyticsGroupPageRepository AnalyticsGroupPageRepository;
@@ -29,10 +29,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 		public IContractScheduleRepository ContractScheduleRepository;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		private readonly Guid _businessUnitId = Guid.NewGuid();
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<BuildInGroupsAnalyticsUpdater>();
+			extend.AddService<BuildInGroupsAnalyticsUpdater>();
 		}
 
 		[Test]

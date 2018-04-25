@@ -49,79 +49,83 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		private IDisposable _tenantScope;
 		private Person _loggedOnPerson;
 
-		protected override void Setup(ISystem system, IIocConfiguration configuration)
+		protected override void Extend(IExtend extend, IIocConfiguration configuration)
+		{
+			extend.AddModule(new WebModule(configuration, null));
+
+			extend.AddService<FakeStorage>();
+			extend.AddService<FakeDatabase>();
+		}
+
+		protected override void Isolate(IIsolate isolate)
 		{
 			var principalAuthorization = new FullPermission();
 
 			CurrentAuthorization.DefaultTo(principalAuthorization);
 
-			system.AddModule(new WebModule(configuration, null));
-
-			system.AddService<FakeStorage>();
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			system.UseTestDouble(new FakePermissionProvider(false)).For<IPermissionProvider>();
-			system.UseTestDouble(principalAuthorization).For<IAuthorization>();
-			system.UseTestDouble<FakePersonRequestRepository>().For<IPersonRequestRepository>();
-			system.UseTestDouble<FakeSeatBookingRepository>().For<ISeatBookingRepository>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble(new FakePermissionProvider(false)).For<IPermissionProvider>();
+			isolate.UseTestDouble(principalAuthorization).For<IAuthorization>();
+			isolate.UseTestDouble<FakePersonRequestRepository>().For<IPersonRequestRepository>();
+			isolate.UseTestDouble<FakeSeatBookingRepository>().For<ISeatBookingRepository>();
 			var scenarioRepository = new FakeScenarioRepository();
 			scenarioRepository.Has("Default");
-			system.UseTestDouble(scenarioRepository).For<IScenarioRepository>();
-			system.UseTestDouble<FakeBudgetDayRepository>().For<IBudgetDayRepository>();
-			system.UseTestDouble<FakeScheduleProjectionReadOnlyPersister>().For<IScheduleProjectionReadOnlyPersister>();
-			system.UseTestDouble<FakeRepositoryFactory>().For<IRepositoryFactory>();
-			system.UseTestDouble<FakePersonScheduleDayReadModelFinder>().For<IPersonScheduleDayReadModelFinder>();
-			system.UseTestDouble<FakePersonForScheduleFinder>().For<IPersonForScheduleFinder>();
-			system.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
-			system.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
-			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
-			system.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
-			system.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
-			system.UseTestDouble<FakeMeetingRepository>().For<IMeetingRepository>();
-			system.UseTestDouble<FakeNoteRepository>().For<INoteRepository>();
-			system.UseTestDouble<FakePublicNoteRepository>().For<IPublicNoteRepository>();
-			system.UseTestDouble<FakeAgentDayScheduleTagRepository>().For<IAgentDayScheduleTagRepository>();
-			system.UseTestDouble<FakeOvertimeAvailabilityRepository>().For<IOvertimeAvailabilityRepository>();
-			system.UseTestDouble<FakePersonAvailabilityRepository>().For<IPersonAvailabilityRepository>();
-			system.UseTestDouble<FakePersonRotationRepository>().For<IPersonRotationRepository>();
-			system.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
-			system.UseTestDouble<FakePreferenceDayRepository>().For<IPreferenceDayRepository>();
-			system.UseTestDouble<FakeStudentAvailabilityDayRepository>().For<IStudentAvailabilityDayRepository>();
-			system.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
-			system.UseTestDouble<FakeShiftTradeLightValidator>().For<IShiftTradeLightValidator>();
-			system.UseTestDouble<FakePersonContractProvider>().For<FakePersonContractProvider>();
-			system.UseTestDouble<FakeRuleSetBagRepository>().For<IRuleSetBagRepository>();
-			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
-			system.UseTestDouble<FindPersonInfoFake>().For<IFindPersonInfo>();
-			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
-			system.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();
-			system.UseTestDouble<PasswordPolicyFake>().For<IPasswordPolicy>();
-			system.UseTestDouble<CurrentTenantFake>().For<ICurrentTenant>();
-			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
-			system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateEnglishCulture())).For<IUserCulture>();
-			system.UseTestDouble<FakePushMessageDialogueRepository>().For<IPushMessageDialogueRepository>();
-			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
-			system.UseTestDouble<ScheduleMinMaxTimeCalculator>().For<IScheduleMinMaxTimeCalculator>();
-			system.UseTestDouble<SiteOpenHourProvider>().For<ISiteOpenHourProvider>();
-			system.UseTestDouble<StaffingDataAvailablePeriodProvider>().For<IStaffingDataAvailablePeriodProvider>();
-			system.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>(); 
-			system.UseTestDouble<FakeGamificationSettingRepository>().For<IGamificationSettingRepository>(); 
-			system.UseTestDouble<FakeTeamGamificationSettingRepository>().For<ITeamGamificationSettingRepository>();
-			system.UseTestDouble<FakeAgentBadgeTransactionRepository>().For<IAgentBadgeTransactionRepository>();
-			system.UseTestDouble<FakeAgentBadgeWithRankTransactionRepository>().For<IAgentBadgeWithRankTransactionRepository>();
-			system.UseTestDouble<SkillIntradayStaffingFactory>().For<SkillIntradayStaffingFactory>();
+			isolate.UseTestDouble(scenarioRepository).For<IScenarioRepository>();
+			isolate.UseTestDouble<FakeBudgetDayRepository>().For<IBudgetDayRepository>();
+			isolate.UseTestDouble<FakeScheduleProjectionReadOnlyPersister>().For<IScheduleProjectionReadOnlyPersister>();
+			isolate.UseTestDouble<FakeRepositoryFactory>().For<IRepositoryFactory>();
+			isolate.UseTestDouble<FakePersonScheduleDayReadModelFinder>().For<IPersonScheduleDayReadModelFinder>();
+			isolate.UseTestDouble<FakePersonForScheduleFinder>().For<IPersonForScheduleFinder>();
+			isolate.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
+			isolate.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
+			isolate.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
+			isolate.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
+			isolate.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
+			isolate.UseTestDouble<FakeMeetingRepository>().For<IMeetingRepository>();
+			isolate.UseTestDouble<FakeNoteRepository>().For<INoteRepository>();
+			isolate.UseTestDouble<FakePublicNoteRepository>().For<IPublicNoteRepository>();
+			isolate.UseTestDouble<FakeAgentDayScheduleTagRepository>().For<IAgentDayScheduleTagRepository>();
+			isolate.UseTestDouble<FakeOvertimeAvailabilityRepository>().For<IOvertimeAvailabilityRepository>();
+			isolate.UseTestDouble<FakePersonAvailabilityRepository>().For<IPersonAvailabilityRepository>();
+			isolate.UseTestDouble<FakePersonRotationRepository>().For<IPersonRotationRepository>();
+			isolate.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
+			isolate.UseTestDouble<FakePreferenceDayRepository>().For<IPreferenceDayRepository>();
+			isolate.UseTestDouble<FakeStudentAvailabilityDayRepository>().For<IStudentAvailabilityDayRepository>();
+			isolate.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
+			isolate.UseTestDouble<FakeShiftTradeLightValidator>().For<IShiftTradeLightValidator>();
+			isolate.UseTestDouble<FakePersonContractProvider>().For<FakePersonContractProvider>();
+			isolate.UseTestDouble<FakeRuleSetBagRepository>().For<IRuleSetBagRepository>();
+			isolate.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
+			isolate.UseTestDouble<FindPersonInfoFake>().For<IFindPersonInfo>();
+			isolate.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
+			isolate.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();
+			isolate.UseTestDouble<PasswordPolicyFake>().For<IPasswordPolicy>();
+			isolate.UseTestDouble<CurrentTenantFake>().For<ICurrentTenant>();
+			isolate.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
+			isolate.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateEnglishCulture())).For<IUserCulture>();
+			isolate.UseTestDouble<FakePushMessageDialogueRepository>().For<IPushMessageDialogueRepository>();
+			isolate.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
+			isolate.UseTestDouble<ScheduleMinMaxTimeCalculator>().For<IScheduleMinMaxTimeCalculator>();
+			isolate.UseTestDouble<SiteOpenHourProvider>().For<ISiteOpenHourProvider>();
+			isolate.UseTestDouble<StaffingDataAvailablePeriodProvider>().For<IStaffingDataAvailablePeriodProvider>();
+			isolate.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>(); 
+			isolate.UseTestDouble<FakeGamificationSettingRepository>().For<IGamificationSettingRepository>(); 
+			isolate.UseTestDouble<FakeTeamGamificationSettingRepository>().For<ITeamGamificationSettingRepository>();
+			isolate.UseTestDouble<FakeAgentBadgeTransactionRepository>().For<IAgentBadgeTransactionRepository>();
+			isolate.UseTestDouble<FakeAgentBadgeWithRankTransactionRepository>().For<IAgentBadgeWithRankTransactionRepository>();
+			isolate.UseTestDouble<SkillIntradayStaffingFactory>().For<SkillIntradayStaffingFactory>();
 
 			// Tenant (and datasource) stuff
 			var tenants = new FakeTenants();
 			tenants.Has(DefaultTenantName, LegacyAuthenticationKey.TheKey);
-			system.UseTestDouble(tenants).For<IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants, IFindTenantByName, IAllTenantNames>();
-			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
-			system.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();
-			system.UseTestDouble<FakeDataSourceForTenant>().For<IDataSourceForTenant>();
-			system.UseTestDouble<FakeDataSourcesFactory>().For<IDataSourcesFactory>();
-			system.AddService<FakeDatabase>();
+			isolate.UseTestDouble(tenants).For<IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants, IFindTenantByName, IAllTenantNames>();
+			isolate.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
+			isolate.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();
+			isolate.UseTestDouble<FakeDataSourceForTenant>().For<IDataSourceForTenant>();
+			isolate.UseTestDouble<FakeDataSourcesFactory>().For<IDataSourcesFactory>();
 
 			//license
-			system.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository, ILicenseRepositoryForLicenseVerifier>();
+			isolate.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository, ILicenseRepositoryForLicenseVerifier>();
 		}
 
 		protected override void BeforeTest()

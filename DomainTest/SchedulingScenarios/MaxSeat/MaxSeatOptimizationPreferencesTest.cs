@@ -22,7 +22,7 @@ using Teleopti.Ccc.TestCommon.Scheduling;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 {
 	[DomainTest]
-	public class MaxSeatOptimizationPreferencesTest : ISetup
+	public class MaxSeatOptimizationPreferencesTest : IIsolateSystem
 	{
 		public MaxSeatOptimization Target;
 		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
@@ -247,9 +247,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			schedules[agent].ScheduledDay(dateOnly.AddDays(1)).PersonAssignment().ShiftCategory.Should().Not.Be.EqualTo(newShiftCategory);
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
+			isolate.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
 		}
 	}
 }

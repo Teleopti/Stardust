@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
 	[TestFixture]
 	[DomainTest]
-	public class AddPersonalActivityCommandHandlerTest : ISetup
+	public class AddPersonalActivityCommandHandlerTest : IExtendSystem
 	{
 		public FakeActivityRepository ActivityRepository;
 		public IScheduleStorage ScheduleStorage;
@@ -119,13 +119,13 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person, new ScheduleDictionaryLoadOptions(false, false),
 					_period, _scenario)[_person].ScheduledDay(_startDate).ScheduleTag().Should().Be.EqualTo(_scheduleTag);
 		}
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<AddPersonalActivityCommandHandler>();
-			system.AddService<ScheduleSaveHandler>();
-			system.AddService<SaveSchedulePartService>();
-			system.AddModule(new AssemblerModule());
+			extend.AddService<AddPersonalActivityCommandHandler>();
+			extend.AddService<ScheduleSaveHandler>();
+			extend.AddService<SaveSchedulePartService>();
+			extend.AddModule(new AssemblerModule());
 		}
 	}
 }

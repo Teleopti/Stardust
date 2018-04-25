@@ -20,17 +20,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 {
 	[DomainTest]
 	[TestFixture]
-	public class GamificationCalculationControllerTest : ISetup
+	public class GamificationCalculationControllerTest : IExtendSystem
 	{
 		public GamificationCalculationController Target;
 		public FakeAgentBadgeWithRankTransactionRepository AgentBadgeWithRankTransactionRepository;
 		public FakeAgentBadgeTransactionRepository AgentBadgeTransactionRepository;
 		public FakeJobResultRepository JobResultRepository;
 		public FakePurgeSettingRepository PurgeSettingRepository;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddModule(new WebModule(configuration, null));
+			extend.AddModule(new WebModule(configuration, null));
 		}
 
 		[Test]

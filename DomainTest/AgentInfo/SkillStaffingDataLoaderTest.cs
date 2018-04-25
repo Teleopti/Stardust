@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 {
 	[DomainTest]
 	[TestFixture]
-	public class SkillStaffingDataLoaderTest : ISetup
+	public class SkillStaffingDataLoaderTest : IIsolateSystem
 	{
 		public ISkillStaffingDataLoader Target;
 		public ILoggedOnUser User;
@@ -29,11 +29,11 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		public FakeSkillTypeRepository SkillTypeRepository;
 		public SkillIntradayStaffingFactory SkillIntradayStaffingFactory;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
 			var scenarioRepository = new FakeScenarioRepository();
 			scenarioRepository.Has("Default");
-			system.UseTestDouble(scenarioRepository).For<IScenarioRepository>();
+			isolate.UseTestDouble(scenarioRepository).For<IScenarioRepository>();
 		}
 
 		[Test]

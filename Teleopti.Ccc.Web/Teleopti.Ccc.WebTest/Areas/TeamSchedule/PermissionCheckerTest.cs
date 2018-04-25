@@ -15,15 +15,15 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 {
 	[TestFixture, DomainTest]
-	public class PermissionCheckerTestNoMock : ISetup
+	public class PermissionCheckerTestNoMock : IIsolateSystem
 	{
 		public IPermissionChecker Target;
 		public Global.FakePermissionProvider PermissionProvider;
 		
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<PermissionChecker>().For<IPermissionChecker>();
-			system.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
+			isolate.UseTestDouble<PermissionChecker>().For<IPermissionChecker>();
+			isolate.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
 		}
 			
 		[Test]

@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 #pragma warning disable 0649
 
 	[TestFixture, DomainTest]
-	public class RequestCommandHandlingProviderTest : ISetup
+	public class RequestCommandHandlingProviderTest : IIsolateSystem
 	{
 		public IRequestCommandHandlingProvider Target;
 		public MutableNow Now;
@@ -51,14 +51,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		private IAbsence _absence;
 		
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<PersonRequestAuthorizationCheckerConfigurable>().For<IPersonRequestCheckAuthorization>();
-			system.UseTestDouble(new FakeScenarioRepository(new Scenario {DefaultScenario = true})).For<IScenarioRepository>();
-			system.UseTestDouble<PersonAbsenceRemover>().For<IPersonAbsenceRemover>();
-			system.UseTestDouble<RequestCommandHandlingProvider>().For<IRequestCommandHandlingProvider>();
-			system.UseTestDouble<SaveSchedulePartService>().For<ISaveSchedulePartService>();
-			system.UseTestDouble<PersonAbsenceCreator>().For<IPersonAbsenceCreator>();
+			isolate.UseTestDouble<PersonRequestAuthorizationCheckerConfigurable>().For<IPersonRequestCheckAuthorization>();
+			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario {DefaultScenario = true})).For<IScenarioRepository>();
+			isolate.UseTestDouble<PersonAbsenceRemover>().For<IPersonAbsenceRemover>();
+			isolate.UseTestDouble<RequestCommandHandlingProvider>().For<IRequestCommandHandlingProvider>();
+			isolate.UseTestDouble<SaveSchedulePartService>().For<ISaveSchedulePartService>();
+			isolate.UseTestDouble<PersonAbsenceCreator>().For<IPersonAbsenceCreator>();
 			_absence = AbsenceFactory.CreateAbsence("Holiday").WithId();
 		}
 

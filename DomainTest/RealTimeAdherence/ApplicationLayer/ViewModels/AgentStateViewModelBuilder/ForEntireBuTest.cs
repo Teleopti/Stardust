@@ -18,17 +18,17 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 {
 	[DomainTest]
 	[TestFixture]
-	public class ForEntireBuTest : ISetup
+	public class ForEntireBuTest : IIsolateSystem
 	{
 		public AgentStatesViewModelBuilder Target;
 		public FakeAgentStateReadModelPersister Database;
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
-			system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserCulture>();
+			isolate.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
+			isolate.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserCulture>();
 		}
 
 

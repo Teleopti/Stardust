@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 {
 	[MyTimeWebTest]
 	[TestFixture]
-	public class PortalViewModelFactoryTest : ISetup
+	public class PortalViewModelFactoryTest : IIsolateSystem
 	{
 		public FakeCurrentDatasource CurrentDataSource;
 		public IPortalViewModelFactory Target;
@@ -42,15 +42,15 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		public FakeAgentBadgeTransactionRepository AgentBadgeTransactionRepository;
 		public FakeAgentBadgeWithRankTransactionRepository AgentBadgeWithRankTransactionRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
-			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
-			system.UseTestDouble(new FakeCurrentUnitOfWorkFactory(null).WithCurrent(new FakeUnitOfWorkFactory(null, null, null, null) { Name = MyTimeWebTestAttribute.DefaultTenantName })).For<ICurrentUnitOfWorkFactory>();
-			system.UseTestDouble<FakeToggleManager>().For<IToggleManager>();
-			system.UseTestDouble<FakeCurrentTeleoptiPrincipal>().For<ICurrentTeleoptiPrincipal>();
-			system.UseTestDouble<FakeCurrentDatasource>().For<ICurrentDataSource>();
-			system.UseTestDouble<FakePermissions>().For<IAuthorization>();
+			isolate.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
+			isolate.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
+			isolate.UseTestDouble(new FakeCurrentUnitOfWorkFactory(null).WithCurrent(new FakeUnitOfWorkFactory(null, null, null, null) { Name = MyTimeWebTestAttribute.DefaultTenantName })).For<ICurrentUnitOfWorkFactory>();
+			isolate.UseTestDouble<FakeToggleManager>().For<IToggleManager>();
+			isolate.UseTestDouble<FakeCurrentTeleoptiPrincipal>().For<ICurrentTeleoptiPrincipal>();
+			isolate.UseTestDouble<FakeCurrentDatasource>().For<ICurrentDataSource>();
+			isolate.UseTestDouble<FakePermissions>().For<IAuthorization>();
 		}
 
 		[Test]

@@ -14,17 +14,17 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
 	[TestFixture]
 	[HangfireTest]
-	public class HangfireAllowRecurringFailuresEventPublishingConcurrencyTest : ISetup
+	public class HangfireAllowRecurringFailuresEventPublishingConcurrencyTest : IExtendSystem
 	{
 		public HangfireUtilities Hangfire;
 		public IEventPublisher Publisher;
 		public IRecurringEventPublisher Recurring;
 		public FailingHandlerImpl FailingHandler;
 		public ConcurrencyRunner Run;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<FailingHandlerImpl>();
+			extend.AddService<FailingHandlerImpl>();
 		}
 
 		[Test]

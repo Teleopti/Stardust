@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			var args = new IocArgs(config);
 			var configuration = new IocConfiguration(args, toggles);
 
-			SetupSystem(system, configuration, config, toggles);
+			setupSystem(system, system, configuration, config, toggles);
 
 			var container = builder.Build();
 			service.InjectFrom(container);
@@ -61,21 +61,21 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 		}
 
 		//Register what's needed for OneTimeSetup here
-		public static void SetupSystem(ISystem system, IocConfiguration configuration, FakeConfigReader config, FakeToggleManager toggles)
+		private static void setupSystem(IIsolate isolate, IExtend extend, IocConfiguration configuration, FakeConfigReader config, FakeToggleManager toggles)
 		{
 			var intervalFetcher = new FakeIntervalLengthFetcher();
 			intervalFetcher.Has(15);  //because we don't restore Analytics
-			system.AddModule(new CommonModule(configuration));
-			system.UseTestDouble(new MutableNow(new DateTime(2017, 02, 13, 8, 0, 0))).For<INow>();
-			system.UseTestDouble<FakeTime>().For<ITime>();
-			system.UseTestDouble(intervalFetcher).For<IIntervalLengthFetcher>();
-			system.UseTestDouble(config).For<IConfigReader>();
-			system.UseTestDouble(toggles).For<IToggleManager>();
-			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
-			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
-			system.UseTestDouble<StaffingViewModelCreator>().For<StaffingViewModelCreator>();
-			system.AddService<Database>();
-			system.AddService<MultiplicatorDefinitionSetRepository>();
+			extend.AddModule(new CommonModule(configuration));
+			isolate.UseTestDouble(new MutableNow(new DateTime(2017, 02, 13, 8, 0, 0))).For<INow>();
+			isolate.UseTestDouble<FakeTime>().For<ITime>();
+			isolate.UseTestDouble(intervalFetcher).For<IIntervalLengthFetcher>();
+			isolate.UseTestDouble(config).For<IConfigReader>();
+			isolate.UseTestDouble(toggles).For<IToggleManager>();
+			isolate.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
+			isolate.UseTestDouble<NoMessageSender>().For<IMessageSender>();
+			isolate.UseTestDouble<StaffingViewModelCreator>().For<StaffingViewModelCreator>();
+			extend.AddService<Database>();
+			extend.AddService<MultiplicatorDefinitionSetRepository>();
 		}
 	}
 }

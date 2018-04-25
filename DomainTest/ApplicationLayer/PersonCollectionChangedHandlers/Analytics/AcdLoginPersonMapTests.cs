@@ -10,14 +10,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 {
 	[TestFixture]
 	[DomainTest]
-	public class AcdLoginPersonMapTests : ISetup
+	public class AcdLoginPersonMapTests : IExtendSystem
 	{
 		public AcdLoginPersonTransformer Target;
 		public FakeAnalyticsPersonPeriodRepository AnalyticsPersonPeriodRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<AcdLoginPersonTransformer>();
+			extend.AddService<AcdLoginPersonTransformer>();
 		}
 
 		private void setupTests()

@@ -22,7 +22,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 {
 	[DatabaseTest]
-	public class FullSchedulingUowTest: ISetup
+	public class FullSchedulingUowTest: IIsolateSystem
 	{
 		public FullScheduling Target;
 		public IScenarioRepository ScenarioRepository;
@@ -198,9 +198,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 			return planningPeriod;
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
+			isolate.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
 		}
 	}
 }

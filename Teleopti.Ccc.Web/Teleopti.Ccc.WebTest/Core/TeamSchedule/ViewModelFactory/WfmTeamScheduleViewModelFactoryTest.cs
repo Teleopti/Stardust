@@ -32,7 +32,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 {
 	[TestFixture, DomainTest]
-	public class WfmTeamScheduleViewModelFactoryTestNotUseFakeScheduleStorage : ISetup
+	public class WfmTeamScheduleViewModelFactoryTestNotUseFakeScheduleStorage : IIsolateSystem, IExtendSystem
 	{
 		public ITeamScheduleViewModelFactory Target;
 		public FakeScenarioRepository CurrentScenario;
@@ -47,13 +47,17 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 		private IPerson logonUser;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddModule(new WebModule(configuration, null));
-			system.AddModule(new TeamScheduleAreaModule());
-			system.UseTestDouble<FakePersonFinderReadOnlyRepository>().For<IPersonFinderReadOnlyRepository>();
-			system.UseTestDouble<Areas.Global.FakePermissionProvider>().For<IPermissionProvider>();
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			extend.AddModule(new WebModule(configuration, null));
+			extend.AddModule(new TeamScheduleAreaModule());
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FakePersonFinderReadOnlyRepository>().For<IPersonFinderReadOnlyRepository>();
+			isolate.UseTestDouble<Areas.Global.FakePermissionProvider>().For<IPermissionProvider>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 
 
 		}
@@ -336,7 +340,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 
 	[TestFixture, TeamScheduleTest]
-	public class WfmTeamScheduleViewModelFactoryTest : ISetup
+	public class WfmTeamScheduleViewModelFactoryTest : IIsolateSystem
 	{
 		public TeamScheduleViewModelFactory Target;
 		public FakePeopleSearchProvider PeopleSearchProvider;
@@ -2947,9 +2951,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			viewModel.PersonWeekSchedules.Count().Should().Be.EqualTo(0);
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeUserUiCulture>().For<IUserUiCulture>();
+			isolate.UseTestDouble<FakeUserUiCulture>().For<IUserUiCulture>();
 		}
 	}
 }

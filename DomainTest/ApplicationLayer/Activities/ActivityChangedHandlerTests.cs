@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Activities
 {
 	[DomainTest]
 	[TestFixture]
-	public class ActivityChangedHandlerTests : ISetup
+	public class ActivityChangedHandlerTests : IExtendSystem
 	{
 		public AnalyticsActivityUpdater Target;
 		public FakeAnalyticsBusinessUnitRepository AnalyticsBusinessUnitRepository;
@@ -24,9 +24,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Activities
 		public FakeAnalyticsActivityRepository AnalyticsActivityRepository;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<AnalyticsActivityUpdater>();
+			extend.AddService<AnalyticsActivityUpdater>();
 		}
 
 		[Test]
@@ -116,5 +116,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Activities
 			analyticsActivity.DisplayColorHtml.Should().Be.EqualTo(ColorTranslator.ToHtml(activity.DisplayColor));
 			analyticsActivity.IsDeleted.Should().Be.EqualTo(activity.IsDeleted);
 		}
+
 	}
 }

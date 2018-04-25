@@ -21,7 +21,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 {
 	[TestFixture, TeamScheduleTest]
-	public class TeamScheduleCommandHandlingProviderTest : ISetup
+	public class TeamScheduleCommandHandlingProviderTest : IIsolateSystem
 	{
 		public ITeamScheduleCommandHandlingProvider Target;
 		public FakeCommandHandler CommandHandler;
@@ -33,9 +33,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		public FakeShiftCategoryRepository ShiftCategoryRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeDayOffTemplateRepository>().For<IDayOffTemplateRepository>();
+			isolate.UseTestDouble<FakeDayOffTemplateRepository>().For<IDayOffTemplateRepository>();
 		}
 
 

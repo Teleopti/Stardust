@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 {
 	[TestFixture]
 	[RequestPerformanceTuningTest]
-	public class ProcessCalcuateIntradayIntervalPossibilities : ISetup
+	public class ProcessCalcuateIntradayIntervalPossibilities : IIsolateSystem
 	{
 		private const string tenantName = "Teleopti WFM";
 		private readonly Guid businessUnitId = new Guid("1FA1F97C-EBFF-4379-B5F9-A11C00F0F02B");
@@ -60,14 +60,14 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 		public OvertimeStaffingPossibilityCalculator OvertimeStaffingPossibilityCalculator;
 		public FakeLoggedOnUser LoggedOnUser;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
 			var fakeIntervalLengthFetcher = new FakeIntervalLengthFetcher();
 			fakeIntervalLengthFetcher.Has(15);
-			system.UseTestDouble(fakeIntervalLengthFetcher).For<IIntervalLengthFetcher>();
-			system.UseTestDouble<AbsenceStaffingPossibilityCalculator>().For<IAbsenceStaffingPossibilityCalculator>();
-			system.UseTestDouble<OvertimeStaffingPossibilityCalculator>().For<IOvertimeStaffingPossibilityCalculator>();
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble(fakeIntervalLengthFetcher).For<IIntervalLengthFetcher>();
+			isolate.UseTestDouble<AbsenceStaffingPossibilityCalculator>().For<IAbsenceStaffingPossibilityCalculator>();
+			isolate.UseTestDouble<OvertimeStaffingPossibilityCalculator>().For<IOvertimeStaffingPossibilityCalculator>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 		}
 
 		[Test]

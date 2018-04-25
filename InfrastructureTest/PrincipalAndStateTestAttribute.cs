@@ -10,11 +10,10 @@ namespace Teleopti.Ccc.InfrastructureTest
 		private IPerson person;
 		private IDisposable _login;
 
-		protected override void Setup(ISystem system, IIocConfiguration configuration)
+		protected override void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			base.Setup(system, configuration);
-			
-			system.AddService(this);
+			base.Extend(extend, configuration);
+			extend.AddService(this);
 		}
 
 		protected override void BeforeTest()

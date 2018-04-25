@@ -22,7 +22,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[DomainTest]
-	public class FixNotOverwriteLayerCommandHandlerTest : ISetup
+	public class FixNotOverwriteLayerCommandHandlerTest : IIsolateSystem
 	{
 		public FixNotOverwriteLayerCommandHandler Target;
 		public FakePersonRepository PersonRepository;
@@ -37,14 +37,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public FakeActivityRepository ActivityRepository;
 		public FakeSkillRepository SkillRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FixNotOverwriteLayerCommandHandler>()
+			isolate.UseTestDouble<FixNotOverwriteLayerCommandHandler>()
 				.For<IHandleCommand<FixNotOverwriteLayerCommand>>();
-			system.UseTestDouble<FakeScheduleDifferenceSaver_DoNotUse>().For<IScheduleDifferenceSaver>();
-			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
-			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<FakeScheduleDifferenceSaver_DoNotUse>().For<IScheduleDifferenceSaver>();
+			isolate.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
+			isolate.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 		}
 
 		[Test]

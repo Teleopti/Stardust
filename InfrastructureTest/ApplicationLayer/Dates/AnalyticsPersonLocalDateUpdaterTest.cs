@@ -16,16 +16,16 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Dates
 {
 	[InfrastructureTest]
 	[AnalyticsDatabaseTest]
-	public class AnalyticsPersonLocalDateUpdaterTest : ISetup
+	public class AnalyticsPersonLocalDateUpdaterTest : IExtendSystem
 	{
 		public AnalyticsPersonLocalDateUpdater Target;
 		public IAnalyticsPersonPeriodRepository PersonPeriodRepository;
 		public AnalyticsDatabase AnalyticsDatabase;
 		public WithAnalyticsUnitOfWork WithAnalyticsUnitOfWork;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<AnalyticsPersonLocalDateUpdater>();
+			extend.AddService<AnalyticsPersonLocalDateUpdater>();
 		}
 
 		[Test]

@@ -31,7 +31,7 @@ using System.Globalization;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 {
 	[TestFixture, DomainTest]
-	public class ImportAgentEventHandlerTest : ISetup
+	public class ImportAgentEventHandlerTest : IIsolateSystem, IExtendSystem
 	{
 		public ImportAgentEventHandler Target;
 		public FakeJobResultRepository JobResultRepo;
@@ -50,36 +50,40 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		public FakeCurrentDatasource CurrentDatasource;
 		public FakeTenants FindTenantByName;
 		public PersistPersonInfoFake PersonInfoPersister;
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
+			extend.AddService<FakeDatabase>();
+			extend.AddService<FakeStorage>();
+		}
+		
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FakeDataSourceForTenant>().For<IDataSourceForTenant>();
+			isolate.UseTestDouble<ImportAgentEventHandler>().For<IHandleEvent<ImportAgentEvent>>();
+			isolate.UseTestDouble<FakeJobResultRepository>().For<IJobResultRepository>();
+			isolate.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();
+			isolate.UseTestDouble<PasswordPolicyFake>().For<IPasswordPolicy>();
+			isolate.UseTestDouble<FindLogonInfoFake>().For<IFindLogonInfo>();
+			isolate.UseTestDouble<FindPersonInfoFake>().For<IFindPersonInfo>();
+			isolate.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
+			isolate.UseTestDouble<PersistPersonInfoFake>().For<IPersistPersonInfo>();
+			isolate.UseTestDouble<FakeCurrentDatasource>().For<ICurrentDataSource>();
 
-			system.AddService<FakeDatabase>();
-			system.AddService<FakeStorage>();
-			system.UseTestDouble<FakeDataSourceForTenant>().For<IDataSourceForTenant>();
-			system.UseTestDouble<ImportAgentEventHandler>().For<IHandleEvent<ImportAgentEvent>>();
-			system.UseTestDouble<FakeJobResultRepository>().For<IJobResultRepository>();
-			system.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();
-			system.UseTestDouble<PasswordPolicyFake>().For<IPasswordPolicy>();
-			system.UseTestDouble<FindLogonInfoFake>().For<IFindLogonInfo>();
-			system.UseTestDouble<FindPersonInfoFake>().For<IFindPersonInfo>();
-			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
-			system.UseTestDouble<PersistPersonInfoFake>().For<IPersistPersonInfo>();
-			system.UseTestDouble<FakeCurrentDatasource>().For<ICurrentDataSource>();
 
-
-			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
-			system.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
-			system.UseTestDouble<FakeContractRepository>().For<IContractRepository>();
-			system.UseTestDouble<FakeContractScheduleRepository>().For<IContractScheduleRepository>();
-			system.UseTestDouble<FakePartTimePercentageRepository>().For<IPartTimePercentageRepository>();
-			system.UseTestDouble<FakeRuleSetBagRepository>().For<IRuleSetBagRepository>();
-			system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
-			system.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
-			system.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
-			system.UseTestDouble<FakeExternalLogOnRepository>().For<IExternalLogOnRepository>();
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
-			system.UseTestDouble<FileProcessor>().For<IFileProcessor>();
+			isolate.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
+			isolate.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
+			isolate.UseTestDouble<FakeContractRepository>().For<IContractRepository>();
+			isolate.UseTestDouble<FakeContractScheduleRepository>().For<IContractScheduleRepository>();
+			isolate.UseTestDouble<FakePartTimePercentageRepository>().For<IPartTimePercentageRepository>();
+			isolate.UseTestDouble<FakeRuleSetBagRepository>().For<IRuleSetBagRepository>();
+			isolate.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
+			isolate.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
+			isolate.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
+			isolate.UseTestDouble<FakeExternalLogOnRepository>().For<IExternalLogOnRepository>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
+			isolate.UseTestDouble<FileProcessor>().For<IFileProcessor>();
 		}
 
 		[Test]

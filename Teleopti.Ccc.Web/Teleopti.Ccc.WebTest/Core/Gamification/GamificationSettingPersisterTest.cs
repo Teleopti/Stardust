@@ -16,14 +16,14 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Core.Gamification
 {	
 	[TestFixture, DomainTest]
-	public class GamificationSettingPersisterTest : ISetup
+	public class GamificationSettingPersisterTest : IExtendSystem
 	{
 		public IGamificationSettingPersister Target;
 		public IGamificationSettingRepository GamificationSettingRepository;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddModule(new WebModule(configuration, null));
+			extend.AddModule(new WebModule(configuration, null));
 		}
 		
 		[Test]

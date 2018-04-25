@@ -21,7 +21,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 {
 	[DomainTest]
-	public class MaxSeatMustNotResourceCalculateTest : ISetup
+	public class MaxSeatMustNotResourceCalculateTest : IIsolateSystem
 	{
 		public MaxSeatOptimization Target;
 		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
@@ -59,9 +59,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			});
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<ResourceOptimizationHelperThatThrows>().For<ResourceOptimizationHelper>();
+			isolate.UseTestDouble<ResourceOptimizationHelperThatThrows>().For<ResourceOptimizationHelper>();
 		}
 	}
 }

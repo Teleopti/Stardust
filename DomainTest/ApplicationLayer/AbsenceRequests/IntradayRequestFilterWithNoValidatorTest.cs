@@ -20,7 +20,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
-	public class IntradayRequestFilterWithNoValidatorTest : ISetup
+	public class IntradayRequestFilterWithNoValidatorTest : IIsolateSystem
 	{
 		public IAbsenceRequestProcessor Target;
 		public FakePersonRepository PersonRepository;
@@ -35,9 +35,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public IScheduleStorage ScheduleStorage;
 		public MutableNow Now;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
+			isolate.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
 		}
 
 		[Test]

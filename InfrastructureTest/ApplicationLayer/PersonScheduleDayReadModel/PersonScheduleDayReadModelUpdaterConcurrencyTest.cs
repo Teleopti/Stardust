@@ -19,11 +19,11 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.PersonScheduleDayRead
 	[PrincipalAndStateTest]
 	[Explicit]
 	[Category("LongRunning")]
-	public class PersonScheduleDayReadModelUpdaterHangfireConcurrencyTest : ISetup
-	{
-		public void Setup(ISystem system, IIocConfiguration configuration)
+	public class PersonScheduleDayReadModelUpdaterHangfireConcurrencyTest : IExtendSystem
+	{		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<FakeMessageSender>();
+			extend.AddService<FakeMessageSender>();
 		}
 
 		public PersonScheduleDayReadModelUpdaterHangfire Handler;

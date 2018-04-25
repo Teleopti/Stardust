@@ -14,15 +14,15 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.Common
 {
 	[DomainTest]
-	public class OrganizationSelectionProviderTest : ISetup
+	public class OrganizationSelectionProviderTest : IIsolateSystem
 	{
 		public OrganizationSelectionProvider Target;
 		public FakeCurrentBusinessUnit CurrentBusinessUnit;
 		public ISiteRepository SiteRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeCurrentBusinessUnit>().For<ICurrentBusinessUnit>();
+			isolate.UseTestDouble<FakeCurrentBusinessUnit>().For<ICurrentBusinessUnit>();
 		}
 
 		[Test]

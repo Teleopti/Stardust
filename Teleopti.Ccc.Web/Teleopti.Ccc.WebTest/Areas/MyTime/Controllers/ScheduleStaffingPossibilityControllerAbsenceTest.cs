@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	[TestFixture]
 	[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
 	[MyTimeWebTest]
-	public class ScheduleStaffingPossibilityControllerAbsenceTest : ISetup
+	public class ScheduleStaffingPossibilityControllerAbsenceTest : IIsolateSystem
 	{
 		public ScheduleStaffingPossibilityController Target;
 		public ICurrentScenario Scenario;
@@ -49,14 +49,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		readonly ISkillType phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
 			.WithId();
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeSkillDayRepository>().For<ISkillDayRepository>();
-			system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
-			system.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
-			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
-			system.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
-			system.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>();
+			isolate.UseTestDouble<FakeSkillDayRepository>().For<ISkillDayRepository>();
+			isolate.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
+			isolate.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
+			isolate.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
+			isolate.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
+			isolate.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>();
 		}
 
 		[Test, SetCulture("en-US")]

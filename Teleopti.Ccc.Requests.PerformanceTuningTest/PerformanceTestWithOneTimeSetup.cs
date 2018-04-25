@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			var args = new IocArgs(config);
 			var configuration = new IocConfiguration(args, toggles);
 
-			SetupSystem(system, configuration, config, toggles);
+			setupSystem(system, system, configuration, config, toggles);
 
 			var container = builder.Build();
 			service.InjectFrom(container);
@@ -65,18 +65,18 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		}
 
 		//Register what's needed for OneTimeSetup here
-		public static void SetupSystem(ISystem system, IocConfiguration configuration, FakeConfigReader config, FakeToggleManager toggles)
+		private static void setupSystem(IIsolate isolate, IExtend extend, IocConfiguration configuration, FakeConfigReader config, FakeToggleManager toggles)
 		{
-			system.AddModule(new CommonModule(configuration));
-			system.UseTestDouble(new MutableNow(new DateTime(2017, 02, 13, 8, 0, 0))).For<INow>();
-			system.UseTestDouble<FakeTime>().For<ITime>();
-			system.UseTestDouble(config).For<IConfigReader>();
-			system.UseTestDouble(toggles).For<IToggleManager>();
-			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
-			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
-			system.AddService<Database>();
-			system.AddModule(new AnywhereAreaModule(configuration));
-			system.AddModule(new TeamScheduleAreaModule());
+			extend.AddModule(new CommonModule(configuration));
+			isolate.UseTestDouble(new MutableNow(new DateTime(2017, 02, 13, 8, 0, 0))).For<INow>();
+			isolate.UseTestDouble<FakeTime>().For<ITime>();
+			isolate.UseTestDouble(config).For<IConfigReader>();
+			isolate.UseTestDouble(toggles).For<IToggleManager>();
+			isolate.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
+			isolate.UseTestDouble<NoMessageSender>().For<IMessageSender>();
+			extend.AddService<Database>();
+			extend.AddModule(new AnywhereAreaModule(configuration));
+			extend.AddModule(new TeamScheduleAreaModule());
 		}
 	}
 }

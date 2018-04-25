@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service
 	[MultiDatabaseTest]
 	[Explicit]
 	[Category("LongRunning")]
-	public class DeadlockTest : ISetup
+	public class DeadlockTest : IIsolateSystem, IExtendSystem
 	{
 		public Database Database;
 		public AnalyticsDatabase Analytics;
@@ -35,11 +35,15 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service
 		public RetryingQueueSimulator QueueSimulator;
 		public IPersonRepository Persons;
 		public INow Now;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<RetryingQueueSimulator>();
-			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+			extend.AddService<RetryingQueueSimulator>();
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 		}
 
 		private void setup()

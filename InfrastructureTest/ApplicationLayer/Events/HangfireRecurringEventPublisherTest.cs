@@ -17,23 +17,26 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
 	[TestFixture]
 	[InfrastructureTest]
-	public class HangfireRecurringEventPublisherTest : ISetup
+	public class HangfireRecurringEventPublisherTest : IIsolateSystem, IExtendSystem
 	{
 		public FakeHangfireEventClient JobClient;
 		public IRecurringEventPublisher Target;
 		public IJsonSerializer Serializer;
 		public FakeDataSourceForTenant DataSources;
 		public IDataSourceScope DataSource;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeDataSourceForTenant>().For<IDataSourceForTenant>();
+			extend.AddService<TestHandler>();
+			extend.AddService<TestMultiHandler1>();
+			extend.AddService<TestMultiHandler2>();
+			extend.AddService<TestLongNameHandlerVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongWithLongId>();
+			extend.AddService<TestLongNameHandlerVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongWithLongId2>();
+		}
 
-			system.AddService<TestHandler>();
-			system.AddService<TestMultiHandler1>();
-			system.AddService<TestMultiHandler2>();
-			system.AddService<TestLongNameHandlerVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongWithLongId>();
-			system.AddService<TestLongNameHandlerVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongWithLongId2>();
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FakeDataSourceForTenant>().For<IDataSourceForTenant>();
 		}
 
 		[Test]

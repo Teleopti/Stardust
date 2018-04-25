@@ -24,7 +24,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
 	[DomainTest]
-	public class SwapAndModifyServiceNewByFakeTest : ISetup
+	public class SwapAndModifyServiceNewByFakeTest : IIsolateSystem, IExtendSystem
 	{
 		public SwapAndModifyServiceNew Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
@@ -34,11 +34,15 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public FakeActivityRepository ActivityRepository;
 		public INow Now;
 		public ScheduleChangedEventDetector ScheduleChangedEventDetector;
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
+		{
+			extend.AddService<SwapAndModifyServiceNew>();
+		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{				
-			system.UseTestDouble<ScheduleChangedEventDetector>().For<IHandleEvent<ScheduleChangedEvent>>();
-			system.AddService<SwapAndModifyServiceNew>();
+			isolate.UseTestDouble<ScheduleChangedEventDetector>().For<IHandleEvent<ScheduleChangedEvent>>();
 		}
 
 		[Test]

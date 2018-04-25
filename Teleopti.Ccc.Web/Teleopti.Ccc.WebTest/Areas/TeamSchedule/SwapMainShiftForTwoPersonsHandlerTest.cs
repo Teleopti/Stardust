@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 {
 	[TestFixture]
 	[TeamScheduleTest]
-	public class SwapMainShiftForTwoPersonsCommandHandlerTest : ISetup
+	public class SwapMainShiftForTwoPersonsCommandHandlerTest : IExtendSystem
 	{
 		public SwapMainShiftForTwoPersonsCommandHandler Target;
 		public FakePersonRepository PersonRepository;
@@ -96,10 +96,10 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			error.ErrorMessages.Count.Should().Be.EqualTo(1);
 			error.ErrorMessages[0].Should().Not.Be.Empty();
 		}
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<SwapMainShiftForTwoPersonsCommandHandler>();
+			extend.AddService<SwapMainShiftForTwoPersonsCommandHandler>();
 		}
 	}
 }

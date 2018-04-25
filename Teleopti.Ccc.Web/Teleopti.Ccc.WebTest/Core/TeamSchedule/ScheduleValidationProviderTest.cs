@@ -29,7 +29,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 {
 	[TestFixture, DomainTest]
-	public class ScheduleValidationProviderTest : ISetup
+	public class ScheduleValidationProviderTest : IIsolateSystem
 	{
 		public FakeScenarioRepository ScenarioRepository;
 		public IScheduleStorage ScheduleStorage;
@@ -40,16 +40,16 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 		public FakeWriteSideRepository<IAbsence> AbsenceRepository;
 		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<ScheduleValidationProvider>().For<IScheduleValidationProvider>();
-			system.UseTestDouble<FakeWriteSideRepository<IActivity>>().For<IProxyForId<IActivity>>();
-			system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
-			system.UseTestDouble<FakeWriteSideRepository<IAbsence>>().For<IProxyForId<IAbsence>>();
-			system.UseTestDouble<AbsenceCommandConverter>().For<IAbsenceCommandConverter>();
-			system.UseTestDouble<PersonNameProvider>().For<IPersonNameProvider>();
-			system.UseTestDouble<NameFormatSettingsPersisterAndProvider>().For<ISettingsPersisterAndProvider<NameFormatSettings>>();
-			system.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
+			isolate.UseTestDouble<ScheduleValidationProvider>().For<IScheduleValidationProvider>();
+			isolate.UseTestDouble<FakeWriteSideRepository<IActivity>>().For<IProxyForId<IActivity>>();
+			isolate.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
+			isolate.UseTestDouble<FakeWriteSideRepository<IAbsence>>().For<IProxyForId<IAbsence>>();
+			isolate.UseTestDouble<AbsenceCommandConverter>().For<IAbsenceCommandConverter>();
+			isolate.UseTestDouble<PersonNameProvider>().For<IPersonNameProvider>();
+			isolate.UseTestDouble<NameFormatSettingsPersisterAndProvider>().For<ISettingsPersisterAndProvider<NameFormatSettings>>();
+			isolate.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
 		}
 
 		[Test]

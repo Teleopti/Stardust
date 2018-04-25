@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 {
 	[DomainTest]
 	[TestFixture]
-	public class SkillStaffingIntervalProviderTest : ISetup
+	public class SkillStaffingIntervalProviderTest : IIsolateSystem
 	{
 		public SkillStaffingIntervalProvider Target;
 		public MutableNow Now;
@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<SkillStaffingIntervalProvider>().For<SkillStaffingIntervalProvider>();
+			isolate.UseTestDouble<SkillStaffingIntervalProvider>().For<SkillStaffingIntervalProvider>();
 		}
 
 

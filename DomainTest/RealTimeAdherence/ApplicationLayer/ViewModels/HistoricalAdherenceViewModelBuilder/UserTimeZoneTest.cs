@@ -18,16 +18,16 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 	[DomainTest]
 	[TestFixture]
 	[DefaultData]
-	public class UserTimeZoneTest : ISetup
+	public class UserTimeZoneTest : IIsolateSystem
 	{
 		public Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels.HistoricalAdherenceViewModelBuilder Target;
 		public FakeDatabase Database;
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
+			isolate.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
 		}
 
 		[Test]

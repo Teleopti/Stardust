@@ -11,16 +11,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.BusinessUnit
 {
 	[TestFixture]
 	[DomainTest]
-	public class AnalyticsBusinessUnitUpdaterTest : ISetup
+	public class AnalyticsBusinessUnitUpdaterTest : IExtendSystem
 	{
 		public AnalyticsBusinessUnitUpdater Target;
 		public FakeAnalyticsBusinessUnitRepository AnalyticsBusinessUnitRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<AnalyticsBusinessUnitUpdater>();
+			extend.AddService<AnalyticsBusinessUnitUpdater>();
 		}
-
+		
 		[Test]
 		public void ShouldAddOrUpdateBusinessUnit()
 		{

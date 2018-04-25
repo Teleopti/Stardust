@@ -16,7 +16,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.InfrastructureTest.Logon
 {
 	[PrincipalAndStateTest]
-	public class ImpersonateSystemTest : ISetup
+	public class ImpersonateSystemTest : IExtendSystem
 	{
 		public Service TheService;
 		public IPrincipalAndStateContext Context;
@@ -24,10 +24,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Logon
 		public IScenarioRepository Scenarios;
 		public WithUnitOfWork UnitOfWork;
 		public FakeMessageSender Messages;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<Service>();
+			extend.AddService<Service>();
 		}
 
 		public class Service

@@ -20,16 +20,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 {
 	[TestFixture]
 	[MyTimeWebTest]
-	public class AbsenceRequestFormMappingTest : ISetup
+	public class AbsenceRequestFormMappingTest : IIsolateSystem
 	{
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeUserTimeZone UserTimeZone;
 		public FakeAbsenceRepository AbsenceRepository;
 		public AbsenceRequestFormMapper Target;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeAbsenceRepository>().For<IAbsenceRepository>();
+			isolate.UseTestDouble<FakeAbsenceRepository>().For<IAbsenceRepository>();
 		}
 
 		[Test]

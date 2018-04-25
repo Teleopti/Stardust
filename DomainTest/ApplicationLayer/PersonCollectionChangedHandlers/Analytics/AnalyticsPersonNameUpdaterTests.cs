@@ -12,15 +12,15 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandlers.Analytics
 {
 	[DomainTest]
-	public class AnalyticsPersonNameUpdaterTests : ISetup
+	public class AnalyticsPersonNameUpdaterTests : IIsolateSystem
 	{
 		public AnalyticsPersonNameUpdater Target;
 		public IAnalyticsPersonPeriodRepository Repository;
 		public IGlobalSettingDataRepository GlobalSettingDataRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<AnalyticsPersonNameUpdater>().For<AnalyticsPersonNameUpdater>();
+			isolate.UseTestDouble<AnalyticsPersonNameUpdater>().For<AnalyticsPersonNameUpdater>();
 		}
 
 		[Test]

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 	[TestFixture(true)]
 	[TestFixture(false)]
 	
-	public class StaffingViewModelCreatorTest : ISetup, IConfigureToggleManager
+	public class StaffingViewModelCreatorTest : IIsolateSystem, IConfigureToggleManager
 	{
 		private readonly bool _useErlangA;
 		public IStaffingViewModelCreator Target;
@@ -63,10 +63,10 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			}
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
-			system.UseTestDouble<FakeSkillDayRepository_DoNotUse>().For<ISkillDayRepository>();
+			isolate.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
+			isolate.UseTestDouble<FakeSkillDayRepository_DoNotUse>().For<ISkillDayRepository>();
 		}
 
 		[Test]

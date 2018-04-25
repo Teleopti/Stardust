@@ -12,17 +12,21 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.Common.TimeLogger
 {
 	[DomainTest]
-	public class LogTimeTest : ISetup
+	public class LogTimeTest : IIsolateSystem, IExtendSystem
 	{
 		public LogTimeTester LogTimeTester;
 		public LogSpy LogSpy;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<LogTimeTester>();
+			extend.AddService<LogTimeTester>();
+		}
+		
+		public void Isolate(IIsolate isolate)
+		{
 			var log = new LogSpy();
-			system.UseTestDouble(log).For<ILog>();
-			system.UseTestDouble(new FakeLogManager(log)).For<ILogManager>();
+			isolate.UseTestDouble(log).For<ILog>();
+			isolate.UseTestDouble(new FakeLogManager(log)).For<ILogManager>();
 		}
 
 		[Test]

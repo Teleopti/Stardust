@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
 	[TestFixture]
 	[RequestsTest]
-	public class RequestsControllerTest : ISetup
+	public class RequestsControllerTest : IIsolateSystem, IExtendSystem
 	{
 		public RequestsController Target;
 		public IPersonRequestRepository PersonRequestRepository;
@@ -54,18 +54,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public MutableNow Now;
 		public IRequestCommandHandlingProvider CommandHandlingProvider;
 		public FakePermissionProvider PermissionProvider;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<RequestsController>();
-			system.UseTestDouble<FakeLinkProvider>().For<ILinkProvider>();
-			system.UseTestDouble<FakePeopleForShiftTradeFinder>().For<IPeopleForShiftTradeFinder>();
-			system.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
-			system.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
-			system.UseTestDouble(new FakeScenarioRepository(new Scenario("test") { DefaultScenario = true }))
+			extend.AddService<RequestsController>();
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FakeLinkProvider>().For<ILinkProvider>();
+			isolate.UseTestDouble<FakePeopleForShiftTradeFinder>().For<IPeopleForShiftTradeFinder>();
+			isolate.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
+			isolate.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
+			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("test") { DefaultScenario = true }))
 				.For<IScenarioRepository>();
-			system.UseTestDouble<RequestApprovalServiceFactory>().For<IRequestApprovalServiceFactory>();
-			system.UseTestDouble<FakeLicensedFunctionProvider>().For<ILicensedFunctionsProvider>();
+			isolate.UseTestDouble<RequestApprovalServiceFactory>().For<IRequestApprovalServiceFactory>();
+			isolate.UseTestDouble<FakeLicensedFunctionProvider>().For<ILicensedFunctionsProvider>();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]

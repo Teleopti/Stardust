@@ -15,17 +15,17 @@ using Teleopti.Ccc.WebTest.Areas.People.IoC;
 namespace Teleopti.Ccc.WebTest.Areas.People
 {
 	[TestFixture, WebPeopleTest]
-	public class ImportAgentControllerTest : ISetup
+	public class ImportAgentControllerTest : IIsolateSystem
 	{
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeCurrentBusinessUnit CurrentBusinessUnit;
 		public ImportAgentController Target;
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeCurrentBusinessUnit>().For<ICurrentBusinessUnit>();
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			system.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
-			system.UseTestDouble<FakeJobResultRepository>().For<IJobResultRepository>();
+			isolate.UseTestDouble<FakeCurrentBusinessUnit>().For<ICurrentBusinessUnit>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
+			isolate.UseTestDouble<FakeJobResultRepository>().For<IJobResultRepository>();
 		}
 
 		

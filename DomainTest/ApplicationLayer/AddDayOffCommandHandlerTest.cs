@@ -17,7 +17,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[DomainTest]
-	public class AddDayOffCommandHandlerTest : ISetup
+	public class AddDayOffCommandHandlerTest : IIsolateSystem
 	{
 		public AddDayOffCommandHandler Target;
 		public FakePersonRepository PersonRepository;
@@ -25,9 +25,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public IScheduleStorage ScheduleStorage;
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<AddDayOffCommandHandler>().For<IHandleCommand<AddDayOffCommand>>();
+			isolate.UseTestDouble<AddDayOffCommandHandler>().For<IHandleCommand<AddDayOffCommand>>();
 		}
 
 		[Test]

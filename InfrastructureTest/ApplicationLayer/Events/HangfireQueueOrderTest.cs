@@ -14,19 +14,19 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
 	[TestFixture]
 	[HangfireTest]
-	public class HangfireQueueOrderTest :ISetup
+	public class HangfireQueueOrderTest :IExtendSystem	
 	{
 		public HangfireUtilities Hangfire;
 		public IEventPublisher Publisher;
 		public QueueScheduleChangesTodayHandler QueueScheduleChangesTodayHandlerImpl;
 		public QueueDefaultHandler QueueDefaultHandlerImpl;
 		public QueueCriticalScheduleChangesTodayHandler QueueCriticalScheduleChangesTodayHandlerImpl;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<QueueScheduleChangesTodayHandler>();
-			system.AddService<QueueCriticalScheduleChangesTodayHandler>();
-			system.AddService<QueueDefaultHandler>();
+			extend.AddService<QueueScheduleChangesTodayHandler>();
+			extend.AddService<QueueCriticalScheduleChangesTodayHandler>();
+			extend.AddService<QueueDefaultHandler>();
 		}
 
 		[Test]

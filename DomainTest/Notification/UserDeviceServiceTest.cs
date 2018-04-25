@@ -13,15 +13,15 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.Notification
 {
 	[TestFixture, DomainTest]
-	public class UserDeviceServiceTest : ISetup
+	public class UserDeviceServiceTest : IIsolateSystem
 	{
 		public UserDeviceService Target;
 		public FakeUserDeviceRepository UserDeviceRepository;
 		public FakeLoggedOnUser LogonUser;
 		
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 		}
 
 		[Test]

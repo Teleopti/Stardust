@@ -27,7 +27,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 {
 	[DomainTest]
-	public class OvertimeRequestApprovalServiceTest : ISetup
+	public class OvertimeRequestApprovalServiceTest : IIsolateSystem
 	{
 		public FakeSkillRepository SkillRepository;
 		public FakeMultiplicatorDefinitionSetRepository MultiplicatorDefinitionSetRepository;
@@ -55,11 +55,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		private readonly int _defaultIntervalInMinutes = 15;
 		private readonly int _emailIntervalInMinutes = 60;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			system.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
-			system.UseTestDouble(new FakeScenarioRepository(new Scenario("default") {DefaultScenario = true}))
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
+			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("default") {DefaultScenario = true}))
 				.For<IScenarioRepository>();
 		}
 

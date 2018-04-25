@@ -15,15 +15,15 @@ namespace Teleopti.Ccc.DomainTest.Security.Logon
 	[DomainTest]
 	[LoggedOff]
 	[TestFixture]
-	public class DataSourceAspectTest : ISetup
+	public class DataSourceAspectTest : IExtendSystem
 	{
 		public Service TheService;
 		public ICurrentDataSource DataSource;
 		public FakeDatabase Database;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<Service>();
+			extend.AddService<Service>();
 		}
 
 		public class Service

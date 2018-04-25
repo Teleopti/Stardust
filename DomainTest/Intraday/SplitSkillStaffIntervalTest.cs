@@ -11,13 +11,13 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 {
 	[DomainTest]
 	[TestFixture]
-	public class SplitSkillStaffIntervalTest : ISetup
+	public class SplitSkillStaffIntervalTest : IIsolateSystem
 	{
 		public SplitSkillStaffInterval Target;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<SplitSkillStaffInterval>().For<SplitSkillStaffInterval>();
+			isolate.UseTestDouble<SplitSkillStaffInterval>().For<SplitSkillStaffInterval>();
 		}
 
 		[Test]

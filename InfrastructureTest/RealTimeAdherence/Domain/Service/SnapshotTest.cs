@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service
 {
 	[TestFixture]
 	[MultiDatabaseTest]
-	public class SnapshotTest : ISetup
+	public class SnapshotTest : IIsolateSystem
 	{
 		public Database Database;
 		public AnalyticsDatabase Analytics;
@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service
 		public IAgentStateReadModelReader ReadModels;
 		public FakeEventPublisher Publisher;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+			isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 		}
 
 		[Test]

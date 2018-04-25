@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 	[TestFixture]
 	[RequestsTest]
 	[Toggle(Toggles.Wfm_Requests_DenyRequestWhenAllSkillsClosed_46384)]
-	public class AbsenceRequestPersisterTest : ISetup
+	public class AbsenceRequestPersisterTest : IIsolateSystem
 	{
 		public IPersonRequestRepository PersonRequestRepository;
 		public IUserTimeZone UserTimeZone;
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		private IPerson _person;
 		private ThisIsNow _now;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
 			_person = PersonFactory.CreatePersonWithPersonPeriod(_today.AddDays(-5)).WithId();
 			_person.PersonPeriodCollection[0].PersonContract.ContractSchedule = new ContractScheduleWorkingMondayToFriday();
@@ -70,27 +70,27 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			personRepository.Add(_person);
 			_now = new ThisIsNow(nowTime);
 			
-			system.UseTestDouble(personRepository).For<IPersonRepository>();
-			system.UseTestDouble<FakeAbsenceRepository>().For<IAbsenceRepository>();
-			system.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
-			system.UseTestDouble(new FakeLoggedOnUser(_person)).For<ILoggedOnUser>();
-			system.UseTestDouble(new FakeLinkProvider()).For<ILinkProvider>();
-			system.UseTestDouble(_now).For<INow>();
-			system.UseTestDouble<AbsenceRequestFormMapper>().For<AbsenceRequestFormMapper>();
-			system.UseTestDouble<RequestsViewModelMapper>().For<RequestsViewModelMapper>();
-			system.UseTestDouble<FakeCurrentBusinessUnit>().For<ICurrentBusinessUnit>();
-			system.UseTestDouble<FakeGlobalSettingDataRepository>().For<IGlobalSettingDataRepository>();
-			system.UseTestDouble<FakeDisableDeletedFilter>().For<IDisableDeletedFilter>();
-			system.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>();
-			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
-			system.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
-			system.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
-			system.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
-			system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
+			isolate.UseTestDouble(personRepository).For<IPersonRepository>();
+			isolate.UseTestDouble<FakeAbsenceRepository>().For<IAbsenceRepository>();
+			isolate.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
+			isolate.UseTestDouble(new FakeLoggedOnUser(_person)).For<ILoggedOnUser>();
+			isolate.UseTestDouble(new FakeLinkProvider()).For<ILinkProvider>();
+			isolate.UseTestDouble(_now).For<INow>();
+			isolate.UseTestDouble<AbsenceRequestFormMapper>().For<AbsenceRequestFormMapper>();
+			isolate.UseTestDouble<RequestsViewModelMapper>().For<RequestsViewModelMapper>();
+			isolate.UseTestDouble<FakeCurrentBusinessUnit>().For<ICurrentBusinessUnit>();
+			isolate.UseTestDouble<FakeGlobalSettingDataRepository>().For<IGlobalSettingDataRepository>();
+			isolate.UseTestDouble<FakeDisableDeletedFilter>().For<IDisableDeletedFilter>();
+			isolate.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>();
+			isolate.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
+			isolate.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
+			isolate.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
+			isolate.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
+			isolate.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
 			var tenants = new FakeTenants();
 			var DefaultTenantName = "default";
 			tenants.Has(DefaultTenantName, LegacyAuthenticationKey.TheKey);
-			system.UseTestDouble(tenants)
+			isolate.UseTestDouble(tenants)
 				.For<IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants, IFindTenantByName, IAllTenantNames>();
 
 		}

@@ -13,14 +13,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Gamification
 {
 	[TestFixture]
 	[DomainTest]
-	public class GamificationControllerReadTest : ISetup
+	public class GamificationControllerReadTest : IExtendSystem
 	{
 		public FakeGamificationSettingRepository GamificationSettingRepository;
 		public GamificationController Target;
-		
-		public void Setup(ISystem system, IIocConfiguration configuration)
+			
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddModule(new WebModule(configuration, null));
+			extend.AddModule(new WebModule(configuration, null));
 		}
 
 		[Test]

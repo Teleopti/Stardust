@@ -18,17 +18,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.MultiplicatorDefinitionSetHan
 {
 	[TestFixture]
 	[DomainTest]
-	public class AnalyticsOvertimeUpdaterTest : ISetup
+	public class AnalyticsOvertimeUpdaterTest : IExtendSystem
 	{
 		public AnalyticsOvertimeUpdater Target;
 		public FakeAnalyticsBusinessUnitRepository AnalyticsBusinessUnitRepository;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public IAnalyticsOvertimeRepository AnalyticsOvertimeRepository;
 		public IMultiplicatorDefinitionSetRepository MultiplicatorDefinitionSetRepository;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<AnalyticsOvertimeUpdater>();
+			extend.AddService<AnalyticsOvertimeUpdater>();
 		}
 
 		[Test, TestCaseSource(nameof(overtimeEvents))]

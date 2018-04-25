@@ -11,14 +11,14 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
 	[TestFixture]
 	[InfrastructureTest]
-	public class AnalyticsUnitOfWorkTest : ISetup
+	public class AnalyticsUnitOfWorkTest : IExtendSystem
 	{
 		public TheService TheService;
 		public ICurrentAnalyticsUnitOfWork UnitOfWork;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<TheService>();
+			extend.AddService<TheService>();
 		}
 
 		[Test]

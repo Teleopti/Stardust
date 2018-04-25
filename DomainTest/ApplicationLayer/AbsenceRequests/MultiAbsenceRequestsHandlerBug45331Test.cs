@@ -26,7 +26,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
-	public class MultiAbsenceRequestsHandlerBug45331Test : ISetup
+	public class MultiAbsenceRequestsHandlerBug45331Test : IIsolateSystem
 	{
 		public IPersonRequestRepository PersonRequestRepository;
 		public IQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
@@ -41,11 +41,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakeSkillRepository SkillRepository;
 		public FakeWorkflowControlSetRepository WorkflowControlSetRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<MultiAbsenceRequestsHandler>().For<IHandleEvent<NewMultiAbsenceRequestsCreatedEvent>>();
-			system.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
-			system.UseTestDouble<FakePersonAssignmentRepositoryThrowsLockException>().For<IPersonAssignmentRepository>();
+			isolate.UseTestDouble<MultiAbsenceRequestsHandler>().For<IHandleEvent<NewMultiAbsenceRequestsCreatedEvent>>();
+			isolate.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
+			isolate.UseTestDouble<FakePersonAssignmentRepositoryThrowsLockException>().For<IPersonAssignmentRepository>();
 		}
 
 		[Test]

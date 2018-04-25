@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
 	[TestFixture]
-	public class AbsenceRequestStrategyProcessorTest : ISetup
+	public class AbsenceRequestStrategyProcessorTest : IIsolateSystem
 	{
 		public FakeQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
 		public IAbsenceRequestStrategyProcessor Target;
@@ -34,16 +34,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakePersonRequestRepository PersonRequestRepository;
 		public MutableNow Now;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<AbsenceRequestStrategyProcessor>().For<IAbsenceRequestStrategyProcessor>();
+			isolate.UseTestDouble<AbsenceRequestStrategyProcessor>().For<IAbsenceRequestStrategyProcessor>();
 			_windowSize = 3;
 			_now = new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc);
 			_pastThreshold = _now;
 			_nearFutureThreshold = _now.AddMinutes(-10);
 			_farFutureThreshold = _now.AddMinutes(-10);
 			_initialPeriod = new DateOnlyPeriod(new DateOnly(_now.AddDays(-1)), new DateOnly(_now.AddDays(_windowSize)));
-			system.UseTestDouble<FilterRequestsWithDifferentVersion41930ToggleOff>().For<IFilterRequestsWithDifferentVersion>();
+			isolate.UseTestDouble<FilterRequestsWithDifferentVersion41930ToggleOff>().For<IFilterRequestsWithDifferentVersion>();
 		}
 
 		[Test]

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 	
 	
 	[DomainTest]
-	public class AnalyticsScheduleChangeUpdaterTest : ISetup
+	public class AnalyticsScheduleChangeUpdaterTest : IIsolateSystem, IExtendSystem
 	{
 		private const int intervalLengthInMinute = 15;
 		public AnalyticsScheduleChangeUpdater Target;
@@ -55,10 +55,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		private readonly DateTime startDate = new DateTime(2017, 03, 07, 8, 0, 0, DateTimeKind.Utc);
 		private readonly DateTime endDate = new DateTime(2017, 03, 07, 17, 0, 0, DateTimeKind.Utc);
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
-			system.AddService<AnalyticsScheduleChangeUpdater>();
+			extend.AddService<AnalyticsScheduleChangeUpdater>();
+		}
+		
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 		}
 
 		[Test]

@@ -22,7 +22,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 {
 	[TestFixture, DomainTest]
-	public class ExportScheduleServiceTest : ISetup
+	public class ExportScheduleServiceTest : IIsolateSystem, IExtendSystem
 	{
 		public FakeCurrentScenario_DoNotUse CurrentScenario;
 		public ExportScheduleService Target;
@@ -34,19 +34,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
 		public FakeOptionalColumnRepository OptionalColumnRepository;
 		
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<ExportScheduleService>();
-			system.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
-			system.UseTestDouble<PeopleSearchProvider>().For<IPeopleSearchProvider>();
-			system.UseTestDouble<UserTextTranslator>().For<IUserTextTranslator>();
-			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
-			system.UseTestDouble<FakePersonFinderReadOnlyRepository>().For<IPersonFinderReadOnlyRepository>();
-			system.UseTestDouble<FakeScenarioRepository>().For<IScenarioRepository>();
-			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
-			system.UseTestDouble<PermissionProvider>().For<IPermissionProvider>();
-			system.UseTestDouble<FakeGroupingReadOnlyRepository>().For<IGroupingReadOnlyRepository>();
-			system.UseTestDouble<FakeOptionalColumnRepository>().For<IOptionalColumnRepository>();
+			extend.AddService<ExportScheduleService>();
+		}
+		
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
+			isolate.UseTestDouble<PeopleSearchProvider>().For<IPeopleSearchProvider>();
+			isolate.UseTestDouble<UserTextTranslator>().For<IUserTextTranslator>();
+			isolate.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
+			isolate.UseTestDouble<FakePersonFinderReadOnlyRepository>().For<IPersonFinderReadOnlyRepository>();
+			isolate.UseTestDouble<FakeScenarioRepository>().For<IScenarioRepository>();
+			isolate.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
+			isolate.UseTestDouble<PermissionProvider>().For<IPermissionProvider>();
+			isolate.UseTestDouble<FakeGroupingReadOnlyRepository>().For<IGroupingReadOnlyRepository>();
+			isolate.UseTestDouble<FakeOptionalColumnRepository>().For<IOptionalColumnRepository>();
 		}
 
 		[Test]

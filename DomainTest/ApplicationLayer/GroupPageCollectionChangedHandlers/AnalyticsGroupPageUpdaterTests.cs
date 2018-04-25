@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 {
 	[TestFixture]
 	[DomainTest]
-	public class AnalyticsGroupPageUpdaterTests : ISetup
+	public class AnalyticsGroupPageUpdaterTests : IExtendSystem
 	{
 		public AnalyticsGroupPageUpdater Target;
 		public IGroupPageRepository GroupPageRepository;
@@ -26,12 +26,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 
 		private readonly Guid _businessUnitId = Guid.NewGuid();
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<AnalyticsGroupPageUpdater>();
+			extend.AddService<AnalyticsGroupPageUpdater>();
 		}
-
+		
 		[Test]
 		public void ShouldDeleteGroupPagesAndBridgeGroupPagePersonWhenAGroupPageIsDeleted()
 		{

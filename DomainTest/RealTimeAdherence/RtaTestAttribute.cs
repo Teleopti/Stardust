@@ -24,15 +24,15 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 		public FakeEventPublisher Publisher;
 		public MutableNow_ExperimentalEventPublishing Now;
 
-		protected override void Setup(ISystem system, IIocConfiguration configuration)
+		protected override void Isolate(IIsolate isolate)
 		{
-			base.Setup(system, configuration);
+			base.Isolate(isolate);
 
-			system.UseTestDouble<MutableNow_ExperimentalEventPublishing>().For<MutableNow, INow>();
-			system.UseTestDouble<FakeDataSourcesFactoryWithEvents>().For<IDataSourcesFactory>();
+			isolate.UseTestDouble<MutableNow_ExperimentalEventPublishing>().For<MutableNow, INow>();
+			isolate.UseTestDouble<FakeDataSourcesFactoryWithEvents>().For<IDataSourcesFactory>();
 
 			// disable activity change checker triggered by minute tick which is triggered by Now.Is(...)
-			system.UseTestDouble<DontCheckForActivityChangesFromScheduleChangeProcessor>().For<IActivityChangeCheckerFromScheduleChangeProcessor>();
+			isolate.UseTestDouble<DontCheckForActivityChangesFromScheduleChangeProcessor>().For<IActivityChangeCheckerFromScheduleChangeProcessor>();
 		}
 
 		protected override void BeforeTest()

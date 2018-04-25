@@ -9,11 +9,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	{
 		private static readonly ProxyFactory proxyFactory = new ProxyFactory();
 
-		public static void Execute(ISystem system)
+		public static void Execute(IIsolate isolate)
 		{
 			foreach (var type in typeof(IPersonRepository).Assembly.GetExportedTypes().Where(t => t.Name.EndsWith("Repository", StringComparison.Ordinal) && t.IsInterface))
 			{
-				system.UseTestDouble(proxyFactory.CreateProxy(type, new throwRepositoryInterceptor())).For(type);
+				isolate.UseTestDouble(proxyFactory.CreateProxy(type, new throwRepositoryInterceptor())).For(type);
 			}
 		}
 

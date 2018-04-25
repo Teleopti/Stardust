@@ -32,7 +32,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 {
 	[InfrastructureTest]
 	[Toggle(Toggles.ETL_EventbasedDate_39562)]
-	public class DimPersonUpdateMaxDateJobStepTests : ISetup
+	public class DimPersonUpdateMaxDateJobStepTests : IIsolateSystem
 	{
 		public IAnalyticsPersonPeriodDateFixer AnalyticsPersonPeriodDateFixer;
 		public IAnalyticsPersonPeriodRepository AnalyticsPersonPeriodRepository;
@@ -42,7 +42,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		private ExistingDatasources _datasource;
 		private UtcAndCetTimeZones _timeZones;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
 		}
 

@@ -18,17 +18,17 @@ using System.Collections.Generic;
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.ImplementationDetails
 {
 	[TestFixture, DatabaseTest]
-	public class ASMScheduleChangeTimePersisterTest : ISetup
+	public class ASMScheduleChangeTimePersisterTest : IIsolateSystem
 	{
 		public ASMScheduleChangeTimePersister Target;
 		public FakeASMScheduleChangeTimeRepository Repo;
 		public MutableNow Now;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<ASMScheduleChangeTimePersister>().For<ITransactionHook>();
-			system.UseTestDouble<FakeASMScheduleChangeTimeRepository>().For<IASMScheduleChangeTimeRepository>();
-			system.UseTestDouble<MutableNow>().For<INow>();
+			isolate.UseTestDouble<ASMScheduleChangeTimePersister>().For<ITransactionHook>();
+			isolate.UseTestDouble<FakeASMScheduleChangeTimeRepository>().For<IASMScheduleChangeTimeRepository>();
+			isolate.UseTestDouble<MutableNow>().For<INow>();
 		}
 
 		[Test]

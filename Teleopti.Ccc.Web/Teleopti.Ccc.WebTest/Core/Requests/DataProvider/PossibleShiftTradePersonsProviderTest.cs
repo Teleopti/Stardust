@@ -26,7 +26,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 {
 	[TestFixture, MyTimeWebTest]
-	public class PossibleShiftTradePersonsProviderTest: ISetup
+	public class PossibleShiftTradePersonsProviderTest: IIsolateSystem
 	{
 		private IPerson currentUser;
 		private ITeam myTeam;
@@ -38,10 +38,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public FakePeopleForShiftTradeFinder PeopleForShiftTradeFinder;
 		public MutableNow Now;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakePeopleForShiftTradeFinder>().For<IPeopleForShiftTradeFinder>();
-			system.UseTestDouble<PossibleShiftTradePersonsProvider>().For<IPossibleShiftTradePersonsProvider>();
+			isolate.UseTestDouble<FakePeopleForShiftTradeFinder>().For<IPeopleForShiftTradeFinder>();
+			isolate.UseTestDouble<PossibleShiftTradePersonsProvider>().For<IPossibleShiftTradePersonsProvider>();
 			
 			myTeam = new Team();
 			myTeam.SetId(Guid.NewGuid());

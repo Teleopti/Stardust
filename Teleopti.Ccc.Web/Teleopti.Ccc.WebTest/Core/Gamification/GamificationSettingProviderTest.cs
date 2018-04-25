@@ -18,7 +18,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Core.Gamification
 {
 	[TestFixture, DomainTest]
-	public class GamificationSettingProviderTest : ISetup
+	public class GamificationSettingProviderTest : IIsolateSystem, IExtendSystem
 	{
 		public IGamificationSettingProvider Target;
 		public IGamificationSettingRepository GamificationSettingRepository;
@@ -70,15 +70,19 @@ namespace Teleopti.Ccc.WebTest.Core.Gamification
 			var result = Target.GetGamificationSetting();
 			result.Should().Be.Null();
 		}
-		
-		public void Setup(ISystem system, IIocConfiguration configuration)
+				
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddModule(new WebModule(configuration, null));
+			extend.AddModule(new WebModule(configuration, null));
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
 			
 			var team = TeamFactory.CreateTeamWithId("myTeam");
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(DateOnly.MinValue, team);
 			
-			system.UseTestDouble(new FakeLoggedOnUser(person)).For<ILoggedOnUser>();
+			isolate.UseTestDouble(new FakeLoggedOnUser(person)).For<ILoggedOnUser>();
 		}
 
 		private void createTeamGamificationSetting(IGamificationSetting gamificationSetting = null)

@@ -14,15 +14,15 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Repositories
 {
 	[TestFixture]
 	[PrincipalAndStateTest]
-	public class RtaStateGroupRepositoryNotSignedInTest : ISetup
+	public class RtaStateGroupRepositoryNotSignedInTest : IExtendSystem
 	{
 		public IRtaStateGroupRepository StateGroupRepository;
 		public IPrincipalAndStateContext Context;
 		public TheServiceImpl TheService;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<TheServiceImpl>();
+			extend.AddService<TheServiceImpl>();
 		}
 
 		public class TheServiceImpl

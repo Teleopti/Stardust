@@ -26,14 +26,14 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Analytics.Etl.IntegrationTest
 {
 	[InfrastructureTest]
-	public class DimDayOffTests : ISetup
+	public class DimDayOffTests : IIsolateSystem
 	{
 		private JobParameters jobParameters;
 		private ExistingDatasources _datasource;
 		public IAnalyticsDayOffRepository AnalyticsDayOffRepository;
 		public IDayOffTemplateRepository DayOffRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
 		}
 

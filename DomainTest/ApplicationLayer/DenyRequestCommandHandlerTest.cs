@@ -16,15 +16,15 @@ using Teleopti.Ccc.IocCommon;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[TestFixture, DomainTest]
-	public class DenyRequestCommandHandlerTest : ISetup
+	public class DenyRequestCommandHandlerTest : IIsolateSystem
 	{
 		public IPersonRequestRepository PersonRequestRepository;
 		public IPersonRequestCheckAuthorization Authorization;
 		public INow Now;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble(new ThisIsNow(new DateTime(2017, 1, 1))).For<INow>();
+			isolate.UseTestDouble(new ThisIsNow(new DateTime(2017, 1, 1))).For<INow>();
 		}
 
 		[Test]

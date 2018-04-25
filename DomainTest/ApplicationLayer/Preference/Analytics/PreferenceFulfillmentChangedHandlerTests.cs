@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 {
 	[TestFixture]
 	[DomainTest]
-	public class PreferenceFulfillmentChangedHandlerTests : ISetup
+	public class PreferenceFulfillmentChangedHandlerTests : IExtendSystem
 	{
 		public PreferenceFulfillmentChangedHandler Target;
 		public IPreferenceDayRepository PreferenceDayRepository;
@@ -25,9 +25,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		public FakeEventPublisher EventPublisher;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<PreferenceFulfillmentChangedHandler>();
+			extend.AddService<PreferenceFulfillmentChangedHandler>();
 		}
 
 		[Test]

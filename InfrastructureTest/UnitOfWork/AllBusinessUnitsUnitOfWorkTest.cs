@@ -18,11 +18,11 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
 	[TestFixture]
 	[PrincipalAndStateTest]
-	public class AllBusinessUnitsUnitOfWorkTest : ISetup
-	{
-		public void Setup(ISystem system, IIocConfiguration configuration)
+	public class AllBusinessUnitsUnitOfWorkTest : IExtendSystem
+	{		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<TheServiceImpl>();
+			extend.AddService<TheServiceImpl>();
 		}
 
 		public TheServiceImpl TheService;

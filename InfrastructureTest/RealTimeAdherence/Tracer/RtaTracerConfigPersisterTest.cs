@@ -14,16 +14,16 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Tracer
 	[AnalyticsDatabaseTest]
 	[Setting("RtaTracerBufferSize", 0)]
 	[Setting("UseSafeRtaTracer", false)]
-	public class RtaTracerConfigPersisterTest : ISetup
+	public class RtaTracerConfigPersisterTest : IIsolateSystem
 	{
 		public FakeDataSourceForTenant Tenants;
 		public IRtaTracerConfigPersister Target;
 		public ICurrentDataSource Tenant;
 		public IDataSourceScope DataSource;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeDataSourceForTenant>().For<IDataSourceForTenant>();
+			isolate.UseTestDouble<FakeDataSourceForTenant>().For<IDataSourceForTenant>();
 		}
 
 		[Test]

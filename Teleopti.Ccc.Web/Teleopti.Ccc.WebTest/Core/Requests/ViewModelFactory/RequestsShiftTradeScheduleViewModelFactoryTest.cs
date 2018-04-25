@@ -21,20 +21,26 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.WebTest.Core.IoC;
+using Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 {
 	public class MyTimeWebRequestsShiftTradeViewModelFactoryTestAttribute : MyTimeWebTestAttribute
 	{
-		protected override void Setup(ISystem system, IIocConfiguration configuration)
+		protected override void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			base.Setup(system, configuration);
-			system.AddService<FakeStorage>();
-			system.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
-			system.UseTestDouble<Areas.Global.FakePermissionProvider>().For<IPermissionProvider>();
-			system.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
-			system.UseTestDouble<FakePeopleForShiftTradeFinder>().For<IPeopleForShiftTradeFinder>();
+			base.Extend(extend, configuration);
+			extend.AddService<FakeStorage>();
+		}
+
+		protected override void Isolate(IIsolate isolate)
+		{
+			base.Isolate(isolate);
+			isolate.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
+			isolate.UseTestDouble<Areas.Global.FakePermissionProvider>().For<IPermissionProvider>();
+			isolate.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
+			isolate.UseTestDouble<FakePeopleForShiftTradeFinder>().For<IPeopleForShiftTradeFinder>();
 		}
 	}
 

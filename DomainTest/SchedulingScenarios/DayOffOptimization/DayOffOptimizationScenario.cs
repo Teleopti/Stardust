@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, true, false, true)]
 	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, false, false, true)]
 	[LoggedOnAppDomain]
-	public abstract class DayOffOptimizationScenario : ISetup, IConfigureToggleManager, ITestInterceptor
+	public abstract class DayOffOptimizationScenario : IIsolateSystem, IExtendSystem, IConfigureToggleManager, ITestInterceptor
 	{
 		private readonly SeperateWebRequest _seperateWebRequest;
 		protected readonly bool _resourcePlannerDayOffOptimizationIslands47208;
@@ -45,13 +45,17 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			_resourcePlannerDayOffUsePredictorEverywhere75667 = resourcePlannerDayOffUsePredictorEverywhere75667;
 			_resourcePlannerMinimumStaffing75339 = resourcePlannerMinimumStaffing75339;
 		}
-		
-		public virtual void Setup(ISystem system, IIocConfiguration configuration)
+				
+		public virtual void Extend(IExtend extend, IIocConfiguration configuration)
+		{
+			extend.AddService<ResourceCalculateWithNewContext>();
+		}
+
+		public virtual void Isolate(IIsolate isolate)
 		{
 			var withDefaultDayOff = new FakeDayOffTemplateRepository();
 			withDefaultDayOff.Has(DayOffFactory.CreateDayOff());
-			system.UseTestDouble(withDefaultDayOff).For<IDayOffTemplateRepository>();
-			system.AddService<ResourceCalculateWithNewContext>();
+			isolate.UseTestDouble(withDefaultDayOff).For<IDayOffTemplateRepository>();
 		}
 
 		public void Configure(FakeToggleManager toggleManager)

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture, Category("BucketB")]
 	[DatabaseTest]
-	public class PersonSelectorReadOnlyRepositoryTest: ISetup
+	public class PersonSelectorReadOnlyRepositoryTest: IIsolateSystem
 	{
 		private PersonSelectorReadOnlyRepository _target;
 		public WithUnitOfWork WithUnitOfWork;
@@ -34,9 +34,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public IBusinessUnitRepository BusinessUnitRepository;
 		public ICurrentUnitOfWork CurrentUnitOfWork;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<CurrentBusinessUnit>().For<ICurrentBusinessUnit>();
+			isolate.UseTestDouble<CurrentBusinessUnit>().For<ICurrentBusinessUnit>();
 		}
 
 		[Test]

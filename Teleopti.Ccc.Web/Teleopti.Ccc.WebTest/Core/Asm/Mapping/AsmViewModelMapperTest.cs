@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 {
 	[TestFixture]
 	[MyTimeWebTest]
-	public class AsmViewModelMapperTest : ISetup
+	public class AsmViewModelMapperTest : IIsolateSystem
 	{
 		public IScheduleStorage ScheduleStorage;
 		public IAsmViewModelMapper Target;
@@ -35,9 +35,9 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 
 		private static readonly CultureInfo defaultCulture = CultureInfo.GetCultureInfo("sv-SE");
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble(new FakeScenarioRepository(new Scenario { DefaultScenario = true })).For<IScenarioRepository>();
+			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario { DefaultScenario = true })).For<IScenarioRepository>();
 		}
 
 		[Test]

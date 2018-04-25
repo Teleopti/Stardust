@@ -13,14 +13,14 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
 	[TestFixture]
 	[InfrastructureTest]
-	public class SyncEventPackagePublishingTest : ISetup
+	public class SyncEventPackagePublishingTest : IExtendSystem
 	{
 		public IEventPublisher Publisher;
 		public TestHandler Handler;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<TestHandler>();
+			extend.AddService<TestHandler>();
 		}
 
 		[Test]

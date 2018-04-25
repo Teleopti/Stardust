@@ -22,7 +22,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 {
 	[DomainTest]
-	public class AnalyticsAvailabilityUpdaterTest : ISetup
+	public class AnalyticsAvailabilityUpdaterTest : IExtendSystem
 	{
 		public AnalyticsAvailabilityUpdater Target;
 		public FakeStudentAvailabilityDayRepository AvailabilityDayRepository;
@@ -39,9 +39,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 		private const int businessUnitId = 123;
 		private const int personId = 321;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<AnalyticsAvailabilityUpdater>();
+			extend.AddService<AnalyticsAvailabilityUpdater>();
 		}
 
 		[Test]

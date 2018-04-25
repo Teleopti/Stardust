@@ -13,13 +13,13 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
-	public class IntradayRequestWithinOpenHourValidatorTest : ISetup
+	public class IntradayRequestWithinOpenHourValidatorTest : IIsolateSystem
 	{
 		public IntradayRequestWithinOpenHourValidator Target;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<IntradayRequestWithinOpenHourValidator>().For<IIntradayRequestWithinOpenHourValidator>();
+			isolate.UseTestDouble<IntradayRequestWithinOpenHourValidator>().For<IIntradayRequestWithinOpenHourValidator>();
 		}
 
 		[Test]

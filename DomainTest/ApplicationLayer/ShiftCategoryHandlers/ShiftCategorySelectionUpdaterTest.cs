@@ -13,7 +13,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftCategoryHandlers
 {
 	[DomainTest]
-	public class ShiftCategorySelectionUpdaterTest : ISetup
+	public class ShiftCategorySelectionUpdaterTest : IIsolateSystem
 	{
 		public ShiftCategorySelectionModelUpdater Target;
 		public FakeShiftCategorySelectionRepository ShiftCategorySelectionRepository;
@@ -73,9 +73,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftCategoryHandlers
 			ShiftCategorySelectionRepository.LoadAll().First().Model.Should().Not.Be.Empty();
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<ShiftCategorySelectionModelUpdater>().For<ShiftCategorySelectionModelUpdater>();
+			isolate.UseTestDouble<ShiftCategorySelectionModelUpdater>().For<ShiftCategorySelectionModelUpdater>();
 		}
 	}
 }

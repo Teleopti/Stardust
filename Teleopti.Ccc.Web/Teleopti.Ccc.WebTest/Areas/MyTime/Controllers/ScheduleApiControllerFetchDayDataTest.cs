@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	[TestFixture]
 	[MyTimeWebTest]
 	[SetCulture("sv-SE")]
-	public class ScheduleApiControllerFetchDayDataTest : ISetup
+	public class ScheduleApiControllerFetchDayDataTest : IIsolateSystem
 	{
 		public ScheduleApiController Target;
 		public ICurrentScenario Scenario;
@@ -54,9 +54,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public ICurrentDataSource CurrentDataSource;
 		public FakeSkillTypeRepository SkillTypeRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<ThreadPrincipalContext>().For<IThreadPrincipalContext>();
+			isolate.UseTestDouble<ThreadPrincipalContext>().For<IThreadPrincipalContext>();
 		}
 
 		[Test, SetCulture("sv-SE")]

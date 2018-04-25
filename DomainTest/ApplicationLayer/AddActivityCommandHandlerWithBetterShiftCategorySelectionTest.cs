@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[DomainTest]
 	[Toggle(Toggles.WfmTeamSchedule_SuggestShiftCategory_152)]
-	public class AddActivityCommandHandlerWithBetterShiftCategorySelectionTest : ISetup
+	public class AddActivityCommandHandlerWithBetterShiftCategorySelectionTest : IIsolateSystem
 	{
 		public AddActivityCommandHandler Target;
 		public FakePersonRepository PersonRepository;
@@ -31,11 +31,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public FakeShiftCategorySelectionRepository ShiftCategorySelectionRepository;
 		public IPredictShiftCategory PredictShiftCategory;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<AddActivityCommandHandler>().For<IHandleCommand<AddActivityCommand>>();
-			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
-			system.UseTestDouble<FakeScheduleDifferenceSaver_DoNotUse>().For<IScheduleDifferenceSaver>();
+			isolate.UseTestDouble<AddActivityCommandHandler>().For<IHandleCommand<AddActivityCommand>>();
+			isolate.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
+			isolate.UseTestDouble<FakeScheduleDifferenceSaver_DoNotUse>().For<IScheduleDifferenceSaver>();
 		}
 
 		[Test]

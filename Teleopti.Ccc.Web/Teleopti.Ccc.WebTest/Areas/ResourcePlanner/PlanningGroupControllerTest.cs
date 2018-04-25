@@ -14,15 +14,15 @@ using Teleopti.Ccc.WebTest.TestHelper;
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 {
 	[DomainTest]
-	public class PlanningGroupControllerTest : ISetup
+	public class PlanningGroupControllerTest : IExtendSystem
 	{
 		public PlanningGroupController Target;
 		public FakePlanningGroupRepository PlanningGroupRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<PlanningGroupController>();
+			extend.AddService<PlanningGroupController>();
 		}
 
 		[Test]

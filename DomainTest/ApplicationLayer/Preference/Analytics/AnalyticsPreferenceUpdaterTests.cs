@@ -21,7 +21,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 {
 	[DomainTest]
-	public class AnalyticsPreferenceUpdaterTests : ISetup
+	public class AnalyticsPreferenceUpdaterTests : IExtendSystem
 	{
 		public AnalyticsPreferenceUpdater Target;
 		public IAnalyticsPersonPeriodRepository PersonPeriodRepository;
@@ -39,9 +39,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 
 		private readonly Guid _businessUnitId = Guid.NewGuid();
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<AnalyticsPreferenceUpdater>();
+			extend.AddService<AnalyticsPreferenceUpdater>();
 		}
 
 		private void setup()

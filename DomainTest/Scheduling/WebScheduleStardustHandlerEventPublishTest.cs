@@ -24,7 +24,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling
 {
 	[DomainTest]
-	public class WebScheduleStardustHandlerEventPublishTest : SchedulingScenario, ISetup
+	public class WebScheduleStardustHandlerEventPublishTest : SchedulingScenario, IIsolateSystem
 	{
 		public WebScheduleStardustHandler Target;
 		public FullScheduling FullScheduling;
@@ -85,10 +85,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			webOptimizationStardustEvent.Policy.Should().Be.EqualTo(WebScheduleStardustBaseEvent.HalfNodesAffinity);
 		}
 
-		public override void Setup(ISystem system, IIocConfiguration configuration)
+		public override void Isolate(IIsolate isolate)
 		{
-			base.Setup(system, configuration);
-			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+			base.Isolate(isolate);
+			isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 		}
 
 		public WebScheduleStardustHandlerEventPublishTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)

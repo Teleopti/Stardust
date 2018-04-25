@@ -14,7 +14,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Skill
 {
 	[DomainTest]
-	public class AnalyticsSkillUpdaterTest : ISetup
+	public class AnalyticsSkillUpdaterTest : IIsolateSystem, IExtendSystem
 	{
 		public AnalyticsSkillUpdater Target;
 		public FakeAnalyticsSkillRepository AnalyticsSkillRepository;
@@ -22,10 +22,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Skill
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public FakeEventPublisher EventPublisher;
 		private Guid _businessUnitId;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<AnalyticsSkillUpdater>();
+			extend.AddService<AnalyticsSkillUpdater>();
+		}
+		
+		public void Isolate(IIsolate isolate)
+		{
 			_businessUnitId = Guid.NewGuid();
 		}
 		

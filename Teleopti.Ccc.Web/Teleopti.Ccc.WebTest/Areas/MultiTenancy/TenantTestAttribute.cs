@@ -14,24 +14,28 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 {
 	public class TenantTestAttribute : IoCTestAttribute
 	{
-		protected override void Setup(ISystem system, IIocConfiguration configuration)
+		protected override void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddModule(new WebModule(configuration, null));
-			system.UseTestDouble<PersistPersonInfoFake>().For<IPersistPersonInfo>();
-			system.UseTestDouble<CheckPasswordStrengthFake>().For<ICheckPasswordStrength>();
-			system.UseTestDouble<DeletePersonInfoFake>().For<IDeletePersonInfo>();
-			system.UseTestDouble<ApplicationUserQueryFake>().For<IApplicationUserQuery>();
-			system.UseTestDouble<IdentityUserQueryFake>().For<IIdentityUserQuery>();
-			system.UseTestDouble<IdUserQueryFake>().For<IIdUserQuery>();
-			system.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();
-			system.UseTestDouble<PasswordPolicyFake>().For<IPasswordPolicy>();
-			system.UseTestDouble<FindLogonInfoFake>().For<IFindLogonInfo>();
-			system.UseTestDouble<FindPersonInfoFake>().For<IFindPersonInfo>();
-			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
-			system.UseTestDouble<LogLogonAttemptFake>().For<ILogLogonAttempt>();
-			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
-			system.UseTestDouble<FakePersistExternalApplicationAccess>().For<IPersistExternalApplicationAccess>();
-			system.UseTestDouble<FakeFindExternalApplicationAccess>().For<IFindExternalApplicationAccess>();
+			extend.AddModule(new WebModule(configuration, null));
+		}
+
+		protected override void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<PersistPersonInfoFake>().For<IPersistPersonInfo>();
+			isolate.UseTestDouble<CheckPasswordStrengthFake>().For<ICheckPasswordStrength>();
+			isolate.UseTestDouble<DeletePersonInfoFake>().For<IDeletePersonInfo>();
+			isolate.UseTestDouble<ApplicationUserQueryFake>().For<IApplicationUserQuery>();
+			isolate.UseTestDouble<IdentityUserQueryFake>().For<IIdentityUserQuery>();
+			isolate.UseTestDouble<IdUserQueryFake>().For<IIdUserQuery>();
+			isolate.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();
+			isolate.UseTestDouble<PasswordPolicyFake>().For<IPasswordPolicy>();
+			isolate.UseTestDouble<FindLogonInfoFake>().For<IFindLogonInfo>();
+			isolate.UseTestDouble<FindPersonInfoFake>().For<IFindPersonInfo>();
+			isolate.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
+			isolate.UseTestDouble<LogLogonAttemptFake>().For<ILogLogonAttempt>();
+			isolate.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
+			isolate.UseTestDouble<FakePersistExternalApplicationAccess>().For<IPersistExternalApplicationAccess>();
+			isolate.UseTestDouble<FakeFindExternalApplicationAccess>().For<IFindExternalApplicationAccess>();
 		}
 	}
 }

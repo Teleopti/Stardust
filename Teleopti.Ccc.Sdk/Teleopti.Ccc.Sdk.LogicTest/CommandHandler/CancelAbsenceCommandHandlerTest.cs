@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
     [TestFixture]
 	[DomainTest]
-    public class CancelAbsenceCommandHandlerTest : ISetup
+    public class CancelAbsenceCommandHandlerTest : IIsolateSystem, IExtendSystem
     {
         public IScheduleStorage ScheduleStorage;
         public FakeScenarioRepository ScenarioRepository;
@@ -132,13 +132,17 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 					new ScheduleDictionaryLoadOptions(false, false), _period.ChangeEndTime(TimeSpan.FromDays(3)),
 					scenario)[person].ScheduledDay(new DateOnly(_startDate).AddDays(3)).PersonAbsenceCollection(true).Length.Should().Be.EqualTo(1);
 		}
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<CancelAbsenceCommandHandler>();
-			system.UseTestDouble<ScheduleSaveHandler>().For<IScheduleSaveHandler>();
-			system.UseTestDouble<SaveSchedulePartService>().For<ISaveSchedulePartService>();
-			system.AddModule(new AssemblerModule());
+			extend.AddService<CancelAbsenceCommandHandler>();
+			extend.AddModule(new AssemblerModule());
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<ScheduleSaveHandler>().For<IScheduleSaveHandler>();
+			isolate.UseTestDouble<SaveSchedulePartService>().For<ISaveSchedulePartService>();
 		}
 	}
 }

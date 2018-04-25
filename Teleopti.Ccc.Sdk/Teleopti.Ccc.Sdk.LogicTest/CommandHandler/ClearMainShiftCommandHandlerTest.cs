@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
     [TestFixture]
 	[DomainTest]
-    public class ClearMainShiftCommandHandlerTest : ISetup
+    public class ClearMainShiftCommandHandlerTest : IIsolateSystem, IExtendSystem
 	{
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonRepository PersonRepository;
@@ -113,14 +113,18 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				.ScheduleTag()
 				.Should()
 				.Be.EqualTo(scheduleTag);
+		}	
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
+		{
+			extend.AddService<ClearMainShiftCommandHandler>();
+			extend.AddModule(new AssemblerModule());
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.AddService<ClearMainShiftCommandHandler>();
-			system.UseTestDouble<ScheduleSaveHandler>().For<IScheduleSaveHandler>();
-			system.UseTestDouble<SaveSchedulePartService>().For<ISaveSchedulePartService>();
-			system.AddModule(new AssemblerModule());
+			isolate.UseTestDouble<ScheduleSaveHandler>().For<IScheduleSaveHandler>();
+			isolate.UseTestDouble<SaveSchedulePartService>().For<ISaveSchedulePartService>();
 		}
 	}
 }

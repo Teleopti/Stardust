@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 {
 	[TestFixture]
 	[RequestsTest]
-	public class RequestsViewModelMappingTest : ISetup
+	public class RequestsViewModelMappingTest : IIsolateSystem
 	{
 		public RequestsViewModelMapper Target;
 		public FakeLoggedOnUser LoggedOnUser;
@@ -826,10 +826,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				globalSettingDataRepository, new CheckingPersonalAccountDaysProvider(personAbsenceAccountRepository));
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeLinkProvider>().For<ILinkProvider>();
-			system.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
+			isolate.UseTestDouble<FakeLinkProvider>().For<ILinkProvider>();
+			isolate.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
 		}
 	}
 }

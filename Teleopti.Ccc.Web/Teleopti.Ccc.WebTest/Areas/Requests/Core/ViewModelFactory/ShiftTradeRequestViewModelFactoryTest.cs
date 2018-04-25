@@ -34,7 +34,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 {
 	[TestFixture, RequestsTest]
-	public class ShiftTradeRequestViewModelFactoryTest : ISetup
+	public class ShiftTradeRequestViewModelFactoryTest : IIsolateSystem
 	{
 		public ICurrentScenario Scenario;
 		public IShiftTradeRequestViewModelFactory ShiftTradeRequestViewModelFactory;
@@ -53,12 +53,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		private ITeam team;
 		private IPersonPeriod personPeriod;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
 			setupStateHolderProxy();
-			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
-			system.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
-			system.UseTestDouble<FakeGroupingReadOnlyRepository>().For<IGroupingReadOnlyRepository>();
+			isolate.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
+			isolate.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
+			isolate.UseTestDouble<FakeGroupingReadOnlyRepository>().For<IGroupingReadOnlyRepository>();
 
 			team = createTeam();
 			personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2015, 10, 1), team);

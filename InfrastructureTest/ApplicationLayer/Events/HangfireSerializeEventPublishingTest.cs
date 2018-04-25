@@ -12,17 +12,17 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
 	[TestFixture]
 	[HangfireTest]
-	public class HangfireSerializeEventPublishingTest : ISetup
+	public class HangfireSerializeEventPublishingTest : IExtendSystem
 	{
 		public Lazy<HangfireUtilities> Hangfire;
 		public IEventPublisher Publisher;
 		public IRecurringEventPublisher Recurring;
 		public HangfireClientStarter Starter;
 		public TestHandler Handler;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<TestHandler>();
+			extend.AddService<TestHandler>();
 		}
 
 		[Test]

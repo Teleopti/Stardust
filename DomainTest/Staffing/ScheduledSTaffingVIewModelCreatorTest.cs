@@ -17,7 +17,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Staffing
 {
 	[DomainTest]
-	public class ScheduledSTaffingVIewModelCreatorTest : ISetup
+	public class ScheduledSTaffingVIewModelCreatorTest : IIsolateSystem
 	{
 		public ScheduledStaffingViewModelCreator Target;
 		public FakeScenarioRepository ScenarioRepository;
@@ -31,9 +31,9 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public FakeUserTimeZone TimeZone;
 		private const int minutesPerInterval = 15;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
+			isolate.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
 		}
 
 		[Test]

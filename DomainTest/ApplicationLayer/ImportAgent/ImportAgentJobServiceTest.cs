@@ -20,7 +20,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 {
 	[TestFixture, DomainTest]
-	public class ImportAgentJobServiceTest : ISetup
+	public class ImportAgentJobServiceTest : IIsolateSystem
 	{
 		public IJobResultRepository JobResultRepository;
 		public FakeLoggedOnUser LoggedOnUser;
@@ -29,16 +29,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		public ImportAgentEventHandler EventHandler;
 		public ICurrentTenantUser CurrentTenantUser;
 		public CurrentBusinessUnit CurrentBusinessUnit;
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<ImportAgentJobService>().For<IImportAgentJobService>();
-			system.UseTestDouble<FakeJobResultRepositoryForCurrentBusinessUnit>().For<IJobResultRepository>();
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
-			system.UseTestDouble<ImportAgentEventHandler>().For<IHandleEvent<ImportAgentEvent>>();
-			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
-			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
-			system.UseTestDouble<CurrentBusinessUnit>().For<ICurrentBusinessUnit>();
+			isolate.UseTestDouble<ImportAgentJobService>().For<IImportAgentJobService>();
+			isolate.UseTestDouble<FakeJobResultRepositoryForCurrentBusinessUnit>().For<IJobResultRepository>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+			isolate.UseTestDouble<ImportAgentEventHandler>().For<IHandleEvent<ImportAgentEvent>>();
+			isolate.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
+			isolate.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
+			isolate.UseTestDouble<CurrentBusinessUnit>().For<ICurrentBusinessUnit>();
 		}
 
 		[Test]

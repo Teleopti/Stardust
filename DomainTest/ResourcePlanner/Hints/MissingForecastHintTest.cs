@@ -15,7 +15,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
-	public class MissingForecastHintTest : ISetup
+	public class MissingForecastHintTest : IIsolateSystem
 	{
 		public MissingForecastHint Target;
 		public FakeExistingForecastRepository ExistingForecastRepository;
@@ -200,9 +200,9 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			validationResult.InvalidResources.Single().ResourceName.Should().Be(skill.Name);
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble(new FakeScenarioRepository(ScenarioFactory.CreateScenario("Default", true, true))).For<IScenarioRepository>();
+			isolate.UseTestDouble(new FakeScenarioRepository(ScenarioFactory.CreateScenario("Default", true, true))).For<IScenarioRepository>();
 		}
 	}
 }

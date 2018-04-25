@@ -19,15 +19,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 	[TestFixture]
 	[AnalyticsDatabaseTest]
 	[Toggle(Toggles.ETL_EventbasedTimeZone_40870)]
-	public class AnalyticsTimeZoneRepositoryWithCreationTest: ISetup
+	public class AnalyticsTimeZoneRepositoryWithCreationTest: IIsolateSystem
 	{
 		public IAnalyticsTimeZoneRepository Target;
 		public WithAnalyticsUnitOfWork WithAnalyticsUnitOfWork;
 		public FakeEventPublisher FakeEventPublisher;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+			isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 		}
 
 		[SetUp]

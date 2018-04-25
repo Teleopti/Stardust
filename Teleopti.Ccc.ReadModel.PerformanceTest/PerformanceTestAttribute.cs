@@ -20,16 +20,22 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 			return config;
 		}
 
-		protected override void Setup(ISystem system, IIocConfiguration configuration)
+		protected override void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			base.Setup(system, configuration);
-			system.AddService<TestConfiguration>();
-			system.AddService<Http>();
-			system.AddService<DataCreator>();
-			system.AddService<Database>();
-			system.AddService<AnalyticsDatabase>();
+			base.Extend(extend, configuration);
+			
+			extend.AddService<TestConfiguration>();
+			extend.AddService<Http>();
+			extend.AddService<DataCreator>();
+			extend.AddService<Database>();
+			extend.AddService<AnalyticsDatabase>();
+		}
 
-			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
+		protected override void Isolate(IIsolate isolate)
+		{
+			base.Isolate(isolate);
+
+			isolate.UseTestDouble<NoMessageSender>().For<IMessageSender>();
 
 		}
 

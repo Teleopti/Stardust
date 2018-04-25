@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 	[TestFixture]
 	[DomainTest]
 	[TestWithStaticDependenciesDONOTUSE]
-	public class RequestApprovalServiceSchedulerNoMockTest : ISetup
+	public class RequestApprovalServiceSchedulerNoMockTest : IIsolateSystem
 	{
 		public IRequestApprovalServiceFactory RequestApprovalServiceFactory;
 		public ICurrentScenario Scenario;
@@ -37,9 +37,9 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		private IRequestApprovalService _requestApprovalService;
 		private IScheduleDictionary _scheduleDictionary;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble(new FakeScenarioRepository(new Scenario() {DefaultScenario = true}.WithId()))
+			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario() {DefaultScenario = true}.WithId()))
 				.For<IScenarioRepository>();
 		}
 

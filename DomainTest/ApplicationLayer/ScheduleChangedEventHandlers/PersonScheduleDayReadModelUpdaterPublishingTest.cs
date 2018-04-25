@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 	[Toggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
 	[ExtendScope(typeof(ScheduleReadModelWrapperHandler))]
 	[ExtendScope(typeof(ProjectionChangedEventPublisher))]
-	public class PersonScheduleDayReadModelUpdaterPublishingTest : ISetup
+	public class PersonScheduleDayReadModelUpdaterPublishingTest : IIsolateSystem
 	{
 		public IEventPublisher EventPublisher;
 		public FakeScenarioRepository ScenarioRepository;
@@ -57,9 +57,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				.Should().Be.EqualTo(1);
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<scheduleChangesSubscriptionPublisherDummy>().For<ScheduleChangesSubscriptionPublisher>();
+			isolate.UseTestDouble<scheduleChangesSubscriptionPublisherDummy>().For<ScheduleChangesSubscriptionPublisher>();
 		}
 
 		private class scheduleChangesSubscriptionPublisherDummy : ScheduleChangesSubscriptionPublisher

@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
 	[TestWithStaticDependenciesDONOTUSE]
-	public class MultiAbsenceRequestsHandlerTest : ISetup
+	public class MultiAbsenceRequestsHandlerTest : IIsolateSystem
 	{
 		public IPersonRequestRepository PersonRequestRepository;
 		public IQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
@@ -52,10 +52,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakeBudgetGroupRepository FakeBudgetGroup;
 		public FakeBudgetDayRepository FakeBudgetDay;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<MultiAbsenceRequestsHandler>().For<IHandleEvent<NewMultiAbsenceRequestsCreatedEvent>>();
-			system.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
+			isolate.UseTestDouble<MultiAbsenceRequestsHandler>().For<IHandleEvent<NewMultiAbsenceRequestsCreatedEvent>>();
+			isolate.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
 		}
 
 		[Test]

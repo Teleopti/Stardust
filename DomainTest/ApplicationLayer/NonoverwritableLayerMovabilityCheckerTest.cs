@@ -15,7 +15,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[DomainTest]
-	public class NonoverwritableLayerMovabilityCheckerTest : ISetup
+	public class NonoverwritableLayerMovabilityCheckerTest : IIsolateSystem
 	{
 		public FakePersonRepository PersonRepository;
 		public FakeCurrentScenario_DoNotUse CurrentScenario;
@@ -287,12 +287,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			return schedules[person].ScheduledDay(date);
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
-			system.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
-			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
-			system.UseTestDouble<NonoverwritableLayerMovabilityChecker>().For<INonoverwritableLayerMovabilityChecker>();
+			isolate.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
+			isolate.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
+			isolate.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
+			isolate.UseTestDouble<NonoverwritableLayerMovabilityChecker>().For<INonoverwritableLayerMovabilityChecker>();
 		}
 	}
 }

@@ -24,54 +24,58 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 {
 	public class TeamScheduleTestAttribute : IoCTestAttribute
 	{
-		protected override void Setup(ISystem system, IIocConfiguration configuration)
+		protected override void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddModule(new WebModule(configuration, null));
-			system.AddModule(new TeamScheduleAreaModule());
+			extend.AddModule(new WebModule(configuration, null));
+			extend.AddModule(new TeamScheduleAreaModule());
 
-			system.AddService<FakeStorage>();
-			system.UseTestDouble<FakeSchedulePersonProvider>().For<ISchedulePersonProvider>();
-			system.UseTestDouble<FakeUserCulture>().For<IUserCulture>();
-			system.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
-			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
-			system.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
-			system.UseTestDouble<FakePeopleSearchProvider>().For<IPeopleSearchProvider>();
-			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
-			system.UseTestDouble<SyncCommandDispatcher>().For<ICommandDispatcher>();
-			system.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
+			extend.AddService<FakeStorage>();
+		}
+
+		protected override void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FakeSchedulePersonProvider>().For<ISchedulePersonProvider>();
+			isolate.UseTestDouble<FakeUserCulture>().For<IUserCulture>();
+			isolate.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
+			isolate.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
+			isolate.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
+			isolate.UseTestDouble<FakePeopleSearchProvider>().For<IPeopleSearchProvider>();
+			isolate.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
+			isolate.UseTestDouble<SyncCommandDispatcher>().For<ICommandDispatcher>();
+			isolate.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
 
 			var fakeCommandHandler = new FakeCommandHandler();
-			system.UseTestDouble(fakeCommandHandler).For<IHandleCommand<BackoutScheduleChangeCommand>>();
-			system.UseTestDouble(fakeCommandHandler).For<IHandleCommand<ChangeShiftCategoryCommand>>();
-			system.UseTestDouble(fakeCommandHandler).For<IHandleCommand<FixNotOverwriteLayerCommand>>();
-			system.UseTestDouble(fakeCommandHandler).For<IHandleCommand<EditScheduleNoteCommand>>();
-			system.UseTestDouble(fakeCommandHandler).For<IHandleCommand<MoveShiftLayerCommand>>();
-			system.UseTestDouble(fakeCommandHandler).For<IHandleCommand<MoveShiftCommand>>();
-			system.UseTestDouble(fakeCommandHandler).For<IHandleCommand<AddDayOffCommand>>();
-			system.UseTestDouble(fakeCommandHandler).For<IHandleCommand<AddActivityCommand>>();
-			system.UseTestDouble(fakeCommandHandler).For<IHandleCommand<AddPersonalActivityCommand>>();
-			system.UseTestDouble(fakeCommandHandler).For<IHandleCommand<AddOvertimeActivityCommand>>();
-			system.UseTestDouble(fakeCommandHandler).For<IHandleCommand<RemoveActivityCommand>>();
-			system.UseTestDouble(fakeCommandHandler).For<IHandleCommand<RemoveDayOffCommand>>();
-			system.UseTestDouble(fakeCommandHandler).For<IHandleCommand<RemoveShiftCommand>>();
+			isolate.UseTestDouble(fakeCommandHandler).For<IHandleCommand<BackoutScheduleChangeCommand>>();
+			isolate.UseTestDouble(fakeCommandHandler).For<IHandleCommand<ChangeShiftCategoryCommand>>();
+			isolate.UseTestDouble(fakeCommandHandler).For<IHandleCommand<FixNotOverwriteLayerCommand>>();
+			isolate.UseTestDouble(fakeCommandHandler).For<IHandleCommand<EditScheduleNoteCommand>>();
+			isolate.UseTestDouble(fakeCommandHandler).For<IHandleCommand<MoveShiftLayerCommand>>();
+			isolate.UseTestDouble(fakeCommandHandler).For<IHandleCommand<MoveShiftCommand>>();
+			isolate.UseTestDouble(fakeCommandHandler).For<IHandleCommand<AddDayOffCommand>>();
+			isolate.UseTestDouble(fakeCommandHandler).For<IHandleCommand<AddActivityCommand>>();
+			isolate.UseTestDouble(fakeCommandHandler).For<IHandleCommand<AddPersonalActivityCommand>>();
+			isolate.UseTestDouble(fakeCommandHandler).For<IHandleCommand<AddOvertimeActivityCommand>>();
+			isolate.UseTestDouble(fakeCommandHandler).For<IHandleCommand<RemoveActivityCommand>>();
+			isolate.UseTestDouble(fakeCommandHandler).For<IHandleCommand<RemoveDayOffCommand>>();
+			isolate.UseTestDouble(fakeCommandHandler).For<IHandleCommand<RemoveShiftCommand>>();
 
-			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
-			system.UseTestDouble<FullPermission>().For<IAuthorization>();
-			system.UseTestDouble<FakePersonAssignmentWriteSideRepository>().For<IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>>();
-			system.UseTestDouble<FakeRepositoryFactory>().For<IRepositoryFactory>();
-			system.UseTestDouble<FakeScenarioRepository>().For<IScenarioRepository>();
-			system.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
-			system.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
-			system.UseTestDouble<FakeMeetingRepository>().For<IMeetingRepository>();
-			system.UseTestDouble<FakeNoteRepository>().For<INoteRepository>();
-			system.UseTestDouble<FakePublicNoteRepository>().For<IPublicNoteRepository>();
-			system.UseTestDouble<FakeAgentDayScheduleTagRepository>().For<IAgentDayScheduleTagRepository>();
-			system.UseTestDouble<FakeShiftCategoryRepository>().For<IShiftCategoryRepository>();
+			isolate.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
+			isolate.UseTestDouble<FullPermission>().For<IAuthorization>();
+			isolate.UseTestDouble<FakePersonAssignmentWriteSideRepository>().For<IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>>();
+			isolate.UseTestDouble<FakeRepositoryFactory>().For<IRepositoryFactory>();
+			isolate.UseTestDouble<FakeScenarioRepository>().For<IScenarioRepository>();
+			isolate.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
+			isolate.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
+			isolate.UseTestDouble<FakeMeetingRepository>().For<IMeetingRepository>();
+			isolate.UseTestDouble<FakeNoteRepository>().For<INoteRepository>();
+			isolate.UseTestDouble<FakePublicNoteRepository>().For<IPublicNoteRepository>();
+			isolate.UseTestDouble<FakeAgentDayScheduleTagRepository>().For<IAgentDayScheduleTagRepository>();
+			isolate.UseTestDouble<FakeShiftCategoryRepository>().For<IShiftCategoryRepository>();
 
-			system.UseTestDouble<TeamScheduleViewModelFactory>().For<ITeamScheduleViewModelFactory>();
-			system.UseTestDouble<FakeGroupingReadOnlyRepository>().For<IGroupingReadOnlyRepository>();
+			isolate.UseTestDouble<TeamScheduleViewModelFactory>().For<ITeamScheduleViewModelFactory>();
+			isolate.UseTestDouble<FakeGroupingReadOnlyRepository>().For<IGroupingReadOnlyRepository>();
 		}
 	}
 }

@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 	[TestFixture(SeperateWebRequest.SimulateFirstRequest)]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
-	public abstract class SchedulingScenario : ITestInterceptor, ISetup
+	public abstract class SchedulingScenario : ITestInterceptor, IIsolateSystem, IExtendSystem
 	{
 		private readonly SeperateWebRequest _seperateWebRequest;
 		public IIoCTestContext IoCTestContext;
@@ -25,11 +25,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		{
 			if (_seperateWebRequest == SeperateWebRequest.SimulateSecondRequestOrScheduler)
 				IoCTestContext.SimulateNewRequest();
+		}	
+		
+		public virtual void Extend(IExtend extend, IIocConfiguration configuration)
+		{
+			extend.AddService<ResourceCalculateWithNewContext>();
 		}
 
-		public virtual void Setup(ISystem system, IIocConfiguration configuration)
+		public virtual void Isolate(IIsolate isolate)
 		{
-			system.AddService<ResourceCalculateWithNewContext>();
 		}
 	}
 }

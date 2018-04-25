@@ -22,7 +22,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandlers.Analytics
 {
 	[DomainTest]
-	public class AnalyticsPersonPeriodUpdaterTests : ISetup
+	public class AnalyticsPersonPeriodUpdaterTests : IExtendSystem
 	{
 		public AnalyticsPersonPeriodUpdater Target;
 		public IAnalyticsPersonPeriodRepository PersonPeriodRepository;
@@ -44,9 +44,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			SkillCode = Guid.NewGuid()
 		};
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<AnalyticsPersonPeriodUpdater>();
+			extend.AddService<AnalyticsPersonPeriodUpdater>();
 		}
 
 		private void basicSetup()

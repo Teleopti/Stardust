@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 {
 	[TestFixture]
 	[UnitOfWorkTest]
-	public class PersonProviderForOvertimeTest : ISetup
+	public class PersonProviderForOvertimeTest : IIsolateSystem
 	{
 		public IPersonRepository PersonRepository;
 		public ISkillRepository SkillRepository;
@@ -46,9 +46,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 		private Team _team;
 		private IMultiplicatorDefinitionSet _multi;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<PersonForOvertimeProvider>().For<IPersonForOvertimeProvider>();
+			isolate.UseTestDouble<PersonForOvertimeProvider>().For<IPersonForOvertimeProvider>();
 		}
 
 		[Test]

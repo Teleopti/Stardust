@@ -23,15 +23,20 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 {
 	public class ReadModelUnitOfWorkTestAttribute : InfrastructureTestAttribute
 	{
-		protected override void Setup(ISystem system, IIocConfiguration configuration)
+		protected override void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			base.Setup(system, configuration);
+			base.Extend(extend, configuration);
+			
+			extend.AddService<TheService>();
+			extend.AddService<NestedService1>();
+			extend.AddService<NestedService2>();
+		}
 
-			system.AddService<TheService>();
-			system.AddService<NestedService1>();
-			system.AddService<NestedService2>();
+		protected override void Isolate(IIsolate isolate)
+		{
+			base.Isolate(isolate);
 
-			system.UseTestDouble<FakeCurrentTeleoptiPrincipal>().For<ICurrentTeleoptiPrincipal>();
+			isolate.UseTestDouble<FakeCurrentTeleoptiPrincipal>().For<ICurrentTeleoptiPrincipal>();
 		}
 	}
 

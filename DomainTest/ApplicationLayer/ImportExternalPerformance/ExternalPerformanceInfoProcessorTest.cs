@@ -20,18 +20,18 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 {
 	[TestFixture, DomainTest]
-	public class ExternalPerformanceInfoProcessorTest : ISetup
+	public class ExternalPerformanceInfoProcessorTest : IIsolateSystem
 	{
 		public IExternalPerformanceInfoFileProcessor Target;
 		public FakeExternalPerformanceRepository PerformanceRepository;
 		public FakePersonFinderReadOnlyRepository PersonFinderReadOnlyRepository;
 		public FakeTenantPersonLogonQuerier TenantPersonLogonQuerier;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<ExternalPerformanceInfoFileProcessor>().For<IExternalPerformanceInfoFileProcessor>();
-			system.UseTestDouble<FakeExternalPerformanceRepository>().For<IExternalPerformanceRepository>();
-			system.UseTestDouble<FakeTenantPersonLogonQuerier>().For<ITenantPersonLogonQuerier>();
+			isolate.UseTestDouble<ExternalPerformanceInfoFileProcessor>().For<IExternalPerformanceInfoFileProcessor>();
+			isolate.UseTestDouble<FakeExternalPerformanceRepository>().For<IExternalPerformanceRepository>();
+			isolate.UseTestDouble<FakeTenantPersonLogonQuerier>().For<ITenantPersonLogonQuerier>();
 		}
 
 		[Test]

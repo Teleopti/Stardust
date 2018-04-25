@@ -31,7 +31,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 {
 	[RequestsTest]
-	public class OvertimeRequestPersisterTest : ISetup
+	public class OvertimeRequestPersisterTest : IIsolateSystem
 	{
 		public IOvertimeRequestPersister Target;
 		public FakeLoggedOnUser LoggedOnUser;
@@ -52,32 +52,32 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		private TimeSpan[] _intervals;
 		readonly ISkillType skillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
 			.WithId();
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
 			_person = PersonFactory.CreatePerson();
 			_intervals = createIntervals();
 
-			system.UseTestDouble(new FakeLoggedOnUser(_person)).For<ILoggedOnUser>();
+			isolate.UseTestDouble(new FakeLoggedOnUser(_person)).For<ILoggedOnUser>();
 
 			var fakeMultiplicatorDefinitionSetRepository = new FakeMultiplicatorDefinitionSetRepository();
 			fakeMultiplicatorDefinitionSetRepository.Has(_multiplicatorDefinitionSet);
-			system.UseTestDouble(fakeMultiplicatorDefinitionSetRepository).For<IMultiplicatorDefinitionSetRepository>();
+			isolate.UseTestDouble(fakeMultiplicatorDefinitionSetRepository).For<IMultiplicatorDefinitionSetRepository>();
 
-			system.UseTestDouble(new FakeScenarioRepository(new Scenario("default") { DefaultScenario = true }))
+			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("default") { DefaultScenario = true }))
 				.For<IScenarioRepository>();
-			system.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
-			system.UseTestDouble(new FakeLinkProvider()).For<ILinkProvider>();
-			system.UseTestDouble<FakeScheduleDictionary>().For<IScheduleDictionary>();
-			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
-			system.UseTestDouble<FakeActivityRepository>().For<IProxyForId<IActivity>>();
-			system.UseTestDouble<FakePersonRepository>().For<IProxyForId<IPerson>>();
-			system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
-			system.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>();
-			system.UseTestDouble<FakeSkillDayRepository>().For<ISkillDayRepository>();
-			system.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
+			isolate.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
+			isolate.UseTestDouble(new FakeLinkProvider()).For<ILinkProvider>();
+			isolate.UseTestDouble<FakeScheduleDictionary>().For<IScheduleDictionary>();
+			isolate.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
+			isolate.UseTestDouble<FakeActivityRepository>().For<IProxyForId<IActivity>>();
+			isolate.UseTestDouble<FakePersonRepository>().For<IProxyForId<IPerson>>();
+			isolate.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
+			isolate.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>();
+			isolate.UseTestDouble<FakeSkillDayRepository>().For<ISkillDayRepository>();
+			isolate.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
 
-			system.UseTestDouble<RequestApprovalServiceFactory>().For<IRequestApprovalServiceFactory>();
-			system.UseTestDouble(new ThisIsNow(_currentDateTime)).For<INow>();
+			isolate.UseTestDouble<RequestApprovalServiceFactory>().For<IRequestApprovalServiceFactory>();
+			isolate.UseTestDouble(new ThisIsNow(_currentDateTime)).For<INow>();
 		}
 
 		[Test]

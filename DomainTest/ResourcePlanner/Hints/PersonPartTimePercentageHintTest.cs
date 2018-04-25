@@ -16,7 +16,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
-	public class PersonPartTimePercentageHintTest : ISetup
+	public class PersonPartTimePercentageHintTest : IIsolateSystem
 	{
 		public CheckScheduleHints Target;
 
@@ -78,9 +78,9 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			result.Should().Be.Empty();
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble(new FakeScenarioRepository(ScenarioFactory.CreateScenario("_", true, true))).For<IScenarioRepository>();
+			isolate.UseTestDouble(new FakeScenarioRepository(ScenarioFactory.CreateScenario("_", true, true))).For<IScenarioRepository>();
 		}
 	}
 }

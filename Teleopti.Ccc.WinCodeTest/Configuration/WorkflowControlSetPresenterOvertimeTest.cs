@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 {
 	[TestFixture]
 	[DomainTest]
-	public class WorkflowControlSetPresenterOvertimeTest : ISetup
+	public class WorkflowControlSetPresenterOvertimeTest : IIsolateSystem
 	{
 		public FakeWorkflowControlSetRepository WorkflowControlSetRepository;
 		public FakeUnitOfWorkFactory UnitOfWorkFactory;
@@ -42,9 +42,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		private WorkflowControlSetView _view;
 		private static IList<ISkillType> _skillTypes;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeUnitOfWorkFactory>().For<IUnitOfWorkFactory>();
+			isolate.UseTestDouble<FakeUnitOfWorkFactory>().For<IUnitOfWorkFactory>();
 
 			if (_skillTypes == null)
 				_skillTypes = new List<ISkillType>

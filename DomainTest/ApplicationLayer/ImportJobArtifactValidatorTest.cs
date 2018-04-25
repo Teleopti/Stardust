@@ -9,15 +9,15 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[TestFixture, DomainTest]
-	public class ImportJobArtifactValidatorTest : ISetup
+	public class ImportJobArtifactValidatorTest : IIsolateSystem
 	{
 		public IImportJobArtifactValidator Target;
 		public IStardustJobFeedback Feedback;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<ImportJobArtifactValidator>().For<IImportJobArtifactValidator>();
-			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
+			isolate.UseTestDouble<ImportJobArtifactValidator>().For<IImportJobArtifactValidator>();
+			isolate.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
 		}
 
 		[Test]

@@ -14,24 +14,27 @@ namespace Teleopti.Ccc.WebTest.Areas.People.IoC
 {
 	class WebPeopleTestAttribute:IoCTestAttribute
 	{
-		protected override void Setup(ISystem system, IIocConfiguration configuration)
+		protected override void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddModule(new WebModule(configuration, null));
-			system.AddModule(new PeopleAreaModule());
+			extend.AddModule(new WebModule(configuration, null));
+			extend.AddModule(new PeopleAreaModule());
+			extend.AddService<FakeStorage>();
+		}
 
-			system.AddService<FakeStorage>();
-			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
-			system.UseTestDouble<FakeContractRepository>().For<IContractRepository>();
-			system.UseTestDouble<FakePartTimePercentageRepository>().For<IPartTimePercentageRepository>();
-			system.UseTestDouble<FakeContractScheduleRepository>().For<IContractScheduleRepository>();
-			system.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
-			system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
-			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
-			system.UseTestDouble<FakeRuleSetBagRepository>().For<IRuleSetBagRepository>();
-			system.UseTestDouble<FakeWorkShiftRuleSetRepository>().For<IWorkShiftRuleSetRepository>();
-			system.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
-			system.UseTestDouble<FakePersonAccessRepository>().For<IRepository<IPersonAccess>>();
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+		protected override void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
+			isolate.UseTestDouble<FakeContractRepository>().For<IContractRepository>();
+			isolate.UseTestDouble<FakePartTimePercentageRepository>().For<IPartTimePercentageRepository>();
+			isolate.UseTestDouble<FakeContractScheduleRepository>().For<IContractScheduleRepository>();
+			isolate.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
+			isolate.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
+			isolate.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
+			isolate.UseTestDouble<FakeRuleSetBagRepository>().For<IRuleSetBagRepository>();
+			isolate.UseTestDouble<FakeWorkShiftRuleSetRepository>().For<IWorkShiftRuleSetRepository>();
+			isolate.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
+			isolate.UseTestDouble<FakePersonAccessRepository>().For<IRepository<IPersonAccess>>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 		}
 	}
 }

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Logon
 	[LoggedOff]
 	[DefaultData]
 	[RealPermissions]
-	public class AsSystemAspectTest : ISetup
+	public class AsSystemAspectTest : IExtendSystem
 	{
 		public FakeDatabase Database;
 		public Service TheService;
@@ -29,10 +29,10 @@ namespace Teleopti.Ccc.DomainTest.Security.Logon
 		public IDefinedRaptorApplicationFunctionFactory ApplicationFunctions;
 		public IUserTimeZone TimeZone;
 		public IUserCulture Culture;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<Service>();
+			extend.AddService<Service>();
 		}
 
 		public class Service

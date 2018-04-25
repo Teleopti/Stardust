@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 {
 	[TestFixture]
 	[DomainTest]
-	public class ImportAgentDataProviderTest: ISetup
+	public class ImportAgentDataProviderTest: IIsolateSystem
 	{
 		public Global.FakePermissionProvider PermissionProvider;
 		public FakeSiteRepository SiteRepository;
@@ -28,16 +28,16 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 		public FakeSkillRepository SkillRepository;
 		public ImportAgentDataProvider Target;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
-			system.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
-			system.UseTestDouble(new FakeCurrentBusinessUnit()).For<ICurrentBusinessUnit>();
-			system.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			system.UseTestDouble<ImportAgentDataProvider>().For<IImportAgentDataProvider>();
-			system.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
-			system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
+			isolate.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
+			isolate.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
+			isolate.UseTestDouble(new FakeCurrentBusinessUnit()).For<ICurrentBusinessUnit>();
+			isolate.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<ImportAgentDataProvider>().For<IImportAgentDataProvider>();
+			isolate.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
+			isolate.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
 		}
 
 		[Test]

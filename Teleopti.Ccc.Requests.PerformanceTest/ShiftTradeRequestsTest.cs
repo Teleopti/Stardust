@@ -257,15 +257,21 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			return config;
 		}
 
-		protected override void Setup (ISystem system, IIocConfiguration configuration)
+		protected override void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			base.Setup (system, configuration);
+			base.Extend(extend, configuration);
+			
+			extend.AddService<Database>();
+		}
 
-			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
-			system.UseTestDouble<StardustJobFeedback>().For<IStardustJobFeedback>();
-			system.UseTestDouble<ShiftTradeRequestHandler>().For<ShiftTradeRequestHandler>();
+		protected override void Isolate(IIsolate isolate)
+		{
+			base.Isolate (isolate);
 
-			system.AddService<Database>();
+			isolate.UseTestDouble<NoMessageSender>().For<IMessageSender>();
+			isolate.UseTestDouble<StardustJobFeedback>().For<IStardustJobFeedback>();
+			isolate.UseTestDouble<ShiftTradeRequestHandler>().For<ShiftTradeRequestHandler>();
+
 		}
 
 		protected override void Startup (IComponentContext container)

@@ -19,7 +19,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Analytics.Etl.CommonTest.Service
 {
 	[DomainTest]
-	public class EtlServiceHangfireEventPublisherTest : ISetup
+	public class EtlServiceHangfireEventPublisherTest : IIsolateSystem, IExtendSystem
 	{
 		public FakeRecurringEventPublisher Publisher;
 		public FakeTenants FakeTenants;
@@ -27,11 +27,14 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 		public TenantTickEventPublisher TenantTickEventPublisher;
 		public IRecurringEventPublisher RecurringEventPublisher;
 
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddModule(new EtlModule(configuration));
-			system.UseTestDouble<FakeBaseConfigurationRepository>().For<IBaseConfigurationRepository>();
+			extend.AddModule(new EtlModule(configuration));
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FakeBaseConfigurationRepository>().For<IBaseConfigurationRepository>();
 		}
 		
 		private void hasTenant(string tenantName)

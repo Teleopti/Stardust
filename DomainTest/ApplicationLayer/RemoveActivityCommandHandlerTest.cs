@@ -23,7 +23,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[DomainTest]
-	public class RemoveActivityCommandHandlerTest : ISetup
+	public class RemoveActivityCommandHandlerTest : IIsolateSystem
 	{
 		public RemoveActivityCommandHandler Target;
 		public IScheduleStorage ScheduleStorage;
@@ -37,11 +37,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 		private IActivity _mainActivity;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<RemoveActivityCommandHandler>().For<IHandleCommand<RemoveActivityCommand>>();
-			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
-			system.UseTestDouble<FakeScheduleDifferenceSaver_DoNotUse>().For<IScheduleDifferenceSaver>();
+			isolate.UseTestDouble<RemoveActivityCommandHandler>().For<IHandleCommand<RemoveActivityCommand>>();
+			isolate.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
+			isolate.UseTestDouble<FakeScheduleDifferenceSaver_DoNotUse>().For<IScheduleDifferenceSaver>();
 
 			_mainActivity = ActivityFactory.CreateActivity("mainActivity");
 		}

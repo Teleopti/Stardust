@@ -63,10 +63,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			//"Assert" by timeout attribute
 		}
 
-		public override void Setup(ISystem system, IIocConfiguration configuration)
+		public override void Isolate(IIsolate isolate)
 		{
-			base.Setup(system, configuration);
-			system.UseTestDouble<decisionMakerFactoryForTest>().For<IDayOffOptimizationDecisionMakerFactory>();
+			base.Isolate(isolate);
+			isolate.UseTestDouble<decisionMakerFactoryForTest>().For<IDayOffOptimizationDecisionMakerFactory>();
 		}
 
 		private class decisionMakerFactoryForTest : IDayOffOptimizationDecisionMakerFactory

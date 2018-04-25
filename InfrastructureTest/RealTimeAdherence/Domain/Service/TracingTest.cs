@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service
 	[TestFixture]
 	[PrincipalAndStateTest]
 	[Setting("RtaTracerBufferSize", 0)]
-	public class TracingTest : ISetup
+	public class TracingTest : IIsolateSystem
 	{
 		public Database Database;
 		public AnalyticsDatabase Analytics;
@@ -26,9 +26,9 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service
 		public IPrincipalAndStateContext Context;
 		public ICurrentDataSource DataSource;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+			isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 		}
 
 		[Test]

@@ -20,7 +20,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SkillDay
 {
 	[DomainTest]
-	public class AnalyticsForecastWorkloadUpdaterTest : ISetup
+	public class AnalyticsForecastWorkloadUpdaterTest : IExtendSystem
 	{
 		public AnalyticsForecastWorkloadUpdater Target;
 		public ISkillDayRepository SkillDayRepository;
@@ -30,10 +30,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SkillDay
 		public IAnalyticsScenarioRepository AnalyticsScenarioRepository;
 		public FakeAnalyticsForecastWorkloadRepository AnalyticsForecastWorkloadRepository;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<AnalyticsForecastWorkloadUpdater>();
+			extend.AddService<AnalyticsForecastWorkloadUpdater>();
 		}
 
 		[Test]

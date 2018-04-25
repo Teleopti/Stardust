@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 	[DomainTest]
 	[TestWithStaticDependenciesDONOTUSE]
 	[TestFixture, SetCulture("en-US")]
-	public class MultiAbsenceRequestsUpdaterWithValidatorTest : ISetup
+	public class MultiAbsenceRequestsUpdaterWithValidatorTest : IIsolateSystem
 	{
 		public IMultiAbsenceRequestsUpdater Target;
 		public FakeScenarioRepository ScenarioRepository;
@@ -43,11 +43,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakeSchedulingResultStateHolder_DoNotUse SchedulingResultStateHolder;
 		public FakeLoggedOnUser LoggedOnUser;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeSchedulingResultStateHolder_DoNotUse>().For<ISchedulingResultStateHolder>();
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			system.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
+			isolate.UseTestDouble<FakeSchedulingResultStateHolder_DoNotUse>().For<ISchedulingResultStateHolder>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
 		}
 
 		[Test]

@@ -15,25 +15,28 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 {
 	public class PermissionsTestAttribute : IoCTestAttribute
 	{
-		protected override void Setup(ISystem system, IIocConfiguration configuration)
+		protected override void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddModule(new WebModule(configuration, null));
+			extend.AddModule(new WebModule(configuration, null));
+			extend.AddService<FakeStorage>();
+		}
 
-			system.AddService<FakeStorage>();
-			system.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
-			system.UseTestDouble<FakeAvailableDataRepository>().For<IAvailableDataRepository>();
-			system.UseTestDouble<FakeApplicationFunctionRepository>().For<IApplicationFunctionRepository>();
-			system.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository>();
-			system.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepositoryForLicenseVerifier>();
-			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
-			system.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
-			system.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
-			system.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
-			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
-			system.UseTestDouble<FakeApplicationRolePersonRepository>().For<IApplicationRolePersonRepository>();
-			system.UseTestDouble<FakePersonInRoleQuerier>().For<IPersonInRoleQuerier>();
-			system.UseTestDouble<FakeApplicationFunctionsToggleFilter>().For<IApplicationFunctionsToggleFilter>();
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+		protected override void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
+			isolate.UseTestDouble<FakeAvailableDataRepository>().For<IAvailableDataRepository>();
+			isolate.UseTestDouble<FakeApplicationFunctionRepository>().For<IApplicationFunctionRepository>();
+			isolate.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository>();
+			isolate.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepositoryForLicenseVerifier>();
+			isolate.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
+			isolate.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
+			isolate.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
+			isolate.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
+			isolate.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
+			isolate.UseTestDouble<FakeApplicationRolePersonRepository>().For<IApplicationRolePersonRepository>();
+			isolate.UseTestDouble<FakePersonInRoleQuerier>().For<IPersonInRoleQuerier>();
+			isolate.UseTestDouble<FakeApplicationFunctionsToggleFilter>().For<IApplicationFunctionsToggleFilter>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 		}
 	}
 

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 {
 	[TestFixture]
 	[PrincipalAndStateTest]
-	public class PersonAbsenceEventPublishingTest : ISetup
+	public class PersonAbsenceEventPublishingTest : IIsolateSystem
 	{
 		public WithUnitOfWork UnitOfWork;
 		public FakeEventPublisher EventsPublisher;
@@ -29,9 +29,9 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 		public IAbsenceRepository AbsenceRepository;
 		public IPersonAbsenceRepository PersonAbsenceRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+			isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 		}
 
 		[Test]

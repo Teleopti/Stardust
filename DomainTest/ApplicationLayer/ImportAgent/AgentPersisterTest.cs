@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 {
 	[TestFixture]
 	[DomainTest]
-	public class AgentPersisterTest :ISetup
+	public class AgentPersisterTest :IIsolateSystem, IExtendSystem
 	{
 		public AgentPersister Target;
 
@@ -35,14 +35,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		public FakeTenants FindTenantByName;
 		public ILoggedOnUser User;
 
-		public void Setup(ISystem system,IIocConfiguration configuration)
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<PersistPersonInfoFake>().For<IPersistPersonInfo>();
-			system.UseTestDouble<TenantUserPersister>().For<ITenantUserPersister>();
-			system.UseTestDouble<PersonInfoHelper>().For<IPersonInfoHelper>();
-			system.UseTestDouble<FakeCurrentDatasource>().For<ICurrentDataSource>();
-			system.UseTestDouble<CheckPasswordStrengthFake>().For<ICheckPasswordStrength>();
-			system.AddService<AgentPersister>();
+			extend.AddService<AgentPersister>();
+		}
+		
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<PersistPersonInfoFake>().For<IPersistPersonInfo>();
+			isolate.UseTestDouble<TenantUserPersister>().For<ITenantUserPersister>();
+			isolate.UseTestDouble<PersonInfoHelper>().For<IPersonInfoHelper>();
+			isolate.UseTestDouble<FakeCurrentDatasource>().For<ICurrentDataSource>();
+			isolate.UseTestDouble<CheckPasswordStrengthFake>().For<ICheckPasswordStrength>();
 		}
 
 		[Test]

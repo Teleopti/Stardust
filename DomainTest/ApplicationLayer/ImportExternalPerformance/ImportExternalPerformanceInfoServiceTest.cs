@@ -18,7 +18,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 {
 	[TestFixture, DomainTest]
-	public class ImportExternalPerformanceInfoServiceTest: ISetup
+	public class ImportExternalPerformanceInfoServiceTest: IIsolateSystem
 	{
 		public CurrentBusinessUnit CurrentBusinessUnit;
 		public IJobResultRepository JobResultRepository;
@@ -27,14 +27,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		public ICurrentTenantUser CurrentTenantUser;
 		public FakeEventPublisher Publisher;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<ImportExternalPerformanceInfoService>().For<IImportExternalPerformanceInfoService>();
-			system.UseTestDouble<FakeJobResultRepositoryForCurrentBusinessUnit>().For<IJobResultRepository>();
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
-			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
-			system.UseTestDouble<CurrentBusinessUnit>().For<ICurrentBusinessUnit>();
+			isolate.UseTestDouble<ImportExternalPerformanceInfoService>().For<IImportExternalPerformanceInfoService>();
+			isolate.UseTestDouble<FakeJobResultRepositoryForCurrentBusinessUnit>().For<IJobResultRepository>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+			isolate.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
+			isolate.UseTestDouble<CurrentBusinessUnit>().For<ICurrentBusinessUnit>();
 		}
 
 		[Test]

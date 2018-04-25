@@ -23,13 +23,18 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			return config;
 		}
 
-		protected override void Setup(ISystem system, IIocConfiguration configuration)
+		protected override void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			base.Setup(system, configuration);
-			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
-			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
-			system.UseTestDouble<MutableNow>().For<INow>();
-			system.AddService<Database>();
+			base.Extend(extend, configuration);
+			extend.AddService<Database>();
+		}
+
+		protected override void Isolate(IIsolate isolate)
+		{
+			base.Isolate(isolate);
+			isolate.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
+			isolate.UseTestDouble<NoMessageSender>().For<IMessageSender>();
+			isolate.UseTestDouble<MutableNow>().For<INow>();
 		}
 
 		protected override void Startup(IComponentContext container)

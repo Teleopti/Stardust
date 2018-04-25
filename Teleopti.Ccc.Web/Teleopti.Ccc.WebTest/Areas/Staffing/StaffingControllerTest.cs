@@ -15,17 +15,17 @@ using Teleopti.Ccc.UserTexts;
 namespace Teleopti.Ccc.WebTest.Areas.Staffing
 {
 	[DomainTest]
-	public class StaffingControllerTest : ISetup
+	public class StaffingControllerTest : IExtendSystem
 	{
 		public StaffingController Target;
 		public MutableNow Now;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeActivityRepository ActivityRepository;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<StaffingController>();
+			extend.AddService<StaffingController>();
 		}
 
 		[Test]

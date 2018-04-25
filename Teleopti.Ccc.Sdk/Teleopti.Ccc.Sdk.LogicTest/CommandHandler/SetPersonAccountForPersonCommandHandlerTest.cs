@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
     [TestFixture]
 	[DomainTest]
-    public class SetPersonAccountForPersonCommandHandlerTest : ISetup
+    public class SetPersonAccountForPersonCommandHandlerTest : IExtendSystem
     {
         public FakePersonRepository PersonRepository;
         public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
@@ -125,17 +125,17 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		    {
 			    Assert.Throws<FaultException>(() => Target.Handle(setPersonAccountForPersonCommandDto));
 		    }
-	    }
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+	    }		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<SetPersonAccountForPersonCommandHandler>();
-			system.AddModule(new AssemblerModule());
+			extend.AddService<SetPersonAccountForPersonCommandHandler>();
+			extend.AddModule(new AssemblerModule());
 		}
+
 	}
 
 	[DomainTest]
-	public class Bug44502Test : ISetup
+	public class Bug44502Test : IExtendSystem
 	{
 		public FakePersonRepository PersonRepository;
 		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
@@ -221,11 +221,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			PersonAbsenceAccountRepository.Find(person).Find(absence, dateOnly).LatestCalculatedBalance.Should().Be
 				.EqualTo(TimeSpan.FromHours(9));
 		}
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<SetPersonAccountForPersonCommandHandler>();
-			system.AddModule(new AssemblerModule());
+			extend.AddService<SetPersonAccountForPersonCommandHandler>();
+			extend.AddModule(new AssemblerModule());
 		}
 	}
 }

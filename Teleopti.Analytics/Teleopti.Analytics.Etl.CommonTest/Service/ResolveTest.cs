@@ -9,12 +9,16 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Analytics.Etl.CommonTest.Service
 {
 	[DomainTest]
-	public class ResolveTest : ISetup
-	{
-		public void Setup(ISystem system, IIocConfiguration configuration)
+	public class ResolveTest : IIsolateSystem, IExtendSystem
+	{		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddModule(new EtlModule(configuration));
-			system.UseTestDouble<FakeBaseConfigurationRepository>().For<IBaseConfigurationRepository>();
+			extend.AddModule(new EtlModule(configuration));
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FakeBaseConfigurationRepository>().For<IBaseConfigurationRepository>();
 		}
 		
 		public EtlService Service;

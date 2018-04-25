@@ -15,16 +15,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftCategoryHandlers
 {
 	[TestFixture]
 	[DomainTest]
-	public class AnalyticsShiftCategoryUpdaterTests : ISetup
+	public class AnalyticsShiftCategoryUpdaterTests : IExtendSystem
 	{
 		public AnalyticsShiftCategoryUpdater Target;
 		public FakeShiftCategoryRepository ShiftCategoryRepository;
 		public FakeAnalyticsShiftCategoryRepository AnalyticsShiftCategoryRepository;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<AnalyticsShiftCategoryUpdater>();
+			extend.AddService<AnalyticsShiftCategoryUpdater>();
 		}
 
 		[Test]

@@ -57,10 +57,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				.DayOff().Should().Not.Be.Null();
 		}
 
-		public override void Setup(ISystem system, IIocConfiguration configuration)
+		public override void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<PeriodValueCalculatorProviderThatReturnsCalculatorThatReturnsWrongValue>().For<IPeriodValueCalculatorProvider>();
-			base.Setup(system, configuration);
+			isolate.UseTestDouble<PeriodValueCalculatorProviderThatReturnsCalculatorThatReturnsWrongValue>().For<IPeriodValueCalculatorProvider>();
+			base.Isolate(isolate);
 		}
 
 		public DayOffOptimizationNoPeriodValueCalculatorTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerDayOffUsePredictorEverywhere75667, bool resourcePlannerMinimumStaffing75339) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerDayOffUsePredictorEverywhere75667, resourcePlannerMinimumStaffing75339)

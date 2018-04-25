@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	[TestFixture]
 	[UnitOfWorkTest]
 	[AllTogglesOn]
-	public class SkillCombinationResourceRepositoryTest : ISetup
+	public class SkillCombinationResourceRepositoryTest : IIsolateSystem
 	{
 		public ISkillCombinationResourceRepository Target;
 		public MutableNow Now;
@@ -39,9 +39,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public IBusinessUnitRepository BusinessUnitRepository;
 		public CurrentBusinessUnit CurrentBusinessUnit;
 		
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<CurrentBusinessUnit>().For<ICurrentBusinessUnit>();
+			isolate.UseTestDouble<CurrentBusinessUnit>().For<ICurrentBusinessUnit>();
 		}
 		private Guid persistSkill(IBusinessUnit businessUnit=null, string skillname = "skill")
 		{

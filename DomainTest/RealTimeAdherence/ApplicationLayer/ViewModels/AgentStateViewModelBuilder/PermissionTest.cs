@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 	[DomainTest]
 	[TestFixture]
 	[FakePermissions]
-	public class PermissionTest : ISetup
+	public class PermissionTest : IIsolateSystem
 	{
 		public AgentStatesViewModelBuilder Target;
 		public FakeAgentStateReadModelPersister Database;
@@ -27,10 +27,10 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 		public FakeUserTimeZone TimeZone;
 		public FakePermissions Permissions;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
-			system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserCulture>();
+			isolate.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
+			isolate.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserCulture>();
 		}
 
 		[Test]

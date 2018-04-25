@@ -22,7 +22,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 {
 	[TestFixture, IoCTest]
-	public class AbsenceRequestProbabilityProviderNoMockTest : ISetup
+	public class AbsenceRequestProbabilityProviderNoMockTest : IIsolateSystem
 	{
 		public IBudgetDayRepository BudgetDayRepository;
 		public ILoggedOnUser LoggedOnUser;
@@ -36,15 +36,15 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 		private IAbsence _absence;
 		private readonly DateTime _today = new DateTime(2016, 10, 25, 0, 0, 0, DateTimeKind.Utc);
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeBudgetDayRepository>().For<IBudgetDayRepository>();
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			system.UseTestDouble<FakeScenarioRepository>().For<IScenarioRepository>();
-			system.UseTestDouble<ExtractBudgetGroupPeriods>().For<IExtractBudgetGroupPeriods>();
-			system.UseTestDouble<FakeScheduleProjectionReadOnlyPersister>().For<IScheduleProjectionReadOnlyPersister>();
-			system.UseTestDouble<AbsenceTimeProviderCache>().For<IAbsenceTimeProviderCache>();
-			system.UseTestDouble(new MutableNow(_today)).For<INow>();
+			isolate.UseTestDouble<FakeBudgetDayRepository>().For<IBudgetDayRepository>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<FakeScenarioRepository>().For<IScenarioRepository>();
+			isolate.UseTestDouble<ExtractBudgetGroupPeriods>().For<IExtractBudgetGroupPeriods>();
+			isolate.UseTestDouble<FakeScheduleProjectionReadOnlyPersister>().For<IScheduleProjectionReadOnlyPersister>();
+			isolate.UseTestDouble<AbsenceTimeProviderCache>().For<IAbsenceTimeProviderCache>();
+			isolate.UseTestDouble(new MutableNow(_today)).For<INow>();
 
 			_absence = AbsenceFactory.CreateAbsence("holiday").WithId();
 		}

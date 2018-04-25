@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Core
 {
 	[MyTimeWebTest]
 	[TestFixture]
-	public class WeekScheduleDomainDataProviderWeekScheduleNoMockTest : ISetup
+	public class WeekScheduleDomainDataProviderWeekScheduleNoMockTest : IIsolateSystem
 	{
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeBudgetDayRepository BudgetDayRepository;
@@ -42,11 +42,11 @@ namespace Teleopti.Ccc.WebTest.Core
 		public MutableNow Now;
 		public Areas.Global.FakePermissionProvider PermissionProvider;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble(new FakeScenarioRepository(new Scenario { DefaultScenario = true })).For<IScenarioRepository>();
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			system.UseTestDouble<Areas.Global.FakePermissionProvider>().For<IPermissionProvider>();
+			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario { DefaultScenario = true })).For<IScenarioRepository>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<Areas.Global.FakePermissionProvider>().For<IPermissionProvider>();
 		}
 
 		[Test]

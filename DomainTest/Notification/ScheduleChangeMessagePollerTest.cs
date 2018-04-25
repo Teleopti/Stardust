@@ -15,7 +15,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 namespace Teleopti.Ccc.DomainTest.Notification
 {
 	[TestFixture, DomainTest]
-	public class ScheduleChangeMessagePollerTest : ISetup
+	public class ScheduleChangeMessagePollerTest : IIsolateSystem, IExtendSystem
 	{
 		public ScheduleChangeMessagePoller Target;
 		public FakeASMScheduleChangeTimeRepository FakeASMScheduleChangeTimeRepository;
@@ -23,15 +23,19 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		public DefaultScenarioFromRepository DefaultScenarioFromRepository;
 		public FakeLoggedOnUser LoggedOnUser;
 		public MutableNow Now;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<ScheduleChangeMessagePoller>();
-			system.UseTestDouble<FakeScenarioRepository>().For<IScenarioRepository>();
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			system.UseTestDouble<DefaultScenarioFromRepository>().For<ICurrentScenario>();
-			system.UseTestDouble<MutableNow>().For<INow>();
-			system.UseTestDouble<FakeASMScheduleChangeTimeRepository>().For<IASMScheduleChangeTimeRepository>();
+			extend.AddService<ScheduleChangeMessagePoller>();
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FakeScenarioRepository>().For<IScenarioRepository>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<DefaultScenarioFromRepository>().For<ICurrentScenario>();
+			isolate.UseTestDouble<MutableNow>().For<INow>();
+			isolate.UseTestDouble<FakeASMScheduleChangeTimeRepository>().For<IASMScheduleChangeTimeRepository>();
 		}
 
 		[Test]

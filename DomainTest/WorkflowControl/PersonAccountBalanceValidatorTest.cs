@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 {
 	[TestFixture]
 	[DomainTest]
-	public class PersonAccountBalanceValidatorTest : ISetup
+	public class PersonAccountBalanceValidatorTest : IIsolateSystem
 	{
 		private IAbsenceRequestValidator _target;
 		private IPersonAccountBalanceCalculator _personAccountBalanceCalculator;
@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			Assert.IsTrue(result.ValidationErrors.Equals(errorMessage));
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
 		}
 	}

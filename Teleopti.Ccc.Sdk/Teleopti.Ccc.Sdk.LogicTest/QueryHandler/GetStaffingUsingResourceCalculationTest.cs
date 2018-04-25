@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 {
 	[TestFixture]
 	[DomainTest]
-	public class GetStaffingUsingResourceCalculationTest : ISetup
+	public class GetStaffingUsingResourceCalculationTest : IExtendSystem
 	{
 		public GetStaffingUsingResourceCalculation Target;
 		public FakePersonRepository PersonRepository;
@@ -163,11 +163,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				TimeZoneId = TimeZoneInfo.Utc.Id
 			}));
 		}
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<GetStaffingUsingResourceCalculation>();
-			system.AddModule(new AssemblerModule());
+			extend.AddService<GetStaffingUsingResourceCalculation>();
+			extend.AddModule(new AssemblerModule());
 		}
+
 	}
 }

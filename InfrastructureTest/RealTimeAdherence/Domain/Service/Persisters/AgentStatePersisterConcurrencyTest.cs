@@ -17,11 +17,11 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Persi
 {
 	[TestFixture]
 	[DatabaseTest]
-	public class AgentStatePersisterConcurrencyTest : ISetup
-	{
-		public void Setup(ISystem system, IIocConfiguration configuration)
+	public class AgentStatePersisterConcurrencyTest : IExtendSystem
+	{		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<TheService>();
+			extend.AddService<TheService>();
 		}
 
 		public TheService Service { get; set; }

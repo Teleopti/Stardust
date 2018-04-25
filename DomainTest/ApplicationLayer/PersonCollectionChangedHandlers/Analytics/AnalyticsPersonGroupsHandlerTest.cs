@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 {
 	[TestFixture]
 	[DomainTest]
-	public class AnalyticsPersonGroupsHandlerTest : ISetup
+	public class AnalyticsPersonGroupsHandlerTest : IExtendSystem
 	{
 		public AnalyticsPersonGroupsHandler Target;
 		public IAnalyticsGroupPageRepository AnalyticsGroupPageRepository;
@@ -38,9 +38,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		private IPerson _person;
 		private AnalyticsPersonPeriod _analyticsPersonPeriod;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<AnalyticsPersonGroupsHandler>();
+			extend.AddService<AnalyticsPersonGroupsHandler>();
 		}
 
 		private void createPerson(IPerson person, bool createInAnalytics=true)

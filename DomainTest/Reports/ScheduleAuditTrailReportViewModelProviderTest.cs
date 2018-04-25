@@ -26,9 +26,9 @@ namespace Teleopti.Ccc.DomainTest.Reports
 		private IPerson modifiedByPerson;
 		private IPerson scheduledAgent;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Setup(IIsolate isolate, IIocConfiguration configuration)
 		{
-			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
+			isolate.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
 		}
 
 		[SetUp]

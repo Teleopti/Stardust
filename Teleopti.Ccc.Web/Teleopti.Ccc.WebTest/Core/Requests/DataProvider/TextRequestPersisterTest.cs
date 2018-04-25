@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 {
 	[TestFixture]
 	[RequestsTest]
-	public class TextRequestPersisterTest : ISetup
+	public class TextRequestPersisterTest : IIsolateSystem
 	{
 		public ITextRequestPersister Target;
 		public FakePersonRequestRepository PersonRequestRepository;
@@ -123,16 +123,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			personRequest.GetMessage(new NoFormatting()).Should().Be.EqualTo("test");
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeLinkProvider>().For<ILinkProvider>();
-			system.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
-			system.UseTestDouble<FakeLicensedFunctionProvider>().For<ILicensedFunctionsProvider>();
+			isolate.UseTestDouble<FakeLinkProvider>().For<ILinkProvider>();
+			isolate.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
+			isolate.UseTestDouble<FakeLicensedFunctionProvider>().For<ILicensedFunctionsProvider>();
 
 			var currentBusinessUnit = new SpecificBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
-			system.UseTestDouble(currentBusinessUnit).For<ICurrentBusinessUnit>();
+			isolate.UseTestDouble(currentBusinessUnit).For<ICurrentBusinessUnit>();
 			var dataSource = new FakeCurrentDatasource("Test");
-			system.UseTestDouble(dataSource).For<ICurrentDataSource>();
+			isolate.UseTestDouble(dataSource).For<ICurrentDataSource>();
 		}
 	}
 }

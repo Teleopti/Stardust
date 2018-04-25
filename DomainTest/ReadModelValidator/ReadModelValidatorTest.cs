@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 {
 	[TestFixture]
 	[DomainTest]
-	public class ReadModelValidatorTest : ISetup
+	public class ReadModelValidatorTest : IIsolateSystem
 	{
 		public FakePersonRepository PersonRepository;
 		public FakePersonAssignmentWriteSideRepository PersonAssignmentRepo;
@@ -36,22 +36,22 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 		public ReadModelScheduleDayValidator ReadModelScheduleDayValidator;
 		public FakeReadModelValidationResultPersistor ReadModelValidationResultPersistor;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<Domain.ApplicationLayer.ReadModelValidator.ReadModelValidator>().For<IReadModelValidator>();
-			system.UseTestDouble<ReadModelPersonScheduleDayValidator>().For<IReadModelPersonScheduleDayValidator>();
-			system.UseTestDouble<ReadModelScheduleProjectionReadOnlyValidator>()
+			isolate.UseTestDouble<Domain.ApplicationLayer.ReadModelValidator.ReadModelValidator>().For<IReadModelValidator>();
+			isolate.UseTestDouble<ReadModelPersonScheduleDayValidator>().For<IReadModelPersonScheduleDayValidator>();
+			isolate.UseTestDouble<ReadModelScheduleProjectionReadOnlyValidator>()
 				.For<IReadModelScheduleProjectionReadOnlyValidator>();
-			system.UseTestDouble<ReadModelScheduleDayValidator>().For<IReadModelScheduleDayValidator>();
+			isolate.UseTestDouble<ReadModelScheduleDayValidator>().For<IReadModelScheduleDayValidator>();
 
-			system.UseTestDouble<FakePersonAssignmentWriteSideRepository>()
+			isolate.UseTestDouble<FakePersonAssignmentWriteSideRepository>()
 				.For<IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>>();
-			system.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
-			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
-			system.UseTestDouble<FakePersonScheduleDayReadModelFinder>().For<IPersonScheduleDayReadModelFinder>();
-			system.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
-			system.UseTestDouble<FakeScheduleDayReadModelRepository>().For<IScheduleDayReadModelRepository>();
-			system.UseTestDouble<FakeReadModelValidationResultPersistor>().For<IReadModelValidationResultPersister>();
+			isolate.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
+			isolate.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
+			isolate.UseTestDouble<FakePersonScheduleDayReadModelFinder>().For<IPersonScheduleDayReadModelFinder>();
+			isolate.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
+			isolate.UseTestDouble<FakeScheduleDayReadModelRepository>().For<IScheduleDayReadModelRepository>();
+			isolate.UseTestDouble<FakeReadModelValidationResultPersistor>().For<IReadModelValidationResultPersister>();
 		}
 
 		[Test]

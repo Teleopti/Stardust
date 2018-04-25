@@ -28,21 +28,26 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			return config;
 		}
 
-		protected override void Setup(ISystem system, IIocConfiguration configuration)
+		protected override void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			base.Setup(system, configuration);
+			base.Extend(extend, configuration);
+			extend.AddService<Database>();
+			extend.AddModule(new AnywhereAreaModule(configuration));
+			extend.AddModule(new TeamScheduleAreaModule());
+		}
+
+		protected override void Isolate(IIsolate isolate)
+		{
+			base.Isolate(isolate);
 
 			var intervalFetcher = new FakeIntervalLengthFetcher();
 			intervalFetcher.Has(15);
-			system.UseTestDouble(intervalFetcher).For<IIntervalLengthFetcher>();
+			isolate.UseTestDouble(intervalFetcher).For<IIntervalLengthFetcher>();
 
-			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
-			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
-			system.UseTestDouble<MultiAbsenceRequestsHandler>().For<MultiAbsenceRequestsHandler>();
-			system.UseTestDouble<MutableNow>().For<INow>();
-			system.AddService<Database>();
-			system.AddModule(new AnywhereAreaModule(configuration));
-			system.AddModule(new TeamScheduleAreaModule());
+			isolate.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
+			isolate.UseTestDouble<NoMessageSender>().For<IMessageSender>();
+			isolate.UseTestDouble<MultiAbsenceRequestsHandler>().For<MultiAbsenceRequestsHandler>();
+			isolate.UseTestDouble<MutableNow>().For<INow>();
 		}
 
 		protected override void Startup(IComponentContext container)

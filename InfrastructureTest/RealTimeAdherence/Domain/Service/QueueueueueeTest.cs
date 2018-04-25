@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service
 {
 	[TestFixture]
 	[MultiDatabaseTest]
-	public class QueueueueueeTest : ISetup
+	public class QueueueueueeTest : IIsolateSystem
 	{
 		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
 		public Database Database;
@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service
 
 		public FakeEventPublisher Publisher;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+			isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 		}
 
 		[Test]

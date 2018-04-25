@@ -10,14 +10,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 {
 	[TestFixture]
 	[InfrastructureTest]
-	public class AspectsTest : ISetup
-	{
-		public void Setup(ISystem system, IIocConfiguration configuration)
+	public class AspectsTest : IExtendSystem
+	{		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<AspectedService>();
-			system.AddService<Aspect1Attribute.Aspect1>();
-			system.AddService<Aspect2Attribute.Aspect2>();
-			system.AddService<Aspect3Attribute.Aspect3>();
+			extend.AddService<AspectedService>();
+			extend.AddService<Aspect1Attribute.Aspect1>();
+			extend.AddService<Aspect2Attribute.Aspect2>();
+			extend.AddService<Aspect3Attribute.Aspect3>();
 		}
 
 		public IIoCTestContext Context;

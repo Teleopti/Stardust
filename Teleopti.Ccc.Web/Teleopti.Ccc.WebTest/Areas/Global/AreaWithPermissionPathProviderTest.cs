@@ -18,20 +18,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 {
 	[IoCTest]
 	[TestFixture]
-	public class AreaWithPermissionPathProviderTest : ISetup
+	public class AreaWithPermissionPathProviderTest : IIsolateSystem, IExtendSystem
 	{
 		public IAreaWithPermissionPathProvider Target;
 		public FakePermissionProvider PermissionProvider;
 		public FakeToggleManager ToggleManager;
 		public FakeApplicationFunctionsToggleFilter ApplicationFunctionsToggleFilter;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddModule(new WebAppModule(configuration));
-			system.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
-			system.UseTestDouble<FakeToggleManager>().For<IToggleManager>();
-			system.UseTestDouble<FakeApplicationFunctionsToggleFilter>().For<IApplicationFunctionsToggleFilter>();
+			extend.AddModule(new WebAppModule(configuration));
+		}
 
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
+			isolate.UseTestDouble<FakeToggleManager>().For<IToggleManager>();
+			isolate.UseTestDouble<FakeApplicationFunctionsToggleFilter>().For<IApplicationFunctionsToggleFilter>();
 		}
 
 		[Test]

@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
 	[Toggle(Toggles.Wfm_Requests_ProcessWaitlistBefore24hRequests_45767)]
-	public class WaitlistRequestHandlerTest : ISetup
+	public class WaitlistRequestHandlerTest : IIsolateSystem
 	{
 		public WaitlistRequestHandler Target;
 		public FakePersonRepository PersonRepository;
@@ -49,10 +49,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public ResourceCalculationWithCount ResourceCalculation;
 		private IBusinessUnit businessUnit;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<SchedulerStateScheduleDayChangedCallback>().For<IScheduleDayChangeCallback>();
-			system.UseTestDouble<ResourceCalculationWithCount>().For<IResourceCalculation>();
+			isolate.UseTestDouble<SchedulerStateScheduleDayChangedCallback>().For<IScheduleDayChangeCallback>();
+			isolate.UseTestDouble<ResourceCalculationWithCount>().For<IResourceCalculation>();
 		}
 
 		public void SetUp()

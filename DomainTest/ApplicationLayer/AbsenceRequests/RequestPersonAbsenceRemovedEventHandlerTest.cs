@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
 	[TestFixture]
-	public class RequestPersonAbsenceRemovedEventHandlerTest : ISetup
+	public class RequestPersonAbsenceRemovedEventHandlerTest : IIsolateSystem
 	{
 		public FakePersonRequestRepository PersonRequestRepository;
 		public FakeQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
@@ -35,10 +35,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakeEventPublisher Publisher;
 		public MutableNow Now;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<ApprovalServiceForTest>().For<IRequestApprovalService>();
-			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+			isolate.UseTestDouble<ApprovalServiceForTest>().For<IRequestApprovalService>();
+			isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 		}
 
 		[Test]

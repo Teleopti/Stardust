@@ -7,11 +7,15 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
 	[DomainTest]
-	public abstract class IntradayOptimizationScenarioTest : ISetup
-	{
-		public virtual void Setup(ISystem system, IIocConfiguration configuration)
+	public abstract class IntradayOptimizationScenarioTest : IExtendSystem, IIsolateSystem
+	{		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<ResourceCalculateWithNewContext>();
+			extend.AddService<ResourceCalculateWithNewContext>();
+		}
+
+		public virtual void Isolate(IIsolate isolate)
+		{
 		}
 	}
 }

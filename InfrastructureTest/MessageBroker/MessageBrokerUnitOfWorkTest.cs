@@ -21,23 +21,26 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 {
 	[TestFixture]
 	[InfrastructureTest]
-	public class MessageBrokerUnitOfWorkTest : ISetup
+	public class MessageBrokerUnitOfWorkTest : IIsolateSystem, IExtendSystem
 	{
 		public TheService TheService;
 		public NestedService1 NestedService1;
 		public NestedService2 NestedService2;
 		public CurrentHttpContext HttpContext;
 		public ICurrentMessageBrokerUnitOfWork UnitOfWork;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<TheService>();
-			system.AddService<NestedService1>();
-			system.AddService<NestedService2>();
+			extend.AddService<TheService>();
+			extend.AddService<NestedService1>();
+			extend.AddService<NestedService2>();
+		}
 
+		public void Isolate(IIsolate isolate)
+		{
 			var config = new FakeConfigReader();
 			config.FakeConnectionString("MessageBroker", InfraTestConfigReader.AnalyticsConnectionString);
-			system.UseTestDouble(config).For<IConfigReader>();
+			isolate.UseTestDouble(config).For<IConfigReader>();
 		}
 
 		[Test]

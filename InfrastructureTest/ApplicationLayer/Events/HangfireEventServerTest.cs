@@ -18,21 +18,24 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 
 	[TestFixture]
 	[InfrastructureTest]
-	public class HangfireEventServerTest : ISetup
+	public class HangfireEventServerTest : IIsolateSystem, IExtendSystem
 	{
 		public AHandler Handler;
 		public AnotherHandler Another;
 		public AspectedHandler Aspected;
 		public HangfireEventServer Target;
 		public FakeDataSourceForTenant DataSources;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeDataSourceForTenant>().For<IDataSourceForTenant>();
+			extend.AddService<AHandler>();
+			extend.AddService<AnotherHandler>();
+			extend.AddService<AspectedHandler>();
+		}
 
-			system.AddService<AHandler>();
-			system.AddService<AnotherHandler>();
-			system.AddService<AspectedHandler>();
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FakeDataSourceForTenant>().For<IDataSourceForTenant>();
 		}
 
 		[Test]

@@ -47,18 +47,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 	}
 
 	[TenantTest]
-	public class PersonInfoControllerExtendedTest : ISetup
+	public class PersonInfoControllerExtendedTest : IIsolateSystem
 	{
 		public PersonInfoController Target;
 		public FindLogonInfoFake FindLogonInfo;
 		public TenantAuthenticationFake TenantAuthentication;
 		public PersonInfoPersisterFake PersonInfoPersisterFake;
 		
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<PersistPersonInfo>().For<IPersistPersonInfo>();
-			system.UseTestDouble<PersonInfoPersisterFake>().For<IPersonInfoPersister>();
-			system.UseTestDouble<TenantAuditPersisterFake>().For<ITenantAuditPersister>();
+			isolate.UseTestDouble<PersistPersonInfo>().For<IPersistPersonInfo>();
+			isolate.UseTestDouble<PersonInfoPersisterFake>().For<IPersonInfoPersister>();
+			isolate.UseTestDouble<TenantAuditPersisterFake>().For<ITenantAuditPersister>();
 		}
 
 		[Test]

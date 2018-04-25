@@ -23,7 +23,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Staffing
 {
 	[DomainTest]
-	public class ExportForecastAndStaffingFileTest: ISetup
+	public class ExportForecastAndStaffingFileTest: IIsolateSystem
 	{
 		public ExportForecastAndStaffingFile Target;
 		public FakeSkillRepository SkillRepository;
@@ -36,12 +36,12 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public FakeUserUiCulture FakeUserUiCulture;
 		public FakeUserCulture FakeUserCulture;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			system.UseTestDouble<FakeStaffingSettingsReader>().For<IStaffingSettingsReader>();
-			system.UseTestDouble<FakeUserUiCulture>().For<IUserUiCulture>();
-			system.UseTestDouble<FakeUserCulture>().For<IUserCulture>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<FakeStaffingSettingsReader>().For<IStaffingSettingsReader>();
+			isolate.UseTestDouble<FakeUserUiCulture>().For<IUserUiCulture>();
+			isolate.UseTestDouble<FakeUserCulture>().For<IUserCulture>();
 		}
 
 		[Test]

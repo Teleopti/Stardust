@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 {
 	[TestFixture]
 	[DomainTest]
-	public class AnalyticsPermissionsUpdaterTest : ISetup
+	public class AnalyticsPermissionsUpdaterTest : IExtendSystem
 	{
 		public IAnalyticsPermissionsUpdater Target;
 		public IAnalyticsPermissionRepository AnalyticsPermissionRepository;
@@ -35,11 +35,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 		private readonly Guid teamId = Guid.NewGuid();
 		private readonly Guid reportId = Guid.NewGuid();
 		private const int analyticsBusinessUnitId = 1;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<AnalyticsPermissionsUpdater>();
-			system.AddService<PermissionsConverter>();
+			extend.AddService<AnalyticsPermissionsUpdater>();
+			extend.AddService<PermissionsConverter>();
 		}
 
 		[Test]

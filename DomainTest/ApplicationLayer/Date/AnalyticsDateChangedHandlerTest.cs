@@ -12,15 +12,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Date
 {
 	[TestFixture]
 	[DomainTest]
-	public class AnalyticsDateChangedHandlerTest : ISetup
+	public class AnalyticsDateChangedHandlerTest : IExtendSystem
 	{
 		public AnalyticsDateChangedHandler Target;
 		public FakeAnalyticsDateRepository AnalyticsDateRepository;
 		public FakeAnalyticsBridgeTimeZoneRepository AnalyticsBridgeTimeZoneRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<AnalyticsDateChangedHandler>();
+			extend.AddService<AnalyticsDateChangedHandler>();
 		}
 
 		[Test]

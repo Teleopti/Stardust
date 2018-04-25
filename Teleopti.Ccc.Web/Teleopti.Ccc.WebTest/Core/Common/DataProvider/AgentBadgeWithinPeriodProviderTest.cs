@@ -17,7 +17,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 {
 	[MyTimeWebTest, TestFixture]
-	public class AgentBadgeWithinPeriodProviderTest : ISetup
+	public class AgentBadgeWithinPeriodProviderTest : IIsolateSystem
 	{
 		public IAgentBadgeWithinPeriodProvider Target;
 		public FakeGamificationSettingRepository GamificationSettingRepository;
@@ -28,12 +28,12 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		public FakeCurrentTeleoptiPrincipal CurrentTeleoptiPrincipal;
 		public FakeCurrentDatasource CurrentDataSource;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
-			system.UseTestDouble<FakeCurrentTeleoptiPrincipal>().For<ICurrentTeleoptiPrincipal>();
-			system.UseTestDouble<FakeCurrentDatasource>().For<ICurrentDataSource>();
-			system.UseTestDouble<FakePermissions>().For<IAuthorization>();
+			isolate.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
+			isolate.UseTestDouble<FakeCurrentTeleoptiPrincipal>().For<ICurrentTeleoptiPrincipal>();
+			isolate.UseTestDouble<FakeCurrentDatasource>().For<ICurrentDataSource>();
+			isolate.UseTestDouble<FakePermissions>().For<IAuthorization>();
 		}
 
 		[Test]

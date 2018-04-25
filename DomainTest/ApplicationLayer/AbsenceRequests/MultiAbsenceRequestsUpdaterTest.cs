@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 	[DomainTest]
 	[TestWithStaticDependenciesDONOTUSE]
 	[TestFixture, SetCulture("en-US")]
-	public class MultiAbsenceRequestsUpdaterTest : ISetup
+	public class MultiAbsenceRequestsUpdaterTest : IIsolateSystem
 	{
 		public IMultiAbsenceRequestsUpdater Target;
 		public FakeScenarioRepository ScenarioRepository;
@@ -50,11 +50,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakeBudgetGroupRepository BudgetGroupRepository;
 		public FakeBudgetDayRepository BudgetDayRepository;
 		
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
-			system.UseTestDouble<FakeBudgetGroupRepository>().For<IBudgetGroupRepository>();
-			system.UseTestDouble<FakeBudgetDayRepository>().For<IBudgetDayRepository>();
+			isolate.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
+			isolate.UseTestDouble<FakeBudgetGroupRepository>().For<IBudgetGroupRepository>();
+			isolate.UseTestDouble<FakeBudgetDayRepository>().For<IBudgetDayRepository>();
 		}
 
 		[Test]

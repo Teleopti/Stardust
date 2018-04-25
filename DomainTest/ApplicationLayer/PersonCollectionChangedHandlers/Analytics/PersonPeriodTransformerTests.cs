@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 {
 	[TestFixture]
 	[DomainTest]
-	public class PersonPeriodTransformerTests : ISetup
+	public class PersonPeriodTransformerTests : IExtendSystem
 	{
 		public FakeGlobalSettingDataRepository GlobalSettingDataRepository;
 		public FakeAnalyticsBusinessUnitRepository AnalyticsBusinessUnitRepository;
@@ -24,9 +24,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		public FakeAnalyticsSkillRepository AnalyticsSkillRepository;
 		public PersonPeriodTransformer Target;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<PersonPeriodTransformer>();
+			extend.AddService<PersonPeriodTransformer>();
 		}
 
 		[Test]

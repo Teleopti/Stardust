@@ -23,7 +23,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 {
 	[DatabaseTest]
-	public class PersonAccountConflictResolverTest : ISetup
+	public class PersonAccountConflictResolverTest : IExtendSystem
 	{
 		public IPersonAccountConflictResolver Target;
 		public ICurrentUnitOfWorkFactory CurrentUnitOfWorkFactory;
@@ -128,10 +128,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 			personAbsenceAccount.AccountCollection()
 				.ForEach(account => account.LatestCalculatedBalance.Should().Be.EqualTo(TimeSpan.FromDays(1)));
 		}
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<PersonAccountConflictResolver>();
+			extend.AddService<PersonAccountConflictResolver>();
 		}
 	}
 }

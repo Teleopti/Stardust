@@ -16,7 +16,7 @@ using Teleopti.Ccc.TestCommon.TestData;
 namespace Teleopti.Ccc.DomainTest.SkillGroups
 {
 	[DomainTest]
-	public class SkillGroupViewModelBuilderTest : ISetup
+	public class SkillGroupViewModelBuilderTest : IIsolateSystem
 	{
 		public SkillGroupViewModelBuilder Target;
 		public FakeSkillGroupRepository SkillGroupRepository;
@@ -24,9 +24,9 @@ namespace Teleopti.Ccc.DomainTest.SkillGroups
 		public FakeUserUiCulture UiCulture;
 		private readonly List<SkillInIntraday> defaultSkills = new List<SkillInIntraday>();
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble(new FakeUserUiCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserUiCulture>();
+			isolate.UseTestDouble(new FakeUserUiCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserUiCulture>();
 			defaultSkills.Add(new SkillInIntraday
 			{
 				Id = Guid.NewGuid(),

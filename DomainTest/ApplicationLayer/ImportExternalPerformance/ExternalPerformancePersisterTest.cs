@@ -13,17 +13,17 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 {
 	[TestFixture, DomainTest]
-	public class ExternalPerformancePersisterTest : ISetup
+	public class ExternalPerformancePersisterTest : IIsolateSystem
 	{
 		public FakeExternalPerformanceRepository ExternalPerformanceRepository;
 		public FakeExternalPerformanceDataRepository ExternalPerformanceDataRepository;
 		public IExternalPerformancePersister Target;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeExternalPerformanceRepository>().For<IExternalPerformanceRepository>();
-			system.UseTestDouble<FakeExternalPerformanceDataRepository>().For<IExternalPerformanceDataRepository>();
-			system.UseTestDouble<ExternalPerformancePersister>().For<IExternalPerformancePersister>();
+			isolate.UseTestDouble<FakeExternalPerformanceRepository>().For<IExternalPerformanceRepository>();
+			isolate.UseTestDouble<FakeExternalPerformanceDataRepository>().For<IExternalPerformanceDataRepository>();
+			isolate.UseTestDouble<ExternalPerformancePersister>().For<IExternalPerformancePersister>();
 		}
 
 

@@ -23,15 +23,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 	[Category("BucketB")]
 	[AnalyticsDatabaseTest]
 	[Toggle(Toggles.ETL_EventbasedDate_39562)]
-	public class AnalyticsDateRepositoryWithCreationTest : ISetup
+	public class AnalyticsDateRepositoryWithCreationTest : IIsolateSystem
 	{
 		public IAnalyticsDateRepository Target;
 		public WithAnalyticsUnitOfWork WithAnalyticsUnitOfWork;
 		public FakeEventPublisher FakeEventPublisher;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+			isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 		}
 
 		[SetUp]

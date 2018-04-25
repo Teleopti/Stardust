@@ -4,7 +4,7 @@ using Teleopti.Ccc.Infrastructure.Aop;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
-	public class SystemImpl : ISystem
+	public class SystemImpl : IIsolate, IExtend
 	{
 		private readonly ContainerBuilder _builder;
 		private readonly TestDoubles _testDoubles;

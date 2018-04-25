@@ -21,19 +21,25 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
 using Teleopti.Ccc.WebTest.Core.Common.DataProvider;
 using Teleopti.Ccc.WebTest.Core.IoC;
+using Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 {
 	public class MyTimeWebTeamScheduleViewModelFactoryTestAttribute : MyTimeWebTestAttribute
 	{
-		protected override void Setup(ISystem system, IIocConfiguration configuration)
+		protected override void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			base.Setup(system, configuration);
-			system.AddService<FakeStorage>();
-			system.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
-			system.UseTestDouble<FakeScheduleProvider>().For<IScheduleProvider>();
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			base.Extend(extend, configuration);
+			extend.AddService<FakeStorage>();
+		}
+
+		protected override void Isolate(IIsolate isolate)
+		{
+			base.Isolate(isolate);
+			isolate.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
+			isolate.UseTestDouble<FakeScheduleProvider>().For<IScheduleProvider>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 		}
 	}
 

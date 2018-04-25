@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 	[TestFixture]
 	[SetCulture("en-US")]
 	[SetUICulture("en-US")]
-	public partial class OvertimeRequestProcessorTest : ISetup
+	public partial class OvertimeRequestProcessorTest : IIsolateSystem
 	{
 		public IOvertimeRequestProcessor Target;
 		public UpdatedBy UpdatedBy;
@@ -63,23 +63,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		private readonly ISkillType _emailSkillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
 		private readonly ISkillType _chatSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Chat), ForecastSource.Chat).WithId();
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<UpdatedBy>().For<IUpdatedByScope>();
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			system.UseTestDouble<DoNothingScheduleDayChangeCallBack>().For<IScheduleDayChangeCallback>();
-			system.UseTestDouble<SiteOpenHoursSpecification>().For<ISiteOpenHoursSpecification>();
-			system.UseTestDouble(new FakeScenarioRepository(new Scenario("default") { DefaultScenario = true }))
+			isolate.UseTestDouble<UpdatedBy>().For<IUpdatedByScope>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<DoNothingScheduleDayChangeCallBack>().For<IScheduleDayChangeCallback>();
+			isolate.UseTestDouble<SiteOpenHoursSpecification>().For<ISiteOpenHoursSpecification>();
+			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("default") { DefaultScenario = true }))
 				.For<IScenarioRepository>();
 
 			var fakeMultiplicatorDefinitionSetRepository = new FakeMultiplicatorDefinitionSetRepository();
 			fakeMultiplicatorDefinitionSetRepository.Has(_multiplicatorDefinitionSet);
-			system.UseTestDouble(fakeMultiplicatorDefinitionSetRepository).For<IMultiplicatorDefinitionSetRepository>();
-			system.UseTestDouble(fakeMultiplicatorDefinitionSetRepository).For<IProxyForId<IMultiplicatorDefinitionSet>>();
+			isolate.UseTestDouble(fakeMultiplicatorDefinitionSetRepository).For<IMultiplicatorDefinitionSetRepository>();
+			isolate.UseTestDouble(fakeMultiplicatorDefinitionSetRepository).For<IProxyForId<IMultiplicatorDefinitionSet>>();
 
-			system.UseTestDouble<FakePersonAssignmentWriteSideRepository>().For<IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>>();
-			system.UseTestDouble<ScheduleStorage>().For<IScheduleStorage>();
-			system.UseTestDouble(new MutableNow(new DateTime(2017, 07, 12, 10, 00, 00, DateTimeKind.Utc))).For<INow>();
+			isolate.UseTestDouble<FakePersonAssignmentWriteSideRepository>().For<IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>>();
+			isolate.UseTestDouble<ScheduleStorage>().For<IScheduleStorage>();
+			isolate.UseTestDouble(new MutableNow(new DateTime(2017, 07, 12, 10, 00, 00, DateTimeKind.Utc))).For<INow>();
 			_intervals = createIntervals();
 		}
 

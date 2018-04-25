@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
 	[TestFixture]
 	[RequestsTest]
-	public class OvertimeRequestsControllerTest : ISetup
+	public class OvertimeRequestsControllerTest : IIsolateSystem
 	{
 		public OvertimeRequestsController OvertimeRequestsController;
 		public ICurrentScenario CurrentScenario;
@@ -29,12 +29,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakeLoggedOnUser FakeLoggedOnUser;
 		public MutableNow Now;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			system.UseTestDouble(new FakeScenarioRepository(new Scenario("default") { DefaultScenario = true }))
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("default") { DefaultScenario = true }))
 				.For<IScenarioRepository>();
-			system.UseTestDouble(new MutableNow(new DateTime(2018, 01, 08, 10, 00, 00, DateTimeKind.Utc))).For<INow>();
+			isolate.UseTestDouble(new MutableNow(new DateTime(2018, 01, 08, 10, 00, 00, DateTimeKind.Utc))).For<INow>();
 		}
 
 		[Test]

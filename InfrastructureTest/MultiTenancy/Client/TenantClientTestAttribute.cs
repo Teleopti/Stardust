@@ -10,13 +10,13 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 {
 	public class TenantClientTestAttribute : IoCTestAttribute
 	{
-		protected override void Setup(ISystem system, IIocConfiguration configuration)
+		protected override void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<PostHttpRequestFake>().For<IPostHttpRequest>();
-			system.UseTestDouble<GetHttpRequestFake>().For<IGetHttpRequest>();
-			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
-			system.UseTestDouble<LoadUserUnauthorizedFake>().For<ILoadUserUnauthorized>();
-			system.UseTestDouble<FakeCurrentTenantCredentials>().For<ICurrentTenantCredentials>();
+			isolate.UseTestDouble<PostHttpRequestFake>().For<IPostHttpRequest>();
+			isolate.UseTestDouble<GetHttpRequestFake>().For<IGetHttpRequest>();
+			isolate.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
+			isolate.UseTestDouble<LoadUserUnauthorizedFake>().For<ILoadUserUnauthorized>();
+			isolate.UseTestDouble<FakeCurrentTenantCredentials>().For<ICurrentTenantCredentials>();
 		}
 	}
 }

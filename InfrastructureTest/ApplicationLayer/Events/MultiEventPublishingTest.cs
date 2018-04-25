@@ -13,18 +13,21 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
 	[TestFixture]
 	[InfrastructureTest]
-	public class MultiEventPublishingTest : ISetup
+	public class MultiEventPublishingTest : IIsolateSystem, IExtendSystem
 	{
 		public FakeHangfireEventClient Hangfire;
 		public FakeStardustSender Stardust;
 		public IEventPublisher Target;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeStardustSender>().For<IStardustSender>();
-			
-			system.AddService<HangfireEventHandler>();
-			system.AddService<StardustEventHandler>();
+			extend.AddService<HangfireEventHandler>();
+			extend.AddService<StardustEventHandler>();
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FakeStardustSender>().For<IStardustSender>();
 		}
 
 		[Test]

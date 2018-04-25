@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 {
     [TestFixture]
 	[DomainTest]
-    public class SchedulePartAssemblerTest : ISetup
+    public class SchedulePartAssemblerTest : IIsolateSystem, IExtendSystem
 	{
 		public FakePersonRepository PersonRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
@@ -246,12 +246,16 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    Assert.AreEqual(act.Id, dto.ProjectedLayerCollection.First().PayloadId);
 		    Assert.AreEqual(act.Id, dto.ProjectedLayerCollection.Last().PayloadId);
 		}
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<TenantPeopleLoader>().For<ITenantPeopleLoader>();
-			system.UseTestDouble<FakeTenantLogonDataManager>().For<ITenantLogonDataManager>();
-			system.AddModule(new AssemblerModule());
+			extend.AddModule(new AssemblerModule());
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<TenantPeopleLoader>().For<ITenantPeopleLoader>();
+			isolate.UseTestDouble<FakeTenantLogonDataManager>().For<ITenantLogonDataManager>();
 		}
 	}
 }

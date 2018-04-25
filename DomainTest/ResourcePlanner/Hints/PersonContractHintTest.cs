@@ -17,7 +17,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
-	public class PersonContractHintTest : ISetup
+	public class PersonContractHintTest : IIsolateSystem
 	{
 		public CheckScheduleHints Target;
 
@@ -62,9 +62,9 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 				.Be.EqualTo(string.Format(Resources.DeletedContractAssigned, personPeriod.PersonContract.Contract.Description));
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble(new FakeScenarioRepository(ScenarioFactory.CreateScenario("_", true, true))).For<IScenarioRepository>();
+			isolate.UseTestDouble(new FakeScenarioRepository(ScenarioFactory.CreateScenario("_", true, true))).For<IScenarioRepository>();
 		}
 	}
 }

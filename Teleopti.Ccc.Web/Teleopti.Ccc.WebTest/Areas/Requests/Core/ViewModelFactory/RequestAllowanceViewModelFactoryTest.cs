@@ -20,7 +20,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 {
 	[TestFixture, RequestsTest, SetCulture("en-US")]
-	public class RequestAllowanceViewModelFactoryTest : ISetup
+	public class RequestAllowanceViewModelFactoryTest : IIsolateSystem
 	{
 		public IBudgetGroupRepository BudgetGroupRepository;
 		public IRequestAllowanceViewModelFactory RequestAllowanceViewModelFactory;
@@ -28,12 +28,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public IBudgetDayRepository BudgetDayRepository;
 		public IScheduleProjectionReadOnlyPersister ScheduleProjectionReadOnlyPersister;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeBudgetDayRepository>().For<IBudgetDayRepository>();
-			system.UseTestDouble<FakeBudgetGroupRepository>().For<IBudgetGroupRepository>();
-			system.UseTestDouble<FakeScheduleProjectionReadOnlyPersister>().For<IScheduleProjectionReadOnlyPersister>();
-			system.UseTestDouble<RequestAllowanceProvider>().For<IRequestAllowanceProvider>();
+			isolate.UseTestDouble<FakeBudgetDayRepository>().For<IBudgetDayRepository>();
+			isolate.UseTestDouble<FakeBudgetGroupRepository>().For<IBudgetGroupRepository>();
+			isolate.UseTestDouble<FakeScheduleProjectionReadOnlyPersister>().For<IScheduleProjectionReadOnlyPersister>();
+			isolate.UseTestDouble<RequestAllowanceProvider>().For<IRequestAllowanceProvider>();
 		}
 
 		[Test]

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.DayOff
 {
 	[TestFixture]
 	[DomainTest]
-	public class AnalyticsDayOffUpdaterTests : ISetup
+	public class AnalyticsDayOffUpdaterTests : IExtendSystem
 	{
 		public AnalyticsDayOffUpdater Target;
 		public FakeAnalyticsBusinessUnitRepository AnalyticsBusinessUnitRepository;
@@ -25,9 +25,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.DayOff
 		public IAnalyticsDayOffRepository AnalyticsDayOffRepository;
 		public IDayOffTemplateRepository DayOffTemplateRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<AnalyticsDayOffUpdater>();
+			extend.AddService<AnalyticsDayOffUpdater>();
 		}
 
 		[Test]

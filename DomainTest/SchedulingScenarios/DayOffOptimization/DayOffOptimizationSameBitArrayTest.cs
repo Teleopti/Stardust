@@ -61,10 +61,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			Target.Execute(planningPeriod.Id.Value);
 		}
 
-		public override void Setup(ISystem system, IIocConfiguration configuration)
+		public override void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<returnsBitarrayClone>().For<ITeamBlockDaysOffMoveFinder>();
-			base.Setup(system, configuration);
+			isolate.UseTestDouble<returnsBitarrayClone>().For<ITeamBlockDaysOffMoveFinder>();
+			base.Isolate(isolate);
 		}
 
 		private class returnsBitarrayClone : ITeamBlockDaysOffMoveFinder

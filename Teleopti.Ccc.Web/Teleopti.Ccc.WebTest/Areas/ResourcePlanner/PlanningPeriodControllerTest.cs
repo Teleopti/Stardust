@@ -28,7 +28,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 {
 	[DomainTest]
-	public class PlanningPeriodControllerTest : ISetup
+	public class PlanningPeriodControllerTest : IExtendSystem
 	{
 		//break this test in to multiple
 		public PlanningPeriodController Target;
@@ -459,13 +459,13 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 				}
 			};
 		}
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
 			//shouldn't be here
 			//instead move logic to domain and don't fake other stuff than "out of process calls" (=repos and similar)
 			//These out of process-fakes, put it in DomainTestAttribute
-			system.AddService<PlanningPeriodController>();
+			extend.AddService<PlanningPeriodController>();
 		}
 	}
 }

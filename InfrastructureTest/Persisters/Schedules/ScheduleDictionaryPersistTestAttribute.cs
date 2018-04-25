@@ -49,12 +49,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			});
 		}
 
-		protected override void Setup(ISystem system, IIocConfiguration configuration)
+		protected override void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			base.Setup(system, configuration);
-			system.AddService(this);
+			base.Extend(extend, configuration);
+			extend.AddService(this);
 		}
-
+		
 		public IScheduleDictionary MakeDictionary()
 		{
 			IScheduleDictionary schedules = null;

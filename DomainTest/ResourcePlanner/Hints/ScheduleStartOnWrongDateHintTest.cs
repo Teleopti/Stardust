@@ -22,7 +22,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
-	public class ScheduleStartOnWrongDateHintTest : ISetup
+	public class ScheduleStartOnWrongDateHintTest : IIsolateSystem
 	{
 		public Func<ISchedulerStateHolder> StateHolder;
 		public CheckScheduleHints Target;
@@ -95,9 +95,9 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			result.ValidationErrors.Any(x => string.Format(Resources.ShiftStartsDayBeforeOrAfter, date.Date).Equals(HintsHelper.BuildErrorMessage(x))).Should().Be.True();
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble(new FakeScenarioRepository(ScenarioFactory.CreateScenario("Default", true, true))).For<IScenarioRepository>();
+			isolate.UseTestDouble(new FakeScenarioRepository(ScenarioFactory.CreateScenario("Default", true, true))).For<IScenarioRepository>();
 		}
 	}
 }

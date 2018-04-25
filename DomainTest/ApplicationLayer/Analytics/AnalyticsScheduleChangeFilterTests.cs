@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Analytics
 {
 	[DomainTest]
 	[TestFixture]
-	public class AnalyticsScheduleChangeFilterTests : ISetup
+	public class AnalyticsScheduleChangeFilterTests : IExtendSystem
 	{
 		public AnalyticsScheduleChangeForAllReportableScenariosFilter Target;
 		public IScenarioRepository Scenarios;
@@ -19,9 +19,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Analytics
 		private Scenario notReportableScenario;
 		private Scenario defaultScenario;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<AnalyticsScheduleChangeForAllReportableScenariosFilter>();
+			extend.AddService<AnalyticsScheduleChangeForAllReportableScenariosFilter>();
 		}
 
 		private void addScenarios()

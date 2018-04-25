@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	[TestFixture]
 	[MyTimeWebTest]
 	[SetCulture("sv-SE")]
-	public class ScheduleApiControllerTimeLineTest:ISetup
+	public class ScheduleApiControllerTimeLineTest:IIsolateSystem
 	{
 		public ScheduleApiController Target;
 		public ICurrentScenario Scenario;
@@ -48,9 +48,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		readonly ISkillType skillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
 			.WithId();
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
+			isolate.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
 			var person = PersonFactory.CreatePersonWithId();
 			var skill = new Skill("test1").WithId();
 			skill.SkillType = skillType;
@@ -65,9 +65,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			});
 			person.WorkflowControlSet = workflowControlSet;
 
-			system.UseTestDouble(new FakeLoggedOnUser(person)).For<ILoggedOnUser>();
+			isolate.UseTestDouble(new FakeLoggedOnUser(person)).For<ILoggedOnUser>();
 
-			system.UseTestDouble(new FakeSkillTypeRepository(skillType)).For<ISkillTypeRepository>();
+			isolate.UseTestDouble(new FakeSkillTypeRepository(skillType)).For<ISkillTypeRepository>();
 
 		}
 

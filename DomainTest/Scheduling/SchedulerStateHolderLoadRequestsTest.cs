@@ -22,7 +22,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling
 {
 	[DomainTest]
-	public class SchedulerStateHolderLoadRequestsTest:ISetup
+	public class SchedulerStateHolderLoadRequestsTest:IIsolateSystem
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public IFindSchedulesForPersons ScheduleStorage;
@@ -30,9 +30,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public IUnitOfWork UnitOfWork;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeUnitOfWork>().For<IUnitOfWork>();
+			isolate.UseTestDouble<FakeUnitOfWork>().For<IUnitOfWork>();
 		}
 
 		[Test]

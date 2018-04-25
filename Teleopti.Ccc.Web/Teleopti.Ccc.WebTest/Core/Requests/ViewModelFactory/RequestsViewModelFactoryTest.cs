@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 	[SetCulture("en-US")]
 	[MyTimeWebTest]
 	[TestFixture]
-	public class RequestsViewModelFactoryTest : ISetup
+	public class RequestsViewModelFactoryTest : IIsolateSystem
 	{
 		public IPersonScheduleDayReadModelFinder PersonScheduleDayReadModelFinder;
 		public IPermissionProvider PermissionProvider;
@@ -47,12 +47,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		public FakePersonRequestRepository FakePersonRequestRepository;
 		public ICurrentDataSource CurrentDataSource;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeAbsenceRepository>().For<IAbsenceRepository>();
-			system.UseTestDouble<FakeMultiplicatorDefinitionSetRepository>().For<IMultiplicatorDefinitionSetRepository>();
-			system.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
-			system.UseTestDouble<FakeLinkProvider>().For<ILinkProvider>();
+			isolate.UseTestDouble<FakeAbsenceRepository>().For<IAbsenceRepository>();
+			isolate.UseTestDouble<FakeMultiplicatorDefinitionSetRepository>().For<IMultiplicatorDefinitionSetRepository>();
+			isolate.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
+			isolate.UseTestDouble<FakeLinkProvider>().For<ILinkProvider>();
 		}
 
 		[Test]

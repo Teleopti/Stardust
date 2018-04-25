@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 {
 	[TestFixture]
 	[PrincipalAndStateTest]
-	public class PersonAssignmentEventPublishingTest : ISetup
+	public class PersonAssignmentEventPublishingTest : IIsolateSystem
 	{
 		public WithUnitOfWork UnitOfWork;
 		public FakeEventPublisher EventsPublisher;
@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 		public IPersonAssignmentRepository PersonAssignmentRepository;
 		public IActivityRepository ActivityRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+			isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 		}
 
 		[Test]

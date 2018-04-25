@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[TestFixture]
 	[DomainTest]
-	public class MoveShiftCommandHandlerTest : ISetup
+	public class MoveShiftCommandHandlerTest : IIsolateSystem
 	{
 		public MoveShiftCommandHandler Target;
 		public IScheduleStorage ScheduleStorage;
@@ -40,11 +40,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public FakeActivityRepository ActivityRepository;
 		public FakeSkillRepository SkillRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeScheduleDifferenceSaver_DoNotUse>().For<IScheduleDifferenceSaver>();
-			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
-			system.UseTestDouble<MoveShiftCommandHandler>().For<IHandleCommand<MoveShiftCommand>>();
+			isolate.UseTestDouble<FakeScheduleDifferenceSaver_DoNotUse>().For<IScheduleDifferenceSaver>();
+			isolate.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
+			isolate.UseTestDouble<MoveShiftCommandHandler>().For<IHandleCommand<MoveShiftCommand>>();
 		}
 
 		[Test]

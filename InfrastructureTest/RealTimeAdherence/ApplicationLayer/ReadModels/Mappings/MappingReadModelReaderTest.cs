@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 	[TestFixture]
 	[DatabaseTest]
 	[Toggle(Toggles.ETL_SpeedUpIntradayBusinessUnit_38932)]
-	public class MappingReadModelReaderTest : ISetup
+	public class MappingReadModelReaderTest : IExtendSystem
 	{
 		public IRtaMapRepository Maps;
 		public IRtaStateGroupRepository Groups;
@@ -32,11 +32,11 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		public WithUnitOfWorkWithRecurringEvents WithUnitOfWork;
 		public IEventPublisher EventPublisher;
 		public ICurrentBusinessUnit CurrentBusinessUnit;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<WithUnitOfWorkWithRecurringEvents>();
-			system.AddService<SyncAllEventPublisher>();
+			extend.AddService<WithUnitOfWorkWithRecurringEvents>();
+			extend.AddService<SyncAllEventPublisher>();
 		}
 
 		[Test]

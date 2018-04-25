@@ -17,20 +17,20 @@ namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Reporting.Core
 {
 	[TestFixture]
 	[InfrastructureTest]
-	public class AnalyticsPermissionsUpdaterConcurrencyTest : ISetup
+	public class AnalyticsPermissionsUpdaterConcurrencyTest : IExtendSystem
 	{
 		public WithUnitOfWork WithUnitOfWork;
 		public ConcurrencyRunner Run;
 		public Database Database;
 		public IPersonRepository PersonRepository;
 		public IAnalyticsPermissionsUpdater Target;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<PermissionsConverter>();
-			system.AddService<AnalyticsPermissionsUpdater>();
+			extend.AddService<PermissionsConverter>();
+			extend.AddService<AnalyticsPermissionsUpdater>();
 		}
-
+		
 		[Test]
 		public void ShouldHandleConcurrency()
 		{

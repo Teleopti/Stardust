@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
 	[Toggle(Toggles.Wfm_Requests_ProcessWaitlistBefore24hRequests_45767)]
-	public class RequestProcessorTest : ISetup
+	public class RequestProcessorTest : IIsolateSystem
 	{
 		public IRequestProcessor Target;
 		public FakePersonRepository PersonRepository;
@@ -44,9 +44,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public MutableNow Now;
 		public FakePersonRequestRepository PersonRequestRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
+			isolate.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
 		}
 
 		[Test]

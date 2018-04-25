@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[UseIocForFatClient]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
-	public class IntradayOptimizationReduceUnnecessaryCallsTest : IntradayOptimizationScenarioTest, ISetup
+	public class IntradayOptimizationReduceUnnecessaryCallsTest : IntradayOptimizationScenarioTest, IIsolateSystem
 	{
 		public OptimizationDesktopExecuter Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
@@ -112,10 +112,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			maxSeatSkillDaysUsedOnCurrentDate.Count().Should().Be.EqualTo(1);
 		}
 
-		public override void Setup(ISystem system, IIocConfiguration configuration)
+		public override void Isolate(IIsolate isolate)
 		{
-			base.Setup(system, configuration);
-			system.UseTestDouble<WorkShiftSelectorTrackWhatSkillDays>().For<WorkShiftSelectorForMaxSeat>();
+			base.Isolate(isolate);
+			isolate.UseTestDouble<WorkShiftSelectorTrackWhatSkillDays>().For<WorkShiftSelectorForMaxSeat>();
 		}
 	}
 }

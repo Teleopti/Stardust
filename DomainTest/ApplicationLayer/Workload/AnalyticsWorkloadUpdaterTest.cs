@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Workload
 {
 	[TestFixture]
 	[DomainTest]
-	public class AnalyticsWorkloadUpdaterTest : ISetup
+	public class AnalyticsWorkloadUpdaterTest : IExtendSystem
 	{
 		public AnalyticsWorkloadUpdater Target;
 		public IWorkloadRepository WorkloadRepository;
@@ -30,10 +30,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Workload
 
 		private readonly Guid workloadId = Guid.NewGuid();
 		private readonly Guid businessUnitId = Guid.NewGuid();
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<AnalyticsWorkloadUpdater>();
+			extend.AddService<AnalyticsWorkloadUpdater>();
 		}
 
 		[Test]

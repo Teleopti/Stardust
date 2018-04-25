@@ -56,6 +56,16 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			return config;
 		}
 
+		protected override void Extend(IExtend extend, IIocConfiguration configuration)
+		{
+			base.Extend(extend, configuration);
+			
+			extend.AddService(TenantUnitOfWorkManager.Create(InfraTestConfigReader.ConnectionString));
+			extend.AddService<Database>();
+			extend.AddService<DatabaseLegacy>();
+			extend.AddService<AnalyticsDatabase>();
+		}
+
 		//
 		// Should fake:
 		// Config
@@ -68,37 +78,33 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		// Bus			<--(??)
 		//
 		// ... we guess ...
-		protected override void Setup(ISystem system, IIocConfiguration configuration)
+		protected override void Isolate(IIsolate isolate)
 		{
-			base.Setup(system, configuration);
+			base.Isolate(isolate);
 
 			// Tenant stuff
-			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
-			system.AddService(TenantUnitOfWorkManager.Create(InfraTestConfigReader.ConnectionString));
+			isolate.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
 			//system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
 
 			// Hangfire bus maybe? ;)
 			if (QueryAllAttributes<RealHangfireAttribute>().IsEmpty())
-				system.UseTestDouble<FakeHangfireEventClient>().For<IHangfireEventClient>();
+				isolate.UseTestDouble<FakeHangfireEventClient>().For<IHangfireEventClient>();
 
 			// message broker
-			system.UseTestDouble(new FakeSignalR()).For<ISignalR>();
-			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
+			isolate.UseTestDouble(new FakeSignalR()).For<ISignalR>();
+			isolate.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
 
 			// stardust
-			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
+			isolate.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
 			
 			// extend scope by including handlers
 			if (QueryAllAttributes<ExtendScopeAttribute>().Any())
-				system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+				isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 
-			system.AddService<Database>();
-			system.AddService<DatabaseLegacy>();
-			system.AddService<AnalyticsDatabase>();
-			system.UseTestDouble<FakeTransactionHook>().For<ITransactionHook>(); // just adds one hook to the list
+			isolate.UseTestDouble<FakeTransactionHook>().For<ITransactionHook>(); // just adds one hook to the list
 
 			// fake for now. if real repo needs to be included in the scope....
-			system.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository, ILicenseRepositoryForLicenseVerifier>();
+			isolate.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository, ILicenseRepositoryForLicenseVerifier>();
 		}
 
 		protected override void BeforeTest()

@@ -12,14 +12,14 @@ namespace Teleopti.MessagingTest.SignalR
 {
 	[TestFixture]
 	[IoCTest]
-	public class SignalRSubscriptionsTest : ISetup
+	public class SignalRSubscriptionsTest : IIsolateSystem
 	{
 		public IMessageListener Target;
 		public FakeSignalRClient SignalRClient;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeSignalRClient>().For<ISignalRClient>();
+			isolate.UseTestDouble<FakeSignalRClient>().For<ISignalRClient>();
 		}
 
 		[Test]

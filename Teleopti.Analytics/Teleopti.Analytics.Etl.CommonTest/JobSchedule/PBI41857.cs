@@ -29,7 +29,7 @@ using WorkloadFactory = Teleopti.Ccc.TestCommon.FakeData.WorkloadFactory;
 namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 {
 	[DomainTest]
-	public class PBI41857 : ISetup
+	public class PBI41857 : IExtendSystem
 	{
 		public IComponentContext ComponentContext;
 
@@ -143,10 +143,10 @@ namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 				secondaryRow["scheduled_resources"].Should().Be.EqualTo(expectedScheduledOnSecondary);
 			}
 		}
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddModule(new EtlModule(configuration));
+			extend.AddModule(new EtlModule(configuration));
 		}
 	}
 }

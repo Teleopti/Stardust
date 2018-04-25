@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Clickatell"),
 		TestFixture,
 		DomainTest]
-	public class ClickatellNotificationSenderTest : ISetup
+	public class ClickatellNotificationSenderTest : IIsolateSystem
 	{
 		// the send will not work in thia test because of the password is wrong
 		// we don't want to send a lot of messages all the time :-) 
@@ -49,13 +49,13 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			</data>
 		</Config>";
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
 			_log = new LogSpy();
 			_fakeNofiticationWebClient = new FakeNofiticationWebClient();
 			_target = new NotificationSenderBase(_log, _fakeNofiticationWebClient);
 
-			system.UseTestDouble<FakeNotificationConfigReader>().For<INotificationConfigReader>();
+			isolate.UseTestDouble<FakeNotificationConfigReader>().For<INotificationConfigReader>();
 		}
 
 		[Test]

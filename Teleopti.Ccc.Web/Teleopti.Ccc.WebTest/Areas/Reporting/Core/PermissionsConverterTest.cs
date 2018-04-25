@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 {
 	[TestFixture]
 	[DomainTest]
-	public class PermissionsConverterTest : ISetup
+	public class PermissionsConverterTest : IExtendSystem
 	{
 		public IPermissionsConverter Target;
 		public MutableNow Now;
@@ -32,10 +32,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 		private readonly Guid reportId = Guid.NewGuid();
 		private readonly Guid teamId = Guid.NewGuid();
 		private const int analyticsBusinessUnitId = 1;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<PermissionsConverter>();
+			extend.AddService<PermissionsConverter>();
 		}
 
 		[Test]

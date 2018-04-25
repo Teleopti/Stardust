@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 {
     [TestFixture]
 	[DomainTest]
-    public class ShiftTradeSwapDetailAssemblerTest : ISetup
+    public class ShiftTradeSwapDetailAssemblerTest : IIsolateSystem, IExtendSystem
 	{
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonRepository PersonRepository;
@@ -97,12 +97,16 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             Assert.AreEqual(shiftTradeSwapDetailDto.ChecksumFrom, shiftTradeSwapDetail.ChecksumFrom);
             Assert.AreEqual(shiftTradeSwapDetailDto.ChecksumTo, shiftTradeSwapDetail.ChecksumTo);
         }
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<TenantPeopleLoader>().For<ITenantPeopleLoader>();
-			system.UseTestDouble<FakeTenantLogonDataManager>().For<ITenantLogonDataManager>();
-			system.AddModule(new AssemblerModule());
+			extend.AddModule(new AssemblerModule());
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<TenantPeopleLoader>().For<ITenantPeopleLoader>();
+			isolate.UseTestDouble<FakeTenantLogonDataManager>().For<ITenantLogonDataManager>();
 		}
 	}
 }

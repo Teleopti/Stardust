@@ -37,7 +37,7 @@ using Teleopti.Wfm.AdministrationTest.FakeData;
 namespace Teleopti.Wfm.AdministrationTest.Controllers
 {
 	[DomainTest]
-	public class EtlControllerTest : ISetup
+	public class EtlControllerTest : IIsolateSystem, IExtendSystem
 	{
 		private const string testTenantName = "Test Tenant";
 		private const string connectionString = "Server=.;DataBase=a";
@@ -62,20 +62,24 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		public FakeConfigReader FakeConfigReader;
 		public FakeAnalyticsTimeZoneRepository TimeZoneRepository;
 		public FakeJobHistoryRepository JobHistoryRepository;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<EtlController>();
-			system.UseTestDouble<FakeConfigurationHandler>().For<IConfigurationHandler>();
+			extend.AddService<EtlController>();
+			extend.AddModule(new EtlToolModule());
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FakeConfigurationHandler>().For<IConfigurationHandler>();
 			
-			system.AddModule(new EtlToolModule());
-			system.UseTestDouble<FakeBaseConfigurationRepository>().For<IBaseConfigurationRepository>();
-			system.UseTestDouble<FakePmInfoProvider>().For<IPmInfoProvider>();
-			system.UseTestDouble<FakeToggleManager>().For<IToggleManager>();
-			system.UseTestDouble<FakeGeneralInfrastructure>().For<IGeneralInfrastructure>();
-			system.UseTestDouble<MutableNow>().For<INow>();
-			system.UseTestDouble<FakeJobScheduleRepository>().For<IJobScheduleRepository>();
-			system.UseTestDouble<FakeJobHistoryRepository>().For<IJobHistoryRepository>();
+			isolate.UseTestDouble<FakeBaseConfigurationRepository>().For<IBaseConfigurationRepository>();
+			isolate.UseTestDouble<FakePmInfoProvider>().For<IPmInfoProvider>();
+			isolate.UseTestDouble<FakeToggleManager>().For<IToggleManager>();
+			isolate.UseTestDouble<FakeGeneralInfrastructure>().For<IGeneralInfrastructure>();
+			isolate.UseTestDouble<MutableNow>().For<INow>();
+			isolate.UseTestDouble<FakeJobScheduleRepository>().For<IJobScheduleRepository>();
+			isolate.UseTestDouble<FakeJobHistoryRepository>().For<IJobHistoryRepository>();
 		}
 
 		[Test]

@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 {
 	[MyTimeWebTest]
 	[TestFixture]
-	public class PortalViewModelFactoryPreferencesTest : ISetup
+	public class PortalViewModelFactoryPreferencesTest : IIsolateSystem
 	{
 		public IPortalViewModelFactory Target;
 		public ICurrentDataSource CurrentDataSource;
@@ -34,12 +34,12 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		public CurrentTenantUserFake CurrentTenantUser;
 		public FakeUserCulture UserCulture;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<PrincipalAuthorization>().For<IAuthorization>();
-			system.UseTestDouble<PermissionProvider>().For<IPermissionProvider>();
-			system.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
-			system.UseTestDouble(new FakeCurrentUnitOfWorkFactory(null).WithCurrent(new FakeUnitOfWorkFactory(null, null, null, null) { Name = MyTimeWebTestAttribute.DefaultTenantName })).For<ICurrentUnitOfWorkFactory>();
+			isolate.UseTestDouble<PrincipalAuthorization>().For<IAuthorization>();
+			isolate.UseTestDouble<PermissionProvider>().For<IPermissionProvider>();
+			isolate.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
+			isolate.UseTestDouble(new FakeCurrentUnitOfWorkFactory(null).WithCurrent(new FakeUnitOfWorkFactory(null, null, null, null) { Name = MyTimeWebTestAttribute.DefaultTenantName })).For<ICurrentUnitOfWorkFactory>();
 		}
 
 		[Test]

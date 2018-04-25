@@ -34,7 +34,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 {
 	[DomainTest]
-	public class AbsenceRequestTest : ISetup
+	public class AbsenceRequestTest : IIsolateSystem
 	{
 		public IRequestApprovalServiceFactory RequestApprovalServiceFactory;
 		public IPersonRequestRepository PersonRequestRepository;
@@ -50,13 +50,13 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
 		private AbsenceRequest _target;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
 			var person = new Person().WithId();
-			system.UseTestDouble(new FakeLoggedOnUser(person)).For<ILoggedOnUser>();
-			system.UseTestDouble(new FakeScenarioRepository(new Scenario("default") {DefaultScenario = true}))
+			isolate.UseTestDouble(new FakeLoggedOnUser(person)).For<ILoggedOnUser>();
+			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("default") {DefaultScenario = true}))
 				.For<IScenarioRepository>();
-			system.UseTestDouble<businessRulesForPersonalAccountUpdateWithNewPersonAccountRuleHaltModify>()
+			isolate.UseTestDouble<businessRulesForPersonalAccountUpdateWithNewPersonAccountRuleHaltModify>()
 				.For<IBusinessRulesForPersonalAccountUpdate>();
 		}
 

@@ -17,7 +17,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.WorkflowControl
 {
 	[DomainTest]
-	public class AnyPersonSkillsOpenValidatorNoSkillActivityTest : ISetup
+	public class AnyPersonSkillsOpenValidatorNoSkillActivityTest : IIsolateSystem
 	{
 		private readonly AnyPersonSkillsOpenValidator _target = new AnyPersonSkillsOpenValidator(new FakeSkillRepository());
 		private IPerson _person;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		public ICurrentScenario Scenario;
 		public FakeScenarioRepository ScenarioRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
 			
 		}

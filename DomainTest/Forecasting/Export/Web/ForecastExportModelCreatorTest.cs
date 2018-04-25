@@ -21,7 +21,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 {
 	[DomainTest]
-	public class ForecastExportModelCreatorTest : ISetup
+	public class ForecastExportModelCreatorTest : IIsolateSystem
 	{
 		public ForecastExportModelCreator Target;
 		public FakeScenarioRepository ScenarioRepository;
@@ -296,9 +296,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 			return skill;
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeSkillDayRepository_DoNotUse>().For<ISkillDayRepository>();
+			isolate.UseTestDouble<FakeSkillDayRepository_DoNotUse>().For<ISkillDayRepository>();
 		}
 	}
 }

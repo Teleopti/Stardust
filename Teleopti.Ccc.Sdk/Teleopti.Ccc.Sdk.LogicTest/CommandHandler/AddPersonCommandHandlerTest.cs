@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
 	[TestFixture]
 	[DomainTest]
-	public class AddPersonCommandHandlerTest : ISetup
+	public class AddPersonCommandHandlerTest : IIsolateSystem, IExtendSystem
 	{
 		public FakePersonRepository PersonRepository;
 		public FakeWorkflowControlSetRepository WorkflowControlSetRepository;
@@ -127,21 +127,25 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 
 			Assert.Throws<ArgumentException>(() => Target.Handle(addPersonCommandDto));
 		}
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<AddPersonCommandHandler>();
+			extend.AddService<AddPersonCommandHandler>();
+			extend.AddModule(new AssemblerModule());
+		}
 
-			system.UseTestDouble<ChangePassword>().For<IChangePassword>();
-			system.UseTestDouble<TenantPeopleSaver>().For<ITenantPeopleSaver>();
-			system.UseTestDouble<TenantDataManager>().For<ITenantDataManager>();
-			system.UseTestDouble<TenantPeopleLoader>().For<ITenantPeopleLoader>();
+		public void Isolate(IIsolate isolate)
+		{
 
-			system.UseTestDouble<PostHttpRequestFake>().For<IPostHttpRequest>();
-			system.UseTestDouble<GetHttpRequestFake>().For<IGetHttpRequest>();
-			system.UseTestDouble<FakeCurrentTenantCredentials>().For<ICurrentTenantCredentials>();
+			isolate.UseTestDouble<ChangePassword>().For<IChangePassword>();
+			isolate.UseTestDouble<TenantPeopleSaver>().For<ITenantPeopleSaver>();
+			isolate.UseTestDouble<TenantDataManager>().For<ITenantDataManager>();
+			isolate.UseTestDouble<TenantPeopleLoader>().For<ITenantPeopleLoader>();
 
-			system.AddModule(new AssemblerModule());
+			isolate.UseTestDouble<PostHttpRequestFake>().For<IPostHttpRequest>();
+			isolate.UseTestDouble<GetHttpRequestFake>().For<IGetHttpRequest>();
+			isolate.UseTestDouble<FakeCurrentTenantCredentials>().For<ICurrentTenantCredentials>();
+
 		}
 	}
 }

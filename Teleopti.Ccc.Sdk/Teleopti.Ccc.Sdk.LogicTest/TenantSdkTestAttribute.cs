@@ -9,16 +9,16 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 {
 	public class TenantSdkTestAttribute : IoCTestAttribute
 	{
-		protected override void Setup(ISystem system, IIocConfiguration configuration)
+		protected override void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<ChangePassword>().For<IChangePassword>();
-			system.UseTestDouble<TenantPeopleSaver>().For<ITenantPeopleSaver>();
-			system.UseTestDouble<TenantDataManager>().For<ITenantDataManager>();
-			system.UseTestDouble<TenantPeopleLoader>().For<ITenantPeopleLoader>();
+			isolate.UseTestDouble<ChangePassword>().For<IChangePassword>();
+			isolate.UseTestDouble<TenantPeopleSaver>().For<ITenantPeopleSaver>();
+			isolate.UseTestDouble<TenantDataManager>().For<ITenantDataManager>();
+			isolate.UseTestDouble<TenantPeopleLoader>().For<ITenantPeopleLoader>();
 
-			system.UseTestDouble<PostHttpRequestFake>().For<IPostHttpRequest>();
-			system.UseTestDouble<GetHttpRequestFake>().For<IGetHttpRequest>();
-			system.UseTestDouble<FakeCurrentTenantCredentials>().For<ICurrentTenantCredentials>();
+			isolate.UseTestDouble<PostHttpRequestFake>().For<IPostHttpRequest>();
+			isolate.UseTestDouble<GetHttpRequestFake>().For<IGetHttpRequest>();
+			isolate.UseTestDouble<FakeCurrentTenantCredentials>().For<ICurrentTenantCredentials>();
 		}
 	}
 }

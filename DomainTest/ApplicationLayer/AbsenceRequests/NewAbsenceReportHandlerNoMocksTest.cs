@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[TestFixture]
 	[DomainTest]
-	public class NewAbsenceReportHandlerNoMocksTest : ISetup
+	public class NewAbsenceReportHandlerNoMocksTest : IIsolateSystem
 	{
 		public FakeScenarioRepository ScenarioRepository;
 		public IScheduleStorage ScheduleRepository;
@@ -170,9 +170,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonAbsenceAccountRepository.Add(personAbsenceAccount);
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<NewAbsenceReport>().For<NewAbsenceReport>();
+			isolate.UseTestDouble<NewAbsenceReport>().For<NewAbsenceReport>();
 		}
 	}
 }

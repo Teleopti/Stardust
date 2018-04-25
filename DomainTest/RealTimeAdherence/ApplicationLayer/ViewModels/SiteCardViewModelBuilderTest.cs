@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels
 	[DomainTest]
 	[TestFixture]
 	[DefaultData]
-	public class SiteCardViewModelBuilderTest : ISetup
+	public class SiteCardViewModelBuilderTest : IIsolateSystem
 	{
 		public SiteCardViewModelBuilder Target;
 		public FakeDatabase Database;
@@ -26,9 +26,9 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels
 		public MutableNow Now;
 		public FakeUserUiCulture UiCulture;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble(new FakeUserUiCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserUiCulture>();
+			isolate.UseTestDouble(new FakeUserUiCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserUiCulture>();
 		}
 
 		[Test]

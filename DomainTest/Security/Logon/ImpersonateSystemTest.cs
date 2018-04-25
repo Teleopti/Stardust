@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Logon
 	[DomainTest]
 	[LoggedOff]
 	[RealPermissions]
-	public class ImpersonateSystemTest : ISetup
+	public class ImpersonateSystemTest : IExtendSystem
 	{
 		public FakeDatabase Database;
 		public Service TheService;
@@ -25,10 +25,10 @@ namespace Teleopti.Ccc.DomainTest.Security.Logon
 		public IScenarioRepository Scenarios;
 		public ICurrentAuthorization PrincipalAuthorization;
 		public IDefinedRaptorApplicationFunctionFactory ApplicationFunctions;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<Service>();
+			extend.AddService<Service>();
 		}
 
 		public class Service

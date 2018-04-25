@@ -21,7 +21,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[DomainTest]
-	public class TerminatePersonHandlerTest : ISetup
+	public class TerminatePersonHandlerTest : IIsolateSystem, IExtendSystem
 	{
 		public MutableNow Now;
 		public IPersonAssignmentRepository PersonAssignmentRepository;
@@ -35,10 +35,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public IPreferenceDayRepository PreferenceDayRepository;
 
 		private IBusinessUnit businessUnit;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<TerminatePersonHandler>();
+			extend.AddService<TerminatePersonHandler>();
+		}
+		
+		public void Isolate(IIsolate isolate)
+		{
 			businessUnit = BusinessUnitFactory.CreateWithId("something");
 		}
 

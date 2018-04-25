@@ -20,7 +20,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.AbsenceHandler
 {
 	[TestFixture, TeamScheduleTest]
-	public class AbsencePersisterTest_NoMock :ISetup
+	public class AbsencePersisterTest_NoMock :IIsolateSystem
 	{
 		public IAbsencePersister Target;
 		public FakePersonRepository PersonRepository;
@@ -30,12 +30,12 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.AbsenceHandler
 		public IScheduleStorage ScheduleStorage;
 		public FakeUserTimeZone UserTimeZone;
 		public Global.FakePermissionProvider PermissionProvider;
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakePersonRepository>().For<IProxyForId<IPerson>>();
-			system.UseTestDouble<FakeAbsenceRepository>().For<IProxyForId<IAbsence>>();
-			system.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
-			system.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
+			isolate.UseTestDouble<FakePersonRepository>().For<IProxyForId<IPerson>>();
+			isolate.UseTestDouble<FakeAbsenceRepository>().For<IProxyForId<IAbsence>>();
+			isolate.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
+			isolate.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
 			
 		}
 

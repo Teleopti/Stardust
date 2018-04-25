@@ -14,7 +14,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
-	public class PersonShiftBagHintTest : ISetup
+	public class PersonShiftBagHintTest : IIsolateSystem
 	{
 		public CheckScheduleHints Target;
 
@@ -78,9 +78,9 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 			validationError.ValidationErrors.Should().Not.Be.Null().And.Not.Be.Empty();
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble(new FakeScenarioRepository(ScenarioFactory.CreateScenario("_", true, true))).For<IScenarioRepository>();
+			isolate.UseTestDouble(new FakeScenarioRepository(ScenarioFactory.CreateScenario("_", true, true))).For<IScenarioRepository>();
 		}
 	}
 }

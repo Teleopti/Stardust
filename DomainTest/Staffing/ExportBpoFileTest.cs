@@ -24,7 +24,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Staffing
 {
 	[DomainTest, Toggle(Toggles.Forecast_FileImport_UnifiedFormat_46585)]
-	public class ExportBpoFileTest : ISetup
+	public class ExportBpoFileTest : IIsolateSystem
 	{
 		public IExportBpoFile Target;
 		public FakeSkillRepository SkillRepository;
@@ -36,9 +36,9 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public FakeUserTimeZone UserTimeZone;
 		private readonly ForecastsRowExtractor ForecastsRowExtractor = new ForecastsRowExtractor();
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
+			isolate.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
 		}
 		
 		[Test]

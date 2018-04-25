@@ -23,7 +23,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 {
 	[TestFixture, DomainTest]
-	public class ImportExternalPerformanceInfoHandlerTest : ISetup
+	public class ImportExternalPerformanceInfoHandlerTest : IIsolateSystem
 	{
 		public ImportExternalPerformanceInfoHandler Target;
 		public FakeJobResultRepository JobResultRepository;
@@ -31,17 +31,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		public FakeExternalPerformanceDataRepository ExternalPerformanceDataRepository;
 		public FakePersonFinderReadOnlyRepository PersonFinderReadOnlyRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<ImportExternalPerformanceInfoHandler>().For<IHandleEvent<ImportExternalPerformanceInfoEvent>>();
-			system.UseTestDouble<ExternalPerformanceInfoFileProcessor>().For<IExternalPerformanceInfoFileProcessor>();
-			system.UseTestDouble<FakeJobResultRepository>().For<IJobResultRepository>();
-			system.UseTestDouble<ImportJobArtifactValidator>().For<IImportJobArtifactValidator>();
-			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
-			system.UseTestDouble<FakeTenantLogonDataManager>().For<ITenantLogonDataManager>();
-			system.UseTestDouble<FakeExternalPerformanceRepository>().For<IExternalPerformanceRepository>();
-			system.UseTestDouble<FakeExternalPerformanceDataRepository>().For<IExternalPerformanceDataRepository>();
-			system.UseTestDouble<FakePersonFinderReadOnlyRepository>().For<IPersonFinderReadOnlyRepository>();
+			isolate.UseTestDouble<ImportExternalPerformanceInfoHandler>().For<IHandleEvent<ImportExternalPerformanceInfoEvent>>();
+			isolate.UseTestDouble<ExternalPerformanceInfoFileProcessor>().For<IExternalPerformanceInfoFileProcessor>();
+			isolate.UseTestDouble<FakeJobResultRepository>().For<IJobResultRepository>();
+			isolate.UseTestDouble<ImportJobArtifactValidator>().For<IImportJobArtifactValidator>();
+			isolate.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
+			isolate.UseTestDouble<FakeTenantLogonDataManager>().For<ITenantLogonDataManager>();
+			isolate.UseTestDouble<FakeExternalPerformanceRepository>().For<IExternalPerformanceRepository>();
+			isolate.UseTestDouble<FakeExternalPerformanceDataRepository>().For<IExternalPerformanceDataRepository>();
+			isolate.UseTestDouble<FakePersonFinderReadOnlyRepository>().For<IPersonFinderReadOnlyRepository>();
 		}
 
 		[Test]

@@ -16,7 +16,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Staffing
 {
 	[InfrastructureTest]
-	public class SendUpdateStaffingReadModelHandlerTest : ISetup
+	public class SendUpdateStaffingReadModelHandlerTest : IIsolateSystem
 	{
 		public SendUpdateStaffingReadModelHandler Target;
 		public IEventPublisherScope Publisher;
@@ -27,10 +27,10 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Staffing
 		public FakeSkillDayRepository FakeSkillDayRepository;
 		public LegacyFakeEventPublisher FakeEventPublisher;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeSkillDayRepository>().For<ISkillDayRepository>();
-			system.UseTestDouble<LegacyFakeEventPublisher>().For<IEventPublisher>();
+			isolate.UseTestDouble<FakeSkillDayRepository>().For<ISkillDayRepository>();
+			isolate.UseTestDouble<LegacyFakeEventPublisher>().For<IEventPublisher>();
 		}
 
 		[Test]

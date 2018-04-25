@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 {
 	[TestFixture]
 	[RequestsTest]
-	public class RespondToShiftTradeTest : ISetup
+	public class RespondToShiftTradeTest : IIsolateSystem
 	{
 		public IRespondToShiftTrade Target;
 		public ILoggedOnUser LoggedOnUser;
@@ -59,16 +59,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 			Assert.That(Target.Deny(id, ""), Is.Not.Null);
 		}
 		
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeLinkProvider>().For<ILinkProvider>();
-			system.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
-			system.UseTestDouble<FakeLicensedFunctionProvider>().For<ILicensedFunctionsProvider>();
+			isolate.UseTestDouble<FakeLinkProvider>().For<ILinkProvider>();
+			isolate.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
+			isolate.UseTestDouble<FakeLicensedFunctionProvider>().For<ILicensedFunctionsProvider>();
 
 			var currentBusinessUnit = new SpecificBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
-			system.UseTestDouble(currentBusinessUnit).For<ICurrentBusinessUnit>();
+			isolate.UseTestDouble(currentBusinessUnit).For<ICurrentBusinessUnit>();
 			var dataSource = new FakeCurrentDatasource("Test");
-			system.UseTestDouble(dataSource).For<ICurrentDataSource>();
+			isolate.UseTestDouble(dataSource).For<ICurrentDataSource>();
 		}
 	}
 }

@@ -25,56 +25,61 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
 {
 	public class RequestsTestAttribute : DomainTestAttribute
 	{
-		protected override void Setup(ISystem system, IIocConfiguration configuration)
+		protected override void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			base.Setup(system, configuration);
+			base.Extend(extend, configuration);
+			extend.AddModule(new WebModule(configuration, null));
+
+			extend.AddService<FakeStorage>();
+		}
+
+		protected override void Isolate(IIsolate isolate)
+		{
+			base.Isolate(isolate);
 
 			var scenario = new FakeScenarioRepository();
 			scenario.Has("Default");
 
-			system.AddModule(new WebModule(configuration, null));
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
+			isolate.UseTestDouble(scenario).For<IScenarioRepository>();
+			isolate.UseTestDouble<FakeRepositoryFactory>().For<IRepositoryFactory>();
+			isolate.UseTestDouble<FakePersonRequestRepository>().For<IPersonRequestRepository>();
+			isolate.UseTestDouble<FakeGroupingReadOnlyRepository>().For<IGroupingReadOnlyRepository>();
+			isolate.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
+			isolate.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
+			isolate.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
+			isolate.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
+			isolate.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
+			isolate.UseTestDouble<FakeMeetingRepository>().For<IMeetingRepository>();
+			isolate.UseTestDouble<FakeNoteRepository>().For<INoteRepository>();
+			isolate.UseTestDouble<FakePublicNoteRepository>().For<IPublicNoteRepository>();
+			isolate.UseTestDouble<FakeAgentDayScheduleTagRepository>().For<IAgentDayScheduleTagRepository>();
+			isolate.UseTestDouble<FakeOvertimeAvailabilityRepository>().For<IOvertimeAvailabilityRepository>();
+			isolate.UseTestDouble<FakePersonAvailabilityRepository>().For<IPersonAvailabilityRepository>();
+			isolate.UseTestDouble<FakePersonRotationRepository>().For<IPersonRotationRepository>();
+			isolate.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
+			isolate.UseTestDouble<FakePreferenceDayRepository>().For<IPreferenceDayRepository>();
+			isolate.UseTestDouble<FakeStudentAvailabilityDayRepository>().For<IStudentAvailabilityDayRepository>();
+			isolate.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
+			isolate.UseTestDouble<FakeQueuedAbsenceRequestRepository>().For<IQueuedAbsenceRequestRepository>();
+			isolate.UseTestDouble<FakePeopleSearchProvider>().For<IPeopleSearchProvider>();
+			isolate.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 
-			system.AddService<FakeStorage>();
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			system.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
-			system.UseTestDouble(scenario).For<IScenarioRepository>();
-			system.UseTestDouble<FakeRepositoryFactory>().For<IRepositoryFactory>();
-			system.UseTestDouble<FakePersonRequestRepository>().For<IPersonRequestRepository>();
-			system.UseTestDouble<FakeGroupingReadOnlyRepository>().For<IGroupingReadOnlyRepository>();
-			system.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
-			system.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
-			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
-			system.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
-			system.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
-			system.UseTestDouble<FakeMeetingRepository>().For<IMeetingRepository>();
-			system.UseTestDouble<FakeNoteRepository>().For<INoteRepository>();
-			system.UseTestDouble<FakePublicNoteRepository>().For<IPublicNoteRepository>();
-			system.UseTestDouble<FakeAgentDayScheduleTagRepository>().For<IAgentDayScheduleTagRepository>();
-			system.UseTestDouble<FakeOvertimeAvailabilityRepository>().For<IOvertimeAvailabilityRepository>();
-			system.UseTestDouble<FakePersonAvailabilityRepository>().For<IPersonAvailabilityRepository>();
-			system.UseTestDouble<FakePersonRotationRepository>().For<IPersonRotationRepository>();
-			system.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
-			system.UseTestDouble<FakePreferenceDayRepository>().For<IPreferenceDayRepository>();
-			system.UseTestDouble<FakeStudentAvailabilityDayRepository>().For<IStudentAvailabilityDayRepository>();
-			system.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
-			system.UseTestDouble<FakeQueuedAbsenceRequestRepository>().For<IQueuedAbsenceRequestRepository>();
-			system.UseTestDouble<FakePeopleSearchProvider>().For<IPeopleSearchProvider>();
-			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
+			isolate.UseTestDouble<SyncCommandDispatcher>().For<ICommandDispatcher>();
+			isolate.UseTestDouble<FakeRequestApprovalServiceFactory>().For<IRequestApprovalServiceFactory>();
 
-			system.UseTestDouble<SyncCommandDispatcher>().For<ICommandDispatcher>();
-			system.UseTestDouble<FakeRequestApprovalServiceFactory>().For<IRequestApprovalServiceFactory>();
-
-			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
+			isolate.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
 			var personRequestCheckAuthorization = new PersonRequestAuthorizationCheckerConfigurable();
-			system.UseTestDouble(personRequestCheckAuthorization).For<IPersonRequestCheckAuthorization>();
-			system.UseTestDouble(new FakeCommonAgentNameProvider()).For<ICommonAgentNameProvider>();
+			isolate.UseTestDouble(personRequestCheckAuthorization).For<IPersonRequestCheckAuthorization>();
+			isolate.UseTestDouble(new FakeCommonAgentNameProvider()).For<ICommonAgentNameProvider>();
 
-			system.UseTestDouble(new FakeLoggedOnUser()).For<ILoggedOnUser>();
-			system.UseTestDouble(new FakeUserCulture(CultureInfo.GetCultureInfo("en-US"))).For<IUserCulture>();
-			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
-			system.UseTestDouble(new FakeStardustJobFeedback()).For<IStardustJobFeedback>();
+			isolate.UseTestDouble(new FakeLoggedOnUser()).For<ILoggedOnUser>();
+			isolate.UseTestDouble(new FakeUserCulture(CultureInfo.GetCultureInfo("en-US"))).For<IUserCulture>();
+			isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+			isolate.UseTestDouble(new FakeStardustJobFeedback()).For<IStardustJobFeedback>();
 
-			system.UseTestDouble(new FakeToggleManager()).For<IToggleManager>();
+			isolate.UseTestDouble(new FakeToggleManager()).For<IToggleManager>();
 		}
 	}
 

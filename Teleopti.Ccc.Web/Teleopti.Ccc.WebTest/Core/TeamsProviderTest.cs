@@ -19,7 +19,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Core
 {
 	[TestFixture, DomainTest]
-	public class TeamsProviderTest : ISetup
+	public class TeamsProviderTest : IIsolateSystem
 	{
 		public Areas.Global.FakePermissionProvider PermissionProvider;
 		public FakeSiteRepository SiteRepository;
@@ -31,16 +31,16 @@ namespace Teleopti.Ccc.WebTest.Core
 		public FakePersonSelectorReadOnlyRepository PersonSelectorReadOnlyRepository;
 		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
-			system.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
-			system.UseTestDouble(new FakeCurrentBusinessUnit()).For<ICurrentBusinessUnit>();
-			system.UseTestDouble<TeamsProvider>().For<ITeamsProvider>();
-			system.UseTestDouble<Areas.Global.FakePermissionProvider>().For<IPermissionProvider>();
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
+			isolate.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
+			isolate.UseTestDouble(new FakeCurrentBusinessUnit()).For<ICurrentBusinessUnit>();
+			isolate.UseTestDouble<TeamsProvider>().For<ITeamsProvider>();
+			isolate.UseTestDouble<Areas.Global.FakePermissionProvider>().For<IPermissionProvider>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			personRepository = new FakePersonRepositoryLegacy();
-			system.UseTestDouble<FakePersonSelectorReadOnlyRepository>().For<IPersonSelectorReadOnlyRepository>();
+			isolate.UseTestDouble<FakePersonSelectorReadOnlyRepository>().For<IPersonSelectorReadOnlyRepository>();
 		}
 		[Test]
 		public void ShouldReturnPermittedTeamsHierachyWhenUserHasMyTeamSchedulesPermission()

@@ -15,18 +15,22 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 {
 	[DomainTest]
 	[TestFixture]
-	public class CacheTest : ISetup
+	public class CacheTest : IIsolateSystem, IExtendSystem
 	{
 		public OuterService Service;
 		public CachedServiceImpl CachedService;
 		public FakeDataSourceForTenant DataSources;
 		public IDataSourceScope DataSource;
 		public IMbCacheFactory Cache;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<NoCurrentIdentity>().For<ICurrentIdentity>();
-			system.AddModule(new TestModule(configuration));
+			extend.AddModule(new TestModule(configuration));
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<NoCurrentIdentity>().For<ICurrentIdentity>();
 		}
 
 		public class TestModule : Module

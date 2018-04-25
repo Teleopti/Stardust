@@ -28,19 +28,24 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			return config;
 		}
 
-		protected override void Setup(ISystem system, IIocConfiguration configuration)
+		protected override void Extend(IExtend extend, IIocConfiguration configuration)
+		{
+			base.Extend(extend, configuration);
+			extend.AddService<Database>();
+		}
+
+		protected override void Isolate(IIsolate isolate)
 		{
 			var intervalFetcher = new FakeIntervalLengthFetcher();
 			intervalFetcher.Has(15);  //because we don't restore Analytics
-			base.Setup(system, configuration);
-			system.UseTestDouble<ScenarioRepository>().For<IScenarioRepository>();
-			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
-			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
-			system.UseTestDouble<MutableNow>().For<INow>();
-			system.UseTestDouble(intervalFetcher).For<IIntervalLengthFetcher>();
-			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
-			system.UseTestDouble<StaffingViewModelCreator>().For<StaffingViewModelCreator>();
-			system.AddService<Database>();
+			base.Isolate(isolate);
+			isolate.UseTestDouble<ScenarioRepository>().For<IScenarioRepository>();
+			isolate.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
+			isolate.UseTestDouble<NoMessageSender>().For<IMessageSender>();
+			isolate.UseTestDouble<MutableNow>().For<INow>();
+			isolate.UseTestDouble(intervalFetcher).For<IIntervalLengthFetcher>();
+			isolate.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
+			isolate.UseTestDouble<StaffingViewModelCreator>().For<StaffingViewModelCreator>();
 		}
 
 		protected override void Startup(IComponentContext container)

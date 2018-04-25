@@ -13,14 +13,14 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[DomainTest]
-	public class RunWaitlistCommandHandlerTest : ISetup
+	public class RunWaitlistCommandHandlerTest : IIsolateSystem
 	{
 		public RunWaitlistCommandHandler Target;
 		public FakeQueuedAbsenceRequestRepository FakeQueuedAbsenceRequestRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<RunWaitlistCommandHandler>().For<IHandleCommand<RunWaitlistCommand>>();
+			isolate.UseTestDouble<RunWaitlistCommandHandler>().For<IHandleCommand<RunWaitlistCommand>>();
 		}
 
 		[Test]

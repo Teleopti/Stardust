@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service
 {
 	[TestFixture]
 	[PrincipalAndStateTest]
-	public class UnrecognizedStatesTest : ISetup
+	public class UnrecognizedStatesTest : IIsolateSystem, IExtendSystem
 	{
 		public IRtaStateGroupRepository StateGroupRepository;
 		public PersonCreator PersonCreatorr;
@@ -34,12 +34,16 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service
 		public Database Database;
 		public AnalyticsDatabase Analytics;
 		public FakeEventPublisher Publisher;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
-			system.AddService<TheServiceImpl>();
-			system.AddService<PersonCreator>();
+			extend.AddService<TheServiceImpl>();
+			extend.AddService<PersonCreator>();
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 		}
 
 		[Test]

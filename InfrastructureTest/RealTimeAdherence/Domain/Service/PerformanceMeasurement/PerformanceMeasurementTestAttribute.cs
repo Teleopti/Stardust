@@ -31,17 +31,23 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Perfo
 		public ITeamRepository Teams;
 		public ISiteRepository Sites;
 
-		protected override void Setup(ISystem system, IIocConfiguration configuration)
+		protected override void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			base.Setup(system, configuration);
+			base.Extend(extend, configuration);
+			
+			extend.AddService(this);
+		}
+
+		protected override void Isolate(IIsolate isolate)
+		{
+			base.Isolate(isolate);
 
 			//?????????????????????????????????
 			if (QueryAllAttributes<RealHangfireAttribute>().Any())
-				system.UseTestDouble<FakeEventPublisher>().For<FakeEventPublisher>();
+				isolate.UseTestDouble<FakeEventPublisher>().For<FakeEventPublisher>();
 			else
-				system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+				isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 
-			system.AddService(this);
 		}
 
 		protected override void BeforeTest()

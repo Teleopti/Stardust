@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Absences
 {
 	[TestFixture]
 	[DomainTest]
-	public class AnalyticsAbsenceUpdaterTests : ISetup
+	public class AnalyticsAbsenceUpdaterTests : IExtendSystem
 	{
 		public AnalyticsAbsenceUpdater Target;
 		public FakeAnalyticsBusinessUnitRepository AnalyticsBusinessUnitRepository;
@@ -23,9 +23,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Absences
 		public FakeAbsenceRepository AbsenceRepository;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<AnalyticsAbsenceUpdater>();
+			extend.AddService<AnalyticsAbsenceUpdater>();
 		}
 
 		[Test]

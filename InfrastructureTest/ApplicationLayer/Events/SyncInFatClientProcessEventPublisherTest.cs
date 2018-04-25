@@ -13,7 +13,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
 	[InfrastructureTest]
-	public class SyncInFatClientProcessEventPublisherTest : ISetup
+	public class SyncInFatClientProcessEventPublisherTest : IExtendSystem
 	{
 		public SyncInFatClientProcessEventPublisher Target;
 		public TestEventHandler Handler;
@@ -53,12 +53,12 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			@event.HandleByEventHandlers().Where(x => x is IncorrectTestEventHandler)
 				.Should().Be.Empty();
 		}
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<TestEventHandler>(true);
-			system.AddService<TestEventHandler2>(true);
-			system.AddService<IncorrectTestEventHandler>(true);
+			extend.AddService<TestEventHandler>(true);
+			extend.AddService<TestEventHandler2>(true);
+			extend.AddService<IncorrectTestEventHandler>(true);
 		}
 
 

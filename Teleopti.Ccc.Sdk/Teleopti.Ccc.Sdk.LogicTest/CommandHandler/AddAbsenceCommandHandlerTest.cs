@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
 	[TestFixture]
 	[DomainTest]
-    public class AddAbsenceCommandHandlerTest : ISetup
+    public class AddAbsenceCommandHandlerTest : IIsolateSystem, IExtendSystem
 	{
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeAbsenceRepository AbsenceRepository;
@@ -104,13 +104,17 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				.Length.Should()
 				.Be.EqualTo(1);
 		}
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<AddAbsenceCommandHandler>();
-			system.UseTestDouble<ScheduleSaveHandler>().For<IScheduleSaveHandler>();
-			system.UseTestDouble<SaveSchedulePartService>().For<ISaveSchedulePartService>();
-			system.AddModule(new AssemblerModule());
+			extend.AddService<AddAbsenceCommandHandler>();
+			extend.AddModule(new AssemblerModule());
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<ScheduleSaveHandler>().For<IScheduleSaveHandler>();
+			isolate.UseTestDouble<SaveSchedulePartService>().For<ISaveSchedulePartService>();
 		}
 	}
 }

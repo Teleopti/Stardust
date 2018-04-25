@@ -16,15 +16,15 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels
 	[DomainTest]
 	[DefaultData]
 	[TestFixture]
-	public class OrganizationViewModelBuilderTest : ISetup
+	public class OrganizationViewModelBuilderTest : IIsolateSystem
 	{
 		public OrganizationViewModelBuilder Target;
 		public FakeDatabase Database;
 		public FakeUserUiCulture UiCulture;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble(new FakeUserUiCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserUiCulture>();
+			isolate.UseTestDouble(new FakeUserUiCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserUiCulture>();
 		}
 
 		[Test]

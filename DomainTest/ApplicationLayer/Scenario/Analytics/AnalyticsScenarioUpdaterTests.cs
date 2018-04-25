@@ -13,16 +13,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScenarioTests.Analytics
 {
 	[TestFixture]
 	[DomainTest]
-	public class AnalyticsScenarioUpdaterTests : ISetup
+	public class AnalyticsScenarioUpdaterTests : IExtendSystem
 	{
 		public AnalyticsScenarioUpdater Target;
 		public FakeAnalyticsScenarioRepository AnalyticsScenarioRepository;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<AnalyticsScenarioUpdater>();
+			extend.AddService<AnalyticsScenarioUpdater>();
 		}
 
 		[Test]

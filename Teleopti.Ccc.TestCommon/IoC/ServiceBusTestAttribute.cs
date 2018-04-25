@@ -9,20 +9,20 @@ namespace Teleopti.Ccc.TestCommon.IoC
 {
 	public class ServiceBusTestAttribute : IoCTestAttribute
 	{
-		protected override void Setup(ISystem system, IIocConfiguration configuration)
+		protected override void Isolate(IIsolate isolate)
 		{
-			base.Setup(system, configuration);
+			base.Isolate(isolate);
 
-			system.UseTestDouble<FakeStorageSimple>().For<IFakeStorage>();
-			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
-			system.UseTestDouble<FakeTeamGamificationSettingRepository>().For<ITeamGamificationSettingRepository>();
-			system.UseTestDouble<FakePushMessageRepository>().For<IPushMessageRepository>();
-			system.UseTestDouble<AgentBadgeCalculator>().For<IAgentBadgeCalculator>();
-			system.UseTestDouble<AgentBadgeWithRankCalculator>().For<IAgentBadgeWithRankCalculator>();
-			system.UseTestDouble<FakeAgentBadgeRepository>().For<IAgentBadgeRepository>();
-			system.UseTestDouble<FakeAgentBadgeWithRankRepository>().For<IAgentBadgeWithRankRepository>();
-			system.UseTestDouble<FakeGlobalSettingDataRepository>().For<IGlobalSettingDataRepository>();
-			system.UseTestDouble<CalculateBadges>().For<CalculateBadges>();
+			isolate.UseTestDouble<FakeStorageSimple>().For<IFakeStorage>();
+			isolate.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
+			isolate.UseTestDouble<FakeTeamGamificationSettingRepository>().For<ITeamGamificationSettingRepository>();
+			isolate.UseTestDouble<FakePushMessageRepository>().For<IPushMessageRepository>();
+			isolate.UseTestDouble<AgentBadgeCalculator>().For<IAgentBadgeCalculator>();
+			isolate.UseTestDouble<AgentBadgeWithRankCalculator>().For<IAgentBadgeWithRankCalculator>();
+			isolate.UseTestDouble<FakeAgentBadgeRepository>().For<IAgentBadgeRepository>();
+			isolate.UseTestDouble<FakeAgentBadgeWithRankRepository>().For<IAgentBadgeWithRankRepository>();
+			isolate.UseTestDouble<FakeGlobalSettingDataRepository>().For<IGlobalSettingDataRepository>();
+			isolate.UseTestDouble<CalculateBadges>().For<CalculateBadges>();
 		}
 	}
 }

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 {
 	[DomainTest]
 	[AllTogglesOn]
-	public class AddOvertimeTest : ISetup
+	public class AddOvertimeTest : IIsolateSystem
 	{
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
@@ -51,11 +51,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		private IShiftCategory shiftCategory;
 		private IContract contract;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<GridlockManager>().For<IGridlockManager>();
-			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
-			system.UseTestDouble<FakePersonForOvertimeProvider>().For<IPersonForOvertimeProvider>();
+			isolate.UseTestDouble<GridlockManager>().For<IGridlockManager>();
+			isolate.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
+			isolate.UseTestDouble<FakePersonForOvertimeProvider>().For<IPersonForOvertimeProvider>();
 		}
 
 		private void setup()

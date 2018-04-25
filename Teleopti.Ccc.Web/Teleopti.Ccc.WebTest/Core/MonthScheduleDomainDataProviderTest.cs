@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Core
 {
 	[MyTimeWebTest]
 	[TestFixture]
-	public class MonthScheduleDomainDataProviderTest : ISetup
+	public class MonthScheduleDomainDataProviderTest : IIsolateSystem
 	{
 		public FakeLoggedOnUser LoggedOnUser;
 		public IMonthScheduleDomainDataProvider Target;
@@ -31,12 +31,12 @@ namespace Teleopti.Ccc.WebTest.Core
 		public FullPermission Authorization;
 		public Areas.Global.FakePermissionProvider PermissionProvider;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<MonthScheduleDomainDataProvider>().For<IMonthScheduleDomainDataProvider>();
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			system.UseTestDouble<Areas.Global.FakePermissionProvider>().For<IPermissionProvider>();
-			system.UseTestDouble<SeatOccupancyProvider>().For<ISeatOccupancyProvider>();
+			isolate.UseTestDouble<MonthScheduleDomainDataProvider>().For<IMonthScheduleDomainDataProvider>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<Areas.Global.FakePermissionProvider>().For<IPermissionProvider>();
+			isolate.UseTestDouble<SeatOccupancyProvider>().For<ISeatOccupancyProvider>();
 		}
 
 		[Test]

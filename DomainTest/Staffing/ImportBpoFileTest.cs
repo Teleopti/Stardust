@@ -17,7 +17,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.Staffing 
 {
 	[DomainTest]
-	public class ImportBpoFileTest : ISetup
+	public class ImportBpoFileTest : IIsolateSystem
 	{
 		public ImportBpoFile Target;
 		public FakeSkillRepository SkillRepository;
@@ -25,11 +25,11 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public FakeUserTimeZone UserTimeZone;
 		public MutableNow Now;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
-			system.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
-			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
+			isolate.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
+			isolate.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
+			isolate.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
 		}
 
 		[Test]

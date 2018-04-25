@@ -21,7 +21,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 {
 	[TestFixture, ServiceBusTest]
-	public class PerformAllBadgeCalculationTest: ISetup
+	public class PerformAllBadgeCalculationTest: IIsolateSystem
 	{
 		public PerformAllBadgeCalculation Target;
 		public CalculateBadges CalculateBadges;
@@ -43,17 +43,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private BadgeSetting _badgeSetting;
 		private readonly DateTime _systemCalculateDate = DateTime.UtcNow.AddDays(-2);
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<PerformAllBadgeCalculation>().For<IPerformBadgeCalculation>();
-			system.UseTestDouble<FakeExternalPerformanceDataRepository>().For<IExternalPerformanceDataRepository>();
-			system.UseTestDouble<FakePushMessageDialogueRepository>().For<IPushMessageDialogueRepository>();
-			system.UseTestDouble<FakeAgentBadgeWithRankTransactionRepository>().For<IAgentBadgeWithRankTransactionRepository>();
-			system.UseTestDouble<FakeAgentBadgeTransactionRepository>().For<IAgentBadgeTransactionRepository>();
-			system.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
-			system.UseTestDouble<LogObjectDateChecker>().For<ILogObjectDateChecker>();
-			system.UseTestDouble<FakeStatisticRepository>().For<IStatisticRepository>();
-			system.UseTestDouble<FakeBadgeCalculationRepository>().For<IBadgeCalculationRepository>();
+			isolate.UseTestDouble<PerformAllBadgeCalculation>().For<IPerformBadgeCalculation>();
+			isolate.UseTestDouble<FakeExternalPerformanceDataRepository>().For<IExternalPerformanceDataRepository>();
+			isolate.UseTestDouble<FakePushMessageDialogueRepository>().For<IPushMessageDialogueRepository>();
+			isolate.UseTestDouble<FakeAgentBadgeWithRankTransactionRepository>().For<IAgentBadgeWithRankTransactionRepository>();
+			isolate.UseTestDouble<FakeAgentBadgeTransactionRepository>().For<IAgentBadgeTransactionRepository>();
+			isolate.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
+			isolate.UseTestDouble<LogObjectDateChecker>().For<ILogObjectDateChecker>();
+			isolate.UseTestDouble<FakeStatisticRepository>().For<IStatisticRepository>();
+			isolate.UseTestDouble<FakeBadgeCalculationRepository>().For<IBadgeCalculationRepository>();
 		}
 
 		[Test]

@@ -22,13 +22,13 @@ using System.Threading;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {
 	[DomainTest]
-	public class NotOverwriteLayerRuleTest : ISetup
+	public class NotOverwriteLayerRuleTest : IIsolateSystem
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		private NotOverwriteLayerRule _target;
 		private IScenario _scenario;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
 			_target = new NotOverwriteLayerRule();
 			_scenario = ScenarioFactory.CreateScenarioWithId("default", true);

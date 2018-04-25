@@ -23,7 +23,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[DomainTest]
-	public class BackoutScheduleChangeCommandHandlerTest : ISetup
+	public class BackoutScheduleChangeCommandHandlerTest : IIsolateSystem, IExtendSystem
 	{
 		public FakeScheduleHistoryRepository ScheduleHistoryRepository;		
 		public FakePersonRepository PersonRepository;
@@ -37,19 +37,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public BackoutScheduleChangeCommandHandler target;
 		public FakeEventPublisher EventPublisher;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeScheduleHistoryRepository>().For<IScheduleHistoryRepository>();
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			system.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
-			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
-			system.UseTestDouble<FakeScheduleDifferenceSaver_DoNotUse>().For<IScheduleDifferenceSaver>();
-			system.UseTestDouble<FakeAggregateRootInitializer>().For<IAggregateRootInitializer>();
-			system.UseTestDouble<FakeAuditSettingRepository>().For<IAuditSettingRepository>();
-			system.AddService<BackoutScheduleChangeCommandHandler>();
-			system.UseTestDouble<FakeWriteSideRepository<IAbsence>>().For<IProxyForId<IAbsence>>();
-			system.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
-			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+			extend.AddService<BackoutScheduleChangeCommandHandler>();
+		}
+		
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FakeScheduleHistoryRepository>().For<IScheduleHistoryRepository>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
+			isolate.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
+			isolate.UseTestDouble<FakeScheduleDifferenceSaver_DoNotUse>().For<IScheduleDifferenceSaver>();
+			isolate.UseTestDouble<FakeAggregateRootInitializer>().For<IAggregateRootInitializer>();
+			isolate.UseTestDouble<FakeAuditSettingRepository>().For<IAuditSettingRepository>();
+			isolate.UseTestDouble<FakeWriteSideRepository<IAbsence>>().For<IProxyForId<IAbsence>>();
+			isolate.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
+			isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 		}
 
 		[Test]

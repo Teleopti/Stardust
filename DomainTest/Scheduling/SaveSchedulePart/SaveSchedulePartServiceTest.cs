@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 	}
 
 	[DomainTest]
-	public class SaveSchedulePartServiceNoMocksTest: ISetup
+	public class SaveSchedulePartServiceNoMocksTest: IIsolateSystem
 	{
 		public ISaveSchedulePartService Target;
 		public FakeScenarioRepository ScenarioRepository;
@@ -118,11 +118,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 		public ICurrentUnitOfWorkFactory CurrentUnitOfWorkFactory;
 		public FakeRepositoryFactory RepositoryFactory;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<SaveSchedulePartService>().For<ISaveSchedulePartService>();
-			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
-			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
+			isolate.UseTestDouble<SaveSchedulePartService>().For<ISaveSchedulePartService>();
+			isolate.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
+			isolate.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 		}
 
 		[Test]

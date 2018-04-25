@@ -19,19 +19,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[TestFixture]
 	[DomainTest]
-	public class EditScheduleNoteCommandHandlerTest : ISetup
+	public class EditScheduleNoteCommandHandlerTest : IIsolateSystem
 	{
 		public EditScheduleNoteCommandHandler Target;
 		public FakeWriteSideRepository<IPerson> PersonRepo;
 		public FakeScheduleStorage_DoNotUse ScheduleStorage;
 		public FakeCurrentScenario_DoNotUse CurrentScenario;
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<EditScheduleNoteCommandHandler>().For<IHandleCommand<EditScheduleNoteCommand>>();
-			system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
-			system.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
-			system.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
-			system.UseTestDouble<FakeScheduleDifferenceSaver_DoNotUse>().For<IScheduleDifferenceSaver>();
+			isolate.UseTestDouble<EditScheduleNoteCommandHandler>().For<IHandleCommand<EditScheduleNoteCommand>>();
+			isolate.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
+			isolate.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
+			isolate.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
+			isolate.UseTestDouble<FakeScheduleDifferenceSaver_DoNotUse>().For<IScheduleDifferenceSaver>();
 		}
 
 		[Test]

@@ -24,7 +24,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 {
 	[TestFixture, DomainTest]
-	public class RecalculateBadgeEventHandlerTest:ISetup
+	public class RecalculateBadgeEventHandlerTest:IIsolateSystem
 	{
 		public RecalculateBadgeEventHandler Target;
 		public FakeJobResultRepository JobResultRepository;
@@ -46,13 +46,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		private readonly int _externalId = 1;
 		private readonly DateOnly _calculatedate = new DateOnly(2018, 2, 28);
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<RecalculateBadgeEventHandler>().For<IHandleEvent<RecalculateBadgeEvent>>();
-			system.UseTestDouble<FakeCurrentBusinessUnit>().For<ICurrentBusinessUnit>();
-			system.UseTestDouble<FakePushMessageDialogueRepository>().For<IPushMessageDialogueRepository>();
-			system.UseTestDouble<FakePushMessageRepository>().For<IPushMessageRepository>();
-			system.UseTestDouble<PerformAllBadgeCalculation>().For<IPerformBadgeCalculation>();
+			isolate.UseTestDouble<RecalculateBadgeEventHandler>().For<IHandleEvent<RecalculateBadgeEvent>>();
+			isolate.UseTestDouble<FakeCurrentBusinessUnit>().For<ICurrentBusinessUnit>();
+			isolate.UseTestDouble<FakePushMessageDialogueRepository>().For<IPushMessageDialogueRepository>();
+			isolate.UseTestDouble<FakePushMessageRepository>().For<IPushMessageRepository>();
+			isolate.UseTestDouble<PerformAllBadgeCalculation>().For<IPerformBadgeCalculation>();
 		}
 
 		[Test]

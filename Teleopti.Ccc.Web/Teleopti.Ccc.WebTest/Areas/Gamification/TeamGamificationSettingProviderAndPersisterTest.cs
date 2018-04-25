@@ -13,14 +13,14 @@ using Teleopti.Ccc.Web.Core.IoC;
 namespace Teleopti.Ccc.WebTest.Areas.Gamification
 {
 	[TestFixture, DomainTest]
-	public class TeamGamificationSettingProviderAndPersisterTest : ISetup
+	public class TeamGamificationSettingProviderAndPersisterTest : IExtendSystem
 	{
 		public ITeamGamificationSettingProviderAndPersister Target;
 		public FakeTeamRepository teamRepository;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddModule(new WebModule(configuration, null));
+			extend.AddModule(new WebModule(configuration, null));
 		}
 
 		[Test]

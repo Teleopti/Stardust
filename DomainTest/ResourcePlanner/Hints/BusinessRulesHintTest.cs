@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 	}
 
 	[DomainTest]
-	public class BusinessRulesHintTest : ISetup
+	public class BusinessRulesHintTest : IIsolateSystem
 	{
 		public CheckScheduleHints Target;
 		public FakePersonRepository PersonRepository;
@@ -301,9 +301,9 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 		}
 
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble(new FakeScenarioRepository(ScenarioFactory.CreateScenario("Default", true, true))).For<IScenarioRepository>();
+			isolate.UseTestDouble(new FakeScenarioRepository(ScenarioFactory.CreateScenario("Default", true, true))).For<IScenarioRepository>();
 		}
 	}
 }

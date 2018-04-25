@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	[TestFixture]
 	[MyTimeWebTest]
 	[SetCulture("sv-SE")]
-	public class ScheduleApiControllerFetchMonthDataTest : ISetup
+	public class ScheduleApiControllerFetchMonthDataTest : IIsolateSystem
 	{
 		public ScheduleApiController Target;
 		public ICurrentScenario Scenario;
@@ -42,10 +42,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakeSeatMapRepository SeatMapRepository;
 		public FakePushMessageDialogueRepository PushMessageDialogueRepository;
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Isolate(IIsolate isolate)
 		{
-			system.UseTestDouble<FakeSeatMapRepository>().For<ISeatMapLocationRepository>();
-			system.UseTestDouble<FakePushMessageDialogueRepository>().For<IPushMessageDialogueRepository>();
+			isolate.UseTestDouble<FakeSeatMapRepository>().For<ISeatMapLocationRepository>();
+			isolate.UseTestDouble<FakePushMessageDialogueRepository>().For<IPushMessageDialogueRepository>();
 		}
 
 		[Test]

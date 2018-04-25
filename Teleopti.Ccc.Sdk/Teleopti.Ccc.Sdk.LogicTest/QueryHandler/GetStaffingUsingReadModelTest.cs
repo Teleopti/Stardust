@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 {
 	[TestFixture]
 	[DomainTest]
-	public class GetStaffingUsingReadModelTest : ISetup
+	public class GetStaffingUsingReadModelTest : IExtendSystem
 	{
 		public GetStaffingUsingReadModel Target;
 		public FakePersonRepository PersonRepository;
@@ -232,11 +232,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			}
 			skillCombinationResourceRepository.AddSkillCombinationResource(DateTime.UtcNow, skillCombinationResources);
 		}
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			system.AddService<GetStaffingUsingReadModel>();
-			system.AddModule(new AssemblerModule());
+			extend.AddService<GetStaffingUsingReadModel>();
+			extend.AddModule(new AssemblerModule());
 		}
+
 	}
 }

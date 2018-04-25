@@ -33,7 +33,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			return _service.Config();
 		}
 
-		protected virtual void Setup(ISystem system, IIocConfiguration configuration)
+		protected virtual void Extend(IExtend extend, IIocConfiguration configuration)
+		{
+		}
+
+		protected virtual void Isolate(IIsolate isolate)
 		{
 		}
 
@@ -73,14 +77,16 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			var builder = new ContainerBuilder();
 			_testDoubles = new TestDoubles();
-			setupBuilder(new SystemImpl(builder, _testDoubles));
+			var s = new SystemImpl(builder, _testDoubles);
+			setupBuilder(s, s);
 			_container = builder.Build();
 		}
 
 		private void rebuildContainer()
 		{
 			var builder = new ContainerBuilder();
-			setupBuilder(new ignoringTestDoubles(builder, null));
+			var s = new ignoringTestDoubles(builder, null);
+			setupBuilder(s, s);
 			_testDoubles.RegisterFromPreviousContainer(builder);
 			_container = builder.Build();
 		}
@@ -91,7 +97,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			_testDoubles = null;
 		}
 
-		private void setupBuilder(ISystem system)
+		private void setupBuilder(IExtend extend, IIsolate isolate)
 		{
 			var config = Config();
 			var toggles = Toggles();
@@ -102,22 +108,25 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			(_fixture as ISetupConfiguration)?.SetupConfiguration(args);
 			var configuration = new IocConfiguration(args, toggles);
 
-			system.AddModule(new CommonModule(configuration));
+			extend.AddModule(new CommonModule(configuration));
+
+			Extend(extend, configuration);
+			(_fixture as IExtendSystem)?.Extend(extend, configuration);
 
 			var now = new MutableNow();
 			now.Is("2014-12-18 13:31");
-			system.UseTestDouble(now).For<INow>();
-			system.UseTestDouble<FakeTime>().For<ITime>();
-			system.UseTestDouble(config).For<IConfigReader>();
+			isolate.UseTestDouble(now).For<INow>();
+			isolate.UseTestDouble<FakeTime>().For<ITime>();
+			isolate.UseTestDouble(config).For<IConfigReader>();
 			// we really shouldnt inject this, but if we do, maybe its better its correct...
-			system.UseTestDouble(toggles).For<IToggleManager>();
+			isolate.UseTestDouble(toggles).For<IToggleManager>();
 
 			// Test helpers
-			system.AddService(this);
-			system.AddService<ConcurrencyRunner>();
+			extend.AddService(this); // move up
+			extend.AddService<ConcurrencyRunner>(); // move to TestModule
 
-			Setup(system, configuration);
-			(_fixture as ISetup)?.Setup(system, configuration);
+			Isolate(isolate);
+			(_fixture as IIsolateSystem)?.Isolate(isolate);
 		}
 
 		private void disposeContainer()
