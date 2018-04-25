@@ -61,6 +61,8 @@ export class IdentityLogonPageComponent implements OnDestroy, OnInit {
 	}
 
 	personToFormGroup(person: PersonWithLogon) {
+		const Id = new FormControl(person.Id);
+		Id.disable();
 		const FullName = new FormControl(person.FullName);
 		FullName.disable();
 		const Logon = new FormControlWithInitial(person.Logon);
@@ -68,6 +70,7 @@ export class IdentityLogonPageComponent implements OnDestroy, OnInit {
 		Logon.setAsyncValidators(this.duplicateNameValidator.validate);
 
 		return this.formBuilder.group({
+			Id,
 			FullName,
 			Logon
 		});
@@ -97,7 +100,7 @@ export class IdentityLogonPageComponent implements OnDestroy, OnInit {
 	}
 
 	save(): void {
-		const people = this.people.value;
+		const people = this.people.getRawValue();
 		this.identityLogonPageService.save(people).subscribe({
 			next: () => {
 				this.nav.navToSearch();
