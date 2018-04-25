@@ -148,7 +148,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class AdvancedPreferences : IAdvancedPreferences
 	{
 		public TargetValueOptions TargetValueCalculation { get; set; }
-		public bool UseIntraIntervalDeviation { get; set; }
 		public bool UseTweakedValues { get; set; }
 
 		public bool UseMinimumStaffing { get; set; }
