@@ -82,7 +82,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<HandleMultipleAnalyticsAvailabilityDays>().SingleInstance();
 
 			builder.RegisterType<ScheduleStorage>()
-				.UsingConstructor(typeof(ICurrentUnitOfWork), typeof(IRepositoryFactory), typeof(IPersistableScheduleDataPermissionChecker), typeof(IScheduleStorageRepositoryWrapper))
 				.As<IScheduleStorage>()
 				.As<IFindSchedulesForPersons>()
 				.AsSelf()
