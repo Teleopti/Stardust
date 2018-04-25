@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 		[Then("I should see all matches for '(.*)'")]
 		public void ShouldSeeAllMatchesForSearch(string searchString)
 		{
-			Browser.Interactions.AssertJavascriptResultContains("return document.querySelectorAll('[data-test-search] [data-test-person]').length === 3", "True"); // 3 because I also exists
+			Browser.Interactions.AssertJavascriptResultContains("return document.querySelectorAll('[data-test-search] [data-test-person]').length >= 2", "True");
 		}
 
 		[Then("I should see columns")]
