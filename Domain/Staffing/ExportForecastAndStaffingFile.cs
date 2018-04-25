@@ -3,83 +3,48 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Staffing
 {
 	public class ExportForecastAndStaffingFile
 	{
-		private readonly ICurrentScenario _currentScenario;
 		private readonly ScheduledStaffingProvider _scheduledStaffingProvider;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
-		private readonly INow _now;
-		private readonly IStaffingSettingsReader _staffingSettingsReader;
-		private readonly IUserUiCulture _userUiCulture;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IUserCulture _userCulture;
-		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
+		private readonly ExportStaffingPeriodValidationProvider _periodValidationProvider;
 		private const int numberOfDecimals = 2;
 
-		public ExportForecastAndStaffingFile(ICurrentScenario currentScenario, 
-			ScheduledStaffingProvider scheduledStaffingProvider, IUserTimeZone userTimeZone, 
-			ISkillCombinationResourceRepository skillCombinationResourceRepository, INow now, IStaffingSettingsReader staffingSettingsReader,
-			IUserUiCulture userUiCulture, ISkillRepository skillRepository, IUserCulture userCulture, ISkillDayLoadHelper skillDayLoadHelper)
+		public ExportForecastAndStaffingFile(ScheduledStaffingProvider scheduledStaffingProvider, IUserTimeZone userTimeZone, 
+			ISkillCombinationResourceRepository skillCombinationResourceRepository, ISkillRepository skillRepository, 
+			IUserCulture userCulture, ExportStaffingPeriodValidationProvider periodValidationProvider)
 		{
-			_currentScenario = currentScenario;
 			_scheduledStaffingProvider = scheduledStaffingProvider;
 			_userTimeZone = userTimeZone;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
-			_now = now;
-			_staffingSettingsReader = staffingSettingsReader;
-			_userUiCulture = userUiCulture;
 			_skillRepository = skillRepository;
 			_userCulture = userCulture;
-			_skillDayLoadHelper = skillDayLoadHelper;
+			_periodValidationProvider = periodValidationProvider;
 		}
-		public string GetExportPeriodMessageString()
-		{
-			var readModelNumberOfDays = _staffingSettingsReader.GetIntSetting(KeyNames.StaffingReadModelNumberOfDays, 14);
-			var staffingReadModelHistoricalDays = _staffingSettingsReader.GetIntSetting(KeyNames.StaffingReadModelHistoricalHours, 8 * 24)/24;
-
-			var utcNowDate = new DateOnly(_now.UtcDateTime());
-			var exportMinDate = new DateOnly(_now.UtcDateTime().AddDays(-staffingReadModelHistoricalDays));
-			var exportPeriodMaxDate = utcNowDate.AddDays(readModelNumberOfDays);
-
-			var validExportPeriodText =
-				$"{exportMinDate.ToShortDateString(_userCulture.GetCulture())} - {exportPeriodMaxDate.ToShortDateString(_userCulture.GetCulture())}";
-			var exportPeriodMessage = string.Format(
-				Resources.ResourceManager.GetString(nameof(Resources.BpoOnlyExportPeriodBetweenDates), _userUiCulture.GetUiCulture()), validExportPeriodText);
-			return exportPeriodMessage;
-		}
-
+		
 		public virtual ExportStaffingReturnObject ExportForecastAndStaffing(Guid skillId, DateTime exportStartDate, DateTime exportEndDate, bool useShrinkage)
 		{
 			var returnVal = new ExportStaffingReturnObject();
+			
 			var exportStartDateOnly = new DateOnly(exportStartDate);
 			var exportEndDateOnly = new DateOnly(exportEndDate);
-			var readModelNumberOfDays = _staffingSettingsReader.GetIntSetting(KeyNames.StaffingReadModelNumberOfDays, 14);
-			var staffingReadModelHistoricalDays = _staffingSettingsReader.GetIntSetting(KeyNames.StaffingReadModelHistoricalHours, 8 * 24)/24;
-			var utcNowDate = new DateOnly(_now.UtcDateTime());
-			var exportPeriodMinDate = utcNowDate.AddDays(-staffingReadModelHistoricalDays);
-			var exportPeriodMaxDate = utcNowDate.AddDays(readModelNumberOfDays);
-			if (exportStartDateOnly > exportEndDateOnly)
+
+			var validationObject = _periodValidationProvider.ValidateExportStaffingPeriod(exportStartDateOnly, exportEndDateOnly);
+			if (validationObject.Result == false)
 			{
-				returnVal.ErrorMessage = Resources.ResourceManager.GetString(nameof(Resources.BpoExportPeriodStartDateBeforeEndDate), _userUiCulture.GetUiCulture());
-				return returnVal;
-			}
-			if (exportStartDateOnly < exportPeriodMinDate || exportEndDateOnly > exportPeriodMaxDate)
-			{
-				var validExportPeriodText = GetExportPeriodMessageString();
-				returnVal.ErrorMessage = validExportPeriodText;
+				returnVal.ErrorMessage = validationObject.ErrorMessage;
 				return returnVal;
 			}
 
@@ -131,19 +96,9 @@ namespace Teleopti.Ccc.Domain.Staffing
 			{
 				var ssiStartDate = interval.StartDateTime;
 				var ssiEndDate = interval.EndDateTime;
-				//var staffingInterval =
-				//	allIntervals.Where(
-				//		x => x.StartDateTime == ssiStartDate && x.EndDateTime == ssiEndDate && x.SkillId == skill.Id.GetValueOrDefault()).ToList();
-				//var staffing = 0d;
-				//var demand = 0d;
-				
-				//if (interval.Any())
-				
 				var staffing = interval.StaffingLevel;
 				var demand = interval.FStaff;
-
-				//var startDateTime = interval.Period.StartDateTimeLocal(_userTimeZone.TimeZone()).ToString("g",userCulture);
-				//var endDateTime = interval.Period.EndDateTimeLocal(_userTimeZone.TimeZone()).ToString("g", userCulture);
+				
 				var startDateTime = TimeZoneHelper.ConvertFromUtc(interval.StartDateTime, _userTimeZone.TimeZone()).ToString("g",userCulture);
 				var endDateTime = TimeZoneHelper.ConvertFromUtc(interval.EndDateTime, _userTimeZone.TimeZone()).ToString("g",userCulture);
 				

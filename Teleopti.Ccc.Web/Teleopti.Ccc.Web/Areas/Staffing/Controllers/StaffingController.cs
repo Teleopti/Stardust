@@ -16,7 +16,6 @@ using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
@@ -35,17 +34,15 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		private readonly ICurrentDataSource _currentDataSource;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IAuthorization _authorization;
-		private readonly IStaffingSettingsReader _staffingSettingsReader;
-		private readonly INow _now;
 		private readonly ExportForecastAndStaffingFile _exportForecastAndStaffingFile;
+		private readonly ExportStaffingPeriodValidationProvider _periodValidationProvider;
 
 		public StaffingController(AddOverTime addOverTime, ScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
 								  ForecastedStaffingToDataSeries forecastedStaffingToDataSeries, IUserTimeZone timeZone,
 								  IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository, ISkillGroupRepository skillGroupRepository,
 								  ScheduledStaffingViewModelCreator staffingViewModelCreator, ImportBpoFile bpoFile, ICurrentDataSource currentDataSource, 
 								  IExportBpoFile exportBpoFile, ISkillRepository skillRepository, IAuthorization authorization,
-								  IStaffingSettingsReader staffingSettingsReader, INow now,
-			ExportForecastAndStaffingFile exportForecastAndStaffingFile)
+			ExportForecastAndStaffingFile exportForecastAndStaffingFile, ExportStaffingPeriodValidationProvider periodValidationProvider)
 		{
 			_addOverTime = addOverTime;
 			_scheduledStaffingToDataSeries = scheduledStaffingToDataSeries;
@@ -59,9 +56,8 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			_exportBpoFile = exportBpoFile;
 			_skillRepository = skillRepository;
 			_authorization = authorization;
-			_staffingSettingsReader = staffingSettingsReader;
-			_now = now;
 			_exportForecastAndStaffingFile = exportForecastAndStaffingFile;
+			_periodValidationProvider = periodValidationProvider;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/staffing/monitorskillareastaffing")]
@@ -138,24 +134,17 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		public virtual IHttpActionResult ExportBpo(Guid skillId, DateTime exportStartDateTime, DateTime exportEndDateTime)
 		{
 			var returnVal = new ExportStaffingReturnObject();
-			var exportStartDate = new DateOnly(exportStartDateTime);
-			var exportEndDate = new DateOnly(exportEndDateTime);
-			var readModelNumberOfDays = _staffingSettingsReader.GetIntSetting(KeyNames.StaffingReadModelNumberOfDays, 14);
 
-			var utcNowDate = new DateOnly(_now.UtcDateTime());
-			var exportPeriodMaxDate = utcNowDate.AddDays(readModelNumberOfDays);
-			if (exportStartDate > exportEndDate)
+			var dateOnlyStartDate = new DateOnly(exportStartDateTime);
+			var dateOnlyEndDate = new DateOnly(exportEndDateTime);
+			var validationObject = _periodValidationProvider.ValidateExportBpoPeriod(dateOnlyStartDate, dateOnlyEndDate);
+
+			if (validationObject.Result == false)
 			{
-				returnVal.ErrorMessage = Resources.BpoExportPeriodStartDateBeforeEndDate;
+				returnVal.ErrorMessage = validationObject.ErrorMessage;
 				return Ok(returnVal);
 			}
-			if (exportStartDate < utcNowDate || exportEndDate > exportPeriodMaxDate)
-			{
-				var validExportPeriodText = _exportForecastAndStaffingFile.GetExportPeriodMessageString();
-				returnVal.ErrorMessage = validExportPeriodText;
-				return Ok(returnVal);
-			}
-
+			
 			var skill = _skillRepository.Get(skillId);
 			if (skill == null)
 			{
@@ -163,7 +152,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 				return Ok(returnVal);
 			}
 			var exportedContent = _exportBpoFile.ExportDemand(skill,
-				new DateOnlyPeriod(exportStartDate, exportEndDate), CultureInfo.InvariantCulture);
+				new DateOnlyPeriod(dateOnlyStartDate, dateOnlyEndDate), CultureInfo.InvariantCulture);
 		
 			returnVal.Content = exportedContent;
 			returnVal.ErrorMessage = "";
@@ -173,13 +162,20 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		[UnitOfWork, HttpGet, Route("api/staffing/exportforecastandstaffing")]
 		public virtual IHttpActionResult ExportForecastAndStaffing(Guid skillId, DateTime exportStartDate, DateTime exportEndDate, bool useShrinkage)
 		{
-			return Ok(_exportForecastAndStaffingFile.ExportForecastAndStaffing(skillId,
-		 exportStartDate, exportEndDate, useShrinkage));
-        		}
-		[HttpGet, Route("api/staffing/exportPeriodMessage")]
-		public virtual IHttpActionResult GetExportPeriodMessage()
+			return Ok(_exportForecastAndStaffingFile.ExportForecastAndStaffing(skillId, exportStartDate, exportEndDate, 
+				useShrinkage));
+		}
+		
+		[HttpGet, Route("api/staffing/exportStaffingPeriodMessage")]
+		public virtual IHttpActionResult GetExportStaffingPeriodMessage()
 		{
-			return Ok(new {ExportPeriodMessage = _exportForecastAndStaffingFile.GetExportPeriodMessageString()});
+			return Ok(new {ExportPeriodMessage = _periodValidationProvider.GetExportStaffingPeriodMessageString()});
+		}
+		
+		[HttpGet, Route("api/staffing/exportGapPeriodMessage")]
+		public virtual IHttpActionResult GetExportGapPeriodMessage()
+		{
+			return Ok(new {ExportPeriodMessage = _periodValidationProvider.GetExportGapPeriodMessageString()});
 		}
 
 		[UnitOfWork, HttpGet, Route("api/staffing/staffingSettings")]

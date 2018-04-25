@@ -25,7 +25,8 @@
 		vm.exportFile = exportFile;
 		vm.ErrorMessage = "";
 		vm.ExportPeriodMessage = "DefaultHejsan";
-
+		vm.ExportBpoPeriodMessage = "DefaultHejsan";
+		
         var skills;
 		getSkills();
 		getMessage();
@@ -41,9 +42,14 @@
 		}
 
 		function getMessage() {
-			var query = staffingService.getExportPeriodMessage.get();
+			var query = staffingService.getExportStaffingPeriodMessage.get();
 			query.$promise.then(function (response) {
 				vm.ExportPeriodMessage = response.ExportPeriodMessage;
+			});
+
+			var queryBpo = staffingService.getExportGapPeriodMessage.get();
+			queryBpo.$promise.then(function (response) {
+				vm.ExportBpoPeriodMessage = response.ExportPeriodMessage;
 			});
 		}
 

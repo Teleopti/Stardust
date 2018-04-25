@@ -56,6 +56,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<PrimaryPersonSkillFilterToggle44686Off>().As<IPrimaryPersonSkillFilter>().SingleInstance();
 			}
+
+			builder.RegisterType<ExportStaffingPeriodValidationProvider>().As<ExportStaffingPeriodValidationProvider>().SingleInstance();
 		}
 	}
 }

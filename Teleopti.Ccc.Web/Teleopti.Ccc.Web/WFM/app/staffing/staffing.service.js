@@ -17,7 +17,8 @@
     var savebpo = $resource('../api/staffing/importBpo');
     var staffingSettings = $resource('../api/staffing/staffingSettings');
     var fileExport = $resource('../api/staffing/exportStaffingDemand');
-    var exportPeriodMessage = $resource('../api/staffing/exportPeriodMessage');
+    var exportStaffingPeriodMessage = $resource('../api/staffing/exportStaffingPeriodMessage');
+  	var exportGapPeriodMessage = $resource('../api/staffing/exportGapPeriodMessage');
     var staffingDataExport = $resource('../api/staffing/exportforecastandstaffing');
 
     var service = {
@@ -31,7 +32,8 @@
       importbpo: savebpo,
       staffingSettings: staffingSettings,
       postFileExport: fileExport,
-      getExportPeriodMessage: exportPeriodMessage,
+	  getExportStaffingPeriodMessage: exportStaffingPeriodMessage,
+	  getExportGapPeriodMessage: exportGapPeriodMessage,
       exportStaffingData: staffingDataExport
     };
 
