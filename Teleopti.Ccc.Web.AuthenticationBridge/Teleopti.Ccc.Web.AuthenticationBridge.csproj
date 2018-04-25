@@ -56,8 +56,8 @@
     <Reference Include="AuthBridge, Version=1.0.4.123, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AuthBridge.1.0.4.123\lib\net461\AuthBridge.dll</HintPath>
     </Reference>
-    <Reference Include="AuthBridge.Web, Version=1.0.4.122, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AuthBridge.Web.1.0.4.122\lib\net461\AuthBridge.Web.dll</HintPath>
+    <Reference Include="AuthBridge.Web, Version=1.0.4.123, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AuthBridge.Web.1.0.4.123\lib\net461\AuthBridge.Web.dll</HintPath>
     </Reference>
     <Reference Include="ClaimsPolicyEngine, Version=1.0.4.123, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ClaimsPolicyEngine.1.0.4.123\lib\net461\ClaimsPolicyEngine.dll</HintPath>
