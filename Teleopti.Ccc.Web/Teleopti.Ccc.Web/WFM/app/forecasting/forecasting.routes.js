@@ -42,18 +42,15 @@
 
     $stateProvider.state('forecast', {
       url: '/forecast',
-      templateUrl: 'app/forecasting/refact/forecast.html',
-      controller: 'ForecastRefactController as vm'
+      templateUrl: 'app/forecasting/refact/r2forecast.html',
+      controller: 'r2ForecastRefactController as vm'
     })
     .state('modify', {
       url: '/forecast/modify/:workloadId',
       templateUrl: 'app/forecasting/refact/forecast-modify.html',
       controller: 'ForecastModController as vm',
       params: {
-        workloadId: undefined,
-        skill: undefined,
-        days: undefined,
-        scenario: undefined
+        workloadId: undefined
       },
     })
     .state('statistics', {

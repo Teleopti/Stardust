@@ -1,17 +1,18 @@
 <div class="view-header with-desc">
-  <div class="view-title" ng-if="vm.selectedWorkload.Days.length > 1">
-    <h1><i class="mdi mdi-chart-line"></i> {{vm.selectedWorkload.Name}} ({{vm.selectedWorkload.Scenario.Name}})</h1>
+  <div class="view-title">
+    <h1><i class="mdi mdi-chart-line"></i> {{vm.selectedWorkload.Workload.Name}}</h1>
     <p>This is the current forecast for this workload</p>
   </div>
-  <div ng-if="vm.selectedWorkload.Days.length < 1">
+  <div ng-if="vm.scenarioNotForecasted">
     <p>No forecast data found for {{vm.selectedWorkload.Name}}, try running a forecast on the selected skill with "{{vm.selectedWorkload.Scenario.Name}}" scenario</p>
-    <a ui-sref="forecast"><!-- todo: fix missing data issue -->
-      <button type="button" class="wfm-btn wfm-btn-primary" name="button">
-        {{'BackToList'|translate}}
-      </button>
-    </a>
+    <button type="button" class="wfm-btn wfm-btn-primary" ng-click="vm.forecastModal = true" name="button">{{'ForecastDo'|translate}}</button>
   </div>
 </div>
+
+<md-select ng-model="vm.selectedScenario" ng-change="vm.changeScenario(vm.selectedScenario)" placeholder="{{'Scenario' | translate}}">
+  <md-option ng-repeat="scenario in vm.scenarios" ng-value="scenario">{{scenario.Name}}</md-option>
+</md-select>
+<button type="button" class="wfm-btn wfm-btn-primary" name="button" ng-click="vm.exportModal = true">{{'ExportToFile'|translate}}</button>
 
 <!--Override/Campaign-->
 <form ng-submit="vm.applyCampaign()">
@@ -81,6 +82,17 @@
 
 
 <!-- Chart -->
+<div class="con-row"  ng-if="vm.selectedWorkload.Days.length < 1">
+  <div class="con-flex">
+    <div class="panel material-depth-1 full-padding">
+      <div ng-if="vm.isForecastRunning">
+        Loading..
+        <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="con-row" ng-if="vm.selectedWorkload.Days.length > 1">
   <div class="con-flex">
     <div class="panel material-depth-1">
@@ -108,21 +120,60 @@
         </div>
       </div>
       <div class="con-row">
-        <div class="con-flex">
-          <div ng-show="vm.isForecastRunning">
-            <md-progress-linear md-mode="indeterminate"></md-progress-linear>
-          </div>
-        </div>
-      </div>
-      <div class="con-row">
         <div class="con-flex" >
           <forecast-chart  chart-id="vm.selectedWorkload.ChartId" selectable="true" refresh="vm.loadChart" on-click="vm.pointClick" days="vm.selectedWorkload.Days"> </forecast-chart>
         </div>
       </div>
       <!-- <div class="con-footer">
-        <button class="wfm-btn wfm-btn-invis-default">Compare</button>
-        <button class="wfm-btn wfm-btn-invis-primary">Publish</button>
-      </div> -->
-    </div>
+      <button class="wfm-btn wfm-btn-invis-default">Compare</button>
+      <button class="wfm-btn wfm-btn-invis-primary">Publish</button>
+    </div> -->
   </div>
 </div>
+</div>
+
+
+<modal-dialog show='vm.forecastModal' ng-cloak>
+  <div>
+    <div class="con-row">
+      <div class="con-flex">
+        <p>{{'TemplateTargetWorkload' | translate}}: <b>{{vm.selectedWorkload.Workload.Name}}</b></p>
+        <p class="subtext">{{'Scenario'|translate}}: <b>{{vm.selectedScenario.Name}}</b></p>
+      </div>
+    </div>
+
+    <div class="modal-inner-content" style="text-align:center;">
+      <!-- <label>{{'ForecastPeriod' | translate}}:</label><br/> -->
+      <wfm-calendar-picker ng-model="vm.forecastPeriod"></wfm-calendar-picker>
+    </div>
+    <div class="modal-actions">
+      <aside>
+        <button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.forecastWorkload()">{{'Apply'|translate}}</button>
+      </aside>
+    </div>
+    <div ng-if="vm.isForecastRunning">
+      <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+    </div>
+  </div>
+</modal-dialog>
+
+<modal-dialog show='vm.exportModal' ng-cloak>
+  <div>
+    <div class="con-row">
+      <div class="con-flex">
+        <b>{{'ExportToFile'|translate}}</b>
+      </div>
+    </div>
+    <div class="modal-inner-content" style="text-align:center;">
+      <wfm-calendar-picker ng-model="vm.forecastPeriod"></wfm-calendar-picker>
+    </div>
+    <div class="modal-actions">
+      <aside>
+        <button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.exportToFile()">{{'Export'|translate}}</button>
+      </aside>
+    </div>
+    <div ng-if="vm.isForecastRunning">
+      <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+    </div>
+  </div>
+</modal-dialog>
