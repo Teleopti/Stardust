@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using AuthBridge.Configuration;
 using AuthBridge.Model;
 using AuthBridge.Utilities;
+using Microsoft.Practices.Unity;
 
 namespace Teleopti.Ccc.Web.AuthenticationBridge
 {
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge
 		{
 			var results = visitProviderUrls();
 			
-			var isScopeAccessible = tryVisitUrl(DefaultConfigurationRepository.Instance.RetrieveDefaultScope(Request.UrlConsideringLoadBalancerHeaders()).Uri);
+			var isScopeAccessible = tryVisitUrl(ServiceLocator.Container.Value.Resolve<IConfigurationRepository>().RetrieveDefaultScope(Request.UrlConsideringLoadBalancerHeaders()).Uri);
 			results.Add("Teleopti web site", isScopeAccessible);
 			
 			foreach (var providerResult in results)
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge
 
 		private Dictionary<string, bool> visitProviderUrls()
 		{
-			var configurationRepository = DefaultConfigurationRepository.Instance;
+			var configurationRepository = ServiceLocator.Container.Value.Resolve<IConfigurationRepository>();
 			var issuers = configurationRepository.RetrieveIssuers(Request.UrlConsideringLoadBalancerHeaders()).Where(provider => provider.DisplayName.ToLower().Contains("teleopti"));
 			var result = tryVisitUrlsByIdentity(issuers);
 			return result;
