@@ -25,6 +25,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeActivityRepository ActivityRepository;
+		public FakeUserUiCulture UserUiCulture;
+		public FakeUserCulture UserCulture;
 		
 		public void Isolate(IIsolate isolate)
 		{
