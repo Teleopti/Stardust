@@ -3,30 +3,25 @@ import { FormArray, FormBuilder, FormControl, FormGroup, ValidationErrors, Valid
 import { AbstractControl } from '@angular/forms/src/model';
 import { Subject } from 'rxjs';
 import { NavigationService } from '../../services';
-import { Person } from '../../types';
 import { FormControlWithInitial } from '../shared';
 import { DuplicateIdentityLogonValidator } from './duplicate-identity-logon.validator';
-import {
-	IdentityLogonPageService,
-	PersonWithIdentityLogon,
-	PeopleWithIdentityLogon
-} from './identity-logon-page.service';
+import { IdentityLogonPageService, PeopleWithLogon, PersonWithLogon } from './identity-logon-page.service';
 
 class DuplicateFormNameValidator {
-	private appLogonPageComponent: IdentityLogonPageComponent;
+	private identityLogonPageComponent: IdentityLogonPageComponent;
 
-	constructor(appLogonPageComponent: IdentityLogonPageComponent) {
-		this.appLogonPageComponent = appLogonPageComponent;
+	constructor(identityLogonPageComponent: IdentityLogonPageComponent) {
+		this.identityLogonPageComponent = identityLogonPageComponent;
 	}
 
 	validate = (control: FormControlWithInitial): ValidationErrors => {
-		const filterByExists = (appLogon: string) => appLogon && appLogon.length > 0;
-		const filterBySameAppLogon = appLogon => appLogon === control.value;
-		const countSameAppLogon = this.appLogonPageComponent.appLogons
+		const filterByExists = (logon: string) => logon && logon.length > 0;
+		const filterBySameLogon = logon => logon === control.value;
+		const countSameLogon = this.identityLogonPageComponent.logons
 			.map(control => control.value)
 			.filter(filterByExists)
-			.filter(filterBySameAppLogon).length;
-		if (countSameAppLogon > 1) return { duplicateFormNameValidator: control.value };
+			.filter(filterBySameLogon).length;
+		if (countSameLogon > 1) return { duplicateFormNameValidator: control.value };
 		return {};
 	};
 }
@@ -47,14 +42,17 @@ export class IdentityLogonPageComponent implements OnDestroy, OnInit {
 
 	private componentDestroyed: Subject<any> = new Subject();
 
-	logonForm: FormGroup = this.formBuilder.group({
-		logons: this.formBuilder.array([])
+	form: FormGroup = this.formBuilder.group({
+		people: this.formBuilder.array([])
 	});
-	duplicationError: boolean = false;
-	formValid: boolean = true;
 
 	ngOnInit() {
-		this.setupForm();
+		this.identityLogonPageService.people$.takeUntil(this.componentDestroyed).subscribe({
+			next: (people: PeopleWithLogon) => {
+				if (people.length === 0) return this.nav.navToSearch();
+				this.buildForm(people);
+			}
+		});
 	}
 
 	ngOnDestroy() {
@@ -62,69 +60,44 @@ export class IdentityLogonPageComponent implements OnDestroy, OnInit {
 		this.componentDestroyed.complete();
 	}
 
-	setupForm() {
-		this.identityLogonPageService.people$.takeUntil(this.componentDestroyed).subscribe({
-			next: (people: PeopleWithIdentityLogon) => {
-				if (people.length === 0) return this.nav.navToSearch();
-				this.rebuildForm(people);
-			}
+	personToFormGroup(person: PersonWithLogon) {
+		const FullName = new FormControl(person.FullName);
+		FullName.disable();
+		const Logon = new FormControlWithInitial(person.Logon);
+		Logon.setValidators([Validators.maxLength(50), new DuplicateFormNameValidator(this).validate]);
+		Logon.setAsyncValidators(this.duplicateNameValidator.validate);
+
+		return this.formBuilder.group({
+			FullName,
+			Logon
 		});
-		this.logons.statusChanges.subscribe({
-			next: status => {
-				this.formValid = status === 'VALID';
-			}
-		});
 	}
 
-	rebuildForm(people: PeopleWithIdentityLogon) {
-		while (this.logons.length > 0) this.logons.removeAt(0);
-		people
-			.map((person: PersonWithIdentityLogon) => {
-				console.log(person);
-				var formGroup = this.formBuilder.group({
-					...person,
-					IdentityLogon: new FormControlWithInitial(person.Identity)
-				});
-				formGroup.get('FullName').disable();
-				var logon = formGroup.get('IdentityLogon') as FormControl;
-				logon.setValidators([Validators.maxLength(50), new DuplicateFormNameValidator(this).validate]);
-				logon.setAsyncValidators(this.duplicateNameValidator.validate);
-				return formGroup;
-			})
-			.forEach(control => this.logons.push(control));
+	buildForm(people: PeopleWithLogon) {
+		while (this.people.length > 0) this.people.removeAt(0);
+		people.map(people => this.personToFormGroup(people)).forEach(control => this.people.push(control));
 	}
 
-	checkForDuplicates(people: Person[]) {
-		const filterByAppLogon = ({ ApplicationLogon }: Person) => ApplicationLogon && ApplicationLogon.length > 0;
-		let errors = people.filter(filterByAppLogon).reduce((errors, person, index, people) => {
-			const filterBySameAppLogon = p => p.Id !== person.Id && p.ApplicationLogon === person.ApplicationLogon;
-			const peopleWithSameLogon = people.filter(filterBySameAppLogon).length;
-			if (peopleWithSameLogon === 0) return errors;
-			return errors.concat({ [person.ApplicationLogon]: person.Id });
-		}, []);
-		this.duplicationError = errors.length > 0;
+	get people(): FormArray {
+		return this.form.get('people') as FormArray;
 	}
 
-	get logons(): FormArray {
-		return this.logonForm.get('logons') as FormArray;
-	}
-
-	get appLogons(): AbstractControl[] {
-		return this.logons.controls.map(control => control.get('IdentityLogon'));
+	get logons(): AbstractControl[] {
+		return this.people.controls.map(control => control.get('Logon'));
 	}
 
 	revalidateLogons() {
-		this.appLogons.forEach(control => {
+		this.logons.forEach(control => {
 			control.updateValueAndValidity();
 		});
 	}
 
 	isValid(): boolean {
-		return this.formValid && this.duplicationError === false;
+		return this.form.valid;
 	}
 
 	save(): void {
-		const people = this.logonForm.get('logons').value;
+		const people = this.people.value;
 		this.identityLogonPageService.save(people).subscribe({
 			next: () => {
 				this.nav.navToSearch();

@@ -4,9 +4,9 @@
       <h2>Identity logon</h2>
     </div>
   </div>
-  <form [formGroup]="logonForm">
-    <form formArrayName="logons">
-      <ng-container *ngFor="let logonControl of logons.controls; let i=index" [formGroupName]="i">
+  <form [formGroup]="form">
+    <form formArrayName="people">
+      <ng-container *ngFor="let personGroup of people.controls; let i=index" [formGroupName]="i">
         <div class="con-row" data-test-person>
           <div class="con-flex">
             <mat-form-field class="full-width">
@@ -15,14 +15,14 @@
           </div>
           <div class="con-flex">
             <mat-form-field class="full-width">
-              <input matInput formControlName="IdentityLogon" maxlength="50" placeholder="Identity logon" data-test-person-logon>
-              <mat-error *ngIf="logonControl.get('IdentityLogon').hasError('duplicateNameValidator')">
+              <input matInput formControlName="Logon" maxlength="50" placeholder="Application logon" data-test-person-logon>
+              <mat-error *ngIf="personGroup.get('Logon').hasError('duplicateNameValidator')">
                 Username is already in use
               </mat-error>
-              <mat-error *ngIf="logonControl.get('IdentityLogon').hasError('duplicateFormNameValidator')">
+              <mat-error *ngIf="personGroup.get('Logon').hasError('duplicateFormNameValidator')">
                 Duplicate username in form
               </mat-error>
-              <mat-error *ngIf="logonControl.get('IdentityLogon').hasError('maxLength')">
+              <mat-error *ngIf="personGroup.get('Logon').hasError('maxLength')">
                 Username has a limit of 50 characters
               </mat-error>
             </mat-form-field>
@@ -34,11 +34,6 @@
           </div>
         </div>
       </ng-container>
-      <div class="con-row" *ngIf="duplicationError">
-        <div class="con-flex">
-          You have entered duplicate logon names
-        </div>
-      </div>
     </form>
   </form>
   <div class="con-row">

@@ -3,12 +3,12 @@ import { ValidationErrors } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { of } from 'rxjs/observable/of';
 import { first, map, switchMap, take, tap } from 'rxjs/operators';
-import { AppLogonService } from '../../services';
+import { LogonInfoService } from '../../services';
 import { FormControlWithInitial } from '../shared/forms';
 
 @Injectable()
 export class DuplicateAppLogonValidator {
-	constructor(private appLogonService: AppLogonService) {}
+	constructor(private appLogonService: LogonInfoService) {}
 
 	stateToErrorMessage = state => (state ? { duplicateNameValidator: state } : {});
 
@@ -17,7 +17,7 @@ export class DuplicateAppLogonValidator {
 	 * @param value the value to check
 	 */
 	nameExists(value: string) {
-		return this.appLogonService.logonNameExists(value);
+		return this.appLogonService.appLogonExists(value);
 	}
 
 	validate = (control: FormControlWithInitial): Observable<ValidationErrors> => {

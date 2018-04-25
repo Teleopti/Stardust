@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { AppLogonService, WorkspaceService, LogonInfoFromGuidsResponse, LogonInfo } from '../../services';
+import { LogonInfoService, WorkspaceService, LogonInfoFromGuidsResponse, LogonInfo } from '../../services';
 import { map, switchMap, filter, flatMap } from 'rxjs/operators';
 import { of } from 'rxjs/observable/of';
 
@@ -19,7 +19,7 @@ export interface PeopleWithLogon extends Array<PersonWithLogon> {}
 
 @Injectable()
 export class AppLogonPageService {
-	constructor(public appLogonService: AppLogonService, public workspaceService: WorkspaceService) {}
+	constructor(public logonInfoService: LogonInfoService, public workspaceService: WorkspaceService) {}
 
 	public people$: Observable<PeopleWithLogon> = this.workspaceService.people$.pipe(
 		map(people => this.mapPeopleWithFullName(people)),
@@ -27,7 +27,7 @@ export class AppLogonPageService {
 	);
 
 	public save(people: PeopleWithLogon) {
-		return this.appLogonService.persistLogonNames(
+		return this.logonInfoService.persistAppLogonNames(
 			people.map(person => ({
 				ApplicationLogonName: person.Logon,
 				PersonId: person.Id
@@ -38,7 +38,7 @@ export class AppLogonPageService {
 	private joinPeopleWithAppLogon(peopleWithName: PersonWithName[]) {
 		if (peopleWithName.length === 0) return of([]);
 		const peopleIds = peopleWithName.map(person => person.Id);
-		const peopleLogonInfo$ = this.appLogonService.getLogonInfo(peopleIds);
+		const peopleLogonInfo$ = this.logonInfoService.getLogonInfo(peopleIds);
 		return peopleLogonInfo$.pipe(
 			map(peopleLogonInfo =>
 				peopleWithName.reduce((peopleWithLogon: PeopleWithLogon, personWithName: PersonWithName) => {

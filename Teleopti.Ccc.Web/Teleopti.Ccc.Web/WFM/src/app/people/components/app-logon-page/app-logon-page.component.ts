@@ -15,13 +15,13 @@ class DuplicateFormNameValidator {
 	}
 
 	validate = (control: FormControlWithInitial): ValidationErrors => {
-		const filterByExists = (appLogon: string) => appLogon && appLogon.length > 0;
-		const filterBySameAppLogon = appLogon => appLogon === control.value;
-		const countSameAppLogon = this.appLogonPageComponent.logons
+		const filterByExists = (logon: string) => logon && logon.length > 0;
+		const filterBySameLogon = logon => logon === control.value;
+		const countSameLogon = this.appLogonPageComponent.logons
 			.map(control => control.value)
 			.filter(filterByExists)
-			.filter(filterBySameAppLogon).length;
-		if (countSameAppLogon > 1) return { duplicateFormNameValidator: control.value };
+			.filter(filterBySameLogon).length;
+		if (countSameLogon > 1) return { duplicateFormNameValidator: control.value };
 		return {};
 	};
 }

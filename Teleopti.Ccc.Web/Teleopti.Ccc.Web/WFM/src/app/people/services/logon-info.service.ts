@@ -9,8 +9,17 @@ interface PersonApplicationLogonModel {
 	PersonId: string;
 }
 
+interface PersonIdentityLogonModel {
+	Identity: string;
+	PersonId: string;
+}
+
 interface PersistApplicationLogonNamesQuery {
 	People: PersonApplicationLogonModel[];
+}
+
+interface PersistIdentityLogonNamesQuery {
+	People: PersonIdentityLogonModel[];
 }
 
 export interface LogonInfo {
@@ -22,14 +31,21 @@ export interface LogonInfo {
 export interface LogonInfoFromGuidsResponse extends Array<LogonInfo> {}
 
 @Injectable()
-export class AppLogonService {
+export class LogonInfoService {
 	constructor(private http: HttpClient) {}
 
-	persistLogonNames(people: PersonApplicationLogonModel[]) {
+	persistAppLogonNames(people: PersonApplicationLogonModel[]) {
 		const body: PersistApplicationLogonNamesQuery = {
 			People: people
 		};
 		return this.http.post('../PersonInfo/PersistApplicationLogonNames', body);
+	}
+
+	persistIdentityLogonNames(people: PersonIdentityLogonModel[]) {
+		const body: PersistIdentityLogonNamesQuery = {
+			People: people
+		};
+		return this.http.post('../PersonInfo/PersistIdentities', body);
 	}
 
 	getLogonInfo(personIdsToGet: string[]): Observable<LogonInfoFromGuidsResponse> {
@@ -38,10 +54,25 @@ export class AppLogonService {
 		>;
 	}
 
-	logonNameExists(logonName: string): Observable<boolean> {
-		const params = new HttpParams().set('LogonName', logonName);
+	appLogonExists(logon: string): Observable<boolean> {
+		const params = new HttpParams().set('LogonName', logon);
 		var response = this.http
 			.get('../PersonInfo/LogonFromName', {
+				params
+			})
+			.pipe(
+				map((person: Person) => {
+					return person !== null;
+				})
+			);
+
+		return response as Observable<boolean>;
+	}
+
+	identityLogonExists(logon: string): Observable<boolean> {
+		const params = new HttpParams().set('Identity', logon);
+		var response = this.http
+			.get('../PersonInfo/LogonFromIdentity', {
 				params
 			})
 			.pipe(

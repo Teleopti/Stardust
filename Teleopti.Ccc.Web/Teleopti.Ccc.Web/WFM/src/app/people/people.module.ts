@@ -36,9 +36,8 @@ import {
 	RolesService,
 	SearchService,
 	WorkspaceService,
-	AppLogonService,
-	SearchOverridesService,
-	IdentityLogonService
+	LogonInfoService,
+	SearchOverridesService
 } from './services';
 
 @NgModule({
@@ -79,8 +78,7 @@ import {
 		SearchService,
 		SearchOverridesService,
 		NavigationService,
-		AppLogonService,
-		IdentityLogonService
+		LogonInfoService
 	],
 	exports: [],
 	entryComponents: [
