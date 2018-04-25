@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		
 		[TestCase(true, 1)]
 		[TestCase(false, 0)]
-		[Ignore("#75339 Dont understand why this isn't working... Let's continue tomorrow")]
 		public void ShouldMoveDayOffToDayWithLessDemand(bool useMinimumStaffing, int expectedDayWithDO)
 		{
 			var date = new DateOnly(2015, 10, 12);
@@ -49,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				1,
 				1, //DO from beginning
 				1);
-		
+			skillDays.First().SetMinimumAgents(1);
 			var asses = Enumerable.Range(0, 7).Select(i => new PersonAssignment(agent, scenario, date.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16))).ToArray();
 			asses[5].SetDayOff(new DayOffTemplate()); //saturday
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] {agent}, asses, skillDays);
@@ -67,6 +66,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 		public DayOffOptimizationMinimumStaffingDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerDayOffUsePredictorEverywhere75667, bool resourcePlannerMinimumStaffing75339) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerDayOffUsePredictorEverywhere75667, resourcePlannerMinimumStaffing75339)
 		{
+			if(!_resourcePlannerMinimumStaffing75339)
+				Assert.Ignore("Only available when ResourcePlanner_MinimumStaffing_75339 is true");
 		}
 	}
 }
