@@ -32,9 +32,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 					if (intervalDateOnly == baseDate.AddDays(1))
 					{
-						var startTime = DateTime.SpecifyKind(returnListDateOnly.Date.Add(timeSpanKey.Add(TimeSpan.FromDays(1))), DateTimeKind.Utc);
+						var startTime = DateTime.SpecifyKind(baseDate.Date.Add(timeSpanKey.Add(TimeSpan.FromDays(1))), DateTimeKind.Utc);
 						var found = days.Values.Any(daysValue => daysValue.Values.Any(daysValueValue => startTime.Equals(daysValueValue.Period.StartDateTime)));
-						if (!found) continue;
+						if (!found || baseDate < returnListDateOnly) continue;
 						timeSpanKey = timeSpanKey.Add(TimeSpan.FromDays(1));
 					}
 

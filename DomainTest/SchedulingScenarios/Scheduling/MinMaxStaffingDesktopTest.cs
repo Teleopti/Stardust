@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -8,7 +10,9 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -56,6 +60,41 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			schedulerStateHolder.Schedules[agent].ScheduledDay(date).IsScheduled().Should().Be.False();
 			schedulerStateHolder.Schedules[agent].ScheduledDay(date.AddDays(1)).IsScheduled().Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldGetCorrectShiftWhenUsingMinimumStaffing()
+		{
+			var date = new DateOnly(2017, 1, 11);
+			var activity = new Activity().WithId();
+			var scenario = new Scenario();
+			var shiftCategory = new ShiftCategory().WithId();
+			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var skillDayOne = skill.CreateSkillDayWithDemand(scenario, date.AddDays(-1), 1);
+			var skillDayTwo = skill.CreateSkillDayWithDemand(scenario, date, 1);
+			var skillDayThree = skill.CreateSkillDayWithDemand(scenario, date.AddDays(1), 1);
+			var shiftCat = new ShiftCategory("_");
+			var ruleSet1 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var ruleSet2 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(18, 0, 18, 0, 15), new TimePeriodWithSegment(26, 0, 26, 0, 15), shiftCategory));
+			var ruleSetBag = new RuleSetBag(ruleSet1, ruleSet2);
+			var contract = new ContractWithMaximumTolerance();
+			var agents = new List<IPerson>();
+			var asses = new List<IPersonAssignment>();
+			for (var i = 0; i < 5; i++)
+			{
+				agents.Add(new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSetBag, contract, skill).WithSchedulePeriodOneWeek(date));
+			}
+			asses.Add(new PersonAssignment(agents[0], scenario, date).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCat));
+			asses.Add(new PersonAssignment(agents[1], scenario, date).WithLayer(activity, new TimePeriod(18, 26)).ShiftCategory(shiftCat));
+			asses.Add(new PersonAssignment(agents[2], scenario, date).WithLayer(activity, new TimePeriod(18, 26)).ShiftCategory(shiftCat));
+			asses.Add(new PersonAssignment(agents[3], scenario, date).WithLayer(activity, new TimePeriod(18, 26)).ShiftCategory(shiftCat));
+			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date.AddDays(-1), date.AddDays(1)), agents, asses, new[] { skillDayOne, skillDayTwo, skillDayThree });
+			skillDayTwo.SkillDataPeriodCollection.ForEach(x => x.SkillPersonData = new SkillPersonData(1, 0));
+			var schedulingOptions = new SchedulingOptions { UseMinimumStaffing = true };
+
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agents[4] }, date.ToDateOnlyPeriod());
+
+			schedulerStateHolder.Schedules[agents[4]].ScheduledDay(date).PersonAssignment().Period.StartDateTime.Hour.Should().Be.EqualTo(8);
 		}
 
 		public MinMaxStaffingDesktopTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
