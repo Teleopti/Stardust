@@ -23,6 +23,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 		protected override void Extend(IExtend extend, IIocConfiguration configuration)
 		{
 			base.Extend(extend, configuration);
+			_tenantUnitOfWorkManager = TenantUnitOfWorkForTest();
 			extend.AddModule(new WfmAdminModule2(configuration));
 			extend.AddService(_tenantUnitOfWorkManager);
 			extend.AddService<DbPathProviderFake>();
@@ -41,8 +42,6 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 			isolate.UseTestDouble<FakeHangfireCookie>().For<IHangfireCookie>();
 			isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 			isolate.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
-
-			_tenantUnitOfWorkManager = TenantUnitOfWorkForTest();
 		}
 
 		public static TenantUnitOfWorkManager TenantUnitOfWorkForTest()
@@ -54,7 +53,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 		{
 			base.AfterTest();
 
-			_tenantUnitOfWorkManager.CancelAndDisposeCurrent();
+			_tenantUnitOfWorkManager?.CancelAndDisposeCurrent();
 		}
 	}
 }
