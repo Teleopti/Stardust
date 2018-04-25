@@ -19,16 +19,23 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		public IScheduleResultDataExtractor Create(IScheduleMatrixPro scheduleMatrix, IOptimizationPreferences optimizationPreferences, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			ISkillExtractor skillExtractor = new ScheduleMatrixPersonalSkillExtractor(scheduleMatrix, _personalSkillsProvider);
+			var dailySkillForecastAndScheduledValueCalculator = CreateCalculator(optimizationPreferences, schedulingResultStateHolder);
 			if (optimizationPreferences.Advanced.UseMinimumStaffing)
 			{
-				var dailySkillForecastAndScheduledValueCalculator = new DailyBoostedSkillForecastAndScheduledValueCalculator(()=> schedulingResultStateHolder, _skillPriorityProvider, _userTimeZone);
 				return new RelativeBoostedDailyDifferencesByPersonalSkillsExtractor(scheduleMatrix, dailySkillForecastAndScheduledValueCalculator, skillExtractor);
 			}
-			else
+			return new RelativeDailyDifferencesByPersonalSkillsExtractor(scheduleMatrix, dailySkillForecastAndScheduledValueCalculator, skillExtractor);
+		}
+		
+		
+		public IDailySkillForecastAndScheduledValueCalculator CreateCalculator(IOptimizationPreferences optimizationPreferences, ISchedulingResultStateHolder schedulingResultStateHolder)
+		{
+			if (optimizationPreferences.Advanced.UseMinimumStaffing)
 			{
-				var dailySkillForecastAndScheduledValueCalculator = new DailySkillForecastAndScheduledValueCalculator(()=> schedulingResultStateHolder, _userTimeZone);
-				return new RelativeDailyDifferencesByPersonalSkillsExtractor(scheduleMatrix, dailySkillForecastAndScheduledValueCalculator, skillExtractor);
+				return new DailyBoostedSkillForecastAndScheduledValueCalculator(()=> schedulingResultStateHolder, _skillPriorityProvider, _userTimeZone);
 			}
+
+			return new DailySkillForecastAndScheduledValueCalculator(()=> schedulingResultStateHolder, _userTimeZone);
 		}
 	}
 }
