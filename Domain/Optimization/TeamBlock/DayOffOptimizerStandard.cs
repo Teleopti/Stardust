@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				var movedDaysOff = _affectedDayOffs.Execute(matrix.Item1, dayOffOptimizationPreference, originalArray, resultingArray);
 				if (movedDaysOff != null)
 				{
-					var predictorResult = _dayOffOptimizerPreMoveResultPredictor.IsPredictedBetterThanCurrent(matrix.Item1, resultingArray, originalArray, dayOffOptimizationPreference, optimizationPreferences, schedulingResultStateHolder);
+					var predictorResult = _dayOffOptimizerPreMoveResultPredictor.IsPredictedBetterThanCurrent(matrix.Item1, resultingArray, originalArray, dayOffOptimizationPreference);
 					var previousPeriodValue = predictorResult.CurrentValue;
 					if (!predictorResult.IsBetter)
 					{
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						continue;
 					}
 
-					var currentPeriodValue = new Lazy<double>(() => _dayOffOptimizerPreMoveResultPredictor.CurrentValue(matrix.Item1, optimizationPreferences, schedulingResultStateHolder));
+					var currentPeriodValue = new Lazy<double>(() => _dayOffOptimizerPreMoveResultPredictor.CurrentValue(matrix.Item1));
 					var resCalcState = new UndoRedoContainer();
 					resCalcState.FillWith(schedulingResultStateHolder.SkillDaysOnDateOnly(movedDaysOff.ModifiedDays()));
 					var success = runOneMatrixOnly(optimizationPreferences, rollbackService, matrix.Item1, schedulingOptions, matrix.Item2,
@@ -424,7 +424,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				{
 					if (!optimizationPreferences.Advanced.UseTweakedValues && optimizationPreferences.Extra.IsClassic())
 					{
-						var predictorResult = _dayOffOptimizerPreMoveResultPredictor.IsPredictedBetterThanCurrent(matrix.Item1, resultingArray, originalArray, dayOffOptimizationPreference, optimizationPreferences, schedulingResultStateHolder);
+						var predictorResult = _dayOffOptimizerPreMoveResultPredictor.IsPredictedBetterThanCurrent(matrix.Item1, resultingArray, originalArray, dayOffOptimizationPreference);
 						previousPeriodValue = predictorResult.CurrentValue;
 						if (!predictorResult.IsBetter)
 						{
@@ -437,7 +437,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					}
 
 					var currentPeriodValue = optimizationPreferences.Extra.IsClassic() ? 
-						new Lazy<double>(() => _dayOffOptimizerPreMoveResultPredictor.CurrentValue(matrix.Item1, optimizationPreferences, schedulingResultStateHolder)) : 
+						new Lazy<double>(() => _dayOffOptimizerPreMoveResultPredictor.CurrentValue(matrix.Item1)) : 
 						new Lazy<double>(() => periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization));
 					var resCalcState = new UndoRedoContainer();
 					resCalcState.FillWith(schedulingResultStateHolder.SkillDaysOnDateOnly(movedDaysOff.ModifiedDays()));

@@ -7,12 +7,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	public class CreatePersonalSkillDataExtractorOLD : ICreatePersonalSkillDataExtractor
 	{
 		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
-		private readonly IUserTimeZone _userTimeZone;
 
-		public CreatePersonalSkillDataExtractorOLD(IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider, IUserTimeZone userTimeZone)
+		public CreatePersonalSkillDataExtractorOLD(IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider)
 		{
 			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
-			_userTimeZone = userTimeZone;
 		}
 		
 		public IScheduleResultDataExtractor Create(IScheduleMatrixPro scheduleMatrix, IOptimizationPreferences optimizationPreferences,
@@ -21,12 +19,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return _scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(scheduleMatrix,
 				optimizationPreferences.Advanced, schedulingResultStateHolder);
 		}
-
-		public IDailySkillForecastAndScheduledValueCalculator CreateCalculator(IOptimizationPreferences optimizationPreferences,
-			ISchedulingResultStateHolder schedulingResultStateHolder)
-		{
-			return new DailySkillForecastAndScheduledValueCalculator(()=> schedulingResultStateHolder, _userTimeZone);
-		}
 	}
 	
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_MinimumStaffing_75339)]
@@ -34,7 +26,5 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	{
 		IScheduleResultDataExtractor Create(IScheduleMatrixPro scheduleMatrix, IOptimizationPreferences optimizationPreferences,
 			ISchedulingResultStateHolder schedulingResultStateHolder);
-
-		IDailySkillForecastAndScheduledValueCalculator CreateCalculator(IOptimizationPreferences optimizationPreferences, ISchedulingResultStateHolder schedulingResultStateHolder);
 	}
 }
