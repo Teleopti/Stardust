@@ -3,13 +3,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 {
-	public interface ISkillStaffPeriodEvaluator
-	{
-		bool ResultIsBetter(IList<ISkillStaffPeriod> listBefore, IList<ISkillStaffPeriod> listAfter, double limit);
-		bool ResultIsWorse(IList<ISkillStaffPeriod> listBefore, IList<ISkillStaffPeriod> listAfter, double limit);
-	}
-
-	public class SkillStaffPeriodEvaluator : ISkillStaffPeriodEvaluator
+	public class SkillStaffPeriodEvaluator
 	{
 		public bool ResultIsBetter(IList<ISkillStaffPeriod> listBefore, IList<ISkillStaffPeriod> listAfter, double limit)
 		{
