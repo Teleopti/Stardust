@@ -107,5 +107,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			LogonName = logonName;
 		}
 
+		public void ClearLogonInfo()
+		{
+			LogonName = null;
+			LogonPassword = null;
+		}
+
 	}
 }

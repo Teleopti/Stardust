@@ -50,8 +50,24 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 			}
 			else
 			{
-				currentPersonInfo.SetIdentity(personInfo.Identity);
-				session.Merge(currentPersonInfo);
+				if (string.IsNullOrWhiteSpace(personInfo.Identity))
+				{
+					currentPersonInfo.SetIdentity(null);
+				}
+				else
+				{
+					currentPersonInfo.SetIdentity(personInfo.Identity);
+				}
+
+				if (string.IsNullOrWhiteSpace(currentPersonInfo.ApplicationLogonInfo.LogonName) &&
+					string.IsNullOrWhiteSpace(currentPersonInfo.Identity))
+				{
+					session.Delete(currentPersonInfo);
+				}
+				else
+				{
+					session.Merge(currentPersonInfo);
+				}
 			}
 		}
 
@@ -66,8 +82,24 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 			}
 			else
 			{
-				currentPersonInfo.ApplicationLogonInfo.SetLogonName(personInfo.ApplicationLogonInfo.LogonName);
-				session.Merge(currentPersonInfo);
+				if (string.IsNullOrWhiteSpace(personInfo.ApplicationLogonInfo.LogonName))
+				{
+					currentPersonInfo.ApplicationLogonInfo.ClearLogonInfo();
+				}
+				else
+				{
+					currentPersonInfo.ApplicationLogonInfo.SetLogonName(personInfo.ApplicationLogonInfo.LogonName);
+				}
+
+				if (string.IsNullOrWhiteSpace(currentPersonInfo.ApplicationLogonInfo.LogonName) &&
+					string.IsNullOrWhiteSpace(currentPersonInfo.Identity))
+				{
+					session.Delete(currentPersonInfo);
+				}
+				else
+				{
+					session.Merge(currentPersonInfo);
+				}
 			}
 		}
 
