@@ -1,7 +1,7 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module("wfm.teamSchedule").service("ActivityService", ['$http', '$q', 'serviceDateFormatHelper',ActivityService]);
+	angular.module("wfm.teamSchedule").service("ActivityService", ['$http', '$q', 'serviceDateFormatHelper', ActivityService]);
 
 	function ActivityService($http, $q, serviceDateFormatHelper) {
 		var activities = [];
@@ -17,7 +17,7 @@
 		var undoScheduleChangeUrl = '../api/TeamScheduleCommand/BackoutScheduleChange';
 		var moveInvalidOverlappedActivityUrl = '../api/TeamScheduleCommand/MoveNonoverwritableLayers';
 		var getAllMultiplicatorDefinitionSetsUrl = '../api/MultiplicatorDefinitionSet/Overtime';
-		
+
 
 
 		this.fetchAvailableActivities = fetchAvailableActivities;
@@ -118,7 +118,8 @@
 
 		function normalizeInput(input) {
 			var normalized = angular.copy(input);
-			normalized.Date = serviceDateFormatHelper.getDateOnly(input.Date);
+			if (!!input.Date)
+				normalized.Date = serviceDateFormatHelper.getDateOnly(input.Date);
 			return normalized;
 		}
 

@@ -28,31 +28,36 @@
 		var meridianInfo = getMeridiemInfoFromMoment($locale);
 		ctrl.showMeridian = meridianInfo.showMeridian;
 		ctrl.meridians = ctrl.showMeridian ? [meridianInfo.am, meridianInfo.pm] : [];
-
-
+		
 
 		ctrl.$onChanges = function () {
 			ctrl.onTimeChange();
 		}
+
 		ctrl.$onInit = function () {
 			ctrl.minuteStep = ctrl.minuteStep || 1;
 		}
 
 		ctrl.onTimeChange = function () {
-			ctrl.ngModel = !!ctrl.dateTimeObj ? getValidDateTimeInTimezone(ctrl.dateTimeObj) : null;
-			ctrl.ngModelCtrl.$setViewValue(ctrl.ngModel);
+			ctrl.ngModelCtrl.$setValidity('dst', !!getValidDateTimeInTimezone(ctrl.dateTimeObj));
+			ctrl.ngModelCtrl.$setViewValue(getDateTime(ctrl.dateTimeObj));
 		}
 
 		function getValidDateTimeInTimezone(dateObj) {
-			if (!dateObj)
+			var dateTime = getDateTime(dateObj);
+			if (!dateTime)
 				return null;
-			var timezone = ctrl.timezone;
-			var time = serviceDateFormatHelper.getTimeOnly(dateObj);
-			var dateTime = serviceDateFormatHelper.getDateOnly(ctrl.date) + ' ' + time;
-			var dateTimeInTimeZone = serviceDateFormatHelper.getDateTime(moment.tz(dateTime, timezone));
+			var dateTimeInTimeZone = serviceDateFormatHelper.getDateTime(moment.tz(dateTime, ctrl.timezone));
 			if (dateTimeInTimeZone === dateTime)
 				return dateTimeInTimeZone;
 			return null;
+		}
+
+		function getDateTime(dateObj) {
+			if (!dateObj)
+				return null;
+			var time = serviceDateFormatHelper.getTimeOnly(dateObj);
+			return  serviceDateFormatHelper.getDateOnly(ctrl.date) + ' ' + time;
 		}
 
 		function getMeridiemInfoFromMoment($locale) {

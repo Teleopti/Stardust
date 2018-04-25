@@ -4,17 +4,17 @@
 	<div class="con-row">
 		<teams-time-picker required
 						   ng-model="$ctrl.timeRange.startTime"
-						   minute-step="5"
+						   minute-step="$ctrl.minuteStep"
 						   timezone="$ctrl.timezone"
 						   date="$ctrl.startDate"
-						   ng-change="$ctrl.onTimeRangeChange()" ></teams-time-picker>
+						   ng-change="$ctrl.onTimeRangeChange()"></teams-time-picker>
 		<div>—</div>
 		<teams-time-picker required
 						   ng-model="$ctrl.timeRange.endTime"
-						   minute-step="5"
+						   minute-step="$ctrl.minuteStep"
 						   timezone="$ctrl.timezone"
 						   date="$ctrl.endDate"
-						   ng-change="$ctrl.onTimeRangeChange()" ></teams-time-picker>
+						   ng-change="$ctrl.onTimeRangeChange()"></teams-time-picker>
 	</div>
 
 	<div class="con-row">

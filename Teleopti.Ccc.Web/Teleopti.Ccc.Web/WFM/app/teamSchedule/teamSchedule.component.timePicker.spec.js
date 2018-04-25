@@ -62,12 +62,12 @@
 		expect(scope.dateTime).toBe(null);
 	});
 
-	it('should not init time if dateTime is invalid in DST', function () {
-		setUp("2018-03-25", 'Europe/Berlin', "2018-03-25 02:00");
-		expect(scope.dateTime).toBe(null);
+	it('should show error if dateTime is invalid in DST when init time picker', function () {
+		var element = setUp("2018-03-25", 'Europe/Berlin', "2018-03-25 02:00");
+		expect(angular.element(element[0]).hasClass('ng-invalid-dst')).toBe(true);
 	});
 
-	it('should set dateTime to null if time is invalid in DST', function () {
+	it('should show error if time is invalid in DST', function () {
 		var element = setUp("2018-03-25", 'Europe/Berlin', "2018-03-25 01:00");
 
 		var hoursEl = element[0].querySelector('.uib-time.hours input');
@@ -77,8 +77,7 @@
 		mimuteEl.value = 30;
 		angular.element(mimuteEl).triggerHandler('change');
 		scope.$apply();
-
-		expect(scope.dateTime).toBe(null);
+		expect(angular.element(element[0]).hasClass('ng-invalid-dst')).toBe(true);
 	});
 
 

@@ -16,11 +16,11 @@
 			templateUrl: 'app/teamSchedule/html/teamsTimeRangePicker.tpl.html',
 		});
 
-	timeRangePickerCtrl.$inject = ['$element', '$attrs', '$locale', 'serviceDateFormatHelper'];
+	timeRangePickerCtrl.$inject = ['$element', '$attrs', '$locale', '$timeout', 'serviceDateFormatHelper'];
 
-	function timeRangePickerCtrl($element, $attrs, $locale, serviceDateFormatHelper) {
+	function timeRangePickerCtrl($element, $attrs, $locale, $timeout, serviceDateFormatHelper) {
 		var ctrl = this;
-
+	
 		ctrl.timeRange = ctrl.ngModel;
 		ctrl.startDate = moment(ctrl.date).isSame(ctrl.timeRange.startTime, 'day') ? ctrl.date : serviceDateFormatHelper.getDateOnly(ctrl.timeRange.startTime);
 		ctrl.endDate = moment(ctrl.date).isSame(ctrl.timeRange.endTime, 'day') ? ctrl.date : serviceDateFormatHelper.getDateOnly(ctrl.timeRange.endTime);
@@ -33,36 +33,47 @@
 		}
 
 		ctrl.onTimeRangeChange = function () {
-			var isValidTime = ctrl.timeRange.startTime && ctrl.timeRange.endTime;
-			if (isValidTime) {
-				if (endEarlierThanStartOnTimeOnly()) {
-					ctrl.isNextDay = false;
-					ctrl.timeRange.startTime = serviceDateFormatHelper.getDateOnly(ctrl.date) + ' ' + serviceDateFormatHelper.getTimeOnly(ctrl.timeRange.startTime);
-					ctrl.timeRange.endTime = getNextDate() + ' ' + serviceDateFormatHelper.getTimeOnly(ctrl.timeRange.endTime);
-				} else {
-					ctrl.onIsNextDayChanged();
-				}
+			if (endEarlierThanStartOnTimeOnly()) {
+				ctrl.isNextDay = false;
+				ctrl.startDate = ctrl.date;
+				ctrl.endDate = getNextDate();
 			}
-			
-			ctrl.timeRange = angular.copy(ctrl.timeRange);
-			ctrl.ngModelCtrl.$setViewValue(ctrl.timeRange);
+			else {
+				setDateRange();
+			}
+
+			$timeout(function () {
+				ctrl.timeRange = angular.copy(ctrl.timeRange);
+				ctrl.ngModelCtrl.$setViewValue(ctrl.timeRange);
+			});
 		}
 
 		ctrl.disableNextDay = endEarlierThanStartOnTimeOnly;
-		
 
-		ctrl.onIsNextDayChanged = function () {
+		ctrl.onIsNextDayChanged = setDateRange;
+
+		function setDateRange() {
+			if (!isValidTimeRange())
+				return;
+			var nextDate = getNextDate();
+			var startDate = serviceDateFormatHelper.getDateOnly(ctrl.timeRange.startTime);
+			var endDate = serviceDateFormatHelper.getDateOnly(ctrl.timeRange.endTime);
+
 			if (ctrl.isNextDay) {
-				ctrl.startDate = getNextDate();
-				ctrl.endDate = getNextDate();
+				if (startDate !== nextDate) ctrl.startDate = nextDate;
+				if (endDate !== nextDate) ctrl.endDate = nextDate;
 			} else {
-				ctrl.startDate = angular.copy(ctrl.date);
-				ctrl.endDate = angular.copy(ctrl.date);
+				if (startDate !== ctrl.date) ctrl.startDate = ctrl.date;
+				if (endDate !== ctrl.date) ctrl.endDate = ctrl.date;
 			}
 		}
 
+		function isValidTimeRange() {
+			return !!ctrl.timeRange.startTime && !!ctrl.timeRange.endTime;
+		}
+
 		function endEarlierThanStartOnTimeOnly() {
-			return moment('1900-01-01 ' + serviceDateFormatHelper.getTimeOnly(ctrl.timeRange.endTime))
+			return isValidTimeRange() && moment('1900-01-01 ' + serviceDateFormatHelper.getTimeOnly(ctrl.timeRange.endTime))
 				.isSameOrBefore('1900-01-01 ' + serviceDateFormatHelper.getTimeOnly(ctrl.timeRange.startTime));
 		}
 

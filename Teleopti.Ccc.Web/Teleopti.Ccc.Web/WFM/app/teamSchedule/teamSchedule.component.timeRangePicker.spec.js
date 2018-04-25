@@ -151,6 +151,21 @@ describe('<teams-time-range-picker>', function () {
 		expect(!!element[0].querySelector('md-switch').disabled).toBeFalsy();
 
 	});
-	
+
+	it('should set end time invalid when the end time is on DST changing date, and the time value is invalid', function () {
+		var timeRange = {
+			startTime: "2018-03-24 08:00",
+			endTime: "2018-03-24 09:00"
+		};
+		var element = setUp("2018-03-24", timeRange);
+
+		var hoursEls = element[0].querySelectorAll('teams-time-picker .hours input');
+		hoursEls[1].value = 2;
+		angular.element(hoursEls[1]).triggerHandler('change');
+		scope.$apply();
+
+		expect(scope.timeRange.endTime).toEqual("2018-03-25 02:00");
+		expect(angular.element(element[0].querySelectorAll('teams-time-picker')[1]).hasClass('ng-invalid-dst')).toBeTruthy();
+	});
 });
 
