@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	{
 		private readonly SeperateWebRequest _seperateWebRequest;
 		protected readonly bool _resourcePlannerDayOffOptimizationIslands47208;
-		private readonly bool _resourcePlannerDayOffUsePredictorEverywhere75667;
+		protected readonly bool _resourcePlannerDayOffUsePredictorEverywhere75667;
 		protected readonly bool _resourcePlannerMinimumStaffing75339;
 
 		public IIoCTestContext IoCTestContext;

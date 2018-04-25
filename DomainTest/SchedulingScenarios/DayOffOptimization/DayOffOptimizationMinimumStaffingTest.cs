@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			schedulePeriod.SetDaysOff(1);
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
-			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team {Site = new Site("site")}, schedulePeriod, ruleSet, skill);
+			var agent = PersonRepository.Has(new Team {Site = new Site("site")}, schedulePeriod, ruleSet, skill);
 			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
 				0.8, //minimum staffing = 1, prevent putting DO here
 				0.9, //DO should end up here
@@ -66,8 +66,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		
 		public DayOffOptimizationMinimumStaffingTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerDayOffUsePredictorEverywhere75667, bool resourcePlannerMinimumStaffing75339) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerDayOffUsePredictorEverywhere75667, resourcePlannerMinimumStaffing75339)
 		{
-			if(!_resourcePlannerMinimumStaffing75339)
-				Assert.Ignore("Only available when ResourcePlanner_MinimumStaffing_75339 is true");
+			if(!_resourcePlannerMinimumStaffing75339 || !_resourcePlannerDayOffUsePredictorEverywhere75667)
+				Assert.Ignore("Only available when ResourcePlanner_MinimumStaffing_75339 and ResourcePlanner_DayOffUsePredictorEverywhere_75667 is true");
 		}
 	}
 }
