@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Autofac;
 using NUnit.Framework.Interfaces;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Logon;
@@ -31,28 +32,30 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		public HangfireUtilities Hangfire;
 		public StateQueueUtilities StateQueue;
 		public IConfigReader ConfigReader;
+		public TestLog TestLog;
 
 		public override void BeforeTest(ITest testDetails)
 		{
 			base.BeforeTest(testDetails);
 
-			//var dataHash = DefaultDataCreator.HashValue;
+			var dataHash = DefaultDataCreator.HashValue;
 
 			DataSourceHelper.CreateDatabases();
-//			var path = "";
-//#if DEBUG
-//			path = "./";
-//#else
-//				path = Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "Stardust");
-//#endif
+			var path = "";
+#if DEBUG
+			path = "./";
+#else
+				path = Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "Stardust");
+#endif
 
 
-			//var haveDatabases =
-			//	DataSourceHelper.TryRestoreApplicationDatabaseBySql(path, dataHash) &&
-			//	DataSourceHelper.TryRestoreAnalyticsDatabaseBySql(path, dataHash);
+			var haveDatabases =
+				DataSourceHelper.TryRestoreApplicationDatabaseBySql(path, dataHash) &&
+				DataSourceHelper.TryRestoreAnalyticsDatabaseBySql(path, dataHash);
 
-			//if (!haveDatabases)
+			if (!haveDatabases)
 			{
+				TestLog.Debug("Setting up data for the test");
 				StateHolderProxyHelper.SetupFakeState(
 					DataSourceHelper.CreateDataSource(Container),
 					DefaultPersonThatCreatesData.PersonThatCreatesDbData,
@@ -65,14 +68,14 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 				DataCreator.Create();
 
 				
-				//DataSourceHelper.BackupApplicationDatabaseBySql(path, dataHash);
-				//DataSourceHelper.BackupAnalyticsDatabaseBySql(path, dataHash);
+				DataSourceHelper.BackupApplicationDatabaseBySql(path, dataHash);
+				DataSourceHelper.BackupAnalyticsDatabaseBySql(path, dataHash);
 				
 				StateHolderProxyHelper.Logout();
 				StateHolderProxyHelper.ClearStateHolder();
 			}
 
-
+			TestLog.Debug("Starting hangfire");
 			HangfireClientStarter.Start();
 
 			Guid businessUnitId;
@@ -81,6 +84,10 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			AsSystem.Logon(DataSourceHelper.TestTenantName, businessUnitId);
 
 			TestSiteConfigurationSetup.Setup();
+			((TestConfigReader) ConfigReader).ConfigValues.Remove("ManagerLocation");
+			((TestConfigReader) ConfigReader).ConfigValues.Remove("MessageBroker");
+			((TestConfigReader) ConfigReader).ConfigValues.Remove("NumberOfNodes");
+
 			((TestConfigReader)ConfigReader).ConfigValues.Add("ManagerLocation", TestSiteConfigurationSetup.URL.AbsoluteUri + @"StardustDashboard/");
 			((TestConfigReader)ConfigReader).ConfigValues.Add("MessageBroker", TestSiteConfigurationSetup.URL.AbsoluteUri );
 			((TestConfigReader)ConfigReader).ConfigValues.Add("NumberOfNodes", "1");
@@ -92,11 +99,12 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		public override void AfterTest(ITest testDetails)
 		{
 			base.AfterTest(testDetails);
-
+			TestLog.Debug("In teardown stopping all services");
 			Hangfire.WaitForQueue();
+			StateQueue.WaitForQueue();
+
 
 			TestSiteConfigurationSetup.TearDown();
-
 		}
 	}
 }

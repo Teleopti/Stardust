@@ -7,6 +7,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -36,11 +37,13 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		public ICurrentUnitOfWork CurrentUnitOfWork;
 		public ICurrentBusinessUnit CurrentBusinessUnit;
 		private AssertRetryStrategy _assertRetryStrategy;
-		
+		public TestLog TestLog;
+
 
 		[Test]
 		public void ShouldRunEndToEndAbsenceRequest()
 		{
+			TestLog.Debug("Setting up test data");
 			_assertRetryStrategy = new AssertRetryStrategy(10);
 			Now.Is("2016-02-25 08:00".Utc());
 			IPersonRequest personRequest = null;
@@ -66,19 +69,31 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 
 			});
 
-			startServiceBusAndPublishTick();
+			TestLog.Debug("Starting service bus");
+			var host = new ServiceBusRunner(i => { }, ConfigReader);
+			host.Start();
+			Thread.Sleep(2000);
+			EventPublisher.Publish(new TenantMinuteTickEvent());
 
+
+			TestLog.Debug("Performing Tier1 assertion");
 			_assertRetryStrategy.Reset();
 			performLevel1Assert(personRequest);
 
+			TestLog.Debug("Performing Tier2 assertion");
 			_assertRetryStrategy.Reset();
 			performLevel2Assert();
-			
+
+			TestLog.Debug("Performing Tier3 assertion");
 			//adding a small delay an experinment may be we need to retry late
 			Thread.Sleep(2000);
 			performLevel3Assert(personRequest);
 
+			TestLog.Debug("Performing Tier4 assertion");
 			performLevel4Assert(personRequest);
+
+			host.Stop();
+			TestLog.Debug("Service bus stopped");
 
 		}
 
@@ -184,16 +199,6 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 				PersonRequestRepository.Load(personRequest.Id.GetValueOrDefault()).IsPending.Should().Be.False();
 			});
 		}
-
 		
-
-		private void startServiceBusAndPublishTick()
-		{
-			var host = new ServiceBusRunner(i => { }, ConfigReader);
-			host.Start();
-			Thread.Sleep(2000);
-
-			EventPublisher.Publish(new TenantMinuteTickEvent());
-		}
 	}
 }

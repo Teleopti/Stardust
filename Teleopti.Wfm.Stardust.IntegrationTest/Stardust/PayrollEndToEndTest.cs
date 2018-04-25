@@ -7,12 +7,12 @@ using log4net;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Payroll;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -22,7 +22,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 {
-	[Ignore("not working"),StardustTest]
+	[Ignore("WIP"), StardustTest]
 	public class PayrollEndToEndTest
 	{
 		public IStardustSender StardustSender;
@@ -33,40 +33,43 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		public IPayrollExportRepository PayrollExportRepository;
 		public IPayrollFormatRepository PayrollFormatRepository;
 		public IPayrollResultRepository PayrollResultRepository;
-		private static readonly ILog _logger = LogManager.GetLogger(typeof(PayrollEndToEndTest));
+		public TestLog TestLog;
 
 
 		private AssertRetryStrategy _assertRetryStrategy;
 
-		[Test, Ignore("Optimistic Lock")]
+		[Test]
 		public void ShouldPublishAndProcessPayrollJob()
 		{
-			_logger.Info("Starting the test for payroll");
+			_assertRetryStrategy = new AssertRetryStrategy(10);
+
+			TestLog.Debug("Starting the test for payroll");
 			var period = new DateOnlyPeriod(2016, 02, 20, 2016, 02, 28);
 
 			StardustSender.Send(dataSetup(period));
-			_logger.Info("Sent job to star dust");
+			TestLog.Debug("Sent job to star dust");
 
 			performLevel1Assert(period);
 			_assertRetryStrategy.Reset();
 
-			_logger.Info("Performed level1 assertion");
-			startServuceBus();
+			TestLog.Debug("Performed level1 assertion");
+			var host = new ServiceBusRunner(i => { }, ConfigReader);
+			host.Start();
+			Thread.Sleep(2000);
 
-			_logger.Info("Started stardust");
+			TestLog.Debug("Started stardust");
 
 			performLevel2Assert();
 			_assertRetryStrategy.Reset();
 
-			_logger.Info("performed level2 assertion");
+			TestLog.Debug("performed level2 assertion");
 
-			Thread.Sleep(10000);
-			_logger.Info("Test Finished");
+			TestLog.Debug("Test Finished");
+			host.Stop();
 		}
 
 		private void performLevel2Assert()
 		{
-			//check in job 
 			var connectionString = InfraTestConfigReader.ConnectionString;
 			using (var connection = new SqlConnection(connectionString))
 			{
@@ -100,17 +103,8 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			}
 		}
 
-		private void startServuceBus()
-		{
-			var host = new ServiceBusRunner(i => { }, ConfigReader);
-			host.Start();
-			Thread.Sleep(2000);
-		}
-
 		private RunPayrollExportEvent dataSetup(DateOnlyPeriod period)
 		{
-			_logger.Info("Setting the data for payroll");
-			_assertRetryStrategy = new AssertRetryStrategy(10);
 			RunPayrollExportEvent message = null;
 
 			WithUnitOfWork.Do(() =>
@@ -173,7 +167,6 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 
 		private void performLevel1Assert(DateOnlyPeriod period)
 		{
-			//check in job queue
 			var connectionString = InfraTestConfigReader.ConnectionString;
 			using (var connection = new SqlConnection(connectionString))
 			{
