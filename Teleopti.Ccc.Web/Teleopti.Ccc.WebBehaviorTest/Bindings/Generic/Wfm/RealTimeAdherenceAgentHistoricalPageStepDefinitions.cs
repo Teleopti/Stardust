@@ -63,12 +63,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.AssertAnyContains(".recorded-out-of-adherence", to);
 		}
 
-		
 		[Then(@"I should see approved period between '(.*)' and '(.*)'")]
 		public void ThenIShouldSeeApprovedPeriodBetween(string from, string to)
 		{
 			Browser.Interactions.AssertAnyContains(".approved-period", from);
 			Browser.Interactions.AssertAnyContains(".approved-period", to);
+		}
+
+		[Then(@"I should not be able to approve out of adherences")]
+		public void ThenIShouldNotBeAbleToApproveOutOfAdherences()
+		{
+			Browser.Interactions.Click(".recorded-out-of-adherence");
+			Browser.Interactions.AssertNotExists(".recorded-out-of-adherence", ".approve-adherence-submit");
+		}
+
+		[Then(@"I should not be able to remove approved out of adherences")]
+		public void ThenIShouldNotBeAbleToRemoveOutOfAdherences()
+		{
+			Browser.Interactions.Click(".approved-period");
+			Browser.Interactions.AssertNotExists(".approved-period", ".remove-approved-period");
 		}
 
 		[Then(@"I should not see any out of adherences")]

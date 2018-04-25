@@ -37,7 +37,7 @@ Feature: Restrict modify adherence with permission
 	And the time is '17:15'
 	When I view historical adherence for 'Mikkey Dee' on '2018-04-19'
 	Then I should not be able to approve out of adherences
-
+	
   Scenario: Remove approved out of adherences restricted by permission
 	And Mikkey Dee has a 'Phone' shift between '2018-04-19 09:00' and '17:00'
 	And today is '2018-04-19'
