@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { PeopleModule } from '../../people.module';
 import { WorkspaceService, WorkspaceServiceStub } from '../../services';
-import { ROLES, fakeBackendProvider } from '../../services/fake-backend.provider';
+import { ROLES, fakeBackendProvider } from '../../services/fake-backend';
 import { GrantPageComponent } from './grant-page.component';
 
 describe('GrantPage', () => {
