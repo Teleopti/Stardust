@@ -211,6 +211,8 @@
     <Compile Include="Intraday\BacklogSkillTypesForecastCalculator.cs" />
     <Compile Include="Optimization\TeamBlock\CreatePersonalSkillDataExtractor.cs" />
     <Compile Include="Optimization\TeamBlock\CreatePersonalSkillDataExtractorOLD.cs" />
+    <Compile Include="MultiTenancy\PersonIdentitiesInputModel.cs" />
+    <Compile Include="MultiTenancy\PersonIdentityModel.cs" />
     <Compile Include="Scheduling\IPredictShiftCategory.cs" />
     <Compile Include="Scheduling\IShiftCategoryPredictionModelLoader.cs" />
     <Compile Include="Scheduling\ShiftCategoryExample.cs" />

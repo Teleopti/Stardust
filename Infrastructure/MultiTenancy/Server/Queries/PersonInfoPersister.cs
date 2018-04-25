@@ -7,6 +7,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 		void Persist(PersonInfo personInfo);
 		bool ValidateApplicationLogonNameIsUnique(PersonInfo personInfo);
 		bool ValidateIdenitityIsUnique(PersonInfo personInfo);
+		void PersistIdentity(PersonInfo personInfo);
+		void PersistApplicationLogonName(PersonInfo personInfo);
 	}
 
 	public class PersonInfoPersister : IPersonInfoPersister
@@ -34,6 +36,38 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 				personInfo.ApplicationLogonInfo.SetEncryptedPasswordIfLogonNameExistButNoPassword(oldPersonInfo.ApplicationLogonInfo
 					.LogonPassword);
 				session.Merge(personInfo);
+			}
+		}
+
+		public void PersistIdentity(PersonInfo personInfo)
+		{
+			var session = _currentTenantSession.CurrentSession();
+			var currentPersonInfo = session.Get<PersonInfo>(personInfo.Id);
+
+			if (currentPersonInfo == null)
+			{
+				session.Save(personInfo);
+			}
+			else
+			{
+				currentPersonInfo.SetIdentity(personInfo.Identity);
+				session.Merge(currentPersonInfo);
+			}
+		}
+
+		public void PersistApplicationLogonName(PersonInfo personInfo)
+		{
+			var session = _currentTenantSession.CurrentSession();
+			var currentPersonInfo = session.Get<PersonInfo>(personInfo.Id);
+
+			if (currentPersonInfo == null)
+			{
+				session.Save(personInfo);
+			}
+			else
+			{
+				currentPersonInfo.ApplicationLogonInfo.SetLogonName(personInfo.ApplicationLogonInfo.LogonName);
+				session.Merge(currentPersonInfo);
 			}
 		}
 

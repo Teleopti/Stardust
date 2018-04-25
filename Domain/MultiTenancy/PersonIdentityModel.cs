@@ -2,9 +2,9 @@
 
 namespace Teleopti.Ccc.Domain.MultiTenancy
 {
-	public class PersonApplicationLogonModel
+	public class PersonIdentityModel
 	{
-		public string ApplicationLogonName { get; set; }
+		public string Identity { get; set; }
 		public Guid PersonId { get; set; }
 	}
 }

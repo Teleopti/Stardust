@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Web;
 using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
@@ -36,7 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Aspects
 			var data = Newtonsoft.Json.JsonConvert.SerializeObject(new
 			{
 				Identity = personInfo.Identity ?? string.Empty,
-				AppLogonName = personInfo.ApplicationLogonInfo.LogonName,
+				AppLogonName = personInfo.ApplicationLogonInfo.LogonName ?? string.Empty,
 				AppLogonPwd = string.IsNullOrEmpty(personInfo.ApplicationLogonInfo.LogonPassword) ? string.Empty : "<pwd-hash-set>"
 			});
 

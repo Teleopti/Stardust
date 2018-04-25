@@ -32,6 +32,32 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 			return null;
 		}
 
+		[TenantAudit]
+		public virtual string PersistIdentity(PersonInfo personInfo, PersistActionIntent actionIntent, bool throwOnError = true)
+		{
+			return persistHelper(_personInfoPersister.PersistIdentity, personInfo, throwOnError);
+		}
+
+		[TenantAudit]
+		public virtual string PersistApplicationLogonName(PersonInfo personInfo, PersistActionIntent actionIntent, bool throwOnError = true)
+		{
+			return persistHelper(_personInfoPersister.PersistApplicationLogonName, personInfo, throwOnError);
+		}
+
+		private string persistHelper(Action<PersonInfo> persist, PersonInfo personInfo, bool throwOnError = true)
+		{
+			var res = ValidatePersonInfo(personInfo, throwOnError);
+
+			if (!string.IsNullOrEmpty(res))
+			{
+				return res;
+			}
+
+			persist(personInfo);
+
+			return null;
+		}
+
 		private string ValidatePersonInfo(PersonInfo personInfo, bool throwOnError = false)
 		{
 			if (personInfo.Id == Guid.Empty)

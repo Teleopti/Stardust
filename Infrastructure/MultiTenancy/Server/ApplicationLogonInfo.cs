@@ -102,5 +102,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			return !string.IsNullOrEmpty(LogonName) && string.IsNullOrEmpty(LogonPassword);
 		}
 
+		public void SetLogonName(string logonName)
+		{
+			LogonName = logonName;
+		}
+
 	}
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Teleopti.Interfaces.Domain;
+﻿using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.MultiTenancy
 {

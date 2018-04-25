@@ -110,5 +110,55 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			contentResult.StatusCode.Should().Be.EqualTo(HttpStatusCode.BadRequest);
 			contentResult.Content.ResultList.Count.Should().Be.EqualTo(1);
 		}
+
+		[Test]
+		public void ShouldPersistIdentity()
+		{
+			var p1 = PersonFactory.CreatePersonWithGuid("Kalle", "Anka");
+			var p2 = PersonFactory.CreatePersonWithGuid("Joakim", "Anka");
+
+			var inputModel = new PersonIdentitiesInputModel()
+			{
+				People = new List<PersonIdentityModel>
+				{
+					new PersonIdentityModel {PersonId = p1.Id.GetValueOrDefault(), Identity = "TOPTINET/aaa"},
+					new PersonIdentityModel {PersonId = p2.Id.GetValueOrDefault(), Identity = "TOPTINET/aaa2"}
+				}
+			};
+			var result = Target.PersistIdentities(inputModel);
+			result.Should().Be.OfType<OkResult>();
+			PersonInfoPersisterFake.PersistedData.Count.Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldFailWhenTryingToSaveAlreadyExistingIdentity()
+		{
+			var p1 = PersonFactory.CreatePersonWithGuid("Kalle", "Anka");
+			var p2 = PersonFactory.CreatePersonWithGuid("Joakim", "Anka");
+
+			var inputModel = new PersonIdentitiesInputModel
+			{
+				People = new List<PersonIdentityModel>
+				{
+					new PersonIdentityModel {PersonId = p1.Id.GetValueOrDefault(), Identity = "aaa1"}
+				}
+			};
+			var result = Target.PersistIdentities(inputModel);
+			result.Should().Be.OfType<OkResult>();
+			PersonInfoPersisterFake.PersistedData.Count.Should().Be.EqualTo(1);
+
+			var inputModelRoundTwo = new PersonIdentitiesInputModel
+			{
+				People = new List<PersonIdentityModel>
+				{
+					new PersonIdentityModel {PersonId = p2.Id.GetValueOrDefault(), Identity = "aaa1"}//, // Should Fail, same as p1
+				}
+			};
+			var result2 = Target.PersistIdentities(inputModelRoundTwo);
+			PersonInfoPersisterFake.PersistedData.Count.Should().Be.EqualTo(1);
+			var contentResult = result2 as NegotiatedContentResult<PersonInfoGenericResultModel>;
+			contentResult.StatusCode.Should().Be.EqualTo(HttpStatusCode.BadRequest);
+			contentResult.Content.ResultList.Count.Should().Be.EqualTo(1);
+		}
 	}
 }

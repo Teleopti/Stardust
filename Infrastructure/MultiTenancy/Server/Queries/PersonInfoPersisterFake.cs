@@ -25,6 +25,32 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 			}
 		}
 
+		public void PersistApplicationLogonName(PersonInfo personInfo)
+		{
+			var existing = _storage.SingleOrDefault(x => x.ApplicationLogonInfo.LogonName == personInfo.ApplicationLogonInfo.LogonName);
+			if (existing != null)
+			{
+				existing = personInfo;
+			}
+			else
+			{
+				_storage.Add(personInfo);
+			}
+		}
+
+		public void PersistIdentity(PersonInfo personInfo)
+		{
+			var existing = _storage.SingleOrDefault(x => x.Identity == personInfo.Identity);
+			if (existing != null)
+			{
+				existing = personInfo;
+			}
+			else
+			{
+				_storage.Add(personInfo);
+			}
+		}
+
 		public bool ValidateApplicationLogonNameIsUnique(PersonInfo personInfo)
 		{
 			return !_storage.Exists(x => x.ApplicationLogonInfo.LogonName == personInfo.ApplicationLogonInfo.LogonName && x.Id != personInfo.Id);
