@@ -11,14 +11,14 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 	{
 		private readonly ScheduleDayIntraIntervalIssueExtractor _scheduleDayIntraIntervalIssueExtractor;
 		private readonly IIntraIntervalOptimizer _intraIntervalOptimizer;
-		private readonly IIntraIntervalIssueCalculator _intraIntervalIssueCalculator;
+		private readonly IntraIntervalIssueCalculator _intraIntervalIssueCalculator;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly IUserCulture _userCulture;
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
 		public IntraIntervalOptimizationService(
 			ScheduleDayIntraIntervalIssueExtractor scheduleDayIntraIntervalIssueExtractor,
-			IIntraIntervalOptimizer intraIntervalOptimizer, IIntraIntervalIssueCalculator intraIntervalIssueCalculator,
+			IIntraIntervalOptimizer intraIntervalOptimizer, IntraIntervalIssueCalculator intraIntervalIssueCalculator,
 			ISchedulingOptionsCreator schedulingOptionsCreator,
 			IUserCulture userCulture)
 		{

@@ -4,12 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 {
-	public interface IIntraIntervalIssueCalculator
-	{
-		IIntraIntervalIssues CalculateIssues(ISchedulingResultStateHolder schedulingResultStateHolder, ISkill skill, DateOnly dateOnly);
-	}
-
-	public class IntraIntervalIssueCalculator : IIntraIntervalIssueCalculator
+	public class IntraIntervalIssueCalculator
 	{
 		private readonly ISkillDayIntraIntervalIssueExtractor _skillDayIntraIntervalIssueExtractor;
 
