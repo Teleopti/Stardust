@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	public class IntraIntervalOptimizationServiceModule : Module
+	internal class IntraIntervalOptimizationServiceModule : Module
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
