@@ -4,14 +4,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 {
-	public interface IScheduleDayIntraIntervalIssueExtractor
+	public class ScheduleDayIntraIntervalIssueExtractor
 	{
-		IList<IScheduleDay> Extract(IScheduleDictionary scheduleDictionary, DateOnly dateOnly, IList<ISkillStaffPeriod> issues);
-	}
-
-	public class ScheduleDayIntraIntervalIssueExtractor : IScheduleDayIntraIntervalIssueExtractor
-	{
-		public IList<IScheduleDay> Extract(IScheduleDictionary scheduleDictionary, DateOnly dateOnly, IList<ISkillStaffPeriod> issues)
+		public IEnumerable<IScheduleDay> Extract(IScheduleDictionary scheduleDictionary, DateOnly dateOnly, IEnumerable<ISkillStaffPeriod> issues)
 		{
 			var result = new List<IScheduleDay>();
 
@@ -24,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			return result;
 		}
 
-		private static void checkDay(IScheduleDay scheduleDay, IList<IScheduleDay> result, IEnumerable<ISkillStaffPeriod> issues)
+		private static void checkDay(IScheduleDay scheduleDay, ICollection<IScheduleDay> result, IEnumerable<ISkillStaffPeriod> issues)
 		{
 			if (!scheduleDay.SignificantPart().Equals(SchedulePartView.MainShift)) return;
 
