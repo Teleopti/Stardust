@@ -189,6 +189,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		}
 
 		[Test]
+		public void ShouldRejectRecordIfScoreNumberIsTooLarge()
+		{
+			var invalidRecord = "20171120,1,Kalle,Pettersson,Quality Score,1.5,Numeric,1000000";
+			var fileData = createFileData(invalidRecord);
+
+			var expectedErrorRecord = $"{invalidRecord},{Resources.InvalidScore}";
+			var result = Target.Process(fileData);
+
+			result.InvalidRecords.Count.Should().Be.EqualTo(1);
+			result.InvalidRecords[0].Should().Be.EqualTo(expectedErrorRecord);
+		}
+
+		[Test]
 		public void ShouldRejectRecordIfScorePercentageIsInvalid()
 		{
 			var invalidRecord = "20171120,1,Kalle,Pettersson,Quality Score,1,Percent,InvalidScore";

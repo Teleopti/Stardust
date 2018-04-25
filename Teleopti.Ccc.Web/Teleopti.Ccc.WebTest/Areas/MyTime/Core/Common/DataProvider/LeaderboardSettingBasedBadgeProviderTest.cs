@@ -417,73 +417,63 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				Type = LeadboardQueryType.Everyone
 			};
 
-			var agentBadgeTransactions = new[]
-			{
-				new AgentBadgeTransaction
-				{
-					BadgeType = BadgeType.Adherence,
-					Amount = 7,
-					Person = person1,
-					CalculatedDate = new DateOnly(2014, 10, 1)
-				},
-				new AgentBadgeTransaction
-				{
-					BadgeType = BadgeType.Adherence,
-					Amount = 7,
-					Person = person1,
-					CalculatedDate = new DateOnly(2014, 10, 15)
-				},
-				new AgentBadgeTransaction
-				{
-					BadgeType = BadgeType.Adherence,
-					Amount = 7,
-					Person = person1,
-					CalculatedDate = new DateOnly(2014, 10, 20)
-				}
-			};
-
 			agentBadgeTransactionRepository.ResetAgentBadges();
-			foreach (var agentBadgeTransaction in agentBadgeTransactions)
+			var agentBadge1 = new AgentBadgeTransaction
 			{
-				agentBadgeTransactionRepository.Add(agentBadgeTransaction);
-			}
-
-			var agentBadgeWithRankTransactions = new[]
-			{
-				new AgentBadgeWithRankTransaction
-				{
-					BadgeType = BadgeType.Adherence,					
-					Person = person1,
-					CalculatedDate = new DateOnly(2014, 10, 1),
-					GoldBadgeAmount = 1,
-					SilverBadgeAmount = 1,
-					BronzeBadgeAmount = 1
-				},
-				new AgentBadgeWithRankTransaction
-				{
-					BadgeType = BadgeType.Adherence,					
-					Person = person1,
-					CalculatedDate = new DateOnly(2014, 10, 15),
-					GoldBadgeAmount = 1,
-					SilverBadgeAmount = 1,
-					BronzeBadgeAmount = 1
-				},
-				new AgentBadgeWithRankTransaction
-				{
-					BadgeType = BadgeType.Adherence,
-					Person = person1,
-					CalculatedDate = new DateOnly(2014, 10, 20),
-					GoldBadgeAmount = 1,
-					SilverBadgeAmount = 1,
-					BronzeBadgeAmount = 1
-				}
+				BadgeType = BadgeType.Adherence,
+				Amount = 7,
+				Person = person1,
+				CalculatedDate = new DateOnly(2014, 10, 1)
 			};
+			agentBadgeTransactionRepository.Add(agentBadge1);
+			var agentBadge2 = new AgentBadgeTransaction
+			{
+				BadgeType = BadgeType.Adherence,
+				Amount = 7,
+				Person = person1,
+				CalculatedDate = new DateOnly(2014, 10, 15)
+			};
+			agentBadgeTransactionRepository.Add(agentBadge2);
+			var agentBadge3 = new AgentBadgeTransaction
+			{
+				BadgeType = BadgeType.Adherence,
+				Amount = 7,
+				Person = person1,
+				CalculatedDate = new DateOnly(2014, 10, 20)
+			};
+			agentBadgeTransactionRepository.Add(agentBadge3);
 
 			agentBadgeWithRankTransactionRepository.ResetAgentBadges();
-			foreach (var agentBadgeWithRankTransaction in agentBadgeWithRankTransactions)
+			var agentBadgeWithRank1 = new AgentBadgeWithRankTransaction
 			{
-				agentBadgeWithRankTransactionRepository.Add(agentBadgeWithRankTransaction);
-			}
+				BadgeType = BadgeType.Adherence,
+				Person = person1,
+				CalculatedDate = new DateOnly(2014, 10, 1),
+				GoldBadgeAmount = 1,
+				SilverBadgeAmount = 1,
+				BronzeBadgeAmount = 1
+			};
+			agentBadgeWithRankTransactionRepository.Add(agentBadgeWithRank1);
+			var agentBadgeWithRank2 = new AgentBadgeWithRankTransaction
+			{
+				BadgeType = BadgeType.Adherence,
+				Person = person1,
+				CalculatedDate = new DateOnly(2014, 10, 15),
+				GoldBadgeAmount = 1,
+				SilverBadgeAmount = 1,
+				BronzeBadgeAmount = 1
+			};
+			agentBadgeWithRankTransactionRepository.Add(agentBadgeWithRank2);
+			var agentBadgeWithRank3 = new AgentBadgeWithRankTransaction
+			{
+				BadgeType = BadgeType.Adherence,
+				Person = person1,
+				CalculatedDate = new DateOnly(2014, 10, 20),
+				GoldBadgeAmount = 1,
+				SilverBadgeAmount = 1,
+				BronzeBadgeAmount = 1
+			};
+			agentBadgeWithRankTransactionRepository.Add(agentBadgeWithRank3);
 
 			var teamGroupDetail = new ReadOnlyGroupDetail { GroupId = Guid.NewGuid() };
 			groupingRepository.Stub(x => x.AvailableGroups(new ReadOnlyGroupPage(),date))

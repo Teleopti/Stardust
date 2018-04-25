@@ -162,13 +162,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ImportExternalPerformance
 			var numberInfoFormat = (NumberFormatInfo)CultureInfo.NumberFormat.Clone();
 			if (double.TryParse(value, NumberStyles.AllowDecimalPoint, numberInfoFormat, out result))
 			{
-				return true;
+				return result <= 999999.9999;
 			}
 
 			numberInfoFormat.NumberDecimalSeparator = ",";
 			if (double.TryParse(value, NumberStyles.AllowDecimalPoint, numberInfoFormat, out result))
 			{
-				return true;
+				return result <= 999999.9999;
 			}
 
 			return false;

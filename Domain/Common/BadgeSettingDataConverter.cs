@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		private static double getNumericValue(double originalValue)
 		{
-			InParameter.MustBeTrue(nameof(originalValue), originalValue >= 0);
+			InParameter.MustBeTrue(nameof(originalValue), originalValue >= 0 && originalValue <= 999999.9999);
 			return originalValue;
 		}
 
