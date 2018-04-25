@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 		public WithUnitOfWork WithUnitOfWork;
 
 		[Test]
-		[Timeout(12000)]
+		[Timeout(15000)]
 		public void ShouldNotHangWhenMultipleThreadsCallingMultipleDates()
 		{
 			var targetDate = new DateTime(2010, 01, 05);
