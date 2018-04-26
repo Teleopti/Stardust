@@ -40,7 +40,7 @@ WebByPassDefaultPermissionCheck_37984 = true
 RTA_StoreEvents_47721 = true
 RTA_RemoveApprovedOOA_47721 = true
 RTA_ImprovedStateGroupFilter_48724 = true
-RTA_KillFattyIntradayUntilItDies_74939 = RC
+RTA_KillFattyIntradayUntilItDies_74939 = true
 RTA_RestrictModifyAdherenceWithPermission_74898 = false
 
 # Dumplings, can any of these be removed? #
@@ -106,9 +106,9 @@ ResourcePlanner_HideSkillPrioSliders_41312 = RC
 ResourcePlanner_BlockSchedulingValidation_46092 = true
 ResourcePlanner_UseErlangAWithInfinitePatience_45845 = true
 ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899 = RC
-ResourcePlanner_SpeedUpEvents_48769 = RC #batch deletes of dates - can be deleted early
-ResourcePlanner_SpeedUpEvents_74996 = RC #caching different data - can be deleted early
-ResourcePlanner_SpeedUpEvents_75415 = RC #restructure of events - dont remove toggle too early
+ResourcePlanner_SpeedUpEvents_48769 = true #batch deletes of dates - can be deleted early
+ResourcePlanner_SpeedUpEvents_74996 = true #caching different data - can be deleted early
+ResourcePlanner_SpeedUpEvents_75415 = true #restructure of events - dont remove toggle too early
 ResourcePlanner_DayOffUsePredictorEverywhere_75667 = RC
 ResourcePlanner_MinimumStaffing_75339 = false
 
