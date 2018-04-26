@@ -19,22 +19,33 @@
 *.sbr
 *.scc
 *.tokens
-[Bb]in
-[Db]ebug/
-obj/
-[Rr]elease/
-*resharper*
-_ReSharper*/
-[Tt]est[Rr]esult*
-[Bb]uild[Ll]og.*
-*.[Pp]ublish.xml
-.vs/
-packages/
-.idea/
-node_modules/
+
+# teleopti things
 *.[Cc]onfig
+*.feature.cs
 dbo.OlaHallengren*.sql
 dbo.IndexMaintenance*.sql
+
+# front end build
 NodeHash.txt
 WfmFileHash.txt
+
+# ide and tools
+.vs/
+.idea/
+*resharper*
+_ReSharper*/
+[Bb]uild[Ll]og.*
+[Tt]est[Rr]esult*
+*.[Pp]ublish.xml
+
+# packages
+node_modules/
+packages/
+
+# bin
+[Bb]in
+obj/
+[Db]ebug/
+[Rr]elease/
 TeleOpti.Messaging.Bin/
