@@ -27,8 +27,21 @@ dbo.OlaHallengren*.sql
 dbo.IndexMaintenance*.sql
 
 # front end build
-NodeHash.txt
-WfmFileHash.txt
+npm-debug*
+npm-shrinkwrap.json
+**/.node/NodeHash.txt
+**/.node/PackageJsonHash.txt
+**/.node/WfmFileHash.txt
+**/dist/
+**/css/main.css
+**/css/main.min.css
+**/css/style.css
+**/css/style.css.map
+**/css/style.min.css
+**/css/style_classic.css
+**/css/style_dark.css
+**/WFM/index.html
+**/WFM/index_desktop_client.html
 
 # ide and tools
 .vs/
