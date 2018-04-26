@@ -608,41 +608,39 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 		    if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.DeletePerson))
 		        return;
 
-			if (Grid.Model.SelectedRanges.Count > 0)
-			{
-				var result = ViewBase.ShowConfirmationMessage(Resources.AreYouSureYouWantToDelete, Resources.AreYouSureYouWantToDelete);
-				if (result == DialogResult.Yes)
-				{
-					var gridRangeInfos = revertIfNecessary(Grid.Model.SelectedRanges);
+			if (Grid.Model.SelectedRanges.Count <= 0) return;
 
-					foreach (var gridRangeInfo in gridRangeInfos)
+			var result = ViewBase.ShowConfirmationMessage(Resources.AreYouSureYouWantToDelete, Resources.AreYouSureYouWantToDelete);
+			if (result != DialogResult.Yes) return;
+
+			var gridRangeInfos = revertIfNecessary(Grid.Model.SelectedRanges);
+			foreach (var gridRangeInfo in gridRangeInfos)
+			{
+				if (gridRangeInfo.IsTable)
+				{
+					deleteWhenAllSelected();
+				}
+				else
+				{
+					if (gridRangeInfo.Height == 1)
 					{
-						if (gridRangeInfo.IsTable)
-						{
-							deleteWhenAllSelected();
-						}
-						else
-						{
-							if (gridRangeInfo.Height == 1)
-							{
-								PeopleWorksheet.StateHolder.DeletePersonByIndex(gridRangeInfo.Top, FilteredPeopleHolder);
-								PeopleWorksheet.StateHolder.TobeDeleteFromGridDataAfterRomove(FilteredPeopleHolder);
-							}
-							else
-							{
-								for (var row = gridRangeInfo.Bottom; row >= gridRangeInfo.Top; row--)
-								{
-									PeopleWorksheet.StateHolder.DeletePersonByIndex(row, FilteredPeopleHolder);
-								}
-								PeopleWorksheet.StateHolder.TobeDeleteFromGridDataAfterRomove(FilteredPeopleHolder);
-							}
-						}
+						PeopleWorksheet.StateHolder.DeletePersonByIndex(gridRangeInfo.Top, FilteredPeopleHolder);
+						PeopleWorksheet.StateHolder.TobeDeleteFromGridDataAfterRomove(FilteredPeopleHolder);
 					}
-					RowCount = FilteredPeopleHolder.FilteredPeopleGridData.Count;
-					Grid.RowCount = RowCount;
-					Grid.Invalidate();
+					else
+					{
+						for (var row = gridRangeInfo.Bottom; row >= gridRangeInfo.Top; row--)
+						{
+							PeopleWorksheet.StateHolder.DeletePersonByIndex(row, FilteredPeopleHolder);
+						}
+						PeopleWorksheet.StateHolder.TobeDeleteFromGridDataAfterRomove(FilteredPeopleHolder);
+					}
 				}
 			}
+
+			RowCount = FilteredPeopleHolder.FilteredPeopleGridData.Count;
+			Grid.RowCount = RowCount;
+			Grid.Invalidate();
 		}
 
 		private static IEnumerable<GridRangeInfo> revertIfNecessary(IEnumerable gridRangeInfoList)
@@ -671,10 +669,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 
 		internal override IList<IPerson> GetSelectedPersons()
 		{
-			if (_currentSelectedPersons != null)
-				return _currentSelectedPersons;
-
-			return new List<IPerson>();
+			return _currentSelectedPersons ?? new List<IPerson>();
 		}
 
 		internal override void SetSelectedPersons(IList<IPerson> selectedPersons)
@@ -682,10 +677,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			// Selection events will not be raised
 			Grid.Selections.Clear(false);
 
-			GridRangeInfo range = GridRangeInfo.Empty;
-			foreach (IPerson person in selectedPersons)
+			var range = GridRangeInfo.Empty;
+			foreach (var person in selectedPersons)
 			{
-				for (int i = 0; i < FilteredPeopleHolder.FilteredPeopleGridData.Count; i++)
+				for (var i = 0; i < FilteredPeopleHolder.FilteredPeopleGridData.Count; i++)
 				{
 					if (FilteredPeopleHolder.FilteredPeopleGridData[i].Id == person.Id)
 					{
@@ -698,11 +693,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 
 		public void ConfigureGridForDynamicColumns()
 		{
-			IList<IOptionalColumn> optionalColumnCollection = FilteredPeopleHolder.OptionalColumnCollection;
+			const int optionalValueLengthLimit = 255;
+			var optionalColumnCollection = FilteredPeopleHolder.OptionalColumnCollection;
 
-			foreach (IOptionalColumn t in optionalColumnCollection)
+			foreach (var t in optionalColumnCollection)
 			{
-				var optionalColumn = new OptionalColumn<PersonGeneralModel>(t.Name, 100, t.Name);
+				var optionalColumn = new OptionalColumn<PersonGeneralModel>(t.Name, optionalValueLengthLimit, t.Name);
 				optionalColumn.CellChanged += columnCellChanged;
 				optionalColumn.CellDisplayChanged += columnCellDisplayChanged;
 				_gridColumns.Add(optionalColumn);
