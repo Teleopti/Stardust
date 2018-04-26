@@ -36,8 +36,17 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 {
+	public class FakeDisableDeletedFilter : IDisableDeletedFilter
+	{
+		public IDisposable Disable()
+		{
+			return null;
+		}
+	}
+	
 	[TestFixture]
 	[RequestsTest]
+	[DefaultData]
 	[Toggle(Toggles.Wfm_Requests_DenyRequestWhenAllSkillsClosed_46384)]
 	public class AbsenceRequestPersisterTest : IIsolateSystem
 	{

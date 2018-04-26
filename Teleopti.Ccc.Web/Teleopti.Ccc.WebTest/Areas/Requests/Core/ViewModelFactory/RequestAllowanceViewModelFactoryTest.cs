@@ -19,7 +19,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 {
-	[TestFixture, RequestsTest, SetCulture("en-US")]
+	[TestFixture, RequestsTest, SetCulture("en-US")] 
+	[DefaultData]
 	public class RequestAllowanceViewModelFactoryTest : IIsolateSystem
 	{
 		public IBudgetGroupRepository BudgetGroupRepository;

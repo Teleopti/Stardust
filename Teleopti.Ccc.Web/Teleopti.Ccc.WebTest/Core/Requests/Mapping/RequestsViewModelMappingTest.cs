@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 {
 	[TestFixture]
 	[RequestsTest]
+	[DefaultData]
 	public class RequestsViewModelMappingTest : IIsolateSystem
 	{
 		public RequestsViewModelMapper Target;
