@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
 	[DomainTest]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
+	[Ignore("#75339 - to be fixed")]
 	public class DayOffOptimizationMinimumStaffingTest : DayOffOptimizationScenario
 	{
 		public DayOffOptimizationWeb Target;
@@ -65,7 +66,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		}
 
 		[Test]
-		[Ignore("#75339")]
 		public void ShouldNotConsiderMinimumStaffingIfFulfilled()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
@@ -99,8 +99,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				.Should().Be.EqualTo(skillDays[0].CurrentDate); //only DO is on tuesday
 		}
 		
-		[Test] 
-		[Ignore("#75339")]
+		[Test]
 		public void ShouldConsiderMinimumStaffingWhenMovingDayOffFrom()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
