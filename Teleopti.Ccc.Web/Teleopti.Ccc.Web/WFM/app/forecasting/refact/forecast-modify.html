@@ -9,10 +9,28 @@
   </div>
 </div>
 
-<md-select ng-model="vm.selectedScenario" ng-change="vm.changeScenario(vm.selectedScenario)" placeholder="{{'Scenario' | translate}}">
-  <md-option ng-repeat="scenario in vm.scenarios" ng-value="scenario">{{scenario.Name}}</md-option>
-</md-select>
-<button type="button" class="wfm-btn wfm-btn-primary" name="button" ng-click="vm.exportModal = true">{{'ExportToFile'|translate}}</button>
+<div class="con-row">
+  <div class="con-flex">
+    <div class="panel material-depth-1">
+      <div class="con-row">
+        <div class="con-flex">
+          <div style="display: flex; align-items: center; justify-content:space-between;">
+            <label>
+              Scenario:
+              <md-select ng-model="vm.selectedScenario" ng-change="vm.changeScenario(vm.selectedScenario)" placeholder="{{'Scenario' | translate}}">
+                <md-option ng-repeat="scenario in vm.scenarios" ng-value="scenario">{{scenario.Name}}</md-option>
+              </md-select>
+            </label>
+            <div tabindex=0 class="context-menu card-context"  ng-click="vm.exportModal = true">
+              <i class="mdi mdi-file-excel"></i>
+              <md-tooltip>{{'ExportToFile'|translate}}</md-tooltip>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!--Override/Campaign-->
 <form ng-submit="vm.applyCampaign()">
