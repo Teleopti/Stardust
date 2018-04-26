@@ -7,7 +7,7 @@
 			<teams-time-picker date="$ctrl.containerCtrl.getDate()"
 							   timezone="$ctrl.containerCtrl.getCurrentTimezone()"
 							   ng-model="$ctrl.moveToTime"
-							   ng-change="$ctrl.updateInvalidAgents()"
+							   ng-change="$ctrl.updateInvalidAgents(moveShiftForm.$valid)"
 							   required
 							   md-autofocus="::$ctrl.containerCtrl.onReady()">
 			</teams-time-picker>
@@ -23,7 +23,7 @@
 
 		<span class="text-danger" ng-if="$ctrl.anyAgentsInDifferentTimeZone()">{{'ShiftCannotBeAddedToAgentsInAnotherTimeZone'|translate}}</span>
 		<button id="applyMoveShift" class="wfm-btn form-submit"
-				ng-class="{ 'wfm-btn-primary': $ctrl.anyValidAgent() && moveShiftForm.$valid && !$ctrl.checkingCommand, 'wfm-btn-primary-disabled': !$ctrl.anyValidAgent() || !moveShiftForm.$valid || $ctrl.checkingCommand}"
+				ng-class="{ 'wfm-btn-primary': moveShiftForm.$valid && !$ctrl.checkingCommand && $ctrl.anyValidAgent(), 'wfm-btn-primary-disabled': !$ctrl.anyValidAgent() || !moveShiftForm.$valid || $ctrl.checkingCommand}"
 				ng-disabled="$ctrl.processingCommand || !$ctrl.anyValidAgent() || !moveShiftForm.$valid"
 				ng-click="$ctrl.moveShift()">
 			{{'Apply' | translate}}

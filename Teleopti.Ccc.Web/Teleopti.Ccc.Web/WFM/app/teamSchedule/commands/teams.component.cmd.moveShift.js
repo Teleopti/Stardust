@@ -27,7 +27,8 @@
 			ctrl.updateInvalidAgents();
 		};
 
-		ctrl.updateInvalidAgents = function () {
+		ctrl.updateInvalidAgents = function (isFormValid) {
+			if (!isFormValid) return;
 			var currentTimezone = ctrl.containerCtrl.getCurrentTimezone();
 			validator.validateMoveToTimeForShift(ctrl.containerCtrl.scheduleManagementSvc, moment(getMoveToStartTimeStr()), currentTimezone);
 			var invalidAgents = validator.getInvalidPeople();
