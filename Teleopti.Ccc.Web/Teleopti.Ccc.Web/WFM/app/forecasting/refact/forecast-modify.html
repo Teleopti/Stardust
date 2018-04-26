@@ -3,10 +3,6 @@
     <h1><i class="mdi mdi-chart-line"></i> {{vm.selectedWorkload.Workload.Name}}</h1>
     <p>This is the current forecast for this workload</p>
   </div>
-  <div ng-if="vm.scenarioNotForecasted">
-    <p>No forecast data found for {{vm.selectedWorkload.Name}}, try running a forecast on the selected skill with "{{vm.selectedWorkload.Scenario.Name}}" scenario</p>
-    <button type="button" class="wfm-btn wfm-btn-primary" ng-click="vm.forecastModal = true" name="button">{{'ForecastDo'|translate}}</button>
-  </div>
 </div>
 
 <div class="con-row">
@@ -15,8 +11,8 @@
       <div class="con-row">
         <div class="con-flex">
           <div style="display: flex; align-items: center; justify-content:space-between;">
-            <label>
-              Scenario:
+            <label class="inline-flex" style="align-items: center;">
+              Scenario: &nbsp;
               <md-select ng-model="vm.selectedScenario" ng-change="vm.changeScenario(vm.selectedScenario)" placeholder="{{'Scenario' | translate}}">
                 <md-option ng-repeat="scenario in vm.scenarios" ng-value="scenario">{{scenario.Name}}</md-option>
               </md-select>
@@ -98,9 +94,25 @@
   </div>
 </form>
 
+<div ng-if="vm.scenarioNotForecasted">
+  <div class="con-row">
+    <div class="con-flex">
+      <div class="panel material-depth-1">
+        <div class="con-row">
+          <div class="con-flex">
+            Scenario "{{vm.selectedScenario.Name}}" has no forecast data, please run a forecast for it
+          </div>
+        </div>
+        <div class="con-footer">
+         <button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.forecastModal = true">{{'ForecastDo'|translate}}</button>
+         </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- Chart -->
-<div class="con-row"  ng-if="vm.selectedWorkload.Days.length < 1">
+<div class="con-row" ng-if="vm.selectedWorkload.Days.length < 1 && vm.selectedWorkload.Days = !null">
   <div class="con-flex">
     <div class="panel material-depth-1 full-padding">
       <div ng-if="vm.isForecastRunning">
