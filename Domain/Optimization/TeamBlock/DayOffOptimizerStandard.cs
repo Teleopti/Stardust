@@ -101,7 +101,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				allFailed[teamInfo] = true;
 				matrixes.AddRange(teamInfo.MatrixesForGroup().Select(scheduleMatrixPro => new Tuple<IScheduleMatrixPro, ITeamInfo>(scheduleMatrixPro, teamInfo)));
 			}
-
 			
 			foreach (var matrix in matrixes.Randomize())
 			{
@@ -112,6 +111,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				_blockPreferencesMapper.UpdateSchedulingOptionsFromOptimizationPreferences(schedulingOptions, optimizationPreferences);
 
 				currentMatrixCounter++;
+				
+				//This if is really strange... Remove?
 				if (!(optimizationPreferences.Extra.UseTeamBlockOption && optimizationPreferences.Extra.UseTeamSameDaysOff))
 				{
 					if (!selectedPersons.Contains(matrix.Item1.Person))
