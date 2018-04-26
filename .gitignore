@@ -19,6 +19,7 @@
 *.sbr
 *.scc
 *.tokens
+*.orig
 
 # teleopti things
 *.[Cc]onfig
