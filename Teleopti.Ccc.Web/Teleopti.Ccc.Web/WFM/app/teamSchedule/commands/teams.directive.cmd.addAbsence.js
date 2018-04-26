@@ -99,6 +99,8 @@
 		};
 
 		vm.updateInvalidAgents = function () {
+			if (!$scope.newAbsenceForm.$valid)
+				return;
 			if (vm.isFullDayAbsence) {
 				determineIsSameTimezoneForFullDayAbsence();
 			} else {
