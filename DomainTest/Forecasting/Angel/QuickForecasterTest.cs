@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			historicalPeriodProvider.Stub(x => x.AvailablePeriod(workload2)).Return(historicalPeriodForForecast2);
 			historicalPeriodProvider.Stub(x => x.AvailableIntradayTemplatePeriod(historicalPeriodForForecast2)).Return(templatePeriod);
 			var target = new QuickForecaster(quickForecasterWorkload, fetchAndFillSkillDays, quickForecastWorkloadEvaluator, historicalPeriodProvider);
-			target.ForecastWorkloadsWithinSkill(skill1, new[] { new ForecastWorkloadInput { WorkloadId = workload1.Id.Value, ForecastMethodId = ForecastMethodType.None } }, futurePeriod, scenario);
+			target.ForecastWorkloadsWithinSkill(skill1,  new ForecastWorkloadInput { WorkloadId = workload1.Id.Value, ForecastMethodId = ForecastMethodType.None }, futurePeriod, scenario);
 			quickForecasterWorkload.AssertWasCalled(x => x.Execute(new QuickForecasterWorkloadParams
 			{
 				FuturePeriod = futurePeriod,
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var templatePeriod = new DateOnlyPeriod(2014, 10, 1, 2014, 12, 31);
 			historicalPeriodProvider.Stub(x => x.AvailableIntradayTemplatePeriod(historicalPeriodForForecast)).Return(templatePeriod);
 			var target = new QuickForecaster(quickForecasterWorkload, fetchAndFillSkillDays, quickForecastWorkloadEvaluator, historicalPeriodProvider);
-			target.ForecastWorkloadsWithinSkill(skill1, new[] { new ForecastWorkloadInput { WorkloadId = workload1.Id.Value, ForecastMethodId = ForecastMethodType.TeleoptiClassicLongTerm } }, futurePeriod, scenario);
+			target.ForecastWorkloadsWithinSkill(skill1, new ForecastWorkloadInput { WorkloadId = workload1.Id.Value, ForecastMethodId = ForecastMethodType.TeleoptiClassicLongTerm }, futurePeriod, scenario);
 			quickForecastWorkloadEvaluator.AssertWasNotCalled(x => x.Evaluate(workload1));
 			quickForecasterWorkload.AssertWasCalled(x => x.Execute(new QuickForecasterWorkloadParams
 			{
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var templatePeriod = new DateOnlyPeriod(2014, 10, 1, 2014, 12, 31);
 			historicalPeriodProvider.Stub(x => x.AvailableIntradayTemplatePeriod(historicalPeriodForForecast)).Return(templatePeriod);
 			var target = new QuickForecaster(quickForecasterWorkload, fetchAndFillSkillDays, quickForecastWorkloadEvaluator, historicalPeriodProvider);
-			target.ForecastWorkloadsWithinSkill(skill1, new[] { new ForecastWorkloadInput { WorkloadId = workload1.Id.Value, ForecastMethodId = ForecastMethodType.None } }, futurePeriod, scenario);
+			target.ForecastWorkloadsWithinSkill(skill1,new ForecastWorkloadInput { WorkloadId = workload1.Id.Value, ForecastMethodId = ForecastMethodType.None }, futurePeriod, scenario);
 			quickForecasterWorkload.AssertWasCalled(x => x.Execute(new QuickForecasterWorkloadParams
 			{
 				FuturePeriod = futurePeriod,

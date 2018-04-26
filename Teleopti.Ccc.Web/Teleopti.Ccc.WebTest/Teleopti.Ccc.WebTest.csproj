@@ -213,6 +213,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Areas\Anywhere\BusinessUnitControllerTest.cs" />
+    <Compile Include="Areas\Forecasting\Controllers\ForecastControllerTest.cs" />
     <Compile Include="Areas\Gamification\GamificationCalculationControllerTest.cs" />
     <Compile Include="Areas\Gamification\GamificationControllerPersistTest.cs" />
     <Compile Include="Areas\Gamification\GamificationControllerReadTest.cs" />
@@ -368,7 +369,7 @@
     <Compile Include="Areas\MultiTenancy\Core\DataSourceConfigurationEncryptionTest.cs" />
     <Compile Include="Areas\MultiTenancy\Core\LoginAttemptModelFactoryForWebTest.cs" />
     <Compile Include="Areas\Messages\MessagesAreaRegistrationTest.cs" />
-    <Compile Include="Areas\Forecasting\Controllers\ForecastControllerTest.cs" />
+    <Compile Include="Areas\Forecasting\Controllers\ForecastControllerOldTest.cs" />
     <Compile Include="Areas\Mart\Controllers\QueueStatsControllerTest.cs" />
     <Compile Include="Areas\Mart\Core\FakeQueueStatRepository.cs" />
     <Compile Include="Areas\Mart\Core\QueueStatHandlerTest.cs" />

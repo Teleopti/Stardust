@@ -23,42 +23,34 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			_historicalPeriodProvider = historicalPeriodProvider;
 		}
 
-		public void ForecastWorkloadsWithinSkill(ISkill skill, ForecastWorkloadInput[] workloads, DateOnlyPeriod futurePeriod, IScenario scenario)
+		public void ForecastWorkloadsWithinSkill(ISkill skill, ForecastWorkloadInput workloadInput, DateOnlyPeriod futurePeriod, IScenario scenario)
 		{
 			var skillDays = _fetchAndFillSkillDays.FindRange(futurePeriod, skill, scenario);
-			var workloadLookup = workloads.ToDictionary(w => w.WorkloadId);
+			var workload = skill.WorkloadCollection.Single(w => w.Id.Value == workloadInput.WorkloadId);
 
-			foreach (var workload in skill.WorkloadCollection)
+			var forecastMethodId = workloadInput.ForecastMethodId;
+			if (forecastMethodId == ForecastMethodType.None)
 			{
-				ForecastWorkloadInput workloadInput;
-				if (workloadLookup.TryGetValue(workload.Id.Value, out workloadInput))
-				{
-					var forecastMethodId = workloadInput.ForecastMethodId;
-					if (forecastMethodId == ForecastMethodType.None)
-					{
-						var workloadAccuracy = _forecastWorkloadEvaluator.Evaluate(workload);
-						forecastMethodId = (workloadAccuracy == null || workloadAccuracy.Accuracies.Length == 0)
-							? ForecastMethodType.None
-							: workloadAccuracy.Accuracies.Single(x => x.IsSelected).MethodId;
-					}
-
-					var availablePeriod = _historicalPeriodProvider.AvailablePeriod(workload);
-					if (availablePeriod.HasValue)
-					{
-						var availableIntradayTemplatePeriod = _historicalPeriodProvider.AvailableIntradayTemplatePeriod(availablePeriod.Value);
-						var quickForecasterWorkloadParams = new QuickForecasterWorkloadParams
-						{
-							WorkLoad = workload,
-							FuturePeriod = futurePeriod,
-							SkillDays = skillDays,
-							HistoricalPeriod = availablePeriod.Value,
-							IntradayTemplatePeriod = availableIntradayTemplatePeriod,
-							ForecastMethodId = forecastMethodId
-						};
-						_quickForecasterWorkload.Execute(quickForecasterWorkloadParams);
-					}
-				}
+				var workloadAccuracy = _forecastWorkloadEvaluator.Evaluate(workload);
+				forecastMethodId = (workloadAccuracy == null || workloadAccuracy.Accuracies.Length == 0)
+					? ForecastMethodType.None
+					: workloadAccuracy.Accuracies.Single(x => x.IsSelected).MethodId;
 			}
+
+			var availablePeriod = _historicalPeriodProvider.AvailablePeriod(workload);
+			if (!availablePeriod.HasValue) return;
+
+			var availableIntradayTemplatePeriod = _historicalPeriodProvider.AvailableIntradayTemplatePeriod(availablePeriod.Value);
+			var quickForecasterWorkloadParams = new QuickForecasterWorkloadParams
+			{
+				WorkLoad = workload,
+				FuturePeriod = futurePeriod,
+				SkillDays = skillDays,
+				HistoricalPeriod = availablePeriod.Value,
+				IntradayTemplatePeriod = availableIntradayTemplatePeriod,
+				ForecastMethodId = forecastMethodId
+			};
+			_quickForecasterWorkload.Execute(quickForecasterWorkloadParams);
 		}
 	}
 

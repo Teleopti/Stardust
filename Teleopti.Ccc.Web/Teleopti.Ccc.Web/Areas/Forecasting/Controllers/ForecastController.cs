@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		public virtual Task<ForecastResultViewModel> Forecast(ForecastInput input)
 		{
 			var futurePeriod = new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd));
-			_forecastCreator.CreateForecastForWorkloads(futurePeriod, input.Workloads,
+			_forecastCreator.CreateForecastForWorkload(futurePeriod, input.Workload,
 				_scenarioRepository.Get(input.ScenarioId));
 			return Task.FromResult(new ForecastResultViewModel
 			{
