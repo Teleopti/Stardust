@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 			result.Content.Content.Should().Be.Empty();
 		}
 		
-		[Test]		
+		[Test, SetCulture("sv-SE")]		
 		public void ShouldFailWhenUsingPastDates()
 		{
 			Now.Is("2018-04-24 14:30");
