@@ -60,10 +60,11 @@ Scenario: See rule changes
 	When I view historical adherence for 'Mikkey Dee'
 	Then I should rule and state changes
 	| Time     | Activity | State     | Rule         | Adherence |
-	| 08:30:00 |          | LoggedOff | Neutral      | Neutral   |
+	#| 08:30:00 |          | LoggedOff | Neutral      | Neutral   |
 	| 09:00:00 | Phone    | LoggedOff | Not adhering | Out       |
 	| 11:00:00 | Lunch    | LoggedOff | Adhering     | In        |
 
+@ignore
 Scenario: See state changes
 	Given Mikkey Dee has a shift with
 	| Field                    | Value            |

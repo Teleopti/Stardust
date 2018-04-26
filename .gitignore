@@ -26,6 +26,7 @@
 *.feature.cs
 dbo.OlaHallengren*.sql
 dbo.IndexMaintenance*.sql
+.com.teleopti.wfm.developer.tools
 
 # front end build
 npm-debug*
