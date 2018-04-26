@@ -1,15 +1,15 @@
-﻿(function() {
+﻿(function () {
 	'use strict';
 	angular.module('wfm.teamSchedule').component('moveShift',
-	{
-		require: {
-			containerCtrl: '^teamscheduleCommandContainer'
-		},
-		templateUrl: 'app/teamSchedule/commands/teams.component.cmd.moveShift.html',
-		controller: MoveShiftCtrl
-	});
+		{
+			require: {
+				containerCtrl: '^teamscheduleCommandContainer'
+			},
+			templateUrl: 'app/teamSchedule/commands/teams.component.cmd.moveShift.html',
+			controller: MoveShiftCtrl
+		});
 
-	MoveShiftCtrl.$inject = ['$scope', '$locale', '$element', 'ActivityValidator', 'PersonSelection', 'ActivityService', 'teamScheduleNotificationService','serviceDateFormatHelper'];
+	MoveShiftCtrl.$inject = ['$scope', '$locale', '$element', 'ActivityValidator', 'PersonSelection', 'ActivityService', 'teamScheduleNotificationService', 'serviceDateFormatHelper'];
 
 	function MoveShiftCtrl($scope, $locale, $element, validator, personSelectionSvc, activitySvc, teamScheduleNotificationService, serviceDateFormatHelper) {
 		var ctrl = this;
@@ -22,18 +22,20 @@
 			ctrl.selectedAgents = personSelectionSvc.getCheckedPersonInfoList();
 			ctrl.moveToTime = getDefaultMoveToTime();
 			ctrl.trackId = ctrl.containerCtrl.getTrackId();
-			findAgentsInDifferentTimezone();
 			addTabindexAndFocus();
-			ctrl.updateInvalidAgents();
+			ctrl.updateInvalidAgents(true);
 		};
 
-		ctrl.updateInvalidAgents = function (isFormValid) {
-			if (!isFormValid) return;
-			var currentTimezone = ctrl.containerCtrl.getCurrentTimezone();
-			validator.validateMoveToTimeForShift(ctrl.containerCtrl.scheduleManagementSvc, moment(getMoveToStartTimeStr()), currentTimezone);
-			var invalidAgents = validator.getInvalidPeople();
+		ctrl.updateInvalidAgents = function (isTimeValid) {
+			var invalidAgents = [];
+			findAgentsInDifferentTimezone();
 			if (ctrl.agentsInDifferentTimeZone.length > 0) {
 				invalidAgents = invalidAgents.concat(ctrl.agentsInDifferentTimeZone);
+			}
+			if (isTimeValid) {
+				var currentTimezone = ctrl.containerCtrl.getCurrentTimezone();
+				validator.validateMoveToTimeForShift(ctrl.containerCtrl.scheduleManagementSvc, moment(getMoveToStartTimeStr()), currentTimezone);
+				invalidAgents = invalidAgents.concat(validator.getInvalidPeople());
 			}
 			ctrl.invalidAgents = filterAgentArray(invalidAgents);
 		}
@@ -42,22 +44,22 @@
 			return ctrl.invalidAgents.length > 0;
 		};
 		ctrl.anyValidAgent = function () {
-			return ctrl.invalidAgents.length !== ctrl.selectedAgents.length ;
+			return ctrl.invalidAgents.length !== ctrl.selectedAgents.length;
 		};
-		ctrl.anyAgentsInDifferentTimeZone = function() {
+		ctrl.anyAgentsInDifferentTimeZone = function () {
 			return ctrl.agentsInDifferentTimeZone.length > 0;
 		};
 
 		ctrl.moveShift = function () {
-			var invalidAgentIds = ctrl.invalidAgents.map(function(a) {
+			var invalidAgentIds = ctrl.invalidAgents.map(function (a) {
 				return a.PersonId;
 			});
-			var agentsInDifferentTimeZone = ctrl.agentsInDifferentTimeZone.map(function(a) {
+			var agentsInDifferentTimeZone = ctrl.agentsInDifferentTimeZone.map(function (a) {
 				return a.PersonId;
 			});
 			invalidAgentIds = invalidAgentIds.concat(agentsInDifferentTimeZone);
 
-			var validAgents = ctrl.selectedAgents.filter(function(agent) {
+			var validAgents = ctrl.selectedAgents.filter(function (agent) {
 				return invalidAgentIds.indexOf(agent.PersonId) < 0;
 			});
 
@@ -76,14 +78,14 @@
 				ctrl.processingCommand = true;
 
 				activitySvc.moveShift(requestData)
-					.then(function(response) {
+					.then(function (response) {
 						if (ctrl.containerCtrl.getActionCb(ctrl.label)) {
 							ctrl.containerCtrl.getActionCb(ctrl.label)(ctrl.trackId, validAgentIds);
 						}
 						teamScheduleNotificationService.reportActionResult({
-								success: 'SuccessfulMessageForMovingShift',
-								warning: 'PartialSuccessMessageForMovingShift'
-							},
+							success: 'SuccessfulMessageForMovingShift',
+							warning: 'PartialSuccessMessageForMovingShift'
+						},
 							validAgents.map(function (x) {
 								return {
 									PersonId: x.PersonId,
@@ -139,14 +141,14 @@
 
 		function filterAgentArray(arr) {
 			var map = {};
-			arr.forEach(function(agent) {
+			arr.forEach(function (agent) {
 				map[agent.PersonId] = {
-					PersonId:agent.PersonId,
-					Name:agent.Name
+					PersonId: agent.PersonId,
+					Name: agent.Name
 				};
 			});
 			var personIds = Object.keys(map);
-			return personIds.map(function(key) { return map[key]; });
+			return personIds.map(function (key) { return map[key]; });
 		}
 
 		function findAgentsInDifferentTimezone() {
@@ -158,6 +160,6 @@
 				}
 			});
 		}
-		
+
 	}
 })();
