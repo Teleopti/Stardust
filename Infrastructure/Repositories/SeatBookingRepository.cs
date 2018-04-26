@@ -4,7 +4,6 @@ using System.Linq;
 using System.Security.Claims;
 using NHibernate;
 using NHibernate.Impl;
-using NHibernate.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;

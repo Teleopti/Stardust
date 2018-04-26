@@ -1,7 +1,6 @@
 ﻿using NHibernate;
 using NHibernate.Transform;
 using System;
-using System.Text;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Repositories;

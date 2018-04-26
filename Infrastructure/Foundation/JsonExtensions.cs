@@ -2,7 +2,6 @@
 using System.IO;
 using System.Net;
 using Newtonsoft.Json;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.Util;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation

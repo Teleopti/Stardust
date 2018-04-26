@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Common;
