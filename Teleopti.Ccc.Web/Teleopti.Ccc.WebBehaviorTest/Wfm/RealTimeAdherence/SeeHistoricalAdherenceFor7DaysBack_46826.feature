@@ -24,6 +24,7 @@ Feature: See historical adherence for 7 days back
 	  | Phone state | LoggedOff |
 	  | Adherence   | Out       |
 
+  @ignore
   Scenario: See historical adherence for 7 days back
 	Given Mikkey Dee has a 'Phone' shift between '2018-01-02 09:00' and '17:00'
 	Given Mikkey Dee has a 'Phone' shift between '2018-01-03 09:00' and '17:00'
