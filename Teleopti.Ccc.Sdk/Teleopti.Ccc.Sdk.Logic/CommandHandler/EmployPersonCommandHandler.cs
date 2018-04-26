@@ -18,7 +18,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private readonly IContractRepository _contractRepository;
         private readonly ITeamRepository _teamRepository;
 
-        public EmployPersonCommandHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IPersonRepository personRepository, IPersonAssembler personAssembler, IPartTimePercentageRepository partTimePercentageRepository, IContractScheduleRepository contractScheduleRepository, IContractRepository contractRepository, ITeamRepository teamRepository)
+        public EmployPersonCommandHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IPersonRepository personRepository,
+            IPersonAssembler personAssembler, IPartTimePercentageRepository partTimePercentageRepository,
+            IContractScheduleRepository contractScheduleRepository, IContractRepository contractRepository,
+            ITeamRepository teamRepository)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _personRepository = personRepository;
@@ -37,6 +40,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             PersonPeriod personPeriod;
             using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
             {
+                var team = _teamRepository.Load(command.Team.Id.GetValueOrDefault());
+                team.Site.ValidateBusinessUnitConsistency();
+
                 var start = command.Period.StartDate.DateTime;
 
                 _personAssembler.EnableSaveOrUpdate = true;
@@ -46,7 +52,6 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                    _partTimePercentageRepository.Load(command.PersonContract.PartTimePercentageId.GetValueOrDefault());
                 var contractSchedule =
                     _contractScheduleRepository.Load(command.PersonContract.ContractScheduleId.GetValueOrDefault());
-                var team = _teamRepository.Load(command.Team.Id.GetValueOrDefault());
                 var contract = _contractRepository.Load(command.PersonContract.ContractId.GetValueOrDefault());
 
                 var personContract = new PersonContract(contract, partTimePercentage, contractSchedule);
