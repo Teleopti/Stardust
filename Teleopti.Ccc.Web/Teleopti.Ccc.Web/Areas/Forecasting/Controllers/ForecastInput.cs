@@ -10,8 +10,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		public DateTime ForecastEnd { get; set; }
 		public ForecastWorkloadInput[] Workloads { get; set; }
 		public Guid ScenarioId { get; set; }
-		public BlockToken BlockToken { get; set; }
-		public bool IsLastWorkload { get; set; }
 	}
 
 	public class ForecastResultInput
