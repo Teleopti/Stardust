@@ -29,6 +29,19 @@ dbo.IndexMaintenance*.sql
 # front end build
 NodeHash.txt
 WfmFileHash.txt
+*/dist/
+*/npm-debug*
+*/npm-shrinkwrap.json
+*/css/main.css
+*/css/main.min.css
+*/css/style.css
+*/css/style.css.map
+*/css/style.min.css
+*/WFM/index.html
+*/WFM/index_desktop_client.html
+*/WFM/css/style_classic.css
+*/WFM/css/style_dark.css
+*/.node/PackageJsonHash.txt
 
 # ide and tools
 .vs/
