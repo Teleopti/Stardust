@@ -8,6 +8,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public static void AddColumnsToTable(DataTable table)
 		{
+			table.Columns.Add("id", typeof(int));
 			table.Columns.Add("overtime_code", typeof(Guid));
 			table.Columns.Add("overtime_name", typeof(string));
 			table.Columns.Add("business_unit_code", typeof(Guid));

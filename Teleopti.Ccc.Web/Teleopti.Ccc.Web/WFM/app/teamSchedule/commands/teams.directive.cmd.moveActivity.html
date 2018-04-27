@@ -6,7 +6,7 @@
 			<h3>{{'StartTime' | translate}}:</h3>
 			<teams-time-picker date="vm.getMoveToDate()"
 							   ng-model="vm.moveToTime"
-							   ng-change="vm.updateInvalidAgents()"
+							   ng-change="vm.updateInvalidAgents(moveActivityForm.$valid)"
 							   required
 							   timezone="vm.getCurrentTimezone()"
 							   md-autofocus="::vm.containerCtrl.onReady()"></teams-time-picker>

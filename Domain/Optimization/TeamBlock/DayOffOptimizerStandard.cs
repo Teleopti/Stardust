@@ -101,7 +101,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				allFailed[teamInfo] = true;
 				matrixes.AddRange(teamInfo.MatrixesForGroup().Select(scheduleMatrixPro => new Tuple<IScheduleMatrixPro, ITeamInfo>(scheduleMatrixPro, teamInfo)));
 			}
-
 			
 			foreach (var matrix in matrixes.Randomize())
 			{
@@ -112,12 +111,18 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				_blockPreferencesMapper.UpdateSchedulingOptionsFromOptimizationPreferences(schedulingOptions, optimizationPreferences);
 
 				currentMatrixCounter++;
-
+				
+				//This if is really strange... Remove?
 				if (!(optimizationPreferences.Extra.UseTeamBlockOption && optimizationPreferences.Extra.UseTeamSameDaysOff))
 				{
 					if (!selectedPersons.Contains(matrix.Item1.Person))
 						continue;
 				}
+
+				var numberOfDayOffsMoved = optimizationPreferences.Extra.UseTeams && optimizationPreferences.Extra.UseTeamSameDaysOff
+					? matrix.Item2.GroupMembers.Count()
+					: 1;
+
 				rollbackService.ClearModificationCollection();
 				var dayOffOptimizationPreference = dayOffOptimizationPreferenceProvider.ForAgent(matrix.Item1.Person, matrix.Item1.EffectivePeriodDays.First().Day);
 
@@ -127,9 +132,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				var movedDaysOff = _affectedDayOffs.Execute(matrix.Item1, dayOffOptimizationPreference, originalArray, resultingArray);
 				if (movedDaysOff != null)
 				{
-					var predictorResult = _dayOffOptimizerPreMoveResultPredictor.IsPredictedBetterThanCurrent(matrix.Item1, resultingArray, originalArray, dayOffOptimizationPreference);
-					var previousPeriodValue = predictorResult.CurrentValue;
-					if (!predictorResult.IsBetter)
+					var predictorResult = _dayOffOptimizerPreMoveResultPredictor.IsPredictedBetterThanCurrent(matrix.Item1, resultingArray, originalArray, dayOffOptimizationPreference, numberOfDayOffsMoved);
+					if (!predictorResult)
 					{
 						allFailed[matrix.Item2] = false;
 						matrix.Item2.LockDays(movedDaysOff.AddedDaysOff);
@@ -137,21 +141,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						callback.Optimizing(new OptimizationCallbackInfo(matrix.Item2, false, matrixes.Count));
 						continue;
 					}
-
-					var currentPeriodValue = new Lazy<double>(() => _dayOffOptimizerPreMoveResultPredictor.CurrentValue(matrix.Item1));
 					var resCalcState = new UndoRedoContainer();
 					resCalcState.FillWith(schedulingResultStateHolder.SkillDaysOnDateOnly(movedDaysOff.ModifiedDays()));
 					var success = runOneMatrixOnly(optimizationPreferences, rollbackService, matrix.Item1, schedulingOptions, matrix.Item2,
 						resourceCalculateDelayer,
 						schedulingResultStateHolder,
-						currentPeriodValue,
-						previousPeriodValue,
 						movedDaysOff,
 						dayOffOptimizationPreferenceProvider);
 
 					if (success)
 					{
-						previousPeriodValue = currentPeriodValue.Value;
 						allFailed[matrix.Item2] = false;
 					}
 					else
@@ -169,7 +168,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 					callback.Optimizing(new OptimizationCallbackInfo(matrix.Item2, success, matrixes.Count));
 					
-					if (onReportProgress(schedulingProgress, matrixes.Count, currentMatrixCounter, matrix.Item2, previousPeriodValue, optimizationPreferences.Advanced.RefreshScreenInterval))
+					if (onReportProgress(schedulingProgress, matrixes.Count, currentMatrixCounter, matrix.Item2, optimizationPreferences.Advanced.RefreshScreenInterval))
 					{
 						cancelAction();
 						return null;
@@ -189,7 +188,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			SchedulingOptions schedulingOptions, ITeamInfo teamInfo,
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
-			Lazy<double> currentPeriodValue, double previousPeriodValue,
 			MovedDaysOff movedDaysOff,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
@@ -250,10 +248,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				}
 			}
 
-			return currentPeriodValue.Value < previousPeriodValue;
+			return true;
 		}
 
-		private static bool onReportProgress(ISchedulingProgress schedulingProgress, int totalNumberOfTeamInfos, int teamInfoCounter, ITeamInfo currentTeamInfo, double periodValue, int screenRefreshRate)
+		private static bool onReportProgress(ISchedulingProgress schedulingProgress, int totalNumberOfTeamInfos, int teamInfoCounter, ITeamInfo currentTeamInfo, int screenRefreshRate)
 		{
 			if (schedulingProgress.CancellationPending)
 			{
@@ -261,7 +259,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			}
 			var eventArgs = new ResourceOptimizerProgressEventArgs(0, 0,
 				Resources.OptimizingDaysOff + Resources.Colon + "(" + totalNumberOfTeamInfos.ToString("####") + ")(" +
-				teamInfoCounter.ToString("####") + ") " + currentTeamInfo.Name.DisplayString(20) + " (" + periodValue + ")", screenRefreshRate);
+				teamInfoCounter.ToString("####") + ") " + currentTeamInfo.Name.DisplayString(20), screenRefreshRate);
 			schedulingProgress.ReportProgress(1, eventArgs);
 			return false;
 		}
@@ -308,6 +306,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return true;
 		}
 	}
+	
+	
+	
+	
+	
 
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_DayOffUsePredictorEverywhere_75667)]
 	public class DayOffOptimizerStandardOLD
@@ -324,7 +327,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamBlockDayOffsInPeriodValidator _teamBlockDayOffsInPeriodValidator;
 		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
-		private readonly DayOffOptimizerPreMoveResultPredictor _dayOffOptimizerPreMoveResultPredictor;
+		private readonly DayOffOptimizerPreMoveResultPredictorOLD _dayOffOptimizerPreMoveResultPredictor;
 		private readonly ITeamBlockDaysOffMoveFinder _teamBlockDaysOffMoveFinder;
 		private readonly AffectedDayOffs _affectedDayOffs;
 		private readonly IShiftCategoryLimitationChecker _shiftCategoryLimitationChecker;
@@ -345,7 +348,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ITeamBlockDayOffsInPeriodValidator teamBlockDayOffsInPeriodValidator,
 			IWorkShiftSelector workShiftSelector,
 			IGroupPersonSkillAggregator groupPersonSkillAggregator,
-			DayOffOptimizerPreMoveResultPredictor dayOffOptimizerPreMoveResultPredictor,
+			DayOffOptimizerPreMoveResultPredictorOLD dayOffOptimizerPreMoveResultPredictor,
 			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder,
 			AffectedDayOffs affectedDayOffs,
 			IShiftCategoryLimitationChecker shiftCategoryLimitationChecker,

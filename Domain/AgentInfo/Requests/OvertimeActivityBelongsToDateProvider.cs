@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -60,20 +62,23 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		private TimeSpan? calculateValidGapToClosestShift(IScheduleDay scheduleDay, DateTimePeriod overtimeActivityPeriod)
 		{
-			var personAssignment = scheduleDay.PersonAssignment();
-
-			if (personAssignment == null)
+			var visualLayers = scheduleDay.ProjectionService().CreateProjection();
+			if (visualLayers.IsNullOrEmpty())
+			{
 				return null;
+			}
 
+			var lastLayer = visualLayers.Last();
+			var startLayer = visualLayers.First();
 			TimeSpan? gap = null;
 
-			if (overtimeActivityPeriod.StartDateTime.CompareTo(personAssignment.Period.EndDateTime) >= 0)
+			if (overtimeActivityPeriod.StartDateTime.CompareTo(lastLayer.Period.EndDateTime) >= 0)
 			{
-				gap = overtimeActivityPeriod.StartDateTime - personAssignment.Period.EndDateTime;
+				gap = overtimeActivityPeriod.StartDateTime - lastLayer.Period.EndDateTime;
 			}
-			else if (overtimeActivityPeriod.EndDateTime.CompareTo(personAssignment.Period.StartDateTime) <= 0)
+			else if (overtimeActivityPeriod.EndDateTime.CompareTo(startLayer.Period.StartDateTime) <= 0)
 			{
-				gap = personAssignment.Period.StartDateTime - overtimeActivityPeriod.EndDateTime;
+				gap = startLayer.Period.StartDateTime - overtimeActivityPeriod.EndDateTime;
 			}
 
 			return gap > belongsToDateThreshold ? null : gap;

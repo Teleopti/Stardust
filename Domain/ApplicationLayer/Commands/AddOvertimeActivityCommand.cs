@@ -14,5 +14,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public Guid MultiplicatorDefinitionSetId { get; set; }
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 		public IList<string> ErrorMessages { get; set; }
+		public bool AllowDisconnected { get; set; }
 	}
 }

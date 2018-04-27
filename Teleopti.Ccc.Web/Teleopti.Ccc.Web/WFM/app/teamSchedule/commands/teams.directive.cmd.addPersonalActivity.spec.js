@@ -204,7 +204,6 @@
 
 		expect(applyButton.hasClass('wfm-btn-primary-disabled')).toBeTruthy();
 		expect(applyButton.attr('disabled')).toBe('disabled');
-		expect(vm.anyValidAgent()).toBe(false);
 	});
 
 

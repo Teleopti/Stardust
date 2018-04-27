@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public FakeWriteSideRepository<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSetRepository;
 		public FakeLoggedOnUser LoggedOnUser;
 
-
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FakePersonAssignmentWriteSideRepository>().For<IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>>();
@@ -84,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
 			var activity = ActivityFactory.CreateActivity("Phone").WithId();
-			var  mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
+			var mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
 			ActivityRepository.Add(activity);
 			ActivityRepository.Add(mainActivity);
 
@@ -115,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var addOvertimeEvent = ass.PopAllEvents().OfType<ActivityAddedEvent>()
 				.Single(e => e.ActivityId == command.ActivityId);
-		
+
 			addOvertimeEvent.Date.Should().Be.EqualTo(new DateTime(2013, 11, 14));
 			addOvertimeEvent.PersonId.Should().Be.EqualTo(command.Person.Id.GetValueOrDefault());
 			addOvertimeEvent.StartDateTime.Should().Be.EqualTo(command.Period.StartDateTime);
@@ -132,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
 			var activity = ActivityFactory.CreateActivity("Phone").WithId();
-			var  mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
+			var mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
 			ActivityRepository.Add(activity);
 			ActivityRepository.Add(mainActivity);
 
@@ -160,7 +159,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			Target.Handle(command);
 
 			command.ErrorMessages.Single().Should().Be.EqualTo(Resources.InvalidInput);
-		
+
 		}
 
 		[Test]
@@ -210,7 +209,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
 			var activity = ActivityFactory.CreateActivity("Phone").WithId();
-			var  mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
+			var mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
 			ActivityRepository.Add(activity);
 			ActivityRepository.Add(mainActivity);
 
@@ -289,7 +288,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
 			var activity = ActivityFactory.CreateActivity("Phone").WithId();
-			var  mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
+			var mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
 			ActivityRepository.Add(activity);
 			ActivityRepository.Add(mainActivity);
 
@@ -326,6 +325,45 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			command.ErrorMessages.Count.Should().Be.EqualTo(0);
 		}
 
+		[Test]
+		public void ShouldAllowToAddDisconnectedOvertimeActivityToADayWithShift()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Add(person);
 
+			var activity = ActivityFactory.CreateActivity("Phone").WithId();
+			var mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
+			ActivityRepository.Add(activity);
+			ActivityRepository.Add(mainActivity);
+
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, CurrentScenario.Current(), new DateOnly(2013, 11, 14));
+			personAssignment.AddActivity(mainActivity, new DateTimePeriod(2013, 11, 14, 18, 2013, 11, 15, 1));
+			PersonAssignmentRepository.Add(personAssignment);
+
+			var mds = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("double pay", MultiplicatorType.Overtime);
+			mds.WithId();
+			MultiplicatorDefinitionSetRepository.Add(mds);
+
+			var command = new AddOvertimeActivityCommand
+			{
+				Person = person,
+				AllowDisconnected = true,
+				Date = new DateOnly(2013, 11, 14),
+				ActivityId = activity.Id.GetValueOrDefault(),
+				Period = new DateTimePeriod(2013, 11, 15, 2, 2013, 11, 15, 4),
+				MultiplicatorDefinitionSetId = mds.Id.GetValueOrDefault()
+			};
+			Target.Handle(command);
+
+			var addedPersonAssignment = PersonAssignmentRepository.LoadAll().LastOrDefault();
+
+			addedPersonAssignment.Date.Should().Be.EqualTo(command.Date);
+			addedPersonAssignment.Period.Should().Be.EqualTo(new DateTimePeriod(2013, 11, 14, 18, 2013, 11, 15, 4));
+			var overtimeLayer = addedPersonAssignment.ShiftLayers.Last() as OvertimeShiftLayer;
+			overtimeLayer.Should().Not.Be.Null();
+			overtimeLayer.DefinitionSet.Should().Be.EqualTo(mds);
+			overtimeLayer.Period.StartDateTime.Should().Be(command.Period.StartDateTime);
+			overtimeLayer.Period.EndDateTime.Should().Be(command.Period.EndDateTime);
+		}
 	}
 }

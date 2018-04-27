@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var dic = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), loadedPeriod, scenario);
 			var scheduleRange = dic[person];
 			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
-			if (!isActivityPeriodValid(command, scheduleDay))
+			if (!command.AllowDisconnected && !isActivityPeriodValid(command, scheduleDay))
 			{
 				command.ErrorMessages.Add(Resources.InvalidInput);
 				return;

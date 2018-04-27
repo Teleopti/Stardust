@@ -392,6 +392,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		
 		public IEnumerable<SkillCombinationResourceForBpo> BpoResourcesForSkill(Guid skillId, DateOnlyPeriod period)
 		{
+			var extendedEndDate = period.EndDate.Date.AddDays(1).AddMinutes(-1);
 			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
 			var result = _currentUnitOfWork.Current().Session()
 				.CreateSQLQuery(@"select b.[Source],StartDateTime,EndDateTime, SUM(Resources) Resource
@@ -404,7 +405,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 									AND scrb.BusinessUnit = :bu
 								GROUP BY StartDateTime,EndDateTime, b.[Source]")
 				.SetDateTime("startDateTime", period.StartDate.Date)
-				.SetDateTime("endDateTime", period.EndDate.Date)
+				.SetDateTime("endDateTime", extendedEndDate)
 				.SetParameter("bu", bu)
 				.SetGuid("skillId", skillId)
 				.SetResultTransformer(new AliasToBeanResultTransformer(typeof(SkillCombinationResourceForBpo)))

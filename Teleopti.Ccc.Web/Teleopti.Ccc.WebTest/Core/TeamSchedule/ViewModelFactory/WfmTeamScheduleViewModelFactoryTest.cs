@@ -335,7 +335,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var summary = viewModel.Schedules.FirstOrDefault().UnderlyingScheduleSummary;
 			summary.Should().Be.Null();
 		}
-		
+
 	}
 
 
@@ -1661,6 +1661,80 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			first.DaySchedules[2].Date.Should().Be(new DateOnly(2020, 1, 1));
 			first.DaySchedules[2].Title.Should().Be("abs");
 			first.DaySchedules[2].IsDayOff.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldReturnCorrectDateTimePeriodWhenPersonalActivityStartTimeRightAfterTheEndTimeOfMainShift()
+		{
+			var scheduleDate = new DateOnly(2018, 4, 23);
+			setUpPersonAndCulture();
+
+			var scenario = CurrentScenario.Has("Default");
+
+			var period = new DateTimePeriod(new DateTime(2018, 4, 24, 9, 0, 0, DateTimeKind.Utc), new DateTime(2018, 4, 24, 18, 0, 0, DateTimeKind.Utc));
+			var personalPeriod = new DateTimePeriod(new DateTime(2018, 4, 24, 18, 0, 0, DateTimeKind.Utc), new DateTime(2018, 4, 24, 19, 0, 0, DateTimeKind.Utc));
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc, scenario, period, ShiftCategoryFactory.CreateShiftCategory("Main", "blue"));
+			pa.AddPersonalActivity(ActivityFactory.CreateActivity("personal activity", Color.Azure), personalPeriod);
+
+			ScheduleStorage.Add(pa);
+
+			var searchTerm = new Dictionary<PersonFinderField, string> {
+				   { PersonFinderField.FirstName, "Sherlock"}
+			   };
+
+			var result = Target.CreateWeekScheduleViewModel(new SearchSchedulesInput
+			{
+				CriteriaDictionary = searchTerm,
+				GroupIds = new Guid[] { team.Id.GetValueOrDefault() },
+				PageSize = 1,
+				CurrentPageIndex = 0,
+				DateInUserTimeZone = scheduleDate
+			});
+
+			result.Total.Should().Be(1);
+
+			var first = result.PersonWeekSchedules.FirstOrDefault();
+
+			first.DaySchedules[1].DateTimeSpan.GetValueOrDefault().StartDateTime.Should().Be(new DateTime(2018, 4, 24, 9, 0, 0, DateTimeKind.Utc));
+			first.DaySchedules[1].DateTimeSpan.GetValueOrDefault().EndDateTime.Should().Be(new DateTime(2018, 4, 24, 19, 0, 0, DateTimeKind.Utc));
+		}
+
+		[Test]
+		public void ShouldReturnCorrectDateTimePeriodWhenStartTimeOfPersonalActivityIsAfterTheEndTimeOfMainShift()
+		{
+			var scheduleDate = new DateOnly(2018, 4, 23);
+			setUpPersonAndCulture();
+
+			var scenario = CurrentScenario.Has("Default");
+
+			var period = new DateTimePeriod(new DateTime(2018, 4, 24, 9, 0, 0, DateTimeKind.Utc), new DateTime(2018, 4, 24, 18, 0, 0, DateTimeKind.Utc));
+			var personalPeriod = new DateTimePeriod(new DateTime(2018, 4, 24, 19, 0, 0, DateTimeKind.Utc), new DateTime(2018, 4, 24, 20, 0, 0, DateTimeKind.Utc));
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc, scenario, period, ShiftCategoryFactory.CreateShiftCategory("Main", "blue"));
+			pa.AddPersonalActivity(ActivityFactory.CreateActivity("personal activity", Color.Azure), personalPeriod);
+
+			ScheduleStorage.Add(pa);
+
+			var searchTerm = new Dictionary<PersonFinderField, string> {
+						   { PersonFinderField.FirstName, "Sherlock"}
+					   };
+
+			var result = Target.CreateWeekScheduleViewModel(new SearchSchedulesInput
+			{
+				CriteriaDictionary = searchTerm,
+				GroupIds = new Guid[] { team.Id.GetValueOrDefault() },
+				PageSize = 1,
+				CurrentPageIndex = 0,
+				DateInUserTimeZone = scheduleDate
+			});
+
+			result.Total.Should().Be(1);
+
+			var first = result.PersonWeekSchedules.FirstOrDefault();
+
+			first.DaySchedules[1].DateTimeSpan.GetValueOrDefault().StartDateTime.Should().Be(new DateTime(2018, 4, 24, 9, 0, 0, DateTimeKind.Utc));
+			first.DaySchedules[1].DateTimeSpan.GetValueOrDefault().EndDateTime.Should().Be(new DateTime(2018, 4, 24, 18, 0, 0, DateTimeKind.Utc));
 		}
 		[Test]
 		public void ShouldIndicateTerminationForTerminatedPerson()

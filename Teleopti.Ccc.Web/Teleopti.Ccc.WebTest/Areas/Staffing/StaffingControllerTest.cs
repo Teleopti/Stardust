@@ -97,6 +97,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 		[Test]		
 		public void ShouldFailWhenUsingPastDates()
 		{
+			UserCulture.IsSwedish();
 			Now.Is("2018-04-24 14:30");
 			ScenarioRepository.Has("Default");
 			var activity = ActivityRepository.Has("Activity");

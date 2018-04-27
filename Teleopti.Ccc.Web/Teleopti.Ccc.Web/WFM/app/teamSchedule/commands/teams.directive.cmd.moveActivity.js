@@ -3,7 +3,7 @@
 
 	angular.module('wfm.teamSchedule').directive('moveActivity', ['serviceDateFormatHelper', moveActivityDirective]);
 
-	function moveActivityDirective(serviceDateFormatHelper) {
+	function moveActivityDirective() {
 		return {
 			restrict: 'E',
 			scope: {},
@@ -64,7 +64,8 @@
 			return vm.invalidAgents.length > 0;
 		};
 
-		vm.updateInvalidAgents = function () {
+		vm.updateInvalidAgents = function (isFormValid) {
+			if (!isFormValid) return;
 			var currentTimezone = vm.getCurrentTimezone();
 			validator.validateMoveToTime(vm.scheduleMgtSvc, moment(vm.moveToTime), currentTimezone);
 			vm.invalidAgents = validator.getInvalidPeople();

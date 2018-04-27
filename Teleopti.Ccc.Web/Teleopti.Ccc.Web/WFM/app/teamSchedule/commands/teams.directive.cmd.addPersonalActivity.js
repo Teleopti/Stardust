@@ -76,8 +76,9 @@
 		};
 
 		vm.updateInvalidAgents = function () {
+			if (!$scope.newPersonalActivityForm.$valid)
+				return;
 			var belongsToDates = decidePersonBelongsToDates(vm.selectedAgents, getTimeRangeMoment());
-			vm.invalidAgents = [];
 
 			for (var i = 0; i < belongsToDates.length; i++) {
 				if (!belongsToDates[i].Date) vm.invalidAgents.push(vm.selectedAgents[i]);
