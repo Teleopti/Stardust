@@ -269,6 +269,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Configuration\TeleoptiConfigurationRepository.cs" />
     <Compile Include="Controllers\Log4NetModule.cs" />
     <Compile Include="Controllers\MachineKeyCookieTransform.cs" />
     <Compile Include="Controllers\MachineKeySessionSecurityTokenHandler.cs" />
