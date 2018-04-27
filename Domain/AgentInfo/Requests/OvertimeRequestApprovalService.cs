@@ -95,7 +95,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				Date = belongsToDate,
 				MultiplicatorDefinitionSetId = overtimeRequest.MultiplicatorDefinitionSet.Id.GetValueOrDefault(),
 				Period = period,
-				Person = overtimeRequest.Person
+				Person = overtimeRequest.Person,
+				AllowDisconnected = true
 			});
 		}
 

@@ -313,15 +313,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<TeamBlockDayOffOptimizer>().As<ITeamBlockDayOffOptimizer>().InstancePerLifetimeScope().ApplyAspects();
 				builder.RegisterType<DayOffOptimizerStandard>().InstancePerLifetimeScope();
+				builder.RegisterType<DayOffOptimizerPreMoveResultPredictor>().InstancePerLifetimeScope();
 			}
 			else
 			{
 				builder.RegisterType<TeamBlockDayOffOptimizerOLD>().As<ITeamBlockDayOffOptimizer>().InstancePerLifetimeScope().ApplyAspects();
 				builder.RegisterType<DayOffOptimizerStandardOLD>().InstancePerLifetimeScope();
+				builder.RegisterType<DayOffOptimizerPreMoveResultPredictorOLD>().InstancePerLifetimeScope();
 			}
 
 			builder.RegisterType<AffectedDayOffs>().SingleInstance();
-			builder.RegisterType<DayOffOptimizerPreMoveResultPredictor>().InstancePerLifetimeScope();
 
 			builder.RegisterType<TeamBlockRemoveShiftCategoryOnBestDateService>().As<ITeamBlockRemoveShiftCategoryOnBestDateService>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockRetryRemoveShiftCategoryBackToLegalService>().InstancePerLifetimeScope();

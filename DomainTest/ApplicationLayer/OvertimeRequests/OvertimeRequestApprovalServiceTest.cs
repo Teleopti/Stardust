@@ -16,7 +16,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -59,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		{
 			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			isolate.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
-			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("default") {DefaultScenario = true}))
+			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("default") { DefaultScenario = true }))
 				.For<IScenarioRepository>();
 		}
 
@@ -75,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var period = new DateTimePeriod(Now.UtcDateTime().AddHours(8), Now.UtcDateTime().AddHours(9));
 
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] {_emailSkillType})
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _emailSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				BetweenDays = new MinMax<int>(0, 5),
@@ -128,13 +127,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var period = new DateTimePeriod(Now.UtcDateTime().AddHours(8), Now.UtcDateTime().AddHours(9));
 
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] {_phoneSkillType})
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				BetweenDays = new MinMax<int>(0, 5),
 				OrderIndex = 1
 			});
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] {_emailSkillType})
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _emailSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				BetweenDays = new MinMax<int>(0, 5),
@@ -204,13 +203,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var period = new DateTimePeriod(Now.UtcDateTime().AddHours(8), Now.UtcDateTime().AddHours(9));
 
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] {_phoneSkillType})
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				BetweenDays = new MinMax<int>(0, 5),
 				OrderIndex = 1
 			});
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] {_emailSkillType})
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _emailSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				BetweenDays = new MinMax<int>(0, 5),
@@ -282,7 +281,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var period = new DateTimePeriod(Now.UtcDateTime().AddHours(23), Now.UtcDateTime().AddDays(1).AddHours(1));
 
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] {_phoneSkillType})
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				BetweenDays = new MinMax<int>(0, 5),
@@ -334,6 +333,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			addOvertimeActivityCommand.Should().Not.Be.Null();
 			addOvertimeActivityCommand?.ActivityId.Should().Be.EqualTo(phoneActivity.Id.GetValueOrDefault());
 			addOvertimeActivityCommand?.Period.Should().Be.EqualTo(period);
+		}
+		[Test]
+		public void ShouldAllowToAddDisconnnectedOvertimeActivity()
+		{
+			var todayShiftPeriod = new DateTimePeriod(new DateTime(2018, 01, 01, 20, 0, 0, DateTimeKind.Utc), new DateTime(2018, 01, 02, 02, 0, 0, DateTimeKind.Utc));
+
+			var requestPeriod = new DateTimePeriod(new DateTime(2018, 01, 02, 03, 0, 0, DateTimeKind.Utc), new DateTime(2018, 01, 02, 10, 0, 0, DateTimeKind.Utc));
+
+			doBelongsToDateTest(todayShiftPeriod, requestPeriod, null);
+
+			var addOvertimeActivityCommand = CommandDispatcher.LatestCommand as AddOvertimeActivityCommand;
+			addOvertimeActivityCommand.Should().Not.Be.Null();
+			addOvertimeActivityCommand?.AllowDisconnected.Should().Be.True();
 		}
 
 		[Test]
@@ -560,6 +572,53 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestChangeBelongsToDateForOverNightShift_74984)]
+		public void ShouldChangeBelongsToDateWhenOvertimeIsConnectedToPreviousFullDayAbsence()
+		{
+			Now.Is(new DateTime(2018, 01, 01, 0, 0, 0, DateTimeKind.Utc));
+
+			setupPerson(0, 24);
+
+			LoggedOnUser.CurrentUser().PersonPeriodCollection[0].PersonContract.Contract.WorkTime = new WorkTime(TimeSpan.FromHours(15));
+
+			ScheduleStorage.Add(new PersonAbsence(LoggedOnUser.CurrentUser(), Scenario.Current(), new AbsenceLayer(new Absence(),
+				new DateTimePeriod(new DateTime(2018, 01, 01, 0, 0, 0, DateTimeKind.Utc),
+					new DateTime(2018, 01, 01, 23, 59, 0, DateTimeKind.Utc)))).WithId());
+
+			var requestPeriod = new DateTimePeriod(new DateTime(2018, 01, 02, 01, 0, 0, DateTimeKind.Utc), new DateTime(2018, 01, 02, 05, 0, 0, DateTimeKind.Utc));
+
+			doBelongsToDateTestByAssignment(null, requestPeriod, null);
+
+			var addOvertimeActivityCommand = CommandDispatcher.LatestCommand as AddOvertimeActivityCommand;
+			addOvertimeActivityCommand.Should().Not.Be.Null();
+			addOvertimeActivityCommand?.Date.Should().Be.EqualTo(new DateOnly(2018, 1, 1));
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestChangeBelongsToDateForOverNightShift_74984)]
+		public void ShouldChangeBelongsToDateWhenOvertimeIsConnectedToPreviousDayShiftWithLastLayerAsAbsence()
+		{
+			Now.Is(new DateTime(2018, 01, 01, 0, 0, 0, DateTimeKind.Utc));
+
+			setupPerson(0, 24);
+
+			var todayShiftPeriod = new DateTimePeriod(new DateTime(2018, 01, 01, 20, 0, 0, DateTimeKind.Utc), new DateTime(2018, 01, 02, 01, 0, 0, DateTimeKind.Utc));
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(LoggedOnUser.CurrentUser(), Scenario.Current(), new Activity("test").WithId(), todayShiftPeriod, new ShiftCategory());
+			ScheduleStorage.Add(personAssignment);
+			ScheduleStorage.Add(new PersonAbsence(LoggedOnUser.CurrentUser(), Scenario.Current(), new AbsenceLayer(new Absence(),
+				new DateTimePeriod(new DateTime(2018, 01, 01, 23, 0, 0, DateTimeKind.Utc),
+					new DateTime(2018, 01, 02, 01, 0, 0, DateTimeKind.Utc)))).WithId());
+
+
+			var requestPeriod = new DateTimePeriod(new DateTime(2018, 01, 02, 03, 0, 0, DateTimeKind.Utc), new DateTime(2018, 01, 02, 10, 0, 0, DateTimeKind.Utc));
+
+			doBelongsToDateTestByAssignment(personAssignment, requestPeriod, null);
+
+			var addOvertimeActivityCommand = CommandDispatcher.LatestCommand as AddOvertimeActivityCommand;
+			addOvertimeActivityCommand.Should().Not.Be.Null();
+			addOvertimeActivityCommand?.Date.Should().Be.EqualTo(new DateOnly(todayShiftPeriod.StartDateTime));
+		}
+		[Test]
 		public void ShouldNotApproveWhenAgentSkillIsOutOfPersonPeriod()
 		{
 			setupPerson(0, 24);
@@ -571,7 +630,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var period = new DateTimePeriod(Now.UtcDateTime().AddHours(8), Now.UtcDateTime().AddHours(9));
 
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] {_phoneSkillType})
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				BetweenDays = new MinMax<int>(0, 5),
@@ -588,7 +647,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var personSkillPhone = createPersonSkill(phoneActivity, criticalUnderStaffingSkillPhone);
 
 			var team = TeamFactory.CreateTeam("team1", "site1");
-			var personPeriod = (PersonPeriod) PersonPeriodFactory.CreatePersonPeriod(
+			var personPeriod = (PersonPeriod)PersonPeriodFactory.CreatePersonPeriod(
 				new DateOnly(period.EndDateTime.AddDays(30)), PersonContractFactory.CreatePersonContract(), team);
 			LoggedOnUser.CurrentUser().AddPersonPeriod(personPeriod);
 
@@ -651,21 +710,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var workflowControlSet = new WorkflowControlSet();
 			workflowControlSet.AddOpenOvertimeRequestPeriod(
-				new OvertimeRequestOpenRollingPeriod(new[] {_emailSkillType, _phoneSkillType})
+				new OvertimeRequestOpenRollingPeriod(new[] { _emailSkillType, _phoneSkillType })
 				{
 					AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 					BetweenDays = new MinMax<int>(0, 7),
 					OrderIndex = 1
 				});
 
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] {_emailSkillType})
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _emailSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Deny,
 				BetweenDays = new MinMax<int>(0, 5),
 				OrderIndex = 2
 			});
 
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] {_chatSkillType})
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _chatSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.No,
 				BetweenDays = new MinMax<int>(0, 5),
@@ -772,7 +831,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfo.Utc);
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] {_phoneSkillType})
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				BetweenDays = new MinMax<int>(0, 30)
@@ -815,7 +874,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		private PersonPeriod getOrAddPersonPeriod(DateOnly startDate)
 		{
 			var personPeriod =
-				(PersonPeriod) LoggedOnUser.CurrentUser().PersonPeriods(startDate.ToDateOnlyPeriod()).FirstOrDefault();
+				(PersonPeriod)LoggedOnUser.CurrentUser().PersonPeriods(startDate.ToDateOnlyPeriod()).FirstOrDefault();
 			if (personPeriod != null) return personPeriod;
 			var team = TeamFactory.CreateTeam("team1", "site1");
 			personPeriod =
@@ -899,7 +958,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			}
 
 			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] {_phoneSkillType})
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _phoneSkillType })
 			{
 				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
 				BetweenDays = new MinMax<int>(0, 5),
