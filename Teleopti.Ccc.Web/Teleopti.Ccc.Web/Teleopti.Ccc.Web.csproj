@@ -1470,6 +1470,10 @@
     </None>
     <Content Include="WFM\ai.js" />
     <Content Include="WFM\appInsights.js" />
+    <Content Include="WFM\app\forecasting\forecasting.default.controller.js" />
+    <Content Include="WFM\app\forecasting\html\forecasting.html" />
+    <Content Include="WFM\app\forecasting\refact\r2forecast.controller.js" />
+    <Content Include="WFM\app\forecasting\refact\r2forecast.html" />
     <Content Include="WFM\app\gamification\gamification.component.badgeCalculation.js" />
     <Content Include="WFM\app\gamification\gamification.component.badgeCalculation.spec.js" />
     <Content Include="WFM\app\gamification\gamification.component.gamification.js" />
@@ -1882,14 +1886,8 @@
     <Content Include="WFM\index_desktop_client.tpl.html" />
     <Content Include="WFM\index.tpl.html" />
     <Content Include="WFM\app\app_desktop_client.js" />
-    <Content Include="WFM\app\forecasting\forecasting.advanced.controller.spec.js" />
     <Content Include="WFM\app\forecasting\forecasting.routes.js" />
-    <Content Include="WFM\app\forecasting\forecasting.start.controller.spec.js" />
-    <Content Include="WFM\app\forecasting\html\forecasting-result-chart.html" />
-    <Content Include="WFM\app\forecasting\html\forecasting.html" />
     <Content Include="WFM\app\forecasting\html\skill-create.html" />
-    <Content Include="WFM\app\forecasting\forecasting.default.controller.js" />
-    <Content Include="WFM\app\forecasting\forecasting.resultChart.directive.js" />
     <Content Include="WFM\app\forecasting\skill.create.controller.spec.js" />
     <Content Include="WFM\app\global\areas\areas.controller.spec.js" />
     <Content Include="WFM\app\global\businessunits\businessunits.service.js" />
@@ -2084,8 +2082,6 @@
     <Content Include="WFM\app\teamSchedule\_modules.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali-ext.js" />
     <Content Include="WFM\app\forecasting\c3-fix-forecast.js" />
-    <Content Include="WFM\app\forecasting\html\forecasting-advanced.html" />
-    <Content Include="WFM\app\forecasting\forecasting.advanced.controller.js" />
     <Content Include="WFM\app\outbound\angular-gantt.ext.js" />
     <Content Include="WFM\app\outbound\outbound.directive.scroll-fix.js" />
     <Content Include="WFM\app\outbound\outbound.controller.campaign-list-gantt.js" />
@@ -2197,7 +2193,6 @@
     <None Include="WFM\css\_layout.scss" />
     <None Include="WFM\css\_outbound.scss" />
     <Content Include="WFM\Gruntfile.js" />
-    <Content Include="WFM\app\forecasting\forecasting.start.controller.js" />
     <Content Include="WFM\app\forecasting\forecasting.service.js" />
     <Content Include="WFM\app\global\areas\areas.controller.js" />
     <Content Include="WFM\app\global\areas\areas.service.js" />
@@ -2486,7 +2481,6 @@
     <Content Include="Areas\Reporting\Views\Report\Adherence.cshtml" />
     <Content Include="Areas\Reporting\Views\Report\Empty.cshtml" />
     <Content Include=".node\flatten-packages.cmd" />
-    <Content Include="WFM\app\forecasting\html\forecasting-overview.html" />
     <Content Include="WFM\html\main.html" />
     <Content Include="WFM\html\nav.html" />
     <Content Include="WFM\app\app.js" />
