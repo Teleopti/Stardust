@@ -10,7 +10,7 @@ GO
 CREATE PROCEDURE [mart].[etl_job_execution_history]
 	@start_date smalldatetime, 
 	@end_date smalldatetime,
-	@business_unit_id uniqueidentifier,
+	@business_unit_id nvarchar(max),
 	@show_only_errors bit
 AS
 BEGIN
