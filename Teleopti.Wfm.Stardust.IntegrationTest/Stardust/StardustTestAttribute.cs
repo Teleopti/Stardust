@@ -53,26 +53,36 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 				DataSourceHelper.TryRestoreApplicationDatabaseBySql(path, dataHash) &&
 				DataSourceHelper.TryRestoreAnalyticsDatabaseBySql(path, dataHash);
 
+			//DO NOT remove this as you will get optimistic lock on two diff tests
 			if (!haveDatabases)
 			{
-				TestLog.Debug("Setting up data for the test");
-				StateHolderProxyHelper.SetupFakeState(
-					DataSourceHelper.CreateDataSource(Container),
-					DefaultPersonThatCreatesData.PersonThatCreatesDbData,
-					DefaultBusinessUnit.BusinessUnit
-				);
+				try
+				{
+					TestLog.Debug("Setting up data for the test");
+					StateHolderProxyHelper.SetupFakeState(
+						DataSourceHelper.CreateDataSource(Container),
+						DefaultPersonThatCreatesData.PersonThatCreatesDbData,
+						DefaultBusinessUnit.BusinessUnit
+					);
 
-				DefaultDataCreator.Create();
-				DataSourceHelper.ClearAnalyticsData();
-				DefaultAnalyticsDataCreator.Create();
-				DataCreator.Create();
+					DefaultDataCreator.Create();
+					DataSourceHelper.ClearAnalyticsData();
+					DefaultAnalyticsDataCreator.Create();
+					DataCreator.Create();
 
+
+					DataSourceHelper.BackupApplicationDatabaseBySql(path, dataHash);
+					DataSourceHelper.BackupAnalyticsDatabaseBySql(path, dataHash);
+
+					StateHolderProxyHelper.Logout();
+					StateHolderProxyHelper.ClearStateHolder();
+				}
+				catch (Exception ex)
+				{
+					TestLog.Debug(ex.InnerException.StackTrace);
+					throw;
+				}
 				
-				DataSourceHelper.BackupApplicationDatabaseBySql(path, dataHash);
-				DataSourceHelper.BackupAnalyticsDatabaseBySql(path, dataHash);
-				
-				StateHolderProxyHelper.Logout();
-				StateHolderProxyHelper.ClearStateHolder();
 			}
 
 			TestLog.Debug("Starting hangfire");
