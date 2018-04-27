@@ -20,7 +20,8 @@
 		ctrl.processingCommand = false;
 		ctrl.invalidAgents = [];
 
-		ctrl.validateTimeRangeAndInput = function () {
+		ctrl.validateTimeRangeAndInput = function (isFormValid) {
+			if (!isFormValid) return;
 			ctrl.timeRangeIsValid = validateTimeRange(ctrl.fromTime, ctrl.toTime);
 			ctrl.validateInput();
 		}
