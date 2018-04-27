@@ -189,7 +189,7 @@
 			}]
 		});
 
-		vm.updateInvalidAgents();
+		vm.updateInvalidAgents(true);
 		result.scope.$apply();
 
 		var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));

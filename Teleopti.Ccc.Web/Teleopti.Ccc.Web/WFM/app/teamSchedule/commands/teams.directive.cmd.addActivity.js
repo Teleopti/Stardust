@@ -50,7 +50,7 @@
 
 		vm.updateInvalidAgents = updateInvalidAgents;
 
-		updateInvalidAgents();
+		updateInvalidAgents(true);
 
 		activityService.fetchAvailableActivities().then(function (activities) {
 			vm.availableActivities = activities;
@@ -78,7 +78,8 @@
 			return vm.invalidAgents.length != vm.selectedAgents.length;
 		};
 
-		function updateInvalidAgents () {
+		function updateInvalidAgents(isTimeRangeValid) {
+			if (!isTimeRangeValid) return;
 			var belongsToDates = decidePersonBelongsToDates(vm.selectedAgents, getTimeRangeMoment());
 			vm.invalidAgents = [];
 
