@@ -38,42 +38,42 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		{
 			base.BeforeTest(testDetails);
 
-			//var dataHash = DefaultDataCreator.HashValue;
+			var dataHash = DefaultDataCreator.HashValue;
 
 			DataSourceHelper.CreateDatabases();
-//			var path = "";
-//#if DEBUG
-//			path = "./";
-//#else
-//				path = Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "Stardust");
-//#endif
+			var path = "";
+#if DEBUG
+			path = "./";
+#else
+				path = Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "Stardust");
+#endif
 
 
-			//var haveDatabases =
-			//	DataSourceHelper.TryRestoreApplicationDatabaseBySql(path, dataHash) &&
-			//	DataSourceHelper.TryRestoreAnalyticsDatabaseBySql(path, dataHash);
+			var haveDatabases =
+				DataSourceHelper.TryRestoreApplicationDatabaseBySql(path, dataHash) &&
+				DataSourceHelper.TryRestoreAnalyticsDatabaseBySql(path, dataHash);
 
-			//if (!haveDatabases)
-			//{
-			TestLog.Debug("Setting up data for the test");
-			StateHolderProxyHelper.SetupFakeState(
-				DataSourceHelper.CreateDataSource(Container),
-				DefaultPersonThatCreatesData.PersonThatCreatesDbData,
-				DefaultBusinessUnit.BusinessUnit
-			);
+			if (!haveDatabases)
+			{
+				TestLog.Debug("Setting up data for the test");
+				StateHolderProxyHelper.SetupFakeState(
+					DataSourceHelper.CreateDataSource(Container),
+					DefaultPersonThatCreatesData.PersonThatCreatesDbData,
+					DefaultBusinessUnit.BusinessUnit
+				);
 
-			DefaultDataCreator.Create();
-			DataSourceHelper.ClearAnalyticsData();
-			DefaultAnalyticsDataCreator.Create();
-			DataCreator.Create();
+				DefaultDataCreator.Create();
+				DataSourceHelper.ClearAnalyticsData();
+				DefaultAnalyticsDataCreator.Create();
+				DataCreator.Create();
 
 				
-			//DataSourceHelper.BackupApplicationDatabaseBySql(path, dataHash);
-			//DataSourceHelper.BackupAnalyticsDatabaseBySql(path, dataHash);
+				DataSourceHelper.BackupApplicationDatabaseBySql(path, dataHash);
+				DataSourceHelper.BackupAnalyticsDatabaseBySql(path, dataHash);
 				
-			StateHolderProxyHelper.Logout();
-			StateHolderProxyHelper.ClearStateHolder();
-			//}
+				StateHolderProxyHelper.Logout();
+				StateHolderProxyHelper.ClearStateHolder();
+			}
 
 			TestLog.Debug("Starting hangfire");
 			HangfireClientStarter.Start();
