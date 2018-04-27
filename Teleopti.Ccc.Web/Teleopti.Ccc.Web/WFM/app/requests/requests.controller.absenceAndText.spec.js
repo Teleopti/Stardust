@@ -660,6 +660,18 @@ describe('Requests - absence and text controller tests: ',
 			expect(requestCommandParamsHolder.getSelectedRequestsIds(false).length).toEqual(0);
 		});
 
+		it('should not load requests when period is undefined', function () {
+			requestsDataService.setRequests([]);
+			params.selectedGroupIds = ['team'];
+			compileUIGridHtml(scope, controller.gridOptions);
+
+			requestsDataService.reset();
+			period = undefined;
+			scope.$digest();
+
+			expect(requestsDataService.getHasSentRequests()).toBeFalsy();
+		});
+
 		function setUpTarget() {
 			scope = $rootScope.$new();
 			controller = $controller('requestsAbsenceAndTextController', {

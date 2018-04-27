@@ -237,7 +237,7 @@
 				function (newVal) {
 					if (!newVal || !vm.initialized)
 						return;
-					if (validateDateParameters(newVal.period.startDate, newVal.period.endDate)) {
+					if (newVal.period && validateDateParameters(newVal.period.startDate, newVal.period.endDate)) {
 						vm.period = newVal.period;
 						vm.reload($stateParams.getParams());
 					}
