@@ -44,6 +44,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			checkBoxAdvOvertimeProbability.CheckStateChanged += checkBoxAdvOvertimeProbability_CheckStateChanged;
 		}
 
+		public void SetOvertimeRequestUsePrimarySkill(bool usePrimarySkill)
+		{
+			checkBoxUsePrimarySkill.CheckStateChanged -= checkBoxUsePrimarySkill_CheckStateChanged;
+			checkBoxUsePrimarySkill.Checked = usePrimarySkill;
+			checkBoxUsePrimarySkill.CheckStateChanged += checkBoxUsePrimarySkill_CheckStateChanged;
+		}
+
 		public void SetOvertimeRequestMaximumTimeEnabled(bool overtimeRequestMaximumTimeEnabled)
 		{
 			checkBoxAdvOvertimeMaximumEnabled.CheckStateChanged -= CheckBoxAdvOvertimeMaximumEnabled_CheckStateChanged;
@@ -107,7 +114,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		public void SetOverTimeRequestMaximumTime(TimeSpan? selectedModelOvertimeRequestMaximumTime)
 		{
-			if (selectedModelOvertimeRequestMaximumTime.HasValue && selectedModelOvertimeRequestMaximumTime.Value != TimeSpan.Zero) { 
+			if (selectedModelOvertimeRequestMaximumTime.HasValue && selectedModelOvertimeRequestMaximumTime.Value != TimeSpan.Zero)
+			{
 				timeSpanTextBoxOvertimeRequestMaximumTime.SetInitialResolution(selectedModelOvertimeRequestMaximumTime.Value);
 				comboBoxOvertimeRequestMaximumTimeHandleType.Enabled = true;
 			}
@@ -168,6 +176,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.DisplayMember = "Description";
 		}
 
+		private void initOvertimeRequestUsePrimarySkill()
+		{
+			if (!_toggleManager.IsEnabled(Toggles.OvertimeRequestUsePrimarySkillOption_75573) || !_presenter.IsUsingPrimarySkill())
+			{
+				checkBoxUsePrimarySkill.Visible = false;
+			}
+		}
 		private void timeSpanTextBoxOvertimeRequestMaximumTime_Leave(object sender, EventArgs e)
 		{
 			_presenter.SetOvertimeRequestMaximumTime(timeSpanTextBoxOvertimeRequestMaximumTime.Value);
@@ -176,13 +191,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private void ComboBoxOvertimeRequestMaximumTimeHandleType_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			_presenter.SetOvertimeRequestMaximumTimeHandleType(
-				(OvertimeRequestValidationHandleOptionView) comboBoxOvertimeRequestMaximumTimeHandleType.SelectedItem);
+				(OvertimeRequestValidationHandleOptionView)comboBoxOvertimeRequestMaximumTimeHandleType.SelectedItem);
 		}
 
 		private void ComboBoxOvertimeRequestStaffingCheckMethod_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			_presenter.SetOvertimeRequestIntradayStaffingCheckMethod(
-				(OvertimeRequestStaffingCheckMethodOptionView) comboBoxOvertimeRequestStaffingCheckMethod.SelectedItem);
+				(OvertimeRequestStaffingCheckMethodOptionView)comboBoxOvertimeRequestStaffingCheckMethod.SelectedItem);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
@@ -200,7 +215,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			cellModel.HideTodayButton();
 			gridControlOvertimeRequestOpenPeriods.CellModels.Add(GridCellModelConstants.CellTypeDatePickerCell, cellModel);
 
-			
+
 
 			var cell = new NullableIntegerCellModel(gridControlOvertimeRequestOpenPeriods.Model)
 			{
@@ -291,6 +306,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		{
 			_presenter.SetOvertimeProbability(checkBoxAdvOvertimeProbability.Checked);
 		}
+		private void checkBoxUsePrimarySkill_CheckStateChanged(object sender, EventArgs e)
+		{
+			_presenter.SetOvertimeRequestUsePrimarySkill(checkBoxUsePrimarySkill.Checked);
+		}
 
 		private void CheckBoxAdvOvertimeMaximumEnabled_CheckStateChanged(object sender, EventArgs e)
 		{
@@ -342,7 +361,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			if (e.RowIndex == 0 && (e.ColIndex == 3 || e.ColIndex == 4))
 			{
 				e.Style.CellTipText = " - " + Resources.NewMaxWeekWorkTimeRuleName + "\n" +
-									  " - "	+ Resources.NewNightlyRestRuleName + "\n" +
+									  " - " + Resources.NewNightlyRestRuleName + "\n" +
 									  " - " + Resources.MinWeeklyRestRuleName;
 			}
 		}
@@ -360,7 +379,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				chosenOvertimeRequestPeriodTypeModel == null && chosenOvertimeRequestPeriodSkillTypeModel == null) return;
 
 			var overtimeRequestPeriodModel = _overtimeRequestOpenPeriodGridHelper.FindSelectedItem();
-			if (chosenOvertimeRequestPeriodTypeModel!= null)
+			if (chosenOvertimeRequestPeriodTypeModel != null)
 			{
 				if (overtimeRequestPeriodModel.PeriodType.Equals(chosenOvertimeRequestPeriodTypeModel)) return;
 				_presenter.SetOvertimeRequestPeriodType(overtimeRequestPeriodModel, chosenOvertimeRequestPeriodTypeModel);

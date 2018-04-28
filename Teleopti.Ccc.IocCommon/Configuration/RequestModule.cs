@@ -134,6 +134,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			registerType<IOvertimeRequestCriticalUnderStaffedSpecification,
 				OvertimeRequestCriticalUnderStaffedSpecificationToggle74944On, OvertimeRequestCriticalUnderStaffedSpecification>(
 				builder, Toggles.OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944);
+
+			registerType<IPrimaryPersonSkillFilter,
+				PrimaryPersonSkillFilter, PrimaryPersonSkillFilterToggle75573Off>(
+				builder, Toggles.OvertimeRequestUsePrimarySkillOption_75573);
 		}
 
 		private void registerType<T, TToggleOn, TToggleOff>(ContainerBuilder builder, Toggles toggle)

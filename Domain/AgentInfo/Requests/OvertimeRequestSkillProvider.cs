@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		public IEnumerable<ISkill> GetAvailableSkillsBySkillType(IPerson person, DateTimePeriod requestPeriod)
 		{
 			var period = requestPeriod.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
-			return _primaryPersonSkillFilter.Filter(getSupportedPersonSkillsInOpenPeriods(person, period))
+			return _primaryPersonSkillFilter.Filter(getSupportedPersonSkillsInOpenPeriods(person, period), person)
 				.Select(s => s.Skill).ToList();
 		}
 
