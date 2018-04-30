@@ -148,7 +148,7 @@
         {
           ForecastStart: vm.forecastPeriod.startDate,
           ForecastEnd: vm.forecastPeriod.endDate,
-          WorkloadId: temp,
+          Workload: temp,
           ScenarioId: vm.selectedScenario.Id,
           BlockToken: blockToken,
           IsLastWorkload: true
