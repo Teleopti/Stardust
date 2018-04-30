@@ -596,5 +596,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 				IsDirty = true;
 			}
 		}
+
+		public bool OvertimeRequestUsePrimarySkill
+		{
+			get => DomainEntity.OvertimeRequestUsePrimarySkill;
+			set
+			{
+				if (DomainEntity.OvertimeRequestUsePrimarySkill == value) return;
+				DomainEntity.OvertimeRequestUsePrimarySkill = value;
+				IsDirty = true;
+			}
+		}
 	}
 }

@@ -17299,4 +17299,8 @@ The application will now exit.</value>
     <value>Overtime staffing check method:</value>
     <comment>Label name for overtime staffing check method setting</comment>
   </data>
+  <data name="UsePrimarySkill" xml:space="preserve">
+    <value>Use Priority Skill Validation</value>
+    <comment>Label name for use priority skill validation setting</comment>
+  </data>
 </root>

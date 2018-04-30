@@ -29,7 +29,6 @@
 		MyTimeWeb_PreferenceForJalaliCalendar_42965,
 		MyTimeWeb_DayScheduleForStartPage_43446,
 		MyTimeWeb_DayScheduleForStartPage_Command_44209,
-		MyTimeWeb_CalculateOvertimeProbabilityByPrimarySkill_44686,
 		MyTimeWeb_OvertimeRequest_44558,
 		MyTimeWeb_OvertimeRequestDefaultStartTime_47513,
 		MyTimeWeb_MonthlyScheduleMobileView_45004,
@@ -90,6 +89,7 @@
 		ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899,
 		ResourcePlanner_DayOffUsePredictorEverywhere_75667,
 		ResourcePlanner_MinimumStaffing_75339,
+		ResourcePlanner_UseErlangAWithFinitePatience_47738,
 
 		Wfm_DisplayOnlineHelp_39402,
 
@@ -130,6 +130,7 @@
 		OvertimeRequestSupportMultiSelectionSkillTypes_74945,
 		OvertimeRequestStaffingCheckMethod_74949,
 		OvertimeRequestChangeBelongsToDateForOverNightShift_74984,
+		OvertimeRequestUsePrimarySkillOption_75573,
 		ETL_SpeedUpNightlyDayOff_38213,
 		MyTimeWeb_MobileResponsive_43826,
 		WFM_Forecaster_Refact_44480,

@@ -148,6 +148,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelOpenForOvertimeRequests = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanelOvertimeMaximumSetting = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting = new System.Windows.Forms.TableLayoutPanel();
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill = new System.Windows.Forms.TableLayoutPanel();
 			this.labelOvertimeStaffingCheckMethodSetting = new System.Windows.Forms.Label();
 			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting = new System.Windows.Forms.TableLayoutPanel();
 			this.labelOpenForAbsenceRequests = new System.Windows.Forms.Label();
@@ -199,6 +200,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.panelOvertimeRequestHeaderBasic = new System.Windows.Forms.Panel();
 			this.labelOvertimeRequestBasic = new System.Windows.Forms.Label();
 			this.checkBoxAdvOvertimeProbability = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
+			this.checkBoxUsePrimarySkill = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxAdvOvertimeMaximumEnabled = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -256,9 +258,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelOpenForOvertimeRequests.SuspendLayout();
 			this.tableLayoutPanelOvertimeMaximumSetting.ResumeLayout(false);
 			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.ResumeLayout(false);
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.ResumeLayout(false);
 			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ResumeLayout(false);
 			this.tableLayoutPanelOvertimeMaximumSetting.PerformLayout();
 			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.PerformLayout();
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.PerformLayout();
 			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gridControlAbsenceRequestOpenPeriods)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.gridControlOvertimeRequestOpenPeriods)).BeginInit();
@@ -278,6 +282,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelETOTRequest.SuspendLayout();
 			this.panelOvertimeRequestHeaderBasic.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeProbability)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxUsePrimarySkill)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeMaximumEnabled)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
@@ -285,8 +290,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			// gradientPanelHeader
 			// 
-			this.gradientPanelHeader.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gradientPanelHeader.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.gradientPanelHeader.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.gradientPanelHeader.BackColor = System.Drawing.SystemColors.ActiveCaption;
 			this.gradientPanelHeader.BorderSingle = System.Windows.Forms.ButtonBorderStyle.None;
@@ -330,9 +335,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			// tableLayoutPanelMain
 			// 
-			this.tableLayoutPanelMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.tableLayoutPanelMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			| System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.tableLayoutPanelMain.AutoScroll = true;
 			this.tableLayoutPanelMain.ColumnCount = 1;
 			this.tableLayoutPanelMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -625,8 +630,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			// twoListSelectorAbsencesForReport
 			// 
-			this.twoListSelectorAbsencesForReport.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.twoListSelectorAbsencesForReport.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.twoListSelectorAbsencesForReport.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
 			this.tableLayoutPanelBasic.SetColumnSpan(this.twoListSelectorAbsencesForReport, 2);
 			this.twoListSelectorAbsencesForReport.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -666,8 +671,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			// twoListSelectorAbsences
 			// 
-			this.twoListSelectorAbsences.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.twoListSelectorAbsences.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.twoListSelectorAbsences.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
 			this.tableLayoutPanelBasic.SetColumnSpan(this.twoListSelectorAbsences, 2);
 			this.twoListSelectorAbsences.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -794,8 +799,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			// twoListSelectorCategories
 			// 
-			this.twoListSelectorCategories.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.twoListSelectorCategories.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.twoListSelectorCategories.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
 			this.tableLayoutPanelBasic.SetColumnSpan(this.twoListSelectorCategories, 2);
 			this.twoListSelectorCategories.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -823,8 +828,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			// buttonZoomOut
 			// 
-			this.buttonZoomOut.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonZoomOut.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonZoomOut.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonZoomOut.BackColor = System.Drawing.Color.White;
 			this.buttonZoomOut.BeforeTouchSize = new System.Drawing.Size(28, 28);
@@ -840,8 +845,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			// buttonZoomIn
 			// 
-			this.buttonZoomIn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonZoomIn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonZoomIn.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonZoomIn.BackColor = System.Drawing.Color.White;
 			this.buttonZoomIn.BeforeTouchSize = new System.Drawing.Size(28, 28);
@@ -857,8 +862,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			// buttonPanLeft
 			// 
-			this.buttonPanLeft.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonPanLeft.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonPanLeft.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonPanLeft.BackColor = System.Drawing.Color.White;
 			this.buttonPanLeft.BeforeTouchSize = new System.Drawing.Size(28, 28);
@@ -874,8 +879,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			// buttonPanRight
 			// 
-			this.buttonPanRight.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonPanRight.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonPanRight.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonPanRight.BackColor = System.Drawing.Color.White;
 			this.buttonPanRight.BeforeTouchSize = new System.Drawing.Size(28, 28);
@@ -891,8 +896,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			// twoListSelectorDayOffs
 			// 
-			this.twoListSelectorDayOffs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.twoListSelectorDayOffs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.twoListSelectorDayOffs.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
 			this.tableLayoutPanelBasic.SetColumnSpan(this.twoListSelectorDayOffs, 2);
 			this.twoListSelectorDayOffs.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1551,13 +1556,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			gridBaseStyle4.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
 			gridBaseStyle4.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
 			this.gridControlVisualisation.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
-            gridBaseStyle1,
-            gridBaseStyle2,
-            gridBaseStyle3,
-            gridBaseStyle4});
+			gridBaseStyle1,
+			gridBaseStyle2,
+			gridBaseStyle3,
+			gridBaseStyle4});
 			this.gridControlVisualisation.ColCount = 2;
 			this.gridControlVisualisation.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
-            new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
+			new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
 			this.gridControlVisualisation.DefaultGridBorderStyle = Syncfusion.Windows.Forms.Grid.GridBorderStyle.Solid;
 			this.gridControlVisualisation.DefaultRowHeight = 20;
 			this.gridControlVisualisation.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1576,7 +1581,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.gridControlVisualisation.Properties.MarkRowHeader = false;
 			this.gridControlVisualisation.RowCount = 0;
 			this.gridControlVisualisation.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
-            new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 29)});
+			new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 29)});
 			this.gridControlVisualisation.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
 			this.gridControlVisualisation.Size = new System.Drawing.Size(959, 115);
 			this.gridControlVisualisation.SmartSizeBox = false;
@@ -1924,7 +1929,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// tableLayoutPanelOvertimeMaximumSetting
 			// 
 			this.tableLayoutPanelOvertimeMaximumSetting.ColumnCount = 5;
-			this.tableLayoutPanelOvertimeMaximumSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(){ SizeType = SizeType.AutoSize});
+			this.tableLayoutPanelOvertimeMaximumSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle() { SizeType = SizeType.AutoSize });
 			this.tableLayoutPanelOvertimeMaximumSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanelOvertimeMaximumSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanelOvertimeMaximumSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
@@ -1956,11 +1961,27 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.Size = new System.Drawing.Size(959, 34);
 			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.TabIndex = 0;
 			//
+			// tableLayoutPanelOvertimeProbablityAndPrimarySkill
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.ColumnCount = 3;
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(){ Width = 50 });
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(){ Width = 50 });
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.Controls.Add(this.checkBoxAdvOvertimeProbability, 0, 0);
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.Controls.Add(this.checkBoxUsePrimarySkill, 1, 0);
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.Location = new System.Drawing.Point(3, 103);
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.Name = "tableLayoutPanelOvertimeProbablityAndPrimarySkill";
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.RowCount = 1;
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.Size = new System.Drawing.Size(959, 34);
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.TabIndex = 0;
+			//
+			//
 			// 
 			// tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting
 			// 
 			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ColumnCount = 7;
-			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(){ SizeType = SizeType.AutoSize});
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle() { SizeType = SizeType.AutoSize });
 			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
@@ -2108,7 +2129,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.Size = new System.Drawing.Size(150, 23);
 			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.TabIndex = 7;
-			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.SelectedIndexChanged += ComboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType_SelectedIndexChanged;	
+			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.SelectedIndexChanged += ComboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType_SelectedIndexChanged;
 			// 
 			// buttonDeleteOvertimeRequestPeriod
 			// 
@@ -2184,13 +2205,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			gridBaseStyle8.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
 			gridBaseStyle8.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
 			this.gridControlAbsenceRequestOpenPeriods.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
-            gridBaseStyle5,
-            gridBaseStyle6,
-            gridBaseStyle7,
-            gridBaseStyle8});
+			gridBaseStyle5,
+			gridBaseStyle6,
+			gridBaseStyle7,
+			gridBaseStyle8});
 			this.gridControlAbsenceRequestOpenPeriods.ColCount = 11;
 			this.gridControlAbsenceRequestOpenPeriods.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
-            new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
+			new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
 			this.gridControlAbsenceRequestOpenPeriods.ContextMenuStrip = this.contextMenuStripOpenPeriodsGrid;
 			this.gridControlAbsenceRequestOpenPeriods.DefaultGridBorderStyle = Syncfusion.Windows.Forms.Grid.GridBorderStyle.Solid;
 			this.gridControlAbsenceRequestOpenPeriods.DefaultRowHeight = 20;
@@ -2209,7 +2230,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.gridControlAbsenceRequestOpenPeriods.Properties.MarkRowHeader = false;
 			this.gridControlAbsenceRequestOpenPeriods.RowCount = 0;
 			this.gridControlAbsenceRequestOpenPeriods.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
-            new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 29)});
+			new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 29)});
 			this.gridControlAbsenceRequestOpenPeriods.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
 			this.gridControlAbsenceRequestOpenPeriods.Size = new System.Drawing.Size(959, 115);
 			this.gridControlAbsenceRequestOpenPeriods.SmartSizeBox = false;
@@ -2223,7 +2244,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// gridControlOvertimeRequestOpenPeriods
 			// 
 			this.gridControlOvertimeRequestOpenPeriods.AlphaBlendSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(94)))), ((int)(((byte)(171)))), ((int)(((byte)(222)))));
-			
+
 			this.gridControlOvertimeRequestOpenPeriods.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
 			gridBaseStyle5,
 			gridBaseStyle6,
@@ -2265,12 +2286,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			this.contextMenuStripOpenPeriodsGrid.ImageScalingSize = new System.Drawing.Size(32, 32);
 			this.contextMenuStripOpenPeriodsGrid.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemFromToPeriod,
-            this.toolStripMenuItemRollingPeriod,
-            this.toolStripMenuItemDelete,
-            this.toolStripSeparator2,
-            this.toolStripMenuItemMoveUp,
-            this.toolStripMenuItemMoveDown});
+			this.toolStripMenuItemFromToPeriod,
+			this.toolStripMenuItemRollingPeriod,
+			this.toolStripMenuItemDelete,
+			this.toolStripSeparator2,
+			this.toolStripMenuItemMoveUp,
+			this.toolStripMenuItemMoveDown});
 			this.contextMenuStripOpenPeriodsGrid.Name = "contextMenuStripOpenPeriodsGrid";
 			this.contextMenuStripOpenPeriodsGrid.ShowImageMargin = false;
 			this.contextMenuStripOpenPeriodsGrid.Size = new System.Drawing.Size(278, 190);
@@ -2512,8 +2533,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			// twoListSelectorMatchingSkills
 			// 
-			this.twoListSelectorMatchingSkills.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.twoListSelectorMatchingSkills.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.twoListSelectorMatchingSkills.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
 			this.tableLayoutPanelShiftTrade.SetColumnSpan(this.twoListSelectorMatchingSkills, 2);
 			this.twoListSelectorMatchingSkills.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -2665,7 +2686,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelETOTRequest.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanelETOTRequest.Controls.Add(this.panelOvertimeRequestHeaderBasic, 0, 0);
 			this.tableLayoutPanelETOTRequest.Controls.Add(this.tableLayoutPanelOvertimeStaffingCheckMethodSetting, 0, 1);
-			this.tableLayoutPanelETOTRequest.Controls.Add(this.checkBoxAdvOvertimeProbability, 0, 2);
+			this.tableLayoutPanelETOTRequest.Controls.Add(this.tableLayoutPanelOvertimeProbablityAndPrimarySkill, 0, 2);
 			this.tableLayoutPanelETOTRequest.Controls.Add(this.tableLayoutPanelOvertimeMaximumSetting, 0, 3);
 			this.tableLayoutPanelETOTRequest.Controls.Add(this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting, 0, 4);
 			this.tableLayoutPanelETOTRequest.Controls.Add(this.tableLayoutPanelOpenForOvertimeRequests, 0, 5);
@@ -2716,15 +2737,27 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// checkBoxAdvOvertimeProbability
 			// 
 			this.checkBoxAdvOvertimeProbability.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.checkBoxAdvOvertimeProbability.BeforeTouchSize = new System.Drawing.Size(460, 24);
+			this.checkBoxAdvOvertimeProbability.BeforeTouchSize = new System.Drawing.Size(220, 24);
 			this.checkBoxAdvOvertimeProbability.ImageCheckBoxSize = new System.Drawing.Size(26, 26);
 			this.checkBoxAdvOvertimeProbability.Location = new System.Drawing.Point(3, 43);
 			this.checkBoxAdvOvertimeProbability.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvOvertimeProbability.Name = "checkBoxAdvOvertimeProbability";
-			this.checkBoxAdvOvertimeProbability.Size = new System.Drawing.Size(460, 24);
+			this.checkBoxAdvOvertimeProbability.Size = new System.Drawing.Size(220, 24);
 			this.checkBoxAdvOvertimeProbability.TabIndex = 0;
 			this.checkBoxAdvOvertimeProbability.Text = "xxEnableOvertimeProbability";
 			this.checkBoxAdvOvertimeProbability.ThemesEnabled = false;
+			//
+			// checkBoxUsePrimarySkill
+			this.checkBoxUsePrimarySkill.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.checkBoxUsePrimarySkill.BeforeTouchSize = new System.Drawing.Size(220, 24);
+			this.checkBoxUsePrimarySkill.ImageCheckBoxSize = new System.Drawing.Size(26, 26);
+			this.checkBoxUsePrimarySkill.Location = new System.Drawing.Point(3, 43);
+			this.checkBoxUsePrimarySkill.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
+			this.checkBoxUsePrimarySkill.Name = "checkBoxUsePrimarySkill";
+			this.checkBoxUsePrimarySkill.Size = new System.Drawing.Size(220, 24);
+			this.checkBoxUsePrimarySkill.TabIndex = 0;
+			this.checkBoxUsePrimarySkill.Text = "xxUsePrimarySkill";
+			this.checkBoxUsePrimarySkill.ThemesEnabled = false;
 			// 
 			// checkBoxAdvOvertimeMaximumEnabled
 			// 
@@ -2873,6 +2906,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.panelOvertimeRequestHeaderBasic.ResumeLayout(false);
 			this.panelOvertimeRequestHeaderBasic.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeProbability)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxUsePrimarySkill)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeMaximumEnabled)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
@@ -2913,6 +2947,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private TableLayoutPanel tableLayoutPanelOpenForAbsenceRequests;
 		private TableLayoutPanel tableLayoutPanelOpenForOvertimeRequests;
 		private TableLayoutPanel tableLayoutPanelOvertimeStaffingCheckMethodSetting;
+		private TableLayoutPanel tableLayoutPanelOvertimeProbablityAndPrimarySkill;
 		private TableLayoutPanel tableLayoutPanelOvertimeMaximumSetting;
 		private TableLayoutPanel tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting;
 		private Label labelOpenForAbsenceRequests;
@@ -3031,6 +3066,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private TableLayoutPanel tableLayoutPanelAbsenceProbability;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxEnableAbsenceProbability;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvOvertimeProbability;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxUsePrimarySkill;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvOvertimeMaximumEnabled;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled;
 		private Panel panelOvertimeRequestHeaderBasic;

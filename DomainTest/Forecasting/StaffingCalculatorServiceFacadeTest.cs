@@ -9,19 +9,23 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.Forecasting
 {
 	[DomainTest]
-	[TestFixture(true, true)]
-	[TestFixture(true, false)]
-	[TestFixture(false, false)]
+	[TestFixture(true, true, true)]
+	[TestFixture(true, true, false)]
+	[TestFixture(true, false, false)]
+	[TestFixture(false, false, false)]
+	
 	public class StaffingCalculatorServiceFacadeTest:IConfigureToggleManager
 	{
 		public IStaffingCalculatorServiceFacade Target;
 		private readonly bool _useErlangA;
 		private readonly bool _useErlangAWithEsl;
+		private readonly bool _useErlangAWithAbandonRate;
 
-		public StaffingCalculatorServiceFacadeTest(bool useErlangA, bool useErlangAWithEsl)
+		public StaffingCalculatorServiceFacadeTest(bool useErlangA, bool useErlangAWithEsl, bool useErlangAWithAbandonRate)
 		{
 			_useErlangA = useErlangA;
 			_useErlangAWithEsl = useErlangAWithEsl;
+			_useErlangAWithAbandonRate = useErlangAWithAbandonRate;
 		}
 
 		[Test]
@@ -177,12 +181,34 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			esl.Should().Be.IncludedIn(.80, .82);
 		}
 
+		[Test]
+		public void ErlangCErlangAComparison10()
+		{
+			double callsPerInterval = 50;
+			double averageHandelingTimeSeconds = 300;
+			int serviceLevelSeconds = 20;
+			const int intervalLengthInSeconds = 3600;
+
+			const double targetServiceLevelPercentage = 0.868;
+			const double maximumOccupancy = 1;
+			const double minimumOccupancy = 0;
+
+			var agents = Target.AgentsUseOccupancy(targetServiceLevelPercentage, serviceLevelSeconds, callsPerInterval,
+				averageHandelingTimeSeconds, TimeSpan.FromSeconds(intervalLengthInSeconds), minimumOccupancy, maximumOccupancy, 1);
+
+			Assert.AreEqual(Math.Round(agents, 2), 7.00);
+		}
+
 		public void Configure(FakeToggleManager toggleManager)
 		{
 			if (_useErlangA)
 			{
 				if (_useErlangAWithEsl)
 				{
+					if (_useErlangAWithAbandonRate)
+					{
+						toggleManager.Enable(Toggles.ResourcePlanner_UseErlangAWithFinitePatience_47738);
+					}
 					toggleManager.Enable(Toggles.ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899);
 				}
 				toggleManager.Enable(Toggles.ResourcePlanner_UseErlangAWithInfinitePatience_45845);
