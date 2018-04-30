@@ -333,19 +333,22 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	function _loadContent(hashInfo, secondAction) {
+		if (window.appInsights !== undefined) {
+			window.appInsights.trackPageView('MyTime/' + hashInfo.hash);
+		}
 		_disablePortalControls();
 
 		_ajax.Ajax({
 			url: hashInfo.hash,
 			global: true,
-			success: function (html) {
+			success: function(html) {
 				var viewId = hashInfo.actionHash; //gröt
 				$('#body-inner').html(html);
 				$('#body-inner').show();
 				_invokeInitCallback(viewId, secondAction);
 				currentViewId = viewId;
 			},
-			error: function () {
+			error: function() {
 				var htmlString = '<h4 style="text-align:center;">Unable to load the page.</h4>';
 				$('#body-inner').show();
 				$('#body-inner').html(htmlString);
