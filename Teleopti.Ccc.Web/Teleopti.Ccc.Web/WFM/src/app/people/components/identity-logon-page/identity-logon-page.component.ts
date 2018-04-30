@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { AbstractControl } from '@angular/forms/src/model';
 import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { NavigationService } from '../../services';
 import { FormControlWithInitial } from '../shared';
 import { DuplicateIdentityLogonValidator } from './duplicate-identity-logon.validator';
@@ -51,6 +52,14 @@ export class IdentityLogonPageComponent implements OnDestroy, OnInit {
 			next: (people: PeopleWithLogon) => {
 				if (people.length === 0) return this.nav.navToSearch();
 				this.buildForm(people);
+			}
+		});
+		this.people.valueChanges.pipe(debounceTime(100)).subscribe({
+			next: val => {
+				console.log(val);
+				this.logons.filter(logon => logon.invalid).forEach(control => {
+					control.updateValueAndValidity();
+				});
 			}
 		});
 	}

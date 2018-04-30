@@ -322,6 +322,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		TimeSpan? OvertimeRequestMaximumContinuousWorkTime { get; set; }
 		TimeSpan? OvertimeRequestMinimumRestTimeThreshold { get; set; }
 		OvertimeRequestStaffingCheckMethod OvertimeRequestStaffingCheckMethod { get; set; }
+		bool OvertimeRequestUsePrimarySkill { get; set; }
 		void InsertOvertimePeriod(IOvertimeRequestOpenPeriod newOvertimeRequestOpenPeriod, int currentIndex);
 	}
 }

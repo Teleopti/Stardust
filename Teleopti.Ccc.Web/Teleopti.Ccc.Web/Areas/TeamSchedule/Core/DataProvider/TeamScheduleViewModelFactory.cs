@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
@@ -365,7 +366,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 								IanaId = _ianaTimeZoneProvider.WindowsToIana(timeZone.Id),
 								DisplayName = timeZone.DisplayName
 							};
-							dayScheduleViewModel.DateTimeSpan = personAssignment.PeriodExcludingPersonalActivity();
+							dayScheduleViewModel.DateTimeSpan = scheduleDay.ProjectionService().CreateProjection().Period();
 
 							if (personAssignment.ShiftCategory != null)
 							{

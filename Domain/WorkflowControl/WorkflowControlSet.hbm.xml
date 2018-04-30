@@ -170,6 +170,8 @@
 		<property name="OvertimeRequestMaximumContinuousWorkTimeEnabled" type="bool" not-null="true" />
 		
 		<property name="OvertimeRequestStaffingCheckMethod" not-null="true"/>
+		
+		<property name="OvertimeRequestUsePrimarySkill" type="bool" not-null="true" />
 
 		<filter name="businessUnitFilter"
                 condition=":businessUnitParameter = BusinessUnit" />

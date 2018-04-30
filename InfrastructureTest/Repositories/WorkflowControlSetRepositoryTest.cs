@@ -294,6 +294,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.That(staffingCheckMethod, Is.EqualTo(OvertimeRequestStaffingCheckMethod.IntradayWithShrinkage));
 		}
 
+		[Test]
+		public void ShouldSaveOvertimeRequestUsePrimarySkillOption()
+		{
+			var org = CreateAggregateWithCorrectBusinessUnit();
+			org.OvertimeRequestUsePrimarySkill = true;
+			PersistAndRemoveFromUnitOfWork(org);
+
+			IWorkflowControlSetRepository repository = new WorkflowControlSetRepository(UnitOfWork);
+			var result = repository.LoadAllSortByName();
+
+			var usePrimarySkill = result[0].OvertimeRequestUsePrimarySkill;
+
+			Assert.That(result.Count, Is.EqualTo(1));
+			Assert.That(usePrimarySkill, Is.EqualTo(true));
+		}
+
 		protected override Repository<IWorkflowControlSet> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
             return new WorkflowControlSetRepository(currentUnitOfWork);

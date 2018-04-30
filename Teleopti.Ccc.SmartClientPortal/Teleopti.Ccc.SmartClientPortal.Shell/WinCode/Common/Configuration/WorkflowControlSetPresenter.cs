@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		private IWorkflowControlSetModel _selectedModel;
 		private IList<IAbsence> _requestableAbsenceCollection;
 		private IList<ISkill> _skillCollection;
+		private bool _isUsingPrimarySkill;
 
 		public WorkflowControlSetPresenter(IWorkflowControlSetView view,
 			IUnitOfWorkFactory unitOfWorkFactory,
@@ -95,6 +96,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			_view.SetAbsenceRequestExpiration(_selectedModel);
 			_view.SetAbsenceProbability(_selectedModel.AbsenceProbabilityEnabled);
 			_view.SetOvertimeProbability(_selectedModel.IsOvertimeProbabilityEnabled);
+			_view.SetOvertimeRequestUsePrimarySkill(_selectedModel.OvertimeRequestUsePrimarySkill);
 			_view.SetOverTimeRequestMaximumTimeHandleType(_selectedModel.OvertimeRequestMaximumOvertimeValidationHandleOptionView);
 			_view.SetOverTimeRequestStaffingCheckMethod(_selectedModel.OvertimeRequestStaffingCheckMethodOptionView);
 			_view.SetOverTimeRequestMaximumTime(_selectedModel.OvertimeRequestMaximumTime);
@@ -155,6 +157,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 				var skillRepository = _repositoryFactory.CreateSkillRepository(uow);
 				_skillCollection = new List<ISkill>(skillRepository.FindAllWithoutMultisiteSkills());
+
+				setIsUsingPrimarySkill(uow);
 
 				initializeSupportedSkillTypes(uow);
 			}
@@ -785,6 +789,22 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			{
 				_selectedModel.OvertimeRequestStaffingCheckMethodOptionView = overtimeRequestStaffingCheckMethodOptionView;
 			}
+		}
+
+		public void SetOvertimeRequestUsePrimarySkill(bool overtimeRequestUsePrimarySkill)
+		{
+			_selectedModel.OvertimeRequestUsePrimarySkill = overtimeRequestUsePrimarySkill;
+		}
+
+		private void setIsUsingPrimarySkill(IUnitOfWork uow)
+		{
+			var skillRepository = _repositoryFactory.CreateSkillRepository(uow);
+			_isUsingPrimarySkill = skillRepository.LoadAll().Any(a => a.IsCascading());
+		}
+
+		public bool IsUsingPrimarySkill()
+		{
+			return _isUsingPrimarySkill;
 		}
 	}
 }

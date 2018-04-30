@@ -280,6 +280,21 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 				_target.SelectedModel.OvertimeRequestStaffingCheckMethodOptionView.OvertimeRequestStaffingCheckMethod);
 		}
 
+		[Test]
+		public void VerifyCanSetOvertimeRequestUsePrimarySkill()
+		{
+			var workflowControlSet = new WorkflowControlSet("My Workflow Control Set").WithId();
+			WorkflowControlSetRepository.Add(workflowControlSet);
+
+			initialize();
+
+			var workflowControlSetModel = _target.WorkflowControlSetModelCollection.ElementAt(0);
+			_target.SetSelectedWorkflowControlSetModel(workflowControlSetModel);
+			_target.SetOvertimeRequestUsePrimarySkill(true);
+
+			Assert.AreEqual(true, workflowControlSetModel.OvertimeRequestUsePrimarySkill);
+		}
+
 		private void initialize()
 		{
 			_target = new WorkflowControlSetPresenter(null, UnitOfWorkFactory, RepositoryFactory, ToggleManager);

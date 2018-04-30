@@ -1,30 +1,27 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { SearchPageComponent } from './search-page.component';
-import { PeopleModule } from '../../people.module';
 import { HttpClientModule } from '@angular/common/http';
-import { fakeBackendProvider } from '../../services';
+import { DebugElement } from '@angular/core';
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { PeopleTestModule } from '../../people.test.module';
+import { fakeBackendProvider } from '../../services';
+import { SearchPageComponent } from './search-page.component';
 
 describe('SearchPageComponent', () => {
 	let component: SearchPageComponent;
 	let fixture: ComponentFixture<SearchPageComponent>;
-	const SEARCH_PERSON_QUERY = '[data-test-search] [data-test-person]';
-	const WORKSPACE_PERSON_QUERY = '[data-test-workspace] [data-test-person]';
-	const WORKSPACE_PERSON_REMOVE = '[data-test-workspace] [data-test-person] [data-test-person-remove]';
+	let page: Page;
 
-	beforeEach(
-		async(() => {
-			TestBed.configureTestingModule({
-				imports: [PeopleModule, HttpClientModule],
-				providers: [fakeBackendProvider]
-			}).compileComponents();
-		})
-	);
+	beforeEach(async(() => {
+		TestBed.configureTestingModule({
+			imports: [PeopleTestModule, HttpClientModule],
+			providers: [fakeBackendProvider]
+		}).compileComponents();
+	}));
 
 	beforeEach(() => {
 		fixture = TestBed.createComponent(SearchPageComponent);
 		component = fixture.componentInstance;
+		page = new Page(fixture);
 		fixture.detectChanges();
 	});
 
@@ -32,50 +29,41 @@ describe('SearchPageComponent', () => {
 		expect(component).toBeTruthy();
 	});
 
-	it(
-		'should display people in list',
-		async(() => {
-			fixture.detectChanges();
+	it('should display search results', async(() => {
+		component.searchPeople();
 
-			component.searchPeople();
+		fixture.whenStable().then(() => {
+			expect(page.resultRows.length).toBeGreaterThan(0);
+		});
+	}));
 
-			fixture.whenStable().then(() => {
-				fixture.detectChanges();
+	it('should be able to select people', async(() => {
+		component.searchPeople();
 
-				expect(component.searchService.getPeople().getValue().length).toBeGreaterThan(0);
-
-				let debugElements = fixture.debugElement.queryAll(By.css(SEARCH_PERSON_QUERY));
-				expect(debugElements.length).toBeGreaterThan(0);
+		fixture.whenStable().then(() => {
+			expect(page.resultRows.length).toBeGreaterThan(0);
+			page.resultRows[0].nativeElement.click();
+			component.workspaceService.getSelectedPeople().subscribe({
+				next: people => {
+					expect(people.length).toEqual(1);
+				}
 			});
-		})
-	);
-
-	it(
-		'selected people should be shown in workspace',
-		async(() => {
-			fixture.detectChanges();
-
-			component.searchPeople();
-
-			fixture.whenStable().then(() => {
-				let debugElements;
-				fixture.detectChanges();
-
-				debugElements = fixture.debugElement.queryAll(By.css(SEARCH_PERSON_QUERY));
-				debugElements[0].nativeElement.click();
-				debugElements[1].nativeElement.click();
-				fixture.detectChanges();
-				debugElements = fixture.debugElement.queryAll(By.css(WORKSPACE_PERSON_QUERY));
-
-				expect(debugElements.length).toEqual(2);
-
-				// // Deleting person from workspace
-				fixture.debugElement.query(By.css(WORKSPACE_PERSON_REMOVE)).nativeElement.click();
-				fixture.detectChanges();
-				debugElements = fixture.debugElement.queryAll(By.css(WORKSPACE_PERSON_QUERY));
-
-				expect(debugElements.length).toEqual(1);
-			});
-		})
-	);
+		});
+	}));
 });
+
+class Page {
+	get resultRows() {
+		return this.queryAll('[data-test-search] [data-test-person]');
+	}
+
+	fixture: ComponentFixture<SearchPageComponent>;
+
+	constructor(fixture: ComponentFixture<SearchPageComponent>) {
+		this.fixture = fixture;
+	}
+
+	private queryAll(selector: string): DebugElement[] {
+		return this.fixture.debugElement.queryAll(By.css(selector));
+	}
+}

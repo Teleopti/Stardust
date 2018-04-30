@@ -14,6 +14,7 @@ import { ROLES } from './roles';
 import { PEOPLE } from './people';
 import { of } from 'rxjs/observable/of';
 import { mergeMap } from 'rxjs/operators';
+import { LOGONS } from './logons';
 
 @Injectable()
 export class FakeBackendInterceptor implements HttpInterceptor {
@@ -29,6 +30,9 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
 				if (request.url.endsWith('/api/PeopleData/fetchPersons') && request.method === 'POST') {
 					return of(new HttpResponse({ status: 200, body: PEOPLE }));
+				}
+				if (request.url.endsWith('/PersonInfo/LogonInfoFromGuids') && request.method === 'POST') {
+					return of(new HttpResponse({ status: 200, body: LOGONS }));
 				}
 
 				if (request.url.endsWith('/api/Search/FindPeople') && request.method === 'POST') {

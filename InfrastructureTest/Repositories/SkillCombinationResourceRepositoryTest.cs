@@ -1305,5 +1305,47 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			loadedCombinationResources.Single(x => x.StartDateTime.Equals(start.AddMinutes(15))).Resource.Should().Be
 				.EqualTo(1d);
 		}
+
+		[Test]
+		public void ShouldincludeIntervalsThatBelogToEndDay()
+		{
+			var skillId1 = persistSkill();
+			Now.Is("2017-06-01 08:00");
+
+			var combinationResourcesBpo = new List<ImportSkillCombinationResourceBpo>()
+			{
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 02, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
+					Resources = 5.5,
+					Source = "TPSWEDEN",
+					SkillIds = new List<Guid>{skillId1}
+
+				},
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
+					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
+					Resources = 5.1,
+					Source = "TPSWEDEN",
+					SkillIds = new List<Guid>{skillId1}
+				},
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 03, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 03, 0, 15, 0),
+					Resources = 5.1,
+					Source = "TPSWEDEN",
+					SkillIds = new List<Guid>{skillId1}
+				}
+			};
+			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
+
+			var skillResources =
+				Target.BpoResourcesForSkill(skillId1, new DateOnlyPeriod(2017, 06, 01, 2017, 06, 02)).ToList();
+			skillResources.Count.Should().Be.EqualTo(2);
+			skillResources.Any(x => x.StartDateTime == new DateTime(2017, 06, 03, 0, 0, 0)).Should().Be.EqualTo(false);
+		}
 	}
 }

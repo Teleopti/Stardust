@@ -37,6 +37,12 @@ export class WorkspaceService {
 		}
 	}
 
+	public selectPeople(people: Person[]): void {
+		people.forEach(person => {
+			this.selectPerson(person);
+		});
+	}
+
 	public deselectPerson(person: Person): void {
 		if (this.people$.getValue().find(p => p.Id === person.Id)) {
 			this.people$.next(this.people$.getValue().filter(p => p.Id !== person.Id));

@@ -30,3 +30,5 @@ export const mylesLogon: MylesLogon = {
 	LogonName: '',
 	Identity: ''
 };
+
+export const LOGONS = [adinaLogon, evaLogon, mylesLogon];

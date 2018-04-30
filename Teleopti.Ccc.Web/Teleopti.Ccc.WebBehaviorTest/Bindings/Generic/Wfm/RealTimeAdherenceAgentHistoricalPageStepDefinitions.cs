@@ -114,6 +114,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		private static void assertRuleAndStateChange(RuleAndStateChanges change)
 		{
 			var selector = $".change[data-time='{change.Time}']";
+
+			// because....
+			// in some rare cases if you use a table, where the td only has content in a child span
+			// sometimes other td:s do not get rendered/or something due to something height something
+			// forcing hight "fixes" it
+			var forceRowHeight = $@"
+var element = document.querySelector(""{selector}"");
+element.style.height = '50px';
+return 'OK';
+";
+			Browser.Interactions.AssertJavascriptResultContains(forceRowHeight, "OK");
+
 			Browser.Interactions.AssertFirstContains(selector, change.Time);
 			if (!string.IsNullOrEmpty(change.Activity))
 				Browser.Interactions.AssertFirstContains(selector, change.Activity);
