@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
+using Teleopti.Ccc.Domain.Forecasting.Models;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 {
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 	public class WorkloadForecastResultViewModel
 	{
 		public Guid WorkloadId { get; set; }
-		public dynamic[] Days { get; set; }
+		public ForecastResultModel[] Days { get; set; }
 	}
 
 	public class WorkloadQueueStatisticsViewModel

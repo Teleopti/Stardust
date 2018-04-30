@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
+using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -35,12 +35,12 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			};
 		}
 
-		private dynamic[] transformForecastResult(IEnumerable<IWorkloadDayBase> workloadDays)
+		private ForecastResultModel[] transformForecastResult(IEnumerable<IWorkloadDayBase> workloadDays)
 		{
-			var days = new List<dynamic>();
+			var days = new List<ForecastResultModel>();
 			foreach (var workloadDay in workloadDays)
 			{
-				dynamic day = new ExpandoObject();
+				var day = new ForecastResultModel();
 				day.date = workloadDay.CurrentDate.Date;
 				day.vc = workloadDay.Tasks;
 				day.vtc = workloadDay.TotalTasks;

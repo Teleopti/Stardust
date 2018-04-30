@@ -7,6 +7,8 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
+using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -108,15 +110,17 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		}
 
 		[HttpPost, Route("api/Forecasting/Forecast"), UnitOfWork]
-		public virtual Task<ForecastResultViewModel> Forecast(ForecastInput input)
+		public virtual IHttpActionResult Forecast(ForecastInput input)
 		{
 			var futurePeriod = new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd));
-			_forecastCreator.CreateForecastForWorkload(futurePeriod, input.Workload,
+			var forecast = _forecastCreator.CreateForecastForWorkload(futurePeriod, input.Workload,
 				_scenarioRepository.Get(input.ScenarioId));
-			return Task.FromResult(new ForecastResultViewModel
+			var ret = new WorkloadForecastResultViewModel()
 			{
-				Success = true
-			});
+				WorkloadId = input.Workload.WorkloadId,
+				Days = forecast.ToArray()
+			};
+			return Ok(ret);
 		}
 
 		[HttpPost, Route("api/Forecasting/IntradayPattern"), UnitOfWork]

@@ -3,6 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
+using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			_historicalPeriodProvider = historicalPeriodProvider;
 		}
 
-		public void ForecastWorkloadsWithinSkill(ISkill skill, ForecastWorkloadInput workloadInput, DateOnlyPeriod futurePeriod, IScenario scenario)
+		public IList<ForecastResultModel> ForecastWorkloadsWithinSkill(ISkill skill, ForecastWorkloadInput workloadInput, DateOnlyPeriod futurePeriod, IScenario scenario)
 		{
 			var skillDays = _fetchAndFillSkillDays.FindRange(futurePeriod, skill, scenario);
 			var workload = skill.WorkloadCollection.Single(w => w.Id.Value == workloadInput.WorkloadId);
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			}
 
 			var availablePeriod = _historicalPeriodProvider.AvailablePeriod(workload);
-			if (!availablePeriod.HasValue) return;
+			if (!availablePeriod.HasValue) return new List<ForecastResultModel>();
 
 			var availableIntradayTemplatePeriod = _historicalPeriodProvider.AvailableIntradayTemplatePeriod(availablePeriod.Value);
 			var quickForecasterWorkloadParams = new QuickForecasterWorkloadParams
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 				IntradayTemplatePeriod = availableIntradayTemplatePeriod,
 				ForecastMethodId = forecastMethodId
 			};
-			_quickForecasterWorkload.Execute(quickForecasterWorkloadParams);
+			return _quickForecasterWorkload.Execute(quickForecasterWorkloadParams);
 		}
 	}
 

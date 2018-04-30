@@ -206,6 +206,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleProjection\ScheduleProjectionReadOnlyChecker.cs" />
     <Compile Include="Common\CalculatePersonAccount.cs" />
     <Compile Include="Config\WebTenantAuthenticationConfiguration.cs" />
+    <Compile Include="Forecasting\Models\ForecastResultModel.cs" />
     <Compile Include="InterfaceLegacy\Domain\OvertimeRequestStaffingCheckMethod.cs" />
     <Compile Include="Intraday\BacklogSkillTypesForecastCalculator.cs" />
     <Compile Include="MultiTenancy\PersonIdentitiesInputModel.cs" />
