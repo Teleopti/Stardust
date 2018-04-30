@@ -24,7 +24,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		public DefaultDataCreator DefaultDataCreator;
 		public DataCreator DataCreator;
 		public DefaultAnalyticsDataCreator DefaultAnalyticsDataCreator;
-		public AsSystem AsSystem;
+		public ImpersonateSystem Impersonate;
 		public IDataSourceScope DataSource;
 		public WithUnitOfWork WithUnitOfWork;
 		public IBusinessUnitRepository BusinessUnits;
@@ -41,80 +41,68 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			var dataHash = DefaultDataCreator.HashValue;
 
 			DataSourceHelper.CreateDatabases();
-			var path = "";
 #if DEBUG
-			path = "./";
+			var path = "./";
 #else
-				path = Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "Stardust");
+			var path = Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "Stardust");
 #endif
-
-
+			
 			var haveDatabases =
 				DataSourceHelper.TryRestoreApplicationDatabaseBySql(path, dataHash) &&
 				DataSourceHelper.TryRestoreAnalyticsDatabaseBySql(path, dataHash);
+			if (!haveDatabases)
+				DataSourceHelper.CreateDatabases();
 
-			//DO NOT remove this as you will get optimistic lock on two diff tests
 			if (!haveDatabases)
 			{
-				try
-				{
-					TestLog.Debug("Setting up data for the test");
-					StateHolderProxyHelper.SetupFakeState(
-						DataSourceHelper.CreateDataSource(Container),
-						DefaultPersonThatCreatesData.PersonThatCreatesDbData,
-						DefaultBusinessUnit.BusinessUnit
-					);
+				StateHolderProxyHelper.SetupFakeState(
+					DataSourceHelper.CreateDataSource(Container),
+					DefaultPersonThatCreatesData.PersonThatCreatesDbData,
+					DefaultBusinessUnit.BusinessUnit
+				);
 
-					DefaultDataCreator.Create();
-					DataSourceHelper.ClearAnalyticsData();
-					DefaultAnalyticsDataCreator.Create();
-					DataCreator.Create();
+				DefaultDataCreator.Create();
+				DefaultAnalyticsDataCreator.OneTimeSetup();
+				DataSourceHelper.ClearAnalyticsData();
+				DefaultAnalyticsDataCreator.Create();
+				DataCreator.Create();
 
+				DataSourceHelper.BackupApplicationDatabaseBySql(path, dataHash);
+				DataSourceHelper.BackupAnalyticsDatabaseBySql(path, dataHash);
 
-					DataSourceHelper.BackupApplicationDatabaseBySql(path, dataHash);
-					DataSourceHelper.BackupAnalyticsDatabaseBySql(path, dataHash);
-
-					StateHolderProxyHelper.Logout();
-					StateHolderProxyHelper.ClearStateHolder();
-				}
-				catch (Exception ex)
-				{
-					TestLog.Debug(ex.InnerException.StackTrace);
-					throw;
-				}
-				
+				StateHolderProxyHelper.Logout();
 			}
 
-			TestLog.Debug("Starting hangfire");
 			HangfireClientStarter.Start();
 
 			Guid businessUnitId;
 			using (DataSource.OnThisThreadUse(DataSourceHelper.TestTenantName))
 				businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.Value;
-			AsSystem.Logon(DataSourceHelper.TestTenantName, businessUnitId);
+			Impersonate.Impersonate(DataSourceHelper.TestTenantName, businessUnitId);
 
 			TestSiteConfigurationSetup.Setup();
-			((TestConfigReader) ConfigReader).ConfigValues.Remove("ManagerLocation");
-			((TestConfigReader) ConfigReader).ConfigValues.Remove("MessageBroker");
-			((TestConfigReader) ConfigReader).ConfigValues.Remove("NumberOfNodes");
 
-			((TestConfigReader)ConfigReader).ConfigValues.Add("ManagerLocation", TestSiteConfigurationSetup.URL.AbsoluteUri + @"StardustDashboard/");
-			((TestConfigReader)ConfigReader).ConfigValues.Add("MessageBroker", TestSiteConfigurationSetup.URL.AbsoluteUri );
-			((TestConfigReader)ConfigReader).ConfigValues.Add("NumberOfNodes", "1");
-			
+			var configReader = (TestConfigReader) ConfigReader;
+			configReader.ConfigValues.Remove("ManagerLocation");
+			configReader.ConfigValues.Remove("MessageBroker");
+			configReader.ConfigValues.Remove("NumberOfNodes");
+
+			configReader.ConfigValues.Add("ManagerLocation", TestSiteConfigurationSetup.URL.AbsoluteUri + @"StardustDashboard/");
+			configReader.ConfigValues.Add("MessageBroker", TestSiteConfigurationSetup.URL.AbsoluteUri );
+			configReader.ConfigValues.Add("NumberOfNodes", "1");
 		}
-
 		
-
 		public override void AfterTest(ITest testDetails)
 		{
 			base.AfterTest(testDetails);
+			
 			TestLog.Debug("In teardown stopping all services");
 			Hangfire.WaitForQueue();
 			StateQueue.WaitForQueue();
-
-
+			
 			TestSiteConfigurationSetup.TearDown();
+
+			Impersonate?.EndImpersonation();
 		}
 	}
 }
