@@ -89,6 +89,7 @@
 		ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899,
 		ResourcePlanner_DayOffUsePredictorEverywhere_75667,
 		ResourcePlanner_MinimumStaffing_75339,
+		ResourcePlanner_UseErlangAWithFinitePatience_47738,
 
 		Wfm_DisplayOnlineHelp_39402,
 

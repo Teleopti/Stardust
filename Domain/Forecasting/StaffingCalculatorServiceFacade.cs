@@ -63,6 +63,24 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		}
 	}
 
+	[RemoveMeWithToggle("Move AgentsUseOccupancy to StaffingCalculatorServiceFacadeErlangA", Toggles.ResourcePlanner_UseErlangAWithFinitePatience_47738)]
+	public class StaffingCalculatorServiceFacadeErlangAAbandon : StaffingCalculatorServiceFacadeErlangAWithEsl
+	{
+		private readonly NumberOfAgentsNeededAbandonment _agentsNeededAbandonment;
+		public StaffingCalculatorServiceFacadeErlangAAbandon()
+		{
+			_agentsNeededAbandonment = new NumberOfAgentsNeededAbandonment();
+		}
+
+		public override double AgentsUseOccupancy(double serviceLevel, int serviceTime, double tasks, double aht, TimeSpan periodLength,
+			double minOcc, double maxOcc, int maxParallelTasks)
+		{
+			var result = _agentsNeededAbandonment.CalculateNumberOfAgentsNeededAbandon(tasks / maxParallelTasks, aht, serviceTime, serviceLevel,
+				(int)periodLength.TotalSeconds, minOcc, maxOcc, 0);
+			return result.NumberOfAgentsNeeded;
+		}
+	}
+
 	[RemoveMeWithToggle("Move ServiceLevelAchievedOcc to StaffingCalculatorServiceFacadeErlangA", Toggles.ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899)]
 	public class StaffingCalculatorServiceFacadeErlangAWithEsl : StaffingCalculatorServiceFacadeErlangA
 	{
