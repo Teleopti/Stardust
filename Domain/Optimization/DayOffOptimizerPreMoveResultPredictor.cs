@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -10,31 +11,36 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class DayOffOptimizerPreMoveResultPredictor
 	{
-		private readonly IDailySkillForecastAndScheduledValueCalculator _dailySkillForecastAndScheduledValueCalculator;
 		private readonly PersonalSkillsProvider _personalSkillsProvider;
+		private readonly ForecastAndScheduleSumForDay _forecastAndScheduleSumForDay;
 
-		public DayOffOptimizerPreMoveResultPredictor(IDailySkillForecastAndScheduledValueCalculator dailySkillForecastAndScheduledValueCalculator, 
-																		PersonalSkillsProvider personalSkillsProvider)
-
+		public DayOffOptimizerPreMoveResultPredictor(PersonalSkillsProvider personalSkillsProvider, ForecastAndScheduleSumForDay forecastAndScheduleSumForDay)
 		{
-			_dailySkillForecastAndScheduledValueCalculator = dailySkillForecastAndScheduledValueCalculator;
 			_personalSkillsProvider = personalSkillsProvider;
+			_forecastAndScheduleSumForDay = forecastAndScheduleSumForDay;
 		}
 
-		public bool IsPredictedBetterThanCurrent(IScheduleMatrixPro matrix, ILockableBitArray workingBitArray,
-									 ILockableBitArray originalBitArray, IDaysOffPreferences daysOffPreferences,
-									int numberOfDayOffsMoved)
+		public PredictorCheck IsPredictedBetterThanCurrent(IScheduleMatrixPro matrix, ILockableBitArray workingBitArray,
+			ILockableBitArray originalBitArray, IDaysOffPreferences daysOffPreferences,
+			int numberOfDayOffsMoved, IOptimizationPreferences optimizationPreferences,
+			ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			IVirtualSchedulePeriod schedulePeriod = matrix.SchedulePeriod;
 			IEnumerable<ISkill> personalSkills = extractSkills(matrix);
-			var rawDataDictionary = createRawDataDictionary(schedulePeriod, personalSkills);
+
+			var rawDataDictionary = createRawDataDictionary(schedulePeriod, personalSkills, optimizationPreferences, schedulingResultStateHolder);
+			if (rawDataDictionary.Any(x => x.Value.ForecastValue == ForecastAndScheduleSumForDay.MinimumStaffingNotFulfilledValue))
+			{
+				return PredictorCheck.NotApplicable;
+			}
+		
 			double currentResult = calculateValue(rawDataDictionary);
 
 			TimeSpan averageWorkTime = TimeSpan.FromTicks(schedulePeriod.AverageWorkTimePerDay.Ticks * numberOfDayOffsMoved);
 			modifyRawData(workingBitArray, matrix, originalBitArray, daysOffPreferences, rawDataDictionary, averageWorkTime);
 			double predictedResult = calculateValue(rawDataDictionary);
 
-			return predictedResult < currentResult;
+			return predictedResult < currentResult ? PredictorCheck.Success : PredictorCheck.Unsuccesful;
 		}
 
 		private static double calculateValue(IDictionary<DateOnly, IForecastScheduleValuePair> rawDataDic)
@@ -72,21 +78,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 		}
 
-		private IDictionary<DateOnly, IForecastScheduleValuePair> createRawDataDictionary(IVirtualSchedulePeriod schedulePeriod, IEnumerable<ISkill> personalSkills)
+		private IDictionary<DateOnly, IForecastScheduleValuePair> createRawDataDictionary(
+			IVirtualSchedulePeriod schedulePeriod, IEnumerable<ISkill> personalSkills,
+			IOptimizationPreferences optimizationPreferences, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			var retDic = new Dictionary<DateOnly, IForecastScheduleValuePair>();
 			foreach (DateOnly key in schedulePeriod.DateOnlyPeriod.DayCollection())
 			{
-				double dailyForecast = 0;
-				double dailyScheduled = 0;
-				foreach (ISkill skill in personalSkills)
-				{
-					IForecastScheduleValuePair forecastScheduleValuePairForSkill = _dailySkillForecastAndScheduledValueCalculator.CalculateDailyForecastAndScheduleDataForSkill(skill, key);
-					dailyForecast += forecastScheduleValuePairForSkill.ForecastValue;
-					dailyScheduled += forecastScheduleValuePairForSkill.ScheduleValue;
-				}
-
-				var value = new ForecastScheduleValuePair { ForecastValue = dailyForecast, ScheduleValue = dailyScheduled };
+				var forecastAndSchedule = _forecastAndScheduleSumForDay.Execute(optimizationPreferences, schedulingResultStateHolder, personalSkills, key);
+				var value = new ForecastScheduleValuePair { ForecastValue = forecastAndSchedule.ForecastSum, ScheduleValue = forecastAndSchedule.ScheduledSum };
 				retDic.Add(key, value);
 			}
 

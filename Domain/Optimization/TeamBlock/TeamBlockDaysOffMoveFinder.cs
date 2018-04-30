@@ -16,15 +16,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	{
 		private readonly ISmartDayOffBackToLegalStateService _daysOffBackToLegal;
 		private readonly IDayOffOptimizationDecisionMakerFactory _dayOffOptimizationDecisionMakerFactory;
-		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
+		private readonly ICreatePersonalSkillDataExtractor _createPersonalSkillDataExtractor;
 
 		public TeamBlockDaysOffMoveFinder(ISmartDayOffBackToLegalStateService daysOffBackToLegal,
 		                                  IDayOffOptimizationDecisionMakerFactory dayOffOptimizationDecisionMakerFactory,
-											IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider)
+										ICreatePersonalSkillDataExtractor createPersonalSkillDataExtractor)
 		{
 			_daysOffBackToLegal = daysOffBackToLegal;
 			_dayOffOptimizationDecisionMakerFactory = dayOffOptimizationDecisionMakerFactory;
-			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
+			_createPersonalSkillDataExtractor = createPersonalSkillDataExtractor;
 		}
 
 		public ILockableBitArray TryFindMoves(IScheduleMatrixPro matrix, ILockableBitArray originalArray,
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		{
 			//should use agggregated skills
 			var scheduleResultDataExtractorValues =
-				_scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(matrix, optimizationPreferences.Advanced, schedulingResultStateHolder).Values();
+				_createPersonalSkillDataExtractor.Create(matrix, optimizationPreferences, schedulingResultStateHolder).Values();
 
 			// find days off to move within the common matrix period
 			IEnumerable<IDayOffDecisionMaker> decisionMakers =

@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
 	[DomainTest]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
-	[Ignore("#75339 - to be fixed")]
 	public class DayOffOptimizationMinimumStaffingTest : DayOffOptimizationScenario
 	{
 		public DayOffOptimizationWeb Target;
@@ -88,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			);
 			skillDays.First().SetMinimumAgents(1);
 			var alreadyScheduledAgent = PersonRepository.Has(skill);
-			PersonAssignmentRepository.Has(alreadyScheduledAgent, scenario, activity, shiftCategory, firstDay, new TimePeriod(8, 0, 16, 0));
+			PersonAssignmentRepository.Has(alreadyScheduledAgent, scenario, activity, shiftCategory, firstDay, new TimePeriod(0, 0, 24, 0));
 			var agentToOptimize = PersonRepository.Has(new Team {Site = new Site("site")}, schedulePeriod, ruleSet, skill);
 			PersonAssignmentRepository.Has(agentToOptimize, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay, firstDay.AddDays(7)), new TimePeriod(8, 0, 16, 0));
 			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate).SetDayOff(new DayOffTemplate());
@@ -99,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				.Should().Be.EqualTo(skillDays[0].CurrentDate); //only DO is on tuesday
 		}
 		
-		[Test]
+		[Test] 
 		public void ShouldConsiderMinimumStaffingWhenMovingDayOffFrom()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
