@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge
 		{
 			var results = visitProviderUrls();
 			
-			var isScopeAccessible = tryVisitUrl(ServiceLocator.Container.Value.Resolve<IConfigurationRepository>().RetrieveDefaultScope(Request.UrlConsideringLoadBalancerHeaders()).Uri);
+			var isScopeAccessible = tryVisitUrl(ServiceLocator.Container.Value.Resolve<IConfigurationRepository>().RetrieveDefaultScope(Request.UrlConsideringLoadBalancerHeaders()).Url.ToString());
 			results.Add("Teleopti web site", isScopeAccessible);
 			
 			foreach (var providerResult in results)

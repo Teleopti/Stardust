@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge.Configuration
 			return inner.RetrieveScope(host, identifier);
 		}
 
-		public ScopeElement RetrieveDefaultScope(Uri host)
+		public Scope RetrieveDefaultScope(Uri host)
 		{
 			return inner.RetrieveDefaultScope(host);
 		}
