@@ -15,7 +15,7 @@
           </div>
           <div class="con-flex">
             <mat-form-field class="full-width">
-              <input matInput formControlName="Logon" maxlength="50" placeholder="Application logon" data-test-person-logon>
+              <input matInput formControlName="Logon" maxlength="50" placeholder="Identity logon" data-test-person-logon>
               <mat-error *ngIf="personGroup.get('Logon').hasError('duplicateNameValidator')">
                 Username is already in use
               </mat-error>
