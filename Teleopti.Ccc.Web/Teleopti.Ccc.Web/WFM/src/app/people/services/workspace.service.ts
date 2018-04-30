@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Person, Role } from '../types';
+import { BehaviorSubject } from 'rxjs';
+import { Person } from '../types';
 import { SearchService } from './search.service';
-import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable()
 export class WorkspaceService {
@@ -41,6 +41,10 @@ export class WorkspaceService {
 		people.forEach(person => {
 			this.selectPerson(person);
 		});
+	}
+
+	public clear() {
+		this.people$.next([]);
 	}
 
 	public deselectPerson(person: Person): void {
