@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	public class ForecastAndScheduleSumForDay
 	{
 		private readonly IUserTimeZone _userTimeZone;
-		public const double MinimumStaffingNotFulfilledValue = double.MaxValue;
+		public const double MinimumStaffingNotFulfilledValue = 100_000;
 		
 		public ForecastAndScheduleSumForDay(IUserTimeZone userTimeZone)
 		{
@@ -23,11 +23,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 			foreach (var skillStaffPeriod in stateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(skills, date.ToDateTimePeriod(_userTimeZone.TimeZone())))
 			{
-				var minimumPersons = skillStaffPeriod.Payload.SkillPersonData.MinimumPersons;
 				var scheduled = skillStaffPeriod.CalculatedResource;
-				if (optimizationPreferences.Advanced.UseMinimumStaffing && minimumPersons > scheduled)
+				if (optimizationPreferences.Advanced.UseMinimumStaffing)
 				{
-					return (MinimumStaffingNotFulfilledValue, 0);
+					var minimumPersons = skillStaffPeriod.Payload.SkillPersonData.MinimumPersons;
+					var lackingPersons = minimumPersons - scheduled;
+					if (lackingPersons > 0)
+					{
+						return (MinimumStaffingNotFulfilledValue + lackingPersons, 1);						
+					}
 				}
 	
 				dailyForecastSum += skillStaffPeriod.FStaffTime().TotalMinutes;

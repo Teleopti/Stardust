@@ -65,7 +65,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		}
 		
 		[Test]
-		[Ignore("2 be fixed")]
 		public void ShouldConsiderMultipleMinimumStaffingsWhenMovingDayOffTo()
 		{
 			var date = new DateOnly(2015, 10, 12); //mon

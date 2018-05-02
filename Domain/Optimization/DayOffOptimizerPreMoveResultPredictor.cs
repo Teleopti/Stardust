@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IEnumerable<ISkill> personalSkills = extractSkills(matrix);
 
 			var rawDataDictionary = createRawDataDictionary(schedulePeriod, personalSkills, optimizationPreferences, schedulingResultStateHolder);
-			if (rawDataDictionary.Any(x => x.Value.ForecastValue == ForecastAndScheduleSumForDay.MinimumStaffingNotFulfilledValue))
+			if (rawDataDictionary.Any(x => x.Value.ForecastValue >= ForecastAndScheduleSumForDay.MinimumStaffingNotFulfilledValue))
 			{
 				return PredictorCheck.NotApplicable;
 			}
