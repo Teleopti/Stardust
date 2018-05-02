@@ -18,6 +18,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
 	[TestFixture]
+	[DomainTest]
+	[WebTest]
 	[RequestsTest]
 	public class OvertimeRequestsControllerTest : IIsolateSystem
 	{
@@ -31,7 +33,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 		public void Isolate(IIsolate isolate)
 		{
-			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("default") { DefaultScenario = true }))
 				.For<IScenarioRepository>();
 			isolate.UseTestDouble(new MutableNow(new DateTime(2018, 01, 08, 10, 00, 00, DateTimeKind.Utc))).For<INow>();
