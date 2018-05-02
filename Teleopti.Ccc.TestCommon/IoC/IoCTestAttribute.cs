@@ -4,6 +4,8 @@ using System.Linq;
 using Autofac;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -111,7 +113,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			extend.AddModule(new CommonModule(configuration));
 
 			Extend(extend, configuration);
-			(_fixture as IExtendSystem)?.Extend(extend, configuration);
+//			(_fixture as IExtendSystem)?.Extend(extend, configuration);
+			QueryAllExtensions<IExtendSystem>()
+				.ForEach(x => x?.Extend(extend, configuration));
 
 			var now = new MutableNow();
 			now.Is("2014-12-18 13:31");
@@ -126,7 +130,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			extend.AddService<ConcurrencyRunner>(); // move to TestModule
 
 			Isolate(isolate);
-			(_fixture as IIsolateSystem)?.Isolate(isolate);
+//			(_fixture as IIsolateSystem)?.Isolate(isolate);
+			QueryAllExtensions<IIsolateSystem>()
+				.ForEach(x => x?.Isolate(isolate));
 		}
 
 		private void disposeContainer()
@@ -135,10 +141,12 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			_container = null;
 		}
 
-		protected IEnumerable<T> QueryAllAttributes<T>()
-		{
-			return _service.QueryAllAttributes<T>();
-		}
+		protected IEnumerable<T> QueryAllExtensions<T>() where T : class =>
+			(_fixture as T).AsIEnumerable()
+			.Concat(QueryAllAttributes<Attribute>().OfType<T>());
+
+		protected IEnumerable<T> QueryAllAttributes<T>() where T : Attribute =>
+			_service.QueryAllAttributes<T>();
 
 		protected object Resolve(Type targetType)
 		{

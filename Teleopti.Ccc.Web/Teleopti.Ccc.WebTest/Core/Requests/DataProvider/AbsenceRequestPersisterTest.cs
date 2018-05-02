@@ -45,7 +45,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 	}
 	
 	[TestFixture]
-	[RequestsTest]
+	[DomainTest]
+	[WebTest]
 	[DefaultData]
 	[Toggle(Toggles.Wfm_Requests_DenyRequestWhenAllSkillsClosed_46384)]
 	public class AbsenceRequestPersisterTest : IIsolateSystem

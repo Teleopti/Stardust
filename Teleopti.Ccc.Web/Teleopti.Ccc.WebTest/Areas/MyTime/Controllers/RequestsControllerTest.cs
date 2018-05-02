@@ -40,8 +40,11 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
 	[TestFixture]
+	[DomainTest]
+	[WebTest]
 	[RequestsTest]
-	public class RequestsControllerTest : IIsolateSystem, IExtendSystem
+//	[RequestsTest_old_]
+	public class RequestsControllerTest : IIsolateSystem
 	{
 		public RequestsController Target;
 		public IPersonRequestRepository PersonRequestRepository;
@@ -54,11 +57,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public MutableNow Now;
 		public IRequestCommandHandlingProvider CommandHandlingProvider;
 		public FakePermissionProvider PermissionProvider;
-		
-		public void Extend(IExtend extend, IIocConfiguration configuration)
-		{
-			extend.AddService<RequestsController>();
-		}
 
 		public void Isolate(IIsolate isolate)
 		{
