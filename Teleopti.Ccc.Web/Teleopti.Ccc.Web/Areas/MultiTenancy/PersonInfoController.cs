@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 								.Select(p =>
 								{
 									var model = new PersonInfoModel { PersonId = p.PersonId, ApplicationLogonName = p.ApplicationLogonName };
-									return new { PersistResult = _persister.PersistApplicationLogonName(_mapper.Map(model), PersistActionIntent.AppLogonChange, throwOnError: false), p.PersonId };
+									return new { PersistResult = _persister.PersistApplicationLogonName(_mapper.Map(model), throwOnError: false), p.PersonId };
 								})
 								.Where(r => !string.IsNullOrEmpty(r.PersistResult))
 								.Select(r => new PersonInfoGenericModel { Message = r.PersistResult, PersonId = r.PersonId }).ToList()
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 					.Select(p =>
 					{
 						var model = new PersonInfoModel { PersonId = p.PersonId, Identity = p.Identity };
-						return new { PersistResult = _persister.PersistIdentity(_mapper.Map(model), PersistActionIntent.IdentityChange, throwOnError: false), p.PersonId };
+						return new { PersistResult = _persister.PersistIdentity(_mapper.Map(model), throwOnError: false), p.PersonId };
 					})
 					.Where(r => !string.IsNullOrEmpty(r.PersistResult))
 					.Select(r => new PersonInfoGenericModel { Message = r.PersistResult, PersonId = r.PersonId }).ToList()
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		[TenantUnitOfWork]
 		protected virtual void PersistInternal(PersonInfoModel personInfoModel)
 		{
-			_persister.Persist(_mapper.Map(personInfoModel), PersistActionIntent.GenericPersistApiCall);
+			_persister.Persist(_mapper.Map(personInfoModel));
 		}
 
 		[HttpPost, Route("PersonInfo/Delete")]

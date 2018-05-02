@@ -19,8 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Aspects
 	public class TenantAuditAspectTest : IIsolateSystem, IExtendSystem
 	{
 		public TestAuditService Target;
-		public TenantUnitOfWorkManager _tenantUnitOfWorkManager;
-		public ITenantUnitOfWork TenantUnitOfWork;
+		public TenantUnitOfWorkManager TenantUnitOfWorkManager;
 		public ICurrentHttpContext CurrentHttpContext;
 
 		
@@ -39,12 +38,12 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Aspects
 		public void TenantAuditAspectShouldSavesAuditInformation()
 		{
 			var personInfo = new PersonInfo(new Tenant("_"), Guid.NewGuid());
-			CurrentHttpContext.Current().Items.Add(WebTenantAuthenticationConfiguration.PersonInfo, personInfo);
+			CurrentHttpContext.Current().Items[WebTenantAuthenticationConfiguration.PersonInfo] = personInfo;
 
-			using (_tenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted())
+			using (TenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted())
 			{
-				Target.DoSomething(personInfo, PersistActionIntent.AppLogonChange);
-				var session = _tenantUnitOfWorkManager.CurrentSession();
+				Target.DoSomething(personInfo);
+				var session = TenantUnitOfWorkManager.CurrentSession();
 				session.FlushAndClear();
 				session.Query<TenantAudit>().ToList().Count.Should().Be.EqualTo(1);
 			}
@@ -52,8 +51,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Aspects
 
 		public class TestAuditService
 		{
-			[TenantAudit]
-			public virtual void DoSomething(PersonInfo personInfo, PersistActionIntent actionIntent)
+			[TenantAudit(PersistActionIntent.AppLogonChange)]
+			public virtual void DoSomething(PersonInfo personInfo)
 			{
 			}
 		}
