@@ -63,6 +63,41 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.LoadAll().Single(x => x.DayOff() != null).Date
 				.Should().Be.EqualTo(skillDays[1].CurrentDate); //only DO is on tuesday
 		}
+		
+		[Test]
+		[Ignore("2 be fixed")]
+		public void ShouldConsiderMultipleMinimumStaffingsWhenMovingDayOffTo()
+		{
+			var date = new DateOnly(2015, 10, 12); //mon
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
+			var scenario = ScenarioRepository.Has("some name");
+			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1);
+			schedulePeriod.SetDaysOff(1);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var agent = PersonRepository.Has(new Team {Site = new Site("site")}, schedulePeriod, ruleSet, skill);
+			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date,
+					1, //minimum staffing = 2,//DO in the beginning
+					1, //minimum staffing = 2,
+					1, //minimum staffing = 2
+					1, //minimum staffing = 2
+					1, //minimum staffing = 2
+					1, //minimum staffing = 2
+					1 //minimum staffing = 1 //DO should end up here
+					).SetMinimumAgents(2)
+			);
+			skillDays.Last().SetMinimumAgents(1);
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
+			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate).SetDayOff(new DayOffTemplate());
+
+			Target.Execute(planningPeriod.Id.Value);
+
+			PersonAssignmentRepository.LoadAll().Single(x => x.DayOff() != null).Date
+				.Should().Be.EqualTo(skillDays[6].CurrentDate); //only DO is on tuesday
+		}
+
 
 		[Test]
 		public void ShouldNotConsiderMinimumStaffingIfFulfilled()
