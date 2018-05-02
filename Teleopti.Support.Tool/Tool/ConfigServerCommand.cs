@@ -3,7 +3,7 @@ using Teleopti.Support.Tool.DataLayer;
 
 namespace Teleopti.Support.Tool.Tool
 {
-	public class SavePmConfigurationCommand : ISupportCommand
+	public class SavePmConfigurationCommand
 	{
 		private readonly DBHelper _dbHelper;
 
@@ -29,15 +29,18 @@ namespace Teleopti.Support.Tool.Tool
 				{
 					result.PM_INSTALL = bool.Parse(setting.ReplaceWith);
 				}
+
 				if (setting.SearchFor == $"$({nameof(PmConfiguration.AS_SERVER_NAME)})")
 				{
 					result.AS_SERVER_NAME = setting.ReplaceWith;
 				}
+
 				if (setting.SearchFor == $"$({nameof(PmConfiguration.AS_DATABASE)})")
 				{
 					result.AS_DATABASE = setting.ReplaceWith;
 				}
 			}
+
 			return result;
 		}
 	}
@@ -49,7 +52,7 @@ namespace Teleopti.Support.Tool.Tool
 		public string AS_DATABASE { get; set; }
 	}
 
-	public class ConfigServerCommand : ISupportCommand
+	public class ConfigServerCommand
 	{
 		private readonly DBHelper _dbHelper;
 
@@ -66,6 +69,7 @@ namespace Teleopti.Support.Tool.Tool
 			{
 				new FrameAncestorsUpdator().Update(val);
 			}
+
 			if (configurations.TryGetValue(ServerConfiguration.InstrumentationKey, out val) && !string.IsNullOrEmpty(val))
 			{
 				new ApplicationInsightsInstrumentationKeyUpdator().Update(val);

@@ -3,7 +3,7 @@ using Teleopti.Support.Tool.Tool;
 
 namespace Teleopti.Support.Tool
 {
-	public partial class HelpWindow : Form, ISupportCommand
+	public partial class HelpWindow : Form
 	{
 		public static readonly string HelpText = @"Command line arguments:
 
@@ -26,11 +26,6 @@ namespace Teleopti.Support.Tool
 			textBox1.Text = text;
 			textBox1.SelectionStart = 0;
 			textBox1.SelectionLength = 0;
-		}
-
-		public void Execute()
-		{
-			ShowDialog();
 		}
 	}
 }
