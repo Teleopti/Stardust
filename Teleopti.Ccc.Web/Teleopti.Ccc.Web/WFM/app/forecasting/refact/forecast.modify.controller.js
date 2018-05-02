@@ -246,8 +246,7 @@
               }), function(data, status, headers, config) {
                 vm.isForecastRunning = false;
                 vm.forecastModal = false;
-                vm.blockToken = data.BlockToken;
-                getWorkloadForecastData();
+                vm.selectedWorkload.Days = data.Days;
               }, function(data, status, headers, config) {
                 vm.isForecastRunning = false;
                 vm.forecastModal = false;

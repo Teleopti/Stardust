@@ -14,6 +14,7 @@
           $state.go('forecast');
       }
     })
+    .state('forecasting.start', {})
     $stateProvider.state('forecast', {
       url: '/forecast',
       templateUrl: 'app/forecasting/refact/r2forecast.html',
