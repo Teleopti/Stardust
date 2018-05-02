@@ -194,7 +194,15 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 				_actionThrottler.Finish(token);
 			}
 		}
+
+		[UnitOfWork, HttpPost, Route("api/Forecasting/ApplyForecast")]
+		public virtual  IHttpActionResult ApplyForecast(ForecastPersistModel forecastResult)
+		{
+			throw new NotImplementedException();
+		}
 	}
+
+	
 
 	public class SkillsViewModel
 	{
