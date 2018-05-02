@@ -21,7 +21,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Core.Requests
 {
 	[TestFixture]
-	[RequestsTest]
+	[DomainTest]
+	[WebTest]
 	public class RespondToShiftTradeTest : IIsolateSystem
 	{
 		public IRespondToShiftTrade Target;

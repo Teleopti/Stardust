@@ -18,8 +18,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 			_personInfoPersister = personInfoPersister;
 		}
 		
-		[TenantAudit]
-		public virtual string Persist(PersonInfo personInfo, PersistActionIntent actionIntent, bool throwOnError = true)
+		[TenantAudit(PersistActionIntent.GenericPersistApiCall)]
+		public virtual string Persist(PersonInfo personInfo, bool throwOnError = true)
 		{
 			var res = ValidatePersonInfo(personInfo, throwOnError);
 
@@ -32,14 +32,15 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 			return null;
 		}
 
-		[TenantAudit]
-		public virtual string PersistIdentity(PersonInfo personInfo, PersistActionIntent actionIntent, bool throwOnError = true)
+
+		[TenantAudit(PersistActionIntent.IdentityChange)]
+		public virtual string PersistIdentity(PersonInfo personInfo, bool throwOnError = true)
 		{
 			return persistHelper(_personInfoPersister.PersistIdentity, personInfo, throwOnError);
 		}
 
-		[TenantAudit]
-		public virtual string PersistApplicationLogonName(PersonInfo personInfo, PersistActionIntent actionIntent, bool throwOnError = true)
+		[TenantAudit(PersistActionIntent.AppLogonChange)]
+		public virtual string PersistApplicationLogonName(PersonInfo personInfo, bool throwOnError = true)
 		{
 			return persistHelper(_personInfoPersister.PersistApplicationLogonName, personInfo, throwOnError);
 		}

@@ -30,7 +30,7 @@ BEGIN
    SELECT DISTINCT PageId
         , GroupId
         , GroupName
-        , CAST('00000000-0000-0000-0000-000000000000' AS UNIQUEIDENTIFIER) PersonId
+        , PersonId
         , '' FirstName
         , '' LastName
         , '' EmploymentNumber

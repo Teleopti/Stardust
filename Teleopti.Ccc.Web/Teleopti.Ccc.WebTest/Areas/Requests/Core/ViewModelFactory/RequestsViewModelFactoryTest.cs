@@ -34,12 +34,15 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 {
-	[TestFixture, RequestsTest]
+	[TestFixture]
+	[DomainTest]
+	[WebTest]
+	[RequestsTest]
 	public class RequestsViewModelFactoryTest : IIsolateSystem
 	{
 		public IRequestsViewModelFactory Target;
 		public IPersonRequestRepository PersonRequestRepository;
-		public IPermissionProvider PermissionProvider;
+		public Global.FakePermissionProvider PermissionProvider;
 		public FakePeopleSearchProvider PeopleSearchProvider;
 		public IPersonAbsenceAccountRepository PersonAbsenceAccountRepository;
 		public FakeToggleManager ToggleManager;
@@ -58,6 +61,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			isolate.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
 			isolate.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 			isolate.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
+			isolate.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
 
 			team = createTeam();
 			personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2015, 10, 1), team);
@@ -86,7 +90,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
 				SortingOrders = new List<RequestsSortingOrder>(),
-				SelectedGroupIds = new[] { team.Id.Value.ToString() }
+				SelectedGroupIds = new[] {team.Id.Value.ToString()}
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
@@ -103,7 +107,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new[] { team.Id.Value.ToString() },
+				SelectedGroupIds = new[] {team.Id.Value.ToString()},
 				SortingOrders = new List<RequestsSortingOrder>()
 			};
 
@@ -121,7 +125,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new[] { Guid.NewGuid().ToString() },
+				SelectedGroupIds = new[] {Guid.NewGuid().ToString()},
 				SortingOrders = new List<RequestsSortingOrder>()
 			};
 
@@ -140,7 +144,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				EndDate = new DateOnly(2015, 10, 1),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
 				SortingOrders = new List<RequestsSortingOrder>(),
-				SelectedGroupIds = new[] { team.Id.Value.ToString() }
+				SelectedGroupIds = new[] {team.Id.Value.ToString()}
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
@@ -158,7 +162,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				EndDate = new DateOnly(2015, 10, 2),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
 				SortingOrders = new List<RequestsSortingOrder>(),
-				SelectedGroupIds = new[] { team.Id.Value.ToString() }
+				SelectedGroupIds = new[] {team.Id.Value.ToString()}
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
@@ -175,8 +179,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.AgentNameAsc },
-				SelectedGroupIds = new[] { team.Id.Value.ToString() }
+				SortingOrders = new List<RequestsSortingOrder> {RequestsSortingOrder.AgentNameAsc},
+				SelectedGroupIds = new[] {team.Id.Value.ToString()}
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests.ToList();
@@ -192,8 +196,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		{
 			setUpRequests();
 
-			var permissionProvider = PermissionProvider as Global.FakePermissionProvider;
-			permissionProvider.Enable();
+			PermissionProvider.Enable();
 
 			var input = new AllRequestsFormData
 			{
@@ -201,7 +204,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				EndDate = new DateOnly(2015, 12, 31),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
 				SortingOrders = new List<RequestsSortingOrder>(),
-				SelectedGroupIds = new[] { "teamId" }
+				SelectedGroupIds = new[] {"teamId"}
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
@@ -213,9 +216,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		{
 			setUpRequests();
 			var date = new DateOnly(2015, 10, 3);
-			var permissionProvider = PermissionProvider as Global.FakePermissionProvider;
-			permissionProvider.Enable();
-			permissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.WebRequests, date, new PersonAuthorization
+			PermissionProvider.Enable();
+			PermissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.WebRequests, date, new PersonAuthorization
 			{
 				TeamId = team.Id.GetValueOrDefault(),
 				SiteId = team.Site?.Id.GetValueOrDefault(),
@@ -227,7 +229,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				EndDate = new DateOnly(2015, 10, 31),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
 				SortingOrders = new List<RequestsSortingOrder>(),
-				SelectedGroupIds = new[] { team.Id.Value.ToString() }
+				SelectedGroupIds = new[] {team.Id.Value.ToString()}
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
@@ -240,16 +242,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var agentTimeZone = TimeZoneInfoFactory.ChinaTimeZoneInfo();
 			var absenceRequest = new AbsenceRequest(absence, new DateOnly(2015, 10, 2).ToDateTimePeriod(agentTimeZone));
 
-			people = new[]{PersonFactory.CreatePerson ("test1").WithId()};
+			people = new[] {PersonFactory.CreatePerson("test1").WithId()};
 			people.ForEach(setUpPerson);
 			people.ForEach(p => { p.PermissionInformation.SetDefaultTimeZone(agentTimeZone); });
 
 			PersonRequestRepository.Add(new PersonRequest(people[0], absenceRequest).WithId());
 
 			var date = new DateOnly(2015, 10, 2);
-			var permissionProvider = PermissionProvider as Global.FakePermissionProvider;
-			permissionProvider.Enable();
-			permissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.WebRequests, date, new PersonAuthorization
+			PermissionProvider.Enable();
+			PermissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.WebRequests, date, new PersonAuthorization
 			{
 				TeamId = team.Id.GetValueOrDefault(),
 				SiteId = team.Site?.Id
@@ -261,7 +262,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				EndDate = new DateOnly(2015, 10, 2),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
 				SortingOrders = new List<RequestsSortingOrder>(),
-				SelectedGroupIds = new[] { team.Id.Value.ToString() }
+				SelectedGroupIds = new[] {team.Id.Value.ToString()}
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
@@ -277,15 +278,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 
 			PeopleSearchProvider.Add(people.First());
 
-			GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail { PersonId = people.First().Id.Value });
+			GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail {PersonId = people.First().Id.Value});
 
 			var input = new AllRequestsFormData
 			{
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 31),
-				AgentSearchTerm = new Dictionary<PersonFinderField, string> { { PersonFinderField.FirstName, "test1" } },
+				AgentSearchTerm = new Dictionary<PersonFinderField, string> {{PersonFinderField.FirstName, "test1"}},
 				SortingOrders = new List<RequestsSortingOrder>(),
-				SelectedGroupIds = new[] { "teamId" }
+				SelectedGroupIds = new[] {"teamId"}
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests.ToList();
@@ -304,7 +305,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new[] { team.Id.Value.ToString() }
+				SelectedGroupIds = new[] {team.Id.Value.ToString()}
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input);
@@ -324,19 +325,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			fakePeopleSearchProvider.Add(requests[1].Person);
 			fakePeopleSearchProvider.Add(requests[2].Person);
 
-			GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail { PersonId = requests[0].Person.Id.Value });
-			GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail { PersonId = requests[1].Person.Id.Value });
-			GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail { PersonId = requests[2].Person.Id.Value });
+			GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail {PersonId = requests[0].Person.Id.Value});
+			GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail {PersonId = requests[1].Person.Id.Value});
+			GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail {PersonId = requests[2].Person.Id.Value});
 
 
-			ApplicationRoleRepository.Add(new ApplicationRole { DescriptionText = roleDescription });
+			ApplicationRoleRepository.Add(new ApplicationRole {DescriptionText = roleDescription});
 
 			var input = new AllRequestsFormData
 			{
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new[] { Guid.NewGuid().ToString() }
+				SelectedGroupIds = new[] {Guid.NewGuid().ToString()}
 			};
 			input.AgentSearchTerm.Add(PersonFinderField.Role, roleDescription);
 
@@ -351,10 +352,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			setUpRequests().ToArray();
 			var date = new DateOnly(2015, 10, 3);
 
-			var permissionProvider = PermissionProvider as Global.FakePermissionProvider;
-			permissionProvider.Enable();
+			PermissionProvider.Enable();
 
-			permissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.WebRequests, date, new PersonAuthorization
+			PermissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.WebRequests, date, new PersonAuthorization
 			{
 				TeamId = team.Id.GetValueOrDefault(),
 				SiteId = team.Site?.Id.GetValueOrDefault(),
@@ -365,7 +365,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 31),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new[] { team.Id.Value.ToString() }
+				SelectedGroupIds = new[] {team.Id.Value.ToString()}
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input);
@@ -417,8 +417,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			{
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 31),
-				AgentSearchTerm = new Dictionary<PersonFinderField, string> { { PersonFinderField.FirstName, "test1" } },
-				SelectedGroupIds = new[] { team.Id.Value.ToString() }
+				AgentSearchTerm = new Dictionary<PersonFinderField, string> {{PersonFinderField.FirstName, "test1"}},
+				SelectedGroupIds = new[] {team.Id.Value.ToString()}
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input);
@@ -504,7 +504,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new[] { team.Id.Value.ToString() }
+				SelectedGroupIds = new[] {team.Id.Value.ToString()}
 			};
 
 			var result = Target.CreateOvertimeRequestListViewModel(input);
@@ -522,7 +522,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new[] { team.Id.Value.ToString() }
+				SelectedGroupIds = new[] {team.Id.Value.ToString()}
 			};
 
 			var result = Target.CreateOvertimeRequestListViewModel(input);
@@ -539,7 +539,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new[] { team.Id.Value.ToString() }
+				SelectedGroupIds = new[] {team.Id.Value.ToString()}
 			};
 			var overtimeRequest = requests[3];
 			overtimeRequest.TrySetBrokenBusinessRule(BusinessRuleFlags.MaximumOvertimeRule);
@@ -556,17 +556,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 
 			var personAbsenceAccount = createPersonAbsenceAccount(people[1], absence);
 
-			accountDays.ForEach((accountDay) =>
-		   {
-			   personAbsenceAccount.Add(accountDay);
-		   });
+			accountDays.ForEach((accountDay) => { personAbsenceAccount.Add(accountDay); });
 
 			var input = new AllRequestsFormData
 			{
 				StartDate = new DateOnly(2015, 10, 3),
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new[] { team.Id.Value.ToString() }
+				SelectedGroupIds = new[] {team.Id.Value.ToString()}
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input);
@@ -600,19 +597,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 
 			people = new[]
 			{
-				PersonFactory.CreatePerson ("test1").WithId(),
-				PersonFactory.CreatePerson ("test2").WithId(),
-				PersonFactory.CreatePerson ("test3").WithId(),
-				PersonFactory.CreatePerson ("test4").WithId()
+				PersonFactory.CreatePerson("test1").WithId(),
+				PersonFactory.CreatePerson("test2").WithId(),
+				PersonFactory.CreatePerson("test3").WithId(),
+				PersonFactory.CreatePerson("test4").WithId()
 			};
 			people.ForEach(setUpPerson);
 
 			var personRequests = new[]
 			{
-				 new PersonRequest(people[0], textRequest1).WithId(),
-				 new PersonRequest(people[1], absenceRequest).WithId(),
-				 new PersonRequest (people[2], textRequest2).WithId(),
-				 new PersonRequest (people[3], overtimeRequest).WithId()
+				new PersonRequest(people[0], textRequest1).WithId(),
+				new PersonRequest(people[1], absenceRequest).WithId(),
+				new PersonRequest(people[2], textRequest2).WithId(),
+				new PersonRequest(people[3], overtimeRequest).WithId()
 			};
 
 			PersonRequestRepository.AddRange(personRequests);
@@ -683,4 +680,3 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		}
 	}
 }
-

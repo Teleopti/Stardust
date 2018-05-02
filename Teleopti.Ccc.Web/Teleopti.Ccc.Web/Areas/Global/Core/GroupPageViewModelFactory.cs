@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 			var orgsLookup = allAvailableGroups[Group.PageMainId].ToLookup(g => g.SiteId);
 			foreach (var siteLookUp in orgsLookup)
 			{
-				var permittedTeamGroups = orgsLookup[siteLookUp.Key].Where(team => _permissionProvider.HasOrganisationDetailPermission(functionPath, period.StartDate, team));
+				var permittedTeamGroups = siteLookUp.Where(team => _permissionProvider.HasOrganisationDetailPermission(functionPath, period.StartDate, team));
 				if (!permittedTeamGroups.Any())
 					continue;
 				var permittedTeams = _teamRepository.FindTeams(permittedTeamGroups.Select(x => x.TeamId.Value));

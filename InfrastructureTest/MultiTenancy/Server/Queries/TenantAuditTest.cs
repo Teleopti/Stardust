@@ -35,9 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			var session = _tenantUnitOfWorkManager.CurrentSession(); 
 			var tenantAudit = new TenantAudit(Guid.NewGuid(), Guid.NewGuid(), "action", "{ \"Data\" : \"SomeData\" }", Guid.NewGuid());
 			target.Persist(tenantAudit);
-
-			session.Flush();
-			session.Clear();
+			
 			var theEntry = session.Get<TenantAudit>(tenantAudit.Id);
 			session.Query<TenantAudit>().ToList().Count.Should().Be.EqualTo(1);
 

@@ -121,6 +121,10 @@ namespace Teleopti.Ccc.TestCommon.Web
 			}
 		}
 
+		public void AddItem(object key, object value)
+		{
+			_items.Add(key, value);
+		}
 
 		public override bool SkipAuthorization { get; set; }
 

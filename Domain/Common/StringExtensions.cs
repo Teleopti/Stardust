@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.Common
 {
@@ -15,6 +16,11 @@ namespace Teleopti.Ccc.Domain.Common
 		public static T[] AsArray<T>(this T g)
 		{
 			return new[] { g };
+		}
+		
+		public static IEnumerable<T> AsIEnumerable<T>(this T g)
+		{
+			yield return g;
 		}
 	}
 	
