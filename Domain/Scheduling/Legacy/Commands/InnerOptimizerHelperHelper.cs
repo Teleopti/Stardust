@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			return allSkillsDataExtractor;
 		}
 
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_DayOffUsePredictorEverywhere_75667)]
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MinimumStaffing_75339)]
 		public IScheduleResultDataExtractor CreateTeamBlockAllSkillsDataExtractor(
 			IAdvancedPreferences advancedPreferences,
 			DateOnlyPeriod selectedPeriod,

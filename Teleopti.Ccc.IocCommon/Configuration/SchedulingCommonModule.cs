@@ -309,7 +309,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<DayOffOptimizationDirectCallCommandHandler>().As<IDayOffOptimizationCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
 			}
 
-			if (_configuration.Toggle(Toggles.ResourcePlanner_DayOffUsePredictorEverywhere_75667))
+			if (_configuration.Toggle(Toggles.ResourcePlanner_MinimumStaffing_75339))
 			{
 				builder.RegisterType<TeamBlockDayOffOptimizer>().As<ITeamBlockDayOffOptimizer>().InstancePerLifetimeScope().ApplyAspects();
 				builder.RegisterType<DayOffOptimizerStandard>().InstancePerLifetimeScope();
@@ -345,12 +345,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_configuration.Toggle(Toggles.ResourcePlanner_MinimumStaffing_75339))
 			{
 				builder.RegisterType<CreatePersonalSkillDataExtractor>().As<ICreatePersonalSkillDataExtractor>().SingleInstance();
+				builder.RegisterType<ForecastAndScheduleSumForDay>().SingleInstance();
 			}
 			else
 			{
 				builder.RegisterType<CreatePersonalSkillDataExtractorOLD>().As<ICreatePersonalSkillDataExtractor>().SingleInstance();				
 			}
-			builder.RegisterType<ForecastAndScheduleSumForDay>().SingleInstance(); //TODO: merge the two toggles instread!?
 			builder.RegisterType<TrueFalseRandomizer>().As<ITrueFalseRandomizer>().SingleInstance();
 			builder.RegisterType<OfficialWeekendDays>().As<IOfficialWeekendDays>().SingleInstance();
 			builder.RegisterType<CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker>().As<IDayOffDecisionMaker>().SingleInstance();

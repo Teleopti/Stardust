@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	
 	
 	
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_DayOffUsePredictorEverywhere_75667)]
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MinimumStaffing_75339)]
 	public class DayOffOptimizerPreMoveResultPredictorOLD
 	{
 		private readonly IDailySkillForecastAndScheduledValueCalculator _dailySkillForecastAndScheduledValueCalculator;
@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 	}
 
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_DayOffUsePredictorEverywhere_75667)]
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MinimumStaffing_75339)]
 	public class PredictorResult
 	{
 		public bool IsBetter { get; set; }
