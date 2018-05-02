@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
 using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.Repositories;
@@ -34,7 +36,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly ICampaignPersister _campaignPersister;
 		private readonly IOverridePersister _overridePersister;
 		private readonly IAuthorization _authorization;
-		private readonly IForecastMisc _forecastMisc;
+		private readonly IWorkloadNameBuilder _workloadNameBuilder;
+		private readonly IFetchAndFillSkillDays _fetchAndFillSkillDays;
 
 		public ForecastController(
 			IForecastCreator forecastCreator,
@@ -48,7 +51,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			ICampaignPersister campaignPersister,
 			IOverridePersister overridePersister,
 			IAuthorization authorization,
-			IForecastMisc forecastMisc)
+			IWorkloadNameBuilder workloadNameBuilder,
+			IFetchAndFillSkillDays fetchAndFillSkillDays)
 		{
 			_forecastCreator = forecastCreator;
 			_skillRepository = skillRepository;
@@ -61,7 +65,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_campaignPersister = campaignPersister;
 			_overridePersister = overridePersister;
 			_authorization = authorization;
-			_forecastMisc = forecastMisc;
+			_workloadNameBuilder = workloadNameBuilder;
+			_fetchAndFillSkillDays = fetchAndFillSkillDays;
 		}
 
 		[UnitOfWork, Route("api/Forecasting/Skills"), HttpGet]
@@ -77,7 +82,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 						Id = skill.Id.Value,
 						Workloads =
 							skill.WorkloadCollection.Select(
-								x => new WorkloadAccuracy {Id = x.Id.Value, Name = _forecastMisc.WorkloadName(skill.Name, x.Name)}).ToArray()
+								x => new WorkloadAccuracy {Id = x.Id.Value, Name = _workloadNameBuilder.WorkloadName(skill.Name, x.Name)}).ToArray()
 					})
 			};
 		}
@@ -198,11 +203,24 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		[UnitOfWork, HttpPost, Route("api/Forecasting/ApplyForecast")]
 		public virtual  IHttpActionResult ApplyForecast(ForecastPersistModel forecastResult)
 		{
-			throw new NotImplementedException();
+			var workload = _workloadRepository.Get(forecastResult.WorkloadId);
+			var scenario = _scenarioRepository.Get(forecastResult.ScenarioId);
+			var periodStart = new DateOnly(forecastResult.ForecastDays.Min(x => x.Date).Date);
+			var periodEnd = new DateOnly(forecastResult.ForecastDays.Max(x => x.Date).Date);
+			var skillDays = _fetchAndFillSkillDays.FindRange(new DateOnlyPeriod(periodStart, periodEnd), workload.Skill, scenario);
+
+			foreach (var skillDay in skillDays)
+			{
+				var forecastedWorkloadDay = skillDay.WorkloadDayCollection.SingleOrDefault(x => x.Workload.Id.Value == forecastResult.WorkloadId);
+				var model = forecastResult.ForecastDays.SingleOrDefault(x => x.Date == forecastedWorkloadDay.CurrentDate);
+				forecastedWorkloadDay.Tasks = model.Tasks;
+				forecastedWorkloadDay.AverageTaskTime = TimeSpan.FromSeconds(model.TaskTime);
+				forecastedWorkloadDay.AverageAfterTaskTime = TimeSpan.FromSeconds(model.AfterTaskTime);
+			}
+
+			return Ok();
 		}
 	}
-
-	
 
 	public class SkillsViewModel
 	{

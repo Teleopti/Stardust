@@ -415,9 +415,9 @@
     <Compile Include="Areas\Anywhere\Core\GroupScheduleProjectionViewModel.cs" />
     <Compile Include="Areas\Anywhere\Controllers\AnywhereReportsController.cs" />
     <Compile Include="Areas\Forecasting\Core\CampaignPersister.cs" />
-    <Compile Include="Areas\Forecasting\Core\ForecastMisc.cs" />
+    <Compile Include="Areas\Forecasting\Core\WorkloadNameBuilder.cs" />
     <Compile Include="Areas\Forecasting\Core\ICampaignPersister.cs" />
-    <Compile Include="Areas\Forecasting\Core\IForecastMisc.cs" />
+    <Compile Include="Areas\Forecasting\Core\IWorkloadNameBuilder.cs" />
     <Compile Include="Areas\Forecasting\Core\IOverridePersister.cs" />
     <Compile Include="Areas\Forecasting\Core\OverridePersister.cs" />
     <Compile Include="Areas\Global\DataProtectionController.cs" />

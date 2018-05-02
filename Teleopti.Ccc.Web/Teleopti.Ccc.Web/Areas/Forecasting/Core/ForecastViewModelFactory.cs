@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 		private readonly IHistoricalData _historicalData;
 		private readonly IOutlierRemover _outlierRemover;
 		private readonly IForecastMethodProvider _forecastMethodProvider;
-		private readonly IForecastMisc _forecastMisc;
+		private readonly IWorkloadNameBuilder _workloadNameBuilder;
 
-		public ForecastViewModelFactory(IForecastWorkloadEvaluator forecastWorkloadEvaluator, IWorkloadRepository workloadRepository, IHistoricalPeriodProvider historicalPeriodProvider, IHistoricalData historicalData, IOutlierRemover outlierRemover, IForecastMethodProvider forecastMethodProvider, IForecastMisc forecastMisc)
+		public ForecastViewModelFactory(IForecastWorkloadEvaluator forecastWorkloadEvaluator, IWorkloadRepository workloadRepository, IHistoricalPeriodProvider historicalPeriodProvider, IHistoricalData historicalData, IOutlierRemover outlierRemover, IForecastMethodProvider forecastMethodProvider, IWorkloadNameBuilder workloadNameBuilder)
 		{
 			_forecastWorkloadEvaluator = forecastWorkloadEvaluator;
 			_workloadRepository = workloadRepository;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			_historicalData = historicalData;
 			_outlierRemover = outlierRemover;
 			_forecastMethodProvider = forecastMethodProvider;
-			_forecastMisc = forecastMisc;
+			_workloadNameBuilder = workloadNameBuilder;
 		}
 
 		public WorkloadEvaluateViewModel Evaluate(EvaluateInput input)
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 				: new dynamic[] {};
 			return new WorkloadEvaluateViewModel
 			{
-				Name = _forecastMisc.WorkloadName(workload.Skill.Name, workload.Name),
+				Name = _workloadNameBuilder.WorkloadName(workload.Skill.Name, workload.Name),
 				WorkloadId = workload.Id.Value,
 				ForecastMethods = createMethodViewModels(evaluateResult),
 				Days = evaluationDayViewModels,

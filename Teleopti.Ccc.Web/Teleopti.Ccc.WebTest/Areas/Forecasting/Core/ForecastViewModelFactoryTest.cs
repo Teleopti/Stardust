@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			var historicalData = MockRepository.GenerateMock<IHistoricalData>();
 			var forecastWorkloadEvaluator = MockRepository.GenerateMock<IForecastWorkloadEvaluator>();
 			forecastWorkloadEvaluator.Stub(x => x.Evaluate(workload)).Return(new WorkloadAccuracy() { Accuracies = new MethodAccuracy[] { } });
-			var target = new ForecastViewModelFactory(forecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData, null, null, MockRepository.GenerateMock<IForecastMisc>());
+			var target = new ForecastViewModelFactory(forecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData, null, null, MockRepository.GenerateMock<IWorkloadNameBuilder>());
 			var availablePeriod = new DateOnlyPeriod(2012, 3, 16, 2015, 3, 15);
 			historicalPeriodProvider.Stub(x => x.AvailablePeriod(workload)).Return(availablePeriod);
 			historicalData.Stub(x => x.Fetch(Arg<IWorkload>.Is.Equal(workload), Arg<DateOnlyPeriod>.Is.Anything)).Return(new TaskOwnerPeriod(DateOnly.Today, new ITaskOwner[] { }, TaskOwnerPeriodType.Other));
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 							}
 						}
 				});
-			var target = new ForecastViewModelFactory(forecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData, null, null, MockRepository.GenerateMock<IForecastMisc>());
+			var target = new ForecastViewModelFactory(forecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData, null, null, MockRepository.GenerateMock<IWorkloadNameBuilder>());
 
 			var result = target.Evaluate(evaluateInput);
 
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			var historicalData = MockRepository.GenerateMock<IHistoricalData>();
 			var taskOwnerPeriod = new TaskOwnerPeriod(DateOnly.MinValue, new List<WorkloadDay>(), TaskOwnerPeriodType.Other);
 			historicalData.Stub(x => x.Fetch(workload, HistoricalPeriodProvider.DivideIntoTwoPeriods(availablePeriod).Item2)).Return(taskOwnerPeriod);
-			var forecastMisc = MockRepository.GenerateMock<IForecastMisc>();
+			var forecastMisc = MockRepository.GenerateMock<IWorkloadNameBuilder>();
 			var workloadName = workload.Skill.Name + " - " + workload.Name;
 			forecastMisc.Stub(x => x.WorkloadName(workload.Skill.Name, workload.Name)).Return(workloadName);
 			var target = new ForecastViewModelFactory(forecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData, null, null, forecastMisc);

@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.DistributedLock;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
@@ -43,6 +44,8 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.Services;
+using Teleopti.Ccc.Web.Areas.Forecasting.Core;
+using Teleopti.Ccc.Web.Areas.Global;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
@@ -128,7 +131,16 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			// Gamification
 			isolate.UseTestDouble<FakePurgeSettingRepository>().For<IPurgeSettingRepository>();
-			//
+
+			// Forecast
+			isolate.UseTestDouble<FakeForecastViewModelFactory>().For<IForecastViewModelFactory>();
+			isolate.UseTestDouble<FakeForecastResultViewModelFactory>().For<IForecastResultViewModelFactory>();
+			isolate.UseTestDouble<FakeIntradayPatternViewModelFactory>().For<IIntradayPatternViewModelFactory>();
+			isolate.UseTestDouble<FakeActionThrottler>().For<IActionThrottler>();
+			isolate.UseTestDouble<FakeCampaignPersister>().For<ICampaignPersister>();
+			isolate.UseTestDouble<FakeOverridePersister>().For<IOverridePersister>();
+			isolate.UseTestDouble<WorkloadNameBuilder>().For<IWorkloadNameBuilder>();
+			isolate.UseTestDouble<FetchAndFillSkillDays>().For<IFetchAndFillSkillDays>();
 
 			// AppInsights
 			isolate.UseTestDouble<FakeApplicationInsights>().For<IApplicationInsights>();
