@@ -411,7 +411,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			principal.AddClaimSet(new DefaultClaimSet(ClaimSet.System, claims));
 		}
 
-		private IPersonRequest doShiftTradeWithBrokenRules(IBusinessRuleProvider businessRuleProvider, bool autoGrantShiftTrade = true, IShiftExchangeOffer offer = null)
+		private IPersonRequest doShiftTradeWithBrokenRules(IBusinessRuleProvider businessRuleProvider, bool autoGrantShiftTrade = true, 
+			IShiftExchangeOffer offer = null, bool useMaximumWorkday = false)
 		{
 			setPermissions();
 
@@ -443,6 +444,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			var @event = _shiftTradeTestHelper.GetAcceptShiftTradeEvent(personTo, personRequest.Id.GetValueOrDefault());
 			@event.UseSiteOpenHoursRule = true;
+			@event.UseMaximumWorkday = useMaximumWorkday;
+			_schedulingResultStateHolder.UseMaximumWorkday = useMaximumWorkday;
 
 			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom }, null,
 				new DateOnlyPeriod(new DateOnly(scheduleDate), new DateOnly(scheduleDate.AddDays(7))), _currentScenario.Current());

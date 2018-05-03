@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -12,23 +13,21 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
 {
-	public class RequestsTestAttribute : DomainTestAttribute
+	public class WebTestAttribute : Attribute, IExtendSystem
 	{
-		protected override void Extend(IExtend extend, IIocConfiguration configuration)
+		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
-			base.Extend(extend, configuration);
 			extend.AddModule(new WebModule(configuration, null));
 		}
+	}
 
-		protected override void Isolate(IIsolate isolate)
+	public class RequestsTestAttribute : Attribute, IIsolateSystem
+	{
+		public void Isolate(IIsolate isolate)
 		{
-			base.Isolate(isolate);
-
-			isolate.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
 			isolate.UseTestDouble<FakePeopleSearchProvider>().For<IPeopleSearchProvider>();
 			isolate.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
-
-			isolate.UseTestDouble(new FakeLoggedOnUser()).For<ILoggedOnUser>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			isolate.UseTestDouble(new FakeUserCulture(CultureInfo.GetCultureInfo("en-US"))).For<IUserCulture>();
 		}
 	}

@@ -9,6 +9,7 @@ using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Messaging.Client;
 
@@ -22,6 +23,8 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		{
 			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
 			XmlConfigurator.Configure();
+
+			DataSourceHelper.CreateDatabases();
 
 			TestSiteConfigurationSetup.Setup();
 

@@ -39,19 +39,19 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			base.BeforeTest(testDetails);
 
 			var dataHash = DefaultDataCreator.HashValue;
-
-			DataSourceHelper.CreateDatabases();
+			
 			var path = "";
 #if DEBUG
 			path = "./";
 #else
 				path = Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "Stardust");
 #endif
-
-
+			
 			var haveDatabases =
 				DataSourceHelper.TryRestoreApplicationDatabaseBySql(path, dataHash) &&
 				DataSourceHelper.TryRestoreAnalyticsDatabaseBySql(path, dataHash);
+			if (!haveDatabases)
+				DataSourceHelper.CreateDatabases();
 
 			//DO NOT remove this as you will get optimistic lock on two diff tests
 			if (!haveDatabases)
@@ -85,7 +85,6 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 				
 			}
 
-			TestLog.Debug("Starting hangfire");
 			HangfireClientStarter.Start();
 
 			Guid businessUnitId;
@@ -109,6 +108,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		public override void AfterTest(ITest testDetails)
 		{
 			base.AfterTest(testDetails);
+			
 			TestLog.Debug("In teardown stopping all services");
 			Hangfire.WaitForQueue();
 			StateQueue.WaitForQueue();

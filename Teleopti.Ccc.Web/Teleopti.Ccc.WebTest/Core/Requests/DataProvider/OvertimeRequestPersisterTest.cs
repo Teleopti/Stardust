@@ -30,7 +30,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 {
-	[RequestsTest]
+	[DomainTest]
+	[WebTest]
 	public class OvertimeRequestPersisterTest : IIsolateSystem
 	{
 		public IOvertimeRequestPersister Target;

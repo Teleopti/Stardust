@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	[DomainTest]
 	[UseIocForFatClient]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
-	[Ignore("#75339 - to be fixed")]
 	public class DayOffOptimizationMinimumStaffingDesktopTest : DayOffOptimizationScenario
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
@@ -65,10 +64,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				.Should().Be.EqualTo(skillDays[expectedDayWithDO].CurrentDate); 
 		}
 
-		public DayOffOptimizationMinimumStaffingDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerDayOffUsePredictorEverywhere75667, bool resourcePlannerMinimumStaffing75339) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerDayOffUsePredictorEverywhere75667, resourcePlannerMinimumStaffing75339)
+		public DayOffOptimizationMinimumStaffingDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerMinimumStaffing75339) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerMinimumStaffing75339)
 		{
-			if(!_resourcePlannerMinimumStaffing75339 || !_resourcePlannerDayOffUsePredictorEverywhere75667)
-				Assert.Ignore("Only available when ResourcePlanner_MinimumStaffing_75339 and ResourcePlanner_DayOffUsePredictorEverywhere_75667 is true");
+			if(!_resourcePlannerMinimumStaffing75339)
+				Assert.Ignore("Only available when ResourcePlanner_MinimumStaffing_75339 is true");
 		}
 	}
 }

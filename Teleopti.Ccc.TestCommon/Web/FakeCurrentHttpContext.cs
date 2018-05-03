@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Specialized;
 using System.Web;
+using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Web;
 
 namespace Teleopti.Ccc.TestCommon.Web
@@ -11,11 +13,10 @@ namespace Teleopti.Ccc.TestCommon.Web
 
 		public FakeCurrentHttpContext()
 		{
-		//	Guid personId = Guid.NewGuid();
-		//	string tenantPassword = "afsasdf";
-			
-		//	var headers = new NameValueCollection { { "personid", personId.ToString() }, { "tenantpassword", tenantPassword } };
-			_httpContextBase = new FakeHttpContext(string.Empty, string.Empty, null, null, null, null, null, new NameValueCollection());
+			var fakeHttpContext = new FakeHttpContext(string.Empty, string.Empty, null, null, null, null, null, new NameValueCollection());
+			var pi = new PersonInfo(new Tenant("_"), Guid.NewGuid());
+			fakeHttpContext.AddItem(WebTenantAuthenticationConfiguration.PersonInfo, pi);
+			_httpContextBase = fakeHttpContext;
 		}
 
 		public FakeCurrentHttpContext(HttpContextBase httpContextBase) {

@@ -208,10 +208,15 @@
     <Compile Include="Config\WebTenantAuthenticationConfiguration.cs" />
     <Compile Include="InterfaceLegacy\Domain\OvertimeRequestStaffingCheckMethod.cs" />
     <Compile Include="Intraday\BacklogSkillTypesForecastCalculator.cs" />
+    <Compile Include="Optimization\PredictorCheck.cs" />
+    <Compile Include="Optimization\TeamBlock\CreatePersonalSkillDataExtractor.cs" />
+    <Compile Include="Optimization\TeamBlock\CreatePersonalSkillDataExtractorOLD.cs" />
     <Compile Include="MultiTenancy\PersonIdentitiesInputModel.cs" />
     <Compile Include="MultiTenancy\PersonIdentityModel.cs" />
+    <Compile Include="Optimization\TeamBlock\ForecastAndScheduleSumForDay.cs" />
     <Compile Include="Scheduling\IPredictShiftCategory.cs" />
     <Compile Include="Scheduling\IShiftCategoryPredictionModelLoader.cs" />
+    <Compile Include="Scheduling\Rules\MaximumWorkdayRule.cs" />
     <Compile Include="Scheduling\ShiftCategoryExample.cs" />
     <Compile Include="Scheduling\IShiftCategoryPredictionModel.cs" />
     <Compile Include="ApplicationLayer\ShiftCategoryHandlers\ShiftCategorySelectionModelUpdater.cs" />

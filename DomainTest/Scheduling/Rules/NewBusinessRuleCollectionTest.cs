@@ -195,6 +195,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		}
 
 		[Test]
+		public void ShouldConsiderUseMaximumWorkday()
+		{
+			setup();
+			_state = new SchedulingResultStateHolder
+			{
+				UseMaximumWorkday = true,
+				UseValidation = true
+			};
+			var allForScheduling = NewBusinessRuleCollection.AllForScheduling(_state);
+			Assert.AreEqual(totalNumberOfRules + 1, allForScheduling.Count);
+			Assert.IsTrue(collectionContainsType(allForScheduling, typeof(MaximumWorkdayRule)));
+		}
+
+		[Test]
 		public void ShouldHandleAgentWithNoAssignment()
 		{
 			setup();

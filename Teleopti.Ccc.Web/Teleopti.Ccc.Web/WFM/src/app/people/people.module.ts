@@ -2,19 +2,19 @@ import { NgModule } from '@angular/core';
 import {
 	MatButtonModule,
 	MatCheckboxModule,
+	MatDatepickerModule,
 	MatDialogModule,
 	MatDividerModule,
+	MatGridListModule,
 	MatInputModule,
+	MatListModule,
+	MatNativeDateModule,
 	MatPaginatorModule,
 	MatProgressSpinnerModule,
 	MatSortModule,
 	MatTableModule,
-	MatListModule,
-	MatGridListModule,
-	MatDatepickerModule,
-	MatNativeDateModule
+	MatTooltipModule
 } from '@angular/material';
-
 import { SharedModule } from '../shared/shared.module';
 import {
 	AppLogonPageComponent,
@@ -22,22 +22,22 @@ import {
 	ChipComponent,
 	ChipRemoveComponent,
 	GrantPageComponent,
+	IdentityLogonPageComponent,
 	PageContainerComponent,
+	PlaygroundComponent,
 	RevokePageComponent,
 	RolePage,
 	SearchPageComponent,
 	TitleBarComponent,
-	WorkspaceComponent,
-	PlaygroundComponent,
-	IdentityLogonPageComponent
+	WorkspaceComponent
 } from './components';
 import {
+	LogonInfoService,
 	NavigationService,
 	RolesService,
+	SearchOverridesService,
 	SearchService,
-	WorkspaceService,
-	LogonInfoService,
-	SearchOverridesService
+	WorkspaceService
 } from './services';
 
 @NgModule({
@@ -70,7 +70,8 @@ import {
 		MatListModule,
 		MatGridListModule,
 		MatDatepickerModule,
-		MatNativeDateModule
+		MatNativeDateModule,
+		MatTooltipModule
 	],
 	providers: [
 		WorkspaceService,

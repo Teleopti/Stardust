@@ -44,9 +44,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		[Test]
 		public void ShouldPersistConnectionStrings()
 		{
-			var appConnString = string.Format("Data source={0};Initial Catalog={1}", RandomName.Make(), RandomName.Make());
-			var analConnString = string.Format("Data source={0};Initial Catalog={1}", RandomName.Make(), RandomName.Make());
-			var aggConnString = string.Format("Data source={0};Initial Catalog={1}", RandomName.Make(), RandomName.Make());
+			var appConnString = $"Data source={RandomName.Make()};Initial Catalog={RandomName.Make()}";
+			var analConnString = $"Data source={RandomName.Make()};Initial Catalog={RandomName.Make()}";
+			var aggConnString = $"Data source={RandomName.Make()};Initial Catalog={RandomName.Make()}";
 
 			var tenant = new Tenant(RandomName.Make());
 			tenant.DataSourceConfiguration.SetApplicationConnectionString(appConnString);
@@ -70,9 +70,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			var tenant = new Tenant(RandomName.Make());
 			tenant.SetApplicationConfig(RandomName.Make(), RandomName.Make());
 			target.Persist(tenant);
-			tenantUnitOfWorkManager.CurrentSession().Flush();
-			tenantUnitOfWorkManager.CurrentSession().Clear();
-		
+			
 			var result = tenantUnitOfWorkManager.CurrentSession()
 				.CreateQuery("select t from Tenant t where t.Name=:name")
 				.SetString("name", tenant.Name)
