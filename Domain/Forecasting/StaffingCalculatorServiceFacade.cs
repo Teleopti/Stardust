@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		}
 
 		public virtual double AgentsUseOccupancy(double serviceLevel, int serviceTime, double tasks, double aht, TimeSpan periodLength, double minOcc, double maxOcc,
-			int maxParallelTasks)
+			int maxParallelTasks, double abandonRate)
 		{
 			return _secretService.AgentsUseOccupancy(serviceLevel, serviceTime, tasks/maxParallelTasks, aht, periodLength, minOcc, maxOcc, 1);
 		}
@@ -73,10 +73,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		}
 
 		public override double AgentsUseOccupancy(double serviceLevel, int serviceTime, double tasks, double aht, TimeSpan periodLength,
-			double minOcc, double maxOcc, int maxParallelTasks)
+			double minOcc, double maxOcc, int maxParallelTasks, double abandonRate)
 		{
 			var result = _agentsNeededAbandonment.CalculateNumberOfAgentsNeededAbandon(tasks / maxParallelTasks, aht, serviceTime, serviceLevel,
-				(int)periodLength.TotalSeconds, minOcc, maxOcc, 0);
+				(int)periodLength.TotalSeconds, minOcc, maxOcc, abandonRate);
 			return result.NumberOfAgentsNeeded;
 		}
 	}
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		}
 
 		public override double AgentsUseOccupancy(double serviceLevel, int serviceTime, double tasks, double aht, TimeSpan periodLength,
-			double minOcc, double maxOcc, int maxParallelTasks)
+			double minOcc, double maxOcc, int maxParallelTasks, double abandonRate)
 		{
 			var result = _agentsNeeded.CalculateNumberOfAgentsNeeded(tasks / maxParallelTasks, aht, 1000000, serviceTime, serviceLevel,
 				(int)periodLength.TotalSeconds, minOcc, maxOcc);

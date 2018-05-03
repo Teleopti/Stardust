@@ -25,7 +25,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 	public partial class SkillGeneral : BaseUserControl, IPropertyPage, ISkillGeneralView
     {
         private readonly IAbstractPropertyPages _propertyPages;
-        private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
+		private readonly bool _showAbandonRate;
+		private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
 		private SkillGeneralPresenter _presenter;
 
         protected SkillGeneral()
@@ -38,11 +39,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
             }
         }
 
-        public SkillGeneral(IAbstractPropertyPages propertyPages)
+        public SkillGeneral(IAbstractPropertyPages propertyPages, bool showAbandonRate)
             : this()
-        {
-            _propertyPages = propertyPages;
-        }
+		{
+			_propertyPages = propertyPages;
+			_showAbandonRate = showAbandonRate;
+		}
 
         public void Populate(IAggregateRoot aggregateRoot)
         {
@@ -116,7 +118,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 	            numericUpDownMaxParallel.Visible = false;
 	            label1.Visible = false;
 	        }
-        }
+
+			if ((skill.SkillType.ForecastSource.Equals(ForecastSource.Chat) || skill.SkillType.ForecastSource.Equals(ForecastSource.InboundTelephony)) && _showAbandonRate)
+			{
+				percentTextBoxAbandonRate.Visible = true;
+				labelAbandonRate.Visible = true;
+				percentTextBoxAbandonRate.Enabled = true;
+				percentTextBoxAbandonRate.DoubleValue = skill.AbandonRate.Value;
+			}
+			else
+			{
+				percentTextBoxAbandonRate.Visible = false;
+				labelAbandonRate.Visible = false;
+			}
+		}
 
 		public void SetActivityList(IList<IActivity> activities)
 		{
@@ -234,8 +249,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
             thisSkill.TimeZone = (TimeZoneInfo)comboBoxTimeZones.SelectedItem;
             thisSkill.MidnightBreakOffset = office2007OutlookTimePickerMidnightOffsetBreak.TimeValue();
 		    thisSkill.MaxParallelTasks = (int)numericUpDownMaxParallel.Value;
+			if (_showAbandonRate)
+			{
+				thisSkill.AbandonRate = new Percent(percentTextBoxAbandonRate.DoubleValue);
+			}
+			else
+			{
+				thisSkill.AbandonRate = new Percent(0);
+			}
+			
 
-            if (office2007OutlookTimePickerMidnightOffsetBreak.Enabled)
+			if (office2007OutlookTimePickerMidnightOffsetBreak.Enabled)
 			{
 				createDefaultTemplates(thisSkill);
 			}
@@ -354,5 +378,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
         {
             labelTotalOpeningHours.Text = string.Format(CultureInfo.CurrentCulture, "{0} - {0}", office2007OutlookTimePickerMidnightOffsetBreak.Text);
 		}
-    }
+
+		private void label2_Click(object sender, EventArgs e)
+		{
+
+		}
+	}
 }
