@@ -233,21 +233,8 @@
     <Compile Include="SettingsInRegistry.cs" />
     <Compile Include="Tool\ApplicationInsightsInstrumentationKeyUpdator.cs" />
     <Compile Include="Tool\CommandBuilder.cs" />
-    <Compile Include="Tool\CompositeCommand.cs" />
     <Compile Include="Tool\ConfigServerCommand.cs" />
-    <Compile Include="Tool\CustomSection.cs" />
-    <Compile Include="Tool\CustomSectionContainer.cs" />
     <Compile Include="Tool\FrameAncestorsUpdator.cs" />
-    <Compile Include="Tool\ISupportCommand.cs" />
-    <Compile Include="Tool\ConfigFiles.cs" />
-    <Compile Include="Tool\LoadSettingsCommand.cs" />
-    <Compile Include="Tool\MoveCustomReportsCommand.cs" />
-    <Compile Include="Tool\RefreshConfigsRunner.cs" />
-    <Compile Include="Tool\SetSettingCommand.cs" />
-    <Compile Include="Tool\SetToggleModeCommand.cs" />
-    <Compile Include="Tool\ConfigurationBackupCommand.cs" />
-    <Compile Include="Tool\ConfigurationRestoreCommand.cs" />
-    <Compile Include="Tool\ConfigFilePathReader.cs" />
     <EmbeddedResource Include="Controls\ConnectionString\ConnectionSettings.resx">
       <DependentUpon>ConnectionSettings.cs</DependentUpon>
     </EmbeddedResource>

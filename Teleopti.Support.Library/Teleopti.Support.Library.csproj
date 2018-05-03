@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a">
+      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,13 +46,26 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Config\ConfigFilePathReader.cs" />
+    <Compile Include="Config\ConfigFiles.cs" />
+    <Compile Include="Config\ConfigurationBackuper.cs" />
+    <Compile Include="Config\ConfigurationRestorer.cs" />
+    <Compile Include="Config\CustomReportsMover.cs" />
+    <Compile Include="Config\CustomSection.cs" />
+    <Compile Include="Config\CustomSectionContainer.cs" />
     <Compile Include="Config\FileConfigurator.cs" />
     <Compile Include="Config\CryptoCreator.cs" />
     <Compile Include="Config\Extensions.cs" />
+    <Compile Include="Config\LoadSettingsCommand.cs" />
+    <Compile Include="Config\ModeDefaultRunner.cs" />
+    <Compile Include="Config\ModeDeployRunner.cs" />
+    <Compile Include="Config\RefreshConfigsRunner.cs" />
+    <Compile Include="Config\SetSettingCommand.cs" />
     <Compile Include="Config\SettingsFileManager.cs" />
     <Compile Include="Config\SearchReplaceCollection.cs" />
     <Compile Include="Config\Parser.cs" />
     <Compile Include="Config\RefreshConfigFile.cs" />
+    <Compile Include="Config\SetToggleModeCommand.cs" />
     <Compile Include="DatabaseType.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Folders\DatabaseFolder.cs" />
@@ -59,6 +75,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
