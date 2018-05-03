@@ -4501,7 +4501,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			IScheduleDay selectedPart = null;
 			IScheduleSortCommand sortCommand = null;
 			IList<IPerson> selectedPersons = null;
-			IEnumerable<DateOnly> selectedDates;
 			var selectedPeriod = new DateOnlyPeriod();
 			int currentSortColumn = 0;
 			bool isAscendingSort = false;
@@ -4511,8 +4510,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				_grid.ContextMenuStrip = null;
 				scheduleParts = _scheduleView.SelectedSchedules();
 				selectedPersons = new List<IPerson>(_scheduleView.AllSelectedPersons(scheduleParts));
-				selectedDates = _scheduleView.AllSelectedDates(scheduleParts);
-				selectedPeriod = new DateOnlyPeriod(selectedDates.Min(), selectedDates.Max());
+				IEnumerable<DateOnly> selectedDates = _scheduleView.AllSelectedDates(scheduleParts);
+				if(selectedDates.Any())
+					selectedPeriod = new DateOnlyPeriod(selectedDates.Min(), selectedDates.Max());
 				sortCommand = _scheduleView.Presenter.SortCommand;
 				currentSortColumn = _scheduleView.Presenter.CurrentSortColumn;
 				isAscendingSort = _scheduleView.Presenter.IsAscendingSort;
