@@ -19,8 +19,8 @@
     vm.overridePanel = false;
     vm.selectedScenario = null;
     vm.forecastPeriod = {
-      startDate: moment().utc(),
-      endDate: moment().utc().add(6, 'months')
+      startDate: moment().utc().add(1, 'days').toDate(),
+      endDate: moment().utc().add(6, 'months').toDate()
     };
 
     vm.applyOverride = applyOverride;
@@ -206,8 +206,8 @@
             var resultEndDate = moment(resultStartDate).add(6, 'months');
 
             var wl = {
-              ForecastStart: resultStartDate.toDate(),
-              ForecastEnd: resultEndDate.toDate(),
+              ForecastStart: vm.forecastPeriod.startDate,
+              ForecastEnd: vm.forecastPeriod.endDate,
               WorkloadId: vm.selectedWorkload.Workload.Id,
               ScenarioId: vm.selectedScenario.Id
             };
@@ -217,6 +217,7 @@
               function(data, status, headers, config) {
                 vm.selectedWorkload.Days = data.Days;
                 vm.isForecastRunning = false;
+                vm.periodModal = false;
                 if (vm.selectedWorkload.Days.length === 0 ) {
                   vm.scenarioNotForecasted = true;
                 }
@@ -224,6 +225,7 @@
               function(data, status, headers, config) {
                 vm.selectedWorkload.Days = data.days;
                 vm.isForecastRunning = false;
+                vm.periodModal = false;
               }
             )
           }
