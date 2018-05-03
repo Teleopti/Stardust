@@ -71,6 +71,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		private readonly IConfigReader _configReader;
 		private readonly IStatisticHelper _statisticHelper;
 		private bool _hidePriorityToggle;
+		private bool _showAbandonRate;
 		private readonly IApplicationInsights _applicationInsights;
 
 		protected ForecasterNavigator(IStatisticHelper statisticHelper, IBusinessRuleConfigProvider businessRuleConfigProvider, IApplicationInsights applicationInsights)
@@ -106,6 +107,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 				instance.IsPermitted(
 					DefinedRaptorApplicationFunctionPaths.ImportForecastFromFile);
 			_hidePriorityToggle = _toggleManager.IsEnabled(Toggles.ResourcePlanner_HideSkillPrioSliders_41312);
+			_showAbandonRate = _toggleManager.IsEnabled(Toggles.ResourcePlanner_UseErlangAWithFinitePatience_47738);
 		}
 
 		public ForecasterNavigator(IRepositoryFactory repositoryFactory,
@@ -546,7 +548,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			var skillType = getInitializedSkillType(st);
 			using (var swp = new SkillWizardPages(skillType, _repositoryFactory, _unitOfWorkFactory, _staffingCalculatorServiceFacade))
 			{
-				swp.Initialize(PropertyPagesHelper.GetSkillPages(true, swp, skillType, _hidePriorityToggle), new LazyLoadingManagerWrapper());
+				swp.Initialize(PropertyPagesHelper.GetSkillPages(true, swp, skillType, _hidePriorityToggle, _showAbandonRate), new LazyLoadingManagerWrapper());
 				using (var wizard = new Wizard(swp))
 				{
 					swp.Saved += swpAfterSave;
@@ -991,7 +993,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 				var skill = getInitializedSkill(skillModel);
 				using (var spp = new SkillPropertiesPages(skill, _repositoryFactory, _unitOfWorkFactory, _staffingCalculatorServiceFacade))
 				{
-					var pages = PropertyPagesHelper.GetSkillPages(false, spp, _hidePriorityToggle);
+					var pages = PropertyPagesHelper.GetSkillPages(false, spp, _hidePriorityToggle, _showAbandonRate);
 					if (skillModel.IsMultisite) PropertyPagesHelper.AddMultisiteSkillPages(pages, _staffingCalculatorServiceFacade);
 					spp.Initialize(pages, new LazyLoadingManagerWrapper());
 					using (var propertiesPages = new PropertiesPages(spp))
@@ -1170,7 +1172,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			DialogResult result;
 			using (var swp = new SkillWizardPages(skill, _repositoryFactory, _unitOfWorkFactory, _staffingCalculatorServiceFacade))
 			{
-				swp.Initialize(PropertyPagesHelper.GetSkillPages(true, swp, skillType, _hidePriorityToggle), new LazyLoadingManagerWrapper());
+				swp.Initialize(PropertyPagesHelper.GetSkillPages(true, swp, skillType, _hidePriorityToggle, _showAbandonRate), new LazyLoadingManagerWrapper());
 				using (var wizard = new Wizard(swp))
 				{
 					swp.Saved += multisiteSkillSaved;
@@ -1218,7 +1220,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 					new SkillWizardPages(childSkill, null, null, _staffingCalculatorServiceFacade).SetSkillDefaultSettings(childSkill);
 					using (var swp = new SkillWizardPages(childSkill, _repositoryFactory, _unitOfWorkFactory, _staffingCalculatorServiceFacade))
 					{
-						swp.Initialize(PropertyPagesHelper.GetSkillPages(false, swp, true), new LazyLoadingManagerWrapper());
+						swp.Initialize(PropertyPagesHelper.GetSkillPages(false, swp, true, _showAbandonRate), new LazyLoadingManagerWrapper());
 						using (var wizard = new Wizard(swp))
 						{
 							result = wizard.ShowDialog(this);
