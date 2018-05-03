@@ -25,9 +25,9 @@ namespace Teleopti.Support.Library.Config
 				text = text + searchReplace.SearchFor + "|" + searchReplace.ReplaceWith + Environment.NewLine;
 			File.WriteAllText(settingsFile(), text);
 		}
-		
+
 		private static string settingsFile() => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.txt");
-		
+
 		public void UpdateFileByName(string name, string replaceWith)
 		{
 			var collection = ReadFile();
@@ -41,7 +41,5 @@ namespace Teleopti.Support.Library.Config
 			collection.Set(searchFor, replaceWith);
 			SaveFile(collection.ForDisplay());
 		}
-
-		
 	}
 }

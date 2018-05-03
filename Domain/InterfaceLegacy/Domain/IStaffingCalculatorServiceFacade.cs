@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		double Utilization(double demandWithoutEfficiency, double tasks, double aht, TimeSpan periodLength, int maxParallelTasks);
 
 		double AgentsUseOccupancy(double serviceLevel, int serviceTime, double tasks, double aht, TimeSpan periodLength, double minOcc, double maxOcc,
-			int maxParallelTasks);
+			int maxParallelTasks, double abandonRate);
 
 		double LinearEsl(double forecastedAgents, double agents, double sla);
 	}

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
@@ -437,13 +438,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 Payload.MultiskillMinOccupancy.GetValueOrDefault(Payload.ServiceAgreementData.MinOccupancy).Value;
 
 			var maxParallel = SkillDay.Skill.MaxParallelTasks;
+			var abandonRate = SkillDay.Skill.AbandonRate;
 
-            if (Payload.TaskData.Tasks == 0 && Payload.ServiceAgreementData.MinOccupancy.Value == 0)
+			if (Payload.TaskData.Tasks == 0 && Payload.ServiceAgreementData.MinOccupancy.Value == 0)
                 traffic = 0;
             else
             {
 				if (!Payload.ManualAgents.HasValue && !Payload.NoneBlendDemand.HasValue)
-				{					
+				{
 					traffic = StaffingCalculatorService.AgentsUseOccupancy(
 					Payload.ServiceAgreementData.ServiceLevel.Percent.Value,
 					(int)Math.Round(Payload.ServiceAgreementData.ServiceLevel.Seconds),
@@ -452,7 +454,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 					Period.ElapsedTime(),
 					minOcc,
 					maxOcc,
-					maxParallel);
+					maxParallel,
+					abandonRate.Value);
 				}
                 
             }

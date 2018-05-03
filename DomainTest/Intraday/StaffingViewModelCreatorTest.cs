@@ -1511,7 +1511,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				TimeSpan.FromMinutes(resolution),
 				skillData.MinOccupancy.Value,
 				skillData.MaxOccupancy.Value,
-				skillDay.Skill.MaxParallelTasks);
+				skillDay.Skill.MaxParallelTasks,
+				0);
 
 			return actualStaffingSkill1;
 		}

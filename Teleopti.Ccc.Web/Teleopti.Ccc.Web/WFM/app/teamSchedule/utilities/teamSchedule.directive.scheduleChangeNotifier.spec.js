@@ -1,16 +1,21 @@
-﻿describe('schedule change notifier test', function() {
+﻿describe('schedule change notifier test', function () {
 	var $compile,
 		$rootScope,
 		mockSignalRBackendServer = {},
-		teamsToggles;
+		teamsToggles,
+		fakeScheduleManagement;
 
 
-	beforeEach(function() {
+	beforeEach(function () {
 		module('wfm.teamSchedule');
-		module(function($provide) {
+		module(function ($provide) {
+
 			$provide.service('signalRSVC', setupMockSignalRService);
 			$provide.service('teamsToggles', setupMockTeamsTogglesService);
-			$provide.service('ScheduleManagement', setupFakeScheduleManagement);
+			$provide.service('ScheduleManagement', function () {
+				fakeScheduleManagement = new setupFakeScheduleManagement();
+				return fakeScheduleManagement;
+			});
 		});
 	});
 
@@ -31,13 +36,13 @@
 
 		var cbWithPersonIds = [];
 
-		scope.cb = function(personIds) {
+		scope.cb = function (personIds) {
 			cbWithPersonIds = personIds;
 		}
 
 		$compile(html)(scope);
 		scope.$apply();
-		
+
 		mockSignalRBackendServer.notifyClients([
 			{
 				"DomainReferenceId": "221B-Baker-SomeoneElse",
@@ -48,7 +53,6 @@
 
 		expect(cbWithPersonIds[0]).toEqual("221B-Baker-SomeoneElse");
 	}));
-
 
 	it("should not reload schedule when other people schedule changed", inject(function () {
 		var html =
@@ -65,7 +69,7 @@
 
 		$compile(html)(scope);
 		scope.$apply();
-	
+
 		mockSignalRBackendServer.notifyClients([
 			{
 				"DomainReferenceId": "221B-Baker-otherPeople",
@@ -134,7 +138,6 @@
 		expect(cbWithPersonIds[0]).toEqual("221B-Baker-SomeoneElse");
 	}));
 
-
 	it("should reload schedule when schedule changed from tomorrow", inject(function () {
 		var html =
 			'<schedule-change-notifier schedule-date="scheduleDate" last-command-track-id="commandId" on-notification="cb"></schedule-change-notifier>';
@@ -164,8 +167,31 @@
 		expect(cbWithPersonIds[0]).toEqual("221B-Baker-SomeoneElse");
 	}));
 
+	it("should not call onNotification when the schedule group view model is not created or its schedules is null, empty or undefined", inject(function () {
+		var html =
+			'<schedule-change-notifier schedule-date="scheduleDate" last-command-track-id="commandId" on-notification="onNotification"></schedule-change-notifier>';
+		var scope = $rootScope.$new();
 
+		scope.scheduleDate = moment('2018-05-02').toDate();
+		scope.commandId = '';
+		var relatedPersonIds = [];
 
+		scope.onNotification = function (personIds) {
+			relatedPersonIds = personIds;
+		}
+
+		fakeScheduleManagement.Schedules = undefined;
+
+		mockSignalRBackendServer.notifyClients([
+			{
+				"DomainReferenceId": "221B-Baker-SomeoneElse",
+				"StartDate": "D2015-10-26T00:00:00",
+				"EndDate": "D2015-10-27T00:00:00"
+			}
+		]);
+
+		expect(relatedPersonIds.length).toEqual(0);
+	}));
 
 	function setupMockSignalRService() {
 		mockSignalRBackendServer.subscriptions = [];
@@ -195,16 +221,16 @@
 
 	function setupMockTeamsTogglesService() {
 
-		toggles = {			
+		toggles = {
 		};
 
 		return {
-			all: function() {
+			all: function () {
 				return toggles;
 			},
-			setToggle: function(toggle) {
+			setToggle: function (toggle) {
 				toggles[toggle] = true;
-			}			
+			}
 		};
 	}
 })

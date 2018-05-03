@@ -41,7 +41,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		[Test]
 		public void ShouldPublishAndProcessPayrollJob()
 		{
-			_assertRetryStrategy = new AssertRetryStrategy(10);
+			_assertRetryStrategy = new AssertRetryStrategy(100);
 
 			TestLog.Debug("Starting the test for payroll");
 			var period = new DateOnlyPeriod(2016, 02, 20, 2016, 02, 28);

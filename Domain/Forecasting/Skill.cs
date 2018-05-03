@@ -43,8 +43,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private int _priority = 4;
         private Percent _overstaffingFactor = new Percent(.5);
 	    private int _maxParallelTasks;
+		private Percent _abandonRate;
 
-	    public Skill() : this("_")
+		public Skill() : this("_")
         {
         }
 
@@ -77,6 +78,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	        //defaults to 3 on chat
 			if (skillType.ForecastSource.Equals(ForecastSource.Chat))
 		        _maxParallelTasks = 3;
+			if (skillType.ForecastSource.Equals(ForecastSource.Chat)|| skillType.ForecastSource.Equals(ForecastSource.InboundTelephony))
+			{
+				_abandonRate = new Percent(0.05);
+			}
 
             foreach (DayOfWeek dayOfWeek in Enum.GetValues(typeof(DayOfWeek)))
             {
@@ -403,17 +408,28 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		    }
 	    }
 
-	    /// <summary>
-        /// Returns a <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
-        /// </returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-04-15
-        /// </remarks>
-        public override string ToString()
+		public virtual Percent AbandonRate
+		{
+			get { return _abandonRate; }
+			set
+			{
+				if (value.Value < 0 || value.Value > 1)
+					throw new ArgumentOutOfRangeException(nameof(AbandonRate), value, "Abandon rate must be between 0 and 100%.");
+				_abandonRate = value;
+			}
+		}
+
+		/// <summary>
+		/// Returns a <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+		/// </returns>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 2008-04-15
+		/// </remarks>
+		public override string ToString()
         {
             return String.Concat(Name, ", ", base.ToString());
         }

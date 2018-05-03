@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Helper
 			return calls/workPerAgent;
 		}
 
-        public double AgentsUseOccupancy(double sla, int serviceTime, double calls, double averageHandlingTime, TimeSpan periodLength, double minOccupancy, double maxOccupancy, int maxParallelTasks)
+        public double AgentsUseOccupancy(double sla, int serviceTime, double calls, double averageHandlingTime, TimeSpan periodLength, double minOccupancy, double maxOccupancy, int maxParallelTasks, double abandonRate)
         {
 			return teleoptiAgents(sla, serviceTime, calls, averageHandlingTime, periodLength);
         }

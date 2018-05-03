@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 			DialogResult result;
 			using (var swp = new SkillWizardPages(childSkill,new RepositoryFactory(),UnitOfWorkFactory.Current, _staffingCalculatorServiceFacade))
 			{
-				swp.Initialize(PropertyPagesHelper.GetSkillPages(false, swp, true), new LazyLoadingManagerWrapper());
+				swp.Initialize(PropertyPagesHelper.GetSkillPages(false, swp, true,false), new LazyLoadingManagerWrapper());
 				using (var wizard = new Wizard(swp))
 				{
 					result = wizard.ShowDialog(this);

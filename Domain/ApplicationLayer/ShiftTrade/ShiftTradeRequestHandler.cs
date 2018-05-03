@@ -155,6 +155,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 					((IShiftTradeRequest)personRequest.Request).Accept(acceptingPerson, checkSum, _authorization);
 					setUpdatedMessage(@event, personRequest);
 
+					_schedulingResultStateHolder.UseMaximumWorkday = @event.UseMaximumWorkday;
 					var allEnabledRules = getAllEnabledBusinessRules(personRequest.Person.PermissionInformation.UICulture(), @event);
 
 					if (!validationResult.IsOk)

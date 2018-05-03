@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
@@ -182,6 +183,16 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// Created date: 2013-06-13
 		/// </remarks>
 		int MaxParallelTasks { get; set; }
+
+		/// <summary>
+		/// What is the abandon rate for the skill. Used to calculate average patience in Erlang A. 
+		/// Only used for Phone and Chat. Must be between 0 and 1
+		/// </summary>
+		/// <remarks>
+		/// Created by: Oskar
+		/// Created date: 2018-04-30
+		/// </remarks>
+		Percent AbandonRate { get; set; }
 
 		/// <summary>
 		/// Changes the name of the skill, also publishes a SkillnameChangedEvent

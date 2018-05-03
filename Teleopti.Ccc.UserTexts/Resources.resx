@@ -17303,4 +17303,8 @@ The application will now exit.</value>
     <value>Use Priority Skill Validation</value>
     <comment>Label name for use priority skill validation setting</comment>
   </data>
+  <data name="DescriptionOfMaximumWorkdayRule" xml:space="preserve">
+    <value>Maximum consectutive days without dayoff</value>
+    <comment>Friendly description of MaximumWorkdayRule to show shift trade system setting</comment>
+  </data>
 </root>
