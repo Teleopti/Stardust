@@ -21,7 +21,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 		public FakeActivityRepository ActivityRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 
-		[Test, Ignore("Work in progress")]
+		[Test]
 		public void ShouldGetBasicScheduleInformation()
 		{
 			Client.Authorize();
