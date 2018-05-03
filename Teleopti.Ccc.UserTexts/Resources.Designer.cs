@@ -24048,6 +24048,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to People Access.
+        /// </summary>
+        public static string PeopleAccess {
+            get {
+                return ResourceManager.GetString("PeopleAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to People.
         /// </summary>
         public static string PeopleAdminScreen {
