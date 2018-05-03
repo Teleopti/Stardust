@@ -43,6 +43,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			return Has(skillName, activity, null);
 		}
+		
+		public ISkill Has(IActivity activity)
+		{
+			return Has("_", activity, null);
+		}
 
 		public void Has(params ISkill[] skills)
 		{
