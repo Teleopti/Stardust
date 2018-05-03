@@ -10,10 +10,9 @@ namespace Teleopti.Support.Tool.Tool
 
 	public class SettingsSetter
 	{
-		public void UpdateSettingsFile(params SetSettingCommand[] commands)
+		public void UpdateSettingsFile(SetSettingCommand command)
 		{
-			var manager = new SettingsFileManager();
-			commands.ForEach(command => manager.UpdateFile(command.SearchFor, command.ReplaceWith));
+			new SettingsFileManager().UpdateFile(command.SearchFor, command.ReplaceWith);
 		}
 	}
 }

@@ -56,8 +56,6 @@
     <Compile Include="Config\FileConfigurator.cs" />
     <Compile Include="Config\CryptoCreator.cs" />
     <Compile Include="Config\Extensions.cs" />
-    <Compile Include="Config\FixMyConfigFixer.cs" />
-    <Compile Include="Config\InfraTestConfigurator.cs" />
     <Compile Include="Config\LoadSettingsCommand.cs" />
     <Compile Include="Config\ModeDefaultRunner.cs" />
     <Compile Include="Config\ModeDeployRunner.cs" />

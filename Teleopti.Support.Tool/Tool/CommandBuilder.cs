@@ -32,11 +32,12 @@ namespace Teleopti.Support.Tool.Tool
 			logger.InfoFormat("support tool is called with args: {0}", string.Join(" ", args));
 
 			args
+				.Select(a => a.ToUpper())
 				.ForEach(argument =>
 				{
 					matchSwitchWithAdjacentValue(argument, "-MO", v =>
 					{
-						var mode = modes().Single(x => x.Name == v.ToUpper());
+						var mode = modes().Single(x => x.Name == v);
 						command = mode.Command;
 					});
 					matchSwitchWithAdjacentValue(argument, "-TC", v => { command = new SetToggleModeCommand(v); });
@@ -53,19 +54,6 @@ namespace Teleopti.Support.Tool.Tool
 					matchSwitch(argument, "-SET", () => { command = new SetSettingCommand {SearchFor = args.ElementAt(1), ReplaceWith = args.ElementAt(2)}; });
 					matchSwitch(argument, "-CS", () => { command = command = new ConfigServerCommand(args.ElementAt(1)); });
 					matchSwitch(argument, "-PM", () => { command = new SavePmConfigurationCommand(args.ElementAt(1)); });
-					matchSwitch(argument, "-FixMyConfig", () => { command = new FixMyConfigCommand {ApplicationDatabase = args.ElementAt(1), AnalyticsDatabase = args.ElementAt(2)}; });
-					matchSwitch(argument, "-InfraTestConfig", () =>
-					{
-						var c = new InfraTestConfigCommand
-						{
-							ApplicationDatabase = args.ElementAt(1), 
-							AnalyticsDatabase = args.ElementAt(2),
-							ToggleMode = args.ElementAt(3)
-						};
-						if (args.Count() > 4)
-							c.SqlAuthString = args.ElementAt(4);
-						command = c;
-					});
 				});
 
 			return command;
@@ -76,9 +64,7 @@ namespace Teleopti.Support.Tool.Tool
 
 		private static bool matchSwitch(string arg, IEnumerable<string> matches, Action found)
 		{
-			var result = matches
-				.Select(x => x.ToUpper())
-				.Any(x => arg.ToUpper().Equals(x));
+			var result = matches.Any(x => arg.ToUpper().Equals(x));
 			if (result)
 				found();
 			return result;
@@ -89,9 +75,7 @@ namespace Teleopti.Support.Tool.Tool
 
 		private static bool matchSwitchWithAdjacentValue(string arg, IEnumerable<string> matches, Action<string> value)
 		{
-			var match = matches
-				.Select(x => x.ToUpper())
-				.OrderByDescending(x => x.Length)
+			var match = matches.OrderByDescending(x => x.Length)
 				.FirstOrDefault(arg.StartsWith);
 
 			if (match == null)

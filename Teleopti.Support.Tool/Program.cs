@@ -65,14 +65,6 @@ namespace Teleopti.Support.Tool
 						case SavePmConfigurationCommand c:
 							c.Execute();
 							break;
-						case FixMyConfigCommand c:
-							new FixMyConfigFixer().Fix(c);
-							break;
-						case InfraTestConfigCommand c:
-							new InfraTestConfigurator().Configure(c);
-							break;
-						default:
-							throw new ArgumentException("Unknown command");
 					}
 				}
 				catch (Exception e)
