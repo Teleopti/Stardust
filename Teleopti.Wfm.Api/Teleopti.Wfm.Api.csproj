@@ -281,6 +281,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ApiModule.cs" />
     <Compile Include="CommandDtoProvider.cs" />
     <Compile Include="Controllers\WfmCommandController.cs" />
     <Compile Include="Controllers\WfmQueryController.cs" />

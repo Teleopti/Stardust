@@ -97,11 +97,14 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ApiTest.cs" />
+    <Compile Include="ApiHttpClient.cs" />
+    <Compile Include="ApiTestAttribute.cs" />
     <Compile Include="AuthorizationTest.cs" />
     <Compile Include="CommandListingTest.cs" />
     <Compile Include="FakeTokenVerifier.cs" />
+    <Compile Include="IApiHttpClient.cs" />
     <Compile Include="QueryListingTest.cs" />
+    <Compile Include="Query\ScheduleByPersonIdTest.cs" />
     <Compile Include="Query\UserByEmailTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -119,9 +122,17 @@
       <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
       <Name>Teleopti.Ccc.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
+      <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
+      <Name>Teleopti.Ccc.IocCommon</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
       <Project>{68a028b6-864c-4969-8830-9c3c6bd56a98}</Project>
       <Name>Teleopti.Ccc.TestCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
+      <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
+      <Name>Teleopti.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Wfm.Api\Teleopti.Wfm.Api.csproj">
       <Project>{98a1ceaf-a22c-4e04-8a5e-9969ceea7776}</Project>
