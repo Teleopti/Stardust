@@ -44,7 +44,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		public void ShouldRunEndToEndAbsenceRequest()
 		{
 			TestLog.Debug("Setting up test data");
-			_assertRetryStrategy = new AssertRetryStrategy(10);
+			_assertRetryStrategy = new AssertRetryStrategy(100);
 			Now.Is("2016-02-25 08:00".Utc());
 			IPersonRequest personRequest = null;
 			WithUnitOfWork.Do(() =>
