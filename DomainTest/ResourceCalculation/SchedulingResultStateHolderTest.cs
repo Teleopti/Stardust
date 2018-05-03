@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.IsNotNull(target.SkillDays);
             Assert.IsNotNull(target.SkillStaffPeriodHolder);
 			Assert.IsNotNull(target.SeniorityWorkDayRanks);
+			Assert.IsFalse(target.UseMaximumWorkday);
         }
 
 
@@ -106,5 +107,23 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var rule = (MinWeekWorkTimeRule)rules.Item(typeof(MinWeekWorkTimeRule));
             Assert.IsNotNull(rule);
         }
-    }
+
+		[Test]
+		public void ShouldGetRulesWithMaximumWorkTimeActivated()
+		{
+			var target = new SchedulingResultStateHolder { UseMaximumWorkday = true, UseValidation = true };
+			var rules = target.GetRulesToRun();
+			var rule = (MaximumWorkdayRule)rules.Item(typeof(MaximumWorkdayRule));
+			Assert.IsNotNull(rule);
+		}
+
+		[Test]
+		public void ShouldGetRulesWithMaximumWorktimeDeActivated()
+		{
+			var target = new SchedulingResultStateHolder { UseValidation = true };
+			var rules = target.GetRulesToRun();
+			var rule = (MaximumWorkdayRule)rules.Item(typeof(MaximumWorkdayRule));
+			Assert.IsNull(rule);
+		}
+	}
 }
