@@ -36,7 +36,7 @@ namespace Teleopti.Support.Tool.Tool
 				{
 					matchSwitchWithAdjacentValue(argument, "-MO", v =>
 					{
-						var mode = modes().Single(x => x.Name == v);
+						var mode = modes().Single(x => x.Name == v.ToUpper());
 						command = mode.Command;
 					});
 					matchSwitchWithAdjacentValue(argument, "-TC", v => { command = new SetToggleModeCommand(v); });
