@@ -3,31 +3,26 @@ using Teleopti.Support.Library.Folders;
 
 namespace Teleopti.Support.Tool.Tool
 {
-	public class FixMyConfigCommand
+	public class InfraTestConfigCommand
 	{
 		public string ApplicationDatabase;
 		public string AnalyticsDatabase;
+		public string ToggleMode;
+		public string SqlAuthString;
 	}
 
-	public class FixMyConfigFixer
+	public class InfraTestConfigurator
 	{
-		public void Fix(FixMyConfigCommand command)
+		public void Configure(InfraTestConfigCommand command)
 		{
 			new SettingsLoader().LoadSettingsFile(new LoadSettingsCommand
 			{
 				File = Path.Combine(new RepositoryRootFolder().Path(), @".debug-Setup\config\", "settings.txt")
 			});
-			new SettingsSetter().UpdateSettingsFile(
-				new SetSettingCommand
-				{
-					SearchFor = "machineKey.validationKey",
-					ReplaceWith = "754534E815EF6164CE788E521F845BA4953509FA45E321715FDF5B92C5BD30759C1669B4F0DABA17AC7BBF729749CE3E3203606AB49F20C19D342A078A3903D1"
-				},
-				new SetSettingCommand
-				{
-					SearchFor = "machineKey.decryptionKey",
-					ReplaceWith = "3E1AD56713339011EB29E98D1DF3DBE1BADCF353938C3429"
-				},
+
+			var manager = new SettingsSetter();
+
+			manager.UpdateSettingsFile(
 				new SetSettingCommand
 				{
 					SearchFor = "$(DB_CCC7)",
@@ -46,11 +41,20 @@ namespace Teleopti.Support.Tool.Tool
 				new SetSettingCommand
 				{
 					SearchFor = "$(ToggleMode)",
-					ReplaceWith = "ALL"
+					ReplaceWith = command.ToggleMode
 				}
 			);
-			new ModeDebugRunner()
-				.Run(new ModeDebugCommand());
+
+			if (!string.IsNullOrEmpty(command.SqlAuthString))
+				manager.UpdateSettingsFile(
+					new SetSettingCommand
+					{
+						SearchFor = "$(SQL_AUTH_STRING)",
+						ReplaceWith = command.SqlAuthString
+					});
+
+			new ModeTestRunner()
+				.Run(new ModeTestCommand());
 		}
 	}
 }

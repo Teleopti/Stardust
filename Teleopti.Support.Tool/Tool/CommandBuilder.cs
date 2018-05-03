@@ -54,6 +54,18 @@ namespace Teleopti.Support.Tool.Tool
 					matchSwitch(argument, "-CS", () => { command = command = new ConfigServerCommand(args.ElementAt(1)); });
 					matchSwitch(argument, "-PM", () => { command = new SavePmConfigurationCommand(args.ElementAt(1)); });
 					matchSwitch(argument, "-FixMyConfig", () => { command = new FixMyConfigCommand {ApplicationDatabase = args.ElementAt(1), AnalyticsDatabase = args.ElementAt(2)}; });
+					matchSwitch(argument, "-InfraTestConfig", () =>
+					{
+						var c = new InfraTestConfigCommand
+						{
+							ApplicationDatabase = args.ElementAt(1), 
+							AnalyticsDatabase = args.ElementAt(2),
+							ToggleMode = args.ElementAt(3)
+						};
+						if (args.Count() > 4)
+							c.SqlAuthString = args.ElementAt(4);
+						command = c;
+					});
 				});
 
 			return command;

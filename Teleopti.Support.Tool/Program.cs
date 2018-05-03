@@ -68,6 +68,9 @@ namespace Teleopti.Support.Tool
 						case FixMyConfigCommand c:
 							new FixMyConfigFixer().Fix(c);
 							break;
+						case InfraTestConfigCommand c:
+							new InfraTestConfigurator().Configure(c);
+							break;
 						default:
 							throw new ArgumentException("Unknown command");
 					}
