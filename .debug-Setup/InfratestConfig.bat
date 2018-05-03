@@ -18,11 +18,11 @@ IF "%configuration%"=="" (
 )
 
 IF "%CCC7DB%" == "" (
-	SET CCC7DB=Infratest_CCC7
+	SET CCC7DB=InfraTest_CCC7
 )
 
 IF "%AnalyticsDB%" == "" (
-	SET AnalyticsDB=Infratest_Analytics
+	SET AnalyticsDB=InfraTest_Analytics
 )
  
 IF "%ToggleMode%" == "" (
@@ -45,15 +45,10 @@ IF EXIST "%ROOTDIR%\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" (
 		%MSBUILD% /t:build "%ROOTDIR%\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" /p:Configuration=%configuration%
 	)
 )
+
 %DriveLetter%
 CD "%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\"
-Teleopti.Support.Tool.exe -LOAD "%ROOTDIR%\.debug-setup\config\settings.txt"
-Teleopti.Support.Tool.exe -SET $(DB_CCC7) "%CCC7DB%"
-Teleopti.Support.Tool.exe -SET $(DB_ANALYTICS) "%AnalyticsDB%"
-Teleopti.Support.Tool.exe -SET $(AS_DATABASE) "%AnalyticsDB%"
-Teleopti.Support.Tool.exe -SET $(ToggleMode) "%ToggleMode%"
-IF NOT "%sqlAuthString%" == "" CALL Teleopti.Support.Tool.exe -SET $(SQL_AUTH_STRING) "%sqlAuthString%"
-Teleopti.Support.Tool.exe -MOTEST
+Teleopti.Support.Tool.exe -InfraTestConfig "%CCC7DB%" "%AnalyticsDB%" "%ToggleMode%" "%sqlAuthString%"
 
 ECHO Done!
 
