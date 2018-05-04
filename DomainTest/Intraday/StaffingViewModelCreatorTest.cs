@@ -1514,7 +1514,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				skillDay.Skill.MaxParallelTasks,
 				0);
 
-			return actualStaffingSkill1;
+			return actualStaffingSkill1.Agents;
 		}
 
 

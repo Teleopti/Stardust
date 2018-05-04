@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Helper
@@ -17,10 +18,14 @@ namespace Teleopti.Ccc.Domain.Helper
 			return calls/workPerAgent;
 		}
 
-        public double AgentsUseOccupancy(double sla, int serviceTime, double calls, double averageHandlingTime, TimeSpan periodLength, double minOccupancy, double maxOccupancy, int maxParallelTasks, double abandonRate)
+        public AgentsAndOccupancy AgentsUseOccupancy(double sla, int serviceTime, double calls, double averageHandlingTime, TimeSpan periodLength, double minOccupancy, double maxOccupancy, int maxParallelTasks, double abandonRate)
         {
-			return teleoptiAgents(sla, serviceTime, calls, averageHandlingTime, periodLength);
-        }
+			return new AgentsAndOccupancy()
+			{
+				Agents = teleoptiAgents(sla, serviceTime, calls, averageHandlingTime, periodLength),
+				Occupancy = 0
+			};
+		}
 
 		public double LinearEsl(double forecastedAgents, double agents, double sla)
 		{
@@ -35,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Helper
 			//return ServiceLevelAchieved(agents, serviceTime, calls, aht, intervalLength, (int)sla*100);
 		}
 
-		public double Utilization(double demandWithoutEfficiency, double tasks, double aht, TimeSpan periodLength, int maxParallelTasks)
+		public double Utilization(double demandWithoutEfficiency, double tasks, double aht, TimeSpan periodLength, int maxParallelTasks, double occupancy)
 		{
 			return 1; //Always 100%
 		}
