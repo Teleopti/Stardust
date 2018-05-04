@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ValidationErrors } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { of } from 'rxjs/observable/of';
+import { Observable ,  of } from 'rxjs';
 import { first, map, switchMap, take, tap } from 'rxjs/operators';
 import { LogonInfoService } from '../../services';
 import { FormControlWithInitial } from '../shared/forms';
