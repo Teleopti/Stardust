@@ -141,8 +141,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		public void WhenISetNewActivityAs(Table table)
 		{
 			var values = table.CreateInstance<AddActivityFormInfo>();
-			var startTime = $"new Date('{values.StartTime}')";
-			var endTime = $"new Date('{values.EndTime}')";
+			var startTime = '"' + values.StartTime + '"';
+			var endTime = '"' + values.EndTime + '"';
 			var timeRangeStr = $"{{startTime:{startTime}, endTime:{endTime}}}";
 			var selectedDate = $"function(){{return '{values.SelectedDate}';}}";
 			var selectedId = idForActivity(values.Activity).ToString();
