@@ -26,7 +26,6 @@ import {
 	PageContainerComponent,
 	PlaygroundComponent,
 	RevokePageComponent,
-	RolePage,
 	SearchPageComponent,
 	TitleBarComponent,
 	WorkspaceComponent
@@ -44,7 +43,6 @@ import {
 	declarations: [
 		GrantPageComponent,
 		RevokePageComponent,
-		RolePage,
 		ChipComponent,
 		ChipAddComponent,
 		ChipRemoveComponent,
