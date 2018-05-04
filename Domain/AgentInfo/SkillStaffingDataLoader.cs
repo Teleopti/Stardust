@@ -84,8 +84,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 				from startTime in distinctedStartTimes
 				from skill in skills
 				let skillTimePair = new {StartTime = startTime, SkillId = skill.Id.GetValueOrDefault()}
-				let scheduledStaffing = calculateScheduledStaffing(dayStaffingData.Scheduled[skillTimePair].ToList())
-				let forecastedStaffing = calculateForecastedStaffing(dayStaffingData.Forecasted[skillTimePair].ToList())
+				let scheduledStaffing = roundWithOneFractionalDigit(calculateScheduledStaffing(dayStaffingData.Scheduled[skillTimePair].ToList()))
+				let forecastedStaffing = roundWithOneFractionalDigit(calculateForecastedStaffing(dayStaffingData.Forecasted[skillTimePair].ToList()))
 				select new SkillStaffingData
 				{
 					Resolution = resolution,
@@ -102,6 +102,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		private static double? calculateForecastedStaffing(IList<StaffingIntervalModel> forecasteds)
 		{
 			return forecasteds.Any() ? forecasteds.Sum(forecasted => forecasted?.Agents) : null;
+		}
+
+		private static double? roundWithOneFractionalDigit(double? value)
+		{
+			if (!value.HasValue)
+				return value;
+			return Math.Round(value.Value, 1);
 		}
 
 		private static double? calculateScheduledStaffing(IList<SkillStaffingIntervalLightModel> scheduleds)

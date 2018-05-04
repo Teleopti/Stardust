@@ -164,6 +164,19 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldGetFairPossibilitiesAfterRoundStaffingDataWithOneFractional()
+		{
+			setupWorkFlowControlSet();
+			setupSiteOpenHour();
+			setupDefaultTestData(new double?[] { 0.001, 0.001d }, new double?[] { 0d, 0d });
+			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
+				.Where(d => d.Date == Now.ServerDate_DontUse().ToFixedClientDateOnlyFormat()).ToList();
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+		}
+
+		[Test]
 		public void ShouldNotGetPossibilitiesForOvertimeWhenOverstaffingAndNoSkillTypeIsMatched()
 		{
 			setupSiteOpenHour();
