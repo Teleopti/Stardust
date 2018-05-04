@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		//if below is needed on more places - make an attribute/"something" instead?
 		[TestLog]
-		public void HandleEvent(IntradayOptimizationWasOrdered @event, Guid? planningPeriodId, Func<IBlockPreferenceProvider> blockPreferenceProvider)
+		public virtual void HandleEvent(IntradayOptimizationWasOrdered @event, Guid? planningPeriodId, Func<IBlockPreferenceProvider> blockPreferenceProvider)
 		{
 			var numberOfTries = 0;
 			while (true)
