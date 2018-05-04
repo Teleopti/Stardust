@@ -63,6 +63,10 @@
 	margin-left: 20px;
 }
 
+.weekview-probability-toggle li > a {
+	color: #333333 !important;
+}
+
 .overtime {
 	padding-top: 30px;
 }
