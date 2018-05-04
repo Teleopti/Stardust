@@ -87,7 +87,7 @@
 		ResourcePlanner_SpeedUpEvents_74996,
 		ResourcePlanner_SpeedUpEvents_75415,
 		ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899,
-		ResourcePlanner_MinimumStaffing_75339,
+		ResourcePlanner_MinimumAgents_75339,
 		ResourcePlanner_UseErlangAWithFinitePatience_47738,
 
 		Wfm_DisplayOnlineHelp_39402,

@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	public class ForecastAndScheduleSumForDay
 	{
 		private readonly IUserTimeZone _userTimeZone;
-		public const double MinimumStaffingNotFulfilledValue = 100_000;
+		public const double MinimumAgentsNotFulfilledValue = 100_000;
 		
 		public ForecastAndScheduleSumForDay(IUserTimeZone userTimeZone)
 		{
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					var lackingPersons = minimumPersons - scheduled;
 					if (lackingPersons > 0)
 					{
-						return (MinimumStaffingNotFulfilledValue + lackingPersons, 1);						
+						return (MinimumAgentsNotFulfilledValue + lackingPersons, 1);						
 					}
 				}
 	

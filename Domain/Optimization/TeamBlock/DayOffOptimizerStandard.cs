@@ -315,7 +315,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	
 	
 
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_MinimumStaffing_75339)]
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MinimumAgents_75339)]
 	public class DayOffOptimizerStandardOLD
 	{
 		private readonly ILockableBitArrayFactory _lockableBitArrayFactory;

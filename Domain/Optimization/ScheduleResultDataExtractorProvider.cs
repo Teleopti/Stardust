@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 allSkillExtractor);
         }
 
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_MinimumStaffing_75339)]
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MinimumAgents_75339)]
 		public IScheduleResultDataExtractor CreatePrimarySkillsDataExtractor(DateOnlyPeriod selectedPeriod, ISchedulingResultStateHolder stateHolder, IAdvancedPreferences optimizerPreferences, IEnumerable<IScheduleMatrixPro> allScheduleMatrixPros)
 		{
 			ISkillExtractor primarySkillExtractor = new ScheduleMatrixesPrimarySkillExtractor(allScheduleMatrixPros, _personalSkillsProvider);

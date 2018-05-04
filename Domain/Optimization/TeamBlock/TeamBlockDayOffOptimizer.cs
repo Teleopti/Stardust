@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		}
 	}
 
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_MinimumStaffing_75339)]
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MinimumAgents_75339)]
 	public interface ITeamBlockDayOffOptimizer
 	{
 		void OptimizeDaysOff(
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ISchedulingProgress schedulingProgress);
 	}
 
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_MinimumStaffing_75339)]
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MinimumAgents_75339)]
 	public class TeamBlockDayOffOptimizerOLD : ITeamBlockDayOffOptimizer
 	{
 		private readonly IAllTeamMembersInSelectionSpecification _allTeamMembersInSelectionSpecification;
