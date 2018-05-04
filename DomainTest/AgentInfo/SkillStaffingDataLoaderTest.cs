@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 				User.CurrentUser().PermissionInformation.DefaultTimeZone(), ServiceAgreement.DefaultValuesEmail());
 
 			var skillStaffingDatas = Target.Load(new[] { skill1 }, new DateOnly(utcDate).ToDateOnlyPeriod(), true);
-			Assert.AreEqual(0.030,
+			Assert.AreEqual(0.7d,
 				skillStaffingDatas.FirstOrDefault(p => p.Time.Equals(utcDate.AddHours(7))).ForecastedStaffing);
 		}
 
@@ -79,9 +79,9 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			}
 
 			var skillStaffingDatas = Target.Load(new[] { skill1 }, weekPeriod, true);
-			Assert.AreEqual(0.048,
+			Assert.AreEqual(1.2d,
 				skillStaffingDatas.FirstOrDefault(p => p.Time.Equals(firstDayOfWeek.AddHours(7))).ForecastedStaffing);
-			Assert.AreEqual(0.048,
+			Assert.AreEqual(1.2d,
 				skillStaffingDatas.FirstOrDefault(p => p.Time.Equals(firstDayOfWeek.AddDays(6).AddHours(7))).ForecastedStaffing);
 		}
 
@@ -95,9 +95,9 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 				createStaffingPeriodData(1.25d, 0d, date, 3, 4),
 				createStaffingPeriodData(0d, 0d, date, 4, 5),
 				createStaffingPeriodData(0d, 0d, date, 5, 6),
-				createStaffingPeriodData(0.012d, 0d, date, 6, 7),
-				createStaffingPeriodData(0.036d, 0d, date, 7, 8),
-				createStaffingPeriodData(0.093d, 1d, date, 8, 9),
+				createStaffingPeriodData(0.112d, 0d, date, 6, 7),
+				createStaffingPeriodData(1.136d, 0d, date, 7, 8),
+				createStaffingPeriodData(0.193d, 1d, date, 8, 9),
 				createStaffingPeriodData(0.185d, 1d, date, 9, 10),
 				createStaffingPeriodData(0.286d, 0d, date, 10, 11),
 				createStaffingPeriodData(0.379d, 0d, date, 11, 12),
