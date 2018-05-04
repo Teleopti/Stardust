@@ -135,7 +135,7 @@
     "webpack": "^4.0.1",
     "webpack-cli": "2.1.2",
     "webpack-concat-plugin": "3.0.0-beta.0",
-    "webpack-extraneous-file-cleanup-plugin": "1.0.5"
+    "webpack-extraneous-file-cleanup-plugin": "2.0.0"
   },
   "scripts": {
     "pretest": "..\\.node\\grunt.cmd dist",
