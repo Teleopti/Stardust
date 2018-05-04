@@ -3,7 +3,7 @@
 
 	angular.module('wfm.teamSchedule').directive('addPersonalActivity', ['serviceDateFormatHelper', addPersonalActivity]);
 
-	function addPersonalActivity(serviceDateFormatHelper) {
+	function addPersonalActivity() {
 		return {
 			restrict: 'E',
 			scope: {},
@@ -76,14 +76,15 @@
 		};
 
 		vm.updateInvalidAgents = function () {
+			vm.invalidAgents = [];
 			if (!$scope.newPersonalActivityForm.$valid)
 				return;
 			var belongsToDates = decidePersonBelongsToDates(vm.selectedAgents, getTimeRangeMoment());
 
 			for (var i = 0; i < belongsToDates.length; i++) {
-				if (!belongsToDates[i].Date) vm.invalidAgents.push(vm.selectedAgents[i]);
+				if (!belongsToDates[i].Date)
+					vm.invalidAgents.push(vm.selectedAgents[i]);
 			}
-
 			vm.notAllowedNameListString = vm.invalidAgents.map(function (x) { return x.Name; }).join(', ');
 		};
 
