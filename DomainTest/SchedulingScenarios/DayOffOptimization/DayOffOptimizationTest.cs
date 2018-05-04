@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeActivityRepository ActivityRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public FakePlanningGroupSettingsRepository PlanningGroupSettingsRepository;
 		public IScheduleStorage ScheduleStorage;
 		public IPersonWeekViolatingWeeklyRestSpecification CheckWeeklyRestRule;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
@@ -468,6 +467,44 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate) //saturday
 				.DayOff().Should().Be.Null();
 			PersonAssignmentRepository.GetSingle(skillDays[1].CurrentDate) //tuesday
+				.DayOff().Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldConsiderMultiskilledAgents()
+		{
+			var date = new DateOnly(2015, 10, 12);
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var skillExtra1 = SkillRepository.Has("skillextra1", activity);
+			var skillExtra2 = SkillRepository.Has("skillextra2", activity);
+			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
+			var scenario = ScenarioRepository.Has("some name");
+			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1).NumberOfDaysOf(1);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var agent = PersonRepository.Has(schedulePeriod, ruleSet, skill);
+			var multiskilledAgent = PersonRepository.Has(schedulePeriod, ruleSet, skill, skillExtra1, skillExtra2);
+			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date,
+				0.5,
+				1, //multiskilled guy scheduled here => should not matter because he should be considered to be a "-0.33" resource
+				1,
+				1,
+				1,
+				1,
+				1)
+			);
+			SkillDayRepository.Has(skillExtra1.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 1));
+			SkillDayRepository.Has(skillExtra2.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 1));
+			PersonAssignmentRepository.Has(multiskilledAgent, scenario, activity, shiftCategory, date.AddDays(1), new TimePeriod(8, 0, 16, 0));
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory,
+				DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
+			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate, agent) 
+				.SetDayOff(new DayOffTemplate());
+
+			Target.Execute(planningPeriod.Id.Value);
+
+			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate, agent)
 				.DayOff().Should().Not.Be.Null();
 		}
 
