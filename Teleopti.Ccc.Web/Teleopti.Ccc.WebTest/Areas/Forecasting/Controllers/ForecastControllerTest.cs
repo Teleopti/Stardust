@@ -120,5 +120,36 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			SkillDayRepository.FindRange(forecastedDay1.ToDateOnlyPeriod(), skill, scenario)
 				.Single().WorkloadDayCollection.Single().TotalTasks.Should().Be(0);
 		}
+
+		[Test]
+		public void ShouldAddCampaign()
+		{
+			var model = new CampaignInput
+			{
+				SelectedDays = new []{ new DateOnly(2018, 5, 4) },
+				CampaignTasksPercent = 0.5d,
+				ForecastDays = new List<ForecastDayModel>
+				{
+					new ForecastDayModel
+					{
+						Date = new DateOnly(2018, 5, 4),
+						Tasks = 100d
+					},
+					new ForecastDayModel
+					{
+						Date = new DateOnly(2018, 5, 5),
+						Tasks = 100d
+					}
+				}
+			};
+
+			var result = (OkNegotiatedContentResult<IList<ForecastDayModel>>)Target.AddCampaign(model);
+
+			result.Should().Be.OfType<OkNegotiatedContentResult<IList<ForecastDayModel>>>();
+			result.Content.First().Tasks
+				.Should().Be(150);
+			result.Content.Last().Tasks
+				.Should().Be(100);
+		}
 	}
 }

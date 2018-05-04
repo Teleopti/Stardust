@@ -134,7 +134,12 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		[UnitOfWork, HttpPost, Route("api/Forecasting/Campaign")]
 		public virtual IHttpActionResult AddCampaign(CampaignInput input)
 		{
-			return Ok();
+			foreach (var selectedDay in input.SelectedDays)
+			{
+				var forecastDay = input.ForecastDays.Single(x => x.Date == selectedDay);
+				forecastDay.Tasks = (input.CampaignTasksPercent + 1) * forecastDay.Tasks;
+			}
+			return Ok(input.ForecastDays);
 		}
 
 		[UnitOfWork, HttpPost, Route("api/Forecasting/Override")]
