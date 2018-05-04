@@ -389,9 +389,20 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Areas\Forecasting\Controllers\ExportForecastInput.cs" />
+    <Compile Include="Areas\Forecasting\Models\CampaignInput.cs" />
+    <Compile Include="Areas\Forecasting\Models\EvaluateMethodsInput.cs" />
+    <Compile Include="Areas\Forecasting\Models\ExportForecastInput.cs" />
     <Compile Include="Areas\Forecasting\Controllers\ForecastExportController.cs" />
     <Compile Include="Areas\Forecasting\Core\ForecastExportToExcel.cs" />
+    <Compile Include="Areas\Forecasting\Models\ForecastDayModel.cs" />
+    <Compile Include="Areas\Forecasting\Models\ForecastModel.cs" />
+    <Compile Include="Areas\Forecasting\Models\ForecastResultInput.cs" />
+    <Compile Include="Areas\Forecasting\Models\ForecastResultViewModel.cs" />
+    <Compile Include="Areas\Forecasting\Models\IntradayPatternInput.cs" />
+    <Compile Include="Areas\Forecasting\Models\ModifyInput.cs" />
+    <Compile Include="Areas\Forecasting\Models\OverrideInput.cs" />
+    <Compile Include="Areas\Forecasting\Models\QueueStatisticsInput.cs" />
+    <Compile Include="Areas\Forecasting\Models\SkillsViewModel.cs" />
     <Compile Include="Areas\Gamification\Controller\GamificationCalculationController.cs" />
     <Compile Include="Areas\Gamification\Controller\GamificationController.cs" />
     <Compile Include="Areas\Gamification\Core\DataProvider\GamificationSettingPersister.cs" />
@@ -440,7 +451,7 @@
     <Compile Include="Areas\Anywhere\Core\GroupScheduleShiftViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelMapper.cs" />
-    <Compile Include="Areas\Forecasting\Controllers\EvaluateInput.cs" />
+    <Compile Include="Areas\Forecasting\Models\EvaluateInput.cs" />
     <Compile Include="Areas\Forecasting\Controllers\SkillController.cs" />
     <Compile Include="Areas\Forecasting\Core\ForecastResultViewModelFactory.cs" />
     <Compile Include="Areas\Forecasting\Core\IForecastViewModelFactory.cs" />
@@ -844,7 +855,7 @@
     <Compile Include="Areas\MultiTenancy\Core\IApplicationAuthentication.cs" />
     <Compile Include="Areas\Forecasting\Controllers\ForecastController.cs" />
     <Compile Include="Areas\Forecasting\Core\IoC\ForecastingAreaModule.cs" />
-    <Compile Include="Areas\Forecasting\Controllers\ForecastInput.cs" />
+    <Compile Include="Areas\Forecasting\Models\ForecastInput.cs" />
     <Compile Include="Areas\Mart\Controllers\QueueStatsController.cs" />
     <Compile Include="Areas\Mart\Core\DatabaseConnectionHandler.cs" />
     <Compile Include="Areas\Mart\Core\IQueueStatHandler.cs" />

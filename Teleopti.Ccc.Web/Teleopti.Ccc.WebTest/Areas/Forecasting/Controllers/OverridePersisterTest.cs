@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
 using Teleopti.Ccc.Web.Areas.Forecasting.Core;
+using Teleopti.Ccc.Web.Areas.Forecasting.Models;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 
 			var input = new OverrideInput
 			{
-				Days = new[] { new ModifiedDay { Date = dateOnly.Date } },
+				Days = new[] { new DateOnly() },
 				ScenarioId = Guid.NewGuid(),
 				WorkloadId = Guid.NewGuid(),
 				OverrideTasks = 300,
@@ -84,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 
 			var input = new OverrideInput
 			{
-				Days = new[] { new ModifiedDay { Date = dateOnly.Date } },
+				Days = new[] {dateOnly },
 				ScenarioId = Guid.NewGuid(),
 				WorkloadId = Guid.NewGuid(),
 				OverrideTasks = 300,
@@ -122,7 +123,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 
 			var input = new OverrideInput
 			{
-				Days = new[] { new ModifiedDay { Date = dateOnly.Date } },
+				Days = new[] { dateOnly },
 				ScenarioId = Guid.NewGuid(),
 				WorkloadId = Guid.NewGuid(),
 				OverrideTalkTime = 30,
@@ -163,7 +164,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 
 			var input = new OverrideInput
 			{
-				Days = new[] { new ModifiedDay { Date = dateOnly.Date } },
+				Days = new[] {dateOnly },
 				ScenarioId = Guid.NewGuid(),
 				WorkloadId = Guid.NewGuid(),
 				OverrideTasks = 300,
@@ -212,7 +213,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 
 			var input = new OverrideInput
 			{
-				Days = new[] { new ModifiedDay { Date = dateOnly.Date } },
+				Days = new[] { dateOnly },
 				ScenarioId = Guid.NewGuid(),
 				WorkloadId = Guid.NewGuid(),
 				OverrideTasks = 300,
@@ -251,7 +252,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 
 			var input = new OverrideInput
 			{
-				Days = new[] { new ModifiedDay { Date = dateOnly.Date } },
+				Days = new[] { dateOnly},
 				ScenarioId = Guid.NewGuid(),
 				WorkloadId = Guid.NewGuid(),
 				OverrideTasks = 300,

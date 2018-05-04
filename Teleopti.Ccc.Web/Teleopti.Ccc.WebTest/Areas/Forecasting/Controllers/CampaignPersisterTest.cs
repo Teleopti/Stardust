@@ -23,10 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var dateOnly = new DateOnly();
 			var campaignDays = new[]
 			{
-				new ModifiedDay
-				{
-					Date = dateOnly.Date
-				}
+				dateOnly
 			};
 			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkill("skill1"));
 			var scenario = new Scenario("scenario1");
@@ -54,10 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var dateOnly = new DateOnly();
 			var campaignDays = new[]
 			{
-				new ModifiedDay
-				{
-					Date = dateOnly.Date
-				}
+				dateOnly
 			};
 			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkill("skill1"));
 			var scenario = new Scenario("scenario1");
@@ -85,15 +79,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var fiveDaysLater = dateOnly.AddDays(5);
 			var campaignDays = new[]
 			{
-				new ModifiedDay
-				{
-					Date = dateOnly.Date
-				},
-
-				new ModifiedDay
-				{
-					Date = fiveDaysLater.Date
-				}
+				dateOnly,
+				fiveDaysLater
 			};
 			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkill("skill1"));
 			var scenario = new Scenario("scenario1");

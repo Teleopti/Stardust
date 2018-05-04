@@ -3,19 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
-using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
-using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.Forecasting.Core;
+using Teleopti.Ccc.Web.Areas.Forecasting.Models;
 using Teleopti.Ccc.Web.Areas.Global;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
@@ -135,36 +132,9 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		}
 
 		[UnitOfWork, HttpPost, Route("api/Forecasting/Campaign")]
-		public virtual Task<ForecastResultViewModel> AddCampaign(CampaignInput input)
+		public virtual IHttpActionResult AddCampaign(CampaignInput input)
 		{
-			var failedTask = Task.FromResult(new ForecastResultViewModel
-			{
-				Success = false,
-				Message = "Forecast is running, please try later."
-			});
-			if (_actionThrottler.IsBlocked(ThrottledAction.Forecasting))
-			{
-				return failedTask;
-			}
-			var token = _actionThrottler.Block(ThrottledAction.Forecasting);
-			try
-			{
-				var scenario = _scenarioRepository.Get(input.ScenarioId);
-				var workload = _workloadRepository.Get(input.WorkloadId);
-				_campaignPersister.Persist(scenario, workload, input.Days, input.CampaignTasksPercent);
-				return Task.FromResult(new ForecastResultViewModel
-				{
-					Success = true
-				});
-			}
-			catch (OptimisticLockException)
-			{
-				return failedTask;
-			}
-			finally
-			{
-				_actionThrottler.Finish(token);
-			}
+			return Ok();
 		}
 
 		[UnitOfWork, HttpPost, Route("api/Forecasting/Override")]
@@ -201,7 +171,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		}
 
 		[UnitOfWork, HttpPost, Route("api/Forecasting/ApplyForecast")]
-		public virtual  IHttpActionResult ApplyForecast(ForecastPersistModel forecastResult)
+		public virtual  IHttpActionResult ApplyForecast(ForecastModel forecastResult)
 		{
 			var workload = _workloadRepository.Get(forecastResult.WorkloadId);
 			var scenario = _scenarioRepository.Get(forecastResult.ScenarioId);
@@ -212,6 +182,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			foreach (var skillDay in skillDays)
 			{
 				var forecastedWorkloadDay = skillDay.WorkloadDayCollection.SingleOrDefault(x => x.Workload.Id.Value == forecastResult.WorkloadId);
+				if(!forecastedWorkloadDay.OpenForWork.IsOpen)
+					continue;
 				var model = forecastResult.ForecastDays.SingleOrDefault(x => x.Date == forecastedWorkloadDay.CurrentDate);
 				forecastedWorkloadDay.Tasks = model.Tasks;
 				forecastedWorkloadDay.AverageTaskTime = TimeSpan.FromSeconds(model.TaskTime);
@@ -220,44 +192,5 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 
 			return Ok();
 		}
-	}
-
-	public class SkillsViewModel
-	{
-		public IEnumerable<SkillAccuracy> Skills { get; set; }
-		public bool IsPermittedToModifySkill { get; set; }
-	}
-
-	public class ForecastResultViewModel
-	{
-		public bool Success { get; set; }
-		public string Message { get; set; }
-	}
-
-	public class ModifyInput
-	{
-		public ModifiedDay[] Days { get; set; }
-		public Guid ScenarioId { get; set; }
-		public Guid WorkloadId { get; set; }
-	}
-
-	public class CampaignInput : ModifyInput
-	{
-		public double CampaignTasksPercent { get; set; }
-	}
-
-	public class OverrideInput : ModifyInput
-	{
-		public double? OverrideTasks { get; set; }
-		public double? OverrideTalkTime { get; set; }
-		public double? OverrideAfterCallWork { get; set; }
-		public bool ShouldSetOverrideTasks { get; set; }
-		public bool ShouldSetOverrideTalkTime { get; set; }
-		public bool ShouldSetOverrideAfterCallWork { get; set; }
-	}
-
-	public class ModifiedDay
-	{
-		public DateTime Date { get; set; }
 	}
 }
