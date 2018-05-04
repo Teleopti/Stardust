@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
 using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel
@@ -12,21 +13,21 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 	public class QuickForecaster : IQuickForecaster
 	{
 		private readonly IQuickForecasterWorkload _quickForecasterWorkload;
-		private readonly IFetchAndFillSkillDays _fetchAndFillSkillDays;
+		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly IForecastWorkloadEvaluator _forecastWorkloadEvaluator;
 		private readonly IHistoricalPeriodProvider _historicalPeriodProvider;
 
-		public QuickForecaster(IQuickForecasterWorkload quickForecasterWorkload, IFetchAndFillSkillDays fetchAndFillSkillDays, IForecastWorkloadEvaluator forecastWorkloadEvaluator, IHistoricalPeriodProvider historicalPeriodProvider)
+		public QuickForecaster(IQuickForecasterWorkload quickForecasterWorkload, ISkillDayRepository skillDayRepository, IForecastWorkloadEvaluator forecastWorkloadEvaluator, IHistoricalPeriodProvider historicalPeriodProvider)
 		{
 			_quickForecasterWorkload = quickForecasterWorkload;
-			_fetchAndFillSkillDays = fetchAndFillSkillDays;
+			_skillDayRepository = skillDayRepository;
 			_forecastWorkloadEvaluator = forecastWorkloadEvaluator;
 			_historicalPeriodProvider = historicalPeriodProvider;
 		}
 
 		public IList<ForecastResultModel> ForecastWorkloadsWithinSkill(ISkill skill, ForecastWorkloadInput workloadInput, DateOnlyPeriod futurePeriod, IScenario scenario)
 		{
-			var skillDays = _fetchAndFillSkillDays.FindRange(futurePeriod, skill, scenario);
+			var skillDays = _skillDayRepository.FindRange(futurePeriod, skill, scenario);
 			var workload = skill.WorkloadCollection.Single(w => w.Id.Value == workloadInput.WorkloadId);
 
 			var forecastMethodId = workloadInput.ForecastMethodId;

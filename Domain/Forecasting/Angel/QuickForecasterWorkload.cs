@@ -41,8 +41,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 		{
 			var workloadDayForDate = workloadDays
 				.ToDictionary(w => w.CurrentDate);
-			var taskOwnerHelper = new TaskOwnerHelper(workloadDays);
-			taskOwnerHelper.BeginUpdate();
 			var forecastresult = new List<ForecastResultModel>();
 			foreach (var target in forecast.ForecastingTargets)
 			{
@@ -50,30 +48,33 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 				{
 					date = target.CurrentDate.Date,
 					vc = target.Tasks,
-					vtc = target.Tasks,
-					vtt = target.AverageTaskTime.TotalSeconds,
-					vttt = target.AverageTaskTime.TotalSeconds,
+					vtc = target.AverageTaskTime.TotalSeconds,
 					vacw = target.AverageAfterTaskTime.TotalSeconds,
+					vtt = target.Tasks,
+					vttt = target.AverageTaskTime.TotalSeconds,
 					vtacw = target.AverageAfterTaskTime.TotalSeconds
 				};
-				var currentWorkLoadDay = workloadDayForDate[target.CurrentDate];
-				if (hasCampaign(currentWorkLoadDay) && hasOverride(currentWorkLoadDay))
+				if (workloadDayForDate.ContainsKey(target.CurrentDate))
 				{
-					model.vcombo = -1;
-				}
-				if(hasCampaign(currentWorkLoadDay))
-				{
-					model.vcampaign = -1;
-					model.vtc = model.vc * (currentWorkLoadDay.CampaignTasks.Value + 1d);
-					model.vtt = model.vtt * (currentWorkLoadDay.CampaignTaskTime.Value + 1d);
-					model.vtacw = model.vacw * (currentWorkLoadDay.CampaignAfterTaskTime.Value + 1d);
-				}
-				if (hasOverride(currentWorkLoadDay))
-				{
-					model.voverride = -1;
-					model.vtc = currentWorkLoadDay.OverrideTasks ?? model.vc;
-					model.vtt = currentWorkLoadDay.OverrideAverageTaskTime?.TotalSeconds ?? model.vtt;
-					model.vtacw = currentWorkLoadDay.OverrideAverageAfterTaskTime?.TotalSeconds ?? model.vacw;
+					var currentWorkLoadDay = workloadDayForDate[target.CurrentDate];
+					if (hasCampaign(currentWorkLoadDay) && hasOverride(currentWorkLoadDay))
+					{
+						model.vcombo = -1;
+					}
+					if (hasCampaign(currentWorkLoadDay))
+					{
+						model.vcampaign = -1;
+						model.vtc = model.vc * (currentWorkLoadDay.CampaignTasks.Value + 1d);
+						model.vtt = model.vtt * (currentWorkLoadDay.CampaignTaskTime.Value + 1d);
+						model.vtacw = model.vacw * (currentWorkLoadDay.CampaignAfterTaskTime.Value + 1d);
+					}
+					if (hasOverride(currentWorkLoadDay))
+					{
+						model.voverride = -1;
+						model.vtc = currentWorkLoadDay.OverrideTasks ?? model.vc;
+						model.vtt = currentWorkLoadDay.OverrideAverageTaskTime?.TotalSeconds ?? model.vtt;
+						model.vtacw = currentWorkLoadDay.OverrideAverageAfterTaskTime?.TotalSeconds ?? model.vacw;
+					}
 				}
 
 				forecastresult.Add(model);

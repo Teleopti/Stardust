@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWorkload
@@ -17,9 +18,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 			yield return new StatisticTask {Interval = dateTimeOnStartPeriod, StatOfferedTasks = expectedNumberOfTasks};
 		}
 
-		protected override void Assert(IEnumerable<ISkillDay> modifiedSkillDays)
+		protected override void Assert(IEnumerable<ForecastResultModel> forecastResult)
 		{
-			Convert.ToInt32(modifiedSkillDays.Single().Tasks)
+			Convert.ToInt32(forecastResult.Single().vc)
 				.Should().Be.EqualTo(expectedNumberOfTasks);
 		}
 	}
