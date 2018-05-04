@@ -91,12 +91,16 @@ module.exports = env => {
 		// outputPath: 'dist',
 		fileName: 'main.js',
 		filesToConcat: [
+			'./app/app.js',
+			'./app/**/_modules.js',
 			[
 				'./app/**/*.js',
 				'!./app/**/*.spec.js',
 				'!./app/**/*.fake.js',
 				'!./app/**/*.fortest.js',
-				'!./app/app_desktop_client.js'
+				'!./app/app.js',
+				'!./app/app_desktop_client.js',
+				'!./app/**/_modules.js'
 			]
 		],
 		attributes: {
