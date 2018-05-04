@@ -116,7 +116,6 @@ ResourcePlanner_MinimumAgents_75339 = DEV
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
 ResourcePlanner_DayOffOptimizationIslands_47208 = true
 ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
-ResourcePlanner_Deadlock_48170 = true
 
 # From old Kittens team... #
 ETL_SpeedUpPersonPeriodNightly_38097 = true
