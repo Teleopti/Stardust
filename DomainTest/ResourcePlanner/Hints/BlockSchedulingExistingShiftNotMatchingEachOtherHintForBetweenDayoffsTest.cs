@@ -515,7 +515,6 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 		}
 		
 		[Test]
-		[Ignore("#75836 to be fixed")]
 		public void ShouldNotCrashWhenScheduleATerminatedAgentAndWhoHasScheduleInOpeningPeriod()
 		{
 			var startDate = new DateOnly(2017, 01, 01);

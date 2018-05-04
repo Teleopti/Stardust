@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.UserTexts;
@@ -44,7 +45,9 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 					}
 					else
 					{
-						var personPeriod = person.PersonPeriods(period).First();
+						if(personPeriods.IsEmpty())
+							continue;
+						var personPeriod = personPeriods.First();
 						if (personPeriod.StartDate > period.StartDate)
 							continue;
 
