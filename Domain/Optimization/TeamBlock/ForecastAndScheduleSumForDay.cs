@@ -23,11 +23,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 			foreach (var skillStaffPeriod in stateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(skills, date.ToDateTimePeriod(_userTimeZone.TimeZone())))
 			{
-				var scheduled = skillStaffPeriod.CalculatedResource;
+				var scheduledHeads = skillStaffPeriod.CalculatedLoggedOn;
 				if (optimizationPreferences.Advanced.UseMinimumStaffing)
 				{
 					var minimumPersons = skillStaffPeriod.Payload.SkillPersonData.MinimumPersons;
-					var lackingPersons = minimumPersons - scheduled;
+					var lackingPersons = minimumPersons - scheduledHeads;
 					if (lackingPersons > 0)
 					{
 						return (MinimumAgentsNotFulfilledValue + lackingPersons, 1);						
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				}
 	
 				dailyForecastSum += skillStaffPeriod.FStaffTime().TotalMinutes;
-				dailyScheduledSum += TimeSpan.FromMinutes(scheduled * skillStaffPeriod.Period.ElapsedTime().TotalMinutes).TotalMinutes;
+				dailyScheduledSum += TimeSpan.FromMinutes(scheduledHeads * skillStaffPeriod.Period.ElapsedTime().TotalMinutes).TotalMinutes;
 			}
 
 			return (dailyForecastSum, dailyScheduledSum);

@@ -60,6 +60,41 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		}
 		
 		[Test]
+		public void ShouldConsiderMinimumAgentsCorrectlyWhenAgentHasMultipleSkills()
+		{
+			var date = new DateOnly(2015, 10, 12); //mon
+			var activity = ActivityRepository.Has();
+			var skill = SkillRepository.Has("skill", activity);
+			var extraSkill = SkillRepository.Has("extraSkill", activity);
+			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
+			var scenario = ScenarioRepository.Has();
+			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1).NumberOfDaysOf(1);
+			var shiftCategory = new ShiftCategory().WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date,
+				0.5, //DO should end up here
+				1, 
+				1,
+				1,
+				1,
+				1, //DO from beginning
+				1)
+			);
+			skillDays.First().SetMinimumAgents(1);
+			SkillDayRepository.Has(extraSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 1));
+			var alreadyScheduledAgent = PersonRepository.Has(skill, extraSkill);
+			PersonAssignmentRepository.Has(alreadyScheduledAgent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(0, 0, 24, 0));
+			var agentToOptimize = PersonRepository.Has(schedulePeriod, ruleSet, skill);
+			PersonAssignmentRepository.Has(agentToOptimize, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
+			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate, agentToOptimize).WithDayOff();
+
+			Target.Execute(planningPeriod.Id.Value);
+
+			PersonAssignmentRepository.LoadAll().Single(x => x.DayOff() != null).Date
+				.Should().Be.EqualTo(skillDays[0].CurrentDate); //only DO is on Monday
+		}
+		
+		[Test]
 		public void ShouldConsiderMultipleMinimumAgentsWhenMovingDayOffTo()
 		{
 			var date = new DateOnly(2015, 10, 12); //mon
@@ -104,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var shiftCategory = new ShiftCategory().WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date,
-				1.8, //DO should end up here
+				1.8, //DO should end up here (demand left to fulfil = 1.8 - 1 = 0.8)
 				0.9, 
 				1,
 				1,
@@ -122,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			Target.Execute(planningPeriod.Id.Value);
 
 			PersonAssignmentRepository.LoadAll().Single(x => x.DayOff() != null).Date
-				.Should().Be.EqualTo(skillDays[0].CurrentDate); //only DO is on tuesday
+				.Should().Be.EqualTo(skillDays[0].CurrentDate); //only DO is on Monday
 		}
 		
 		[Test] 
