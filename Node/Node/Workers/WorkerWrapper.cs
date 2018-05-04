@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -8,6 +10,7 @@ using Newtonsoft.Json;
 using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
+using Stardust.Node.ReturnObjects;
 using Stardust.Node.Timers;
 using Timer = System.Timers.Timer;
 
@@ -23,7 +26,7 @@ namespace Stardust.Node.Workers
 		private const string JobToDoTypeCanNotBeResolved = "Job to do property=TYPE {0}, can not be resolved by container.";
 		private const string JobToDoCanNotBeDeserialize = "Job to do property=SERIALIZED can not be deserialized.";
 
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (WorkerWrapper));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(WorkerWrapper));
 
 		private readonly IInvokeHandler _handler;
 		private readonly NodeConfiguration _nodeConfiguration;
@@ -40,13 +43,13 @@ namespace Stardust.Node.Workers
 		private readonly JobDetailSender _jobDetailSender;
 
 		public WorkerWrapper(IInvokeHandler invokeHandler,
-		                     NodeConfiguration nodeConfiguration,
-		                     TrySendNodeStartUpNotificationToManagerTimer nodeStartUpNotificationToManagerTimer,
-		                     Timer pingToManagerTimer,
-		                     TrySendJobDoneStatusToManagerTimer trySendJobDoneStatusToManagerTimer,
-		                     TrySendJobCanceledToManagerTimer trySendJobCanceledStatusToManagerTimer,
-		                     TrySendJobFaultedToManagerTimer trySendJobFaultedStatusToManagerTimer,
-		                     TrySendJobDetailToManagerTimer trySendJobDetailToManagerTimer, JobDetailSender jobDetailSender)
+							 NodeConfiguration nodeConfiguration,
+							 TrySendNodeStartUpNotificationToManagerTimer nodeStartUpNotificationToManagerTimer,
+							 Timer pingToManagerTimer,
+							 TrySendJobDoneStatusToManagerTimer trySendJobDoneStatusToManagerTimer,
+							 TrySendJobCanceledToManagerTimer trySendJobCanceledStatusToManagerTimer,
+							 TrySendJobFaultedToManagerTimer trySendJobFaultedStatusToManagerTimer,
+							 TrySendJobDetailToManagerTimer trySendJobDetailToManagerTimer, JobDetailSender jobDetailSender)
 		{
 			_handler = invokeHandler;
 			_nodeConfiguration = nodeConfiguration;
@@ -81,7 +84,7 @@ namespace Stardust.Node.Workers
 			{
 				if (_currentMessageToProcess != null || IsWorking)
 				{
-					var responseMsg = new HttpResponseMessage(HttpStatusCode.Conflict) {Content = new StringContent(WorkerIsAlreadyWorking)};
+					var responseMsg = new HttpResponseMessage(HttpStatusCode.Conflict) { Content = new StringContent(WorkerIsAlreadyWorking) };
 					return responseMsg;
 				}
 				if (jobQueueItemEntity == null)
@@ -125,7 +128,7 @@ namespace Stardust.Node.Workers
 
 		private static HttpResponseMessage CreateBadRequest(string content)
 		{
-			var responseMsg = new HttpResponseMessage(HttpStatusCode.BadRequest) {Content = new StringContent(content)};
+			var responseMsg = new HttpResponseMessage(HttpStatusCode.BadRequest) { Content = new StringContent(content) };
 			return responseMsg;
 		}
 
@@ -139,10 +142,11 @@ namespace Stardust.Node.Workers
 			if (IsWorking) return;
 			IsWorking = true;
 			CancellationTokenSource = new CancellationTokenSource();
+			IEnumerable<object> returnObjects = null;
 
 			var typ = _nodeConfiguration.HandlerAssembly.GetType(jobQueueItemEntity.Type);
 			var deSer = JsonConvert.DeserializeObject(jobQueueItemEntity.Serialized,
-			                                          typ);
+													  typ);
 			//-----------------------------------------------------
 			// Clear faulted timer.
 			//-----------------------------------------------------
@@ -160,52 +164,77 @@ namespace Stardust.Node.Workers
 			//----------------------------------------------------
 
 			Task = new Task(() =>
-			                {
-				                _handler.Invoke(deSer,
-				                                CancellationTokenSource,
-				                                SendJobProgressToManager);
-			                },
-			                CancellationTokenSource.Token);
+							{
+								_handler.Invoke(deSer,
+												CancellationTokenSource,
+												SendJobProgressToManager,
+												ref returnObjects);
+							},
+							CancellationTokenSource.Token);
 
 			Task.ContinueWith(t =>
-			                  {
-				                  switch (t.Status)
-				                  {
-					                  case TaskStatus.RanToCompletion:
+							  {
+								  switch (t.Status)
+								  {
+									  case TaskStatus.RanToCompletion:
 
-						                  SetNodeStatusTimer(_trySendJobDoneStatusToManagerTimer,
-						                                     _currentMessageToProcess);
+										  SetNodeStatusTimer(_trySendJobDoneStatusToManagerTimer,
+															 _currentMessageToProcess);
+
+										  LoopReturnObjects(returnObjects);
+
 										  break;
 
 
-					                  case TaskStatus.Canceled:
+									  case TaskStatus.Canceled:
 
-						                  SetNodeStatusTimer(_trySendJobCanceledStatusToManagerTimer,
-						                                     _currentMessageToProcess);
+										  SetNodeStatusTimer(_trySendJobCanceledStatusToManagerTimer,
+															 _currentMessageToProcess);
+
+										  LoopReturnObjects(returnObjects);
+
 										  break;
 
 
-					                  case TaskStatus.Faulted:
-						                  if (faultedTimer != null)
-						                  {
-							                  faultedTimer.AggregateExceptionToSend = t.Exception;
-							                  faultedTimer.ErrorOccured = DateTime.UtcNow;
-						                  }
+									  case TaskStatus.Faulted:
+										  if (faultedTimer != null)
+										  {
+											  faultedTimer.AggregateExceptionToSend = t.Exception;
+											  faultedTimer.ErrorOccured = DateTime.UtcNow;
+										  }
 
-						                  if (t.Exception != null)
-						                  {
-							                  Logger.ErrorWithLineNumber("Failed",
-							                                             t.Exception);
-						                  }
+										  if (t.Exception != null)
+										  {
+											  Logger.ErrorWithLineNumber("Failed",
+																		 t.Exception);
+										  }
 
-						                  SetNodeStatusTimer(_trySendJobFaultedStatusToManagerTimer,
-						                                     _currentMessageToProcess);
+										  SetNodeStatusTimer(_trySendJobFaultedStatusToManagerTimer,
+															 _currentMessageToProcess);
 
-						                  break;
-				                  }
-			                  }, TaskContinuationOptions.LongRunning);
+										  LoopReturnObjects(returnObjects);
+
+										  break;
+								  }
+							  }, TaskContinuationOptions.LongRunning);
 
 			Task.Start();
+		}
+
+		private void LoopReturnObjects(IEnumerable<object> returnObjects)
+		{
+			foreach (var returnObject in returnObjects)
+			{
+				if (returnObject is ExitApplication)
+				{
+					EnvironmentExit(returnObject as ExitApplication);
+;				}
+			}
+		}
+
+		private void EnvironmentExit(ExitApplication exitApplication)
+		{
+			Environment.Exit(exitApplication.ExitCode);
 		}
 
 		public JobQueueItemEntity GetCurrentMessageToProcess()
@@ -216,8 +245,8 @@ namespace Stardust.Node.Workers
 		public void CancelJob(Guid id)
 		{
 			if (_currentMessageToProcess != null &&
-			    id != Guid.Empty &&
-			    _currentMessageToProcess.JobId == id)
+				id != Guid.Empty &&
+				_currentMessageToProcess.JobId == id)
 			{
 				var token = CancellationTokenSource;
 				token?.Cancel();
@@ -232,14 +261,14 @@ namespace Stardust.Node.Workers
 		}
 
 		public bool IsCancellationRequested => CancellationTokenSource != null &&
-		                                       CancellationTokenSource.IsCancellationRequested;
+											   CancellationTokenSource.IsCancellationRequested;
 
 		public bool IsWorking { get; private set; }
 
 		public void Dispose()
 		{
 			if (CancellationTokenSource != null &&
-			    !CancellationTokenSource.IsCancellationRequested)
+				!CancellationTokenSource.IsCancellationRequested)
 			{
 				CancellationTokenSource.Cancel();
 			}
@@ -253,7 +282,7 @@ namespace Stardust.Node.Workers
 		}
 
 		private void NodeStartUpNotificationToManagerTimer_TrySendNodeStartUpNotificationSucceded(object sender,
-		                                                                                          EventArgs e)
+																								  EventArgs e)
 		{
 			_nodeStartUpNotificationToManagerTimer.Stop();
 			_pingToManagerTimer.Start();
@@ -266,7 +295,7 @@ namespace Stardust.Node.Workers
 		}
 
 		private void SetNodeStatusTimer(TrySendStatusToManagerTimer newTrySendStatusToManagerTimer,
-		                                JobQueueItemEntity jobQueueItemEntity)
+										JobQueueItemEntity jobQueueItemEntity)
 		{
 			// Stop and dispose old timer.
 			if (_trySendStatusToManagerTimer != null)
@@ -299,7 +328,7 @@ namespace Stardust.Node.Workers
 		}
 
 		private void TrySendStatusToManagerTimer_TrySendStatusSucceded(object sender,
-		                                                               EventArgs e)
+																	   EventArgs e)
 		{
 			// Dispose timer.
 			SetNodeStatusTimer(null, null);

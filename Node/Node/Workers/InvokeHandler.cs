@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using Autofac;
 using log4net;
@@ -23,9 +24,10 @@ namespace Stardust.Node.Workers
 
 		private ILifetimeScope ComponentContext { get; }
 
-		public void Invoke(object query,
-		                   CancellationTokenSource cancellationTokenSource,
-		                   Action<string> progressCallback)
+		public void Invoke(object query, 
+			CancellationTokenSource cancellationTokenSource, 
+			Action<string> progressCallback, 
+			ref IEnumerable<object> returnObjects)
 		{
 			using (var lifetimeScope = ComponentContext.BeginLifetimeScope())
 			{
@@ -51,13 +53,12 @@ namespace Stardust.Node.Workers
 				//this is to throw right exception and not cause faulted on cancellation
 				try
 				{
+					var arguments = new []{ query, cancellationTokenSource, progressCallback, null };
+
 					method.Invoke(handler,
-					              new[]
-					              {
-						              query,
-						              cancellationTokenSource,
-						              progressCallback
-					              });
+					              arguments);
+
+					returnObjects = arguments[arguments.Length - 1] as IEnumerable<object>;
 				}
 				catch (Exception ex)
 				{

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using log4net;
 using Stardust.Node.Extensions;
@@ -23,16 +24,18 @@ namespace NodeTest.JobHandlers
 		public CancellationTokenSource CancellationTokenSource { get; set; }
 
 		public void Handle(TestJobParams parameters,
-		                   CancellationTokenSource cancellationTokenSource,
-		                   Action<string> sendProgress)
+			CancellationTokenSource cancellationTokenSource,
+			Action<string> sendProgress,
+			ref IEnumerable<object> returnObjects)
 		{
 			Logger.DebugWithLineNumber("'Test Job Timer Worker' handle method called.");
 
 			CancellationTokenSource = cancellationTokenSource;
 
 			_testJobCode.DoTheThing(parameters,
-			                        cancellationTokenSource,
-			                        sendProgress);
+				cancellationTokenSource,
+				sendProgress,
+				ref returnObjects);
 		}
 	}
 }

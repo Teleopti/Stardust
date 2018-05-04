@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace Stardust.Node.Interfaces
@@ -7,6 +8,7 @@ namespace Stardust.Node.Interfaces
 	{
 		void Handle(T parameters,
 		            CancellationTokenSource cancellationTokenSource,
-		            Action<string> sendProgress);
+		            Action<string> sendProgress,
+					ref IEnumerable<object> returnObjects);
 	}
 }

@@ -7,6 +7,9 @@ using NUnit.Framework;
 using Stardust.Node.Entities;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Workers;
+using System.Collections.Generic;
+using System.Linq;
+using Stardust.Node.ReturnObjects;
 
 namespace NodeTest
 {
@@ -34,9 +37,35 @@ namespace NodeTest
 			var invokehandler = Container.Resolve<InvokeHandler>();
 
 			var jobParams = new TestJobParams("Test Job", 1);
+
+			IEnumerable<object> returnObjects = null;
+
 			invokehandler.Invoke(jobParams,
 			                     new CancellationTokenSource(),
-			                     _=>{});
+			                     _=>{},
+								ref returnObjects
+								);
+		}
+
+		[Test]
+		public void ShouldBeAbleToInvokeAHandlerAndGetExitObjectInReturn()
+		{
+			var invokehandler = Container.Resolve<InvokeHandler>();
+
+			var jobParams = new TestJobParams("Test Job", 1);
+
+			IEnumerable<object> returnObjects = null;
+
+			invokehandler.Invoke(jobParams,
+				new CancellationTokenSource(),
+				_ => { },
+				ref returnObjects
+			);
+
+			Assert.IsNotNull(returnObjects);
+			var list = ((List<object>) returnObjects);
+			Assert.True(list.Count > 0);
+			Assert.IsNotNull(list.FirstOrDefault(x => x is ExitApplication));
 		}
 
 		[Test]
