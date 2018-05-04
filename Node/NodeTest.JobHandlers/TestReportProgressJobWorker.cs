@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading;
 using log4net;
 using Stardust.Node.Extensions;
@@ -23,16 +25,18 @@ namespace NodeTest.JobHandlers
 		public CancellationTokenSource CancellationTokenSource { get; set; }
 
 		public void Handle(TestReportProgressJobParams parameters,
-		                   CancellationTokenSource cancellationTokenSource,
-		                   Action<string> sendProgress)
+			CancellationTokenSource cancellationTokenSource,
+			Action<string> sendProgress, 
+			ref IEnumerable<object> returnObjects)
 		{
+			returnObjects = null;
 			Logger.DebugWithLineNumber("'Test Report Progress Job Worker' handle method called.");
 
 			CancellationTokenSource = cancellationTokenSource;
 
 			_testReportProgressJobCode.DoTheThing(parameters,
-			                                      cancellationTokenSource,
-			                                      sendProgress);
+				cancellationTokenSource,
+				sendProgress);
 		}
 	}
 }

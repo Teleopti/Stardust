@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using log4net;
 using Stardust.Node.Extensions;
@@ -18,10 +19,10 @@ namespace NodeTest.JobHandlers
 		public CancellationTokenSource CancellationTokenSource { get; set; }
 
 		public void Handle(FailingJobParams parameters,
-		                   CancellationTokenSource cancellationTokenSource,
-		                   Action<string> sendProgress)
+			CancellationTokenSource cancellationTokenSource,
+			Action<string> sendProgress,
+			ref IEnumerable<object> returnObjects)
 		{
-
 			CancellationTokenSource = cancellationTokenSource;
 			var doTheRealThing = new FailingJobCode();
 

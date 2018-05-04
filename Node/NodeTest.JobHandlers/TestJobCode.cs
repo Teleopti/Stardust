@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
+using Stardust.Node.ReturnObjects;
 
 namespace NodeTest.JobHandlers
 {
@@ -8,7 +10,7 @@ namespace NodeTest.JobHandlers
 	{
 		public void DoTheThing(TestJobParams message,
 		                       CancellationTokenSource cancellationTokenSource,
-		                       Action<string> progress)
+		                       Action<string> progress, ref IEnumerable<object> returnObjects)
 		{
 			// -----------------------------------------------------------
 			// Start execution.
@@ -56,6 +58,10 @@ namespace NodeTest.JobHandlers
 				Text = "Finished job: " + message.Name
 			};
 			progress(jobProgress.Text);
+
+			var objects = new List<object>();
+			objects.Add(new ExitApplication() {ExitCode = 0});
+			returnObjects = objects;
 		}
 	}
 }
