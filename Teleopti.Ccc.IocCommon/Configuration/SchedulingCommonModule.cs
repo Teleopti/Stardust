@@ -309,7 +309,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<DayOffOptimizationDirectCallCommandHandler>().As<IDayOffOptimizationCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
 			}
 
-			if (_configuration.Toggle(Toggles.ResourcePlanner_MinimumStaffing_75339))
+			if (_configuration.Toggle(Toggles.ResourcePlanner_MinimumAgents_75339))
 			{
 				builder.RegisterType<TeamBlockDayOffOptimizer>().As<ITeamBlockDayOffOptimizer>().InstancePerLifetimeScope().ApplyAspects();
 				builder.RegisterType<DayOffOptimizerStandard>().InstancePerLifetimeScope();
@@ -342,7 +342,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<MatrixDataWithToFewDaysOff>().As<IMatrixDataWithToFewDaysOff>().InstancePerLifetimeScope();
 
 			builder.RegisterType<ScheduleResultDataExtractorProvider>().As<IScheduleResultDataExtractorProvider>().SingleInstance();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_MinimumStaffing_75339))
+			if (_configuration.Toggle(Toggles.ResourcePlanner_MinimumAgents_75339))
 			{
 				builder.RegisterType<CreatePersonalSkillDataExtractor>().As<ICreatePersonalSkillDataExtractor>().SingleInstance();
 				builder.RegisterType<ForecastAndScheduleSumForDay>().SingleInstance();

@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_MinimumStaffing_75339)]
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MinimumAgents_75339)]
 	public class ScheduleMatrixesPrimarySkillExtractor : ISkillExtractor
 	{
 		private readonly PersonalSkillsProvider _personalSkillsProvider;

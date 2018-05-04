@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_MinimumStaffing_75339)]
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MinimumAgents_75339)]
 	public class CreatePersonalSkillDataExtractorOLD : ICreatePersonalSkillDataExtractor
 	{
 		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		}
 	}
 	
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_MinimumStaffing_75339)]
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MinimumAgents_75339)]
 	public interface ICreatePersonalSkillDataExtractor
 	{
 		IScheduleResultDataExtractor Create(IScheduleMatrixPro scheduleMatrix, IOptimizationPreferences optimizationPreferences,

@@ -22,17 +22,17 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	{
 		private readonly SeperateWebRequest _seperateWebRequest;
 		protected readonly bool _resourcePlannerDayOffOptimizationIslands47208;
-		protected readonly bool _resourcePlannerMinimumStaffing75339;
+		protected readonly bool ResourcePlannerMinimumAgents75339;
 
 		public IIoCTestContext IoCTestContext;
 
 		protected DayOffOptimizationScenario(SeperateWebRequest seperateWebRequest,
 			bool resourcePlannerDayOffOptimizationIslands47208, 
-			bool resourcePlannerMinimumStaffing75339)
+			bool resourcePlannerMinimumAgents75339)
 		{
 			_seperateWebRequest = seperateWebRequest;
 			_resourcePlannerDayOffOptimizationIslands47208 = resourcePlannerDayOffOptimizationIslands47208;
-			_resourcePlannerMinimumStaffing75339 = resourcePlannerMinimumStaffing75339;
+			ResourcePlannerMinimumAgents75339 = resourcePlannerMinimumAgents75339;
 		}
 				
 		public virtual void Extend(IExtend extend, IIocConfiguration configuration)
@@ -51,8 +51,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		{
 			if(_resourcePlannerDayOffOptimizationIslands47208)
 				toggleManager.Enable(Toggles.ResourcePlanner_DayOffOptimizationIslands_47208);
-			if(_resourcePlannerMinimumStaffing75339)
-				toggleManager.Enable(Toggles.ResourcePlanner_MinimumStaffing_75339);
+			if(ResourcePlannerMinimumAgents75339)
+				toggleManager.Enable(Toggles.ResourcePlanner_MinimumAgents_75339);
 		}
 
 		public void OnBefore()
