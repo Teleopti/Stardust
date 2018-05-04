@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -286,8 +287,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			stPeriod1.SetSkillDay(skillDay);
 			using (mocks.Record())
 			{
-				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1,0).Agents).IgnoreArguments().Return(10d);
-				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1,1)).IgnoreArguments().Return(1d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1,0)).IgnoreArguments().Return(10d);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d);
 				_target.Payload.ManualAgents = null;
 			}
 			using (mocks.Playback())
@@ -459,8 +460,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			
             using(mocks.Record())
             {
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1,0).Agents).IgnoreArguments().Return(10d);
-				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1,1)).IgnoreArguments().Return(1d);
+                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1,0)).IgnoreArguments().Return(10d);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d);
             }
             using(mocks.Playback())
             {
@@ -494,8 +495,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			stPeriod1.SetSkillDay(skillDay);
             using (mocks.Record())
             {
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1,0).Agents).IgnoreArguments().Return(6d);
-				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1,1)).IgnoreArguments().Return(1d);
+                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1,0)).IgnoreArguments().Return(6d);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d);
             }
             using (mocks.Playback())
             {
@@ -532,8 +533,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			stPeriod1.SetSkillDay(skillDay);
             using (mocks.Record())
             {
-				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0).Agents).IgnoreArguments().Return(5d);
-				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1,1)).IgnoreArguments().Return(1d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0)).IgnoreArguments().Return(5d);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d);
             }
             using (mocks.Playback())
             {
@@ -568,8 +569,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			stPeriod1.SetSkillDay(skillDay);
             using (mocks.Record())
             {
-                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1,0).Agents).IgnoreArguments().Return(0d);
-				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1,1)).IgnoreArguments().Return(1d);
+                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1,0)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d);
             }
             using (mocks.Playback())
             {
@@ -580,7 +581,896 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(1, stPeriod1.SegmentInThisCollection.Count);
         }
 
-       
+
+        [Test]
+        public void VerifyAndersRowsTwoIncoming()
+        {
+			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
+            ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(4).TotalSeconds);
+			var skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today);
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
+
+			stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
+                                                               _task,
+                                                               new ServiceAgreement(level1, new Percent(1),
+                                                                                    new Percent(2)));
+            stPeriod2 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 2, 2000, 1, 3),
+                                                               _task,
+                                                               new ServiceAgreement(level1, new Percent(1),
+                                                                                    new Percent(2)));
+            stPeriod3 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 3, 2000, 1, 4),
+                                                               _task,
+                                                               new ServiceAgreement(level1, new Percent(1),
+                                                                                    new Percent(2)));
+            stPeriod4 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 4, 2000, 1, 5),
+                                                               _task,
+                                                               new ServiceAgreement(level1, new Percent(1),
+                                                                                    new Percent(2)));
+
+            stPeriod5 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 5, 2000, 1, 6),
+                                                               _task,
+                                                               new ServiceAgreement(level1, new Percent(1),
+                                                                                    new Percent(2)));
+            stPeriod6 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 6, 2000, 1, 7),
+                                                               _task,
+                                                               new ServiceAgreement(level1, new Percent(1),
+                                                                                    new Percent(2)));
+			stPeriod1.SetSkillDay(skillDay);
+			stPeriod2.SetSkillDay(skillDay);
+			stPeriod3.SetSkillDay(skillDay);
+			stPeriod4.SetSkillDay(skillDay);
+			stPeriod5.SetSkillDay(skillDay);
+			stPeriod6.SetSkillDay(skillDay);
+            using (mocks.Record())
+            {
+                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1,0)).IgnoreArguments()
+                                .Return(0d);
+                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1,0)).IgnoreArguments()
+                                .Return(0d);
+                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1,0)).IgnoreArguments()
+                                .Return(0d);
+                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1,0)).IgnoreArguments()
+                                .Return(2d);
+                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1,0)).IgnoreArguments()
+                                .Return(0d);
+                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2,1,0)).IgnoreArguments()
+                               .Return(2d);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d).Repeat.Times(6);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
+            }
+
+            using (mocks.Playback())
+            {
+                calculateStaff(new List<ISkillStaffPeriod> { stPeriod1, stPeriod2, stPeriod3, stPeriod4, stPeriod5, stPeriod6 });
+
+                stPeriod1.SetCalculatedResource65(0);
+                stPeriod2.SetCalculatedResource65(1);
+                stPeriod3.SetCalculatedResource65(0);
+                stPeriod4.SetCalculatedResource65(1);
+                stPeriod5.SetCalculatedResource65(0);
+                stPeriod6.SetCalculatedResource65(0);
+
+                Assert.AreEqual(0, stPeriod1.Payload.CalculatedResource);
+                Assert.AreEqual(1, stPeriod2.Payload.CalculatedResource);
+                Assert.AreEqual(0, stPeriod3.Payload.CalculatedResource);
+                Assert.AreEqual(1, stPeriod4.Payload.CalculatedResource);
+                Assert.AreEqual(0, stPeriod5.Payload.CalculatedResource);
+                Assert.AreEqual(0, stPeriod6.Payload.CalculatedResource);
+
+                Assert.AreEqual(2, stPeriod1.Payload.ForecastedIncomingDemand);
+                Assert.AreEqual(0, stPeriod2.Payload.ForecastedIncomingDemand);
+                Assert.AreEqual(2, stPeriod3.Payload.ForecastedIncomingDemand);
+                Assert.AreEqual(0, stPeriod4.Payload.ForecastedIncomingDemand);
+                Assert.AreEqual(0, stPeriod5.Payload.ForecastedIncomingDemand);
+                Assert.AreEqual(0, stPeriod6.Payload.ForecastedIncomingDemand);
+
+                Assert.AreEqual(0.5, stPeriod1.ForecastedDistributedDemand);
+                Assert.AreEqual(0.5, stPeriod2.ForecastedDistributedDemand);
+                Assert.AreEqual(1, stPeriod3.ForecastedDistributedDemand);
+                Assert.AreEqual(1, stPeriod4.ForecastedDistributedDemand);
+                Assert.AreEqual(0.5, stPeriod5.ForecastedDistributedDemand);
+                Assert.AreEqual(0.5, stPeriod6.ForecastedDistributedDemand);
+
+                Assert.AreEqual(2, stPeriod1.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod2.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod3.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod4.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod5.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod6.ScheduledAgentsIncoming);
+
+                Assert.AreEqual(0, stPeriod1.IncomingDifference);
+                Assert.AreEqual(0, stPeriod2.IncomingDifference);
+                Assert.AreEqual(-2, stPeriod3.IncomingDifference);
+                Assert.AreEqual(0, stPeriod4.IncomingDifference);
+                Assert.AreEqual(0, stPeriod5.IncomingDifference);
+                Assert.AreEqual(0, stPeriod6.IncomingDifference);
+
+                //Assert.AreEqual(0, stPeriod1.DistributedDifference);
+                //Assert.AreEqual(0, stPeriod2.DistributedDifference);
+                //Assert.AreEqual(-0.5, stPeriod3.DistributedDifference);
+                //Assert.AreEqual(-0.5, stPeriod4.DistributedDifference);
+                //Assert.AreEqual(-0.5, stPeriod5.DistributedDifference);
+                //Assert.AreEqual(-0.5, stPeriod6.DistributedDifference);
+
+                Assert.AreEqual(0, stPeriod1.FStaff);
+                Assert.AreEqual(1, stPeriod2.FStaff);
+                Assert.AreEqual(0.5, stPeriod3.FStaff);
+                Assert.AreEqual(1.5, stPeriod4.FStaff);
+                Assert.AreEqual(0.5, stPeriod5.FStaff);
+                Assert.AreEqual(0.5, stPeriod6.FStaff);
+
+            }
+        }
+
+        [Test]
+        public void VerifyAndersRows()
+        {
+			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
+            ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(4).TotalSeconds);
+			var skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today);
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
+
+			stPeriod1 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
+                                                               _task,
+                                                               new ServiceAgreement(level1, new Percent(1),
+                                                                                    new Percent(2)));
+            stPeriod2 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 2, 2000, 1, 3),
+                                                               _task,
+                                                               new ServiceAgreement(level1, new Percent(1),
+                                                                                    new Percent(2)));
+            stPeriod3 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 3, 2000, 1, 4),
+                                                               _task,
+                                                               new ServiceAgreement(level1, new Percent(1),
+                                                                                    new Percent(2)));
+            stPeriod4 = new SkillStaffPeriod(new DateTimePeriod(2000, 1, 4, 2000, 1, 5),
+                                                               _task,
+                                                               new ServiceAgreement(level1, new Percent(1),
+                                                                                    new Percent(2)));
+			stPeriod1.SetSkillDay(skillDay);
+			stPeriod2.SetSkillDay(skillDay);
+			stPeriod3.SetSkillDay(skillDay);
+			stPeriod4.SetSkillDay(skillDay);
+
+            using (mocks.Record())
+            {
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0)).IgnoreArguments()
+                                .Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0)).IgnoreArguments()
+                                .Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0)).IgnoreArguments()
+                                .Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0)).IgnoreArguments()
+                               .Return(2d);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d).Repeat.Times(4);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
+            }
+
+            using (mocks.Playback())
+            {
+                calculateStaff(new List<ISkillStaffPeriod> { stPeriod1, stPeriod2, stPeriod3, stPeriod4 });
+
+                stPeriod1.SetCalculatedResource65(0);
+                stPeriod2.SetCalculatedResource65(1);
+                stPeriod3.SetCalculatedResource65(0);
+                stPeriod4.SetCalculatedResource65(0);
+
+                Assert.AreEqual(0, stPeriod1.Payload.CalculatedResource);
+                Assert.AreEqual(1, stPeriod2.Payload.CalculatedResource);
+                Assert.AreEqual(0, stPeriod3.Payload.CalculatedResource);
+                Assert.AreEqual(0, stPeriod4.Payload.CalculatedResource);
+
+                Assert.AreEqual(2, stPeriod1.Payload.ForecastedIncomingDemand);
+                Assert.AreEqual(0, stPeriod2.Payload.ForecastedIncomingDemand);
+                Assert.AreEqual(0, stPeriod3.Payload.ForecastedIncomingDemand);
+                Assert.AreEqual(0, stPeriod4.Payload.ForecastedIncomingDemand);
+
+                Assert.AreEqual(0.5, stPeriod1.ForecastedDistributedDemand);
+                Assert.AreEqual(0.5, stPeriod2.ForecastedDistributedDemand);
+                Assert.AreEqual(0.5, stPeriod3.ForecastedDistributedDemand);
+                Assert.AreEqual(0.5, stPeriod4.ForecastedDistributedDemand);
+
+                Assert.AreEqual(1, stPeriod1.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod2.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod3.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod4.ScheduledAgentsIncoming);
+
+                Assert.AreEqual(-1, stPeriod1.IncomingDifference);
+                Assert.AreEqual(0, stPeriod2.IncomingDifference);
+                Assert.AreEqual(0, stPeriod3.IncomingDifference);
+                Assert.AreEqual(0, stPeriod4.IncomingDifference);
+
+                //Assert.AreEqual(-0.25, stPeriod1.DistributedDifference);
+                //Assert.AreEqual(-0.25, stPeriod2.DistributedDifference);
+                //Assert.AreEqual(-0.25, stPeriod3.DistributedDifference);
+                //Assert.AreEqual(-0.25, stPeriod4.DistributedDifference);
+
+                Assert.AreEqual(0.25, stPeriod1.FStaff);
+                Assert.AreEqual(1.25, stPeriod2.FStaff);
+                Assert.AreEqual(0.25, stPeriod3.FStaff);
+                Assert.AreEqual(0.25, stPeriod4.FStaff);
+
+            }
+        }
+
+        [Test]
+        public void VerifyScheduledAgainstIncomingForecast()
+        {
+			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
+            ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromHours(2).TotalSeconds);
+            DateTimePeriod period1 = new DateTimePeriod(new DateTime(2009, 02, 02, 7, 0, 0, DateTimeKind.Utc), new DateTime(2009, 02, 02, 8, 0, 0, DateTimeKind.Utc));
+            DateTimePeriod period2 = period1.MovePeriod(TimeSpan.FromHours(1));
+            DateTimePeriod period3 = period2.MovePeriod(TimeSpan.FromHours(1));
+            DateTimePeriod period4 = period3.MovePeriod(TimeSpan.FromHours(1));
+            ServiceAgreement ag1 = new ServiceAgreement(level1, new Percent(1), new Percent(2));
+			var skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today);
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
+
+			stPeriod1 = new SkillStaffPeriod(period1, _task, ag1);
+            stPeriod2 = new SkillStaffPeriod(period2, _task, ag1);
+            stPeriod3 = new SkillStaffPeriod(period3, _task, ag1);
+            stPeriod4 = new SkillStaffPeriod(period4, _task, ag1);
+			stPeriod1.SetSkillDay(skillDay);
+			stPeriod2.SetSkillDay(skillDay);
+			stPeriod3.SetSkillDay(skillDay);
+			stPeriod4.SetSkillDay(skillDay);
+			
+            using (mocks.Record())
+            {
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0)).IgnoreArguments()
+                                .Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0)).IgnoreArguments()
+                                .Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0)).IgnoreArguments()
+                                .Return(2d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0)).IgnoreArguments()
+                               .Return(2d);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d).Repeat.Times(4);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
+            }
+
+            using (mocks.Playback())
+            {
+                calculateStaff(new List<ISkillStaffPeriod> {stPeriod1, stPeriod2, stPeriod3, stPeriod4});
+
+                Assert.AreEqual(2, stPeriod1.Payload.ForecastedIncomingDemand);
+                Assert.AreEqual(2, stPeriod2.Payload.ForecastedIncomingDemand);
+                Assert.AreEqual(0, stPeriod3.Payload.ForecastedIncomingDemand);
+                Assert.AreEqual(0, stPeriod4.Payload.ForecastedIncomingDemand);
+
+                Assert.AreEqual(1, stPeriod1.ForecastedDistributedDemand);
+                Assert.AreEqual(2, stPeriod2.ForecastedDistributedDemand);
+                Assert.AreEqual(1, stPeriod3.ForecastedDistributedDemand);
+                Assert.AreEqual(0, stPeriod4.ForecastedDistributedDemand);
+
+                stPeriod1.SetCalculatedResource65(0);
+                stPeriod2.SetCalculatedResource65(0);
+                stPeriod3.SetCalculatedResource65(0);
+                stPeriod4.SetCalculatedResource65(0);
+
+                Assert.AreEqual(0, stPeriod1.Payload.CalculatedResource);
+                Assert.AreEqual(0, stPeriod2.Payload.CalculatedResource);
+                Assert.AreEqual(0, stPeriod3.Payload.CalculatedResource);
+                Assert.AreEqual(0, stPeriod4.Payload.CalculatedResource);
+
+                Assert.AreEqual(0, stPeriod1.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod2.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod3.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod4.ScheduledAgentsIncoming);
+
+                stPeriod2.SetCalculatedResource65(3);
+
+                Assert.AreEqual(0, stPeriod1.Payload.CalculatedResource);
+                Assert.AreEqual(3, stPeriod2.Payload.CalculatedResource);
+                Assert.AreEqual(0, stPeriod3.Payload.CalculatedResource);
+                Assert.AreEqual(0, stPeriod4.Payload.CalculatedResource);
+
+                Assert.AreEqual(2, stPeriod1.ScheduledAgentsIncoming);
+                Assert.AreEqual(1, stPeriod2.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod3.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod4.ScheduledAgentsIncoming);
+
+                stPeriod2.SetCalculatedResource65(1);
+                Assert.AreEqual(1, stPeriod2.Payload.CalculatedResource);
+                Assert.AreEqual(0, ((SkillStaffPeriod)stPeriod1).BookedResource65);
+                Assert.AreEqual(1, ((SkillStaffPeriod)stPeriod2).BookedResource65);
+                Assert.AreEqual(0, ((SkillStaffPeriod)stPeriod3).BookedResource65);
+                Assert.AreEqual(0, ((SkillStaffPeriod)stPeriod4).BookedResource65);
+                Assert.AreEqual(1, ((SkillStaff)stPeriod1.Payload).BookedAgainstIncomingDemand65);
+                Assert.AreEqual(0, ((SkillStaff)stPeriod2.Payload).BookedAgainstIncomingDemand65);
+                Assert.AreEqual(0, ((SkillStaff)stPeriod3.Payload).BookedAgainstIncomingDemand65);
+                Assert.AreEqual(0, ((SkillStaff)stPeriod4.Payload).BookedAgainstIncomingDemand65);
+                Assert.AreEqual(1, stPeriod1.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod2.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod3.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod4.ScheduledAgentsIncoming);
+
+                stPeriod2.SetCalculatedResource65(0);
+
+                Assert.AreEqual(0, stPeriod1.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod2.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod3.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod4.ScheduledAgentsIncoming);
+
+                stPeriod1.SetCalculatedResource65(3);
+                Assert.AreEqual(3, stPeriod1.Payload.CalculatedResource);
+                Assert.AreEqual(3, stPeriod1.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod2.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod3.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod4.ScheduledAgentsIncoming);
+            }
+
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily"), Test]
+        public void VerifyScheduledAgainstIncomingForecast1()
+        {
+			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
+            ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromHours(2).TotalSeconds);
+            DateTimePeriod period1 = new DateTimePeriod(new DateTime(2009, 02, 02, 7, 0, 0, DateTimeKind.Utc),
+                                                        new DateTime(2009, 02, 02, 8, 0, 0, DateTimeKind.Utc));
+            DateTimePeriod period2 = period1.MovePeriod(TimeSpan.FromHours(1));
+            DateTimePeriod period3 = period2.MovePeriod(TimeSpan.FromHours(1));
+            DateTimePeriod period4 = period3.MovePeriod(TimeSpan.FromHours(1));
+            ServiceAgreement ag1 = new ServiceAgreement(level1, new Percent(1), new Percent(2));
+			var skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today);
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
+
+			stPeriod1 = new SkillStaffPeriod(period1, _task, ag1);
+            stPeriod2 = new SkillStaffPeriod(period2, _task, ag1);
+            stPeriod3 = new SkillStaffPeriod(period3, _task, ag1);
+            stPeriod4 = new SkillStaffPeriod(period4, _task, ag1);
+			stPeriod1.SetSkillDay(skillDay);
+			stPeriod2.SetSkillDay(skillDay);
+			stPeriod3.SetSkillDay(skillDay);
+			stPeriod4.SetSkillDay(skillDay);
+			
+            using (mocks.Record())
+            {
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0)).IgnoreArguments()
+                    .Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0)).IgnoreArguments()
+                    .Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0)).IgnoreArguments()
+                    .Return(2d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0)).IgnoreArguments()
+                    .Return(2d);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d).Repeat.Times(4);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
+            }
+
+            using (mocks.Playback())
+            {
+                calculateStaff(new List<ISkillStaffPeriod> { stPeriod1, stPeriod2, stPeriod3, stPeriod4 });
+
+                stPeriod1.SetCalculatedResource65(1);
+                Assert.AreEqual(1, stPeriod1.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod2.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod3.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod4.ScheduledAgentsIncoming);
+
+                stPeriod3.SetCalculatedResource65(1);
+                Assert.AreEqual(1, ((SkillStaffPeriod)stPeriod1).BookedResource65);
+                Assert.AreEqual(0, ((SkillStaffPeriod)stPeriod2).BookedResource65);
+                Assert.AreEqual(1, ((SkillStaffPeriod)stPeriod3).BookedResource65);
+                Assert.AreEqual(0, ((SkillStaffPeriod)stPeriod4).BookedResource65);
+                Assert.AreEqual(1, stPeriod1.ScheduledAgentsIncoming);
+                Assert.AreEqual(1, stPeriod2.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod3.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod4.ScheduledAgentsIncoming);
+
+                stPeriod3.SetCalculatedResource65(2);
+                Assert.AreEqual(1, ((SkillStaffPeriod)stPeriod1).BookedResource65);
+                Assert.AreEqual(0, ((SkillStaffPeriod)stPeriod2).BookedResource65);
+                Assert.AreEqual(2, ((SkillStaffPeriod)stPeriod3).BookedResource65);
+                Assert.AreEqual(0, ((SkillStaffPeriod)stPeriod4).BookedResource65);
+                Assert.AreEqual(1, stPeriod1.ScheduledAgentsIncoming);
+                Assert.AreEqual(2, stPeriod2.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod3.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod4.ScheduledAgentsIncoming);
+
+                stPeriod3.SetCalculatedResource65(3);
+                Assert.AreEqual(1, stPeriod1.ScheduledAgentsIncoming);
+                Assert.AreEqual(2, stPeriod2.ScheduledAgentsIncoming);
+                Assert.AreEqual(1, stPeriod3.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod4.ScheduledAgentsIncoming);
+
+                stPeriod1.SetCalculatedResource65(0);
+                Assert.AreEqual(0, ((SkillStaffPeriod)stPeriod1).BookedResource65);
+                Assert.AreEqual(0, ((SkillStaffPeriod)stPeriod2).BookedResource65);
+                Assert.AreEqual(2, ((SkillStaffPeriod)stPeriod3).BookedResource65);
+                Assert.AreEqual(0, ((SkillStaffPeriod)stPeriod4).BookedResource65);
+                Assert.AreEqual(0, ((SkillStaff)stPeriod1.Payload).BookedAgainstIncomingDemand65);
+                Assert.AreEqual(2, ((SkillStaff)stPeriod2.Payload).BookedAgainstIncomingDemand65);
+                Assert.AreEqual(0, ((SkillStaff)stPeriod3.Payload).BookedAgainstIncomingDemand65);
+                Assert.AreEqual(0, ((SkillStaff)stPeriod4.Payload).BookedAgainstIncomingDemand65);
+                Assert.AreEqual(0, stPeriod1.ScheduledAgentsIncoming);
+                Assert.AreEqual(2, stPeriod2.ScheduledAgentsIncoming);
+                Assert.AreEqual(1, stPeriod3.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod4.ScheduledAgentsIncoming);
+
+                stPeriod2.SetCalculatedResource65(1);
+                Assert.AreEqual(0, ((SkillStaffPeriod)stPeriod1).BookedResource65);
+                Assert.AreEqual(1, ((SkillStaffPeriod)stPeriod2).BookedResource65);
+                Assert.AreEqual(2, ((SkillStaffPeriod)stPeriod3).BookedResource65);
+                Assert.AreEqual(0, ((SkillStaffPeriod)stPeriod4).BookedResource65);
+                Assert.AreEqual(1, ((SkillStaff)stPeriod1.Payload).BookedAgainstIncomingDemand65);
+                Assert.AreEqual(2, ((SkillStaff)stPeriod2.Payload).BookedAgainstIncomingDemand65);
+                Assert.AreEqual(0, ((SkillStaff)stPeriod3.Payload).BookedAgainstIncomingDemand65);
+                Assert.AreEqual(0, ((SkillStaff)stPeriod4.Payload).BookedAgainstIncomingDemand65);
+                Assert.AreEqual(1, stPeriod1.ScheduledAgentsIncoming);
+                Assert.AreEqual(2, stPeriod2.ScheduledAgentsIncoming);
+                Assert.AreEqual(1, stPeriod3.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod4.ScheduledAgentsIncoming);
+            }
+        }
+
+        [Test]
+        public void VerifyScheduledAgainstIncomingForecast2()
+        {
+			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
+            ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromHours(2).TotalSeconds);
+            DateTimePeriod period1 = new DateTimePeriod(new DateTime(2009, 02, 02, 7, 0, 0, DateTimeKind.Utc),
+                                                        new DateTime(2009, 02, 02, 8, 0, 0, DateTimeKind.Utc));
+            DateTimePeriod period2 = period1.MovePeriod(TimeSpan.FromHours(1));
+            DateTimePeriod period3 = period2.MovePeriod(TimeSpan.FromHours(1));
+            DateTimePeriod period4 = period3.MovePeriod(TimeSpan.FromHours(1));
+            ServiceAgreement ag1 = new ServiceAgreement(level1, new Percent(1), new Percent(2));
+			var skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today);
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
+
+			stPeriod1 = new SkillStaffPeriod(period1, _task, ag1);
+            stPeriod2 = new SkillStaffPeriod(period2, _task, ag1);
+            stPeriod3 = new SkillStaffPeriod(period3, _task, ag1);
+            stPeriod4 = new SkillStaffPeriod(period4, _task, ag1);
+			stPeriod1.SetSkillDay(skillDay);
+			stPeriod2.SetSkillDay(skillDay);
+			stPeriod3.SetSkillDay(skillDay);
+			stPeriod4.SetSkillDay(skillDay);
+			
+            using (mocks.Record())
+            {
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0)).IgnoreArguments()
+                    .Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0)).IgnoreArguments()
+                    .Return(1d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0)).IgnoreArguments()
+                    .Return(2d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0)).IgnoreArguments()
+                    .Return(2d);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d).Repeat.Times(4);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
+            }
+
+            using (mocks.Playback())
+            {
+                calculateStaff(new List<ISkillStaffPeriod> { stPeriod1, stPeriod2, stPeriod3, stPeriod4 });
+
+                stPeriod3.SetCalculatedResource65(3.5);
+                Assert.AreEqual(0, stPeriod1.ScheduledAgentsIncoming);
+                Assert.AreEqual(2, stPeriod2.ScheduledAgentsIncoming);
+                Assert.AreEqual(1.5, stPeriod3.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod4.ScheduledAgentsIncoming);
+
+                stPeriod2.SetCalculatedResource65(1);
+                Assert.AreEqual(1, stPeriod1.ScheduledAgentsIncoming);
+                Assert.AreEqual(2, stPeriod2.ScheduledAgentsIncoming);
+                Assert.AreEqual(1.5, stPeriod3.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod4.ScheduledAgentsIncoming);
+            }
+        }
+
+        [Test]
+        public void VerifyScheduledAgainstIncomingForecast3()
+        {
+			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
+            ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromHours(3).TotalSeconds);
+            DateTimePeriod period1 = new DateTimePeriod(new DateTime(2009, 02, 02, 7, 0, 0, DateTimeKind.Utc),
+                                                        new DateTime(2009, 02, 02, 8, 0, 0, DateTimeKind.Utc));
+            DateTimePeriod period2 = period1.MovePeriod(TimeSpan.FromHours(1));
+            DateTimePeriod period3 = period2.MovePeriod(TimeSpan.FromHours(1));
+            DateTimePeriod period4 = period3.MovePeriod(TimeSpan.FromHours(1));
+            DateTimePeriod period5 = period4.MovePeriod(TimeSpan.FromHours(1));
+            DateTimePeriod period6 = period5.MovePeriod(TimeSpan.FromHours(1));
+            DateTimePeriod period7 = period6.MovePeriod(TimeSpan.FromHours(1));
+            DateTimePeriod period8 = period7.MovePeriod(TimeSpan.FromHours(1));
+            DateTimePeriod period9 = period8.MovePeriod(TimeSpan.FromHours(1));
+
+            ServiceAgreement ag1 = new ServiceAgreement(level1, new Percent(1), new Percent(2));
+			var skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today);
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
+
+			stPeriod1 = new SkillStaffPeriod(period1, _task, ag1);
+            stPeriod2 = new SkillStaffPeriod(period2, _task, ag1);
+            stPeriod3 = new SkillStaffPeriod(period3, _task, ag1);
+            stPeriod4 = new SkillStaffPeriod(period4, _task, ag1);
+            stPeriod5 = new SkillStaffPeriod(period5, _task, ag1);
+            stPeriod6 = new SkillStaffPeriod(period6, _task, ag1);
+            stPeriod7 = new SkillStaffPeriod(period7, _task, ag1);
+			
+            ISkillStaffPeriod stPeriod8 = new SkillStaffPeriod(period8, _task, ag1);
+            ISkillStaffPeriod stPeriod9 = new SkillStaffPeriod(period9, _task, ag1);
+
+			stPeriod1.SetSkillDay(skillDay);
+			stPeriod2.SetSkillDay(skillDay);
+			stPeriod3.SetSkillDay(skillDay);
+			stPeriod4.SetSkillDay(skillDay);
+			stPeriod5.SetSkillDay(skillDay);
+			stPeriod6.SetSkillDay(skillDay);
+			stPeriod7.SetSkillDay(skillDay);
+			stPeriod8.SetSkillDay(skillDay);
+			stPeriod9.SetSkillDay(skillDay);
+            using (mocks.Record())
+            {
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1,0)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1,0)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1,0)).IgnoreArguments().Return(3d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1,0)).IgnoreArguments().Return(6d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1,0)).IgnoreArguments().Return(6d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1,0)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1,0)).IgnoreArguments().Return(3d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1,0)).IgnoreArguments().Return(6d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1,0)).IgnoreArguments().Return(6d);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d).Repeat.Times(9);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
+            }
+
+            using (mocks.Playback())
+            {
+                calculateStaff(new List<ISkillStaffPeriod> { stPeriod1, stPeriod2, stPeriod3, stPeriod4, stPeriod5, stPeriod6, stPeriod7, stPeriod8, stPeriod9 });
+
+                stPeriod3.SetCalculatedResource65(6);
+                Assert.AreEqual(6, stPeriod1.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod2.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod3.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod4.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod5.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod6.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod7.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod8.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod9.ScheduledAgentsIncoming);
+
+                stPeriod2.SetCalculatedResource65(1);
+                Assert.AreEqual(6, stPeriod1.ScheduledAgentsIncoming);
+                Assert.AreEqual(1, stPeriod2.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod3.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod4.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod5.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod6.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod7.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod8.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod9.ScheduledAgentsIncoming);
+
+                stPeriod4.SetCalculatedResource65(11);
+                Assert.AreEqual(6, stPeriod1.ScheduledAgentsIncoming);
+                Assert.AreEqual(6, stPeriod2.ScheduledAgentsIncoming);
+                Assert.AreEqual(3, stPeriod3.ScheduledAgentsIncoming);
+                Assert.AreEqual(3, stPeriod4.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod5.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod6.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod7.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod8.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod9.ScheduledAgentsIncoming);
+
+                Assert.AreEqual(0, stPeriod1.IncomingDifference);
+                Assert.AreEqual(0, stPeriod2.IncomingDifference);
+                Assert.AreEqual(0, stPeriod3.IncomingDifference);
+                Assert.AreEqual(3, stPeriod4.IncomingDifference);
+                Assert.AreEqual(-6, stPeriod5.IncomingDifference);
+                Assert.AreEqual(-6, stPeriod6.IncomingDifference);
+                Assert.AreEqual(-3, stPeriod7.IncomingDifference);
+                Assert.AreEqual(0, stPeriod8.IncomingDifference);
+                Assert.AreEqual(0, stPeriod9.IncomingDifference);
+
+                //Assert.AreEqual(0, stPeriod1.DistributedDifference);
+                //Assert.AreEqual(0, stPeriod2.DistributedDifference);
+                //Assert.AreEqual(0, stPeriod3.DistributedDifference);
+                //Assert.AreEqual(1, stPeriod4.DistributedDifference);
+                //Assert.AreEqual(-1, stPeriod5.DistributedDifference);
+                //Assert.AreEqual(-3, stPeriod6.DistributedDifference);
+                //Assert.AreEqual(-5, stPeriod7.DistributedDifference);
+                //Assert.AreEqual(-3, stPeriod8.DistributedDifference);
+                //Assert.AreEqual(-1, stPeriod9.DistributedDifference);
+
+                stPeriod3.SetCalculatedResource65(0);
+                Assert.AreEqual(1, stPeriod1.ScheduledAgentsIncoming);
+                Assert.AreEqual(6, stPeriod2.ScheduledAgentsIncoming);
+                Assert.AreEqual(3, stPeriod3.ScheduledAgentsIncoming);
+                Assert.AreEqual(2, stPeriod4.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod5.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod6.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod7.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod8.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod9.ScheduledAgentsIncoming);
+
+                stPeriod2.SetCalculatedResource65(0);
+                stPeriod4.SetCalculatedResource65(0);
+                Assert.AreEqual(0, stPeriod1.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod2.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod3.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod4.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod5.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod6.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod7.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod8.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod9.ScheduledAgentsIncoming);
+
+            }
+        }
+
+        [Test]
+        public void VerifyFStaff1()
+        {
+			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
+            ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(4).TotalSeconds);
+            ServiceAgreement sa = new ServiceAgreement(level1, new Percent(1),
+                                                       new Percent(2));
+            DateTimePeriod dtp = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
+			var skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today);
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
+
+			stPeriod1 = new SkillStaffPeriod(dtp, _task, sa);
+            stPeriod2 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(1)), _task, sa);
+            stPeriod3 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(2)), _task, sa);
+            stPeriod4 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(3)), _task, sa);
+            stPeriod5 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(4)), _task, sa);
+            stPeriod6 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(5)), _task, sa);
+			stPeriod1.SetSkillDay(skillDay);
+			stPeriod2.SetSkillDay(skillDay);
+			stPeriod3.SetSkillDay(skillDay);
+			stPeriod4.SetSkillDay(skillDay);
+			stPeriod5.SetSkillDay(skillDay);
+			stPeriod6.SetSkillDay(skillDay);
+            using (mocks.Record())
+            {
+                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2,1,0)).IgnoreArguments().Return(0d);
+                Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2,1,0)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1,0)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1,0)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1,0)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1,0)).IgnoreArguments().Return(2d);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d).Repeat.Times(6);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
+            }
+
+            using (mocks.Playback())
+            {
+                calculateStaff(new List<ISkillStaffPeriod> { stPeriod1, stPeriod2, stPeriod3, stPeriod4, stPeriod5, stPeriod6 });
+
+                stPeriod1.SetCalculatedResource65(0);
+                stPeriod2.SetCalculatedResource65(0);
+                stPeriod3.SetCalculatedResource65(0);
+                stPeriod4.SetCalculatedResource65(0);
+                stPeriod5.SetCalculatedResource65(0);
+                stPeriod6.SetCalculatedResource65(0);
+
+                Assert.AreEqual(0.5, stPeriod1.FStaff);
+                Assert.AreEqual(0.5, stPeriod2.FStaff);
+                Assert.AreEqual(0.5, stPeriod3.FStaff);
+                Assert.AreEqual(0.5, stPeriod4.FStaff);
+
+                stPeriod3.SetCalculatedResource65(1);
+                Assert.AreEqual(0.25, stPeriod1.FStaff);
+                Assert.AreEqual(0.25, stPeriod2.FStaff);
+                Assert.AreEqual(1.25, stPeriod3.FStaff);
+                Assert.AreEqual(0.25, stPeriod4.FStaff);
+
+                stPeriod3.SetCalculatedResource65(2);
+                Assert.AreEqual(0, stPeriod1.FStaff);
+                Assert.AreEqual(0, stPeriod2.FStaff);
+                Assert.AreEqual(2, stPeriod3.FStaff);
+                Assert.AreEqual(0, stPeriod4.FStaff);
+
+                stPeriod3.SetCalculatedResource65(10);
+                stPeriod3.SetCalculatedResource65(10);
+                Assert.AreEqual(0, stPeriod1.FStaff);
+                Assert.AreEqual(0, stPeriod2.FStaff);
+                Assert.AreEqual(2, stPeriod3.FStaff);
+                Assert.AreEqual(0, stPeriod4.FStaff);
+            }
+        }
+
+        [Test]
+        public void VerifyAndersRowsWhenOverstaffed()
+        {
+			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
+            ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(4).TotalSeconds);
+            ServiceAgreement sa = new ServiceAgreement(level1, new Percent(1),
+                                                       new Percent(2));
+            DateTimePeriod dtp = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
+			var skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today);
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
+
+			stPeriod1 = new SkillStaffPeriod(dtp, _task, sa);
+            stPeriod2 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(1)), _task, sa);
+            stPeriod3 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(2)), _task, sa);
+            stPeriod4 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(3)), _task, sa);
+            stPeriod5 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(4)), _task, sa);
+            stPeriod6 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(5)), _task, sa);
+			stPeriod1.SetSkillDay(skillDay);
+			stPeriod2.SetSkillDay(skillDay);
+			stPeriod3.SetSkillDay(skillDay);
+			stPeriod4.SetSkillDay(skillDay);
+			stPeriod5.SetSkillDay(skillDay);
+			stPeriod6.SetSkillDay(skillDay);
+            using (mocks.Record())
+            {
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1,0)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1,0)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1,0)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1,0)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1,0)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1,0)).IgnoreArguments().Return(2d);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d).Repeat.Times(6);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
+            }
+
+            using (mocks.Playback())
+            {
+                calculateStaff(new List<ISkillStaffPeriod> { stPeriod1, stPeriod2, stPeriod3, stPeriod4, stPeriod5, stPeriod6 });
+
+                stPeriod1.SetCalculatedResource65(0);
+                stPeriod2.SetCalculatedResource65(0);
+                stPeriod3.SetCalculatedResource65(3);
+                stPeriod4.SetCalculatedResource65(0);
+                stPeriod5.SetCalculatedResource65(0);
+                stPeriod6.SetCalculatedResource65(0);
+
+                Assert.AreEqual(0, stPeriod1.Payload.CalculatedResource);
+                Assert.AreEqual(0, stPeriod2.Payload.CalculatedResource);
+                Assert.AreEqual(3, stPeriod3.Payload.CalculatedResource);
+                Assert.AreEqual(0, stPeriod4.Payload.CalculatedResource);
+
+                Assert.AreEqual(2, stPeriod1.Payload.ForecastedIncomingDemand);
+                Assert.AreEqual(0, stPeriod2.Payload.ForecastedIncomingDemand);
+                Assert.AreEqual(0, stPeriod3.Payload.ForecastedIncomingDemand);
+                Assert.AreEqual(0, stPeriod4.Payload.ForecastedIncomingDemand);
+
+                Assert.AreEqual(0.5, stPeriod1.ForecastedDistributedDemand);
+                Assert.AreEqual(0.5, stPeriod2.ForecastedDistributedDemand);
+                Assert.AreEqual(0.5, stPeriod3.ForecastedDistributedDemand);
+                Assert.AreEqual(0.5, stPeriod4.ForecastedDistributedDemand);
+
+                Assert.AreEqual(2, stPeriod1.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod2.ScheduledAgentsIncoming);
+                Assert.AreEqual(1, stPeriod3.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod4.ScheduledAgentsIncoming);
+
+                Assert.AreEqual(0, stPeriod1.IncomingDifference);
+                Assert.AreEqual(0, stPeriod2.IncomingDifference);
+                Assert.AreEqual(1, stPeriod3.IncomingDifference);
+                Assert.AreEqual(0, stPeriod4.IncomingDifference);
+
+                //Assert.AreEqual(0, stPeriod1.DistributedDifference);
+                //Assert.AreEqual(0, stPeriod2.DistributedDifference);
+                //Assert.AreEqual(0.25, stPeriod3.DistributedDifference);
+                //Assert.AreEqual(0.25, stPeriod4.DistributedDifference);
+                //Assert.AreEqual(0.25, stPeriod5.DistributedDifference);
+                //Assert.AreEqual(0.25, stPeriod6.DistributedDifference);
+
+                Assert.AreEqual(0, stPeriod1.FStaff);
+                Assert.AreEqual(0, stPeriod2.FStaff);
+                Assert.AreEqual(2, stPeriod3.FStaff);
+                Assert.AreEqual(0, stPeriod4.FStaff);
+
+            }
+        }
+
+        [Test]
+        public void VerifyAbsoluteAndRelativeDifference()
+        {
+			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
+            ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(4).TotalSeconds);
+            ServiceAgreement sa = new ServiceAgreement(level1, new Percent(1),
+                                                       new Percent(2));
+            DateTimePeriod dtp = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
+			var skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today);
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
+
+			stPeriod1 = new SkillStaffPeriod(dtp, _task, sa);
+            stPeriod2 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(1)), _task, sa);
+            stPeriod3 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(2)), _task, sa);
+            stPeriod4 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(3)), _task, sa);
+            stPeriod5 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(4)), _task, sa);
+            stPeriod6 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(5)), _task, sa);
+			stPeriod1.SetSkillDay(skillDay);
+			stPeriod2.SetSkillDay(skillDay);
+			stPeriod3.SetSkillDay(skillDay);
+			stPeriod4.SetSkillDay(skillDay);
+			stPeriod5.SetSkillDay(skillDay);
+			stPeriod6.SetSkillDay(skillDay);
+            using (mocks.Record())
+            {
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1,0)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1,0)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1,0)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1,0)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1,0)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1,0)).IgnoreArguments().Return(4d);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d).Repeat.Times(6);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1, 1)).IgnoreArguments().Repeat.
+                    Any().Return(7);
+            }
+            using (mocks.Playback())
+            {
+                calculateStaff(new List<ISkillStaffPeriod>
+                                   {stPeriod1, stPeriod2, stPeriod3, stPeriod4, stPeriod5, stPeriod6});
+
+                
+                Assert.AreEqual(1, stPeriod1.FStaff);
+                Assert.AreEqual(0, stPeriod1.Payload.CalculatedResource);
+                Assert.AreEqual(-1, stPeriod1.AbsoluteDifference);
+                Assert.AreEqual(-1, stPeriod1.RelativeDifference);
+                Assert.AreEqual(0, stPeriod5.RelativeDifference);
+                Assert.AreEqual(0, stPeriod5.AbsoluteDifference);
+
+                stPeriod5.SetCalculatedResource65(1);
+                Assert.AreEqual(double.NaN, stPeriod5.RelativeDifference);
+                Assert.AreEqual(1, stPeriod5.AbsoluteDifference);
+            }
+        }
+
+        [Test]
+        public void VerifyAbsoluteAndRelativeDifferenceIncoming()
+        {
+			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
+            ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(4).TotalSeconds);
+            ServiceAgreement sa = new ServiceAgreement(level1, new Percent(1),
+                                                       new Percent(2));
+            DateTimePeriod dtp = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
+			var skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today);
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
+
+			stPeriod1 = new SkillStaffPeriod(dtp, _task, sa);
+            stPeriod2 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(1)), _task, sa);
+            stPeriod3 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(2)), _task, sa);
+            stPeriod4 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(3)), _task, sa);
+            stPeriod5 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(4)), _task, sa);
+            stPeriod6 = new SkillStaffPeriod(dtp.MovePeriod(TimeSpan.FromDays(5)), _task, sa);
+			stPeriod1.SetSkillDay(skillDay);
+			stPeriod2.SetSkillDay(skillDay);
+			stPeriod3.SetSkillDay(skillDay);
+			stPeriod4.SetSkillDay(skillDay);
+			stPeriod5.SetSkillDay(skillDay);
+			stPeriod6.SetSkillDay(skillDay);
+            using (mocks.Record())
+            {
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1, 0)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1, 0)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1, 0)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1, 0)).IgnoreArguments().Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1, 0)).IgnoreArguments().Return(4d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, TimeSpan.Zero, 2, 2, 1, 0)).IgnoreArguments().Return(4d);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d).Repeat.Times(6);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
+            }
+            using (mocks.Playback())
+            {
+                calculateStaff(new List<ISkillStaffPeriod> { stPeriod1, stPeriod2, stPeriod3, stPeriod4, stPeriod5, stPeriod6 });
+
+                stPeriod1.SetCalculatedResource65(6);
+                Assert.AreEqual(2, stPeriod1.IncomingDifference);
+                Assert.AreEqual(-4, stPeriod2.IncomingDifference);
+                Assert.AreEqual(0, stPeriod6.IncomingDifference);
+                Assert.AreEqual(2d/4d, stPeriod1.RelativeDifferenceIncoming);
+                Assert.AreEqual(-4/4, stPeriod2.RelativeDifferenceIncoming);
+                Assert.AreEqual(0, stPeriod6.RelativeDifferenceIncoming);
+
+                stPeriod6.SetCalculatedResource65(1);
+                Assert.AreEqual(1, stPeriod6.IncomingDifference);
+                Assert.IsNaN(stPeriod6.RelativeDifferenceIncoming);
+
+            }
+        }
 
         [Test]
         public void VerifyOverstaff1()
@@ -895,7 +1785,67 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
 			Assert.Throws<ArgumentException>(() => _target.CalculateStaff(new List<ISkillStaffPeriod>()));
         }
-		
+
+        [Test]
+        public void VerifyIncomingAndDistributedDifference()
+        {
+			IStaffingCalculatorServiceFacade svc = mocks.StrictMock<IStaffingCalculatorServiceFacade>();
+            ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromHours(2).TotalSeconds);
+            DateTimePeriod period1 = new DateTimePeriod(new DateTime(2009, 02, 02, 7, 0, 0, DateTimeKind.Utc),
+                                                        new DateTime(2009, 02, 02, 8, 0, 0, DateTimeKind.Utc));
+            DateTimePeriod period2 = period1.MovePeriod(TimeSpan.FromHours(1));
+            DateTimePeriod period3 = period2.MovePeriod(TimeSpan.FromHours(1));
+            DateTimePeriod period4 = period3.MovePeriod(TimeSpan.FromHours(1));
+            ServiceAgreement ag1 = new ServiceAgreement(level1, new Percent(1), new Percent(2));
+			var skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today);
+			skillDay.Skill.SkillType.StaffingCalculatorService = svc;
+
+			stPeriod1 = new SkillStaffPeriod(period1, _task, ag1);
+            stPeriod2 = new SkillStaffPeriod(period2, _task, ag1);
+            stPeriod3 = new SkillStaffPeriod(period3, _task, ag1);
+            stPeriod4 = new SkillStaffPeriod(period4, _task, ag1);
+			stPeriod1.SetSkillDay(skillDay);
+			stPeriod2.SetSkillDay(skillDay);
+			stPeriod3.SetSkillDay(skillDay);
+			stPeriod4.SetSkillDay(skillDay);
+			
+            using (mocks.Record())
+            {
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0)).IgnoreArguments()
+                    .Return(0d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0)).IgnoreArguments()
+                    .Return(2.5d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0)).IgnoreArguments()
+                    .Return(2d);
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0)).IgnoreArguments()
+                    .Return(2d);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d).Repeat.Times(4);
+				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
+            }
+
+            using (mocks.Playback())
+            {
+                calculateStaff(new List<ISkillStaffPeriod> { stPeriod1, stPeriod2, stPeriod3, stPeriod4 });
+
+                stPeriod2.SetCalculatedResource65(5.5);
+                Assert.AreEqual(2, stPeriod1.ScheduledAgentsIncoming);
+                Assert.AreEqual(3.5, stPeriod2.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod3.ScheduledAgentsIncoming);
+                Assert.AreEqual(0, stPeriod4.ScheduledAgentsIncoming);
+
+                Assert.AreEqual(0, stPeriod1.IncomingDifference);
+                Assert.AreEqual(1.5, stPeriod2.IncomingDifference);
+                Assert.AreEqual(-2.5, stPeriod3.IncomingDifference);
+                Assert.AreEqual(0, stPeriod4.IncomingDifference);
+
+                //Assert.AreEqual(0, stPeriod1.DistributedDifference);
+                //Assert.AreEqual(0.75, stPeriod2.DistributedDifference);
+                //Assert.AreEqual(-0.5, stPeriod3.DistributedDifference);
+                //Assert.AreEqual(-1.25, stPeriod4.DistributedDifference);
+            }
+        }
+
         #endregion
 
 
@@ -1166,21 +2116,21 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             using (mocks.Record())
             {
-				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0).Agents).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0)).IgnoreArguments()
                     .Return(0d);
-				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0).Agents).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0)).IgnoreArguments()
                     .Return(0d);
-				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0).Agents).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0)).IgnoreArguments()
                     .Return(0d);
-				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0).Agents).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0)).IgnoreArguments()
                     .Return(4d);
-				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0).Agents).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0)).IgnoreArguments()
                     .Return(4d);
-				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0).Agents).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0)).IgnoreArguments()
                     .Return(4d);
-				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0).Agents).IgnoreArguments()
+				Expect.Call(svc.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1,0)).IgnoreArguments()
                     .Return(4d);
-				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1,1)).IgnoreArguments().Return(1d).Repeat.Times(7);
+				Expect.Call(svc.Utilization(1, 1, 1, TimeSpan.MinValue, 1)).IgnoreArguments().Return(1d).Repeat.Times(7);
 				Expect.Call(svc.ServiceLevelAchievedOcc(1, 1, 1, 1, TimeSpan.FromMinutes(1), 1, 1, 1)).IgnoreArguments().Repeat.Any().Return(7);
             }
             return periodlist;
@@ -1217,5 +2167,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
 			Assert.Throws<ArgumentOutOfRangeException>(() => stPeriod1.Split(new TimeSpan(0, 15, 0)));
         }
+
+        
     }
+
+
+    
 }
