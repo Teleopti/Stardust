@@ -17,6 +17,15 @@
                 <md-option ng-repeat="scenario in vm.scenarios" ng-value="scenario">{{scenario.Name}}</md-option>
               </md-select>
             </label>
+
+            <div>
+              <div tabindex=0 class="context-menu card-context" ng-click="vm.periodModal = true">
+                <i class="mdi mdi-calendar"></i>
+                <md-tooltip>Period</md-tooltip>
+              </div>
+               From: {{vm.forecastPeriod.startDate | date: L}} To: {{vm.forecastPeriod.endDate  | date: L}}
+            </div>
+
             <div tabindex=0 class="context-menu card-context"  ng-click="vm.exportModal = true">
               <i class="mdi mdi-file-excel"></i>
               <md-tooltip>{{'ExportToFile'|translate}}</md-tooltip>
@@ -94,7 +103,7 @@
   </div>
 </form>
 
-<div ng-if="vm.selectedWorkload.Days.length < 1" >
+<div ng-if="vm.scenarioNotForecasted" >
   <div class="con-row">
     <div class="con-flex">
       <div class="panel material-depth-1">
@@ -112,7 +121,7 @@
 </div>
 
 <!-- Chart -->
-<div class="con-row" ng-if="vm.selectedWorkload.Days.length < 1 && vm.selectedWorkload.Days === !null">
+<div class="con-row" ng-if="vm.isForecastRunning">
   <div class="con-flex">
     <div class="panel material-depth-1 full-padding">
       <div ng-if="vm.isForecastRunning">
@@ -129,10 +138,6 @@
       <div class="sub-header">
         <h2>{{'SelectToModify'|translate}}</h2>
         <div class="head-actions panel-menu">
-          <div tabindex=0 class="context-menu card-context" ng-click="vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days)">
-            <i class="mdi mdi-sync" ></i>
-            <md-tooltip>{{'Refresh'|translate}}</md-tooltip>
-          </div>
           <div tabindex=0 ng-show="vm.selectedDayCount.length > 0" class="grow-out context-menu card-context wfm-badge-wrapper">
             <i class="mdi mdi-dots-vertical"></i>
             <wfm-badge badge-model="vm.selectedDayCount.length" pulse="true" status="'notice-success'"> </wfm-badge>
@@ -178,6 +183,30 @@
     <div class="modal-actions">
       <aside>
         <button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.forecastWorkload()">{{'Apply'|translate}}</button>
+      </aside>
+    </div>
+    <div ng-if="vm.isForecastRunning">
+      <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+    </div>
+  </div>
+</modal-dialog>
+
+<modal-dialog show='vm.periodModal' ng-cloak>
+  <div>
+    <div class="con-row">
+      <div class="con-flex">
+        <p>{{'TemplateTargetWorkload' | translate}}: <b>{{vm.selectedWorkload.Workload.Name}}</b></p>
+        <p class="subtext">{{'Scenario'|translate}}: <b>{{vm.selectedScenario.Name}}</b></p>
+      </div>
+    </div>
+
+    <div class="modal-inner-content" style="text-align:center;">
+      <!-- <label>{{'ForecastPeriod' | translate}}:</label><br/> -->
+      <wfm-calendar-picker ng-model="vm.forecastPeriod"></wfm-calendar-picker>
+    </div>
+    <div class="modal-actions">
+      <aside>
+        <button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.getWorkloadForecastData()">{{'Apply'|translate}}</button>
       </aside>
     </div>
     <div ng-if="vm.isForecastRunning">
