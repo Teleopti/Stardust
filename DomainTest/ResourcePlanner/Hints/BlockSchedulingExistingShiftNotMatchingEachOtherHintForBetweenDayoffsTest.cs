@@ -512,6 +512,38 @@ namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 					BlockTypeValue = BlockFinderType.BetweenDayOff,
 					UseBlockSameShiftCategory = true
 				}), false));
+		}
+		
+		[Test]
+		[Ignore("#75836 to be fixed")]
+		public void ShouldNotCrashWhenScheduleATerminatedAgentAndWhoHasScheduleInOpeningPeriod()
+		{
+			var startDate = new DateOnly(2017, 01, 01);
+			var planningPeriod = DateOnlyPeriod.CreateWithNumberOfWeeks(startDate.AddDays(7), 1);
+			var scenario = new Scenario { DefaultScenario = true };
+			ScenarioRepository.Has(scenario);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var activity = ActivityRepository.Has("_");
+						
+			var agent = PersonRepository.Has(new Person().WithId(), new Team {Site = new Site("site")},  startDate);
+			agent.TerminatePerson(startDate.AddDays(3), new PersonAccountUpdaterDummy());
+			agent.AddSchedulePeriod(new SchedulePeriod(startDate, SchedulePeriodType.Week, 1));
+			agent.PersonPeriodCollection.First().PersonContract = new PersonContract(new Contract("_"),new PartTimePercentage("_"),new ContractScheduleWorkingMondayToFriday()  );
+
+			var openingPeriod = DateOnlyPeriod.CreateWithNumberOfWeeks(startDate, 2);
+			var currentSchedule = new ScheduleDictionaryForTest(scenario, openingPeriod.ToDateTimePeriod(TimeZoneInfo.Utc));
+
+			var personAssignment = new PersonAssignment(agent, scenario, openingPeriod.StartDate).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCategory);
+			currentSchedule.AddPersonAssignment(personAssignment);
+
+
+			Target.Execute(new HintInput(currentSchedule, new[] { agent }, planningPeriod,
+				new FixedBlockPreferenceProvider(new ExtraPreferences
+				{
+					UseTeamBlockOption = true,
+					BlockTypeValue = BlockFinderType.BetweenDayOff,
+					UseBlockSameStartTime = true
+				}), false));
 
 		}
 
