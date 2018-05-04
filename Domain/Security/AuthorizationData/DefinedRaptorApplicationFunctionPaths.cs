@@ -155,5 +155,7 @@
 		public const string WebStaffing = "Raptor/Anywhere/WebStaffing";
 		public const string BpoExchange = "Raptor/Anywhere/WebStaffing/BPOExchange";
 		public const string ScheduleAuditTrailWebReport = "Raptor/Reports/ScheduleAuditTrailWebReport";
+		//People
+		public const string PeopleAccess = "Raptor/Anywhere/WebPeople/PeopleAccess";
 	}
 }

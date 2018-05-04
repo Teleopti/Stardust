@@ -207,6 +207,67 @@
 	});
 
 
+	it('should not add duplicate agent in invalid agent list when input validation is called multiple time with the input changed', function () {
+		var result = setUp();
+		var element = result.container;
+		var vm = result.commandControl;
+
+		vm.isNextDay = false;
+		vm.disableNextDay = false;
+		vm.timeRange = {
+			startTime: '2016-06-16 18:00:00',
+			endTime: '2016-06-16 20:00:00'
+		};
+		vm.manageScheduleForDistantTimezonesEnabled = true;
+
+		vm.selectedAgents = [
+			{
+				PersonId: 'agent1',
+				Name: 'agent1',
+				ScheduleEndTime: moment('2016-06-16 12:00:00').toDate()
+			}];
+
+		var timezone1 = {
+			IanaId: 'Asia/Hong_Kong',
+			DisplayName: '(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi'
+		};
+
+		fakePersonSelectionService.setFakeCheckedPersonInfoList(vm.selectedAgents);
+
+		vm.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('agent1', {
+			Date: '2016-06-16',
+			PersonId: 'agent1',
+			Timezone: timezone1,
+			Shifts: [
+				{
+					Date: '2016-06-16',
+					Projections: [
+						{
+							Start: '2016-06-16 08:00',
+							End: '2016-06-16 12:00',
+							Minutes: 600
+						}],
+					ProjectionTimeRange: {
+						Start: '2016-06-16 08:00',
+						End: '2016-06-16 12:00'
+					}
+				}]
+		});
+		var commandScope = angular.element(element[0].querySelector('add-personal-activity')).isolateScope();
+		commandScope.newPersonalActivityForm.$valid = true;
+		vm.updateInvalidAgents();
+		result.scope.$apply();
+
+		commandScope.newPersonalActivityForm.$valid = true;
+		vm.updateInvalidAgents();
+		result.scope.$apply();
+
+
+		expect(vm.invalidAgents.length).toBe(1);
+		expect(vm.invalidAgents[0].PersonId).toBe('agent1');
+	});
+
+
 	it('should invoke action callback after calling add personal activity', function () {
 		var result = setUp();
 

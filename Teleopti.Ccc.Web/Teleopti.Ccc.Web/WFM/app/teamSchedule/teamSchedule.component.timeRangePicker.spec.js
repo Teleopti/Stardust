@@ -152,7 +152,7 @@ describe('<teams-time-range-picker>', function () {
 
 	});
 
-	it('should set end time invalid when the end time is on DST changing date, and the time value is invalid', function () {
+	it('should set end time invalid when the start-time greater than end-time and the end time is on DST changing date and the time value is invalid', function () {
 		var timeRange = {
 			startTime: "2018-03-24 08:00",
 			endTime: "2018-03-24 09:00"
@@ -164,6 +164,25 @@ describe('<teams-time-range-picker>', function () {
 		angular.element(hoursEls[1]).triggerHandler('change');
 		scope.$apply();
 
+		expect(scope.timeRange.endTime).toEqual("2018-03-25 02:00");
+		expect(angular.element(element[0].querySelectorAll('teams-time-picker')[1]).hasClass('ng-invalid-dst')).toBeTruthy();
+	});
+
+	it('should set end-time invalid and keep the origin value when the end time is on DST and the time value is invalid', function () {
+		var timeRange = {
+			startTime: "2018-03-25 08:00",
+			endTime: "2018-03-25 09:00"
+		};
+		var element = setUp("2018-03-25", timeRange);
+
+		var hoursEls = element[0].querySelectorAll('teams-time-picker .hours input');
+		hoursEls[0].value = 1;
+		angular.element(hoursEls[0]).triggerHandler('change');
+		hoursEls[1].value = 2;
+		angular.element(hoursEls[1]).triggerHandler('change');
+		scope.$apply();
+
+		expect(scope.timeRange.startTime).toEqual("2018-03-25 01:00");
 		expect(scope.timeRange.endTime).toEqual("2018-03-25 02:00");
 		expect(angular.element(element[0].querySelectorAll('teams-time-picker')[1]).hasClass('ng-invalid-dst')).toBeTruthy();
 	});

@@ -10,9 +10,4 @@ namespace Teleopti.Wfm.Api.Query
 		public string Identity { get; set; }
 		public string Email { get; set; }
 	}
-
-	public class UserByEmailDto : IQueryDto
-	{
-		public string Email { get; set; }
-	}
 }

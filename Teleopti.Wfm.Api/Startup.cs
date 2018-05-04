@@ -3,7 +3,6 @@ using System.Configuration;
 using System.Web.Http;
 using System.Xml.Linq;
 using Autofac;
-using Autofac.Integration.WebApi;
 using NSwag.AspNet.Owin;
 using Owin;
 using Teleopti.Ccc.Domain.Common;
@@ -12,7 +11,6 @@ using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
-using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
@@ -24,24 +22,21 @@ namespace Teleopti.Wfm.Api
 {
 	public class Startup
 	{
-		private readonly Action<IContainer> _afterContainerBuild;
-		private readonly Action<ContainerBuilder> _optionalRegistrations;
+		private readonly ILifetimeScope _container;
 
-		public Startup() : this(null,null)
+		public Startup() : this(null)
 		{
 		}
 
-		public Startup(Action<ContainerBuilder> optionalRegistrations, Action<IContainer> afterContainerBuild)
+		public Startup(ILifetimeScope container)
 		{
-			_afterContainerBuild = afterContainerBuild ?? (_ => {});
-			_optionalRegistrations = optionalRegistrations ?? (_ => {});
+			_container = container;
 		}
 
 		public void Configuration(IAppBuilder app)
 		{
-			var container = configureContainer();
-			_afterContainerBuild.Invoke(container);
-
+			var container = _container ?? configureContainer();
+			
 			if (!StateHolderReader.IsInitialized)
 			{
 				var webSettings = new WebSettings
@@ -94,18 +89,8 @@ namespace Teleopti.Wfm.Api
 				DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForApi()
 			};
 			var configuration = new IocConfiguration(args, CommonModule.ToggleManagerForIoc(args));
-
+			builder.RegisterModule(new ApiModule());
 			builder.RegisterModule(new CommonModule(configuration));
-			builder.RegisterType<CommandDtoProvider>();
-			builder.RegisterType<QueryDtoProvider>();
-			builder.RegisterType<DtoProvider>();
-			builder.RegisterType<QueryHandlerProvider>();
-			builder.RegisterType<TokenVerifier>().As<ITokenVerifier>();
-			builder.RegisterApiControllers(typeof(Startup).Assembly);
-			builder.RegisterAssemblyTypes(typeof(Startup).Assembly).AsClosedTypesOf(typeof(IQueryHandler<,>)).ApplyAspects();
-			builder.RegisterAssemblyTypes(typeof(Startup).Assembly).AsClosedTypesOf(typeof(ICommandHandler<>)).ApplyAspects();
-
-			_optionalRegistrations.Invoke(builder);
 
 			return builder.Build();
 		}

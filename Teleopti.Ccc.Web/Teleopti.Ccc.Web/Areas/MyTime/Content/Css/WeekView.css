@@ -63,6 +63,10 @@
 	margin-left: 20px;
 }
 
+.weekview-probability-toggle li > a {
+	color: #333333 !important;
+}
+
 .overtime {
 	padding-top: 30px;
 }
@@ -176,7 +180,8 @@
 .weekview-day-time-indicator {
 	float: left;
 	z-index: 2;
-	border-bottom: 2px dashed black;
+	border-top: 1px dashed white;
+	border-bottom: 1px dashed black;
 	display: none;
 }
 
@@ -184,7 +189,8 @@
 	width: 31px;
 	float: left;
 	z-index: 2;
-	border-bottom: 2px dashed black;
+	border-top: 1px dashed white;
+	border-bottom: 1px dashed black;
 	display: none;
 }
 

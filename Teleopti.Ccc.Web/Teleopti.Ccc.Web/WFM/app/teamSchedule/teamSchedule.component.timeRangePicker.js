@@ -73,8 +73,11 @@
 		}
 
 		function endEarlierThanStartOnTimeOnly() {
-			return isValidTimeRange() && moment('1900-01-01 ' + serviceDateFormatHelper.getTimeOnly(ctrl.timeRange.endTime))
-				.isSameOrBefore('1900-01-01 ' + serviceDateFormatHelper.getTimeOnly(ctrl.timeRange.startTime));
+			return isValidTimeRange() && moment('1900-01-01 ' + getTimeOnlyInTimeZone(ctrl.timeRange.endTime))
+				.isSameOrBefore('1900-01-01 ' + getTimeOnlyInTimeZone(ctrl.timeRange.startTime));
+		}
+		function getTimeOnlyInTimeZone(dateTime) {
+			return serviceDateFormatHelper.getTimeOnly(moment.tz(dateTime, ctrl.timezone));
 		}
 
 		function getNextDate() {

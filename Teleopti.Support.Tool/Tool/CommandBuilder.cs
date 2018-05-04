@@ -10,53 +10,24 @@ namespace Teleopti.Support.Tool.Tool
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(CommandBuilder));
 
-		private ConfigFiles configFiles;
-		private CompositeCommand modeDefaultCommand;
-		private CompositeCommand modeDeployCommand;
-		private ConfigurationBackupCommand backupCommand;
-		private ConfigurationRestoreCommand restoreCommand;
-
-		public CommandBuilder()
-		{
-			var configFilePathReader = new ConfigFilePathReader();
-			var customSection = new CustomSection();
-			restoreCommand = new ConfigurationRestoreCommand(customSection, configFilePathReader, () => configFiles);
-			backupCommand = new ConfigurationBackupCommand(customSection, configFilePathReader, () => configFiles);
-			var refreshConfigFile = new RefreshConfigFile();
-			var refreshConfigsRunner = new RefreshConfigsRunner(refreshConfigFile, () => configFiles);
-
-			modeDefaultCommand = new CompositeCommand(
-				refreshConfigsRunner,
-				restoreCommand,
-				new MoveCustomReportsCommand()
-			);
-
-			modeDeployCommand = new CompositeCommand(
-				refreshConfigsRunner,
-				restoreCommand
-			);
-		}
-
 		private class Mode
 		{
 			public string Name;
-			public ConfigFiles ConfigFiles;
-			public ISupportCommand Command;
+			public object Command;
 		}
 
 		private IEnumerable<Mode> modes()
 		{
-			yield return new Mode {Name = "DEBUG", ConfigFiles = new ConfigFiles("ConfigFiles.txt"), Command = modeDefaultCommand};
-			yield return new Mode {Name = "DEPLOYWEB", ConfigFiles = new ConfigFiles("DeployConfigFilesWeb.txt"), Command = modeDeployCommand};
-			yield return new Mode {Name = "DEPLOYWORKER", ConfigFiles = new ConfigFiles("DeployConfigFilesWorker.txt"), Command = modeDeployCommand};
-			yield return new Mode {Name = "AZURE", ConfigFiles = new ConfigFiles("AzureConfigFiles.txt"), Command = modeDefaultCommand};
-			yield return new Mode {Name = "TEST", ConfigFiles = new ConfigFiles("BuildServerConfigFiles.txt"), Command = modeDefaultCommand};
+			yield return new Mode {Name = "DEBUG", Command = new ModeDebugCommand()};
+			yield return new Mode {Name = "DEPLOYWEB", Command = new ModeDeployWebCommand()};
+			yield return new Mode {Name = "DEPLOYWORKER", Command = new ModeDeployWorkerCommand()};
+			yield return new Mode {Name = "AZURE", Command = new ModeAzureCommand()};
+			yield return new Mode {Name = "TEST", Command = new ModeTestCommand()};
 		}
 
-		public ISupportCommand ParseCommandLine(IEnumerable<string> args)
+		public object ParseCommandLine(IEnumerable<string> args)
 		{
-			ISupportCommand command = null;
-			configFiles = null;
+			object command = null;
 
 			logger.InfoFormat("support tool is called with args: {0}", string.Join(" ", args));
 
@@ -67,19 +38,20 @@ namespace Teleopti.Support.Tool.Tool
 					matchSwitchWithAdjacentValue(argument, "-MO", v =>
 					{
 						var mode = modes().Single(x => x.Name == v);
-						configFiles = mode.ConfigFiles;
 						command = mode.Command;
 					});
 					matchSwitchWithAdjacentValue(argument, "-TC", v => { command = new SetToggleModeCommand(v); });
 					matchSwitch(argument, new[] {"-?", "?", "-H", "-HELP", "HELP"}, () => { command = new HelpWindow(HelpWindow.HelpText); });
 					matchSwitch(argument, "-BC", () =>
 					{
-						configFiles = new ConfigFiles("DeployConfigFilesWeb.txt");
-						command = backupCommand;
+						command = new ConfigurationBackupCommand
+						{
+							ConfigFiles = new ConfigFiles("DeployConfigFilesWeb.txt")
+						};
 					});
-					matchSwitch(argument, "-RC", () => { command = restoreCommand; });
-					matchSwitch(argument, "-LOAD", () => { command = new LoadSettingsCommand(args.ElementAt(1)); });
-					matchSwitch(argument, "-SET", () => { command = new SetSettingCommand(args.ElementAt(1), args.ElementAt(2)); });
+					matchSwitch(argument, "-RC", () => { command = new ConfigurationRestoreCommand(); });
+					matchSwitch(argument, "-LOAD", () => { command = new LoadSettingsCommand {File = args.ElementAt(1)}; });
+					matchSwitch(argument, "-SET", () => { command = new SetSettingCommand {SearchFor = args.ElementAt(1), ReplaceWith = args.ElementAt(2)}; });
 					matchSwitch(argument, "-CS", () => { command = command = new ConfigServerCommand(args.ElementAt(1)); });
 					matchSwitch(argument, "-PM", () => { command = new SavePmConfigurationCommand(args.ElementAt(1)); });
 				});
@@ -114,5 +86,4 @@ namespace Teleopti.Support.Tool.Tool
 			return true;
 		}
 	}
-
 }

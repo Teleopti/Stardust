@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 				DefinedRaptorApplicationFunctionPaths.BpoExchange,
 				DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailWebReport,
 				DefinedRaptorApplicationFunctionPaths.WebPlans,
-
+				DefinedRaptorApplicationFunctionPaths.PeopleAccess
 			};
 
 			var webTeamsFunctionPaths = new List<string>
