@@ -104,10 +104,10 @@
 										<span ng-show="sortType == 'Duration' && !sortReverse">▾</span>
 										<span ng-show="sortType == 'Duration' && sortReverse">▴</span>
 									</th>
-									<th scope="col" ng-click="sortType = 'RowsAfffected'; sortReverse = !sortReverse">
-										Afffected rows
-										<span ng-show="sortType == 'RowsAfffected' && !sortReverse">▾</span>
-										<span ng-show="sortType == 'RowsAfffected' && sortReverse">▴</span>
+									<th scope="col" ng-click="sortType = 'RowsAffected'; sortReverse = !sortReverse">
+										Affected rows
+										<span ng-show="sortType == 'RowsAffected' && !sortReverse">▾</span>
+										<span ng-show="sortType == 'RowsAffected' && sortReverse">▴</span>
 									</th>
 									<th scope="col" ng-click="sortType = 'ScheduleName'; sortReverse = !sortReverse">
 										Schedule
@@ -154,7 +154,7 @@
 										{{job.Duration}}
 									</td>
 									<td>
-										{{job.RowsAfffected}}
+										{{job.RowsAffected}}
 									</td>
 									<td>
 										{{job.ScheduleName}}

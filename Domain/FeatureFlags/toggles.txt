@@ -110,13 +110,12 @@ ResourcePlanner_UseErlangAWithFinitePatience_47738 = RC
 ResourcePlanner_SpeedUpEvents_48769 = true #batch deletes of dates - can be deleted early
 ResourcePlanner_SpeedUpEvents_74996 = true #caching different data - can be deleted early
 ResourcePlanner_SpeedUpEvents_75415 = true #restructure of events - dont remove toggle too early
-ResourcePlanner_MinimumAgents_75339 = DEV
+ResourcePlanner_MinimumAgents_75339 = RC
 
 # Bugs&Roses #
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
 ResourcePlanner_DayOffOptimizationIslands_47208 = true
 ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
-ResourcePlanner_Deadlock_48170 = true
 
 # From old Kittens team... #
 ETL_SpeedUpPersonPeriodNightly_38097 = true

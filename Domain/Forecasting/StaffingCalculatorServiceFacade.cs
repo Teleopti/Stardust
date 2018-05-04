@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				return LinearEsl(forecastedAgents, agents, sla);
 			}
 
-			return _estimatedServiceLevel.CalculateEstimatedServiceLevel(agents, calls / maxParellelTasks, aht, 1000000, (int) serviceTime, (int) intervalLength.TotalSeconds, forecastedAgents,sla);
+			return _estimatedServiceLevel.CalculateEstimatedServiceLevel(agents, calls / maxParellelTasks, aht, 10000000, (int) serviceTime, (int) intervalLength.TotalSeconds, forecastedAgents,sla);
 		}
 	}
 

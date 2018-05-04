@@ -146,15 +146,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PersonListExtractorFromScheduleParts>().As<IPersonListExtractorFromScheduleParts>().SingleInstance();
 			builder.RegisterType<GroupPersonBuilderForOptimizationFactory>().As<IGroupPersonBuilderForOptimizationFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<FlexibelDayOffOptimizationDecisionMakerFactory>().As<IDayOffOptimizationDecisionMakerFactory>().SingleInstance();
+			builder.RegisterType<IntradayOptimizationExecutor>().As<IntradayOptimizationExecutor>().InstancePerLifetimeScope().ApplyAspects();
 
-			if (_configuration.Toggle(Toggles.ResourcePlanner_Deadlock_48170))
-			{
-				builder.RegisterType<IntradayOptimizationExecutorWithDeadlockRetries>().As<IntradayOptimizationExecutor>().InstancePerLifetimeScope().ApplyAspects();
-			}
-			else
-			{
-				builder.RegisterType<IntradayOptimizationExecutor>().InstancePerLifetimeScope().ApplyAspects();
-			}
 			
 			//change to scope? 
 			builder.RegisterType<TeamBlockMoveTimeBetweenDaysCommand>().As<ITeamBlockMoveTimeBetweenDaysCommand>();
