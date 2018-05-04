@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { NavigationService, WorkspaceService } from '../../services';
 import { Person, Role } from '../../types';
 import { RevokePageService } from './revoke-page.service';
@@ -23,7 +24,7 @@ export class RevokePageComponent implements OnInit, OnDestroy {
 	private componentDestroyed: Subject<any> = new Subject();
 
 	ngOnInit() {
-		this.workspaceService.people$.takeUntil(this.componentDestroyed).subscribe({
+		this.workspaceService.people$.pipe(takeUntil(this.componentDestroyed)).subscribe({
 			next: (people: Person[]) => {
 				if (people.length === 0) return this.nav.navToSearch();
 				this.people = people;
