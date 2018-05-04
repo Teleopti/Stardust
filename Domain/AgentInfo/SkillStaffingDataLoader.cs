@@ -38,29 +38,26 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			if (!skills.Any()) return skillStaffingList;
 
 			var resolution = skills.Min(s => s.DefaultResolution);
-			var skillDays = _skillDayRepository.FindReadOnlyRange(period.Inflate(1), skills, _scenarioRepository.Current())
+			var skillDays = _skillDayRepository
+				.FindReadOnlyRange(period.Inflate(1), skills, _scenarioRepository.Current())
 				.ToList();
 
-			var skillDaysBySkills = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
-			foreach (var skillDay in skillDays)
+			foreach (var dateOnly in period.DayCollection())
 			{
-				if (!skillDaysBySkills.ContainsKey(skillDay.Skill))
-				{
-					skillDaysBySkills.Add(skillDay.Skill, new List<ISkillDay>());
-				}
+				var skillDaysInDay = skillDays.Where(s => dateOnly.ToDateOnlyPeriod().Inflate(1).Contains(s.CurrentDate)).ToList();
+				var skillSkillDayDictionary = skillDaysInDay.ToLookup(x => x.Skill).ToDictionary(y => y.Key, y => y.AsEnumerable());
 
-				((List<ISkillDay>) skillDaysBySkills[skillDay.Skill]).Add(skillDay);
+				_backlogSkillTypesForecastCalculator.CalculateForecastedAgents(skillSkillDayDictionary, dateOnly,
+					_userTimeZone.TimeZone(), useShrinkage);
+
+				var skillStaffingDatas = createSkillStaffingDatas(dateOnly.ToDateOnlyPeriod(), skills, resolution, useShrinkage,
+					skillDaysInDay, dayFilter);
+
+				skillStaffingList.AddRange(skillStaffingDatas);
 			}
 
-			_backlogSkillTypesForecastCalculator.CalculateForecastedAgents(skillDaysBySkills, _userTimeZone.TimeZone(), useShrinkage);
-
-			var skillStaffingDatas = createSkillStaffingDatas(period, skills, resolution, useShrinkage,
-				skillDays, dayFilter);
-
-			skillStaffingList.AddRange(skillStaffingDatas);
 			return skillStaffingList;
 		}
-
 
 		private IEnumerable<SkillStaffingData> createSkillStaffingDatas(DateOnlyPeriod period, IList<ISkill> skills,
 			int resolution, bool useShrinkage, IList<ISkillDay> skillDays, Func<DateOnly, bool> dayFilter)
@@ -74,10 +71,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var dayStaffingDatas = days.Select(day => new
 			{
 				Date = day,
-				Scheduled = getScheduledStaffing(skills, resolution, useShrinkage, day)
-					.ToLookup(x => new {StartTime = x.StartDateTime, SkillId = x.Id}),
 				Forecasted = getForecastedStaffing(resolution, useShrinkage, skillDays, day)
-					.ToLookup(x => new {x.StartTime, x.SkillId})
+					.ToLookup(x => new {x.StartTime, x.SkillId}),
+				Scheduled = getScheduledStaffing(skills, resolution, useShrinkage, day)
+					.ToLookup(x => new { StartTime = x.StartDateTime, SkillId = x.Id })
 			});
 
 			var skillStaffingDatas = from dayStaffingData in dayStaffingDatas

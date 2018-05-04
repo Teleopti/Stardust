@@ -16,25 +16,24 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_scheduledStaffingProvider = scheduledStaffingProvider;
 		}
 
-		public void CalculateForecastedAgents(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, TimeZoneInfo timezone, bool useShrinkage)
+		public void CalculateForecastedAgents(IDictionary<ISkill, IEnumerable<ISkillDay>> skillSkillDayDictionary, DateOnly dateOnly,
+			TimeZoneInfo timezone, bool useShrinkage)
 		{
 			var scheduledStaffingPerSkill = new List<SkillStaffingIntervalLightModel>();
-			var skillGroupsByResuolution = skillDays.Keys
+			var skillGroupsByResuolution = skillSkillDayDictionary.Keys
 				.Where(SkillTypesWithBacklog.IsBacklogSkillType)
 				.GroupBy(x => x.DefaultResolution);
 			foreach (var group in skillGroupsByResuolution)
 			{
 				var emailSkillsForOneResoultion = group.ToList();
+				scheduledStaffingPerSkill.AddRange(
+					_scheduledStaffingProvider.StaffingPerSkill(emailSkillsForOneResoultion, group.Key, dateOnly, useShrinkage));
 
 				foreach (var skill in emailSkillsForOneResoultion)
 				{
-					var skillDaysEmail = skillDays[skill];
-
+					var skillDaysEmail = skillSkillDayDictionary[skill];
 					foreach (var skillDay in skillDaysEmail)
 					{
-						var skillDayDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(skillDay.CurrentDate.Date, timezone));
-						scheduledStaffingPerSkill.AddRange(_scheduledStaffingProvider.StaffingPerSkill(emailSkillsForOneResoultion, group.Key, skillDayDate, useShrinkage));
-
 						foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
 						{
 							var intervalStartLocal = TimeZoneHelper.ConvertFromUtc(skillStaffPeriod.Period.StartDateTime, timezone);
