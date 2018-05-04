@@ -223,6 +223,8 @@ namespace Stardust.Node.Workers
 
 		private void LoopReturnObjects(IEnumerable<object> returnObjects)
 		{
+			if (returnObjects == null) return;
+
 			foreach (var returnObject in returnObjects)
 			{
 				if (returnObject is ExitApplication)
