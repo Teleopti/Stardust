@@ -143,14 +143,18 @@
 			});
 			return {
 				PersonDates: decidePersonBelongsToDates(validAgents, getTimeRangeMoment()),
-				StartTime: vm.convertTime(serviceDateFormatHelper.getDateTime(vm.timeRange.startTime)),
-				EndTime: vm.convertTime(serviceDateFormatHelper.getDateTime(vm.timeRange.endTime)),
+				StartTime: vm.convertTime(getDateTimeInTimeZone(vm.timeRange.startTime)),
+				EndTime: vm.convertTime(getDateTimeInTimeZone(vm.timeRange.endTime)),
 				ActivityId: vm.selectedActivityId,
 				ActivityType: 2,
 				TrackedCommandInfo: {
 					TrackId: vm.trackId
 				}
 			};
+		}
+
+		function getDateTimeInTimeZone(dateTime) {
+			return serviceDateFormatHelper.getDateTime(moment.tz(dateTime, vm.currentTimezone()));
 		}
 
 		vm.addPersonalActivity = function () {
