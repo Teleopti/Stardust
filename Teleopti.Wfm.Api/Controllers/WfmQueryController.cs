@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using Autofac;
+using Teleopti.Wfm.Api.Query;
 
 namespace Teleopti.Wfm.Api.Controllers
 {
@@ -33,7 +35,17 @@ namespace Teleopti.Wfm.Api.Controllers
 	        });
         }
 
-        [HttpPost,Route("query/{queryType}/{query}")]
+		[HttpGet, Route("query2")]
+		public QueryResultDto<ScheduleDto> AvailableQueries1()
+		{
+			return new QueryResultDto<ScheduleDto>
+			{
+				Result = new List<ScheduleDto>(),
+				Successful = true
+			};
+		}
+
+		[HttpPost,Route("query/{queryType}/{query}")]
         public IHttpActionResult Post(string queryType, string query)
 		{
 			using (var scope = services.Resolve<ILifetimeScope>())
