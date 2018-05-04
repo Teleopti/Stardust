@@ -393,7 +393,7 @@
 			expect(activityData.TrackedCommandInfo.TrackId).toBe(vm.trackId);
 		});
 
-		it('should set StartTime and EndTime with correct data after click apply when StartTime value is on DST', function () {
+		it('should apply with correct StartTime and EndTime when StartTime value is on DST', function () {
 			var result = setUp();
 			var vm = result.commandControl;
 			vm.isNextDay = false;
