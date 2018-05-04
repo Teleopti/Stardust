@@ -468,7 +468,7 @@ module.exports = function(grunt) {
 		// },
 		exec: {
 			ngbuild_dev: 'npm run ng build',
-			ngbuild_prod: 'npm run ng build -- --prod -env=prod --output-hashing none',
+			ngbuild_prod: 'npm run ng build -- --prod --environment=prod --output-hashing none',
 			webpackDevDist: 'webpack'
 		},
 		clean: [

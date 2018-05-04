@@ -29,7 +29,7 @@ module.exports = function(config) {
 
 		// frameworks to use
 		// available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-		frameworks: ['jasmine', '@angular/cli'],
+		frameworks: ['jasmine', '@angular-devkit/build-angular'],
 
 		plugins: [
 			require('karma-teamcity-reporter'),
@@ -38,13 +38,13 @@ module.exports = function(config) {
 			require('karma-jasmine-html-reporter'),
 			require('karma-coverage-istanbul-reporter'),
 			require('karma-coverage-istanbul-es5-preprocessor'),
-			require('@angular/cli/plugins/karma')
+			require('@angular-devkit/build-angular/plugins/karma')
 		],
 
 		// preprocess matching files before serving them to the browser
 		// available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
 		preprocessors: {
-			'./src/test.ts': ['@angular/cli']
+			
 		},
 
 		// to use this attribute, run "npm run devTest -- keyWordFromSpecFileDescribe". example: npm run devTest -- Rta
@@ -69,7 +69,7 @@ module.exports = function(config) {
 
 		coverageIstanbulReporter: {
 			dir: './coverage',
-			reports: ['html', 'text-summary'],
+			dir: require('path').join(__dirname, 'coverage'), reports: ['html', 'text-summary'],
 			fixWebpackSourcePaths: true
 		},
 		angularCli: {
