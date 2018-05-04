@@ -22,6 +22,7 @@
       startDate: moment().utc().add(1, 'days').toDate(),
       endDate: moment().utc().add(6, 'months').toDate()
     };
+    vm.savingToScenario = false;
 
     vm.applyOverride = applyOverride;
     vm.applyCampaign = applyCampaign;
@@ -32,6 +33,7 @@
     vm.changeScenario = changeScenario;
     vm.forecastWorkload = forecastWorkload;
     vm.loadChart = loadChart;
+    vm.applyWipToScenario = applyWipToScenario;
     vm.exportToFile = exportToFile;
 
     vm.isForecastRunning = false;
@@ -255,6 +257,34 @@
               });
             }
 
+            function applyWipToScenario() {
+              vm.savingToScenario = true;
+              var tempForecastDays = [];
+              for (var i = 0; i < vm.selectedWorkload.Days.length; i++) {
+                tempForecastDays.push(
+                  {
+                    Date: vm.selectedWorkload.Days[i].date,
+                    Tasks: vm.selectedWorkload.Days[i].vtc,
+                    TaskTime: vm.selectedWorkload.Days[i].vtt,
+                    AfterTaskTime: vm.selectedWorkload.Days[i].vtacw
+                  }
+                )
+              }
+              forecastingService.applyToScenario(
+                angular.toJson(
+                  {
+                    WorkloadId: vm.selectedWorkload.Workload.Id,
+                    ScenarioId: vm.selectedScenario.Id,
+                    ForecastDays: tempForecastDays
+                  }
+                ), function (data, status, headers, config) {
+                  vm.savingToScenario = false;
+                }, function(data, status, headers, config) {
+                  vm.savingToScenario = false;
+                }
+              );
+            }
+
             function exportToFile() {
               vm.isForecastRunning = true;
               forecastingService.exportForecast(angular.toJson(
@@ -269,9 +299,9 @@
                     type: headers['content-type']
                   });
                   var fileName = moment(vm.forecastPeriod.startDate).format('YYYY-MM-DD') +
-                    ' - ' +
-                    moment(vm.forecastPeriod.endDate).format('YYYY-MM-DD') +
-                    '.xlsx';
+                  ' - ' +
+                  moment(vm.forecastPeriod.endDate).format('YYYY-MM-DD') +
+                  '.xlsx';
                   saveAs(blob, fileName);
                   vm.isForecastRunning = false;
                   vm.exportModal = false;

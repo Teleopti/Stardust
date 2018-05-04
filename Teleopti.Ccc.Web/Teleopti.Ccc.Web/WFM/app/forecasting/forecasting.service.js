@@ -43,6 +43,12 @@
 						.finally(finalCb);
 				};
 
+				this.applyToScenario = function(data, successCb, errorCb) {
+					$http.post("../api/Forecasting/ApplyForecast", data)
+						.success(successCb)
+						.error(errorCb);
+				};
+
 				this.evaluate = function(data, successCb, errorCb) {
 					$http.post("../api/Forecasting/Evaluate", data)
 						.success(successCb)

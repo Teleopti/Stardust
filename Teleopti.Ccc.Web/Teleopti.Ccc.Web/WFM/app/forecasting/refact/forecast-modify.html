@@ -1,7 +1,13 @@
-<div class="view-header with-desc">
+<div class="view-header with-desc with-fab">
   <div class="view-title">
     <h1><i class="mdi mdi-chart-line"></i> {{vm.selectedWorkload.Workload.Name}}</h1>
     <p>This is the current forecast for this workload</p>
+  </div>
+  <div class="fab-wrapper">
+    <button ng-click="vm.applyWipToScenario()" ng-class="{'shrink-in':vm.savingToScenario}" class="wfm-fab material-depth-1">
+      <i ng-cloak class="mdi mdi-content-save"></i>
+      <md-tooltip>Save changes to scenario</md-tooltip>
+    </button>
   </div>
 </div>
 
@@ -23,7 +29,7 @@
                 <i class="mdi mdi-calendar"></i>
                 <md-tooltip>Period</md-tooltip>
               </div>
-               From: {{vm.forecastPeriod.startDate | date: L}} To: {{vm.forecastPeriod.endDate  | date: L}}
+              From: {{vm.forecastPeriod.startDate | date: L}} To: {{vm.forecastPeriod.endDate  | date: L}}
             </div>
 
             <div tabindex=0 class="context-menu card-context"  ng-click="vm.exportModal = true">
