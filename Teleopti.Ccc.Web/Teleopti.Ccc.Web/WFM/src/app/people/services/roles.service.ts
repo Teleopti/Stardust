@@ -1,24 +1,26 @@
-import { Injectable } from '@angular/core';
-import { Person, Role } from '../types';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Role } from '../types';
 
 @Injectable()
 export class RolesService {
 	constructor(private http: HttpClient) {}
 
-	protected rolesCache: Array<Role> = [];
-
-	async getRoles(): Promise<Array<Role>> {
-		const roles = (await this.http.get('../api/PeopleData/fetchRoles').toPromise()) as Array<Role>;
-		this.rolesCache = roles.sort((r1, r2) => r1.Name.localeCompare(r2.Name));
-		return this.rolesCache;
+	private sortRoles(roles: Role[]) {
+		return roles.sort((r1, r2) => r1.Name.localeCompare(r2.Name));
 	}
 
-	async grantRoles(persons: Array<String>, roles: Array<String>): Promise<object> {
-		return await this.http.post('../api/PeopleCommand/grantRoles', { Persons: persons, Roles: roles }).toPromise();
+	getRoles(): Observable<Role[]> {
+		return this.http.get('../api/PeopleData/fetchRoles').pipe(map((roles: Role[]) => this.sortRoles(roles)));
 	}
 
-	async revokeRoles(persons: Array<String>, roles: Array<String>): Promise<object> {
-		return await this.http.post('../api/PeopleCommand/revokeRoles', { Persons: persons, Roles: roles }).toPromise();
+	grantRoles(persons: string[], roles: string[]) {
+		return this.http.post('../api/PeopleCommand/grantRoles', { Persons: persons, Roles: roles });
+	}
+
+	revokeRoles(persons: Array<String>, roles: Array<String>) {
+		return this.http.post('../api/PeopleCommand/revokeRoles', { Persons: persons, Roles: roles });
 	}
 }

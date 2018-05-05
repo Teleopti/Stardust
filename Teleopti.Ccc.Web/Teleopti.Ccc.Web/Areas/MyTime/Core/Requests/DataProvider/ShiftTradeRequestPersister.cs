@@ -2,9 +2,11 @@
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -25,6 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly IShiftTradeRequestPersonToPermissionValidator _shiftTradeRequestPermissionValidator;
 		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 		private readonly RequestsViewModelMapper _mapper;
+		private readonly IToggleManager _toggleManager;
 
 		public ShiftTradeRequestPersister(IPersonRequestRepository personRequestRepository,
 			IShiftTradeRequestMapper shiftTradeRequestMapper,
@@ -37,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			IShiftTradeRequestProvider shiftTradeRequestprovider,
 			IShiftTradeRequestPersonToPermissionValidator shiftTradePersonToPermissionValidator,
 			IPersonRequestCheckAuthorization personRequestCheckAuthorization,
-			RequestsViewModelMapper mapper)
+			RequestsViewModelMapper mapper, IToggleManager toggleManager)
 		{
 			_personRequestRepository = personRequestRepository;
 			_shiftTradeRequestMapper = shiftTradeRequestMapper;
@@ -51,6 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_shiftTradeRequestPermissionValidator = shiftTradePersonToPermissionValidator;
 			_personRequestCheckAuthorization = personRequestCheckAuthorization;
 			_mapper = mapper;
+			_toggleManager = toggleManager;
 		}
 
 		public RequestViewModel Persist(ShiftTradeRequestForm form)
@@ -118,7 +122,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 						LogOnDatasource = _dataSourceProvider.Current().DataSourceName,
 						PersonRequestId = personRequest.Id.GetValueOrDefault(),
 						AcceptingPersonId = shiftTrade.PersonTo.Id.GetValueOrDefault(),
-						UseSiteOpenHoursRule = true
+						UseSiteOpenHoursRule = true,
+						UseMaximumWorkday = _toggleManager.IsEnabled(Toggles.MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889)
 					};
 				}
 			}

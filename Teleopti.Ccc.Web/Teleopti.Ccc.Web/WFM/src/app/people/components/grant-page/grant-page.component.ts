@@ -1,45 +1,79 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
+import 'rxjs/add/operator/takeUntil';
+import { NavigationService, WorkspaceService } from '../../services';
 import { Person, Role } from '../../types';
-
-import { RolePage } from '../shared/role-page';
-
+import { GrantPageService } from './grant-page.service';
 @Component({
 	selector: 'people-grant',
 	templateUrl: './grant-page.component.html',
-	styleUrls: ['./grant-page.component.scss']
+	styleUrls: ['./grant-page.component.scss'],
+	providers: [GrantPageService]
 })
-export class GrantPageComponent extends RolePage implements OnInit {
+export class GrantPageComponent implements OnInit, OnDestroy {
+	constructor(
+		public nav: NavigationService,
+		public grantPageService: GrantPageService,
+		public workspaceService: WorkspaceService
+	) {}
+
+	private componentDestroyed: Subject<any> = new Subject();
+
+	roles: Role[] = [];
+	people: Person[] = [];
+	selectedRoles: Role[] = [];
+
 	ngOnInit() {
-		super.ngOnInit();
-		this.rolesService.getRoles().then(roles => {
-			this.roles = roles;
+		this.grantPageService.roles$.subscribe({
+			next: (roles: Role[]) => {
+				this.roles = roles;
+			}
+		});
+		this.workspaceService.people$.takeUntil(this.componentDestroyed).subscribe({
+			next: (people: Person[]) => {
+				if (people.length === 0) return this.nav.navToSearch();
+				this.people = people;
+			}
 		});
 	}
 
-	grantRoles(roles: Array<string>): Promise<object> {
-		const peopleIds = this.workspaceService
-			.getSelectedPeople()
-			.getValue()
-			.map(({ Id }) => Id);
-		return this.rolesService.grantRoles(peopleIds, roles);
+	ngOnDestroy() {
+		this.componentDestroyed.next();
+		this.componentDestroyed.complete();
+	}
+
+	isRoleOnAll(roleId: string): boolean {
+		const roleOccurancesInPeople = this.people.filter(({ Roles }) => Roles.map(role => role.Id).includes(roleId))
+			.length;
+		const numberOfPeople = this.workspaceService.getSelectedPeople().getValue().length;
+		return roleOccurancesInPeople === numberOfPeople;
+	}
+
+	getRolesNotOnAll(): Role[] {
+		return this.roles.filter(role => !this.isRoleOnAll(role.Id));
+	}
+
+	toggleSelectedRole(role: Role): void {
+		this.selectedRoles = this.selectedRoles.find(r => r.Id === role.Id)
+			? this.selectedRoles.filter(r => r.Id !== role.Id)
+			: this.selectedRoles.concat(role);
+	}
+
+	isRoleSelected(roleId: string): boolean {
+		return !!this.selectedRoles.find(r => r.Id === roleId);
+	}
+
+	isAnyRoleSelected(): boolean {
+		return this.selectedRoles.length > 0;
 	}
 
 	save() {
-		this.grantRoles(this.selectedRoles).then(() => {
-			this.workspaceService.update();
-			const selectedRoles = this.selectedRoles.map(id => this.getRole(id));
-			const people = this.workspaceService
-				.getSelectedPeople()
-				.getValue()
-				.map(person => {
-					const roles = person.Roles.filter(r => !this.selectedRoles.includes(r.Id)).concat(selectedRoles);
-					return {
-						...person,
-						Roles: roles
-					};
-				});
-			this.searchOverridesService.mergeOptimistic(people, ['Roles']);
-			super.save();
+		this.grantPageService.grantRoles(this.selectedRoles, this.people).subscribe({
+			next: () => this.close()
 		});
+	}
+
+	close() {
+		this.nav.navToSearch();
 	}
 }

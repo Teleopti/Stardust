@@ -76,7 +76,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.Click(".recorded-out-of-adherence");
 			Browser.Interactions.AssertNotExists(".recorded-out-of-adherence", ".approve-adherence-submit");
 		}
-
+		
+		[Then(@"I should be able to approve out of adherences")]
+		public void ThenIShouldBeAbleToApproveOutOfAdherences()
+		{
+			Browser.Interactions.Click(".recorded-out-of-adherence");
+			Browser.Interactions.AssertExists(".approve-adherence-submit");
+		}
+		
 		[Then(@"I should not be able to remove approved out of adherences")]
 		public void ThenIShouldNotBeAbleToRemoveOutOfAdherences()
 		{

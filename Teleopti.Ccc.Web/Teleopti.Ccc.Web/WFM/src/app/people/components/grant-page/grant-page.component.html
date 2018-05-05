@@ -5,7 +5,7 @@
 	<div class="role-content">
 		<h3>Current roles</h3>
 		<div class="con-fluid-row" data-test-grant-current>
-			<div class="con-fluid-flex" *ngFor="let role of getRolesOfPeople()">
+			<div class="con-fluid-flex" *ngFor="let role of grantPageService.rolesOfPeople$ | async">
 				<chip [disabled]="true" [inactiveIcon]="isRoleOnAll(role.Id) ? 'mdi-check' : 'mdi-minus'" data-test-chip>
 					{{role.Name}}
 				</chip>
@@ -15,7 +15,7 @@
 		<h3>Available roles</h3>
 		<div class="con-fluid-row" data-test-grant-available>
 			<div class="con-fluid-flex" *ngFor="let role of getRolesNotOnAll()">
-				<chip-add (click)="toggleSelectedRole(role.Id)" [active]="isSelectedRole(role.Id)" data-test-chip>
+				<chip-add (click)="toggleSelectedRole(role)" [active]="isRoleSelected(role.Id)" data-test-chip>
 					{{role.Name}}
 				</chip-add>
 			</div>

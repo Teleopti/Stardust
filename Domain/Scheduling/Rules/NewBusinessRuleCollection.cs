@@ -175,6 +175,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				//    new WorkShiftMinMaxLengthCalculatorFactory())
 			};
 
+			if (schedulingResultStateHolder.UseMaximumWorkday) ret.Add(new MaximumWorkdayRule());
+
 			ret.Add(new MinWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
 
 			if (!schedulingResultStateHolder.TeamLeaderMode)

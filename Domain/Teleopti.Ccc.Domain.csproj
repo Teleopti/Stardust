@@ -112,10 +112,10 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.202\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.203\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.202\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.203\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -208,10 +208,15 @@
     <Compile Include="Config\WebTenantAuthenticationConfiguration.cs" />
     <Compile Include="InterfaceLegacy\Domain\OvertimeRequestStaffingCheckMethod.cs" />
     <Compile Include="Intraday\BacklogSkillTypesForecastCalculator.cs" />
+    <Compile Include="Optimization\PredictorCheck.cs" />
+    <Compile Include="Optimization\TeamBlock\CreatePersonalSkillDataExtractor.cs" />
+    <Compile Include="Optimization\TeamBlock\CreatePersonalSkillDataExtractorOLD.cs" />
     <Compile Include="MultiTenancy\PersonIdentitiesInputModel.cs" />
     <Compile Include="MultiTenancy\PersonIdentityModel.cs" />
+    <Compile Include="Optimization\TeamBlock\ForecastAndScheduleSumForDay.cs" />
     <Compile Include="Scheduling\IPredictShiftCategory.cs" />
     <Compile Include="Scheduling\IShiftCategoryPredictionModelLoader.cs" />
+    <Compile Include="Scheduling\Rules\MaximumWorkdayRule.cs" />
     <Compile Include="Scheduling\ShiftCategoryExample.cs" />
     <Compile Include="Scheduling\IShiftCategoryPredictionModel.cs" />
     <Compile Include="ApplicationLayer\ShiftCategoryHandlers\ShiftCategorySelectionModelUpdater.cs" />
@@ -455,7 +460,6 @@
     <Compile Include="Optimization\DayOffOptimizationDirectCallCommandHandler.cs" />
     <Compile Include="Optimization\DayOffOptimizationEventHandler.cs" />
     <Compile Include="Optimization\DayOffOptimizationWasOrdered.cs" />
-    <Compile Include="Optimization\IntradayOptimizationExecutorWithDeadlockRetries.cs" />
     <Compile Include="Optimization\TeamBlock\BlockPreferencesMapper.cs" />
     <Compile Include="Optimization\TeamBlock\PreferenceLimits.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentStateReadModelMaintainer.cs" />
@@ -4142,7 +4146,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="WorkflowControl\OvertimeRequestOpenPeriodSkillType.hbm.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\ShiftCategorySelection.hbm.xml">

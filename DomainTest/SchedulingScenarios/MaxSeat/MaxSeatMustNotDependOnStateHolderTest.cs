@@ -212,6 +212,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				set { throw new NotImplementedException(); }
 			}
 
+			public bool UseMaximumWorkday { get; set; }
+
 			public bool UseValidation
 			{
 				get { throw new NotImplementedException(); }

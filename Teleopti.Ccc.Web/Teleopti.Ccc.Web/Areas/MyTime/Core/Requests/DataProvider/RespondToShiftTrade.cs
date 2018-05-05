@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -107,7 +108,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				PersonRequestId = personRequest.Id.GetValueOrDefault(),
 				AcceptingPersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault(),
 				Message = personRequest.GetMessage(new NoFormatting()),
-				UseSiteOpenHoursRule = true
+				UseSiteOpenHoursRule = true,
+				UseMaximumWorkday = _toggleManager.IsEnabled(Toggles.MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889)
 			});
 		}
 

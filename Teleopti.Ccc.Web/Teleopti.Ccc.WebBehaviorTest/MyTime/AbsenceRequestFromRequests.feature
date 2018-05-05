@@ -241,6 +241,7 @@ Scenario: Default absence request values from request view when unchecked Fullda
 	Then I should see the request form with today's date as default
 	And I should see 08:00 - 17:00 as the default times
 
+@suppressHangfireQueue
 Scenario: Adding invalid absence request values
 	Given I am an agent
 	And I am viewing requests

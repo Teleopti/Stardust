@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.UserTexts;
@@ -137,7 +138,10 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 				else if (blockOption.BlockTypeValue == BlockFinderType.BetweenDayOff)
 				{
 					var scheduleDays = schedule.Value.ScheduledDayCollection(period);
-					var personPeriod = person.PersonPeriods(period).First();
+					var periods = person.PersonPeriods(period);
+					if(periods.IsEmpty())
+						continue;
+					var personPeriod = periods.First();
 
 					if (personPeriod.StartDate > scheduleDays.First().DateOnlyAsPeriod.DateOnly)
 						continue;

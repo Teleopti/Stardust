@@ -9533,6 +9533,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maximum consectutive days without dayoff.
+        /// </summary>
+        public static string DescriptionOfMaximumWorkdayRule {
+            get {
+                return ResourceManager.GetString("DescriptionOfMaximumWorkdayRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Minimum weekly rest.
         /// </summary>
         public static string DescriptionOfMinWeeklyRestRule {
@@ -24035,6 +24044,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string People {
             get {
                 return ResourceManager.GetString("People", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to People Access.
+        /// </summary>
+        public static string PeopleAccess {
+            get {
+                return ResourceManager.GetString("PeopleAccess", resourceCulture);
             }
         }
         

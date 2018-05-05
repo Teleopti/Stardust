@@ -117,6 +117,8 @@ ECHO Set Teleopti App pool recycling time ...
 "%appcmd%" set apppool /APPPOOL.NAME:"%PoolName%" /recycling.periodicRestart.time:00:00:00 /commit:apphost
 "%appcmd%" set apppool /APPPOOL.NAME:"%PoolName%" /-recycling.periodicRestart.schedule /commit:apphost
 "%appcmd%" set apppool /APPPOOL.NAME:"%PoolName%" /+recycling.periodicRestart.schedule.[value='04:00:00'] /commit:apphost
+ECHO Set StartMode to AlwaysRunning
+"%appcmd%" set apppool /APPPOOL.NAME:"%PoolName%" /startMode:AlwaysRunning /commit:apphost
 echo.
 exit /B
 
@@ -175,9 +177,10 @@ echo.
 if "%SSL%"=="True" "%appcmd%" set config "%DefaultSite%/%SitePath%" /section:access /sslFlags:Ssl /commit:APPHOST
 if "%SSL%"=="False" "%appcmd%" set config "%DefaultSite%/%SitePath%" /section:access /sslFlags:None /commit:APPHOST
 
-::4.5 Machine keys
+::4.5 Machine keys, and set preloadEnabled to true
 SET WebConfigPath=%INSTALLDIR%\%FolderPath%\web.config
 if "%SiteOrApp%"=="app" (
+"%appcmd%" set app "%DefaultSite%/%SitePath%" /preloadEnabled:true /commit:apphost
 echo Setting machine keys in "%WebConfigPath%"
 if EXIST "%WebConfigPath%" (SetMachineKeys.exe "%WebConfigPath%")
 )

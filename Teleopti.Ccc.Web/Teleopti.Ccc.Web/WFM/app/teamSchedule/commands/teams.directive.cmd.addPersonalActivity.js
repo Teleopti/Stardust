@@ -3,7 +3,7 @@
 
 	angular.module('wfm.teamSchedule').directive('addPersonalActivity', ['serviceDateFormatHelper', addPersonalActivity]);
 
-	function addPersonalActivity(serviceDateFormatHelper) {
+	function addPersonalActivity() {
 		return {
 			restrict: 'E',
 			scope: {},
@@ -76,14 +76,15 @@
 		};
 
 		vm.updateInvalidAgents = function () {
+			vm.invalidAgents = [];
 			if (!$scope.newPersonalActivityForm.$valid)
 				return;
 			var belongsToDates = decidePersonBelongsToDates(vm.selectedAgents, getTimeRangeMoment());
 
 			for (var i = 0; i < belongsToDates.length; i++) {
-				if (!belongsToDates[i].Date) vm.invalidAgents.push(vm.selectedAgents[i]);
+				if (!belongsToDates[i].Date)
+					vm.invalidAgents.push(vm.selectedAgents[i]);
 			}
-
 			vm.notAllowedNameListString = vm.invalidAgents.map(function (x) { return x.Name; }).join(', ');
 		};
 
@@ -142,14 +143,18 @@
 			});
 			return {
 				PersonDates: decidePersonBelongsToDates(validAgents, getTimeRangeMoment()),
-				StartTime: vm.convertTime(serviceDateFormatHelper.getDateTime(vm.timeRange.startTime)),
-				EndTime: vm.convertTime(serviceDateFormatHelper.getDateTime(vm.timeRange.endTime)),
+				StartTime: vm.convertTime(getDateTimeInTimeZone(vm.timeRange.startTime)),
+				EndTime: vm.convertTime(getDateTimeInTimeZone(vm.timeRange.endTime)),
 				ActivityId: vm.selectedActivityId,
 				ActivityType: 2,
 				TrackedCommandInfo: {
 					TrackId: vm.trackId
 				}
 			};
+		}
+
+		function getDateTimeInTimeZone(dateTime) {
+			return serviceDateFormatHelper.getDateTime(moment.tz(dateTime, vm.currentTimezone()));
 		}
 
 		vm.addPersonalActivity = function () {

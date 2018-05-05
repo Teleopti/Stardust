@@ -1,11 +1,15 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
 
 namespace Teleopti.Wfm.Api.Test
 {
-	public class AuthorizationTest : ApiTest
+	[ApiTest]
+	public class AuthorizationTest
 	{
+		public IApiHttpClient Client;
+
 		[Test]
 		public async Task ShouldRequireAuthorization()
 		{

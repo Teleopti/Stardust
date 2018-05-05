@@ -1,16 +1,20 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 
 namespace Teleopti.Wfm.Api.Test
 {
-	public class CommandListingTest : ApiTest
+	[ApiTest]
+	public class CommandListingTest
 	{
+		public IApiHttpClient Client;
+
 		[Test]
 		public async Task ShouldListCommands()
 		{
-			Authorize();
+			Client.Authorize();
 
 			var result = await Client.GetAsync("/command");
 			result.EnsureSuccessStatusCode();

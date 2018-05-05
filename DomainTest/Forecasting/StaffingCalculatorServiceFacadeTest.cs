@@ -31,16 +31,17 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		[Test]
 		public void UtilizationShouldHandleChatAsWell()
 		{
-			var agents = Target.AgentsUseOccupancy(.8, 20, 5d, 550, TimeSpan.FromMinutes(15), .9, .9, 2);
-			var calculatedOcc = Target.Utilization(agents, 5d, 550, TimeSpan.FromMinutes(15), 2);
+			var agentsAndOccupancy = Target.AgentsUseOccupancy(.8, 20, 5d, 550, TimeSpan.FromMinutes(15), .9, .9, 2,0);
+			var calculatedOcc = Target.Utilization(agentsAndOccupancy.Agents, 5d, 550, TimeSpan.FromMinutes(15), 2, agentsAndOccupancy.Occupancy);
 			calculatedOcc.Should().Be.IncludedIn(.89, .91);
+
 		}
 
 		[Test]
 		public void BetterEslCalculationOnSmallVolumeChatUseLinearIfTaskDivMaxParallelIsTwoOrLess()
 		{
 			var tasks = 4d;
-			var agents = Target.AgentsUseOccupancy(.8, 20, tasks, 550, TimeSpan.FromMinutes(15), 0, 1, 3);
+			var agents = Target.AgentsUseOccupancy(.8, 20, tasks, 550, TimeSpan.FromMinutes(15), 0, 1, 3,0).Agents;
 			var esl = Target.ServiceLevelAchievedOcc(agents, 20, tasks, 550, TimeSpan.FromMinutes(15), .8, agents, 3);
 			esl.Should().Be.IncludedIn(.79, .81);
 		}
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		public void EslCalculationOnLargerVolymesShouldNotUseLinear()
 		{
 			var tasks = 40d;
-			var agents = Target.AgentsUseOccupancy(.8, 20, tasks, 550, TimeSpan.FromMinutes(15), 0, 1, 3);
+			var agents = Target.AgentsUseOccupancy(.8, 20, tasks, 550, TimeSpan.FromMinutes(15), 0, 1, 3,0).Agents;
 			var esl = Target.ServiceLevelAchievedOcc(agents, 20, tasks, 550, TimeSpan.FromMinutes(15), .8, agents, 3);
 			esl.Should().Be.IncludedIn(.79, .81);
 		}
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		public void ShouldCalculateLinearEslToMatchSlaWhenPerfectlyStaffed()
 		{
 			var tasks = 6d;
-			var agents = Target.AgentsUseOccupancy(.8, 20, tasks, 550, TimeSpan.FromMinutes(15), 0, 1, 3);
+			var agents = Target.AgentsUseOccupancy(.8, 20, tasks, 550, TimeSpan.FromMinutes(15), 0, 1, 3,0).Agents;
 			var esl = Target.LinearEsl(agents, agents, .8);
 			esl.Should().Be.IncludedIn(.79, .81);
 		}
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		public void LinearEslCanNotBeNegative()
 		{
 			var tasks = 6d;
-			var agents = Target.AgentsUseOccupancy(.8, 20, tasks, 550, TimeSpan.FromMinutes(15), 0, 1, 3);
+			var agents = Target.AgentsUseOccupancy(.8, 20, tasks, 550, TimeSpan.FromMinutes(15), 0, 1, 3,0).Agents;
 			var esl = Target.LinearEsl(agents, 0, .8);
 			esl.Should().Be.EqualTo(0);
 		}
@@ -76,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		public void LinearEslCanNotBeMoreThan100Percent()
 		{
 			var tasks = 6d;
-			var agents = Target.AgentsUseOccupancy(.8, 20, tasks, 550, TimeSpan.FromMinutes(15), 0, 1, 3);
+			var agents = Target.AgentsUseOccupancy(.8, 20, tasks, 550, TimeSpan.FromMinutes(15), 0, 1, 3,0).Agents;
 			var esl = Target.LinearEsl(agents, agents * 10, .8d);
 			esl.Should().Be.EqualTo(1);
 		}
@@ -92,48 +93,48 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		public void TestMultipleCombinationsForCallsAndAht([Values(0.1,1,10,100,1000,10000)] double tasks, [Values(0.1,1,10,100,1000,10000)] double aht)
 
 		{
-			var agents = Target.AgentsUseOccupancy(.8, 20, tasks, aht, TimeSpan.FromMinutes(15), 0, 1, 1);
+			var agents = Target.AgentsUseOccupancy(.8, 20, tasks, aht, TimeSpan.FromMinutes(15), 0, 1, 1,0);
 			agents.Should().Not.Be.EqualTo(double.NaN);
 		}
 
 		[Test]
 		public void ErlangCErlangAComparison()
 		{
-			var agents = Target.AgentsUseOccupancy(.8, 20, 37, 320, TimeSpan.FromMinutes(15), 0.3, 0.9, 1);
+			var agents = Target.AgentsUseOccupancy(.8, 20, 37, 320, TimeSpan.FromMinutes(15), 0.3, 0.9, 1,0).Agents;
 			Math.Round(agents,2).Should().Be.EqualTo(16.87);
 		}
 		[Test]
 		public void ErlangCErlangAComparison1()
 		{
-			var agents = Target.AgentsUseOccupancy(.8, 20, 38, 320, TimeSpan.FromMinutes(15), 0.3, 0.9, 1);
+			var agents = Target.AgentsUseOccupancy(.8, 20, 38, 320, TimeSpan.FromMinutes(15), 0.3, 0.9, 1,0).Agents;
 			Math.Round(agents, 1).Should().Be.EqualTo(17.3);
 		}
 
 		[Test]
 		public void ErlangCErlangAComparison2()
 		{
-			var agents = Target.AgentsUseOccupancy(.8, 20, 40, 3.75, TimeSpan.FromMinutes(15), 0.3, 0.9, 1);
+			var agents = Target.AgentsUseOccupancy(.8, 20, 40, 3.75, TimeSpan.FromMinutes(15), 0.3, 0.9, 1,0).Agents;
 			Math.Round(agents, 2).Should().Be.EqualTo(0.56);
 		}
 
 		[Test]
 		public void ErlangCErlangAComparison3()
 		{
-			var agents = Target.AgentsUseOccupancy(.8, 20, 17, 320, TimeSpan.FromMinutes(30), 0.3, 0.9, 1);
+			var agents = Target.AgentsUseOccupancy(.8, 20, 17, 320, TimeSpan.FromMinutes(30), 0.3, 0.9, 1,0).Agents;
 			Math.Round(agents, 1).Should().Be.EqualTo(5.1);
 		}
 
 		[Test]
 		public void ErlangCErlangAComparison4()
 		{
-			var agents = Target.AgentsUseOccupancy(.8, 20, 8, 320, TimeSpan.FromMinutes(30), 0.3, 0.9, 1);
+			var agents = Target.AgentsUseOccupancy(.8, 20, 8, 320, TimeSpan.FromMinutes(30), 0.3, 0.9, 1,0).Agents;
 			Math.Round(agents, 2).Should().Be.EqualTo(2.97);
 		}
 
 		[Test]
 		public void ErlangCErlangAComparison5()
 		{
-			var agents = Target.AgentsUseOccupancy(.8, 20, 32, 10, TimeSpan.FromMinutes(30), 0.3, 0.9, 1);
+			var agents = Target.AgentsUseOccupancy(.8, 20, 32, 10, TimeSpan.FromMinutes(30), 0.3, 0.9, 1,0).Agents;
 			Math.Round(agents, 2).Should().Be.EqualTo(0.59);
 		}
 
@@ -175,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		{
 			const double tasks = 6d;
 			const double agents = 2d;
-			var forecasted = Target.AgentsUseOccupancy(.8, 20, tasks, 850, TimeSpan.FromMinutes(15), 0, 1, 3);	
+			var forecasted = Target.AgentsUseOccupancy(.8, 20, tasks, 850, TimeSpan.FromMinutes(15), 0, 1, 3,0).Agents;	
 			var esl = Target.ServiceLevelAchievedOcc(agents, 20, tasks, 850, TimeSpan.FromMinutes(15), .8, forecasted, 3);
 
 			esl.Should().Be.IncludedIn(.80, .82);
@@ -194,7 +195,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			const double minimumOccupancy = 0;
 
 			var agents = Target.AgentsUseOccupancy(targetServiceLevelPercentage, serviceLevelSeconds, callsPerInterval,
-				averageHandelingTimeSeconds, TimeSpan.FromSeconds(intervalLengthInSeconds), minimumOccupancy, maximumOccupancy, 1);
+				averageHandelingTimeSeconds, TimeSpan.FromSeconds(intervalLengthInSeconds), minimumOccupancy, maximumOccupancy, 1,0).Agents;
 
 			Assert.AreEqual(Math.Round(agents, 2), 7.00);
 		}

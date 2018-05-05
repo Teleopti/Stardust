@@ -26,9 +26,11 @@ function fnLoopSiteApplication ([string]$applicationName, [string]$netVersion)
 
 function fnChangeAppPoolVersion ([System.Object]$site, [string]$ManagedRuntimeVersion)
 {
+	$site.SetAttributeValue("preloadEnabled", $true)
 	$appPoolName = $site.ApplicationPoolName;
 	$apppoolobject = $iis.ApplicationPools[$appPoolName]
 	$apppoolobject.ManagedRuntimeVersion = $ManagedRuntimeVersion;
+	$apppoolobject.startMode = "alwaysrunning";
 	$iis.CommitChanges();
 }
 

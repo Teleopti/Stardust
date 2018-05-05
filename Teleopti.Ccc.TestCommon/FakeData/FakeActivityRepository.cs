@@ -33,6 +33,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return newActivity;
 		}
 		
+		public IActivity Has()
+		{
+			return Has("_");
+		}
+		
 		public void Add(IActivity activity)
 		{
 			_activities.Add(activity);

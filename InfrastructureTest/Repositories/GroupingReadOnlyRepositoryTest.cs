@@ -466,6 +466,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				orgs.Count().Should().Be.EqualTo(1);
 				orgs[team.Site.Id].Count().Should().Be.EqualTo(1);
 				orgs[team.Site.Id].Single().GroupName.Should().Be.EqualTo("Dummy Site/Dummy Team");
+				orgs[team.Site.Id].Single().PersonId.Should().Be.EqualTo(personToTest.Id);
 				result[normalGroups.First().PageId].Single().GroupName.Should().Be.EqualTo("dummyContract");
 
 			});
