@@ -3,17 +3,15 @@ module.exports = function(config) {
 		basePath: '',
 		files: [],
 		exclude: ['app/**/*'],
-		frameworks: ['jasmine', '@angular/cli'],
+		frameworks: ['jasmine', '@angular-devkit/build-angular'],
 		plugins: [
-			require('@angular/cli/plugins/karma'),
+			require('@angular-devkit/build-angular/plugins/karma'),
 			require('karma-jasmine'),
 			require('karma-mocha-reporter'),
 			require('karma-chrome-launcher')
 		],
 
-		preprocessors: {
-			'./src/test.ts': ['@angular/cli']
-		},
+		preprocessors: {},
 		captureTimeout: 210000,
 		browserDisconnectTolerance: 3,
 		browserDisconnectTimeout: 210000,
