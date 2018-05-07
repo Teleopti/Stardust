@@ -69,6 +69,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[SetUp]
         public void Setup()
         {
+			//just a hack ensuring static variables are set "correct" before these test
+			new SetupFixtureForAssembly().RunBeforeAnyTest();
+			//
             _mocks = new MockRepository();
             _gridlockManager = new GridlockManager();
 			_timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time");
