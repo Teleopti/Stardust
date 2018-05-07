@@ -351,7 +351,6 @@
     <Compile Include="RealTimeAdherence\Domain\Service\ExternalLogonPersonMappingTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\IncorrectOutOfAdherenceCount35829.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\MeetingTest.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\NotificationExtension.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\PersonActivityActualStartEventTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\PersonActivityStartEventTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\PersonAdherenceEventsTest.cs" />
@@ -781,7 +780,6 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactSchedulePersonMapperTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleMapperTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleTimeMapperTest.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\FakePublishEventsFromEventHandlers.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModelUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventShiftExtensionTest.cs" />

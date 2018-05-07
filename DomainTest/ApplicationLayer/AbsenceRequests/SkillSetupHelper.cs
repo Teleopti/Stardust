@@ -139,22 +139,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return skillStats;
 		}
 
-		public static IList<SkillIntervalStatistics> CreateSkillDaysYesterdayTodayTomorrow(ISkill skill, Scenario scenario,
-			DateTime userNow, DateTime latestStatsTime, FakeSkillDayRepository skillDayRepository, FakeUserTimeZone timeZone)
-		{
-			var skillStats = new List<SkillIntervalStatistics>();
-			var timePeriod = new TimePeriod(0, 0, 24, 0);
-			var skillYesterday = CreateSkillDay(skill, scenario, userNow.AddDays(-1), timePeriod, false);
-			var skillToday = CreateSkillDay(skill, scenario, userNow, timePeriod, false);
-			var skillTomorrow = CreateSkillDay(skill, scenario, userNow.AddDays(1), timePeriod, false);
-			skillDayRepository.Has(skillYesterday, skillToday, skillTomorrow);
-			skillStats.AddRange(CreateStatistics(skillYesterday, latestStatsTime, timeZone));
-			skillStats.AddRange(CreateStatistics(skillToday, latestStatsTime, timeZone));
-			skillStats.AddRange(CreateStatistics(skillTomorrow, latestStatsTime, timeZone));
-
-			return skillStats;
-		}
-
 		public static double CalculateAverageDeviation(IList<SkillIntervalStatistics> actualCallsStats, ISkillDay skillDay, FakeUserTimeZone timeZone)
 		{
 			var listdeviationPerInterval = new List<double>();

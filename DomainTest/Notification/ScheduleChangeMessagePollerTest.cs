@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		public ScheduleChangeMessagePoller Target;
 		public FakeASMScheduleChangeTimeRepository FakeASMScheduleChangeTimeRepository;
 		public FakeScenarioRepository ScenarioRepository;
-		public DefaultScenarioFromRepository DefaultScenarioFromRepository;
 		public FakeLoggedOnUser LoggedOnUser;
 		public MutableNow Now;
 		

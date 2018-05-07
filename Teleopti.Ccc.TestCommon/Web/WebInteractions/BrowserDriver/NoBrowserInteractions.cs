@@ -88,16 +88,6 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 			throw new NotSupportedException(notAllowedAction);
 		}
 
-		public void AssertEventualExists(string selector)
-		{
-			throw new NotSupportedException(notAllowedAction);
-		}
-
-		public void AssertEventualNotExists(string existsSelector, string notExistsSelector)
-		{
-			throw new NotSupportedException(notAllowedAction);
-		}
-
 		public void AssertAnyContains(string selector, string text)
 		{
 			throw new NotSupportedException(notAllowedAction);

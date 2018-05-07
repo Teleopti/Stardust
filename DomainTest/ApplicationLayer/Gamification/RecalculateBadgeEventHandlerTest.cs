@@ -13,7 +13,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -30,7 +29,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Gamification
 		public FakeJobResultRepository JobResultRepository;
 		public FakeAgentBadgeWithRankTransactionRepository AgentBadgeWithRankTransactionRepository;
 		public FakeAgentBadgeTransactionRepository AgentBadgeTransactionRepository;
-		public IPerformBadgeCalculation PerformBadgeCalculation;
 		public FakeExternalPerformanceDataRepository ExternalPerformanceDataRepository;
 		public FakePersonRepository PersonRepository;
 		public FakeTeamGamificationSettingRepository TeamGamificationSettingRepository;

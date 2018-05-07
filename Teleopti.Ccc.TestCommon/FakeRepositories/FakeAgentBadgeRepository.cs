@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakeAgentBadgeRepository: IAgentBadgeRepository
 	{
 		private IList<AgentBadge> _agentBadges = new List<AgentBadge>();
-		private int _findByPersonListWasCalledTimes = 0;
 
 		public void Add(AgentBadge badge)
 		{
@@ -47,7 +46,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<AgentBadge> Find(IEnumerable<Guid> personIdList)
 		{
-			_findByPersonListWasCalledTimes++;
 			return (from agentBadge in _agentBadges
 				from personId in personIdList
 				where personId == agentBadge.Person
@@ -67,11 +65,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 													&& x.BadgeType == badgeType
 													&& x.IsExternal == isExternal
 													&& period.Contains(new DateOnly(x.LastCalculatedDate)));
-		}
-
-		public int FindByPersonListCalledTimes()
-		{
-			return _findByPersonListWasCalledTimes;
 		}
 	}
 }

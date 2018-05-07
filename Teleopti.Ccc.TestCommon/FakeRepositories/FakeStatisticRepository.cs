@@ -85,24 +85,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IList LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date, int answeredCallsThreshold,
-			Guid businessUnitId, int? timeoutInSecond)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IList LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod adherenceCalculationMethod,
-			string timezoneCode, DateTime date, Percent adherenceThreshold, Guid businessUnitId, int? timeoutInSecond)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IList LoadAgentsUnderThresholdForAHT(string timezoneCode, DateTime date, TimeSpan ahtThreshold,
-			Guid businessUnitId, int? timeoutInSecond)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IEnumerable<HistoricalDataDetail> GetLogObjectDetails()
 		{
 			return new List<HistoricalDataDetail>();

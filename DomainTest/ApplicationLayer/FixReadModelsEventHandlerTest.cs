@@ -10,8 +10,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Schedule
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -33,7 +31,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeScheduleDayReadModelRepository ScheduleDayReadModelRepository;
 		public FakeScheduleStorage_DoNotUse ScheduleStorage;
-		public ReadModelScheduleDayValidator ReadModelScheduleDayValidator;
 		public FixReadModelsEventHandler FixHandler;
 		public IReadModelValidationResultPersister ValidationResultPersister;
 		public FakePersonScheduleDayReadModelPersister PersonScheduleDayReadModelPersister;

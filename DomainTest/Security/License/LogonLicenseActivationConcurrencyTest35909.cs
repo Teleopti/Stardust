@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.DomainTest.Security.License
 		public ILogOnOff LogOnOff;
 		public IAuthorization Authorization;
 		public ICurrentTeleoptiPrincipal Principal;
-		public ClaimSetForApplicationRole ClaimSetForApplicationRole;
 		public ConcurrencyRunner Run;
 		
 		[Test]
