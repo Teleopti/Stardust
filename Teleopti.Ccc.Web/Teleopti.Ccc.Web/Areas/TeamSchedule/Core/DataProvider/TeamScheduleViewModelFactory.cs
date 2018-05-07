@@ -190,12 +190,17 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private GroupScheduleViewModel createViewModelForPeople(IList<Guid> targetIds, SearchDaySchedulesInput input)
 		{
 			var permittedPersons = new List<IPerson>();
+			var canSeeUnpublishedSchedules =
+				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
 			foreach (var batch in targetIds.Batch(251))
 			{
 				var batchPermittedPersons = getPermittedPersons(batch.ToArray(), input.DateInUserTimeZone);
 				if (input.IsOnlyAbsences)
 				{
-					batchPermittedPersons = _searchProvider.SearchPermittedPeopleWithAbsence(batchPermittedPersons, input.DateInUserTimeZone).ToList();
+					var scheduleDaysForPerson =
+						_scheduleProvider.GetScheduleForPersons(input.DateInUserTimeZone, batchPermittedPersons);
+					batchPermittedPersons =
+						scheduleDaysForPerson.Where(sd => (canSeeUnpublishedSchedules || sd.IsFullyPublished)  && sd.HasAbsenceProjection()).Select(sd => sd.Person).ToList();
 				}
 				permittedPersons.AddRange(batchPermittedPersons);
 				if (isResultTooMany(permittedPersons))
@@ -210,8 +215,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 			var peopleCanSeeConfidentialAbsencesFor = _searchProvider.GetPermittedPersonIdList(permittedPersons, input.DateInUserTimeZone,
 					DefinedRaptorApplicationFunctionPaths.ViewConfidential).ToList();
-			var canSeeUnpublishedSchedules =
-				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
+			
 
 			var scheduleDays = _scheduleProvider.GetScheduleForPersons(input.DateInUserTimeZone, permittedPersons, true).ToArray();
 			var scheduleDayLookup = scheduleDays.ToLookup(s => s.Person);

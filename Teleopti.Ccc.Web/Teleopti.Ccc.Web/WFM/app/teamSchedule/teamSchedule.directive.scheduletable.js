@@ -153,7 +153,7 @@
 			}
 			for (var i = 0; i < vm.scheduleVm.Schedules.length; i++) {
 				var personSchedule = vm.scheduleVm.Schedules[i];
-				if (!selectedPeople[personSchedule.PersonId]) {
+				if (!selectedPeople[personSchedule.PersonId] || !selectedPeople[personSchedule.PersonId].Checked) {
 					isAllSelected = false;
 					break;
 				}

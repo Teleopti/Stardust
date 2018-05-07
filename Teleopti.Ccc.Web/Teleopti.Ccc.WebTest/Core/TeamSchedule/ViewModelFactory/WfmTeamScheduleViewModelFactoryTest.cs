@@ -238,7 +238,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PersonAssignmentRepository.Has(pa);
 
 			var absencePeriod = new DateTimePeriod(new DateTime(2018, 04, 03, 10, 0, 0, DateTimeKind.Utc), new DateTime(2018, 04, 03, 11, 0, 0, DateTimeKind.Utc));
-			var activity = ActivityFactory.CreateActivity("activity");
 			var absence = AbsenceFactory.CreateAbsence("confidential absence");
 			absence.Confidential = true;
 
@@ -334,6 +333,242 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			});
 			var summary = viewModel.Schedules.FirstOrDefault().UnderlyingScheduleSummary;
 			summary.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldNotReturnPersonWhoHasNoShiftButPartialDayAbsenceWhenFilterOnOnlyShowPersonWithAbsencesIsOn()
+		{
+			var personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes").WithId();
+
+			var scenario = CurrentScenario.Has("Default");
+			var date = new DateOnly(2018, 04, 03);
+			var site = SiteFactory.CreateSiteWithOneTeam().WithId();
+			var team = site.TeamCollection.First().WithId();
+			personInUtc.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, team));
+
+			PersonRepo.Has(personInUtc);
+			PersonFinderReadOnlyRepository.Has(personInUtc);
+
+			var period = new DateTimePeriod(new DateTime(2018, 04, 03, 10, 0, 0, DateTimeKind.Utc), new DateTime(2018, 04, 03, 11, 0, 0, DateTimeKind.Utc));
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario, period);
+			PersonAbsenceRepository.Add(personAbsence);
+
+			var viewModel = Target.CreateViewModel(new SearchDaySchedulesInput
+			{
+				DateInUserTimeZone = date,
+				GroupIds = new[] { team.Id.Value },
+				CurrentPageIndex = 1,
+				PageSize = 20,
+				IsOnlyAbsences = true
+
+			});
+
+			viewModel.Schedules.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldNotReturnPersonWhoHasShiftAndIntraDayAbsenceOutsideOfShiftWhenFilterOnOnlyShowPersonWithAbsencesIsOn()
+		{
+			var personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes").WithId();
+
+			var scenario = CurrentScenario.Has("Default");
+			var date = new DateOnly(2018, 04, 03);
+			var site = SiteFactory.CreateSiteWithOneTeam().WithId();
+			var team = site.TeamCollection.First().WithId();
+			personInUtc.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, team));
+
+			PersonRepo.Has(personInUtc);
+			PersonFinderReadOnlyRepository.Has(personInUtc);
+
+			var assPeriod = new DateTimePeriod(new DateTime(2018, 04, 03, 10, 0, 0, DateTimeKind.Utc), new DateTime(2018, 04, 03, 11, 0, 0, DateTimeKind.Utc));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc, scenario, assPeriod);
+			PersonAssignmentRepository.Has(pa);
+			var absPeriod = new DateTimePeriod(new DateTime(2018, 04, 03, 12, 0, 0, DateTimeKind.Utc), new DateTime(2018, 04, 03, 13, 0, 0, DateTimeKind.Utc));
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario, absPeriod);
+			PersonAbsenceRepository.Add(personAbsence);
+
+			var viewModel = Target.CreateViewModel(new SearchDaySchedulesInput
+			{
+				DateInUserTimeZone = date,
+				GroupIds = new[] { team.Id.Value },
+				CurrentPageIndex = 1,
+				PageSize = 20,
+				IsOnlyAbsences = true
+
+			});
+
+			viewModel.Schedules.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldNotReturnPersonWhoHasShiftAndIntraDayAbsenceJustAfterShiftWhenFilterOnOnlyShowPersonWithAbsencesIsOn()
+		{
+			var personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes").WithId();
+
+			var scenario = CurrentScenario.Has("Default");
+			var date = new DateOnly(2018, 04, 03);
+			var site = SiteFactory.CreateSiteWithOneTeam().WithId();
+			var team = site.TeamCollection.First().WithId();
+			personInUtc.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, team));
+
+			PersonRepo.Has(personInUtc);
+			PersonFinderReadOnlyRepository.Has(personInUtc);
+
+			var assPeriod = new DateTimePeriod(new DateTime(2018, 04, 03, 10, 0, 0, DateTimeKind.Utc), new DateTime(2018, 04, 03, 11, 0, 0, DateTimeKind.Utc));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc, scenario, assPeriod);
+			PersonAssignmentRepository.Has(pa);
+			var absPeriod = new DateTimePeriod(new DateTime(2018, 04, 03, 11, 0, 0, DateTimeKind.Utc), new DateTime(2018, 04, 03, 13, 0, 0, DateTimeKind.Utc));
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario, absPeriod);
+			PersonAbsenceRepository.Add(personAbsence);
+
+			var viewModel = Target.CreateViewModel(new SearchDaySchedulesInput
+			{
+				DateInUserTimeZone = date,
+				GroupIds = new[] { team.Id.Value },
+				CurrentPageIndex = 1,
+				PageSize = 20,
+				IsOnlyAbsences = true
+
+			});
+
+			viewModel.Schedules.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldReturnPersonWhoHasShiftAndFullDayAbsenceWhenFilterOnOnlyShowPersonWithAbsencesIsOn()
+		{
+			var personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes").WithId();
+			
+			var scenario = CurrentScenario.Has("Default");
+			var date = new DateOnly(2018, 04, 03);
+			var site = SiteFactory.CreateSiteWithOneTeam().WithId();
+			var team = site.TeamCollection.First().WithId();
+			personInUtc.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, team));
+
+			PersonRepo.Has(personInUtc);
+			PersonFinderReadOnlyRepository.Has(personInUtc);
+
+			var assPeriod = new DateTimePeriod(new DateTime(2018, 04, 03, 10, 0, 0, DateTimeKind.Utc), new DateTime(2018, 04, 03, 11, 0, 0, DateTimeKind.Utc));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc, scenario, assPeriod);
+			PersonAssignmentRepository.Has(pa);
+			var absPeriod = new DateTimePeriod(new DateTime(2018, 04, 03, 0, 0, 0, DateTimeKind.Utc), new DateTime(2018, 04, 03, 23, 0, 0, DateTimeKind.Utc));
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario, absPeriod);
+			PersonAbsenceRepository.Add(personAbsence);
+
+			var viewModel = Target.CreateViewModel(new SearchDaySchedulesInput
+			{
+				DateInUserTimeZone = date,
+				GroupIds = new[] { team.Id.Value },
+				CurrentPageIndex = 1,
+				PageSize = 20,
+				IsOnlyAbsences = true
+
+			});
+
+			viewModel.Schedules.Select(s => s.PersonId).Distinct().Single().Should().Be.EqualTo(personInUtc.Id.ToString());
+		}
+
+		[Test]
+		public void ShouldReturnPersonWhoHasNoShiftButFullDayAbsenceWhenFilterOnOnlyShowPersonWithAbsencesIsOn()
+		{
+			var personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes").WithId();
+			
+			var scenario = CurrentScenario.Has("Default");
+			var date = new DateOnly(2018, 04, 03);
+			var site = SiteFactory.CreateSiteWithOneTeam().WithId();
+			var team = site.TeamCollection.First().WithId();
+			personInUtc.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, team));
+
+			PersonRepo.Has(personInUtc);
+			PersonFinderReadOnlyRepository.Has(personInUtc);
+
+			var absPeriod = new DateTimePeriod(new DateTime(2018, 04, 03, 0, 0, 0, DateTimeKind.Utc), new DateTime(2018, 04, 03, 23, 0, 0, DateTimeKind.Utc));
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario, absPeriod);
+			PersonAbsenceRepository.Add(personAbsence);
+
+			var viewModel = Target.CreateViewModel(new SearchDaySchedulesInput
+			{
+				DateInUserTimeZone = date,
+				GroupIds = new[] { team.Id.Value },
+				CurrentPageIndex = 1,
+				PageSize = 20,
+				IsOnlyAbsences = true
+
+			});
+
+			viewModel.Schedules.Select(s => s.PersonId).Distinct().Single().Should().Be.EqualTo(personInUtc.Id.ToString());
+		}
+
+		[Test]
+		public void ShouldReturnPersonWhoHasShiftAndIntraDayAbsenceWhenFilterOnOnlyShowPersonWithAbsencesIsOn()
+		{
+			var personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes").WithId();
+			
+			var scenario = CurrentScenario.Has("Default");
+			var date = new DateOnly(2018, 04, 03);
+			var site = SiteFactory.CreateSiteWithOneTeam().WithId();
+			var team = site.TeamCollection.First().WithId();
+			personInUtc.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, team));
+
+			PersonRepo.Has(personInUtc);
+			PersonFinderReadOnlyRepository.Has(personInUtc);
+
+			var assPeriod = new DateTimePeriod(new DateTime(2018, 04, 03, 8, 0, 0, DateTimeKind.Utc), new DateTime(2018, 04, 03, 17, 0, 0, DateTimeKind.Utc));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc, scenario, assPeriod);
+			PersonAssignmentRepository.Has(pa);
+			var absPeriod = new DateTimePeriod(new DateTime(2018, 04, 03, 9, 0, 0, DateTimeKind.Utc), new DateTime(2018, 04, 03, 10, 0, 0, DateTimeKind.Utc));
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario, absPeriod);
+			PersonAbsenceRepository.Add(personAbsence);
+
+			var viewModel = Target.CreateViewModel(new SearchDaySchedulesInput
+			{
+				DateInUserTimeZone = date,
+				GroupIds = new[] { team.Id.Value },
+				CurrentPageIndex = 1,
+				PageSize = 20,
+				IsOnlyAbsences = true
+
+			});
+
+			viewModel.Schedules.Select(s => s.PersonId).Distinct().Single().Should().Be.EqualTo(personInUtc.Id.ToString());
+		}
+
+		[Test]
+		public void ShouldNotReturnPersonWhoHasUnpublishedShiftAndIntraDayAbsenceWhenFilterOnOnlyShowPersonWithAbsencesIsOn()
+		{
+			var personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes").WithId();
+			PermissionProvider.Enable();
+
+			personInUtc.WorkflowControlSet = new WorkflowControlSet();
+			personInUtc.WorkflowControlSet.SchedulePublishedToDate = new DateTime(2018, 4, 1);
+
+			var scenario = CurrentScenario.Has("Default");
+			var date = new DateOnly(2018, 04, 03);
+			var site = SiteFactory.CreateSiteWithOneTeam().WithId();
+			var team = site.TeamCollection.First().WithId();
+			personInUtc.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(date, team));
+
+			PersonRepo.Has(personInUtc);
+			PersonFinderReadOnlyRepository.Has(personInUtc);
+
+			var assPeriod = new DateTimePeriod(new DateTime(2018, 04, 03, 8, 0, 0, DateTimeKind.Utc), new DateTime(2018, 04, 03, 17, 0, 0, DateTimeKind.Utc));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc, scenario, assPeriod);
+			PersonAssignmentRepository.Has(pa);
+			var absPeriod = new DateTimePeriod(new DateTime(2018, 04, 03, 9, 0, 0, DateTimeKind.Utc), new DateTime(2018, 04, 03, 10, 0, 0, DateTimeKind.Utc));
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario, absPeriod);
+			PersonAbsenceRepository.Add(personAbsence);
+
+			var viewModel = Target.CreateViewModel(new SearchDaySchedulesInput
+			{
+				DateInUserTimeZone = date,
+				GroupIds = new[] { team.Id.Value },
+				CurrentPageIndex = 1,
+				PageSize = 20,
+				IsOnlyAbsences = true
+
+			});
+
+			viewModel.Schedules.Should().Be.Empty();
 		}
 
 	}

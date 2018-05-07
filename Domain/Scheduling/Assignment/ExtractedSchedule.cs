@@ -773,5 +773,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 			return significantPart == SchedulePartView.FullDayAbsence;
 		}
+
+		public static bool HasAbsenceProjection(this IScheduleDay scheduleDay)
+		{
+			return scheduleDay != null &&
+				   scheduleDay.ProjectionService().CreateProjection().Any(x => { return x.Payload is IAbsence; });
+		}
 	}
 }

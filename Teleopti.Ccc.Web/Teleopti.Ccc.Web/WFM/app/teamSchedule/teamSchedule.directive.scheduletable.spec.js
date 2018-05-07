@@ -20,6 +20,10 @@ describe('teamschedule schedule table controller tests', function () {
 		controller = setUpController($controller);
 	}));
 
+	afterEach(function() {
+		controller = undefined;
+	});
+
 	it("can select and deselect one person", inject(function () {
 		var schedules = [
 			createSchedule('1111', '2015-01-01', null, [{ startHour: 8, endHour: 16 }]),
@@ -394,9 +398,10 @@ describe('teamschedule schedule table controller tests', function () {
 		];
 		schedules[0].IsSelected = true;
 		schedules[1].IsSelected = true;
-		personSelection.personInfo['1111'] = { checked: true };
-		personSelection.personInfo['2222'] = { checked: true };
-		controller.scheduleVm = { Schedules: schedules };
+		personSelection.personInfo['1111'] = { Checked: true };
+		personSelection.personInfo['2222'] = { Checked: true };
+		scheduleManagement.groupScheduleVm = { Schedules: schedules }
+		controller.init();
 		scope.$apply();
 
 		expect(controller.toggleAllInCurrentPage).toEqual(true);
@@ -415,6 +420,78 @@ describe('teamschedule schedule table controller tests', function () {
 
 		expect(controller.hasUnderlyingSchedules(schedules[0])).not.toBeNull();
 	});
+
+
+	it('should not make current page selected when only one person on the page and the person is partially selected', inject(function () {
+		var personActivity1 = {
+			ShiftLayerIds: ['111'],
+			ParentPersonAbsences: null,
+			Start: "2016-02-19 08:00",
+			Minutes: 640,
+			Selected: false,
+			ToggleSelection: function () {
+				this.Selected = !this.Selected;
+			},
+			Selectable: function () { return true; }
+		};
+		var personActivity2 = {
+			ShiftLayerIds: ['222'],
+			ParentPersonAbsences: null,
+			Start: "2016-02-19 15:00",
+			Minutes: 60,
+			Selected: false,
+			ToggleSelection: function () {
+				this.Selected = !this.Selected;
+			},
+			Selectable: function () { return true; }
+		};
+		var personActivity3 = {
+			ShiftLayerIds: ['333'],
+			ParentPersonAbsences: null,
+			Start: "2016-02-19 15:30",
+			Minutes: 60,
+			Selected: false,
+			ToggleSelection: function () {
+				this.Selected = !this.Selected;
+			},
+			Selectable: function () { return true; }
+		};
+		var allProjections = [personActivity1, personActivity2, personActivity3];
+		var shift = {
+			"Date": "2016-02-19",
+			"Projections": allProjections
+		};
+		var schedule = {
+			"PersonId": "1234",
+			"Date": "2016-02-19",
+			"Shifts": [
+				shift
+			],
+			ScheduleStartTime: function () {
+				return "2016-02-19 08:30";
+			},
+			ScheduleEndTime: function () {
+				return "2016-02-19 16:30";
+			},
+			ActivityCount: function () {
+				return 3;
+			},
+			AbsenceCount: function () {
+				return 0;
+			},
+			AllowSwap: function () {
+				return true;
+			}
+		};
+
+		setupParent(schedule);
+		controller.scheduleVm = { Schedules: [schedule] };
+
+		controller.ToggleProjectionSelection(personActivity1, schedule.Date);
+		scope.$apply();
+
+		expect(controller.toggleAllInCurrentPage).toBeFalsy();
+	}));
 
 	function setupParent(schedule) {
 		if (schedule.Shifts) {
