@@ -259,7 +259,7 @@ module.exports = function(grunt) {
 		uglify: {
 			dist: {
 				files: {
-					'dist/main.min.js': [
+					'dist/main.js': [
 						'app/**/*.js',
 						'!app/**/*.spec.js',
 						'!app/**/*.fake.js',
