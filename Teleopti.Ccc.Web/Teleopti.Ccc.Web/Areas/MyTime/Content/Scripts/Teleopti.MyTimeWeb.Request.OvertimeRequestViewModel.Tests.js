@@ -440,8 +440,6 @@ $(document).ready(function() {
 	});
 
 	test('should use default start time from backend as default start date when UseDefaultStartTime toggle is toggled on', function() {
-		enabledTogglesList = ['MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
-
 		var tomorrow = moment().add(1, 'days').hours(17).minutes(0);
 
 		fakeDefaultStartTimeFromBackend.DefaultStartTimeString = tomorrow.format('YYYY-MM-DD HH:mm');
@@ -458,8 +456,6 @@ $(document).ready(function() {
 	});
 
 	test('should not fetch default start time when viewing overtime request detail', function () {
-		enabledTogglesList = ['MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
-
 		var tomorrow = moment().add(1, 'days').hours(17).minutes(0);
 		fakeDefaultStartTimeFromBackend.DefaultStartTimeString = tomorrow.format('YYYY-MM-DD HH:mm');
 
@@ -513,8 +509,6 @@ $(document).ready(function() {
 	});
 
 	test('should use selected day as default start time when UseDefaultStartTime toggle is toggled off', function() {
-		enabledTogglesList = ['MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
-
 		var tomorrow = moment().add(1, 'days').hours(17).minutes(0);
 		fakeDefaultStartTimeFromBackend.DefaultStartTimeString = tomorrow.format('YYYY-MM-DD HH:mm');
 
@@ -530,8 +524,6 @@ $(document).ready(function() {
 	});
 
 	test('should use shift start time subtracting duration for default start time', function() {
-		enabledTogglesList = ['MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
-
 		var tomorrow = moment().add(1, 'days').hours(17).minutes(0);
 		fakeDefaultStartTimeFromBackend.DefaultStartTimeString = tomorrow.format('YYYY-MM-DD HH:mm');
 		fakeDefaultStartTimeFromBackend.IsShiftStartTime = true;
@@ -555,8 +547,6 @@ $(document).ready(function() {
 	});
 
 	test('should not subtract duration from shift end time when setting default start time', function() {
-		enabledTogglesList = ['MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
-
 		var tomorrow = moment().add(1, 'days').hours(7).minutes(0);
 		fakeDefaultStartTimeFromBackend.DefaultStartTimeString = tomorrow.format('YYYY-MM-DD HH:mm');
 		fakeDefaultStartTimeFromBackend.IsShiftStartTime = false;
@@ -576,8 +566,6 @@ $(document).ready(function() {
 	});
 
 	test('should re-calculate start time when changing duration', function() {
-		enabledTogglesList = ['MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
-
 		var tomorrow = moment().add(1, 'days').hours(7).minutes(0);
 		fakeDefaultStartTimeFromBackend.DefaultStartTimeString = tomorrow.format('YYYY-MM-DD HH:mm');
 		fakeDefaultStartTimeFromBackend.IsShiftStartTime = true;
@@ -600,8 +588,6 @@ $(document).ready(function() {
 	});
 
 	test('should not show UseDefaultStartTime toggle when viewing an overtime request', function () {
-		enabledTogglesList = ['MyTimeWeb_OvertimeRequestDefaultStartTime_47513'];
-
 		var tomorrow = moment('2018-01-31').add(1, 'days').hours(7).minutes(0);
 		fakeDefaultStartTimeFromBackend.DefaultStartTimeString = tomorrow.format('YYYY-MM-DD HH:mm');
 		fakeDefaultStartTimeFromBackend.IsShiftStartTime = true;

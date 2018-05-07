@@ -10,19 +10,12 @@ $(document).ready(function () {
 		}
 	});
 
-	var overtimeRequestsToggle = false;
-
 	var tempToggleFn,
 		tempList,
 		tempAddShiftTradeRequest;
 
 	function setUpFunctionsBeforeRun() {
 		tempToggleFn = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggle) {
-			if (toggle === 'MyTimeWeb_OvertimeRequest_44558') {
-				return overtimeRequestsToggle;
-			}
-		};
 
 		tempList = Teleopti.MyTimeWeb.Request.List;
 		Teleopti.MyTimeWeb.Request.List = {

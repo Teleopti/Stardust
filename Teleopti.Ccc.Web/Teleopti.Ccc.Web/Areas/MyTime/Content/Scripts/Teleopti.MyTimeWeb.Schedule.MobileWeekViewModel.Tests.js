@@ -237,7 +237,6 @@ $(document).ready(function () {
 
 	test("should show no absence probability if the feature is toggle off in fat client", function () {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
 			if (x === "Staffing_Info_Configuration_44687") return true;
 		};
 
@@ -254,7 +253,6 @@ $(document).ready(function () {
 
 	test("should not consider value AbsenceProbabilityEnabled when Staffing_Info_Configuration_44687 is off", function () {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
 			if (x === "Staffing_Info_Configuration_44687") return false;
 		};
 
@@ -266,25 +264,8 @@ $(document).ready(function () {
 		equal(weekViewModel.absenceProbabilityEnabled(), true);
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
-
-	test("should show no absence probability if the feature is disabled", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return false;
-		};
-
-		var fakeScheduleData = getFakeScheduleData();
-		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(null, null, blockFetchProbabilityAjax);
-		weekViewModel.readData(fakeScheduleData);
-
-		equal(weekViewModel.selectedProbabilityOptionValue(), undefined);
-		equal(weekViewModel.dayViewModels()[0].probabilities().length, 0);
-		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
-	});
-
+	
 	test("should show no absence probability if agent has no permission", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-		};
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.ViewPossibilityPermission = false;
 		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(null, null, blockFetchProbabilityAjax);
@@ -295,9 +276,6 @@ $(document).ready(function () {
 	});
 
 	test("should set default probability option to hidden ", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-		};
 		var fakeScheduleData = getFakeScheduleData();
 		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(null, null, blockFetchProbabilityAjax);
 		weekViewModel.readData(fakeScheduleData);
@@ -307,9 +285,6 @@ $(document).ready(function () {
 	});
 
 	test("should show no absence probability if set to hide probability", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-		};
 		var fakeScheduleData = getFakeScheduleData();
 		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(null, null, blockFetchProbabilityAjax);
 		weekViewModel.readData(fakeScheduleData);
@@ -322,9 +297,6 @@ $(document).ready(function () {
 	});
 
 	test("should keep probability selection for today when changing date", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-		};
 		var fakeScheduleData = getFakeScheduleData();
 		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(null, null, blockFetchProbabilityAjax);
 		weekViewModel.readData(fakeScheduleData);
@@ -337,10 +309,6 @@ $(document).ready(function () {
 	});
 
 	test("should keep probability selection for multiple days when changing date", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return true;
-		};
 		var fakeScheduleData = getFakeScheduleData();
 		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(null, null, blockFetchProbabilityAjax);
 		weekViewModel.readData(fakeScheduleData);
@@ -353,9 +321,6 @@ $(document).ready(function () {
 	});
 
 	test("should show absence probability within schedule time range", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-		};
 		var fakeScheduleData = getFakeScheduleData();
 		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(null, null, blockFetchProbabilityAjax);
 		weekViewModel.readData(fakeScheduleData);
@@ -371,7 +336,6 @@ $(document).ready(function () {
 
 	test("should show no overtime probability option if the feature is toggle off in fat client", function () {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
 			if (x === "Staffing_Info_Configuration_44687") return true;
 		};
 
@@ -389,7 +353,6 @@ $(document).ready(function () {
 
 	test("should not consider value OvertimeProbabilityEnabled when Staffing_Info_Configuration_44687 is off", function () {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
 			if (x === "Staffing_Info_Configuration_44687") return false;
 		};
 
@@ -403,10 +366,6 @@ $(document).ready(function () {
 	});
 
 	test("should show overtime probability within timeline range", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-		};
-
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.TimeLine[1].Time = "15:00:00";		//narrow timeline to 9:30 - 15:00
 		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(null, null, blockFetchProbabilityAjax);
@@ -424,10 +383,6 @@ $(document).ready(function () {
 	});
 
 	test("should show no absence probability for dayoff", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-		};
-
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Days[0].IsDayOff = true;
 		fakeScheduleData.Days[0].Periods = [];
@@ -445,10 +400,6 @@ $(document).ready(function () {
 	});
 
 	test("should show no absence probability for fullday absence", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-		};
-
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Days[0].IsFullDayAbsence = true;
 
@@ -465,10 +416,6 @@ $(document).ready(function () {
 	});
 
 	test("should show overtime probability for dayoff", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-		};
-
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Days[0].IsDayOff = true;
 		fakeScheduleData.Days[0].Periods = [];
@@ -486,10 +433,6 @@ $(document).ready(function () {
 	});
 
 	test("should show overtime probability for fullday absence", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-		};
-
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Days[0].IsFullDayAbsence = true;
 		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(null, null, blockFetchProbabilityAjax);
@@ -506,9 +449,6 @@ $(document).ready(function () {
 	});
 
 	test("should show overtime probability based on intraday open hour", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-		};
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Days[0].OpenHourPeriod = {
 			StartTime: '10:00:00',
@@ -528,9 +468,6 @@ $(document).ready(function () {
 	});
 
 	test("should show correct overtime possibility for cross day schedule", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-		};
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.TimeLine = [{
 			Time: "00:00:00",
@@ -560,9 +497,6 @@ $(document).ready(function () {
 	});
 
 	test("should show correct absence possibility for cross day schedule", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-		};
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.TimeLine = [{
 			Time: "00:00:00",
@@ -592,9 +526,6 @@ $(document).ready(function () {
 	});
 
     test("should show absence possibility for night shift schedule", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-		};
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Days[0].Periods[0].EndTime = momentWithLocale(basedDate).add('day', 1).add('hour', 2).format('YYYY-MM-DDTHH:mm:ss');
 		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(null, null, blockFetchProbabilityAjax);
@@ -612,9 +543,6 @@ $(document).ready(function () {
 	});
 
     test("should change probability option value to absence(1) after selecting 'Show absence probability' ", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-		};
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Days[0].Periods[0].EndTime = momentWithLocale(basedDate).add('day', 1).add('hour', 2).format('YYYY-MM-DDTHH:mm:ss');
 
@@ -637,9 +565,6 @@ $(document).ready(function () {
 	});
 
     test("should change staffing probability option value to overtime(2) after selecting 'Show overtime  probability' ", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-		};
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Days[0].Periods[0].EndTime = momentWithLocale(basedDate).add('day', 1).add('hour', 2).format('YYYY-MM-DDTHH:mm:ss');
 
@@ -662,9 +587,6 @@ $(document).ready(function () {
 	});
 
 	test("should toggle off staffing probability after selecting Hide staffing probability ", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-		};
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.Days[0].Periods[0].EndTime = momentWithLocale(basedDate).add('day', 1).add('hour', 2).format('YYYY-MM-DDTHH:mm:ss');
 		var ajax = {
@@ -685,50 +607,8 @@ $(document).ready(function () {
 		equal(weekViewModel.selectedProbabilityOptionValue(), constants.probabilityType.none);
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
-
-	test("Should show the staffing probability for today", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return false;
-		};
-		
-		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(null, null, blockFetchProbabilityAjax);
-		var fakeScheduleData = getFakeScheduleData();
-
-		weekViewModel.readData(fakeScheduleData);
-		equal(weekViewModel.dayViewModels()[0].showProbabilityToggleIcon(), true);
-		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
-	});
-
-	test("Should not show probability option model if it is not current day when MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 is off", function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return false;
-		};
-
-		var fakeScheduleData = getFakeScheduleData();
-		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(null, null, blockFetchProbabilityAjax);
-		weekViewModel.readData(fakeScheduleData);
-
-		var fakeFixedDateObj = {fixedDate: function(){return fakeScheduleData.Days[0].FixedDate}};
-		weekViewModel.toggleProbabilityOptionsPanel(fakeFixedDateObj);
-		equal(weekViewModel.dayViewModels()[0].showProbabilityToggleIcon(), true);
-		equal(weekViewModel.requestViewModel() != null, true);
-		equal(weekViewModel.dayViewModels()[0].isModelVisible(), true);
-
-		weekViewModel.toggleProbabilityOptionsPanel(fakeFixedDateObj);
-		equal(weekViewModel.requestViewModel() == null, true);
-		equal(weekViewModel.dayViewModels()[1].showProbabilityToggleIcon(), false);
-		equal(weekViewModel.dayViewModels()[1].isModelVisible(), false);
-		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
-	});
-
-	test("Should toggle the global staffing probability option form after clicking the toggle icon when 'MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880' is on", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return true;
-		};
-
+	
+	test("Should toggle the global staffing probability option form after clicking the toggle icon", function () {
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.StaffingInfoAvailableDays = 14;
 		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(null, null, blockFetchProbabilityAjax);
@@ -748,12 +628,8 @@ $(document).ready(function () {
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
-    test("Should show probability data for multiple upcoming days when MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 is on", function () {
+    test("Should show probability data for multiple upcoming days", function () {
         Teleopti.MyTimeWeb.Common.SetUserTexts(userTexts);
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return true;
-		};
 		var fakeScheduleData = getFakeScheduleData();
 		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(basedDate);
 		fakeProbabilityData.push({
@@ -789,12 +665,7 @@ $(document).ready(function () {
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
-	test("should not show probability toggle if current week doesn't intercept with 14 upcoming days period even when MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 is on ", function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return true;
-		};
-
+	test("should not show probability toggle if current week doesn't intercept with 14 upcoming days period", function() {
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.StaffingInfoAvailableDays = 14;
 		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(basedDate);
@@ -831,11 +702,6 @@ $(document).ready(function () {
 	});
 
 	test("should show probability toggle if current week is within staffing info availableDays", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return true;
-		};
-
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.StaffingInfoAvailableDays = 28;
 		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(basedDate);

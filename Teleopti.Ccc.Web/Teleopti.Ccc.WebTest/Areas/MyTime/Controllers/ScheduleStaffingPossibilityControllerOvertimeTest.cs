@@ -30,7 +30,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
 	[TestFixture]
-	[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
 	[MyTimeWebTest]
 	public class ScheduleStaffingPossibilityControllerOvertimeTest : IIsolateSystem
 	{

@@ -1,5 +1,5 @@
 ﻿@MyTimeAbsence
-@OnlyRunIfDisabled('MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913')
+@ignore
 Feature: Absence Report On Mobile Week Schedule
  In order to report absence directly
  As an agent

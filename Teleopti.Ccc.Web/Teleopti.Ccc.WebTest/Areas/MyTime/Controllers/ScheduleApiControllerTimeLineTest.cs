@@ -122,7 +122,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
 		public void ShouldAdjustTimelineAccordingSiteOpenHourInWeek()
 		{
 			addSiteOpenHour(new SiteOpenHour
@@ -147,7 +146,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
 		public void ShouldAdjustTimelineAccordingOpenPeriodSkillTypeOpenHourDaySchedule()
 		{
 			var skillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
@@ -173,7 +171,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
 		public void ShouldAdjustTimelineForDayScheduleWithMultipleSkillTypesMatched()
 		{
 			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
@@ -208,7 +205,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
 		public void ShouldAdjustTimelineForDayScheduleWithNotDenySkillType()
 		{
 			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
@@ -243,7 +239,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
 		public void ShouldAdjustTimelineForWeekScheduleWithMultipleSkillTypesMatched()
 		{
 			Now.Is(new DateTime(2018, 2, 1, 8, 0, 0, DateTimeKind.Utc));
@@ -290,7 +285,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
 		[Toggle(Toggles.OvertimeRequestSupportMultiSelectionSkillTypes_74945)]
 		public void ShouldAdjustTimelineForWeekScheduleByNotDeniedSkillType()
 		{
@@ -339,7 +333,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 
 		[Test]
-		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
 		public void ShouldAdjustTimelineAccordingOpenPeriodSkillTypeOpenHourWeekSchedule()
 		{
 			var skillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
@@ -373,7 +366,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
 		public void ShouldAdjustTimelineAccordingCrossDaySiteOpenHourInWeek()
 		{
 			addSiteOpenHour(new SiteOpenHour
@@ -403,7 +395,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
 		public void ShouldAdjustTimelineAccordingCrossWeekSiteOpenHourInWeek()
 		{
 			addSiteOpenHour(new SiteOpenHour
@@ -432,7 +423,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		
 		public void ShouldNotAdjustTimelineWithSiteOpenHourWhenCurrentWeekOutOfRange()
 		{
 			addSiteOpenHour(new SiteOpenHour
@@ -847,7 +837,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
 		public void ShouldAdjustTimeLineBySkillOpenHoursOnlyWithDayWhenStaffingDataIsAvailable()
 		{
 			var skill1 = addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));

@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 		{
 			var functions = _applicationFunctionsProvider.AllFunctions();
 
-			if (!_toggleManager.IsEnabled(Toggles.MyTimeWeb_OvertimeRequest_44558)) hideOvertimeRequest(functions);
 			hideRealTimeReports(functions);
 
 			hideBpoExchangeIfNotLicensed(functions);
@@ -95,15 +94,6 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 				}
 			}
 
-		}
-
-		private static void hideOvertimeRequest(AllFunctions functions)
-		{
-			var foundFunction = functions.FindByForeignId(DefinedRaptorApplicationFunctionForeignIds.OvertimeRequestsWeb);
-			if (foundFunction != null)
-			{
-				foundFunction.SetHidden();
-			}
 		}
 	}
 }

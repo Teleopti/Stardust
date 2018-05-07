@@ -180,7 +180,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.staffingProbabilityForMultipleDaysEnabled = false;
 		self.absenceProbabilityEnabled = ko.observable();
 		self.overtimeProbabilityEnabled = ko.observable();
-		self.isOvertimeRequestAvailable = ko.observable();
+		self.isOvertimeRequestAvailable = ko.observable(true);
 		self.showProbabilityToggle = ko.observable();
 		self.loadingProbabilityData = ko.observable(false);
 
@@ -561,8 +561,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		var currentUserDate = getCurrentUserDateTime(self.baseUtcOffsetInMinutes).format("YYYY-MM-DD");
 		self.isCurrentWeek(data.IsCurrentWeek);
 
-		self.isOvertimeRequestAvailable(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_OvertimeRequest_44558"));
-
 		if (data.RequestPermission) {
 			self.absenceRequestPermission(!!data.RequestPermission.AbsenceRequestPermission);
 			self.absenceReportPermission(!!data.RequestPermission.AbsenceReportPermission);
@@ -571,11 +569,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.personAccountPermission(!!data.RequestPermission.PersonAccountPermission);
 			self.textPermission(!!data.RequestPermission.TextRequestPermission);
 			self.requestPermission(!!data.RequestPermission.TextRequestPermission || !!data.RequestPermission.AbsenceRequestPermission);
-			self.isOvertimeRequestAvailable(!!data.RequestPermission.OvertimeRequestPermission && Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_OvertimeRequest_44558"));
+			self.isOvertimeRequestAvailable(!!data.RequestPermission.OvertimeRequestPermission);
 		}
 
-		self.staffingProbabilityEnabled = data.ViewPossibilityPermission && Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewIntradayStaffingProbability_41608");
-		self.staffingProbabilityForMultipleDaysEnabled = self.staffingProbabilityEnabled && Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880");
+		self.staffingProbabilityEnabled = data.ViewPossibilityPermission;
+		self.staffingProbabilityForMultipleDaysEnabled = self.staffingProbabilityEnabled;
 
 		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("Staffing_Info_Configuration_44687")) {
 			self.absenceProbabilityEnabled(data.AbsenceProbabilityEnabled && data.CheckStaffingByIntraday && self.staffingProbabilityEnabled);

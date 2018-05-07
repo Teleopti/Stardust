@@ -32,7 +32,6 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 		self.addPostShiftForTradeActive = ko.observable(false);
 		self.addOvertimeRequestActive = ko.observable(false);
 		self.menuIsVisible = ko.observable(false);
-		self.addOvertimeRequestEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_OvertimeRequest_44558');
 
 		self.enableMenu = function (blah, e) {
 			self.menuIsVisible(true);

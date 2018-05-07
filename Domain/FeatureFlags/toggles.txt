@@ -76,14 +76,9 @@ Wfm_People_MoveImportJobToBackgroundService_43582 = true
 Wfm_PeopleWeb_PrepareForRelease_47766 = RC
 
 # China, can any of these be removed? #
-MyTimeWeb_ViewIntradayStaffingProbability_41608 = true
-MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913 = true
-MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 = true
 MyTimeWeb_PreferenceForJalaliCalendar_42965 = true
 MyTimeWeb_DayScheduleForStartPage_43446 = true
 MyTimeWeb_DayScheduleForStartPage_Command_44209 = true
-MyTimeWeb_OvertimeRequest_44558 = true
-MyTimeWeb_OvertimeRequestDefaultStartTime_47513 = true
 MyTimeWeb_MonthlyScheduleMobileView_45004 = true
 MyTimeWeb_SortRequestList_40711 = true #Please note the feature for this one is 40771!
 MyTimeWeb_WaitListPositionEnhancement_46301 = true

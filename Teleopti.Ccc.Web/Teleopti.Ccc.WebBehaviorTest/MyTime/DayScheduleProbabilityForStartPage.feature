@@ -56,21 +56,18 @@ Given there is a role with
 	| Shift category | Early            |
 	| Activity       | activity1        |
 
-@OnlyRunIfEnabled('MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913')
 Scenario: Should see the absence probability
 	When I am viewing mobile view for today
 	And I click show probability toggle
 	And I click show absence probability
 	Then I should see the probability in schedule
 
-@OnlyRunIfEnabled('MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913')
 Scenario: Should see the overtime probability
 	When I am viewing mobile view for today
 	And I click show probability toggle
 	And I click show overtime probability
 	Then I should see the probability in schedule
 	
-@OnlyRunIfEnabled('MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913')
 Scenario: Should hide staffing probability
 	When I am viewing mobile view for today
 	And I click show probability toggle
@@ -79,7 +76,6 @@ Scenario: Should hide staffing probability
 	And I click hide probability
 	Then I should not see the probability in schedule
 
-@OnlyRunIfEnabled('MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913')
 @OnlyRunIfDisabled('MyTimeWeb_MonthlyScheduleMobileView_45004')
 Scenario: Probability setting should be kept when date changed
 	Given tomorrow I have a full day absence
