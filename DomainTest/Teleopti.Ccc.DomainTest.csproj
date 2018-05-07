@@ -886,7 +886,6 @@
     <Compile Include="Forecasting\Angel\Methods\TeleoptiClassicWithTrendTest.cs" />
     <Compile Include="Forecasting\Angel\ForecastingTargetMergerTest.cs" />
     <Compile Include="Forecasting\Angel\Historical\HistoricalDataTest.cs" />
-    <Compile Include="Forecasting\Angel\ForecastCreatorTest.cs" />
     <Compile Include="Forecasting\Angel\MonthlyPatternIndexVolumesTest.cs" />
     <Compile Include="Forecasting\Angel\Outlier\OutlierRemoverTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecasterTest.cs" />

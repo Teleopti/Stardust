@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Teleopti.Ccc.Web.Areas.Forecasting.Models
+namespace Teleopti.Ccc.Domain.Forecasting.Models
 {
 	public class ForecastModel
 	{

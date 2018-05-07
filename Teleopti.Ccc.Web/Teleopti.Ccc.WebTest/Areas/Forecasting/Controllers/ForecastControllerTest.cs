@@ -5,6 +5,10 @@ using System.Web.Http.Results;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Forecasting.Angel;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
+using Teleopti.Ccc.Domain.Forecasting.Models;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -21,8 +25,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 	{
 		public ForecastController Target;
 		public FakeSkillDayRepository SkillDayRepository;
+		public FakeSkillRepository SkillRepository;
 		public FakeWorkloadRepository WorkloadRepository;
 		public FakeScenarioRepository ScenarioRepository;
+		public FakeStatisticRepository StatisticRepository;
 
 		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
@@ -133,11 +139,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 					new ForecastDayModel
 					{
 						Date = new DateOnly(2018, 5, 4),
+						IsOpen = true,
 						Tasks = 100d
 					},
 					new ForecastDayModel
 					{
 						Date = new DateOnly(2018, 5, 5),
+						IsOpen = true,
 						Tasks = 100d
 					}
 				}
@@ -150,6 +158,73 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				.Should().Be(150);
 			result.Content.Last().Tasks
 				.Should().Be(100);
+		}
+
+		[Test]
+		public void ShouldNotAddCampaignForClosedDay()
+		{
+			var model = new CampaignInput
+			{
+				SelectedDays = new[] { new DateOnly(2018, 5, 4) },
+				CampaignTasksPercent = 0.5d,
+				ForecastDays = new List<ForecastDayModel>
+				{
+					new ForecastDayModel
+					{
+						Date = new DateOnly(2018, 5, 4),
+						IsOpen = false,
+						Tasks = 100d
+					}
+				}
+			};
+
+			var result = (OkNegotiatedContentResult<IList<ForecastDayModel>>)Target.AddCampaign(model);
+
+			result.Should().Be.OfType<OkNegotiatedContentResult<IList<ForecastDayModel>>>();
+			result.Content.First().Tasks
+				.Should().Be(100d);
+		}
+
+		[Test]
+		public void ShouldReturnForecastDaysAsClosedAndOpen()
+		{
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
+			var workload = skill.WorkloadCollection.Single();
+			var scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
+			var openDay = new DateOnly(2018, 05, 04);
+			var closedDay = new DateOnly(2018, 05, 05);
+			var workloadDayTemplate = new WorkloadDayTemplate();
+			workloadDayTemplate.Create(openDay.Date.DayOfWeek.ToString(), DateTime.UtcNow, workload, new List<TimePeriod> { new TimePeriod(10, 12) });
+			workload.SetTemplate(openDay.Date.DayOfWeek, workloadDayTemplate);
+
+			SkillRepository.Add(skill);
+			WorkloadRepository.Add(workload);
+			ScenarioRepository.Has(scenario);
+			var forecastInput = new ForecastInput()
+			{
+				ForecastStart = openDay.Date,
+				ForecastEnd = closedDay.Date,
+				ScenarioId = scenario.Id.Value,
+				Workload = new ForecastWorkloadInput
+				{
+					ForecastMethodId = ForecastMethodType.TeleoptiClassicShortTerm,
+					WorkloadId = workload.Id.Value
+				}
+			};
+			StatisticRepository.Has(workload.QueueSourceCollection.First(), new List<IStatisticTask>
+			{
+				new StatisticTask
+				{
+					Interval = openDay.AddDays(-10).Date.AddHours(10),
+					StatOfferedTasks = 10
+				}
+			});
+			var result = (OkNegotiatedContentResult<ForecastModel>)Target.Forecast(forecastInput);
+
+			result.Should().Be.OfType<OkNegotiatedContentResult<ForecastModel>>();
+			result.Content.ForecastDays.Count.Should().Be(2);
+			result.Content.ForecastDays.First().IsOpen.Should().Be(true);
+			result.Content.ForecastDays.Last().IsOpen.Should().Be(false);
 		}
 	}
 }

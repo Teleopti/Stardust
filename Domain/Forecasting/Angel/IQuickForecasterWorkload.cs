@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
 	public interface IQuickForecasterWorkload
 	{
-		IList<ForecastResultModel> Execute(QuickForecasterWorkloadParams quickForecasterWorkloadParams);
+		ForecastModel Execute(QuickForecasterWorkloadParams quickForecasterWorkloadParams);
 	}
 }

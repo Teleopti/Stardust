@@ -8,6 +8,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
 	public interface IQuickForecaster
 	{
-		IList<ForecastResultModel> ForecastWorkloadsWithinSkill(ISkill skill, ForecastWorkloadInput workload, DateOnlyPeriod futurePeriod, IScenario scenario);
+		ForecastModel ForecastWorkloadWithinSkill(ISkill skill, ForecastWorkloadInput workload, DateOnlyPeriod futurePeriod, IScenario scenario);
 	}
 }

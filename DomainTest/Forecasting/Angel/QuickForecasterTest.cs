@@ -7,8 +7,6 @@ using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -23,12 +21,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var futurePeriod = new DateOnlyPeriod(2015, 1, 1, 2015, 2, 1);
 			var historicalPeriodForForecast1 = new DateOnlyPeriod(2014, 1, 1, 2014, 12, 31);
 			var historicalPeriodForForecast2 = new DateOnlyPeriod(2013, 12, 31, 2014, 12, 30);
-			var skillDayRepository = MockRepository.GenerateMock<ISkillDayRepository>();
+			var fetchAndFillSkillDays = MockRepository.GenerateMock<IFetchAndFillSkillDays>();
 			var skillDay = SkillDayFactory.CreateSkillDay(skill1, new DateOnly(2015, 1, 3));
 			skillDay.Skill.WorkloadCollection.ForEach(w => w.SetId(Guid.NewGuid()));
 			var skillDays = new[] {skillDay};
 			var scenario = new Scenario("scenario1");
-			skillDayRepository.Stub(x => x.FindRange(futurePeriod, skill1, scenario)).Return(skillDays);
+			fetchAndFillSkillDays.Stub(x => x.FindRange(futurePeriod, skill1, scenario)).Return(skillDays);
 			var quickForecasterWorkload = MockRepository.GenerateMock<IQuickForecasterWorkload>();
 			var workload1 = WorkloadFactory.CreateWorkload("workload1", skill1);
 			workload1.SetId(Guid.NewGuid());
@@ -52,10 +50,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			historicalPeriodProvider.Stub(x => x.AvailableIntradayTemplatePeriod(historicalPeriodForForecast1)).Return(templatePeriod);
 			historicalPeriodProvider.Stub(x => x.AvailablePeriod(workload2)).Return(historicalPeriodForForecast2);
 			historicalPeriodProvider.Stub(x => x.AvailableIntradayTemplatePeriod(historicalPeriodForForecast2)).Return(templatePeriod);
-			var target = new QuickForecaster(quickForecasterWorkload, skillDayRepository, quickForecastWorkloadEvaluator, historicalPeriodProvider);
-			target.ForecastWorkloadsWithinSkill(skill1,  new ForecastWorkloadInput { WorkloadId = workload1.Id.Value, ForecastMethodId = ForecastMethodType.None }, futurePeriod, scenario);
+			var target = new QuickForecaster(quickForecasterWorkload, fetchAndFillSkillDays, quickForecastWorkloadEvaluator, historicalPeriodProvider);
+			target.ForecastWorkloadWithinSkill(skill1,  new ForecastWorkloadInput { WorkloadId = workload1.Id.Value, ForecastMethodId = ForecastMethodType.None }, futurePeriod, scenario);
 			quickForecasterWorkload.AssertWasCalled(x => x.Execute(new QuickForecasterWorkloadParams
 			{
+				Scenario = scenario,
 				FuturePeriod = futurePeriod,
 				HistoricalPeriod = historicalPeriodForForecast1,
 				SkillDays = skillDays,
@@ -81,12 +80,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var skill1 = SkillFactory.CreateSkill("skill1");
 			var futurePeriod = new DateOnlyPeriod(2015, 1, 2, 2015, 2, 2);
 			var historicalPeriodForForecast = new DateOnlyPeriod(2014, 1, 1, 2014, 12, 31);
-			var skillDayRepository = MockRepository.GenerateMock<ISkillDayRepository>();
+			var fetchAndFillSkillDays = MockRepository.GenerateMock<IFetchAndFillSkillDays>();
 			var skillDay = SkillDayFactory.CreateSkillDay(skill1, new DateOnly(2015, 1, 3));
 			skillDay.Skill.WorkloadCollection.ForEach(w => w.SetId(Guid.NewGuid()));
 			var skillDays = new[] { skillDay };
 			var scenario = new Scenario("scenario1");
-			skillDayRepository.Stub(x => x.FindRange(futurePeriod, skill1, scenario)).Return(skillDays);
+			fetchAndFillSkillDays.Stub(x => x.FindRange(futurePeriod, skill1, scenario)).Return(skillDays);
 			var quickForecasterWorkload = MockRepository.GenerateMock<IQuickForecasterWorkload>();
 			var workload1 = WorkloadFactory.CreateWorkload("workload1", skill1);
 			workload1.SetId(Guid.NewGuid());
@@ -95,11 +94,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			historicalPeriodProvider.Stub(x => x.AvailablePeriod(workload1)).Return(historicalPeriodForForecast);
 			var templatePeriod = new DateOnlyPeriod(2014, 10, 1, 2014, 12, 31);
 			historicalPeriodProvider.Stub(x => x.AvailableIntradayTemplatePeriod(historicalPeriodForForecast)).Return(templatePeriod);
-			var target = new QuickForecaster(quickForecasterWorkload, skillDayRepository, quickForecastWorkloadEvaluator, historicalPeriodProvider);
-			target.ForecastWorkloadsWithinSkill(skill1, new ForecastWorkloadInput { WorkloadId = workload1.Id.Value, ForecastMethodId = ForecastMethodType.TeleoptiClassicLongTerm }, futurePeriod, scenario);
+			var target = new QuickForecaster(quickForecasterWorkload, fetchAndFillSkillDays, quickForecastWorkloadEvaluator, historicalPeriodProvider);
+			target.ForecastWorkloadWithinSkill(skill1, new ForecastWorkloadInput { WorkloadId = workload1.Id.Value, ForecastMethodId = ForecastMethodType.TeleoptiClassicLongTerm }, futurePeriod, scenario);
 			quickForecastWorkloadEvaluator.AssertWasNotCalled(x => x.Evaluate(workload1));
 			quickForecasterWorkload.AssertWasCalled(x => x.Execute(new QuickForecasterWorkloadParams
 			{
+				Scenario = scenario,
 				FuturePeriod = futurePeriod,
 				HistoricalPeriod = historicalPeriodForForecast,
 				SkillDays = skillDays,
@@ -115,12 +115,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var skill1 = SkillFactory.CreateSkill("skill1");
 			var futurePeriod = new DateOnlyPeriod(2015, 1, 2, 2015, 2, 2);
 			var historicalPeriodForForecast = new DateOnlyPeriod(2014, 1, 1, 2014, 12, 31);
-			var skillDayRepository = MockRepository.GenerateMock<ISkillDayRepository>();
+			var fetchAndFillSkillDays = MockRepository.GenerateMock<IFetchAndFillSkillDays>();
 			var skillDay = SkillDayFactory.CreateSkillDay(skill1, new DateOnly(2015, 1, 3));
 			skillDay.Skill.WorkloadCollection.ForEach(w => w.SetId(Guid.NewGuid()));
 			var skillDays = new[] {skillDay};
 			var scenario = new Scenario("scenario1");
-			skillDayRepository.Stub(x => x.FindRange(futurePeriod, skill1, scenario)).Return(skillDays);
+			fetchAndFillSkillDays.Stub(x => x.FindRange(futurePeriod, skill1, scenario)).Return(skillDays);
 			var quickForecasterWorkload = MockRepository.GenerateMock<IQuickForecasterWorkload>();
 			var workload1 = WorkloadFactory.CreateWorkload("workload1", skill1);
 			workload1.SetId(Guid.NewGuid());
@@ -139,10 +139,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			historicalPeriodProvider.Stub(x => x.AvailablePeriod(workload1)).Return(historicalPeriodForForecast);
 			var templatePeriod = new DateOnlyPeriod(2014, 10, 1, 2014, 12, 31);
 			historicalPeriodProvider.Stub(x => x.AvailableIntradayTemplatePeriod(historicalPeriodForForecast)).Return(templatePeriod);
-			var target = new QuickForecaster(quickForecasterWorkload, skillDayRepository, quickForecastWorkloadEvaluator, historicalPeriodProvider);
-			target.ForecastWorkloadsWithinSkill(skill1,new ForecastWorkloadInput { WorkloadId = workload1.Id.Value, ForecastMethodId = ForecastMethodType.None }, futurePeriod, scenario);
+			var target = new QuickForecaster(quickForecasterWorkload, fetchAndFillSkillDays, quickForecastWorkloadEvaluator, historicalPeriodProvider);
+			target.ForecastWorkloadWithinSkill(skill1,new ForecastWorkloadInput { WorkloadId = workload1.Id.Value, ForecastMethodId = ForecastMethodType.None }, futurePeriod, scenario);
 			quickForecasterWorkload.AssertWasCalled(x => x.Execute(new QuickForecasterWorkloadParams
 			{
+				Scenario = scenario,
 				FuturePeriod = futurePeriod,
 				HistoricalPeriod = historicalPeriodForForecast,
 				SkillDays = skillDays,

@@ -29,10 +29,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 			};
 		}
 
-		protected override void Assert(IEnumerable<ForecastResultModel> forecastResult)
+		protected override void Assert(ForecastModel forecastResult)
 		{
-			var skillDay = forecastResult.Single();
-			Convert.ToInt32(skillDay.vc)
+			var skillDay = forecastResult.ForecastDays.Single();
+			Convert.ToInt32(skillDay.Tasks)
 				.Should().Be.EqualTo(3);
 		}
 	}

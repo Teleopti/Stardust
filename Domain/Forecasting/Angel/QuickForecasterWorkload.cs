@@ -25,62 +25,75 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			_outlierRemover = outlierRemover;
 		}
 
-		public IList<ForecastResultModel> Execute(QuickForecasterWorkloadParams quickForecasterWorkloadParams)
+		public ForecastModel Execute(QuickForecasterWorkloadParams quickForecasterWorkloadParams)
 		{
 			var historicalData = _historicalData.Fetch(quickForecasterWorkloadParams.WorkLoad, quickForecasterWorkloadParams.HistoricalPeriod);
 			if (!historicalData.TaskOwnerDayCollection.Any())
-				return new List<ForecastResultModel>();
+			{
+				return new ForecastModel
+				{
+					WorkloadId = quickForecasterWorkloadParams.WorkLoad.Id.Value,
+					ScenarioId = quickForecasterWorkloadParams.Scenario.Id.Value,
+					ForecastDays = new List<ForecastDayModel>()
+				};
+			}
+
 			var forecastMethod = _forecastMethodProvider.Get(quickForecasterWorkloadParams.ForecastMethodId);
 			var historicalDataNoOutliers = _outlierRemover.RemoveOutliers(historicalData, forecastMethod);
 			var forecast =  forecastMethod.Forecast(historicalDataNoOutliers, quickForecasterWorkloadParams.FuturePeriod);
 			var workloadDays = _futureData.Fetch(quickForecasterWorkloadParams.WorkLoad, quickForecasterWorkloadParams.SkillDays, quickForecasterWorkloadParams.FuturePeriod);
-			return forecast.ForecastingTargets == null ? new List<ForecastResultModel>() : createForecastViewModel(forecast, workloadDays);
+			var forecastDays = createForecastViewModel(forecast, workloadDays);
+			return new ForecastModel
+			{
+				WorkloadId = quickForecasterWorkloadParams.WorkLoad.Id.Value,
+				ScenarioId = quickForecasterWorkloadParams.Scenario.Id.Value,
+				ForecastDays = forecastDays
+			};
 		}
 
-		private static IList<ForecastResultModel> createForecastViewModel(ForecastMethodResult forecast, IEnumerable<IWorkloadDayBase> workloadDays)
+		private static List<ForecastDayModel> createForecastViewModel(ForecastMethodResult forecast, IEnumerable<IWorkloadDayBase> workloadDays)
 		{
+			var forecastResult = new List<ForecastDayModel>();
+			if (forecast.ForecastingTargets == null)
+				return forecastResult;
 			var workloadDayForDate = workloadDays
 				.ToDictionary(w => w.CurrentDate);
-			var forecastresult = new List<ForecastResultModel>();
+			
 			foreach (var target in forecast.ForecastingTargets)
 			{
-				var model = new ForecastResultModel
+				var currentWorkLoadDay = workloadDayForDate[target.CurrentDate];
+				var model = new ForecastDayModel
 				{
-					date = target.CurrentDate.Date,
-					vc = target.Tasks,
-					vtc = target.AverageTaskTime.TotalSeconds,
-					vacw = target.AverageAfterTaskTime.TotalSeconds,
-					vtt = target.Tasks,
-					vttt = target.AverageTaskTime.TotalSeconds,
-					vtacw = target.AverageAfterTaskTime.TotalSeconds
+					Date = target.CurrentDate,
+					Tasks = target.Tasks,
+					TaskTime = target.AverageTaskTime.TotalSeconds,
+					AfterTaskTime = target.AverageAfterTaskTime.TotalSeconds,
+					TotalTasks = target.Tasks,
+					TotalAverageTaskTime = target.AverageTaskTime.TotalSeconds,
+					TotalAverageAfterTaskTime = target.AverageAfterTaskTime.TotalSeconds,
+					IsOpen = currentWorkLoadDay.OpenForWork.IsOpen
 				};
-				if (workloadDayForDate.ContainsKey(target.CurrentDate))
+
+				if (hasCampaign(currentWorkLoadDay) && hasOverride(currentWorkLoadDay)) model.Combo = -1;
+				if (hasCampaign(currentWorkLoadDay))
 				{
-					var currentWorkLoadDay = workloadDayForDate[target.CurrentDate];
-					if (hasCampaign(currentWorkLoadDay) && hasOverride(currentWorkLoadDay))
-					{
-						model.vcombo = -1;
-					}
-					if (hasCampaign(currentWorkLoadDay))
-					{
-						model.vcampaign = -1;
-						model.vtc = model.vc * (currentWorkLoadDay.CampaignTasks.Value + 1d);
-						model.vtt = model.vtt * (currentWorkLoadDay.CampaignTaskTime.Value + 1d);
-						model.vtacw = model.vacw * (currentWorkLoadDay.CampaignAfterTaskTime.Value + 1d);
-					}
-					if (hasOverride(currentWorkLoadDay))
-					{
-						model.voverride = -1;
-						model.vtc = currentWorkLoadDay.OverrideTasks ?? model.vc;
-						model.vtt = currentWorkLoadDay.OverrideAverageTaskTime?.TotalSeconds ?? model.vtt;
-						model.vtacw = currentWorkLoadDay.OverrideAverageAfterTaskTime?.TotalSeconds ?? model.vacw;
-					}
+					model.Campaign = -1;
+					model.TotalTasks = model.Tasks * (currentWorkLoadDay.CampaignTasks.Value + 1d);
+					model.TotalAverageTaskTime = model.TotalAverageTaskTime * (currentWorkLoadDay.CampaignTaskTime.Value + 1d);
+					model.TotalAverageAfterTaskTime = model.TotalAverageAfterTaskTime * (currentWorkLoadDay.CampaignAfterTaskTime.Value + 1d);
+				}
+				if (hasOverride(currentWorkLoadDay))
+				{
+					model.Override = -1;
+					model.TotalTasks = currentWorkLoadDay.OverrideTasks ?? model.Tasks;
+					model.TotalAverageTaskTime = currentWorkLoadDay.OverrideAverageTaskTime?.TotalSeconds ?? model.TotalAverageTaskTime;
+					model.TotalAverageAfterTaskTime = currentWorkLoadDay.OverrideAverageAfterTaskTime?.TotalSeconds ?? model.TotalAverageAfterTaskTime;
 				}
 
-				forecastresult.Add(model);
+				forecastResult.Add(model);
 			}
 
-			return forecastresult;
+			return forecastResult;
 		}
 
 		private static bool hasCampaign(IWorkloadDayBase workloadDay)

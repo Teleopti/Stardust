@@ -67,18 +67,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var scenario = new Scenario("test1").WithId(scenarioId);
 			var scenarioRepository = new FakeScenarioRepository(scenario);
 			var target = new ForecastController(forecastCreator, null, null, null, null, new BasicActionThrottler(), scenarioRepository, null, null, null, null, null, null);
-			IList<ForecastResultModel> forecast = new List<ForecastResultModel>()
+			var forecast = new ForecastModel
 			{
-				new ForecastResultModel()
+				ForecastDays = new List<ForecastDayModel>()
 				{
-					date = new DateTime(2016,05,01),
-					vc = 10
+					new ForecastDayModel()
+					{
+						Date = new DateOnly(2016, 05, 01),
+						Tasks = 10
+					}
 				}
 			};
-			forecastCreator.Stub(x => x.CreateForecastForWorkload(new DateOnlyPeriod(new DateOnly(forecastInput.ForecastStart), new DateOnly(forecastInput.ForecastEnd)), forecastInput.Workload, scenario)).Return(forecast);
-			var result = (OkNegotiatedContentResult<WorkloadForecastResultViewModel>)target.Forecast(forecastInput);
+			
+			forecastCreator.Stub(x => x.CreateForecastForWorkload(new DateOnlyPeriod(new DateOnly(forecastInput.ForecastStart), new DateOnly(forecastInput.ForecastEnd)), forecastInput.Workload, scenario))
+				.Return(forecast);
+			var result = (OkNegotiatedContentResult<ForecastModel>)target.Forecast(forecastInput);
 			forecastCreator.AssertWasCalled(x => x.CreateForecastForWorkload(new DateOnlyPeriod(new DateOnly(forecastInput.ForecastStart), new DateOnly(forecastInput.ForecastEnd)), forecastInput.Workload, scenario));
-			result.Should().Be.OfType<OkNegotiatedContentResult<WorkloadForecastResultViewModel>>();
+			result.Should().Be.OfType<OkNegotiatedContentResult<ForecastModel>>();
 		}
 
 		[Test]

@@ -1,4 +1,5 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.Forecasting.Models;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Models
 {

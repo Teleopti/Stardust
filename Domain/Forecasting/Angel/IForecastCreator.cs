@@ -7,6 +7,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
 	public interface IForecastCreator
 	{
-		IList<ForecastResultModel> CreateForecastForWorkload(DateOnlyPeriod futurePeriod, ForecastWorkloadInput workload, IScenario scenario);
+		ForecastModel CreateForecastForWorkload(DateOnlyPeriod futurePeriod, ForecastWorkloadInput workload, IScenario scenario);
 	}
 }

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.LogObject;
 using Teleopti.Ccc.Domain.Repositories;
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeStatisticRepository : IStatisticRepository
 	{
-		private Dictionary<IQueueSource, IList<IStatisticTask>> _statisticTaskDataPerQueueSource =
+		private readonly Dictionary<IQueueSource, IList<IStatisticTask>> _statisticTaskDataPerQueueSource =
 			new Dictionary<IQueueSource, IList<IStatisticTask>>();
 
 		public ICollection<IStatisticTask> LoadSpecificDates(ICollection<IQueueSource> sources, DateTimePeriod period)
@@ -30,6 +31,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				}
 			}
 			return result;
+		}
+
+		public void Has(IQueueSource queueSource, IList<IStatisticTask> statisticTasks)
+		{
+			_statisticTaskDataPerQueueSource.Add(queueSource, statisticTasks);
 		}
 
 		public ICollection<MatrixReportInfo> LoadReports()
@@ -112,12 +118,31 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			DateTimePeriod period, string timeZoneId,
 			TimeSpan midnightBreakOffset)
 		{
-			throw new NotImplementedException();
+			IList<IStatisticTask> result = new List<IStatisticTask>();
+			foreach (var source in sources)
+			{
+				if (!_statisticTaskDataPerQueueSource.ContainsKey(source)) continue;
+				foreach (var task in _statisticTaskDataPerQueueSource[source])
+				{
+					if (period.Contains(task.Interval))
+					{
+						result.Add(task);
+					}
+				}
+			}
+			return result;
 		}
 
 		public DateOnlyPeriod? QueueStatisticsUpUntilDate(ICollection<IQueueSource> sources)
 		{
-			throw new NotImplementedException();
+			var stats = LoadSpecificDates(sources, new DateTimePeriod());
+
+			if (!stats.Any())
+			{
+				return null;
+			}
+
+			return new DateOnlyPeriod(new DateOnly(stats.Min(x => x.Interval)), new DateOnly(stats.Max(x => x.Interval)));
 		}
 
 		public ICollection<IIntradayStatistics> LoadSkillStatisticForSpecificDates(DateOnly date)

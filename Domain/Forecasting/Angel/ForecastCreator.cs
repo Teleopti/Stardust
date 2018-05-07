@@ -20,12 +20,12 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			_skillRepository = skillRepository;
 		}
 
-		public IList<ForecastResultModel> CreateForecastForWorkload(DateOnlyPeriod futurePeriod, ForecastWorkloadInput workload, IScenario scenario)
+		public ForecastModel CreateForecastForWorkload(DateOnlyPeriod futurePeriod, ForecastWorkloadInput workload, IScenario scenario)
 		{
 			var skill = _skillRepository.FindSkillsWithAtLeastOneQueueSource()
 				.SingleOrDefault(s => s.WorkloadCollection.Any(
 					w => w.Id.HasValue && w.Id.Value == workload.WorkloadId));
-			return _quickForecaster.ForecastWorkloadsWithinSkill(skill, workload, futurePeriod, scenario);
+			return _quickForecaster.ForecastWorkloadWithinSkill(skill, workload, futurePeriod, scenario);
 		}
 	}
 }

@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Outlier;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -19,9 +20,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 		[Test]
 		public void ShouldRemoveOutliers()
 		{
-			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkillWithId("skill1"));
+			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkillWithId("skill1")).WithId();
 			var quickForecasterWorkloadParams = new QuickForecasterWorkloadParams
 			{
+				Scenario = ScenarioFactory.CreateScenarioWithId("default", true),
 				WorkLoad = workload,
 				HistoricalPeriod = new DateOnlyPeriod(2015,1,1,2015,2,1),
 				ForecastMethodId = ForecastMethodType.TeleoptiClassicLongTerm,

@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
+using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -111,18 +112,13 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			return Task.FromResult(_forecastViewModelFactory.EvaluateMethods(input));
 		}
 
-		[HttpPost, Route("api/Forecasting/Forecast"), UnitOfWork]
+		[HttpPost, Route("api/Forecasting/Forecast"), ReadonlyUnitOfWork]
 		public virtual IHttpActionResult Forecast(ForecastInput input)
 		{
 			var futurePeriod = new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd));
 			var forecast = _forecastCreator.CreateForecastForWorkload(futurePeriod, input.Workload,
 				_scenarioRepository.Get(input.ScenarioId));
-			var ret = new WorkloadForecastResultViewModel()
-			{
-				WorkloadId = input.Workload.WorkloadId,
-				Days = forecast.ToArray()
-			};
-			return Ok(ret);
+			return Ok(forecast);
 		}
 
 		[HttpPost, Route("api/Forecasting/IntradayPattern"), UnitOfWork]
@@ -136,7 +132,10 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		{
 			foreach (var selectedDay in input.SelectedDays)
 			{
+				
 				var forecastDay = input.ForecastDays.Single(x => x.Date == selectedDay);
+				if (!forecastDay.IsOpen)
+					continue;
 				forecastDay.Tasks = (input.CampaignTasksPercent + 1) * forecastDay.Tasks;
 			}
 			return Ok(input.ForecastDays);

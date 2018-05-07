@@ -35,6 +35,24 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return new SkillDay(dt, skill, scenario, WorkloadDayFactory.GetWorkloadDaysForTest(dt.Date, skill), skillDataPeriods);
 		}
 
+		public static ISkillDay CreateSkillDay(ISkill skill, IWorkload workload, DateOnly date, IScenario scenario)
+		{
+			IList<ISkillDataPeriod> skillDataPeriods = new List<ISkillDataPeriod>();
+			skillDataPeriods.Add(
+				new SkillDataPeriod(
+					new ServiceAgreement(
+						new ServiceLevel(
+							new Percent(0.8), 20),
+						new Percent(0.5),
+						new Percent(0.7)),
+					new SkillPersonData(),
+					TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date.Date.Add(TimeSpan.FromHours(4)), date.Date.Add(TimeSpan.FromHours(19)), skill.TimeZone)));
+
+			if (!skill.Id.HasValue) skill.SetId(Guid.NewGuid());
+
+			return new SkillDay(date, skill, scenario, WorkloadDayFactory.GetWorkloadDaysForTest(date.Date, date.Date, workload), skillDataPeriods);
+		}
+
 		public static ISkillDay CreateSkillDay(ISkill skill, DateOnly dt)
 		{
 			return CreateSkillDay(skill, dt, ScenarioFactory.CreateScenarioAggregate());
