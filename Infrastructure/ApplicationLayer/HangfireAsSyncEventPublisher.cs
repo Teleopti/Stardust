@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Infrastructure.Util;
 using AggregateException = System.AggregateException;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
@@ -47,10 +48,15 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			var tenant = _dataSource.CurrentName();
 			try
 			{
-				var exceptions = new List<Exception>();
-				onAnotherThread(() => processQueue(tenant, exceptions));
-				if (exceptions.Any())
-					throw new AggregateException(exceptions);
+				Retry.Handle<Exception>()
+					.WaitAndRetry(TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(5))
+					.Do(() =>
+					{
+						var exceptions = new List<Exception>();
+						onAnotherThread(() => processQueue(tenant, exceptions));
+						if (exceptions.Any())
+							throw new AggregateException(exceptions);
+					});
 			}
 			finally
 			{
