@@ -242,7 +242,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         }
 
 		[Test]
-		[Ignore("#75833 to be fixed")]
 		public void CanReturnWeekHeaderStringForMoreThanOneYear()
 		{
 			var startDate= new DateOnly(2017,4,1);

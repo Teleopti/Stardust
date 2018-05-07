@@ -476,20 +476,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
             {
                 if (e.ColIndex >= (int)ColumnType.StartScheduleColumns)
                 {
-                    int week;
-
-                    if (ColWeekMap.TryGetValue(e.ColIndex, out week))
+					if (ColWeekMap.TryGetValue(e.ColIndex, out var week))
                     {
                         e.Style.WrapText = false;
-                        var period = ViewBaseHelper.WeekHeaderDates(week, SelectedPeriod.DateOnlyPeriod);
-	                    e.Style.Tag =
-		                    new DateOnly(
-			                    SelectedPeriod.Period()
-				                    .StartDateTimeLocal(_schedulerState.TimeZoneInfo)
-				                    .Date.AddDays(e.ColIndex - (int) ColumnType.StartScheduleColumns)
-				                    .Date);
-	                    e.Style.Text = string.Format(CultureInfo.CurrentCulture, Resources.WeekAbbreviationDot,
-		                    week, period.StartDate.ToShortDateString());
+						var tagDate = new DateOnly(SelectedPeriod.Period().StartDateTimeLocal(_schedulerState.TimeZoneInfo).Date.AddDays(e.ColIndex - (int) ColumnType.StartScheduleColumns).Date);
+                        var period = ViewBaseHelper.WeekHeaderDates(week, tagDate.ToDateOnlyPeriod().Inflate(7));
+						e.Style.Tag = tagDate;
+	                    e.Style.Text = string.Format(CultureInfo.CurrentCulture, Resources.WeekAbbreviationDot, week, period.StartDate.ToShortDateString());
 
                     }
                 }
