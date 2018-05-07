@@ -20,8 +20,15 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Aspects
 
 		public void OnBeforeInvocation(IInvocationInfo invocation)
 		{
+			object intent = null;
+			var tenantAttr = invocation.Method.GetCustomAttributes(typeof(TenantAuditAttribute), false).FirstOrDefault();
+
+			if (tenantAttr != null)
+			{
+				intent = ((TenantAuditAttribute)tenantAttr).ActionIntent;
+			}
+
 			var personInfo = invocation.Arguments.SingleOrDefault(x => x is PersonInfo) as PersonInfo;
-			var intent = invocation.Arguments.SingleOrDefault(x => x is PersistActionIntent);
 			if (personInfo != null && intent != null)
 			{
 				AuditPersist(personInfo, (PersistActionIntent)intent);

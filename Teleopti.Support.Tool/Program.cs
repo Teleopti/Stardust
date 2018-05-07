@@ -7,29 +7,73 @@ namespace Teleopti.Support.Tool
 {
 	static class Program
 	{
-		/// <summary>
-		/// The main entry point for the application.
-		/// </summary>
 		[STAThread]
 		public static void Main(string[] args)
 		{
 			XmlConfigurator.Configure();
 			if (args.Length.Equals(0))
 			{
-				// *********************************************************************************
 				// Don't remove this, used for showing groups in a ListView /Henry
 				System.Windows.Forms.Application.EnableVisualStyles();
-				// *********************************************************************************
-
 				new MainForm().ShowDialog();
 			}
 			else
 			{
 				try
 				{
-					new CommandBuilder()
-						.ParseCommandLine(args)
-						.Execute();
+					var command = new CommandBuilder()
+						.ParseCommandLine(args);
+
+					switch (command)
+					{
+						case ModeDebugCommand c:
+							new ModeDebugRunner().Run(c);
+							break;
+						case ModeDeployWebCommand c:
+							new ModeDeployWebRunner().Run(c);
+							break;
+						case ModeDeployWorkerCommand c:
+							new ModeDeployWorkerRunner().Run(c);
+							break;
+						case ModeAzureCommand c:
+							new ModeAzureRunner().Run(c);
+							break;
+						case ModeTestCommand c:
+							new ModeTestRunner().Run(c);
+							break;
+						case SetToggleModeCommand c:
+							c.UpdateToggleMode();
+							break;
+						case HelpWindow c:
+							c.ShowDialog();
+							break;
+						case ConfigurationBackupCommand c:
+							new ConfigurationBackuper().Backup(c);
+							break;
+						case ConfigurationRestoreCommand c:
+							new ConfigurationRestorer().Restore(c);
+							break;
+						case LoadSettingsCommand c:
+							new SettingsLoader().LoadSettingsFile(c);
+							break;
+						case SetSettingCommand c:
+							new SettingsSetter().UpdateSettingsFile(c);
+							break;
+						case ConfigServerCommand c:
+							c.Execute();
+							break;
+						case SavePmConfigurationCommand c:
+							c.Execute();
+							break;
+						case FixMyConfigCommand c:
+							new FixMyConfigFixer().Fix(c);
+							break;
+						case InfraTestConfigCommand c:
+							new InfraTestConfigurator().Configure(c);
+							break;
+						default:
+							throw new ArgumentException("Unknown command");
+					}
 				}
 				catch (Exception e)
 				{

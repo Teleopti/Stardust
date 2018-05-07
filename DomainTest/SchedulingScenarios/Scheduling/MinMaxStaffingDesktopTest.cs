@@ -25,6 +25,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 	{
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
+		public FakeTimeZoneGuard TimeZoneGuard;
+		public FakeUserTimeZone UserTimeZone;
+
 
 		[Test]
 		public void ShouldRespectMinimumStaffingWhenBreakingShiftCategoryLimiation()
@@ -95,6 +98,48 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agents[4] }, date.ToDateOnlyPeriod());
 
 			schedulerStateHolder.Schedules[agents[4]].ScheduledDay(date).PersonAssignment().Period.StartDateTime.Hour.Should().Be.EqualTo(8);
+		}
+
+		[Test]
+		public void ShouldGetCorrectShiftWhenUsingMinimumStaffingDifferentTimeZones(
+			[Values("Taipei Standard Time", "UTC", "Mountain Standard Time")] string userTimeZone,
+			[Values("Taipei Standard Time", "UTC", "Mountain Standard Time")] string userViewPointTimeZone,
+			[Values("Taipei Standard Time", "UTC", "Mountain Standard Time")] string agentTimeZone,
+			[Values("Taipei Standard Time", "UTC", "Mountain Standard Time")] string skillTimeZone)
+		{
+			TimeZoneGuard.SetTimeZone(TimeZoneInfo.FindSystemTimeZoneById(userTimeZone));
+			UserTimeZone.Is(TimeZoneInfo.FindSystemTimeZoneById(userViewPointTimeZone));
+			var date = new DateOnly(2017, 1, 11);
+			var activity = new Activity().WithId();
+			var scenario = new Scenario();
+			var shiftCategory1 = new ShiftCategory().WithId();
+			var shiftCategory2 = new ShiftCategory().WithId();
+			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.FindSystemTimeZoneById(skillTimeZone)).WithId().IsOpen();
+			var skillDayOne = skill.CreateSkillDayWithDemand(scenario, date.AddDays(-1), 1);
+			var skillDayTwo = skill.CreateSkillDayWithDemand(scenario, date, 1);
+			var skillDayThree = skill.CreateSkillDayWithDemand(scenario, date.AddDays(1), 1);
+			var ruleSet1 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory1));
+			var ruleSet2 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(18, 0, 18, 0, 15), new TimePeriodWithSegment(26, 0, 26, 0, 15), shiftCategory2));
+			var ruleSetBag = new RuleSetBag(ruleSet1, ruleSet2);
+			var contract = new ContractWithMaximumTolerance();
+			var agents = new List<IPerson>();
+			var asses = new List<IPersonAssignment>();
+			for (var i = 0; i < 5; i++)
+			{
+				agents.Add(new Person().WithId().InTimeZone(TimeZoneInfo.FindSystemTimeZoneById(agentTimeZone)).WithPersonPeriod(ruleSetBag, contract, skill).WithSchedulePeriodOneWeek(date));
+			}
+			asses.Add(new PersonAssignment(agents[0], scenario, date).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCategory2));
+			asses.Add(new PersonAssignment(agents[1], scenario, date).WithLayer(activity, new TimePeriod(18, 26)).ShiftCategory(shiftCategory2));
+			asses.Add(new PersonAssignment(agents[2], scenario, date).WithLayer(activity, new TimePeriod(18, 26)).ShiftCategory(shiftCategory2));
+			asses.Add(new PersonAssignment(agents[3], scenario, date).WithLayer(activity, new TimePeriod(18, 26)).ShiftCategory(shiftCategory2));
+			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date.AddDays(-1), date.AddDays(1)), agents, asses, new[] { skillDayOne, skillDayTwo, skillDayThree });
+			skillDayOne.SkillDataPeriodCollection.ForEach(x => x.SkillPersonData = new SkillPersonData(1, 0));
+			skillDayTwo.SkillDataPeriodCollection.ForEach(x => x.SkillPersonData = new SkillPersonData(1, 0));
+			var schedulingOptions = new SchedulingOptions { UseMinimumStaffing = true };
+
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agents[4] }, date.ToDateOnlyPeriod());
+
+			schedulerStateHolder.Schedules[agents[4]].ScheduledDay(date).PersonAssignment().ShiftCategory.Should().Be.EqualTo(shiftCategory1);
 		}
 
 		public MinMaxStaffingDesktopTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)

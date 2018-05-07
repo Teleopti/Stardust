@@ -190,9 +190,6 @@ $(document).ready(function () {
 	});
 
 	test("should show staffing probability bar when current date is within staffing info available days", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
-			if (x === "MyTimeWeb_OvertimeRequest_44558") return true;
-		};
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.StaffingInfoAvailableDays = 14;
 		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null, undefined);

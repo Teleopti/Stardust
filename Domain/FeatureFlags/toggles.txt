@@ -68,6 +68,7 @@ OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944 = RC
 OvertimeRequestSupportMultiSelectionSkillTypes_74945 = RC
 OvertimeRequestStaffingCheckMethod_74949 = RC
 OvertimeRequestChangeBelongsToDateForOverNightShift_74984 = DEV
+OvertimeRequestUsePrimarySkillOption_75573 = RC
 
 Wfm_People_ImportAndCreateAgentFromFile_42528 = true
 Wfm_People_SetFallbackValuesForImporting_43289 = true
@@ -75,18 +76,13 @@ Wfm_People_MoveImportJobToBackgroundService_43582 = true
 Wfm_PeopleWeb_PrepareForRelease_47766 = RC
 
 # China, can any of these be removed? #
-MyTimeWeb_ViewIntradayStaffingProbability_41608 = true
-MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913 = true
-MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 = true
 MyTimeWeb_PreferenceForJalaliCalendar_42965 = true
 MyTimeWeb_DayScheduleForStartPage_43446 = true
 MyTimeWeb_DayScheduleForStartPage_Command_44209 = true
-MyTimeWeb_CalculateOvertimeProbabilityByPrimarySkill_44686 = true
-MyTimeWeb_OvertimeRequest_44558 = true
-MyTimeWeb_OvertimeRequestDefaultStartTime_47513 = true
 MyTimeWeb_MonthlyScheduleMobileView_45004 = true
 MyTimeWeb_SortRequestList_40711 = true #Please note the feature for this one is 40771!
 MyTimeWeb_WaitListPositionEnhancement_46301 = true
+
 MyTimeWeb_PollToCheckScheduleChanges_46595 = true
 
 # China, can any of these be removed? #
@@ -94,7 +90,6 @@ MyTimeWeb_MobileResponsive_43826 = true
 Staffing_Info_Configuration_44687 = true
 
 # Kittens, Bugs&Roses and Micke #
-Scheduler_IntradayOptimization_36617 = true
 Scheduler_RestrictionReport_47013 = true
 Wfm_SkillPriorityRoutingGUI_39885 = RC
 WfmGlobalLayout_personalOptions_37114 = true
@@ -105,18 +100,17 @@ Wfm_WebPlan_Pilot_46815 = RC #Switch this on to try out the new web based schedu
 ResourcePlanner_HideSkillPrioSliders_41312 = RC
 ResourcePlanner_BlockSchedulingValidation_46092 = true
 ResourcePlanner_UseErlangAWithInfinitePatience_45845 = true
-ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899 = RC
+ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899 = true
+ResourcePlanner_UseErlangAWithFinitePatience_47738 = RC
 ResourcePlanner_SpeedUpEvents_48769 = true #batch deletes of dates - can be deleted early
 ResourcePlanner_SpeedUpEvents_74996 = true #caching different data - can be deleted early
 ResourcePlanner_SpeedUpEvents_75415 = true #restructure of events - dont remove toggle too early
-ResourcePlanner_DayOffUsePredictorEverywhere_75667 = RC
-ResourcePlanner_MinimumStaffing_75339 = false
+ResourcePlanner_MinimumAgents_75339 = RC
 
 # Bugs&Roses #
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
 ResourcePlanner_DayOffOptimizationIslands_47208 = true
 ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
-ResourcePlanner_Deadlock_48170 = true
 
 # From old Kittens team... #
 ETL_SpeedUpPersonPeriodNightly_38097 = true
@@ -149,7 +143,7 @@ ETL_Show_Web_Based_ETL_Tool_75530 = RC
 # DeBockers #
 WfmIntraday_MonitorActualvsForecasted_35176 = true
 WFM_Modify_Skill_Groups_43727 = true
-WFM_Remember_My_Selection_In_Intraday_47254 = RC
+WFM_Remember_My_Selection_In_Intraday_47254 = true
 
 # Ziggy #
 Wfm_Staffing_45411 = true #Enables the entire Staffing page!

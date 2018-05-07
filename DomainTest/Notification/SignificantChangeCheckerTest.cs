@@ -84,8 +84,8 @@ namespace Teleopti.Ccc.DomainTest.Notification
 
             _mocks.ReplayAll();
 
-            Assert.That(_target.SignificantChangeNotificationMessage(period.StartDate, _person, newReadModel).Subject, Is.Not.Empty);
-            _mocks.VerifyAll();
+			Assert.That(_target.SignificantChangeNotificationMessage(period.StartDate, _person, newReadModel).Subject, Is.Not.Empty.And.Not.Null);
+			_mocks.VerifyAll();
         }
 
         [Test]
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
                                                                              new DateOnly(date.AddDays(1)))).Return(message);
             _mocks.ReplayAll();
 
-            Assert.That(_target.SignificantChangeNotificationMessage(period.StartDate, _person, newReadModel).Subject, Is.Not.Empty);
+            Assert.That(_target.SignificantChangeNotificationMessage(period.StartDate, _person, newReadModel).Subject, Is.Not.Empty.And.Not.Null);
             _mocks.VerifyAll();
         }
 
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
                                                                              new DateOnly(date.AddDays(1)))).Return(message);
             _mocks.ReplayAll();
 
-            Assert.That(_target.SignificantChangeNotificationMessage(period.StartDate, _person, newReadModel).Subject, Is.Not.Empty);
+            Assert.That(_target.SignificantChangeNotificationMessage(period.StartDate, _person, newReadModel).Subject, Is.Not.Empty.And.Not.Null);
             _mocks.VerifyAll();
 
         }

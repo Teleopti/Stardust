@@ -1,4 +1,4 @@
-﻿@OnlyRunIfDisabled('MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913')
+﻿@ignore
 Feature: View week schedule on mobile
 	In order to know how to work this week
 	As an agent

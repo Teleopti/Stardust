@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 {
 	public interface IPrimaryPersonSkillFilter
 	{
-		IList<IPersonSkill> Filter(IEnumerable<IPersonSkill> personSkills);
+		IList<IPersonSkill> Filter(IEnumerable<IPersonSkill> personSkills, IPerson person);
 	}
 }

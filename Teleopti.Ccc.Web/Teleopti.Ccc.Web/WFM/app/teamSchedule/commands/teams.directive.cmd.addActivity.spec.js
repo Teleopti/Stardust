@@ -341,8 +341,8 @@
 			vm.isNextDay = false;
 			vm.disableNextDay = false;
 			vm.timeRange = {
-				startTime: moment('2016-06-15 08:00').toDate(),
-				endTime: moment('2016-06-15 16:00').toDate()
+				startTime: '2016-06-15 08:00',
+				endTime: '2016-06-15 16:00'
 			};
 
 			vm.selectedAgents = [
@@ -391,6 +391,58 @@
 			expect(activityData.EndTime).toEqual('2016-06-15T16:00');
 
 			expect(activityData.TrackedCommandInfo.TrackId).toBe(vm.trackId);
+		});
+
+		it('should apply with correct time range based on the selected time zone', function () {
+			var result = setUp();
+			var vm = result.commandControl;
+			vm.isNextDay = false;
+			vm.disableNextDay = false;
+			vm.timeRange = {
+				startTime: '2018-03-25 01:00',
+				endTime: '2018-03-25 03:00'
+			};
+
+			vm.selectedAgents = [
+				{
+					PersonId: 'agent1',
+					Name: 'agent1',
+					ScheduleStartTime: null,
+					ScheduleEndTime: null
+				}];
+
+			vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
+
+			fakePersonSelectionService.setFakeCheckedPersonInfoList(vm.selectedAgents);
+
+			var timezone1 = {
+				IanaId: "Asia/Hong_Kong",
+				DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
+			};
+
+			vm.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('agent1', {
+				Date: '2018-03-25',
+				PersonId: 'agent1',
+				Timezone: timezone1,
+				Shifts: [
+					{
+						Date: '2018-03-25',
+						Projections: [
+						],
+						ProjectionTimeRange: null
+					}]
+			});
+			result.scope.$apply();
+
+			var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
+			applyButton.triggerHandler('click');
+
+			result.scope.$apply();
+
+			var activityData = fakeActivityService.getAddActivityCalledWith();
+			expect(activityData).not.toBeNull();
+			expect(activityData.StartTime).toEqual('2018-03-25T01:00');
+			expect(activityData.EndTime).toEqual('2018-03-25T03:00');
 		});
 	}
 

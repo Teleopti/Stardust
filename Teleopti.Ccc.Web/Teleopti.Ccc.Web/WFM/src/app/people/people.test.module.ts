@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
-import { fakeBackendProvider } from './services';
-
 import { PeopleModule } from './people.module';
+import { fakeBackendProvider } from './services';
 
 @NgModule({
 	imports: [PeopleModule],

@@ -1,21 +1,21 @@
-import { HttpClientModule } from '@angular/common/http';
 import { DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { PeopleModule } from '../../people.module';
-import { WorkspaceService, WorkspaceServiceStub } from '../../services';
-import { ROLES, fakeBackendProvider } from '../../services/fake-backend';
+import { PeopleTestModule } from '../../people.test.module';
+import { WorkspaceService } from '../../services';
+import { adina, eva, myles } from '../../services/fake-backend';
+import { countUniqueRolesFromPeople } from '../../utils';
 import { GrantPageComponent } from './grant-page.component';
 
-describe('GrantPage', () => {
+describe('GrantPageComponent', () => {
 	let component: GrantPageComponent;
 	let fixture: ComponentFixture<GrantPageComponent>;
 	let page: Page;
+	let workspaceService: WorkspaceService;
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			imports: [PeopleModule, HttpClientModule],
-			providers: [{ provide: WorkspaceService, useClass: WorkspaceServiceStub }, fakeBackendProvider]
+			imports: [PeopleTestModule]
 		}).compileComponents();
 	}));
 
@@ -23,12 +23,7 @@ describe('GrantPage', () => {
 		fixture = TestBed.createComponent(GrantPageComponent);
 		component = fixture.componentInstance;
 		page = new Page(fixture);
-
-		fixture.whenStable().then(async () => {
-			component.roles = ROLES;
-
-			fixture.detectChanges();
-		});
+		workspaceService = fixture.debugElement.injector.get(WorkspaceService);
 	}));
 
 	it('should create', () => {
@@ -36,19 +31,9 @@ describe('GrantPage', () => {
 	});
 
 	it('should show current roles', () => {
+		workspaceService.selectPeople([adina, myles, eva]);
 		fixture.detectChanges();
-		expect(page.currentChips.length).toEqual(2);
-	});
-
-	it('should only show chips from selected people', () => {
-		fixture.detectChanges();
-		expect(page.currentChips.length).toEqual(2);
-
-		const firstPerson = component.workspaceService.getSelectedPeople().getValue()[0];
-		component.workspaceService.deselectPerson(firstPerson);
-		fixture.detectChanges();
-
-		expect(page.currentChips.length).toEqual(1);
+		expect(page.currentChips.length).toEqual(countUniqueRolesFromPeople([adina, myles, eva]));
 	});
 });
 

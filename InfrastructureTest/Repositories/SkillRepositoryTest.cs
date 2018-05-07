@@ -607,6 +607,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
+		public void ShouldPersistAbandonRate()
+		{
+			var abandonRate = 0.02;
+			var skill = new Skill("_", "_", Color.AliceBlue, 1, _skillType)
+			{
+				Activity = _activity,
+				TimeZone = TimeZoneInfo.Utc,
+				AbandonRate = new Percent(abandonRate)
+			};
+			PersistAndRemoveFromUnitOfWork(skill);
+
+			var target = new SkillRepository(CurrUnitOfWork);
+			target.Get(skill.Id.Value).AbandonRate.Value.Should().Be.EqualTo(abandonRate);
+		}
+
+		[Test]
 		public void ShouldLoadSkillsByIdList()
 		{
 			ISkill skill1 = SkillFactory.CreateSkill("skill 1", _skillType, 15);

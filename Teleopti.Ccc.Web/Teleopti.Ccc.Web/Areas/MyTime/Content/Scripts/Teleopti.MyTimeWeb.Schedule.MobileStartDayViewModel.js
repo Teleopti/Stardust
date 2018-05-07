@@ -45,7 +45,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	self.requestPermission = ko.observable();
 	self.showAbsenceReportingCommandItem = ko.observable();
 	self.showPostShiftTradeMenu = ko.observable(false);
-	self.showAddOvertimeRequestMenu = ko.observable(false);
+	self.showAddOvertimeRequestMenu = ko.observable(true);
 	self.baseUtcOffsetInMinutes = 0;
 
 	self.overtimeAvailabililty = null;
@@ -138,8 +138,6 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		});
 		self.layers(layers);
 
-		self.showAddOvertimeRequestMenu(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_OvertimeRequest_44558"));
-
 		if (data.RequestPermission) {
 			self.overtimeAvailabilityPermission(!!data.RequestPermission.OvertimeAvailabilityPermission);
 			self.absenceReportPermission(!!data.RequestPermission.AbsenceReportPermission);
@@ -147,7 +145,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 			self.absenceRequestPermission(!!data.RequestPermission.AbsenceRequestPermission);
 			self.shiftTradeRequestPermission(!!data.RequestPermission.ShiftTradeRequestPermission);
 			self.personAccountPermission(!!data.RequestPermission.PersonAccountPermission);
-			self.showAddOvertimeRequestMenu(!!data.RequestPermission.OvertimeRequestPermission && Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_OvertimeRequest_44558"));
+			self.showAddOvertimeRequestMenu(!!data.RequestPermission.OvertimeRequestPermission);
 		}
 
 		setSelectedDateSubscription(data.Date);
@@ -239,8 +237,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	};
 
 	function setStaffingProbabilityToggleStates(data) {
-		self.staffingProbabilityOnMobileEnabled(data.ViewPossibilityPermission
-			&& Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913"));
+		self.staffingProbabilityOnMobileEnabled(data.ViewPossibilityPermission);
 
 
 		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled("Staffing_Info_Configuration_44687")) {

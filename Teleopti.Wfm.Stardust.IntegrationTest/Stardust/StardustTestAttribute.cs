@@ -39,43 +39,52 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			base.BeforeTest(testDetails);
 
 			var dataHash = DefaultDataCreator.HashValue;
-
-			DataSourceHelper.CreateDatabases();
+			
 			var path = "";
 #if DEBUG
 			path = "./";
 #else
 				path = Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "Stardust");
 #endif
-
-
+			
 			var haveDatabases =
 				DataSourceHelper.TryRestoreApplicationDatabaseBySql(path, dataHash) &&
 				DataSourceHelper.TryRestoreAnalyticsDatabaseBySql(path, dataHash);
+			if (!haveDatabases)
+				DataSourceHelper.CreateDatabases();
 
+			//DO NOT remove this as you will get optimistic lock on two diff tests
 			if (!haveDatabases)
 			{
-				TestLog.Debug("Setting up data for the test");
-				StateHolderProxyHelper.SetupFakeState(
-					DataSourceHelper.CreateDataSource(Container),
-					DefaultPersonThatCreatesData.PersonThatCreatesDbData,
-					DefaultBusinessUnit.BusinessUnit
-				);
+				try
+				{
+					TestLog.Debug("Setting up data for the test");
+					StateHolderProxyHelper.SetupFakeState(
+						DataSourceHelper.CreateDataSource(Container),
+						DefaultPersonThatCreatesData.PersonThatCreatesDbData,
+						DefaultBusinessUnit.BusinessUnit
+					);
 
-				DefaultDataCreator.Create();
-				DataSourceHelper.ClearAnalyticsData();
-				DefaultAnalyticsDataCreator.Create();
-				DataCreator.Create();
+					DefaultDataCreator.Create();
+					DataSourceHelper.ClearAnalyticsData();
+					DefaultAnalyticsDataCreator.Create();
+					DataCreator.Create();
 
+
+					DataSourceHelper.BackupApplicationDatabaseBySql(path, dataHash);
+					DataSourceHelper.BackupAnalyticsDatabaseBySql(path, dataHash);
+
+					StateHolderProxyHelper.Logout();
+					StateHolderProxyHelper.ClearStateHolder();
+				}
+				catch (Exception ex)
+				{
+					TestLog.Debug(ex.InnerException.StackTrace);
+					throw;
+				}
 				
-				DataSourceHelper.BackupApplicationDatabaseBySql(path, dataHash);
-				DataSourceHelper.BackupAnalyticsDatabaseBySql(path, dataHash);
-				
-				StateHolderProxyHelper.Logout();
-				StateHolderProxyHelper.ClearStateHolder();
 			}
 
-			TestLog.Debug("Starting hangfire");
 			HangfireClientStarter.Start();
 
 			Guid businessUnitId;
@@ -99,6 +108,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		public override void AfterTest(ITest testDetails)
 		{
 			base.AfterTest(testDetails);
+			
 			TestLog.Debug("In teardown stopping all services");
 			Hangfire.WaitForQueue();
 			StateQueue.WaitForQueue();

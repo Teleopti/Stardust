@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Windows.Forms;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -22,6 +23,7 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleSortingCommands;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Is = Rhino.Mocks.Constraints.Is;
 
@@ -238,6 +240,27 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				}
 			}
         }
+
+		[Test]
+		public void CanReturnWeekHeaderStringForMoreThanOneYear()
+		{
+			var startDate= new DateOnly(2017,4,1);
+			var endDate= new DateOnly(2018,3,31);
+			Expect.Call(_viewBase.RowHeaders).Return(1).Repeat.AtLeastOnce();
+			Expect.Call(_viewBase.TheGrid).Return(_grid).Repeat.AtLeastOnce();
+
+			_mocks.ReplayAll();
+
+			const int weekNumber = 13;
+			const int targetColIndex = 365;
+			_target.ColWeekMap.Add((int)ColumnType.StartScheduleColumns, weekNumber);
+			_target.ColWeekMap.Add(targetColIndex, weekNumber);
+			_target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(startDate, endDate), _timeZoneInfo);
+            
+			GridQueryCellInfoEventArgs eventArgs = new GridQueryCellInfoEventArgs(0, targetColIndex, new GridStyleInfo());
+			_target.QueryCellInfo(null, eventArgs);
+			Assert.AreEqual(string.Format(CultureInfo.CurrentCulture, Resources.WeekAbbreviationDot, weekNumber,new DateOnly(2018,3,26).ToShortDateString()), eventArgs.Style.Text);
+		}
 
 		[Test]
         public void VerifyQueryCellInfoHeaders()

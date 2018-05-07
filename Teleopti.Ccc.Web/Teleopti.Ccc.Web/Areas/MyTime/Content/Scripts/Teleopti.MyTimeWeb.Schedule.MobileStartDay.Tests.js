@@ -30,21 +30,21 @@
 		});
 
 	test("should navigate to default start date when clicking logo", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggle){
-			if(toggle == 'MyTimeWeb_DayScheduleForStartPage_43446')
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggle) {
+			if (toggle == 'MyTimeWeb_DayScheduleForStartPage_43446')
 				return true;
 		};
 
 		var brandEle = document.createElement('div');
 		brandEle.innerHTML = '<div class="navbar-header pull-left fake-navbar-brand">'
-							+ '<button id="mainNavbarToggler" type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".navbar-offcanvas">'
-							+ 	'<span class="icon-bar"></span>'
-							+ 	'<span class="icon-bar"></span>'
-							+ 	'<span class="icon-bar"></span>'
-							+'</button>'
+			+ '<button id="mainNavbarToggler" type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".navbar-offcanvas">'
+			+ '<span class="icon-bar"></span>'
+			+ '<span class="icon-bar"></span>'
+			+ '<span class="icon-bar"></span>'
+			+ '</button>'
 
-							+'<a class="navbar-brand" href="@string.Format("#{0}Tab", Model.NavigationItems.FirstOrDefault().Controller)">Teleopti</a>'
-						+ '</div>';
+			+ '<a class="navbar-brand" href="@string.Format("#{0}Tab", Model.NavigationItems.FirstOrDefault().Controller)">Teleopti</a>'
+			+ '</div>';
 
 		$("body").append(brandEle);
 		var fakeWindow = {
@@ -168,16 +168,16 @@
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 
 		var html = '<div id="testUnreadMessageHtml">'
-					+	'<ul class="nav navbar-nav navbar-teleopti row submenu">'
-					+		'<li class="mobile-message" data-bind="click: navigateToMessages">'
-					+			'<a>'
-					+				'<i class="glyphicon glyphicon-envelope"></i>'
-					+				'<span id="MobileDayView-message" class="badge" data-bind="visible: unreadMessageCount() > 0, text: unreadMessageCount">'
-					+				'</span>'
-					+			'</a>'
-					+		'</li>'
-					+	'</ul>'
-					+'</div>';
+			+ '<ul class="nav navbar-nav navbar-teleopti row submenu">'
+			+ '<li class="mobile-message" data-bind="click: navigateToMessages">'
+			+ '<a>'
+			+ '<i class="glyphicon glyphicon-envelope"></i>'
+			+ '<span id="MobileDayView-message" class="badge" data-bind="visible: unreadMessageCount() > 0, text: unreadMessageCount">'
+			+ '</span>'
+			+ '</a>'
+			+ '</li>'
+			+ '</ul>'
+			+ '</div>';
 		$('body').append(html);
 
 		ko.applyBindings(vm, $('#testUnreadMessageHtml')[0]);
@@ -450,7 +450,7 @@
 		equal(vm.requestViewModel().model.Template, templateConfig.postShiftForTrade);
 	});
 
-	test("should post shift for trade", function() {
+	test("should post shift for trade", function () {
 		setupAddRequestTemplate(templateConfig.postShiftForTrade);
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax, null, moment('2017-04-28'));
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
@@ -518,11 +518,6 @@
 	});
 
 	test("should show probability toggle by agent's timezone", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-			return false;
-		};
-
 		startDayData.BaseUtcOffsetInMinutes = -600;
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
@@ -531,11 +526,6 @@
 	});
 
 	test("should show probability toggle when the day is within staffing info availableDays", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-			return false;
-		};
-
 		startDayData.BaseUtcOffsetInMinutes = -600;
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
@@ -543,11 +533,7 @@
 		equal(vm.showProbabilityOptionsToggleIcon(), true);
 	});
 
-	test("should show overtime probability by site open hour period", function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-			return false;
-		};
+	test("should show overtime probability by site open hour period", function () {
 		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
 		startDayData.Date = moment().zone(-startDayData.BaseUtcOffsetInMinutes).format(constants.serviceDateTimeFormat.dateOnly);
 		startDayData.Schedule.OpenHourPeriod = { EndTime: "13:00:00", StartTime: "08:00:00" };
@@ -561,11 +547,7 @@
 		ok(lastTooltips.indexOf("12:00 - 12:15") > -1, "expect contains 12:00 - 12:15 but it is " + lastTooltips);
 	});
 
-	test("should clear probabilities when probability option is none", function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-			return false;
-		};
+	test("should clear probabilities when probability option is none", function () {
 		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
 		startDayData.CheckStaffingByIntraday = true;
 		startDayData.Date = moment().zone(-startDayData.BaseUtcOffsetInMinutes).format(constants.serviceDateTimeFormat.dateOnly);
@@ -589,7 +571,6 @@
 
 	test("should not show overtime probability option if Overtime Probability is disabled and selectedProbability is overtime", function () {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
 			if (x === "Staffing_Info_Configuration_44687") return true;
 			return false;
 		};
@@ -603,7 +584,7 @@
 
 	function createPropabilities(periods, date) {
 		var values = [];
-		periods.forEach(function(period) {
+		periods.forEach(function (period) {
 			values.push({
 				Date: date,
 				StartTime: moment(date + " " + period).format(
@@ -703,7 +684,7 @@
 			"Date": "2017-04-28",
 			"DisplayDate": "28/04/2017",
 			"IsToday": false,
-			"StaffingInfoAvailableDays":14,
+			"StaffingInfoAvailableDays": 14,
 			"Schedule": {
 				"RequestsCount": 0,
 				"Date": "28/04/2017",

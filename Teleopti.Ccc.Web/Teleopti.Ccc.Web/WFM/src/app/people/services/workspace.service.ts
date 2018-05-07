@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Person, Role } from '../types';
+import { BehaviorSubject } from 'rxjs';
+import { Person } from '../types';
 import { SearchService } from './search.service';
-import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable()
 export class WorkspaceService {
@@ -35,6 +35,16 @@ export class WorkspaceService {
 		if (!this.people$.getValue().find(p => p.Id === person.Id)) {
 			this.people$.next([...this.people$.getValue(), person]);
 		}
+	}
+
+	public selectPeople(people: Person[]): void {
+		people.forEach(person => {
+			this.selectPerson(person);
+		});
+	}
+
+	public clear() {
+		this.people$.next([]);
 	}
 
 	public deselectPerson(person: Person): void {

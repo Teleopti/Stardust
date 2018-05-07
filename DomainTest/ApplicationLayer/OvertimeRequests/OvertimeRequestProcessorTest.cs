@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -481,6 +482,57 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 				.Be.EqualTo(string.Format(Resources.OvertimeRequestAlreadyHasScheduleInPeriod,
 					personRequest.Request.Period.StartDateTimeLocal(timeZoneInfo),
 					personRequest.Request.Period.EndDateTimeLocal(timeZoneInfo)));
+		}
+
+		[Test]
+		[Toggle(Toggles.OvertimeRequestUsePrimarySkillOption_75573)]
+		public void ShouldApproveWhenUsePrimarySkillValidationIsOnAndTheSkillIsCriticalUnderStaffed()
+		{
+			setupPerson(8, 20);
+			LoggedOnUser.CurrentUser().WorkflowControlSet.OvertimeRequestUsePrimarySkill = true;
+
+			var primarySkill = setupPersonSkill();
+			primarySkill.SetCascadingIndex(1);
+			setupIntradayStaffingForSkill(primarySkill, 10d, 1d);
+
+			var nonPrimarySkill = setupPersonSkill();
+			setupIntradayStaffingForSkill(nonPrimarySkill, 10d, 20d);
+
+			var personRequest = createOvertimeRequest(18, 1);
+
+			var period = new DateTimePeriod(2017, 7, 17, 8, 2017, 7, 17, 18);
+			var pa = createMainPersonAssignment(LoggedOnUser.CurrentUser(), period);
+			ScheduleStorage.Add(pa);
+
+			getTarget().Process(personRequest);
+
+			personRequest.IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		[Toggle(Toggles.OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944)]
+		[Toggle(Toggles.OvertimeRequestUsePrimarySkillOption_75573)]
+		public void ShouldApproveWhenUsePrimarySkillValidationIsOffAndOnlyPrimarySkillIsNotCriticalUnderStaffed()
+		{
+			setupPerson(8, 20);
+			LoggedOnUser.CurrentUser().WorkflowControlSet.OvertimeRequestUsePrimarySkill = false;
+
+			var primarySkill = setupPersonSkill();
+			primarySkill.SetCascadingIndex(1);
+			setupIntradayStaffingForSkill(primarySkill, 10d, 20d);
+
+			var nonPrimarySkill = setupPersonSkill();
+			setupIntradayStaffingForSkill(nonPrimarySkill, 10d, 1d);
+
+			var personRequest = createOvertimeRequest(18, 1);
+
+			var period = new DateTimePeriod(2017, 7, 17, 8, 2017, 7, 17, 18);
+			var pa = createMainPersonAssignment(LoggedOnUser.CurrentUser(), period);
+			ScheduleStorage.Add(pa);
+
+			getTarget().Process(personRequest);
+
+			personRequest.IsApproved.Should().Be.True();
 		}
 
 		private IPersonAssignment createMainPersonAssignment(IPerson person, DateTimePeriod period)

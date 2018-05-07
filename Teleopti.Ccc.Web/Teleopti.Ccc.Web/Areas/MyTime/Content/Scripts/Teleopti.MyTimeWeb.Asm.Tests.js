@@ -74,6 +74,6 @@
 		var enableIntervalUpdate = false;
 		target.ShowAsm(null, enableIntervalUpdate);
 
-		equal(target.Vm().now().format('YYYY-MM-DDTHH:mm:ssZ'), '2018-03-04T00:00:00Z');
+		equal(target.Vm().now().format('YYYY-MM-DDTHH:mm:ss'), '2018-03-04T00:00:00');
 	});
 });

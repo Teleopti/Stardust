@@ -146,15 +146,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PersonListExtractorFromScheduleParts>().As<IPersonListExtractorFromScheduleParts>().SingleInstance();
 			builder.RegisterType<GroupPersonBuilderForOptimizationFactory>().As<IGroupPersonBuilderForOptimizationFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<FlexibelDayOffOptimizationDecisionMakerFactory>().As<IDayOffOptimizationDecisionMakerFactory>().SingleInstance();
+			builder.RegisterType<IntradayOptimizationExecutor>().As<IntradayOptimizationExecutor>().InstancePerLifetimeScope().ApplyAspects();
 
-			if (_configuration.Toggle(Toggles.ResourcePlanner_Deadlock_48170))
-			{
-				builder.RegisterType<IntradayOptimizationExecutorWithDeadlockRetries>().As<IntradayOptimizationExecutor>().InstancePerLifetimeScope().ApplyAspects();
-			}
-			else
-			{
-				builder.RegisterType<IntradayOptimizationExecutor>().InstancePerLifetimeScope().ApplyAspects();
-			}
 			
 			//change to scope? 
 			builder.RegisterType<TeamBlockMoveTimeBetweenDaysCommand>().As<ITeamBlockMoveTimeBetweenDaysCommand>();
@@ -309,7 +302,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<DayOffOptimizationDirectCallCommandHandler>().As<IDayOffOptimizationCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
 			}
 
-			if (_configuration.Toggle(Toggles.ResourcePlanner_DayOffUsePredictorEverywhere_75667))
+			if (_configuration.Toggle(Toggles.ResourcePlanner_MinimumAgents_75339))
 			{
 				builder.RegisterType<TeamBlockDayOffOptimizer>().As<ITeamBlockDayOffOptimizer>().InstancePerLifetimeScope().ApplyAspects();
 				builder.RegisterType<DayOffOptimizerStandard>().InstancePerLifetimeScope();
@@ -342,6 +335,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<MatrixDataWithToFewDaysOff>().As<IMatrixDataWithToFewDaysOff>().InstancePerLifetimeScope();
 
 			builder.RegisterType<ScheduleResultDataExtractorProvider>().As<IScheduleResultDataExtractorProvider>().SingleInstance();
+			if (_configuration.Toggle(Toggles.ResourcePlanner_MinimumAgents_75339))
+			{
+				builder.RegisterType<CreatePersonalSkillDataExtractor>().As<ICreatePersonalSkillDataExtractor>().SingleInstance();
+				builder.RegisterType<ForecastAndScheduleSumForDay>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<CreatePersonalSkillDataExtractorOLD>().As<ICreatePersonalSkillDataExtractor>().SingleInstance();				
+			}
 			builder.RegisterType<TrueFalseRandomizer>().As<ITrueFalseRandomizer>().SingleInstance();
 			builder.RegisterType<OfficialWeekendDays>().As<IOfficialWeekendDays>().SingleInstance();
 			builder.RegisterType<CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker>().As<IDayOffDecisionMaker>().SingleInstance();

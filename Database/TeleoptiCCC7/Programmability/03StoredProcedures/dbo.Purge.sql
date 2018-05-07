@@ -599,13 +599,48 @@ CREATE TABLE #ExpiredArtifacts (Id uniqueidentifier NOT NULL, Parent uniqueident
 set @RowCount = 1
 while @RowCount > 0
 begin
+	delete top(1000) dbo.JobResultArtifact
+	from dbo.JobResultArtifact jra
+	inner join dbo.JobResult jr on jr.Id = jra.Parent
+	where jr.UpdatedOn < @KeepUntil
 
-	Insert Into #ExpiredArtifacts select  top 1000 Id, Parent from dbo.JobResultArtifact
-		where CreateTime < @KeepUntil
-	delete from dbo.JobResultArtifact where id in (select id from #ExpiredArtifacts)
-	delete from dbo.JobResultDetail where Parent in (select distinct Parent from #ExpiredArtifacts)
-	delete from dbo.JobResult where id in (select distinct Parent from #ExpiredArtifacts)
-	truncate table #ExpiredArtifacts
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > @timeout 
+		return
+end
+
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top(1000) dbo.JobResultDetail
+	from dbo.JobResultDetail jrd
+	inner join dbo.JobResult jr on jr.Id = jrd.Parent
+	where jr.UpdatedOn < @KeepUntil
+
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > @timeout 
+		return
+end
+
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top(1000) dbo.PlanningPeriodJobResult
+	from dbo.PlanningPeriodJobResult ppjr
+	inner join dbo.JobResult jr on jr.Id = ppjr.jobresult
+	where jr.UpdatedOn < @KeepUntil
+
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > @timeout 
+		return
+end
+
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top(1000) dbo.JobResult
+	from dbo.JobResult jr
+	where jr.UpdatedOn < @KeepUntil
 
 	select @RowCount = @@rowcount
 	if datediff(second,@start,getdate()) > @timeout 

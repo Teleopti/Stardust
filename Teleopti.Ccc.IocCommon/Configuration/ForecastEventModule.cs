@@ -52,11 +52,20 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<StatisticHelper>().As<IStatisticHelper>();
 			builder.RegisterType<OpenAndSplitTargetSkill>().As<IOpenAndSplitTargetSkill>();
 			builder.RegisterType<ExportMultisiteSkillProcessor>().As<IExportMultisiteSkillProcessor>();
+
+			
 			if (_configuration.Toggle(Toggles.ResourcePlanner_UseErlangAWithInfinitePatience_45845))
 			{
 				if (_configuration.Toggle(Toggles.ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899))
 				{
-					builder.RegisterType<StaffingCalculatorServiceFacadeErlangAWithEsl>().As<IStaffingCalculatorServiceFacade>().SingleInstance();
+					if (_configuration.Toggle(Toggles.ResourcePlanner_UseErlangAWithFinitePatience_47738))
+					{
+						builder.RegisterType<StaffingCalculatorServiceFacadeErlangAAbandon>().As<IStaffingCalculatorServiceFacade>().SingleInstance();
+					}
+					else
+					{
+						builder.RegisterType<StaffingCalculatorServiceFacadeErlangAWithEsl>().As<IStaffingCalculatorServiceFacade>().SingleInstance();
+					}
 				}
 				else
 				{

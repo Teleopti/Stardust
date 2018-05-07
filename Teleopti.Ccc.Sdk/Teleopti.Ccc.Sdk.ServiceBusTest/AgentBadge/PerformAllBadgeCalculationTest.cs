@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -24,7 +23,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 	public class PerformAllBadgeCalculationTest: IIsolateSystem
 	{
 		public PerformAllBadgeCalculation Target;
-		public CalculateBadges CalculateBadges;
 		public FakeTeamGamificationSettingRepository TeamGamificationSettingRepository;
 		public FakePersonRepository PersonRepository;
 		public FakeAgentBadgeWithRankTransactionRepository AgentBadgeWithRankTransactionRepository;
@@ -33,7 +31,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		public FakePushMessageDialogueRepository PushMessageDialogueRepository;
 		public FakeAgentBadgeRepository AgentBadgeRepository;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
-		public FakeAgentBadgeWithRankRepository AgentBadgeWithRankRepository;
 		public FakeBadgeCalculationRepository BadgeCalculationRepository;
 
 		private ITeamGamificationSetting _teamGamificationSetting;

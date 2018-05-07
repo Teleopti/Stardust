@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -9529,6 +9529,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string DescriptionOfDataPartOfAgentDay {
             get {
                 return ResourceManager.GetString("DescriptionOfDataPartOfAgentDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximum consectutive days without dayoff.
+        /// </summary>
+        public static string DescriptionOfMaximumWorkdayRule {
+            get {
+                return ResourceManager.GetString("DescriptionOfMaximumWorkdayRule", resourceCulture);
             }
         }
         
@@ -21842,7 +21851,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There are no skills critically understaffed for the entire request period..
+        ///   Looks up a localized string similar to There are no skills critically understaffed for all or part of the requested period..
         /// </summary>
         public static string NoUnderStaffingSkill {
             get {
@@ -24035,6 +24044,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string People {
             get {
                 return ResourceManager.GetString("People", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to People Access.
+        /// </summary>
+        public static string PeopleAccess {
+            get {
+                return ResourceManager.GetString("PeopleAccess", resourceCulture);
             }
         }
         
@@ -36981,6 +36999,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string UsePreferencesMustHavesOnly {
             get {
                 return ResourceManager.GetString("UsePreferencesMustHavesOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Priority Skill Validation.
+        /// </summary>
+        public static string UsePrimarySkill {
+            get {
+                return ResourceManager.GetString("UsePrimarySkill", resourceCulture);
             }
         }
         

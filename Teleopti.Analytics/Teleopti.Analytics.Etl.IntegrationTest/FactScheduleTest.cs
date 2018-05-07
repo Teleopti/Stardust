@@ -315,27 +315,6 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Assert.That(SqlCommands.CountIntervalsPerLocalDate(person, testDate.AddDays(0)), Is.EqualTo(38));
 		}
 
-		public static int IntervalValueGet(DataTable adherance, DateTime testDate, String testColumn, String intervalName, IPerson person)
-		{
-			foreach (DataRow dtRow in adherance.Rows)
-			{
-				if (dtRow["date"].Equals(testDate))
-				{
-					foreach (DataColumn dc in adherance.Columns)
-					{
-						if (dc.ColumnName.Equals(testColumn))
-						{
-							if (dtRow["interval_name"].ToString().Equals(intervalName))
-							{
-								return Convert.ToInt32(dtRow[testColumn]);
-							}
-						}
-					}
-				}
-			}
-			return -9999;
-		}
-
 		public void AssertOverlapping(IPerson person, string timeZoneId, string etlType, DateTime testDate)
 		{
 			//Tests for "Ready Time vs. Schedule Ready Time"

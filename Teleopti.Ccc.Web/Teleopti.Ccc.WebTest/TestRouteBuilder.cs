@@ -26,26 +26,5 @@ namespace Teleopti.Ccc.WebTest
 
 			return routes;
 		}
-
-		public RouteCollection MakeAreaWithDefaults(string areaName)
-		{
-			var routes = new RouteCollection();
-
-			var mapRoute = routes.MapRoute("area-origin",
-			                                 areaName + "/{controller}/{action}/{id}", new
-			                                                                           	{
-			                                                                           		area = areaName,
-			                                                                           		controller = "Controller",
-			                                                                           		action = "Index",
-			                                                                           		id =
-			                                                                           	UrlParameter.Optional
-			                                                                           	});
-			mapRoute.DataTokens["area"] = areaName;
-			routes.MapRoute(
-				"route-default",
-				"{controller}/{action}/{id}", new {controller = "Home", action = "Index", id = UrlParameter.Optional}
-				);
-			return routes;
-		}
 	}
 }

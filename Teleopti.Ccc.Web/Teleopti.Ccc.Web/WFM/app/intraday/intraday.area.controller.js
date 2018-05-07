@@ -102,7 +102,6 @@
 		}
 
 		vm.exportIntradayData = function() {
-			if (angular.isUnde)
 				if (skillOrGroupIsSelected() && !vm.exporting) {
 					vm.exporting = true;
 					if (

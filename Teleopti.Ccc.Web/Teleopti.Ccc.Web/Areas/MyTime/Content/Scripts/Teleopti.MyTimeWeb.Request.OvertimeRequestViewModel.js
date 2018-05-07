@@ -39,8 +39,7 @@
 	self.IsTimeListOpened = ko.observable(false);
 
 	self.IsMobile = Teleopti.MyTimeWeb.Portal.IsMobile();
-	self.isDefaultStartTimeToggleEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_OvertimeRequestDefaultStartTime_47513');
-	self.showUseDefaultStartTimeToggle = ko.observable(false);
+	self.showUseDefaultStartTimeToggle = ko.observable(true);
 
 	self.checkMessageLength = function (data, event) {
 		var text = $(event.target)[0].value;
@@ -154,8 +153,7 @@
 
 	function setDefaultStartTime() {
 		requestDateStr = (self.DateFrom() && self.DateFrom()._isAMomentObject) ? self.DateFrom().format('YYYY/MM/DD') : moment(self.DateFrom(), dateOnlyFormat).format('YYYY/MM/DD');
-
-		if (moment(requestDateStr).isBefore(self.PeriodStartDate().format('YYYY-MM-DD')) || moment(requestDateStr).isAfter(self.PeriodEndDate().format('YYYY-MM-DD'))) {
+		if (moment(requestDateStr).isBefore(self.PeriodStartDate().format('YYYY-MM-DD')) || self.PeriodEndDate() == null || moment(requestDateStr).isAfter(self.PeriodEndDate().format('YYYY-MM-DD'))) {
 			return;
 		}
 
@@ -358,11 +356,10 @@
 		self.TimeList = _createTimeList();
 		self.RequestDuration(self.TimeList[0]);
 		self.CancelAddRequest = parentViewModel.CancelAddingNewRequest;
-		self.showUseDefaultStartTimeToggle(self.isDefaultStartTimeToggleEnabled);
 
 		setAvailableDays();
 		
-		if (self.isDefaultStartTimeToggleEnabled && !disableGetDefaultStartTime) {
+		if (!disableGetDefaultStartTime) {
 			setDateFromSubscription();
 			setUseDefaultStartTimeToggleSubscription();
 		}

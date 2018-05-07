@@ -1,16 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Owin;
 using NJsonSchema;
+using NJsonSchema.Generation;
 using NSwag;
-using NSwag.SwaggerGeneration;
 
 namespace Teleopti.Wfm.Api
 {
 	public class SwaggerHandler : OwinMiddleware
 	{
-		readonly CommandDtoProvider commandProvider;
-		readonly QueryHandlerProvider queryProvider;
+		private readonly CommandDtoProvider commandProvider;
+		private readonly QueryHandlerProvider queryProvider;
+		private readonly JsonSchemaGeneratorSettings settings = new JsonSchemaGeneratorSettings
+		{
+			SchemaType = SchemaType.Swagger2,
+			DefaultPropertyNameHandling = PropertyNameHandling.CamelCase,
+			AllowReferencesWithProperties = true
+		};
 
 		private const string url = "/swagger/v1/swagger.json";
 
@@ -22,26 +29,26 @@ namespace Teleopti.Wfm.Api
 
 		private string generateDoc(IOwinContext context)
 		{
-			var settings = new NJsonSchema.Generation.JsonSchemaGeneratorSettings
+			var doc = new SwaggerDocument
 			{
-				SchemaType = SchemaType.Swagger2,
-				DefaultPropertyNameHandling = PropertyNameHandling.CamelCase
+				Info =
+				{
+					Title = "Teleopti WFM api",
+					Description =
+						"The api to use for integrations with Teleopti WFM. Please specify an api key to use to run the samples."
+				},
+				Host = context.Request.Host.Value ?? "",
 			};
 
-			var generator = new SwaggerJsonSchemaGenerator(settings);
-			var doc = new SwaggerDocument();
-			var resolver = new SwaggerSchemaResolver(doc, settings);
-
-			doc.Info.Title = "Teleopti WFM api";
-			doc.Info.Description = "The api to use for integrations with Teleopti WFM. Please specify an api key to use to run the samples.";
-
-			doc.Host = context.Request.Host.Value ?? "";
+			var schemaResolver = new SwaggerSchemaResolver(doc, settings);
+			var generator = new JsonSchemaGenerator(settings);
+			
 			doc.Schemes.Add(context.Request.Scheme == "http" ? SwaggerSchema.Http : SwaggerSchema.Https);
 			doc.BasePath = context.Request.PathBase.Value?.Substring(0, context.Request.PathBase.Value.Length) ?? "";
 
-			var list = new System.Collections.Generic.List<SwaggerSecurityRequirement> { new SwaggerSecurityRequirement { { "Authorization", new[] { "Authorization" } } } };
+			var list = new List<SwaggerSecurityRequirement> { new SwaggerSecurityRequirement { { "Authorization", new[] { "Authorization" } } } };
 			var swaggerOperations = new SwaggerOperations {{SwaggerOperationMethod.Get, new SwaggerOperation {Security = list}}};
-			doc.Paths.Add("/command", swaggerOperations);
+			doc.Paths.Add("command", swaggerOperations);
 			foreach (var cmd in commandProvider.AllowedCommandTypes())
 			{
 				var opname = cmd.Name.Substring(0, cmd.Name.LastIndexOf("Dto", StringComparison.InvariantCultureIgnoreCase));
@@ -53,8 +60,7 @@ namespace Teleopti.Wfm.Api
 				};
 				var swaggerResponse = new SwaggerResponse
 				{
-					Schema = generator.GenerateWithReferenceAndNullability<JsonSchema4>(typeof(ResultDto), null, false, resolver)
-						.Result
+					Schema = Task.Run(() => generator.GenerateWithReferenceAndNullability<JsonSchema4>(typeof(ResultDto), null, false, schemaResolver, null)).Result
 				};
 				swaggerOperation.Responses.Add("200", swaggerResponse);
 
@@ -62,17 +68,17 @@ namespace Teleopti.Wfm.Api
 				{
 					Description = "Command arguments for " + opname,
 					Kind = SwaggerParameterKind.Body,
-					Schema = generator.GenerateWithReferenceAndNullability<JsonSchema4>(cmd, null, false, resolver).Result
+					Schema = Task.Run(() => generator.GenerateWithReferenceAndNullability<JsonSchema4>(cmd, null, false, schemaResolver, null)).Result
 				};
 				swaggerOperation.Parameters.Add(param);
 
 				operations.Add(SwaggerOperationMethod.Post, swaggerOperation);
-				doc.Paths.Add("/command/" + opname, operations);
-
+				doc.Paths.Add("command/" + opname, operations);
 			}
-
+			
 			swaggerOperations = new SwaggerOperations {{SwaggerOperationMethod.Get, new SwaggerOperation {Security = list}}};
-			doc.Paths.Add("/query", swaggerOperations);
+			doc.Paths.Add("query", swaggerOperations);
+			
 			foreach (var query in queryProvider.AllowedQueryTypes())
 			{
 				var opname = query.Item2.Name.Substring(0, query.Item2.Name.LastIndexOf("Dto", StringComparison.InvariantCultureIgnoreCase));
@@ -84,28 +90,28 @@ namespace Teleopti.Wfm.Api
 					Security = list,
 					OperationId = "POST_query_" + opname
 				};
+
+				operations.Add(SwaggerOperationMethod.Post, swaggerOperation);
+				doc.Paths.Add($"query/{typename}/{opname}", operations);
+				
 				var swaggerResponse = new SwaggerResponse
 				{
-					Schema = generator.GenerateWithReferenceAndNullability<JsonSchema4>(query.Item3, null, false, resolver).Result
+					Schema = Task.Run(()=>generator.GenerateWithReferenceAndNullability<JsonSchema4>(typeof(QueryResultDto<>).MakeGenericType(query.Item3), null, false, schemaResolver, null)).Result
 				};
 				swaggerOperation.Responses.Add("200", swaggerResponse);
-
+				
 				var param = new SwaggerParameter
 				{
 					Description = "Query arguments for " + opname,
 					Kind = SwaggerParameterKind.Body,
-					Schema = generator.GenerateWithReferenceAndNullability<JsonSchema4>(query.Item2, null, false, resolver).Result
+					Schema = Task.Run(() => generator.GenerateWithReferenceAndNullability<JsonSchema4>(query.Item2, null, false, schemaResolver, null)).Result
 				};
 				swaggerOperation.Parameters.Add(param);
-
-				operations.Add(SwaggerOperationMethod.Post, swaggerOperation);
-				doc.Paths.Add("/query/" + typename + "/" + opname, operations);
-
 			}
-
+			
 			doc.SecurityDefinitions.Add("Authorization", new SwaggerSecurityScheme { Name = "Authorization", Description = "Bearer token", Type = SwaggerSecuritySchemeType.ApiKey, In = SwaggerSecurityApiKeyLocation.Header });
-			doc.Consumes = new System.Collections.Generic.List<string> { "application/json" };
-			doc.Produces = new System.Collections.Generic.List<string> { "application/json" };
+			doc.Consumes = new List<string> { "application/json" };
+			doc.Produces = new List<string> { "application/json" };
 
 			return doc.ToJson();
 		}
@@ -116,7 +122,9 @@ namespace Teleopti.Wfm.Api
 			{
 				context.Response.StatusCode = 200;
 				context.Response.Headers["Content-Type"] = "application/json; charset=utf-8";
-				return context.Response.WriteAsync(generateDoc(context));
+
+				var doc = generateDoc(context);
+				return context.Response.WriteAsync(doc);
 			}
 
 			// Call the next delegate/middleware in the pipeline

@@ -33,6 +33,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			Has(scenario);
 			return scenario;
 		}
+		
+		public IScenario Has()
+		{
+			return Has("_");
+		}
 
 		public void Add(IScenario entity)
 		{

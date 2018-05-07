@@ -112,7 +112,6 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 		}
 
 		[Test]
-		[Toggle(Toggles.MyTimeWeb_CalculateOvertimeProbabilityByPrimarySkill_44686)]
 		public void ShouldProcessCalculationOfOverTimePossibilitiesByPeriodForMultipleAgents()
 		{
 			initialise();

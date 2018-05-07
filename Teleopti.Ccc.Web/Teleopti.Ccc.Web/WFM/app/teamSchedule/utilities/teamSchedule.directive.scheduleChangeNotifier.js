@@ -8,7 +8,7 @@
 	function scheduleChangeNotifierDirective(signalRSVC, scheduleMgmtSvc) {
 		return {
 			restrict: 'E',
-			link: function($scope, $element, $attr) {
+			link: function ($scope, $element, $attr) {
 
 				var cb = $scope.$eval($attr.onNotification);
 
@@ -18,7 +18,7 @@
 					300);
 
 				function isMessageNeedToBeHandled() {
-					var personIds = scheduleMgmtSvc.groupScheduleVm.Schedules.map(function(schedule) { return schedule.PersonId; });
+					var personIds = scheduleMgmtSvc.groupScheduleVm.Schedules.map(function (schedule) { return schedule.PersonId; });
 
 					var scheduleDate = $scope.$eval($attr.scheduleDate);
 					var lastCommandTrackId = $scope.$eval($attr.lastCommandTrackId);
@@ -27,7 +27,7 @@
 					var viewRangeStart = scheduleDateMoment.clone().add(-1, 'day').startOf('day');
 					var viewRangeEnd = scheduleDateMoment.clone().add(1, 'day').startOf('day');
 
-					return function(message) {
+					return function (message) {
 						if (message.TrackId === lastCommandTrackId) {
 							return false;
 						}
@@ -43,18 +43,22 @@
 				}
 
 				function scheduleChangedEventHandler(messages) {
+					if (!scheduleMgmtSvc.groupScheduleVm.Schedules
+						|| !scheduleMgmtSvc.groupScheduleVm.Schedules.length)
+						return;
+
 					var personIds = messages.filter(isMessageNeedToBeHandled())
-						.map(function(message) {
+						.map(function (message) {
 							return message.DomainReferenceId;
 						});
 
 					var uniquePersonIds = [];
-					personIds.forEach(function(personId) {
+					personIds.forEach(function (personId) {
 						if (uniquePersonIds.indexOf(personId) === -1) uniquePersonIds.push(personId);
 					});
 
 					if (uniquePersonIds.length !== 0) {
-						cb(uniquePersonIds);						
+						cb(uniquePersonIds);
 					}
 				}
 			}

@@ -132,8 +132,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				var movedDaysOff = _affectedDayOffs.Execute(matrix.Item1, dayOffOptimizationPreference, originalArray, resultingArray);
 				if (movedDaysOff != null)
 				{
-					var predictorResult = _dayOffOptimizerPreMoveResultPredictor.IsPredictedBetterThanCurrent(matrix.Item1, resultingArray, originalArray, dayOffOptimizationPreference, numberOfDayOffsMoved);
-					if (!predictorResult)
+					var predictorResult = _dayOffOptimizerPreMoveResultPredictor.IsPredictedBetterThanCurrent(matrix.Item1, resultingArray, originalArray, dayOffOptimizationPreference, numberOfDayOffsMoved, optimizationPreferences, schedulingResultStateHolder);
+					if (predictorResult == PredictorCheck.Unsuccesful)
 					{
 						allFailed[matrix.Item2] = false;
 						matrix.Item2.LockDays(movedDaysOff.AddedDaysOff);
@@ -151,7 +151,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 					if (success)
 					{
-						allFailed[matrix.Item2] = false;
+						if (predictorResult != PredictorCheck.NotApplicable)
+						{
+							allFailed[matrix.Item2] = false;				
+						}
 					}
 					else
 					{
@@ -312,7 +315,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	
 	
 
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_DayOffUsePredictorEverywhere_75667)]
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MinimumAgents_75339)]
 	public class DayOffOptimizerStandardOLD
 	{
 		private readonly ILockableBitArrayFactory _lockableBitArrayFactory;

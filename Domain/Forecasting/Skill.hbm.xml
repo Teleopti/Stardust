@@ -107,6 +107,12 @@
 			not-null="true"
 			column="OverstaffingFactor"/>
 	</component>
+	<component name="AbandonRate" class="Teleopti.Interfaces.Domain.Percent, Teleopti.Interfaces">
+		<property name="Value"
+					not-null="true"
+					type="double"
+					column="AbandonRate"/>
+	</component>
 	<many-to-one name="BusinessUnit"
 	  class="Teleopti.Ccc.Domain.Common.BusinessUnit"
 	  access="nosetter.camelcase-underscore"

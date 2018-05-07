@@ -174,25 +174,6 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 			}
 		}
 
-		internal static IDictionary<string, string> Sql2005conf(string connString, int? timeout)
-		{
-			return DataSourceHelper.CreateDataSourceSettings(connString, timeout, null);
-		}
-
-
-
-
-
-
-		public static TestScope CreatePersonAndLoginWithOpenUnitOfWork(out IPerson person, out IUnitOfWork unitOfWork)
-		{
-			createBusinessUnitAndPerson(out person);
-			Login(person);
-			unitOfWork = DataSource.Application.CreateAndOpenUnitOfWork();
-			saveBusinessUnitAndPerson(person, unitOfWork);
-			return new TestScope(unitOfWork);
-		}
-
 		public class TestScope
 		{
 			private readonly IUnitOfWork _unitOfWork;

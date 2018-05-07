@@ -156,11 +156,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			return 0;
 		}
 
-		public int FillIntradayScheduleDataMart(IBusinessUnit businessUnit)
-		{
-			throw new NotImplementedException();
-		}
-
 		public int PersistDate(DataTable dataTable)
 		{
 			return dataTable.Rows.Count;
@@ -249,11 +244,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 		public int FillScheduleDayCountDataMart(DateTimePeriod period, IBusinessUnit businessUnit)
 		{
 			return 0;
-		}
-
-		public int FillIntradayScheduleDayCountDataMart(IBusinessUnit currentBusinessUnit, IScenario scenario)
-		{
-			throw new NotImplementedException();
 		}
 
 		public int FillDayOffDataMart(IBusinessUnit businessUnit)
@@ -361,11 +351,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 		public int PersistForecastWorkload(DataTable dataTable)
 		{
 			return dataTable.Rows.Count;
-		}
-
-		public int FillForecastWorkloadDataMart(DateTimePeriod period, IBusinessUnit businessUnit, bool isIntraday)
-		{
-			throw new NotImplementedException();
 		}
 
 		public int FillForecastWorkloadDataMart(DateTimePeriod period, IBusinessUnit businessUnit)
@@ -694,22 +679,12 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			return 0;
 		}
 
-		public int FillIntradayFactRequestMart(IBusinessUnit businessUnit)
-		{
-			return 0;
-		}
-
 		public int FillFactRequestMart(DateTimePeriod period, IBusinessUnit businessUnit)
 		{
 			return 0;
 		}
 
 		public int PerformPurge()
-		{
-			return 0;
-		}
-
-		public int FillIntradayFactRequestedDaysMart(IBusinessUnit businessUnit)
 		{
 			return 0;
 		}
@@ -774,11 +749,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 		}
 
 		public int FillFactAvailabilityMart(DateTimePeriod period, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit)
-		{
-			return 0;
-		}
-
-		public int FillIntradayFactAvailabilityMart(IBusinessUnit businessUnit, IScenario scenario)
 		{
 			return 0;
 		}

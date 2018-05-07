@@ -5,7 +5,6 @@
 		.controller('ResourceplannerReportCtrl', [
 			'$scope', '$state', '$translate', '$stateParams', 'ResourcePlannerReportSrvc', 'planningPeriodService', 'NoticeService', 'Toggle', '$interval',
 			function ($scope, $state, $translate, $stateParams, ResourcePlannerReportSrvc, planningPeriodService, NoticeService, toggleService, $interval) {
-				var toggledOptimization = false;
 				var tenMinutes = 1000 * 60 * 10;
 				var planningPeriodId = $stateParams.id ? $stateParams.id : $scope.id;
 				var checkProgressRef;
@@ -26,7 +25,6 @@
 				}, tenMinutes);
 
 				toggleService.togglesLoaded.then(function () {
-					toggledOptimization = toggleService.Scheduler_IntradayOptimization_36617;
 					initLoad();
 				});
 
@@ -85,7 +83,7 @@
 				}
 
 				function optimizeDayOffIsEnabled() {
-					return (toggledOptimization && planningPeriodId !== "");
+					return planningPeriodId !== "";
 				}
 
 				function notifyOptimizationDone() {

@@ -58,8 +58,6 @@ BEGIN
 		insert into mart.etl_maintenance_configuration VALUES (1, N'daysToKeepETLError', 60)
 	if not exists (select 1 from mart.etl_maintenance_configuration where configuration_id = 2)
 		insert into mart.etl_maintenance_configuration VALUES (2, N'daysToKeepETLExecution', 45)
-	if not exists (select 1 from mart.etl_maintenance_configuration where configuration_id = 3)
-		insert into mart.etl_maintenance_configuration VALUES (3, N'daysToKeepRTAEvents', 2)
 	if not exists(select 1 from [mart].[etl_maintenance_configuration] where configuration_id = 14)
 		insert into [mart].[etl_maintenance_configuration] values(14,'YearsToKeepAggQueueStats',50)
 	if not exists(select 1 from [mart].[etl_maintenance_configuration] where configuration_id = 15)
@@ -68,8 +66,6 @@ BEGIN
 		insert into mart.etl_maintenance_configuration values(16,'DaysToKeepMessagesPurged',60)
 	IF NOT EXISTS (SELECT 1 FROM [mart].[etl_maintenance_configuration] WHERE configuration_id = 17)
 		insert into mart.etl_maintenance_configuration VALUES(17,'DaysToKeepUnchangedPermissionReport',90)
-
-
 
 	SELECT @daysToKeepETLExecution = configuration_value
 	FROM mart.etl_maintenance_configuration

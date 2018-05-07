@@ -120,23 +120,6 @@ namespace Teleopti.Ccc.Rta.TestApplication
 			}
 		}
 
-		public void SendRtaDataToServer(Guid platformTypeId, int logObjectId, ICollection<ITeleoptiRtaState> rtaStates)
-		{
-			try
-			{
-				_dataHandler.ProcessRtaData(platformTypeId, logObjectId.ToString(CultureInfo.InvariantCulture), rtaStates);
-			}
-			catch (InvalidOperationException exception)
-			{
-				const string errorMessage = "The data handler service has been disposed. Restart the client before trying to send new messages.";
-				_loggingSvc.Error(errorMessage, exception);
-
-				throw;
-			}
-
-			_loggingSvc.Info("Done sending message to server");
-		}
-
         public void StopLogClient()
         {
             _loggingSvc.Info("Client channel unregistered");

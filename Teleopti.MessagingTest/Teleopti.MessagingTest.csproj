@@ -50,7 +50,6 @@
     <Compile Include="SignalR\ImplementationDetailsTests\DisabledSignalRClientTest.cs" />
     <Compile Include="SignalR\ImplementationDetailsTests\SignalRSubscriptionsTest.cs" />
     <Compile Include="SignalR\SignalRSubscriptionsTest.cs" />
-    <Compile Include="SignalR\ImplementationDetailsTests\TestDoubles\FailingHubProxyFake.cs" />
     <Compile Include="SignalR\ImplementationDetailsTests\TestDoubles\HubProxyFake.cs" />
     <Compile Include="SignalR\ImplementationDetailsTests\TestDoubles\MessageFilterManagerFake.cs" />
     <Compile Include="SignalR\ImplementationDetailsTests\TestDoubles\MultiConnectionMessageBrokerCompositeClientForTest.cs" />

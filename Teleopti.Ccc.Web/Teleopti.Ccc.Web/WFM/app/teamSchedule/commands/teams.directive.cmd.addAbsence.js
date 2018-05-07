@@ -92,7 +92,7 @@
 		};
 
 		vm.isAbsenceTimeValid = function () {
-			return (moment(vm.timeRange.endTime).isAfter(moment(vm.timeRange.startTime)));
+			return (moment.tz(vm.timeRange.endTime, vm.getCurrentTimezone()).isAfter(moment.tz(vm.timeRange.startTime, vm.getCurrentTimezone())));
 		};
 		vm.isAbsenceDateValid = function () {
 			return moment(vm.timeRange.endTime).isSameOrAfter(moment(vm.timeRange.startTime), 'day');
@@ -124,7 +124,7 @@
 			vm.invalidAgents = [];
 			var invalidAgentNameList = [];
 			vm.selectedAgents.forEach(function (agent) {
-				if (vm.getCurrentTimezone() != vm.containerCtrl.scheduleManagementSvc.findPersonScheduleVmForPersonId(agent.PersonId).Timezone.IanaId) {
+				if (vm.getCurrentTimezone() !== vm.containerCtrl.scheduleManagementSvc.findPersonScheduleVmForPersonId(agent.PersonId).Timezone.IanaId) {
 					vm.invalidAgents.push(agent);
 					invalidAgentNameList.push(agent.Name);
 				}
@@ -133,7 +133,7 @@
 		}
 
 		function checkIfTimeRangeAllowedForIntradayAbsence() {
-			vm.invalidAgents.length = 0;
+			vm.invalidAgents = [];
 			var timeRangeMoment = {
 				startTime: moment(vm.timeRange.startTime),
 				endTime: moment(vm.timeRange.endTime)
@@ -198,8 +198,8 @@
 				requestData.Start = serviceDateFormatHelper.getDateOnly(vm.timeRange.startTime);
 				requestData.End = serviceDateFormatHelper.getDateOnly(vm.timeRange.endTime);
 			} else {
-				requestData.Start = vm.convertTime(serviceDateFormatHelper.getDateTime(vm.timeRange.startTime));
-				requestData.End = vm.convertTime(serviceDateFormatHelper.getDateTime(vm.timeRange.endTime));
+				requestData.Start = vm.convertTime(getDateTimeInTimeZone(vm.timeRange.startTime));
+				requestData.End = vm.convertTime(getDateTimeInTimeZone(vm.timeRange.endTime));
 			}
 			requestData.IsFullDay = vm.isFullDayAbsence;
 
@@ -219,6 +219,10 @@
 			}
 
 		};
+
+		function getDateTimeInTimeZone(dateTime) {
+			return serviceDateFormatHelper.getDateTime(moment.tz(dateTime, vm.getCurrentTimezone()));
+		}
 
 		function updateDateAndTimeFormat() {
 			var timeFormat = $locale.DATETIME_FORMATS.shortTime;

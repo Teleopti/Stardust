@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private OvertimeValidationHandleType? _overtimeRequestMaximumContinuousWorkTimeHandleType;
 		private bool _overtimeRequestMaximumContinuousWorkTimeEnabled;
 		private OvertimeRequestStaffingCheckMethod _overtimeRequestStaffingCheckMethod;
+		private bool _overtimeRequestUsePrimarySkill;
 
 		public WorkflowControlSet()
 		{
@@ -176,6 +177,11 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		{
 			absenceRequestOpenPeriod.SetParent(this);
 			_absenceRequestOpenPeriods.Insert(orderIndex, absenceRequestOpenPeriod);
+		}
+
+		public virtual bool OvertimeRequestUsePrimarySkill {
+			get { return _overtimeRequestUsePrimarySkill; }
+			set { _overtimeRequestUsePrimarySkill = value; }
 		}
 
 		public virtual void InsertOvertimePeriod(IOvertimeRequestOpenPeriod overtimeRequestOpenPeriod, int orderIndex)

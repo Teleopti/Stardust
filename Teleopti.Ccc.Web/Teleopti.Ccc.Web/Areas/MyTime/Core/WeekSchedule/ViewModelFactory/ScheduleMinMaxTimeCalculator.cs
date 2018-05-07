@@ -114,19 +114,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		private TimePeriod? getSiteOpenHourPeriod(WeekScheduleDomainData scheduleDomainData)
 		{
 			TimePeriod? siteOpenHourPeriod;
-			if (_toggles.IsEnabled(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880))
+			var weekPeriod = DateHelper.GetWeekPeriod(scheduleDomainData.Date, CultureInfo.CurrentCulture);
+			if (weekPeriod.StartDate > _now.ServerDate_DontUse().AddDays(ScheduleStaffingPossibilityConsts.MaxAvailableDays))
 			{
-				var weekPeriod = DateHelper.GetWeekPeriod(scheduleDomainData.Date, CultureInfo.CurrentCulture);
-				if (weekPeriod.StartDate > _now.ServerDate_DontUse().AddDays(ScheduleStaffingPossibilityConsts.MaxAvailableDays))
-				{
-					return null;
-				}
-				siteOpenHourPeriod = _siteOpenHourProvider.GetMergedSiteOpenHourPeriod(weekPeriod);
+				return null;
 			}
-			else
-			{
-				siteOpenHourPeriod = _siteOpenHourProvider.GetSiteOpenHourPeriod(_now.ServerDate_DontUse());
-			}
+			siteOpenHourPeriod = _siteOpenHourProvider.GetMergedSiteOpenHourPeriod(weekPeriod);
 			return siteOpenHourPeriod;
 		}
 

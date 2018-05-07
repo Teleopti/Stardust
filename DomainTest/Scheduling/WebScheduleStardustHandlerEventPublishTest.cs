@@ -13,7 +13,6 @@ using Teleopti.Ccc.DomainTest.SchedulingScenarios;
 using Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -39,7 +38,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public FakePersonRepository PersonRepository;
 		public FakeJobResultRepository JobResultRepository;
 		public FakeTenants Tenants;
-		public FakeSchedulingSourceScope FakeSchedulingSourceScope;
 
 		private IBusinessUnit businessUnit;
 

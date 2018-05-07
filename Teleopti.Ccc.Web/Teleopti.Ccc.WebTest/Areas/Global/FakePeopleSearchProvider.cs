@@ -47,29 +47,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			return _model;
 		}
 
-		public IEnumerable<IPerson> SearchPermittedPeople(IDictionary<PersonFinderField, string> criteriaDictionary,
-			DateOnly dateInUserTimeZone, string function)
-		{
-			if (_enableDateFilter)
-			{
-				return !_permittedPeopleByDate.ContainsKey(dateInUserTimeZone) ? new List<IPerson>() : _permittedPeopleByDate[dateInUserTimeZone].ToList();
-			}
-			var people = function == DefinedRaptorApplicationFunctionPaths.ViewConfidential
-				? _peopleWithConfidentialAbsencePermission
-				: _permittedPeople;
-
-			if (criteriaDictionary.ContainsKey(PersonFinderField.Role))
-			{
-				var roleName = criteriaDictionary[PersonFinderField.Role];
-				roleName = Regex.Match(roleName, quotePattern).Value;
-				people =
-					people.Where(
-						p => _personApplicationRoleDictionary.ContainsKey(p) && _personApplicationRoleDictionary[p] == roleName).ToList();
-			}
-
-			return people;
-		}
-
 		public IEnumerable<IPerson> SearchPermittedPeople(PersonFinderSearchCriteria searchCriteria,
 			DateOnly dateInUserTimeZone, string function)
 		{
@@ -80,20 +57,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			return function == DefinedRaptorApplicationFunctionPaths.ViewConfidential
 				? _peopleWithConfidentialAbsencePermission
 				: _permittedPeople;
-		}
-
-		public IEnumerable<Guid> GetPermittedPersonIdList(PersonFinderSearchCriteria searchCriteria, DateOnly currentDate,
-			string function)
-		{
-
-			if (_enableDateFilter)
-			{
-				return !_permittedPeopleByDate.ContainsKey(currentDate) ? new List<Guid>() : _permittedPeopleByDate[currentDate].Select(p => p.Id.GetValueOrDefault()).ToList();
-			}
-
-			return function == DefinedRaptorApplicationFunctionPaths.ViewConfidential
-				? _peopleWithConfidentialAbsencePermission.Select(p => p.Id.GetValueOrDefault())
-				: _permittedPeople.Select(p => p.Id.GetValueOrDefault());
 		}
 
 		public IEnumerable<IPerson> SearchPermittedPeopleWithAbsence(IEnumerable<IPerson> permittedPeople,
@@ -222,10 +185,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			{
 				_permittedPeopleByDate[date] = persons.ToList();
 			}
-		}
-		public void AddPersonUnavailableSince(IPerson person, DateOnly date)
-		{
-
 		}
 
 		public void AddPersonWithViewConfidentialPermission(IPerson person)

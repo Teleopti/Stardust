@@ -48,8 +48,6 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 
 		public EtlController Target;
 		public FakeToggleManager ToggleManager;
-		public JobCollectionModelProvider JobCollectionModelProvider;
-		public TenantLogDataSourcesProvider TenantLogDataSourcesProvider;
 		public FakeTenants AllTenants;
 		public FakeBaseConfigurationRepository BaseConfigurationRepository;
 		public FakeGeneralInfrastructure GeneralInfrastructure;

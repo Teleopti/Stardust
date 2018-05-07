@@ -19,7 +19,9 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 {
 	[TestFixture]
-	[RequestsTest]
+	[DomainTest] 
+	[WebTest] 
+	[RequestsTest] 
 	public class ShiftTradeRequestPersonToPermissionValidatorTest : IIsolateSystem
 	{
 		public FakePersonRepository PersonRepository;

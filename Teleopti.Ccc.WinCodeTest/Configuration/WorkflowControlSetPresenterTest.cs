@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 	public class WorkflowControlSetPresenterTest : IIsolateSystem
 	{
 		public FakeWorkflowControlSetRepository WorkflowControlSetRepository;
+		public FakeSkillRepository SkillRepository;
 		public FakeUnitOfWorkFactory UnitOfWorkFactory;
 		public FakeRepositoryFactory RepositoryFactory;
 		public FakeAbsenceRepository AbsenceRepository;
@@ -760,6 +762,35 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 
 			Assert.IsNotNull(_target.ShiftCategoriesCollection());
 			Assert.IsNotNull(_target.DayOffCollection());
+		}
+		
+		[Test]
+		public void VerifyIsUsingPrimaySkill()
+		{
+			var skill = new Skill("test");
+			skill.SetCascadingIndex(1);
+			SkillRepository.Add(skill);
+
+			initialize();
+
+			var workflowControlSet = new WorkflowControlSet("My Workflow Control Set").WithId();
+			WorkflowControlSetRepository.Add(workflowControlSet);
+
+			Assert.IsTrue(_target.IsUsingPrimarySkill());
+		}
+
+		[Test]
+		public void VerifyIsNotUsingPrimaySkill()
+		{
+			var skill = new Skill("test");
+			SkillRepository.Add(skill);
+
+			initialize();
+
+			var workflowControlSet = new WorkflowControlSet("My Workflow Control Set").WithId();
+			WorkflowControlSetRepository.Add(workflowControlSet);
+
+			Assert.IsFalse(_target.IsUsingPrimarySkill());
 		}
 
 		[Test]

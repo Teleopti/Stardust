@@ -251,11 +251,9 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (ajax, reloadData, bl
 	};
 
 	function setStaffingProbabilityToggleStates(data){
-		self.staffingProbabilityOnMobileEnabled(data.ViewPossibilityPermission
-			&& Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913"));
+		self.staffingProbabilityOnMobileEnabled(data.ViewPossibilityPermission);
 
-		self.staffingProbabilityForMultipleDaysEnabled(data.ViewPossibilityPermission
-			&& Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880"));
+		self.staffingProbabilityForMultipleDaysEnabled(data.ViewPossibilityPermission);
 
 		if(Teleopti.MyTimeWeb.Common.IsToggleEnabled("Staffing_Info_Configuration_44687")){
 			self.absenceProbabilityEnabled = ko.observable((self.staffingProbabilityOnMobileEnabled() || self.staffingProbabilityForMultipleDaysEnabled()) && data.CheckStaffingByIntraday && data.AbsenceProbabilityEnabled);

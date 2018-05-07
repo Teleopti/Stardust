@@ -27,6 +27,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					var timeSpanKey = interval.Key.TimeOfDay;
 					var intervalDateOnly = new DateOnly(interval.Key);
 
+					if (intervalDateOnly == returnListDateOnly.AddDays(-2))
+						timeSpanKey = timeSpanKey.Add(TimeSpan.FromDays(-2));
+
 					if (intervalDateOnly == returnListDateOnly.AddDays(-1))
 						timeSpanKey = timeSpanKey.Add(TimeSpan.FromDays(-1));
 

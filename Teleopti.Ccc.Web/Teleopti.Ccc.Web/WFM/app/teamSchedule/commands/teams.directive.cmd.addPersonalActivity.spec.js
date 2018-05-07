@@ -207,6 +207,67 @@
 	});
 
 
+	it('should not add duplicate agent in invalid agent list when input validation is called multiple time with the input changed', function () {
+		var result = setUp();
+		var element = result.container;
+		var vm = result.commandControl;
+
+		vm.isNextDay = false;
+		vm.disableNextDay = false;
+		vm.timeRange = {
+			startTime: '2016-06-16 18:00:00',
+			endTime: '2016-06-16 20:00:00'
+		};
+		vm.manageScheduleForDistantTimezonesEnabled = true;
+
+		vm.selectedAgents = [
+			{
+				PersonId: 'agent1',
+				Name: 'agent1',
+				ScheduleEndTime: moment('2016-06-16 12:00:00').toDate()
+			}];
+
+		var timezone1 = {
+			IanaId: 'Asia/Hong_Kong',
+			DisplayName: '(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi'
+		};
+
+		fakePersonSelectionService.setFakeCheckedPersonInfoList(vm.selectedAgents);
+
+		vm.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('agent1', {
+			Date: '2016-06-16',
+			PersonId: 'agent1',
+			Timezone: timezone1,
+			Shifts: [
+				{
+					Date: '2016-06-16',
+					Projections: [
+						{
+							Start: '2016-06-16 08:00',
+							End: '2016-06-16 12:00',
+							Minutes: 600
+						}],
+					ProjectionTimeRange: {
+						Start: '2016-06-16 08:00',
+						End: '2016-06-16 12:00'
+					}
+				}]
+		});
+		var commandScope = angular.element(element[0].querySelector('add-personal-activity')).isolateScope();
+		commandScope.newPersonalActivityForm.$valid = true;
+		vm.updateInvalidAgents();
+		result.scope.$apply();
+
+		commandScope.newPersonalActivityForm.$valid = true;
+		vm.updateInvalidAgents();
+		result.scope.$apply();
+
+
+		expect(vm.invalidAgents.length).toBe(1);
+		expect(vm.invalidAgents[0].PersonId).toBe('agent1');
+	});
+
+
 	it('should invoke action callback after calling add personal activity', function () {
 		var result = setUp();
 
@@ -418,8 +479,8 @@
 			vm.isNextDay = false;
 			vm.disableNextDay = false;
 			vm.timeRange = {
-				startTime: new Date('2016-06-15T08:00:00Z'),
-				endTime: new Date('2016-06-15T16:00:00Z')
+				startTime: '2016-06-15 08:00',
+				endTime: '2016-06-15 16:00'
 			};
 
 			var timezone1 = {
@@ -494,6 +555,56 @@
 			expect(moment(activityData.EndTime).format('YYYY-MM-DDTHH:mm:00')).toEqual(moment(vm.timeRange.endTime).add(8, 'hours').format('YYYY-MM-DDTHH:mm:00'));
 			expect(activityData.TrackedCommandInfo.TrackId).toBe(vm.trackId);
 		});
+
+		it('should apply with correct time range based on the selected time zone', function () {
+			var result = setUp("2018-03-25", "Asia/Hong_Kong");
+			var vm = result.commandControl;
+
+			vm.isNextDay = false;
+			vm.disableNextDay = false;
+			vm.timeRange = {
+				startTime: '2018-03-25 01:00',
+				endTime: '2018-03-25 03:00'
+			};
+
+			var timezone1 = {
+				IanaId: "Asia/Hong_Kong",
+				DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
+			};
+
+			vm.selectedAgents = [
+				{
+					PersonId: 'agent1',
+					Name: 'agent1',
+					ScheduleEndTime: null
+				}];
+
+			vm.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('agent1', {
+				Date: '2018-03-25',
+				PersonId: 'agent1',
+				Timezone: timezone1,
+				Shifts: [
+					{
+						Date: '2018-03-25',
+						Projections: [],
+						ProjectionTimeRange: null
+					}]
+			});
+			
+			vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
+
+			fakePersonSelectionService.setFakeCheckedPersonInfoList(vm.selectedAgents);
+
+			var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
+			applyButton.triggerHandler('click');
+
+			result.scope.$apply();
+
+			var activityData = fakeActivityService.getAddActivityCalledWith();
+			expect(activityData).not.toBeNull();
+			expect(activityData.StartTime).toEqual("2018-03-25T01:00");
+			expect(activityData.EndTime).toEqual("2018-03-25T03:00");
+		});
 	}
 
 	commonTestsInDifferentLocale();
@@ -533,11 +644,7 @@
 			date = inputDate;
 
 		scope.curDate = date;
-		if (timezone) {
-			scope.timezone = timezone;
-		} else {
-			scope.timezone = "Etc/UTC";
-		}
+		scope.timezone = timezone || "Etc/UTC";
 
 		fakeActivityService.setAvailableActivities(getAvailableActivities());
 

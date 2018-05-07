@@ -8,11 +8,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 	{
 		private readonly IList<IPersonInRole> _personInRole = new List<IPersonInRole>();
 
-		public void AddFakeData(IPersonInRole personInRole)
-		{
-			_personInRole.Add(personInRole);
-		}
-
 		public IList<IPersonInRole> GetPersonsInRole(Guid roleId)
 		{
 			return _personInRole;

@@ -75,6 +75,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AbsenceRequestSynchronousValidator>().As<IAbsenceRequestSynchronousValidator>()
 				.SingleInstance();
 			builder.RegisterType<BusinessRuleConfigProvider>().As<IBusinessRuleConfigProvider>().SingleInstance();
+			registerType
+				<IBusinessRuleConfigProvider, BusinessRuleConfigProvider, BusinessRuleConfigProviderToggle74889Off>(builder,
+					Toggles.MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889);
 
 			registerType
 				<IFilterRequests, FilterOutRequestsHandledByReadmodel, NoFilterCheckRequests>(builder,
@@ -134,6 +137,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			registerType<IOvertimeRequestCriticalUnderStaffedSpecification,
 				OvertimeRequestCriticalUnderStaffedSpecificationToggle74944On, OvertimeRequestCriticalUnderStaffedSpecification>(
 				builder, Toggles.OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944);
+
+			registerType<IPrimaryPersonSkillFilter,
+				PrimaryPersonSkillFilter, PrimaryPersonSkillFilterToggle75573Off>(
+				builder, Toggles.OvertimeRequestUsePrimarySkillOption_75573);
 		}
 
 		private void registerType<T, TToggleOn, TToggleOff>(ContainerBuilder builder, Toggles toggle)

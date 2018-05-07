@@ -56,11 +56,6 @@ $(document).ready(function () {
 	});
 
 	test("should read absence report permission", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
-				if (x === "MyTimeWeb_OvertimeRequest_44558") return true;
-				return false;
-			};
-		
 		initUserTexts();
 		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
 		vm.initializeData(getFakeScheduleData());
@@ -69,11 +64,6 @@ $(document).ready(function () {
 	});
 
 	test("should read scheduled days", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
-			if (x === "MyTimeWeb_OvertimeRequest_44558") return true;
-			return false;
-		};
-
 		var fakeScheduleData = getFakeScheduleData();
 		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
 
@@ -90,11 +80,6 @@ $(document).ready(function () {
 	});
 
 	test("should read timelines", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
-			if (x === "MyTimeWeb_OvertimeRequest_44558") return true;
-			return false;
-		};
-
 		initUserTexts();
 		var fakeScheduleData = getFakeScheduleData();
 		//9:30 ~ 17:00 makes 9 timeline points
@@ -156,28 +141,8 @@ $(document).ready(function () {
 		equal(timelineViewModel.minutes, 1440);
 	});
 
-	test("should read overtime request toggle", function () {
-		initUserTexts();
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
-			if (x === "MyTimeWeb_OvertimeRequest_44558") return false;
-			return false;
-		};
-		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
-
-		var fakeScheduleData = getFakeScheduleData();
-		fakeScheduleData.RequestPermission.OvertimeRequestPermission = true;
-
-		vm.initializeData(fakeScheduleData);
-
-		equal(vm.isOvertimeRequestAvailable(), false);
-	});
-
 	test("should read overtime request permission", function () {
 		initUserTexts();
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
-			if (x === "MyTimeWeb_OvertimeRequest_44558") return true;
-			return false;
-		};
 		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
 		vm.initializeData(getFakeScheduleData());
 
@@ -185,12 +150,7 @@ $(document).ready(function () {
 	});
 
 	test("should increase request count after creating an overtime request", function () {
-		var tempTogglFn = Teleopti.MyTimeWeb.Common.IsToggleEnabled 
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
-			if (x === "MyTimeWeb_OvertimeRequest_44558") return true;
-			return false;
-		};
-
+		var tempTogglFn = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
 		var tempFn1 = Date.prototype.getTeleoptiTime;
 		Date.prototype.getTeleoptiTime = function() {
 			return new Date("2018-03-05T02:30:00Z").getTime();

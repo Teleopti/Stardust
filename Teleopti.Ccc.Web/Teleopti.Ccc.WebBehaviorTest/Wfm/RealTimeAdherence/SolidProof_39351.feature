@@ -60,13 +60,12 @@ Feature: Solid proof
 	And the time is '2016-10-11 12:00:00'
 	When I view historical adherence for 'Mikkey Dee'
 	Then I should rule and state changes
-	  | Time     | Activity | State     | Rule         | Adherence |
-	  | 08:30:00 |          | LoggedOff | Neutral      | Neutral   |
-	  | 09:00:00 | Phone    | LoggedOff | Not adhering | Out       |
-	  | 11:00:00 | Lunch    | LoggedOff | Adhering     | In        |
+	| Time     | Activity | State     | Rule         | Adherence |
+	| 08:30:00 |          | LoggedOff | Neutral      | Neutral   |
+	| 09:00:00 | Phone    | LoggedOff | Not adhering | Out       |
+	| 11:00:00 | Lunch    | LoggedOff | Adhering     | In        |
 
-  @ignore
-  Scenario: See state changes
+Scenario: See state changes
 	Given Mikkey Dee has a shift with
 	  | Field      | Value            |
 	  | Start time | 2016-10-11 09:00 |

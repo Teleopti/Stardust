@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 	{
 		private bool _rollbacked = false;
 
-		public string Persist(PersonInfo personInfo, PersistActionIntent intent, bool throwOnError)
+		public string Persist(PersonInfo personInfo, bool throwOnError)
 		{
 			LastPersist = personInfo;
 			if (personInfo.ApplicationLogonInfo.LogonName == "existingId@teleopti.com")
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 			return null;
 		}
 
-		public string PersistApplicationLogonName(PersonInfo personInfo, PersistActionIntent intent, bool throwOnError)
+		public string PersistApplicationLogonName(PersonInfo personInfo, bool throwOnError)
 		{
 			LastPersist = personInfo;
 			if (personInfo.ApplicationLogonInfo.LogonName == "existingId@teleopti.com")
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 			return null;
 		}
 
-		public string PersistIdentity(PersonInfo personInfo, PersistActionIntent intent, bool throwOnError)
+		public string PersistIdentity(PersonInfo personInfo, bool throwOnError)
 		{
 			LastPersist = personInfo;
 			if (personInfo.Identity == "existingId@teleopti.com")

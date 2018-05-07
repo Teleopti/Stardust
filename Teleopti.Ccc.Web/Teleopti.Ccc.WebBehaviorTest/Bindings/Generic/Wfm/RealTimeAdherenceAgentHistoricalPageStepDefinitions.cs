@@ -76,7 +76,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.Click(".recorded-out-of-adherence");
 			Browser.Interactions.AssertNotExists(".recorded-out-of-adherence", ".approve-adherence-submit");
 		}
-
+		
+		[Then(@"I should be able to approve out of adherences")]
+		public void ThenIShouldBeAbleToApproveOutOfAdherences()
+		{
+			Browser.Interactions.Click(".recorded-out-of-adherence");
+			Browser.Interactions.AssertExists(".approve-adherence-submit");
+		}
+		
 		[Then(@"I should not be able to remove approved out of adherences")]
 		public void ThenIShouldNotBeAbleToRemoveOutOfAdherences()
 		{
@@ -114,6 +121,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		private static void assertRuleAndStateChange(RuleAndStateChanges change)
 		{
 			var selector = $".change[data-time='{change.Time}']";
+
+			// because....
+			// in some rare cases if you use a table, where the td only has content in a child span
+			// sometimes other td:s do not get rendered/or something due to something height something
+			// forcing hight "fixes" it
+			var forceRowHeight = $@"
+var element = document.querySelector(""{selector}"");
+element.style.height = '50px';
+return 'OK';
+";
+			Browser.Interactions.AssertJavascriptResultContains(forceRowHeight, "OK");
+
 			Browser.Interactions.AssertFirstContains(selector, change.Time);
 			if (!string.IsNullOrEmpty(change.Activity))
 				Browser.Interactions.AssertFirstContains(selector, change.Activity);

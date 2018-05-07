@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public MutableNow Now;
 		public FakeUserTimeZone UserTimeZone;
-		private readonly ForecastsRowExtractor ForecastsRowExtractor = new ForecastsRowExtractor();
 
 	
 		public void Isolate(IIsolate isolate)
