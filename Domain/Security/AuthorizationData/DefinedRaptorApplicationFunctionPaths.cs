@@ -147,6 +147,7 @@
 		public const string WebIntraday = "Raptor/Anywhere/WebIntraday";
 		public const string WebPermissions = "Raptor/Anywhere/WebPermissions";
 		public const string WebPlans = "Raptor/Anywhere/WebPlans";
+		public const string WebPeople = "Raptor/Anywhere/WebPeople";
 		public const string WebRequests = "Raptor/Anywhere/WebRequests";
 		public const string WebCancelRequest = "Raptor/Anywhere/WebRequests/CancelRequest";
 		public const string WebOvertimeRequest = "Raptor/Anywhere/WebRequests/OvertimeRequest";
@@ -154,9 +155,7 @@
 		public const string WebStaffing = "Raptor/Anywhere/WebStaffing";
 		public const string BpoExchange = "Raptor/Anywhere/WebStaffing/BPOExchange";
 		public const string ScheduleAuditTrailWebReport = "Raptor/Reports/ScheduleAuditTrailWebReport";
-		
 		//People
-		public const string WebPeople = "Raptor/Anywhere/WebPeople";
-		public const string PeopleAccess = "Raptor/Anywhere/WebPeople/Access";
+		public const string PeopleAccess = "Raptor/Anywhere/WebPeople/PeopleAccess";
 	}
 }
