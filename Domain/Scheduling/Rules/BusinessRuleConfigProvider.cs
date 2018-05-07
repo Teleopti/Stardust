@@ -53,6 +53,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				HandleOptionOnFailed = RequestHandleOption.Pending,
 				Order = getOrder(x.GetType())
 			}));
+			foreach (var shiftTradeBusinessRuleConfig in result)
+			{
+				if (shiftTradeBusinessRuleConfig.BusinessRuleType == typeof(MaximumWorkdayRule).FullName)
+				{
+					shiftTradeBusinessRuleConfig.Enabled = false;
+					break;
+				}
+			}
 
 			result.AddRange(_shiftTradeSpecifications.Where(x => x.Configurable).Select(x => new ShiftTradeBusinessRuleConfig
 			{
