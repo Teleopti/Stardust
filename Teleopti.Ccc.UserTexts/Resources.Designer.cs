@@ -21851,7 +21851,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There are no skills critically understaffed for the entire request period..
+        ///   Looks up a localized string similar to There are no skills critically understaffed for all or part of the requested period..
         /// </summary>
         public static string NoUnderStaffingSkill {
             get {

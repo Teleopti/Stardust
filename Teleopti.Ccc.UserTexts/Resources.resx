@@ -16331,7 +16331,7 @@ Do you want to participate?</value>
     <comment>Use in Mytime overtime request. An error message when overtime request period is out of skill open hours</comment>
   </data>
   <data name="NoUnderStaffingSkill" xml:space="preserve">
-    <value>There are no skills critically understaffed for the entire request period.</value>
+    <value>There are no skills critically understaffed for all or part of the requested period.</value>
     <comment>Use in Mytime overtime request. An error message when there is no under staffing skill for request period.</comment>
   </data>
   <data name="NoAccessToSites" xml:space="preserve">
