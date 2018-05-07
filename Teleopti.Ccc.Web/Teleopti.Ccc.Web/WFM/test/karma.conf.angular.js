@@ -1,6 +1,6 @@
 module.exports = function(config) {
 	config.set({
-		basePath: '',
+		basePath: '../',
 		files: [],
 		exclude: ['app/**/*'],
 		frameworks: ['jasmine', '@angular-devkit/build-angular'],

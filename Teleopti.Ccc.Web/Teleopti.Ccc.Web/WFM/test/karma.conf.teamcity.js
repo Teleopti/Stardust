@@ -4,7 +4,7 @@
 module.exports = function(config) {
 	config.set({
 		// base path that will be used to resolve all patterns (eg. files, exclude)
-		basePath: '',
+		basePath: '../',
 
 		// list of files / patterns to load in the browser
 		files: [
@@ -43,9 +43,7 @@ module.exports = function(config) {
 
 		// preprocess matching files before serving them to the browser
 		// available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-		preprocessors: {
-			
-		},
+		preprocessors: {},
 
 		// to use this attribute, run "npm run devTest -- keyWordFromSpecFileDescribe". example: npm run devTest -- Rta
 		client: {
@@ -69,7 +67,8 @@ module.exports = function(config) {
 
 		coverageIstanbulReporter: {
 			dir: './coverage',
-			dir: require('path').join(__dirname, 'coverage'), reports: ['html', 'text-summary'],
+			dir: require('path').join(__dirname, 'coverage'),
+			reports: ['html', 'text-summary'],
 			fixWebpackSourcePaths: true
 		},
 		angularCli: {
@@ -84,9 +83,6 @@ module.exports = function(config) {
 		// level of logging
 		// possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
 		logLevel: config.LOG_INFO,
-
-		// enable / disable watching file and executing tests whenever any file changes
-		autoWatch: true,
 
 		// start these browsers
 		// available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
