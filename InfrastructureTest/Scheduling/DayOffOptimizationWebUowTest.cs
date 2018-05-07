@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 		public IActivityRepository ActivityRepository;
 		public IShiftCategoryRepository ShiftCategoryRepository;
 		public IPlanningPeriodRepository PlanningPeriodRepository;
-		public SchedulingOptionsProvider SchedulingOptionsProvider;
 		public IJobResultRepository JobResultRepository;
 		public ISkillRepository SkillRepository;
 		public ISkillTypeRepository SkillTypeRepository;

@@ -360,7 +360,6 @@
     <Compile Include="MultiTenancy\Server\Queries\PersistTenantTest.cs" />
     <Compile Include="MultiTenancy\Client\TenantClientTestAttribute.cs" />
     <Compile Include="MultiTenancy\SessionExtension.cs" />
-    <Compile Include="MultiUnitOfWorkTestAttribute.cs" />
     <Compile Include="NHibernateConfiguration\SqlServerTransientErrorTest.cs" />
     <Compile Include="Persisters\Schedules\Bug39612.cs" />
     <Compile Include="Persisters\Schedules\Bug42159.cs" />

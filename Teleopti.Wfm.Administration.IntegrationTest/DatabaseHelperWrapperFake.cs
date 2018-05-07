@@ -22,10 +22,6 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 		{
 		}
 
-		public void AddBusinessUnit(string connectionToNewDb, string name)
-		{
-		}
-
 		public bool LoginExists(string connectionToNewDb, string login, SqlVersion sqlVersion)
 		{
 			return false;

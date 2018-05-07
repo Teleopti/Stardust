@@ -46,14 +46,5 @@ namespace Teleopti.Ccc.WebTest
 		{
 			throw new NotImplementedException();
 		}
-
-		public void AddPersonWithMyTeamSchedulesPermission(IPerson person)
-		{
-			_personsWithMyTeamSchedulesPermission.Add(person);
-		}
-		public void AddPersonWitViewConfidentialPermission(IPerson person)
-		{
-			_personsWithViewConfidentialPermission.Add(person);
-		}
 	}
 }

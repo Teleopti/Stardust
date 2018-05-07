@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -24,7 +23,6 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public FakeSkillRepository SkillRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
-		public FakeIntradayQueueStatisticsLoader IntradayQueueStatisticsLoader;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public FakeActivityRepository ActivityRepository;
 		public MutableNow Now;

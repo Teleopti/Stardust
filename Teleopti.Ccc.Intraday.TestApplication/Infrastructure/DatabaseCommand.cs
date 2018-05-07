@@ -91,19 +91,6 @@ namespace Teleopti.Ccc.Intraday.TestApplication.Infrastructure
 			}
 		}
 
-		public int ExecuteNonQueryMaintenance()
-		{
-			int number = default (int);
-			_executor.Run(grabConnection, conn =>
-			{
-				using (var command = SetCommandMaintenance(conn))
-				{
-					number = command.ExecuteNonQuery();
-				}
-			});
-			return number;
-		}
-
 		protected virtual SqlCommand SetCommandMaintenance(SqlConnection conn)
 		{
 			const string timeout = "21600";

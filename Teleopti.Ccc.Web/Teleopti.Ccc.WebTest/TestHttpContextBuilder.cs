@@ -46,13 +46,6 @@ namespace Teleopti.Ccc.WebTest
 			return context;
 		}
 
-		public void SetFakeControllerContext(Controller controller)
-		{
-			var httpContext = StubHttpContext();
-			var context = new ControllerContext(new RequestContext(httpContext, new RouteData()), controller);
-			controller.ControllerContext = context;
-		}
-
 		private string GetUrlFileName(string url) {
 			return new Uri(url).AbsolutePath;
 		}

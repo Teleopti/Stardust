@@ -338,10 +338,5 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 
 		}
-
-		public void ClearLicensedFunctions()
-		{
-			
-		}
 	}
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
@@ -26,7 +25,6 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 		public IDataSourceScope DataSource;
 		public AsSystem AsSystem;
 		public IConfigReader ConfigReader;
-		public SkillStaffingIntervalProvider SkillStaffingIntervalProvider;
 		public ISkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public ScheduledStaffingViewModelCreator StaffingViewModelCreator;
 		public ISkillRepository SkillRepository;

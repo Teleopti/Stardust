@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public ILoggedOnUser User;
 		public IScheduleStorage ScheduleData;
 		public MutableNow Now;
-		public IPushMessageProvider PushMessageProvider;
 		public IPushMessageDialogueRepository PushMessageDialogueRepository;
 		public FakeUserTimeZone UserTimeZone;
 		readonly ISkillType skillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
