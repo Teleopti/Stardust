@@ -393,7 +393,7 @@
 			expect(activityData.TrackedCommandInfo.TrackId).toBe(vm.trackId);
 		});
 
-		it('should apply with correct StartTime and EndTime when StartTime value is on DST', function () {
+		it('should apply with correct time range based on the selected time zone', function () {
 			var result = setUp();
 			var vm = result.commandControl;
 			vm.isNextDay = false;

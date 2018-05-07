@@ -556,7 +556,7 @@
 			expect(activityData.TrackedCommandInfo.TrackId).toBe(vm.trackId);
 		});
 
-		it('should apply with correct StartTime and EndTime when StartTime is on DST', function () {
+		it('should apply with correct time range based on the selected time zone', function () {
 			var result = setUp("2018-03-25", "Asia/Hong_Kong");
 			var vm = result.commandControl;
 

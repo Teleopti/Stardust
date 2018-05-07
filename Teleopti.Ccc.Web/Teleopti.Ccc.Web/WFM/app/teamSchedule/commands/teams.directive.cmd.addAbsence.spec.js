@@ -155,7 +155,6 @@
 			angular.element(dateInputElements[1]).triggerHandler('change');
 			var vm = result.commandScope.vm;
 			vm.selectedAbsenceId = getAvailableAbsenceTypes()[0].Id;
-			//vm.isFullDayAbsence = true;
 			vm.selectedAgents = [
 				{
 					PersonId: 'agent1',
@@ -191,14 +190,65 @@
 
 		});
 
-		xit('should apply add intraday absence with correct data', function () {
+		it('should apply add intraday absence with correct time range based on the selected time zone', function () {
+			fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: false });
+
+			var result = setUp("2018-03-25 08:00");
+			var vm = result.commandScope.vm;
+
+			vm.timeRange = {};
+			vm.timeRange.startTime = "2018-03-25 01:00";
+			vm.timeRange.endTime = "2018-03-25 03:00";
+
+			vm.selectedAbsenceId = getAvailableAbsenceTypes()[0].Id;
+			vm.selectedAgents = [
+				{
+					PersonId: 'agent1',
+					Name: 'agent1',
+					ScheduleStartTime: '2018-03-25 01:00',
+					ScheduleEndTime: '2018-03-25 17:00'
+				}];
+			vm.getCurrentTimezone = function () { return 'Europe/Stockholm'; };
+			fakePersonSelectionService.setFakeCheckedPersonInfoList(vm.selectedAgents);
+			vm.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('agent1', {
+				Date: '2018-03-25',
+				PersonId: 'agent1',
+				Timezone: {
+					IanaId: 'Europe/Stockholm'
+				},
+				Shifts: [
+					{
+						Date: '2018-03-25',
+						Projections: [
+						],
+						ProjectionTimeRange: {
+							Start: '2018-03-25 01:00',
+							End: '2018-03-25 17:00'
+						}
+					}]
+			});
+			result.commandScope.$apply();
+
+			result.commandScope.newAbsenceForm.$valid = true;
+			vm.updateInvalidAgents();
+			result.commandScope.$apply();
+
+			var applyButton = result.container[0].querySelectorAll('#applyAbsence');
+			applyButton[0].click();
+
+			var lastAbsence = fakeAbsenceService.getAddAbsenceCalledWith();
+			expect(lastAbsence.Start).toEqual('2018-03-25T01:00');
+			expect(lastAbsence.End).toEqual('2018-03-25T03:00');
+		});
+
+		it('should apply add intraday absence with correct data', function () {
 
 			fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: true });
 			var result = setUp(moment('2015-01-01T00:00:00').toDate());
 			var vm = result.commandScope.vm;
 			vm.timeRange = {};
-			vm.timeRange.startTime = '2015-01-01 10:00:00';
-			vm.timeRange.endTime = '2015-01-01 10:30:00';
+			vm.timeRange.startTime = '2015-01-01 10:00';
+			vm.timeRange.endTime = '2015-01-01 10:30';
 			vm.selectedAbsenceId = getAvailableAbsenceTypes()[0].Id;
 			vm.isFullDayAbsence = false;
 			vm.selectedAgents = [
@@ -226,6 +276,9 @@
 						}
 					}]
 			});
+			
+			result.commandScope.newAbsenceForm.$valid = true;
+			vm.updateInvalidAgents();
 			result.commandScope.$apply();
 
 			var panel = result.container;
@@ -293,7 +346,6 @@
 			commandScope: commandScope,
 			scope: scope
 		};
-
 		return obj;
 	}
 
