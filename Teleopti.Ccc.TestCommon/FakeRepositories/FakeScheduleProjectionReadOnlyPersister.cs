@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
@@ -37,6 +37,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public int GetNumberOfAbsencesPerDayAndBudgetGroup(Guid budgetGroupId, DateOnly currentDate)
 		{
 			return _numberOfHeadCounts;
+		}
+
+		public void SetNumberOfAbsencesPerDayAndBudgetGroup(int numberOfHeadCounts)
+		{
+			_numberOfHeadCounts = numberOfHeadCounts;
 		}
 
 		public IEnumerable<ScheduleProjectionReadOnlyModel> ForPerson(DateOnly date, Guid personId, Guid scenarioId)
