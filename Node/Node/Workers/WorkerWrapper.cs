@@ -181,7 +181,11 @@ namespace Stardust.Node.Workers
 										  SetNodeStatusTimer(_trySendJobDoneStatusToManagerTimer,
 															 _currentMessageToProcess);
 
-										  LoopReturnObjects(returnObjects);
+										  if (returnObjects != null)
+										  {
+											  SpinWait.SpinUntil(() => _currentMessageToProcess == null);
+											  LoopReturnObjects(returnObjects);
+										  }
 
 										  break;
 
@@ -191,7 +195,11 @@ namespace Stardust.Node.Workers
 										  SetNodeStatusTimer(_trySendJobCanceledStatusToManagerTimer,
 															 _currentMessageToProcess);
 
-										  LoopReturnObjects(returnObjects);
+										  if (returnObjects != null)
+										  {
+											  SpinWait.SpinUntil(() => _currentMessageToProcess == null);
+											  LoopReturnObjects(returnObjects);
+										  }
 
 										  break;
 
@@ -212,7 +220,11 @@ namespace Stardust.Node.Workers
 										  SetNodeStatusTimer(_trySendJobFaultedStatusToManagerTimer,
 															 _currentMessageToProcess);
 
-										  LoopReturnObjects(returnObjects);
+										  if (returnObjects != null)
+										  {
+											  SpinWait.SpinUntil(() => _currentMessageToProcess == null);
+											  LoopReturnObjects(returnObjects);
+										  }
 
 										  break;
 								  }
@@ -306,7 +318,7 @@ namespace Stardust.Node.Workers
 
 				// Remove event handler.
 				_trySendStatusToManagerTimer.TrySendStatusSucceded -=
-					TrySendStatusToManagerTimer_TrySendStatusSucceded;
+					TrySendStatusToManagerTimer_TrySendStatus;
 
 				_trySendStatusToManagerTimer = null;
 			}
@@ -319,7 +331,7 @@ namespace Stardust.Node.Workers
 				_trySendStatusToManagerTimer.JobQueueItemEntity = jobQueueItemEntity;
 
 				_trySendStatusToManagerTimer.TrySendStatusSucceded +=
-					TrySendStatusToManagerTimer_TrySendStatusSucceded;
+					TrySendStatusToManagerTimer_TrySendStatus;
 
 				_trySendStatusToManagerTimer.Start();
 			}
@@ -329,7 +341,7 @@ namespace Stardust.Node.Workers
 			}
 		}
 
-		private void TrySendStatusToManagerTimer_TrySendStatusSucceded(object sender,
+		private void TrySendStatusToManagerTimer_TrySendStatus(object sender,
 																	   EventArgs e)
 		{
 			// Dispose timer.
