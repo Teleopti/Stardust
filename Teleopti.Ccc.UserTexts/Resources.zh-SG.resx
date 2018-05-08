@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AbandonedCalls" xml:space="preserve">
     <value>放弃的电话</value>
@@ -189,7 +189,7 @@
     <comment>Activities</comment>
   </data>
   <data name="Activity" xml:space="preserve">
-    <value>活动</value>
+    <value>班表活动</value>
     <comment>Activity</comment>
   </data>
   <data name="ActivityColon" xml:space="preserve">
@@ -289,11 +289,11 @@
     <comment>Context menu value &lt;Add New&gt;</comment>
   </data>
   <data name="AddNewContract" xml:space="preserve">
-    <value>添加合同</value>
+    <value>添加排班规则设置</value>
     <comment>Add new contract</comment>
   </data>
   <data name="AddNewContractSchedule" xml:space="preserve">
-    <value>添加新的班表合同</value>
+    <value>添加新的工作日规则</value>
     <comment>Add new contract schedule</comment>
   </data>
   <data name="AddNewOptionalColumn" xml:space="preserve">
@@ -301,7 +301,7 @@
     <comment>Add New Optional Column</comment>
   </data>
   <data name="AddNewScenario" xml:space="preserve">
-    <value>添加业务场景</value>
+    <value>添加预测场景</value>
     <comment>New Scenario</comment>
   </data>
   <data name="AddNewScorecard" xml:space="preserve">
@@ -317,7 +317,7 @@
     <comment>Setting forms: Organization Hierarchy</comment>
   </data>
   <data name="AddNewWeekToSchedule" xml:space="preserve">
-    <value>添加新的一周到班表合同</value>
+    <value>添加新的一周到工作日设置</value>
     <comment>Add new week to schedule</comment>
   </data>
   <data name="AddOpenHours" xml:space="preserve">
@@ -656,7 +656,7 @@
     <comment>Average ACW</comment>
   </data>
   <data name="AverageAEW" xml:space="preserve">
-    <value>平均AEW</value>
+    <value>平均间接处理时间</value>
     <comment>Average AEW</comment>
   </data>
   <data name="AverageAfterCallWork" xml:space="preserve">
@@ -786,7 +786,7 @@
     <comment>There must be a daily rest of at least {0} hours between 2 shifts. Between {1} and {2} there are only {3} hours.</comment>
   </data>
   <data name="BusinessRuleNoContractErrorMessage" xml:space="preserve">
-    <value>人员 {0} 在当前日期 {1} 没有设定合同。</value>
+    <value>人员 {0} 在当前日期 {1} 没有设定排班规则。</value>
     <comment>Person {0} has no contract defined for the current date {1}.</comment>
   </data>
   <data name="BusinessRuleOverlappingErrorMessage1" xml:space="preserve">
@@ -834,7 +834,7 @@
     <comment>Campaign ACW %</comment>
   </data>
   <data name="CampaignAEWPercent" xml:space="preserve">
-    <value>AEW调整 (%)</value>
+    <value>间接处理时间调整 (%)</value>
     <comment>Campaign AEW %</comment>
   </data>
   <data name="CampaignAfterWorkPercentSign" xml:space="preserve">
@@ -974,11 +974,11 @@
     <comment>&amp;Choose commands from:</comment>
   </data>
   <data name="ChooseContractScheduleToChange" xml:space="preserve">
-    <value>选择班表合同进行编辑</value>
+    <value>设置工作日</value>
     <comment>Choose Contract Schedule To Manage</comment>
   </data>
   <data name="ChooseContractToChange" xml:space="preserve">
-    <value>选择合同进行编辑</value>
+    <value>设置排班规则</value>
     <comment>Choose Contract To Manage</comment>
   </data>
   <data name="ChooseDaysOffToChange" xml:space="preserve">
@@ -994,7 +994,7 @@
     <comment>Choose part-time percentage definition to change</comment>
   </data>
   <data name="ChooseScenarioToChange" xml:space="preserve">
-    <value>选择业务场景进行编辑</value>
+    <value>选择预测场景进行编辑</value>
     <comment>Choose Scenario To Change</comment>
   </data>
   <data name="ChooseScorecardToEdit" xml:space="preserve">
@@ -1090,15 +1090,15 @@
     <comment>Connected to:</comment>
   </data>
   <data name="Contract" xml:space="preserve">
-    <value>合同</value>
+    <value>排班规则设置</value>
     <comment>Contract</comment>
   </data>
   <data name="ContractColon" xml:space="preserve">
-    <value>合同：</value>
+    <value>排班规则：</value>
     <comment>Contract:</comment>
   </data>
   <data name="Contracts" xml:space="preserve">
-    <value>合同</value>
+    <value>排班规则</value>
     <comment>Contracts</comment>
   </data>
   <data name="ContractSchedule" xml:space="preserve">
@@ -1110,15 +1110,15 @@
     <comment>Contract schedule time</comment>
   </data>
   <data name="ContractScheduleLower" xml:space="preserve">
-    <value>班表合同</value>
+    <value>工作日设置</value>
     <comment>Grid header</comment>
   </data>
   <data name="ContractScheduleName" xml:space="preserve">
-    <value>班表合同名称</value>
+    <value>工作日规则名称</value>
     <comment>Contract schedule name contract schedule combo</comment>
   </data>
   <data name="Contractschedules" xml:space="preserve">
-    <value>班表合同</value>
+    <value>工作日规则设置</value>
     <comment>Contract schedules</comment>
   </data>
   <data name="ContractTargetTime" xml:space="preserve">
@@ -1374,11 +1374,11 @@
     <comment>Default name to be appeared in the tree in the shift creator module</comment>
   </data>
   <data name="DefaultScenario" xml:space="preserve">
-    <value>默认业务场景</value>
+    <value>默认预测场景</value>
     <comment>Default Scenario</comment>
   </data>
   <data name="DefaultScenarioColon" xml:space="preserve">
-    <value>默认业务场景：</value>
+    <value>默认预测场景：</value>
     <comment>Default Scenario Colon</comment>
   </data>
   <data name="DefaultStateGroup" xml:space="preserve">
@@ -1453,7 +1453,7 @@
     <comment>Delete Rule Set Bag</comment>
   </data>
   <data name="DeleteScenario" xml:space="preserve">
-    <value>删除业务场景</value>
+    <value>删除预测场景</value>
     <comment>Delete scenario</comment>
   </data>
   <data name="DeleteSelectedRowsQuestionmark" xml:space="preserve">
@@ -1631,7 +1631,7 @@
     <comment>Editor</comment>
   </data>
   <data name="EditSkillTemplatesThreeDots" xml:space="preserve">
-    <value>编辑技能模板</value>
+    <value>编辑排班目标</value>
     <comment>Edit skill templates</comment>
   </data>
   <data name="EditWorkloadTemplates" xml:space="preserve">
@@ -1639,7 +1639,7 @@
     <comment>Edit workload templates</comment>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>业务量</value>
+    <value>仓储预测</value>
     <comment>Email</comment>
   </data>
   <data name="EmailResult" xml:space="preserve">
@@ -1702,7 +1702,7 @@
     <comment>Enter a name for the grouping</comment>
   </data>
   <data name="EnterContractDetails" xml:space="preserve">
-    <value>输入合同详情</value>
+    <value>设置详细规则</value>
     <comment>Enter Contract Details</comment>
   </data>
   <data name="EnteredTimeIsInvalid" xml:space="preserve">
@@ -1750,7 +1750,7 @@
     <comment>Enter Settings For Days Off title in the day off setting page</comment>
   </data>
   <data name="EnterSettingsForScenario" xml:space="preserve">
-    <value>请输入业务场景设置</value>
+    <value>请输入预测场景设置</value>
     <comment>Enter Settings For Scenario</comment>
   </data>
   <data name="EnterSettingsForShiftCategory" xml:space="preserve">
@@ -2073,7 +2073,7 @@
     <comment>Period Contract</comment>
   </data>
   <data name="GroupByPersonPeriodContractSchedule" xml:space="preserve">
-    <value>班表合同</value>
+    <value>工作日规则</value>
     <comment>Period contract schedule</comment>
   </data>
   <data name="GroupByPersonPeriodPartTimePercentage" xml:space="preserve">
@@ -2221,7 +2221,7 @@
     <comment>Index ACW</comment>
   </data>
   <data name="IndexAEW" xml:space="preserve">
-    <value>AEW索引</value>
+    <value>间接处理时间索引</value>
     <comment>Index AEW</comment>
   </data>
   <data name="IndexAfterCallWork" xml:space="preserve">
@@ -2573,11 +2573,11 @@
     <comment>ManageActivities</comment>
   </data>
   <data name="ManageContracts" xml:space="preserve">
-    <value>管理合同</value>
+    <value>排班规则</value>
     <comment>Manage contract settings</comment>
   </data>
   <data name="ManageContractSchedules" xml:space="preserve">
-    <value>管理班表合同</value>
+    <value>工作日规则</value>
     <comment>Manage Contract Schedules</comment>
   </data>
   <data name="ManageDayDistributionsThreeDots" xml:space="preserve">
@@ -2613,7 +2613,7 @@
     <comment>Application function description</comment>
   </data>
   <data name="ManageScenarios" xml:space="preserve">
-    <value>管理业务场景</value>
+    <value>管理预测场景</value>
     <comment>Manage your scenarios</comment>
   </data>
   <data name="ManageScorecards" xml:space="preserve">
@@ -2926,11 +2926,11 @@
     <comment>&lt; New Availability &gt;</comment>
   </data>
   <data name="NewContract" xml:space="preserve">
-    <value>新建合同</value>
+    <value>新建排班规则</value>
     <comment>New Contract</comment>
   </data>
   <data name="NewContractSchedule" xml:space="preserve">
-    <value>新建班表合同</value>
+    <value>新建工作日规则</value>
     <comment>New Contract Schedule string</comment>
   </data>
   <data name="NewDateExclusion" xml:space="preserve">
@@ -3021,7 +3021,7 @@
     <comment>New Rule Set Bag</comment>
   </data>
   <data name="NewScenario" xml:space="preserve">
-    <value>新建业务场景</value>
+    <value>新建预测场景</value>
     <comment>&lt; New Scenario &gt;</comment>
   </data>
   <data name="NewSchedulePeriod" xml:space="preserve">
@@ -3318,7 +3318,7 @@
     <comment>Options</comment>
   </data>
   <data name="OrganizationHierarchy" xml:space="preserve">
-    <value>组织体系</value>
+    <value>组织架构</value>
     <comment>Setting Form TreeFamily name</comment>
   </data>
   <data name="OrganizationTree" xml:space="preserve">
@@ -3330,7 +3330,7 @@
     <comment>Original ACW</comment>
   </data>
   <data name="OriginalAEW" xml:space="preserve">
-    <value>原始的AEW</value>
+    <value>原始的间接处理时间</value>
     <comment>Original AEW</comment>
   </data>
   <data name="OriginalAfterCallWork" xml:space="preserve">
@@ -3634,7 +3634,7 @@ Periods</comment>
     <comment>PersonAvailabilityView</comment>
   </data>
   <data name="PersonPeriodCouldNotLoad" xml:space="preserve">
-    <value>请在设置页面添加合同、班表合同、兼职时间百分比、小组以加载人员周期视图。</value>
+    <value>请在设置页面添加排班规则、工作日规则、兼职时间百分比、小组以加载人员周期视图。</value>
     <comment>Person Period couldn't load error</comment>
   </data>
   <data name="PersonPeriodError" xml:space="preserve">
@@ -4065,11 +4065,11 @@ Periods</comment>
     <comment>Save Error</comment>
   </data>
   <data name="Scenario" xml:space="preserve">
-    <value>业务场景</value>
+    <value>预测场景</value>
     <comment>Scenario</comment>
   </data>
   <data name="ScenarioColon" xml:space="preserve">
-    <value>业务场景：</value>
+    <value>预测场景：</value>
     <comment>Scenario:</comment>
   </data>
   <data name="Schedule" xml:space="preserve">
@@ -4266,7 +4266,7 @@ Periods</comment>
     <comment>Select Rule Set Message</comment>
   </data>
   <data name="SelectScenario" xml:space="preserve">
-    <value>选择业务场景</value>
+    <value>选择预测场景</value>
     <comment>Select Scenario</comment>
   </data>
   <data name="SelectShiftCategory" xml:space="preserve">
@@ -4278,7 +4278,7 @@ Periods</comment>
     <comment>Välj site:</comment>
   </data>
   <data name="SelectWorkingdaysForThisContractSchedule" xml:space="preserve">
-    <value>为该班表合同选择工作日</value>
+    <value>选择工作日</value>
     <comment>Select Workingdays For This Contract</comment>
   </data>
   <data name="SelectYourListOfValues" xml:space="preserve">
@@ -4494,7 +4494,7 @@ Periods</comment>
     <comment>Skill days loaded</comment>
   </data>
   <data name="SkillDayTemplate" xml:space="preserve">
-    <value>技能日期模板</value>
+    <value>每日排班目标</value>
     <comment>Skill day template</comment>
   </data>
   <data name="SkillDayTemplateIsInvalidOneParameter" xml:space="preserve">
@@ -4502,7 +4502,7 @@ Periods</comment>
     <comment>The templates cannot be saved because of an error in validation. Check that max agents are higher than min agents or 0. Error information: {0}</comment>
   </data>
   <data name="SkillDayTemplates" xml:space="preserve">
-    <value>技能日期模板</value>
+    <value>每日排班目标</value>
     <comment>Skill day templates</comment>
   </data>
   <data name="SkillLoaded" xml:space="preserve">
@@ -4522,7 +4522,7 @@ Periods</comment>
     <comment>Skill tab</comment>
   </data>
   <data name="SkillTemplate" xml:space="preserve">
-    <value>技能模板</value>
+    <value>排班目标</value>
     <comment>Skill template</comment>
   </data>
   <data name="SkillTypeBackoffice" xml:space="preserve">
@@ -4530,7 +4530,7 @@ Periods</comment>
     <comment>Skilltype Backoffice</comment>
   </data>
   <data name="SkillTypeEmail" xml:space="preserve">
-    <value>业务量</value>
+    <value>仓储预测</value>
     <comment>SkillTrype Email</comment>
   </data>
   <data name="SkillTypeFax" xml:space="preserve">
@@ -4795,11 +4795,11 @@ Periods</comment>
     <comment>Teleopti CCC : Schedules</comment>
   </data>
   <data name="Template" xml:space="preserve">
-    <value>模板</value>
+    <value>排班目标</value>
     <comment>Template</comment>
   </data>
   <data name="Templates" xml:space="preserve">
-    <value>模板</value>
+    <value>排班目标</value>
     <comment>Templates</comment>
   </data>
   <data name="TemplatesLoaded" xml:space="preserve">
@@ -4930,7 +4930,7 @@ Periods</comment>
     <comment>Total ACW</comment>
   </data>
   <data name="TotalAEW" xml:space="preserve">
-    <value>调整后Email后工作均长</value>
+    <value>调整后间接处理时间均长</value>
     <comment>Total AEW</comment>
   </data>
   <data name="TotalAfterWorkTime" xml:space="preserve">
@@ -5137,7 +5137,7 @@ Periods</comment>
     <comment>Validated ACW</comment>
   </data>
   <data name="ValidatedAEW" xml:space="preserve">
-    <value>经验证的AEW</value>
+    <value>经验证的间接处理时间</value>
     <comment>Validated AEW</comment>
   </data>
   <data name="ValidatedAfterCallWork" xml:space="preserve">
@@ -5523,7 +5523,7 @@ Periods</comment>
     <value>您确定想要删除 ‘{0}’ 循环？</value>
   </data>
   <data name="AreYouSureYouWantToDeleteScenario" xml:space="preserve">
-    <value>您确定想要删除 '{0}' 业务场景？</value>
+    <value>您确定想要删除 '{0}' 预测场景？</value>
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
     <value>确认删除</value>
@@ -5532,7 +5532,7 @@ Periods</comment>
     <value>授权失败</value>
   </data>
   <data name="CannotDeleteDefaultScenario" xml:space="preserve">
-    <value>不能删除默认的业务场景 '{0}'。</value>
+    <value>不能删除默认的预测场景 '{0}'。</value>
   </data>
   <data name="ScoreCardPreviewHeaderToolTip" xml:space="preserve">
     <value>请双击这里在主界面打开</value>
@@ -5694,13 +5694,13 @@ Periods</comment>
     <value>未遵时：</value>
   </data>
   <data name="SaveAsScenario" xml:space="preserve">
-    <value>另存为业务场景</value>
+    <value>另存为预测场景</value>
   </data>
   <data name="MeetingCanNotCreate" xml:space="preserve">
     <value>不能创建会议。系统可能不包含活动。</value>
   </data>
   <data name="MeetingCanNotLoadWithoutScenarios" xml:space="preserve">
-    <value>会议无法加载。系统可能不包含业务场景。</value>
+    <value>会议无法加载。系统可能不包含预测场景。</value>
   </data>
   <data name="label7" xml:space="preserve">
     <value>标签7</value>
@@ -5844,7 +5844,7 @@ Periods</comment>
     <value>周：</value>
   </data>
   <data name="AreYouSureYouWantToDeleteContract" xml:space="preserve">
-    <value>您确定要删除 '{0}' 合同吗？</value>
+    <value>您确定要删除 '{0}' 排班规则吗？</value>
   </data>
   <data name="ResReportAbandonmentAndSpeedOfAnswer" xml:space="preserve">
     <value>放弃和应答的速度</value>
@@ -6168,7 +6168,7 @@ Periods</comment>
     <value>数据库中没找到有班次类别</value>
   </data>
   <data name="DeleteContract" xml:space="preserve">
-    <value>删除合同</value>
+    <value>删除排班规则</value>
   </data>
   <data name="DefinitionName" xml:space="preserve">
     <value>姓名</value>
@@ -6334,10 +6334,10 @@ Periods</comment>
     <value>工作时间限制</value>
   </data>
   <data name="NoScenario" xml:space="preserve">
-    <value>没有业务场景</value>
+    <value>没有预测场景</value>
   </data>
   <data name="ScenarioMustBeCreated" xml:space="preserve">
-    <value>至少需要先创建一个业务场景</value>
+    <value>至少需要先创建一个预测场景</value>
   </data>
   <data name="EarliestEndTime" xml:space="preserve">
     <value>最早的结束时间</value>
@@ -6538,7 +6538,7 @@ Periods</comment>
     <value>每个循环的最小改进</value>
   </data>
   <data name="AEW" xml:space="preserve">
-    <value>Email后的工作时长</value>
+    <value>间接处理时间</value>
   </data>
   <data name="AFW" xml:space="preserve">
     <value>传真后的工作时长</value>
@@ -7027,7 +7027,7 @@ Teleopti R&amp;D</value>
     <value>导出到</value>
   </data>
   <data name="ExportToScenario" xml:space="preserve">
-    <value>导出到业务场景</value>
+    <value>导出到预测场景</value>
   </data>
   <data name="EmploymentTypeFixedStaffDayWorkTime" xml:space="preserve">
     <value>固定员工日工作时间(适用月排)</value>
@@ -7042,7 +7042,7 @@ Teleopti R&amp;D</value>
     <value>未定义限制条件</value>
   </data>
   <data name="ExportToAnotherScenario" xml:space="preserve">
-    <value>导出到另一个业务场景</value>
+    <value>导出到另一个预测场景</value>
   </data>
   <data name="ExportValidationWarnings" xml:space="preserve">
     <value>验证告警</value>
@@ -7072,7 +7072,7 @@ Teleopti R&amp;D</value>
     <value>启用报告：</value>
   </data>
   <data name="Maximum5Scenarios" xml:space="preserve">
-    <value>*最多只能在报表中使用 5 种业务场景</value>
+    <value>*最多只能在报表中使用 5 种预测场景</value>
   </data>
   <data name="Daily" xml:space="preserve">
     <value>每日</value>
@@ -7090,7 +7090,7 @@ Teleopti R&amp;D</value>
     <value>工作日可用性</value>
   </data>
   <data name="DeviationAEWColon" xml:space="preserve">
-    <value>AEW偏差：</value>
+    <value>间接处理时间偏差：</value>
   </data>
   <data name="DeviationAFWColon" xml:space="preserve">
     <value>AFW偏差：</value>
@@ -7114,7 +7114,7 @@ Teleopti R&amp;D</value>
     <value>数据：</value>
   </data>
   <data name="ExportToOtherScenario" xml:space="preserve">
-    <value>导出到其它业务场景</value>
+    <value>导出到其它预测场景</value>
   </data>
   <data name="FilterAgents" xml:space="preserve">
     <value>筛选普通员工</value>
@@ -7590,7 +7590,7 @@ Teleopti R&amp;D</value>
     <value>您应该工作 {0} 小时，您的偏好为{1}到{2}小时。</value>
   </data>
   <data name="TeleoptiCCCColonModuleColonFromToDateScenarioColon" xml:space="preserve">
-    <value>Teleopti WFM：{0}{1}－{2}业务场景{3}</value>
+    <value>Teleopti WFM：{0}{1}－{2}预测场景{3}</value>
   </data>
   <data name="TheAttachedFileContainsScheduleForDateParameters" xml:space="preserve">
     <value>附件的PDF文件包含您的班表从 {0} - {1} 。</value>
@@ -8145,13 +8145,13 @@ Teleopti R&amp;D</value>
     <value>管理主活动</value>
   </data>
   <data name="MasterActivity" xml:space="preserve">
-    <value>主活动</value>
+    <value>多技能活动</value>
   </data>
   <data name="MasterActivityCanResultInColon" xml:space="preserve">
     <value>可导致下列活动：</value>
   </data>
   <data name="MasterActivityColon" xml:space="preserve">
-    <value>主活动：</value>
+    <value>多技能活动：</value>
   </data>
   <data name="NotSelectedActivities" xml:space="preserve">
     <value>未选择活动</value>
@@ -8166,7 +8166,7 @@ Teleopti R&amp;D</value>
     <value>选择用于修改的主活动</value>
   </data>
   <data name="NewMasterActivity" xml:space="preserve">
-    <value>新建主活动</value>
+    <value>新建多技能</value>
   </data>
   <data name="PeriodNotInLegalState" xml:space="preserve">
     <value>周期不在合法状态</value>
@@ -8229,7 +8229,7 @@ Teleopti R&amp;D</value>
     <value>预算的员工</value>
   </data>
   <data name="Contractors" xml:space="preserve">
-    <value>立合同人</value>
+    <value>外包商</value>
   </data>
   <data name="DaysOffPerWeek" xml:space="preserve">
     <value>每周休息日天数</value>
@@ -8373,7 +8373,7 @@ Teleopti R&amp;D</value>
     <value>最大席位数</value>
   </data>
   <data name="RequiresSeat" xml:space="preserve">
-    <value>需要席位</value>
+    <value>需要人数</value>
   </data>
   <data name="Sites" xml:space="preserve">
     <value>部门</value>
@@ -8517,7 +8517,7 @@ Teleopti R&amp;D</value>
     <value>公开备注：</value>
   </data>
   <data name="AreYouSureYouWantToDeleteContractSchedule" xml:space="preserve">
-    <value>你确定要删除 '{0}' 班表合同吗么？</value>
+    <value>你确定要删除 '{0}' 工作日规则吗么？</value>
   </data>
   <data name="EqualOfEachShiftCategory" xml:space="preserve">
     <value>每个班次类别均等</value>
@@ -8553,7 +8553,7 @@ Teleopti R&amp;D</value>
     <value>详细信息</value>
   </data>
   <data name="ModifyRestrictedScenario" xml:space="preserve">
-    <value>修改受限的业务场景</value>
+    <value>修改受限的预测场景</value>
   </data>
   <data name="PlanningTimeBankMinMaxInfo" xml:space="preserve">
     <value>({0} 到 {1})</value>
@@ -8832,13 +8832,13 @@ Teleopti R&amp;D</value>
     <value>需要用户名</value>
   </data>
   <data name="SelectPeriodAndScenarioToExportTo" xml:space="preserve">
-    <value>选择一个时间周期以找到会议以及一个业务场景来导出。</value>
+    <value>选择一个时间周期以找到会议以及一个预测场景来导出。</value>
   </data>
   <data name="SuccessfullyExportedMeetings" xml:space="preserve">
-    <value>成功导出 {0} 会议到另一个业务场景。</value>
+    <value>成功导出 {0} 会议到另一个预测场景。</value>
   </data>
   <data name="NoAllowedScenarios" xml:space="preserve">
-    <value>没有允许您查看的业务场景！</value>
+    <value>没有允许您查看的预测场景！</value>
   </data>
   <data name="ProficiencyPercent" xml:space="preserve">
     <value>精通 (%)</value>
@@ -8964,7 +8964,7 @@ Teleopti R&amp;D</value>
     <value>受限的</value>
   </data>
   <data name="ViewRestrictedScenario" xml:space="preserve">
-    <value>查看限制的业务场景</value>
+    <value>查看限制的预测场景</value>
   </data>
   <data name="PlanningTimeBankCaption" xml:space="preserve">
     <value>计划时间储备</value>
@@ -9138,10 +9138,10 @@ Teleopti R&amp;D</value>
     <value>小时工可用性的满足</value>
   </data>
   <data name="PersonFinderFieldContract" xml:space="preserve">
-    <value>合同</value>
+    <value>排班规则</value>
   </data>
   <data name="PersonFinderFieldContractSchedule" xml:space="preserve">
-    <value>班表合同</value>
+    <value>工作日规则</value>
   </data>
   <data name="PersonFinderFieldOrganization" xml:space="preserve">
     <value>组织</value>
@@ -9276,7 +9276,7 @@ Teleopti R&amp;D</value>
     <value>保存设置时出错。</value>
   </data>
   <data name="HavePermissionToRestrictedScenariosButNotForSelectedTeams" xml:space="preserve">
-    <value>您拥有一般权限可以查看限制业务场景，但不适用于选中的组和日期。</value>
+    <value>您拥有一般权限可以查看限制预测场景，但不适用于选中的组和日期。</value>
   </data>
   <data name="ShowPublicNote" xml:space="preserve">
     <value>显示公开备注</value>
@@ -9288,7 +9288,7 @@ Teleopti R&amp;D</value>
     <value>工作量名称：</value>
   </data>
   <data name="NoPermissionToViewRestrictedScenarios" xml:space="preserve">
-    <value>您没有权限查看限制业务场景，所有业务场景多已经被限制</value>
+    <value>您没有权限查看限制预测场景，所有预测场景多已经被限制</value>
   </data>
   <data name="RequestAllowances" xml:space="preserve">
     <value>申请配额</value>
@@ -9366,7 +9366,7 @@ Teleopti R&amp;D</value>
     <value>班次包</value>
   </data>
   <data name="ThisIsTheDefaultScenario" xml:space="preserve">
-    <value>这是默认业务场景</value>
+    <value>这是默认预测场景</value>
   </data>
   <data name="FulfillRestrictions" xml:space="preserve">
     <value>满足限制条件</value>
@@ -9453,7 +9453,7 @@ Teleopti R&amp;D</value>
     <value>文件导出已完成</value>
   </data>
   <data name="SelectDateAndScenario" xml:space="preserve">
-    <value>选择一个日期和业务场景</value>
+    <value>选择一个日期和预测场景</value>
   </data>
   <data name="SelectFileDestination" xml:space="preserve">
     <value>选择文件目标位置</value>
@@ -9723,7 +9723,7 @@ Teleopti R&amp;D</value>
     <value>预测的到岗员工数</value>
   </data>
   <data name="FromContract" xml:space="preserve">
-    <value>来自合同</value>
+    <value>来自排班规则</value>
   </data>
   <data name="IndexCustomers" xml:space="preserve">
     <value>客户数量索引</value>
@@ -10098,13 +10098,13 @@ Teleopti R&amp;D</value>
     <value>加班类型</value>
   </data>
   <data name="AllowBreakContractMaxWorkTimePerWeek" xml:space="preserve">
-    <value>允许超过每周合同最大工作时间</value>
+    <value>允许超过每周排班规则最大工作时间</value>
   </data>
   <data name="AllowBreakContractNightlyRest" xml:space="preserve">
-    <value>允许超过合同夜间休息时长</value>
+    <value>允许超过排班规则夜间休息时长</value>
   </data>
   <data name="AllowBreakContractWeeklyRest" xml:space="preserve">
-    <value>允许超过合同每周休息时长</value>
+    <value>允许超过排班规则每周休息时长</value>
   </data>
   <data name="ExtendTheEndOfExistingShiftsColon" xml:space="preserve">
     <value>延长现有班次的结束时间</value>
@@ -10551,7 +10551,7 @@ Teleopti R&amp;D</value>
     <value>秒</value>
   </data>
   <data name="SaveTheForecastToAnotherScenario" xml:space="preserve">
-    <value>保存预测结果至另一个业务场景</value>
+    <value>保存预测结果至另一个预测场景</value>
   </data>
   <data name="SaveToSpace" xml:space="preserve">
     <value>保存到</value>
@@ -10834,6 +10834,13 @@ Teleopti R&amp;D</value>
   </data>
   <data name="Planned" xml:space="preserve">
     <value>已计划的</value>
+  </data>
+  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
+    <value>恭喜您！产品激活密钥已被应用．您现在是这个屡获殊荣的WFM解决方案的授权使用者。
+当前应用程序将被关闭。
+
+重要：
+为了获得全部的服务及Web应用程序功能，请让您的IT部门在服务器上执行“Restart Teleopti WFM” （开始菜单--&gt;Teleopti文件夹）</value>
   </data>
   <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
     <value>您的产品激活密钥已经过期，请申请新的</value>
@@ -11637,7 +11644,7 @@ Teleopti R&amp;D</value>
     <value>覆盖预测值</value>
   </data>
   <data name="OverrideCallsForCampaign" xml:space="preserve">
-    <value>针对业务场景覆盖呼叫量或活动</value>
+    <value>针对预测场景覆盖呼叫量或活动</value>
   </data>
   <data name="ProcessFailedErrorColon" xml:space="preserve">
     <value>处理失败！错误：</value>
@@ -12402,7 +12409,7 @@ Teleopti R&amp;D</value>
     <value>存档班表</value>
   </data>
   <data name="ArchiveScheduleDescription" xml:space="preserve">
-    <value>将班表从默认业务场景存档到另一个业务场景，将覆盖目标业务场景中选定周期的班表。</value>
+    <value>将班表从默认预测场景存档到另一个预测场景，将覆盖目标预测场景中选定周期的班表。</value>
   </data>
   <data name="ConfirmDeleteCampaign" xml:space="preserve">
     <value>您确定要删除此活动吗？亲</value>
@@ -12519,7 +12526,7 @@ Teleopti R&amp;D</value>
     <value>先到先得</value>
   </data>
   <data name="FromScenarioColon" xml:space="preserve">
-    <value>从业务场景：</value>
+    <value>从预测场景：</value>
   </data>
   <data name="Full" xml:space="preserve">
     <value>全部</value>
@@ -12537,7 +12544,7 @@ Teleopti R&amp;D</value>
     <value>导入班表</value>
   </data>
   <data name="ImportScheduleDescription" xml:space="preserve">
-    <value>从其他业务场景导入班表到默认业务场景，选定周期内目标业务场景中一些已存在的班表将被合并。</value>
+    <value>从其他预测场景导入班表到默认预测场景，选定周期内目标预测场景中一些已存在的班表将被合并。</value>
   </data>
   <data name="IncludedSkills" xml:space="preserve">
     <value>已包括的技能</value>
@@ -12997,7 +13004,7 @@ Teleopti R&amp;D</value>
     <value>该缺勤无法被添加到</value>
   </data>
   <data name="ArchivingConfirmationWithParameters" xml:space="preserve">
-    <value>您将要覆盖选定的小组在业务场景'{0}'中所有已存在的班表，在周期{1} - {2}。</value>
+    <value>您将要覆盖选定的小组在预测场景'{0}'中所有已存在的班表，在周期{1} - {2}。</value>
   </data>
   <data name="PickASmallerDatePeriodDot" xml:space="preserve">
     <value>选取一个更小的日期范围。</value>
@@ -13012,19 +13019,19 @@ Teleopti R&amp;D</value>
     <value>运行存档中</value>
   </data>
   <data name="TheScenarioYouArchiveFromMustBeTheDefaultScenarioDot" xml:space="preserve">
-    <value>您所存档的源业务场景必须是默认业务场景。</value>
+    <value>您所存档的源预测场景必须是默认预测场景。</value>
   </data>
   <data name="TheScenarioYouArchiveToMustNotBeTheDefaultScenarioDot" xml:space="preserve">
-    <value>您所存档的目标业务场景不能是默认业务场景。</value>
+    <value>您所存档的目标预测场景不能是默认预测场景。</value>
   </data>
   <data name="ToScenarioColon" xml:space="preserve">
-    <value>目标业务场景：</value>
+    <value>目标预测场景：</value>
   </data>
   <data name="YouNeedToPickAScenarioToArchiveFromDot" xml:space="preserve">
-    <value>您需要选取一个源业务场景进行存档。</value>
+    <value>您需要选取一个源预测场景进行存档。</value>
   </data>
   <data name="YouNeedToPickAScenarioToArchiveToDot" xml:space="preserve">
-    <value>您需要选取一个目标业务场景进行存档。</value>
+    <value>您需要选取一个目标预测场景进行存档。</value>
   </data>
   <data name="YourSelectionResultedInZeroPeopleDot" xml:space="preserve">
     <value>您选择了0人。</value>
@@ -13054,13 +13061,13 @@ Teleopti R&amp;D</value>
     <value>主要的</value>
   </data>
   <data name="ImportingConfirmationWithParameters" xml:space="preserve">
-    <value>您将要合并选定的小组在业务场景'{0}'中一些已存在的班表，在周期{1} - {2}。</value>
+    <value>您将要合并选定的小组在预测场景'{0}'中一些已存在的班表，在周期{1} - {2}。</value>
   </data>
   <data name="RunImporting" xml:space="preserve">
     <value>运行导入中</value>
   </data>
   <data name="YouNeedToPickAScenarioToImportFromDot" xml:space="preserve">
-    <value>您需要选取一个导入的源业务场景。</value>
+    <value>您需要选取一个导入的源预测场景。</value>
   </data>
   <data name="SendToAdministrator" xml:space="preserve">
     <value>发送给管理员</value>
@@ -13484,7 +13491,7 @@ Teleopti R&amp;D</value>
     <value>工时目标 ({0}) 未满足</value>
   </data>
   <data name="EmailSkillSelected" xml:space="preserve">
-    <value>已选择一个业务量技能，因此将不显示放弃率。</value>
+    <value>已选择一个仓储预测技能，因此将不显示放弃率。</value>
   </data>
   <data name="AgentsHaveScheduled" xml:space="preserve">
     <value>普通员工已排班</value>
@@ -13506,6 +13513,9 @@ Teleopti R&amp;D</value>
   </data>
   <data name="DayOffRule" xml:space="preserve">
     <value>休息日规则</value>
+  </data>
+  <data name="DayOffRuleAppliedFilters" xml:space="preserve">
+    <value>以下设置被应用于以下座席分组 {0}</value>
   </data>
   <data name="DayOffRuleSetting" xml:space="preserve">
     <value>休息日规则设置</value>
@@ -13550,7 +13560,7 @@ Teleopti R&amp;D</value>
     <value>排班成功</value>
   </data>
   <data name="SearchForDayOff" xml:space="preserve">
-    <value>搜索部门 / 小组 / 合同</value>
+    <value>搜索部门 / 小组 / 排班规则</value>
   </data>
   <data name="SelectedPlanningPeriod" xml:space="preserve">
     <value>已选定的排班周期</value>
@@ -13657,10 +13667,10 @@ Teleopti R&amp;D</value>
     <comment>Message displayed for users on access Anywhere</comment>
   </data>
   <data name="DeletedContractAssigned" xml:space="preserve">
-    <value>分配给此普通员工的合同 {0} 已被删除</value>
+    <value>分配给此普通员工的工作规则 {0} 已被删除</value>
   </data>
   <data name="DeletedContractScheduleAssigned" xml:space="preserve">
-    <value>分配给此普通员工的班表合同 {0} 已被删除</value>
+    <value>分配给此普通员工的工作日规则 {0} 已被删除</value>
   </data>
   <data name="DeletedPartTimePercentageAssigned" xml:space="preserve">
     <value>分配给此普通员工的兼职时间百分比 {0} 已被删除</value>
@@ -13723,7 +13733,7 @@ Teleopti R&amp;D</value>
     <value>选择计划组以为普通员工排班</value>
   </data>
   <data name="SearchForPlanningGroup" xml:space="preserve">
-    <value>查询 部门 /小组/技能/合同</value>
+    <value>查询 部门 /小组/技能/排班规则</value>
   </data>
   <data name="SelectPpToSchedulePlanningGroup" xml:space="preserve">
     <value>选择计划周期以为您的计划组排班</value>
@@ -13768,7 +13778,7 @@ Teleopti R&amp;D</value>
     <value>额外时间/加班 申请</value>
   </data>
   <data name="UnavailableSeries" xml:space="preserve">
-    <value>当前选择中包含业务量技能，某些特定数据不可用</value>
+    <value>当前选择中包含仓储预测技能，某些特定数据不可用</value>
   </data>
   <data name="EnableAbsenceProbability" xml:space="preserve">
     <value>启用缺勤可能性提示</value>
@@ -13851,6 +13861,9 @@ Teleopti R&amp;D</value>
   <data name="OvertimeRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
     <value>加班申请 {0} 已被拒绝。</value>
   </data>
+  <data name="NoAvailableSkillForOvertime" xml:space="preserve">
+    <value>普通员工无可用技能以申请加班</value>
+  </data>
   <data name="PeriodIsOutOfSkillOpenHours" xml:space="preserve">
     <value>申请周期超出技能开放时间</value>
   </data>
@@ -13886,6 +13899,30 @@ Teleopti R&amp;D</value>
   </data>
   <data name="SeveralGroupsSelected" xml:space="preserve">
     <value>已选定 {0} 个组</value>
+  </data>
+  <data name="TheSkillWithNameIsNotDefinedInTheSystem" xml:space="preserve">
+    <value>技能名称 {0} 未在系统中定义。</value>
+  </data>
+  <data name="SkillDefinedMultipleTimesInTheSystem" xml:space="preserve">
+    <value>技能名称 {0} 已在系统中定义了 {1} 次。当使用此功能时仅允许一次。 </value>
+  </data>
+  <data name="BpoLineHasIncorrectParameterCount" xml:space="preserve">
+    <value>一行中有 {0} 个参数，但只需要 {1} 个参数。</value>
+  </data>
+  <data name="ErrorFoundOnLineNumberXWithContentsY" xml:space="preserve">
+    <value>行数 {0} 中发现错误内容：{1} {2}</value>
+  </data>
+  <data name="ParameterCannotBeEmpty" xml:space="preserve">
+    <value>参数 {0} 不能为空</value>
+  </data>
+  <data name="InvalidFieldNameInHeader" xml:space="preserve">
+    <value>页眉包含无效字段名称: '{0}'. 有效的字段名称为: ({1})</value>
+  </data>
+  <data name="TheImportFileCannotBeEmpty" xml:space="preserve">
+    <value>导入文件不能为空。</value>
+  </data>
+  <data name="FirstLineInFileHeaderLineCannotBeEmpty" xml:space="preserve">
+    <value>文件中第一行（页面一行）不能为空。</value>
   </data>
   <data name="OpenSite" xml:space="preserve">
     <value>进入部门</value>
@@ -14003,6 +14040,9 @@ Teleopti R&amp;D</value>
   </data>
   <data name="NotShowingReforcastedAgents" xml:space="preserve">
     <value>当前选择无法显示重新预测的普通员工数.</value>
+  </data>
+  <data name="ShiftTradeSpecification" xml:space="preserve">
+    <value>调换班说明</value>
   </data>
   <data name="EditPlanGroupSchedulingSetting" xml:space="preserve">
     <value>编辑排班设置</value>

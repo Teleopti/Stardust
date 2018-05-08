@@ -571,7 +571,7 @@
     <value>队列：</value>
   </data>
   <data name="ResReportQueueStatistics" xml:space="preserve">
-    <value>队列统计数据</value>
+    <value>历史业务量统计</value>
   </data>
   <data name="ResAbandonedCallsWithinSL" xml:space="preserve">
     <value>服务水平内放弃的电话量</value>
