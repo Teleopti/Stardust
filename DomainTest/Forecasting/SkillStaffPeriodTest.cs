@@ -197,8 +197,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		        _target.Payload.TaskData.AverageAfterTaskTime.TotalSeconds,
 		        _target.Period.ElapsedTime(),
 				(int)_target.Payload.ServiceAgreementData.ServiceLevel.Percent.Value * 100,
-		        _target.Payload.ForecastedIncomingDemandWithoutShrinkage, 1
-		        );
+		        _target.Payload.ForecastedIncomingDemandWithoutShrinkage, 1,
+		        0);
 			
 			_target.PickResources65();
             Assert.AreEqual(new Percent(serviceLevel), _target.EstimatedServiceLevel);
