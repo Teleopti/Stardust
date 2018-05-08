@@ -253,11 +253,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public void ShouldNotHavePeopleAreaWhenFeatureDisabled()
 		{
 			ApplicationFunctionsToggleFilter
-				.AddFakeFunction(new ApplicationFunction { FunctionCode = DefinedRaptorApplicationFunctionPaths.WebPeople }
+				.AddFakeFunction(new ApplicationFunction { FunctionCode = DefinedRaptorApplicationFunctionPaths.PeopleAccess }
 					, o => true);
 
 			PermissionProvider.Enable();
-			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.WebPeople);
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.PeopleAccess);
 			ToggleManager.Disable(Toggles.Wfm_PeopleWeb_PrepareForRelease_47766);
 
 			var areas = Target.GetWfmAreasWithPermissions();
@@ -269,16 +269,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public void ShouldHavePeopleAreaWhenFeatureEnabledAndPermitted()
 		{
 			ApplicationFunctionsToggleFilter
-				.AddFakeFunction(new ApplicationFunction { FunctionCode = DefinedRaptorApplicationFunctionPaths.WebPeople }
+				.AddFakeFunction(new ApplicationFunction { FunctionCode = DefinedRaptorApplicationFunctionPaths.PeopleAccess }
 					, o => true);
 
 			PermissionProvider.Enable();
-			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.WebPeople);
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.PeopleAccess);
 			ToggleManager.Enable(Toggles.Wfm_PeopleWeb_PrepareForRelease_47766);
 
 			var areas = Target.GetWfmAreasWithPermissions();
 
-			areas.Single().Path.Should().Be(DefinedRaptorApplicationFunctionPaths.WebPeople);
+			areas.Single().Path.Should().Be(DefinedRaptorApplicationFunctionPaths.PeopleAccess);
 			areas.Single().Name.Invoke().Should().Be(Resources.People);
 			areas.Single().InternalName.Should().Be("people");
 		}
