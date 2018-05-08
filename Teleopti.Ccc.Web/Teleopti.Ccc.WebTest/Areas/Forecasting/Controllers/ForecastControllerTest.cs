@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 	[DomainTest]
 	public class ForecastControllerTest : IExtendSystem
 	{
+		private const double tolerance = 0.000001d;
 		public ForecastController Target;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeSkillRepository SkillRepository;
@@ -46,8 +47,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 
 			var workloadDayTemplate1 = new WorkloadDayTemplate();
 			var workloadDayTemplate2 = new WorkloadDayTemplate();
-			workloadDayTemplate1.Create(forecastedDay1.Date.DayOfWeek.ToString(), DateTime.UtcNow, workload, new List<TimePeriod> { new TimePeriod(10, 12) });
-			workloadDayTemplate2.Create(forecastedDay2.Date.DayOfWeek.ToString(), DateTime.UtcNow, workload, new List<TimePeriod> { new TimePeriod(11, 14) });
+			workloadDayTemplate1.Create(forecastedDay1.Date.DayOfWeek.ToString(), DateTime.UtcNow, workload, new List<TimePeriod>
+			{
+				new TimePeriod(10, 12)
+			});
+			workloadDayTemplate2.Create(forecastedDay2.Date.DayOfWeek.ToString(), DateTime.UtcNow, workload, new List<TimePeriod>
+			{
+				new TimePeriod(11, 14)
+			});
 			workload.SetTemplate(forecastedDay1.Date.DayOfWeek, workloadDayTemplate1);
 			workload.SetTemplate(forecastedDay2.Date.DayOfWeek, workloadDayTemplate2);
 
@@ -282,9 +289,61 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
 			var openDay = new DateOnly(2018, 05, 04);
 			var skillDay = SkillDayFactory.CreateSkillDay(skill, workload, openDay, scenario);
-			skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new[] { skillDay }, new DateOnlyPeriod());
+			skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new[] {skillDay}, new DateOnlyPeriod());
 			skillDay.WorkloadDayCollection.Single().SetOverrideTasks(100d, null);
-			skillDay.WorkloadDayCollection.Single().OverrideAverageTaskTime = TimeSpan.FromSeconds(100d);
+			skillDay.WorkloadDayCollection.Single().OverrideAverageTaskTime = TimeSpan.FromSeconds(150d);
+			skillDay.WorkloadDayCollection.Single().OverrideAverageAfterTaskTime = TimeSpan.FromSeconds(200d);
+
+			SkillRepository.Add(skill);
+			WorkloadRepository.Add(workload);
+			ScenarioRepository.Has(scenario);
+			SkillDayRepository.Add(skillDay);
+
+			var forecastInput = new ForecastInput
+			{
+				ForecastStart = openDay.Date,
+				ForecastEnd = openDay.Date,
+				ScenarioId = scenario.Id.Value,
+				Workload = new ForecastWorkloadInput
+				{
+					ForecastMethodId = ForecastMethodType.TeleoptiClassicShortTerm,
+					WorkloadId = workload.Id.Value
+				}
+			};
+			StatisticRepository.Has(workload.QueueSourceCollection.First(), new List<IStatisticTask>
+			{
+				new StatisticTask
+				{
+					Interval = openDay.AddDays(-10).Date.AddHours(10),
+					StatOfferedTasks = 10
+				}
+			});
+			var result = (OkNegotiatedContentResult<ForecastModel>) Target.Forecast(forecastInput);
+			var forecastDay = result.Content.ForecastDays.Single();
+			forecastDay.Campaign.Should().Be(0);
+			forecastDay.Override.Should().Be(-1);
+			forecastDay.CampaignAndOverride.Should().Be(0);
+			Assert.That(forecastDay.TotalTasks, Is.EqualTo(100d).Within(tolerance));
+			Assert.That(forecastDay.TotalAverageTaskTime, Is.EqualTo(150d).Within(tolerance));
+			Assert.That(forecastDay.TotalAverageAfterTaskTime, Is.EqualTo(200d).Within(tolerance));
+		}
+
+		[Test]
+		public void ShouldForecastUsingExistingCampaignAndOverride()
+		{
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
+			var workload = skill.WorkloadCollection.Single();
+			var scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
+			var openDay = new DateOnly(2018, 05, 04);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, workload, openDay, scenario);
+			skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new[] { skillDay }, new DateOnlyPeriod());
+
+			skillDay.WorkloadDayCollection.Single().CampaignTasks = new Percent(0.5);
+			skillDay.WorkloadDayCollection.Single().CampaignTaskTime = new Percent(0.6);
+			skillDay.WorkloadDayCollection.Single().CampaignAfterTaskTime = new Percent(0.7);
+
+			skillDay.WorkloadDayCollection.Single().SetOverrideTasks(100d, null);
+			skillDay.WorkloadDayCollection.Single().OverrideAverageTaskTime = TimeSpan.FromSeconds(150d);
 			skillDay.WorkloadDayCollection.Single().OverrideAverageAfterTaskTime = TimeSpan.FromSeconds(200d);
 
 			SkillRepository.Add(skill);
@@ -314,11 +373,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var result = (OkNegotiatedContentResult<ForecastModel>)Target.Forecast(forecastInput);
 			var forecastDay = result.Content.ForecastDays.Single();
 			forecastDay.Campaign.Should().Be(0);
-			forecastDay.Override.Should().Be(-1);
-			forecastDay.CampaignAndOverride.Should().Be(0);
-			//forecastDay.TotalTasks.Should().Be.EqualTo(100d, 0.001);
-			//forecastDay.TotalAverageTaskTime.Should().Be.EqualTo(100d);
-			//forecastDay.TotalAverageAfterTaskTime.Should().Be.EqualTo(200d);
+			forecastDay.Override.Should().Be(0);
+			forecastDay.CampaignAndOverride.Should().Be(-1);
+			Assert.That(forecastDay.TotalTasks, Is.EqualTo(100d).Within(tolerance));
+			Assert.That(forecastDay.TotalAverageTaskTime, Is.EqualTo(150d).Within(tolerance));
+			Assert.That(forecastDay.TotalAverageAfterTaskTime, Is.EqualTo(200d).Within(tolerance));
 		}
 	}
 }
