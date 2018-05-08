@@ -149,7 +149,6 @@
 		function selectActivity(activity) {
 			if (activity !== null) {
 				resetAllList();
-				vm.selectedActivity = activity;
 				var skillsOfSelectedActivity = angular.copy(vm.skills.filter(belongsToActivity)).sort(localeLanguageSortingService.localeSort('+SkillName'));
 				if (skillsOfSelectedActivity.length !== 0) {
 					addNewRow();
