@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Outlier;
 using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
@@ -66,15 +65,15 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 				{
 					Date = target.CurrentDate,
 					Tasks = target.Tasks,
-					TaskTime = target.AverageTaskTime.TotalSeconds,
-					AfterTaskTime = target.AverageAfterTaskTime.TotalSeconds,
+					AverageTaskTime = target.AverageTaskTime.TotalSeconds,
+					AverageAfterTaskTime = target.AverageAfterTaskTime.TotalSeconds,
 					TotalTasks = target.Tasks,
 					TotalAverageTaskTime = target.AverageTaskTime.TotalSeconds,
 					TotalAverageAfterTaskTime = target.AverageAfterTaskTime.TotalSeconds,
 					IsOpen = currentWorkLoadDay.OpenForWork.IsOpen
 				};
 
-				if (hasCampaign(currentWorkLoadDay) && hasOverride(currentWorkLoadDay)) model.Combo = -1;
+				if (hasCampaign(currentWorkLoadDay) && hasOverride(currentWorkLoadDay)) model.CampaignAndOverride = -1;
 				if (hasCampaign(currentWorkLoadDay))
 				{
 					model.Campaign = -1;

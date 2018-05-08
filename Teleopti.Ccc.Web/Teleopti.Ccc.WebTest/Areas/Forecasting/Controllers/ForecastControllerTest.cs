@@ -56,19 +56,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 
 			IList<ForecastDayModel> forecastDays = new List<ForecastDayModel>
 			{
-				new ForecastDayModel()
+				new ForecastDayModel
 				{
 					Date = forecastedDay1,
 					Tasks = 10,
-					TaskTime = 60,
-					AfterTaskTime = 60
+					AverageTaskTime = 60,
+					AverageAfterTaskTime = 60
 				},
-				new ForecastDayModel()
+				new ForecastDayModel
 				{
 					Date = forecastedDay2,
 					Tasks = 15,
-					TaskTime = 65,
-					AfterTaskTime = 65
+					AverageTaskTime = 65,
+					AverageAfterTaskTime = 65
 				}
 			};
 			var forecastResult = new ForecastModel
@@ -86,12 +86,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var savedWorkloadDay2 = savedForecastDay2.WorkloadDayCollection.Single();
 
 			savedWorkloadDay1.Tasks.Should().Be(forecastDays.First().Tasks);
-			savedWorkloadDay1.AverageTaskTime.TotalSeconds.Should().Be(forecastDays.First().TaskTime);
-			savedWorkloadDay1.AverageAfterTaskTime.TotalSeconds.Should().Be(forecastDays.First().AfterTaskTime);
+			savedWorkloadDay1.AverageTaskTime.TotalSeconds.Should().Be(forecastDays.First().AverageTaskTime);
+			savedWorkloadDay1.AverageAfterTaskTime.TotalSeconds.Should().Be(forecastDays.First().AverageAfterTaskTime);
 
 			savedWorkloadDay2.Tasks.Should().Be(forecastDays.Last().Tasks);
-			savedWorkloadDay2.AverageTaskTime.TotalSeconds.Should().Be(forecastDays.Last().TaskTime);
-			savedWorkloadDay2.AverageAfterTaskTime.TotalSeconds.Should().Be(forecastDays.Last().AfterTaskTime);
+			savedWorkloadDay2.AverageTaskTime.TotalSeconds.Should().Be(forecastDays.Last().AverageTaskTime);
+			savedWorkloadDay2.AverageAfterTaskTime.TotalSeconds.Should().Be(forecastDays.Last().AverageAfterTaskTime);
 		}
 
 		[Test]
@@ -110,8 +110,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				{
 					Date = forecastedDay1,
 					Tasks = 10,
-					TaskTime = 0,
-					AfterTaskTime = 0
+					AverageTaskTime = 0,
+					AverageAfterTaskTime = 0
 				}
 			};
 			var forecastResult = new ForecastModel
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			SkillRepository.Add(skill);
 			WorkloadRepository.Add(workload);
 			ScenarioRepository.Has(scenario);
-			var forecastInput = new ForecastInput()
+			var forecastInput = new ForecastInput
 			{
 				ForecastStart = openDay.Date,
 				ForecastEnd = closedDay.Date,
@@ -225,6 +225,100 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			result.Content.ForecastDays.Count.Should().Be(2);
 			result.Content.ForecastDays.First().IsOpen.Should().Be(true);
 			result.Content.ForecastDays.Last().IsOpen.Should().Be(false);
+		}
+
+		[Test]
+		public void ShouldForecastUsingExistingCampaign()
+		{
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
+			var workload = skill.WorkloadCollection.Single();
+			var scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
+			var openDay = new DateOnly(2018, 05, 04);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, workload, openDay, scenario);
+			skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new[] { skillDay }, new DateOnlyPeriod());
+			skillDay.WorkloadDayCollection.Single().CampaignTasks = new Percent(0.5);
+			skillDay.WorkloadDayCollection.Single().CampaignTaskTime = new Percent(0.6);
+			skillDay.WorkloadDayCollection.Single().CampaignAfterTaskTime = new Percent(0.7);
+
+			SkillRepository.Add(skill);
+			WorkloadRepository.Add(workload);
+			ScenarioRepository.Has(scenario);
+			SkillDayRepository.Add(skillDay);
+
+			var forecastInput = new ForecastInput
+			{
+				ForecastStart = openDay.Date,
+				ForecastEnd = openDay.Date,
+				ScenarioId = scenario.Id.Value,
+				Workload = new ForecastWorkloadInput
+				{
+					ForecastMethodId = ForecastMethodType.TeleoptiClassicShortTerm,
+					WorkloadId = workload.Id.Value
+				}
+			};
+			StatisticRepository.Has(workload.QueueSourceCollection.First(), new List<IStatisticTask>
+			{
+				new StatisticTask
+				{
+					Interval = openDay.AddDays(-10).Date.AddHours(10),
+					StatOfferedTasks = 10
+				}
+			});
+			var result = (OkNegotiatedContentResult<ForecastModel>)Target.Forecast(forecastInput);
+			var forecastDay = result.Content.ForecastDays.Single();
+			forecastDay.Campaign.Should().Be(-1);
+			forecastDay.Override.Should().Be(0);
+			forecastDay.CampaignAndOverride.Should().Be(0);
+			forecastDay.TotalTasks.Should().Be(forecastDay.Tasks*1.5);
+			forecastDay.TotalAverageTaskTime.Should().Be(forecastDay.AverageTaskTime * 1.6);
+			forecastDay.TotalAverageAfterTaskTime.Should().Be(forecastDay.AverageAfterTaskTime * 1.7);
+		}
+
+		[Test]
+		public void ShouldForecastUsingExistingOverride()
+		{
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
+			var workload = skill.WorkloadCollection.Single();
+			var scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
+			var openDay = new DateOnly(2018, 05, 04);
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, workload, openDay, scenario);
+			skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new[] { skillDay }, new DateOnlyPeriod());
+			skillDay.WorkloadDayCollection.Single().SetOverrideTasks(100d, null);
+			skillDay.WorkloadDayCollection.Single().OverrideAverageTaskTime = TimeSpan.FromSeconds(100d);
+			skillDay.WorkloadDayCollection.Single().OverrideAverageAfterTaskTime = TimeSpan.FromSeconds(200d);
+
+			SkillRepository.Add(skill);
+			WorkloadRepository.Add(workload);
+			ScenarioRepository.Has(scenario);
+			SkillDayRepository.Add(skillDay);
+
+			var forecastInput = new ForecastInput
+			{
+				ForecastStart = openDay.Date,
+				ForecastEnd = openDay.Date,
+				ScenarioId = scenario.Id.Value,
+				Workload = new ForecastWorkloadInput
+				{
+					ForecastMethodId = ForecastMethodType.TeleoptiClassicShortTerm,
+					WorkloadId = workload.Id.Value
+				}
+			};
+			StatisticRepository.Has(workload.QueueSourceCollection.First(), new List<IStatisticTask>
+			{
+				new StatisticTask
+				{
+					Interval = openDay.AddDays(-10).Date.AddHours(10),
+					StatOfferedTasks = 10
+				}
+			});
+			var result = (OkNegotiatedContentResult<ForecastModel>)Target.Forecast(forecastInput);
+			var forecastDay = result.Content.ForecastDays.Single();
+			forecastDay.Campaign.Should().Be(0);
+			forecastDay.Override.Should().Be(-1);
+			forecastDay.CampaignAndOverride.Should().Be(0);
+			//forecastDay.TotalTasks.Should().Be.EqualTo(100d, 0.001);
+			//forecastDay.TotalAverageTaskTime.Should().Be.EqualTo(100d);
+			//forecastDay.TotalAverageAfterTaskTime.Should().Be.EqualTo(200d);
 		}
 	}
 }

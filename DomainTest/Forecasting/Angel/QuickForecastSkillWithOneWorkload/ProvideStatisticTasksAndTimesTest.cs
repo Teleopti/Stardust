@@ -29,9 +29,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 			var firstDay = forecastResult.ForecastDays.Single(x => x.Date == FuturePeriod.StartDate);
 			Convert.ToInt32(firstDay.Tasks)
 				.Should().Be.EqualTo(6);
-			Convert.ToInt32(firstDay.TaskTime)
+			Convert.ToInt32(firstDay.AverageTaskTime)
 				.Should().Be.EqualTo(35);
-			Convert.ToInt32(firstDay.AfterTaskTime)
+			Convert.ToInt32(firstDay.AverageAfterTaskTime)
 				.Should().Be.EqualTo(50);
 		}
 	}

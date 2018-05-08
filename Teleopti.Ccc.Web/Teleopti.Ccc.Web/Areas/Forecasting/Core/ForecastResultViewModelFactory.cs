@@ -15,54 +15,59 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 		private readonly IFutureData _futureData;
 		private readonly IWorkloadRepository _workloadRepository;
 
-		public ForecastResultViewModelFactory(IWorkloadRepository workloadRepository, ISkillDayRepository skillDayRepository, IFutureData futureData)
+		public ForecastResultViewModelFactory(IWorkloadRepository workloadRepository, ISkillDayRepository skillDayRepository,
+			IFutureData futureData)
 		{
 			_workloadRepository = workloadRepository;
 			_skillDayRepository = skillDayRepository;
 			_futureData = futureData;
 		}
 
-		public WorkloadForecastResultViewModel Create(Guid workloadId, DateOnlyPeriod futurePeriod, IScenario scenario)
+		public ForecastModel Create(Guid workloadId, DateOnlyPeriod futurePeriod, IScenario scenario)
 		{
 			var workload = _workloadRepository.Get(workloadId);
 			var skillDays = _skillDayRepository.FindRange(futurePeriod, workload.Skill, scenario);
 			var futureWorkloadDays = _futureData.Fetch(workload, skillDays, futurePeriod)
 				.OrderBy(x => x.CurrentDate);
-			return new WorkloadForecastResultViewModel
+			return new ForecastModel()
 			{
-				WorkloadId = workload.Id.GetValueOrDefault(),
-				Days = transformForecastResult(futureWorkloadDays)
+				WorkloadId = workload.Id.Value,
+				ScenarioId = scenario.Id.Value,
+				ForecastDays = transformForecastResult(futureWorkloadDays)
 			};
 		}
 
-		private ForecastResultModel[] transformForecastResult(IEnumerable<IWorkloadDayBase> workloadDays)
+		private IList<ForecastDayModel> transformForecastResult(IEnumerable<IWorkloadDayBase> workloadDays)
 		{
-			var days = new List<ForecastResultModel>();
+			var days = new List<ForecastDayModel>();
 			foreach (var workloadDay in workloadDays)
 			{
-				var day = new ForecastResultModel();
-				day.date = workloadDay.CurrentDate.Date;
-				day.vc = workloadDay.Tasks;
-				day.vtc = workloadDay.TotalTasks;
-				day.vtt = workloadDay.AverageTaskTime.TotalSeconds;
-				day.vttt = workloadDay.TotalAverageTaskTime.TotalSeconds;
-				day.vacw = workloadDay.AverageAfterTaskTime.TotalSeconds;
-				day.vtacw = workloadDay.TotalAverageAfterTaskTime.TotalSeconds;
+				var day = new ForecastDayModel
+				{
+					Date = workloadDay.CurrentDate,
+					Tasks = workloadDay.Tasks,
+					TotalTasks = workloadDay.TotalTasks,
+					AverageTaskTime = workloadDay.AverageTaskTime.TotalSeconds,
+					TotalAverageTaskTime = workloadDay.TotalAverageTaskTime.TotalSeconds,
+					AverageAfterTaskTime = workloadDay.AverageAfterTaskTime.TotalSeconds,
+					TotalAverageAfterTaskTime = workloadDay.TotalAverageAfterTaskTime.TotalSeconds
+				};
 
-				if (Math.Abs(workloadDay.CampaignTasks.Value) > 0
-					&& (workloadDay.OverrideTasks.HasValue  || workloadDay.OverrideAverageTaskTime.HasValue || workloadDay.OverrideAverageAfterTaskTime.HasValue))
+				var hasOverride = workloadDay.OverrideTasks.HasValue ||
+								  workloadDay.OverrideAverageTaskTime.HasValue ||
+								  workloadDay.OverrideAverageAfterTaskTime.HasValue;
+				var hasCampaign = Math.Abs(workloadDay.CampaignTasks.Value) > 0;
+				if (hasCampaign && hasOverride)
 				{
-					day.vcombo = -1;
+					day.CampaignAndOverride = -1;
 				}
-				else if (workloadDay.OverrideTasks.HasValue
-							|| workloadDay.OverrideAverageTaskTime.HasValue
-							|| workloadDay.OverrideAverageAfterTaskTime.HasValue)
+				else if (hasOverride)
 				{
-					day.voverride = -1;
+					day.Override = -1;
 				}
-				else if (Math.Abs(workloadDay.CampaignTasks.Value) > 0)
+				else if (hasCampaign)
 				{
-					day.vcampaign = -1;
+					day.Campaign = -1;
 				}
 
 				days.Add(day);

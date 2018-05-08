@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly IActionThrottler _actionThrottler;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IWorkloadRepository _workloadRepository;
-		private readonly ICampaignPersister _campaignPersister;
 		private readonly IOverridePersister _overridePersister;
 		private readonly IAuthorization _authorization;
 		private readonly IWorkloadNameBuilder _workloadNameBuilder;
@@ -46,7 +45,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			IActionThrottler actionThrottler,
 			IScenarioRepository scenarioRepository, 
 			IWorkloadRepository workloadRepository,
-			ICampaignPersister campaignPersister,
 			IOverridePersister overridePersister,
 			IAuthorization authorization,
 			IWorkloadNameBuilder workloadNameBuilder,
@@ -60,7 +58,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_actionThrottler = actionThrottler;
 			_scenarioRepository = scenarioRepository;
 			_workloadRepository = workloadRepository;
-			_campaignPersister = campaignPersister;
 			_overridePersister = overridePersister;
 			_authorization = authorization;
 			_workloadNameBuilder = workloadNameBuilder;
@@ -74,14 +71,15 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			return new SkillsViewModel
 			{
 				IsPermittedToModifySkill = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebModifySkill),
-				Skills = skillList.Select(
-					skill => new SkillAccuracy
+				Skills = skillList.Select(skill => new SkillAccuracy
+				{
+					Id = skill.Id.Value,
+					Workloads = skill.WorkloadCollection.Select(x => new WorkloadAccuracy
 					{
-						Id = skill.Id.Value,
-						Workloads =
-							skill.WorkloadCollection.Select(
-								x => new WorkloadAccuracy {Id = x.Id.Value, Name = _workloadNameBuilder.WorkloadName(skill.Name, x.Name)}).ToArray()
-					})
+						Id = x.Id.Value,
+						Name = _workloadNameBuilder.WorkloadName(skill.Name, x.Name)
+					}).ToArray()
+				})
 			};
 		}
 
@@ -98,12 +96,11 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		}
 
 		[HttpPost, Route("api/Forecasting/ForecastResult"), UnitOfWork]
-		public virtual Task<WorkloadForecastResultViewModel> ForecastResult(ForecastResultInput input)
+		public virtual IHttpActionResult ForecastResult(ForecastResultInput input)
 		{
-			return
-				Task.FromResult(_forecastResultViewModelFactory.Create(input.WorkloadId,
-					new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd)),
-					_scenarioRepository.Get(input.ScenarioId)));
+			var period = new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd));
+			var scenario = _scenarioRepository.Get(input.ScenarioId);
+			return Ok(_forecastResultViewModelFactory.Create(input.WorkloadId, period, scenario));
 		}
 
 		[HttpPost, Route("api/Forecasting/EvaluateMethods"), UnitOfWork]
@@ -116,8 +113,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		public virtual IHttpActionResult Forecast(ForecastInput input)
 		{
 			var futurePeriod = new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd));
-			var forecast = _forecastCreator.CreateForecastForWorkload(futurePeriod, input.Workload,
-				_scenarioRepository.Get(input.ScenarioId));
+			var scenario = _scenarioRepository.Get(input.ScenarioId);
+			var forecast = _forecastCreator.CreateForecastForWorkload(futurePeriod, input.Workload, scenario);
 			return Ok(forecast);
 		}
 
@@ -132,7 +129,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		{
 			foreach (var selectedDay in input.SelectedDays)
 			{
-				
 				var forecastDay = input.ForecastDays.Single(x => x.Date == selectedDay);
 				if (!forecastDay.IsOpen)
 					continue;
@@ -190,8 +186,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 					continue;
 				var model = forecastResult.ForecastDays.SingleOrDefault(x => x.Date == forecastedWorkloadDay.CurrentDate);
 				forecastedWorkloadDay.Tasks = model.Tasks;
-				forecastedWorkloadDay.AverageTaskTime = TimeSpan.FromSeconds(model.TaskTime);
-				forecastedWorkloadDay.AverageAfterTaskTime = TimeSpan.FromSeconds(model.AfterTaskTime);
+				forecastedWorkloadDay.AverageTaskTime = TimeSpan.FromSeconds(model.AverageTaskTime);
+				forecastedWorkloadDay.AverageAfterTaskTime = TimeSpan.FromSeconds(model.AverageAfterTaskTime);
 			}
 
 			return Ok();
