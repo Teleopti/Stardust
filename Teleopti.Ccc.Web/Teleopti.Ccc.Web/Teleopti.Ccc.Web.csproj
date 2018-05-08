@@ -469,7 +469,8 @@
     <Compile Include="Areas\Intraday\IntradayController.cs" />
     <Compile Include="Areas\MultiTenancy\ExternalApplicationAccessController.cs" />
     <Compile Include="Areas\MultiTenancy\ExternalApplicationModel.cs" />
-    <Compile Include="Areas\MultiTenancy\Model\PersonInfoGenericResultModel.cs" />
+    <Compile Include="Areas\MultiTenancy\Model\BaseResultModel.cs" />
+    <Compile Include="Areas\MultiTenancy\Model\PersonInfoGenericModel.cs" />
     <Compile Include="Areas\MultiTenancy\NewExternalApplicationModel.cs" />
     <Compile Include="Areas\MultiTenancy\NewExternalApplicationResponseModel.cs" />
     <Compile Include="Areas\MyTime\Controllers\OvertimeRequestsController.cs" />
