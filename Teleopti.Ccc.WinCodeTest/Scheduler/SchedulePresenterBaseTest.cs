@@ -242,6 +242,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         }
 
 		[Test]
+		[SetCulture("sv-SE")]
 		public void CanReturnWeekHeaderStringForMoreThanOneYear()
 		{
 			var startDate= new DateOnly(2017,4,1);
