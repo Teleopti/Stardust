@@ -72,6 +72,7 @@
 				.toDate()
 		};
 		vm.HasPermissionToModifySkillArea = false;
+		vm.isSearchRequested = false;
 
 		var events = [];
 		var allSkills = [];
@@ -169,9 +170,11 @@
 
 		function generateChart(skill, area) {
 			if (skill) {
+				vm.isSearchRequested = true;
 				clearSuggestions();
 				var query = getSkillStaffingByDate(skill.Id, vm.selectedDate, vm.useShrinkage);
 			} else if (area) {
+				vm.isSearchRequested = true;
 				clearSuggestions();
 				var query = getSkillAreaStaffingByDate(area.Id, vm.selectedDate, vm.useShrinkage);
 			}
@@ -183,6 +186,10 @@
 				} else {
 					vm.staffingDataAvailable = false;
 				}
+				//just in case
+				vm.isSearchRequested = false;
+			}).finally(function () {
+				vm.isSearchRequested = false;
 			});
 		}
 
