@@ -1,15 +1,15 @@
-﻿(function() {
+﻿(function () {
 	'use strict';
 	angular.module('wfm.teamSchedule').component('addOvertime',
-	{
-		templateUrl: 'app/teamSchedule/commands/teams.component.cmd.addOvertime.html',
-		require: {
-			containerCtrl: '^teamscheduleCommandContainer'
-		},
-		controller: AddOvertimeCtrl
-	});
+		{
+			templateUrl: 'app/teamSchedule/commands/teams.component.cmd.addOvertime.html',
+			require: {
+				containerCtrl: '^teamscheduleCommandContainer'
+			},
+			controller: AddOvertimeCtrl
+		});
 
-	AddOvertimeCtrl.$inject = ['PersonSelection', 'ActivityService', 'ActivityValidator', 'belongsToDateDecider', 'teamScheduleNotificationService','serviceDateFormatHelper'];
+	AddOvertimeCtrl.$inject = ['PersonSelection', 'ActivityService', 'ActivityValidator', 'belongsToDateDecider', 'teamScheduleNotificationService', 'serviceDateFormatHelper'];
 
 	function AddOvertimeCtrl(personSelectionSvc, activityService, activityValidator, belongsToDateDecider, teamScheduleNotificationService, serviceDateFormatHelper) {
 		var ctrl = this;
@@ -26,7 +26,7 @@
 			ctrl.validateInput();
 		}
 
-		ctrl.$onInit = function() {
+		ctrl.$onInit = function () {
 			ctrl.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
 			ctrl.trackId = ctrl.containerCtrl.getTrackId();
 			ctrl.fromTime = getDefaultStartTime();
@@ -40,32 +40,32 @@
 			});
 		};
 
-		ctrl.loadDefinitionSets = function() {
+		ctrl.loadDefinitionSets = function () {
 			return activityService.fetchAvailableDefinitionSets()
-				.then(function(data) {
+				.then(function (data) {
 					ctrl.definitionSets = data;
 				});
 		};
 
-		ctrl.anyValidAgent = function() {
+		ctrl.anyValidAgent = function () {
 			return ctrl.invalidAgents.length !== ctrl.selectedAgents.length;
 		};
 
-		ctrl.anyInvalidAgent = function() {
+		ctrl.anyInvalidAgent = function () {
 			return ctrl.invalidAgents.length > 0;
 		};
 
-		ctrl.validateInput = function() {
+		ctrl.validateInput = function () {
 			var timeRange = {
 				startTime: moment(ctrl.fromTime),
 				endTime: moment(ctrl.toTime)
 			};
-		
+
 			var timezone = ctrl.containerCtrl.getCurrentTimezone();
 			ctrl.invalidAgents = activityValidator.validateInputForOvertime(ctrl.containerCtrl.scheduleManagementSvc, timeRange, ctrl.selectedDefinitionSetId, timezone);
 		};
 
-		ctrl.addOvertime = function() {
+		ctrl.addOvertime = function () {
 			var invalidAgentIds = ctrl.invalidAgents.map(function (a) {
 				return a.PersonId;
 			});
@@ -82,7 +82,7 @@
 				activityService.addOvertimeActivity(requestData)
 					.then(function (response) {
 						if (ctrl.containerCtrl.getActionCb(ctrl.label)) {
-							ctrl.containerCtrl.getActionCb(ctrl.label)(ctrl.trackId, validAgents.map(function(a) { return a.PersonId; }));
+							ctrl.containerCtrl.getActionCb(ctrl.label)(ctrl.trackId, validAgents.map(function (a) { return a.PersonId; }));
 						}
 						teamScheduleNotificationService.reportActionResult({
 							success: 'SuccessfulMessageForAddingOvertime',
@@ -147,17 +147,23 @@
 				PersonDates: personDates,
 				ActivityId: ctrl.selectedActivityId,
 				MultiplicatorDefinitionSetId: ctrl.selectedDefinitionSetId,
-				StartDateTime: ctrl.containerCtrl.getServiceTimeInCurrentUserTimezone(serviceDateFormatHelper.getDateTime(ctrl.fromTime)),
-				EndDateTime: ctrl.containerCtrl.getServiceTimeInCurrentUserTimezone(serviceDateFormatHelper.getDateTime(ctrl.toTime)),
+				StartDateTime: getServiceTimeInCurrentUserTimezone(ctrl.fromTime),
+				EndDateTime: getServiceTimeInCurrentUserTimezone(ctrl.toTime),
 				TrackedCommandInfo: { TrackId: ctrl.trackId }
 			};
 
 			return requestData;
 		}
 
+		function getServiceTimeInCurrentUserTimezone(dateTime) {
+			var timezone = ctrl.containerCtrl.getCurrentTimezone();
+			return ctrl.containerCtrl.getServiceTimeInCurrentUserTimezone(moment.tz(dateTime, timezone));
+		}
+
 		function validateTimeRange(fromTime, toTime) {
-			var from = moment(fromTime);
-			var to = moment(toTime);
+			var timezone = ctrl.containerCtrl.getCurrentTimezone();
+			var from = moment.tz(fromTime, timezone);
+			var to = moment.tz(toTime, timezone);
 			return to.isAfter(from);
 		}
 	}

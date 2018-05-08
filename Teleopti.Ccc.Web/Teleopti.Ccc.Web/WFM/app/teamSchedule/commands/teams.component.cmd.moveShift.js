@@ -34,7 +34,7 @@
 			}
 			if (isTimeValid) {
 				var currentTimezone = ctrl.containerCtrl.getCurrentTimezone();
-				validator.validateMoveToTimeForShift(ctrl.containerCtrl.scheduleManagementSvc, moment(getMoveToStartTimeStr()), currentTimezone);
+				validator.validateMoveToTimeForShift(ctrl.containerCtrl.scheduleManagementSvc, getMoveToStartTimeMoment() , currentTimezone);
 				invalidAgents = invalidAgents.concat(validator.getInvalidPeople());
 			}
 			ctrl.invalidAgents = filterAgentArray(invalidAgents);
@@ -70,7 +70,7 @@
 			if (validAgentIds.length > 0) {
 				var requestData = {
 					Date: ctrl.containerCtrl.getDate(),
-					NewShiftStart: ctrl.containerCtrl.getServiceTimeInCurrentUserTimezone(serviceDateFormatHelper.getDateTime(ctrl.moveToTime)),
+					NewShiftStart: ctrl.containerCtrl.getServiceTimeInCurrentUserTimezone(getMoveToStartTimeMoment()),
 					PersonIds: validAgentIds,
 					TrackedCommandInfo: { TrackId: ctrl.trackId }
 				};
@@ -135,8 +135,9 @@
 			return serviceDateFormatHelper.getDateTime(moment(ctrl.containerCtrl.getDate() + " 08:00"));
 		}
 
-		function getMoveToStartTimeStr() {
-			return serviceDateFormatHelper.getDateTime(moment(ctrl.containerCtrl.getDate() + " " + moment(ctrl.moveToTime).format('HH:mm')));
+		function getMoveToStartTimeMoment() {
+			var currentTimezone = ctrl.containerCtrl.getCurrentTimezone();
+			return moment.tz(ctrl.moveToTime, currentTimezone)
 		}
 
 		function filterAgentArray(arr) {
