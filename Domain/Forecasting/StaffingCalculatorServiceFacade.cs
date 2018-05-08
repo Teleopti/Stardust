@@ -52,7 +52,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			return esl < 0 ? 0 : esl > 1 ? 1 : esl;
 		}
 
-		public virtual double ServiceLevelAchievedOcc(double agents, double serviceTime, double calls, double aht, TimeSpan intervalLength, double sla, double forecastedAgents, int maxParellelTasks)
+		public virtual double ServiceLevelAchievedOcc(double agents, double serviceTime, double calls, double aht, TimeSpan intervalLength, double sla, double forecastedAgents, 
+			int maxParellelTasks, double abandonRate)
 		{
 			if (calls/maxParellelTasks <= 2)
 			{
@@ -82,11 +83,24 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			var result = _agentsNeededAbandonment.CalculateNumberOfAgentsNeededAbandon(tasks / maxParallelTasks, aht, serviceTime, serviceLevel,
 				(int)periodLength.TotalSeconds, minOcc, maxOcc, abandonRate);
 
+
 			return new AgentsAndOccupancy()
 			{
 				Agents = result.NumberOfAgentsNeeded,
 				Occupancy = result.Occupancy
 			};
+		}
+
+		public override double ServiceLevelAchievedOcc(double agents, double serviceTime, double calls, double aht, TimeSpan intervalLength, double sla, 
+			double forecastedAgents, int maxParellelTasks, double abandonRate)
+		{
+			if (calls / maxParellelTasks <= 2)
+			{
+				return LinearEsl(forecastedAgents, agents, sla);
+			}
+
+			return EstimatedServiceLevelAbandonment.CalculateServiceLevelAbandonment(agents, calls / maxParellelTasks, aht, (int)serviceTime, (int)intervalLength.TotalSeconds, 
+				forecastedAgents, sla, abandonRate);
 		}
 
 		public override double Utilization(double demandWithoutEfficiency, double tasks, double aht, TimeSpan periodLength, int maxParellelTasks, double occupancy)
@@ -105,7 +119,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			_estimatedServiceLevel = new EstimatedServiceLevel();
 		}
 
-		public override double ServiceLevelAchievedOcc(double agents, double serviceTime, double calls, double aht, TimeSpan intervalLength, double sla, double forecastedAgents, int maxParellelTasks)
+		public override double ServiceLevelAchievedOcc(double agents, double serviceTime, double calls, double aht, TimeSpan intervalLength, double sla, double forecastedAgents, 
+			int maxParellelTasks, double abandonRate)
 		{
 			if (calls / maxParellelTasks <= 2)
 			{

@@ -304,8 +304,8 @@
 			ctrl.selectedDefinitionSetId = '5c1409de-a0f1-4cd4-b383-9b5e015ab789';
 			scope.$apply();
 
-			ctrl.fromTime = new Date('2018-02-12T10:00:00');
-			ctrl.toTime = new Date('2018-02-12T10:30:00');
+			ctrl.fromTime = '2018-02-12T10:00:00';
+			ctrl.toTime = '2018-02-12T10:30:00';
 			var timezone1 = {
 				IanaId: "Asia/Hong_Kong",
 				DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
@@ -332,6 +332,68 @@
 			expect(fakeActivityService.lastAddedOvertimeActivity.ActivityId).toEqual('472e02c8-1a84-4064-9a3b-9b5e015ab3c6');
 			expect(fakeActivityService.lastAddedOvertimeActivity.StartDateTime).toEqual('2018-02-12T10:00');
 			expect(fakeActivityService.lastAddedOvertimeActivity.EndDateTime).toEqual('2018-02-12T10:30');
+		});
+
+		it('should apply with correct time range based on the selected time zone', function () {
+			var personInfoList = [{
+				PersonId: '7c25f4ae-96ea-409e-b959-2c02587c649e',
+				Name: 'Bill',
+				Checked: true,
+				OrderIndex: 1,
+				AllowSwap: false,
+				IsDayOff: false,
+				IsEmptyDay: true,
+				IsFullDayAbsence: false,
+				ScheduleStartTime: '2018-03-25T00:00:00',
+				ScheduleEndTime: '2018-03-25T23:59:00',
+				Schedules: [],
+				SelectedAbsences: [],
+				SelectedActivities: [],
+				Timezone: {
+					IanaId: "Asia/Shanghai",
+					DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
+				},
+				SelectedDayOffs: []
+			}];
+
+			fakePersonSelectionService.setFakeCheckedPersonInfoList(personInfoList);
+
+			var date = "2018-03-25";
+			var result = setUp(date);
+			var scope = result.scope;
+			var ctrl = result.commandControl;
+			var panel = result.container;
+
+			ctrl.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
+			ctrl.selectedDefinitionSetId = '5c1409de-a0f1-4cd4-b383-9b5e015ab789';
+			scope.$apply();
+
+			ctrl.fromTime = '2018-03-25 01:00';
+			ctrl.toTime = '2018-03-25 02:00';
+			var timezone1 = {
+				IanaId: "Asia/Hong_Kong",
+				DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
+			};
+			ctrl.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('7c25f4ae-96ea-409e-b959-2c02587c649e', {
+				Date: date,
+				PersonId: '7c25f4ae-96ea-409e-b959-2c02587c649e',
+				Timezone: timezone1,
+				Shifts: [
+					{
+						Date: date,
+						Projections: [
+						],
+						ProjectionTimeRange: null
+					}]
+			});
+
+			scope.$apply();
+
+			ctrl.addOvertime();
+			
+			expect(fakeActivityService.lastAddedOvertimeActivity.StartDateTime).toEqual('2018-03-25T01:00');
+			expect(fakeActivityService.lastAddedOvertimeActivity.EndDateTime).toEqual('2018-03-25T02:00');
+
 		});
 
 	}

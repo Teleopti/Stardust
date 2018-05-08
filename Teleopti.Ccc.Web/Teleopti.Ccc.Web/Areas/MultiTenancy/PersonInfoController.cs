@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.MultiTenancy;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
+using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 {
@@ -58,52 +59,54 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 			return Ok(ret);
 		}
 
+		[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.PeopleAccess)]
 		[TenantUnitOfWork, HttpPost, Route("PersonInfo/PersistApplicationLogonNames")]
 		public virtual IHttpActionResult PersistApplicationLogonNames(PersonApplicationLogonInputModel personApplicationLogonInputModel)
 		{
-			var resultModel = new PersonInfoGenericResultModel
+			var resultModel = new BaseResultModel
 			{
-				ResultList = personApplicationLogonInputModel.People
+				Errors = personApplicationLogonInputModel.People
 								.Select(p =>
 								{
 									var model = new PersonInfoModel { PersonId = p.PersonId, ApplicationLogonName = p.ApplicationLogonName };
 									return new { PersistResult = _persister.PersistApplicationLogonName(_mapper.Map(model), throwOnError: false), p.PersonId };
 								})
 								.Where(r => !string.IsNullOrEmpty(r.PersistResult))
-								.Select(r => new PersonInfoGenericModel { Message = r.PersistResult, PersonId = r.PersonId }).ToList()
+								.Select(r => (object)new PersonInfoGenericModel { Message = r.PersistResult, PersonId = r.PersonId }).ToList()
 			};
 
-			if (resultModel.ResultList.Any())
+			if (resultModel.Errors.Any())
 			{
 				_tenantUnitOfWork.CancelAndDisposeCurrent();
-				return Content(HttpStatusCode.BadRequest, resultModel);
+				return Ok(resultModel);
 			}
 
-			return Ok();
+			return Ok(resultModel);
 		}
 
+		[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.PeopleAccess)]
 		[TenantUnitOfWork, HttpPost, Route("PersonInfo/PersistIdentities")]
 		public virtual IHttpActionResult PersistIdentities(PersonIdentitiesInputModel personIdentitiesInputModel)
 		{
-			var resultModel = new PersonInfoGenericResultModel
+			var resultModel = new BaseResultModel
 			{
-				ResultList = personIdentitiesInputModel.People
+				Errors = personIdentitiesInputModel.People
 					.Select(p =>
 					{
 						var model = new PersonInfoModel { PersonId = p.PersonId, Identity = p.Identity };
 						return new { PersistResult = _persister.PersistIdentity(_mapper.Map(model), throwOnError: false), p.PersonId };
 					})
 					.Where(r => !string.IsNullOrEmpty(r.PersistResult))
-					.Select(r => new PersonInfoGenericModel { Message = r.PersistResult, PersonId = r.PersonId }).ToList()
+					.Select(r => (object)new PersonInfoGenericModel { Message = r.PersistResult, PersonId = r.PersonId }).ToList()
 			};
 
-			if (resultModel.ResultList.Any())
+			if (resultModel.Result.Any())
 			{
 				_tenantUnitOfWork.CancelAndDisposeCurrent();
-				return Content(HttpStatusCode.BadRequest, resultModel);
+				return Ok(resultModel);
 			}
 
-			return Ok();
+			return Ok(resultModel);
 		}
 
 		[TenantUnitOfWork]

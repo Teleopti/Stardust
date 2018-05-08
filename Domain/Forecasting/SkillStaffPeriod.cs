@@ -359,7 +359,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 					Period.ElapsedTime(),
 					Payload.ServiceAgreementData.ServiceLevel.Percent.Value,
 					Payload.ForecastedIncomingDemandWithoutShrinkage,
-					SkillDay.Skill.MaxParallelTasks));
+					SkillDay.Skill.MaxParallelTasks,
+					SkillDay.Skill.AbandonRate.Value));
 
 				if (largeVolumes())
 				{
@@ -371,7 +372,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 						Period.ElapsedTime(),
 						Payload.ServiceAgreementData.ServiceLevel.Percent.Value,
 						Payload.ForecastedIncomingDemand,
-						SkillDay.Skill.MaxParallelTasks));
+						SkillDay.Skill.MaxParallelTasks,
+						SkillDay.Skill.AbandonRate.Value));
 				}
 				else
 				{
@@ -385,7 +387,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 						Period.ElapsedTime(),
 						Payload.ServiceAgreementData.ServiceLevel.Percent.Value,
 						Payload.ForecastedIncomingDemandWithoutShrinkage,
-						SkillDay.Skill.MaxParallelTasks));
+						SkillDay.Skill.MaxParallelTasks,
+						SkillDay.Skill.AbandonRate.Value));
 				}
 			}
 		}
@@ -506,8 +509,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 					demandWithoutEfficiency = Payload.NoneBlendDemand.Value;
 				}
 			}
-
-			//castedPayLoad.CalculatedOccupancy = agentAndOccupancy.Occuopancy
+			
 			castedPayLoad.CalculatedOccupancy = StaffingCalculatorService.Utilization(demandWithoutEfficiency,
 				Payload.TaskData.Tasks,
 				Payload.TaskData.AverageTaskTime.TotalSeconds +
