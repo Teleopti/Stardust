@@ -397,7 +397,6 @@
     <Compile Include="Areas\Forecasting\Models\ForecastResultInput.cs" />
     <Compile Include="Areas\Forecasting\Models\ForecastResultViewModel.cs" />
     <Compile Include="Areas\Forecasting\Models\IntradayPatternInput.cs" />
-    <Compile Include="Areas\Forecasting\Models\ModifyInput.cs" />
     <Compile Include="Areas\Forecasting\Models\OverrideInput.cs" />
     <Compile Include="Areas\Forecasting\Models\QueueStatisticsInput.cs" />
     <Compile Include="Areas\Forecasting\Models\SkillsViewModel.cs" />
@@ -423,12 +422,8 @@
     <Compile Include="Areas\Anywhere\Controllers\GroupScheduleController.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleProjectionViewModel.cs" />
     <Compile Include="Areas\Anywhere\Controllers\AnywhereReportsController.cs" />
-    <Compile Include="Areas\Forecasting\Core\CampaignPersister.cs" />
     <Compile Include="Areas\Forecasting\Core\WorkloadNameBuilder.cs" />
-    <Compile Include="Areas\Forecasting\Core\ICampaignPersister.cs" />
     <Compile Include="Areas\Forecasting\Core\IWorkloadNameBuilder.cs" />
-    <Compile Include="Areas\Forecasting\Core\IOverridePersister.cs" />
-    <Compile Include="Areas\Forecasting\Core\OverridePersister.cs" />
     <Compile Include="Areas\Global\DataProtectionController.cs" />
     <Compile Include="Areas\Global\Core\GroupPageViewModelFactory.cs" />
     <Compile Include="Areas\Global\ScenarioController.cs" />

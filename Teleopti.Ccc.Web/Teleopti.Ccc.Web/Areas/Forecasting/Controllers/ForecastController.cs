@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -11,10 +10,8 @@ using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.Forecasting.Core;
 using Teleopti.Ccc.Web.Areas.Forecasting.Models;
-using Teleopti.Ccc.Web.Areas.Global;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -28,10 +25,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly IForecastViewModelFactory _forecastViewModelFactory;
 		private readonly IForecastResultViewModelFactory _forecastResultViewModelFactory;
 		private readonly IIntradayPatternViewModelFactory _intradayPatternViewModelFactory;
-		private readonly IActionThrottler _actionThrottler;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IWorkloadRepository _workloadRepository;
-		private readonly IOverridePersister _overridePersister;
 		private readonly IAuthorization _authorization;
 		private readonly IWorkloadNameBuilder _workloadNameBuilder;
 		private readonly IFetchAndFillSkillDays _fetchAndFillSkillDays;
@@ -41,11 +36,9 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			ISkillRepository skillRepository,
 			IForecastViewModelFactory forecastViewModelFactory,
 			IForecastResultViewModelFactory forecastResultViewModelFactory,
-			IIntradayPatternViewModelFactory intradayPatternViewModelFactory, 
-			IActionThrottler actionThrottler,
-			IScenarioRepository scenarioRepository, 
+			IIntradayPatternViewModelFactory intradayPatternViewModelFactory,
+			IScenarioRepository scenarioRepository,
 			IWorkloadRepository workloadRepository,
-			IOverridePersister overridePersister,
 			IAuthorization authorization,
 			IWorkloadNameBuilder workloadNameBuilder,
 			IFetchAndFillSkillDays fetchAndFillSkillDays)
@@ -55,10 +48,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_forecastViewModelFactory = forecastViewModelFactory;
 			_forecastResultViewModelFactory = forecastResultViewModelFactory;
 			_intradayPatternViewModelFactory = intradayPatternViewModelFactory;
-			_actionThrottler = actionThrottler;
 			_scenarioRepository = scenarioRepository;
 			_workloadRepository = workloadRepository;
-			_overridePersister = overridePersister;
 			_authorization = authorization;
 			_workloadNameBuilder = workloadNameBuilder;
 			_fetchAndFillSkillDays = fetchAndFillSkillDays;
@@ -132,46 +123,40 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 				var forecastDay = input.ForecastDays.Single(x => x.Date == selectedDay);
 				if (!forecastDay.IsOpen)
 					continue;
-				forecastDay.Tasks = (input.CampaignTasksPercent + 1) * forecastDay.Tasks;
+				forecastDay.TotalTasks = (input.CampaignTasksPercent + 1) * forecastDay.Tasks;
 			}
 			return Ok(input.ForecastDays);
 		}
 
 		[UnitOfWork, HttpPost, Route("api/Forecasting/Override")]
-		public virtual Task<ForecastResultViewModel> Override(OverrideInput input)
+		public virtual IHttpActionResult AddOverride(OverrideInput input)
 		{
-			var failedTask = Task.FromResult(new ForecastResultViewModel
+			foreach (var selectedDay in input.SelectedDays)
 			{
-				Success = false,
-				Message = "Forecast is running, please try later."
-			});
-			if (_actionThrottler.IsBlocked(ThrottledAction.Forecasting))
-			{
-				return failedTask;
-			}
-			var token = _actionThrottler.Block(ThrottledAction.Forecasting);
-			try
-			{
-				var scenario = _scenarioRepository.Get(input.ScenarioId);
-				var workload = _workloadRepository.Get(input.WorkloadId);
-				_overridePersister.Persist(scenario, workload, input);
-				return Task.FromResult(new ForecastResultViewModel
+				var forecastDay = input.ForecastDays.Single(x => x.Date == selectedDay);
+				if (!forecastDay.IsOpen)
+					continue;
+				if (input.ShouldOverrideTasks)
 				{
-					Success = true
-				});
+					forecastDay.TotalTasks = input.OverrideTasks ?? forecastDay.Tasks;
+				}
+
+				if (input.ShouldOverrideAverageTaskTime)
+				{
+					forecastDay.TotalAverageTaskTime = input.OverrideAverageTaskTime ?? forecastDay.AverageTaskTime;
+				}
+
+				if (input.ShouldOverrideAverageAfterTaskTime)
+				{
+					forecastDay.TotalAverageAfterTaskTime = input.OverrideAverageAfterTaskTime ?? forecastDay.AverageAfterTaskTime;
+				}
 			}
-			catch (OptimisticLockException)
-			{
-				return failedTask;
-			}
-			finally
-			{
-				_actionThrottler.Finish(token);
-			}
+
+			return Ok(input.ForecastDays);
 		}
 
 		[UnitOfWork, HttpPost, Route("api/Forecasting/ApplyForecast")]
-		public virtual  IHttpActionResult ApplyForecast(ForecastModel forecastResult)
+		public virtual IHttpActionResult ApplyForecast(ForecastModel forecastResult)
 		{
 			var workload = _workloadRepository.Get(forecastResult.WorkloadId);
 			var scenario = _scenarioRepository.Get(forecastResult.ScenarioId);

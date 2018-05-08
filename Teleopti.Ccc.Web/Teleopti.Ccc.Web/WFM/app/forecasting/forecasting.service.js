@@ -8,6 +8,7 @@
 					query: { method: 'GET', params: {}, isArray: false }
 				});
 
+				// TODO: Should be removed
 				this.status = $resource('../api/Status/Forecasting', {}, {
 					get: { method: 'GET', params: {}, isArray: false }
 				});

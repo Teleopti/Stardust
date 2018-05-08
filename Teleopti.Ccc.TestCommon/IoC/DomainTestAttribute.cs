@@ -137,8 +137,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			isolate.UseTestDouble<FakeForecastResultViewModelFactory>().For<IForecastResultViewModelFactory>();
 			isolate.UseTestDouble<FakeIntradayPatternViewModelFactory>().For<IIntradayPatternViewModelFactory>();
 			isolate.UseTestDouble<FakeActionThrottler>().For<IActionThrottler>();
-			isolate.UseTestDouble<FakeCampaignPersister>().For<ICampaignPersister>();
-			isolate.UseTestDouble<FakeOverridePersister>().For<IOverridePersister>();
 			isolate.UseTestDouble<WorkloadNameBuilder>().For<IWorkloadNameBuilder>();
 			isolate.UseTestDouble<FetchAndFillSkillDays>().For<IFetchAndFillSkillDays>();
 

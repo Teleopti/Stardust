@@ -1,12 +1,16 @@
-﻿namespace Teleopti.Ccc.Web.Areas.Forecasting.Models
+﻿using Teleopti.Ccc.Domain.Forecasting.Models;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Web.Areas.Forecasting.Models
 {
-	public class OverrideInput : ModifyInput
+	public class OverrideInput : ForecastModel
 	{
+		public DateOnly[] SelectedDays { get; set; }
 		public double? OverrideTasks { get; set; }
-		public double? OverrideTalkTime { get; set; }
-		public double? OverrideAfterCallWork { get; set; }
-		public bool ShouldSetOverrideTasks { get; set; }
-		public bool ShouldSetOverrideTalkTime { get; set; }
-		public bool ShouldSetOverrideAfterCallWork { get; set; }
+		public double? OverrideAverageTaskTime { get; set; }
+		public double? OverrideAverageAfterTaskTime { get; set; }
+		public bool ShouldOverrideTasks { get; set; }
+		public bool ShouldOverrideAverageTaskTime { get; set; }
+		public bool ShouldOverrideAverageAfterTaskTime { get; set; }
 	}
 }

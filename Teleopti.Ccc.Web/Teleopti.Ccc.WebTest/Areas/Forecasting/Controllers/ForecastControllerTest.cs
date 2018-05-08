@@ -147,13 +147,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 					{
 						Date = new DateOnly(2018, 5, 4),
 						IsOpen = true,
-						Tasks = 100d
+						Tasks = 100d,
+						TotalTasks = 100d
 					},
 					new ForecastDayModel
 					{
 						Date = new DateOnly(2018, 5, 5),
 						IsOpen = true,
-						Tasks = 100d
+						Tasks = 100d,
+						TotalTasks = 100d
 					}
 				}
 			};
@@ -162,9 +164,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 
 			result.Should().Be.OfType<OkNegotiatedContentResult<IList<ForecastDayModel>>>();
 			result.Content.First().Tasks
-				.Should().Be(150);
+				.Should().Be(100d);
+			result.Content.First().TotalTasks
+				.Should().Be(150d);
 			result.Content.Last().Tasks
-				.Should().Be(100);
+				.Should().Be(100d);
+			result.Content.Last().TotalTasks
+				.Should().Be(100d);
 		}
 
 		[Test]
@@ -378,6 +384,138 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			Assert.That(forecastDay.TotalTasks, Is.EqualTo(100d).Within(tolerance));
 			Assert.That(forecastDay.TotalAverageTaskTime, Is.EqualTo(150d).Within(tolerance));
 			Assert.That(forecastDay.TotalAverageAfterTaskTime, Is.EqualTo(200d).Within(tolerance));
+		}
+
+		[Test]
+		public void ShouldAddOverride()
+		{
+			var model = new OverrideInput
+			{
+				SelectedDays = new[] { new DateOnly(2018, 5, 4) },
+				ForecastDays = new List<ForecastDayModel>
+				{
+					new ForecastDayModel
+					{
+						Date = new DateOnly(2018, 5, 4),
+						IsOpen = true,
+						Tasks = 100d,
+						AverageTaskTime = 30d,
+						AverageAfterTaskTime = 10d,
+						TotalTasks = 100d,
+						TotalAverageTaskTime = 30d,
+						TotalAverageAfterTaskTime = 10d
+					},
+					new ForecastDayModel
+					{
+						Date = new DateOnly(2018, 5, 5),
+						IsOpen = true,
+						Tasks = 100d,
+						AverageTaskTime = 30d,
+						AverageAfterTaskTime = 10d,
+						TotalTasks = 100d,
+						TotalAverageTaskTime = 30d,
+						TotalAverageAfterTaskTime = 10d
+					}
+				},
+				OverrideTasks = 200d,
+				OverrideAverageTaskTime = 50d,
+				OverrideAverageAfterTaskTime = 20d,
+				ShouldOverrideTasks = true,
+				ShouldOverrideAverageTaskTime = true,
+				ShouldOverrideAverageAfterTaskTime = true
+			};
+
+			var result = (OkNegotiatedContentResult<IList<ForecastDayModel>>)Target.AddOverride(model);
+
+			result.Should().Be.OfType<OkNegotiatedContentResult<IList<ForecastDayModel>>>();
+			result.Content.First().TotalTasks
+				.Should().Be(200d);
+			result.Content.First().TotalAverageTaskTime
+				.Should().Be(50d);
+			result.Content.First().TotalAverageAfterTaskTime
+				.Should().Be(20d);
+
+			result.Content.Last().TotalTasks
+				.Should().Be(100d);
+			result.Content.Last().TotalAverageTaskTime
+				.Should().Be(30d);
+			result.Content.Last().TotalAverageAfterTaskTime
+				.Should().Be(10d);
+		}
+
+		[Test]
+		public void ShouldClearOverrideValues()
+		{
+			var model = new OverrideInput
+			{
+				SelectedDays = new[] {new DateOnly(2018, 5, 4)},
+				ForecastDays = new List<ForecastDayModel>
+				{
+					new ForecastDayModel
+					{
+						Date = new DateOnly(2018, 5, 4),
+						IsOpen = true,
+						Tasks = 100d,
+						AverageTaskTime = 30d,
+						AverageAfterTaskTime = 10d,
+						TotalTasks = 150d,
+						TotalAverageTaskTime = 50d,
+						TotalAverageAfterTaskTime = 20d
+					}
+				},
+				ShouldOverrideTasks = true,
+				ShouldOverrideAverageTaskTime = true,
+				ShouldOverrideAverageAfterTaskTime = true
+			};
+
+			var result = (OkNegotiatedContentResult<IList<ForecastDayModel>>)Target.AddOverride(model);
+
+			result.Should().Be.OfType<OkNegotiatedContentResult<IList<ForecastDayModel>>>();
+			var forecastDay = result.Content.First();
+			forecastDay.TotalTasks
+				.Should().Be(forecastDay.Tasks);
+			forecastDay.TotalAverageTaskTime
+				.Should().Be(forecastDay.AverageTaskTime);
+			forecastDay.TotalAverageAfterTaskTime
+				.Should().Be(forecastDay.AverageAfterTaskTime);
+		}
+
+		[Test]
+		public void ShouldNotAddOverrideOnClosedDay()
+		{
+			var model = new OverrideInput
+			{
+				SelectedDays = new[] { new DateOnly(2018, 5, 4) },
+				ForecastDays = new List<ForecastDayModel>
+				{
+					new ForecastDayModel
+					{
+						Date = new DateOnly(2018, 5, 4),
+						IsOpen = false,
+						Tasks = 100d,
+						AverageTaskTime = 30d,
+						AverageAfterTaskTime = 10d,
+						TotalTasks = 100d,
+						TotalAverageTaskTime = 30d,
+						TotalAverageAfterTaskTime = 10d
+					}
+				},
+				OverrideTasks = 200d,
+				OverrideAverageTaskTime = 50d,
+				OverrideAverageAfterTaskTime = 20d,
+				ShouldOverrideTasks = true,
+				ShouldOverrideAverageTaskTime = true,
+				ShouldOverrideAverageAfterTaskTime = true
+			};
+
+			var result = (OkNegotiatedContentResult<IList<ForecastDayModel>>)Target.AddOverride(model);
+
+			result.Content.First().TotalTasks
+				.Should().Be(100d);
+			result.Content.First().TotalAverageTaskTime
+				.Should().Be(30d);
+			result.Content.First().TotalAverageAfterTaskTime
+				.Should().Be(10d);
 		}
 	}
 }
