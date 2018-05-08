@@ -46,88 +46,89 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 		ctrl.onClick(ctrl.selectedDays);
 
 		var preparedData = {
-			dateSeries: ['date'],
-			vacwSeries: ['vacw'],
-			vcSeries: ['vc'],
-			vtacwSeries: ['vtacw'],
-			vtcSeries: ['vtc'],
-			vttSeries: ['vtt'],
-			vtttSeries: ['vttt'],
-			vcamSeries: ['vcampaign'],
-			voverrideSeries: ['voverride'],
-			vcomboSeries: ['vcombo']
+			dateSeries: ['Date'],
+			averageAfterTaskTimeSeries: ['AverageAfterTaskTime'],
+			tasksSeries: ['Tasks'],
+			totalAverageAfterTaskTimeSeries: ['TotalAverageAfterTaskTime'],
+			totalTasksSeries: ['TotalTasks'],
+			averageTaskTimeSeries: ['AverageTaskTime'],
+			totalAverageTaskTimeSeries: ['TotalAverageTaskTime'],
+			campaignSeries: ['Campaign'],
+			overrideSeries: ['Override'],
+			campaignAndOverrideSeries: ['CampaignAndOverride']
 		}
-
+		console.log(days);
 		for (var i = 0; i < days.length; i++) {
-			preparedData.dateSeries.push(moment(days[i].date).format('DD/MM/YYYY'));
-			preparedData.vacwSeries.push(days[i].vacw);
-			preparedData.vcSeries.push(days[i].vc);
-			preparedData.vtacwSeries.push(days[i].vtacw);
-			preparedData.vtcSeries.push(days[i].vtc);
-			preparedData.vttSeries.push(days[i].vtt);
-			preparedData.vtttSeries.push(days[i].vttt);
 
-			if (days[i].vcampaign) {
-				preparedData.vcamSeries.push(days[i].vcampaign);
+			preparedData.dateSeries.push(moment(days[i].Date).format('DD/MM/YYYY'));
+			preparedData.averageAfterTaskTimeSeries.push(days[i].AverageAfterTaskTime);
+			preparedData.tasksSeries.push(days[i].Tasks);
+			preparedData.totalAverageAfterTaskTimeSeries.push(days[i].TotalAverageAfterTaskTime);
+			preparedData.totalTasksSeries.push(days[i].TotalTasks);
+			preparedData.averageTaskTimeSeries.push(days[i].AverageTaskTime);
+			preparedData.totalAverageTaskTimeSeries.push(days[i].TotalAverageTaskTime);
+
+			if (days[i].Campaign) {
+				preparedData.campaignSeries.push(days[i].Campaign);
 			} else{
-				preparedData.vcamSeries.push(null);
+				preparedData.campaignSeries.push(null);
 			}
 
-			if (days[i].voverride) {
-				preparedData.voverrideSeries.push(days[i].voverride);
+			if (days[i].Override) {
+				preparedData.overrideSeries.push(days[i].Override);
 			} else{
-				preparedData.voverrideSeries.push(null);
+				preparedData.overrideSeries.push(null);
 			}
 
-			if (days[i].vcombo) {
-				preparedData.vcomboSeries.push(days[i].vcombo);
+			if (days[i].CampaignAndOverride) {
+				preparedData.campaignAndOverrideSeries.push(days[i].CampaignAndOverride);
 			} else{
-				preparedData.vcomboSeries.push(null);
+				preparedData.campaignAndOverrideSeries.push(null);
 			}
 		}
 
 		chart = c3.generate({
 			bindto: '#' + chartId,
 			data: {
-				x: 'date',
+				x: 'Date',
 				columns: [
-					preparedData.vtcSeries,
-					preparedData.vcSeries,
+					preparedData.totalTasksSeries,
+					preparedData.tasksSeries,
 
-					preparedData.vtacwSeries,
-					preparedData.vacwSeries,
+					preparedData.totalAverageAfterTaskTimeSeries,
+					preparedData.averageAfterTaskTimeSeries,
 
-					preparedData.vtttSeries,
-					preparedData.vttSeries,
+					preparedData.totalAverageTaskTimeSeries,
+					preparedData.averageTaskTimeSeries,
 
 					preparedData.dateSeries,
-					preparedData.vcamSeries,
-					preparedData.voverrideSeries,
-					preparedData.vcomboSeries
+					preparedData.campaignSeries,
+					preparedData.overrideSeries,
+					preparedData.campaignAndOverrideSeries
 				],
 				names: {
-					vtc: $translate.instant('TotalCalls' + ' ←'),
-					vcampaign: $translate.instant('Campaign'),
-					voverride: $translate.instant('Override'),
-					vcombo: $translate.instant('BothOverrideAndCampaignAdded'),
-					vc: $translate.instant('Calls' + ' ←'),
-					vttt: $translate.instant('TotalTalkTime' + ' ←'),
-					vtt: $translate.instant('TalkTime' + ' ←'),
-					vtacw: $translate.instant('TotalACW' + ' ←'),
-					vacw: $translate.instant('ACW' + ' ←'),
+					TotalTasks: $translate.instant('TotalCalls' + ' ←'),
+					Campaign: $translate.instant('Campaign'),
+					Override: $translate.instant('Override'),
+					CampaignAndOverride: $translate.instant('BothOverrideAndCampaignAdded'),
+					Tasks: $translate.instant('Calls' + ' ←'),
+					TotalAverageTaskTime: $translate.instant('TotalTalkTime' + ' ←'),
+					AverageTaskTime: $translate.instant('TalkTime' + ' ←'),
+					TotalAverageAfterTaskTime: $translate.instant('TotalACW' + ' ←'),
+					AverageAfterTaskTime: $translate.instant('ACW' + ' ←'),
 				},
 				colors: {
-					vtc: '#0099FF',
-					vc: '#99D6FF',
-					vttt: '#77ac39',
-					vtt: '#C2E085',
-					vtacw: '#eb2e9e',
-					vacw: '#F488C8',
-					voverride: '#9C27B0',
-					vcampaign: '#EF5350',
-					vcombo: '#888'
+					TotalTasks: '#0099FF',
+					Tasks: '#99D6FF',
+					TotalAverageTaskTime: '#77ac39',
+					AverageTaskTime: '#C2E085',
+					TotalAverageAfterTaskTime: '#eb2e9e',
+					AverageAfterTaskTime: '#F488C8',
+					Override: '#9C27B0',
+					Campaign: '#EF5350',
+					CampaignAndOverride: '#888'
 				},
-				hide: ['vc', 'vtt', 'vacw'],
+				hide: ['Tasks', 'AverageTaskTime', 'AverageAfterTaskTime'],
 				selection: {
 					enabled: ctrl.selectable,
 					draggable: true,
@@ -168,10 +169,10 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 				y2: {
 					show: true
 				},
-				vttt: 'y2',
-				vtt: 'y2',
-				vtacw: 'y2',
-				vacw: 'y2',
+				TotalAverageTaskTime: 'y2',
+				AverageTaskTime: 'y2',
+				TotalAverageAfterTaskTime: 'y2',
+				AverageAfterTaskTime: 'y2',
 				x: {
 					type: 'category',
 					tick: {

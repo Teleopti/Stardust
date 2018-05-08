@@ -217,7 +217,7 @@
             forecastingService.result(
               wl,
               function(data, status, headers, config) {
-                vm.selectedWorkload.Days = data.Days;
+                vm.selectedWorkload.Days = data.ForecastDays;
                 vm.isForecastRunning = false;
                 vm.periodModal = false;
                 if (vm.selectedWorkload.Days.length === 0 ) {
@@ -225,7 +225,7 @@
                 }
               },
               function(data, status, headers, config) {
-                vm.selectedWorkload.Days = data.days;
+                vm.selectedWorkload.Days = data.ForecastDays;
                 vm.isForecastRunning = false;
                 vm.periodModal = false;
               }
@@ -250,7 +250,7 @@
               }), function(data, status, headers, config) {
                 vm.isForecastRunning = false;
                 vm.forecastModal = false;
-                vm.selectedWorkload.Days = data.Days;
+                vm.selectedWorkload.Days = data.ForecastDays;
               }, function(data, status, headers, config) {
                 vm.isForecastRunning = false;
                 vm.forecastModal = false;
@@ -263,10 +263,10 @@
               for (var i = 0; i < vm.selectedWorkload.Days.length; i++) {
                 tempForecastDays.push(
                   {
-                    Date: vm.selectedWorkload.Days[i].date,
-                    Tasks: vm.selectedWorkload.Days[i].vtc,
-                    TaskTime: vm.selectedWorkload.Days[i].vtt,
-                    AfterTaskTime: vm.selectedWorkload.Days[i].vtacw
+                    Date: vm.selectedWorkload.Days[i].Date,
+                    Tasks: vm.selectedWorkload.Days[i].TotalTasks,
+                    TaskTime: vm.selectedWorkload.Days[i].AverageTaskTime,
+                    AfterTaskTime: vm.selectedWorkload.Days[i].AverageAfterTaskTime
                   }
                 )
               }
