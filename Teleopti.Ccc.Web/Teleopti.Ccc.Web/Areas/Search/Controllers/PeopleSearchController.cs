@@ -14,7 +14,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 {
-	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.PeopleAccess)]
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebPeople)]
 	public class PeopleSearchController : ApiController
 	{
 		private readonly IPersonRepository _personRepository;
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 		private object constructResult(int pageSize, int currentPageIndex, IDictionary<string, bool> sortColumns, IDictionary<PersonFinderField, 
 			string> criteriaDictionary, DateOnly currentDate)
 		{
-			var peopleList = _searchProvider.SearchPermittedPeopleSummary(criteriaDictionary, pageSize, currentPageIndex, currentDate, sortColumns, DefinedRaptorApplicationFunctionPaths.PeopleAccess);
+			var peopleList = _searchProvider.SearchPermittedPeopleSummary(criteriaDictionary, pageSize, currentPageIndex, currentDate, sortColumns, DefinedRaptorApplicationFunctionPaths.WebPeople);
 
 			const string dateFormat = "yyyy-MM-dd";
 			// This list should keep same as in SP "ReadModel.PersonFinderWithCriteria"

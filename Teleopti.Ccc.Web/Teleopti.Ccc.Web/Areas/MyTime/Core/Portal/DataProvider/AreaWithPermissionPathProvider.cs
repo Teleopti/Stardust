@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebPlans, () => Resources.OpenPlansPage, "resourceplanner", new Link {href = "api/ResourcePlanner/Filter", rel = "filters"}),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebPermissions, () => Resources.OpenPermissionPage, "permissions"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.Outbound, () => Resources.Outbound, "outbound"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.PeopleAccess, () => Resources.People, "people"),
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebPeople, () => Resources.People, "people"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebRequests, () => Resources.Requests, "requests"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.SeatPlanner, () => Resources.SeatPlan, "seatPlan"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.SeatPlanner, () => Resources.SeatMap, "seatMap"),
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			{
 				return _toggleManager.IsEnabled(Toggles.Wfm_AddMyTimeLink_45088);
 			}
-			if (path.Equals(DefinedRaptorApplicationFunctionPaths.PeopleAccess))
+			if (path.Equals(DefinedRaptorApplicationFunctionPaths.WebPeople))
 			{
 				return _toggleManager.IsEnabled(Toggles.Wfm_PeopleWeb_PrepareForRelease_47766);
 			}
