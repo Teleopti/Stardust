@@ -264,6 +264,19 @@ end
 set @RowCount = 1
 while @RowCount > 0
 begin
+	delete top(1000) PublicNote
+	from PublicNote n
+	where n.NoteDate < @KeepUntil
+ 
+	select @RowCount = @@rowcount
+
+	if datediff(second,@start,getdate()) > @timeout 
+		return
+end
+
+set @RowCount = 1
+while @RowCount > 0
+begin
 	delete top(1000) AgentDayScheduleTag
 	from AgentDayScheduleTag ad
 	where ad.TagDate < @KeepUntil

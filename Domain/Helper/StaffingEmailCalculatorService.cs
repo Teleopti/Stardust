@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Helper
 
 
 		public double ServiceLevelAchievedOcc(double agents, double serviceTime, double calls, double aht, TimeSpan intervalLength,
-			double sla, double forecastedAgents, int maxParellelTasks)
+			double sla, double forecastedAgents, int maxParellelTasks, double abandonRate)
 		{
 			return 0;
 			//return ServiceLevelAchieved(agents, serviceTime, calls, aht, intervalLength, (int)sla*100);
