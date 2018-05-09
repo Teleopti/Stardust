@@ -44,7 +44,7 @@ describe('ForecastCtrl', function() {
         DefaultScenario:true
       }
 
-      $httpBackend.whenPOST('../api/Forecasting/ForecastResult').respond(function (method, url, data, headers) {
+      $httpBackend.whenPOST('../api/Forecasting/LoadForecast').respond(function (method, url, data, headers) {
         return [201, {
           Days: [{
             date:"2018-04-25T00:00:00",

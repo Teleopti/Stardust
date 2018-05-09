@@ -15,14 +15,17 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 		private readonly IFutureData _futureData;
 		private readonly IForecastMethodProvider _forecastMethodProvider;
 		private readonly IOutlierRemover _outlierRemover;
+		private readonly ForecastDayModelMapper _forecastDayModelMapper;
 
 		public QuickForecasterWorkload(IHistoricalData historicalData, IFutureData futureData,
-			IForecastMethodProvider forecastMethodProvider, IOutlierRemover outlierRemover)
+			IForecastMethodProvider forecastMethodProvider, IOutlierRemover outlierRemover,
+			ForecastDayModelMapper forecastDayModelMapper)
 		{
 			_historicalData = historicalData;
 			_futureData = futureData;
 			_forecastMethodProvider = forecastMethodProvider;
 			_outlierRemover = outlierRemover;
+			_forecastDayModelMapper = forecastDayModelMapper;
 		}
 
 		public ForecastModel Execute(QuickForecasterWorkloadParams quickForecasterWorkloadParams)
@@ -53,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			};
 		}
 
-		private static List<ForecastDayModel> createForecastViewModel(ForecastMethodResult forecast,
+		private List<ForecastDayModel> createForecastViewModel(ForecastMethodResult forecast,
 			IEnumerable<IWorkloadDayBase> workloadDays)
 		{
 			var forecastResult = new List<ForecastDayModel>();
@@ -77,63 +80,11 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 					IsOpen = currentWorkLoadDay.OpenForWork.IsOpen
 				};
 
-				if (hasCampaign(currentWorkLoadDay) && hasOverride(currentWorkLoadDay))
-				{
-					setCampaign(model, currentWorkLoadDay);
-					setOverride(model, currentWorkLoadDay);
-				}
-				else if (hasOverride(currentWorkLoadDay))
-				{
-					setOverride(model, currentWorkLoadDay);
-				}
-				else if (hasCampaign(currentWorkLoadDay))
-				{
-					setCampaign(model, currentWorkLoadDay);
-
-					model.TotalTasks = model.Tasks * (currentWorkLoadDay.CampaignTasks.Value + 1d);
-					model.TotalAverageTaskTime = model.TotalAverageTaskTime * (currentWorkLoadDay.CampaignTaskTime.Value + 1d);
-					model.TotalAverageAfterTaskTime =
-						model.TotalAverageAfterTaskTime * (currentWorkLoadDay.CampaignAfterTaskTime.Value + 1d);
-				}
-
+				_forecastDayModelMapper.SetCampaignAndOverride(currentWorkLoadDay, model);
 				forecastResult.Add(model);
 			}
 
 			return forecastResult;
-		}
-
-		private static void setCampaign(ForecastDayModel forecastDay, IWorkloadDayBase workloadDay)
-		{
-			forecastDay.HasCampaign = true;
-			forecastDay.CampaignTasksPercentage = workloadDay.CampaignTasks.Value;
-		}
-
-		private static void setOverride(ForecastDayModel forecastDay, IWorkloadDayBase workloadDay)
-		{
-			forecastDay.HasOverride = true;
-			forecastDay.OverrideTasks = workloadDay.OverrideTasks;
-			forecastDay.OverrideAverageTaskTime = workloadDay.OverrideAverageTaskTime?.TotalSeconds;
-			forecastDay.OverrideAverageAfterTaskTime = workloadDay.OverrideAverageAfterTaskTime?.TotalSeconds;
-
-			forecastDay.TotalTasks = workloadDay.OverrideTasks ?? forecastDay.Tasks;
-			forecastDay.TotalAverageTaskTime = workloadDay.OverrideAverageTaskTime?.TotalSeconds ??
-											   forecastDay.TotalAverageTaskTime;
-			forecastDay.TotalAverageAfterTaskTime = workloadDay.OverrideAverageAfterTaskTime?.TotalSeconds ??
-													forecastDay.TotalAverageAfterTaskTime;
-		}
-
-		private static bool hasCampaign(IWorkloadDayBase workloadDay)
-		{
-			return workloadDay.CampaignTasks.Value > 0d || 
-				   workloadDay.CampaignTaskTime.Value > 0d ||
-				   workloadDay.CampaignAfterTaskTime.Value > 0d;
-		}
-
-		private static bool hasOverride(IWorkloadDayBase workloadDay)
-		{
-			return workloadDay.OverrideTasks.HasValue ||
-				   workloadDay.OverrideAverageTaskTime.HasValue ||
-				   workloadDay.OverrideAverageAfterTaskTime.HasValue;
 		}
 	}
 }

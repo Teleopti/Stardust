@@ -9,21 +9,26 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 {
-	public class ForecastResultViewModelFactory : IForecastResultViewModelFactory
+	public class ForecastProvider
 	{
 		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly IFutureData _futureData;
+		private readonly ForecastDayModelMapper _forecastDayModelMapper;
 		private readonly IWorkloadRepository _workloadRepository;
 
-		public ForecastResultViewModelFactory(IWorkloadRepository workloadRepository, ISkillDayRepository skillDayRepository,
-			IFutureData futureData)
+		public ForecastProvider(
+			IWorkloadRepository workloadRepository, 
+			ISkillDayRepository skillDayRepository,
+			IFutureData futureData,
+			ForecastDayModelMapper forecastDayModelMapper)
 		{
 			_workloadRepository = workloadRepository;
 			_skillDayRepository = skillDayRepository;
 			_futureData = futureData;
+			_forecastDayModelMapper = forecastDayModelMapper;
 		}
 
-		public ForecastModel Create(Guid workloadId, DateOnlyPeriod futurePeriod, IScenario scenario)
+		public ForecastModel Load(Guid workloadId, DateOnlyPeriod futurePeriod, IScenario scenario)
 		{
 			var workload = _workloadRepository.Get(workloadId);
 			var skillDays = _skillDayRepository.FindRange(futurePeriod, workload.Skill, scenario);
@@ -33,16 +38,16 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			{
 				WorkloadId = workload.Id.Value,
 				ScenarioId = scenario.Id.Value,
-				ForecastDays = transformForecastResult(futureWorkloadDays)
+				ForecastDays = createModelDays(futureWorkloadDays)
 			};
 		}
 
-		private IList<ForecastDayModel> transformForecastResult(IEnumerable<IWorkloadDayBase> workloadDays)
+		private IList<ForecastDayModel> createModelDays(IEnumerable<IWorkloadDayBase> workloadDays)
 		{
 			var days = new List<ForecastDayModel>();
 			foreach (var workloadDay in workloadDays)
 			{
-				var day = new ForecastDayModel
+				var dayModel = new ForecastDayModel
 				{
 					Date = workloadDay.CurrentDate,
 					Tasks = workloadDay.Tasks,
@@ -53,25 +58,9 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 					TotalAverageAfterTaskTime = workloadDay.TotalAverageAfterTaskTime.TotalSeconds
 				};
 
-				var hasOverride = workloadDay.OverrideTasks.HasValue ||
-								  workloadDay.OverrideAverageTaskTime.HasValue ||
-								  workloadDay.OverrideAverageAfterTaskTime.HasValue;
-				var hasCampaign = Math.Abs(workloadDay.CampaignTasks.Value) > 0;
-				if (hasCampaign && hasOverride)
-				{
-					day.HasCampaign = true;
-					day.HasOverride = true;
-				}
-				else if (hasOverride)
-				{
-					day.HasOverride = true;
-				}
-				else if (hasCampaign)
-				{
-					day.HasCampaign = true;
-				}
+				_forecastDayModelMapper.SetCampaignAndOverride(workloadDay, dayModel);
 
-				days.Add(day);
+				days.Add(dayModel);
 			}
 
 			return days.ToArray();

@@ -446,10 +446,9 @@
     <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelMapper.cs" />
     <Compile Include="Areas\Forecasting\Models\EvaluateInput.cs" />
     <Compile Include="Areas\Forecasting\Controllers\SkillController.cs" />
-    <Compile Include="Areas\Forecasting\Core\ForecastResultViewModelFactory.cs" />
+    <Compile Include="Areas\Forecasting\Core\ForecastProvider.cs" />
     <Compile Include="Areas\Forecasting\Core\IForecastViewModelFactory.cs" />
     <Compile Include="Areas\Forecasting\Core\ForecastViewModelFactory.cs" />
-    <Compile Include="Areas\Forecasting\Core\IForecastResultViewModelFactory.cs" />
     <Compile Include="Areas\Forecasting\Core\IntradayPatternViewModelFactory.cs" />
     <Compile Include="Areas\Forecasting\Core\WorkloadEvaluateViewModel.cs" />
     <Compile Include="Areas\Global\ApplicationController.cs" />

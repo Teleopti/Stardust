@@ -190,7 +190,6 @@
     <Compile Include="FakeData\FakeActionThrottler.cs" />
     <Compile Include="FakeData\FakeAnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="FakeData\FakeBusinessRuleProvider.cs" />
-    <Compile Include="FakeData\FakeForecastResultViewModelFactory.cs" />
     <Compile Include="FakeData\FakeForecastViewModelFactory.cs" />
     <Compile Include="FakeData\FakeGamificationSettingRepository.cs" />
     <Compile Include="FakeData\FakeIntervalLengthFetcher.cs" />

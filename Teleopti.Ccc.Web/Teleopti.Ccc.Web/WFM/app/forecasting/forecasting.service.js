@@ -25,7 +25,7 @@
 				};
 
 				this.result = function(data, successCb, errorCb) {
-					$http.post("../api/Forecasting/ForecastResult", data).
+					$http.post("../api/Forecasting/LoadForecast", data).
 						success(successCb).
 						error(errorCb);
 				};

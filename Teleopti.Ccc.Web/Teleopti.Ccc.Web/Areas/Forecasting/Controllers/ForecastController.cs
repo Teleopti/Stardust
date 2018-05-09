@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly IForecastCreator _forecastCreator;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IForecastViewModelFactory _forecastViewModelFactory;
-		private readonly IForecastResultViewModelFactory _forecastResultViewModelFactory;
+		private readonly ForecastProvider _forecastProvider;
 		private readonly IIntradayPatternViewModelFactory _intradayPatternViewModelFactory;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IWorkloadRepository _workloadRepository;
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			IForecastCreator forecastCreator,
 			ISkillRepository skillRepository,
 			IForecastViewModelFactory forecastViewModelFactory,
-			IForecastResultViewModelFactory forecastResultViewModelFactory,
+			ForecastProvider forecastProvider,
 			IIntradayPatternViewModelFactory intradayPatternViewModelFactory,
 			IScenarioRepository scenarioRepository,
 			IWorkloadRepository workloadRepository,
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_forecastCreator = forecastCreator;
 			_skillRepository = skillRepository;
 			_forecastViewModelFactory = forecastViewModelFactory;
-			_forecastResultViewModelFactory = forecastResultViewModelFactory;
+			_forecastProvider = forecastProvider;
 			_intradayPatternViewModelFactory = intradayPatternViewModelFactory;
 			_scenarioRepository = scenarioRepository;
 			_workloadRepository = workloadRepository;
@@ -86,12 +86,12 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			return Task.FromResult(_forecastViewModelFactory.QueueStatistics(input));
 		}
 
-		[HttpPost, Route("api/Forecasting/ForecastResult"), UnitOfWork]
-		public virtual IHttpActionResult ForecastResult(ForecastResultInput input)
+		[HttpPost, Route("api/Forecasting/LoadForecast"), UnitOfWork]
+		public virtual IHttpActionResult LoadForecast(ForecastResultInput input)
 		{
 			var period = new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd));
 			var scenario = _scenarioRepository.Get(input.ScenarioId);
-			return Ok(_forecastResultViewModelFactory.Create(input.WorkloadId, period, scenario));
+			return Ok(_forecastProvider.Load(input.WorkloadId, period, scenario));
 		}
 
 		[HttpPost, Route("api/Forecasting/EvaluateMethods"), UnitOfWork]
@@ -125,6 +125,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 					continue;
 				forecastDay.TotalTasks = (input.CampaignTasksPercent + 1) * forecastDay.Tasks;
 			}
+
 			return Ok(input.ForecastDays);
 		}
 
@@ -162,12 +163,14 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			var scenario = _scenarioRepository.Get(forecastResult.ScenarioId);
 			var periodStart = new DateOnly(forecastResult.ForecastDays.Min(x => x.Date).Date);
 			var periodEnd = new DateOnly(forecastResult.ForecastDays.Max(x => x.Date).Date);
-			var skillDays = _fetchAndFillSkillDays.FindRange(new DateOnlyPeriod(periodStart, periodEnd), workload.Skill, scenario);
+			var skillDays =
+				_fetchAndFillSkillDays.FindRange(new DateOnlyPeriod(periodStart, periodEnd), workload.Skill, scenario);
 
 			foreach (var skillDay in skillDays)
 			{
-				var forecastedWorkloadDay = skillDay.WorkloadDayCollection.SingleOrDefault(x => x.Workload.Id.Value == forecastResult.WorkloadId);
-				if(!forecastedWorkloadDay.OpenForWork.IsOpen)
+				var forecastedWorkloadDay =
+					skillDay.WorkloadDayCollection.SingleOrDefault(x => x.Workload.Id.Value == forecastResult.WorkloadId);
+				if (!forecastedWorkloadDay.OpenForWork.IsOpen)
 					continue;
 				var model = forecastResult.ForecastDays.SingleOrDefault(x => x.Date == forecastedWorkloadDay.CurrentDate);
 				forecastedWorkloadDay.Tasks = model.Tasks;

@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
+using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
@@ -112,7 +113,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			isolate.UseTestDouble<FakeAgentStateReadModelPersister>().For<IAgentStateReadModelPersister, IAgentStateReadModelReader>();
 			isolate.UseTestDouble<FakeHistoricalChangeReadModelPersister>().For<IHistoricalChangeReadModelPersister, IHistoricalChangeReadModelReader>();
 			isolate.UseTestDouble<FakeApprovedPeriodsStorage>().For<IApprovedPeriodsReader, IApprovedPeriodsPersister>();
-			;
 
 			isolate.UseTestDouble<FakeAllLicenseActivatorProvider>().For<ILicenseActivatorProvider>();
 			isolate.UseTestDouble<FakeTeamCardReader>().For<ITeamCardReader>();
@@ -134,7 +134,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			// Forecast
 			isolate.UseTestDouble<FakeForecastViewModelFactory>().For<IForecastViewModelFactory>();
-			isolate.UseTestDouble<FakeForecastResultViewModelFactory>().For<IForecastResultViewModelFactory>();
+			isolate.UseTestDouble<ForecastProvider>().For<ForecastProvider>();
+			isolate.UseTestDouble<ForecastDayModelMapper>().For<ForecastDayModelMapper>();
 			isolate.UseTestDouble<FakeIntradayPatternViewModelFactory>().For<IIntradayPatternViewModelFactory>();
 			isolate.UseTestDouble<FakeActionThrottler>().For<IActionThrottler>();
 			isolate.UseTestDouble<WorkloadNameBuilder>().For<IWorkloadNameBuilder>();
