@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private bool _lockTrading;
 		private bool _absenceRequestWaitlistEnabled;
 		private bool _absenceProbabilityEnabled;
-		private int _maxConsecutiveWorkingDays;
+		private int _maximumConsecutiveWorkingDays;
 		private WaitlistProcessOrder _absenceRequestWaitlistProcessOrder;
 		private int? _absenceRequestCancellationThreshold;
 		private int? _absenceRequestExpiredThreshold;
@@ -467,8 +467,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		public virtual OvertimeRequestStaffingCheckMethod OvertimeRequestStaffingCheckMethod { get => _overtimeRequestStaffingCheckMethod; set => _overtimeRequestStaffingCheckMethod = value; }
 		public virtual int MaximumConsecutiveWorkingDays
 		{
-			get => _maxConsecutiveWorkingDays;
-			set => _maxConsecutiveWorkingDays = value;
+			get => _maximumConsecutiveWorkingDays;
+			set => _maximumConsecutiveWorkingDays = value;
 		}
 
 		public virtual void AddAllowedAbsenceForReport(IAbsence absence)
