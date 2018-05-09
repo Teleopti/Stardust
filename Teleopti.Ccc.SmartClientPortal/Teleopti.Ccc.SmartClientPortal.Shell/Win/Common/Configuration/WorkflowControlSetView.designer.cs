@@ -1,5 +1,4 @@
 ﻿using System.Windows.Forms;
-using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateTimePeriodVisualizer;
@@ -50,6 +49,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle6 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle7 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle8 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
+			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle9 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
+			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle10 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
+			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle11 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
+			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle12 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			this.gradientPanelHeader = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanelHeader = new System.Windows.Forms.TableLayoutPanel();
 			this.labelHeader = new System.Windows.Forms.Label();
@@ -64,9 +67,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.autoLabel5 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.autoLabel1 = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.comboBoxAdvWorkflowControlSet = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
-			this.comboBoxOvertimeRequestMaximumTimeHandleType = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
-			this.comboBoxOvertimeRequestStaffingCheckMethod = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
-			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.textBoxDescription = new Syncfusion.Windows.Forms.Tools.TextBoxExt();
 			this.autoLabelInfoAboutChanges = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.tabControlAdvArea = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
@@ -137,47 +137,26 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.checkBoxEnableAbsenceProbability = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.tableLayoutPanelAbsenceRequestCancellation = new System.Windows.Forms.TableLayoutPanel();
 			this.txtAbsenceRequestCancellationThreshold = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.NullableIntegerTextBox();
-			this.timeSpanTextBoxOvertimeRequestMaximumTime = new TimeSpanTextBox();
-			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime = new TimeSpanTextBox();
-			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold = new TimeSpanTextBox();
 			this.labelAbsenceRequestCancellationThreshold = new System.Windows.Forms.Label();
 			this.tableLayoutPanelAbsenceRequestExpiration = new System.Windows.Forms.TableLayoutPanel();
 			this.txtAbsenceRequestExpiredThreshold = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.NullableIntegerTextBox();
 			this.labelAbsenceRequestExpriedThreshold = new System.Windows.Forms.Label();
 			this.tableLayoutPanelOpenForAbsenceRequests = new System.Windows.Forms.TableLayoutPanel();
-			this.tableLayoutPanelOpenForOvertimeRequests = new System.Windows.Forms.TableLayoutPanel();
-			this.tableLayoutPanelOvertimeMaximumSetting = new System.Windows.Forms.TableLayoutPanel();
-			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting = new System.Windows.Forms.TableLayoutPanel();
-			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill = new System.Windows.Forms.TableLayoutPanel();
-			this.labelOvertimeStaffingCheckMethodSetting = new System.Windows.Forms.Label();
-			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting = new System.Windows.Forms.TableLayoutPanel();
 			this.labelOpenForAbsenceRequests = new System.Windows.Forms.Label();
-			this.labelOpenForOvertimeRequests = new System.Windows.Forms.Label();
-			this.lblOvertimeRequestMaximumTimeHandleType = new System.Windows.Forms.Label();
-			this.lblOvertimeRequestMinimumRestTimeThreshold = new System.Windows.Forms.Label();
-			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType = new System.Windows.Forms.Label();
 			this.buttonDeleteAbsenceRequestPeriod = new Syncfusion.Windows.Forms.ButtonAdv();
-			this.buttonDeleteOvertimeRequestPeriod = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonAddAbsenceRequestPeriod = new Syncfusion.Windows.Forms.ButtonAdv();
-			this.buttonAddOvertimeRequestPeriod = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.gridControlAbsenceRequestOpenPeriods = new Syncfusion.Windows.Forms.Grid.GridControl();
-			this.gridControlOvertimeRequestOpenPeriods = new Syncfusion.Windows.Forms.Grid.GridControl();
 			this.contextMenuStripOpenPeriodsGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.contextMenuStripOvertimeRequestOpenPeriodsGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItemFromToPeriod = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemRollingPeriod = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemDelete = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItemMoveUp = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemMoveDown = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItemOvertimeRequestFromToPeriod = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItemOvertimeRequestRollingPeriod = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItemOvertimeRequestDelete = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator2OvertimeRequest = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItemOvertimeRequestMoveUp = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItemOvertimeRequestMoveDown = new System.Windows.Forms.ToolStripMenuItem();
 			this.tabPageAdvShiftTradeRequest = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tableLayoutPanelShiftTrade = new System.Windows.Forms.TableLayoutPanel();
+			this.panel10 = new System.Windows.Forms.Panel();
+			this.label1 = new System.Windows.Forms.Label();
 			this.panel5 = new System.Windows.Forms.Panel();
 			this.label3 = new System.Windows.Forms.Label();
 			this.panelOpenForShiftTrade = new System.Windows.Forms.Panel();
@@ -195,14 +174,43 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.checkBoxAdvAutoGrant = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxAdvAnonymousTrading = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxAdvLockTrading = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
+			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+			this.daysTbx = new System.Windows.Forms.NumericUpDown();
+			this.label2 = new System.Windows.Forms.Label();
 			this.tabPageAdvETOTRequest = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tableLayoutPanelETOTRequest = new System.Windows.Forms.TableLayoutPanel();
 			this.panelOvertimeRequestHeaderBasic = new System.Windows.Forms.Panel();
 			this.labelOvertimeRequestBasic = new System.Windows.Forms.Label();
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting = new System.Windows.Forms.TableLayoutPanel();
+			this.labelOvertimeStaffingCheckMethodSetting = new System.Windows.Forms.Label();
+			this.comboBoxOvertimeRequestStaffingCheckMethod = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill = new System.Windows.Forms.TableLayoutPanel();
 			this.checkBoxAdvOvertimeProbability = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxUsePrimarySkill = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
+			this.tableLayoutPanelOvertimeMaximumSetting = new System.Windows.Forms.TableLayoutPanel();
 			this.checkBoxAdvOvertimeMaximumEnabled = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
+			this.timeSpanTextBoxOvertimeRequestMaximumTime = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.TimeSpanTextBox();
+			this.lblOvertimeRequestMaximumTimeHandleType = new System.Windows.Forms.Label();
+			this.comboBoxOvertimeRequestMaximumTimeHandleType = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting = new System.Windows.Forms.TableLayoutPanel();
 			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
+			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.TimeSpanTextBox();
+			this.lblOvertimeRequestMinimumRestTimeThreshold = new System.Windows.Forms.Label();
+			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.TimeSpanTextBox();
+			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType = new System.Windows.Forms.Label();
+			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
+			this.tableLayoutPanelOpenForOvertimeRequests = new System.Windows.Forms.TableLayoutPanel();
+			this.labelOpenForOvertimeRequests = new System.Windows.Forms.Label();
+			this.buttonDeleteOvertimeRequestPeriod = new Syncfusion.Windows.Forms.ButtonAdv();
+			this.buttonAddOvertimeRequestPeriod = new Syncfusion.Windows.Forms.ButtonAdv();
+			this.gridControlOvertimeRequestOpenPeriods = new Syncfusion.Windows.Forms.Grid.GridControl();
+			this.contextMenuStripOvertimeRequestOpenPeriodsGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.toolStripMenuItemOvertimeRequestFromToPeriod = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItemOvertimeRequestRollingPeriod = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItemOvertimeRequestDelete = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator2OvertimeRequest = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItemOvertimeRequestMoveUp = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItemOvertimeRequestMoveDown = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
@@ -214,9 +222,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelSubHeader1.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvWorkflowControlSet)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.comboBoxOvertimeRequestMaximumTimeHandleType)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.comboBoxOvertimeRequestStaffingCheckMethod)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.textBoxDescription)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.tabControlAdvArea)).BeginInit();
 			this.tabControlAdvArea.SuspendLayout();
@@ -255,21 +260,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelAbsenceRequestCancellation.SuspendLayout();
 			this.tableLayoutPanelAbsenceRequestExpiration.SuspendLayout();
 			this.tableLayoutPanelOpenForAbsenceRequests.SuspendLayout();
-			this.tableLayoutPanelOpenForOvertimeRequests.SuspendLayout();
-			this.tableLayoutPanelOvertimeMaximumSetting.ResumeLayout(false);
-			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.ResumeLayout(false);
-			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.ResumeLayout(false);
-			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ResumeLayout(false);
-			this.tableLayoutPanelOvertimeMaximumSetting.PerformLayout();
-			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.PerformLayout();
-			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.PerformLayout();
-			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gridControlAbsenceRequestOpenPeriods)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.gridControlOvertimeRequestOpenPeriods)).BeginInit();
 			this.contextMenuStripOpenPeriodsGrid.SuspendLayout();
-			this.contextMenuStripOvertimeRequestOpenPeriodsGrid.SuspendLayout();
 			this.tabPageAdvShiftTradeRequest.SuspendLayout();
 			this.tableLayoutPanelShiftTrade.SuspendLayout();
+			this.panel10.SuspendLayout();
 			this.panel5.SuspendLayout();
 			this.panelOpenForShiftTrade.SuspendLayout();
 			this.panelTolerance.SuspendLayout();
@@ -278,20 +273,32 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvAutoGrant)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvAnonymousTrading)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvLockTrading)).BeginInit();
+			this.tableLayoutPanel3.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.daysTbx)).BeginInit();
 			this.tabPageAdvETOTRequest.SuspendLayout();
 			this.tableLayoutPanelETOTRequest.SuspendLayout();
 			this.panelOvertimeRequestHeaderBasic.SuspendLayout();
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.comboBoxOvertimeRequestStaffingCheckMethod)).BeginInit();
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeProbability)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxUsePrimarySkill)).BeginInit();
+			this.tableLayoutPanelOvertimeMaximumSetting.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeMaximumEnabled)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.comboBoxOvertimeRequestMaximumTimeHandleType)).BeginInit();
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType)).BeginInit();
+			this.tableLayoutPanelOpenForOvertimeRequests.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.gridControlOvertimeRequestOpenPeriods)).BeginInit();
+			this.contextMenuStripOvertimeRequestOpenPeriodsGrid.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// gradientPanelHeader
 			// 
-			this.gradientPanelHeader.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.gradientPanelHeader.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.gradientPanelHeader.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.gradientPanelHeader.BackColor = System.Drawing.SystemColors.ActiveCaption;
 			this.gradientPanelHeader.BorderSingle = System.Windows.Forms.ButtonBorderStyle.None;
@@ -329,15 +336,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.labelHeader.Location = new System.Drawing.Point(3, 0);
 			this.labelHeader.Name = "labelHeader";
 			this.labelHeader.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
-			this.labelHeader.Size = new System.Drawing.Size(597, 38);
+			this.labelHeader.Size = new System.Drawing.Size(460, 38);
 			this.labelHeader.TabIndex = 0;
 			this.labelHeader.Text = "xxManageWorkflowControlSets";
 			// 
 			// tableLayoutPanelMain
 			// 
-			this.tableLayoutPanelMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			| System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.tableLayoutPanelMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.tableLayoutPanelMain.AutoScroll = true;
 			this.tableLayoutPanelMain.ColumnCount = 1;
 			this.tableLayoutPanelMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -394,9 +401,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.labelSubHeader1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.labelSubHeader1.ForeColor = System.Drawing.Color.GhostWhite;
 			this.labelSubHeader1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.labelSubHeader1.Location = new System.Drawing.Point(3, 0);
+			this.labelSubHeader1.Location = new System.Drawing.Point(3, 3);
 			this.labelSubHeader1.Name = "labelSubHeader1";
-			this.labelSubHeader1.Size = new System.Drawing.Size(458, 36);
+			this.labelSubHeader1.Size = new System.Drawing.Size(353, 28);
 			this.labelSubHeader1.TabIndex = 0;
 			this.labelSubHeader1.Text = "xxChooseWorkflowControlSetToEdit";
 			this.labelSubHeader1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -410,7 +417,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.buttonDelete.ForeColor = System.Drawing.Color.White;
 			this.buttonDelete.Image = global::Teleopti.Ccc.SmartClientPortal.Shell.Properties.Resources.ccc_temp_DeleteGroup10;
 			this.buttonDelete.IsBackStageButton = false;
-			this.buttonDelete.Location = new System.Drawing.Point(933, 4);
+			this.buttonDelete.Location = new System.Drawing.Point(933, 3);
 			this.buttonDelete.Margin = new System.Windows.Forms.Padding(0, 1, 3, 0);
 			this.buttonDelete.Name = "buttonDelete";
 			this.buttonDelete.Size = new System.Drawing.Size(28, 28);
@@ -428,7 +435,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.buttonNew.ForeColor = System.Drawing.Color.White;
 			this.buttonNew.Image = global::Teleopti.Ccc.SmartClientPortal.Shell.Properties.Resources.test_add2;
 			this.buttonNew.IsBackStageButton = false;
-			this.buttonNew.Location = new System.Drawing.Point(898, 4);
+			this.buttonNew.Location = new System.Drawing.Point(898, 3);
 			this.buttonNew.Margin = new System.Windows.Forms.Padding(0, 1, 3, 0);
 			this.buttonNew.Name = "buttonNew";
 			this.buttonNew.Size = new System.Drawing.Size(28, 28);
@@ -500,11 +507,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			this.comboBoxAdvWorkflowControlSet.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.comboBoxAdvWorkflowControlSet.BackColor = System.Drawing.Color.White;
-			this.comboBoxAdvWorkflowControlSet.BeforeTouchSize = new System.Drawing.Size(252, 40);
+			this.comboBoxAdvWorkflowControlSet.BeforeTouchSize = new System.Drawing.Size(252, 33);
 			this.comboBoxAdvWorkflowControlSet.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxAdvWorkflowControlSet.Location = new System.Drawing.Point(207, 3);
 			this.comboBoxAdvWorkflowControlSet.Name = "comboBoxAdvWorkflowControlSet";
-			this.comboBoxAdvWorkflowControlSet.Size = new System.Drawing.Size(252, 40);
+			this.comboBoxAdvWorkflowControlSet.Size = new System.Drawing.Size(252, 33);
 			this.comboBoxAdvWorkflowControlSet.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxAdvWorkflowControlSet.TabIndex = 3;
 			this.comboBoxAdvWorkflowControlSet.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvWorkflowControlSet_SelectedIndexChanged);
@@ -512,14 +519,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// textBoxDescription
 			// 
 			this.textBoxDescription.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.textBoxDescription.BeforeTouchSize = new System.Drawing.Size(251, 39);
+			this.textBoxDescription.BeforeTouchSize = new System.Drawing.Size(251, 31);
 			this.textBoxDescription.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.textBoxDescription.Location = new System.Drawing.Point(207, 38);
 			this.textBoxDescription.MaxLength = 50;
 			this.textBoxDescription.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxDescription.Name = "textBoxDescription";
 			this.textBoxDescription.OverflowIndicatorToolTipText = null;
-			this.textBoxDescription.Size = new System.Drawing.Size(251, 39);
+			this.textBoxDescription.Size = new System.Drawing.Size(251, 31);
 			this.textBoxDescription.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
 			this.textBoxDescription.TabIndex = 4;
 			this.textBoxDescription.WordWrap = false;
@@ -561,10 +568,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tabPageBasic.Controls.Add(this.tableLayoutPanelBasic);
 			this.tabPageBasic.Image = null;
 			this.tabPageBasic.ImageSize = new System.Drawing.Size(16, 16);
-			this.tabPageBasic.Location = new System.Drawing.Point(1, 45);
+			this.tabPageBasic.Location = new System.Drawing.Point(1, 37);
 			this.tabPageBasic.Name = "tabPageBasic";
 			this.tabPageBasic.ShowCloseButton = true;
-			this.tabPageBasic.Size = new System.Drawing.Size(965, 410);
+			this.tabPageBasic.Size = new System.Drawing.Size(965, 418);
 			this.tabPageBasic.TabBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(191)))), ((int)(((byte)(234)))));
 			this.tabPageBasic.TabIndex = 2;
 			this.tabPageBasic.Text = "xxBasic";
@@ -625,13 +632,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelBasic.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanelBasic.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanelBasic.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanelBasic.Size = new System.Drawing.Size(965, 410);
+			this.tableLayoutPanelBasic.Size = new System.Drawing.Size(965, 418);
 			this.tableLayoutPanelBasic.TabIndex = 0;
 			// 
 			// twoListSelectorAbsencesForReport
 			// 
-			this.twoListSelectorAbsencesForReport.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.twoListSelectorAbsencesForReport.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.twoListSelectorAbsencesForReport.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
 			this.tableLayoutPanelBasic.SetColumnSpan(this.twoListSelectorAbsencesForReport, 2);
 			this.twoListSelectorAbsencesForReport.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -664,15 +671,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.labelAllowedAbsencesForReport.Location = new System.Drawing.Point(3, 8);
 			this.labelAllowedAbsencesForReport.Name = "labelAllowedAbsencesForReport";
 			this.labelAllowedAbsencesForReport.Padding = new System.Windows.Forms.Padding(0, 0, 0, 3);
-			this.labelAllowedAbsencesForReport.Size = new System.Drawing.Size(388, 39);
+			this.labelAllowedAbsencesForReport.Size = new System.Drawing.Size(305, 31);
 			this.labelAllowedAbsencesForReport.TabIndex = 0;
 			this.labelAllowedAbsencesForReport.Text = "xxAbsencesAvailableForReport";
 			this.labelAllowedAbsencesForReport.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// twoListSelectorAbsences
 			// 
-			this.twoListSelectorAbsences.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.twoListSelectorAbsences.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.twoListSelectorAbsences.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
 			this.tableLayoutPanelBasic.SetColumnSpan(this.twoListSelectorAbsences, 2);
 			this.twoListSelectorAbsences.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -705,7 +712,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.labelAbsencesAvailableForExtendedPreference.Location = new System.Drawing.Point(3, 8);
 			this.labelAbsencesAvailableForExtendedPreference.Name = "labelAbsencesAvailableForExtendedPreference";
 			this.labelAbsencesAvailableForExtendedPreference.Padding = new System.Windows.Forms.Padding(0, 0, 0, 3);
-			this.labelAbsencesAvailableForExtendedPreference.Size = new System.Drawing.Size(549, 39);
+			this.labelAbsencesAvailableForExtendedPreference.Size = new System.Drawing.Size(430, 31);
 			this.labelAbsencesAvailableForExtendedPreference.TabIndex = 0;
 			this.labelAbsencesAvailableForExtendedPreference.Text = "xxAbsencesAvailableForExtendedPreference";
 			this.labelAbsencesAvailableForExtendedPreference.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -736,9 +743,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.labelStudentAvailabilityPeriod.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.labelStudentAvailabilityPeriod.AutoSize = true;
 			this.labelStudentAvailabilityPeriod.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-			this.labelStudentAvailabilityPeriod.Location = new System.Drawing.Point(3, 0);
+			this.labelStudentAvailabilityPeriod.Location = new System.Drawing.Point(3, 1);
 			this.labelStudentAvailabilityPeriod.Name = "labelStudentAvailabilityPeriod";
-			this.labelStudentAvailabilityPeriod.Size = new System.Drawing.Size(323, 30);
+			this.labelStudentAvailabilityPeriod.Size = new System.Drawing.Size(251, 28);
 			this.labelStudentAvailabilityPeriod.TabIndex = 0;
 			this.labelStudentAvailabilityPeriod.Text = "xxStudentAvailabilityPeriod";
 			// 
@@ -747,9 +754,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.label6.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.label6.AutoSize = true;
 			this.label6.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-			this.label6.Location = new System.Drawing.Point(420, 0);
+			this.label6.Location = new System.Drawing.Point(420, 1);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(121, 30);
+			this.label6.Size = new System.Drawing.Size(91, 28);
 			this.label6.TabIndex = 1;
 			this.label6.Text = "xxIsOpen";
 			// 
@@ -799,8 +806,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			// twoListSelectorCategories
 			// 
-			this.twoListSelectorCategories.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.twoListSelectorCategories.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.twoListSelectorCategories.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
 			this.tableLayoutPanelBasic.SetColumnSpan(this.twoListSelectorCategories, 2);
 			this.twoListSelectorCategories.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -828,8 +835,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			// buttonZoomOut
 			// 
-			this.buttonZoomOut.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonZoomOut.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonZoomOut.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonZoomOut.BackColor = System.Drawing.Color.White;
 			this.buttonZoomOut.BeforeTouchSize = new System.Drawing.Size(28, 28);
@@ -845,8 +852,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			// buttonZoomIn
 			// 
-			this.buttonZoomIn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonZoomIn.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonZoomIn.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonZoomIn.BackColor = System.Drawing.Color.White;
 			this.buttonZoomIn.BeforeTouchSize = new System.Drawing.Size(28, 28);
@@ -862,8 +869,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			// buttonPanLeft
 			// 
-			this.buttonPanLeft.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonPanLeft.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonPanLeft.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonPanLeft.BackColor = System.Drawing.Color.White;
 			this.buttonPanLeft.BeforeTouchSize = new System.Drawing.Size(28, 28);
@@ -879,8 +886,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			// buttonPanRight
 			// 
-			this.buttonPanRight.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonPanRight.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonPanRight.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonPanRight.BackColor = System.Drawing.Color.White;
 			this.buttonPanRight.BeforeTouchSize = new System.Drawing.Size(28, 28);
@@ -896,8 +903,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			// twoListSelectorDayOffs
 			// 
-			this.twoListSelectorDayOffs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.twoListSelectorDayOffs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.twoListSelectorDayOffs.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
 			this.tableLayoutPanelBasic.SetColumnSpan(this.twoListSelectorDayOffs, 2);
 			this.twoListSelectorDayOffs.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -944,7 +951,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.labelShiftCategoriesAvailableForExtendedPreference.Location = new System.Drawing.Point(3, 8);
 			this.labelShiftCategoriesAvailableForExtendedPreference.Name = "labelShiftCategoriesAvailableForExtendedPreference";
 			this.labelShiftCategoriesAvailableForExtendedPreference.Padding = new System.Windows.Forms.Padding(0, 0, 0, 3);
-			this.labelShiftCategoriesAvailableForExtendedPreference.Size = new System.Drawing.Size(623, 39);
+			this.labelShiftCategoriesAvailableForExtendedPreference.Size = new System.Drawing.Size(487, 31);
 			this.labelShiftCategoriesAvailableForExtendedPreference.TabIndex = 0;
 			this.labelShiftCategoriesAvailableForExtendedPreference.Text = "xxShiftCategoriesAvailableForExtendedPreference";
 			this.labelShiftCategoriesAvailableForExtendedPreference.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -971,7 +978,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.labelDaysOffAvailableForExtendedPreferences.Location = new System.Drawing.Point(3, 8);
 			this.labelDaysOffAvailableForExtendedPreferences.Name = "labelDaysOffAvailableForExtendedPreferences";
 			this.labelDaysOffAvailableForExtendedPreferences.Padding = new System.Windows.Forms.Padding(0, 0, 0, 3);
-			this.labelDaysOffAvailableForExtendedPreferences.Size = new System.Drawing.Size(546, 39);
+			this.labelDaysOffAvailableForExtendedPreferences.Size = new System.Drawing.Size(428, 31);
 			this.labelDaysOffAvailableForExtendedPreferences.TabIndex = 0;
 			this.labelDaysOffAvailableForExtendedPreferences.Text = "xxDaysOffAvailableForExtendedPreferences";
 			this.labelDaysOffAvailableForExtendedPreferences.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -998,7 +1005,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.labelAllowedPreferenceActivity.Location = new System.Drawing.Point(3, 8);
 			this.labelAllowedPreferenceActivity.Name = "labelAllowedPreferenceActivity";
 			this.labelAllowedPreferenceActivity.Padding = new System.Windows.Forms.Padding(0, 0, 0, 3);
-			this.labelAllowedPreferenceActivity.Size = new System.Drawing.Size(529, 39);
+			this.labelAllowedPreferenceActivity.Size = new System.Drawing.Size(416, 31);
 			this.labelAllowedPreferenceActivity.TabIndex = 0;
 			this.labelAllowedPreferenceActivity.Text = "xxActivityAvailableForExtendedPreference";
 			this.labelAllowedPreferenceActivity.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1038,7 +1045,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.labelBasic.Location = new System.Drawing.Point(3, 8);
 			this.labelBasic.Name = "labelBasic";
 			this.labelBasic.Padding = new System.Windows.Forms.Padding(0, 0, 0, 3);
-			this.labelBasic.Size = new System.Drawing.Size(104, 39);
+			this.labelBasic.Size = new System.Drawing.Size(83, 31);
 			this.labelBasic.TabIndex = 0;
 			this.labelBasic.Text = "xxBasic";
 			this.labelBasic.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1068,9 +1075,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			this.labelWriteProtect.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.labelWriteProtect.AutoSize = true;
-			this.labelWriteProtect.Location = new System.Drawing.Point(3, 0);
+			this.labelWriteProtect.Location = new System.Drawing.Point(3, 5);
 			this.labelWriteProtect.Name = "labelWriteProtect";
-			this.labelWriteProtect.Size = new System.Drawing.Size(410, 35);
+			this.labelWriteProtect.Size = new System.Drawing.Size(376, 25);
 			this.labelWriteProtect.TabIndex = 0;
 			this.labelWriteProtect.Text = "xxWriteProtectScheduledOlderThanDaysColon";
 			// 
@@ -1079,7 +1086,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.integerTextBoxWriteProtect.Location = new System.Drawing.Point(422, 3);
 			this.integerTextBoxWriteProtect.MaxLength = 3;
 			this.integerTextBoxWriteProtect.Name = "integerTextBoxWriteProtect";
-			this.integerTextBoxWriteProtect.Size = new System.Drawing.Size(133, 39);
+			this.integerTextBoxWriteProtect.Size = new System.Drawing.Size(133, 31);
 			this.integerTextBoxWriteProtect.TabIndex = 5;
 			this.integerTextBoxWriteProtect.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.integerTextBoxWriteProtect.Leave += new System.EventHandler(this.integerTextBoxWriteProtect_Leave);
@@ -1088,9 +1095,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			this.labelPublishSchedules.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.labelPublishSchedules.AutoSize = true;
-			this.labelPublishSchedules.Location = new System.Drawing.Point(3, 36);
+			this.labelPublishSchedules.Location = new System.Drawing.Point(3, 40);
 			this.labelPublishSchedules.Name = "labelPublishSchedules";
-			this.labelPublishSchedules.Size = new System.Drawing.Size(310, 32);
+			this.labelPublishSchedules.Size = new System.Drawing.Size(229, 25);
 			this.labelPublishSchedules.TabIndex = 2;
 			this.labelPublishSchedules.Text = "xxPublishSchedulesToColon";
 			// 
@@ -1207,7 +1214,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.labelPreferencePeriod.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.labelPreferencePeriod.Location = new System.Drawing.Point(3, 0);
 			this.labelPreferencePeriod.Name = "labelPreferencePeriod";
-			this.labelPreferencePeriod.Size = new System.Drawing.Size(236, 27);
+			this.labelPreferencePeriod.Size = new System.Drawing.Size(177, 27);
 			this.labelPreferencePeriod.TabIndex = 0;
 			this.labelPreferencePeriod.Text = "xxPreferencePeriod";
 			// 
@@ -1218,7 +1225,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.labelIsOpen.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.labelIsOpen.Location = new System.Drawing.Point(420, 0);
 			this.labelIsOpen.Name = "labelIsOpen";
-			this.labelIsOpen.Size = new System.Drawing.Size(121, 27);
+			this.labelIsOpen.Size = new System.Drawing.Size(91, 27);
 			this.labelIsOpen.TabIndex = 1;
 			this.labelIsOpen.Text = "xxIsOpen";
 			// 
@@ -1286,7 +1293,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.labelOpenPreference.ForeColor = System.Drawing.Color.GhostWhite;
 			this.labelOpenPreference.Location = new System.Drawing.Point(3, 8);
 			this.labelOpenPreference.Name = "labelOpenPreference";
-			this.labelOpenPreference.Size = new System.Drawing.Size(250, 36);
+			this.labelOpenPreference.Size = new System.Drawing.Size(195, 28);
 			this.labelOpenPreference.TabIndex = 0;
 			this.labelOpenPreference.Text = "xxOpenPreferences";
 			// 
@@ -1311,7 +1318,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.label4.Location = new System.Drawing.Point(3, 8);
 			this.label4.Name = "label4";
 			this.label4.Padding = new System.Windows.Forms.Padding(0, 0, 0, 3);
-			this.label4.Size = new System.Drawing.Size(461, 39);
+			this.label4.Size = new System.Drawing.Size(357, 31);
 			this.label4.TabIndex = 0;
 			this.label4.Text = "xxFairnessSystemUsedForScheduling";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1352,7 +1359,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.labelOpenStudentAvailability.ForeColor = System.Drawing.Color.GhostWhite;
 			this.labelOpenStudentAvailability.Location = new System.Drawing.Point(3, 8);
 			this.labelOpenStudentAvailability.Name = "labelOpenStudentAvailability";
-			this.labelOpenStudentAvailability.Size = new System.Drawing.Size(339, 36);
+			this.labelOpenStudentAvailability.Size = new System.Drawing.Size(266, 28);
 			this.labelOpenStudentAvailability.TabIndex = 1;
 			this.labelOpenStudentAvailability.Text = "xxOpenStudentAvailability";
 			// 
@@ -1377,10 +1384,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tabPageAdvAbsenceRequests.Controls.Add(this.tableLayoutPanelAbsenceRequestPeriods);
 			this.tabPageAdvAbsenceRequests.Image = null;
 			this.tabPageAdvAbsenceRequests.ImageSize = new System.Drawing.Size(16, 16);
-			this.tabPageAdvAbsenceRequests.Location = new System.Drawing.Point(1, 45);
+			this.tabPageAdvAbsenceRequests.Location = new System.Drawing.Point(1, 37);
 			this.tabPageAdvAbsenceRequests.Name = "tabPageAdvAbsenceRequests";
 			this.tabPageAdvAbsenceRequests.ShowCloseButton = true;
-			this.tabPageAdvAbsenceRequests.Size = new System.Drawing.Size(965, 410);
+			this.tabPageAdvAbsenceRequests.Size = new System.Drawing.Size(965, 418);
 			this.tabPageAdvAbsenceRequests.TabBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(191)))), ((int)(((byte)(234)))));
 			this.tabPageAdvAbsenceRequests.TabIndex = 1;
 			this.tabPageAdvAbsenceRequests.Text = "xxAbsenceRequests";
@@ -1416,7 +1423,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelAbsenceRequestPeriods.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanelAbsenceRequestPeriods.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelAbsenceRequestPeriods.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 150F));
-			this.tableLayoutPanelAbsenceRequestPeriods.Size = new System.Drawing.Size(965, 410);
+			this.tableLayoutPanelAbsenceRequestPeriods.Size = new System.Drawing.Size(965, 418);
 			this.tableLayoutPanelAbsenceRequestPeriods.TabIndex = 0;
 			// 
 			// panel1
@@ -1442,7 +1449,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.dateTimePickerAdvViewpoint.Calendar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.dateTimePickerAdvViewpoint.Calendar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.dateTimePickerAdvViewpoint.Calendar.BottomHeight = 25;
-			this.dateTimePickerAdvViewpoint.Calendar.Culture = new System.Globalization.CultureInfo("en-US");
+			this.dateTimePickerAdvViewpoint.Calendar.Culture = new System.Globalization.CultureInfo("zh-CN");
 			this.dateTimePickerAdvViewpoint.Calendar.DayNamesColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvViewpoint.Calendar.DayNamesFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dateTimePickerAdvViewpoint.Calendar.DaysFont = new System.Drawing.Font("Segoe UI", 9F);
@@ -1528,7 +1535,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.labelAbsenceRequestsVisualisation.Location = new System.Drawing.Point(3, 8);
 			this.labelAbsenceRequestsVisualisation.Name = "labelAbsenceRequestsVisualisation";
 			this.labelAbsenceRequestsVisualisation.Padding = new System.Windows.Forms.Padding(0, 0, 0, 3);
-			this.labelAbsenceRequestsVisualisation.Size = new System.Drawing.Size(196, 39);
+			this.labelAbsenceRequestsVisualisation.Size = new System.Drawing.Size(155, 31);
 			this.labelAbsenceRequestsVisualisation.TabIndex = 0;
 			this.labelAbsenceRequestsVisualisation.Text = "xxVisualisation";
 			this.labelAbsenceRequestsVisualisation.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1556,13 +1563,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			gridBaseStyle4.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
 			gridBaseStyle4.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
 			this.gridControlVisualisation.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
-			gridBaseStyle1,
-			gridBaseStyle2,
-			gridBaseStyle3,
-			gridBaseStyle4});
+            gridBaseStyle1,
+            gridBaseStyle2,
+            gridBaseStyle3,
+            gridBaseStyle4});
 			this.gridControlVisualisation.ColCount = 2;
 			this.gridControlVisualisation.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
-			new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
+            new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
 			this.gridControlVisualisation.DefaultGridBorderStyle = Syncfusion.Windows.Forms.Grid.GridBorderStyle.Solid;
 			this.gridControlVisualisation.DefaultRowHeight = 20;
 			this.gridControlVisualisation.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1581,9 +1588,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.gridControlVisualisation.Properties.MarkRowHeader = false;
 			this.gridControlVisualisation.RowCount = 0;
 			this.gridControlVisualisation.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
-			new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 29)});
+            new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 29)});
 			this.gridControlVisualisation.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
-			this.gridControlVisualisation.Size = new System.Drawing.Size(959, 115);
+			this.gridControlVisualisation.Size = new System.Drawing.Size(959, 109);
 			this.gridControlVisualisation.SmartSizeBox = false;
 			this.gridControlVisualisation.TabIndex = 21;
 			this.gridControlVisualisation.TabStop = false;
@@ -1600,7 +1607,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelNextPreviousPeriod.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanelNextPreviousPeriod.Controls.Add(this.buttonAdvPreviousProjectionPeriod, 0, 0);
 			this.tableLayoutPanelNextPreviousPeriod.Controls.Add(this.buttonAdvNextProjectionPeriod, 1, 0);
-			this.tableLayoutPanelNextPreviousPeriod.Location = new System.Drawing.Point(732, 98);
+			this.tableLayoutPanelNextPreviousPeriod.Location = new System.Drawing.Point(732, 156);
 			this.tableLayoutPanelNextPreviousPeriod.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanelNextPreviousPeriod.Name = "tableLayoutPanelNextPreviousPeriod";
 			this.tableLayoutPanelNextPreviousPeriod.RowCount = 1;
@@ -1651,7 +1658,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelAbsenceRequestMiscellaneous.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanelAbsenceRequestMiscellaneous.Controls.Add(this.labelAbsenceRequestMiscellaneous, 0, 0);
 			this.tableLayoutPanelAbsenceRequestMiscellaneous.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanelAbsenceRequestMiscellaneous.Location = new System.Drawing.Point(3, 135);
+			this.tableLayoutPanelAbsenceRequestMiscellaneous.Location = new System.Drawing.Point(3, 193);
 			this.tableLayoutPanelAbsenceRequestMiscellaneous.Name = "tableLayoutPanelAbsenceRequestMiscellaneous";
 			this.tableLayoutPanelAbsenceRequestMiscellaneous.RowCount = 1;
 			this.tableLayoutPanelAbsenceRequestMiscellaneous.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -1666,9 +1673,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.labelAbsenceRequestMiscellaneous.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.labelAbsenceRequestMiscellaneous.ForeColor = System.Drawing.Color.GhostWhite;
 			this.labelAbsenceRequestMiscellaneous.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.labelAbsenceRequestMiscellaneous.Location = new System.Drawing.Point(3, 0);
+			this.labelAbsenceRequestMiscellaneous.Location = new System.Drawing.Point(3, 3);
 			this.labelAbsenceRequestMiscellaneous.Name = "labelAbsenceRequestMiscellaneous";
-			this.labelAbsenceRequestMiscellaneous.Size = new System.Drawing.Size(213, 36);
+			this.labelAbsenceRequestMiscellaneous.Size = new System.Drawing.Size(168, 28);
 			this.labelAbsenceRequestMiscellaneous.TabIndex = 0;
 			this.labelAbsenceRequestMiscellaneous.Text = "xxMiscellaneous";
 			this.labelAbsenceRequestMiscellaneous.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1684,7 +1691,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelWaitlist.Controls.Add(this.radioButtonWaitlistFirstComeFirstServed, 1, 0);
 			this.tableLayoutPanelWaitlist.Controls.Add(this.radioButtonWaitlistBySeniority, 2, 0);
 			this.tableLayoutPanelWaitlist.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanelWaitlist.Location = new System.Drawing.Point(3, 175);
+			this.tableLayoutPanelWaitlist.Location = new System.Drawing.Point(3, 233);
 			this.tableLayoutPanelWaitlist.Name = "tableLayoutPanelWaitlist";
 			this.tableLayoutPanelWaitlist.RowCount = 1;
 			this.tableLayoutPanelWaitlist.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -1710,7 +1717,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.radioButtonWaitlistFirstComeFirstServed.AutoSize = true;
 			this.radioButtonWaitlistFirstComeFirstServed.Location = new System.Drawing.Point(190, 3);
 			this.radioButtonWaitlistFirstComeFirstServed.Name = "radioButtonWaitlistFirstComeFirstServed";
-			this.radioButtonWaitlistFirstComeFirstServed.Size = new System.Drawing.Size(292, 23);
+			this.radioButtonWaitlistFirstComeFirstServed.Size = new System.Drawing.Size(220, 23);
 			this.radioButtonWaitlistFirstComeFirstServed.TabIndex = 29;
 			this.radioButtonWaitlistFirstComeFirstServed.TabStop = true;
 			this.radioButtonWaitlistFirstComeFirstServed.Text = "xxFirstComeFirstServed";
@@ -1720,9 +1727,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// radioButtonWaitlistBySeniority
 			// 
 			this.radioButtonWaitlistBySeniority.AutoSize = true;
-			this.radioButtonWaitlistBySeniority.Location = new System.Drawing.Point(488, 3);
+			this.radioButtonWaitlistBySeniority.Location = new System.Drawing.Point(416, 3);
 			this.radioButtonWaitlistBySeniority.Name = "radioButtonWaitlistBySeniority";
-			this.radioButtonWaitlistBySeniority.Size = new System.Drawing.Size(188, 23);
+			this.radioButtonWaitlistBySeniority.Size = new System.Drawing.Size(141, 23);
 			this.radioButtonWaitlistBySeniority.TabIndex = 30;
 			this.radioButtonWaitlistBySeniority.TabStop = true;
 			this.radioButtonWaitlistBySeniority.Text = "xxBySeniority";
@@ -1736,7 +1743,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelAbsenceProbability.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanelAbsenceProbability.Controls.Add(this.checkBoxEnableAbsenceProbability, 0, 0);
 			this.tableLayoutPanelAbsenceProbability.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanelAbsenceProbability.Location = new System.Drawing.Point(3, 210);
+			this.tableLayoutPanelAbsenceProbability.Location = new System.Drawing.Point(3, 268);
 			this.tableLayoutPanelAbsenceProbability.Name = "tableLayoutPanelAbsenceProbability";
 			this.tableLayoutPanelAbsenceProbability.RowCount = 1;
 			this.tableLayoutPanelAbsenceProbability.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -1765,7 +1772,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelAbsenceRequestCancellation.Controls.Add(this.txtAbsenceRequestCancellationThreshold, 0, 0);
 			this.tableLayoutPanelAbsenceRequestCancellation.Controls.Add(this.labelAbsenceRequestCancellationThreshold, 0, 0);
 			this.tableLayoutPanelAbsenceRequestCancellation.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanelAbsenceRequestCancellation.Location = new System.Drawing.Point(3, 245);
+			this.tableLayoutPanelAbsenceRequestCancellation.Location = new System.Drawing.Point(3, 303);
 			this.tableLayoutPanelAbsenceRequestCancellation.Name = "tableLayoutPanelAbsenceRequestCancellation";
 			this.tableLayoutPanelAbsenceRequestCancellation.RowCount = 1;
 			this.tableLayoutPanelAbsenceRequestCancellation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -1774,10 +1781,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			// txtAbsenceRequestCancellationThreshold
 			// 
-			this.txtAbsenceRequestCancellationThreshold.Location = new System.Drawing.Point(458, 3);
+			this.txtAbsenceRequestCancellationThreshold.Location = new System.Drawing.Point(340, 3);
 			this.txtAbsenceRequestCancellationThreshold.MaxLength = 3;
 			this.txtAbsenceRequestCancellationThreshold.Name = "txtAbsenceRequestCancellationThreshold";
-			this.txtAbsenceRequestCancellationThreshold.Size = new System.Drawing.Size(70, 39);
+			this.txtAbsenceRequestCancellationThreshold.Size = new System.Drawing.Size(70, 31);
 			this.txtAbsenceRequestCancellationThreshold.TabIndex = 6;
 			this.txtAbsenceRequestCancellationThreshold.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.txtAbsenceRequestCancellationThreshold.Leave += new System.EventHandler(this.txtAbsenceRequestCancellationThreshold_Leave);
@@ -1786,9 +1793,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			this.labelAbsenceRequestCancellationThreshold.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.labelAbsenceRequestCancellationThreshold.AutoSize = true;
-			this.labelAbsenceRequestCancellationThreshold.Location = new System.Drawing.Point(3, 0);
+			this.labelAbsenceRequestCancellationThreshold.Location = new System.Drawing.Point(3, 2);
 			this.labelAbsenceRequestCancellationThreshold.Name = "labelAbsenceRequestCancellationThreshold";
-			this.labelAbsenceRequestCancellationThreshold.Size = new System.Drawing.Size(449, 29);
+			this.labelAbsenceRequestCancellationThreshold.Size = new System.Drawing.Size(331, 25);
 			this.labelAbsenceRequestCancellationThreshold.TabIndex = 1;
 			this.labelAbsenceRequestCancellationThreshold.Text = "xxAbsenceRequestCancellationThreshold";
 			// 
@@ -1800,7 +1807,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelAbsenceRequestExpiration.Controls.Add(this.txtAbsenceRequestExpiredThreshold, 0, 0);
 			this.tableLayoutPanelAbsenceRequestExpiration.Controls.Add(this.labelAbsenceRequestExpriedThreshold, 0, 0);
 			this.tableLayoutPanelAbsenceRequestExpiration.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanelAbsenceRequestExpiration.Location = new System.Drawing.Point(3, 280);
+			this.tableLayoutPanelAbsenceRequestExpiration.Location = new System.Drawing.Point(3, 338);
 			this.tableLayoutPanelAbsenceRequestExpiration.Name = "tableLayoutPanelAbsenceRequestExpiration";
 			this.tableLayoutPanelAbsenceRequestExpiration.RowCount = 1;
 			this.tableLayoutPanelAbsenceRequestExpiration.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -1809,10 +1816,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			// txtAbsenceRequestExpiredThreshold
 			// 
-			this.txtAbsenceRequestExpiredThreshold.Location = new System.Drawing.Point(405, 3);
+			this.txtAbsenceRequestExpiredThreshold.Location = new System.Drawing.Point(303, 3);
 			this.txtAbsenceRequestExpiredThreshold.MaxLength = 3;
 			this.txtAbsenceRequestExpiredThreshold.Name = "txtAbsenceRequestExpiredThreshold";
-			this.txtAbsenceRequestExpiredThreshold.Size = new System.Drawing.Size(70, 39);
+			this.txtAbsenceRequestExpiredThreshold.Size = new System.Drawing.Size(70, 31);
 			this.txtAbsenceRequestExpiredThreshold.TabIndex = 6;
 			this.txtAbsenceRequestExpiredThreshold.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.txtAbsenceRequestExpiredThreshold.Leave += new System.EventHandler(this.txtAbsenceRequestExpiredThreshold_Leave);
@@ -1821,21 +1828,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			this.labelAbsenceRequestExpriedThreshold.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.labelAbsenceRequestExpriedThreshold.AutoSize = true;
-			this.labelAbsenceRequestExpriedThreshold.Location = new System.Drawing.Point(3, 0);
+			this.labelAbsenceRequestExpriedThreshold.Location = new System.Drawing.Point(3, 2);
 			this.labelAbsenceRequestExpriedThreshold.Name = "labelAbsenceRequestExpriedThreshold";
-			this.labelAbsenceRequestExpriedThreshold.Size = new System.Drawing.Size(396, 29);
+			this.labelAbsenceRequestExpriedThreshold.Size = new System.Drawing.Size(294, 25);
 			this.labelAbsenceRequestExpriedThreshold.TabIndex = 1;
 			this.labelAbsenceRequestExpriedThreshold.Text = "xxAbsenceRequestExpiredThreshold";
-			//
-			// labelOvertimeStaffingCheckMethodSetting
-			this.labelOvertimeStaffingCheckMethodSetting.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.labelOvertimeStaffingCheckMethodSetting.AutoSize = true;
-			this.labelOvertimeStaffingCheckMethodSetting.Location = new System.Drawing.Point(3, 0);
-			this.labelOvertimeStaffingCheckMethodSetting.Name = "labelOvertimeStaffingCheckMethodSetting";
-			this.labelOvertimeStaffingCheckMethodSetting.Size = new System.Drawing.Size(396, 29);
-			this.labelOvertimeStaffingCheckMethodSetting.TabIndex = 1;
-			this.labelOvertimeStaffingCheckMethodSetting.Text = "xxOvertimeStaffingCheckMethodSetting";
-			//
 			// 
 			// tableLayoutPanelOpenForAbsenceRequests
 			// 
@@ -1848,11 +1845,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelOpenForAbsenceRequests.Controls.Add(this.buttonDeleteAbsenceRequestPeriod, 2, 0);
 			this.tableLayoutPanelOpenForAbsenceRequests.Controls.Add(this.buttonAddAbsenceRequestPeriod, 1, 0);
 			this.tableLayoutPanelOpenForAbsenceRequests.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanelOpenForAbsenceRequests.Location = new System.Drawing.Point(3, 315);
+			this.tableLayoutPanelOpenForAbsenceRequests.Location = new System.Drawing.Point(3, 373);
 			this.tableLayoutPanelOpenForAbsenceRequests.Name = "tableLayoutPanelOpenForAbsenceRequests";
 			this.tableLayoutPanelOpenForAbsenceRequests.RowCount = 1;
 			this.tableLayoutPanelOpenForAbsenceRequests.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanelOpenForAbsenceRequests.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
+			this.tableLayoutPanelOpenForAbsenceRequests.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
 			this.tableLayoutPanelOpenForAbsenceRequests.Size = new System.Drawing.Size(959, 34);
 			this.tableLayoutPanelOpenForAbsenceRequests.TabIndex = 0;
 			// 
@@ -1864,9 +1861,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.labelOpenForAbsenceRequests.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.labelOpenForAbsenceRequests.ForeColor = System.Drawing.Color.GhostWhite;
 			this.labelOpenForAbsenceRequests.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.labelOpenForAbsenceRequests.Location = new System.Drawing.Point(3, 0);
+			this.labelOpenForAbsenceRequests.Location = new System.Drawing.Point(3, 3);
 			this.labelOpenForAbsenceRequests.Name = "labelOpenForAbsenceRequests";
-			this.labelOpenForAbsenceRequests.Size = new System.Drawing.Size(358, 36);
+			this.labelOpenForAbsenceRequests.Size = new System.Drawing.Size(278, 28);
 			this.labelOpenForAbsenceRequests.TabIndex = 0;
 			this.labelOpenForAbsenceRequests.Text = "xxOpenForAbsenceRequests";
 			this.labelOpenForAbsenceRequests.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1880,7 +1877,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.buttonDeleteAbsenceRequestPeriod.ForeColor = System.Drawing.Color.White;
 			this.buttonDeleteAbsenceRequestPeriod.Image = global::Teleopti.Ccc.SmartClientPortal.Shell.Properties.Resources.ccc_temp_DeleteGroup10;
 			this.buttonDeleteAbsenceRequestPeriod.IsBackStageButton = false;
-			this.buttonDeleteAbsenceRequestPeriod.Location = new System.Drawing.Point(924, 4);
+			this.buttonDeleteAbsenceRequestPeriod.Location = new System.Drawing.Point(924, 3);
 			this.buttonDeleteAbsenceRequestPeriod.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
 			this.buttonDeleteAbsenceRequestPeriod.Name = "buttonDeleteAbsenceRequestPeriod";
 			this.buttonDeleteAbsenceRequestPeriod.Size = new System.Drawing.Size(28, 28);
@@ -1898,7 +1895,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.buttonAddAbsenceRequestPeriod.ForeColor = System.Drawing.Color.White;
 			this.buttonAddAbsenceRequestPeriod.Image = global::Teleopti.Ccc.SmartClientPortal.Shell.Properties.Resources.test_add2;
 			this.buttonAddAbsenceRequestPeriod.IsBackStageButton = false;
-			this.buttonAddAbsenceRequestPeriod.Location = new System.Drawing.Point(889, 4);
+			this.buttonAddAbsenceRequestPeriod.Location = new System.Drawing.Point(889, 3);
 			this.buttonAddAbsenceRequestPeriod.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
 			this.buttonAddAbsenceRequestPeriod.Name = "buttonAddAbsenceRequestPeriod";
 			this.buttonAddAbsenceRequestPeriod.Size = new System.Drawing.Size(28, 28);
@@ -1906,281 +1903,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.buttonAddAbsenceRequestPeriod.UseVisualStyle = true;
 			this.buttonAddAbsenceRequestPeriod.UseVisualStyleBackColor = false;
 			this.buttonAddAbsenceRequestPeriod.Click += new System.EventHandler(this.buttonAddAbsenceRequestPeriod_Click);
-			// 
-			// tableLayoutPanelOpenForOvertimeRequests
-			// 
-			this.tableLayoutPanelOpenForOvertimeRequests.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(191)))), ((int)(((byte)(234)))));
-			this.tableLayoutPanelOpenForOvertimeRequests.ColumnCount = 3;
-			this.tableLayoutPanelOpenForOvertimeRequests.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanelOpenForOvertimeRequests.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-			this.tableLayoutPanelOpenForOvertimeRequests.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-			this.tableLayoutPanelOpenForOvertimeRequests.Controls.Add(this.labelOpenForOvertimeRequests, 0, 0);
-			this.tableLayoutPanelOpenForOvertimeRequests.Controls.Add(this.buttonDeleteOvertimeRequestPeriod, 2, 0);
-			this.tableLayoutPanelOpenForOvertimeRequests.Controls.Add(this.buttonAddOvertimeRequestPeriod, 1, 0);
-			this.tableLayoutPanelOpenForOvertimeRequests.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanelOpenForOvertimeRequests.Location = new System.Drawing.Point(3, 325);
-			this.tableLayoutPanelOpenForOvertimeRequests.Name = "tableLayoutPanelOpenForOvertimeRequests";
-			this.tableLayoutPanelOpenForOvertimeRequests.RowCount = 1;
-			this.tableLayoutPanelOpenForOvertimeRequests.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanelOpenForOvertimeRequests.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
-			this.tableLayoutPanelOpenForOvertimeRequests.Size = new System.Drawing.Size(959, 34);
-			this.tableLayoutPanelOpenForOvertimeRequests.TabIndex = 0;
-			// 
-			// tableLayoutPanelOvertimeMaximumSetting
-			// 
-			this.tableLayoutPanelOvertimeMaximumSetting.ColumnCount = 5;
-			this.tableLayoutPanelOvertimeMaximumSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle() { SizeType = SizeType.AutoSize });
-			this.tableLayoutPanelOvertimeMaximumSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanelOvertimeMaximumSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanelOvertimeMaximumSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanelOvertimeMaximumSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanelOvertimeMaximumSetting.Controls.Add(this.checkBoxAdvOvertimeMaximumEnabled, 0, 0);
-			this.tableLayoutPanelOvertimeMaximumSetting.Controls.Add(this.timeSpanTextBoxOvertimeRequestMaximumTime, 1, 0);
-			this.tableLayoutPanelOvertimeMaximumSetting.Controls.Add(this.lblOvertimeRequestMaximumTimeHandleType, 2, 0);
-			this.tableLayoutPanelOvertimeMaximumSetting.Controls.Add(this.comboBoxOvertimeRequestMaximumTimeHandleType, 3, 0);
-			this.tableLayoutPanelOvertimeMaximumSetting.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanelOvertimeMaximumSetting.Location = new System.Drawing.Point(3, 103);
-			this.tableLayoutPanelOvertimeMaximumSetting.Name = "tableLayoutPanelOvertimeMaximumSetting";
-			this.tableLayoutPanelOvertimeMaximumSetting.RowCount = 1;
-			this.tableLayoutPanelOvertimeMaximumSetting.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanelOvertimeMaximumSetting.Size = new System.Drawing.Size(959, 34);
-			this.tableLayoutPanelOvertimeMaximumSetting.TabIndex = 0;
-			//
-			//tableLayoutPanelOvertimeStaffingCheckMethodSetting
-			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.ColumnCount = 3;
-			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle() { SizeType = SizeType.AutoSize });
-			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.Controls.Add(this.labelOvertimeStaffingCheckMethodSetting, 0, 0);
-			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.Controls.Add(this.comboBoxOvertimeRequestStaffingCheckMethod, 1, 0);
-			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.Location = new System.Drawing.Point(3, 103);
-			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.Name = "tableLayoutPanelOvertimeStaffingCheckMethodSetting";
-			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.RowCount = 1;
-			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.Size = new System.Drawing.Size(959, 34);
-			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.TabIndex = 0;
-			//
-			// tableLayoutPanelOvertimeProbablityAndPrimarySkill
-			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.ColumnCount = 3;
-			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(){ Width = 50 });
-			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(){ Width = 50 });
-			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.Controls.Add(this.checkBoxAdvOvertimeProbability, 0, 0);
-			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.Controls.Add(this.checkBoxUsePrimarySkill, 1, 0);
-			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.Location = new System.Drawing.Point(3, 103);
-			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.Name = "tableLayoutPanelOvertimeProbablityAndPrimarySkill";
-			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.RowCount = 1;
-			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.Size = new System.Drawing.Size(959, 34);
-			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.TabIndex = 0;
-			//
-			//
-			// 
-			// tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting
-			// 
-			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ColumnCount = 7;
-			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle() { SizeType = SizeType.AutoSize });
-			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Controls.Add(this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled, 0, 0);
-			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Controls.Add(this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime, 1, 0);
-			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Controls.Add(this.lblOvertimeRequestMinimumRestTimeThreshold, 2, 0);
-			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Controls.Add(this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold, 3, 0);
-			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Controls.Add(this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType, 4, 0);
-			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Controls.Add(this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType, 5, 0);
-			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Location = new System.Drawing.Point(3, 103);
-			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Name = "tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting";
-			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.RowCount = 1;
-			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Size = new System.Drawing.Size(959, 34);
-			// 
-			// timeSpanTextBoxOvertimeRequestMaximumTime
-			// 
-			this.timeSpanTextBoxOvertimeRequestMaximumTime.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Center;
-			this.timeSpanTextBoxOvertimeRequestMaximumTime.AllowNegativeValues = false;
-			this.timeSpanTextBoxOvertimeRequestMaximumTime.DefaultInterpretAsMinutes = false;
-			this.timeSpanTextBoxOvertimeRequestMaximumTime.Location = new System.Drawing.Point(183, 4);
-			this.timeSpanTextBoxOvertimeRequestMaximumTime.Margin = new System.Windows.Forms.Padding(0, 4, 0, 0);
-			this.timeSpanTextBoxOvertimeRequestMaximumTime.MaximumValue = System.TimeSpan.Parse("10.00:00:00");
-			this.timeSpanTextBoxOvertimeRequestMaximumTime.Name = "timeSpanTextBoxOvertimeRequestMaximumTime";
-			this.timeSpanTextBoxOvertimeRequestMaximumTime.Size = new System.Drawing.Size(80, 25);
-			this.timeSpanTextBoxOvertimeRequestMaximumTime.TabIndex = 2;
-			this.timeSpanTextBoxOvertimeRequestMaximumTime.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
-			this.timeSpanTextBoxOvertimeRequestMaximumTime.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBoxOvertimeRequestMaximumTime.TimeSpanBoxWidth = 60;
-			this.timeSpanTextBoxOvertimeRequestMaximumTime.Leave += timeSpanTextBoxOvertimeRequestMaximumTime_Leave;
-			// 
-			// timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime
-			// 
-			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Center;
-			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.AllowNegativeValues = false;
-			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.DefaultInterpretAsMinutes = false;
-			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.Location = new System.Drawing.Point(183, 4);
-			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.Margin = new System.Windows.Forms.Padding(0, 4, 0, 0);
-			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.MaximumValue = System.TimeSpan.Parse("10.00:00:00");
-			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.Name = "timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime";
-			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.Size = new System.Drawing.Size(80, 25);
-			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.TabIndex = 5;
-			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
-			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.TimeSpanBoxWidth = 60;
-			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.Leave += timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime_Leave;
-			// 
-			// timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold
-			// 
-			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Center;
-			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.AllowNegativeValues = false;
-			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.DefaultInterpretAsMinutes = false;
-			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.Location = new System.Drawing.Point(183, 4);
-			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.Margin = new System.Windows.Forms.Padding(0, 4, 0, 0);
-			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.MaximumValue = System.TimeSpan.Parse("10.00:00:00");
-			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.Name = "timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold";
-			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.Size = new System.Drawing.Size(80, 25);
-			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.TabIndex = 6;
-			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
-			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.TimeSpanBoxWidth = 60;
-			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.Leave += timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold_Leave;
-			// 
-			// lblOvertimeRequestMaximumTimeHandleType
-			// 
-			this.lblOvertimeRequestMaximumTimeHandleType.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblOvertimeRequestMaximumTimeHandleType.AutoSize = true;
-			this.lblOvertimeRequestMaximumTimeHandleType.BackColor = System.Drawing.Color.Transparent;
-			this.lblOvertimeRequestMaximumTimeHandleType.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lblOvertimeRequestMaximumTimeHandleType.ForeColor = System.Drawing.Color.Black;
-			this.lblOvertimeRequestMaximumTimeHandleType.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.lblOvertimeRequestMaximumTimeHandleType.Location = new System.Drawing.Point(266, 8);
-			this.lblOvertimeRequestMaximumTimeHandleType.Name = "lblOvertimeRequestMaximumTimeHandleType";
-			this.lblOvertimeRequestMaximumTimeHandleType.Size = new System.Drawing.Size(273, 17);
-			this.lblOvertimeRequestMaximumTimeHandleType.TabIndex = 0;
-			this.lblOvertimeRequestMaximumTimeHandleType.Text = "xxOvertimeRequestMaximumTimeHandleType";
-			this.lblOvertimeRequestMaximumTimeHandleType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// lblOvertimeRequestMinimumRestTimeThreshold
-			// 
-			this.lblOvertimeRequestMinimumRestTimeThreshold.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblOvertimeRequestMinimumRestTimeThreshold.AutoSize = true;
-			this.lblOvertimeRequestMinimumRestTimeThreshold.BackColor = System.Drawing.Color.Transparent;
-			this.lblOvertimeRequestMinimumRestTimeThreshold.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lblOvertimeRequestMinimumRestTimeThreshold.ForeColor = System.Drawing.Color.Black;
-			this.lblOvertimeRequestMinimumRestTimeThreshold.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.lblOvertimeRequestMinimumRestTimeThreshold.Location = new System.Drawing.Point(266, 8);
-			this.lblOvertimeRequestMinimumRestTimeThreshold.Name = "lblOvertimeRequestMinimumRestTimeThreshold";
-			this.lblOvertimeRequestMinimumRestTimeThreshold.Size = new System.Drawing.Size(273, 17);
-			this.lblOvertimeRequestMinimumRestTimeThreshold.TabIndex = 0;
-			this.lblOvertimeRequestMinimumRestTimeThreshold.Text = "xxOvertimeRequestMinimumRestTimeThreshold";
-			this.lblOvertimeRequestMinimumRestTimeThreshold.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// lblOvertimeRequestMaximumContinuousWorkTimeHandleType
-			// 
-			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.AutoSize = true;
-			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.BackColor = System.Drawing.Color.Transparent;
-			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.ForeColor = System.Drawing.Color.Black;
-			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.Location = new System.Drawing.Point(266, 8);
-			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.Name = "lblOvertimeRequestMaximumContinuousWorkTimeHandleType";
-			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.Size = new System.Drawing.Size(273, 17);
-			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.TabIndex = 0;
-			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.Text = "xxOvertimeRequestMaximumTimeHandleType";
-			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// comboBoxOvertimeRequestMaximumTimeHandleType
-			// 
-			this.comboBoxOvertimeRequestMaximumTimeHandleType.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.comboBoxOvertimeRequestMaximumTimeHandleType.BackColor = System.Drawing.Color.White;
-			this.comboBoxOvertimeRequestMaximumTimeHandleType.BeforeTouchSize = new System.Drawing.Size(150, 23);
-			this.comboBoxOvertimeRequestMaximumTimeHandleType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxOvertimeRequestMaximumTimeHandleType.Location = new System.Drawing.Point(545, 6);
-			this.comboBoxOvertimeRequestMaximumTimeHandleType.Name = "comboBoxOvertimeRequestMaximumTimeHandleType";
-			this.comboBoxOvertimeRequestMaximumTimeHandleType.Size = new System.Drawing.Size(150, 23);
-			this.comboBoxOvertimeRequestMaximumTimeHandleType.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
-			this.comboBoxOvertimeRequestMaximumTimeHandleType.TabIndex = 3;
-			this.comboBoxOvertimeRequestMaximumTimeHandleType.SelectedIndexChanged += ComboBoxOvertimeRequestMaximumTimeHandleType_SelectedIndexChanged;
-			//
-			// comboBoxOvertimeRequestStaffingCheckMethod
-			this.comboBoxOvertimeRequestStaffingCheckMethod.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.comboBoxOvertimeRequestStaffingCheckMethod.BackColor = System.Drawing.Color.White;
-			this.comboBoxOvertimeRequestStaffingCheckMethod.BeforeTouchSize = new System.Drawing.Size(150, 23);
-			this.comboBoxOvertimeRequestStaffingCheckMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxOvertimeRequestStaffingCheckMethod.Location = new System.Drawing.Point(545, 6);
-			this.comboBoxOvertimeRequestStaffingCheckMethod.Name = "comboBoxOvertimeRequestStaffingCheckMethod";
-			this.comboBoxOvertimeRequestStaffingCheckMethod.Size = new System.Drawing.Size(150, 23);
-			this.comboBoxOvertimeRequestStaffingCheckMethod.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
-			this.comboBoxOvertimeRequestStaffingCheckMethod.TabIndex = 3;
-			this.comboBoxOvertimeRequestStaffingCheckMethod.SelectedIndexChanged += ComboBoxOvertimeRequestStaffingCheckMethod_SelectedIndexChanged;
-			//
-			// 
-			// comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType
-			// 
-			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.BackColor = System.Drawing.Color.White;
-			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.BeforeTouchSize = new System.Drawing.Size(150, 23);
-			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.Location = new System.Drawing.Point(545, 6);
-			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.Name = "comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType";
-			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.Size = new System.Drawing.Size(150, 23);
-			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
-			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.TabIndex = 7;
-			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.SelectedIndexChanged += ComboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType_SelectedIndexChanged;
-			// 
-			// buttonDeleteOvertimeRequestPeriod
-			// 
-			this.buttonDeleteOvertimeRequestPeriod.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.buttonDeleteOvertimeRequestPeriod.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonDeleteOvertimeRequestPeriod.BackColor = System.Drawing.Color.White;
-			this.buttonDeleteOvertimeRequestPeriod.BeforeTouchSize = new System.Drawing.Size(28, 28);
-			this.buttonDeleteOvertimeRequestPeriod.ForeColor = System.Drawing.Color.White;
-			this.buttonDeleteOvertimeRequestPeriod.Image = global::Teleopti.Ccc.SmartClientPortal.Shell.Properties.Resources.ccc_temp_DeleteGroup10;
-			this.buttonDeleteOvertimeRequestPeriod.IsBackStageButton = false;
-			this.buttonDeleteOvertimeRequestPeriod.Location = new System.Drawing.Point(924, 4);
-			this.buttonDeleteOvertimeRequestPeriod.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-			this.buttonDeleteOvertimeRequestPeriod.Name = "buttonDeleteOvertimeRequestPeriod";
-			this.buttonDeleteOvertimeRequestPeriod.Size = new System.Drawing.Size(28, 28);
-			this.buttonDeleteOvertimeRequestPeriod.TabIndex = 25;
-			this.buttonDeleteOvertimeRequestPeriod.UseVisualStyle = true;
-			this.buttonDeleteOvertimeRequestPeriod.Click += new System.EventHandler(this.buttonAdvDeleteOvertimeRequestPeriod_Click);
-			// 
-			// labelOpenForOvertimeRequests
-			// 
-			this.labelOpenForOvertimeRequests.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.labelOpenForOvertimeRequests.AutoSize = true;
-			this.labelOpenForOvertimeRequests.BackColor = System.Drawing.Color.Transparent;
-			this.labelOpenForOvertimeRequests.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelOpenForOvertimeRequests.ForeColor = System.Drawing.Color.GhostWhite;
-			this.labelOpenForOvertimeRequests.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.labelOpenForOvertimeRequests.Location = new System.Drawing.Point(3, 0);
-			this.labelOpenForOvertimeRequests.Name = "labelOpenForOvertimeRequests";
-			this.labelOpenForOvertimeRequests.Size = new System.Drawing.Size(358, 36);
-			this.labelOpenForOvertimeRequests.TabIndex = 0;
-			this.labelOpenForOvertimeRequests.Text = "xxOpenForOvertimeRequests";
-			this.labelOpenForOvertimeRequests.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// buttonAddOvertimeRequestPeriod
-			// 
-			this.buttonAddOvertimeRequestPeriod.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.buttonAddOvertimeRequestPeriod.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonAddOvertimeRequestPeriod.BackColor = System.Drawing.Color.White;
-			this.buttonAddOvertimeRequestPeriod.BeforeTouchSize = new System.Drawing.Size(28, 28);
-			this.buttonAddOvertimeRequestPeriod.Font = new System.Drawing.Font("Tahoma", 8F);
-			this.buttonAddOvertimeRequestPeriod.ForeColor = System.Drawing.Color.White;
-			this.buttonAddOvertimeRequestPeriod.Image = global::Teleopti.Ccc.SmartClientPortal.Shell.Properties.Resources.test_add2;
-			this.buttonAddOvertimeRequestPeriod.IsBackStageButton = false;
-			this.buttonAddOvertimeRequestPeriod.Location = new System.Drawing.Point(889, 4);
-			this.buttonAddOvertimeRequestPeriod.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-			this.buttonAddOvertimeRequestPeriod.Name = "buttonAddOvertimeRequestPeriod";
-			this.buttonAddOvertimeRequestPeriod.Size = new System.Drawing.Size(28, 28);
-			this.buttonAddOvertimeRequestPeriod.TabIndex = 24;
-			this.buttonAddOvertimeRequestPeriod.UseVisualStyle = true;
-			this.buttonAddOvertimeRequestPeriod.UseVisualStyleBackColor = false;
-			this.buttonAddOvertimeRequestPeriod.Click += new System.EventHandler(this.buttonAddOvertimeRequestPeriod_Click);
 			// 
 			// gridControlAbsenceRequestOpenPeriods
 			// 
@@ -2205,20 +1927,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			gridBaseStyle8.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
 			gridBaseStyle8.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
 			this.gridControlAbsenceRequestOpenPeriods.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
-			gridBaseStyle5,
-			gridBaseStyle6,
-			gridBaseStyle7,
-			gridBaseStyle8});
+            gridBaseStyle5,
+            gridBaseStyle6,
+            gridBaseStyle7,
+            gridBaseStyle8});
 			this.gridControlAbsenceRequestOpenPeriods.ColCount = 11;
 			this.gridControlAbsenceRequestOpenPeriods.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
-			new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
+            new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
 			this.gridControlAbsenceRequestOpenPeriods.ContextMenuStrip = this.contextMenuStripOpenPeriodsGrid;
 			this.gridControlAbsenceRequestOpenPeriods.DefaultGridBorderStyle = Syncfusion.Windows.Forms.Grid.GridBorderStyle.Solid;
 			this.gridControlAbsenceRequestOpenPeriods.DefaultRowHeight = 20;
 			this.gridControlAbsenceRequestOpenPeriods.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.gridControlAbsenceRequestOpenPeriods.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2007;
 			this.gridControlAbsenceRequestOpenPeriods.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Metro;
-			this.gridControlAbsenceRequestOpenPeriods.Location = new System.Drawing.Point(3, 355);
+			this.gridControlAbsenceRequestOpenPeriods.Location = new System.Drawing.Point(3, 413);
 			this.gridControlAbsenceRequestOpenPeriods.Name = "gridControlAbsenceRequestOpenPeriods";
 			this.gridControlAbsenceRequestOpenPeriods.NumberedColHeaders = false;
 			this.gridControlAbsenceRequestOpenPeriods.NumberedRowHeaders = false;
@@ -2230,166 +1952,67 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.gridControlAbsenceRequestOpenPeriods.Properties.MarkRowHeader = false;
 			this.gridControlAbsenceRequestOpenPeriods.RowCount = 0;
 			this.gridControlAbsenceRequestOpenPeriods.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
-			new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 29)});
+            new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 29)});
 			this.gridControlAbsenceRequestOpenPeriods.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
-			this.gridControlAbsenceRequestOpenPeriods.Size = new System.Drawing.Size(959, 115);
+			this.gridControlAbsenceRequestOpenPeriods.Size = new System.Drawing.Size(959, 144);
 			this.gridControlAbsenceRequestOpenPeriods.SmartSizeBox = false;
 			this.gridControlAbsenceRequestOpenPeriods.TabIndex = 26;
 			this.gridControlAbsenceRequestOpenPeriods.Text = "gridControl1";
 			this.gridControlAbsenceRequestOpenPeriods.ThemesEnabled = true;
 			this.gridControlAbsenceRequestOpenPeriods.UseRightToLeftCompatibleTextBox = true;
 			this.gridControlAbsenceRequestOpenPeriods.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gridControlAbsenceRequestOpenPeriods_MouseDown);
-
-			// 
-			// gridControlOvertimeRequestOpenPeriods
-			// 
-			this.gridControlOvertimeRequestOpenPeriods.AlphaBlendSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(94)))), ((int)(((byte)(171)))), ((int)(((byte)(222)))));
-
-			this.gridControlOvertimeRequestOpenPeriods.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
-			gridBaseStyle5,
-			gridBaseStyle6,
-			gridBaseStyle7,
-			gridBaseStyle8});
-			this.gridControlOvertimeRequestOpenPeriods.ColCount = 6;
-			this.gridControlOvertimeRequestOpenPeriods.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
-			new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
-			this.gridControlOvertimeRequestOpenPeriods.ContextMenuStrip = this.contextMenuStripOvertimeRequestOpenPeriodsGrid;
-			this.gridControlOvertimeRequestOpenPeriods.DefaultGridBorderStyle = Syncfusion.Windows.Forms.Grid.GridBorderStyle.Solid;
-			this.gridControlOvertimeRequestOpenPeriods.DefaultRowHeight = 20;
-			this.gridControlOvertimeRequestOpenPeriods.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.gridControlOvertimeRequestOpenPeriods.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2007;
-			this.gridControlOvertimeRequestOpenPeriods.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Metro;
-			this.gridControlOvertimeRequestOpenPeriods.Location = new System.Drawing.Point(3, 355);
-			this.gridControlOvertimeRequestOpenPeriods.Name = "gridControlOvertimeRequestOpenPeriods";
-			this.gridControlOvertimeRequestOpenPeriods.NumberedColHeaders = false;
-			this.gridControlOvertimeRequestOpenPeriods.NumberedRowHeaders = false;
-			this.gridControlOvertimeRequestOpenPeriods.Office2007ScrollBars = true;
-			this.gridControlOvertimeRequestOpenPeriods.Properties.BackgroundColor = System.Drawing.SystemColors.Window;
-			this.gridControlOvertimeRequestOpenPeriods.Properties.ForceImmediateRepaint = false;
-			this.gridControlOvertimeRequestOpenPeriods.Properties.GridLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(212)))), ((int)(((byte)(212)))));
-			this.gridControlOvertimeRequestOpenPeriods.Properties.MarkColHeader = false;
-			this.gridControlOvertimeRequestOpenPeriods.Properties.MarkRowHeader = false;
-			this.gridControlOvertimeRequestOpenPeriods.RowCount = 0;
-			this.gridControlOvertimeRequestOpenPeriods.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
-			new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 29)});
-			this.gridControlOvertimeRequestOpenPeriods.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
-			this.gridControlOvertimeRequestOpenPeriods.Size = new System.Drawing.Size(959, 52);
-			this.gridControlOvertimeRequestOpenPeriods.SmartSizeBox = false;
-			this.gridControlOvertimeRequestOpenPeriods.TabIndex = 26;
-			this.gridControlOvertimeRequestOpenPeriods.Text = "gridControl1";
-			this.gridControlOvertimeRequestOpenPeriods.ThemesEnabled = true;
-			this.gridControlOvertimeRequestOpenPeriods.UseRightToLeftCompatibleTextBox = true;
-			this.gridControlOvertimeRequestOpenPeriods.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gridControlOvertimeRequestOpenPeriods_MouseDown);
-
 			// 
 			// contextMenuStripOpenPeriodsGrid
 			// 
 			this.contextMenuStripOpenPeriodsGrid.ImageScalingSize = new System.Drawing.Size(32, 32);
 			this.contextMenuStripOpenPeriodsGrid.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.toolStripMenuItemFromToPeriod,
-			this.toolStripMenuItemRollingPeriod,
-			this.toolStripMenuItemDelete,
-			this.toolStripSeparator2,
-			this.toolStripMenuItemMoveUp,
-			this.toolStripMenuItemMoveDown});
+            this.toolStripMenuItemFromToPeriod,
+            this.toolStripMenuItemRollingPeriod,
+            this.toolStripMenuItemDelete,
+            this.toolStripSeparator2,
+            this.toolStripMenuItemMoveUp,
+            this.toolStripMenuItemMoveDown});
 			this.contextMenuStripOpenPeriodsGrid.Name = "contextMenuStripOpenPeriodsGrid";
 			this.contextMenuStripOpenPeriodsGrid.ShowImageMargin = false;
-			this.contextMenuStripOpenPeriodsGrid.Size = new System.Drawing.Size(278, 190);
-
-			// 
-			// contextMenuStripOvertimeRequestOpenPeriodsGrid
-			// 
-			this.contextMenuStripOvertimeRequestOpenPeriodsGrid.ImageScalingSize = new System.Drawing.Size(32, 32);
-			this.contextMenuStripOvertimeRequestOpenPeriodsGrid.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-				this.toolStripMenuItemOvertimeRequestFromToPeriod,
-				this.toolStripMenuItemOvertimeRequestRollingPeriod,
-				this.toolStripMenuItemOvertimeRequestDelete,
-				this.toolStripSeparator2OvertimeRequest,
-				this.toolStripMenuItemOvertimeRequestMoveUp,
-				this.toolStripMenuItemOvertimeRequestMoveDown});
-			this.contextMenuStripOvertimeRequestOpenPeriodsGrid.Name = "contextMenuStripOvertimeRequestOpenPeriodsGrid";
-			this.contextMenuStripOvertimeRequestOpenPeriodsGrid.ShowImageMargin = false;
-			this.contextMenuStripOvertimeRequestOpenPeriodsGrid.Size = new System.Drawing.Size(278, 190);
-
-			// 
-			// toolStripMenuItemOvertimeRequestFromToPeriod
-			// 
-			this.toolStripMenuItemOvertimeRequestFromToPeriod.Name = "toolStripMenuItemOvertimeRequestFromToPeriod";
-			this.toolStripMenuItemOvertimeRequestFromToPeriod.Size = new System.Drawing.Size(277, 36);
-			this.toolStripMenuItemOvertimeRequestFromToPeriod.Text = "xxAddFromToPeriod";
-			this.toolStripMenuItemOvertimeRequestFromToPeriod.Click += new System.EventHandler(this.toolStripMenuItemOvertimeRequestFromToPeriod_Click);
-			// 
-			// toolStripMenuItemOvertimeRequestRollingPeriod
-			// 
-			this.toolStripMenuItemOvertimeRequestRollingPeriod.Name = "toolStripMenuItemOvertimeRequestRollingPeriod";
-			this.toolStripMenuItemOvertimeRequestRollingPeriod.Size = new System.Drawing.Size(277, 36);
-			this.toolStripMenuItemOvertimeRequestRollingPeriod.Text = "xxAddRollingPeriod";
-			this.toolStripMenuItemOvertimeRequestRollingPeriod.Click += new System.EventHandler(this.toolStripMenuItemOvertimeRequestRollingPeriod_Click);
-			// 
-			// toolStripMenuItemOvertimeRequestDelete
-			// 
-			this.toolStripMenuItemOvertimeRequestDelete.Name = "toolStripMenuItemOvertimeRequestDelete";
-			this.toolStripMenuItemOvertimeRequestDelete.Size = new System.Drawing.Size(277, 36);
-			this.toolStripMenuItemOvertimeRequestDelete.Text = "xxDelete";
-			this.toolStripMenuItemOvertimeRequestDelete.Click += new System.EventHandler(this.toolStripMenuItemOvertimeRequestDelete_Click);
-			// 
-			// toolStripSeparator2OvertimeRequest
-			// 
-			this.toolStripSeparator2OvertimeRequest.Name = "toolStripSeparator2OvertimeRequest";
-			this.toolStripSeparator2OvertimeRequest.Size = new System.Drawing.Size(274, 6);
-			// 
-			// toolStripMenuItemOvertimeRequestMoveUp
-			// 
-			this.toolStripMenuItemOvertimeRequestMoveUp.Name = "toolStripMenuItemOvertimeRequestMoveUp";
-			this.toolStripMenuItemOvertimeRequestMoveUp.Size = new System.Drawing.Size(277, 36);
-			this.toolStripMenuItemOvertimeRequestMoveUp.Text = "xxMoveUp";
-			this.toolStripMenuItemOvertimeRequestMoveUp.Click += new System.EventHandler(this.toolStripMenuItemOvertimeRequestMoveUp_Click);
-			// 
-			// toolStripMenuItemOvertimeRequestMoveDown
-			// 
-			this.toolStripMenuItemOvertimeRequestMoveDown.Name = "toolStripMenuItemOvertimeRequestMoveDown";
-			this.toolStripMenuItemOvertimeRequestMoveDown.Size = new System.Drawing.Size(277, 36);
-			this.toolStripMenuItemOvertimeRequestMoveDown.Text = "xxMoveDown";
-			this.toolStripMenuItemOvertimeRequestMoveDown.Click += new System.EventHandler(this.toolStripMenuItemOvertimeRequestMoveDown_Click);
-
+			this.contextMenuStripOpenPeriodsGrid.Size = new System.Drawing.Size(220, 160);
 			// 
 			// toolStripMenuItemFromToPeriod
 			// 
 			this.toolStripMenuItemFromToPeriod.Name = "toolStripMenuItemFromToPeriod";
-			this.toolStripMenuItemFromToPeriod.Size = new System.Drawing.Size(277, 36);
+			this.toolStripMenuItemFromToPeriod.Size = new System.Drawing.Size(219, 30);
 			this.toolStripMenuItemFromToPeriod.Text = "xxAddFromToPeriod";
 			this.toolStripMenuItemFromToPeriod.Click += new System.EventHandler(this.toolStripMenuItemFromToPeriod_Click);
 			// 
 			// toolStripMenuItemRollingPeriod
 			// 
 			this.toolStripMenuItemRollingPeriod.Name = "toolStripMenuItemRollingPeriod";
-			this.toolStripMenuItemRollingPeriod.Size = new System.Drawing.Size(277, 36);
+			this.toolStripMenuItemRollingPeriod.Size = new System.Drawing.Size(219, 30);
 			this.toolStripMenuItemRollingPeriod.Text = "xxAddRollingPeriod";
 			this.toolStripMenuItemRollingPeriod.Click += new System.EventHandler(this.toolStripMenuItemRollingPeriod_Click);
 			// 
 			// toolStripMenuItemDelete
 			// 
 			this.toolStripMenuItemDelete.Name = "toolStripMenuItemDelete";
-			this.toolStripMenuItemDelete.Size = new System.Drawing.Size(277, 36);
+			this.toolStripMenuItemDelete.Size = new System.Drawing.Size(219, 30);
 			this.toolStripMenuItemDelete.Text = "xxDelete";
 			this.toolStripMenuItemDelete.Click += new System.EventHandler(this.toolStripMenuItemDelete_Click);
 			// 
 			// toolStripSeparator2
 			// 
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(274, 6);
+			this.toolStripSeparator2.Size = new System.Drawing.Size(216, 6);
 			// 
 			// toolStripMenuItemMoveUp
 			// 
 			this.toolStripMenuItemMoveUp.Name = "toolStripMenuItemMoveUp";
-			this.toolStripMenuItemMoveUp.Size = new System.Drawing.Size(277, 36);
+			this.toolStripMenuItemMoveUp.Size = new System.Drawing.Size(219, 30);
 			this.toolStripMenuItemMoveUp.Text = "xxMoveUp";
 			this.toolStripMenuItemMoveUp.Click += new System.EventHandler(this.toolStripMenuItemMoveUp_Click);
 			// 
 			// toolStripMenuItemMoveDown
 			// 
 			this.toolStripMenuItemMoveDown.Name = "toolStripMenuItemMoveDown";
-			this.toolStripMenuItemMoveDown.Size = new System.Drawing.Size(277, 36);
+			this.toolStripMenuItemMoveDown.Size = new System.Drawing.Size(219, 30);
 			this.toolStripMenuItemMoveDown.Text = "xxMoveDown";
 			this.toolStripMenuItemMoveDown.Click += new System.EventHandler(this.toolStripMenuItemMoveDown_Click);
 			// 
@@ -2398,10 +2021,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tabPageAdvShiftTradeRequest.Controls.Add(this.tableLayoutPanelShiftTrade);
 			this.tabPageAdvShiftTradeRequest.Image = null;
 			this.tabPageAdvShiftTradeRequest.ImageSize = new System.Drawing.Size(16, 16);
-			this.tabPageAdvShiftTradeRequest.Location = new System.Drawing.Point(1, 45);
+			this.tabPageAdvShiftTradeRequest.Location = new System.Drawing.Point(1, 37);
 			this.tabPageAdvShiftTradeRequest.Name = "tabPageAdvShiftTradeRequest";
 			this.tabPageAdvShiftTradeRequest.ShowCloseButton = true;
-			this.tabPageAdvShiftTradeRequest.Size = new System.Drawing.Size(965, 410);
+			this.tabPageAdvShiftTradeRequest.Size = new System.Drawing.Size(965, 418);
 			this.tabPageAdvShiftTradeRequest.TabBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(191)))), ((int)(((byte)(234)))));
 			this.tabPageAdvShiftTradeRequest.TabIndex = 3;
 			this.tabPageAdvShiftTradeRequest.Text = "xxShiftTradeRequests";
@@ -2413,20 +2036,24 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelShiftTrade.ColumnCount = 2;
 			this.tableLayoutPanelShiftTrade.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanelShiftTrade.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanelShiftTrade.Controls.Add(this.panel5, 0, 6);
+			this.tableLayoutPanelShiftTrade.Controls.Add(this.panel10, 0, 2);
+			this.tableLayoutPanelShiftTrade.Controls.Add(this.panel5, 0, 8);
 			this.tableLayoutPanelShiftTrade.Controls.Add(this.panelOpenForShiftTrade, 0, 0);
-			this.tableLayoutPanelShiftTrade.Controls.Add(this.panelTolerance, 0, 2);
+			this.tableLayoutPanelShiftTrade.Controls.Add(this.panelTolerance, 0, 4);
 			this.tableLayoutPanelShiftTrade.Controls.Add(this.minMaxIntegerTextBoxControl1, 0, 1);
-			this.tableLayoutPanelShiftTrade.Controls.Add(this.twoListSelectorMatchingSkills, 0, 5);
-			this.tableLayoutPanelShiftTrade.Controls.Add(this.panelMatchingSkills, 0, 4);
-			this.tableLayoutPanelShiftTrade.Controls.Add(this.tableLayoutPanel2, 0, 3);
-			this.tableLayoutPanelShiftTrade.Controls.Add(this.checkBoxAdvAutoGrant, 0, 7);
-			this.tableLayoutPanelShiftTrade.Controls.Add(this.checkBoxAdvAnonymousTrading, 0, 8);
-			this.tableLayoutPanelShiftTrade.Controls.Add(this.checkBoxAdvLockTrading, 0, 9);
+			this.tableLayoutPanelShiftTrade.Controls.Add(this.twoListSelectorMatchingSkills, 0, 7);
+			this.tableLayoutPanelShiftTrade.Controls.Add(this.panelMatchingSkills, 0, 6);
+			this.tableLayoutPanelShiftTrade.Controls.Add(this.tableLayoutPanel2, 0, 5);
+			this.tableLayoutPanelShiftTrade.Controls.Add(this.checkBoxAdvAutoGrant, 0, 9);
+			this.tableLayoutPanelShiftTrade.Controls.Add(this.checkBoxAdvAnonymousTrading, 0, 10);
+			this.tableLayoutPanelShiftTrade.Controls.Add(this.checkBoxAdvLockTrading, 0, 11);
+			this.tableLayoutPanelShiftTrade.Controls.Add(this.tableLayoutPanel3, 0, 3);
 			this.tableLayoutPanelShiftTrade.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelShiftTrade.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanelShiftTrade.Name = "tableLayoutPanelShiftTrade";
-			this.tableLayoutPanelShiftTrade.RowCount = 11;
+			this.tableLayoutPanelShiftTrade.RowCount = 13;
+			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
@@ -2435,12 +2062,35 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 185F));
 			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 39F));
-			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38F));
-			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 63F));
+			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanelShiftTrade.Size = new System.Drawing.Size(965, 410);
+			this.tableLayoutPanelShiftTrade.Size = new System.Drawing.Size(965, 418);
 			this.tableLayoutPanelShiftTrade.TabIndex = 0;
+			// 
+			// panel10
+			// 
+			this.panel10.BackColor = System.Drawing.Color.LightSteelBlue;
+			this.tableLayoutPanelShiftTrade.SetColumnSpan(this.panel10, 2);
+			this.panel10.Controls.Add(this.label1);
+			this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel10.Location = new System.Drawing.Point(3, 83);
+			this.panel10.Name = "panel10";
+			this.panel10.Size = new System.Drawing.Size(1325, 34);
+			this.panel10.TabIndex = 17;
+			// 
+			// label1
+			// 
+			this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.label1.AutoSize = true;
+			this.label1.BackColor = System.Drawing.Color.Transparent;
+			this.label1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label1.ForeColor = System.Drawing.Color.GhostWhite;
+			this.label1.Location = new System.Drawing.Point(3, 8);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(387, 28);
+			this.label1.TabIndex = 0;
+			this.label1.Text = "xxDescriptionOfMaximumWorkdayRule";
 			// 
 			// panel5
 			// 
@@ -2448,9 +2098,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelShiftTrade.SetColumnSpan(this.panel5, 2);
 			this.panel5.Controls.Add(this.label3);
 			this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel5.Location = new System.Drawing.Point(3, 388);
+			this.panel5.Location = new System.Drawing.Point(3, 468);
 			this.panel5.Name = "panel5";
-			this.panel5.Size = new System.Drawing.Size(959, 34);
+			this.panel5.Size = new System.Drawing.Size(1325, 34);
 			this.panel5.TabIndex = 9;
 			// 
 			// label3
@@ -2462,7 +2112,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.label3.ForeColor = System.Drawing.Color.GhostWhite;
 			this.label3.Location = new System.Drawing.Point(3, 8);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(213, 36);
+			this.label3.Size = new System.Drawing.Size(168, 28);
 			this.label3.TabIndex = 0;
 			this.label3.Text = "xxMiscellaneous";
 			// 
@@ -2474,7 +2124,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.panelOpenForShiftTrade.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panelOpenForShiftTrade.Location = new System.Drawing.Point(3, 3);
 			this.panelOpenForShiftTrade.Name = "panelOpenForShiftTrade";
-			this.panelOpenForShiftTrade.Size = new System.Drawing.Size(959, 34);
+			this.panelOpenForShiftTrade.Size = new System.Drawing.Size(1325, 34);
 			this.panelOpenForShiftTrade.TabIndex = 0;
 			// 
 			// labelOpenForShiftTrade
@@ -2486,7 +2136,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.labelOpenForShiftTrade.ForeColor = System.Drawing.Color.GhostWhite;
 			this.labelOpenForShiftTrade.Location = new System.Drawing.Point(3, 8);
 			this.labelOpenForShiftTrade.Name = "labelOpenForShiftTrade";
-			this.labelOpenForShiftTrade.Size = new System.Drawing.Size(382, 36);
+			this.labelOpenForShiftTrade.Size = new System.Drawing.Size(296, 28);
 			this.labelOpenForShiftTrade.TabIndex = 0;
 			this.labelOpenForShiftTrade.Text = "xxOpenForShiftTradeRequests";
 			// 
@@ -2496,9 +2146,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelShiftTrade.SetColumnSpan(this.panelTolerance, 2);
 			this.panelTolerance.Controls.Add(this.labelTolerance);
 			this.panelTolerance.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panelTolerance.Location = new System.Drawing.Point(3, 83);
+			this.panelTolerance.Location = new System.Drawing.Point(3, 163);
 			this.panelTolerance.Name = "panelTolerance";
-			this.panelTolerance.Size = new System.Drawing.Size(959, 34);
+			this.panelTolerance.Size = new System.Drawing.Size(1325, 34);
 			this.panelTolerance.TabIndex = 2;
 			// 
 			// labelTolerance
@@ -2510,7 +2160,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.labelTolerance.ForeColor = System.Drawing.Color.GhostWhite;
 			this.labelTolerance.Location = new System.Drawing.Point(3, 8);
 			this.labelTolerance.Name = "labelTolerance";
-			this.labelTolerance.Size = new System.Drawing.Size(479, 36);
+			this.labelTolerance.Size = new System.Drawing.Size(373, 28);
 			this.labelTolerance.TabIndex = 0;
 			this.labelTolerance.Text = "xxToleranceForMatchingContractTime";
 			// 
@@ -2522,7 +2172,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.minMaxIntegerTextBoxControl1.LabelMinDaysText = "xxDays";
 			this.minMaxIntegerTextBoxControl1.LabelToText = "xxTo";
 			this.minMaxIntegerTextBoxControl1.Location = new System.Drawing.Point(6, 46);
-			this.minMaxIntegerTextBoxControl1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+			this.minMaxIntegerTextBoxControl1.Margin = new System.Windows.Forms.Padding(6);
 			this.minMaxIntegerTextBoxControl1.MaxTextBoxValue = 1;
 			this.minMaxIntegerTextBoxControl1.MinTextBoxValue = 1;
 			this.minMaxIntegerTextBoxControl1.Name = "minMaxIntegerTextBoxControl1";
@@ -2533,15 +2183,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			// twoListSelectorMatchingSkills
 			// 
-			this.twoListSelectorMatchingSkills.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.twoListSelectorMatchingSkills.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.twoListSelectorMatchingSkills.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange;
 			this.tableLayoutPanelShiftTrade.SetColumnSpan(this.twoListSelectorMatchingSkills, 2);
 			this.twoListSelectorMatchingSkills.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.twoListSelectorMatchingSkills.Location = new System.Drawing.Point(3, 203);
+			this.twoListSelectorMatchingSkills.Location = new System.Drawing.Point(3, 283);
 			this.twoListSelectorMatchingSkills.Name = "twoListSelectorMatchingSkills";
 			this.twoListSelectorMatchingSkills.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this.twoListSelectorMatchingSkills.Size = new System.Drawing.Size(959, 179);
+			this.twoListSelectorMatchingSkills.Size = new System.Drawing.Size(1325, 179);
 			this.twoListSelectorMatchingSkills.TabIndex = 11;
 			// 
 			// panelMatchingSkills
@@ -2550,9 +2200,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelShiftTrade.SetColumnSpan(this.panelMatchingSkills, 2);
 			this.panelMatchingSkills.Controls.Add(this.labelMatchingSkills);
 			this.panelMatchingSkills.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panelMatchingSkills.Location = new System.Drawing.Point(3, 163);
+			this.panelMatchingSkills.Location = new System.Drawing.Point(3, 243);
 			this.panelMatchingSkills.Name = "panelMatchingSkills";
-			this.panelMatchingSkills.Size = new System.Drawing.Size(959, 34);
+			this.panelMatchingSkills.Size = new System.Drawing.Size(1325, 34);
 			this.panelMatchingSkills.TabIndex = 6;
 			// 
 			// labelMatchingSkills
@@ -2564,7 +2214,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.labelMatchingSkills.ForeColor = System.Drawing.Color.GhostWhite;
 			this.labelMatchingSkills.Location = new System.Drawing.Point(3, 8);
 			this.labelMatchingSkills.Name = "labelMatchingSkills";
-			this.labelMatchingSkills.Size = new System.Drawing.Size(221, 36);
+			this.labelMatchingSkills.Size = new System.Drawing.Size(173, 28);
 			this.labelMatchingSkills.TabIndex = 0;
 			this.labelMatchingSkills.Text = "xxMatchingSkills";
 			// 
@@ -2577,7 +2227,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanel2.Controls.Add(this.timeSpanTextBox1, 1, 0);
 			this.tableLayoutPanel2.Controls.Add(this.labelTolerancePosNeg, 0, 0);
 			this.tableLayoutPanel2.Controls.Add(this.labelHMm, 2, 0);
-			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 120);
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 200);
 			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 1;
@@ -2591,14 +2241,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.timeSpanTextBox1.AllowNegativeValues = false;
 			this.timeSpanTextBox1.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.timeSpanTextBox1.DefaultInterpretAsMinutes = false;
-			this.timeSpanTextBox1.Location = new System.Drawing.Point(86, 3);
-			this.timeSpanTextBox1.Margin = new System.Windows.Forms.Padding(0, 3, 0, 0);
+			this.timeSpanTextBox1.Location = new System.Drawing.Point(86, 2);
+			this.timeSpanTextBox1.Margin = new System.Windows.Forms.Padding(0, 2, 0, 0);
 			this.timeSpanTextBox1.MaximumValue = System.TimeSpan.Parse("4.03:00:00");
 			this.timeSpanTextBox1.Name = "timeSpanTextBox1";
 			this.timeSpanTextBox1.Size = new System.Drawing.Size(82, 32);
 			this.timeSpanTextBox1.TabIndex = 9;
 			this.timeSpanTextBox1.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
-			this.timeSpanTextBox1.TimeSpanBoxHeight = 39;
+			this.timeSpanTextBox1.TimeSpanBoxHeight = 31;
 			this.timeSpanTextBox1.TimeSpanBoxWidth = 65535;
 			this.timeSpanTextBox1.Leave += new System.EventHandler(this.timeSpanTextBox1_Leave);
 			// 
@@ -2608,7 +2258,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.labelTolerancePosNeg.AutoSize = true;
 			this.labelTolerancePosNeg.Location = new System.Drawing.Point(3, 0);
 			this.labelTolerancePosNeg.Name = "labelTolerancePosNeg";
-			this.labelTolerancePosNeg.Size = new System.Drawing.Size(73, 35);
+			this.labelTolerancePosNeg.Size = new System.Drawing.Size(78, 35);
 			this.labelTolerancePosNeg.TabIndex = 8;
 			this.labelTolerancePosNeg.Text = "xxPosNeg";
 			// 
@@ -2616,10 +2266,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			this.labelHMm.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.labelHMm.AutoSize = true;
-			this.labelHMm.Location = new System.Drawing.Point(168, 1);
+			this.labelHMm.Location = new System.Drawing.Point(168, 5);
 			this.labelHMm.Margin = new System.Windows.Forms.Padding(0);
 			this.labelHMm.Name = "labelHMm";
-			this.labelHMm.Size = new System.Drawing.Size(161, 32);
+			this.labelHMm.Size = new System.Drawing.Size(120, 25);
 			this.labelHMm.TabIndex = 9;
 			this.labelHMm.Text = "xxHColonMM";
 			// 
@@ -2628,7 +2278,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.checkBoxAdvAutoGrant.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.checkBoxAdvAutoGrant.BeforeTouchSize = new System.Drawing.Size(349, 24);
 			this.checkBoxAdvAutoGrant.ImageCheckBoxSize = new System.Drawing.Size(26, 26);
-			this.checkBoxAdvAutoGrant.Location = new System.Drawing.Point(3, 433);
+			this.checkBoxAdvAutoGrant.Location = new System.Drawing.Point(3, 513);
 			this.checkBoxAdvAutoGrant.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvAutoGrant.Name = "checkBoxAdvAutoGrant";
 			this.checkBoxAdvAutoGrant.Size = new System.Drawing.Size(349, 24);
@@ -2642,7 +2292,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.checkBoxAdvAnonymousTrading.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.checkBoxAdvAnonymousTrading.BeforeTouchSize = new System.Drawing.Size(349, 24);
 			this.checkBoxAdvAnonymousTrading.ImageCheckBoxSize = new System.Drawing.Size(26, 26);
-			this.checkBoxAdvAnonymousTrading.Location = new System.Drawing.Point(3, 472);
+			this.checkBoxAdvAnonymousTrading.Location = new System.Drawing.Point(3, 553);
 			this.checkBoxAdvAnonymousTrading.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvAnonymousTrading.Name = "checkBoxAdvAnonymousTrading";
 			this.checkBoxAdvAnonymousTrading.Size = new System.Drawing.Size(349, 24);
@@ -2656,7 +2306,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.checkBoxAdvLockTrading.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.checkBoxAdvLockTrading.BeforeTouchSize = new System.Drawing.Size(349, 24);
 			this.checkBoxAdvLockTrading.ImageCheckBoxSize = new System.Drawing.Size(26, 26);
-			this.checkBoxAdvLockTrading.Location = new System.Drawing.Point(3, 511);
+			this.checkBoxAdvLockTrading.Location = new System.Drawing.Point(3, 593);
 			this.checkBoxAdvLockTrading.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvLockTrading.Name = "checkBoxAdvLockTrading";
 			this.checkBoxAdvLockTrading.Size = new System.Drawing.Size(349, 24);
@@ -2665,15 +2315,64 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.checkBoxAdvLockTrading.ThemesEnabled = false;
 			this.checkBoxAdvLockTrading.CheckStateChanged += new System.EventHandler(this.checkBoxAdvLockTrading_CheckStateChanged);
 			// 
+			// tableLayoutPanel3
+			// 
+			this.tableLayoutPanel3.ColumnCount = 2;
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel3.Controls.Add(this.daysTbx, 0, 0);
+			this.tableLayoutPanel3.Controls.Add(this.label2, 1, 0);
+			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 123);
+			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+			this.tableLayoutPanel3.RowCount = 1;
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(965, 34);
+			this.tableLayoutPanel3.TabIndex = 20;
+			// 
+			// daysTbx
+			// 
+			this.daysTbx.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.daysTbx.Location = new System.Drawing.Point(3, 3);
+			this.daysTbx.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+			this.daysTbx.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			this.daysTbx.Name = "daysTbx";
+			this.daysTbx.Size = new System.Drawing.Size(94, 31);
+			this.daysTbx.TabIndex = 20;
+			this.daysTbx.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+			// 
+			// label2
+			// 
+			this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(103, 4);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(67, 25);
+			this.label2.TabIndex = 21;
+			this.label2.Text = "xxDays";
+			// 
 			// tabPageAdvETOTRequest
 			// 
 			this.tabPageAdvETOTRequest.Controls.Add(this.tableLayoutPanelETOTRequest);
 			this.tabPageAdvETOTRequest.Image = null;
 			this.tabPageAdvETOTRequest.ImageSize = new System.Drawing.Size(16, 16);
-			this.tabPageAdvETOTRequest.Location = new System.Drawing.Point(1, 45);
+			this.tabPageAdvETOTRequest.Location = new System.Drawing.Point(1, 37);
 			this.tabPageAdvETOTRequest.Name = "tabPageAdvETOTRequest";
 			this.tabPageAdvETOTRequest.ShowCloseButton = true;
-			this.tabPageAdvETOTRequest.Size = new System.Drawing.Size(965, 410);
+			this.tabPageAdvETOTRequest.Size = new System.Drawing.Size(965, 418);
 			this.tabPageAdvETOTRequest.TabBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(191)))), ((int)(((byte)(234)))));
 			this.tabPageAdvETOTRequest.TabIndex = 4;
 			this.tabPageAdvETOTRequest.Text = "xxETOTRequests";
@@ -2691,7 +2390,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelETOTRequest.Controls.Add(this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting, 0, 4);
 			this.tableLayoutPanelETOTRequest.Controls.Add(this.tableLayoutPanelOpenForOvertimeRequests, 0, 5);
 			this.tableLayoutPanelETOTRequest.Controls.Add(this.gridControlOvertimeRequestOpenPeriods, 0, 6);
-
 			this.tableLayoutPanelETOTRequest.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelETOTRequest.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanelETOTRequest.Margin = new System.Windows.Forms.Padding(0);
@@ -2706,7 +2404,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanelETOTRequest.Size = new System.Drawing.Size(965, 410);
+			this.tableLayoutPanelETOTRequest.Size = new System.Drawing.Size(965, 418);
 			this.tableLayoutPanelETOTRequest.TabIndex = 4;
 			// 
 			// panelOvertimeRequestHeaderBasic
@@ -2730,28 +2428,83 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.labelOvertimeRequestBasic.ForeColor = System.Drawing.Color.GhostWhite;
 			this.labelOvertimeRequestBasic.Location = new System.Drawing.Point(3, 8);
 			this.labelOvertimeRequestBasic.Name = "labelOvertimeRequestBasic";
-			this.labelOvertimeRequestBasic.Size = new System.Drawing.Size(104, 36);
+			this.labelOvertimeRequestBasic.Size = new System.Drawing.Size(83, 28);
 			this.labelOvertimeRequestBasic.TabIndex = 0;
 			this.labelOvertimeRequestBasic.Text = "xxBasic";
+			// 
+			// tableLayoutPanelOvertimeStaffingCheckMethodSetting
+			// 
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.ColumnCount = 3;
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.Controls.Add(this.labelOvertimeStaffingCheckMethodSetting, 0, 0);
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.Controls.Add(this.comboBoxOvertimeRequestStaffingCheckMethod, 1, 0);
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.Location = new System.Drawing.Point(3, 43);
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.Name = "tableLayoutPanelOvertimeStaffingCheckMethodSetting";
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.RowCount = 1;
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.Size = new System.Drawing.Size(959, 34);
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.TabIndex = 0;
+			// 
+			// labelOvertimeStaffingCheckMethodSetting
+			// 
+			this.labelOvertimeStaffingCheckMethodSetting.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelOvertimeStaffingCheckMethodSetting.AutoSize = true;
+			this.labelOvertimeStaffingCheckMethodSetting.Location = new System.Drawing.Point(3, 4);
+			this.labelOvertimeStaffingCheckMethodSetting.Name = "labelOvertimeStaffingCheckMethodSetting";
+			this.labelOvertimeStaffingCheckMethodSetting.Size = new System.Drawing.Size(328, 25);
+			this.labelOvertimeStaffingCheckMethodSetting.TabIndex = 1;
+			this.labelOvertimeStaffingCheckMethodSetting.Text = "xxOvertimeStaffingCheckMethodSetting";
+			// 
+			// comboBoxOvertimeRequestStaffingCheckMethod
+			// 
+			this.comboBoxOvertimeRequestStaffingCheckMethod.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.comboBoxOvertimeRequestStaffingCheckMethod.BackColor = System.Drawing.Color.White;
+			this.comboBoxOvertimeRequestStaffingCheckMethod.BeforeTouchSize = new System.Drawing.Size(150, 19);
+			this.comboBoxOvertimeRequestStaffingCheckMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxOvertimeRequestStaffingCheckMethod.Location = new System.Drawing.Point(337, 6);
+			this.comboBoxOvertimeRequestStaffingCheckMethod.Name = "comboBoxOvertimeRequestStaffingCheckMethod";
+			this.comboBoxOvertimeRequestStaffingCheckMethod.Size = new System.Drawing.Size(150, 19);
+			this.comboBoxOvertimeRequestStaffingCheckMethod.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
+			this.comboBoxOvertimeRequestStaffingCheckMethod.TabIndex = 3;
+			// 
+			// tableLayoutPanelOvertimeProbablityAndPrimarySkill
+			// 
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.ColumnCount = 3;
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.Controls.Add(this.checkBoxAdvOvertimeProbability, 0, 0);
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.Controls.Add(this.checkBoxUsePrimarySkill, 1, 0);
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.Location = new System.Drawing.Point(3, 83);
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.Name = "tableLayoutPanelOvertimeProbablityAndPrimarySkill";
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.RowCount = 1;
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.Size = new System.Drawing.Size(959, 34);
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.TabIndex = 0;
 			// 
 			// checkBoxAdvOvertimeProbability
 			// 
 			this.checkBoxAdvOvertimeProbability.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.checkBoxAdvOvertimeProbability.BeforeTouchSize = new System.Drawing.Size(220, 24);
 			this.checkBoxAdvOvertimeProbability.ImageCheckBoxSize = new System.Drawing.Size(26, 26);
-			this.checkBoxAdvOvertimeProbability.Location = new System.Drawing.Point(3, 43);
+			this.checkBoxAdvOvertimeProbability.Location = new System.Drawing.Point(3, 5);
 			this.checkBoxAdvOvertimeProbability.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvOvertimeProbability.Name = "checkBoxAdvOvertimeProbability";
 			this.checkBoxAdvOvertimeProbability.Size = new System.Drawing.Size(220, 24);
 			this.checkBoxAdvOvertimeProbability.TabIndex = 0;
 			this.checkBoxAdvOvertimeProbability.Text = "xxEnableOvertimeProbability";
 			this.checkBoxAdvOvertimeProbability.ThemesEnabled = false;
-			//
+			// 
 			// checkBoxUsePrimarySkill
+			// 
 			this.checkBoxUsePrimarySkill.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.checkBoxUsePrimarySkill.BeforeTouchSize = new System.Drawing.Size(220, 24);
 			this.checkBoxUsePrimarySkill.ImageCheckBoxSize = new System.Drawing.Size(26, 26);
-			this.checkBoxUsePrimarySkill.Location = new System.Drawing.Point(3, 43);
+			this.checkBoxUsePrimarySkill.Location = new System.Drawing.Point(229, 5);
 			this.checkBoxUsePrimarySkill.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxUsePrimarySkill.Name = "checkBoxUsePrimarySkill";
 			this.checkBoxUsePrimarySkill.Size = new System.Drawing.Size(220, 24);
@@ -2759,35 +2512,375 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.checkBoxUsePrimarySkill.Text = "xxUsePrimarySkill";
 			this.checkBoxUsePrimarySkill.ThemesEnabled = false;
 			// 
+			// tableLayoutPanelOvertimeMaximumSetting
+			// 
+			this.tableLayoutPanelOvertimeMaximumSetting.ColumnCount = 5;
+			this.tableLayoutPanelOvertimeMaximumSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelOvertimeMaximumSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelOvertimeMaximumSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelOvertimeMaximumSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelOvertimeMaximumSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelOvertimeMaximumSetting.Controls.Add(this.checkBoxAdvOvertimeMaximumEnabled, 0, 0);
+			this.tableLayoutPanelOvertimeMaximumSetting.Controls.Add(this.timeSpanTextBoxOvertimeRequestMaximumTime, 1, 0);
+			this.tableLayoutPanelOvertimeMaximumSetting.Controls.Add(this.lblOvertimeRequestMaximumTimeHandleType, 2, 0);
+			this.tableLayoutPanelOvertimeMaximumSetting.Controls.Add(this.comboBoxOvertimeRequestMaximumTimeHandleType, 3, 0);
+			this.tableLayoutPanelOvertimeMaximumSetting.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanelOvertimeMaximumSetting.Location = new System.Drawing.Point(3, 123);
+			this.tableLayoutPanelOvertimeMaximumSetting.Name = "tableLayoutPanelOvertimeMaximumSetting";
+			this.tableLayoutPanelOvertimeMaximumSetting.RowCount = 1;
+			this.tableLayoutPanelOvertimeMaximumSetting.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
+			this.tableLayoutPanelOvertimeMaximumSetting.Size = new System.Drawing.Size(959, 34);
+			this.tableLayoutPanelOvertimeMaximumSetting.TabIndex = 0;
+			// 
 			// checkBoxAdvOvertimeMaximumEnabled
 			// 
 			this.checkBoxAdvOvertimeMaximumEnabled.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.checkBoxAdvOvertimeMaximumEnabled.BeforeTouchSize = new System.Drawing.Size(250, 24);
 			this.checkBoxAdvOvertimeMaximumEnabled.ImageCheckBoxSize = new System.Drawing.Size(26, 26);
-			this.checkBoxAdvOvertimeMaximumEnabled.Location = new System.Drawing.Point(3, 73);
+			this.checkBoxAdvOvertimeMaximumEnabled.Location = new System.Drawing.Point(0, 5);
 			this.checkBoxAdvOvertimeMaximumEnabled.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
 			this.checkBoxAdvOvertimeMaximumEnabled.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvOvertimeMaximumEnabled.Name = "checkBoxAdvOvertimeMaximumEnabled";
 			this.checkBoxAdvOvertimeMaximumEnabled.Size = new System.Drawing.Size(250, 24);
-			this.checkBoxAdvOvertimeMaximumEnabled.Text = "xxOvertimeRequestMaximum";
 			this.checkBoxAdvOvertimeMaximumEnabled.TabIndex = 1;
+			this.checkBoxAdvOvertimeMaximumEnabled.Text = "xxOvertimeRequestMaximum";
 			this.checkBoxAdvOvertimeMaximumEnabled.ThemesEnabled = false;
 			this.checkBoxAdvOvertimeMaximumEnabled.CheckStateChanged += new System.EventHandler(this.CheckBoxAdvOvertimeMaximumEnabled_CheckStateChanged);
+			// 
+			// timeSpanTextBoxOvertimeRequestMaximumTime
+			// 
+			this.timeSpanTextBoxOvertimeRequestMaximumTime.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Center;
+			this.timeSpanTextBoxOvertimeRequestMaximumTime.AllowNegativeValues = false;
+			this.timeSpanTextBoxOvertimeRequestMaximumTime.DefaultInterpretAsMinutes = false;
+			this.timeSpanTextBoxOvertimeRequestMaximumTime.Location = new System.Drawing.Point(253, 4);
+			this.timeSpanTextBoxOvertimeRequestMaximumTime.Margin = new System.Windows.Forms.Padding(0, 4, 0, 0);
+			this.timeSpanTextBoxOvertimeRequestMaximumTime.MaximumValue = System.TimeSpan.Parse("10.00:00:00");
+			this.timeSpanTextBoxOvertimeRequestMaximumTime.Name = "timeSpanTextBoxOvertimeRequestMaximumTime";
+			this.timeSpanTextBoxOvertimeRequestMaximumTime.Size = new System.Drawing.Size(720, 30);
+			this.timeSpanTextBoxOvertimeRequestMaximumTime.TabIndex = 2;
+			this.timeSpanTextBoxOvertimeRequestMaximumTime.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
+			this.timeSpanTextBoxOvertimeRequestMaximumTime.TimeSpanBoxHeight = 31;
+			this.timeSpanTextBoxOvertimeRequestMaximumTime.TimeSpanBoxWidth = 796;
+			// 
+			// lblOvertimeRequestMaximumTimeHandleType
+			// 
+			this.lblOvertimeRequestMaximumTimeHandleType.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblOvertimeRequestMaximumTimeHandleType.AutoSize = true;
+			this.lblOvertimeRequestMaximumTimeHandleType.BackColor = System.Drawing.Color.Transparent;
+			this.lblOvertimeRequestMaximumTimeHandleType.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblOvertimeRequestMaximumTimeHandleType.ForeColor = System.Drawing.Color.Black;
+			this.lblOvertimeRequestMaximumTimeHandleType.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.lblOvertimeRequestMaximumTimeHandleType.Location = new System.Drawing.Point(976, 3);
+			this.lblOvertimeRequestMaximumTimeHandleType.Name = "lblOvertimeRequestMaximumTimeHandleType";
+			this.lblOvertimeRequestMaximumTimeHandleType.Size = new System.Drawing.Size(412, 28);
+			this.lblOvertimeRequestMaximumTimeHandleType.TabIndex = 0;
+			this.lblOvertimeRequestMaximumTimeHandleType.Text = "xxOvertimeRequestMaximumTimeHandleType";
+			this.lblOvertimeRequestMaximumTimeHandleType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// comboBoxOvertimeRequestMaximumTimeHandleType
+			// 
+			this.comboBoxOvertimeRequestMaximumTimeHandleType.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.comboBoxOvertimeRequestMaximumTimeHandleType.BackColor = System.Drawing.Color.White;
+			this.comboBoxOvertimeRequestMaximumTimeHandleType.BeforeTouchSize = new System.Drawing.Size(150, 19);
+			this.comboBoxOvertimeRequestMaximumTimeHandleType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxOvertimeRequestMaximumTimeHandleType.Location = new System.Drawing.Point(1394, 6);
+			this.comboBoxOvertimeRequestMaximumTimeHandleType.Name = "comboBoxOvertimeRequestMaximumTimeHandleType";
+			this.comboBoxOvertimeRequestMaximumTimeHandleType.Size = new System.Drawing.Size(150, 19);
+			this.comboBoxOvertimeRequestMaximumTimeHandleType.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
+			this.comboBoxOvertimeRequestMaximumTimeHandleType.TabIndex = 3;
+			// 
+			// tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting
+			// 
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ColumnCount = 7;
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Controls.Add(this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled, 0, 0);
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Controls.Add(this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime, 1, 0);
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Controls.Add(this.lblOvertimeRequestMinimumRestTimeThreshold, 2, 0);
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Controls.Add(this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold, 3, 0);
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Controls.Add(this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType, 4, 0);
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Controls.Add(this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType, 5, 0);
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Location = new System.Drawing.Point(3, 163);
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Name = "tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting";
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.RowCount = 1;
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.Size = new System.Drawing.Size(959, 34);
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.TabIndex = 20;
 			// 
 			// checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled
 			// 
 			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.BeforeTouchSize = new System.Drawing.Size(250, 24);
 			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.ImageCheckBoxSize = new System.Drawing.Size(26, 26);
-			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.Location = new System.Drawing.Point(3, 73);
+			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.Location = new System.Drawing.Point(0, 5);
 			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
 			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.Name = "checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled";
 			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.Size = new System.Drawing.Size(250, 24);
-			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.Text = "xxOvertimeRequestMaximumContinuousWorkTime";
 			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.TabIndex = 4;
+			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.Text = "xxOvertimeRequestMaximumContinuousWorkTime";
 			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.ThemesEnabled = false;
 			this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled.CheckStateChanged += new System.EventHandler(this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled_CheckStateChanged);
+			// 
+			// timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime
+			// 
+			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Center;
+			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.AllowNegativeValues = false;
+			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.DefaultInterpretAsMinutes = false;
+			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.Location = new System.Drawing.Point(253, 4);
+			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.Margin = new System.Windows.Forms.Padding(0, 4, 0, 0);
+			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.MaximumValue = System.TimeSpan.Parse("10.00:00:00");
+			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.Name = "timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime";
+			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.Size = new System.Drawing.Size(720, 30);
+			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.TabIndex = 5;
+			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
+			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.TimeSpanBoxHeight = 31;
+			this.timeSpanTextBoxOvertimeRequestMaximumContinuousWorkTime.TimeSpanBoxWidth = 796;
+			// 
+			// lblOvertimeRequestMinimumRestTimeThreshold
+			// 
+			this.lblOvertimeRequestMinimumRestTimeThreshold.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblOvertimeRequestMinimumRestTimeThreshold.AutoSize = true;
+			this.lblOvertimeRequestMinimumRestTimeThreshold.BackColor = System.Drawing.Color.Transparent;
+			this.lblOvertimeRequestMinimumRestTimeThreshold.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblOvertimeRequestMinimumRestTimeThreshold.ForeColor = System.Drawing.Color.Black;
+			this.lblOvertimeRequestMinimumRestTimeThreshold.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.lblOvertimeRequestMinimumRestTimeThreshold.Location = new System.Drawing.Point(976, 3);
+			this.lblOvertimeRequestMinimumRestTimeThreshold.Name = "lblOvertimeRequestMinimumRestTimeThreshold";
+			this.lblOvertimeRequestMinimumRestTimeThreshold.Size = new System.Drawing.Size(428, 28);
+			this.lblOvertimeRequestMinimumRestTimeThreshold.TabIndex = 0;
+			this.lblOvertimeRequestMinimumRestTimeThreshold.Text = "xxOvertimeRequestMinimumRestTimeThreshold";
+			this.lblOvertimeRequestMinimumRestTimeThreshold.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold
+			// 
+			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.AlignTextBoxText = System.Windows.Forms.HorizontalAlignment.Center;
+			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.AllowNegativeValues = false;
+			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.DefaultInterpretAsMinutes = false;
+			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.Location = new System.Drawing.Point(1407, 4);
+			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.Margin = new System.Windows.Forms.Padding(0, 4, 0, 0);
+			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.MaximumValue = System.TimeSpan.Parse("10.00:00:00");
+			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.Name = "timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold";
+			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.Size = new System.Drawing.Size(720, 30);
+			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.TabIndex = 6;
+			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
+			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.TimeSpanBoxHeight = 31;
+			this.timeSpanTextBoxOvertimeRequestMinimumRestTimeThreshold.TimeSpanBoxWidth = 796;
+			// 
+			// lblOvertimeRequestMaximumContinuousWorkTimeHandleType
+			// 
+			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.AutoSize = true;
+			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.BackColor = System.Drawing.Color.Transparent;
+			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.ForeColor = System.Drawing.Color.Black;
+			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.Location = new System.Drawing.Point(2130, 3);
+			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.Name = "lblOvertimeRequestMaximumContinuousWorkTimeHandleType";
+			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.Size = new System.Drawing.Size(412, 28);
+			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.TabIndex = 0;
+			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.Text = "xxOvertimeRequestMaximumTimeHandleType";
+			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType
+			// 
+			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.BackColor = System.Drawing.Color.White;
+			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.BeforeTouchSize = new System.Drawing.Size(14, 19);
+			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.Location = new System.Drawing.Point(2548, 6);
+			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.Name = "comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType";
+			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.Size = new System.Drawing.Size(14, 19);
+			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
+			this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType.TabIndex = 7;
+			// 
+			// tableLayoutPanelOpenForOvertimeRequests
+			// 
+			this.tableLayoutPanelOpenForOvertimeRequests.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(191)))), ((int)(((byte)(234)))));
+			this.tableLayoutPanelOpenForOvertimeRequests.ColumnCount = 3;
+			this.tableLayoutPanelOpenForOvertimeRequests.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanelOpenForOvertimeRequests.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+			this.tableLayoutPanelOpenForOvertimeRequests.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+			this.tableLayoutPanelOpenForOvertimeRequests.Controls.Add(this.labelOpenForOvertimeRequests, 0, 0);
+			this.tableLayoutPanelOpenForOvertimeRequests.Controls.Add(this.buttonDeleteOvertimeRequestPeriod, 2, 0);
+			this.tableLayoutPanelOpenForOvertimeRequests.Controls.Add(this.buttonAddOvertimeRequestPeriod, 1, 0);
+			this.tableLayoutPanelOpenForOvertimeRequests.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanelOpenForOvertimeRequests.Location = new System.Drawing.Point(3, 203);
+			this.tableLayoutPanelOpenForOvertimeRequests.Name = "tableLayoutPanelOpenForOvertimeRequests";
+			this.tableLayoutPanelOpenForOvertimeRequests.RowCount = 1;
+			this.tableLayoutPanelOpenForOvertimeRequests.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanelOpenForOvertimeRequests.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
+			this.tableLayoutPanelOpenForOvertimeRequests.Size = new System.Drawing.Size(959, 34);
+			this.tableLayoutPanelOpenForOvertimeRequests.TabIndex = 0;
+			// 
+			// labelOpenForOvertimeRequests
+			// 
+			this.labelOpenForOvertimeRequests.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelOpenForOvertimeRequests.AutoSize = true;
+			this.labelOpenForOvertimeRequests.BackColor = System.Drawing.Color.Transparent;
+			this.labelOpenForOvertimeRequests.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelOpenForOvertimeRequests.ForeColor = System.Drawing.Color.GhostWhite;
+			this.labelOpenForOvertimeRequests.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.labelOpenForOvertimeRequests.Location = new System.Drawing.Point(3, 3);
+			this.labelOpenForOvertimeRequests.Name = "labelOpenForOvertimeRequests";
+			this.labelOpenForOvertimeRequests.Size = new System.Drawing.Size(288, 28);
+			this.labelOpenForOvertimeRequests.TabIndex = 0;
+			this.labelOpenForOvertimeRequests.Text = "xxOpenForOvertimeRequests";
+			this.labelOpenForOvertimeRequests.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// buttonDeleteOvertimeRequestPeriod
+			// 
+			this.buttonDeleteOvertimeRequestPeriod.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.buttonDeleteOvertimeRequestPeriod.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonDeleteOvertimeRequestPeriod.BackColor = System.Drawing.Color.White;
+			this.buttonDeleteOvertimeRequestPeriod.BeforeTouchSize = new System.Drawing.Size(28, 28);
+			this.buttonDeleteOvertimeRequestPeriod.ForeColor = System.Drawing.Color.White;
+			this.buttonDeleteOvertimeRequestPeriod.Image = global::Teleopti.Ccc.SmartClientPortal.Shell.Properties.Resources.ccc_temp_DeleteGroup10;
+			this.buttonDeleteOvertimeRequestPeriod.IsBackStageButton = false;
+			this.buttonDeleteOvertimeRequestPeriod.Location = new System.Drawing.Point(924, 3);
+			this.buttonDeleteOvertimeRequestPeriod.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+			this.buttonDeleteOvertimeRequestPeriod.Name = "buttonDeleteOvertimeRequestPeriod";
+			this.buttonDeleteOvertimeRequestPeriod.Size = new System.Drawing.Size(28, 28);
+			this.buttonDeleteOvertimeRequestPeriod.TabIndex = 25;
+			this.buttonDeleteOvertimeRequestPeriod.UseVisualStyle = true;
+			this.buttonDeleteOvertimeRequestPeriod.Click += new System.EventHandler(this.buttonAdvDeleteOvertimeRequestPeriod_Click);
+			// 
+			// buttonAddOvertimeRequestPeriod
+			// 
+			this.buttonAddOvertimeRequestPeriod.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.buttonAddOvertimeRequestPeriod.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonAddOvertimeRequestPeriod.BackColor = System.Drawing.Color.White;
+			this.buttonAddOvertimeRequestPeriod.BeforeTouchSize = new System.Drawing.Size(28, 28);
+			this.buttonAddOvertimeRequestPeriod.Font = new System.Drawing.Font("Tahoma", 8F);
+			this.buttonAddOvertimeRequestPeriod.ForeColor = System.Drawing.Color.White;
+			this.buttonAddOvertimeRequestPeriod.Image = global::Teleopti.Ccc.SmartClientPortal.Shell.Properties.Resources.test_add2;
+			this.buttonAddOvertimeRequestPeriod.IsBackStageButton = false;
+			this.buttonAddOvertimeRequestPeriod.Location = new System.Drawing.Point(889, 3);
+			this.buttonAddOvertimeRequestPeriod.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+			this.buttonAddOvertimeRequestPeriod.Name = "buttonAddOvertimeRequestPeriod";
+			this.buttonAddOvertimeRequestPeriod.Size = new System.Drawing.Size(28, 28);
+			this.buttonAddOvertimeRequestPeriod.TabIndex = 24;
+			this.buttonAddOvertimeRequestPeriod.UseVisualStyle = true;
+			this.buttonAddOvertimeRequestPeriod.UseVisualStyleBackColor = false;
+			this.buttonAddOvertimeRequestPeriod.Click += new System.EventHandler(this.buttonAddOvertimeRequestPeriod_Click);
+			// 
+			// gridControlOvertimeRequestOpenPeriods
+			// 
+			this.gridControlOvertimeRequestOpenPeriods.AlphaBlendSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(94)))), ((int)(((byte)(171)))), ((int)(((byte)(222)))));
+			gridBaseStyle9.Name = "Header";
+			gridBaseStyle9.StyleInfo.Borders.Bottom = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle9.StyleInfo.Borders.Left = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle9.StyleInfo.Borders.Right = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle9.StyleInfo.Borders.Top = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
+			gridBaseStyle9.StyleInfo.CellType = "Header";
+			gridBaseStyle9.StyleInfo.Font.Bold = true;
+			gridBaseStyle9.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
+			gridBaseStyle9.StyleInfo.VerticalAlignment = Syncfusion.Windows.Forms.Grid.GridVerticalAlignment.Middle;
+			gridBaseStyle10.Name = "Standard";
+			gridBaseStyle10.StyleInfo.Font.Facename = "Tahoma";
+			gridBaseStyle10.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
+			gridBaseStyle11.Name = "Column Header";
+			gridBaseStyle11.StyleInfo.BaseStyle = "Header";
+			gridBaseStyle11.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
+			gridBaseStyle12.Name = "Row Header";
+			gridBaseStyle12.StyleInfo.BaseStyle = "Header";
+			gridBaseStyle12.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
+			gridBaseStyle12.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
+			this.gridControlOvertimeRequestOpenPeriods.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
+            gridBaseStyle9,
+            gridBaseStyle10,
+            gridBaseStyle11,
+            gridBaseStyle12});
+			this.gridControlOvertimeRequestOpenPeriods.ColCount = 6;
+			this.gridControlOvertimeRequestOpenPeriods.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
+            new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
+			this.gridControlOvertimeRequestOpenPeriods.ContextMenuStrip = this.contextMenuStripOvertimeRequestOpenPeriodsGrid;
+			this.gridControlOvertimeRequestOpenPeriods.DefaultGridBorderStyle = Syncfusion.Windows.Forms.Grid.GridBorderStyle.Solid;
+			this.gridControlOvertimeRequestOpenPeriods.DefaultRowHeight = 20;
+			this.gridControlOvertimeRequestOpenPeriods.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.gridControlOvertimeRequestOpenPeriods.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2007;
+			this.gridControlOvertimeRequestOpenPeriods.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Metro;
+			this.gridControlOvertimeRequestOpenPeriods.Location = new System.Drawing.Point(3, 243);
+			this.gridControlOvertimeRequestOpenPeriods.Name = "gridControlOvertimeRequestOpenPeriods";
+			this.gridControlOvertimeRequestOpenPeriods.NumberedColHeaders = false;
+			this.gridControlOvertimeRequestOpenPeriods.NumberedRowHeaders = false;
+			this.gridControlOvertimeRequestOpenPeriods.Office2007ScrollBars = true;
+			this.gridControlOvertimeRequestOpenPeriods.Properties.BackgroundColor = System.Drawing.SystemColors.Window;
+			this.gridControlOvertimeRequestOpenPeriods.Properties.ForceImmediateRepaint = false;
+			this.gridControlOvertimeRequestOpenPeriods.Properties.GridLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(212)))), ((int)(((byte)(212)))));
+			this.gridControlOvertimeRequestOpenPeriods.Properties.MarkColHeader = false;
+			this.gridControlOvertimeRequestOpenPeriods.Properties.MarkRowHeader = false;
+			this.gridControlOvertimeRequestOpenPeriods.RowCount = 0;
+			this.gridControlOvertimeRequestOpenPeriods.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
+            new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 29)});
+			this.gridControlOvertimeRequestOpenPeriods.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
+			this.gridControlOvertimeRequestOpenPeriods.Size = new System.Drawing.Size(959, 152);
+			this.gridControlOvertimeRequestOpenPeriods.SmartSizeBox = false;
+			this.gridControlOvertimeRequestOpenPeriods.TabIndex = 26;
+			this.gridControlOvertimeRequestOpenPeriods.Text = "gridControl1";
+			this.gridControlOvertimeRequestOpenPeriods.ThemesEnabled = true;
+			this.gridControlOvertimeRequestOpenPeriods.UseRightToLeftCompatibleTextBox = true;
+			this.gridControlOvertimeRequestOpenPeriods.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gridControlOvertimeRequestOpenPeriods_MouseDown);
+			// 
+			// contextMenuStripOvertimeRequestOpenPeriodsGrid
+			// 
+			this.contextMenuStripOvertimeRequestOpenPeriodsGrid.ImageScalingSize = new System.Drawing.Size(32, 32);
+			this.contextMenuStripOvertimeRequestOpenPeriodsGrid.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemOvertimeRequestFromToPeriod,
+            this.toolStripMenuItemOvertimeRequestRollingPeriod,
+            this.toolStripMenuItemOvertimeRequestDelete,
+            this.toolStripSeparator2OvertimeRequest,
+            this.toolStripMenuItemOvertimeRequestMoveUp,
+            this.toolStripMenuItemOvertimeRequestMoveDown});
+			this.contextMenuStripOvertimeRequestOpenPeriodsGrid.Name = "contextMenuStripOvertimeRequestOpenPeriodsGrid";
+			this.contextMenuStripOvertimeRequestOpenPeriodsGrid.ShowImageMargin = false;
+			this.contextMenuStripOvertimeRequestOpenPeriodsGrid.Size = new System.Drawing.Size(220, 160);
+			// 
+			// toolStripMenuItemOvertimeRequestFromToPeriod
+			// 
+			this.toolStripMenuItemOvertimeRequestFromToPeriod.Name = "toolStripMenuItemOvertimeRequestFromToPeriod";
+			this.toolStripMenuItemOvertimeRequestFromToPeriod.Size = new System.Drawing.Size(219, 30);
+			this.toolStripMenuItemOvertimeRequestFromToPeriod.Text = "xxAddFromToPeriod";
+			this.toolStripMenuItemOvertimeRequestFromToPeriod.Click += new System.EventHandler(this.toolStripMenuItemOvertimeRequestFromToPeriod_Click);
+			// 
+			// toolStripMenuItemOvertimeRequestRollingPeriod
+			// 
+			this.toolStripMenuItemOvertimeRequestRollingPeriod.Name = "toolStripMenuItemOvertimeRequestRollingPeriod";
+			this.toolStripMenuItemOvertimeRequestRollingPeriod.Size = new System.Drawing.Size(219, 30);
+			this.toolStripMenuItemOvertimeRequestRollingPeriod.Text = "xxAddRollingPeriod";
+			this.toolStripMenuItemOvertimeRequestRollingPeriod.Click += new System.EventHandler(this.toolStripMenuItemOvertimeRequestRollingPeriod_Click);
+			// 
+			// toolStripMenuItemOvertimeRequestDelete
+			// 
+			this.toolStripMenuItemOvertimeRequestDelete.Name = "toolStripMenuItemOvertimeRequestDelete";
+			this.toolStripMenuItemOvertimeRequestDelete.Size = new System.Drawing.Size(219, 30);
+			this.toolStripMenuItemOvertimeRequestDelete.Text = "xxDelete";
+			this.toolStripMenuItemOvertimeRequestDelete.Click += new System.EventHandler(this.toolStripMenuItemOvertimeRequestDelete_Click);
+			// 
+			// toolStripSeparator2OvertimeRequest
+			// 
+			this.toolStripSeparator2OvertimeRequest.Name = "toolStripSeparator2OvertimeRequest";
+			this.toolStripSeparator2OvertimeRequest.Size = new System.Drawing.Size(216, 6);
+			// 
+			// toolStripMenuItemOvertimeRequestMoveUp
+			// 
+			this.toolStripMenuItemOvertimeRequestMoveUp.Name = "toolStripMenuItemOvertimeRequestMoveUp";
+			this.toolStripMenuItemOvertimeRequestMoveUp.Size = new System.Drawing.Size(219, 30);
+			this.toolStripMenuItemOvertimeRequestMoveUp.Text = "xxMoveUp";
+			this.toolStripMenuItemOvertimeRequestMoveUp.Click += new System.EventHandler(this.toolStripMenuItemOvertimeRequestMoveUp_Click);
+			// 
+			// toolStripMenuItemOvertimeRequestMoveDown
+			// 
+			this.toolStripMenuItemOvertimeRequestMoveDown.Name = "toolStripMenuItemOvertimeRequestMoveDown";
+			this.toolStripMenuItemOvertimeRequestMoveDown.Size = new System.Drawing.Size(219, 30);
+			this.toolStripMenuItemOvertimeRequestMoveDown.Text = "xxMoveDown";
+			this.toolStripMenuItemOvertimeRequestMoveDown.Click += new System.EventHandler(this.toolStripMenuItemOvertimeRequestMoveDown_Click);
 			// 
 			// toolStripSeparator1
 			// 
@@ -2801,7 +2894,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			// WorkflowControlSetView
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 32F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoScroll = true;
 			this.BackColor = System.Drawing.SystemColors.Window;
@@ -2877,15 +2970,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelAbsenceRequestExpiration.ResumeLayout(false);
 			this.tableLayoutPanelAbsenceRequestExpiration.PerformLayout();
 			this.tableLayoutPanelOpenForAbsenceRequests.ResumeLayout(false);
-			this.tableLayoutPanelOpenForOvertimeRequests.ResumeLayout(false);
 			this.tableLayoutPanelOpenForAbsenceRequests.PerformLayout();
-			this.tableLayoutPanelOpenForOvertimeRequests.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gridControlAbsenceRequestOpenPeriods)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.gridControlOvertimeRequestOpenPeriods)).EndInit();
 			this.contextMenuStripOpenPeriodsGrid.ResumeLayout(false);
-			this.contextMenuStripOvertimeRequestOpenPeriodsGrid.ResumeLayout(false);
 			this.tabPageAdvShiftTradeRequest.ResumeLayout(false);
 			this.tableLayoutPanelShiftTrade.ResumeLayout(false);
+			this.panel10.ResumeLayout(false);
+			this.panel10.PerformLayout();
 			this.panel5.ResumeLayout(false);
 			this.panel5.PerformLayout();
 			this.panelOpenForShiftTrade.ResumeLayout(false);
@@ -2899,16 +2990,33 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvAutoGrant)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvAnonymousTrading)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvLockTrading)).EndInit();
+			this.tableLayoutPanel3.ResumeLayout(false);
+			this.tableLayoutPanel3.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.daysTbx)).EndInit();
 			this.tabPageAdvETOTRequest.ResumeLayout(false);
 			this.tabPageAdvETOTRequest.PerformLayout();
 			this.tableLayoutPanelETOTRequest.ResumeLayout(false);
 			this.tableLayoutPanelETOTRequest.PerformLayout();
 			this.panelOvertimeRequestHeaderBasic.ResumeLayout(false);
 			this.panelOvertimeRequestHeaderBasic.PerformLayout();
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.ResumeLayout(false);
+			this.tableLayoutPanelOvertimeStaffingCheckMethodSetting.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.comboBoxOvertimeRequestStaffingCheckMethod)).EndInit();
+			this.tableLayoutPanelOvertimeProbablityAndPrimarySkill.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeProbability)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxUsePrimarySkill)).EndInit();
+			this.tableLayoutPanelOvertimeMaximumSetting.ResumeLayout(false);
+			this.tableLayoutPanelOvertimeMaximumSetting.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeMaximumEnabled)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.comboBoxOvertimeRequestMaximumTimeHandleType)).EndInit();
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.ResumeLayout(false);
+			this.tableLayoutPanelOvertimeMaximumContinuousWorkTimeSetting.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.comboBoxOvertimeRequestMaximumContinuousWorkTimeHandleType)).EndInit();
+			this.tableLayoutPanelOpenForOvertimeRequests.ResumeLayout(false);
+			this.tableLayoutPanelOpenForOvertimeRequests.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.gridControlOvertimeRequestOpenPeriods)).EndInit();
+			this.contextMenuStripOvertimeRequestOpenPeriodsGrid.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
 			this.ResumeLayout(false);
 
@@ -3071,5 +3179,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled;
 		private Panel panelOvertimeRequestHeaderBasic;
 		private Label labelOvertimeRequestBasic;
+		private Panel panel10;
+		private Label label1;
+		private TableLayoutPanel tableLayoutPanel3;
+		private Label label2;
+		private NumericUpDown daysTbx;
 	}
 }

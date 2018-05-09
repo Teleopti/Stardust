@@ -7,6 +7,7 @@ namespace Teleopti.Support.Tool.Tool
 	{
 		public string ApplicationDatabase;
 		public string AnalyticsDatabase;
+		public string ToggleMode = "ALL";
 	}
 
 	public class FixMyConfigFixer
@@ -46,7 +47,7 @@ namespace Teleopti.Support.Tool.Tool
 				new SetSettingCommand
 				{
 					SearchFor = "$(ToggleMode)",
-					ReplaceWith = "ALL"
+					ReplaceWith = command.ToggleMode
 				}
 			);
 			new ModeDebugRunner()

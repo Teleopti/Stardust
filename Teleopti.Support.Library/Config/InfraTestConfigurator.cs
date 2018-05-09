@@ -7,7 +7,7 @@ namespace Teleopti.Support.Tool.Tool
 	{
 		public string ApplicationDatabase;
 		public string AnalyticsDatabase;
-		public string ToggleMode;
+		public string ToggleMode = "ALL";
 		public string SqlAuthString;
 	}
 
