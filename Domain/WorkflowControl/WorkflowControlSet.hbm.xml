@@ -26,6 +26,10 @@
                   not-null="true"
                   type="string"
                   length="50" />
+			
+				<property name="MaximumConsecutiveWorkingDays"
+                  type="int"
+                  not-null="true" />
 
         <list name="AbsenceRequestOpenPeriods" cascade="all-delete-orphan" inverse="true" lazy="false">
             <key column="Parent" />
@@ -90,7 +94,6 @@
                   column="FairnessType"
                   type="int"
                   not-null="true" />
-
         <set name="MustMatchSkills"
              table="WorkflowControlSetSkills">
             <key column="WorkflowControlSet" foreign-key="FK_WorkflowControlSetSkills_WorkflowControlSet" />
