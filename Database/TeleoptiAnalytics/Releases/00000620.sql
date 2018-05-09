@@ -1,0 +1,1 @@
+delete from mart.etl_maintenance_configuration where configuration_id = 16 and configuration_name = 'DaysToKeepMessagesPurged'
