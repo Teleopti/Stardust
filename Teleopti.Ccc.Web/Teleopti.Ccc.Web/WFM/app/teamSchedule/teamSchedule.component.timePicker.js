@@ -22,13 +22,13 @@
 	function timePickerCtrl($scope, $element, $attrs, $locale, serviceDateFormatHelper) {
 		var ctrl = this;
 
-		ctrl.dateTimeObj = (typeof ctrl.ngModel === 'string') && serviceDateFormatHelper.getDateTime(ctrl.ngModel) === ctrl.ngModel
-			? moment('1900-01-01 ' + serviceDateFormatHelper.getTimeOnly(ctrl.ngModel)).toDate()
-			: undefined;
+		ctrl.dateTimeObj = typeof (ctrl.ngModel) === 'string' ?
+			moment('1900-01-01 ' + serviceDateFormatHelper.getTimeOnly(moment.tz(ctrl.ngModel, 'UTC'))).toDate() : undefined;
+
 		var meridianInfo = getMeridiemInfoFromMoment($locale);
 		ctrl.showMeridian = meridianInfo.showMeridian;
 		ctrl.meridians = ctrl.showMeridian ? [meridianInfo.am, meridianInfo.pm] : [];
-		
+
 
 		ctrl.$onChanges = function () {
 			ctrl.onTimeChange();
@@ -57,7 +57,7 @@
 			if (!dateObj)
 				return null;
 			var time = serviceDateFormatHelper.getTimeOnly(dateObj);
-			return  serviceDateFormatHelper.getDateOnly(ctrl.date) + ' ' + time;
+			return serviceDateFormatHelper.getDateOnly(ctrl.date) + ' ' + time;
 		}
 
 		function getMeridiemInfoFromMoment($locale) {

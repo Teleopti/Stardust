@@ -1,4 +1,5 @@
-﻿(function () {
+﻿
+(function () {
 	'use strict';
 
 	angular.module('wfm.teamSchedule').directive('addAbsence', ['serviceDateFormatHelper', addAbsenceDirective]);
@@ -92,8 +93,21 @@
 		};
 
 		vm.isAbsenceTimeValid = function () {
-			return (moment.tz(vm.timeRange.endTime, vm.getCurrentTimezone()).isAfter(moment.tz(vm.timeRange.startTime, vm.getCurrentTimezone())));
+			var currentTimezone = vm.getCurrentTimezone();
+			var timeRangeInCurrentTimezone = getTimeRangeInCurrentTimezone();
+			var isStartTimeValid = serviceDateFormatHelper.getDateTime(timeRangeInCurrentTimezone.startTime) === vm.timeRange.startTime;
+			var isEndTimeValid = serviceDateFormatHelper.getDateTime(timeRangeInCurrentTimezone.endTime) === vm.timeRange.endTime;
+
+			return isStartTimeValid
+				&& isEndTimeValid
+				&& vm.isEndTimeGreaterThanStartTime();
 		};
+
+		vm.isEndTimeGreaterThanStartTime = function () {
+			var timeRangeInCurrentTimezone = getTimeRangeInCurrentTimezone();
+			return timeRangeInCurrentTimezone.endTime.isAfter(timeRangeInCurrentTimezone.startTime);
+		}
+
 		vm.isAbsenceDateValid = function () {
 			return moment(vm.timeRange.endTime).isSameOrAfter(moment(vm.timeRange.startTime), 'day');
 		};
@@ -108,6 +122,14 @@
 			}
 			return;
 		};
+
+		function getTimeRangeInCurrentTimezone() {
+			var currentTimezone = vm.getCurrentTimezone();
+			return {
+				startTime: moment.tz(vm.timeRange.startTime, currentTimezone),
+				endTime: moment.tz(vm.timeRange.endTime, currentTimezone)
+			};
+		}
 
 		function getDefaultAbsenceStartTime() {
 			var curDateMoment = moment(vm.selectedDate());
