@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { AbstractControl } from '@angular/forms/src/model';
 import { Subject } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 import { NavigationService } from '../../services';
 import { FormControlWithInitial } from '../shared';
 import { DuplicateIdentityLogonValidator } from './duplicate-identity-logon.validator';
@@ -48,7 +48,7 @@ export class IdentityLogonPageComponent implements OnDestroy, OnInit {
 	});
 
 	ngOnInit() {
-		this.identityLogonPageService.people$.pipe(takeUntil(this.componentDestroyed)).subscribe({
+		this.identityLogonPageService.people$.takeUntil(this.componentDestroyed).subscribe({
 			next: (people: PeopleWithLogon) => {
 				if (people.length === 0) return this.nav.navToSearch();
 				this.buildForm(people);

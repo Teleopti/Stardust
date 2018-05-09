@@ -1,8 +1,6 @@
-
-import {takeUntil} from 'rxjs/operators';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
-
+import 'rxjs/add/operator/takeUntil';
 import { NavigationService, WorkspaceService } from '../../services';
 import { Person, Role } from '../../types';
 import { GrantPageService } from './grant-page.service';
@@ -31,7 +29,7 @@ export class GrantPageComponent implements OnInit, OnDestroy {
 				this.roles = roles;
 			}
 		});
-		this.workspaceService.people$.pipe(takeUntil(this.componentDestroyed)).subscribe({
+		this.workspaceService.people$.takeUntil(this.componentDestroyed).subscribe({
 			next: (people: Person[]) => {
 				if (people.length === 0) return this.nav.navToSearch();
 				this.people = people;

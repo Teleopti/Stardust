@@ -11,8 +11,5 @@
 		"lib": ["es2017", "dom"]
 	},
 	"include": ["app", "src", "e2e"],
-	"exclude": ["node_modules", "dist"],
-	"angularCompilerOptions": {
-		"preserveWhitespaces": false
-	}
+	"exclude": ["node_modules", "dist"]
 }
