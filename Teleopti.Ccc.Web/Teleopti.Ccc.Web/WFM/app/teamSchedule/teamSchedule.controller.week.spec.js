@@ -77,6 +77,7 @@
 		}
 
 		function setUpFakeStateParams() {
+			moment.locale('en');
 			return {
 				selectedDate: new Date('2018-02-02'),
 				keyword: 'search',
