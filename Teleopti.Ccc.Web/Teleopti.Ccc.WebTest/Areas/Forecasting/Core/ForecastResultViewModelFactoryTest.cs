@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.CSharp.RuntimeBinder;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -78,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			result.WorkloadId.Should().Be.EqualTo(_workload.Id.Value);
 
 			var firstDay = result.ForecastDays.First();
-			firstDay.Campaign.Should().Be.EqualTo(-1);
+			firstDay.HasCampaign.Should().Be.True();
 		}
 
 		[Test]
@@ -92,7 +91,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			result.WorkloadId.Should().Be.EqualTo(_workload.Id.Value);
 
 			var firstDay = result.ForecastDays.First();
-			firstDay.Campaign.Should().Be.EqualTo(-1);
+			firstDay.HasCampaign.Should().Be.True();
 		}
 
 		[Test]
@@ -106,7 +105,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			result.WorkloadId.Should().Be.EqualTo(_workload.Id.Value);
 
 			var firstDay = result.ForecastDays.First();
-			firstDay.Override.Should().Be.EqualTo(-1);
+			firstDay.HasOverride.Should().Be.True();
+			firstDay.HasCampaign.Should().Be.False();
 		}
 
 		[Test]
@@ -120,7 +120,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			result.WorkloadId.Should().Be.EqualTo(_workload.Id.Value);
 
 			var firstDay = result.ForecastDays.First();
-			firstDay.Override.Should().Be.EqualTo(-1);
+			firstDay.HasOverride.Should().Be.True();
+			firstDay.HasCampaign.Should().Be.False();
 		}
 
 		[Test]
@@ -134,7 +135,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			result.WorkloadId.Should().Be.EqualTo(_workload.Id.Value);
 
 			var firstDay = result.ForecastDays.First();
-			firstDay.Override.Should().Be.EqualTo(-1);
+			firstDay.HasOverride.Should().Be.True();
+			firstDay.HasCampaign.Should().Be.False();
 		}
 
 		[Test]
@@ -149,9 +151,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			result.WorkloadId.Should().Be.EqualTo(_workload.Id.Value);
 
 			var firstDay = result.ForecastDays.First();
-			firstDay.CampaignAndOverride.Should().Be.EqualTo(-1);
-			firstDay.Override.Should().Be.EqualTo(0);
-			firstDay.Campaign.Should().Be.EqualTo(0);
+			firstDay.HasOverride.Should().Be.True();
+			firstDay.HasCampaign.Should().Be.True();
 		}
 
 		[Test]
@@ -163,9 +164,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			var result = target.Create(_workload.Id.Value, _futurePeriod, _scenario);
 
 			var firstDay = result.ForecastDays.First();
-			firstDay.CampaignAndOverride.Should().Be.EqualTo(-1);
-			firstDay.Campaign.Should().Be.EqualTo(0);
-			firstDay.Override.Should().Be.EqualTo(0);
+			firstDay.HasOverride.Should().Be.True();
+			firstDay.HasCampaign.Should().Be.True();
 		}
 
 		[Test]
@@ -177,9 +177,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			var result = target.Create(_workload.Id.Value, _futurePeriod, _scenario);
 
 			var firstDay = result.ForecastDays.First();
-			firstDay.CampaignAndOverride.Should().Be.EqualTo(-1);
-			firstDay.Campaign.Should().Be.EqualTo(0);
-			firstDay.Override.Should().Be.EqualTo(0);
+			firstDay.HasOverride.Should().Be.True();
+			firstDay.HasCampaign.Should().Be.True();
 		}
 
 		[Test]
@@ -191,9 +190,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 
 			var result = target.Create(_workload.Id.Value, _futurePeriod, _scenario);
 			var firstDay = result.ForecastDays.First();
-			firstDay.CampaignAndOverride.Should().Be.EqualTo(-1);
-			firstDay.Override.Should().Be.EqualTo(0);
-			firstDay.Campaign.Should().Be.EqualTo(0);
+			firstDay.HasOverride.Should().Be.True();
+			firstDay.HasCampaign.Should().Be.True();
 		}
 
 		[Test]
@@ -204,9 +202,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			var target = new ForecastResultViewModelFactory(_workloadRepository, _skillDayRepository, _futureData);
 			var result = target.Create(_workload.Id.Value, _futurePeriod, _scenario);
 			var firstDay = result.ForecastDays.First();
-			firstDay.CampaignAndOverride.Should().Be.EqualTo(-1);
-			firstDay.Override.Should().Be.EqualTo(0);
-			firstDay.Campaign.Should().Be.EqualTo(0);
+			firstDay.HasOverride.Should().Be.True();
+			firstDay.HasCampaign.Should().Be.True();
 		}
 
 		private void stubForecastDataFor2Days(Task task, Percent campaignTasks, double? overrideTasks,

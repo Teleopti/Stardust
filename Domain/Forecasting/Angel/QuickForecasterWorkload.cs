@@ -79,25 +79,17 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 
 				if (hasCampaign(currentWorkLoadDay) && hasOverride(currentWorkLoadDay))
 				{
-					model.CampaignAndOverride = -1;
-					model.TotalTasks = currentWorkLoadDay.OverrideTasks ?? model.Tasks;
-					model.TotalAverageTaskTime =
-						currentWorkLoadDay.OverrideAverageTaskTime?.TotalSeconds ?? model.TotalAverageTaskTime;
-					model.TotalAverageAfterTaskTime = currentWorkLoadDay.OverrideAverageAfterTaskTime?.TotalSeconds ??
-													  model.TotalAverageAfterTaskTime;
+					setCampaign(model, currentWorkLoadDay);
+					setOverride(model, currentWorkLoadDay);
 				}
 				else if (hasOverride(currentWorkLoadDay))
 				{
-					model.Override = -1;
-					model.TotalTasks = currentWorkLoadDay.OverrideTasks ?? model.Tasks;
-					model.TotalAverageTaskTime =
-						currentWorkLoadDay.OverrideAverageTaskTime?.TotalSeconds ?? model.TotalAverageTaskTime;
-					model.TotalAverageAfterTaskTime = currentWorkLoadDay.OverrideAverageAfterTaskTime?.TotalSeconds ??
-													  model.TotalAverageAfterTaskTime;
+					setOverride(model, currentWorkLoadDay);
 				}
 				else if (hasCampaign(currentWorkLoadDay))
 				{
-					model.Campaign = -1;
+					setCampaign(model, currentWorkLoadDay);
+
 					model.TotalTasks = model.Tasks * (currentWorkLoadDay.CampaignTasks.Value + 1d);
 					model.TotalAverageTaskTime = model.TotalAverageTaskTime * (currentWorkLoadDay.CampaignTaskTime.Value + 1d);
 					model.TotalAverageAfterTaskTime =
@@ -108,6 +100,26 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			}
 
 			return forecastResult;
+		}
+
+		private static void setCampaign(ForecastDayModel forecastDay, IWorkloadDayBase workloadDay)
+		{
+			forecastDay.HasCampaign = true;
+			forecastDay.CampaignTasksPercentage = workloadDay.CampaignTasks.Value;
+		}
+
+		private static void setOverride(ForecastDayModel forecastDay, IWorkloadDayBase workloadDay)
+		{
+			forecastDay.HasOverride = true;
+			forecastDay.OverrideTasks = workloadDay.OverrideTasks;
+			forecastDay.OverrideAverageTaskTime = workloadDay.OverrideAverageTaskTime?.TotalSeconds;
+			forecastDay.OverrideAverageAfterTaskTime = workloadDay.OverrideAverageAfterTaskTime?.TotalSeconds;
+
+			forecastDay.TotalTasks = workloadDay.OverrideTasks ?? forecastDay.Tasks;
+			forecastDay.TotalAverageTaskTime = workloadDay.OverrideAverageTaskTime?.TotalSeconds ??
+											   forecastDay.TotalAverageTaskTime;
+			forecastDay.TotalAverageAfterTaskTime = workloadDay.OverrideAverageAfterTaskTime?.TotalSeconds ??
+													forecastDay.TotalAverageAfterTaskTime;
 		}
 
 		private static bool hasCampaign(IWorkloadDayBase workloadDay)

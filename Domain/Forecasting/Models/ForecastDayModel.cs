@@ -12,8 +12,13 @@ namespace Teleopti.Ccc.Domain.Forecasting.Models
 		public double TotalTasks { get; set; }
 		public double TotalAverageTaskTime { get; set; }
 		public double TotalAverageAfterTaskTime { get; set; }
-		public double Campaign { get; set; }
-		public int Override { get; set; }
-		public int CampaignAndOverride { get; set; }
+
+		public double CampaignTasksPercentage { get; set; }
+		public double? OverrideTasks { get; set; }
+		public double? OverrideAverageTaskTime { get; set; }
+		public double? OverrideAverageAfterTaskTime { get; set; }
+
+		public bool HasCampaign { get; set; }
+		public bool HasOverride { get; set; }
 	}
 }

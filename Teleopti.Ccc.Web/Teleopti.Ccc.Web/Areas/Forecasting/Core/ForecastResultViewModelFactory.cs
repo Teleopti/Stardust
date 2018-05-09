@@ -59,15 +59,16 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 				var hasCampaign = Math.Abs(workloadDay.CampaignTasks.Value) > 0;
 				if (hasCampaign && hasOverride)
 				{
-					day.CampaignAndOverride = -1;
+					day.HasCampaign = true;
+					day.HasOverride = true;
 				}
 				else if (hasOverride)
 				{
-					day.Override = -1;
+					day.HasOverride = true;
 				}
 				else if (hasCampaign)
 				{
-					day.Campaign = -1;
+					day.HasCampaign = true;
 				}
 
 				days.Add(day);
