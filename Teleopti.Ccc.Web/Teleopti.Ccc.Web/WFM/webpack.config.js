@@ -1,6 +1,6 @@
 const webpack = require('webpack'); //to access built-in plugins
 const path = require('path');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ConcatPlugin = require('webpack-concat-plugin');
 const ExtraneousFileCleanupPlugin = require('webpack-extraneous-file-cleanup-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
@@ -21,9 +21,8 @@ module.exports = env => {
 		inject: false
 	});
 
-	const extractSass = new ExtractTextPlugin({
+	const extractSass = new MiniCssExtractPlugin({
 		filename: '[name].css'
-		// disable: process.env.NODE_ENV === 'development'
 	});
 
 	const concatJsModules = new ConcatPlugin({
@@ -92,12 +91,16 @@ module.exports = env => {
 		// outputPath: 'dist',
 		fileName: 'main.js',
 		filesToConcat: [
+			'./app/app.js',
+			'./app/**/_modules.js',
 			[
 				'./app/**/*.js',
 				'!./app/**/*.spec.js',
 				'!./app/**/*.fake.js',
 				'!./app/**/*.fortest.js',
-				'!./app/app_desktop_client.js'
+				'!./app/app.js',
+				'!./app/app_desktop_client.js',
+				'!./app/**/_modules.js'
 			]
 		],
 		attributes: {
@@ -190,6 +193,7 @@ module.exports = env => {
 			'style_classic.min': './css/style.scss',
 			'style_dark.min': './css/darkstyle.scss'
 		},
+		mode: 'development',
 		output: {
 			path: __dirname + '/dist',
 			filename: '[name].js'
@@ -208,23 +212,19 @@ module.exports = env => {
 					]
 				},
 				{
-					test: /\.scss$/,
-					use: extractSass.extract({
-						use: [
-							{
-								loader: 'css-loader'
-							},
-							{
-								loader: 'sass-loader',
-								options: {
-									outputStyle: isProd ? 'compressed' : 'nested',
-									includePaths: ['node_modules/teleopti-styleguide/styleguide/sass']
-								}
+					test: /\.s?[ac]ss$/,
+					use: [
+						MiniCssExtractPlugin.loader,
+						'css-loader',
+						'postcss-loader',
+						{
+							loader: 'sass-loader',
+							options: {
+								outputStyle: isProd ? 'compressed' : 'nested',
+								includePaths: ['node_modules/teleopti-styleguide/styleguide/sass']
 							}
-						]
-						// // use style-loader in development
-						// fallback: 'style-loader'
-					})
+						}
+					]
 				}
 			]
 		},
