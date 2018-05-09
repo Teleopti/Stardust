@@ -47,6 +47,16 @@
 			expect(controller.staffingEnabled).toEqual(fakeStateParams.staffingEnabled);
 		});
 
+		it('should get correct week days when start of week is changed',
+			function () {
+				controller.startOfWeek = '2018-05-09';
+				controller.onStartOfWeekChanged();
+
+				expect(controller.startOfWeek).toEqual('2018-05-06');
+				expect(moment(controller.weekDays[0].date).format('YYYY-MM-DD')).toEqual('2018-05-06');
+				expect(moment(controller.weekDays[6].date).format('YYYY-MM-DD')).toEqual('2018-05-12');
+			});
+
 		function setUpController($controller) {
 			return $controller("TeamScheduleWeeklyController", {
 				$scope: rootScope,
