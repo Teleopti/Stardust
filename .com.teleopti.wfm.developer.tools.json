@@ -5,5 +5,5 @@
 	NpmRunRtaTest: true,
 	ToolsFlowWithoutSQLCMD: true,
 	ToolsFlowWithFixMyConfig: true,
-	ToolsFlowWithInfraTestConfig: true
+	ToolsFlowWithInfraTestConfigWithOptionalToggleMode: true
 }
