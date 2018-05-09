@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Security.Cryptography;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace StaffHubPoC.ConsoleApp
 {
@@ -27,16 +21,15 @@ namespace StaffHubPoC.ConsoleApp
 				authorizeUri,
 				true,
 				"KIxOydAoOQDBtkEk9WWWo8WqIH6K5h00AuJ0pqBLfOE=");
+
+			var myTeam = Communicator.GetMyTeam(token);
+			var members = Communicator.GetMembers(myTeam, token);
 			
-			var jsonResult =  HttpSender.Get("api/beta/users/me/teams", token);
-			var teams = JsonConvert.DeserializeObject<TeamResult>(jsonResult);
-			foreach (var team in teams.teams)
-			{
-				Console.WriteLine(team.id);
-				Console.WriteLine(team.eTag);
-				Console.WriteLine(team.name);
-				Console.WriteLine(team.provisioningDomain);
-			}
+			//var amanda = members.First(x => x.firstName == "Amanda");
+			//var breaks = new List<Break> {new Break {breakType = BreakType.Paid, duration = 15}};
+			//Communicator.PostShift(amanda,new DateTime(2018,05,11,16,0,0), new DateTime(2018,05,11,23,0,0), breaks, "AM", myTeam, token);
+
+
 		}
 	}
 }

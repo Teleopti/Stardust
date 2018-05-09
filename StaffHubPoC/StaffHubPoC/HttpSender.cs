@@ -1,11 +1,35 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 
 namespace StaffHubPoC
 {
 	public class HttpSender
 	{
+
+		public static string Post(string endpoint, string payload, string token)
+		{
+			using (var client = new HttpClient())
+			{
+				client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+				client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+				client.BaseAddress = new Uri("https://api.manage.staffhub.office.com");
+				var stringContent = new StringContent(payload, Encoding.UTF8, "application/json");
+				var result = client.PostAsync(endpoint, stringContent).Result;
+				if (result.IsSuccessStatusCode)
+				{
+					var responseContent = result.Content;
+					var responseString = responseContent.ReadAsStringAsync().Result;
+					return responseString;
+				}
+
+				Console.WriteLine("Crap.");
+				return null;
+
+			}
+		}
+
 		public static string Get(string endpoint, string token)
 		{
 			using (var client = new HttpClient())
@@ -21,11 +45,8 @@ namespace StaffHubPoC
 					var responseString = responseContent.ReadAsStringAsync().Result;
 					return responseString;
 				}
-				else
-				{
-					Console.WriteLine("Crap.");
-				}
 
+				Console.WriteLine("Crap.");
 				return null;
 			}
 		}
