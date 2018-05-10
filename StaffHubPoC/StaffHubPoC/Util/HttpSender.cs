@@ -2,9 +2,8 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using Newtonsoft.Json;
 
-namespace StaffHubPoC
+namespace StaffHubPoC.Util
 {
 	public class HttpSender
 	{
@@ -63,7 +62,6 @@ namespace StaffHubPoC
 					Content = new StringContent(payload, Encoding.UTF8, "application/json"),
 					Method = HttpMethod.Delete,
 					RequestUri = new Uri("https://api.manage.staffhub.office.com/" + endpoint)
-					//RequestUri = new Uri("[YOUR URL GOES HERE]")
 				};
 				
 

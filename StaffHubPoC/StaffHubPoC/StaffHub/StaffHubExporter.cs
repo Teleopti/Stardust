@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using StaffHubPoC.Models;
+using StaffHubPoC.Types;
 
 namespace StaffHubPoC.StaffHub
 {
 	public class StaffHubExporter
 	{
-		private ShiftCollection _allShifts;
-		private List<Member> _allMembers;
+		private readonly ShiftCollection _allShifts;
+		private readonly List<Member> _allMembers;
 		private readonly Team _myTeam;
 		private string _token;
 
@@ -21,18 +22,17 @@ namespace StaffHubPoC.StaffHub
 			_allShifts = StaffHubCommunicator.GetAllShifts(_myTeam, _token);
 		}
 
-		public void PostShifts(List<Shift> shifts)
+		public void PostShifts(List<TeleoptiShift> teleoptiShifts)
 		{
-			foreach (var shift in shifts)
+			foreach (var teleoptiShift in teleoptiShifts)
 			{
-				var overlappingPublishedShifts =
-					_allShifts.PublishedShifts.Where(x => x.startTime < shift.endTime && x.endTime > x.startTime);
-				var overlappingUnpublishedShifts =
-					_allShifts.UnpublishedShifts.Where(x => x.startTime < shift.endTime && x.endTime > x.startTime);
-				if (overlappingPublishedShifts.Any()) continue;
-				foreach (var overlappingUnpublishedShift in overlappingUnpublishedShifts)
+				var member = _allMembers.First(x => x.email == teleoptiShift.Email);
+				var shift = teleoptiShift.ConvertToStaffHubShift(member);
+				if (_allShifts.Shifts.Any(x => x.memberId == member.id && x.state != StateType.Deleted &&
+												((x.startTime < shift.endTime &&
+												x.endTime > shift.startTime) && !(!teleoptiShift.Working && x.shiftType == ShiftType.Working))))
 				{
-					StaffHubCommunicator.DeleteShift(_myTeam, overlappingUnpublishedShift, _token);
+					continue;
 				}
 
 				StaffHubCommunicator.PostShift(shift, _myTeam, _token);

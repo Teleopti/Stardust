@@ -52,11 +52,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Integrator.cs" />
     <Compile Include="StaffHub\StaffHubExporter.cs" />
     <Compile Include="Teleopti\TeleoptiImporter.cs" />
     <Compile Include="Types\BreakType.cs" />
     <Compile Include="StaffHub\StaffHubCommunicator.cs" />
     <Compile Include="Types\TeleoptiShift.cs" />
+    <Compile Include="Util\DateTimePeriod.cs" />
     <Compile Include="Util\HttpSender.cs" />
     <Compile Include="Models\Member.cs" />
     <Compile Include="Util\OAuthFlow.cs" />

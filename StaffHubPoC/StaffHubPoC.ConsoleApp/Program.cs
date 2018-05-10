@@ -1,6 +1,4 @@
 ﻿using System;
-using StaffHubPoC.StaffHub;
-using StaffHubPoC.Teleopti;
 
 namespace StaffHubPoC.ConsoleApp
 {
@@ -9,12 +7,8 @@ namespace StaffHubPoC.ConsoleApp
 		[STAThread]
 		static void Main(string[] args)
 		{
-			var staffhubExporter = new StaffHubExporter();
-
-			var teleoptiImporter = new TeleoptiImporter();
-			teleoptiImporter.GetAllShifts();
-
-
+			var integrator = new Integrator();
+			integrator.Publish();
 		}
 	}
 }
