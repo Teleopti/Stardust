@@ -215,5 +215,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		void SetOverTimeRequestMinimumRestTimeThreshold(TimeSpan? selectedModelOvertimeRequestMinimumRestTimeThreshold);
 		void SetOvertimeRequestMaximumContinuousWorkTimeEnabled(bool selectedModelOvertimeRequestMaximumContinuousWorkTimeEnabled);
 		void SetOvertimeRequestUsePrimarySkill(bool usePrimarySkill);
+		void SetMaxConsecutiveWorkingDays(int maxConsecutiveWorkingDays);
 	}
 }
