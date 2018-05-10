@@ -33,9 +33,16 @@ namespace StaffHubPoC.Models
 		public LastModifiedBy lastModifiedBy { get; set; }
 	}
 
-	public class ShiftCollection
+	public class ShiftRoot
 	{
 		public Shift shift { get; set; }
 		public bool isShiftPublished { get; set; }
+	}
+
+	public class ShiftCollection
+	{
+		public List<Shift> Shifts { get; set; }
+		public List<Shift> PublishedShifts { get; set; }
+		public List<Shift> UnpublishedShifts { get; set; }
 	}
 }
