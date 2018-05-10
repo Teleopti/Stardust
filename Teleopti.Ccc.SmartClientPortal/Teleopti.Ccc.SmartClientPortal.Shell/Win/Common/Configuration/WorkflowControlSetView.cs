@@ -908,6 +908,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			SelectWorkflowControlSet(selectedModel);
 		}
 
+		private void daysTbx_Leave(object sender, EventArgs e)
+		{
+			if (_presenter == null || _presenter.SelectedModel == null || Disposing) return;
+			int days = (int)daysTbx.Value;
+			_presenter.SetMaxConsecutiveWorkingDays(days);
+		}
+
 		private void buttonAddAbsenceRequestPeriod_Click(object sender, EventArgs e)
 		{
 			_presenter.AddOpenDatePeriod();
@@ -1231,6 +1238,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private void checkBoxEnableAbsenceProbability_CheckStateChanged(object sender, EventArgs e)
 		{
 			_presenter.SetAbsenceProbability(checkBoxEnableAbsenceProbability.Checked);
+		}
+
+		public void SetMaxConsecutiveWorkingDays(int maxConsecutiveWorkingDays)
+		{
+			daysTbx.Value = maxConsecutiveWorkingDays;
 		}
 	}
 }
