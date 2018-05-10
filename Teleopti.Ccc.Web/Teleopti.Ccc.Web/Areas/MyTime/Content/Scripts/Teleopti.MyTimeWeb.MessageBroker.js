@@ -38,7 +38,7 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 
 		_startConnection();
 
-		if (!!_getListeners(options.page).length)
+		if (!!_getListeners(options.page, options.domainType).length)
 			return;
 
 		conn
@@ -49,15 +49,17 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 					'DataSource': options.datasource,
 					'DomainReferenceId': options.referenceId
 				})
-				.done(function (route) {
-					listeners.push({ Route: route, Callback: options.callback, Page: options.page });
-				});
+					.done(function (route) {
+						listeners.push({ Route: route, Callback: options.callback, Page: options.page, DomainType: options.domainType  });
+					});
 			});
 	}
 
-	function _getListeners(page) {
+	function _getListeners(page, domainType) {
 		return listeners.filter(function (listener) {
-			return listener.Page != undefined && listener.Page === page;
+			var isInSamePage = listener.Page != undefined && listener.Page === page;
+			var isSameDomainType = listener.DomainType === domainType;
+			return isInSamePage && isSameDomainType;
 		});
 	}
 	function _remove(arr, lambda) {

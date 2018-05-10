@@ -22,7 +22,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var vm;
 	var completelyLoaded;
-	var currentPage = "Teleopti.MyTimeWeb.Schedule";
+	var currentPage = "Teleopti.MyTimeWeb.Schedule.MobileWeek";
 	var subscribed = false;
 
 	var fetchData = function () {
@@ -51,6 +51,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
 			vm.dayViewModels([]);
 			vm = null;
 		}
+		Teleopti.MyTimeWeb.MessageBroker.RemoveListeners(currentPage);
 	};
 
 	function subscribeForChanges() {
