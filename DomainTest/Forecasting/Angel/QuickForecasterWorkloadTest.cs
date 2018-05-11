@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Outlier;
+using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			{
 				Scenario = ScenarioFactory.CreateScenarioWithId("default", true),
 				WorkLoad = workload,
-				HistoricalPeriod = new DateOnlyPeriod(2015,1,1,2015,2,1),
+				HistoricalPeriod = new DateOnlyPeriod(2015, 1, 1, 2015, 2, 1),
 				ForecastMethodId = ForecastMethodType.TeleoptiClassicLongTerm,
 				SkillDays = new List<ISkillDay>(),
 				FuturePeriod = new DateOnlyPeriod(2015, 3, 1, 2015, 3, 1)
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var dateOnly = new DateOnly(2015, 1, 1);
 
 			var workloadDay = new WorkloadDay();
-			workloadDay.Create(dateOnly, workload, new List<TimePeriod> { new TimePeriod(8, 0, 8, 15) });
+			workloadDay.Create(dateOnly, workload, new List<TimePeriod> {new TimePeriod(8, 0, 8, 15)});
 
 			var validatedVolumeDay = new ValidatedVolumeDay(workload, dateOnly)
 			{
@@ -49,17 +50,18 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 				ValidatedTasks = 110
 			};
 
-			var taskOwnerPeriod = new TaskOwnerPeriod(dateOnly, new ITaskOwner[] { validatedVolumeDay }, TaskOwnerPeriodType.Other);
+			var taskOwnerPeriod = new TaskOwnerPeriod(dateOnly, new ITaskOwner[] {validatedVolumeDay}, TaskOwnerPeriodType.Other);
 			historicalData.Stub(
 				x => x.Fetch(quickForecasterWorkloadParams.WorkLoad, quickForecasterWorkloadParams.HistoricalPeriod))
 				.Return(taskOwnerPeriod);
 			var futureData = MockRepository.GenerateMock<IFutureData>();
 			var futureWorkloadDays = new IWorkloadDay[] { };
-			futureData.Stub(x => x.Fetch(workload, quickForecasterWorkloadParams.SkillDays, quickForecasterWorkloadParams.FuturePeriod)).Return(futureWorkloadDays);
-			var target = new QuickForecasterWorkload(historicalData,
-				futureData,
-				forecastMethodProvider,outlierRemover);
-			
+			futureData.Stub(
+				x => x.Fetch(workload, quickForecasterWorkloadParams.SkillDays, quickForecasterWorkloadParams.FuturePeriod))
+				.Return(futureWorkloadDays);
+			var target = new QuickForecasterWorkload(historicalData, futureData, forecastMethodProvider, outlierRemover,
+				new ForecastDayModelMapper());
+
 			target.Execute(quickForecasterWorkloadParams);
 			outlierRemover.AssertWasCalled(x => x.RemoveOutliers(taskOwnerPeriod, method));
 		}

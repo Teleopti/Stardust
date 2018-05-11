@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
 using Teleopti.Ccc.Web.Areas.Forecasting.Models;
 using Teleopti.Interfaces.Domain;
 
@@ -15,7 +14,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 		private readonly IHistoricalPeriodProvider _historicalPeriodProvider;
 		private readonly IUserCulture _userCulture;
 
-		public IntradayPatternViewModelFactory(IIntradayForecaster intradayForecaster, IWorkloadRepository workloadRepository, IHistoricalPeriodProvider historicalPeriodProvider, IUserCulture userCulture)
+		public IntradayPatternViewModelFactory(IIntradayForecaster intradayForecaster, IWorkloadRepository workloadRepository,
+			IHistoricalPeriodProvider historicalPeriodProvider, IUserCulture userCulture)
 		{
 			_intradayForecaster = intradayForecaster;
 			_workloadRepository = workloadRepository;

@@ -7,6 +7,7 @@ namespace Teleopti.Support.Tool.Tool
 	{
 		public string ApplicationDatabase;
 		public string AnalyticsDatabase;
+		public string ToggleMode = "ALL";
 	}
 
 	public class FixMyConfigFixer
@@ -30,16 +31,6 @@ namespace Teleopti.Support.Tool.Tool
 				},
 				new SetSettingCommand
 				{
-					SearchFor = "machineKey.validationKey",
-					ReplaceWith = "754534E815EF6164CE788E521F845BA4953509FA45E321715FDF5B92C5BD30759C1669B4F0DABA17AC7BBF729749CE3E3203606AB49F20C19D342A078A3903D1"
-				},
-				new SetSettingCommand
-				{
-					SearchFor = "machineKey.decryptionKey",
-					ReplaceWith = "3E1AD56713339011EB29E98D1DF3DBE1BADCF353938C3429"
-				},
-				new SetSettingCommand
-				{
 					SearchFor = "$(DB_CCC7)",
 					ReplaceWith = command.ApplicationDatabase
 				},
@@ -56,7 +47,7 @@ namespace Teleopti.Support.Tool.Tool
 				new SetSettingCommand
 				{
 					SearchFor = "$(ToggleMode)",
-					ReplaceWith = "ALL"
+					ReplaceWith = command.ToggleMode
 				}
 			);
 			new ModeDebugRunner()

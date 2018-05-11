@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		{
 			var tasks = 4d;
 			var agents = Target.AgentsUseOccupancy(.8, 20, tasks, 550, TimeSpan.FromMinutes(15), 0, 1, 3,0).Agents;
-			var esl = Target.ServiceLevelAchievedOcc(agents, 20, tasks, 550, TimeSpan.FromMinutes(15), .8, agents, 3);
+			var esl = Target.ServiceLevelAchievedOcc(agents, 20, tasks, 550, TimeSpan.FromMinutes(15), .8, agents, 3, 0);
 			esl.Should().Be.IncludedIn(.79, .81);
 		}
 
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		{
 			var tasks = 40d;
 			var agents = Target.AgentsUseOccupancy(.8, 20, tasks, 550, TimeSpan.FromMinutes(15), 0, 1, 3,0).Agents;
-			var esl = Target.ServiceLevelAchievedOcc(agents, 20, tasks, 550, TimeSpan.FromMinutes(15), .8, agents, 3);
+			var esl = Target.ServiceLevelAchievedOcc(agents, 20, tasks, 550, TimeSpan.FromMinutes(15), .8, agents, 3, 0);
 			esl.Should().Be.IncludedIn(.79, .81);
 		}
 
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			const double tasks = 40d;
 			const double agents = 9d;
 			const double forecasted = 10d;
-			var esl = Target.ServiceLevelAchievedOcc(agents, 20, tasks, 550, TimeSpan.FromMinutes(15), .8, forecasted, 3);
+			var esl = Target.ServiceLevelAchievedOcc(agents, 20, tasks, 550, TimeSpan.FromMinutes(15), .8, forecasted, 3, 0);
 
 			esl.Should().Be.IncludedIn(.63, .65);
 		}
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			const double tasks = 40d;
 			const double agents = 6d;
 			const double forecasted = 10d;
-			var esl = Target.ServiceLevelAchievedOcc(agents, 20, tasks, 550, TimeSpan.FromMinutes(15), .8, forecasted, 3);
+			var esl = Target.ServiceLevelAchievedOcc(agents, 20, tasks, 550, TimeSpan.FromMinutes(15), .8, forecasted, 3, 0);
 
 			esl.Should().Be.EqualTo(0d);
 		}
@@ -166,9 +166,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			const double tasks = 40d;
 			const double agents = 7.5d;
 			const double forecasted = 10d;
-			var esl = Target.ServiceLevelAchievedOcc(agents, 20, tasks, 550, TimeSpan.FromMinutes(15), .8, forecasted, 3);
+			var esl = Target.ServiceLevelAchievedOcc(agents, 20, tasks, 550, TimeSpan.FromMinutes(15), .8, forecasted, 3, 0);
 
-			esl.Should().Be.IncludedIn(.18, .20);
+			esl.Should().Be.IncludedIn(.18, .23);
 		}
 
 		[Test]
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			const double tasks = 6d;
 			const double agents = 2d;
 			var forecasted = Target.AgentsUseOccupancy(.8, 20, tasks, 850, TimeSpan.FromMinutes(15), 0, 1, 3,0).Agents;	
-			var esl = Target.ServiceLevelAchievedOcc(agents, 20, tasks, 850, TimeSpan.FromMinutes(15), .8, forecasted, 3);
+			var esl = Target.ServiceLevelAchievedOcc(agents, 20, tasks, 850, TimeSpan.FromMinutes(15), .8, forecasted, 3, 0);
 
 			esl.Should().Be.IncludedIn(.80, .82);
 		}

@@ -24,11 +24,9 @@ describe("Timezone filter tests", function () {
 	}));
 
 	it("Should return timezone adjusted time for input time string", function () {
-
 		var input = '08:00';
-		var result = target(input, 'Europe/Stockholm');
-		var isDST = moment().tz('Europe/Stockholm').isDST();
-		if (isDST || moment().format('YYYY-MM-DD') === '2017-10-29') {
+		var result = target(input, 'Europe/Berlin');
+		if (isOnDSTAndNotTheStartOfDST(input, result)) {
 			expect(result).toEqual('02:00');
 		} else {
 			expect(result).toEqual('01:00');
@@ -36,11 +34,9 @@ describe("Timezone filter tests", function () {
 	});
 
 	it("Should return timezone adjusted time for input time string in 24 hours format", function () {
-
 		var input = '05:00';
 		var result = target(input, 'Europe/Stockholm');
-		var isDST = moment().tz('Europe/Stockholm').isDST();
-		if (isDST || moment().format('YYYY-MM-DD') === '2017-10-29') {
+		if (isOnDSTAndNotTheStartOfDST(input, result)) {
 			expect(result).toEqual('23:00');
 		} else {
 			expect(result).toEqual('22:00');
@@ -48,7 +44,6 @@ describe("Timezone filter tests", function () {
 	});
 
 	it("Should return timezone adjusted time for input date time string", function () {
-
 		var input = '2016-10-07T08:00';
 		var result = target(input, 'Europe/Stockholm');
 		expect(result).toEqual('2016-10-07T02:00');
@@ -61,6 +56,15 @@ describe("Timezone filter tests", function () {
 		expect(result).toEqual('2016-10-06T23:00');
 	});
 
+	function isOnDSTAndNotTheStartOfDST(input, result) {
+		var fromTimezone = "Asia/Hong_Kong",
+			toTimezone = 'Europe/Stockholm';
+		var date = moment().format('YYYY-MM-DD');
+		var dateTimeInFromTimezone = moment.tz(date + ' ' + input, fromTimezone);
+		var isOnDST = moment.tz(date + ' 23:59', toTimezone).isDST();
+		var isSameAsNextDay = result === target(dateTimeInFromTimezone.clone().add(1, 'days'), toTimezone).split('T')[1];
+		return (isOnDST && isSameAsNextDay) || (!isOnDST && !isSameAsNextDay);
+	}
 });
 
 describe("#serviceTimezone filter#", function () {
@@ -87,11 +91,9 @@ describe("#serviceTimezone filter#", function () {
 
 	function commonTestsInDifferentLocale() {
 		it("Should return timezone adjusted time for input time string", function () {
-
 			var input = '08:00';
 			var result = target(input, 'Europe/Stockholm');
-			var isDST = moment().tz('Europe/Stockholm').isDST();
-			if (isDST || moment().format('YYYY-MM-DD') === '2017-10-29') {
+			if (isOnDSTAndNotTheStartOfDST(input, result)) {
 				expect(result).toEqual('02:00');
 			} else {
 				expect(result).toEqual('01:00');
@@ -99,11 +101,9 @@ describe("#serviceTimezone filter#", function () {
 		});
 
 		it("Should return timezone adjusted time for input time string in 24 hours format", function () {
-
 			var input = '05:00';
 			var result = target(input, 'Europe/Stockholm');
-			var isDST = moment().tz('Europe/Stockholm').isDST();
-			if (isDST || moment().format('YYYY-MM-DD') === '2017-10-29') {
+			if (isOnDSTAndNotTheStartOfDST(input, result)) {
 				expect(result).toEqual('23:00');
 			} else {
 				expect(result).toEqual('22:00');
@@ -111,14 +111,12 @@ describe("#serviceTimezone filter#", function () {
 		});
 
 		it("Should return timezone adjusted time for input date time string", function () {
-
 			var input = '2016-10-07T08:00';
 			var result = target(input, 'Europe/Stockholm');
 			expect(result).toEqual('2016-10-07T02:00');
 		});
 
 		it("Should return timezone adjusted time for input date time string in 24 hours format", function () {
-
 			var input = '2016-10-07T05:00';
 			var result = target(input, 'Europe/Stockholm');
 			expect(result).toEqual('2016-10-06T23:00');
@@ -150,4 +148,14 @@ describe("#serviceTimezone filter#", function () {
 
 		commonTestsInDifferentLocale();
 	});
+
+	function isOnDSTAndNotTheStartOfDST(input, result) {
+		var fromTimezone = "Asia/Hong_Kong",
+			toTimezone = 'Europe/Stockholm';
+		var date = moment().format('YYYY-MM-DD');
+		var dateTimeInFromTimezone = moment.tz(date + ' ' + input, fromTimezone);
+		var isOnDST = moment.tz(date + ' 23:59', toTimezone).isDST();
+		var isSameAsNextDay = result === target(dateTimeInFromTimezone.clone().add(1, 'days'), toTimezone).split('T')[1];
+		return (isOnDST && isSameAsNextDay) || (!isOnDST && !isSameAsNextDay);
+	}
 });

@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 		public FakePersonRepository PersonRepository;
 		public PersistPersonInfoFake TenantUserRepository;
-		public CheckPasswordStrengthFake CheckPasswordStrengthFake;
 		public FakeCurrentDatasource CurrentDatasource;
 		public FakeTenants FindTenantByName;
 		public ILoggedOnUser User;

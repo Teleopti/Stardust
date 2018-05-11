@@ -58,6 +58,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			timeSpanTextBox1.TimeSpanBoxWidth = timeSpanTextBox1.Width;
 			dateTimePickerAdvViewpoint.SetCultureInfoSafe(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 			setAbsenceRequestVisibilityOptions(_toggleManager);
+			SetMaxConsecutiveWorkingDaysVisibility(_toggleManager);
 			checkOvertimeProbabilityLicense();
 			checkOvertimeRequestsLicense();
 			checkOvertimeStaffingCheckMethodToggle();
@@ -77,7 +78,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				hideAbsenceProbabilityCheckBox();
 			}
 		}
-		
+
+		private void SetMaxConsecutiveWorkingDaysVisibility(IToggleManager toggleManager)
+		{
+			if (!toggleManager.IsEnabled(Toggles.MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889))
+			{
+				tableLayoutPanelShiftTrade.RowStyles[tableLayoutPanelShiftTrade.GetRow(this.tableLayoutPanel3)].Height = 0;
+				tableLayoutPanelShiftTrade.RowStyles[tableLayoutPanelShiftTrade.GetRow(this.panel10)].Height = 0;
+				this.tableLayoutPanel3.Visible = false;
+				this.panel10.Visible = false;
+
+			}
+		}
+
+
 		private void hideAbsenceProbabilityCheckBox()
 		{
 			hideControl(tableLayoutPanelAbsenceProbability);
@@ -383,6 +397,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			tableLayoutPanelOpenForAbsenceRequests.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 			panelTolerance.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 			tableLayoutPanelAbsenceRequestMiscellaneous.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			panel10.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 
 			labelSubHeader1.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 			labelBasic.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
@@ -397,6 +412,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			labelOpenForAbsenceRequests.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 			labelOpenForShiftTrade.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 			labelTolerance.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+			label1.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 			labelMatchingSkills.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 			label3.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 			labelAllowedAbsencesForReport.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
@@ -892,6 +908,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			SelectWorkflowControlSet(selectedModel);
 		}
 
+		private void daysTbx_Leave(object sender, EventArgs e)
+		{
+			if (_presenter == null || _presenter.SelectedModel == null || Disposing) return;
+			int days = (int)daysTbx.Value;
+			_presenter.SetMaxConsecutiveWorkingDays(days);
+		}
+
 		private void buttonAddAbsenceRequestPeriod_Click(object sender, EventArgs e)
 		{
 			_presenter.AddOpenDatePeriod();
@@ -1215,6 +1238,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private void checkBoxEnableAbsenceProbability_CheckStateChanged(object sender, EventArgs e)
 		{
 			_presenter.SetAbsenceProbability(checkBoxEnableAbsenceProbability.Checked);
+		}
+
+		public void SetMaxConsecutiveWorkingDays(int maxConsecutiveWorkingDays)
+		{
+			daysTbx.Value = maxConsecutiveWorkingDays;
 		}
 	}
 }

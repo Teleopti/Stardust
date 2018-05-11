@@ -199,10 +199,10 @@
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.203\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.209\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.203\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.209\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
     <Reference Include="WebGrease">
       <HintPath>..\..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -213,6 +213,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Areas\Anywhere\BusinessUnitControllerTest.cs" />
+    <Compile Include="Areas\Forecasting\Controllers\ForecastControllerOldTest.cs" />
     <Compile Include="Areas\Forecasting\Controllers\ForecastControllerTest.cs" />
     <Compile Include="Areas\Gamification\GamificationCalculationControllerTest.cs" />
     <Compile Include="Areas\Gamification\GamificationControllerPersistTest.cs" />
@@ -365,7 +366,6 @@
     <Compile Include="Areas\MultiTenancy\Core\DataSourceConfigurationEncryptionTest.cs" />
     <Compile Include="Areas\MultiTenancy\Core\LoginAttemptModelFactoryForWebTest.cs" />
     <Compile Include="Areas\Messages\MessagesAreaRegistrationTest.cs" />
-    <Compile Include="Areas\Forecasting\Controllers\ForecastControllerOldTest.cs" />
     <Compile Include="Areas\Mart\Controllers\QueueStatsControllerTest.cs" />
     <Compile Include="Areas\Mart\Core\FakeQueueStatRepository.cs" />
     <Compile Include="Areas\Mart\Core\QueueStatHandlerTest.cs" />

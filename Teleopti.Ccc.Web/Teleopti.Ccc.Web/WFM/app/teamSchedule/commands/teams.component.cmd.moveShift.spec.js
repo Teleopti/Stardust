@@ -346,7 +346,7 @@
 				var element = compiledResult.element;
 				var scope = compiledResult.scope;
 				var ctrl = element.scope().$ctrl;
-				ctrl.moveToTime = new Date('2016-06-15 09:00');
+				ctrl.moveToTime = '2016-06-15 09:00';
 				var applyButton = angular.element(element[0].querySelector(".move-shift .form-submit"));
 				applyButton[0].click();
 				scope.$apply();
@@ -357,6 +357,60 @@
 				expect(lastRequestedData.Date).toBe('2016-06-15');
 				expect(lastRequestedData.NewShiftStart).toBe('2016-06-15T09:00');
 				expect(!!lastRequestedData.TrackedCommandInfo.TrackId).toBe(true);
+			});
+
+			it('should apply with correct time range based on the selected time zone', function () {
+				var timezone1 = {
+					IanaId: 'Etc/UTC',
+					DisplayName: 'UTC'
+				};
+				var currentTimezone = 'Etc/UTC';
+
+				var selectedAgents = [
+					{
+						PersonId: 'agent1',
+						Name: 'agent1',
+						Checked: true,
+						ScheduleStartTime: '2018-03-25T01:00:00Z',
+						ScheduleEndTime: '2018-03-25T23:00:00Z',
+						SelectedActivities: ['472e02c8-1a84-4064-9a3b-9b5e015ab3c6'],
+						SelectedDayOffs: []
+					}
+				];
+				personSelectionService.setFakeSelectedPersonInfoList(selectedAgents);
+
+				scheduleManagementSvc.setPersonScheduleVm('agent1', {
+					Date: '2018-03-25',
+					PersonId: 'agent1',
+					Timezone: timezone1,
+					Shifts: [
+						{
+							Date: '2018-03-25',
+							Projections: [
+								{
+									Start: '2018-03-25 01:00',
+									End: '2018-03-25 23:00',
+									Minutes: 540
+								}],
+							ProjectionTimeRange: {
+								Start: '2018-03-25 01:00',
+								End: '2018-03-25 23:00'
+							}
+						}],
+					ExtraShifts: []
+				});
+			
+				var compiledResult = setUp(moment('2018-03-25').toDate(), currentTimezone);
+				var element = compiledResult.element;
+				var scope = compiledResult.scope;
+				var ctrl = element.scope().$ctrl;
+				ctrl.moveToTime = '2018-03-25 02:00';
+				var applyButton = angular.element(element[0].querySelector(".move-shift .form-submit"));
+				applyButton[0].click();
+				scope.$apply();
+
+				var lastRequestedData = activityService.lastRequestedData();
+				expect(lastRequestedData.NewShiftStart).toBe('2018-03-25T02:00');
 			});
 		}
 

@@ -113,11 +113,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			throw new NotImplementedException();
 		}
 
-		public int MinimumResolution()
-		{
-			throw new NotImplementedException();
-		}
-
 		public IEnumerable<ISkill> FindSkillsWithAtLeastOneQueueSource()
 		{
 			return _skills;

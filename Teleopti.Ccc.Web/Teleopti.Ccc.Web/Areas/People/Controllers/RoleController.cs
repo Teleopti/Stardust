@@ -10,7 +10,7 @@ using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.People.Controllers
 {
-	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebPeople)]
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.PeopleAccess)]
 	public class RoleController : ApiController
 	{
 		private readonly IPersonRepository _personRepository;

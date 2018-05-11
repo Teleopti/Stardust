@@ -255,12 +255,5 @@ namespace Teleopti.Ccc.TestCommon
 			visualLayer.Stub(x => x.Person).Return(person);
 			return visualLayer;
 		}
-
-		public IPublicNote PublicNoteStub()
-		{
-			var publicNote = MockRepository.GenerateStub<IPublicNote>();
-			publicNote.Stub(x => x.GetScheduleNote(new NoFormatting())).Return("a note");
-			return publicNote;
-		}
 	}
 }

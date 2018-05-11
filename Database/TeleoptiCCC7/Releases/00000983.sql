@@ -1,0 +1,1 @@
+delete from PurgeSetting where [Key] = 'DaysToKeepSecurityAudit'

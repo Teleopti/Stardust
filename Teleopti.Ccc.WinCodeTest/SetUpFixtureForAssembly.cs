@@ -17,11 +17,5 @@ namespace Teleopti.Ccc.WinCodeTest
             var stateMock = new FakeState();
             StateHolderProxyHelper.ClearAndSetStateHolder(loggedOnPerson, BusinessUnitFactory.BusinessUnitUsedInTest, StateHolderProxyHelper.CreateApplicationData(new MessageBrokerCompositeDummy()),dataSource, stateMock);
         }
-
-        public static void ResetStateHolder()
-        {
-            var setUpFixture = new SetupFixtureForAssembly();
-            setUpFixture.RunBeforeAnyTest();
-        }
     }
 }

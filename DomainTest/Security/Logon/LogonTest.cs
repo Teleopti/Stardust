@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.DomainTest.Security.Logon
 		public ILogOnOff LogOnOff;
 		public IAuthorization Authorization;
 		public ICurrentTeleoptiPrincipal Principal;
-		public ClaimSetForApplicationRole ClaimSetForApplicationRole;
 
 		[Test]
 		public void ShouldHavePermissionsOfRole()

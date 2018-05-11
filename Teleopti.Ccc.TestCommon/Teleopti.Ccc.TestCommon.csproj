@@ -146,10 +146,10 @@
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.203\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.209\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.203\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.209\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
     <Reference Include="WebDriver, Version=2.53.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Selenium.WebDriver.2.53.0\lib\net40\WebDriver.dll</HintPath>
@@ -187,13 +187,10 @@
     <Compile Include="FakeData\AnalyticsWorkloadFactory.cs" />
     <Compile Include="FakeData\ContractScheduleWorkingMondayToFriday.cs" />
     <Compile Include="FakeData\ContractWithMaximumTolerance.cs" />
-    <Compile Include="FakeData\FakeActionThrottler.cs" />
     <Compile Include="FakeData\FakeAnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="FakeData\FakeBusinessRuleProvider.cs" />
-    <Compile Include="FakeData\FakeForecastViewModelFactory.cs" />
     <Compile Include="FakeData\FakeGamificationSettingRepository.cs" />
     <Compile Include="FakeData\FakeIntervalLengthFetcher.cs" />
-    <Compile Include="FakeData\FakeIntradayPatternViewModelFactory.cs" />
     <Compile Include="FakeData\FakeLatestStatisticsIntervalIdLoader.cs" />
     <Compile Include="FakeData\FakeMessageBrokerUnitOfWorkScope.cs" />
     <Compile Include="FakeData\FakeNewBusinessRuleCollection.cs" />
@@ -205,7 +202,6 @@
     <Compile Include="FakeData\FakePermissions.cs" />
     <Compile Include="FakeData\FakeIntradayQueueStatisticsLoader.cs" />
     <Compile Include="FakeData\FakeSkillCombinationResourceRepository.cs" />
-    <Compile Include="FakeData\FakeSkillCombinationResourceNoZeroValueRepository.cs" />
     <Compile Include="FakeData\FakeTeamGamificationSettingRepository.cs" />
     <Compile Include="FakeData\OrganizationFactory.cs" />
     <Compile Include="FakeData\PersonAbsenceAccountFactory.cs" />
@@ -298,7 +294,6 @@
     <Compile Include="FakeRepositories\FakeUserDeviceRepository.cs" />
     <Compile Include="FakeRepositories\FakeWorkShiftRuleSetRepository.cs" />
     <Compile Include="FakeRepositories\FakeWriteSideRepository.cs" />
-    <Compile Include="FakeRepositories\PersonAssignmentRepositoryWithRandomLatency.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAgentStatePersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAllLicenseActivator.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAllLicenseActivatorProvider.cs" />
@@ -306,7 +301,6 @@
     <Compile Include="FakeRepositories\Rta\FakeDataSourceReader.cs" />
     <Compile Include="FakeRepositories\Rta\FakeExternalLogonReadModelPersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeKeyValueStorePersister.cs" />
-    <Compile Include="FakeRepositories\Rta\FakeNoRtaLicenseActivator.cs" />
     <Compile Include="FakeRepositories\Rta\FakeMappingReadModelPersister.cs" />
     <Compile Include="FakeData\FakeRequestFactory.cs" />
     <Compile Include="FakeRepositories\Rta\FakeHistoricalChangeReadModelPersister.cs" />
@@ -396,12 +390,10 @@
     <Compile Include="FakeRepositories\FakeTeamRepository.cs" />
     <Compile Include="FakeRepositories\FakeWorkflowControlSetRepository.cs" />
     <Compile Include="FakeRepositories\FakePlanningGroupSettingsRepository.cs" />
-    <Compile Include="FakeRequestApprovalServiceFactory.cs" />
     <Compile Include="FakeRepositories\FakeDatabase.cs" />
     <Compile Include="IoC\AllTogglesOffAttribute.cs" />
     <Compile Include="IoC\AllTogglesOnAttribute.cs" />
     <Compile Include="FakeRepositories\FakeLicenseRepository.cs" />
-    <Compile Include="FakeData\FakeCurrentAnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="FakeRepositories\FakeStateQueue.cs" />
     <Compile Include="IoC\DefaultDataAttribute.cs" />
     <Compile Include="IoC\FakePermissionsAttribute.cs" />
@@ -554,7 +546,6 @@
     <Compile Include="TrackSchedulingProgress.cs" />
     <Compile Include="UnitOfWorkAndSession.cs" />
     <Compile Include="Web\FakeCurrentHttpContext.cs" />
-    <Compile Include="FakeCurrentInitiatorIdentifier.cs" />
     <Compile Include="FakeData\AbsenceAccountFactory.cs" />
     <Compile Include="FakeData\CultureInfoFactory.cs" />
     <Compile Include="FakeData\EditableShiftFactory.cs" />

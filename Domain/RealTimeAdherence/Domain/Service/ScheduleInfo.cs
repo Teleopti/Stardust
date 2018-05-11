@@ -89,20 +89,10 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 		{
 			return _previousActivity.Value;
 		}
-
-		public Guid? PreviousActivityId()
-		{
-			return _previousActivity.Value?.PayloadId;
-		}
 		
 		public ScheduledActivity NextActivity()
 		{
 			return _nextActivity.Value;
-		}
-
-		public Guid? NextActivityId()
-		{
-			return _nextActivity.Value?.PayloadId;
 		}
 
 		public DateTime? NextActivityStartTime()

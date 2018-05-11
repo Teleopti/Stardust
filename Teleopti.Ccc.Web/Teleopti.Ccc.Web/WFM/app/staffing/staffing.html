@@ -19,7 +19,7 @@
     <div class="con-row">
         <div class="con-flex">
             <div class="panel material-depth-1">
-                <div class="con-row align-row-center staffing-toolbar"
+				<div class="con-row align-row-center staffing-toolbar" ng-class="{'locked':vm.isSearchRequested}"
                      style="flex-wrap:wrap">
                     <div class="con-flex">
                         <md-autocomplete id="skill-id"
@@ -93,7 +93,8 @@
                                      ng-model="vm.useShrinkage"
                                      aria-label="Checkbox">{{'UseShrinkage'| translate}}</md-checkbox>
                     </div>
-                </div>
+					<md-progress-linear md-mode="indeterminate" ng-if="vm.isSearchRequested"></md-progress-linear>
+				</div>
             </div>
         </div>
     </div>

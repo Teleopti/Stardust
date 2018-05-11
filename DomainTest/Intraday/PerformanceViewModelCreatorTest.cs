@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				TimeSpan.FromMinutes(minutesPerInterval),
 				skillDay1.SkillDataPeriodCollection.First().ServiceAgreement.ServiceLevel.Percent.Value,
 				skillDay1.SkillStaffPeriodCollection[0].FStaff,
-				1);
+				1,0);
 			var eslSkill2Second = StaffingCalculatorService.ServiceLevelAchievedOcc(
 				scheduledStaffingList[3].Resource,
 				skillDay2.SkillDataPeriodCollection.First().ServiceAgreement.ServiceLevel.Seconds,
@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				TimeSpan.FromMinutes(minutesPerInterval),
 				skillDay2.SkillDataPeriodCollection.First().ServiceAgreement.ServiceLevel.Percent.Value,
 				skillDay2.SkillStaffPeriodCollection[1].FStaff,
-				1);
+				1, 0);
 
 			var answeredWithinServiceLevelSkill1 = forecastedCallsSkill1 * eslSkill1First;
 			var answeredWithinServiceLevelSkill2 = forecastedCallsSkill2 * eslSkill2Second;
@@ -865,7 +865,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				TimeSpan.FromMinutes(minutesPerInterval),
 				skillDay.SkillDataPeriodCollection.First().ServiceAgreement.ServiceLevel.Percent.Value,
 				skillDay.SkillStaffPeriodCollection[intervalPosition].FStaff,
-				1);
+				1,0);
 		}
 
 		private IList<SkillCombinationResource> createScheduledStaffing(ISkillDay skillDay)

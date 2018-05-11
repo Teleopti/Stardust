@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Outlier;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
 using Teleopti.Ccc.Web.Areas.Forecasting.Models;
 using Teleopti.Interfaces.Domain;
 
@@ -25,7 +24,10 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 		private readonly IForecastMethodProvider _forecastMethodProvider;
 		private readonly IWorkloadNameBuilder _workloadNameBuilder;
 
-		public ForecastViewModelFactory(IForecastWorkloadEvaluator forecastWorkloadEvaluator, IWorkloadRepository workloadRepository, IHistoricalPeriodProvider historicalPeriodProvider, IHistoricalData historicalData, IOutlierRemover outlierRemover, IForecastMethodProvider forecastMethodProvider, IWorkloadNameBuilder workloadNameBuilder)
+		public ForecastViewModelFactory(IForecastWorkloadEvaluator forecastWorkloadEvaluator,
+			IWorkloadRepository workloadRepository, IHistoricalPeriodProvider historicalPeriodProvider,
+			IHistoricalData historicalData, IOutlierRemover outlierRemover, IForecastMethodProvider forecastMethodProvider,
+			IWorkloadNameBuilder workloadNameBuilder)
 		{
 			_forecastWorkloadEvaluator = forecastWorkloadEvaluator;
 			_workloadRepository = workloadRepository;

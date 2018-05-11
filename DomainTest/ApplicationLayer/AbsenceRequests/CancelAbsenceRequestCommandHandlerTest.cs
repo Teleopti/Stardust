@@ -45,9 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakePersonAbsenceRepository PersonAbsenceRepository;
 		public FakeScheduleStorage_DoNotUse ScheduleStorage;
 		public FakePersonRepository PersonRepository;
-		public CancelAbsenceRequestCommandValidator CancelAbsenceRequestCommandValidator;
 		public FakeCurrentScenario_DoNotUse CurrentScenario;
-		public WriteProtectedScheduleCommandValidator WriteProtectedScheduleCommandValidator;
 		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeCommonAgentNameProvider CommonAgentNameProvider;

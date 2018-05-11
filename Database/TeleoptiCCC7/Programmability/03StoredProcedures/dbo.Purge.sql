@@ -47,8 +47,6 @@ if not exists (select 1 from PurgeSetting where [key] = 'MonthsToKeepPayroll')
 	insert into PurgeSetting ([Key], [Value]) values ('MonthsToKeepPayroll', 3)
 if not exists (select 1 from PurgeSetting where [key] = 'YearsToKeepSchedule')
 	insert into PurgeSetting ([Key], [Value]) values ('YearsToKeepSchedule', 3)
-if not exists (select 1 from PurgeSetting where [key] = 'DaysToKeepSecurityAudit')
-	insert into PurgeSetting ([Key], [Value]) values ('DaysToKeepSecurityAudit', 30)
 if not exists (select 1 from PurgeSetting where [key] = 'MonthsToKeepRequests')
 	insert into PurgeSetting ([Key], [Value]) values ('MonthsToKeepRequests', 12)
 if not exists (select 1 from PurgeSetting where [key] = 'YearsToKeepPersons')
@@ -261,6 +259,19 @@ begin
 		return
 end
  
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top(1000) PublicNote
+	from PublicNote n
+	where n.NoteDate < @KeepUntil
+ 
+	select @RowCount = @@rowcount
+
+	if datediff(second,@start,getdate()) > @timeout 
+		return
+end
+
 set @RowCount = 1
 while @RowCount > 0
 begin

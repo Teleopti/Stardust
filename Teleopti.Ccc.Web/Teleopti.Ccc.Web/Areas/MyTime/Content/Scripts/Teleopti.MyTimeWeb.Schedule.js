@@ -345,15 +345,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Month" + getUrlPartForDate(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash));
 		};
 
-		self.mobile = function () {
-			var urlPartForDate = getUrlPartForDate(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash);
-			if (showDayScheduleForStartPage()) {
-				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileDay" + urlPartForDate);
-			} else {
-				Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileWeek" + urlPartForDate + getUrlPartForProbability());
-			}
-		};
-
 		function getUrlPartForDate(date) {
 			return Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format("YYYY-MM-DD"));
 		}

@@ -20,13 +20,6 @@ namespace Teleopti.Ccc.TestCommon
 			Scenario = owner.Scenario;
 		}
 
-		public IScheduleRange UpdateCalcValues(int scheduledDaysOff, TimeSpan contractTimeHolder)
-		{
-			CalculatedScheduleDaysOff = scheduledDaysOff;
-			CalculatedContractTimeHolder = contractTimeHolder;
-			return this;
-		}
-
 		public new DateTimePeriod Period { get; private set; }
 		public new IPerson Person { get; private set; }
 		public new IScenario Scenario { get; private set; }
@@ -153,11 +146,6 @@ namespace Teleopti.Ccc.TestCommon
 
 		public void TakeSnapshot()
 		{
-		}
-
-		public DateTimePeriod VisiblePeriodMinusFourWeeksPeriod()
-		{
-			throw new NotImplementedException();
 		}
 
 		public IScheduleDay ScheduledDay(DateOnly day, bool includeUnpublished)

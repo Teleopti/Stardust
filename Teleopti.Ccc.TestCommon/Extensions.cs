@@ -72,11 +72,6 @@ namespace Teleopti.Ccc.TestCommon
 			return TimeZoneInfo.ConvertTimeFromUtc(dateTimeString.Utc(), timeZone.TimeZone());
 		}
 
-		public static DateTime InHawaii(this string dateTimeString)
-		{
-			return dateTimeString.In(TimeZoneInfoFactory.HawaiiTimeZoneInfo());
-		}
-
 		public static string AsShortTime(this DateTime dateTime, IUserCulture culture)
 		{
 			return dateTime.ToShortTimeString(culture);

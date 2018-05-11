@@ -114,7 +114,6 @@
       <DependentUpon>DatabaseDeployMain.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\DatabaseDeployment\DatabaseDeploymentModel.cs" />
-    <Compile Include="Controls\DatabaseDeployment\DeploySettings.cs" />
     <Compile Include="Controls\DatabaseDeployment\Pages\ArchivedSetSelectionPagePage.cs">
       <SubType>UserControl</SubType>
     </Compile>

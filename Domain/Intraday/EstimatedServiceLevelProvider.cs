@@ -108,7 +108,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 				TimeSpan.FromMinutes(minutesPerInterval),
 				serviceAgreement.ServiceLevel.Percent.Value,
 				interval.Agents,
-				1);
+				1,
+				skill.AbandonRate.Value);
 
 			return new EslInterval
 			{

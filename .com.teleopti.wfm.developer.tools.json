@@ -1,7 +1,9 @@
 {
-	RestoreToLocalFlow: true, 
-	EtlEnsureRecurringJobs: true, 
-	EtlEnsureRecurringJobsWithRetries: true, 
-	NpmRunRtaTest: true, 
-	ToolsFlowWithoutSQLCMD: true 
+	RestoreToLocalFlow: true,
+	EtlEnsureRecurringJobs: true,
+	EtlEnsureRecurringJobsWithRetries: true,
+	NpmRunRtaTest: true,
+	ToolsFlowWithoutSQLCMD: true,
+	ToolsFlowWithFixMyConfig: true,
+	ToolsFlowWithInfraTestConfigWithOptionalToggleMode: true
 }

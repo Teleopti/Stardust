@@ -1,4 +1,3 @@
-using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
 using Teleopti.Ccc.Web.Areas.Forecasting.Models;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Core

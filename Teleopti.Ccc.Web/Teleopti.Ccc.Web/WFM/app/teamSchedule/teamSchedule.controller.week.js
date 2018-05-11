@@ -47,7 +47,7 @@
 		vm.selectedFavorite = $stateParams.do ? $stateParams.selectedFavorite : null;
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 
-		vm.startOfWeek = moment(vm.scheduleDate).startOf('week').toDate();
+		vm.startOfWeek = serviceDateFormatHelper.getDateOnly(moment(vm.scheduleDate).startOf('week'));
 
 		vm.onKeyWordInSearchInputChanged = function () {
 			vm.selectedFavorite = false;
@@ -64,7 +64,7 @@
 			vm.paginationOptions.pageNumber = 1;
 			vm.scheduleFullyLoaded = false;
 			vm.loadSchedules();
-			resetFocus()
+			resetFocus();
 		};
 
 		function resetFocus() {
@@ -72,9 +72,9 @@
 		};
 
 		vm.onStartOfWeekChanged = function () {
-			vm.scheduleDate = new Date(vm.startOfWeek);
-			if (!moment(vm.startOfWeek).startOf('week').isSame(vm.startOfWeek, 'day')) {
-				vm.startOfWeek = moment(vm.startOfWeek).startOf('week').toDate();
+			vm.scheduleDate = moment(vm.startOfWeek).toDate();
+			if (!moment(vm.startOfWeek).startOf('week').isSame(moment(vm.startOfWeek), 'day')) {
+				vm.startOfWeek = serviceDateFormatHelper.getDateOnly(moment(vm.startOfWeek).startOf('week'));
 			}
 			vm.weekDays = Util.getWeekdays(vm.startOfWeek);
 			vm.loadSchedules();

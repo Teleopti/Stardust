@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakePreferenceDayRepository PreferenceDayRepository;
 		public FakeRuleSetBagRepository RuleSetBagRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public FakePlanningGroupSettingsRepository PlanningGroupSettingsRepository;
 		public FakePersonRotationRepository PersonRotationRepository;
 
 		[TestCase(true)]

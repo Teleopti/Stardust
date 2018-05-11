@@ -18,30 +18,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return new VisualLayerCollection(person, coll, new ProjectionPayloadMerger());
 		}
 
-		public static IVisualLayerCollection CreateForWorkShift(IPerson person, TimeSpan start, TimeSpan end,
-			IActivity activity)
-		{
-			var coll = createVisualLayerCollection(person, start, end, activity);
-			return new VisualLayerCollection(person, coll, new ProjectionPayloadMerger());
-		}
-
-		public static IVisualLayerCollection CreateForWorkShift(IPerson person, TimeSpan start, TimeSpan end, TimePeriod lunch)
-		{
-			var projSvc = new VisualLayerProjectionService(person);
-			var lunchAct = new Activity("lunch") {InContractTime = false};
-			lunchAct.SetId(Guid.NewGuid());
-
-			var testAct = new Activity("for test");
-			testAct.SetId(Guid.NewGuid());
-
-			projSvc.Add(factory.CreateShiftSetupLayer(testAct, new DateTimePeriod(WorkShift.BaseDate.Add(start),
-				WorkShift.BaseDate.Add(end)), person));
-			projSvc.Add(factory.CreateShiftSetupLayer(lunchAct, new DateTimePeriod(
-				WorkShift.BaseDate.Add(lunch.StartTime),
-				WorkShift.BaseDate.Add(lunch.EndTime)), person));
-			return projSvc.CreateProjection();
-		}
-
 		public static IVisualLayerCollection CreateForAbsence(IPerson person, TimeSpan start, TimeSpan end)
 		{
 			var coll = createVisualLayerCollectionWithAbsence(person, start, end);
