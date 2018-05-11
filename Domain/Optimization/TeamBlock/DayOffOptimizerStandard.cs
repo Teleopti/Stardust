@@ -132,7 +132,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				var movedDaysOff = _affectedDayOffs.Execute(matrix.Item1, dayOffOptimizationPreference, originalArray, resultingArray);
 				if (movedDaysOff != null)
 				{
-					var predictorResult = _dayOffOptimizerPreMoveResultPredictor.IsPredictedBetterThanCurrent(matrix.Item1, resultingArray, originalArray, dayOffOptimizationPreference, numberOfDayOffsMoved, optimizationPreferences, schedulingResultStateHolder);
+					var predictorResult = _dayOffOptimizerPreMoveResultPredictor.IsPredictedBetterThanCurrent(matrix.Item1, resultingArray, originalArray, dayOffOptimizationPreference, 
+						numberOfDayOffsMoved, optimizationPreferences, schedulingResultStateHolder, movedDaysOff);
 					if (predictorResult == PredictorCheck.Unsuccesful)
 					{
 						allFailed[matrix.Item2] = false;
@@ -151,7 +152,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 					if (success)
 					{
-						if (predictorResult != PredictorCheck.NotApplicable)
+						if (predictorResult != PredictorCheck.SuccessDueToMinimumStaffing)
 						{
 							allFailed[matrix.Item2] = false;				
 						}

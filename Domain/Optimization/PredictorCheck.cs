@@ -4,6 +4,6 @@
 	{
 		Success, 
 		Unsuccesful,
-		NotApplicable
+		SuccessDueToMinimumStaffing
 	}
 }

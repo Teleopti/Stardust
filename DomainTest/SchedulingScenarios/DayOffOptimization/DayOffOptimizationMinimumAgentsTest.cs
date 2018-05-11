@@ -60,7 +60,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		}
 		
 		[Test]
-		[Ignore("Test issue for #75339")]
 		public void ShouldMoveMoreThanOneDoPerAgent()
 		{
 			var date = new DateOnly(2015, 10, 12); //mon
