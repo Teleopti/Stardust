@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 						.Select(x => x.Type)
 				)
 				.AsSelf()
-				.SingleInstance()
+				.InstancePerLifetimeScope()
 				.ApplyAspects();
 			
 			builder.RegisterType<UnitOfWorkTransactionEventSyncronization>().As<IEventSyncronization>().SingleInstance();
