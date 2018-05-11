@@ -278,6 +278,39 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		}
 
 		[Test]
+		public void ShouldNotAddCampaignWhenExistsOverride()
+		{
+			var forecast = new ForecastDayModel
+			{
+				Date = new DateOnly(2018, 5, 4),
+				IsOpen = true,
+				Tasks = 100d,
+				AverageTaskTime = 30d,
+				AverageAfterTaskTime = 10d,
+				TotalTasks = 200d,
+				TotalAverageTaskTime = 40d,
+				TotalAverageAfterTaskTime = 20d,
+				OverrideTasks = 200d,
+				OverrideAverageTaskTime = 40d,
+				OverrideAverageAfterTaskTime = 20d,
+				HasOverride = true
+			};
+			var model = new CampaignInput
+			{
+				SelectedDays = new[] {new DateOnly(2018, 5, 4)},
+				ForecastDays = new List<ForecastDayModel> { forecast },
+				CampaignTasksPercent = 0.5d
+			};
+
+			var result = (OkNegotiatedContentResult<IList<ForecastDayModel>>)Target.AddCampaign(model);
+			var forecastDay = result.Content.First();
+			result.Should().Be.OfType<OkNegotiatedContentResult<IList<ForecastDayModel>>>();
+			Assert.That(forecastDay.TotalTasks, Is.EqualTo(200d).Within(tolerance));
+			Assert.That(forecastDay.TotalAverageTaskTime, Is.EqualTo(40d).Within(tolerance));
+			Assert.That(forecastDay.TotalAverageAfterTaskTime, Is.EqualTo(20d).Within(tolerance));
+		}
+
+		[Test]
 		public void ShouldNotAddCampaignForClosedDay()
 		{
 			var model = new CampaignInput
@@ -630,6 +663,46 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				.Should().Be(30d);
 			result.Content.First().TotalAverageAfterTaskTime
 				.Should().Be(10d);
+			result.Content.First().HasOverride
+				.Should().Be(false);
+		}
+
+		[Test]
+		public void ShouldUseExistingCampaignWhenClearingOverride()
+		{
+			var model = new OverrideInput
+			{
+				SelectedDays = new[] { new DateOnly(2018, 5, 4) },
+				ForecastDays = new List<ForecastDayModel>
+				{
+					new ForecastDayModel
+					{
+						Date = new DateOnly(2018, 5, 4),
+						IsOpen = true,
+						Tasks = 100d,
+						AverageTaskTime = 30d,
+						AverageAfterTaskTime = 10d,
+						CampaignTasksPercentage = 0.5d,
+						TotalTasks = 200d,
+						TotalAverageTaskTime = 40d,
+						TotalAverageAfterTaskTime = 20d
+					}
+				},
+				ShouldOverrideTasks = true,
+				ShouldOverrideAverageTaskTime = true,
+				ShouldOverrideAverageAfterTaskTime = true
+			};
+
+			var result = (OkNegotiatedContentResult<IList<ForecastDayModel>>)Target.AddOverride(model);
+
+			result.Content.First().TotalTasks
+				.Should().Be(150d);
+			result.Content.First().TotalAverageTaskTime
+				.Should().Be(30d);
+			result.Content.First().TotalAverageAfterTaskTime
+				.Should().Be(10d);
+			result.Content.First().HasCampaign.Should().Be(true);
+			result.Content.First().HasOverride.Should().Be(false);
 		}
 
 		[Test]

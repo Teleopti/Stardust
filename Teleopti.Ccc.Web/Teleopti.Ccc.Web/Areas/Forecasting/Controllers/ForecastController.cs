@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			foreach (var selectedDay in input.SelectedDays)
 			{
 				var forecastDay = input.ForecastDays.Single(x => x.Date == selectedDay);
-				if (!forecastDay.IsOpen)
+				if (!forecastDay.IsOpen || forecastDay.HasOverride)
 					continue;
 				forecastDay.TotalTasks = (input.CampaignTasksPercent + 1) * forecastDay.Tasks;
 			}
@@ -141,7 +141,19 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 					continue;
 				if (input.ShouldOverrideTasks)
 				{
-					forecastDay.TotalTasks = input.OverrideTasks ?? forecastDay.Tasks;
+					if (input.OverrideTasks.HasValue)
+					{
+						forecastDay.TotalTasks = input.OverrideTasks.Value;
+					}
+					else if (forecastDay.CampaignTasksPercentage > 0)
+					{
+						forecastDay.TotalTasks = (forecastDay.CampaignTasksPercentage + 1) * forecastDay.Tasks;
+					}
+					else
+					{
+						forecastDay.TotalTasks = forecastDay.Tasks;
+					}
+					
 				}
 
 				if (input.ShouldOverrideAverageTaskTime)
@@ -153,6 +165,11 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 				{
 					forecastDay.TotalAverageAfterTaskTime = input.OverrideAverageAfterTaskTime ?? forecastDay.AverageAfterTaskTime;
 				}
+
+				forecastDay.HasOverride = input.OverrideAverageAfterTaskTime.HasValue || input.OverrideTasks.HasValue ||
+										  input.OverrideAverageTaskTime.HasValue;
+				forecastDay.HasCampaign = forecastDay.CampaignTasksPercentage > 0;
+
 			}
 
 			return Ok(input.ForecastDays);
