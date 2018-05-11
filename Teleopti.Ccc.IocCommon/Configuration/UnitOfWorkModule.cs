@@ -50,14 +50,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DatabaseVersion>().AsSelf().SingleInstance();
 			builder.RegisterType<AllBusinessUnitsUnitOfWorkAspect>().As<IAspect>().As<IAllBusinessUnitsUnitOfWorkAspect>().SingleInstance();
 			builder.RegisterType<UnitOfWorkAspect>().As<IAspect>().As<IUnitOfWorkAspect>().SingleInstance();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_LessResourcesXXL_74915))
-			{
-				builder.RegisterType<UnitOfWorkNoCommitAspect>().As<IAspect>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<UnitOfWorkNoCommitAspectOLD>().As<IAspect>().SingleInstance();
-			}
+			builder.RegisterType<UnitOfWorkNoCommitAspectOLD>().As<IAspect>().SingleInstance();
 
 			builder.RegisterType<ConnectionStrings>().As<IConnectionStrings>();
 		}
