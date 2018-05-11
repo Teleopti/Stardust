@@ -282,8 +282,10 @@
                   }
                 ), function (data, status, headers, config) {
                   vm.savingToScenario = false;
+                  getWorkloadForecastData();
                 }, function(data, status, headers, config) {
                   vm.savingToScenario = false;
+                  getWorkloadForecastData();
                 }
               );
             }
