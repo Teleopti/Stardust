@@ -118,13 +118,25 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				})
 				.Except<DayOffOptimizationEventHandler>(ct =>
 				{
-					ct.As(typeof(IHandleEvent<DayOffOptimizationWasOrdered>))
-						.AsSelf()
-						.InstancePerLifetimeScope()
-						.ApplyAspects();
+					if (_config.Toggle(Toggles.ResourcePlanner_LessResourcesXXL_74915))
+					{
+						ct.As(typeof(IHandleEvent<DayOffOptimizationWasOrdered>))
+							.AsSelf()
+							.InstancePerLifetimeScope()
+							.ApplyAspects();						
+					}
+				})
+				.Except<DayOffOptimizationEventHandlerOLD>(ct =>
+				{
+					if (!_config.Toggle(Toggles.ResourcePlanner_LessResourcesXXL_74915))
+					{
+						ct.As(typeof(IHandleEvent<DayOffOptimizationWasOrdered>))
+							.AsSelf()
+							.InstancePerLifetimeScope()
+							.ApplyAspects();						
+					}
 				})
 				.ApplyAspects();
-
 
 			builder.RegisterType<UnitOfWorkTransactionEventSyncronization>().As<IEventSyncronization>().SingleInstance();
 			builder.RegisterType<BusinessRulesForPersonalAccountUpdate>().As<IBusinessRulesForPersonalAccountUpdate>().InstancePerDependency();
