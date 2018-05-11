@@ -54,7 +54,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterAssemblyTypes(typeof(IHandleEvent<>).Assembly)
 				.Where(t =>
 					t.IsEventHandler() &&
-					t.EnabledByToggle(_config)
+					t.EnabledByToggle(_config) && 
+					t.RegisterAsSingleton()
 				)
 				.As(t =>
 					t.HandleInterfaces()
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				)
 				.AsSelf()
 				.SingleInstance()
-				// when will someone think this is an anti-pattern? ;)
+				// use 	[RegisterEventHandlerInLifetimeScope] instead
 				.Except<IntradayOptimizationEventRunInSyncInFatClientProcessHandler>(ct =>
 				{
 					ct.As<IHandleEvent<IntradayOptimizationWasOrdered>>()
@@ -109,35 +110,23 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 						.InstancePerLifetimeScope()
 						.ApplyAspects();
 				})
-				.Except<SchedulingEventHandler>(ct =>
-				{
-					ct.As(typeof(IHandleEvent<SchedulingWasOrdered>))
-						.AsSelf()
-						.InstancePerLifetimeScope()
-						.ApplyAspects();
-				})
-				.Except<DayOffOptimizationEventHandler>(ct =>
-				{
-					if (_config.Toggle(Toggles.ResourcePlanner_LessResourcesXXL_74915))
-					{
-						ct.As(typeof(IHandleEvent<DayOffOptimizationWasOrdered>))
-							.AsSelf()
-							.InstancePerLifetimeScope()
-							.ApplyAspects();						
-					}
-				})
-				.Except<DayOffOptimizationEventHandlerOLD>(ct =>
-				{
-					if (!_config.Toggle(Toggles.ResourcePlanner_LessResourcesXXL_74915))
-					{
-						ct.As(typeof(IHandleEvent<DayOffOptimizationWasOrdered>))
-							.AsSelf()
-							.InstancePerLifetimeScope()
-							.ApplyAspects();						
-					}
-				})
 				.ApplyAspects();
 
+			builder.RegisterAssemblyTypes(typeof(IHandleEvent<>).Assembly)
+				.Where(t =>
+					t.IsEventHandler() &&
+					t.EnabledByToggle(_config) &&
+					t.RegisterAsLifetimeScope()
+				)
+				.As(t =>
+					t.HandleInterfaces()
+						.Where(x => x.Method?.EnabledByToggle(_config) ?? true)
+						.Select(x => x.Type)
+				)
+				.AsSelf()
+				.SingleInstance()
+				.ApplyAspects();
+			
 			builder.RegisterType<UnitOfWorkTransactionEventSyncronization>().As<IEventSyncronization>().SingleInstance();
 			builder.RegisterType<BusinessRulesForPersonalAccountUpdate>().As<IBusinessRulesForPersonalAccountUpdate>().InstancePerDependency();
 			builder.RegisterType<ProjectionChangedEventBuilder>().As<IProjectionChangedEventBuilder>().SingleInstance();

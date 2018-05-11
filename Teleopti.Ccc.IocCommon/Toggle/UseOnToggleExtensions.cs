@@ -1,12 +1,27 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using Hangfire.Storage.Monitoring;
 using Teleopti.Ccc.Domain;
 
 namespace Teleopti.Ccc.IocCommon.Toggle
 {
 	public static class UseOnToggleExtensions
 	{
+		public static bool RegisterAsSingleton(this Type type)
+		{
+			return !type.GetCustomAttributes(false)
+				.OfType<RegisterEventHandlerInLifetimeScopeAttribute>()
+				.Any();
+		}
+		
+		public static bool RegisterAsLifetimeScope(this Type type)
+		{
+			return type.GetCustomAttributes(false)
+				.OfType<RegisterEventHandlerInLifetimeScopeAttribute>()
+				.Any();
+		}
+		
 		public static bool EnabledByToggle(this Type type, IIocConfiguration iocConfiguration)
 		{
 			var attributes = type.GetCustomAttributes(false);

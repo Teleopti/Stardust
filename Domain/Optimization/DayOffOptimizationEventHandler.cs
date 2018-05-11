@@ -11,6 +11,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.Optimization
 {
 	[EnabledBy(Toggles.ResourcePlanner_LessResourcesXXL_74915)]
+	[RegisterEventHandlerInLifetimeScope]
 	public class DayOffOptimizationEventHandler : IRunInSyncInFatClientProcess, IHandleEvent<DayOffOptimizationWasOrdered>
 	{
 		private readonly DayOffOptimization _dayOffOptimization;
@@ -18,8 +19,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly FillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly ISynchronizeSchedulesAfterIsland _synchronizeSchedulesAfterIsland;
 		private readonly IGridlockManager _gridlockManager;
-		
-
 
 		public DayOffOptimizationEventHandler(DayOffOptimization dayOffOptimization,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
@@ -62,6 +61,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	
 	[DisabledBy(Toggles.ResourcePlanner_LessResourcesXXL_74915)]
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_LessResourcesXXL_74915)]
+	[RegisterEventHandlerInLifetimeScope]
 	public class DayOffOptimizationEventHandlerOLD : IRunInSyncInFatClientProcess, IHandleEvent<DayOffOptimizationWasOrdered>
 	{
 		private readonly DayOffOptimization _dayOffOptimization;
