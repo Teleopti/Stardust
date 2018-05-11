@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable ,  of } from 'rxjs';
+import { Observable } from 'rxjs';
+import { of } from 'rxjs/observable/of';
 import { flatMap, map } from 'rxjs/operators';
 import { LogonInfoService, WorkspaceService } from '../../services';
 

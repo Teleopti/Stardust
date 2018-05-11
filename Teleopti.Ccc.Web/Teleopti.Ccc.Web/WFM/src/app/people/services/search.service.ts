@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Person, Role } from '../types';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { BehaviorSubject ,  Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs';
 import { SearchOverridesService, PeopleOverride } from './search-overrides.service';
 
 export interface PeopleSearchResult {

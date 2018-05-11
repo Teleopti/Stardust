@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ValidationErrors } from '@angular/forms';
-import { Observable, of, timer } from 'rxjs';
+import { Observable } from 'rxjs';
+import { of } from 'rxjs/observable/of';
 import { first, map, switchMap, take, tap } from 'rxjs/operators';
 import { LogonInfoService } from '../../services';
 import { FormControlWithInitial } from '../shared/forms';
@@ -22,7 +23,7 @@ export class DuplicateIdentityLogonValidator {
 	validate = (control: FormControlWithInitial): Observable<ValidationErrors> => {
 		if (control.sameAsInitialValue) return of(this.stateToErrorMessage(false));
 
-		return timer(500).pipe(
+		return Observable.timer(500).pipe(
 			switchMap(() => this.nameExists(control.value)),
 			take(1),
 			map(isDuplicate => this.stateToErrorMessage(isDuplicate)),

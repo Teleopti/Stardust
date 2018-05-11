@@ -24048,6 +24048,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Access.
         /// </summary>
         public static string PeopleAccess {
             get {
