@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Integrator.cs" />
+    <Compile Include="Models\Group.cs" />
     <Compile Include="StaffHub\StaffHubExporter.cs" />
     <Compile Include="Teleopti\TeleoptiImporter.cs" />
     <Compile Include="Types\BreakType.cs" />

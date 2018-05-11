@@ -11,6 +11,7 @@ namespace StaffHubPoC.StaffHub
 		private readonly ShiftCollection _allShifts;
 		private readonly List<Member> _allMembers;
 		private readonly Team _myTeam;
+		private readonly List<Group> _allGroups;
 		private string _token;
 
 		public StaffHubExporter()
@@ -20,6 +21,7 @@ namespace StaffHubPoC.StaffHub
 			_myTeam = StaffHubCommunicator.GetMyTeam(_token);
 			_allMembers = StaffHubCommunicator.GetMembers(_myTeam, _token);
 			_allShifts = StaffHubCommunicator.GetAllShifts(_myTeam, _token);
+			_allGroups = StaffHubCommunicator.GetGroups(_myTeam, _token);
 		}
 
 		public void PostShifts(List<TeleoptiShift> teleoptiShifts)
@@ -27,7 +29,7 @@ namespace StaffHubPoC.StaffHub
 			foreach (var teleoptiShift in teleoptiShifts)
 			{
 				var member = _allMembers.First(x => x.email == teleoptiShift.Email);
-				var shift = teleoptiShift.ConvertToStaffHubShift(member);
+				var shift = teleoptiShift.ConvertToStaffHubShift(member, _allGroups);
 				if (_allShifts.Shifts.Any(x => x.memberId == member.id && x.state != StateType.Deleted &&
 												((x.startTime < shift.endTime &&
 												x.endTime > shift.startTime) && !(!teleoptiShift.Working && x.shiftType == ShiftType.Working))))

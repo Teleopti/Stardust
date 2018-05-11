@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Tracing;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using StaffHubPoC.Models;
-using StaffHubPoC.Types;
 using StaffHubPoC.Util;
 
 namespace StaffHubPoC.StaffHub
@@ -25,6 +22,14 @@ namespace StaffHubPoC.StaffHub
 			if (jsonResult == null) return null;
 			var members = JsonConvert.DeserializeObject<MemberCollection>(jsonResult).members;
 			return members;
+		}
+
+		public static List<Group> GetGroups(Team team, string token)
+		{
+			var jsonResult = HttpSender.Get($"api/beta/teams/{team.id}/groups", token);
+			if (jsonResult == null) return null;
+			var groups = JsonConvert.DeserializeObject<GroupCollection>(jsonResult).groups;
+			return groups;
 		}
 
 		public static ShiftCollection GetAllShifts(Team team, string token)

@@ -21,14 +21,16 @@ namespace StaffHubPoC.Teleopti
 			using (var conn = new SqlConnection(ConnectionString))
 			{
 				conn.Open();
-				using (var command = new SqlCommand(
-				@"SELECT p.email, shift_starttime, shift_endtime, sc.shift_category_name, ab.absence_name
+				using (var command = new SqlCommand( //yeap, probably not the smartest way and assumes a shit only contains one work activity
+				@"SELECT p.email, shift_starttime, shift_endtime, sc.shift_category_name, a.activity_name, ab.absence_name
   FROM [mart].[fact_schedule] s
   inner join mart.dim_person p on s.person_id=p.person_id
   inner join mart.fact_schedule_day_count sdc on s.shift_starttime=sdc.starttime and s.person_id=sdc.person_id
   inner join mart.dim_shift_category sc on sdc.shift_category_id=sc.shift_category_id
   inner join mart.dim_absence ab on ab.absence_id=s.absence_id
-  group by shift_starttime, shift_endtime, p.email, sc.shift_category_name, ab.absence_name
+  inner join mart.dim_activity a on a.activity_id=s.activity_id
+  where a.activity_name IN (select activity_name FROM mart.dim_activity where in_work_time = 1) OR a.activity_name = 'Not Defined'
+  group by shift_starttime, shift_endtime, p.email, sc.shift_category_name, a.activity_name, ab.absence_name
   order by s.shift_starttime", conn))
 				{
 					using (var reader = command.ExecuteReader())
@@ -40,9 +42,10 @@ namespace StaffHubPoC.Teleopti
 								Email = reader.GetString(0),
 								StartTime = reader.GetDateTime(1),
 								EndTime = reader.GetDateTime(2),
-								Label = reader.GetString(3) != "Not Defined" ? reader.GetString(3) : reader.GetString(4),
+								Label = reader.GetString(3) != "Not Defined" ? reader.GetString(3) : reader.GetString(5),
 								Breaks = new List<Break>(),
-								Working = reader.GetString(4) == "Not Defined"
+								Activity = reader.GetString(4),
+								Working = reader.GetString(5) == "Not Defined"
 							});
 						}
 					}
