@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.EqualTo(activityC);
 		}
 
-		public SchedulingIslandTests(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
+		public SchedulingIslandTests(SeperateWebRequest seperateWebRequest, bool resourcePlannerLessResourcesXXL74915) : base(seperateWebRequest, resourcePlannerLessResourcesXXL74915)
 		{
 		}
 	}
