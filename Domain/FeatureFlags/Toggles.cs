@@ -83,6 +83,7 @@
 		ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899,
 		ResourcePlanner_MinimumAgents_75339,
 		ResourcePlanner_UseErlangAWithFinitePatience_47738,
+		ResourcePlanner_LessResourcesXXL_74915,
 
 		Wfm_DisplayOnlineHelp_39402,
 
