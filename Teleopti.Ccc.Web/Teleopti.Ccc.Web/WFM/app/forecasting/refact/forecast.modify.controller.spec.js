@@ -46,14 +46,14 @@ describe('ForecastCtrl', function() {
 
       $httpBackend.whenPOST('../api/Forecasting/LoadForecast').respond(function (method, url, data, headers) {
         return [201, {
-          Days: [{
-            date:"2018-04-25T00:00:00",
-            vacw:4.7,
-            vc:1135.2999999999997,
-            vtacw:4.7,
-            vtc:1135.2999999999997,
-            vtt:158.10038509999998,
-            vttt:158.10038509999998
+          ForecastDays: [{
+            Date:"2018-04-25T00:00:00",
+            AverageAfterTaskTime:4.7,
+            Tasks:1135.2999999999997,
+            TotalAverageAfterTaskTime:4.7,
+            TotalTasks:1135.2999999999997,
+            AverageTaskTime:158.10038509999998,
+            TotalAverageTaskTime:158.10038509999998
           }],
           WorkloadId: '123'
         }];
@@ -79,9 +79,9 @@ describe('ForecastCtrl', function() {
   }));
 
   it("should default forecasting period to next 6 month", inject(function () {
-    var today = moment().utc().format("MMM Do YY");
-    var testStartDate = vm.forecastPeriod.startDate.format("MMM Do YY");
-    var testEndDate = vm.forecastPeriod.endDate.format("MMM Do YY");
+    var today = moment().utc().add(1, 'days').format("MMM Do YY");
+    var testStartDate = moment(vm.forecastPeriod.startDate).utc().format("MMM Do YY");
+    var testEndDate = moment(vm.forecastPeriod.endDate).utc().format("MMM Do YY");
     expect(testStartDate).toEqual(today);
     expect(testEndDate).toEqual(moment().utc().add(6, 'months').format("MMM Do YY"));
   }));

@@ -90,7 +90,8 @@
       forecastingService.campaign(
         angular.toJson(
           {
-            Days: vm.selectedDayCount,
+            ForecastDays: vm.selectedWorkload.Days,
+            SelectedDays: vm.selectedDayCount,
             WorkloadId: vm.selectedWorkload.Workload.Id,
             ScenarioId: vm.selectedScenario.Id,
             CampaignTasksPercent: vm.campaignPercentage
@@ -117,7 +118,7 @@
       function applyOverride(form) {
         forecastingService.override(angular.toJson(
           {
-            Days: vm.selectedDayCount,
+            SelectedDays: vm.selectedDayCount,
             WorkloadId: vm.selectedWorkload.Workload.Id,
             ScenarioId: vm.selectedScenario.Id,
             OverrideTasks: form.overrideTasksValue,
@@ -125,7 +126,8 @@
             OverrideAfterCallWork: form.overrideAfterCallWorkValue,
             ShouldSetOverrideTasks: checkData(form.overrideTasksValue),
             ShouldSetOverrideTalkTime: checkData(form.overrideTalkTimeValue),
-            ShouldSetOverrideAfterCallWork: checkData(form.overrideAfterCallWorkValue)
+            ShouldSetOverrideAfterCallWork: checkData(form.overrideAfterCallWorkValue),
+            ForecastDays: vm.selectedWorkload.Days
           }), function (data, status, headers, config) {
 
           }, function (data, status, headers, config) {
@@ -140,7 +142,8 @@
         function clearOverride() {
           forecastingService.override(angular.toJson(
             {
-              Days: vm.selectedDayCount,
+              ForecastDays: vm.selectedWorkload.Days,
+              SelectedDays: vm.selectedDayCount,
               WorkloadId: vm.selectedWorkload.Workload.Id,
               ScenarioId: vm.selectedScenario.Id,
               ShouldSetOverrideTasks: true,
