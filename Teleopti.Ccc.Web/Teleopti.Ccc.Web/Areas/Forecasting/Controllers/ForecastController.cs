@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -7,6 +8,7 @@ using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Models;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -163,8 +165,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			var scenario = _scenarioRepository.Get(forecastResult.ScenarioId);
 			var periodStart = new DateOnly(forecastResult.ForecastDays.Min(x => x.Date).Date);
 			var periodEnd = new DateOnly(forecastResult.ForecastDays.Max(x => x.Date).Date);
-			var skillDays =
-				_fetchAndFillSkillDays.FindRange(new DateOnlyPeriod(periodStart, periodEnd), workload.Skill, scenario);
+			var forecastPeriod = new DateOnlyPeriod(periodStart, periodEnd);
+			var skillDays = _fetchAndFillSkillDays.FindRange(forecastPeriod, workload.Skill, scenario);
 
 			foreach (var skillDay in skillDays)
 			{
@@ -176,6 +178,14 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 				forecastedWorkloadDay.Tasks = model.Tasks;
 				forecastedWorkloadDay.AverageTaskTime = TimeSpan.FromSeconds(model.AverageTaskTime);
 				forecastedWorkloadDay.AverageAfterTaskTime = TimeSpan.FromSeconds(model.AverageAfterTaskTime);
+				forecastedWorkloadDay.CampaignTasks = new Percent(model.CampaignTasksPercentage);
+				forecastedWorkloadDay.SetOverrideTasks(model.OverrideTasks, new List<ITaskOwner>());
+				forecastedWorkloadDay.OverrideAverageTaskTime = model.OverrideAverageTaskTime.HasValue
+					? TimeSpan.FromSeconds(model.OverrideAverageTaskTime.Value)
+					: (TimeSpan?) null;
+				forecastedWorkloadDay.OverrideAverageAfterTaskTime = model.OverrideAverageAfterTaskTime.HasValue
+					? TimeSpan.FromSeconds(model.OverrideAverageAfterTaskTime.Value)
+					: (TimeSpan?) null;
 			}
 
 			return Ok();
