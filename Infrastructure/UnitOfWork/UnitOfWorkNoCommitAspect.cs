@@ -22,7 +22,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public void OnBeforeInvocation(IInvocationInfo invocation)
 		{
 			var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
-			uow.Session().DefaultReadOnly = true;
+			var session = uow.Session();
+			if (session == null)
+				return; //to avoid nullex in domain tests
+			session.DefaultReadOnly = true;
 		}
 
 		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
