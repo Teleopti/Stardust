@@ -137,8 +137,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					if (predictorResult == PredictorCheck.Unsuccesful)
 					{
 						allFailed[matrix.Item2] = false;
-						matrix.Item2.LockDays(movedDaysOff.AddedDaysOff);
-						matrix.Item2.LockDays(movedDaysOff.RemovedDaysOff);
+						matrix.Item2.LockDays(movedDaysOff.ModifiedDays());
 						callback.Optimizing(new OptimizationCallbackInfo(matrix.Item2, false, matrixes.Count));
 						continue;
 					}
@@ -166,8 +165,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						{
 							allFailed[matrix.Item2] = false;
 						}
-						matrix.Item2.LockDays(movedDaysOff.AddedDaysOff);
-						matrix.Item2.LockDays(movedDaysOff.RemovedDaysOff);
+						matrix.Item2.LockDays(movedDaysOff.ModifiedDays());
 					}
 
 					callback.Optimizing(new OptimizationCallbackInfo(matrix.Item2, success, matrixes.Count));
