@@ -1,6 +1,7 @@
 using System;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Aop.Core;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
 
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		}
 	}
 	
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_LessResourcesXXL_74915)]
 	public class UnitOfWorkNoCommitAspectOLD : IUnitOfWorkNoCommitAspect
 	{
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
