@@ -72,6 +72,8 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 				return 'app/rta/rta/historical/rta-historical.approvePreviousOOA_47230.html';
 			},
 			controllerProvider: function () {
+				if (toggles.RTA_RestrictModifyAdherenceWithPermission_74898)
+					return 'RtaHistoricalController74898 as vm';
 				if (toggles.RTA_RemoveApprovedOOA_47721)
 					return 'RtaHistoricalController47721 as vm';
 				return 'RtaHistoricalController47230 as vm';
