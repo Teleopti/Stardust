@@ -1399,7 +1399,6 @@
       <Link>FeatureFlags\toggles.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include=".node\Gruntfile.js" />
     <Content Include="Areas\MyTime\Content\appdownload.html" />
     <Content Include="Areas\Anywhere\Views\Application\redirect.aspx" />
     <Content Include="Areas\MyTime\Content\Css\MobileApp.css" />
@@ -1450,9 +1449,9 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AppGuide.WFMApp.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AppGuide.WFMAppViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewNew.js" />
-    <Content Include=".node\package.json" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.PollScheduleUpdates.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.BadgeCountsDropdown.js" />
+    <Content Include=".node\package.json" />
     <None Include="Areas\MyTime\Content\Scripts\_references.js" />
     <Content Include="Areas\SSO\Content\Css\newLogin.css" />
     <Content Include="Areas\SSO\Content\Css\main.min.css" />
@@ -2946,10 +2945,11 @@ if not exist "$(ProjectDir)Areas\MyTime\Views\web.config" copy "$(ProjectDir)..\
 if not exist "$(ProjectDir)Areas\Start\Views\web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.Start.Web.config" "$(ProjectDir)Areas\Start\Views\web.config"
 if not exist "$(ProjectDir)Areas\SSO\Views\web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.SSO.Web.config" "$(ProjectDir)Areas\SSO\Views\web.config"</PreBuildEvent>
   </PropertyGroup>
-  <Import Project=".node\node.targets" Condition="Exists('.node\node.targets')" />
   <Target Name="BeforeBuild">
-    <CallTarget Targets="RestoreNodePackages" Condition="'$(Configuration)' == 'Debug'" />
-    <CallTarget Targets="RestoreNodePackages;RunGruntBuildDist" Condition="'$(Configuration)' != 'Debug'" />
+    <Exec Command="powershell -ExecutionPolicy Bypass ./NpmInstallWFM-Dev.ps1" WorkingDirectory="$(MSBuildProjectDirectory)\.node\" ConsoleToMsBuild="true" Condition="'$(Configuration)' == 'Debug'" />
+    <Exec Command="powershell -ExecutionPolicy Bypass ./NpmRunDist.ps1" WorkingDirectory="$(MSBuildProjectDirectory)\.node\" ConsoleToMsBuild="true" Condition="'$(Configuration)' != 'Debug'" />
+    <!-- <CallTarget Targets="RestoreNodePackages" Condition="'$(Configuration)' == 'Debug'" /> -->
+    <!-- <CallTarget Targets="RestoreNodePackages;RunGruntBuildDist" Condition="'$(Configuration)' != 'Debug'" /> -->
   </Target>
   <!--<Import Project="..\..\.nuget\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\.nuget\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
