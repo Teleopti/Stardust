@@ -381,6 +381,21 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				.EqualTo(TimeSpan.FromHours(168));
 		}
 
+		[Test]
+		public void ShouldNotReportBrokenNightRestBetweenTwoScheduledDay()
+		{
+			var period = createStandardSetup(out var scenario, out var agent, out var skillDays);
+			var shiftCategory = new ShiftCategory().WithId();
+			var activity = new Activity().WithId();
+			var ass1 = new PersonAssignment(agent, scenario, period.StartDate).WithLayer(activity, new TimePeriod(15, 23)).ShiftCategory(shiftCategory);
+			var ass2 = new PersonAssignment(agent, scenario, period.StartDate.AddDays(1)).WithLayer(activity, new TimePeriod(7, 15)).ShiftCategory(shiftCategory);
+			SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, new IScheduleData[] { ass1, ass2 }, skillDays);
+
+			var result = Target.Execute(agent.VirtualSchedulePeriod(period.StartDate));
+			result.Should().Be.EqualTo(null);
+
+		}
+
 		private static DateOnlyPeriod createStandardSetupWithFlexibleContract(out Scenario scenario, out Person agent, out IList<ISkillDay> skillDays)
 		{
 			var period = new DateOnlyPeriod(2017, 12, 01, 2017, 12, 31);
