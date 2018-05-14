@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			foreach (var skillDataPeriod in skillDay.SkillDataPeriodCollection)
 			{
-				if (period.Contains(skillDataPeriod.Period.TimePeriod(skillDay.Skill.TimeZone)))
+				if (period.Intersect(skillDataPeriod.Period.TimePeriod(skillDay.Skill.TimeZone)))
 				{
 					skillDataPeriod.MinimumPersons = numberOfAgents;					
 				}
