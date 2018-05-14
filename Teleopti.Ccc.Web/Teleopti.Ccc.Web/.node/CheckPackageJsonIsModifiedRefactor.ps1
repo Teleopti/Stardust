@@ -37,10 +37,16 @@ function renewCheck([String]$FilePath, [String]$HashFilePath) {
 } 
 
 $CheckWfm = renewCheck "..\WFM\Package.json" ".\WfmFileHash.txt"
+$CheckNodeEnv = renewCheck "..\..\..\packages\NodeEnv.1.0.6\node.exe" ".\NodeHash.txt"
 $CheckWfmNodeMoudle = checkNodeModules "..\WFM\node_modules"
+$CheckNodeEnvNodeModule = checkNodeModules "..\..\..\packages\NodeEnv.1.0.6\node_modules"
 
-if (($CheckWfm -eq "isChanged") -or ($CheckWfmNodeMoudle -eq $False)) {
+if (($CheckNodeEnv -eq "isChanged") -or ($CheckNodeEnvNodeModule -eq $False)) {
+    return "ALL"
+} elseIf (($CheckWfm -eq "isChanged") -or ($CheckWfmNodeMoudle -eq $False)) {
     return "WFM"
 } else {
     return "False"
 }
+
+
