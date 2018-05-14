@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	public class ForecastAndScheduleSumForDay
 	{
 		private readonly IUserTimeZone _userTimeZone;
-		public const double MinimumAgentsNotFulfilledValue = 100_000;
+		public const double MinimumAgentsNotFulfilledValue = double.MaxValue - 100_000;
 		
 		public ForecastAndScheduleSumForDay(IUserTimeZone userTimeZone)
 		{
