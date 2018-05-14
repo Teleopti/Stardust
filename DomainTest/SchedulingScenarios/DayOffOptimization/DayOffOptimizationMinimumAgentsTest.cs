@@ -104,14 +104,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var scenario = ScenarioRepository.Has();
 			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1).NumberOfDaysOf(2);
 			var shiftCategory = new ShiftCategory().WithId();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(0, 0, 24, 0, 15), new TimePeriodWithSegment(0, 0, 24, 0, 15), shiftCategory));
 			var agent1 = PersonRepository.Has(schedulePeriod, ruleSet, skill);
 			var agent2 = PersonRepository.Has(schedulePeriod, ruleSet, skill);
-			var skillDays = SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 1).SetMinimumAgents(1));
-			PersonAssignmentRepository.Has(agent1, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
+			var skillDays = SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 1)).SetMinimumAgents(1);
+			PersonAssignmentRepository.Has(agent1, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(0, 0, 24, 0));
 			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate, agent1).WithDayOff();
 			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate, agent1).WithDayOff();
-			PersonAssignmentRepository.Has(agent2, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
+			PersonAssignmentRepository.Has(agent2, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(0, 0, 24, 0));
 			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate, agent2).WithDayOff();
 			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate, agent2).WithDayOff();
 
