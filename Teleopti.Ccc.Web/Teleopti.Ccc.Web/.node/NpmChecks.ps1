@@ -15,8 +15,8 @@ if (!(Get-Command "npx" -ErrorAction SilentlyContinue)) {
 }
 
 # Ensure acceptible version
-$nodeVersion = (Get-Command "node").Version
-$npmVersion = (Get-Command "node").Version
+$nodeVersion = [System.Version]::Parse((Get-Command "node").FileVersionInfo.FileVersion)
+$npmVersion = [System.Version]::Parse((Invoke-Expression "npm -v"))
 function semVer($v) {"{0}.{1}.{2}" -f $v.Major,$v.Minor,$v.Build}
 if ($nodeVersion -lt $preferedNodeVersion) {
     Write-Warning ("node version {0} is too old" -f (semVer $nodeVersion))
