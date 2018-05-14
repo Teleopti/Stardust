@@ -992,7 +992,7 @@ BEGIN
 		UPDATE [mart].[etl_job_intraday_settings]
 		SET
 			target_date		= @latest_deviation_date,
-			target_interval	= @latest_deviation_date_id
+			target_interval	= @latest_deviation_interval_id
 		WHERE business_unit_id = @business_unit_id
 		AND detail_id = @detail_id
 	END
