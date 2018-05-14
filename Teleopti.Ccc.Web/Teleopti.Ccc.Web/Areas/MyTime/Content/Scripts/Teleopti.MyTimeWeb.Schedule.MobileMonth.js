@@ -22,17 +22,19 @@ Teleopti.MyTimeWeb.Schedule.MobileMonth = (function ($) {
 		completelyLoaded,
 		subscribed = false,
 		dataService,
-		ajax;
+		ajax,
+		currentPage = "Teleopti.MyTimeWeb.Schedule.MobileMonth" ;
 
 	function cleanBinding() {
 		ko.cleanNode($("#page")[0]);
+		Teleopti.MyTimeWeb.MessageBroker.RemoveListeners(currentPage);
 	};
 
 	function subscribeForChanges() {
 		Teleopti.MyTimeWeb.Common.SubscribeToMessageBroker({
 			successCallback: Teleopti.MyTimeWeb.Schedule.MobileMonth.ReloadScheduleListener,
 			domainType: "IScheduleChangedInDefaultScenario",
-			page: "Teleopti.MyTimeWeb.Schedule"
+			page: currentPage 
 		});
 		subscribed = true;
 	}

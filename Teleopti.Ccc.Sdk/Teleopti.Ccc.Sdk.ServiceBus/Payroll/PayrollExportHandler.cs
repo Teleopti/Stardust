@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -27,13 +28,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 		private readonly IStardustJobFeedback _stardustJobFeedback;
 		private readonly IBusinessUnitScope _businessUnitScope;
 		private readonly IBusinessUnitRepository _businessUnitRepository;
+		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
 		public PayrollExportHandler(ICurrentUnitOfWork currentUnitOfWork,
 			IPayrollExportRepository payrollExportRepository, IPayrollResultRepository payrollResultRepository,
 			IPayrollDataExtractor payrollDataExtractor, IPersonBusAssembler personBusAssembler,
 			IServiceBusPayrollExportFeedback serviceBusPayrollExportFeedback,
 			IPayrollPeopleLoader payrollPeopleLoader, IDomainAssemblyResolver domainAssemblyResolver,
-			ITenantPeopleLoader tenantPeopleLoader, IStardustJobFeedback stardustJobFeedback, IBusinessUnitScope businessUnitScope, IBusinessUnitRepository businessUnitRepository)
+			ITenantPeopleLoader tenantPeopleLoader, IStardustJobFeedback stardustJobFeedback, IBusinessUnitScope businessUnitScope, IBusinessUnitRepository businessUnitRepository, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
 		{
 			_currentUnitOfWork = currentUnitOfWork;
 			_payrollExportRepository = payrollExportRepository;
@@ -47,50 +49,64 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 			_stardustJobFeedback = stardustJobFeedback;
 			_businessUnitScope = businessUnitScope;
 			_businessUnitRepository = businessUnitRepository;
+			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 		}
 
-		public void Handle(RunPayrollExportEvent @event)
+		[AsSystem]
+		public virtual void Handle(RunPayrollExportEvent @event)
 		{
-			_stardustJobFeedback.SendProgress($@"Consuming message for Payroll Export with Id = {@event.PayrollExportId}. (Message timestamp = {@event.Timestamp})");
-
-			var origPeriod = new DateOnlyPeriod(new DateOnly(@event.ExportStartDate), new DateOnly(@event.ExportEndDate));
-			_stardustJobFeedback.SendProgress($@"Payroll Export period = {origPeriod}");
-
-			AppDomain.CurrentDomain.AssemblyResolve += _domainAssemblyResolver.Resolve;
-
-			var payrollExport = _payrollExportRepository.Get(@event.PayrollExportId);
-			var payrollResult = _payrollResultRepository.Get(@event.PayrollResultId);
-
-			_serviceBusPayrollExportFeedback.SetPayrollResult(payrollResult);
-
-			_serviceBusPayrollExportFeedback.ReportProgress(1, "Payroll export initiated.");
-
-			IEnumerable<IPerson> people;
-			var bu = _businessUnitRepository.Get(@event.LogOnBusinessUnitId);
-			using (_businessUnitScope.OnThisThreadUse(bu))
-			{
-				people = _payrollPeopleLoader.GetPeopleForExport(@event, origPeriod, _currentUnitOfWork.Current());
-			}
-				
-			var personDtos = _personBusAssembler.CreatePersonDto(people, _tenantPeopleLoader);
 			try
 			{
-				var result = _payrollDataExtractor.Extract(payrollExport, @event, personDtos, _serviceBusPayrollExportFeedback);
-				if(result != null)
-					payrollResult.XmlResult.SetResult(result);
+				using (var uow=_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+				{
+					_stardustJobFeedback.SendProgress($@"Consuming message for Payroll Export with Id = {@event.PayrollExportId}. (Message timestamp = {@event.Timestamp})");
+
+					var origPeriod = new DateOnlyPeriod(new DateOnly(@event.ExportStartDate), new DateOnly(@event.ExportEndDate));
+					_stardustJobFeedback.SendProgress($@"Payroll Export period = {origPeriod}");
+
+					AppDomain.CurrentDomain.AssemblyResolve += _domainAssemblyResolver.Resolve;
+
+					var payrollExport = _payrollExportRepository.Get(@event.PayrollExportId);
+					var payrollResult = _payrollResultRepository.Get(@event.PayrollResultId);
+
+					_serviceBusPayrollExportFeedback.SetPayrollResult(payrollResult);
+
+					_serviceBusPayrollExportFeedback.ReportProgress(1, "Payroll export initiated.");
+					_stardustJobFeedback.SendProgress("Payroll export initiated");
+					IEnumerable<IPerson> people;
+					var bu = _businessUnitRepository.Get(@event.LogOnBusinessUnitId);
+					using (_businessUnitScope.OnThisThreadUse(bu))
+					{
+						people = _payrollPeopleLoader.GetPeopleForExport(@event, origPeriod, _currentUnitOfWork.Current());
+					}
+
+					var personDtos = _personBusAssembler.CreatePersonDto(people, _tenantPeopleLoader);
+
+					var result = _payrollDataExtractor.Extract(payrollExport, @event, personDtos, _serviceBusPayrollExportFeedback);
+					if (result != null)
+						payrollResult.XmlResult.SetResult(result);
+					payrollResult.FinishedOk = true;
+					uow.PersistAll();
+				}
 			}
 			catch (Exception exception)
 			{
-				_serviceBusPayrollExportFeedback.Error(@"An error occurred while running the payroll export.", exception);
+				using (var uow=_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+				{
+					//a very unusual way of reporting error but we need that to make the UI more responsive
+					var payrollResult = _payrollResultRepository.Get(@event.PayrollResultId);
+					_serviceBusPayrollExportFeedback.SetPayrollResult(payrollResult);
+					_stardustJobFeedback.SendProgress("An error occurred while running the payroll export. " + exception.StackTrace);
+					_serviceBusPayrollExportFeedback.Error(@"An error occurred while running the payroll export.", exception);
+					uow.PersistAll();
+				}
 				throw;
 			}
 			finally
 			{
-				payrollResult.FinishedOk = true;
-				
 				_serviceBusPayrollExportFeedback.Dispose();
 				_serviceBusPayrollExportFeedback = null;
-	
+
 				AppDomain.CurrentDomain.AssemblyResolve -= _domainAssemblyResolver.Resolve;
 			}
 		}

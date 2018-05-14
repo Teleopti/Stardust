@@ -28,7 +28,13 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(_target.GetType(), true));
         }
 
-        [Test]
+		[Test]
+		public void ShouldSetDefaultValueForMaximumWorkday()
+		{
+			Assert.AreEqual(_target.MaximumConsecutiveWorkingDays, 9);
+		}
+
+		[Test]
         public void VerifyPrimitiveProperties()
         {
             var longestPeriod = new DateOnlyPeriod(

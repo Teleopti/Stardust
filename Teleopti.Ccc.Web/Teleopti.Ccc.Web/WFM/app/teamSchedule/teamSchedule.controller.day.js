@@ -618,14 +618,6 @@
 			return $translate.instant('TooManyResultsForSearchKeywords').replace('{0}', max);
 		}
 
-		function showReleaseNotification() {
-			var template = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink');
-			var moduleName = $translate.instant('Teams');
-			var message = template.replace('{0}', moduleName)
-				.replace('{1}', '<a href="http://www.teleopti.com/wfm/customer-feedback.aspx">')
-				.replace('{2}', '</a>');
-			NoticeService.info(message, null, true);
-		}
 
 		function extractTeamNames(sites) {
 			var teamNameMap = {};
@@ -668,7 +660,6 @@
 				vm.resetSchedulePage();
 			});
 
-			showReleaseNotification();
 			personSelectionSvc.clearPersonInfo();
 
 			if (vm.staffingEnabled)

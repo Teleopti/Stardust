@@ -24,8 +24,10 @@ namespace Teleopti.Support.Security.Library
 				Assembly a = Assembly.Load("Teleopti.Analytics.ReportTexts");
 				var rm = new ResourceManager("Teleopti.Analytics.ReportTexts.Resources", a);
 
-				//Get all cultures from config
+				//Get all cultures from config, or default
 				string cultures = ConfigurationManager.AppSettings.Get("cultures");
+				if (string.IsNullOrEmpty(cultures))
+					cultures = "en;ar;cs;da;de;es;fi;fr;it;ja;ru;pt;pl;sk-SK;sq-AL;sv;th;tr;zh-CN";
 				string[] stringArray = cultures.Split(';');
 
 				CultureInfo enlishInfo = CultureInfo.CreateSpecificCulture("en");

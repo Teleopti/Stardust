@@ -73,7 +73,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[HttpGet, Route("Etl/ShouldEtlToolBeVisible")]
 		public IHttpActionResult ShouldEtlToolBeVisible()
 		{
-			return Json(_toggleManager.IsEnabled(Toggles.ETL_Show_Web_Based_ETL_Tool_75530));
+			return Json(_toggleManager.IsEnabled(Toggles.ETL_Show_Web_Based_ETL_Tool_74837));
 		}
 
 		[TenantUnitOfWork]
@@ -499,7 +499,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private List<Guid> getBusinessUnitIds(string tenantName, Guid businessUnitId)
 		{
 			if (businessUnitId != new Guid(allBusinessUnitId) || Tenants.IsAllTenants(tenantName))
-				return new List<Guid>() {businessUnitId};
+				return new List<Guid> {businessUnitId};
 			var tenant = _loadAllTenants.Tenants().Single(x => x.Name == tenantName);
 			return _jobHistoryRepository.GetBusinessUnitsIncludingAll(tenant.DataSourceConfiguration.AnalyticsConnectionString)
 				.Where(x => x.Id != new Guid(allBusinessUnitId))

@@ -16,7 +16,7 @@
         })
             .state('staffingModule-import-export', {
                 templateUrl: 'app/staffing/import_export/importexport.overview.html',
-                controller: 'ImportexportController as vm'
+				controller: 'ImportDataController as vm'
             })
             .state('bpo-gatekeeper', {
                 url: '/bpo',

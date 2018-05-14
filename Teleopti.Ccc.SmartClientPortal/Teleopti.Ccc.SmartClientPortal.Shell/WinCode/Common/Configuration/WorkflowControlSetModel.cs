@@ -607,5 +607,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 				IsDirty = true;
 			}
 		}
+
+		public int MaxConsecutiveWorkingDays
+		{
+			get => DomainEntity.MaximumConsecutiveWorkingDays;
+			set
+			{
+				if (DomainEntity.MaximumConsecutiveWorkingDays == value) return;
+				DomainEntity.MaximumConsecutiveWorkingDays = value;
+				IsDirty = true;
+			}
+		}
 	}
 }

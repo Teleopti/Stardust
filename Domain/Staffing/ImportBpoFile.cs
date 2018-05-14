@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IUserNow _userNow;
+		private readonly ILoggedOnUser _loggedOnUser;
 		private char _tokenSeparator = ',';
 		
 		private const string lineSeparator = "\r\n";
@@ -34,15 +35,17 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 		private List<ISkill> _allSkills;
 
-		public ImportBpoFile(ISkillRepository skillRepository, ISkillCombinationResourceRepository skillCombinationResourceRepository, IUserTimeZone userTimeZone, IUserNow userNow)
+		public ImportBpoFile(ISkillRepository skillRepository, ISkillCombinationResourceRepository skillCombinationResourceRepository, IUserTimeZone userTimeZone, IUserNow userNow, ILoggedOnUser loggedOnUser)
 		{
 			_skillRepository = skillRepository;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 			_userTimeZone = userTimeZone;
 			_userNow = userNow;
+			_loggedOnUser = loggedOnUser;
 		}
 
-		public ImportBpoFileResult ImportFile(string fileContents, IFormatProvider importFormatProvider, char skillSeparator = '|')
+		public ImportBpoFileResult ImportFile(string fileContents, IFormatProvider importFormatProvider, string fileName,
+			char skillSeparator = '|')
 		{
 			var result = new ImportBpoFileResult();
 
@@ -50,27 +53,30 @@ namespace Teleopti.Ccc.Domain.Staffing
 			{
 				result.Success = false;
 				result.ErrorInformation.Add(
-					formatGeneralLineErrorMessage(new LineWithNumber{ LineContent = "", LineNumber = 1 }, 
+					formatGeneralLineErrorMessage(new LineWithNumber {LineContent = "", LineNumber = 1},
 						Resources.ImportBpoTheImportFileCannotBeEmpty));
 				return result;
 			}
 
-			var lines = fileContents.Split(new[] { lineSeparator }, StringSplitOptions.None);
+			var lines = fileContents.Split(new[] {lineSeparator}, StringSplitOptions.None);
 			lines = removeDoubleQuotesIfNecessary(lines);
 			var lineNumber = 1;
-			
-			var linesWithNumbers = lines.Select(line => new LineWithNumber{LineContent = line, LineNumber = lineNumber++}).ToList();
+
+			var linesWithNumbers = lines.Select(line => new LineWithNumber {LineContent = line, LineNumber = lineNumber++})
+				.ToList();
 
 			presetTokenSeparator(linesWithNumbers[0].LineContent);
-			
+
 			var headerWithFieldNames = linesWithNumbers[0].LineContent.ToLower().Split(_tokenSeparator);
-			if (headerWithFieldNames.IsNullOrEmpty() || (headerWithFieldNames.Length==1 && headerWithFieldNames.FirstOrDefault().IsNullOrEmpty()))
+			if (headerWithFieldNames.IsNullOrEmpty() ||
+				(headerWithFieldNames.Length == 1 && headerWithFieldNames.FirstOrDefault().IsNullOrEmpty()))
 			{
 				result.Success = false;
 				result.ErrorInformation.Add(formatGeneralLineErrorMessage(linesWithNumbers[0],
 					Resources.ImportBpoFirstLineInFileHeaderLineCannotBeEmpty));
 				return result;
 			}
+
 			assertFieldNames(headerWithFieldNames, result);
 
 			if (!result.Success) return result;
@@ -88,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 				if (resourceBpo == null)
 					continue;
-				
+
 				var validateBpoRowResult = validateBpoRow(resourceBpo);
 				if (!validateBpoRowResult.Success)
 				{
@@ -98,6 +104,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 						result.ErrorInformation.Add(formatGeneralLineErrorMessage(line,
 							errorInfo));
 					}
+
 					continue;
 				}
 
@@ -106,23 +113,29 @@ namespace Teleopti.Ccc.Domain.Staffing
 					result.Success = false;
 					result.ErrorInformation.Add(formatGeneralLineErrorMessage(line, Resources.ImportBpoDuplicateRecord));
 				}
-				else if(result.Success)
+				else if (result.Success)
+				{
+					resourceBpo.ImportFileName = fileName;
+					resourceBpo.PersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault();
 					bpoResourceList.Add(resourceBpo);
+				}
 			}
-			if(result.Success)
+
+			if (result.Success)
 				_skillCombinationResourceRepository.PersistSkillCombinationResourceBpo(bpoResourceList);
 
 
 			if (result.ErrorInformation.Count > maxErrors)
 			{
-				var originalErrorCount = result.ErrorInformation.Count; 
+				var originalErrorCount = result.ErrorInformation.Count;
 				var temp = result.ErrorInformation.Take(maxErrors).ToList();
 				result.ErrorInformation.Clear();
 				temp.ForEach(e => result.ErrorInformation.Add(e));
 
-				result.ErrorInformation.Add(string.Format(Resources.ImportBpoShowingTheFirstXErrorMessagesOfY, maxErrors, originalErrorCount));
+				result.ErrorInformation.Add(string.Format(Resources.ImportBpoShowingTheFirstXErrorMessagesOfY, maxErrors,
+					originalErrorCount));
 			}
-			
+
 			return result;
 		}
 
@@ -383,12 +396,16 @@ namespace Teleopti.Ccc.Domain.Staffing
 		public double Resources { get; set; }
 		public List<Guid> SkillIds { get; set; }
 		public string Source { get; set; }
+		public string ImportFileName { get; set; }
+		public Guid PersonId { get; set; }
+
 		public bool Equals(ImportSkillCombinationResourceBpo other)
 		{
 			//not considering resource here 
 			if (other == null) return false;
-			return other.StartDateTime == StartDateTime && string.Equals(other.Source, Source, StringComparison.OrdinalIgnoreCase) && EndDateTime == other.EndDateTime &&
-				   SkillIds.OrderBy(s=>s).SequenceEqual(other.SkillIds.OrderBy(s => s));
+			return other.StartDateTime == StartDateTime &&
+				   string.Equals(other.Source, Source, StringComparison.OrdinalIgnoreCase) && EndDateTime == other.EndDateTime &&
+				   SkillIds.OrderBy(s => s).SequenceEqual(other.SkillIds.OrderBy(s => s));
 		}
 	}
 

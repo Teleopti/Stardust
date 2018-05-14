@@ -144,11 +144,13 @@
       <HintPath>..\..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MbCache, Version=2.13.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
-      <HintPath>..\..\packages\MbCache.2.13.0\lib\net40\MbCache.dll</HintPath>
+    <Reference Include="MbCache, Version=2.14.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
+      <HintPath>..\..\packages\MbCache.2.14.0\lib\net40\MbCache.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.13.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
-      <HintPath>..\..\packages\MbCache.2.13.0\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.14.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
+      <HintPath>..\..\packages\MbCache.2.14.0\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
@@ -373,10 +375,10 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.207\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.211\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.207\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.211\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
     <Reference Include="Validation">
       <HintPath>..\..\packages\Validation.2.0.2.13022\lib\portable-windows8+net40+sl5+windowsphone8\Validation.dll</HintPath>
@@ -1397,7 +1399,6 @@
       <Link>FeatureFlags\toggles.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include=".node\Gruntfile.js" />
     <Content Include="Areas\MyTime\Content\appdownload.html" />
     <Content Include="Areas\Anywhere\Views\Application\redirect.aspx" />
     <Content Include="Areas\MyTime\Content\Css\MobileApp.css" />
@@ -1448,9 +1449,9 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AppGuide.WFMApp.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AppGuide.WFMAppViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewNew.js" />
-    <Content Include=".node\package.json" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.PollScheduleUpdates.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.BadgeCountsDropdown.js" />
+    <Content Include=".node\package.json" />
     <None Include="Areas\MyTime\Content\Scripts\_references.js" />
     <Content Include="Areas\SSO\Content\Css\newLogin.css" />
     <Content Include="Areas\SSO\Content\Css\main.min.css" />
@@ -1747,13 +1748,11 @@
     <Content Include="WFM\app\rta\rta\rta.routes.js" />
     <Content Include="WFM\app\rta\rta\rta.state.service.js" />
     <Content Include="WFM\app\rta\rta\_modules.js" />
-    <Content Include="WFM\app\staffing\import_export\importexport.overview.controller.js" />
     <Content Include="WFM\app\staffing\import_export\importexport.overview.controller.spec.js" />
     <Content Include="WFM\app\staffing\import_export\importexport.overview.html" />
     <Content Include="WFM\app\staffing\import_export\importexport.overview.service.js" />
     <Content Include="WFM\app\staffing\import_export\importexport.service.js" />
     <Content Include="WFM\app\staffing\staffing.importData.controller.js" />
-    <Content Include="WFM\app\staffing\staffing.importData.template.html" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addDayOff.spec.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addDayOff.html" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addDayOff.js" />
@@ -2946,10 +2945,11 @@ if not exist "$(ProjectDir)Areas\MyTime\Views\web.config" copy "$(ProjectDir)..\
 if not exist "$(ProjectDir)Areas\Start\Views\web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.Start.Web.config" "$(ProjectDir)Areas\Start\Views\web.config"
 if not exist "$(ProjectDir)Areas\SSO\Views\web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.SSO.Web.config" "$(ProjectDir)Areas\SSO\Views\web.config"</PreBuildEvent>
   </PropertyGroup>
-  <Import Project=".node\node.targets" Condition="Exists('.node\node.targets')" />
   <Target Name="BeforeBuild">
-    <CallTarget Targets="RestoreNodePackages" Condition="'$(Configuration)' == 'Debug'" />
-    <CallTarget Targets="RestoreNodePackages;RunGruntBuildDist" Condition="'$(Configuration)' != 'Debug'" />
+    <Exec Command="powershell -ExecutionPolicy Bypass ./NpmInstallWFM-Dev.ps1" WorkingDirectory="$(MSBuildProjectDirectory)\.node\" ConsoleToMsBuild="true" Condition="'$(Configuration)' == 'Debug'" />
+    <Exec Command="powershell -ExecutionPolicy Bypass ./NpmRunDist.ps1" WorkingDirectory="$(MSBuildProjectDirectory)\.node\" ConsoleToMsBuild="true" Condition="'$(Configuration)' != 'Debug'" />
+    <!-- <CallTarget Targets="RestoreNodePackages" Condition="'$(Configuration)' == 'Debug'" /> -->
+    <!-- <CallTarget Targets="RestoreNodePackages;RunGruntBuildDist" Condition="'$(Configuration)' != 'Debug'" /> -->
   </Target>
   <!--<Import Project="..\..\.nuget\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\.nuget\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">

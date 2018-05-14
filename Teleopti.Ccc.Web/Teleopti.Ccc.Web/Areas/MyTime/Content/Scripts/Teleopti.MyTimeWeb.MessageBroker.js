@@ -38,6 +38,9 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 
 		_startConnection();
 
+		if (!!_getListeners(options.page, options.domainType).length)
+			return;
+
 		conn
 			.done(function () {
 				hub.server.addSubscription({
@@ -46,10 +49,18 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 					'DataSource': options.datasource,
 					'DomainReferenceId': options.referenceId
 				})
-				.done(function (route) {
-					listeners.push({ Route: route, Callback: options.callback, Page: options.page });
-				});
+					.done(function (route) {
+						listeners.push({ Route: route, Callback: options.callback, Page: options.page, DomainType: options.domainType  });
+					});
 			});
+	}
+
+	function _getListeners(page, domainType) {
+		return listeners.filter(function (listener) {
+			var isInSamePage = listener.Page != undefined && listener.Page === page;
+			var isSameDomainType = listener.DomainType === domainType;
+			return isInSamePage && isSameDomainType;
+		});
 	}
 	function _remove(arr, lambda) {
 		for (var i = arr.length; i--;) {
@@ -80,7 +91,6 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 		Stop: function () {
 			$.connection.hub.stop(false, true);
 		},
-
 		RemoveListeners: function (page) {
 			/// <summary>Removes all message callbacks that are used on the current page.</summary>
 			/// <param name="page">

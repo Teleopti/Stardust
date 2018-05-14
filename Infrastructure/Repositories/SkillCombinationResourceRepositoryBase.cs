@@ -149,6 +149,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				dt.Columns.Add("Resources", typeof(double));
 				dt.Columns.Add("SourceId", typeof(Guid));
 				dt.Columns.Add("BusinessUnit", typeof(Guid));
+				dt.Columns.Add("ImportFilename", typeof(string));
+				dt.Columns.Add("PersonId", typeof(Guid));
 				var insertedOn = _now.UtcDateTime();
 
 				using (var transaction = connection.BeginTransaction())
@@ -174,6 +176,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						row["EndDateTime"] = skillCombinationResourceBpo.EndDateTime;
 						row["InsertedOn"] = insertedOn;
 						row["Resources"] = skillCombinationResourceBpo.Resources;
+						row["ImportFilename"] = skillCombinationResourceBpo.ImportFileName;
+						row["PersonId"] = skillCombinationResourceBpo.PersonId;
 
 						var bpoId = Guid.NewGuid();
 
@@ -538,7 +542,10 @@ AND d.StartDateTime < :endDateTime AND d.EndDateTime > :startDateTime)
 				.UniqueResult<DateTime>();
 			return latest;
 		}
+
+		
 	}
+
 
 	public class RawSkillCombinationResource
 	{

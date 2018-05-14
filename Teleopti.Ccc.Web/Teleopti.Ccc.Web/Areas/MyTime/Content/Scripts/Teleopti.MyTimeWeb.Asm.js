@@ -22,7 +22,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var _settings;
 	var userTimeZoneMinuteOffset = 0;
-	var currentPage = Math.random().toString(36).slice(2);
+	var currentPage = 'Teleopti.MyTimeWeb.Asm';
 	var _notificationTrackIdList = [];
 
 	function resize() {

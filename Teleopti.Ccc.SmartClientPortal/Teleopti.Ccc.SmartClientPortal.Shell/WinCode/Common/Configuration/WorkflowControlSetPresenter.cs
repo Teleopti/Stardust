@@ -106,6 +106,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			_view.SetOverTimeRequestMaximumContinuousWorkTime(_selectedModel.OvertimeRequestMaximumContinuousWorkTime);
 			_view.SetOverTimeRequestMinimumRestTimeThreshold(_selectedModel.OvertimeRequestMinimumRestTimeThreshold);
 			_view.SetOvertimeRequestMaximumContinuousWorkTimeEnabled(_selectedModel.OvertimeRequestMaximumContinuousWorkTimeEnabled);
+			_view.SetMaxConsecutiveWorkingDays(_selectedModel.MaxConsecutiveWorkingDays);
 		}
 
 		public IWorkflowControlSetModel SelectedModel
@@ -560,6 +561,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		{
 			_selectedModel.PreferencePeriod = preferencePeriod;
 			_view.LoadDateOnlyVisualizer();
+		}
+
+		public void SetMaxConsecutiveWorkingDays(int maxConsecutiveWorkingDays)
+		{
+			if (_selectedModel != null)
+			{
+				_selectedModel.MaxConsecutiveWorkingDays = maxConsecutiveWorkingDays;
+			}
 		}
 
 		public void SetPreferenceInputPeriod(DateOnlyPeriod preferenceInputPeriod)

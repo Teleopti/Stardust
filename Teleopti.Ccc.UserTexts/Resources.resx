@@ -17311,4 +17311,32 @@ The application will now exit.</value>
     <value>Access</value>
     <comment>Permission name</comment>
   </data>
+  <data name="ImportBpoImportedAt" xml:space="preserve">
+    <value>imported at</value>
+    <comment>At what date (and maybe time) the file was imported</comment>
+  </data>
+  <data name="ImportBpoImportInformationAllSkills" xml:space="preserve">
+    <value>all Skills</value>
+    <comment>When not a Skill or a Skill Group is selected</comment>
+  </data>
+  <data name="ImportBpoImportInformationHeader" xml:space="preserve">
+    <value>Import history for:</value>
+    <comment>And then comes the name of the Skill or Skill Group</comment>
+  </data>
+  <data name="ImportBpoImportInformationTooltipAt" xml:space="preserve">
+    <value>at</value>
+    <comment>{at} what time the file was imported</comment>
+  </data>
+  <data name="ImportBpoImportInformationTooltipImported" xml:space="preserve">
+    <value>imported</value>
+    <comment>Person xx {imported}  and then nthe name of a file</comment>
+  </data>
+  <data name="ImportBpoFileImportDateInformation" xml:space="preserve">
+    <value>All dates are UTC</value>
+    <comment>Information in gantt chart about the dates</comment>
+  </data>
+  <data name="ImportBpoFileImportInfoHeader" xml:space="preserve">
+    <value>BPO file import information</value>
+    <comment>Header on staffing page</comment>
+  </data>
 </root>

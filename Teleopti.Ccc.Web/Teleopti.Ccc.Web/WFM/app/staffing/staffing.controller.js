@@ -44,6 +44,7 @@
 		vm.dynamicIcon = dynamicIcon;
 		vm.toggleOverstaffSettings = toggleOverstaffSettings;
 		vm.isOvertimeSuggestionEnabled = isOvertimeSuggestionEnabled;
+		vm.showBpoImportInfo = showBpoImportInfo;
 		vm.validSettings = validSettings;
 		vm.isRunning = isRunning;
 		vm.isNoSuggestion = isNoSuggestion;
@@ -72,6 +73,8 @@
 				.toDate()
 		};
 		vm.HasPermissionToModifySkillArea = false;
+		vm.importedBboInfos = [];
+		
 		vm.isSearchRequested = false;
 
 		var events = [];
@@ -109,6 +112,10 @@
 
 		function isOvertimeSuggestionEnabled() {
 			return toggleService.WfmStaffing_AddOvertime_42524;
+		}
+
+		function showBpoImportInfo() {
+			return toggleService.Staffing_BPO_Visualization_74958;
 		}
 
 		function toggleOverstaffSettings() {
@@ -183,6 +190,7 @@
 					timeSerie = result.DataSeries.Time;
 					staffingData = utilService.prepareStaffingData(result);
 					generateChartForView(staffingData);
+					vm.importedBboInfos = result.ImportBpoInfoList;
 				} else {
 					vm.staffingDataAvailable = false;
 				}
@@ -253,6 +261,8 @@
 		}
 
 		function getSkills() {
+			if ($window.sessionStorage.staffingSelectedDate)
+				vm.selectedDate = new Date($window.sessionStorage.staffingSelectedDate);
 			var query = staffingService.getSkills.query();
 			query.$promise.then(function(skills) {
 				if ($window.sessionStorage.staffingSelectedSkill) {

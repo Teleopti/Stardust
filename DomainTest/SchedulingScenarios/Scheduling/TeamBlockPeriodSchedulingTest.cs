@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 		}
 
-		public TeamBlockPeriodSchedulingTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
+		public TeamBlockPeriodSchedulingTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerLessResourcesXXL74915) : base(seperateWebRequest, resourcePlannerLessResourcesXXL74915)
 		{
 		}
 	}

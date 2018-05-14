@@ -20,18 +20,19 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_forecastAndScheduleSumForDay = forecastAndScheduleSumForDay;
 		}
 
-		public PredictorCheck IsPredictedBetterThanCurrent(IScheduleMatrixPro matrix, ILockableBitArray workingBitArray,
+		public bool IsPredictedBetterThanCurrent(IScheduleMatrixPro matrix, ILockableBitArray workingBitArray,
 			ILockableBitArray originalBitArray, IDaysOffPreferences daysOffPreferences,
 			int numberOfDayOffsMoved, IOptimizationPreferences optimizationPreferences,
-			ISchedulingResultStateHolder schedulingResultStateHolder)
+			ISchedulingResultStateHolder schedulingResultStateHolder, MovedDaysOff movedDaysOff)
 		{
 			IVirtualSchedulePeriod schedulePeriod = matrix.SchedulePeriod;
 			IEnumerable<ISkill> personalSkills = extractSkills(matrix);
 
 			var rawDataDictionary = createRawDataDictionary(schedulePeriod, personalSkills, optimizationPreferences, schedulingResultStateHolder);
-			if (rawDataDictionary.Any(x => x.Value.ForecastValue >= ForecastAndScheduleSumForDay.MinimumAgentsNotFulfilledValue))
+			if (rawDataDictionary.Any(x => movedDaysOff.Contains(x.Key) && 
+					x.Value.ForecastValue >= ForecastAndScheduleSumForDay.MinimumAgentsNotFulfilledValue))
 			{
-				return PredictorCheck.NotApplicable;
+				return true;
 			}
 		
 			double currentResult = calculateValue(rawDataDictionary);
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			modifyRawData(workingBitArray, matrix, originalBitArray, daysOffPreferences, rawDataDictionary, averageWorkTime);
 			double predictedResult = calculateValue(rawDataDictionary);
 
-			return predictedResult < currentResult ? PredictorCheck.Success : PredictorCheck.Unsuccesful;
+			return predictedResult < currentResult;
 		}
 
 		private static double calculateValue(IDictionary<DateOnly, IForecastScheduleValuePair> rawDataDic)

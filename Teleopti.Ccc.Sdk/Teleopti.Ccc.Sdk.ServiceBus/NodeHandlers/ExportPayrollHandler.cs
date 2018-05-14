@@ -24,8 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			_stardustJobFeedback = stardustJobFeedback;
 		}
 
-		[AsSystem, UnitOfWork]
-		public virtual void Handle(RunPayrollExportEvent parameters, CancellationTokenSource cancellationTokenSource, Action<string> sendProgress)
+		public void Handle(RunPayrollExportEvent parameters, CancellationTokenSource cancellationTokenSource, Action<string> sendProgress)
 		{
 			_stardustJobFeedback.SendProgress = sendProgress;
 			AuthenticationMessageHeader.BusinessUnit = parameters.LogOnBusinessUnitId;

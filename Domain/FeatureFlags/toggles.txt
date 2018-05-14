@@ -138,7 +138,7 @@ ETL_RemoveTimeZoneAndDateNightly_40870 = true
 ETL_EventBasedAgentNameDescription_41432 = true
 ETL_FixScheduleForPersonPeriod_41393 = true
 ETL_SpeedUpNightlyDayOff_38213 = true
-ETL_Show_Web_Based_ETL_Tool_75530 = RC
+ETL_Show_Web_Based_ETL_Tool_74837 = RC
 
 # DeBockers #
 WfmIntraday_MonitorActualvsForecasted_35176 = true
@@ -157,6 +157,7 @@ Wfm_Requests_ProcessWaitlistBefore24hRequests_45767 = true
 Wfm_Requests_DenyRequestWhenAllSkillsClosed_46384 = true
 AddOrRemoveTenantsWithoutRestart_43635 = RC
 People_ImprovePersonAccountAccuracy_74914 = true
+Staffing_BPO_Visualization_74958 = RC
 
 # Squids #
 WFM_Forecaster_Refact_44480 = true

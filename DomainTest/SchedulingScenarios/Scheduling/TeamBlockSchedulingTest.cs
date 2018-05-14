@@ -904,7 +904,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			AssignmentRepository.Find(new[] { agent }, period, scenario).Count(personAssignment => personAssignment.MainActivities().Any()).Should().Be.EqualTo(5);
 		}
 
-		public TeamBlockSchedulingTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
+		public TeamBlockSchedulingTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerLessResourcesXXL74915) : base(seperateWebRequest, resourcePlannerLessResourcesXXL74915)
 		{
 		}
 	}

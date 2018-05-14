@@ -13,7 +13,8 @@ if (typeof (Teleopti) === 'undefined') {
 Teleopti.MyTimeWeb.AsmMessage = (function ($) {
 
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
-	
+	var currentPage = 'Teleopti.MyTimeWeb.AsmMessage';
+
 	function _onMessageBrokerEvent(notification) {
 		if (notification.DomainUpdateType == 2)
 			Teleopti.MyTimeWeb.AsmMessageList.DeleteMessage(notification.DomainId);
@@ -28,15 +29,15 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
 	function _setMessageNotificationOnTab(messageCount) {
 		var messageSpan = $('a[href*="#MessageTab"] > span');
 		if (messageCount == 0) {
-		    messageSpan.parent().removeClass("asm-new-message-indicator");
-		    messageSpan.hide();
-		    return;
+			messageSpan.parent().removeClass("asm-new-message-indicator");
+			messageSpan.hide();
+			return;
 		}
 
-	    messageSpan.text(messageCount);
+		messageSpan.text(messageCount);
 		messageSpan.removeClass('hide');
-	    messageSpan.show();
-		
+		messageSpan.show();
+
 		messageSpan.parent().addClass("asm-new-message-indicator");
 	}
 
@@ -46,10 +47,11 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
 	}
 
 	function _listenForEvents(callbackForMessages) {
-		
+
 		Teleopti.MyTimeWeb.Common.SubscribeToMessageBroker({
 			successCallback: callbackForMessages,
-			domainType: 'IPushMessageDialogue'
+			domainType: 'IPushMessageDialogue',
+			page: currentPage
 		});
 	};
 

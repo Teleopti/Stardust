@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 	[DomainTest]
 	[ExtendScope(typeof(WebDayoffOptimizationStardustHandler))]
 	[ExtendScope(typeof(DayOffOptimizationEventHandler))]
+	[ExtendScope(typeof(DayOffOptimizationEventHandlerOLD))]
 	[ExtendScope(typeof(WebScheduleStardustHandler))]
 	[ExtendScope(typeof(SchedulingEventHandler))]
 	public class SchedulePlanningPeriodCommandHandlerHeatMapTest : DayOffOptimizationScenario
@@ -105,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			dayCount[6].RelativeDifference.Should().Be.EqualTo(-0.96);
 		}
 
-		public SchedulePlanningPeriodCommandHandlerHeatMapTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerMinimumAgents75339) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerMinimumAgents75339)
+		public SchedulePlanningPeriodCommandHandlerHeatMapTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerMinimumAgents75339, bool resourcePlannerLessResourcesXXL74915) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerMinimumAgents75339, resourcePlannerLessResourcesXXL74915)
 		{
 		}
 	}
