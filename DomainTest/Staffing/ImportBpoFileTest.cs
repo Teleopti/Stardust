@@ -746,6 +746,7 @@ TPBRZIL, Directsales|Channelsales, 2017-07-24 11:00, 2017-07-24 11:15, 6.0";
 			skillCombResources.Should().Be.Empty();
 			result.ErrorInformation.SingleOrDefault(e => e.Contains("Number of agents cannot be less than 0")).Should().Not.Be.Null();
 		}
+
 		[Test]
 		public void ShouldLimitErrorMessagesToMax20()
 		{

@@ -93,12 +93,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ISchedulingProgress schedulingProgress)
 		{
 			var currentMatrixCounter = 0;
-			var allFailed = new Dictionary<ITeamInfo, bool>();
+			var stopOptimizeTeamInfo = new Dictionary<ITeamInfo, bool>();
 			var matrixes = new List<Tuple<IScheduleMatrixPro, ITeamInfo>>();
 			var callback = _currentOptimizationCallback.Current();
 			foreach (var teamInfo in remainingInfoList)
 			{
-				allFailed[teamInfo] = true;
+				stopOptimizeTeamInfo[teamInfo] = true;
 				matrixes.AddRange(teamInfo.MatrixesForGroup().Select(scheduleMatrixPro => new Tuple<IScheduleMatrixPro, ITeamInfo>(scheduleMatrixPro, teamInfo)));
 			}
 			
@@ -134,9 +134,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				{
 					var predictorResult = _dayOffOptimizerPreMoveResultPredictor.IsPredictedBetterThanCurrent(matrix.Item1, resultingArray, originalArray, dayOffOptimizationPreference, 
 						numberOfDayOffsMoved, optimizationPreferences, schedulingResultStateHolder, movedDaysOff);
-					if (predictorResult == PredictorCheck.Unsuccesful)
+					if (!predictorResult)
 					{
-						allFailed[matrix.Item2] = false;
+						stopOptimizeTeamInfo[matrix.Item2] = false;
 						matrix.Item2.LockDays(movedDaysOff.ModifiedDays());
 						callback.Optimizing(new OptimizationCallbackInfo(matrix.Item2, false, matrixes.Count));
 						continue;
@@ -151,10 +151,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 					if (success)
 					{
-						if (predictorResult != PredictorCheck.SuccessDueToMinimumStaffing)
-						{
-							allFailed[matrix.Item2] = false;				
-						}
+						stopOptimizeTeamInfo[matrix.Item2] = false;			
 					}
 					else
 					{
@@ -163,7 +160,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 						if (!optimizationPreferences.Extra.IsClassic()) //removing this if makes bookingdb lot slower...
 						{
-							allFailed[matrix.Item2] = false;
+							stopOptimizeTeamInfo[matrix.Item2] = false;
 						}
 						matrix.Item2.LockDays(movedDaysOff.ModifiedDays());
 					}
@@ -178,7 +175,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				}
 			}
 
-			return from allFailedKeyValue in allFailed
+			return from allFailedKeyValue in stopOptimizeTeamInfo 
 				where allFailedKeyValue.Value
 				select allFailedKeyValue.Key;
 		}
