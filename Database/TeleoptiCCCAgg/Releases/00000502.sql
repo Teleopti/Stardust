@@ -209,6 +209,8 @@ GO
 
 -----------------------------------------------------------
 -- [dbo].[t_agent_report] does not have a clustered index defined. This is needed for Azure compability
+DROP INDEX DATE ON dbo.t_agent_report
+GO
 ALTER TABLE dbo.t_agent_report
 	DROP CONSTRAINT PK_t_agent_report
 GO
