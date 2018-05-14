@@ -37,6 +37,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 		private IDomainAssemblyResolver _resolver;
 		private ITenantPeopleLoader _tenantPeopleLoader;
 		private IBusinessUnit _currentBusinessUnit;
+		private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+		private IUnitOfWorkFactory unitOfWorkFactory;
+
 		[SetUp]
 		public void Setup()
 		{
@@ -50,6 +53,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 			serviceBusReportProgress = mock.StrictMock<IServiceBusPayrollExportFeedback>();
 			_resolver = mock.DynamicMock<IDomainAssemblyResolver>();
 			_tenantPeopleLoader = mock.DynamicMock<ITenantPeopleLoader>();
+			_currentUnitOfWorkFactory = mock.DynamicMock<ICurrentUnitOfWorkFactory>();
+			unitOfWorkFactory = mock.DynamicMock<IUnitOfWorkFactory>();
 			exportingPerson = new Person().WithName(new Name("Ex", "Porter"));
 			_currentBusinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit().WithId();
 			var fakeBuRepo = new FakeBusinessUnitRepository();
@@ -57,7 +62,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 			fakeBuRepo.Has(_currentBusinessUnit);
 			target = new PayrollExportHandler(currentUnitOfWork, payrollExportRepository, payrollResultRepository,
 				payrollDataExtractor, personBusAssembler, serviceBusReportProgress, payrollPeopleLoader, _resolver,
-				_tenantPeopleLoader, new FakeStardustJobFeedback(), new FakeCurrentBusinessUnit(), fakeBuRepo);
+				_tenantPeopleLoader, new FakeStardustJobFeedback(), new FakeCurrentBusinessUnit(), fakeBuRepo, _currentUnitOfWorkFactory);
 		}
 
 		[Test] 
@@ -87,6 +92,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 
 			using (mock.Record())
 			{
+				
+				Expect.Call(_currentUnitOfWorkFactory.Current()).Return(unitOfWorkFactory);
+				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).IgnoreArguments().Return(unitOfWork);
+
 				prepareUnitOfWork();
 				Expect.Call(payrollPeopleLoader.GetPeopleForExport(exportMessage, new DateOnlyPeriod(), unitOfWork)).Return(persons).IgnoreArguments();
 				Expect.Call(payrollExportRepository.Get(payrollGuid)).Return(payrollExport);
@@ -97,6 +106,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 				Expect.Call(() => serviceBusReportProgress.ReportProgress(0, string.Empty)).IgnoreArguments().Repeat.
 					 Once();
 				Expect.Call(serviceBusReportProgress.Dispose);
+
+				Expect.Call(unitOfWork.PersistAll()).IgnoreArguments();
+				Expect.Call(() => unitOfWork.Dispose());
 			}
 			using (mock.Playback())
 			{
