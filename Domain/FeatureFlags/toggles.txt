@@ -157,6 +157,7 @@ Wfm_Requests_ProcessWaitlistBefore24hRequests_45767 = true
 Wfm_Requests_DenyRequestWhenAllSkillsClosed_46384 = true
 AddOrRemoveTenantsWithoutRestart_43635 = RC
 People_ImprovePersonAccountAccuracy_74914 = true
+Staffing_BPO_Visualization_74958 = RC
 
 # Squids #
 WFM_Forecaster_Refact_44480 = true

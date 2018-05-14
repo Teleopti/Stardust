@@ -1749,13 +1749,11 @@
     <Content Include="WFM\app\rta\rta\rta.routes.js" />
     <Content Include="WFM\app\rta\rta\rta.state.service.js" />
     <Content Include="WFM\app\rta\rta\_modules.js" />
-    <Content Include="WFM\app\staffing\import_export\importexport.overview.controller.js" />
     <Content Include="WFM\app\staffing\import_export\importexport.overview.controller.spec.js" />
     <Content Include="WFM\app\staffing\import_export\importexport.overview.html" />
     <Content Include="WFM\app\staffing\import_export\importexport.overview.service.js" />
     <Content Include="WFM\app\staffing\import_export\importexport.service.js" />
     <Content Include="WFM\app\staffing\staffing.importData.controller.js" />
-    <Content Include="WFM\app\staffing\staffing.importData.template.html" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addDayOff.spec.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addDayOff.html" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addDayOff.js" />

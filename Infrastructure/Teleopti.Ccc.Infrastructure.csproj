@@ -321,6 +321,7 @@
     <Compile Include="Repositories\RequestPeriod.cs" />
     <Compile Include="Repositories\ShiftCategorySelectionRepository.cs" />
     <Compile Include="Repositories\ShiftCategoryUsageFinder.cs" />
+    <Compile Include="Repositories\SkillCombinationBpoTimeLineReader.cs" />
     <Compile Include="Repositories\SkillCombinationResourceRepository.cs" />
     <Compile Include="Repositories\SkillCombinationResourceRepositoryOld.cs" />
     <Compile Include="Repositories\Stardust\IStardustRepository.cs" />

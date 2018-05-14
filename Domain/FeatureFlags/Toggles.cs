@@ -131,6 +131,7 @@
 		WFM_Export_Forecast_44716,
 		Staffing_BPOExchangeImport_45202,
 		Forecast_FileImport_UnifiedFormat_46585,
+		Staffing_BPO_Visualization_74958,
 		WFM_TrainingPlanner_44780,
 		Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560,
 		Report_Remove_Realtime_Scheduled_Time_vs_Target_45559,
