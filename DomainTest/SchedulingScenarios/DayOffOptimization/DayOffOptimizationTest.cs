@@ -507,6 +507,29 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate, agent)
 				.DayOff().Should().Not.Be.Null();
 		}
+		
+		[Test]
+		[Timeout(5000)]
+		[Ignore("#75339 to be fixed")]
+		public void ShouldNotHangDueToPingPongBetweenTwoDays()
+		{
+			var date = new DateOnly(2015, 10, 12); //mon
+			var activity = ActivityRepository.Has();
+			var skill = SkillRepository.Has("skill", activity);
+			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
+			var scenario = ScenarioRepository.Has();
+			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1).NumberOfDaysOf(1);
+			var shiftCategory = new ShiftCategory().WithId();
+			//two shifts - 0-12 and 12-24
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(0, 0, 12, 0, 60*13), new TimePeriodWithSegment(12, 0, 24, 0, 60*13), shiftCategory));
+			ruleSet.AddLimiter(new ActivityTimeLimiter(activity, TimeSpan.FromHours(12), OperatorLimiter.Equals));
+			var agent = PersonRepository.Has(schedulePeriod, ruleSet, skill);
+			var skillDays = SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 1));
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(0, 0, 12, 0));
+			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate).WithDayOff();
+
+			Target.Execute(planningPeriod.Id.Value);
+		}
 
 		public DayOffOptimizationTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerMinimumAgents75339, bool resourcePlannerLessResourcesXXL74915) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerMinimumAgents75339, resourcePlannerLessResourcesXXL74915)
 		{

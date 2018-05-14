@@ -94,28 +94,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		}
 		
 		[Test]
-		[Timeout(5000)]
-		[Ignore("#75339 to be fixed")]
-		public void ShouldNotHangIfAnyMoveBreaksMinimumAgents()
-		{
-			var date = new DateOnly(2015, 10, 12); //mon
-			var activity = ActivityRepository.Has();
-			var skill = SkillRepository.Has("skill", activity);
-			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
-			var scenario = ScenarioRepository.Has();
-			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1).NumberOfDaysOf(1);
-			var shiftCategory = new ShiftCategory().WithId();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(0, 0, 12, 0, 60), new TimePeriodWithSegment(12, 0, 24, 0, 60), shiftCategory));
-			ruleSet.AddLimiter(new ActivityTimeLimiter(activity, TimeSpan.FromHours(12), OperatorLimiter.Equals));
-			var agent = PersonRepository.Has(schedulePeriod, ruleSet, skill);
-			var skillDays = SkillDayRepository.Has(skill.CreateSkillDayWithDemandOnInterval(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 1).SetMinimumAgents(new TimePeriod(8, 16), 1));
-			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(0, 0, 12, 0));
-			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate).WithDayOff();
-
-			Target.Execute(planningPeriod.Id.Value);
-		}
-		
-		[Test]
 		public void ShouldMoveMoreThanOneDoWhenMultipleAgents()
 		{
 			var date = new DateOnly(2015, 10, 12); //mon
