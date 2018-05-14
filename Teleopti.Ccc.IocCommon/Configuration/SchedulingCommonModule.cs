@@ -224,14 +224,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ShiftLengthDecider>().As<IShiftLengthDecider>().SingleInstance();
 			builder.RegisterType<PersonSkillDayCreator>().As<IPersonSkillDayCreator>().SingleInstance();
 
-			if (_configuration.Toggle(Toggles.ResourcePlanner_LessResourcesXXL_74915))
-			{
-				builder.RegisterType<WorkShiftFinderService>().InstancePerLifetimeScope();				
-			}
-			else
-			{
-				builder.RegisterType<WorkShiftFinderServiceOLD>().InstancePerLifetimeScope();	
-			}
+			builder.RegisterType<WorkShiftFinderService>().InstancePerLifetimeScope();
 			builder.RegisterType<OccupiedSeatCalculator>().As<IOccupiedSeatCalculator>().SingleInstance();
 			builder.RegisterType<PersonSkillProvider>().As<IPersonSkillProvider>().SingleInstance();
 			builder.RegisterType<PeriodDistributionService>().As<IPeriodDistributionService>().SingleInstance();
