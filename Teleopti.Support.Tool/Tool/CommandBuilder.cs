@@ -60,8 +60,9 @@ namespace Teleopti.Support.Tool.Tool
 						{
 							ApplicationDatabase = args.ElementAt(1), 
 							AnalyticsDatabase = args.ElementAt(2),
-							ToggleMode = args.ElementAt(3)
 						};
+						if (args.Count() > 3)
+							c.ToggleMode = args.ElementAt(3);
 						if (args.Count() > 4)
 							c.SqlAuthString = args.ElementAt(4);
 						command = c;

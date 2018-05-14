@@ -21,13 +21,14 @@ if (typeof (Teleopti.MyTimeWeb.Schedule) === "undefined") {
 Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 	var vm;
 	var completelyLoaded;
-	var currentPage = "Teleopti.MyTimeWeb.Schedule";
+	var currentPage = "Teleopti.MyTimeWeb.Schedule.MobileStartDay";
 	var subscribed = false;
 	var dataService;
 	var ajax;
 
 	function cleanBinding() {
 		ko.cleanNode($("#page")[0]);
+		Teleopti.MyTimeWeb.MessageBroker.RemoveListeners(currentPage);
 	};
 
 	function subscribeForChanges() {

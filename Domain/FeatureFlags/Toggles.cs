@@ -83,6 +83,7 @@
 		ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899,
 		ResourcePlanner_MinimumAgents_75339,
 		ResourcePlanner_UseErlangAWithFinitePatience_47738,
+		ResourcePlanner_LessResourcesXXL_74915,
 
 		Wfm_DisplayOnlineHelp_39402,
 
@@ -130,6 +131,7 @@
 		WFM_Export_Forecast_44716,
 		Staffing_BPOExchangeImport_45202,
 		Forecast_FileImport_UnifiedFormat_46585,
+		Staffing_BPO_Visualization_74958,
 		WFM_TrainingPlanner_44780,
 		Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560,
 		Report_Remove_Realtime_Scheduled_Time_vs_Target_45559,
@@ -145,7 +147,7 @@
 		WFM_Gamification_Recalculate_Badges_Within_Period_48403,
 		WFM_Gamification_Create_Rolling_Periods_74866,
 		Report_Remove_Realtime_AuditTrail_44006,
-		ETL_Show_Web_Based_ETL_Tool_75530,
+		ETL_Show_Web_Based_ETL_Tool_74837,
 		WFM_Remember_My_Selection_In_Intraday_47254,
 		WFM_Clear_Data_After_Leaving_Date_47768,
 

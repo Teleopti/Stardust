@@ -62,8 +62,6 @@ BEGIN
 		insert into [mart].[etl_maintenance_configuration] values(14,'YearsToKeepAggQueueStats',50)
 	if not exists(select 1 from [mart].[etl_maintenance_configuration] where configuration_id = 15)
 		insert into [mart].[etl_maintenance_configuration] values(15,'YearsToKeepAggAgentStats',50)
-	if not exists (select 1 from mart.etl_maintenance_configuration where configuration_id = 16)
-		insert into mart.etl_maintenance_configuration values(16,'DaysToKeepMessagesPurged',60)
 	IF NOT EXISTS (SELECT 1 FROM [mart].[etl_maintenance_configuration] WHERE configuration_id = 17)
 		insert into mart.etl_maintenance_configuration VALUES(17,'DaysToKeepUnchangedPermissionReport',90)
 

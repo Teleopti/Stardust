@@ -13,10 +13,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		public bool ForDelete { get; set; }
 		public string Description => Resources.DescriptionOfMaximumWorkdayRule;
 
+
 		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays)
 		{
 			throw new NotImplementedException();
 		}
-
 	}
 }

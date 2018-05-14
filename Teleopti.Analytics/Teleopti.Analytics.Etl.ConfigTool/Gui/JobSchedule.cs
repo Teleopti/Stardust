@@ -36,7 +36,8 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 		private readonly bool _selectDataSourceIsPossible;
 		private bool _isWebBasedEtlToolInUse;
 
-		public JobSchedule(IEtlJobSchedule etlJobSchedule, ObservableCollection<IEtlJobSchedule> observableCollection, IBaseConfiguration baseConfiguration, bool selectDataSourceIsPossible)
+		public JobSchedule(IEtlJobSchedule etlJobSchedule, ObservableCollection<IEtlJobSchedule> observableCollection,
+			IBaseConfiguration baseConfiguration, bool selectDataSourceIsPossible)
 		{
 			InitializeComponent();
 			_repository = new JobScheduleRepository();
@@ -83,7 +84,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 			comboBoxJob.DataSource = jobCollection;
 			comboBoxJob.DisplayMember = "Name";
 			comboBoxJob.ValueMember = "Name";
-			_isWebBasedEtlToolInUse =container.ToggleManager.IsEnabled(Toggles.ETL_Show_Web_Based_ETL_Tool_75530);
+			_isWebBasedEtlToolInUse =container.ToggleManager.IsEnabled(Toggles.ETL_Show_Web_Based_ETL_Tool_74837);
 		}
 
 		private void fillDataSourceCombo()

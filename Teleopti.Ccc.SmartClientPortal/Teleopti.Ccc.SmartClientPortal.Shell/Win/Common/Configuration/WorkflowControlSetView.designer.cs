@@ -156,6 +156,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.lblOvertimeRequestMaximumTimeHandleType = new System.Windows.Forms.Label();
 			this.lblOvertimeRequestMinimumRestTimeThreshold = new System.Windows.Forms.Label();
 			this.lblOvertimeRequestMaximumContinuousWorkTimeHandleType = new System.Windows.Forms.Label();
+			this.panel10 = new System.Windows.Forms.Panel();
+			this.label1 = new System.Windows.Forms.Label();
+			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+			this.daysTbx = new System.Windows.Forms.NumericUpDown();
+			this.label2 = new System.Windows.Forms.Label();
 			this.buttonDeleteAbsenceRequestPeriod = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonDeleteOvertimeRequestPeriod = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonAddAbsenceRequestPeriod = new Syncfusion.Windows.Forms.ButtonAdv();
@@ -228,6 +233,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.panelVisualizationButtons.SuspendLayout();
 			this.panel4.SuspendLayout();
 			this.panel3.SuspendLayout();
+			this.panel10.SuspendLayout();
 			this.panel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvAllowedPreferenceActivity)).BeginInit();
 			this.panelBasic.SuspendLayout();
@@ -2413,20 +2419,24 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelShiftTrade.ColumnCount = 2;
 			this.tableLayoutPanelShiftTrade.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanelShiftTrade.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanelShiftTrade.Controls.Add(this.panel5, 0, 6);
+			this.tableLayoutPanelShiftTrade.Controls.Add(this.panel10, 0, 2);
+			this.tableLayoutPanelShiftTrade.Controls.Add(this.panel5, 0, 8);
 			this.tableLayoutPanelShiftTrade.Controls.Add(this.panelOpenForShiftTrade, 0, 0);
-			this.tableLayoutPanelShiftTrade.Controls.Add(this.panelTolerance, 0, 2);
+			this.tableLayoutPanelShiftTrade.Controls.Add(this.panelTolerance, 0, 4);
 			this.tableLayoutPanelShiftTrade.Controls.Add(this.minMaxIntegerTextBoxControl1, 0, 1);
-			this.tableLayoutPanelShiftTrade.Controls.Add(this.twoListSelectorMatchingSkills, 0, 5);
-			this.tableLayoutPanelShiftTrade.Controls.Add(this.panelMatchingSkills, 0, 4);
-			this.tableLayoutPanelShiftTrade.Controls.Add(this.tableLayoutPanel2, 0, 3);
-			this.tableLayoutPanelShiftTrade.Controls.Add(this.checkBoxAdvAutoGrant, 0, 7);
-			this.tableLayoutPanelShiftTrade.Controls.Add(this.checkBoxAdvAnonymousTrading, 0, 8);
-			this.tableLayoutPanelShiftTrade.Controls.Add(this.checkBoxAdvLockTrading, 0, 9);
+			this.tableLayoutPanelShiftTrade.Controls.Add(this.twoListSelectorMatchingSkills, 0, 7);
+			this.tableLayoutPanelShiftTrade.Controls.Add(this.panelMatchingSkills, 0, 6);
+			this.tableLayoutPanelShiftTrade.Controls.Add(this.tableLayoutPanel2, 0, 5);
+			this.tableLayoutPanelShiftTrade.Controls.Add(this.checkBoxAdvAutoGrant, 0, 9);
+			this.tableLayoutPanelShiftTrade.Controls.Add(this.checkBoxAdvAnonymousTrading, 0, 10);
+			this.tableLayoutPanelShiftTrade.Controls.Add(this.checkBoxAdvLockTrading, 0, 11);
+			this.tableLayoutPanelShiftTrade.Controls.Add(this.tableLayoutPanel3, 0, 3);
 			this.tableLayoutPanelShiftTrade.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelShiftTrade.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanelShiftTrade.Name = "tableLayoutPanelShiftTrade";
-			this.tableLayoutPanelShiftTrade.RowCount = 11;
+			this.tableLayoutPanelShiftTrade.RowCount = 13;
+			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
@@ -2435,12 +2445,35 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 185F));
 			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 39F));
-			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38F));
-			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 63F));
+			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanelShiftTrade.Size = new System.Drawing.Size(965, 410);
+			this.tableLayoutPanelShiftTrade.Size = new System.Drawing.Size(965, 418);
 			this.tableLayoutPanelShiftTrade.TabIndex = 0;
+			// 
+			// panel10
+			// 
+			this.panel10.BackColor = System.Drawing.Color.LightSteelBlue;
+			this.tableLayoutPanelShiftTrade.SetColumnSpan(this.panel10, 2);
+			this.panel10.Controls.Add(this.label1);
+			this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel10.Location = new System.Drawing.Point(3, 83);
+			this.panel10.Name = "panel10";
+			this.panel10.Size = new System.Drawing.Size(1325, 34);
+			this.panel10.TabIndex = 17;
+			// 
+			// label1
+			// 
+			this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.label1.AutoSize = true;
+			this.label1.BackColor = System.Drawing.Color.Transparent;
+			this.label1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label1.ForeColor = System.Drawing.Color.GhostWhite;
+			this.label1.Location = new System.Drawing.Point(3, 8);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(387, 28);
+			this.label1.TabIndex = 0;
+			this.label1.Text = "xxDescriptionOfMaximumWorkdayRule";
 			// 
 			// panel5
 			// 
@@ -2721,6 +2754,56 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.panelOvertimeRequestHeaderBasic.Size = new System.Drawing.Size(959, 34);
 			this.panelOvertimeRequestHeaderBasic.TabIndex = 19;
 			// 
+			// tableLayoutPanel3
+			// 
+			this.tableLayoutPanel3.ColumnCount = 2;
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel3.Controls.Add(this.daysTbx, 0, 0);
+			this.tableLayoutPanel3.Controls.Add(this.label2, 1, 0);
+			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 123);
+			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+			this.tableLayoutPanel3.RowCount = 1;
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(965, 34);
+			this.tableLayoutPanel3.TabIndex = 20;
+			// 
+			// daysTbx
+			// 
+			this.daysTbx.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.daysTbx.Location = new System.Drawing.Point(3, 3);
+			this.daysTbx.Maximum = new decimal(new int[] {
+			15,
+			0,
+			0,
+			0});
+			this.daysTbx.Minimum = new decimal(new int[] {
+			1,
+			0,
+			0,
+			0});
+			this.daysTbx.Name = "daysTbx";
+			this.daysTbx.Size = new System.Drawing.Size(94, 31);
+			this.daysTbx.TabIndex = 20;
+			this.daysTbx.Value = new decimal(new int[] {
+			1,
+			0,
+			0,
+			0});
+			this.daysTbx.Leave += new System.EventHandler(this.daysTbx_Leave);
+			// 
+			// label2
+			// 
+			this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(103, 4);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(67, 25);
+			this.label2.TabIndex = 21;
+			this.label2.Text = "xxDays";
+			// 
 			// labelOvertimeRequestBasic
 			// 
 			this.labelOvertimeRequestBasic.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -2886,6 +2969,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.contextMenuStripOvertimeRequestOpenPeriodsGrid.ResumeLayout(false);
 			this.tabPageAdvShiftTradeRequest.ResumeLayout(false);
 			this.tableLayoutPanelShiftTrade.ResumeLayout(false);
+			this.panel10.ResumeLayout(false);
+			this.panel10.PerformLayout();
 			this.panel5.ResumeLayout(false);
 			this.panel5.PerformLayout();
 			this.panelOpenForShiftTrade.ResumeLayout(false);
@@ -2899,6 +2984,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvAutoGrant)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvAnonymousTrading)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvLockTrading)).EndInit();
+			this.tableLayoutPanel3.ResumeLayout(false);
+			this.tableLayoutPanel3.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.daysTbx)).EndInit();
 			this.tabPageAdvETOTRequest.ResumeLayout(false);
 			this.tabPageAdvETOTRequest.PerformLayout();
 			this.tableLayoutPanelETOTRequest.ResumeLayout(false);
@@ -3071,5 +3159,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvOvertimeMaximumContinuousWorkTimeEnabled;
 		private Panel panelOvertimeRequestHeaderBasic;
 		private Label labelOvertimeRequestBasic;
+		private Panel panel10;
+		private Label label1;
+		private TableLayoutPanel tableLayoutPanel3;
+		private Label label2;
+		private NumericUpDown daysTbx;
 	}
 }

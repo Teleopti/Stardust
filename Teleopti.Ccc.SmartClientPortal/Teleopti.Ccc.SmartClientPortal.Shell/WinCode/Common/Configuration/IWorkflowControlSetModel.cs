@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		IWorkflowControlSet DomainEntity { get; }
 		bool ToBeDeleted { get; set; }
 		bool IsNew { get; }
+		int MaxConsecutiveWorkingDays { get; set; }
 		IWorkflowControlSet OriginalDomainEntity { get; }
 		IList<AbsenceRequestPeriodModel> AbsenceRequestPeriodModels { get; }
 		IList<OvertimeRequestPeriodModel> OvertimeRequestPeriodModels { get; }

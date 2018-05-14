@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 				}
 			};
 			var result = Target.PersistApplicationLogonNames(inputModel);
-			result.Should().Be.OfType<OkResult>();
+			result.Should().Be.OfType<OkNegotiatedContentResult<BaseResultModel>>();
 			PersonInfoPersisterFake.PersistedData.Count.Should().Be.EqualTo(2);
 		}
 
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 				}
 			};
 			var result = Target.PersistApplicationLogonNames(inputModel);
-			result.Should().Be.OfType<OkResult>();
+			result.Should().Be.OfType<OkNegotiatedContentResult<BaseResultModel>>();
 			PersonInfoPersisterFake.PersistedData.Count.Should().Be.EqualTo(1);
 
 			var inputModelRoundTwo = new PersonApplicationLogonInputModel
@@ -106,9 +106,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			};
 			var result2 = Target.PersistApplicationLogonNames(inputModelRoundTwo);
 			PersonInfoPersisterFake.PersistedData.Count.Should().Be.EqualTo(1);
-			var contentResult = result2 as NegotiatedContentResult<BaseResultModel>;
-			contentResult.StatusCode.Should().Be.EqualTo(HttpStatusCode.BadRequest);
-			contentResult.Content.Result.Count.Should().Be.EqualTo(1);
+			var contentResult = result2 as OkNegotiatedContentResult<BaseResultModel>;
+			contentResult.Content.Success.Should().Be.EqualTo(false);
+			contentResult.Content.Errors.Count.Should().Be.EqualTo(1);
+			contentResult.Content.Result.Count.Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -126,7 +127,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 				}
 			};
 			var result = Target.PersistIdentities(inputModel);
-			result.Should().Be.OfType<OkResult>();
+			result.Should().Be.OfType<OkNegotiatedContentResult<BaseResultModel>>();
 			PersonInfoPersisterFake.PersistedData.Count.Should().Be.EqualTo(2);
 		}
 
@@ -144,7 +145,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 				}
 			};
 			var result = Target.PersistIdentities(inputModel);
-			result.Should().Be.OfType<OkResult>();
+			result.Should().Be.OfType<OkNegotiatedContentResult<BaseResultModel>>();
 			PersonInfoPersisterFake.PersistedData.Count.Should().Be.EqualTo(1);
 
 			var inputModelRoundTwo = new PersonIdentitiesInputModel
@@ -156,9 +157,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			};
 			var result2 = Target.PersistIdentities(inputModelRoundTwo);
 			PersonInfoPersisterFake.PersistedData.Count.Should().Be.EqualTo(1);
-			var contentResult = result2 as NegotiatedContentResult<BaseResultModel>;
-			contentResult.StatusCode.Should().Be.EqualTo(HttpStatusCode.BadRequest);
-			contentResult.Content.Result.Count.Should().Be.EqualTo(1);
+			var contentResult = result2 as OkNegotiatedContentResult<BaseResultModel>;
+			contentResult.Content.Success.Should().Be.EqualTo(false);
+			contentResult.Content.Errors.Count.Should().Be.EqualTo(1);
+			contentResult.Content.Result.Count.Should().Be.EqualTo(0);
 		}
 	}
 }

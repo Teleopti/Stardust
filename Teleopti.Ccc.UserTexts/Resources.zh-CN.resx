@@ -8229,7 +8229,7 @@ Teleopti R&amp;D</value>
     <value>预算的员工</value>
   </data>
   <data name="Contractors" xml:space="preserve">
-    <value>立合同人</value>
+    <value>外包商</value>
   </data>
   <data name="DaysOffPerWeek" xml:space="preserve">
     <value>每周休息日天数</value>
@@ -10834,6 +10834,13 @@ Teleopti R&amp;D</value>
   </data>
   <data name="Planned" xml:space="preserve">
     <value>已计划的</value>
+  </data>
+  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
+    <value>恭喜您！产品激活密钥已被应用．您现在是这个屡获殊荣的WFM解决方案的授权使用者。
+当前应用程序将被关闭。
+
+重要：
+为了获得全部的服务及Web应用程序功能，请让您的IT部门在服务器上执行“Restart Teleopti WFM” （开始菜单--&gt;Teleopti文件夹）</value>
   </data>
   <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
     <value>您的产品激活密钥已经过期，请申请新的</value>
@@ -13507,6 +13514,9 @@ Teleopti R&amp;D</value>
   <data name="DayOffRule" xml:space="preserve">
     <value>休息日规则</value>
   </data>
+  <data name="DayOffRuleAppliedFilters" xml:space="preserve">
+    <value>以下设置被应用于以下座席分组 {0}</value>
+  </data>
   <data name="DayOffRuleSetting" xml:space="preserve">
     <value>休息日规则设置</value>
   </data>
@@ -13851,6 +13861,9 @@ Teleopti R&amp;D</value>
   <data name="OvertimeRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
     <value>加班申请 {0} 已被拒绝。</value>
   </data>
+  <data name="NoAvailableSkillForOvertime" xml:space="preserve">
+    <value>座席代表无可用技能以申请加班</value>
+  </data>
   <data name="PeriodIsOutOfSkillOpenHours" xml:space="preserve">
     <value>申请周期超出技能开放时间</value>
   </data>
@@ -13886,6 +13899,30 @@ Teleopti R&amp;D</value>
   </data>
   <data name="SeveralGroupsSelected" xml:space="preserve">
     <value>已选定 {0} 个组</value>
+  </data>
+  <data name="TheSkillWithNameIsNotDefinedInTheSystem" xml:space="preserve">
+    <value>技能名称 {0} 未在系统中定义。</value>
+  </data>
+  <data name="SkillDefinedMultipleTimesInTheSystem" xml:space="preserve">
+    <value>技能名称 {0} 已在系统中定义了 {1} 次。当使用此功能时仅允许一次。 </value>
+  </data>
+  <data name="BpoLineHasIncorrectParameterCount" xml:space="preserve">
+    <value>一行中有 {0} 个参数，但只需要 {1} 个参数。</value>
+  </data>
+  <data name="ErrorFoundOnLineNumberXWithContentsY" xml:space="preserve">
+    <value>行数 {0} 中发现错误内容：{1} {2}</value>
+  </data>
+  <data name="ParameterCannotBeEmpty" xml:space="preserve">
+    <value>参数 {0} 不能为空</value>
+  </data>
+  <data name="InvalidFieldNameInHeader" xml:space="preserve">
+    <value>页眉包含无效字段名称: '{0}'. 有效的字段名称为: ({1})</value>
+  </data>
+  <data name="TheImportFileCannotBeEmpty" xml:space="preserve">
+    <value>导入文件不能为空。</value>
+  </data>
+  <data name="FirstLineInFileHeaderLineCannotBeEmpty" xml:space="preserve">
+    <value>文件中第一行（页面一行）不能为空。</value>
   </data>
   <data name="OpenSite" xml:space="preserve">
     <value>进入站点</value>
@@ -14003,6 +14040,9 @@ Teleopti R&amp;D</value>
   </data>
   <data name="NotShowingReforcastedAgents" xml:space="preserve">
     <value>当前选择无法显示重新预测的座席代表数.</value>
+  </data>
+  <data name="ShiftTradeSpecification" xml:space="preserve">
+    <value>调换班说明</value>
   </data>
   <data name="EditPlanGroupSchedulingSetting" xml:space="preserve">
     <value>编辑排班设置</value>

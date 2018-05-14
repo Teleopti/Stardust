@@ -16,6 +16,8 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -1347,5 +1349,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			skillResources.Count.Should().Be.EqualTo(2);
 			skillResources.Any(x => x.StartDateTime == new DateTime(2017, 06, 03, 0, 0, 0)).Should().Be.EqualTo(false);
 		}
+
+
+		
 	}
 }
