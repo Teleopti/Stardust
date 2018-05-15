@@ -93,8 +93,11 @@
 		});
 
 		service.fake({
-			name: 'permissionToModifyAdherence',
+			name: 'modifyAdherencePermission',
 			url: /\.\.\/api\/HistoricalAdherence\/HasModifyAdherencePermission/,
+			clear: function () {
+				return {};
+			},
 			add: function (data, item) {
 				return item;
 			}
