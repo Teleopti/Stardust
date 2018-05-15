@@ -267,14 +267,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var result = (OkNegotiatedContentResult<IList<ForecastDayModel>>) Target.AddCampaign(model);
 
 			result.Should().Be.OfType<OkNegotiatedContentResult<IList<ForecastDayModel>>>();
-			result.Content.First().Tasks
-				.Should().Be(100d);
-			result.Content.First().TotalTasks
-				.Should().Be(150d);
-			result.Content.Last().Tasks
-				.Should().Be(100d);
-			result.Content.Last().TotalTasks
-				.Should().Be(100d);
+
+			var firstForecastDay = result.Content.First();
+			firstForecastDay.HasCampaign.Should().Be.True();
+			firstForecastDay.CampaignTasksPercentage.Should().Be.EqualTo(model.CampaignTasksPercent);
+			firstForecastDay.Tasks.Should().Be(100d);
+			firstForecastDay.TotalTasks.Should().Be(150d);
+
+			var secondForecastDay = result.Content.Last();
+			secondForecastDay.CampaignTasksPercentage.Should().Be.EqualTo(0);
+			secondForecastDay.HasCampaign.Should().Be.False();
+			secondForecastDay.Tasks.Should().Be(100d);
+			secondForecastDay.TotalTasks.Should().Be(100d);
 		}
 
 		[Test]

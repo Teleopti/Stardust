@@ -55,7 +55,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 					AverageTaskTime = workloadDay.AverageTaskTime.TotalSeconds,
 					TotalAverageTaskTime = workloadDay.TotalAverageTaskTime.TotalSeconds,
 					AverageAfterTaskTime = workloadDay.AverageAfterTaskTime.TotalSeconds,
-					TotalAverageAfterTaskTime = workloadDay.TotalAverageAfterTaskTime.TotalSeconds
+					TotalAverageAfterTaskTime = workloadDay.TotalAverageAfterTaskTime.TotalSeconds,
+					IsOpen = workloadDay.OpenForWork.IsOpen
 				};
 
 				_forecastDayModelMapper.SetCampaignAndOverride(workloadDay, dayModel);
