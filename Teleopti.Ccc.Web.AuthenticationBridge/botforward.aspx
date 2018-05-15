@@ -16,7 +16,7 @@ if (string.IsNullOrWhiteSpace(action))
 	Response.Write("Empty return url not allowed");
 	Response.End();
 }
-if (!action.StartsWith("http://localhost:3979") && !action.Equals("https://grantbot.azurewebsites.net/AuthCallback"))
+if (!action.StartsWith("http://localhost:3979") && !action.StartsWith("https://grantbot.azurewebsites.net/AuthCallback"))
 {
 	Response.Write("Not an allowed return url");
 	Response.End();

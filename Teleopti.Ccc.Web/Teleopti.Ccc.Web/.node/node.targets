@@ -1,85 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<PropertyGroup>
-		<SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">$(MSBuildProjectDirectory)\..\</SolutionDir>
+    <PropertyGroup>
+        <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">$(MSBuildProjectDirectory)\..\</SolutionDir>
+      
+        <!-- Node Directory  -->
+        <NodeDir>$(MSBuildProjectDirectory)\.node\</NodeDir>
+            
+        <!-- Path to Node.exe -->
+        <NodeCmd>$(NodeDir)node</NodeCmd>
+      
+        <!-- Path to npm command -->
+        <NpmCmd>$(NodeDir)npm</NpmCmd>
+      
+        <!-- Path to grunt command -->
+        <GruntCmd>$(NodeDir)grunt</GruntCmd>
+            
+        <!-- Grunt Build Command -->
+        <GruntBuild>"$(GruntCmd)" --verbose --no-color</GruntBuild>
+        
+        <!-- NPM install command -->
+        <NpmInstallCmd>"$(NpmCmd)" install</NpmInstallCmd>
+            
+    </PropertyGroup>
 
-		<!-- Node Directory  -->
-		<NodeDir>$(MSBuildProjectDirectory)\.node\</NodeDir>
+    <!-- Runs NPM command -->
+    <Target Name="RestoreNodePackages">
+      <Message Text="Restore Node Packages Command: $(NpmInstallCmd) /w WorkingDirectory: $(NodeDir)" Importance="high" />  
+      <Exec Command="$(NpmInstallCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />     
+    </Target>
 
-		<!-- Path to Node.exe -->
-		<NodeCmd>$(NodeDir)node</NodeCmd>
-
-		<!-- Path to npm command -->
-		<NpmCmd>$(NodeDir)npm</NpmCmd>
-
-		<!-- Path to grunt command -->
-		<GruntCmd>$(NodeDir)grunt</GruntCmd>
-
-		<!-- Grunt Build for Dist Command -->
-		<GruntBuildDist>"$(GruntCmd)" dist --no-color </GruntBuildDist>
-
-		<!-- Grunt Build for Development Command -->
-		<GruntBuildDev>"$(GruntCmd)" devDist --no-color </GruntBuildDev>
-
-		<!-- Grunt Build Command for desktop client -->
-		<GruntBuildForDesktop>"$(GruntCmd)" buildForDesktop --no-color </GruntBuildForDesktop>
-
-		<!-- NPM install command -->
-		<NpmInstallCmd>"$(NpmCmd)" install</NpmInstallCmd>
-		<NpmSetServerCmd>"$(NpmCmd)" set registry https://registry.npmjs.org/</NpmSetServerCmd>
-		<NpmRebuildNodeSassCmd>"$(NpmCmd)" rebuild node-sass</NpmRebuildNodeSassCmd>
-
-		<!-- NPM dedupe command -->
-		<NpmDedupeCmd>"$(NpmCmd)" dedupe</NpmDedupeCmd>
-
-		<!-- Karma install command -->
-		<NpmInstallKarmaCmd>"$(NpmCmd)" update -g karma@0.13.3</NpmInstallKarmaCmd>
-
-		<!-- Karma cli install command -->
-		<NpmInstallKarmaCliCmd>"$(NpmCmd)" install -g karma-cli@0.1.2</NpmInstallKarmaCliCmd>
-
-		<!-- grunt-cli install command -->
-		<NpmInstallGruntCliCmd>"$(NpmCmd)" install -g grunt-cli@0.1.13</NpmInstallGruntCliCmd>
-
-	</PropertyGroup>
-
-	<!-- Runs NPM command -->
-	<Target Name="RestoreNodePackages" >
-		<Exec ConsoleToMSBuild="true" WorkingDirectory="$(NodeDir)" Command="powershell -ExecutionPolicy Bypass ./CheckPackageJsonIsModifiedRefactor.ps1" >
-			<Output TaskParameter="ConsoleOutput" ItemName="DepsAreModified" />
-		</Exec>
-
-		<Exec Command="$(NpmSetServerCmd)" Condition="'@(DepsAreModified)' == 'ALL'"  ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
-		<Exec Command="$(NpmInstallKarmaCmd)" Condition="'@(DepsAreModified)' == 'ALL'" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
-		<Exec Command="$(NpmInstallKarmaCliCmd)" Condition="'@(DepsAreModified)' == 'ALL'" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
-		<Exec Command="$(NpmInstallGruntCliCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" Condition="'@(DepsAreModified)' == 'ALL'"  />
-
-		<Message Text="Restore or Update Node Packages Command: $(NpmInstallCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" Condition="'@(DepsAreModified)' == 'True'"  />
-		<Exec Command="PATH=&quot;$(NodeDir)&quot; &amp;&amp; $(NpmInstallCmd)" Condition="'@(DepsAreModified)' == 'ALL' or '@(DepsAreModified)' == 'WFM'"  ContinueOnError="WarnAndContinue" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
-		
-		<Message Text="$(NpmRebuildNodeSassCmd)" Condition="'@(DepsAreModified)' == 'ALL' or '@(DepsAreModified)' == 'WFM'"/>
-		<Exec Command="$(NpmRebuildNodeSassCmd)" Condition="'@(DepsAreModified)' == 'ALL' or '@(DepsAreModified)' == 'WFM'"  ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
-
-		<Message Text="Deduplicate Node Packages Command: $(NpmDedupeCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high"  Condition="'@(DepsAreModified)' == 'ALL' or '@(DepsAreModified)' == 'WFM'" />
-		<Exec Command="$(NpmDedupeCmd)" Condition="'@(DepsAreModified)' == 'ALL' or '@(DepsAreModified)' == 'WFM'" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
-		<Message Text="Dependencies are modified and has been updated " Condition="'@(DepsAreModified)' == 'ALL' or '@(DepsAreModified)' == 'WFM'" Importance="high"/>
-		<Message Text="Dependencies are not modified and updated" Condition="'@(DepsAreModified)' == 'False'" Importance="high"/>
-
-	</Target>
-
-	<!-- Executes Build -->
-	<ItemGroup>
-		<OriginalJsFiles Include="$(MSBuildProjectDirectory)\WFM\js\**\*.js" />
-		<DistCssFiles Include="$(MSBuildProjectDirectory)\WFM\css\main.css" />
-		<DistJsFiles Include="$(MSBuildProjectDirectory)\WFM\dist;$(MSBuildProjectDirectory)\WFM\dist\**\*" />
-	</ItemGroup>
-	<Target Name="RunGruntBuildDist" Inputs="@(OriginalJsFiles);@(DistCssFiles)" Outputs="@(DistJsFiles);@(DistCssFiles)">
-		<Message Text="Restore Node Packages Command: $(NpmInstallGruntCliCmd) /w WorkingDirectory: $(NodeDir)" Importance="high" />
-		<Exec Command="$(NpmInstallGruntCliCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
-		<Message Text="Executing Node.JS Builds: $(GruntBuildDist) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
-		<Exec ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" Command="$(GruntBuildDist)" />
-	  <Message Text="Executing Node.JS Build for desktop client: $(GruntBuild) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
-	  <Exec ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" Command="$(GruntBuildForDesktop)" />
-	</Target>
-
+    <!-- Executes Build -->
+   <Target Name="RunGruntBuild">
+      <Message Text="Executing Node.JS Builds: $(GruntBuild)" Importance="high" />     
+      <Exec ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\.node" Command="$(GruntBuild)" />     
+   </Target>  
 </Project>

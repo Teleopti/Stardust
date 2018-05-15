@@ -200,6 +200,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 				if (significant2 == SchedulePartView.FullDayAbsence || significant2 == SchedulePartView.ContractDayOff || significant2 == SchedulePartView.DayOff)
 					continue;
 
+				if(significant1 == SchedulePartView.MainShift && significant2 == SchedulePartView.MainShift)
+					continue;
+
 				DateTime earliestEnd;
 				if (significant1 == SchedulePartView.MainShift)
 				{

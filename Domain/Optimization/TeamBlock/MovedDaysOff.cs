@@ -13,5 +13,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		{
 			return AddedDaysOff.Union(RemovedDaysOff);
 		}
+
+		public bool Contains(DateOnly date)
+		{
+			return ModifiedDays().Contains(date);
+		}
 	}
 }

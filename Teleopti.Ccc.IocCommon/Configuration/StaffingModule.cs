@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -21,10 +22,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<CompareProjection>().SingleInstance();
 
-
 			builder.RegisterType<UpdateStaffingLevelReadModelOnlySkillCombinationResources>().InstancePerLifetimeScope();
 
-			
 			builder.RegisterType<StaffingSettingsReader>().As<IStaffingSettingsReader>().SingleInstance();
 			
 			if (_configuration.Toggle((Toggles.Wfm_Staffing_StaffingReadModel28DaysStep1_45109)))
@@ -40,8 +39,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ScheduledStaffingViewModelCreator>().SingleInstance();
 			builder.RegisterType<BacklogSkillTypesForecastCalculator>().SingleInstance();
 			builder.RegisterType<ImportBpoFile>().SingleInstance();
-			
-			if(_configuration.Toggle(Toggles.Forecast_FileImport_UnifiedFormat_46585))
+			builder.RegisterType<SkillCombinationBpoTimeLineReader>().As<ISkillCombinationBpoTimeLineReader>().SingleInstance();
+			builder.RegisterType<BpoGanttProvider>().SingleInstance();
+
+			if (_configuration.Toggle(Toggles.Forecast_FileImport_UnifiedFormat_46585))
 				builder.RegisterType<ExportBpoFile>().As<IExportBpoFile>();
 			else
 				builder.RegisterType<ExportBpoFileOld>().As<IExportBpoFile>();

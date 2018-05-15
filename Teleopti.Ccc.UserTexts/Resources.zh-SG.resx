@@ -504,7 +504,7 @@
     <comment>Find next</comment>
   </data>
   <data name="AmpersandFirstName" xml:space="preserve">
-    <value>组别(&amp;F)</value>
+    <value>姓名(&amp;F)</value>
     <comment>Ampersand First Name</comment>
   </data>
   <data name="AmpersandLastName" xml:space="preserve">
@@ -1639,7 +1639,7 @@
     <comment>Edit workload templates</comment>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>仓储预测</value>
+    <value>Email</value>
     <comment>Email</comment>
   </data>
   <data name="EmailResult" xml:space="preserve">
@@ -1897,7 +1897,7 @@
     <comment>&amp;Finish</comment>
   </data>
   <data name="FirstName" xml:space="preserve">
-    <value>组别</value>
+    <value>姓名</value>
     <comment>First name</comment>
   </data>
   <data name="FiveMinutes" xml:space="preserve">
@@ -10695,10 +10695,10 @@ Teleopti R&amp;D</value>
     <value>普通员工描述</value>
   </data>
   <data name="AgentNameFormatFirstNameLastName" xml:space="preserve">
-    <value>[组别] [姓名]</value>
+    <value>[姓名] [组别]</value>
   </data>
   <data name="AgentNameFormatLastNameFirstName" xml:space="preserve">
-    <value>[姓名] [组别]</value>
+    <value>[组别] [姓名]</value>
   </data>
   <data name="AnnounceShift" xml:space="preserve">
     <value>公告班次</value>
@@ -11044,7 +11044,7 @@ Teleopti R&amp;D</value>
     <value>遵时</value>
   </data>
   <data name="PersonFinderFieldFirstName" xml:space="preserve">
-    <value>组别</value>
+    <value>姓名</value>
   </data>
   <data name="PersonFinderFieldEmploymentNumber" xml:space="preserve">
     <value>员工工号</value>
@@ -11434,7 +11434,7 @@ Teleopti R&amp;D</value>
     <value>组别过长:</value>
   </data>
   <data name="TooLongFirstnameErrorMsgSemicolon" xml:space="preserve">
-    <value>组别过长:</value>
+    <value>姓名过长:</value>
   </data>
   <data name="TooLongApplicationUserIdErrorMsgSemicolon" xml:space="preserve">
     <value>应用程序用户ID过长:</value>

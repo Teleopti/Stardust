@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IdentityModel.Claims;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
@@ -9,6 +10,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -18,7 +20,6 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	[DomainTest]
 	[WebTest]
 	[RequestsTest]
-//	[RequestsTest_old_]
+	[RealPermissions]
 	public class RequestsControllerTest : IIsolateSystem
 	{
 		public RequestsController Target;
@@ -56,18 +57,23 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public ICurrentScenario CurrentScenario;
 		public MutableNow Now;
 		public IRequestCommandHandlingProvider CommandHandlingProvider;
-		public FakePermissionProvider PermissionProvider;
+		public IPermissionProvider PermissionProvider;
+		public FakePersonScheduleDayReadModelFinder PersonScheduleDayReadModelFinder;
+		public FakeThreadPrincipalContext ThreadPrincipalContext;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
 
 		public void Isolate(IIsolate isolate)
 		{
+			isolate.UseTestDouble<FakeThreadPrincipalContext>().For<IThreadPrincipalContext>();
+			isolate.UseTestDouble<PrincipalAuthorization>().For<IAuthorization>();
 			isolate.UseTestDouble<FakeLinkProvider>().For<ILinkProvider>();
 			isolate.UseTestDouble<FakePeopleForShiftTradeFinder>().For<IPeopleForShiftTradeFinder>();
-			isolate.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
 			isolate.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
 			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario("test") { DefaultScenario = true }))
 				.For<IScenarioRepository>();
 			isolate.UseTestDouble<RequestApprovalServiceFactory>().For<IRequestApprovalServiceFactory>();
 			isolate.UseTestDouble<FakeLicensedFunctionProvider>().For<ILicensedFunctionsProvider>();
+			isolate.UseTestDouble<FakePersonScheduleDayReadModelFinder>().For<IPersonScheduleDayReadModelFinder>();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
@@ -310,9 +316,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldGetIdOfTeamIBelongTo()
 		{
+			setPermissions(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb);
 			var today = DateOnly.Today;
-			var personFrom = PersonFactory.CreatePersonWithId(Guid.NewGuid());
-			PersonRepository.Add(personFrom);
+			var personFrom = ThreadPrincipalContext.Current().GetPerson(PersonRepository);
 			LoggedOnUser.SetFakeLoggedOnUser(personFrom);
 
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(today).WithId();
@@ -328,9 +334,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldGetIdOfSiteIBelongTo()
 		{
+			setPermissions(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb);
 			var today = DateOnly.Today;
-			var personFrom = PersonFactory.CreatePersonWithId(Guid.NewGuid());
-			PersonRepository.Add(personFrom);
+			var personFrom = ThreadPrincipalContext.Current().GetPerson(PersonRepository);
 			LoggedOnUser.SetFakeLoggedOnUser(personFrom);
 
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(today).WithId();
@@ -467,10 +473,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var data = result.Data as RequestViewModel;
 
 			var shiftTradeRequest = PersonRequestRepository.Find(Guid.Parse(data.Id));
-			((IShiftTradeRequest) shiftTradeRequest.Request).Refer(new PersonRequestAuthorizationCheckerForTest());
+			((IShiftTradeRequest)shiftTradeRequest.Request).Refer(new PersonRequestAuthorizationCheckerForTest());
 
 			Target.ResendShiftTrade(Guid.Parse(data.Id));
-			((IShiftTradeRequest) shiftTradeRequest.Request).GetShiftTradeStatus(new EmptyShiftTradeRequestChecker()).Should()
+			((IShiftTradeRequest)shiftTradeRequest.Request).GetShiftTradeStatus(new EmptyShiftTradeRequestChecker()).Should()
 				.Be(ShiftTradeStatus.OkByMe);
 		}
 
@@ -501,16 +507,17 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var data = result.Data as RequestViewModel;
 
 			var shiftTradeRequest = PersonRequestRepository.Find(Guid.Parse(data.Id));
-			((IShiftTradeRequest) shiftTradeRequest.Request).Refer(new PersonRequestAuthorizationCheckerForTest());
+			((IShiftTradeRequest)shiftTradeRequest.Request).Refer(new PersonRequestAuthorizationCheckerForTest());
 
 			var resendResult = Target.ResendShiftTrade(Guid.Parse(data.Id));
-			
-			((RequestViewModel) resendResult.Data).Text.Should().Be(Resources.ShiftTradeResendMessage);
+
+			((RequestViewModel)resendResult.Data).Text.Should().Be(Resources.ShiftTradeResendMessage);
 		}
 
 		[Test]
 		public void ShouldReturnPersonalAccountPermission()
 		{
+			setPermissions(DefinedRaptorApplicationFunctionPaths.ViewPersonalAccount);
 			var result = Target.PersonalAccountPermission();
 			result.Data.Should().Be.EqualTo(true);
 		}
@@ -536,11 +543,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 		[Test]
 		public void ShouldAllowCancelAbsenceRequest()
-		{
+		{	
 			Now.Is(new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc));
 
-			var person = PersonFactory.CreatePerson("Bill", "Bloggins").WithId();
-			var data = doCancelAbsenceRequestMyTimeSpecificValidation(person, new DateTimePeriod(2016, 03, 02, 2016, 03, 03));
+			var currentUser = ThreadPrincipalContext.Current().GetPerson(PersonRepository);
+			currentUser.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 01, 01)));
+			var data = doCancelAbsenceRequestMyTimeSpecificValidation(currentUser,
+				new DateTimePeriod(2016, 03, 02, 2016, 03, 03));
 			data.ErrorMessages.Should().Be.Empty();
 		}
 
@@ -582,6 +591,51 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			shouldHandleTeamIdsCorrectly(teamIds);
 		}
 
+		[Test]
+		public void ShouldShowMyScheduleWhenAgentHasViewUnpublishedSchedulesPermission()
+		{
+			var team = TeamFactory.CreateTeamWithId("team1");
+			var filter = new ScheduleFilter
+			{
+				TeamIds = team.Id.ToString(),
+				IsDayOff = true
+			};
+
+			var currentUser = ThreadPrincipalContext.Current().GetPerson(PersonRepository);
+			LoggedOnUser.SetFakeLoggedOnUser(currentUser);
+			currentUser.WorkflowControlSet = new WorkflowControlSet("test")
+			{
+				SchedulePublishedToDate = new DateTime(2018, 1, 1)
+			};
+
+			setPermissions(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
+
+			var date = new DateOnly(DateTime.Now);
+			PersonAssignmentRepository.Has(currentUser, CurrentScenario.Current(), new Activity(), new ShiftCategory("test"),
+				date, new TimePeriod(8, 10));
+
+			var result = Target.ShiftTradeRequestSchedule(date, filter,
+				new Paging { Skip = 0, Take = 1, TotalCount = 10 });
+
+			var shiftTradeScheduleViewModel = (result as JsonResult)?.Data as ShiftTradeScheduleViewModel;
+
+			shiftTradeScheduleViewModel.Should().Not.Be.Null();
+			shiftTradeScheduleViewModel.MySchedule.Should().Not.Be.Null();
+		}
+
+		private void setPermissions(params string[] functionPaths)
+		{
+			var teleoptiPrincipal = ThreadPrincipalContext.Current();
+			var claims = functionPaths.Select(functionPath => new Claim(string.Concat(
+					TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
+					, "/", functionPath)
+				, new AuthorizeEveryone(), Rights.PossessProperty)).ToList();
+			claims.Add(new Claim(
+				string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace,
+					"/AvailableData"), new AuthorizeEveryone(), Rights.PossessProperty));
+			teleoptiPrincipal.AddClaimSet(new DefaultClaimSet(ClaimSet.System, claims));
+		}
+
 		private void shouldHandleTeamIdsCorrectly(string teamIds)
 		{
 			var filter = new ScheduleFilter
@@ -595,16 +649,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Should().Not.Be.Null();
 		}
 
-		private RequestCommandHandlingResult doCancelAbsenceRequestMyTimeSpecificValidation(IPerson person, DateTimePeriod period, bool hasPermission = true, int? absenceRequestCancellationThreshold = null)
+		private RequestCommandHandlingResult doCancelAbsenceRequestMyTimeSpecificValidation(IPerson person,
+			DateTimePeriod period, bool hasPermission = true, int? absenceRequestCancellationThreshold = null)
 		{
 			if (hasPermission)
 			{
-				PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.MyTimeCancelRequest,
-					new DateOnly(period.StartDateTime), person);
+				setPermissions(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence, DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules, DefinedRaptorApplicationFunctionPaths.ViewSchedules, DefinedRaptorApplicationFunctionPaths.MyTimeCancelRequest);
 			}
 
 			var workflowControlSet =
-				new WorkflowControlSet { AbsenceRequestCancellationThreshold = absenceRequestCancellationThreshold };
+				new WorkflowControlSet {AbsenceRequestCancellationThreshold = absenceRequestCancellationThreshold};
 			var absence = AbsenceFactory.CreateAbsence("Holiday").WithId();
 			AbsenceRepository.Add(absence);
 			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenRollingPeriod
@@ -613,11 +667,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				AbsenceRequestProcess = new PendingAbsenceRequest(),
 				StaffingThresholdValidator = new AbsenceRequestNoneValidator(),
 				BetweenDays = new MinMax<int>(0, 100),
-				OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(period.StartDateTime.Date.AddDays(-1)), new DateOnly(period.EndDateTime.Date.AddDays(1))),
+				OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(period.StartDateTime.Date.AddDays(-1)),
+					new DateOnly(period.EndDateTime.Date.AddDays(1))),
 				PersonAccountValidator = new AbsenceRequestNoneValidator()
 			});
 			person.WorkflowControlSet = workflowControlSet;
-			PersonRepository.Add(person);
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 
 			var result = Target.AbsenceRequest(new AbsenceRequestForm
@@ -635,10 +689,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var data = result.Data as RequestViewModel;
 			var requestId = Guid.Parse(data.Id);
 
-			CommandHandlingProvider.ApproveRequests(new[] { requestId }, string.Empty);
+			CommandHandlingProvider.ApproveRequests(new[] {requestId}, string.Empty);
 
 			var cancelRequestResult = Target.CancelRequest(requestId);
-			return (RequestCommandHandlingResult)cancelRequestResult.Data;
+			return (RequestCommandHandlingResult) cancelRequestResult.Data;
 		}
 	}
 }

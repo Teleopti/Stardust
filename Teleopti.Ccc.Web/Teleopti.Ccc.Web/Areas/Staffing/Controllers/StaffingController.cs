@@ -36,13 +36,15 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		private readonly IAuthorization _authorization;
 		private readonly ExportForecastAndStaffingFile _exportForecastAndStaffingFile;
 		private readonly ExportStaffingPeriodValidationProvider _periodValidationProvider;
+		private readonly BpoGanttProvider _bpoGanttProvider;
 
 		public StaffingController(AddOverTime addOverTime, ScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
 								  ForecastedStaffingToDataSeries forecastedStaffingToDataSeries, IUserTimeZone timeZone,
 								  IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository, ISkillGroupRepository skillGroupRepository,
 								  ScheduledStaffingViewModelCreator staffingViewModelCreator, ImportBpoFile bpoFile, ICurrentDataSource currentDataSource, 
 								  IExportBpoFile exportBpoFile, ISkillRepository skillRepository, IAuthorization authorization,
-			ExportForecastAndStaffingFile exportForecastAndStaffingFile, ExportStaffingPeriodValidationProvider periodValidationProvider)
+			ExportForecastAndStaffingFile exportForecastAndStaffingFile, ExportStaffingPeriodValidationProvider periodValidationProvider,
+			BpoGanttProvider bpoGanttProvider)
 		{
 			_addOverTime = addOverTime;
 			_scheduledStaffingToDataSeries = scheduledStaffingToDataSeries;
@@ -58,6 +60,25 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			_authorization = authorization;
 			_exportForecastAndStaffingFile = exportForecastAndStaffingFile;
 			_periodValidationProvider = periodValidationProvider;
+			_bpoGanttProvider = bpoGanttProvider;
+		}
+
+		[UnitOfWork, HttpGet, Route("api/staffing/getallganttdataforbpotimeline")]
+		public virtual IHttpActionResult GetAllGanttDataForBpoTimeline()
+		{
+			return Ok(_bpoGanttProvider.GetAllGanttDataForBpoTimeline());
+		}
+
+		[UnitOfWork, HttpGet, Route("api/staffing/getganttdataforbpotimelineonskill")]
+		public virtual IHttpActionResult GetGanttDataForBpoTimelineOnSkill(Guid skillId)
+		{
+			return Ok(_bpoGanttProvider.GetGanttDataForBpoTimelineOnSkill(skillId));
+		}
+
+		[UnitOfWork, HttpGet, Route("api/staffing/getganttdataforbpotimelineonskillgroup")]
+		public virtual IHttpActionResult GetGanttDataForBpoTimelineOnSkillGroup(Guid skillGroupId)
+		{
+			return Ok(_bpoGanttProvider.GetGanttDataForBpoTimelineOnSkillGroup(skillGroupId));
 		}
 
 		[UnitOfWork, HttpGet, Route("api/staffing/monitorskillareastaffing")]
@@ -65,13 +86,17 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		{
 			var skillArea = _skillGroupRepository.Get(SkillAreaId);
 			var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
-			return Ok(_staffingViewModelCreator.Load(skillIdList, new DateOnly(DateTime), UseShrinkage));
+			var model = _staffingViewModelCreator.Load(skillIdList, new DateOnly(DateTime), UseShrinkage);
+			model.ImportBpoInfoList = _bpoGanttProvider.ImportInfoOnSkillGroup(SkillAreaId, DateTime); ;
+			return Ok(model);
 		}
 
 		[UnitOfWork, HttpGet, Route("api/staffing/monitorskillstaffing")]
 		public virtual IHttpActionResult MonitorSkillStaffingByDate(Guid SkillId, DateTime DateTime, bool UseShrinkage)
 		{
-			return Ok(_staffingViewModelCreator.Load(new[] { SkillId }, new DateOnly(DateTime), UseShrinkage));
+			var model = _staffingViewModelCreator.Load(new[] {SkillId}, new DateOnly(DateTime), UseShrinkage);
+			model.ImportBpoInfoList = _bpoGanttProvider.ImportInfoOnSkill(SkillId, DateTime);
+			return Ok(model);
 		}
 
 		[UnitOfWork, HttpPost, Route("api/staffing/overtime/suggestion")]
@@ -124,9 +149,9 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		}
 
 		[UnitOfWork, HttpPost, Route("api/staffing/importBpo")]
-		public virtual IHttpActionResult ImportBpo([FromBody]string fileContents)
+		public virtual IHttpActionResult ImportBpo([FromBody]importObj fileContents)
 		{
-			var result = _bpoFile.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			var result = _bpoFile.ImportFile(fileContents.FileContent, CultureInfo.InvariantCulture, fileContents.FileName);
 			return Ok(result);
 		}
 
@@ -256,5 +281,10 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			public bool HasPermissionForBpoExchange { get; set; }
 		}
 
+		public class importObj
+		{
+			public string FileContent { get; set; }
+			public string FileName { get; set; }
+		}
 	}
 }

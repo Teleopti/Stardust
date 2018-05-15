@@ -312,6 +312,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 			window.scrollTo(0, 0);
 			self.setSendEnableStatus();
 
+			self.searchNameText(agent.agentName);
 			self.cleanTimeFiler();
 		}
 		self.agentChoosed(agent);
@@ -376,7 +377,13 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		if (self.message() !== undefined) {
 			self.message("");
 		}
-		self.goToFirstPage();
+
+		if(self.searchNameText().length == 0) {
+			self.goToFirstPage();
+		} else {
+			self.searchNameText("");
+			self.loadSchedule(self.getFormattedDateForServiceCall(), self.selectedTeamInternal());
+		}
 	};
 
 	self._createTimeLine = function (hours) {
@@ -508,6 +515,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 				self.chooseHistorys.removeAll();
 			}
 			self.selectedTeamInternal(teamId);
+			self.searchNameText('');
 			if (teamId === null) return;
 			self.prepareLoad();
 			self.loadSchedule(self.getFormattedDateForServiceCall(), teamId);
@@ -520,6 +528,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		},
 		write: function (siteId) {
 			self.selectedSiteInternal(siteId);
+			self.searchNameText('');
 			if (self.selectedTeam() == null || self.dateChanged()) return;
 			self.selectedTeamInternal(self.allTeamsId);
 			self.loadTeamsUnderSite(siteId, self.getFormattedDateForServiceCall());

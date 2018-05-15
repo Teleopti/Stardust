@@ -149,5 +149,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			_lastCalcualted = dt;
 		}
+
+		public List<ImportSkillCombinationResourceBpo> ImportedBpoData()
+		{
+			return _combinationResourcesBpo;
+		}
 	}
 }

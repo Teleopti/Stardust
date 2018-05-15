@@ -48,6 +48,7 @@
 		WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871,
 		WfmTeamSchedule_SuggestShiftCategory_152,
 		WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952,
+		WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978,
 
 		WebByPassDefaultPermissionCheck_37984,
 
@@ -83,6 +84,7 @@
 		ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899,
 		ResourcePlanner_MinimumAgents_75339,
 		ResourcePlanner_UseErlangAWithFinitePatience_47738,
+		ResourcePlanner_LessResourcesXXL_74915,
 
 		Wfm_DisplayOnlineHelp_39402,
 
@@ -130,6 +132,7 @@
 		WFM_Export_Forecast_44716,
 		Staffing_BPOExchangeImport_45202,
 		Forecast_FileImport_UnifiedFormat_46585,
+		Staffing_BPO_Visualization_74958,
 		WFM_TrainingPlanner_44780,
 		Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560,
 		Report_Remove_Realtime_Scheduled_Time_vs_Target_45559,

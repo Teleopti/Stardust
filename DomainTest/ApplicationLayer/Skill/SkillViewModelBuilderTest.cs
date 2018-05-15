@@ -75,7 +75,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Skill
 
 			result.Id.Should().Be(skill.Id.ToString());
 			result.Name.Should().Be("Sales");
+			result.IsMultisiteSkill.Should().Be.EqualTo(false);
+			result.SkillType.Should().Be.EqualTo(skill.SkillType.Description.Name);
+			result.DoDisplayData.Should().Be.EqualTo(true);
+
 		}
+
 		[Test]
 		public void ShouldSortSkillsConnectedWithQueueByName()
 		{

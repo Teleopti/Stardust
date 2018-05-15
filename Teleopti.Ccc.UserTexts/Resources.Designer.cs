@@ -14511,11 +14511,74 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All dates are UTC.
+        /// </summary>
+        public static string ImportBpoFileImportDateInformation {
+            get {
+                return ResourceManager.GetString("ImportBpoFileImportDateInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BPO file import information.
+        /// </summary>
+        public static string ImportBpoFileImportInfoHeader {
+            get {
+                return ResourceManager.GetString("ImportBpoFileImportInfoHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to First line in file (header line) cannot be empty..
         /// </summary>
         public static string ImportBpoFirstLineInFileHeaderLineCannotBeEmpty {
             get {
                 return ResourceManager.GetString("ImportBpoFirstLineInFileHeaderLineCannotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to imported at.
+        /// </summary>
+        public static string ImportBpoImportedAt {
+            get {
+                return ResourceManager.GetString("ImportBpoImportedAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to all Skills.
+        /// </summary>
+        public static string ImportBpoImportInformationAllSkills {
+            get {
+                return ResourceManager.GetString("ImportBpoImportInformationAllSkills", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import history for:.
+        /// </summary>
+        public static string ImportBpoImportInformationHeader {
+            get {
+                return ResourceManager.GetString("ImportBpoImportInformationHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to at.
+        /// </summary>
+        public static string ImportBpoImportInformationTooltipAt {
+            get {
+                return ResourceManager.GetString("ImportBpoImportInformationTooltipAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to imported.
+        /// </summary>
+        public static string ImportBpoImportInformationTooltipImported {
+            get {
+                return ResourceManager.GetString("ImportBpoImportInformationTooltipImported", resourceCulture);
             }
         }
         

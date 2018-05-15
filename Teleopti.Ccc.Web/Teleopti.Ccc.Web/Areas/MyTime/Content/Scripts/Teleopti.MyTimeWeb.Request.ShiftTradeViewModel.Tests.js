@@ -733,4 +733,127 @@
 
 		equal(viewModel.TimeSortOrder(), 'start asc');
 	});
+
+	test("should set search name after choosing an agent", function() {
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+		viewModel.chooseAgent({ agentName:"test", isVisible:function(){} });
+		equal(viewModel.searchNameText(), 'test');
+	});
+
+	test("should clear search name after changing team", function(){
+		var schedules = {
+			"MySchedule":
+			{
+				"ScheduleLayers": [{}],
+				"ContractTimeInMinute": 480
+			},
+			"PossibleTradeSchedules": [
+				{
+					"ScheduleLayers": [{}],
+					"ContractTimeInMinute": 425
+				}
+			],
+			"TimeLineHours": [
+				{
+					"HourText": "",
+					"StartTime": "2017-01-01 00:00:00"
+				},
+				{
+					"HourText": "07:00",
+					"StartTime": "2017-01-01 07:00:00"
+				}
+			]
+		};
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url === "Requests/ShiftTradeRequestSchedule") {
+					options.success(schedules);
+				}
+			}
+		};
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
+		viewModel.chooseAgent({ agentName:"test", isVisible:function(){} });
+		viewModel.selectedTeam('other team');
+		equal(viewModel.searchNameText(), '');
+	});
+
+	test("should clear search name after changing site", function(){
+		var schedules = {
+			"MySchedule":
+			{
+				"ScheduleLayers": [{}],
+				"ContractTimeInMinute": 480
+			},
+			"PossibleTradeSchedules": [
+				{
+					"ScheduleLayers": [{}],
+					"ContractTimeInMinute": 425
+				}
+			],
+			"TimeLineHours": [
+				{
+					"HourText": "",
+					"StartTime": "2017-01-01 00:00:00"
+				},
+				{
+					"HourText": "07:00",
+					"StartTime": "2017-01-01 07:00:00"
+				}
+			]
+		};
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url === "Requests/ShiftTradeRequestSchedule") {
+					options.success(schedules);
+				}
+			}
+		};
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
+		viewModel.chooseAgent({ agentName:"test", isVisible:function(){} });
+		viewModel.selectedSite('other site');
+		equal(viewModel.searchNameText(), '');
+	});
+
+	test("should clear search name and reload schedule after cancelling a request", function() {
+		var methodCalled = false;
+		var schedules = {
+			"MySchedule":
+			{
+				"ScheduleLayers": [{}],
+				"ContractTimeInMinute": 480
+			},
+			"PossibleTradeSchedules": [
+				{
+					"ScheduleLayers": [{}],
+					"ContractTimeInMinute": 425
+				}
+			],
+			"TimeLineHours": [
+				{
+					"HourText": "",
+					"StartTime": "2017-01-01 00:00:00"
+				},
+				{
+					"HourText": "07:00",
+					"StartTime": "2017-01-01 07:00:00"
+				}
+			]
+		};
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url === "Requests/ShiftTradeRequestSchedule") {
+					methodCalled = true;
+					options.success(schedules);
+				}
+			}
+		};
+
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
+		viewModel.selectedTeamInternal("myTeam");
+		viewModel.chooseAgent({ agentName:"test", isVisible:function(){} });
+		viewModel.cancelRequest();
+
+		equal(viewModel.searchNameText(), '');
+		equal(methodCalled, true);
+	});
 });
