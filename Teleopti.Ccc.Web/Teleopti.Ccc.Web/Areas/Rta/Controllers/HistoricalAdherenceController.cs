@@ -4,7 +4,9 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -17,18 +19,24 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		private readonly ApprovePeriodAsInAdherenceCommandHandler _approvePeriodCommandHandler;
 		private readonly HistoricalAdherenceDate _historicalAdherenceDate;
 		private readonly RemoveApprovedPeriodCommandHandler _removePeriodCommandHandler;
+		private readonly ICurrentAuthorization _authorization;
+		private readonly IPersonRepository _persons;
 
+		
 		public HistoricalAdherenceController(
 			HistoricalAdherenceViewModelBuilder historicalAdherenceViewModelBuilder,
 			ApprovePeriodAsInAdherenceCommandHandler approvePeriodCommandHandler,
 			RemoveApprovedPeriodCommandHandler removePeriodCommandHandler,
-			HistoricalAdherenceDate historicalAdherenceDate
-			)
+			HistoricalAdherenceDate historicalAdherenceDate,
+			ICurrentAuthorization authorization, 
+			IPersonRepository persons)
 		{
 			_historicalAdherenceViewModelBuilder = historicalAdherenceViewModelBuilder;
 			_approvePeriodCommandHandler = approvePeriodCommandHandler;
 			_removePeriodCommandHandler = removePeriodCommandHandler;
 			_historicalAdherenceDate = historicalAdherenceDate;
+			_authorization = authorization;
+			_persons = persons;
 		}
 
 		[ReadModelUnitOfWork, UnitOfWork]
@@ -59,6 +67,17 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		[HttpGet, Route("api/HistoricalAdherence/MostRecentShiftDate")]
 		public virtual IHttpActionResult MostRecentShiftDate(Guid personId) =>
 			Ok(_historicalAdherenceDate.MostRecentShiftDate(personId).Date.ToString("yyyyMMdd"));
-	}
+		
+		[UnitOfWork]
+		[HttpGet, Route("api/HistoricalAdherence/HasModifyAdherencePermission")]
+		public virtual IHttpActionResult HasModifyAdherencePermission(Guid personId, string date)
+		{
+			var dateTime = new DateOnly(DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None));
+			var person = _persons.Load(personId);
+			
+			return Ok(new []{_authorization.Current().IsPermitted(
+				DefinedRaptorApplicationFunctionPaths.ModifyAdherence, dateTime, person)});
+		}
 
+	}
 }

@@ -22,12 +22,13 @@
 		'groupPageService',
 		'TeamsStaffingConfigurationStorageService',
 		'serviceDateFormatHelper',
+		'TeamScheduleSkillService',
 		TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, $mdComponentRegistry, $document,
 		teamScheduleSvc, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService,
 		CommandCheckService, ScheduleNoteManagementService, teamsToggles, toggleSvc, bootstrapCommon, groupPageService,
-		StaffingConfigStorageService, serviceDateFormatHelper) {
+		StaffingConfigStorageService, serviceDateFormatHelper, SkillService) {
 		var vm = this;
 		vm.isLoading = false;
 		vm.scheduleFullyLoaded = false;
@@ -661,6 +662,7 @@
 			});
 
 			personSelectionSvc.clearPersonInfo();
+			SkillService.init();
 
 			if (vm.staffingEnabled)
 				vm.showStaffing();

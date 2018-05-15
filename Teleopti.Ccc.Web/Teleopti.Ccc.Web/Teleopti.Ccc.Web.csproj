@@ -1672,12 +1672,15 @@
     <Content Include="WFM\app\rta\rta\filter\filter-template_RTA_ModifySkillGroup_48191.html" />
     <Content Include="WFM\app\rta\rta\filter\rta.filter.controller.RTA_MobileFriendlyCheckboxes_46758.js" />
     <Content Include="WFM\app\rta\rta\historical\rta-historical.removeApprovedOOA_47721.html" />
+    <Content Include="WFM\app\rta\rta\historical\rta-historical.restrictModifyAdherenceWithPermission_74898.html" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA.timepicking.ie.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA.timepicking.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA_47230.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.outOfAdherences.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.removeApprovedOOA_47721.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.removeApprovedOOA_47721.spec.js" />
+    <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.restrictModifyAdherenceWithPermission_74898.js" />
+    <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.restrictModifyAdherenceWithPermission_74898.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.timeline.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.timeline.service.js" />
     <Content Include="WFM\app\rta\rta\historical\_rta.card.panel.component.js" />

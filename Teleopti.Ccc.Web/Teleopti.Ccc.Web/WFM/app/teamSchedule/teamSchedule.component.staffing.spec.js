@@ -21,13 +21,20 @@
 		$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
 	}));
 
-
 	afterEach(function () {
 		var body = $document[0].body;
 		var children = body.querySelectorAll('.staffing-panel');
 		for (var i = 0; i < children.length; i++) {
 			angular.element(children[i]).remove();
 		}
+	});
+
+	it('should render skill picker correctly', function () {
+		var scope = $rootScope.$new();
+		scope.preselectedSkills = { skillIds: ['XYZ'] };
+		var panel = setupComponent('selected-date="2018-05-10" preselected-skills="preselectedSkills"', scope);
+		var skillPickerEl = panel[0].querySelector("the-skill-picker");
+		expect(!!skillPickerEl).toBeTruthy();
 	});
 
 	it('should view no available data by default',
@@ -101,7 +108,6 @@
 		expect(_staffingInfoService.selectedSkillGroup.Id).toEqual('SkillArea1');
 		expect(!!_staffingInfoService.selectedSkill).toEqual(false);
 	});
-
 
 	it("should show skills for the preselected skill group", function () {
 		enableShowSkillsToggle();
