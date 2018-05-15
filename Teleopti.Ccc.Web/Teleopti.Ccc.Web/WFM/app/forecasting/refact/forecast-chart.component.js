@@ -135,15 +135,15 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 					grouped: true
 				},
 				onselected: function(d){
-					var temp = moment(this.internal.config.axis_x_categories[d.x], 'DD/MM/YYYY').format('YYYY-MM-DDTHH:MM:SSZ');
+					var temp = moment(this.internal.config.axis_x_categories[d.x], 'DD/MM/YYYY').format('YYYY-MM-DDT00:00:00');
 
 					if (selectedItems.indexOf(temp) == -1) {
-						selectedItems.push({date:temp, value:d.value});
+						selectedItems.push(temp);
 					}
 					ctrl.onClick(selectedItems);
 				},
 				onunselected: function (d) {
-					var temp = moment(this.internal.config.axis_x_categories[d.x], 'DD/MM/YYYY').format('YYYY-MM-DDTHH:MM:SSZ');
+					var temp = moment(this.internal.config.axis_x_categories[d.x], 'DD/MM/YYYY').format('YYYY-MM-DDT00:00:00');
 					if (selectedItems.indexOf(temp) == -1) {
 						selectedItems.splice(selectedItems.indexOf(temp),1);
 					}

@@ -94,7 +94,7 @@
             SelectedDays: vm.selectedDayCount,
             WorkloadId: vm.selectedWorkload.Workload.Id,
             ScenarioId: vm.selectedScenario.Id,
-            CampaignTasksPercent: vm.campaignPercentage
+            CampaignTasksPercent: vm.campaignPercentage / 100
           }), function (data, status, headers, config) {
 
           }, function (data, status, headers, config) {
