@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -821,13 +822,22 @@ TPBRZIL; DIRECTSALES; 2017-07-24 10:30; 2017-07-24 10:45; 6.25";
 
 			Console.WriteLine("File contents are :" );
 			Console.WriteLine(fileContents);
+			
 
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture, "import.csv");
-			result.Success.Should().Be.True();
-
 			Console.WriteLine(string.Join("*", result.ErrorInformation));
+			
 
 			var skillCombResources = SkillCombinationResourceRepository.ImportedBpoData();
+
+			Console.WriteLine("skillCombResources is empty = " + skillCombResources.IsEmpty());
+			if (!skillCombResources.IsEmpty())
+			{
+				Console.WriteLine("filename = " + skillCombResources[0].ImportFileName);
+				Console.WriteLine("personid = " + skillCombResources[0].PersonId);
+			}
+			result.Success.Should().Be.True();
+
 
 			skillCombResources.Should().Not.Be.Empty();
 			skillCombResources[0].ImportFileName.Should().Be("import.csv");
