@@ -101,9 +101,11 @@
         }),
         function(data, status, headers, config) {
           vm.selectedWorkload.Days = data;
+          vm.changesMade = true;
         },
         function(data, status, headers, config) {
           vm.selectedWorkload.Days = data;
+          vm.changesMade = true;
         },
         function() {
           NoticeService.success($translate.instant('CampaignValuesUpdated'), 5000, true);
@@ -137,9 +139,11 @@
         }),
         function(data, status, headers, config) {
           vm.selectedWorkload.Days = data;
+          vm.changesMade = true;
         },
         function(data, status, headers, config) {
           vm.selectedWorkload.Days = data;
+          vm.changesMade = true;
         },
         function() {
           NoticeService.success($translate.instant('OverrideValuesUpdated'), 5000, true);
@@ -162,9 +166,11 @@
         }),
         function(data, status, headers, config) {
           vm.selectedWorkload.Days = data;
+          vm.changesMade = true;
         },
         function(data, status, headers, config) {
           vm.selectedWorkload.Days = data;
+          vm.changesMade = true;
         },
         function() {
           NoticeService.success($translate.instant('OverrideValuesCleared'), 5000, true);
@@ -300,10 +306,12 @@
         }),
         function(data, status, headers, config) {
           vm.savingToScenario = false;
+          vm.changesMade = false;
           getWorkloadForecastData();
         },
         function(data, status, headers, config) {
           vm.savingToScenario = false;
+          vm.changesMade = false;
           getWorkloadForecastData();
         }
       );
