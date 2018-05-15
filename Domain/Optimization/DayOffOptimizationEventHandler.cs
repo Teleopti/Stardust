@@ -33,7 +33,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_gridlockManager = gridlockManager;
 		}
 
-		public void Handle(DayOffOptimizationWasOrdered @event)
+		[TestLog]
+		public virtual void Handle(DayOffOptimizationWasOrdered @event)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
 			var selectedPeriod = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
