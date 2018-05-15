@@ -1,3 +1,5 @@
+<div ng-if="!vm.noWorkloadFound">
+
 <div class="view-header with-desc with-fab">
   <div class="view-title">
     <h1><i class="mdi mdi-chart-line"></i> {{vm.selectedWorkload.Workload.Name}}</h1>
@@ -241,3 +243,7 @@
     </div>
   </div>
 </modal-dialog>
+</div>
+<div ng-cloak ng-if="vm.noWorkloadFound">
+  No workload found, please select one
+</div>

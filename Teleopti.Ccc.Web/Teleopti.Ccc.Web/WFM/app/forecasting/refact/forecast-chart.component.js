@@ -1,6 +1,4 @@
-angular.module('wfm.forecasting')
-.component('forecastChart',
-{
+angular.module('wfm.forecasting').component('forecastChart', {
 	templateUrl: 'app/forecasting/refact/forecast-chart.html',
 	controller: ForecastChartCtrl,
 	bindings: {
@@ -28,15 +26,15 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 		return false;
 	}
 
-	$timeout(function () {
+	$timeout(function() {
 		if (ctrl.days != null && ctrl.days.length > 0) {
-			generateForecastChart(ctrl.chartId,  ctrl.days);
+			generateForecastChart(ctrl.chartId, ctrl.days);
 			chart.unzoom();
 		}
 	});
 
 	function generateForecastChart(chartId, days) {
-		if ((!chartId || days.length < 1) && chart ) {
+		if ((!chartId || days.length < 1) && chart) {
 			chart.unload();
 			return;
 		}
@@ -56,10 +54,8 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 			campaignSeries: ['Campaign'],
 			overrideSeries: ['Override'],
 			campaignAndOverrideSeries: ['CampaignAndOverride']
-		}
-		console.log(days);
+		};
 		for (var i = 0; i < days.length; i++) {
-
 			preparedData.dateSeries.push(moment(days[i].Date).format('DD/MM/YYYY'));
 			preparedData.averageAfterTaskTimeSeries.push(days[i].AverageAfterTaskTime);
 			preparedData.tasksSeries.push(days[i].Tasks);
@@ -70,19 +66,19 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 
 			if (days[i].Campaign) {
 				preparedData.campaignSeries.push(days[i].Campaign);
-			} else{
+			} else {
 				preparedData.campaignSeries.push(null);
 			}
 
 			if (days[i].Override) {
 				preparedData.overrideSeries.push(days[i].Override);
-			} else{
+			} else {
 				preparedData.overrideSeries.push(null);
 			}
 
 			if (days[i].CampaignAndOverride) {
 				preparedData.campaignAndOverrideSeries.push(days[i].CampaignAndOverride);
-			} else{
+			} else {
 				preparedData.campaignAndOverrideSeries.push(null);
 			}
 		}
@@ -115,7 +111,7 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 					TotalAverageTaskTime: $translate.instant('TotalTalkTime' + ' ←'),
 					AverageTaskTime: $translate.instant('TalkTime' + ' ←'),
 					TotalAverageAfterTaskTime: $translate.instant('TotalACW' + ' ←'),
-					AverageAfterTaskTime: $translate.instant('ACW' + ' ←'),
+					AverageAfterTaskTime: $translate.instant('ACW' + ' ←')
 				},
 				colors: {
 					TotalTasks: '#0099FF',
@@ -134,22 +130,26 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 					draggable: true,
 					grouped: true
 				},
-				onselected: function(d){
-					var temp = moment(this.internal.config.axis_x_categories[d.x], 'DD/MM/YYYY').format('YYYY-MM-DDT00:00:00');
+				onselected: function(d) {
+					var temp = moment(this.internal.config.axis_x_categories[d.x], 'DD/MM/YYYY').format(
+						'YYYY-MM-DDT00:00:00'
+					);
 
 					if (selectedItems.indexOf(temp) == -1) {
 						selectedItems.push(temp);
+						ctrl.onClick(selectedItems);
 					}
-					ctrl.onClick(selectedItems);
 				},
-				onunselected: function (d) {
-					var temp = moment(this.internal.config.axis_x_categories[d.x], 'DD/MM/YYYY').format('YYYY-MM-DDT00:00:00');
+				onunselected: function(d) {
+					var temp = moment(this.internal.config.axis_x_categories[d.x], 'DD/MM/YYYY').format(
+						'YYYY-MM-DDT00:00:00'
+					);
 					if (selectedItems.indexOf(temp) == -1) {
-						selectedItems.splice(selectedItems.indexOf(temp),1);
+						selectedItems.splice(selectedItems.indexOf(temp), 1);
+						ctrl.onClick(selectedItems);
 					}
-					ctrl.onClick(selectedItems);
 				}
-			},//end of data
+			}, //end of data
 			point: {
 				focus: {
 					expand: {
@@ -177,7 +177,7 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 					type: 'category',
 					tick: {
 						culling: {
-							max: preparedData.dateSeries.length/28
+							max: preparedData.dateSeries.length / 28
 						},
 						multiline: false
 					}
@@ -185,5 +185,4 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 			}
 		});
 	}
-
 }
