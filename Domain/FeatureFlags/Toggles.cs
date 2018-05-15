@@ -48,6 +48,7 @@
 		WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871,
 		WfmTeamSchedule_SuggestShiftCategory_152,
 		WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952,
+		WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978,
 
 		WebByPassDefaultPermissionCheck_37984,
 
