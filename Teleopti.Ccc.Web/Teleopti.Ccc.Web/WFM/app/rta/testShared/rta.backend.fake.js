@@ -94,7 +94,7 @@
 
 		service.fake({
 			name: 'permissionToModifyAdherence',
-			url: /\.\.\/api\/Permission\/Check/
+			url: /\.\.\/api\/HistoricalAdherence\/HasModifyAdherencePermission/
 		});
 
 		service.fake(/\.\.\/api\/AgentStates\/Poll/,

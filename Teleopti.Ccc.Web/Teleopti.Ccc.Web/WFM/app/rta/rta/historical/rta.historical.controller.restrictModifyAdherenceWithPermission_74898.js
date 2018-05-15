@@ -26,11 +26,10 @@
 		getPermission();
 		
 		function getPermission(){
-			$http.get('../api/Permission/Check', {
+			$http.get('../api/HistoricalAdherence/HasModifyAdherencePermission', {
 				params: {
 					personId: $stateParams.personId,
-					date: $stateParams.date,
-					functionPath: 'Raptor/Anywhere/RealTimeAdherenceOverview/ModifyAdherence'
+					date: $stateParams.date
 				}
 			}).then(function (response) {
 				vm.hasModifyAdherencePermission = response.data[0];

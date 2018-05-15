@@ -36,11 +36,4 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 
 		expect(t.backend.lastParams.permissionToModifyAdherence().date).toEqual(date);
 	});
-
-	it('should check permission with modify adherence function path', function (t) {
-		
-		t.createController();
-
-		expect(t.backend.lastParams.permissionToModifyAdherence().functionPath).toEqual("Raptor/Anywhere/RealTimeAdherenceOverview/ModifyAdherence");
-	});
 });
