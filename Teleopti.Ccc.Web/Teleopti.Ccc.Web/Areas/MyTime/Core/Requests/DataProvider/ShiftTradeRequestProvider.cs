@@ -32,7 +32,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		public IPersonScheduleDayReadModel RetrieveMySchedule(DateOnly date)
 		{
 			var person = _loggedOnUser.CurrentUser();
-			return _permissionProvider.IsPersonSchedulePublished(date, person)
+			return _permissionProvider.IsPersonSchedulePublished(date, person) ||
+				   _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths
+					   .ViewUnpublishedSchedules)
 				? _scheduleDayReadModelFinder.ForPerson(date, person.Id.Value)
 				: null;
 		}
