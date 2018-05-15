@@ -32,7 +32,7 @@
 					date: $stateParams.date
 				}
 			}).then(function (response) {
-				vm.hasModifyAdherencePermission = response.data[0];
+				vm.hasModifyAdherencePermission = response.data;
 			});
 		}
 		

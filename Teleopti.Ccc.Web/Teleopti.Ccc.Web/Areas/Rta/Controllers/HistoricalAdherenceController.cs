@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		[UnitOfWork]
 		[HttpGet, Route("api/HistoricalAdherence/HasModifyAdherencePermission")]
 		public virtual IHttpActionResult HasModifyAdherencePermission(Guid personId, string date) => 
-			Ok(new[] {isPermitted( personId, date, "yyyyMMdd")});
+			Ok(isPermitted( personId, date, "yyyyMMdd"));
 		
 		private bool isPermitted( Guid personId, string dateTime, string dateFormatter="yyyy-MM-dd HH:mm:ss")
 		{
