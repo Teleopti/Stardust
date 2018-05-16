@@ -11,8 +11,8 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -26,17 +26,19 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 {
-	[TestFixture]
+	[TestFixture, TeamScheduleTest]
 	public class TeamScheduleProjectionProviderTests
 	{
 		private TeamScheduleProjectionProvider target;
 		private readonly Scenario scenario = new Scenario("d");
 		private CommonAgentNameProvider _commonAgentNameProvider;
+		public Areas.Global.FakePermissionProvider PermissionProvider;
+		public FakeLoggedOnUser LoggedOnUser;
+		public IScheduleStorage ScheduleStorage;
 
 		[SetUp]
 		public void SetupTeamScheduleProjectionProvider()
 		{
-			var loggonUser = new FakeLoggedOnUser();
 			var projectionProvider = new ProjectionProvider();
 			var fakeGlobalSettingRepo = new FakeGlobalSettingDataRepository();
 			fakeGlobalSettingRepo.PersistSettingValue("CommonNameDescription", new CommonNameDescriptionSetting("{FirstName}{LastName}"));
@@ -44,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var nameFormatSettingsPersisterAndProvider = new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository());
 			nameFormatSettingsPersisterAndProvider.Persist(
 				new NameFormatSettings { NameFormatId = (int)NameFormatSetting.LastNameThenFirstName });
-			target = new TeamScheduleProjectionProvider(projectionProvider, loggonUser,
+			target = new TeamScheduleProjectionProvider(projectionProvider, LoggedOnUser,
 				new ScheduleProjectionHelper(), new ProjectionSplitter(projectionProvider, new ScheduleProjectionHelper()),
 				new FakeIanaTimeZoneProvider(), new PersonNameProvider(nameFormatSettingsPersisterAndProvider));
 		}
@@ -86,6 +88,53 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			viewModel.Timezone.IanaId.Should().Be(timezoneChina.Id);
 			viewModel.Timezone.DisplayName.Should().Be(timezoneChina.DisplayName);
 		}
+
+		[Test]
+		public void ShouldMakeViewModelWithIsProtected()
+		{
+			var date = new DateOnly(2018, 05, 15);
+			var timezoneChina = TimeZoneInfoFactory.ChinaTimeZoneInfo();
+
+			var contract = ContractFactory.CreateContract("Contract");
+			contract.WithId();
+			var mds = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("mds", MultiplicatorType.Overtime).WithId();
+			contract.AddMultiplicatorDefinitionSetCollection(mds);
+
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.SetWriteProtection, LoggedOnUser.CurrentUser(), date);
+
+			ITeam team = TeamFactory.CreateSimpleTeam();
+			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
+			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(date, personContract, team);
+
+			var person = PersonFactory.CreatePersonWithGuid("bill", "gates");
+			person.AddPersonPeriod(personPeriod);
+			person.PermissionInformation.SetDefaultTimeZone(timezoneChina);
+			person.PersonWriteProtection.PersonWriteProtectedDate = date;
+			var scheduleDay = ScheduleDayFactory.Create(date, person, scenario);
+			scheduleDay.CreateAndAddPersonalActivity(ActivityFactory.CreateActivity("activity"), new DateTimePeriod(2018, 05, 15, 10, 2018, 05, 15, 11));
+
+			var person2 = PersonFactory.CreatePersonWithGuid("bill", "gates");
+			person2.AddPersonPeriod(personPeriod);
+			person2.PermissionInformation.SetDefaultTimeZone(timezoneChina);
+			var scheduleDayForPerson2 = ScheduleDayFactory.Create(date, person2, scenario);
+			scheduleDayForPerson2.CreateAndAddPersonalActivity(ActivityFactory.CreateActivity("activity"), new DateTimePeriod(2018, 05, 15, 10, 2018, 05, 15, 11));
+
+
+			var canViewConfidential = false;
+			var canViewUnpublished = false;
+			var includeNote = false;
+
+			var viewModel = target.MakeViewModel(person, date, scheduleDay, canViewConfidential, canViewUnpublished, includeNote,
+				_commonAgentNameProvider.CommonAgentNameSettings);
+
+			var viewModelForPerson2 = target.MakeViewModel(person2, date, scheduleDayForPerson2, canViewConfidential, canViewUnpublished, includeNote,
+				_commonAgentNameProvider.CommonAgentNameSettings);
+
+			viewModel.IsProtected.Should().Be(true);
+			viewModelForPerson2.IsProtected.Should().Be(false);
+		}
+
+
 
 		[Test]
 		public void ShouldNotReturnMultiplicatorDefinitionSetIdsInViewModelWhenAgentHasNoPersonPeriod()

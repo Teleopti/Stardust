@@ -238,9 +238,9 @@
 			if (schedule.ShiftCategory)
 				this.ShiftCategory = new ShiftCategory(schedule.ShiftCategory);
 			this.Shifts = [];
-			this.ExtraShifts = [];
 			this.Timezone = schedule.Timezone;
 			this.ViewRange = timeLine.MaximumViewRange;
+			this.IsProtected = schedule.IsProtected;
 			this.UnderlyingScheduleSummary = schedule.UnderlyingScheduleSummary;
 			this.GetSummaryTimeSpan = function (summary, selectedDate) {
 				var start = moment(summary.Start);

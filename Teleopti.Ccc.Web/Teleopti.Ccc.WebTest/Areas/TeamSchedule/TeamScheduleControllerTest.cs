@@ -128,6 +128,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		}
 
 		[Test]
+		public void ShouldGetModifyWriteProtectedSchedulePermission()
+		{
+			principalAuthorization.HasPermission(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule);
+			var result = target.GetPermissions();
+			result.Content.HasModifyWriteProtectedSchedulePermission.Should().Be.EqualTo(true);
+		}
+
+		[Test]
 		public void ShouldAssignOperatePersonForAddFullDayAbsence()
 		{
 			var expectedPerson = new Person();

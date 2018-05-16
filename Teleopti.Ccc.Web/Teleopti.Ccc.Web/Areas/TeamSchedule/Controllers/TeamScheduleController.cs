@@ -74,7 +74,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 				HasMoveOvertimePermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MoveOvertime),
 				HasRemoveShiftPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RemoveShift),
 				HasAddDayOffPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddDayOff),
-				HasRemoveDayOffPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RemoveDayOff)
+				HasRemoveDayOffPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RemoveDayOff),
+				HasModifyWriteProtectedSchedulePermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule)
 			};
 
 			return Json(permissions);

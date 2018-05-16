@@ -133,6 +133,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				DisplayName = person.PermissionInformation.DefaultTimeZone().DisplayName
 			};
 
+			vm.IsProtected =  pa?.Person.PersonWriteProtection.IsWriteProtected(date) ?? false;
 			return vm;
 		}
 

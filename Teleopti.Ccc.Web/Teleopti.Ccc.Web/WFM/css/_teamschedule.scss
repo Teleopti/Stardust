@@ -699,10 +699,17 @@ team-schedule-datepicker {
 			}
 		}
 
-
-
-		th.right-border-empty, td.right-border-empty {
+		th.schedule-tool-column, td.schedule-tool-column {
 			width: 2%;
+			text-align: center;
+
+			i.mdi:before {
+				font-size: 14px !important;
+			}
+
+			span {
+				cursor: pointer;
+			}
 		}
 
 		th.contract-time-header, td.contract-time-column {
@@ -718,18 +725,8 @@ team-schedule-datepicker {
 			border-left: 1px solid $gray012;
 		}
 
-		th.schedule-note-column {
-			width: 2%;
-		}
 
-		td.schedule-note-column {
-			width: 2%;
-			cursor: pointer;
-			text-align: center;
-
-			.mdi:before {
-				font-size: 14px !important;
-			}
+		td.schedule-tool-column.schedule-note-column {
 
 			.noComment {
 				color: $gray-500;
