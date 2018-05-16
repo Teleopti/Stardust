@@ -22,6 +22,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public string PublicNotes { get; set; }
 		public TimeZoneViewModel Timezone { get; set; }
 		public UnderlyingScheduleSummary UnderlyingScheduleSummary { get; set; }
+		public bool IsProtected { get; set; }
+
 	}
 
 	public class UnderlyingScheduleSummary

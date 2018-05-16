@@ -238,9 +238,9 @@
 			if (schedule.ShiftCategory)
 				this.ShiftCategory = new ShiftCategory(schedule.ShiftCategory);
 			this.Shifts = [];
-			this.ExtraShifts = [];
 			this.Timezone = schedule.Timezone;
 			this.ViewRange = timeLine.MaximumViewRange;
+			this.IsProtected = schedule.IsProtected;
 			this.UnderlyingScheduleSummary = schedule.UnderlyingScheduleSummary;
 			this.GetSummaryTimeSpan = function (summary, selectedDate) {
 				var start = moment(summary.Start);
@@ -250,7 +250,13 @@
 					return $filter('date')(start.toDate(), 'short') + ' - ' + $filter('date')(end.toDate(), 'short');
 				}
 				return $filter('date')(start.toDate(), 'shortTime') + ' - ' + $filter('date')(end.toDate(), 'shortTime');
-			}
+			};
+
+			this.IsDayOff = function () {
+				return !!this.DayOffs.filter(function (d) {
+					return d.Date == serviceDateFormatHelper.getDateOnly(schedule.Date);
+				}).length;
+			};
 		}
 
 		PersonSchedule.prototype.AbsenceCount = function () {

@@ -71,10 +71,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private static TimeSpan CalculateDaylightSavingsRecorrection(DateTimePeriod sourceShiftPeriod, DateTimePeriod targetShiftPeriod)
 		{
 			//pretty sure this method is compeletly wrong/unnecessary... all timezones here don't make sense.
-			var loggedOnPersonsTimezone = TimeZoneGuard.Instance.CurrentTimeZone();
+			var currentUserTimeZone = TimeZoneGuard.Instance.CurrentTimeZone();
 			
-			var sourceIsDaylightSavingTime = loggedOnPersonsTimezone.IsDaylightSavingTime(TimeZoneHelper.ConvertFromUtc(sourceShiftPeriod.StartDateTime, TimeZoneHelper.CurrentSessionTimeZone));
-			var targetIsDaylightSavingTime = loggedOnPersonsTimezone.IsDaylightSavingTime(TimeZoneHelper.ConvertFromUtc(targetShiftPeriod.StartDateTime, TimeZoneHelper.CurrentSessionTimeZone));
+			var sourceIsDaylightSavingTime = currentUserTimeZone.IsDaylightSavingTime(TimeZoneHelper.ConvertFromUtc(sourceShiftPeriod.StartDateTime, currentUserTimeZone));
+			var targetIsDaylightSavingTime = currentUserTimeZone.IsDaylightSavingTime(TimeZoneHelper.ConvertFromUtc(targetShiftPeriod.StartDateTime, currentUserTimeZone));
 
 			if (sourceIsDaylightSavingTime == targetIsDaylightSavingTime)
 				return TimeSpan.Zero;
@@ -85,13 +85,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			if (targetShiftPeriod.StartDateTime == sourceShiftPeriod.StartDateTime)
 				milliVanilli = 0;
 
-			var sourceShiftStartTimeInLoggedOnLocal = TimeZoneHelper.ConvertFromUtc(sourceShiftPeriod.StartDateTime, loggedOnPersonsTimezone);
-			var targetShiftStartTimeInLoggedOnLocal = TimeZoneHelper.ConvertFromUtc(targetShiftPeriod.StartDateTime, loggedOnPersonsTimezone);
+			var sourceShiftStartTimeInLoggedOnLocal = TimeZoneHelper.ConvertFromUtc(sourceShiftPeriod.StartDateTime, currentUserTimeZone);
+			var targetShiftStartTimeInLoggedOnLocal = TimeZoneHelper.ConvertFromUtc(targetShiftPeriod.StartDateTime, currentUserTimeZone);
 
 			TimeSpan sourceDaylightOffset =
-				loggedOnPersonsTimezone.GetUtcOffset(sourceShiftStartTimeInLoggedOnLocal).Subtract(loggedOnPersonsTimezone.BaseUtcOffset);
+				currentUserTimeZone.GetUtcOffset(sourceShiftStartTimeInLoggedOnLocal).Subtract(currentUserTimeZone.BaseUtcOffset);
 			TimeSpan targetDaylightOffset =
-				loggedOnPersonsTimezone.GetUtcOffset(targetShiftStartTimeInLoggedOnLocal.AddMilliseconds(milliVanilli)).Subtract((loggedOnPersonsTimezone.BaseUtcOffset));
+				currentUserTimeZone.GetUtcOffset(targetShiftStartTimeInLoggedOnLocal.AddMilliseconds(milliVanilli)).Subtract((currentUserTimeZone.BaseUtcOffset));
 
 			return sourceDaylightOffset.Subtract(targetDaylightOffset);
 

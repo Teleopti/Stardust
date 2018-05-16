@@ -2,8 +2,7 @@
 
 rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	it('should have permission to modify adherence', function (t) {
-		t.stateParams.personId = '1';
-		t.backend.with.permissionToModifyAdherence(true);
+		t.backend.with.modifyAdherencePermission(true);
 
 		var c = t.createController();
 
@@ -11,8 +10,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 	});	
 	
 	it('should not have permission to modify adherence', function (t) {
-		t.stateParams.personId = '1';
-		t.backend.with.permissionToModifyAdherence(false);
+		t.backend.with.modifyAdherencePermission(false);
 		
 		var c = t.createController();
 
@@ -25,7 +23,7 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		
 		t.createController();
 
-		expect(t.backend.lastParams.permissionToModifyAdherence().personId).toEqual(personId);
+		expect(t.backend.lastParams.modifyAdherencePermission().personId).toEqual(personId);
 	});
 
 	it('should check permission with date', function (t) {
@@ -34,6 +32,6 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 		
 		t.createController();
 
-		expect(t.backend.lastParams.permissionToModifyAdherence().date).toEqual(date);
+		expect(t.backend.lastParams.modifyAdherencePermission().date).toEqual(date);
 	});
 });

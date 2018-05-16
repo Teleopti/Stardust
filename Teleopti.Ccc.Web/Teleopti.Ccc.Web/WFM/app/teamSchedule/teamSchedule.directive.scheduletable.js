@@ -144,6 +144,17 @@
 		vm.hasUnderlyingSchedules = function (personSchedule) {
 			return toggleSvc.WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952 && !!personSchedule.UnderlyingScheduleSummary;
 		}
+
+		vm.showEditButton = function (personSchedule) {
+			return toggleSvc.WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978
+				&& !personSchedule.IsFullDayAbsence
+				&& !(personSchedule.IsProtected && !vm.permissions.HasModifyWriteProtectedSchedulePermission)
+				&& !personSchedule.IsDayOff()
+				&& !!personSchedule.ActivityCount();
+		}
+
+		
+
 	
 		function isAllInCurrentPageSelected() {
 			var isAllSelected = true;

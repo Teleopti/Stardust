@@ -59,7 +59,8 @@ namespace Teleopti.Analytics.Portal.AnalyzerProxy
 			{
 				customSessionId = HttpContext.Current.Session.SessionID;
 			}
-			cookies.Add(new Cookie("ASP.NET_SessionId", customSessionId, "/", _analyzerServer));
+			var builder = new UriBuilder(_analyzerServer);
+			cookies.Add(new Cookie("ASP.NET_SessionId", customSessionId, "/", builder.Uri.Host));
 			_az.CookieContainer = cookies;
 
 			_olapServer = olapServer;

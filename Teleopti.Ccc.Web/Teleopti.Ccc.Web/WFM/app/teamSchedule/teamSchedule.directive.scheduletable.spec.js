@@ -2,14 +2,17 @@
 
 describe('teamschedule schedule table controller tests', function () {
 	var controller;
-	var scope, personSelection, scheduleManagement;
+	var scope, personSelection, scheduleManagement, toggleSvc, permissions;
 
 	beforeEach(function () {
 		module('wfm.teamSchedule');
 		module(function ($provide) {
+			toggleSvc = {};
+			permissions = new FakePermissions();
 			$provide.service('Toggle', function () {
-				return {};
+				return toggleSvc;
 			});
+			$provide.service('teamsPermissions', function () { return permissions; });
 		});
 	});
 
@@ -20,7 +23,7 @@ describe('teamschedule schedule table controller tests', function () {
 		controller = setUpController($controller);
 	}));
 
-	afterEach(function() {
+	afterEach(function () {
 		controller = undefined;
 	});
 
@@ -421,7 +424,6 @@ describe('teamschedule schedule table controller tests', function () {
 		expect(controller.hasUnderlyingSchedules(schedules[0])).not.toBeNull();
 	});
 
-
 	it('should not make current page selected when only one person on the page and the person is partially selected', inject(function () {
 		var personActivity1 = {
 			ShiftLayerIds: ['111'],
@@ -493,6 +495,87 @@ describe('teamschedule schedule table controller tests', function () {
 		expect(controller.toggleAllInCurrentPage).toBeFalsy();
 	}));
 
+	it('should show edit button unless toggle WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978 is on and agent has activities', function () {
+		var schedules = [createSchedule('personId1', '2018-05-15', null, [{ startHour: 8, endHour: 16 }])];
+		scheduleManagement.groupScheduleVm = { Schedules: schedules };
+		controller.init();
+
+		toggleSvc.WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978 = true;
+		expect(controller.showEditButton(schedules[0])).toBeTruthy();
+
+		toggleSvc.WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978 = false;
+		expect(controller.showEditButton(schedules[0])).toBeFalsy();
+	});
+
+	it('should not show edit button if schedule is empty ', function () {
+		toggleSvc.WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978 = true;
+		var schedules = [createSchedule('personId1', '2018-05-15', null, [])];
+		scheduleManagement.groupScheduleVm = { Schedules: schedules };
+
+		controller.init();
+		scope.$apply();
+		expect(controller.showEditButton(schedules[0])).toBeFalsy();
+	});
+
+	it('should not show edit button if schedule has full day absence ', function () {
+		toggleSvc.WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978 = true;
+		var schedules = [createSchedule('personId1', '2018-05-15', null, [{ startHour: 8, endHour: 16 }], null, true)];
+		scheduleManagement.groupScheduleVm = { Schedules: schedules };
+
+		controller.init();
+		scope.$apply();
+		expect(controller.showEditButton(schedules[0])).toBeFalsy();
+	});
+
+	it('should not show edit button unless the schedule of current day is day off ', function () {
+		toggleSvc.WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978 = true;
+		var schedules = [createSchedule('personId1', '2018-05-15', true, null, null)];
+		scheduleManagement.groupScheduleVm = { Schedules: schedules };
+
+		controller.init();
+		scope.$apply();
+		expect(controller.showEditButton(schedules[0])).toBeFalsy();
+
+		var dayOff = {
+			Date: '2018-05-14',
+			DayOffName: 'Day off',
+			Start: '2018-05-14 08:00',
+			Minutes: 1440
+		};
+
+		schedules = [createSchedule('personId1', '2018-05-15', dayOff, [{ startHour: 8, endHour: 16 }], null)];
+		scheduleManagement.groupScheduleVm = { Schedules: schedules };
+
+		controller.init();
+		scope.$apply();
+		expect(controller.showEditButton(schedules[0])).toBeTruthy();
+	});
+
+	it('should not show edit button if schedule is protected and logon user does not have the permission', function () {
+		toggleSvc.WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978 = true;
+		permissions.set({ HasModifyWriteProtectedSchedulePermission: false });
+
+		var schedules = [createSchedule('personId1', '2018-05-15', null, [{ startHour: 8, endHour: 16 }], null, false, true)];
+		scheduleManagement.groupScheduleVm = { Schedules: schedules };
+		controller.init();
+
+		expect(controller.showEditButton(schedules[0])).toBeFalsy();
+	});
+
+	it('should show edit button if schedule is protected and logon user have the permission', function () {
+		toggleSvc.WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978 = true;
+		permissions.set({ HasModifyWriteProtectedSchedulePermission: true });
+
+		var schedules = [createSchedule('personId1', '2018-05-15', null, [{ startHour: 8, endHour: 16 }], null, false, true)];
+		scheduleManagement.groupScheduleVm = { Schedules: schedules };
+		controller.init();
+
+		expect(controller.showEditButton(schedules[0])).toBeTruthy();
+	});
+
+
+
+
 	function setupParent(schedule) {
 		if (schedule.Shifts) {
 			schedule.Shifts.forEach(function (s) {
@@ -512,7 +595,7 @@ describe('teamschedule schedule table controller tests', function () {
 		return $controller('ScheduleTableController', { $scope: scope, personSelectionSvc: personSelection });
 	}
 
-	function createSchedule(personId, belongsToDate, dayOff, projectionInfoArray, underlyingScheduleSummary) {
+	function createSchedule(personId, belongsToDate, dayOff, projectionInfoArray, underlyingScheduleSummary, isFullDayAbsence, isProtected) {
 
 		var dateMoment = moment(belongsToDate);
 		var projections = [];
@@ -520,22 +603,33 @@ describe('teamschedule schedule table controller tests', function () {
 		var fakeSchedule = {
 			PersonId: personId,
 			Date: dateMoment,
-			DayOff: dayOff == null ? null : createDayOff(),
+			DayOffs: dayOff != null ? [dayOff] : [createDayOff()],
 			Shifts: [{
 				Date: dateMoment,
 				Projections: createProjection(),
-				AbsenceCount: 0,
-				ActivityCount: 0
+				AbsenceCount: function () { return 0; },
+				ActivityCount: function () {
+					return this.Projections.length;
+				}
 			}],
 			ScheduleStartTime: function () { return dateMoment.startOf('day') },
 			ScheduleEndTime: function () { return dateMoment.endOf('day') },
 			AllowSwap: function () { return false; },
-			UnderlyingScheduleSummary: underlyingScheduleSummary
+			UnderlyingScheduleSummary: underlyingScheduleSummary,
+			IsFullDayAbsence: isFullDayAbsence,
+			ActivityCount: function () {
+				return this.Shifts[0].ActivityCount();
+			},
+			IsProtected: isProtected,
+			IsDayOff: function () {
+				return !!this.DayOffs.filter(function (d) {
+					return d.Date == belongsToDate;
+				}).length;
+			}
 		};
 
 		function createProjection() {
-
-			if (dayOff == null) {
+			if (!!projectionInfoArray && (!dayOff || dayOff.Date !== belongsToDate)) {
 				projectionInfoArray.forEach(function (projectionInfo) {
 					var dateMomentCopy = moment(dateMoment);
 
@@ -561,4 +655,17 @@ describe('teamschedule schedule table controller tests', function () {
 
 		return fakeSchedule;
 	}
+
+	function FakePermissions() {
+		var _permissions = {
+			HasModifyWriteProtectedSchedulePermission: true
+		};
+		this.set = function (permissions) {
+			_permissions = permissions;
+		}
+		this.all = function () {
+			return _permissions;
+		}
+	}
+
 });
