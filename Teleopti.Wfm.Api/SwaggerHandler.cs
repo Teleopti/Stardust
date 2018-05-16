@@ -48,7 +48,7 @@ namespace Teleopti.Wfm.Api
 
 			var list = new List<SwaggerSecurityRequirement> { new SwaggerSecurityRequirement { { "Authorization", new[] { "Authorization" } } } };
 			var swaggerOperations = new SwaggerOperations {{SwaggerOperationMethod.Get, new SwaggerOperation {Security = list}}};
-			doc.Paths.Add("command", swaggerOperations);
+			doc.Paths.Add("/command", swaggerOperations);
 			foreach (var cmd in commandProvider.AllowedCommandTypes())
 			{
 				var opname = cmd.Name.Substring(0, cmd.Name.LastIndexOf("Dto", StringComparison.InvariantCultureIgnoreCase));
@@ -73,11 +73,11 @@ namespace Teleopti.Wfm.Api
 				swaggerOperation.Parameters.Add(param);
 
 				operations.Add(SwaggerOperationMethod.Post, swaggerOperation);
-				doc.Paths.Add("command/" + opname, operations);
+				doc.Paths.Add("/command/" + opname, operations);
 			}
 			
 			swaggerOperations = new SwaggerOperations {{SwaggerOperationMethod.Get, new SwaggerOperation {Security = list}}};
-			doc.Paths.Add("query", swaggerOperations);
+			doc.Paths.Add("/query", swaggerOperations);
 			
 			foreach (var query in queryProvider.AllowedQueryTypes())
 			{
@@ -92,7 +92,7 @@ namespace Teleopti.Wfm.Api
 				};
 
 				operations.Add(SwaggerOperationMethod.Post, swaggerOperation);
-				doc.Paths.Add($"query/{typename}/{opname}", operations);
+				doc.Paths.Add($"/query/{typename}/{opname}", operations);
 				
 				var swaggerResponse = new SwaggerResponse
 				{
