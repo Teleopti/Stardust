@@ -31,13 +31,16 @@
 		vm.selected;
 		vm.openImportData;
 		vm.selectedSkill;
+		vm.selectedArea;
 		vm.exportPeriod = {
 			startDate: {},
 			endDate: {}
 		};
 		vm.skills = [];
-		vm.skillGroups = [];
+		vm.allSkillAreas = [];
+		
 		vm.selectedSkillChange = selectedSkillChange;
+		vm.selectedAreaChange = selectedAreaChange;
 		vm.querySearchSkills = querySearchSkills;
 		vm.exportFile = exportFile;
 		vm.ErrorMessage = "";
@@ -49,6 +52,7 @@
 
 		var skills;
 		getSkills();
+		getSkillAreas();
 		getMessage();
 		resetExportPeriod();
 		getGanttData();
@@ -69,7 +73,7 @@
 			}
 			else if (angular.isDefined($window.sessionStorage.staffingSelectedArea)) {
 				vm.localSkill = JSON.parse($window.sessionStorage.staffingSelectedArea);
-				vm.localSkillName = localSkill.Name;
+				vm.localSkillName = vm.localSkill.Name;
 				var skillGroup = JSON.parse($window.sessionStorage.staffingSelectedArea).Id;
 
 				parameterData = { SkillGroupId: skillGroup };
@@ -151,6 +155,36 @@
 				skills = response;
 			});
 		}
+
+		function getSkillAreas() {
+			var query = staffingService.getSkillAreas.get();
+			query.$promise.then(function (response) {
+				vm.HasPermissionToModifySkillArea = response.HasPermissionToModifySkillArea;
+
+				if ($window.sessionStorage.staffingSelectedArea) {
+					if (response.SkillAreas.find(checkArea)) {
+						vm.selectedArea = response.SkillAreas.find(checkArea);
+					} else {
+						manageAreaSessionStorage();
+					}
+
+				}
+				allSkillAreas = response.SkillAreas;
+				vm.allSkillAreas = response.SkillAreas;
+			});
+		}
+
+		function checkArea(area) {
+			return area.Id === angular.fromJson($window.sessionStorage.staffingSelectedArea).Id;
+		}
+
+		function manageAreaSessionStorage() {
+			if ($window.sessionStorage.staffingSelectedArea) {
+				vm.selectedArea = null;
+				selectedAreaChange(angular.fromJson($window.sessionStorage.staffingSelectedArea));
+			}
+		}
+
 		function isBpoVisualizeEnabled() {
 			return toggleService.Staffing_BPO_Visualization_74958;
 		}
@@ -170,6 +204,11 @@
 		function selectedSkillChange(skill) {
 			if (skill == null) return;
 			selectSkill(skill);
+		}
+
+		function selectedAreaChange(area) {
+			if (area == null) return;
+			selectSkillOrArea(null, area);
 		}
 
 		function selectSkill(skill) {
