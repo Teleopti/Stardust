@@ -104,6 +104,77 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		}
 
 		[Test]
+		public void ShouldSaveForecastWithIntradayPattern()
+		{
+			var forecastedDay = new DateOnly(2018, 05, 02);
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
+			var workload = skill.WorkloadCollection.Single();
+			var scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
+
+			var workloadDayTemplate = new WorkloadDayTemplate();
+			workloadDayTemplate.Create(forecastedDay.Date.DayOfWeek.ToString(), DateTime.UtcNow, workload, new List<TimePeriod>
+			{
+				new TimePeriod(10, 11)
+			});
+			workload.SetTemplate(forecastedDay.Date.DayOfWeek, workloadDayTemplate);
+
+			WorkloadRepository.Add(skill.WorkloadCollection.Single());
+			ScenarioRepository.Has(scenario);
+
+			var forecastDays = new List<ForecastDayModel>
+			{
+				new ForecastDayModel
+				{
+					Date = forecastedDay,
+					Tasks = 200,
+					AverageTaskTime = 60,
+					AverageAfterTaskTime = 60
+				}
+			};
+
+			var templateDay = forecastedDay.AddDays(-7).Date;
+			StatisticRepository.Has(workload.QueueSourceCollection.First(), new List<IStatisticTask>
+			{
+				new StatisticTask
+				{
+					Interval = templateDay.AddHours(10),
+					StatOfferedTasks = 15
+				},
+				new StatisticTask
+				{
+					Interval = templateDay.AddHours(10).AddMinutes(15),
+					StatOfferedTasks = 25
+				},
+				new StatisticTask
+				{
+					Interval = templateDay.AddHours(10).AddMinutes(30),
+					StatOfferedTasks = 55
+				},
+				new StatisticTask
+				{
+					Interval = templateDay.AddHours(10).AddMinutes(45),
+					StatOfferedTasks = 5
+				}
+			});
+
+			var forecastResult = new ForecastModel
+			{
+				WorkloadId = skill.WorkloadCollection.Single().Id.Value,
+				ScenarioId = scenario.Id.Value,
+				ForecastDays = forecastDays
+			};
+
+			var result = Target.ApplyForecast(forecastResult);
+			result.Should().Be.OfType<OkResult>();
+			var savedForecastDay = SkillDayRepository.FindRange(forecastedDay.ToDateOnlyPeriod(), skill, scenario).Single();
+			var savedWorkloadDay = savedForecastDay.WorkloadDayCollection.Single();
+
+			var taskPeriods = savedWorkloadDay.TaskPeriodList;
+			taskPeriods.Count.Should().Be(4);
+			Assert.That(taskPeriods.Sum(x => x.Tasks), Is.EqualTo(200).Within(tolerance));
+		}
+
+		[Test]
 		public void ShouldNotSaveForecastOnClosedDay()
 		{
 			var forecastedDay1 = new DateOnly(2018, 05, 02);
@@ -113,7 +184,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			WorkloadRepository.Add(skill.WorkloadCollection.Single());
 			ScenarioRepository.Has(scenario);
 
-			IList<ForecastDayModel> forecastDays = new List<ForecastDayModel>
+			var forecastDays = new List<ForecastDayModel>
 			{
 				new ForecastDayModel
 				{
@@ -123,12 +194,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 					AverageAfterTaskTime = 0
 				}
 			};
+
 			var forecastResult = new ForecastModel
 			{
 				WorkloadId = skill.WorkloadCollection.Single().Id.Value,
 				ScenarioId = scenario.Id.Value,
 				ForecastDays = forecastDays
 			};
+
 			var result = Target.ApplyForecast(forecastResult);
 
 			result.Should().Be.OfType<OkResult>();

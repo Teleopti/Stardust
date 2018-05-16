@@ -32,6 +32,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly IAuthorization _authorization;
 		private readonly IWorkloadNameBuilder _workloadNameBuilder;
 		private readonly IFetchAndFillSkillDays _fetchAndFillSkillDays;
+		private readonly IHistoricalPeriodProvider _historicalPeriodProvider;
+		private readonly IIntradayForecaster _intradayForecaster;
 
 		public ForecastController(
 			IForecastCreator forecastCreator,
@@ -43,7 +45,9 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			IWorkloadRepository workloadRepository,
 			IAuthorization authorization,
 			IWorkloadNameBuilder workloadNameBuilder,
-			IFetchAndFillSkillDays fetchAndFillSkillDays)
+			IFetchAndFillSkillDays fetchAndFillSkillDays,
+			IHistoricalPeriodProvider historicalPeriodProvider,
+			IIntradayForecaster intradayForecaster)
 		{
 			_forecastCreator = forecastCreator;
 			_skillRepository = skillRepository;
@@ -55,6 +59,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_authorization = authorization;
 			_workloadNameBuilder = workloadNameBuilder;
 			_fetchAndFillSkillDays = fetchAndFillSkillDays;
+			_historicalPeriodProvider = historicalPeriodProvider;
+			_intradayForecaster = intradayForecaster;
 		}
 
 		[UnitOfWork, Route("api/Forecasting/Skills"), HttpGet]
@@ -210,6 +216,10 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 				forecastedWorkloadDay.OverrideAverageAfterTaskTime = model.OverrideAverageAfterTaskTime.HasValue
 					? TimeSpan.FromSeconds(model.OverrideAverageAfterTaskTime.Value)
 					: (TimeSpan?) null;
+
+				var period = _historicalPeriodProvider.AvailablePeriod(workload);
+				var periodForTemplate = _historicalPeriodProvider.AvailableIntradayTemplatePeriod(period.Value);
+				_intradayForecaster.Apply(workload, periodForTemplate, skillDay.WorkloadDayCollection);
 			}
 
 			return Ok();
