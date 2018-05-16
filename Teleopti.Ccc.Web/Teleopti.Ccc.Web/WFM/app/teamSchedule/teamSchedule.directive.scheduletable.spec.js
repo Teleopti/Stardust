@@ -527,14 +527,28 @@ describe('teamschedule schedule table controller tests', function () {
 		expect(controller.showEditButton(schedules[0])).toBeFalsy();
 	});
 
-	it('should not show edit button if schedule is day off ', function () {
+	it('should not show edit button unless the schedule of current day is day off ', function () {
 		toggleSvc.WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978 = true;
-		var schedules = [createSchedule('personId1', '2018-05-15', true, null, null, true)];
+		var schedules = [createSchedule('personId1', '2018-05-15', true, null, null)];
 		scheduleManagement.groupScheduleVm = { Schedules: schedules };
 
 		controller.init();
 		scope.$apply();
 		expect(controller.showEditButton(schedules[0])).toBeFalsy();
+
+		var dayOff = {
+			Date: '2018-05-14',
+			DayOffName: 'Day off',
+			Start: '2018-05-14 08:00',
+			Minutes: 1440
+		};
+
+		schedules = [createSchedule('personId1', '2018-05-15', dayOff, [{ startHour: 8, endHour: 16 }], null)];
+		scheduleManagement.groupScheduleVm = { Schedules: schedules };
+
+		controller.init();
+		scope.$apply();
+		expect(controller.showEditButton(schedules[0])).toBeTruthy();
 	});
 
 	it('should not show edit button if schedule is protected and logon user does not have the permission', function () {
@@ -558,6 +572,8 @@ describe('teamschedule schedule table controller tests', function () {
 
 		expect(controller.showEditButton(schedules[0])).toBeTruthy();
 	});
+
+
 
 
 	function setupParent(schedule) {
@@ -587,7 +603,7 @@ describe('teamschedule schedule table controller tests', function () {
 		var fakeSchedule = {
 			PersonId: personId,
 			Date: dateMoment,
-			DayOffs: dayOff == null ? [] : createDayOff(),
+			DayOffs: dayOff != null ? [dayOff] : [createDayOff()],
 			Shifts: [{
 				Date: dateMoment,
 				Projections: createProjection(),
@@ -604,11 +620,16 @@ describe('teamschedule schedule table controller tests', function () {
 			ActivityCount: function () {
 				return this.Shifts[0].ActivityCount();
 			},
-			IsProtected: isProtected
+			IsProtected: isProtected,
+			IsDayOff: function () {
+				return !!this.DayOffs.filter(function (d) {
+					return d.Date == belongsToDate;
+				}).length;
+			}
 		};
 
 		function createProjection() {
-			if (dayOff == null) {
+			if (!!projectionInfoArray && (!dayOff || dayOff.Date !== belongsToDate)) {
 				projectionInfoArray.forEach(function (projectionInfo) {
 					var dateMomentCopy = moment(dateMoment);
 

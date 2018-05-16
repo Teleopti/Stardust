@@ -149,9 +149,12 @@
 			return toggleSvc.WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978
 				&& !personSchedule.IsFullDayAbsence
 				&& !(personSchedule.IsProtected && !vm.permissions.HasModifyWriteProtectedSchedulePermission)
-				&& !personSchedule.DayOffs.length
+				&& !personSchedule.IsDayOff()
 				&& !!personSchedule.ActivityCount();
 		}
+
+		
+
 	
 		function isAllInCurrentPageSelected() {
 			var isAllSelected = true;
