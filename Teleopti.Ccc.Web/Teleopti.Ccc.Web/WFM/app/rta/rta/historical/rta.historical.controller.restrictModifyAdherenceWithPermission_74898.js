@@ -17,25 +17,23 @@
 		vm.openRecordedOutOfAdherences = $stateParams.open;
 		vm.openApprovedPeriods = $stateParams.open;
 		vm.openApproveForm = $stateParams.open;
-
+		vm.hasModifyAdherencePermission = false;
+		
 		var calculate;
 		var timelineStart;
 		var timelineEnd;
-		
+
 		loadData();
-		getPermission();
 		
-		function getPermission(){
-			$http.get('../api/HistoricalAdherence/HasModifyAdherencePermission', {
-				params: {
-					personId: $stateParams.personId,
-					date: $stateParams.date
-				}
-			}).then(function (response) {
-				vm.hasModifyAdherencePermission = response.data[0];
-			});
-		}
-		
+		$http.get('../api/HistoricalAdherence/HasModifyAdherencePermission', {
+			params: {
+				personId: $stateParams.personId,
+				date: $stateParams.date
+			}
+		}).then(function (response) {
+			vm.hasModifyAdherencePermission = response.data;
+		});
+
 		function loadData() {
 			$http.get('../api/HistoricalAdherence/ForPerson', {
 				params: {
