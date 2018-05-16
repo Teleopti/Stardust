@@ -1452,6 +1452,7 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.PollScheduleUpdates.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.BadgeCountsDropdown.js" />
     <Content Include=".node\package.json" />
+    <Content Include=".node\node.targets" />
     <None Include="Areas\MyTime\Content\Scripts\_references.js" />
     <Content Include="Areas\SSO\Content\Css\newLogin.css" />
     <Content Include="Areas\SSO\Content\Css\main.min.css" />
@@ -2720,9 +2721,6 @@
     <Content Include="Areas\MyTime\Views\Schedule\AddShiftExchangeOfferPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\ShiftTradeBulletinBoardView.cshtml" />
     <Content Include=".node\npm.cmd" />
-    <Content Include=".node\node.targets">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include=".node\node.cmd" />
     <Content Include=".node\grunt.cmd" />
     <Content Include="Areas\Reporting\Views\web.config" />
