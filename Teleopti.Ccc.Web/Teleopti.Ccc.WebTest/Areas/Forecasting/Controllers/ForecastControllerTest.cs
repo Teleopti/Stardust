@@ -171,7 +171,61 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 
 			var taskPeriods = savedWorkloadDay.TaskPeriodList;
 			taskPeriods.Count.Should().Be(4);
+			taskPeriods[0].Tasks.Should().Be.GreaterThan(0);
+			taskPeriods[1].Tasks.Should().Be.GreaterThan(0);
+			taskPeriods[2].Tasks.Should().Be.GreaterThan(0);
+			taskPeriods[3].Tasks.Should().Be.GreaterThan(0);
 			Assert.That(taskPeriods.Sum(x => x.Tasks), Is.EqualTo(200).Within(tolerance));
+		}
+
+		[Test]
+		public void ShouldSaveForecastWithIntradayPatternWithOutAvialableHistory()
+		{
+			var forecastedDay = new DateOnly(2018, 05, 02);
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
+			var workload = skill.WorkloadCollection.Single();
+			var scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
+
+			var workloadDayTemplate = new WorkloadDayTemplate();
+			workloadDayTemplate.Create(forecastedDay.Date.DayOfWeek.ToString(), DateTime.UtcNow, workload, new List<TimePeriod>
+			{
+				new TimePeriod(10, 11)
+			});
+			workload.SetTemplate(forecastedDay.Date.DayOfWeek, workloadDayTemplate);
+
+			WorkloadRepository.Add(skill.WorkloadCollection.Single());
+			ScenarioRepository.Has(scenario);
+
+			var forecastDays = new List<ForecastDayModel>
+			{
+				new ForecastDayModel
+				{
+					Date = forecastedDay,
+					Tasks = 200,
+					AverageTaskTime = 60,
+					AverageAfterTaskTime = 60
+				}
+			};
+
+			
+
+			var forecastResult = new ForecastModel
+			{
+				WorkloadId = skill.WorkloadCollection.Single().Id.Value,
+				ScenarioId = scenario.Id.Value,
+				ForecastDays = forecastDays
+			};
+
+			var result = Target.ApplyForecast(forecastResult);
+			result.Should().Be.OfType<OkResult>();
+			var savedForecastDay = SkillDayRepository.FindRange(forecastedDay.ToDateOnlyPeriod(), skill, scenario).Single();
+			var taskPeriods = savedForecastDay.WorkloadDayCollection.Single().TaskPeriodList;
+
+			taskPeriods.Count.Should().Be(4);
+			taskPeriods[0].Tasks.Should().Be.EqualTo(50);
+			taskPeriods[1].Tasks.Should().Be.EqualTo(50);
+			taskPeriods[2].Tasks.Should().Be.EqualTo(50);
+			taskPeriods[3].Tasks.Should().Be.EqualTo(50);
 		}
 
 		[Test]

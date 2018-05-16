@@ -218,7 +218,11 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 					: (TimeSpan?) null;
 
 				var period = _historicalPeriodProvider.AvailablePeriod(workload);
-				var periodForTemplate = _historicalPeriodProvider.AvailableIntradayTemplatePeriod(period.Value);
+				var periodForTemplate = new DateOnlyPeriod();
+				if (period != null)
+				{
+					periodForTemplate = _historicalPeriodProvider.AvailableIntradayTemplatePeriod(period.Value);
+				}
 				_intradayForecaster.Apply(workload, periodForTemplate, skillDay.WorkloadDayCollection);
 			}
 
