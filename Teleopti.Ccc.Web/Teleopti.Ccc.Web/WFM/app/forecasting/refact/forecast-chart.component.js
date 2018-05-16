@@ -64,20 +64,20 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 			preparedData.averageTaskTimeSeries.push(days[i].AverageTaskTime);
 			preparedData.totalAverageTaskTimeSeries.push(days[i].TotalAverageTaskTime);
 
-			if (days[i].Campaign) {
-				preparedData.campaignSeries.push(days[i].Campaign);
+			if (days[i].HasCampaign) {
+				preparedData.campaignSeries.push(1);
 			} else {
 				preparedData.campaignSeries.push(null);
 			}
 
-			if (days[i].Override) {
-				preparedData.overrideSeries.push(days[i].Override);
+			if (days[i].HasOverride) {
+				preparedData.overrideSeries.push(1);
 			} else {
 				preparedData.overrideSeries.push(null);
 			}
 
-			if (days[i].CampaignAndOverride) {
-				preparedData.campaignAndOverrideSeries.push(days[i].CampaignAndOverride);
+			if (days[i].HasOverride && days[i].HasCampaign) {
+				preparedData.campaignAndOverrideSeries.push(1);
 			} else {
 				preparedData.campaignAndOverrideSeries.push(null);
 			}
