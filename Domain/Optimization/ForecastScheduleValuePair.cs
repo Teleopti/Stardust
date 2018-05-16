@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class ForecastScheduleValuePair : IForecastScheduleValuePair
+	public class ForecastScheduleValuePair
 	{
 		private double _forecastValue;
 		private double _scheduleValue;
@@ -18,5 +18,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			get { return _scheduleValue; }
 			set { _scheduleValue = value; }
 		}
+
+		public bool BreaksMinimumAgents { get; set; }
 	}
 }

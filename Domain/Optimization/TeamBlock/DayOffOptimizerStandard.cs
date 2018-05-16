@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				{
 					var predictorResult = _dayOffOptimizerPreMoveResultPredictor.IsPredictedBetterThanCurrent(matrix.Item1, resultingArray, originalArray, dayOffOptimizationPreference, 
 						numberOfDayOffsMoved, optimizationPreferences, schedulingResultStateHolder, movedDaysOff);
-					if (!predictorResult)
+					if (!predictorResult.IsBetter)
 					{
 						stopOptimizeTeamInfo[matrix.Item2] = false;
 						matrix.Item2.LockDays(movedDaysOff.ModifiedDays());
@@ -147,11 +147,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						resourceCalculateDelayer,
 						schedulingResultStateHolder,
 						movedDaysOff,
-						dayOffOptimizationPreferenceProvider);
-
+						dayOffOptimizationPreferenceProvider, predictorResult);
+					
 					if (success)
 					{
-						stopOptimizeTeamInfo[matrix.Item2] = false;			
+						stopOptimizeTeamInfo[matrix.Item2] = false;
 					}
 					else
 					{
@@ -188,7 +188,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			MovedDaysOff movedDaysOff,
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
+			PredictorResult prevPredictorResult)
 		{
 			if (optimizationPreferences.Extra.UseTeams && optimizationPreferences.Extra.UseTeamSameDaysOff)
 			{
@@ -247,7 +248,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				}
 			}
 
-			return true;
+			return _dayOffOptimizerPreMoveResultPredictor.WasReallyBetter(matrix, optimizationPreferences,
+				schedulingResultStateHolder, movedDaysOff, prevPredictorResult);
 		}
 
 		private static bool onReportProgress(ISchedulingProgress schedulingProgress, int totalNumberOfTeamInfos, int teamInfoCounter, ITeamInfo currentTeamInfo, int screenRefreshRate)

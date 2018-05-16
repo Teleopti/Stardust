@@ -9,7 +9,7 @@ function Add-EnvPath {
     }
 }
 
-$relPath = Join-Path (Join-Path ($PSScriptRoot) .) '..\..\..\packages\nodeenv.1.0.8\'
+$relPath = Join-Path (Join-Path ($PSScriptRoot) .) '..\..\..\packages\nodeenv.1.0.9\'
 $absPath = [System.IO.Path]::GetFullPath($relPath)
 
 # Add npm folder to path

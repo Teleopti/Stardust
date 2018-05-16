@@ -211,6 +211,7 @@
     <Compile Include="Forecasting\Models\ForecastModel.cs" />
     <Compile Include="InterfaceLegacy\Domain\OvertimeRequestStaffingCheckMethod.cs" />
     <Compile Include="Intraday\BacklogSkillTypesForecastCalculator.cs" />
+    <Compile Include="Optimization\PredictorResult.cs" />
     <Compile Include="Optimization\TeamBlock\CreatePersonalSkillDataExtractor.cs" />
     <Compile Include="Optimization\TeamBlock\CreatePersonalSkillDataExtractorOLD.cs" />
     <Compile Include="MultiTenancy\PersonIdentitiesInputModel.cs" />
@@ -993,7 +994,6 @@
     <Compile Include="InterfaceLegacy\Domain\IForecastDayTemplate.cs" />
     <Compile Include="InterfaceLegacy\Domain\IForecastingTarget.cs" />
     <Compile Include="InterfaceLegacy\Domain\IForecastProcessReport.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IForecastScheduleValuePair.cs" />
     <Compile Include="InterfaceLegacy\Domain\IForecastTemplateOwner.cs" />
     <Compile Include="InterfaceLegacy\Domain\IFullWeekOuterWeekPeriodCreator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IGamificationSetting.cs" />
