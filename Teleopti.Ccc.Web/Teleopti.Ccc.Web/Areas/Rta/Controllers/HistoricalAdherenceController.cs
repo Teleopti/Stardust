@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using System.Web.Http;
+using Microsoft.AspNet.SignalR.Messaging;
+using NPOI.SS.Formula.Udf;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
@@ -51,33 +53,40 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		[HttpPost, Route("api/HistoricalAdherence/ApprovePeriod")]
 		public virtual IHttpActionResult ApprovePeriod([FromBody] ApprovePeriodAsInAdherenceCommand command)
 		{
+			if (!isPermitted(command.PersonId, command.StartDateTime))
+				return BadRequest();
+			
 			_approvePeriodCommandHandler.Handle(command);
 			return Ok();
 		}
-		
+
 		[UnitOfWork]
 		[HttpPost, Route("api/HistoricalAdherence/RemoveApprovedPeriod")]
 		public virtual IHttpActionResult RemoveApprovedPeriod([FromBody] RemoveApprovedPeriodCommand command)
 		{
+			if (!isPermitted(command.PersonId, command.StartDateTime))
+				return BadRequest();
+			
 			_removePeriodCommandHandler.Handle(command);
 			return Ok();
 		}
-		
+				
 		[UnitOfWork]
 		[HttpGet, Route("api/HistoricalAdherence/MostRecentShiftDate")]
 		public virtual IHttpActionResult MostRecentShiftDate(Guid personId) =>
 			Ok(_historicalAdherenceDate.MostRecentShiftDate(personId).Date.ToString("yyyyMMdd"));
-		
+
 		[UnitOfWork]
 		[HttpGet, Route("api/HistoricalAdherence/HasModifyAdherencePermission")]
-		public virtual IHttpActionResult HasModifyAdherencePermission(Guid personId, string date)
+		public virtual IHttpActionResult HasModifyAdherencePermission(Guid personId, string date) => 
+			Ok(isPermitted(personId, date, "yyyyMMdd"));
+		
+		private bool isPermitted( Guid personId, string dateTime, string dateFormatter="yyyy-MM-dd HH:mm:ss")
 		{
-			var dateTime = new DateOnly(DateTime.ParseExact(date, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None));
+			var date = new DateOnly(DateTime.ParseExact(dateTime, dateFormatter, CultureInfo.InvariantCulture, DateTimeStyles.None));
 			var person = _persons.Load(personId);
 			
-			return Ok(new []{_authorization.Current().IsPermitted(
-				DefinedRaptorApplicationFunctionPaths.ModifyAdherence, dateTime, person)});
-		}
-
+			return _authorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAdherence, date, person);
+		}		
 	}
 }
