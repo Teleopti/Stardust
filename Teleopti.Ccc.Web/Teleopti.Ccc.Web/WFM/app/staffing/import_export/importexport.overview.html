@@ -11,7 +11,18 @@
 				<div class="sub-header">
 					<h2>{{'ImportBpoImportInformationHeader' | translate}} {{vm.localSkillName}}</h2>
 				</div>
-				<!--when the new skill picker is ready lets have it here-->
+				<div class="con-flex">
+					<the-skill-picker skills="vm.skills"
+									  skill-groups="vm.allSkillAreas"
+									  on-skill-selected="vm.selectedSkillChange(skill)"
+									  on-skill-group-selected="vm.selectedAreaChange(skillGroup)"
+									  preselected-skill="vm.selectedSkill"
+									  on-clear-skill-group-selection="vm.clearSelectedSkillGroup()"
+									  on-clear-skill-selection="vm.clearSelectedSkill()"
+									  preselected-skill-group="vm.selectedSkillArea">
+					</the-skill-picker>
+
+				</div>
 				<div style="text-align: center">{{'ImportBpoFileImportDateInformation' | translate}}</div>
 				<div class="con-row">
 					<div class="con-flex">
