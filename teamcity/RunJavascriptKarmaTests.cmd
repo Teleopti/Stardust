@@ -1,7 +1,7 @@
 @ECHO off
 
 :: Set nodevars so node/npm/npx is available via path
-call ..\..\..\packages\NodeEnv.1.0.7\nodevars.bat
+call ..\..\..\packages\NodeEnv.1.0.8\nodevars.bat
 
 
 SET /A ERRORLEV=0
