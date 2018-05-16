@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
@@ -21,11 +22,13 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
@@ -166,10 +169,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			database.WithPerson(id, name, terminalDate, timeZone, null, null, employeeNumber);
 			database.WithPeriod(null, teamId, siteId, businessUnitId);
 			database.WithExternalLogon(name);
+			database.WithSchedulePeriod(null);
 			return database;
 		}
 	}
-
+	
 	public static class FakeDatabaseAdherenceExtensions
 	{
 		public static FakeDatabase WithApprovedPeriod(this FakeDatabase database, string startTime, string endTime)
@@ -338,6 +342,21 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return database.WithAbsence(null, name, null);
 		}
+
+		public static FakeDatabase WithSchedule(this FakeDatabase database, string start, string end)
+		{
+			return database
+				.WithAssignment(start)
+				.WithAssignedActivity(start, end);
+		}
+
+		public static FakeDatabase WithScheduleDayOff(this FakeDatabase database, string date)
+		{
+			return database
+				.WithAssignment(date)
+				.WithDayOff();
+		}
+
 	}
 
 	public class FakeDataSources
@@ -379,13 +398,19 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly FakeExternalLogOnRepository _externalLogOns;
 		private readonly FakeDataSources _dataSources;
 		private readonly FakeMeetingRepository _meetings;
+		private readonly FakeWorkflowControlSetRepository _workflowControlSets;
 		private readonly FakeAgentStatePersister _agentStates;
 		private readonly FakeAgentStateReadModelPersister _agentStateReadModels;
 		private readonly HardcodedSkillGroupingPageId _hardcodedSkillGroupingPageId;
 		private readonly FakeMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSets;
+		private readonly FakeShiftCategoryRepository _shiftCategories;
+		private readonly FakeGlobalSettingDataRepository _globalSettings;
+		private readonly FakePersonRequestRepository _personRequests;
+		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ApprovePeriodAsInAdherence _approvePeriod;
 		private readonly RemoveApprovedPeriod _removePeriod;
 		private readonly HistoricalChange _historicalChange;
+		private readonly IBusinessRuleConfigProvider _businessRuleConfig;
 		private readonly IEventPublisher _publisher;
 
 		private BusinessUnit _businessUnit;
@@ -407,6 +432,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private RtaRule _rule;
 		private Meeting _meeting;
 		private MultiplicatorDefinitionSet _multiplicatorDefinitionSet;
+		private WorkflowControlSet _workflowControlSet;
+		private ShiftCategory _shiftCategory;
+		private IPersonRequest _personRequest;
 
 		public FakeDatabase(
 			FakeTenants tenants,
@@ -436,13 +464,19 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			FakeExternalLogOnRepository externalLogOns,
 			FakeDataSources dataSources,
 			FakeMeetingRepository meetings,
+			FakeWorkflowControlSetRepository workflowControlSets,
 			FakeAgentStatePersister agentStates,
 			FakeAgentStateReadModelPersister agentStateReadModels,
 			HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId,
 			FakeMultiplicatorDefinitionSetRepository multiplicatorDefinitionSets,
+			FakeShiftCategoryRepository shiftCategories,
+			FakeGlobalSettingDataRepository globalSettings,
+			FakePersonRequestRepository personRequests,
+			IScheduleStorage scheduleStorage,
 			ApprovePeriodAsInAdherence approvePeriod,
 			RemoveApprovedPeriod removePeriod,
 			HistoricalChange historicalChange,
+			IBusinessRuleConfigProvider businessRuleConfig,
 			IEventPublisher publisher)
 		{
 			_tenants = tenants;
@@ -472,12 +506,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_mappings = mappings;
 			_rules = rules;
 			_meetings = meetings;
+			_workflowControlSets = workflowControlSets;
 			_agentStates = agentStates;
 			_agentStateReadModels = agentStateReadModels;
 			_hardcodedSkillGroupingPageId = hardcodedSkillGroupingPageId;
 			_multiplicatorDefinitionSets = multiplicatorDefinitionSets;
+			_shiftCategories = shiftCategories;
+			_globalSettings = globalSettings;
+			_personRequests = personRequests;
+			_scheduleStorage = scheduleStorage;
 			_approvePeriod = approvePeriod;
 			_historicalChange = historicalChange;
+			_businessRuleConfig = businessRuleConfig;
 			_publisher = publisher;
 			_removePeriod = removePeriod;
 		}
@@ -560,6 +600,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public int CurrentDataSourceId()
 		{
 			return _dataSources.Datasources.Last().Value;
+		}
+
+		public Guid CurrentPersonRequestId()
+		{
+			return _personRequest.Id.Value;
 		}
 
 		public FakeDatabase WithTenant(string tenant, string rtaKey)
@@ -678,6 +723,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_person = new Person().WithName(setName);
 			_person.SetId(id ?? Guid.NewGuid());
 			_person.SetEmploymentNumber(employeeNumber?.ToString());
+			if (_workflowControlSet != null)
+				_person.WorkflowControlSet = _workflowControlSet;
 			_persons.Has(_person);
 
 			_person.InTimeZone(timeZone ?? TimeZoneInfo.Utc);
@@ -717,6 +764,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 			return this;
 		}
+
+		public FakeDatabase WithSchedulePeriod(string startDate)
+		{
+			startDate = startDate ?? "2000-01-01";
+			_person.AddSchedulePeriod(new SchedulePeriod(startDate.Date(), SchedulePeriodType.Month, 1));
+			return this;
+		}
+
 
 		[UnitOfWork]
 		public virtual FakeDatabase WithExternalLogon(string name)
@@ -810,9 +865,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public virtual FakeDatabase WithAssignment(string date)
 		{
 			ensureExists(_scenarios, null, () => WithScenario(null, true));
+			ensureExists(_shiftCategories, null, () => WithShiftCategory(null));
 			_personAssignment = new PersonAssignment(_person, _scenario, date.Date());
 			_personAssignment.SetId(Guid.NewGuid());
+			_personAssignment.SetShiftCategory(_shiftCategory);
 			_personAssignments.Has(_personAssignment);
+			return this;
+		}
+
+		public FakeDatabase WithShiftCategory(Guid? id)
+		{
+			_shiftCategory = new ShiftCategory();
+			_shiftCategory.SetId(Guid.NewGuid());
 			return this;
 		}
 
@@ -951,6 +1015,44 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
+		public FakeDatabase WithWorkflowControlSet(Guid? id, string name)
+		{
+			var workflowControlSet = new WorkflowControlSet(name ?? RandomName.Make());
+			workflowControlSet.SetId(id ?? Guid.NewGuid());
+			workflowControlSet.SetBusinessUnit(_businessUnit);
+			_workflowControlSets.Add(workflowControlSet);
+			_workflowControlSet = workflowControlSet;
+			return this;
+		}
+
+		public FakeDatabase WithShiftTradeWorkflow(int? maximumConsecutiveWorkingDays)
+		{
+			ensureExists(_workflowControlSets, null, () => WithWorkflowControlSet(null, null));
+			_workflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>();
+			_workflowControlSet.ShiftTradeTargetTimeFlexibility = TimeSpan.FromDays(10000);
+			_workflowControlSet.AutoGrantShiftTradeRequest = true;
+			_workflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 100);
+			if (maximumConsecutiveWorkingDays != null)
+				_workflowControlSet.MaximumConsecutiveWorkingDays = maximumConsecutiveWorkingDays.Value;
+			return this;
+		}
+
+		public FakeDatabase WithBusinessRuleForShiftTrade(bool enable = true, RequestHandleOption handleOption = RequestHandleOption.AutoDeny)
+		{
+			_globalSettings.PersistSettingValue(ShiftTradeSettings.SettingsKey,
+				new ShiftTradeSettings
+				{
+					BusinessRuleConfigs =
+						_businessRuleConfig.GetDefaultConfigForShiftTradeRequest().Cast<ShiftTradeBusinessRuleConfig>()
+							.ForEach(x =>
+							{
+								if (enable) x.Enabled = true;
+								if(handleOption == RequestHandleOption.AutoDeny) x.HandleOptionOnFailed = handleOption;
+							}).ToArray()
+				});
+			return this;
+		}
+
 		public FakeDatabase WithSkill(Guid skillId)
 		{
 			ensureExists(_skills, skillId, () => withSkill(skillId));
@@ -979,6 +1081,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_skills.Has(skill);
 			_skill = skill;
 		}
+
+
 
 		public FakeDatabase WithStateGroup(Guid? id, string name)
 		{
@@ -1279,6 +1383,29 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 			if (all.IsEmpty())
 				createAction();
+		}
+
+		public FakeDatabase WithShiftTradeRequest(Guid personFromId, Guid personToId, string date)
+		{
+			_personRequest = new PersonRequestFactory()
+				.CreatePersonShiftTradeRequest(
+					_persons.Get(personFromId),
+					_persons.Get(personToId),
+					"2018-05-11".Date()
+				);
+			_personRequest.SetId(Guid.NewGuid());
+
+			// refact somewhere else would be good, whatever it is a duplicate of
+			new ShiftTradeSwapScheduleDetailsMapper(_scheduleStorage, new ThisCurrentScenario(_scenario)).Map((ShiftTradeRequest)_personRequest.Request);
+			var shiftTradeSwapDetails = ((ShiftTradeRequest)_personRequest.Request).ShiftTradeSwapDetails;
+			foreach (var shiftTradeSwapDetail in shiftTradeSwapDetails)
+			{
+				shiftTradeSwapDetail.ChecksumFrom = new ShiftTradeChecksumCalculator(shiftTradeSwapDetail.SchedulePartFrom).CalculateChecksum();
+				shiftTradeSwapDetail.ChecksumTo = new ShiftTradeChecksumCalculator(shiftTradeSwapDetail.SchedulePartTo).CalculateChecksum();
+			}
+
+			_personRequests.Add(_personRequest);
+			return this;
 		}
 	}
 }

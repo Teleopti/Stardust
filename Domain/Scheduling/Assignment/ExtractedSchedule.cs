@@ -757,7 +757,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 	public static class ScheduleDayExtension
 	{
-	
+		public static bool IsWorkday(this IScheduleDay scheduleDay)
+		{
+			if (scheduleDay.SignificantPart() == SchedulePartView.Overtime)
+				return true;
+			if (scheduleDay.SignificantPart() == SchedulePartView.MainShift)
+				return true;
+			return false;
+		}
+
 		public static bool IsFullDayAbsence(this IScheduleDay scheduleDay)
 		{
 			if (scheduleDay == null)
