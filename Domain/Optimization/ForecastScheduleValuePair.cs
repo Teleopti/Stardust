@@ -18,5 +18,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			get { return _scheduleValue; }
 			set { _scheduleValue = value; }
 		}
+
+		public bool BreaksMinimumAgents { get; set; }
 	}
 }

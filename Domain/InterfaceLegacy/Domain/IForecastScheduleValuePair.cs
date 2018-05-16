@@ -19,5 +19,7 @@
 		/// The schedule value.
 		/// </value>
 		double ScheduleValue { get; set; }
+
+		bool BreaksMinimumAgents { get; set; }
 	}
 }
