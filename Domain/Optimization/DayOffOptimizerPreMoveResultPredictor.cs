@@ -28,8 +28,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var currPredictorValue = currentValue(matrix, optimizationPreferences, schedulingResultStateHolder, movedDaysOff);
 
-			return currPredictorValue < previousPredictorResult.CurrentValue || 
-				   currPredictorValue == REMOVEMELATER; //should be removed probably
+			return currPredictorValue < previousPredictorResult.CurrentValue ||
+				   previousPredictorResult.CurrentValue == REMOVEMELATER; //should be removed probably
 		}
 
 		public PredictorResult IsPredictedBetterThanCurrent(IScheduleMatrixPro matrix, ILockableBitArray workingBitArray,

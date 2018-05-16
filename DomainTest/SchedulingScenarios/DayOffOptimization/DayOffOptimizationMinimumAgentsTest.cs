@@ -255,7 +255,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		}
 		
 		[Test]
-		[Ignore("#75339 2befixed")]
 		public void ShouldMoveDayOffFromDayLackingMinimumAgentsEvenThoughDemandIsLow()
 		{
 			var date = new DateOnly(2015, 10, 12);
