@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class ForecastScheduleValuePair : IForecastScheduleValuePair
+	public class ForecastScheduleValuePair
 	{
 		private double _forecastValue;
 		private double _scheduleValue;
