@@ -222,10 +222,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var taskPeriods = savedForecastDay.WorkloadDayCollection.Single().TaskPeriodList;
 
 			taskPeriods.Count.Should().Be(4);
-			taskPeriods[0].Tasks.Should().Be.EqualTo(50);
-			taskPeriods[1].Tasks.Should().Be.EqualTo(50);
-			taskPeriods[2].Tasks.Should().Be.EqualTo(50);
-			taskPeriods[3].Tasks.Should().Be.EqualTo(50);
+			taskPeriods.All(x => x.Tasks.Equals(50)).Should().Be(true);
 		}
 
 		[Test]

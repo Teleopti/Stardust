@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 
 				var period = _historicalPeriodProvider.AvailablePeriod(workload);
 				var periodForTemplate = new DateOnlyPeriod();
-				if (period != null)
+				if (period.HasValue)
 				{
 					periodForTemplate = _historicalPeriodProvider.AvailableIntradayTemplatePeriod(period.Value);
 				}
