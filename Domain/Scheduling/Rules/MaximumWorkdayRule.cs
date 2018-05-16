@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				var person = scheduleDay.Person;
 				var maxConsecutiveWorkday = person.WorkflowControlSet.MaximumConsecutiveWorkingDays;
 				var scheduleRange = rangeClones[person];
-				var startDate = new DateOnly(scheduleDay.Period.StartDateTime);
+				var startDate = scheduleDay.DateOnlyAsPeriod.DateOnly;
 				var scheduleDaysAround = scheduleRange.ScheduledDayCollection(new DateOnlyPeriod(startDate.AddDays(-maxConsecutiveWorkday), startDate.AddDays(maxConsecutiveWorkday)));
 
 				var workdayCount = 0;

@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
@@ -184,7 +185,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				.WithScheduleDayOff("2018-05-10")
 				.WithScheduleDayOff("2018-05-11")
 				.WithSchedule("2018-05-12 8:00", "2018-05-12 16:00")
-				.WithAgent(personToId)
+				.WithAgent(personToId, "agentTo", TimeZoneInfoFactory.StockholmTimeZoneInfo())
 				.WithSchedule("2018-05-11 8:00", "2018-05-11 16:00")
 				.WithShiftTradeRequest(personFromId, personToId, "2018-05-11")
 				;
