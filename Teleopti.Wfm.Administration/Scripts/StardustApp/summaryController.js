@@ -12,11 +12,13 @@
 		vm.NodeError = "";
 		vm.JobError = "";
 		vm.triggerResourceCalculation = triggerResourceCalculation;
+		vm.refreshPayrollFormats = refreshPayrollFormats;
 		vm.healthCheck = healthCheck;
 		vm.selectTenant = selectTenant;
 		vm.anyQueuedJobs = vm.anyFailedJobs = vm.anyHistory = vm.anyNodes = false;
 		vm.showFailureAlert = vm.showNodesAlert = vm.showHistoryAlert = vm.showHealthAlert = false;
 		vm.result = "";
+		vm.showRefreshPayrollFormats = false;
 		refresh();
 
 		var refreshPromise = $interval(refresh, 3000);
@@ -29,6 +31,11 @@
 		$http.get("./AllTenants", tokenHeaderService.getHeaders())
 			.success(function (data) {
 				vm.Tenants = data;
+			});
+
+		$http.get("./Stardust/ShowRefreshPayrollFormats", tokenHeaderService.getHeaders())
+			.success(function (data) {
+				vm.showRefreshPayrollFormats = data;
 			});
 
 		function refresh() {
@@ -139,6 +146,18 @@
 					vm.result = "Something is wrong but we can't figure out what!";
 					vm.showHealthAlert = true;
 				});
+		}
+
+		function refreshPayrollFormats() {
+			if (!vm.selectedTenantName) return;
+			$http.post("./Stardust/RefreshPayrollFormats",
+				{
+					"Tenant": vm.selectedTenantName
+				},
+				tokenHeaderService.getHeaders()
+			).success(function () {
+				refresh();
+			});
 		}
 	}
 

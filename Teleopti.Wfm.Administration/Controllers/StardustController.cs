@@ -38,13 +38,13 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[HttpGet, Route("Stardust/Jobs")]
 		public IHttpActionResult JobHistoryFiltered(int from, int to, string dataSource = null, string type = null, DateTime? fromDate = null, DateTime? toDate = null)
 		{
-			return Ok(_stardustRepository.GetJobs(new JobFilterModel{DataSource = dataSource, Type = type, From = from, To = to, FromDate = fromDate, ToDate = toDate}));
+			return Ok(_stardustRepository.GetJobs(new JobFilterModel { DataSource = dataSource, Type = type, From = from, To = to, FromDate = fromDate, ToDate = toDate }));
 		}
 
 		[HttpGet, Route("Stardust/FailedJobs")]
 		public IHttpActionResult FailedJobHistoryFiltered(int from, int to, string dataSource = null, string type = null, DateTime? fromDate = null, DateTime? toDate = null)
 		{
-			return Ok(_stardustRepository.GetJobs(new JobFilterModel { DataSource = dataSource, Type = type, From = from, To = to, FromDate = fromDate, ToDate = toDate, Result = "Failed"}));
+			return Ok(_stardustRepository.GetJobs(new JobFilterModel { DataSource = dataSource, Type = type, From = from, To = to, FromDate = fromDate, ToDate = toDate, Result = "Failed" }));
 		}
 
 		[HttpGet, Route("Stardust/JobsByNode/{nodeId}/{from}/{to}")]
@@ -151,7 +151,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			if (!allNodes.Any())
 				return Ok("No nodes registered! Make sure that the Teleopti Service Bus service is running.");
 			if (!allNodes.Any(x => x.Alive))
-				 return Ok("No node is sending heartbeats. Make sure that the Teleopti Service Bus service is running.");
+				return Ok("No node is sending heartbeats. Make sure that the Teleopti Service Bus service is running.");
 
 			foreach (var node in allNodes.Where(x => x.Alive))
 			{
@@ -169,27 +169,49 @@ namespace Teleopti.Wfm.Administration.Controllers
 			}
 
 			var dummyBUId = Guid.NewGuid();
-			var id = _stardustSender.Send(new StardustHealthCheckEvent { JobName = "Stardust Health Check", UserName = "Stardust", LogOnDatasource = "Health Check",LogOnBusinessUnitId = dummyBUId});
+			var id = _stardustSender.Send(new StardustHealthCheckEvent { JobName = "Stardust Health Check", UserName = "Stardust", LogOnDatasource = "Health Check", LogOnBusinessUnitId = dummyBUId });
 			var waiting = true;
 			var healthCheckJob = new Job();
 			var stopwatch = new Stopwatch();
 			stopwatch.Start();
 			while (waiting)
 			{
-				 healthCheckJob = _stardustRepository.GetJobByJobId(id);
+				healthCheckJob = _stardustRepository.GetJobByJobId(id);
 				if (healthCheckJob.Ended != null || stopwatch.Elapsed > TimeSpan.FromSeconds(15))
 					waiting = false;
 				Thread.Sleep(TimeSpan.FromMilliseconds(500));
 			}
-			if(healthCheckJob.Ended != null && healthCheckJob.Result != "Success")
+			if (healthCheckJob.Ended != null && healthCheckJob.Result != "Success")
 				return Ok("The Health Check job failed during execution. Check the Failed Jobs tab for more information.");
-			var queuedJobs = _stardustRepository.GetAllQueuedJobs(new JobFilterModel{From = 0, To = 5});
-			if(healthCheckJob.Ended == null || queuedJobs.Any())
+			var queuedJobs = _stardustRepository.GetAllQueuedJobs(new JobFilterModel { From = 0, To = 5 });
+			if (healthCheckJob.Ended == null || queuedJobs.Any())
 				return Ok("Something is wrong with Stardust and it smells like a bug!");
 			return Ok("Everything looks OK!");
 		}
 
-	
+		[HttpPost, Route("Stardust/RefreshPayrollFormats")]
+		[TenantUnitOfWork]
+		public virtual IHttpActionResult RefreshPayrollFormats([FromBody] LogOnModel logOnModel)
+		{
+			if (logOnModel == null) return BadRequest("logOnModel is null!");
+			if (string.IsNullOrEmpty(EnvironmentVariable.GetValue("IS_CONTAINER"))) return BadRequest("");
 
+			var tenant = _loadAllTenants.Tenants().Single(x => x.Name.Equals(logOnModel.Tenant));
+
+			_stardustSender.Send(
+					new RefreshPayrollFormatsEvent
+					{
+						LogOnBusinessUnitId = Guid.NewGuid(),
+						TenantName = tenant.Name
+					});
+
+			return Ok("");
+		}
+
+		[HttpGet, Route("Stardust/ShowRefreshPayrollFormats")]
+		public IHttpActionResult ShowRefreshPayrollFormats()
+		{
+			return Ok(!string.IsNullOrEmpty(EnvironmentVariable.GetValue("IS_CONTAINER")));
+		}
 	}
 }

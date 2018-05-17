@@ -15,6 +15,7 @@ using Stardust.Node;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -22,8 +23,8 @@ using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus.Container;
+using Teleopti.Ccc.Sdk.ServiceBus.Custom;
 using Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
@@ -38,12 +39,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		private IContainer _sharedContainer;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(ServiceBusRunner));
+		private readonly IEnvironmentVariable _environmentVariable;
 
-		public ServiceBusRunner(Action<int> requestAdditionalTime, IConfigReader configReader = null)
+		public ServiceBusRunner(Action<int> requestAdditionalTime, IEnvironmentVariable environmentVariable, IConfigReader configReader = null)
 		{
 			_requestAdditionalTime = requestAdditionalTime;
 			_configReader = configReader ?? new ConfigReader();
 			Nodes = new List<NodeStarter>();
+			_environmentVariable = environmentVariable;
 		}
 
 		public void Start()
@@ -66,31 +69,39 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			_sharedContainer.Resolve<HangfireClientStarter>().Start();
 
 
-		    try
-		    {
-		        AppDomain.CurrentDomain.SetThreadPrincipal(new GenericPrincipal(new GenericIdentity("Anonymous"),
-		            new string[] {}));
-		    }
-		    catch (PolicyException)
-		    {
-		        //no way of knowing if the the principal is set or not
-		    }
-		    
-		    AppDomain.MonitoringIsEnabled = true;
-
-			new PayrollDllCopy(new SearchPath()).CopyPayrollDll();
-
-			Task.Run(() =>
+			try
 			{
-				var container = makeContainer(toggleManager, _sharedContainer);
-				var initializePayrollFormats = new InitializePayrollFormatsToDb(container.Resolve<IPlugInLoader>(),
-					container.Resolve<DataSourceForTenantWrapper>().DataSource()());
-				initializePayrollFormats.Initialize();
-			}).ContinueWith(t =>
+				AppDomain.CurrentDomain.SetThreadPrincipal(new GenericPrincipal(new GenericIdentity("Anonymous"),
+					new string[] { }));
+			}
+			catch (PolicyException)
 			{
-                nodeStarter();
-            }
-            );
+				//no way of knowing if the the principal is set or not
+			}
+
+			AppDomain.MonitoringIsEnabled = true;
+
+			var numberOfNodes = _configReader.AppConfig("NumberOfNodes");
+			if (numberOfNodes != null && numberOfNodes == "1" && !string.IsNullOrEmpty(_environmentVariable.GetValue("IS_CONTAINER")))
+			{
+				nodeStarter();
+			}
+			else
+			{
+				new PayrollDllCopy(new SearchPath()).CopyPayrollDll();
+
+				Task.Run(() =>
+				{
+					var container = makeContainer(toggleManager, _sharedContainer);
+					var initializePayrollFormats = new InitializePayrollFormatsToDb(container.Resolve<IPlugInLoader>(),
+						container.Resolve<DataSourceForTenantWrapper>().DataSource()());
+					initializePayrollFormats.Initialize();
+				}).ContinueWith(t =>
+					{
+						nodeStarter();
+					}
+				);
+			}
 		}
 
 		private static IContainer makeContainer(IToggleManager toggleManager, IContainer sharedContainer)
@@ -123,17 +134,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private void nodeStarter()
 		{
 			var port = _configReader.ReadValue("port", 14100);
-				var totalNodes = _configReader.ReadValue("NumberOfNodes", Environment.ProcessorCount);
-				for (var portIndex = 1; portIndex <= totalNodes; portIndex++)
-				{
-					var nodeName = "Node" + portIndex;
-					var localPort = port;
-					var nodeThread = new Thread(() => startNode(localPort, nodeName));
-					nodeThread.Start();
-					// a little delay
-					Thread.Sleep(3000);
-					port++;
-				}
+			var totalNodes = _configReader.ReadValue("NumberOfNodes", Environment.ProcessorCount);
+			for (var portIndex = 1; portIndex <= totalNodes; portIndex++)
+			{
+				var nodeName = "Node" + portIndex;
+				var localPort = port;
+				var nodeThread = new Thread(() => startNode(localPort, nodeName));
+				nodeThread.Start();
+				// a little delay
+				Thread.Sleep(3000);
+				port++;
+			}
 		}
 
 		private void startNode(int port, string nodeName)
@@ -190,10 +201,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			var messageBroker = container.Resolve<IMessageBrokerComposite>();
 			string messageBrokerConnection;
 			var configurationAppSettings = ConfigurationManager.AppSettings.ToDictionary();
-			if (!configurationAppSettings.TryGetValue("MessageBroker", out messageBrokerConnection) )
+			if (!configurationAppSettings.TryGetValue("MessageBroker", out messageBrokerConnection))
 			{
-				var configvalues = new Dictionary<string,string>();
-				configvalues.Add("MessageBroker",_configReader.AppConfig("MessageBroker"));
+				var configvalues = new Dictionary<string, string>();
+				configvalues.Add("MessageBroker", _configReader.AppConfig("MessageBroker"));
 				new InitializeMessageBroker(messageBroker).Start(configvalues);
 			}
 			else
@@ -203,7 +214,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			var nodeStarter = new NodeStarter();
 			Nodes.Add(nodeStarter);
 			nodeStarter.Start(nodeConfig, container);
-			
+
 		}
 
 		public IList<NodeStarter> Nodes { get; set; }

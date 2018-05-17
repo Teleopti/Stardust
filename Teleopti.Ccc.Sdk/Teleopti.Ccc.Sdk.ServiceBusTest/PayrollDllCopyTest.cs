@@ -5,8 +5,10 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
+using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest
 {
@@ -122,6 +124,28 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 			file.Dispose();
 			File.Delete(filePath);
+		}
+
+		[Test]
+		public void CopyDllsFromAzureStorage()
+		{
+			var fakeSettingValues = new Dictionary<string, string>
+			{
+				{"AzureStorageContainer", "installations"},
+				{"AzureStoragePayrollPath", "i-devtest/payroll"}
+			};
+
+			var fakeConfigReader = new FakeConfigReader(fakeSettingValues);
+
+			fakeConfigReader.FakeConnectionString("AzureStorage",
+				"DefaultEndpointsProtocol=https;AccountName=payrolltests;AccountKey=uR8uzi2XR6EEjZePYC/W0qYAcafovsVfHFvJrk6a2TjFMPCbmsiOsN0LiysoSAAcZWcQyf7MXfg0s4ThMOk3Mw==;EndpointSuffix=core.windows.net");
+			
+			IConfigReader configReader = new ConfigOverrider(fakeConfigReader, new Dictionary<string, string>());
+
+			var target = new PayrollDllCopy(createStubbedSearchPath(), configReader);
+			target.CopyPayrollDllFromAzureStorage("Teleopti WFM");
+
+			Assert.IsTrue(File.Exists(Path.GetFullPath($"{_destination}Teleopti.Ccc.Payroll.dll")));
 		}
 
 		[TearDown]

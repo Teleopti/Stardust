@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.ServiceModel;
@@ -7,6 +8,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Payroll;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
@@ -49,19 +51,55 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 
 						foreach (var payrollFormatDto in formatsToAllDbs)
 						{
-							var format = new PayrollFormat {Name = payrollFormatDto.Name, FormatId = payrollFormatDto.FormatId};
+							var format = new PayrollFormat { Name = payrollFormatDto.Name, FormatId = payrollFormatDto.FormatId };
 							payrollFormatRepository.Add(format);
 						}
 						unitOfWork.PersistAll();
 					}
 
-					
+
 				});
 			}
 			catch (CommunicationException exception)
 			{
 				logger.ErrorFormat("Error when initializing payroll formats: {0}", exception.Message);
 			}
+		}
+
+		public void InitializeOneTenant(IList<PayrollFormatDto> tenantPayrollFormats, string tenantName)
+		{
+			if (tenantPayrollFormats == null)
+				tenantPayrollFormats = _plugInLoader.LoadDtos();
+
+			var tenant = _dataSourceForTenant.Tenant(tenantName);
+			var unitOfWork = (tenant.Application.HasCurrentUnitOfWork()
+				? tenant.Application.CurrentUnitOfWork()
+				: tenant.Application.CreateAndOpenUnitOfWork());
+
+			var payrollFormatRepository = new PayrollFormatRepository(new ThisUnitOfWork(unitOfWork));
+			var oldOnes = payrollFormatRepository.LoadAll();
+			foreach (var payrollFormat in oldOnes)
+			{
+				var existingPayrollFormat = tenantPayrollFormats.SingleOrDefault(x =>
+					x.FormatId == payrollFormat.FormatId && x.Name == payrollFormat.Name);
+
+				if (existingPayrollFormat == null)
+				{
+					payrollFormatRepository.Remove(payrollFormat);
+				}
+				else
+				{
+					tenantPayrollFormats.Remove(existingPayrollFormat);
+				}
+			}
+
+			foreach (var payrollFormatDto in tenantPayrollFormats)
+			{
+				var format = new PayrollFormat { Name = payrollFormatDto.Name, FormatId = payrollFormatDto.FormatId };
+				payrollFormatRepository.Add(format);
+			}
+
+			unitOfWork.PersistAll();
 		}
 	}
 }

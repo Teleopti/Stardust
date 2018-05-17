@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Sdk.Common.Contracts;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
@@ -13,19 +14,21 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
     {
         private readonly IDomainAssemblyResolver _domainAssemblyResolver;
         private readonly ISearchPath _searchPath;
+		private readonly IDataSourceForTenant _dataSourceForTenant;
         private List<IPayrollExportProcessor> _availablePayrollExportProcessors;
 
-        public PlugInLoader(IDomainAssemblyResolver domainAssemblyResolver, ISearchPath searchPath)
+        public PlugInLoader(IDomainAssemblyResolver domainAssemblyResolver, ISearchPath searchPath, IDataSourceForTenant dataSourceForTenant)
         {
             _domainAssemblyResolver = domainAssemblyResolver;
             _searchPath = searchPath;
-        }
+			_dataSourceForTenant = dataSourceForTenant;
+		}
 
         public IList<IPayrollExportProcessor> Load()
         {
             if (_availablePayrollExportProcessors == null)
-            {
-                _availablePayrollExportProcessors = new List<IPayrollExportProcessor>();
+			{
+				_availablePayrollExportProcessors = new List<IPayrollExportProcessor>();
                 string[] files = Directory.GetFiles(_searchPath.Path, "*Payroll*.dll", SearchOption.AllDirectories);
 
                 AppDomain.CurrentDomain.AssemblyResolve += _domainAssemblyResolver.Resolve;
@@ -44,9 +47,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
                         var obj = Activator.CreateInstance(type);
                         var t = (IPayrollExportProcessor)obj;
                         _availablePayrollExportProcessors.Add(t);
+
                     }
                 }
                 AppDomain.CurrentDomain.AssemblyResolve -= _domainAssemblyResolver.Resolve;
+
             }
             return _availablePayrollExportProcessors;
         }
