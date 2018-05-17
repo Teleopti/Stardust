@@ -23,8 +23,8 @@
 		};
 	}
 
-	ScheduleTableController.$inject = ['$scope', 'PersonSelection', 'ScheduleManagement', 'ValidateRulesService', 'ScheduleNoteManagementService','Toggle', 'teamsPermissions'];
-	function ScheduleTableController($scope, personSelectionSvc, ScheduleMgmt, ValidateRulesService, ScheduleNoteMgmt, toggleSvc, teamsPermissions) {
+	ScheduleTableController.$inject = ['$scope','$state', 'PersonSelection', 'ScheduleManagement', 'ValidateRulesService', 'ScheduleNoteManagementService','Toggle', 'teamsPermissions'];
+	function ScheduleTableController($scope, $state, personSelectionSvc, ScheduleMgmt, ValidateRulesService, ScheduleNoteMgmt, toggleSvc, teamsPermissions) {
 		var vm = this;
 
 		vm.updateAllSelectionInCurrentPage = function (isAllSelected) {
@@ -147,6 +147,10 @@
 				&& !(personSchedule.IsProtected && !vm.permissions.HasModifyWriteProtectedSchedulePermission)
 				&& !personSchedule.IsDayOff()
 				&& !!personSchedule.ActivityCount();
+		}
+
+		vm.clickEditButton = function (personSchedule) {
+			$state.go('teams.shiftEditor', { personSchedule: personSchedule });
 		}
 	
 		function isAllInCurrentPageSelected() {

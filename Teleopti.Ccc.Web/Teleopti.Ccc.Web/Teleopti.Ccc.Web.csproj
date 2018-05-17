@@ -1773,8 +1773,8 @@
     <Content Include="WFM\app\teamSchedule\html\teamsTimePicker.tpl.html" />
     <Content Include="WFM\app\teamSchedule\html\underlyingScheduleInfo.html" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.exportSchedule.spec.js" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.component.shiftEditor.js" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.component.shiftEditor.spec.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.controller.shiftEditor.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.controller.shiftEditor.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.staffing.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.staffing.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.exportSchedule.js" />

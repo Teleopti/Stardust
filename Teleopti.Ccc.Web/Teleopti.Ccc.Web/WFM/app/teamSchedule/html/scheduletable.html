@@ -84,7 +84,7 @@
 				</div>
 			</td>
 			<td class="schedule-tool-column">
-				<span ng-if="vm.showEditButton(personSchedule)"><i class="mdi mdi-pencil"></i></span>
+				<span ng-if="vm.showEditButton(personSchedule)" ng-click="vm.clickEditButton(personSchedule)"><i class="mdi mdi-pencil"></i></span>
 			</td>
 			<td class="schedule-tool-column schedule-note-column" ng-click="vm.editScheduleNote(personSchedule.PersonId)">
 				<span ng-class="{noComment:!vm.getScheduleNoteForPerson(personSchedule.PersonId).internalNotes && !vm.getScheduleNoteForPerson(personSchedule.PersonId).publicNotes}"><i class="mdi mdi-comment"></i></span>
