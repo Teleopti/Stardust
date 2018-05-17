@@ -18,12 +18,12 @@
 			var element = panel[0];
 
 			expect(element.querySelectorAll('.shift-editor').length).toEqual(1);
-			expect(element.querySelector('.name').innerText.trim()).toEqual('Agent 1');
-			expect(element.querySelector('.date').innerText).toEqual('2018-05-16');
-		
+			expect(element.querySelector('.shift-editor .name').innerText.trim()).toEqual('Agent 1');
+			expect(element.querySelector('.shift-editor .date').innerText).toEqual('2018-05-16');
 		});
 
-		xit('should show underlying info icon if schedule has underlying activities', function () {
+		it('should show underlying info icon if schedule has underlying activities', function () {
+			var scheduleDate = "2018-05-16";
 			var panel = setUp({
 				Name: 'Agent 1',
 				Date: '2018-05-16',
@@ -33,29 +33,15 @@
 						"Start": scheduleDate + ' 10:00',
 						"End": scheduleDate + ' 11:00'
 					}]
-				}
+				},
+				HasUnderlyingSchedules: function () { return true; }
 			});
 
 			var element = panel[0];
-			expect(element.querySelector('.underlying-info').length).toEqual(1);
+			expect(element.querySelectorAll('.underlying-info').length).toBe(1);
 		});
 
-		xit('should show underlying info icon if schedule has underlying activities', function () {
-			var panel = setUp({
-				Name: 'Agent 1',
-				Date: '2018-05-16',
-				UnderlyingScheduleSummary: {
-					"PersonalActivities": [{
-						"Description": "personal activity",
-						"Start": '2018-05-16 10:00',
-						"End": '2018-05-16 11:00'
-					}]
-				}
-			});
-
-			var element = panel[0];
-			expect(element.querySelector('.underlying-info').length).toEqual(1);
-		});
+		
 
 		function setUp(personSchedule) {
 			var scope = $rootScope.$new();

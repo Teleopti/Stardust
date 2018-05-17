@@ -411,6 +411,7 @@ describe('teamschedule schedule table controller tests', function () {
 	}));
 
 	it("should show icon if schedules has underlying schedule summaries", function () {
+		toggleSvc.WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952 = true;
 		var underlyingScheduleSummary = {
 			PersonalActivities: [{ Description: 'Personal activity 1', Timespan: '10:00 - 11:00' }]
 		};
@@ -421,7 +422,7 @@ describe('teamschedule schedule table controller tests', function () {
 
 		scope.$apply();
 
-		expect(controller.hasUnderlyingSchedules(schedules[0])).not.toBeNull();
+        expect(schedules[0].HasUnderlyingSchedules()).not.toBeNull();
 	});
 
 	it('should not make current page selected when only one person on the page and the person is partially selected', inject(function () {
@@ -573,9 +574,6 @@ describe('teamschedule schedule table controller tests', function () {
 		expect(controller.showEditButton(schedules[0])).toBeTruthy();
 	});
 
-
-
-
 	function setupParent(schedule) {
 		if (schedule.Shifts) {
 			schedule.Shifts.forEach(function (s) {
@@ -616,6 +614,9 @@ describe('teamschedule schedule table controller tests', function () {
 			ScheduleEndTime: function () { return dateMoment.endOf('day') },
 			AllowSwap: function () { return false; },
 			UnderlyingScheduleSummary: underlyingScheduleSummary,
+			HasUnderlyingSchedules: function () {
+				return toggleSvc.WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952 && !!underlyingScheduleSummary;
+			},
 			IsFullDayAbsence: isFullDayAbsence,
 			ActivityCount: function () {
 				return this.Shifts[0].ActivityCount();

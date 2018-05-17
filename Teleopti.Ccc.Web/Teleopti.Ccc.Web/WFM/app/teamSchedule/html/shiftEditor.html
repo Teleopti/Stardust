@@ -3,8 +3,14 @@
 		<div class="con-flex">
 			<span class="name">{{ vm.personSchedule.Name}} </span>
 		</div>
-		<div class="con-flex">
-			<span class="underlying-info"><i></i> </span>
+		<div class="con-flex" ng-if="personSchedule.HasUnderlyingSchedules()">
+			<span class="underlying-info">
+				<i class="mdi mdi-information mdi-alert info"></i>
+			</span>
+			<md-tooltip class="multiline-tooltip" md-direction="right">
+				<div ng-if="::personSchedule.ShiftCategory.Name">{{::personSchedule.ShiftCategory.Name}}</div>
+				<underlying-schedule-info person-schedule="personSchedule" date="vm.selectedDate"></underlying-schedule-info>
+			</md-tooltip>
 		</div>
 	</div>
 	<div class="con-row">
