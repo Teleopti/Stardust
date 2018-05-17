@@ -77,7 +77,7 @@
     </div>
   </form>
 
-  <div class="con-row" ng-show="vm.changesMade">
+  <div class="con-row" ng-show="vm.changesMade && !vm.savingToScenario">
     <div class="con-flex">
       <div class="con-row">
         <div class="con-flex notice-warning">
@@ -139,11 +139,12 @@
   </div>
 
   <!-- Chart -->
-  <div class="con-row" ng-if="vm.isForecastRunning">
+  <div class="con-row" ng-if="vm.isForecastRunning || vm.savingToScenario">
     <div class="con-flex">
       <div class="panel material-depth-1 full-padding">
-        <div ng-if="vm.isForecastRunning">
-          Loading..
+        <div>
+          <span ng-if="vm.isForecastRunning" >Loading..</span>
+          <span ng-if="vm.savingToScenario" >Saving to scenario..</span>
           <md-progress-linear md-mode="indeterminate"></md-progress-linear>
         </div>
       </div>

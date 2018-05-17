@@ -289,15 +289,8 @@
 
     function applyWipToScenario() {
       vm.savingToScenario = true;
-      var tempForecastDays = [];
-      for (var i = 0; i < vm.selectedWorkload.Days.length; i++) {
-        tempForecastDays.push({
-          Date: vm.selectedWorkload.Days[i].Date,
-          Tasks: vm.selectedWorkload.Days[i].TotalTasks,
-          TaskTime: vm.selectedWorkload.Days[i].AverageTaskTime,
-          AfterTaskTime: vm.selectedWorkload.Days[i].AverageAfterTaskTime
-        });
-      }
+      var tempForecastDays = vm.selectedWorkload.Days;
+
       forecastingService.applyToScenario(
         angular.toJson({
           WorkloadId: vm.selectedWorkload.Workload.Id,
@@ -308,6 +301,7 @@
           vm.savingToScenario = false;
           vm.changesMade = false;
           getWorkloadForecastData();
+          NoticeService.success(vm.selectedScenario.Name + ' ' + 'scenario was updated', 5000, true);
         },
         function(data, status, headers, config) {
           vm.savingToScenario = false;
