@@ -5,7 +5,7 @@ var MicrosoftLoginPage = Object.create(Page, {
     username: { get: function () { return browser.element("input[type='email']"); } },
     nextbutton: { get: function () { return browser.element("input[type='submit']"); } },
     password: { get: function () { return browser.element("#i0118"); } },
-    signinButton:     { get: function () { return browser.element('#submitButton'); } },
+    signinButton:     { get: function () { return browser.element("input[type='submit']"); } },
     keepSignedInButton:     { get: function () { return browser.element('#idSIButton9'); } },
 	
     clickSignin: { value: function() {
