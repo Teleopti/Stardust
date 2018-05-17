@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var workloadName = skill1.Name + " - " + workload.Name;
 			forecastMisc.Stub(x => x.WorkloadName(skill1.Name, workload.Name)).Return(workloadName);
 			var target = new ForecastController(null, skillRepository, null, null, null, null, null, principalAuthorization,
-				forecastMisc, null, null, null);
+				forecastMisc, null, null, null, null);
 			var result = target.Skills();
 			result.Skills.Single().Id.Should().Be.EqualTo(skill1.Id.Value);
 			result.Skills.Single().Workloads.Single().Id.Should().Be.EqualTo(workload.Id.Value);
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var skillRepository = new FakeSkillRepository();
 
 			var target = new ForecastController(null, skillRepository, null, null, null, null, null, principalAuthorization,
-				null, null, null, null);
+				null, null, null, null, null);
 			var result = target.Skills();
 			result.IsPermittedToModifySkill.Should().Be.EqualTo(true);
 		}
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var scenario = new Scenario("test1").WithId(scenarioId);
 			var scenarioRepository = new FakeScenarioRepository(scenario);
 			var target = new ForecastController(forecastCreator, null, null, null, null, scenarioRepository, null, null, null,
-				null, null, null);
+				null, null, null, null);
 			var forecast = new ForecastModel
 			{
 				ForecastDays = new List<ForecastDayModel>
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var workloadForecastingViewModel = new WorkloadEvaluateViewModel();
 			forecastViewModelFactory.Stub(x => x.Evaluate(evaluateInput)).Return(workloadForecastingViewModel);
 			var target = new ForecastController(null, null, forecastViewModelFactory, null, null, null, null, null, null, null,
-				null, null);
+				null, null, null);
 
 			var result = target.Evaluate(evaluateInput);
 
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var workloadQueueStatisticsViewModel = new WorkloadQueueStatisticsViewModel();
 			forecastViewModelFactory.Stub(x => x.QueueStatistics(queueStatisticsInput)).Return(workloadQueueStatisticsViewModel);
 			var target = new ForecastController(null, null, forecastViewModelFactory, null, null, null, null, null, null, null,
-				null, null);
+				null, null, null);
 
 			var result = target.QueueStatistics(queueStatisticsInput);
 
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			};
 			intradayPatternViewModelFactory.Stub(x => x.Create(input)).Return(intradayPatternViewModel);
 			var target = new ForecastController(null, null, null, null, intradayPatternViewModelFactory, null, null, null, null,
-				null, null, null);
+				null, null, null, null);
 			
 			var result = target.IntradayPattern(input);
 

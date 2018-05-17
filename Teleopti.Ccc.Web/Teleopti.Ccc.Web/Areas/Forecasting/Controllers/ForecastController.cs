@@ -1,21 +1,22 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Models;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.Forecasting.Core;
 using Teleopti.Ccc.Web.Areas.Forecasting.Models;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
+using Task = System.Threading.Tasks.Task;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 {
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly IFetchAndFillSkillDays _fetchAndFillSkillDays;
 		private readonly IHistoricalPeriodProvider _historicalPeriodProvider;
 		private readonly IIntradayForecaster _intradayForecaster;
+		private readonly IForecastDayOverrideRepository _forecastDayOverrideRepository;
 
 		public ForecastController(
 			IForecastCreator forecastCreator,
@@ -47,7 +49,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			IWorkloadNameBuilder workloadNameBuilder,
 			IFetchAndFillSkillDays fetchAndFillSkillDays,
 			IHistoricalPeriodProvider historicalPeriodProvider,
-			IIntradayForecaster intradayForecaster)
+			IIntradayForecaster intradayForecaster,
+			IForecastDayOverrideRepository forecastDayOverrideRepository)
 		{
 			_forecastCreator = forecastCreator;
 			_skillRepository = skillRepository;
@@ -61,6 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_fetchAndFillSkillDays = fetchAndFillSkillDays;
 			_historicalPeriodProvider = historicalPeriodProvider;
 			_intradayForecaster = intradayForecaster;
+			_forecastDayOverrideRepository = forecastDayOverrideRepository;
 		}
 
 		[UnitOfWork, Route("api/Forecasting/Skills"), HttpGet]
@@ -200,6 +204,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			var periodEnd = new DateOnly(forecastResult.ForecastDays.Max(x => x.Date).Date);
 			var forecastPeriod = new DateOnlyPeriod(periodStart, periodEnd);
 			var skillDays = _fetchAndFillSkillDays.FindRange(forecastPeriod, workload.Skill, scenario);
+			//var overrideDays = _forecastDayOverrideRepository.FindRange(forecastPeriod, workload, scenario).ToDictionary(k => k.Date);
 
 			foreach (var skillDay in skillDays)
 			{
@@ -208,18 +213,49 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 				if (!forecastedWorkloadDay.OpenForWork.IsOpen)
 					continue;
 				var model = forecastResult.ForecastDays.SingleOrDefault(x => x.Date == forecastedWorkloadDay.CurrentDate);
-				forecastedWorkloadDay.Tasks = model.Tasks;
-				forecastedWorkloadDay.AverageTaskTime = TimeSpan.FromSeconds(model.AverageTaskTime);
-				forecastedWorkloadDay.AverageAfterTaskTime = TimeSpan.FromSeconds(model.AverageAfterTaskTime);
+				forecastedWorkloadDay.Tasks = model.OverrideTasks ?? model.Tasks;
+				forecastedWorkloadDay.AverageTaskTime = TimeSpan.FromSeconds(model.OverrideAverageTaskTime ?? model.AverageTaskTime);
+				forecastedWorkloadDay.AverageAfterTaskTime = TimeSpan.FromSeconds(model.OverrideAverageAfterTaskTime ?? model.AverageAfterTaskTime);
 				forecastedWorkloadDay.CampaignTasks = new Percent(model.CampaignTasksPercentage);
-				forecastedWorkloadDay.SetOverrideTasks(model.OverrideTasks, new List<ITaskOwner>());
-				forecastedWorkloadDay.OverrideAverageTaskTime = model.OverrideAverageTaskTime.HasValue
-					? TimeSpan.FromSeconds(model.OverrideAverageTaskTime.Value)
-					: (TimeSpan?) null;
-				forecastedWorkloadDay.OverrideAverageAfterTaskTime = model.OverrideAverageAfterTaskTime.HasValue
-					? TimeSpan.FromSeconds(model.OverrideAverageAfterTaskTime.Value)
-					: (TimeSpan?) null;
 
+				if (model.HasOverride)
+				{
+					var forecastDayOverride =
+						_forecastDayOverrideRepository.FindRange(skillDay.CurrentDate.ToDateOnlyPeriod(), workload, scenario).SingleOrDefault();
+					if (forecastDayOverride == null)
+					{
+						forecastDayOverride =
+							new ForecastDayOverride(skillDay.CurrentDate, workload, scenario)
+							{
+								OriginalTasks = model.Tasks,
+								OriginalAverageTaskTime = TimeSpan.FromSeconds(model.AverageTaskTime),
+								OriginalAverageAfterTaskTime = TimeSpan.FromSeconds(model.AverageAfterTaskTime),
+								OverridedTasks = model.OverrideTasks,
+								OverridedAverageTaskTime = model.OverrideAverageTaskTime.HasValue
+									? TimeSpan.FromSeconds(model.OverrideAverageTaskTime.Value)
+									: (TimeSpan?)null,
+								OverridedAverageAfterTaskTime = model.OverrideAverageAfterTaskTime.HasValue
+									? TimeSpan.FromSeconds(model.OverrideAverageAfterTaskTime.Value)
+									: (TimeSpan?)null
+							};
+						_forecastDayOverrideRepository.Add(forecastDayOverride);
+					}
+					else
+					{
+						forecastDayOverride.OriginalTasks = model.Tasks;
+						forecastDayOverride.OriginalAverageTaskTime = TimeSpan.FromSeconds(model.AverageTaskTime);
+						forecastDayOverride.OriginalAverageAfterTaskTime = TimeSpan.FromSeconds(model.AverageAfterTaskTime);
+						forecastDayOverride.OverridedTasks = model.OverrideTasks;
+						forecastDayOverride.OverridedAverageTaskTime = model.OverrideAverageTaskTime.HasValue
+							? TimeSpan.FromSeconds(model.OverrideAverageTaskTime.Value)
+							: (TimeSpan?) null;
+						forecastDayOverride.OverridedAverageAfterTaskTime = model.OverrideAverageAfterTaskTime.HasValue
+							? TimeSpan.FromSeconds(model.OverrideAverageAfterTaskTime.Value)
+							: (TimeSpan?) null;
+					}
+					
+				}
+				
 				var period = _historicalPeriodProvider.AvailablePeriod(workload);
 				if (period.HasValue)
 				{

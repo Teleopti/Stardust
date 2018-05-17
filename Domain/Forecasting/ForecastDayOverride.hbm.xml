@@ -34,5 +34,34 @@
 					 not-null="true" foreign-key="FK_ForecastDayOverride_Scenario"
 					 unique-key="Unique_ForecastDayOverride"/>
 
+		<property name="OriginalTasks"
+				  type="double"
+				  not-null="true"
+				  access="property"/>
+
+		<property name="OriginalAverageTaskTime"
+				  type="TimeSpan"
+				  not-null="true"
+				  access="property"/>
+
+		<property name="OriginalAverageAfterTaskTime"
+				  type="TimeSpan"
+				  not-null="true"
+				  access="property"/>
+
+		<property name="OverridedTasks"
+				  type="double"
+				  not-null="false"
+				  access="property"/>
+
+		<property name="OverridedAverageTaskTime"
+				  type="TimeSpan"
+				  not-null="false"
+				  access="property"/>
+
+		<property name="OverridedAverageAfterTaskTime"
+				  type="TimeSpan"
+				  not-null="false"
+				  access="property"/>
 	</class>
 </hibernate-mapping>
