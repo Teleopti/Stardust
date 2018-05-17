@@ -171,10 +171,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 
 			var taskPeriods = savedWorkloadDay.TaskPeriodList;
 			taskPeriods.Count.Should().Be(4);
-			taskPeriods[0].Tasks.Should().Be.GreaterThan(0);
-			taskPeriods[1].Tasks.Should().Be.GreaterThan(0);
-			taskPeriods[2].Tasks.Should().Be.GreaterThan(0);
-			taskPeriods[3].Tasks.Should().Be.GreaterThan(0);
+			taskPeriods.All(x => x.Tasks > 0).Should().Be.True();
 			Assert.That(taskPeriods.Sum(x => x.Tasks), Is.EqualTo(200).Within(tolerance));
 		}
 
@@ -501,9 +498,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var result = (OkNegotiatedContentResult<ForecastModel>) Target.Forecast(forecastInput);
 
 			result.Should().Be.OfType<OkNegotiatedContentResult<ForecastModel>>();
-			result.Content.ForecastDays.Count.Should().Be(2);
-			result.Content.ForecastDays.First().IsOpen.Should().Be(true);
-			result.Content.ForecastDays.Last().IsOpen.Should().Be(false);
+			var forecastDays = result.Content.ForecastDays;
+			forecastDays.Count.Should().Be(2);
+			forecastDays.First().IsOpen.Should().Be.True();
+			forecastDays.Last().IsOpen.Should().Be.False();
 		}
 
 		[Test]
@@ -844,15 +842,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var workloadDay = skillDay.WorkloadDayCollection.Single();
 			skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new[] {skillDay}, new DateOnlyPeriod());
 
+			var closedDay = new DateOnly(2018, 05, 05);
+			var skillDayClosed = SkillDayFactory.CreateSkillDay(skill, workload, closedDay, scenario, false);
+			var workloadDayClosed = skillDayClosed.WorkloadDayCollection.Single();
+			skillDayClosed.SkillDayCalculator = new SkillDayCalculator(skill, new[] { skillDayClosed }, new DateOnlyPeriod());
+
 			SkillRepository.Add(skill);
 			WorkloadRepository.Add(workload);
 			ScenarioRepository.Has(scenario);
 			SkillDayRepository.Add(skillDay);
+			SkillDayRepository.Add(skillDayClosed);
 
 			var forecastResultInput = new ForecastResultInput
 			{
 				ForecastStart = openDay.Date,
-				ForecastEnd = openDay.Date,
+				ForecastEnd = closedDay.Date,
 				ScenarioId = scenario.Id.Value,
 				WorkloadId = workload.Id.Value
 			};
@@ -860,7 +864,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			result.Content.WorkloadId.Should().Be.EqualTo(workload.Id.Value);
 			result.Content.ScenarioId.Should().Be.EqualTo(scenario.Id.Value);
 
-			var forecastDay = result.Content.ForecastDays.Single();
+			result.Content.ForecastDays.Count.Should().Be(2);
+
+			var forecastDay = result.Content.ForecastDays.First();
 			Assert.That(forecastDay.Tasks, Is.EqualTo(workloadDay.Tasks).Within(tolerance));
 			Assert.That(forecastDay.AverageTaskTime, Is.EqualTo(workloadDay.AverageTaskTime.TotalSeconds).Within(tolerance));
 			Assert.That(forecastDay.AverageAfterTaskTime,
@@ -874,6 +880,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 
 			forecastDay.HasCampaign.Should().Be.False();
 			forecastDay.HasOverride.Should().Be.False();
+			forecastDay.IsOpen.Should().Be.True();
+
+			var forecastDayClosed = result.Content.ForecastDays.Last();
+			Assert.That(forecastDayClosed.Tasks, Is.EqualTo(workloadDayClosed.Tasks).Within(tolerance));
+			Assert.That(forecastDayClosed.AverageTaskTime, Is.EqualTo(workloadDayClosed.AverageTaskTime.TotalSeconds).Within(tolerance));
+			Assert.That(forecastDayClosed.AverageAfterTaskTime,
+				Is.EqualTo(workloadDayClosed.AverageAfterTaskTime.TotalSeconds).Within(tolerance));
+
+			Assert.That(forecastDayClosed.TotalTasks, Is.EqualTo(workloadDayClosed.TotalTasks).Within(tolerance));
+			Assert.That(forecastDayClosed.TotalAverageTaskTime,
+				Is.EqualTo(workloadDayClosed.TotalAverageTaskTime.TotalSeconds).Within(tolerance));
+			Assert.That(forecastDayClosed.TotalAverageAfterTaskTime,
+				Is.EqualTo(workloadDayClosed.TotalAverageAfterTaskTime.TotalSeconds).Within(tolerance));
+
+			forecastDayClosed.HasCampaign.Should().Be.False();
+			forecastDayClosed.HasOverride.Should().Be.False();
+			forecastDayClosed.IsOpen.Should().Be.False();
 		}
 
 		[Test]

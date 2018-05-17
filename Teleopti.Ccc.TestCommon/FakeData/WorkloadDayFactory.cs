@@ -10,7 +10,8 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public static class WorkloadDayFactory
 	{
-		public static IList<IWorkloadDay> GetWorkloadDaysForTest(DateTime dt, ISkill skill, bool setIdOnWorkLoad)
+		public static IList<IWorkloadDay> GetWorkloadDaysForTest(DateTime dt, ISkill skill, bool setIdOnWorkLoad,
+			bool alwaysMakeWorkloadDayOpen = true)
 		{
 			IList<IWorkloadDay> workloadDays = new List<IWorkloadDay>();
 			IWorkload workload1 = new Workload(skill);
@@ -20,13 +21,16 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 				workload1.SetId(Guid.NewGuid());
 
 			IList<ITemplateTaskPeriod> taskPeriods = new List<ITemplateTaskPeriod>();
-			ITemplateTaskPeriod templateTaskPeriod =
-					new TemplateTaskPeriod(new Task(100, TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(20)),
-																 TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-																		 dt.Add(TimeSpan.FromHours(11)), dt.Add(TimeSpan.FromHours(14)),
-																		 skill.TimeZone));
-
-			taskPeriods.Add(templateTaskPeriod);
+			ITemplateTaskPeriod templateTaskPeriod;
+			if (alwaysMakeWorkloadDayOpen)
+			{
+				var task = new Task(100, TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(20));
+				var period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
+					dt.Add(TimeSpan.FromHours(11)), dt.Add(TimeSpan.FromHours(14)),
+					skill.TimeZone);
+				templateTaskPeriod = new TemplateTaskPeriod(task, period);
+				taskPeriods.Add(templateTaskPeriod);
+			}
 
 			WorkloadDay workloadDay = new WorkloadDay();
 			workloadDay.Create(new DateOnly(dt), workload1, new List<TimePeriod>());
@@ -152,25 +156,27 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		/// <param name="startDate">The start date.</param>
 		/// <param name="endDate">The end date.</param>
 		/// <param name="workload">The workload.</param>
+		/// <param name="alwaysMakeWorkloadDayOpen"></param>
 		/// <returns></returns>
 		/// <remarks>
 		/// Created by: robink
 		/// Created date: 2008-04-02
 		/// </remarks>
-		public static IList<IWorkloadDay> GetWorkloadDaysForTest(DateTime startDate, DateTime endDate, IWorkload workload)
+		public static IList<IWorkloadDay> GetWorkloadDaysForTest(DateTime startDate, DateTime endDate, IWorkload workload,
+			bool alwaysMakeWorkloadDayOpen = true)
 		{
 			IList<IWorkloadDay> workloadDays = new List<IWorkloadDay>();
 
 			var timePeriod = new TimePeriod(workload.Skill.MidnightBreakOffset, workload.Skill.MidnightBreakOffset.Add(TimeSpan.FromHours(24)));
+
 			foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
 			{
-				var template = (IWorkloadDayTemplate)workload.GetTemplate(TemplateTarget.Workload, day);
-				if (!template.OpenHourList.Contains(timePeriod))
-				{
-					template.Lock();
-					template.MakeOpen24Hours();
-					template.Release();
-				}
+				var template = (IWorkloadDayTemplate) workload.GetTemplate(TemplateTarget.Workload, day);
+				if (template.OpenHourList.Contains(timePeriod) || !alwaysMakeWorkloadDayOpen) continue;
+
+				template.Lock();
+				template.MakeOpen24Hours();
+				template.Release();
 			}
 
 			var currentDate =
@@ -178,18 +184,19 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 					workload.Skill.TimeZone));
 			var endDateOnly = new DateOnly(endDate);
 
-			int i = 0;
+			var i = 0;
 			do
 			{
-				WorkloadDay workloadDay = new WorkloadDay();
-				workloadDay.Create(currentDate, workload, new[] { timePeriod });
+				var workloadDay = new WorkloadDay();
+				workloadDay.Create(currentDate, workload, alwaysMakeWorkloadDayOpen ? new[] {timePeriod} : new TimePeriod[] { });
 				workloadDay.Lock();
-				foreach (ITemplateTaskPeriod taskPeriod in workloadDay.TaskPeriodList)
+				foreach (var taskPeriod in workloadDay.TaskPeriodList)
 				{
 					taskPeriod.AverageAfterTaskTime = TimeSpan.FromSeconds((i % 4) + 3);
 					taskPeriod.AverageTaskTime = TimeSpan.FromSeconds((i % 3) + 2);
 					taskPeriod.SetTasks(((i % 2) + 30d) / 96d);
 				}
+
 				workloadDay.Release();
 
 				workloadDays.Add(workloadDay);

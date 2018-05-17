@@ -35,7 +35,8 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return new SkillDay(dt, skill, scenario, WorkloadDayFactory.GetWorkloadDaysForTest(dt.Date, skill), skillDataPeriods);
 		}
 
-		public static ISkillDay CreateSkillDay(ISkill skill, IWorkload workload, DateOnly date, IScenario scenario)
+		public static ISkillDay CreateSkillDay(ISkill skill, IWorkload workload, DateOnly date, IScenario scenario,
+			bool alwaysMakeWorkloadDayOpen = true)
 		{
 			IList<ISkillDataPeriod> skillDataPeriods = new List<ISkillDataPeriod>();
 			skillDataPeriods.Add(
@@ -46,11 +47,14 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 						new Percent(0.5),
 						new Percent(0.7)),
 					new SkillPersonData(),
-					TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date.Date.Add(TimeSpan.FromHours(4)), date.Date.Add(TimeSpan.FromHours(19)), skill.TimeZone)));
+					TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date.Date.Add(TimeSpan.FromHours(4)),
+						date.Date.Add(TimeSpan.FromHours(19)), skill.TimeZone)));
 
 			if (!skill.Id.HasValue) skill.SetId(Guid.NewGuid());
 
-			return new SkillDay(date, skill, scenario, WorkloadDayFactory.GetWorkloadDaysForTest(date.Date, date.Date, workload), skillDataPeriods);
+			return new SkillDay(date, skill, scenario,
+				WorkloadDayFactory.GetWorkloadDaysForTest(date.Date, date.Date, workload, alwaysMakeWorkloadDayOpen),
+				skillDataPeriods);
 		}
 
 		public static ISkillDay CreateSkillDay(ISkill skill, DateOnly dt)
