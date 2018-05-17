@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.TestCommon
 			var skillDays = Enumerable.Range(0, numberOfAgentsPerIntervalDemand.Length).Select(day =>
 			{
 				var date = startDate.AddDays(day);
-				return skill.CreateSkillDayWithDemand(scenario, date, numberOfAgentsPerIntervalDemand[day]);
+				return skill.CreateSkillDayWithDemandOnInterval(scenario, date, numberOfAgentsPerIntervalDemand[day]);
 			}).ToList();
 			
 			return skillDays;
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.TestCommon
 			var skillDays = Enumerable.Range(0, period.DayCount()).Select(day =>
 			{
 				var date = period.StartDate.AddDays(day);
-				return skill.CreateSkillDayWithDemand(scenario, date, numberOfAgentsPerIntervalDemand);
+				return skill.CreateSkillDayWithDemandOnInterval(scenario, date, numberOfAgentsPerIntervalDemand);
 			}).ToList();
 
 			return skillDays;
