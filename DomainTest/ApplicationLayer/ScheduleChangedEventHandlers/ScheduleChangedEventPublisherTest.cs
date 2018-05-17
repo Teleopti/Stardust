@@ -44,6 +44,50 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		}
 
 		[Test]
+		public void ShouldPassDateWhenActivityAddedEventHasFired()
+		{
+			var @event = new ActivityAddedEvent
+			{
+				Timestamp = new DateTime(2013, 11, 15, 10, 0, 0),
+				LogOnDatasource = "datasource",
+				LogOnBusinessUnitId = Guid.NewGuid(),
+				PersonId = Guid.NewGuid(),
+				Date = new DateTime(2013, 11, 15),
+				ActivityId = Guid.NewGuid(),
+				ScenarioId = Guid.NewGuid(),
+				StartDateTime = new DateTime(2013, 11, 15, 8, 0, 0),
+				EndDateTime = new DateTime(2013, 11, 15, 9, 0, 0)
+			};
+			Target.Handle(@event);
+
+			var published = Publisher.PublishedEvents.OfType<ScheduleChangedEvent>().Single();
+			published.Date.HasValue.Should().Be(true);
+			published.Date.Value.Should().Be(@event.Date);
+
+		}
+
+		[Test]
+		public void ShouldPassDateWhenPersonAssignmentLayerRemovedEventHasFired()
+		{
+			var @event = new PersonAssignmentLayerRemovedEvent
+			{
+				Timestamp = new DateTime(2013, 11, 15, 10, 0, 0),
+				LogOnDatasource = "datasource",
+				LogOnBusinessUnitId = Guid.NewGuid(),
+				PersonId = Guid.NewGuid(),
+				Date = new DateTime(2013, 11, 15),
+				ScenarioId = Guid.NewGuid(),
+				StartDateTime = new DateTime(2013, 11, 15, 8, 0, 0),
+				EndDateTime = new DateTime(2013, 11, 15, 9, 0, 0)
+			};
+			Target.Handle(@event);
+
+			var published = Publisher.PublishedEvents.OfType<ScheduleChangedEvent>().Single();
+			published.Date.HasValue.Should().Be(true);
+			published.Date.Value.Should().Be(@event.Date);
+		}
+
+		[Test]
 		public void ShouldPublishScheduleChangedEventWhenActivityMovedEventHasFired()
 		{
 			var theEvent = new ActivityMovedEvent

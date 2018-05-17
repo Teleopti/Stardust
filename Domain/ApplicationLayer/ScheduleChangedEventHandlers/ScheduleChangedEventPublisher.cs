@@ -103,7 +103,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					StartDateTime = @event.StartDateTime,
 					EndDateTime = @event.EndDateTime,
 					InitiatorId = @event.InitiatorId,
-					CommandId = @event.CommandId
+					CommandId = @event.CommandId,
+					Date = @event.Date
 				});
 		}
 
@@ -225,7 +226,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 				StartDateTime = @event.StartDateTime,
 				EndDateTime = @event.EndDateTime,
 				InitiatorId = @event.InitiatorId,
-				CommandId = @event.CommandId
+				CommandId = @event.CommandId,
+				Date = @event.Date
 			});
 		}
 

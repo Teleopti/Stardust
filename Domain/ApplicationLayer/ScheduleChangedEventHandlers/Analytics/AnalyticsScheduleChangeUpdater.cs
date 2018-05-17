@@ -27,8 +27,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		public virtual void Handle(ScheduleChangedEvent @event)
 		{
 			Func<IPerson, IEnumerable<DateTime>> period = p =>
-				new DateTimePeriod(@event.StartDateTime, @event.EndDateTime)
-					.ToDateOnlyPeriod(p.PermissionInformation.DefaultTimeZone()).DayCollection().Select(d => d.Date);
+			{
+				var days =
+					new DateTimePeriod(@event.StartDateTime, @event.EndDateTime)
+						.ToDateOnlyPeriod(p.PermissionInformation.DefaultTimeZone()).DayCollection().Select(d => d.Date).ToList();
+				if (@event.Date.HasValue)
+					days.Add(@event.Date.Value);
+				return days.Distinct();
+			};
+
 			_updateFactSchedules.Execute(@event.PersonId, @event.ScenarioId, @event.LogOnBusinessUnitId,
 				period, @event.Timestamp);
 		}
