@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using System;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Models
 {
@@ -49,9 +50,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Models
 
 		private bool hasCampaign(IWorkloadDayBase workloadDay)
 		{
-			return workloadDay.CampaignTasks.Value > 0d ||
-				   workloadDay.CampaignTaskTime.Value > 0d ||
-				   workloadDay.CampaignAfterTaskTime.Value > 0d;
+			return workloadDay.CampaignTasks.Value > 0.0001 ||
+				   workloadDay.CampaignTaskTime.Value > 0.0001 ||
+				   workloadDay.CampaignAfterTaskTime.Value > 0.0001;
 		}
 
 		private bool hasOverride(IWorkloadDayBase workloadDay)
