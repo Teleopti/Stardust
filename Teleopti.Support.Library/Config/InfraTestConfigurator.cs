@@ -5,8 +5,8 @@ namespace Teleopti.Support.Tool.Tool
 {
 	public class InfraTestConfigCommand
 	{
-		public string ApplicationDatabase;
-		public string AnalyticsDatabase;
+		public string ApplicationDatabase = "InfraTest_CCC7";
+		public string AnalyticsDatabase = "InfraTest_Analytics";
 		public string ToggleMode = "ALL";
 		public string SqlAuthString;
 	}
