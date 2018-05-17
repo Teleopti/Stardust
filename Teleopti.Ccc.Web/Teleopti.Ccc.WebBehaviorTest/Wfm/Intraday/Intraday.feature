@@ -24,7 +24,6 @@ I want to be able to monitor my part of the business
         And I pick the skillgroup 'my Area'
         Then I should monitor 'my Area'
 
-	@Ignore
     Scenario: Rename Skill Group in SGM
         Given I am viewing intraday page
         And Local storage is reset
