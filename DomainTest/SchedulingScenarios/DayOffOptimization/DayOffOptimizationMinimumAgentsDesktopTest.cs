@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		
 		[TestCase(true, 1)]
 		[TestCase(false, 0)]
-		[Ignore("To be fixed!")]
 		public void ShouldMoveDayOffToDayWithLessDemand(bool useMinimumStaffing, int expectedDayWithDO)
 		{
 			var date = new DateOnly(2015, 10, 12);

@@ -10,9 +10,9 @@
 			return new PredictorResult(predictedResult < currentResult, currentResult, false);
 		}
 
-		public static PredictorResult CreateBreaksDueToMinimumAgents()
+		public static PredictorResult CreateBreaksDueToMinimumAgents(double currentResult)
 		{
-			return new PredictorResult(true, 10, true);
+			return new PredictorResult(true, currentResult, true);
 		}
 		
 		private PredictorResult(bool isBetter, double standardDeviation, bool breaksMinimumAgents)
@@ -24,13 +24,17 @@
 		
 		public bool IsBetter { get; }
 
-		public bool IsBetterThan(bool currentlyBreakingMinimumAgents, double currentStandardDeviation)
+		public WasReallyBetterResult IsBetterThan(bool currentlyBreakingMinimumAgents, double currentStandardDeviation)
 		{
-		
-			if (currentlyBreakingMinimumAgents && _breaksMinimumAgents)
-				return currentStandardDeviation < _standardDeviation;
+			if (currentlyBreakingMinimumAgents && !_breaksMinimumAgents)
+				return WasReallyBetterResult.NoDueToMinimumAgents;
+
+			if (!currentlyBreakingMinimumAgents && _breaksMinimumAgents)
+				return WasReallyBetterResult.Yes;
 			
-			return _breaksMinimumAgents || currentStandardDeviation < _standardDeviation;
+			return currentStandardDeviation < _standardDeviation ? 
+				WasReallyBetterResult.Yes : 
+				WasReallyBetterResult.No;
 		}
 	}
 }

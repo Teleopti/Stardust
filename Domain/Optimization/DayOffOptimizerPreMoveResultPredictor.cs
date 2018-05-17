@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_forecastAndScheduleSumForDay = forecastAndScheduleSumForDay;
 		}
 
-		public bool WasReallyBetter(IScheduleMatrixPro matrix, IOptimizationPreferences optimizationPreferences,
+		public WasReallyBetterResult WasReallyBetter(IScheduleMatrixPro matrix, IOptimizationPreferences optimizationPreferences,
 			ISchedulingResultStateHolder schedulingResultStateHolder, MovedDaysOff movedDaysOff, PredictorResult previousPredictorResult)
 		{
 			var rawDataDictionary = createRawDataDictionary(matrix, optimizationPreferences, schedulingResultStateHolder);
@@ -34,12 +34,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 			ISchedulingResultStateHolder schedulingResultStateHolder, MovedDaysOff movedDaysOff)
 		{
 			var rawDataDictionary = createRawDataDictionary(matrix, optimizationPreferences, schedulingResultStateHolder);
+			var currentResult = calculateValue(rawDataDictionary);
 			if (breaksMinimumAgents(rawDataDictionary, movedDaysOff))
 			{
-				return PredictorResult.CreateBreaksDueToMinimumAgents();
+				return PredictorResult.CreateBreaksDueToMinimumAgents(currentResult);
 			}
-		
-			var currentResult = calculateValue(rawDataDictionary);
+	
 			var averageWorkTime = TimeSpan.FromTicks(matrix.SchedulePeriod.AverageWorkTimePerDay.Ticks * numberOfDayOffsMoved);
 			modifyRawData(workingBitArray, matrix, originalBitArray, daysOffPreferences, rawDataDictionary, averageWorkTime);
 			var predictedResult = calculateValue(rawDataDictionary);

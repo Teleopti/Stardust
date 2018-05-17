@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
 		[Test]
-		[Ignore("To be fixed!")]
 		public void ShouldConsiderMinimumAgentsWhenMovingDayOffTo()
 		{
 			var date = new DateOnly(2015, 10, 12); //mon
@@ -61,7 +60,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		}
 		
 		[Test]
-		[Ignore("To be fixed!")]
 		public void ShouldMoveMoreThanOneDoPerAgent()
 		{
 			var date = new DateOnly(2015, 10, 12); //mon
@@ -285,7 +283,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		
 		[Test]
 		[Timeout(5000)]
-		[Ignore("To be fixed!")]
 		public void ShouldNotHangDueToPingPongBetweenTwoDays()
 		{
 			var date = new DateOnly(2015, 10, 12);
