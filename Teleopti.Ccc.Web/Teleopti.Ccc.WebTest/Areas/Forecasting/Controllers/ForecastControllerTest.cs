@@ -221,8 +221,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var savedForecastDay = SkillDayRepository.FindRange(forecastedDay.ToDateOnlyPeriod(), skill, scenario).Single();
 			var taskPeriods = savedForecastDay.WorkloadDayCollection.Single().TaskPeriodList;
 
-			taskPeriods.Count.Should().Be(4);
-			taskPeriods.All(x => x.Tasks.Equals(50)).Should().Be(true);
+			taskPeriods.Count.Should().Be(1);
+			taskPeriods.First().Tasks.Should().Be(200);
 		}
 
 		[Test]
@@ -709,6 +709,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				.Should().Be(50d);
 			result.Content.First().TotalAverageAfterTaskTime
 				.Should().Be(20d);
+			result.Content.First().OverrideTasks
+				.Should().Be(200d);
+			result.Content.First().HasOverride
+				.Should().Be(true);
 
 			result.Content.Last().TotalTasks
 				.Should().Be(100d);
@@ -716,6 +720,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				.Should().Be(30d);
 			result.Content.Last().TotalAverageAfterTaskTime
 				.Should().Be(10d);
+			result.Content.Last().OverrideTasks
+				.Should().Be(null);
+			result.Content.Last().HasOverride
+				.Should().Be(false);
+
 		}
 
 		[Test]

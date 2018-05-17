@@ -167,16 +167,19 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 					{
 						forecastDay.TotalTasks = forecastDay.Tasks;
 					}
+					forecastDay.OverrideTasks = input.OverrideTasks;
 				}
 
 				if (input.ShouldOverrideAverageTaskTime)
 				{
 					forecastDay.TotalAverageTaskTime = input.OverrideAverageTaskTime ?? forecastDay.AverageTaskTime;
+					forecastDay.OverrideAverageTaskTime = input.OverrideAverageTaskTime;
 				}
 
 				if (input.ShouldOverrideAverageAfterTaskTime)
 				{
 					forecastDay.TotalAverageAfterTaskTime = input.OverrideAverageAfterTaskTime ?? forecastDay.AverageAfterTaskTime;
+					forecastDay.OverrideAverageAfterTaskTime = input.OverrideAverageAfterTaskTime;
 				}
 
 				forecastDay.HasOverride = input.OverrideTasks.HasValue ||
@@ -218,12 +221,11 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 					: (TimeSpan?) null;
 
 				var period = _historicalPeriodProvider.AvailablePeriod(workload);
-				var periodForTemplate = new DateOnlyPeriod();
 				if (period.HasValue)
 				{
-					periodForTemplate = _historicalPeriodProvider.AvailableIntradayTemplatePeriod(period.Value);
+					var periodForTemplate = _historicalPeriodProvider.AvailableIntradayTemplatePeriod(period.Value);
+					_intradayForecaster.Apply(workload, periodForTemplate, skillDay.WorkloadDayCollection);
 				}
-				_intradayForecaster.Apply(workload, periodForTemplate, skillDay.WorkloadDayCollection);
 			}
 
 			return Ok();
