@@ -213,8 +213,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				var flexibleDayOffvalidator = _teamBlockDayOffsInPeriodValidator;
 				if (!flexibleDayOffvalidator.Validate(teamInfo, schedulingResultStateHolder))
 				{
-					teamInfo.LockDays(movedDaysOff.AddedDaysOff);
-					teamInfo.LockDays(movedDaysOff.RemovedDaysOff);
 					return false;
 				}
 			}
