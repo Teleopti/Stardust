@@ -359,7 +359,6 @@
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>1335</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/Teleopti.Ccc.Sdk.Host</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
