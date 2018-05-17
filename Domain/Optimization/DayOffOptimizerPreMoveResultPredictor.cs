@@ -19,13 +19,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_personalSkillsProvider = personalSkillsProvider;
 			_forecastAndScheduleSumForDay = forecastAndScheduleSumForDay;
 		}
-		
 
 		public bool WasReallyBetter(IScheduleMatrixPro matrix, IOptimizationPreferences optimizationPreferences,
 			ISchedulingResultStateHolder schedulingResultStateHolder, MovedDaysOff movedDaysOff, PredictorResult previousPredictorResult)
 		{
-			var currPredictorValue = currentValue(matrix, optimizationPreferences, schedulingResultStateHolder);
-			return previousPredictorResult.IsBetterThan(currPredictorValue);
+			var rawDataDictionary = createRawDataDictionary(matrix, optimizationPreferences, schedulingResultStateHolder);
+			var currPredictorValue = calculateValue(rawDataDictionary);
+			return previousPredictorResult.IsBetterThan(breaksMinimumAgents(rawDataDictionary, movedDaysOff), currPredictorValue);
 		}
 
 		public PredictorResult IsPredictedBetterThanCurrent(IScheduleMatrixPro matrix, ILockableBitArray workingBitArray,
@@ -34,13 +34,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 			ISchedulingResultStateHolder schedulingResultStateHolder, MovedDaysOff movedDaysOff)
 		{
 			var rawDataDictionary = createRawDataDictionary(matrix, optimizationPreferences, schedulingResultStateHolder);
-			if (rawDataDictionary.Any(x => movedDaysOff.Contains(x.Key) && x.Value.BreaksMinimumAgents))
+			if (breaksMinimumAgents(rawDataDictionary, movedDaysOff))
 			{
 				return PredictorResult.CreateBreaksDueToMinimumAgents();
 			}
 		
 			var currentResult = calculateValue(rawDataDictionary);
-
 			var averageWorkTime = TimeSpan.FromTicks(matrix.SchedulePeriod.AverageWorkTimePerDay.Ticks * numberOfDayOffsMoved);
 			modifyRawData(workingBitArray, matrix, originalBitArray, daysOffPreferences, rawDataDictionary, averageWorkTime);
 			var predictedResult = calculateValue(rawDataDictionary);
@@ -48,11 +47,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return PredictorResult.Create(currentResult, predictedResult);
 		}
 		
-		private double currentValue(IScheduleMatrixPro matrix, IOptimizationPreferences optimizationPreferences,
-			ISchedulingResultStateHolder schedulingResultStateHolder)
+		private static bool breaksMinimumAgents(IDictionary<DateOnly, ForecastScheduleValuePair> rawDataDictionary, MovedDaysOff movedDaysOff)
 		{
-			var rawDataDictionary = createRawDataDictionary(matrix, optimizationPreferences, schedulingResultStateHolder);
-			return calculateValue(rawDataDictionary);
+			return rawDataDictionary.Any(x => movedDaysOff.Contains(x.Key) && x.Value.BreaksMinimumAgents);
 		}
 
 		private static double calculateValue(IDictionary<DateOnly, ForecastScheduleValuePair> rawDataDic)

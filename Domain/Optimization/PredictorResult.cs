@@ -24,8 +24,12 @@
 		
 		public bool IsBetter { get; }
 
-		public bool IsBetterThan(double currentStandardDeviation)
+		public bool IsBetterThan(bool currentlyBreakingMinimumAgents, double currentStandardDeviation)
 		{
+		
+			if (currentlyBreakingMinimumAgents && _breaksMinimumAgents)
+				return currentStandardDeviation < _standardDeviation;
+			
 			return _breaksMinimumAgents || currentStandardDeviation < _standardDeviation;
 		}
 	}
