@@ -70,8 +70,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			var shiftTradeRequests =
 				_personRequestRepository.FindShiftTradeRequestsByOfferId(shiftTradeRequest.Offer.Id.GetValueOrDefault());
 			var otherShiftTradeRequests = shiftTradeRequests.Where(a => !a.Id.Equals(request.Parent.Id.GetValueOrDefault()));
+
 			foreach (var otherShiftTradeRequest in otherShiftTradeRequests)
 			{
+				if (otherShiftTradeRequest.IsDenied) continue;
+
 				otherShiftTradeRequest.Deny(nameof(Resources.ShiftTradeRequestForExchangeOfferHasBeenCompleted),
 					_personRequestCheckAuthorization);
 			}
