@@ -354,9 +354,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			savedWorkloadDay.AverageTaskTime.TotalSeconds.Should().Be(forecastDays.First().AverageTaskTime);
 			savedWorkloadDay.AverageAfterTaskTime.TotalSeconds.Should().Be(forecastDays.First().AverageAfterTaskTime);
 
-			Assert.That(savedWorkloadDay.OverrideTasks, Is.EqualTo(80d).Within(tolerance));
-			Assert.That(savedWorkloadDay.OverrideAverageTaskTime, Is.EqualTo(TimeSpan.FromSeconds(50)).Within(tolerance));
-			Assert.That(savedWorkloadDay.OverrideAverageAfterTaskTime, Is.EqualTo(TimeSpan.FromSeconds(20)).Within(tolerance));
+			Assert.That(savedWorkloadDay.TotalTasks, Is.EqualTo(80d).Within(tolerance));
+			Assert.That(savedWorkloadDay.TotalAverageTaskTime, Is.EqualTo(TimeSpan.FromSeconds(50)).Within(tolerance));
+			Assert.That(savedWorkloadDay.TotalAverageAfterTaskTime, Is.EqualTo(TimeSpan.FromSeconds(20)).Within(tolerance));
 		}
 
 		[Test]
