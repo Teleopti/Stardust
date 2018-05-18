@@ -115,6 +115,11 @@
     <Compile Include="Bindings\Generic\Messages\MessageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\OutboundStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PhoneStateStepDefinitions.cs" />
+    <Compile Include="Wfm\Intraday\Intraday.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Intraday.feature</DependentUpon>
+    </Compile>
     <Compile Include="Wfm\People\RoleStepDefinition.cs" />
     <Compile Include="Wfm\People\PeopleStepDefinition.cs" />
     <Compile Include="Bindings\Generic\Wfm\RealTimeAdherenceAgentHistoricalPageStepDefinitions.cs" />
@@ -665,11 +670,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>GroupPages.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Wfm\Intraday\Intraday.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Intraday.feature</DependentUpon>
     </Compile>
     <Compile Include="Wfm\Outbound\OutboundCampaignBasicOperations.feature.cs">
       <AutoGen>True</AutoGen>
