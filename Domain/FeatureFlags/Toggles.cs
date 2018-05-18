@@ -29,6 +29,7 @@
 		MyTimeWeb_MonthlyScheduleMobileView_45004,
 		MyTimeWeb_WaitListPositionEnhancement_46301,
 		MyTimeWeb_PollToCheckScheduleChanges_46595,
+		MyTimeWeb_NewTeamScheduleView_75989,
 
 		Wfm_MinimumScaffolding_32659,
 		Wfm_WebPlan_Pilot_46815,
