@@ -144,7 +144,7 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 					var temp = moment(this.internal.config.axis_x_categories[d.x], 'DD/MM/YYYY').format(
 						'YYYY-MM-DDT00:00:00'
 					);
-					if (selectedItems.indexOf(temp) == -1) {
+					if (selectedItems.indexOf(temp) !== -1) {
 						selectedItems.splice(selectedItems.indexOf(temp), 1);
 						ctrl.onClick(selectedItems);
 					}
