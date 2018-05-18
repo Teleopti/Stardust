@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 #pragma warning disable 618
 			var eventInfos = from @event in events
 				from handlerType in resolver.HandlerTypesFor<IRunInSyncInFatClientProcess>(@event)
-				select new eventAndHandlerType { Event = @event, HandlerType = handlerType };
+				select new { Event = @event, HandlerType = handlerType };
 
 			Parallel.ForEach(eventInfos, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount },
 			eventInfo =>
@@ -66,12 +66,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				processor.Process(eventInfo.Event, eventInfo.HandlerType);
 			});
 #pragma warning restore 618
-		}
-
-		private class eventAndHandlerType
-		{
-			public IEvent @Event { get; set; }
-			public Type HandlerType { get; set; }
 		}
 	}	
 }
