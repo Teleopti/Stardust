@@ -132,11 +132,11 @@
           WorkloadId: vm.selectedWorkload.Workload.Id,
           ScenarioId: vm.selectedScenario.Id,
           OverrideTasks: form.overrideTasksValue,
-          OverrideTalkTime: form.overrideTalkTimeValue,
-          OverrideAfterCallWork: form.overrideAfterCallWorkValue,
+          OverrideAverageTaskTime: form.overrideTalkTimeValue,
+          OverrideAverageAfterTaskTime: form.overrideAfterCallWorkValue,
           ShouldOverrideTasks: checkData(form.overrideTasksValue),
-          ShouldOverrideTalkTime: checkData(form.overrideTalkTimeValue),
-          ShouldOverrideAfterCallWork: checkData(form.overrideAfterCallWorkValue),
+          ShouldOverrideAverageTaskTime: checkData(form.overrideTalkTimeValue),
+          ShouldOverrideAverageAfterTaskTime: checkData(form.overrideAfterCallWorkValue),
           ForecastDays: vm.selectedWorkload.Days
         }),
         function(data, status, headers, config) {
