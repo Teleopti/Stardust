@@ -5,6 +5,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 {
 	public interface ILoadAllSkillInIntradays
 	{
-		IEnumerable<SkillInIntraday> Skills();
+		IEnumerable<SkillInIntraday> SkillsWithAtleastOneQueueSource();
+		IEnumerable<SkillInIntraday> AllSkills();
 	}
 }

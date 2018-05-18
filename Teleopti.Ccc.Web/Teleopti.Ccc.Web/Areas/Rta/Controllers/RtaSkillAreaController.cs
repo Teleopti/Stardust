@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		[UnitOfWork, HttpGet, Route("api/SkillGroups")]
 		public virtual IHttpActionResult Index()
 		{
-			return Ok(_skillGroupViewModelBuilder.GetAll());
+			return Ok(_skillGroupViewModelBuilder.GetAllWithAtleastOneQueue());
 		}
 
 		[UnitOfWork, HttpGet, Route("api/SkillArea/For")]

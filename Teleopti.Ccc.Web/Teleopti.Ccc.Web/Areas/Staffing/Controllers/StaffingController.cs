@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.SkillGroupManagement;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Web.Areas.SkillGroup;
 using Teleopti.Interfaces.Domain;
@@ -38,6 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		private readonly ExportForecastAndStaffingFile _exportForecastAndStaffingFile;
 		private readonly ExportStaffingPeriodValidationProvider _periodValidationProvider;
 		private readonly BpoGanttProvider _bpoGanttProvider;
+		private readonly ILoadAllSkillInIntradays _loadAllSkillInIntradays;
 
 		public StaffingController(AddOverTime addOverTime, ScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
 								  ForecastedStaffingToDataSeries forecastedStaffingToDataSeries, IUserTimeZone timeZone,
@@ -45,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 								  ScheduledStaffingViewModelCreator staffingViewModelCreator, ImportBpoFile bpoFile, ICurrentDataSource currentDataSource, 
 								  IExportBpoFile exportBpoFile, ISkillRepository skillRepository, IAuthorization authorization,
 			ExportForecastAndStaffingFile exportForecastAndStaffingFile, ExportStaffingPeriodValidationProvider periodValidationProvider,
-			BpoGanttProvider bpoGanttProvider)
+			BpoGanttProvider bpoGanttProvider, ILoadAllSkillInIntradays loadAllSkillInIntradays)
 		{
 			_addOverTime = addOverTime;
 			_scheduledStaffingToDataSeries = scheduledStaffingToDataSeries;
@@ -62,6 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			_exportForecastAndStaffingFile = exportForecastAndStaffingFile;
 			_periodValidationProvider = periodValidationProvider;
 			_bpoGanttProvider = bpoGanttProvider;
+			_loadAllSkillInIntradays = loadAllSkillInIntradays;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/staffing/getallganttdataforbpotimeline")]
@@ -219,25 +222,22 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			return Ok(returnVal);
 		}
 
-		//[UnitOfWork, HttpGet, Route("api/staffing/skills")]
-		//public virtual IHttpActionResult GetAllSkills()
-		//{
-		//	return Ok(_skillRepository.LoadAllSkills()
-		//		.Select(x => new staffingSkill()
-		//			{Name = x.Name, Id = x.Id.Value, SkillType = x.SkillType.Description.Name})
-		//		.ToArray());
-		//}
+		[UnitOfWork, HttpGet, Route("api/staffing/skills")]
+		public virtual IHttpActionResult GetAllSkills()
+		{
+			return Ok(_loadAllSkillInIntradays.AllSkills());
+		}
 
 		//[UnitOfWork]
 		//[HttpGet]
-		//[Route("api/skillgroup/skillgroups")]
+		//[Route("api/staffing/skillgroups")]
 		//public virtual IHttpActionResult GetSkillGroups()
 		//{
 		//	return Ok(new SkillGroupInfo
 		//	{
 		//		HasPermissionToModifySkillArea =
 		//			_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebModifySkillGroup),
-		//		SkillAreas = _skillGroupViewModelBuilder.GetAll()
+		//		SkillAreas = _skillGroupViewModelBuilder.GetAllWithAtleastOneQueue()
 		//	});
 		//}
 
@@ -310,11 +310,11 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			public string FileName { get; set; }
 		}
 
-		//public class staffingSkill
-		//{
-		//	public Guid Id { get; set; }
-		//	public string Name { get; set; }
-		//	public string SkillType { get; set; }
-		//}
+		public class staffingSkill
+		{
+			public Guid Id { get; set; }
+			public string Name { get; set; }
+			public string SkillType { get; set; }
+		}
 	}
 }

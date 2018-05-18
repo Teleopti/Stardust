@@ -54,9 +54,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_skillInIntradays.Add(existingSkillInIntraday);
 		}
 
-		public IEnumerable<SkillInIntraday> Skills()
+		public IEnumerable<SkillInIntraday> SkillsWithAtleastOneQueueSource()
 		{
 			return _skillInIntradays;
+		}
+
+		public IEnumerable<SkillInIntraday> AllSkills()
+		{
+			throw new NotImplementedException();
 		}
 
 		public void HasWithName(string name)

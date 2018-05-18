@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.SkillGroups
 			SkillGroupRepository.Has(new SkillGroup {Skills = defaultSkills}.WithId());
 			SkillGroupRepository.Has(new SkillGroup {Skills = defaultSkills}.WithId());
 
-			Target.GetAll().Count()
+			Target.GetAllWithAtleastOneQueue().Count()
 				.Should().Be.EqualTo(2);
 		}
 
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.SkillGroups
 			SkillGroupRepository.Has(new SkillGroup {Name = "A", Skills = defaultSkills}.WithId());
 
 			UiCulture.IsSwedish();
-			Target.GetAll().Select(sa => sa.Name).Should().Have.SameSequenceAs(new[] {"A", "B", "C"});
+			Target.GetAllWithAtleastOneQueue().Select(sa => sa.Name).Should().Have.SameSequenceAs(new[] {"A", "B", "C"});
 		}
 
 		[Test]
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.SkillGroups
 			SkillGroupRepository.Has(new SkillGroup {Name = "Å", Skills = defaultSkills}.WithId());
 
 			UiCulture.IsSwedish();
-			Target.GetAll().Select(sa => sa.Name).Should().Have.SameSequenceAs(new[] {"A", "Å", "Ä"});
+			Target.GetAllWithAtleastOneQueue().Select(sa => sa.Name).Should().Have.SameSequenceAs(new[] {"A", "Å", "Ä"});
 		}
 
 		[Test]
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.SkillGroups
 			var skillInIntraday = new SkillInIntraday() {Id = existingSkillArea.Skills.First().Id, DoDisplayData = true, SkillType = "InboundPhone"};
 			LoadAllSkillInIntradays.Has(skillInIntraday);
 
-			var result = Target.GetAll().Single();
+			var result = Target.GetAllWithAtleastOneQueue().Single();
 
 			result.Should().Be.OfType<SkillGroupViewModel>();
 			result.Id.Should().Be.EqualTo(existingSkillArea.Id);
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.SkillGroups
 
 			SkillGroupRepository.Has(existingSkillArea);
 
-			var result = Target.GetAll().Single();
+			var result = Target.GetAllWithAtleastOneQueue().Single();
 
 			result.Should().Be.OfType<SkillGroupViewModel>();
 			result.Id.Should().Be.EqualTo(existingSkillArea.Id);
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.DomainTest.SkillGroups
 
 			SkillGroupRepository.Has(existingSkillArea);
 
-			var result = Target.GetAll().FirstOrDefault();
+			var result = Target.GetAllWithAtleastOneQueue().FirstOrDefault();
 
 			result.Should().Be.Null();
 		}

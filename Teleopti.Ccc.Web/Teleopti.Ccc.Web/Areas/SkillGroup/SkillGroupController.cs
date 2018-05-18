@@ -62,7 +62,20 @@ namespace Teleopti.Ccc.Web.Areas.SkillGroup
 			{
 				HasPermissionToModifySkillArea =
 					_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebModifySkillGroup),
-				SkillAreas = _skillGroupViewModelBuilder.GetAll()
+				SkillAreas = _skillGroupViewModelBuilder.GetAllWithAtleastOneQueue()
+			});
+		}
+
+		[UnitOfWork]
+		[HttpGet]
+		[Route("api/skillgroup/skillgroupsallskills")]
+		public virtual IHttpActionResult GetSkillGroupsWithAllSkills()
+		{
+			return Ok(new SkillGroupInfo
+			{
+				HasPermissionToModifySkillArea =
+					_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebModifySkillGroup),
+				SkillAreas = _skillGroupViewModelBuilder.GetAllSkills()
 			});
 		}
 

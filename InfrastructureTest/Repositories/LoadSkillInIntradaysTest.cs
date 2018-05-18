@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var target = new LoadSkillInIntradays(CurrUnitOfWork, new SupportedSkillsInIntradayProvider(null, 
 				new List<ISupportedSkillCheck>() { },
 				new MultisiteSkillSupportedCheck()), new SkillTypeInfoProvider(new List<ISkillTypeInfo>()));
-			var skills = target.Skills().ToList();
+			var skills = target.SkillsWithAtleastOneQueueSource().ToList();
 			skills.Count().Should().Be.EqualTo(1);
 			skills.First().Name.Should().Be.EqualTo(skillWithQueue.Name);
 		}
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var target = new LoadSkillInIntradays(CurrUnitOfWork, new SupportedSkillsInIntradayProvider(null, 
 				new List<ISupportedSkillCheck>() { },
 				new MultisiteSkillSupportedCheck()), new SkillTypeInfoProvider(new List<ISkillTypeInfo>()));
-			var skills = target.Skills().ToList();
+			var skills = target.SkillsWithAtleastOneQueueSource().ToList();
 			skills.Count().Should().Be.EqualTo(1);
 		}
 
@@ -125,7 +126,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					},
 					new MultisiteSkillSupportedCheck()
 				), new SkillTypeInfoProvider(new List<ISkillTypeInfo>()));
-			var skills = target.Skills().ToList();
+			var skills = target.SkillsWithAtleastOneQueueSource().ToList();
 			skills.Count().Should().Be.EqualTo(3);
 			skills.First().Name.Should().Be.EqualTo(chatSkill.Name);
 			skills.First().DoDisplayData.Should().Be.EqualTo(true);
@@ -174,7 +175,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					new MultisiteSkillSupportedCheck()
 				), new SkillTypeInfoProvider(new List<ISkillTypeInfo>()));
 
-			var skills = target.Skills().ToList();
+			var skills = target.SkillsWithAtleastOneQueueSource().ToList();
 			skills.Count().Should().Be.EqualTo(2);
 			skills.First().Name.Should().Be.EqualTo(multiSiteSkill.Name);
 			skills.First().DoDisplayData.Should().Be.EqualTo(false);
@@ -208,7 +209,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					},
 					new MultisiteSkillSupportedCheckAlwaysTrue()
 				), new SkillTypeInfoProvider(new List<ISkillTypeInfo>()));
-			var skills = target.Skills().ToList();
+			var skills = target.SkillsWithAtleastOneQueueSource().ToList();
 			skills.Count().Should().Be.EqualTo(1);
 			skills.First().Name.Should().Be.EqualTo(multiSiteSkill.Name);
 			skills.First().DoDisplayData.Should().Be.EqualTo(true);
@@ -250,10 +251,83 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					},
 					new MultisiteSkillSupportedCheckAlwaysTrue()
 				), new SkillTypeInfoProvider(new List<ISkillTypeInfo>()));
-			var skills = target.Skills().ToList();
+			var skills = target.SkillsWithAtleastOneQueueSource().ToList();
 			
 			skills.First().IsMultisiteSkill.Should().Be.True();
 			skills.Last().IsMultisiteSkill.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldLoadAllSkills()
+		{
+			var skillType = SkillTypeFactory.CreateSkillType();
+			var skillWithQueue = SkillFactory.CreateSkill("dummy1", skillType, 15);
+			var skillWithoutQueue = SkillFactory.CreateSkill("dummy2", skillType, 15);
+			var activity = new Activity("dummyActivity");
+			skillWithQueue.Activity = activity;
+			skillWithoutQueue.Activity = activity;
+			var queueSourceHelpdesk = QueueSourceFactory.CreateQueueSourceHelpdesk();
+
+			PersistAndRemoveFromUnitOfWork(queueSourceHelpdesk);
+
+			PersistAndRemoveFromUnitOfWork(skillType);
+
+			PersistAndRemoveFromUnitOfWork(activity);
+			PersistAndRemoveFromUnitOfWork(skillWithQueue);
+			PersistAndRemoveFromUnitOfWork(skillWithoutQueue);
+
+			PersistAndRemoveFromUnitOfWork(skillType);
+			var workload = WorkloadFactory.CreateWorkload(skillWithQueue);
+			workload.AddQueueSource(queueSourceHelpdesk);
+			PersistAndRemoveFromUnitOfWork(workload);
+
+			var target = new LoadSkillInIntradays(CurrUnitOfWork, new SupportedSkillsInIntradayProvider(null,
+				new List<ISupportedSkillCheck>() { },
+				new MultisiteSkillSupportedCheck()), new SkillTypeInfoProvider(new List<ISkillTypeInfo>()));
+			var skills = target.AllSkills().ToList();
+			skills.Count().Should().Be.EqualTo(2);
+			skills.First().Name.Should().Be.EqualTo(skillWithQueue.Name);
+			skills.Second().Name.Should().Be.EqualTo(skillWithoutQueue.Name);
+		}
+
+		[Test]
+		public void ShouldNotShowSubSkills()
+		{
+			var skillType = SkillTypeFactory.CreateSkillType();
+			var skillWithQueue = SkillFactory.CreateSkill("dummy1", skillType, 15);
+			var skillWithoutQueue = SkillFactory.CreateSkill("dummy2", skillType, 15);
+			var skillMultiSite = SkillFactory.CreateMultisiteSkill("multisite", skillType, 15);
+			IChildSkill childSkill = SkillFactory.CreateChildSkill("childskill", skillMultiSite);
+			skillMultiSite.AddChildSkill(childSkill);
+
+			var activity = new Activity("dummyActivity");
+			skillWithQueue.Activity = activity;
+			skillWithoutQueue.Activity = activity;
+			var queueSourceHelpdesk = QueueSourceFactory.CreateQueueSourceHelpdesk();
+
+			PersistAndRemoveFromUnitOfWork(queueSourceHelpdesk);
+
+			PersistAndRemoveFromUnitOfWork(skillType);
+
+			PersistAndRemoveFromUnitOfWork(activity);
+			PersistAndRemoveFromUnitOfWork(skillWithQueue);
+			PersistAndRemoveFromUnitOfWork(skillWithoutQueue);
+			PersistAndRemoveFromUnitOfWork(childSkill);
+			PersistAndRemoveFromUnitOfWork(skillMultiSite);
+
+			//PersistAndRemoveFromUnitOfWork(skillType);
+			var workload = WorkloadFactory.CreateWorkload(skillWithQueue);
+			workload.AddQueueSource(queueSourceHelpdesk);
+			PersistAndRemoveFromUnitOfWork(workload);
+
+			var target = new LoadSkillInIntradays(CurrUnitOfWork, new SupportedSkillsInIntradayProvider(null,
+				new List<ISupportedSkillCheck>() { },
+				new MultisiteSkillSupportedCheck()), new SkillTypeInfoProvider(new List<ISkillTypeInfo>()));
+			var skills = target.AllSkills().ToList();
+			skills.Count().Should().Be.EqualTo(3);
+			skills.First().Name.Should().Be.EqualTo(skillWithQueue.Name);
+			skills.Second().Name.Should().Be.EqualTo(skillWithoutQueue.Name);
+			skills.Last().Name.Should().Be.EqualTo(skillMultiSite.Name);
 		}
 	}
 }

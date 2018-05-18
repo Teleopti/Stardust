@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.SkillGroupManagement
 		private readonly ISkillGroupRepository _skillGroupRepository;
 		private readonly ILoadAllSkillInIntradays _loadAllSkillInIntradays;
 		private readonly IUserUiCulture _uiCulture;
-
+		
 		public SkillGroupViewModelBuilder(ISkillGroupRepository skillGroupRepository, ILoadAllSkillInIntradays loadAllSkillInIntradays, IUserUiCulture uiCulture)
 		{
 			_skillGroupRepository = skillGroupRepository;
@@ -20,13 +20,46 @@ namespace Teleopti.Ccc.Domain.SkillGroupManagement
 			_uiCulture = uiCulture;
 		}
 
-		public IEnumerable<SkillGroupViewModel> GetAll()
+		public IEnumerable<SkillGroupViewModel> GetAllWithAtleastOneQueue()
 		{
 			var skillGroups = _skillGroupRepository.LoadAll()
 				.Where(x => x.Skills.Any(y => y.IsDeleted == false))
 				.OrderBy(x => x.Name, StringComparer.Create(_uiCulture.GetUiCulture(), false));
 
-			var skills = _loadAllSkillInIntradays.Skills().ToDictionary(x => x.Id, x => x);
+			var skills = _loadAllSkillInIntradays.SkillsWithAtleastOneQueueSource().ToDictionary(x => x.Id, x => x);
+
+			return skillGroups.Select(skillGroup =>
+					new SkillGroupViewModel
+					{
+						Id = skillGroup.Id.Value,
+						Name = skillGroup.Name,
+						Skills = skillGroup.Skills.Where(x => x.IsDeleted == false).Select(skill =>
+							{
+								var skillInIntraday = skills.ContainsKey(skill.Id) ? skills[skill.Id] : null;
+								return new SkillInIntradayViewModel
+								{
+									Id = skill.Id,
+									Name = skill.Name,
+									IsDeleted = skill.IsDeleted,
+									SkillType = skillInIntraday?.SkillType,
+									DoDisplayData = skillInIntraday != null && skillInIntraday.DoDisplayData,
+									IsMultisiteSkill = skillInIntraday != null && skillInIntraday.IsMultisiteSkill,
+									ShowAbandonRate = skillInIntraday?.ShowAbandonRate ?? true,
+									ShowReforecastedAgents = skillInIntraday?.ShowReforecastedAgents ?? true
+								};
+							})
+							.ToArray()
+					})
+				.ToArray();
+		}
+
+		public IEnumerable<SkillGroupViewModel> GetAllSkills()
+		{
+			var skillGroups = _skillGroupRepository.LoadAll()
+				.Where(x => x.Skills.Any(y => y.IsDeleted == false))
+				.OrderBy(x => x.Name, StringComparer.Create(_uiCulture.GetUiCulture(), false));
+
+			var skills = _loadAllSkillInIntradays.AllSkills().ToDictionary(x => x.Id, x => x);
 
 			return skillGroups.Select(skillGroup =>
 					new SkillGroupViewModel
