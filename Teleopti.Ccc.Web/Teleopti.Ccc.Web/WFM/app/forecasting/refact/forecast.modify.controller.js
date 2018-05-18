@@ -62,6 +62,8 @@
 
     function modifyPanelHelper(state) {
       if (vm.selectedDayCount === null || vm.selectedDayCount.length < 1) {
+        vm.campaignPanel = false;
+        vm.overridePanel = false;
         return;
       }
       if (state == true) {
