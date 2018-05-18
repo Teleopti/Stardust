@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </summary>
         /// <param name="person"></param>
         /// <returns></returns>
-        IList<IPersonMeeting> GetPersonMeetings(IPerson person);
+        IList<IPersonMeeting> GetPersonMeetings(params IPerson[] person);
 
         /// <summary>
         /// Remove person
