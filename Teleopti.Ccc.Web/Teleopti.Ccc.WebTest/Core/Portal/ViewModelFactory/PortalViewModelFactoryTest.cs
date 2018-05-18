@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -17,6 +18,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory;
 using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
@@ -245,6 +247,18 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			result.ToList()[1].BronzeBadge.Should().Be.EqualTo(0);
 			result.ToList()[1].SilverBadge.Should().Be.EqualTo(0);
 			result.ToList()[1].GoldBadge.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldMapNewTeamScheduleMenuItemWhenToggle75989IsOn()
+		{
+			setupLoggedOnUser();
+			setLicense("default");
+
+			ToggleManager.Enable(Toggles.MyTimeWeb_NewTeamScheduleView_75989);
+
+			var result = Target.CreatePortalViewModel().NavigationItems;
+			result.FirstOrDefault(r => r.Title == Resources.TeamSchedule)?.Action.Should().Be("NewIndex");
 		}
 
 		private void setLicense(string name)
