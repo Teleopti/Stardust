@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Remove(IForecastDayOverride root)
 		{
-			throw new NotImplementedException();
+			_storage.Remove(root);
 		}
 
 		public IForecastDayOverride Get(Guid id)

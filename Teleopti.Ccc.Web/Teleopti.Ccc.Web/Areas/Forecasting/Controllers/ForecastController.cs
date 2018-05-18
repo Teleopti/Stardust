@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			var periodEnd = new DateOnly(forecastResult.ForecastDays.Max(x => x.Date).Date);
 			var forecastPeriod = new DateOnlyPeriod(periodStart, periodEnd);
 			var skillDays = _fetchAndFillSkillDays.FindRange(forecastPeriod, workload.Skill, scenario);
-			//var overrideDays = _forecastDayOverrideRepository.FindRange(forecastPeriod, workload, scenario).ToDictionary(k => k.Date);
+			var overrideDays = _forecastDayOverrideRepository.FindRange(forecastPeriod, workload, scenario).ToDictionary(k => k.Date);
 
 			foreach (var skillDay in skillDays)
 			{
@@ -220,9 +220,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 
 				if (model.HasOverride)
 				{
-					var forecastDayOverride =
-						_forecastDayOverrideRepository.FindRange(skillDay.CurrentDate.ToDateOnlyPeriod(), workload, scenario).SingleOrDefault();
-					if (forecastDayOverride == null)
+					if(!overrideDays.TryGetValue(skillDay.CurrentDate, out var forecastDayOverride))
 					{
 						forecastDayOverride =
 							new ForecastDayOverride(skillDay.CurrentDate, workload, scenario)
@@ -253,7 +251,13 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 							? TimeSpan.FromSeconds(model.OverrideAverageAfterTaskTime.Value)
 							: (TimeSpan?) null;
 					}
-					
+				}
+				else
+				{
+					if (overrideDays.TryGetValue(skillDay.CurrentDate, out var forecastDayOverride))
+					{
+						_forecastDayOverrideRepository.Remove(forecastDayOverride);
+					}
 				}
 				
 				var period = _historicalPeriodProvider.AvailablePeriod(workload);
