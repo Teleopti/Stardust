@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Ccc.Web.Areas.SkillGroup;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
@@ -218,6 +219,28 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			return Ok(returnVal);
 		}
 
+		//[UnitOfWork, HttpGet, Route("api/staffing/skills")]
+		//public virtual IHttpActionResult GetAllSkills()
+		//{
+		//	return Ok(_skillRepository.LoadAllSkills()
+		//		.Select(x => new staffingSkill()
+		//			{Name = x.Name, Id = x.Id.Value, SkillType = x.SkillType.Description.Name})
+		//		.ToArray());
+		//}
+
+		//[UnitOfWork]
+		//[HttpGet]
+		//[Route("api/skillgroup/skillgroups")]
+		//public virtual IHttpActionResult GetSkillGroups()
+		//{
+		//	return Ok(new SkillGroupInfo
+		//	{
+		//		HasPermissionToModifySkillArea =
+		//			_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebModifySkillGroup),
+		//		SkillAreas = _skillGroupViewModelBuilder.GetAll()
+		//	});
+		//}
+
 		private OverTimeSuggestionResultModel extractDataSeries(OverTimeSuggestionModel overTimeSuggestionModel,OvertimeWrapperModel wrapperModels)
 		{
 			var sourceTimeZone = _timeZone.TimeZone();
@@ -286,5 +309,12 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			public string FileContent { get; set; }
 			public string FileName { get; set; }
 		}
+
+		//public class staffingSkill
+		//{
+		//	public Guid Id { get; set; }
+		//	public string Name { get; set; }
+		//	public string SkillType { get; set; }
+		//}
 	}
 }

@@ -5,6 +5,7 @@ using Stardust.Node.Interfaces;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Forecasting.Export;
+using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 {
@@ -28,7 +29,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 
 
 		public void Handle(ExportMultisiteSkillsToSkillEvent parameters, CancellationTokenSource cancellationTokenSource,
-			Action<string> sendProgress)
+			Action<string> sendProgress,
+			ref IEnumerable<object> returnObjects)
 		{
 			_feedback.FeedbackChanged += feedbackFeedbackChanged;
 			_sendProgress = sendProgress;

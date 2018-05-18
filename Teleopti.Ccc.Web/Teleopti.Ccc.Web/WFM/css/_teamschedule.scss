@@ -1168,3 +1168,13 @@ teams-time-picker.ng-invalid-dst {
 		border: 2px solid $red-600;
 	}
 }
+
+.shift-editor {
+	.underlying-info {
+		margin-left: 10px;
+	}
+
+	.mdi-alert {
+		color: $orange-500;
+	}
+}

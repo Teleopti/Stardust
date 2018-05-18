@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using Autofac;
 using Stardust.Node.Interfaces;
@@ -20,7 +21,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 		[AsSystem]
 		public virtual void Handle(FixReadModelsEvent parameters,
 			CancellationTokenSource cancellationTokenSource,
-			Action<string> sendProgress)
+			Action<string> sendProgress,
+			ref IEnumerable<object> returnObjects)
 		{
 			var theRealOne = _componentContext.Resolve<IHandleEvent<FixReadModelsEvent>>();
 			theRealOne.Handle(parameters);

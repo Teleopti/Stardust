@@ -116,34 +116,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Staffing
 		[When(@"I select skill group '(.*)'")]
 		public void WhenISelectSkillGroup(string group)
 		{
-			/*
-			Browser.Interactions.AssertExists("md-autocomplete");
-			var javascript = "var scope = angular.element(document.querySelector('md-autocomplete')).scope();" +
-							 "var sg = scope.vm.skillAreas.find(function(e){{return e.Name === '" + group + "'}});" +
-							 "scope.vm.selectedArea = sg;" +
-							 "scope.vm.selectedAreaChange(sg);";
-			Browser.Interactions.TryUntil(
-				() => { Browser.Interactions.Javascript(javascript); },
-				() => Browser.Interactions.IsVisible("md-autocomplete")
-				, TimeSpan.FromSeconds(1)
-			);*/
+			Thread.Sleep(1000);
+			Browser.Interactions.AssertExists("the-skill-picker");
 
-			
-			Browser.Interactions.AssertJavascriptResultContains(
-				"var scope = angular.element(document.querySelector('#area-id')).scope();" +
-				"var skillGroup = scope.vm.querySearchAreas()[0].Name;" +
-				$"return (skillGroup === '{group}')", "True");
+			Browser.Interactions.ClickVisibleOnly("the-skill-picker .con-flex:nth-child(2n) div.wfm-form input");
+			Browser.Interactions.ClickContaining("the-skill-picker .con-flex:nth-child(2n) div.wfm-form .wfm-dropdown-panel li", group);
 
-
-			Browser.Interactions.Javascript(
-				"var scope = angular.element(document.querySelector('#area-id')).scope();" +
-				"var sg = scope.vm.allSkillAreas.find(function(e){{return e.Name === '" + group + "'}});" +
-				$"scope.vm.selectedSkillArea = sg;" +
-				$"scope.vm.selectedAreaChange(sg);"
-			);
-
-			Browser.Interactions.PressEnter("#area-id");
-			
 		}
 
 		[When(@"I change staffing date to '(.*)'")]
@@ -226,7 +204,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Staffing
 		public void ThenIShouldSeeTheSelectedSkillGroup(string group)
 		{
 			Browser.Interactions.AssertJavascriptResultContains(
-				"var scope = angular.element(document.querySelector('#area-id')).scope();" +
+				"var scope = angular.element(document.querySelector('the-skill-picker')).scope();" +
 				"var skillGroup = scope.vm.selectedArea;" +
 				$"return (skillGroup.Name === '{group}')", "True");
 		}

@@ -256,6 +256,42 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		}
 
 		[Test]
+		public void ShouldNotDenyOtherShiftTradeRequestsWhenShiftTradeRequestIsDenied()
+		{
+			var shiftDate = new DateOnly(2007, 1, 1);
+			var agent1 = PersonFactory.CreatePersonWithId();
+			_personRepository.AddRange(new[]
+			{
+				agent1
+			});
+
+			var period = new DateTimePeriod(new DateTime(2007, 1, 1, 3, 0, 0, DateTimeKind.Utc),
+				new DateTime(2007, 01, 01, 15, 0, 0, DateTimeKind.Utc));
+			var activity = ActivityFactory.CreateActivity("Phone").WithId();
+			var agent1Shift = createScheduleDay(shiftDate, period.ChangeEndTime(TimeSpan.FromHours(3)), agent1, activity);
+			var shiftTradeOffer =
+				new ShiftExchangeOffer(agent1Shift, new ShiftExchangeCriteria(), ShiftExchangeOfferStatus.Pending)
+				{
+					Criteria = new ShiftExchangeCriteria(DateOnly.Today.AddDays(1),
+						new ScheduleDayFilterCriteria
+						{
+							DayType = ShiftExchangeLookingForDay.DayOffOrEmptyDay
+						}),
+					ShiftExchangeOfferId = Guid.NewGuid().ToString()
+				}.WithId();
+
+			var workflowControlSet = ShiftTradeTestHelper.CreateWorkFlowControlSet(true);
+			var shiftTradeRequest1 = doShiftTradeWithBrokenRules(new BusinessRuleProvider(), true, shiftTradeOffer);
+			shiftTradeRequest1.Deny("test", new PersonRequestAuthorizationCheckerConfigurable());
+
+			var shiftTradeRequest2 = doBasicShiftTrade(workflowControlSet, offer: shiftTradeOffer).PersonRequest;
+
+			Assert.IsTrue(shiftTradeRequest1.IsDenied);
+			Assert.IsTrue(shiftTradeRequest2.IsApproved);
+		}
+
+
+		[Test]
 		public void ShouldApprovePendingRequestAfterNightlyRuleIsSatisfied()
 		{
 			var workflowControlSet = ShiftTradeTestHelper.CreateWorkFlowControlSet(true);

@@ -51,6 +51,56 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		}
 
 		[Test]
+		public void ShouldDenyWhenHasAbsenceOnWorkday()
+		{
+			Now.Is("2018-05-09 06:00");
+			var personFromId = Guid.NewGuid();
+			var personToId = Guid.NewGuid();
+			Database
+				.WithShiftTradeWorkflow(2)
+				.WithBusinessRuleForShiftTrade()
+				.WithAgent(personFromId)
+				.WithSchedule("2018-05-09 8:00", "2018-05-09 16:00")
+				.WithPersonAbsence("2018-05-09 8:00", "2018-05-09 16:00")
+				.WithSchedule("2018-05-10 8:00", "2018-05-10 16:00")
+				.WithScheduleDayOff("2018-05-11")
+				.WithAgent(personToId)
+				.WithSchedule("2018-05-11 8:00", "2018-05-11 16:00")
+				.WithShiftTradeRequest(personFromId, personToId, "2018-05-11")
+				;
+			Target.Handle(createAcceptShiftTradeEvent(personToId));
+
+			var handledRequest = PersonRequestRepository.Get(Database.CurrentPersonRequestId());
+			var personBreakRule = PersonRepository.Get(personFromId);
+			handledRequest.IsDenied.Should().Be.True();
+			handledRequest.DenyReason.Should().Be.EqualTo(String.Format(Resources.BusinessRuleMaximumWorkdayErrorMessage, personBreakRule.Name, 3, 2));
+		}
+
+		[Test]
+		public void ShouldDenyWhenHasEmptySchedule()
+		{
+			Now.Is("2018-05-09 06:00");
+			var personFromId = Guid.NewGuid();
+			var personToId = Guid.NewGuid();
+			Database
+				.WithShiftTradeWorkflow(2)
+				.WithBusinessRuleForShiftTrade()
+				.WithAgent(personFromId)
+				.WithSchedule("2018-05-10 8:00", "2018-05-10 16:00")
+				.WithScheduleDayOff("2018-05-11")
+				.WithAgent(personToId)
+				.WithSchedule("2018-05-11 8:00", "2018-05-11 16:00")
+				.WithShiftTradeRequest(personFromId, personToId, "2018-05-11")
+				;
+			Target.Handle(createAcceptShiftTradeEvent(personToId));
+
+			var handledRequest = PersonRequestRepository.Get(Database.CurrentPersonRequestId());
+			var personBreakRule = PersonRepository.Get(personFromId);
+			handledRequest.IsDenied.Should().Be.True();
+			handledRequest.DenyReason.Should().Be.EqualTo(String.Format(Resources.BusinessRuleMaximumWorkdayErrorMessage, personBreakRule.Name, 3, 2));
+		}
+
+		[Test]
 		public void ShouldApproveWithMaximumWorkdayRule()
 		{
 			Now.Is("2018-05-09 06:00");
@@ -60,11 +110,41 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				.WithShiftTradeWorkflow(3)
 				.WithBusinessRuleForShiftTrade()
 				.WithAgent(personFromId)
+				.WithScheduleDayOff("2018-05-08")
 				.WithSchedule("2018-05-09 8:00", "2018-05-09 16:00")
 				.WithSchedule("2018-05-10 8:00", "2018-05-10 16:00")
 				.WithScheduleDayOff("2018-05-11")
+				.WithScheduleDayOff("2018-05-12")
 				.WithAgent(personToId)
 				.WithSchedule("2018-05-11 8:00", "2018-05-11 16:00")
+				.WithShiftTradeRequest(personFromId, personToId, "2018-05-11")
+				;
+
+			Target.Handle(createAcceptShiftTradeEvent(personToId));
+
+			var handledRequest = PersonRequestRepository.Get(Database.CurrentPersonRequestId());
+			handledRequest.IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldApproveWhenAbsenceOnDayoff()
+		{
+			Now.Is("2018-05-09 06:00");
+			var personFromId = Guid.NewGuid();
+			var personToId = Guid.NewGuid();
+			Database
+				.WithShiftTradeWorkflow(2)
+				.WithBusinessRuleForShiftTrade()
+				.WithAgent(personFromId)
+				.WithScheduleDayOff("2018-05-09")
+				.WithSchedule("2018-05-10 8:00", "2018-05-10 16:00")
+				.WithSchedule("2018-05-11 8:00", "2018-05-11 16:00")
+				.WithScheduleDayOff("2018-05-12")
+				.WithAgent(personToId)
+				.WithScheduleDayOff("2018-05-10")
+				.WithScheduleDayOff("2018-05-11")
+				.WithPersonAbsence("2018-05-11", "2018-05-11")
+				.WithScheduleDayOff("2018-05-12")
 				.WithShiftTradeRequest(personFromId, personToId, "2018-05-11")
 				;
 
@@ -181,10 +261,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				.WithShiftTradeWorkflow(2)
 				.WithBusinessRuleForShiftTrade()
 				.WithAgent(personFromId)
+				.WithScheduleDayOff("2018-05-08")
 				.WithSchedule("2018-05-09 8:00", "2018-05-09 16:00")
 				.WithScheduleDayOff("2018-05-10")
 				.WithScheduleDayOff("2018-05-11")
 				.WithSchedule("2018-05-12 8:00", "2018-05-12 16:00")
+				.WithScheduleDayOff("2018-05-13")
 				.WithAgent(personToId, "agentTo", TimeZoneInfoFactory.StockholmTimeZoneInfo())
 				.WithSchedule("2018-05-11 8:00", "2018-05-11 16:00")
 				.WithShiftTradeRequest(personFromId, personToId, "2018-05-11")

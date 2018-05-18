@@ -8,6 +8,7 @@ using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.Sdk.ServiceBus.Custom;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<SendPushMessageWhenRootAlteredService>().As<ISendPushMessageWhenRootAlteredService>().InstancePerDependency();
 			builder.RegisterType<RepositoryFactory>().As<IRepositoryFactory>().SingleInstance();
 			builder.RegisterType<GroupingReadOnlyRepository>().As<IGroupingReadOnlyRepository>().SingleInstance();
+			builder.RegisterType<EnvironmentVariable>().As<IEnvironmentVariable>().SingleInstance();
 			registerDataSourcesFactoryDependencies(builder);
 		}
 

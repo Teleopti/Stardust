@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using Autofac;
 using Stardust.Node.Interfaces;
@@ -16,7 +17,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			_componentContext = componentContext;
 		}
 
-		public void Handle (PersonAbsenceRemovedEvent parameters, CancellationTokenSource cancellationTokenSource, Action<string> sendProgress)
+		public void Handle (PersonAbsenceRemovedEvent parameters, 
+			CancellationTokenSource cancellationTokenSource, 
+			Action<string> sendProgress,
+			ref IEnumerable<object> returnObjects)
 		{
 			var theRealOne = _componentContext.Resolve<IHandleEvent<PersonAbsenceRemovedEvent>>();
 			theRealOne.Handle(parameters);

@@ -1,13 +1,31 @@
 ﻿<div class="shift-editor">
-	<div class="con-row">
-		<div class="con-flex">
-			<span class="name">{{ vm.personSchedule.Name}} </span>
-		</div>
-		<div class="con-flex">
-			<span class="underlying-info"><i></i> </span>
+	<div class="view-header">
+		<div class="view-title">
+			<h1 style="text-transform: capitalize;">
+				<i class="mdi mdi-account-multiple"></i>
+				<span>{{ 'ShiftEditor'|translate }}</span>
+			</h1>
 		</div>
 	</div>
-	<div class="con-row">
-		<span class="date">{{vm.personSchedule.Date }}</span>
+	<div class="panel material-depth-1">
+		<div class="con-row">
+			<div class="con-flex">
+				<span class="name">{{ ::vm.personSchedule.Name}} </span>
+				<span ng-if="vm.personSchedule.HasUnderlyingSchedules()">
+					<span class="underlying-info">
+						<i class="mdi mdi-information mdi-alert info"></i>
+					</span>
+					<md-tooltip class="multiline-tooltip" md-direction="right">
+						<underlying-schedule-info person-schedule="vm.personSchedule" date="vm.date"></underlying-schedule-info>
+					</md-tooltip>
+				</span>
+
+			</div>
+		</div>
+		<div class="con-row">
+			<div class="con-flex">
+				<span class="date">{{vm.personSchedule.Date }}</span>
+			</div>
+		</div>
 	</div>
 </div>

@@ -74,7 +74,8 @@
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggleName) { return true; }
 
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
-		viewModel.loadSchedule("2017-01-01", "TeamId");
+		viewModel.requestedDate(moment("2017-01-01"));
+		viewModel.selectedTeam("TeamId");
 
 		equal(viewModel.mySchedule().contractTime, "8:00");
 		equal(viewModel.possibleTradeSchedules()[0].contractTime, "7:05");
@@ -123,7 +124,8 @@
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
 		var now = moment("Dec 25, 1995");
 
-		viewModel.setDatePickerRange(now, 1, 2);
+		viewModel.openPeriodStartDate(moment(now).add('days', 1));
+		viewModel.openPeriodEndDate(moment(now).add('days', 2));
 
 		equal(viewModel.openPeriodStartDate().format("YYYY-MM-DD"), "1995-12-26");
 		equal(viewModel.openPeriodEndDate().format("YYYY-MM-DD"), "1995-12-27");
@@ -142,7 +144,7 @@
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
 		viewModel.requestedDateInternal(moment("Dec 25, 1995"));
 
-		var result = viewModel.getFormattedDateForDisplay();
+		var result = viewModel.requestedDateInternal().format(viewModel.DatePickerFormat());
 
 		equal(result, "1995-12-25");
 	});
@@ -235,13 +237,13 @@
 		equal(viewModel.IsLoading(), false);
 	});
 
-	test("should get all team ids except 'Team All'", function() {
+	test("should get all team ids except 'Team All'", function () {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
 		viewModel.availableTeams.push({ id: "A", text: "Team A" });
 		viewModel.availableTeams.push({ id: "B", text: "Team B" });
 		viewModel.availableTeams.push({ id: "allTeams", text: "Team All" });
 
-		var target = viewModel.getAllTeamIds();
+		var target = viewModel.availableTeams().filter(function (team) { return team.id !== viewModel.allTeamsId; }).map(function (team) { return team.id; });
 
 		equal(target.length, 2);
 		equal(target[0], "A");
@@ -254,7 +256,7 @@
 		viewModel.availableSites.push({ id: "B", text: "Site B" });
 		viewModel.availableSites.push({ id: "allSites", text: "All Sites" });
 
-		var target = viewModel.getAllSiteIds();
+		var target = viewModel.availableSites().filter(function (site) { return site.id !== viewModel.allSitesId; }).map(function (site) { return site.id; });
 
 		equal(target.length, 2);
 		equal(target[0], "A");
@@ -459,7 +461,8 @@
 	test("should hide page view when no data", function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
 
-		viewModel.setPagingInfo(0);
+		viewModel.pageCount(0);
+		viewModel.isPageVisible(0 > 0);
 
 		equal(viewModel.isPageVisible(), false);
 	});
@@ -467,7 +470,8 @@
 	test("should show page view when there is data", function () {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
 
-		viewModel.setPagingInfo(1);
+		viewModel.pageCount(1);
+		viewModel.isPageVisible(1 > 0);
 
 		equal(viewModel.isPageVisible(), true);
 	});
@@ -476,7 +480,8 @@
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
 		viewModel.selectablePages.push(new Teleopti.MyTimeWeb.Request.PageView(1));
 
-		viewModel.setPagingInfo(2);
+		viewModel.pageCount(2);
+		viewModel.isPageVisible(2 > 0);
 
 		equal(viewModel.selectablePages().length, 2);
 	});
@@ -484,7 +489,8 @@
 	test("should set page count when set paging infos", function () {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
 
-		viewModel.setPagingInfo(2);
+		viewModel.pageCount(2);
+		viewModel.isPageVisible(2 > 0);
 
 		equal(viewModel.pageCount(), 2);
 	});
@@ -494,7 +500,8 @@
 		viewModel.selectedPageIndex(1);
 
 		viewModel.selectedPageIndex(2);
-		viewModel.setPagingInfo(2);
+		viewModel.pageCount(2);
+		viewModel.isPageVisible(2 > 0);
 
 		equal(viewModel.pageCount(), 2);
 		equal(viewModel.selectablePages().length, 2);
@@ -572,7 +579,8 @@
 
 	test("should go to first page without more", function () {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
-		viewModel.setPagingInfo(3);
+		viewModel.pageCount(3);
+		viewModel.isPageVisible(3 > 0);
 
 		viewModel.selectedPageIndex(3);
 
@@ -728,10 +736,20 @@
 
 	test("should update time sort order correctly", function () {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { return true; };
-		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+
+		var optionsData = {};
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url === "Requests/ShiftTradeRequestSchedule") {
+					optionsData = options;
+				}
+			}
+		};
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
+		viewModel.selectedTeamInternal(['Team Id']);
 		viewModel.updateTimeSortOrder({ Value: 'start asc' });
 
-		equal(viewModel.TimeSortOrder(), 'start asc');
+		equal(JSON.parse(optionsData.data).TimeSortOrder, 'start asc');
 	});
 
 	test("should set search name after choosing an agent", function() {
@@ -740,7 +758,7 @@
 		equal(viewModel.searchNameText(), 'test');
 	});
 
-	test("should clear search name after changing team", function(){
+	test("should keep search name after changing team", function(){
 		var schedules = {
 			"MySchedule":
 			{
@@ -772,12 +790,12 @@
 			}
 		};
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
-		viewModel.chooseAgent({ agentName:"test", isVisible:function(){} });
+		viewModel.chooseAgent({ agentName:"test agent", isVisible:function(){} });
 		viewModel.selectedTeam('other team');
-		equal(viewModel.searchNameText(), '');
+		equal(viewModel.searchNameText(), 'test agent');
 	});
 
-	test("should clear search name after changing site", function(){
+	test("should keep search name after changing site", function(){
 		var schedules = {
 			"MySchedule":
 			{
@@ -809,9 +827,9 @@
 			}
 		};
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
-		viewModel.chooseAgent({ agentName:"test", isVisible:function(){} });
+		viewModel.chooseAgent({ agentName:"test agent", isVisible:function(){} });
 		viewModel.selectedSite('other site');
-		equal(viewModel.searchNameText(), '');
+		equal(viewModel.searchNameText(), 'test agent');
 	});
 
 	test("should clear search name and reload schedule after cancelling a request", function() {

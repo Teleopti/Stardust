@@ -1,8 +1,8 @@
 ﻿(function () {
 	'use strict';
-	angular.module('wfm.teamSchedule').factory('PersonSchedule', ['$filter', 'teamsToggles', 'teamsPermissions', 'serviceDateFormatHelper', personScheduleFactory]);
+	angular.module('wfm.teamSchedule').factory('PersonSchedule', ['$filter', 'Toggle', 'teamsPermissions', 'serviceDateFormatHelper', personScheduleFactory]);
 
-	function personScheduleFactory($filter, toggles, permissions, serviceDateFormatHelper) {
+	function personScheduleFactory($filter, toggleSvc, permissions, serviceDateFormatHelper) {
 
 		var personScheduleFactory = {
 			Create: create
@@ -242,22 +242,29 @@
 			this.ViewRange = timeLine.MaximumViewRange;
 			this.IsProtected = schedule.IsProtected;
 			this.UnderlyingScheduleSummary = schedule.UnderlyingScheduleSummary;
-			this.GetSummaryTimeSpan = function (summary, selectedDate) {
-				var start = moment(summary.Start);
-				var end = moment(summary.End);
-				var selectedDateMoment = moment(selectedDate);
-				if (!start.isSame(end, 'day') || !start.isSame(selectedDateMoment, 'day')) {
-					return $filter('date')(start.toDate(), 'short') + ' - ' + $filter('date')(end.toDate(), 'short');
-				}
-				return $filter('date')(start.toDate(), 'shortTime') + ' - ' + $filter('date')(end.toDate(), 'shortTime');
-			};
-
-			this.IsDayOff = function () {
-				return !!this.DayOffs.filter(function (d) {
-					return d.Date == serviceDateFormatHelper.getDateOnly(schedule.Date);
-				}).length;
-			};
 		}
+
+		PersonSchedule.prototype.GetSummaryTimeSpan = function (summary, selectedDate) {
+			var start = moment(summary.Start);
+			var end = moment(summary.End);
+			var selectedDateMoment = moment(selectedDate);
+			if (!start.isSame(end, 'day') || !start.isSame(selectedDateMoment, 'day')) {
+				return $filter('date')(start.toDate(), 'short') + ' - ' + $filter('date')(end.toDate(), 'short');
+			}
+			return $filter('date')(start.toDate(), 'shortTime') + ' - ' + $filter('date')(end.toDate(), 'shortTime');
+		};
+
+		PersonSchedule.prototype.IsDayOff = function () {
+			var date = this.Date;
+			return !!this.DayOffs.filter(function (d) {
+				return d.Date == serviceDateFormatHelper.getDateOnly(date);
+			}).length;
+		};
+
+		PersonSchedule.prototype.HasUnderlyingSchedules = function () {
+			return toggleSvc.WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952 && !!this.UnderlyingScheduleSummary;
+		}
+		
 
 		PersonSchedule.prototype.AbsenceCount = function () {
 			var shiftsOnCurrentDate = this.Shifts.filter(function (shift) {
@@ -383,4 +390,4 @@
 
 		return personScheduleFactory;
 	}
-}());
+}) ();

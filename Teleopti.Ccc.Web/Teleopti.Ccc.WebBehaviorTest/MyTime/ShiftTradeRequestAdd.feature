@@ -735,6 +735,7 @@ Scenario: Should cancel the current shift trade when switch to another team to t
 	And I view Add Shift Trade Request for date '2030-01-01'
 	And I choose 'OtherAgent' to make a shift trade
 	When I select the 'Other team'
+	And I clear the name search box
 	Then I should see 'OtherAgentNotInMyTeam' last in the list
 	And I choose 'OtherAgentNotInMyTeam' to make a shift trade
 	And I should not see schedule on date '2030-01-01' in my shift trade list with 'OtherAgent'

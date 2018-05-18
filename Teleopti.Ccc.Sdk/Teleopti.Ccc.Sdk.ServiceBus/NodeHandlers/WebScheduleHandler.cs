@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Autofac;
 using Stardust.Node.Interfaces;
@@ -24,7 +25,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 		}
 
 		[AsSystem]
-		public virtual void Handle(WebScheduleStardustEvent parameters, CancellationTokenSource cancellationTokenSource, Action<string> sendProgress)
+		public virtual void Handle(WebScheduleStardustEvent parameters, 
+			CancellationTokenSource cancellationTokenSource, 
+			Action<string> sendProgress,
+			ref IEnumerable<object> returnObjects)
 		{
 			_stardustJobFeedback.SendProgress = sendProgress;
 			using (_dataSourceScope.OnThisThreadUse(parameters.LogOnDatasource))
