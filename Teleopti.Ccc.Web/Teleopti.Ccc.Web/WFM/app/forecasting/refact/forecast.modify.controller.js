@@ -162,9 +162,9 @@
           SelectedDays: vm.selectedDayCount,
           WorkloadId: vm.selectedWorkload.Workload.Id,
           ScenarioId: vm.selectedScenario.Id,
-          ShouldSetOverrideTasks: true,
-          ShouldSetOverrideTalkTime: true,
-          ShouldSetOverrideAfterCallWork: true
+		  ShouldOverrideTasks: true,
+		  ShouldOverrideAverageTaskTime: true,
+		  ShouldOverrideAverageAfterTaskTime: true
         }),
         function(data, status, headers, config) {
           vm.selectedWorkload.Days = data;
