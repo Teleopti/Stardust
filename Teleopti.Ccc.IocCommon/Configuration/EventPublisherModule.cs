@@ -27,6 +27,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<EventPopulatingPublisher>().As<IEventPopulatingPublisher>().SingleInstance();
 
 			builder.RegisterType<HangfireEventPublisher>().SingleInstance();
+
+			if (_configuration.Toggle(Toggles.ResourcePlanner_LessResourcesXXL_74915))
+			{
+				builder.RegisterType<EventRunnerThrottled>().As<IEventRunner>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<EventRunner>().As<IEventRunner>().SingleInstance();
+			}
+
 			builder.RegisterType<SyncInFatClientProcessEventPublisher>().SingleInstance();
 			builder.RegisterType<SyncEventPublisher>().SingleInstance();
 			builder.RegisterType<SyncAllEventPublisher>().SingleInstance();

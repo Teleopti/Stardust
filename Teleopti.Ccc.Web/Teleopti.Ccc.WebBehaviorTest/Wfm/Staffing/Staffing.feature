@@ -14,6 +14,7 @@ And There is a skill to monitor called 'Skill A' with queue id '1' and queue nam
 And There is a skill to monitor called 'Skill B' with queue id '2' and queue name 'queue2' and activity 'Chat'
 And There is a compensation with name 'Comparera'
 
+
 Scenario: View staffing for one skillgroup
 	Given the time is '2017-09-25 08:00'
 	And there is queue statistics for skill 'Skill A' until '2017-09-27 17:00'

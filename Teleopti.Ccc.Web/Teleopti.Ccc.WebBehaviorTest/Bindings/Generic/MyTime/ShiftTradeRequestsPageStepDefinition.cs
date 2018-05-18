@@ -384,6 +384,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.PressEnter(selector);
 		}
 
+		[When(@"I clear the name search box")]
+		public void WhenIClearTheNameSearchBox()
+		{
+			var selector = ".name-search input.form-control";
+			Browser.Interactions.FillWith(selector, "");
+			Browser.Interactions.PressEnter(selector);
+		}
 
 		[Then(@"I should see MySchedule is dayoff")]
 		public void ThenIShouldSeeMyScheduleIsDayoff()

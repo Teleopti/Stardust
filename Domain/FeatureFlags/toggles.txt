@@ -68,7 +68,7 @@ OvertimeRequestUseMostUnderStaffedSkill_47853 = RC
 OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944 = RC
 OvertimeRequestSupportMultiSelectionSkillTypes_74945 = RC
 OvertimeRequestStaffingCheckMethod_74949 = RC
-OvertimeRequestChangeBelongsToDateForOverNightShift_74984 = DEV
+OvertimeRequestChangeBelongsToDateForOverNightShift_74984 = RC
 OvertimeRequestUsePrimarySkillOption_75573 = RC
 
 Wfm_People_ImportAndCreateAgentFromFile_42528 = true

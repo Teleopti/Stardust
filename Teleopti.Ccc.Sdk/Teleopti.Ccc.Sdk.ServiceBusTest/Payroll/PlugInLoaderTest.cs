@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 
 			var domainAssemblyResolver = new DomainAssemblyResolver(new AssemblyFileLoader(searchPath));
 
-			target = new PlugInLoader(domainAssemblyResolver, searchPath);
+			target = new PlugInLoader(domainAssemblyResolver, searchPath, null);
 		}
 
 		[Test]
