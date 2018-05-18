@@ -29,6 +29,37 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public MergeIslandsSizeLimit MergeIslandsSizeLimit;
 
+		
+		[Test]
+		[Ignore("Delete me - just a temp test for 74915")]
+		public void ForKittensToUseWhenLabbing()
+		{
+			MergeIslandsSizeLimit.TurnOff_UseOnlyFromTest();
+			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
+			var firstDay = new DateOnly(2015, 10, 12);
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 4);
+			var activity = ActivityRepository.Has("_");
+			var scenario = ScenarioRepository.Has("_");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSetWithLoadsOfShifts = 
+				new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(0, 0, 24, 0, 1), new TimePeriodWithSegment(0, 0, 24, 0, 1), shiftCategory));
+			
+			const int numberOfIslands = 50;
+			const int numberOfAgentsPerIsland = 1;
+			for (var i = 0; i < numberOfIslands; i++)
+			{
+				var skill = SkillRepository.Has("skill", activity);
+				SkillDayRepository.Has(skill.CreateSkillDayWithDemandOnInterval(scenario, firstDay, 111));
+				for (int j = 0; j < numberOfAgentsPerIsland; j++)
+				{
+					PersonRepository.Has(new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSetWithLoadsOfShifts, skill);	
+				}
+			}
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 4);
+			
+			Target.DoScheduling(planningPeriod.Id.Value);
+		}
+		
 		[Test]
 		public void ShouldNotUseSkillsThatWereRemovedDuringIslandCreation()
 		{
