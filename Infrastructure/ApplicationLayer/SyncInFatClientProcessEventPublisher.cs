@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				from handlerType in resolver.HandlerTypesFor<IRunInSyncInFatClientProcess>(@event)
 				select new eventAndHandlerType { Event = @event, HandlerType = handlerType };
 
-			Parallel.ForEach(eventInfos, 
+			Parallel.ForEach(eventInfos, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount },
 			eventInfo =>
 			{
 				processor.Process(eventInfo.Event, eventInfo.HandlerType);
