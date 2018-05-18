@@ -10,9 +10,9 @@ CREATE TABLE dbo.ForecastDayOverride
 	OriginalTasks float NOT NULL,
 	OriginalAverageTaskTime float NOT NULL,
 	OriginalAverageAfterTaskTime float NOT NULL,
-	OverridedTasks float NULL,
-	OverridedAverageTaskTime float NULL,
-	OverridedAverageAfterTaskTime float NULL
+	OverriddenTasks float NULL,
+	OverriddenAverageTaskTime float NULL,
+	OverriddenAverageAfterTaskTime float NULL
 )
 GO
 

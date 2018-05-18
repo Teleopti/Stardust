@@ -4,14 +4,11 @@ using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public interface IForecastDayOverrideRepository : IRepository<IForecastDayOverride>
-	{
-		ICollection<IForecastDayOverride> FindRange(DateOnlyPeriod period, IWorkload workload, IScenario scenario);
-	}
 	public class ForecastDayOverrideRepository : Repository<IForecastDayOverride>, IForecastDayOverrideRepository
 	{
 		public ForecastDayOverrideRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)

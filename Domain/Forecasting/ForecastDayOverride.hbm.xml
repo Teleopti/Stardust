@@ -49,17 +49,17 @@
 				  not-null="true"
 				  access="property"/>
 
-		<property name="OverridedTasks"
+		<property name="OverriddenTasks"
 				  type="double"
 				  not-null="false"
 				  access="property"/>
 
-		<property name="OverridedAverageTaskTime"
+		<property name="OverriddenAverageTaskTime"
 				  type="TimeSpan"
 				  not-null="false"
 				  access="property"/>
 
-		<property name="OverridedAverageAfterTaskTime"
+		<property name="OverriddenAverageAfterTaskTime"
 				  type="TimeSpan"
 				  not-null="false"
 				  access="property"/>

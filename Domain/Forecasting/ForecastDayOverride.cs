@@ -13,9 +13,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		double OriginalTasks { get; set; }
 		TimeSpan OriginalAverageTaskTime { get; set; }
 		TimeSpan OriginalAverageAfterTaskTime { get; set; }
-		double? OverridedTasks { get; set; }
-		TimeSpan? OverridedAverageTaskTime { get; set; }
-		TimeSpan? OverridedAverageAfterTaskTime { get; set; }
+		double? OverriddenTasks { get; set; }
+		TimeSpan? OverriddenAverageTaskTime { get; set; }
+		TimeSpan? OverriddenAverageAfterTaskTime { get; set; }
 	}
 
 	public class ForecastDayOverride : VersionedAggregateRoot, IForecastDayOverride
@@ -65,19 +65,19 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			set => _originalAverageAfterTaskTime = value;
 		}
 
-		public virtual double? OverridedTasks
+		public virtual double? OverriddenTasks
 		{
 			get => _overridedTasks;
 			set => _overridedTasks = value;
 		}
 
-		public virtual TimeSpan? OverridedAverageTaskTime
+		public virtual TimeSpan? OverriddenAverageTaskTime
 		{
 			get => _overridedAverageTaskTime;
 			set => _overridedAverageTaskTime = value;
 		}
 
-		public virtual TimeSpan? OverridedAverageAfterTaskTime
+		public virtual TimeSpan? OverriddenAverageAfterTaskTime
 		{
 			get => _overridedAverageAfterTaskTime;
 			set => _overridedAverageAfterTaskTime = value;

@@ -221,6 +221,7 @@
     <Compile Include="Optimization\TeamBlock\ForecastAndScheduleSumForDay.cs" />
     <Compile Include="Optimization\WasReallyBetterResult.cs" />
     <Compile Include="RegisterEventHandlerInLifetimeScopeAttribute.cs" />
+    <Compile Include="Repositories\IForecastDayOverrideRepository.cs" />
     <Compile Include="Scheduling\IPredictShiftCategory.cs" />
     <Compile Include="Scheduling\IShiftCategoryPredictionModelLoader.cs" />
     <Compile Include="Scheduling\Rules\MaximumWorkdayRule.cs" />

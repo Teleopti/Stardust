@@ -228,11 +228,11 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 								OriginalTasks = model.Tasks,
 								OriginalAverageTaskTime = TimeSpan.FromSeconds(model.AverageTaskTime),
 								OriginalAverageAfterTaskTime = TimeSpan.FromSeconds(model.AverageAfterTaskTime),
-								OverridedTasks = model.OverrideTasks,
-								OverridedAverageTaskTime = model.OverrideAverageTaskTime.HasValue
+								OverriddenTasks = model.OverrideTasks,
+								OverriddenAverageTaskTime = model.OverrideAverageTaskTime.HasValue
 									? TimeSpan.FromSeconds(model.OverrideAverageTaskTime.Value)
 									: (TimeSpan?)null,
-								OverridedAverageAfterTaskTime = model.OverrideAverageAfterTaskTime.HasValue
+								OverriddenAverageAfterTaskTime = model.OverrideAverageAfterTaskTime.HasValue
 									? TimeSpan.FromSeconds(model.OverrideAverageAfterTaskTime.Value)
 									: (TimeSpan?)null
 							};
@@ -243,11 +243,11 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 						forecastDayOverride.OriginalTasks = model.Tasks;
 						forecastDayOverride.OriginalAverageTaskTime = TimeSpan.FromSeconds(model.AverageTaskTime);
 						forecastDayOverride.OriginalAverageAfterTaskTime = TimeSpan.FromSeconds(model.AverageAfterTaskTime);
-						forecastDayOverride.OverridedTasks = model.OverrideTasks;
-						forecastDayOverride.OverridedAverageTaskTime = model.OverrideAverageTaskTime.HasValue
+						forecastDayOverride.OverriddenTasks = model.OverrideTasks;
+						forecastDayOverride.OverriddenAverageTaskTime = model.OverrideAverageTaskTime.HasValue
 							? TimeSpan.FromSeconds(model.OverrideAverageTaskTime.Value)
 							: (TimeSpan?) null;
-						forecastDayOverride.OverridedAverageAfterTaskTime = model.OverrideAverageAfterTaskTime.HasValue
+						forecastDayOverride.OverriddenAverageAfterTaskTime = model.OverrideAverageAfterTaskTime.HasValue
 							? TimeSpan.FromSeconds(model.OverrideAverageAfterTaskTime.Value)
 							: (TimeSpan?) null;
 					}

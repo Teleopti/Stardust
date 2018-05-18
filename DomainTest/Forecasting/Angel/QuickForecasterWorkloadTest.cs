@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 				x => x.Fetch(workload, quickForecasterWorkloadParams.SkillDays, quickForecasterWorkloadParams.FuturePeriod))
 				.Return(futureWorkloadDays);
 			var target = new QuickForecasterWorkload(historicalData, futureData, forecastMethodProvider, outlierRemover,
-				new ForecastDayModelMapper());
+				new ForecastDayModelMapper(), new FakeForecastDayOverrideRepository(new FakeStorage()));
 
 			target.Execute(quickForecasterWorkloadParams);
 			outlierRemover.AssertWasCalled(x => x.RemoveOutliers(taskOwnerPeriod, method));

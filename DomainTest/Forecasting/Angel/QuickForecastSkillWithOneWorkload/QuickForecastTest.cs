@@ -17,6 +17,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Forecasting.Angel;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWorkload
@@ -61,7 +62,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 			var historicalData = new HistoricalData(dailyStatistics);
 			var methodProvider = new ForecastMethodProvider(new LinearRegressionTrendCalculator());
 			var outlierRemover = new OutlierRemover();
-			var quickForecasterWorkload = new QuickForecasterWorkload(historicalData, futureData, methodProvider, outlierRemover, new ForecastDayModelMapper());
+			var quickForecasterWorkload = new QuickForecasterWorkload(historicalData, futureData, methodProvider, outlierRemover, new ForecastDayModelMapper(),
+				new FakeForecastDayOverrideRepository(new FakeStorage()));
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
 			historicalPeriodProvider.Stub(x => x.AvailablePeriod(Workload)).Return(HistoricalPeriodForForecast);
 			var forecastMethodProvider = methodProvider;
