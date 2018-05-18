@@ -209,17 +209,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void GivenIPickTheSkillGroup(string skillName)
 		{
 			//Browser.SetDefaultTimeouts(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(1));
-			Browser.Interactions.AssertExists("skill-picker");
-			var javascript = "var scope = angular.element(document.querySelector('skill-picker')).scope();" +
-							 "var sg = scope.vm.skillAreas.find(function(e){{return e.Name === '" + skillName + "'}});" +
-							 "scope.vm.selectedSkillArea = sg;" +
-							 "scope.vm.preselectedItem = sg;" +
-							 "scope.vm.selectSkillOrSkillArea(sg);";
-			Browser.Interactions.TryUntil(
-				() => { Browser.Interactions.Javascript(javascript); },
-				() => Browser.Interactions.IsVisible("skill-picker")
-				, TimeSpan.FromSeconds(1)
-			);
+			Browser.Interactions.AssertExists("the-skill-picker");
+
+			Browser.Interactions.ClickVisibleOnly("the-skill-picker .con-flex:nth-child(2n) div.wfm-form input");
+			Browser.Interactions.ClickContaining("the-skill-picker .con-flex:nth-child(2n) div.wfm-form .wfm-dropdown-panel li", skillName);
 		}
 
 		[Given(@"I select the skill '(.*)'")]
