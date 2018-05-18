@@ -110,5 +110,33 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 				result.Success.Should().Be.True();
 			}
 		}
+
+		[Test]
+		public void ShouldEnforceSameLengthOnChangePasswords()
+		{
+			//new fresh
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			int id;
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			{
+				var addUserModel = new AddUserModel { ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };
+				Target.AddUser(addUserModel);
+			}
+			var model = new LoginModel { GrantType = "password", Password = "passadej", UserName = "ola@teleopti.com" };
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			{
+				var result = Target.Login(model).Content;
+				id = result.Id;
+			}
+			var changeModel = new ChangePasswordModel { Id = id, OldPassword = "passadej", NewPassword = "short", ConfirmNewPassword = "short" };
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			{
+				var changeResult = Target.ChangePassword(changeModel).Content;
+				changeResult.Success.Should().Be.False();
+				changeResult.Message.Should().Be.EqualTo("Password must be at least 6 characters.");
+			}
+			
+		}
+
 	}
 }
