@@ -228,7 +228,6 @@
     <Compile Include="Persisters\Schedules\Performance\NoUnnecessaryUpdatesWhenAddingNewAssignmentTest.cs" />
     <Compile Include="Persisters\Schedules\ReadWriteDeadlockTest.cs" />
     <Compile Include="Persisters\Schedules\ScheduleDifferenceSaverTest.cs" />
-    <Compile Include="Purge\PurgeSettingTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\AgentStateReadModelForTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\AgentStateReadModelPersisterExtensions.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\AgentStateReadModelPersisterTest.cs" />
