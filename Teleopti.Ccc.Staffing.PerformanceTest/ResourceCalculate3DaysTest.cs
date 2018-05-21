@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 	[StaffingPerformanceTest]
 	public class ResourceCalculate3DaysTest : PerformanceTestWithOneTimeSetup
 	{
-		public UpdateStaffingLevelReadModelOnlySkillCombinationResources UpdateStaffingLevel;
+		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;
 		public MutableNow Now;
 		public WithUnitOfWork WithUnitOfWork;
 		public IDataSourceScope DataSource;
