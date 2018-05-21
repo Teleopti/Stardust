@@ -38,6 +38,19 @@ GO
 ALTER TABLE dbo.RecurrentWeeklyMeetingWeekDays
 	DROP CONSTRAINT FK_RecurrentWeeklyMeetingWeekDays_RecurrentWeeklyMeeting
 GO
+
+;WITH dublett (RecurrentWeeklyMeeting, DayOfWeek, rank) AS
+(
+SELECT
+	RecurrentWeeklyMeeting, 
+	DayOfWeek, 
+	ROW_NUMBER() OVER (PARTITION BY RecurrentWeeklyMeeting, DayOfWeek ORDER BY RecurrentWeeklyMeeting, DayOfWeek ASC) AS 'RANK'
+FROM RecurrentWeeklyMeetingWeekDays 
+)
+DELETE FROM dublett
+WHERE RANK >1;
+GO
+
 ALTER TABLE dbo.RecurrentWeeklyMeeting SET (LOCK_ESCALATION = TABLE)
 GO
 
