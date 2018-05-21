@@ -676,6 +676,9 @@ begin
 		return
 end
 
+DELETE FROM Tenant.Security
+WHERE DateTimeUtc < DATEADD(DAY , -(select value from PurgeSetting where [key] = 'DaysToKeepSecurityAudit') , GETUTCDATE())
+
 --ToDo: BudgetDay, Meeting, MultiSiteDay, SkillDay
 /*
 exec Purge
