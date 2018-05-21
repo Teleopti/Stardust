@@ -44,6 +44,12 @@ describe('ForecastCtrl', function() {
         DefaultScenario:true
       }
 
+      scenario2 = {
+        Id:"18b34548-3604-49fe-9584-9b5e015ab432",
+        Name:"High",
+        DefaultScenario:false
+      }
+
       $httpBackend.whenPOST('../api/Forecasting/LoadForecast').respond(function (method, url, data, headers) {
         return [201, {
           ForecastDays: [{
@@ -91,6 +97,16 @@ describe('ForecastCtrl', function() {
 
     expect(vm.selectedWorkload.Id).toEqual('dfg');
     expect(vm.selectedScenario.Id).toEqual('e21d813c-238c-4c3f-9b49-9b5e015ab432');
+  }));
+
+  it('should be able to forecast clean scenario', inject(function () {
+    vm.changeScenario(scenario2);
+
+    expect(vm.selectedWorkload.Days.length).toEqual(0);
+    expect(vm.selectedScenario.Id).toEqual(scenario2.Id);
+
+    vm.forecastWorkload();
+    //should complete forecast without issue
   }));
 
 });
