@@ -14,12 +14,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 		public IEnumerable<SkillInIntraday> GetAll()
 		{
-			return _loadAllSkillInIntradays.SkillsWithAtleastOneQueueSource();
+			return _loadAllSkillInIntradays.Skills();
 		}
-
-		//public IEnumerable<SkillInIntraday> GetAllInOneSkillArea(Guid skillAreaId)
-		//{
-			
-		//}
 	}
 }

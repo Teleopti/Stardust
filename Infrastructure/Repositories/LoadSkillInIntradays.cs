@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_skillTypeInfoProvider = skillTypeInfoProvider;
 		}
 
-		public IEnumerable<SkillInIntraday> SkillsWithAtleastOneQueueSource()
+		public IEnumerable<SkillInIntraday> Skills()
 		{
 			var skillRepo = new SkillRepository(_currentUnitOfWork.Current());
 			var skills = skillRepo.FindSkillsWithAtLeastOneQueueSource();
@@ -30,17 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return map(skills);
 		}
 
-		public IEnumerable<SkillInIntraday> AllSkills()
-		{
-			var skillRepo = new SkillRepository(_currentUnitOfWork.Current());
-			//until i found another method
-
-			var skills = skillRepo.LoadAllSkills();
-
-			skills = skills.Where(x => !(x is IChildSkill));
-			return map(skills);
-		}
-
+		
 		private List<SkillInIntraday> map(IEnumerable<ISkill> skills)
 		{
 			return skills.Select(skill =>

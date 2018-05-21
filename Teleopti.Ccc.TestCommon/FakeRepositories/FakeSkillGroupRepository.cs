@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_skillInIntradays.Add(existingSkillInIntraday);
 		}
 
-		public IEnumerable<SkillInIntraday> SkillsWithAtleastOneQueueSource()
+		public IEnumerable<SkillInIntraday> Skills()
 		{
 			return _skillInIntradays;
 		}

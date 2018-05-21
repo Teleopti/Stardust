@@ -302,6 +302,7 @@
     <Compile Include="RealTimeAdherence\Domain\Service\UnrecognizedStatesTest2.cs" />
     <Compile Include="Repositories\AgentBadgeRepositoryTest.cs" />
     <Compile Include="Repositories\AgentBadgeWithRankRepositoryTest.cs" />
+    <Compile Include="Repositories\AllSkillForSkillGroupProviderTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsSiteRepositoryTest.cs" />
     <Compile Include="Repositories\ASMScheduleChangeTimeRepositoryTest.cs" />
     <Compile Include="Repositories\Audit\ScheduleAuditTrailReportTest.cs" />

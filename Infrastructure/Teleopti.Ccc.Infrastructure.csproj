@@ -311,6 +311,7 @@
     <Compile Include="RealTimeAdherence\Tracer\RtaTracerSessionFactory.cs" />
     <Compile Include="RealTimeAdherence\Tracer\RtaTracerWriter.cs" />
     <Compile Include="MultiTenancy\Server\Queries\IFindExternalApplicationAccess.cs" />
+    <Compile Include="Repositories\AllSkillForSkillGroupProvider.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsSiteRepository.cs" />
     <Compile Include="Repositories\Audit\ScheduleAuditTrailReport.cs" />
     <Compile Include="Repositories\ExternalPerformanceDataRepository.cs" />

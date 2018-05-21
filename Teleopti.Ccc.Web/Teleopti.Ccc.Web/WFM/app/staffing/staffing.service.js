@@ -10,7 +10,7 @@
 	var monitorskillareastaffingByDate = $resource('../api/staffing/monitorskillareastaffing');
 	var monitorskillstaffingByDate = $resource('../api/staffing/monitorskillstaffing');
 	  var skills = $resource("../api/staffing/skills");
-	  var areas = $resource("../api/skillgroup/skillgroupsallskills");
+	  var areas = $resource("../api/skillgroup/skillgroups");
 	var overtime = $resource('../api/staffing/overtime');
 	var suggestion = $resource('../api/staffing/overtime/suggestion');
 	var compensations = $resource('../api/staffing/GetCompensations');

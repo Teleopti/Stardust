@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.SkillGroups
 	{
 		public SkillGroupViewModelBuilder Target;
 		public FakeSkillGroupRepository SkillGroupRepository;
-		public FakeLoadAllSkillInIntradays LoadAllSkillInIntradays;
+		public FakeSkillRepository SkillRepository;
 		public FakeUserUiCulture UiCulture;
 		private readonly List<SkillInIntraday> defaultSkills = new List<SkillInIntraday>();
 
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.SkillGroups
 			SkillGroupRepository.Has(new SkillGroup {Skills = defaultSkills}.WithId());
 			SkillGroupRepository.Has(new SkillGroup {Skills = defaultSkills}.WithId());
 
-			Target.GetAllWithAtleastOneQueue().Count()
+			Target.GetAll().Count()
 				.Should().Be.EqualTo(2);
 		}
 
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.SkillGroups
 			SkillGroupRepository.Has(new SkillGroup {Name = "A", Skills = defaultSkills}.WithId());
 
 			UiCulture.IsSwedish();
-			Target.GetAllWithAtleastOneQueue().Select(sa => sa.Name).Should().Have.SameSequenceAs(new[] {"A", "B", "C"});
+			Target.GetAll().Select(sa => sa.Name).Should().Have.SameSequenceAs(new[] {"A", "B", "C"});
 		}
 
 		[Test]
@@ -68,37 +68,38 @@ namespace Teleopti.Ccc.DomainTest.SkillGroups
 			SkillGroupRepository.Has(new SkillGroup {Name = "Å", Skills = defaultSkills}.WithId());
 
 			UiCulture.IsSwedish();
-			Target.GetAllWithAtleastOneQueue().Select(sa => sa.Name).Should().Have.SameSequenceAs(new[] {"A", "Å", "Ä"});
+			Target.GetAll().Select(sa => sa.Name).Should().Have.SameSequenceAs(new[] {"A", "Å", "Ä"});
 		}
 
 		[Test]
 		public void ShouldMapViewModelCorrectly()
 		{
+			var skill = SkillFactory.CreateSkill("skill").WithId();
+			SkillRepository.Has(skill);
 			var existingSkillArea = new SkillGroup
 			{
 				Name = RandomName.Make(),
 				Skills = new List<SkillInIntraday>
 				{
-					new SkillInIntraday {Id = Guid.NewGuid(), Name = RandomName.Make(), IsDeleted = false}
+					new SkillInIntraday {Id = skill.Id.GetValueOrDefault(), Name = skill.Name, IsDeleted = false}
 				}
 			}.WithId();
 
 			SkillGroupRepository.Has(existingSkillArea);
 
-			var skillInIntraday = new SkillInIntraday() {Id = existingSkillArea.Skills.First().Id, DoDisplayData = true, SkillType = "InboundPhone"};
-			LoadAllSkillInIntradays.Has(skillInIntraday);
-
-			var result = Target.GetAllWithAtleastOneQueue().Single();
+			var skillInIntraday = new SkillInIntraday() {Id = existingSkillArea.Skills.First().Id, DoDisplayData = true, SkillType = "SkillTypeInboundTelephony" };
+			
+			var result = Target.GetAll().Single();
 
 			result.Should().Be.OfType<SkillGroupViewModel>();
 			result.Id.Should().Be.EqualTo(existingSkillArea.Id);
 			result.Name.Should().Be.EqualTo(existingSkillArea.Name);
 			result.Skills.Count().Should().Be.EqualTo(1);
-			var skill = existingSkillArea.Skills.First();
+			var existingSkill = existingSkillArea.Skills.First();
 			var mappedSkill = result.Skills.First();
-			mappedSkill.Id.Should().Be.EqualTo(skill.Id);
-			mappedSkill.Name.Should().Be.EqualTo(skill.Name);
-			mappedSkill.IsDeleted.Should().Be.EqualTo(skill.IsDeleted);
+			mappedSkill.Id.Should().Be.EqualTo(existingSkill.Id);
+			mappedSkill.Name.Should().Be.EqualTo(existingSkill.Name);
+			mappedSkill.IsDeleted.Should().Be.EqualTo(existingSkill.IsDeleted);
 			mappedSkill.SkillType.Should().Be.EqualTo(skillInIntraday.SkillType);
 			mappedSkill.DoDisplayData.Should().Be.EqualTo(skillInIntraday.DoDisplayData);
 		}
@@ -118,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.SkillGroups
 
 			SkillGroupRepository.Has(existingSkillArea);
 
-			var result = Target.GetAllWithAtleastOneQueue().Single();
+			var result = Target.GetAll().Single();
 
 			result.Should().Be.OfType<SkillGroupViewModel>();
 			result.Id.Should().Be.EqualTo(existingSkillArea.Id);
@@ -172,7 +173,7 @@ namespace Teleopti.Ccc.DomainTest.SkillGroups
 
 			SkillGroupRepository.Has(existingSkillArea);
 
-			var result = Target.GetAllWithAtleastOneQueue().FirstOrDefault();
+			var result = Target.GetAll().FirstOrDefault();
 
 			result.Should().Be.Null();
 		}

@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		{
 			return Ok(new SkillGroupInfo
 			{
-				SkillAreas = _skillGroupViewModelBuilder.GetAllWithAtleastOneQueue()
+				SkillAreas = _skillGroupViewModelBuilder.GetAll()
 			});
 		}
 
