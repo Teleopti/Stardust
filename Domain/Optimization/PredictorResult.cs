@@ -2,34 +2,34 @@
 {
 	public class PredictorResult
 	{
-		private readonly bool _breaksMinimumAgents;
 		private readonly double _standardDeviation;
+		private readonly int _brokenMinimumAgentsInterval;
 
 		public static PredictorResult Create(double currentResult, double predictedResult)
 		{
-			return new PredictorResult(predictedResult < currentResult, currentResult, false);
+			return new PredictorResult(predictedResult < currentResult, currentResult, 0);
 		}
 
-		public static PredictorResult CreateBreaksDueToMinimumAgents(double currentResult)
+		public static PredictorResult CreateBreaksDueToMinimumAgents(double currentResult, int brokenMinimumAgentsInterval)
 		{
-			return new PredictorResult(true, currentResult, true);
+			return new PredictorResult(true, currentResult, brokenMinimumAgentsInterval);
 		}
 		
-		private PredictorResult(bool isBetter, double standardDeviation, bool breaksMinimumAgents)
+		private PredictorResult(bool isBetter, double standardDeviation, int brokenMinimumAgentsInterval)
 		{
 			IsBetter = isBetter;
 			_standardDeviation = standardDeviation;
-			_breaksMinimumAgents = breaksMinimumAgents;
+			_brokenMinimumAgentsInterval = brokenMinimumAgentsInterval;
 		}
 		
 		public bool IsBetter { get; }
 
-		public WasReallyBetterResult IsBetterThan(bool currentlyBreakingMinimumAgents, double currentStandardDeviation)
+		public WasReallyBetterResult IsBetterThan(double currentStandardDeviation, int currentBrokenMinimumAgentsInterval)
 		{
-			if (currentlyBreakingMinimumAgents && !_breaksMinimumAgents)
+			if (currentBrokenMinimumAgentsInterval > _brokenMinimumAgentsInterval)
 				return WasReallyBetterResult.NoDueToMinimumAgents;
 
-			if (!currentlyBreakingMinimumAgents && _breaksMinimumAgents)
+			if (_brokenMinimumAgentsInterval > currentBrokenMinimumAgentsInterval)
 				return WasReallyBetterResult.Yes;
 			
 			return currentStandardDeviation < _standardDeviation ? 
