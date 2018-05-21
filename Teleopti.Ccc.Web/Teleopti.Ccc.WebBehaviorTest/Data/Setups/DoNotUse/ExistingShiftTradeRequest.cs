@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 
 		private static IPerson getOrCreatePerson(string name, ICurrentUnitOfWork uow)
 		{
-			var personName = new CreateName().FromString(name);
+			var personName = new Name(name, "");
 			var personRepository = new PersonRepository(uow);
 			var people = personRepository.LoadAll();
 			var person = people.FirstOrDefault(p => p.Name == personName);
