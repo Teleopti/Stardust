@@ -1422,6 +1422,7 @@
     <Content Include="Areas\MyTime\Content\Css\CiscoWidget.css" />
     <Content Include="Areas\MyTime\Content\Css\MobileDayView.css" />
     <Content Include="Areas\MyTime\Content\Css\MobileMonthView.css" />
+    <Content Include="Areas\MyTime\Content\Css\MobileTeamSchedule.css" />
     <Content Include="Areas\MyTime\Content\Images\logo.png" />
     <Content Include="Areas\MyTime\Content\Images\seat.svg" />
     <Content Include="Areas\MyTime\Content\Scripts\qrcode.js" />
@@ -2486,6 +2487,8 @@
     <Content Include="Areas\Start\Content\Scripts\jquery.extensions.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Common.js" />
     <Content Include="Areas\MyTime\Views\TeamSchedule\NoPersonPeriodPartial.cshtml" />
+    <Content Include="Areas\MyTime\Views\TeamSchedule\NewTeamSchedulePartial.cshtml" />
+    <Content Include="Areas\MyTime\Views\TeamSchedule\NewTeamSchedulePartial.mobile.cshtml" />
     <Content Include="Areas\MyTime\Views\Preference\NoPersonPeriodPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Asm\Index.cshtml" />
     <Content Include="Areas\MyTime\Views\Message\MessagePartial.cshtml" />

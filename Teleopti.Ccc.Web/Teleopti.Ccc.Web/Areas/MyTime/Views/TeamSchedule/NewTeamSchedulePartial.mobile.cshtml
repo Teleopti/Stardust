@@ -3,4 +3,134 @@
 	Layout = null;
 }
 
-New TeamSchedule Mobile View!
+<div class="mobile-teamschedule-view">
+	<div class="navbar navbar-teleopti subnavbar">
+		<div class="container mobile-teamschedule-view-nav">
+			<ul class="nav navbar-nav navbar-teleopti row submenu">
+				<li class="mobile-datepicker">
+					<div class="input-group">
+						<span class="input-group-btn">
+							<button class="btn btn-default" type="button" data-bind="click: previousDay">
+								<i class="glyphicon glyphicon-chevron-left"></i>
+							</button>
+						</span>
+						<input class="form-control text-center date-input-style" type="text" readonly="readonly" disabled="disabled" data-bind="value: displayDate"/>
+						<span class="input-group-btn">
+							<span class="btn btn-default moment-datepicker" type="button">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</span>
+							<button class="btn btn-default" type="button" data-bind="click: nextDay">
+								<i class="glyphicon glyphicon-chevron-right"></i>
+							</button>
+						</span>
+					</div>
+				</li>
+				<li>
+					<select>
+						<option>
+							Team Preference
+						</option>
+
+						<option>
+							Team Student
+						</option>
+
+						<option>
+							Team 
+						</option>
+					</select>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="mobile-teamschedule-view-body container">
+		<div class="mobile-timeline floatleft">
+			<!-- ko foreach: timeLines -->
+			<div class="mobile-timeline-label absolute">
+			</div>
+			<!-- /ko -->
+		</div>
+		
+		<div class="my-schedule-column" >
+			<div class="schedule-item">
+				<div class="agent-name">
+					<span> My </span>
+				</div>
+				<!-- ko if: mySchedule -->
+				<div class="mobile-schedule-container relative" >
+					<!-- ko foreach: mySchedule().layers -->
+					<div class="mobile-schedule-layer absolute" >
+						<div class="start-dashed-line"></div>
+						<div class="end-dashed-line"></div>
+						<p class="start-label-text">
+							<i class="glyphicon glyphicon-remove"></i>
+							<span ></span>
+						</p>
+
+						<i class="glyphicon glyphicon-resize-vertical"></i>
+						<div class="original-place-of-layer"></div>
+	
+						<div >
+							<strong xdata-bind="text: title()"></strong>
+							<!-- ko if: hasMeeting -->
+							<div class="meeting floatright">
+								<i class="meeting-icon mr10">
+									<i class="glyphicon glyphicon-user ml10"></i>
+								</i>
+							</div>
+							<!-- /ko -->
+							<span class="fullwidth displayblock"></span>
+						</div>
+						<div >
+							<i class="glyphicon glyphicon-time"></i>
+						</div>
+					</div>
+					<!-- /ko -->
+				</div>
+				<!-- /ko -->
+			</div>
+		</div>
+
+		<div class="teammates-schedules-column" >
+			<!-- ko foreach: teamSchedules -->
+			<div class="schedule-item">
+				<div class="agent-name">
+					<span ></span>
+				</div>
+				<div class="mobile-schedule-container relative" >
+						<!-- ko foreach: layers-->
+						<div class="mobile-schedule-layer absolute">
+							<div >
+								<strong ></strong>
+								<!-- ko if: hasMeeting -->
+								<div class="meeting floatright">
+									<i class="meeting-icon mr10">
+										<i class="glyphicon glyphicon-user ml10"></i>
+									</i>
+								</div>
+								<!-- /ko -->
+								<span class="fullwidth displayblock" ></span>
+							</div>
+							<div >
+								<i class="glyphicon glyphicon-time"></i>
+							</div>
+						</div>
+						<!-- /ko -->
+					<!-- /ko -->
+				</div>
+			</div>
+			<!-- /ko -->
+		</div>
+
+		<div class="move-activity-confirm-dialog" data-bind="visible: false">
+			<p>
+				Do you want to move your '<span data-bind="text: 'selectedLayerTitle'"></span>' from <span data-bind="text: fromTimeLabel"> </span> to <span data-bind="text: 'toTimeLabel'"> </span>?
+			</p>
+			<div class="confirm-buttons">
+				<button class="btn btn-default no-button">No</button>
+				<button class="btn btn-primary yes-button">Yes</button>
+			</div>
+		</div>
+	</div>
+</div>
