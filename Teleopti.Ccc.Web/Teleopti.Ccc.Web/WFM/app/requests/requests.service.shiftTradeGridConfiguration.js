@@ -129,6 +129,8 @@
 						cellClass: 'request-period-start-time',
 						headerCellClass: 'request-period-start-time-header',
 						visible: false,
+						pinnedRight: true,
+						enablePinning: false,
 						minWidth: 111
 					},
 					{
@@ -138,6 +140,8 @@
 						cellClass: 'request-period-end-time',
 						headerCellClass: 'request-period-end-time-header',
 						visible: false,
+						pinnedRight: true,
+						enablePinning: false,
 						minWidth: 111
 					},
 					{
@@ -148,6 +152,8 @@
 						enableSorting: false,
 						visible: false,
 						headerCellClass: 'request-period-duration-header',
+						pinnedRight: true,
+						enablePinning: false,
 						minWidth: 111
 					},
 					{
@@ -159,6 +165,7 @@
 						headerCellClass: 'request-agent-name-header',
 						enableSorting: false,
 						pinnedLeft: true,
+						enablePinning: false,
 						minWidth: 111
 					},
 					{
@@ -168,6 +175,8 @@
 						cellClass: 'request-time-zone',
 						headerCellClass: 'request-time-zone-header',
 						enableSorting: false,
+						pinnedRight: true,
+						enablePinning: false,
 						visible: false,
 						minWidth: 111
 					},
@@ -180,6 +189,7 @@
 						cellTemplate: '<table style="width: 100%; height: 100%;"><tr><td> {{row.entity[col.field]}}</td></tr><tr><td> {{row.entity["PersonToTeam"]}}</td></tr></table>',
 						enableSorting: false,
 						pinnedLeft: true,
+						enablePinning: false,
 						minWidth: 111
 					},
 					{
@@ -189,6 +199,8 @@
 						cellClass: 'request-seniority',
 						headerCellClass: 'request-seniority-header',
 						visible: false,
+						pinnedRight: true,
+						enablePinning: false,
 						minWidth: 111
 					},
 					{
@@ -202,6 +214,8 @@
 							placeholder: $translate.instant('FilterThreeDots')
 						},
 						visible: false,
+						pinnedRight: true,
+						enablePinning: false,
 						minWidth: 111,
 						cellTooltip: true,
 						filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\" > <input ng-enter=\"enter()\" ' +
@@ -216,6 +230,8 @@
 						cellClass: 'request-message',
 						headerCellClass: 'request-message-header',
 						visible: false,
+						pinnedRight: true,
+						enablePinning: false,
 						minWidth: 111,
 						cellTooltip: true,
 						filter: {
@@ -234,6 +250,8 @@
 						cellClass: 'request-deny-reason',
 						headerCellClass: 'request-deny-reason-header',
 						visible: false,
+						pinnedRight: true,
+						enablePinning: false,
 						minWidth: 111,
 						cellTooltip: true
 					},
@@ -245,6 +263,8 @@
 						headerCellClass: 'request-status-header',
 						visible: true,
 						enableSorting: false,
+						pinnedRight: true,
+						enablePinning: false,
 						minWidth: 111,
 						filterHeaderTemplate: '<md-select ng-model-options=\"{trackBy: \'$value.Id\'}\" ng-repeat=\"colFilter in col.filters\" md-on-close=\"grid.appScope.statusFilterClose()\"'
 							+ 'multiple ng-model=\"grid.appScope.selectedRequestStatuses\" placeholder=\"{{\'FilterColon\' | translate}} {{\'Status\' | translate}}\" aria-label=\"{{\'Status\' | translate}}\">'
@@ -259,6 +279,8 @@
 						headerCellFilter: 'translate',
 						cellClass: 'request-created-time',
 						headerCellClass: 'request-created-time-header',
+						pinnedRight: true,
+						enablePinning: false,
 						minWidth: 111
 					},
 					{
@@ -268,6 +290,8 @@
 						cellClass: 'request-updated-time',
 						visible: false,
 						headerCellClass: 'request-updated-time-header',
+						pinnedRight: true,
+						enablePinning: false,
 						minWidth: 111
 					}
 				];
@@ -282,10 +306,12 @@
 				return {
 					displayName: 'ShiftTrade',
 					field: 'AgentName',
+					enablePinning: false,
 					enableColumnMenu: false,
 					enableHiding: false,
 					cellTemplate: 'shift-trade-day-template.html',
 					width: numberOfDays * 40,
+
 					enableSorting: false,
 					enableFiltering: false,
 					isShiftTradeDayColumn: true
@@ -303,6 +329,8 @@
 						cellClass: 'request-broken-rules',
 						cellTooltip: true,
 						visible: true,
+						pinnedRight: true,
+						enablePinning: false,
 						enableSorting: false,
 						minWidth: 111
 					};
