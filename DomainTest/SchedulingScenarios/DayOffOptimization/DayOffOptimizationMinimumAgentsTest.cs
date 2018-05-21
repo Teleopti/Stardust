@@ -40,18 +40,20 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var shiftCategory = new ShiftCategory().WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var agent = PersonRepository.Has(schedulePeriod, ruleSet, skill);
+			var alreadyScheduledAgent = PersonRepository.Has(skill);
 			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date,
-				0.8, //minimum staffing = 1, prevent putting DO here
-				0.9, //DO should end up here
-				1,
-				1,
-				1,
-				1, //DO from beginning
-				1)
+				1.8, //minimum staffing = 1, prevent putting DO here
+				1.9, //DO should end up here
+				2,
+				2,
+				2,
+				2, //DO from beginning
+				2)
 			);
-			skillDays.First().SetMinimumAgents(new TimePeriod(8, 16), 1);
+			skillDays.First().SetMinimumAgents(new TimePeriod(8, 16), 2);
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
 			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate).WithDayOff();
+			PersonAssignmentRepository.Has(alreadyScheduledAgent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
 
 			Target.Execute(planningPeriod.Id.Value);
 
@@ -71,20 +73,22 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var shiftCategory = new ShiftCategory().WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var agent = PersonRepository.Has(schedulePeriod, ruleSet, skill);
+			var alreadyScheduledAgent = PersonRepository.Has(skill);
 			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date,
-				0.1, //minimum staffing = 1, prevent putting DO here
-				0.1, //minimum staffing = 1, prevent putting DO here
-				0.2,
-				0.2,
-				1,
-				1, //DO from beginning
-				1) //DO from beginning
+				1.1, //minimum staffing = 1, prevent putting DO here
+				1.1, //minimum staffing = 1, prevent putting DO here
+				1.2,
+				1.2,
+				2,
+				2, //DO from beginning
+				2) //DO from beginning
 			);
-			skillDays[0].SetMinimumAgents(new TimePeriod(8, 16), 1);
-			skillDays[1].SetMinimumAgents(new TimePeriod(8, 16), 1);
+			skillDays[0].SetMinimumAgents(new TimePeriod(8, 16), 2);
+			skillDays[1].SetMinimumAgents(new TimePeriod(8, 16), 2);
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
 			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate).WithDayOff();
 			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate).WithDayOff();
+			PersonAssignmentRepository.Has(alreadyScheduledAgent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
 
 			Target.Execute(planningPeriod.Id.Value);
 
