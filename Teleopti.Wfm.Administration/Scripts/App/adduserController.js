@@ -141,7 +141,7 @@
 						vm.ErrorMessage = data.Message;
 						return;
 					}
-					window.location = "/#";
+					window.location = document.location.toString().replace("firstuser.html", "");
 				})
 				.error(function(xhr, ajaxOptions, thrownError) {
 					vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
