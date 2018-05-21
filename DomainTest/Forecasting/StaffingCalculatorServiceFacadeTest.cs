@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			const double forecasted = 10d;
 			var esl = Target.ServiceLevelAchievedOcc(agents, 20, tasks, 550, TimeSpan.FromMinutes(15), .8, forecasted, 3, 0);
 
-			esl.Should().Be.EqualTo(0d);
+			esl.Should().Be.LessThan(0.000001);
 		}
 
 		[Test]
