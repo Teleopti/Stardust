@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				{
 					var predictorResult = _dayOffOptimizerPreMoveResultPredictor.IsPredictedBetterThanCurrent(matrix.Item1, resultingArray, originalArray, dayOffOptimizationPreference, 
 						numberOfDayOffsMoved, optimizationPreferences, schedulingResultStateHolder, movedDaysOff);
-					if (!predictorResult.IsBetter)
+					if (predictorResult.IsDefinatlyWorse)
 					{
 						stopOptimizeTeamInfo[matrix.Item2] = false;
 						matrix.Item2.LockDays(movedDaysOff.ModifiedDays());

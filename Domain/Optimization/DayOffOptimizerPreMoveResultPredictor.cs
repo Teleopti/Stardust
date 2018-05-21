@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			
 			if (brokenMinimumAgentsIntervals > 0)
 			{
-				return PredictorResult.CreateBreaksDueToMinimumAgents(currentResult, brokenMinimumAgentsIntervals);
+				return PredictorResult.CreateDueToMinimumAgents(currentResult, brokenMinimumAgentsIntervals);
 			}
 	
 			var averageWorkTime = TimeSpan.FromTicks(matrix.SchedulePeriod.AverageWorkTimePerDay.Ticks * numberOfDayOffsMoved);
