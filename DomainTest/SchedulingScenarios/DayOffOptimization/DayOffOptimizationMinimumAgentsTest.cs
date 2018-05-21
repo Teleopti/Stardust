@@ -333,6 +333,33 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				.Should().Not.Be.EqualTo(skillDays[6].CurrentDate); //should have been moved
 		}
 		
+		[Test]
+		public void ShouldTryToMoveDayOffIfMoveFailedDueToNewBrokenMinimumAgents()
+		{
+			var date = new DateOnly(2015, 10, 12);
+			var activity = ActivityRepository.Has();
+			var skill = SkillRepository.Has("skill", activity);
+			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
+			var scenario = ScenarioRepository.Has();
+			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1).NumberOfDaysOf(1);
+			var shiftCategory = new ShiftCategory().WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), shiftCategory));
+			var agent = PersonRepository.Has(schedulePeriod, ruleSet, skill);
+			var skillDays = skill.CreateSkillDayWithDemandOnInterval(scenario, new DateOnlyPeriod(date.AddDays(1), date.AddDays(6)), 2).ToList();
+			skillDays.Add(skill.CreateSkillDayWithDemandOnInterval(scenario, date.AddDays(0), 0.5)); //will first try to make move here
+			skillDays.Single(x => x.CurrentDate == date).SetMinimumAgents(new TimePeriod(8, 16), 1); //..but will be rolled back (should then move sucessfully move to another day)
+			skillDays.Single(x => x.CurrentDate == date.AddDays(6)).SetMinimumAgents(new TimePeriod(13, 14), 1);
+			SkillDayRepository.Has(skillDays);
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
+			PersonAssignmentRepository.GetSingle(date.AddDays(6), agent).WithDayOff();
+
+			Target.Execute(planningPeriod.Id.Value);
+			
+			PersonAssignmentRepository.LoadAll().Single(x => x.DayOff() != null).Date
+				.Should().Not.Be.EqualTo(date.AddDays(0))
+				.And.Not.Be.EqualTo(date.AddDays(6));
+		}
+		
 		public DayOffOptimizationMinimumAgentsTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerMinimumAgents75339, bool resourcePlannerLessResourcesXXL74915) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerMinimumAgents75339, resourcePlannerLessResourcesXXL74915)
 		{
 			if(!ResourcePlannerMinimumAgents75339)
