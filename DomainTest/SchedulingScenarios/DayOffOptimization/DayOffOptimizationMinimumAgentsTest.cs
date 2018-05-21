@@ -282,7 +282,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		}
 		
 		[Test]
-		[Timeout(5000)]
+		[Timeout(8000)]
 		public void ShouldNotHangDueToPingPongBetweenTwoDays()
 		{
 			var date = new DateOnly(2015, 10, 12);
