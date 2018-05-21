@@ -57,6 +57,7 @@ _ReSharper*/
 *.tmp_proj
 *.rej
 Logs/
+*.DotSettings
 
 # packages
 node_modules/
