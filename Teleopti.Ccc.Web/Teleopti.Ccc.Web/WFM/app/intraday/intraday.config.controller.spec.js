@@ -21,7 +21,7 @@ describe('IntradayConfigController', function() {
 			$httpBackend = _$httpBackend_;
 			scope = _$rootScope_.$new();
 			$translate = _$translate_;
-			$httpBackend.whenGET('../api/intraday/skills').respond(200, skills);
+			$httpBackend.whenGET('../api/skillgroup/skills').respond(200, skills);
 
 			$httpBackend.whenGET('../ToggleHandler/AllToggles').respond(200, {});
 		})
