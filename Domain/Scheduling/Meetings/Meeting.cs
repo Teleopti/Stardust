@@ -70,10 +70,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 			_meetingChangeTracker.TakeSnapshot(this);
 		}
 
-		public virtual IEnumerable<IMeetingPerson> MeetingPersons
-		{
-			get { return _meetingPersons; }
-		}
+		public virtual IEnumerable<IMeetingPerson> MeetingPersons => _meetingPersons;
 
 		public virtual string Subject
 		{
@@ -260,21 +257,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 				_meetingPersons.Remove(meetingPerson);
 		}
 
-		public virtual IList<IPersonMeeting> GetPersonMeetings(IPerson person)
+		public virtual IList<IPersonMeeting> GetPersonMeetings(params IPerson[] person)
 		{
-			IList<IPersonMeeting> personMeetings = new List<IPersonMeeting>();
-			IMeetingPerson meetingPerson = _meetingPersons.FirstOrDefault(mp => mp.Person.Equals(person));
-			if (meetingPerson != null)
-			{
-				foreach (DateOnly recurringDate in GetRecurringDates())
-				{
-					personMeetings.Add(new PersonMeeting(this, meetingPerson, getMeetingPeriod(recurringDate)));
-				}
-			}
+			var meetingPerson = _meetingPersons.Where(mp => person.Contains(mp.Person)).ToArray();
 
-			return personMeetings;
+			return GetRecurringDates().Select(getMeetingPeriod)
+				.SelectMany(r => meetingPerson.Select(m => (IPersonMeeting) new PersonMeeting(this, m, r))).ToArray();
 		}
-
+		
 		public virtual DateTimePeriod MeetingPeriod(DateOnly meetingDay)
 		{
 			return getMeetingPeriod(meetingDay);

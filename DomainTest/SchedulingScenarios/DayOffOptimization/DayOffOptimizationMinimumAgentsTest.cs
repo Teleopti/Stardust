@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -50,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				1, //DO from beginning
 				1)
 			);
-			skillDays.First().SetMinimumAgents(1);
+			skillDays.First().SetMinimumAgents(new TimePeriod(8, 16), 1);
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
 			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate).WithDayOff();
 
@@ -81,8 +80,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				1, //DO from beginning
 				1) //DO from beginning
 			);
-			skillDays[0].SetMinimumAgents(1);
-			skillDays[1].SetMinimumAgents(1);
+			skillDays[0].SetMinimumAgents(new TimePeriod(8, 16), 1);
+			skillDays[1].SetMinimumAgents(new TimePeriod(8, 16), 1);
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
 			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate).WithDayOff();
 			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate).WithDayOff();
@@ -103,10 +102,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var scenario = ScenarioRepository.Has();
 			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1).NumberOfDaysOf(2);
 			var shiftCategory = new ShiftCategory().WithId();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(0, 0, 24, 0, 15), new TimePeriodWithSegment(0, 0, 24, 0, 15), shiftCategory));
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var agent1 = PersonRepository.Has(schedulePeriod, ruleSet, skill);
 			var agent2 = PersonRepository.Has(schedulePeriod, ruleSet, skill);
-			var skillDays = SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 1)).SetMinimumAgents(1);
+			var skillDays = SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 1))
+				.SetMinimumAgents(new TimePeriod(8, 16), 1);
 			PersonAssignmentRepository.Has(agent1, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(0, 0, 24, 0));
 			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate, agent1).WithDayOff();
 			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate, agent1).WithDayOff();
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				1, //DO from beginning
 				1)
 			);
-			skillDays.First().SetMinimumAgents(1);
+			skillDays.First().SetMinimumAgents(new TimePeriod(8, 16), 1);
 			SkillDayRepository.Has(extraSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 1));
 			var alreadyScheduledAgent = PersonRepository.Has(skill, extraSkill);
 			PersonAssignmentRepository.Has(alreadyScheduledAgent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(0, 0, 24, 0));
@@ -177,9 +177,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 					1, //minimum staffing = 1 //DO should end up here
 					1, //minimum staffing = 3 
 					1 //minimum staffing = 3 
-					).SetMinimumAgents(3)
+					).SetMinimumAgents(new TimePeriod(8, 16), 3)
 			);
-			skillDays[4].SetMinimumAgents(1);
+			skillDays[4].SetMinimumAgents(new TimePeriod(8, 16), 1);
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
 			PersonAssignmentRepository.GetSingle(skillDays[3].CurrentDate).WithDayOff();
 
@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				1, //DO from beginning
 				1)
 			);
-			skillDays.First().SetMinimumAgents(1);
+			skillDays.First().SetMinimumAgents(new TimePeriod(8, 16), 1);
 			var alreadyScheduledAgent = PersonRepository.Has(skill);
 			PersonAssignmentRepository.Has(alreadyScheduledAgent, scenario, activity, shiftCategory, date, new TimePeriod(0, 0, 24, 0));
 			var agentToOptimize = PersonRepository.Has(schedulePeriod, ruleSet, skill);
@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				1,
 				0.1) //DO from beginning, minimum staffing 1 so we should move DO from this spot
 			);
-			skillDays.Last().SetMinimumAgents(1);
+			skillDays.Last().SetMinimumAgents(new TimePeriod(8, 16), 1);
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
 			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate).WithDayOff();
 
@@ -269,7 +269,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var agent = PersonRepository.Has(schedulePeriod, ruleSet, skill);
 			var alreadyScheduledAgent = PersonRepository.Has(schedulePeriod, ruleSet, skill);
 			var skillDays = skill.CreateSkillDayWithDemandOnInterval(scenario, new DateOnlyPeriod(date, date.AddDays(5)), 10).ToList();
-			skillDays.Add(skill.CreateSkillDayWithDemandOnInterval(scenario, date.AddDays(6), 1).SetMinimumAgents(new TimePeriod(11, 12), 2));
+			skillDays.Add(skill.CreateSkillDayWithDemandOnInterval(scenario, date.AddDays(6), 1).SetMinimumAgents(new TimePeriod(8, 16), 2));
 			SkillDayRepository.Has(skillDays);
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
 			PersonAssignmentRepository.Has(alreadyScheduledAgent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
@@ -279,6 +279,28 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			
 			PersonAssignmentRepository.LoadAll().Single(x => x.DayOff() != null).Date
 				.Should().Not.Be.EqualTo(skillDays[6].CurrentDate); //should have been moved
+		}
+		
+		[Test]
+		[Timeout(5000)]
+		public void ShouldNotHangDueToPingPongBetweenTwoDays()
+		{
+			var date = new DateOnly(2015, 10, 12);
+			var activity = ActivityRepository.Has();
+			var skill = SkillRepository.Has("skill", activity).IsOpenBetween(8, 16);
+			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
+			var scenario = ScenarioRepository.Has();
+			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1).NumberOfDaysOf(1);
+			var shiftCategory = new ShiftCategory().WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), shiftCategory));
+			var agent = PersonRepository.Has(schedulePeriod, ruleSet, skill);
+			var skillDays = SkillDayRepository.Has(
+				skill.CreateSkillDayWithDemandOnInterval(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 0.5)
+					.SetMinimumAgents(new TimePeriod(8, 16), 1));
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
+			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate).WithDayOff();
+
+			Target.Execute(planningPeriod.Id.Value);
 		}
 		
 		public DayOffOptimizationMinimumAgentsTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerMinimumAgents75339, bool resourcePlannerLessResourcesXXL74915) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerMinimumAgents75339, resourcePlannerLessResourcesXXL74915)

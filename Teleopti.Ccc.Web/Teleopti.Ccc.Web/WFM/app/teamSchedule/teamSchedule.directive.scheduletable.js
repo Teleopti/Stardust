@@ -150,7 +150,10 @@
 		}
 
 		vm.clickEditButton = function (personSchedule) {
-			$state.go('teams.shiftEditor', { personSchedule: personSchedule });
+			$state.go('teams.shiftEditor', {
+				personSchedule: personSchedule,
+				date: vm.selectedDate
+			});
 		}
 	
 		function isAllInCurrentPageSelected() {

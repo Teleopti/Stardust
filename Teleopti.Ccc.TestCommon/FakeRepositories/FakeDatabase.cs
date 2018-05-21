@@ -412,6 +412,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly HistoricalChange _historicalChange;
 		private readonly IBusinessRuleConfigProvider _businessRuleConfig;
 		private readonly IEventPublisher _publisher;
+		private readonly IShiftTradeRequestSetChecksum _shiftTradeSetChecksum;
+
 
 		private BusinessUnit _businessUnit;
 		private Site _site;
@@ -477,7 +479,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			RemoveApprovedPeriod removePeriod,
 			HistoricalChange historicalChange,
 			IBusinessRuleConfigProvider businessRuleConfig,
-			IEventPublisher publisher)
+			IEventPublisher publisher,
+			IShiftTradeRequestSetChecksum shiftTradeSetChecksum)
 		{
 			_tenants = tenants;
 			_persons = persons;
@@ -520,6 +523,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_businessRuleConfig = businessRuleConfig;
 			_publisher = publisher;
 			_removePeriod = removePeriod;
+			_shiftTradeSetChecksum = shiftTradeSetChecksum;
 		}
 
 		public void CreateDefaultData()
@@ -1391,18 +1395,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				.CreatePersonShiftTradeRequest(
 					_persons.Get(personFromId),
 					_persons.Get(personToId),
-					"2018-05-11".Date()
+					date.Date()
 				);
 			_personRequest.SetId(Guid.NewGuid());
-
-			// refact somewhere else would be good, whatever it is a duplicate of
-			new ShiftTradeSwapScheduleDetailsMapper(_scheduleStorage, new ThisCurrentScenario(_scenario)).Map((ShiftTradeRequest)_personRequest.Request);
-			var shiftTradeSwapDetails = ((ShiftTradeRequest)_personRequest.Request).ShiftTradeSwapDetails;
-			foreach (var shiftTradeSwapDetail in shiftTradeSwapDetails)
-			{
-				shiftTradeSwapDetail.ChecksumFrom = new ShiftTradeChecksumCalculator(shiftTradeSwapDetail.SchedulePartFrom).CalculateChecksum();
-				shiftTradeSwapDetail.ChecksumTo = new ShiftTradeChecksumCalculator(shiftTradeSwapDetail.SchedulePartTo).CalculateChecksum();
-			}
+			_shiftTradeSetChecksum.SetChecksum(_personRequest.Request);
 
 			_personRequests.Add(_personRequest);
 			return this;

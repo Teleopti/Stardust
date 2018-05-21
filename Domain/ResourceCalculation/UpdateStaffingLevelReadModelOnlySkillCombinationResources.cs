@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -9,7 +10,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public class UpdateStaffingLevelReadModelOnlySkillCombinationResources
+	public interface IUpdateStaffingLevelReadModel
+	{
+		void Update(DateTimePeriod period);
+	}
+	public class UpdateStaffingLevelReadModelOnlySkillCombinationResources : IUpdateStaffingLevelReadModel
 	{
 		private readonly INow _now;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
@@ -62,6 +67,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				Logger.Warn(ex.Message);
 				_stardustJobFeedback.SendProgress(ex.Message);
 			}
+		}
+	}
+
+	public class FakeUpdateStaffingLevelReadModel : IUpdateStaffingLevelReadModel
+	{
+		public Exception Exception { get; set; }
+
+		public void Update(DateTimePeriod period)
+		{
+			if(Exception != null) throw Exception;
 		}
 	}
 }

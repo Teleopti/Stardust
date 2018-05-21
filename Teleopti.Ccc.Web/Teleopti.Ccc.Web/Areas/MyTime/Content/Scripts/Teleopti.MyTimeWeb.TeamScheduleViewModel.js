@@ -111,10 +111,10 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 						self.hasError(false);
 						self.errorMessage();
 						self.setTeamPicker(allTeams.teams, myTeam, allTeams.allTeam);
-						self.activateFilterMixinChangeHandler();
-						self.activatePagingMixinChangeHandler();
 						self.selectedPageIndex(1);
 						loadSchedule();
+						self.activateFilterMixinChangeHandler();
+						self.activatePagingMixinChangeHandler();
 					}
 				);
 			},

@@ -264,7 +264,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			if (!model.NewPassword.Equals(model.ConfirmNewPassword))
 				return Json(new UpdateUserResultModel { Success = false, Message = "The new password and confirm password does not match." });
-
+			if (model.NewPassword.Length < 6)
+				return Json(new UpdateUserResultModel { Success = false, Message = "Password must be at least 6 characters." });
 			try
 			{
 				var encryptedPassword = _currentHashFunction.CreateHash(model.NewPassword);

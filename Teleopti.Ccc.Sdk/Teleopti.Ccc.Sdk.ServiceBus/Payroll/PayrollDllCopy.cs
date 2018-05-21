@@ -1,7 +1,10 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using log4net;
+using Microsoft.WindowsAzure.Storage;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
@@ -10,10 +13,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(PayrollDllCopy));
 		private readonly ISearchPath _searchPath;
+		private readonly IConfigReader _configReader;
 
-		public PayrollDllCopy(ISearchPath searchPath)
+		public PayrollDllCopy(ISearchPath searchPath, IConfigReader configReader = null)
 		{
 			_searchPath = searchPath;
+			_configReader = configReader ?? new ConfigReader();
 		}
 
 		public void CopyPayrollDll()
@@ -31,7 +36,49 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 				throw;
 			}
 		}
-		
+
+		public void CopyPayrollDllFromAzureStorage(string tenantName)
+		{
+			try
+			{
+				CopyFilsesFromAzureStorage(tenantName, _configReader.ConnectionString("AzureStorage"),
+					_configReader.AppConfig("AzureStorageContainer"), _configReader.AppConfig("AzureStoragePayrollPath"),
+					_searchPath.Path);
+			}
+			catch (Exception exception)
+			{
+				Log.Error("An exception was encountered when trying to load new payroll dll from azure storage.", exception);
+				throw;
+			}
+		}
+
+		public static void CopyFilsesFromAzureStorage(string tenantName, string connectionString, string containerName, string payrollPath, string destination)
+		{
+			var account = CloudStorageAccount.Parse(connectionString);
+
+			//Get storage account reference
+			var storageAccount = new CloudStorageAccount(account.Credentials, true);
+
+			// Create a blob client for interacting with the blob service.
+			var blobClient = storageAccount.CreateCloudBlobClient();
+
+			//Getting container reference
+			var container = blobClient.GetContainerReference(containerName);
+
+			var listOfUrisToDownload = container.ListBlobs($"{payrollPath}/{tenantName}/", true).Select(x => x.Uri).ToList();
+
+			foreach (var uri in listOfUrisToDownload)
+			{
+				var fileNameAndDestination = $"{destination}{uri.Segments[uri.Segments.Length - 1]}";
+				if(File.Exists(fileNameAndDestination))
+				{
+					File.Delete(fileNameAndDestination);
+				}
+
+				container.GetBlockBlobReference(uri.LocalPath.Replace($"/{containerName}/", "")).DownloadToFile($"{fileNameAndDestination}", FileMode.CreateNew);
+			}
+		}
+
 		private static void copyFiles(string source, string destination)
 		{
 			foreach (var folder in Directory.GetDirectories(source))

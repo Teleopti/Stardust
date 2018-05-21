@@ -59,7 +59,8 @@
 				templateUrl: 'app/teamSchedule/html/shiftEditor.html',
 				controller: 'ShiftEditorController as vm',
 				params: {
-					personSchedule: {}
+					personSchedule: {},
+					date: ''
 				}
 			});
 	}

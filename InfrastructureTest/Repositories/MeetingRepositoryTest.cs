@@ -15,9 +15,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-    ///<summary>
-    /// Tests MeetingRepository
-    ///</summary>
     [TestFixture]
     [Category("BucketB")]
     public class MeetingRepositoryTest : RepositoryTest<IMeeting>
@@ -64,7 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             meeting.EndDate = meeting.StartDate;
             meeting.StartTime = TimeSpan.FromHours(10);
             meeting.EndTime = TimeSpan.FromHours(11);
-            meeting.TimeZone = (TimeZoneInfo.Utc);
+            meeting.TimeZone = TimeZoneInfo.Utc;
 
             return meeting;
         }

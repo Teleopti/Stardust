@@ -214,7 +214,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 				foreach (var settingView in _gamificationSettingListToBeDeleted)
 				{
-					repo.Remove(settingView.ContainedOriginalEntity);
+					var entityToDelete = repo.Get(settingView.ContainedOriginalEntity.Id.Value);
+					if (entityToDelete != null)
+					{
+						repo.Remove(entityToDelete);
+					}
 				}
 
 				foreach (var settingView in _gamificationSettingList)

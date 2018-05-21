@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				var workdayCount = 0;
 				foreach (var scheduleDayAround in scheduleDaysAround)
 				{
-					if (scheduleDayAround.IsWorkday()) workdayCount++;
+					if (!scheduleDayAround.HasDayOff()) workdayCount++;
 					else workdayCount = 0;
 
 					if (workdayCount > maxConsecutiveWorkday)

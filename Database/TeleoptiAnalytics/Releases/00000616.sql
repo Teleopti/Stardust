@@ -15,18 +15,21 @@ ALTER TABLE dbo.AdvancedLoggingService SET (LOCK_ESCALATION = TABLE)
 GO
 
 -----------------------------------------------------------
+-- Commented this because:
+-- 		Bug 75992: Upgrade fails when trying to create index on stage.stg_queue 
+-- /Henry
+--
+-- ALTER TABLE stage.stg_queue ADD CONSTRAINT
+	-- PK_stg_queue PRIMARY KEY NONCLUSTERED 
+	-- (
+		-- date,
+		-- interval,
+		-- queue_name
+	-- ) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 
-ALTER TABLE stage.stg_queue ADD CONSTRAINT
-	PK_stg_queue PRIMARY KEY NONCLUSTERED 
-	(
-		date,
-		interval,
-		queue_name
-	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-
-GO
-ALTER TABLE stage.stg_queue SET (LOCK_ESCALATION = TABLE)
-GO
+-- GO
+-- ALTER TABLE stage.stg_queue SET (LOCK_ESCALATION = TABLE)
+-- GO
 
 -----------------------------------------------------------
 DROP TABLE stage.stg_permission_report

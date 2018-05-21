@@ -237,6 +237,12 @@ $(document).ready(function () {
 
 	test("should show error message when there is no default team", function () {
 
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggle) {
+			if (toggle == 'MyTimeWeb_MobileResponsive_43826')
+				return false;
+			return true;
+		}
+
 		Teleopti.MyTimeWeb.TeamScheduleViewModel.loadSchedule = function () { };
 
 		var ajax = {
@@ -259,6 +265,39 @@ $(document).ready(function () {
 		viewModel.requestedDate(moment().startOf('day'));
 		equal(viewModel.hasError(), true);
 		equal(viewModel.errorMessage(), "There are no teams available");
+
+	});
+
+	test("should load request schedule data only once", function () {
+
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggle) {
+			if (toggle == 'MyTimeWeb_MobileResponsive_43826')
+				return false;
+			return true;
+		}
+
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url == endpoints.loadTeams) {
+					options.success({
+						teams: [],
+						allTeam: 'All Teams'
+					});
+				} else if (options.url == endpoints.loadDefaultTeam) {
+					options.success({ "Message": "" });
+				}
+			}
+		};
+
+		var viewModel = Teleopti.MyTimeWeb.TeamScheduleViewModelFactory.createViewModel(endpoints, ajax);
+
+		var invokeCount = 0;
+		viewModel.loadSchedule = function () {
+			invokeCount += 1;
+		};
+
+		viewModel.requestedDate(moment().startOf('day'));
+		equal(invokeCount, 1);
 
 	});
 });

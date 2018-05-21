@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using Autofac;
 using Stardust.Node.Interfaces;
@@ -26,7 +27,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 				_sendProgress(e.JobResultDetail.Message);
 		}
 
-		public void Handle(ImportForecastsFileToSkillEvent parameters, CancellationTokenSource cancellationTokenSource, Action<string> sendProgress)
+		public void Handle(ImportForecastsFileToSkillEvent parameters, 
+			CancellationTokenSource cancellationTokenSource, 
+			Action<string> sendProgress, 
+			ref IEnumerable<object> returnObjects)
 		{
 			_feedback.FeedbackChanged += feedbackFeedbackChanged;
 			_sendProgress = sendProgress;
