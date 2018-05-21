@@ -10,7 +10,7 @@
 				<li class="mobile-datepicker">
 					<div class="input-group">
 						<span class="input-group-btn">
-							<button class="btn btn-default" type="button" data-bind="click: previousDay">
+							<button class="btn btn-default" data-bind="click: previousDay">
 								<i class="glyphicon glyphicon-chevron-left"></i>
 							</button>
 						</span>
@@ -19,7 +19,7 @@
 							<span class="btn btn-default moment-datepicker" type="button">
 								<i class="glyphicon glyphicon-calendar"></i>
 							</span>
-							<button class="btn btn-default" type="button" data-bind="click: nextDay">
+							<button class="btn btn-default" data-bind="click: nextDay">
 								<i class="glyphicon glyphicon-chevron-right"></i>
 							</button>
 						</span>
@@ -46,10 +46,10 @@
 
 	<div class="mobile-teamschedule-view-body container">
 		<div class="mobile-timeline floatleft">
-			<!-- ko foreach: timeLines -->
+			<!-- xko foreach: timeLines -->
 			<div class="mobile-timeline-label absolute">
 			</div>
-			<!-- /ko -->
+			<!-- /xko -->
 		</div>
 		
 		<div class="my-schedule-column" >
@@ -57,9 +57,9 @@
 				<div class="agent-name">
 					<span> My </span>
 				</div>
-				<!-- ko if: mySchedule -->
+				<!-- xko if: mySchedule -->
 				<div class="mobile-schedule-container relative" >
-					<!-- ko foreach: mySchedule().layers -->
+					<!-- xko foreach: mySchedule().layers -->
 					<div class="mobile-schedule-layer absolute" >
 						<div class="start-dashed-line"></div>
 						<div class="end-dashed-line"></div>
@@ -73,64 +73,54 @@
 	
 						<div >
 							<strong xdata-bind="text: title()"></strong>
-							<!-- ko if: hasMeeting -->
+							<!-- xko if: hasMeeting -->
 							<div class="meeting floatright">
 								<i class="meeting-icon mr10">
 									<i class="glyphicon glyphicon-user ml10"></i>
 								</i>
 							</div>
-							<!-- /ko -->
+							<!-- /xko -->
 							<span class="fullwidth displayblock"></span>
 						</div>
 						<div >
 							<i class="glyphicon glyphicon-time"></i>
 						</div>
 					</div>
-					<!-- /ko -->
+					<!-- /xko -->
 				</div>
-				<!-- /ko -->
+				<!-- /xko -->
 			</div>
 		</div>
 
 		<div class="teammates-schedules-column" >
-			<!-- ko foreach: teamSchedules -->
+			<!-- xko foreach: teamSchedules -->
 			<div class="schedule-item">
 				<div class="agent-name">
 					<span ></span>
 				</div>
 				<div class="mobile-schedule-container relative" >
-						<!-- ko foreach: layers-->
+						<!-- xko foreach: layers-->
 						<div class="mobile-schedule-layer absolute">
 							<div >
 								<strong ></strong>
-								<!-- ko if: hasMeeting -->
+								<!-- xko if: hasMeeting -->
 								<div class="meeting floatright">
 									<i class="meeting-icon mr10">
 										<i class="glyphicon glyphicon-user ml10"></i>
 									</i>
 								</div>
-								<!-- /ko -->
+								<!-- /xko -->
 								<span class="fullwidth displayblock" ></span>
 							</div>
 							<div >
 								<i class="glyphicon glyphicon-time"></i>
 							</div>
 						</div>
-						<!-- /ko -->
-					<!-- /ko -->
+						<!-- /xko -->
+					<!-- /xko -->
 				</div>
 			</div>
-			<!-- /ko -->
-		</div>
-
-		<div class="move-activity-confirm-dialog" data-bind="visible: false">
-			<p>
-				Do you want to move your '<span data-bind="text: 'selectedLayerTitle'"></span>' from <span data-bind="text: fromTimeLabel"> </span> to <span data-bind="text: 'toTimeLabel'"> </span>?
-			</p>
-			<div class="confirm-buttons">
-				<button class="btn btn-default no-button">No</button>
-				<button class="btn btn-primary yes-button">Yes</button>
-			</div>
+			<!-- /xko -->
 		</div>
 	</div>
 </div>
