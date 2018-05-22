@@ -162,8 +162,6 @@
     <Compile Include="..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Areas\Rta\ITeleoptiRtaService.cs">
       <Link>Rta\ITeleoptiRtaService.cs</Link>
     </Compile>
-    <Compile Include="Custom\EnvironmentVariable.cs" />
-    <Compile Include="Custom\IEnvironmentVariable.cs" />
     <Compile Include="NodeHandlers\ApproveRequestsWithValidatorsEventStardustHandler.cs" />
     <Compile Include="NodeHandlers\ExportPayrollHandler.cs" />
     <Compile Include="NodeHandlers\ExportMultisiteSkillsToSkillEventHandler.cs" />

@@ -15,7 +15,6 @@ using Teleopti.Ccc.Infrastructure.Absence;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Sdk.ServiceBus.Custom;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
@@ -50,7 +49,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			builder.RegisterType<RecalculateBadgeHandler>().As<IHandle<RecalculateBadgeEvent>>().SingleInstance().ApplyAspects();
 			builder.RegisterType<ScheduleDayDifferenceSaver>().As<IScheduleDayDifferenceSaver>().SingleInstance();
 			builder.RegisterType<RefreshPayrollFormatsHandler>().As<IHandle<RefreshPayrollFormatsEvent>>().SingleInstance();
-			builder.RegisterType<EnvironmentVariable>().As<IEnvironmentVariable>().SingleInstance();
 		}
 	}
 }

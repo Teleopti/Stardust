@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.ServiceProcess;
 using System.Threading;
 using Teleopti.Ccc.Domain;
-using Teleopti.Ccc.Sdk.ServiceBus.Custom;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Host
 {
@@ -14,7 +13,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Host
 		public ServiceBusHost()
 		{
 			InitializeComponent();
-			serviceBusRunner = new ServiceBusRunner(RequestAdditionalTime, new EnvironmentVariable());
+			serviceBusRunner = new ServiceBusRunner(RequestAdditionalTime);
 		}
 
 		protected override void OnStart(string[] args)
