@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				addPersonAssignments(retDic, personsAss);
 
 				addPersonMeetings(retDic,
-								  _repositoryFactory.CreateMeetingRepository(uow).Find(people, period, scenario), people);
+								  _repositoryFactory.CreateMeetingRepository(uow).Find(people, period, scenario, false), people);
 
 				if (scheduleDictionaryLoadOptions.LoadNotes)
 				{
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			using (TurnoffPermissionScope.For(retDic))
 			{
 				addPersonAbsences(retDic, personAbsenceRepository.Find(people, optimizedPeriod, scenario));
-				addPersonMeetings(retDic, _repositoryFactory.CreateMeetingRepository(uow).Find(people, longDateOnlyPeriod, scenario), people);
+				addPersonMeetings(retDic, _repositoryFactory.CreateMeetingRepository(uow).Find(people, longDateOnlyPeriod, scenario, false), people);
 				var personAssignments = personAssignmentRepository.Find(people, longDateOnlyPeriod, scenario);
 				foreach (var personAssignment in personAssignments)
 				{
@@ -273,7 +273,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var uow = _currentUnitOfWork.Current();
 			addPersonAbsences(scheduleDictionary, _repositoryFactory.CreatePersonAbsenceRepository(uow).Find(personsToLoad, longDateOnlyPeriod.ToDateTimePeriod(TimeZoneInfo.Utc), scenario), scheduleDictionaryLoadOptions.LoadDaysAfterLeft);
 			addPersonAssignments(scheduleDictionary, _repositoryFactory.CreatePersonAssignmentRepository(uow).Find(personsToLoad, longDateOnlyPeriod, scenario), scheduleDictionaryLoadOptions.LoadDaysAfterLeft);
-			addPersonMeetings(scheduleDictionary, _repositoryFactory.CreateMeetingRepository(uow).Find(personsToLoad, longDateOnlyPeriod, scenario), personsToLoad, scheduleDictionaryLoadOptions.LoadDaysAfterLeft);
+			addPersonMeetings(scheduleDictionary, _repositoryFactory.CreateMeetingRepository(uow).Find(personsToLoad, longDateOnlyPeriod, scenario, false), personsToLoad, scheduleDictionaryLoadOptions.LoadDaysAfterLeft);
 			if (scheduleDictionaryLoadOptions.LoadNotes)
 			{
 				addNotes(scheduleDictionary, _repositoryFactory.CreateNoteRepository(uow).Find(longDateOnlyPeriod, personsToLoad, scenario));
