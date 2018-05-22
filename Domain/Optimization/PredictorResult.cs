@@ -33,12 +33,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				return currentStandardDeviation < _standardDeviation ? 
 					WasReallyBetterResult.WasBetter() : 
-					WasReallyBetterResult.WasWorse(currentStandardDeviation > doubleTolerance);
+					WasReallyBetterResult.WasWorse(currentStandardDeviation > doubleTolerance, false);
 			}
 
 			return _brokenMinimumAgentsInterval > currentBrokenMinimumAgentsInterval ? 
 				WasReallyBetterResult.WasBetter() : 
-				WasReallyBetterResult.WasWorse(true);
+				WasReallyBetterResult.WasWorse(true, false);
 		}
 	}
 }

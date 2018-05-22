@@ -161,7 +161,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						if (result.MinimumAgentsAreCurrentlyBroken)
 						{
 							stopOptimizeTeamInfo[matrix.Item2] = false;
-							matrix.Item2.LockDays(movedDaysOff.AddedDaysOff);
+							matrix.Item2.LockDays(result.FailedWhenPlacingShift ?
+								movedDaysOff.RemovedDaysOff : 
+								movedDaysOff.AddedDaysOff);
 						}
 						else
 						{
@@ -214,11 +216,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var personToSetShiftCategoryLimitationFor = optimizationPreferences.Extra.IsClassic() ? matrix.Person : null;
 			if (!reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, movedDaysOff.RemovedDaysOff, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, personToSetShiftCategoryLimitationFor, matrix, optimizationPreferences))
 			{
-				//"true" flag is actually wrong
+				//first "true" flag is actually wrong
 				//for perf reason 
 				// => true when minagent is broken
 				// => if not, it should be false
-				return WasReallyBetterResult.WasWorse(true);
+				return WasReallyBetterResult.WasWorse(true, true);
 			}
 
 			if (!optimizationPreferences.General.OptimizationStepDaysOff && optimizationPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime)
@@ -226,7 +228,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				var flexibleDayOffvalidator = _teamBlockDayOffsInPeriodValidator;
 				if (!flexibleDayOffvalidator.Validate(teamInfo, schedulingResultStateHolder))
 				{
-					return WasReallyBetterResult.WasWorse(false);
+					return WasReallyBetterResult.WasWorse(false, false);
 				}
 			}
 
