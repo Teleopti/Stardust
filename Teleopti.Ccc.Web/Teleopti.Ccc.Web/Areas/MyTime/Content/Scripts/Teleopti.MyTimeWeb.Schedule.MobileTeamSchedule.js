@@ -7,41 +7,39 @@
 /// <reference path="~/Content/moment/moment.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel.js" />
 
-if (typeof Teleopti === "undefined") {
+if (typeof Teleopti === 'undefined') {
 	Teleopti = {};
 }
-if (typeof Teleopti.MyTimeWeb === "undefined") {
+if (typeof Teleopti.MyTimeWeb === 'undefined') {
 	Teleopti.MyTimeWeb = {};
 }
-if (typeof Teleopti.MyTimeWeb.Schedule === "undefined") {
+if (typeof Teleopti.MyTimeWeb.Schedule === 'undefined') {
 	Teleopti.MyTimeWeb.Schedule = {};
 }
 
 Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 	var vm,
 		completelyLoaded,
-		currentPage = "Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule",
+		currentPage = 'Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule',
 		subscribed = false,
 		dataService,
 		ajax;
 
 	function cleanBinding() {
-		ko.cleanNode($("#page")[0]);
+		ko.cleanNode($('#page')[0]);
 		Teleopti.MyTimeWeb.MessageBroker.RemoveListeners(currentPage);
 	}
 
 	function subscribeForChanges() {
 		Teleopti.MyTimeWeb.Common.SubscribeToMessageBroker({
-			successCallback:
-				Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule.ReloadScheduleListener,
-			domainType: "IScheduleChangedInDefaultScenario",
+			successCallback: Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule.ReloadScheduleListener,
+			domainType: 'IScheduleChangedInDefaultScenario',
 			page: currentPage
 		});
 
 		Teleopti.MyTimeWeb.Common.SubscribeToMessageBroker({
-			successCallback:
-				Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule.ReloadScheduleListener,
-			domainType: "IPushMessageDialogue",
+			successCallback: Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule.ReloadScheduleListener,
+			domainType: 'IPushMessageDialogue',
 			page: currentPage
 		});
 		subscribed = true;
@@ -49,15 +47,14 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 
 	function registerUserInfoLoadedCallback(initialMomentDate) {
 		Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function(data) {
-			$(".mobile-teamschedule-view .moment-datepicker").attr(
-				"data-bind",
+			$('.mobile-teamschedule-view .moment-datepicker').attr(
+				'data-bind',
 				"datepicker: selectedDate, datepickerOptions: { calendarPlacement: 'center', autoHide: true, weekStart: " +
 					data.WeekStart +
-					"}"
+					'}'
 			);
 
 			initViewModel(data.WeekStart);
-
 			fetchData(initialMomentDate);
 		});
 	}
@@ -72,38 +69,42 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 		applyBindings();
 	}
 
-	function updateUnreadMessageCount() {
-		//dataService.fetchMessageCount(fetchUnreadMessageCountCallback);
-	}
-
-	function fetchUnreadMessageCountCallback(data) {
-		vm.unreadMessageCount(data);
-	}
-
 	function fetchData(momentDate) {
 		var dateStr =
-			(momentDate && momentDate.format("YYYY/MM/DD")) ||
+			(momentDate && momentDate.format('YYYY/MM/DD')) ||
 			Teleopti.MyTimeWeb.Portal.ParseHash().dateHash ||
-			vm.selectedDate().format("YYYY/MM/DD");
-		//dataService.fetchData(dateStr, 0, fetchDataSuccessCallback);
+			vm.selectedDate().format('YYYY/MM/DD');
+
+	
+		ajax.Ajax({
+			url: 'Team/TeamsAndGroupsWithAllTeam',
+			success: function(teams) {
+				vm.readTeamsData(teams);
+				ajax.Ajax({
+					url: 'TeamSchedule/DefaultTeam',
+					success: function(defaultTeam) {
+						vm.readDefaultTeamData(defaultTeam);
+						fetchDataSuccessCallback();
+					}
+				});
+			}
+		});
 	}
 
-	function fetchDataSuccessCallback(data) {
-		vm.readData(data);
+	function fetchDataSuccessCallback() {
 		completelyLoaded();
 		if (!subscribed) subscribeForChanges();
 	}
 
 	function applyBindings() {
-		ko.applyBindings(vm, $("#page")[0]);
+		ko.applyBindings(vm, $('#page')[0]);
 	}
-	
 
 	return {
 		Init: function() {
 			if ($.isFunction(Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack)) {
 				Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack(
-					"TeamSchedule/NewIndex",
+					'TeamSchedule/NewIndex',
 					Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule.PartialInit,
 					Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule.PartialDispose
 				);
@@ -117,32 +118,22 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 			initialMomentDate
 		) {
 			ajax = ajaxobj || new Teleopti.MyTimeWeb.Ajax();
-			// dataService = new Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule.DataService(
-			// 	ajax
-			// );
 			completelyLoaded = completelyLoadedCallback;
 			registerUserInfoLoadedCallback(initialMomentDate);
 			readyForInteractionCallback();
 		},
 		ReloadScheduleListener: function(notification) {
-			if (notification.DomainType === "IScheduleChangedInDefaultScenario") {
+			if (notification.DomainType === 'IScheduleChangedInDefaultScenario') {
 				var messageStartDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(
 					notification.StartDate
 				);
-				var messageEndDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(
-					notification.EndDate
-				);
+				var messageEndDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate);
 				var selectedDate = vm.selectedDate().toDate();
-				if (
-					messageStartDate <= selectedDate &&
-					messageEndDate >= selectedDate
-				) {
+				if (messageStartDate <= selectedDate && messageEndDate >= selectedDate) {
 					fetchData(vm.selectedDate());
 					return;
 				}
 			}
-
-			updateUnreadMessageCount();
 		},
 		PartialDispose: function() {
 			cleanBinding();

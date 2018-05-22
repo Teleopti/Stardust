@@ -2,7 +2,27 @@
 @{
 	Layout = null;
 }
+<style>
+	html, body, article#body, section#page, .mobile-teamschedule-view {
+		height: 100%;
+		cursor: pointer;
+		overflow-x: hidden;
+	}
+	body {
+		overflow: hidden;
+		padding-top: 50px;
+	}
+	#body-inner{
+		height: calc(100% - 21px);
+	}
+	ul li ul li.select2-result:nth-child(odd) {
+		background: rgba(0, 0, 0, 0.1);
+	}
 
+	ul li ul li.select2-result.select2-highlighted {
+		background: #5ACDF9;
+	}
+</style>
 <div class="mobile-teamschedule-view">
 	<div class="navbar navbar-teleopti subnavbar">
 		<div class="container mobile-teamschedule-view-nav">
@@ -25,20 +45,14 @@
 						</span>
 					</div>
 				</li>
-				<li>
-					<select>
-						<option>
-							Team Preference
-						</option>
-
-						<option>
-							Team Student
-						</option>
-
-						<option>
-							Team 
-						</option>
-					</select>
+				<li class="teamschedule-filter">
+					<div class="teamschedule-filter-component">
+						<select data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
+							<optgroup data-bind="attr: { label: text }, foreach: children">
+								<option data-bind="text: text, value: id"></option>
+							</optgroup>
+						</select>
+					</div>
 				</li>
 			</ul>
 		</div>

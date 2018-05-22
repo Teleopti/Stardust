@@ -31,6 +31,7 @@
 		<script type="text/javascript" src="../../../../Content/signalr/broker-hubs.js"></script>
 		
 		<script type="text/javascript" src="../../../../Content/hasher/hasher.min.js"></script>
+		<script type="text/javascript" src="../../../../Content/select2/select2.js"></script>
 		<script type="text/javascript" src="qrcode.js"></script>
 
 		<%

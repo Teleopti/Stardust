@@ -6,25 +6,48 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.LayerViewModel.js" />
 
-Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function (weekStart, parent, dataService) {
-	var self = this;
-
-	var constants = Teleopti.MyTimeWeb.Common.Constants;
+Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function() {
+	var self = this,
+		constants = Teleopti.MyTimeWeb.Common.Constants,
+		dateOnlyFormat = constants.serviceDateTimeFormat.dateOnly;
 
 	self.selectedDate = ko.observable(moment());
-	self.displayDate = ko.observable(self.selectedDate().format('YYYY-MM-DD'));
-	self.selectedDate.subscribe(function (value) {
-		self.displayDate(value.format('YYYY-MM-DD'));
+	self.displayDate = ko.observable(self.selectedDate().format(dateOnlyFormat));
+	self.availableTeams = ko.observableArray();
+	self.selectedTeam = ko.observable();
+
+	self.selectedDate.subscribe(function(value) {
+		self.displayDate(value.format(dateOnlyFormat));
 	});
-	self.previousDay = function(){
-		var previousDate = moment(self.selectedDate()).add(-1, 'days');
-		self.displayDate(previousDate.format('YYYY-MM-DD'));
-		self.selectedDate(previousDate); 
+
+	self.previousDay = function() {
+		self.selectedDate(moment(self.selectedDate()).add(-1, 'days'));
 	};
 
-	self.nextDay = function(){
-		var nextDate = moment(self.selectedDate()).add(1, 'days');
-		self.displayDate(nextDate.format('YYYY-MM-DD'));
-		self.selectedDate(nextDate);
+	self.nextDay = function() {
+		self.selectedDate(moment(self.selectedDate()).add(1, 'days'));
 	};
+
+	self.readTeamsData = function(data) {
+		setTeams(data.allTeam, data.teams);
+	};
+
+	self.readDefaultTeamData = function(data) {
+		self.selectedTeam(data.DefaultTeam);
+	};
+
+	function setTeams(allTeam, teams) {
+		if (allTeam !== null) {
+			allTeam.id = -1;
+
+			if (teams.length > 1) {
+				if (teams[0] && teams[0].children != null) {
+					teams.unshift({ children: [allTeam], text: '' });
+				} else {
+					teams.unshift(allTeam);
+				}
+			}
+		}
+		self.availableTeams(teams);
+	}
 };
