@@ -1,24 +1,11 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-
-namespace Teleopti.Ccc.Domain.Optimization
+﻿namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class ForecastScheduleValuePair
 	{
-		private double _forecastValue;
-		private double _scheduleValue;
+		public double ForecastValue { get; set; }
 
-		public double ForecastValue
-		{
-			get { return _forecastValue; }
-			set { _forecastValue = value; }
-		}
+		public double ScheduleValue { get; set; }
 
-		public double ScheduleValue
-		{
-			get { return _scheduleValue; }
-			set { _scheduleValue = value; }
-		}
-
-		public bool BreaksMinimumAgents { get; set; }
+		public int BrokenMinimumAgents { get; set; }
 	}
 }

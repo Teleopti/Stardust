@@ -282,7 +282,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		}
 		
 		[Test]
-		[Timeout(5000)]
+		[Timeout(8000)]
 		public void ShouldNotHangDueToPingPongBetweenTwoDays()
 		{
 			var date = new DateOnly(2015, 10, 12);
@@ -301,6 +301,32 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate).WithDayOff();
 
 			Target.Execute(planningPeriod.Id.Value);
+		}
+
+		[Test]
+		public void ShouldKeepRemovedDayOffIfMinimumAgentsTurnsOutBetter()
+		{
+			var date = new DateOnly(2015, 10, 12);
+			var activity = ActivityRepository.Has();
+			var skill = SkillRepository.Has("skill", activity);
+			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
+			var scenario = ScenarioRepository.Has();
+			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1).NumberOfDaysOf(1);
+			var shiftCategory = new ShiftCategory().WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), shiftCategory));
+			var agent = PersonRepository.Has(schedulePeriod, ruleSet, skill);
+			var alreadyScheduledAgent = PersonRepository.Has(skill);
+			var skillDays = skill.CreateSkillDayWithDemandOnInterval(scenario, new DateOnlyPeriod(date, date.AddDays(5)), 2).ToList();
+			skillDays.Add(skill.CreateSkillDayWithDemandOnInterval(scenario, date.AddDays(6), 1).SetMinimumAgents(2));
+			SkillDayRepository.Has(skillDays);
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
+			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate, agent).WithDayOff();
+			PersonAssignmentRepository.Has(alreadyScheduledAgent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
+
+			Target.Execute(planningPeriod.Id.Value);
+			
+			PersonAssignmentRepository.LoadAll().Single(x => x.DayOff() != null).Date
+				.Should().Not.Be.EqualTo(skillDays[6].CurrentDate); //should have been moved
 		}
 		
 		public DayOffOptimizationMinimumAgentsTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerMinimumAgents75339, bool resourcePlannerLessResourcesXXL74915) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerMinimumAgents75339, resourcePlannerLessResourcesXXL74915)

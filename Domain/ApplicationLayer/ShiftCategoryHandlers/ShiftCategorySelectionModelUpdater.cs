@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
@@ -34,11 +35,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategoryHandlers
 			_businessUnitScope = businessUnitScope;
 		}
 
-		[UnitOfWork]
 		public virtual void Handle(TenantDayTickEvent @event)
 		{
-			var businessUnits = _businessUnitRepository.LoadAll();
-			using (_updatedBySystemUser.Context())
+			var businessUnits = businessUnitsAndContext(out var context);
+			using (context)
 			{
 				businessUnits.ForEach(businessUnit =>
 				{
@@ -48,7 +48,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategoryHandlers
 			}
 		}
 
-		private void updateShiftCategoryPredictionModel()
+		[UnitOfWork]
+		protected virtual IBusinessUnit[] businessUnitsAndContext(out IDisposable context)
+		{
+			context = _updatedBySystemUser.Context();
+			return _businessUnitRepository.LoadAll().ToArray();
+		}
+
+		[UnitOfWork]
+		protected virtual void updateShiftCategoryPredictionModel()
 		{
 			string model = string.Empty;
 			var history = _shiftCategoryUsageFinder.Find();
@@ -78,7 +86,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategoryHandlers
 		}
 
 		[AsSystem]
-		[UnitOfWork]
 		public virtual void Handle(ShiftCategoryDeletedEvent @event)
 		{
 			updateShiftCategoryPredictionModel();

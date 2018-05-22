@@ -248,3 +248,7 @@
 	left: 0;
 	background-color: red;
 }
+
+.staffing-info-dropdown-form {
+	z-index: 150;
+}

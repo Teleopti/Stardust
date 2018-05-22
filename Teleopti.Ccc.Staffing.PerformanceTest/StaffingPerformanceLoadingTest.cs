@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 	[Toggle(Toggles.Staffing_BPOExchangeImport_45202)]
 	public class StaffingPerformanceLoadingTest : PerformanceTestWithOneTimeSetup
 	{
-		public UpdateStaffingLevelReadModelOnlySkillCombinationResources UpdateStaffingLevel;
+		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;
 		public MutableNow Now;
 		public WithUnitOfWork WithUnitOfWork;
 		public IDataSourceScope DataSource;

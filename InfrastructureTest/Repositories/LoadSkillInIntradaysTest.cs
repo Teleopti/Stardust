@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
 
@@ -255,5 +256,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			skills.First().IsMultisiteSkill.Should().Be.True();
 			skills.Last().IsMultisiteSkill.Should().Be.False();
 		}
+
 	}
 }

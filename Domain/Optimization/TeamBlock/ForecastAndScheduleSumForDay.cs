@@ -15,10 +15,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_userTimeZone = userTimeZone;
 		}
 			
-		public (double ForecastSum, double ScheduledSum, bool BreaksMinimumAgents) Execute(IOptimizationPreferences optimizationPreferences, ISchedulingResultStateHolder stateHolder, IEnumerable<ISkill> skills, DateOnly date)
+		public (double ForecastSum, double ScheduledSum, int BrokenMinimumAgentsIntervals) Execute(IOptimizationPreferences optimizationPreferences, ISchedulingResultStateHolder stateHolder, IEnumerable<ISkill> skills, DateOnly date)
 		{
 			double dailyForecastSum = 0;
 			double dailyScheduledSum = 0;
+			var brokenMinimumAgentsIntervals = 0;
 
 			foreach (var skillStaffPeriod in stateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(skills, date.ToDateTimePeriod(_userTimeZone.TimeZone())))
 			{
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					var lackingPersons = minimumPersons - skillStaffPeriod.CalculatedLoggedOn;
 					if (lackingPersons > 0)
 					{
-						return (boostingForecastValueIfMinimumAgentsBreaks + lackingPersons, 1, true);						
+						brokenMinimumAgentsIntervals += (int) lackingPersons;						
 					}
 				}
 	
@@ -36,7 +37,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				dailyScheduledSum += TimeSpan.FromMinutes(skillStaffPeriod.CalculatedResource * skillStaffPeriod.Period.ElapsedTime().TotalMinutes).TotalMinutes;
 			}
 
-			return (dailyForecastSum, dailyScheduledSum, false);
+			return brokenMinimumAgentsIntervals > 0 ? 
+				(boostingForecastValueIfMinimumAgentsBreaks + brokenMinimumAgentsIntervals, 1, brokenMinimumAgentsIntervals) : 
+				(dailyForecastSum, dailyScheduledSum, brokenMinimumAgentsIntervals);
 		}
 	}
 }

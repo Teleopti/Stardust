@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
@@ -26,6 +27,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var skillRepo = new SkillRepository(_currentUnitOfWork.Current());
 			var skills = skillRepo.FindSkillsWithAtLeastOneQueueSource();
 
+			return map(skills);
+		}
+
+		
+		private List<SkillInIntraday> map(IEnumerable<ISkill> skills)
+		{
 			return skills.Select(skill =>
 				{
 					var skillTypeInfo = _skillTypeInfoProvider.GetSkillTypeInfo(skill);
@@ -33,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					{
 						Id = skill.Id.Value,
 						Name = skill.Name,
-						IsDeleted = ((Skill) skill).IsDeleted,
+						IsDeleted = ((Skill)skill).IsDeleted,
 						DoDisplayData = _supportedSkillsInIntradayProvider.CheckSupportedSkill(skill),
 						SkillType = skill.SkillType.Description.Name,
 						IsMultisiteSkill = skill is MultisiteSkill,
