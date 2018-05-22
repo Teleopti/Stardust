@@ -214,6 +214,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var personToSetShiftCategoryLimitationFor = optimizationPreferences.Extra.IsClassic() ? matrix.Person : null;
 			if (!reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, movedDaysOff.RemovedDaysOff, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, personToSetShiftCategoryLimitationFor, matrix, optimizationPreferences))
 			{
+				//"true" flag is actually wrong
+				//for perf reason 
+				// => true when minagent is broken
+				// => if not, it should be false
 				return WasReallyBetterResult.WasWorse(true);
 			}
 
