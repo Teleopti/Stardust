@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				.Be.True();
 		}
 
-		[Test, Timeout(5000)]
+		[Test, Timeout(10000)]
 		public void ShouldFixWeeklyRestWithShiftsEndingAtMidnight()
 		{
 			var weeklyRest = TimeSpan.FromHours(40).Add(TimeSpan.FromMinutes(15));
