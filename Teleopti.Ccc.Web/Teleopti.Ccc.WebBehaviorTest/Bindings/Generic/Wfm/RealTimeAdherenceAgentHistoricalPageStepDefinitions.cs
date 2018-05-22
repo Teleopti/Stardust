@@ -76,14 +76,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.Click(".recorded-out-of-adherence");
 			Browser.Interactions.AssertNotExists(".recorded-out-of-adherence", ".approve-adherence-submit");
 		}
-		
+
 		[Then(@"I should be able to approve out of adherences")]
 		public void ThenIShouldBeAbleToApproveOutOfAdherences()
 		{
 			Browser.Interactions.Click(".recorded-out-of-adherence");
 			Browser.Interactions.AssertExists(".approve-adherence-submit");
 		}
-		
+
 		[Then(@"I should not be able to remove approved out of adherences")]
 		public void ThenIShouldNotBeAbleToRemoveOutOfAdherences()
 		{
@@ -109,6 +109,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		{
 			Browser.Interactions.AssertFirstContains(".adherence-percent", adherence);
 		}
+		
+		[Then(@"I should be informed she is late for work with (.*) minutes")]
+		public void ThenIShouldBeInformedSheIsLateForWorkWithMinutes(string minutes) =>
+			Browser.Interactions.AssertFirstContains(".late-for-work", minutes);
+
+		[Then(@"I should not be informed she is late for work")]
+		public void ThenIShouldNotBeInformedSheIsLateForWork() =>
+			Browser.Interactions.AssertNotExists(".change", ".late-for-work");
 
 		[Then(@"I should rule and state changes")]
 		public void ThenIShouldRuleAndStateChanges(Table table) =>
