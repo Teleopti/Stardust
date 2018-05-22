@@ -133,6 +133,9 @@ $(document).ready(function () {
 
 	test("should increase request count after creating an overtime request", function () {
 		var tempTogglFn = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function() {
+			return true;
+		};
 		var tempFn1 = Date.prototype.getTeleoptiTime;
 		Date.prototype.getTeleoptiTime = function() {
 			return new Date("2018-03-05T02:30:00Z").getTime();

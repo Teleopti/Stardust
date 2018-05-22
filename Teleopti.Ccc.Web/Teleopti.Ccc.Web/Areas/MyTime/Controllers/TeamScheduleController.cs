@@ -53,6 +53,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return View("TeamSchedulePartial", _teamScheduleViewModelFactory.CreateViewModel());
 		}
 
+		[EnsureInPortal]
+		[UnitOfWork]
+		public virtual ViewResult NewIndex(DateOnly? date, Guid? id)
+		{
+			return View("NewTeamSchedulePartial", _teamScheduleViewModelFactory.CreateViewModel());
+		}
+
 		[UnitOfWork]
 		[HttpGet]
 		public virtual JsonResult TeamScheduleCurrentDate()

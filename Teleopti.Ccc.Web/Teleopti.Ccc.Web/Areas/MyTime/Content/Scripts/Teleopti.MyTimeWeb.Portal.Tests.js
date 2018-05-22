@@ -2,6 +2,27 @@
 
 	module("Teleopti.MyTimeWeb.Portal");
 
+	test("should navigate to binded action view after clicking menu item", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+			return false;
+		};
+
+		var html = '<div id="innerNavBar"><a id="test-menu" href="#Schedule/MobileWeek" data-mytime-action ="#Schedule/MobileWeekAction"></a></div>';
+		$('body').append(html);
+
+
+
+		(function () {
+			var fakeWindow = getFakeWindow();
+			setup(fakeWindow);
+			init(fakeWindow);
+
+			$("#test-menu").click();
+
+			equal("#Schedule/MobileWeekAction", fakeWindow.location.url);
+		})();
+	});
+
 	test("should navigate to defaultNavigation", function () {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			return false;
@@ -59,7 +80,7 @@
 	});
 
 
-	function setup() {
+	function setup(fakeWindow) {
 		this.crossroads = {
 			addRoute: function () { }
 		};
@@ -69,6 +90,10 @@
 			},
 			changed: {
 				add: function () { }
+			},
+			setHash: function(hash) {
+				if(fakeWindow)
+					fakeWindow.location.url = hash;
 			},
 			init: function () { }
 		};
