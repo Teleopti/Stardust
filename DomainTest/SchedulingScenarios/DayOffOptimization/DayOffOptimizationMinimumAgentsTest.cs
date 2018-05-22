@@ -375,6 +375,45 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.LoadAll().Single(x => x.DayOff() != null).Date
 				.Should().Be.EqualTo(skillDays[1].CurrentDate);
 		}
+		
+		[Test]
+		public void ShouldContinueIfFirstMinimumAgentMoveMadeNightRestBroken()
+		{
+			var date = new DateOnly(2015, 10, 12);
+			var activity = ActivityRepository.Has();
+			var skill = SkillRepository.Has("skill", activity).IsOpenBetween(8, 16);
+			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
+			var scenario = ScenarioRepository.Has();
+			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1).NumberOfDaysOf(2);
+			var shiftCategory = new ShiftCategory().WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(23, 0, 23, 0, 60), new TimePeriodWithSegment(31, 0, 31, 0, 60), shiftCategory));
+			var agent = PersonRepository.Has(schedulePeriod, ruleSet, skill);
+			var alreadyScheduledAgent = PersonRepository.Has(skill);
+			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date,
+					1, 
+					1,
+					1,
+					1,
+					1,
+					1, //DO from beginning
+					1) //DO from beginning
+			);
+			skillDays[5].SetMinimumAgents(new TimePeriod(23, 24), 2);
+			skillDays[6].SetMinimumAgents(new TimePeriod(23, 24), 3);
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(23, 0, 31, 0));
+			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate).WithDayOff();
+			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate).WithDayOff();
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, date.AddDays(7), new TimePeriod(1, 2)); //prevents replacing last DO
+			PersonAssignmentRepository.Has(alreadyScheduledAgent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(23, 0, 31, 0));
+
+			Target.Execute(planningPeriod.Id.Value);
+			
+			var doDates = PersonAssignmentRepository.LoadAll().Where(x => x.DayOff() != null).Select(x => x.Date);
+			doDates.Count().Should().Be.EqualTo(2);
+			doDates.Should().Not.Contain(date.AddDays(5));
+			doDates.Should().Contain(date.AddDays(6));
+		}
+
 
 		[Test]
 		public void ShouldKeepRemovedDayOffIfMinimumAgentsTurnsOutBetter()

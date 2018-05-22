@@ -6,6 +6,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private readonly double _standardDeviation;
 		private readonly double _brokenMinimumAgentsInterval;
+		private const double doubleTolerance = 0.01;
 
 		public static PredictorResult Create(double currentResult, double predictedResult)
 		{
@@ -27,20 +28,17 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public bool IsDefinatlyWorse { get; }
 
 		public WasReallyBetterResult IsBetterThan(double currentStandardDeviation, double currentBrokenMinimumAgentsInterval)
-		{			
-			if (Math.Abs(currentBrokenMinimumAgentsInterval - _brokenMinimumAgentsInterval) < 0.01)
+		{
+			if (Math.Abs(currentBrokenMinimumAgentsInterval - _brokenMinimumAgentsInterval) < doubleTolerance)
 			{
-				if (currentStandardDeviation < _standardDeviation)
-					return WasReallyBetterResult.Yes;
-				
-				return Math.Abs(currentBrokenMinimumAgentsInterval) < 0.01 ? 
-					WasReallyBetterResult.No : 
-					WasReallyBetterResult.NoDueToMinimumAgents;
+				return currentStandardDeviation < _standardDeviation ? 
+					WasReallyBetterResult.WasBetter() : 
+					WasReallyBetterResult.WasWorse(currentStandardDeviation > doubleTolerance);
 			}
 
 			return _brokenMinimumAgentsInterval > currentBrokenMinimumAgentsInterval ? 
-				WasReallyBetterResult.Yes : 
-				WasReallyBetterResult.NoDueToMinimumAgents;
+				WasReallyBetterResult.WasBetter() : 
+				WasReallyBetterResult.WasWorse(true);
 		}
 	}
 }

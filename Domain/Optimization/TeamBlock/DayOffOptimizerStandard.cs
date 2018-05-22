@@ -143,13 +143,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					}
 					var resCalcState = new UndoRedoContainer();
 					resCalcState.FillWith(schedulingResultStateHolder.SkillDaysOnDateOnly(movedDaysOff.ModifiedDays()));
-					var success = runOneMatrixOnly(optimizationPreferences, rollbackService, matrix.Item1, schedulingOptions, matrix.Item2,
+					var result = runOneMatrixOnly(optimizationPreferences, rollbackService, matrix.Item1, schedulingOptions, matrix.Item2,
 						resourceCalculateDelayer,
 						schedulingResultStateHolder,
 						movedDaysOff,
 						dayOffOptimizationPreferenceProvider, predictorResult);
 					
-					if (success == WasReallyBetterResult.Yes)
+					if (result.Better)
 					{
 						stopOptimizeTeamInfo[matrix.Item2] = false;
 					}
@@ -158,22 +158,23 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						resCalcState.UndoAll();
 						rollbackService.RollbackMinimumChecks();
 
-						if (success == WasReallyBetterResult.No)
+						if (result.MinimumAgentsAreCurrentlyBroken)
+						{
+							stopOptimizeTeamInfo[matrix.Item2] = false;
+							matrix.Item2.LockDays(movedDaysOff.AddedDaysOff);
+						}
+						else
 						{
 							if (!optimizationPreferences.Extra.IsClassic()) //removing this if makes bookingdb lot slower...
 							{
 								stopOptimizeTeamInfo[matrix.Item2] = false;
 							}
-							matrix.Item2.LockDays(movedDaysOff.ModifiedDays());							
-						}
-						else
-						{
-							stopOptimizeTeamInfo[matrix.Item2] = false;
-							matrix.Item2.LockDays(movedDaysOff.AddedDaysOff);
+
+							matrix.Item2.LockDays(movedDaysOff.ModifiedDays());
 						}
 					}
 
-					callback.Optimizing(new OptimizationCallbackInfo(matrix.Item2, success == WasReallyBetterResult.Yes, matrixes.Count));
+					callback.Optimizing(new OptimizationCallbackInfo(matrix.Item2, result.Better, matrixes.Count));
 					
 					if (onReportProgress(schedulingProgress, matrixes.Count, currentMatrixCounter, matrix.Item2, optimizationPreferences.Advanced.RefreshScreenInterval))
 					{
@@ -213,7 +214,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var personToSetShiftCategoryLimitationFor = optimizationPreferences.Extra.IsClassic() ? matrix.Person : null;
 			if (!reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, movedDaysOff.RemovedDaysOff, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, personToSetShiftCategoryLimitationFor, matrix, optimizationPreferences))
 			{
-				return WasReallyBetterResult.No;
+				return WasReallyBetterResult.WasWorse(true);
 			}
 
 			if (!optimizationPreferences.General.OptimizationStepDaysOff && optimizationPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime)
@@ -221,7 +222,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				var flexibleDayOffvalidator = _teamBlockDayOffsInPeriodValidator;
 				if (!flexibleDayOffvalidator.Validate(teamInfo, schedulingResultStateHolder))
 				{
-					return WasReallyBetterResult.No;
+					return WasReallyBetterResult.WasWorse(false);
 				}
 			}
 
@@ -229,14 +230,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			{
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 				teamInfo.LockDays(movedDaysOff.AddedDaysOff);
-				return WasReallyBetterResult.Yes;
+				return WasReallyBetterResult.WasBetter();
 			}
 
 			if (!_teamBlockOptimizationLimits.Validate(teamInfo, optimizationPreferences, dayOffOptimizationPreferenceProvider))
 			{
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 				teamInfo.LockDays(movedDaysOff.AddedDaysOff);
-				return WasReallyBetterResult.Yes;
+				return WasReallyBetterResult.WasBetter();
 			}
 
 			if (!optimizationPreferences.Extra.IsClassic())
