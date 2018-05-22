@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return PredictorResult.Create(currentResult, predictedResult);
 		}
 		
-		private static int breaksMinimumAgents(IDictionary<DateOnly, ForecastScheduleValuePair> rawDataDictionary, MovedDaysOff movedDaysOff)
+		private static double breaksMinimumAgents(IDictionary<DateOnly, ForecastScheduleValuePair> rawDataDictionary, MovedDaysOff movedDaysOff)
 		{
 			return rawDataDictionary.Where(x => movedDaysOff.Contains(x.Key)).Sum(x => x.Value.BrokenMinimumAgents);
 		}

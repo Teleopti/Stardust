@@ -62,6 +62,41 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		}
 		
 		[Test]
+		public void ShouldConsiderMinimumAgentsOnPartOfIntervals()
+		{
+			var date = new DateOnly(2015, 10, 12); //mon
+			var activity = ActivityRepository.Has();
+			var skill = SkillRepository.Has("skill", activity).DefaultResolution(60);
+			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
+			var scenario = ScenarioRepository.Has();
+			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1).NumberOfDaysOf(1);
+			var shiftCategory = new ShiftCategory().WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var agent = PersonRepository.Has(schedulePeriod, ruleSet, skill);
+			var alreadyScheduledAgent = PersonRepository.Has(skill);
+			var partlyScheduledAgent = PersonRepository.Has(skill);
+			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date,
+				1,
+				2.5,
+				3,
+				3,
+				3,
+				3,
+				3)
+			);
+			skillDays[0].SetMinimumAgents(new TimePeriod(8, 9), 2);
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
+			PersonAssignmentRepository.GetSingle(date.AddDays(6)).WithDayOff();
+			PersonAssignmentRepository.Has(alreadyScheduledAgent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
+			PersonAssignmentRepository.Has(partlyScheduledAgent, scenario, activity, shiftCategory, date.AddDays(0), new TimePeriod(8, 0, 8, 30)); //is not enough, only half interval
+
+			Target.Execute(planningPeriod.Id.Value);
+
+			PersonAssignmentRepository.LoadAll().Single(x => x.DayOff() != null).Date
+				.Should().Be.EqualTo(date.AddDays(1)); 
+		}
+		
+		[Test]
 		public void ShouldMoveMoreThanOneDoPerAgent()
 		{
 			var date = new DateOnly(2015, 10, 12); //mon
