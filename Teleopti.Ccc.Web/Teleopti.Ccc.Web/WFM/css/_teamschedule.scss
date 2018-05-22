@@ -1231,6 +1231,26 @@ teams-time-picker.ng-invalid-dst {
 			position: absolute;
 			display: inline-block;
 			height: 25px;
+
+			&:first-of-type {
+				border-radius: 4px 0 0 4px;
+			}
+
+			&:last-of-type {
+				border-radius: 0 4px 4px 0;
+			}
+
+			&.overtime {
+				background-size: 11px 11px;
+
+				&.overtime-dark {
+					background-image: linear-gradient(45deg, transparent, transparent 4px, rgba(0, 0, 0, 0.5) 6px, transparent 10px, transparent);
+				}
+
+				&.overtime-light {
+					background-image: linear-gradient(45deg, transparent, transparent 4px, rgba(255, 255, 255, 0.8) 6px, transparent 10px, transparent);
+				}
+			}
 		}
 	}
 }
