@@ -341,6 +341,40 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 			Target.Execute(planningPeriod.Id.Value);
 		}
+		
+		[Test]
+		public void ShouldContinueIfFirstMoveDidntSuccessBecauseIntroducingNewBreakingOfMinimumStaffing()
+		{
+			var date = new DateOnly(2015, 10, 12);
+			var activity = ActivityRepository.Has();
+			var skill = SkillRepository.Has("skill", activity).IsOpenBetween(8, 16);
+			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
+			var scenario = ScenarioRepository.Has();
+			var schedulePeriod = new SchedulePeriod(date, SchedulePeriodType.Week, 1).NumberOfDaysOf(1);
+			var shiftCategory = new ShiftCategory().WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), shiftCategory));
+			var agent = PersonRepository.Has(schedulePeriod, ruleSet, skill);
+			var alreadyScheduledAgent = PersonRepository.Has(skill);
+			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date,
+					0.5, 
+					0.6, //should end up here due to min agents on first day
+					1,
+					1,
+					1,
+					1,
+					0.1) //DO from beginning, issue occur if low demand here
+			);
+			skillDays[0].SetMinimumAgents(new TimePeriod(8, 16), 2);
+			skillDays[6].SetMinimumAgents(new TimePeriod(8, 16), 2);
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
+			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate).WithDayOff();
+			PersonAssignmentRepository.Has(alreadyScheduledAgent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
+
+			Target.Execute(planningPeriod.Id.Value);
+			
+			PersonAssignmentRepository.LoadAll().Single(x => x.DayOff() != null).Date
+				.Should().Be.EqualTo(skillDays[1].CurrentDate);
+		}
 
 		[Test]
 		public void ShouldKeepRemovedDayOffIfMinimumAgentsTurnsOutBetter()

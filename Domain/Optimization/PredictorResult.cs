@@ -27,12 +27,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public bool IsDefinatlyWorse { get; }
 
 		public WasReallyBetterResult IsBetterThan(double currentStandardDeviation, double currentBrokenMinimumAgentsInterval)
-		{
+		{			
 			if (Math.Abs(currentBrokenMinimumAgentsInterval - _brokenMinimumAgentsInterval) < 0.01)
 			{
-				return currentStandardDeviation < _standardDeviation ? 
-					WasReallyBetterResult.Yes : 
-					WasReallyBetterResult.No;
+				if (currentStandardDeviation < _standardDeviation)
+					return WasReallyBetterResult.Yes;
+				
+				return Math.Abs(currentBrokenMinimumAgentsInterval) < 0.01 ? 
+					WasReallyBetterResult.No : 
+					WasReallyBetterResult.NoDueToMinimumAgents;
 			}
 
 			return _brokenMinimumAgentsInterval > currentBrokenMinimumAgentsInterval ? 
