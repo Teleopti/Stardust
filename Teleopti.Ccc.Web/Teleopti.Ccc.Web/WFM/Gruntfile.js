@@ -259,7 +259,7 @@ module.exports = function(grunt) {
 		uglify: {
 			dist: {
 				files: {
-					'dist/main.min.js': [
+					'dist/main.js': [
 						'app/**/*.js',
 						'!app/**/*.spec.js',
 						'!app/**/*.fake.js',
@@ -467,8 +467,8 @@ module.exports = function(grunt) {
 		//     dev: webpackConfig
 		// },
 		exec: {
-			ngbuild_dev: 'npm run ng build',
-			ngbuild_prod: 'npm run ng build -- --prod -env=prod --output-hashing none',
+			ngbuild_dev: 'npm run ng build -- --configuration development',
+			ngbuild_prod: 'npm run ng build -- --configuration production',
 			webpackDevDist: 'webpack'
 		},
 		clean: [
