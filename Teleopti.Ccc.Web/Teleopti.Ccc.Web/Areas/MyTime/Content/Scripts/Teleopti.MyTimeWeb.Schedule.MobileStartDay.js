@@ -144,6 +144,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 			}
 		},
 		PartialInit: function (readyForInteractionCallback, completelyLoadedCallback, ajaxobj, mywindow, initialMomentDate) {
+			if ($(".mobile-start-day").length == 0) return;
 			ajax = ajaxobj || new Teleopti.MyTimeWeb.Ajax();
 			dataService = new Teleopti.MyTimeWeb.Schedule.MobileStartDay.DataService(ajax);
 			completelyLoaded = completelyLoadedCallback;
