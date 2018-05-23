@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void PermissionForShiftTradeBulletinBoard_WhenAgentHasPermissionToViewShiftTradeBulletinBoardWithDefaultContructor_ShouldBeTrue()
 		{
-			var target = new TeamScheduleViewModelFactory(new FakePermissionProvider());
+			var target = new TeamSchedulePermissionViewModelFactory(new FakePermissionProvider());
 
 			var result = target.CreateTeamSchedulePermissionViewModel();
 			Assert.That(result.ShiftTradeBulletinBoardPermission, Is.True);
