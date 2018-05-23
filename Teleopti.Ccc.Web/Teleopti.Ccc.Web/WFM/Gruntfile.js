@@ -4,7 +4,7 @@ module.exports = function(grunt) {
 		watch: {
 			dev: {
 				files: ['css/*.scss', 'index.tpl.html', 'app/**/*.html', 'html/**/*.html', 'app/**/*.js'],
-				tasks: ['devDist', 'eslint:dev'],
+				tasks: ['buildAngularJsPart', 'eslint:dev'],
 				options: {
 					spawn: false
 				}
@@ -510,20 +510,7 @@ module.exports = function(grunt) {
 		// 'generateIndexDev', // processhtml:dev is mimicked
 		'exec:ngbuild_dev'
 	]);
-	grunt.registerTask('devDist', [
-		'ngtemplates',
-		'sass',
-		'imageEmbed',
-		'concat:distModules',
-		'concat:devJs',
-		'newer:concat:distCss',
-		'newer:concat:distDarkCss',
-		'copy:devCss',
-		'newer:copy',
-		'generateIndexDev',
-		'exec:ngbuild_dev'
-	]);
-	grunt.registerTask('devDistRta', [
+	grunt.registerTask('buildAngularJsPart', [
 		'ngtemplates',
 		'sass',
 		'imageEmbed',
@@ -535,6 +522,8 @@ module.exports = function(grunt) {
 		'newer:copy',
 		'generateIndexDev'
 	]);
+	grunt.registerTask('devDist', ['buildAngularJsPart', 'exec:ngbuild_dev']);
+	grunt.registerTask('devDistRta', ['buildAngularJsPart']);
 	grunt.registerTask('test-continuous', ['ngtemplates', 'karma:continuous']);
 	grunt.registerTask('nova', ['devDist', 'iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
 	grunt.registerTask('build', ['msbuild:build']); // build the solution
