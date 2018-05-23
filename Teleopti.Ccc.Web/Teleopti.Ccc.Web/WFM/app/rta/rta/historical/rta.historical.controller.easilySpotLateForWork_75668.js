@@ -57,8 +57,11 @@
 					"OutOfAdherences":[{"StartTime":"2018-05-21T08:00:00","EndTime":"2018-05-21T08:30:00"}],
 					"RecordedOutOfAdherences":[{"StartTime":"2018-05-21T08:00:00","EndTime":"2018-05-21T08:30:00"}],
 					"ApprovedPeriods":[],
+					"Prylar":[
+						
+					],
 					"Changes":[
-						{"Time":"2018-05-21T08:00:00","Activity":"Phone","ActivityColor":"#80FF80","State":"Logged off","Rule":"Out Of Adherence","RuleColor":"#FF0000","Adherence":"Out Of Adherences","AdherenceColor":"#FF0000"},
+						{"Alert": "Late for work 30 minutes", "Time":"2018-05-21T08:00:00","Activity":"Phone","ActivityColor":"#80FF80","State":"Logged off","Rule":"Out Of Adherence","RuleColor":"#FF0000","Adherence":"Out Of Adherences","AdherenceColor":"#FF0000"},
 						{"Time":"2018-05-21T08:30:00","Activity":"Phone","ActivityColor":"#80FF80","State":"Phone","Rule":"In Adherence","RuleColor":"#00C000","Adherence":"In adherence","AdherenceColor":"#556B2F"}],
 					"Now":"2018-06-21T14:11:04",
 					"Timeline":{
