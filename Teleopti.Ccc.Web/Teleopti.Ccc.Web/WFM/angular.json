@@ -28,7 +28,7 @@
           "configurations": {
             "production": {
               "optimization": true,
-              "outputHashing": "all",
+              "outputHashing": "none",
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
@@ -42,6 +42,9 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ]
+            },
+            "development": {
+              "outputHashing": "none"
             }
           }
         },

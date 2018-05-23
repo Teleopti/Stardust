@@ -145,7 +145,7 @@
     "prestart": "grunt devDist",
     "start": "run-p iis openWeb watch:* ",
     "startAlpha": "npm run concat:html && run-p iis openWeb webpack:watch watch:html fisk",
-    "startBeta": "npm run concat:html && npm run webpack:prod && ng build --prod --output-hashing none",
+    "startBeta": "npm run concat:html && npm run webpack:prod && ng build --configuration production",
     "webpack:watch": "webpack --watch",
     "webpack:prod": "webpack --env.production",
     "prestartProd": "grunt dist",
