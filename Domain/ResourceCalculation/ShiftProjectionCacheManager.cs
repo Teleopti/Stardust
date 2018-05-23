@@ -96,23 +96,25 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     	private readonly IRuleSetDeletedShiftCategoryChecker _rulesSetDeletedShiftCategoryChecker;
 	    private readonly IWorkShiftFromEditableShift _workShiftFromEditableShift;
 		private readonly ShiftProjectionCacheFetcher _shiftProjectionCacheFetcher;
-		private readonly IPersonalShiftMeetingTimeChecker personalShiftMeetingTimeChecker = new PersonalShiftMeetingTimeChecker();
+		private readonly IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 
 	    public ShiftProjectionCacheManager(IRuleSetDeletedActivityChecker ruleSetDeletedActivityChecker, 
 			IRuleSetDeletedShiftCategoryChecker rulesSetDeletedShiftCategoryChecker,
 			IWorkShiftFromEditableShift workShiftFromEditableShift,
-			ShiftProjectionCacheFetcher shiftProjectionCacheFetcher)
+			ShiftProjectionCacheFetcher shiftProjectionCacheFetcher,
+			IPersonalShiftMeetingTimeChecker personalShiftMeetingTimeChecker)
         {
             _ruleSetDeletedActivityChecker = ruleSetDeletedActivityChecker;
 			_rulesSetDeletedShiftCategoryChecker = rulesSetDeletedShiftCategoryChecker;
 	        _workShiftFromEditableShift = workShiftFromEditableShift;
 			_shiftProjectionCacheFetcher = shiftProjectionCacheFetcher;
+			_personalShiftMeetingTimeChecker = personalShiftMeetingTimeChecker;
 		}
 
 	    public ShiftProjectionCache ShiftProjectionCacheFromShift(IEditableShift shift, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
 	    {
 		    var workShift = _workShiftFromEditableShift.Convert(shift, dateOnlyAsDateTimePeriod.DateOnly,dateOnlyAsDateTimePeriod.TimeZone());
-		    var ret = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker);
+		    var ret = new ShiftProjectionCache(workShift, _personalShiftMeetingTimeChecker);
 			ret.SetDate(dateOnlyAsDateTimePeriod);
 
 		    return ret;
