@@ -2,7 +2,7 @@ import { DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { PeopleTestModule } from '../../people.test.module';
-import { adina } from '../../services';
+import { adina, eva, myles } from '../../services';
 import { WorkspaceComponent } from './workspace.component';
 
 describe('WorkspaceComponent', () => {
@@ -44,6 +44,16 @@ describe('WorkspaceComponent', () => {
 		fixture.detectChanges();
 		expect(page.getPeople.length).toEqual(0);
 	});
+
+	it('should be able to clear workspace', () => {
+		component.workspaceService.selectPeople([adina, myles, eva]);
+		fixture.detectChanges();
+		expect(page.getPeople.length).toEqual(3);
+
+		page.clearButton.nativeElement.click();
+		fixture.detectChanges();
+		expect(page.getPeople.length).toEqual(0);
+	});
 });
 
 class Page {
@@ -53,6 +63,10 @@ class Page {
 
 	get getRemoveButtons() {
 		return this.queryAll('[data-test-workspace] [data-test-person] [data-test-person-remove]');
+	}
+
+	get clearButton() {
+		return this.queryAll('[data-test-workspace] [data-test-clear-button]')[0];
 	}
 
 	fixture: ComponentFixture<WorkspaceComponent>;
