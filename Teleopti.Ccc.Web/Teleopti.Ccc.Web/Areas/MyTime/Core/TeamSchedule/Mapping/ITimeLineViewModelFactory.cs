@@ -3,8 +3,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 {
-	public interface ITimeLineViewModelReworkedFactory
+	public interface ITimeLineViewModelFactory
 	{
-		TimeLineViewModelReworked[] CreateTimeLineHours(DateTimePeriod timeLinePeriod);
+		TimeLineViewModel[] CreateTimeLineHours(DateTimePeriod timeLinePeriod);
 	}
 }

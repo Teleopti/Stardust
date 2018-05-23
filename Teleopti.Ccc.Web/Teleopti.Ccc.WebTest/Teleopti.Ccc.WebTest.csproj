@@ -445,7 +445,8 @@
     <Compile Include="Core\Startup\OriginHandlerPipelineModuleTest.cs" />
     <Compile Include="Core\Startup\RegisterAreasTest.cs" />
     <Compile Include="Core\Startup\RegisterGlobalApiFiltersTaskTest.cs" />
-    <Compile Include="Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelReworkedFactoryTest.cs" />
+    <Compile Include="Core\TeamSchedule\ViewModelFactory\TeamSchedulePermissionViewModelFactoryTest.cs" />
+    <Compile Include="Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelFactoryTest.cs" />
     <Compile Include="Core\TeamSchedule\ViewModelFactory\WfmTeamScheduleViewModelFactoryTest.cs" />
     <Compile Include="Core\TeamsProviderTest.cs" />
     <Compile Include="Core\TranslatedTextsTest.cs" />
@@ -549,7 +550,6 @@
     <Compile Include="Core\Requests\Mapping\DateTimePeriodFormMappingTest.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\Mapping\SettingsViewModelMappingTest.cs" />
     <Compile Include="Core\TeamSchedule\Mapping\TeamScheduleDomainDataMappingTest.cs" />
-    <Compile Include="Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelFactoryTest.cs" />
     <Compile Include="Core\Common\DataProvider\ScheduleColorProviderTest.cs" />
     <Compile Include="Core\WeekSchedule\DataProvider\AbsenceTypesProviderTest.cs" />
     <Compile Include="Filters\ApplicationFunctionApiAttributeTest.cs" />

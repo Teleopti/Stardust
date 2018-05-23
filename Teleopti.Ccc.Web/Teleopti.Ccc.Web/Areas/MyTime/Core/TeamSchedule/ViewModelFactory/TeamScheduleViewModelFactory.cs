@@ -15,11 +15,11 @@ using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 {
-	public class TeamScheduleViewModelReworkedFactory : ITeamScheduleViewModelReworkedFactory
+	public class TeamScheduleViewModelFactory : ITeamScheduleViewModelFactory
 	{
 		private readonly ITeamSchedulePersonsProvider _teamSchedulePersonsProvider;
-		private readonly IAgentScheduleViewModelReworkedMapper _agentScheduleViewModelReworkedMapper;
-		private readonly ITimeLineViewModelReworkedMapper _timeLineViewModelReworkedMapper;
+		private readonly IAgentScheduleViewModelMapper _agentScheduleViewModelMapper;
+		private readonly ITimeLineViewModelMapper _timeLineViewModelMapper;
 		private readonly IPersonScheduleDayReadModelFinder _scheduleDayReadModelFinder;
 		private readonly IPersonRepository _personRep;
 		private readonly IScheduleProvider _scheduleProvider;
@@ -27,14 +27,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ILoggedOnUser _logonUser;
 
-		public TeamScheduleViewModelReworkedFactory(ITeamSchedulePersonsProvider teamSchedulePersonsProvider,
-			IAgentScheduleViewModelReworkedMapper agentScheduleViewModelReworkedMapper,
-			ITimeLineViewModelReworkedMapper timeLineViewModelReworkedMapper,
+		public TeamScheduleViewModelFactory(ITeamSchedulePersonsProvider teamSchedulePersonsProvider,
+			IAgentScheduleViewModelMapper agentScheduleViewModelMapper,
+			ITimeLineViewModelMapper timeLineViewModelMapper,
 			IPersonScheduleDayReadModelFinder scheduleDayReadModelFinder, IPersonRepository personRep, IScheduleProvider scheduleProvider, ITeamScheduleProjectionProvider projectionProvider, IPermissionProvider permissionProvider, ILoggedOnUser logonUser)
 		{
 			_teamSchedulePersonsProvider = teamSchedulePersonsProvider;
-			_agentScheduleViewModelReworkedMapper = agentScheduleViewModelReworkedMapper;
-			_timeLineViewModelReworkedMapper = timeLineViewModelReworkedMapper;
+			_agentScheduleViewModelMapper = agentScheduleViewModelMapper;
+			_timeLineViewModelMapper = timeLineViewModelMapper;
 			_scheduleDayReadModelFinder = scheduleDayReadModelFinder;
 			_personRep = personRep;
 			_scheduleProvider = scheduleProvider;
@@ -43,11 +43,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			_logonUser = logonUser;
 		}
 		
-		public TeamScheduleViewModelReworked GetViewModelNoReadModel(TeamScheduleViewModelData data)
+		public TeamScheduleViewModel GetViewModelNoReadModel(TeamScheduleViewModelData data)
 		{
 			if (data.Paging.Equals(Paging.Empty) || data.Paging.Take <= 0)
 			{
-				return new TeamScheduleViewModelReworked();
+				return new TeamScheduleViewModel();
 			}
 
 			var currentUser = _logonUser.CurrentUser();
@@ -75,9 +75,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 				agentSchedules.Remove(mySchedule);
 			}
 
-			var timeLineHours = _timeLineViewModelReworkedMapper.Map(agentSchedules.Concat(Enumerable.Repeat(myScheduleViewModel,1)), data.ScheduleDate).ToArray();
+			var timeLineHours = _timeLineViewModelMapper.Map(agentSchedules.Concat(Enumerable.Repeat(myScheduleViewModel,1)), data.ScheduleDate).ToArray();
 
-			return new TeamScheduleViewModelReworked
+			return new TeamScheduleViewModel
 			{
 				MySchedule = myScheduleViewModel,
 				AgentSchedules = agentSchedules.ToArray(),
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 										   Date = data.ScheduleDate
 									   };
 
-			var agentSchedules = _agentScheduleViewModelReworkedMapper.Map(schedulesWithPersons).ToList();
+			var agentSchedules = _agentScheduleViewModelMapper.Map(schedulesWithPersons).ToList();
 			var scheduleCount = agentSchedules.Any() ? agentSchedules.First().Total : 0;
 			pageCount = (int)Math.Ceiling((double)scheduleCount / data.Paging.Take);
 

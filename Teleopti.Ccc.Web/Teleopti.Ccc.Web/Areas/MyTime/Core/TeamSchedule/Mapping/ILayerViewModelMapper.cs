@@ -4,7 +4,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 {
-	public interface ILayerViewModelReworkedMapper
+	public interface ILayerViewModelMapper
 	{
 		TeamScheduleLayerViewModel[] Map(IEnumerable<SimpleLayer> sourceLayers);
 		TeamScheduleLayerViewModel Map(SimpleLayer sourceLayer);

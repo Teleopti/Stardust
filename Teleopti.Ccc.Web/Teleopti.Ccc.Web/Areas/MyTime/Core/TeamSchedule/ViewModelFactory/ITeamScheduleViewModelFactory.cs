@@ -3,8 +3,8 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 {
-	public interface ITeamScheduleViewModelReworkedFactory
+	public interface ITeamScheduleViewModelFactory
 	{
-		TeamScheduleViewModelReworked GetViewModelNoReadModel(TeamScheduleViewModelData data);
+		TeamScheduleViewModel GetViewModelNoReadModel(TeamScheduleViewModelData data);
 	}
 }

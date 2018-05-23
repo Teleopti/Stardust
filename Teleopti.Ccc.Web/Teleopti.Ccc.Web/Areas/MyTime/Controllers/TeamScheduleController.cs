@@ -24,25 +24,25 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly INow _now;
 		private readonly ITeamSchedulePermissionViewModelFactory _teamSchedulePermissionViewModelFactory;
 		private readonly IDefaultTeamProvider _defaultTeamProvider;
-		private readonly ITeamScheduleViewModelReworkedFactory _teamScheduleViewModelReworkedFactory;
+		private readonly ITeamScheduleViewModelFactory _teamScheduleViewModelFactory;
 		private readonly ITimeFilterHelper _timeFilterHelper;
 		private readonly ILoggedOnUser _loggedOnUser;
 
 		public TeamScheduleController(
 			INow now,
-			ITeamSchedulePermissionViewModelFactory teamScheduleViewModelFactory,
+			ITeamSchedulePermissionViewModelFactory teamSchedulePermissionViewModelFactory,
 			IDefaultTeamProvider defaultTeamProvider,
 			ITimeFilterHelper timeFilterHelper,
 			IToggleManager toggleManager,
 			ILoggedOnUser loggedOnUser,
-			ITeamScheduleViewModelReworkedFactory teamScheduleViewModelReworkedFactory)
+			ITeamScheduleViewModelFactory teamScheduleViewModelFactory)
 		{
 			_now = now;
-			_teamSchedulePermissionViewModelFactory = teamScheduleViewModelFactory;
+			_teamSchedulePermissionViewModelFactory = teamSchedulePermissionViewModelFactory;
 			_defaultTeamProvider = defaultTeamProvider;
 			_timeFilterHelper = timeFilterHelper;
 			_loggedOnUser = loggedOnUser;
-			_teamScheduleViewModelReworkedFactory = teamScheduleViewModelReworkedFactory;
+			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
 		}
 
 		[EnsureInPortal]
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				SearchNameText = filter.SearchNameText,
 				TimeSortOrder = filter.TimeSortOrder
 			};
-			var result = _teamScheduleViewModelReworkedFactory.GetViewModelNoReadModel(data);
+			var result = _teamScheduleViewModelFactory.GetViewModelNoReadModel(data);
 			return Json(result);
 		}
 
