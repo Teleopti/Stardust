@@ -18,6 +18,7 @@ $(function() {
 	Teleopti.MyTimeWeb.Schedule.Month.Init();
 	Teleopti.MyTimeWeb.Schedule.MobileWeek.Init();
 	Teleopti.MyTimeWeb.Schedule.MobileStartDay.Init();
+	Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule.Init();
 	Teleopti.MyTimeWeb.Schedule.MobileMonth.Init();
 	Teleopti.MyTimeWeb.StudentAvailability.Init();
 	Teleopti.MyTimeWeb.Preference.Init();

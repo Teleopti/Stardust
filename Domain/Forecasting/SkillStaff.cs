@@ -358,12 +358,16 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		public void Restore(ISkillStaff previousState)
 		{
 			_calculatedResource = previousState.CalculatedResource;
+			_calculatedLoggedOn = previousState.CalculatedLoggedOn;
 		}
 
 		public IMemento CreateMemento()
 		{
-			var copy = new SkillStaff(_taskData, _serviceAgreementData);
-			copy._calculatedResource = _calculatedResource;
+			var copy = new SkillStaff(_taskData, _serviceAgreementData)
+			{
+				_calculatedResource = _calculatedResource,
+				_calculatedLoggedOn = _calculatedLoggedOn
+			};
 			return new Memento<ISkillStaff>(this, copy);
 		}
 	}

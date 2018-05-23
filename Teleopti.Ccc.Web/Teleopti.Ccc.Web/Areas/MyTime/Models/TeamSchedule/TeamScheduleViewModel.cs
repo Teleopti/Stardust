@@ -1,18 +1,16 @@
 using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 {
 	public class TeamScheduleViewModel
 	{
-		public PeriodSelectionViewModel PeriodSelection { get; set; }
-		public Guid TeamSelection { get; set; }
-		public AgentScheduleViewModel[] AgentSchedules { get; set; }
+		public AgentInTeamScheduleViewModel[] AgentSchedules { get; set; }
 		public TimeLineViewModel[] TimeLine { get; set; }
-		public bool ShiftTradePermisssion { get; set; }
-		public bool ShiftTradeBulletinBoardPermission { get; set; }
+		public int TimeLineLengthInMinutes { get; set; }
+		public int PageCount { get; set; }
+		public AgentInTeamScheduleViewModel MySchedule { get; set; }
 	}
 
 	public class PersonSchedule
@@ -20,32 +18,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 		public IPerson Person { get; set; }
 		public DateOnly Date { get; set; }
 		public IPersonScheduleDayReadModel Schedule { get; set; }
-	}
-
-	public class TeamScheduleViewModelReworked
-	{
-		public AgentInTeamScheduleViewModel[] AgentSchedules { get; set; }
-		public TimeLineViewModelReworked[] TimeLine { get; set; }
-
-		public int TimeLineLengthInMinutes { get; set; }
-		public int PageCount { get; set; }
-		public AgentInTeamScheduleViewModel MySchedule { get; set; }
-	}
-
-	public class TimeLineViewModel
-	{
-		public string ShortTime { get; set; }
-		public decimal PositionPercent { get; set; }
-		public bool IsFullHour { get; set; }
-	}
-
-	public class TimeLineViewModelReworked
-	{
-		public string HourText { get; set; }
-		public int LengthInMinutesToDisplay { get; set; }
-
-		public DateTime StartTime { get; set; }
-		public DateTime EndTime { get; set; }
 	}
 
 	public class AgentScheduleViewModel

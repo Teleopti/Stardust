@@ -3,12 +3,14 @@
 		'use strict';
 
 		var $rootScope,
-			$compile;
+			$compile,
+			$document;
 
 		beforeEach(module('wfm.templates', 'wfm.teamSchedule'));
-		beforeEach(inject(function (_$rootScope_, _$compile_) {
+		beforeEach(inject(function (_$rootScope_, _$compile_, _$document_) {
 			$rootScope = _$rootScope_;
 			$compile = _$compile_;
+			$document = _$document_;
 		}));
 		beforeEach(function () { moment.locale('sv'); });
 		afterEach(function () { moment.locale('en'); });
@@ -44,7 +46,18 @@
 		});
 
 		it('should render time line correctly', function () {
-			var panel = setUp({}, "2018-05-21", "Europe/Berlin");
+			var panel = setUp({
+				Name: 'Agent 1',
+				Date: '2018-05-21',
+				Shifts: [{
+					Projections: [{
+						Color: "#80FF80",
+						Description: "Phone",
+						Start: "2018-03-25 05:00",
+						Minutes: 120
+					}]
+				}]
+			}, "2018-05-21", "Europe/Berlin");
 			var timeline = panel[0].querySelector(".timeline");
 			var intervals = panel[0].querySelectorAll(".timeline .interval");
 			var hours = panel[0].querySelectorAll(".timeline .interval .label>span");
@@ -59,7 +72,18 @@
 		});
 
 		it('should render time line correctly on DST', function () {
-			var panel = setUp({}, "2018-03-25", "Europe/Berlin");
+			var panel = setUp({
+				Name: 'Agent 1',
+				Date: '2018-03-25',
+				Shifts: [{
+					Projections: [{
+						Color: "#80FF80",
+						Description: "Phone",
+						Start: "2018-03-25 05:00",
+						Minutes: 120
+					}]
+				}]
+			}, "2018-03-25", "Europe/Berlin");
 			var timeline = panel[0].querySelector(".timeline");
 			var intervals = panel[0].querySelectorAll(".timeline .interval");
 			var hours = panel[0].querySelectorAll(".timeline .interval .label>span");
@@ -69,7 +93,7 @@
 			expect(textHours).toEqual(["00:00", "01:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00"]);
 		});
 
-		it('should show all shifts for schedule', function () {
+		it('should show all shifts correctly', function () {
 			var schedule = {
 				Name: 'Agent 1',
 				Date: '2018-05-21',
@@ -88,22 +112,38 @@
 						Color: "#000000",
 						Description: "Email",
 						Start: "2018-05-21 08:30",
-						Minutes: 30
+						Minutes: 30,
+						IsOvertime: true,
+						UseLighterBorder: true
+					},
+					{
+						Color: "#000000",
+						Description: "Email",
+						Start: "2018-05-21 09:00",
+						Minutes: 30,
+						IsOvertime: true,
+						UseLighterBorder: false
 					}]
 				}]
 			};
 			var panel = setUp(schedule, "2018-05-21", "Europe/Berlin");
 			var schedulesEl = panel[0].querySelector(".shift");
 			var shiftLayers = schedulesEl.querySelectorAll(".shift-layer");
-			expect(shiftLayers.length).toEqual(3);
+			expect(shiftLayers.length).toEqual(4);
 			expect(shiftLayers[0].style.width).toEqual('120px');
 			expect(shiftLayers[1].style.width).toEqual('60px');
 			expect(shiftLayers[2].style.width).toEqual('30px');
+			expect(shiftLayers[3].style.width).toEqual('30px');
 
 			expect(shiftLayers[0].style.left).toEqual('330px');
 			expect(shiftLayers[1].style.left).toEqual('450px');
 			expect(shiftLayers[2].style.left).toEqual('510px');
+			expect(shiftLayers[3].style.left).toEqual('540px');
 
+			expect(angular.element(shiftLayers[2]).hasClass('overtime')).toBeTruthy();
+			expect(angular.element(shiftLayers[2]).hasClass('overtime-light')).toBeTruthy();
+			expect(angular.element(shiftLayers[3]).hasClass('overtime')).toBeTruthy();
+			expect(angular.element(shiftLayers[3]).hasClass('overtime-dark')).toBeTruthy();
 
 		});
 
@@ -128,12 +168,45 @@
 			expect(shiftLayers[0].style.left).toEqual('240px');
 		});
 
+		xit('should locate correctly based on the schedule ', function () {
+			var schedule = {
+				Name: 'Agent 1',
+				Date: '2018-05-22',
+				Shifts: [{
+					Projections: [{
+						Color: "#80FF80",
+						Description: "Phone",
+						Start: "2018-05-22 05:00",
+						Minutes: 120
+					}],
+					ProjectionTimeRange: {
+						Start: "2018-05-22 05:00",
+						End: "2018-05-22 07:00",
+					}
+				}]
+			};
+			var panel = setUp(schedule, "2018-05-22", "Europe/Berlin");
+			var shiftContainer = panel[0].querySelector(".shift-container");
+			expect(shiftContainer.scrollLeft).toEqual('180');
+		});
+
 		describe("in locale en-UK", function () {
 			beforeEach(function () { moment.locale('en-UK'); });
 			afterEach(function () { moment.locale('en'); });
 
 			it('should render time line correctly based on current user locale', function () {
-				var panel = setUp({}, "2018-05-21", "Europe/Berlin");
+				var panel = setUp({
+					Name: 'Agent 1',
+					Date: '2018-05-21',
+					Shifts: [{
+						Projections: [{
+							Color: "#80FF80",
+							Description: "Phone",
+							Start: "2018-03-25 05:00",
+							Minutes: 120
+						}]
+					}]
+				}, "2018-05-21", "Europe/Berlin");
 				var timeline = panel[0].querySelector(".timeline");
 				var intervals = panel[0].querySelectorAll(".timeline .interval");
 				var hours = panel[0].querySelectorAll(".timeline .interval .label>span");

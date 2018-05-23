@@ -6,22 +6,21 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 {
-	public class TimeLineViewModelReworkedFactory : ITimeLineViewModelReworkedFactory
+	public class TimeLineViewModelFactory : ITimeLineViewModelFactory
 	{
 		private readonly ICreateHourText _createHourText;
 		private readonly IUserTimeZone _userTimeZone;
 
-		public TimeLineViewModelReworkedFactory(ICreateHourText createHourText, IUserTimeZone userTimeZone)
+		public TimeLineViewModelFactory(ICreateHourText createHourText, IUserTimeZone userTimeZone)
 		{
 			_createHourText = createHourText;
 			_userTimeZone = userTimeZone;
 		}
 
-
-		public TimeLineViewModelReworked[] CreateTimeLineHours(DateTimePeriod timeLinePeriod)
+		public TimeLineViewModel[] CreateTimeLineHours(DateTimePeriod timeLinePeriod)
 		{
-			var hourList = new List<TimeLineViewModelReworked>();
-			TimeLineViewModelReworked lastHour = null;
+			var hourList = new List<TimeLineViewModel>();
+			TimeLineViewModel lastHour = null;
 			var shiftStartRounded = timeLinePeriod.StartDateTime;
 			var shiftEndRounded = timeLinePeriod.EndDateTime;
 			var timeZone = _userTimeZone.TimeZone();
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 			if (timeLinePeriod.StartDateTime.Minute != 0)
 			{
 				var lengthInMinutes = 60 - timeLinePeriod.StartDateTime.Minute;
-				hourList.Add(new TimeLineViewModelReworked
+				hourList.Add(new TimeLineViewModel
 					             {
 						             HourText = string.Empty,
 						             LengthInMinutesToDisplay = lengthInMinutes,
@@ -41,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 			if (timeLinePeriod.EndDateTime.Minute != 0)
 			{
 				shiftEndRounded = timeLinePeriod.EndDateTime.AddMinutes(-timeLinePeriod.EndDateTime.Minute);
-				lastHour = new TimeLineViewModelReworked
+				lastHour = new TimeLineViewModel
 					           {
 								   HourText = _createHourText.CreateText(shiftEndRounded),
 						           LengthInMinutesToDisplay = timeLinePeriod.EndDateTime.Minute,
@@ -52,7 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 
 			for (var time = shiftStartRounded; time < shiftEndRounded; time = time.AddHours(1))
 			{
-				hourList.Add(new TimeLineViewModelReworked
+				hourList.Add(new TimeLineViewModel
 					             {
 									 HourText = _createHourText.CreateText(time),
 						             LengthInMinutesToDisplay = 60,

@@ -10,12 +10,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 {
-	public class LayerViewModelReworkedMapper : ILayerViewModelReworkedMapper
+	public class LayerViewModelMapper : ILayerViewModelMapper
 	{
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IPermissionProvider _permissionProvider;
 
-		public LayerViewModelReworkedMapper(IUserTimeZone userTimeZone, IPermissionProvider permissionProvider)
+		public LayerViewModelMapper(IUserTimeZone userTimeZone, IPermissionProvider permissionProvider)
 		{
 			_userTimeZone = userTimeZone;
 			_permissionProvider = permissionProvider;

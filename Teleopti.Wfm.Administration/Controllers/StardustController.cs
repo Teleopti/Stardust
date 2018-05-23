@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -23,16 +24,19 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly ILoadAllTenants _loadAllTenants;
 		private readonly IStaffingSettingsReader _staffingSettingsReader;
 		private readonly IPingNode _pingNode;
+		private readonly IConfigReader _configReader;
 
 
 		public StardustController(IStardustRepository stardustRepository, IStardustSender stardustSender,
-			ILoadAllTenants loadAllTenants, IStaffingSettingsReader staffingSettingsReader, IPingNode pingNode)
+			ILoadAllTenants loadAllTenants, IStaffingSettingsReader staffingSettingsReader, IPingNode pingNode, 
+			IConfigReader configReader = null)
 		{
 			_stardustRepository = stardustRepository;
 			_stardustSender = stardustSender;
 			_loadAllTenants = loadAllTenants;
 			_staffingSettingsReader = staffingSettingsReader;
 			_pingNode = pingNode;
+			_configReader = configReader ?? new ConfigReader();
 		}
 
 		[HttpGet, Route("Stardust/Jobs")]
@@ -194,7 +198,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		public virtual IHttpActionResult RefreshPayrollFormats([FromBody] LogOnModel logOnModel)
 		{
 			if (logOnModel == null) return BadRequest("logOnModel is null!");
-			if (string.IsNullOrEmpty(EnvironmentVariable.GetValue("IS_CONTAINER"))) return BadRequest("");
+			if (string.IsNullOrEmpty(_configReader.AppConfig("IsContainer"))) return BadRequest("");
 
 			var tenant = _loadAllTenants.Tenants().Single(x => x.Name.Equals(logOnModel.Tenant));
 
@@ -211,7 +215,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[HttpGet, Route("Stardust/ShowRefreshPayrollFormats")]
 		public IHttpActionResult ShowRefreshPayrollFormats()
 		{
-			return Ok(!string.IsNullOrEmpty(EnvironmentVariable.GetValue("IS_CONTAINER")));
+			return Ok(!string.IsNullOrEmpty(_configReader.AppConfig("IsContainer")));
 		}
 	}
 }

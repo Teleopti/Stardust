@@ -8,21 +8,21 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 {
-	public class TimeLineViewModelReworkedMapper : ITimeLineViewModelReworkedMapper
+	public class TimeLineViewModelMapper : ITimeLineViewModelMapper
 	{
 		private readonly IUserTimeZone _userTimeZone;
-		private readonly ITimeLineViewModelReworkedFactory _timeLineViewModelReworkedFactory;
+		private readonly ITimeLineViewModelFactory _timeLineViewModelFactory;
 
-		public TimeLineViewModelReworkedMapper(ITimeLineViewModelReworkedFactory timeLineViewModelReworkedFactory, IUserTimeZone userTimeZone)
+		public TimeLineViewModelMapper(ITimeLineViewModelFactory timeLineViewModelFactory, IUserTimeZone userTimeZone)
 		{
-			_timeLineViewModelReworkedFactory = timeLineViewModelReworkedFactory;
+			_timeLineViewModelFactory = timeLineViewModelFactory;
 			_userTimeZone = userTimeZone;
 		}
 
-		public TimeLineViewModelReworked[] Map(IEnumerable<AgentInTeamScheduleViewModel>
+		public TimeLineViewModel[] Map(IEnumerable<AgentInTeamScheduleViewModel>
 			                                                         agentSchedules, DateOnly date)
 		{
-			return _timeLineViewModelReworkedFactory.CreateTimeLineHours(getTimeLinePeriod(agentSchedules, date));
+			return _timeLineViewModelFactory.CreateTimeLineHours(getTimeLinePeriod(agentSchedules, date));
 		}
 
 		private DateTimePeriod getTimeLinePeriod(IEnumerable<AgentInTeamScheduleViewModel>

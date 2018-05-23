@@ -9,13 +9,13 @@ using Teleopti.Ccc.Web.Core;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 {
-	public class AgentScheduleViewModelReworkedMapper : IAgentScheduleViewModelReworkedMapper
+	public class AgentScheduleViewModelMapper : IAgentScheduleViewModelMapper
 	{
-		private readonly ILayerViewModelReworkedMapper _layerMapper;
+		private readonly ILayerViewModelMapper _layerMapper;
 		private readonly IPersonNameProvider _personNameProvider;
 		private readonly IPermissionProvider _permissionProvider;
 
-		public AgentScheduleViewModelReworkedMapper(ILayerViewModelReworkedMapper layerMapper, IPersonNameProvider personNameProvider, IPermissionProvider permissionProvider)
+		public AgentScheduleViewModelMapper(ILayerViewModelMapper layerMapper, IPersonNameProvider personNameProvider, IPermissionProvider permissionProvider)
 		{
 			_layerMapper = layerMapper;
 			_personNameProvider = personNameProvider;
