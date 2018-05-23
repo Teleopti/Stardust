@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -36,6 +37,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		public FakeAnalyticsAbsenceRepository AnalyticsAbsenceRepository;
 		public FakeAnalyticsShiftCategoryRepository AnalyticsShiftCategoryRepository;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
+		public IPersonAssignmentRepository PersonAssignmentRepository;
+		public IPersonAbsenceRepository PersonAbsenceRepository;
 
 		private readonly Guid _businessUnitId = Guid.NewGuid();
 
@@ -231,6 +234,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		}
 
 		[Test]
+		public void ShouldSkipPreferenceDayWhenMissing()
+		{
+			setup();
+			setupValidPreferenceDay(new DateTime(2001, 1, 2), out var person, out _);
+
+			Target.Handle(new PreferenceChangedEvent
+			{
+				PersonId = person.Id.GetValueOrDefault(),
+				RestrictionDates = new List<DateTime> { new DateTime(2001, 1, 1), new DateTime(2001, 1, 2) },
+				LogOnBusinessUnitId = _businessUnitId
+			});
+			var preference = AnalyticsPreferenceRepository.PreferencesForPerson(0).Single();
+			preference.PreferencesFulfilled.Should().Be.EqualTo(0);
+			preference.PreferencesUnfulfilled.Should().Be.EqualTo(1);
+		}
+
+		[Test]
 		public void ShouldHandleSameEventTwicePreference()
 		{
 			const int dimPersonId = 0;
@@ -328,6 +348,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			{
 				PersonId = person.Id.GetValueOrDefault(),
 				RestrictionDates = new List<DateTime> {new DateTime(2001, 1, 1)},
+				LogOnBusinessUnitId = _businessUnitId
+			});
+			AnalyticsPreferenceRepository.PreferencesForPerson(0).Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldHandleMissingPersonPeriod()
+		{
+			setup();
+			setupInvalidPreferenceDay(new DateTime(2001, 1, 2), out var person);
+			person.TerminatePerson(new DateOnly(2001, 1, 1), new PersonAccountUpdaterDummy(),
+				new ClearPersonRelatedInformation(PersonAssignmentRepository, ScenarioRepository, PersonAbsenceRepository));
+			Target.Handle(new PreferenceChangedEvent
+			{
+				PersonId = person.Id.GetValueOrDefault(),
+				RestrictionDates = new List<DateTime> { new DateTime(2001, 1, 2) },
 				LogOnBusinessUnitId = _businessUnitId
 			});
 			AnalyticsPreferenceRepository.PreferencesForPerson(0).Should().Be.Empty();

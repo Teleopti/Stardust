@@ -133,13 +133,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 				if (!preferenceDays.Any())
 				{
 					// Preference day does not exists anymore so it has been deleted, will be handled by other event.
-					return;
+					continue;
 				}
 
 				var preferenceDay = preferenceDays.Single();
 
 				var dateId = getAnalyticsDate(restrictionDate);
 				var analyticsPersonPeriod = getAnalyticsPersonPeriod(restrictionDate, person);
+				if (analyticsPersonPeriod == null)
+				{
+					continue;
+				}
 
 				var scenarios = _scenarioRepository.FindEnabledForReportingSorted();
 				if (scenarioId != Guid.Empty)
@@ -290,6 +294,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 		private AnalyticsPersonPeriod getAnalyticsPersonPeriod(DateTime restrictionDate, IPerson person)
 		{
 			var personPeriod = person.Period(new DateOnly(restrictionDate.Date));
+			if (personPeriod == null)
+				return null;
 			var analyticsPersonPeriod = _analyticsPersonPeriodRepository.PersonPeriod(personPeriod.Id.GetValueOrDefault());
 			if (analyticsPersonPeriod == null)
 				throw new PersonPeriodMissingInAnalyticsException(personPeriod.Id.GetValueOrDefault());
