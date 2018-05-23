@@ -12,7 +12,6 @@ I want to be able to monitor my part of the business
         And There is a skill to monitor called 'Skill B' with queue id '7' and queue name 'queue2' and activity 'activity2'
         And There is an email-like skill to monitor called 'Skill BackOffice' with queue id '3' and queue name 'queue3' and activity 'activity3'
 
-    @Ignore
 	Scenario: Create Skill Group in SGM
         Given I am viewing intraday page
         And Local storage is reset
@@ -41,7 +40,6 @@ I want to be able to monitor my part of the business
         And I pick the skillgroup 'my Area 2'
         Then I should monitor 'my Area 2'
 
-    @Ignore
     Scenario: Add Skill to Skill Group in SGM
         Given there is a Skill Area called 'SkillArea A' that monitors skills 'Skill B'
         And I am viewing intraday page

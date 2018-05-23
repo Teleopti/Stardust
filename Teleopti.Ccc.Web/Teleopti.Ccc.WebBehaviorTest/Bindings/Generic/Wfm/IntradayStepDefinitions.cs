@@ -246,25 +246,31 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Then(@"I close the Skill Manager")]
 		public void WhenICloseTheSkillManager()
 		{
-			try
+			//try
+			//{
+			//	var n = 10;
+			//	while (Browser.Interactions.IsVisible("#exit_sgm") && !Browser.Interactions.IsVisible("#confirmExitButton"))
+			//	{
+			//		Browser.Interactions.Click("#exit_sgm");
+			//		n--;
+			//		if (n == 0)
+			//		{
+			//			break;
+			//		}
+			//	}
+			//	if (Browser.Interactions.IsVisible("#confirmExitButton"))
+			//		Browser.Interactions.Click("#confirmExitButton");
+			//}
+			//catch (Exception e)
+			//{
+			//	Console.WriteLine(e);
+			//	throw;
+			//}
+
+			Browser.Interactions.ClickVisibleOnly("#exit_sgm");
+			if (Browser.Interactions.IsVisible("#confirmExitButton"))
 			{
-				var n = 10;
-				while (Browser.Interactions.IsVisible("#exit_sgm") && !Browser.Interactions.IsVisible("#confirmExitButton"))
-				{
-					Browser.Interactions.Click("#exit_sgm");
-					n--;
-					if (n == 0)
-					{
-						break;
-					}
-				}
-				if (Browser.Interactions.IsVisible("#confirmExitButton"))
-					Browser.Interactions.Click("#confirmExitButton");
-			}
-			catch (Exception e)
-			{
-				Console.WriteLine(e);
-				throw;
+				Browser.Interactions.ClickVisibleOnly("#confirmExitButton");
 			}
 		}
 
