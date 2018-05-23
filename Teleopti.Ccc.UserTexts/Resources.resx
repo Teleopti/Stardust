@@ -4657,7 +4657,7 @@ deny</value>
     <comment>Schedule Only Rotation Days</comment>
   </data>
   <data name="UseConsecutiveWorkDays" xml:space="preserve">
-    <value>Use Consecutive Work Days</value>
+    <value>Use Consecutive Workdays</value>
     <comment>Use Consecutive Work Days</comment>
   </data>
   <data name="ManageWorkload" xml:space="preserve">
@@ -10512,7 +10512,7 @@ These options are activated:
     <comment>Consecutive days off</comment>
   </data>
   <data name="ConsecutiveWorkDays" xml:space="preserve">
-    <value>Consecutive work days</value>
+    <value>Consecutive workdays</value>
     <comment>Consecutive work days</comment>
   </data>
   <data name="DaysOffFromFlexibleWorkTime" xml:space="preserve">
@@ -17304,7 +17304,7 @@ The application will now exit.</value>
     <comment>Label name for use priority skill validation setting</comment>
   </data>
   <data name="DescriptionOfMaximumWorkdayRule" xml:space="preserve">
-    <value>Maximum consecutive days without dayoff</value>
+    <value>Maximum consecutive days without day off</value>
     <comment>Friendly description of MaximumWorkdayRule to show shift trade system setting</comment>
   </data>
   <data name="PeopleAccess" xml:space="preserve">
@@ -17329,7 +17329,7 @@ The application will now exit.</value>
   </data>
   <data name="ImportBpoImportInformationTooltipImported" xml:space="preserve">
     <value>imported</value>
-    <comment>Person xx {imported}  and then nthe name of a file</comment>
+    <comment>Person xx {imported}  and then the name of a file</comment>
   </data>
   <data name="ImportBpoFileImportDateInformation" xml:space="preserve">
     <value>All dates are UTC</value>
