@@ -61,14 +61,9 @@
           <mat-cell *matCellDef="let person" data-test-person-role> {{personToRoles(person)}} </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="Site">
-          <mat-header-cell *matHeaderCellDef> Site </mat-header-cell>
-          <mat-cell *matCellDef="let person" data-test-person-site> {{person.Site}} </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="Team">
-          <mat-header-cell *matHeaderCellDef> Team </mat-header-cell>
-          <mat-cell *matCellDef="let person" data-test-person-team> {{person.Team}}</mat-cell>
+        <ng-container matColumnDef="SiteTeam">
+          <mat-header-cell *matHeaderCellDef> Site/Team </mat-header-cell>
+          <mat-cell *matCellDef="let person" data-test-person-site-team> {{person.Site}}/{{person.Team}} </mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

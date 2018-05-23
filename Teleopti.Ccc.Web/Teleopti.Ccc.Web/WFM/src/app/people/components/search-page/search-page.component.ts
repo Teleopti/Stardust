@@ -28,7 +28,7 @@ export class SearchPageComponent implements OnInit {
 		public searchPageService: SearchPageService
 	) {}
 
-	displayedColumns = ['select', 'FirstName', 'LastName', 'Site', 'Team', 'Roles'];
+	displayedColumns = ['select', 'FirstName', 'LastName', 'SiteTeam', 'Roles'];
 	dataSource = new MatTableDataSource<Person>([]);
 	searchControl = new FormControl('');
 
