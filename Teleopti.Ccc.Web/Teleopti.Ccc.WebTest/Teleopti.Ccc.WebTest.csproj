@@ -549,7 +549,6 @@
     <Compile Include="Core\Requests\Mapping\DateTimePeriodFormMappingTest.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\Mapping\SettingsViewModelMappingTest.cs" />
     <Compile Include="Core\TeamSchedule\Mapping\TeamScheduleDomainDataMappingTest.cs" />
-    <Compile Include="Core\TeamSchedule\Mapping\TeamScheduleViewModelMappingTest.cs" />
     <Compile Include="Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelFactoryTest.cs" />
     <Compile Include="Core\Common\DataProvider\ScheduleColorProviderTest.cs" />
     <Compile Include="Core\WeekSchedule\DataProvider\AbsenceTypesProviderTest.cs" />

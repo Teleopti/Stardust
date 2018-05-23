@@ -478,6 +478,9 @@
     <Compile Include="Areas\MyTime\Controllers\OvertimeRequestsController.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AgentBadgeWithinPeriodProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\SingleOwnedPerson.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\ViewModelFactory\ITeamSchedulePermissionViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\ViewModelFactory\TeamSchedulePermissionViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Models\TeamSchedule\TeamSchedulePermissionViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\WeekSchedule\RequestLicense.cs" />
     <Compile Include="Areas\People\Controllers\RoleManager.cs" />
     <Compile Include="Areas\People\Core\ActionFilters.cs" />
@@ -1208,9 +1211,6 @@
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamScheduleProjection.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TeamScheduleDomainData.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TeamScheduleDomainDataMapper.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TeamScheduleViewModelMapper.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\ViewModelFactory\ITeamScheduleViewModelFactory.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Common\Mapping\CommonViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\ScheduleColorSource.cs" />
     <Compile Include="Areas\MyTime\Models\LayoutBase\CultureSpecificViewModelFactory.cs" />
