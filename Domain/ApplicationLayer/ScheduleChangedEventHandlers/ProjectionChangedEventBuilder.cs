@@ -5,6 +5,7 @@ using log4net;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
@@ -84,15 +85,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 				CheckSum = new ShiftTradeChecksumCalculator(scheduleDay).CalculateChecksum()
 			};
 
-
+			eventScheduleDay.IsWorkday = scheduleDay.IsWorkday();
 			switch (significantPart)
 			{
 				case SchedulePartView.Overtime:
-					eventScheduleDay.IsWorkday = true;
 					break;
 				case SchedulePartView.MainShift:
 					var shiftCategory = scheduleDay.PersonAssignment().ShiftCategory;
-					eventScheduleDay.IsWorkday = true;
 					eventScheduleDay.ShiftCategoryId = shiftCategory.Id.GetValueOrDefault();
 					eventScheduleDay.ShortName = shiftCategory.Description.ShortName;
 					eventScheduleDay.DisplayColor = shiftCategory.DisplayColor.ToArgb();

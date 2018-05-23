@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Teleopti.Support.Library.ConfigFiles;
 
 namespace Teleopti.Support.Tool.Tool
 {
@@ -14,7 +15,11 @@ namespace Teleopti.Support.Tool.Tool
 
 		public string[] FileContents()
 		{
-			return File.ReadAllLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"ConfigFiles\" + _file));
+			var file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ConfigFiles", _file);
+			if (File.Exists(file))
+				return File.ReadAllLines(file);
+			return new ResourceLoader().Load(_file)
+				.Split(new[] {Environment.NewLine}, StringSplitOptions.None);
 		}
 	}
 }

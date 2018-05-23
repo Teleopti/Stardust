@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
@@ -573,6 +574,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I view requests")]
 		public void GivenIAmViewingRequests()
 		{
+			TestControllerMethods.Logon();
+			Navigation.GotoRequests();
+		}
+
+		[When(@"I wait half second and refresh the request page")]
+		public void WhenIWaitHalfSecondAndRefreshTheRequestPage()
+		{
+			Thread.Sleep(500);
 			TestControllerMethods.Logon();
 			Navigation.GotoRequests();
 		}

@@ -92,6 +92,17 @@
 			}
 		});
 
+		service.fake({
+			name: 'modifyAdherencePermission',
+			url: /\.\.\/api\/HistoricalAdherence\/HasModifyAdherencePermission/,
+			clear: function () {
+				return {};
+			},
+			add: function (data, item) {
+				return item;
+			}
+		});
+
 		service.fake(/\.\.\/api\/AgentStates\/Poll/,
 			function (params) {
 				service.lastAgentStatesRequestParams = params;

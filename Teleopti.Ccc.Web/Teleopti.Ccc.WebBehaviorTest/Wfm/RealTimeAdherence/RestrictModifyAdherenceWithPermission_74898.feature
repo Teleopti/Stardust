@@ -35,20 +35,19 @@ Feature: Restrict modify adherence with permission
 	  | Phone state | LoggedOff |
 	  | Adherence   | Out       |
 	And Ashley Andeen has a 'Phone' shift between '2018-04-19 09:00' and '17:00'
-	And Pierre Bladi has a 'Phone' shift between '2018-04-19 09:00' and '17:00'
+	And Pierre Baldi has a 'Phone' shift between '2018-04-19 09:00' and '17:00'
 	And Ashley Andeen has a 'Phone' shift between '2018-04-20 09:00' and '17:00'
-	And Pierre Bladi has a 'Phone' shift between '2018-04-20 09:00' and '17:00'
+	And Pierre Baldi has a 'Phone' shift between '2018-04-20 09:00' and '17:00'
 	And today is '2018-04-19'
 	And at '09:00' 'Ashley Andeen' sets his phone state to 'Ready'
-	And at '09:00' 'Pierre Bladi' sets his phone state to 'Ready'
+	And at '09:00' 'Pierre Baldi' sets his phone state to 'Ready'
 	And at '16:30' 'Ashley Andeen' sets his phone state to 'LoggedOff'
-	And at '16:30' 'Pierre Bladi' sets his phone state to 'LoggedOff'
-	And the time is '17:15'
+	And at '16:30' 'Pierre Baldi' sets his phone state to 'LoggedOff'
 	And today is '2018-04-20'
 	And at '09:00' 'Ashley Andeen' sets his phone state to 'Ready'
-	And at '09:00' 'Pierre Bladi' sets his phone state to 'Ready'
+	And at '09:00' 'Pierre Baldi' sets his phone state to 'Ready'
 	And at '16:30' 'Ashley Andeen' sets his phone state to 'LoggedOff'
-	And at '16:30' 'Pierre Bladi' sets his phone state to 'LoggedOff'
+	And at '16:30' 'Pierre Baldi' sets his phone state to 'LoggedOff'
 	And the time is '17:15'
 
   Scenario: Approve as in adherence restricted by access permission
@@ -65,7 +64,7 @@ Feature: Restrict modify adherence with permission
 	  | Access to modify adherence | True  |
 	When I view historical adherence for 'Ashley Andeen' on '2018-04-19'
 	Then I should be able to approve out of adherences
-	When I view historical adherence for 'Pierre Bladi' on '2018-04-19'
+	When I view historical adherence for 'Pierre Baldi' on '2018-04-19'
 	Then I should not be able to approve out of adherences
 
   Scenario: Approve as in adherence restricted by date access
@@ -73,9 +72,9 @@ Feature: Restrict modify adherence with permission
 	  | Field                      | Value |
 	  | Access to team             | Green |
 	  | Access to modify adherence | True  |
-	When I view historical adherence for 'Pierre Bladi' on '2018-04-19'
+	When I view historical adherence for 'Pierre Baldi' on '2018-04-19'
 	Then I should not be able to approve out of adherences
-	When I view historical adherence for 'Pierre Bladi' on '2018-04-20'
+	When I view historical adherence for 'Pierre Baldi' on '2018-04-20'
 	Then I should be able to approve out of adherences
 
   Scenario: Remove approved out of adherences restricted by access permission
@@ -83,7 +82,7 @@ Feature: Restrict modify adherence with permission
 	  | Field                      | Value |
 	  | Access to modify adherence | False |
 	And Ashley Andeen has an approved period between '16:30' and '17:00'
-	When I view historical adherence for 'Ashley Andeen' on '2018-04-19'
+	When I view historical adherence for 'Ashley Andeen' on '2018-04-20'
 	Then I should not be able to remove approved out of adherences
 
   @ignore

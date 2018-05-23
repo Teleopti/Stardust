@@ -31,13 +31,18 @@
 		vm.selected;
 		vm.openImportData;
 		vm.selectedSkill;
+		vm.selectedSkillArea;
 		vm.exportPeriod = {
 			startDate: {},
 			endDate: {}
 		};
 		vm.skills = [];
-		vm.skillGroups = [];
+		vm.allSkillAreas = [];
+		
 		vm.selectedSkillChange = selectedSkillChange;
+		vm.selectedAreaChange = selectedAreaChange;
+		vm.clearSelectedSkill = clearSelectedSkill;
+		vm.clearSelectedSkillGroup = clearSelectedSkillGroup;
 		vm.querySearchSkills = querySearchSkills;
 		vm.exportFile = exportFile;
 		vm.ErrorMessage = "";
@@ -49,17 +54,18 @@
 
 		var skills;
 		getSkills();
+		getSkillAreas();
 		getMessage();
 		resetExportPeriod();
-		getGanttData();
+		
 
 		function getGanttData() {
 			vm.data = {};
 			var parameterData = null;
-			if (angular.isDefined($window.sessionStorage.staffingSelectedSkill)) {
-				vm.localSkill = JSON.parse($window.sessionStorage.staffingSelectedSkill);
+			if (vm.selectedSkill != null) {
+				vm.localSkill = vm.selectedSkill;
 				vm.localSkillName = vm.localSkill.Name;
-				var skillId = JSON.parse($window.sessionStorage.staffingSelectedSkill).Id;
+				var skillId = vm.selectedSkill.Id;
 				parameterData = { SkillId: skillId };
 				var gantSkillDataQuery = staffingService.getGanttDataForOneSkill.get(parameterData);
 				gantSkillDataQuery.$promise.then(function (response) {
@@ -67,10 +73,10 @@
 					vm.data = vm.gantData.GanttDataPerBpoList;
 				});
 			}
-			else if (angular.isDefined($window.sessionStorage.staffingSelectedArea)) {
-				vm.localSkill = JSON.parse($window.sessionStorage.staffingSelectedArea);
-				vm.localSkillName = localSkill.Name;
-				var skillGroup = JSON.parse($window.sessionStorage.staffingSelectedArea).Id;
+			else if (vm.selectedSkillArea != null) {
+				vm.localSkill = vm.selectedSkillArea;
+				vm.localSkillName = vm.localSkill.Name;
+				var skillGroup = vm.selectedSkillArea.Id;
 
 				parameterData = { SkillGroupId: skillGroup };
 				var gantSkillGroupDataQuery = staffingService.getGanttDataForOneSkillGroup.get(parameterData);
@@ -145,12 +151,56 @@
 		}
 
 		function getSkills() {
+			if ($window.sessionStorage.staffingSelectedDate)
+				vm.selectedDate = new Date($window.sessionStorage.staffingSelectedDate);
 			var query = staffingService.getSkills.query();
-			query.$promise.then(function (response) {
-				selectSkill(response[0]);
-				skills = response;
+			query.$promise.then(function (result) {
+				if ($window.sessionStorage.staffingSelectedSkill) {
+					manageSkillSessionStorage();
+				} else if (!$window.sessionStorage.staffingSelectedArea) {
+					selectSkill(skills[0]);
+				}
+				skills = result;
+				vm.skills = skills;
 			});
 		}
+
+		function getSkillAreas() {
+			var query = staffingService.getSkillAreas.get();
+			query.$promise.then(function (response) {
+				vm.HasPermissionToModifySkillArea = response.HasPermissionToModifySkillArea;
+
+				if ($window.sessionStorage.staffingSelectedArea) {
+					if (response.SkillAreas.find(checkArea)) {
+						vm.selectedSkillArea = response.SkillAreas.find(checkArea);
+					} else {
+						manageAreaSessionStorage();
+					}
+
+				}
+				vm.allSkillAreas = response.SkillAreas;
+				getGanttData();
+			});
+		}
+
+		function checkArea(area) {
+			return area.Id === angular.fromJson($window.sessionStorage.staffingSelectedArea).Id;
+		}
+
+		function manageSkillSessionStorage() {
+			if ($window.sessionStorage.staffingSelectedSkill) {
+				vm.selectedSkill = null;
+				selectedSkillChange(angular.fromJson($window.sessionStorage.staffingSelectedSkill));
+			}
+		}
+
+		function manageAreaSessionStorage() {
+			if ($window.sessionStorage.staffingSelectedArea) {
+				vm.selectedSkillArea = null;
+				selectedAreaChange(angular.fromJson($window.sessionStorage.staffingSelectedArea));
+			}
+		}
+
 		function isBpoVisualizeEnabled() {
 			return toggleService.Staffing_BPO_Visualization_74958;
 		}
@@ -170,11 +220,30 @@
 		function selectedSkillChange(skill) {
 			if (skill == null) return;
 			selectSkill(skill);
+			getGanttData();
+		}
+
+		function clearSelectedSkill() {
+			vm.selectedSkill = null;
+			getGanttData();
+		}
+
+		function clearSelectedSkillGroup() {
+			vm.selectedSkillArea = null;
+			getGanttData();
+		}
+
+		function selectedAreaChange(area) {
+			vm.selectedSkillArea = area;
+			vm.selectedSkill = null;
+			getGanttData();
 		}
 
 		function selectSkill(skill) {
 			vm.selectedSkill = skill;
+			vm.selectedSkillGroup = null;
 		}
+
 		function createFilterFor(query) {
 			var lowercaseQuery = angular.lowercase(query);
 			return function filterFn(item) {

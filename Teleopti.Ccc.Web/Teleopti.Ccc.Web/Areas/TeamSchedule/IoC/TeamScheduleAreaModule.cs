@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.IoC
 
 			builder.RegisterType<CommonNameDescriptionSetting>().As<ICommonNameDescriptionSetting>().SingleInstance();
 			builder.RegisterType<SwapAndModifyServiceNew>().As<ISwapAndModifyServiceNew>().SingleInstance();
-			builder.RegisterType<ScheduleDictionaryPersister>().As<IScheduleDictionaryPersister>().SingleInstance();
 
 			builder.RegisterType<SwapMainShiftForTwoPersonsCommandHandler>().As<ISwapMainShiftForTwoPersonsCommandHandler>().SingleInstance();
 			builder.RegisterType<MoveShiftLayerCommandHelper>().As<IMoveShiftLayerCommandHelper>().SingleInstance();

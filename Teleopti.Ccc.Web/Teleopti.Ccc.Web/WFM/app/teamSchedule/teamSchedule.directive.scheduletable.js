@@ -23,8 +23,8 @@
 		};
 	}
 
-	ScheduleTableController.$inject = ['$scope', 'PersonSelection', 'ScheduleManagement', 'ValidateRulesService', 'ScheduleNoteManagementService','Toggle', 'teamsPermissions'];
-	function ScheduleTableController($scope, personSelectionSvc, ScheduleMgmt, ValidateRulesService, ScheduleNoteMgmt, toggleSvc, teamsPermissions) {
+	ScheduleTableController.$inject = ['$scope','$state', 'PersonSelection', 'ScheduleManagement', 'ValidateRulesService', 'ScheduleNoteManagementService','Toggle', 'teamsPermissions'];
+	function ScheduleTableController($scope, $state, personSelectionSvc, ScheduleMgmt, ValidateRulesService, ScheduleNoteMgmt, toggleSvc, teamsPermissions) {
 		var vm = this;
 
 		vm.updateAllSelectionInCurrentPage = function (isAllSelected) {
@@ -141,8 +141,19 @@
 			};
 		};
 
-		vm.hasUnderlyingSchedules = function (personSchedule) {
-			return toggleSvc.WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952 && !!personSchedule.UnderlyingScheduleSummary;
+		vm.showEditButton = function (personSchedule) {
+			return toggleSvc.WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978
+				&& !personSchedule.IsFullDayAbsence
+				&& !(personSchedule.IsProtected && !vm.permissions.HasModifyWriteProtectedSchedulePermission)
+				&& !personSchedule.IsDayOff()
+				&& !!personSchedule.ActivityCount();
+		}
+
+		vm.clickEditButton = function (personSchedule) {
+			$state.go('teams.shiftEditor', {
+				personSchedule: personSchedule,
+				date: vm.selectedDate
+			});
 		}
 	
 		function isAllInCurrentPageSelected() {

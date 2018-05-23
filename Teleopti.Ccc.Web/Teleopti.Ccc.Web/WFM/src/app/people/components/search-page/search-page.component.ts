@@ -1,22 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource, PageEvent } from '@angular/material';
 
-import { NavigationService, PeopleSearchQuery, RolesService, SearchService, WorkspaceService } from '../../services';
+import {
+	NavigationService,
+	PeopleSearchQuery,
+	RolesService,
+	WorkspaceService,
+	PeopleSearchResult
+} from '../../services';
 import { Person, Role } from '../../types';
 import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
+import { SearchPageService } from './search-page.service';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
 	selector: 'people-search-page',
 	templateUrl: './search-page.component.html',
-	styleUrls: ['./search-page.component.scss']
+	styleUrls: ['./search-page.component.scss'],
+	providers: [SearchPageService]
 })
 export class SearchPageComponent implements OnInit {
 	constructor(
 		public nav: NavigationService,
 		public workspaceService: WorkspaceService,
 		public rolesService: RolesService,
-		public searchService: SearchService
+		public searchPageService: SearchPageService
 	) {}
 
 	displayedColumns = ['select', 'FirstName', 'LastName', 'Site', 'Team', 'Roles'];
@@ -29,9 +38,9 @@ export class SearchPageComponent implements OnInit {
 	};
 
 	ngOnInit() {
-		this.searchControl.setValue(this.searchService.keyword);
-		this.pagination.length = this.searchService.lastQuerySize;
-		this.searchService.getPeople().subscribe({
+		this.searchControl.setValue(this.searchPageService.keyword);
+		this.pagination.length = this.searchPageService.lastQuerySize;
+		this.searchPageService.getPeople().subscribe({
 			next: (people: Person[]) => {
 				this.dataSource.data = people;
 			}
@@ -56,19 +65,20 @@ export class SearchPageComponent implements OnInit {
 	}
 
 	onSearch() {
-		this.searchService.keyword = this.searchControl.value;
+		this.searchPageService.keyword = this.searchControl.value;
 		this.searchPeople();
 	}
 
 	searchPeople() {
 		const query: PeopleSearchQuery = {
-			keyword: this.searchService.keyword,
-			pageSize: this.searchService.pageSize,
-			pageIndex: this.searchService.pageIndex
+			keyword: this.searchPageService.keyword,
+			pageSize: this.searchPageService.pageSize,
+			pageIndex: this.searchPageService.pageIndex
 		};
-		return this.searchService.searchPeople(query).then(searchResult => {
-			this.pagination.length = searchResult.TotalRows;
-			return searchResult;
+		this.searchPageService.searchPeople(query).subscribe({
+			next: searchResult => {
+				this.pagination.length = searchResult.TotalRows;
+			}
 		});
 	}
 
@@ -78,7 +88,7 @@ export class SearchPageComponent implements OnInit {
 			const person = this.workspaceService.getSelectedPerson(id);
 			this.workspaceService.deselectPerson(person);
 		} else {
-			const person = this.searchService.getPerson(id);
+			const person = this.searchPageService.getPerson(id);
 			this.workspaceService.selectPerson(person);
 		}
 	}
@@ -90,8 +100,8 @@ export class SearchPageComponent implements OnInit {
 	}
 
 	paginationChanged(event: PageEvent) {
-		this.searchService.pageSize = event.pageSize;
-		this.searchService.pageIndex = event.pageIndex;
+		this.searchPageService.pageSize = event.pageSize;
+		this.searchPageService.pageIndex = event.pageIndex;
 		this.searchPeople();
 	}
 
@@ -99,7 +109,7 @@ export class SearchPageComponent implements OnInit {
 		this.toggleSelectedPerson(row.Id);
 	}
 
-	masterToggle() {
+	selectAllOnPage() {
 		if (this.isAllSelected()) {
 			this.dataSource.data.forEach(person => {
 				if (this.workspaceService.isPersonSelected(person.Id)) this.workspaceService.deselectPerson(person);
@@ -109,5 +119,13 @@ export class SearchPageComponent implements OnInit {
 				if (!this.workspaceService.isPersonSelected(person.Id)) this.workspaceService.selectPerson(person);
 			});
 		}
+	}
+
+	selectAllMatches() {
+		this.searchPageService.searchPeopleAllPages().subscribe({
+			next: (result: PeopleSearchResult) => {
+				this.workspaceService.selectPeople(result.People);
+			}
+		});
 	}
 }

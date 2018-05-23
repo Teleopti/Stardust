@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakeJobStartTimeRepository : IJobStartTimeRepository
 	{
 		private readonly INow _now;
-		public Dictionary<Guid,DateTime> Records = new Dictionary<Guid, DateTime>();
+		public Dictionary<Guid,LockRecord> Records = new Dictionary<Guid, LockRecord>();
 
 		public FakeJobStartTimeRepository(INow now)
 		{
@@ -17,23 +17,37 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public bool CheckAndUpdate(int thresholdMinutes, Guid bu)
 		{
-			if (Records.ContainsKey(bu) && _now.UtcDateTime() <= Records[bu].AddMinutes(thresholdMinutes))
+			if (Records.ContainsKey(bu) && _now.UtcDateTime() <= Records[bu].StartTime.AddMinutes(thresholdMinutes))
 				return false;
 
 			if (Records.ContainsKey(bu))
 				Records.Remove(bu);
-			Records.Add(bu, _now.UtcDateTime());
+			Records.Add(bu, new LockRecord{StartTime = _now.UtcDateTime() }); 
 			return true;
 		}
 
 		public void UpdateLockTimestamp(Guid bu)
 		{
-			
+			if (Records.ContainsKey(bu))
+				Records[bu].LockTimestamp = _now.UtcDateTime().AddMinutes(5);
 		}
 
 		public void ResetLockTimestamp(Guid bu)
 		{
-			
+			if (Records.ContainsKey(bu))
+				Records[bu].LockTimestamp = null;
 		}
+
+		public void RemoveLock(Guid bu)
+		{
+			if (Records.ContainsKey(bu))
+				Records.Remove(bu);
+		}
+	}
+
+	public class LockRecord
+	{
+		public DateTime StartTime { get; set; }
+		public DateTime? LockTimestamp { get; set; }
 	}
 }

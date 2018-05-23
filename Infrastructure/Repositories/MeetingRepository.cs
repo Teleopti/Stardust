@@ -58,9 +58,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     		InParameter.NotNull(nameof(period), period);
     		InParameter.NotNull(nameof(scenario), scenario);
 
-    		ICollection<IMeeting> retList = new HashSet<IMeeting>();
+    		var retList = new List<IMeeting>();
 
-    		period = new DateOnlyPeriod(period.StartDate.AddDays(-1), period.EndDate.AddDays(1)); //To compensate for time zones
+    		period = period.Inflate(1); //To compensate for time zones
     		foreach (var personList in persons.Batch(400))
     		{
     			var people = personList.ToArray();
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     				personRestriction = Restrictions.Or(Restrictions.InG("Organizer", people), personRestriction);
     			}
 
-    			IList<IMeeting> tempList = Session.CreateCriteria<Meeting>()
+    			var tempList = Session.CreateCriteria<Meeting>()
     				.Add(Restrictions.Le("StartDate", period.EndDate))
     				.Add(Restrictions.Gt("EndDate", period.StartDate))
     				.Add(Restrictions.Eq("Scenario", scenario))
@@ -85,13 +85,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     				.SetResultTransformer(Transformers.DistinctRootEntity)
     				.List<IMeeting>();
 
-    			foreach (IMeeting meeting in tempList)
-    			{
-    				retList.Add(meeting);
-    			}
-    		}
+				retList.AddRange(tempList);
+			}
 
-    		return retList;
+    		return retList.Distinct().ToArray();
     	}
 		
         public IMeeting LoadAggregate(Guid id)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using Autofac;
 using Stardust.Node.Interfaces;
@@ -19,8 +20,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			_stardustJobFeedback = stardustJobFeedback;
 		}
 
-		public void Handle(NewMultiAbsenceRequestsCreatedEvent parameters, CancellationTokenSource cancellationTokenSource,
-			Action<string> sendProgress)
+		public void Handle(NewMultiAbsenceRequestsCreatedEvent parameters, 
+			CancellationTokenSource cancellationTokenSource,
+			Action<string> sendProgress,
+			ref IEnumerable<object> returnObjects)
 		{
 			_stardustJobFeedback.SendProgress = sendProgress;
 			var theRealOne = _componentContext.Resolve<IHandleEvent<NewMultiAbsenceRequestsCreatedEvent>>();

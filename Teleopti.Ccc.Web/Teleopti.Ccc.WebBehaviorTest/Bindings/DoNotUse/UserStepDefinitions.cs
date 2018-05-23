@@ -7,6 +7,8 @@ using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
+using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse;
@@ -542,6 +544,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.DoNotUse
 			var existingShiftTrade = table.CreateInstance<ExistingShiftTradeRequest>();
 			DataMaker.Data().ApplyAfterSetup(existingShiftTrade);
 		}
+
+		[Then(@"I should see the existing shift trade request be approved")]
+		public void ThenIShouldSeeTheExistingShiftTradeRequestBeApproved()
+		{
+			Browser.Interactions.AssertAnyContains(".request-details .request-label", "Approved");
+		}
+
 
 		[Given(@"I have created '(.*)' shift trade requests")]
 		public void GivenIHaveCreatedShiftTradeRequests(int count, Table table)

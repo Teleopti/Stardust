@@ -699,10 +699,17 @@ team-schedule-datepicker {
 			}
 		}
 
-
-
-		th.right-border-empty, td.right-border-empty {
+		th.schedule-tool-column, td.schedule-tool-column {
 			width: 2%;
+			text-align: center;
+
+			i.mdi:before {
+				font-size: 14px !important;
+			}
+
+			span {
+				cursor: pointer;
+			}
 		}
 
 		th.contract-time-header, td.contract-time-column {
@@ -718,18 +725,8 @@ team-schedule-datepicker {
 			border-left: 1px solid $gray012;
 		}
 
-		th.schedule-note-column {
-			width: 2%;
-		}
 
-		td.schedule-note-column {
-			width: 2%;
-			cursor: pointer;
-			text-align: center;
-
-			.mdi:before {
-				font-size: 14px !important;
-			}
+		td.schedule-tool-column.schedule-note-column {
 
 			.noComment {
 				color: $gray-500;
@@ -1169,5 +1166,91 @@ note-editor {
 teams-time-picker.ng-invalid-dst {
 	.hours > input {
 		border: 2px solid $red-600;
+	}
+}
+
+.shift-editor {
+	.underlying-info {
+		margin-left: 10px;
+	}
+
+	.mdi-alert {
+		color: $orange-500;
+	}
+
+	.shift-container {
+		margin-left: 10px;
+		width: 100%;
+		max-width: 100%;
+		height: 500px;
+		white-space: nowrap;
+		overflow-x: auto;
+	}
+
+	.timeline {
+		width: 100%;
+
+		.interval {
+			display: inline-block;
+			width: 60px;
+
+			.label {
+				font-size: x-small;
+				height: 1.32em;
+				z-index: 11;
+				transform: translateX(-50%);
+				padding: 0 0.3em;
+			}
+
+			.ticks {
+				.tick {
+					width: 1px;
+					height: 8px;
+					display: inline-flex;
+					margin-right: 4px;
+					background-color: #000;
+				}
+
+				.tick.hour {
+					height: 15px;
+				}
+
+				.tick.half-hour {
+					height: 12px;
+				}
+			}
+		}
+	}
+
+	.shift {
+		width: 100%;
+		position: relative;
+		margin-top: 10px;
+
+		.shift-layer {
+			position: absolute;
+			display: inline-block;
+			height: 25px;
+
+			&:first-of-type {
+				border-radius: 4px 0 0 4px;
+			}
+
+			&:last-of-type {
+				border-radius: 0 4px 4px 0;
+			}
+
+			&.overtime {
+				background-size: 11px 11px;
+
+				&.overtime-dark {
+					background-image: linear-gradient(45deg, transparent, transparent 4px, rgba(0, 0, 0, 0.5) 6px, transparent 10px, transparent);
+				}
+
+				&.overtime-light {
+					background-image: linear-gradient(45deg, transparent, transparent 4px, rgba(255, 255, 255, 0.8) 6px, transparent 10px, transparent);
+				}
+			}
+		}
 	}
 }

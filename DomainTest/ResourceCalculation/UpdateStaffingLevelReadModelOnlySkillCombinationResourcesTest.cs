@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	[DomainTest]
 	public class UpdateStaffingLevelReadModelOnlySkillCombinationResourcesTest
 	{
-		public UpdateStaffingLevelReadModelOnlySkillCombinationResources Target;
+		public IUpdateStaffingLevelReadModel Target;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonRepository PersonRepository;
 		public FakeSkillRepository SkillRepository;

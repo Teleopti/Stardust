@@ -23,18 +23,41 @@
 					</div>
 				</div>
 			</div>
+
+			<div ng-show="vm.showRefreshPayrollFormats" class="panel panel-default ">
+				<div class="panel-heading">Trigger payroll dll reload</div>
+				<div class="panel-body">
+					<div class="dropdown" style="padding-bottom: 10px">
+						<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							<span ng-show="!vm.selectedTenantName">Select Tenant...</span>
+							<span ng-show="vm.selectedTenantName">{{vm.selectedTenantName}}</span>
+							<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+							<li ng-repeat="tenant in vm.Tenants" ng-click="vm.selectTenant(tenant.Name)"><a>{{tenant.Name}}</a></li>
+						</ul>
+					</div>
+					<div class="row" style="padding: 10px">
+						<button class="btn btn-primary" ng-disabled="!vm.selectedTenantName" ng-click="vm.refreshPayrollFormats()">
+							<span class="text-white">Trigger payroll dll load &raquo;</span>
+						</button>
+					</div>
+				</div>
+			</div>		
+
+
 			<div class="panel panel-default ">
 				<div class="panel-heading">Run Health Check</div>
 				<div class="panel-body">
 					<p>
 						Do you suspect something is wrong with Stardust? Run the Healthcheck and see if there is any communication issues!
-						<br/>
-						<br/>
+						<br />
+						<br />
 						<button class="btn btn-primary" ng-click="vm.healthCheck()">
 							<span class="text-white">Health Check &raquo;</span>
 						</button>
-						<br/>
-						<br/>
+						<br />
+						<br />
 						<md-icon md-svg-src="Content/images/error_alert_24px.svg" ng-show="vm.showHealthAlert"></md-icon> {{vm.result}}
 					</p>
 				</div>

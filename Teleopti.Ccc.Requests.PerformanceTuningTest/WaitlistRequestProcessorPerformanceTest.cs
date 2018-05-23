@@ -6,7 +6,6 @@ using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -30,7 +29,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 	[Toggle(Toggles.Wfm_Requests_ProcessWaitlistBefore24hRequests_45767)]
 	public class WaitlistRequestProcessorPerformanceTest : PerformanceTestWithOneTimeSetup
 	{
-		public UpdateStaffingLevelReadModelOnlySkillCombinationResources UpdateStaffingLevel;
+		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;
 		public MutableNow Now;
 		public WithUnitOfWork WithUnitOfWork;
 		public IDataSourceScope DataSource;

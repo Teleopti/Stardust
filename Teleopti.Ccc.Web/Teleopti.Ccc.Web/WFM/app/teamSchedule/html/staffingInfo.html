@@ -1,7 +1,14 @@
 ﻿<div class="staffing-panel">
 	<div class="con-row">
 		<div class="con-flex">
-			<skill-picker skills="vm.skills" skill-areas="vm.skillGroups" item-to-return="vm.setSkill" preselected-item="vm.preselectedSkills"></skill-picker>
+			<the-skill-picker skills="vm.skills"
+							  skill-groups="vm.skillGroups"
+							  on-skill-selected="vm.clickedSkillInPicker(skill)"
+							  on-skill-group-selected="vm.clickedSkillGroupInPicker(skillGroup)"
+							  preselected-skill="vm.selectedSkill"
+							  preselected-skill-group="vm.selectedSkillGroup">
+			</the-skill-picker>
+
 		</div>
 		<div class="con-flex">
 			<md-checkbox ng-checked="vm.useShrinkage" ng-click="vm.useShrinkageForStaffing()">
@@ -26,7 +33,7 @@
 						</div>
 					</div>
 					<div class="skills-tools" ng-if="vm.isSkillGroupDetailToggleVisible()">
-						<div class="wfm-chip-wrap"  ng-if="!vm.isSkillsToggled()" ng-click="vm.toggleSkills()">
+						<div class="wfm-chip-wrap" ng-if="!vm.isSkillsToggled()" ng-click="vm.toggleSkills()">
 							<span class="wfm-chip">
 								<span class="chip-handle">
 									<i class="mdi mdi-dots-horizontal"></i>

@@ -62,6 +62,57 @@ Background:
 	| Name  | DayOff |
 	And I am englishspeaking swede
 
+@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889')
+Scenario: Should trade when not break Maximum workday rule
+	Given I have the role 'Full access to mytime'
+	And I am american
+	And there is a workflow control set with
+	| Field                            | Value                    |
+	| Name                             | WFC with maximum workday |
+	| Schedule published to date       | 2040-06-24               |
+	| Shift Trade sliding period start | 1                        |
+	| Shift Trade sliding period end   | 30                       |
+	| Maximum Workdays                 | 2                        |
+	| ShiftTradeFlexibilityDays        | 1000                     |
+	| AutoGrantShiftTradeRequest       | true                     |
+	And I have the workflow control set 'WFC with maximum workday'
+	And OtherAgent has the workflow control set 'WFC with maximum workday'
+	And 'I' have a day off with
+	| Field | Value      |
+	| Name  | DayOff     |
+	| Date  | 2030-01-01 |
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-02 06:00 |
+	| EndTime               | 2030-01-02 16:00 |
+	| Shift category		| Day	           |
+	And 'I' have a day off with
+	| Field | Value      |
+	| Name  | DayOff     |
+	| Date  | 2030-01-03 |	
+	And 'I' have a day off with
+	| Field | Value      |
+	| Name  | DayOff     |
+	| Date  | 2030-01-04 |
+	And OtherAgent has a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-03 06:00 |
+	| EndTime               | 2030-01-03 16:00 |
+	| Shift category		| Day	           |
+	And I have received a shift trade request
+		| Field    | Value        |
+		| From     | OtherAgent   |
+		| DateTo   | 2030-01-03   |
+		| DateFrom | 2030-01-03   |
+		| Pending  | True         |
+		| Subject  | trade please |
+	And the time is '2029-12-27'
+	And I am viewing requests
+	When I click on the existing request in the list
+	And I click the Approve button on the shift request
+	And I wait half second and refresh the request page
+	Then I should see the existing shift trade request be approved
+
 Scenario: No access to make shift trade reuquests
 	Given there is a role with
 	| Field								| Value						|
@@ -735,6 +786,7 @@ Scenario: Should cancel the current shift trade when switch to another team to t
 	And I view Add Shift Trade Request for date '2030-01-01'
 	And I choose 'OtherAgent' to make a shift trade
 	When I select the 'Other team'
+	And I clear the name search box
 	Then I should see 'OtherAgentNotInMyTeam' last in the list
 	And I choose 'OtherAgentNotInMyTeam' to make a shift trade
 	And I should not see schedule on date '2030-01-01' in my shift trade list with 'OtherAgent'

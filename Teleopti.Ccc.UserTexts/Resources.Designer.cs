@@ -4818,6 +4818,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} cannot work {1} days consecutively as the maximum permitted is {2}..
+        /// </summary>
+        public static string BusinessRuleMaximumWorkdayErrorMessage {
+            get {
+                return ResourceManager.GetString("BusinessRuleMaximumWorkdayErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Too many consecutive workdays..
+        /// </summary>
+        public static string BusinessRuleMaximumWorkdayFriendlyName {
+            get {
+                return ResourceManager.GetString("BusinessRuleMaximumWorkdayFriendlyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The week contains too much work time ({0}). Max is {1}..
         /// </summary>
         public static string BusinessRuleMaxWeekWorkTimeErrorMessage {
@@ -9533,7 +9551,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maximum consectutive days without dayoff.
+        ///   Looks up a localized string similar to Maximum consecutive days without dayoff.
         /// </summary>
         public static string DescriptionOfMaximumWorkdayRule {
             get {

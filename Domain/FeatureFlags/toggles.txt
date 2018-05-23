@@ -41,7 +41,8 @@ RTA_StoreEvents_47721 = true
 RTA_RemoveApprovedOOA_47721 = true
 RTA_ImprovedStateGroupFilter_48724 = true
 RTA_KillFattyIntradayUntilItDies_74939 = true
-RTA_RestrictModifyAdherenceWithPermission_74898 = false
+RTA_RestrictModifyAdherenceWithPermission_74898 = RC
+RTA_EasilySpotLateForWork_75668 = false
 
 # Dumplings, can any of these be removed? #
 WfmTeamSchedule_ShowStaffingInfo_45206 = true
@@ -58,6 +59,7 @@ Wfm_AddMyTimeLink_45088 = true
 Wfm_GroupPages_45057 = true
 Wfm_FetchBusinessHierarchyFromReadModel_45275 = RC
 WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952 = RC
+WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978 = DEV
 
 # Code Monkeys, can any of these be removed? #
 Wfm_Requests_Approve_Based_On_Budget_Allotment_39626 = RC # can not use it until function 'Approve based on business rules' is ready
@@ -67,7 +69,7 @@ OvertimeRequestUseMostUnderStaffedSkill_47853 = RC
 OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944 = RC
 OvertimeRequestSupportMultiSelectionSkillTypes_74945 = RC
 OvertimeRequestStaffingCheckMethod_74949 = RC
-OvertimeRequestChangeBelongsToDateForOverNightShift_74984 = DEV
+OvertimeRequestChangeBelongsToDateForOverNightShift_74984 = RC
 OvertimeRequestUsePrimarySkillOption_75573 = RC
 
 Wfm_People_ImportAndCreateAgentFromFile_42528 = true
@@ -82,7 +84,7 @@ MyTimeWeb_DayScheduleForStartPage_Command_44209 = true
 MyTimeWeb_MonthlyScheduleMobileView_45004 = true
 MyTimeWeb_SortRequestList_40711 = true #Please note the feature for this one is 40771!
 MyTimeWeb_WaitListPositionEnhancement_46301 = true
-
+MyTimeWeb_NewTeamScheduleView_75989 = DEV
 MyTimeWeb_PollToCheckScheduleChanges_46595 = true
 
 # China, can any of these be removed? #
@@ -176,4 +178,4 @@ WFM_Gamification_Setting_With_External_Quality_Values_45003 = RC
 WFM_Gamification_Calculate_Badges_47250 = RC
 WFM_Gamification_Recalculate_Badges_Within_Period_48403 = RC
 WFM_Gamification_Create_Rolling_Periods_74866 = RC
-MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889 = DEV
+MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889 = RC

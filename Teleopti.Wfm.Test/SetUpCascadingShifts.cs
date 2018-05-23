@@ -22,7 +22,7 @@ namespace Teleopti.Wfm.Test
 		public ITenantUnitOfWork TenantUnitOfWork;
 		public ICurrentTenantSession CurrentTenantSession;
 		public ICurrentBusinessUnit CurrentBusinessUnit;
-		public UpdateStaffingLevelReadModelOnlySkillCombinationResources UpdateStaffingLevelReadModel;
+		public IUpdateStaffingLevelReadModel UpdateStaffingLevelReadModel;
 		public MutableNow Now;
 
 		public string CreateDenyMessage30Min(int understaffedHour, CultureInfo culture, CultureInfo uiCulture, TimeZoneInfo timeZone, DateTime dateTime)

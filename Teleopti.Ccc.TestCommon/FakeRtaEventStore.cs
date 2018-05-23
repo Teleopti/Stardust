@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.TestCommon
 			var rtaStoredEvent = (@event as IRtaStoredEvent).QueryData();
 			if (rtaStoredEvent == null)
 				return;
-			
+
 			_events.Add(new storedEvent
 			{
 				PersonId = rtaStoredEvent.PersonId.Value,
@@ -33,9 +33,7 @@ namespace Teleopti.Ccc.TestCommon
 			});
 		}
 
-		public void Remove(DateTime removeUntil)
-		{
-		}
+		public int Remove(DateTime removeUntil, int maxEventsToRemove) => throw new NotImplementedException();
 
 		public IEnumerable<IEvent> Load(Guid personId, DateTimePeriod period)
 		{

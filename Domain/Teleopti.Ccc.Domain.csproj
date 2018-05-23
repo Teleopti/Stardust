@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -112,10 +112,10 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.211\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.225\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.211\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.225\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +184,7 @@
     <Compile Include="ApplicationLayer\Commands\ShiftCategorySelector.cs" />
     <Compile Include="ApplicationLayer\Commands\ShiftCategorySelectorWithPrediction.cs" />
     <Compile Include="ApplicationLayer\Events\ProjectionChangedEventForShiftExchangeOffer.cs" />
+    <Compile Include="ApplicationLayer\Events\RefreshPayrollFormatsEvent.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\IOvertimeRequestContractWorkRulesValidator.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\IOvertimeRequestOpenPeriodProvider.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestOpenPeriodProvider.cs" />
@@ -208,12 +209,15 @@
     <Compile Include="Config\WebTenantAuthenticationConfiguration.cs" />
     <Compile Include="InterfaceLegacy\Domain\OvertimeRequestStaffingCheckMethod.cs" />
     <Compile Include="Intraday\BacklogSkillTypesForecastCalculator.cs" />
+    <Compile Include="Optimization\PredictorResult.cs" />
     <Compile Include="Optimization\TeamBlock\CreatePersonalSkillDataExtractor.cs" />
     <Compile Include="Optimization\TeamBlock\CreatePersonalSkillDataExtractorOLD.cs" />
     <Compile Include="MultiTenancy\PersonIdentitiesInputModel.cs" />
     <Compile Include="MultiTenancy\PersonIdentityModel.cs" />
     <Compile Include="Optimization\TeamBlock\ForecastAndScheduleSumForDay.cs" />
+    <Compile Include="Optimization\WasReallyBetterResult.cs" />
     <Compile Include="RegisterEventHandlerInLifetimeScopeAttribute.cs" />
+    <Compile Include="Repositories\IAllSkillForSkillGroupProvider.cs" />
     <Compile Include="Scheduling\IPredictShiftCategory.cs" />
     <Compile Include="Scheduling\IShiftCategoryPredictionModelLoader.cs" />
     <Compile Include="Scheduling\Rules\MaximumWorkdayRule.cs" />
@@ -990,7 +994,6 @@
     <Compile Include="InterfaceLegacy\Domain\IForecastDayTemplate.cs" />
     <Compile Include="InterfaceLegacy\Domain\IForecastingTarget.cs" />
     <Compile Include="InterfaceLegacy\Domain\IForecastProcessReport.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IForecastScheduleValuePair.cs" />
     <Compile Include="InterfaceLegacy\Domain\IForecastTemplateOwner.cs" />
     <Compile Include="InterfaceLegacy\Domain\IFullWeekOuterWeekPeriodCreator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IGamificationSetting.cs" />

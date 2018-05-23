@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading;
 using Teleopti.Support.Library;
 using Teleopti.Support.Library.Folders;
 
@@ -31,7 +34,9 @@ namespace Teleopti.Ccc.DBManager.Library
 			var bakFile = command.RestoreBackup ?? command.RestoreBackupIfNotExistsOrNewer;
 			var dataFolder = command.DataFolder ?? new FileInfo(bakFile).Directory.FullName;
 			restore(command.DatabaseType, command.DatabaseName, bakFile, dataFolder);
+			waitUntilLoginWorks();
 			createLoginDropUsers(command.DatabaseName, command.AppUserName, command.AppUserPassword);
+			waitUntilLoginWorks();
 			if (command.DatabaseType == DatabaseType.TeleoptiCCC7)
 				_configureSystem.ActivateAllTenants();
 			addLicence(command.DatabaseType);
@@ -63,13 +68,20 @@ namespace Teleopti.Ccc.DBManager.Library
 			_sql.ExecuteTransactionlessNonQuery(script, Timeouts.CommandTimeout);
 		}
 
-
 		private void createLoginDropUsers(string databaseName, string user, string password)
 		{
 			var file = Path.Combine(_debugDbFolder.Path(), @"tsql\DemoDatabase\CreateLoginDropUsers.sql");
 			var script = File.ReadAllText(file);
 			script = replaceVariables(script, null, null, databaseName, user, password, null);
 			_sql.ExecuteTransactionlessNonQuery(script, Timeouts.CommandTimeout);
+		}
+
+		private void waitUntilLoginWorks()
+		{
+			// wait until login actually works
+			Retry.Handle<Exception>()
+				.WaitAndRetry(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(5))
+				.Do(() => { _sql.Execute("select 1"); });
 		}
 
 		private string replaceVariables(
@@ -92,6 +104,51 @@ namespace Teleopti.Ccc.DBManager.Library
 			script = script.Replace("$(LicFile)", licenseFile);
 			script = script.Replace("$(DATAFOLDER)", dataFolder);
 			return script;
+		}
+	}
+
+	public interface IRetryHandle
+	{
+		IRetryHandle WaitAndRetry(params TimeSpan[] waitTimes);
+		void Do(Action action);
+	}
+
+	public class Retry
+	{
+		public static IRetryHandle Handle<TException>()
+		{
+			return new RetryHandle<TException>();
+		}
+
+		class RetryHandle<TException> : IRetryHandle
+		{
+			private readonly Stack<TimeSpan> waitingTimes = new Stack<TimeSpan>();
+
+			public IRetryHandle WaitAndRetry(params TimeSpan[] waitTimes)
+			{
+				foreach (var t in waitTimes)
+				{
+					waitingTimes.Push(t);
+				}
+
+				return this;
+			}
+
+			public void Do(Action action)
+			{
+				try
+				{
+					action.Invoke();
+				}
+				catch (Exception e) when (e is TException)
+				{
+					if (waitingTimes.Count == 0)
+						throw;
+
+					Thread.Sleep(waitingTimes.Pop());
+					Do(action);
+				}
+			}
 		}
 	}
 }

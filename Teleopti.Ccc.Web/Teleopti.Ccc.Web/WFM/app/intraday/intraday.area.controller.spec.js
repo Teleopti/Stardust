@@ -802,7 +802,7 @@ describe('IntradayAreaController', function() {
 				return [200, skillGroupInfo];
 			});
 
-			$httpBackend.whenGET('../api/intraday/skills').respond(function() {
+			$httpBackend.whenGET('../api/skillgroup/skills').respond(function() {
 				if (isUnsupportedSkillTest) {
 					return [200, skillsWithFirstUnsupported];
 				} else {

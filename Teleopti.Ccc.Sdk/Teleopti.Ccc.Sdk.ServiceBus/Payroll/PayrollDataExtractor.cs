@@ -27,9 +27,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 		public IXPathNavigable Extract(IPayrollExport payrollExport, RunPayrollExportEvent message,
 			IEnumerable<PersonDto> personDtos, IServiceBusPayrollExportFeedback serviceBusPayrollExportFeedback)
 		{
-			var payrollExportProcessors = _plugInLoader.Load();
+			var availablePayrollExportProcessors = _plugInLoader.Load();
+
 			var selectedProcessor =
-				payrollExportProcessors.FirstOrDefault(p => p.PayrollFormat.FormatId == payrollExport.PayrollFormatId);
+				availablePayrollExportProcessors.FirstOrDefault(p => p.PayrollFormat.FormatId == payrollExport.PayrollFormatId);			
 
 			if (selectedProcessor == null)
 			{

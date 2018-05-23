@@ -10,12 +10,18 @@
 			skill: "../api/TeamScheduleData/skills",
 			skillGroups: "../api/TeamScheduleData/skillgroups"
 		};
+		var skills = [];
+		var skillGroups = [];
+		var loadedSkillGroups = false;
+		var loadedSkills = false;
 
+		this.init = function () {
+			loadedSkillGroups = false;
+			loadedSkills = false;
+		}
 		this.getAllSkills = getAllSkills;
 		this.getAllSkillGroups = getAllSkillGroups;
-
-		var skills = [];
-		var loadedSkills = false;
+		
 		function getAllSkills() {
 			return $q(function (resolve, reject) {
 				if (loadedSkills) {
@@ -32,9 +38,7 @@
 				});
 			});
 		}
-
-		var skillGroups = [];
-		var loadedSkillGroups = false;
+		
 		function getAllSkillGroups() {
 			return $q(function (resolve, reject) {
 				if (loadedSkillGroups) {

@@ -1,7 +1,6 @@
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence;
@@ -27,6 +26,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<EventPopulatingPublisher>().As<IEventPopulatingPublisher>().SingleInstance();
 
 			builder.RegisterType<HangfireEventPublisher>().SingleInstance();
+
 			builder.RegisterType<SyncInFatClientProcessEventPublisher>().SingleInstance();
 			builder.RegisterType<SyncEventPublisher>().SingleInstance();
 			builder.RegisterType<SyncAllEventPublisher>().SingleInstance();

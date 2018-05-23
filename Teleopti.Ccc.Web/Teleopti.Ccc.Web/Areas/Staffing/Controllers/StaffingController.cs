@@ -6,6 +6,7 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
@@ -16,6 +17,7 @@ using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
@@ -37,6 +39,8 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		private readonly ExportForecastAndStaffingFile _exportForecastAndStaffingFile;
 		private readonly ExportStaffingPeriodValidationProvider _periodValidationProvider;
 		private readonly BpoGanttProvider _bpoGanttProvider;
+		//private readonly ILoadAllSkillInIntradays _loadAllSkillInIntradays;
+		private readonly IAllSkillForSkillGroupProvider _allSkillForSkillGroupProvider;
 
 		public StaffingController(AddOverTime addOverTime, ScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
 								  ForecastedStaffingToDataSeries forecastedStaffingToDataSeries, IUserTimeZone timeZone,
@@ -44,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 								  ScheduledStaffingViewModelCreator staffingViewModelCreator, ImportBpoFile bpoFile, ICurrentDataSource currentDataSource, 
 								  IExportBpoFile exportBpoFile, ISkillRepository skillRepository, IAuthorization authorization,
 			ExportForecastAndStaffingFile exportForecastAndStaffingFile, ExportStaffingPeriodValidationProvider periodValidationProvider,
-			BpoGanttProvider bpoGanttProvider)
+			BpoGanttProvider bpoGanttProvider, IAllSkillForSkillGroupProvider allSkillForSkillGroupProvider)
 		{
 			_addOverTime = addOverTime;
 			_scheduledStaffingToDataSeries = scheduledStaffingToDataSeries;
@@ -61,6 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			_exportForecastAndStaffingFile = exportForecastAndStaffingFile;
 			_periodValidationProvider = periodValidationProvider;
 			_bpoGanttProvider = bpoGanttProvider;
+			_allSkillForSkillGroupProvider = allSkillForSkillGroupProvider;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/staffing/getallganttdataforbpotimeline")]
@@ -216,6 +221,12 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 				HasPermissionForBpoExchange = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.BpoExchange)
 			};
 			return Ok(returnVal);
+		}
+
+		[UnitOfWork, HttpGet, Route("api/staffing/skills")]
+		public virtual IHttpActionResult GetAllSkills()
+		{
+			return Ok(_allSkillForSkillGroupProvider.AllExceptSubSkills().ToArray());
 		}
 
 		private OverTimeSuggestionResultModel extractDataSeries(OverTimeSuggestionModel overTimeSuggestionModel,OvertimeWrapperModel wrapperModels)

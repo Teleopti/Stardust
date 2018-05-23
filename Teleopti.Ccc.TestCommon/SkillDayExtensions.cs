@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.TestCommon
 			var skillDays = Enumerable.Range(0, numberOfAgentsPerIntervalDemand.Length).Select(day =>
 			{
 				var date = startDate.AddDays(day);
-				return skill.CreateSkillDayWithDemand(scenario, date, numberOfAgentsPerIntervalDemand[day]);
+				return skill.CreateSkillDayWithDemandOnInterval(scenario, date, numberOfAgentsPerIntervalDemand[day]);
 			}).ToList();
 			
 			return skillDays;
@@ -216,17 +216,12 @@ namespace Teleopti.Ccc.TestCommon
 			var skillDays = Enumerable.Range(0, period.DayCount()).Select(day =>
 			{
 				var date = period.StartDate.AddDays(day);
-				return skill.CreateSkillDayWithDemand(scenario, date, numberOfAgentsPerIntervalDemand);
+				return skill.CreateSkillDayWithDemandOnInterval(scenario, date, numberOfAgentsPerIntervalDemand);
 			}).ToList();
 
 			return skillDays;
 		}
 
-		public static ISkillDay SetMinimumAgents(this ISkillDay skillDay, int numberOfAgents)
-		{
-			return SetMinimumAgents(skillDay, new TimePeriod(0, 24), numberOfAgents);
-		}
-		
 		public static ISkillDay SetMinimumAgents(this ISkillDay skillDay, TimePeriod period, int numberOfAgents)
 		{
 			foreach (var skillDataPeriod in skillDay.SkillDataPeriodCollection)
@@ -240,18 +235,19 @@ namespace Teleopti.Ccc.TestCommon
 			return skillDay;
 		}
 		
+		public static ISkillDay SetMinimumAgents(this ISkillDay skillDay, int numberOfAgents)
+		{
+			return skillDay.SetMinimumAgents(new TimePeriod(0, 24), numberOfAgents);
+		}
+		
 		public static IList<ISkillDay> SetMinimumAgents(this IEnumerable<ISkillDay> skillDays, TimePeriod period, int numberOfAgents)
 		{
-			foreach (var skillDay in skillDays)
+			var skillDaysToReturn = skillDays.ToList();
+			foreach (var skillDay in skillDaysToReturn)
 			{
 				skillDay.SetMinimumAgents(period, numberOfAgents);
 			}
-			return skillDays.ToList();
-		}
-		
-		public static IList<ISkillDay> SetMinimumAgents(this IEnumerable<ISkillDay> skillDays, int numberOfAgents)
-		{
-			return SetMinimumAgents(skillDays, new TimePeriod(0, 24), numberOfAgents);
+			return skillDaysToReturn;
 		}
 	}
 }

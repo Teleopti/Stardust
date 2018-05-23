@@ -12,9 +12,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 		{
 		}
 
-		public void Remove(DateTime removeUntil)
-		{
-		}
+		public int Remove(DateTime removeUntil, int maxEventsToRemove) => 0;
 
 		public IEnumerable<IEvent> Load(Guid personId, DateTimePeriod period)
 		{

@@ -34,3 +34,19 @@
 			}
 		})
 })();
+
+(function() {
+	"use strict";
+	angular.module("ui.grid").decorator("i18nService", ["$delegate", function($delegate) {
+			$delegate.add('da', {
+				pinning: {
+					pinLeft: 'Fastgør til venstre',
+					pinRight: 'Fastgør til højre',
+					unpin: 'Frigør'
+				}
+			});
+
+			return $delegate;
+		}
+	]);
+})();

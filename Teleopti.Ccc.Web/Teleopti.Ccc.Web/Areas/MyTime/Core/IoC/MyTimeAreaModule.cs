@@ -177,7 +177,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<StudentAvailabilityDayViewModelMapper>().SingleInstance();
 			builder.RegisterType<StudentAvailabilityViewModelMapper>().SingleInstance();
 			builder.RegisterType<StudentAvailabilityDayFeedbackViewModelMapper>().SingleInstance();
-			builder.RegisterType<TeamScheduleViewModelMapper>().SingleInstance();
 			builder.RegisterType<TeamScheduleDomainDataMapper>().SingleInstance();
 			builder.RegisterType<DateTimePeriodFormMapper>().SingleInstance();
 			builder.RegisterType<SettingsMapper>().SingleInstance();
@@ -260,14 +259,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 
 		private static void registerTeamScheduleTypes(ContainerBuilder builder)
 		{
-			builder.RegisterType<TeamScheduleViewModelFactory>().As<ITeamScheduleViewModelFactory>();
+			builder.RegisterType<TeamSchedulePermissionViewModelFactory>().As<ITeamSchedulePermissionViewModelFactory>();
 			builder.RegisterType<TeamSchedulePersonsProvider>().As<ITeamSchedulePersonsProvider>();
 			builder.RegisterType<TeamScheduleProjectionForMtwForMtwProvider>().As<ITeamScheduleProjectionForMTWProvider>();
-			builder.RegisterType<LayerViewModelReworkedMapper>().As<ILayerViewModelReworkedMapper>();
-			builder.RegisterType<TeamScheduleViewModelReworkedFactory>().As<ITeamScheduleViewModelReworkedFactory>();
-			builder.RegisterType<TimeLineViewModelReworkedFactory>().As<ITimeLineViewModelReworkedFactory>();
-			builder.RegisterType<TimeLineViewModelReworkedMapper>().As<ITimeLineViewModelReworkedMapper>();
-			builder.RegisterType<AgentScheduleViewModelReworkedMapper>().As<IAgentScheduleViewModelReworkedMapper>();
+			builder.RegisterType<LayerViewModelMapper>().As<ILayerViewModelMapper>();
+			builder.RegisterType<TeamScheduleViewModelFactory>().As<ITeamScheduleViewModelFactory>();
+			builder.RegisterType<TimeLineViewModelFactory>().As<ITimeLineViewModelFactory>();
+			builder.RegisterType<TimeLineViewModelMapper>().As<ITimeLineViewModelMapper>();
+			builder.RegisterType<AgentScheduleViewModelMapper>().As<IAgentScheduleViewModelMapper>();
 			builder.RegisterType<TeamProvider>().As<ITeamProvider>();
 			builder.RegisterType<SiteProvider>().As<ISiteProvider>();
 			builder.RegisterType<DefaultTeamProvider>().As<IDefaultTeamProvider>();

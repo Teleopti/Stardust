@@ -1,0 +1,43 @@
+﻿<div class="con-row">
+	<div class="con-flex">
+		<span class="name">{{ ::vm.personSchedule.Name}} </span>
+		<span ng-if="vm.personSchedule.HasUnderlyingSchedules()">
+			<span class="underlying-info">
+				<i class="mdi mdi-information mdi-alert info"></i>
+			</span>
+			<md-tooltip class="multiline-tooltip" md-direction="right">
+				<underlying-schedule-info person-schedule="vm.personSchedule" date="vm.date"></underlying-schedule-info>
+			</md-tooltip>
+		</span>
+
+	</div>
+</div>
+<div class="con-row">
+	<div class="con-flex">
+		<span class="date">{{vm.personSchedule.Date }}</span>
+	</div>
+</div>
+<div class="shift-container">
+	<div class="con-row">
+		<div class="timeline">
+			<div ng-repeat="interval in vm.intervals" class="interval">
+				<div class="label label-info">
+					<span>{{ interval.label}}</span>
+				</div>
+				<div class="ticks">
+					<span ng-repeat="tick in interval.ticks"  class="tick" ng-class="{'half-hour': tick.isHalfHour, 'hour':tick.isHour}"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="con-row">
+		<div class="con-flex shift">
+			<div class="shift-layer"
+				 ng-class="{'overtime': projection.IsOvertime,'overtime-light': projection.UseLighterBorder, 'overtime-dark': !projection.UseLighterBorder}"
+				 ng-style="{'width': projection.Minutes +'px', 'background-color': projection.Color, 'left': projection.Left + 'px'}"
+				 ng-repeat="projection in vm.projections"></div>
+
+		</div>
+	</div>
+</div>
+

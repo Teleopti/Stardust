@@ -14,7 +14,7 @@
 		self.modifySkillGroups = modifySkillGroups;
 
 		function getSkills() {
-			return $http.get('../api/intraday/skills');
+			return $http.get('../api/skillgroup/skills');
 		}
 
 		function createSkillGroup(skillgroup) {

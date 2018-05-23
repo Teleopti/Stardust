@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Stardust.Node.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			_componentContext = componentContext;
 		}
 
-		public void Handle(ImportAgentEvent parameters, CancellationTokenSource cancellationTokenSource, Action<string> sendProgress)
+		public void Handle(ImportAgentEvent parameters, CancellationTokenSource cancellationTokenSource, Action<string> sendProgress, ref IEnumerable<object> returnObjects)
 		{
 			_stardustJobFeedback.SendProgress = sendProgress;
 			var theRealOne = _componentContext.Resolve<IHandleEvent<ImportAgentEvent>>();

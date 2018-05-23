@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			builder.RegisterType<ProcessWaitlistedRequestsHandler>().As<IHandle<ProcessWaitlistedRequestsEvent>>().SingleInstance().ApplyAspects();
 			builder.RegisterType<RecalculateBadgeHandler>().As<IHandle<RecalculateBadgeEvent>>().SingleInstance().ApplyAspects();
 			builder.RegisterType<ScheduleDayDifferenceSaver>().As<IScheduleDayDifferenceSaver>().SingleInstance();
+			builder.RegisterType<RefreshPayrollFormatsHandler>().As<IHandle<RefreshPayrollFormatsEvent>>().SingleInstance();
 		}
 	}
 }

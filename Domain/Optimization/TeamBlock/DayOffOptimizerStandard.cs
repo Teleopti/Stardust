@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				{
 					var predictorResult = _dayOffOptimizerPreMoveResultPredictor.IsPredictedBetterThanCurrent(matrix.Item1, resultingArray, originalArray, dayOffOptimizationPreference, 
 						numberOfDayOffsMoved, optimizationPreferences, schedulingResultStateHolder, movedDaysOff);
-					if (!predictorResult)
+					if (predictorResult.IsDefinatlyWorse)
 					{
 						stopOptimizeTeamInfo[matrix.Item2] = false;
 						matrix.Item2.LockDays(movedDaysOff.ModifiedDays());
@@ -143,29 +143,40 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					}
 					var resCalcState = new UndoRedoContainer();
 					resCalcState.FillWith(schedulingResultStateHolder.SkillDaysOnDateOnly(movedDaysOff.ModifiedDays()));
-					var success = runOneMatrixOnly(optimizationPreferences, rollbackService, matrix.Item1, schedulingOptions, matrix.Item2,
+					var result = runOneMatrixOnly(optimizationPreferences, rollbackService, matrix.Item1, schedulingOptions, matrix.Item2,
 						resourceCalculateDelayer,
 						schedulingResultStateHolder,
 						movedDaysOff,
-						dayOffOptimizationPreferenceProvider);
-
-					if (success)
+						dayOffOptimizationPreferenceProvider, predictorResult);
+					
+					if (result.Better)
 					{
-						stopOptimizeTeamInfo[matrix.Item2] = false;			
+						stopOptimizeTeamInfo[matrix.Item2] = false;
 					}
 					else
 					{
 						resCalcState.UndoAll();
 						rollbackService.RollbackMinimumChecks();
 
-						if (!optimizationPreferences.Extra.IsClassic()) //removing this if makes bookingdb lot slower...
+						if (result.MinimumAgentsAreCurrentlyBroken)
 						{
 							stopOptimizeTeamInfo[matrix.Item2] = false;
+							matrix.Item2.LockDays(result.FailedWhenPlacingShift ?
+								movedDaysOff.RemovedDaysOff : 
+								movedDaysOff.AddedDaysOff);
 						}
-						matrix.Item2.LockDays(movedDaysOff.ModifiedDays());
+						else
+						{
+							if (!optimizationPreferences.Extra.IsClassic()) //removing this if makes bookingdb lot slower...
+							{
+								stopOptimizeTeamInfo[matrix.Item2] = false;
+							}
+
+							matrix.Item2.LockDays(movedDaysOff.ModifiedDays());
+						}
 					}
 
-					callback.Optimizing(new OptimizationCallbackInfo(matrix.Item2, success, matrixes.Count));
+					callback.Optimizing(new OptimizationCallbackInfo(matrix.Item2, result.Better, matrixes.Count));
 					
 					if (onReportProgress(schedulingProgress, matrixes.Count, currentMatrixCounter, matrix.Item2, optimizationPreferences.Advanced.RefreshScreenInterval))
 					{
@@ -182,13 +193,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		
 
-		private bool runOneMatrixOnly(IOptimizationPreferences optimizationPreferences,
+		private WasReallyBetterResult runOneMatrixOnly(IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService rollbackService, IScheduleMatrixPro matrix,
 			SchedulingOptions schedulingOptions, ITeamInfo teamInfo,
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			MovedDaysOff movedDaysOff,
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
+			PredictorResult prevPredictorResult)
 		{
 			if (optimizationPreferences.Extra.UseTeams && optimizationPreferences.Extra.UseTeamSameDaysOff)
 			{
@@ -204,7 +216,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var personToSetShiftCategoryLimitationFor = optimizationPreferences.Extra.IsClassic() ? matrix.Person : null;
 			if (!reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, movedDaysOff.RemovedDaysOff, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, personToSetShiftCategoryLimitationFor, matrix, optimizationPreferences))
 			{
-				return false;
+				//first "true" flag is actually wrong
+				//for perf reason 
+				// => true when minagent is broken
+				// => if not, it should be false
+				return WasReallyBetterResult.WasWorse(true, true);
 			}
 
 			if (!optimizationPreferences.General.OptimizationStepDaysOff && optimizationPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime)
@@ -212,9 +228,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				var flexibleDayOffvalidator = _teamBlockDayOffsInPeriodValidator;
 				if (!flexibleDayOffvalidator.Validate(teamInfo, schedulingResultStateHolder))
 				{
-					teamInfo.LockDays(movedDaysOff.AddedDaysOff);
-					teamInfo.LockDays(movedDaysOff.RemovedDaysOff);
-					return false;
+					return WasReallyBetterResult.WasWorse(false, false);
 				}
 			}
 
@@ -222,14 +236,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			{
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 				teamInfo.LockDays(movedDaysOff.AddedDaysOff);
-				return true;
+				return WasReallyBetterResult.WasBetter();
 			}
 
 			if (!_teamBlockOptimizationLimits.Validate(teamInfo, optimizationPreferences, dayOffOptimizationPreferenceProvider))
 			{
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 				teamInfo.LockDays(movedDaysOff.AddedDaysOff);
-				return true;
+				return WasReallyBetterResult.WasBetter();
 			}
 
 			if (!optimizationPreferences.Extra.IsClassic())
@@ -247,7 +261,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				}
 			}
 
-			return true;
+			return _dayOffOptimizerPreMoveResultPredictor.WasReallyBetter(matrix, optimizationPreferences,
+				schedulingResultStateHolder, movedDaysOff, prevPredictorResult);
 		}
 
 		private static bool onReportProgress(ISchedulingProgress schedulingProgress, int totalNumberOfTeamInfos, int teamInfoCounter, ITeamInfo currentTeamInfo, int screenRefreshRate)

@@ -230,11 +230,11 @@
 				if (confirm($translate.instant('DiscardSuggestionData'))) {
 					clearSuggestions();
 					vm.showOverstaffSettings = false;
-					vm.generateChart(vm.selectedSkill, vm.selectedArea);
+					vm.generateChart(vm.selectedSkill, vm.selectedSkillArea);
 				}
 			} else {
 				vm.showOverstaffSettings = false;
-				vm.generateChart(vm.selectedSkill, vm.selectedArea);
+				vm.generateChart(vm.selectedSkill, vm.selectedSkillArea);
 			}
 			updateExportDate();
 		}
@@ -251,6 +251,7 @@
 			clearSuggestions();
 			if (!skill) {
 				extracted(area);
+				vm.selectedSkillArea = area;
 			} else {
 				currentSkills = skill;
 				vm.selectedSkill = currentSkills;
@@ -288,7 +289,7 @@
 
 				if ($window.sessionStorage.staffingSelectedArea) {
 					if (response.SkillAreas.find(checkArea)) {
-						vm.selectedArea = response.SkillAreas.find(checkArea);
+						vm.selectedSkillArea = response.SkillAreas.find(checkArea);
 					} else {
 						manageAreaSessionStorage();
 					}

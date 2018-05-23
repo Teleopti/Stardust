@@ -11,8 +11,13 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -45,6 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		public IScenarioRepository Scenarios;
 		public IPersonRepository Persons;
 		public FakeIntervalLengthFetcher IntervalLength;
+		public FakeAnalyticsOvertimeRepository AnalyticsOvertimes;
 		public FakeAnalyticsDayOffRepository AnalyticsDayOffRepository;
 
 		private readonly Guid businessUnitId = Guid.NewGuid();
@@ -63,6 +69,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
+
+			var fetcher = new FakeIntervalLengthFetcher();
+			fetcher.Has(15);
+			isolate.UseTestDouble(fetcher).For<IIntervalLengthFetcher>();
 		}
 
 		[Test]
@@ -736,6 +746,151 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			{
 				row.DatePart.ShiftStartTime.Should().Be.EqualTo(startDate);
 			}
+		}
+
+		[Test]
+		public void ShouldSaveScheduleForOvertimeActivityWhenActivityStartTimeIsDifferentWithBelongsToDate()
+		{
+			AnalyticsDates.HasDatesBetween(new DateTime(2017, 3, 6), new DateTime(2030, 12, 31));
+			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("Default BU").WithId(businessUnitId);
+			var scenario = ScenarioFactory.CreateScenario("Default", true, true).WithId(scenarioId);
+			var person = PersonFactory.CreatePerson().WithId(personId);
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2017, 3, 6)).WithId(personPeriodId);
+			personPeriod.Team = TeamFactory.CreateTeam("Team", "Site");
+			person.AddPersonPeriod(personPeriod);
+			var assignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario,
+				new DateTimePeriod(new DateTime(2017, 03, 07, 08, 00, 00, DateTimeKind.Utc), new DateTime(2017, 03, 07, 18, 00, 00, DateTimeKind.Utc)));
+			var assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario,
+				new DateTimePeriod(new DateTime(2017, 03, 06, 20, 00, 00, DateTimeKind.Utc), new DateTime(2017, 03, 07, 03, 00, 0, DateTimeKind.Utc)));
+
+			var overtimeActivity = new Activity("test").WithId();
+			var overtimePeriod = new DateTimePeriod(new DateTime(2017, 03, 07, 3, 00, 00, DateTimeKind.Utc),
+				new DateTime(2017, 03, 07, 04, 00, 0, DateTimeKind.Utc));
+			var multiplicatorDefinitionSet = new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime).WithId();
+			assignment2.AddOvertimeActivity(overtimeActivity, overtimePeriod, multiplicatorDefinitionSet);
+			
+			var analyticsScenario = new AnalyticsScenario
+			{
+				ScenarioCode = scenarioId,
+				ScenarioId = 3
+			};
+
+			var analyticsPersonPeriod = new AnalyticsPersonPeriod
+			{
+				PersonId = 1,
+				BusinessUnitId = 2,
+				PersonPeriodCode = personPeriodId
+			};
+
+			BusinessUnits.Add(businessUnit);
+			Scenarios.Add(scenario);
+			Persons.Add(person);
+			Schedules.Add(assignment1);
+			Schedules.Add(assignment2);
+
+			AnalyticsScenarios.AddScenario(analyticsScenario);
+			AnalyticsPersonPeriods.AddOrUpdatePersonPeriod(analyticsPersonPeriod);
+			AnalyticsOvertimes.AddOrUpdate(new AnalyticsOvertime
+			{
+				OvertimeId = 2,
+				OvertimeName = "test",
+				OvertimeCode = multiplicatorDefinitionSet.Id.Value
+			});
+
+			var belongsToDate = new DateTime(2017, 03, 06, 0, 0, 0, DateTimeKind.Utc);
+			Target.Handle(new ScheduleChangedEvent
+			{
+				StartDateTime = overtimePeriod.StartDateTime,
+				EndDateTime = overtimePeriod.EndDateTime,
+				ScenarioId = scenarioId,
+				LogOnBusinessUnitId = businessUnitId,
+				PersonId = personId,
+				Date = belongsToDate
+			});
+
+			var schedules =
+				AnalyticsSchedules.FactScheduleRows.Where(a => a.DatePart.ShiftStartTime.Date.Equals(belongsToDate.Date)).ToList();
+			schedules.Any().Should().Be(true);
+			schedules.Any(a => a.TimePart.OverTimeId > 0).Should().Be(true);
+		}
+
+		[Test]
+		public void ShouldeRemoveScheduleForOvertimeActivityWhenActivityStartTimeIsDifferentWithBelongsToDate()
+		{
+			AnalyticsDates.HasDatesBetween(new DateTime(2017, 3, 6), new DateTime(2030, 12, 31));
+			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("Default BU").WithId(businessUnitId);
+			var scenario = ScenarioFactory.CreateScenario("Default", true, true).WithId(scenarioId);
+			var person = PersonFactory.CreatePerson().WithId(personId);
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2017, 3, 6)).WithId(personPeriodId);
+			personPeriod.Team = TeamFactory.CreateTeam("Team", "Site");
+			person.AddPersonPeriod(personPeriod);
+			var assignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario,
+				new DateTimePeriod(new DateTime(2017, 03, 07, 08, 00, 00, DateTimeKind.Utc), new DateTime(2017, 03, 07, 18, 00, 00, DateTimeKind.Utc)));
+			var assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario,
+				new DateTimePeriod(new DateTime(2017, 03, 06, 20, 00, 00, DateTimeKind.Utc), new DateTime(2017, 03, 07, 03, 00, 0, DateTimeKind.Utc)));
+
+			var overtimeActivity = new Activity("test").WithId();
+			var overtimePeriod = new DateTimePeriod(new DateTime(2017, 03, 07, 3, 00, 00, DateTimeKind.Utc),
+				new DateTime(2017, 03, 07, 04, 00, 0, DateTimeKind.Utc));
+			var multiplicatorDefinitionSet = new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime).WithId();
+			assignment2.AddOvertimeActivity(overtimeActivity, overtimePeriod, multiplicatorDefinitionSet);
+
+			var analyticsScenario = new AnalyticsScenario
+			{
+				ScenarioCode = scenarioId,
+				ScenarioId = 3
+			};
+
+			var analyticsPersonPeriod = new AnalyticsPersonPeriod
+			{
+				PersonId = 1,
+				BusinessUnitId = 2,
+				PersonPeriodCode = personPeriodId,
+				PersonCode = personId
+			};
+
+			BusinessUnits.Add(businessUnit);
+			Scenarios.Add(scenario);
+			Persons.Add(person);
+			Schedules.Add(assignment1);
+			Schedules.Add(assignment2);
+
+			AnalyticsScenarios.AddScenario(analyticsScenario);
+			AnalyticsPersonPeriods.AddOrUpdatePersonPeriod(analyticsPersonPeriod);
+			AnalyticsOvertimes.AddOrUpdate(new AnalyticsOvertime
+			{
+				OvertimeId = 2,
+				OvertimeName = "test",
+				OvertimeCode = multiplicatorDefinitionSet.Id.Value
+			});
+
+			var belongsToDate = new DateTime(2017, 03, 06, 0, 0, 0, DateTimeKind.Utc);
+			Target.Handle(new ScheduleChangedEvent
+			{
+				StartDateTime = overtimePeriod.StartDateTime,
+				EndDateTime = overtimePeriod.EndDateTime,
+				ScenarioId = scenarioId,
+				LogOnBusinessUnitId = businessUnitId,
+				PersonId = personId,
+				Date = belongsToDate
+			});
+
+			var overtimeShiftLayer = assignment2.ShiftLayers.OfType<OvertimeShiftLayer>().FirstOrDefault();
+			assignment2.RemoveActivity(overtimeShiftLayer);
+			Target.Handle(new ScheduleChangedEvent
+			{
+				StartDateTime = overtimePeriod.StartDateTime,
+				EndDateTime = overtimePeriod.EndDateTime,
+				ScenarioId = scenarioId,
+				LogOnBusinessUnitId = businessUnitId,
+				PersonId = personId,
+				Date = belongsToDate
+			});
+
+			var schedules =
+				AnalyticsSchedules.FactScheduleRows.Where(a => a.DatePart.ScheduleDateId == 0).ToList();
+			schedules.Any().Should().Be(true);
+			schedules.Any(a => a.TimePart.OverTimeId > 0).Should().Be(false);
 		}
 	}
 }

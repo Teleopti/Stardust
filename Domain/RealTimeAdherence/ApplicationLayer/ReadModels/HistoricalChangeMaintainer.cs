@@ -52,25 +52,33 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels
 			var removeUntil = _now.UtcDateTime().Date.AddDays(_keepDays * -1);
 			purgeHistoricalChange(removeUntil);
 			purgeApprovedPeriods(removeUntil);
-			purgeEventStore(removeUntil);
+			purgeEventStoreInBatch(removeUntil);
 		}
 
-		[UnitOfWork]
-		protected virtual void purgeEventStore(DateTime removeUntil)
+		private void purgeEventStoreInBatch(DateTime removeUntil)
 		{
-			_eventStore.Remove(removeUntil);
+			const int maxEventsToRemove = 10000;
+			var deletedEventsCount = 0;
+
+			do
+			{	
+				deletedEventsCount = purgeEventStore(removeUntil, maxEventsToRemove);
+			} while (deletedEventsCount == maxEventsToRemove);
 		}
+
+
+		[UnitOfWork]
+		protected virtual int purgeEventStore(DateTime removeUntil, int maxEventsToRemove) =>
+			_eventStore.Remove(removeUntil, maxEventsToRemove);
+
 
 		[ReadModelUnitOfWork]
-		protected virtual void purgeHistoricalChange(DateTime removeUntil)
-		{
+		protected virtual void purgeHistoricalChange(DateTime removeUntil) =>
 			_historicalChangePersister.Remove(removeUntil);
-		}
+
 
 		[UnitOfWork]
-		protected virtual void purgeApprovedPeriods(DateTime removeUntil)
-		{
+		protected virtual void purgeApprovedPeriods(DateTime removeUntil) =>
 			_approvedPeriodsPersister.Remove(removeUntil);
-		}
 	}
 }
