@@ -17347,4 +17347,8 @@ The application will now exit.</value>
     <value>Too many consecutive workdays.</value>
     <comment>Name of business rule error message when break consecutive maximum workday</comment>
   </data>
+  <data name="ModifyAdherence" xml:space="preserve">
+    <value>Modify Adherence</value>
+    <comment>Permission to approve and remove approvals</comment>
+  </data>
 </root>
