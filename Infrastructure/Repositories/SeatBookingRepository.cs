@@ -36,14 +36,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Where(booking => booking.BelongsToDate >= period.StartDate
 								   && booking.BelongsToDate <= period.EndDate).ToList();
 		}
-
-		public IList<ISeatBooking> LoadSeatBookingsForDateOnlyPeriod(IPerson person, DateOnlyPeriod period)
-		{
-			return Session.Query<ISeatBooking>()
-				.Where(booking => booking.BelongsToDate >= period.StartDate
-								   && booking.BelongsToDate <= period.EndDate
-								   && booking.Person == person).ToList();
-		}
 		
 		public IList<ISeatBooking> LoadSeatBookingsForDay(DateOnly date)
 		{
