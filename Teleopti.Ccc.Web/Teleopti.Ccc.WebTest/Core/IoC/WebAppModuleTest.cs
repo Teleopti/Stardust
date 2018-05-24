@@ -66,7 +66,7 @@ using Teleopti.Ccc.Web.Core.Startup.Booter;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
 using Teleopti.Interfaces.Domain;
 using ConfigReader = Teleopti.Ccc.Domain.Config.ConfigReader;
-using TeamScheduleController = Teleopti.Ccc.Web.Areas.MyTime.Controllers.TeamScheduleController;
+using TeamScheduleApiController = Teleopti.Ccc.Web.Areas.MyTime.Controllers.TeamScheduleApiController;
 
 namespace Teleopti.Ccc.WebTest.Core.IoC
 {
@@ -386,7 +386,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldResolveTeamScheduleController()
 		{
-			requestContainer.Resolve<TeamScheduleController>()
+			requestContainer.Resolve<TeamScheduleApiController>()
 				.Should().Not.Be.Null();
 		}
 

@@ -19,8 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 			_userTimeZone = userTimeZone;
 		}
 
-		public TimeLineViewModel[] Map(IEnumerable<AgentInTeamScheduleViewModel>
-			                                                         agentSchedules, DateOnly date)
+		public TimeLineViewModel[] Map(IEnumerable<AgentInTeamScheduleViewModel> agentSchedules, DateOnly date)
 		{
 			return _timeLineViewModelFactory.CreateTimeLineHours(getTimeLinePeriod(agentSchedules, date));
 		}

@@ -18,6 +18,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Ccc.WebTest.Core.Common.DataProvider;
 using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
@@ -175,8 +176,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				SearchNameText = ""
 			});
 
-			result.TimeLine.Max(t => t.EndTime).Should().Be.EqualTo(new DateTime(2015, 5, 21, 16, 15, 0));
-			result.TimeLine.Min(t => t.StartTime).Should().Be.EqualTo(new DateTime(2015, 5, 21, 5, 45, 0));
+			result.TimeLine.Max(t => (t as TeamScheduleTimeLineViewModelToggle75989Off).EndTime).Should().Be.EqualTo(new DateTime(2015, 5, 21, 16, 15, 0));
+			result.TimeLine.Min(t => (t as TeamScheduleTimeLineViewModelToggle75989Off).StartTime).Should().Be.EqualTo(new DateTime(2015, 5, 21, 5, 45, 0));
 		}
 
 		

@@ -5,6 +5,7 @@ namespace Teleopti.Ccc.Web.Core.Extensions
 {
 	public static class DateTimeFormatExtensions
 	{
+		public const string TimeSpanFormat = @"hh\:mm\:ss";
 		public const string FixedDateFormat = "yyyy-MM-dd";
 		public const string FixedDateTimeFormat = "yyyy-MM-dd HH:mm";
 		public const string FixedDateTimeWithSecondsFormat = "yyyy-MM-dd HH:mm:ss";
