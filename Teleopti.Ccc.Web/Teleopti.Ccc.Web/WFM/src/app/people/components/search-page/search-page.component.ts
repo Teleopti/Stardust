@@ -6,7 +6,8 @@ import {
 	PeopleSearchQuery,
 	RolesService,
 	WorkspaceService,
-	PeopleSearchResult
+	PeopleSearchResult,
+	SearchService
 } from '../../services';
 import { Person, Role } from '../../types';
 import { FormControl } from '@angular/forms';
@@ -25,7 +26,8 @@ export class SearchPageComponent implements OnInit {
 		public nav: NavigationService,
 		public workspaceService: WorkspaceService,
 		public rolesService: RolesService,
-		public searchPageService: SearchPageService
+		public searchPageService: SearchPageService,
+		public searchService: SearchService
 	) {}
 
 	displayedColumns = ['select', 'FirstName', 'LastName', 'SiteTeam', 'Roles'];
@@ -38,8 +40,8 @@ export class SearchPageComponent implements OnInit {
 	};
 
 	ngOnInit() {
-		this.searchControl.setValue(this.searchPageService.keyword);
-		this.pagination.length = this.searchPageService.lastQuerySize;
+		this.searchControl.setValue(this.searchService.keyword);
+		this.pagination.length = this.searchService.lastQuerySize;
 		this.searchPageService.getPeople().subscribe({
 			next: (people: Person[]) => {
 				this.dataSource.data = people;
@@ -65,15 +67,15 @@ export class SearchPageComponent implements OnInit {
 	}
 
 	onSearch() {
-		this.searchPageService.keyword = this.searchControl.value;
+		this.searchService.keyword = this.searchControl.value;
 		this.searchPeople();
 	}
 
 	searchPeople() {
 		const query: PeopleSearchQuery = {
-			keyword: this.searchPageService.keyword,
-			pageSize: this.searchPageService.pageSize,
-			pageIndex: this.searchPageService.pageIndex
+			keyword: this.searchService.keyword,
+			pageSize: this.searchService.pageSize,
+			pageIndex: this.searchService.pageIndex
 		};
 		this.searchPageService.searchPeople(query).subscribe({
 			next: searchResult => {
@@ -100,8 +102,8 @@ export class SearchPageComponent implements OnInit {
 	}
 
 	paginationChanged(event: PageEvent) {
-		this.searchPageService.pageSize = event.pageSize;
-		this.searchPageService.pageIndex = event.pageIndex;
+		this.searchService.pageSize = event.pageSize;
+		this.searchService.pageIndex = event.pageIndex;
 		this.searchPeople();
 	}
 

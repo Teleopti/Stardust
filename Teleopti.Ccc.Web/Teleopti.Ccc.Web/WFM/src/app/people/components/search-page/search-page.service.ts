@@ -27,12 +27,7 @@ export class SearchPageService {
 		});
 	}
 
-	private peopleCache$ = new BehaviorSubject<Array<Person>>([]);
-
-	public keyword: string = '';
-	public pageIndex: number = 0;
-	public pageSize: number = 20;
-	public lastQuerySize: number = 0;
+	private peopleCache$ = this.searchService.peopleCache$;
 
 	public getPerson(id: string): Person {
 		return this.peopleCache$.getValue().find(p => p.Id === id);
@@ -47,19 +42,14 @@ export class SearchPageService {
 			this[key] = query[key];
 		});
 
-		return this.searchService.searchPeople(query).pipe(
-			tap((result: PeopleSearchResult) => {
-				this.peopleCache$.next(result.People);
-				this.lastQuerySize = result.TotalRows;
-			})
-		);
+		return this.searchService.searchPeople(query);
 	}
 
 	searchPeopleAllPages(): Observable<PeopleSearchResult> {
 		const query: PeopleSearchQuery = {
-			keyword: this.keyword,
+			keyword: this.searchService.keyword,
 			pageIndex: 0,
-			pageSize: this.lastQuerySize
+			pageSize: this.searchService.lastQuerySize
 		};
 		return this.searchService.searchPeople(query);
 	}
