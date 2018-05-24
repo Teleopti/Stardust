@@ -195,9 +195,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IslandModelFactory>().SingleInstance();
 			builder.RegisterType<CreateSkillSets>().SingleInstance();
 			builder.RegisterType<ReduceIslandsLimits>().SingleInstance();
-			builder.RegisterType<LongestPeriodForAssignmentCalculator>()
-				.As<ILongestPeriodForAssignmentCalculator>()
-				.SingleInstance();
+			builder.RegisterType<LongestPeriodForAssignmentCalculator>().As<ILongestPeriodForAssignmentCalculator>().SingleInstance();
 			builder.RegisterType<ShiftProjectionCacheFetcher>().SingleInstance();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_LessResourcesXXL_74915))
 			{
@@ -251,7 +249,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<StudentSchedulingService>().As<IStudentSchedulingService>().InstancePerLifetimeScope();
 
-			builder.RegisterType<ShiftProjectionCacheFilter>().InstancePerLifetimeScope();
+			builder.RegisterType<ShiftProjectionCacheFilter>().SingleInstance();
 
 			builder.RegisterType<SkillIntervalDataDivider>().As<ISkillIntervalDataDivider>().SingleInstance();
 			builder.RegisterType<SkillStaffPeriodToSkillIntervalDataMapper>().As<ISkillStaffPeriodToSkillIntervalDataMapper>().SingleInstance();
