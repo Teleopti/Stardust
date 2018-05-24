@@ -19,12 +19,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return externalPerformances.SingleOrDefault(p => p.ExternalId == externalId);
 		}
-
-		public int GetExernalPerformanceCount()
-		{
-			return externalPerformances.Count;
-		}
-
+		
 		public void Add(IExternalPerformance externalPerformance)
 		{
 			externalPerformances.Add(externalPerformance);
