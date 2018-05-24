@@ -1,4 +1,5 @@
-﻿Feature: Team Schedule with filter and paging function
+﻿@OnlyRunIfDisabled('MyTimeWeb_NewTeamScheduleView_75989')
+Feature: Team Schedule with filter and paging function
 In order to know when my colleagues work
 As an agent
 I want to see my team mates' schedules
