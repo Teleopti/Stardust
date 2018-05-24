@@ -59,11 +59,11 @@
 	</div>
 
 	<div class="mobile-teamschedule-view-body container">
-		<div class="mobile-timeline floatleft">
-			<!-- xko foreach: timeLines -->
-			<div class="mobile-timeline-label absolute">
+		<div class="mobile-timeline floatleft" data-bind="style: {height: scheduleHeight + 'px'}">
+			<!-- ko foreach: timeLines -->
+			<div class="mobile-timeline-label absolute" data-bind="style: {top: topPosition}, text: timeText, visible: isHour">
 			</div>
-			<!-- /xko -->
+			<!-- /ko -->
 		</div>
 		
 		<div class="my-schedule-column" >

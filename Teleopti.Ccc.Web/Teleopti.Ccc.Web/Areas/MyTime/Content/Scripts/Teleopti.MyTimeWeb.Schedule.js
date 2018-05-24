@@ -27,8 +27,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		daylightSavingAdjustment,
 		baseUtcOffsetInMinutes,
 		currentPage = "Teleopti.MyTimeWeb.Schedule",
-		constants = Teleopti.MyTimeWeb.Common.Constants,
-		fullDayHour = "1.00";
+		constants = Teleopti.MyTimeWeb.Common.Constants;
 
 	function _bindData(data) {
 		vm.initializeData(data);
@@ -135,29 +134,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				_setTimeIndicator(timeIndicatorDateTime);
 			}
 		}, 1000);
-	};
-
-	var TimelineViewModel = function (rawTimeline, scheduleHeight, offset) {
-		var self = this;
-		self.positionPercentage = ko.observable(rawTimeline.PositionPercentage);
-		var hourMinuteSecond = rawTimeline.Time.split(":");
-		var hour = hourMinuteSecond[0];
-		if (hour.toString() === fullDayHour) {
-			self.minutes = constants.totalMinutesOfOneDay;
-		} else {
-			self.minutes = hourMinuteSecond[0] * 60 + parseInt(hourMinuteSecond[1]);
-		}
-
-		var timeFromMinutes = moment().startOf("day").add("minutes", self.minutes);
-
-		self.timeText = rawTimeline.TimeLineDisplay;
-
-		self.topPosition = ko.computed(function () {
-			return Math.round(scheduleHeight * self.positionPercentage()) + offset + "px";
-		});
-		self.isHour = ko.computed(function () {
-			return timeFromMinutes.minute() === 0;
-		});
 	};
 
 	var WeekScheduleViewModel = function (addRequestViewModel, navigateToRequestsMethod, defaultDateTimes, weekStart, overtimeLicAvailable) {
@@ -622,7 +598,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.staffingInfoAvailableDays = data.StaffingInfoAvailableDays;
 		var timelines = ko.utils.arrayMap(data.TimeLine, function (item) {
 			// "Week schedule" module will be shown on PC only, so continue apply fixed schedule height
-			return new TimelineViewModel(item, constants.scheduleHeight, timeLineOffset);
+			return new Teleopti.MyTimeWeb.Schedule.TimelineViewModel(item, constants.scheduleHeight, timeLineOffset);
 		});
 		self.timeLines(timelines);
 
@@ -795,7 +771,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				ko.applyBindings(vm, $("#page")[0]);
 			});
 		},
-		TimelineViewModel: TimelineViewModel,
 		WeekScheduleViewModel: WeekScheduleViewModel,
 		LoadAndBindData: function () {
 			_fetchData(vm.selectedProbabilityType, _subscribeForChanges);
