@@ -103,7 +103,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		}
 
 		[Test]
-		//[Ignore("75998 to be fixed")]
 		public void ShouldBeOkWithPersonalActivityOnOtherDay()
 		{
 			var start = new DateTime(2000, 1, 2, 2, 0, 0, DateTimeKind.Utc);

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -26,17 +27,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			{
 				var assignment = scheduleDay.PersonAssignment();
 				if (assignment == null) continue;
-
+				if(assignment.ShiftLayers.Count() == assignment.PersonalActivities().Count()) continue;
 				var assignmentPeriod = assignment.Period;
 				var dateOnly = assignment.Date;
 				var dateOnlyPeriod = dateOnly.ToDateOnlyPeriod();
 				//don't want dep to person here...
 				var agentTimeZone = scheduleDay.Person.PermissionInformation.DefaultTimeZone();
-
 				var assignmentDayInAgentTimeZone = TimeZoneHelper.ConvertFromUtc(assignment.Period.StartDateTime, agentTimeZone).Date;
 				var scheduleDayInAgentTimezone = TimeZoneHelper.ConvertFromUtc(scheduleDay.Period.StartDateTime, agentTimeZone).Date;
 				if (assignmentDayInAgentTimeZone == scheduleDayInAgentTimezone) continue;
-
 				var friendlyName = Resources.NotAllowedMoveOfAssignmentToOtherDate;
 				ret.Add(new BusinessRuleResponse(typeof(DataPartOfAgentDay), Resources.NotAllowedMoveOfAssignmentToOtherDate, true, true, assignmentPeriod,
 												 scheduleDay.Person, dateOnlyPeriod, friendlyName));
