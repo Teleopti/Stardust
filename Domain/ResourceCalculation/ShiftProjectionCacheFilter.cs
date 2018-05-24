@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-    public class ShiftProjectionCacheFilter : IShiftProjectionCacheFilter
+    public class ShiftProjectionCacheFilter
     {
 	    private readonly ILongestPeriodForAssignmentCalculator _rules;
 	    private readonly IPersonalShiftAndMeetingFilter _personalShiftAndMeetingFilter;
