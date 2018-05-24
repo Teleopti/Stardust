@@ -1749,7 +1749,6 @@
     <Compile Include="ResourceCalculation\SkillCombinationResource.cs" />
     <Compile Include="ResourceCalculation\SkillStaffingInterval.cs" />
     <Compile Include="ResourceCalculation\SkillStaffingIntervalLightModel.cs" />
-    <Compile Include="ResourceCalculation\SkillStaffIntervalHolder.cs" />
     <Compile Include="ResourceCalculation\StaffingIntervalChange.cs" />
     <Compile Include="ResourceCalculation\UpdateStaffingLevelReadModelOnlySkillCombinationResources.cs" />
     <Compile Include="Scheduling\Assignment\NoProjectionMerger.cs" />
