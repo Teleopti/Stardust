@@ -53,7 +53,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			IAnalyticsAbsenceRepository analyticsAbsenceRepository,
 			IAnalyticsShiftCategoryRepository analyticsShiftCategoryRepository)
 		{
-
 			_scenarioRepository = scenarioRepository;
 			_preferenceDayRepository = preferenceDayRepository;
 			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
@@ -66,7 +65,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			_analyticsScenarioRepository = analyticsScenarioRepository;
 			_analyticsAbsenceRepository = analyticsAbsenceRepository;
 			_analyticsShiftCategoryRepository = analyticsShiftCategoryRepository;
-
 
 			restrictionChecker = new RestrictionChecker();
 			scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, false, true) { LoadDaysAfterLeft = true };
@@ -117,7 +115,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			commonHandle(@event.RestrictionDates, @event.PersonId, @event.ScenarioId);
 		}
 
-		private void commonHandle(List<DateTime> restrictionDates, Guid personCode, Guid scenarioId)
+		private void commonHandle(IEnumerable<DateTime> restrictionDates, Guid personCode, Guid scenarioId)
 		{
 			var person = _personRepository.Get(personCode);
 			if (person == null)
@@ -126,7 +124,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 				return;
 			}
 
-			foreach (var restrictionDate in restrictionDates)
+			// General look ups
+			var analyticsScenarios = _analyticsScenarioRepository.Scenarios();
+			var analyticsDayOffs = _analyticsDayOffRepository.DayOffs();
+			var analyticsAbsences = _analyticsAbsenceRepository.Absences();
+			var analyticsShiftCategories = _analyticsShiftCategoryRepository.ShiftCategories();
+
+			// Remove duplicate day
+			var uniqueRestrictionDates = restrictionDates.Distinct();
+
+			int? analyticsScenarioId = null;
+			var scenarios = _scenarioRepository.FindEnabledForReportingSorted();
+			if (scenarioId != Guid.Empty)
+			{
+				scenarios = scenarios.Where(a => a.Id.Equals(scenarioId)).ToList();
+				if (scenarios.IsEmpty())
+				{
+					var dates = uniqueRestrictionDates.Aggregate("", (current, date) => current + $"{date:yyyy-MM-dd},");
+					logger.Debug($"Nothing to do with person id {personCode} and \"{dates}\" because scenario {scenarioId} was not found as reportable.");
+					return;
+				}
+
+				analyticsScenarioId = getAnalyticsScenario(analyticsScenarios, scenarioId).ScenarioId;
+			}
+
+			foreach (var restrictionDate in uniqueRestrictionDates)
 			{
 				// Preference, person look ups, mapping
 				var preferenceDays = _preferenceDayRepository.Find(new DateOnly(restrictionDate), person).ToList();
@@ -136,7 +158,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 					continue;
 				}
 
-				var preferenceDay = preferenceDays.Single();
+				IPreferenceDay preferenceDay;
+				if (preferenceDays.Count > 1)
+				{
+					// Refer to bug #75976, there may exists multiple PreferenceDay for an agent in same day
+					logger.Warn($"{preferenceDays.Count} preference days found for person with Id={personCode} and date {restrictionDate:yyyy-MM-dd}");
+					// Keep the last updated
+					preferenceDay = preferenceDays.OrderByDescending(x => x.UpdatedOn).First();
+				}
+				else
+				{
+					preferenceDay = preferenceDays.Single();
+				}
 
 				var dateId = getAnalyticsDate(restrictionDate);
 				var analyticsPersonPeriod = getAnalyticsPersonPeriod(restrictionDate, person);
@@ -144,24 +177,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 				{
 					continue;
 				}
-
-				var scenarios = _scenarioRepository.FindEnabledForReportingSorted();
-				if (scenarioId != Guid.Empty)
-				{
-					scenarios = scenarios.Where(a => a.Id.Equals(scenarioId)).ToList();
-					if (scenarios.IsEmpty())
-					{
-						logger.Debug(
-							$"Nothing to do with person id {personCode} and \"{restrictionDate:yyyy-MM-dd}\" because scenario {scenarioId} was not found as reportable.");
-						return;
-					}
-				}
-
-				// General look ups
-				var analyticsScenarios = _analyticsScenarioRepository.Scenarios();
-				var analyticsDayOffs = _analyticsDayOffRepository.DayOffs();
-				var analyticsAbsences = _analyticsAbsenceRepository.Absences();
-				var analyticsShiftCategories = _analyticsShiftCategoryRepository.ShiftCategories();
 
 				var period = new DateOnlyPeriod(new DateOnly(preferenceDay.RestrictionDate.Date),
 					new DateOnly(preferenceDay.RestrictionDate.Date));
@@ -181,7 +196,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 						{
 							if (!(restrictionBase is IPreferenceRestriction preferenceRestriction))
 							{
-								logger.Error($"Could not get restrictions for person with person code {person.Id}");
+								logger.Error($"Could not get restrictions for person with person code {person.Id}, date {restrictionDate:yyyy-MM-dd} and scenario {scenario.Id}");
 								continue;
 							}
 
@@ -197,16 +212,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 				}
 
 				// Delete
-				if (scenarioId == Guid.Empty)
-				{
-					_analyticsPreferenceRepository.DeletePreferences(dateId.DateId, personCode);
-				}
-				else
-				{
-					var analyticsScenario = getAnalyticsScenario(analyticsScenarios, scenarioId);
-					_analyticsPreferenceRepository.DeletePreferences(dateId.DateId, personCode,
-						analyticsScenario.ScenarioId);
-				}
+				_analyticsPreferenceRepository.DeletePreferences(dateId.DateId, personCode, analyticsScenarioId);
 
 				// Insert
 				foreach (var analyticsFactSchedulePreference in resultFactSchedulePreference)
@@ -234,7 +240,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			var dayOffId = getDayOff(preferenceRestriction, analyticsDayOffs, businessUnitId);
 			var shiftCategory = analyticsShiftCategories.FirstOrDefault(a => a.ShiftCategoryCode == (preferenceRestriction.ShiftCategory?.Id ?? Guid.Empty));
 			var absence = analyticsAbsences.FirstOrDefault(a => a.AbsenceCode == (preferenceRestriction.Absence?.Id ?? Guid.Empty));
-			
 
 			var preferenceItem = new AnalyticsFactSchedulePreference
 			{
