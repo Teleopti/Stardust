@@ -101,12 +101,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 				lastHour = endTime.Subtract(new TimeSpan(0, 0, endTime.Minutes, endTime.Seconds, endTime.Milliseconds));
 			}
 
+			var localDate = TimeZoneHelper.ConvertFromUtc(date, timeZone);
 			for (var hour = firstHour; hour <= lastHour; hour = hour.Add(TimeSpan.FromHours(1)))
 			{
 				hourList.Add(new TeamScheduleTimeLineViewModel
 				{
-					Time = TimeZoneHelper.ConvertFromUtc(date.Add(hour), timeZone).TimeOfDay,
-					TimeLineDisplay = date.Add(hour).ToLocalizedTimeFormat(),
+					Time = localDate.Add(hour).TimeOfDay,
+					TimeLineDisplay = localDate.Add(hour).ToLocalizedTimeFormat(),
 					PositionPercentage = diff == TimeSpan.Zero ? 0 : Math.Round((decimal)(hour - startTime).Ticks / diff.Ticks, 4)
 				});
 			}

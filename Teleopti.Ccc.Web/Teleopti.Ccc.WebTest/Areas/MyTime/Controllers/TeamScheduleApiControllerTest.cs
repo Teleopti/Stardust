@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public ICurrentScenario Scenario;
 		public ILoggedOnUser User;
 		public IScheduleStorage ScheduleData;
+		public FakeUserTimeZone UserTimeZone;
 
 		[Test]
 		public void ShouldGiveSuccessResponseButWithRightBusinessReasonWhenThereIsNoDefaultTeam()
@@ -77,6 +78,39 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldReturnTimeOfTeamScheduleTimeLineViewModel()
 		{
 			var today = DateOnly.Today;
+			var teamScheduleRequest = new TeamScheduleApiController.TeamScheduleRequest
+			{
+				SelectedDate = today.Date,
+				Paging = new Paging
+				{
+					Take = 10
+				},
+				ScheduleFilter = new Domain.Repositories.ScheduleFilter
+				{
+					TeamIds = Guid.NewGuid().ToString()
+				}
+			};
+			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
+
+			(teamScheduleViewModel == null).Should().Be(false);
+			(teamScheduleViewModel.TimeLine == null).Should().Be(false);
+			(teamScheduleViewModel.TimeLine.Length > 0).Should().Be(true);
+
+			var firstTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.First() as TeamScheduleTimeLineViewModel;
+			firstTeamScheduleTimeLineViewModel.Time.Should().Be(TimeSpan.FromHours(8));
+			firstTeamScheduleTimeLineViewModel.TimeLineDisplay.Should().Be(today.Date.AddMinutes(480).ToLocalizedTimeFormat());
+
+			var lastTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.Last() as TeamScheduleTimeLineViewModel;
+			lastTeamScheduleTimeLineViewModel.Time.Should().Be(TimeSpan.FromHours(17));
+			lastTeamScheduleTimeLineViewModel.TimeLineDisplay.Should().Be(today.Date.AddMinutes(1020).ToLocalizedTimeFormat());
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
+		public void ShouldReturnDisplayTimeBasedOnLocalTimezoneInTeamScheduleTimeLineViewModel()
+		{
+			UserTimeZone.IsSweden();
+			var today = new DateOnly(2018, 5, 23);
 			var teamScheduleRequest = new TeamScheduleApiController.TeamScheduleRequest
 			{
 				SelectedDate = today.Date,
