@@ -139,7 +139,7 @@
     "test": "ng test",
     "devTest": "ng test --karma-config test/karma.conf.js",
     "pretestRta": "grunt devDistRta",
-    "testRta": "ng test --karma-config test/karma.conf.rta.js",
+    "rtaTest": "ng test --karma-config test/karma.conf.rta.js",
     "minify:css": "cleancss --source-map './css/style_classic.css' -o ./dist/dist.min.css",
     "prestart": "grunt devDist",
     "start": "run-p iis openWeb watch:* ",
