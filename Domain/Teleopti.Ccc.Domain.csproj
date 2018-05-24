@@ -1309,7 +1309,6 @@
     <Compile Include="InterfaceLegacy\Domain\ITimeZoneDim.cs" />
     <Compile Include="InterfaceLegacy\Domain\ITracker.cs" />
     <Compile Include="InterfaceLegacy\Domain\ITrackerCalculator.cs" />
-    <Compile Include="InterfaceLegacy\Domain\ITrackingDataProvider.cs" />
     <Compile Include="InterfaceLegacy\Domain\ITrueFalseRandomizer.cs" />
     <Compile Include="InterfaceLegacy\Domain\IUndoRedoContainer.cs" />
     <Compile Include="InterfaceLegacy\Domain\IUnsafePersonProvider.cs" />
