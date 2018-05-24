@@ -19,9 +19,9 @@
 		}
 	});
 
-	ShiftEditorController.$inject = ['$element', '$timeout', '$window', 'serviceDateFormatHelper'];
+	ShiftEditorController.$inject = ['$element', '$timeout', '$window', '$interval', 'serviceDateFormatHelper'];
 
-	function ShiftEditorController($element, $timeout, $window, serviceDateFormatHelper) {
+	function ShiftEditorController($element, $timeout, $window, $interval, serviceDateFormatHelper) {
 		var vm = this;
 		var viewportClipEl = $element[0].querySelector('.shift-container .viewport-clip');
 		var viewportEl = viewportClipEl.querySelector('.viewport');
@@ -37,11 +37,34 @@
 			vm.projections = getProjections();
 			initScrollState();
 			angular.element($window).bind('resize', initScrollState);
+			bindScrollMouseEvent(viewportEl.querySelector('.left-scroll'), -20);
+			bindScrollMouseEvent(viewportEl.querySelector('.right-scroll'), 20);
 		}
 
 		vm.scroll = function (step) {
 			viewportEl.scrollLeft += step;
 			displayScrollButton();
+		}
+
+		var scrollIntervalPromise = null;
+		function cancelScrollIntervalPromise() {
+			if (scrollIntervalPromise) {
+				$interval.cancel(scrollIntervalPromise);
+				scrollIntervalPromise = null;
+			}
+		}
+		
+		function bindScrollMouseEvent(el, step) {
+			el.addEventListener('mousedown', function () {
+				cancelScrollIntervalPromise();
+				scrollIntervalPromise = $interval(function () {
+					vm.scroll(step);
+				}, 300);
+			}, false);
+			el.addEventListener('mouseleave', function () {
+				cancelScrollIntervalPromise();
+			}, false);
+		
 		}
 
 		function getProjections() {
@@ -53,7 +76,6 @@
 
 			return projections;
 		}
-
 
 		function initScrollState() {
 			$timeout(function () {
