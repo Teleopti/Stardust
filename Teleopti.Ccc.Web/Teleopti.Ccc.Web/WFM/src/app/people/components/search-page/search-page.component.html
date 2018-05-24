@@ -70,8 +70,8 @@
         <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="toggleRow(row)" data-test-person>
         </mat-row>
       </mat-table>
-      <mat-paginator [length]="pagination.length" [pageIndex]="searchPageService.pageIndex" [pageSize]="searchPageService.pageSize"
-        [pageSizeOptions]="pagination.pageSizeOptions" (page)="paginationChanged($event)">
+      <mat-paginator [length]="pagination.length" [pageIndex]="searchService.pageIndex" [pageSize]="searchService.pageSize" [pageSizeOptions]="pagination.pageSizeOptions"
+        (page)="paginationChanged($event)">
       </mat-paginator>
     </div>
   </div>
