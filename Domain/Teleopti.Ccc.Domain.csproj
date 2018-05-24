@@ -996,7 +996,6 @@
     <Compile Include="InterfaceLegacy\Domain\IGroupPage.cs" />
     <Compile Include="InterfaceLegacy\Domain\IGroupPageDataProvider.cs" />
     <Compile Include="InterfaceLegacy\Domain\IGroupPageOptions.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IGroupShiftCategoryFairnessCreator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IHasContractDayOffDefinition.cs" />
     <Compile Include="InterfaceLegacy\Domain\IIncreasePeriodByOne.cs" />
     <Compile Include="InterfaceLegacy\Domain\IJobResult.cs" />
