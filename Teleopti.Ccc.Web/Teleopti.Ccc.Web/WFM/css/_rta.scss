@@ -20,6 +20,10 @@
   $in-adherence-color: darkgreen;
   $out-of-adherence-height: 4px;
 
+  .label-alert {
+	background-color: #FB8C00;
+  }
+
   // con padding/margin reset
   .con-row {
 	padding: 0;
@@ -76,6 +80,9 @@
 	  white-space: nowrap;
 	  text-overflow: ellipsis;
 
+	  .label-alert {
+		margin-left: 10px;
+	  }
 	  &.shift-column {
 		border-right: none;
 		background-color: transparent;
@@ -90,7 +97,7 @@
 		font-size: 14px !important;
 	  }
 	}
-	
+
 	a.mdi {
 	  text-decoration: none;
 	}
@@ -155,6 +162,10 @@
 	  .right {
 		flex-grow: 1;
 		padding: $full-padding;
+		&.late-for-work-line {
+		  padding-top: 0;
+		  padding-bottom: 0;
+		}
 	  }
 	}
 
@@ -186,9 +197,19 @@
 
 	.timeline {
 	  @include container;
+	  height: 15px;
 	  .time {
 		@include positioned;
 		top: 10%;
+		transform: translateX(-50%);
+	  }
+	}
+
+	.late-for-work-line {
+	  @include container;
+	  height: 20px;
+	  .late-for-work {
+		@include positioned;
 		transform: translateX(-50%);
 	  }
 	}

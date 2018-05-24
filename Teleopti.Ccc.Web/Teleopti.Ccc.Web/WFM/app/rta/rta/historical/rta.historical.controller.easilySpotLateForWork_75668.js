@@ -18,13 +18,13 @@
 		vm.openApprovedPeriods = $stateParams.open;
 		vm.openApproveForm = $stateParams.open;
 		vm.hasModifyAdherencePermission = false;
-		
+
 		var calculate;
 		var timelineStart;
 		var timelineEnd;
 
 		loadData();
-		
+
 		$http.get('../api/HistoricalAdherence/HasModifyAdherencePermission', {
 			params: {
 				personId: $stateParams.personId,
@@ -42,35 +42,7 @@
 				}
 			}).then(function (response) {
 				var data = response.data;
-				data = {
-					"PersonId":"47a3d4aa-3cd8-4235-a7eb-9b5e015b2560",
-					"AgentName":"John Smith",
-					"Schedules":[
-						{"Color":"#80FF80","StartTime":"2018-05-21T08:00:00","EndTime":"2018-05-21T10:00:00","Name":"Phone"},
-						{"Color":"#FF0000","StartTime":"2018-05-21T10:00:00","EndTime":"2018-05-21T10:15:00","Name":"Short break"},
-						{"Color":"#80FF80","StartTime":"2018-05-21T10:15:00","EndTime":"2018-05-21T12:00:00","Name":"Phone"},
-						{"Color":"#FFFF00","StartTime":"2018-05-21T12:00:00","EndTime":"2018-05-21T13:00:00","Name":"Lunch"},
-						{"Color":"#8080FF","StartTime":"2018-05-21T13:00:00","EndTime":"2018-05-21T15:00:00","Name":"E-mail"},
-						{"Color":"#FF0000","StartTime":"2018-05-21T15:00:00","EndTime":"2018-05-21T15:15:00","Name":"Short break"},
-						{"Color":"#80FF80","StartTime":"2018-05-21T15:15:00","EndTime":"2018-05-21T17:00:00","Name":"Phone"}
-					],
-					"OutOfAdherences":[{"StartTime":"2018-05-21T08:00:00","EndTime":"2018-05-21T08:30:00"}],
-					"RecordedOutOfAdherences":[{"StartTime":"2018-05-21T08:00:00","EndTime":"2018-05-21T08:30:00"}],
-					"ApprovedPeriods":[],
-					"Prylar":[
-						
-					],
-					"Changes":[
-						{"Alert": "Late for work 30 minutes", "Time":"2018-05-21T08:00:00","Activity":"Phone","ActivityColor":"#80FF80","State":"Logged off","Rule":"Out Of Adherence","RuleColor":"#FF0000","Adherence":"Out Of Adherences","AdherenceColor":"#FF0000"},
-						{"Time":"2018-05-21T08:30:00","Activity":"Phone","ActivityColor":"#80FF80","State":"Phone","Rule":"In Adherence","RuleColor":"#00C000","Adherence":"In adherence","AdherenceColor":"#556B2F"}],
-					"Now":"2018-06-21T14:11:04",
-					"Timeline":{
-						"StartTime":"2018-05-21T07:00:00",
-						"EndTime":"2018-05-21T18:00:00"
-					},
-					"AdherencePercentage":85,
-					"Navigation":{"First":"20180515","Last":"20180521"}
-				};
+
 				data.Schedules = data.Schedules || [];
 				data.OutOfAdherences = data.OutOfAdherences || [];
 				data.RecordedOutOfAdherences = data.RecordedOutOfAdherences || [];
@@ -102,6 +74,8 @@
 
 				vm.diamonds = buildDiamonds(data);
 
+				vm.lateForWork = {Text: "Late 30 min", Offset: "35.8359%"};
+				
 				if ($stateParams.date > data.Navigation.First) {
 					var previousDay = moment($stateParams.date).subtract(1, 'day');
 					vm.previousHref = $state.href($state.current.name, {personId: vm.personId, date: previousDay.format('YYYYMMDD')});
@@ -376,6 +350,7 @@
 				.concat(afterShift)
 				.map(function (card) {
 					card.Items = changes.filter(function (change) {
+						change.lateForWork = 'Late 30 min';
 						return change.Time >= card.StartTime && change.Time < card.EndTime;
 					});
 					return card
