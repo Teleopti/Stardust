@@ -23,15 +23,25 @@
 
 	function ShiftEditorController($element, $timeout, $window, serviceDateFormatHelper) {
 		var vm = this;
+		var viewportClipEl = $element[0].querySelector('.shift-container .viewport-clip');
+		var viewportEl = viewportClipEl.querySelector('.viewport');
+
 		vm.intervals = [];
 		vm.projections = [];
+		vm.showScrollLeftButton = false;
+		vm.showScrollRightButton = false;
 
 		vm.$onInit = function () {
 			if (!hasShift()) return;
 			vm.intervals = getIntervals();
 			vm.projections = getProjections();
-			scrollToScheduleStart();
-			angular.element($window).bind('resize', scrollToScheduleStart);
+			initScrollState();
+			angular.element($window).bind('resize', initScrollState);
+		}
+
+		vm.scroll = function (step) {
+			viewportEl.scrollLeft += step;
+			displayScrollButton();
 		}
 
 		function getProjections() {
@@ -45,17 +55,22 @@
 		}
 
 
-		function scrollToScheduleStart() {
-			var shiftContainerEl = $element[0].querySelector('.shift-container');
+		function initScrollState() {
 			$timeout(function () {
 				var shiftProjectionTimeRange = vm.personSchedule.Shifts[0].ProjectionTimeRange;
 				var shiftStart = getTotalMinutes(shiftProjectionTimeRange.Start);
 				var shiftLength = getTotalMinutes(shiftProjectionTimeRange.End) - shiftStart;
-				var scrollTo = shiftContainerEl.clientWidth <= shiftLength ?
-					(shiftStart - 120) : (shiftStart - ((shiftContainerEl.clientWidth - shiftLength) / 2));
+				var scrollTo = viewportEl.clientWidth <= shiftLength ?
+					(shiftStart - 120) : (shiftStart - ((viewportEl.clientWidth - shiftLength) / 2));
 				if (scrollTo <= 0) return;
-				shiftContainerEl.scrollLeft = scrollTo;
+				viewportEl.scrollLeft = scrollTo;
+				displayScrollButton();
 			});
+		}
+
+		function displayScrollButton() {
+			vm.showScrollLeftButton = viewportEl.scrollLeft > 0;
+			vm.showScrollRightButton = viewportEl.scrollWidth > (viewportEl.scrollLeft + viewportEl.clientWidth);
 		}
 
 		function hasShift() {

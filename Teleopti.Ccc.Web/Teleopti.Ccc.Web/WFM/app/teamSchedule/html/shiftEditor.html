@@ -17,27 +17,32 @@
 		<span class="date">{{vm.personSchedule.Date }}</span>
 	</div>
 </div>
-<div class="shift-container">
-	<div class="con-row">
-		<div class="timeline">
-			<div ng-repeat="interval in vm.intervals" class="interval">
-				<div class="label label-info">
-					<span>{{ interval.label}}</span>
+
+<div class="shift-container con-row">
+	<div class="viewport-clip con-flex">
+		<div class="viewport">
+			<div class="timeline">
+				<div class="scroll-toolbar">
+					<span class="left-scroll" ng-if="vm.showScrollLeftButton" ng-click="vm.scroll(-60)"><i class="mdi mdi-chevron-left"></i></span>
+					<span class="right-scroll" ng-if="vm.showScrollRightButton" ng-click="vm.scroll(60)"><i class="mdi mdi-chevron-right"></i></span>
 				</div>
-				<div class="ticks">
-					<span ng-repeat="tick in interval.ticks"  class="tick" ng-class="{'half-hour': tick.isHalfHour, 'hour':tick.isHour}"></span>
+				<div ng-repeat="interval in vm.intervals" class="interval">
+					<div class="label label-info">
+						<span>{{ interval.label}}</span>
+					</div>
+					<div class="ticks">
+						<span ng-repeat="tick in interval.ticks" class="tick" ng-class="{'half-hour': tick.isHalfHour, 'hour':tick.isHour}"></span>
+					</div>
 				</div>
 			</div>
-		</div>
-	</div>
-	<div class="con-row">
-		<div class="con-flex shift">
-			<div class="shift-layer"
-				 ng-class="{'overtime': projection.IsOvertime,'overtime-light': projection.UseLighterBorder, 'overtime-dark': !projection.UseLighterBorder}"
-				 ng-style="{'width': projection.Minutes +'px', 'background-color': projection.Color, 'left': projection.Left + 'px'}"
-				 ng-repeat="projection in vm.projections"></div>
 
+			<div class="shift">
+				<div class="shift-layer"
+					 ng-class="{'overtime': projection.IsOvertime,'overtime-light': projection.UseLighterBorder, 'overtime-dark': !projection.UseLighterBorder}"
+					 ng-style="{'width': projection.Minutes +'px', 'background-color': projection.Color, 'left': projection.Left + 'px'}"
+					 ng-repeat="projection in vm.projections"></div>
+			</div>
 		</div>
+
 	</div>
 </div>
-
