@@ -217,6 +217,7 @@ Scenario: Show error message when acces to my team but no own team
 	When I view team schedule
 	Then I should see a user-friendly message explaining I dont have anything to view
 
+@ignore
 Scenario: Show friendly message when after leaving date
 	Given I am an agent in a team that leaves on '2030-05-02'
 	When I am viewing team schedule for '2030-05-03'
