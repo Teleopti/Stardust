@@ -3079,6 +3079,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Approve as in adherence.
+        /// </summary>
+        public static string ApproveAsInAdherence {
+            get {
+                return ResourceManager.GetString("ApproveAsInAdherence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Approve based on business rules.
         /// </summary>
         public static string ApproveBasedOnBusinessRules {

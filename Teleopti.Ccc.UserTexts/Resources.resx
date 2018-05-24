@@ -17351,4 +17351,8 @@ The application will now exit.</value>
     <value>Modify Adherence</value>
     <comment>Permission to approve and remove approvals</comment>
   </data>
+  <data name="ApproveAsInAdherence" xml:space="preserve">
+    <value>Approve as in adherence</value>
+    <comment>Approve out of adherence period as in adherence</comment>
+  </data>
 </root>
