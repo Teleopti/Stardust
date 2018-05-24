@@ -270,19 +270,5 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 	        return shiftList;
         }
-
-        
-
-		public IList<ShiftProjectionCache> FilterOnBusinessRules(IEnumerable<IPerson> groupOfPersons, IScheduleDictionary scheduleDictionary, DateOnly dateOnly, IList<ShiftProjectionCache> shiftList)
-        {
-			InParameter.NotNull(nameof(groupOfPersons), groupOfPersons);
-			InParameter.NotNull(nameof(scheduleDictionary), scheduleDictionary);
-			foreach (var person in groupOfPersons)
-            {
-                var range = scheduleDictionary[person];
-                shiftList = FilterOnBusinessRules(range, shiftList, dateOnly);
-            }
-            return shiftList;
-        }
     }
 }

@@ -115,19 +115,5 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <returns></returns>
         IList<ShiftProjectionCache> FilterOnMainShiftOptimizeActivitiesSpecification(
 			IList<ShiftProjectionCache> shiftList, ISpecification<IEditableShift> mainShiftActivitiesOptimizeSpecification);
-
-    	///<summary>
-    	/// Filter on Business Rules on all Persons in List
-    	///</summary>
-    	///<param name="groupOfPersons"></param>
-    	///<param name="scheduleDictionary"></param>
-    	///<param name="shiftList"></param>
-    	///<param name="dateOnly"></param>
-    	///<returns></returns>
-    	IList<ShiftProjectionCache> FilterOnBusinessRules(IEnumerable<IPerson> groupOfPersons,
-    	                                                   IScheduleDictionary scheduleDictionary,
-														   DateOnly dateOnly, IList<ShiftProjectionCache> shiftList);
-
-        
     }
 }

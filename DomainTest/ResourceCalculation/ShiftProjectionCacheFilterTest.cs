@@ -435,28 +435,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         }
 
         [Test]
-        public void CanFilterOnBusinessRulesThroughGroupOfPersons()
-        {
-            var person1 = new Person();
-            var person2 = new Person();
-            var persons = new List<IPerson> { person1, person2 };
-
-            var startTime = new DateTime(2009, 2, 2, 11, 0, 0, DateTimeKind.Utc);
-            var endTime = new DateTime(2009, 2, 2, 21, 0, 0, DateTimeKind.Utc);
-
-            var scheduleDayPeriod = new DateTimePeriod(startTime, endTime);
-
-            Expect.Call(_scheduleDictionary[person1]).Return(_scheduleRange);
-            Expect.Call(_scheduleDictionary[person2]).Return(_scheduleRange);
-
-            Expect.Call(_rules.PossiblePeriod(_scheduleRange, _dateOnly)).Return(scheduleDayPeriod).Repeat.Twice();
-            _mocks.ReplayAll();
-            var ret = _target.FilterOnBusinessRules(persons, _scheduleDictionary, _dateOnly, GetCashes());
-            Assert.AreEqual(2, ret.Count);
-            _mocks.VerifyAll();
-        }
-
-        [Test]
         public void VerifyFilterOnStartAndEndTime()
         {
             var scheduleDayPeriod = new DateTimePeriod(2009, 1, 1, 2009, 1, 2);
