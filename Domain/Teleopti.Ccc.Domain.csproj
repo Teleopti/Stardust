@@ -1426,7 +1426,6 @@
     <Compile Include="InterfaceLegacy\Infrastructure\Analytics\IAnalyticsFactScheduleDayCount.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\Analytics\IAnalyticsFactSchedulePerson.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\Analytics\IAnalyticsFactScheduleTime.cs" />
-    <Compile Include="InterfaceLegacy\Infrastructure\Analytics\IAnalyticsGeneric.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\Analytics\IAnalyticsPersonBusinessUnit.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\Analytics\IAnalyticsShiftLength.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\Analytics\IFactScheduleRow.cs" />
