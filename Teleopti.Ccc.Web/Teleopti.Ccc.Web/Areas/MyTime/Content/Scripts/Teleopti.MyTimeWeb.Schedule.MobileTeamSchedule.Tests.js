@@ -239,7 +239,7 @@
 					option.success(fakeAvailableTeamsData);
 				}
 
-				if (option.url === 'TeamSchedule/DefaultTeam') {
+				if (option.url === '../api/TeamSchedule/DefaultTeam') {
 					option.success(fakeDefaultTeamData);
 				}
 			}

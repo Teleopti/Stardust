@@ -81,7 +81,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 			success: function(teams) {
 				vm.readTeamsData(teams);
 				ajax.Ajax({
-					url: 'TeamSchedule/DefaultTeam',
+					url: '../api/TeamSchedule/DefaultTeam',
 					success: function(defaultTeam) {
 						vm.readDefaultTeamData(defaultTeam);
 						fetchDataSuccessCallback();
