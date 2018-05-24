@@ -1171,7 +1171,6 @@
     <Compile Include="InterfaceLegacy\Domain\ISaveSeatMapCommand.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScenario.cs" />
     <Compile Include="InterfaceLegacy\Domain\ISchedule.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IScheduleAuditTrailReportData.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleChangedEvent.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleChangedMessage.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleData.cs" />
