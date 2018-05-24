@@ -33,26 +33,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     .List<IPersonInRole>();
         }
 
-        public IList<IPersonInRole> GetPersonsNotInRole(Guid roleId, ICollection<Guid> personsIds)
-        {
-            var onDate = DateTime.Today;
-            var ids = new List<Guid>();
-            ids.AddRange(personsIds);
-            const string query = @"SELECT p.Id, FirstName, LastName , ISNULL(t.Name, '') Team
-                        FROM Person p LEFT JOIN PersonPeriod ON Parent = p.Id
-                        AND StartDate <= :onDate AND EndDate >= :onDate
-                        LEFT JOIN Team t ON t.Id = Team
-                        WHERE  p.Id In (:persons)
-                        AND p.Id Not IN (SELECT Person FROM PersonInApplicationRole WHERE ApplicationRole = :role)";
-            return ((NHibernateStatelessUnitOfWork)_unitOfWork).Session.CreateSQLQuery(query)
-                    .SetGuid("role", roleId)
-                    .SetDateTime("onDate", onDate)
-                    .SetParameterList("persons", ids)
-                    .SetResultTransformer(Transformers.AliasToBean(typeof(PersonInRole)))
-                    .SetReadOnly(true)
-                    .List<IPersonInRole>();
-        }
-
         public IList<IPersonInRole> Persons()
         {
             var onDate = DateTime.Today;

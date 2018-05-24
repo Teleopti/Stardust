@@ -6,7 +6,6 @@ namespace Teleopti.Ccc.Domain.Repositories
     public interface IApplicationRolePersonRepository
     {
         IList<IPersonInRole> GetPersonsInRole(Guid roleId);
-        IList<IPersonInRole> GetPersonsNotInRole(Guid roleId, ICollection<Guid> personsIds);
         IList<IPersonInRole> Persons();
         IList<IRoleLight> RolesOnPerson(Guid selectedPerson);
         IList<IFunctionLight> FunctionsOnPerson(Guid selectedPerson);

@@ -13,11 +13,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			return _personInRole;
 		}
 
-		public IList<IPersonInRole> GetPersonsNotInRole(Guid roleId, ICollection<Guid> personsIds)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IList<IPersonInRole> Persons()
 		{
 			throw new NotImplementedException();

@@ -24,25 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 Assert.That(persons.Count, Is.EqualTo(0));
             }
         }
-
-        [Test]
-        public void ShouldLoadPersonsNotInRole()
-        {
-            UnitOfWork.PersistAll();
-            CleanUpAfterTest();
-            var roleId = Guid.NewGuid();
-            var person1Id = Guid.NewGuid();
-            var person2Id = Guid.NewGuid();
-            var personsIds = new List<Guid> {person1Id, person2Id};
-
-            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
-            {
-                _target = new ApplicationRolePersonRepository(uow);
-                var persons = _target.GetPersonsNotInRole(roleId, personsIds);
-                Assert.That(persons.Count, Is.EqualTo(0));
-            }
-        }
-
+		
         [Test]
         public void ShouldLoadPersons()
         {
