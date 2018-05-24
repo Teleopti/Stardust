@@ -3279,7 +3279,6 @@
     <Compile Include="Security\LicenseOptions\TeleoptiCccOvertimeAvailabilityLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccSmsLinkLicenseOption.cs" />
     <Compile Include="Security\LicenseStatus.cs" />
-    <Compile Include="Security\ISystemUserSpecification.cs" />
     <Compile Include="Security\Matrix\ApplicationFunctionResolver.cs" />
     <Compile Include="Security\AuthorizationData\ShippedApplicationRoleNames.cs" />
     <Compile Include="Security\AuthorizationEntities\AllLicenseOption.cs" />
