@@ -33,27 +33,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			throw new NotImplementedException();
 		}
 
-		public IList<IPersonInRole> PersonsWithFunction(Guid selectedFunction)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IList<IRoleLight> RolesWithFunction(Guid selectedFunction)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IList<Guid> AvailableData(Guid selectedPerson)
 		{
 			throw new NotImplementedException();
 		}
 
 		public IList<int> DataRangeOptions(Guid selectedPerson)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IList<IPersonInRole> PersonsWithRoles(IList<Guid> roles)
 		{
 			throw new NotImplementedException();
 		}
