@@ -400,7 +400,6 @@
     <Compile Include="Common\JobResultArtifact.cs" />
     <Compile Include="Common\OrganizationSelectionProvider.cs" />
     <Compile Include="Common\PurgeSetting.cs" />
-    <Compile Include="Common\TimeSpanExtensions.cs" />
     <Compile Include="Common\Time\IUserNow.cs" />
     <Compile Include="Common\Time\TimePassingSimulator.cs" />
     <Compile Include="Common\Time\UserNow.cs" />
