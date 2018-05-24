@@ -327,81 +327,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void VerifyFindAllRequestsForAgentShouldExcludeAutoDeniedForRecipient()
-		{
-			IPersonRequest personRequestWithAbsenceRequest = CreateAggregateWithCorrectBusinessUnit();
-
-			IPerson personFrom = PersonFactory.CreatePerson("vjiosd");
-			personFrom.SetName(new Name("mala", "mala"));
-			PersistAndRemoveFromUnitOfWork(personFrom);
-
-			IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
-				new List<IShiftTradeSwapDetail>
-				{
-					new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 16),
-						new DateOnly(2008, 7, 16)),
-					new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 17),
-						new DateOnly(2008, 7, 17)),
-					new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 18),
-						new DateOnly(2008, 7, 18)),
-					new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 19),
-						new DateOnly(2008, 7, 19))
-				});
-
-			IPersonRequest personRequestWithShiftTrade = new PersonRequest(personFrom);
-			personRequestWithShiftTrade.Deny(string.Empty, new PersonRequestAuthorizationCheckerForTest(), personFrom);
-			Assert.IsTrue(personRequestWithShiftTrade.IsAutoDenied); //!!!
-
-			personRequestWithShiftTrade.Request = shiftTradeRequest;
-
-			PersistAndRemoveFromUnitOfWork(personRequestWithAbsenceRequest);
-			PersistAndRemoveFromUnitOfWork(personRequestWithShiftTrade);
-
-			var foundRequests = new PersonRequestRepository(UnitOfWork).FindAllRequestsForAgent(_person, new Paging { Take = 10 });
-
-			int actualValue = foundRequests.Count();
-			Assert.AreEqual(1, actualValue);
-		}
-
-		[Test]
-		public void ShouldFindAllRequestsForAgentWithPagingSinglePage()
-		{
-			IPersonRequest personRequestWithAbsenceRequest1 = CreateAggregateWithCorrectBusinessUnit();
-			IPersonRequest personRequestWithAbsenceRequest2 = CreateAggregateWithCorrectBusinessUnit();
-
-			PersistAndRemoveFromUnitOfWork(personRequestWithAbsenceRequest1);
-			PersistAndRemoveFromUnitOfWork(personRequestWithAbsenceRequest2);
-
-			var foundRequests = new PersonRequestRepository(UnitOfWork).FindAllRequestsForAgent(_person, new Paging { Take = 1 });
-
-			foundRequests.Should().Have.Count.EqualTo(1);
-		}
-
-		[Test]
-		public void ShouldFindAllRequestsForAgentWithPagingSecondPageAndSortOnUpdatedOn()
-		{
-			var personRequestWithAbsenceRequest1 = CreateAggregateWithCorrectBusinessUnit();
-			var personRequestWithAbsenceRequest2 = CreateAggregateWithCorrectBusinessUnit();
-			var personRequestWithAbsenceRequest3 = CreateAggregateWithCorrectBusinessUnit();
-
-			// ouch! better way to modify updated on?
-			PersistAndRemoveFromUnitOfWork(personRequestWithAbsenceRequest1);
-			setUpdatedOnForRequest(personRequestWithAbsenceRequest1, -2);
-			PersistAndRemoveFromUnitOfWork(personRequestWithAbsenceRequest2);
-			setUpdatedOnForRequest(personRequestWithAbsenceRequest2, -1);
-			PersistAndRemoveFromUnitOfWork(personRequestWithAbsenceRequest3);
-
-			var results = new PersonRequestRepository(UnitOfWork).FindAllRequestsForAgent(_person, new Paging
-			{
-				Take = 1,
-				Skip = 1
-			}).ToList();
-
-			results.Should().Have.Count.EqualTo(1);
-			results.Single().Should().Be.EqualTo(personRequestWithAbsenceRequest2);
-		}
-
-		[Test]
 		public void ShouldNotUpdateBrokenRulesAfterFindAllRequestsForAgent()
 		{
 			IPerson personFrom = PersonFactory.CreatePerson("vjiosd");
@@ -430,15 +355,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var foundRequest = foundRequests.FirstOrDefault();
 			foundRequest.BrokenBusinessRules.Should(null);
 			foundRequest.UpdatedOn.Should().Equals(personRequestWithShiftTrade.UpdatedOn);
-		}
-
-		private void setUpdatedOnForRequest(IPersonRequest personRequest, int minutes)
-		{
-			const string sql = "UPDATE dbo.PersonRequest SET UpdatedOn = DATEADD(mi,:Minutes,UpdatedOn) WHERE Id=:Id;";
-			Session.CreateSQLQuery(sql)
-				.SetGuid("Id", personRequest.Id.GetValueOrDefault())
-				.SetInt32("Minutes", minutes)
-				.ExecuteUpdate();
 		}
 
 		[Test]
