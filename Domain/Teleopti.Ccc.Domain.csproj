@@ -1109,7 +1109,6 @@
     <Compile Include="InterfaceLegacy\Domain\IPerstistableScheduleData.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPopulationStatisticsData.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPossibleMinMaxWorkShiftLengthExtractor.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IPreferenceAbsenceChecker.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPreferenceDay.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPreferenceRestriction.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPreferenceRestrictionTemplate.cs" />
