@@ -548,8 +548,6 @@
     <Compile Include="RealTimeAdherence\Domain\Service\AgentStateProcessor.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\AgentStateReadModel.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\BehaviorTestTenants.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\CheckForActivityChangeInputModel.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\CheckForActivityChangeWebModel.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\Context.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\ContextLoader.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\DataSourceMapper.cs" />
@@ -665,7 +663,6 @@
     <Compile Include="Optimization\WeeklyRestSolver\RemoveShiftCategoryToBeInLegalState.cs" />
     <Compile Include="Reports\AuditTrailSearchParams.cs" />
     <Compile Include="Reports\IReportVisible.cs" />
-    <Compile Include="Reports\IsOnlineReportFunctionSpecification.cs" />
     <Compile Include="Reports\PersonsWhoChangedSchedulesViewModelProvider.cs" />
     <Compile Include="Reports\ScheduleAuditTrailReportViewModelProvider.cs" />
     <Compile Include="Repositories\IScheduleAuditTrailReport.cs" />
@@ -1713,7 +1710,6 @@
     <Compile Include="Islands\ReduceSkillSets.cs" />
     <Compile Include="Islands\SameSkillSetSkillsComparer.cs" />
     <Compile Include="Islands\SkillSet.cs" />
-    <Compile Include="Islands\SkillSetComparerForIslands.cs" />
     <Compile Include="LogObject\LogObjectDetail.cs" />
     <Compile Include="Logon\FullPermissions.cs" />
     <Compile Include="Logon\FullPermissionsAspect.cs" />
