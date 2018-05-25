@@ -70,6 +70,10 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 		applyBindings();
 	}
 
+	function applyBindings() {
+		ko.applyBindings(vm, $('#page')[0]);
+	}
+
 	function fetchData(momentDate) {
 		dataService.loadGroupAndTeams(function(teams) {
 			vm.readTeamsData(teams);
@@ -94,10 +98,6 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 	function fetchDataSuccessCallback() {
 		completelyLoaded();
 		if (!subscribed) subscribeForChanges();
-	}
-
-	function applyBindings() {
-		ko.applyBindings(vm, $('#page')[0]);
 	}
 
 	return {

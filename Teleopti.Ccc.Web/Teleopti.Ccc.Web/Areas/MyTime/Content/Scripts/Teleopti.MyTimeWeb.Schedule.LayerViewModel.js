@@ -6,7 +6,7 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Portal.js" />
 
-Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, parent, layersOnMobile) {
+Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, parent, layersOnMobile, offset) {
 	var self = this;
 	var userTexts = Teleopti.MyTimeWeb.Common.GetUserTexts();
 	var constants = Teleopti.MyTimeWeb.Common.Constants;
@@ -32,7 +32,7 @@ Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, parent, layersOnMo
 		}
 
 		var meetingDescription = layer.Meeting.Description;
-		if (meetingDescription.length > 200) {
+		if (meetingDescription && meetingDescription.length > 200) {
 			meetingDescription = meetingDescription.substring(0, 200) + "...";
 		}
 
@@ -49,10 +49,16 @@ Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, parent, layersOnMo
 		return tooltipContent + text;
 	});
 
-	self.backgroundColor = ko.observable("rgb(" + layer.Color + ")");
+	self.backgroundColor = ko.observable('');
+	if(layer.Color.indexOf('#') > -1) {
+		self.backgroundColor(layer.Color);
+	} else {
+		self.backgroundColor('rgb(' + layer.Color + ')');
+	}
+
 	self.textColor = ko.computed(function () {
 		if (layer.Color !== null && layer.Color !== undefined) {
-			var backgroundColor = "rgb(" + layer.Color + ")";
+			var backgroundColor = self.backgroundColor();
 			return Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(backgroundColor);
 		}
 		return "black";
@@ -66,18 +72,19 @@ Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, parent, layersOnMo
 
 	var scheduleHeight = Teleopti.MyTimeWeb.Schedule.GetScheduleHeight();
 	self.top = ko.computed(function () {
-		return Math.round(scheduleHeight * self.startPositionPercentage());
+		return Math.round(scheduleHeight * self.startPositionPercentage()) + (offset || 0);
 	});
 	self.height = ko.computed(function () {
-		var bottom = Math.round(scheduleHeight * self.endPositionPercentage()) + 1;
+		var bottom = Math.round(scheduleHeight * self.endPositionPercentage()) + 1 + (offset || 0);
 		var top = self.top();
+
 		return bottom > top ? bottom - top : 0;
 	});
 	self.topPx = ko.computed(function () {
 		return self.top() + "px";
 	});
 	self.widthPx = ko.computed(function () {
-		return getWidth(layer.IsOvertimeAvailability, parent.probabilities(), layersOnMobile);
+		return getWidth(layer.IsOvertimeAvailability, parent && parent.probabilities(), layersOnMobile);
 	});
 	self.heightPx = ko.computed(function () {
 		return self.height() + "px";
@@ -141,7 +148,7 @@ function getWidth(isOvertimeAvailability, probabilities, layersOnMobile) {
 	} else if (probabilities && probabilities.length > 0 && layersOnMobile) {
 		width = "calc(100% - 28px)";//MobileDayView.css .mobile-start-day .probability-vertical-bar{width: 28px;}
 	} else {
-		width = "calc(" + 100 + "%" + " - 2px)";
+		width = "calc(" + 100 + "%)";
 	}
 	return width;
 };
