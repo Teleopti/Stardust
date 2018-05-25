@@ -688,7 +688,7 @@
     <Compile Include="UnitOfWork\DataSourcesFactoryTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\ImplementationDetails\OptionalColumnChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\QueryFilterTest.cs" />
-    <Compile Include="UnitOfWork\TransactionHooks\ImplementationDetails\ScheduleMessageSenderTest.cs" />
+    <Compile Include="UnitOfWork\TransactionHooks\ImplementationDetails\ScheduleChangedEventPublisherTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\TransactionHookInvokationTest.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkAspectTest.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkFactoryProviderTest.cs" />
