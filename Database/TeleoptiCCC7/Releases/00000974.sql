@@ -55,6 +55,21 @@ begin
 	EXEC sp_executeSQL @DROPINDEXQUERY;
 end
 
+-- Bug 76064: Db migration 974 fails: myTime is down for teleoptirnd.teleopticloud.com
+IF EXISTS (
+			SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS 
+			WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' 
+			AND CONSTRAINT_NAME = 'PK_OvertimeRequestOpenPeriodSkillType'
+			AND TABLE_NAME = 'OvertimeRequestOpenPeriodSkillType' 
+			AND TABLE_SCHEMA ='dbo'
+		)
+BEGIN
+	PRINT 'PK_OvertimeRequestOpenPeriodSkillType already exists, dropping...'
+	ALTER TABLE stage.OvertimeRequestOpenPeriodSkillType	DROP CONSTRAINT PK_OvertimeRequestOpenPeriodSkillType
+	PRINT 'Recreating PK_OvertimeRequestOpenPeriodSkillType...'
+END 
+GO
+
 ALTER TABLE dbo.OvertimeRequestOpenPeriodSkillType ADD CONSTRAINT
 	PK_OvertimeRequestOpenPeriodSkillType PRIMARY KEY CLUSTERED 
 	(

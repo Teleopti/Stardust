@@ -22,12 +22,12 @@ Teleopti.MyTimeWeb.TeamScheduleNew = (function ($) {
 	var vm;
 
 	var endpoints = {
-		loadCurrentDate: "TeamSchedule/TeamScheduleCurrentDate",
+		loadCurrentDate: "../api/TeamSchedule/TeamScheduleCurrentDate",
 		loadFilterTimes: "RequestsShiftTradeScheduleFilter/Get",
 		loadMyTeam: "Requests/ShiftTradeRequestMyTeam",
-		loadDefaultTeam: "TeamSchedule/DefaultTeam",
+		loadDefaultTeam: "../api/TeamSchedule/DefaultTeam",
 		loadTeams: "Team/TeamsAndGroupsWithAllTeam",
-		loadSchedule: "TeamSchedule/TeamSchedule"
+		loadSchedule: "../api/TeamSchedule/TeamSchedule"
 	};
 
 	function _bindData() {

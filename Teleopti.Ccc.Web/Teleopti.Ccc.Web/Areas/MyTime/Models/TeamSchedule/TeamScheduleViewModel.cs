@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 	{
 		public AgentInTeamScheduleViewModel[] AgentSchedules { get; set; }
 		public TimeLineViewModel[] TimeLine { get; set; }
-		public int TimeLineLengthInMinutes { get; set; }
 		public int PageCount { get; set; }
 		public AgentInTeamScheduleViewModel MySchedule { get; set; }
 	}
@@ -18,14 +17,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 		public IPerson Person { get; set; }
 		public DateOnly Date { get; set; }
 		public IPersonScheduleDayReadModel Schedule { get; set; }
-	}
-
-	public class AgentScheduleViewModel
-	{
-		public bool HasDayOffUnder { get; set; }
-		public string AgentName { get; set; }
-		public LayerViewModel[] Layers { get; set; }
-		public string DayOffText { get; set; }
 	}
 
 	public class AgentInTeamScheduleViewModel

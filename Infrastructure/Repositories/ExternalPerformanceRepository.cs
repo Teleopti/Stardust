@@ -30,11 +30,5 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Add(Restrictions.Eq("ExternalId", externalId))
 				.UniqueResult<IExternalPerformance>();
 		}
-
-		public int GetExernalPerformanceCount()
-		{
-			var businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current();
-			return Session.QueryOver<ExternalPerformance>().Where(x=>x.BusinessUnit == businessUnit).RowCount();
-		}
 	}
 }

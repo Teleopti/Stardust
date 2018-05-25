@@ -4,8 +4,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
 	public interface IBusinessRuleProvider
 	{
-		INewBusinessRuleCollection GetAllBusinessRules(ISchedulingResultStateHolder schedulingResultStateHolder);
-
 		INewBusinessRuleCollection GetBusinessRulesForShiftTradeRequest(
 			ISchedulingResultStateHolder schedulingResultStateHolder, bool enableSiteOpenHoursRule);
 

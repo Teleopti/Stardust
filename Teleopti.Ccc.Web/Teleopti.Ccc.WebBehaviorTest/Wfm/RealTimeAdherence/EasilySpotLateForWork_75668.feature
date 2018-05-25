@@ -37,7 +37,7 @@ Feature: Easily spot late for work
 	And at '2018-05-18 08:30:00' 'Ashley Andeen' sets his phone state to 'Ready'
 	And the time is '2018-05-18 17:30:00'
 	When I view historical adherence for 'Ashley Andeen' on '2018-05-18'
-	Then I should be informed she is late for work with 30 minutes
+	Then I should be informed she is 30 minutes late for work
  
   Scenario: Late for work within alarm threshold
 	Given Ashley Andeen has a 'Phone' shift between '2018-05-17 08:00' and '17:00'

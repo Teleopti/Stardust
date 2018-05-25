@@ -18,22 +18,25 @@ $(document).ready(function () {
 	var dayOffScheduleLayersTemplate = [{ Start: 1433606400000, End: 1433692800000, LengthInMinutes: 1440, Color: null, TitleHeader: "Day off", IsAbsenceConfidential: false, TitleTime: "00:00 - 00:00" }];
 
 	var endpoints = {
-		loadCurrentDate: "TeamSchedule/TeamScheduleCurrentDate",
+		loadCurrentDate: "../api/TeamSchedule/TeamScheduleCurrentDate",
 		loadFilterTimes: "RequestsShiftTradeScheduleFilter/Get",
 		loadMyTeam: "Requests/ShiftTradeRequestMyTeam",
-		loadDefaultTeam: "TeamSchedule/DefaultTeam",
+		loadDefaultTeam: "../api/TeamSchedule/DefaultTeam",
 		loadTeams: "Team/TeamsAndGroupsWithAllTeam",
-		loadSchedule: "TeamSchedule/TeamSchedule"
+		loadSchedule: "../api/TeamSchedule/TeamSchedule"
 	};
 
 	test("should send request to server when I type colleauge`s name in name seach box", function () {
+
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function() {
+		};
 
 		var nameInAjax;
 		var ajax = {
 			Ajax: function (options) {
 				if (options.url == endpoints.loadSchedule) {
 					var data = JSON.parse(options.data);
-					nameInAjax = data.searchNameText;
+					nameInAjax = data.ScheduleFilter.searchNameText;
 				}
 			}
 		};

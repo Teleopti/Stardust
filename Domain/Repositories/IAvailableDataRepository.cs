@@ -13,12 +13,5 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// </summary>
         /// <returns>The AvailableData list.</returns>
         IList<IAvailableData> LoadAllAvailableData();
-
-        /// <summary>
-        /// Loads all collections in available data.
-        /// </summary>
-        /// <param name="availableData">The available data.</param>
-        /// <returns></returns>
-        IAvailableData LoadAllCollectionsInAvailableData(IAvailableData availableData);
     }
 }

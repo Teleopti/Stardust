@@ -1170,6 +1170,8 @@ teams-time-picker.ng-invalid-dst {
 }
 
 .shift-editor {
+	position: relative;
+
 	.underlying-info {
 		margin-left: 10px;
 	}
@@ -1178,77 +1180,124 @@ teams-time-picker.ng-invalid-dst {
 		color: $orange-500;
 	}
 
+
+
 	.shift-container {
-		margin-left: 10px;
-		width: 100%;
-		max-width: 100%;
-		height: 500px;
-		white-space: nowrap;
-		overflow-x: auto;
-	}
+		.viewport-clip {
+			width: 100%;
+			max-width: 100%;
+			height: 500px;
+			white-space: nowrap;
+			overflow: hidden;
 
-	.timeline {
-		width: 100%;
+			.viewport {
+				height: 530px;
+				overflow-x: auto;
+				overflow-y: hidden;
+			}
+		}
 
-		.interval {
-			display: inline-block;
-			width: 60px;
+		.timeline {
+			width: 100%;
+			cursor: pointer;
 
-			.label {
-				font-size: x-small;
-				height: 1.32em;
-				z-index: 11;
-				transform: translateX(-50%);
-				padding: 0 0.3em;
+			.scroll-toolbar {
+				display: none;
+				position: absolute;
+				top: 83px;
+				width: 100%;
+
+				.left-scroll {
+					position: absolute;
+					left: 0;
+				}
+
+				.right-scroll {
+					position: absolute;
+					right: 10px;
+				}
+
+				.left-scroll, .right-scroll {
+					border-radius: 50%;
+					background-color: #0099FF;
+					opacity: 0.7;
+					text-align: center;
+					height: 16px;
+					width: 16px;
+					cursor: pointer;
+					line-height: 16px !important;
+
+					> i {
+						color: #fff;
+						font-size: 14px !important;
+					}
+				}
 			}
 
-			.ticks {
-				.tick {
-					width: 1px;
-					height: 8px;
-					display: inline-flex;
-					margin-right: 4px;
-					background-color: #000;
+			&:hover .scroll-toolbar {
+				display: inline-block;
+			}
+
+			.interval {
+				display: inline-block;
+				width: 60px;
+
+				.label {
+					font-size: x-small;
+					height: 1.32em;
+					z-index: 11;
+					transform: translateX(-50%);
+					padding: 0 0.3em;
 				}
 
-				.tick.hour {
-					height: 15px;
-				}
+				.ticks {
+					.tick {
+						width: 1px;
+						height: 8px;
+						display: inline-flex;
+						margin-right: 4px;
+						background-color: #000;
+					}
 
-				.tick.half-hour {
-					height: 12px;
+					.tick.hour {
+						height: 15px;
+					}
+
+					.tick.half-hour {
+						height: 12px;
+					}
 				}
 			}
 		}
-	}
 
-	.shift {
-		width: 100%;
-		position: relative;
-		margin-top: 10px;
+		.shift {
+			width: 100%;
+			position: relative;
+			margin-top: 10px;
 
-		.shift-layer {
-			position: absolute;
-			display: inline-block;
-			height: 25px;
+			.shift-layer {
+				position: absolute;
+				display: inline-block;
+				height: 25px;
 
-			&:first-of-type {
-				border-radius: 4px 0 0 4px;
-			}
-
-			&:last-of-type {
-				border-radius: 0 4px 4px 0;
-			}
-
-			&.overtime {
-				background-size: 11px 11px;
-
-				&.overtime-dark {
-					background-image: linear-gradient(45deg, transparent, transparent 4px, rgba(0, 0, 0, 0.5) 6px, transparent 10px, transparent);
+				&:first-of-type {
+					border-radius: 4px 0 0 4px;
 				}
 
-				&.overtime-light {
-					background-image: linear-gradient(45deg, transparent, transparent 4px, rgba(255, 255, 255, 0.8) 6px, transparent 10px, transparent);
+				&:last-of-type {
+					border-radius: 0 4px 4px 0;
+				}
+
+				&.overtime {
+					background-size: 11px 11px;
+
+					&.overtime-dark {
+						background-image: linear-gradient(45deg, transparent, transparent 4px, rgba(0, 0, 0, 0.5) 6px, transparent 10px, transparent);
+					}
+
+					&.overtime-light {
+						background-image: linear-gradient(45deg, transparent, transparent 4px, rgba(255, 255, 255, 0.8) 6px, transparent 10px, transparent);
+					}
 				}
 			}
 		}

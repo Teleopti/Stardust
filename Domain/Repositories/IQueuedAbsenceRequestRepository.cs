@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IList<IQueuedAbsenceRequest> Find( DateTimePeriod period);
 		void Remove(DateTime sent);
 		void Send(List<Guid> queuedId, DateTime timeStamp);
-		void CheckAndUpdateSent(int minutes);
 		int UpdateRequestPeriod(Guid id, DateTimePeriod period);
 		IList<IQueuedAbsenceRequest> FindByPersonRequestIds(IEnumerable<Guid> personRequestIds);
 		void ResetSent(DateTime eventSent);

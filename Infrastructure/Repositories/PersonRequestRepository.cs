@@ -139,15 +139,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return returnPersonRequests;
 		}
 
-		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, Paging paging)
-		{
-			var personRequests = getAllRequests(person);
-
-			applyPagingToResults(paging, personRequests);
-
-			return personRequests.List<IPersonRequest>();
-		}
-
 		public IEnumerable<IPersonRequest> FindAbsenceAndTextRequests(RequestFilter filter)
 		{
 			return FindAbsenceAndTextRequests(filter, out _, true);

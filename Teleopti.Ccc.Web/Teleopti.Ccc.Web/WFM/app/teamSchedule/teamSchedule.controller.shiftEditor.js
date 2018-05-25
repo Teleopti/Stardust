@@ -19,19 +19,52 @@
 		}
 	});
 
-	ShiftEditorController.$inject = ['$element', '$timeout', '$window', 'serviceDateFormatHelper'];
+	ShiftEditorController.$inject = ['$element', '$timeout', '$window', '$interval', 'serviceDateFormatHelper'];
 
-	function ShiftEditorController($element, $timeout, $window, serviceDateFormatHelper) {
+	function ShiftEditorController($element, $timeout, $window, $interval, serviceDateFormatHelper) {
 		var vm = this;
+		var viewportClipEl = $element[0].querySelector('.shift-container .viewport-clip');
+		var viewportEl = viewportClipEl.querySelector('.viewport');
+
 		vm.intervals = [];
 		vm.projections = [];
+		vm.showScrollLeftButton = false;
+		vm.showScrollRightButton = false;
 
 		vm.$onInit = function () {
 			if (!hasShift()) return;
 			vm.intervals = getIntervals();
 			vm.projections = getProjections();
-			scrollToScheduleStart();
-			angular.element($window).bind('resize', scrollToScheduleStart);
+			initScrollState();
+			angular.element($window).bind('resize', initScrollState);
+			bindScrollMouseEvent(viewportEl.querySelector('.left-scroll'), -20);
+			bindScrollMouseEvent(viewportEl.querySelector('.right-scroll'), 20);
+		}
+
+		vm.scroll = function (step) {
+			viewportEl.scrollLeft += step;
+			displayScrollButton();
+		}
+
+		var scrollIntervalPromise = null;
+		function cancelScrollIntervalPromise() {
+			if (scrollIntervalPromise) {
+				$interval.cancel(scrollIntervalPromise);
+				scrollIntervalPromise = null;
+			}
+		}
+		
+		function bindScrollMouseEvent(el, step) {
+			el.addEventListener('mousedown', function () {
+				cancelScrollIntervalPromise();
+				scrollIntervalPromise = $interval(function () {
+					vm.scroll(step);
+				}, 300);
+			}, false);
+			el.addEventListener('mouseleave', function () {
+				cancelScrollIntervalPromise();
+			}, false);
+		
 		}
 
 		function getProjections() {
@@ -44,18 +77,22 @@
 			return projections;
 		}
 
-
-		function scrollToScheduleStart() {
-			var shiftContainerEl = $element[0].querySelector('.shift-container');
+		function initScrollState() {
 			$timeout(function () {
 				var shiftProjectionTimeRange = vm.personSchedule.Shifts[0].ProjectionTimeRange;
 				var shiftStart = getTotalMinutes(shiftProjectionTimeRange.Start);
 				var shiftLength = getTotalMinutes(shiftProjectionTimeRange.End) - shiftStart;
-				var scrollTo = shiftContainerEl.clientWidth <= shiftLength ?
-					(shiftStart - 120) : (shiftStart - ((shiftContainerEl.clientWidth - shiftLength) / 2));
+				var scrollTo = viewportEl.clientWidth <= shiftLength ?
+					(shiftStart - 120) : (shiftStart - ((viewportEl.clientWidth - shiftLength) / 2));
 				if (scrollTo <= 0) return;
-				shiftContainerEl.scrollLeft = scrollTo;
+				viewportEl.scrollLeft = scrollTo;
+				displayScrollButton();
 			});
+		}
+
+		function displayScrollButton() {
+			vm.showScrollLeftButton = viewportEl.scrollLeft > 0;
+			vm.showScrollRightButton = viewportEl.scrollWidth > (viewportEl.scrollLeft + viewportEl.clientWidth);
 		}
 
 		function hasShift() {

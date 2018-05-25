@@ -533,7 +533,7 @@
     <Compile Include="Areas\Start\Controllers\MenuControllerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\SettingsControllerTest.cs" />
     <Compile Include="Areas\Start\Core\Menu\MenuViewModelFactoryTest.cs" />
-    <Compile Include="Areas\MyTime\Controllers\TeamScheduleControllerTest.cs" />
+    <Compile Include="Areas\MyTime\Controllers\TeamScheduleApiControllerTest.cs" />
     <Compile Include="Core\Common\DataProvider\SchedulePersonProviderTest.cs" />
     <Compile Include="FakeNoPermissionProvider.cs" />
     <Compile Include="FakePermissionProvider.cs" />

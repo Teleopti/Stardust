@@ -671,17 +671,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         }
 
         [Test]
-        public void CanClearShiftCategoryLimitation()
-        {
-			setup();
-			IShiftCategoryLimitation shiftCategoryLimitation =
-                new ShiftCategoryLimitation(ShiftCategoryFactory.CreateShiftCategory("xx"));
-            _periodMonth.AddShiftCategoryLimitation(shiftCategoryLimitation);
-            _periodMonth.ClearShiftCategoryLimitation();
-            Assert.AreEqual(0, _periodMonth.ShiftCategoryLimitationCollection().Count);
-        }
-
-        [Test]
         public void VerifyMustHavePreferences()
         {
 			setup();

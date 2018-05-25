@@ -79,15 +79,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			}
 		}
 
-		public void CheckAndUpdateSent(int minutes)
-		{
-			foreach (var request in _queuedRequests)
-			{
-				if (request.Sent != null && request.Sent.GetValueOrDefault() < DateTime.UtcNow.AddMinutes(-minutes))
-					request.Sent = null;
-			}
-		}
-
 		public int UpdateRequestPeriod(Guid id, DateTimePeriod period)
 		{
 			

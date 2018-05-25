@@ -23,15 +23,4 @@ namespace Teleopti.Ccc.Domain.Repositories
 
 		bool HasSkillDaysWithinPeriod(DateOnly startDate, DateOnly endDate, IBusinessUnit businessUnit, IScenario scenario);
 	}
-
-	//refactor this PBI 35176
-	public class SkillTaskDetailsModel
-	{
-		public string Name { get; set; }
-		public DateTime Minimum { get; set; }
-		public DateTime Maximum { get; set; }
-		public Double TotalTasks { get; set; }
-		public Guid Scenario { get; set; }
-		public Guid SkillId { get; set; }
-	}
 }

@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.AssertFirstContains(".adherence-percent", adherence);
 		}
 		
-		[Then(@"I should be informed she is late for work with (.*) minutes")]
+		[Then(@"I should be informed she is (.*) minutes late for work")]
 		public void ThenIShouldBeInformedSheIsLateForWorkWithMinutes(string minutes) =>
 			Browser.Interactions.AssertFirstContains(".late-for-work", minutes);
 

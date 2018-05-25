@@ -54,28 +54,10 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         IScheduleDayPro[] WeekAfterOuterPeriodDays { get; }
 
         /// <summary>
-        /// Gets the full week plus the week before the full week period dictionary.
-        /// </summary>
-        /// <value>The full week plus the week before the full week period dictionary.</value>
-        IDictionary<DateOnly, IScheduleDayPro> WeekBeforeOuterPeriodDictionary { get; }
-
-        /// <summary>
-        /// Gets the full week plus the week after the full week period dictionary.
-        /// </summary>
-        /// <value>The full week plus the week after the full week period dictionary.</value>
-        IDictionary<DateOnly, IScheduleDayPro> WeekAfterOuterPeriodDictionary { get; }
-
-        /// <summary>
         /// Gets the outer weeks period dictionary.
         /// </summary>
         /// <value>The outer weeks period dictionary.</value>
         IDictionary<DateOnly, IScheduleDayPro> OuterWeeksPeriodDictionary { get; }
-
-        /// <summary>
-        /// Gets the full weeks period dictionary.
-        /// </summary>
-        /// <value>The full weeks period dictionary.</value>
-        IDictionary<DateOnly, IScheduleDayPro> FullWeeksPeriodDictionary { get; }
 
 		/// <summary>
 		/// Unlock a period of days.

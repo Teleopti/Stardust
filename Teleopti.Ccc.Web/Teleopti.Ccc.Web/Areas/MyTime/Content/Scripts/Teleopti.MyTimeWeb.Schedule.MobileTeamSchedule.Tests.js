@@ -201,6 +201,26 @@
 		equal($('.mobile-teamschedule-view .teamschedule-filter-component select').val(), fakeDefaultTeamData.DefaultTeam);
 	});
 
+	test('should render timeline', function () {
+		var today = moment();
+
+		var html = ['<div class="mobile-timeline floatleft" data-bind="style: {height: scheduleHeight}">',
+			'	<!-- ko foreach: timeLines -->',
+			'	<div class="mobile-timeline-label absolute" data-bind="style: {top: topPosition}, text: timeText, visible: isHour">',
+			'	</div>',
+			'	<!-- /ko -->',
+			'</div>'].join("");
+
+		$('.mobile-teamschedule-view').append(html);
+
+		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+		equal($('.mobile-teamschedule-view .mobile-timeline .mobile-timeline-label').length, 4);
+		equal($('.mobile-teamschedule-view .mobile-timeline .mobile-timeline-label')[0].innerText, '05:00');
+		equal($('.mobile-teamschedule-view .mobile-timeline .mobile-timeline-label')[1].innerText, '06:00');
+		equal($('.mobile-teamschedule-view .mobile-timeline .mobile-timeline-label')[2].innerText, '07:00');
+		equal($('.mobile-teamschedule-view .mobile-timeline .mobile-timeline-label')[3].innerText, '08:00');
+	});
+
 	function setUpFakeData() {
 		fakeAvailableTeamsData = {
 			allTeam: { id: 'allTeams', text: 'All Teams' },
@@ -230,6 +250,67 @@
 			]
 		};
 		fakeDefaultTeamData = { DefaultTeam: fakeAvailableTeamsData.teams[0].children[0].id };
+
+		fakeTeamScheduleData = {
+			"AgentSchedules": [
+				{
+					"ScheduleLayers": [
+						{
+							"Start": "2018-05-24T05:00:00",
+							"End": "2018-05-24T06:45:00",
+							"LengthInMinutes": 105,
+							"Color": "#80FF80",
+							"TitleHeader": "Phone",
+							"IsAbsenceConfidential": false,
+							"IsOvertime": false,
+							"TitleTime": "05:00 - 06:45"
+						}
+					],
+					"Name": "Jon Kleinsmith",
+					"StartTimeUtc": "2018-05-24T05:00:00",
+					"PersonId": "b46a2588-8861-42e3-ab03-9b5e015b257c",
+					"MinStart": null,
+					"IsDayOff": false,
+					"IsFullDayAbsence": false,
+					"Total": 1,
+					"DayOffName": null,
+					"ContractTimeInMinute": 480.0,
+					"IsNotScheduled": false
+				}
+			],
+			"TimeLine": [
+				{ "Time": "05:00:00", "TimeLineDisplay": "05:00", "PositionPercentage": 0.0714, "TimeFixedFormat": null },
+				{ "Time": "06:00:00", "TimeLineDisplay": "06:00", "PositionPercentage": 0.3571, "TimeFixedFormat": null },
+				{ "Time": "07:00:00", "TimeLineDisplay": "07:00", "PositionPercentage": 0.6429, "TimeFixedFormat": null },
+				{ "Time": "08:00:00", "TimeLineDisplay": "08:00", "PositionPercentage": 0.9286, "TimeFixedFormat": null }
+			],
+			"TimeLineLengthInMinutes": 0,
+			"PageCount": 1,
+			"MySchedule": {
+				"ScheduleLayers": [
+					{
+						"Start": "2018-05-24T09:00:00",
+						"End": "2018-05-24T11:00:00",
+						"LengthInMinutes": 120,
+						"Color": "#80FF80",
+						"TitleHeader": "Phone",
+						"IsAbsenceConfidential": false,
+						"IsOvertime": false,
+						"TitleTime": "09:00 - 11:00"
+					}
+				],
+				"Name": "Ashley Andeen",
+				"StartTimeUtc": "2018-05-24T07:00:00",
+				"PersonId": "11610fe4-0130-4568-97de-9b5e015b2564",
+				"MinStart": null,
+				"IsDayOff": false,
+				"IsFullDayAbsence": false,
+				"Total": 1,
+				"DayOffName": null,
+				"ContractTimeInMinute": 120.0,
+				"IsNotScheduled": false
+			}
+		};
 	}
 
 	function setupAjax() {
@@ -239,8 +320,12 @@
 					option.success(fakeAvailableTeamsData);
 				}
 
-				if (option.url === 'TeamSchedule/DefaultTeam') {
+				if (option.url === '../api/TeamSchedule/DefaultTeam') {
 					option.success(fakeDefaultTeamData);
+				}
+
+				if (option.url === '../api/TeamSchedule/TeamSchedule') {
+					option.success(fakeTeamScheduleData);
 				}
 			}
 		};

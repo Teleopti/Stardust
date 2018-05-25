@@ -106,32 +106,48 @@ SELECT 0
             foreach (var skillBatch in skills.Batch(300))
 			{
 				var skillsInBatch = skillBatch.ToArray();
-				DetachedCriteria skillDayQuery = DetachedCriteria.For<SkillDay>("skillDay")
-					.Add(Restrictions.Eq("skillDay.Scenario", scenario))
-					.Add(Restrictions.Between("skillDay.CurrentDate", period.StartDate, period.EndDate))
-					.Add(Restrictions.InG("skillDay.Skill", skillsInBatch));
-
+				
 				DetachedCriteria skillDaySubquery = DetachedCriteria.For<SkillDay>("skillDay")
 					.Add(Restrictions.Eq("skillDay.Scenario", scenario))
 					.Add(Restrictions.Between("skillDay.CurrentDate", period.StartDate, period.EndDate))
 					.Add(Restrictions.InG("skillDay.Skill", skillsInBatch))
 					.SetProjection(Projections.Property("skillDay.Id"));
+				
+				var days = Session.CreateCriteria<SkillDay>("skillDay")
+					.Add(Restrictions.Eq("skillDay.Scenario", scenario))
+					.Add(Restrictions.Between("skillDay.CurrentDate", period.StartDate, period.EndDate))
+					.Add(Restrictions.InG("skillDay.Skill", skillsInBatch))
+					.Future<SkillDay>();
 
-				DetachedCriteria skilldayDataPeriod = getSkilldayDataPeriod(skillDaySubquery);
+				Session.CreateCriteria<Scenario>("scenario")
+					.Add(Restrictions.IdEq(scenario.Id))
+					.Future<Scenario>();
 
-				DetachedCriteria skilldayScenario = getSkilldayScenario(scenario);
+				Session.CreateCriteria<SkillDay>("skillDay")
+					.Add(Restrictions.Eq("skillDay.Scenario", scenario))
+					.Add(Restrictions.Between("skillDay.CurrentDate", period.StartDate, period.EndDate))
+					.Add(Restrictions.InG("skillDay.Skill", skillsInBatch))
+					.SetFetchMode("SkillDataPeriodCollection", FetchMode.Join)
+					.Future<SkillDay>();
 
-				DetachedCriteria workloadDayOpenHour = getWorkloadDayOpenHour(skillDaySubquery);
+				Session.CreateCriteria<SkillDay>("skillDay")
+					.Add(Restrictions.Eq("skillDay.Scenario", scenario))
+					.Add(Restrictions.Between("skillDay.CurrentDate", period.StartDate, period.EndDate))
+					.Add(Restrictions.InG("skillDay.Skill", skillsInBatch))
+					.SetFetchMode("WorkloadDayCollection", FetchMode.Join)
+					.Future<SkillDay>();
 
-                var multi = Session
-					.CreateMultiCriteria()
-                    .Add(skillDayQuery)
-                    .Add(skilldayDataPeriod)
-                    .Add(skilldayScenario)
-                    .Add(workloadDayOpenHour);
+				Session.CreateCriteria<Workload>("workload")
+					.Add(Restrictions.InG("workload.Skill", skillsInBatch))
+					.Future<Workload>();
 
-				var days = CollectionHelper.ToDistinctGenericCollection<ISkillDay>(wrapMultiCriteria(multi));
-	            var grouped = days.GroupBy(d => d.Skill);
+				Session.CreateCriteria<WorkloadDay>()
+					.Add(Subqueries.PropertyIn("Parent", skillDaySubquery))
+					.SetFetchMode("OpenHourList", FetchMode.Join)
+					.SetFetchMode("TaskPeriodList", FetchMode.Join)
+					.Future<WorkloadDay>();
+
+				var grouped = days.GroupBy(d => d.Skill);
 	            foreach (var group in grouped)
 	            {
 		            var calculator = new SkillDayCalculator(group.Key,group,period);

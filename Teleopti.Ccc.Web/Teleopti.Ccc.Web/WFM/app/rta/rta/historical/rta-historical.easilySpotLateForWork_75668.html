@@ -1,4 +1,4 @@
-<div class="rta-view historical prototype" xmlns="http://www.w3.org/1999/html">
+<div class="rta-view historical">
 
 	<div class="view-header with-fab with-desc">
 		<div class="view-title">
@@ -27,125 +27,19 @@
 		</div>
 	</div>
 
-
-	<!--&lt;!&ndash;first prototype&ndash;&gt;-->
-	<!--<div class="panel material-depth-1">-->
-		<!--<div class="twocolumns">-->
-			<!--<div class="left adherence-percent">-->
-				<!--{{'Adherence' | translate}} {{vm.adherencePercentage}}%-->
-			<!--</div>-->
-			<!--<div class="right">-->
-				<!--<div class="timeline">-->
-					<!--<div ng-repeat="row in vm.fullTimeline"-->
-						 <!--class="label label-info time"-->
-						 <!--ng-attr-style="left: {{row.Offset}}">-->
-						<!--{{row.Time | amDateFormat: 'LT'}}-->
-					<!--</div>-->
-				<!--</div>-->
-
-			<!--</div>-->
-		<!--</div>-->
-		<!--<div class="twocolumns">-->
-			<!--<div class="left text-warning" style="font-weight: 600; padding-top:14px">-->
-				<!--<i class="mdi mdi-alert"></i>-->
-				<!--Late for work: 20 min-->
-			<!--</div>-->
-			<!--<div class="right">-->
-
-				<!--<div class="shift">-->
-
-					<!--<div ng-repeat="outOfAdherence in vm.outOfAdherences"-->
-						 <!--class="out-of-adherence"-->
-						 <!--ng-attr-style="left: {{outOfAdherence.Offset}}; width: {{outOfAdherence.Width}};"-->
-						 <!--data-starttime="{{outOfAdherence.StartTime}}" data-endtime="{{outOfAdherence.EndTime}}">-->
-						<!--<md-tooltip md-direction="top">-->
-							<!--{{outOfAdherence.StartTime}} - {{outOfAdherence.EndTime}}-->
-						<!--</md-tooltip>-->
-					<!--</div>-->
-
-					<!--<div class="current-time" ng-if="vm.currentTimeOffset"-->
-						 <!--ng-attr-style="left: {{vm.currentTimeOffset}};">-->
-					<!--</div>-->
-
-					<!--<div ng-repeat="activity in vm.agentsFullSchedule"-->
-						 <!--class="activity"-->
-						 <!--ng-attr-style="width: {{activity.Width}}; left: {{activity.Offset}}; background-color: {{activity.Color}};"-->
-						 <!--data-starttime="{{activity.StartTime | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}"-->
-						 <!--data-endtime="{{activity.EndTime | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}">-->
-					<!--</div>-->
-
-				<!--</div>-->
-
-			<!--</div>-->
-		<!--</div>-->
-	<!--</div>-->
-
-<!--second prototype
-	<div class="con-row">
-			<div class="panel material-depth-1" style="width: 218px; margin-right: 6px; padding:5px">
-					<div class="adherence-percent" style="font-weight: 600">
-						{{'Adherence' | translate}} {{vm.adherencePercentage}}%
-					</div>
-				<div class="adherence-percent text-warning" style="font-weight: 600; padding-top:14px">
-					<i class="mdi mdi-alert"></i>
-					Late for work: 20 min
-				</div>
-			</div>
-			<div class="panel material-depth-1" style="width:100%">
-				<div class="twocolumns">
-					<div class="right">
-						<div class="timeline" style="height:16px">
-							<div ng-repeat="row in vm.fullTimeline"
-								 class="label label-info time"
-								 ng-attr-style="left: {{row.Offset}}">
-								{{row.Time | amDateFormat: 'LT'}}
-							</div>
-						</div>
-
-					</div>
-				</div>
-
-				<div class="twocolumns">
-					<div class="right">
-
-						<div class="shift">
-
-							<div ng-repeat="outOfAdherence in vm.outOfAdherences"
-								 class="out-of-adherence"
-								 ng-attr-style="left: {{outOfAdherence.Offset}}; width: {{outOfAdherence.Width}};"
-								 data-starttime="{{outOfAdherence.StartTime}}" data-endtime="{{outOfAdherence.EndTime}}">
-								<md-tooltip md-direction="top">
-									{{outOfAdherence.StartTime}} - {{outOfAdherence.EndTime}}
-								</md-tooltip>
-							</div>
-
-							<div class="current-time" ng-if="vm.currentTimeOffset"
-								 ng-attr-style="left: {{vm.currentTimeOffset}};">
-							</div>
-
-							<div ng-repeat="activity in vm.agentsFullSchedule"
-								 class="activity"
-								 ng-attr-style="width: {{activity.Width}}; left: {{activity.Offset}}; background-color: {{activity.Color}};"
-								 data-starttime="{{activity.StartTime | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}"
-								 data-endtime="{{activity.EndTime | amDateFormat: 'YYYY-MM-DD HH:mm:ss'}}">
-							</div>
-
-						</div>
-
-					</div>
-				</div>
-		</div>
-	</div>
--->
-
-
-	
 	<div class="panel material-depth-1">
 		<div class="twocolumns">
-			<div class="left adherence-percent">
-				{{'Adherence' | translate}} {{vm.adherencePercentage}}%
+			<div class="left adherence-percent" style="position: relative">
+				<!--<div style="position: absolute;left: 22px;">Adherence</div>-->
+				<!--<div style="position: absolute;border: 4px solid lightblue;border-radius: 50%;height: 50px;width: 50px;top: 30px;left: 30px;">-->
+				<!--</div>-->
+				<div style="position: absolute;font-size: 70px;color: #1c94c4; padding-left: 20px; line-height: 100%; left: 38px">
+					{{vm.adherencePercentage}}
+				</div>
+				
+				<div style="position: absolute;font-size: 35px;color: #1c94c4;padding-left: 0px;line-height: 100%;left: 128px;top: 35px; opacity: 0.4">%</div>
 			</div>
-			<div class="right">
+			<div class="right" style="padding-top: 12px">
 				<div class="timeline">
 					<div ng-repeat="row in vm.fullTimeline"
 						 class="label label-info time"
@@ -156,11 +50,32 @@
 
 			</div>
 		</div>
+
+		<div class="twocolumns">
+			<div class="left">
+			</div>
+			<div class="right" style="padding-top: 0; padding-bottom: 0">
+				<div style="position: relative; height: 20px">
+					<!-- Ovanför skift -->
+					<div style="z-index: 200; position: absolute; left: 11.3%; top: 0px;">
+						<span  class="label" style="background-color: #FB8C00;">
+							Late 30 min
+						</span>
+					</div>
+
+					<div style="z-index: 15; position: absolute; margin-top:20px;left: 13.536363636363635%; background-color: #FB8C00; top: -18px; height: 88px; width: 2px;"></div>
+				</div>
+
+			</div>
+		</div>
+
 		<div class="twocolumns">
 			<div class="left">
 			</div>
 			<div class="right">
+
 				<div class="shift">
+
 
 					<div ng-repeat="outOfAdherence in vm.outOfAdherences"
 						 class="out-of-adherence"
@@ -188,28 +103,8 @@
 		</div>
 	</div>
 
-	<!--third prototype-->
 	<div class="panel material-depth-1">
 		
-		<!--new row starts here-->
-		<div class="twocolumns">
-			<div class="left"></div>
-			<div class="right" style="padding-bottom: 0">
-				<div class="changes">
-					
-					<div style="position: absolute; left: 9.636363636363635%;">
-						<span  class="label" style="background-color: #FB8C00; padding-top: 5px; ">
-							<i class="mdi mdi-alert"></i>&NonBreakingSpace;Late for work 30 min&NonBreakingSpace;
-						</span>
-					</div>
-
-					<div style="position: absolute; margin-top:20px;left: 13.536363636363635%; background-color: #FB8C00; height: 10px; width: 2px;"></div>
-
-				</div>
-			</div>
-		</div>
-		<!--new row ends here-->
-
 		<div class="twocolumns">
 			<div class="left">
 				{{'Changes' | translate}}
@@ -218,7 +113,9 @@
 				<div class="changes">
 					<div ng-repeat="diamond in vm.diamonds"
 						 ng-class="{'diamond': true, 'highlight': diamond.highlight}" ng-click="diamond.click()"
-						 ng-attr-style="left: {{diamond.Offset}}; border-color: {{diamond.RuleColor}}; background-color: {{diamond.RuleColor}}">
+						 ng-attr-style="left: {{diamond.Offset}}; border-color: {{diamond.RuleColor}}; background-color: {{diamond.RuleColor}}; 
+						 z-index: 200"
+					>
 					</div>
 				</div>
 			</div>
@@ -386,6 +283,11 @@
 					ng-click="item.click()">
 					<td>
 						{{item.Time | amDateFormat: 'LTS' }}
+						&NonBreakingSpace;
+						&NonBreakingSpace;
+						<span ng-if="item.State == 'Phone'" class="label" style="background-color: #FB8C00">
+							Late 30 minutes
+						</span>
 					</td>
 					<td>
 						<span ng-if="item.Activity" class="label"

@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-    public class ShiftProjectionCacheFilter : IShiftProjectionCacheFilter
+    public class ShiftProjectionCacheFilter
     {
 	    private readonly ILongestPeriodForAssignmentCalculator _rules;
 	    private readonly IPersonalShiftAndMeetingFilter _personalShiftAndMeetingFilter;
@@ -247,16 +247,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return FilterOnDateTimePeriod(shiftList, rulePeriod.Value);
         }
 
-        public IList<ShiftProjectionCache> FilterOnStartAndEndTime(DateTimePeriod startAndEndTime, IList<ShiftProjectionCache> shiftList)
-        {
-	        IList<ShiftProjectionCache> ret =
-		        shiftList.Select(s => new {s, Period = s.MainShiftProjection.Period()})
-			        .Where(s => s.Period.HasValue && s.Period.Value == startAndEndTime)
-			        .Select(s => s.s)
-			        .ToArray();
-            return ret;
-        }
-
         public IList<ShiftProjectionCache> Filter(IScheduleDictionary schedules, MinMax<TimeSpan> validMinMax, IList<ShiftProjectionCache> shiftList, DateOnly dateToSchedule, IScheduleRange current)
         {
             shiftList = FilterOnContractTime(validMinMax, shiftList);
@@ -269,20 +259,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	        shiftList = _personalShiftAndMeetingFilter.Filter(shiftList, dayPart);
 
 	        return shiftList;
-        }
-
-        
-
-		public IList<ShiftProjectionCache> FilterOnBusinessRules(IEnumerable<IPerson> groupOfPersons, IScheduleDictionary scheduleDictionary, DateOnly dateOnly, IList<ShiftProjectionCache> shiftList)
-        {
-			InParameter.NotNull(nameof(groupOfPersons), groupOfPersons);
-			InParameter.NotNull(nameof(scheduleDictionary), scheduleDictionary);
-			foreach (var person in groupOfPersons)
-            {
-                var range = scheduleDictionary[person];
-                shiftList = FilterOnBusinessRules(range, shiftList, dateOnly);
-            }
-            return shiftList;
         }
     }
 }

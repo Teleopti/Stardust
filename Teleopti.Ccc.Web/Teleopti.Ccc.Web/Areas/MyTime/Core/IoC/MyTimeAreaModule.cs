@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -257,14 +258,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<IntradayScheduleEdgeTimeCalculator>().As<IIntradayScheduleEdgeTimeCalculator>();
 		}
 
-		private static void registerTeamScheduleTypes(ContainerBuilder builder)
+		private void registerTeamScheduleTypes(ContainerBuilder builder)
 		{
 			builder.RegisterType<TeamSchedulePermissionViewModelFactory>().As<ITeamSchedulePermissionViewModelFactory>();
 			builder.RegisterType<TeamSchedulePersonsProvider>().As<ITeamSchedulePersonsProvider>();
 			builder.RegisterType<TeamScheduleProjectionForMtwForMtwProvider>().As<ITeamScheduleProjectionForMTWProvider>();
 			builder.RegisterType<LayerViewModelMapper>().As<ILayerViewModelMapper>();
 			builder.RegisterType<TeamScheduleViewModelFactory>().As<ITeamScheduleViewModelFactory>();
-			builder.RegisterType<TimeLineViewModelFactory>().As<ITimeLineViewModelFactory>();
+			if (_config.Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989))
+			{
+				builder.RegisterType<TimeLineViewModelFactory>().As<ITimeLineViewModelFactory>();
+			}
+			else
+			{
+				builder.RegisterType<TimeLineViewModelFactoryToggle75989Off>().As<ITimeLineViewModelFactory>();
+			}
+
 			builder.RegisterType<TimeLineViewModelMapper>().As<ITimeLineViewModelMapper>();
 			builder.RegisterType<AgentScheduleViewModelMapper>().As<IAgentScheduleViewModelMapper>();
 			builder.RegisterType<TeamProvider>().As<ITeamProvider>();

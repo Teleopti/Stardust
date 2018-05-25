@@ -6,5 +6,6 @@
 	ToolsFlowWithoutSQLCMD: true,
 	ToolsFlowWithFixMyConfig: true,
 	ToolsFlowWithInfraTestConfigWithOptionalToggleMode: true,
-	Batflow: true
+	BatflowThatWorks: true,
+	NpmRunStartAlpha: true
 }
