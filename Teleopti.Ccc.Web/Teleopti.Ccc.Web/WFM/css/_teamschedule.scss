@@ -1180,7 +1180,13 @@ teams-time-picker.ng-invalid-dst {
 		color: $orange-500;
 	}
 
-
+	.activity-info span {
+		display: inline-block;
+		background-color: #DCDCDC;
+		border-radius: 2px;
+		padding: 2px 5px;
+		margin: 0 5px;
+	}
 
 	.shift-container {
 		.viewport-clip {
@@ -1275,10 +1281,15 @@ teams-time-picker.ng-invalid-dst {
 			position: relative;
 			margin-top: 10px;
 
+			&.has-selected .shift-layer:not(.selected) {
+				opacity: 0.4;
+			}
+
 			.shift-layer {
 				position: absolute;
 				display: inline-block;
 				height: 25px;
+				background-color: gainsboro;
 
 				&:first-of-type {
 					border-radius: 4px 0 0 4px;
@@ -1298,6 +1309,19 @@ teams-time-picker.ng-invalid-dst {
 					&.overtime-light {
 						background-image: linear-gradient(45deg, transparent, transparent 4px, rgba(255, 255, 255, 0.8) 6px, transparent 10px, transparent);
 					}
+				}
+			}
+
+			.shift-layer.selected {
+				opacity: 1;
+				border: 1px dashed;
+
+				&.border-light {
+					border-color: #00ffff;
+				}
+
+				&.border-dark {
+					border-color: #795548;
 				}
 			}
 		}

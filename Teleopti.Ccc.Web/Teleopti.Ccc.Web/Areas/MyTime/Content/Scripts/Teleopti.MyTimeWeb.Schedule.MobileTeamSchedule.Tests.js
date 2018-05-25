@@ -154,8 +154,6 @@
 	});
 
 	test('should render sites and teams', function() {
-		var today = moment();
-
 		var html = [
 			'	<div class="teamschedule-filter-component">',
 			'		<select data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">',
@@ -169,6 +167,7 @@
 		$('.mobile-teamschedule-view').append(html);
 
 		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+
 		equal($('.mobile-teamschedule-view .teamschedule-filter-component select')[0].length, 11);
 
 		equal($($('.mobile-teamschedule-view .teamschedule-filter-component select')[0][0]).text(), 'All Teams');
@@ -181,8 +180,6 @@
 	});
 
 	test('should select default team', function() {
-		var today = moment();
-
 		var html = [
 			'	<div class="teamschedule-filter-component">',
 			'		<select data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">',
@@ -202,9 +199,7 @@
 	});
 
 	test('should render timeline', function () {
-		var today = moment();
-
-		var html = ['<div class="mobile-timeline floatleft" data-bind="style: {height: scheduleHeight}">',
+		var html = ['<div class="mobile-timeline floatleft" data-bind="style: {height: scheduleContainerHeight + \'px\'}">',
 			'	<!-- ko foreach: timeLines -->',
 			'	<div class="mobile-timeline-label absolute" data-bind="style: {top: topPosition}, text: timeText, visible: isHour">',
 			'	</div>',
@@ -214,11 +209,50 @@
 		$('.mobile-teamschedule-view').append(html);
 
 		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+
 		equal($('.mobile-teamschedule-view .mobile-timeline .mobile-timeline-label').length, 4);
 		equal($('.mobile-teamschedule-view .mobile-timeline .mobile-timeline-label')[0].innerText, '05:00');
 		equal($('.mobile-teamschedule-view .mobile-timeline .mobile-timeline-label')[1].innerText, '06:00');
 		equal($('.mobile-teamschedule-view .mobile-timeline .mobile-timeline-label')[2].innerText, '07:00');
 		equal($('.mobile-teamschedule-view .mobile-timeline .mobile-timeline-label')[3].innerText, '08:00');
+	});
+
+	test('should render my schedule', function () {
+		var html = [
+			'<div class="my-schedule-column relative" data-bind="style: {height: scheduleContainerHeight + \'px\'}">',
+			'	<!-- ko if: mySchedule -->',
+			'	<div class="agent-name">',
+			'		<span data-bind="text: mySchedule().name"></span>',
+			'	</div>',
+			'	<div class="mobile-schedule-container relative" >',
+			'		<!-- ko foreach: mySchedule().layers -->',
+			'		<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: \'click\' }, style: styleJson, css:{\'overtime-background-image-light\': isOvertime, overTimeLighterBackgroundStyle, \'overtime-background-image-dark\': isOvertime, overTimeDarkerBackgroundStyle, \'last-layer\': isLastLayer}, hideTooltipAfterMouseLeave: true">',
+			'			<div data-bind="visible: showTitle() && !isOvertimeAvailability()"></div>',
+			'			<strong data-bind="text: title()"></strong>',
+			'			<!-- ko if: hasMeeting -->',
+			'			<div class="meeting floatright">',
+			'				<i class="meeting-icon mr10">',
+			'					<i class="glyphicon glyphicon-user ml10"></i>',
+			'				</i>',
+			'			</div>',
+			'			<!-- /ko -->',
+			'			<span class="fullwidth displayblock" data-bind="visible: false && showDetail, text: timeSpan"></span>',
+			'		</div>',
+			'		<div data-bind="visible: false && showTitle() && isOvertimeAvailability()">',
+			'			<i class="glyphicon glyphicon-time"></i>',
+			'		</div>',
+			'		<!-- /ko -->',
+			'	</div>',
+			'	<!-- /ko -->',
+			'</div>'].join("");
+
+		$('.mobile-teamschedule-view').append(html);
+
+		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+
+		equal($('.mobile-teamschedule-view .my-schedule-column .agent-name span').text(), 'Ashley Andeen');
+		equal($('.mobile-teamschedule-view .my-schedule-column .mobile-schedule-layer').length, 1);
+		equal($('.mobile-teamschedule-view .my-schedule-column .mobile-schedule-layer strong').text(), 'Phone');
 	});
 
 	function setUpFakeData() {
@@ -254,28 +288,40 @@
 		fakeTeamScheduleData = {
 			"AgentSchedules": [
 				{
-					"ScheduleLayers": [
-						{
-							"Start": "2018-05-24T05:00:00",
-							"End": "2018-05-24T06:45:00",
-							"LengthInMinutes": 105,
-							"Color": "#80FF80",
-							"TitleHeader": "Phone",
-							"IsAbsenceConfidential": false,
-							"IsOvertime": false,
-							"TitleTime": "05:00 - 06:45"
-						}
-					],
 					"Name": "Jon Kleinsmith",
 					"StartTimeUtc": "2018-05-24T05:00:00",
 					"PersonId": "b46a2588-8861-42e3-ab03-9b5e015b257c",
 					"MinStart": null,
-					"IsDayOff": false,
-					"IsFullDayAbsence": false,
 					"Total": 1,
 					"DayOffName": null,
 					"ContractTimeInMinute": 480.0,
-					"IsNotScheduled": false
+					"Date": "",
+					"FixedDate": "",
+					"Header": "",
+					"HasMainShift": "",
+					"HasOvertime": "",
+					"IsFullDayAbsence": false,
+					"IsDayOff": false,
+					"Summary": "",
+					"Periods": [
+						{
+							"Title": "Phone",
+							"TimeSpan": "05:00 - 06:45",
+							"StartTime": "2018-05-24T05:00:00",
+							"EndTime": "2018-05-24T06:45:00",
+							"Summary": "",
+							"StyleClassName": "",
+							"Meeting": "",
+							"StartPositionPercentage": "",
+							"EndPositionPercentage": "",
+							"Color": "#80FF80",
+							"IsOvertime": false,
+							"IsAbsenceConfidential": false,
+							"TitleTime": "05:00 - 06:45"
+						}
+					],
+					"DayOfWeekNumber": "",
+					"HasNotScheduled": ""
 				}
 			],
 			"TimeLine": [
@@ -284,31 +330,43 @@
 				{ "Time": "07:00:00", "TimeLineDisplay": "07:00", "PositionPercentage": 0.6429, "TimeFixedFormat": null },
 				{ "Time": "08:00:00", "TimeLineDisplay": "08:00", "PositionPercentage": 0.9286, "TimeFixedFormat": null }
 			],
-			"TimeLineLengthInMinutes": 0,
+			"TimeLineLengthInMinutes": 210,
 			"PageCount": 1,
 			"MySchedule": {
-				"ScheduleLayers": [
-					{
-						"Start": "2018-05-24T09:00:00",
-						"End": "2018-05-24T11:00:00",
-						"LengthInMinutes": 120,
-						"Color": "#80FF80",
-						"TitleHeader": "Phone",
-						"IsAbsenceConfidential": false,
-						"IsOvertime": false,
-						"TitleTime": "09:00 - 11:00"
-					}
-				],
 				"Name": "Ashley Andeen",
-				"StartTimeUtc": "2018-05-24T07:00:00",
-				"PersonId": "11610fe4-0130-4568-97de-9b5e015b2564",
+				"StartTimeUtc": "2018-05-24T05:00:00",
+				"PersonId": "b46a2588-8861-42e3-ab03-9b5e015b257c",
 				"MinStart": null,
-				"IsDayOff": false,
-				"IsFullDayAbsence": false,
 				"Total": 1,
 				"DayOffName": null,
-				"ContractTimeInMinute": 120.0,
-				"IsNotScheduled": false
+				"ContractTimeInMinute": 480.0,
+				"Date": "",
+				"FixedDate": "",
+				"Header": "",
+				"HasMainShift": "",
+				"HasOvertime": "",
+				"IsFullDayAbsence": false,
+				"IsDayOff": false,
+				"Summary": "",
+				"Periods": [
+					{
+						"Title": "Phone",
+						"TimeSpan": "05:00 - 06:45",
+						"StartTime": "2018-05-24T05:00:00",
+						"EndTime": "2018-05-24T06:45:00",
+						"Summary": "",
+						"StyleClassName": "",
+						"Meeting": "",
+						"StartPositionPercentage": "",
+						"EndPositionPercentage": "",
+						"Color": "#80FF80",
+						"IsOvertime": false,
+						"IsAbsenceConfidential": false,
+						"TitleTime": "05:00 - 06:45"
+					}
+				],
+				"DayOfWeekNumber": "",
+				"HasNotScheduled": ""
 			}
 		};
 	}

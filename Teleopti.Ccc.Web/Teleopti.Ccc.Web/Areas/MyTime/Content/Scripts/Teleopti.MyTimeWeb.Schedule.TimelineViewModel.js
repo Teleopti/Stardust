@@ -19,8 +19,9 @@ Teleopti.MyTimeWeb.Schedule.TimelineViewModel = function(rawTimeline, scheduleHe
 	self.timeText = rawTimeline.TimeLineDisplay;
 
 	self.topPosition = ko.computed(function() {
-		return Math.round(scheduleHeight * self.positionPercentage()) + offset + 'px';
+		return Math.round(scheduleHeight * self.positionPercentage()) + (offset || 0) + 'px';
 	});
+
 	self.isHour = ko.computed(function() {
 		return timeFromMinutes.minute() === 0;
 	});

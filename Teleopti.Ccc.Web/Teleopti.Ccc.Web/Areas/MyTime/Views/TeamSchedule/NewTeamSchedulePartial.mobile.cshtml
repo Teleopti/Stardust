@@ -59,34 +59,50 @@
 	</div>
 
 	<div class="mobile-teamschedule-view-body container">
-		<div class="mobile-timeline floatleft" data-bind="style: {height: scheduleHeight + 'px'}">
+		<div class="mobile-timeline floatleft" data-bind="style: {height: scheduleContainerHeight + 'px'}">
 			<!-- ko foreach: timeLines -->
 			<div class="mobile-timeline-label absolute" data-bind="style: {top: topPosition}, text: timeText, visible: isHour">
 			</div>
 			<!-- /ko -->
 		</div>
-		
-		<div class="my-schedule-column" >
-			<div class="schedule-item">
-				<div class="agent-name">
-					<span> My </span>
-				</div>
-				<!-- xko if: mySchedule -->
-				<div class="mobile-schedule-container relative" >
-					<!-- xko foreach: mySchedule().layers -->
-					<div class="mobile-schedule-layer absolute" >
-						<div class="start-dashed-line"></div>
-						<div class="end-dashed-line"></div>
-						<p class="start-label-text">
-							<i class="glyphicon glyphicon-remove"></i>
-							<span ></span>
-						</p>
 
-						<i class="glyphicon glyphicon-resize-vertical"></i>
-						<div class="original-place-of-layer"></div>
-	
+		<div class="my-schedule-column relative" data-bind="style: {height: scheduleContainerHeight + 'px'}">
+			<!-- ko if: mySchedule -->
+			<div class="agent-name">
+				<span data-bind="text: mySchedule().name"></span>
+			</div>
+			<div class="mobile-schedule-container relative">
+				<!-- ko foreach: mySchedule().layers -->
+				<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-background-image-light': isOvertime, overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime, overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true">
+					<div data-bind="visible: showTitle() && !isOvertimeAvailability()"></div>
+					<strong data-bind="text: title()"></strong>
+					<!-- ko if: hasMeeting -->
+					<div class="meeting floatright">
+						<i class="meeting-icon mr10">
+							<i class="glyphicon glyphicon-user ml10"></i>
+						</i>
+					</div>
+					<!-- /ko -->
+					<span class="fullwidth displayblock" data-bind="visible: false && showDetail, text: timeSpan"></span>
+				</div>
+				<div data-bind="visible: false && showTitle() && isOvertimeAvailability()">
+					<i class="glyphicon glyphicon-time"></i>
+				</div>
+				<!-- /ko -->
+			</div>
+			<!-- /ko -->
+		</div>
+
+		<div class="teammates-schedules-column relative">
+			<!-- xko foreach: teamSchedules -->
+			<div class="agent-name">
+				<span ></span>
+			</div>
+			<div class="mobile-schedule-container relative" >
+					<!-- xko foreach: layers-->
+					<div class="mobile-schedule-layer absolute">
 						<div >
-							<strong xdata-bind="text: title()"></strong>
+							<strong ></strong>
 							<!-- xko if: hasMeeting -->
 							<div class="meeting floatright">
 								<i class="meeting-icon mr10">
@@ -94,45 +110,14 @@
 								</i>
 							</div>
 							<!-- /xko -->
-							<span class="fullwidth displayblock"></span>
+							<span class="fullwidth displayblock" ></span>
 						</div>
 						<div >
 							<i class="glyphicon glyphicon-time"></i>
 						</div>
 					</div>
 					<!-- /xko -->
-				</div>
 				<!-- /xko -->
-			</div>
-		</div>
-
-		<div class="teammates-schedules-column" >
-			<!-- xko foreach: teamSchedules -->
-			<div class="schedule-item">
-				<div class="agent-name">
-					<span ></span>
-				</div>
-				<div class="mobile-schedule-container relative" >
-						<!-- xko foreach: layers-->
-						<div class="mobile-schedule-layer absolute">
-							<div >
-								<strong ></strong>
-								<!-- xko if: hasMeeting -->
-								<div class="meeting floatright">
-									<i class="meeting-icon mr10">
-										<i class="glyphicon glyphicon-user ml10"></i>
-									</i>
-								</div>
-								<!-- /xko -->
-								<span class="fullwidth displayblock" ></span>
-							</div>
-							<div >
-								<i class="glyphicon glyphicon-time"></i>
-							</div>
-						</div>
-						<!-- /xko -->
-					<!-- /xko -->
-				</div>
 			</div>
 			<!-- /xko -->
 		</div>
