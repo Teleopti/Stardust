@@ -153,6 +153,25 @@
   &.historical {
 	overflow-x: hidden;
 
+	.adherence-percent-huge {
+	  font-size: 60px;
+	  position: relative;
+	  margin-left: 20px;
+	  line-height: 1;
+	  color: #1c94c4;
+	  display: inline-block;
+	  top: 50%;
+	  left: 50%;
+	  transform: translate(-50%, -50%);
+	}
+
+	.adherence-percent-sign {
+	  font-size: 30px;
+	  color: #1c94c4;
+	  padding-left: 2px;
+	  opacity: 0.4
+	}
+
 	.twocolumns {
 	  display: flex;
 	  .left {
@@ -162,9 +181,8 @@
 	  .right {
 		flex-grow: 1;
 		padding: $full-padding;
-		&.late-for-work-line {
-		  padding-top: 0;
-		  padding-bottom: 0;
+		.right-row:not(:last-child) {
+		  padding-bottom: $full-padding;
 		}
 	  }
 	}
@@ -197,7 +215,7 @@
 
 	.timeline {
 	  @include container;
-	  height: 15px;
+	  height: 18px;
 	  .time {
 		@include positioned;
 		top: 10%;
@@ -205,12 +223,23 @@
 	  }
 	}
 
-	.late-for-work-line {
+	.late-for-work-row {
 	  @include container;
 	  height: 20px;
 	  .late-for-work {
 		@include positioned;
 		transform: translateX(-50%);
+		z-index: 40;
+		cursor: pointer;
+	  }
+	  .late-for-work-line {
+		transform: translateX(-1px);
+		position: absolute;
+		z-index: 30;
+		top: 10px;
+		width: 2px;
+		height: 90px;
+		background-color: #FB8C00;
 	  }
 	}
 
@@ -239,6 +268,7 @@
 
 	  .diamond {
 		@include positioned;
+		z-index: 40;
 		top: ($layer-row-height - $diamond-size) / 2;
 		margin-left: ($diamond-size / 2) * -1;
 		transform: rotate(45deg);

@@ -74,8 +74,14 @@
 
 				vm.diamonds = buildDiamonds(data);
 
-				vm.lateForWork = {Text: "Late 30 min", Offset: "35.8359%"};
-				
+				vm.lateForWork = {
+					text: "Late 130 min",
+					offset: "54.54545454545454%",
+					click: function () {
+						console.log('clicked!');
+					}
+				};
+
 				if ($stateParams.date > data.Navigation.First) {
 					var previousDay = moment($stateParams.date).subtract(1, 'day');
 					vm.previousHref = $state.href($state.current.name, {personId: vm.personId, date: previousDay.format('YYYYMMDD')});
