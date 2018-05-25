@@ -23,6 +23,8 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -98,6 +100,9 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.ValueTuple.4.3.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
@@ -115,6 +120,11 @@
     <Compile Include="Bindings\Generic\Messages\MessageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\OutboundStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PhoneStateStepDefinitions.cs" />
+    <Compile Include="Wfm\Intraday\Intraday.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Intraday.feature</DependentUpon>
+    </Compile>
     <Compile Include="Wfm\People\RoleStepDefinition.cs" />
     <Compile Include="Wfm\People\PeopleStepDefinition.cs" />
     <Compile Include="Bindings\Generic\Wfm\RealTimeAdherenceAgentHistoricalPageStepDefinitions.cs" />
@@ -666,11 +676,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>GroupPages.feature</DependentUpon>
     </Compile>
-    <Compile Include="Wfm\Intraday\Intraday.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Intraday.feature</DependentUpon>
-    </Compile>
     <Compile Include="Wfm\Outbound\OutboundCampaignBasicOperations.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -712,6 +717,11 @@
     </Compile>
     <Compile Include="Wfm\RealTimeAdherence\MonitorAgentsViewInPermittedOrganizaionlOnly.feature.cs">
       <DependentUpon>MonitorAgentsViewInPermittedOrganizaionlOnly.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Wfm\RealTimeAdherence\EasilySpotLateForWork_75668.feature.cs">
+      <DependentUpon>EasilySpotLateForWork_75668.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -1198,6 +1208,10 @@
     <None Include="Wfm\RealTimeAdherence\MonitorAgentsViewInPermittedOrganizaionlOnly.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>MonitorAgentsViewInPermittedOrganizaionlOnly.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\RealTimeAdherence\EasilySpotLateForWork_75668.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>EasilySpotLateForWork_75668.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\RealTimeAdherence\RestrictModifyAdherenceWithPermission_74898.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

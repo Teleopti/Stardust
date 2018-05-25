@@ -25,7 +25,8 @@ Background:
 	And Person 'Urban' has role 'Agent'
 	And I view people
 
-
+@ignore
+#ping Bockemon
 Scenario: Search for a selection of users
 	When Searching for 'le'
 	Then I should see all matches for 'le'

@@ -642,7 +642,7 @@ Verminder de complexiteit om deze diensten gebruiken.</value>
     <value>Nieuwe Rooster Periode</value>
   </data>
   <data name="RequestTypeShiftTrade" xml:space="preserve">
-    <value>Dienst Handel</value>
+    <value>Dienst Ruil</value>
   </data>
   <data name="NewContractSchedule" xml:space="preserve">
     <value>Nieuwe Contract Rooster</value>
@@ -651,7 +651,7 @@ Verminder de complexiteit om deze diensten gebruiken.</value>
     <value>Tekst</value>
   </data>
   <data name="ShiftTradeRequest" xml:space="preserve">
-    <value>Dienst Handelverzoek</value>
+    <value>Dienst Ruil Verzoek</value>
   </data>
   <data name="NameYourTypeColon" xml:space="preserve">
     <value>Noem uw {0}:</value>
@@ -771,19 +771,19 @@ Verminder de complexiteit om deze diensten gebruiken.</value>
     <value>Loading layouts...</value>
   </data>
   <data name="ShiftTradeRequestHasBeenAcceptedDot" xml:space="preserve">
-    <value>Een dienst handel {0} - {1} werd door en andere persoon aanvaard.</value>
+    <value>Een dienst Ruil {0} - {1} werd door en andere persoon aanvaard.</value>
   </data>
   <data name="ShiftTradeRequestHasBeenApprovedDot" xml:space="preserve">
-    <value>Een dienst handel {0} - {1} werd goedgekeurd.</value>
+    <value>Een dienst Ruil {0} - {1} werd goedgekeurd.</value>
   </data>
   <data name="ShiftTradeRequestHasBeenDeniedDot" xml:space="preserve">
-    <value>Een dienst handel {0} - {1} werd geweigerd.</value>
+    <value>Een dienst Ruil {0} - {1} werd geweigerd.</value>
   </data>
   <data name="ShiftTradeRequestHasBeenReferredDot" xml:space="preserve">
-    <value>Een dienst handelverzoek {0} - {1} moet opnieuw geaccepteerd worden als gevolg van een rooster verandering van.</value>
+    <value>Een dienst Ruilverzoek{0} - {1} moet opnieuw geaccepteerd worden als gevolg van een rooster verandering van.</value>
   </data>
   <data name="ANewShiftTradeHasBeenCreatedDot" xml:space="preserve">
-    <value>Nieuwe dienst handelverzoek {0} - {1}, keur of weiger in Uw verzoek lijst.</value>
+    <value>Nieuwe dienst Ruilverzoek {0} - {1}, keur of weiger in Uw verzoek lijst.</value>
   </data>
   <data name="MaxColon" xml:space="preserve">
     <value>Max:</value>
@@ -813,7 +813,7 @@ Verminder de complexiteit om deze diensten gebruiken.</value>
     <value>Bekijk vertrouwelijke</value>
   </data>
   <data name="RequestDenyReasonOtherPart" xml:space="preserve">
-    <value>Uw dienst handel is door de ontvanger geweigerd.</value>
+    <value>Uw dienst Ruil is door de ontvanger geweigerd.</value>
   </data>
   <data name="DayOffOutsideScheduleException" xml:space="preserve">
     <value>Kon geen actie uitvoeren als gevolg van verschillende tijdzones.</value>
@@ -867,19 +867,20 @@ Verminder de complexiteit om deze diensten gebruiken.</value>
     <value>Ingeroosterd tegen schrijven beveiligd ouder dan (dagen):</value>
   </data>
   <data name="OpenShiftTradePeriodDenyReason" xml:space="preserve">
-    <value>Dienst handel geweigerd omdat geselecteerde datums zijn niet open voor aanvragen.</value>
+    <value>Dienst Ruil geweigerd omdat geselecteerde datums zijn niet open voor aanvragen.</value>
   </data>
   <data name="ShiftTradeSkillDenyReason" xml:space="preserve">
-    <value>Dienst handel geweigerd omdat Uw skills komen niet overeen met en andere persoon</value>
+    <value>Dienst Ruil 
+geweigerd omdat Uw skills komen niet overeen met en andere persoon</value>
   </data>
   <data name="ShiftTradeTargetTimeDenyReason" xml:space="preserve">
-    <value>Dienst handel geweigerd omdat rooster contract tijd werd overschreden.</value>
+    <value>Dienst Ruil geweigerd omdat rooster contract tijd werd overschreden.</value>
   </data>
   <data name="ShiftTradeRequests" xml:space="preserve">
-    <value>Dienst Handel Verzoeken</value>
+    <value>Dienst Ruil Verzoeken</value>
   </data>
   <data name="OpenForShiftTradeRequests" xml:space="preserve">
-    <value>Open voor dienst handelsaanvragen</value>
+    <value>Open voor dienst Ruilaanvragen</value>
   </data>
   <data name="ToleranceForMatchingContractTime" xml:space="preserve">
     <value>Tolerantie voor matching contract tijd</value>
@@ -924,7 +925,7 @@ Verminder de complexiteit om deze diensten gebruiken.</value>
     <value>Geen skill met de aanpassing eigenschappen van de huidige skill  werd gevonden.</value>
   </data>
   <data name="ShiftTradeAbsenceDenyReason" xml:space="preserve">
-    <value>Dienst handel kan niet gedaan worden door het afwezigheid in en dienst.</value>
+    <value>Dienst Ruil kan niet gedaan worden door het afwezigheid in en dienst.</value>
   </data>
   <data name="ShiftTradePersonalActivityDenyReason" xml:space="preserve">
     <value>Dienst handle is geweigerd omdat en persoonlijke activiteit is buiten en dienst afgelopen.</value>
@@ -975,19 +976,19 @@ Verminder de complexiteit om deze diensten gebruiken.</value>
     <value>Bekijk Vacature historie</value>
   </data>
   <data name="ANewShiftTradeForOneDayHasBeenCreatedDot" xml:space="preserve">
-    <value>Nieuwe dienst handelverzoek {0}, keur of weiger in Uw verzoek lijst.</value>
+    <value>Nieuwe dienst Ruilverzoek{0}, keur of weiger in Uw verzoek lijst.</value>
   </data>
   <data name="ShiftTradeRequestForOneDayHasBeenAcceptedDot" xml:space="preserve">
-    <value>Een dienst handel {0} werd door en andere persoon aanvaard.</value>
+    <value>Een dienst Ruil {0} werd door en andere persoon aanvaard.</value>
   </data>
   <data name="ShiftTradeRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
-    <value>Een dienst handel {0} werd goedgekeurd.</value>
+    <value>Een dienst Ruil {0} werd goedgekeurd.</value>
   </data>
   <data name="ShiftTradeRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
-    <value>Een dienst handel {0} werd geweigerd.</value>
+    <value>Een dienst Ruil {0} werd geweigerd.</value>
   </data>
   <data name="ShiftTradeRequestForOneDayHasBeenReferredDot" xml:space="preserve">
-    <value>Een dienst handel {0} moet opnieuw aanvaard worden omwille van en rooster verandering van.</value>
+    <value>Een dienst Ruil {0} moet opnieuw aanvaard worden omwille van en rooster verandering van.</value>
   </data>
   <data name="NoAbsenceDefined" xml:space="preserve">
     <value>U moet ten minste een absence creëren om dit te kunnen doen.</value>
@@ -3214,7 +3215,7 @@ Accounts</value>
     <value>Gecreëerd</value>
   </data>
   <data name="Denied" xml:space="preserve">
-    <value>Ontkend</value>
+    <value>Afgewezen</value>
   </data>
   <data name="Pending" xml:space="preserve">
     <value>Hangende</value>
@@ -3355,7 +3356,7 @@ Accounts</value>
     <value>Nieuwe toestand groep</value>
   </data>
   <data name="RealTimeAdherence" xml:space="preserve">
-    <value>Real Time Rooster Opvolging</value>
+    <value>Real Time Rooster opvolging</value>
   </data>
   <data name="SetAsDefaultStateGroup" xml:space="preserve">
     <value>Ingesteld als standaard toestand groep</value>
@@ -3562,7 +3563,7 @@ Standaard</value>
     <value>Persoon Rotatie Error</value>
   </data>
   <data name="ManageRTA" xml:space="preserve">
-    <value>Beheer Real Time Rooster Opvolging</value>
+    <value>Beheer Real Time Aanhankelijkheid</value>
   </data>
   <data name="DeleteRotation" xml:space="preserve">
     <value>Verwijder rotatie</value>
@@ -3631,7 +3632,7 @@ Standaard</value>
     <value>Bent U zeker dat U van de groep '{0}' wilt verwijderen?</value>
   </data>
   <data name="LoadingRealTimeAdherenceDataThreeDots" xml:space="preserve">
-    <value>Loading real time rooster opvolging data...</value>
+    <value>Loading real time Rooster opvolging data...</value>
   </data>
   <data name="AreYouSureYouWantToDeleteDefinitionSet" xml:space="preserve">
     <value>Bent U zeker dat '{0}' wilt verwijderen?</value>
@@ -4057,7 +4058,7 @@ Standaard</value>
     <value>Totaal:</value>
   </data>
   <data name="TotalOutOfAdherenceColon" xml:space="preserve">
-    <value>Totaal van rooster opvolging:</value>
+    <value>Totaal van Rooster opvolging:</value>
   </data>
   <data name="SaveAsScenario" xml:space="preserve">
     <value>Opslaan als Scenario</value>
@@ -4584,7 +4585,7 @@ Nieuwe Multiplicator</value>
     <value>Standaard segment lengte</value>
   </data>
   <data name="AdherenceReportCalculation" xml:space="preserve">
-    <value>Rooster opvolging berekening</value>
+    <value>Rooster opvolging Berekening</value>
   </data>
   <data name="SelectDates" xml:space="preserve">
     <value>Selecteer datums</value>
@@ -4836,7 +4837,7 @@ Teleopti R &amp; D</value>
     <value>Verwijder meeting</value>
   </data>
   <data name="RequestStatusDenied" xml:space="preserve">
-    <value>Ontkend</value>
+    <value>Afgewezen</value>
   </data>
   <data name="SubskillDistributionMustSumToHundredPercent" xml:space="preserve">
     <value>De som van de distributies tussen sub skills moet 100% zijn</value>
@@ -6082,7 +6083,7 @@ Periode</value>
     <value>De afwezigheid verzoek {0} werd goedgekeurd.</value>
   </data>
   <data name="AbsenceRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
-    <value>De afwezigheid verzoek {0} werd ontkend.</value>
+    <value>De afwezigheid verzoek {0} werd afgewezen.</value>
   </data>
   <data name="ResourceCalculateEveryColon" xml:space="preserve">
     <value>Resource berekent iedere:</value>

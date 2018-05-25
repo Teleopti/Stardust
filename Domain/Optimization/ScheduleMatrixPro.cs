@@ -52,13 +52,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 	    public IScheduleDayPro[] WeekAfterOuterPeriodDays => _weekAfterOuterPeriodDays.Values.ToArray();
 
-	    public IDictionary<DateOnly, IScheduleDayPro> WeekBeforeOuterPeriodDictionary => _weekBeforeOuterPeriodDays;
-
-	    public IDictionary<DateOnly, IScheduleDayPro> WeekAfterOuterPeriodDictionary => _weekAfterOuterPeriodDays;
-
 	    public IDictionary<DateOnly, IScheduleDayPro> OuterWeeksPeriodDictionary => _outerWeeksPeriodDays;
-
-	    public IDictionary<DateOnly, IScheduleDayPro> FullWeeksPeriodDictionary => _fullWeeksPeriodDays;
 
 	    public IScheduleDayPro[] EffectivePeriodDays => _effectivePeriodDays.Values.ToArray();
 

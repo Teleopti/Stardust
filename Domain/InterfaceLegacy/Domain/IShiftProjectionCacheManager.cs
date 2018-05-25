@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_LessResourcesXXL_74915)]
 	public interface IShiftProjectionCacheManager
 	{
 		IList<ShiftProjectionCache> ShiftProjectionCachesFromRuleSets(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod, IEnumerable<IWorkShiftRuleSet> ruleSets, bool checkExcluded);

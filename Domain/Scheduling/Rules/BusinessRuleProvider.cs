@@ -9,11 +9,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 {
 	public class BusinessRuleProvider : IBusinessRuleProvider
 	{
-		public INewBusinessRuleCollection GetAllBusinessRules(ISchedulingResultStateHolder schedulingResultStateHolder)
-		{
-			return NewBusinessRuleCollection.All(schedulingResultStateHolder);
-		}
-
 		public INewBusinessRuleCollection GetBusinessRulesForShiftTradeRequest(ISchedulingResultStateHolder schedulingResultStateHolder,
 			bool enableSiteOpenHoursRule)
 		{

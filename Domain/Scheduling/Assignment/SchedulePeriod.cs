@@ -525,11 +525,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return 7;
 		}
 
-		public virtual void ClearShiftCategoryLimitation()
-		{
-			shiftCategoryLimitation.Clear();
-		}
-
 		public virtual int MustHavePreference
 		{
 			get { return _mustHavePreference; }

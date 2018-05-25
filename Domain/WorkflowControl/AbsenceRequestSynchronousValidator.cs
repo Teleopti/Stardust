@@ -94,18 +94,4 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			return new ValidatedRequest{IsValid = true};
 		}
 	}
-
-	public class AbsenceRequestSynchronousValidator40747ToggleOff : IAbsenceRequestSynchronousValidator
-	{
-		public IValidatedRequest Validate(IPersonRequest personRequest)
-		{
-			return new ValidatedRequest { IsValid = true };
-		}
-
-		public IValidatedRequest Validate(IPersonRequest personRequest, IScheduleRange scheduleRange,
-			IPersonAbsenceAccount personAbsenceAccount)
-		{
-			return new ValidatedRequest { IsValid = true };
-		}
-	}
 }

@@ -33,26 +33,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     .List<IPersonInRole>();
         }
 
-        public IList<IPersonInRole> GetPersonsNotInRole(Guid roleId, ICollection<Guid> personsIds)
-        {
-            var onDate = DateTime.Today;
-            var ids = new List<Guid>();
-            ids.AddRange(personsIds);
-            const string query = @"SELECT p.Id, FirstName, LastName , ISNULL(t.Name, '') Team
-                        FROM Person p LEFT JOIN PersonPeriod ON Parent = p.Id
-                        AND StartDate <= :onDate AND EndDate >= :onDate
-                        LEFT JOIN Team t ON t.Id = Team
-                        WHERE  p.Id In (:persons)
-                        AND p.Id Not IN (SELECT Person FROM PersonInApplicationRole WHERE ApplicationRole = :role)";
-            return ((NHibernateStatelessUnitOfWork)_unitOfWork).Session.CreateSQLQuery(query)
-                    .SetGuid("role", roleId)
-                    .SetDateTime("onDate", onDate)
-                    .SetParameterList("persons", ids)
-                    .SetResultTransformer(Transformers.AliasToBean(typeof(PersonInRole)))
-                    .SetReadOnly(true)
-                    .List<IPersonInRole>();
-        }
-
         public IList<IPersonInRole> Persons()
         {
             var onDate = DateTime.Today;
@@ -104,35 +84,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     .List<IFunctionLight>();
         }
 
-        public IList<IPersonInRole> PersonsWithFunction(Guid selectedFunction)
-        {
-            var onDate = DateTime.Today;
-            const string query = @"SELECT DISTINCT p.Id, FirstName, LastName , ISNULL(t.Name, '') Team
-                                FROM Person p INNER JOIN PersonInApplicationRole a ON p.Id = a.Person AND IsDeleted = 0
-                                AND ApplicationRole IN(SELECT ApplicationRole FROM ApplicationFunctionInRole WHERE ApplicationFunction = :function)
-                                LEFT JOIN PersonPeriod ON Parent = p.Id
-                                AND StartDate <= :onDate AND EndDate >= :onDate
-                                LEFT JOIN Team t ON t.Id = Team";
-            return ((NHibernateStatelessUnitOfWork)_unitOfWork).Session.CreateSQLQuery(query)
-                    .SetDateTime("onDate", onDate)
-                    .SetGuid("function", selectedFunction)
-                    .SetResultTransformer(Transformers.AliasToBean(typeof(PersonInRole)))
-                    .SetReadOnly(true)
-                    .List<IPersonInRole>();
-        }
-
-        public IList<IRoleLight> RolesWithFunction(Guid selectedFunction)
-        {
-            const string query = @"SELECT Id, DescriptionText as Name FROM ApplicationRole
-                                 WHERE Id IN (SELECT ApplicationRole FROM ApplicationFunctionInRole WHERE ApplicationFunction = :function)
-                                 AND BuiltIn = 0 AND IsDeleted = 0";
-            return ((NHibernateStatelessUnitOfWork)_unitOfWork).Session.CreateSQLQuery(query)
-                    .SetGuid("function", selectedFunction)
-                    .SetResultTransformer(Transformers.AliasToBean(typeof(RoleLight)))
-                    .SetReadOnly(true)
-                    .List<IRoleLight>();
-        }
-
         public IList<Guid> AvailableData(Guid selectedPerson)
         {
             const string query = @"SELECT DISTINCT AvailableBusinessUnit AS Available
@@ -163,24 +114,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     .SetGuid("person", selectedPerson)
                     .SetReadOnly(true)
                     .List<int>();
-        }
-
-        public IList<IPersonInRole> PersonsWithRoles(IList<Guid> roles)
-        {
-            var onDate = DateTime.Today.Date;
-            const string query = @"SELECT p.Id, FirstName, LastName , ISNULL(t.Name, '') Team
-                        FROM Person p INNER JOIN PersonInApplicationRole a ON p.Id = a.Person 
-                        AND a.ApplicationRole IN( :roles )
-                        AND IsDeleted = 0
-                        LEFT JOIN PersonPeriod ON Parent = p.Id
-                        AND StartDate <= :onDate AND EndDate >= :onDate
-                        LEFT JOIN Team t ON t.Id = Team";
-            return ((NHibernateStatelessUnitOfWork)_unitOfWork).Session.CreateSQLQuery(query)
-                    .SetParameterList("roles", roles)
-                    .SetDateTime("onDate", onDate)
-                    .SetResultTransformer(Transformers.AliasToBean(typeof(PersonInRole)))
-                    .SetReadOnly(true)
-                    .List<IPersonInRole>();
         }
 
         public IList<IRoleLight> RolesWithData(Guid id)

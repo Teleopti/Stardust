@@ -19,7 +19,7 @@
 			var panel = setUp({
 				Name: 'Agent 1',
 				Date: '2018-05-16'
-			});
+			}, '2018-05-16');
 			var element = panel[0];
 
 			expect(element.querySelector('.name').innerText.trim()).toEqual('Agent 1');
@@ -39,7 +39,7 @@
 					}]
 				},
 				HasUnderlyingSchedules: function () { return true; }
-			});
+			}, '2018-05-16');
 
 			var element = panel[0];
 			expect(element.querySelectorAll('.underlying-info').length).toBe(1);
@@ -168,26 +168,215 @@
 			expect(shiftLayers[0].style.left).toEqual('240px');
 		});
 
-		xit('should locate correctly based on the schedule ', function () {
+		it('should able to select an activity', function () {
 			var schedule = {
 				Name: 'Agent 1',
-				Date: '2018-05-22',
+				Date: '2018-05-21',
 				Shifts: [{
 					Projections: [{
 						Color: "#80FF80",
 						Description: "Phone",
-						Start: "2018-05-22 05:00",
+						Start: "2018-05-21 05:30",
 						Minutes: 120
-					}],
-					ProjectionTimeRange: {
-						Start: "2018-05-22 05:00",
-						End: "2018-05-22 07:00",
-					}
+					}, {
+						Color: "#FFC080",
+						Description: "Sales",
+						Start: "2018-05-21 07:30",
+						Minutes: 60
+					}]
 				}]
 			};
-			var panel = setUp(schedule, "2018-05-22", "Europe/Berlin");
-			var shiftContainer = panel[0].querySelector(".shift-container");
-			expect(shiftContainer.scrollLeft).toEqual('180');
+			var panel = setUp(schedule, "2018-05-21", "Europe/Berlin");
+
+			var shiftLayers = panel[0].querySelectorAll(".shift-layer");
+			shiftLayers[0].click();
+
+			expect(shiftLayers[0].className.indexOf('selected') >= 0).toBeTruthy();
+		});
+
+		xit('should select the whole activity', function () {
+			var schedule = {
+				Name: 'Agent 1',
+				Date: '2018-05-21',
+				Shifts: [{
+					Projections: [{
+						Color: "#80FF80",
+						Description: "Phone",
+						Start: "2018-05-21 08:00",
+						Minutes: 60,
+						ShiftLayerIds: ['9be3096b-d989-4821-9d32-a7bc00f9f8e9']
+					}, {
+						Color: "#FFC080",
+						Description: "Sales",
+						Start: "2018-05-21 09:00",
+						Minutes: 60
+					},
+					{
+						Color: "#80FF80",
+						Description: "Phone",
+						Start: "2018-05-21 10:00",
+						Minutes: 180,
+						ShiftLayerIds: ['e2964c98-b3e7-4bad-8d9a-a7bc00f9f8e9', '9be3096b-d989-4821-9d32-a7bc00f9f8e9']
+					}]
+				}]
+			};
+			var panel = setUp(schedule, "2018-05-21", "Europe/Berlin");
+
+			var shiftLayers = panel[0].querySelectorAll(".shift-layer");
+
+			shiftLayers[0].click();
+			expect(shiftLayers[0].className.indexOf("selected") >= 0).toBeTruthy();
+			expect(shiftLayers[2].className.indexOf("selected") >= 0).toBeTruthy();
+
+		});
+
+		it('should can select only one activity', function () {
+			var schedule = {
+				Name: 'Agent 1',
+				Date: '2018-05-21',
+				Shifts: [{
+					Projections: [{
+						Color: "#80FF80",
+						Description: "Phone",
+						Start: "2018-05-21 05:30",
+						Minutes: 120,
+						ShiftLayerIds: ['9be3096b-d989-4821-9d32-a7bc00f9f8e9']
+					}, {
+						Color: "#FFC080",
+						Description: "Sales",
+						Start: "2018-05-21 07:30",
+						Minutes: 60,
+						ShiftLayerIds: ['e2964c98-b3e7-4bad-8d9a-a7bc00f9f8e9']
+					}]
+				}]
+			};
+			var panel = setUp(schedule, "2018-05-21", "Europe/Berlin");
+
+			var shiftLayers = panel[0].querySelectorAll(".shift-layer");
+			shiftLayers[0].click();
+			shiftLayers[1].click();
+
+			expect(shiftLayers[0].className.indexOf('selected') >= 0).toBeFalsy();
+			expect(shiftLayers[1].className.indexOf('selected') >= 0).toBeTruthy();
+		});
+
+		it('should clear selection when click the selected activity again', function () {
+			var schedule = {
+				Name: 'Agent 1',
+				Date: '2018-05-21',
+				Shifts: [{
+					Projections: [{
+						Color: "#80FF80",
+						Description: "Phone",
+						Start: "2018-05-21 05:30",
+						Minutes: 120,
+						ShiftLayerIds: ['9be3096b-d989-4821-9d32-a7bc00f9f8e9']
+					}]
+				}]
+			};
+			var panel = setUp(schedule, "2018-05-21", "Europe/Berlin");
+
+			var shiftLayers = panel[0].querySelectorAll(".shift-layer");
+			shiftLayers[0].click();
+			shiftLayers[0].click();
+
+			expect(shiftLayers[0].className.indexOf('selected') >= 0).toBeFalsy();
+			var activityInfoEl = panel[0].querySelector(".activity-info");
+			expect(!!activityInfoEl).toBeFalsy();
+		});
+
+		it('should show border color correctly based on the selected activity color', function () {
+			var schedule = {
+				Name: 'Agent 1',
+				Date: '2018-05-21',
+				Shifts: [{
+					Projections: [{
+						Color: "#80FF80",
+						Description: "Phone",
+						Start: "2018-05-21 05:30",
+						Minutes: 120,
+						ShiftLayerIds: ['9be3096b-d989-4821-9d32-a7bc00f9f8e9'],
+						UseLighterBorder: true
+					}, {
+						Color: "#FFC080",
+						Description: "Sales",
+						Start: "2018-05-21 07:30",
+						Minutes: 60,
+						ShiftLayerIds: ['e2964c98-b3e7-4bad-8d9a-a7bc00f9f8e9'],
+						UseLighterBorder: false
+					}]
+				}]
+			};
+			var panel = setUp(schedule, "2018-05-21", "Europe/Berlin");
+
+			var shiftLayers = panel[0].querySelectorAll(".shift-layer");
+			shiftLayers[0].click();
+			expect(shiftLayers[0].className.indexOf('border-light') >= 0).toBeTruthy();
+			shiftLayers[1].click();
+			expect(shiftLayers[1].className.indexOf('border-dark') >= 0).toBeTruthy();
+		});
+
+		it('should show activity information correctly when select an activity', function () {
+			var schedule = {
+				Name: 'Agent 1',
+				Date: '2018-05-21',
+				Shifts: [{
+					Projections: [{
+						Color: "#80FF80",
+						Description: "Phone",
+						Start: "2018-05-21 08:00",
+						Minutes: 60,
+						ShiftLayerIds: ['9be3096b-d989-4821-9d32-a7bc00f9f8e9']
+					}, {
+						Color: "#FFC080",
+						Description: "Sales",
+						Start: "2018-05-21 09:00",
+						Minutes: 60,
+						ShiftLayerIds: ['e2964c98-b3e7-4bad-8d9a-a7bc00f9f8e9']
+					},
+					{
+						Color: "#80FF80",
+						Description: "Phone",
+						Start: "2018-05-21 10:00",
+						Minutes: 60,
+						ShiftLayerIds: ['9be3096b-d989-4821-9d32-a7bc00f9f8e9']
+					}]
+				}]
+			};
+			var panel = setUp(schedule, "2018-05-21", "Europe/Berlin");
+
+			var shiftLayers = panel[0].querySelectorAll(".shift-layer");
+			shiftLayers[0].click();
+
+			var timespanEl = panel[0].querySelector(".timespan");
+			var typeEl = panel[0].querySelector(".activity-type");
+
+			expect(timespanEl.innerText.trim()).toBe("08:00 - 09:00");
+			expect(typeEl.innerText.trim()).toBe("Phone");
+
+		});
+
+		it('should show time period of activity information correctly on DST when select an activity', function () {
+			var schedule = {
+				Name: 'Agent 1',
+				Date: '2018-03-25',
+				Shifts: [{
+					Projections: [{
+						Color: "#80FF80",
+						Description: "Phone",
+						Start: "2018-03-25 00:30",
+						Minutes: 120,
+						ShiftLayerIds: ['9be3096b-d989-4821-9d32-a7bc00f9f8e9']
+					}]
+				}]
+			};
+			var panel = setUp(schedule, "2018-03-25", "Europe/Berlin");
+
+			var shiftLayers = panel[0].querySelectorAll(".shift-layer");
+			shiftLayers[0].click();
+
+			var timespanEl = panel[0].querySelector(".timespan");
+			expect(timespanEl.innerText.trim()).toBe("00:30 - 03:30");
 		});
 
 		describe("in locale en-UK", function () {
@@ -214,6 +403,45 @@
 				expect(!!timeline).toBeTruthy();
 				expect(intervals.length).toBe(37);
 				expect(textHours).toEqual( ["12:00 AM", "1:00 AM", "2:00 AM", "3:00 AM", "4:00 AM", "5:00 AM", "6:00 AM", "7:00 AM", "8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM", "6:00 PM", "7:00 PM", "8:00 PM", "9:00 PM", "10:00 PM", "11:00 PM", "12:00 AM", "1:00 AM", "2:00 AM", "3:00 AM", "4:00 AM", "5:00 AM", "6:00 AM", "7:00 AM", "8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM"]);
+			});
+
+			it('should show time period of activity information correctly when select an activity', function () {
+				var schedule = {
+					Name: 'Agent 1',
+					Date: '2018-05-21',
+					Shifts: [{
+						Projections: [{
+							Color: "#80FF80",
+							Description: "Phone",
+							Start: "2018-05-21 05:30",
+							Minutes: 120,
+							ShiftLayerIds: ['9be3096b-d989-4821-9d32-a7bc00f9f8e9']
+						}]
+					}]
+				};
+				var panel = setUp(schedule, "2018-05-21", "Europe/Berlin");
+
+				var shiftLayers = panel[0].querySelectorAll(".shift-layer");
+				shiftLayers[0].click();
+
+				var timespanEl = panel[0].querySelector(".timespan");
+				expect(timespanEl.innerText.trim()).toBe("5:30 AM - 7:30 AM");
+
+			});
+		});
+
+		describe("in locale fa", function () {
+			beforeEach(function () { moment.locale('fa'); });
+			afterEach(function () { moment.locale('en'); });
+
+			it("should render schedule date correctly", function () {
+				var panel = setUp({
+					Name: 'Agent 1',
+					Date: '2018-05-24'
+				}, '2018-05-24');
+				var element = panel[0];
+
+				expect(element.querySelector('.date').innerText).toEqual('۲۰۱۸-۰۵-۲۴');
 			});
 		});
 

@@ -166,16 +166,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return people.ToList();
 		}
 
-		public ICollection<IPerson> FindPeopleBelongTeams(ITeam[] teams, DateOnlyPeriod period)
-		{
-			var people = from per in _storage.LoadAll<IPerson>()
-						 let periods = per.PersonPeriods(period)
-						 where periods.Any(personPeriod => teams.Contains(personPeriod.Team))
-						 select per;
-
-			return people.ToList();
-		}
-
 		public ICollection<IPerson> FindPeopleBelongTeamWithSchedulePeriod(ITeam team, DateOnlyPeriod period)
 		{
 			var people = from per in _storage.LoadAll<IPerson>()

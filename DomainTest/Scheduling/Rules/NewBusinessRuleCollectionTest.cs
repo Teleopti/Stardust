@@ -60,6 +60,30 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		}
 
 		[Test]
+		public void ShouldGetMaximumWorkdayRuleFromFlag()
+		{
+			setup();
+			const BusinessRuleFlags flag = BusinessRuleFlags.MaximumContinuousWorkTimeRule;
+
+			var rules = NewBusinessRuleCollection.GetRuleDescriptionsFromFlag(flag).ToList();
+
+			Assert.AreEqual(rules.Count, 1);
+			Assert.Greater(rules.IndexOf("MaximumContinuousWorkTimeRuleName"), -1);
+		}
+
+		[Test]
+		public void ShouldGetMaximumWorkdayRuleFromRules()
+		{
+			setup();
+			const BusinessRuleFlags expectedFlag = BusinessRuleFlags.MaximumContinuousWorkTimeRule;
+
+			var rules = new List<Type> { typeof(MaximumWorkdayRule) };
+
+			var flag = NewBusinessRuleCollection.GetFlagFromRules(rules);
+			Assert.AreEqual(flag, expectedFlag);
+		}
+
+		[Test]
 		public void ShouldGetCorrectFlagFromRules()
 		{
 			setup();

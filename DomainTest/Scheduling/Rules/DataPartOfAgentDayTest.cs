@@ -101,5 +101,21 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				.Validate(null, new[] { scheduleDataTooEarly })
 				.Should().Have.SameValuesAs(expected, expected);
 		}
+
+		[Test]
+		public void ShouldBeOkWithPersonalActivityOnOtherDay()
+		{
+			var start = new DateTime(2000, 1, 2, 2, 0, 0, DateTimeKind.Utc);
+			var end = new DateTime(2000, 1, 2, 3, 0, 0, DateTimeKind.Utc);
+			var assignmentPeriod = new DateTimePeriod(start, end);
+			var scheduleData = ScheduleDayFactory.Create(new DateOnly(2000, 1, 1));
+			var pa = new PersonAssignment(scheduleData.Person, scheduleData.Scenario, new DateOnly(2000, 1, 1));
+			pa.SetDayOff(new DayOffTemplate());
+			pa.AddPersonalActivity(new Activity(), assignmentPeriod);
+
+			scheduleData.Add(pa);
+
+			new DataPartOfAgentDay().Validate(null, new[] { scheduleData }).Should().Be.Empty();
+		}
 	}
 }

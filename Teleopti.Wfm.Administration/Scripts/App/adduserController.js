@@ -89,7 +89,7 @@
 				vm.PasswordMessage = "The must be at least 6 characters.";
 				vm.PasswordOk = false;
 			} else if (vm.Password !== vm.ConfirmPassword) {
-				vm.PasswordMessage = "The passwords do no match.";
+				vm.PasswordMessage = "The passwords are not matching.";
 				vm.PasswordOk = false;
 			} else {
 				vm.PasswordMessage = "Password ok.";

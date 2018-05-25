@@ -138,12 +138,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         void RemoveShiftCategoryLimitation(IShiftCategory shiftCategory);
 
         /// <summary>
-        /// Clears the shift category limitation.
-        /// </summary>
-        void ClearShiftCategoryLimitation();
-
-
-        /// <summary>
         /// Gets or sets the must have preference.
         /// </summary>
         /// <value>The must have preference.</value>

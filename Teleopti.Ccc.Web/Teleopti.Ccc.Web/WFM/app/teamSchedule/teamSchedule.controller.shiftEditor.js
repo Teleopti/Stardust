@@ -19,19 +19,72 @@
 		}
 	});
 
-	ShiftEditorController.$inject = ['$element', '$timeout', '$window', 'serviceDateFormatHelper'];
+	ShiftEditorController.$inject = ['$element', '$timeout', '$window', '$interval', '$filter', 'serviceDateFormatHelper'];
 
-	function ShiftEditorController($element, $timeout, $window, serviceDateFormatHelper) {
+	function ShiftEditorController($element, $timeout, $window, $interval, $filter, serviceDateFormatHelper) {
 		var vm = this;
+		var viewportClipEl = $element[0].querySelector('.shift-container .viewport-clip');
+		var viewportEl = viewportClipEl.querySelector('.viewport');
+
 		vm.intervals = [];
 		vm.projections = [];
+		vm.showScrollLeftButton = false;
+		vm.showScrollRightButton = false;
+		vm.selectedProjection = null;
+		vm.displayDate = moment(vm.date).format("YYYY-MM-DD");
 
 		vm.$onInit = function () {
 			if (!hasShift()) return;
+
 			vm.intervals = getIntervals();
 			vm.projections = getProjections();
-			scrollToScheduleStart();
-			angular.element($window).bind('resize', scrollToScheduleStart);
+			initScrollState();
+			angular.element($window).bind('resize', initScrollState);
+			bindScrollMouseEvent(viewportEl.querySelector('.left-scroll'), -20);
+			bindScrollMouseEvent(viewportEl.querySelector('.right-scroll'), 20);
+		}
+
+		vm.scroll = function (step) {
+			viewportEl.scrollLeft += step;
+			displayScrollButton();
+		}
+
+		vm.toggleSelection = function (projection) {
+			projection.Selected = !projection.Selected;
+			vm.selectedProjection = projection.Selected ? projection : null;
+			vm.personSchedule.Shifts[0].Projections.forEach(function (otherProjection) {
+				if (otherProjection === projection) return;
+				otherProjection.Selected = false;
+				//if (!!otherProjection.ShiftLayerIds) {
+				//	otherProjection.Selected = otherProjection.ShiftLayerIds.some(function (shiftLayerId) {
+				//		return projection.ShiftLayerIds.indexOf(shiftLayerId) >= 0;
+				//	});
+				//	if (otherProjection.Selected) {
+				//		vm.selectedProjection.End = otherProjection.Start
+				//	}
+				//}
+			});
+		}
+
+		var scrollIntervalPromise = null;
+		function cancelScrollIntervalPromise() {
+			if (scrollIntervalPromise) {
+				$interval.cancel(scrollIntervalPromise);
+				scrollIntervalPromise = null;
+			}
+		}
+
+		function bindScrollMouseEvent(el, step) {
+			el.addEventListener('mousedown', function () {
+				cancelScrollIntervalPromise();
+				scrollIntervalPromise = $interval(function () {
+					vm.scroll(step);
+				}, 300);
+			}, false);
+			el.addEventListener('mouseup', function () {
+				cancelScrollIntervalPromise();
+			}, false);
+
 		}
 
 		function getProjections() {
@@ -39,23 +92,38 @@
 			projections.forEach(function (projection) {
 				projection.Left = getTotalMinutes(projection.Start);
 				projection.Width = getTotalMinutes(projection.End) - getTotalMinutes(projection.Start);
+				projection.TimeSpan = getProjectionTimeSpan(projection);
 			});
 
 			return projections;
 		}
 
+		function getProjectionTimeSpan(projection) {
+			var start = moment.tz(projection.Start, vm.timezone);
+			var end = moment.tz(projection.Start, vm.timezone).add(projection.Minutes, 'minute');
+			if (!start.isSame(end, 'day')) {
+				return start.format('YYYY-MM-DD LT') + ' - ' + end.format('YYYY-MM-DD LT');
+			}
+			return start.format('LT') + ' - ' + end.format('LT');
+		}
 
-		function scrollToScheduleStart() {
-			var shiftContainerEl = $element[0].querySelector('.shift-container');
+
+		function initScrollState() {
 			$timeout(function () {
 				var shiftProjectionTimeRange = vm.personSchedule.Shifts[0].ProjectionTimeRange;
 				var shiftStart = getTotalMinutes(shiftProjectionTimeRange.Start);
 				var shiftLength = getTotalMinutes(shiftProjectionTimeRange.End) - shiftStart;
-				var scrollTo = shiftContainerEl.clientWidth <= shiftLength ?
-					(shiftStart - 120) : (shiftStart - ((shiftContainerEl.clientWidth - shiftLength) / 2));
+				var scrollTo = viewportEl.clientWidth <= shiftLength ?
+					(shiftStart - 120) : (shiftStart - ((viewportEl.clientWidth - shiftLength) / 2));
 				if (scrollTo <= 0) return;
-				shiftContainerEl.scrollLeft = scrollTo;
+				viewportEl.scrollLeft = scrollTo;
+				displayScrollButton();
 			});
+		}
+
+		function displayScrollButton() {
+			vm.showScrollLeftButton = viewportEl.scrollLeft > 0;
+			vm.showScrollRightButton = viewportEl.scrollWidth > (viewportEl.scrollLeft + viewportEl.clientWidth);
 		}
 
 		function hasShift() {

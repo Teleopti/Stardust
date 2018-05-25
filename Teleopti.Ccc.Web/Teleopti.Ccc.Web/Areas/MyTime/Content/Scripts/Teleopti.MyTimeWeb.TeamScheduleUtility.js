@@ -773,15 +773,19 @@ Teleopti.MyTimeWeb.TeamScheduleDataProviderMixin = function (ajax, endpoints) {
 			type: 'POST',
 			contentType: 'application/json; charset=utf-8',
 			data: JSON.stringify({
-				selectedDate: date,
-				teamIds: filter.selectedTeams.join(","),
-				searchNameText: filter.searchNameText,
-				filteredStartTimes: filter.filteredStartTimesText.join(","),
-				filteredEndTimes: filter.filteredEndTimesText.join(","),
-				isDayOff: filter.isDayoffFiltered,
-				Take: paging == null ? 20 : paging.take,
-				Skip: paging == null ? 0 : paging.skip,
-				TimeSortOrder: filter.timeSortOrder
+				SelectedDate: date,
+				ScheduleFilter: {
+					teamIds: filter.selectedTeams.join(","),
+					searchNameText: filter.searchNameText,
+					filteredStartTimes: filter.filteredStartTimesText.join(","),
+					filteredEndTimes: filter.filteredEndTimesText.join(","),
+					isDayOff: filter.isDayoffFiltered,
+					TimeSortOrder: filter.timeSortOrder
+				},
+				Paging: {
+					Take: paging == null ? 20 : paging.take,
+					Skip: paging == null ? 0 : paging.skip
+				}
 			}),
 			beforeSend: function () {
 				if (beforeSend != null) beforeSend();

@@ -7,12 +7,11 @@ import {
 	HttpResponse
 } from '@angular/common/http';
 import { Injectable, Provider } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable ,  of } from 'rxjs';
 import { PeopleSearchResult } from '..';
 import { Person, Role } from '../../types';
 import { ROLES } from './roles';
 import { PEOPLE } from './people';
-import { of } from 'rxjs/observable/of';
 import { mergeMap } from 'rxjs/operators';
 import { LOGONS } from './logons';
 

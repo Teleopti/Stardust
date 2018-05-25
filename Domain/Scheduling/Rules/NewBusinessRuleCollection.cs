@@ -58,6 +58,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				},
 				{
 					typeof (ShiftTradeTargetTimeSpecification), BusinessRuleFlags.ShiftTradeTargetTimeRule
+				},
+				{
+					typeof(MaximumWorkdayRule), BusinessRuleFlags.MaximumContinuousWorkTimeRule
 				}
 			};
 

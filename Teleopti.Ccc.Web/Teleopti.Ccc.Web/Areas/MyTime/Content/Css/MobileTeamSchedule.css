@@ -75,7 +75,6 @@
 	width: 100% !important;
 }
 
-
 .formatted-date-text {
 	font-weight: bold;
 	color: white;
@@ -88,21 +87,21 @@
 .mobile-teamschedule-view-body {
 	-webkit-overflow-scrolling: touch;
 	height: calc(100% - 56px);
+	display: flex;
+	justify-content: flex-start;
 	overflow: auto;
 	cursor: pointer;
 	max-width: 100vw;
-	display: flex;
-	justify-content: flex-start;
 	padding-left: 10px;
 	padding-right: 10px;
 }
 
 .mobile-teamschedule-view .mobile-timeline {
-	width: 32px;
+	width: 30px;
+	min-width: 30px;
 	background: transparent;
 	border-right: 1px solid #dfdfdf;
 	position: relative;
-	margin-right: 4px;
 }
 
 .mobile-teamschedule-view .mobile-timeline-label {
@@ -113,14 +112,62 @@
 	white-space: pre-wrap;
 }
 
-.mobile-teamschedule-view .mobile-schedule-container {
-	display: inline-block;
-	width: calc(100% - 36px);
+.my-schedule-column {
+	width: 70px;
+	min-width: 70px;
+	padding: 0 2px;
+	border-right: 2px solid rgba(0, 0, 0, 0.1);
 }
 
-.mobile-schedule-container .data-loading-gif {
-	margin: 100px auto;
-	display: block;
+.my-schedule-column .agent-name,
+.teammates-schedules-column .agent-name {
+	height: 50px;
+	width: 100%;
+	padding: 0 2px;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	white-space: normal;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	text-align: center;
+}
+
+.teammates-schedules-container {
+	overflow-y: hidden;
+	overflow-x: auto;
+	white-space: nowrap;
+	-webkit-overflow-scrolling: touch;
+	font-size: 0;
+	flex-grow: 1;
+}
+
+.teammates-schedules-column {
+	height: 100%;
+	width: 50px;
+	min-width: 50px;
+	padding: 0 7px;
+	border-left: 1px solid rgba(0, 0, 0, 0.1);
+	font-size: 15px;
+	display: inline-block;
+}
+
+div.teammates-schedules-column:last-of-type {
+	border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.mobile-teamschedule-view .mobile-schedule-container {
+	display: inline-block;
+	width: 100%;
+	height: 100%;
+}
+
+.mobile-teamschedule-view .mobile-schedule-container strong {
+	display: inline-block;
+	max-width: 100%;
+	overflow: hidden;
 }
 
 .mobile-teamschedule-view .mobile-schedule-layer {
@@ -128,6 +175,7 @@
 	border-left: 0;
 	border-top: 1px solid #dfdfdf;
 	border-bottom: 1px solid #dfdfdf;
+	width: 100%;
 }
 
 .mobile-teamschedule-view .mobile-schedule-layer:first-of-type {

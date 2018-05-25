@@ -627,42 +627,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void VerifyFindPeopleInTeams()
-		{
-			var person1 = PersonFactory.CreatePerson("person1");
-			var person2 = PersonFactory.CreatePerson("person2");
-			var person3 = PersonFactory.CreatePerson("person3");
-			var site = SiteFactory.CreateSimpleSite("_");
-			var team1 = TeamFactory.CreateSimpleTeam("team1");
-			var team2 = TeamFactory.CreateSimpleTeam("team2");
-			var team3 = TeamFactory.CreateSimpleTeam("team3");
-			site.AddTeam(team1);
-			site.AddTeam(team2);
-			site.AddTeam(team3);
-			var personPeriod1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 12, 12), createPersonContract(), team1);
-			var personPeriod2 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 12, 12), createPersonContract(), team2);
-			var personPeriod3 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 12, 12), createPersonContract(), team3);
-			person1.AddPersonPeriod(personPeriod1);
-			person2.AddPersonPeriod(personPeriod2);
-			person3.AddPersonPeriod(personPeriod3);
-
-			PersistAndRemoveFromUnitOfWork(site);
-			PersistAndRemoveFromUnitOfWork(team1);
-			PersistAndRemoveFromUnitOfWork(team2);
-			PersistAndRemoveFromUnitOfWork(team3);
-			PersistAndRemoveFromUnitOfWork(person1);
-			PersistAndRemoveFromUnitOfWork(person2);
-			PersistAndRemoveFromUnitOfWork(person3);
-
-			var result = target.FindPeopleBelongTeams(new[] { team1, team2 },
-				new DateOnlyPeriod(new DateOnly(2016, 12, 12), new DateOnly(2016, 12, 12)));
-
-			result.Count.Should().Be.EqualTo(2);
-			result.First().Name.Should().Be.EqualTo(person1.Name);
-			result.Last().Name.Should().Be.EqualTo(person2.Name);
-		}
-
-		[Test]
 		public void VerifyFindPersonInOrganizationWithWorkflowControlSet()
 		{
 			SetupPersonsInOrganizationWithContract();

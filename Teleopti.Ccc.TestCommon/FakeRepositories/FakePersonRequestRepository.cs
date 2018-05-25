@@ -72,22 +72,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return RequestRepository.Where(p => p.Person == person).ToList();
 		}
 
-		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, Paging paging)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, DateTimePeriod period)
 		{
 			return RequestRepository;
 		}
-
-		public IEnumerable<IPersonRequest> FindAbsenceAndTextRequests(RequestFilter filter)
-		{
-			int count;
-			return findAllRequests(filter, out count, true);
-		}
-
+		
 		private IEnumerable<IPersonRequest> findAllRequests(RequestFilter filter, out int count, bool ignoreCount = false)
 		{
 			IEnumerable<IPersonRequest> requests;

@@ -118,9 +118,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		bool IsWaitlisted { get; }
 
 		bool IsCancelled { get; }
-
-		// Was manually denied by an administrator.
-		bool WasManuallyDenied { get; }
 			
         /// <summary>
         /// Gets a value indicating whether this instance is approved.

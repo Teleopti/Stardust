@@ -3,9 +3,7 @@
 	public class ForecastScheduleValuePair
 	{
 		public double ForecastValue { get; set; }
-
 		public double ScheduleValue { get; set; }
-
-		public int BrokenMinimumAgents { get; set; }
+		public double BrokenMinimumAgents { get; set; }
 	}
 }
