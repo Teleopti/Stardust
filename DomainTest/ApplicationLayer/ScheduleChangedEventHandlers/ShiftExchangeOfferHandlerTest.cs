@@ -22,12 +22,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 	public class ShiftExchangeOfferHandlerTest
 	{
 		public IComponentContext TempContainer;
+		
 		[Test]
 		[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
-		public void MustNotUseOldHandler()
+		public void OldHandlerShouldHandleLegacyEvents()
 		{
-			Assert.Throws<ComponentNotRegisteredException>(() =>
-				TempContainer.Resolve<ShiftExchangeOfferHandlerHangfire>());
+			Assert.DoesNotThrow(() => TempContainer.Resolve<ShiftExchangeOfferHandlerHangfire>());
 		}
 		
 		[Test]

@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Logon;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel
 {
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
-	[DisabledBy(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
 	public class ShiftExchangeOfferHandlerHangfire :
 		IHandleEvent<ProjectionChangedEvent>,
 		IRunOnHangfire

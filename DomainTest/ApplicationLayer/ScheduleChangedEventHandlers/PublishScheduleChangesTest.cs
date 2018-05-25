@@ -25,10 +25,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 
 		[Test]
 		[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
-		public void MustNotUseOldHandler()
+		public void OldHandlerShouldHandleLegacyEvents()
 		{
-			Assert.Throws<ComponentNotRegisteredException>(() =>
-				TempContainer.Resolve<ScheduleChangesPublisherHangfire>());
+			Assert.DoesNotThrow(() => TempContainer.Resolve<ScheduleChangesPublisherHangfire>());
 		}
 
 		private readonly SignatureCreator signatureCreator =
