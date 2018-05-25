@@ -68,7 +68,6 @@ Wfm_Requests_Approve_Based_On_Minimum_Approval_Time_40274 = RC # can not use it 
 OvertimeRequestUseMostUnderStaffedSkill_47853 = RC
 OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944 = true
 OvertimeRequestSupportMultiSelectionSkillTypes_74945 = true
-OvertimeRequestSupportMultiSelectionSkillTypes_74945 = true
 OvertimeRequestStaffingCheckMethod_74949 = true
 OvertimeRequestChangeBelongsToDateForOverNightShift_74984 = RC
 OvertimeRequestUsePrimarySkillOption_75573 = true
