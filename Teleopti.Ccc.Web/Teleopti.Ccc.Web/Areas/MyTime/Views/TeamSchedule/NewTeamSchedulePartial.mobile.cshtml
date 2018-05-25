@@ -22,6 +22,10 @@
 	ul li ul li.select2-result.select2-highlighted {
 		background: #5ACDF9;
 	}
+	.tooltip.top {
+		margin: 0;
+		min-width: 120px;
+	}
 </style>
 <div class="mobile-teamschedule-view">
 	<div class="navbar navbar-teleopti subnavbar">
@@ -93,33 +97,35 @@
 			<!-- /ko -->
 		</div>
 
-		<div class="teammates-schedules-column relative">
-			<!-- xko foreach: teamSchedules -->
-			<div class="agent-name">
-				<span ></span>
-			</div>
-			<div class="mobile-schedule-container relative" >
-					<!-- xko foreach: layers-->
-					<div class="mobile-schedule-layer absolute">
-						<div >
-							<strong ></strong>
-							<!-- xko if: hasMeeting -->
-							<div class="meeting floatright">
-								<i class="meeting-icon mr10">
-									<i class="glyphicon glyphicon-user ml10"></i>
-								</i>
-							</div>
-							<!-- /xko -->
-							<span class="fullwidth displayblock" ></span>
+		<!-- ko if: teamSchedules -->
+		<div class="teammates-schedules-container" data-bind="style: {height: scheduleContainerHeight + 'px'}">
+			<!-- ko foreach: teamSchedules -->
+			<div class="teammates-schedules-column relative">
+				<div class="agent-name">
+					<span data-bind="text: name"></span>
+				</div>
+				<div class="mobile-schedule-container relative">
+					<!-- ko foreach: layers -->
+					<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-background-image-light': isOvertime, overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime, overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">
+						<div data-bind="visible: showTitle() && !isOvertimeAvailability()"></div>
+						<strong data-bind="visible: false, text: title()"></strong>
+						<!-- ko if: hasMeeting -->
+						<div class="meeting floatright">
+							<i class="meeting-icon mr10">
+								<i class="glyphicon glyphicon-user ml10"></i>
+							</i>
 						</div>
-						<div >
-							<i class="glyphicon glyphicon-time"></i>
-						</div>
+						<!-- /ko -->
+						<span class="fullwidth displayblock" data-bind="visible: false && showDetail, text: timeSpan"></span>
 					</div>
-					<!-- /xko -->
-				<!-- /xko -->
+					<div data-bind="visible: false && showTitle() && isOvertimeAvailability()">
+						<i class="glyphicon glyphicon-time"></i>
+					</div>
+					<!-- /ko -->
+				</div>
 			</div>
-			<!-- /xko -->
+			<!-- /ko -->
 		</div>
+		<!-- /ko -->
 	</div>
 </div>

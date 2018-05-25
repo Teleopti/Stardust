@@ -19,6 +19,8 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function() {
 	self.scheduleContainerHeight = constants.mobileMinScheduleHeight + timeLineOffset;
 	self.timeLines = ko.observableArray();
 	self.mySchedule = ko.observable();
+	self.teamSchedules = ko.observableArray();
+
 	self.filter = {
 		selectedTeamIds: [],
 		filteredStartTimesText: '',
@@ -53,33 +55,51 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function() {
 		self.filter.selectedTeamIds.push(data.DefaultTeam);
 	};
 
-	self.readScheduleData = function(data) {
+	self.readScheduleData = function (data) {
 		self.timeLines(createTimeLine(data.TimeLine));
 
 		//deleteThisFakeScheduleDataFnWhenBackendIsReady(data);
 
-		self.mySchedule({
-			name: data.MySchedule.Name,
-			layers: createMySchedulePeriods(data.MySchedule)
-		});
+		self.mySchedule(createMySchedule(data.MySchedule));
+		self.teamSchedules(createTeamSchedules(data.AgentSchedules));
 	};
 
-	function createMySchedulePeriods(myScheduleData) {
+	function createMySchedule(myScheduleData) {
 		var mySchedulePeriods = [];
-		var layersOnMobile = true;
 
-		myScheduleData.Periods.forEach(function(layer, index, periods) {
-			var layerViewModel = new Teleopti.MyTimeWeb.Schedule.LayerViewModel(
-				layer,
-				null,
-				layersOnMobile,
-				timeLineOffset
-			);
+		myScheduleData.Periods.forEach(function (layer, index, periods) {
+			var layerViewModel = new Teleopti.MyTimeWeb.Schedule.LayerViewModel(layer, null, true, timeLineOffset);
 			layerViewModel.isLastLayer = index == periods.length - 1;
 			mySchedulePeriods.push(layerViewModel);
 		});
 
-		return mySchedulePeriods;
+		return { name: myScheduleData.Name, layers: mySchedulePeriods };
+	}
+
+	function createTeamSchedules(agentSchedulesData) {
+		var teamSchedules = [];
+
+		agentSchedulesData.forEach(function(agentSchedule) {
+			var layers = [];
+			agentSchedule.Periods.forEach(function(layer, index, periods) {
+				var layerViewModel = new Teleopti.MyTimeWeb.Schedule.LayerViewModel(
+					layer,
+					null,
+					true,
+					timeLineOffset
+				);
+				layerViewModel.isLastLayer = index == periods.length - 1;
+
+				layers.push(layerViewModel);
+			});
+
+			teamSchedules.push({
+				name: agentSchedule.Name,
+				layers: layers
+			});
+		});
+
+		return teamSchedules;
 	}
 
 	function createTimeLine(timeLine) {
@@ -153,6 +173,45 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function() {
 			"DayOfWeekNumber": "",
 			"HasNotScheduled": ""
 		};
+
+		for(var i = 0; i < 20; i++) {
+			data.AgentSchedules[i] = {
+				"Name": "Agent 1",
+				"StartTimeUtc": "2018-05-24T05:00:00",
+				"PersonId": "b46a2588-8861-42e3-ab03-9b5e015b257c",
+				"MinStart": null,
+				"Total": 1,
+				"DayOffName": null,
+				"ContractTimeInMinute": 480.0,
+				"Date": "",
+				"FixedDate": "",
+				"Header": "",
+				"HasMainShift": "",
+				"HasOvertime": "",
+				"IsFullDayAbsence": false,
+				"IsDayOff": false,
+				"Summary": "",
+				"Periods": [
+					{
+						"Title": "Phone",
+						"TimeSpan": fistTimeLine.Time + '-' + lastTimeLine.Time,
+						"StartTime": moment().format(dateOnlyFormat) + 'T' + fistTimeLine.Time,
+						"EndTime": moment().format(dateOnlyFormat) + 'T' + data.TimeLine[data.TimeLine.length - 1].Time,
+						"Summary": "",
+						"StyleClassName": "",
+						"Meeting": null,
+						"StartPositionPercentage": fistTimeLine.PositionPercentage,
+						"EndPositionPercentage": lastTimeLine.PositionPercentage,
+						"Color": "#80FF80",
+						"IsOvertime": false,
+						"IsAbsenceConfidential": false,
+						"TitleTime": fistTimeLine.Time + '-' + lastTimeLine.Time
+					}
+				],
+				"DayOfWeekNumber": "",
+				"HasNotScheduled": ""
+			}
+		}
 
 		return data;
 	}

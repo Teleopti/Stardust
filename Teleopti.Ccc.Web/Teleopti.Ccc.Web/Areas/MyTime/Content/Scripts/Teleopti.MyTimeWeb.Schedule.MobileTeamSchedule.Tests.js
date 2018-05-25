@@ -255,6 +255,48 @@
 		equal($('.mobile-teamschedule-view .my-schedule-column .mobile-schedule-layer strong').text(), 'Phone');
 	});
 
+	test('should render teammates\'s schedules', function () {
+		var html = [
+			'<!-- ko if: teamSchedules -->',
+			'<div class="teammates-schedules-container" data-bind="style: {height: scheduleContainerHeight + \'px\'}">',
+			'	<!-- ko foreach: teamSchedules -->',
+			'	<div class="teammates-schedules-column relative">',
+			'		<div class="agent-name">',
+			'			<span data-bind="text: name"></span>',
+			'		</div>',
+			'		<div class="mobile-schedule-container relative">',
+			'			<!-- ko foreach: layers -->',
+			'			<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: \'click\' }, style: styleJson, css:{\'overtime-background-image-light\': isOvertime, overTimeLighterBackgroundStyle, \'overtime-background-image-dark\': isOvertime, overTimeDarkerBackgroundStyle, \'last-layer\': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">',
+			'				<div data-bind="visible: showTitle() && !isOvertimeAvailability()"></div>',
+			'				<strong data-bind="visible: false, text: title()"></strong>',
+			'				<!-- ko if: hasMeeting -->',
+			'				<div class="meeting floatright">',
+			'					<i class="meeting-icon mr10">',
+			'						<i class="glyphicon glyphicon-user ml10"></i>',
+			'					</i>',
+			'				</div>',
+			'				<!-- /ko -->',
+			'				<span class="fullwidth displayblock" data-bind="visible: false && showDetail, text: timeSpan"></span>',
+			'			</div>',
+			'			<div data-bind="visible: false && showTitle() && isOvertimeAvailability()">',
+			'				<i class="glyphicon glyphicon-time"></i>',
+			'			</div>',
+			'			<!-- /ko -->',
+			'		</div>',
+			'	</div>',
+			'	<!-- /ko -->',
+			'</div>',
+			'<!-- /ko -->'].join("");
+
+		$('.mobile-teamschedule-view').append(html);
+
+		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+
+		equal($('.mobile-teamschedule-view .teammates-schedules-column .agent-name span').text(), 'Jon Kleinsmith');
+		equal($('.mobile-teamschedule-view .teammates-schedules-column .mobile-schedule-layer').length, 1);
+		equal($('.mobile-teamschedule-view .teammates-schedules-column .mobile-schedule-layer strong:visible').length, 0);
+	});
+
 	function setUpFakeData() {
 		fakeAvailableTeamsData = {
 			allTeam: { id: 'allTeams', text: 'All Teams' },
@@ -290,7 +332,7 @@
 				{
 					"Name": "Jon Kleinsmith",
 					"StartTimeUtc": "2018-05-24T05:00:00",
-					"PersonId": "b46a2588-8861-42e3-ab03-9b5e015b257c",
+					"PersonId": "a74e1f94-6331-4a7f-9746-9b5e015b257c",
 					"MinStart": null,
 					"Total": 1,
 					"DayOffName": null,
@@ -305,7 +347,7 @@
 					"Summary": "",
 					"Periods": [
 						{
-							"Title": "Phone",
+							"Title": "Email",
 							"TimeSpan": "05:00 - 06:45",
 							"StartTime": "2018-05-24T05:00:00",
 							"EndTime": "2018-05-24T06:45:00",
