@@ -195,22 +195,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I pick the skill '(.*)'")]
 		public void GivenIPickTheSkill(string skillName)
 		{
-			Browser.Interactions.AssertExists("skill-picker");
-			var javascript = "var scope = angular.element(document.querySelector('skill-picker')).scope();" +
-							 "var skillet = scope.vm.skills.find(function(e){{return e.Name === '" + skillName + "'}});" +
-							 "scope.vm.selectedSkill = skillet;" +
-							 "scope.vm.selectSkillOrSkillArea(skillet);";
-
-			Browser.Interactions.Javascript(javascript);
+			Browser.Interactions.AssertExists("the-skill-picker");
+			Browser.Interactions.ClickVisibleOnly("the-skill-picker .con-flex:nth-child(1n) div.wfm-form input");
+			Browser.Interactions.ClickContaining("the-skill-picker .con-flex:nth-child(1n) div.wfm-form .wfm-dropdown-panel li", skillName);
 		}
 
 		[Given(@"I pick the skillgroup '(.*)'")]
 		[When(@"I pick the skillgroup '(.*)'")]
 		public void GivenIPickTheSkillGroup(string skillName)
 		{
-			//Browser.SetDefaultTimeouts(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(1));
 			Browser.Interactions.AssertExists("the-skill-picker");
-
 			Browser.Interactions.ClickVisibleOnly("the-skill-picker .con-flex:nth-child(2n) div.wfm-form input");
 			Browser.Interactions.ClickContaining("the-skill-picker .con-flex:nth-child(2n) div.wfm-form .wfm-dropdown-panel li", skillName);
 		}

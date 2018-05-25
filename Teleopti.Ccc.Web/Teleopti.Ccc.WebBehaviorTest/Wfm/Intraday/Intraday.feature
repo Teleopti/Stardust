@@ -1,4 +1,5 @@
-﻿@WFM
+﻿@Ignore
+@WFM
 Feature: Intraday
 In order to be in control of my part of the business
 As an intraday analyst
