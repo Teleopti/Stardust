@@ -106,8 +106,8 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
-    <Reference Include="TechTalk.SpecFlow, Version=2.3.2.0, Culture=neutral, PublicKeyToken=0778194805d6db41, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SpecFlow.2.3.2\lib\net45\TechTalk.SpecFlow.dll</HintPath>
+    <Reference Include="TechTalk.SpecFlow, Version=2.2.0.0, Culture=neutral, PublicKeyToken=0778194805d6db41, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SpecFlow.2.2.0\lib\net45\TechTalk.SpecFlow.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -1588,13 +1588,6 @@ copy "$(SolutionDir)packages\Selenium.WebDriver.2.53.0\lib\net40\webdriver.dll" 
 copy "$(SolutionDir)packages\Selenium.Support.2.53.0\lib\net40\WebDriver.Support.dll" "$(TargetDir)webdriver.support.dll"
 copy "$(SolutionDir)packages\WebDriver.ChromeDriver.win32.2.37.0\content\chromedriver.exe" "$(TargetDir)chromedriver.exe"</PostBuildEvent>
   </PropertyGroup>
-  <Import Project="..\..\packages\SpecFlow.2.3.2\build\SpecFlow.targets" Condition="Exists('..\..\packages\SpecFlow.2.3.2\build\SpecFlow.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\SpecFlow.2.3.2\build\SpecFlow.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SpecFlow.2.3.2\build\SpecFlow.targets'))" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
