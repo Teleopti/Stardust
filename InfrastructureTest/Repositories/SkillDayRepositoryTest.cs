@@ -18,9 +18,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-	/// <summary>
-	/// Tests for SkillDayRepository
-	/// </summary>
 	[TestFixture]
 	[Category("BucketB")]
 	public class SkillDayRepositoryTest : RepositoryTest<ISkillDay>
