@@ -10835,13 +10835,6 @@ Teleopti R&amp;D</value>
   <data name="Planned" xml:space="preserve">
     <value>已计划的</value>
   </data>
-  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
-    <value>恭喜您！产品激活密钥已被应用．您现在是这个屡获殊荣的WFM解决方案的授权使用者。
-当前应用程序将被关闭。
-
-重要：
-为了获得全部的服务及Web应用程序功能，请让您的IT部门在服务器上执行“Restart Teleopti WFM” （开始菜单--&gt;Teleopti文件夹）</value>
-  </data>
   <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
     <value>您的产品激活密钥已经过期，请申请新的</value>
   </data>
@@ -13514,9 +13507,6 @@ Teleopti R&amp;D</value>
   <data name="DayOffRule" xml:space="preserve">
     <value>休息日规则</value>
   </data>
-  <data name="DayOffRuleAppliedFilters" xml:space="preserve">
-    <value>以下设置被应用于以下座席分组 {0}</value>
-  </data>
   <data name="DayOffRuleSetting" xml:space="preserve">
     <value>休息日规则设置</value>
   </data>
@@ -13861,9 +13851,6 @@ Teleopti R&amp;D</value>
   <data name="OvertimeRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
     <value>加班申请 {0} 已被拒绝。</value>
   </data>
-  <data name="NoAvailableSkillForOvertime" xml:space="preserve">
-    <value>座席代表无可用技能以申请加班</value>
-  </data>
   <data name="PeriodIsOutOfSkillOpenHours" xml:space="preserve">
     <value>申请周期超出技能开放时间</value>
   </data>
@@ -13899,30 +13886,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="SeveralGroupsSelected" xml:space="preserve">
     <value>已选定 {0} 个组</value>
-  </data>
-  <data name="TheSkillWithNameIsNotDefinedInTheSystem" xml:space="preserve">
-    <value>技能名称 {0} 未在系统中定义。</value>
-  </data>
-  <data name="SkillDefinedMultipleTimesInTheSystem" xml:space="preserve">
-    <value>技能名称 {0} 已在系统中定义了 {1} 次。当使用此功能时仅允许一次。 </value>
-  </data>
-  <data name="BpoLineHasIncorrectParameterCount" xml:space="preserve">
-    <value>一行中有 {0} 个参数，但只需要 {1} 个参数。</value>
-  </data>
-  <data name="ErrorFoundOnLineNumberXWithContentsY" xml:space="preserve">
-    <value>行数 {0} 中发现错误内容：{1} {2}</value>
-  </data>
-  <data name="ParameterCannotBeEmpty" xml:space="preserve">
-    <value>参数 {0} 不能为空</value>
-  </data>
-  <data name="InvalidFieldNameInHeader" xml:space="preserve">
-    <value>页眉包含无效字段名称: '{0}'. 有效的字段名称为: ({1})</value>
-  </data>
-  <data name="TheImportFileCannotBeEmpty" xml:space="preserve">
-    <value>导入文件不能为空。</value>
-  </data>
-  <data name="FirstLineInFileHeaderLineCannotBeEmpty" xml:space="preserve">
-    <value>文件中第一行（页面一行）不能为空。</value>
   </data>
   <data name="OpenSite" xml:space="preserve">
     <value>进入站点</value>
@@ -14041,9 +14004,6 @@ Teleopti R&amp;D</value>
   <data name="NotShowingReforcastedAgents" xml:space="preserve">
     <value>当前选择无法显示重新预测的座席代表数.</value>
   </data>
-  <data name="ShiftTradeSpecification" xml:space="preserve">
-    <value>调换班说明</value>
-  </data>
   <data name="EditPlanGroupSchedulingSetting" xml:space="preserve">
     <value>编辑排班设置</value>
   </data>
@@ -14106,5 +14066,604 @@ Teleopti R&amp;D</value>
   </data>
   <data name="ManagePlanningGroupSchedulingSetting" xml:space="preserve">
     <value>为计划组 {0} 管理排班设置</value>
+  </data>
+  <data name="OvertimeRequests" xml:space="preserve">
+    <value>加班申请</value>
+  </data>
+  <data name="ShiftTradeResendMessage" xml:space="preserve">
+    <value>申请已被重新发送。</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonInvalidPeriod" xml:space="preserve">
+    <value>您的加班申请已被自动拒绝。可申请的周期为 {0}。</value>
+  </data>
+  <data name="ShiftTradeRequestForExchangeOfferHasBeenCompleted" xml:space="preserve">
+    <value>此调换班请求已被其他座席代表完成。</value>
+  </data>
+  <data name="MaximumContinuousWorkTimeRuleName" xml:space="preserve">
+    <value>最多连续工作时间</value>
+  </data>
+  <data name="ThereIsNoAvailableSkillForOvertime" xml:space="preserve">
+    <value>没有可申请加班的技能</value>
+  </data>
+  <data name="ImportBpoTheSkillWithNameIsNotDefinedInTheSystem" xml:space="preserve">
+    <value>系统中没有定义名称为 {0} 的技能。</value>
+  </data>
+  <data name="ImportBpoSkillDefinedMultipleTimesInTheSystem" xml:space="preserve">
+    <value>系统中名称为 {0} 的技能已被定义了 {1} 此。使用此功能时仅允许一次。</value>
+  </data>
+  <data name="ImportBpoLineHasIncorrectParameterCount" xml:space="preserve">
+    <value>行中包含 {0} 个参数，但需要 {1} 个参数。</value>
+  </data>
+  <data name="ImportBpoErrorFoundOnLineNumberXWithContentsY" xml:space="preserve">
+    <value>发现错误在第 {0} 行，包含信息： "{1}" {2}</value>
+  </data>
+  <data name="ImportBpoParameterCannotBeEmpty" xml:space="preserve">
+    <value>参数 {0} 不能为空</value>
+  </data>
+  <data name="ImportBpoInvalidFieldNameInHeader" xml:space="preserve">
+    <value>页头: '{0}' 包含无效栏位名称。无效的栏位名称为：({1})</value>
+  </data>
+  <data name="ImportBpoTheImportFileCannotBeEmpty" xml:space="preserve">
+    <value>导入文件不能为空。</value>
+  </data>
+  <data name="ImportBpoFirstLineInFileHeaderLineCannotBeEmpty" xml:space="preserve">
+    <value>文件中的首行不能为空。</value>
+  </data>
+  <data name="NoOvertimeType" xml:space="preserve">
+    <value>未在您的合同设置中找到加班类型。请联系您的管理员。</value>
+  </data>
+  <data name="OvertimeShortName" xml:space="preserve">
+    <value>加班</value>
+  </data>
+  <data name="ExportSchedule" xml:space="preserve">
+    <value>导出班表</value>
+  </data>
+  <data name="ExportSchedulesMaximumDays" xml:space="preserve">
+    <value>最多可选择31天</value>
+  </data>
+  <data name="ExportSchedulesMaximumOptionalColumns" xml:space="preserve">
+    <value>最多可选择3个自定义栏位</value>
+  </data>
+  <data name="ShiftTradeTargetTimeRuleName" xml:space="preserve">
+    <value>合同时间容差</value>
+  </data>
+  <data name="MaximumOvertimeRuleName" xml:space="preserve">
+    <value>最大加班时间</value>
+  </data>
+  <data name="ShowStaffing" xml:space="preserve">
+    <value>显示人力</value>
+  </data>
+  <data name="Feedback" xml:space="preserve">
+    <value>让我们知道您的想法</value>
+  </data>
+  <data name="UserSettings" xml:space="preserve">
+    <value>用户设置</value>
+  </data>
+  <data name="ShiftStartsDayBeforeOrAfter" xml:space="preserve">
+    <value>{0:d}: 班次不允许开始于该日期之前或之后。这可能是因为座席代表在人员模块中的时区设置被更改。请修正时区设置或直接点击删除改日期。</value>
+  </data>
+  <data name="MaximumAgentToExport" xml:space="preserve">
+    <value>您每次最多可到处1000个座席代表的班表，您正在导出{0}。</value>
+  </data>
+  <data name="SelectedGroups" xml:space="preserve">
+    <value>已选定的组</value>
+  </data>
+  <data name="PriorityHigher" xml:space="preserve">
+    <value>高优先级</value>
+  </data>
+  <data name="PriorityLower" xml:space="preserve">
+    <value>低优先级</value>
+  </data>
+  <data name="MaxResultsReached" xml:space="preserve">
+    <value>关键字的搜索结果将超过 {0}, 请优化您的搜索条件。</value>
+  </data>
+  <data name="RequestDenyReasonNoPersonSkillOpen" xml:space="preserve">
+    <value>申请被拒绝，因为所有技能在申请周期内已关闭。</value>
+  </data>
+  <data name="OvertimeRequestDatePeriodError" xml:space="preserve">
+    <value>有效日期范围 {0} - {1}</value>
+  </data>
+  <data name="OvertimeRequestRollingPeriodError" xml:space="preserve">
+    <value>有效范围 0 - {0}</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonClosedPeriod" xml:space="preserve">
+    <value>您的加班申请已被拒绝。一些日期当前未开放申请。</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonAutodeny" xml:space="preserve">
+    <value>管理员已禁用了全部或部分申请周期的加班申请审批。</value>
+  </data>
+  <data name="StartTimeNotMatchingShiftBag" xml:space="preserve">
+    <value>开始时间 {0:HH:mm} 在 {1:d} 的班次 不存在于班次包 {2}</value>
+  </data>
+  <data name="ShiftNotMatchingShiftBag" xml:space="preserve">
+    <value>在日期 {0:d} 的班次不存在于班次包 {1}</value>
+  </data>
+  <data name="OpenForOvertimeRequests" xml:space="preserve">
+    <value>开放加班申请</value>
+  </data>
+  <data name="OvertimeRequestMaximum" xml:space="preserve">
+    <value>每个日历月最大加班时间：</value>
+  </data>
+  <data name="OvertimeRequestMaximumTimeHandleType" xml:space="preserve">
+    <value>当验证失败：</value>
+  </data>
+  <data name="OvertimeRequestMaximumTimeDenyReason" xml:space="preserve">
+    <value>{0} 包含太多加班 ({1}). 最大值是 {2}.</value>
+  </data>
+  <data name="OvertimeRequestContinuousWorkTimeDenyReason" xml:space="preserve">
+    <value>{0} 包含太多连续的工作时间 ({1}). 最大值是 {2}.</value>
+  </data>
+  <data name="OvertimeRequestMaximumContinuousWorkTime" xml:space="preserve">
+    <value>最多连续工作时间：</value>
+  </data>
+  <data name="OvertimeRequestMinimumRestTimeThreshold" xml:space="preserve">
+    <value>最少休息时间：</value>
+  </data>
+  <data name="ExistingShiftNotMatchShift" xml:space="preserve">
+    <value>在 {0:d} 的班次与{1:d} 的班次不相符。</value>
+  </data>
+  <data name="ExistingShiftNotMatchShiftCategory" xml:space="preserve">
+    <value>班次类别 {0} 在 {1:d} 与班次类别 {2} 在 {3:d} 不相符。</value>
+  </data>
+  <data name="ExistingShiftNotMatchStartTime" xml:space="preserve">
+    <value>开始时间 {0:HH:mm} 在日期 {1:d} 与开始时间 {2:HH:mm} 在日期 {3:d} 不相符。</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonNoPeriod" xml:space="preserve">
+    <value>您的加班申请已被拒绝。申请周期内的某些天未开放申请。您可在以下周期内发送申请: {0}。</value>
+  </data>
+  <data name="ShiftCategoryNotMatchingShiftBag" xml:space="preserve">
+    <value>班次类别 {0} 在日期{1:d} 不存在于班次包 {2}。</value>
+  </data>
+  <data name="ContractWorkRuleValidation" xml:space="preserve">
+    <value>合同工作规则验证</value>
+  </data>
+  <data name="GamificationSettings" xml:space="preserve">
+    <value>游戏化设置</value>
+  </data>
+  <data name="SelectOneOrMoreSites" xml:space="preserve">
+    <value>选择一个或多个站点</value>
+  </data>
+  <data name="SetGamificationTargets" xml:space="preserve">
+    <value>设置游戏化目标</value>
+  </data>
+  <data name="AppliedSetting" xml:space="preserve">
+    <value>已应用的设置</value>
+  </data>
+  <data name="BlockSchedulingNotWorkingWhenUsingPreferences" xml:space="preserve">
+    <value>当使用偏好时批次排班可能失效</value>
+  </data>
+  <data name="IntraDayChipNumberOf" xml:space="preserve">
+    <value>于</value>
+  </data>
+  <data name="AllSkillGroups" xml:space="preserve">
+    <value>所有技能组</value>
+  </data>
+  <data name="ExitSGM" xml:space="preserve">
+    <value>退出技能组管理器</value>
+  </data>
+  <data name="AreYouSureYouWantToExitSGM" xml:space="preserve">
+    <value>您有未保存的技能组。您确定要离开技能组管理器吗？</value>
+  </data>
+  <data name="AvailableSkills" xml:space="preserve">
+    <value>可用技能</value>
+  </data>
+  <data name="CreateNewSkillGroup" xml:space="preserve">
+    <value>创建新的技能组</value>
+  </data>
+  <data name="DoYouWantToDeleteSkillGroup" xml:space="preserve">
+    <value>删除技能组</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteTheSkillGroup" xml:space="preserve">
+    <value>您确定要删除技能组吗</value>
+  </data>
+  <data name="ManageSkillGroups" xml:space="preserve">
+    <value>管理技能组</value>
+  </data>
+  <data name="SelectSite" xml:space="preserve">
+    <value>选择站点</value>
+  </data>
+  <data name="SelectTeam" xml:space="preserve">
+    <value>选择小组</value>
+  </data>
+  <data name="UnselectSite" xml:space="preserve">
+    <value>反选站点</value>
+  </data>
+  <data name="UnselectTeam" xml:space="preserve">
+    <value>反选小组</value>
+  </data>
+  <data name="ThresholdForBadge" xml:space="preserve">
+    <value>徽章阈值：</value>
+  </data>
+  <data name="ThresholdForGoldBadge" xml:space="preserve">
+    <value>青铜徽章阈值：</value>
+  </data>
+  <data name="ThresholdForSilverBadge" xml:space="preserve">
+    <value>金色徽章阈值：</value>
+  </data>
+  <data name="ThresholdForBronzeBadge" xml:space="preserve">
+    <value>银色徽章阈值：</value>
+  </data>
+  <data name="DenyReasonSystemBusy" xml:space="preserve">
+    <value>由于系统正忙，您的申请已被拒绝。请稍后重试。</value>
+  </data>
+  <data name="DenyReasonNoSkillCombinationsFound" xml:space="preserve">
+    <value>由于系统无法在申请周期内找到人力数据，您的申请已被拒绝。</value>
+  </data>
+  <data name="YourScheduleHasChanged" xml:space="preserve">
+    <value>您的班表已变更！</value>
+  </data>
+  <data name="AnErrorOccurredWhenUploadingTheFile" xml:space="preserve">
+    <value>上传文件时发生错误</value>
+  </data>
+  <data name="ImportExternalData" xml:space="preserve">
+    <value>导入外部数据</value>
+  </data>
+  <data name="UploadAndStart" xml:space="preserve">
+    <value>上传并开始</value>
+  </data>
+  <data name="InvalidNumberOfFields" xml:space="preserve">
+    <value>每行必须有 {0} 个字段。 此行有 {1} 个。</value>
+  </data>
+  <data name="MeasureNameIsTooLong" xml:space="preserve">
+    <value>名称过长</value>
+  </data>
+  <data name="AgentIdIsTooLong" xml:space="preserve">
+    <value>Agent ID 过长</value>
+  </data>
+  <data name="MeasureTypeMustBeEitherNumericOrPercent" xml:space="preserve">
+    <value>测量类型必须为"数字“或”百分比“</value>
+  </data>
+  <data name="MeasureTypeNotMatchExistingDefinition" xml:space="preserve">
+    <value>测量类型个与现有定义不符</value>
+  </data>
+  <data name="MeasureIdMustContainAnInteger" xml:space="preserve">
+    <value>ID必须包含一个整数</value>
+  </data>
+  <data name="RowExceedsLimitOfGamificationMeasures" xml:space="preserve">
+    <value>游戏化测量值有一个 {0} 的限制.此行不能被导入因为会超过此限制. </value>
+  </data>
+  <data name="InvalidScore" xml:space="preserve">
+    <value>无效得分</value>
+  </data>
+  <data name="AgentIdCouldNotBeMatchedToAnyAgent" xml:space="preserve">
+    <value>此agent ID无法对应任何座席代表</value>
+  </data>
+  <data name="BusinessHierarchy" xml:space="preserve">
+    <value>组织架构</value>
+  </data>
+  <data name="GroupPages" xml:space="preserve">
+    <value>分组页面</value>
+  </data>
+  <data name="SelectEndDate" xml:space="preserve">
+    <value>请选择结束日期</value>
+  </data>
+  <data name="SelectStartDate" xml:space="preserve">
+    <value>请选择开始日期</value>
+  </data>
+  <data name="SelectStartDateAndEndDate" xml:space="preserve">
+    <value>请选择开始日期和结束日期</value>
+  </data>
+  <data name="ValidateEndDate" xml:space="preserve">
+    <value>结束日期应晚于开始日期</value>
+  </data>
+  <data name="ValidateStartDate" xml:space="preserve">
+    <value>开始日期应早于结束日期</value>
+  </data>
+  <data name="NoPermissionToViewWFMModuleErrorMessage" xml:space="preserve">
+    <value>您没有权限查看{0}.</value>
+  </data>
+  <data name="GamificationViewImportFileFormat" xml:space="preserve">
+    <value>查看导入文件格式详情</value>
+  </data>
+  <data name="BpoExportPeriodStartDateBeforeEndDate" xml:space="preserve">
+    <value>导出周期的开始日期必须早于结束日期</value>
+  </data>
+  <data name="BpoOnlyExportPeriodBetweenDates" xml:space="preserve">
+    <value>导出周期必须在日期时段{0}之中.</value>
+  </data>
+  <data name="BpoExportYouMustSelectASkill" xml:space="preserve">
+    <value>必须选择一个技能</value>
+  </data>
+  <data name="DragAndDropYourCsvFileOrClickToSelect" xml:space="preserve">
+    <value>将您的CSV文件拖拽到此处或点击以选择</value>
+  </data>
+  <data name="AgentIdIsMandatory" xml:space="preserve">
+    <value>必须填写Agent ID</value>
+  </data>
+  <data name="MeasureNameIsMandatory" xml:space="preserve">
+    <value>必须填写测量名称</value>
+  </data>
+  <data name="RtaConfigurationIssuesFound" xml:space="preserve">
+    <value>发现配置问题</value>
+  </data>
+  <data name="LoggedOutStateGroupMissingInConfiguration" xml:space="preserve">
+    <value>业务单元 '{0}' 没有指定一个座席代表登出的状态组。请设置好后以使用状态快照功能。请在客户端选项中进行设置。</value>
+  </data>
+  <data name="LoggedOutStateGroupMissingInRtaService" xml:space="preserve">
+    <value>实时遵守度服务没有指定一个座席代表登出的状态组。请设置好后以使用状态快照功能。请在客户端选项中进行设置并等待服务缓存更新。</value>
+  </data>
+  <data name="DefaultStateGroupMissingInConfiguration" xml:space="preserve">
+    <value>业务单元 '{0}' 没有指定一个座席代表默认的状态组。请设置好后以使用未识别的状态。请在客户端选项中进行设置。</value>
+  </data>
+  <data name="PickATemplate" xml:space="preserve">
+    <value>选择一个模板</value>
+  </data>
+  <data name="RemoveDayOff" xml:space="preserve">
+    <value>移除一个休息日</value>
+  </data>
+  <data name="ExportAvailableLimitedTime" xml:space="preserve">
+    <value>请注意”导出到“即将被移除。</value>
+  </data>
+  <data name="AreYouSureToRemoveSelectedDayOff" xml:space="preserve">
+    <value>您确认想要为座席代表{1}移除 {0} 个休息日吗？</value>
+  </data>
+  <data name="FinishedRemoveDayOff" xml:space="preserve">
+    <value>休息日已成功移除。</value>
+  </data>
+  <data name="PartialSuccessMessageForAddingDayOff" xml:space="preserve">
+    <value>为座席代表 {0} 添加休息日，{1} 个成功，{2} 个失败。</value>
+  </data>
+  <data name="PartialSuccessMessageForRemovingDayOff" xml:space="preserve">
+    <value>为座席代表 {0} 移除休息日，{1} 个成功，{2} 个失败。</value>
+  </data>
+  <data name="SuccessfulMessageForAddingDayOff" xml:space="preserve">
+    <value>已为选定座席代表成功添加休息日。</value>
+  </data>
+  <data name="TheImportFailed" xml:space="preserve">
+    <value>导入失败！</value>
+  </data>
+  <data name="YouCanEnable3MeasuresAtMaximum" xml:space="preserve">
+    <value>您最多可启用3个测量指标。</value>
+  </data>
+  <data name="ImportBpoStartDateTimeMustBeBeforeEndDateTime" xml:space="preserve">
+    <value>周期的开始日期必须早于结束日期。</value>
+  </data>
+  <data name="ImportBpoResourcesCannotBeLessThanZero" xml:space="preserve">
+    <value>座席代表数不能小于0.</value>
+  </data>
+  <data name="ImportBpoSkillNotFound" xml:space="preserve">
+    <value>导入的技能无法匹配已有的技能。</value>
+  </data>
+  <data name="ImportBpoNoDefaultResolutionForSkill" xml:space="preserve">
+    <value>技能 {0} 没有找到时段长度。</value>
+  </data>
+  <data name="ImportBpoResourceIntervalLengthDiffersFromTheSkill" xml:space="preserve">
+    <value>导入的座席代表的时段长度 ({0} 分钟) 与技能 {1} 的时段长度不匹配({2} 分钟)。</value>
+  </data>
+  <data name="ImportBpoSourceNameTooLong" xml:space="preserve">
+    <value>BPO源名称太长。最多允许100个字符。</value>
+  </data>
+  <data name="ImportBpoSkillListedMoreThanOnce" xml:space="preserve">
+    <value>技能 {0} 在同一行中出现多次。</value>
+  </data>
+  <data name="NoEndToDisplay" xml:space="preserve">
+    <value>没有结束日期可显示</value>
+  </data>
+  <data name="NoStartAndEndDateToDisplay" xml:space="preserve">
+    <value>没有开始日期和结束日期可显示</value>
+  </data>
+  <data name="NoStartDateToDisplay" xml:space="preserve">
+    <value>没有开始日期可显示</value>
+  </data>
+  <data name="SetupIntervalLength" xml:space="preserve">
+    <value>请设置您的时段长度</value>
+  </data>
+  <data name="GamificationSettingsMovedToWeb" xml:space="preserve">
+    <value>游戏化设置现在可在Teleopti WFM网页门户中使用。</value>
+  </data>
+  <data name="GamificationSettingsRedirectWebManualMessage" xml:space="preserve">
+    <value>点击此处以手动打开游戏化设置页面。</value>
+  </data>
+  <data name="GamificationSettingsRedirectWebMessage" xml:space="preserve">
+    <value>当您打开此页面时游戏化设置页面应自动加载。</value>
+  </data>
+  <data name="SkillType" xml:space="preserve">
+    <value>技能类型</value>
+  </data>
+  <data name="UseDefaultStartTime" xml:space="preserve">
+    <value>使用默认开始时间</value>
+  </data>
+  <data name="Measures" xml:space="preserve">
+    <value>测量</value>
+  </data>
+  <data name="ValuesShouldBeInAscendingOrderFromGoldToBronze" xml:space="preserve">
+    <value>数值应按从金到铜升序排列。</value>
+  </data>
+  <data name="ValuesShouldBeInDescendingOrderFromGoldToBronze" xml:space="preserve">
+    <value>数值应按从金到铜降序排列。</value>
+  </data>
+  <data name="TextIsTooLong" xml:space="preserve">
+    <value>文本太长</value>
+  </data>
+  <data name="InvalidHoursRange" xml:space="preserve">
+    <value>周期小时数不能超过 {0} 个小时。</value>
+  </data>
+  <data name="AgentsAnalyzed" xml:space="preserve">
+    <value>正在分析限制规则</value>
+  </data>
+  <data name="AgentsThatFailedInspection" xml:space="preserve">
+    <value>座席代表检查失败</value>
+  </data>
+  <data name="ManyAgentsAlert" xml:space="preserve">
+    <value>已选择了{0}个座席代表， 点击刷新开始分析</value>
+  </data>
+  <data name="RestrictionNotAbleToBeScheduledReasonNightlyRestMightBeBroken" xml:space="preserve">
+    <value>夜间休息时间规则将被打破</value>
+  </data>
+  <data name="PrimaryReason" xml:space="preserve">
+    <value>主要原因</value>
+  </data>
+  <data name="RestrictionNotAbleToBeScheduledReasonTooLittleWorkTimeInPeriod" xml:space="preserve">
+    <value>此周期导致了太少的工作时间</value>
+  </data>
+  <data name="RestrictionNotAbleToBeScheduledReasonTooMuchWorkTimeInPeriod" xml:space="preserve">
+    <value>此周期导致了太多的工作时间</value>
+  </data>
+  <data name="RequestStartDate" xml:space="preserve">
+    <value>开始日期</value>
+  </data>
+  <data name="RequestEndDate" xml:space="preserve">
+    <value>结束日期</value>
+  </data>
+  <data name="Changes" xml:space="preserve">
+    <value>变更</value>
+  </data>
+  <data name="RestrictionNotAbleToBeScheduledReasonTooManyDaysOff" xml:space="preserve">
+    <value>周期内有太多的休息日</value>
+  </data>
+  <data name="RecordedOutOfAdherence" xml:space="preserve">
+    <value>已记录为未遵时</value>
+  </data>
+  <data name="ApprovedAsInAdherence" xml:space="preserve">
+    <value>已批准为遵时</value>
+  </data>
+  <data name="DuplicateName" xml:space="preserve">
+    <value>重复的名字</value>
+  </data>
+  <data name="YouGotANewBronzeBadge" xml:space="preserve">
+    <value>您获得了新的青铜徽章于 {0} 在 {1}。</value>
+  </data>
+  <data name="RestrictionNotAbleToBeScheduledReasonConflictingRestrictions" xml:space="preserve">
+    <value>限制规则冲突</value>
+  </data>
+  <data name="YouGotANewGoldBadge" xml:space="preserve">
+    <value>您获得了新的金色徽章于 {0} 在 {1}。</value>
+  </data>
+  <data name="YouGotANewSilverBadge" xml:space="preserve">
+    <value>您获得了新的银色徽章于 {0} 在 {1}。</value>
+  </data>
+  <data name="ImportBpoShowingTheFirstXErrorMessagesOfY" xml:space="preserve">
+    <value>正在显示 {0} 个错误信息，总数为 {1}。</value>
+  </data>
+  <data name="RemoveShift" xml:space="preserve">
+    <value>移除班次</value>
+  </data>
+  <data name="AreYouSureToRemoveSelectedShift" xml:space="preserve">
+    <value>您是否希望为座席代表 {1} 移除班次 {0} ?</value>
+  </data>
+  <data name="NoPermissionRemovingShift" xml:space="preserve">
+    <value>没有权限为座席代表移除班次</value>
+  </data>
+  <data name="CanNotRemoveShiftForAgentWithFullDayAbsence" xml:space="preserve">
+    <value>无法为全天缺勤的座席代表移除班次</value>
+  </data>
+  <data name="CanNotRemoveShiftForAgentWithDayOff" xml:space="preserve">
+    <value>无法在休息日移除班次</value>
+  </data>
+  <data name="CanNotRemoveShiftForAgentWithEmptySchedule" xml:space="preserve">
+    <value>无法为座席代表移除空班表</value>
+  </data>
+  <data name="FinishedRemoveShift" xml:space="preserve">
+    <value>已成功移除班次。</value>
+  </data>
+  <data name="PartialSuccessMessageForRemovingShift" xml:space="preserve">
+    <value>为 {0} 个座席代表移除班次。 {1} 个已成功，{2} 个失败。</value>
+  </data>
+  <data name="UIGridColumnsColon" xml:space="preserve">
+    <value>列：</value>
+  </data>
+  <data name="UIGridExportAllCSV" xml:space="preserve">
+    <value>导出所有数据到CSV</value>
+  </data>
+  <data name="UIGridExportSelectedCSV" xml:space="preserve">
+    <value>导出选定数据到CSV</value>
+  </data>
+  <data name="UIGridExportVisibleCSV" xml:space="preserve">
+    <value>导出可视数据到CSV</value>
+  </data>
+  <data name="UIGridHideCol" xml:space="preserve">
+    <value>隐藏列</value>
+  </data>
+  <data name="UIGridNoSort" xml:space="preserve">
+    <value>移除排序</value>
+  </data>
+  <data name="UIGridSortAscending" xml:space="preserve">
+    <value>升序排列</value>
+  </data>
+  <data name="UIGridSortDescending" xml:space="preserve">
+    <value>降序排列</value>
+  </data>
+  <data name="ProductActivationKeyApplicationSuccessNoRestart" xml:space="preserve">
+    <value>产品激活密钥已成功应用。
+恭喜！您现在已成为此屡获殊荣的劳动力管理方案的授权用户。
+应用将被关闭。</value>
+  </data>
+  <data name="NoPermissionToEditUnpublishedSchedule" xml:space="preserve">
+    <value>没有权限修改座席代表的未发布班表</value>
+  </data>
+  <data name="DoYouWantToSaveChangesWithTerminalDate" xml:space="preserve">
+    <value>一个或多个座席代表的离职日期被更改。相关的班表数据将被立即删除。您想要保存吗？</value>
+  </data>
+  <data name="PickADateRangeToStartBadgeCalculation" xml:space="preserve">
+    <value>选取日期访问以进行徽章计算</value>
+  </data>
+  <data name="BadgeCalculation" xml:space="preserve">
+    <value>徽章计算</value>
+  </data>
+  <data name="NoGamificationDataForThePeriod" xml:space="preserve">
+    <value>选定周期内的一些日期或全部日期没有游戏化数据。</value>
+  </data>
+  <data name="BadgeCalculationIsAlreadyInProgressWithinTheSelectedPeriod" xml:space="preserve">
+    <value>徽章计算已在选定周期内运行。</value>
+  </data>
+  <data name="AddSkillGroup" xml:space="preserve">
+    <value>添加技能组</value>
+  </data>
+  <data name="NoNonOverwritableActivities" xml:space="preserve">
+    <value>没有不可覆盖的活动</value>
+  </data>
+  <data name="SelectStates" xml:space="preserve">
+    <value>选择状态</value>
+  </data>
+  <data name="SelectSitesTeams" xml:space="preserve">
+    <value>选择站点/小组</value>
+  </data>
+  <data name="ExcludedColon" xml:space="preserve">
+    <value>已排除：</value>
+  </data>
+  <data name="NoState" xml:space="preserve">
+    <value>无状态</value>
+  </data>
+  <data name="GamingPeriod" xml:space="preserve">
+    <value>游戏周期</value>
+  </data>
+  <data name="NoAgentsWithIssuesFound" xml:space="preserve">
+    <value>未发现有问题的座席代表</value>
+  </data>
+  <data name="IntervalStartMustBeTodaysDateOrLater" xml:space="preserve">
+    <value>时段开始必须在今天或之后的日期。</value>
+  </data>
+  <data name="OvertimeStaffingCheckMethodSetting" xml:space="preserve">
+    <value>加班人力检查方法：</value>
+  </data>
+  <data name="UsePrimarySkill" xml:space="preserve">
+    <value>使用技能优先级验证</value>
+  </data>
+  <data name="DescriptionOfMaximumWorkdayRule" xml:space="preserve">
+    <value>做多连续工作日</value>
+  </data>
+  <data name="PeopleAccess" xml:space="preserve">
+    <value>访问</value>
+  </data>
+  <data name="ImportBpoImportedAt" xml:space="preserve">
+    <value>已导入于：</value>
+  </data>
+  <data name="ImportBpoImportInformationAllSkills" xml:space="preserve">
+    <value>所有技能</value>
+  </data>
+  <data name="ImportBpoImportInformationHeader" xml:space="preserve">
+    <value>导入历史：</value>
+  </data>
+  <data name="ImportBpoImportInformationTooltipAt" xml:space="preserve">
+    <value>在</value>
+  </data>
+  <data name="ImportBpoImportInformationTooltipImported" xml:space="preserve">
+    <value>已导入</value>
+  </data>
+  <data name="ImportBpoFileImportDateInformation" xml:space="preserve">
+    <value>所有日期为UTC</value>
+  </data>
+  <data name="ImportBpoFileImportInfoHeader" xml:space="preserve">
+    <value>BPO文件导入信息</value>
   </data>
 </root>
