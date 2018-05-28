@@ -220,7 +220,14 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 
 				if (model.HasOverride)
 				{
-					if(!overrideDays.TryGetValue(skillDay.CurrentDate, out var forecastDayOverride))
+					forecastedWorkloadDay.Annotation = "Day has been overrided on web";
+					if (model.OverrideTasks.HasValue)
+						forecastedWorkloadDay.CampaignTasks = new Percent(0);
+					if (model.OverrideAverageTaskTime.HasValue)
+						forecastedWorkloadDay.CampaignTaskTime = new Percent(0);
+					if (model.OverrideAverageAfterTaskTime.HasValue)
+						forecastedWorkloadDay.CampaignAfterTaskTime = new Percent(0);
+					if (!overrideDays.TryGetValue(skillDay.CurrentDate, out var forecastDayOverride))
 					{
 						forecastDayOverride =
 							new ForecastDayOverride(skillDay.CurrentDate, workload, scenario)
