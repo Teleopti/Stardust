@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -3075,6 +3075,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Approve {
             get {
                 return ResourceManager.GetString("Approve", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Approve as in adherence.
+        /// </summary>
+        public static string ApproveAsInAdherence {
+            get {
+                return ResourceManager.GetString("ApproveAsInAdherence", resourceCulture);
             }
         }
         
@@ -7120,7 +7129,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Consecutive work days.
+        ///   Looks up a localized string similar to Consecutive workdays.
         /// </summary>
         public static string ConsecutiveWorkDays {
             get {
@@ -9551,7 +9560,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maximum consecutive days without dayoff.
+        ///   Looks up a localized string similar to Maximum consecutive days without day off.
         /// </summary>
         public static string DescriptionOfMaximumWorkdayRule {
             get {
@@ -18649,6 +18658,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ModifyAbsence {
             get {
                 return ResourceManager.GetString("ModifyAbsence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modify Adherence.
+        /// </summary>
+        public static string ModifyAdherence {
+            get {
+                return ResourceManager.GetString("ModifyAdherence", resourceCulture);
             }
         }
         
@@ -36886,7 +36904,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use Consecutive Work Days.
+        ///   Looks up a localized string similar to Use Consecutive Workdays.
         /// </summary>
         public static string UseConsecutiveWorkDays {
             get {

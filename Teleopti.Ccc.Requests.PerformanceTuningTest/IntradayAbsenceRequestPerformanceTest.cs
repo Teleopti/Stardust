@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 	[RequestPerformanceTuningTest]
 	public class IntradayAbsenceRequestPerformanceTest : PerformanceTestWithOneTimeSetup
 	{
-		public UpdateStaffingLevelReadModelOnlySkillCombinationResources UpdateStaffingLevel;
+		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;
 		public MutableNow Now;
 		public WithUnitOfWork WithUnitOfWork;
 		public IDataSourceScope DataSource;

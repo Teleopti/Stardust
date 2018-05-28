@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.NonBlendSkill
     {
         double CalculatePeriod(ISkillStaffPeriod skillStaffPeriod, IEnumerable<IVisualLayer> shift, IActivity skillActivity);
         DateOnly SkillStaffPeriodDate(ISkillStaffPeriod skillStaffPeriod, IPerson person);
-        bool CheckPersonSkill(ISkill skill, IPerson person, DateOnly skillStaffPeriodDate);
     }
 
     public class NonBlendSkillImpactOnPeriodForProjection : INonBlendSkillImpactOnPeriodForProjection
@@ -47,22 +46,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.NonBlendSkill
             DateTime localStartDateTime =
                 skillStaffPeriod.Period.StartDateTimeLocal(person.PermissionInformation.DefaultTimeZone());
             return new DateOnly(localStartDateTime.Date);
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-        public bool CheckPersonSkill(ISkill skill, IPerson person, DateOnly skillStaffPeriodDate)
-        {
-            IPersonPeriod personPeriod = person.Period(skillStaffPeriodDate);
-            if (personPeriod == null)
-                return false;
-
-            foreach (var personSkill in personPeriod.PersonNonBlendSkillCollection)
-            {
-                if (personSkill.Skill.Equals(skill))
-                    return true;
-            }
-
-            return false;
         }
     }
 }

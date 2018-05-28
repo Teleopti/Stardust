@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			const double forecasted = 10d;
 			var esl = Target.ServiceLevelAchievedOcc(agents, 20, tasks, 550, TimeSpan.FromMinutes(15), .8, forecasted, 3, 0);
 
-			esl.Should().Be.EqualTo(0d);
+			esl.Should().Be.LessThan(0.000001);
 		}
 
 		[Test]
@@ -198,6 +198,22 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 				averageHandelingTimeSeconds, TimeSpan.FromSeconds(intervalLengthInSeconds), minimumOccupancy, maximumOccupancy, 1,0).Agents;
 
 			Assert.AreEqual(Math.Round(agents, 2), 7.00);
+		}
+
+		[Test]
+		public void ShouldNotLoopForever()
+		{
+			double callsPerInterval = 341;
+			double averageHandelingTimeSeconds = 7920;
+			int serviceLevelSeconds = 30;
+			const int intervalLengthInSeconds = 1800;
+			var agents = 15;
+			var forecastedAgents = 1667.1111001273;
+
+			const double targetServiceLevelPercentage = 0.6;
+
+			Target.ServiceLevelAchievedOcc(agents, serviceLevelSeconds, callsPerInterval, averageHandelingTimeSeconds, TimeSpan.FromSeconds(intervalLengthInSeconds), targetServiceLevelPercentage,
+				forecastedAgents, 1, 0);
 		}
 
 		public void Configure(FakeToggleManager toggleManager)

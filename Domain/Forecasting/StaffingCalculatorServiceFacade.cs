@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		public override AgentsAndOccupancy AgentsUseOccupancy(double serviceLevel, int serviceTime, double tasks, double aht, TimeSpan periodLength,
 			double minOcc, double maxOcc, int maxParallelTasks, double abandonRate)
 		{
-			var result = _agentsNeeded.CalculateNumberOfAgentsNeeded(tasks / maxParallelTasks, aht, 1000000, serviceTime, serviceLevel,
+			var result = _agentsNeeded.CalculateNumberOfAgentsNeeded(tasks / maxParallelTasks, aht, 10000000, serviceTime, serviceLevel,
 				(int)periodLength.TotalSeconds, minOcc, maxOcc);
 
 			return new AgentsAndOccupancy()

@@ -139,10 +139,10 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.218\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.225\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.218\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.225\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -164,6 +164,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessorTest_useRemoveScheduleForecastSkillChangeReadModel.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsHandlerBug45331Test.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RequestProcessorTest.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\UpdateStaffingReadModelHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistRequestHandlerPersonAccountDayTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistRequestHandlerPersonAccountTimeTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistRequestHandlerTest.cs" />

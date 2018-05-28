@@ -141,8 +141,8 @@
 				<rta-card-panel-content>
 					<div style="max-height: 300px; overflow-y: scroll">
 						<table class="wfm-table">
-							<th style="width: 20%">Start</th>
-							<th style="width: 20%">End</th>
+							<th style="width: 20%">{{'Start' | translate}}</th>
+							<th style="width: 20%">{{'End' | translate}}</th>
 							<tr ng-repeat="outOfAdherence in vm.recordedOutOfAdherences"
 								ng-class="{'highlight': outOfAdherence.highlight}"
 								class="recorded-out-of-adherence"
@@ -165,30 +165,30 @@
 				<div class="con-flex panel material-depth-1" style="padding: 10px">
 					<span class="approve-form non-ie">
 						<label style="margin-left: 12px">
-						Start:
+						{{'Start' | translate}}:
 						<input type="time" ng-model="vm.approveStartTime" step="1"/>
 						</label>
 						<label>
-						End:
+						{{'End' | translate}}:
 						<input type="time" ng-model="vm.approveEndTime" step="1"/>
 						</label>
 					</span>
 					<span class="approve-form ie">
 						<label style="margin-left: 12px">
-						Start:
+						{{'Start' | translate}}:
 						<input type="text" ng-model="vm.approveStartTimeString"/>
 						</label>
 						<label>
-						End:
+						{{'End' | translate}}:
 						<input type="text" ng-model="vm.approveEndTimeString"/>
 						</label>
 					</span>
 					<button type="button" class="wfm-btn wfm-btn-invis-default" ng-click="vm.cancelApprove()">
-						Cancel
+						{{'Cancel' | translate}}
 					</button>
 					<button type="submit" class="approve-adherence-submit wfm-btn wfm-btn-invis-primary"
 							ng-click="vm.submitApprove()">
-						Approve as in adherence
+						{{'ApproveAsInAdherence' | translate}}
 					</button>
 				</div>
 			</div>
@@ -201,8 +201,8 @@
 						</rta-card-panel-header>
 						<rta-card-panel-content>
 							<table class="wfm-table">
-								<th style="width: 20%">Start</th>
-								<th style="width: 20%">End</th>
+								<th style="width: 20%">{{'Start' | translate}}</th>
+								<th style="width: 20%">{{'End' | translate}}</th>
 								<th></th>
 								<th></th>
 								<tr ng-repeat="approved in vm.approvedPeriods"

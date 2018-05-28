@@ -35,7 +35,7 @@
 				return;
 			}
 			if (vm.Password !== vm.ConfirmPassword) {
-				vm.PasswordMessage = "The passwords do no match";
+				vm.PasswordMessage = "The passwords are not matching.";
 				vm.PasswordOk = false;
 				return;
 			}

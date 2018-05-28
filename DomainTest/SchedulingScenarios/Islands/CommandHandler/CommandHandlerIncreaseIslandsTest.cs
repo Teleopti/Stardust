@@ -257,7 +257,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Single().AgentsInIsland.Count().Should().Be.EqualTo(1);
 		}
 
-		[Test, Timeout(5000)]
+		[Test, Timeout(20000)]
 		public void ShouldNotHangWhenHavingManySkillSets_Bug42634()
 		{
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(2, 2);

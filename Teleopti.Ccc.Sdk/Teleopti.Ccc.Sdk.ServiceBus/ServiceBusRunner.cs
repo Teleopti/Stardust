@@ -15,7 +15,6 @@ using Stardust.Node;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -24,7 +23,6 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Sdk.ServiceBus.Container;
-using Teleopti.Ccc.Sdk.ServiceBus.Custom;
 using Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
@@ -39,14 +37,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		private IContainer _sharedContainer;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(ServiceBusRunner));
-		private readonly IEnvironmentVariable _environmentVariable;
 
-		public ServiceBusRunner(Action<int> requestAdditionalTime, IEnvironmentVariable environmentVariable, IConfigReader configReader = null)
+		public ServiceBusRunner(Action<int> requestAdditionalTime, IConfigReader configReader = null)
 		{
 			_requestAdditionalTime = requestAdditionalTime;
 			_configReader = configReader ?? new ConfigReader();
 			Nodes = new List<NodeStarter>();
-			_environmentVariable = environmentVariable;
 		}
 
 		public void Start()
@@ -82,7 +78,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			AppDomain.MonitoringIsEnabled = true;
 
 			var numberOfNodes = _configReader.AppConfig("NumberOfNodes");
-			if (numberOfNodes != null && numberOfNodes == "1" && !string.IsNullOrEmpty(_environmentVariable.GetValue("IS_CONTAINER")))
+			if (numberOfNodes != null && numberOfNodes == "1" && !string.IsNullOrEmpty(_configReader.AppConfig("IsContainer")))
 			{
 				nodeStarter();
 			}

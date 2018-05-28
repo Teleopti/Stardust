@@ -59,12 +59,4 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			return localTimeForRequestStartTime.CompareTo(minimumRequestStartTime) >= 0;
 		}
 	}
-
-	public class ExpiredRequestValidator40274ToggleOff : IExpiredRequestValidator
-	{
-		public IValidatedRequest ValidateExpiredRequest(IAbsenceRequest absenceRequest, IScheduleRange scheduleRange)
-		{
-			return ValidatedRequest.Valid;
-		}
-	}
 }

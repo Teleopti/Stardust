@@ -18,11 +18,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			_deniableResponse = deniableResponse;
 		}
 
-		public INewBusinessRuleCollection GetAllBusinessRules(ISchedulingResultStateHolder schedulingResultStateHolder)
-		{
-			return _businessRuleCollection;
-		}
-
 		public INewBusinessRuleCollection GetBusinessRulesForShiftTradeRequest(
 			ISchedulingResultStateHolder schedulingResultStateHolder, bool enableSiteOpenHoursRule)
 		{

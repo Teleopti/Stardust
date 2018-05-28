@@ -24,25 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 Assert.That(persons.Count, Is.EqualTo(0));
             }
         }
-
-        [Test]
-        public void ShouldLoadPersonsNotInRole()
-        {
-            UnitOfWork.PersistAll();
-            CleanUpAfterTest();
-            var roleId = Guid.NewGuid();
-            var person1Id = Guid.NewGuid();
-            var person2Id = Guid.NewGuid();
-            var personsIds = new List<Guid> {person1Id, person2Id};
-
-            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
-            {
-                _target = new ApplicationRolePersonRepository(uow);
-                var persons = _target.GetPersonsNotInRole(roleId, personsIds);
-                Assert.That(persons.Count, Is.EqualTo(0));
-            }
-        }
-
+		
         [Test]
         public void ShouldLoadPersons()
         {
@@ -96,32 +78,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
         [Test]
-        public void ShouldLoadPersonsOnFunction()
-        {
-            UnitOfWork.PersistAll();
-            CleanUpAfterTest();
-            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
-            {
-                _target = new ApplicationRolePersonRepository(uow);
-                var result = _target.PersonsWithFunction(Guid.NewGuid());
-                Assert.That(result.Count, Is.EqualTo(0));
-            }
-        }
-
-        [Test]
-        public void ShouldLoadRolesOnFunction()
-        {
-            UnitOfWork.PersistAll();
-            CleanUpAfterTest();
-            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
-            {
-                _target = new ApplicationRolePersonRepository(uow);
-                var result = _target.RolesWithFunction(Guid.NewGuid());
-                Assert.That(result.Count, Is.EqualTo(0));
-            }
-        }
-
-        [Test]
         public void ShouldLoadDataOnPerson()
         {
             UnitOfWork.PersistAll();
@@ -156,19 +112,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             {
                 _target = new ApplicationRolePersonRepository(uow);
                 var result = _target.RolesWithData(Guid.NewGuid());
-                Assert.That(result.Count, Is.EqualTo(0));
-            }
-        }
-
-        [Test]
-        public void ShouldLoadPersonsOnRoles()
-        {
-            UnitOfWork.PersistAll();
-            CleanUpAfterTest();
-            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
-            {
-                _target = new ApplicationRolePersonRepository(uow);
-                var result = _target.PersonsWithRoles(new List<Guid>{Guid.NewGuid(), Guid.NewGuid()});
                 Assert.That(result.Count, Is.EqualTo(0));
             }
         }

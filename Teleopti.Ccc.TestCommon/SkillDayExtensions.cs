@@ -235,6 +235,11 @@ namespace Teleopti.Ccc.TestCommon
 			return skillDay;
 		}
 		
+		public static ISkillDay SetMinimumAgents(this ISkillDay skillDay, int numberOfAgents)
+		{
+			return skillDay.SetMinimumAgents(new TimePeriod(0, 24), numberOfAgents);
+		}
+		
 		public static IList<ISkillDay> SetMinimumAgents(this IEnumerable<ISkillDay> skillDays, TimePeriod period, int numberOfAgents)
 		{
 			var skillDaysToReturn = skillDays.ToList();

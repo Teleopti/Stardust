@@ -25,9 +25,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		public IComponentContext TempContainer;
 		
 		[Test]
-		public void MustNotUseOldHandler()
+		public void OldHandlerShouldHandleLegacyEvents()
 		{
-			Assert.Throws<ComponentNotRegisteredException>(() => TempContainer.Resolve<ScheduleProjectionReadOnlyUpdater>());
+			Assert.DoesNotThrow(() => TempContainer.Resolve<ScheduleProjectionReadOnlyUpdater>());
 		}
 		
 		[Test]

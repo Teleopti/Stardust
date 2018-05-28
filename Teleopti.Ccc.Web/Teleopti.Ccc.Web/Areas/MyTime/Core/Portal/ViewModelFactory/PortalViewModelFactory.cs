@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			ITeamGamificationSettingRepository teamGamificationSettingReop,
 			ICurrentTenantUser currentTenantUser,
 			IUserCulture userCulture,
-			ICurrentTeleoptiPrincipal currentIdentity, IToggleManager toggleManager, ILicenseAvailability licenseAvailability, 
+			ICurrentTeleoptiPrincipal currentIdentity, IToggleManager toggleManager, ILicenseAvailability licenseAvailability,
 			IAgentBadgeWithinPeriodProvider agentBadgeWithinPeriodProvider)
 		{
 			_permissionProvider = permissionProvider;
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			}
 
 			var showBadgePeriodNavigator = _toggleManager.IsEnabled(Toggles.WFM_Gamification_Create_Rolling_Periods_74866);
-			
+
 			return new PortalViewModel
 			{
 				ReportNavigationItems = reportsList,
@@ -172,7 +172,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			var reportsItems = _reportsNavigationProvider.GetNavigationItems();
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule))
 			{
-				navigationItems.Add(createTeamScheduleNavigationItem());
+				if (_toggleManager.IsEnabled(Toggles.MyTimeWeb_NewTeamScheduleView_75989))
+				{
+					navigationItems.Add(createNewTeamScheduleNavigationItem());
+				}
+				else
+				{
+					navigationItems.Add(createTeamScheduleNavigationItem());
+				}
 			}
 			if (
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StudentAvailability) &&
@@ -232,6 +239,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			return new NavigationItem.TeamScheduleNavigationItem
 			{
 				Action = "Index",
+				Controller = "TeamSchedule",
+				Title = Resources.TeamSchedule
+			};
+		}
+
+		private static NavigationItem createNewTeamScheduleNavigationItem()
+		{
+			return new NavigationItem.TeamScheduleNavigationItem
+			{
+				Action = "NewIndex",
 				Controller = "TeamSchedule",
 				Title = Resources.TeamSchedule
 			};

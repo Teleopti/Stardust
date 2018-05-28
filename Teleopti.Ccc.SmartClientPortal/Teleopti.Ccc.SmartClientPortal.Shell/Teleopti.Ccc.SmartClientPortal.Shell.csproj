@@ -269,10 +269,10 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.218\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.225\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.218\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.225\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
@@ -3334,11 +3334,11 @@
     <Compile Include="Win\Scheduling\SchedulingScreenInternals\EditorCutPasteHandler.cs" />
     <Compile Include="Win\Scheduling\SchedulingScreenInternals\ICutPasteHandler.cs" />
     <Compile Include="Win\Scheduling\SchedulingScreenInternals\LoaderMethod.cs" />
-    <Compile Include="Win\Scheduling\SchedulingScreenInternals\PersonsThatChangedPersonSkillsDuringPeriodFinderView.cs">
+    <Compile Include="Win\Scheduling\SchedulingScreenInternals\PersonsThatChangedPersonSkills.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Win\Scheduling\SchedulingScreenInternals\PersonsThatChangedPersonSkillsDuringPeriodFinderView.Designer.cs">
-      <DependentUpon>PersonsThatChangedPersonSkillsDuringPeriodFinderView.cs</DependentUpon>
+    <Compile Include="Win\Scheduling\SchedulingScreenInternals\PersonsThatChangedPersonSkills.Designer.cs">
+      <DependentUpon>PersonsThatChangedPersonSkills.cs</DependentUpon>
     </Compile>
     <Compile Include="Win\Scheduling\SchedulingScreenInternals\ResourceCalculationAnalyzerModel.cs" />
     <Compile Include="Win\Scheduling\SchedulingScreenInternals\ResourceCalculationAnalyzerView.cs">
@@ -4957,8 +4957,8 @@
     <EmbeddedResource Include="Win\Scheduling\SchedulingScreenInternals\AgentSkillAnalyzer.resx">
       <DependentUpon>AgentSkillAnalyzer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Win\Scheduling\SchedulingScreenInternals\PersonsThatChangedPersonSkillsDuringPeriodFinderView.resx">
-      <DependentUpon>PersonsThatChangedPersonSkillsDuringPeriodFinderView.cs</DependentUpon>
+    <EmbeddedResource Include="Win\Scheduling\SchedulingScreenInternals\PersonsThatChangedPersonSkills.resx">
+      <DependentUpon>PersonsThatChangedPersonSkills.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Win\Scheduling\SchedulingScreenInternals\ResourceCalculationAnalyzerView.resx">
       <DependentUpon>ResourceCalculationAnalyzerView.cs</DependentUpon>

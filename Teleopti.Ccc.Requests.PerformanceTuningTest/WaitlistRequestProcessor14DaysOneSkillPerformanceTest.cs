@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 	[Toggle(Toggles.Wfm_Requests_HandleFourteenDaysFast_43390)]
 	public class WaitlistRequestProcessor14DaysOneSkillPerformanceTest : PerformanceTestWithOneTimeSetup
 	{
-		public UpdateStaffingLevelReadModelOnlySkillCombinationResources UpdateStaffingLevel;
+		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;
 		public MutableNow Now;
 		public WithUnitOfWork WithUnitOfWork;
 		public IDataSourceScope DataSource;

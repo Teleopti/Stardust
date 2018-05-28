@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using log4net;
-using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
+using Polly;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 
@@ -26,16 +26,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			_currentTenantCredentials = currentTenantCredentials;
 		}
 
-		private RetryPolicy makeRetryPolicy()
+		private Policy makeRetryPolicy()
 		{
-			var policy = new RetryPolicy<TenantDataManagerRetryStrategy>(new ExponentialBackoff(9, TimeSpan.FromMilliseconds(500),
-					TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(2)));
-
-			policy.Retrying += (sender, args) =>
-			{
-				logger.Info($"Retry - Count:{args.CurrentRetryCount}, Delay:{args.Delay}, Exception:{args.LastException}");
-			};
-
+			var policy = Policy.Handle<Exception>()
+				.WaitAndRetry(9, i => TimeSpan.FromSeconds(Math.Min(60d, Math.Pow(2,i))), (exception, time, retry, ctx) => logger.Info($"Retry - Count:{retry}, Delay:{time}, Exception:{exception}"));
+			
 			return policy;
 		}
 
@@ -43,7 +38,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		{
 			var json = _jsonSerializer.SerializeObject(personsToBeDeleted);
 
-			makeRetryPolicy().ExecuteAction(() =>
+			makeRetryPolicy().Execute(() =>
 			{
 				_postHttpRequest.SendSecured<object>(_tenantServerConfiguration.FullPath("PersonInfo/Delete"), json, _currentTenantCredentials.TenantCredentials());
 			});
@@ -74,14 +69,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			}
 
 			return ret;
-		}
-	}
-
-	public class TenantDataManagerRetryStrategy : ITransientErrorDetectionStrategy
-	{
-		public bool IsTransient(Exception ex)
-		{
-			return true;
 		}
 	}
 }

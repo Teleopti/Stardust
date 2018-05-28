@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
-using Teleopti.Ccc.Sdk.ServiceBus.Custom;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 
@@ -26,15 +25,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 		private readonly IConfigReader _configReader;
 		private readonly IDataSourceForTenant _dataSourceForTenant;
 		private readonly IPlugInLoader _pluginInLoader;
-		private readonly IEnvironmentVariable _environmentVariable;
 
 		public ExportPayrollHandler(IComponentContext componentContext, 
 				IStardustJobFeedback stardustJobFeedback, 
 				ISearchPath searchPath, 
 				IConfigReader configReader, 
 				IDataSourceForTenant dataSourceForTenant, 
-				IPlugInLoader pluginInLoader, 
-				IEnvironmentVariable environmentVariable)
+				IPlugInLoader pluginInLoader)
 		{
 			_componentContext = componentContext;
 			_stardustJobFeedback = stardustJobFeedback;
@@ -42,13 +39,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			_configReader = configReader ?? new ConfigReader();
 			_dataSourceForTenant = dataSourceForTenant;
 			_pluginInLoader = pluginInLoader;
-			_environmentVariable = environmentVariable;
 		}
 
 		[AsSystem, UnitOfWork]
 		public void Handle(RunPayrollExportEvent parameters, CancellationTokenSource cancellationTokenSource, Action<string> sendProgress, ref IEnumerable<object> returnObjects)
 		{
-			if (!string.IsNullOrEmpty(_environmentVariable.GetValue("IS_CONTAINER")) &&
+			if (!string.IsNullOrEmpty(_configReader.AppConfig("IsContainer")) &&
 				!string.IsNullOrEmpty(_configReader.ConnectionString("AzureStorage")) &&
 				parameters.LogOnDatasource != null)
 			{

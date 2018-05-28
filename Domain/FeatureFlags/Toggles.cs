@@ -21,6 +21,7 @@
 		RTA_ImprovedStateGroupFilter_48724,
 		RTA_KillFattyIntradayUntilItDies_74939,
 		RTA_RestrictModifyAdherenceWithPermission_74898,
+		RTA_EasilySpotLateForWork_75668,
 		
 		MyTimeWeb_SortRequestList_40711,
 		MyTimeWeb_PreferenceForJalaliCalendar_42965,
@@ -29,6 +30,7 @@
 		MyTimeWeb_MonthlyScheduleMobileView_45004,
 		MyTimeWeb_WaitListPositionEnhancement_46301,
 		MyTimeWeb_PollToCheckScheduleChanges_46595,
+		MyTimeWeb_NewTeamScheduleView_75989,
 
 		Wfm_MinimumScaffolding_32659,
 		Wfm_WebPlan_Pilot_46815,
@@ -153,7 +155,9 @@
 		WFM_Clear_Data_After_Leaving_Date_47768,
 
 		People_ImprovePersonAccountAccuracy_74914,
-		MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889
+		MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889,
+
+		Tech_Moving_ResilientConnectionLogic
 		// ReSharper restore InconsistentNaming
 	}
 }

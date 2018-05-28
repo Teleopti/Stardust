@@ -4,6 +4,7 @@ using NHibernate.Cfg;
 using NHibernate.Dialect;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErrorHandling;
 using Teleopti.Ccc.Infrastructure.Web;
 
 namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork

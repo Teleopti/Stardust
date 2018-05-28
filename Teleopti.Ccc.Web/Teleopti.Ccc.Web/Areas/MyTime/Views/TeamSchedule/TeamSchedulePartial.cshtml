@@ -1,7 +1,7 @@
 ﻿@using Teleopti.Ccc.UserTexts
 @using Teleopti.Ccc.Web.Areas.MyTime.Core
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
-@model TeamScheduleViewModel
+@model TeamSchedulePermissionViewModel
 @{
 	Layout = null;
 	const int scheduleWidth = 695;
@@ -37,7 +37,7 @@
 <div data-bind="if: showFabButton, css: { 'hide-fab-on-phone': hideFab}">
 	<button class="close-fab-overlay" data-bind="visible: menuIsVisible,css: { 'hide-fab-on-phone': hideFab}, click: disableMenu"></button>
 	<button class="fab" data-bind="click: enableMenu" tabindex="0"></button>
-	<div class="navbar navbar-teleopti subnavbar" data-bind="css: { 'menu-focusing': menuIsVisible}, visible: menuIsVisible" >
+	<div class="navbar navbar-teleopti subnavbar" data-bind="css: { 'menu-focusing': menuIsVisible}, visible: menuIsVisible">
 		<ul class="nav navbar-nav navbar-teleopti row submenu ts-menu">
 			@if (Model.ShiftTradePermisssion)
 			{
@@ -221,7 +221,7 @@
 							<td class="shift-trade-agent-name">@Resources.MySchedule</td>
 							<td class="shift-trade-my-schedule">
 								<!-- ko if: mySchedule().isNotScheduled -->
-									<div class="not-scheduled-text">@Resources.NotScheduled</div>
+								<div class="not-scheduled-text">@Resources.NotScheduled</div>
 								<!-- /ko -->
 								<!--ko if:mySchedule().isFullDayAbsence-->
 								<div data-bind="foreach: mySchedule().layers">
@@ -259,7 +259,7 @@
 							</td>
 							<td class="shift-trade-possible-trade-schedule">
 								<!-- ko if: $data.isNotScheduled -->
-									<div class="not-scheduled-text">@Resources.NotScheduled</div>
+								<div class="not-scheduled-text">@Resources.NotScheduled</div>
 								<!-- /ko -->
 								<!--ko if:isFullDayAbsence -->
 								<div data-bind="foreach: $data.layers">

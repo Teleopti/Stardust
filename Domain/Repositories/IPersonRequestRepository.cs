@@ -32,18 +32,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person);
 
 		/// <summary>
-		/// Finds all requests from and to a person for given page.
-		/// </summary>
-		/// <param name="person">The person.</param>
-		/// <param name="paging">Paging information.</param>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: rogerkr
-		/// Created date: 2011-10-24
-		/// </remarks>
-		IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, Paging paging);
-
-		/// <summary>
 		/// Finds all requests from and to a person for given period.
 		/// </summary>
 		/// <param name="person">The person.</param>
@@ -54,8 +42,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// Created date: 2011-10-27
 		/// </remarks>
 		IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, DateTimePeriod period);
-
-		//IEnumerable<IPersonRequest> FindAbsenceAndTextRequests(RequestFilter filter);
 
 		IEnumerable<IPersonRequest> FindAbsenceAndTextRequests(RequestFilter filter, out int count, bool ignoreCount = false);
 

@@ -18,9 +18,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-	/// <summary>
-	/// Tests for SkillDayRepository
-	/// </summary>
 	[TestFixture]
 	[Category("BucketB")]
 	public class SkillDayRepositoryTest : RepositoryTest<ISkillDay>
@@ -47,7 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			PersistAndRemoveFromUnitOfWork(_skillType);
 
-			var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
+			var timeZoneInfo = TimeZoneInfoFactory.GmtTimeZoneInfo();
 			_skill.TimeZone = timeZoneInfo;
 			PersistAndRemoveFromUnitOfWork(_activity);
 			PersistAndRemoveFromUnitOfWork(_skill);
@@ -120,16 +117,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(skillDay.WorkloadDayCollection[0].OverrideAverageAfterTaskTime,
 				loadedAggregateFromDatabase.WorkloadDayCollection[0].OverrideAverageAfterTaskTime);
 		}
-
-		/// <summary>
-		/// Determines whether this instance can be created.
-		/// </summary>
-		[Test]
-		public void CanCreate()
-		{
-			new SkillDayRepository(UnitOfWork);
-		}
-
+		
 		[Test]
 		public void CanGetUpdateInfoWhenWorkloadDayIsSaved()
 		{
@@ -301,7 +289,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void VerifyWorkloadDaysParentAreSet()
+		public void ShouldInitializeWorkloadForWorkloadDaysForPerformanceReasons()
 		{
 			var dateTime = new DateOnly(_date);
 			DateTimePeriod dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDate(dateTime, dateTime.AddDays(1),
@@ -317,17 +305,47 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			ISkillDay skillDay = new SkillDay(dateTime, _skill, _scenario, workloadDays, skillDataPeriods);
 
 			PersistAndRemoveFromUnitOfWork(skillDay);
+			UnitOfWork.Clear();
+
+			var skillRepository = new SkillRepository(UnitOfWork);
+			var skillDayRepository = new SkillDayRepository(UnitOfWork);
+			var orgSkillDays =
+				skillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(dateTime, dateTime.AddDays(2)), skillRepository.LoadAll(),
+					_scenario);
+
+			orgSkillDays
+				.All(s => LazyLoadingManager.IsInitialized(s.WorkloadDayCollection) &&
+						  s.WorkloadDayCollection.All(w => LazyLoadingManager.IsInitialized(w.Workload))).Should().Be.True();
+		}
+
+		[Test]
+		public void VerifyWorkloadDaysParentAreSet()
+		{
+			var dateTime = new DateOnly(_date);
+			DateTimePeriod dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDate(dateTime, dateTime.AddDays(1),
+				TimeZoneHelper.CurrentSessionTimeZone);
+
+			IList<IWorkloadDay> workloadDays = WorkloadDayFactory.GetWorkloadDaysForTest(_date, _date, _workload);
+			SkillPersonData skillPersonData = new SkillPersonData(0, 0);
+			ISkillDataPeriod skillDataPeriod = new SkillDataPeriod(ServiceAgreement.DefaultValues(), skillPersonData,
+				TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
+					dateTimePeriod.StartDateTime,
+					dateTimePeriod.EndDateTime, TimeZoneHelper.CurrentSessionTimeZone));
+			IList<ISkillDataPeriod> skillDataPeriods = new List<ISkillDataPeriod> { skillDataPeriod };
+			ISkillDay skillDay = new SkillDay(dateTime, _skill, _scenario, workloadDays, skillDataPeriods);
+
+			PersistAndRemoveFromUnitOfWork(skillDay);
 			SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
 			ICollection<ISkillDay> orgSkillDays =
-				skillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(dateTime, dateTime.AddDays(2)), new List<ISkill> {_skill},
+				skillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(dateTime, dateTime.AddDays(2)), new List<ISkill> { _skill },
 					_scenario);
 			IList<ISkillDay> skillDays = new List<ISkillDay>(orgSkillDays);
 
-			WorkloadDay workloadDay = (WorkloadDay) skillDays[0].WorkloadDayCollection[0];
+			WorkloadDay workloadDay = (WorkloadDay)skillDays[0].WorkloadDayCollection[0];
 			Assert.AreEqual(1, workloadDay.Parents.Count);
 			Assert.AreEqual(skillDays[0], workloadDay.Parents[0]);
 		}
-		
+
 		[Test,Ignore("Just here temporarily to measure performance")]
 		public void ShouldReadTaskPeriodListFaster()
 		{

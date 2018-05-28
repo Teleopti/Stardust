@@ -4,7 +4,8 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using log4net;
-using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
+using Polly;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
@@ -34,15 +35,17 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			tryWrite(dataTable, connectionString, tableName);
 		}
 
-		private RetryPolicy<ConcatenatedTransientErrorDetectionStrategy> makeRetryPolicy()
+		private Policy makeRetryPolicy()
 		{
-			var policy = new RetryPolicy<ConcatenatedTransientErrorDetectionStrategy>(new ExponentialBackoff(maxRetry, TimeSpan.FromMilliseconds(500),
-					TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(2)));
-			policy.Retrying += (sender, args) =>
-			{
-				Retries++;
-				logger.Debug($"Retry - Count:{args.CurrentRetryCount}, Delay:{args.Delay}, Exception:{args.LastException}");
-			};
+			var policy = Policy.Handle<TimeoutException>()
+				.Or<SqlException>(DetectTransientSqlException.IsTransient)
+				.OrInner<SqlException>(DetectTransientSqlException.IsTransient)
+				.WaitAndRetry(maxRetry, i => TimeSpan.FromSeconds(Math.Min(60d, Math.Pow(2, i))),
+					(exception, span, retries, ctx) =>
+					{
+						Retries = retries;
+						logger.Debug($"Retry - Count:{retries}, Delay:{span}, Exception:{exception}");
+					});
 			return policy;
 		}
 
@@ -52,7 +55,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			var policy = makeRetryPolicy();
 			try
 			{
-				policy.ExecuteAction(() =>
+				policy.Execute(() =>
 				{
 					write(dataTable, connectionString, tableName);
 				});

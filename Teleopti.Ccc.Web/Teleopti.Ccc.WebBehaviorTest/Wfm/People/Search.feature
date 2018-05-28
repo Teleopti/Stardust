@@ -25,7 +25,6 @@ Background:
 	And Person 'Urban' has role 'Agent'
 	And I view people
 
-
 Scenario: Search for a selection of users
 	When Searching for 'le'
 	Then I should see all matches for 'le'
@@ -34,8 +33,7 @@ Scenario: Search for a selection of users
 	| First name	|
 	| Last name		|
 	| Roles			|
-	| Site			|
-	| Team			|
+	| Site/Team		|
 
 
 

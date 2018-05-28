@@ -56,8 +56,8 @@
 			}).state('teams.shiftEditor',
 			{
 				url: '/shiftEditor',
-				templateUrl: 'app/teamSchedule/html/shiftEditor.html',
-				controller: 'ShiftEditorController as vm',
+				controller:'ShiftEditorViewController as vm',
+				templateUrl: 'app/teamSchedule/html/shiftEditorView.html',
 				params: {
 					personSchedule: {},
 					date: ''

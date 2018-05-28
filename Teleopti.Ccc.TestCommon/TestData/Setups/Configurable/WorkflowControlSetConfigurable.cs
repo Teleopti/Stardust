@@ -42,6 +42,9 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public bool AbsenceProbabilityEnabled { get; set; }
 		public bool OvertimeProbabilityEnabled { get; set; }
+		public int MaximumWorkdays { get; set; }
+		public int ShiftTradeFlexibilityDays { get; set; }
+		public bool AutoGrantShiftTradeRequest { get; set; }
 
 		public WorkflowControlSetConfigurable()
 		{
@@ -54,8 +57,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			{
 				SchedulePublishedToDate =
 					!string.IsNullOrEmpty(SchedulePublishedToDate) ? DateTime.Parse(SchedulePublishedToDate) : (DateTime?) null,
-				AbsenceRequestExpiredThreshold = AbsenceRequestExpiredThreshold ?? 15
+				AbsenceRequestExpiredThreshold = AbsenceRequestExpiredThreshold ?? 15,
+				AutoGrantShiftTradeRequest = AutoGrantShiftTradeRequest
 			};
+
+			if (MaximumWorkdays > 0) workflowControlSet.MaximumConsecutiveWorkingDays = MaximumWorkdays;
+			if (ShiftTradeFlexibilityDays > 0) workflowControlSet.ShiftTradeTargetTimeFlexibility = TimeSpan.FromDays(ShiftTradeFlexibilityDays);
 
 			if (!string.IsNullOrEmpty(StudentAvailabilityPeriodStart) && !string.IsNullOrEmpty(StudentAvailabilityPeriodEnd))
 			{

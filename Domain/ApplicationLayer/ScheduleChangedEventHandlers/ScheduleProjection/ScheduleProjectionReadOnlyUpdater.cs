@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection
 {
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
-	[DisabledBy(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
 	public class ScheduleProjectionReadOnlyUpdater :
 		IHandleEvent<ProjectionChangedEventForScheduleProjection>,
 		IHandleEvent<ProjectionChangedEvent>,

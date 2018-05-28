@@ -74,6 +74,7 @@ const wfm = angular.module('wfm', [
 	'wfm.workPicker',
 	'wfm.badge',
 	'wfm.skillPicker',
+	'wfm.skillPickerOld',
 	'wfm.treePicker',
 	'wfm.card-panel',
 	'wfm.skillGroup',

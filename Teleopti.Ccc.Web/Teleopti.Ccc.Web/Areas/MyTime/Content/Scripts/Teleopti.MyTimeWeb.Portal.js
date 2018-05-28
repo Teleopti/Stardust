@@ -72,12 +72,11 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	function _initNavigation(awindow) {
-		$('.dropdown-menu a[data-mytime-action]')
+		$('#innerNavBar a[data-mytime-action]')
 			.click(function (e) {
 				e.preventDefault();
 				_navigateTo($(this).data('mytime-action'));
-			})
-			;
+			});
 
 		if (awindow.location.hash.length <= 1) {
 			var isMobile = _isMobile(awindow);

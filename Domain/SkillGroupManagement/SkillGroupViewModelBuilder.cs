@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
@@ -10,14 +11,16 @@ namespace Teleopti.Ccc.Domain.SkillGroupManagement
 	public class SkillGroupViewModelBuilder
 	{
 		private readonly ISkillGroupRepository _skillGroupRepository;
-		private readonly ILoadAllSkillInIntradays _loadAllSkillInIntradays;
-		private readonly IUserUiCulture _uiCulture;
 
-		public SkillGroupViewModelBuilder(ISkillGroupRepository skillGroupRepository, ILoadAllSkillInIntradays loadAllSkillInIntradays, IUserUiCulture uiCulture)
+		private readonly IUserUiCulture _uiCulture;
+		private readonly IAllSkillForSkillGroupProvider _allSkillForSkillGroupProvider;
+
+		public SkillGroupViewModelBuilder(ISkillGroupRepository skillGroupRepository, IUserUiCulture uiCulture,
+			IAllSkillForSkillGroupProvider allSkillForSkillGroupProvider)
 		{
 			_skillGroupRepository = skillGroupRepository;
-			_loadAllSkillInIntradays = loadAllSkillInIntradays;
 			_uiCulture = uiCulture;
+			_allSkillForSkillGroupProvider = allSkillForSkillGroupProvider;
 		}
 
 		public IEnumerable<SkillGroupViewModel> GetAll()
@@ -26,7 +29,7 @@ namespace Teleopti.Ccc.Domain.SkillGroupManagement
 				.Where(x => x.Skills.Any(y => y.IsDeleted == false))
 				.OrderBy(x => x.Name, StringComparer.Create(_uiCulture.GetUiCulture(), false));
 
-			var skills = _loadAllSkillInIntradays.Skills().ToDictionary(x => x.Id, x => x);
+			var skills = _allSkillForSkillGroupProvider.AllExceptSubSkills().ToDictionary(x => x.Id, x => x);
 
 			return skillGroups.Select(skillGroup =>
 					new SkillGroupViewModel
@@ -57,7 +60,7 @@ namespace Teleopti.Ccc.Domain.SkillGroupManagement
 		{
 			var skillGroup = _skillGroupRepository.Get(skillGroupId);
 
-			return new SkillGroupViewModel() 
+			return new SkillGroupViewModel()
 			{
 				Id = skillGroup.Id.Value,
 				Name = skillGroup.Name,
@@ -70,4 +73,6 @@ namespace Teleopti.Ccc.Domain.SkillGroupManagement
 			};
 		}
 	}
+
+	
 }

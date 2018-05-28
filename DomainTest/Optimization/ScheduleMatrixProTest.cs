@@ -109,27 +109,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         }
 
         [Test]
-        public void VerifyWeekBeforeOuterPeriodDictionary()
-        {
-            Assert.AreEqual(_target.WeekBeforeOuterPeriodDays.Length, _target.WeekBeforeOuterPeriodDictionary.Values.Count);
-        }
-
-        [Test]
-        public void VerifyWeekAfterOuterPeriodDictionary()
-        {
-            Assert.AreEqual(_target.WeekAfterOuterPeriodDays.Length, _target.WeekAfterOuterPeriodDictionary.Values.Count);
-        }
-
-        [Test]
         public void VerifyOuterWeeksPeriodDictionary()
         {
             Assert.AreEqual(_target.OuterWeeksPeriodDays.Length, _target.OuterWeeksPeriodDictionary.Values.Count);
-        }
-
-        [Test]
-        public void VerifyFullWeeksPeriodDictionary()
-        {
-            Assert.AreEqual(_target.FullWeeksPeriodDays.Length, _target.FullWeeksPeriodDictionary.Values.Count);
         }
 
 		[Test]

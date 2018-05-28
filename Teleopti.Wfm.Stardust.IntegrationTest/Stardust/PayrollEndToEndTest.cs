@@ -17,7 +17,6 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.ServiceBus;
-using Teleopti.Ccc.Sdk.ServiceBus.Custom;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
@@ -54,7 +53,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			_assertRetryStrategy.Reset();
 
 			TestLog.Debug("Performed level1 assertion");
-			var host = new ServiceBusRunner(i => { }, new EnvironmentVariable(), ConfigReader);
+			var host = new ServiceBusRunner(i => { }, ConfigReader);
 			host.Start();
 			Thread.Sleep(2000);
 

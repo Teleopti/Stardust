@@ -135,8 +135,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				addPersonAssignments(retDic, personsAss);
 
 				addPersonMeetings(retDic,
-								  _repositoryFactory.CreateMeetingRepository(uow).Find(people, period, scenario),
-								  true, people);
+								  _repositoryFactory.CreateMeetingRepository(uow).Find(people, period, scenario, false), people);
 
 				if (scheduleDictionaryLoadOptions.LoadNotes)
 				{
@@ -201,7 +200,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			using (TurnoffPermissionScope.For(retDic))
 			{
 				addPersonAbsences(retDic, personAbsenceRepository.Find(people, optimizedPeriod, scenario));
-				addPersonMeetings(retDic, _repositoryFactory.CreateMeetingRepository(uow).Find(people, longDateOnlyPeriod, scenario), true, people);
+				addPersonMeetings(retDic, _repositoryFactory.CreateMeetingRepository(uow).Find(people, longDateOnlyPeriod, scenario, false), people);
 				var personAssignments = personAssignmentRepository.Find(people, longDateOnlyPeriod, scenario);
 				foreach (var personAssignment in personAssignments)
 				{
@@ -274,7 +273,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var uow = _currentUnitOfWork.Current();
 			addPersonAbsences(scheduleDictionary, _repositoryFactory.CreatePersonAbsenceRepository(uow).Find(personsToLoad, longDateOnlyPeriod.ToDateTimePeriod(TimeZoneInfo.Utc), scenario), scheduleDictionaryLoadOptions.LoadDaysAfterLeft);
 			addPersonAssignments(scheduleDictionary, _repositoryFactory.CreatePersonAssignmentRepository(uow).Find(personsToLoad, longDateOnlyPeriod, scenario), scheduleDictionaryLoadOptions.LoadDaysAfterLeft);
-			addPersonMeetings(scheduleDictionary, _repositoryFactory.CreateMeetingRepository(uow).Find(personsToLoad, longDateOnlyPeriod, scenario), true, personsToLoad, scheduleDictionaryLoadOptions.LoadDaysAfterLeft);
+			addPersonMeetings(scheduleDictionary, _repositoryFactory.CreateMeetingRepository(uow).Find(personsToLoad, longDateOnlyPeriod, scenario, false), personsToLoad, scheduleDictionaryLoadOptions.LoadDaysAfterLeft);
 			if (scheduleDictionaryLoadOptions.LoadNotes)
 			{
 				addNotes(scheduleDictionary, _repositoryFactory.CreateNoteRepository(uow).Find(longDateOnlyPeriod, personsToLoad, scenario));
@@ -388,22 +387,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return null;
 		}
 
-		private static void addPersonMeetings(IScheduleDictionary retDic, IEnumerable<IMeeting> meetings, bool onlyAddPersonsInList, IEnumerable<IPerson> addForThesePersons, bool loadDaysAfterLeft = false)
+		private static void addPersonMeetings(IScheduleDictionary retDic, IEnumerable<IMeeting> meetings, IEnumerable<IPerson> addForThesePersons, bool loadDaysAfterLeft = false)
 		{
-			foreach (IMeeting meeting in meetings)
+			var persons = addForThesePersons.ToArray();
+			var personMeetings = meetings.SelectMany(m => m.GetPersonMeetings(persons)).ToLookup(p => p.Person);
+			
+			foreach (var personMeeting in personMeetings)
 			{
-				foreach (IMeetingPerson meetingPerson in meeting.MeetingPersons)
-				{
-					if (onlyAddPersonsInList && !addForThesePersons.Contains(meetingPerson.Person))
-						continue;
-					IList<IPersonMeeting> personMeetings = meeting.GetPersonMeetings(meetingPerson.Person);
-
-					foreach (IPersonMeeting personMeeting in personMeetings)
-					{
-						if (loadDaysAfterLeft || !checkIfPersonLeft(meetingPerson.Person, personMeeting.Period))
-							((ScheduleRange)retDic[meetingPerson.Person]).Add(personMeeting);
-					}
-				}
+				((ScheduleRange) retDic[personMeeting.Key]).AddRange(personMeeting.Where(pm =>
+					loadDaysAfterLeft || !checkIfPersonLeft(pm.Person, pm.Period)));
 			}
 		}
 

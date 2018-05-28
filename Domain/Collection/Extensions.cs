@@ -239,20 +239,6 @@ namespace Teleopti.Ccc.Domain.Collection
 			}
 		}
 
-		public static IEnumerable<T> ExceptLast<T>(this IEnumerable<T> source)
-		{
-			using (var e = source.GetEnumerator())
-			{
-				if (e.MoveNext())
-				{
-					for (var value = e.Current; e.MoveNext(); value = e.Current)
-					{
-						yield return value;
-					}
-				}
-			}
-		}
-
 		public static T Second<T>(this IEnumerable<T> source)
 		{
 			return source.ElementAt(1);
@@ -306,14 +292,6 @@ namespace Teleopti.Ccc.Domain.Collection
 		public static TSource SingleOrDefaultNullSafe<TSource>(this IEnumerable<TSource> collection)
 		{
 			return collection == null ? default(TSource) : collection.SingleOrDefault();
-		}
-
-		public static bool SequenceEqualNullSafe<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second)
-		{
-			if (first == null && second == null) return true;
-			if (first == null) return false;
-			if (second == null) return false;
-			return first.SequenceEqual(second);
 		}
 	}
 }

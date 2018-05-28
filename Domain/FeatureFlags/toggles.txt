@@ -42,6 +42,7 @@ RTA_RemoveApprovedOOA_47721 = true
 RTA_ImprovedStateGroupFilter_48724 = true
 RTA_KillFattyIntradayUntilItDies_74939 = true
 RTA_RestrictModifyAdherenceWithPermission_74898 = RC
+RTA_EasilySpotLateForWork_75668 = false
 
 # Dumplings, can any of these be removed? #
 WfmTeamSchedule_ShowStaffingInfo_45206 = true
@@ -57,7 +58,7 @@ Wfm_SearchAgentBasedOnCorrectPeriod_44552 = true
 Wfm_AddMyTimeLink_45088 = true
 Wfm_GroupPages_45057 = true
 Wfm_FetchBusinessHierarchyFromReadModel_45275 = RC
-WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952 = RC
+WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952 = true
 WfmTeamSchedule_DisplaySchedulesInShiftEditor_75978 = DEV
 
 # Code Monkeys, can any of these be removed? #
@@ -65,11 +66,11 @@ Wfm_Requests_Approve_Based_On_Budget_Allotment_39626 = RC # can not use it until
 Wfm_Requests_Approve_Based_On_Intraday_39868 = RC # can not use it until function 'Approve based on business rules' is ready
 Wfm_Requests_Approve_Based_On_Minimum_Approval_Time_40274 = RC # can not use it until function 'Approve based on business rules' is ready
 OvertimeRequestUseMostUnderStaffedSkill_47853 = RC
-OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944 = RC
-OvertimeRequestSupportMultiSelectionSkillTypes_74945 = RC
-OvertimeRequestStaffingCheckMethod_74949 = RC
+OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944 = true
+OvertimeRequestSupportMultiSelectionSkillTypes_74945 = true
+OvertimeRequestStaffingCheckMethod_74949 = true
 OvertimeRequestChangeBelongsToDateForOverNightShift_74984 = RC
-OvertimeRequestUsePrimarySkillOption_75573 = RC
+OvertimeRequestUsePrimarySkillOption_75573 = true
 
 Wfm_People_ImportAndCreateAgentFromFile_42528 = true
 Wfm_People_SetFallbackValuesForImporting_43289 = true
@@ -83,7 +84,7 @@ MyTimeWeb_DayScheduleForStartPage_Command_44209 = true
 MyTimeWeb_MonthlyScheduleMobileView_45004 = true
 MyTimeWeb_SortRequestList_40711 = true #Please note the feature for this one is 40771!
 MyTimeWeb_WaitListPositionEnhancement_46301 = true
-
+MyTimeWeb_NewTeamScheduleView_75989 = DEV
 MyTimeWeb_PollToCheckScheduleChanges_46595 = true
 
 # China, can any of these be removed? #
@@ -106,7 +107,8 @@ ResourcePlanner_UseErlangAWithFinitePatience_47738 = RC
 ResourcePlanner_SpeedUpEvents_48769 = true #batch deletes of dates - can be deleted early
 ResourcePlanner_SpeedUpEvents_74996 = true #caching different data - can be deleted early
 ResourcePlanner_SpeedUpEvents_75415 = true #restructure of events - dont remove toggle too early
-ResourcePlanner_MinimumAgents_75339 = false #currently makes (some) DO opt hang forever
+ResourcePlanner_MinimumAgents_75339 = RC
+ResourcePlanner_LessResourcesXXL_74915 = false
 
 # Bugs&Roses #
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
@@ -139,7 +141,7 @@ ETL_RemoveTimeZoneAndDateNightly_40870 = true
 ETL_EventBasedAgentNameDescription_41432 = true
 ETL_FixScheduleForPersonPeriod_41393 = true
 ETL_SpeedUpNightlyDayOff_38213 = true
-ETL_Show_Web_Based_ETL_Tool_74837 = RC
+ETL_Show_Web_Based_ETL_Tool_74837 = true
 
 # DeBockers #
 WfmIntraday_MonitorActualvsForecasted_35176 = true
@@ -173,8 +175,11 @@ WFM_AuditTrail_44006 = true
 WFM_Clear_Data_After_Leaving_Date_47768 = true
 
 # Dragonfly #
-WFM_Gamification_Setting_With_External_Quality_Values_45003 = RC
-WFM_Gamification_Calculate_Badges_47250 = RC
-WFM_Gamification_Recalculate_Badges_Within_Period_48403 = RC
-WFM_Gamification_Create_Rolling_Periods_74866 = RC
-MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889 = RC
+WFM_Gamification_Setting_With_External_Quality_Values_45003 = true
+WFM_Gamification_Calculate_Badges_47250 = true
+WFM_Gamification_Recalculate_Badges_Within_Period_48403 = true
+WFM_Gamification_Create_Rolling_Periods_74866 = true
+MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889 = true
+
+# Tech #
+Tech_Moving_ResilientConnectionLogic = RC

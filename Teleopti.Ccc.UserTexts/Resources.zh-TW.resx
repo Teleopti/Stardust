@@ -448,11 +448,11 @@
     <comment>Agent settings</comment>
   </data>
   <data name="AgentsInc" xml:space="preserve">
-    <value>座席代表包括</value>
+    <value>座席代表到崗數</value>
     <comment>Agents inc</comment>
   </data>
   <data name="AgentsIncWithShrinkage" xml:space="preserve">
-    <value>包含損耗的座席代表數</value>
+    <value>包含損耗的座席代表到崗數</value>
     <comment>Agents inc with shrinkage</comment>
   </data>
   <data name="AgentState" xml:space="preserve">
@@ -7829,6 +7829,9 @@ Teleopti R&amp;D</value>
   <data name="DateColon" xml:space="preserve">
     <value>日期：</value>
   </data>
+  <data name="RequestDenyReasonAutodeny" xml:space="preserve">
+    <value>您的缺勤申請由於管理員設置的一條規則，被自動拒絕。</value>
+  </data>
   <data name="RequestDenyReasonClosedPeriod" xml:space="preserve">
     <value>您的缺勤申請被系統自動拒絕。某些日期當前未開放申請。</value>
   </data>
@@ -8226,7 +8229,7 @@ Teleopti R&amp;D</value>
     <value>預算的員工</value>
   </data>
   <data name="Contractors" xml:space="preserve">
-    <value>立合同人</value>
+    <value>外包商</value>
   </data>
   <data name="DaysOffPerWeek" xml:space="preserve">
     <value>每週休息日天數</value>
@@ -10893,7 +10896,7 @@ Teleopti R&amp;D</value>
     <value>開始時間應早於結束時間</value>
   </data>
   <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
-    <value>Teleopti產品啟用金鑰錯誤</value>
+    <value>Teleopti產品啟用金鑰免責條款</value>
   </data>
   <data name="TestSendingToColon" xml:space="preserve">
     <value>測試發送到：</value>
@@ -13884,30 +13887,6 @@ Teleopti R&amp;D</value>
   <data name="SeveralGroupsSelected" xml:space="preserve">
     <value>已選定 {0} 個組</value>
   </data>
-  <data name="ImportBpoTheSkillWithNameIsNotDefinedInTheSystem" xml:space="preserve">
-    <value>技能名稱 {0} 未在系統中定義。</value>
-  </data>
-  <data name="ImportBpoSkillDefinedMultipleTimesInTheSystem" xml:space="preserve">
-    <value>技能名稱 {0} 已在系統中定義了 {1} 次。當使用此功能時僅允許一次。 </value>
-  </data>
-  <data name="ImportBpoLineHasIncorrectParameterCount" xml:space="preserve">
-    <value>一行中有 {0} 個參數，但只需要 {1} 個參數。</value>
-  </data>
-  <data name="ImportBpoErrorFoundOnLineNumberXWithContentsY" xml:space="preserve">
-    <value>行數 {0} 中發現錯誤內容：{1} {2}</value>
-  </data>
-  <data name="ImportBpoParameterCannotBeEmpty" xml:space="preserve">
-    <value>參數 {0} 不能為空</value>
-  </data>
-  <data name="ImportBpoInvalidFieldNameInHeader" xml:space="preserve">
-    <value>頁眉包含無效欄位名稱: '{0}'. 有效的欄位名稱為: ({1})</value>
-  </data>
-  <data name="ImportBpoTheImportFileCannotBeEmpty" xml:space="preserve">
-    <value>導入檔不能為空。</value>
-  </data>
-  <data name="ImportBpoFirstLineInFileHeaderLineCannotBeEmpty" xml:space="preserve">
-    <value>檔中第一行（頁面一行）不能為空。</value>
-  </data>
   <data name="OpenSite" xml:space="preserve">
     <value>進入網站</value>
   </data>
@@ -13950,224 +13929,741 @@ Teleopti R&amp;D</value>
   <data name="InAlarmInSite" xml:space="preserve">
     <value>網站中的告警數</value>
   </data>
-  <data name="FilterPlanGroupSchedulingSetting" xml:space="preserve">
-    <value>篩選排班設置</value>
-  </data>
-  <data name="ShiftNotMatchingShiftBag" xml:space="preserve">
-    <value>班次包{1}中不存在日期 {0} 的班次</value>
-  </data>
-  <data name="ModifySkillGroup" xml:space="preserve">
-    <value>修改技能組</value>
-  </data>
-  <data name="ExistingShiftNotMatchShift" xml:space="preserve">
-    <value>{0}的班次與{1}的班次不匹配</value>
-  </data>
-  <data name="IndividualFlexible" xml:space="preserve">
-    <value>靈活性</value>
-  </data>
-  <data name="ExistingShiftNotMatchShiftCategory" xml:space="preserve">
-    <value>班次類別 ({0})於{1} 與 班次類別 ({2})於{3} 不匹配.</value>
-  </data>
-  <data name="TextOFCreatePlanGroupSchedulingSetting" xml:space="preserve">
-    <value>填入資訊以創建一個新的排班設置</value>
-  </data>
-  <data name="ExistingShiftNotMatchStartTime" xml:space="preserve">
-    <value>{1} 的開始時間({0}) 與 {3}的開始時間({2}) 不匹配.</value>
-  </data>
-  <data name="StartTimeNotMatchingShiftBag" xml:space="preserve">
-    <value>班次包{1}中不存在日期 {0} 中此開始時間的班次</value>
-  </data>
-  <data name="InfoOfSchedulingSetting" xml:space="preserve">
-    <value>排班設置已應用於計畫組</value>
-  </data>
-  <data name="AbsenceRequestAlreadyInWaitlist" xml:space="preserve">
-    <value>此週期中已有等候的申請, 請等待.</value>
-  </data>
-  <data name="ExportToExcel" xml:space="preserve">
-    <value>匯出到Excel</value>
-  </data>
-  <data name="ExportSchedule" xml:space="preserve">
-    <value>匯出班表</value>
-  </data>
-  <data name="ExportGap" xml:space="preserve">
-    <value>匯出缺口</value>
-  </data>
-  <data name="PlanGroupSchedulingSettingAppliedFilters" xml:space="preserve">
-    <value>以下設置已被應用於計畫組 {0}</value>
+  <data name="BreakPreferenceStartTimeByMaxColon" xml:space="preserve">
+    <value>打破偏好開始時間最大值:</value>
   </data>
   <data name="PlanningGroup" xml:space="preserve">
     <value>計畫組</value>
   </data>
-  <data name="PriorityHigher" xml:space="preserve">
-    <value>高優先順序</value>
-  </data>
-  <data name="EditPlanGroupSchedulingSetting" xml:space="preserve">
-    <value>編輯排班設置</value>
-  </data>
-  <data name="DeleteSchedulingSetting" xml:space="preserve">
-    <value>刪除排班設置</value>
-  </data>
-  <data name="DeletePlanGroupSchedullingSetting" xml:space="preserve">
-    <value>刪除排班設置</value>
-  </data>
-  <data name="TotalAgentsInAlarm" xml:space="preserve">
-    <value>在報警中的全部座席代表</value>
-  </data>
-  <data name="Feedback" xml:space="preserve">
-    <value>讓我們知道您的想法</value>
-  </data>
-  <data name="LoadingSkillGroups" xml:space="preserve">
-    <value>正在載入技能組...</value>
-  </data>
-  <data name="CreateSkillGroup" xml:space="preserve">
-    <value>創建技能組</value>
-  </data>
-  <data name="CreatePlanGroupSchedulingSetting" xml:space="preserve">
-    <value>創建排班設置</value>
-  </data>
-  <data name="SkillGroupColon" xml:space="preserve">
-    <value>技能組:</value>
-  </data>
-  <data name="PriorityLower" xml:space="preserve">
-    <value>低優先順序</value>
-  </data>
-  <data name="ShiftTradeTargetTimeRuleName" xml:space="preserve">
-    <value>合同時間容差</value>
-  </data>
-  <data name="ManagePlanningGroupSchedulingSetting" xml:space="preserve">
-    <value>為計畫組{0}管理排班設置</value>
-  </data>
-  <data name="ShowStaffing" xml:space="preserve">
-    <value>顯示人力</value>
-  </data>
-  <data name="MissingOvertimeType" xml:space="preserve">
-    <value>缺少加班類型</value>
-  </data>
-  <data name="ViewAgentsBySelection" xml:space="preserve">
-    <value>通過選擇查看座席代表</value>
-  </data>
-  <data name="ModifiedAt" xml:space="preserve">
-    <value>修改於</value>
-  </data>
-  <data name="ModifiedBy" xml:space="preserve">
-    <value>修改人</value>
-  </data>
-  <data name="UserSettings" xml:space="preserve">
-    <value>用戶設置</value>
-  </data>
-  <data name="OvertimeRequestRollingPeriodError" xml:space="preserve">
-    <value>有效區間為 0 - {0}</value>
-  </data>
-  <data name="OvertimeRequestDatePeriodError" xml:space="preserve">
-    <value>有效日期範圍為 {0} - {1}</value>
-  </data>
   <data name="TextOfEditPlanGroupSchedulingSetting" xml:space="preserve">
     <value>為選定的排班設置修改資訊</value>
   </data>
-  <data name="NoAgentsToBeDisplayed" xml:space="preserve">
-    <value>無可顯示的座席代表</value>
+  <data name="PlanGroupSchedulingSettingAppliedFilters" xml:space="preserve">
+    <value>以下設置被應用於計畫組 {0}</value>
   </data>
-  <data name="ViewAgents" xml:space="preserve">
-    <value>查看座席代表</value>
+  <data name="TextOFCreatePlanGroupSchedulingSetting" xml:space="preserve">
+    <value>填入資訊以創建新的排班設置</value>
   </data>
   <data name="BlockSameShiftCategory" xml:space="preserve">
     <value>相同班次類別</value>
   </data>
-  <data name="BreakPreferenceStartTimeByMaxColon" xml:space="preserve">
-    <value>允許打破偏好開始時間最大為:</value>
+  <data name="NotShowingAbandonRate" xml:space="preserve">
+    <value>當前選擇無法顯示放棄率.</value>
   </data>
-  <data name="SelectedFilters" xml:space="preserve">
-    <value>選定的篩選器</value>
+  <data name="MissingOvertimeType" xml:space="preserve">
+    <value>缺少加班類型</value>
   </data>
-  <data name="SelectionTooLarge" xml:space="preserve">
-    <value>選擇範圍太大</value>
-  </data>
-  <data name="AuditType" xml:space="preserve">
-    <value>審計類型</value>
-  </data>
-  <data name="GeneralSettingOfPlanGroupSchedulingSetting" xml:space="preserve">
-    <value>名稱和篩選器</value>
-  </data>
-  <data name="SelectedGroups" xml:space="preserve">
-    <value>選的的組</value>
-  </data>
-  <data name="SelectSkillGroup" xml:space="preserve">
-    <value>選擇技能組</value>
-  </data>
-  <data name="SelectScheduleMethod" xml:space="preserve">
-    <value>選擇排班方法</value>
-  </data>
-  <data name="MaxResultsReached" xml:space="preserve">
-    <value>對關鍵字搜索的結果將超過 {0}, 請重新定義您的搜索條件</value>
-  </data>
-  <data name="AreYouSureYouWantToDeleteSchedulingSetting" xml:space="preserve">
-    <value>您確定要刪除排班設置 {0} 及其相關設置?</value>
-  </data>
-  <data name="PlanGroupScheduling" xml:space="preserve">
-    <value>排班設置</value>
+  <data name="DeleteSchedulingSetting" xml:space="preserve">
+    <value>刪除排班設置</value>
   </data>
   <data name="NewPlanGroupSchedulingSetting" xml:space="preserve">
     <value>新建排班設置</value>
   </data>
-  <data name="ScheduledAgent" xml:space="preserve">
-    <value>排定的座席代表</value>
+  <data name="PlanGroupScheduling" xml:space="preserve">
+    <value>排班設置</value>
   </data>
-  <data name="BlockSameShift" xml:space="preserve">
-    <value>相同班次</value>
+  <data name="SelectionTooLarge" xml:space="preserve">
+    <value>選擇範圍過大</value>
   </data>
-  <data name="TextOfNoBlockScheduling" xml:space="preserve">
-    <value>無批次排班</value>
+  <data name="ExportToExcel" xml:space="preserve">
+    <value>匯出到Excel</value>
   </data>
-  <data name="NoOvertimeType" xml:space="preserve">
-    <value>您的合同中沒有加班類型. 請聯繫您的Teleopti管理員.</value>
+  <data name="SkillAreaNoSkillSelected" xml:space="preserve">
+    <value>您需要選擇至少一個技能</value>
   </data>
-  <data name="BlockSameStartTime" xml:space="preserve">
-    <value>相同開始時間</value>
+  <data name="SelectedFilters" xml:space="preserve">
+    <value>已選擇的篩選器</value>
   </data>
-  <data name="OvertimeShortName" xml:space="preserve">
-    <value>加班</value>
-  </data>
-  <data name="NoSkillGroupsFound" xml:space="preserve">
-    <value>沒有找到技能組</value>
-  </data>
-  <data name="MaximumAgentToExport" xml:space="preserve">
-    <value>您正嘗試匯出{0}個座席代表, 但您一次僅能匯出1000個.</value>
-  </data>
-  <data name="RequestDenyReasonNoPersonSkillOpen" xml:space="preserve">
-    <value>您的申請已被拒絕, 由於在申請的週期內您所有的技能已關閉</value>
-  </data>
-  <data name="OpenForOvertimeRequests" xml:space="preserve">
-    <value>開發加班申請</value>
+  <data name="TotalAgentsInAlarm" xml:space="preserve">
+    <value>在告警狀態的座席代表總數</value>
   </data>
   <data name="ReportGeneratedTime" xml:space="preserve">
     <value>報表已生成</value>
   </data>
+  <data name="CreateSkillGroup" xml:space="preserve">
+    <value>創建技能組</value>
+  </data>
+  <data name="ModifySkillGroup" xml:space="preserve">
+    <value>修改技能組</value>
+  </data>
+  <data name="ExportGap" xml:space="preserve">
+    <value>匯出人力缺口</value>
+  </data>
+  <data name="AbsenceRequestAlreadyInWaitlist" xml:space="preserve">
+    <value>當前週期已有等候的請求, 請等待.</value>
+  </data>
+  <data name="SelectScheduleMethod" xml:space="preserve">
+    <value>選擇排班方法</value>
+  </data>
+  <data name="DeletePlanGroupSchedullingSetting" xml:space="preserve">
+    <value>刪除排班設置</value>
+  </data>
+  <data name="CreatePlanGroupSchedulingSetting" xml:space="preserve">
+    <value>創建排班設置</value>
+  </data>
   <data name="NotShowingReforcastedAgents" xml:space="preserve">
-    <value>在當前選擇中無法顯示重新預測的座席代表.</value>
+    <value>當前選擇無法顯示重新預測的座席代表數.</value>
   </data>
-  <data name="ExportSchedulesMaximumOptionalColumns" xml:space="preserve">
-    <value>最多3個可選欄位可以被選擇</value>
+  <data name="EditPlanGroupSchedulingSetting" xml:space="preserve">
+    <value>編輯排班設置</value>
   </data>
-  <data name="SkillAreaNoSkillSelected" xml:space="preserve">
-    <value>您至少要選擇一個技能.</value>
+  <data name="NoAgentsToBeDisplayed" xml:space="preserve">
+    <value>沒有顯示的座席代表</value>
   </data>
-  <data name="OvertimeRequestDenyReasonClosedPeriod" xml:space="preserve">
-    <value>您的加班申請無法被滿足. 當前某些日期沒有開放申請.</value>
+  <data name="BlockSameStartTime" xml:space="preserve">
+    <value>相同開始時間</value>
   </data>
-  <data name="ShiftStartsDayBeforeOrAfter" xml:space="preserve">
-    <value>{0}: 一個班次不允許開始於前一天或後一天. 該問題可能是由於在人員模組中變更了座席代表的時區. 請選擇正確的時區或刪除此日期以修正問題.</value>
+  <data name="ScheduledAgent" xml:space="preserve">
+    <value>排定的座席代表</value>
   </data>
-  <data name="NotShowingAbandonRate" xml:space="preserve">
-    <value>當前選項無法顯示放棄率</value>
+  <data name="ModifiedBy" xml:space="preserve">
+    <value>修改人</value>
   </data>
-  <data name="OvertimeRequestDenyReasonNoPeriod" xml:space="preserve">
-    <value>您的加班申請已被拒絕. 申請週期內的某些日期還沒有開放申請. 您可以發送申請在以下週期範圍: {0}.</value>
+  <data name="ModifiedAt" xml:space="preserve">
+    <value>修改於</value>
+  </data>
+  <data name="IndividualFlexible" xml:space="preserve">
+    <value>靈活的</value>
+  </data>
+  <data name="AuditType" xml:space="preserve">
+    <value>審核類型</value>
+  </data>
+  <data name="ViewAgentsBySelection" xml:space="preserve">
+    <value>通過選擇查看座席代表</value>
+  </data>
+  <data name="TextOfNoBlockScheduling" xml:space="preserve">
+    <value>無批次排班</value>
+  </data>
+  <data name="GeneralSettingOfPlanGroupSchedulingSetting" xml:space="preserve">
+    <value>名稱和篩選器</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteSchedulingSetting" xml:space="preserve">
+    <value>您確定想要刪除排班設置 {0} 及其相關設置嗎?</value>
+  </data>
+  <data name="ViewAgents" xml:space="preserve">
+    <value>查看座席代表</value>
+  </data>
+  <data name="SkillGroupColon" xml:space="preserve">
+    <value>技能組:</value>
+  </data>
+  <data name="InfoOfSchedulingSetting" xml:space="preserve">
+    <value>排班設置已被應用於計畫組</value>
+  </data>
+  <data name="SelectSkillGroup" xml:space="preserve">
+    <value>選擇技能組</value>
+  </data>
+  <data name="FilterPlanGroupSchedulingSetting" xml:space="preserve">
+    <value>篩選排班設置</value>
+  </data>
+  <data name="NoSkillGroupsFound" xml:space="preserve">
+    <value>沒有找到技能組</value>
+  </data>
+  <data name="BlockSameShift" xml:space="preserve">
+    <value>相同班次</value>
+  </data>
+  <data name="LoadingSkillGroups" xml:space="preserve">
+    <value>正在假造技能組...</value>
+  </data>
+  <data name="ManagePlanningGroupSchedulingSetting" xml:space="preserve">
+    <value>為計畫組 {0} 管理排班設置</value>
+  </data>
+  <data name="OvertimeRequests" xml:space="preserve">
+    <value>加班申請</value>
+  </data>
+  <data name="ShiftTradeResendMessage" xml:space="preserve">
+    <value>申請已被重新發送。</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonInvalidPeriod" xml:space="preserve">
+    <value>您的加班申請已被自動拒絕。可申請的週期為 {0}。</value>
+  </data>
+  <data name="ShiftTradeRequestForExchangeOfferHasBeenCompleted" xml:space="preserve">
+    <value>此調換班請求已被其他座席代表完成。</value>
+  </data>
+  <data name="MaximumContinuousWorkTimeRuleName" xml:space="preserve">
+    <value>最多連續工作時間</value>
+  </data>
+  <data name="ThereIsNoAvailableSkillForOvertime" xml:space="preserve">
+    <value>沒有可申請加班的技能</value>
+  </data>
+  <data name="ImportBpoTheSkillWithNameIsNotDefinedInTheSystem" xml:space="preserve">
+    <value>系統中沒有定義名稱為 {0} 的技能。</value>
+  </data>
+  <data name="ImportBpoSkillDefinedMultipleTimesInTheSystem" xml:space="preserve">
+    <value>系統中名稱為 {0} 的技能已被定義了 {1} 此。使用此功能時僅允許一次。</value>
+  </data>
+  <data name="ImportBpoLineHasIncorrectParameterCount" xml:space="preserve">
+    <value>行中包含 {0} 個參數，但需要 {1} 個參數。</value>
+  </data>
+  <data name="ImportBpoErrorFoundOnLineNumberXWithContentsY" xml:space="preserve">
+    <value>發現錯誤在第 {0} 行，包含資訊： "{1}" {2}</value>
+  </data>
+  <data name="ImportBpoParameterCannotBeEmpty" xml:space="preserve">
+    <value>參數 {0} 不能為空</value>
+  </data>
+  <data name="ImportBpoInvalidFieldNameInHeader" xml:space="preserve">
+    <value>頁頭: '{0}' 包含無效欄位名稱。無效的欄位名稱為：({1})</value>
+  </data>
+  <data name="ImportBpoTheImportFileCannotBeEmpty" xml:space="preserve">
+    <value>導入檔不能為空。</value>
+  </data>
+  <data name="ImportBpoFirstLineInFileHeaderLineCannotBeEmpty" xml:space="preserve">
+    <value>檔中的首行不能為空。</value>
+  </data>
+  <data name="NoOvertimeType" xml:space="preserve">
+    <value>未在您的合同設置中找到加班類型。請聯繫您的管理員。</value>
+  </data>
+  <data name="OvertimeShortName" xml:space="preserve">
+    <value>加班</value>
+  </data>
+  <data name="ExportSchedule" xml:space="preserve">
+    <value>匯出班表</value>
   </data>
   <data name="ExportSchedulesMaximumDays" xml:space="preserve">
     <value>最多可選擇31天</value>
   </data>
+  <data name="ExportSchedulesMaximumOptionalColumns" xml:space="preserve">
+    <value>最多可選擇3個自訂欄位</value>
+  </data>
+  <data name="ShiftTradeTargetTimeRuleName" xml:space="preserve">
+    <value>合同時間容差</value>
+  </data>
+  <data name="MaximumOvertimeRuleName" xml:space="preserve">
+    <value>最大加班時間</value>
+  </data>
+  <data name="ShowStaffing" xml:space="preserve">
+    <value>顯示人力</value>
+  </data>
+  <data name="Feedback" xml:space="preserve">
+    <value>讓我們知道您的想法</value>
+  </data>
+  <data name="UserSettings" xml:space="preserve">
+    <value>用戶設置</value>
+  </data>
+  <data name="ShiftStartsDayBeforeOrAfter" xml:space="preserve">
+    <value>{0:d}: 班次不允許開始於該日期之前或之後。這可能是因為座席代表在人員模組中的時區設置被更改。請修正時區設置或直接點擊刪除改日期。</value>
+  </data>
+  <data name="MaximumAgentToExport" xml:space="preserve">
+    <value>您每次最多可到處1000個座席代表的班表，您正在匯出{0}。</value>
+  </data>
+  <data name="SelectedGroups" xml:space="preserve">
+    <value>已選定的組</value>
+  </data>
+  <data name="PriorityHigher" xml:space="preserve">
+    <value>高優先順序</value>
+  </data>
+  <data name="PriorityLower" xml:space="preserve">
+    <value>低優先順序</value>
+  </data>
+  <data name="MaxResultsReached" xml:space="preserve">
+    <value>關鍵字的搜索結果將超過 {0}, 請優化您的搜索條件。</value>
+  </data>
+  <data name="RequestDenyReasonNoPersonSkillOpen" xml:space="preserve">
+    <value>申請被拒絕，因為所有技能在申請週期內已關閉。</value>
+  </data>
+  <data name="OvertimeRequestDatePeriodError" xml:space="preserve">
+    <value>有效日期範圍 {0} - {1}</value>
+  </data>
+  <data name="OvertimeRequestRollingPeriodError" xml:space="preserve">
+    <value>有效範圍 0 - {0}</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonClosedPeriod" xml:space="preserve">
+    <value>您的加班申請已被拒絕。一些日期當前未開放申請。</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonAutodeny" xml:space="preserve">
+    <value>管理員已禁用了全部或部分申請週期的加班申請審批。</value>
+  </data>
+  <data name="StartTimeNotMatchingShiftBag" xml:space="preserve">
+    <value>開始時間 {0:HH:mm} 在 {1:d} 的班次 不存在于班次包 {2}</value>
+  </data>
+  <data name="ShiftNotMatchingShiftBag" xml:space="preserve">
+    <value>在日期 {0:d} 的班次不存在于班次包 {1}</value>
+  </data>
+  <data name="OpenForOvertimeRequests" xml:space="preserve">
+    <value>開放加班申請</value>
+  </data>
+  <data name="OvertimeRequestMaximum" xml:space="preserve">
+    <value>每個日曆月最大加班時間：</value>
+  </data>
+  <data name="OvertimeRequestMaximumTimeHandleType" xml:space="preserve">
+    <value>當驗證失敗：</value>
+  </data>
+  <data name="OvertimeRequestMaximumTimeDenyReason" xml:space="preserve">
+    <value>{0} 包含太多加班 ({1}). 最大值是 {2}.</value>
+  </data>
+  <data name="OvertimeRequestContinuousWorkTimeDenyReason" xml:space="preserve">
+    <value>{0} 包含太多連續的工作時間 ({1}). 最大值是 {2}.</value>
+  </data>
+  <data name="OvertimeRequestMaximumContinuousWorkTime" xml:space="preserve">
+    <value>最多連續工作時間：</value>
+  </data>
+  <data name="OvertimeRequestMinimumRestTimeThreshold" xml:space="preserve">
+    <value>最少休息時間：</value>
+  </data>
+  <data name="ExistingShiftNotMatchShift" xml:space="preserve">
+    <value>在 {0:d} 的班次與{1:d} 的班次不相符。</value>
+  </data>
+  <data name="ExistingShiftNotMatchShiftCategory" xml:space="preserve">
+    <value>班次類別 {0} 在 {1:d} 與班次類別 {2} 在 {3:d} 不相符。</value>
+  </data>
+  <data name="ExistingShiftNotMatchStartTime" xml:space="preserve">
+    <value>開始時間 {0:HH:mm} 在日期 {1:d} 與開始時間 {2:HH:mm} 在日期 {3:d} 不相符。</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonNoPeriod" xml:space="preserve">
+    <value>您的加班申請已被拒絕。申請週期內的某些天未開放申請。您可在以下週期內發送申請: {0}。</value>
+  </data>
+  <data name="ShiftCategoryNotMatchingShiftBag" xml:space="preserve">
+    <value>班次類別 {0} 在日期{1:d} 不存在于班次包 {2}。</value>
+  </data>
+  <data name="ContractWorkRuleValidation" xml:space="preserve">
+    <value>合同工作規則驗證</value>
+  </data>
+  <data name="GamificationSettings" xml:space="preserve">
+    <value>遊戲化設置</value>
+  </data>
+  <data name="SelectOneOrMoreSites" xml:space="preserve">
+    <value>選擇一個或多個網站</value>
+  </data>
+  <data name="SetGamificationTargets" xml:space="preserve">
+    <value>設置遊戲化目標</value>
+  </data>
+  <data name="AppliedSetting" xml:space="preserve">
+    <value>已應用的設置</value>
+  </data>
+  <data name="BlockSchedulingNotWorkingWhenUsingPreferences" xml:space="preserve">
+    <value>當使用偏好時批次排班可能失效</value>
+  </data>
+  <data name="IntraDayChipNumberOf" xml:space="preserve">
+    <value>於</value>
+  </data>
+  <data name="AllSkillGroups" xml:space="preserve">
+    <value>所有技能組</value>
+  </data>
+  <data name="ExitSGM" xml:space="preserve">
+    <value>退出技能組管理器</value>
+  </data>
+  <data name="AreYouSureYouWantToExitSGM" xml:space="preserve">
+    <value>您有未保存的技能組。您確定要離開技能組管理器嗎？</value>
+  </data>
+  <data name="AvailableSkills" xml:space="preserve">
+    <value>可用技能</value>
+  </data>
+  <data name="CreateNewSkillGroup" xml:space="preserve">
+    <value>創建新的技能組</value>
+  </data>
+  <data name="DoYouWantToDeleteSkillGroup" xml:space="preserve">
+    <value>刪除技能組</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteTheSkillGroup" xml:space="preserve">
+    <value>您確定要刪除技能組嗎</value>
+  </data>
+  <data name="ManageSkillGroups" xml:space="preserve">
+    <value>管理技能組</value>
+  </data>
+  <data name="SelectSite" xml:space="preserve">
+    <value>選擇網站</value>
+  </data>
+  <data name="SelectTeam" xml:space="preserve">
+    <value>選擇小組</value>
+  </data>
+  <data name="UnselectSite" xml:space="preserve">
+    <value>反選網站</value>
+  </data>
+  <data name="UnselectTeam" xml:space="preserve">
+    <value>反選小組</value>
+  </data>
+  <data name="ThresholdForBadge" xml:space="preserve">
+    <value>徽章閾值：</value>
+  </data>
+  <data name="ThresholdForGoldBadge" xml:space="preserve">
+    <value>青銅徽章閾值：</value>
+  </data>
+  <data name="ThresholdForSilverBadge" xml:space="preserve">
+    <value>金色徽章閾值：</value>
+  </data>
+  <data name="ThresholdForBronzeBadge" xml:space="preserve">
+    <value>銀色徽章閾值：</value>
+  </data>
+  <data name="DenyReasonSystemBusy" xml:space="preserve">
+    <value>由於系統正忙，您的申請已被拒絕。請稍後重試。</value>
+  </data>
+  <data name="DenyReasonNoSkillCombinationsFound" xml:space="preserve">
+    <value>由於系統無法在申請週期內找到人力資料，您的申請已被拒絕。</value>
+  </data>
+  <data name="YourScheduleHasChanged" xml:space="preserve">
+    <value>您的班表已變更！</value>
+  </data>
+  <data name="AnErrorOccurredWhenUploadingTheFile" xml:space="preserve">
+    <value>上傳檔時發生錯誤</value>
+  </data>
+  <data name="ImportExternalData" xml:space="preserve">
+    <value>導入外部資料</value>
+  </data>
+  <data name="UploadAndStart" xml:space="preserve">
+    <value>上傳並開始</value>
+  </data>
+  <data name="InvalidNumberOfFields" xml:space="preserve">
+    <value>每行必須有 {0} 個欄位。 此行有 {1} 個。</value>
+  </data>
+  <data name="MeasureNameIsTooLong" xml:space="preserve">
+    <value>名稱過長</value>
+  </data>
+  <data name="AgentIdIsTooLong" xml:space="preserve">
+    <value>Agent ID 過長</value>
+  </data>
+  <data name="MeasureTypeMustBeEitherNumericOrPercent" xml:space="preserve">
+    <value>測量類型必須為"數位“或”百分比“</value>
+  </data>
+  <data name="MeasureTypeNotMatchExistingDefinition" xml:space="preserve">
+    <value>測量類型個與現有定義不符</value>
+  </data>
+  <data name="MeasureIdMustContainAnInteger" xml:space="preserve">
+    <value>ID必須包含一個整數</value>
+  </data>
+  <data name="RowExceedsLimitOfGamificationMeasures" xml:space="preserve">
+    <value>遊戲化測量值有一個 {0} 的限制.此行不能被導入因為會超過此限制. </value>
+  </data>
+  <data name="InvalidScore" xml:space="preserve">
+    <value>無效得分</value>
+  </data>
+  <data name="AgentIdCouldNotBeMatchedToAnyAgent" xml:space="preserve">
+    <value>此agent ID無法對應任何座席代表</value>
+  </data>
+  <data name="BusinessHierarchy" xml:space="preserve">
+    <value>組織架構</value>
+  </data>
+  <data name="GroupPages" xml:space="preserve">
+    <value>分組頁面</value>
+  </data>
+  <data name="SelectEndDate" xml:space="preserve">
+    <value>請選擇結束日期</value>
+  </data>
+  <data name="SelectStartDate" xml:space="preserve">
+    <value>請選擇開始日期</value>
+  </data>
+  <data name="SelectStartDateAndEndDate" xml:space="preserve">
+    <value>請選擇開始日期和結束日期</value>
+  </data>
+  <data name="ValidateEndDate" xml:space="preserve">
+    <value>結束日期應晚於開始日期</value>
+  </data>
+  <data name="ValidateStartDate" xml:space="preserve">
+    <value>開始日期應早於結束日期</value>
+  </data>
+  <data name="NoPermissionToViewWFMModuleErrorMessage" xml:space="preserve">
+    <value>您沒有許可權查看{0}.</value>
+  </data>
+  <data name="GamificationViewImportFileFormat" xml:space="preserve">
+    <value>查看導入檔案格式詳情</value>
+  </data>
+  <data name="BpoExportPeriodStartDateBeforeEndDate" xml:space="preserve">
+    <value>匯出週期的開始日期必須早於結束日期</value>
+  </data>
+  <data name="BpoOnlyExportPeriodBetweenDates" xml:space="preserve">
+    <value>匯出週期必須在日期時段{0}之中.</value>
+  </data>
+  <data name="BpoExportYouMustSelectASkill" xml:space="preserve">
+    <value>必須選擇一個技能</value>
+  </data>
+  <data name="DragAndDropYourCsvFileOrClickToSelect" xml:space="preserve">
+    <value>將您的CSV檔拖拽到此處或點擊以選擇</value>
+  </data>
+  <data name="AgentIdIsMandatory" xml:space="preserve">
+    <value>必須填寫Agent ID</value>
+  </data>
+  <data name="MeasureNameIsMandatory" xml:space="preserve">
+    <value>必須填寫測量名稱</value>
+  </data>
+  <data name="RtaConfigurationIssuesFound" xml:space="preserve">
+    <value>發現配置問題</value>
+  </data>
+  <data name="LoggedOutStateGroupMissingInConfiguration" xml:space="preserve">
+    <value>業務單元 '{0}' 沒有指定一個座席代表登出的狀態組。請設置好後以使用狀態快照功能。請在用戶端選項中進行設置。</value>
+  </data>
+  <data name="LoggedOutStateGroupMissingInRtaService" xml:space="preserve">
+    <value>即時遵守度服務沒有指定一個座席代表登出的狀態組。請設置好後以使用狀態快照功能。請在用戶端選項中進行設置並等待服務緩存更新。</value>
+  </data>
+  <data name="DefaultStateGroupMissingInConfiguration" xml:space="preserve">
+    <value>業務單元 '{0}' 沒有指定一個座席代表預設的狀態組。請設置好後以使用未識別的狀態。請在用戶端選項中進行設置。</value>
+  </data>
+  <data name="PickATemplate" xml:space="preserve">
+    <value>選擇一個範本</value>
+  </data>
+  <data name="RemoveDayOff" xml:space="preserve">
+    <value>移除一個休息日</value>
+  </data>
+  <data name="ExportAvailableLimitedTime" xml:space="preserve">
+    <value>請注意”匯出到“即將被移除。</value>
+  </data>
+  <data name="AreYouSureToRemoveSelectedDayOff" xml:space="preserve">
+    <value>您確認想要為座席代表{1}移除 {0} 個休息日嗎？</value>
+  </data>
+  <data name="FinishedRemoveDayOff" xml:space="preserve">
+    <value>休息日已成功移除。</value>
+  </data>
+  <data name="PartialSuccessMessageForAddingDayOff" xml:space="preserve">
+    <value>為座席代表 {0} 添加休息日，{1} 個成功，{2} 個失敗。</value>
+  </data>
+  <data name="PartialSuccessMessageForRemovingDayOff" xml:space="preserve">
+    <value>為座席代表 {0} 移除休息日，{1} 個成功，{2} 個失敗。</value>
+  </data>
+  <data name="SuccessfulMessageForAddingDayOff" xml:space="preserve">
+    <value>已為選定座席代表成功添加休息日。</value>
+  </data>
+  <data name="TheImportFailed" xml:space="preserve">
+    <value>導入失敗！</value>
+  </data>
+  <data name="YouCanEnable3MeasuresAtMaximum" xml:space="preserve">
+    <value>您最多可啟用3個測量指標。</value>
+  </data>
+  <data name="ImportBpoStartDateTimeMustBeBeforeEndDateTime" xml:space="preserve">
+    <value>週期的開始日期必須早於結束日期。</value>
+  </data>
+  <data name="ImportBpoResourcesCannotBeLessThanZero" xml:space="preserve">
+    <value>座席代表數不能小於0.</value>
+  </data>
+  <data name="ImportBpoSkillNotFound" xml:space="preserve">
+    <value>導入的技能無法匹配已有的技能。</value>
+  </data>
+  <data name="ImportBpoNoDefaultResolutionForSkill" xml:space="preserve">
+    <value>技能 {0} 沒有找到時段長度。</value>
+  </data>
+  <data name="ImportBpoResourceIntervalLengthDiffersFromTheSkill" xml:space="preserve">
+    <value>導入的座席代表的時段長度 ({0} 分鐘) 與技能 {1} 的時段長度不匹配({2} 分鐘)。</value>
+  </data>
+  <data name="ImportBpoSourceNameTooLong" xml:space="preserve">
+    <value>BPO源名稱太長。最多允許100個字元。</value>
+  </data>
+  <data name="ImportBpoSkillListedMoreThanOnce" xml:space="preserve">
+    <value>技能 {0} 在同一行中出現多次。</value>
+  </data>
+  <data name="NoEndToDisplay" xml:space="preserve">
+    <value>沒有結束日期可顯示</value>
+  </data>
+  <data name="NoStartAndEndDateToDisplay" xml:space="preserve">
+    <value>沒有開始日期和結束日期可顯示</value>
+  </data>
+  <data name="NoStartDateToDisplay" xml:space="preserve">
+    <value>沒有開始日期可顯示</value>
+  </data>
+  <data name="SetupIntervalLength" xml:space="preserve">
+    <value>請設置您的時段長度</value>
+  </data>
+  <data name="GamificationSettingsMovedToWeb" xml:space="preserve">
+    <value>遊戲化設置現在可在Teleopti WFM網頁門戶中使用。</value>
+  </data>
+  <data name="GamificationSettingsRedirectWebManualMessage" xml:space="preserve">
+    <value>點擊此處以手動打開遊戲化設置頁面。</value>
+  </data>
+  <data name="GamificationSettingsRedirectWebMessage" xml:space="preserve">
+    <value>當您打開此頁面時遊戲化設置頁面應自動載入。</value>
+  </data>
+  <data name="SkillType" xml:space="preserve">
+    <value>技能類型</value>
+  </data>
+  <data name="UseDefaultStartTime" xml:space="preserve">
+    <value>使用默認開始時間</value>
+  </data>
+  <data name="Measures" xml:space="preserve">
+    <value>測量</value>
+  </data>
+  <data name="ValuesShouldBeInAscendingOrderFromGoldToBronze" xml:space="preserve">
+    <value>數值應按從金到銅昇冪排列。</value>
+  </data>
+  <data name="ValuesShouldBeInDescendingOrderFromGoldToBronze" xml:space="preserve">
+    <value>數值應按從金到銅降冪排列。</value>
+  </data>
+  <data name="TextIsTooLong" xml:space="preserve">
+    <value>文本太長</value>
+  </data>
+  <data name="InvalidHoursRange" xml:space="preserve">
+    <value>週期小時數不能超過 {0} 個小時。</value>
+  </data>
+  <data name="AgentsAnalyzed" xml:space="preserve">
+    <value>正在分析限制規則</value>
+  </data>
+  <data name="AgentsThatFailedInspection" xml:space="preserve">
+    <value>座席代表檢查失敗</value>
+  </data>
+  <data name="ManyAgentsAlert" xml:space="preserve">
+    <value>已選擇了{0}個座席代表， 點擊刷新開始分析</value>
+  </data>
+  <data name="RestrictionNotAbleToBeScheduledReasonNightlyRestMightBeBroken" xml:space="preserve">
+    <value>夜間休息時間規則將被打破</value>
+  </data>
+  <data name="PrimaryReason" xml:space="preserve">
+    <value>主要原因</value>
+  </data>
+  <data name="RestrictionNotAbleToBeScheduledReasonTooLittleWorkTimeInPeriod" xml:space="preserve">
+    <value>此週期導致了太少的工作時間</value>
+  </data>
+  <data name="RestrictionNotAbleToBeScheduledReasonTooMuchWorkTimeInPeriod" xml:space="preserve">
+    <value>此週期導致了太多的工作時間</value>
+  </data>
+  <data name="RequestStartDate" xml:space="preserve">
+    <value>開始日期</value>
+  </data>
+  <data name="RequestEndDate" xml:space="preserve">
+    <value>結束日期</value>
+  </data>
+  <data name="Changes" xml:space="preserve">
+    <value>變更</value>
+  </data>
+  <data name="RestrictionNotAbleToBeScheduledReasonTooManyDaysOff" xml:space="preserve">
+    <value>週期內有太多的休息日</value>
+  </data>
+  <data name="RecordedOutOfAdherence" xml:space="preserve">
+    <value>已記錄為未遵時</value>
+  </data>
+  <data name="ApprovedAsInAdherence" xml:space="preserve">
+    <value>已批准為遵時</value>
+  </data>
+  <data name="DuplicateName" xml:space="preserve">
+    <value>重複的名字</value>
+  </data>
+  <data name="YouGotANewBronzeBadge" xml:space="preserve">
+    <value>您獲得了新的青銅徽章於 {0} 在 {1}。</value>
+  </data>
+  <data name="RestrictionNotAbleToBeScheduledReasonConflictingRestrictions" xml:space="preserve">
+    <value>限制規則衝突</value>
+  </data>
+  <data name="YouGotANewGoldBadge" xml:space="preserve">
+    <value>您獲得了新的金色徽章於 {0} 在 {1}。</value>
+  </data>
+  <data name="YouGotANewSilverBadge" xml:space="preserve">
+    <value>您獲得了新的銀色徽章於 {0} 在 {1}。</value>
+  </data>
+  <data name="ImportBpoShowingTheFirstXErrorMessagesOfY" xml:space="preserve">
+    <value>正在顯示 {0} 個錯誤資訊，總數為 {1}。</value>
+  </data>
+  <data name="RemoveShift" xml:space="preserve">
+    <value>移除班次</value>
+  </data>
+  <data name="AreYouSureToRemoveSelectedShift" xml:space="preserve">
+    <value>您是否希望為座席代表 {1} 移除班次 {0} ?</value>
+  </data>
+  <data name="NoPermissionRemovingShift" xml:space="preserve">
+    <value>沒有許可權為座席代表移除班次</value>
+  </data>
+  <data name="CanNotRemoveShiftForAgentWithFullDayAbsence" xml:space="preserve">
+    <value>無法為全天缺勤的座席代表移除班次</value>
+  </data>
+  <data name="CanNotRemoveShiftForAgentWithDayOff" xml:space="preserve">
+    <value>無法在休息日移除班次</value>
+  </data>
+  <data name="CanNotRemoveShiftForAgentWithEmptySchedule" xml:space="preserve">
+    <value>無法為座席代表移除空班表</value>
+  </data>
+  <data name="FinishedRemoveShift" xml:space="preserve">
+    <value>已成功移除班次。</value>
+  </data>
+  <data name="PartialSuccessMessageForRemovingShift" xml:space="preserve">
+    <value>為 {0} 個座席代表移除班次。 {1} 個已成功，{2} 個失敗。</value>
+  </data>
+  <data name="UIGridColumnsColon" xml:space="preserve">
+    <value>列：</value>
+  </data>
+  <data name="UIGridExportAllCSV" xml:space="preserve">
+    <value>匯出所有資料到CSV</value>
+  </data>
+  <data name="UIGridExportSelectedCSV" xml:space="preserve">
+    <value>匯出選定數據到CSV</value>
+  </data>
+  <data name="UIGridExportVisibleCSV" xml:space="preserve">
+    <value>匯出可視數據到CSV</value>
+  </data>
+  <data name="UIGridHideCol" xml:space="preserve">
+    <value>隱藏列</value>
+  </data>
+  <data name="UIGridNoSort" xml:space="preserve">
+    <value>移除排序</value>
+  </data>
+  <data name="UIGridSortAscending" xml:space="preserve">
+    <value>昇冪排列</value>
+  </data>
+  <data name="UIGridSortDescending" xml:space="preserve">
+    <value>降冪排列</value>
+  </data>
   <data name="ProductActivationKeyApplicationSuccessNoRestart" xml:space="preserve">
-    <value>恭喜您！產品啟用金鑰已被應用．您現在是這個屢獲殊榮的WFM解決方案的授權使用者。
-當前應用程式將被關閉。</value>
+    <value>產品啟用金鑰已成功應用。
+恭喜！您現在已成為此屢獲殊榮的勞動力管理方案的授權使用者。
+應用將被關閉。</value>
+  </data>
+  <data name="NoPermissionToEditUnpublishedSchedule" xml:space="preserve">
+    <value>沒有許可權修改座席代表的未發佈班表</value>
+  </data>
+  <data name="DoYouWantToSaveChangesWithTerminalDate" xml:space="preserve">
+    <value>一個或多個座席代表的離職日期被更改。相關的班表資料將被立即刪除。您想要保存嗎？</value>
+  </data>
+  <data name="PickADateRangeToStartBadgeCalculation" xml:space="preserve">
+    <value>選取日期訪問以進行徽章計算</value>
+  </data>
+  <data name="BadgeCalculation" xml:space="preserve">
+    <value>徽章計算</value>
+  </data>
+  <data name="NoGamificationDataForThePeriod" xml:space="preserve">
+    <value>選定週期內的一些日期或全部日期沒有遊戲化資料。</value>
+  </data>
+  <data name="BadgeCalculationIsAlreadyInProgressWithinTheSelectedPeriod" xml:space="preserve">
+    <value>徽章計算已在選定週期內運行。</value>
+  </data>
+  <data name="AddSkillGroup" xml:space="preserve">
+    <value>添加技能組</value>
+  </data>
+  <data name="NoNonOverwritableActivities" xml:space="preserve">
+    <value>沒有不可覆蓋的活動</value>
+  </data>
+  <data name="SelectStates" xml:space="preserve">
+    <value>選擇狀態</value>
+  </data>
+  <data name="SelectSitesTeams" xml:space="preserve">
+    <value>選擇網站/小組</value>
+  </data>
+  <data name="ExcludedColon" xml:space="preserve">
+    <value>已排除：</value>
+  </data>
+  <data name="NoState" xml:space="preserve">
+    <value>無狀態</value>
+  </data>
+  <data name="GamingPeriod" xml:space="preserve">
+    <value>遊戲週期</value>
+  </data>
+  <data name="NoAgentsWithIssuesFound" xml:space="preserve">
+    <value>未發現有問題的座席代表</value>
+  </data>
+  <data name="IntervalStartMustBeTodaysDateOrLater" xml:space="preserve">
+    <value>時段開始必須在今天或之後的日期。</value>
+  </data>
+  <data name="OvertimeStaffingCheckMethodSetting" xml:space="preserve">
+    <value>加班人力檢查方法：</value>
+  </data>
+  <data name="UsePrimarySkill" xml:space="preserve">
+    <value>使用技能優先順序驗證</value>
+  </data>
+  <data name="DescriptionOfMaximumWorkdayRule" xml:space="preserve">
+    <value>做多連續工作日</value>
+  </data>
+  <data name="PeopleAccess" xml:space="preserve">
+    <value>訪問</value>
+  </data>
+  <data name="ImportBpoImportedAt" xml:space="preserve">
+    <value>已導入於：</value>
+  </data>
+  <data name="ImportBpoImportInformationAllSkills" xml:space="preserve">
+    <value>所有技能</value>
+  </data>
+  <data name="ImportBpoImportInformationHeader" xml:space="preserve">
+    <value>導入歷史：</value>
+  </data>
+  <data name="ImportBpoImportInformationTooltipAt" xml:space="preserve">
+    <value>在</value>
+  </data>
+  <data name="ImportBpoImportInformationTooltipImported" xml:space="preserve">
+    <value>已導入</value>
+  </data>
+  <data name="ImportBpoFileImportDateInformation" xml:space="preserve">
+    <value>所有日期為UTC</value>
+  </data>
+  <data name="ImportBpoFileImportInfoHeader" xml:space="preserve">
+    <value>BPO檔導入資訊</value>
   </data>
 </root>

@@ -1,6 +1,6 @@
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErrorHandling;
 using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration

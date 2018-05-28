@@ -5,5 +5,7 @@
 	NpmRunRtaTest: true,
 	ToolsFlowWithoutSQLCMD: true,
 	ToolsFlowWithFixMyConfig: true,
-	ToolsFlowWithInfraTestConfigWithOptionalToggleMode: true
+	ToolsFlowWithInfraTestConfigWithOptionalToggleMode: true,
+	BatflowThatWorks: true,
+	NpmRunStartAlpha: true
 }

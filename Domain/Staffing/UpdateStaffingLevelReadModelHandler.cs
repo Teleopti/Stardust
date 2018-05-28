@@ -1,4 +1,5 @@
-﻿using System.Timers;
+﻿using System;
+using System.Timers;
 using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -14,14 +15,14 @@ namespace Teleopti.Ccc.Domain.Staffing
 {
 	public class UpdateStaffingLevelReadModelHandler : IHandleEvent<UpdateStaffingLevelReadModelEvent>, IRunOnStardust
 	{
-		private readonly UpdateStaffingLevelReadModelOnlySkillCombinationResources _updateStaffingLevelReadModel;
+		private readonly IUpdateStaffingLevelReadModel _updateStaffingLevelReadModel;
 		private readonly INow _now;
 		private readonly IJobStartTimeRepository _jobStartTimeRepository;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(UpdateStaffingLevelReadModelHandler));
 
-		public UpdateStaffingLevelReadModelHandler(UpdateStaffingLevelReadModelOnlySkillCombinationResources updateStaffingLevelReadModel, INow now, IJobStartTimeRepository jobStartTimeRepository, ICurrentBusinessUnit currentBusinessUnit, ICurrentUnitOfWork currentUnitOfWork)
+		public UpdateStaffingLevelReadModelHandler(IUpdateStaffingLevelReadModel updateStaffingLevelReadModel, INow now, IJobStartTimeRepository jobStartTimeRepository, ICurrentBusinessUnit currentBusinessUnit, ICurrentUnitOfWork currentUnitOfWork)
 		{
 			_updateStaffingLevelReadModel = updateStaffingLevelReadModel;
 			_now = now;
@@ -34,7 +35,12 @@ namespace Teleopti.Ccc.Domain.Staffing
 		[UnitOfWork]
 		public virtual void Handle(UpdateStaffingLevelReadModelEvent @event)
 		{
-			var jobLockTimer = new Timer(60000) {AutoReset = true};
+			DoTheWork(@event);
+		}
+
+		public void DoTheWork(UpdateStaffingLevelReadModelEvent @event)
+		{
+			var jobLockTimer = new Timer(60000) { AutoReset = true };
 			jobLockTimer.Elapsed += updateJobLock;
 
 			try
@@ -49,16 +55,22 @@ namespace Teleopti.Ccc.Domain.Staffing
 				if (current.IsDirty())
 				{
 					current.Clear();
-					logger.Warn("The unit of work was modified while running the readmodel update job on business unit " + @event.LogOnBusinessUnitId);
+					logger.Warn("The unit of work was modified while running the readmodel update job on business unit " +
+								@event.LogOnBusinessUnitId);
 				}
+
 				_jobStartTimeRepository.ResetLockTimestamp(@event.LogOnBusinessUnitId);
+			}
+			catch (Exception exception)
+			{
+				_jobStartTimeRepository.RemoveLock(@event.LogOnBusinessUnitId);
+				throw exception;
 			}
 			finally
 			{
 				jobLockTimer.Elapsed -= updateJobLock;
 				jobLockTimer.Dispose();
 			}
-			
 		}
 
 		private void updateJobLock(object source, ElapsedEventArgs e)

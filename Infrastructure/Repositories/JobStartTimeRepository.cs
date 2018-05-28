@@ -92,5 +92,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				}
 			}
 		}
+
+		public void RemoveLock(Guid bu)
+		{
+			using (var connection = new SqlConnection(_currentUnitOfWorkFactory.Current().ConnectionString))
+			{
+				connection.Open();
+				using (var deleteCommand = new SqlCommand(@"delete from [JobStartTime] where BusinessUnit = @bu", connection))
+				{
+					deleteCommand.Parameters.AddWithValue("@bu", bu);
+					deleteCommand.ExecuteNonQuery();
+				}
+			}
+		}
 	}
 }

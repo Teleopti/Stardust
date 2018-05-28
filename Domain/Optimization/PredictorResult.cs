@@ -1,40 +1,44 @@
-﻿namespace Teleopti.Ccc.Domain.Optimization
+﻿using System;
+
+namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class PredictorResult
 	{
-		private readonly bool _breaksMinimumAgents;
 		private readonly double _standardDeviation;
+		private readonly double _brokenMinimumAgentsInterval;
+		private const double doubleTolerance = 0.01;
 
 		public static PredictorResult Create(double currentResult, double predictedResult)
 		{
-			return new PredictorResult(predictedResult < currentResult, currentResult, false);
+			return new PredictorResult(predictedResult >= currentResult, currentResult, 0);
 		}
 
-		public static PredictorResult CreateBreaksDueToMinimumAgents(double currentResult)
+		public static PredictorResult CreateDueToMinimumAgents(double currentResult, double brokenMinimumAgentsInterval)
 		{
-			return new PredictorResult(true, currentResult, true);
+			return new PredictorResult(false, currentResult, brokenMinimumAgentsInterval);
 		}
 		
-		private PredictorResult(bool isBetter, double standardDeviation, bool breaksMinimumAgents)
+		private PredictorResult(bool isDefinatlyWorse, double standardDeviation, double brokenMinimumAgentsInterval)
 		{
-			IsBetter = isBetter;
+			IsDefinatlyWorse = isDefinatlyWorse;
 			_standardDeviation = standardDeviation;
-			_breaksMinimumAgents = breaksMinimumAgents;
+			_brokenMinimumAgentsInterval = brokenMinimumAgentsInterval;
 		}
 		
-		public bool IsBetter { get; }
+		public bool IsDefinatlyWorse { get; }
 
-		public WasReallyBetterResult IsBetterThan(bool currentlyBreakingMinimumAgents, double currentStandardDeviation)
+		public WasReallyBetterResult IsBetterThan(double currentStandardDeviation, double currentBrokenMinimumAgentsInterval)
 		{
-			if (currentlyBreakingMinimumAgents && !_breaksMinimumAgents)
-				return WasReallyBetterResult.NoDueToMinimumAgents;
+			if (Math.Abs(currentBrokenMinimumAgentsInterval - _brokenMinimumAgentsInterval) < doubleTolerance)
+			{
+				return currentStandardDeviation < _standardDeviation ? 
+					WasReallyBetterResult.WasBetter() : 
+					WasReallyBetterResult.WasWorse(currentStandardDeviation > doubleTolerance, false);
+			}
 
-			if (!currentlyBreakingMinimumAgents && _breaksMinimumAgents)
-				return WasReallyBetterResult.Yes;
-			
-			return currentStandardDeviation < _standardDeviation ? 
-				WasReallyBetterResult.Yes : 
-				WasReallyBetterResult.No;
+			return _brokenMinimumAgentsInterval > currentBrokenMinimumAgentsInterval ? 
+				WasReallyBetterResult.WasBetter() : 
+				WasReallyBetterResult.WasWorse(true, false);
 		}
 	}
 }
