@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Models;
 
@@ -15,11 +17,13 @@ namespace Teleopti.Wfm.Administration.Controllers
 	public class ConfigurationController : ApiController
 	{
 		private readonly IServerConfigurationRepository _serverConfigurationRepository;
+		private readonly IToggleManager _toggleManager;
 		private const string logonAttempsDays = "PreserveLogonAttemptsDays";
 
-		public ConfigurationController(IServerConfigurationRepository serverConfigurationRepository)
+		public ConfigurationController(IServerConfigurationRepository serverConfigurationRepository, IToggleManager toggleManager)
 		{
 			_serverConfigurationRepository = serverConfigurationRepository;
+			_toggleManager = toggleManager;
 		}
 
 		[HttpGet]
@@ -28,6 +32,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 		public virtual JsonResult<IEnumerable<ConfigurationModel>> GetAllConfigurations()
 		{
 			var serverConfigurations = _serverConfigurationRepository.AllConfigurations().ToArray();
+			if (!_toggleManager.IsEnabled(Toggles.Tenant_PurgeLogonAttempts_75782))
+				serverConfigurations = serverConfigurations.Where(sc => sc.Key != logonAttempsDays).ToArray();
+
 			return Json(map(serverConfigurations));
 		}
 
