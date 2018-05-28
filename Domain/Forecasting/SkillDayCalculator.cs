@@ -74,12 +74,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
             if (skillShouldBeCalculatedWithinDay())
             {
-                var unsortedOpenTaskPeriods = new List<ITemplateTaskPeriod>();
-                foreach (var workloadDay in skillDay.WorkloadDayCollection)
-                {
-                    unsortedOpenTaskPeriods.AddRange(workloadDay.OpenTaskPeriodList);
-                }
-                result = unsortedOpenTaskPeriods;
+                result.AddRange(skillDay.WorkloadDayCollection.SelectMany(w => w.OpenTaskPeriodList));
 
                 _isCalculatedWithinDay = true;
             }
