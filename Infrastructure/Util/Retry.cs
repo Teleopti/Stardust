@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using Polly;
+using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.Infrastructure.Util
 {
@@ -13,18 +14,21 @@ namespace Teleopti.Ccc.Infrastructure.Util
 		
 		class RetryHandle<TException> : IRetryHandle where TException : Exception
 		{
-			private Policy _policy;
+			private readonly List<TimeSpan> _waitTimes = new List<TimeSpan>();
 			
 			public IRetryHandle WaitAndRetry(params TimeSpan[] waitTimes)
 			{
-				_policy = Policy.Handle<TException>()
-					.WaitAndRetry(new []{ TimeSpan.Zero }.Concat(waitTimes));
+				_waitTimes.AddRange(waitTimes);
 				return this;
 			}
 
 			public void Do(Action action)
 			{
-				(_policy ?? Policy.NoOp()).Execute(action);
+				var policy = _waitTimes.IsEmpty()
+					? (Policy)Policy.NoOp()
+					: Policy.Handle<TException>().WaitAndRetry(_waitTimes);
+
+				policy.Execute(action);
 			}
 		}
 	}
