@@ -188,14 +188,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			foreach (var skillDay in skillDays)
 			{
-				ISkillStaffPeriodDictionary skillStaffPeriods = new SkillStaffPeriodDictionary(skillDay.Key);
-				foreach (ISkillDay day in skillDay.Value)
-				{
-					foreach (ISkillStaffPeriod skillStaffPeriod in day.SkillStaffPeriodCollection)
-					{
-						skillStaffPeriods.Add(skillStaffPeriod.Period, skillStaffPeriod);
-					}
-				}
+				var skillStaffPeriods = new SkillStaffPeriodDictionary(skillDay.Key, skillDay.Value.SelectMany(day => day.SkillStaffPeriodCollection).ToDictionary(s => s.Period));
 				if (skillStaffPeriods.Count > 0)
 					_internalDictionary.Add(skillDay.Key, skillStaffPeriods);
 			}
@@ -242,17 +235,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var skillStaffPeriods = new Dictionary<ISkill, ISkillStaffPeriodDictionary>();
 			foreach (ISkill skill in skills)
 			{
-				ISkillStaffPeriodDictionary content;
-				if (_internalDictionary.TryGetValue(skill, out content))
+				if (_internalDictionary.TryGetValue(skill, out var content))
 				{
-					var newDictionary = new SkillStaffPeriodDictionary(skill);
-					foreach (var dictionary in content)
-					{
-						if (dictionary.Key.EndDateTime <= utcPeriod.StartDateTime) continue;
-						if (dictionary.Key.StartDateTime >= utcPeriod.EndDateTime) continue;
-
-						newDictionary.Add(dictionary.Key, dictionary.Value);
-					}
+					var newDictionary = new SkillStaffPeriodDictionary(skill,
+						content.Where(c => c.Key.EndDateTime > utcPeriod.StartDateTime && c.Key.StartDateTime < utcPeriod.EndDateTime)
+							.ToDictionary(k => k.Key, v => v.Value));
 					if (newDictionary.Count > 0)
 						skillStaffPeriods.Add(skill, newDictionary);
 				}
@@ -396,12 +383,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public ISkillStaffPeriodDictionary SkillStaffPeriodList(IAggregateSkill skill, DateTimePeriod utcPeriod, bool forDay)
 		{
 			IList<ISkillStaffPeriod> resultList = SkillStaffPeriodList(skill, utcPeriod);
-			ISkillStaffPeriodDictionary returnDictionary = new SkillStaffPeriodDictionary(skill);
+			ISkillStaffPeriodDictionary returnDictionary = new SkillStaffPeriodDictionary(skill, resultList.ToDictionary(k => k.Period));
 
-			foreach (ISkillStaffPeriod skillStaffPeriod in resultList)
-			{
-				returnDictionary.Add(skillStaffPeriod.Period, skillStaffPeriod);
-			}
 			return returnDictionary;
 		}
 
