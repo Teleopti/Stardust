@@ -212,17 +212,13 @@ SELECT 0
 		{
 			InParameter.NotNull(nameof(workload), workload);
 			DateOnly? latestDate = Session.CreateCriteria(typeof(SkillDay))
-				.Add(Restrictions.Eq("Scenario", scenario))
-				.CreateAlias("Skill", "skill")
-				.CreateAlias("skill.WorkloadCollection", "wlColl", JoinType.InnerJoin)
-				.Add(Restrictions.Eq("wlColl.Id", workload.Id))
-				.SetProjection(Projections.Max("CurrentDate"))
-				.UniqueResult<DateOnly?>();
+									   .Add(Restrictions.Eq("Scenario", scenario))
+									   .CreateAlias("Skill", "skill")
+									   .CreateAlias("skill.WorkloadCollection", "wlColl", JoinType.InnerJoin)
+									   .Add(Restrictions.Eq("wlColl.Id", workload.Id))
+									   .SetProjection(Projections.Max("CurrentDate"))
+									   .UniqueResult<DateOnly?>() ?? new DateOnly(DateTime.Today.AddMonths(-1));
 
-			if (!latestDate.HasValue)
-			{
-				latestDate = new DateOnly(DateTime.Today.AddMonths(-1));
-			}
 			return latestDate.Value;
 		}
 
