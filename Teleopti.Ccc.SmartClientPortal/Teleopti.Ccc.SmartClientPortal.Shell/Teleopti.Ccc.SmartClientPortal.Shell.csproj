@@ -3334,11 +3334,11 @@
     <Compile Include="Win\Scheduling\SchedulingScreenInternals\EditorCutPasteHandler.cs" />
     <Compile Include="Win\Scheduling\SchedulingScreenInternals\ICutPasteHandler.cs" />
     <Compile Include="Win\Scheduling\SchedulingScreenInternals\LoaderMethod.cs" />
-    <Compile Include="Win\Scheduling\SchedulingScreenInternals\PersonsThatChangedPersonSkillsDuringPeriodFinderView.cs">
+    <Compile Include="Win\Scheduling\SchedulingScreenInternals\PersonsThatChangedPersonSkills.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Win\Scheduling\SchedulingScreenInternals\PersonsThatChangedPersonSkillsDuringPeriodFinderView.Designer.cs">
-      <DependentUpon>PersonsThatChangedPersonSkillsDuringPeriodFinderView.cs</DependentUpon>
+    <Compile Include="Win\Scheduling\SchedulingScreenInternals\PersonsThatChangedPersonSkills.Designer.cs">
+      <DependentUpon>PersonsThatChangedPersonSkills.cs</DependentUpon>
     </Compile>
     <Compile Include="Win\Scheduling\SchedulingScreenInternals\ResourceCalculationAnalyzerModel.cs" />
     <Compile Include="Win\Scheduling\SchedulingScreenInternals\ResourceCalculationAnalyzerView.cs">
@@ -4957,8 +4957,8 @@
     <EmbeddedResource Include="Win\Scheduling\SchedulingScreenInternals\AgentSkillAnalyzer.resx">
       <DependentUpon>AgentSkillAnalyzer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Win\Scheduling\SchedulingScreenInternals\PersonsThatChangedPersonSkillsDuringPeriodFinderView.resx">
-      <DependentUpon>PersonsThatChangedPersonSkillsDuringPeriodFinderView.cs</DependentUpon>
+    <EmbeddedResource Include="Win\Scheduling\SchedulingScreenInternals\PersonsThatChangedPersonSkills.resx">
+      <DependentUpon>PersonsThatChangedPersonSkills.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Win\Scheduling\SchedulingScreenInternals\ResourceCalculationAnalyzerView.resx">
       <DependentUpon>ResourceCalculationAnalyzerView.cs</DependentUpon>
