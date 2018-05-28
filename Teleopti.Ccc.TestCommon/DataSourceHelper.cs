@@ -184,10 +184,9 @@ namespace Teleopti.Ccc.TestCommon
 		private static void createOrRestoreApplication(string name)
 		{
 			var database = application();
-			var configureSystem = database.ConfigureSystem();
 			if (tryRestoreByFileCopy(database, 0))
 			{
-				configureSystem.SetTenantConnectionInfo(name, database.ConnectionString, analytics().ConnectionString);
+				database.ConfigureSystem().SetTenantConnectionInfo(name, database.ConnectionString, analytics().ConnectionString);
 				return;
 			}
 
@@ -196,8 +195,8 @@ namespace Teleopti.Ccc.TestCommon
 			//would be better if dbmanager was called, but don't have the time right now....
 			// eh, that thing that is called IS the db manager!
 			application().ConfigureSystem().MergePersonAssignments();
-			configureSystem.PersistAuditSetting();
-			configureSystem.SetTenantConnectionInfo(name, database.ConnectionString, analytics().ConnectionString);
+			database.ConfigureSystem().PersistAuditSetting();
+			database.ConfigureSystem().SetTenantConnectionInfo(name, database.ConnectionString, analytics().ConnectionString);
 
 			backupByFileCopy(database, 0);
 		}
