@@ -365,6 +365,68 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			Assert.That(savedWorkloadDay.TotalAverageAfterTaskTime, Is.EqualTo(TimeSpan.FromSeconds(20)).Within(tolerance));
 		}
 
+		[Ignore("Not implemented yet")]
+		[Test]
+		public void ShouldClearCampaignOnSavingForecastWithOverride()
+		{
+			var forecastedDay = new DateOnly(2018, 05, 02);
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
+			var workload = skill.WorkloadCollection.Single();
+			var scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
+
+			var workloadDayTemplate1 = new WorkloadDayTemplate();
+			workloadDayTemplate1.Create(forecastedDay.Date.DayOfWeek.ToString(), DateTime.UtcNow, workload, new List<TimePeriod>
+			{
+				new TimePeriod(10, 12)
+			});
+			workload.SetTemplate(forecastedDay.Date.DayOfWeek, workloadDayTemplate1);
+			
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, workload, forecastedDay, scenario);
+			skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new[] { skillDay }, new DateOnlyPeriod());
+			var workloadDay = skillDay.WorkloadDayCollection.Single();
+			workloadDay.CampaignTasks = new Percent(0.2);
+			workloadDay.CampaignTaskTime = new Percent(0.1);
+			workloadDay.CampaignAfterTaskTime = new Percent(0.1);
+
+			WorkloadRepository.Add(skill.WorkloadCollection.Single());
+			ScenarioRepository.Has(scenario);
+			SkillDayRepository.Add(skillDay);
+
+			IList<ForecastDayModel> forecastDays = new List<ForecastDayModel>
+			{
+				new ForecastDayModel
+				{
+					Date = forecastedDay,
+					Tasks = 100,
+					AverageTaskTime = 300,
+					AverageAfterTaskTime = 200,
+					HasCampaign = true,
+					TotalTasks = 120,
+					TotalAverageTaskTime = 330,
+					TotalAverageAfterTaskTime = 220,
+					OverrideTasks = 80,
+					OverrideAverageTaskTime = 50,
+					OverrideAverageAfterTaskTime = 20,
+					HasOverride = true
+				}
+			};
+			var forecastResult = new ForecastModel
+			{
+				WorkloadId = skill.WorkloadCollection.Single().Id.Value,
+				ScenarioId = scenario.Id.Value,
+				ForecastDays = forecastDays
+			};
+			var result = Target.ApplyForecast(forecastResult);
+
+			result.Should().Be.OfType<OkResult>();
+			var savedForecastDay = SkillDayRepository.FindRange(forecastedDay.ToDateOnlyPeriod(), skill, scenario).Single();
+			var savedWorkloadDay = savedForecastDay.WorkloadDayCollection.Single();
+
+			savedWorkloadDay.CampaignTasks.Should.Be(0);
+			savedWorkloadDay.CampaignTaskTime.Should.Be(0);
+			savedWorkloadDay.CampaignAfterTaskTime.Should.Be(0);
+		}
+
 		[Test]
 		public void ShouldClearOverrideOnSavingForecast()
 		{
