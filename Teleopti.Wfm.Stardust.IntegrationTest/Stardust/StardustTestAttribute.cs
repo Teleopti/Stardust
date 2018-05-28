@@ -64,7 +64,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 						DefaultPersonThatCreatesData.PersonThatCreatesDbData,
 						DefaultBusinessUnit.BusinessUnit
 					);
-
+					
 					DefaultDataCreator.Create();
 					DataSourceHelper.ClearAnalyticsData();
 					DefaultAnalyticsDataCreator.Create();
@@ -84,13 +84,14 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 				}
 				
 			}
-
+			
 			HangfireClientStarter.Start();
 
 			Guid businessUnitId;
 			using (DataSource.OnThisThreadUse(DataSourceHelper.TestTenantName))
 				businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.Value;
 			AsSystem.Logon(DataSourceHelper.TestTenantName, businessUnitId);
+			TestSiteConfigurationSetup.TearDown();
 
 			TestSiteConfigurationSetup.Setup();
 			((TestConfigReader) ConfigReader).ConfigValues.Remove("ManagerLocation");
