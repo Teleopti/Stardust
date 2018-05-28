@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Outlier;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Trend;
 using Teleopti.Ccc.Domain.Forecasting.Export.Web;
+using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Infrastructure.Forecasting.Angel;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
@@ -71,6 +72,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.SingleInstance()
 				.As<IHistoricalPeriodProvider>();
 			builder.RegisterType<ForecastExportModelCreator>()
+				.SingleInstance();
+			builder.RegisterType<ForecastDayModelMapper>()
 				.SingleInstance();
 		}
 	}
