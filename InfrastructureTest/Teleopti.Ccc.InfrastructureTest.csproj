@@ -99,9 +99,6 @@
     <Reference Include="NHibernate.Envers, Version=5.0.3.0, Culture=neutral, PublicKeyToken=e2c5b946037fb7f8">
       <HintPath>..\packages\NHibernate.Envers.5.0.3\lib\net461\NHibernate.Envers.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate.SqlAzure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\NHibernate.SqlAzure.TeleoptiInternal.5.0.0\lib\NET45\NHibernate.SqlAzure.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework, Version=3.6.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.6.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>

@@ -1,23 +1,27 @@
-﻿using System;
+﻿using Polly;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 {
 	public class StardustRepository : IStardustRepository
 	{
-		private const int maxRetry = 5;
 		private const int delayMs = 100;
 
 		private readonly string _connectionString;
-		private readonly RetryPolicy _retryPolicy;
+		private readonly Policy _retryPolicy;
 
 		public StardustRepository(string connectionString)
 		{
 			_connectionString = connectionString;
-			_retryPolicy = new RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy>(maxRetry, TimeSpan.FromMilliseconds(delayMs));
+			_retryPolicy = Policy.Handle<TimeoutException>()
+				.Or<SqlException>(DetectTransientSqlException.IsTransient)
+				.OrInner<SqlException>(DetectTransientSqlException.IsTransient)
+				.WaitAndRetry(5, i => TimeSpan.FromMilliseconds(delayMs));
 		}
 
 		public IList<Job> GetJobsByNodeId(Guid nodeId, int from, int to)
@@ -30,13 +34,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 								WHERE SentToWorkerNodeUri IN (SELECT Url FROM [Stardust].WorkerNode WHERE Id = @nodeId)) as b ORDER BY Started desc ) 
 								SELECT * FROM Ass WITH(NOLOCK) WHERE RowNumber BETWEEN @from AND @to";
 
-				connection.OpenWithRetry(_retryPolicy);
+				_retryPolicy.Execute(connection.Open);
 				using (var selectCommand = new SqlCommand(selectCommandText, connection))
 				{
 					selectCommand.Parameters.AddWithValue("@nodeId", nodeId);
 					selectCommand.Parameters.AddWithValue("@from", from);
 					selectCommand.Parameters.AddWithValue("@to", to);
-					using (var reader = selectCommand.ExecuteReaderWithRetry(_retryPolicy))
+					using (var reader = _retryPolicy.Execute(selectCommand.ExecuteReader))
 					{
 						if (!reader.HasRows) return jobs;
 						while (reader.Read())
@@ -65,10 +69,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 			var types = new List<string>();
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
-				sqlConnection.OpenWithRetry(_retryPolicy);
+				_retryPolicy.Execute(sqlConnection.Open);
 				using (var selectTypesCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
-					using (var sqlDataReader = selectTypesCommand.ExecuteReaderWithRetry(_retryPolicy))
+					using (var sqlDataReader = _retryPolicy.Execute(selectTypesCommand.ExecuteReader))
 					{
 						if (!sqlDataReader.HasRows) return types;
 						while (sqlDataReader.Read())
@@ -90,10 +94,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 			var types = new List<string>();
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
-				sqlConnection.OpenWithRetry(_retryPolicy);
+				_retryPolicy.Execute(sqlConnection.Open);
 				using (var selectTypesCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
-					using (var sqlDataReader = selectTypesCommand.ExecuteReaderWithRetry(_retryPolicy))
+					using (var sqlDataReader = _retryPolicy.Execute(selectTypesCommand.ExecuteReader))
 					{
 						if (!sqlDataReader.HasRows) return types;
 						while (sqlDataReader.Read())
@@ -112,10 +116,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 			const string selectCommandText = "SELECT TOP 1 * FROM Stardust.Job order By Created asc";
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
-				sqlConnection.OpenWithRetry(_retryPolicy);
+				_retryPolicy.Execute(sqlConnection.Open);
 				using (var getOldestJobCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
-					using (var reader = getOldestJobCommand.ExecuteReaderWithRetry(_retryPolicy))
+					using (var reader = _retryPolicy.Execute(getOldestJobCommand.ExecuteReader))
 					{
 						if (!reader.HasRows) return job;
 						while (reader.Read())
@@ -150,10 +154,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
-				sqlConnection.OpenWithRetry(_retryPolicy);
+				_retryPolicy.Execute(sqlConnection.Open);
 				using (var getAllJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
-					using (var reader = getAllJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
+					using (var reader = _retryPolicy.Execute(getAllJobsCommand.ExecuteReader))
 					{
 						if (!reader.HasRows) return jobs;
 						while (reader.Read())
@@ -184,10 +188,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
-				sqlConnection.OpenWithRetry(_retryPolicy);
+				_retryPolicy.Execute(sqlConnection.Open);
 				using (var getQueuedJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
-					using (var reader = getQueuedJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
+					using (var reader = _retryPolicy.Execute(getQueuedJobsCommand.ExecuteReader))
 					{
 						if (!reader.HasRows) return jobs;
 						while (reader.Read())
@@ -209,11 +213,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 			{
 				const string selectCommandText = @"SELECT  [JobId] ,[Name] ,[Created] ,[CreatedBy] ,[Started] ,[Ended] ,[Serialized] ,[Type] ,[SentToWorkerNodeUri] ,[Result] 
 											FROM [Stardust].[Job] WITH(NOLOCK) WHERE JobId = @jobId";
-				sqlConnection.OpenWithRetry(_retryPolicy);
+				_retryPolicy.Execute(sqlConnection.Open);
 				using (var selectCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
 					selectCommand.Parameters.AddWithValue("@JobId", jobId);
-					using (var sqlDataReader = selectCommand.ExecuteReaderWithRetry(_retryPolicy))
+					using (var sqlDataReader = _retryPolicy.Execute(selectCommand.ExecuteReader))
 					{
 						if (!sqlDataReader.HasRows) return job;
 						sqlDataReader.Read();
@@ -231,11 +235,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
 				const string selectCommandText = @"SELECT Id, JobId, Created, Detail FROM [Stardust].[JobDetail] WITH (NOLOCK) WHERE JobId = @JobId ORDER BY Created desc";
-				sqlConnection.OpenWithRetry(_retryPolicy);
+				_retryPolicy.Execute(sqlConnection.Open);
 				using (var selectCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
 					selectCommand.Parameters.AddWithValue("@JobId", jobId);
-					using (var sqlDataReader = selectCommand.ExecuteReaderWithRetry(_retryPolicy))
+					using (var sqlDataReader = _retryPolicy.Execute(selectCommand.ExecuteReader))
 					{
 						if (!sqlDataReader.HasRows) return jobDetails;
 						while (sqlDataReader.Read())
@@ -257,7 +261,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 			var node = new WorkerNode();
 			using (var connection = new SqlConnection(_connectionString))
 			{
-				connection.OpenWithRetry(_retryPolicy);
+				_retryPolicy.Execute(connection.Open);
 				using (var selectCommand = new SqlCommand(selectCommandText, connection))
 				{
 					selectCommand.Parameters.AddWithValue("@Id", nodeId);
@@ -289,10 +293,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 									FROM [Stardust].WorkerNode WITH(NOLOCK)) w";
 			using (var connection = new SqlConnection(_connectionString))
 			{
-				connection.OpenWithRetry(_retryPolicy);
+				_retryPolicy.Execute(connection.Open);
 				using (var selectCommand = new SqlCommand(commandText, connection))
 				{
-					using (var reader = selectCommand.ExecuteReaderWithRetry(_retryPolicy))
+					using (var reader = _retryPolicy.Execute(selectCommand.ExecuteReader))
 					{
 						if (!reader.HasRows) return listToReturn;
 
@@ -327,11 +331,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
 				var selectCommandText = $"SELECT * FROM Stardust.JobQueue WITH(NOLOCK) WHERE JobId = @jobId";
-				sqlConnection.OpenWithRetry(_retryPolicy);
+				_retryPolicy.Execute(sqlConnection.Open);
 				using (var getQueuedJob = new SqlCommand(selectCommandText, sqlConnection))
 				{
 					getQueuedJob.Parameters.AddWithValue("@jobId", jobId);
-					using (var sqlDataReader = getQueuedJob.ExecuteReaderWithRetry(_retryPolicy))
+					using (var sqlDataReader = _retryPolicy.Execute(getQueuedJob.ExecuteReader))
 					{
 						if (!sqlDataReader.HasRows) return job;
 						sqlDataReader.Read();
@@ -346,14 +350,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 		{
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
-				sqlConnection.OpenWithRetry(_retryPolicy);
+				_retryPolicy.Execute(sqlConnection.Open);
 				foreach (var ids in jobIds.Batch(400))
 				{
 					var stringIds = string.Join("','", ids);
 					var sql = $@"DELETE FROM Stardust.JobQueue WHERE JobId IN ('{stringIds}')";
 					using (var comm = new SqlCommand(sql, sqlConnection))
 					{
-						comm.ExecuteNonQuery();
+						_retryPolicy.Execute(comm.ExecuteNonQuery);
 					}
 				}
 			}
@@ -365,10 +369,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 			var ids = new List<Guid>();
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
-				sqlConnection.OpenWithRetry(_retryPolicy);
+				_retryPolicy.Execute(sqlConnection.Open);
 				using (var getQueuedJob = new SqlCommand(selectCommandText, sqlConnection))
 				{
-					using (var sqlDataReader = getQueuedJob.ExecuteReaderWithRetry(_retryPolicy))
+					using (var sqlDataReader = _retryPolicy.Execute(getQueuedJob.ExecuteReader))
 					{
 						if (!sqlDataReader.HasRows) return ids;
 						while (sqlDataReader.Read())
@@ -388,10 +392,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 			var ids = new List<Guid>();
 			using (var sqlConnection = new SqlConnection(connString))
 			{
-				sqlConnection.OpenWithRetry(_retryPolicy);
+				_retryPolicy.Execute(sqlConnection.Open);
 				using (var getQueuedJob = new SqlCommand(selectCommandText, sqlConnection))
 				{
-					using (var sqlDataReader = getQueuedJob.ExecuteReaderWithRetry(_retryPolicy))
+					using (var sqlDataReader = _retryPolicy.Execute(getQueuedJob.ExecuteReader))
 					{
 						if (!sqlDataReader.HasRows) return ids;
 						while (sqlDataReader.Read())

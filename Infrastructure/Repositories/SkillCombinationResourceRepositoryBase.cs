@@ -1,18 +1,17 @@
-﻿using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
-using NHibernate.SqlAzure;
-using NHibernate.Transform;
+﻿using NHibernate.Transform;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using Polly;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -22,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private readonly INow _now;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
-		private readonly RetryPolicy _retryPolicy;
+		private readonly Policy _retryPolicy;
 		private readonly IStardustJobFeedback _stardustJobFeedback;
 
 		protected SkillCombinationResourceRepositoryBase(INow now, ICurrentUnitOfWork currentUnitOfWork,
@@ -32,7 +31,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_currentUnitOfWork = currentUnitOfWork;
 			_currentBusinessUnit = currentBusinessUnit;
 			_stardustJobFeedback = stardustJobFeedback;
-			_retryPolicy = new RetryPolicy<SqlTransientErrorDetectionStrategyWithTimeouts>(5, TimeSpan.FromMilliseconds(100));
+			_retryPolicy = Policy.Handle<TimeoutException>()
+				.Or<SqlException>(DetectTransientSqlException.IsTransient)
+				.OrInner<SqlException>(DetectTransientSqlException.IsTransient)
+				.WaitAndRetry(5, i => TimeSpan.FromMilliseconds(100));
 		}
 
 		private Guid persistSkillCombination(IEnumerable<Guid> skillCombination, SqlConnection connection, SqlTransaction transaction)
@@ -106,7 +108,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	        IEnumerable<SkillCombinationResource> skillCombinationResources)
 	    {
 		    if (!skillCombinationResources.Any()) return;
-			_retryPolicy.ExecuteAction(() =>
+			_retryPolicy.Execute(() =>
 			{
 				tryPersistSkillCombinationResource(dataLoaded,  skillCombinationResources);
 			});
@@ -266,7 +268,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				var connectionString = _currentUnitOfWork.Current().Session().Connection.ConnectionString;
 				using (var connection = new SqlConnection(connectionString))
 				{
-					connection.OpenWithRetry(_retryPolicy);
+					_retryPolicy.Execute(connection.Open);
 					var dt = new DataTable();
 					dt.Columns.Add("SkillCombinationId", typeof(Guid));
 					dt.Columns.Add("StartDateTime", typeof(DateTime));
@@ -485,14 +487,15 @@ AND d.StartDateTime < :endDateTime AND d.EndDateTime > :startDateTime)
 		public void PersistChanges(IEnumerable<SkillCombinationResource> deltas)
 		{
 			if (!deltas.Any()) return;
-			_retryPolicy.ExecuteAction(() => { tryPersistChanges(deltas); });
+			_retryPolicy.Execute(() => { tryPersistChanges(deltas); });
 		}
 
 	    private void tryPersistChanges(IEnumerable<SkillCombinationResource> deltas)
-	    {
-	        var reliableConnection = (ReliableSqlDbConnection) _currentUnitOfWork.Current().Session().Connection;
-	        var connection = reliableConnection.ReliableConnection.Current;
-		    var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
+		{
+			var session = _currentUnitOfWork.Current().Session();
+			var conn = session.Connection.Unwrap();
+
+			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
 			var dt = new DataTable();
 			dt.Columns.Add("SkillCombinationId", typeof(Guid));
 			dt.Columns.Add("StartDateTime", typeof(DateTime));
@@ -502,7 +505,7 @@ AND d.StartDateTime < :endDateTime AND d.EndDateTime > :startDateTime)
 		    dt.Columns.Add("Id", typeof(Guid));
 			dt.Columns.Add("BusinessUnit", typeof(Guid));
 
-			var skillCombinations = loadSkillCombination(connection, null);
+			var skillCombinations = loadSkillCombination(conn, null);
 
 			foreach (var delta in deltas)
 	        {
@@ -522,10 +525,10 @@ AND d.StartDateTime < :endDateTime AND d.EndDateTime > :startDateTime)
 			}
 	        using (var cmd = new SqlCommand())
 	        {
-	            _currentUnitOfWork.Current().Session().Transaction.Enlist(cmd);
+	            session.Transaction.Enlist(cmd);
 
 	            using (
-	                var bulk = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, cmd.Transaction))
+	                var bulk = new SqlBulkCopy(conn, SqlBulkCopyOptions.Default, cmd.Transaction))
 	            {
 	                bulk.DestinationTableName = "[ReadModel].[SkillCombinationResourceDelta]";
 	                bulk.WriteToServer(dt);
@@ -542,11 +545,8 @@ AND d.StartDateTime < :endDateTime AND d.EndDateTime > :startDateTime)
 				.UniqueResult<DateTime>();
 			return latest;
 		}
-
-		
 	}
-
-
+	
 	public class RawSkillCombinationResource
 	{
 		public Guid SkillCombinationId { get; set; }
@@ -555,8 +555,7 @@ AND d.StartDateTime < :endDateTime AND d.EndDateTime > :startDateTime)
 		public double Resource { get; set; }
 		public Guid SkillId { get; set; }
 	}
-
-
+	
 	public class SkillCombinationResourceWithCombinationId : SkillCombinationResource
 	{
 		public Guid SkillCombinationId { get; set; }

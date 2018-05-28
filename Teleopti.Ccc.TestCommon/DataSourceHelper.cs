@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Support.Library;
 using Environment = NHibernate.Cfg.Environment;
 using ServiceLocatorForLegacy = Teleopti.Ccc.Infrastructure.ServiceLocatorForLegacy;
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.TestCommon
 						ServiceLocatorForLegacy.UpdatedBy,
 						ServiceLocatorForEntity.CurrentBusinessUnit,
 						new SirLeakAlot()
-					));
+					), new TrueToggleManager());
 			});
 		}
 

@@ -1,45 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading;
+using System.Linq;
+using Polly;
 
 namespace Teleopti.Ccc.Infrastructure.Util
 {
 	public class Retry
 	{
-		public static IRetryHandle Handle<TException>()
+		public static IRetryHandle Handle<TException>() where TException : Exception
 		{
 			return new RetryHandle<TException>();
 		}
 		
-		class RetryHandle<TException> : IRetryHandle
+		class RetryHandle<TException> : IRetryHandle where TException : Exception
 		{
-			private readonly Stack<TimeSpan> waitingTimes = new Stack<TimeSpan>();
+			private Policy _policy;
 			
 			public IRetryHandle WaitAndRetry(params TimeSpan[] waitTimes)
 			{
-				foreach (var t in waitTimes)
-				{
-					waitingTimes.Push(t);
-				}
+				_policy = Policy.Handle<TException>()
+					.WaitAndRetry(new []{ TimeSpan.Zero }.Concat(waitTimes));
 				return this;
 			}
 
 			public void Do(Action action)
 			{
-				try
-				{
-					action.Invoke();
-				}
-				catch (Exception e) when(e is TException)
-				{
-					if (waitingTimes.Count == 0)
-						throw;
-
-					Thread.Sleep(waitingTimes.Pop());
-					Do(action);
-				}
+				(_policy ?? Policy.NoOp()).Execute(action);
 			}
 		}
-
 	}
 }

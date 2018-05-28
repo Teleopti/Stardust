@@ -129,9 +129,6 @@
     <Reference Include="NHibernate.Envers, Version=5.0.3.0, Culture=neutral, PublicKeyToken=e2c5b946037fb7f8">
       <HintPath>..\packages\NHibernate.Envers.5.0.3\lib\net461\NHibernate.Envers.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate.SqlAzure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\NHibernate.SqlAzure.TeleoptiInternal.5.0.0\lib\NET45\NHibernate.SqlAzure.dll</HintPath>
-    </Reference>
     <Reference Include="numl, Version=0.8.26.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\numl.0.8.26.0\lib\net40\numl.dll</HintPath>
     </Reference>
@@ -141,6 +138,9 @@
     </Reference>
     <Reference Include="policy.2.3.FSharp.Core">
       <HintPath>..\packages\FSharp.Core.3.0.0.2\lib\net40\policy.2.3.FSharp.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Polly, Version=6.0.0.0, Culture=neutral, PublicKeyToken=c8a3ffc3f8f825cc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Polly.6.0.1\lib\netstandard2.0\Polly.dll</HintPath>
     </Reference>
     <Reference Include="Remotion.Linq, Version=2.1.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b">
       <HintPath>..\packages\Remotion.Linq.2.1.2\lib\net45\Remotion.Linq.dll</HintPath>
@@ -155,6 +155,7 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.4.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
@@ -221,7 +222,6 @@
     <Compile Include="Authentication\NonceInfoRepository.cs" />
     <Compile Include="Config\ThrowingLoadPasswordPolicyService.cs" />
     <Compile Include="Foundation\BulkWriter.cs" />
-    <Compile Include="Foundation\ConcatenatedTransientErrorDetectionStrategy.cs" />
     <Compile Include="Foundation\DatabaseCommand.cs" />
     <Compile Include="DistributedLock\DistributedLockAcquirer.cs" />
     <Compile Include="DistributedLock\DistributedLockException.cs" />
@@ -277,6 +277,56 @@
     <Compile Include="MultiTenancy\Server\Queries\TenantAuditPersister.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersonInfoPersister.cs" />
     <Compile Include="MultiTenancy\Server\Queries\PersonInfoPersisterFake.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\AsyncExecution.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\DefaultReliableSql2008ClientDriver.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ExponentialBackoff.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\FixedInterval.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\Incremental.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ITransientErrorDetectionStrategy.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ReliableAdoNetTransactionFactory.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ReliableAdoTransaction.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ReliableSql2008ClientDriver.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ReliableSqlClientBatchingBatcher.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ReliableSqlClientBatchingBatcherFactory.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ReliableSqlCommand.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ReliableSqlConnection.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ReliableSqlDbConnection.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\RetryingEventArgs.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\RetryLimitExceededException.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\RetryManager.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\RetryManagerSqlExtensions.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\RetryPolicy.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\RetryStrategy.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ShouldRetry.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\SqlAzureClientDriverWithLogRetries.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\SqlAzureTransientErrorDetectionStrategy.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\SqlAzureTransientErrorDetectionStrategyWithTimeouts.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\SqlCommandFactory.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\SqlDatabaseTransientErrorDetectionStrategy.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\SqlTransientErrorDetectionStrategyWithTimeouts.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\SqlXmlReader.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ThrottledResourceType.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ThrottlingCondition.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ThrottlingMode.cs" />
+    <Compile Include="NHibernateConfiguration\LegacyTransientErrorHandling\ThrottlingType.cs" />
+    <Compile Include="NHibernateConfiguration\TransientErrorHandling\DbConnectionExtensions.cs" />
+    <Compile Include="NHibernateConfiguration\TransientErrorHandling\DetectTransientSqlException.cs" />
+    <Compile Include="NHibernateConfiguration\TransientErrorHandling\ResilientAdoNetTransactionFactory.cs" />
+    <Compile Include="NHibernateConfiguration\TransientErrorHandling\ResilientAdoTransaction.cs" />
+    <Compile Include="NHibernateConfiguration\TransientErrorHandling\ResilientSql2008ClientDriver.cs" />
+    <Compile Include="NHibernateConfiguration\TransientErrorHandling\ResilientSqlClientBatchingBatcher.cs" />
+    <Compile Include="NHibernateConfiguration\TransientErrorHandling\ResilientSqlClientBatchingBatcherFactory.cs" />
+    <Compile Include="NHibernateConfiguration\TransientErrorHandling\ResilientSqlCommand.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="NHibernateConfiguration\TransientErrorHandling\ResilientSqlConnection.cs" />
+    <Compile Include="NHibernateConfiguration\TransientErrorHandling\ResilientSqlDbConnection.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Persisters\Schedules\ScheduleRangePersisterWithConflictSolve.cs" />
     <Compile Include="MultiTenancy\Server\Queries\TenantPersonLogonQuerier.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\AgentStateReadModelPersister.cs" />
@@ -457,8 +507,6 @@
     <Compile Include="MultiTenancy\Server\TenantAuthenticationFake.cs" />
     <Compile Include="NHibernateConfiguration\AnalyticsUnitOfWorkContext.cs" />
     <Compile Include="NHibernateConfiguration\MoreParameterInCriterion.cs" />
-    <Compile Include="NHibernateConfiguration\SqlAzureClientDriverWithLogRetries.cs" />
-    <Compile Include="NHibernateConfiguration\SqlTransientErrorDetectionStrategyWithTimeouts.cs" />
     <Compile Include="NHibernateConfiguration\ApplicationUnitOfWorkContext.cs" />
     <Compile Include="Persisters\Outbound\OutboundSkillPersister.cs" />
     <Compile Include="Persisters\Schedules\SchedulePersistResult.cs" />
@@ -811,7 +859,6 @@
     <Compile Include="Util\IRetryHandle.cs" />
     <Compile Include="Util\MemoryCounter.cs" />
     <Compile Include="Util\Retry.cs" />
-    <Compile Include="Util\SqlTransientErrorChecker.cs" />
     <Compile Include="Util\TenantTelemetryInitializer.cs" />
     <Compile Include="WebReports\DailyMetricsForDayQuery.cs" />
     <Compile Include="WebReports\QueueMetricsForDayResult.cs" />
@@ -859,6 +906,7 @@
     <None Include="..\Teleopti.Ccc.snk">
       <Link>Teleopti.Ccc.snk</Link>
     </None>
+    <None Include="app.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

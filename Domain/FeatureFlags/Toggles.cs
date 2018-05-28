@@ -155,7 +155,9 @@
 		WFM_Clear_Data_After_Leaving_Date_47768,
 
 		People_ImprovePersonAccountAccuracy_74914,
-		MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889
+		MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889,
+
+		Tech_Moving_ResilientConnectionLogic
 		// ReSharper restore InconsistentNaming
 	}
 }
