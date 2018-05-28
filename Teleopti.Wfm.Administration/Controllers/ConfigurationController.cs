@@ -15,6 +15,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 	public class ConfigurationController : ApiController
 	{
 		private readonly IServerConfigurationRepository _serverConfigurationRepository;
+		private const string logonAttempsDays = "PreserveLogonAttemptsDays";
 
 		public ConfigurationController(IServerConfigurationRepository serverConfigurationRepository)
 		{
@@ -37,6 +38,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 			const string asDatabase = "AS_DATABASE";
 			const string asServerName = "AS_SERVER_NAME";
 			const string pmInstall = "PM_INSTALL";
+			
+
 			return serverConfigurations.Select(serverConfiguration =>
 			{
 				var configurationModel = new ConfigurationModel
@@ -64,6 +67,10 @@ namespace Teleopti.Wfm.Administration.Controllers
 				{
 					configurationModel.Description = "Indicate whether PM service is installed.";
 				}
+				if (configurationModel.Key == logonAttempsDays)
+				{
+					configurationModel.Description = "How many days the logon attempts are saved.";
+				}
 				return configurationModel;
 			});
 		}
@@ -87,6 +94,16 @@ namespace Teleopti.Wfm.Administration.Controllers
 					Success = false,
 					Message = "Key can't be empty."
 				};
+
+			if (model.Key == logonAttempsDays)
+			{
+				if(!int.TryParse(model.Value, out int days))
+					return new UpdateConfigurationResultModel
+					{
+						Success = false,
+						Message = "The value must be an integer."
+					};
+			}
 
 			try
 			{

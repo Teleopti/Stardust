@@ -43,6 +43,14 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		}
 
 		[Test]
+		public void ShouldGetLogonAttemptsDays()
+		{
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			var value = Target.GetConfiguration("PreserveLogonAttemptsDays").Content;
+			value.Should().Be.EqualTo("30");
+		}
+
+		[Test]
 		public void ShouldSave()
 		{
 			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
