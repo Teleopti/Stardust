@@ -363,7 +363,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			Assert.That(savedWorkloadDay.TotalTasks, Is.EqualTo(80d).Within(tolerance));
 			Assert.That(savedWorkloadDay.TotalAverageTaskTime, Is.EqualTo(TimeSpan.FromSeconds(50)).Within(tolerance));
 			Assert.That(savedWorkloadDay.TotalAverageAfterTaskTime, Is.EqualTo(TimeSpan.FromSeconds(20)).Within(tolerance));
-			savedWorkloadDay.Annotation.Should().Be("Day has been overrided on web");
 		}
 
 		[Test]
@@ -1074,25 +1073,24 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 						Tasks = 100d,
 						AverageTaskTime = 30d,
 						AverageAfterTaskTime = 10d,
-						CampaignTasksPercentage = 0.5d,
-						HasOverride = true,
-						OverrideTasks = 180,
-						OverrideAverageTaskTime = 40d,
-						OverrideAverageAfterTaskTime = 16d
+						CampaignTasksPercentage = 0.5d
 					}
 				},
 				ShouldOverrideTasks = true,
 				ShouldOverrideAverageTaskTime = true,
-				ShouldOverrideAverageAfterTaskTime = true
+				ShouldOverrideAverageAfterTaskTime = true,
+				OverrideTasks = 200d,
+				OverrideAverageTaskTime = 50d,
+				OverrideAverageAfterTaskTime = 20d,
 			};
 
 			var result = (OkNegotiatedContentResult<IList<ForecastDayModel>>)Target.AddOverride(model);
 
 			var forecastDay = result.Content.First();
 			forecastDay.HasOverride.Should().Be(true);
-			forecastDay.TotalTasks.Should().Be(180d);
-			forecastDay.TotalAverageTaskTime.Should().Be(40d);
-			forecastDay.TotalAverageAfterTaskTime.Should().Be(16d);
+			forecastDay.TotalTasks.Should().Be(200d);
+			forecastDay.TotalAverageTaskTime.Should().Be(50d);
+			forecastDay.TotalAverageAfterTaskTime.Should().Be(20d);
 
 			forecastDay.HasCampaign.Should().Be(false);
 			forecastDay.CampaignTasksPercentage.Should().Be(0);
