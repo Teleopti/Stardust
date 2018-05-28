@@ -70,6 +70,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			using (DataSource.OnThisThreadUse(DataSourceHelper.TestTenantName))
 				businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.Value;
 			Impersonate.Impersonate(DataSourceHelper.TestTenantName, businessUnitId);
+			TestSiteConfigurationSetup.TearDown();
 
 			TestSiteConfigurationSetup.Setup();
 		}
