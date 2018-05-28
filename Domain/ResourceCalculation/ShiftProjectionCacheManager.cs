@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -95,19 +96,20 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private readonly IRuleSetDeletedActivityChecker _ruleSetDeletedActivityChecker;
     	private readonly IRuleSetDeletedShiftCategoryChecker _rulesSetDeletedShiftCategoryChecker;
 	    private readonly IWorkShiftFromEditableShift _workShiftFromEditableShift;
-		private readonly ShiftProjectionCacheFetcher _shiftProjectionCacheFetcher;
+		private readonly ShiftProjectionCacheFactory _workShiftDateAndTimezoneFactory;
 		private readonly IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 
 	    public ShiftProjectionCacheManager(IRuleSetDeletedActivityChecker ruleSetDeletedActivityChecker, 
 			IRuleSetDeletedShiftCategoryChecker rulesSetDeletedShiftCategoryChecker,
 			IWorkShiftFromEditableShift workShiftFromEditableShift,
-			ShiftProjectionCacheFetcher shiftProjectionCacheFetcher,
-			IPersonalShiftMeetingTimeChecker personalShiftMeetingTimeChecker)
+			IPersonalShiftMeetingTimeChecker personalShiftMeetingTimeChecker,
+			ShiftProjectionCacheFactory workShiftDateAndTimezoneFactory)
         {
             _ruleSetDeletedActivityChecker = ruleSetDeletedActivityChecker;
 			_rulesSetDeletedShiftCategoryChecker = rulesSetDeletedShiftCategoryChecker;
 	        _workShiftFromEditableShift = workShiftFromEditableShift;
-			_shiftProjectionCacheFetcher = shiftProjectionCacheFetcher;
+			_workShiftDateAndTimezoneFactory = workShiftDateAndTimezoneFactory;
+			_personalShiftMeetingTimeChecker = personalShiftMeetingTimeChecker;
 			_personalShiftMeetingTimeChecker = personalShiftMeetingTimeChecker;
 		}
 
@@ -134,14 +136,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				    return false;
 
 			    return true;
-		    }).SelectMany(x => _shiftProjectionCacheFetcher.Execute(x)).ToArray();
-
-		    foreach (var shiftProjectionCache in shiftProjectionCaches)
-		    {
-			    shiftProjectionCache.SetDate(dateOnlyAsDateTimePeriod);
-		    }
+		    }).SelectMany(x => _workShiftDateAndTimezoneFactory.Create(x, dateOnlyAsDateTimePeriod));
 			
-			return shiftProjectionCaches;
+			return shiftProjectionCaches.ToArray();
 		}
 
 	    public IList<ShiftProjectionCache> ShiftProjectionCachesFromRuleSets(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod, IRuleSetBag bag, bool forRestrictionsOnly, bool checkExcluded)

@@ -1,13 +1,15 @@
 using System;
-using System.Collections.Generic;
 using Autofac;
 using MbCache.Core;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
@@ -80,6 +82,58 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			}
 		}
 
+		[Test]
+		public void ShouldCacheShiftProjectionCaches()
+		{
+			var containerBuilder = new ContainerBuilder();
+			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
+			containerBuilder.RegisterModule(new CommonModule(configuration));
+			using (var container = containerBuilder.Build())
+			{
+				var wsRs = createRuleset(true);
+
+				var svc1 = container.Resolve<ShiftProjectionCacheFactory>();
+				var svc2 = container.Resolve<ShiftProjectionCacheFactory>();
+
+				Assert.AreSame(svc1.Create(wsRs, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc)), svc2.Create(wsRs, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc)));
+			}
+		}
+		
+		[Test]
+		public void ShouldNotCacheShiftProjectionCaches_DifferentDates()
+		{
+			var containerBuilder = new ContainerBuilder();
+			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
+			containerBuilder.RegisterModule(new CommonModule(configuration));
+			using (var container = containerBuilder.Build())
+			{
+				var wsRs = createRuleset(true);
+
+				var svc1 = container.Resolve<ShiftProjectionCacheFactory>();
+				var svc2 = container.Resolve<ShiftProjectionCacheFactory>();
+
+				Assert.AreNotSame(svc1.Create(wsRs, new DateOnlyAsDateTimePeriod(DateOnly.Today.AddDays(-1), TimeZoneInfo.Utc)), svc2.Create(wsRs, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc)));
+			}
+		}
+		
+		[Test]
+		public void ShouldNotCacheShiftProjectionCaches_DifferentTimeZones()
+		{
+			var containerBuilder = new ContainerBuilder();
+			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
+			containerBuilder.RegisterModule(new CommonModule(configuration));
+			using (var container = containerBuilder.Build())
+			{
+				var wsRs = createRuleset(true);
+
+				var svc1 = container.Resolve<ShiftProjectionCacheFactory>();
+				var svc2 = container.Resolve<ShiftProjectionCacheFactory>();
+
+				Assert.AreNotSame(svc1.Create(wsRs, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfoFactory.AbuDhabiTimeZoneInfo())), 
+					svc2.Create(wsRs, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfoFactory.AustralianTimeZoneInfo())));
+			}
+		}
+		
 		private static IWorkShiftRuleSet createRuleset(bool withId)
 		{
 			var wsRs = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(new Activity("f"),
