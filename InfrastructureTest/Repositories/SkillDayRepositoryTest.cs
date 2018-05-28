@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			PersistAndRemoveFromUnitOfWork(_skillType);
 
-			var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
+			var timeZoneInfo = TimeZoneInfoFactory.GmtTimeZoneInfo();
 			_skill.TimeZone = timeZoneInfo;
 			PersistAndRemoveFromUnitOfWork(_activity);
 			PersistAndRemoveFromUnitOfWork(_skill);
@@ -117,16 +117,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(skillDay.WorkloadDayCollection[0].OverrideAverageAfterTaskTime,
 				loadedAggregateFromDatabase.WorkloadDayCollection[0].OverrideAverageAfterTaskTime);
 		}
-
-		/// <summary>
-		/// Determines whether this instance can be created.
-		/// </summary>
-		[Test]
-		public void CanCreate()
-		{
-			new SkillDayRepository(UnitOfWork);
-		}
-
+		
 		[Test]
 		public void CanGetUpdateInfoWhenWorkloadDayIsSaved()
 		{
