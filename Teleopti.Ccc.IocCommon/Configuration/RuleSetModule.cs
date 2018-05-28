@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.CacheByInterfaceProxy<RuleSetProjectionService, IRuleSetProjectionService>().SingleInstance();
 			builder.CacheByInterfaceProxy<RuleSetProjectionEntityService, IRuleSetProjectionEntityService>().SingleInstance();
 			builder.CacheByInterfaceProxy<WorkShiftWorkTime, IWorkShiftWorkTime>().SingleInstance();
-			builder.CacheByClassProxy<ShiftProjectionCacheFactory>().SingleInstance();
 
 			_configuration.Cache().This<IRuleSetProjectionService>(b => b
 					.CacheMethod(m => m.ProjectionCollection(null, null))
@@ -34,8 +33,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			_configuration.Cache().This<IWorkShiftWorkTime>(b => b
 					.CacheMethod(m => m.CalculateMinMax(null, null))
 				, "WSWT");
-			
-			_configuration.Cache().This<ShiftProjectionCacheFactory>(b => b.CacheMethod(m => m.Create(null, null)), "WSPRF");
 		}
 	}
 }

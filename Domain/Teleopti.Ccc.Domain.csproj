@@ -642,7 +642,6 @@
     <Compile Include="ResourcePlanner\IDayOffOptimizationPreferenceProviderForPlanningPeriod.cs" />
     <Compile Include="Scheduling\Restrictions\RestrictionsAbleToBeScheduled.cs" />
     <Compile Include="Scheduling\ShiftCategorySelection.cs" />
-    <Compile Include="Scheduling\ShiftCreator\ShiftProjectionCacheFactory.cs" />
     <Compile Include="Scheduling\SuccessfulScheduledAgents.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccOvertimeRequestsLicenseOption.cs" />
     <Compile Include="SkillGroupManagement\ModifySkillGroup.cs" />

@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_LessResourcesXXL_74915)]
 	public class ShiftProjectionCacheFetcher
 	{
 		private readonly IShiftFromMasterActivityService _shiftFromMasterActivityService;
