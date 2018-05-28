@@ -23,21 +23,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			var personSkillSkillStaff = new Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>>();
 
-			IList<IActivity> activities = new List<IActivity>();
-			foreach (ISkill skill in onSkills)
-			{
-				if (!activities.Contains(skill.Activity))
-				{
-					activities.Add(skill.Activity);
-				}
-			}
+			var activities = onSkills.Select(s => s.Activity).Distinct().ToArray();
 
 			var tmp = new Dictionary<ISkill, Dictionary<DateTime, ISkillStaffPeriodDataHolder>>();
-
 			foreach (ISkill skill in onSkills)
 			{
-				ISkillStaffPeriodDictionary skillStaffPeriods;
-				if (_internalDictionary.TryGetValue(skill, out skillStaffPeriods))
+				if (_internalDictionary.TryGetValue(skill, out var skillStaffPeriods))
 				{
 					var dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>();
 
@@ -82,7 +73,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				foreach (KeyValuePair<ISkill, Dictionary<DateTime, ISkillStaffPeriodDataHolder>> pair in tmp)
 				{
 					ISkill skill = pair.Key;
-					if (skill.Activity == activity)
+					if (activity.Equals(skill.Activity))
 					{
 						if (oldSkills.Contains(skill)) break;
 
@@ -173,7 +164,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			foreach (var skill in skills)
 			{
-				if (skill.Key.Activity == activity && !oldSkills.Contains(skill.Key))
+				if (activity.Equals(skill.Key.Activity) && !oldSkills.Contains(skill.Key))
 					return skill.Key;
 			}
 
@@ -198,8 +189,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var skillStaffPeriods = new List<ISkillStaffPeriod>();
 			skills.ForEach(skill =>
 			{
-				ISkillStaffPeriodDictionary content;
-				if (_internalDictionary.TryGetValue(skill, out content))
+				if (_internalDictionary.TryGetValue(skill, out var content))
 				{
 					foreach (var dictionary in content)
 					{
@@ -215,8 +205,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var skillStaffPeriods = new List<ISkillStaffPeriod>();
 			skills.ForEach(skill =>
 			{
-				ISkillStaffPeriodDictionary content;
-				if (_internalDictionary.TryGetValue(skill, out content))
+				if (_internalDictionary.TryGetValue(skill, out var content))
 				{
 					foreach (var dictionary in content)
 					{
@@ -256,8 +245,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				IDictionary<DateTimePeriod, IList<ISkillStaffPeriod>> skillStaffPeriods = new Dictionary<DateTimePeriod, IList<ISkillStaffPeriod>>();
 				foreach (ISkill aggregateSkill in skill.AggregateSkills)
 				{
-					ISkillStaffPeriodDictionary content;
-					if (!_internalDictionary.TryGetValue(aggregateSkill, out content)) continue;
+					if (!_internalDictionary.TryGetValue(aggregateSkill, out var content)) continue;
 
 					if (aggregateSkill.DefaultResolution > minimumResolution)
 					{
@@ -271,8 +259,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 						foreach (ISkillStaffPeriod skillStaffPeriod in skillStaffPeriodsSplitList)
 						{
-							IList<ISkillStaffPeriod> foundList;
-							if (!skillStaffPeriods.TryGetValue(skillStaffPeriod.Period, out foundList))
+							if (!skillStaffPeriods.TryGetValue(skillStaffPeriod.Period, out var foundList))
 							{
 								foundList = new List<ISkillStaffPeriod>();
 								skillStaffPeriods.Add(skillStaffPeriod.Period, foundList);
@@ -285,8 +272,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					{
 						foreach (KeyValuePair<DateTimePeriod, ISkillStaffPeriod> pair in content.Where(c => utcPeriod.Contains(c.Key)))
 						{
-							IList<ISkillStaffPeriod> foundList;
-							if (!skillStaffPeriods.TryGetValue(pair.Key, out foundList))
+							if (!skillStaffPeriods.TryGetValue(pair.Key, out var foundList))
 							{
 								foundList = new List<ISkillStaffPeriod>();
 								skillStaffPeriods.Add(pair.Key, foundList);
