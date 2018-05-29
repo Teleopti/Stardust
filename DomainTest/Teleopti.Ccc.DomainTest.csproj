@@ -298,6 +298,7 @@
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\ChangesTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\DateTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\HistoricalAdherenceViewModelBuilderEx.cs" />
+    <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\LateForWorkTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\NavigationTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\PercentageTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\RecordedAdherencesTest.cs" />
@@ -315,6 +316,7 @@
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\ApprovedPeriodPercentageTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\ApprovedPeriodTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\ChangesTest.cs" />
+    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\LateForWorkTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\PercentageTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\RecordedAdherenceTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\ResolutionTest.cs" />

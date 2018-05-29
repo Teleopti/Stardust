@@ -216,6 +216,8 @@
     <Compile Include="MultiTenancy\PersonIdentityModel.cs" />
     <Compile Include="Optimization\TeamBlock\ForecastAndScheduleSumForDay.cs" />
     <Compile Include="Optimization\WasReallyBetterResult.cs" />
+    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayLoaderLateForWork.cs" />
+    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayWithLateForWork.cs" />
     <Compile Include="RegisterEventHandlerInLifetimeScopeAttribute.cs" />
     <Compile Include="Repositories\IAllSkillForSkillGroupProvider.cs" />
     <Compile Include="Repositories\IExtensiveLogRepository.cs" />
