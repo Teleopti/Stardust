@@ -55,8 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(_dateOnly, _timeZoneInfo);
 			foreach (IWorkShift shift in tmpList)
 			{
-				var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker);
-				cache.SetDate(dateOnlyAsDateTimePeriod);
+				var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
 				retList.Add(cache);
 			}
 			return retList;
@@ -65,8 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
         [Test]
         public void TestIfEmptyListIsReturnedForNullMainShiftProjection()
         {
-            var cache1 = new ShiftProjectionCache(new WorkShift(new ShiftCategory("Day")), new PersonalShiftMeetingTimeChecker());
-			cache1.SetDate(new DateOnlyAsDateTimePeriod(_dateOnly,_timeZoneInfo));
+            var cache1 = new ShiftProjectionCache(new WorkShift(new ShiftCategory("Day")), new PersonalShiftMeetingTimeChecker(), new DateOnlyAsDateTimePeriod(_dateOnly,_timeZoneInfo));
             var shiftList = new List<ShiftProjectionCache> {cache1};
             
             var earlistEnd = new DateTime(2013, 3, 1, 7, 30, 0, DateTimeKind.Utc);

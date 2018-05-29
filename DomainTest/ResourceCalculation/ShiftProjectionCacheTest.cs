@@ -39,12 +39,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			DateTimePeriod period = new DateTimePeriod(WorkShift.BaseDate.Add(start), WorkShift.BaseDate.Add(end));
 			workShift.LayerCollection.Add(new WorkShiftActivityLayer(activity, period));
 			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
-
-			target = new ShiftProjectionCache(workShift, _personalShiftMeetingTimeChecker);
 			timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Central Africa Standard Time");
 			// blir 7 - 16 med denna tidszon (W. Central Africa Standard Time)
-			target.SetDate(new DateOnlyAsDateTimePeriod(schedulingDate, timeZoneInfo));
-
+			target = new ShiftProjectionCache(workShift, _personalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(schedulingDate, timeZoneInfo));
 		}
 
 		[Test]
@@ -152,8 +149,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			DateTimePeriod lunchPeriod = new DateTimePeriod(WorkShift.BaseDate.Add(start), WorkShift.BaseDate.Add(end));
 			workShift.LayerCollection.Add(new WorkShiftActivityLayer(lunch, lunchPeriod));
 
-			target = new ShiftProjectionCache(workShift, _personalShiftMeetingTimeChecker);
-			target.SetDate(new DateOnlyAsDateTimePeriod(schedulingDate, timeZoneInfo));
+			target = new ShiftProjectionCache(workShift, _personalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(schedulingDate, timeZoneInfo));
 
 			var period = new DateTimePeriod(new DateTime(2009, 2, 2, 11, 0, 0, DateTimeKind.Utc),
 			                                new DateTime(2009, 2, 2, 11, 30, 0, DateTimeKind.Utc));
@@ -178,7 +174,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			DateTimePeriod period = new DateTimePeriod(WorkShift.BaseDate.Add(start), WorkShift.BaseDate.Add(end));
 			workShift.LayerCollection.Add(new WorkShiftActivityLayer(activity, period));
 
-			target = new ShiftProjectionCache(workShift, _personalShiftMeetingTimeChecker);
+			target = new ShiftProjectionCache(workShift, _personalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
 
 			TimeSpan result;
 

@@ -62,8 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			
 			var workShift = new WorkShift(new ShiftCategory("hepp"));
 			workShift.LayerCollection.Add(new WorkShiftActivityLayer(phone, new DateTimePeriod(currentDate.AddHours(8), currentDate.AddHours(17))));
-			var c1 = new ShiftProjectionCache(workShift, _personalShiftMeetingTimeChecker);
-			c1.SetDate(new DateOnlyAsDateTimePeriod(_dateOnly, TimeZoneInfo.Utc));
+			var c1 = new ShiftProjectionCache(workShift, _personalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(_dateOnly, TimeZoneInfo.Utc));
 			var shifts = new List<ShiftProjectionCache> {c1};
 
 			using (_mocks.Record())
@@ -105,8 +104,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			var workShift = new WorkShift(new ShiftCategory("hepp"));
 			workShift.LayerCollection.Add(new WorkShiftActivityLayer(phone, new DateTimePeriod(currentDate.AddHours(8), currentDate.AddHours(17))));
-			var c1 = new ShiftProjectionCache(workShift, _personalShiftMeetingTimeChecker);
-			c1.SetDate(new DateOnlyAsDateTimePeriod(_dateOnly, TimeZoneInfo.Utc));
+			var c1 = new ShiftProjectionCache(workShift, _personalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(_dateOnly, TimeZoneInfo.Utc));
 			var shifts = new List<ShiftProjectionCache> { c1 };
 			
 			using (_mocks.Record())
@@ -140,7 +138,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			phone.InWorkTime = true;
 
 			IList<ShiftProjectionCache> shifts = new List<ShiftProjectionCache>();
-			var c1 = new ShiftProjectionCache(new WorkShift(ShiftCategoryFactory.CreateShiftCategory()), _personalShiftMeetingTimeChecker);
+			var c1 = new ShiftProjectionCache(new WorkShift(ShiftCategoryFactory.CreateShiftCategory()), _personalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
 			shifts.Add(c1);
 			var schedules = MockRepository.GenerateMock<IScheduleDictionary>();
 			schedules.Expect(x => x[_person].ScheduledDay(_dateOnly)).Return(_part);

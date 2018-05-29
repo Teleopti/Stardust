@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldCheckParameters()
 		{
-			var shift = new ShiftProjectionCache(_workShift, _personalShiftMeetingTimeChecker);
+			var shift = new ShiftProjectionCache(_workShift, _personalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneGuard.Instance.TimeZone));
 			var restriction = new EffectiveRestriction(new StartTimeLimitation(),
 														new EndTimeLimitation(),
 														new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
@@ -107,8 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(_dateOnly, _timeZoneInfo);
 			foreach (IWorkShift shift in tmpList)
 			{
-				var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker);
-				cache.SetDate(dateOnlyAsDateTimePeriod);
+				var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
 				retList.Add(cache);
 			}
 			return retList;

@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 {
@@ -16,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		public void SetUp()
 		{
 			_target = new DisallowedShiftProjectionCachesFilter();
-			_shiftProjectionCache1 = new ShiftProjectionCache(new WorkShift(new ShiftCategory("Late")), new PersonalShiftMeetingTimeChecker());
+			_shiftProjectionCache1 = new ShiftProjectionCache(new WorkShift(new ShiftCategory("Late")), new PersonalShiftMeetingTimeChecker(), new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
 		}
 
 		[Test]
@@ -64,6 +68,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			{
 				return 1;
 			}
+
+			public shiftProjectionCasheForTestReturn1() 
+				: base(null, null, null)
+			{
+			}
 		}
 
 		private class shiftProjectionCasheForTestReturn2 : ShiftProjectionCache
@@ -71,6 +80,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			public override int GetHashCode()
 			{
 				return 2;
+			}
+
+			public shiftProjectionCasheForTestReturn2() 
+				: base(null, null, null)
+			{
 			}
 		}
 	}
