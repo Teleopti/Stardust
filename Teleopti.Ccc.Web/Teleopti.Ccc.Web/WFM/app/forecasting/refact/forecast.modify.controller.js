@@ -104,12 +104,14 @@
 					CampaignTasksPercent: vm.campaignPercentage / 100
 				}),
 				function(data, status, headers, config) {
-					vm.selectedWorkload.Days = data;
+					vm.selectedWorkload.Days = data.ForecastDays;
+					vm.modifyMessage = data.WarningMessage;
 					vm.changesMade = true;
 					vm.isForecastRunning = false;
 				},
 				function(data, status, headers, config) {
-					vm.selectedWorkload.Days = data;
+					vm.selectedWorkload.Days = data.ForecastDays;
+					vm.modifyMessage = data.WarningMessage;
 					vm.changesMade = true;
 					vm.isForecastRunning = false;
 				},
