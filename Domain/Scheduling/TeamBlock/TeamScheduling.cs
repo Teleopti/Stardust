@@ -20,6 +20,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		protected override ShiftProjectionCache ForDate(ShiftProjectionCache shiftProjectionCache,
 			IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
 		{
+			//dont even know if this is necessary. only here to keep old behavior
+			//maybe/possible it'll work always return shiftProjectionCache here
 			return shiftProjectionCache.GetOrCreateNew(dateOnlyAsDateTimePeriod);
 		}
 	}
