@@ -17355,4 +17355,8 @@ The application will now exit.</value>
     <value>Approve as in adherence</value>
     <comment>Approve out of adherence period as in adherence</comment>
   </data>
+  <data name="LateXMinutes" xml:space="preserve">
+    <value>Late {0} min</value>
+    <comment>Late x minutes alert</comment>
+  </data>
 </root>
