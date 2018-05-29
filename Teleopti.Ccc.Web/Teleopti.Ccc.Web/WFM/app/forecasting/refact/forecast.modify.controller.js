@@ -18,13 +18,13 @@
 		vm.selectedScenario = null;
 		vm.forecastPeriod = {
 			startDate: moment()
-				.utc()
-				.add(1, 'days')
-				.toDate(),
+			.utc()
+			.add(1, 'days')
+			.toDate(),
 			endDate: moment()
-				.utc()
-				.add(6, 'months')
-				.toDate()
+			.utc()
+			.add(6, 'months')
+			.toDate()
 		};
 		vm.savingToScenario = false;
 
@@ -93,6 +93,7 @@
 		}
 
 		function applyCampaign() {
+			vm.modifyMessage = null;
 			vm.isForecastRunning = true;
 			forecastingService.campaign(
 				angular.toJson({
@@ -113,7 +114,11 @@
 					vm.isForecastRunning = false;
 				},
 				function() {
-					NoticeService.success($translate.instant('CampaignValuesUpdated'), 5000, true);
+					if (vm.modifyMessage) {
+						NoticeService.warning(vm.modifyMessage, 5000, true);
+					} else {
+						NoticeService.success('Applied campaign', 5000, true);
+					}
 					modifyPanelHelper();
 					vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
 				}
@@ -129,6 +134,7 @@
 		}
 
 		function applyOverride(form) {
+			vm.modifyMessage = null;
 			vm.isForecastRunning = true;
 			forecastingService.override(
 				angular.toJson({
@@ -144,17 +150,24 @@
 					ForecastDays: vm.selectedWorkload.Days
 				}),
 				function(data, status, headers, config) {
-					vm.selectedWorkload.Days = data;
+					vm.selectedWorkload.Days = data.ForecastDays;
+					vm.modifyMessage = data.WarningMessage;
 					vm.changesMade = true;
 					vm.isForecastRunning = false;
 				},
 				function(data, status, headers, config) {
-					vm.selectedWorkload.Days = data;
+					vm.selectedWorkload.Days = data.ForecastDays;
+					vm.modifyMessage = data.WarningMessage;
 					vm.changesMade = true;
 					vm.isForecastRunning = false;
 				},
 				function() {
-					NoticeService.success($translate.instant('OverrideValuesUpdated'), 5000, true);
+					if (vm.modifyMessage) {
+						NoticeService.warning(vm.modifyMessage, 5000, true);
+					} else {
+						NoticeService.success('Applied override', 5000, true);
+					}
+
 					modifyPanelHelper();
 					vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
 				}
@@ -174,17 +187,20 @@
 					ShouldOverrideAverageAfterTaskTime: true
 				}),
 				function(data, status, headers, config) {
-					vm.selectedWorkload.Days = data;
+					vm.selectedWorkload.Days = data.ForecastDays;
+					vm.modifyMessage = data.WarningMessage;
 					vm.isForecastRunning = false;
 					vm.changesMade = true;
 				},
 				function(data, status, headers, config) {
-					vm.selectedWorkload.Days = data;
+					vm.selectedWorkload.Days = data.ForecastDays;
+					vm.modifyMessage = data.WarningMessage;
 					vm.isForecastRunning = false;
 					vm.changesMade = true;
 				},
 				function() {
-					NoticeService.success($translate.instant('OverrideValuesCleared'), 5000, true);
+					NoticeService.success('Override removed', 5000, true);
+
 					modifyPanelHelper();
 					vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
 				}
@@ -201,7 +217,7 @@
 
 		function UniqueArraybyId(collection, keyname) {
 			var output = [],
-				keys = [];
+			keys = [];
 
 			angular.forEach(collection, function(item) {
 				var key = item[keyname];
@@ -264,7 +280,7 @@
 					vm.selectedWorkload.Days = data.ForecastDays;
 					vm.isForecastRunning = false;
 					vm.periodModal = false;
-          vm.scenarioNotForecasted = vm.selectedWorkload.Days.length === 0;
+					vm.scenarioNotForecasted = vm.selectedWorkload.Days.length === 0;
 				}
 			);
 		}
@@ -289,12 +305,12 @@
 					vm.isForecastRunning = false;
 					vm.forecastModal = false;
 					vm.selectedWorkload.Days = data.ForecastDays;
-          vm.scenarioNotForecasted = vm.selectedWorkload.Days.length === 0;
+					vm.scenarioNotForecasted = vm.selectedWorkload.Days.length === 0;
 				},
 				function(data, status, headers, config) {
 					vm.isForecastRunning = false;
 					vm.forecastModal = false;
-          vm.scenarioNotForecasted = vm.selectedWorkload.Days.length === 0;
+					vm.scenarioNotForecasted = vm.selectedWorkload.Days.length === 0;
 				}
 			);
 		}
@@ -338,10 +354,10 @@
 						type: headers['content-type']
 					});
 					var fileName =
-						moment(vm.forecastPeriod.startDate).format('YYYY-MM-DD') +
-						' - ' +
-						moment(vm.forecastPeriod.endDate).format('YYYY-MM-DD') +
-						'.xlsx';
+					moment(vm.forecastPeriod.startDate).format('YYYY-MM-DD') +
+					' - ' +
+					moment(vm.forecastPeriod.endDate).format('YYYY-MM-DD') +
+					'.xlsx';
 					saveAs(blob, fileName);
 					vm.isForecastRunning = false;
 					vm.exportModal = false;
