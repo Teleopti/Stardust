@@ -1655,6 +1655,7 @@
     <Content Include="WFM\app\requests\requests.directive.synchronizeHeaderHeight.js" />
     <Content Include="WFM\app\requests\requests.uigridFix.js" />
     <Content Include="WFM\app\requests\requests.controller.js" />
+    <Content Include="WFM\app\requests\_modules.js" />
     <Content Include="WFM\app\resourceplanner\manageschedule\manageschedule.html" />
     <Content Include="WFM\app\resourceplanner\manageschedule\resourceplanner.manageschedule.controller.js" />
     <Content Include="WFM\app\resourceplanner\manageschedule\resourceplanner.manageschedule.controller.spec.js" />
@@ -1920,14 +1921,9 @@
     <Content Include="WFM\index_desktop_client.tpl.html" />
     <Content Include="WFM\index.tpl.html" />
     <Content Include="WFM\app\app_desktop_client.js" />
-    <Content Include="WFM\app\forecasting\forecasting.advanced.controller.spec.js" />
     <Content Include="WFM\app\forecasting\forecasting.routes.js" />
-    <Content Include="WFM\app\forecasting\forecasting.start.controller.spec.js" />
-    <Content Include="WFM\app\forecasting\html\forecasting-result-chart.html" />
     <Content Include="WFM\app\forecasting\html\forecasting.html" />
     <Content Include="WFM\app\forecasting\html\skill-create.html" />
-    <Content Include="WFM\app\forecasting\forecasting.default.controller.js" />
-    <Content Include="WFM\app\forecasting\forecasting.resultChart.directive.js" />
     <Content Include="WFM\app\forecasting\skill.create.controller.spec.js" />
     <Content Include="WFM\app\global\areas\areas.controller.spec.js" />
     <Content Include="WFM\app\global\businessunits\businessunits.service.js" />
@@ -1997,7 +1993,6 @@
     <Content Include="WFM\app\requests\templates\requests.template.absencePersonAccountOverview.js" />
     <Content Include="WFM\app\requests\templates\requests.template.shiftTradeDay.js" />
     <Content Include="WFM\app\requests\templates\requests.template.scheduleTableTemplate.js" />
-    <Content Include="WFM\app\requests\_module.js" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.routes.js" />
     <Content Include="WFM\app\global\http\http.service.js" />
     <Content Include="WFM\app\search\search.controller.spec.js" />
@@ -2122,8 +2117,6 @@
     <Content Include="WFM\app\teamSchedule\_modules.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali-ext.js" />
     <Content Include="WFM\app\forecasting\c3-fix-forecast.js" />
-    <Content Include="WFM\app\forecasting\html\forecasting-advanced.html" />
-    <Content Include="WFM\app\forecasting\forecasting.advanced.controller.js" />
     <Content Include="WFM\app\outbound\angular-gantt.ext.js" />
     <Content Include="WFM\app\outbound\outbound.directive.scroll-fix.js" />
     <Content Include="WFM\app\outbound\outbound.controller.campaign-list-gantt.js" />
@@ -2266,7 +2259,6 @@
     <Content Include="WFM\app\seatManagement\seatplan.controller.js" />
     <Content Include="WFM\app\seatManagement\seatmap.service.js" />
     <Content Include="WFM\app\seatManagement\seatplan.service.js" />
-    <Content Include="WFM\karma.conf.js" />
     <Content Include="Areas\Reporting\Content\Scripts\persianDatepicker.min.js" />
     <Content Include="Areas\Reporting\Content\Scripts\reportController.js" />
     <Content Include="Areas\Reporting\Content\Styles\calendar.css" />
