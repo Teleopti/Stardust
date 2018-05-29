@@ -5,6 +5,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 {
 	public interface ITimeLineViewModelFactory
 	{
-		TimeLineViewModel[] CreateTimeLineHours(DateTimePeriod timeLinePeriod);
+		TeamScheduleTimeLineViewModel[] CreateTimeLineHours(DateTimePeriod timeLinePeriod);
+	}
+
+	public interface ITimeLineViewModelFactoryToggle75989Off
+	{
+		TeamScheduleTimeLineViewModelToggle75989Off[] CreateTimeLineHours(DateTimePeriod timeLinePeriod);
 	}
 }

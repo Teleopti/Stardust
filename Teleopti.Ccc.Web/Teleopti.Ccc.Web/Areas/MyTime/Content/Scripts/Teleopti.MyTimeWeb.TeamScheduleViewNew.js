@@ -27,7 +27,7 @@ Teleopti.MyTimeWeb.TeamScheduleNew = (function ($) {
 		loadMyTeam: "Requests/ShiftTradeRequestMyTeam",
 		loadDefaultTeam: "../api/TeamSchedule/DefaultTeam",
 		loadTeams: "Team/TeamsAndGroupsWithAllTeam",
-		loadSchedule: "../api/TeamSchedule/TeamSchedule"
+		loadSchedule: "../api/TeamSchedule/TeamScheduleOld"
 	};
 
 	function _bindData() {

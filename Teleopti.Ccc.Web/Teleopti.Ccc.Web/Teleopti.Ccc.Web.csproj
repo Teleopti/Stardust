@@ -486,12 +486,18 @@
     <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\ITimeLineViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\LayerViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TimeLineViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TimeLineViewModelFactoryToggle75989Off.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TimeLineViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\ViewModelFactory\TeamScheduleAgentScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\ViewModelFactory\ITeamSchedulePermissionViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\ViewModelFactory\ITeamScheduleViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\ViewModelFactory\TeamSchedulePermissionViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelFactoryToggle75989Off.cs" />
     <Compile Include="Areas\MyTime\Models\TeamSchedule\TeamSchedulePermissionViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\TeamSchedule\TeamScheduleRequest.cs" />
+    <Compile Include="Areas\MyTime\Models\TeamSchedule\TeamScheduleViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\TeamSchedule\TeamScheduleViewModelOld.cs" />
     <Compile Include="Areas\MyTime\Models\TeamSchedule\TimeLineViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\WeekSchedule\RequestLicense.cs" />
     <Compile Include="Areas\People\Controllers\RoleManager.cs" />
@@ -1222,7 +1228,6 @@
     <Compile Include="Areas\MyTime\Models\Shared\StyleClasses.cs" />
     <Compile Include="Areas\MyTime\Models\Settings\ChangePasswordViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Settings\SettingsViewModel.cs" />
-    <Compile Include="Areas\MyTime\Models\TeamSchedule\TeamScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Shared\StyleClassViewModel.cs" />
     <Compile Include="Areas\Start\Controllers\TestController.cs" />
     <Compile Include="Areas\Start\Core\Menu\DefinedApplicationAreas.cs" />

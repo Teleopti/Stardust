@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 	[TestFixture, MyTimeWebTeamScheduleViewModelFactoryTest]
 	public class TeamScheduleViewModelFactoryTest
 	{
-		public ITeamScheduleViewModelFactory Target;
+		public ITeamScheduleViewModelFactoryToggle75989Off Target;
 		public IPersonRepository PersonRepository;
 		public IPersonForScheduleFinder PersonForScheduleFinder;
 		public IBusinessUnitRepository BusinessUnitRepository;
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			SetUp();
 
-			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
+			var result = Target.GetTeamScheduleViewModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 21),
 				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var person1 = PersonRepository.LoadAll().First(p => p.Name.LastName == "1");
 			LoggedOnUser.SetFakeLoggedOnUser(person1);
 
-			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
+			var result = Target.GetTeamScheduleViewModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 21),
 				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var person = PersonRepository.LoadAll().First(p => p.Name.LastName == "3");
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 
-			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
+			var result = Target.GetTeamScheduleViewModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 21),
 				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
@@ -232,7 +232,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			LoggedOnUser.SetFakeLoggedOnUser(personMe);
 
-			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
+			var result = Target.GetTeamScheduleViewModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 21),
 				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			LoggedOnUser.SetFakeLoggedOnUser(personMe);
 
-			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
+			var result = Target.GetTeamScheduleViewModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 21),
 				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
@@ -273,7 +273,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var person1 = PersonRepository.LoadAll().First(p => p.Name.LastName == "1");
 
-			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
+			var result = Target.GetTeamScheduleViewModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 21),
 				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
@@ -303,7 +303,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var p5ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), p5, scenario);
 			ScheduleProvider.AddScheduleDay(p5ScheduleOn23);
 
-			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
+			var result = Target.GetTeamScheduleViewModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 23),
 				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
@@ -341,7 +341,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			p5ScheduleOn23.Add(p5AbsenceOn23);
 			ScheduleProvider.AddScheduleDay(p5ScheduleOn23);
 
-			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
+			var result = Target.GetTeamScheduleViewModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 23),
 				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
@@ -377,7 +377,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			p5ScheduleOn23.Add(p5AbsenceOn23);
 			ScheduleProvider.AddScheduleDay(p5ScheduleOn23);
 
-			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
+			var result = Target.GetTeamScheduleViewModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 23),
 				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
@@ -410,7 +410,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			p5ScheduleOn23.Add(p5AssOn23);
 			ScheduleProvider.AddScheduleDay(p5ScheduleOn23);
 
-			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
+			var result = Target.GetTeamScheduleViewModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 23),
 				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
@@ -453,7 +453,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			p5ScheduleOn23.Add(personAbsence);
 			ScheduleProvider.AddScheduleDay(p5ScheduleOn23);
 
-			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
+			var result = Target.GetTeamScheduleViewModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(new DateTime(2015, 5, 23, 0, 0, 0, 0, DateTimeKind.Utc)),
 				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
@@ -477,7 +477,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var teamate = PersonRepository.LoadAll().First(p => p.Name.LastName == "a");
 			LoggedOnUser.SetFakeLoggedOnUser(me);
 
-			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
+			var result = Target.GetTeamScheduleViewModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 22),
 				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
@@ -562,7 +562,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PersonRepository.Add(p5);
 			PersonRepository.Add(p6);
 
-			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
+			var result = Target.GetTeamScheduleViewModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 23),
 				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
@@ -648,7 +648,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PersonRepository.Add(p5);
 			PersonRepository.Add(p6);
 
-			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
+			var result = Target.GetTeamScheduleViewModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 23),
 				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
@@ -742,7 +742,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PersonRepository.Add(p5);
 			PersonRepository.Add(p6);
 
-			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
+			var result = Target.GetTeamScheduleViewModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 23),
 				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
@@ -830,7 +830,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PersonRepository.Add(p5);
 			PersonRepository.Add(p6);
 
-			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
+			var result = Target.GetTeamScheduleViewModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 23),
 				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
@@ -850,7 +850,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			SetUp();
 
-			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
+			var result = Target.GetTeamScheduleViewModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 19),
 				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
