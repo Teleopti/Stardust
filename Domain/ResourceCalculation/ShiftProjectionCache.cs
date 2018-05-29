@@ -20,6 +20,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	        _workShift = workShift;
         	_personalShiftMeetingTimeChecker = personalShiftMeetingTimeChecker;
         }
+		
+		public ShiftProjectionCache(IWorkShift workShift, 
+			IPersonalShiftMeetingTimeChecker personalShiftMeetingTimeChecker, 
+			IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
+		{
+			_workShift = workShift;
+			_personalShiftMeetingTimeChecker = personalShiftMeetingTimeChecker;
+			SetDate(dateOnlyAsDateTimePeriod);
+		}
 
 		protected ShiftProjectionCache() { }
 
