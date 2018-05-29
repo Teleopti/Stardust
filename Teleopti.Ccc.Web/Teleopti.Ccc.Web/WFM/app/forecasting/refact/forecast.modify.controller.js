@@ -3,9 +3,9 @@
 
 	angular.module('wfm.forecasting').controller('ForecastModController', ForecastModCtrl);
 
-	ForecastModCtrl.$inject = ['forecastingService', '$stateParams', '$window', 'NoticeService', '$translate'];
+	ForecastModCtrl.$inject = ['forecastingService', '$stateParams', '$window', 'NoticeService', '$translate', '$state', '$scope'];
 
-	function ForecastModCtrl(forecastingService, $stateParams, $window, NoticeService, $translate) {
+	function ForecastModCtrl(forecastingService, $stateParams, $window, NoticeService, $translate, $state, $scope) {
 		var vm = this;
 
 		var storage = {};
@@ -367,5 +367,21 @@
 				}
 			);
 		}
+
+		vm.exitConfigMode = function() {
+			if (vm.stateName.length > 0) {
+				$state.go(vm.stateName);
+			} else {
+				$state.go($state.params.returnState);
+			}
+		};
+		$scope.$on('$stateChangeStart', function(event, next, current) {
+			if (vm.changesMade) {
+				event.preventDefault();
+				vm.stateName = next.name;
+				vm.closeConfirmation = true;
+			}
+		});
+
 	}
 })();

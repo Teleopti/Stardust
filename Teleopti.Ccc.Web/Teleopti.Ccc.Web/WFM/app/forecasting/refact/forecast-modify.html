@@ -254,6 +254,34 @@
       </div>
     </div>
   </modal-dialog>
+
+  <div ng-cloak
+     class="modal-box">
+    <div ng-cloak
+         ng-show="vm.closeConfirmation">
+        <div class="modalbg">
+            <div class="dialog-mini material-depth-1">
+                <div class="modal-inner-content">
+                    <h3>You have unsaved changes</h3>
+                    Are you sure you want to exit forecaster without saving?
+                </div>
+                <div class="modal-actions">
+                    <aside>
+                        <button type="button"
+                                focus-me="vm.closeConfirmation"
+                                id="confirmExitButton"
+                                ng-click="vm.changesMade=false; vm.exitConfigMode(); $event.stopPropagation();"
+                                class="wfm-btn wfm-btn-invis-default">{{'Yes'|translate}}</button>
+                        <button type="button"
+                                id="cancelExitButton"
+                                ng-click="vm.stateName=''; vm.closeConfirmation=false; $event.stopPropagation();"
+                                class="wfm-btn wfm-btn-invis-primary">{{'No'|translate}}</button>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 <div ng-cloak ng-if="vm.noWorkloadFound">
   No workload found, please select one
