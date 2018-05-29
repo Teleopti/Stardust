@@ -61,14 +61,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		}
 
 		[Test]
-		public void VerifySetNewDate()
-		{
-			Assert.AreEqual(schedulingDate.Date, target.MainShiftProjection.Period().Value.StartDateTime.Date);
-			target.SetDate(new DateOnlyAsDateTimePeriod(schedulingDate.AddDays(1), timeZoneInfo));
-			Assert.AreEqual(schedulingDate.Date.AddDays(1), target.MainShiftProjection.Period().Value.StartDateTime.Date);
-		}
-
-		[Test]
 		public void VerifyNoPublicEmptyConstructor()
 		{
 			Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(target.GetType()));

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Interfaces.Domain;
@@ -15,7 +16,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    private IDateOnlyAsDateTimePeriod _dateOnlyAsPeriod;
 		private WorkShiftCalculatableVisualLayerCollection _workShiftCalculatableLayers;
 
-		public ShiftProjectionCache(IWorkShift workShift, IPersonalShiftMeetingTimeChecker personalShiftMeetingTimeChecker) : this()
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_LessResourcesXXL_74915)]
+		public ShiftProjectionCache(IWorkShift workShift, IPersonalShiftMeetingTimeChecker personalShiftMeetingTimeChecker)
         {
 	        _workShift = workShift;
         	_personalShiftMeetingTimeChecker = personalShiftMeetingTimeChecker;
@@ -29,8 +31,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_personalShiftMeetingTimeChecker = personalShiftMeetingTimeChecker;
 			SetDate(dateOnlyAsDateTimePeriod);
 		}
-
-		protected ShiftProjectionCache() { }
 
         public void SetDate(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
         {
