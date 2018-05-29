@@ -698,7 +698,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			};
 
 			dynamic data = Target.AddCampaign(model);
-			dynamic result = data.Content;
+			var result = data.Content;
 			var firstForecastDay = ((List<ForecastDayModel>)result.ForecastDays).First();
 			var secondForecastDay = ((List<ForecastDayModel>)result.ForecastDays).Last();
 
@@ -739,7 +739,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			};
 
 			dynamic data = Target.AddCampaign(model);
-			dynamic result = data.Content;
+			var result = data.Content;
 			var forecastDay = ((List<ForecastDayModel>)result.ForecastDays).First();
 
 			Assert.That(forecastDay.TotalTasks, Is.EqualTo(200d).Within(tolerance));
@@ -767,7 +767,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			};
 
 			dynamic data = Target.AddCampaign(model);
-			dynamic result = data.Content;
+			var result = data.Content;
 			var firstForecastDay = ((List<ForecastDayModel>)result.ForecastDays).First();
 
 			firstForecastDay.Tasks
@@ -1025,7 +1025,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			};
 
 			dynamic data = Target.AddOverride(model);
-			dynamic result = data.Content;
+			var result = data.Content;
 			var forecastDay = ((List<ForecastDayModel>)result.ForecastDays).First();
 			var lastForecastDay = ((List<ForecastDayModel>)result.ForecastDays).Last();
 
@@ -1079,7 +1079,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			};
 
 			dynamic data = Target.AddOverride(model);
-			dynamic result = data.Content;
+			var result = data.Content;
 			var forecastDay = ((List<ForecastDayModel>)result.ForecastDays).First();
 			forecastDay.TotalTasks
 				.Should().Be(forecastDay.Tasks);
@@ -1119,7 +1119,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			};
 
 			dynamic data = Target.AddOverride(model);
-			dynamic result = data.Content;
+			var result = data.Content;
 			var forecastDay = ((List<ForecastDayModel>)result.ForecastDays).First();
 
 			forecastDay.TotalTasks
@@ -1160,7 +1160,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			};
 			
 			dynamic data = Target.AddOverride(model);
-			dynamic result = data.Content;
+			var result = data.Content;
 
 			var forecastDay = ((List<ForecastDayModel>)result.ForecastDays).First();
 			forecastDay.HasOverride.Should().Be(true);
@@ -1200,7 +1200,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			};
 
 			dynamic data = Target.AddOverride(model);
-			dynamic result = data.Content;
+			var result = data.Content;
 			var forecastDay = ((List<ForecastDayModel>)result.ForecastDays).First();
 
 			forecastDay.TotalTasks
