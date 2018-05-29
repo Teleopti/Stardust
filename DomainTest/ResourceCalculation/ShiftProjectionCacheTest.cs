@@ -61,12 +61,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		}
 
 		[Test]
-		public void VerifyNoPublicEmptyConstructor()
-		{
-			Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(target.GetType()));
-		}
-
-		[Test]
 		public void WhenEmptyPersonalShiftsAndMeetingsAreInWorkTimeReturnsTrue()
 		{
 			var readMeetings = new IPersonMeeting[0];

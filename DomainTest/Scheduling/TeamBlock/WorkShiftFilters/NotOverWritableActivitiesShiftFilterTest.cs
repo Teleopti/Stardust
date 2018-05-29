@@ -61,22 +61,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		}
 
 		[Test]
-		public void ShouldNotFilterIfNoMeeting()
-		{
-			IList<ShiftProjectionCache> shifts = new List<ShiftProjectionCache>();
-			var c1 = _mocks.StrictMock<ShiftProjectionCache>();
-			shifts.Add(c1);
-			var schedules = _mocks.StrictMock<IScheduleDictionary>();
-			Expect.Call(schedules[_person].ScheduledDay(_dateOnly)).Return(_part);
-
-
-			_mocks.ReplayAll();
-			var retShifts = _target.Filter(schedules, _dateOnly, _person, shifts);
-			retShifts.Count.Should().Be.EqualTo(1);
-			_mocks.VerifyAll();
-		}
-
-		[Test]
 		public void VerifyIfMeetingCannotOverrideActivity()
 		{
 			var currentDate = new DateTime(2013, 3, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -111,21 +95,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			retShifts.Count.Should().Be.EqualTo(0);
 			_mocks.VerifyAll();
 		}
-
-		[Test]
-		public void ShouldNotFilterIfNoPersonalShift()
-		{
-			IList<ShiftProjectionCache> shifts = new List<ShiftProjectionCache>();
-			var c1 = _mocks.StrictMock<ShiftProjectionCache>();
-			shifts.Add(c1);
-			var schedules = _mocks.StrictMock<IScheduleDictionary>();
-			Expect.Call(schedules[_person].ScheduledDay(_dateOnly)).Return(_part);
-			_mocks.ReplayAll();
-			var retShifts = _target.Filter(schedules, _dateOnly, _person, shifts);
-			retShifts.Count.Should().Be.EqualTo(1);
-			_mocks.VerifyAll();
-		}
-
+		
 		[Test]
 		public void ShouldCheckParameters()
 		{

@@ -1165,12 +1165,10 @@
     <Compile Include="Scheduling\Scenarios\WeeklyRestSolverLaterTest.cs" />
     <Compile Include="Scheduling\Scenarios\WeeklyRestSolverEarlierTest.cs" />
     <Compile Include="Scheduling\TeamBlock\AllTeamMembersInSelectionSpecificationTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\FirstShiftInTeamBlockFinderTest.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForDaysTest.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForSkillIntervalTest.cs" />
     <Compile Include="Scheduling\TeamBlock\PullTargetValueFromSkillIntervalDataTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\NightlyRestRestrcitionTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\Restriction\ProposedRestrictionAggregatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\ResctrictionFromRoleModelRestrictionTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\SameActivityRestrictionTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\SameEndTimeRestrictionTest.cs" />
