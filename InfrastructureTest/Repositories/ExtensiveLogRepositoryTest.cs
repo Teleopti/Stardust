@@ -246,14 +246,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			});
 		}
 
-		[Test]
+		[Ignore("Too big data"),Test]
 		public void ShouldSaveLogWithHugeRawDataWithContent()
 		{
 			Now.Is("2018-05-25 09:54".Utc());
 			logSetting("true");
 
 			var personList = new List<IPerson>();
-			for (int i = 0; i < 100000; i++)
+			for (int i = 0; i < 100; i++)
 			{
 				personList.Add(PersonFactory.CreatePersonWithId());
 			}
