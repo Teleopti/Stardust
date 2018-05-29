@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
@@ -24,9 +25,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 		}
 
 		public bool Validate(ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder)
-		{
+		{	
 			var dayIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockInfo, schedulingResultStateHolder.AllSkillDays(), _groupPersonSkillAggregator);
-			var firstDate = findFirstNoneDayOffDayForAnyTeamMember(teamBlockInfo.BlockInfo.BlockPeriod,
+			var firstDate = findFirstNoneDayOffOrFullDayAbsenceDayForAnyTeamMember(teamBlockInfo.BlockInfo.BlockPeriod,
 				teamBlockInfo.TeamInfo.GroupMembers.ToList(), schedulingResultStateHolder);
 			var firstDateActivities = dayIntervalDataPerDateAndActivity[firstDate].Keys.ToList();
 			
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 				{
 					if(dateOnly.Equals(firstDate)) continue;
 
-					if (!isDayOffForAllTeamMembers(dateOnly, teamBlockInfo.TeamInfo.GroupMembers, schedulingResultStateHolder))
+					if (!isDayOffOrFullAbsenceForAllTeamMembers(dateOnly, teamBlockInfo.TeamInfo.GroupMembers, schedulingResultStateHolder))
 					{
 						dictionary = dayIntervalDataPerDateAndActivity[dateOnly];
 					var openPeriod = _skillIntervalDataOpenHour.GetOpenHours(dictionary[activity], dateOnly);
@@ -53,32 +54,32 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 			return true;
 		}
 
-		private DateOnly findFirstNoneDayOffDayForAnyTeamMember(DateOnlyPeriod period, IList<IPerson> teamMembers , ISchedulingResultStateHolder schedulingResultStateHolder)
+		private DateOnly findFirstNoneDayOffOrFullDayAbsenceDayForAnyTeamMember(DateOnlyPeriod period, IList<IPerson> teamMembers , ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			var dayCollection = period.DayCollection();
 			foreach (var dateOnly in dayCollection)
 			{
-				if (!isDayOffForAllTeamMembers(dateOnly, teamMembers, schedulingResultStateHolder))
+				if (!isDayOffOrFullAbsenceForAllTeamMembers(dateOnly, teamMembers, schedulingResultStateHolder))
 					return dateOnly;
 			}
 
 			return dayCollection.First();
 		}
 
-		private bool isDayOffForAllTeamMembers(DateOnly dateOnly, IEnumerable<IPerson> teamMembers, ISchedulingResultStateHolder schedulingResultStateHolder)
+		private bool isDayOffOrFullAbsenceForAllTeamMembers(DateOnly dateOnly, IEnumerable<IPerson> teamMembers, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
-			bool dayOffFound = false;
+			bool dayOffOrAbsenceFound = false;
 			foreach (var groupMember in teamMembers)
 			{
 				var scheduleDay = schedulingResultStateHolder.Schedules[groupMember].ScheduledDay(dateOnly);
-				if (scheduleDay.HasDayOff())
+				if (scheduleDay.HasDayOff() || scheduleDay.IsFullDayAbsence())
 				{
-					dayOffFound = true;
+					dayOffOrAbsenceFound = true;
 					break;
 				}
 			}
 
-			return dayOffFound;
+			return dayOffOrAbsenceFound;
 		}
 	}
 }
