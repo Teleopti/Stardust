@@ -24,7 +24,7 @@
   </div>
   <div class="con-row">
     <div class="con-flex table-container">
-      <button mat-icon-button class="action-button" [matMenuTriggerFor]="menu" data-test-action-menu>
+      <button *ngIf="false" mat-icon-button class="action-button" [matMenuTriggerFor]="menu" data-test-action-menu>
         <i class="mdi mdi-dots-vertical"></i>
       </button>
       <mat-menu #menu="matMenu">
