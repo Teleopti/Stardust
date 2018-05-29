@@ -2,11 +2,25 @@
 (function () {
 	'use strict';
 
-	angular.module("wfm.teamSchedule").controller("ShiftEditorViewController", ['$stateParams', 'serviceDateFormatHelper', function ($stateParams, serviceDateFormatHelper) {
-		var vm = this;
-		vm.personSchedule = $stateParams.personSchedule;
-		vm.date = serviceDateFormatHelper.getDateOnly($stateParams.date);
-	}]);
+	angular.module("wfm.teamSchedule").controller("ShiftEditorViewController", ['$stateParams', 'TeamSchedule', 'ShiftEditorViewModelFactory', 'signalRSVC',
+		function ($stateParams, TeamSchedule, ShiftEditorViewModelFactory, signalRSVC) {
+			var vm = this;
+			vm.personId = $stateParams.personId;
+			vm.timezone = $stateParams.timezone;
+			vm.date = $stateParams.date;
+
+			signalRSVC.subscribe(
+				{ DomainType: 'IScheduleChangedInDefaultScenario' },
+				getSchedule,
+				300);
+
+			function getSchedule() {
+				TeamSchedule.getSchedules(vm.date, [vm.personId]).then(function (data) {
+					vm.schedules = data.Schedules;
+				});
+			}
+			getSchedule();
+		}]);
 
 	angular.module("wfm.teamSchedule").component("shiftEditor", {
 		controller: ShiftEditorController,
