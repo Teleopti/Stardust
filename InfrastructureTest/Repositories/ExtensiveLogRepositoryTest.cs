@@ -208,9 +208,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			WithUnitOfWork.Do(uow =>
 			{
 				var session = uow.Current().FetchSession();
-				var command = $@"select value,StartedLoggingAt from ExtensiveLogsSettings WHERE Setting = 'EnableRequestLogging' ";
-				var result = session.CreateSQLQuery(command).SetResultTransformer(Transformers.AliasToEntityMap)
-					.List<Hashtable>().First(); ;
+				var result = session
+					.CreateSQLQuery(
+						$@"select value,StartedLoggingAt from ExtensiveLogsSettings WHERE Setting = 'EnableRequestLogging' ")
+					.SetResultTransformer(Transformers.AliasToEntityMap)
+					.List<Hashtable>().First();
 				result["value"].Should().Be.EqualTo("false");
 				result["StartedLoggingAt"].Should().Be.Null();
 				
@@ -273,6 +275,45 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				var extensiveLogs = Target.LoadAll();
 				extensiveLogs.First().RawData.Should().Be.EqualTo(stringJson);
+			});
+		}
+
+		[Test]
+		public void ShouldResetTimerIfLoggingIsDisabled()
+		{
+			Now.Is("2018-05-25 09:54".Utc());
+			
+			
+			WithUnitOfWork.Do(uow =>
+			{
+				var session = uow.Current().FetchSession();
+				var command = $@"UPDATE ExtensiveLogsSettings SET Value = :value, StartedLoggingAt = :date  WHERE Setting = 'EnableRequestLogging' ";
+				session.CreateSQLQuery(command)
+					.SetDateTime("date",Now.UtcDateTime())
+					.SetString("value","false").ExecuteUpdate();
+			});
+
+			var objId = Guid.NewGuid();
+			var entityType = "StringType";
+
+			WithUnitOfWork.Do(() =>
+			{
+				Target.Add(PersonFactory.CreatePersonWithId(), objId, entityType);
+			});
+
+			WithUnitOfWork.Do(uow =>
+			{
+				var extensiveLogs = Target.LoadAll();
+				extensiveLogs.Count.Should().Be.EqualTo(0);
+
+				var session = uow.Current().FetchSession();
+				var result = session
+					.CreateSQLQuery(
+						$@"select value,StartedLoggingAt from ExtensiveLogsSettings WHERE Setting = 'EnableRequestLogging' ")
+					.SetResultTransformer(Transformers.AliasToEntityMap)
+					.List<Hashtable>().First();
+				result["value"].Should().Be.EqualTo("false");
+				result["StartedLoggingAt"].Should().Be.Null();
 			});
 		}
 

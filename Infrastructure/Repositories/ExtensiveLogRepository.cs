@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			try
 			{
 				//assuming we only have one setting
-				
 				var settingValue = _currentUnitOfWork.Session().CreateSQLQuery(
 						@"select value,TimeoutInMin,StartedLoggingAt from ExtensiveLogsSettings where Setting = 'EnableRequestLogging'")
 					.SetResultTransformer(Transformers.AliasToEntityMap)
@@ -97,6 +96,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							.ExecuteUpdate();
 					}
 					
+				}else if (!Convert.ToBoolean(settingValue["value"]) && settingValue["StartedLoggingAt"] != null)
+				{
+					resetSettings();
 				}
 				
 			}
@@ -116,8 +118,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				var logStartedAt = Convert.ToDateTime(ls);
 				if (timeoutAt > logStartedAt.AddMinutes(timeoutInMinutes))
 				{
-					var command = $@"UPDATE ExtensiveLogsSettings SET Value = 'false',StartedLoggingAt = null  WHERE Setting = 'EnableRequestLogging' ";
-					_currentUnitOfWork.Session().CreateSQLQuery(command).ExecuteUpdate();
+					resetSettings();
 					return false;
 				}
 			}
@@ -130,6 +131,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 
 			return true;
+		}
+
+		private void resetSettings()
+		{
+			var command =
+				$@"UPDATE ExtensiveLogsSettings SET Value = 'false',StartedLoggingAt = null  WHERE Setting = 'EnableRequestLogging' ";
+			_currentUnitOfWork.Session().CreateSQLQuery(command).ExecuteUpdate();
 		}
 
 		public IList<ExtensiveLog> LoadAll()
