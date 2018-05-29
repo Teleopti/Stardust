@@ -32,7 +32,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    {
 		    var workShift = _workShiftFromEditableShift.Convert(shift, dateOnlyAsDateTimePeriod.DateOnly,dateOnlyAsDateTimePeriod.TimeZone());
 		    var ret = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker);
+#pragma warning disable 618
 			ret.SetDate(dateOnlyAsDateTimePeriod);
+#pragma warning restore 618
 
 		    return ret;
 	    }
@@ -55,7 +57,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		    foreach (var shiftProjectionCache in shiftProjectionCaches)
 		    {
-			    shiftProjectionCache.SetDate(dateOnlyAsDateTimePeriod);
+#pragma warning disable 618
+				shiftProjectionCache.SetDate(dateOnlyAsDateTimePeriod);
+#pragma warning restore 618
 		    }
 			
 			return shiftProjectionCaches;
