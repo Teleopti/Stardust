@@ -165,8 +165,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			workShift.LayerCollection.Add(new WorkShiftActivityLayer(phone,
 				new DateTimePeriod(WorkShift.BaseDate.AddHours(8), WorkShift.BaseDate.AddHours(17))));
 
-			var shiftProjectionCache = new ShiftProjectionCache(workShift, new PersonalShiftMeetingTimeChecker());
-			shiftProjectionCache.SetDate(new DateOnlyAsDateTimePeriod(new DateOnly(2009,2,2), TimeZoneInfo.Utc));
+			var shiftProjectionCache = new ShiftProjectionCache(workShift, new PersonalShiftMeetingTimeChecker(), new DateOnlyAsDateTimePeriod(new DateOnly(2009,2,2), TimeZoneInfo.Utc));
 			var shifts = new []{shiftProjectionCache };
 			
 			using (_mocks.Record())
@@ -212,8 +211,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			workShift.LayerCollection.Add(new WorkShiftActivityLayer(phone,
 				new DateTimePeriod(WorkShift.BaseDate.AddHours(8), WorkShift.BaseDate.AddHours(17))));
 
-			var shiftProjectionCache = new ShiftProjectionCache(workShift, new PersonalShiftMeetingTimeChecker());
-			shiftProjectionCache.SetDate(new DateOnlyAsDateTimePeriod(new DateOnly(2009, 2, 2), TimeZoneInfo.Utc));
+			var shiftProjectionCache = new ShiftProjectionCache(workShift, new PersonalShiftMeetingTimeChecker(), new DateOnlyAsDateTimePeriod(new DateOnly(2009, 2, 2), TimeZoneInfo.Utc));
 			var shifts = new[] { shiftProjectionCache };
 
 			using (_mocks.Record())

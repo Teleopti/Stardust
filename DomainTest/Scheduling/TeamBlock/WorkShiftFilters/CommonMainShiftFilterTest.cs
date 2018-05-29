@@ -45,10 +45,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		{
 			var mainShift = EditableShiftFactory.CreateEditorShift(new TimeSpan(10, 0, 0), new TimeSpan(19, 0, 0),
 															 _activity, _category);
-			var workShift3 = WorkShiftFactory.CreateWorkShift(new TimeSpan(10, 0, 0), new TimeSpan(19, 0, 0),
-															  _activity, _category);
-			var shift = new ShiftProjectionCache(workShift3, _personalShiftMeetingTimeChecker);
-			shift.SetDate(new DateOnlyAsDateTimePeriod(_dateOnly, _timeZoneInfo));
 			var effectiveRestriction = new EffectiveRestriction(
 				new StartTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(10, 0, 0)),
 				new EndTimeLimitation(new TimeSpan(15, 0, 0), new TimeSpan(18, 0, 0)),
@@ -114,8 +110,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(_dateOnly, _timeZoneInfo);
 			foreach (IWorkShift shift in tmpList)
 			{
-				var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker);
-				cache.SetDate(dateOnlyAsDateTimePeriod);
+				var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
 				retList.Add(cache);
 			}
 			return retList;

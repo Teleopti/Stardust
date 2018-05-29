@@ -46,12 +46,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			var workShift1 = WorkShiftFactory.CreateWorkShift(TimeSpan.FromHours(8), TimeSpan.FromHours(9), skill.Activity);
 			var workShift2 = WorkShiftFactory.CreateWorkShift(TimeSpan.FromHours(9), TimeSpan.FromHours(10), skill.Activity); //should win
 			var workShift3 = WorkShiftFactory.CreateWorkShift(TimeSpan.FromHours(10), TimeSpan.FromHours(11), skill.Activity);
-			var cache1 = new ShiftProjectionCache(workShift1, PersonalShiftMeetingTimeChecker);
-			cache1.SetDate(new DateOnlyAsDateTimePeriod(date, TimeZoneGuard.Instance.TimeZone));
-			var cache2 = new ShiftProjectionCache(workShift2, PersonalShiftMeetingTimeChecker);
-			cache2.SetDate(new DateOnlyAsDateTimePeriod(date, TimeZoneGuard.Instance.TimeZone));
-			var cache3 = new ShiftProjectionCache(workShift3, PersonalShiftMeetingTimeChecker);
-			cache3.SetDate(new DateOnlyAsDateTimePeriod(date, TimeZoneGuard.Instance.TimeZone));
+			var cache1 = new ShiftProjectionCache(workShift1, PersonalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(date, TimeZoneGuard.Instance.TimeZone));
+			var cache2 = new ShiftProjectionCache(workShift2, PersonalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(date, TimeZoneGuard.Instance.TimeZone));
+			var cache3 = new ShiftProjectionCache(workShift3, PersonalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(date, TimeZoneGuard.Instance.TimeZone));
 			var caches = new List<ShiftProjectionCache> {cache1, cache2, cache3};
 			
 			var businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current();
