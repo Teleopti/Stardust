@@ -196,13 +196,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CreateSkillSets>().SingleInstance();
 			builder.RegisterType<ReduceIslandsLimits>().SingleInstance();
 			builder.RegisterType<LongestPeriodForAssignmentCalculator>().As<ILongestPeriodForAssignmentCalculator>().SingleInstance();
-			builder.RegisterType<ShiftProjectionCacheFetcher>().SingleInstance();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_LessResourcesXXL_74915))
 			{
+				builder.CacheByClassProxy<ShiftProjectionCacheFetcher>().SingleInstance();
+				_configuration.Cache().This<ShiftProjectionCacheFetcher>(b => b.CacheMethod(m => m.Execute(null, null)), "SPCF");
 				builder.RegisterType<ShiftProjectionCacheManager>().As<IShiftProjectionCacheManager>().SingleInstance();
 			}
 			else
 			{
+				builder.RegisterType<ShiftProjectionCacheFetcher>().SingleInstance();
 				builder.RegisterType<ShiftProjectionCacheManagerOLD>().As<IShiftProjectionCacheManager>().InstancePerLifetimeScope();	
 			}
 			builder.RegisterType<ShiftsFromMasterActivityBaseActivityService>().As<IShiftFromMasterActivityService>().SingleInstance();			

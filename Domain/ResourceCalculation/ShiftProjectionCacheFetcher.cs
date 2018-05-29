@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				.ToArray();
 		}
 		
-		public IEnumerable<ShiftProjectionCache> Execute(IWorkShiftRuleSet ruleSet, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
+		public virtual IEnumerable<ShiftProjectionCache> Execute(IWorkShiftRuleSet ruleSet, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
 		{
 			var baseIsMasterActivity = ruleSet.TemplateGenerator.BaseActivity is IMasterActivity;
 			return _ruleSetProjectionEntityService.ProjectionCollection(ruleSet, null)
