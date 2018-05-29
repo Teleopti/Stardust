@@ -14,6 +14,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
 using Teleopti.Ccc.Web.Areas.Forecasting.Core;
 using Teleopti.Ccc.Web.Areas.Forecasting.Models;
@@ -363,6 +364,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			Assert.That(savedWorkloadDay.TotalTasks, Is.EqualTo(80d).Within(tolerance));
 			Assert.That(savedWorkloadDay.TotalAverageTaskTime, Is.EqualTo(TimeSpan.FromSeconds(50)).Within(tolerance));
 			Assert.That(savedWorkloadDay.TotalAverageAfterTaskTime, Is.EqualTo(TimeSpan.FromSeconds(20)).Within(tolerance));
+			var overrideNote = $"[*{Resources.ForecastDayIsOverrided}*]";
+			savedWorkloadDay.Annotation.Should().Be(overrideNote);
 		}
 
 		[Test]
@@ -424,6 +427,63 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			savedWorkloadDay.CampaignTasks.Value.Should().Be(0);
 			savedWorkloadDay.CampaignTaskTime.Value.Should().Be(0);
 			savedWorkloadDay.CampaignAfterTaskTime.Value.Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldAppendNoteOnSavingForecastWithOverride()
+		{
+			var forecastedDay = new DateOnly(2018, 05, 02);
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
+			var workload = skill.WorkloadCollection.Single();
+			var scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
+
+			var workloadDayTemplate1 = new WorkloadDayTemplate();
+			workloadDayTemplate1.Create(forecastedDay.Date.DayOfWeek.ToString(), DateTime.UtcNow, workload, new List<TimePeriod>
+			{
+				new TimePeriod(10, 12)
+			});
+			workload.SetTemplate(forecastedDay.Date.DayOfWeek, workloadDayTemplate1);
+
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, workload, forecastedDay, scenario);
+			skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new[] { skillDay }, new DateOnlyPeriod());
+			var workloadDay = skillDay.WorkloadDayCollection.Single();
+			workloadDay.Annotation = "This is existing note.";
+
+			WorkloadRepository.Add(skill.WorkloadCollection.Single());
+			ScenarioRepository.Has(scenario);
+			SkillDayRepository.Add(skillDay);
+			var overrideNote = $"[*{Resources.ForecastDayIsOverrided}*]";
+
+			IList<ForecastDayModel> forecastDays = new List<ForecastDayModel>
+			{
+				new ForecastDayModel
+				{
+					Date = forecastedDay,
+					Tasks = 100,
+					AverageTaskTime = 300,
+					AverageAfterTaskTime = 200,
+					HasCampaign = true,
+					TotalTasks = 120,
+					TotalAverageTaskTime = 330,
+					TotalAverageAfterTaskTime = 220,
+					OverrideTasks = 80,
+					OverrideAverageTaskTime = 50,
+					OverrideAverageAfterTaskTime = 20,
+					HasOverride = true
+				}
+			};
+			var forecastResult = new ForecastModel
+			{
+				WorkloadId = skill.WorkloadCollection.Single().Id.Value,
+				ScenarioId = scenario.Id.Value,
+				ForecastDays = forecastDays
+			};
+			var result = Target.ApplyForecast(forecastResult);
+
+			result.Should().Be.OfType<OkResult>();
+			var savedForecastDay = SkillDayRepository.FindRange(forecastedDay.ToDateOnlyPeriod(), skill, scenario).Single();
+			var savedWorkloadDay = savedForecastDay.WorkloadDayCollection.Single();
+			savedWorkloadDay.Annotation.Should().Be(overrideNote+"This is existing note.");
 		}
 
 		[Test]
@@ -500,8 +560,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			});
 			workload.SetTemplate(forecastedDay.Date.DayOfWeek, workloadDayTemplate1);
 
+			var skillDay = SkillDayFactory.CreateSkillDay(skill, workload, forecastedDay, scenario);
+			skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new[] { skillDay }, new DateOnlyPeriod());
+			var workloadDay = skillDay.WorkloadDayCollection.Single();
+			var overrideNote = $"[*{Resources.ForecastDayIsOverrided}*]";
+			workloadDay.Annotation = overrideNote+"This is existing note.";
+
 			WorkloadRepository.Add(skill.WorkloadCollection.Single());
 			ScenarioRepository.Has(scenario);
+			SkillDayRepository.Add(skillDay);
 			ForecastDayOverrideRepository.Add(new ForecastDayOverride(forecastedDay, workload, scenario)
 			{
 				OverriddenTasks = 15,
@@ -538,6 +605,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			Assert.That(savedWorkloadDay.TotalTasks, Is.EqualTo(10d).Within(tolerance));
 			Assert.That(savedWorkloadDay.TotalAverageTaskTime, Is.EqualTo(TimeSpan.FromSeconds(60)).Within(tolerance));
 			Assert.That(savedWorkloadDay.TotalAverageAfterTaskTime, Is.EqualTo(TimeSpan.FromSeconds(60)).Within(tolerance));
+			savedWorkloadDay.Annotation.Should().Be("This is existing note.");
 		}
 
 		[Test]

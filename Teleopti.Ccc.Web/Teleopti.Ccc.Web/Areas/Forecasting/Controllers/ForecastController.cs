@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Forecasting.Core;
 using Teleopti.Ccc.Web.Areas.Forecasting.Models;
 using Teleopti.Ccc.Web.Filters;
@@ -206,6 +207,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		[UnitOfWork, HttpPost, Route("api/Forecasting/ApplyForecast")]
 		public virtual IHttpActionResult ApplyForecast(ForecastModel forecastResult)
 		{
+			var overrideNote = $"[*{Resources.ForecastDayIsOverrided}*]";
+
 			var workload = _workloadRepository.Get(forecastResult.WorkloadId);
 			var scenario = _scenarioRepository.Get(forecastResult.ScenarioId);
 			var periodStart = new DateOnly(forecastResult.ForecastDays.Min(x => x.Date).Date);
@@ -234,8 +237,13 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 						forecastedWorkloadDay.CampaignTaskTime = new Percent(0);
 					if (model.OverrideAverageAfterTaskTime.HasValue)
 						forecastedWorkloadDay.CampaignAfterTaskTime = new Percent(0);
+
 					if (!overrideDays.TryGetValue(skillDay.CurrentDate, out var forecastDayOverride))
 					{
+						forecastedWorkloadDay.Annotation = string.IsNullOrEmpty(forecastedWorkloadDay.Annotation)
+							? overrideNote
+							: overrideNote + forecastedWorkloadDay.Annotation;
+
 						forecastDayOverride =
 							new ForecastDayOverride(skillDay.CurrentDate, workload, scenario)
 							{
@@ -270,6 +278,12 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 				{
 					if (overrideDays.TryGetValue(skillDay.CurrentDate, out var forecastDayOverride))
 					{
+						if (!string.IsNullOrEmpty(forecastedWorkloadDay.Annotation))
+						{
+							forecastedWorkloadDay.Annotation =
+								forecastedWorkloadDay.Annotation.Replace($"[*{Resources.ForecastDayIsOverrided}*]", "");
+						}
+
 						_forecastDayOverrideRepository.Remove(forecastDayOverride);
 					}
 				}

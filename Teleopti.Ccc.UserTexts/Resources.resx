@@ -17355,4 +17355,8 @@ The application will now exit.</value>
     <value>Approve as in adherence</value>
     <comment>Approve out of adherence period as in adherence</comment>
   </data>
+  <data name="ForecastDayIsOverrided" xml:space="preserve">
+    <value>Day has been overrided on web</value>
+    <comment>Note to append to forecasted day with override to show in admin client</comment>
+  </data>
 </root>
