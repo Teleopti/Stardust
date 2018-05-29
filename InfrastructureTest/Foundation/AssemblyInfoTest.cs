@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		public void GlobalAssemblyFileOnlyExistOnce()
 		{
 			var numberOfGlobalAssemblyInfos = solutionDirectory().EnumerateFiles("GlobalAssemblyInfo.cs", SearchOption.AllDirectories).Count();
-			Assert.AreEqual(1, numberOfGlobalAssemblyInfos, "You should link to GlobalAssemblyInfo, not create a new one!");
+			Assert.AreEqual(1, numberOfGlobalAssemblyInfos, "You should link to GlobalAssemblyInfo.cs, not create a new one!");
 		}
 
 		[Test]
@@ -25,14 +25,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 				"Teleopti.Support.PreReqsCheck", "Teleopti.Ccc.Web", "ReplaceString", "Teleopti.Ccc.WebBehaviorTest"
 			};
 
-			foreach (var assemblyInfo in solutionDirectory()
-													.EnumerateFiles("AssemblyInfo.cs", SearchOption.AllDirectories)
-													.Where(assemblyInfo => !exceptions.Any(ex => assemblyInfo.DirectoryName.Contains(ex))))
-			{
-				Assert.Fail("Don't add new {0} if really needed, add a link to [repo]/globalassemblyinfo.cs instead!", assemblyInfo.DirectoryName);
-			}
-		}
+			var folders = solutionDirectory().EnumerateFiles("AssemblyInfo.cs", SearchOption.AllDirectories)
+				.Where(assemblyInfoFile => !exceptions.Any(ex => assemblyInfoFile.DirectoryName.Contains(ex)))
+				.Select(assemblyInfoFile => assemblyInfoFile.DirectoryName)
+				.ToList();
 
+			Assert.IsTrue(!folders.Any(),
+				$"Found new added \"AssemblyInfo\" in folders below:\r\n{string.Join(",\r\n", folders)}\r\n"
+				+ "If really needed, add a link to [repo]/GlobalAssemblyInfo.cs instead!");
+		}
 
 		private static DirectoryInfo solutionDirectory()
 		{
