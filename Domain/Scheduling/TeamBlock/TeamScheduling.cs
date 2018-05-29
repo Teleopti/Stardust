@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_LessResourcesXXL_74915)]
+	[RemoveMeWithToggle("Merge with base class", Toggles.ResourcePlanner_LessResourcesXXL_74915)]
 	public class TeamSchedulingNoSetDate : TeamScheduling
 	{
 		public TeamSchedulingNoSetDate(AssignScheduledLayers assignScheduledLayers, IDayOffsInPeriodCalculator dayOffsInPeriodCalculator, IResourceCalculation resourceCalculation, ScheduleChangesAffectedDates scheduleChangesAffectedDates) : base(assignScheduledLayers, dayOffsInPeriodCalculator, resourceCalculation, scheduleChangesAffectedDates)
