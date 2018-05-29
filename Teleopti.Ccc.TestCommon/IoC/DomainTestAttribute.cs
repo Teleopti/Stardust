@@ -260,6 +260,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				
 				isolate.UseTestDouble<FakeGamificationSettingRepository>().For<IGamificationSettingRepository>();
 				isolate.UseTestDouble<FakeExternalPerformanceRepository>().For<IExternalPerformanceRepository>();
+				isolate.UseTestDouble<FakeExtensiveLogRepository>().For<IExtensiveLogRepository>();
+				isolate.UseTestDouble<FakeExtensiveLogRepository>().For<IExtensiveLogRepository>();
 			}
 
 			isolate.UseTestDouble<ScheduleStorageRepositoryWrapper>().For<IScheduleStorageRepositoryWrapper>();
