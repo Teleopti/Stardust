@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -28,8 +29,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithAssignment(person, "2018-02-08")
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2018-02-08 08:00", "2018-02-08 18:00")
-				.WithAdherenceOut("2018-02-08 08:00")
-				.WithAdherenceIn("2018-02-08 09:00")
+				.WithHistoricalStateChange("2018-02-08 08:00", Adherence.Out)
+				.WithHistoricalStateChange("2018-02-08 09:00", Adherence.In)
 				.WithApprovedPeriod("2018-02-08 08:00", "2018-02-08 09:00")
 				;
 
@@ -48,8 +49,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithAssignment(person, "2017-12-08")
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 10:00", "2017-12-08 20:00")
-				.WithAdherenceOut("2017-12-08 10:00")
-				.WithAdherenceNeutral("2017-12-08 11:00")
+				.WithHistoricalStateChange("2017-12-08 10:00", Adherence.Out)
+				.WithHistoricalStateChange("2017-12-08 11:00", Adherence.Neutral)
 				.WithApprovedPeriod("2017-12-08 11:00", "2017-12-08 20:00")
 				;
 
@@ -68,9 +69,9 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithAssignment(person, "2017-12-08")
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 10:00", "2017-12-08 18:00")
-				.WithAdherenceNeutral("2017-12-08 10:00")
-				.WithAdherenceIn("2017-12-08 12:00")
-				.WithAdherenceOut("2017-12-08 14:00")
+				.WithHistoricalStateChange("2017-12-08 10:00", Adherence.Neutral)
+				.WithHistoricalStateChange("2017-12-08 12:00", Adherence.In)
+				.WithHistoricalStateChange("2017-12-08 14:00", Adherence.Out)
 				.WithApprovedPeriod("2017-12-08 10:00", "2017-12-08 12:00")
 				;
 

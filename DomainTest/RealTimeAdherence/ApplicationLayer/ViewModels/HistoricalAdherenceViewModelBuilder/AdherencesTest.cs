@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -23,8 +24,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 			Now.Is("2016-10-10 15:00");
 			var person = Guid.NewGuid();
 			Database
-				.WithAdherenceOut(person, "2016-10-10 08:05")
-				.WithAdherenceIn(person, "2016-10-10 08:15");
+				.WithHistoricalStateChange(person, "2016-10-10 08:05", Adherence.Out)
+				.WithHistoricalStateChange(person, "2016-10-10 08:15", Adherence.In);
 
 			var data = Target.Build(person);
 
