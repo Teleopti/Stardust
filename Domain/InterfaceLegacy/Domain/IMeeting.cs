@@ -59,12 +59,13 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </summary>
         IPerson Organizer { get; set; }
 
-        /// <summary>
-        /// PersonMeeting
-        /// </summary>
-        /// <param name="person"></param>
-        /// <returns></returns>
-        IList<IPersonMeeting> GetPersonMeetings(params IPerson[] person);
+		/// <summary>
+		/// PersonMeeting
+		/// </summary>
+		/// <param name="period"></param>
+		/// <param name="person"></param>
+		/// <returns></returns>
+		IList<IPersonMeeting> GetPersonMeetings(DateTimePeriod period, params IPerson[] person);
 
         /// <summary>
         /// Remove person

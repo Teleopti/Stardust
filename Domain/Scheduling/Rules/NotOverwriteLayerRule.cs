@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 						LayerBelowId = layerWithLowPriority.Id.GetValueOrDefault(),
 						LayerBelowName = layerWithLowPriority.Payload.Name,
 						LayerBelowPeriod = layerWithLowPriority.Period,
-						LayerAboveId = personMeeting.Id.GetValueOrDefault(),
+						LayerAboveId = Guid.Empty,
 						LayerAboveName = personMeeting.ToLayer().Payload.Name,
 						LayerAbovePeriod = personMeeting.Period
 					};

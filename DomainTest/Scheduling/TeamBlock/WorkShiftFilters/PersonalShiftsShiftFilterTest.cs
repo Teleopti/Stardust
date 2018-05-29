@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				EndTime = TimeSpan.FromHours(14)
 			};
 
-			var personMeetings = meeting.GetPersonMeetings(_person);
+			var personMeetings = meeting.GetPersonMeetings(_part.Period, _person);
 			_part.CreateAndAddPersonalActivity(new Activity("sdf"), period);
 			_part.Add(personMeetings.First());
 			var schedules = MockRepository.GenerateMock<IScheduleDictionary>();
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				EndTime = TimeSpan.FromHours(14)
 			};
 
-			var personMeetings = meeting.GetPersonMeetings(_person);
+			var personMeetings = meeting.GetPersonMeetings(_part.Period, _person);
 			_part.Add(personMeetings.First());
 			var schedules = MockRepository.GenerateMock<IScheduleDictionary>();
 			schedules.Expect(x => x[_person].ScheduledDay(_dateOnly)).Return(_part);
