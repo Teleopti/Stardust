@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, INewBusinessRuleCollection businessRules, 
 			SchedulingOptions schedulingOptions, ResourceCalculationData resourceCalculationData)
 		{
-			ForDate(shiftProjectionCache, destinationScheduleDay.DateOnlyAsPeriod);
+			shiftProjectionCache = ForDate(shiftProjectionCache, destinationScheduleDay.DateOnlyAsPeriod);
 
 	        var personAssignment = destinationScheduleDay.PersonAssignment();
 	        if (personAssignment != null && personAssignment.PersonalActivities().Any())
