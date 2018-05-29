@@ -6533,6 +6533,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Override replaced existing campaign values.
+        /// </summary>
+        public static string ClearCampaignWIthOverride {
+            get {
+                return ResourceManager.GetString("ClearCampaignWIthOverride", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clear chart selection.
         /// </summary>
         public static string ClearForecastChart {

@@ -150,6 +150,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		[UnitOfWork, HttpPost, Route("api/Forecasting/Override")]
 		public virtual IHttpActionResult AddOverride(OverrideInput input)
 		{
+			var warning = "";
 			foreach (var selectedDay in input.SelectedDays)
 			{
 				var forecastDay = input.ForecastDays.Single(x => x.Date == selectedDay);
@@ -192,6 +193,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 										  input.OverrideAverageAfterTaskTime.HasValue;
 				if (forecastDay.HasOverride)
 				{
+					if (forecastDay.HasCampaign && warning == "")
+						warning = Resources.ClearCampaignWIthOverride;
 					forecastDay.HasCampaign = false;
 					forecastDay.CampaignTasksPercentage = 0;
 				}
@@ -201,7 +204,11 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 				}
 			}
 
-			return Ok(input.ForecastDays);
+			return Ok(new
+			{
+				WarningMessage = warning,
+				ForecastDays = input.ForecastDays
+			});
 		}
 
 		[UnitOfWork, HttpPost, Route("api/Forecasting/ApplyForecast")]

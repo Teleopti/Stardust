@@ -1022,31 +1022,33 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				ShouldOverrideAverageAfterTaskTime = true
 			};
 
-			var result = (OkNegotiatedContentResult<IList<ForecastDayModel>>) Target.AddOverride(model);
+			dynamic data = Target.AddOverride(model);
+			dynamic result = data.Content;
+			var forecastDay = ((List<ForecastDayModel>)result.ForecastDays).First();
+			var lastForecastDay = ((List<ForecastDayModel>)result.ForecastDays).Last();
 
-			result.Should().Be.OfType<OkNegotiatedContentResult<IList<ForecastDayModel>>>();
-			result.Content.First().TotalTasks
+			forecastDay.TotalTasks
 				.Should().Be(200d);
-			result.Content.First().TotalAverageTaskTime
+			forecastDay.TotalAverageTaskTime
 				.Should().Be(50d);
-			result.Content.First().TotalAverageAfterTaskTime
+			forecastDay.TotalAverageAfterTaskTime
 				.Should().Be(20d);
-			result.Content.First().OverrideTasks
+			forecastDay.OverrideTasks
 				.Should().Be(200d);
-			result.Content.First().HasOverride
+			forecastDay.HasOverride
 				.Should().Be(true);
 
-			result.Content.Last().TotalTasks
+			lastForecastDay.TotalTasks
 				.Should().Be(100d);
-			result.Content.Last().TotalAverageTaskTime
+			lastForecastDay.TotalAverageTaskTime
 				.Should().Be(30d);
-			result.Content.Last().TotalAverageAfterTaskTime
+			lastForecastDay.TotalAverageAfterTaskTime
 				.Should().Be(10d);
-			result.Content.Last().OverrideTasks
+			lastForecastDay.OverrideTasks
 				.Should().Be(null);
-			result.Content.Last().HasOverride
+			lastForecastDay.HasOverride
 				.Should().Be(false);
-
+			((string) result.WarningMessage).Should().Be("");
 		}
 
 		[Test]
@@ -1074,16 +1076,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				ShouldOverrideAverageAfterTaskTime = true
 			};
 
-			var result = (OkNegotiatedContentResult<IList<ForecastDayModel>>) Target.AddOverride(model);
-
-			result.Should().Be.OfType<OkNegotiatedContentResult<IList<ForecastDayModel>>>();
-			var forecastDay = result.Content.First();
+			dynamic data = Target.AddOverride(model);
+			dynamic result = data.Content;
+			var forecastDay = ((List<ForecastDayModel>)result.ForecastDays).First();
 			forecastDay.TotalTasks
 				.Should().Be(forecastDay.Tasks);
 			forecastDay.TotalAverageTaskTime
 				.Should().Be(forecastDay.AverageTaskTime);
 			forecastDay.TotalAverageAfterTaskTime
 				.Should().Be(forecastDay.AverageAfterTaskTime);
+			((string)result.WarningMessage).Should().Be("");
 		}
 
 		[Test]
@@ -1114,15 +1116,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				ShouldOverrideAverageAfterTaskTime = true
 			};
 
-			var result = (OkNegotiatedContentResult<IList<ForecastDayModel>>) Target.AddOverride(model);
+			dynamic data = Target.AddOverride(model);
+			dynamic result = data.Content;
+			var forecastDay = ((List<ForecastDayModel>)result.ForecastDays).First();
 
-			result.Content.First().TotalTasks
+			forecastDay.TotalTasks
 				.Should().Be(100d);
-			result.Content.First().TotalAverageTaskTime
+			forecastDay.TotalAverageTaskTime
 				.Should().Be(30d);
-			result.Content.First().TotalAverageAfterTaskTime
+			forecastDay.TotalAverageAfterTaskTime
 				.Should().Be(10d);
-			result.Content.First().HasOverride
+			forecastDay.HasOverride
 				.Should().Be(false);
 		}
 
@@ -1141,7 +1145,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 						Tasks = 100d,
 						AverageTaskTime = 30d,
 						AverageAfterTaskTime = 10d,
-						CampaignTasksPercentage = 0.5d
+						CampaignTasksPercentage = 0.5d,
+						HasCampaign = true
 					}
 				},
 				ShouldOverrideTasks = true,
@@ -1151,10 +1156,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				OverrideAverageTaskTime = 50d,
 				OverrideAverageAfterTaskTime = 20d,
 			};
+			
+			dynamic data = Target.AddOverride(model);
+			dynamic result = data.Content;
 
-			var result = (OkNegotiatedContentResult<IList<ForecastDayModel>>)Target.AddOverride(model);
-
-			var forecastDay = result.Content.First();
+			var forecastDay = ((List<ForecastDayModel>)result.ForecastDays).First();
 			forecastDay.HasOverride.Should().Be(true);
 			forecastDay.TotalTasks.Should().Be(200d);
 			forecastDay.TotalAverageTaskTime.Should().Be(50d);
@@ -1162,6 +1168,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 
 			forecastDay.HasCampaign.Should().Be(false);
 			forecastDay.CampaignTasksPercentage.Should().Be(0);
+			((string)result.WarningMessage).Should().Be(Resources.ClearCampaignWIthOverride);
 		}
 
 		[Test]
@@ -1190,16 +1197,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				ShouldOverrideAverageAfterTaskTime = true
 			};
 
-			var result = (OkNegotiatedContentResult<IList<ForecastDayModel>>)Target.AddOverride(model);
+			dynamic data = Target.AddOverride(model);
+			dynamic result = data.Content;
+			var forecastDay = ((List<ForecastDayModel>)result.ForecastDays).First();
 
-			result.Content.First().TotalTasks
+			forecastDay.TotalTasks
 				.Should().Be(150d);
-			result.Content.First().TotalAverageTaskTime
+			forecastDay.TotalAverageTaskTime
 				.Should().Be(30d);
-			result.Content.First().TotalAverageAfterTaskTime
+			forecastDay.TotalAverageAfterTaskTime
 				.Should().Be(10d);
-			result.Content.First().HasCampaign.Should().Be(true);
-			result.Content.First().HasOverride.Should().Be(false);
+			forecastDay.HasCampaign.Should().Be(true);
+			forecastDay.HasOverride.Should().Be(false);
 		}
 
 		[Test]
