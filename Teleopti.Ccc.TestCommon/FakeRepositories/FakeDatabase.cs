@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return database;
 		}
 	}
-	
+
 	public static class FakeDatabaseAdherenceExtensions
 	{
 		public static FakeDatabase WithApprovedPeriod(this FakeDatabase database, string startTime, string endTime)
@@ -186,19 +186,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return database.WithRemovedApprovedPeriod(null, startTime, endTime);
 		}
 
-		public static FakeDatabase WithAdherenceIn(this FakeDatabase database, string time)
+		public static FakeDatabase WithHistoricalStateChange(this FakeDatabase database, string time, Adherence adherence)
 		{
-			return database.WithAdherenceIn(null, time);
-		}
-
-		public static FakeDatabase WithAdherenceOut(this FakeDatabase database, string time)
-		{
-			return database.WithAdherenceOut(null, time);
-		}
-
-		public static FakeDatabase WithAdherenceNeutral(this FakeDatabase database, string time)
-		{
-			return database.WithAdherenceNeutral(null, time);
+			return database.WithHistoricalStateChange(null, time, adherence);
 		}
 	}
 
@@ -356,7 +346,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				.WithAssignment(date)
 				.WithDayOff();
 		}
-
 	}
 
 	public class FakeDataSources
@@ -406,14 +395,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly FakeShiftCategoryRepository _shiftCategories;
 		private readonly FakeGlobalSettingDataRepository _globalSettings;
 		private readonly FakePersonRequestRepository _personRequests;
-		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ApprovePeriodAsInAdherence _approvePeriod;
 		private readonly RemoveApprovedPeriod _removePeriod;
-		private readonly HistoricalChange _historicalChange;
 		private readonly IBusinessRuleConfigProvider _businessRuleConfig;
-		private readonly IEventPublisher _publisher;
+		private readonly FakeRtaHistory _rtaHistory;
 		private readonly IShiftTradeRequestSetChecksum _shiftTradeSetChecksum;
-
 
 		private BusinessUnit _businessUnit;
 		private Site _site;
@@ -474,12 +460,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			FakeShiftCategoryRepository shiftCategories,
 			FakeGlobalSettingDataRepository globalSettings,
 			FakePersonRequestRepository personRequests,
-			IScheduleStorage scheduleStorage,
 			ApprovePeriodAsInAdherence approvePeriod,
 			RemoveApprovedPeriod removePeriod,
-			HistoricalChange historicalChange,
 			IBusinessRuleConfigProvider businessRuleConfig,
-			IEventPublisher publisher,
+			FakeRtaHistory rtaHistory,
 			IShiftTradeRequestSetChecksum shiftTradeSetChecksum)
 		{
 			_tenants = tenants;
@@ -517,11 +501,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_shiftCategories = shiftCategories;
 			_globalSettings = globalSettings;
 			_personRequests = personRequests;
-			_scheduleStorage = scheduleStorage;
 			_approvePeriod = approvePeriod;
-			_historicalChange = historicalChange;
 			_businessRuleConfig = businessRuleConfig;
-			_publisher = publisher;
+			_rtaHistory = rtaHistory;
 			_removePeriod = removePeriod;
 			_shiftTradeSetChecksum = shiftTradeSetChecksum;
 		}
@@ -1051,7 +1033,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 							.ForEach(x =>
 							{
 								if (enable) x.Enabled = true;
-								if(handleOption == RequestHandleOption.AutoDeny) x.HandleOptionOnFailed = handleOption;
+								if (handleOption == RequestHandleOption.AutoDeny) x.HandleOptionOnFailed = handleOption;
 							}).ToArray()
 				});
 			return this;
@@ -1085,7 +1067,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_skills.Has(skill);
 			_skill = skill;
 		}
-
 
 
 		public FakeDatabase WithStateGroup(Guid? id, string name)
@@ -1236,109 +1217,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
-		public FakeDatabase WithAdherenceIn(Guid? id, string time)
+		public FakeDatabase WithHistoricalStateChange(Guid? id, string time, Adherence adherence)
 		{
-			_publisher.Publish(new PersonInAdherenceEvent
-			{
-				PersonId = id ?? _person.Id.Value,
-				BelongsToDate = time.Date(),
-				Timestamp = time.Utc(),
-				BusinessUnitId = _businessUnit.Id.Value,
-				TeamId = _team?.Id.Value ?? Guid.Empty,
-				SiteId = _site?.Id.Value ?? Guid.Empty,
-			});
-			_publisher.Publish(new PersonStateChangedEvent
-			{
-				PersonId = id ?? _person.Id.Value,
-				BelongsToDate = time.Date(),
-				Timestamp = time.Utc(),
-				Adherence = EventAdherence.In
-			});
+			_rtaHistory.StateChanged(id ?? _person.Id.Value, time, null, null, null, null, null, adherence);
 			return this;
 		}
 
-		public FakeDatabase WithAdherenceOut(Guid? id, string time)
+		public FakeDatabase WithHistoricalStateChange(string time)
 		{
-			_publisher.Publish(new PersonOutOfAdherenceEvent
-			{
-				PersonId = id ?? _person.Id.Value,
-				BelongsToDate = time.Date(),
-				Timestamp = time.Utc(),
-				BusinessUnitId = _businessUnit.Id.Value,
-				TeamId = _team?.Id.Value ?? Guid.Empty,
-				SiteId = _site?.Id.Value ?? Guid.Empty,
-			});
-			_publisher.Publish(new PersonStateChangedEvent
-			{
-				PersonId = id ?? _person.Id.Value,
-				BelongsToDate = time.Date(),
-				Timestamp = time.Utc(),
-				Adherence = EventAdherence.Out
-			});
+			_rtaHistory.StateChanged(_person.Id.Value, time, _stateGroup?.Name, _activity?.Name, _activity?.DisplayColor, _rule?.Description.Name, _rule?.DisplayColor, _rule?.Adherence);
 			return this;
 		}
-
-		public FakeDatabase WithAdherenceNeutral(Guid? id, string time)
-		{
-			_publisher.Publish(new PersonNeutralAdherenceEvent
-			{
-				PersonId = id ?? _person.Id.Value,
-				BelongsToDate = time.Date(),
-				Timestamp = time.Utc(),
-				BusinessUnitId = _businessUnit.Id.Value,
-				TeamId = _team?.Id.Value ?? Guid.Empty,
-				SiteId = _site?.Id.Value ?? Guid.Empty,
-			});
-			_publisher.Publish(new PersonStateChangedEvent
-			{
-				PersonId = id ?? _person.Id.Value,
-				BelongsToDate = time.Date(),
-				Timestamp = time.Utc(),
-				Adherence = EventAdherence.Neutral
-			});
-			return this;
-		}
-
-		public FakeDatabase WithHistoricalChange(string time)
-		{
-			_publisher.Publish(new PersonStateChangedEvent
-			{
-				PersonId = _person.Id.Value,
-				BelongsToDate = time.Date(),
-				Timestamp = time.Utc(),
-				StateName = _stateGroup?.Name,
-				StateGroupId = _stateGroup?.Id.Value,
-				ActivityName = _activity?.Name,
-				ActivityColor = _activity?.DisplayColor.ToArgb(),
-				RuleName = _rule?.Description.Name,
-				RuleColor = _rule?.DisplayColor.ToArgb(),
-				Adherence = _rule == null ? null : (EventAdherence?) Enum.Parse(typeof(EventAdherence), _rule?.Adherence.ToString())
-			});
-			return this;
-		}
-		
-		public FakeDatabase WithHistoricalRuleChange(string time)
-		{
-			_publisher.Publish(new PersonRuleChangedEvent()
-			{
-				PersonId = _person.Id.Value,
-				BelongsToDate = time.Date(),
-				Timestamp = time.Utc(),
-				StateName = _stateGroup?.Name,
-				StateGroupId = _stateGroup?.Id.Value,
-				ActivityName = _activity?.Name,
-				ActivityColor = _activity?.DisplayColor.ToArgb(),
-				RuleName = _rule?.Description.Name,
-				RuleColor = _rule?.DisplayColor.ToArgb(),
-				Adherence = _rule == null ? null : (EventAdherence?) Enum.Parse(typeof(EventAdherence), _rule?.Adherence.ToString()),
-				AlarmColor = _rule?.AlarmColor.ToArgb(),
-				AlarmStartTime = time.Utc(),
-				IsAlarm = _rule?.IsAlarm ?? false,
-				StaffingEffect = _rule?.StaffingEffect
-			});
-			return this;
-		}
-
 
 		[UnitOfWork]
 		public virtual FakeDatabase ClearAssignments(Guid? personId)

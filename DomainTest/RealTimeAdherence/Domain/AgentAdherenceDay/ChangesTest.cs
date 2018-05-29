@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 	public class ChangesTest
 	{
 		public IAgentAdherenceDayLoader Target;
-		public FakeDatabase Database;
+		public FakeRtaHistory History;
 		public MutableNow Now;
 
 		[Test]
@@ -26,31 +26,24 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 		{
 			Now.Is("2017-03-14 18:00");
 			var personId = Guid.NewGuid();
-			Database
-				.WithAgent(personId, "nicklas")
-				.WithRule(null, "in", 0, Adherence.In, Color.DarkKhaki)
-				.WithHistoricalRuleChange("2017-03-14 18:00")
+			History
+				.RuleChanged(personId, "2017-03-14 18:00", "in")
 				;
-			
+
 			var data = Target.Load(personId, "2017-03-14".Date());
 
 			data.Changes().Single().RuleName.Should().Be("in");
 		}
-		
+
 		[Test]
 		public void ShouldGetRuleChangeProperties()
 		{
 			Now.Is("2017-03-14 18:00");
 			var personId = Guid.NewGuid();
-			Database
-				.WithAgent(personId, "nicklas")
-				.WithStateGroup(Guid.NewGuid(), "InCall")
-				.WithStateCode("InCall")
-				.WithActivity(null, "phone", Color.Crimson)
-				.WithRule(null, "in", 0, Adherence.In, Color.DarkKhaki)
-				.WithHistoricalRuleChange("2017-03-14 18:00")
+			History
+				.RuleChanged(personId, "2017-03-14 18:00", "InCall", "phone", Color.Crimson, null, Color.DarkKhaki, Adherence.In)
 				;
-			
+
 			var data = Target.Load(personId, "2017-03-14".Date());
 
 			data.Changes().Single().ActivityName.Should().Be("phone");

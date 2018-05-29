@@ -38,7 +38,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 				builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
 			}, arguments => { arguments.AllEventPublishingsAsSync = true; }, this);
 
-			TestSiteConfigurationSetup.TearDown();
+			//TestSiteConfigurationSetup.TearDown();
 		}
 	}
 }

@@ -81,7 +81,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             clone = (PersonMeeting)_target.NoneEntityClone();
 
             Assert.AreEqual(_target.Person, clone.Person);
-            Assert.IsTrue(clone.Id == null);
         }
 
         [Test]

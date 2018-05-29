@@ -27,9 +27,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			var workShift = MockRepository.GenerateMock<IWorkShift>();
 			var editorShift = MockRepository.GenerateMock<IEditableShift>();
 			var projectionService = MockRepository.GenerateMock<IProjectionService>();
-			var shiftProjectionCache = new ShiftProjectionCache(workShift, new PersonalShiftMeetingTimeChecker());
 			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2014,1,1), TimeZoneInfo.Utc);
-			shiftProjectionCache.SetDate(dateOnlyAsDateTimePeriod);
+			var shiftProjectionCache = new ShiftProjectionCache(workShift, new PersonalShiftMeetingTimeChecker(), dateOnlyAsDateTimePeriod);
 			var activity = ActivityFactory.CreateActivity("activity");
 			var skill = SkillFactory.CreateSkill("skill");
 			skill.Activity = activity;

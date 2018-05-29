@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
-using Teleopti.Ccc.Sdk.LogicTest.QueryHandler;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -47,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         {
             IMeeting mainMeeting = new Meeting(new Person(), new List<IMeetingPerson>(), "subject", "location", "description",
                     new Activity("activity"), new Scenario("scenario")).WithId();
-            IPersonMeeting personMeeting = new PersonMeeting(mainMeeting, new MeetingPerson(person, true), period).WithId();
+            IPersonMeeting personMeeting = new PersonMeeting(mainMeeting, new MeetingPerson(person, true), period);
             personMeeting.BelongsToMeeting.AddMeetingPerson(new MeetingPerson(person, true));
             return personMeeting;
         }
@@ -75,8 +74,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var personMeetingDto = target.DomainEntityToDto(personMeeting);
 		    var newPersonMeeting = target.DtoToDomainEntity(personMeetingDto);
 		    Assert.IsNotNull(newPersonMeeting);
-		    Assert.AreEqual(newPersonMeeting.Id, personMeetingDto.Id);
-		    Assert.AreEqual(newPersonMeeting.Id, personMeeting.Id);
 	    }
     }
 }

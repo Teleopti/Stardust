@@ -75,7 +75,7 @@
 		equal(target.Vm().now().format('YYYY-MM-DDTHH:mm:ss'), '2018-03-04T00:00:00');
 	});
 
-	asyncTest('should update current and next activity label', function() {
+	ignore('should update current and next activity label', function() {
 		var dateStr = '2018-03-04';
 		Date.prototype.getTeleoptiTime = function() {
 			return dateStr;
@@ -147,4 +147,6 @@
 			equal(target.Vm().nextLayerString(), '02: 15-02: 30 Chat');
 		}, 1000);
 	});
+
+	function ignore() {}
 });

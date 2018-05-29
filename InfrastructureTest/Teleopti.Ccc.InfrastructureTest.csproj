@@ -304,6 +304,7 @@
     <Compile Include="Repositories\ASMScheduleChangeTimeRepositoryTest.cs" />
     <Compile Include="Repositories\Audit\ScheduleAuditTrailReportTest.cs" />
     <Compile Include="Repositories\Bug47522.cs" />
+    <Compile Include="Repositories\ExtensiveLogRepositoryTest.cs" />
     <Compile Include="Repositories\ExternalPerformanceDataRepositoryTest.cs" />
     <Compile Include="Repositories\ForecastDayOverrideRepositoryTest.cs" />
     <Compile Include="Repositories\GroupingReadOnlyBug46991Test.cs" />

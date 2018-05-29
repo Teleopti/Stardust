@@ -251,6 +251,7 @@ Scenario: Adding invalid absence request values
 	Then I should see subject is missing error
 	And I should not see any requests in the list
 
+@suppressHangfireQueue
 Scenario: Adding too long message on absence request
 	Given I am an agent
 	And I am viewing requests

@@ -32,7 +32,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    {
 		    var workShift = _workShiftFromEditableShift.Convert(shift, dateOnlyAsDateTimePeriod.DateOnly,dateOnlyAsDateTimePeriod.TimeZone());
 		    var ret = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker);
+#pragma warning disable 618
 			ret.SetDate(dateOnlyAsDateTimePeriod);
+#pragma warning restore 618
 
 		    return ret;
 	    }
@@ -55,7 +57,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		    foreach (var shiftProjectionCache in shiftProjectionCaches)
 		    {
-			    shiftProjectionCache.SetDate(dateOnlyAsDateTimePeriod);
+#pragma warning disable 618
+				shiftProjectionCache.SetDate(dateOnlyAsDateTimePeriod);
+#pragma warning restore 618
 		    }
 			
 			return shiftProjectionCaches;
@@ -111,16 +115,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_personalShiftMeetingTimeChecker = personalShiftMeetingTimeChecker;
 		}
 
-	    public ShiftProjectionCache ShiftProjectionCacheFromShift(IEditableShift shift, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
-	    {
-		    var workShift = _workShiftFromEditableShift.Convert(shift, dateOnlyAsDateTimePeriod.DateOnly,dateOnlyAsDateTimePeriod.TimeZone());
-		    var ret = new ShiftProjectionCache(workShift, _personalShiftMeetingTimeChecker);
-			ret.SetDate(dateOnlyAsDateTimePeriod);
+		public ShiftProjectionCache ShiftProjectionCacheFromShift(IEditableShift shift,
+			IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
+		{
+			var workShift =_workShiftFromEditableShift.Convert(shift, dateOnlyAsDateTimePeriod.DateOnly, dateOnlyAsDateTimePeriod.TimeZone());
+			return new ShiftProjectionCache(workShift, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
+		}
 
-		    return ret;
-	    }
-
-	    public IList<ShiftProjectionCache> ShiftProjectionCachesFromRuleSets(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod, IEnumerable<IWorkShiftRuleSet> ruleSets, bool checkExcluded)
+		public IList<ShiftProjectionCache> ShiftProjectionCachesFromRuleSets(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod, IEnumerable<IWorkShiftRuleSet> ruleSets, bool checkExcluded)
 	    {
 		    var shiftProjectionCaches = ruleSets.Where(ruleSet =>
 		    {
@@ -134,12 +136,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				    return false;
 
 			    return true;
-		    }).SelectMany(x => _shiftProjectionCacheFetcher.Execute(x)).ToArray();
-
-		    foreach (var shiftProjectionCache in shiftProjectionCaches)
-		    {
-			    shiftProjectionCache.SetDate(dateOnlyAsDateTimePeriod);
-		    }
+		    }).SelectMany(x => _shiftProjectionCacheFetcher.Execute(x, dateOnlyAsDateTimePeriod)).ToArray();
 			
 			return shiftProjectionCaches;
 		}

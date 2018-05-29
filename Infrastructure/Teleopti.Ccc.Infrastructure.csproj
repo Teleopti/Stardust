@@ -364,6 +364,7 @@
     <Compile Include="Repositories\AllSkillForSkillGroupProvider.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsSiteRepository.cs" />
     <Compile Include="Repositories\Audit\ScheduleAuditTrailReport.cs" />
+    <Compile Include="Repositories\ExtensiveLogRepository.cs" />
     <Compile Include="Repositories\ExternalPerformanceDataRepository.cs" />
     <Compile Include="Repositories\ExternalPerformanceRepository.cs" />
     <Compile Include="Repositories\ForecastDayOverrideRepository.cs" />

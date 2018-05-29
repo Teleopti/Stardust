@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -9,6 +10,22 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
+	[RemoveMeWithToggle("Merge with base class", Toggles.ResourcePlanner_LessResourcesXXL_74915)]
+	public class TeamSchedulingNoSetDate : TeamScheduling
+	{
+		public TeamSchedulingNoSetDate(AssignScheduledLayers assignScheduledLayers, IDayOffsInPeriodCalculator dayOffsInPeriodCalculator, IResourceCalculation resourceCalculation, ScheduleChangesAffectedDates scheduleChangesAffectedDates) : base(assignScheduledLayers, dayOffsInPeriodCalculator, resourceCalculation, scheduleChangesAffectedDates)
+		{
+		}
+
+		protected override ShiftProjectionCache ForDate(ShiftProjectionCache shiftProjectionCache,
+			IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
+		{
+			//dont even know if this is necessary. only here to keep old behavior
+			//maybe/possible it'll work always return shiftProjectionCache here
+			return shiftProjectionCache.GetOrCreateNew(dateOnlyAsDateTimePeriod);
+		}
+	}
+	
     public class TeamScheduling
     {
 	    private readonly AssignScheduledLayers _assignScheduledLayers;
@@ -61,11 +78,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return dayScheduled != null && dayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
 		}
 
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_LessResourcesXXL_74915)]
+		protected virtual ShiftProjectionCache ForDate(ShiftProjectionCache shiftProjectionCache, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
+		{
+#pragma warning disable 618
+			shiftProjectionCache.SetDate(dateOnlyAsDateTimePeriod);
+#pragma warning restore 618
+			return shiftProjectionCache;
+		}
+
 		private void assignShiftProjection(IEnumerable<IPersonAssignment> orginalPersonAssignments, ShiftProjectionCache shiftProjectionCache, IScheduleDay destinationScheduleDay, 
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, INewBusinessRuleCollection businessRules, 
 			SchedulingOptions schedulingOptions, ResourceCalculationData resourceCalculationData)
-        {
-			shiftProjectionCache.SetDate(destinationScheduleDay.DateOnlyAsPeriod);
+		{
+			shiftProjectionCache = ForDate(shiftProjectionCache, destinationScheduleDay.DateOnlyAsPeriod);
 
 	        var personAssignment = destinationScheduleDay.PersonAssignment();
 	        if (personAssignment != null && personAssignment.PersonalActivities().Any())

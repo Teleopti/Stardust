@@ -264,17 +264,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<TeamSchedulePersonsProvider>().As<ITeamSchedulePersonsProvider>();
 			builder.RegisterType<TeamScheduleProjectionForMtwForMtwProvider>().As<ITeamScheduleProjectionForMTWProvider>();
 			builder.RegisterType<LayerViewModelMapper>().As<ILayerViewModelMapper>();
+			builder.RegisterType<TeamScheduleAgentScheduleViewModelMapper>().SingleInstance();
+			builder.RegisterType<TeamScheduleViewModelFactoryToggle75989Off>().As<ITeamScheduleViewModelFactoryToggle75989Off>();
 			builder.RegisterType<TeamScheduleViewModelFactory>().As<ITeamScheduleViewModelFactory>();
-			if (_config.Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989))
-			{
-				builder.RegisterType<TimeLineViewModelFactory>().As<ITimeLineViewModelFactory>();
-			}
-			else
-			{
-				builder.RegisterType<TimeLineViewModelFactoryToggle75989Off>().As<ITimeLineViewModelFactory>();
-			}
+
+			builder.RegisterType<TimeLineViewModelFactory>().As<ITimeLineViewModelFactory>();
+			builder.RegisterType<TimeLineViewModelFactoryToggle75989Off>().As<ITimeLineViewModelFactoryToggle75989Off>();
 
 			builder.RegisterType<TimeLineViewModelMapper>().As<ITimeLineViewModelMapper>();
+			builder.RegisterType<TimeLineViewModelMapperToggle75989Off>().As<ITimeLineViewModelMapperToggle75989Off>();
 			builder.RegisterType<AgentScheduleViewModelMapper>().As<IAgentScheduleViewModelMapper>();
 			builder.RegisterType<TeamProvider>().As<ITeamProvider>();
 			builder.RegisterType<SiteProvider>().As<ISiteProvider>();

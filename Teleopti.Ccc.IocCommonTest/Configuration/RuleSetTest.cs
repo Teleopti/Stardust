@@ -1,18 +1,26 @@
 using System;
-using System.Collections.Generic;
 using Autofac;
 using MbCache.Core;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
+	[DomainTest]
 	public class RuleSetTest
 	{
+		public ShiftProjectionCacheFetcher ShiftProjectionCacheFetcher;
+		
 		[Test]
 		public void VerifyProjectionServiceIsCached()
 		{
@@ -78,6 +86,34 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 					Assert.AreNotSame(projSvc.ProjectionCollection(wsRs, callback), projSvc.ProjectionCollection(wsRs, callback));
 				}
 			}
+		}
+		
+		[Test]
+		[Toggle(Toggles.ResourcePlanner_LessResourcesXXL_74915)]
+		public void ShouldCacheShiftProjectionCaches()
+		{
+			var wsRs = createRuleset(true);
+
+			Assert.AreSame(ShiftProjectionCacheFetcher.Execute(wsRs, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc)), 
+				ShiftProjectionCacheFetcher.Execute(wsRs, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc)));
+		}
+	
+		[Test]
+		[Toggle(Toggles.ResourcePlanner_LessResourcesXXL_74915)]
+		public void ShouldNotCacheShiftProjectionCaches_DifferentDates()
+		{
+			var wsRs = createRuleset(true);
+			Assert.AreNotSame(ShiftProjectionCacheFetcher.Execute(wsRs, new DateOnlyAsDateTimePeriod(DateOnly.Today.AddDays(-1), TimeZoneInfo.Utc)), 
+				ShiftProjectionCacheFetcher.Execute(wsRs, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc)));
+		}
+		
+		[Test]
+		[Toggle(Toggles.ResourcePlanner_LessResourcesXXL_74915)]
+		public void ShouldNotCacheShiftProjectionCaches_DifferentTimeZones()
+		{
+			var wsRs = createRuleset(true);
+			Assert.AreNotSame(ShiftProjectionCacheFetcher.Execute(wsRs, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfoFactory.AbuDhabiTimeZoneInfo())), 
+				ShiftProjectionCacheFetcher.Execute(wsRs, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfoFactory.AustralianTimeZoneInfo())));
 		}
 
 		private static IWorkShiftRuleSet createRuleset(bool withId)

@@ -5,8 +5,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     /// <summary>
     /// class for meeting to be used in schedule
     /// </summary>
-    public interface IPersonMeeting : IAggregateRoot, 
-                                        IScheduleData, 
+    public interface IPersonMeeting : IScheduleData, 
                                         ICloneableEntity<IPersonMeeting>
     {
         /// <summary>

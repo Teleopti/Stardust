@@ -26,6 +26,12 @@ namespace Teleopti.Ccc.Domain.Collection
             _skill = skill;
         }
 
+		public SkillStaffPeriodDictionary(IAggregateSkill skill,
+			IDictionary<DateTimePeriod, ISkillStaffPeriod> wrappedDictionary) : this(skill)
+		{
+			_wrappedDictionary = wrappedDictionary;
+		}
+
         #region Implementation of ISkillStaffPeriodDictionary
 
         /// <summary>

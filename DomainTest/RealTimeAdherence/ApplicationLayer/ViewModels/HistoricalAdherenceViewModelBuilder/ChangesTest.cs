@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 				.WithStateCode("InCall")
 				.WithActivity(null, "phone", Color.Crimson)
 				.WithRule(null, "in", 0, Adherence.In, Color.DarkKhaki)
-				.WithHistoricalChange("2017-03-07 14:00")
+				.WithHistoricalStateChange("2017-03-07 14:00")
 				;
 			
 			var result = Target.Build(personId).Changes.Single();
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 			var name = RandomName.Make();
 			Database
 				.WithAgent(personId, name)
-				.WithHistoricalChange("2017-03-07 14:00");
+				.WithHistoricalStateChange("2017-03-07 14:00");
 			
 			var result = Target.Build(personId).Changes.Single();
 			
@@ -86,8 +86,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 			var personId = Guid.NewGuid();
 			Database
 				.WithAgent(personId, "name")
-				.WithHistoricalChange("2017-03-06 14:00")
-				.WithHistoricalChange("2017-03-07 14:00");
+				.WithHistoricalStateChange("2017-03-06 14:00")
+				.WithHistoricalStateChange("2017-03-07 14:00");
 
 			var historicalData = Target.Build(personId).Changes.Single();
 			
@@ -102,8 +102,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 			Database
 				.WithAgent(personId, "nicklas")
 				.WithSchedule(personId, "2017-03-14 09:00", "2017-03-14 17:00")
-				.WithHistoricalChange("2017-03-14 07:59")
-				.WithHistoricalChange("2017-03-14 08:00");
+				.WithHistoricalStateChange("2017-03-14 07:59")
+				.WithHistoricalStateChange("2017-03-14 08:00");
 			
 			var data = Target.Build(personId);
 
@@ -118,8 +118,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 			Database
 				.WithAgent(personId, "nicklas")
 				.WithSchedule(personId, "2017-03-14 09:00", "2017-03-14 17:00")
-				.WithHistoricalChange("2017-03-14 18:00")
-				.WithHistoricalChange("2017-03-14 18:01");
+				.WithHistoricalStateChange("2017-03-14 18:00")
+				.WithHistoricalStateChange("2017-03-14 18:01");
 			
 			var data = Target.Build(personId);
 
@@ -142,10 +142,10 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 				.WithStateCode("InCall")
 				.WithActivity(null, "phone", Color.Crimson)
 				.WithRule(null, "in", 0, Adherence.In, Color.DarkKhaki)
-				.WithHistoricalChange("2017-03-07 14:00")
-				.WithHistoricalChange("2017-03-07 14:00")
-				.WithHistoricalChange("2017-03-07 14:00")
-				.WithHistoricalChange("2017-03-07 14:00")
+				.WithHistoricalStateChange("2017-03-07 14:00")
+				.WithHistoricalStateChange("2017-03-07 14:00")
+				.WithHistoricalStateChange("2017-03-07 14:00")
+				.WithHistoricalStateChange("2017-03-07 14:00")
 				;
 
 			var result = Target.Build(personId).Changes.Single();

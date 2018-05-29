@@ -1,5 +1,5 @@
 ﻿describe('<shift-editor>',
-	function () {
+function () {
 		'use strict';
 
 		var $rootScope,
@@ -456,5 +456,150 @@
 		}
 
 	});
+
+
+describe('#shiftEditorController#', function () {
+	var $controller, stateParams, fakeTeamSchedule, mockSignalRBackendServer = {};
+	beforeEach(function () {
+		module('wfm.teamSchedule');
+		module(function ($provide) {
+			stateParams = {
+				personId: '9be3096b-d989-4821-9d32-a7bc00f9f8e9',
+				timezone: 'Europe/Berlin',
+				date: '2018-05-28'
+			};
+
+			$provide.service('$stateParams', function () { return stateParams; });
+			$provide.service('signalRSVC', setupMockSignalRService);
+		});
+	});
+	beforeEach(inject(function (_$controller_) {
+		$controller = _$controller_;
+		fakeTeamSchedule = new FakeTeamSchedule();
+	}));
+
+	it('should set up correctly and get schedule from state params', function () {
+		var schedule = {
+			"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+			"Name": "Annika Andersson",
+			"Date": "2018-05-28",
+			"WorkTimeMinutes": 240,
+			"ContractTimeMinutes": 240,
+			"Projection": [{
+				"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+				"Color": "#ffffff",
+				"Description": "E-mail",
+				"Start": "2018-05-28 08:00",
+				"Minutes": 120,
+				"IsOvertime": false
+			},
+			{
+				"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+				"Color": "#8080c0",
+				"Description": "E-mail",
+				"Start": "2018-05-28 10:00",
+				"Minutes": 120,
+				"IsOvertime": false
+			}],
+			"Timezone": { "IanaId": "Europe/Berlin" }
+		};
+		fakeTeamSchedule.has(schedule);
+
+		var target = setUp();
+		expect(target.personId).toEqual('9be3096b-d989-4821-9d32-a7bc00f9f8e9');
+		expect(target.timezone).toEqual('Europe/Berlin');
+		expect(target.date).toEqual('2018-05-28');
+		expect(target.schedules[0]).toEqual(schedule);
+	});
+
+	it('should get schedule when schedule was updated', function () {
+		var schedule = {
+			"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+			"Name": "Annika Andersson",
+			"Date": "2018-05-28",
+			"WorkTimeMinutes": 240,
+			"ContractTimeMinutes": 240,
+			"Projection": [{
+				"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+				"Color": "#ffffff",
+				"Description": "E-mail",
+				"Start": "2018-05-28 08:00",
+				"Minutes": 120,
+				"IsOvertime": false
+			},
+			{
+				"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+				"Color": "#8080c0",
+				"Description": "E-mail",
+				"Start": "2018-05-28 10:00",
+				"Minutes": 120,
+				"IsOvertime": false
+			}],
+			"Timezone": { "IanaId": "Europe/Berlin" }
+		};
+		fakeTeamSchedule.has(schedule);
+		var target = setUp();
+		
+		var updateSchedule = {
+			"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+			"Name": "Annika Andersson",
+			"Date": "2018-05-28",
+			"WorkTimeMinutes": 240,
+			"ContractTimeMinutes": 240,
+			"Projection": [{
+				"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+				"Color": "#ffffff",
+				"Description": "Phone",
+				"Start": "2018-05-28 09:00",
+				"Minutes": 120,
+				"IsOvertime": false
+			}],
+			"Timezone": { "IanaId": "Europe/Berlin" }
+		};
+		fakeTeamSchedule.has(updateSchedule);
+
+		mockSignalRBackendServer.notifyClients([
+			{
+				"DomainReferenceId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+				"StartDate": "D2018-05-28T00:00:00",
+				"EndDate": "D2018-05-28T00:00:00"
+			}
+		]);
+
+		expect(target.schedules[1]).toBe(updateSchedule);
+	})
+
+	function setUp() {
+		return $controller("ShiftEditorViewController", { TeamSchedule: fakeTeamSchedule });
+	}
+
+	function FakeTeamSchedule() {
+		var schedules = [];
+		this.has = function (schedule) {
+			schedules.push(schedule);
+		}
+		this.getSchedules = function () {
+			return {
+				then: function (callback) {
+					callback({ Schedules: schedules });
+				}
+			};
+
+		}
+	}
+
+	function setupMockSignalRService() {
+		mockSignalRBackendServer.subscriptions = [];
+
+		return {
+			subscribe: function (options, eventHandler, errorHandler) {
+				mockSignalRBackendServer.subscriptions.push(options);
+				mockSignalRBackendServer.notifyClients = eventHandler;
+			}
+		};
+	}
+});
+
+
 
 

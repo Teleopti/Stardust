@@ -257,11 +257,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 				_meetingPersons.Remove(meetingPerson);
 		}
 
-		public virtual IList<IPersonMeeting> GetPersonMeetings(params IPerson[] person)
+		public virtual IList<IPersonMeeting> GetPersonMeetings(DateTimePeriod period, params IPerson[] person)
 		{
 			var meetingPerson = _meetingPersons.Where(mp => person.Contains(mp.Person)).ToArray();
 
 			return GetRecurringDates().Select(getMeetingPeriod)
+				.Where(period.Contains)
 				.SelectMany(r => meetingPerson.Select(m => (IPersonMeeting) new PersonMeeting(this, m, r))).ToArray();
 		}
 		

@@ -157,7 +157,8 @@
 		People_ImprovePersonAccountAccuracy_74914,
 		MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889,
 
-		Tech_Moving_ResilientConnectionLogic
+		Tech_Moving_ResilientConnectionLogic,
+		Tenant_PurgeLogonAttempts_75782
 		// ReSharper restore InconsistentNaming
 	}
 }

@@ -16267,6 +16267,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Late {0} min.
+        /// </summary>
+        public static string LateXMinutes {
+            get {
+                return ResourceManager.GetString("LateXMinutes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Layer.
         /// </summary>
         public static string Layer {
