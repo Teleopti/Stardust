@@ -44,13 +44,14 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 			foreach (var dateOnly in period.DayCollection())
 			{
-				var skillDaysInDay = skillDays.Where(s => dateOnly.ToDateOnlyPeriod().Inflate(1).Contains(s.CurrentDate)).ToList();
-				var skillSkillDayDictionary = skillDaysInDay.ToLookup(x => x.Skill).ToDictionary(y => y.Key, y => y.AsEnumerable());
+				var dateOnlyPeriod = dateOnly.ToDateOnlyPeriod();
+				var skillDaysInDay = skillDays.Where(s => dateOnlyPeriod.Inflate(1).Contains(s.CurrentDate)).ToList();
+				var skillSkillDayDictionary = skillDaysInDay.GroupBy(x => x.Skill).ToDictionary(y => y.Key, y => y.AsEnumerable());
 
 				_backlogSkillTypesForecastCalculator.CalculateForecastedAgents(skillSkillDayDictionary, dateOnly,
 					_userTimeZone.TimeZone(), useShrinkage);
 
-				var skillStaffingDatas = createSkillStaffingDatas(dateOnly.ToDateOnlyPeriod(), skills, resolution, useShrinkage,
+				var skillStaffingDatas = createSkillStaffingDatas(dateOnlyPeriod, skills, resolution, useShrinkage,
 					skillDaysInDay, dayFilter);
 
 				skillStaffingList.AddRange(skillStaffingDatas);
@@ -127,7 +128,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			IEnumerable<ISkillDay> skillDays, DateOnly day)
 		{
 			var skillDayDict = skillDays.Where(s => s.CurrentDate >= day.AddDays(-1) && s.CurrentDate <= day.AddDays(1))
-				.ToLookup(x => x.Skill).ToDictionary(y => y.Key, y => y.AsEnumerable());
+				.GroupBy(x => x.Skill).ToDictionary(y => y.Key, y => y.AsEnumerable());
 			return _forecastedStaffingProvider.StaffingPerSkill(skillDayDict, resolution, day, useShrinkage);
 		}
 	}

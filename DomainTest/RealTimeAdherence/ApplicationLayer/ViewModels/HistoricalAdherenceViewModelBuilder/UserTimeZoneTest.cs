@@ -52,8 +52,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 			Now.Is("2016-10-10 15:00");
 			var person = Guid.NewGuid();
 			Database
-				.WithAdherenceOut(person, "2016-10-10 06:05")
-				.WithAdherenceIn(person, "2016-10-10 06:15");
+				.WithHistoricalStateChange(person, "2016-10-10 06:05", Adherence.Out)
+				.WithHistoricalStateChange(person, "2016-10-10 06:15", Adherence.In);
 
 			var data = Target.Build(person);
 
@@ -88,8 +88,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 			var person = Guid.NewGuid();
 			Database
 				.WithAgent(person, "nicklas")
-				.WithAdherenceOut(person, "2016-10-12 14:00")
-				.WithAdherenceIn(person, "2016-10-12 15:00");
+				.WithHistoricalStateChange(person, "2016-10-12 14:00", Adherence.Out)
+				.WithHistoricalStateChange(person, "2016-10-12 15:00", Adherence.In);
 
 			var data = Target.Build(person);
 
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 				.WithAssignment(person, "2017-04-18")
 				.WithActivity(null, ColorTranslator.FromHtml("#80FF80"))
 				.WithAssignedActivity("2017-04-18 08:00", "2017-04-18 09:00")
-				.WithHistoricalChange("2017-04-18 08:20");
+				.WithHistoricalStateChange("2017-04-18 08:20");
 
 			var data = Target.Build(person);
 

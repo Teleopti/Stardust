@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -31,9 +32,9 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
 				;
-			Database.WithAdherenceOut("2017-12-08 08:00");
-			Database.WithAdherenceIn("2017-12-08 10:00");
-			Database.WithAdherenceNeutral("2017-12-08 12:00");
+			Database.WithHistoricalStateChange("2017-12-08 08:00", Adherence.Out);
+			Database.WithHistoricalStateChange("2017-12-08 10:00", Adherence.In);
+			Database.WithHistoricalStateChange("2017-12-08 12:00", Adherence.Neutral);
 
 			var result = Target.Load(person);
 
@@ -51,12 +52,12 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithAssignment(person, "2017-12-08")
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
-				.WithAdherenceOut("2017-12-08 08:00")
-				.WithAdherenceIn("2017-12-08 09:00")
-				.WithAdherenceNeutral("2017-12-08 10:00")
-				.WithAdherenceOut("2017-12-08 11:00")
-				.WithAdherenceNeutral("2017-12-08 12:00")
-				.WithAdherenceIn("2017-12-08 13:00")
+				.WithHistoricalStateChange("2017-12-08 08:00", Adherence.Out)
+				.WithHistoricalStateChange("2017-12-08 09:00", Adherence.In)
+				.WithHistoricalStateChange("2017-12-08 10:00", Adherence.Neutral)
+				.WithHistoricalStateChange("2017-12-08 11:00", Adherence.Out)
+				.WithHistoricalStateChange("2017-12-08 12:00", Adherence.Neutral)
+				.WithHistoricalStateChange("2017-12-08 13:00", Adherence.In)
 				;
 
 			var result = Target.Load(person);
@@ -77,8 +78,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithAssignment(person, "2017-12-08")
 				.WithActivity(null, "phone")
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
-				.WithAdherenceOut("2017-12-08 08:00")
-				.WithAdherenceIn("2017-12-10 12:00");
+				.WithHistoricalStateChange("2017-12-08 08:00", Adherence.Out)
+				.WithHistoricalStateChange("2017-12-10 12:00", Adherence.In);
 
 			var result = Target.Load(person);
 

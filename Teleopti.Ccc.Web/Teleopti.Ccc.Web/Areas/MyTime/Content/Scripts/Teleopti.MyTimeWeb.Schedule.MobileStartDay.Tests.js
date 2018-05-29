@@ -21,6 +21,7 @@
 			},
 			teardown: function () {
 				$("body").removeClass("mobile-start-day-body");
+				$("body").removeClass("mobile-start-day");
 				templates.forEach(function (template) {
 					if (template) {
 						template.remove();
@@ -623,7 +624,12 @@
 	function setup() {
 		fetchDayDataRequestCount = 0;
 		setupAjax();
+		setupElement();
 		initContext();
+	}
+
+	function setupElement() {
+		$("body").addClass("mobile-start-day");
 	}
 
 	function setupAjax() {

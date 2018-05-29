@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -34,9 +35,9 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 		{
 			var workShift = new WorkShift(new ShiftCategory("test"));
 			var personalShiftMeetingTimeChecker = new PersonalShiftMeetingTimeChecker();
-			ShiftProjectionCache c1 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker);
-			ShiftProjectionCache c2 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker);
-			ShiftProjectionCache c3 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker);
+			ShiftProjectionCache c1 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
+			ShiftProjectionCache c2 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
+			ShiftProjectionCache c3 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
 
 			IList<ShiftProjectionCache> shiftList = new List<ShiftProjectionCache> { c1, c2, c3 };
 			_schedulingOptions.UseAverageShiftLengths = false;
@@ -50,9 +51,9 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 		{
 			var workShift = new WorkShift(new ShiftCategory("test"));
 			var personalShiftMeetingTimeChecker = new PersonalShiftMeetingTimeChecker();
-			ShiftProjectionCache c1 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker);
-			ShiftProjectionCache c2 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker);
-			ShiftProjectionCache c3 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker);
+			ShiftProjectionCache c1 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
+			ShiftProjectionCache c2 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
+			ShiftProjectionCache c3 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
 			IList<ShiftProjectionCache> shiftList = new List<ShiftProjectionCache> { c1, c2, c3 };
 			_schedulingOptions.UseAverageShiftLengths = false;
 
@@ -76,9 +77,9 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 
 			var personalShiftMeetingTimeChecker = new PersonalShiftMeetingTimeChecker();
 
-			ShiftProjectionCache c1 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker);
-			ShiftProjectionCache c2 = new ShiftProjectionCache(longWorkShift, personalShiftMeetingTimeChecker);
-			ShiftProjectionCache c3 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker);
+			ShiftProjectionCache c1 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
+			ShiftProjectionCache c2 = new ShiftProjectionCache(longWorkShift, personalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
+			ShiftProjectionCache c3 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
 			IList<ShiftProjectionCache> shiftList = new List<ShiftProjectionCache> {c1, c2, c3};
 			_schedulingOptions.UseAverageShiftLengths = false;
 			//should filter becouse we are using teamblock and same shift
@@ -108,9 +109,9 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 
 			var personalShiftMeetingTimeChecker = new PersonalShiftMeetingTimeChecker();
 
-			ShiftProjectionCache c1 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker);
-			ShiftProjectionCache c2 = new ShiftProjectionCache(longWorkShift, personalShiftMeetingTimeChecker);
-			ShiftProjectionCache c3 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker);
+			ShiftProjectionCache c1 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
+			ShiftProjectionCache c2 = new ShiftProjectionCache(longWorkShift, personalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
+			ShiftProjectionCache c3 = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
 			IList<ShiftProjectionCache> shiftList = new List<ShiftProjectionCache> { c1, c2, c3 };
 
 			_desiredShiftLengthCalculator.Stub(x => x.FindAverageLength(_workShiftMinMaxCalculator, _matrix, _schedulingOptions)).Return(new TimeSpan(8, 0, 0));

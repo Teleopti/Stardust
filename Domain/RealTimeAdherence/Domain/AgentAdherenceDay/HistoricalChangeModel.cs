@@ -23,5 +23,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 		public int? RuleColor { get; set; }
 
 		public HistoricalChangeAdherence? Adherence { get; set; }
+		
+		public string LateForWork { get; set; }
 	}
 }

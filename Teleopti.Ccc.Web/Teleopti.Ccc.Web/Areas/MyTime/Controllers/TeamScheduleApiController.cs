@@ -5,7 +5,6 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
@@ -23,6 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly INow _now;
 		private readonly IDefaultTeamProvider _defaultTeamProvider;
 		private readonly ITeamScheduleViewModelFactory _teamScheduleViewModelFactory;
+		private readonly ITeamScheduleViewModelFactoryToggle75989Off _teamScheduleViewModelFactoryToggle75989Off;
 		private readonly ITimeFilterHelper _timeFilterHelper;
 		private readonly ILoggedOnUser _loggedOnUser;
 
@@ -31,13 +31,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			IDefaultTeamProvider defaultTeamProvider,
 			ITimeFilterHelper timeFilterHelper,
 			ILoggedOnUser loggedOnUser,
-			ITeamScheduleViewModelFactory teamScheduleViewModelFactory)
+			ITeamScheduleViewModelFactory teamScheduleViewModelFactory, ITeamScheduleViewModelFactoryToggle75989Off teamScheduleViewModelFactoryToggle75989Off)
 		{
 			_now = now;
 			_defaultTeamProvider = defaultTeamProvider;
 			_timeFilterHelper = timeFilterHelper;
 			_loggedOnUser = loggedOnUser;
 			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
+			_teamScheduleViewModelFactoryToggle75989Off = teamScheduleViewModelFactoryToggle75989Off;
 		}
 
 		[UnitOfWork, Route("api/TeamSchedule/TeamScheduleCurrentDate"), HttpGet]
@@ -55,22 +56,40 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			};
 		}
 
-		[UnitOfWork, Route("api/TeamSchedule/TeamSchedule"), HttpPost]
-		public virtual TeamScheduleViewModel TeamSchedule(TeamScheduleRequest request)
+		[UnitOfWork, Route("api/TeamSchedule/TeamScheduleOld"), HttpPost]
+		public virtual TeamScheduleViewModelToggle75989Off TeamScheduleOld(TeamScheduleRequest teamScheduleRequest)
 		{
-			var allTeamIds = request.ScheduleFilter.TeamIds.Split(',').Select(teamId => new Guid(teamId)).ToList();
+			var allTeamIds = teamScheduleRequest.ScheduleFilter.TeamIds.Split(',').Select(teamId => new Guid(teamId)).ToList();
 			var data = new TeamScheduleViewModelData
 			{
-				ScheduleDate = new DateOnly(request.SelectedDate),
+				ScheduleDate = new DateOnly(teamScheduleRequest.SelectedDate),
 				TeamIdList = allTeamIds,
-				Paging = request.Paging,
-				TimeFilter = _timeFilterHelper.GetFilter(new DateOnly(request.SelectedDate), request.ScheduleFilter.FilteredStartTimes, request.ScheduleFilter.FilteredEndTimes,
-					request.ScheduleFilter.IsDayOff, request.ScheduleFilter.IsEmptyDay),
-				SearchNameText = request.ScheduleFilter.SearchNameText,
-				TimeSortOrder = request.ScheduleFilter.TimeSortOrder
+				Paging = teamScheduleRequest.Paging,
+				TimeFilter = _timeFilterHelper.GetFilter(new DateOnly(teamScheduleRequest.SelectedDate), teamScheduleRequest.ScheduleFilter.FilteredStartTimes, teamScheduleRequest.ScheduleFilter.FilteredEndTimes,
+					teamScheduleRequest.ScheduleFilter.IsDayOff, teamScheduleRequest.ScheduleFilter.IsEmptyDay),
+				SearchNameText = teamScheduleRequest.ScheduleFilter.SearchNameText,
+				TimeSortOrder = teamScheduleRequest.ScheduleFilter.TimeSortOrder
 			};
 
-			return _teamScheduleViewModelFactory.GetViewModelNoReadModel(data);
+			return _teamScheduleViewModelFactoryToggle75989Off.GetTeamScheduleViewModel(data);
+		}
+
+		[UnitOfWork, Route("api/TeamSchedule/TeamSchedule"), HttpPost]
+		public virtual TeamScheduleViewModel TeamSchedule(TeamScheduleRequest teamScheduleRequest)
+		{
+			var allTeamIds = teamScheduleRequest.ScheduleFilter.TeamIds.Split(',').Select(teamId => new Guid(teamId)).ToList();
+			var data = new TeamScheduleViewModelData
+			{
+				ScheduleDate = new DateOnly(teamScheduleRequest.SelectedDate),
+				TeamIdList = allTeamIds,
+				Paging = teamScheduleRequest.Paging,
+				TimeFilter = _timeFilterHelper.GetFilter(new DateOnly(teamScheduleRequest.SelectedDate), teamScheduleRequest.ScheduleFilter.FilteredStartTimes, teamScheduleRequest.ScheduleFilter.FilteredEndTimes,
+					teamScheduleRequest.ScheduleFilter.IsDayOff, teamScheduleRequest.ScheduleFilter.IsEmptyDay),
+				SearchNameText = teamScheduleRequest.ScheduleFilter.SearchNameText,
+				TimeSortOrder = teamScheduleRequest.ScheduleFilter.TimeSortOrder
+			};
+
+			return _teamScheduleViewModelFactory.GetTeamScheduleViewModel(data);
 		}
 
 		[UnitOfWork, Route("api/TeamSchedule/DefaultTeam"), HttpGet]
@@ -86,13 +105,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			}
 
 			return new { Message = UserTexts.Resources.NoTeamsAvailable };
-		}
-
-		public class TeamScheduleRequest
-		{
-			public DateTime SelectedDate { get; set; }
-			public ScheduleFilter ScheduleFilter { get; set; }
-			public Paging Paging { get; set; }
 		}
 	}
 }

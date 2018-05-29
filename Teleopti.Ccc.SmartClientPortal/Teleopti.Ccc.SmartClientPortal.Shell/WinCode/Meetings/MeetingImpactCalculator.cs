@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
 				foreach (var meetingPerson in meeting.MeetingPersons)
 				{
 					var person = meetingPerson.Person;
-					var personMeetings = meeting.GetPersonMeetings(person).Where(m => loadedPeriod.Contains(m.Period.StartDateTime));
+					var personMeetings = meeting.GetPersonMeetings(loadedPeriod, person);
 					foreach (var personMeeting in personMeetings)
 					{
 						((ScheduleRange)_schedulerStateHolder.Schedules[person]).Add(personMeeting);

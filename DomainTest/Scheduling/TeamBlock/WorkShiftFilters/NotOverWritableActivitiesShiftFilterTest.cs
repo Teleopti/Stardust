@@ -49,8 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var workShift = new WorkShift(new ShiftCategory("Day"));
 			workShift.LayerCollection.Add(getLunchLayer(lunch));
 
-			var shiftProjectionCache = new ShiftProjectionCache(workShift, new PersonalShiftMeetingTimeChecker());
-			shiftProjectionCache.SetDate(new DateOnlyAsDateTimePeriod(_dateOnly,TimeZoneInfo.Utc));
+			var shiftProjectionCache = new ShiftProjectionCache(workShift, new PersonalShiftMeetingTimeChecker(), new DateOnlyAsDateTimePeriod(_dateOnly,TimeZoneInfo.Utc));
 			var shifts = new[] { shiftProjectionCache };
 			var schedules = _mocks.StrictMock<IScheduleDictionary>();
 			Expect.Call(schedules[_person].ScheduledDay(_dateOnly)).Return(_part);
@@ -58,22 +57,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_mocks.ReplayAll();
 			var retShifts = _target.Filter(schedules, _dateOnly, _person, shifts);
 			retShifts.Count.Should().Be.EqualTo(0);
-			_mocks.VerifyAll();
-		}
-
-		[Test]
-		public void ShouldNotFilterIfNoMeeting()
-		{
-			IList<ShiftProjectionCache> shifts = new List<ShiftProjectionCache>();
-			var c1 = _mocks.StrictMock<ShiftProjectionCache>();
-			shifts.Add(c1);
-			var schedules = _mocks.StrictMock<IScheduleDictionary>();
-			Expect.Call(schedules[_person].ScheduledDay(_dateOnly)).Return(_part);
-
-
-			_mocks.ReplayAll();
-			var retShifts = _target.Filter(schedules, _dateOnly, _person, shifts);
-			retShifts.Count.Should().Be.EqualTo(1);
 			_mocks.VerifyAll();
 		}
 
@@ -97,13 +80,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			_part.CreateAndAddActivity(lunch, new DateTimePeriod(currentDate.AddHours(11), currentDate.AddHours(12)),
 				ShiftCategoryFactory.CreateShiftCategory());
-			_part.Add(meeting.GetPersonMeetings(_person).First());
+			_part.Add(meeting.GetPersonMeetings(_part.Period, _person).First());
 
 			var workShift = new WorkShift(new ShiftCategory("Day"));
 			workShift.LayerCollection.Add(getLunchLayer(lunch));
 
-			var shiftProjectionCache = new ShiftProjectionCache(workShift,new PersonalShiftMeetingTimeChecker());
-			shiftProjectionCache.SetDate(new DateOnlyAsDateTimePeriod(_dateOnly, TimeZoneInfo.Utc));
+			var shiftProjectionCache = new ShiftProjectionCache(workShift,new PersonalShiftMeetingTimeChecker(), new DateOnlyAsDateTimePeriod(_dateOnly, TimeZoneInfo.Utc));
 			var shifts = new []{shiftProjectionCache};
 
 			var schedules = _mocks.StrictMock<IScheduleDictionary>();
@@ -113,21 +95,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			retShifts.Count.Should().Be.EqualTo(0);
 			_mocks.VerifyAll();
 		}
-
-		[Test]
-		public void ShouldNotFilterIfNoPersonalShift()
-		{
-			IList<ShiftProjectionCache> shifts = new List<ShiftProjectionCache>();
-			var c1 = _mocks.StrictMock<ShiftProjectionCache>();
-			shifts.Add(c1);
-			var schedules = _mocks.StrictMock<IScheduleDictionary>();
-			Expect.Call(schedules[_person].ScheduledDay(_dateOnly)).Return(_part);
-			_mocks.ReplayAll();
-			var retShifts = _target.Filter(schedules, _dateOnly, _person, shifts);
-			retShifts.Count.Should().Be.EqualTo(1);
-			_mocks.VerifyAll();
-		}
-
+		
 		[Test]
 		public void ShouldCheckParameters()
 		{

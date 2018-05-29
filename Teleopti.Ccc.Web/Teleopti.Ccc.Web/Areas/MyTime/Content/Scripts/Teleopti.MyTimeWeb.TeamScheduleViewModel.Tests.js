@@ -23,7 +23,7 @@ $(document).ready(function () {
 		loadMyTeam: "Requests/ShiftTradeRequestMyTeam",
 		loadDefaultTeam: "../api/TeamSchedule/DefaultTeam",
 		loadTeams: "Team/TeamsAndGroupsWithAllTeam",
-		loadSchedule: "../api/TeamSchedule/TeamSchedule"
+		loadSchedule: "../api/TeamSchedule/TeamScheduleOld"
 	};
 
 	test("should send request to server when I type colleauge`s name in name seach box", function () {

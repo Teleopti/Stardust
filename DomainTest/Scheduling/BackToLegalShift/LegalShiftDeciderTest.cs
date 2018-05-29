@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 			_target = new LegalShiftDecider(_shiftProjectionCacheManager, _scheduleDayEquator);
 			_ruleSetBag = _mocks.StrictMock<IRuleSetBag>();
 			_workShift = _mocks.StrictMock<IWorkShift>();
-			_shiftProjectionCache = new ShiftProjectionCache(_workShift, new PersonalShiftMeetingTimeChecker());
+			_shiftProjectionCache = new ShiftProjectionCache(_workShift, new PersonalShiftMeetingTimeChecker(), new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_personAssignment = new PersonAssignment(new Person(), new Scenario("_"), new DateOnly());
 		}

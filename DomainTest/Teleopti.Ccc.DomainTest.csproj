@@ -298,6 +298,7 @@
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\ChangesTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\DateTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\HistoricalAdherenceViewModelBuilderEx.cs" />
+    <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\LateForWorkTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\NavigationTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\PercentageTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\RecordedAdherencesTest.cs" />
@@ -315,6 +316,7 @@
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\ApprovedPeriodPercentageTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\ApprovedPeriodTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\ChangesTest.cs" />
+    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\LateForWorkTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\PercentageTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\RecordedAdherenceTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\ResolutionTest.cs" />
@@ -392,6 +394,7 @@
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationMinimumAgentsTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\SchedulingAndDayOffOptimizationStardustResultTest.cs" />
     <Compile Include="SchedulingScenarios\ExtraPreferencesFactory.cs" />
+    <Compile Include="SchedulingScenarios\FairnessOptimization\FairnessOptimizationDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayCombinationDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationBlockTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCascadingSameThreadDesktopTest.cs" />
@@ -1159,12 +1162,10 @@
     <Compile Include="Scheduling\Scenarios\WeeklyRestSolverLaterTest.cs" />
     <Compile Include="Scheduling\Scenarios\WeeklyRestSolverEarlierTest.cs" />
     <Compile Include="Scheduling\TeamBlock\AllTeamMembersInSelectionSpecificationTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\FirstShiftInTeamBlockFinderTest.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForDaysTest.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForSkillIntervalTest.cs" />
     <Compile Include="Scheduling\TeamBlock\PullTargetValueFromSkillIntervalDataTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\NightlyRestRestrcitionTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\Restriction\ProposedRestrictionAggregatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\ResctrictionFromRoleModelRestrictionTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\SameActivityRestrictionTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\SameEndTimeRestrictionTest.cs" />

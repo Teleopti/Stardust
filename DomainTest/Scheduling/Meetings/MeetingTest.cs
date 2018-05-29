@@ -161,12 +161,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             _target.ClearMeetingPersons();
             _target.AddMeetingPerson(meetingPerson);
 
-            IList<IPersonMeeting> personMeetings = _target.GetPersonMeetings(_person);
+            IList<IPersonMeeting> personMeetings = _target.GetPersonMeetings(new DateTimePeriod(2009,10,12,2009,10,14), _person);
             Assert.AreEqual(1, personMeetings.Count);
 
-            personMeetings = _target.GetPersonMeetings(PersonFactory.CreatePerson());
+            personMeetings = _target.GetPersonMeetings(new DateTimePeriod(2009, 10, 12, 2009, 10, 14), PersonFactory.CreatePerson());
             Assert.AreEqual(0, personMeetings.Count);
-        }
+
+			personMeetings = _target.GetPersonMeetings(new DateTimePeriod(2009, 10, 10, 2009, 10, 12), _person);
+			Assert.AreEqual(0, personMeetings.Count);
+		}
 
 
         [Test]

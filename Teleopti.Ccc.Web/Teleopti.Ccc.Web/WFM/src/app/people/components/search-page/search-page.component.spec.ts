@@ -65,7 +65,8 @@ describe('SearchPageComponent', () => {
 		});
 	}));
 
-	it('should be able to select all people on all pages', async(() => {
+	//TODO: Activate again when Story 75440 is in the pipe
+	xit('should be able to select all people on all pages', async(() => {
 		component.searchPeople();
 
 		fixture.whenStable().then(() => {

@@ -91,11 +91,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			using (_mocks.Playback())
 			{
 				var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 1, 1), _timeZoneInfo);
-				c1 = new ShiftProjectionCache(_workShift1, _personalShiftMeetingTimeChecker);
-				c1.SetDate(dateOnlyAsDateTimePeriod);
+				c1 = new ShiftProjectionCache(_workShift1, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
 				shifts.Add(c1);
-				c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker);
-				c2.SetDate(dateOnlyAsDateTimePeriod);
+				c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
 				shifts.Add(c2);
 				retShifts = _target.Filter(shifts, _effectiveRestriction);
 
@@ -121,8 +119,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(_dateOnly, _timeZoneInfo);
 			foreach (IWorkShift shift in tmpList)
 			{
-				var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker);
-				cache.SetDate(dateOnlyAsDateTimePeriod);
+				var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
 				retList.Add(cache);
 			}
 			return retList;

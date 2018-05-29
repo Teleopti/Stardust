@@ -31,5 +31,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSets { get; }
 
 	    void SetDayOffTemplate(IDayOffTemplate dayOffTemplate);
-    }
+		void SetShiftCategories(IList<IShiftCategory> shiftCategories);
+	}
 }

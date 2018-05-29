@@ -2,6 +2,7 @@ using System;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -41,8 +42,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 				.WithAgent(person, "name");
 
 			Database
-				.WithAdherenceOut(person, "2016-10-08 00:00")
-				.WithAdherenceOut(person, "2016-10-10 00:00");
+				.WithHistoricalStateChange(person, "2016-10-08 00:00", Adherence.Out)
+				.WithHistoricalStateChange(person, "2016-10-10 00:00", Adherence.Out);
 
 			var data = Target.Build(person);
 

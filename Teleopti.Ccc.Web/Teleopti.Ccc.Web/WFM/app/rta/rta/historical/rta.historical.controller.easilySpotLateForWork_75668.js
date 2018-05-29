@@ -70,17 +70,10 @@
 				vm.fullTimeline = buildTimeline(data);
 				timelineStart = data.Timeline.StartTime;
 				timelineEnd = data.Timeline.EndTime;
+
 				vm.cards = mapChanges(data.Changes, data.Schedules);
-
-				vm.diamonds = buildDiamonds(data);
-
-				vm.lateForWork = {
-					text: "Late 130 min",
-					offset: "54.54545454545454%",
-					click: function () {
-						console.log('clicked!');
-					}
-				};
+				vm.diamonds = buildDiamonds(data.Changes);
+				vm.lateForWork = buildLateForWork(data.Changes);
 
 				if ($stateParams.date > data.Navigation.First) {
 					var previousDay = moment($stateParams.date).subtract(1, 'day');
@@ -308,59 +301,100 @@
 			});
 		}
 
-		function buildDiamonds(data) {
-			return data.Changes.map(function (change) {
-				change.Offset = calculate.Offset(change.Time);
-				change.RuleColor = !change.RuleColor ? "rgba(0,0,0,0.54)" : change.RuleColor;
-				change.Color = change.RuleColor;
-				change.click = function () {
-					vm.diamonds.forEach(function (d) {
-						d.highlight = false;
-					});
-					change.highlight = true;
-					vm.cards.find(function (card) {
-						return card.Items.includes(change);
-					}).isOpen = true;
+		function buildDiamonds(changes) {
+			return changes.map(function (change) {
+				return {
+					Time: change.Time,
+					Offset: calculate.Offset(change.Time),
+					RuleColor: !change.RuleColor ? "rgba(0,0,0,0.54)" : change.RuleColor,
+					Color: change.RuleColor,
+					click: change.click,
+					get highlight() {
+						return change.highlight;
+					}
 				};
-				return change;
 			});
 		}
 
-		function mapChanges(changes, schedules) {
-			var makeCard = function (header, color, startTime, endTime) {
+		function buildLateForWork(changes) {
+			var change = changes.find(function (d) {
+				return d.LateForWork;
+			});
+			if (change) {
 				return {
+					text: change.LateForWork,
+					offset: calculate.Offset(change.Time),
+					click: change.click
+				};
+			}
+		}
+
+		function mapChanges(changes, schedules) {
+
+			var makeCard = function (allChanges, header, color, startTime, endTime) {
+
+				var changes = allChanges;
+				if (startTime)
+					changes = allChanges.filter(function (change) {
+						return change.Time >= startTime && change.Time < endTime;
+					});
+
+				var card = {
 					Header: header,
-					Items: [],
 					Color: color,
 					isOpen: $stateParams.open,
 					StartTime: startTime,
 					EndTime: endTime
-				}
+				};
+
+				card.Items = mapChanges(allChanges, changes, card);
+
+				return card;
 			};
 
-			if (schedules.length === 0) {
-				var card = makeCard($translate.instant('NoShift'), 'black');
-				card.Items = changes;
-				return [card];
-			}
+			var mapChanges = function (allChanges, changes, card) {
+				return changes.map(function (change) {
 
-			var beforeShift = [makeCard($translate.instant('BeforeShiftStart'), 'black', '0000-01-01T00:00:00', schedules[0].StartTime)];
-			var afterShift = [makeCard($translate.instant('AfterShiftEnd'), 'black', schedules[schedules.length - 1].EndTime, '9999-01-01T00:00:00')];
+					change.click = function () {
+						allChanges.forEach(function (c) {
+							c.highlight = false;
+						});
+						change.highlight = true;
+						card.isOpen = true;
+					};
+
+					return {
+						Time: change.Time,
+						Activity: change.Activity,
+						ActivityColor: change.ActivityColor,
+						Rule: change.Rule,
+						RuleColor: change.RuleColor,
+						State: change.State,
+						Adherence: change.Adherence,
+						AdherenceColor: change.AdherenceColor,
+						lateForWork: change.LateForWork,
+
+						click: change.click,
+						get highlight() {
+							return change.highlight;
+						}
+					};
+				});
+			};
+
+			if (schedules.length === 0)
+				return [makeCard(changes, $translate.instant('NoShift'), 'black')];
+
+			var beforeShift = [makeCard(changes, $translate.instant('BeforeShiftStart'), 'black', '0000-01-01T00:00:00', schedules[0].StartTime)];
+			var afterShift = [makeCard(changes, $translate.instant('AfterShiftEnd'), 'black', schedules[schedules.length - 1].EndTime, '9999-01-01T00:00:00')];
 			return beforeShift
 				.concat(schedules.map(function (l) {
 					var activityStart = moment(l.StartTime);
 					var activityEnd = moment(l.EndTime);
 					var header = l.Name + ' ' + activityStart.format('LT') + ' - ' + activityEnd.format('LT');
-					return makeCard(header, l.Color, l.StartTime, l.EndTime);
+					return makeCard(changes, header, l.Color, l.StartTime, l.EndTime);
 				}))
 				.concat(afterShift)
-				.map(function (card) {
-					card.Items = changes.filter(function (change) {
-						change.lateForWork = 'Late 30 min';
-						return change.Time >= card.StartTime && change.Time < card.EndTime;
-					});
-					return card
-				})
 				.filter(function (card) {
 					return card.Items.length > 0;
 				});

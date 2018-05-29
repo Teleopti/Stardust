@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         {
             PersonMeetingDto personMeetingDto = new PersonMeetingDto();
         	var normalizeText = new NormalizeText();
-            personMeetingDto.Id = entity.Id;
+            personMeetingDto.Id = null;
             personMeetingDto.Person = _personAssembler.DomainEntityToDto(entity.Person);
             personMeetingDto.Period = _dateTimePeriodAssembler.DomainEntityToDto(entity.Period);
             personMeetingDto.Subject = entity.BelongsToMeeting.GetSubject(normalizeText);
@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         {
             var period = _dateTimePeriodAssembler.DtoToDomainEntity(dto.Period);
             IPersonMeeting personMeeting = new PersonMeeting(null, null,period);
-            personMeeting.SetId(dto.Id);
             return personMeeting;
         }
     }

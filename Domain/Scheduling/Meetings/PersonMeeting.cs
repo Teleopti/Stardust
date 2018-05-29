@@ -1,5 +1,4 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
@@ -9,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
     /// <summary>
     /// class for meeting to be used in schedule
     /// </summary>
-    public class PersonMeeting : VersionedAggregateRootWithBusinessUnit, IPersonMeeting
+    public class PersonMeeting : IPersonMeeting
     {
         private readonly IMeetingPerson _meetingPerson;
         private readonly IMeeting _belongsToMeeting;
@@ -111,7 +110,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
         public IPersonMeeting NoneEntityClone()
         {
             PersonMeeting retobj = (PersonMeeting)MemberwiseClone();
-            retobj.SetId(null);
            
             return retobj;
         }
@@ -135,7 +133,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 		{
 			return Person.GetHashCode() ^ BelongsToMeeting.GetHashCode() ^ Period.GetHashCode();
 		}
-
+		
 		public override bool Equals(object obj)
 		{
 			var casted = obj as IPersonMeeting;
@@ -144,5 +142,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 
 			return casted.Person.Equals(Person) && casted.BelongsToMeeting.Equals(BelongsToMeeting) && casted.Period.Equals(Period);
 		}
-    }
+	}
 }

@@ -52,8 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(_dateOnly, timeZoneInfo);
 			foreach (IWorkShift shift in listOfWorkShifts)
 			{
-				var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker);
-				cache.SetDate(dateOnlyAsDateTimePeriod);
+				var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
 				casheList.Add(cache);
 			}
 

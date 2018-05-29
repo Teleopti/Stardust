@@ -1,10 +1,13 @@
+using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 {
@@ -41,9 +44,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var workShift3 = _mocks.StrictMock<IWorkShift>();
 
 			var personalShiftMeetingTimeChecker = new PersonalShiftMeetingTimeChecker();
-			var cache1 = new ShiftProjectionCache(workShift1,personalShiftMeetingTimeChecker);
-			var cache2 = new ShiftProjectionCache(workShift2, personalShiftMeetingTimeChecker);
-			var cache3 = new ShiftProjectionCache(workShift3, personalShiftMeetingTimeChecker);
+			var cache1 = new ShiftProjectionCache(workShift1,personalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
+			var cache2 = new ShiftProjectionCache(workShift2, personalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
+			var cache3 = new ShiftProjectionCache(workShift3, personalShiftMeetingTimeChecker, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
 
 			IList<ShiftProjectionCache> caches = new List<ShiftProjectionCache> { cache1, cache2, cache3 };
 			IList<IShiftCategory> categoriesNotAllowed = new List<IShiftCategory> { shiftCategory2, shiftCategory3 };
