@@ -190,5 +190,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_dayOffs.Clear();
 		    _dayOffs.Add(dayOffTemplate);
 	    }
-    }
+
+		public void SetShiftCategories(IList<IShiftCategory> shiftCategories)
+		{
+			_shiftCategories.Clear();
+			_shiftCategories.AddRange(shiftCategories);
+		}
+	}
 }
