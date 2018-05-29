@@ -7,6 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
+	[RemoveMeWithToggle("make all fields readonly", Toggles.ResourcePlanner_LessResourcesXXL_74915)]
 	public class ShiftProjectionCache : IWorkShiftCalculatableProjection
 	{
 		private Lazy<IEditableShift> _mainShift;
@@ -29,9 +30,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			_workShift = workShift;
 			_personalShiftMeetingTimeChecker = personalShiftMeetingTimeChecker;
+#pragma warning disable 618
 			SetDate(dateOnlyAsDateTimePeriod);
+#pragma warning restore 618
 		}
 
+		[RemoveMeWithToggle("make part of ctor", Toggles.ResourcePlanner_LessResourcesXXL_74915)]
+		[Obsolete("will be removed with toggle ResourcePlanner_LessResourcesXXL_74915")]
         public void SetDate(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
         {
 	        if (_dateOnlyAsPeriod!=null && _dateOnlyAsPeriod.Equals(dateOnlyAsDateTimePeriod)) return;
@@ -76,5 +81,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    public TimeSpan WorkShiftEndTime => WorkShiftProjectionPeriod.EndDateTime.Subtract(WorkShiftProjectionPeriod.StartDateTime.Date);
 
 	    public DateOnly SchedulingDate => _dateOnlyAsPeriod?.DateOnly ?? DateOnly.MinValue;
-    }
+
+		public ShiftProjectionCache GetOrCreateNew(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
+		{
+			return dateOnlyAsDateTimePeriod.Equals(_dateOnlyAsPeriod) ? 
+				this : 
+				new ShiftProjectionCache(_workShift, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
+		}
+	}
 }

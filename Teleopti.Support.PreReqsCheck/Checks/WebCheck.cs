@@ -106,6 +106,8 @@ namespace CheckPreRequisites.Checks
 						_form1.printFeatureStatus(true, ".Net framework 4.6.2 is installed", lineNumber);
 					else if(installed== 460798 || installed == 460805)
 						_form1.printFeatureStatus(true,".Net framework 4.7 is installed", lineNumber);
+					else if (installed == 461808)
+						_form1.printFeatureStatus(true, ".Net framework 4.7.2 is installed", lineNumber);
 					else 
                         _form1.printFeatureStatus(false, ".Net framework 4.6.1 is not installed", lineNumber);
                 }

@@ -211,7 +211,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var meeting = new Meeting(PersonFactory.CreatePerson(), new List<IMeetingPerson>(), "subject", "location", "description", meetingActivity, scenario);
 			meeting.SetId(Guid.NewGuid());
 			var personMeeting = new PersonMeeting(meeting, meetingPerson, dateTimePeriod);
-			personMeeting.SetId(Guid.NewGuid());
 
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, new IScheduleData[] { assesList[0], assesList[1], assesList[2], personMeeting }, skillDays);
 			var scheduleDays = new List<IScheduleDay>

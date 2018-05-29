@@ -68,8 +68,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             //add to schedule
             scheduleRange.Add(ass1);
-            scheduleRange.AddRange(meeting1.GetPersonMeetings(_agent));
-            scheduleRange.AddRange(meeting2.GetPersonMeetings(_agent));
+            scheduleRange.AddRange(meeting1.GetPersonMeetings(dic.Period.LoadedPeriod(), _agent));
+            scheduleRange.AddRange(meeting2.GetPersonMeetings(dic.Period.LoadedPeriod(), _agent));
         }
 
         [Test]

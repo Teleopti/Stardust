@@ -390,8 +390,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private static void addPersonMeetings(IScheduleDictionary retDic, IEnumerable<IMeeting> meetings, IEnumerable<IPerson> addForThesePersons, bool loadDaysAfterLeft = false)
 		{
 			var persons = addForThesePersons.ToArray();
-			var personMeetings = meetings.SelectMany(m => m.GetPersonMeetings(persons)).ToLookup(p => p.Person);
-			
+			var period = retDic.Period.LoadedPeriod();
+			var personMeetings = meetings.SelectMany(m => m.GetPersonMeetings(period, persons)).ToLookup(p => p.Person);
+
 			foreach (var personMeeting in personMeetings)
 			{
 				((ScheduleRange) retDic[personMeeting.Key]).AddRange(personMeeting.Where(pm =>

@@ -134,8 +134,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             //add to schedule
             _scheduleRange.Add(_ass1);
             _scheduleRange.Add(abs);
-            _scheduleRange.AddRange(meeting1.GetPersonMeetings(_agent));
-            _scheduleRange.AddRange(meeting2.GetPersonMeetings(_agent));
+            _scheduleRange.AddRange(meeting1.GetPersonMeetings(_dic.Period.LoadedPeriod(), _agent));
+            _scheduleRange.AddRange(meeting2.GetPersonMeetings(_dic.Period.LoadedPeriod(), _agent));
 
             var start = new DateTime(2007, 10, 1, 6, 0, 0);
             var end = new DateTime(2007, 10, 1, 10, 0, 0);

@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			_part.CreateAndAddActivity(lunch, new DateTimePeriod(currentDate.AddHours(11), currentDate.AddHours(12)),
 				ShiftCategoryFactory.CreateShiftCategory());
-			_part.Add(meeting.GetPersonMeetings(_person).First());
+			_part.Add(meeting.GetPersonMeetings(_part.Period, _person).First());
 
 			var workShift = new WorkShift(new ShiftCategory("Day"));
 			workShift.LayerCollection.Add(getLunchLayer(lunch));
