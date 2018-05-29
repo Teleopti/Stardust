@@ -697,17 +697,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				}
 			};
 
-			var result = (OkNegotiatedContentResult<IList<ForecastDayModel>>) Target.AddCampaign(model);
+			dynamic data = Target.AddCampaign(model);
+			dynamic result = data.Content;
+			var firstForecastDay = ((List<ForecastDayModel>)result.ForecastDays).First();
+			var secondForecastDay = ((List<ForecastDayModel>)result.ForecastDays).Last();
 
-			result.Should().Be.OfType<OkNegotiatedContentResult<IList<ForecastDayModel>>>();
-
-			var firstForecastDay = result.Content.First();
 			firstForecastDay.HasCampaign.Should().Be.True();
 			firstForecastDay.CampaignTasksPercentage.Should().Be.EqualTo(model.CampaignTasksPercent);
 			firstForecastDay.Tasks.Should().Be(100d);
 			firstForecastDay.TotalTasks.Should().Be(150d);
 
-			var secondForecastDay = result.Content.Last();
 			secondForecastDay.CampaignTasksPercentage.Should().Be.EqualTo(0);
 			secondForecastDay.HasCampaign.Should().Be.False();
 			secondForecastDay.Tasks.Should().Be(100d);
@@ -739,12 +738,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				CampaignTasksPercent = 0.5d
 			};
 
-			var result = (OkNegotiatedContentResult<IList<ForecastDayModel>>)Target.AddCampaign(model);
-			var forecastDay = result.Content.First();
-			result.Should().Be.OfType<OkNegotiatedContentResult<IList<ForecastDayModel>>>();
+			dynamic data = Target.AddCampaign(model);
+			dynamic result = data.Content;
+			var forecastDay = ((List<ForecastDayModel>)result.ForecastDays).First();
+
 			Assert.That(forecastDay.TotalTasks, Is.EqualTo(200d).Within(tolerance));
 			Assert.That(forecastDay.TotalAverageTaskTime, Is.EqualTo(40d).Within(tolerance));
 			Assert.That(forecastDay.TotalAverageAfterTaskTime, Is.EqualTo(20d).Within(tolerance));
+			((string) result.WarningMessage).Should().Be(Resources.CampaignNotAppliedWIthExistingOverride);
 		}
 
 		[Test]
@@ -765,10 +766,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				}
 			};
 
-			var result = (OkNegotiatedContentResult<IList<ForecastDayModel>>) Target.AddCampaign(model);
+			dynamic data = Target.AddCampaign(model);
+			dynamic result = data.Content;
+			var firstForecastDay = ((List<ForecastDayModel>)result.ForecastDays).First();
 
-			result.Should().Be.OfType<OkNegotiatedContentResult<IList<ForecastDayModel>>>();
-			result.Content.First().Tasks
+			firstForecastDay.Tasks
 				.Should().Be(100d);
 		}
 

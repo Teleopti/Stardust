@@ -5466,6 +5466,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Campaign not applied for overrided days.
+        /// </summary>
+        public static string CampaignNotAppliedWIthExistingOverride {
+            get {
+                return ResourceManager.GetString("CampaignNotAppliedWIthExistingOverride", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Early.
         /// </summary>
         public static string CampaignOverstaff {

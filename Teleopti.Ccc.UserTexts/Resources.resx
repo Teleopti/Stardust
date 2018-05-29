@@ -17359,6 +17359,10 @@ The application will now exit.</value>
     <value>Day has been overrided on web</value>
     <comment>Note to append to forecasted day with override to show in admin client</comment>
   </data>
+  <data name="CampaignNotAppliedWIthExistingOverride" xml:space="preserve">
+    <value>Campaign not applied for overrided days</value>
+    <comment>Warning message to show when campaign not applied for overrided days</comment>
+  </data>
   <data name="ClearCampaignWIthOverride" xml:space="preserve">
     <value>Override replaced existing campaign values</value>
     <comment>Warning message to show when override is added on top of existing campaign</comment>
