@@ -206,8 +206,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				}
 			};
 
-			
-
 			var forecastResult = new ForecastModel
 			{
 				WorkloadId = skill.WorkloadCollection.Single().Id.Value,
@@ -1050,7 +1048,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				.Should().Be(null);
 			lastForecastDay.HasOverride
 				.Should().Be(false);
-			((string) result.WarningMessage).Should().Be("");
+			((string) result.WarningMessage).Should().Be.Empty();
 		}
 
 		[Test]
@@ -1087,7 +1085,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				.Should().Be(forecastDay.AverageTaskTime);
 			forecastDay.TotalAverageAfterTaskTime
 				.Should().Be(forecastDay.AverageAfterTaskTime);
-			((string)result.WarningMessage).Should().Be("");
+			((string)result.WarningMessage).Should().Be.Empty();
 		}
 
 		[Test]
@@ -1203,12 +1201,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var result = data.Content;
 			var forecastDay = ((List<ForecastDayModel>)result.ForecastDays).First();
 
-			forecastDay.TotalTasks
-				.Should().Be(150d);
-			forecastDay.TotalAverageTaskTime
-				.Should().Be(30d);
-			forecastDay.TotalAverageAfterTaskTime
-				.Should().Be(10d);
+			forecastDay.TotalTasks.Should().Be(150d);
+			forecastDay.TotalAverageTaskTime.Should().Be(30d);
+			forecastDay.TotalAverageAfterTaskTime.Should().Be(10d);
 			forecastDay.HasCampaign.Should().Be(true);
 			forecastDay.HasOverride.Should().Be(false);
 		}
@@ -1339,7 +1334,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var openDay = new DateOnly(2018, 05, 04);
 			var skillDay = SkillDayFactory.CreateSkillDay(skill, workload, openDay, scenario);
 			skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new[] { skillDay }, new DateOnlyPeriod());
-
 
 			SkillRepository.Add(skill);
 			WorkloadRepository.Add(workload);
