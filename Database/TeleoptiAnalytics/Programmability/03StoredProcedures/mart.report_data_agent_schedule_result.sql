@@ -238,7 +238,7 @@ from #bridge_time_zone btz
 inner join #pre_result_subSP me
 	on me.date_id = btz.date_id
 	and me.interval_id = btz.interval_id
-	
+
 --delete data outside local dates
 DELETE FROM #pre_result_subSP
 WHERE date_date < @date_from
@@ -269,7 +269,9 @@ SELECT	r.date_date AS 'date',
 		END AS 'occupancy',
 		SUM(r.adherence_calc_s) AS 'adherence_calc_s',
 		CASE
-			WHEN SUM(r.adherence_calc_s) = 0 THEN 1
+			WHEN SUM(r.adherence_calc_s) = 0 and @adherence_id <> 2 THEN 1
+			WHEN SUM(r.adherence_calc_s) = 0 and @adherence_id = 2 THEN 0
+			WHEN SUM(r.deviation_s) > SUM(r.adherence_calc_s) THEN 0
 			ELSE (SUM(r.adherence_calc_s) - SUM(r.deviation_s))/SUM(r.adherence_calc_s)
 		END AS 'adherence',
 		SUM(r.deviation_s) AS 'deviation_s',

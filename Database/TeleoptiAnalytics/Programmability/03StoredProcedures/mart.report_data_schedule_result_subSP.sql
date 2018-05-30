@@ -58,6 +58,9 @@ CREATE TABLE #agent_statistics_subSP
 	)
 
 CREATE TABLE #fact_schedule_deviation_subSP (
+	shift_startdate_local_id int,
+	shift_startdate_id INT,
+	shift_startinterval_id int,
 	date_id INT,
 	person_id INT,
 	interval_id INT,
@@ -68,9 +71,12 @@ CREATE TABLE #fact_schedule_deviation_subSP (
 	is_logged_in INT,
 	contract_time_s INT
 	)
-	
+
 CREATE TABLE #fact_schedule_subSP
 	(
+	shift_startdate_local_id int,
+	shift_startdate_id INT,
+	shift_startinterval_id int,
 	schedule_date_id int,
 	interval_id int,
 	person_id int,
@@ -89,7 +95,6 @@ CREATE TABLE #acd_login (
 	acd_login_id int,
 	person_code uniqueidentifier
 	)
-
 ---------
 --DECLARE
 ---------           
@@ -115,11 +120,14 @@ INSERT INTO #person
 SELECT DISTINCT person_id, valid_from_date_id_local,valid_to_date_id_local FROM #person_acd_subSP
 
 --Create local table from: mart.fact_schedule_deviation(do a summary in case of overlapping shifts)
-INSERT INTO #fact_schedule_deviation_subSP
+INSERT INTO #fact_schedule_deviation_subSP(shift_startdate_local_id,shift_startdate_id,shift_startinterval_id,date_id,interval_id,person_id,deviation_schedule_ready_s,deviation_schedule_s,deviation_contract_s,ready_time_s,is_logged_in,contract_time_s)
 SELECT 
+	fsd.shift_startdate_local_id,
+	fsd.shift_startdate_id,
+	fsd.shift_startinterval_id,
 	fsd.date_id,
-	fsd.person_id,
 	fsd.interval_id,
+	fsd.person_id,
 	SUM(fsd.deviation_schedule_ready_s),
 	SUM(fsd.deviation_schedule_s),
 	SUM(fsd.deviation_contract_s),
@@ -132,7 +140,7 @@ INNER JOIN #person a
 	AND fsd.shift_startdate_local_id between a.valid_from_date_id_local AND a.valid_to_date_id_local
 WHERE fsd.shift_startdate_local_id BETWEEN @date_from_id -1 AND @date_to_id +1
 AND fsd.date_id BETWEEN @date_from_id AND @date_to_id	
-GROUP BY fsd.date_id,fsd.person_id,fsd.interval_id
+GROUP BY fsd.shift_startdate_local_id,fsd.shift_startdate_id,fsd.shift_startinterval_id,fsd.date_id,fsd.person_id,fsd.interval_id
 
 --Get agent statistics
 INSERT INTO #agent_queue_statistics_subSP (date_id,interval_id,acd_login_id,person_code,answered_calls,talk_time_s,after_call_work_time_s)
@@ -198,8 +206,11 @@ INNER JOIN #person_acd_subSP acd
 	)
 
 --Get agent schedule
-INSERT INTO #fact_schedule_subSP(schedule_date_id, interval_id, person_id, scheduled_time_m, scheduled_ready_time_m, scheduled_contract_time_m)
-SELECT	fs.schedule_date_id, 
+INSERT INTO #fact_schedule_subSP(shift_startdate_local_id,shift_startdate_id,shift_startinterval_id, schedule_date_id, interval_id, person_id, scheduled_time_m, scheduled_ready_time_m, scheduled_contract_time_m)
+SELECT	fs.shift_startdate_local_id,
+		fs.shift_startdate_id,
+		fs.shift_startinterval_id,
+		fs.schedule_date_id, 
 		fs.interval_id, 
 		fs.person_id, 
 		SUM(fs.scheduled_time_m), 
@@ -212,7 +223,7 @@ INNER JOIN #person p
 WHERE fs.shift_startdate_local_id BETWEEN  @date_from_id -1 AND @date_to_id +1
 AND fs.schedule_date_id BETWEEN @date_from_id AND @date_to_id
 AND fs.scenario_id = @scenario_id
-GROUP BY fs.schedule_date_id, fs.interval_id, fs.person_id
+GROUP BY fs.shift_startdate_local_id,fs.shift_startdate_id,fs.shift_startinterval_id,fs.schedule_date_id, fs.interval_id, fs.person_id
 
 --Prepare result
 INSERT #pre_result_subSP(date_id,interval_id,person_id,answered_calls,talk_time_s,after_call_work_time_s,ready_time_s, handling_time_s)
@@ -239,44 +250,72 @@ FROM #fact_schedule_subSP
 INSERT #pre_result_subSP(date_id,interval_id,person_id,adherence_calc_s,deviation_s)
 SELECT	fs.schedule_date_id,
 		fs.interval_id,
-		fsd.person_id,
+		fs.person_id,
 		adherence_calc_s =
-		CASE @adherence_id 
+		CASE @adherence_id
 			WHEN 1 THEN isnull(fs.scheduled_ready_time_m*60,0)
 			WHEN 2 THEN isnull(fs.scheduled_time_m*60,0)
 			WHEN 3 THEN isnull(fsd.contract_time_s,0)
 		END,
 		deviation_s		=
-		CASE @adherence_id 
-			WHEN 1 THEN fsd.deviation_schedule_ready_s
-			WHEN 2 THEN fsd.deviation_schedule_s
-			WHEN 3 THEN fsd.deviation_contract_s
+		CASE @adherence_id
+			WHEN 1 THEN isnull(fsd.deviation_schedule_ready_s, 0)
+			WHEN 2 THEN isnull(fsd.deviation_schedule_s, 0)
+			WHEN 3 THEN isnull(fsd.deviation_contract_s, 0)
 		END
-FROM #fact_schedule_deviation_subSP fsd
-INNER JOIN #fact_schedule_subSP fs --only inlclude scheduled intervals
-	ON fsd.date_id = fs.schedule_date_id
-	AND fsd.interval_id = fs.interval_id
-	AND fsd.person_id = fs.person_id
+	FROM #person a
+	INNER JOIN #fact_schedule_subSP fs
+	ON a.person_id = fs.person_id
+	AND fs.shift_startdate_local_id BETWEEN a.valid_from_date_id_local AND a.valid_to_date_id_local
+	LEFT JOIN #fact_schedule_deviation_subSP fsd
+		ON fsd.person_id=fs.person_id
+		AND fsd.date_id=fs.schedule_date_id
+		AND fsd.interval_id=fs.interval_id
+		AND fsd.shift_startdate_local_id=fs.shift_startdate_local_id
+	INNER JOIN #bridge_time_zone b1
+		ON	fs.shift_startinterval_id= b1.interval_id
+		AND fs.shift_startdate_id=b1.date_id
+	INNER JOIN bridge_time_zone b2 WITH (NOLOCK)
+		ON	fs.interval_id= b2.interval_id
+		AND fs.schedule_date_id= b2.date_id
+	INNER JOIN mart.dim_interval i
+		ON b2.local_interval_id = i.interval_id			
+	INNER JOIN mart.dim_date d WITH (NOLOCK)
+		ON b2.local_date_id = d.date_id
+	AND b2.time_zone_id=@time_zone_id
 
 --include intervals that have ready_time but no scheduled time. 
 INSERT #pre_result_subSP(date_id,interval_id,person_id,adherence_calc_s,deviation_s)
 SELECT	fsd.date_id,
 		fsd.interval_id,
 		fsd.person_id,
+		adherence_calc_s =
 		CASE @adherence_id 
 			WHEN 1 THEN 0
 			WHEN 2 THEN 0
 			WHEN 3 THEN isnull(fsd.contract_time_s,0)
 		END,
 		deviation_s		=
-		CASE @adherence_id 
-			WHEN 1 THEN fsd.deviation_schedule_ready_s
-			WHEN 2 THEN fsd.deviation_schedule_s
-			WHEN 3 THEN fsd.deviation_contract_s
+		CASE @adherence_id
+			WHEN 1 THEN isnull(fsd.deviation_schedule_ready_s, 0)
+			WHEN 2 THEN isnull(fsd.deviation_schedule_s, 0)
+			WHEN 3 THEN isnull(fsd.deviation_contract_s, 0)
 		END
-FROM #fact_schedule_deviation_subSP fsd
-INNER JOIN #person a
+FROM #person a
+LEFT JOIN #fact_schedule_deviation_subSP fsd
 	ON a.person_id = fsd.person_id
+	AND fsd.shift_startdate_local_id BETWEEN a.valid_from_date_id_local AND a.valid_to_date_id_local
+INNER JOIN #bridge_time_zone b1
+	ON	fsd.shift_startinterval_id= b1.interval_id
+	AND fsd.shift_startdate_id=b1.date_id
+INNER JOIN bridge_time_zone b2 WITH (NOLOCK)
+	ON	fsd.interval_id= b2.interval_id
+	AND fsd.date_id= b2.date_id
+INNER JOIN mart.dim_interval i WITH (NOLOCK)
+	ON b2.local_interval_id = i.interval_id			
+INNER JOIN mart.dim_date d WITH (NOLOCK)
+	ON b2.local_date_id = d.date_id
+AND b2.time_zone_id=@time_zone_id
 WHERE fsd.date_id BETWEEN @date_from_id AND @date_to_id				
 AND NOT EXISTS (SELECT 1 FROM #fact_schedule_subSP fs WHERE fsd.person_id=fs.person_id	AND fsd.date_id=fs.schedule_date_id
 				AND fsd.interval_id=fs.interval_id)
