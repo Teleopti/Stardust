@@ -504,6 +504,7 @@ module.exports = function(grunt) {
 		'imageEmbed',
 		'concat:distModules',
 		'concat:devJs',
+		'concat:distJsForDesktop',
 		'newer:concat:distCss',
 		'newer:concat:distDarkCss',
 		'copy:devCss',
