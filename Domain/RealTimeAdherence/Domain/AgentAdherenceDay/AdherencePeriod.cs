@@ -15,6 +15,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 		}
 		
 		public DateTime StartTime { get; set; }
-		public DateTime EndTime { get; set; }
+		public DateTime? EndTime { get; set; }
 	}
 }

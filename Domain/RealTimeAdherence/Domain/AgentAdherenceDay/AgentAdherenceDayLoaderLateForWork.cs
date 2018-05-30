@@ -50,7 +50,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 				period = new DateTimePeriod(shift.Value.StartDateTime.AddHours(-1), shift.Value.EndDateTime.AddHours(1));
 			}
 
-			
 			var events =
 				_eventStore.LoadLastAdherenceEventBefore(personId, period.StartDateTime)
 					.AsArray()
