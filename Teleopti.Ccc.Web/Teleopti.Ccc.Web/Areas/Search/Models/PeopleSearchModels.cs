@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Teleopti.Ccc.Web.Areas.Search.Models
 {
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Models
 		public List<PeopleViewModel> People { get; set; }
 	}
 
+	[DebuggerDisplay("{FirstName} {LastName}, {Site}, {Team}")]
 	public class PeopleViewModel
 	{
 		public string Id { get; set; }

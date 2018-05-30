@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
@@ -16,6 +16,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
+	[DebuggerDisplay("{Name}, {Id.ToString().ToUpper()}")]
 	public class Person : VersionedAggregateRoot, IPerson, IDeleteTag, IAggregateRootWithEvents
 	{
 		private Name _name;

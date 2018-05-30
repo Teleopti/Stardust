@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void Find(IPersonFinderSearchCriteria personFinderSearchCriteria);
 		void FindInTeams(IPersonFinderSearchCriteria personFinderSearchCriteria, Guid[] teamIds);
 		void FindPeople(IPeoplePersonFinderSearchCriteria personFinderSearchCriteria);
+		void FindPeopleWithDataPermission(IPeoplePersonFinderSearchWithPermissionCriteria personFinderSearchCriteria);
 		void UpdateFindPerson(ICollection<Guid> ids);
 		void UpdateFindPersonData(ICollection<Guid> ids);
 		List<Guid> FindPersonIdsInTeams(DateOnly date, Guid[] teamIds, IDictionary<PersonFinderField, string> searchCriteria);
