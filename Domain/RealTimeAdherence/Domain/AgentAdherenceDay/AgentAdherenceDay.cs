@@ -109,17 +109,17 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 		public DateTimePeriod Period() => _period;
 		public IEnumerable<HistoricalChangeModel> Changes() => _changes;
 
-		public IEnumerable<OutOfAdherencePeriod> RecordedOutOfAdherences() =>
-			_recordedOutOfAdherences.Select(x => new OutOfAdherencePeriod {StartTime = x.StartDateTime, EndTime = x.EndDateTime})
+		public IEnumerable<AdherencePeriod> RecordedOutOfAdherences() =>
+			_recordedOutOfAdherences.Select(x => new AdherencePeriod {StartTime = x.StartDateTime, EndTime = x.EndDateTime})
 				.ToArray();
 
 		public IEnumerable<ApprovedPeriod> ApprovedPeriods() =>
 			_approvedPeriods.Select(x => new ApprovedPeriod {PersonId = _personId, StartTime = x.StartDateTime, EndTime = x.EndDateTime})
 				.ToArray();
 
-		public IEnumerable<OutOfAdherencePeriod> OutOfAdherences() =>
+		public IEnumerable<AdherencePeriod> OutOfAdherences() =>
 			_outOfAdherences
-				.Select(x => new OutOfAdherencePeriod {StartTime = x.StartDateTime, EndTime = x.EndDateTime})
+				.Select(x => new AdherencePeriod {StartTime = x.StartDateTime, EndTime = x.EndDateTime})
 				.ToArray();
 
 		public int? Percentage() => _percentage;

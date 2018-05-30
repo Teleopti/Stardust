@@ -4,17 +4,17 @@ using System.Globalization;
 
 namespace Teleopti.Interfaces.Domain
 {
-    /// <summary>
-    /// Date helper class 
-    /// </summary>
-    public static class DateHelper
+	/// <summary>
+	/// Date helper class 
+	/// </summary>
+	public static class DateHelper
 	{
-        static DateHelper()
-        {
-            var calendar = new UmAlQuraCalendar();
-             maxSmallDateTime = calendar.MaxSupportedDateTime.Date;
-             minSmallDateTime = calendar.MinSupportedDateTime;
-        }
+		static DateHelper()
+		{
+			var calendar = new UmAlQuraCalendar();
+			maxSmallDateTime = calendar.MaxSupportedDateTime.Date;
+			minSmallDateTime = calendar.MinSupportedDateTime;
+		}
 
 		/// <summary>
 		/// The cultures that should use week number from ISO8601
@@ -35,8 +35,8 @@ namespace Teleopti.Interfaces.Domain
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")]
 		public static readonly IList<int> Iso8601Cultures = new List<int> { 2068, 1044, 1053, 1031, 3079, 2055, 1030, 1035, 1036, 2057, 3082 };
 
-        private static readonly DateTime minSmallDateTime;
-        private static readonly DateTime maxSmallDateTime;
+		private static readonly DateTime minSmallDateTime;
+		private static readonly DateTime maxSmallDateTime;
 
 		/// <summary>
 		/// Returns quarter from month.
@@ -51,75 +51,75 @@ namespace Teleopti.Interfaces.Domain
 		{
 			if (month < 1) return 0;
 			if (month > 12) return 0;
-			return (month - 1)/3 + 1;
+			return (month - 1) / 3 + 1;
 		}
 
-        /// <summary>
-        /// Returns week number. Contains a correction for FirstFourDayWeek CalendarWeekRule.
-        /// </summary>
-        /// <param name="date">The date.</param>
-        /// <param name="cult">The cult.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2007-12-05
-        /// </remarks>
-        public static int WeekNumber(DateTime date, CultureInfo cult)
-        {
-        	var calendarWeekRule = cult.DateTimeFormat.CalendarWeekRule;
+		/// <summary>
+		/// Returns week number. Contains a correction for FirstFourDayWeek CalendarWeekRule.
+		/// </summary>
+		/// <param name="date">The date.</param>
+		/// <param name="cult">The cult.</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: zoet
+		/// Created date: 2007-12-05
+		/// </remarks>
+		public static int WeekNumber(DateTime date, CultureInfo cult)
+		{
+			var calendarWeekRule = cult.DateTimeFormat.CalendarWeekRule;
 			if (Iso8601Cultures.Contains(cult.LCID))
 			{
 				calendarWeekRule = CalendarWeekRule.FirstFourDayWeek;
 			}
-            var weekNo = cult.Calendar.GetWeekOfYear(date, calendarWeekRule, cult.DateTimeFormat.FirstDayOfWeek);
+			var weekNo = cult.Calendar.GetWeekOfYear(date, calendarWeekRule, cult.DateTimeFormat.FirstDayOfWeek);
 
-            if (weekNo == 53 && cult.DateTimeFormat.Calendar.GetType() == typeof(GregorianCalendar)
-                && calendarWeekRule == CalendarWeekRule.FirstFourDayWeek)
-            {
-                weekNo = cult.DateTimeFormat.Calendar.GetWeekOfYear(
-                             date.AddDays(7),
-                             CalendarWeekRule.FirstFourDayWeek,
-                             DayOfWeek.Monday) - 1;
-                if (weekNo == 0)
-                {
-                    weekNo = 53;
-                }
-            }
-            return weekNo;
-        }
+			if (weekNo == 53 && cult.DateTimeFormat.Calendar.GetType() == typeof(GregorianCalendar)
+							 && calendarWeekRule == CalendarWeekRule.FirstFourDayWeek)
+			{
+				weekNo = cult.DateTimeFormat.Calendar.GetWeekOfYear(
+							 date.AddDays(7),
+							 CalendarWeekRule.FirstFourDayWeek,
+							 DayOfWeek.Monday) - 1;
+				if (weekNo == 0)
+				{
+					weekNo = 53;
+				}
+			}
+			return weekNo;
+		}
 
 
-        /// <summary>
-        /// Check if date is on a weekend, weekends hard coded for now
-        /// </summary>
-        /// <param name="date"></param>
-        /// <param name="cult"></param>
-        /// <returns></returns>
-        public static bool IsWeekend(DateOnly date, CultureInfo cult)
-        {
+		/// <summary>
+		/// Check if date is on a weekend, weekends hard coded for now
+		/// </summary>
+		/// <param name="date"></param>
+		/// <param name="cult"></param>
+		/// <returns></returns>
+		public static bool IsWeekend(DateOnly date, CultureInfo cult)
+		{
 			//data collected from http://en.wikipedia.org/wiki/Workweek_and_weekend
 
 			var day = date.DayOfWeek;
 			switch (cult.LCID)
 			{
-				case 5121:	// Algeria
+				case 5121: // Algeria
 				case 15361: // Bahrain
-				case 2117:	// Bangladesh
-				case 3073:	// Egypt
-				case 2049:	// Iraq
-				case 1037:	// Israel
+				case 2117: // Bangladesh
+				case 3073: // Egypt
+				case 2049: // Iraq
+				case 1037: // Israel
 				case 11265: // Jordan
 				case 13313: // Kuwait
-				case 4097:	// Libya
-				case 1125:	// Maldives
-				case 1086:	// Malaysia
-				case 1121:	// Nepal
-				case 8193:	// Oman
+				case 4097: // Libya
+				case 1125: // Maldives
+				case 1086: // Malaysia
+				case 1121: // Nepal
+				case 8193: // Oman
 				case 16385: // Qatar
-				case 1025:	// Saudi Arabia
+				case 1025: // Saudi Arabia
 				case 10241: // Syria
 				case 14337: // U.A.E.
-				case 9217:	// Yemen
+				case 9217: // Yemen
 					return day == DayOfWeek.Friday || day == DayOfWeek.Saturday;
 
 
@@ -138,221 +138,221 @@ namespace Teleopti.Interfaces.Domain
 				default:
 					return day == DayOfWeek.Saturday || day == DayOfWeek.Sunday;
 			}
-        }
+		}
 
-        /// <summary>
-        /// Gets the last date in month.
-        /// </summary>
-        /// <param name="theDate">The date.</param>
-        /// <param name="culture">The culture.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-12-20
-        /// </remarks>
-        public static DateTime GetLastDateInMonth(DateTime theDate, CultureInfo culture)
-        {
-            return GetLastDateInMonth(theDate, culture.Calendar);
-        }
-
-        /// <summary>
-        /// Gets the last date in month.
-        /// </summary>
-        /// <param name="theDate">The date.</param>
-        /// <param name="calendar">The calendar.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-05-20
-        /// </remarks>
-        public static DateTime GetLastDateInMonth(DateTime theDate, Calendar calendar)
-        {
-            var year = calendar.GetYear(theDate);
-            var month = calendar.GetMonth(theDate);
-            var era = calendar.GetEra(theDate);
-
-            return calendar.ToDateTime(
-                year,
-                month,
-                calendar.GetDaysInMonth(year, month, era),
-                0,
-                0,
-                0,
-                0,
-                era);
-        }
-
-        /// <summary>
-        /// Gets the first date in month.
-        /// </summary>
-        /// <param name="theDate">The date.</param>
-        /// <param name="culture">The culture.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-12-20
-        /// </remarks>
-        public static DateTime GetFirstDateInMonth(DateTime theDate, CultureInfo culture)
-        {
-            return GetFirstDateInMonth(theDate, culture.Calendar);
-        }
-
-        /// <summary>
-        /// Gets the first date in month.
-        /// </summary>
-        /// <param name="theDate">The date.</param>
-        /// <param name="calendar">The calendar.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-05-20
-        /// </remarks>
-        public static DateTime GetFirstDateInMonth(DateTime theDate, Calendar calendar)
-        {
-            return calendar.ToDateTime(
-                calendar.GetYear(theDate),
-                calendar.GetMonth(theDate),
-                1,
-                0,
-                0,
-                0,
-                0,
-                calendar.GetEra(theDate));
-        }
-
-        /// <summary>
-        /// Gets the first date in week.
-        /// </summary>
-        /// <param name="theDate">The date.</param>
-        /// <param name="culture">The culture.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-12-20
-        /// </remarks>
-        public static DateTime GetFirstDateInWeek(DateTime theDate, CultureInfo culture)
-        {
-            var firstDayOfWeek = (int)culture.DateTimeFormat.FirstDayOfWeek;
-            var currentDayOfWeek = (int)theDate.DayOfWeek;
-
-            var differenceAsDays = currentDayOfWeek - firstDayOfWeek;
-            if (differenceAsDays < 0) differenceAsDays += 7;
-
-            return theDate.AddDays(-differenceAsDays);
-        }
-
-        ///<summary>
-        /// Used when getting the first date in work week for person
-        ///</summary>
-        ///<param name="theDate"></param>
-        ///<param name="workweekStartsAt"></param>
-        ///<returns></returns>
-        public static DateTime GetFirstDateInWeek(DateTime theDate, DayOfWeek workweekStartsAt)
-        {
-            var currentDayOfWeek = (int)theDate.DayOfWeek;
-
-            var differenceAsDays = currentDayOfWeek - (int)workweekStartsAt;
-            if (differenceAsDays < 0) differenceAsDays += 7;
-
-            return theDate.AddDays(-differenceAsDays);
-        }
-
-		public static DateOnly GetFirstDateInWeek(DateOnly theDate, DayOfWeek workweekStartsAt)
+		/// <summary>
+		/// Gets the last date in month.
+		/// </summary>
+		/// <param name="theDate">The date.</param>
+		/// <param name="culture">The culture.</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: robink
+		/// Created date: 2007-12-20
+		/// </remarks>
+		public static DateTime GetLastDateInMonth(DateTime theDate, CultureInfo culture)
 		{
-			var currentDayOfWeek = (int)theDate.DayOfWeek;
+			return GetLastDateInMonth(theDate, culture.Calendar);
+		}
 
-			var differenceAsDays = currentDayOfWeek - (int)workweekStartsAt;
+		/// <summary>
+		/// Gets the last date in month.
+		/// </summary>
+		/// <param name="theDate">The date.</param>
+		/// <param name="calendar">The calendar.</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: robink
+		/// Created date: 2008-05-20
+		/// </remarks>
+		public static DateTime GetLastDateInMonth(DateTime theDate, Calendar calendar)
+		{
+			var year = calendar.GetYear(theDate);
+			var month = calendar.GetMonth(theDate);
+			var era = calendar.GetEra(theDate);
+
+			return calendar.ToDateTime(
+				year,
+				month,
+				calendar.GetDaysInMonth(year, month, era),
+				0,
+				0,
+				0,
+				0,
+				era);
+		}
+
+		/// <summary>
+		/// Gets the first date in month.
+		/// </summary>
+		/// <param name="theDate">The date.</param>
+		/// <param name="culture">The culture.</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: robink
+		/// Created date: 2007-12-20
+		/// </remarks>
+		public static DateTime GetFirstDateInMonth(DateTime theDate, CultureInfo culture)
+		{
+			return GetFirstDateInMonth(theDate, culture.Calendar);
+		}
+
+		/// <summary>
+		/// Gets the first date in month.
+		/// </summary>
+		/// <param name="theDate">The date.</param>
+		/// <param name="calendar">The calendar.</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: robink
+		/// Created date: 2008-05-20
+		/// </remarks>
+		public static DateTime GetFirstDateInMonth(DateTime theDate, Calendar calendar)
+		{
+			return calendar.ToDateTime(
+				calendar.GetYear(theDate),
+				calendar.GetMonth(theDate),
+				1,
+				0,
+				0,
+				0,
+				0,
+				calendar.GetEra(theDate));
+		}
+
+		/// <summary>
+		/// Gets the first date in week.
+		/// </summary>
+		/// <param name="theDate">The date.</param>
+		/// <param name="culture">The culture.</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: robink
+		/// Created date: 2007-12-20
+		/// </remarks>
+		public static DateTime GetFirstDateInWeek(DateTime theDate, CultureInfo culture)
+		{
+			var firstDayOfWeek = (int) culture.DateTimeFormat.FirstDayOfWeek;
+			var currentDayOfWeek = (int) theDate.DayOfWeek;
+
+			var differenceAsDays = currentDayOfWeek - firstDayOfWeek;
 			if (differenceAsDays < 0) differenceAsDays += 7;
 
 			return theDate.AddDays(-differenceAsDays);
 		}
 
-        /// <summary>
-        /// Gets the last date in week.
-        /// </summary>
-        /// <param name="theDate">The date.</param>
-        /// <param name="culture">The culture.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-12-20
-        /// </remarks>
-        public static DateTime GetLastDateInWeek(DateTime theDate, CultureInfo culture)
-        {
-            return GetFirstDateInWeek(theDate, culture).AddDays(6);
-        }
+		///<summary>
+		/// Used when getting the first date in work week for person
+		///</summary>
+		///<param name="theDate"></param>
+		///<param name="workweekStartsAt"></param>
+		///<returns></returns>
+		public static DateTime GetFirstDateInWeek(DateTime theDate, DayOfWeek workweekStartsAt)
+		{
+			var currentDayOfWeek = (int) theDate.DayOfWeek;
 
-        ///<summary>
-        /// Used when getting the last date in work week for person
-        ///</summary>
-        ///<param name="theDate"></param>
-        ///<param name="workweekStartsAt"></param>
-        ///<returns></returns>
-        public static DateTime GetLastDateInWeek(DateTime theDate, DayOfWeek workweekStartsAt)
-        {
-            return GetFirstDateInWeek(theDate, workweekStartsAt).AddDays(6);
-        }
+			var differenceAsDays = currentDayOfWeek - (int) workweekStartsAt;
+			if (differenceAsDays < 0) differenceAsDays += 7;
+
+			return theDate.AddDays(-differenceAsDays);
+		}
+
+		public static DateOnly GetFirstDateInWeek(DateOnly theDate, DayOfWeek workweekStartsAt)
+		{
+			var currentDayOfWeek = (int) theDate.DayOfWeek;
+
+			var differenceAsDays = currentDayOfWeek - (int) workweekStartsAt;
+			if (differenceAsDays < 0) differenceAsDays += 7;
+
+			return theDate.AddDays(-differenceAsDays);
+		}
+
+		/// <summary>
+		/// Gets the last date in week.
+		/// </summary>
+		/// <param name="theDate">The date.</param>
+		/// <param name="culture">The culture.</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: robink
+		/// Created date: 2007-12-20
+		/// </remarks>
+		public static DateTime GetLastDateInWeek(DateTime theDate, CultureInfo culture)
+		{
+			return GetFirstDateInWeek(theDate, culture).AddDays(6);
+		}
+
+		///<summary>
+		/// Used when getting the last date in work week for person
+		///</summary>
+		///<param name="theDate"></param>
+		///<param name="workweekStartsAt"></param>
+		///<returns></returns>
+		public static DateTime GetLastDateInWeek(DateTime theDate, DayOfWeek workweekStartsAt)
+		{
+			return GetFirstDateInWeek(theDate, workweekStartsAt).AddDays(6);
+		}
 
 		public static DateOnly GetLastDateInWeek(DateOnly theDate, DayOfWeek workweekStartsAt)
 		{
 			return GetFirstDateInWeek(theDate, workweekStartsAt).AddDays(6);
 		}
 
-        /// <summary>
-        /// Gets the week period using the the TimeZone and Culture.
-        /// </summary>
-        /// <param name="theDate">The date.</param>
-        /// <param name="culture">The culture.</param>
-        /// <returns></returns>
-        /// <remarks>
-        ///  Created by: Ola
-        ///  Created date: 2008-08-14    
-        /// </remarks>
-        public static DateOnlyPeriod GetWeekPeriod(DateOnly theDate, CultureInfo culture)
-        {
-            var localStartDate = GetFirstDateInWeek(theDate.Date, culture);
-            var localEndDate = localStartDate.AddDays(6);
+		/// <summary>
+		/// Gets the week period using the the TimeZone and Culture.
+		/// </summary>
+		/// <param name="theDate">The date.</param>
+		/// <param name="culture">The culture.</param>
+		/// <returns></returns>
+		/// <remarks>
+		///  Created by: Ola
+		///  Created date: 2008-08-14    
+		/// </remarks>
+		public static DateOnlyPeriod GetWeekPeriod(DateOnly theDate, CultureInfo culture)
+		{
+			var localStartDate = GetFirstDateInWeek(theDate.Date, culture);
+			var localEndDate = localStartDate.AddDays(6);
 
-            return new DateOnlyPeriod(new DateOnly(localStartDate), new DateOnly(localEndDate));
-        }
+			return new DateOnlyPeriod(new DateOnly(localStartDate), new DateOnly(localEndDate));
+		}
 
-        ///<summary>
-        /// Used when getting a work week for person
-        ///</summary>
-        ///<param name="theDate"></param>
-        ///<param name="workweekStartsAt"></param>
-        ///<returns></returns>
-        public static DateOnlyPeriod GetWeekPeriod(DateOnly theDate, DayOfWeek workweekStartsAt)
-        {
-            var localStartDate = GetFirstDateInWeek(theDate.Date, workweekStartsAt);
-            var localEndDate = localStartDate.AddDays(6);
+		///<summary>
+		/// Used when getting a work week for person
+		///</summary>
+		///<param name="theDate"></param>
+		///<param name="workweekStartsAt"></param>
+		///<returns></returns>
+		public static DateOnlyPeriod GetWeekPeriod(DateOnly theDate, DayOfWeek workweekStartsAt)
+		{
+			var localStartDate = GetFirstDateInWeek(theDate.Date, workweekStartsAt);
+			var localEndDate = localStartDate.AddDays(6);
 
-            return new DateOnlyPeriod(new DateOnly(localStartDate), new DateOnly(localEndDate));
-        }
+			return new DateOnlyPeriod(new DateOnly(localStartDate), new DateOnly(localEndDate));
+		}
 
-        /// <summary>
-        /// Gets the days of week.
-        /// </summary>
-        /// <param name="culture">The culture.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-12-20
-        /// </remarks>
-        public static IList<DayOfWeek> GetDaysOfWeek(CultureInfo culture)
-        {
-            IList<DayOfWeek> daysToReturn = new List<DayOfWeek>();
+		/// <summary>
+		/// Gets the days of week.
+		/// </summary>
+		/// <param name="culture">The culture.</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: robink
+		/// Created date: 2007-12-20
+		/// </remarks>
+		public static IList<DayOfWeek> GetDaysOfWeek(CultureInfo culture)
+		{
+			IList<DayOfWeek> daysToReturn = new List<DayOfWeek>();
 
-            var current = (int)culture.DateTimeFormat.FirstDayOfWeek;
-            for (var i = 0; i < 7; i++)
-            {
-                daysToReturn.Add((DayOfWeek)current);
-                current++;
-                if (current > 6) current = 0;
-            }
+			var current = (int) culture.DateTimeFormat.FirstDayOfWeek;
+			for (var i = 0; i < 7; i++)
+			{
+				daysToReturn.Add((DayOfWeek) current);
+				current++;
+				if (current > 6) current = 0;
+			}
 
-            return daysToReturn;
-        }
+			return daysToReturn;
+		}
 
 		/// <summary>
 		/// Gets the week day names.
@@ -374,72 +374,72 @@ namespace Teleopti.Interfaces.Domain
 			return dayNames;
 		}
 
-        /// <summary>
-        /// Gets the Month name.
-        /// </summary>
-        /// <param name="theDate">The date.</param>
-        /// <param name="culture">The culture.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: jonas n
-        /// Created date: 2008-02-07
-        /// </remarks>
-        public  static string GetMonthName(DateTime theDate, CultureInfo culture)
-        {
-            var dateTimeFormatInfo = culture.DateTimeFormat;
-            return dateTimeFormatInfo.GetMonthName(CultureInfo.CurrentCulture.Calendar.GetMonth(theDate));
-        }
-
-        /// <summary>
-        /// Get a time string from minutes
-        /// </summary>
-        /// <param name="totalMinutes"></param>
-        /// <returns></returns>
-        public static string HourMinutesString(double totalMinutes)
-        {
-            if (totalMinutes < 1)
-                return "00:00";
-
-            var totMinutes = (long)totalMinutes;
-
-            var hours = totMinutes / 60;
-            var minutes = (int)(totMinutes - hours * 60);
-            string hourString;
-            string minutesString;
-            var numberInfo = CultureInfo.CurrentCulture.NumberFormat;
-
-            if (hours < 10)
-                hourString = "0" + hours.ToString(numberInfo);
-            else
-                hourString = hours.ToString(numberInfo);
-
-            if (minutes < 10)
-                minutesString = "0" + minutes.ToString(numberInfo);
-            else
-                minutesString = minutes.ToString(numberInfo);
-
-            return hourString + ":" + minutesString;
-        }
-
-        /// <summary>
-        /// Gets the min small date time.
-        /// </summary>
-        /// <value>The min small date time.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2009-01-28
-        /// </remarks>
-        public static DateTime MinSmallDateTime => minSmallDateTime;
+		/// <summary>
+		/// Gets the Month name.
+		/// </summary>
+		/// <param name="theDate">The date.</param>
+		/// <param name="culture">The culture.</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: jonas n
+		/// Created date: 2008-02-07
+		/// </remarks>
+		public static string GetMonthName(DateTime theDate, CultureInfo culture)
+		{
+			var dateTimeFormatInfo = culture.DateTimeFormat;
+			return dateTimeFormatInfo.GetMonthName(CultureInfo.CurrentCulture.Calendar.GetMonth(theDate));
+		}
 
 		/// <summary>
-        /// Gets the max small date time.
-        /// </summary>
-        /// <value>The max small date time.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2009-01-28
-        /// </remarks>
-        public static DateTime MaxSmallDateTime => maxSmallDateTime;
+		/// Get a time string from minutes
+		/// </summary>
+		/// <param name="totalMinutes"></param>
+		/// <returns></returns>
+		public static string HourMinutesString(double totalMinutes)
+		{
+			if (totalMinutes < 1)
+				return "00:00";
+
+			var totMinutes = (long) totalMinutes;
+
+			var hours = totMinutes / 60;
+			var minutes = (int) (totMinutes - hours * 60);
+			string hourString;
+			string minutesString;
+			var numberInfo = CultureInfo.CurrentCulture.NumberFormat;
+
+			if (hours < 10)
+				hourString = "0" + hours.ToString(numberInfo);
+			else
+				hourString = hours.ToString(numberInfo);
+
+			if (minutes < 10)
+				minutesString = "0" + minutes.ToString(numberInfo);
+			else
+				minutesString = minutes.ToString(numberInfo);
+
+			return hourString + ":" + minutesString;
+		}
+
+		/// <summary>
+		/// Gets the min small date time.
+		/// </summary>
+		/// <value>The min small date time.</value>
+		/// <remarks>
+		/// Created by: robink
+		/// Created date: 2009-01-28
+		/// </remarks>
+		public static DateTime MinSmallDateTime => minSmallDateTime;
+
+		/// <summary>
+		/// Gets the max small date time.
+		/// </summary>
+		/// <value>The max small date time.</value>
+		/// <remarks>
+		/// Created by: robink
+		/// Created date: 2009-01-28
+		/// </remarks>
+		public static DateTime MaxSmallDateTime => maxSmallDateTime;
 
 		// Matched to work similar to SQL small date time. https://msdn.microsoft.com/en-us/library/ms182418.aspx
 		public static DateTime GetSmallDateTime(DateTime value)
@@ -449,6 +449,16 @@ namespace Teleopti.Interfaces.Domain
 				return value.Date.Add(timeOfDay);
 
 			return value.Date.Add(timeOfDay).AddMinutes(1);
+		}
+
+		/// <summary>
+		/// Gets the DateOnly counterpart.
+		/// </summary>
+		/// <param name="dt"></param>
+		/// <returns></returns>
+		public static DateOnly ToDateOnly(this DateTime dt)
+		{
+			return new DateOnly(dt);
 		}
 	}
 }

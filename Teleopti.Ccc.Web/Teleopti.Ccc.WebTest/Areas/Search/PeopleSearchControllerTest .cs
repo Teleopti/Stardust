@@ -3,11 +3,14 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Claims;
 using System.Linq;
+using System.Security.Claims;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -15,6 +18,7 @@ using Teleopti.Ccc.Web.Areas.Search.Controllers;
 using Teleopti.Ccc.Web.Areas.Search.Models;
 using Teleopti.Ccc.WebTest.Areas.Global;
 using Teleopti.Interfaces.Domain;
+using Claim = System.IdentityModel.Claims.Claim;
 
 namespace Teleopti.Ccc.WebTest.Areas.Search
 {
@@ -52,16 +56,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 
 			person.SetOptionalColumnValue(optionalColumnValue, optionalColumn);
 
-			target = new PeopleSearchController(new FakePeopleSearchProvider(new[] {person}, new[] {optionalColumn}), loggonUser,
-				new FakePersonFinderReadOnlyRepository(), PersonRepository);
+			target = new PeopleSearchController(new FakePeopleSearchProvider(new[] { person }, new[] { optionalColumn }), loggonUser,
+				new FakePersonFinderReadOnlyRepository(), PersonRepository, PrincipalAuthorization.Current());
 
-			var result = ((dynamic) target).GetResult("Ashley", 10, 1, "");
+			var result = ((dynamic)target).GetResult("Ashley", 10, 1, "");
 
-			var optionalColumns = (IEnumerable<string>) result.Content.OptionalColumns;
+			var optionalColumns = (IEnumerable<string>)result.Content.OptionalColumns;
 			Assert.AreEqual(1, optionalColumns.Count());
 			Assert.AreEqual("Cell Phone", optionalColumns.First());
 
-			var peopleList = (IEnumerable<dynamic>) result.Content.People;
+			var peopleList = (IEnumerable<dynamic>)result.Content.People;
 			var first = peopleList.First();
 			Assert.AreEqual("TestSite/TestTeam", first.Team);
 			Assert.AreEqual("Ashley", first.FirstName);
@@ -71,7 +75,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			Assert.AreEqual("ashley.andeen@abc.com", first.Email);
 			Assert.AreEqual(leavingDate.ToShortDateString(), first.LeavingDate);
 
-			var optionalColumnValues = (IEnumerable<KeyValuePair<string, string>>) first.OptionalColumnValues;
+			var optionalColumnValues = (IEnumerable<KeyValuePair<string, string>>)first.OptionalColumnValues;
 			var columnValue = optionalColumnValues.First();
 			Assert.AreEqual("Cell Phone", columnValue.Key);
 			Assert.AreEqual("123456", columnValue.Value);
@@ -85,12 +89,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 
 			target =
 				new PeopleSearchController(
-					new FakePeopleSearchProvider(new[] {firstPerson, secondPerson}, new List<IOptionalColumn>()), loggonUser,
-					new FakePersonFinderReadOnlyRepository(), PersonRepository);
+					new FakePeopleSearchProvider(new[] { firstPerson, secondPerson }, new List<IOptionalColumn>()), loggonUser,
+					new FakePersonFinderReadOnlyRepository(), PersonRepository, PrincipalAuthorization.Current());
 
-			var result = ((dynamic) target).GetResult("a", 10, 1, "");
+			var result = ((dynamic)target).GetResult("a", 10, 1, "");
 
-			var peopleList = (IEnumerable<dynamic>) result.Content.People;
+			var peopleList = (IEnumerable<dynamic>)result.Content.People;
 			Assert.AreEqual(firstPerson.Name.FirstName, peopleList.First().FirstName);
 			Assert.AreEqual(secondPerson.Name.FirstName, peopleList.Last().FirstName);
 		}
@@ -108,11 +112,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 				PersonContractFactory.CreatePersonContract(), team));
 
 			target =
-				new PeopleSearchController(new FakePeopleSearchProvider(new[] {person, currentUser}, new List<IOptionalColumn>()),
-					loggonUser, new FakePersonFinderReadOnlyRepository(), PersonRepository);
+				new PeopleSearchController(new FakePeopleSearchProvider(new[] { person, currentUser }, new List<IOptionalColumn>()),
+					loggonUser, new FakePersonFinderReadOnlyRepository(), PersonRepository, PrincipalAuthorization.Current());
 
-			var result = ((dynamic) target).GetResult("", 10, 1, "");
-			var peopleList = (IEnumerable<dynamic>) result.Content.People;
+			var result = ((dynamic)target).GetResult("", 10, 1, "");
+			var peopleList = (IEnumerable<dynamic>)result.Content.People;
 
 			Assert.AreEqual(2, peopleList.Count());
 			Assert.AreEqual(person.Name.FirstName, peopleList.First().FirstName);
@@ -131,12 +135,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 
 			target =
 				new PeopleSearchController(
-					new FakePeopleSearchProvider(new[] {firstPerson, secondPerson, thirdPerson}, new List<IOptionalColumn>()),
-					loggonUser, new FakePersonFinderReadOnlyRepository(), PersonRepository);
+					new FakePeopleSearchProvider(new[] { firstPerson, secondPerson, thirdPerson }, new List<IOptionalColumn>()),
+					loggonUser, new FakePersonFinderReadOnlyRepository(), PersonRepository, PrincipalAuthorization.Current());
 
-			var result = ((dynamic) target).GetResult("a", 10, 1, "lastname:true;firstname:true;employmentnumber:true");
+			var result = ((dynamic)target).GetResult("a", 10, 1, "lastname:true;firstname:true;employmentnumber:true");
 
-			var peopleList = (IEnumerable<dynamic>) result.Content.People;
+			var peopleList = (IEnumerable<dynamic>)result.Content.People;
 			var pe = peopleList.ToList();
 			Assert.AreEqual(pe[0].EmploymentNumber, "1");
 			Assert.AreEqual(pe[1].EmploymentNumber, "2");
@@ -162,6 +166,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 				PageSize = 10,
 				PageIndex = 0
 			};
+
+			target =
+				new PeopleSearchController(
+					new FakePeopleSearchProvider(new[] {p1, p2, p3}, new List<IOptionalColumn>()), loggonUser,
+					PersonFinderRepository, PersonRepository, new FullPermission());
 
 			var result = target.FindPeople(inputModel);
 
@@ -201,6 +210,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 				PageSize = 10,
 				PageIndex = 0
 			};
+
+			target =
+				new PeopleSearchController(
+					new FakePeopleSearchProvider(new List<IPerson>(), new List<IOptionalColumn>()), loggonUser,
+					PersonFinderRepository, PersonRepository, new FullPermission());
 
 			var result = target.FindPeople(inputModel);
 			result.People.Count().Should().Be.EqualTo(10);
@@ -246,6 +260,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 				PageSize = 10,
 				PageIndex = 0
 			};
+
+			target =
+				new PeopleSearchController(
+					new FakePeopleSearchProvider(new[] { ash }, new List<IOptionalColumn>()), loggonUser,
+					PersonFinderRepository, PersonRepository, new FullPermission());
 
 			var result = target.FindPeople(inputModel);
 			result.People.Count().Should().Be.EqualTo(1);

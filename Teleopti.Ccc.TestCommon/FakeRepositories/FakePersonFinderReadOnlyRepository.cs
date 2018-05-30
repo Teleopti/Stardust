@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -32,14 +33,39 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			var personList = _personList.Where(x =>
 				x.Name.FirstName.ToLower().Contains(personFinderSearchCriteria.SearchValue.ToLower()));
+
+
 			var paginatedResult = personList.Skip((personFinderSearchCriteria.CurrentPage - 1) * personFinderSearchCriteria.PageSize).Take(personFinderSearchCriteria.PageSize);
 
-			var row = 0;
+			var personFinderDisplayRows = new List<PersonFinderDisplayRow>();
+
 			foreach (var personFinderDisplayRow in paginatedResult.Select(p => new PersonFinderDisplayRow { PersonId = p.Id.GetValueOrDefault(), FirstName = p.Name.FirstName, LastName = p.Name.LastName }))
 			{
-				personFinderSearchCriteria.SetRow(row, personFinderDisplayRow);
-				row++;
+				personFinderDisplayRows.Add(personFinderDisplayRow);
 			}
+
+			personFinderSearchCriteria.SetRows(personFinderDisplayRows);
+
+			personFinderSearchCriteria.TotalRows = personList.Count();
+		}
+
+		public void FindPeopleWithDataPermission(IPeoplePersonFinderSearchWithPermissionCriteria personFinderSearchCriteria)
+		{
+			var personList = _personList.Where(x =>
+				x.Name.FirstName.ToLower().Contains(personFinderSearchCriteria.SearchValue.ToLower()));
+
+
+			var paginatedResult = personList.Skip((personFinderSearchCriteria.CurrentPage - 1) * personFinderSearchCriteria.PageSize).Take(personFinderSearchCriteria.PageSize);
+
+			var personFinderDisplayRows = new List<PersonFinderDisplayRow>();
+
+			foreach (var personFinderDisplayRow in paginatedResult.Select(p => new PersonFinderDisplayRow { PersonId = p.Id.GetValueOrDefault(), FirstName = p.Name.FirstName, LastName = p.Name.LastName }))
+			{
+				personFinderDisplayRows.Add(personFinderDisplayRow);
+			}
+
+			personFinderSearchCriteria.SetRows(personFinderDisplayRows);
+
 			personFinderSearchCriteria.TotalRows = personList.Count();
 		}
 

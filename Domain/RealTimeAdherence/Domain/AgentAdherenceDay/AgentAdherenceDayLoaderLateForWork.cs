@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
@@ -10,7 +12,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 {
-	
 	public class AgentAdherenceDayLoaderLateForWork : IAgentAdherenceDayLoader
 	{
 		private readonly INow _now;
@@ -56,18 +57,11 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 					.Where(x => x != null)
 					.ToArray();
 
-			var obj = new AgentAdherenceDayWithLateForWork();
-			obj.Load(
-				personId,
-				now,
-				period,
-				shift,
-				events
-			);
+			var obj = new AgentAdherenceDayWithLateForWork(personId, period, shift, now);
+			events.ForEach(x => obj.Apply((dynamic) x));
+			obj.ApplyDone();
 
 			return obj;
 		}
 	}
-
-	
 }

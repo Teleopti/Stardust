@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Interfaces.Domain;
 
@@ -113,13 +114,32 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		///</summary>
 		int SortDirection { get; set; }
 
-
 		///<summary>
 		/// Set row
 		///</summary>
 		///<param name="rowNumber"></param>
 		///<param name="theRow"></param>
-		void SetRow(int rowNumber, IPersonFinderDisplayRow theRow);
+		void SetRow(IPersonFinderDisplayRow theRow);
+
+		void SetRows(IEnumerable<IPersonFinderDisplayRow> rows);
+	}
+
+	public interface IPeoplePersonFinderSearchWithPermissionCriteria : IPeoplePersonFinderSearchCriteria
+	{
+		/// <summary>
+		/// The date to use when checking data permission
+		/// </summary>
+		DateOnly PermissionDate { get; set; }
+		
+		/// <summary>
+		/// The user to check data permission for when searching
+		/// </summary>
+		Guid PermissionUserId { get; set; }
+
+		/// <summary>
+		/// The ApplicationFunction ForeignId to use when checking data permission on searchresult
+		/// </summary>
+		string PermissionAppFuncForeignId { get; set; }
 	}
 
 	/// <summary>

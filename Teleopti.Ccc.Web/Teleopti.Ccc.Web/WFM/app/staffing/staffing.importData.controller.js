@@ -59,42 +59,42 @@
 		resetExportPeriod();
 		
 
-		function getGanttData() {
-			vm.data = {};
-			var parameterData = null;
-			if (vm.selectedSkill != null) {
-				vm.localSkill = vm.selectedSkill;
-				vm.localSkillName = vm.localSkill.Name;
-				var skillId = vm.selectedSkill.Id;
-				parameterData = { SkillId: skillId };
-				var gantSkillDataQuery = staffingService.getGanttDataForOneSkill.get(parameterData);
-				gantSkillDataQuery.$promise.then(function (response) {
-					vm.gantData = response;
-					vm.data = vm.gantData.GanttDataPerBpoList;
-				});
-			}
-			else if (vm.selectedSkillArea != null) {
-				vm.localSkill = vm.selectedSkillArea;
-				vm.localSkillName = vm.localSkill.Name;
-				var skillGroup = vm.selectedSkillArea.Id;
+		//function getGanttData() {
+		//	vm.data = {};
+		//	var parameterData = null;
+		//	if (vm.selectedSkill != null) {
+		//		vm.localSkill = vm.selectedSkill;
+		//		vm.localSkillName = vm.localSkill.Name;
+		//		var skillId = vm.selectedSkill.Id;
+		//		parameterData = { SkillId: skillId };
+		//		var gantSkillDataQuery = staffingService.getGanttDataForOneSkill.get(parameterData);
+		//		gantSkillDataQuery.$promise.then(function (response) {
+		//			vm.gantData = response;
+		//			vm.data = vm.gantData.GanttDataPerBpoList;
+		//		});
+		//	}
+		//	else if (vm.selectedSkillArea != null) {
+		//		vm.localSkill = vm.selectedSkillArea;
+		//		vm.localSkillName = vm.localSkill.Name;
+		//		var skillGroup = vm.selectedSkillArea.Id;
 
-				parameterData = { SkillGroupId: skillGroup };
-				var gantSkillGroupDataQuery = staffingService.getGanttDataForOneSkillGroup.get(parameterData);
-				gantSkillGroupDataQuery.$promise.then(function (response) {
-					vm.gantData = response;
-					vm.data = vm.gantData.GanttDataPerBpoList;
-				});
-			}
-			else {
-				vm.localSkill = null;
-				vm.localSkillName = vm.AllSkills;
-				var gantDataQuery = staffingService.getGanttData.get();
-				gantDataQuery.$promise.then(function (response) {
-					vm.gantData = response;
-					vm.data = vm.gantData.GanttDataPerBpoList;
-				});
-			}
-		}
+		//		parameterData = { SkillGroupId: skillGroup };
+		//		var gantSkillGroupDataQuery = staffingService.getGanttDataForOneSkillGroup.get(parameterData);
+		//		gantSkillGroupDataQuery.$promise.then(function (response) {
+		//			vm.gantData = response;
+		//			vm.data = vm.gantData.GanttDataPerBpoList;
+		//		});
+		//	}
+		//	else {
+		//		vm.localSkill = null;
+		//		vm.localSkillName = vm.AllSkills;
+		//		var gantDataQuery = staffingService.getGanttData.get();
+		//		gantDataQuery.$promise.then(function (response) {
+		//			vm.gantData = response;
+		//			vm.data = vm.gantData.GanttDataPerBpoList;
+		//		});
+		//	}
+		//}
 
         function resetFileLists() {
             vm.invalidFile = {};
@@ -124,7 +124,7 @@
                 query.$promise.then(function (response) {
                     if (response.Success) {
 						vm.isSuccessful = true;
-						getGanttData();
+						//getGanttData();
 					} else {
                         vm.isFailed = true;
                         vm.errors = response.ErrorInformation;
@@ -179,7 +179,7 @@
 
 				}
 				vm.allSkillAreas = response.SkillAreas;
-				getGanttData();
+				//getGanttData();
 			});
 		}
 
@@ -220,23 +220,23 @@
 		function selectedSkillChange(skill) {
 			if (skill == null) return;
 			selectSkill(skill);
-			getGanttData();
+			//getGanttData();
 		}
 
 		function clearSelectedSkill() {
 			vm.selectedSkill = null;
-			getGanttData();
+			//getGanttData();
 		}
 
 		function clearSelectedSkillGroup() {
 			vm.selectedSkillArea = null;
-			getGanttData();
+			//getGanttData();
 		}
 
 		function selectedAreaChange(area) {
 			vm.selectedSkillArea = area;
 			vm.selectedSkill = null;
-			getGanttData();
+			//getGanttData();
 		}
 
 		function selectSkill(skill) {

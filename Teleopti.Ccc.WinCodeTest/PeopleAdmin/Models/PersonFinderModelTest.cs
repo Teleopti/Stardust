@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models;
 using Teleopti.Interfaces.Domain;
 
@@ -16,13 +17,13 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         private MockRepository _mocks;
         private IPersonFinderReadOnlyRepository _personFinderReadOnlyRepository;
         private PersonFinderModel _target;
-		  private IPeoplePersonFinderSearchCriteria _searchCriteria;
+		private IPeoplePersonFinderSearchCriteria _searchCriteria;
         
         [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
-            _searchCriteria = _mocks.StrictMock<IPeoplePersonFinderSearchCriteria>();
+            _searchCriteria = _mocks.StrictMock<IPeoplePersonFinderSearchWithPermissionCriteria>();
             _personFinderReadOnlyRepository = _mocks.StrictMock<IPersonFinderReadOnlyRepository>();
             _target = new PersonFinderModel(_personFinderReadOnlyRepository, _searchCriteria);
         }
@@ -36,10 +37,10 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void ShouldCallRepositoryOnFind()
         {
-            _searchCriteria = new PeoplePersonFinderSearchCriteria(PersonFinderField.All, "aa", 5,
+			_searchCriteria = new PeoplePersonFinderSearchCriteria(PersonFinderField.All, "aa", 5,
                                                              new DateOnly(DateTime.Today.AddMonths(-2)),2,0);
-			_searchCriteria.SetRow(0, new PersonFinderDisplayRow { BusinessUnitId = Guid.NewGuid(), PersonId = Guid.Empty });
-			_searchCriteria.SetRow(1, new PersonFinderDisplayRow{BusinessUnitId = Guid.Empty, PersonId = Guid.NewGuid()});
+			_searchCriteria.SetRow(new PersonFinderDisplayRow { BusinessUnitId = Guid.NewGuid(), PersonId = Guid.Empty });
+			_searchCriteria.SetRow(new PersonFinderDisplayRow{BusinessUnitId = Guid.Empty, PersonId = Guid.NewGuid()});
             _target = new PersonFinderModel(_personFinderReadOnlyRepository, _searchCriteria);
             
             Expect.Call(() => _personFinderReadOnlyRepository.FindPeople(_searchCriteria));

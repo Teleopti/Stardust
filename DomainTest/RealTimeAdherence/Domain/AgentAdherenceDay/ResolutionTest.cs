@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 			result.OutOfAdherences().Single().StartTime.Should().Be("2018-02-20 08:00:00".Utc());
 			result.OutOfAdherences().Single().EndTime.Should().Be("2018-02-20 08:12:34".Utc());
 		}
-		
+
 		[Test]
 		public void ShouldCalculatePercentageWithSecondResolution()
 		{
@@ -112,6 +112,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 
 			result.Percentage().Should().Be(25);
 		}
+
 		[Test]
 		public void ShouldHaveRecordedOutOfAdherencesWithSecondResolution()
 		{
@@ -146,7 +147,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 
 			result.OutOfAdherences().Should().Be.Empty();
 		}
-		
+
 		[Test]
 		public void ShouldNotHaveOutOfAdherenceUntilNowShorterThanOneSecond()
 		{
@@ -161,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 
 			result.OutOfAdherences().Should().Be.Empty();
 		}
-		
+
 		[Test]
 		public void ShouldNotHaveOutOfAdherencesWithNanoSecondResolution()
 		{
@@ -178,6 +179,25 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 
 			result.OutOfAdherences().Should().Be.Empty();
 		}
-		
+
+		[Test]
+		[Ignore("Laterz ;)")]
+		public void ShouldSplitOutOfAdherencePeriodBecauseOfTinyNeutralPeriod()
+		{
+			Now.Is("2018-03-26 23:00");
+			var person = Guid.NewGuid();
+			Database
+				.WithAgent(person)
+				.WithHistoricalStateChange("2018-03-26 08:00:00", Adherence.Out)
+				.WithHistoricalStateChange("2018-03-26 08:30:00.100", Adherence.Neutral)
+				.WithHistoricalStateChange("2018-03-26 08:30:00.200", Adherence.Out)
+				.WithHistoricalStateChange("2018-03-26 09:00:00", Adherence.In)
+				;
+
+			var result = Target.Load(person, "2018-03-26".Date());
+
+			result.OutOfAdherences().Single().StartTime.Should().Be("2018-03-26 08:00:00".Utc());
+			result.OutOfAdherences().Single().EndTime.Should().Be("2018-03-26 09:00:00".Utc());
+		}
 	}
 }

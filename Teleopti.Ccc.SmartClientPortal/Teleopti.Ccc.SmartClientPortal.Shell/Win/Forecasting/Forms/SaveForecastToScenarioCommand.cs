@@ -180,9 +180,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 
         public void InvokeProgressReporter(CustomEventArgs<int> e)
         {
-            EventHandler<CustomEventArgs<int>> handler = ProgressReporter;
-            if (handler != null) handler(this, e);
-        }
+			ProgressReporter?.Invoke(this, e);
+		}
     }
 
     public class SaveForecastToScenarioCommandResult
