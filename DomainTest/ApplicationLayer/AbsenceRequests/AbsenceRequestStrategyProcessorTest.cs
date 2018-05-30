@@ -577,6 +577,34 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			queuedAbsenceRequests.First().Select(x => x.PersonRequest).Should().Contain(Guid.Empty);
 		}
 
+		[Test]
+		public void ShouldHandleOverlappingRequestsInSameBatch()
+		{
+			Now.Is(new DateTime(2018,05,24)); 
+
+			var requestDateEastern = new DateTime(2018,05,29,4,0,0,DateTimeKind.Utc);
+			var requestDateUtc = new DateTime(2018,05,29,0,0,0,DateTimeKind.Utc);
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = requestDateEastern,
+				EndDateTime = requestDateEastern.AddDays(1).AddMinutes(-1),
+				Created = _now.AddMinutes(-20),
+				PersonRequest = Guid.Empty
+			});
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = requestDateUtc,
+				EndDateTime = requestDateUtc.AddDays(1).AddMinutes(-1),
+				Created = _now.AddMinutes(-21),
+				PersonRequest = Guid.NewGuid()
+			});
+
+			var queuedAbsenceRequests = Target.Get(_nearFutureThreshold, _farFutureThreshold, _pastThreshold, _initialPeriod, _windowSize);
+			queuedAbsenceRequests.Count.Should().Be.EqualTo(1);
+			queuedAbsenceRequests.First().Count().Should().Be(2);
+		}
+
 		private IPersonRequest createAbsenceRequest(DateTime startDateTime, DateTime endDateTime)
 		{
 			var personRequestFactory = new PersonRequestFactory();
