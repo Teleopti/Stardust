@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.TestCommon;
@@ -94,13 +95,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		public void ShouldEvaluate()
 		{
 			var forecastViewModelFactory = MockRepository.GenerateMock<IForecastViewModelFactory>();
-			var evaluateInput = new EvaluateInput();
 			var workloadForecastingViewModel = new WorkloadEvaluateViewModel();
-			forecastViewModelFactory.Stub(x => x.Evaluate(evaluateInput)).Return(workloadForecastingViewModel);
+			forecastViewModelFactory.Stub(x => x.Evaluate(Guid.Empty)).Return(workloadForecastingViewModel);
 			var target = new ForecastController(null, null, forecastViewModelFactory, null, null, null, null, null, null, null,
 				null, null, null);
 
-			var result = target.Evaluate(evaluateInput);
+			var result = target.Evaluate(Guid.Empty);
 
 			result.Result.Should().Be.EqualTo(workloadForecastingViewModel);
 		}
@@ -127,15 +127,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var workloadId = Guid.NewGuid();
 			var intradayPatternViewModelFactory = MockRepository.GenerateMock<IIntradayPatternViewModelFactory>();
 			var intradayPatternViewModel = new IntradayPatternViewModel();
-			var input = new IntradayPatternInput
-			{
-				WorkloadId = workloadId
-			};
-			intradayPatternViewModelFactory.Stub(x => x.Create(input)).Return(intradayPatternViewModel);
+			intradayPatternViewModelFactory.Stub(x => x.Create(workloadId)).Return(intradayPatternViewModel);
 			var target = new ForecastController(null, null, null, null, intradayPatternViewModelFactory, null, null, null, null,
 				null, null, null, null);
 			
-			var result = target.IntradayPattern(input);
+			var result = target.IntradayPattern(workloadId);
 
 			result.Result.Should().Be.EqualTo(intradayPatternViewModel);
 		}

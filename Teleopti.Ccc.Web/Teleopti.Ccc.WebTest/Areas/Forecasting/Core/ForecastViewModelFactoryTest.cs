@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -14,7 +15,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Forecasting.Angel;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.Web.Areas.Forecasting.Core;
 using Teleopti.Ccc.Web.Areas.Forecasting.Models;
 using Teleopti.Interfaces.Domain;
 
@@ -71,11 +71,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			var skill = SkillFactory.CreateSkillWithWorkloadAndSources();
 			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
 			var workload = skill.WorkloadCollection.Single();
-			var evaluateInput = new EvaluateInput
-			{
-				WorkloadId = workload.Id.Value
-			};
-			workloadRepository.Stub(x => x.Get(evaluateInput.WorkloadId)).Return(workload);
+			workloadRepository.Stub(x => x.Get(workload.Id.Value)).Return(workload);
 			var historicalData = MockRepository.GenerateMock<IHistoricalData>();
 			var forecastWorkloadEvaluator = MockRepository.GenerateMock<IForecastWorkloadEvaluator>();
 			forecastWorkloadEvaluator.Stub(x => x.Evaluate(workload)).Return(new WorkloadAccuracy() { Accuracies = new MethodAccuracy[] { } });
@@ -84,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			historicalPeriodProvider.Stub(x => x.AvailablePeriod(workload)).Return(availablePeriod);
 			historicalData.Stub(x => x.Fetch(Arg<IWorkload>.Is.Equal(workload), Arg<DateOnlyPeriod>.Is.Anything)).Return(new TaskOwnerPeriod(DateOnly.Today, new ITaskOwner[] { }, TaskOwnerPeriodType.Other));
 
-			target.Evaluate(evaluateInput);
+			target.Evaluate(workload.Id.Value);
 
 			historicalData.AssertWasCalled(x => x.Fetch(workload, new DateOnlyPeriod(2014, 3, 16, 2015, 3, 15)));
 		}
@@ -95,11 +91,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			var skill = SkillFactory.CreateSkillWithWorkloadAndSources();
 			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
 			var workload = skill.WorkloadCollection.Single();
-			var evaluateInput = new EvaluateInput
-			{
-				WorkloadId = workload.Id.Value
-			};
-			workloadRepository.Stub(x => x.Get(evaluateInput.WorkloadId)).Return(workload);
+			workloadRepository.Stub(x => x.Get(workload.Id.Value)).Return(workload);
 
 			var date1 = new DateOnly(2014, 12, 9);
 			var date2 = new DateOnly(2014, 12, 10);
@@ -152,7 +144,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 				});
 			var target = new ForecastViewModelFactory(forecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData, null, null, MockRepository.GenerateMock<IWorkloadNameBuilder>());
 
-			var result = target.Evaluate(evaluateInput);
+			var result = target.Evaluate(workload.Id.Value);
 
 			dynamic firstDay = result.Days.First();
 			((object)firstDay.date).Should().Be.EqualTo(date1.Date);
@@ -174,11 +166,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			var skill = SkillFactory.CreateSkillWithWorkloadAndSources();
 			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
 			var workload = skill.WorkloadCollection.Single();
-			var evaluateInput = new EvaluateInput
-			{
-				WorkloadId = workload.Id.Value
-			};
-			workloadRepository.Stub(x => x.Get(evaluateInput.WorkloadId)).Return(workload);
+			workloadRepository.Stub(x => x.Get(workload.Id.Value)).Return(workload);
 			var forecastWorkloadEvaluator = MockRepository.GenerateMock<IForecastWorkloadEvaluator>();
 			var availablePeriod = new DateOnlyPeriod(2012, 12, 20, 2014, 12, 20);
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
@@ -205,13 +193,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			forecastMisc.Stub(x => x.WorkloadName(workload.Skill.Name, workload.Name)).Return(workloadName);
 			var target = new ForecastViewModelFactory(forecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData, null, null, forecastMisc);
 
-			var result = target.Evaluate(evaluateInput);
+			var result = target.Evaluate(workload.Id.Value);
 
 			result.WorkloadId.Should().Be.EqualTo(workload.Id.Value);
 			result.Name.Should().Be.EqualTo(workloadName);
-			((ForecastMethodType)result.ForecastMethodRecommended.Id).Should().Be.EqualTo(ForecastMethodType.TeleoptiClassicLongTermWithTrend);
-			result.ForecastMethods.Any(x => (int)x.AccuracyNumber == 89 && x.ForecastMethodType == ForecastMethodType.TeleoptiClassicLongTerm).Should().Be.True();
-			result.ForecastMethods.Any(x => (int)x.AccuracyNumber == 92 && x.ForecastMethodType == ForecastMethodType.TeleoptiClassicLongTermWithTrend).Should().Be.True();
+			dynamic forecastMethod = result.ForecastMethodRecommended;
+
+			Type t = forecastMethod.GetType(); // get object's type
+			PropertyInfo propertyId = t.GetProperty("Id"); // look up for the property:
+			PropertyInfo propertyAccuracyNumber = t.GetProperty("AccuracyNumber"); // look up for the property:
+			ForecastMethodType id = (ForecastMethodType)propertyId.GetValue(forecastMethod, null); // get the value
+
+			id.Should().Be.EqualTo(ForecastMethodType.TeleoptiClassicLongTermWithTrend);
+			result.ForecastMethods.Any(x => (int)propertyAccuracyNumber.GetValue(forecastMethod, null) == 89 && x.ForecastMethodType == ForecastMethodType.TeleoptiClassicLongTerm).Should().Be.True();
+			result.ForecastMethods.Any(x => (int)propertyAccuracyNumber.GetValue(forecastMethod, null) == 92 && x.ForecastMethodType == ForecastMethodType.TeleoptiClassicLongTermWithTrend).Should().Be.True();
 			result.Days.Any().Should().Be.False();
 		}
 	}

@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Models;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Core.IoC

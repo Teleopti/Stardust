@@ -11,9 +11,6 @@ using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
-using Teleopti.Ccc.Web.Areas.Forecasting.Core;
-using Teleopti.Ccc.Web.Areas.Forecasting.Models;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
@@ -27,11 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			var skill = SkillFactory.CreateSkillWithWorkloadAndSources();
 			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
 			var workload = skill.WorkloadCollection.Single();
-			var input = new IntradayPatternInput
-			{
-				WorkloadId = workload.Id.Value
-			};
-			workloadRepository.Stub(x => x.Get(input.WorkloadId)).Return(workload);
+			workloadRepository.Stub(x => x.Get(workload.Id.Value)).Return(workload);
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
 			var templatePeriod = new DateOnlyPeriod(2015, 1, 1, 2015, 3, 31);
 			historicalPeriodProvider.Stub(x => x.AvailableIntradayTemplatePeriod(workload)).Return(templatePeriod);
@@ -52,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			userCulture.Stub(x => x.GetCulture()).Return(new System.Globalization.CultureInfo("en-US"));
 			var target = new IntradayPatternViewModelFactory(intradayForecaster, workloadRepository, historicalPeriodProvider, userCulture);
 			
-			var result = target.Create(input);
+			var result = target.Create(workload.Id.Value);
 
 			result.WorkloadId.Should().Be.EqualTo(workload.Id.Value);
 			result.WeekDays.Second().DayOfWeek.Should().Be.EqualTo(DayOfWeek.Monday);

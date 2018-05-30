@@ -87,9 +87,9 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		}
 
 		[UnitOfWork, HttpPost, Route("api/Forecasting/Evaluate")]
-		public virtual Task<WorkloadEvaluateViewModel> Evaluate(EvaluateInput input)
+		public virtual Task<WorkloadEvaluateViewModel> Evaluate(Guid workloadId)
 		{
-			return Task.FromResult(_forecastViewModelFactory.Evaluate(input));
+			return Task.FromResult(_forecastViewModelFactory.Evaluate(workloadId));
 		}
 
 		[UnitOfWork, HttpPost, Route("api/Forecasting/QueueStatistics")]
@@ -122,9 +122,9 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		}
 
 		[HttpPost, Route("api/Forecasting/IntradayPattern"), UnitOfWork]
-		public virtual Task<IntradayPatternViewModel> IntradayPattern(IntradayPatternInput input)
+		public virtual Task<IntradayPatternViewModel> IntradayPattern(Guid workloadId)
 		{
-			return Task.FromResult(_intradayPatternViewModelFactory.Create(input));
+			return Task.FromResult(_intradayPatternViewModelFactory.Create(workloadId));
 		}
 
 		[UnitOfWork, HttpPost, Route("api/Forecasting/Campaign")]
