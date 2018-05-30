@@ -11,7 +11,7 @@
 				selectedDate: '=',
 				selectedTimezone: '<',
 				selectedSortOption: '<',
-				showWarnings: '=?',				
+				showWarnings: '=?',
 				paginationOptions: '<?',
 				tableStyle: '='
 			},
@@ -23,8 +23,8 @@
 		};
 	}
 
-	ScheduleTableController.$inject = ['$scope','$state', 'PersonSelection', 'ScheduleManagement', 'ValidateRulesService', 'ScheduleNoteManagementService','Toggle', 'teamsPermissions'];
-	function ScheduleTableController($scope, $state, personSelectionSvc, ScheduleMgmt, ValidateRulesService, ScheduleNoteMgmt, toggleSvc, teamsPermissions) {
+	ScheduleTableController.$inject = ['$scope', '$state', 'PersonSelection', 'ScheduleManagement', 'ValidateRulesService', 'ScheduleNoteManagementService', 'Toggle', 'teamsPermissions', 'serviceDateFormatHelper'];
+	function ScheduleTableController($scope, $state, personSelectionSvc, ScheduleMgmt, ValidateRulesService, ScheduleNoteMgmt, toggleSvc, teamsPermissions, serviceDateFormatHelper) {
 		var vm = this;
 
 		vm.updateAllSelectionInCurrentPage = function (isAllSelected) {
@@ -64,7 +64,7 @@
 		};
 
 		vm.togglePerson = function (personSchedule, $event) {
-			if($event === null){
+			if ($event === null) {
 				personSchedule.IsSelected = !personSchedule.IsSelected;
 				vm.updatePersonSelection(personSchedule);
 			}
@@ -74,18 +74,18 @@
 			}
 		};
 
-		vm.modifyShiftCategoryForAgent = function($event, personSchedule){
+		vm.modifyShiftCategoryForAgent = function ($event, personSchedule) {
 			if (!vm.permissions.HasEditShiftCategoryPermission) {
 				return;
 			}
 
 			$event.stopPropagation();
 
-			if(!personSchedule.IsSelected){
+			if (!personSchedule.IsSelected) {
 				vm.togglePerson(personSchedule, null);
 			}
 
-			if(personSchedule.IsSelected){
+			if (personSchedule.IsSelected) {
 				var activeCmdLabel = "EditShiftCategory";
 
 				$scope.$emit('teamSchedule.trigger.command', {
@@ -99,7 +99,7 @@
 			if (!personSchedule.Shifts) return false;
 
 			var result = false;
-			personSchedule.Shifts.forEach(function(shift) {
+			personSchedule.Shifts.forEach(function (shift) {
 				if (moment(shift.ProjectionTimeRange.Start) < personSchedule.ViewRange.startMoment)
 					result = true;
 			});
@@ -117,19 +117,19 @@
 			return result;
 		};
 
-
-		vm.checkBusinessRulesWarningMessage = function(personId){
+		vm.checkBusinessRulesWarningMessage = function (personId) {
 			return ValidateRulesService.checkValidationForPerson(personId);
 		};
 
-		vm.checkIsLoadedValidationForPerson = function(personId){
+		vm.checkIsLoadedValidationForPerson = function (personId) {
 			return ValidateRulesService.checkIsLoadedValidationForPerson(personId);
 		};
 
 		vm.getScheduleNoteForPerson = function (personId) {
 			return ScheduleNoteMgmt.getNoteForPerson(personId);
 		};
-		vm.hasPublicNote = function(personId) {
+
+		vm.hasPublicNote = function (personId) {
 			return ScheduleNoteMgmt.getNoteForPerson(personId).publicNotes && ScheduleNoteMgmt.getNoteForPerson(personId).publicNotes.length > 0;
 		}
 
@@ -137,7 +137,7 @@
 			vm.noteEditorInputOption = {
 				selectedDate: vm.selectedDate,
 				personId: personId,
-				showEditor:true
+				showEditor: true
 			};
 		};
 
@@ -151,11 +151,12 @@
 
 		vm.clickEditButton = function (personSchedule) {
 			$state.go('teams.shiftEditor', {
-				personSchedule: personSchedule,
-				date: vm.selectedDate
+				personId: personSchedule.PersonId,
+				timezone: vm.selectedTimezone,
+				date: serviceDateFormatHelper.getDateOnly(vm.selectedDate)
 			});
 		}
-	
+
 		function isAllInCurrentPageSelected() {
 			var isAllSelected = true;
 			var selectedPeople = personSelectionSvc.personInfo;
@@ -176,7 +177,7 @@
 		vm.init = function () {
 			vm.toggleAllInCurrentPage = isAllInCurrentPageSelected();
 			vm.scheduleVm = ScheduleMgmt.groupScheduleVm;
-			
+
 			vm.permissions = teamsPermissions.all();
 		};
 

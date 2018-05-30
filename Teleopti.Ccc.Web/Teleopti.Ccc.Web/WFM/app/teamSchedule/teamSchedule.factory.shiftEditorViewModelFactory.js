@@ -2,8 +2,8 @@
 	'use strict';
 
 	angular.module('wfm.teamSchedule').factory('ShiftEditorViewModelFactory', ShiftEditorViewModelFactory);
-	ShiftEditorViewModelFactory.$inject = ['serviceDateFormatHelper'];
-	function ShiftEditorViewModelFactory(serviceDateFormatHelper) {
+	ShiftEditorViewModelFactory.$inject = ['serviceDateFormatHelper', 'Toggle', 'CurrentUserInfo'];
+	function ShiftEditorViewModelFactory(serviceDateFormatHelper, toggleSvc, CurrentUserInfo) {
 		var factory = {
 			CreateTimeline: function (date, timezone) {
 				return new TimelineViewModel(date, timezone);
@@ -16,18 +16,33 @@
 		function ScheduleViewModel(date, timezone, schedule) {
 			if (!schedule)
 				return;
-			var scheduleTimezone = schedule.Timezone.IanaId;
+			var currentTimezone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
 			var layers = [];
 			schedule.Projection && schedule.Projection.forEach(function (projection) {
-				var layer = new ShiftLayerViewModel(projection, date, timezone, scheduleTimezone);
+				var layer = new ShiftLayerViewModel(projection, date, timezone, currentTimezone);
 				layers.push(layer);
 			});
 
+			var hasUnderlyingSchedules = toggleSvc.WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952 && !!schedule.UnderlyingScheduleSummary;
+
 			return {
 				Date: date,
-				Timezone: scheduleTimezone,
-				ShiftLayers: layers
+				Name: schedule.Name,
+				Timezone: currentTimezone,
+				ProjectionTimeRange: getProjectionTimeRange(layers),
+				ShiftLayers: layers,
+				HasUnderlyingSchedules: hasUnderlyingSchedules
 			}
+		}
+
+		function getProjectionTimeRange(layers) {
+			if (!layers.length) {
+				return null;
+			}
+			return {
+				Start: layers[0].Start,
+				End: layers[layers.length - 1].End
+			};
 		}
 
 		function ShiftLayerViewModel(layer, date, timezone, fromTimezone) {
@@ -39,10 +54,8 @@
 				End: serviceDateFormatHelper.getDateTime(endInToTimezone),
 				Minutes: layer.Minutes,
 				ShiftLayerIds: layer.ShiftLayerIds,
-				Width: layer.Minutes,
-				Left: getTotalMinutes(date, timezone, layer.Start),
 				Color: layer.Color,
-				UseLightColor: useLightColor(layer.Color),
+				UseLighterBorder: useLighterColor(layer.Color),
 				TimeSpan: getProjectionTimeSpan(startInToTimezone, endInToTimezone),
 				IsOvertime: layer.IsOvertime
 			};
@@ -77,18 +90,8 @@
 			return start.format('LT') + ' - ' + end.format('LT');
 		}
 
-		function getTotalMinutes(date, timezone, dateTime) {
-			var hours = 0;
-			var currentDate = moment.tz(date, timezone);
-			var dateTimeMoment = moment.tz(dateTime, timezone);
-			while (dateTimeMoment.diff(currentDate, 'hours') > 0) {
-				hours += 1;
-				currentDate = currentDate.add(1, 'hours');
-			}
-			return hours * 60 + moment(dateTime).minutes();
-		}
 
-		function useLightColor(color) {
+		function useLighterColor(color) {
 			var getLumi = function (cstring) {
 				var matched = /#([\w\d]{2})([\w\d]{2})([\w\d]{2})/.exec(cstring);
 				if (!matched) return null;

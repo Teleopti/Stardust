@@ -2,10 +2,25 @@
 	var target;
 
 	beforeEach(module('wfm.templates', 'wfm.teamSchedule'));
+	beforeEach(module(function ($provide) {
+		$provide.service('Toggle', function () { return { WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952: true } });
+		$provide.service('CurrentUserInfo', function () {
+			return {
+				CurrentUserInfo: function () {
+					return {
+						DefaultTimeZone: "Europe/Berlin",
+						DateFormatLocale: "sv-SE"
+					};
+				}
+			};
+		});
+	}));
+
 	beforeEach(inject(function (ShiftEditorViewModelFactory) {
 		target = ShiftEditorViewModelFactory;
 
 	}));
+
 	beforeEach(function () {
 		moment.locale('sv');
 	});
@@ -41,6 +56,7 @@
 				"Color": "#ffffff",
 				"Description": "E-mail",
 				"Start": "2018-05-28 08:00",
+				"End": "2018-05-28 10:00",
 				"Minutes": 120,
 				"IsOvertime": false
 			},
@@ -49,17 +65,26 @@
 				"Color": "#8080c0",
 				"Description": "E-mail",
 				"Start": "2018-05-28 10:00",
+				"End": "2018-05-28 12:00",
 				"Minutes": 120,
 				"IsOvertime": false
 			}],
-			"Timezone": { "IanaId": "Europe/Berlin" }
+			"Timezone": { "IanaId": "Europe/Berlin" },
+			"UnderlyingScheduleSummary": {
+				"PersonalActivities": [{ "Description": "Chat", "Start": "2018-05-29 08:00", "End": "2018-05-29 09:00" }],
+				"PersonPartTimeAbsences": null,
+				"PersonMeetings": null
+			}
 		};
 
 		var schedule = target.CreateSchedule("2018-05-28", "Europe/Berlin", schedule);
 		var shiftLayers = schedule.ShiftLayers;
 		expect(schedule.Date).toEqual("2018-05-28");
+		expect(schedule.Name).toEqual("Annika Andersson");
 		expect(schedule.Timezone).toEqual("Europe/Berlin");
-
+		expect(schedule.HasUnderlyingSchedules).toBe(true);
+		expect(schedule.ProjectionTimeRange.Start).toBe("2018-05-28 08:00");
+		expect(schedule.ProjectionTimeRange.End).toBe("2018-05-28 12:00");
 
 		expect(shiftLayers.length).toEqual(2);
 		expect(shiftLayers[0].Description).toEqual('E-mail');
@@ -70,10 +95,8 @@
 		expect(shiftLayers[0].Minutes).toEqual(120);
 		expect(shiftLayers[0].ShiftLayerIds).toEqual(["61678e5a-ac3f-4daa-9577-a83800e49622"]);
 		expect(shiftLayers[0].Color).toEqual('#ffffff');
-		expect(shiftLayers[0].Width).toEqual(120);
-		expect(shiftLayers[0].Left).toEqual(480);
-		expect(shiftLayers[0].UseLightColor).toEqual(false);
-		expect(shiftLayers[1].UseLightColor).toEqual(true);
+		expect(shiftLayers[0].UseLighterBorder).toEqual(false);
+		expect(shiftLayers[1].UseLighterBorder).toEqual(true);
 	});
 
 	it('should create shift layers based on timezone', function () {
@@ -90,14 +113,16 @@
 				"Start": "2018-05-28 08:00",
 				"Minutes": 120,
 				"IsOvertime": false
-			}],
-			"Timezone": { "IanaId": "Europe/Berlin" }
+			}]
 		};
 
 		var viewModel = target.CreateSchedule("2018-05-28", "Asia/Hong_Kong", schedule);
+		expect(viewModel.ProjectionTimeRange.Start).toEqual("2018-05-28 14:00");
+		expect(viewModel.ProjectionTimeRange.End).toEqual("2018-05-28 16:00");
 		expect(viewModel.ShiftLayers[0].Start).toEqual("2018-05-28 14:00");
 		expect(viewModel.ShiftLayers[0].End).toEqual("2018-05-28 16:00");
 		expect(viewModel.ShiftLayers[0].TimeSpan).toEqual("14:00 - 16:00");
+
 	});
 
 	it('should create shift layers correctly on DST', function () {
@@ -179,5 +204,4 @@
 			expect(viewModel.ShiftLayers[0].TimeSpan).toEqual("1:00 AM - 4:00 AM");
 		});
 	});
-
 });

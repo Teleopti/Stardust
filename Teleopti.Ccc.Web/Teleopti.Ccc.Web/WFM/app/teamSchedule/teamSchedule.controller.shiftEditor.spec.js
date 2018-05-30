@@ -1,5 +1,5 @@
 ﻿describe('<shift-editor>',
-function () {
+	function () {
 		'use strict';
 
 		var $rootScope,
@@ -7,6 +7,19 @@ function () {
 			$document;
 
 		beforeEach(module('wfm.templates', 'wfm.teamSchedule'));
+		beforeEach(module(function ($provide) {
+			$provide.service('Toggle', function () { return { WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952: true } });
+			$provide.service('CurrentUserInfo', function () {
+				return {
+					CurrentUserInfo: function () {
+						return {
+							DefaultTimeZone: "Europe/Berlin",
+							DateFormatLocale: "sv-SE"
+						};
+					}
+				};
+			});
+		}));
 		beforeEach(inject(function (_$rootScope_, _$compile_, _$document_) {
 			$rootScope = _$rootScope_;
 			$compile = _$compile_;
@@ -16,19 +29,33 @@ function () {
 		afterEach(function () { moment.locale('en'); });
 
 		it("should render correctly", function () {
-			var panel = setUp({
-				Name: 'Agent 1',
-				Date: '2018-05-16'
-			}, '2018-05-16');
+			var schedule = {
+				"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+				"Name": "Annika Andersson",
+				"Date": "2018-05-28",
+				"WorkTimeMinutes": 240,
+				"ContractTimeMinutes": 240,
+				"Projection": [{
+					"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+					"Color": "#ffffff",
+					"Description": "E-mail",
+					"Start": "2018-05-28 08:00",
+					"Minutes": 120,
+					"IsOvertime": false
+				}],
+				"Timezone": { "IanaId": "Europe/Berlin" }
+			};
+			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', [schedule], '2018-05-28', 'Europe/Berlin');
 			var element = panel[0];
 
-			expect(element.querySelector('.name').innerText.trim()).toEqual('Agent 1');
-			expect(element.querySelector('.date').innerText).toEqual('2018-05-16');
+			expect(element.querySelector('.name').innerText.trim()).toEqual('Annika Andersson');
+			expect(element.querySelector('.date').innerText).toEqual('2018-05-28');
 		});
 
 		it('should show underlying info icon if schedule has underlying activities', function () {
 			var scheduleDate = "2018-05-16";
-			var panel = setUp({
+			var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", [{
+				"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
 				Name: 'Agent 1',
 				Date: '2018-05-16',
 				UnderlyingScheduleSummary: {
@@ -38,155 +65,31 @@ function () {
 						"End": scheduleDate + ' 11:00'
 					}]
 				},
-				HasUnderlyingSchedules: function () { return true; }
-			}, '2018-05-16');
+				"Timezone": { "IanaId": "Europe/Berlin" }
+			}], '2018-05-16');
 
 			var element = panel[0];
 			expect(element.querySelectorAll('.underlying-info').length).toBe(1);
 		});
 
-		it('should render time line correctly', function () {
-			var panel = setUp({
-				Name: 'Agent 1',
-				Date: '2018-05-21',
-				Shifts: [{
-					Projections: [{
-						Color: "#80FF80",
-						Description: "Phone",
-						Start: "2018-03-25 05:00",
-						Minutes: 120
-					}]
-				}]
-			}, "2018-05-21", "Europe/Berlin");
-			var timeline = panel[0].querySelector(".timeline");
-			var intervals = panel[0].querySelectorAll(".timeline .interval");
-			var hours = panel[0].querySelectorAll(".timeline .interval .label>span");
-			var textHours = [].slice.call(hours).map(function (hourEl) { return hourEl.innerText.trim() });
-			expect(!!timeline).toBeTruthy();
-			expect(intervals.length).toBe(37);
-			expect(textHours).toEqual( ["00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00"]);
-			expect(intervals[0].querySelectorAll('.tick').length).toBe(12);
-			expect(intervals[0].querySelectorAll('.tick.hour').length).toBe(1);
-			expect(intervals[0].querySelectorAll('.tick.half-hour').length).toBe(1);
-			expect(intervals[intervals.length - 1].querySelectorAll('.tick').length).toBe(1);
-		});
-
-		it('should render time line correctly on DST', function () {
-			var panel = setUp({
-				Name: 'Agent 1',
-				Date: '2018-03-25',
-				Shifts: [{
-					Projections: [{
-						Color: "#80FF80",
-						Description: "Phone",
-						Start: "2018-03-25 05:00",
-						Minutes: 120
-					}]
-				}]
-			}, "2018-03-25", "Europe/Berlin");
-			var timeline = panel[0].querySelector(".timeline");
-			var intervals = panel[0].querySelectorAll(".timeline .interval");
-			var hours = panel[0].querySelectorAll(".timeline .interval .label>span");
-			var textHours = [].slice.call(hours).map(function (hourEl) { return hourEl.innerText.trim() });
-			expect(!!timeline).toBeTruthy();
-			expect(intervals.length).toBe(36);
-			expect(textHours).toEqual(["00:00", "01:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00"]);
-		});
-
-		it('should show all shifts correctly', function () {
-			var schedule = {
-				Name: 'Agent 1',
-				Date: '2018-05-21',
-				Shifts: [{
-					Projections: [{
-						Color: "#80FF80",
-						Description: "Phone",
-						Start: "2018-05-21 05:30",
-						Minutes: 120
-					}, {
-						Color: "#FFC080",
-						Description: "Sales",
-						Start: "2018-05-21 07:30",
-						Minutes: 60
-					}, {
-						Color: "#000000",
-						Description: "Email",
-						Start: "2018-05-21 08:30",
-						Minutes: 30,
-						IsOvertime: true,
-						UseLighterBorder: true
-					},
-					{
-						Color: "#000000",
-						Description: "Email",
-						Start: "2018-05-21 09:00",
-						Minutes: 30,
-						IsOvertime: true,
-						UseLighterBorder: false
-					}]
-				}]
-			};
-			var panel = setUp(schedule, "2018-05-21", "Europe/Berlin");
-			var schedulesEl = panel[0].querySelector(".shift");
-			var shiftLayers = schedulesEl.querySelectorAll(".shift-layer");
-			expect(shiftLayers.length).toEqual(4);
-			expect(shiftLayers[0].style.width).toEqual('120px');
-			expect(shiftLayers[1].style.width).toEqual('60px');
-			expect(shiftLayers[2].style.width).toEqual('30px');
-			expect(shiftLayers[3].style.width).toEqual('30px');
-
-			expect(shiftLayers[0].style.left).toEqual('330px');
-			expect(shiftLayers[1].style.left).toEqual('450px');
-			expect(shiftLayers[2].style.left).toEqual('510px');
-			expect(shiftLayers[3].style.left).toEqual('540px');
-
-			expect(angular.element(shiftLayers[2]).hasClass('overtime')).toBeTruthy();
-			expect(angular.element(shiftLayers[2]).hasClass('overtime-light')).toBeTruthy();
-			expect(angular.element(shiftLayers[3]).hasClass('overtime')).toBeTruthy();
-			expect(angular.element(shiftLayers[3]).hasClass('overtime-dark')).toBeTruthy();
-
-		});
-
-		it('should show all shifts for schedule on DST', function () {
-			var schedule = {
-				Name: 'Agent 1',
-				Date: '2018-03-25',
-				Shifts: [{
-					Projections: [{
-						Color: "#80FF80",
-						Description: "Phone",
-						Start: "2018-03-25 05:00",
-						Minutes: 120
-					}]
-				}]
-			};
-			var panel = setUp(schedule, "2018-03-25", "Europe/Berlin");
-			var schedulesEl = panel[0].querySelector(".shift");
-			var shiftLayers = schedulesEl.querySelectorAll(".shift-layer");
-			expect(shiftLayers.length).toEqual(1);
-			expect(shiftLayers[0].style.width).toEqual('120px');
-			expect(shiftLayers[0].style.left).toEqual('240px');
-		});
-
 		it('should able to select an activity', function () {
 			var schedule = {
-				Name: 'Agent 1',
-				Date: '2018-05-21',
-				Shifts: [{
-					Projections: [{
-						Color: "#80FF80",
-						Description: "Phone",
-						Start: "2018-05-21 05:30",
-						Minutes: 120
-					}, {
-						Color: "#FFC080",
-						Description: "Sales",
-						Start: "2018-05-21 07:30",
-						Minutes: 60
-					}]
-				}]
+				"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+				"Name": "Annika Andersson",
+				"Date": "2018-05-28",
+				"WorkTimeMinutes": 240,
+				"ContractTimeMinutes": 240,
+				"Projection": [{
+					"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+					"Color": "#ffffff",
+					"Description": "E-mail",
+					"Start": "2018-05-28 08:00",
+					"Minutes": 120,
+					"IsOvertime": false
+				}],
+				"Timezone": { "IanaId": "Europe/Berlin" }
 			};
-			var panel = setUp(schedule, "2018-05-21", "Europe/Berlin");
+			var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", [schedule], "2018-05-28", "Europe/Berlin");
 
 			var shiftLayers = panel[0].querySelectorAll(".shift-layer");
 			shiftLayers[0].click();
@@ -232,25 +135,29 @@ function () {
 
 		it('should can select only one activity', function () {
 			var schedule = {
-				Name: 'Agent 1',
-				Date: '2018-05-21',
-				Shifts: [{
-					Projections: [{
-						Color: "#80FF80",
-						Description: "Phone",
-						Start: "2018-05-21 05:30",
-						Minutes: 120,
-						ShiftLayerIds: ['9be3096b-d989-4821-9d32-a7bc00f9f8e9']
-					}, {
-						Color: "#FFC080",
-						Description: "Sales",
-						Start: "2018-05-21 07:30",
-						Minutes: 60,
-						ShiftLayerIds: ['e2964c98-b3e7-4bad-8d9a-a7bc00f9f8e9']
-					}]
-				}]
+				"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+				"Name": "Annika Andersson",
+				"Date": "2018-05-28",
+				"WorkTimeMinutes": 240,
+				"ContractTimeMinutes": 240,
+				"Projection": [{
+					"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+					"Color": "#ffffff",
+					"Description": "E-mail",
+					"Start": "2018-05-28 08:00",
+					"Minutes": 120,
+					"IsOvertime": false
+				}, {
+					"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49623"],
+					"Color": "#808080",
+					"Description": "Phone",
+					"Start": "2018-05-28 10:00",
+					"Minutes": 120,
+					"IsOvertime": false
+				}],
+				"Timezone": { "IanaId": "Europe/Berlin" }
 			};
-			var panel = setUp(schedule, "2018-05-21", "Europe/Berlin");
+			var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", [schedule], "2018-05-28", "Europe/Berlin");
 
 			var shiftLayers = panel[0].querySelectorAll(".shift-layer");
 			shiftLayers[0].click();
@@ -262,19 +169,22 @@ function () {
 
 		it('should clear selection when click the selected activity again', function () {
 			var schedule = {
-				Name: 'Agent 1',
-				Date: '2018-05-21',
-				Shifts: [{
-					Projections: [{
-						Color: "#80FF80",
-						Description: "Phone",
-						Start: "2018-05-21 05:30",
-						Minutes: 120,
-						ShiftLayerIds: ['9be3096b-d989-4821-9d32-a7bc00f9f8e9']
-					}]
-				}]
+				"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+				"Name": "Annika Andersson",
+				"Date": "2018-05-28",
+				"WorkTimeMinutes": 240,
+				"ContractTimeMinutes": 240,
+				"Projection": [{
+					"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+					"Color": "#ffffff",
+					"Description": "E-mail",
+					"Start": "2018-05-28 08:00",
+					"Minutes": 120,
+					"IsOvertime": false
+				}],
+				"Timezone": { "IanaId": "Europe/Berlin" }
 			};
-			var panel = setUp(schedule, "2018-05-21", "Europe/Berlin");
+			var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", [schedule], "2018-05-28", "Europe/Berlin");
 
 			var shiftLayers = panel[0].querySelectorAll(".shift-layer");
 			shiftLayers[0].click();
@@ -287,63 +197,55 @@ function () {
 
 		it('should show border color correctly based on the selected activity color', function () {
 			var schedule = {
-				Name: 'Agent 1',
-				Date: '2018-05-21',
-				Shifts: [{
-					Projections: [{
-						Color: "#80FF80",
-						Description: "Phone",
-						Start: "2018-05-21 05:30",
-						Minutes: 120,
-						ShiftLayerIds: ['9be3096b-d989-4821-9d32-a7bc00f9f8e9'],
-						UseLighterBorder: true
-					}, {
-						Color: "#FFC080",
-						Description: "Sales",
-						Start: "2018-05-21 07:30",
-						Minutes: 60,
-						ShiftLayerIds: ['e2964c98-b3e7-4bad-8d9a-a7bc00f9f8e9'],
-						UseLighterBorder: false
-					}]
-				}]
+				"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+				"Name": "Annika Andersson",
+				"Date": "2018-05-28",
+				"WorkTimeMinutes": 240,
+				"ContractTimeMinutes": 240,
+				"Projection": [{
+					"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+					"Color": "#ffffff",
+					"Description": "E-mail",
+					"Start": "2018-05-28 08:00",
+					"Minutes": 120,
+					"IsOvertime": false
+				}, {
+					"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49623"],
+					"Color": "#8080c0",
+					"Description": "Phone",
+					"Start": "2018-05-28 10:00",
+					"Minutes": 120,
+					"IsOvertime": false
+				}],
+				"Timezone": { "IanaId": "Europe/Berlin" }
 			};
-			var panel = setUp(schedule, "2018-05-21", "Europe/Berlin");
+			var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", [schedule], "2018-05-28", "Europe/Berlin");
 
 			var shiftLayers = panel[0].querySelectorAll(".shift-layer");
 			shiftLayers[0].click();
-			expect(shiftLayers[0].className.indexOf('border-light') >= 0).toBeTruthy();
+			expect(shiftLayers[0].className.indexOf('border-dark') >= 0).toBeTruthy();
 			shiftLayers[1].click();
-			expect(shiftLayers[1].className.indexOf('border-dark') >= 0).toBeTruthy();
+			expect(shiftLayers[1].className.indexOf('border-light') >= 0).toBeTruthy();
 		});
 
 		it('should show activity information correctly when select an activity', function () {
 			var schedule = {
-				Name: 'Agent 1',
-				Date: '2018-05-21',
-				Shifts: [{
-					Projections: [{
-						Color: "#80FF80",
-						Description: "Phone",
-						Start: "2018-05-21 08:00",
-						Minutes: 60,
-						ShiftLayerIds: ['9be3096b-d989-4821-9d32-a7bc00f9f8e9']
-					}, {
-						Color: "#FFC080",
-						Description: "Sales",
-						Start: "2018-05-21 09:00",
-						Minutes: 60,
-						ShiftLayerIds: ['e2964c98-b3e7-4bad-8d9a-a7bc00f9f8e9']
-					},
-					{
-						Color: "#80FF80",
-						Description: "Phone",
-						Start: "2018-05-21 10:00",
-						Minutes: 60,
-						ShiftLayerIds: ['9be3096b-d989-4821-9d32-a7bc00f9f8e9']
-					}]
-				}]
+				"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+				"Name": "Annika Andersson",
+				"Date": "2018-05-28",
+				"WorkTimeMinutes": 240,
+				"ContractTimeMinutes": 240,
+				"Projection": [{
+					"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+					"Color": "#ffffff",
+					"Description": "Phone",
+					"Start": "2018-05-28 08:00",
+					"Minutes": 60,
+					"IsOvertime": false
+				}],
+				"Timezone": { "IanaId": "Europe/Berlin" }
 			};
-			var panel = setUp(schedule, "2018-05-21", "Europe/Berlin");
+			var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", [schedule], "2018-05-21", "Europe/Berlin");
 
 			var shiftLayers = panel[0].querySelectorAll(".shift-layer");
 			shiftLayers[0].click();
@@ -358,19 +260,22 @@ function () {
 
 		it('should show time period of activity information correctly on DST when select an activity', function () {
 			var schedule = {
-				Name: 'Agent 1',
-				Date: '2018-03-25',
-				Shifts: [{
-					Projections: [{
-						Color: "#80FF80",
-						Description: "Phone",
-						Start: "2018-03-25 00:30",
-						Minutes: 120,
-						ShiftLayerIds: ['9be3096b-d989-4821-9d32-a7bc00f9f8e9']
-					}]
-				}]
+				"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+				"Name": "Annika Andersson",
+				"Date": "2018-03-25",
+				"WorkTimeMinutes": 240,
+				"ContractTimeMinutes": 240,
+				"Projection": [{
+					"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+					"Color": "#ffffff",
+					"Description": "Phone",
+					"Start": "2018-03-25 00:30",
+					"Minutes": 120,
+					"IsOvertime": false
+				}],
+				"Timezone": { "IanaId": "Europe/Berlin" }
 			};
-			var panel = setUp(schedule, "2018-03-25", "Europe/Berlin");
+			var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", [schedule], "2018-03-25", "Europe/Berlin");
 
 			var shiftLayers = panel[0].querySelectorAll(".shift-layer");
 			shiftLayers[0].click();
@@ -383,43 +288,24 @@ function () {
 			beforeEach(function () { moment.locale('en-UK'); });
 			afterEach(function () { moment.locale('en'); });
 
-			it('should render time line correctly based on current user locale', function () {
-				var panel = setUp({
-					Name: 'Agent 1',
-					Date: '2018-05-21',
-					Shifts: [{
-						Projections: [{
-							Color: "#80FF80",
-							Description: "Phone",
-							Start: "2018-03-25 05:00",
-							Minutes: 120
-						}]
-					}]
-				}, "2018-05-21", "Europe/Berlin");
-				var timeline = panel[0].querySelector(".timeline");
-				var intervals = panel[0].querySelectorAll(".timeline .interval");
-				var hours = panel[0].querySelectorAll(".timeline .interval .label>span");
-				var textHours = [].slice.call(hours).map(function (hourEl) { return hourEl.innerText.trim() });
-				expect(!!timeline).toBeTruthy();
-				expect(intervals.length).toBe(37);
-				expect(textHours).toEqual( ["12:00 AM", "1:00 AM", "2:00 AM", "3:00 AM", "4:00 AM", "5:00 AM", "6:00 AM", "7:00 AM", "8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM", "6:00 PM", "7:00 PM", "8:00 PM", "9:00 PM", "10:00 PM", "11:00 PM", "12:00 AM", "1:00 AM", "2:00 AM", "3:00 AM", "4:00 AM", "5:00 AM", "6:00 AM", "7:00 AM", "8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM"]);
-			});
-
 			it('should show time period of activity information correctly when select an activity', function () {
 				var schedule = {
-					Name: 'Agent 1',
-					Date: '2018-05-21',
-					Shifts: [{
-						Projections: [{
-							Color: "#80FF80",
-							Description: "Phone",
-							Start: "2018-05-21 05:30",
-							Minutes: 120,
-							ShiftLayerIds: ['9be3096b-d989-4821-9d32-a7bc00f9f8e9']
-						}]
-					}]
+					"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+					"Name": "Annika Andersson",
+					"Date": "2018-05-21",
+					"WorkTimeMinutes": 240,
+					"ContractTimeMinutes": 240,
+					"Projection": [{
+						"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+						"Color": "#ffffff",
+						"Description": "Phone",
+						"Start": "2018-05-21 05:30",
+						"Minutes": 120,
+						"IsOvertime": false
+					}],
+					"Timezone": { "IanaId": "Europe/Berlin" }
 				};
-				var panel = setUp(schedule, "2018-05-21", "Europe/Berlin");
+				var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", [schedule], "2018-05-21", "Europe/Berlin");
 
 				var shiftLayers = panel[0].querySelectorAll(".shift-layer");
 				shiftLayers[0].click();
@@ -435,22 +321,37 @@ function () {
 			afterEach(function () { moment.locale('en'); });
 
 			it("should render schedule date correctly", function () {
-				var panel = setUp({
-					Name: 'Agent 1',
-					Date: '2018-05-24'
-				}, '2018-05-24');
+				var schedule = {
+					"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+					"Name": "Annika Andersson",
+					"Date": "2018-05-24",
+					"WorkTimeMinutes": 240,
+					"ContractTimeMinutes": 240,
+					"Projection": [{
+						"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+						"Color": "#ffffff",
+						"Description": "E-mail",
+						"Start": "2018-05-24 08:00",
+						"Minutes": 120,
+						"IsOvertime": false
+					}],
+					"Timezone": { "IanaId": "Europe/Berlin" }
+				};
+				var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', [schedule], '2018-05-24', 'Europe/Berlin');
 				var element = panel[0];
 
 				expect(element.querySelector('.date').innerText).toEqual('۲۰۱۸-۰۵-۲۴');
 			});
 		});
 
-		function setUp(personSchedule, date, timezone) {
+		function setUp(personId, schedules, date, timezone) {
 			var scope = $rootScope.$new();
-			scope.personSchedule = personSchedule;
+			scope.personId = personId;
+			scope.schedules = schedules;
 			scope.date = date;
 			scope.timezone = timezone;
-			var element = $compile('<shift-editor person-schedule="personSchedule" date="date" timezone="timezone"></shift-editor>')(scope);
+
+			var element = $compile('<shift-editor schedules="schedules" date="date" timezone="timezone" person-id="personId"></shift-editor>')(scope);
 			scope.$apply();
 			return element;
 		}
@@ -464,7 +365,7 @@ describe('#shiftEditorController#', function () {
 		module('wfm.teamSchedule');
 		module(function ($provide) {
 			stateParams = {
-				personId: '9be3096b-d989-4821-9d32-a7bc00f9f8e9',
+				personId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
 				timezone: 'Europe/Berlin',
 				date: '2018-05-28'
 			};
@@ -506,13 +407,13 @@ describe('#shiftEditorController#', function () {
 		fakeTeamSchedule.has(schedule);
 
 		var target = setUp();
-		expect(target.personId).toEqual('9be3096b-d989-4821-9d32-a7bc00f9f8e9');
+		expect(target.personId).toEqual('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22');
 		expect(target.timezone).toEqual('Europe/Berlin');
 		expect(target.date).toEqual('2018-05-28');
 		expect(target.schedules[0]).toEqual(schedule);
 	});
 
-	it('should get schedule when schedule was updated', function () {
+	it('should get schedulewhen schedule was updated', function () {
 		var schedule = {
 			"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
 			"Name": "Annika Andersson",
@@ -539,7 +440,7 @@ describe('#shiftEditorController#', function () {
 		};
 		fakeTeamSchedule.has(schedule);
 		var target = setUp();
-		
+
 		var updateSchedule = {
 			"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
 			"Name": "Annika Andersson",
@@ -566,8 +467,95 @@ describe('#shiftEditorController#', function () {
 			}
 		]);
 
-		expect(target.schedules[1]).toBe(updateSchedule);
-	})
+		expect(target.schedules[0]).toBe(updateSchedule);
+	});
+
+
+	it('should only get schedule for same person and same date when schedule was updated', function () {
+		var schedule = {
+			"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+			"Name": "Annika Andersson",
+			"Date": "2018-05-28",
+			"WorkTimeMinutes": 240,
+			"ContractTimeMinutes": 240,
+			"Projection": [{
+				"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+				"Color": "#ffffff",
+				"Description": "E-mail",
+				"Start": "2018-05-28 08:00",
+				"Minutes": 120,
+				"IsOvertime": false
+			},
+			{
+				"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+				"Color": "#8080c0",
+				"Description": "E-mail",
+				"Start": "2018-05-28 10:00",
+				"Minutes": 120,
+				"IsOvertime": false
+			}],
+			"Timezone": { "IanaId": "Europe/Berlin" }
+		};
+		fakeTeamSchedule.has(schedule);
+
+		var target = setUp();
+
+		var scheduleForAnotherAgent = {
+			"PersonId": "b0e171ad-8f81-44ac-b82e-9c0f00aa6f23",
+			"Name": "Annika Andersson",
+			"Date": "2018-05-27",
+			"WorkTimeMinutes": 240,
+			"ContractTimeMinutes": 240,
+			"Projection": [{
+				"ShiftLayerIds": ["31678e5a-ac3f-4daa-9577-a83800e49622"],
+				"Color": "#ffffff",
+				"Description": "Phone",
+				"Start": "2018-05-27 09:00",
+				"Minutes": 120,
+				"IsOvertime": false
+			}],
+			"Timezone": { "IanaId": "Europe/Berlin" }
+		};
+		fakeTeamSchedule.has(scheduleForAnotherAgent);
+
+		mockSignalRBackendServer.notifyClients([
+			{
+				"DomainReferenceId": "b0e171ad-8f81-44ac-b82e-9c0f00aa6f23",
+				"StartDate": "D2018-05-27T00:00:00",
+				"EndDate": "D2018-05-27T00:00:00"
+			}
+		]);
+
+		expect(target.schedules[0]).toBe(schedule);
+
+		var newSchedule = {
+			"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+			"Name": "Annika Andersson",
+			"Date": "2018-05-28",
+			"WorkTimeMinutes": 240,
+			"ContractTimeMinutes": 240,
+			"Projection": [{
+				"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+				"Color": "#ffffff",
+				"Description": "E-mail",
+				"Start": "2018-05-28 08:00",
+				"Minutes": 120,
+				"IsOvertime": false
+			}],
+			"Timezone": { "IanaId": "Europe/Berlin" }
+		};
+		fakeTeamSchedule.has(newSchedule);
+
+		mockSignalRBackendServer.notifyClients([
+			{
+				"DomainReferenceId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+				"StartDate": "D2018-05-28T00:00:00",
+				"EndDate": "D2018-05-28T00:00:00"
+			}
+		]);
+
+		expect(target.schedules[0]).toBe(newSchedule);
+	});
 
 	function setUp() {
 		return $controller("ShiftEditorViewController", { TeamSchedule: fakeTeamSchedule });
@@ -576,7 +564,11 @@ describe('#shiftEditorController#', function () {
 	function FakeTeamSchedule() {
 		var schedules = [];
 		this.has = function (schedule) {
-			schedules.push(schedule);
+			if (!schedules.length || (schedules[0].PersonId == schedule.PersonId && schedules[0].Date == schedule.Date)) {
+				schedules = [];
+				schedules.push(schedule);
+			}
+			
 		}
 		this.getSchedules = function () {
 			return {
@@ -592,9 +584,9 @@ describe('#shiftEditorController#', function () {
 		mockSignalRBackendServer.subscriptions = [];
 
 		return {
-			subscribe: function (options, eventHandler, errorHandler) {
+			subscribeBatchMessage: function (options, messageHandler, timeout) {
 				mockSignalRBackendServer.subscriptions.push(options);
-				mockSignalRBackendServer.notifyClients = eventHandler;
+				mockSignalRBackendServer.notifyClients = messageHandler;
 			}
 		};
 	}

@@ -1,12 +1,12 @@
 ﻿<div class="con-row">
 	<div class="con-flex">
-		<span class="name">{{ ::vm.personSchedule.Name}} </span>
-		<span ng-if="vm.personSchedule.HasUnderlyingSchedules()">
+		<span class="name">{{vm.scheduleVm.Name}}</span>
+		<span ng-if="vm.scheduleVm.HasUnderlyingSchedules">
 			<span class="underlying-info">
 				<i class="mdi mdi-information mdi-alert info"></i>
 			</span>
 			<md-tooltip class="multiline-tooltip" md-direction="right">
-				<underlying-schedule-info person-schedule="vm.personSchedule" date="vm.date"></underlying-schedule-info>
+				<underlying-schedule-info person-schedule="vm.scheduleVm" date="vm.date"></underlying-schedule-info>
 			</md-tooltip>
 		</span>
 
@@ -15,9 +15,10 @@
 <div class="con-row">
 	<div class="con-flex">
 		<span class="date">{{vm.displayDate }}</span>
-		<div class="activity-info" ng-if="vm.selectedProjection">
-			<span class="timespan">{{vm.selectedProjection.TimeSpan}}</span>
-			<span class="activity-type">{{vm.selectedProjection.Description}}</span>
+		
+		<div class="activity-info" ng-if="vm.selectedShiftLayer">
+			<span class="timespan">{{vm.selectedShiftLayer.TimeSpan}}</span>
+			<span class="activity-type">{{vm.selectedShiftLayer.Description}}</span>
 		</div>
 	</div>
 </div>
@@ -30,28 +31,28 @@
 					<span class="left-scroll" ng-show="vm.showScrollLeftButton" ng-click="vm.scroll(-60)"><i class="mdi mdi-chevron-left"></i></span>
 					<span class="right-scroll" ng-show="vm.showScrollRightButton" ng-click="vm.scroll(60)"><i class="mdi mdi-chevron-right"></i></span>
 				</div>
-				<div ng-repeat="interval in vm.intervals" class="interval">
+				<div ng-repeat="interval in vm.timelineVm.Intervals" class="interval">
 					<div class="label label-info">
-						<span>{{ interval.label}}</span>
+						<span>{{ interval.Label}}</span>
 					</div>
 					<div class="ticks">
-						<span ng-repeat="tick in interval.ticks" class="tick" ng-class="{'half-hour': tick.isHalfHour, 'hour':tick.isHour}"></span>
+						<span ng-repeat="tick in interval.Ticks" class="tick" ng-class="{'half-hour': tick.IsHalfHour, 'hour':tick.IsHour}"></span>
 					</div>
 				</div>
 			</div>
 
-			<div class="shift" ng-class="{'has-selected': !!vm.selectedProjection}">
+			<div class="shift" ng-class="{'has-selected': !!vm.selectedShiftLayer}">
 				<div class="shift-layer"
 					 ng-class="{
-					 'overtime': projection.IsOvertime,
-					 'overtime-light': projection.UseLighterBorder,
-					 'overtime-dark': !projection.UseLighterBorder,
-					 'selected': projection.Selected,
-					 'border-dark': !projection.UseLighterBorder,
-					 'border-light': projection.UseLighterBorder}"
-					 ng-style="{'width': projection.Minutes +'px', 'background-color': projection.Color, 'left': projection.Left + 'px'}"
-					 ng-click="vm.toggleSelection(projection)"
-					 ng-repeat="projection in vm.projections"></div>
+					 'overtime': shiftLayer.IsOvertime,
+					 'overtime-light': shiftLayer.UseLighterBorder,
+					 'overtime-dark': !shiftLayer.UseLighterBorder,
+					 'selected': shiftLayer.Selected,
+					 'border-dark': !shiftLayer.UseLighterBorder,
+					 'border-light': shiftLayer.UseLighterBorder}"
+					 ng-style="{'width':vm.getShiftLayerWidth(shiftLayer) +'px', 'background-color': shiftLayer.Color, 'left': vm.getShiftLayerLeft(shiftLayer) + 'px'}"
+					 ng-click="vm.toggleSelection(shiftLayer)"
+					 ng-repeat="shiftLayer in vm.scheduleVm.ShiftLayers"></div>
 			</div>
 		</div>
 

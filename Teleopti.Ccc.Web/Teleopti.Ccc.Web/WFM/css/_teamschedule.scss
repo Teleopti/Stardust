@@ -1180,12 +1180,14 @@ teams-time-picker.ng-invalid-dst {
 		color: $orange-500;
 	}
 
-	.activity-info span {
+	.activity-info {
 		display: inline-block;
-		background-color: #DCDCDC;
-		border-radius: 2px;
-		padding: 2px 5px;
-		margin: 0 5px;
+		span {
+			background-color: #DCDCDC;
+			border-radius: 2px;
+			padding: 2px 5px;
+			margin: 0 5px;
+		}
 	}
 
 	.shift-container {

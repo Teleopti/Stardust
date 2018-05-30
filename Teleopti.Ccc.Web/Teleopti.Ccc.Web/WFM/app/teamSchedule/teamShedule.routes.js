@@ -55,12 +55,13 @@
 				templateUrl: 'app/teamSchedule/html/exportScheduleView.html'
 			}).state('teams.shiftEditor',
 			{
-				url: '/shiftEditor',
+				url: '/shiftEditor?:personId&:date&:timezone',
 				controller:'ShiftEditorViewController as vm',
 				templateUrl: 'app/teamSchedule/html/shiftEditorView.html',
 				params: {
-					personSchedule: {},
-					date: ''
+					personId: '',
+					date: '',
+					timezone: ''
 				}
 			});
 	}
