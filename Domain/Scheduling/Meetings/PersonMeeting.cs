@@ -30,20 +30,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
         /// <summary>
         /// Optional
         /// </summary>
-        public Boolean Optional
-        {
-            get { return _meetingPerson.Optional; }
-        }
+        public Boolean Optional => _meetingPerson.Optional;
 
-        /// <summary>
+		/// <summary>
         /// Meeting this personMeeting belongs to
         /// </summary>
-        public IMeeting BelongsToMeeting
-        {
-            get { return _belongsToMeeting; }
-        }
+        public IMeeting BelongsToMeeting => _belongsToMeeting;
 
-        public ILayer<IActivity> ToLayer()
+		public ILayer<IActivity> ToLayer()
         {
             return new MeetingLayer(_belongsToMeeting.Activity, _period);
         }
@@ -51,28 +45,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
         /// <summary>
         /// Person
         /// </summary>
-        public IPerson Person
-        {
-            get { return _meetingPerson.Person; }
-        }
+        public IPerson Person => _meetingPerson.Person;
 
-        /// <summary>
+		/// <summary>
         /// Scenario
         /// </summary>
-        public virtual IScenario Scenario
-        {
-            get { return _belongsToMeeting.Scenario; }
-        }
+        public virtual IScenario Scenario => _belongsToMeeting.Scenario;
 
-        /// <summary>
+		/// <summary>
         /// Period
         /// </summary>
-        public DateTimePeriod Period
-        {
-            get { return _period; }
-        }
+        public DateTimePeriod Period => _period;
 
-        /// <summary>
+		/// <summary>
         /// Creates a new object that is a copy of the current instance.
         /// </summary>
         /// <returns>
@@ -132,15 +117,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 		public override int GetHashCode()
 		{
 			return Person.GetHashCode() ^ BelongsToMeeting.GetHashCode() ^ Period.GetHashCode();
-		}
-		
-		public override bool Equals(object obj)
-		{
-			var casted = obj as IPersonMeeting;
-			if (casted == null)
-				return false;
-
-			return casted.Person.Equals(Person) && casted.BelongsToMeeting.Equals(BelongsToMeeting) && casted.Period.Equals(Period);
 		}
 	}
 }
