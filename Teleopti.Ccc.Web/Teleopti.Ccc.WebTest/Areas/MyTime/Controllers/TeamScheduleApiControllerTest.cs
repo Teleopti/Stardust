@@ -633,6 +633,47 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			assertPeriodPosition(firstPeriod, startPosition, endPosition);
 		}
 
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
+		public void ShouldReturnAgentNameInAgentSchedules()
+		{
+			var today = new DateOnly(2014, 12, 15);
+			var team = TeamFactory.CreateSimpleTeam("test team").WithId();
+			TeamRepository.Add(team);
+
+			var person = PersonFactory.CreatePersonWithGuid("test", "agent");
+			PersonRepository.Add(person);
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var assignment = new PersonAssignment(person, Scenario.Current(), today);
+			var period = new DateTimePeriod(2014, 12, 15, 9, 2014, 12, 15, 16);
+			var phoneActivity = new Activity("Phone")
+			{
+				InWorkTime = true,
+				InContractTime = true,
+				DisplayColor = Color.Green
+			};
+			assignment.AddActivity(phoneActivity, period);
+			assignment.SetShiftCategory(new ShiftCategory("sc"));
+			ScheduleData.Add(assignment);
+
+			var teamScheduleRequest = new TeamScheduleRequest
+			{
+				SelectedDate = today.Date,
+				Paging = new Paging
+				{
+					Take = 10
+				},
+				ScheduleFilter = new Domain.Repositories.ScheduleFilter
+				{
+					TeamIds = team.Id.ToString()
+				}
+			};
+			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
+			var agentName = teamScheduleViewModel.AgentSchedules[0].Name;
+
+			agentName.Should().Be("test agent");;
+		}
 		private void assertPeriodPosition(TeamScheduleAgentScheduleLayerViewModel period, decimal expectedStartPosition, decimal expectedEndPosition)
 		{
 			period.StartPositionPercentage.Should().Be(Math.Round(expectedStartPosition, 4));

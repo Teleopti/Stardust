@@ -3,13 +3,17 @@ Teleopti.MyTimeWeb.Schedule.TimelineViewModel = function(rawTimeline, scheduleHe
 	var fullDayHour = "1.00";
 	var hourMinuteSecond = rawTimeline.Time.split(':');
 	var hour = hourMinuteSecond[0];
+	var minute = hourMinuteSecond[1];
 
 	self.positionPercentage = ko.observable(rawTimeline.PositionPercentage);	
 
 	if (hour.toString() === fullDayHour) {
 		self.minutes = Teleopti.MyTimeWeb.Common.Constants.totalMinutesOfOneDay;
 	} else {
-		self.minutes = hourMinuteSecond[0] * 60 + parseInt(hourMinuteSecond[1]);
+		if (hour.indexOf('.') > -1){
+			hour = hour.split('.')[1];
+		}
+		self.minutes = hour * 60 + parseInt(minute);
 	}
 
 	var timeFromMinutes = moment()

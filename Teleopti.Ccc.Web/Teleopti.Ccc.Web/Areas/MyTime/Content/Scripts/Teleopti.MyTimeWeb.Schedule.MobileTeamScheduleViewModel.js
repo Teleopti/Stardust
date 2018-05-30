@@ -16,7 +16,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function() {
 	self.displayDate = ko.observable(self.selectedDate().format(dateOnlyFormat));
 	self.availableTeams = ko.observableArray();
 	self.selectedTeam = ko.observable();
-	self.scheduleContainerHeight = constants.mobileMinScheduleHeight + timeLineOffset;
+	self.scheduleContainerHeight = Teleopti.MyTimeWeb.Schedule.GetScheduleHeight() + timeLineOffset;
 	self.timeLines = ko.observableArray();
 	self.mySchedule = ko.observable();
 	self.teamSchedules = ko.observableArray();
@@ -31,7 +31,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function() {
 	};
 	self.paging = {
 		skip: 0,
-		take: 1
+		take: 5
 	};
 
 	self.selectedDate.subscribe(function(value) {
@@ -104,13 +104,14 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function() {
 
 	function createTimeLine(timeLine) {
 		var timelineArr = [];
+		var scheduleHeight = Teleopti.MyTimeWeb.Schedule.GetScheduleHeight();
 
 		timeLine.forEach(function(hour) {
 			// 5 is half of timeline label height (10px)
 			timelineArr.push(
 				new Teleopti.MyTimeWeb.Schedule.TimelineViewModel(
 					hour,
-					constants.mobileMinScheduleHeight,
+					scheduleHeight,
 					timeLineOffset - 5
 				)
 			);

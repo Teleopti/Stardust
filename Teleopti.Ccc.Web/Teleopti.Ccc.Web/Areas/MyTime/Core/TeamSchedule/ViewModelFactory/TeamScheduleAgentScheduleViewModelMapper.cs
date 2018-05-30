@@ -33,7 +33,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 				}
 				var model = new TeamScheduleAgentScheduleViewModel
 				{
-					Periods = periods
+					Periods = periods,
+					Name = agentInTeamScheduleViewModel.Name
 				};
 				result.Add(model);
 			}
