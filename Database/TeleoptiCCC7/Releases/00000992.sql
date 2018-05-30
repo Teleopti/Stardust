@@ -5,7 +5,7 @@
 ----------------------------------------------------------------------------------------
 --exec [ReadModel].[PersonFinderWithDataPermission] @search_string='a', @search_type='All', @leave_after='2018-05-28 00:00:00', @start_row=1, @end_row=500, @order_by=1, @sort_direction=1, @culture=1053, @perm_date='2018-05-28 00:00:00', @perm_userid='76939942-AE47-46FF-86BB-A1410093C99A' , @perm_foreignId='0154' 
 
-ALTER PROCEDURE [ReadModel].[PersonFinderWithDataPermission]
+CREATE PROCEDURE [ReadModel].[PersonFinderWithDataPermission]
 @search_string nvarchar(max),
 @search_type nvarchar(200),
 @leave_after datetime,
