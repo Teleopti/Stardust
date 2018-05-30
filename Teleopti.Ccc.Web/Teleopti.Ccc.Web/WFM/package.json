@@ -16,7 +16,6 @@
     "core-js": "^2.4.1",
     "rxjs": "6.1.0",
     "rxjs-compat": "^6.0.0-rc.0",
-    "uninstall": "0.0.0",
     "zone.js": "0.8.26"
   },
   "devDependencies": {
