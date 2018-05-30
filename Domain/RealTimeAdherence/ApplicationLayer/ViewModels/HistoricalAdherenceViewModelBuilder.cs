@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 				.ToArray();
 		}
 
-		private IEnumerable<OutOfAdherenceViewModel> buildOutOfAdherences(IEnumerable<OutOfAdherencePeriod> periods)
+		private IEnumerable<OutOfAdherenceViewModel> buildOutOfAdherences(IEnumerable<AdherencePeriod> periods)
 		{
 			return periods
 				.Select(x =>

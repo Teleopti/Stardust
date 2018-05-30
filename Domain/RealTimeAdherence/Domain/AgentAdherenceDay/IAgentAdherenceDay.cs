@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 	{
 		DateTimePeriod Period();
 		IEnumerable<HistoricalChangeModel> Changes();
-		IEnumerable<OutOfAdherencePeriod> RecordedOutOfAdherences();
+		IEnumerable<AdherencePeriod> RecordedOutOfAdherences();
 		IEnumerable<ApprovedPeriod> ApprovedPeriods();
-		IEnumerable<OutOfAdherencePeriod> OutOfAdherences();
+		IEnumerable<AdherencePeriod> OutOfAdherences();
 		int? Percentage();
 	}
 }
