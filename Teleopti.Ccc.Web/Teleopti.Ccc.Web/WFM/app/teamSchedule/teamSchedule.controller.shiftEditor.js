@@ -2,42 +2,49 @@
 (function () {
 	'use strict';
 
-	angular.module("wfm.teamSchedule").controller("ShiftEditorViewController", ['$stateParams', '$state', 'TeamSchedule', 'ShiftEditorViewModelFactory', 'signalRSVC', 'serviceDateFormatHelper',
-		function ($stateParams, $state, TeamSchedule, ShiftEditorViewModelFactory, signalRSVC, serviceDateFormatHelper) {
-			var vm = this;
-			vm.personId = $stateParams.personId;
-			vm.timezone = decodeURIComponent($stateParams.timezone);
-			vm.date = $stateParams.date;
-			vm.gotoDayView = function () {
-				$state.go('teams.dayView');
-			}
+	angular.module("wfm.teamSchedule").controller("ShiftEditorViewController",
+		['$stateParams',
+			'$state',
+			'TeamSchedule',
+			'ShiftEditorViewModelFactory',
+			'signalRSVC',
+			'serviceDateFormatHelper',
+			'ViewStateKeeper',
+			function ($stateParams, $state, TeamSchedule, ShiftEditorViewModelFactory, signalRSVC, serviceDateFormatHelper, ViewStateKeeper) {
+				var vm = this;
+				vm.personId = $stateParams.personId;
+				vm.timezone = decodeURIComponent($stateParams.timezone);
+				vm.date = $stateParams.date;
+				vm.gotoDayView = function () {
+					$state.go('teams.dayView', ViewStateKeeper.get());
+				}
 
-			function init() {
-				getSchedule();
-				subscribeToScheduleChange();
-			}
+				function init() {
+					getSchedule();
+					subscribeToScheduleChange();
+				}
 
-			function subscribeToScheduleChange() {
-				var domainType = 'IScheduleChangedInDefaultScenario';
-				signalRSVC.subscribeBatchMessage({ DomainType: domainType }, function (messages) {
-					for (var i = 0; i < messages.length; i++) {
-						var message = messages[i];
-						if (message.DomainReferenceId === vm.personId
-							&& serviceDateFormatHelper.getDateOnly(message.StartDate.substring(1, message.StartDate.length)) === vm.date) {
-							getSchedule();
-							return;
+				function subscribeToScheduleChange() {
+					var domainType = 'IScheduleChangedInDefaultScenario';
+					signalRSVC.subscribeBatchMessage({ DomainType: domainType }, function (messages) {
+						for (var i = 0; i < messages.length; i++) {
+							var message = messages[i];
+							if (message.DomainReferenceId === vm.personId
+								&& serviceDateFormatHelper.getDateOnly(message.StartDate.substring(1, message.StartDate.length)) === vm.date) {
+								getSchedule();
+								return;
+							}
 						}
-					}
-				}, 300);
-			}
+					}, 300);
+				}
 
-			function getSchedule() {
-				TeamSchedule.getSchedules(vm.date, [vm.personId]).then(function (data) {
-					vm.schedules = data.Schedules;
-				});
-			}
-			init();
-		}]);
+				function getSchedule() {
+					TeamSchedule.getSchedules(vm.date, [vm.personId]).then(function (data) {
+						vm.schedules = data.Schedules;
+					});
+				}
+				init();
+			}]);
 
 	angular.module("wfm.teamSchedule").component("shiftEditor", {
 		controller: ShiftEditorController,

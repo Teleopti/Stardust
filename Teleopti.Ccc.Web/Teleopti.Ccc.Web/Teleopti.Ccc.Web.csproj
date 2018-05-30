@@ -2198,6 +2198,7 @@
     <Content Include="Areas\MultiTenancy\Views\TenantAdminInfo\Index.cshtml" />
     <Content Include="Areas\MultiTenancy\Views\web.config" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.shiftEditorViewModelFactory.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.service.viewStateKeeper.js" />
     <None Include="WFM\css\_forecasting.scss" />
     <Content Include="WFM\app\outbound\outbound.controller.campaign-edit.js" />
     <Content Include="WFM\app\outbound\outbound.service.campaign.js" />

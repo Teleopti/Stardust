@@ -3,6 +3,7 @@
 	angular.module('wfm.teamSchedule').controller('TeamScheduleController', [
 		'$scope',
 		'$q',
+		'$timeout',
 		'$translate',
 		'$stateParams',
 		'$state',
@@ -25,7 +26,7 @@
 		'TeamScheduleSkillService',
 		TeamScheduleController]);
 
-	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, $mdComponentRegistry, $document,
+	function TeamScheduleController($scope, $q, $timeout, $translate, $stateParams, $state, $mdSidenav, $mdComponentRegistry, $document,
 		teamScheduleSvc, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService,
 		CommandCheckService, ScheduleNoteManagementService, teamsToggles, toggleSvc, bootstrapCommon, groupPageService,
 		StaffingConfigStorageService, serviceDateFormatHelper, SkillService) {
@@ -63,7 +64,9 @@
 			};
 		};
 		vm.showStaffing = function () {
-			initTeamSize();
+			$timeout(function () {
+				initTeamSize();
+			});
 			if (vm.staffingEnabled) {
 				vm.preselectedSkills = {};
 				var preference = StaffingConfigStorageService.getConfig();
@@ -74,6 +77,8 @@
 				}
 
 			}
+			
+			
 
 		}
 
@@ -146,7 +151,7 @@
 				});
 			} else {
 				initCommand(command, needToOpenSidePanel);
-			}		
+			}
 		};
 
 		function initCommand(command, needToOpenSidePanel) {

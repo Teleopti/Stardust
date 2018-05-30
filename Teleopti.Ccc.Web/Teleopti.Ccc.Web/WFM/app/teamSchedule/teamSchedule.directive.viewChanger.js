@@ -1,61 +1,63 @@
 (function () {
 	'use strict';
 
-	angular.module('wfm.teamSchedule').directive('viewChanger', viewChangerDirective);
+	angular.module('wfm.teamSchedule').component('viewChanger', {
+		controller: ViewChangerController,
+		controllerAs: 'vm',
+		templateUrl: 'app/teamSchedule/html/view-changer.tpl.html',
+		bindings: {
+			keyword: '<?',
+			selectedDate: '<?',
+			selectedGroups: '<?',
+			teamNameMap: '<?',
+			selectedFavorite: '<?',
+			selectedSortOption: '<?',
+			staffingEnabled: '<?'
+		}
+	});
 
-	function viewChangerDirective() {
-		return {
-			restrict: 'E',
-			templateUrl: 'app/teamSchedule/html/view-changer.tpl.html',
-			replace: true,
-			controllerAs: 'vc',
-			scope: {
-				keyword: '=?',
-				selectedDate: '=?',
-				selectedGroups: '=?',
-				teamNameMap: '=?',
-				selectedFavorite: '=?',
-				selectedSortOption: '=?',
-				staffingEnabled: '=?'
-			},
-			bindToController: true,
-			controller: viewChangerController
-		};
-	}
+	ViewChangerController.$inject = ['$state', 'ViewStateKeeper'];
 
-	viewChangerController.$inject = ['$state'];
+	function ViewChangerController($state, ViewStateKeeper) {
+		var vm = this;
 
-	function viewChangerController($state) {
-		var vc = this;
+		vm.viewState = $state.current.name;
 
-		vc.viewState = $state.current.name;
-
-		vc.viewStateMap = {
+		vm.viewStateMap = {
 			'day': 'teams.dayView',
 			'week': 'teams.weekView'
 		};
 
-		vc.changeView = function (viewState) {
+		vm.$onChanges = function () {
+			ViewStateKeeper.save(getParams());
+		}
+
+		vm.changeView = function (viewState) {
+			$state.go(viewState, ViewStateKeeper.get());
+		};
+
+		function getParams() {
 			var params = {};
 			params.do = true;
-			if (angular.isDefined(vc.keyword)) params.keyword = vc.keyword;
-			if (angular.isDefined(vc.selectedDate)) params.selectedDate = vc.selectedDate;
-			if (angular.isDefined(vc.teamNameMap)) params.teamNameMap = vc.teamNameMap;
-			if (angular.isDefined(vc.selectedFavorite)) params.selectedFavorite = vc.selectedFavorite;
-			if (angular.isDefined(vc.selectedSortOption)) params.selectedSortOption = vc.selectedSortOption;
-			if (angular.isDefined(vc.selectedGroups)) {
-				if (vc.selectedGroups.mode === 'BusinessHierarchy') {
-					params.selectedTeamIds = vc.selectedGroups.groupIds;
+			if (angular.isDefined(vm.keyword)) params.keyword = vm.keyword;
+			if (angular.isDefined(vm.selectedDate)) params.selectedDate = vm.selectedDate;
+			if (angular.isDefined(vm.teamNameMap)) params.teamNameMap = vm.teamNameMap;
+			if (angular.isDefined(vm.selectedFavorite)) params.selectedFavorite = vm.selectedFavorite;
+			if (angular.isDefined(vm.selectedSortOption)) params.selectedSortOption = vm.selectedSortOption;
+			if (angular.isDefined(vm.selectedGroups)) {
+				if (vm.selectedGroups.mode === 'BusinessHierarchy') {
+					params.selectedTeamIds = vm.selectedGroups.groupIds;
 				} else {
 					params.selectedGroupPage = {
-						pageId: vc.selectedGroups.groupPageId,
-						groupIds: vc.selectedGroups.groupIds
+						pageId: vm.selectedGroups.groupPageId,
+						groupIds: vm.selectedGroups.groupIds
 					};
 				}
 			}
-			if (angular.isDefined(vc.selectedSortOption)) params.selectedSortOption = vc.selectedSortOption;
-			if (angular.isDefined(vc.staffingEnabled)) params.staffingEnabled = vc.staffingEnabled;
-			$state.go(viewState, params);
-		};
+			if (angular.isDefined(vm.selectedSortOption)) params.selectedSortOption = vm.selectedSortOption;
+			if (angular.isDefined(vm.staffingEnabled)) params.staffingEnabled = vm.staffingEnabled;
+
+			return params;
+		}
 	}
 })();
