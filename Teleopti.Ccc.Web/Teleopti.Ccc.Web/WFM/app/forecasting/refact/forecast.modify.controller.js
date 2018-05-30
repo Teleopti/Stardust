@@ -56,10 +56,6 @@
 			vm.campaignPercentage = null;
 		}
 
-		function loadChart() {
-			return;
-		}
-
 		function modifyPanelHelper(state) {
 			if (vm.selectedDayCount === null || vm.selectedDayCount.length < 1) {
 				vm.campaignPanel = false;
