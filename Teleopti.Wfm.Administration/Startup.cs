@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using Autofac;
 using Autofac.Integration.WebApi;
 using log4net.Config;
@@ -10,6 +12,7 @@ using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Core.Modules;
 using System.Web.Http;
+using Autofac.Core;
 
 namespace Teleopti.Wfm.Administration
 {
@@ -19,7 +22,6 @@ namespace Teleopti.Wfm.Administration
 		{
 			// Code that runs on application startup
 			GlobalConfiguration.Configure(WebApiConfig.Register);
-
 			var config = GlobalConfiguration.Configuration;
 			config.Filters.Add(new NoCacheFilterHttp());
 
@@ -40,6 +42,7 @@ namespace Teleopti.Wfm.Administration
 			});
 
 			container.Resolve<HangfireDashboardStarter>().Start(app);
+			container.Resolve<IRecurrentEventTimer>().Init(TimeSpan.FromHours(1));
 		}
 	}
 }

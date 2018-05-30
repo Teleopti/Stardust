@@ -14,7 +14,7 @@
     <RootNamespace>Teleopti.Wfm.Administration</RootNamespace>
     <AssemblyName>Teleopti.Wfm.Administration</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
@@ -338,6 +338,9 @@
     <Compile Include="Controllers\ConfigurationController.cs" />
     <Compile Include="Controllers\EtlController.cs" />
     <Compile Include="Controllers\LicenseController.cs" />
+    <Compile Include="Core\IRecurrentEventTimer.cs" />
+    <Compile Include="Core\RecurrentEventTimer.cs" />
+    <Compile Include="Core\PreloadAdminPage.cs" />
     <Compile Include="Models\EtlScheduleJobModel.cs" />
     <Compile Include="Models\JobPeriodRelative.cs" />
     <Compile Include="Models\TenantConfigurationModel.cs" />
@@ -465,7 +468,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>56464</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:56187/</IISUrl>
+          <IISUrl>http://localhost/Teleopti.Wfm.Administration</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

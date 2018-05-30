@@ -98,6 +98,11 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 			builder.Register<Func<ICurrentUnitOfWork, IRtaStateGroupRepository>>(context => uow => new RtaStateGroupRepository(uow));
 
 			builder.RegisterType<AdminAccessTokenRepository>().AsSelf();
+
+			if(_configuration.Toggle(Toggles.Tenant_PurgeLogonAttempts_75782))
+				builder.RegisterType<RecurrentEventTimer>().As<IRecurrentEventTimer>().SingleInstance();
+			else
+				builder.RegisterType<RecurrentEventTimerNoTick>().As<IRecurrentEventTimer>().SingleInstance();
 		}
 	}
 
