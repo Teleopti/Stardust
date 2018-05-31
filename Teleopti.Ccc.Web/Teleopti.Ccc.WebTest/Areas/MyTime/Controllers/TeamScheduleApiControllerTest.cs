@@ -132,6 +132,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldReturnDisplayTimeBasedOnLocalTimezoneInTimeLine()
 		{
 			UserTimeZone.IsSweden();
+			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			var today = new DateOnly(2018, 5, 23);
 			var teamScheduleRequest = new TeamScheduleRequest
 			{
@@ -151,11 +152,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			(teamScheduleViewModel.TimeLine == null).Should().Be(false);
 			(teamScheduleViewModel.TimeLine.Length > 0).Should().Be(true);
 
-			var firstTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.First() as TeamScheduleTimeLineViewModel;
+			var firstTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.First();
 			firstTeamScheduleTimeLineViewModel.Time.Should().Be(TimeSpan.FromHours(8));
 			firstTeamScheduleTimeLineViewModel.TimeLineDisplay.Should().Be(today.Date.AddMinutes(480).ToLocalizedTimeFormat());
 
-			var lastTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.Last() as TeamScheduleTimeLineViewModel;
+			var lastTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.Last();
 			lastTeamScheduleTimeLineViewModel.Time.Should().Be(TimeSpan.FromHours(17));
 			lastTeamScheduleTimeLineViewModel.TimeLineDisplay.Should().Be(today.Date.AddMinutes(1020).ToLocalizedTimeFormat());
 		}
@@ -242,6 +243,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var lastTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.Last() as TeamScheduleTimeLineViewModel;
 			lastTeamScheduleTimeLineViewModel.PositionPercentage.Should().Be(Math.Round((decimal)TimeSpan.FromMinutes(7 * 60 + 15).Ticks / diff.Ticks, 4));
 		}
+
 
 		[Test]
 		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
@@ -557,7 +559,48 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 		[Test]
 		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
-		public void ShouldReturnPositionPercentageInPeriod()
+		public void ShouldReturnPositionPercentageWhenStartTimeIsHalfPast5()
+		{
+			var today = new DateOnly(2014, 12, 15);
+			var team = TeamFactory.CreateSimpleTeam("test team").WithId();
+			TeamRepository.Add(team);
+
+			var person = User.CurrentUser();
+			PersonRepository.Add(person);
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var assignment = new PersonAssignment(person, Scenario.Current(), today);
+			var period = new DateTimePeriod(2014, 12, 15, 5, 2014, 12, 16, 1);
+			period = period.ChangeStartTime(TimeSpan.FromMinutes(30));
+			period = period.ChangeEndTime(TimeSpan.FromMinutes(30));
+			assignment.AddActivity(ActivityFactory.CreateActivity("test"), period);
+			ScheduleData.Add(assignment);
+
+			var teamScheduleRequest = new TeamScheduleRequest
+			{
+				SelectedDate = today.Date,
+				Paging = new Paging
+				{
+					Take = 10
+				},
+				ScheduleFilter = new Domain.Repositories.ScheduleFilter
+				{
+					TeamIds = team.Id.ToString()
+				}
+			};
+			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
+			var firstPeriod = teamScheduleViewModel.MySchedule.Periods.ElementAt(0);
+
+			var diff = TimeSpan.FromHours(25).Add(TimeSpan.FromMinutes(45)) - TimeSpan.FromHours(5).Add(TimeSpan.FromMinutes(15));
+
+			var startPosition = TimeSpan.FromMinutes(15).Ticks / (decimal)diff.Ticks;
+			var endPosition = TimeSpan.FromMinutes(20 * 60 + 15).Ticks / (decimal)diff.Ticks;
+			assertPeriodPosition(firstPeriod, startPosition, endPosition);
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
+		public void ShouldReturnPositionPercentageInAgentScheulePeriod()
 		{
 			var today = new DateOnly(2014, 12, 15);
 			var team = TeamFactory.CreateSimpleTeam("test team").WithId();
