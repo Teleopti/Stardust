@@ -209,6 +209,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return database.WithMappedRule(Guid.NewGuid(), stateCode, activityId, 0, null, null);
 		}
 
+
+		public static FakeDatabase WithMappedRule(this FakeDatabase database, string stateCode, Guid? activityId, Adherence adherence)
+		{
+			return database.WithMappedRule(Guid.NewGuid(), stateCode, activityId, 0, null, adherence);
+		}
+
 		public static FakeDatabase WithMappedRule(this FakeDatabase database, string stateCode, Guid? activityId, int staffingEffect)
 		{
 			return database.WithMappedRule(Guid.NewGuid(), stateCode, activityId, staffingEffect, null, null);
@@ -252,6 +258,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public static FakeDatabase WithMappedRule(this FakeDatabase database, Guid? ruleId, string stateCode, Guid? activityId, int staffingEffect, string name, Adherence? adherence)
 		{
 			return database.WithMappedRule(ruleId, stateCode, activityId, staffingEffect, name, adherence, null);
+		}
+		
+		public static FakeDatabase WithMappedRule(this FakeDatabase database, string stateCode, Guid? activityId, int staffingEffect, string name, Adherence? adherence, Color color)
+		{
+			return database.WithMappedRule(Guid.NewGuid(), stateCode, activityId, staffingEffect, name, adherence, color);
 		}
 	}
 
@@ -1114,7 +1125,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				).FirstOrDefault() as RtaStateGroup;
 				if (_stateGroup == null)
 				{
-					WithStateGroup(null, name);
+					WithStateGroup(null, stateCode);
 					WithStateCode(stateCode);
 				}
 			}
