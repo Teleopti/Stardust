@@ -12873,15 +12873,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Day has been overrided on web.
-        /// </summary>
-        public static string ForecastDayIsOverrided {
-            get {
-                return ResourceManager.GetString("ForecastDayIsOverrided", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Forecast.
         /// </summary>
         public static string ForecastDo {
@@ -28310,6 +28301,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string RestrictionNotAbleToBeScheduledReasonNightlyRestMightBeBroken {
             get {
                 return ResourceManager.GetString("RestrictionNotAbleToBeScheduledReasonNightlyRestMightBeBroken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No issues in period.
+        /// </summary>
+        public static string RestrictionNotAbleToBeScheduledReasonNoIssue {
+            get {
+                return ResourceManager.GetString("RestrictionNotAbleToBeScheduledReasonNoIssue", resourceCulture);
             }
         }
         

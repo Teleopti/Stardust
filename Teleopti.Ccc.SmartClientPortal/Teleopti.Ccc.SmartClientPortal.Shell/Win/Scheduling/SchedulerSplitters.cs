@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         private readonly PinnedSkillHelper _pinnedSkillHelper;
 		IEnumerable<IPerson> _filteredPersons = new List<IPerson>();
 		private bool _schedulerRestrictionReport47013;
+		private bool _schedulerRestrictionReportToggleAll76224;
 
 
 		public SchedulerSplitters()
@@ -140,7 +141,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 		}
 
-        private void chbAvailability_CheckedChanged(object sender, EventArgs e)
+		[RemoveMeWithToggle(Toggles.Scheduler_RestrictionReportToggleAll_76224)]
+		public bool SchedulerRestrictionReportToggleAll76224 => _schedulerRestrictionReportToggleAll76224;
+
+		private void chbAvailability_CheckedChanged(object sender, EventArgs e)
         {
             _useAvailability = chbAvailability.Checked;
             RecalculateRestrictions();
@@ -258,9 +262,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 		}
 		[RemoveMeWithToggle(Toggles.Scheduler_RestrictionReport_47013)]
-		public void InsertRestrictionNotAbleToBeScheduledReportModel(RestrictionNotAbleToBeScheduledReport reportModel, bool schedulerRestrictionReport47013)
+		public void InsertRestrictionNotAbleToBeScheduledReportModel(RestrictionNotAbleToBeScheduledReport reportModel, bool schedulerRestrictionReport47013, bool schedulerRestrictionReportToggleAll76224)
 		{
 			_schedulerRestrictionReport47013 = schedulerRestrictionReport47013;
+			_schedulerRestrictionReportToggleAll76224 = schedulerRestrictionReportToggleAll76224;
 			var oldPanel = (TableLayoutPanel)teleoptiLessIntellegentSplitContainerView.Panel1.Controls[1];
 			var newPanel = (AgentsNotPossibleToSchedule)teleoptiLessIntellegentSplitContainerView.Panel1.Controls[0];
 			if (schedulerRestrictionReport47013)

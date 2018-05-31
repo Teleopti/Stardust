@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
 		[Test]
-		public void ShouldOnlyReportOnAgentsNotAbleToSchedule()
+		public void ShouldOnlyReportOnAllAgents()
 		{
 			var period = new DateOnlyPeriod(2017, 12, 01, 2017, 12, 31);
 			var activity = new Activity().WithId();
@@ -67,9 +67,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			var result = Target.Create(period, new[] {agent1, agent2}, new NoSchedulingProgress());
 
-			result.Count().Should().Be.EqualTo(1);
-			result.First().Agent.Should().Be.EqualTo(agent2);
-			
+			result.Count().Should().Be.EqualTo(2);
+			result.Last().Agent.Should().Be.EqualTo(agent2);
+			result.First().Agent.Should().Be.EqualTo(agent1);
+			result.First().Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.NoIssue);
+
 		}
 
 		[Test]
@@ -128,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			var result = Target.Create(period, new[] { agent1 }, new NoSchedulingProgress());
 
-			result.Count().Should().Be.EqualTo(0);
+			result.Count().Should().Be.EqualTo(1);
 			foreach (var dateOnly in period.DayCollection())
 			{
 				stateHolder.Schedules[agent1].ScheduledDay(dateOnly).PersonAssignment(true).DayOff().Should().Be.Null();
@@ -157,7 +159,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			var result = Target.Create(period, new[] { agent1 }, new NoSchedulingProgress());
 
-			result.Count().Should().Be.EqualTo(0);
+			result.Count().Should().Be.EqualTo(2);
+			result.First().Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.NoIssue);
 		}
 
 		[Test]
@@ -189,7 +192,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			var result = Target.Create(period, new[] { agent1 }, new NoSchedulingProgress());
 
-			result.Count().Should().Be.EqualTo(1);
+			result.Count().Should().Be.EqualTo(2);
+			result.First().Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.NoIssue);
 		}
 
 		[Test]
@@ -223,13 +227,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent1 }, preferenceDays, skillDays);
 
-			var result = Target.Create(period, new[] { agent1 }, new NoSchedulingProgress());
+			var result = Target.Create(period, new[] { agent1 }, new NoSchedulingProgress()).ToList();
 
-			result.Count().Should().Be.EqualTo(2);
-			result.First().Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.TooMuchWorkTimeInPeriod);
-			result.First().Period.Should().Be.EqualTo(new DateOnlyPeriod(new DateOnly(2018, 4, 9), new DateOnly(2018, 4, 9).AddDays(6)));
-			result.Last().Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.TooMuchWorkTimeInPeriod);
-			result.Last().Period.Should().Be.EqualTo(new DateOnlyPeriod(new DateOnly(2018, 4, 23), new DateOnly(2018, 4, 23).AddDays(6)));
+			result.Count().Should().Be.EqualTo(3);
+			result[0].Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.NoIssue);
+			result[1].Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.TooMuchWorkTimeInPeriod);
+			result[1].Period.Should().Be.EqualTo(new DateOnlyPeriod(new DateOnly(2018, 4, 9), new DateOnly(2018, 4, 9).AddDays(6)));
+			result[2].Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.TooMuchWorkTimeInPeriod);
+			result[2].Period.Should().Be.EqualTo(new DateOnlyPeriod(new DateOnly(2018, 4, 23), new DateOnly(2018, 4, 23).AddDays(6)));
 		}
 
 		public RestrictionNotAbleToBeScheduledReportTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerLessResourcesXXL74915) : base(seperateWebRequest, resourcePlannerLessResourcesXXL74915)

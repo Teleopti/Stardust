@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, preferenceDays, skillDays);
 
 			var result = Target.Execute(agent.VirtualSchedulePeriod(period.StartDate));
-			result.Should().Be.EqualTo(null);
+			result.Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.NoIssue);
 
 			Target2.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, extendedPeriod);
 			stateHolder.Schedules[agent].CalculatedContractTimeHolderOnPeriod(period).TotalHours.Should().Be
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, preferenceDaysOrAss, skillDays);
 
 			var result = Target.Execute(agent.VirtualSchedulePeriod(period.StartDate));
-			result.Should().Be.EqualTo(null);
+			result.Reason.Should().Be.EqualTo(RestrictionNotAbleToBeScheduledReason.NoIssue);
 
 			Target2.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, extendedPeriod);
 			stateHolder.Schedules[agent].CalculatedContractTimeHolderOnPeriod(period).TotalHours.Should().Be.EqualTo(176);

@@ -17367,4 +17367,8 @@ The application will now exit.</value>
     <value>Override replaced existing campaign values</value>
     <comment>Warning message to show when override is added on top of existing campaign</comment>
   </data>
+  <data name="RestrictionNotAbleToBeScheduledReasonNoIssue" xml:space="preserve">
+    <value>No issues in period</value>
+    <comment>No issues in period</comment>
+  </data>
 </root>
