@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Forecasting.Angel.Outlier;
 using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Web.Areas.Forecasting.Models;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting
@@ -82,9 +81,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			};
 		}
 
-		public WorkloadEvaluateMethodsViewModel EvaluateMethods(EvaluateMethodsInput input)
+		public WorkloadEvaluateMethodsViewModel EvaluateMethods(Guid workloadId)
 		{
-			var workload = _workloadRepository.Get(input.WorkloadId);
+			var workload = _workloadRepository.Get(workloadId);
 			var evaluateResult = _forecastWorkloadEvaluator.Evaluate(workload);
 			var availablePeriod = _historicalPeriodProvider.AvailablePeriod(workload);
 			var result = new WorkloadEvaluateMethodsViewModel

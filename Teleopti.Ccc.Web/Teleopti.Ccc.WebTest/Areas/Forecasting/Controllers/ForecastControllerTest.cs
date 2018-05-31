@@ -16,7 +16,6 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
-using Teleopti.Ccc.Web.Areas.Forecasting.Core;
 using Teleopti.Ccc.Web.Areas.Forecasting.Models;
 using Teleopti.Interfaces.Domain;
 

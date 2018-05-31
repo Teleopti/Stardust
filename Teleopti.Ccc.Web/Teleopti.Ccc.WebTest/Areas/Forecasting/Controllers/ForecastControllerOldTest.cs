@@ -13,7 +13,6 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
-using Teleopti.Ccc.Web.Areas.Forecasting.Core;
 using Teleopti.Ccc.Web.Areas.Forecasting.Models;
 using Teleopti.Interfaces.Domain;
 
@@ -63,7 +62,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			{
 				ForecastStart = new DateTime(2014, 4, 1),
 				ForecastEnd = new DateTime(2014, 4, 29),
-				Workload = new ForecastWorkloadInput {},
+				Workload = new ForecastWorkloadInput(),
 				ScenarioId = scenarioId
 			};
 			var scenario = new Scenario("test1").WithId(scenarioId);
@@ -86,7 +85,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			forecastCreator.Stub(x => x.CreateForecastForWorkload(period, forecastInput.Workload, scenario)).Return(forecast);
 
 			var result = (OkNegotiatedContentResult<ForecastModel>)target.Forecast(forecastInput);
-			//var period2 = new DateOnlyPeriod(new DateOnly(forecastInput.ForecastStart), new DateOnly(forecastInput.ForecastEnd));
 			forecastCreator.AssertWasCalled(x => x.CreateForecastForWorkload(period, forecastInput.Workload, scenario));
 			result.Should().Be.OfType<OkNegotiatedContentResult<ForecastModel>>();
 		}

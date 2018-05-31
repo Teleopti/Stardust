@@ -1,7 +1,7 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
 
-namespace Teleopti.Ccc.Web.Areas.Forecasting.Models
+namespace Teleopti.Ccc.Domain.Forecasting.Models
 {
 	public class QueueStatisticsInput
 	{

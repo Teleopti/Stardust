@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Web.Areas.Forecasting.Core;
 using Teleopti.Ccc.Web.Areas.Forecasting.Models;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
@@ -107,9 +106,9 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		}
 
 		[HttpPost, Route("api/Forecasting/EvaluateMethods"), UnitOfWork]
-		public virtual Task<WorkloadEvaluateMethodsViewModel> EvaluateMethods(EvaluateMethodsInput input)
+		public virtual Task<WorkloadEvaluateMethodsViewModel> EvaluateMethods(Guid workloadId)
 		{
-			return Task.FromResult(_forecastViewModelFactory.EvaluateMethods(input));
+			return Task.FromResult(_forecastViewModelFactory.EvaluateMethods(workloadId));
 		}
 
 		[HttpPost, Route("api/Forecasting/Forecast"), ReadonlyUnitOfWork]
@@ -278,8 +277,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 					{
 						if (!string.IsNullOrEmpty(forecastedWorkloadDay.Annotation))
 						{
-							forecastedWorkloadDay.Annotation =
-								forecastedWorkloadDay.Annotation.Replace($"[*{Resources.ForecastDayIsOverrided}*]", "");
+							forecastedWorkloadDay.Annotation = forecastedWorkloadDay.Annotation.Replace(overrideNote, "");
 						}
 
 						_forecastDayOverrideRepository.Remove(forecastDayOverride);
