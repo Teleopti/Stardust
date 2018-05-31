@@ -15505,6 +15505,6 @@ Applikationen kommer nu att stängas. </value>
     <value>För många arbetsdagar i följd. </value>
   </data>
   <data name="ImportBpoImportedAt" xml:space="preserve">
-    <value>importerad den</value>
+    <value>importerad</value>
   </data>
 </root>

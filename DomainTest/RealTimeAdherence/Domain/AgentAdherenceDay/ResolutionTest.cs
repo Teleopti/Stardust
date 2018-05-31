@@ -181,7 +181,6 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 		}
 
 		[Test]
-		[Ignore("Laterz ;)")]
 		public void ShouldSplitOutOfAdherencePeriodBecauseOfTinyNeutralPeriod()
 		{
 			Now.Is("2018-03-26 23:00");

@@ -6,11 +6,12 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.LayerViewModel.js" />
 
-Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function() {
+Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function (selectedDateChangedCallback) {
 	var self = this,
 		constants = Teleopti.MyTimeWeb.Common.Constants,
 		dateOnlyFormat = constants.serviceDateTimeFormat.dateOnly,
-		timeLineOffset = 40;
+		timeLineOffset = 40,
+		requestDateOnlyFormat = 'YYYY/MM/DD';
 
 	self.selectedDate = ko.observable(moment());
 	self.displayDate = ko.observable(self.selectedDate().format(dateOnlyFormat));
@@ -20,6 +21,8 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function() {
 	self.timeLines = ko.observableArray();
 	self.mySchedule = ko.observable();
 	self.teamSchedules = ko.observableArray();
+	self.selectedDateChangedCallback = selectedDateChangedCallback;
+	self.selectedDateSubscription = null;
 
 	self.filter = {
 		selectedTeamIds: [],
@@ -34,16 +37,14 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function() {
 		take: 5
 	};
 
-	self.selectedDate.subscribe(function(value) {
-		self.displayDate(value.format(dateOnlyFormat));
-	});
-
-	self.previousDay = function() {
-		self.selectedDate(moment(self.selectedDate()).add(-1, 'days'));
+	self.previousDay = function () {
+		var previousDate = moment(self.selectedDate()).add(-1, 'days').format(requestDateOnlyFormat);
+		self.selectedDateChangedCallback(previousDate);
 	};
 
-	self.nextDay = function() {
-		self.selectedDate(moment(self.selectedDate()).add(1, 'days'));
+	self.nextDay = function () {
+		var nextDate = moment(self.selectedDate()).add(1, 'days').format(requestDateOnlyFormat);
+		self.selectedDateChangedCallback(nextDate);
 	};
 
 	self.readTeamsData = function(data) {
@@ -55,11 +56,33 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function() {
 		self.filter.selectedTeamIds.push(data.DefaultTeam);
 	};
 
-	self.readScheduleData = function (data) {
+	self.readScheduleData = function (data, date) {
+		disposeSelectedDateSubscription();
+
+		self.selectedDate(moment(date));
+		self.displayDate(moment(date).format(Teleopti.MyTimeWeb.Common.DateFormat));
 		self.timeLines(createTimeLine(data.TimeLine));
 
 		self.mySchedule(createMySchedule(data.MySchedule));
 		self.teamSchedules(createTeamSchedules(data.AgentSchedules));
+
+		setSelectedDateSubscription();
+	};
+
+	function setSelectedDateSubscription() {
+		if (self.selectedDateSubscription == null) {
+			self.selectedDateSubscription = self.selectedDate.subscribe(function(value) {
+				self.displayDate(value.format(dateOnlyFormat));
+				if (self.selectedDateChangedCallback) {
+					self.selectedDateChangedCallback(value.format(requestDateOnlyFormat));
+				}
+			});
+		}
+	};
+
+	function disposeSelectedDateSubscription() {
+		if (self.selectedDateSubscription)
+			self.selectedDateSubscription.dispose();
 	};
 
 	function createMySchedule(myScheduleData) {
@@ -67,7 +90,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function() {
 
 		myScheduleData.Periods.forEach(function (layer, index, periods) {
 			var layerViewModel = new Teleopti.MyTimeWeb.Schedule.LayerViewModel(layer, null, true, timeLineOffset);
-			layerViewModel.isLastLayer = index == periods.length - 1;
+			layerViewModel.isLastLayer = index === periods.length - 1;
 			mySchedulePeriods.push(layerViewModel);
 		});
 
@@ -86,7 +109,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function() {
 					true,
 					timeLineOffset
 				);
-				layerViewModel.isLastLayer = index == periods.length - 1;
+				layerViewModel.isLastLayer = index === periods.length - 1;
 
 				layers.push(layerViewModel);
 			});

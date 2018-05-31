@@ -45,6 +45,11 @@
 	});
 
 	it('should create schedule correctly', function () {
+		var underlyingScheduleSummary = {
+			"PersonalActivities": [{ "Description": "Chat", "Start": "2018-05-29 08:00", "End": "2018-05-29 09:00" }],
+			"PersonPartTimeAbsences": null,
+			"PersonMeetings": null
+		};
 		var schedule = {
 			"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
 			"Name": "Annika Andersson",
@@ -70,11 +75,7 @@
 				"IsOvertime": false
 			}],
 			"Timezone": { "IanaId": "Europe/Berlin" },
-			"UnderlyingScheduleSummary": {
-				"PersonalActivities": [{ "Description": "Chat", "Start": "2018-05-29 08:00", "End": "2018-05-29 09:00" }],
-				"PersonPartTimeAbsences": null,
-				"PersonMeetings": null
-			}
+			"UnderlyingScheduleSummary": underlyingScheduleSummary
 		};
 
 		var schedule = target.CreateSchedule("2018-05-28", "Europe/Berlin", schedule);
@@ -85,6 +86,8 @@
 		expect(schedule.HasUnderlyingSchedules).toBe(true);
 		expect(schedule.ProjectionTimeRange.Start).toBe("2018-05-28 08:00");
 		expect(schedule.ProjectionTimeRange.End).toBe("2018-05-28 12:00");
+		expect(schedule.UnderlyingScheduleSummary.PersonalActivities[0].TimeSpan).toBe("08:00 - 09:00");
+		expect(schedule.UnderlyingScheduleSummary.PersonalActivities[0].Description).toBe("Chat");
 
 		expect(shiftLayers.length).toEqual(2);
 		expect(shiftLayers[0].Description).toEqual('E-mail');
@@ -99,7 +102,12 @@
 		expect(shiftLayers[1].UseLighterBorder).toEqual(true);
 	});
 
-	it('should create shift layers based on timezone', function () {
+	it('should create shift layers and underlying summary schedule timespan based on timezone', function () {
+		var underlyingScheduleSummary = {
+			"PersonalActivities": [{ "Description": "Chat", "Start": "2018-05-28 08:00", "End": "2018-05-28 09:00" }],
+			"PersonPartTimeAbsences": [{ "Description": "Chat", "Start": "2018-05-28 09:00", "End": "2018-05-28 10:00" }],
+			"PersonMeetings": [{ "Description": "Chat", "Start": "2018-05-28 10:00", "End": "2018-05-28 11:00" }]
+		};
 		var schedule = {
 			"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
 			"Name": "Annika Andersson",
@@ -113,10 +121,17 @@
 				"Start": "2018-05-28 08:00",
 				"Minutes": 120,
 				"IsOvertime": false
-			}]
+			}],
+			"Timezone": { "IanaId": "Europe/Berlin" },
+			"UnderlyingScheduleSummary": underlyingScheduleSummary
+
 		};
 
 		var viewModel = target.CreateSchedule("2018-05-28", "Asia/Hong_Kong", schedule);
+
+		expect(viewModel.UnderlyingScheduleSummary.PersonalActivities[0].TimeSpan).toEqual("14:00 - 15:00");
+		expect(viewModel.UnderlyingScheduleSummary.PersonPartTimeAbsences[0].TimeSpan).toEqual("15:00 - 16:00");
+		expect(viewModel.UnderlyingScheduleSummary.PersonMeetings[0].TimeSpan).toEqual("16:00 - 17:00");
 		expect(viewModel.ProjectionTimeRange.Start).toEqual("2018-05-28 14:00");
 		expect(viewModel.ProjectionTimeRange.End).toEqual("2018-05-28 16:00");
 		expect(viewModel.ShiftLayers[0].Start).toEqual("2018-05-28 14:00");

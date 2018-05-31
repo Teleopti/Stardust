@@ -71,6 +71,7 @@
 		Wfm_PeopleWeb_PrepareForRelease_47766,
 
 		Scheduler_RestrictionReport_47013,
+		Scheduler_RestrictionReportToggleAll_76224,
 
 		WfmGlobalLayout_personalOptions_37114,
 		

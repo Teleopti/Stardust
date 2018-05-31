@@ -5,7 +5,6 @@
 		'$q',
 		'$timeout',
 		'$translate',
-		'$stateParams',
 		'$state',
 		'$mdSidenav',
 		'$mdComponentRegistry',
@@ -24,13 +23,15 @@
 		'TeamsStaffingConfigurationStorageService',
 		'serviceDateFormatHelper',
 		'TeamScheduleSkillService',
+		'ViewStateKeeper',
 		TeamScheduleController]);
 
-	function TeamScheduleController($scope, $q, $timeout, $translate, $stateParams, $state, $mdSidenav, $mdComponentRegistry, $document,
+	function TeamScheduleController($scope, $q, $timeout, $translate, $state, $mdSidenav, $mdComponentRegistry, $document,
 		teamScheduleSvc, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService,
 		CommandCheckService, ScheduleNoteManagementService, teamsToggles, toggleSvc, bootstrapCommon, groupPageService,
-		StaffingConfigStorageService, serviceDateFormatHelper, SkillService) {
+		StaffingConfigStorageService, serviceDateFormatHelper, SkillService, ViewStateKeeper) {
 		var vm = this;
+		var stateParams = ViewStateKeeper.get();
 		vm.isLoading = false;
 		vm.scheduleFullyLoaded = false;
 		vm.scheduleDateMoment = function () {
@@ -38,19 +39,19 @@
 		};
 		vm.availableTimezones = [];
 		vm.sitesAndTeams = undefined;
-		vm.staffingEnabled = $stateParams.staffingEnabled;
+		vm.staffingEnabled = stateParams.staffingEnabled;
 		vm.selectedGroups = {
 			mode: 'BusinessHierarchy',
 			groupIds: [],
 			groupPageId: ''
 		};
-		if (angular.isArray($stateParams.selectedTeamIds) && $stateParams.selectedTeamIds.length > 0) {
-			replaceArrayValues($stateParams.selectedTeamIds, vm.selectedGroups.groupIds);
+		if (angular.isArray(stateParams.selectedTeamIds) && stateParams.selectedTeamIds.length > 0) {
+			replaceArrayValues(stateParams.selectedTeamIds, vm.selectedGroups.groupIds);
 		}
-		else if ($stateParams.selectedGroupPage && $stateParams.selectedGroupPage.groupIds.length > 0) {
-			replaceArrayValues($stateParams.selectedGroupPage.groupIds, vm.selectedGroups.groupIds);
+		else if (stateParams.selectedGroupPage && stateParams.selectedGroupPage.groupIds.length > 0) {
+			replaceArrayValues(stateParams.selectedGroupPage.groupIds, vm.selectedGroups.groupIds);
 			vm.selectedGroups.mode = 'GroupPages';
-			vm.selectedGroups.groupPageId = $stateParams.selectedGroupPage.pageId;
+			vm.selectedGroups.groupPageId = stateParams.selectedGroupPage.pageId;
 		}
 
 		vm.lastCommandTrackId = '';
@@ -75,11 +76,7 @@
 					vm.preselectedSkills.skillAreaId = preference.skillGroupId;
 					vm.useShrinkage = preference.useShrinkage;
 				}
-
 			}
-			
-			
-
 		}
 
 		function getTotalTableRowHeight() {
@@ -242,16 +239,16 @@
 			return skillsRow ? skillsRow.offsetHeight : 0;
 		}
 
-		vm.scheduleDate = $stateParams.selectedDate || new Date();
+		vm.scheduleDate = stateParams.selectedDate || new Date();
 
-		vm.teamNameMap = $stateParams.teamNameMap || {};
+		vm.teamNameMap = stateParams.teamNameMap || {};
 		vm.searchOptions = {
-			keyword: $stateParams.keyword || '',
+			keyword: stateParams.keyword || '',
 			searchKeywordChanged: false,
 			focusingSearch: false
 		};
-		vm.selectedFavorite = $stateParams.do ? $stateParams.selectedFavorite : null;
-		vm.sortOption = $stateParams.selectedSortOption;
+		vm.selectedFavorite = stateParams.do ? stateParams.selectedFavorite : null;
+		vm.sortOption = stateParams.selectedSortOption;
 
 		vm.openSettingsPanel = function () {
 			closeAllCommandSidenav();
@@ -402,7 +399,7 @@
 		vm.loadSchedules = function () {
 			closeAllCommandSidenav();
 			vm.isLoading = true;
-			var preSelectPersonIds = $stateParams.personId ? [$stateParams.personId] : [];
+			var preSelectPersonIds = stateParams.personId ? [stateParams.personId] : [];
 			if (vm.searchEnabled) {
 				var params = getParamsForLoadingSchedules();
 
@@ -511,14 +508,14 @@
 		vm.toggles = teamsToggles.all();
 		vm.toggles.WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871 = toggleSvc.WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871;
 
-		vm.scheduleDate = $stateParams.selectedDate || new Date();
+		vm.scheduleDate = stateParams.selectedDate || new Date();
 
 		vm.searchOptions = {
-			keyword: $stateParams.keyword || '',
+			keyword: stateParams.keyword || '',
 			searchKeywordChanged: false,
 			focusingSearch: false
 		};
-		vm.selectedFavorite = $stateParams.do ? $stateParams.selectedFavorite : null;
+		vm.selectedFavorite = stateParams.do ? stateParams.selectedFavorite : null;
 
 		vm.validateWarningEnabled = false;
 
@@ -653,7 +650,7 @@
 				var defaultFavoriteSearch = data.defaultFavoriteSearch;
 				var loggedonUsersTeamId = data.loggedonUsersTeamId;
 
-				if (!$stateParams.do) {
+				if (!stateParams.do) {
 					if (defaultFavoriteSearch) {
 						replaceArrayValues(defaultFavoriteSearch.TeamIds, vm.selectedGroups.groupIds);
 						vm.searchOptions.keyword = defaultFavoriteSearch.SearchTerm;

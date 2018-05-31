@@ -9,14 +9,13 @@
 			'ShiftEditorViewModelFactory',
 			'signalRSVC',
 			'serviceDateFormatHelper',
-			'ViewStateKeeper',
-			function ($stateParams, $state, TeamSchedule, ShiftEditorViewModelFactory, signalRSVC, serviceDateFormatHelper, ViewStateKeeper) {
+			function ($stateParams, $state, TeamSchedule, ShiftEditorViewModelFactory, signalRSVC, serviceDateFormatHelper) {
 				var vm = this;
 				vm.personId = $stateParams.personId;
 				vm.timezone = decodeURIComponent($stateParams.timezone);
 				vm.date = $stateParams.date;
 				vm.gotoDayView = function () {
-					$state.go('teams.dayView', ViewStateKeeper.get());
+					$state.go('teams.dayView');
 				}
 
 				function init() {
