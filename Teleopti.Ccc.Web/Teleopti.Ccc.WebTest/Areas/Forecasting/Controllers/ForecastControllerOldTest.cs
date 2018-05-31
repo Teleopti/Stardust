@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http.Results;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
 using Teleopti.Ccc.Web.Areas.Forecasting.Models;
@@ -21,37 +18,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 	[TestFixture]
 	public class ForecastControllerOldTest
 	{
-		[Test]
-		public void ShouldGetSkillsAndWorkloads()
-		{
-			var principalAuthorization = new FullPermission();
-			var skill1 = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
-			var skillRepository = new FakeSkillRepository();
-			skillRepository.Has(skill1);
-			var forecastMisc = MockRepository.GenerateMock<IWorkloadNameBuilder>();
-			var workload = skill1.WorkloadCollection.Single();
-			var workloadName = skill1.Name + " - " + workload.Name;
-			forecastMisc.Stub(x => x.WorkloadName(skill1.Name, workload.Name)).Return(workloadName);
-			var target = new ForecastController(null, skillRepository, null, null, null, principalAuthorization,
-				forecastMisc, null, null, null, null);
-			var result = target.Skills();
-			result.Skills.Single().Id.Should().Be.EqualTo(skill1.Id.Value);
-			result.Skills.Single().Workloads.Single().Id.Should().Be.EqualTo(workload.Id.Value);
-			result.Skills.Single().Workloads.Single().Name.Should().Be.EqualTo(workloadName);
-		}
-
-		[Test]
-		public void ShouldHavePermissionForModifySkill()
-		{
-			var principalAuthorization = new FullPermission();
-			var skillRepository = new FakeSkillRepository();
-
-			var target = new ForecastController(null, skillRepository, null, null, null, principalAuthorization,
-				null, null, null, null, null);
-			var result = target.Skills();
-			result.IsPermittedToModifySkill.Should().Be.EqualTo(true);
-		}
-		
 		[Test]
 		public void ShouldForecast()
 		{
