@@ -58,8 +58,6 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function() {
 	self.readScheduleData = function (data) {
 		self.timeLines(createTimeLine(data.TimeLine));
 
-		//deleteThisFakeScheduleDataFnWhenBackendIsReady(data);
-
 		self.mySchedule(createMySchedule(data.MySchedule));
 		self.teamSchedules(createTeamSchedules(data.AgentSchedules));
 	};
@@ -132,88 +130,5 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function() {
 			}
 		}
 		self.availableTeams(teams);
-	}
-
-	function deleteThisFakeScheduleDataFnWhenBackendIsReady(data) {
-		//Faking myschedule data to render schedule cause backend is not ready yet.
-		var fistTimeLine = data.TimeLine[1];
-		var lastTimeLine = data.TimeLine[data.TimeLine.length - 2];
-		data.MySchedule = {
-			"Name": "Ashley Andeen",
-			"StartTimeUtc": "2018-05-24T05:00:00",
-			"PersonId": "b46a2588-8861-42e3-ab03-9b5e015b257c",
-			"MinStart": null,
-			"Total": 1,
-			"DayOffName": null,
-			"ContractTimeInMinute": 480.0,
-			"Date": "",
-			"FixedDate": "",
-			"Header": "",
-			"HasMainShift": "",
-			"HasOvertime": "",
-			"IsFullDayAbsence": false,
-			"IsDayOff": false,
-			"Summary": "",
-			"Periods": [
-				{
-					"Title": "Phone",
-					"TimeSpan": fistTimeLine.Time + '-' + lastTimeLine.Time,
-					"StartTime": moment().format(dateOnlyFormat) + 'T' + fistTimeLine.Time,
-					"EndTime": moment().format(dateOnlyFormat) + 'T' + data.TimeLine[data.TimeLine.length - 1].Time,
-					"Summary": "",
-					"StyleClassName": "",
-					"Meeting": null,
-					"StartPositionPercentage": fistTimeLine.PositionPercentage,
-					"EndPositionPercentage": lastTimeLine.PositionPercentage,
-					"Color": "#80FF80",
-					"IsOvertime": false,
-					"IsAbsenceConfidential": false,
-					"TitleTime": fistTimeLine.Time + '-' + lastTimeLine.Time
-				}
-			],
-			"DayOfWeekNumber": "",
-			"HasNotScheduled": ""
-		};
-
-		for(var i = 0; i < 20; i++) {
-			data.AgentSchedules[i] = {
-				"Name": "Agent 1",
-				"StartTimeUtc": "2018-05-24T05:00:00",
-				"PersonId": "b46a2588-8861-42e3-ab03-9b5e015b257c",
-				"MinStart": null,
-				"Total": 1,
-				"DayOffName": null,
-				"ContractTimeInMinute": 480.0,
-				"Date": "",
-				"FixedDate": "",
-				"Header": "",
-				"HasMainShift": "",
-				"HasOvertime": "",
-				"IsFullDayAbsence": false,
-				"IsDayOff": false,
-				"Summary": "",
-				"Periods": [
-					{
-						"Title": "Phone",
-						"TimeSpan": fistTimeLine.Time + '-' + lastTimeLine.Time,
-						"StartTime": moment().format(dateOnlyFormat) + 'T' + fistTimeLine.Time,
-						"EndTime": moment().format(dateOnlyFormat) + 'T' + data.TimeLine[data.TimeLine.length - 1].Time,
-						"Summary": "",
-						"StyleClassName": "",
-						"Meeting": null,
-						"StartPositionPercentage": fistTimeLine.PositionPercentage,
-						"EndPositionPercentage": lastTimeLine.PositionPercentage,
-						"Color": "#80FF80",
-						"IsOvertime": false,
-						"IsAbsenceConfidential": false,
-						"TitleTime": fistTimeLine.Time + '-' + lastTimeLine.Time
-					}
-				],
-				"DayOfWeekNumber": "",
-				"HasNotScheduled": ""
-			}
-		}
-
-		return data;
-	}
+	}	
 };
