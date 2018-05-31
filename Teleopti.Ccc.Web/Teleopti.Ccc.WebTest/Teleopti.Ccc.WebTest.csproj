@@ -235,7 +235,6 @@
     <Compile Include="Areas\Anywhere\Rta\ThemeSettingProviderTest.cs" />
     <Compile Include="Areas\Forecasting\Controllers\WorkloadNameBuilderTest.cs" />
     <Compile Include="Areas\Forecasting\Controllers\SkillControllerTest.cs" />
-    <Compile Include="Areas\Forecasting\Core\ForecastViewModelFactoryTest.cs" />
     <Compile Include="Areas\Global\ApplicationControllerTest.cs" />
     <Compile Include="Areas\Global\AreaWithPermissionPathProviderTest.cs" />
     <Compile Include="Areas\Global\DataProtectionControllerTest.cs" />

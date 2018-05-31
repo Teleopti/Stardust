@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var workload = skill1.WorkloadCollection.Single();
 			var workloadName = skill1.Name + " - " + workload.Name;
 			forecastMisc.Stub(x => x.WorkloadName(skill1.Name, workload.Name)).Return(workloadName);
-			var target = new ForecastController(null, skillRepository, null, null, null, null, principalAuthorization,
+			var target = new ForecastController(null, skillRepository, null, null, null, principalAuthorization,
 				forecastMisc, null, null, null, null);
 			var result = target.Skills();
 			result.Skills.Single().Id.Should().Be.EqualTo(skill1.Id.Value);
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var principalAuthorization = new FullPermission();
 			var skillRepository = new FakeSkillRepository();
 
-			var target = new ForecastController(null, skillRepository, null, null, null, null, principalAuthorization,
+			var target = new ForecastController(null, skillRepository, null, null, null, principalAuthorization,
 				null, null, null, null, null);
 			var result = target.Skills();
 			result.IsPermittedToModifySkill.Should().Be.EqualTo(true);
@@ -67,8 +67,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			};
 			var scenario = new Scenario("test1").WithId(scenarioId);
 			var scenarioRepository = new FakeScenarioRepository(scenario);
-			var target = new ForecastController(forecastCreator, null, null, null, scenarioRepository, null, null, null,
-				null, null, null, null);
+			var target = new ForecastController(forecastCreator, null, null, scenarioRepository, null, null, null, null,
+				null, null, null);
 			var forecast = new ForecastModel
 			{
 				ForecastDays = new List<ForecastDayModel>
@@ -87,20 +87,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var result = (OkNegotiatedContentResult<ForecastModel>)target.Forecast(forecastInput);
 			forecastCreator.AssertWasCalled(x => x.CreateForecastForWorkload(period, forecastInput.Workload, scenario));
 			result.Should().Be.OfType<OkNegotiatedContentResult<ForecastModel>>();
-		}
-
-		[Test]
-		public void ShouldEvaluate()
-		{
-			var forecastViewModelFactory = MockRepository.GenerateMock<IForecastViewModelFactory>();
-			var workloadForecastingViewModel = new WorkloadEvaluateViewModel();
-			forecastViewModelFactory.Stub(x => x.Evaluate(Guid.Empty)).Return(workloadForecastingViewModel);
-			var target = new ForecastController(null, null, forecastViewModelFactory, null, null, null, null, null, null,
-				null, null, null);
-
-			var result = target.Evaluate(Guid.Empty);
-
-			result.Result.Should().Be.EqualTo(workloadForecastingViewModel);
 		}
 	}
 }
