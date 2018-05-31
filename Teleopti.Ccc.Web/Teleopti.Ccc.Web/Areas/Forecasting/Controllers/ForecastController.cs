@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly ISkillRepository _skillRepository;
 		private readonly IForecastViewModelFactory _forecastViewModelFactory;
 		private readonly ForecastProvider _forecastProvider;
-		private readonly IIntradayPatternViewModelFactory _intradayPatternViewModelFactory;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IWorkloadRepository _workloadRepository;
 		private readonly IAuthorization _authorization;
@@ -41,7 +40,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			ISkillRepository skillRepository,
 			IForecastViewModelFactory forecastViewModelFactory,
 			ForecastProvider forecastProvider,
-			IIntradayPatternViewModelFactory intradayPatternViewModelFactory,
 			IScenarioRepository scenarioRepository,
 			IWorkloadRepository workloadRepository,
 			IAuthorization authorization,
@@ -55,7 +53,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_skillRepository = skillRepository;
 			_forecastViewModelFactory = forecastViewModelFactory;
 			_forecastProvider = forecastProvider;
-			_intradayPatternViewModelFactory = intradayPatternViewModelFactory;
 			_scenarioRepository = scenarioRepository;
 			_workloadRepository = workloadRepository;
 			_authorization = authorization;
@@ -118,12 +115,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			var scenario = _scenarioRepository.Get(input.ScenarioId);
 			var forecast = _forecastCreator.CreateForecastForWorkload(futurePeriod, input.Workload, scenario);
 			return Ok(forecast);
-		}
-
-		[HttpPost, Route("api/Forecasting/IntradayPattern"), UnitOfWork]
-		public virtual Task<IntradayPatternViewModel> IntradayPattern(Guid workloadId)
-		{
-			return Task.FromResult(_intradayPatternViewModelFactory.Create(workloadId));
 		}
 
 		[UnitOfWork, HttpPost, Route("api/Forecasting/Campaign")]

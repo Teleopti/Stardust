@@ -211,7 +211,6 @@
     <Compile Include="Forecasting\ForecastProvider.cs" />
     <Compile Include="Forecasting\ForecastViewModelFactory.cs" />
     <Compile Include="Forecasting\IForecastViewModelFactory.cs" />
-    <Compile Include="Forecasting\IntradayPatternViewModelFactory.cs" />
     <Compile Include="Forecasting\IWorkloadNameBuilder.cs" />
     <Compile Include="Forecasting\Models\ForecastDayModel.cs" />
     <Compile Include="Forecasting\Models\ForecastDayModelMapper.cs" />

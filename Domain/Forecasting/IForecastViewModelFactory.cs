@@ -9,10 +9,4 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		WorkloadQueueStatisticsViewModel QueueStatistics(QueueStatisticsInput input);
 		WorkloadEvaluateMethodsViewModel EvaluateMethods(Guid workloadId);
 	}
-
-	public interface IIntradayPatternViewModelFactory
-	{
-		IntradayPatternViewModel Create(Guid workloadId);
-	}
-
 }
