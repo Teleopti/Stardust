@@ -33,7 +33,7 @@
 		}
 
 		vm.changeView = function (viewState) {
-			$state.go(viewState, ViewStateKeeper.get());
+			$state.go(viewState);
 		};
 
 		function getParams() {

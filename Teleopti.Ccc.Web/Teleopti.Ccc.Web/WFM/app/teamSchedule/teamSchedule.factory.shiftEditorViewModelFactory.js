@@ -25,15 +25,46 @@
 
 			var hasUnderlyingSchedules = toggleSvc.WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952 && !!schedule.UnderlyingScheduleSummary;
 
-			return {
-				Date: date,
-				Name: schedule.Name,
-				Timezone: currentTimezone,
-				ProjectionTimeRange: getProjectionTimeRange(layers),
-				ShiftLayers: layers,
-				HasUnderlyingSchedules: hasUnderlyingSchedules
-			}
+			var underlyingScheduleSummary = hasUnderlyingSchedules ? getUnderlyingSummarySchedule(schedule.UnderlyingScheduleSummary, timezone, currentTimezone) : null;
+
+			this.Date = date;
+			this.Name = schedule.Name;
+			this.Timezone = currentTimezone;
+			this.ProjectionTimeRange = getProjectionTimeRange(layers);
+			this.ShiftLayers = layers;
+			this.HasUnderlyingSchedules = hasUnderlyingSchedules;
+			this.UnderlyingScheduleSummary = underlyingScheduleSummary;
+
 		}
+
+		ScheduleViewModel.prototype.GetSummaryTimeSpan = function (info) {
+			return info.TimeSpan;
+		};
+
+		function getUnderlyingSummarySchedule(underlyingScheduleSummary, timezone, currentTimezone) {
+			return {
+				PersonalActivities: getUnderlyingSummaryViewModel(underlyingScheduleSummary.PersonalActivities, timezone, currentTimezone),
+				PersonPartTimeAbsences: getUnderlyingSummaryViewModel(underlyingScheduleSummary.PersonPartTimeAbsences, timezone, currentTimezone),
+				PersonMeetings: getUnderlyingSummaryViewModel(underlyingScheduleSummary.PersonMeetings, timezone, currentTimezone)
+			};
+		}
+
+		function getUnderlyingSummaryViewModel(items, timezone, currentTimezone) {
+			var result = [];
+			if (items && items.length) {
+				result = items.map(function (item) {
+					var startInToTimezone = moment.tz(item.Start, currentTimezone).clone().tz(timezone);
+					var endInToTimezone = moment.tz(item.End, currentTimezone).clone().tz(timezone);
+					var timeSpan = getTimeSpan(startInToTimezone, endInToTimezone);
+					return {
+						TimeSpan: timeSpan,
+						Description: item.Description
+					};
+				});
+			}
+			return result;
+		}
+
 
 		function getProjectionTimeRange(layers) {
 			if (!layers.length) {
@@ -56,7 +87,7 @@
 				ShiftLayerIds: layer.ShiftLayerIds,
 				Color: layer.Color,
 				UseLighterBorder: useLighterColor(layer.Color),
-				TimeSpan: getProjectionTimeSpan(startInToTimezone, endInToTimezone),
+				TimeSpan: getTimeSpan(startInToTimezone, endInToTimezone),
 				IsOvertime: layer.IsOvertime
 			};
 		}
@@ -83,7 +114,7 @@
 			};
 		}
 
-		function getProjectionTimeSpan(start, end) {
+		function getTimeSpan(start, end) {
 			if (!start.isSame(end, 'day')) {
 				return start.format('YYYY-MM-DD LT') + ' - ' + end.format('YYYY-MM-DD LT');
 			}

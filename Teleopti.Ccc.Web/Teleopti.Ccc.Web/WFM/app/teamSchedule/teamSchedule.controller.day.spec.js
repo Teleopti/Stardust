@@ -10,8 +10,8 @@ describe("teamschedule controller tests", function () {
 		scheduleMgmt,
 		teamScheduleService,
 		staffingConfigStorageService,
-		fakeStateParams,
-		$controller;
+		$controller,
+		viewStateKeeper;
 
 	beforeEach(function () {
 		module('externalModules');
@@ -20,10 +20,8 @@ describe("teamschedule controller tests", function () {
 		module('wfm.teamSchedule');
 
 		module(function ($provide) {
-			fakeStateParams = setupMockStateParams();
 			$provide.service('CurrentUserInfo', setupMockCurrentUserInfoService);
 			$provide.service('$locale', setupMockLocale);
-			$provide.service('$stateParams', function () { return fakeStateParams });
 			$provide.service('Toggle', setupMockAllTrueToggleService);
 			$provide.service('groupPageService', setUpMockGroupPagesService);
 			$provide.service('$mdSidenav', setUpMockMdSideNav);
@@ -31,15 +29,16 @@ describe("teamschedule controller tests", function () {
 	});
 
 	beforeEach(inject(function (_$q_, _$mdSidenav_, _$rootScope_, _$controller_, _TeamSchedule_, _PersonSelection_,
-		_ScheduleManagement_, _TeamsStaffingConfigurationStorageService_) {
+		_ScheduleManagement_, _TeamsStaffingConfigurationStorageService_, _ViewStateKeeper_) {
 		$q = _$q_;
 		$mdSidenav = _$mdSidenav_;
+		$controller = _$controller_;
 		rootScope = _$rootScope_.$new();
 		personSelection = _PersonSelection_;
 		scheduleMgmt = _ScheduleManagement_;
 		setupMockTeamScheduleService(_TeamSchedule_);
 		teamScheduleService = _TeamSchedule_;
-		$controller = _$controller_;
+		viewStateKeeper = _ViewStateKeeper_;
 
 		staffingConfigStorageService = _TeamsStaffingConfigurationStorageService_;
 		staffingConfigStorageService.clearConfig();
@@ -305,8 +304,14 @@ describe("teamschedule controller tests", function () {
 	});
 
 	it("should read prechecked status for use shrinkage when show staffing is enabled and there is valid config", function () {
+		var state = {
+			staffingEnabled: true
+		};
+		viewStateKeeper.save(state);
 		staffingConfigStorageService.setShrinkage(true);
+
 		controller = setUpController($controller);
+
 		controller.scheduleDate = new Date("2015-10-26");
 		expect(controller.useShrinkage).toEqual(true);
 	});
@@ -319,21 +324,28 @@ describe("teamschedule controller tests", function () {
 		expect(!!controller.useShrinkage).toEqual(false);
 	});
 
-	it("should init all settings state as same as the route state", function () {
+	it("should init all settings state", function () {
 		staffingConfigStorageService.setSkill(null, 'groupPage');
+
+		var state = {
+			selectedDate: '2018-05-28',
+			keyword: 'jon',
+			teamNameMap: '1 team selected',
+			selectedSortOption: 'Name DESC',
+			selectedGroupPage: { pageId: '', groupIds: ['group id 1'] },
+			staffingEnabled: true
+		};
+		viewStateKeeper.save(state);
+
 		controller = setUpController($controller);
 
-		expect(controller.searchOptions.keyword).toEqual(fakeStateParams.keyword);
-		expect(controller.scheduleDate).toEqual(fakeStateParams.selectedDate);
-		expect(controller.teamNameMap).toEqual(fakeStateParams.teamNameMap);
-		expect(controller.sortOption).toEqual(fakeStateParams.selectedSortOption);
-		if (fakeStateParams.selectedTeamIds) {
-			expect(controller.selectedGroups.groupIds).toEqual(fakeStateParams.selectedTeamIds);
-		} else {
-			expect(controller.selectedGroups.groupPageId).toEqual(fakeStateParams.selectedGroupPage.pageId);
-			expect(controller.selectedGroups.groupIds).toEqual(fakeStateParams.selectedGroupPage.groupIds);
-		}
-		expect(controller.staffingEnabled).toEqual(fakeStateParams.staffingEnabled);
+		expect(controller.searchOptions.keyword).toEqual('jon');
+		expect(controller.scheduleDate).toEqual('2018-05-28');
+		expect(controller.teamNameMap).toEqual('1 team selected');
+		expect(controller.sortOption).toEqual('Name DESC');
+		expect(controller.selectedGroups.groupIds).toEqual(['group id 1']);
+		expect(controller.selectedGroups.groupPageId).toEqual('');
+		expect(controller.staffingEnabled).toEqual(true);
 
 		expect(!!controller.preselectedSkills.skillIds).toEqual(false);
 		expect(controller.preselectedSkills.skillAreaId).toEqual('groupPage');
@@ -488,18 +500,6 @@ describe("teamschedule controller tests", function () {
 			DATETIME_FORMATS: {
 				shortTime: "h:mm a"
 			}
-		};
-	}
-
-	function setupMockStateParams() {
-		return {
-			selectedDate: new Date('2018-02-02'),
-			keyword: 'search',
-			teamNameMap: '1 team selected',
-			selectedSortOption: '',
-			selectedTeamIds: [],
-			selectedGroupPage: { pageId: '', groupIds: [] },
-			staffingEnabled: true
 		};
 	}
 

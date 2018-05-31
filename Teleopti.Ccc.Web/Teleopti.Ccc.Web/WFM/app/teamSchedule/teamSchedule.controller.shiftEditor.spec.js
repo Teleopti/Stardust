@@ -64,9 +64,8 @@
 						"Start": scheduleDate + ' 10:00',
 						"End": scheduleDate + ' 11:00'
 					}]
-				},
-				"Timezone": { "IanaId": "Europe/Berlin" }
-			}], '2018-05-16');
+				}
+			}], '2018-05-16', "Europe/Berlin");
 
 			var element = panel[0];
 			expect(element.querySelectorAll('.underlying-info').length).toBe(1);
