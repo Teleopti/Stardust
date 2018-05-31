@@ -56,5 +56,16 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 					string.Join(Environment.NewLine, possiblePaths));
 			return new DirectoryInfo(path).FullName;
 		}
+		
+		public static string StardustConsoleHostFolderPath()
+		{
+			var path = Path.Combine(_stardustConsoleHostPath.Value, "bin\\Debug");
+			if(Directory.Exists(path))
+				return new DirectoryInfo(path).FullName;
+			path = Path.Combine(_stardustConsoleHostPath.Value, "bin\\Release");
+			if (Directory.Exists(path)) 
+				return new DirectoryInfo(path).FullName;
+			throw new ArgumentException("Stardust console doesn't exist!");
+		}
 	}
 }
