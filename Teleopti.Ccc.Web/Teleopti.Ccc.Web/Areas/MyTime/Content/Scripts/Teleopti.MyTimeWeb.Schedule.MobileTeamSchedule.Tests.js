@@ -17,6 +17,7 @@
 		},
 		teardown: function() {
 			$('.mobile-teamschedule-view').remove();
+			Teleopti.MyTimeWeb.Common.DateFormat = null;
 		}
 	});
 
@@ -318,6 +319,64 @@
 		equal($('.mobile-teamschedule-view .teammates-schedules-column .mobile-schedule-layer strong:visible').length, 0);
 	});
 
+	test('should reload schedule after clicking on "previous day" icon', function() {
+		var html = [
+			'<li class="mobile-datepicker">',
+			'					<div class="input-group">',
+			'						<span class="input-group-btn">',
+			'							<button class="btn btn-default previous-day" data-bind="click: previousDay">',
+			'								<i class="glyphicon glyphicon-chevron-left"></i>',
+			'							</button>',
+			'						</span>',
+			'						<input class="form-control text-center date-input-style" data-bind="value: displayDate" type="text" readonly="readonly"/>',
+			'						<span class="input-group-btn">',
+			'							<span class="btn btn-default moment-datepicker" type="button">',
+			'								<i class="glyphicon glyphicon-calendar"></i>',
+			'							</span>',
+			'							<button class="btn btn-default">',
+			'								<i class="glyphicon glyphicon-chevron-right"></i>',
+			'							</button>',
+			'						</span>',
+			'					</div>',
+			'				</li>'
+		].join('');
+		$('.mobile-teamschedule-view').append(html);
+
+		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+		$('.previous-day').click();
+
+		equal(fetchTeamScheduleDataRequestCount, 2);
+	});
+
+	test('should reload schedule after clicking on "next day" icon', function () {
+		var html = [
+			'<li class="mobile-datepicker">',
+			'					<div class="input-group">',
+			'						<span class="input-group-btn">',
+			'							<button class="btn btn-default">',
+			'								<i class="glyphicon glyphicon-chevron-left"></i>',
+			'							</button>',
+			'						</span>',
+			'						<input class="form-control text-center date-input-style" data-bind="value: displayDate" type="text" readonly="readonly"/>',
+			'						<span class="input-group-btn">',
+			'							<span class="btn btn-default moment-datepicker" type="button">',
+			'								<i class="glyphicon glyphicon-calendar"></i>',
+			'							</span>',
+			'							<button class="btn btn-default next-day" data-bind="click: nextDay">',
+			'								<i class="glyphicon glyphicon-chevron-right"></i>',
+			'							</button>',
+			'						</span>',
+			'					</div>',
+			'				</li>'
+		].join('');
+		$('.mobile-teamschedule-view').append(html);
+
+		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+		$('.next-day').click();
+
+		equal(fetchTeamScheduleDataRequestCount, 2);
+	});
+
 	function setUpFakeData() {
 		fakeAvailableTeamsData = {
 			allTeam: { id: 'allTeams', text: 'All Teams' },
@@ -451,6 +510,7 @@
 				}
 
 				if (option.url === '../api/TeamSchedule/TeamSchedule') {
+					fetchTeamScheduleDataRequestCount++;
 					option.success(fakeTeamScheduleData);
 				}
 			}
@@ -458,9 +518,12 @@
 	}
 
 	function setup() {
+		fetchTeamScheduleDataRequestCount = 0;
 		completeLoadedCount = 0;
 		setUpFakeData();
 		setupAjax();
+
+		Teleopti.MyTimeWeb.Common.DateFormat = dateFormat;
 
 		$('body').append('<div class="mobile-teamschedule-view"></div>');
 		Teleopti.MyTimeWeb.UserInfo = {
