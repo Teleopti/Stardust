@@ -68,19 +68,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			};
 		}
 
-		public WorkloadQueueStatisticsViewModel QueueStatistics(QueueStatisticsInput input)
-		{
-			var workload = _workloadRepository.Get(input.WorkloadId);
-			var availablePeriod = _historicalPeriodProvider.AvailablePeriod(workload);
-			return new WorkloadQueueStatisticsViewModel
-			{
-				WorkloadId = workload.Id.Value,
-				QueueStatisticsDays = availablePeriod.HasValue
-					? createQueueStatisticsDayViewModels(workload, input.MethodId, availablePeriod.Value)
-					: new dynamic[] {}
-			};
-		}
-
 		public WorkloadEvaluateMethodsViewModel EvaluateMethods(Guid workloadId)
 		{
 			var workload = _workloadRepository.Get(workloadId);
@@ -183,27 +170,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 						data.Add(dayResult.CurrentDate, item);
 					}
 				}
-			}
-			return data.Values.ToArray();
-		}
-
-		private dynamic[] createQueueStatisticsDayViewModels(IWorkload workload, ForecastMethodType method, DateOnlyPeriod period)
-		{
-			var historicalData = _historicalData.Fetch(workload, period);
-			var forecastMethod = _forecastMethodProvider.Get(method);
-			var data = new Dictionary<DateOnly, dynamic>();
-			foreach (var taskOwner in historicalData.TaskOwnerDayCollection)
-			{
-				dynamic item = new ExpandoObject();
-				item.date = taskOwner.CurrentDate.Date;
-				item.vh = taskOwner.TotalStatisticCalculatedTasks;
-				data.Add(taskOwner.CurrentDate, item);
-			}
-
-			var historicalDataNoOutliers = _outlierRemover.RemoveOutliers(historicalData, forecastMethod);
-			foreach (var day in historicalDataNoOutliers.TaskOwnerDayCollection)
-			{
-				data[day.CurrentDate].vh2 = Math.Round(day.TotalStatisticCalculatedTasks, 1);
 			}
 			return data.Values.ToArray();
 		}

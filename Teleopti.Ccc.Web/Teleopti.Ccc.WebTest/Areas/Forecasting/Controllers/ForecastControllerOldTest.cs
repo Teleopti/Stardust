@@ -90,21 +90,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		}
 
 		[Test]
-		public void ShouldGetQueueStatistics()
-		{
-			var forecastViewModelFactory = MockRepository.GenerateMock<IForecastViewModelFactory>();
-			var queueStatisticsInput = new QueueStatisticsInput();
-			var workloadQueueStatisticsViewModel = new WorkloadQueueStatisticsViewModel();
-			forecastViewModelFactory.Stub(x => x.QueueStatistics(queueStatisticsInput)).Return(workloadQueueStatisticsViewModel);
-			var target = new ForecastController(null, null, forecastViewModelFactory, null, null, null, null, null, null,
-				null, null, null);
-
-			var result = target.QueueStatistics(queueStatisticsInput);
-
-			result.Result.Should().Be.EqualTo(workloadQueueStatisticsViewModel);
-		}
-
-		[Test]
 		public void ShouldEvaluate()
 		{
 			var forecastViewModelFactory = MockRepository.GenerateMock<IForecastViewModelFactory>();

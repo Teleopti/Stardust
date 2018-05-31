@@ -88,12 +88,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			return Task.FromResult(_forecastViewModelFactory.Evaluate(workloadId));
 		}
 
-		[UnitOfWork, HttpPost, Route("api/Forecasting/QueueStatistics")]
-		public virtual Task<WorkloadQueueStatisticsViewModel> QueueStatistics(QueueStatisticsInput input)
-		{
-			return Task.FromResult(_forecastViewModelFactory.QueueStatistics(input));
-		}
-
 		[HttpPost, Route("api/Forecasting/LoadForecast"), UnitOfWork]
 		public virtual IHttpActionResult LoadForecast(ForecastResultInput input)
 		{

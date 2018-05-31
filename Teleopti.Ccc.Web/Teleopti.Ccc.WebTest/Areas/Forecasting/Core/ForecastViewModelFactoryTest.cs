@@ -10,10 +10,8 @@ using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
-using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Forecasting.Angel;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -21,50 +19,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 {
 	public class ForecastViewModelFactoryTest
 	{
-		[Test]
-		public void ShouldGetQueueStatisticsAndQueueStatisticsNoOutliersForQueueStatisticsViewModel()
-		{
-			var skill = SkillFactory.CreateSkillWithWorkloadAndSources();
-			var workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
-			var workload = skill.WorkloadCollection.Single();
-
-			var date1 = new DateOnly(2014, 12, 19);
-			var date2 = new DateOnly(2014, 12, 20);
-			var workloadDay1 = new WorkloadDay();
-			workloadDay1.Create(date1, new Workload(SkillFactory.CreateSkill("Phone")), new List<TimePeriod>());
-			workloadDay1.MakeOpen24Hours();
-			workloadDay1.TotalStatisticCalculatedTasks = 8d;
-			var workloadDay2 = new WorkloadDay();
-			workloadDay2.Create(date2, new Workload(SkillFactory.CreateSkill("Phone")), new List<TimePeriod>());
-			workloadDay2.MakeOpen24Hours();
-			workloadDay2.TotalStatisticCalculatedTasks = 12d;
-
-			var availablePeriod = new DateOnlyPeriod(2012, 12, 20, 2014, 12, 20);
-			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
-			historicalPeriodProvider.Stub(x => x.AvailablePeriod(workload)).Return(availablePeriod);
-			var historicalData = MockRepository.GenerateMock<IHistoricalData>();
-			var taskOwnerPeriod = new TaskOwnerPeriod(DateOnly.MinValue, new List<WorkloadDay> {workloadDay1, workloadDay2},
-				TaskOwnerPeriodType.Other);
-			historicalData.Stub(x => x.Fetch(workload, availablePeriod)).Return(taskOwnerPeriod);
-
-			var queueStatisticsInput = new QueueStatisticsInput
-			{
-				WorkloadId = workload.Id.Value,
-				MethodId = ForecastMethodType.TeleoptiClassicLongTerm
-			};
-			workloadRepository.Stub(x => x.Get(queueStatisticsInput.WorkloadId)).Return(workload);
-			var target = new ForecastViewModelFactory(null, workloadRepository, historicalPeriodProvider, historicalData,
-				new OutlierRemover(), new ForecastMethodProvider(new LinearRegressionTrendCalculator()), null);
-
-			var result = target.QueueStatistics(queueStatisticsInput);
-
-			result.WorkloadId.Should().Be.EqualTo(workload.Id.Value);
-			var firstDay = result.QueueStatisticsDays.First();
-			((object) firstDay.date).Should().Be.EqualTo(date1.Date);
-			((object) firstDay.vh).Should().Be.EqualTo(8d);
-			((object) firstDay.vh2).Should().Be.EqualTo(8d);
-		}
-
 		[Test]
 		public void ShouldGetCorrectPeriodForEvaluationViewModel()
 		{
@@ -118,35 +72,31 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			historicalData.Stub(x => x.Fetch(workload, new DateOnlyPeriod(2013, 12, 21, 2014, 12, 20))).Return(taskOwnerPeriod);
 
 			var forecastWorkloadEvaluator = MockRepository.GenerateMock<IForecastWorkloadEvaluator>();
-			forecastWorkloadEvaluator.Stub(x => x.Evaluate(workload))
-				.Return(new WorkloadAccuracy
+			forecastWorkloadEvaluator.Stub(x => x.Evaluate(workload)).Return(new WorkloadAccuracy
+			{
+				Accuracies = new[]
 				{
-					Accuracies =
-						new[]
+					new MethodAccuracy
+					{
+						IsSelected = false,
+						MeasureResult = new IForecastingTarget[]
 						{
-							new MethodAccuracy
-							{
-								IsSelected = false,
-								MeasureResult =
-									new IForecastingTarget[]
-									{
-										new ForecastingTarget(date1, new OpenForWork(true, true)) {Tasks = 23.1},
-										new ForecastingTarget(date2, new OpenForWork(true, true)) {Tasks = 23.2}
-									}
-							},
-							new MethodAccuracy
-							{
-								IsSelected = true,
-								MeasureResult =
-									new IForecastingTarget[]
-									{
-										new ForecastingTarget(date1, new OpenForWork(true, true)) {Tasks = 34.1},
-										new ForecastingTarget(date2, new OpenForWork(true, true)) {Tasks = 34.2},
-										new ForecastingTarget(date3, new OpenForWork(true, true)) {Tasks = 34.3}
-									}
-							}
+							new ForecastingTarget(date1, new OpenForWork(true, true)) {Tasks = 23.1},
+							new ForecastingTarget(date2, new OpenForWork(true, true)) {Tasks = 23.2}
 						}
-				});
+					},
+					new MethodAccuracy
+					{
+						IsSelected = true,
+						MeasureResult = new IForecastingTarget[]
+						{
+							new ForecastingTarget(date1, new OpenForWork(true, true)) {Tasks = 34.1},
+							new ForecastingTarget(date2, new OpenForWork(true, true)) {Tasks = 34.2},
+							new ForecastingTarget(date3, new OpenForWork(true, true)) {Tasks = 34.3}
+						}
+					}
+				}
+			});
 			var target = new ForecastViewModelFactory(forecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider,
 				historicalData, null, null, MockRepository.GenerateMock<IWorkloadNameBuilder>());
 
@@ -177,26 +127,25 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			var availablePeriod = new DateOnlyPeriod(2012, 12, 20, 2014, 12, 20);
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
 			historicalPeriodProvider.Stub(x => x.AvailablePeriod(workload)).Return(availablePeriod);
-			forecastWorkloadEvaluator.Stub(x => x.Evaluate(workload))
-				.Return(new WorkloadAccuracy
+			forecastWorkloadEvaluator.Stub(x => x.Evaluate(workload)).Return(new WorkloadAccuracy
+			{
+				Accuracies = new[]
 				{
-					Accuracies = new[]
+					new MethodAccuracy
 					{
-						new MethodAccuracy
-						{
-							Number = 89,
-							MethodId = ForecastMethodType.TeleoptiClassicLongTerm,
-							IsSelected = false
-						},
-						new MethodAccuracy
-						{
-							Number = 92,
-							MethodId = ForecastMethodType.TeleoptiClassicLongTermWithTrend,
-							IsSelected = true,
-							MeasureResult = new IForecastingTarget[] { }
-						}
+						Number = 89,
+						MethodId = ForecastMethodType.TeleoptiClassicLongTerm,
+						IsSelected = false
+					},
+					new MethodAccuracy
+					{
+						Number = 92,
+						MethodId = ForecastMethodType.TeleoptiClassicLongTermWithTrend,
+						IsSelected = true,
+						MeasureResult = new IForecastingTarget[] { }
 					}
-				});
+				}
+			});
 
 			var historicalData = MockRepository.GenerateMock<IHistoricalData>();
 			var taskOwnerPeriod = new TaskOwnerPeriod(DateOnly.MinValue, new List<WorkloadDay>(), TaskOwnerPeriodType.Other);
