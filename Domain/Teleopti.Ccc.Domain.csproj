@@ -213,8 +213,6 @@
     <Compile Include="Forecasting\Models\ForecastDayModel.cs" />
     <Compile Include="Forecasting\Models\ForecastDayModelMapper.cs" />
     <Compile Include="Forecasting\Models\ForecastModel.cs" />
-    <Compile Include="Forecasting\Models\QueueStatisticsInput.cs" />
-    <Compile Include="Forecasting\Models\WorkloadEvaluateViewModel.cs" />
     <Compile Include="Forecasting\WorkloadNameBuilder.cs" />
     <Compile Include="InterfaceLegacy\Domain\OvertimeRequestStaffingCheckMethod.cs" />
     <Compile Include="Intraday\BacklogSkillTypesForecastCalculator.cs" />
