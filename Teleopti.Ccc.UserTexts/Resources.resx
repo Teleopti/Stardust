@@ -17371,4 +17371,7 @@ The application will now exit.</value>
     <value>No issues in period</value>
     <comment>No issues in period</comment>
   </data>
+  <data name="ForecastDayIsOverrided" xml:space="preserve">
+    <value>xxForecastDayIsOverrided</value>
+  </data>
 </root>
