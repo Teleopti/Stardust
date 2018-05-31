@@ -63,13 +63,6 @@
 			</component>
 
 		</component>
-		<component name="OverrideTask"
-               class="Teleopti.Ccc.Domain.Forecasting.OverrideTask"
-					access="property">
-			<property name="OverrideTasks" />
-			<property name="OverrideAverageTaskTime" />
-			<property name="OverrideAverageAfterTaskTime" />
-		</component>
 	</class>
 </hibernate-mapping>
 

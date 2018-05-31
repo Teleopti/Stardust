@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -45,14 +44,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// Created date: 2007-12-17
 		/// </remarks>
 		TimeSpan AverageTaskTime { get; set; }
-
-		double? OverrideTasks { get; }
-
-		TimeSpan? OverrideAverageTaskTime { get; set; }
-
-		TimeSpan? OverrideAverageAfterTaskTime { get; set; }
-
-		void SetOverrideTasks(double? task, IEnumerable<ITaskOwner> intradayPattern);
 
 		/// <summary>
 		/// Gets a value indicating whether this instance is closed.
