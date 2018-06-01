@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NPOI.SS.Formula.Functions;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
 	public interface IAbsenceRequestStrategyProcessor
 	{
-		IList<IEnumerable<IQueuedAbsenceRequest>> Get(DateTime nearFutureThresholdTime, DateTime farFutureThresholdTime, DateTime pastThresholdTime, DateOnlyPeriod initialPeriod,
+		IList<IEnumerable<IQueuedAbsenceRequest>> Get(DateTime threshholdTime, DateTime pastThresholdTime, DateOnlyPeriod initialPeriod,
 									 int windowSize);
 	}
 
@@ -33,8 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_now = now;
 		}
 
-		public IList<IEnumerable<IQueuedAbsenceRequest>> Get(DateTime nearFutureThresholdTime, DateTime farFutureThresholdTime, DateTime pastThresholdTime,
-											DateOnlyPeriod initialPeriod, int windowSize)
+		public IList<IEnumerable<IQueuedAbsenceRequest>> Get(DateTime threshholdTime, DateTime pastThresholdTime, DateOnlyPeriod initialPeriod, int windowSize)
 		{
 			
 			IList<IQueuedAbsenceRequest> requestsInQueue;
@@ -44,18 +44,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				requestsInQueue = _denyLongQueuedAbsenceRequests.DenyAndRemoveLongRunningRequests(allRequestsRaw);
 				uow.PersistAll();
 			}
-
+			
 			var timedOutRequestsTime = _now.UtcDateTime().AddMinutes(-60);
 			var allNewRequests = new List<IQueuedAbsenceRequest>();
 			allNewRequests.AddRange(requestsInQueue.Where(x => x.Sent == null || x.Sent < timedOutRequestsTime));
 
 			//filter out requests that is not in a period that is already beeing processed
 			var processingPeriods = getProcessingPeriods(requestsInQueue.Where(x => x.Sent != null && x.Sent >= timedOutRequestsTime));
+
+			if (!allNewRequests.Any(x=>x.Created <= threshholdTime)) return new List<IEnumerable<IQueuedAbsenceRequest>>();
+
 			var notConflictingRequests = getNotConflictingRequests(allNewRequests, processingPeriods);
 			if (!notConflictingRequests.Any()) return new List<IEnumerable<IQueuedAbsenceRequest>>();
 
 			var futureRequests = getFutureRequests(notConflictingRequests, initialPeriod);
-			var nearFutureRequestIds = getNearFutureRequestIds(nearFutureThresholdTime, initialPeriod, futureRequests);
+			var nearFutureRequestIds = getNearFutureRequestIds(threshholdTime, initialPeriod, futureRequests,windowSize);
 
 			if (nearFutureRequestIds.Any())
 			{
@@ -64,7 +67,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				
 
 			var farFutureRequests = getFarFutureRequests(notConflictingRequests, initialPeriod);
-			var farFutureRequestIds = getFarFutureRequestIds(farFutureThresholdTime, initialPeriod, farFutureRequests, windowSize);
+			var farFutureRequestIds = getFarFutureRequestIds(threshholdTime, initialPeriod, farFutureRequests, windowSize);
 			if (farFutureRequestIds.Any())
 			{
 				return farFutureRequestIds;
@@ -126,12 +129,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			return allRequests.Where(x => x.StartDateTime.Date >= nearFuturePeriod.StartDate.Date).ToList();
 		}
 
-		private IList<IEnumerable<IQueuedAbsenceRequest>> getNearFutureRequestIds(DateTime nearFutureThresholdTime, DateOnlyPeriod nearFuturePeriod, IList<IQueuedAbsenceRequest> futureRequests)
+		private IList<IEnumerable<IQueuedAbsenceRequest>> getNearFutureRequestIds(DateTime nearFutureThresholdTime, DateOnlyPeriod nearFuturePeriod, IList<IQueuedAbsenceRequest> futureRequests, int windowSize)
 		{
 			var result = new List<IEnumerable<IQueuedAbsenceRequest>>();
 			if (!futureRequests.Any()) return result;
 
-			var requests = getRequestsOnPeriod(nearFutureThresholdTime, nearFuturePeriod, futureRequests);
+			var requests = getRequestsOnPeriod(nearFutureThresholdTime, nearFuturePeriod, futureRequests, windowSize);
 			if (requests.Any())
 				result.Add(requests);
 
@@ -147,7 +150,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				period = new DateOnlyPeriod(period.StartDate.AddDays(-windowSize),
 												  period.StartDate.AddDays(-1));
 
-				var windowRequests = getRequestsOnPeriod(pastThresholdTime, period, pastRequests);
+				var windowRequests = getRequestsOnPeriod(pastThresholdTime, period, pastRequests,windowSize);
 				if (windowRequests.Any())
 					result.Add(windowRequests);
 			}
@@ -163,7 +166,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			{
 				period = new DateOnlyPeriod(period.EndDate.AddDays(1),
 											period.EndDate.AddDays(windowSize));
-				var windowRequests = getRequestsOnPeriod(farFutureThresholdTime, period, farFutureRequests);
+				var windowRequests = getRequestsOnPeriod(farFutureThresholdTime, period, farFutureRequests,windowSize);
 				if (windowRequests.Any())
 					result.Add(windowRequests);
 			}
@@ -181,18 +184,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		}
 
 		private List<IQueuedAbsenceRequest> getRequestsOnPeriod(DateTime thresholdTime, DateOnlyPeriod windowPeriod,
-													  IList<IQueuedAbsenceRequest> requests)
+													  IList<IQueuedAbsenceRequest> requests, int windowSize)
 		{
 			var requestsInPeriod = requests.Where(x => x.StartDateTime.Date >= windowPeriod.StartDate.Date &&
 													   x.StartDateTime.Date <= windowPeriod.EndDate.Date).ToArray();
 			if (!requestsInPeriod.Any()) return new List<IQueuedAbsenceRequest>();
 
 			var min = requestsInPeriod.Select(x => x.StartDateTime).Min();
-			var max = requestsInPeriod.Select(x => x.EndDateTime).Max();
+			var maxreqEndDate = requestsInPeriod.Select(x => x.EndDateTime).Max();
+			var max = maxreqEndDate;
+			if (maxreqEndDate > windowPeriod.EndDate.AddDays(windowSize).Date)
+				max = windowPeriod.EndDate.Date;
+			
 
 			var requestsinExtendedPeriod = findRequestsCompletelyWithinPeriod(requests, min, max).ToList();
 
-			if (requestsinExtendedPeriod.Any(x => x.Created <= thresholdTime))
+			if (requestsinExtendedPeriod.Any())
 			{
 				removeRequests(requests, requestsinExtendedPeriod.Select(x => x.PersonRequest));
 				return requestsinExtendedPeriod.ToList();
@@ -206,7 +213,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 																							 DateTime min, DateTime max)
 		{
 			return requests.Where(
-				x => x.StartDateTime >= min && x.StartDateTime <= max && x.EndDateTime > min && x.EndDateTime <= max);
+				x => x.StartDateTime >= min && x.StartDateTime <= max);
 		}
 	}
 }
