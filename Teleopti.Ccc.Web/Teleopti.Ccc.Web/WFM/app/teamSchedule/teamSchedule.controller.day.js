@@ -37,6 +37,7 @@
 		vm.scheduleDateMoment = function () {
 			return moment(vm.scheduleDate);
 		};
+		vm.currentTimezone = stateParams.timezone;
 		vm.availableTimezones = [];
 		vm.sitesAndTeams = undefined;
 		vm.staffingEnabled = stateParams.staffingEnabled;
@@ -390,9 +391,8 @@
 			});
 		}
 
-		vm.changeTimezone = function (timezone) {
-			vm.currentTimezone = timezone;
-			scheduleMgmtSvc.recreateScheduleVm(vm.scheduleDateMoment(), timezone);
+		vm.changeTimezone = function () {
+			scheduleMgmtSvc.recreateScheduleVm(vm.scheduleDateMoment(), vm.currentTimezone);
 			personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
 		};
 

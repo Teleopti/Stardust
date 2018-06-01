@@ -333,7 +333,8 @@ describe("teamschedule controller tests", function () {
 			teamNameMap: '1 team selected',
 			selectedSortOption: 'Name DESC',
 			selectedGroupPage: { pageId: '', groupIds: ['group id 1'] },
-			staffingEnabled: true
+			staffingEnabled: true,
+			timezone: 'Europe/Berlin'
 		};
 		viewStateKeeper.save(state);
 
@@ -346,6 +347,7 @@ describe("teamschedule controller tests", function () {
 		expect(controller.selectedGroups.groupIds).toEqual(['group id 1']);
 		expect(controller.selectedGroups.groupPageId).toEqual('');
 		expect(controller.staffingEnabled).toEqual(true);
+		expect(controller.currentTimezone).toEqual('Europe/Berlin');
 
 		expect(!!controller.preselectedSkills.skillIds).toEqual(false);
 		expect(controller.preselectedSkills.skillAreaId).toEqual('groupPage');

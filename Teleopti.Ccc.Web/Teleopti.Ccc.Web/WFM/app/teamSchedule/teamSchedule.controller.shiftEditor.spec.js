@@ -357,7 +357,6 @@
 
 	});
 
-
 describe('#shiftEditorController#', function () {
 	var $controller, stateParams, fakeTeamSchedule, mockSignalRBackendServer = {};
 	beforeEach(function () {
@@ -590,7 +589,3 @@ describe('#shiftEditorController#', function () {
 		};
 	}
 });
-
-
-
-

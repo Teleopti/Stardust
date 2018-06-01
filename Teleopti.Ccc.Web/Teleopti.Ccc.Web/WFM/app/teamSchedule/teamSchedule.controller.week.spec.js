@@ -41,7 +41,8 @@
 				selectedSortOption: 'Name DESC',
 				selectedTeamIds: [],
 				selectedGroupPage: { pageId: '', groupIds: [] },
-				staffingEnabled: true
+				staffingEnabled: true,
+				timezone: 'Europe/Berlin'
 			};
 			viewStateKeeper.save(state);
 
@@ -55,6 +56,7 @@
 			expect(controller.selectedGroups.groupPageId).toEqual('');
 			expect(controller.selectedGroups.groupIds).toEqual([]);
 			expect(controller.staffingEnabled).toEqual(true);
+			expect(controller.timezone).toEqual("Europe/Berlin");
 		});
 
 		it('should get correct week days when start of week is changed',

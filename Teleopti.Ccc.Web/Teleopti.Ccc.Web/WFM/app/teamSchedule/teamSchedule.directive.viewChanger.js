@@ -12,7 +12,8 @@
 			teamNameMap: '<?',
 			selectedFavorite: '<?',
 			selectedSortOption: '<?',
-			staffingEnabled: '<?'
+			staffingEnabled: '<?',
+			timezone: '<?'
 		}
 	});
 
@@ -56,6 +57,7 @@
 			}
 			if (angular.isDefined(vm.selectedSortOption)) params.selectedSortOption = vm.selectedSortOption;
 			if (angular.isDefined(vm.staffingEnabled)) params.staffingEnabled = vm.staffingEnabled;
+			if (angular.isDefined(vm.timezone)) params.timezone = vm.timezone;
 
 			return params;
 		}
