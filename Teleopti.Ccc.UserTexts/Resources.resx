@@ -17374,4 +17374,7 @@ The application will now exit.</value>
   <data name="ForecastDayIsOverrided" xml:space="preserve">
     <value>xxForecastDayIsOverrided</value>
   </data>
+  <data name="AbandonRateParenthesisPercentSign" xml:space="preserve">
+    <value>Abandon rate (%)</value>
+  </data>
 </root>

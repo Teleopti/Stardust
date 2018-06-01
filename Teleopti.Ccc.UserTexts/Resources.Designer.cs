@@ -160,6 +160,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Abandon rate (%).
+        /// </summary>
+        public static string AbandonRateParenthesisPercentSign {
+            get {
+                return ResourceManager.GetString("AbandonRateParenthesisPercentSign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to About.
         /// </summary>
         public static string About {
