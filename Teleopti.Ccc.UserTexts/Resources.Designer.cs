@@ -12882,7 +12882,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to xxForecastDayIsOverrided.
+        ///   Looks up a localized string similar to Day has been overrided on web.
         /// </summary>
         public static string ForecastDayIsOverrided {
             get {

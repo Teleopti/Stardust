@@ -17372,7 +17372,8 @@ The application will now exit.</value>
     <comment>No issues in period</comment>
   </data>
   <data name="ForecastDayIsOverrided" xml:space="preserve">
-    <value>xxForecastDayIsOverrided</value>
+    <value>Day has been overrided on web</value>
+    <comment>Note to append to forecasted day with override to show in admin client</comment>
   </data>
   <data name="AbandonRateParenthesisPercentSign" xml:space="preserve">
     <value>Abandon rate (%)</value>
