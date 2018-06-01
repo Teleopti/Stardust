@@ -38,6 +38,15 @@
 		expect(selectionDisplayValue.innerText).toEqual('UTC+08:00');
 	});
 
+	xit('should include current user timezone if avaliable timezones without it', function () {
+		var panel = setUp(null, [
+			{
+				IanaId: "America/New_York",
+				DisplayName: "(UTC-05:00) Estern Time"
+			}
+		] );
+	});
+
 	it('should expose default timezone to be currentUserInfo timezone', function () {
 		var panel = setUp();
 		var selectedOption = panel[0].querySelector('md-option[selected] .md-text');
@@ -70,10 +79,10 @@
 	});
 
 
-	function setUp(timezone) {
+	function setUp(timezone, availableTimezones) {
 		var scope = $rootScope.$new();
 		var html = '<timezone-picker class="timezone-picker" ng-model="timezone" available-timezones="availableTimezones"></timezone-picker> ';
-		scope.availableTimezones = [
+		scope.availableTimezones = availableTimezones || [
 			{
 				IanaId: "Asia/Hong_Kong",
 				DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"

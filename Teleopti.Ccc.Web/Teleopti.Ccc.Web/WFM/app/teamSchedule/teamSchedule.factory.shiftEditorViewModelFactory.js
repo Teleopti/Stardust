@@ -115,7 +115,7 @@
 		}
 
 		function getTimeSpan(date, start, end) {
-			if (!start.isSame(end, 'day') || !moment(date).isSame(start, 'day')) {
+			if (!start.isSame(end, 'day') || serviceDateFormatHelper.getDateOnly(start) !== date) {
 				return start.format('YYYY-MM-DD LT') + ' - ' + end.format('YYYY-MM-DD LT');
 			}
 			return start.format('LT') + ' - ' + end.format('LT');
