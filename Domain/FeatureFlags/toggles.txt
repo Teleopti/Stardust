@@ -93,7 +93,7 @@ Staffing_Info_Configuration_44687 = true
 
 # Kittens, Bugs&Roses and Micke #
 Scheduler_RestrictionReport_47013 = true
-Scheduler_RestrictionReportToggleAll_76224 = RC
+Scheduler_RestrictionReportToggleAll_76224 = DEV
 Wfm_SkillPriorityRoutingGUI_39885 = RC
 WfmGlobalLayout_personalOptions_37114 = true
 Wfm_ArchiveSchedule_41498 = true

@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 
 			if (showAll)
 			{
-				var result = _result.Where(x => x.Reason != RestrictionNotAbleToBeScheduledReason.NoIssue).Take(50).ToList();
+				var result = _result.Where(x => x.Reason == RestrictionNotAbleToBeScheduledReason.NoIssue).Take(50).ToList();
 				for (int i = 0; i < Math.Min(result.Count, 50); i++)
 				{
 					var item = new ListViewItem(result[i].Agent.Name.ToString())
