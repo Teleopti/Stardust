@@ -59,19 +59,18 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 					data.WeekStart +
 					'}'
 			);
-
-			initViewModel(data.WeekStart);
+			initViewModel();
 			fetchData(initialMomentDate);
 		});
 	}
 
-	function initViewModel(weekStart) {
-		vm = new Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel(selectedDateChangedCallback);
+	function initViewModel() {
+		vm = new Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel(filterChangedCallback);
 		applyBindings();
 	}
 
-	function selectedDateChangedCallback(dateStr) {
-		dataService.loadScheduleData(dateStr, vm.filter, vm.paging, function (schedules) {
+	function filterChangedCallback(dateStr) {
+		dataService.loadScheduleData(dateStr, vm.selectedTeamIds, vm.paging, function (schedules) {
 			vm.readScheduleData(schedules, moment(dateStr));
 
 			fetchDataSuccessCallback();
@@ -94,7 +93,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 					Teleopti.MyTimeWeb.Portal.ParseHash().dateHash ||
 					vm.selectedDate().format('YYYY/MM/DD');
 
-				dataService.loadScheduleData(dateStr, vm.filter, vm.paging, function(schedules) {
+				dataService.loadScheduleData(dateStr, vm.selectedTeamIds, vm.paging, function(schedules) {
 					vm.readScheduleData(schedules, dateStr);
 
 					fetchDataSuccessCallback();

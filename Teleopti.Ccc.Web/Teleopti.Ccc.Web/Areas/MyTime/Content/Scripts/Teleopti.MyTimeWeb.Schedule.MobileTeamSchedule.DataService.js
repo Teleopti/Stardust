@@ -19,7 +19,7 @@
 		});
 	};
 
-	self.loadScheduleData = function(date, filter, paging, callback) {
+	self.loadScheduleData = function (date, selectedTeamIds, paging, callback) {
 		ajax.Ajax({
 			url: '../api/TeamSchedule/TeamSchedule',
 			dataType: "json",
@@ -28,12 +28,7 @@
 			data: JSON.stringify({
 				SelectedDate: date,
 				ScheduleFilter: {
-					teamIds: filter.selectedTeamIds.join(','),
-					searchNameText: filter.searchNameText,
-					filteredStartTimes: filter.filteredStartTimesText,
-					filteredEndTimes: filter.filteredEndTimesText,
-					isDayOff: filter.isDayoffFiltered,
-					TimeSortOrder: filter.timeSortOrder
+					teamIds: selectedTeamIds.join(',')
 				},
 				Paging: {
 					Take: paging == null ? 20 : paging.take,
