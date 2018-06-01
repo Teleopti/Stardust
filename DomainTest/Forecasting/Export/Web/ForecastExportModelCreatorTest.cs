@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.DomainTest.Intraday;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -97,35 +96,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 			dailyModel2.AverageHandleTime.Should().Be.EqualTo(dailyModel2.AverageTalkTime + dailyModel2.AverageAfterCallWork);
 			dailyModel2.ForecastedHours.Should().Be.EqualTo(skillDay2.ForecastedIncomingDemand.TotalHours);
 			dailyModel2.ForecastedHoursShrinkage.Should().Be.EqualTo(skillDay2.ForecastedIncomingDemandWithShrinkage.TotalHours);
-		}
-
-
-		[Test]
-		public void ShouldReturnDailyModelWithOverrideValues()
-		{
-			var theDate = new DateOnly(2016, 8, 26);
-			var openHour = new TimePeriod(8, 0, 8, 30);
-			var skill = createSkill(minutesPerInterval, "skill", openHour, false, 0);
-			var period = new DateOnlyPeriod(theDate, theDate.AddDays(1));
-			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
-			var skillDay = SkillSetupHelper.CreateSkillDay(skill, scenario, theDate.Date, openHour, false);
-			skillDay.WorkloadDayCollection.First().SetOverrideTasks(200,null);
-			skillDay.WorkloadDayCollection.First().OverrideAverageAfterTaskTime = TimeSpan.FromSeconds(60);
-			skillDay.WorkloadDayCollection.First().OverrideAverageTaskTime = TimeSpan.FromSeconds(60);
-			SkillRepository.Has(skill);
-			WorkloadRepository.Add(skill.WorkloadCollection.First());
-			SkillDayRepository.Add(skillDay);
-
-			var model = Target.Load(skill.WorkloadCollection.First().Id.Value, period);
-
-			model.DailyModelForecast.Count().Should().Be.EqualTo(1);
-			var dailyModel = model.DailyModelForecast.First();
-
-			dailyModel.ForecastDate.Should().Be.EqualTo(skillDay.CurrentDate.Date);
-			Math.Round(dailyModel.Calls).Should().Be.EqualTo(200);
-			Math.Round(dailyModel.AverageTalkTime).Should().Be.EqualTo(60);
-			Math.Round(dailyModel.AverageAfterCallWork).Should().Be.EqualTo(60);
-			Math.Round(dailyModel.AverageHandleTime).Should().Be.EqualTo(120);
 		}
 
 		[Test]

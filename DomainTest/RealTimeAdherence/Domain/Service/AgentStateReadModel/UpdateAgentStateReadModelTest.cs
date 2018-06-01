@@ -147,7 +147,9 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 09:00", "2014-10-20 11:00")
-				.WithMappedRule("statecode", activityId, "my state");
+				.WithStateGroup(null, "my state")
+				.WithStateCode("statecode")
+				.WithMappedRule("statecode", activityId);
 			Now.Is("2014-10-20 10:00");
 
 			Target.ProcessState(new StateForTest

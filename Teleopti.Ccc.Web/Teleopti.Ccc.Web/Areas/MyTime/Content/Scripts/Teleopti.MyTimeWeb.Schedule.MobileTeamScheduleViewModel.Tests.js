@@ -19,7 +19,7 @@
 		vm.readDefaultTeamData(defaultTeam);
 
 		equal(vm.selectedTeam(), 'e5f968d7-6f6d-407c-81d5-9b5e015ab495');
-		equal(vm.filter.selectedTeamIds.length, 1);
-		equal(vm.filter.selectedTeamIds[0], 'e5f968d7-6f6d-407c-81d5-9b5e015ab495');
+		equal(vm.selectedTeamIds.length, 1);
+		equal(vm.selectedTeamIds[0], 'e5f968d7-6f6d-407c-81d5-9b5e015ab495');
 	});
 });

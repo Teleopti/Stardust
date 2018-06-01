@@ -52,8 +52,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </remarks>
         double AggregatedTasks { get; set; }
 
-	    IOverrideTask OverrideTask { get; }
-
 
 	    /// <summary>
         /// Sets the number of tasks.

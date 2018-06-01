@@ -377,6 +377,51 @@
 		equal(fetchTeamScheduleDataRequestCount, 2);
 	});
 
+	test('should reload schedule after changing selectedTeam', function () {
+		var html = [
+			'	<div class="teamschedule-filter-component">',
+			'		<select data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">',
+			'			<optgroup data-bind="attr: { label: text }, foreach: children">',
+			'				<option data-bind="text: text, value: id"></option>',
+			'			</optgroup>',
+			'		</select>',
+			'	</div>'
+		].join('');
+
+		$('.mobile-teamschedule-view').append(html);
+
+		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+
+		equal($('.mobile-teamschedule-view .teamschedule-filter-component select').val(), fakeDefaultTeamData.DefaultTeam);
+
+		vm.selectedTeam('d7a9c243-8cd8-406e-9889-9b5e015ab495');
+
+		equal(fetchTeamScheduleDataRequestCount, 2);
+	});
+
+	test('should reload schedule after select allTeam', function () {
+		var html = [
+			'	<div class="teamschedule-filter-component">',
+			'		<select data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">',
+			'			<optgroup data-bind="attr: { label: text }, foreach: children">',
+			'				<option data-bind="text: text, value: id"></option>',
+			'			</optgroup>',
+			'		</select>',
+			'	</div>'
+		].join('');
+
+		$('.mobile-teamschedule-view').append(html);
+
+		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+
+		equal($('.mobile-teamschedule-view .teamschedule-filter-component select').val(), fakeDefaultTeamData.DefaultTeam);
+
+		vm.selectedTeam('-1');
+
+		equal(fetchTeamScheduleDataRequestCount, 2);
+		equal(vm.selectedTeamIds.length, 5);
+	});
+
 	function setUpFakeData() {
 		fakeAvailableTeamsData = {
 			allTeam: { id: 'allTeams', text: 'All Teams' },

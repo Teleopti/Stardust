@@ -135,10 +135,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			isolate.UseTestDouble<FakePurgeSettingRepository>().For<IPurgeSettingRepository>();
 
 			// Forecast
-			isolate.UseTestDouble<ForecastViewModelFactory>().For<IForecastViewModelFactory>();
 			isolate.UseTestDouble<ForecastProvider>().For<ForecastProvider>();
 			isolate.UseTestDouble<ForecastDayModelMapper>().For<ForecastDayModelMapper>();
-			isolate.UseTestDouble<IntradayPatternViewModelFactory>().For<IIntradayPatternViewModelFactory>();
 			isolate.UseTestDouble<WorkloadNameBuilder>().For<IWorkloadNameBuilder>();
 			isolate.UseTestDouble<FetchAndFillSkillDays>().For<IFetchAndFillSkillDays>();
 

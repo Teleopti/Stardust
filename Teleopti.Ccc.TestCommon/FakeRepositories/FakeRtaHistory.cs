@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeRtaHistory BackFromLateForWork(Guid personId, string shiftStart, string time, string state, string activity, Color? activityColor, string rule, Color? ruleColor, Adherence? adherence)
 		{
-			_store.Add(new PersonInAdherenceAfterLateForWorkEvent
+			_store.Add(new PersonArrivalAfterLateForWorkEvent
 			{
 				PersonId = personId,
 				Timestamp = time.Utc(),

@@ -1,7 +1,7 @@
 ﻿<appSettings>
-	<add key="UserName" value="logonName"/>
-	<add key="Password" value="logonPassword"/>
-	<add key="BusinessUnitName" value="TheBusinessUnit name"/>
-	<add key="PlanningPeriodId" value="guid to planning period to run"/>
-	<add key="PlanningGroupId" value="guid to planning group to run"/>
+	<add key="UserName" value="demo"/>
+	<add key="Password" value="demo"/>
+	<add key="BusinessUnitName" value="Teleopti WFM Demo"/>
+	<add key="PlanningPeriodId" value="266FD8A9-0D49-4DFA-9563-A84B00AEB5DD"/>
+	<add key="PlanningGroupId" value="1EB94A63-9820-4E3D-B6D2-A84B00AE8776"/>
 </appSettings>

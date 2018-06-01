@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Infrastructure.Hangfire;
-using Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
@@ -15,20 +10,10 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Domain
 	[InfrastructureTest]
 	public class FullSchedulingStardustTest
 	{
-		public HangfireUtilities Hangfire;
-		public TestLog TestLog;
-
 		[Test]
 		[Category("ScheduleOptimizationStardust")]
 		public void MeasurePerformanceOnStardust()
 		{
-			Hangfire.CleanQueue();
-			TestLog.Debug($"Number of succeeded jobs before scheduling {Hangfire.SucceededFromStatistics()}");
-			var hangfireQueueLogCancellationToken = new CancellationTokenSource();
-			Task.Run(() =>
-			{
-				HangfireLogger.LogHangfireQueues(TestLog, Hangfire);
-			}, hangfireQueueLogCancellationToken.Token);
 
 			using (var browserActivator = new CoypuChromeActivator())
 			{
@@ -63,11 +48,6 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Domain
 				browserInteractions.AssertNotExists("body", "#Login-container");
 				browserInteractions.AssertExistsUsingJQuery(".heatmap:visible");
 			}
-
-			TestLog.Debug($"Number of succeeded jobs before Hangfire.WaitForQueue {Hangfire.SucceededFromStatistics()}");
-			Hangfire.WaitForQueue();
-			hangfireQueueLogCancellationToken.Cancel();
-			TestLog.Debug($"Number of succeeded jobs after Hangfire.WaitForQueue {Hangfire.SucceededFromStatistics()}");
 		}
 	}
 }

@@ -16,7 +16,6 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
-using Teleopti.Ccc.Web.Areas.Forecasting.Core;
 using Teleopti.Ccc.Web.Areas.Forecasting.Models;
 using Teleopti.Interfaces.Domain;
 
@@ -34,6 +33,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		public FakeStatisticRepository StatisticRepository;
 		public ForecastProvider ForecastProvider;
 		public FakeForecastDayOverrideRepository ForecastDayOverrideRepository;
+		public FullPermission FullPermission;
+		public IWorkloadNameBuilder WorkloadNameBuilder;
 
 		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
@@ -1436,6 +1437,34 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			Assert.That(forecastDay.OverrideTasks, Is.EqualTo(100d).Within(tolerance));
 			Assert.That(forecastDay.OverrideAverageTaskTime, Is.EqualTo(150d).Within(tolerance));
 			Assert.That(forecastDay.OverrideAverageAfterTaskTime, Is.EqualTo(200d).Within(tolerance));
+		}
+
+		[Test]
+		public void ShouldGetSkillsAndWorkloads()
+		{
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
+			var workload = skill.WorkloadCollection.Single();
+			var workloadName = skill.Name + " - " + workload.Name;
+
+			SkillRepository.Has(skill);
+
+			var target = new ForecastController(null, SkillRepository, null, null, null, FullPermission,
+				WorkloadNameBuilder, null, null, null, null);
+
+			var result = target.Skills();
+			result.Skills.Single().Id.Should().Be.EqualTo(skill.Id.Value);
+			result.Skills.Single().Workloads.Single().Id.Should().Be.EqualTo(workload.Id.Value);
+			result.Skills.Single().Workloads.Single().Name.Should().Be.EqualTo(workloadName);
+		}
+
+		[Test]
+		public void ShouldHavePermissionForModifySkill()
+		{
+			var target = new ForecastController(null, SkillRepository, null, null, null, FullPermission,
+				null, null, null, null, null);
+
+			var result = target.Skills();
+			result.IsPermittedToModifySkill.Should().Be.EqualTo(true);
 		}
 	}
 }

@@ -30,6 +30,7 @@
 		{
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.toolStripButtonRefresh = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButtonShowNonIssued = new System.Windows.Forms.ToolStripButton();
 			this.toolStripLabelManySelected = new System.Windows.Forms.ToolStripLabel();
 			this.listViewResult = new System.Windows.Forms.ListView();
 			this.columnHeaderAgent = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -43,6 +44,7 @@
 			// 
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonRefresh,
+            this.toolStripButtonShowNonIssued,
             this.toolStripLabelManySelected});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
@@ -58,6 +60,16 @@
 			this.toolStripButtonRefresh.Size = new System.Drawing.Size(76, 22);
 			this.toolStripButtonRefresh.Text = "xxRefresh";
 			this.toolStripButtonRefresh.Click += new System.EventHandler(this.toolStripButtonRefreshClick);
+			// 
+			// toolStripButtonShowNonIssued
+			// 
+			this.toolStripButtonShowNonIssued.CheckOnClick = true;
+			this.toolStripButtonShowNonIssued.Image = global::Teleopti.Ccc.SmartClientPortal.Shell.Properties.Resources.ccc_ok_green_16x16;
+			this.toolStripButtonShowNonIssued.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonShowNonIssued.Name = "toolStripButtonShowNonIssued";
+			this.toolStripButtonShowNonIssued.Size = new System.Drawing.Size(165, 22);
+			this.toolStripButtonShowNonIssued.Text = "xxShowNoneIssuedAgents";
+			this.toolStripButtonShowNonIssued.CheckedChanged += new System.EventHandler(this.toolStripButtonShowNonIssuedCheckedChanged);
 			// 
 			// toolStripLabelManySelected
 			// 
@@ -131,5 +143,6 @@
 		private System.Windows.Forms.ColumnHeader columnHeaderPeriod;
 		private System.ComponentModel.BackgroundWorker backgroundWorker1;
 		private System.Windows.Forms.ToolStripLabel toolStripLabelManySelected;
+		private System.Windows.Forms.ToolStripButton toolStripButtonShowNonIssued;
 	}
 }

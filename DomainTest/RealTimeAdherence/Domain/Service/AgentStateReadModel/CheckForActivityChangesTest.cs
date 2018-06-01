@@ -46,7 +46,9 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 9:00", "2014-10-20 11:00")
-				.WithMappedRule("phone", activityId, "alarm")
+				.WithStateGroup(null, "alarm")
+				.WithStateCode("phone")
+				.WithMappedRule("phone", activityId)
 				;
 
 			Target.ProcessState(new StateForTest
@@ -83,6 +85,5 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 
 			Database.PersistedReadModel.NextActivityStartTime.Should().Be("2015-09-21 12:00".Utc());
 		}
-		
 	}
 }

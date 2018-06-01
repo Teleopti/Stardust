@@ -35,6 +35,7 @@
 		vm.onCellClick = openSelectedAgentDayInNewWindow;
 		vm.sortOption = stateParams.selectedSortOption;
 		vm.staffingEnabled = stateParams.staffingEnabled;
+		vm.timezone = stateParams.timezone;
 		vm.selectedGroups = {
 			mode: 'BusinessHierarchy',
 			groupIds: [],

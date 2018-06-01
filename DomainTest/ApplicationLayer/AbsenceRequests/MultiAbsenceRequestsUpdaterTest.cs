@@ -1058,6 +1058,77 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 		[Test]
+		public void ShouldApproveRequestThatFitIntoBudget()
+		{
+			Now.Is(new DateTime(2017, 6, 5));
+
+			var budgetDay = new DateOnly(2017, 6, 5);
+			var budgetGroup = getBudgetGroup();
+			var scenario = ScenarioRepository.Has("scenarioName");
+			var budgetDayOne = new BudgetDay(budgetGroup, scenario, budgetDay)
+			{
+				FulltimeEquivalentHours = 8d,
+				ShrinkedAllowance = 1,
+				AbsenceOverride = 1d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			BudgetGroupRepository.Add(budgetGroup);
+			BudgetDayRepository.Add(budgetDayOne);
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			absence.InContractTime = true;
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new BudgetGroupAllowanceValidator(),
+				Period = new DateOnlyPeriod(2017, 6, 4, 2017, 6, 11),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2017, 6, 4, 2017, 6, 11),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(budgetDay);
+			personPeriod.BudgetGroup = budgetGroup;
+			var person = PersonFactory.CreatePerson(wfcs).WithId();
+			person.AddPersonPeriod(personPeriod);
+			PersonRepository.Add(person);
+
+			var personPeriod2 = PersonPeriodFactory.CreatePersonPeriod(budgetDay);
+			personPeriod2.BudgetGroup = budgetGroup;
+			var person2 = PersonFactory.CreatePerson(wfcs).WithId();
+			person2.AddPersonPeriod(personPeriod2);
+			PersonRepository.Add(person2);
+
+			var startTime = new DateTime(2017, 06, 05, 0, 0, 0, DateTimeKind.Utc);
+			var period = new DateTimePeriod(startTime, startTime.AddDays(1).AddMinutes(-1));
+
+			var personAssignmentPeriod = new DateTimePeriod(2017, 6, 5, 8, 2017, 6, 5, 16);
+
+			var activity = ActivityRepository.Has("activity");
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity,
+				personAssignmentPeriod, new ShiftCategory("category")));
+
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person2, scenario, activity,
+				personAssignmentPeriod, new ShiftCategory("category")));
+
+			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, period)).WithId();
+			personRequest.Pending();
+			PersonRequestRepository.Add(personRequest);
+
+			var personRequest2 = new PersonRequest(person2, new AbsenceRequest(absence, period)).WithId();
+			personRequest2.Pending();
+			PersonRequestRepository.Add(personRequest2);
+
+			Target.UpdateAbsenceRequest(new List<Guid> { personRequest.Id.GetValueOrDefault(), personRequest2.Id.GetValueOrDefault() });
+
+			var requests = PersonRequestRepository.RequestRepository;
+			requests.Count(r => r.IsApproved).Should().Be(1);
+			requests.Count(r => r.IsDenied).Should().Be(1);
+		}
+
+		[Test]
 		public void ShouldNotDenyWhenRequestDayIsNotWorkingDayAndWithoutAssignment()
 		{
 			Now.Is(new DateTime(2017, 6, 5));

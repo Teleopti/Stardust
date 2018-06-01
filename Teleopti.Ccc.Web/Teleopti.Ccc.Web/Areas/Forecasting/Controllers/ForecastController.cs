@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -12,11 +11,9 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Web.Areas.Forecasting.Core;
 using Teleopti.Ccc.Web.Areas.Forecasting.Models;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
-using Task = System.Threading.Tasks.Task;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 {
@@ -25,9 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 	{
 		private readonly IForecastCreator _forecastCreator;
 		private readonly ISkillRepository _skillRepository;
-		private readonly IForecastViewModelFactory _forecastViewModelFactory;
 		private readonly ForecastProvider _forecastProvider;
-		private readonly IIntradayPatternViewModelFactory _intradayPatternViewModelFactory;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IWorkloadRepository _workloadRepository;
 		private readonly IAuthorization _authorization;
@@ -40,9 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		public ForecastController(
 			IForecastCreator forecastCreator,
 			ISkillRepository skillRepository,
-			IForecastViewModelFactory forecastViewModelFactory,
 			ForecastProvider forecastProvider,
-			IIntradayPatternViewModelFactory intradayPatternViewModelFactory,
 			IScenarioRepository scenarioRepository,
 			IWorkloadRepository workloadRepository,
 			IAuthorization authorization,
@@ -54,9 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		{
 			_forecastCreator = forecastCreator;
 			_skillRepository = skillRepository;
-			_forecastViewModelFactory = forecastViewModelFactory;
 			_forecastProvider = forecastProvider;
-			_intradayPatternViewModelFactory = intradayPatternViewModelFactory;
 			_scenarioRepository = scenarioRepository;
 			_workloadRepository = workloadRepository;
 			_authorization = authorization;
@@ -86,30 +77,12 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			};
 		}
 
-		[UnitOfWork, HttpPost, Route("api/Forecasting/Evaluate")]
-		public virtual Task<WorkloadEvaluateViewModel> Evaluate(Guid workloadId)
-		{
-			return Task.FromResult(_forecastViewModelFactory.Evaluate(workloadId));
-		}
-
-		[UnitOfWork, HttpPost, Route("api/Forecasting/QueueStatistics")]
-		public virtual Task<WorkloadQueueStatisticsViewModel> QueueStatistics(QueueStatisticsInput input)
-		{
-			return Task.FromResult(_forecastViewModelFactory.QueueStatistics(input));
-		}
-
 		[HttpPost, Route("api/Forecasting/LoadForecast"), UnitOfWork]
 		public virtual IHttpActionResult LoadForecast(ForecastResultInput input)
 		{
 			var period = new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd));
 			var scenario = _scenarioRepository.Get(input.ScenarioId);
 			return Ok(_forecastProvider.Load(input.WorkloadId, period, scenario));
-		}
-
-		[HttpPost, Route("api/Forecasting/EvaluateMethods"), UnitOfWork]
-		public virtual Task<WorkloadEvaluateMethodsViewModel> EvaluateMethods(EvaluateMethodsInput input)
-		{
-			return Task.FromResult(_forecastViewModelFactory.EvaluateMethods(input));
 		}
 
 		[HttpPost, Route("api/Forecasting/Forecast"), ReadonlyUnitOfWork]
@@ -119,12 +92,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			var scenario = _scenarioRepository.Get(input.ScenarioId);
 			var forecast = _forecastCreator.CreateForecastForWorkload(futurePeriod, input.Workload, scenario);
 			return Ok(forecast);
-		}
-
-		[HttpPost, Route("api/Forecasting/IntradayPattern"), UnitOfWork]
-		public virtual Task<IntradayPatternViewModel> IntradayPattern(Guid workloadId)
-		{
-			return Task.FromResult(_intradayPatternViewModelFactory.Create(workloadId));
 		}
 
 		[UnitOfWork, HttpPost, Route("api/Forecasting/Campaign")]
@@ -278,8 +245,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 					{
 						if (!string.IsNullOrEmpty(forecastedWorkloadDay.Annotation))
 						{
-							forecastedWorkloadDay.Annotation =
-								forecastedWorkloadDay.Annotation.Replace($"[*{Resources.ForecastDayIsOverrided}*]", "");
+							forecastedWorkloadDay.Annotation = forecastedWorkloadDay.Annotation.Replace(overrideNote, "");
 						}
 
 						_forecastDayOverrideRepository.Remove(forecastDayOverride);
