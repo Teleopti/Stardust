@@ -70,7 +70,7 @@ OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944 = true
 OvertimeRequestSupportMultiSelectionSkillTypes_74945 = true
 OvertimeRequestStaffingCheckMethod_74949 = true
 OvertimeRequestChangeBelongsToDateForOverNightShift_74984 = RC
-OvertimeRequestUsePrimarySkillOption_75573 = true
+OvertimeRequestUsePrimarySkillOption_75573 = RC
 
 Wfm_People_ImportAndCreateAgentFromFile_42528 = true
 Wfm_People_SetFallbackValuesForImporting_43289 = true
