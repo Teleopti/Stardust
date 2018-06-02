@@ -44,8 +44,8 @@
 			// 
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonRefresh,
-            this.toolStripButtonShowNonIssued,
-            this.toolStripLabelManySelected});
+            this.toolStripLabelManySelected,
+            this.toolStripButtonShowNonIssued});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.Size = new System.Drawing.Size(1050, 25);
@@ -69,12 +69,15 @@
 			this.toolStripButtonShowNonIssued.Name = "toolStripButtonShowNonIssued";
 			this.toolStripButtonShowNonIssued.Size = new System.Drawing.Size(165, 22);
 			this.toolStripButtonShowNonIssued.Text = "xxShowNoneIssuedAgents";
-			this.toolStripButtonShowNonIssued.CheckedChanged += new System.EventHandler(this.toolStripButtonShowNonIssuedCheckedChanged);
+			this.toolStripButtonShowNonIssued.Click += new System.EventHandler(this.toolStripButtonShowNonIssuedClick);
 			// 
 			// toolStripLabelManySelected
 			// 
+			this.toolStripLabelManySelected.BackColor = System.Drawing.SystemColors.Control;
+			this.toolStripLabelManySelected.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+			this.toolStripLabelManySelected.ForeColor = System.Drawing.Color.Red;
 			this.toolStripLabelManySelected.Name = "toolStripLabelManySelected";
-			this.toolStripLabelManySelected.Size = new System.Drawing.Size(109, 22);
+			this.toolStripLabelManySelected.Size = new System.Drawing.Size(118, 22);
 			this.toolStripLabelManySelected.Text = "xxManyAgentsAlert";
 			// 
 			// listViewResult

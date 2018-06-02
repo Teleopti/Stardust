@@ -73,6 +73,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			_selectedDates = selectedDates;
 			_detailView = detailView;
 			_detailView.ViewPasteCompleted += detailViewViewPasteCompleted;
+			toolStripButtonShowNonIssued.Checked = false;
 			autoCreateIfNotToManyAgents();
 		}
 
@@ -133,15 +134,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 				throw ex;
 			}
 			_parent.OnRestrictionsNotAbleToBeScheduledProgress(new ProgressChangedEventArgs(100, ""));
-			
 
-			if (!_result.Select(x => x.Reason != RestrictionNotAbleToBeScheduledReason.NoIssue).Any())
+			var result = _result.Where(x => x.Reason != RestrictionNotAbleToBeScheduledReason.NoIssue);
+			if (!result.Any())
 			{
 				toolStripLabelManySelected.Text = Resources.NoAgentsWithIssuesFound;
 				toolStripLabelManySelected.Visible = true;
 			}
 
-			fillList(false);
+			fillList(toolStripButtonShowNonIssued.Checked);
 
 			toolStripButtonRefresh.Enabled = true;
 			_detailView.TheGrid.Enabled = true;
@@ -239,7 +240,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			}
 		}
 
-		private void toolStripButtonShowNonIssuedCheckedChanged(object sender, EventArgs e)
+		private void toolStripButtonShowNonIssuedClick(object sender, EventArgs e)
 		{
 			fillList(toolStripButtonShowNonIssued.Checked);
 		}
