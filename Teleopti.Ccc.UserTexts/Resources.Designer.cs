@@ -32429,6 +32429,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show top {0} of agents with no issues.
+        /// </summary>
+        public static string ShowNoneIssuedAgents {
+            get {
+                return ResourceManager.GetString("ShowNoneIssuedAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show only absences.
         /// </summary>
         public static string ShowOnlyAbsence {

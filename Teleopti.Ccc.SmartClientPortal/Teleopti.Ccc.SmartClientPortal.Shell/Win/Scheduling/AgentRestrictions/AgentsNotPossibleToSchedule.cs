@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 		private IRestrictionExtractor _restrictionExtractor;
 		private readonly BlinkingToolStripButtonRenderer _blinker;
 		private IDictionary<RestrictionNotAbleToBeScheduledReason, string> _translatedEnums;
+		private const int numOfAgentsWithNoIssue = 50;
 
 		public AgentsNotPossibleToSchedule()
 		{
@@ -32,7 +33,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			_blinker = new BlinkingToolStripButtonRenderer(toolStrip1);
 			if(!DesignMode)
 				SetTexts();
-			
+
+			toolStripButtonShowNonIssued.Text = string.Format(Resources.ShowNoneIssuedAgents, numOfAgentsWithNoIssue);
 		}
 
 		public void InitAgentsNotPossibleToSchedule(RestrictionNotAbleToBeScheduledReport restrictionNotAbleToBeScheduledReport, SchedulerSplitters parent)

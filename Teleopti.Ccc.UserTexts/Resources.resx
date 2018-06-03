@@ -17378,4 +17378,7 @@ The application will now exit.</value>
   <data name="AbandonRateParenthesisPercentSign" xml:space="preserve">
     <value>Abandon rate (%)</value>
   </data>
+  <data name="ShowNoneIssuedAgents" xml:space="preserve">
+    <value>Show top {0} of agents with no issues</value>
+  </data>
 </root>
