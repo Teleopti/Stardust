@@ -116,6 +116,26 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			_businessUnitId = business_unit_id;
 		}
 
+		public FactSchedule(int personId, int shiftStartdateLocalId, int scheduleDateId, int scheduledTimeM,
+			int scheduledReadyTimeMinutes, int scheduledContractTimeMinutes, int intervalId, int scenarioId, int businessUnitId)
+		{
+			_personId = personId;
+			_shiftStartdateLocalId = shiftStartdateLocalId;
+			_scheduleDateId = scheduleDateId;
+			_scheduledTimeM = scheduledTimeM;
+			_scheduledReadyTimeM = scheduledReadyTimeMinutes;
+			_scheduledContractTimeM = scheduledContractTimeMinutes;
+			_intervalId = intervalId;
+			_scenarioId = scenarioId;
+			_businessUnitId = businessUnitId;
+			_shiftStartdateId = shiftStartdateLocalId;
+			_shiftEnddateId = shiftStartdateLocalId;
+			_activityStarttime = DateTime.Now;
+			_activityEndtime = DateTime.Now;
+			_shiftStarttime = DateTime.Now;
+			_shiftEndtime = DateTime.Now;
+		}
+
 		public FactSchedule(int personId, int shiftStartdateLocalId, int scheduleDateId, int scheduledTimeM, int scheduledReadyTimeMinutes, int intervalId, int scenarioId)
 		{
 			_personId = personId;

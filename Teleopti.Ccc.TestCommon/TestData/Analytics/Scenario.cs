@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			ScenarioCode = Guid.NewGuid();
 		}
 
+		public int ScenarioId => _scenarioId;
 		public Guid ScenarioCode { get; }
 
 		public static Scenario DefaultScenarioFor(int scenarioId, Guid businessUnitCode)

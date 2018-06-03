@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 				sysConfiguration,
 				quarterOfAnHourInterval,
 				new DefaultSkillset(),
-				new DefaultAcdLogin(),
+				new DefaultAcdLogin(-1, -1),
 				new Scenario(12, DefaultBusinessUnit.BusinessUnit.Id.GetValueOrDefault(), true),
 				Team.NotDefinedTeam(),
 				Person.NotDefinedPerson(existingDatasources),

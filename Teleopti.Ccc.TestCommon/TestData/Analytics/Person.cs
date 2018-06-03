@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 {
 	public class Person : IAnalyticsDataSetup, IPersonData
 	{
+		private readonly int _validToDateIdMaxDate;
 		private readonly Guid? _personCode;
 		private readonly IDatasourceData _datasource;
 		private readonly DateTime _validFrom;
@@ -48,6 +49,14 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		{
 
 		}
+
+		public Person(IPerson person, IDatasourceData datasource, int personId, DateTime validFrom, DateTime validTo, int validFromId,
+			int validToId, int businessUnitId, Guid businessUnitCode, bool toBeDeleted, int timeZoneId, Guid? personPeriodCode, int validToDateIdMaxDate
+		) : this(person, datasource, personId, validFrom, validTo, validFromId, validToId, businessUnitId, businessUnitCode, toBeDeleted, timeZoneId, personPeriodCode)
+		{
+			_validToDateIdMaxDate = validToDateIdMaxDate;
+		}
+
 
 		public static int FindPersonIdByPersonCode(Guid person_code)
 		{
@@ -108,7 +117,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			{
 				table.AddPerson(PersonId, _personCode, _firstName, _lastName, _validFrom, _validTo,
 												_validFromId, 0, _validToId, 0, _businessUnitId, _businessUnitCode, "",
-												_datasource.RaptorDefaultDatasourceId, _toBeDeleted, _timeZoneId, _personPeriodCode);
+												_datasource.RaptorDefaultDatasourceId, _toBeDeleted, _timeZoneId, _personPeriodCode, _validToDateIdMaxDate);
 
 				Bulk.Insert(connection, table);
 

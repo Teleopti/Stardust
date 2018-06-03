@@ -37,6 +37,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 
 		public void Apply(SqlConnection connection, CultureInfo userCulture, CultureInfo analyticsDataCulture)
 		{
+			using (var sqlCommand = new SqlCommand("select count(1) from mart.dim_activity where activity_id = @id", connection))
+			{
+				sqlCommand.Parameters.AddWithValue("@id", _id);
+				if (Convert.ToInt32(sqlCommand.ExecuteScalar(), CultureInfo.InvariantCulture) > 0)
+					return;
+			}
 			using (var table = dim_activity.CreateTable())
 			{
 				table.AddActivity(_id, _code, _name, _displayColor.ToArgb(), _businessUnitId, _datasource.RaptorDefaultDatasourceId, false);
