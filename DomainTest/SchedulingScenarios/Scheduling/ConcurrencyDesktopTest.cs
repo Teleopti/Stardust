@@ -27,12 +27,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public MergeIslandsSizeLimit MergeIslandsSizeLimit;
 
 		[Test]
-		public void SorryNeedAnOutputThatWeDontWantToRelease()
-		{
-			2.Should().Be(3);
-		}
-		
-		[Test]
 		public void ShouldNotCrashDueToMultipleNonExistingSchedulingRangesWhenFillingSchedulerStateHolder()
 		{
 			const int agentsInEachIsland = 10;
