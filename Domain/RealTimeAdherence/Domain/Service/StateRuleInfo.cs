@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
@@ -18,6 +20,11 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 						context.StateMapper.StateFor(context.Stored.StateGroupId)
 			);
 			_mappedRule = new Lazy<MappedRule>(() => context.StateMapper.RuleFor(context.BusinessUnitId, context.State.StateGroupId(), context.Schedule.CurrentActivityId()));
+		}
+
+		public bool IsLoggedIn()
+		{
+			return !_context.StateMapper.LoggedOutStateGroupIds().Contains(StateGroupId().Value); 
 		}
 		
 		public bool StateChanged()
