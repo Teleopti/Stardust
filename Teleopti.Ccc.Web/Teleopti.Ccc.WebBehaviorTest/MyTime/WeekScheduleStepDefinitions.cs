@@ -38,11 +38,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeTheStartAndEndDatesOfCurrentWeekInBulgarianCultureForDate(DateTime date)
 		{
 			var day = DateHelper.GetFirstDateInWeek(date.Date, DataMaker.Data().MyCulture);
-			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(day, DataMaker.Data().MyCulture).ToString("D.M.YYYY 'Г.'");
-			var lastDayOfWeek = DateHelper.GetLastDateInWeek(day, DataMaker.Data().MyCulture).ToString("D.M.YYYY 'Г.'");
+			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(day, DataMaker.Data().MyCulture).ToString("d.M.yyyy");
+			var lastDayOfWeek = DateHelper.GetLastDateInWeek(day, DataMaker.Data().MyCulture).ToString("d.M.yyyy");
 
-			Browser.Interactions.AssertExists($".weekview-day[data-mytime-date='{firstDayOfWeek}']");
-			Browser.Interactions.AssertExists($".weekview-day[data-mytime-date='{lastDayOfWeek}']");
+			Browser.Interactions.AssertInputValue($".form-control.text-center.date-input-style", string.Format("{0} 'Г.' - {1} 'Г.'", firstDayOfWeek, lastDayOfWeek));
 		}
 
 

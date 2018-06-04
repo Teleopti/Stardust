@@ -71,13 +71,6 @@ Scenario: View current week
 	When I view my week schedule for date '2030-10-03'
 	Then I should see the start and end dates of current week for date '2030-10-03'
 
-Scenario: View Correct Date for Bulgarian culture
-	Given I have the role 'Full access to mytime'
-	And the time is '2030-10-03 12:00'
-	And I am Bulgarian
-	When I view my week schedule for date '2030-10-03'
-	Then I should see the start and end dates of current week in Bulgarian culture for date '2030-10-03'
-
 Scenario: View night shift
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
@@ -360,3 +353,10 @@ Scenario: Should not show absence probability option when staffing check is not 
 	And I have the workflow control set 'Published schedule'
 	When I view my week schedule for date '2013-01-01'
 	Then I should not see option 'Show absence probability'in probability value list
+
+Scenario: View Correct Date for Bulgarian culture
+	Given I have the role 'Full access to mytime'
+	And the time is '2030-10-03 12:00'
+	And I am Bulgarian
+	When I view my week schedule for date '2030-10-03'
+	Then I should see the start and end dates of current week in Bulgarian culture for date '2030-10-03'
