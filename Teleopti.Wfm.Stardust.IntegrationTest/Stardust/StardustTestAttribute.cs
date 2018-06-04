@@ -115,13 +115,20 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		public override void AfterTest(ITest testDetails)
 		{
 			base.AfterTest(testDetails);
+			try
+			{
+				TestLog.Debug("In teardown stopping all services");
+				Hangfire.WaitForQueue();
+				StateQueue.WaitForQueue();
+
+
+				TestSiteConfigurationSetup.TearDown();
+			}
+			catch (Exception e)
+			{
+				TestLog.Debug("Problem while teardown :" + e.InnerException.StackTrace );
+			}
 			
-			TestLog.Debug("In teardown stopping all services");
-			Hangfire.WaitForQueue();
-			StateQueue.WaitForQueue();
-
-
-			TestSiteConfigurationSetup.TearDown();
 		}
 	}
 }
