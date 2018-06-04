@@ -25,6 +25,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public MergeIslandsSizeLimit MergeIslandsSizeLimit;
+
+		[Test]
+		public void SorryNeedAnOutputThatWeDontWantToRelease()
+		{
+			2.Should().Be(3);
+		}
 		
 		[Test]
 		public void ShouldNotCrashDueToMultipleNonExistingSchedulingRangesWhenFillingSchedulerStateHolder()
