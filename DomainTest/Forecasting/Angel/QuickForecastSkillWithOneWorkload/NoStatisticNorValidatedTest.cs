@@ -1,16 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using SharpTestsEx;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using SharpTestsEx;
+using Teleopti.Ccc.Domain.Forecasting.Models;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWorkload
 {
 	public class NoStatisticNorValidatedTest : QuickForecastTest
 	{
-		protected override void Assert(IEnumerable<ISkillDay> modifiedSkillDays)
+		protected override void Assert(ForecastModel forecastResult)
 		{
-			modifiedSkillDays.Single().Tasks
-				.Should().Be.EqualTo(0);
+			forecastResult.ForecastDays.Should().Be.Empty();
 		}
 	}
 }

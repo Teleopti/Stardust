@@ -22,7 +22,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		toggleCache = {},
 		constants = {
 			scheduleHeight: 668, // Same value as height of class "weekview-day-schedule"
-			mobileMinScheduleHeight: 550,
+			mobileMinScheduleHeight: 700,
 			pixelToDisplayAll: 38,
 			pixelToDisplayTitle: 16,
 

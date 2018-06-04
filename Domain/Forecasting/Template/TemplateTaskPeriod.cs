@@ -6,8 +6,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Template
 {
-
-
     /// <summary>
     /// Holds a TimePeriod Template
     /// </summary>
@@ -19,7 +17,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
     {
         private ITask _task;
         private ICampaign _campaign = new Campaign();
-	    private IOverrideTask _overrideTask;
         private double _aggregatedTasks;
         private IStatisticTask _statisticTask = new StatisticTask();
         private readonly DateTimePeriod _period;
@@ -45,16 +42,14 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
 	    /// </summary>
 	    /// <param name="task">The task.</param>
 	    /// <param name="campaign">The campaign.</param>
-	    /// <param name="overrideTask"></param>
 	    /// <param name="period">The period.</param>
 	    /// <remarks>
 	    /// Created by: robink
 	    /// Created date: 2008-03-04
 	    /// </remarks>
-	    public TemplateTaskPeriod(ITask task, ICampaign campaign, IOverrideTask overrideTask, DateTimePeriod period) : this(task,period)
+	    public TemplateTaskPeriod(ITask task, ICampaign campaign, DateTimePeriod period) : this(task, period)
         {
             _campaign = campaign;
-		    _overrideTask = overrideTask;
         }
 
         /// <summary>
@@ -104,45 +99,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
         {
             get { return _period; }
         }
-
-
-
-	    public virtual double? OverrideTasks
-	    {
-		    get { return OverrideTask.OverrideTasks; }		  
-	    }
-
-	    public virtual TimeSpan? OverrideAverageTaskTime
-	    {
-			 get { return OverrideTask.OverrideAverageTaskTime; }
-		    set
-		    {
-				 _overrideTask = new OverrideTask(OverrideTask.OverrideTasks, value, OverrideTask.OverrideAverageAfterTaskTime);
-				OnAverageTaskTimesChanged();
-		    }
-	    }
-
-	    public virtual TimeSpan? OverrideAverageAfterTaskTime
-	    {
-			 get { return OverrideTask.OverrideAverageAfterTaskTime; }
-		    set
-		    {
-				 _overrideTask = new OverrideTask(OverrideTask.OverrideTasks, OverrideTask.OverrideAverageTaskTime, value);
-				OnAverageTaskTimesChanged();
-		    }
-	    }
-
-
-	    public virtual IOverrideTask OverrideTask
-	    {
-		    get
-		    {
-			    if (_overrideTask == null)
-				    _overrideTask = new OverrideTask();
-			    return _overrideTask;
-		    }
-		    protected set { _overrideTask = value; }
-	    }
 
 	    /// <summary>
 	    /// Sets the number of tasks.
@@ -337,8 +293,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
         {
 	        get
 	        {
-		        if (OverrideTasks.HasValue)
-			        return OverrideTasks.Value;
 		        return _task.Tasks * (1d + _campaign.CampaignTasksPercent.Value);
 	        }
         }
@@ -544,12 +498,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
             throw new NotImplementedException();
         }
 
-	    public virtual void SetOverrideTasks(double? task, IEnumerable<ITaskOwner> intradayPattern)
-	    {
-			_overrideTask = new OverrideTask(task, OverrideTask.OverrideAverageTaskTime, OverrideTask.OverrideAverageAfterTaskTime);
-			OnTasksChanged();
-	    }
-
 	    /// <summary>
 	    /// Gets the total average after task time.
 	    /// </summary>
@@ -562,8 +510,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
 	    {
 		    get
 		    {
-				if (OverrideAverageAfterTaskTime.HasValue)
-					return OverrideAverageAfterTaskTime.Value;
 			    return TimeSpan.FromTicks(
 				    (long) (_task.AverageAfterTaskTime.Ticks*(1d + _campaign.CampaignAfterTaskTimePercent.Value)));
 		    }
@@ -581,9 +527,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
         {
             get
             {
-	            if (OverrideAverageTaskTime.HasValue)
-		            return OverrideAverageTaskTime.Value;		            
-	            
                 return TimeSpan.FromTicks(
                     (long)(_task.AverageTaskTime.Ticks * (1d + _campaign.CampaignTaskTimePercent.Value)));
             }

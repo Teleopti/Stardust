@@ -69,16 +69,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			seat.AddSeatBooking(this);
 		}
 
-
-		public virtual void RemoveBooking()
-		{
-			if (Seat != null)
-			{
-				Seat.RemoveSeatBooking (this);
-				Seat = null;
-			}		
-		}
-
 		public virtual bool Intersects(ISeatBooking booking)
 		{
 			return !((booking.EndDateTime < StartDateTime) || (booking.StartDateTime > EndDateTime));

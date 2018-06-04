@@ -17,9 +17,9 @@
     };
     vm.selectedScenario = {};
     vm.forecastPeriod = {
-		  startDate: {},
-		  endDate: {}
-	  };
+      startDate: {},
+      endDate: {}
+    };
     vm.skillMaster = {
       IsPermittedToModify: false,
       IsForecastRunning: false,
@@ -51,9 +51,9 @@
       vm.getScenarios();
 
       var message = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink')
-          .replace('{0}', $translate.instant('Forecasts'))
-          .replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank' rel='noopener'>")
-          .replace('{2}', '</a>');
+      .replace('{0}', $translate.instant('Forecasts'))
+      .replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank' rel='noopener'>")
+      .replace('{2}', '</a>');
       NoticeService.info(message, null, true);
     }
     init();
@@ -148,7 +148,7 @@
         {
           ForecastStart: vm.forecastPeriod.startDate,
           ForecastEnd: vm.forecastPeriod.endDate,
-          Workloads: [temp],
+          Workload: temp,
           ScenarioId: vm.selectedScenario.Id,
           BlockToken: blockToken,
           IsLastWorkload: true
@@ -186,9 +186,9 @@
               type: headers['content-type']
             });
             var fileName = moment(vm.forecastPeriod.startDate).format('YYYY-MM-DD') +
-              ' - ' +
-              moment(vm.forecastPeriod.endDate).format('YYYY-MM-DD') +
-              '.xlsx';
+            ' - ' +
+            moment(vm.forecastPeriod.endDate).format('YYYY-MM-DD') +
+            '.xlsx';
             saveAs(blob, fileName);
             vm.skillMaster.isForecastRunning = false;
             vm.exportModal = false;
@@ -202,7 +202,7 @@
         if (vm.forecastPeriod.endDate && vm.forecastPeriod.startDate) {
           return moment(vm.forecastPeriod.endDate).diff(moment(vm.forecastPeriod.startDate), 'years') >= 1;
         } else
-          return false;
+        return false;
       };
 
       function goToModify(skillData) {

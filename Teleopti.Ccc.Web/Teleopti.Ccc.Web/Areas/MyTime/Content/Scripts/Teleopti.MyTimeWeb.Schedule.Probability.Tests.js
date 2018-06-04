@@ -5,7 +5,12 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.js" />
 
 $(document).ready(function () {
-	module("Teleopti.MyTimeWeb.Schedule");
+	module("Teleopti.MyTimeWeb.Schedule", {
+		setup: function() {
+			Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(){};
+		},
+		teardown: function() { }
+	});
 
 	var hash = "";
 	var constants = Teleopti.MyTimeWeb.Common.Constants;

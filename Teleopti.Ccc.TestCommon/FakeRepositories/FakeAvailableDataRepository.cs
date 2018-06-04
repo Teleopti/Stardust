@@ -38,10 +38,5 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			throw new NotImplementedException();
 		}
-
-		public IAvailableData LoadAllCollectionsInAvailableData(IAvailableData availableData)
-		{
-			throw new NotImplementedException();
-		}
 	}
 }

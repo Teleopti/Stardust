@@ -2,8 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Util;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -161,16 +161,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			var people = from per in _storage.LoadAll<IPerson>()
 						 let periods = per.PersonPeriods(period)
 						 where periods.Any(personPeriod => personPeriod.Team == team)
-						 select per;
-
-			return people.ToList();
-		}
-
-		public ICollection<IPerson> FindPeopleBelongTeams(ITeam[] teams, DateOnlyPeriod period)
-		{
-			var people = from per in _storage.LoadAll<IPerson>()
-						 let periods = per.PersonPeriods(period)
-						 where periods.Any(personPeriod => teams.Contains(personPeriod.Team))
 						 select per;
 
 			return people.ToList();

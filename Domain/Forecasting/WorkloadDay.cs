@@ -106,9 +106,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			var originalTasks = Tasks;
 			var originalAverageTaskTime = AverageTaskTime;
 			var originalAfterTaskTime = AverageAfterTaskTime;
-			var originalOverrideTasks = OverrideTasks;
-			var originalOverrideAverageTaskTime = OverrideAverageTaskTime;
-			var originalOverrideAverageAfterTaskTime = OverrideAverageAfterTaskTime;
 
 			Close();
 			var template = (IWorkloadDayTemplate)Workload.GetTemplateAt(TemplateTarget.Workload, (int)CurrentDate.DayOfWeek);
@@ -150,11 +147,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				Tasks = originalTasks;
 				AverageTaskTime = originalAverageTaskTime;
 				AverageAfterTaskTime = originalAfterTaskTime;
-				SetOverrideTasks(originalOverrideTasks, sortedTemplateTaskPeriods);
-				OverrideAverageTaskTime = originalOverrideAverageTaskTime;
-				OverrideAverageAfterTaskTime = originalOverrideAverageAfterTaskTime;
 
-				if (Math.Abs(Tasks) < 0.0001 && (!OverrideTasks.HasValue || Math.Abs(OverrideTasks.Value) < 0.0001))
+				if (Math.Abs(Tasks) < 0.0001)
 				{
 					AverageTaskTime = TimeSpan.Zero;
 					AverageAfterTaskTime = TimeSpan.Zero;
@@ -169,9 +163,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
             Percent campaignTasks = CampaignTasks;
             Percent campaignAfterTasksTime = CampaignAfterTaskTime;
             Percent campaignTasksTime = CampaignTaskTime;
-			var overrideTasks = OverrideTasks;
-			var overrideAverageTaskTime = OverrideAverageTaskTime;
-			var overrideAverageAfterTaskTime = OverrideAverageAfterTaskTime;
             TimeSpan originalAverageTaskTime = AverageTaskTime;
             TimeSpan originalAfterTaskTime = AverageAfterTaskTime;
             double tasksSum = 0.0;
@@ -237,9 +228,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 CampaignTasks = campaignTasks;
                 CampaignTaskTime = campaignTasksTime;
 				CampaignAfterTaskTime = campaignAfterTasksTime;
-				SetOverrideTasks(overrideTasks, null);
-				OverrideAverageTaskTime = overrideAverageTaskTime;
-				OverrideAverageAfterTaskTime = overrideAverageAfterTaskTime;
 
                 if (tasks == 0 && originalAfterTaskTime.TotalSeconds == 0 && originalAverageTaskTime.TotalSeconds == 0)
                 {
@@ -274,9 +262,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 CampaignTasks = campaignTasks;
                 CampaignTaskTime = campaignTasksTime;
 				CampaignAfterTaskTime = campaignAfterTasksTime;
-				SetOverrideTasks(overrideTasks, null);
-				OverrideAverageTaskTime = overrideAverageTaskTime;
-				OverrideAverageAfterTaskTime = overrideAverageAfterTaskTime;
 
                 if (tasks == 0 && originalAfterTaskTime.TotalSeconds == 0 && originalAverageTaskTime.TotalSeconds == 0)
                 {

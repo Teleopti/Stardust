@@ -67,6 +67,8 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 		.state('rta-historical', {
 			url: '/rta/agent-historical/:personId/:date?open',
 			templateUrl: function () {
+				if (toggles.RTA_EasilySpotLateForWork_75668)
+					return 'app/rta/rta/historical/rta-historical.easilySpotLateForWork_75668.html';
 				if (toggles.RTA_RestrictModifyAdherenceWithPermission_74898)
 					return 'app/rta/rta/historical/rta-historical.restrictModifyAdherenceWithPermission_74898.html';
 				if (toggles.RTA_RemoveApprovedOOA_47721)
@@ -74,6 +76,8 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 				return 'app/rta/rta/historical/rta-historical.approvePreviousOOA_47230.html';
 			},
 			controllerProvider: function () {
+				if (toggles.RTA_EasilySpotLateForWork_75668)
+					return 'RtaHistoricalController75668 as vm';
 				if (toggles.RTA_RestrictModifyAdherenceWithPermission_74898)
 					return 'RtaHistoricalController74898 as vm';
 				if (toggles.RTA_RemoveApprovedOOA_47721)

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly SmartDeltaDoer _smartDeltaDoer;
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 		private readonly ScheduledStaffingProvider _scheduledStaffingProvider;
+		private readonly IExtensiveLogRepository _extensiveLogRepository;
 
 		public RequestProcessor(ICommandDispatcher commandDispatcher,
 			ISkillCombinationResourceRepository skillCombinationResourceRepository,
@@ -43,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			ISkillRepository skillRepository, SkillCombinationResourceReadModelValidator skillCombinationResourceReadModelValidator,
 			IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, SkillStaffingIntervalProvider skillStaffingIntervalProvider,
 			IActivityRepository activityRepository, IPersonRequestRepository personRequestRepository, INow now, SmartDeltaDoer smartDeltaDoer,
-			ISkillDayLoadHelper skillDayLoadHelper, ScheduledStaffingProvider scheduledStaffingProvider)
+			ISkillDayLoadHelper skillDayLoadHelper, ScheduledStaffingProvider scheduledStaffingProvider, IExtensiveLogRepository extensiveLogRepositor)
 		{
 			_commandDispatcher = commandDispatcher;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
@@ -59,6 +61,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_smartDeltaDoer = smartDeltaDoer;
 			_skillDayLoadHelper = skillDayLoadHelper;
 			_scheduledStaffingProvider = scheduledStaffingProvider;
+			_extensiveLogRepository = extensiveLogRepositor;
 		}
 
 		public void Process(IPersonRequest personRequest)
@@ -157,6 +160,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						skillStaffingIntervalsToValidate.AddRange(staffingIntervalsWithinPeriod);
 					}
 					var validatedRequest = staffingThresholdValidators.FirstOrDefault().ValidateLight((IAbsenceRequest)personRequest.Request, skillStaffingIntervalsToValidate);
+
+					dynamic logObject = new ExpandoObject();
+					logObject.ValidationResult = validatedRequest;
+					logObject.SkillStaffingIntervals = skillStaffingIntervalsToValidate;
+					_extensiveLogRepository.Add(logObject, personRequest.Id.GetValueOrDefault(), "PersonRequest.SkillStaffIntervals");
+
 					if (validatedRequest.IsValid)
 					{
 						if (!autoGrant) return;

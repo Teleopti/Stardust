@@ -4,16 +4,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 {
-
-    public interface IShiftCategoryFairnessCreator
+    public class ShiftCategoryFairnessCreator
     {
-        IShiftCategoryFairnessHolder CreatePersonShiftCategoryFairness(IScheduleRange scheduleRange, DateOnlyPeriod period);
-    }
-
-    public class ShiftCategoryFairnessCreator : IShiftCategoryFairnessCreator
-    {
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IShiftCategoryFairnessHolder CreatePersonShiftCategoryFairness(IScheduleRange scheduleRange, DateOnlyPeriod period)
         {
             Dictionary<IShiftCategory, int> shiftDic = new Dictionary<IShiftCategory, int>();

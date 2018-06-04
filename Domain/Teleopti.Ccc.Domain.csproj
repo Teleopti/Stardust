@@ -112,10 +112,10 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.222\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.225\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.222\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.225\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -185,6 +185,7 @@
     <Compile Include="ApplicationLayer\Commands\ShiftCategorySelectorWithPrediction.cs" />
     <Compile Include="ApplicationLayer\Events\ProjectionChangedEventForShiftExchangeOffer.cs" />
     <Compile Include="ApplicationLayer\Events\RefreshPayrollFormatsEvent.cs" />
+    <Compile Include="ApplicationLayer\IPersonInAdherenceAfterLateForWorkEventPublisher.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\IOvertimeRequestContractWorkRulesValidator.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\IOvertimeRequestOpenPeriodProvider.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestOpenPeriodProvider.cs" />
@@ -207,6 +208,13 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleProjection\ScheduleProjectionReadOnlyChecker.cs" />
     <Compile Include="Common\CalculatePersonAccount.cs" />
     <Compile Include="Config\WebTenantAuthenticationConfiguration.cs" />
+    <Compile Include="Forecasting\ForecastDayOverride.cs" />
+    <Compile Include="Forecasting\ForecastProvider.cs" />
+    <Compile Include="Forecasting\IWorkloadNameBuilder.cs" />
+    <Compile Include="Forecasting\Models\ForecastDayModel.cs" />
+    <Compile Include="Forecasting\Models\ForecastDayModelMapper.cs" />
+    <Compile Include="Forecasting\Models\ForecastModel.cs" />
+    <Compile Include="Forecasting\WorkloadNameBuilder.cs" />
     <Compile Include="InterfaceLegacy\Domain\OvertimeRequestStaffingCheckMethod.cs" />
     <Compile Include="Intraday\BacklogSkillTypesForecastCalculator.cs" />
     <Compile Include="Optimization\PredictorResult.cs" />
@@ -216,7 +224,14 @@
     <Compile Include="MultiTenancy\PersonIdentityModel.cs" />
     <Compile Include="Optimization\TeamBlock\ForecastAndScheduleSumForDay.cs" />
     <Compile Include="Optimization\WasReallyBetterResult.cs" />
+    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayLoaderLateForWork.cs" />
+    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayWithLateForWork.cs" />
+    <Compile Include="RealTimeAdherence\Domain\Events\ISolidProof.cs" />
+    <Compile Include="RealTimeAdherence\Domain\Events\PersonArrivalAfterLateForWorkEvent.cs" />
     <Compile Include="RegisterEventHandlerInLifetimeScopeAttribute.cs" />
+    <Compile Include="Repositories\IAllSkillForSkillGroupProvider.cs" />
+    <Compile Include="Repositories\IForecastDayOverrideRepository.cs" />
+    <Compile Include="Repositories\IExtensiveLogRepository.cs" />
     <Compile Include="Scheduling\IPredictShiftCategory.cs" />
     <Compile Include="Scheduling\IShiftCategoryPredictionModelLoader.cs" />
     <Compile Include="Scheduling\Rules\MaximumWorkdayRule.cs" />
@@ -399,7 +414,6 @@
     <Compile Include="Common\JobResultArtifact.cs" />
     <Compile Include="Common\OrganizationSelectionProvider.cs" />
     <Compile Include="Common\PurgeSetting.cs" />
-    <Compile Include="Common\TimeSpanExtensions.cs" />
     <Compile Include="Common\Time\IUserNow.cs" />
     <Compile Include="Common\Time\TimePassingSimulator.cs" />
     <Compile Include="Common\Time\UserNow.cs" />
@@ -505,7 +519,7 @@
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\IHistoricalChangeReadModelReader.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\IRtaEventStore.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\NoRtaEventStore.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\OutOfAdherencePeriod.cs" />
+    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AdherencePeriod.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\ScheduleLoader.cs" />
     <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\ApprovedPeriod.cs" />
     <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\ApprovePeriodAsInAdherence.cs" />
@@ -547,8 +561,6 @@
     <Compile Include="RealTimeAdherence\Domain\Service\AgentStateProcessor.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\AgentStateReadModel.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\BehaviorTestTenants.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\CheckForActivityChangeInputModel.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\CheckForActivityChangeWebModel.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\Context.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\ContextLoader.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\DataSourceMapper.cs" />
@@ -664,7 +676,6 @@
     <Compile Include="Optimization\WeeklyRestSolver\RemoveShiftCategoryToBeInLegalState.cs" />
     <Compile Include="Reports\AuditTrailSearchParams.cs" />
     <Compile Include="Reports\IReportVisible.cs" />
-    <Compile Include="Reports\IsOnlineReportFunctionSpecification.cs" />
     <Compile Include="Reports\PersonsWhoChangedSchedulesViewModelProvider.cs" />
     <Compile Include="Reports\ScheduleAuditTrailReportViewModelProvider.cs" />
     <Compile Include="Repositories\IScheduleAuditTrailReport.cs" />
@@ -682,7 +693,6 @@
     <Compile Include="Scheduling\SchedulingEventHandler.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\SchedulingWasOrdered.cs" />
     <Compile Include="Scheduling\SchedulingInformationProvider.cs" />
-    <Compile Include="Scheduling\ThreadPriorityManager.cs" />
     <Compile Include="Scheduling\WebLegacy\DesktopContext.cs" />
     <Compile Include="Scheduling\WebLegacy\DesktopPeopleInOrganization.cs" />
     <Compile Include="Scheduling\WebLegacy\DesktopSchedulingContext.cs" />
@@ -910,7 +920,6 @@
     <Compile Include="InterfaceLegacy\Domain\IAuditSetter.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAuditSetting.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAuditSettingRepository.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IAuthorizationSettings.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAutoPositionedActivityExtender.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAvailabilityDay.cs" />
     <Compile Include="InterfaceLegacy\Domain\IAvailabilityRestriction.cs" />
@@ -999,7 +1008,6 @@
     <Compile Include="InterfaceLegacy\Domain\IGroupPage.cs" />
     <Compile Include="InterfaceLegacy\Domain\IGroupPageDataProvider.cs" />
     <Compile Include="InterfaceLegacy\Domain\IGroupPageOptions.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IGroupShiftCategoryFairnessCreator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IHasContractDayOffDefinition.cs" />
     <Compile Include="InterfaceLegacy\Domain\IIncreasePeriodByOne.cs" />
     <Compile Include="InterfaceLegacy\Domain\IJobResult.cs" />
@@ -1115,7 +1123,6 @@
     <Compile Include="InterfaceLegacy\Domain\IPerstistableScheduleData.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPopulationStatisticsData.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPossibleMinMaxWorkShiftLengthExtractor.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IPreferenceAbsenceChecker.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPreferenceDay.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPreferenceRestriction.cs" />
     <Compile Include="InterfaceLegacy\Domain\IPreferenceRestrictionTemplate.cs" />
@@ -1174,7 +1181,6 @@
     <Compile Include="InterfaceLegacy\Domain\ISaveSeatMapCommand.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScenario.cs" />
     <Compile Include="InterfaceLegacy\Domain\ISchedule.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IScheduleAuditTrailReportData.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleChangedEvent.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleChangedMessage.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleData.cs" />
@@ -1246,7 +1252,6 @@
     <Compile Include="InterfaceLegacy\Domain\IShiftFromMasterActivityService.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftLengthDecider.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftProjectionCacheManager.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IShiftProjectionCasheFilter.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftTradeApproveService.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftTradeBusinessRuleConfig.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftTradeMaxSeatValidator.cs" />
@@ -1312,7 +1317,6 @@
     <Compile Include="InterfaceLegacy\Domain\ITimeZoneDim.cs" />
     <Compile Include="InterfaceLegacy\Domain\ITracker.cs" />
     <Compile Include="InterfaceLegacy\Domain\ITrackerCalculator.cs" />
-    <Compile Include="InterfaceLegacy\Domain\ITrackingDataProvider.cs" />
     <Compile Include="InterfaceLegacy\Domain\ITrueFalseRandomizer.cs" />
     <Compile Include="InterfaceLegacy\Domain\IUndoRedoContainer.cs" />
     <Compile Include="InterfaceLegacy\Domain\IUnsafePersonProvider.cs" />
@@ -1429,7 +1433,6 @@
     <Compile Include="InterfaceLegacy\Infrastructure\Analytics\IAnalyticsFactScheduleDayCount.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\Analytics\IAnalyticsFactSchedulePerson.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\Analytics\IAnalyticsFactScheduleTime.cs" />
-    <Compile Include="InterfaceLegacy\Infrastructure\Analytics\IAnalyticsGeneric.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\Analytics\IAnalyticsPersonBusinessUnit.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\Analytics\IAnalyticsShiftLength.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\Analytics\IFactScheduleRow.cs" />
@@ -1712,7 +1715,6 @@
     <Compile Include="Islands\ReduceSkillSets.cs" />
     <Compile Include="Islands\SameSkillSetSkillsComparer.cs" />
     <Compile Include="Islands\SkillSet.cs" />
-    <Compile Include="Islands\SkillSetComparerForIslands.cs" />
     <Compile Include="LogObject\LogObjectDetail.cs" />
     <Compile Include="Logon\FullPermissions.cs" />
     <Compile Include="Logon\FullPermissionsAspect.cs" />
@@ -1748,7 +1750,6 @@
     <Compile Include="ResourceCalculation\SkillCombinationResource.cs" />
     <Compile Include="ResourceCalculation\SkillStaffingInterval.cs" />
     <Compile Include="ResourceCalculation\SkillStaffingIntervalLightModel.cs" />
-    <Compile Include="ResourceCalculation\SkillStaffIntervalHolder.cs" />
     <Compile Include="ResourceCalculation\StaffingIntervalChange.cs" />
     <Compile Include="ResourceCalculation\UpdateStaffingLevelReadModelOnlySkillCombinationResources.cs" />
     <Compile Include="Scheduling\Assignment\NoProjectionMerger.cs" />
@@ -3291,7 +3292,6 @@
     <Compile Include="Security\LicenseOptions\TeleoptiCccOvertimeAvailabilityLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccSmsLinkLicenseOption.cs" />
     <Compile Include="Security\LicenseStatus.cs" />
-    <Compile Include="Security\ISystemUserSpecification.cs" />
     <Compile Include="Security\Matrix\ApplicationFunctionResolver.cs" />
     <Compile Include="Security\AuthorizationData\ShippedApplicationRoleNames.cs" />
     <Compile Include="Security\AuthorizationEntities\AllLicenseOption.cs" />
@@ -4177,6 +4177,7 @@
     <EmbeddedResource Include="Auditing\PersonAccess.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\ForecastDayOverride.hbm.xml" />
     <Content Include="InterfaceLegacy\_DONT_PUT_NEW_TYPES_HERE.txt" />
     <Content Include="Optimization\ClassicLegacy\REMOVE.txt" />
     <EmbeddedResource Include="Optimization\Filters\SkillFilter.hbm.xml" />

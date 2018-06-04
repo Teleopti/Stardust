@@ -265,6 +265,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service
 			Database
 				.WithAgent("usercode", personId)
 				.WithSchedule(personId, phone, "2017-03-06 10:00", "2017-03-06 11:00")
+				.WithStateGroup(null, "out")
+				.WithStateCode("break")
 				.WithMappedRule(Guid.NewGuid(), "break", phone, 0, "out", Adherence.Out)
 				;
 			Now.Is("2017-03-06 10:00");

@@ -1,25 +1,36 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource, PageEvent } from '@angular/material';
 
-import { NavigationService, PeopleSearchQuery, RolesService, SearchService, WorkspaceService } from '../../services';
+import {
+	NavigationService,
+	PeopleSearchQuery,
+	RolesService,
+	WorkspaceService,
+	PeopleSearchResult,
+	SearchService
+} from '../../services';
 import { Person, Role } from '../../types';
 import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
+import { SearchPageService } from './search-page.service';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
 	selector: 'people-search-page',
 	templateUrl: './search-page.component.html',
-	styleUrls: ['./search-page.component.scss']
+	styleUrls: ['./search-page.component.scss'],
+	providers: [SearchPageService]
 })
 export class SearchPageComponent implements OnInit {
 	constructor(
 		public nav: NavigationService,
 		public workspaceService: WorkspaceService,
 		public rolesService: RolesService,
+		public searchPageService: SearchPageService,
 		public searchService: SearchService
 	) {}
 
-	displayedColumns = ['select', 'FirstName', 'LastName', 'Site', 'Team', 'Roles'];
+	displayedColumns = ['select', 'FirstName', 'LastName', 'SiteTeam', 'Roles'];
 	dataSource = new MatTableDataSource<Person>([]);
 	searchControl = new FormControl('');
 
@@ -31,7 +42,7 @@ export class SearchPageComponent implements OnInit {
 	ngOnInit() {
 		this.searchControl.setValue(this.searchService.keyword);
 		this.pagination.length = this.searchService.lastQuerySize;
-		this.searchService.getPeople().subscribe({
+		this.searchPageService.getPeople().subscribe({
 			next: (people: Person[]) => {
 				this.dataSource.data = people;
 			}
@@ -66,9 +77,10 @@ export class SearchPageComponent implements OnInit {
 			pageSize: this.searchService.pageSize,
 			pageIndex: this.searchService.pageIndex
 		};
-		return this.searchService.searchPeople(query).then(searchResult => {
-			this.pagination.length = searchResult.TotalRows;
-			return searchResult;
+		this.searchPageService.searchPeople(query).subscribe({
+			next: searchResult => {
+				this.pagination.length = searchResult.TotalRows;
+			}
 		});
 	}
 
@@ -78,7 +90,7 @@ export class SearchPageComponent implements OnInit {
 			const person = this.workspaceService.getSelectedPerson(id);
 			this.workspaceService.deselectPerson(person);
 		} else {
-			const person = this.searchService.getPerson(id);
+			const person = this.searchPageService.getPerson(id);
 			this.workspaceService.selectPerson(person);
 		}
 	}
@@ -99,7 +111,7 @@ export class SearchPageComponent implements OnInit {
 		this.toggleSelectedPerson(row.Id);
 	}
 
-	masterToggle() {
+	selectAllOnPage() {
 		if (this.isAllSelected()) {
 			this.dataSource.data.forEach(person => {
 				if (this.workspaceService.isPersonSelected(person.Id)) this.workspaceService.deselectPerson(person);
@@ -109,5 +121,13 @@ export class SearchPageComponent implements OnInit {
 				if (!this.workspaceService.isPersonSelected(person.Id)) this.workspaceService.selectPerson(person);
 			});
 		}
+	}
+
+	selectAllMatches() {
+		this.searchPageService.searchPeopleAllPages().subscribe({
+			next: (result: PeopleSearchResult) => {
+				this.workspaceService.selectPeople(result.People);
+			}
+		});
 	}
 }

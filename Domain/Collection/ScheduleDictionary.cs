@@ -457,21 +457,18 @@ namespace Teleopti.Ccc.Domain.Collection
             IMeeting updatedData = repository.LoadAggregate(id);
             if (updatedData == null) return;
             if (!_scenario.Equals(updatedData.Scenario)) return;
-            foreach (var meetingPerson in updatedData.MeetingPersons)
-            {
-                var personMeetings = updatedData.GetPersonMeetings(meetingPerson.Person);
 
-                if (!Keys.Contains(meetingPerson.Person)) continue;
-
-                var range = (ScheduleRange)this[meetingPerson.Person];
-                foreach (var personMeeting in personMeetings)
-                {
-                    if (!range.WithinRange(personMeeting.Period)) continue;
-                    using (TurnoffPermissionScope.For(this)) range.SolveConflictBecauseOfExternalUpdate(personMeeting, true);
-                    OnPartModified(new ModifyEventArgs(ScheduleModifier.MessageBroker, personMeeting.Person, personMeeting.Period, null));
-                }
-            }
-        }
+			var personMeetings = updatedData.GetPersonMeetings(Period.LoadedPeriod(), Keys.ToArray());
+			
+			foreach (var personMeeting in personMeetings)
+			{
+				var range = (ScheduleRange)this[personMeeting.Person];
+				if (!range.WithinRange(personMeeting.Period)) continue;
+				using (TurnoffPermissionScope.For(this)) range.SolveConflictBecauseOfExternalUpdate(personMeeting, true);
+				OnPartModified(
+					new ModifyEventArgs(ScheduleModifier.MessageBroker, personMeeting.Person, personMeeting.Period, null));
+			}
+		}
 
         public void ValidateBusinessRulesOnPersons(IEnumerable<IPerson> people, INewBusinessRuleCollection newBusinessRuleCollection)
         {

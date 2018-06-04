@@ -34,7 +34,9 @@ namespace Teleopti.Ccc.DBManager.Library
 			var bakFile = command.RestoreBackup ?? command.RestoreBackupIfNotExistsOrNewer;
 			var dataFolder = command.DataFolder ?? new FileInfo(bakFile).Directory.FullName;
 			restore(command.DatabaseType, command.DatabaseName, bakFile, dataFolder);
+			waitUntilLoginWorks();
 			createLoginDropUsers(command.DatabaseName, command.AppUserName, command.AppUserPassword);
+			waitUntilLoginWorks();
 			if (command.DatabaseType == DatabaseType.TeleoptiCCC7)
 				_configureSystem.ActivateAllTenants();
 			addLicence(command.DatabaseType);
@@ -72,10 +74,13 @@ namespace Teleopti.Ccc.DBManager.Library
 			var script = File.ReadAllText(file);
 			script = replaceVariables(script, null, null, databaseName, user, password, null);
 			_sql.ExecuteTransactionlessNonQuery(script, Timeouts.CommandTimeout);
+		}
 
+		private void waitUntilLoginWorks()
+		{
 			// wait until login actually works
 			Retry.Handle<Exception>()
-				.WaitAndRetry(TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(5))
+				.WaitAndRetry(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(5))
 				.Do(() => { _sql.Execute("select 1"); });
 		}
 

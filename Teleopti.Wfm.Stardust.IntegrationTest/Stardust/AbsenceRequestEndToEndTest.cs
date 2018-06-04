@@ -18,7 +18,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Sdk.ServiceBus;
-using Teleopti.Ccc.Sdk.ServiceBus.Custom;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
@@ -71,7 +70,7 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			});
 
 			TestLog.Debug("Starting service bus");
-			var host = new ServiceBusRunner(i => { }, new EnvironmentVariable(), ConfigReader);
+			var host = new ServiceBusRunner(i => { }, ConfigReader);
 			host.Start();
 			Thread.Sleep(2000);
 			EventPublisher.Publish(new TenantMinuteTickEvent());

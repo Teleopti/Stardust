@@ -74,9 +74,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 			else
 			{
-				var groupPersonGroupPagePerDate = _groupPageCreator.CreateGroupPagePerDate(schedulerStateHolder.ChoosenAgents, schedulerStateHolder.Schedules, 
-					schedulerStateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection(), _groupScheduleGroupPageDataProvider, optimizationPreferences.Extra.TeamGroupPage);
-
+				var groupPersonGroupPagePerDate = _groupPageCreator.CreateGroupPagePerDate(schedulerStateHolder.ChoosenAgents, schedulerStateHolder.Schedules,
+					schedulerStateHolder.Schedules.Period.LoadedPeriod().ToDateOnlyPeriod(_userTimeZone.TimeZone()).DayCollection(), _groupScheduleGroupPageDataProvider, optimizationPreferences.Extra.TeamGroupPage);
 				_groupPagePerDateHolder.GroupPersonGroupPagePerDate = groupPersonGroupPagePerDate;
 				_scheduleOptimizerHelper.ReOptimize(backgroundWorker, selectedAgents, selectedPeriod, schedulingOptions,
 					dayOffOptimizationPreferenceProvider, optimizationPreferences, resourceCalculateDelayer, rollbackService);

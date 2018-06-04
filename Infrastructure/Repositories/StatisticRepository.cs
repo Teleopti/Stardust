@@ -9,7 +9,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
-using NHibernate.SqlAzure;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -18,6 +17,8 @@ using Teleopti.Ccc.Domain.LogObject;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErrorHandling;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 
@@ -169,10 +170,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				IDbConnection dbConnection = ((NHibernateStatelessUnitOfWork)uow).Session.Connection;
 
-				if (dbConnection is ReliableSqlDbConnection)
-				{
-					dbConnection = ((ReliableSqlDbConnection) dbConnection).ReliableConnection.Current;
-				}
+				
 
 				using (SqlBulkCopy bulkCopy = new SqlBulkCopy((SqlConnection)dbConnection))
 				{
@@ -437,7 +435,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				if (ex.InnerException is Win32Exception && attempt < 6)
 				{
-					_logger.Warn(string.Format("Retry - Count:{0}, Exception:{1}, StackTrace:{2}", attempt, ex, ex.StackTrace));
+					_logger.Warn($"Retry - Count:{attempt}, Exception:{ex}, StackTrace:{ex.StackTrace}");
 					return repositoryActionWithRetry(innerAction, ++attempt);
 				}
 

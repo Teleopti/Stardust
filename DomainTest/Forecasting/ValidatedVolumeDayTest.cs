@@ -266,59 +266,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(TimeSpan.FromSeconds(300d), target.TotalStatisticAverageAfterTaskTime);
         }
 
-        [Test]
-        public void VerifyCanAddPercentToTasks()
-        {
-            Percent percent = new Percent(0.1);
-            target.ValidatedTasks = 10;
-            target.AddPercentageToTasks(percent);
-            Assert.AreEqual(11, target.ValidatedTasks);
-            percent = new Percent(1);
-            target.ValidatedTasks = 10;
-            target.AddPercentageToTasks(percent);
-            Assert.AreEqual(20, target.ValidatedTasks);
-            percent = new Percent(-0.1);
-            target.ValidatedTasks = 10;
-            target.AddPercentageToTasks(percent);
-            Assert.AreEqual(9, target.ValidatedTasks);
-        }
-        
-        [Test]
-        public void VerifyCanAddPercentToTalkTime()
-        {
-            Percent percent = new Percent(0.1);
-            TimeSpan talkTime = new TimeSpan(0, 0, 1, 2);
-            target.ValidatedAverageTaskTime = talkTime;
-            target.AddPercentageToValidatedTaskTime(percent);
-            Assert.AreEqual(new TimeSpan(0, 0, 0, 68, 200), target.ValidatedAverageTaskTime);
-            percent = new Percent(1);
-            target.ValidatedAverageTaskTime = talkTime;
-            target.AddPercentageToValidatedTaskTime(percent);
-            Assert.AreEqual(talkTime.Add(talkTime), target.ValidatedAverageTaskTime);
-            percent = new Percent(-0.1);
-            target.ValidatedAverageTaskTime = talkTime;
-            target.AddPercentageToValidatedTaskTime(percent);
-            Assert.AreEqual(new TimeSpan(0, 0, 0, 55, 800), target.ValidatedAverageTaskTime);
-        }
-
-        [Test]
-        public void VerifyCanAddPercentToAcw()
-        {
-            Percent percent = new Percent(0.1);
-            TimeSpan acw = new TimeSpan(0, 0, 1, 2);
-            target.ValidatedAverageAfterTaskTime = acw;
-            target.AddPercentageToValidatedAfterTaskTime(percent);
-            Assert.AreEqual(new TimeSpan(0, 0, 0, 68, 200), target.ValidatedAverageAfterTaskTime);
-            percent = new Percent(1);
-            target.ValidatedAverageAfterTaskTime = acw;
-            target.AddPercentageToValidatedAfterTaskTime(percent);
-            Assert.AreEqual(acw.Add(acw), target.ValidatedAverageAfterTaskTime);
-            percent = new Percent(-0.1);
-            target.ValidatedAverageAfterTaskTime = acw;
-            target.AddPercentageToValidatedAfterTaskTime(percent);
-            Assert.AreEqual(new TimeSpan(0, 0, 0, 55, 800), target.ValidatedAverageAfterTaskTime);
-        }
-
 		[Test]
 		public void ShouldNotAcceptNegativeValuesInValidatedAverageAfterTaskTime()
 		{

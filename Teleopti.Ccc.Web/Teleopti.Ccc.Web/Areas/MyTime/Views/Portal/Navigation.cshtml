@@ -27,7 +27,7 @@
 		Teleopti.MyTimeWeb.Common.SetupCalendar(
 		{
 			UseJalaaliCalendar: @Model.UseJalaaliCalendar.ToString().ToLowerInvariant(),
-			DateFormat: "@Model.DateFormat",
+			DateFormat: "@Html.Raw(@Model.DateFormat)",
 			TimeFormat: "@Model.TimeFormat",
 			AMDesignator: "@Model.AMDesignator",
 			PMDesignator: "@Model.PMDesignator",

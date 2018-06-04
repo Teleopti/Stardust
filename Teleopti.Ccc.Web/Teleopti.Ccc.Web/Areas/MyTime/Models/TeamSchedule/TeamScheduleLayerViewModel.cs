@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 {
@@ -12,5 +13,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 		public bool IsAbsenceConfidential { get; set; }
 		public bool IsOvertime { get; set; }
 		public string TitleTime { get; set; }
+		public MeetingViewModel Meeting { get; set; }
 	}
 }

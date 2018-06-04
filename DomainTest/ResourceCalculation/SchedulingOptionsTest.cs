@@ -1,8 +1,11 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
@@ -16,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void Setup()
         {
             _target = new SchedulingOptions();
-	        _shiftProjectionCache = new ShiftProjectionCache(new WorkShift(new ShiftCategory("Test")), new PersonalShiftMeetingTimeChecker());
+	        _shiftProjectionCache = new ShiftProjectionCache(new WorkShift(new ShiftCategory("Test")), new PersonalShiftMeetingTimeChecker(), new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
         }
 
         [Test]

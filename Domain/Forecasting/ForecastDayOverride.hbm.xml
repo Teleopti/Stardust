@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Forecasting"
+                   default-access="field.camelcase-underscore">
+	<class name="ForecastDayOverride">
+		<!--IEntity-->
+		<id name="Id" access="nosetter.camelcase-underscore"
+					type="guid"
+					unsaved-value="null">
+			<generator class="guid.comb" />
+		</id>
+		<version name="Version"
+					 unsaved-value ="null"/>
+		<many-to-one name="UpdatedBy"
+						 class="Teleopti.Ccc.Domain.Common.Person"
+						 not-null="true"
+						 foreign-key="FK_ForecastDayOverride_Person_UpdatedBy"/>
+		<property name="UpdatedOn"
+					  type="UtcDateTime"
+					  not-null="true"/>
+		<!--IEntity-->
+
+		<property name="Date"
+					  type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
+					  not-null="true"
+				  unique-key="Unique_ForecastDayOverride"/>
+		<many-to-one class="Workload"
+					 name="Workload"
+					 not-null="true"
+					 unique-key="Unique_ForecastDayOverride" foreign-key="FK_ForecastDayOverride_Workload"/>
+		<many-to-one class="Teleopti.Ccc.Domain.Common.Scenario"
+					 name="Scenario"
+					 not-null="true" foreign-key="FK_ForecastDayOverride_Scenario"
+					 unique-key="Unique_ForecastDayOverride"/>
+
+		<property name="OriginalTasks"
+				  type="double"
+				  not-null="true"
+				  access="property"/>
+
+		<property name="OriginalAverageTaskTime"
+				  type="TimeSpan"
+				  not-null="true"
+				  access="property"/>
+
+		<property name="OriginalAverageAfterTaskTime"
+				  type="TimeSpan"
+				  not-null="true"
+				  access="property"/>
+
+		<property name="OverriddenTasks"
+				  type="double"
+				  not-null="false"
+				  access="property"/>
+
+		<property name="OverriddenAverageTaskTime"
+				  type="TimeSpan"
+				  not-null="false"
+				  access="property"/>
+
+		<property name="OverriddenAverageAfterTaskTime"
+				  type="TimeSpan"
+				  not-null="false"
+				  access="property"/>
+	</class>
+</hibernate-mapping>

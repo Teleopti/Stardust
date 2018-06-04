@@ -1,7 +1,10 @@
-﻿namespace Teleopti.Ccc.Domain.Forecasting.Angel
+﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Forecasting.Models;
+
+namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
 	public interface IQuickForecasterWorkload
 	{
-		void Execute(QuickForecasterWorkloadParams quickForecasterWorkloadParams);
+		ForecastModel Execute(QuickForecasterWorkloadParams quickForecasterWorkloadParams);
 	}
 }

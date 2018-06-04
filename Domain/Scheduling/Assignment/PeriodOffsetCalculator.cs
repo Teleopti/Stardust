@@ -4,26 +4,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-    public interface IPeriodOffsetCalculator
-    {
-        /// <summary>
-        /// Calculates offset (timechange) between the source and the target period.
-        /// </summary>
-        /// <param name="source">The source.</param>
-        /// <param name="target">The target.</param>
-        /// <param name="ignoreTimeZoneChanges">if set to <c>true</c> [ignore time zone changes].</param>
-        /// <param name="sourceShiftPeriod"></param>
-        /// <returns></returns>
-        TimeSpan CalculatePeriodOffset(IScheduleDay source, IScheduleDay target, bool ignoreTimeZoneChanges, DateTimePeriod sourceShiftPeriod);
-
-        TimeSpan CalculatePeriodOffset(DateTimePeriod sourcePeriod, DateTimePeriod targetPeriod);
-		TimeSpan CalculatePeriodOffsetConsiderDaylightSavings(IScheduleDay source, IScheduleDay target, DateTimePeriod sourceShiftPeriod);
-    }
-
     /// <summary>
     /// Calculator to calculate the offset (timechange) between the source and the target period.
     /// </summary>
-    public class PeriodOffsetCalculator : IPeriodOffsetCalculator
+    public class PeriodOffsetCalculator
     {
         /// <summary>
         /// Calculates offset (timechange) between the source and the target period.
@@ -94,11 +78,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				currentUserTimeZone.GetUtcOffset(targetShiftStartTimeInLoggedOnLocal.AddMilliseconds(milliVanilli)).Subtract((currentUserTimeZone.BaseUtcOffset));
 
 			return sourceDaylightOffset.Subtract(targetDaylightOffset);
-
-			//if (sourceIsSummerTime)
-			//	return TimeSpan.FromHours(1);
-
-			//return TimeSpan.FromHours(-1);
 		}
 
         private static TimeSpan CalculatePeriodDifference(DateTimePeriod sourcePeriod, DateTimePeriod targetPeriod)

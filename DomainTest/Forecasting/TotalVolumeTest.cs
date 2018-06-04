@@ -294,9 +294,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Expect.Call(historicDayOne.CurrentDate).Return(outlier1.Dates[0]).Repeat.AtLeastOnce();
             Expect.Call(historicDayOne.TotalTasks).Return(0d).Repeat.AtLeastOnce();
             Expect.Call(historicDayOne.Tasks).Return(0d).Repeat.AtLeastOnce();
-            Expect.Call(historicDayOne.OverrideTasks).Return(null).Repeat.AtLeastOnce();
-			Expect.Call(historicDayOne.OverrideAverageTaskTime).Return(null).Repeat.AtLeastOnce();
-			Expect.Call(historicDayOne.OverrideAverageAfterTaskTime).Return(null).Repeat.AtLeastOnce();
             Expect.Call(historicDayOne.AverageTaskTime).Return(TimeSpan.Zero).Repeat.AtLeastOnce();
             Expect.Call(historicDayOne.AverageAfterTaskTime).Return(TimeSpan.Zero).Repeat.AtLeastOnce();
             Expect.Call(historicDayOne.TotalAverageTaskTime).Return(TimeSpan.Zero).Repeat.AtLeastOnce();
@@ -383,7 +380,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             var t = new TotalVolume();
             t.Create(historicalDepth, taskOwners, volumes, new List<IOutlier>(), 0, 0, false, workload);
 
-            //Assert.IsFalse(t.WorkloadDayCollection[0].IsClosed);
             Assert.IsTrue(t.WorkloadDayCollection[0].OpenForWork.IsOpen);
             Assert.AreEqual(openHourPeriods, ((WorkloadDay)t.WorkloadDayCollection[1]).OpenHourList);
         }

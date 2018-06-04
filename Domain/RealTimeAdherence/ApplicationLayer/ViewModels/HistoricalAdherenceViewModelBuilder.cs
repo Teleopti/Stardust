@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 				.ToArray();
 		}
 
-		private IEnumerable<OutOfAdherenceViewModel> buildOutOfAdherences(IEnumerable<OutOfAdherencePeriod> periods)
+		private IEnumerable<OutOfAdherenceViewModel> buildOutOfAdherences(IEnumerable<AdherencePeriod> periods)
 		{
 			return periods
 				.Select(x =>
@@ -123,6 +123,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 				.Select(x => new HistoricalChangeViewModel
 				{
 					Time = formatForUser(x.Timestamp),
+					LateForWork = x.LateForWork,
 					Activity = x.ActivityName,
 					ActivityColor = x.ActivityColor.HasValue ? ColorTranslator.ToHtml(Color.FromArgb(x.ActivityColor.Value)) : null,
 					State = x.StateName,

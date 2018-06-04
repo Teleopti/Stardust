@@ -57,7 +57,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 				return ret;
 			}
 
-			foreach (var date in input.Dates)
+			var uniqueDates = input.Dates.Distinct();
+			foreach (var date in uniqueDates)
 			{
 				var dayInput = new PreferenceDayInput
 				{

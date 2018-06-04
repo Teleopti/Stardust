@@ -59,6 +59,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _skillInIntradays;
 		}
 
+		public IEnumerable<SkillInIntraday> AllSkills()
+		{
+			throw new NotImplementedException();
+		}
+
 		public void HasWithName(string name)
 		{
 			var skillInIntraday = new SkillInIntraday {Name = name};

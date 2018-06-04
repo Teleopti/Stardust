@@ -17,24 +17,30 @@
         <button mat-raised-button color="primary" data-test-applicationlogon-button [disabled]="!workspaceService.isAnySelected()"
           (click)="nav.navToApplicationLogon()">
           Application logon</button>
-        <button mat-raised-button color="primary" data-test-identitylogon-button [disabled]="!workspaceService.isAnySelected()"
-          (click)="nav.navToIdentityLogon()">
+        <button mat-raised-button color="primary" data-test-identitylogon-button [disabled]="!workspaceService.isAnySelected()" (click)="nav.navToIdentityLogon()">
           Identity logon</button>
       </div>
     </div>
   </div>
   <div class="con-row">
-    <div class="con-flex">
+    <div class="con-flex table-container">
+      <button *ngIf="false" mat-icon-button class="action-button" [matMenuTriggerFor]="menu" data-test-action-menu>
+        <i class="mdi mdi-dots-vertical"></i>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="selectAllMatches()" data-test-selectallonallpages-button>Select all on all pages</button>
+      </mat-menu>
       <mat-table #table [dataSource]="dataSource" data-test-search>
 
         <!-- Checkbox Column -->
         <ng-container matColumnDef="select">
           <mat-header-cell *matHeaderCellDef>
-            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="isAllSelected()" [indeterminate]="isAnySelected() && !isAllSelected()">
+            <mat-checkbox (change)="selectAllOnPage()" [checked]="isAllSelected()" [indeterminate]="isAnySelected() && !isAllSelected()"
+              data-test-selectall-toggle>
             </mat-checkbox>
           </mat-header-cell>
           <mat-cell *matCellDef="let row">
-            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? toggleSelectedPerson(row.Id) : null" [checked]="workspaceService.isPersonSelected(row.Id)">
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="toggleSelectedPerson(row.Id)" [checked]="workspaceService.isPersonSelected(row.Id)">
             </mat-checkbox>
           </mat-cell>
         </ng-container>
@@ -55,16 +61,10 @@
           <mat-cell *matCellDef="let person" data-test-person-role> {{personToRoles(person)}} </mat-cell>
         </ng-container>
 
-        <ng-container matColumnDef="Site">
-          <mat-header-cell *matHeaderCellDef> Site </mat-header-cell>
-          <mat-cell *matCellDef="let person" data-test-person-site> {{person.Site}} </mat-cell>
+        <ng-container matColumnDef="SiteTeam">
+          <mat-header-cell *matHeaderCellDef> Site/Team </mat-header-cell>
+          <mat-cell *matCellDef="let person" data-test-person-site-team> {{person.Site}}/{{person.Team}} </mat-cell>
         </ng-container>
-
-        <ng-container matColumnDef="Team">
-          <mat-header-cell *matHeaderCellDef> Team </mat-header-cell>
-          <mat-cell *matCellDef="let person" data-test-person-team> {{person.Team}}</mat-cell>
-        </ng-container>
-
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="toggleRow(row)" data-test-person>

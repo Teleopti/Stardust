@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.SkillGroup
 		private readonly SkillGroupViewModelBuilder _skillGroupViewModelBuilder;
 		private readonly ModifySkillGroup _modifySkillGroup;
 		private readonly ISkillGroupRepository _skillGroupRepository;
+		private readonly IAllSkillForSkillGroupProvider _allSkillForSkillGroupProvider;
 
 
 		public SkillGroupController(
@@ -29,8 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.SkillGroup
 			DeleteSkillGroup deleteSkillGroup,
 			ModifySkillGroup modifySkillGroup,
 			IAuthorization authorization,
-			ISkillGroupRepository skillGroupRepository
-		)
+			ISkillGroupRepository skillGroupRepository, IAllSkillForSkillGroupProvider allSkillForSkillGroupProvider)
 		{
 			_createSkillGroup = createSkillGroup;
 			_skillGroupViewModelBuilder = skillGroupViewModelBuilder;
@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.SkillGroup
 			_authorization = authorization;
 			_modifySkillGroup = modifySkillGroup;
 			_skillGroupRepository = skillGroupRepository;
+			_allSkillForSkillGroupProvider = allSkillForSkillGroupProvider;
 		}
 
 		[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebModifySkillGroup)]
@@ -58,12 +59,13 @@ namespace Teleopti.Ccc.Web.Areas.SkillGroup
 		[Route("api/skillgroup/skillgroups")]
 		public virtual IHttpActionResult GetSkillGroups()
 		{
-			return Ok(new SkillGroupInfo
+			var returnValue = new SkillGroupInfo
 			{
 				HasPermissionToModifySkillArea =
 					_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebModifySkillGroup),
 				SkillAreas = _skillGroupViewModelBuilder.GetAll()
-			});
+			};
+			return Ok(returnValue);
 		}
 
 		[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebModifySkillGroup)]
@@ -109,6 +111,23 @@ namespace Teleopti.Ccc.Web.Areas.SkillGroup
 				Console.WriteLine(e);
 				return InternalServerError(e);
 			}
+		}
+
+		[UnitOfWork, HttpGet, Route("api/skillgroup/skills")]
+		public virtual IHttpActionResult GetAllSkills()
+		{
+			return Ok(_allSkillForSkillGroupProvider.AllExceptSubSkills()
+				.Select(x => new
+				{
+					x.Id,
+					x.Name,
+					x.DoDisplayData,
+					x.SkillType,
+					x.IsMultisiteSkill,
+					x.ShowAbandonRate,
+					x.ShowReforecastedAgents
+				})
+				.ToArray());
 		}
 	}
 }

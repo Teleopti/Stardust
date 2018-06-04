@@ -322,24 +322,75 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\Teleopti.Support.Library\ConfigFiles\AzureConfigFiles.txt">
+      <Link>ConfigFiles\AzureConfigFiles.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Teleopti.Support.Library\ConfigFiles\BuildServerConfigFiles.txt">
+      <Link>ConfigFiles\BuildServerConfigFiles.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Teleopti.Support.Library\ConfigFiles\ConfigFiles.txt">
+      <Link>ConfigFiles\ConfigFiles.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Teleopti.Support.Library\ConfigFiles\DeployConfigFilesWeb.txt">
+      <Link>ConfigFiles\DeployConfigFilesWeb.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Teleopti.Support.Library\ConfigFiles\DeployConfigFilesWorker.txt">
+      <Link>ConfigFiles\DeployConfigFilesWorker.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="config.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="ConfigFiles\AzureConfigFiles.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ConfigFiles\BuildServerConfigFiles.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ConfigFiles\ConfigFiles.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ConfigFiles\DeployConfigFilesWeb.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ConfigFiles\DeployConfigFilesWorker.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="SQLServerPerformance\RML\helpers\ConvertTraceTo2008.ps1" />
+    <Content Include="SQLServerPerformance\RML\helpers\Sleep.vbs" />
+    <Content Include="SQLServerPerformance\RML\Start.bat" />
+    <Content Include="SQLServerPerformance\RML\tsql\TraceCaptureDef_Replay.sql" />
+    <Content Include="SQLServerPerformance\RML\tsql\TraceCaptureDef_ReportMin.sql" />
+    <Content Include="SQLServerPerformance\SQLIO\docs\BaseLine-BadFigures.txt" />
+    <Content Include="SQLServerPerformance\SQLIO\docs\IO-BestPractices.url" />
+    <Content Include="SQLServerPerformance\SQLIO\docs\ReadMe.txt" />
+    <Content Include="SQLServerPerformance\SQLIO\docs\SQLServer-BestPractices.url" />
+    <Content Include="SQLServerPerformance\SQLIO\docs\Using SQLIO.rtf" />
+    <Content Include="SQLServerPerformance\SQLIO\scripts\SQLIO.ps1" />
+    <Content Include="SQLServerPerformance\SQLIO\Start.cmd" />
+    <Content Include="SQLServerPerformance\ThePerfCheckScript.sql" />
+    <Content Include="StartStopSystem\BrowseUrl.vbs" />
+    <Content Include="StartStopSystem\OsMajorVersionGet.vbs" />
+    <Content Include="StartStopSystem\ResetSystem.bat" />
+    <Content Include="StartStopSystem\RestartHelper.ps1" />
+    <Content Include="StartStopSystem\RestartTeleopti.ps1" />
+    <Content Include="StartStopSystem\StartSystem.bat" />
+    <Content Include="StartStopSystem\StopSystem.bat" />
+    <Content Include="WiseIISConfig\adsutil.vbs" />
+    <Content Include="WiseIISConfig\Apps\ApplicationsInAppPool.txt" />
+    <Content Include="WiseIISConfig\ASPNetVersion.vbs" />
+    <Content Include="WiseIISConfig\CleanUpVirDir.bat" />
+    <Content Include="WiseIISConfig\IIS6ConfigWebAppsAndPool.bat" />
+    <Content Include="WiseIISConfig\IIS7ConfigWebAppsAndPool.bat" />
+    <Content Include="WiseIISConfig\IISAddWindowsFeatures\addWindowsFeatures.bat" />
+    <Content Include="WiseIISConfig\IISAddWindowsFeatures\common\configure_Win7_Win2008ServerR2.bat" />
+    <Content Include="WiseIISConfig\IISAddWindowsFeatures\common\configure_Win8_Win2012Server.ps1" />
+    <Content Include="WiseIISConfig\IISAddWindowsFeatures\common\SupportedOSList.txt" />
+    <Content Include="WiseIISConfig\IISAddWindowsFeatures\common\Win8Features.txt" />
+    <Content Include="WiseIISConfig\IISConfigCommands\Add-CccLicenseToDemo.bat" />
+    <Content Include="WiseIISConfig\IISConfigCommands\IISConfigCommands.ps1" />
+    <Content Include="WiseIISConfig\IISConfigCommands\IISConfigCommands.Tests.ps1" />
+    <Content Include="WiseIISConfig\IISConfigCommands\RestoreToBaseline.sql" />
+    <Content Include="WiseIISConfig\None\anonymousAuthentication.txt" />
+    <Content Include="WiseIISConfig\None\basicAuthentication.txt" />
+    <Content Include="WiseIISConfig\None\FormsAuthentication.txt" />
+    <Content Include="WiseIISConfig\None\Impersonate.txt" />
+    <Content Include="WiseIISConfig\None\windowsAuthentication.txt" />
+    <Content Include="WiseIISConfig\NTLM\anonymousAuthentication.txt" />
+    <Content Include="WiseIISConfig\NTLM\basicAuthentication.txt" />
+    <Content Include="WiseIISConfig\NTLM\FormsAuthentication.txt" />
+    <Content Include="WiseIISConfig\NTLM\Impersonate.txt" />
+    <Content Include="WiseIISConfig\NTLM\windowsAuthentication.txt" />
+    <Content Include="WiseIISConfig\SetMachineKeys.exe" />
     <None Include="Resources\Teleopti-WFM-main-icon256.png" />
     <None Include="Resources\Teleopti-WFM-main_small.png" />
     <None Include="Resources\ccc_icon.png" />

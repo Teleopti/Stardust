@@ -106,7 +106,7 @@
 						OpenHours: workingHours
 					}).$promise.then(
 						function (result) {
-							$state.go('forecasting.start', { workloadId: result.WorkloadId });
+							$state.go('forecast', { workloadId: result.WorkloadId });
 						}
 					);
 				};

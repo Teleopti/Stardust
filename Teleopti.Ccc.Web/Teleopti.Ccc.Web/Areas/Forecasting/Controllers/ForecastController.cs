@@ -1,18 +1,17 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
+using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Web.Areas.Forecasting.Core;
-using Teleopti.Ccc.Web.Areas.Global;
+using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Web.Areas.Forecasting.Models;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -23,43 +22,40 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 	{
 		private readonly IForecastCreator _forecastCreator;
 		private readonly ISkillRepository _skillRepository;
-		private readonly IForecastViewModelFactory _forecastViewModelFactory;
-		private readonly IForecastResultViewModelFactory _forecastResultViewModelFactory;
-		private readonly IIntradayPatternViewModelFactory _intradayPatternViewModelFactory;
-		private readonly IActionThrottler _actionThrottler;
+		private readonly ForecastProvider _forecastProvider;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IWorkloadRepository _workloadRepository;
-		private readonly ICampaignPersister _campaignPersister;
-		private readonly IOverridePersister _overridePersister;
 		private readonly IAuthorization _authorization;
-		private readonly IForecastMisc _forecastMisc;
+		private readonly IWorkloadNameBuilder _workloadNameBuilder;
+		private readonly IFetchAndFillSkillDays _fetchAndFillSkillDays;
+		private readonly IHistoricalPeriodProvider _historicalPeriodProvider;
+		private readonly IIntradayForecaster _intradayForecaster;
+		private readonly IForecastDayOverrideRepository _forecastDayOverrideRepository;
 
 		public ForecastController(
 			IForecastCreator forecastCreator,
 			ISkillRepository skillRepository,
-			IForecastViewModelFactory forecastViewModelFactory,
-			IForecastResultViewModelFactory forecastResultViewModelFactory,
-			IIntradayPatternViewModelFactory intradayPatternViewModelFactory, 
-			IActionThrottler actionThrottler,
-			IScenarioRepository scenarioRepository, 
+			ForecastProvider forecastProvider,
+			IScenarioRepository scenarioRepository,
 			IWorkloadRepository workloadRepository,
-			ICampaignPersister campaignPersister,
-			IOverridePersister overridePersister,
 			IAuthorization authorization,
-			IForecastMisc forecastMisc)
+			IWorkloadNameBuilder workloadNameBuilder,
+			IFetchAndFillSkillDays fetchAndFillSkillDays,
+			IHistoricalPeriodProvider historicalPeriodProvider,
+			IIntradayForecaster intradayForecaster,
+			IForecastDayOverrideRepository forecastDayOverrideRepository)
 		{
 			_forecastCreator = forecastCreator;
 			_skillRepository = skillRepository;
-			_forecastViewModelFactory = forecastViewModelFactory;
-			_forecastResultViewModelFactory = forecastResultViewModelFactory;
-			_intradayPatternViewModelFactory = intradayPatternViewModelFactory;
-			_actionThrottler = actionThrottler;
+			_forecastProvider = forecastProvider;
 			_scenarioRepository = scenarioRepository;
 			_workloadRepository = workloadRepository;
-			_campaignPersister = campaignPersister;
-			_overridePersister = overridePersister;
 			_authorization = authorization;
-			_forecastMisc = forecastMisc;
+			_workloadNameBuilder = workloadNameBuilder;
+			_fetchAndFillSkillDays = fetchAndFillSkillDays;
+			_historicalPeriodProvider = historicalPeriodProvider;
+			_intradayForecaster = intradayForecaster;
+			_forecastDayOverrideRepository = forecastDayOverrideRepository;
 		}
 
 		[UnitOfWork, Route("api/Forecasting/Skills"), HttpGet]
@@ -69,205 +65,216 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			return new SkillsViewModel
 			{
 				IsPermittedToModifySkill = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebModifySkill),
-				Skills = skillList.Select(
-					skill => new SkillAccuracy
+				Skills = skillList.Select(skill => new SkillAccuracy
+				{
+					Id = skill.Id.Value,
+					Workloads = skill.WorkloadCollection.Select(x => new WorkloadAccuracy
 					{
-						Id = skill.Id.Value,
-						Workloads =
-							skill.WorkloadCollection.Select(
-								x => new WorkloadAccuracy {Id = x.Id.Value, Name = _forecastMisc.WorkloadName(skill.Name, x.Name)}).ToArray()
-					})
+						Id = x.Id.Value,
+						Name = _workloadNameBuilder.WorkloadName(skill.Name, x.Name)
+					}).ToArray()
+				})
 			};
 		}
 
-		[UnitOfWork, HttpPost, Route("api/Forecasting/Evaluate")]
-		public virtual Task<WorkloadEvaluateViewModel> Evaluate(EvaluateInput input)
+		[HttpPost, Route("api/Forecasting/LoadForecast"), UnitOfWork]
+		public virtual IHttpActionResult LoadForecast(ForecastResultInput input)
 		{
-			return Task.FromResult(_forecastViewModelFactory.Evaluate(input));
+			var period = new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd));
+			var scenario = _scenarioRepository.Get(input.ScenarioId);
+			return Ok(_forecastProvider.Load(input.WorkloadId, period, scenario));
 		}
 
-		[UnitOfWork, HttpPost, Route("api/Forecasting/QueueStatistics")]
-		public virtual Task<WorkloadQueueStatisticsViewModel> QueueStatistics(QueueStatisticsInput input)
+		[HttpPost, Route("api/Forecasting/Forecast"), ReadonlyUnitOfWork]
+		public virtual IHttpActionResult Forecast(ForecastInput input)
 		{
-			return Task.FromResult(_forecastViewModelFactory.QueueStatistics(input));
-		}
-
-		[HttpPost, Route("api/Forecasting/ForecastResult"), UnitOfWork]
-		public virtual Task<WorkloadForecastResultViewModel> ForecastResult(ForecastResultInput input)
-		{
-			return
-				Task.FromResult(_forecastResultViewModelFactory.Create(input.WorkloadId,
-					new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd)),
-					_scenarioRepository.Get(input.ScenarioId)));
-		}
-
-		[HttpPost, Route("api/Forecasting/EvaluateMethods"), UnitOfWork]
-		public virtual Task<WorkloadEvaluateMethodsViewModel> EvaluateMethods(EvaluateMethodsInput input)
-		{
-			return Task.FromResult(_forecastViewModelFactory.EvaluateMethods(input));
-		}
-
-		[HttpPost, Route("api/Forecasting/Forecast"), UnitOfWork]
-		public virtual Task<ForecastResultViewModel> Forecast(ForecastInput input)
-		{
-			var failedTask = Task.FromResult(new ForecastResultViewModel
-			{
-				Success = false,
-				Message = "Forecast is running, please try later."
-			});
-			if (input.BlockToken == null)
-			{
-				if (_actionThrottler.IsBlocked(ThrottledAction.Forecasting))
-				{
-					return failedTask;
-				}
-				input.BlockToken = _actionThrottler.Block(ThrottledAction.Forecasting);
-			}
-			else
-			{
-				// need to check if the token is valid first, if valid:
-				_actionThrottler.Resume(input.BlockToken);
-				// if not valid: 
-				// 1. check _actionThrottler.IsBlocked(ThrottledAction.Forecasting)
-				// 1.1 if not blocked, we block it with a new token
-				// 1.2 if blocked, return failedTask
-			}
-
-			try
-			{
-				var futurePeriod = new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd));
-				_forecastCreator.CreateForecastForWorkloads(futurePeriod, input.Workloads, _scenarioRepository.Get(input.ScenarioId));
-				return Task.FromResult(new ForecastResultViewModel
-				{
-					Success = true,
-					BlockToken = input.BlockToken
-				});
-			}
-			catch (OptimisticLockException)
-			{
-				_actionThrottler.Finish(input.BlockToken);
-				return failedTask;
-			}
-			finally
-			{
-				if (input.IsLastWorkload)
-					_actionThrottler.Finish(input.BlockToken);
-				else
-					_actionThrottler.Pause(input.BlockToken, TimeSpan.FromSeconds(20));
-			}
-
-		}
-
-		[HttpPost, Route("api/Forecasting/IntradayPattern"), UnitOfWork]
-		public virtual Task<IntradayPatternViewModel> IntradayPattern(IntradayPatternInput input)
-		{
-			return Task.FromResult(_intradayPatternViewModelFactory.Create(input));
+			var futurePeriod = new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd));
+			var scenario = _scenarioRepository.Get(input.ScenarioId);
+			var forecast = _forecastCreator.CreateForecastForWorkload(futurePeriod, input.Workload, scenario);
+			return Ok(forecast);
 		}
 
 		[UnitOfWork, HttpPost, Route("api/Forecasting/Campaign")]
-		public virtual Task<ForecastResultViewModel> AddCampaign(CampaignInput input)
+		public virtual IHttpActionResult AddCampaign(CampaignInput input)
 		{
-			var failedTask = Task.FromResult(new ForecastResultViewModel
+			var hasWarning = false;
+			foreach (var selectedDay in input.SelectedDays)
 			{
-				Success = false,
-				Message = "Forecast is running, please try later."
-			});
-			if (_actionThrottler.IsBlocked(ThrottledAction.Forecasting))
-			{
-				return failedTask;
-			}
-			var token = _actionThrottler.Block(ThrottledAction.Forecasting);
-			try
-			{
-				var scenario = _scenarioRepository.Get(input.ScenarioId);
-				var workload = _workloadRepository.Get(input.WorkloadId);
-				_campaignPersister.Persist(scenario, workload, input.Days, input.CampaignTasksPercent);
-				return Task.FromResult(new ForecastResultViewModel
+				var forecastDay = input.ForecastDays.Single(x => x.Date == selectedDay);
+				if (!forecastDay.IsOpen)
 				{
-					Success = true
-				});
+					continue;
+				}
+
+				if (forecastDay.HasOverride)
+				{
+					hasWarning = true;
+					continue;
+				}
+
+				forecastDay.HasCampaign = input.CampaignTasksPercent > 0d;
+				forecastDay.CampaignTasksPercentage = input.CampaignTasksPercent;
+				forecastDay.TotalTasks = (input.CampaignTasksPercent + 1) * forecastDay.Tasks;
 			}
-			catch (OptimisticLockException)
+
+			return Ok(new
 			{
-				return failedTask;
-			}
-			finally
-			{
-				_actionThrottler.Finish(token);
-			}
+				WarningMessage = hasWarning ? Resources.CampaignNotAppliedWIthExistingOverride : string.Empty,
+				input.ForecastDays
+			});
 		}
 
 		[UnitOfWork, HttpPost, Route("api/Forecasting/Override")]
-		public virtual Task<ForecastResultViewModel> Override(OverrideInput input)
+		public virtual IHttpActionResult AddOverride(OverrideInput input)
 		{
-			var failedTask = Task.FromResult(new ForecastResultViewModel
+			var hasWarning = false;
+			foreach (var selectedDay in input.SelectedDays)
 			{
-				Success = false,
-				Message = "Forecast is running, please try later."
-			});
-			if (_actionThrottler.IsBlocked(ThrottledAction.Forecasting))
-			{
-				return failedTask;
-			}
-			var token = _actionThrottler.Block(ThrottledAction.Forecasting);
-			try
-			{
-				var scenario = _scenarioRepository.Get(input.ScenarioId);
-				var workload = _workloadRepository.Get(input.WorkloadId);
-				_overridePersister.Persist(scenario, workload, input);
-				return Task.FromResult(new ForecastResultViewModel
+				var forecastDay = input.ForecastDays.Single(x => x.Date == selectedDay);
+				if (!forecastDay.IsOpen)
 				{
-					Success = true
-				});
+					continue;
+				}
+
+				if (input.ShouldOverrideTasks)
+				{
+					if (input.OverrideTasks.HasValue)
+					{
+						forecastDay.TotalTasks = input.OverrideTasks.Value;
+					}
+					else if (forecastDay.CampaignTasksPercentage > 0)
+					{
+						forecastDay.TotalTasks = (forecastDay.CampaignTasksPercentage + 1) * forecastDay.Tasks;
+					}
+					else
+					{
+						forecastDay.TotalTasks = forecastDay.Tasks;
+					}
+					forecastDay.OverrideTasks = input.OverrideTasks;
+				}
+
+				if (input.ShouldOverrideAverageTaskTime)
+				{
+					forecastDay.TotalAverageTaskTime = input.OverrideAverageTaskTime ?? forecastDay.AverageTaskTime;
+					forecastDay.OverrideAverageTaskTime = input.OverrideAverageTaskTime;
+				}
+
+				if (input.ShouldOverrideAverageAfterTaskTime)
+				{
+					forecastDay.TotalAverageAfterTaskTime = input.OverrideAverageAfterTaskTime ?? forecastDay.AverageAfterTaskTime;
+					forecastDay.OverrideAverageAfterTaskTime = input.OverrideAverageAfterTaskTime;
+				}
+
+				forecastDay.HasOverride = input.OverrideTasks.HasValue ||
+										  input.OverrideAverageTaskTime.HasValue ||
+										  input.OverrideAverageAfterTaskTime.HasValue;
+				if (forecastDay.HasOverride)
+				{
+					hasWarning = hasWarning || forecastDay.HasCampaign;
+					forecastDay.HasCampaign = false;
+					forecastDay.CampaignTasksPercentage = 0;
+				}
+				else
+				{
+					forecastDay.HasCampaign = forecastDay.CampaignTasksPercentage > 0;
+				}
 			}
-			catch (OptimisticLockException)
+
+			return Ok(new
 			{
-				return failedTask;
-			}
-			finally
-			{
-				_actionThrottler.Finish(token);
-			}
+				WarningMessage = hasWarning ? Resources.ClearCampaignWIthOverride : string.Empty,
+				input.ForecastDays
+			});
 		}
-	}
 
-	public class SkillsViewModel
-	{
-		public IEnumerable<SkillAccuracy> Skills { get; set; }
-		public bool IsPermittedToModifySkill { get; set; }
-	}
+		[UnitOfWork, HttpPost, Route("api/Forecasting/ApplyForecast")]
+		public virtual IHttpActionResult ApplyForecast(ForecastModel forecastResult)
+		{
+			var overrideNote = $"[*{Resources.ForecastDayIsOverrided}*]";
 
-	public class ForecastResultViewModel
-	{
-		public bool Success { get; set; }
-		public string Message { get; set; }
-		public BlockToken BlockToken { get; set; }
-	}
+			var workload = _workloadRepository.Get(forecastResult.WorkloadId);
+			var scenario = _scenarioRepository.Get(forecastResult.ScenarioId);
+			var periodStart = new DateOnly(forecastResult.ForecastDays.Min(x => x.Date).Date);
+			var periodEnd = new DateOnly(forecastResult.ForecastDays.Max(x => x.Date).Date);
+			var forecastPeriod = new DateOnlyPeriod(periodStart, periodEnd);
+			var skillDays = _fetchAndFillSkillDays.FindRange(forecastPeriod, workload.Skill, scenario);
+			var overrideDays = _forecastDayOverrideRepository.FindRange(forecastPeriod, workload, scenario).ToDictionary(k => k.Date);
 
-	public class ModifyInput
-	{
-		public ModifiedDay[] Days { get; set; }
-		public Guid ScenarioId { get; set; }
-		public Guid WorkloadId { get; set; }
-	}
+			foreach (var skillDay in skillDays)
+			{
+				var forecastedWorkloadDay = skillDay.WorkloadDayCollection
+					.SingleOrDefault(x => x.Workload.Id.Value == forecastResult.WorkloadId);
+				if (!forecastedWorkloadDay.OpenForWork.IsOpen)
+				{
+					continue;
+				}
 
-	public class CampaignInput : ModifyInput
-	{
-		public double CampaignTasksPercent { get; set; }
-	}
+				var model = forecastResult.ForecastDays.SingleOrDefault(x => x.Date == forecastedWorkloadDay.CurrentDate);
+				forecastedWorkloadDay.Tasks = model.OverrideTasks ?? model.Tasks;
+				forecastedWorkloadDay.AverageTaskTime = TimeSpan.FromSeconds(model.OverrideAverageTaskTime ?? model.AverageTaskTime);
+				forecastedWorkloadDay.AverageAfterTaskTime = TimeSpan.FromSeconds(model.OverrideAverageAfterTaskTime ?? model.AverageAfterTaskTime);
+				forecastedWorkloadDay.CampaignTasks = new Percent(model.CampaignTasksPercentage);
 
-	public class OverrideInput : ModifyInput
-	{
-		public double? OverrideTasks { get; set; }
-		public double? OverrideTalkTime { get; set; }
-		public double? OverrideAfterCallWork { get; set; }
-		public bool ShouldSetOverrideTasks { get; set; }
-		public bool ShouldSetOverrideTalkTime { get; set; }
-		public bool ShouldSetOverrideAfterCallWork { get; set; }
-	}
+				if (model.HasOverride)
+				{
+					if (model.OverrideTasks.HasValue)
+						forecastedWorkloadDay.CampaignTasks = new Percent(0);
+					if (model.OverrideAverageTaskTime.HasValue)
+						forecastedWorkloadDay.CampaignTaskTime = new Percent(0);
+					if (model.OverrideAverageAfterTaskTime.HasValue)
+						forecastedWorkloadDay.CampaignAfterTaskTime = new Percent(0);
 
-	public class ModifiedDay
-	{
-		public DateTime Date { get; set; }
+					if (!overrideDays.TryGetValue(skillDay.CurrentDate, out var forecastDayOverride))
+					{
+						forecastedWorkloadDay.Annotation = string.IsNullOrEmpty(forecastedWorkloadDay.Annotation)
+							? overrideNote
+							: overrideNote + forecastedWorkloadDay.Annotation;
+
+						forecastDayOverride = new ForecastDayOverride(skillDay.CurrentDate, workload, scenario);
+						mapDayModelToOverride(forecastDayOverride, model);
+						_forecastDayOverrideRepository.Add(forecastDayOverride);
+					}
+					else
+					{
+						mapDayModelToOverride(forecastDayOverride, model);
+					}
+				}
+				else
+				{
+					if (overrideDays.TryGetValue(skillDay.CurrentDate, out var forecastDayOverride))
+					{
+						if (!string.IsNullOrEmpty(forecastedWorkloadDay.Annotation))
+						{
+							forecastedWorkloadDay.Annotation = forecastedWorkloadDay.Annotation.Replace(overrideNote, "");
+						}
+
+						_forecastDayOverrideRepository.Remove(forecastDayOverride);
+					}
+				}
+				
+				var period = _historicalPeriodProvider.AvailablePeriod(workload);
+				if (period.HasValue)
+				{
+					var periodForTemplate = _historicalPeriodProvider.AvailableIntradayTemplatePeriod(period.Value);
+					_intradayForecaster.Apply(workload, periodForTemplate, skillDay.WorkloadDayCollection);
+				}
+			}
+
+			return Ok();
+		}
+
+		private static void mapDayModelToOverride(IForecastDayOverride forecastDayOverride, ForecastDayModel forecastDay)
+		{
+			forecastDayOverride.OriginalTasks = forecastDay.Tasks;
+			forecastDayOverride.OriginalAverageTaskTime = TimeSpan.FromSeconds(forecastDay.AverageTaskTime);
+			forecastDayOverride.OriginalAverageAfterTaskTime = TimeSpan.FromSeconds(forecastDay.AverageAfterTaskTime);
+			forecastDayOverride.OverriddenTasks = forecastDay.OverrideTasks;
+			forecastDayOverride.OverriddenAverageTaskTime = forecastDay.OverrideAverageTaskTime.HasValue
+				? TimeSpan.FromSeconds(forecastDay.OverrideAverageTaskTime.Value)
+				: (TimeSpan?) null;
+			forecastDayOverride.OverriddenAverageAfterTaskTime = forecastDay.OverrideAverageAfterTaskTime.HasValue
+				? TimeSpan.FromSeconds(forecastDay.OverrideAverageAfterTaskTime.Value)
+				: (TimeSpan?) null;
+		}
 	}
 }

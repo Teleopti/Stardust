@@ -5,6 +5,7 @@ using NHibernate.Dialect;
 using NHibernate.Impl;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErrorHandling;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 {

@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -51,10 +52,10 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 				.WithAssignedActivity("2016-10-11 09:00", "2016-10-11 12:00")
 				.WithActivity(null, "email")
 				.WithAssignedActivity("2016-10-11 12:00", "2016-10-11 17:00")
-				.WithAdherenceOut(person, "2016-10-11 11:00")
-				.WithAdherenceIn(person, "2016-10-11 11:05")
-				.WithAdherenceOut(person, "2016-10-11 13:30")
-				.WithAdherenceIn(person, "2016-10-11 17:00");
+				.WithHistoricalStateChange(person, "2016-10-11 11:00", Adherence.Out)
+				.WithHistoricalStateChange(person, "2016-10-11 11:05", Adherence.In)
+				.WithHistoricalStateChange(person, "2016-10-11 13:30", Adherence.Out)
+				.WithHistoricalStateChange(person, "2016-10-11 17:00", Adherence.In);
 
 			var viewModel = Target.Build(person);
 

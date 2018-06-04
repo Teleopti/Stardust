@@ -5,7 +5,12 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.js" />
 
 $(document).ready(function () {
-	module("Teleopti.MyTimeWeb.Schedule");
+	module("Teleopti.MyTimeWeb.Schedule", {
+		setup: function() {
+			Teleopti.MyTimeWeb.Common.IsToggleEnabled = function() {}
+		},
+		teardown: function() {}
+	});
 
 	var hash = "";
 	var fakeAddRequestViewModel = Teleopti.MyTimeWeb.Schedule.FakeData.fakeAddRequestViewModel;
@@ -133,6 +138,9 @@ $(document).ready(function () {
 
 	test("should increase request count after creating an overtime request", function () {
 		var tempTogglFn = Teleopti.MyTimeWeb.Common.IsToggleEnabled;
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function() {
+			return true;
+		};
 		var tempFn1 = Date.prototype.getTeleoptiTime;
 		Date.prototype.getTeleoptiTime = function() {
 			return new Date("2018-03-05T02:30:00Z").getTime();

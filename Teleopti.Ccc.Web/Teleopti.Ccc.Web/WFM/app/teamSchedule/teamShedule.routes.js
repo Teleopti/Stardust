@@ -12,18 +12,7 @@
 			}).state('teams.dayView',
 			{
 				templateUrl: 'app/teamSchedule/html/dayViewSchedule.html',
-				controller: 'TeamScheduleController as vm',
-				params: {
-					keyword: undefined,
-					selectedDate: undefined,
-					selectedTeamIds: undefined,
-					selectedGroupPage: undefined,
-					selectedFavorite: undefined,
-					selectedSortOption: undefined,
-					teamNameMap: undefined,
-					staffingEnabled: false,
-					do: false
-				}
+				controller: 'TeamScheduleController as vm'
 			}).state('teams.for',
 			{
 				url: '/?personId&{selectedDate:date}',
@@ -36,17 +25,6 @@
 			}).state('teams.weekView',
 			{
 				url: '/week',
-				params: {
-					keyword: undefined,
-					selectedDate: undefined,
-					selectedTeamIds: undefined,
-					selectedGroupPage: undefined,
-					selectedFavorite: undefined,
-					selectedSortOption: undefined,
-					teamNameMap: undefined,
-					staffingEnabled: false,
-					do: false
-				},
 				templateUrl: 'app/teamSchedule/html/weekViewSchedule.html',
 				controller: 'TeamScheduleWeeklyController as vm'
 			}).state('teams.exportSchedule',
@@ -55,12 +33,13 @@
 				templateUrl: 'app/teamSchedule/html/exportScheduleView.html'
 			}).state('teams.shiftEditor',
 			{
-				url: '/shiftEditor',
-				templateUrl: 'app/teamSchedule/html/shiftEditor.html',
-				controller: 'ShiftEditorController as vm',
+				url: '/shiftEditor?:personId&:date&:timezone',
+				controller:'ShiftEditorViewController as vm',
+				templateUrl: 'app/teamSchedule/html/shiftEditorView.html',
 				params: {
-					personSchedule: {},
-					date: ''
+					personId: '',
+					date: '',
+					timezone: ''
 				}
 			});
 	}

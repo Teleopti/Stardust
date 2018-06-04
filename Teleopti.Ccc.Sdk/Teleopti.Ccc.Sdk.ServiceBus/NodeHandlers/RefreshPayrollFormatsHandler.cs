@@ -6,7 +6,6 @@ using System.Threading;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Sdk.ServiceBus.Custom;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 
@@ -18,22 +17,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 		private readonly ISearchPath _searchPath;
 		private readonly IPlugInLoader _pluginInLoader;
 		private readonly IDataSourceForTenant _dataSourceForTenant;
-		private readonly IEnvironmentVariable _environmentVariable;
 		public RefreshPayrollFormatsHandler(ISearchPath searchPath, 
 			IConfigReader configReader, 
 			IPlugInLoader plugInLoader, 
-			IDataSourceForTenant dataSourceForTenant,
-			IEnvironmentVariable environmentVariable)
+			IDataSourceForTenant dataSourceForTenant)
 		{
 			_searchPath = searchPath ?? new SearchPath();
 			_configReader = configReader ?? new ConfigReader();
 			_pluginInLoader = plugInLoader;
 			_dataSourceForTenant = dataSourceForTenant;
-			_environmentVariable = environmentVariable;
 		}
 		public void Handle(RefreshPayrollFormatsEvent parameters, CancellationTokenSource cancellationTokenSource, Action<string> sendProgress, ref IEnumerable<object> returnObjects)
 		{
-			if (!string.IsNullOrEmpty(_environmentVariable.GetValue("IS_CONTAINER")) && 
+			if (!string.IsNullOrEmpty(_configReader.AppConfig("IsContainer")) && 
 				!string.IsNullOrEmpty(_configReader.ConnectionString("AzureStorage")))
 			{
 				new PayrollDllCopy(_searchPath, _configReader).CopyPayrollDllFromAzureStorage(parameters.TenantName);

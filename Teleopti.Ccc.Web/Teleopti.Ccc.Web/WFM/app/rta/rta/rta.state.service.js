@@ -163,9 +163,9 @@
 
 		function organizationSelectionText() {
 			return data.organization
-				.flatMap(function (site) {
+				.map(function (site) {
 					if (isSiteSelected(site.Id))
-						return [site.Name];
+						return site.Name;
 					return site.Teams.map(function (team) {
 						if (isTeamSelected(team.Id))
 							return team.Name;

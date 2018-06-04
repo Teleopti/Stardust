@@ -375,10 +375,10 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.222\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.225\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.222\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.225\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
     <Reference Include="Validation">
       <HintPath>..\..\packages\Validation.2.0.2.13022\lib\portable-windows8+net40+sl5+windowsphone8\Validation.dll</HintPath>
@@ -391,9 +391,14 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Areas\Forecasting\Controllers\ExportForecastInput.cs" />
+    <Compile Include="Areas\Forecasting\Models\CampaignInput.cs" />
+    <Compile Include="Areas\Forecasting\Models\ExportForecastInput.cs" />
     <Compile Include="Areas\Forecasting\Controllers\ForecastExportController.cs" />
     <Compile Include="Areas\Forecasting\Core\ForecastExportToExcel.cs" />
+    <Compile Include="Areas\Forecasting\Models\ForecastResultInput.cs" />
+    <Compile Include="Areas\Forecasting\Models\ForecastResultViewModel.cs" />
+    <Compile Include="Areas\Forecasting\Models\OverrideInput.cs" />
+    <Compile Include="Areas\Forecasting\Models\SkillsViewModel.cs" />
     <Compile Include="Areas\Gamification\Controller\GamificationCalculationController.cs" />
     <Compile Include="Areas\Gamification\Controller\GamificationController.cs" />
     <Compile Include="Areas\Gamification\Core\DataProvider\GamificationSettingPersister.cs" />
@@ -416,12 +421,6 @@
     <Compile Include="Areas\Anywhere\Controllers\GroupScheduleController.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleProjectionViewModel.cs" />
     <Compile Include="Areas\Anywhere\Controllers\AnywhereReportsController.cs" />
-    <Compile Include="Areas\Forecasting\Core\CampaignPersister.cs" />
-    <Compile Include="Areas\Forecasting\Core\ForecastMisc.cs" />
-    <Compile Include="Areas\Forecasting\Core\ICampaignPersister.cs" />
-    <Compile Include="Areas\Forecasting\Core\IForecastMisc.cs" />
-    <Compile Include="Areas\Forecasting\Core\IOverridePersister.cs" />
-    <Compile Include="Areas\Forecasting\Core\OverridePersister.cs" />
     <Compile Include="Areas\Global\DataProtectionController.cs" />
     <Compile Include="Areas\Global\Core\GroupPageViewModelFactory.cs" />
     <Compile Include="Areas\Global\ScenarioController.cs" />
@@ -442,14 +441,7 @@
     <Compile Include="Areas\Anywhere\Core\GroupScheduleShiftViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelMapper.cs" />
-    <Compile Include="Areas\Forecasting\Controllers\EvaluateInput.cs" />
     <Compile Include="Areas\Forecasting\Controllers\SkillController.cs" />
-    <Compile Include="Areas\Forecasting\Core\ForecastResultViewModelFactory.cs" />
-    <Compile Include="Areas\Forecasting\Core\IForecastViewModelFactory.cs" />
-    <Compile Include="Areas\Forecasting\Core\ForecastViewModelFactory.cs" />
-    <Compile Include="Areas\Forecasting\Core\IForecastResultViewModelFactory.cs" />
-    <Compile Include="Areas\Forecasting\Core\IntradayPatternViewModelFactory.cs" />
-    <Compile Include="Areas\Forecasting\Core\WorkloadEvaluateViewModel.cs" />
     <Compile Include="Areas\Global\ApplicationController.cs" />
     <Compile Include="Areas\Global\AreaWithPermissionPath.cs" />
     <Compile Include="Areas\Global\GlobalAreaController.cs" />
@@ -476,8 +468,29 @@
     <Compile Include="Areas\MultiTenancy\NewExternalApplicationModel.cs" />
     <Compile Include="Areas\MultiTenancy\NewExternalApplicationResponseModel.cs" />
     <Compile Include="Areas\MyTime\Controllers\OvertimeRequestsController.cs" />
+    <Compile Include="Areas\MyTime\Controllers\TeamScheduleController.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AgentBadgeWithinPeriodProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\SingleOwnedPerson.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\AgentScheduleViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\IAgentScheduleViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\ILayerViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\ITimeLineViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\ITimeLineViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\LayerViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TimeLineViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TimeLineViewModelFactoryToggle75989Off.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TimeLineViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\ViewModelFactory\TeamScheduleAgentScheduleViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\ViewModelFactory\ITeamSchedulePermissionViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\ViewModelFactory\ITeamScheduleViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\ViewModelFactory\TeamSchedulePermissionViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelFactoryToggle75989Off.cs" />
+    <Compile Include="Areas\MyTime\Models\TeamSchedule\TeamSchedulePermissionViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\TeamSchedule\TeamScheduleRequest.cs" />
+    <Compile Include="Areas\MyTime\Models\TeamSchedule\TeamScheduleViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\TeamSchedule\TeamScheduleViewModelOld.cs" />
+    <Compile Include="Areas\MyTime\Models\TeamSchedule\TimeLineViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\WeekSchedule\RequestLicense.cs" />
     <Compile Include="Areas\People\Controllers\RoleManager.cs" />
     <Compile Include="Areas\People\Core\ActionFilters.cs" />
@@ -629,16 +642,6 @@
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\OutboundThresholdSettingPersistorAndProvider.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\ITeamSchedulePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamSchedulePersonsProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\AgentScheduleViewModelReworkedMapper.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\IAgentScheduleViewModelReworkedMapper.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\ITimeLineViewModelReworkedFactory.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\ITimeLineViewModelReworkedMapper.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\LayerViewModelReworkedMapper.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\ILayerViewModelReworkedMapper.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TimeLineViewModelReworkedFactory.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TimeLineViewModelReworkedMapper.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\ViewModelFactory\ITeamScheduleViewModelReworkedFactory.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelReworkedFactory.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceRequestProbability.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceRequestProbability.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceRequestProbabilityProvider.cs" />
@@ -847,7 +850,7 @@
     <Compile Include="Areas\MultiTenancy\Core\IApplicationAuthentication.cs" />
     <Compile Include="Areas\Forecasting\Controllers\ForecastController.cs" />
     <Compile Include="Areas\Forecasting\Core\IoC\ForecastingAreaModule.cs" />
-    <Compile Include="Areas\Forecasting\Controllers\ForecastInput.cs" />
+    <Compile Include="Areas\Forecasting\Models\ForecastInput.cs" />
     <Compile Include="Areas\Mart\Controllers\QueueStatsController.cs" />
     <Compile Include="Areas\Mart\Core\DatabaseConnectionHandler.cs" />
     <Compile Include="Areas\Mart\Core\IQueueStatHandler.cs" />
@@ -1194,7 +1197,7 @@
     <Compile Include="Areas\MyTime\Core\Settings\Mapping\SettingsMapper.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\DefaultTeamProvider.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\IDefaultTeamProvider.cs" />
-    <Compile Include="Areas\MyTime\Controllers\TeamScheduleController.cs" />
+    <Compile Include="Areas\MyTime\Controllers\TeamScheduleApiController.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\ILinkProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\ISchedulePersonProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\LinkProvider.cs" />
@@ -1208,9 +1211,6 @@
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamScheduleProjection.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TeamScheduleDomainData.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TeamScheduleDomainDataMapper.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TeamScheduleViewModelMapper.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\ViewModelFactory\ITeamScheduleViewModelFactory.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Common\Mapping\CommonViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\ScheduleColorSource.cs" />
     <Compile Include="Areas\MyTime\Models\LayoutBase\CultureSpecificViewModelFactory.cs" />
@@ -1220,7 +1220,6 @@
     <Compile Include="Areas\MyTime\Models\Shared\StyleClasses.cs" />
     <Compile Include="Areas\MyTime\Models\Settings\ChangePasswordViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Settings\SettingsViewModel.cs" />
-    <Compile Include="Areas\MyTime\Models\TeamSchedule\TeamScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Shared\StyleClassViewModel.cs" />
     <Compile Include="Areas\Start\Controllers\TestController.cs" />
     <Compile Include="Areas\Start\Core\Menu\DefinedApplicationAreas.cs" />
@@ -1418,10 +1417,12 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileMonth.DataService.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileMonth.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileMonthViewModel.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule.DataService.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.Probability.Tests.js" />
     <Content Include="Areas\MyTime\Content\Css\CiscoWidget.css" />
     <Content Include="Areas\MyTime\Content\Css\MobileDayView.css" />
     <Content Include="Areas\MyTime\Content\Css\MobileMonthView.css" />
+    <Content Include="Areas\MyTime\Content\Css\MobileTeamSchedule.css" />
     <Content Include="Areas\MyTime\Content\Images\logo.png" />
     <Content Include="Areas\MyTime\Content\Images\seat.svg" />
     <Content Include="Areas\MyTime\Content\Scripts\qrcode.js" />
@@ -1433,9 +1434,13 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileStartDay.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileDayViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.LayerViewModel.js" />
-    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel.Tests.js" />
-    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileStartDay.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel.Tests.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule.Tests.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ProbabilityModels.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileDayViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary.js" />
@@ -1444,6 +1449,7 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.Tests.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.TimelineViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ViewModels.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ViewModels.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AppGuide.WFMApp.js" />
@@ -1475,6 +1481,10 @@
     </None>
     <Content Include="WFM\ai.js" />
     <Content Include="WFM\appInsights.js" />
+    <Content Include="WFM\app\forecasting\forecasting.default.controller.js" />
+    <Content Include="WFM\app\forecasting\html\forecasting.html" />
+    <Content Include="WFM\app\forecasting\refact\r2forecast.controller.js" />
+    <Content Include="WFM\app\forecasting\refact\r2forecast.html" />
     <Content Include="WFM\app\gamification\gamification.component.badgeCalculation.js" />
     <Content Include="WFM\app\gamification\gamification.component.badgeCalculation.spec.js" />
     <Content Include="WFM\app\gamification\gamification.component.gamification.js" />
@@ -1634,6 +1644,7 @@
     <Content Include="WFM\app\requests\requests.directive.synchronizeHeaderHeight.js" />
     <Content Include="WFM\app\requests\requests.uigridFix.js" />
     <Content Include="WFM\app\requests\requests.controller.js" />
+    <Content Include="WFM\app\requests\_modules.js" />
     <Content Include="WFM\app\resourceplanner\manageschedule\manageschedule.html" />
     <Content Include="WFM\app\resourceplanner\manageschedule\resourceplanner.manageschedule.controller.js" />
     <Content Include="WFM\app\resourceplanner\manageschedule\resourceplanner.manageschedule.controller.spec.js" />
@@ -1672,6 +1683,7 @@
     <Content Include="WFM\app\rta\rta\filter\filter-template_RTA_MobileFriendlyCheckboxes_46758.html" />
     <Content Include="WFM\app\rta\rta\filter\filter-template_RTA_ModifySkillGroup_48191.html" />
     <Content Include="WFM\app\rta\rta\filter\rta.filter.controller.RTA_MobileFriendlyCheckboxes_46758.js" />
+    <Content Include="WFM\app\rta\rta\historical\rta-historical.easilySpotLateForWork_75668.html" />
     <Content Include="WFM\app\rta\rta\historical\rta-historical.removeApprovedOOA_47721.html" />
     <Content Include="WFM\app\rta\rta\historical\rta-historical.restrictModifyAdherenceWithPermission_74898.html" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA.timepicking.ie.spec.js" />
@@ -1680,9 +1692,11 @@
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.outOfAdherences.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.removeApprovedOOA_47721.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.removeApprovedOOA_47721.spec.js" />
+    <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.easilySpotLateForWork_75668.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.restrictModifyAdherenceWithPermission_74898.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.restrictModifyAdherenceWithPermission_74898.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.timeline.spec.js" />
+    <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.easilySpotLateForWork_75668.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.timeline.service.js" />
     <Content Include="WFM\app\rta\rta\historical\_rta.card.panel.component.js" />
     <Content Include="WFM\app\rta\rta\historical\rta-historical.approvePreviousOOA_47230.html" />
@@ -1768,6 +1782,7 @@
     <Content Include="WFM\app\teamSchedule\commands\teams.directive.cmd.modifyShiftCategory.spec.js" />
     <Content Include="WFM\app\teamSchedule\html\exportSchedule.html" />
     <Content Include="WFM\app\teamSchedule\html\exportScheduleView.html" />
+    <Content Include="WFM\app\teamSchedule\html\shiftEditorView.html" />
     <Content Include="WFM\app\teamSchedule\html\shiftEditor.html" />
     <Content Include="WFM\app\teamSchedule\html\staffingInfo.html" />
     <Content Include="WFM\app\teamSchedule\html\teamsTimePicker.tpl.html" />
@@ -1783,6 +1798,7 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.underlyingInfo.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.underlyingInfo.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.controller.week.spec.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.factory.shiftEditorViewModelFactory.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.exportScheduleService.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.exportScheduleService.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.dayOffService.js" />
@@ -1894,14 +1910,9 @@
     <Content Include="WFM\index_desktop_client.tpl.html" />
     <Content Include="WFM\index.tpl.html" />
     <Content Include="WFM\app\app_desktop_client.js" />
-    <Content Include="WFM\app\forecasting\forecasting.advanced.controller.spec.js" />
     <Content Include="WFM\app\forecasting\forecasting.routes.js" />
-    <Content Include="WFM\app\forecasting\forecasting.start.controller.spec.js" />
-    <Content Include="WFM\app\forecasting\html\forecasting-result-chart.html" />
     <Content Include="WFM\app\forecasting\html\forecasting.html" />
     <Content Include="WFM\app\forecasting\html\skill-create.html" />
-    <Content Include="WFM\app\forecasting\forecasting.default.controller.js" />
-    <Content Include="WFM\app\forecasting\forecasting.resultChart.directive.js" />
     <Content Include="WFM\app\forecasting\skill.create.controller.spec.js" />
     <Content Include="WFM\app\global\areas\areas.controller.spec.js" />
     <Content Include="WFM\app\global\businessunits\businessunits.service.js" />
@@ -1971,7 +1982,6 @@
     <Content Include="WFM\app\requests\templates\requests.template.absencePersonAccountOverview.js" />
     <Content Include="WFM\app\requests\templates\requests.template.shiftTradeDay.js" />
     <Content Include="WFM\app\requests\templates\requests.template.scheduleTableTemplate.js" />
-    <Content Include="WFM\app\requests\_module.js" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.routes.js" />
     <Content Include="WFM\app\global\http\http.service.js" />
     <Content Include="WFM\app\search\search.controller.spec.js" />
@@ -2096,8 +2106,6 @@
     <Content Include="WFM\app\teamSchedule\_modules.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali-ext.js" />
     <Content Include="WFM\app\forecasting\c3-fix-forecast.js" />
-    <Content Include="WFM\app\forecasting\html\forecasting-advanced.html" />
-    <Content Include="WFM\app\forecasting\forecasting.advanced.controller.js" />
     <Content Include="WFM\app\outbound\angular-gantt.ext.js" />
     <Content Include="WFM\app\outbound\outbound.directive.scroll-fix.js" />
     <Content Include="WFM\app\outbound\outbound.controller.campaign-list-gantt.js" />
@@ -2178,6 +2186,8 @@
     <Content Include="WFM\css\_main.scss" />
     <Content Include="Areas\MultiTenancy\Views\TenantAdminInfo\Index.cshtml" />
     <Content Include="Areas\MultiTenancy\Views\web.config" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.factory.shiftEditorViewModelFactory.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.service.viewStateKeeper.js" />
     <None Include="WFM\css\_forecasting.scss" />
     <Content Include="WFM\app\outbound\outbound.controller.campaign-edit.js" />
     <Content Include="WFM\app\outbound\outbound.service.campaign.js" />
@@ -2209,7 +2219,6 @@
     <None Include="WFM\css\_layout.scss" />
     <None Include="WFM\css\_outbound.scss" />
     <Content Include="WFM\Gruntfile.js" />
-    <Content Include="WFM\app\forecasting\forecasting.start.controller.js" />
     <Content Include="WFM\app\forecasting\forecasting.service.js" />
     <Content Include="WFM\app\global\areas\areas.controller.js" />
     <Content Include="WFM\app\global\areas\areas.service.js" />
@@ -2240,7 +2249,6 @@
     <Content Include="WFM\app\seatManagement\seatplan.controller.js" />
     <Content Include="WFM\app\seatManagement\seatmap.service.js" />
     <Content Include="WFM\app\seatManagement\seatplan.service.js" />
-    <Content Include="WFM\karma.conf.js" />
     <Content Include="Areas\Reporting\Content\Scripts\persianDatepicker.min.js" />
     <Content Include="Areas\Reporting\Content\Scripts\reportController.js" />
     <Content Include="Areas\Reporting\Content\Styles\calendar.css" />
@@ -2485,6 +2493,8 @@
     <Content Include="Areas\Start\Content\Scripts\jquery.extensions.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Common.js" />
     <Content Include="Areas\MyTime\Views\TeamSchedule\NoPersonPeriodPartial.cshtml" />
+    <Content Include="Areas\MyTime\Views\TeamSchedule\NewTeamSchedulePartial.cshtml" />
+    <Content Include="Areas\MyTime\Views\TeamSchedule\NewTeamSchedulePartial.mobile.cshtml" />
     <Content Include="Areas\MyTime\Views\Preference\NoPersonPeriodPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Asm\Index.cshtml" />
     <Content Include="Areas\MyTime\Views\Message\MessagePartial.cshtml" />
@@ -2498,7 +2508,6 @@
     <Content Include="Areas\Reporting\Views\Report\Adherence.cshtml" />
     <Content Include="Areas\Reporting\Views\Report\Empty.cshtml" />
     <Content Include=".node\flatten-packages.cmd" />
-    <Content Include="WFM\app\forecasting\html\forecasting-overview.html" />
     <Content Include="WFM\html\main.html" />
     <Content Include="WFM\html\nav.html" />
     <Content Include="WFM\app\app.js" />

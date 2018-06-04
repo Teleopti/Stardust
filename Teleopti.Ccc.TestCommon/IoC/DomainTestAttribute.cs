@@ -9,6 +9,9 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.DistributedLock;
+using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
+using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
@@ -35,6 +38,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.IocCommon;
@@ -49,6 +53,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_StoreEvents_47721)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_RemoveApprovedOOA_47721)]
+	[Toggle(Domain.FeatureFlags.Toggles.RTA_EasilySpotLateForWork_75668)]
 	public class DomainTestAttribute : IoCTestAttribute
 	{
 		public static string DefaultTenantName = "default";
@@ -62,6 +67,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			extend.AddService<FakeDatabase>();
 			extend.AddService<FakeStorage>();
 			extend.AddService<FakeSchedulingSourceScope>();
+			extend.AddService<FakeRtaHistory>();
 		}
 
 		protected override void Isolate(IIsolate isolate)
@@ -109,7 +115,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			isolate.UseTestDouble<FakeAgentStateReadModelPersister>().For<IAgentStateReadModelPersister, IAgentStateReadModelReader>();
 			isolate.UseTestDouble<FakeHistoricalChangeReadModelPersister>().For<IHistoricalChangeReadModelPersister, IHistoricalChangeReadModelReader>();
 			isolate.UseTestDouble<FakeApprovedPeriodsStorage>().For<IApprovedPeriodsReader, IApprovedPeriodsPersister>();
-			;
 
 			isolate.UseTestDouble<FakeAllLicenseActivatorProvider>().For<ILicenseActivatorProvider>();
 			isolate.UseTestDouble<FakeTeamCardReader>().For<ITeamCardReader>();
@@ -128,7 +133,12 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			// Gamification
 			isolate.UseTestDouble<FakePurgeSettingRepository>().For<IPurgeSettingRepository>();
-			//
+
+			// Forecast
+			isolate.UseTestDouble<ForecastProvider>().For<ForecastProvider>();
+			isolate.UseTestDouble<ForecastDayModelMapper>().For<ForecastDayModelMapper>();
+			isolate.UseTestDouble<WorkloadNameBuilder>().For<IWorkloadNameBuilder>();
+			isolate.UseTestDouble<FetchAndFillSkillDays>().For<IFetchAndFillSkillDays>();
 
 			// AppInsights
 			isolate.UseTestDouble<FakeApplicationInsights>().For<IApplicationInsights>();
@@ -259,7 +269,10 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakePersonScheduleDayReadModelPersister>().For<IPersonScheduleDayReadModelPersister>();
 				
 				isolate.UseTestDouble<FakeGamificationSettingRepository>().For<IGamificationSettingRepository>();
+				isolate.UseTestDouble<FakeForecastDayOverrideRepository>().For<IForecastDayOverrideRepository>();
 				isolate.UseTestDouble<FakeExternalPerformanceRepository>().For<IExternalPerformanceRepository>();
+				isolate.UseTestDouble<FakeExtensiveLogRepository>().For<IExtensiveLogRepository>();
+				isolate.UseTestDouble<FakeExtensiveLogRepository>().For<IExtensiveLogRepository>();
 			}
 
 			isolate.UseTestDouble<ScheduleStorageRepositoryWrapper>().For<IScheduleStorageRepositoryWrapper>();

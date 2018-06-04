@@ -74,7 +74,7 @@
 		};
 		vm.HasPermissionToModifySkillArea = false;
 		vm.importedBboInfos = [];
-		
+
 		vm.isSearchRequested = false;
 
 		var events = [];
@@ -176,29 +176,32 @@
 		}
 
 		function generateChart(skill, area) {
+			vm.chartQuery = null;
 			if (skill) {
 				vm.isSearchRequested = true;
 				clearSuggestions();
-				var query = getSkillStaffingByDate(skill.Id, vm.selectedDate, vm.useShrinkage);
+				vm.chartQuery = getSkillStaffingByDate(skill.Id, vm.selectedDate, vm.useShrinkage);
 			} else if (area) {
 				vm.isSearchRequested = true;
 				clearSuggestions();
-				var query = getSkillAreaStaffingByDate(area.Id, vm.selectedDate, vm.useShrinkage);
+				vm.chartQuery = getSkillAreaStaffingByDate(area.Id, vm.selectedDate, vm.useShrinkage);
 			}
-			query.$promise.then(function(result) {
-				if (staffingPrecheck(result.DataSeries)) {
-					timeSerie = result.DataSeries.Time;
-					staffingData = utilService.prepareStaffingData(result);
-					generateChartForView(staffingData);
-					vm.importedBboInfos = result.ImportBpoInfoList;
-				} else {
-					vm.staffingDataAvailable = false;
-				}
-				//just in case
-				vm.isSearchRequested = false;
-			}).finally(function () {
-				vm.isSearchRequested = false;
-			});
+			if (vm.chartQuery) {
+				vm.chartQuery.$promise.then(function(result) {
+					if (staffingPrecheck(result.DataSeries)) {
+						timeSerie = result.DataSeries.Time;
+						staffingData = utilService.prepareStaffingData(result);
+						generateChartForView(staffingData);
+						vm.importedBboInfos = result.ImportBpoInfoList;
+					} else {
+						vm.staffingDataAvailable = false;
+					}
+					//just in case
+					vm.isSearchRequested = false;
+				}).finally(function () {
+					vm.isSearchRequested = false;
+				});
+			}
 		}
 
 		function staffingPrecheck(data) {

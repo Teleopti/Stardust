@@ -40,18 +40,20 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skill).WithSchedulePeriodOneWeek(date);
 			agent.SchedulePeriod(date).SetDaysOff(1);
+			var alreadyScheduledAgent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(skill);
 			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date,
-				0.8, //minimum staffing = 1, prevent putting DO here
-				0.9, //DO should end up here
-				1,
-				1,
-				1,
-				1, //DO from beginning
-				1);
-			skillDays.First().SetMinimumAgents(new TimePeriod(8, 16), 1);
-			var asses = Enumerable.Range(0, 7).Select(i => new PersonAssignment(agent, scenario, date.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16))).ToArray();
+				1.8, //minimum staffing = 1, prevent putting DO here
+				1.9, //DO should end up here
+				2,
+				2,
+				2,
+				2, //DO from beginning
+				2);
+			skillDays.First().SetMinimumAgents(new TimePeriod(8, 16), 2);
+			var asses = Enumerable.Range(0, 7).Select(i => new PersonAssignment(agent, scenario, date.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16))).ToList();
 			asses[5].SetDayOff(new DayOffTemplate()); //saturday
-			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] {agent}, asses, skillDays);
+			asses.AddRange(Enumerable.Range(0, 7).Select(i => new PersonAssignment(alreadyScheduledAgent, scenario, date.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16))));
+			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] {agent, alreadyScheduledAgent}, asses, skillDays);
 			var optPrefs = new OptimizationPreferences
 			{
 				General = {ScheduleTag = new ScheduleTag()}, 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
@@ -11,7 +12,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 {
-    public class ApplicationFunction : VersionedAggregateRoot, IApplicationFunction, IDeleteTag
+	[DebuggerDisplay("{ForeignId}, {Id.ToString().ToUpper()}, {FunctionPath}")]
+	public class ApplicationFunction : VersionedAggregateRoot, IApplicationFunction, IDeleteTag
     {
         private string _functionDescription;
         private IParentChildEntity _parent;

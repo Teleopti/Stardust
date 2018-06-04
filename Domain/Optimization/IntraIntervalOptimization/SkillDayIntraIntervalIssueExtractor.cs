@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
@@ -19,13 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			{
 				if (skillDay.Skill != skill) continue;
 
-				foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
-				{
-					if (skillStaffPeriod.HasIntraIntervalIssue)
-					{
-						result.Add((ISkillStaffPeriod)skillStaffPeriod.NoneEntityClone());
-					}
-				}
+				result.AddRange(skillDay.SkillStaffPeriodCollection.Where(s => s.HasIntraIntervalIssue).Select(s => (ISkillStaffPeriod)s.NoneEntityClone()));
 			}
 
 			return result;	
@@ -39,10 +34,8 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			{
 				if (skillDay.Skill != skill) continue;
 
-				foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
-				{
-					result.Add((ISkillStaffPeriod)skillStaffPeriod.NoneEntityClone());
-				}
+				result.AddRange(skillDay.SkillStaffPeriodCollection.Select(skillStaffPeriod =>
+					(ISkillStaffPeriod) skillStaffPeriod.NoneEntityClone()));
 			}
 
 			return result;

@@ -160,6 +160,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Abandon rate (%).
+        /// </summary>
+        public static string AbandonRateParenthesisPercentSign {
+            get {
+                return ResourceManager.GetString("AbandonRateParenthesisPercentSign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to About.
         /// </summary>
         public static string About {
@@ -3079,6 +3088,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Approve as in adherence.
+        /// </summary>
+        public static string ApproveAsInAdherence {
+            get {
+                return ResourceManager.GetString("ApproveAsInAdherence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Approve based on business rules.
         /// </summary>
         public static string ApproveBasedOnBusinessRules {
@@ -5457,6 +5475,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Campaign not applied for overrided days.
+        /// </summary>
+        public static string CampaignNotAppliedWIthExistingOverride {
+            get {
+                return ResourceManager.GetString("CampaignNotAppliedWIthExistingOverride", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Early.
         /// </summary>
         public static string CampaignOverstaff {
@@ -6524,6 +6551,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Override replaced existing campaign values.
+        /// </summary>
+        public static string ClearCampaignWIthOverride {
+            get {
+                return ResourceManager.GetString("ClearCampaignWIthOverride", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clear chart selection.
         /// </summary>
         public static string ClearForecastChart {
@@ -7120,7 +7156,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Consecutive work days.
+        ///   Looks up a localized string similar to Consecutive workdays.
         /// </summary>
         public static string ConsecutiveWorkDays {
             get {
@@ -9551,7 +9587,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maximum consecutive days without dayoff.
+        ///   Looks up a localized string similar to Maximum consecutive days without day off.
         /// </summary>
         public static string DescriptionOfMaximumWorkdayRule {
             get {
@@ -12842,6 +12878,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ForecastAll {
             get {
                 return ResourceManager.GetString("ForecastAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Day has been overrided on web.
+        /// </summary>
+        public static string ForecastDayIsOverrided {
+            get {
+                return ResourceManager.GetString("ForecastDayIsOverrided", resourceCulture);
             }
         }
         
@@ -16231,6 +16276,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Late {0} min.
+        /// </summary>
+        public static string LateXMinutes {
+            get {
+                return ResourceManager.GetString("LateXMinutes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Layer.
         /// </summary>
         public static string Layer {
@@ -18649,6 +18703,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ModifyAbsence {
             get {
                 return ResourceManager.GetString("ModifyAbsence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modify Adherence.
+        /// </summary>
+        public static string ModifyAdherence {
+            get {
+                return ResourceManager.GetString("ModifyAdherence", resourceCulture);
             }
         }
         
@@ -28260,6 +28323,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No issues in period.
+        /// </summary>
+        public static string RestrictionNotAbleToBeScheduledReasonNoIssue {
+            get {
+                return ResourceManager.GetString("RestrictionNotAbleToBeScheduledReasonNoIssue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The period results in too little work time.
         /// </summary>
         public static string RestrictionNotAbleToBeScheduledReasonTooLittleWorkTimeInPeriod {
@@ -32353,6 +32425,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShowNextShift {
             get {
                 return ResourceManager.GetString("ShowNextShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show top {0} of agents with no issues.
+        /// </summary>
+        public static string ShowNoneIssuedAgents {
+            get {
+                return ResourceManager.GetString("ShowNoneIssuedAgents", resourceCulture);
             }
         }
         
@@ -36886,7 +36967,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use Consecutive Work Days.
+        ///   Looks up a localized string similar to Use Consecutive Workdays.
         /// </summary>
         public static string UseConsecutiveWorkDays {
             get {

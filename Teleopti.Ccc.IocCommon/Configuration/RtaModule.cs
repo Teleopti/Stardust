@@ -102,7 +102,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.As<IRtaEventStoreReader>()
 					.SingleInstance();
 
-			if (_config.Toggle(Toggles.RTA_RemoveApprovedOOA_47721))
+			if (_config.Toggle(Toggles.RTA_EasilySpotLateForWork_75668))
+				builder.RegisterType<AgentAdherenceDayLoaderLateForWork>().As<IAgentAdherenceDayLoader>().SingleInstance();
+			else if (_config.Toggle(Toggles.RTA_RemoveApprovedOOA_47721))
 				builder.RegisterType<AgentAdherenceDayLoaderFromEventStore>().As<IAgentAdherenceDayLoader>().SingleInstance();
 			else
 				builder.RegisterType<AgentAdherenceDayLoader>().As<IAgentAdherenceDayLoader>().SingleInstance();
@@ -120,7 +122,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<StateEventPublisher>().SingleInstance();
 			builder.RegisterType<ActivityEventPublisher>().SingleInstance();
 			builder.RegisterType<RuleEventPublisher>().SingleInstance();
-
+			if (_config.Toggle(Toggles.RTA_EasilySpotLateForWork_75668))
+				builder.RegisterType<LateForWorkEventPublisher>().As<ILateForWorkEventPublisher>().SingleInstance();
+			else
+				builder.RegisterType<NoLateForWorkEventPublisher>().As<ILateForWorkEventPublisher>().SingleInstance();
+			
 			builder.RegisterType<CurrentBelongsToDate>().SingleInstance();
 
 			builder.RegisterType<ProperAlarm>().SingleInstance();

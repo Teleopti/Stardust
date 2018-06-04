@@ -4,7 +4,7 @@ module.exports = function(grunt) {
 		watch: {
 			dev: {
 				files: ['css/*.scss', 'index.tpl.html', 'app/**/*.html', 'html/**/*.html', 'app/**/*.js'],
-				tasks: ['devDist', 'eslint:dev'],
+				tasks: ['buildAngularJsPart', 'eslint:dev'],
 				options: {
 					spawn: false
 				}
@@ -62,20 +62,6 @@ module.exports = function(grunt) {
 					},
 					verbosity: 'normal'
 				}
-			}
-		},
-		karma: {
-			options: {
-				configFile: 'karma.conf.js'
-			},
-			unit: {
-				browsers: ['Chrome_small']
-			},
-			dev: {
-				singleRun: false
-			},
-			continuous: {
-				reporters: 'teamcity'
 			}
 		},
 		sass: {
@@ -259,7 +245,7 @@ module.exports = function(grunt) {
 		uglify: {
 			dist: {
 				files: {
-					'dist/main.min.js': [
+					'dist/main.js': [
 						'app/**/*.js',
 						'!app/**/*.spec.js',
 						'!app/**/*.fake.js',
@@ -467,9 +453,11 @@ module.exports = function(grunt) {
 		//     dev: webpackConfig
 		// },
 		exec: {
-			ngbuild_dev: 'npm run ng build',
-			ngbuild_prod: 'npm run ng build -- --prod -env=prod --output-hashing none',
-			webpackDevDist: 'webpack'
+			ngbuild_dev: 'npm run ng build -- --configuration development',
+			ngbuild_prod: 'npm run ng build -- --configuration production',
+			webpackDevDist: 'webpack',
+			karmaTeamcity: 'npm run test',
+			karmaDevTest: 'npm run devTest'
 		},
 		clean: [
 			'dist/*.map',
@@ -501,8 +489,8 @@ module.exports = function(grunt) {
 
 	// Default task(s).
 	grunt.registerTask('default', ['devDist', 'test', 'watch:dev']); // this task run the main task and then watch for file changes
-	grunt.registerTask('test', ['ngtemplates', 'karma:unit']);
-	grunt.registerTask('devTest', ['ngtemplates', 'karma:dev']);
+	grunt.registerTask('test', ['ngtemplates', 'exec:karmaDevTest']);
+	grunt.registerTask('devTest', ['ngtemplates', 'exec:karmaDevTest']);
 	grunt.registerTask('devDistWebpack', [
 		'ngtemplates',
 		'exec:webpackDevDist',
@@ -510,32 +498,22 @@ module.exports = function(grunt) {
 		// 'generateIndexDev', // processhtml:dev is mimicked
 		'exec:ngbuild_dev'
 	]);
-	grunt.registerTask('devDist', [
+	grunt.registerTask('buildAngularJsPart', [
 		'ngtemplates',
 		'sass',
 		'imageEmbed',
 		'concat:distModules',
 		'concat:devJs',
-		'newer:concat:distCss',
-		'newer:concat:distDarkCss',
-		'copy:devCss',
-		'newer:copy',
-		'generateIndexDev',
-		'exec:ngbuild_dev'
-	]);
-	grunt.registerTask('devDistRta', [
-		'ngtemplates',
-		'sass',
-		'imageEmbed',
-		'concat:distModules',
-		'concat:devJs',
+		'concat:distJsForDesktop',
 		'newer:concat:distCss',
 		'newer:concat:distDarkCss',
 		'copy:devCss',
 		'newer:copy',
 		'generateIndexDev'
 	]);
-	grunt.registerTask('test-continuous', ['ngtemplates', 'karma:continuous']);
+	grunt.registerTask('devDist', ['buildAngularJsPart', 'exec:ngbuild_dev']);
+	grunt.registerTask('devDistRta', ['buildAngularJsPart']);
+	grunt.registerTask('test-continuous', ['ngtemplates', 'exec:karmaTeamcity']);
 	grunt.registerTask('nova', ['devDist', 'iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
 	grunt.registerTask('build', ['msbuild:build']); // build the solution
 	grunt.registerTask('buildWeb', ['msbuild:buildWeb']); // build the web project

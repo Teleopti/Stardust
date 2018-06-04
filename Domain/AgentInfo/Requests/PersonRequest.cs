@@ -525,8 +525,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		public virtual bool IsPending => RequestState.IsPending;
 
-		public virtual bool WasManuallyDenied => RequestState is deniedPersonRequest;
-
 		public virtual bool IsDenied => RequestState.IsDenied;
 
 		public virtual bool IsAutoDenied => RequestState.IsAutoDenied;

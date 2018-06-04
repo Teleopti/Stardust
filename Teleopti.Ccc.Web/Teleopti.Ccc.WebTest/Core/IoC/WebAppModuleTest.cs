@@ -44,6 +44,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.Reports.Controllers;
 using Teleopti.Ccc.Web.Areas.Rta.Controllers;
@@ -65,8 +66,7 @@ using Teleopti.Ccc.Web.Core.Startup.Booter;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
 using Teleopti.Interfaces.Domain;
 using ConfigReader = Teleopti.Ccc.Domain.Config.ConfigReader;
-using ITeamScheduleViewModelFactory = Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory.ITeamScheduleViewModelFactory;
-using TeamScheduleController = Teleopti.Ccc.Web.Areas.MyTime.Controllers.TeamScheduleController;
+using TeamScheduleApiController = Teleopti.Ccc.Web.Areas.MyTime.Controllers.TeamScheduleApiController;
 
 namespace Teleopti.Ccc.WebTest.Core.IoC
 {
@@ -386,7 +386,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldResolveTeamScheduleController()
 		{
-			requestContainer.Resolve<TeamScheduleController>()
+			requestContainer.Resolve<TeamScheduleApiController>()
 				.Should().Not.Be.Null();
 		}
 
@@ -429,7 +429,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldResolveTeamScheduleViewModelFactory()
 		{
-			requestContainer.Resolve<ITeamScheduleViewModelFactory>()
+			requestContainer.Resolve<ITeamSchedulePermissionViewModelFactory>()
 				.Should().Not.Be.Null();
 		}
 

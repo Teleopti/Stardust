@@ -20,7 +20,7 @@ describe('ForecastCtrl', function() {
       $httpBackend = _$httpBackend_;
       fakeBackend = _fakeForecastingBackend_;
 
-      vm = $controller('ForecastModController');
+      vm = $controller('ForecastModController', {$scope: scope});
 
       skill = {
         IsPermittedToModifySkill: true,
@@ -44,16 +44,22 @@ describe('ForecastCtrl', function() {
         DefaultScenario:true
       }
 
-      $httpBackend.whenPOST('../api/Forecasting/ForecastResult').respond(function (method, url, data, headers) {
+      scenario2 = {
+        Id:"18b34548-3604-49fe-9584-9b5e015ab432",
+        Name:"High",
+        DefaultScenario:false
+      }
+
+      $httpBackend.whenPOST('../api/Forecasting/LoadForecast').respond(function (method, url, data, headers) {
         return [201, {
-          Days: [{
-            date:"2018-04-25T00:00:00",
-            vacw:4.7,
-            vc:1135.2999999999997,
-            vtacw:4.7,
-            vtc:1135.2999999999997,
-            vtt:158.10038509999998,
-            vttt:158.10038509999998
+          ForecastDays: [{
+            Date:"2018-04-25T00:00:00",
+            AverageAfterTaskTime:4.7,
+            Tasks:1135.2999999999997,
+            TotalAverageAfterTaskTime:4.7,
+            TotalTasks:1135.2999999999997,
+            AverageTaskTime:158.10038509999998,
+            TotalAverageTaskTime:158.10038509999998
           }],
           WorkloadId: '123'
         }];
@@ -79,9 +85,9 @@ describe('ForecastCtrl', function() {
   }));
 
   it("should default forecasting period to next 6 month", inject(function () {
-    var today = moment().utc().format("MMM Do YY");
-    var testStartDate = vm.forecastPeriod.startDate.format("MMM Do YY");
-    var testEndDate = vm.forecastPeriod.endDate.format("MMM Do YY");
+    var today = moment().utc().add(1, 'days').format("MMM Do YY");
+    var testStartDate = moment(vm.forecastPeriod.startDate).utc().format("MMM Do YY");
+    var testEndDate = moment(vm.forecastPeriod.endDate).utc().format("MMM Do YY");
     expect(testStartDate).toEqual(today);
     expect(testEndDate).toEqual(moment().utc().add(6, 'months').format("MMM Do YY"));
   }));
@@ -93,4 +99,13 @@ describe('ForecastCtrl', function() {
     expect(vm.selectedScenario.Id).toEqual('e21d813c-238c-4c3f-9b49-9b5e015ab432');
   }));
 
+  it('should be able to forecast clean scenario', inject(function () {
+    vm.changeScenario(scenario2);
+
+    expect(vm.selectedWorkload.Days.length).toEqual(0);
+    expect(vm.selectedScenario.Id).toEqual(scenario2.Id);
+
+    vm.forecastWorkload();
+    //should complete forecast without issue
+  }));
 });

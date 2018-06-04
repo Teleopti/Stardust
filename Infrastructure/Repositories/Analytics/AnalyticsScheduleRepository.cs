@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
-using NHibernate.SqlAzure;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -12,6 +11,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Analytics.Tables;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
@@ -28,7 +28,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public void PersistFactScheduleBatch(IList<IFactScheduleRow> factScheduleRows)
 		{
 			var table = getTable(factScheduleRows);
-			var insertCommand = new SqlCommand("mart.etl_fact_schedule_insert", ((ReliableSqlDbConnection)_analyticsUnitOfWork.Current().Session().Connection).ReliableConnection.Current)
+
+			var session = _analyticsUnitOfWork.Current().Session();
+			var insertCommand = new SqlCommand("mart.etl_fact_schedule_insert", session.Connection.Unwrap())
 			{
 				CommandType = CommandType.StoredProcedure,
 				UpdatedRowSource = UpdateRowSource.None,
@@ -74,7 +76,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				}
 			};
 
-			_analyticsUnitOfWork.Current().Session().Transaction.Enlist(insertCommand);
+			session.Transaction.Enlist(insertCommand);
 
 			var adapter = new SqlDataAdapter
 			{

@@ -25,23 +25,12 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Messages.Denormalize.Legacy
 			}
 		}
 
-		public void SetPersonIdCollection(ICollection<Guid> personIdCollection)
-		{
-			if (personIdCollection != null)
-			{
-				_serializedPeople = string.Join(",", personIdCollection.Select(p => p.ToString()));
-			}
-		}
-
 		public string SerializedPeople
 		{
 			get { return _serializedPeople; }
 			set { _serializedPeople = value; }
 		}
 
-		/// <summary>
-		/// Gets the message identity.
-		/// </summary>
 		public override Guid Identity
 		{
 			get { return _messageId; }

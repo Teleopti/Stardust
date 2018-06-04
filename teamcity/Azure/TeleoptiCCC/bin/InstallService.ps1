@@ -64,6 +64,10 @@ Try
 	#log-info "Installing Report Viewer"
 	#CALL "ReportViewer2010.exe" /norestart /log "%ROOTDIR%\ReportViewer2010-installlog.htm" /install /q
 	
+	log-info "Install IIS Application Initialization..."
+	. "$PSScriptRoot\InstallIisApplicationInitialization.ps1"
+	log-info "Install IIS Application Initialization. Done!"
+	
 	log-info "Install Powershell ISE..."
 	. "$PSScriptRoot\InstallPowershell-ISE.ps1"
 	log-info "Install Powershell ISE. Done!"

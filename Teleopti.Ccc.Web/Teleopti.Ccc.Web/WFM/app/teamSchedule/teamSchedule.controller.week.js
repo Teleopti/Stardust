@@ -3,14 +3,19 @@
 
 	angular.module('wfm.teamSchedule').controller('TeamScheduleWeeklyController', TeamScheduleWeeklyController);
 
-	TeamScheduleWeeklyController.$inject = ['$window', '$stateParams', '$q', '$translate',
+	TeamScheduleWeeklyController.$inject = ['$window', '$q', '$translate',
 		'$filter', 'PersonScheduleWeekViewCreator', 'UtilityService', 'weekViewScheduleSvc',
-		'TeamSchedule', 'signalRSVC', '$scope', 'Toggle', 'bootstrapCommon', 'groupPageService', 'serviceDateFormatHelper'];
+		'TeamSchedule', 'signalRSVC', '$scope', 'Toggle', 'bootstrapCommon', 'groupPageService',
+		'serviceDateFormatHelper', 'ViewStateKeeper'];
 
-	function TeamScheduleWeeklyController($window, $stateParams, $q, $translate, $filter, WeekViewCreator, Util, weekViewScheduleSvc, teamScheduleSvc, signalR, $scope, toggles, bootstrapCommon, groupPageService, serviceDateFormatHelper) {
+	function TeamScheduleWeeklyController($window, $q, $translate, $filter, WeekViewCreator, Util,
+		weekViewScheduleSvc, teamScheduleSvc, signalR,
+		$scope, toggles, bootstrapCommon, groupPageService,
+		serviceDateFormatHelper, ViewStateKeeper) {
 		var vm = this;
+		var stateParams = ViewStateKeeper.get();
 		vm.searchOptions = {
-			keyword: angular.isDefined($stateParams.keyword) && $stateParams.keyword !== '' ? $stateParams.keyword : '',
+			keyword: angular.isDefined(stateParams.keyword) && stateParams.keyword !== '' ? stateParams.keyword : '',
 			searchKeywordChanged: false,
 			focusingSearch: false,
 			searchFields: [
@@ -18,33 +23,35 @@
 				'PartTimePercentage', 'Skill', 'BudgetGroup', 'Note'
 			]
 		};
+		
 		vm.toggles = toggles;
 		vm.boostrap = bootstrapCommon.ready();
 		vm.isLoading = false;
 		vm.scheduleFullyLoaded = false;
 		vm.agentsPerPageSelection = [20, 50, 100, 500];
-		vm.scheduleDate = $stateParams.selectedDate || new Date();
-		vm.teamNameMap = $stateParams.teamNameMap || {};
+		vm.scheduleDate = stateParams.selectedDate || new Date();
+		vm.teamNameMap = stateParams.teamNameMap || {};
 		vm.enableClickableCell = true;
 		vm.onCellClick = openSelectedAgentDayInNewWindow;
-		vm.sortOption = $stateParams.selectedSortOption;
-		vm.staffingEnabled = $stateParams.staffingEnabled;
+		vm.sortOption = stateParams.selectedSortOption;
+		vm.staffingEnabled = stateParams.staffingEnabled;
+		vm.timezone = stateParams.timezone;
 		vm.selectedGroups = {
 			mode: 'BusinessHierarchy',
 			groupIds: [],
 			groupPageId: ''
 		};
 
-		if (angular.isArray($stateParams.selectedTeamIds) && $stateParams.selectedTeamIds.length > 0) {
-			replaceArrayValues($stateParams.selectedTeamIds, vm.selectedGroups.groupIds);
+		if (angular.isArray(stateParams.selectedTeamIds) && stateParams.selectedTeamIds.length > 0) {
+			replaceArrayValues(stateParams.selectedTeamIds, vm.selectedGroups.groupIds);
 		}
-		else if ($stateParams.selectedGroupPage && $stateParams.selectedGroupPage.groupIds.length > 0) {
-			replaceArrayValues($stateParams.selectedGroupPage.groupIds, vm.selectedGroups.groupIds);
+		else if (stateParams.selectedGroupPage && stateParams.selectedGroupPage.groupIds.length > 0) {
+			replaceArrayValues(stateParams.selectedGroupPage.groupIds, vm.selectedGroups.groupIds);
 			vm.selectedGroups.mode = 'GroupPages';
-			vm.selectedGroups.groupPageId = $stateParams.selectedGroupPage.pageId;
+			vm.selectedGroups.groupPageId = stateParams.selectedGroupPage.pageId;
 		}
 
-		vm.selectedFavorite = $stateParams.do ? $stateParams.selectedFavorite : null;
+		vm.selectedFavorite = stateParams.do ? stateParams.selectedFavorite : null;
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 
 		vm.startOfWeek = serviceDateFormatHelper.getDateOnly(moment(vm.scheduleDate).startOf('week'));
@@ -118,7 +125,7 @@
 		};
 
 		vm.onSelectedTeamsChanged = function (teams) {
-			$stateParams.selectedTeamIds = vm.selectedGroups.groupIds;
+			stateParams.selectedTeamIds = vm.selectedGroups.groupIds;
 			vm.searchOptions.focusingSearch = true;
 			vm.selectedFavorite = false;
 		};
@@ -218,7 +225,7 @@
 			var defaultFavoriteSearch = data.defaultFavoriteSearch;
 			var loggedonUsersTeamId = data.loggedonUsersTeamId;
 
-			if (!$stateParams.do) {
+			if (!stateParams.do) {
 				if (defaultFavoriteSearch) {
 					replaceArrayValues(defaultFavoriteSearch.TeamIds, vm.selectedGroups.groupIds);
 					vm.searchOptions.keyword = defaultFavoriteSearch.SearchTerm;

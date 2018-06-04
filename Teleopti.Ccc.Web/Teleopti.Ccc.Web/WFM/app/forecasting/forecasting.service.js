@@ -8,6 +8,7 @@
 					query: { method: 'GET', params: {}, isArray: false }
 				});
 
+				// TODO: Should be removed
 				this.status = $resource('../api/Status/Forecasting', {}, {
 					get: { method: 'GET', params: {}, isArray: false }
 				});
@@ -24,7 +25,7 @@
 				};
 
 				this.result = function(data, successCb, errorCb) {
-					$http.post("../api/Forecasting/ForecastResult", data).
+					$http.post("../api/Forecasting/LoadForecast", data).
 						success(successCb).
 						error(errorCb);
 				};
@@ -43,14 +44,8 @@
 						.finally(finalCb);
 				};
 
-				this.evaluate = function(data, successCb, errorCb) {
-					$http.post("../api/Forecasting/Evaluate", data)
-						.success(successCb)
-						.error(errorCb);
-				};
-
-				this.queueStatistics = function(data, successCb, errorCb) {
-					$http.post("../api/Forecasting/QueueStatistics", data)
+				this.applyToScenario = function(data, successCb, errorCb) {
+					$http.post("../api/Forecasting/ApplyForecast", data)
 						.success(successCb)
 						.error(errorCb);
 				};

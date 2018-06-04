@@ -15,28 +15,41 @@
 </div>
 <!--
 <div class="con-row" ng-cloak>
-  <div class="con-flex">
-    <div class="line-center">
-      <i class="mdi mdi-information-outline huge-icon line-center"></i>
-      <h2>No skills or workloads found</h2>
-      <button class="wfm-btn wfm-btn-primary">Create a skill</button>
+<div class="con-flex">
+<div class="line-center">
+<i class="mdi mdi-information-outline huge-icon line-center"></i>
+<h2>No skills or workloads found</h2>
+<button class="wfm-btn wfm-btn-primary">Create a skill</button>
+</div>
+</div>
+</div> -->
+<div ng-if="vm.skills">
+  <div class="con-row">
+    <div class="con-flex">
+      <div class="panel material-depth-1 full-padding">
+        <label for="filter" class="input-icon">
+          <i class="mdi mdi-filter-outline">
+            <input type="text" id="filter" ng-model="filter.Workload.Name" placeholder="Filter...">
+            <md-tooltip>Filter</md-tooltip>
+          </i>
+        </label>
+      </div>
     </div>
   </div>
-</div> -->
 
-
-<div class="con-row">
-  <div class="con-flex">
-    <div class="con-fluid-row">
-      <div class="con-fluid-flex" ng-repeat="skill in vm.skills">
-        <div class="card panel material-depth-1">
-          <div class="sub-header">
-            <h2>{{skill.Workload.Name}}</h2>
-          </div>
-          <div class="card-footer con-row">
-            <span class="con-flex line-right card-footer-section">
-              <button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.goToModify(skill)">Manage</button>
-            </span>
+  <div class="con-row">
+    <div class="con-flex">
+      <div class="con-fluid-row">
+        <div class="con-fluid-flex" ng-repeat="skill in vm.skills | filter:filter | orderBy : 'Workload.Name'">
+          <div class="card panel material-depth-1">
+            <div class="sub-header">
+              <h2>{{skill.Workload.Name}}</h2>
+            </div>
+            <div class="card-footer con-row">
+              <span class="con-flex line-right card-footer-section">
+                <button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.goToModify(skill)">Manage</button>
+              </span>
+            </div>
           </div>
         </div>
       </div>

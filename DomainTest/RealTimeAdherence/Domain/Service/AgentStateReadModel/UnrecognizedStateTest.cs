@@ -20,7 +20,9 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 		{
 			Database
 				.WithAgent("usercode")
-				.WithMappedRule(Guid.NewGuid(), "loggedout", null, "Logged Out");
+				.WithStateGroup(null, "Logged Out", true)
+				.WithStateCode("loggedout")
+				;
 
 			Target.ProcessState(new StateForTest
 			{

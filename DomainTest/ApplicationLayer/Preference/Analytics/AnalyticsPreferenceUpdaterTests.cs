@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Preference;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		public IPreferenceDayRepository PreferenceDayRepository;
 		public IScenarioRepository ScenarioRepository;
 		public IScheduleStorage ScheduleStorage;
+		public IShiftCategoryRepository ShiftCategoryRepository;
 		public IAnalyticsPreferenceRepository AnalyticsPreferenceRepository;
 		public FakeAnalyticsDateRepository AnalyticsDateRepository;
 		public FakePersonRepository PersonRepository;
@@ -36,6 +38,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		public FakeAnalyticsAbsenceRepository AnalyticsAbsenceRepository;
 		public FakeAnalyticsShiftCategoryRepository AnalyticsShiftCategoryRepository;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
+		public IPersonAssignmentRepository PersonAssignmentRepository;
+		public IPersonAbsenceRepository PersonAbsenceRepository;
 
 		private readonly Guid _businessUnitId = Guid.NewGuid();
 
@@ -78,6 +82,63 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 				LogOnBusinessUnitId = _businessUnitId
 			});
 			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldHandlePreferenceCreatedEventEvent()
+		{
+			setup();
+
+			var date1 = new DateTime(2001, 1, 1);
+			setupValidPreferenceDay(date1, out var person, out var scenario);
+
+			var shiftCategory = new ShiftCategory("Late");
+			ShiftCategoryRepository.Add(shiftCategory);
+
+			PreferenceDayRepository.Add(new PreferenceDay(person, new DateOnly(date1), new PreferenceRestriction
+			{
+				ShiftCategory = shiftCategory
+			}));
+
+			Target.Handle(new PreferenceCreatedEvent
+			{
+				PersonId = person.Id.GetValueOrDefault(),
+				RestrictionDates = new List<DateTime> { date1 },
+				ScenarioId = scenario.Id.GetValueOrDefault(),
+				LogOnBusinessUnitId = _businessUnitId
+			});
+			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(1);
+		}
+
+		// Refer to bug #75976 (duplicates of preferenceday in app DB)
+		[Test]
+		public void ShouldHandleDuplicateExistingPreferenceDaysOnHandlingPreferenceCreatedEventEvent()
+		{
+			setup();
+
+			var date1 = new DateTime(2001, 1, 1);
+			setupValidPreferenceDay(date1, out var person, out var scenario);
+
+			var shiftCategory = new ShiftCategory("Late");
+			ShiftCategoryRepository.Add(shiftCategory);
+
+			PreferenceDayRepository.Add(new PreferenceDay(person, new DateOnly(date1), new PreferenceRestriction
+			{
+				ShiftCategory = shiftCategory
+			}));
+			PreferenceDayRepository.Add(new PreferenceDay(person, new DateOnly(date1), new PreferenceRestriction
+			{
+				ShiftCategory = shiftCategory
+			}));
+
+			Target.Handle(new PreferenceCreatedEvent
+			{
+				PersonId = person.Id.GetValueOrDefault(),
+				RestrictionDates = new List<DateTime> { date1 },
+				ScenarioId = scenario.Id.GetValueOrDefault(),
+				LogOnBusinessUnitId = _businessUnitId
+			});
+			AnalyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -231,6 +292,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		}
 
 		[Test]
+		public void ShouldSkipPreferenceDayWhenMissing()
+		{
+			setup();
+			setupValidPreferenceDay(new DateTime(2001, 1, 2), out var person, out _);
+
+			Target.Handle(new PreferenceChangedEvent
+			{
+				PersonId = person.Id.GetValueOrDefault(),
+				RestrictionDates = new List<DateTime> { new DateTime(2001, 1, 1), new DateTime(2001, 1, 2) },
+				LogOnBusinessUnitId = _businessUnitId
+			});
+			var preference = AnalyticsPreferenceRepository.PreferencesForPerson(0).Single();
+			preference.PreferencesFulfilled.Should().Be.EqualTo(0);
+			preference.PreferencesUnfulfilled.Should().Be.EqualTo(1);
+		}
+
+		[Test]
 		public void ShouldHandleSameEventTwicePreference()
 		{
 			const int dimPersonId = 0;
@@ -328,6 +406,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			{
 				PersonId = person.Id.GetValueOrDefault(),
 				RestrictionDates = new List<DateTime> {new DateTime(2001, 1, 1)},
+				LogOnBusinessUnitId = _businessUnitId
+			});
+			AnalyticsPreferenceRepository.PreferencesForPerson(0).Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldHandleMissingPersonPeriod()
+		{
+			setup();
+			setupInvalidPreferenceDay(new DateTime(2001, 1, 2), out var person);
+			person.TerminatePerson(new DateOnly(2001, 1, 1), new PersonAccountUpdaterDummy(),
+				new ClearPersonRelatedInformation(PersonAssignmentRepository, ScenarioRepository, PersonAbsenceRepository));
+			Target.Handle(new PreferenceChangedEvent
+			{
+				PersonId = person.Id.GetValueOrDefault(),
+				RestrictionDates = new List<DateTime> { new DateTime(2001, 1, 2) },
 				LogOnBusinessUnitId = _businessUnitId
 			});
 			AnalyticsPreferenceRepository.PreferencesForPerson(0).Should().Be.Empty();

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
@@ -40,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			
 			if (brokenMinimumAgentsIntervals > 0)
 			{
-				return PredictorResult.CreateBreaksDueToMinimumAgents(currentResult, brokenMinimumAgentsIntervals);
+				return PredictorResult.CreateDueToMinimumAgents(currentResult, brokenMinimumAgentsIntervals);
 			}
 	
 			var averageWorkTime = TimeSpan.FromTicks(matrix.SchedulePeriod.AverageWorkTimePerDay.Ticks * numberOfDayOffsMoved);
@@ -50,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return PredictorResult.Create(currentResult, predictedResult);
 		}
 		
-		private static int breaksMinimumAgents(IDictionary<DateOnly, ForecastScheduleValuePair> rawDataDictionary, MovedDaysOff movedDaysOff)
+		private static double breaksMinimumAgents(IDictionary<DateOnly, ForecastScheduleValuePair> rawDataDictionary, MovedDaysOff movedDaysOff)
 		{
 			return rawDataDictionary.Where(x => movedDaysOff.Contains(x.Key)).Sum(x => x.Value.BrokenMinimumAgents);
 		}

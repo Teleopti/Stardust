@@ -50,8 +50,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					{
 						PersonId = g.Key.Person.Id.GetValueOrDefault(),
 						ScenarioId = g.Key.Scenario.Id.GetValueOrDefault(),
-						StartDateTime = g.Min(s => s.Period.StartDateTime),
-						EndDateTime = g.Max(s => s.Period.EndDateTime),
+						StartDateTime = g.Min(s => s is IPersonAbsence ? s.Period.StartDateTime.AddHours(-12) : s.Period.StartDateTime),
+						EndDateTime = g.Max(s => s.Period.EndDateTime)
 					};
 				})
 				.ToArray();

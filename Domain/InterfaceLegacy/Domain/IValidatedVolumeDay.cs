@@ -109,38 +109,5 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Created date: 2008-03-27
         /// </remarks>
         TimeSpan OriginalAverageAfterTaskTime { get; }
-
-        /// <summary>
-        /// Adds the percentage to tasks.
-        /// </summary>
-        /// <param name="percent">The percent.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2008-06-27
-        /// </remarks>
-        void AddPercentageToTasks(Percent percent);
-
-        /// <summary>
-        /// Adds the percentage to Validated ACW.
-        /// </summary>
-        /// <param name="percent">The percent.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2008-06-27
-        /// </remarks>
-        void AddPercentageToValidatedAfterTaskTime(Percent percent);
-
-        /// <summary>
-        /// Adds the percentage to validated talk time.
-        /// </summary>
-        /// <param name="percent">The percent.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2008-06-27
-        /// </remarks>
-        void AddPercentageToValidatedTaskTime(Percent percent);
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Forecasting.Models;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWorkload
 {
@@ -24,14 +24,14 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 			};
 		}
 
-		protected override void Assert(IEnumerable<ISkillDay> modifiedSkillDays)
+		protected override void Assert(ForecastModel forecastResult)
 		{
-			var firstDay = modifiedSkillDays.Single(x => x.CurrentDate == FuturePeriod.StartDate);
+			var firstDay = forecastResult.ForecastDays.Single(x => x.Date == FuturePeriod.StartDate);
 			Convert.ToInt32(firstDay.Tasks)
 				.Should().Be.EqualTo(6);
-			Convert.ToInt32(firstDay.AverageTaskTime.TotalSeconds)
+			Convert.ToInt32(firstDay.AverageTaskTime)
 				.Should().Be.EqualTo(35);
-			Convert.ToInt32(firstDay.AverageAfterTaskTime.TotalSeconds)
+			Convert.ToInt32(firstDay.AverageAfterTaskTime)
 				.Should().Be.EqualTo(50);
 		}
 	}

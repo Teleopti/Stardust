@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Forecasting.Models;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Core.IoC
 {
@@ -6,12 +8,9 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core.IoC
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<ForecastViewModelFactory>().SingleInstance().As<IForecastViewModelFactory>();
-			builder.RegisterType<ForecastResultViewModelFactory>().SingleInstance().As<IForecastResultViewModelFactory>();
-			builder.RegisterType<IntradayPatternViewModelFactory>().SingleInstance().As<IIntradayPatternViewModelFactory>();
-			builder.RegisterType<CampaignPersister>().SingleInstance().As<ICampaignPersister>();
-			builder.RegisterType<OverridePersister>().SingleInstance().As<IOverridePersister>();
-			builder.RegisterType<ForecastMisc>().SingleInstance().As<IForecastMisc>();
+			builder.RegisterType<WorkloadNameBuilder>().SingleInstance().As<IWorkloadNameBuilder>();
+			builder.RegisterType<ForecastProvider>().SingleInstance();
+			builder.RegisterType<ForecastDayModelMapper>().SingleInstance();
 		}
 	}
 }

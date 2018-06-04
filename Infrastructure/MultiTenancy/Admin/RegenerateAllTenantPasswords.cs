@@ -1,4 +1,4 @@
-﻿using NHibernate.Util;
+﻿using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 

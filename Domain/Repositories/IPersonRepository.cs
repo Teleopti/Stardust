@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 	{
 		ICollection<IPerson> LoadAllPeopleWithHierarchyDataSortByName(DateOnly earliestTerminalDate);
 		ICollection<IPerson> FindPeopleBelongTeam(ITeam team, DateOnlyPeriod period);
-		ICollection<IPerson> FindPeopleBelongTeams(ITeam[] teams, DateOnlyPeriod period);
 		ICollection<IPerson> FindPeopleBelongTeamWithSchedulePeriod(ITeam team, DateOnlyPeriod period);
 		ICollection<IPerson> FindAllSortByName();
 		ICollection<IPerson> FindAllAgents(DateOnlyPeriod period, bool includeRuleSetData);

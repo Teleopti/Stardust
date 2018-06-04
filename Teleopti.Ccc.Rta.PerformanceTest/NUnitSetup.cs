@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 				builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
 			}, arguments => { arguments.AllEventPublishingsAsSync = true; }, this);
 
-			TestSiteConfigurationSetup.TearDown();
+			//TestSiteConfigurationSetup.TearDown();
 		}
 	}
 }

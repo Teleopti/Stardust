@@ -15,11 +15,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_userTimeZone = userTimeZone;
 		}
 			
-		public (double ForecastSum, double ScheduledSum, int BrokenMinimumAgentsIntervals) Execute(IOptimizationPreferences optimizationPreferences, ISchedulingResultStateHolder stateHolder, IEnumerable<ISkill> skills, DateOnly date)
+		public (double ForecastSum, double ScheduledSum, double BrokenMinimumAgentsIntervals) Execute(IOptimizationPreferences optimizationPreferences, ISchedulingResultStateHolder stateHolder, IEnumerable<ISkill> skills, DateOnly date)
 		{
 			double dailyForecastSum = 0;
 			double dailyScheduledSum = 0;
-			var brokenMinimumAgentsIntervals = 0;
+			double brokenMinimumAgentsIntervals = 0;
 
 			foreach (var skillStaffPeriod in stateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(skills, date.ToDateTimePeriod(_userTimeZone.TimeZone())))
 			{
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					var lackingPersons = minimumPersons - skillStaffPeriod.CalculatedLoggedOn;
 					if (lackingPersons > 0)
 					{
-						brokenMinimumAgentsIntervals += (int) lackingPersons;						
+						brokenMinimumAgentsIntervals += lackingPersons;						
 					}
 				}
 	

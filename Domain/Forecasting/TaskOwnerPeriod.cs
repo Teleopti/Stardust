@@ -40,9 +40,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		private double _totalTasks;
 		private bool _turnOffInternalRecalc;
 		private TaskOwnerPeriodType _typeOfTaskOwnerPeriod;
-		private double? _overrideTasks;
-		private TimeSpan? _overrideAverageTaskTime;
-		private TimeSpan? _overrideAverageAfterTaskTime;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TaskOwnerPeriod"/> class.
@@ -138,78 +135,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			{
 				if (!_initialized) Initialize();
 				return _totalTasks;
-			}
-		}
-
-		public double? OverrideTasks
-		{
-			get
-			{
-				if (!_initialized) Initialize();
-				return _overrideTasks;
-			}
-			private set { _overrideTasks = value; }
-		}
-
-		public TimeSpan? OverrideAverageTaskTime
-		{
-			get
-			{
-				if (!_initialized) Initialize();
-				return _overrideAverageTaskTime;
-			}
-			set
-			{
-				checkIsLoaded();
-
-				long overrideAverageTaskTimeTicks = TimeSpan.FromSeconds(1).Ticks;
-				if (OverrideAverageTaskTime.HasValue)
-					overrideAverageTaskTimeTicks = OverrideAverageTaskTime.Value.Ticks;
-				var newValueTicks = value.HasValue ? value.Value.Ticks : 1d;
-
-				ValueDistributor.DistributeOverrideAverageTaskTime(
-					newValueTicks / overrideAverageTaskTimeTicks,
-					value,
-					TaskOwnerDayOpenCollection(),
-					DistributionType.ByPercent);
-
-				_overrideAverageTaskTime = value;
-
-				RecalculateDailyAverageTimes();
-
-				OnAverageTaskTimeChanged();
-			}
-		}
-
-		public TimeSpan? OverrideAverageAfterTaskTime
-		{
-			get
-			{
-				if (!_initialized) Initialize();
-				return _overrideAverageAfterTaskTime;
-			}
-			set
-			{
-				//_overrideAverageAfterTaskTime = value;
-
-				checkIsLoaded();
-
-				long overrideAverageAfterTaskTimeTicks = TimeSpan.FromSeconds(1).Ticks;
-				if (OverrideAverageAfterTaskTime.HasValue)
-					overrideAverageAfterTaskTimeTicks = OverrideAverageAfterTaskTime.Value.Ticks;
-				var newValueTicks = value.HasValue ? value.Value.Ticks : 1d;
-
-				ValueDistributor.DistributeOverrideAverageAfterTaskTime(
-					newValueTicks / overrideAverageAfterTaskTimeTicks,
-					value,
-					TaskOwnerDayOpenCollection(),
-					DistributionType.ByPercent);
-
-				_overrideAverageAfterTaskTime = value;
-
-				RecalculateDailyAverageTimes();
-
-				OnAverageTaskTimeChanged();
 			}
 		}
 
@@ -422,16 +347,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 						 (taskOwnerDays.Sum(t => t.TotalAverageTaskTime.Ticks * t.TotalTasks) / _totalTasks));
 					_totalAverageAfterTaskTime = TimeSpan.FromTicks((long)
 						 (taskOwnerDays.Sum(t => t.TotalAverageAfterTaskTime.Ticks * t.TotalTasks) / _totalTasks));
-
-					var overrideAttPeriodList = taskOwnerDays.Where(t => t.OverrideAverageTaskTime.HasValue).ToList();
-					_overrideAverageTaskTime = overrideAttPeriodList.Any()
-						? (TimeSpan?)TimeSpan.FromTicks((long)(overrideAttPeriodList.Sum(t => t.OverrideAverageTaskTime.Value.Ticks * t.TotalTasks) / _totalTasks))
-						: null;
-
-					var overrideAcwPeriodList = taskOwnerDays.Where(t => t.OverrideAverageAfterTaskTime.HasValue).ToList();
-					_overrideAverageAfterTaskTime = overrideAcwPeriodList.Any()
-						? (TimeSpan?)TimeSpan.FromTicks((long)(overrideAcwPeriodList.Sum(t => t.OverrideAverageAfterTaskTime.Value.Ticks * t.TotalTasks) / _totalTasks))
-						: null;
 				}
 				else if (taskOwnerDays.Count > 0)
 				{
@@ -443,16 +358,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 						 (taskOwnerDays.Average(t => t.TotalAverageTaskTime.Ticks)));
 					_totalAverageAfterTaskTime = TimeSpan.FromTicks((long)
 						 (taskOwnerDays.Average(t => t.TotalAverageAfterTaskTime.Ticks)));
-
-					var overrideAttPeriodList = taskOwnerDays.Where(t => t.OverrideAverageTaskTime.HasValue).ToList();
-					_overrideAverageTaskTime = overrideAttPeriodList.Any()
-						? (TimeSpan?)TimeSpan.FromTicks((long)(overrideAttPeriodList.Average(t => t.OverrideAverageTaskTime.Value.Ticks)))
-						: null;
-
-					var overrideAcwPeriodList = taskOwnerDays.Where(t => t.OverrideAverageAfterTaskTime.HasValue).ToList();
-					_overrideAverageAfterTaskTime = overrideAcwPeriodList.Any()
-						? (TimeSpan?)TimeSpan.FromTicks((long)(overrideAcwPeriodList.Average(t => t.OverrideAverageAfterTaskTime.Value.Ticks)))
-						: null;
 				}
 				else
 				{
@@ -489,7 +394,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				{
 					_totalTasks = taskOwnerDays.Sum(t => t.TotalTasks);
 					_tasks = taskOwnerDays.Sum(t => t.Tasks);
-					_overrideTasks = taskOwnerDays.All(x => x.OverrideTasks.Equals(null)) ? null : taskOwnerDays.Sum(t => t.OverrideTasks);
 				}
 				else
 				{
@@ -971,19 +875,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			{
 				_isDirty = true;
 			}
-		}
-
-		public virtual void SetOverrideTasks(double? task, IEnumerable<ITaskOwner> intradayPattern)
-		{
-			if (!IsLoaded) throw new InvalidOperationException("The workload period must contain workload days before using this operation.");
-
-			ValueDistributor.DistributeOverrideTasks(task, TaskOwnerDayOpenCollection(), intradayPattern);
-
-			_overrideTasks = task;
-
-			RecalculateDailyTasks();
-
-			OnTasksChanged();
 		}
 
 		/// <summary>

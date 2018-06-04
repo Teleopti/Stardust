@@ -176,43 +176,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(availableData.AvailableBusinessUnits.Count, loadedAvailableData.AvailableBusinessUnits.Count);
         }
 
-        [Test]
-        public void VerifyDifferentTypesOfAvailableObjectWith()
-        {
-            IAvailableData availableData = CreatePersistableAvailableData();
-
-            ISite site1 = SiteFactory.CreateSimpleSite("Site");
-
-            PersistAndRemoveFromUnitOfWork(site1);
-
-            availableData.AddAvailableSite(site1);
-
-            ITeam team1 = TeamFactory.CreateSimpleTeam("Team1");
-
-            site1.AddTeam(team1);
-
-            PersistAndRemoveFromUnitOfWork(team1);
-
-            availableData.AddAvailableTeam(team1);
-
-            IBusinessUnit unit1 = BusinessUnitFactory.CreateSimpleBusinessUnit("Unit1");
-
-            PersistAndRemoveFromUnitOfWork(unit1);
-
-            availableData.AddAvailableBusinessUnit(unit1);
-
-            PersistAndRemoveFromUnitOfWork(availableData);
-            PersistAndRemoveFromUnitOfWork(site1);
-
-            _target = new AvailableDataRepository(UnitOfWork);
-
-            IAvailableData loadedAvailableData = _target.LoadAllCollectionsInAvailableData(availableData);
-
-            Assert.AreEqual(availableData.AvailableTeams.Count, loadedAvailableData.AvailableTeams.Count);
-            Assert.AreEqual(availableData.AvailableSites.Count, loadedAvailableData.AvailableSites.Count);
-            Assert.AreEqual(availableData.AvailableBusinessUnits.Count, loadedAvailableData.AvailableBusinessUnits.Count);
-        }
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "SCUD"), Test]
         public void VerifyMultipleSCUD()
         {

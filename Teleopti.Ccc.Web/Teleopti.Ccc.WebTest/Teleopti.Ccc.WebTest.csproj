@@ -201,10 +201,10 @@
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.222\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.225\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.222\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.225\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
     <Reference Include="WebGrease">
       <HintPath>..\..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -215,6 +215,8 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Areas\Anywhere\BusinessUnitControllerTest.cs" />
+    <Compile Include="Areas\Forecasting\Controllers\ForecastControllerOldTest.cs" />
+    <Compile Include="Areas\Forecasting\Controllers\ForecastControllerTest.cs" />
     <Compile Include="Areas\Gamification\GamificationCalculationControllerTest.cs" />
     <Compile Include="Areas\Gamification\GamificationControllerPersistTest.cs" />
     <Compile Include="Areas\Gamification\GamificationControllerReadTest.cs" />
@@ -231,13 +233,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Areas\Anywhere\Rta\ThemeSettingProviderTest.cs" />
-    <Compile Include="Areas\Forecasting\Controllers\CampaignPersisterTest.cs" />
-    <Compile Include="Areas\Forecasting\Controllers\ForecastMiscTest.cs" />
-    <Compile Include="Areas\Forecasting\Controllers\OverridePersisterTest.cs" />
+    <Compile Include="Areas\Forecasting\Controllers\WorkloadNameBuilderTest.cs" />
     <Compile Include="Areas\Forecasting\Controllers\SkillControllerTest.cs" />
-    <Compile Include="Areas\Forecasting\Core\ForecastViewModelFactoryTest.cs" />
-    <Compile Include="Areas\Forecasting\Core\ForecastResultViewModelFactoryTest.cs" />
-    <Compile Include="Areas\Forecasting\Core\IntradayPatternViewModelFactoryTest.cs" />
     <Compile Include="Areas\Global\ApplicationControllerTest.cs" />
     <Compile Include="Areas\Global\AreaWithPermissionPathProviderTest.cs" />
     <Compile Include="Areas\Global\DataProtectionControllerTest.cs" />
@@ -369,7 +366,6 @@
     <Compile Include="Areas\MultiTenancy\Core\DataSourceConfigurationEncryptionTest.cs" />
     <Compile Include="Areas\MultiTenancy\Core\LoginAttemptModelFactoryForWebTest.cs" />
     <Compile Include="Areas\Messages\MessagesAreaRegistrationTest.cs" />
-    <Compile Include="Areas\Forecasting\Controllers\ForecastControllerTest.cs" />
     <Compile Include="Areas\Mart\Controllers\QueueStatsControllerTest.cs" />
     <Compile Include="Areas\Mart\Core\FakeQueueStatRepository.cs" />
     <Compile Include="Areas\Mart\Core\QueueStatHandlerTest.cs" />
@@ -445,7 +441,8 @@
     <Compile Include="Core\Startup\OriginHandlerPipelineModuleTest.cs" />
     <Compile Include="Core\Startup\RegisterAreasTest.cs" />
     <Compile Include="Core\Startup\RegisterGlobalApiFiltersTaskTest.cs" />
-    <Compile Include="Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelReworkedFactoryTest.cs" />
+    <Compile Include="Core\TeamSchedule\ViewModelFactory\TeamSchedulePermissionViewModelFactoryTest.cs" />
+    <Compile Include="Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelFactoryTest.cs" />
     <Compile Include="Core\TeamSchedule\ViewModelFactory\WfmTeamScheduleViewModelFactoryTest.cs" />
     <Compile Include="Core\TeamsProviderTest.cs" />
     <Compile Include="Core\TranslatedTextsTest.cs" />
@@ -532,7 +529,7 @@
     <Compile Include="Areas\Start\Controllers\MenuControllerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\SettingsControllerTest.cs" />
     <Compile Include="Areas\Start\Core\Menu\MenuViewModelFactoryTest.cs" />
-    <Compile Include="Areas\MyTime\Controllers\TeamScheduleControllerTest.cs" />
+    <Compile Include="Areas\MyTime\Controllers\TeamScheduleApiControllerTest.cs" />
     <Compile Include="Core\Common\DataProvider\SchedulePersonProviderTest.cs" />
     <Compile Include="FakeNoPermissionProvider.cs" />
     <Compile Include="FakePermissionProvider.cs" />
@@ -549,8 +546,6 @@
     <Compile Include="Core\Requests\Mapping\DateTimePeriodFormMappingTest.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\Mapping\SettingsViewModelMappingTest.cs" />
     <Compile Include="Core\TeamSchedule\Mapping\TeamScheduleDomainDataMappingTest.cs" />
-    <Compile Include="Core\TeamSchedule\Mapping\TeamScheduleViewModelMappingTest.cs" />
-    <Compile Include="Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelFactoryTest.cs" />
     <Compile Include="Core\Common\DataProvider\ScheduleColorProviderTest.cs" />
     <Compile Include="Core\WeekSchedule\DataProvider\AbsenceTypesProviderTest.cs" />
     <Compile Include="Filters\ApplicationFunctionApiAttributeTest.cs" />

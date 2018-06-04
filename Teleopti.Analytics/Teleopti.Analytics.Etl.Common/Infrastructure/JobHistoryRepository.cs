@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using NHibernate.Util;
 using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.JobHistory;
@@ -26,7 +25,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 			var ds = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure, "mart.etl_job_execution_history", parameterList, connectionString);
 
-			if (!ds.Tables.Any() || ds.Tables[0] == null)
+			if (ds.Tables.Count==0 || ds.Tables[0] == null)
 				return null;
 
 			int previousJobExecutionId = -99;
@@ -93,7 +92,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			var ds = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure, "mart.sys_business_unit_all_get", null,
 				connectionString);
-			if (!ds.Tables.Any() || ds.Tables[0] == null)
+			if (ds.Tables.Count==0 || ds.Tables[0] == null)
 			{
 				return null;
 			}

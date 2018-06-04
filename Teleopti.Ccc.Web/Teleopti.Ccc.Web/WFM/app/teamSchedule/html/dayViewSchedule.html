@@ -50,9 +50,13 @@
 						  team-name-map="vm.teamNameMap"
 						  selected-favorite="vm.selectedFavorite"
 						  selected-sort-option="vm.sortOption"
-						  staffing-enabled="vm.staffingEnabled"></view-changer>
-			<timezone-picker class="timezone-picker" available-timezones="vm.availableTimezones"
-							 on-pick="vm.changeTimezone(timezone)"></timezone-picker>
+						  staffing-enabled="vm.staffingEnabled"
+						  timezone="vm.currentTimezone"></view-changer>
+			<timezone-picker class="timezone-picker"
+							 ng-if="!vm.isLoading"
+							 available-timezones="vm.availableTimezones"
+							 ng-model="vm.currentTimezone"
+							 ng-change="vm.changeTimezone()"></timezone-picker>
 
 			<md-switch ng-if="vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206"
 					   ng-model="vm.staffingEnabled"
@@ -100,7 +104,7 @@
 				<div class="alert-warning notice-spacer" ng-if="vm.isResultTooMany()">
 					<i class='mdi mdi-alert'></i>{{vm.warningMessageForTooManyResults()}}
 				</div>
-				
+
 				<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
 				<schedule-table ng-show="vm.scheduleFullyLoaded"
 								select-mode="vm.scheduleTableSelectMode"
@@ -150,8 +154,7 @@
 				   chart-height="vm.chartHeight" preselected-skills="vm.preselectedSkills"
 				   use-shrinkage="vm.useShrinkage"
 				   on-selected-skill-changed="vm.onSelectedSkillChanged(skill, skillGroup)"
-				   on-use-shrinkage-changed="vm.onUseShrinkageChanged"
-				   ></staffing-info>
+				   on-use-shrinkage-changed="vm.onUseShrinkageChanged"></staffing-info>
 
 	<schedule-change-notifier on-notification="vm.onPersonScheduleChanged"
 							  schedule-date="vm.scheduleDate"

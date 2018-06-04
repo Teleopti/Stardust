@@ -31,6 +31,7 @@
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.toolStripButtonRefresh = new System.Windows.Forms.ToolStripButton();
 			this.toolStripLabelManySelected = new System.Windows.Forms.ToolStripLabel();
+			this.toolStripButtonShowNonIssued = new System.Windows.Forms.ToolStripButton();
 			this.listViewResult = new System.Windows.Forms.ListView();
 			this.columnHeaderAgent = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeaderReason = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -43,7 +44,8 @@
 			// 
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonRefresh,
-            this.toolStripLabelManySelected});
+            this.toolStripLabelManySelected,
+            this.toolStripButtonShowNonIssued});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.Size = new System.Drawing.Size(1050, 25);
@@ -61,9 +63,22 @@
 			// 
 			// toolStripLabelManySelected
 			// 
+			this.toolStripLabelManySelected.BackColor = System.Drawing.SystemColors.Control;
+			this.toolStripLabelManySelected.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+			this.toolStripLabelManySelected.ForeColor = System.Drawing.Color.Red;
 			this.toolStripLabelManySelected.Name = "toolStripLabelManySelected";
-			this.toolStripLabelManySelected.Size = new System.Drawing.Size(109, 22);
+			this.toolStripLabelManySelected.Size = new System.Drawing.Size(118, 22);
 			this.toolStripLabelManySelected.Text = "xxManyAgentsAlert";
+			// 
+			// toolStripButtonShowNonIssued
+			// 
+			this.toolStripButtonShowNonIssued.CheckOnClick = true;
+			this.toolStripButtonShowNonIssued.Image = global::Teleopti.Ccc.SmartClientPortal.Shell.Properties.Resources.ccc_ok_green_16x16;
+			this.toolStripButtonShowNonIssued.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonShowNonIssued.Name = "toolStripButtonShowNonIssued";
+			this.toolStripButtonShowNonIssued.Size = new System.Drawing.Size(165, 22);
+			this.toolStripButtonShowNonIssued.Text = "xxShowNoneIssuedAgents";
+			this.toolStripButtonShowNonIssued.Click += new System.EventHandler(this.toolStripButtonShowNonIssuedClick);
 			// 
 			// listViewResult
 			// 
@@ -85,12 +100,12 @@
 			// 
 			// columnHeaderAgent
 			// 
-			this.columnHeaderAgent.Text = "xxAgentsThatFailedInspection";
+			this.columnHeaderAgent.Text = "xxAgents";
 			this.columnHeaderAgent.Width = 300;
 			// 
 			// columnHeaderReason
 			// 
-			this.columnHeaderReason.Text = "xxPrimaryReason";
+			this.columnHeaderReason.Text = "xxIssue";
 			this.columnHeaderReason.Width = 300;
 			// 
 			// columnHeaderPeriod
@@ -131,5 +146,6 @@
 		private System.Windows.Forms.ColumnHeader columnHeaderPeriod;
 		private System.ComponentModel.BackgroundWorker backgroundWorker1;
 		private System.Windows.Forms.ToolStripLabel toolStripLabelManySelected;
+		private System.Windows.Forms.ToolStripButton toolStripButtonShowNonIssued;
 	}
 }

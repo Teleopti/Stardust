@@ -39,6 +39,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeRuleSetBagRepository RuleSetBagRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakePersonRotationRepository PersonRotationRepository;
+		public FakePersonAbsenceRepository PersonAbsenceRepository;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
 
 		[TestCase(true)]
 		[TestCase(false)]
@@ -903,6 +905,99 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			AssignmentRepository.Find(new[] { agent }, period, scenario).Count(personAssignment => personAssignment.MainActivities().Any()).Should().Be.EqualTo(5);
 		}
+
+		[Test]
+		public void ShouldBePossibleToScheduleBlockSchedulePeriodSameShiftWhenSkillIsClosedOneDay()
+		{
+			var firstDay = new DateOnly(2015, 10, 12);
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var scenario = ScenarioRepository.Has("some name");
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			var agent = PersonRepository.Has(new Contract("_"), ContractScheduleFactory.CreateWorkingWeekContractSchedule(),
+				new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
+			agent.Period(firstDay).RuleSetBag = new RuleSetBag(new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
+				new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId())));
+
+			foreach (var dayTemplate in skill.WorkloadCollection.First().TemplateWeekCollection.Values)
+			{
+				if (dayTemplate.DayOfWeek == DayOfWeek.Monday || dayTemplate.DayOfWeek == DayOfWeek.Sunday || dayTemplate.DayOfWeek == DayOfWeek.Saturday)
+				{
+					dayTemplate.Close();
+				}
+			}
+
+			PersonAbsenceRepository.Has(new PersonAbsence(agent, scenario, new AbsenceLayer(new Absence { InContractTime = true },
+					firstDay.ToDateTimePeriod(new TimePeriod(8, 16), TimeZoneInfo.Utc))));
+
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 0, 1, 1, 1, 1, 0, 0));
+			var dayOffTemplate = new DayOffTemplate(new Description("_default")).WithId();
+			DayOffTemplateRepository.Add(dayOffTemplate);
+			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			{
+				DayOffTemplate = dayOffTemplate,
+				ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
+				UseBlock = true,
+				BlockSameShift = true,
+				BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod,
+				UseAverageShiftLengths = true
+			});
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
+
+			Target.DoScheduling(planningPeriod.Id.Value);
+
+
+			var assignments = AssignmentRepository.Find(new[] { agent }, period, scenario);
+			assignments.Count.Should().Be.EqualTo(6);
+		}
+
+		[Test]
+		public void ShouldBePossibleToScheduleBlockBetweenDaysOffSameShiftWhenSkillIsClosedOneDay()
+		{
+			var firstDay = new DateOnly(2015, 10, 12);
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var scenario = ScenarioRepository.Has("some name");
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			var agent = PersonRepository.Has(new Contract("_"), ContractScheduleFactory.CreateWorkingWeekContractSchedule(),
+				new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
+			agent.Period(firstDay).RuleSetBag = new RuleSetBag(new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
+				new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId())));
+
+			foreach (var dayTemplate in skill.WorkloadCollection.First().TemplateWeekCollection.Values)
+			{
+				if (dayTemplate.DayOfWeek == DayOfWeek.Monday || dayTemplate.DayOfWeek == DayOfWeek.Sunday || dayTemplate.DayOfWeek == DayOfWeek.Saturday)
+				{
+					dayTemplate.Close();
+				}
+			}
+
+			PersonAbsenceRepository.Has(new PersonAbsence(agent, scenario, new AbsenceLayer(new Absence { InContractTime = true },
+					firstDay.ToDateTimePeriod(new TimePeriod(8, 16), TimeZoneInfo.Utc))));
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 0, 1, 1, 1, 1, 0, 0));
+			var dayOffTemplate = new DayOffTemplate(new Description("_default")).WithId();
+			DayOffTemplateRepository.Add(dayOffTemplate);
+			PersonAssignmentRepository.Has(agent, scenario, dayOffTemplate,firstDay.AddDays(-1));
+			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			{
+				DayOffTemplate = dayOffTemplate,
+				ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
+				UseBlock = true,
+				BlockSameShift = true,
+				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff,
+				UseAverageShiftLengths = true
+			});
+			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
+
+			Target.DoScheduling(planningPeriod.Id.Value);
+
+			var assignments = AssignmentRepository.Find(new[] { agent }, period, scenario);
+			assignments.Count.Should().Be.EqualTo(6);
+		}
+
+
 
 		public TeamBlockSchedulingTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerLessResourcesXXL74915) : base(seperateWebRequest, resourcePlannerLessResourcesXXL74915)
 		{

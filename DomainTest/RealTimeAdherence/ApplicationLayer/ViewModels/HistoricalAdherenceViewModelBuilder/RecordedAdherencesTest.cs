@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -23,8 +24,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 			Now.Is("2018-01-10 15:00");
 			var person = Guid.NewGuid();
 			Database
-				.WithAdherenceOut(person, "2018-01-10 08:05")
-				.WithAdherenceIn(person, "2018-01-10 08:15");
+				.WithHistoricalStateChange(person, "2018-01-10 08:05", Adherence.Out)
+				.WithHistoricalStateChange(person, "2018-01-10 08:15", Adherence.In);
 
 			var data = Target.Build(person);
 
@@ -38,8 +39,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 			Now.Is("2018-02-13 15:00");
 			var person = Guid.NewGuid();
 			Database
-				.WithAdherenceOut(person, "2018-02-13 08:05")
-				.WithAdherenceIn(person, "2018-02-13 08:15")
+				.WithHistoricalStateChange(person, "2018-02-13 08:05", Adherence.Out)
+				.WithHistoricalStateChange(person, "2018-02-13 08:15", Adherence.In)
 				.WithApprovedPeriod(person, "2018-02-13 08:05", "2018-02-13 08:15");
 
 			var data = Target.Build(person);

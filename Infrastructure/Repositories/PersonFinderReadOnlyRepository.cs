@@ -323,7 +323,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public void FindPeople(IPeoplePersonFinderSearchCriteria personFinderSearchCriteria)
 		{
-			personFinderSearchCriteria.TotalRows = 0;
 			int cultureId = Domain.Security.Principal.TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.LCID;
 			if (personFinderSearchCriteria.TerminalDate < new DateOnly(1753, 1, 1))
 				personFinderSearchCriteria.TerminalDate = new DateOnly(1753, 1, 1);
@@ -345,13 +344,39 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetReadOnly(true)
 				.List<IPersonFinderDisplayRow>();
 
-			var row = 0;
-			foreach (var personFinderDisplayRow in result)
-			{
-				personFinderSearchCriteria.TotalRows = personFinderDisplayRow.TotalCount;
-				personFinderSearchCriteria.SetRow(row, personFinderDisplayRow);
-				row++;
-			}
+			personFinderSearchCriteria.SetRows(result.ToList());
+			personFinderSearchCriteria.TotalRows = personFinderSearchCriteria.DisplayRows.FirstOrDefault()?.TotalCount ?? 0;
+		}
+
+		public void FindPeopleWithDataPermission(IPeoplePersonFinderSearchWithPermissionCriteria personFinderSearchCriteria)
+		{
+			int cultureId = Domain.Security.Principal.TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.LCID;
+			if (personFinderSearchCriteria.TerminalDate < new DateOnly(1753, 1, 1))
+				personFinderSearchCriteria.TerminalDate = new DateOnly(1753, 1, 1);
+
+			var uow = _currentUnitOfWork.Current();
+			var result = ((NHibernateUnitOfWork)uow).Session.CreateSQLQuery(
+					"exec [ReadModel].[PersonFinderWithDataPermission] @search_string=:search_string, @search_type=:search_type, "
+					+ "@leave_after=:leave_after, @start_row =:start_row, @end_row=:end_row, @order_by=:order_by, "
+					+ "@sort_direction=:sort_direction, @culture=:culture, " 
+					+ "@perm_date=:perm_date, @perm_userid=:perm_userid, @perm_foreignId=:perm_foreignId")
+				.SetString("search_string", personFinderSearchCriteria.SearchValue)
+				.SetString("search_type", Enum.GetName(typeof(PersonFinderField), personFinderSearchCriteria.Field))
+				.SetDateOnly("leave_after", personFinderSearchCriteria.TerminalDate)
+				.SetInt32("start_row", personFinderSearchCriteria.StartRow)
+				.SetInt32("end_row", personFinderSearchCriteria.EndRow)
+				.SetInt32("order_by", personFinderSearchCriteria.SortColumn)
+				.SetInt32("sort_direction", personFinderSearchCriteria.SortDirection)
+				.SetInt32("culture", cultureId)
+				.SetDateOnly("perm_date", personFinderSearchCriteria.PermissionDate)
+				.SetGuid("perm_userid", personFinderSearchCriteria.PermissionUserId)
+				.SetString("perm_foreignId", personFinderSearchCriteria.PermissionAppFuncForeignId)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(PersonFinderDisplayRow)))
+				.SetReadOnly(true)
+				.List<IPersonFinderDisplayRow>();
+
+			personFinderSearchCriteria.SetRows(result.ToList());
+			personFinderSearchCriteria.TotalRows = personFinderSearchCriteria.DisplayRows.FirstOrDefault()?.TotalCount ?? 0;
 		}
 
 		public void UpdateFindPerson(ICollection<Guid> ids)
@@ -437,7 +462,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	}
 	public class PeoplePersonFinderSearchCriteria : IPeoplePersonFinderSearchCriteria
 	{
-		private readonly IList<IPersonFinderDisplayRow> _displayRows;
+		private List<IPersonFinderDisplayRow> _displayRows;
 
 		public PeoplePersonFinderSearchCriteria(PersonFinderField field, string searchValue, int pageSize,
 			DateOnly terminalDate, int sortColumn, int sortDirection)
@@ -445,8 +470,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			Field = field;
 			SearchValue = searchValue;
 			PageSize = pageSize;
-			_displayRows =
-				Enumerable.Range(0, pageSize).Select<int, IPersonFinderDisplayRow>(i => new PersonFinderDisplayRow()).ToList();
+			_displayRows = new List<IPersonFinderDisplayRow>(); //Enumerable.Range(0, pageSize).Select<int, IPersonFinderDisplayRow>(i => new PersonFinderDisplayRow()).ToList();
 			TerminalDate = terminalDate;
 			SortColumn = sortColumn;
 			SortDirection = sortDirection;
@@ -480,18 +504,43 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public int EndRow => StartRow + PageSize;
 
-		public void SetRow(int rowNumber, IPersonFinderDisplayRow theRow)
+		public void SetRow(IPersonFinderDisplayRow theRow)
 		{
-			if (rowNumber >= _displayRows.Count)
-				return;
-			_displayRows[rowNumber] = theRow;
+			_displayRows.Add(theRow);
 		}
 
 		public int SortColumn { get; set; }
 		public int SortDirection { get; set; }
+
+		public void SetRows(IEnumerable<IPersonFinderDisplayRow> rows)
+		{
+			_displayRows.AddRange(rows);
+		}
 	}
 
-	
+	public class PeoplePersonFinderSearchWithPermissionCriteria : PeoplePersonFinderSearchCriteria, IPeoplePersonFinderSearchWithPermissionCriteria
+	{
+		public PeoplePersonFinderSearchWithPermissionCriteria(
+			PersonFinderField field, 
+			string searchValue, 
+			int currentPage,
+			int pageSize, 
+			DateOnly terminalDate, 
+			int sortColumn, 
+			int sortDirection, 
+			DateOnly permissionDate, 
+			Guid permissionUserId, 
+			string permissionAppFuncForeignId) : 
+				base(field, searchValue, pageSize, terminalDate, sortColumn, sortDirection)
+		{
+			this.CurrentPage = currentPage;
+			this.PermissionDate = permissionDate;
+			this.PermissionUserId = permissionUserId;
+			this.PermissionAppFuncForeignId = permissionAppFuncForeignId;
+		}
 
-	
+		public DateOnly PermissionDate { get; set; }
+		public Guid PermissionUserId { get; set; }
+		public string PermissionAppFuncForeignId { get; set; }
+	}
 }

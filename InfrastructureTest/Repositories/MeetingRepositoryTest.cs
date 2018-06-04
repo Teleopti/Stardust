@@ -40,12 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(_attendee1);
             PersistAndRemoveFromUnitOfWork(_attendee2);
         }
-
-        /// <summary>
-        /// Creates an aggregate using the Bu of logged in user.
-        /// Should be a "full detailed" aggregate
-        /// </summary>
-        /// <returns></returns>
+		
         protected override IMeeting CreateAggregateWithCorrectBusinessUnit()
         {
             IMeetingPerson meetingPerson1 = new MeetingPerson(_attendee1, true);
@@ -65,11 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             return meeting;
         }
-
-        /// <summary>
-        /// Verifies the aggregate graph properties.
-        /// </summary>
-        /// <param name="loadedAggregateFromDatabase">The loaded aggregate from database.</param>
+		
         protected override void VerifyAggregateGraphProperties(IMeeting loadedAggregateFromDatabase)
         {
             IMeeting org = CreateAggregateWithCorrectBusinessUnit();
@@ -113,10 +104,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyFindByPersonsPeriodScenario()
         {
-            ICollection<IMeeting> meetingList;
-            IMeeting meeting = CreateAggregateWithCorrectBusinessUnit();
-            IPerson personNotInMeeting = PersonFactory.CreatePerson("c");
-            IList<IPerson> persons = new List<IPerson>();
+			var meeting = CreateAggregateWithCorrectBusinessUnit();
+            var personNotInMeeting = PersonFactory.CreatePerson("c");
+            var persons = new List<IPerson>();
 
             persons.Add(_attendee1);
             persons.Add(_attendee2);
@@ -124,8 +114,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(personNotInMeeting);
             PersistAndRemoveFromUnitOfWork(meeting);
 
-            MeetingRepository meetingRepository = new MeetingRepository(CurrUnitOfWork);
-            meetingList = meetingRepository.Find(persons, new DateOnlyPeriod(2008, 1, 1, 2009, 1, 2), _scenario);
+            var meetingRepository = new MeetingRepository(CurrUnitOfWork);
+            var meetingList = meetingRepository.Find(persons, new DateOnlyPeriod(2008, 1, 1, 2009, 1, 2), _scenario);
             Assert.AreEqual(1, meetingList.Count);
             Assert.IsTrue(LazyLoadingManager.IsInitialized(meetingList.First().Organizer));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(meetingList.First().Organizer.Name));
@@ -134,9 +124,53 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             persons.Add(personNotInMeeting);
             meetingList = meetingRepository.Find(persons, new DateOnlyPeriod(2008, 1, 1, 2009, 1, 2), _scenario);
             Assert.IsTrue(meetingList.Count == 0);
-        }
+		}
 
-        [Test]
+		[Test]
+		public void VerifyFindByPersonsDifferentPeriodScenario()
+		{
+			var meeting = CreateAggregateWithCorrectBusinessUnit();
+			var personNotInMeeting = PersonFactory.CreatePerson("c");
+			var persons = new List<IPerson>();
+
+			persons.Add(_attendee1);
+			persons.Add(_attendee2);
+
+			PersistAndRemoveFromUnitOfWork(personNotInMeeting);
+			PersistAndRemoveFromUnitOfWork(meeting);
+
+			var meetingRepository = new MeetingRepository(CurrUnitOfWork);
+			var meetingList = meetingRepository.Find(persons, new DateOnlyPeriod(2008, 1, 1, 2009, 1, 2), _scenario);
+			Assert.AreEqual(1, meetingList.Count);
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(meetingList.First().Organizer));
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(meetingList.First().Organizer.Name));
+			
+			meetingList = meetingRepository.Find(persons, new DateOnlyPeriod(2009, 1, 1, 2009, 1, 2), _scenario);
+			Assert.IsTrue(meetingList.Count == 0);
+		}
+
+
+		[Test]
+		public void VerifyFindByOrganizationPeriodScenario()
+		{
+			var meeting = CreateAggregateWithCorrectBusinessUnit();
+			var personNotInMeeting = PersonFactory.CreatePerson("c");
+			var persons = new List<IPerson> {_organizer};
+
+			PersistAndRemoveFromUnitOfWork(personNotInMeeting);
+			PersistAndRemoveFromUnitOfWork(meeting);
+
+			var meetingRepository = new MeetingRepository(CurrUnitOfWork);
+			var meetingList = meetingRepository.Find(persons, new DateOnlyPeriod(2008, 1, 1, 2009, 1, 2), _scenario);
+			Assert.AreEqual(1, meetingList.Count);
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(meetingList.First().Organizer));
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(meetingList.First().Organizer.Name));
+			
+			meetingList = meetingRepository.Find(persons, new DateOnlyPeriod(2009, 1, 1, 2009, 1, 2), _scenario);
+			Assert.IsTrue(meetingList.Count == 0);
+		}
+
+		[Test]
         public void VerifyChangeRecurringType()
         {
             IMeeting meeting = CreateAggregateWithCorrectBusinessUnit();

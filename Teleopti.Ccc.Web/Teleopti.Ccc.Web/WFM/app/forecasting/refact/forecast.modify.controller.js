@@ -1,284 +1,385 @@
 (function() {
-  'use strict';
+	'use strict';
 
-  angular
-  .module('wfm.forecasting')
-  .controller('ForecastModController', ForecastModCtrl);
+	angular.module('wfm.forecasting').controller('ForecastModController', ForecastModCtrl);
 
-  ForecastModCtrl.$inject = ['forecastingService', '$stateParams', '$window', 'NoticeService', '$translate'];
+	ForecastModCtrl.$inject = ['forecastingService', '$stateParams', '$window', 'NoticeService', '$translate', '$state', '$scope'];
 
-  function ForecastModCtrl(forecastingService, $stateParams, $window, NoticeService, $translate) {
-    var vm = this;
+	function ForecastModCtrl(forecastingService, $stateParams, $window, NoticeService, $translate, $state, $scope) {
+		var vm = this;
 
-    var storage = {};
-    vm.loadChart = loadChart;
-    vm.pointClick = pointClick;
-    vm.selectedDayCount = [];
-    vm.modifyPanelHelper = modifyPanelHelper;
-    vm.campaignPanel = false;
-    vm.overridePanel = false;
-    vm.selectedScenario = null;
-    vm.forecastPeriod = {
-      startDate: moment().utc(),
-      endDate: moment().utc().add(6, 'months')
-    };
+		var storage = {};
+		vm.loadChart = loadChart;
+		vm.pointClick = pointClick;
+		vm.selectedDayCount = [];
+		vm.modifyPanelHelper = modifyPanelHelper;
+		vm.campaignPanel = false;
+		vm.overridePanel = false;
+		vm.selectedScenario = null;
+		vm.forecastPeriod = {
+			startDate: moment()
+			.utc()
+			.add(1, 'days')
+			.toDate(),
+			endDate: moment()
+			.utc()
+			.add(6, 'months')
+			.toDate()
+		};
+		vm.savingToScenario = false;
 
-    vm.applyOverride = applyOverride;
-    vm.applyCampaign = applyCampaign;
-    vm.clearCampaign = clearCampaign;
-    vm.clearOverride = clearOverride;
-    vm.updateCampaignPreview = updateCampaignPreview;
-    vm.getWorkloadForecastData = getWorkloadForecastData;
-    vm.changeScenario = changeScenario;
-    vm.forecastWorkload = forecastWorkload;
-    vm.loadChart = loadChart;
-    vm.exportToFile = exportToFile;
+		vm.applyOverride = applyOverride;
+		vm.applyCampaign = applyCampaign;
+		vm.clearCampaign = clearCampaign;
+		vm.clearOverride = clearOverride;
+		vm.updateCampaignPreview = updateCampaignPreview;
+		vm.getWorkloadForecastData = getWorkloadForecastData;
+		vm.changeScenario = changeScenario;
+		vm.forecastWorkload = forecastWorkload;
+		vm.loadChart = loadChart;
+		vm.applyWipToScenario = applyWipToScenario;
+		vm.exportToFile = exportToFile;
 
-    vm.isForecastRunning = false;
-    vm.overrideStatus = {
-      tasks: false,
-      talkTime: false,
-      acw: false
-    };
+		vm.isForecastRunning = false;
+		vm.overrideStatus = {
+			tasks: false,
+			talkTime: false,
+			acw: false
+		};
 
-    (function init() {
-      manageLocalStorage();
-      getScenarios();
-    })();
+		(function init() {
+			manageLocalStorage();
+			getScenarios();
+		})();
 
-    function resetForms() {
-      vm.campaignPercentage = null;
-    }
+		function resetForms() {
+			vm.campaignPercentage = null;
+		}
 
-    function loadChart() {
-      return;
-    }
+		function modifyPanelHelper(state) {
+			if (vm.selectedDayCount === null || vm.selectedDayCount.length < 1) {
+				vm.campaignPanel = false;
+				vm.overridePanel = false;
+				return;
+			}
+			if (state == true) {
+				//overide
+				vm.campaignPanel = false;
+				vm.overridePanel = true;
+			} else if (state == false) {
+				//campaign
+				vm.campaignPanel = true;
+				vm.overridePanel = false;
+			} else {
+				vm.campaignPanel = false;
+				vm.overridePanel = false;
+			}
+			resetForms();
+		}
 
-    function modifyPanelHelper(state) {
-      if (vm.selectedDayCount === null || vm.selectedDayCount.length<1) {
-        return;
-      }
-      if (state == true) {
-        //overide
-        vm.campaignPanel = false;
-        vm.overridePanel = true;
-      }
-      else if (state == false){
-        //campaign
-        vm.campaignPanel = true;
-        vm.overridePanel = false;
-      }
-      else{
-        vm.campaignPanel = false;
-        vm.overridePanel = false;
-      }
-      resetForms();
-    }
+		function clearCampaign() {
+			vm.campaignPercentage = 0;
+			applyCampaign();
+		}
 
-    function clearCampaign() {
-      vm.campaignPercentage = 0;
-      applyCampaign();
-    }
+		function updateCampaignPreview() {
+			vm.sumOfCallsForSelectedDays = (vm.selectedDayCount[0].value * (vm.campaignPercentage + 100) / 100).toFixed(
+				1
+			);
+		}
 
-    function updateCampaignPreview() {
-      vm.sumOfCallsForSelectedDays = (vm.selectedDayCount[0].value * (vm.campaignPercentage + 100) / 100).toFixed(1);
-    }
+		function applyCampaign() {
+			vm.modifyMessage = null;
+			vm.isForecastRunning = true;
+			forecastingService.campaign(
+				angular.toJson({
+					ForecastDays: vm.selectedWorkload.Days,
+					SelectedDays: vm.selectedDayCount,
+					WorkloadId: vm.selectedWorkload.Workload.Id,
+					ScenarioId: vm.selectedScenario.Id,
+					CampaignTasksPercent: vm.campaignPercentage / 100
+				}),
+				function(data, status, headers, config) {
+					vm.selectedWorkload.Days = data.ForecastDays;
+					vm.modifyMessage = data.WarningMessage;
+					vm.changesMade = true;
+					vm.isForecastRunning = false;
+				},
+				function(data, status, headers, config) {
+					vm.selectedWorkload.Days = data.ForecastDays;
+					vm.modifyMessage = data.WarningMessage;
+					vm.changesMade = true;
+					vm.isForecastRunning = false;
+				},
+				function() {
+					if (vm.modifyMessage) {
+						NoticeService.warning(vm.modifyMessage, 5000, true);
+					} else {
+						NoticeService.success('Applied campaign', 5000, true);
+					}
+					modifyPanelHelper();
+					vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
+				}
+			);
+		}
 
-    function applyCampaign() {
-      forecastingService.campaign(
-        angular.toJson(
-          {
-            Days: vm.selectedDayCount,
-            WorkloadId: vm.selectedWorkload.Workload.Id,
-            ScenarioId: vm.selectedScenario.Id,
-            CampaignTasksPercent: vm.campaignPercentage
-          }), function (data, status, headers, config) {
+		function checkData(data) {
+			if (data == null) {
+				return false;
+			} else {
+				return true;
+			}
+		}
 
-          }, function (data, status, headers, config) {
+		function applyOverride(form) {
+			vm.modifyMessage = null;
+			vm.isForecastRunning = true;
+			forecastingService.override(
+				angular.toJson({
+					SelectedDays: vm.selectedDayCount,
+					WorkloadId: vm.selectedWorkload.Workload.Id,
+					ScenarioId: vm.selectedScenario.Id,
+					OverrideTasks: form.overrideTasksValue,
+					OverrideAverageTaskTime: form.overrideTalkTimeValue,
+					OverrideAverageAfterTaskTime: form.overrideAfterCallWorkValue,
+					ShouldOverrideTasks: checkData(form.overrideTasksValue),
+					ShouldOverrideAverageTaskTime: checkData(form.overrideTalkTimeValue),
+					ShouldOverrideAverageAfterTaskTime: checkData(form.overrideAfterCallWorkValue),
+					ForecastDays: vm.selectedWorkload.Days
+				}),
+				function(data, status, headers, config) {
+					vm.selectedWorkload.Days = data.ForecastDays;
+					vm.modifyMessage = data.WarningMessage;
+					vm.changesMade = true;
+					vm.isForecastRunning = false;
+				},
+				function(data, status, headers, config) {
+					vm.selectedWorkload.Days = data.ForecastDays;
+					vm.modifyMessage = data.WarningMessage;
+					vm.changesMade = true;
+					vm.isForecastRunning = false;
+				},
+				function() {
+					if (vm.modifyMessage) {
+						NoticeService.warning(vm.modifyMessage, 5000, true);
+					} else {
+						NoticeService.success('Applied override', 5000, true);
+					}
 
-          }, function () {
-            NoticeService.success($translate.instant('CampaignValuesUpdated'), 5000, true);
-            modifyPanelHelper();
-            getWorkloadForecastData();
-          }
-        );
-      };
+					modifyPanelHelper();
+					vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
+				}
+			);
+		}
 
-      function checkData(data) {
-        if (data == null){
-          return false;
-        } else {
-          return true;
-        }
-      }
+		function clearOverride() {
+			vm.isForecastRunning = true;
+			forecastingService.override(
+				angular.toJson({
+					ForecastDays: vm.selectedWorkload.Days,
+					SelectedDays: vm.selectedDayCount,
+					WorkloadId: vm.selectedWorkload.Workload.Id,
+					ScenarioId: vm.selectedScenario.Id,
+					ShouldOverrideTasks: true,
+					ShouldOverrideAverageTaskTime: true,
+					ShouldOverrideAverageAfterTaskTime: true
+				}),
+				function(data, status, headers, config) {
+					vm.selectedWorkload.Days = data.ForecastDays;
+					vm.modifyMessage = data.WarningMessage;
+					vm.isForecastRunning = false;
+					vm.changesMade = true;
+				},
+				function(data, status, headers, config) {
+					vm.selectedWorkload.Days = data.ForecastDays;
+					vm.modifyMessage = data.WarningMessage;
+					vm.isForecastRunning = false;
+					vm.changesMade = true;
+				},
+				function() {
+					NoticeService.success('Override removed', 5000, true);
 
-      function applyOverride(form) {
-        forecastingService.override(angular.toJson(
-          {
-            Days: vm.selectedDayCount,
-            WorkloadId: vm.selectedWorkload.Workload.Id,
-            ScenarioId: vm.selectedScenario.Id,
-            OverrideTasks: form.overrideTasksValue,
-            OverrideTalkTime: form.overrideTalkTimeValue,
-            OverrideAfterCallWork: form.overrideAfterCallWorkValue,
-            ShouldSetOverrideTasks: checkData(form.overrideTasksValue),
-            ShouldSetOverrideTalkTime: checkData(form.overrideTalkTimeValue),
-            ShouldSetOverrideAfterCallWork: checkData(form.overrideAfterCallWorkValue)
-          }), function (data, status, headers, config) {
+					modifyPanelHelper();
+					vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
+				}
+			);
+		}
 
-          }, function (data, status, headers, config) {
+		function loadChart() {
+			return;
+		}
 
-          }, function () {
-            NoticeService.success($translate.instant('OverrideValuesUpdated'), 5000, true);
-            modifyPanelHelper();
-            getWorkloadForecastData();
-          })
-        };
+		function pointClick(days) {
+			vm.selectedDayCount = days;
+		}
 
-        function clearOverride() {
-          forecastingService.override(angular.toJson(
-            {
-              Days: vm.selectedDayCount,
-              WorkloadId: vm.selectedWorkload.Workload.Id,
-              ScenarioId: vm.selectedScenario.Id,
-              ShouldSetOverrideTasks: true,
-              ShouldSetOverrideTalkTime: true,
-              ShouldSetOverrideAfterCallWork: true
-            }), function (data, status, headers, config) {
+		function UniqueArraybyId(collection, keyname) {
+			var output = [],
+			keys = [];
 
-            }, function (data, status, headers, config) {
+			angular.forEach(collection, function(item) {
+				var key = item[keyname];
+				if (keys.indexOf(key) === -1) {
+					keys.push(key);
+					output.push(item);
+				}
+			});
+			return output;
+		}
 
-            }, function () {
-              NoticeService.success($translate.instant('OverrideValuesCleared'), 5000, true);
-              modifyPanelHelper();
-              getWorkloadForecastData();
-              // vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
-            })
-          };
+		function manageLocalStorage() {
+			vm.noWorkloadFound = null;
+			if (sessionStorage.currentForecastWorkload) {
+				vm.selectedWorkload = JSON.parse(sessionStorage.currentForecastWorkload);
+			} else {
+				vm.noWorkloadFound = true;
+			}
+		}
 
-          function loadChart() {
-            return;
-          }
+		function getScenarios() {
+			vm.scenarios = [];
+			forecastingService.scenarios.query().$promise.then(function(result) {
+				result.forEach(function(s) {
+					vm.scenarios.push(s);
+				});
+				changeScenario(vm.scenarios[0]);
+			});
+		}
 
-          function pointClick(days) {
-            vm.selectedDayCount = UniqueArraybyId(days ,"date");
-          }
+		function changeScenario(scenario) {
+			vm.selectedScenario = scenario;
+			getWorkloadForecastData();
+		}
 
-          function UniqueArraybyId(collection, keyname) {
-            var output = [],
-            keys = [];
+		function getWorkloadForecastData() {
+			vm.selectedWorkload.Days = [];
+			vm.isForecastRunning = true;
+			vm.scenarioNotForecasted = false;
 
-            angular.forEach(collection, function(item) {
-              var key = item[keyname];
-              if(keys.indexOf(key) === -1) {
-                keys.push(key);
-                output.push(item);
-              }
-            });
-            return output;
-          };
+			var resultStartDate = moment().utc();
+			var resultEndDate = moment(resultStartDate).add(6, 'months');
 
-          function manageLocalStorage() {
-            vm.selectedWorkload = JSON.parse(sessionStorage.currentForecastWorkload);
-          }
+			var wl = {
+				ForecastStart: vm.forecastPeriod.startDate,
+				ForecastEnd: vm.forecastPeriod.endDate,
+				WorkloadId: vm.selectedWorkload.Workload.Id,
+				ScenarioId: vm.selectedScenario.Id
+			};
 
-          function getScenarios() {
-            vm.scenarios = [];
-            forecastingService.scenarios.query().$promise.then(function (result) {
-              result.forEach(function(s) {
-                vm.scenarios.push(s);
-              });
-              changeScenario(vm.scenarios[0]);
-            });
-          }
+			forecastingService.result(
+				wl,
+				function(data, status, headers, config) {
+					vm.selectedWorkload.Days = data.ForecastDays;
+					vm.isForecastRunning = false;
+					vm.periodModal = false;
+					vm.scenarioNotForecasted = vm.selectedWorkload.Days.length === 0;
+				},
+				function(data, status, headers, config) {
+					vm.selectedWorkload.Days = data.ForecastDays;
+					vm.isForecastRunning = false;
+					vm.periodModal = false;
+					vm.scenarioNotForecasted = vm.selectedWorkload.Days.length === 0;
+				}
+			);
+		}
 
-          function changeScenario(scenario) {
-            vm.selectedScenario = scenario;
-            getWorkloadForecastData()
-          }
+		function forecastWorkload() {
+			vm.isForecastRunning = true;
+			var temp = {
+				WorkloadId: vm.selectedWorkload.Workload.Id,
+				ForecastMethodId: -1
+			};
 
-          function getWorkloadForecastData() {
-            vm.selectedWorkload.Days = [];
-            vm.isForecastRunning = true;
-            vm.scenarioNotForecasted = false;
+			forecastingService.forecast(
+				angular.toJson({
+					ForecastStart: vm.forecastPeriod.startDate,
+					ForecastEnd: vm.forecastPeriod.endDate,
+					Workload: temp,
+					ScenarioId: vm.selectedScenario.Id,
+					BlockToken: vm.blockToken,
+					IsLastWorkload: true
+				}),
+				function(data, status, headers, config) {
+					vm.isForecastRunning = false;
+					vm.forecastModal = false;
+					vm.selectedWorkload.Days = data.ForecastDays;
+					vm.scenarioNotForecasted = vm.selectedWorkload.Days.length === 0;
+				},
+				function(data, status, headers, config) {
+					vm.isForecastRunning = false;
+					vm.forecastModal = false;
+					vm.scenarioNotForecasted = vm.selectedWorkload.Days.length === 0;
+				}
+			);
+		}
 
-            var resultStartDate = moment().utc();
-            var resultEndDate = moment(resultStartDate).add(6, 'months');
+		function applyWipToScenario() {
+			vm.savingToScenario = true;
+			var tempForecastDays = vm.selectedWorkload.Days;
 
-            var wl = {
-              ForecastStart: resultStartDate.toDate(),
-              ForecastEnd: resultEndDate.toDate(),
-              WorkloadId: vm.selectedWorkload.Workload.Id,
-              ScenarioId: vm.selectedScenario.Id
-            };
+			forecastingService.applyToScenario(
+				angular.toJson({
+					WorkloadId: vm.selectedWorkload.Workload.Id,
+					ScenarioId: vm.selectedScenario.Id,
+					ForecastDays: tempForecastDays
+				}),
+				function(data, status, headers, config) {
+					vm.savingToScenario = false;
+					vm.changesMade = false;
+					getWorkloadForecastData();
+					NoticeService.success(vm.selectedScenario.Name + ' ' + 'scenario was updated', 5000, true);
+				},
+				function(data, status, headers, config) {
+					vm.savingToScenario = false;
+					vm.changesMade = false;
+					getWorkloadForecastData();
+				}
+			);
+		}
 
-            forecastingService.result(
-              wl,
-              function(data, status, headers, config) {
-                vm.selectedWorkload.Days = data.Days;
-                vm.isForecastRunning = false;
-                if (vm.selectedWorkload.Days.length === 0 ) {
-                  vm.scenarioNotForecasted = true;
-                }
-              },
-              function(data, status, headers, config) {
-                vm.selectedWorkload.Days = data.days;
-                vm.isForecastRunning = false;
-              }
-            )
-          }
+		function exportToFile() {
+			vm.isForecastRunning = true;
+			forecastingService.exportForecast(
+				angular.toJson({
+					ForecastStart: vm.forecastPeriod.startDate,
+					ForecastEnd: vm.forecastPeriod.endDate,
+					ScenarioId: vm.selectedScenario.Id,
+					SkillId: vm.selectedWorkload.SkillId,
+					WorkloadId: vm.selectedWorkload.Workload.Id
+				}),
+				function(data, status, headers, config) {
+					var blob = new Blob([data], {
+						type: headers['content-type']
+					});
+					var fileName =
+					moment(vm.forecastPeriod.startDate).format('YYYY-MM-DD') +
+					' - ' +
+					moment(vm.forecastPeriod.endDate).format('YYYY-MM-DD') +
+					'.xlsx';
+					saveAs(blob, fileName);
+					vm.isForecastRunning = false;
+					vm.exportModal = false;
+				},
+				function(data, status, headers, config) {
+					vm.isForecastRunning = false;
+				}
+			);
+		}
 
-          function forecastWorkload() {
-            vm.isForecastRunning = true;
-            var temp = {
-              WorkloadId: vm.selectedWorkload.Workload.Id,
-              ForecastMethodId: -1
-            }
+		vm.exitConfigMode = function() {
+			if (vm.stateName.length > 0) {
+				$state.go(vm.stateName);
+			} else {
+				$state.go($state.params.returnState);
+			}
+		};
+		$scope.$on('$stateChangeStart', function(event, next, current) {
+			if (vm.changesMade) {
+				event.preventDefault();
+				vm.stateName = next.name;
+				vm.closeConfirmation = true;
+			}
+		});
 
-            forecastingService.forecast(angular.toJson(
-              {
-                ForecastStart: vm.forecastPeriod.startDate,
-                ForecastEnd: vm.forecastPeriod.endDate,
-                Workloads: [temp],
-                ScenarioId: vm.selectedScenario.Id,
-                BlockToken: vm.blockToken,
-                IsLastWorkload: true
-              }), function(data, status, headers, config) {
-                vm.isForecastRunning = false;
-                vm.forecastModal = false;
-                vm.blockToken = data.BlockToken;
-                getWorkloadForecastData();
-              }, function(data, status, headers, config) {
-                vm.isForecastRunning = false;
-                vm.forecastModal = false;
-              });
-            }
-
-            function exportToFile() {
-              vm.isForecastRunning = true;
-              forecastingService.exportForecast(angular.toJson(
-                {
-                  ForecastStart: vm.forecastPeriod.startDate,
-                  ForecastEnd: vm.forecastPeriod.endDate,
-                  ScenarioId: vm.selectedScenario.Id,
-                  SkillId: vm.selectedWorkload.SkillId,
-                  WorkloadId: vm.selectedWorkload.Workload.Id
-                }), function (data, status, headers, config) {
-                  var blob = new Blob([data], {
-                    type: headers['content-type']
-                  });
-                  var fileName = moment(vm.forecastPeriod.startDate).format('YYYY-MM-DD') +
-                    ' - ' +
-                    moment(vm.forecastPeriod.endDate).format('YYYY-MM-DD') +
-                    '.xlsx';
-                  saveAs(blob, fileName);
-                  vm.isForecastRunning = false;
-                  vm.exportModal = false;
-                }, function(data, status, headers, config) {
-                  vm.isForecastRunning = false;
-                }
-              );
-            };
-
-          }
-        })();
+	}
+})();

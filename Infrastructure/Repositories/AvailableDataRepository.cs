@@ -47,36 +47,5 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
             return new List<IAvailableData>(CollectionHelper.ToDistinctGenericCollection<IAvailableData>(res[0]));
         }
-
-        public IAvailableData LoadAllCollectionsInAvailableData(IAvailableData availableData)
-        {
-            if (!UnitOfWork.Contains(availableData))
-                UnitOfWork.Reassociate(availableData);
-
-            if (!LazyLoadingManager.IsInitialized(availableData.AvailableBusinessUnits))
-                LazyLoadingManager.Initialize(availableData.AvailableBusinessUnits);
-            if (!LazyLoadingManager.IsInitialized(availableData.AvailableSites))
-                LazyLoadingManager.Initialize(availableData.AvailableSites);
-            if (!LazyLoadingManager.IsInitialized(availableData.AvailableTeams))
-                LazyLoadingManager.Initialize(availableData.AvailableTeams);
-
-            var businessUnitRepository = new BusinessUnitRepository(UnitOfWork);
-            foreach (IBusinessUnit businessUnit in availableData.AvailableBusinessUnits)
-            {
-                if (!UnitOfWork.Contains(businessUnit))
-                UnitOfWork.Reassociate(businessUnit);
-                businessUnitRepository.LoadHierarchyInformation(businessUnit);
-            }
-
-            foreach (ISite site in availableData.AvailableSites)
-            {
-                if (!UnitOfWork.Contains(site))
-                UnitOfWork.Reassociate(site);
-                if (!LazyLoadingManager.IsInitialized(site.TeamCollection))
-                    LazyLoadingManager.Initialize(site.TeamCollection);
-            }
-
-            return availableData;
-        }
     }
 }

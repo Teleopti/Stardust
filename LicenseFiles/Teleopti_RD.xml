@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <License>
   <CustomerName>Teleopti_RD</CustomerName>
-  <ExpirationDate>2018-06-07T16:39:21</ExpirationDate>
-  <ExpirationGracePeriod>P15D</ExpirationGracePeriod>
+  <ExpirationDate>2019-05-25T13:51:54</ExpirationDate>
+  <ExpirationGracePeriod>P5D</ExpirationGracePeriod>
   <MaxActiveAgents>15000</MaxActiveAgents>
-  <MaxActiveAgentsGrace>5</MaxActiveAgentsGrace>
+  <MaxActiveAgentsGrace>10</MaxActiveAgentsGrace>
   <MajorVersion>8</MajorVersion>
   <AgentsOrSeats>0</AgentsOrSeats>
   <MaxSeats>15000</MaxSeats>
@@ -22,7 +22,6 @@
     <CalendarLink>true</CalendarLink>
     <PerformanceManager>true</PerformanceManager>
     <PayrollIntegration>true</PayrollIntegration>
-    <MyTeam>true</MyTeam>
     <VNext>true</VNext>
     <Outbound>true</Outbound>
     <OvertimeRequests>true</OvertimeRequests>
@@ -39,9 +38,9 @@
           <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
         </Transforms>
         <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <DigestValue>9JtEKBzzHx3+P226bJNzDaaHKzE=</DigestValue>
+        <DigestValue>QgpLYqfVWgIl12C1lEVSLZGvqqI=</DigestValue>
       </Reference>
     </SignedInfo>
-    <SignatureValue>yWt4MlLHgU4ibdmZF7pNB27q+y560eKySci2JOOU/l9F4gtLKu3SNdCH+/bA5BXJzYFvkwgpWeZBUsma4FrI5sg/gOevIdT3SkLatfwwD1oQDWiRlq1MQiG8x7eqiisylP/GMnroU8NrFIOxYrSfREf/vneuTlEpSQyL85ve9+4=</SignatureValue>
+    <SignatureValue>klnRKUPP4LbxY0GyH1U9mEfpS/jzWbg+Xxo9zohOovvpxTGvTfksvWIcttr8JiKMJ2tOh2a9UzwcNRuqPlZKYQj3ykcMjGXkQA6JsbjkDysRm1N9RnoyDX5yrgNpeiPTuRZjLJUr8u1rVMaZ2MUwo0CZFo37Uuqt26y2c68BIlg=</SignatureValue>
   </Signature>
 </License>

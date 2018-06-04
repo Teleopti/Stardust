@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 {
-    public class PreferenceAbsenceChecker : IPreferenceAbsenceChecker
+    public class PreferenceAbsenceChecker
     {
         private readonly IScheduleDay _scheduleDay;
 

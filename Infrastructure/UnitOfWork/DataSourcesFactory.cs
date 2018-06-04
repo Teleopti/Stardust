@@ -5,10 +5,14 @@ using NHibernate.Cfg;
 using NHibernate.Dialect;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Common.Logging;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Analytics;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErrorHandling;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Environment = NHibernate.Cfg.Environment;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
@@ -17,6 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	{
 		private readonly IEnversConfiguration _enversConfiguration;
 		private readonly UnitOfWorkFactoryFactory _unitOfWorkFactoryFactory;
+		private readonly IToggleManager _toggles;
 		private readonly IDataSourceConfigurationSetter _dataSourceConfigurationSetter;
 		private readonly INHibernateConfigurationCache _nhibernateConfigurationCache;
 
@@ -26,12 +31,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			IEnversConfiguration enversConfiguration,
 			IDataSourceConfigurationSetter dataSourceConfigurationSetter,
 			INHibernateConfigurationCache nhibernateConfigurationCache,
-			UnitOfWorkFactoryFactory unitOfWorkFactoryFactory)
+			UnitOfWorkFactoryFactory unitOfWorkFactoryFactory,
+			IToggleManager toggles)
 		{
 			_enversConfiguration = enversConfiguration;
 			_dataSourceConfigurationSetter = dataSourceConfigurationSetter;
 			_nhibernateConfigurationCache = nhibernateConfigurationCache;
 			_unitOfWorkFactoryFactory = unitOfWorkFactoryFactory;
+			_toggles = toggles;
 		}
 
 		public IDataSource Create(IDictionary<string, string> applicationNhibConfiguration, string statisticConnectionString)
@@ -142,20 +149,23 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			// 2018-01-26
 			// Putting down a one beer bet that this will be here on 2020-01-01 // LevelUp
 			var statCfg = new Configuration()
-					.SetProperty(Environment.ConnectionString, connectionString)
-					.SetProperty(Environment.ConnectionProvider, "NHibernate.Connection.DriverConnectionProvider")
-					.SetProperty(Environment.ConnectionDriver, typeof(SqlAzureClientDriverWithLogRetries).AssemblyQualifiedName)
-					.SetProperty(Environment.Dialect, typeof(MsSql2008Dialect).AssemblyQualifiedName)
-					.SetProperty(Environment.SessionFactoryName, tenant + "_" + AnalyticsDataSourceName)
-					.SetProperty(Environment.SqlExceptionConverter, typeof(SqlServerExceptionConverter).AssemblyQualifiedName)
-				;
+				.SetProperty(Environment.ConnectionString, connectionString)
+				.SetProperty(Environment.ConnectionProvider, "NHibernate.Connection.DriverConnectionProvider")
+				.SetProperty(Environment.ConnectionDriver,
+					_toggles.IsEnabled(Domain.FeatureFlags.Toggles.Tech_Moving_ResilientConnectionLogic)
+						? typeof(ResilientSql2008ClientDriver).AssemblyQualifiedName
+						: typeof(SqlAzureClientDriverWithLogRetries).AssemblyQualifiedName)
+				.SetProperty(Environment.Dialect, typeof(MsSql2008Dialect).AssemblyQualifiedName)
+				.SetProperty(Environment.SessionFactoryName, tenant + "_" + AnalyticsDataSourceName)
+				.SetProperty(Environment.SqlExceptionConverter, typeof(SqlServerExceptionConverter).AssemblyQualifiedName);
+
 			_dataSourceConfigurationSetter.AddApplicationNameToConnectionString(statCfg);
 			return statCfg;
 		}
 
 		private void setDefaultValuesOnApplicationConf(Configuration cfg)
 		{
-			_dataSourceConfigurationSetter.AddDefaultSettingsTo(cfg);
+			_dataSourceConfigurationSetter.AddDefaultSettingsTo(cfg, _toggles.IsEnabled(Toggles.Tech_Moving_ResilientConnectionLogic));
 			_enversConfiguration.Configure(cfg);
 		}
 	}

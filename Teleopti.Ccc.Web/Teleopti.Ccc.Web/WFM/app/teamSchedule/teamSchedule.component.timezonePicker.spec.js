@@ -1,13 +1,11 @@
-﻿describe('timezonePicker component tests', function() {
-
+﻿describe('<timezonePicker component tests>', function () {
 	var $componentController,
 		$rootScope,
 		$compile;
 
-
 	var mockCurrentUserInfo = {
 		CurrentUserInfo: function () {
-			return { DefaultTimeZone: "Asia/Hong_Kong" };
+			return { DefaultTimeZone: "Asia/Hong_Kong", DefaultTimeZoneName: '(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi' };
 		}
 	};
 
@@ -27,102 +25,74 @@
 		$compile = _$compile_;
 	}));
 
-	it('should expose default timezone to be currentUserInfo timezone', function() {
-		var bindings = { availableTimezones: [], onPick: function () { } };
-		var ctrl = $componentController('timezonePicker', null, bindings);
-		ctrl.$onInit();
-		expect(ctrl.selectedTimezone).toEqual("Asia/Hong_Kong");
-	});
-
-	it("should populate timezone list", inject(function () {
-		var bindings = {
-			 availableTimezones: [
-			 {
-			 	IanaId: "Asia/Shanghai",
-			 	DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
-			 }, {
-			 	IanaId: "Europe/Berlin",
-			 	DisplayName: "(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna"
-			 }],
-			 onPick: function () { }
-		};
-		var ctrl = $componentController('timezonePicker', null, bindings);
-		ctrl.$onInit();
-	
-		expect(ctrl.timezoneList.length).toEqual(3);
-		expect(ctrl.timezoneList[0].ianaId).toEqual("Asia/Hong_Kong");
-		expect(ctrl.timezoneList[1].ianaId).toEqual("Asia/Shanghai");
-		expect(ctrl.timezoneList[2].ianaId).toEqual("Europe/Berlin");
-	}));
-
-	it("should extract the right abbreviation of the selected time zone ", inject(function () {
-		var bindings = {
-			availableTimezones: [
-			{
-				IanaId: "Asia/Shanghai",
-				DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
-			}, {
-				IanaId: "Europe/Berlin",
-				DisplayName: "(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna"
-			}],
-			onPick: function () { }
-		};
-		var ctrl = $componentController('timezonePicker', null, bindings);
-		ctrl.$onInit();
-
-		ctrl.selectedTimezone = "Asia/Shanghai";
-		var displayName = ctrl.shortDisplayNameOfTheSelected();
-		expect(displayName).toEqual("UTC+08:00");		
-	}));
-
-	it("Should trigger onPick when selection changes", function () {
-		var triggeredTimezone;
-		var bindings = {
-			availableTimezones: [
-			{
-				IanaId: "Asia/Shanghai",
-				DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
-			}, {
-				IanaId: "Europe/Berlin",
-				DisplayName: "(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna"
-			}],
-			onPick: function (input) {				
-				triggeredTimezone = input.timezone;
-			}
-		};
-		var ctrl = $componentController('timezonePicker', null, bindings);
-		ctrl.$onInit();
-
-		ctrl.selectedTimezone = "Asia/Shanghai";
-		ctrl.onSelectionChanged();
-		expect(triggeredTimezone).toEqual("Asia/Shanghai");
-	});
-
-	it("should list timezone order by displayName", function () {
+	it("should list timezone order by display name", function () {
 		var panel = setUp();
 		var timezoneSelect = panel[0].querySelectorAll("md-select");
 		var timezoneOptions = panel[0].querySelectorAll("md-option");
+		var selectionDisplayValue = panel[0].querySelector("md-select-value");
 
 		expect(timezoneSelect.length).toEqual(1);
-		expect(timezoneOptions.length).toEqual(3);
+		expect(timezoneOptions.length).toEqual(2);
 		expect(timezoneOptions[0].innerText.trim()).toEqual("(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna");
 		expect(timezoneOptions[1].innerText.trim()).toEqual("(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi");
-		expect(timezoneOptions[2].innerText.trim()).toEqual("");
-		
+		expect(selectionDisplayValue.innerText).toEqual('UTC+08:00');
 	});
 
-	function setUp() {
-		var scope = $rootScope.$new();
-		var html = '<timezone-picker class="timezone-picker" on-pick="onPick" available-timezones="availableTimezones"></timezone-picker> ';
-		scope.availableTimezones = [
+	it('should include current user timezone if avaliable timezones without it', function () {
+		var panel = setUp(null, [
 			{
-				IanaId: "Asia/Shanghai",
+				IanaId: "America/New_York",
+				DisplayName: "(UTC-05:00) Estern Time"
+			}
+		]);
+		var timezoneOptions = panel[0].querySelectorAll("md-option");
+		expect(timezoneOptions[0].innerText.trim()).toEqual("(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi");
+		expect(timezoneOptions[1].innerText.trim()).toEqual("(UTC-05:00) Estern Time");
+	});
+
+	it('should expose default timezone to be currentUserInfo timezone', function () {
+		var panel = setUp();
+		var selectedOption = panel[0].querySelector('md-option[selected] .md-text');
+		expect(selectedOption.innerText).toEqual('(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi');
+	});
+
+	it('should pre selected the timezone', function () {
+		var panel = setUp('Europe/Berlin');
+
+		var selectedOption = panel[0].querySelector('md-option[selected] .md-text');
+		expect(selectedOption.innerText).toEqual('(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna');
+	});
+
+
+	it("should update ngModel value when selection changed", function () {
+		var panel = setUp();
+		var timezoneOptions = panel[0].querySelectorAll("md-option");
+		timezoneOptions[0].click();
+
+		var scope = panel.isolateScope().$parent;
+		expect(scope.timezone).toEqual('Europe/Berlin');
+	});
+
+	it('should set selectedTimezone to current user timezone if avaliable timezones does not contain the selected timezone', function () {
+		var panel = setUp('America/New_York');
+		var selectedOption = panel[0].querySelector('md-option[selected] .md-text');
+		expect(selectedOption.innerText).toEqual('(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi');
+	});
+
+
+	function setUp(timezone, availableTimezones) {
+		var scope = $rootScope.$new();
+		var html = '<timezone-picker class="timezone-picker" ng-model="timezone" available-timezones="availableTimezones"></timezone-picker> ';
+		scope.availableTimezones = availableTimezones || [
+			{
+				IanaId: "Asia/Hong_Kong",
 				DisplayName: "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi"
 			}, {
 				IanaId: "Europe/Berlin",
 				DisplayName: "(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna"
-			}];
-		scope.onPick = {};
+			}
+		];
+		scope.timezone = timezone;
 
 		var element = $compile(html)(scope);
 		scope.$apply();

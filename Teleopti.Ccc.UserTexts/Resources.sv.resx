@@ -15471,4 +15471,40 @@ Applikationen kommer nu att stängas. </value>
   <data name="NoAgentsWithIssuesFound" xml:space="preserve">
     <value>Ingen agent med problem hittades</value>
   </data>
+  <data name="OvertimeStaffingCheckMethodSetting" xml:space="preserve">
+    <value>Metod för bemanningskontroll vid övertid:</value>
+  </data>
+  <data name="IntervalStartMustBeTodaysDateOrLater" xml:space="preserve">
+    <value>Intervallets startdag måste vara idag eller senare.</value>
+  </data>
+  <data name="DescriptionOfMaximumWorkdayRule" xml:space="preserve">
+    <value>Max antal sammanhängande dagar utan fridag</value>
+  </data>
+  <data name="ImportBpoImportInformationAllSkills" xml:space="preserve">
+    <value>alla kompetenser</value>
+  </data>
+  <data name="ImportBpoImportInformationHeader" xml:space="preserve">
+    <value>Importhistorik för:</value>
+  </data>
+  <data name="ImportBpoImportInformationTooltipAt" xml:space="preserve">
+    <value>vid</value>
+  </data>
+  <data name="ImportBpoImportInformationTooltipImported" xml:space="preserve">
+    <value>importerad</value>
+  </data>
+  <data name="ImportBpoFileImportDateInformation" xml:space="preserve">
+    <value>Alla datum är i UTC</value>
+  </data>
+  <data name="ImportBpoFileImportInfoHeader" xml:space="preserve">
+    <value>BPO - filimportinformation</value>
+  </data>
+  <data name="BusinessRuleMaximumWorkdayErrorMessage" xml:space="preserve">
+    <value>{0} kan inte arbeta {1} dagar i följd då maxantalet är {2}.</value>
+  </data>
+  <data name="BusinessRuleMaximumWorkdayFriendlyName" xml:space="preserve">
+    <value>För många arbetsdagar i följd. </value>
+  </data>
+  <data name="ImportBpoImportedAt" xml:space="preserve">
+    <value>importerad</value>
+  </data>
 </root>

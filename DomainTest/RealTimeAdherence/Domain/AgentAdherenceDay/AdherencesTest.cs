@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -26,8 +27,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 			Now.Is("2016-10-10 15:00");
 			var person = Guid.NewGuid();
 			Database
-				.WithAdherenceOut(person, "2016-10-10 08:05")
-				.WithAdherenceIn(person, "2016-10-10 08:15");
+				.WithHistoricalStateChange(person, "2016-10-10 08:05", Adherence.Out)
+				.WithHistoricalStateChange(person, "2016-10-10 08:15", Adherence.In);
 
 			var data = Target.Load(person, "2016-10-10".Date());
 
@@ -42,8 +43,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 			var person = Guid.NewGuid();
 
 			Database.WithAgent(person, "nicklas")
-				.WithAdherenceOut(person, "2016-10-12 08:00")
-				.WithAdherenceOut(person, "2016-10-12 09:00");
+				.WithHistoricalStateChange(person, "2016-10-12 08:00", Adherence.Out)
+				.WithHistoricalStateChange(person, "2016-10-12 09:00", Adherence.Out);
 
 			var data = Target.Load(person, "2016-10-12".Date());
 
@@ -57,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 			var person = Guid.NewGuid();
 
 			Database.WithAgent(person, "nicklas")
-				.WithAdherenceOut(person, "2016-10-11 09:00")
+				.WithHistoricalStateChange(person, "2016-10-11 09:00", Adherence.Out)
 				;
 
 			var data = Target.Load(person, "2016-10-12".Date());
@@ -72,8 +73,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 			var person = Guid.NewGuid();
 
 			Database.WithAgent(person, "nicklas")
-				.WithAdherenceOut(person, "2016-10-11 09:00")
-				.WithAdherenceIn(person, "2016-10-12 11:00")
+				.WithHistoricalStateChange(person, "2016-10-11 09:00", Adherence.Out)
+				.WithHistoricalStateChange(person, "2016-10-12 11:00", Adherence.In)
 				;
 
 			var data = Target.Load(person, "2016-10-12".Date());
@@ -89,9 +90,9 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 			var person = Guid.NewGuid();
 
 			Database.WithAgent(person, "nicklas")
-				.WithAdherenceOut(person, "2016-10-11 09:00")
-				.WithAdherenceNeutral(person, "2016-10-12 10:00")
-				.WithAdherenceIn(person, "2016-10-12 11:00")
+				.WithHistoricalStateChange(person, "2016-10-11 09:00", Adherence.Out)
+				.WithHistoricalStateChange(person, "2016-10-12 10:00", Adherence.Neutral)
+				.WithHistoricalStateChange(person, "2016-10-12 11:00", Adherence.In)
 				;
 
 			var data = Target.Load(person, "2016-10-12".Date());
@@ -107,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 			var person = Guid.NewGuid();
 
 			Database.WithAgent(person, "nicklas")
-				.WithAdherenceOut(person, "2018-02-01 09:00")
+				.WithHistoricalStateChange(person, "2018-02-01 09:00", Adherence.Out)
 				;
 
 			var data = Target.Load(person, "2018-02-01".Date());

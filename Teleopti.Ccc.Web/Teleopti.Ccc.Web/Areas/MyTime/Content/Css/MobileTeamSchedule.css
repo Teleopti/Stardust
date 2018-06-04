@@ -1,0 +1,193 @@
+﻿.mobile-teamschedule-view-nav {
+	padding: 0;
+}
+
+.mobile-teamschedule-view-nav .navbar-teleopti {
+	margin: 5px;
+	display: flex;
+	justify-content: space-between;
+}
+
+.mobile-teamschedule-view-nav span.input-group-btn .btn.btn-default {
+	padding: 9px 10px;
+}
+
+@media (max-width: 500px) {
+	.mobile-teamschedule-view-nav .input-group {
+		max-width: 220px;
+	}
+	.mobile-teamschedule-view-nav span.input-group-btn .btn {
+		padding: 10px;
+	}
+}
+@media (max-width: 350px) {
+	.mobile-teamschedule-view-nav input.form-control {
+		padding-left: 0;
+		padding-right: 0;
+	}
+	.mobile-teamschedule-view-nav span.input-group-btn .btn {
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+}
+
+.mobile-teamschedule-view-nav .submenu li {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	white-space: nowrap;
+	min-width: 35px;
+}
+
+.mobile-teamschedule-view-nav .submenu li.mobile-datepicker {
+	padding: 0 5px 0 0;
+	max-width: 329px;
+	flex-grow: 1;
+	flex-basis: 55%;
+}
+
+.mobile-teamschedule-view-nav .submenu li.mobile-datepicker .moment-datepicker {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.mobile-teamschedule-view-nav .submenu li.mobile-datepicker > .input-group {
+	padding: 0;
+}
+
+.mobile-teamschedule-view-nav .submenu li.mobile-datepicker .date-input-style {
+	min-width: 80px;
+}
+
+.mobile-teamschedule-view-nav .teamschedule-filter {
+	flex-basis: 45%;
+}
+
+.mobile-teamschedule-view-nav .teamschedule-filter .teamschedule-filter-component {
+	width: 100%;
+}
+
+.mobile-teamschedule-view-nav .teamschedule-filter .select2-container {
+	margin: 0 !important;
+	border-radius: 0;
+	border: none;
+	box-shadow: none !important;
+	width: 100% !important;
+}
+
+.formatted-date-text {
+	font-weight: bold;
+	color: white;
+	display: inline-block;
+	font-size: 1.1em;
+	width: 120px;
+	padding: 10px 5px !important;
+}
+
+.mobile-teamschedule-view-body {
+	-webkit-overflow-scrolling: touch;
+	height: calc(100% - 56px);
+	display: flex;
+	justify-content: flex-start;
+	overflow: auto;
+	cursor: pointer;
+	max-width: 100vw;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.mobile-teamschedule-view .mobile-timeline {
+	width: 30px;
+	min-width: 30px;
+	background: transparent;
+	border-right: 1px solid #dfdfdf;
+	position: relative;
+}
+
+.mobile-teamschedule-view .mobile-timeline-label {
+	font-size: 7pt;
+	width: 30px;
+	height: 10px;
+	text-align: center;
+	white-space: pre-wrap;
+}
+
+.my-schedule-column {
+	width: 70px;
+	min-width: 70px;
+	padding: 0 2px;
+	border-right: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.my-schedule-column .agent-name,
+.teammates-schedules-column .agent-name {
+	height: 50px;
+	width: 100%;
+	padding: 0 2px;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	white-space: normal;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	text-align: center;
+}
+
+.teammates-schedules-container {
+	overflow-y: hidden;
+	overflow-x: auto;
+	white-space: nowrap;
+	-webkit-overflow-scrolling: touch;
+	font-size: 0;
+	flex-grow: 1;
+}
+
+.teammates-schedules-column {
+	height: 100%;
+	width: 50px;
+	min-width: 50px;
+	padding: 0 7px;
+	border-left: 1px solid rgba(0, 0, 0, 0.1);
+	font-size: 15px;
+	display: inline-block;
+}
+
+div.teammates-schedules-column:last-of-type {
+	border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.mobile-teamschedule-view .mobile-schedule-container {
+	display: inline-block;
+	width: 100%;
+	height: 100%;
+}
+
+.mobile-teamschedule-view .mobile-schedule-container strong {
+	display: inline-block;
+	max-width: 100%;
+	overflow: hidden;
+}
+
+.mobile-teamschedule-view .mobile-schedule-layer {
+	text-align: center;
+	border-left: 0;
+	border-top: 1px solid #dfdfdf;
+	border-bottom: 1px solid #dfdfdf;
+	width: 100%;
+}
+
+.mobile-teamschedule-view .mobile-schedule-layer:first-of-type {
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+}
+
+.mobile-teamschedule-view .mobile-schedule-layer.last-layer {
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
+}
+
+.mobile-teamschedule-view .form-control[disabled] {
+	background-color: #f1f1f1;
+}
