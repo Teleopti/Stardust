@@ -23,11 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 	{
 		public FakeQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
 		public IAbsenceRequestStrategyProcessor Target;
-		private DateTime _thresholdTime;
-		private DateTime _pastThreshold;
 		private int _windowSize;
-		private DateOnlyPeriod _initialPeriod;
-		private DateTime _now;
 		public FakeConfigReader ConfigReader;
 		public FakePersonRequestRepository PersonRequestRepository;
 		public MutableNow Now;
@@ -36,10 +32,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			isolate.UseTestDouble<AbsenceRequestStrategyProcessor>().For<IAbsenceRequestStrategyProcessor>();
 			_windowSize = 2;
-			_now = new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc);
-			_pastThreshold = _now;
-			_thresholdTime = _now.AddMinutes(-10);
-			_initialPeriod = new DateOnlyPeriod(new DateOnly(_now.AddDays(-1)), new DateOnly(_now.AddDays(_windowSize)));
 			isolate.UseTestDouble<FilterRequestsWithDifferentVersion41930ToggleOff>().For<IFilterRequestsWithDifferentVersion>();
 		}
 
@@ -67,86 +59,105 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldOnlyFetchRequestsInNearFuture()
 		{
+			var now = new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc);
+			var pastThreshold = now;
+			var thresholdTime = now.AddMinutes(-10);
+			var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)), new DateOnly(now.AddDays(_windowSize)));
+
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = _now.AddDays(1),
-				EndDateTime = _now.AddDays(1).AddHours(1),
-				Created = _now.AddMinutes(-13),
+				StartDateTime = new DateTime(2016, 03, 02, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 03, 02, 1, 0, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-13),
 				PersonRequest = Guid.NewGuid()
 			});
 
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = _now.AddDays(4),
-				EndDateTime = _now.AddDays(4).AddHours(1),
-				Created = _now.AddMinutes(-12),
+				StartDateTime = new DateTime(2016, 03, 5, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 03, 5, 1, 0, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-12),
 				PersonRequest = Guid.NewGuid()
 			});
 
-			var queuedAbsenceRequests = Target.Get(_thresholdTime, _pastThreshold, _initialPeriod, _windowSize);
+			var queuedAbsenceRequests = Target.Get(thresholdTime, pastThreshold, initialPeriod, _windowSize);
 			queuedAbsenceRequests.Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldFetchAllNearFutureIfOneIsOlderThan10Minutes()
 		{
+			var now = new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc);
+			var pastThreshold = now;
+			var thresholdTime = now.AddMinutes(-10);
+			var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)), new DateOnly(now.AddDays(_windowSize)));
+
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = _now.AddDays(1),
-				EndDateTime = _now.AddDays(1).AddHours(1),
-				Created = _now.AddMinutes(-12),
+				StartDateTime = new DateTime(2016, 03, 2, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 03, 2, 1, 0, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-12),
 				PersonRequest = Guid.NewGuid()
 			});
 
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = _now.AddDays(1),
-				EndDateTime = _now.AddDays(1).AddHours(1),
-				Created = _now.AddMinutes(-2),
+				StartDateTime = new DateTime(2016, 03, 2, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 03, 2, 1, 0, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-2),
 				PersonRequest = Guid.NewGuid()
 			});
 
-			var queuedAbsenceRequests = Target.Get(_thresholdTime, _pastThreshold, _initialPeriod, _windowSize);
+			var queuedAbsenceRequests = Target.Get(thresholdTime, pastThreshold, initialPeriod, _windowSize);
 			queuedAbsenceRequests.First().Count().Should().Be.EqualTo(2);
 		}
 
 		[Test]
 		public void ShouldFetchFarFutureRequests()
 		{
+			var now = new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc);
+			var pastThreshold = now;
+			var thresholdTime = now.AddMinutes(-10);
+			var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)), new DateOnly(now.AddDays(_windowSize)));
+
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = _now.AddDays(4),
-				EndDateTime = _now.AddDays(4).AddHours(1),
-				Created = _now.AddMinutes(-23),
+				StartDateTime = new DateTime(2016, 03, 5, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 03, 5, 1, 0, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-23),
 				PersonRequest = Guid.NewGuid()
 			});
 
-			var queuedAbsenceRequests = Target.Get(_thresholdTime, _pastThreshold, _initialPeriod, _windowSize);
+			var queuedAbsenceRequests = Target.Get(thresholdTime, pastThreshold, initialPeriod, _windowSize);
 			queuedAbsenceRequests.Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldFetchAllFarFutureIfOneIsOlderThan10MinutesWithWindow3()
 		{
+			var now = new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc);
+			var pastThreshold = now;
+			var thresholdTime = now.AddMinutes(-10);
+			var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)), new DateOnly(now.AddDays(_windowSize)));
+
 			var windowSize = 3;
-			var initialPeriod = new DateOnlyPeriod(new DateOnly(_now.AddDays(-1)), new DateOnly(_now.AddDays(windowSize)));
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = _now.AddDays(4),
-				EndDateTime = _now.AddDays(4).AddHours(1),
-				Created = _now.AddMinutes(-12),
+				StartDateTime = new DateTime(2016, 03, 5, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 03, 05, 1, 0, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-12),
 				PersonRequest = Guid.NewGuid()
 			});
 
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = _now.AddDays(5),
-				EndDateTime = _now.AddDays(5).AddHours(1),
-				Created = _now.AddMinutes(-2),
+				StartDateTime = new DateTime(2016, 03, 6, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 03, 6, 1, 0, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-2),
 				PersonRequest = Guid.NewGuid()
 			});
 
-			var queuedAbsenceRequests = Target.Get(_thresholdTime, _pastThreshold, initialPeriod, windowSize);
+			var queuedAbsenceRequests = Target.Get(thresholdTime, pastThreshold, initialPeriod, windowSize);
 			queuedAbsenceRequests.First().Count().Should().Be.EqualTo(2);
 		}
 
@@ -184,25 +195,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldFetchNearFutureRequestsBeforeFarFuture()
 		{
+			var now = new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc);
+			var pastThreshold = now;
+			var thresholdTime = now.AddMinutes(-10);
+			var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)), new DateOnly(now.AddDays(_windowSize)));
+
 			var nearFutureReqId = Guid.NewGuid();
 			var farFutureReqId = Guid.NewGuid();
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = _now.AddDays(4),
-				EndDateTime = _now.AddDays(4).AddHours(1),
-				Created = _now.AddMinutes(-13),
+				StartDateTime = new DateTime(2016, 03, 5, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 03, 5, 1, 0, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-13),
 				PersonRequest = farFutureReqId
 			});
 
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = _now.AddDays(1),
-				EndDateTime = _now.AddDays(1).AddHours(1),
-				Created = _now.AddMinutes(-12),
+				StartDateTime = new DateTime(2016, 03, 2, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 03, 2, 1, 0, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-12),
 				PersonRequest = nearFutureReqId
 			});
 
-			var queuedAbsenceRequests = Target.Get(_thresholdTime, _pastThreshold, _initialPeriod, _windowSize);
+			var queuedAbsenceRequests = Target.Get(thresholdTime, pastThreshold, initialPeriod, _windowSize);
 			queuedAbsenceRequests.Count.Should().Be.EqualTo(1);
 			queuedAbsenceRequests.First().First().PersonRequest.Should().Be.EqualTo(nearFutureReqId);
 		}
@@ -210,31 +226,36 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldFetchAllNearFutureIncludedInMaxPeriod()
 		{
+			var now = new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc);
+			var pastThreshold = now;
+			var thresholdTime = now.AddMinutes(-10);
+			var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)), new DateOnly(now.AddDays(_windowSize)));
+
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = _now.AddDays(1),
-				EndDateTime = _now.AddDays(9).AddHours(1),
-				Created = _now.AddMinutes(-13),
+				StartDateTime = new DateTime(2016, 03, 2, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 03, 10, 1, 0, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-13),
 				PersonRequest = Guid.NewGuid()
 			});
 
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = _now.AddDays(2),
-				EndDateTime = _now.AddDays(7).AddHours(1),
-				Created = _now.AddMinutes(-2),
+				StartDateTime = new DateTime(2016, 03, 3, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 03, 8, 0, 0, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-2),
 				PersonRequest = Guid.NewGuid()
 			});
 
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = _now.AddDays(6),
-				EndDateTime = _now.AddDays(10).AddHours(1),
-				Created = _now.AddMinutes(-2),
+				StartDateTime = new DateTime(2016, 03, 7, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 03, 11, 1, 0, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-2),
 				PersonRequest = Guid.NewGuid()
 			});
 
-			var queuedAbsenceRequests = Target.Get(_thresholdTime, _pastThreshold, _initialPeriod, _windowSize);
+			var queuedAbsenceRequests = Target.Get(thresholdTime, pastThreshold, initialPeriod, _windowSize);
 			queuedAbsenceRequests.First().Count().Should().Be.EqualTo(2);
 		}
 
@@ -253,7 +274,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 03, 11, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 03, 13, 1, 0, 0, DateTimeKind.Utc),
-				Created = _now.AddMinutes(-13).AddHours(-1),
+				Created = now.AddMinutes(-13).AddHours(-1),
 				PersonRequest = Guid.NewGuid()
 			});
 
@@ -261,7 +282,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 03, 12, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 03, 12, 1, 0, 0, DateTimeKind.Utc),
-				Created = _now.AddMinutes(-14).AddHours(-1),
+				Created = now.AddMinutes(-14).AddHours(-1),
 				PersonRequest = Guid.NewGuid()
 			});
 
@@ -269,7 +290,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 03, 13, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 03, 13, 10, 0, 0, DateTimeKind.Utc),
-				Created = _now.AddMinutes(-2).AddHours(-1),
+				Created = now.AddMinutes(-2).AddHours(-1),
 				PersonRequest = Guid.NewGuid()
 			});
 
@@ -277,7 +298,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 03, 14, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 03, 20, 0, 0, 0, DateTimeKind.Utc).AddHours(1),
-				Created = _now.AddMinutes(-2).AddHours(-1),
+				Created = now.AddMinutes(-2).AddHours(-1),
 				PersonRequest = lastAbsenceReqId
 			});
 
@@ -342,23 +363,29 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ExcludeRequestsWithPeriodLongerThanConfiguredDays()
 		{
+			var now = new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+			var pastThreshold = now;
+			var thresholdTime = now.AddMinutes(-10);
+			var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)), new DateOnly(now.AddDays(_windowSize)));
+
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = _now.AddDays(1),
-				EndDateTime = _now.AddDays(9).AddHours(1),
-				Created = _now.AddMinutes(-13),
+				StartDateTime = new DateTime(2016, 03, 2, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 03, 10, 1, 0, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-13),
 				PersonRequest = Guid.NewGuid()
 			});
 
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = _now.AddDays(1),
-				EndDateTime = _now.AddDays(66),
-				Created = _now.AddMinutes(-2).AddHours(-1),
+				StartDateTime = new DateTime(2016, 03, 2, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 5, 01, 0, 0, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-2).AddHours(-1),
 				PersonRequest = Guid.NewGuid()
 			});
 
-			var queuedAbsenceRequests = Target.Get(_thresholdTime, _pastThreshold, _initialPeriod, _windowSize);
+			var queuedAbsenceRequests = Target.Get(thresholdTime, pastThreshold, initialPeriod, _windowSize);
 			queuedAbsenceRequests.First().Count().Should().Be.EqualTo(1);
 		}
 
@@ -366,17 +393,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void FetchPastRequestsIfNoOtherRequestsInQueue()
 		{
+			var now = new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+			var pastThreshold = now;
+			var thresholdTime = now.AddMinutes(-10);
+			var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)), new DateOnly(now.AddDays(_windowSize)));
+
 			var pastId = Guid.NewGuid();
 
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = _now.AddDays(-10),
-				EndDateTime = _now.AddDays(-10).AddHours(1),
-				Created = _now.AddMinutes(-2).AddHours(-1),
+				StartDateTime = new DateTime(2016, 02, 19, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 02, 19, 1, 0, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-2).AddHours(-1),
 				PersonRequest = pastId
 			});
 
-			var queuedAbsenceRequests = Target.Get(_thresholdTime, _pastThreshold, _initialPeriod, _windowSize);
+			var queuedAbsenceRequests = Target.Get(thresholdTime, pastThreshold, initialPeriod, _windowSize);
 			queuedAbsenceRequests.First().First().PersonRequest.Should().Be.EqualTo(pastId);
 		}
 
@@ -384,13 +417,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void DontFetchPastRequestsIfOtherRequestsInQueue()
 		{
+			var now = new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+			var pastThreshold = now;
+			var thresholdTime = now.AddMinutes(-10);
+			var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)), new DateOnly(now.AddDays(_windowSize)));
+
 			var pastId = Guid.NewGuid();
 
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = _now.AddDays(-10),
-				EndDateTime = _now.AddDays(-10).AddHours(1),
-				Created = _now.AddMinutes(-2).AddHours(-1),
+				StartDateTime = new DateTime(2016, 02, 19, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 02, 19, 1, 0, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-2).AddHours(-1),
 				PersonRequest = pastId
 			});
 
@@ -398,13 +437,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = _now.AddDays(1),
-				EndDateTime = _now.AddDays(1).AddHours(1),
-				Created = _now.AddMinutes(-2).AddHours(-1),
+				StartDateTime = new DateTime(2016, 03, 2, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 03, 2, 1, 0, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-2).AddHours(-1),
 				PersonRequest = futureId
 			});
 
-			var queuedAbsenceRequests = Target.Get(_thresholdTime, _pastThreshold, _initialPeriod, _windowSize);
+			var queuedAbsenceRequests = Target.Get(thresholdTime, pastThreshold, initialPeriod, _windowSize);
 			queuedAbsenceRequests.First().Count().Should().Be.EqualTo(1);
 			queuedAbsenceRequests.First().First().PersonRequest.Should().Be.EqualTo(futureId);
 		}
@@ -412,21 +451,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void DontProcessRecentReuqestIfThereExistsAtleastOnePastPresentFuture()
 		{
+			var now = new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+			var pastThreshold = now;
+			var thresholdTime = now.AddMinutes(-10);
+			var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)), new DateOnly(now.AddDays(_windowSize)));
 			var pastId = Guid.NewGuid();
 
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = _now.AddDays(-10),
-				EndDateTime = _now.AddDays(-10).AddHours(1),
-				Created = _now.AddDays(-10),
+				StartDateTime = new DateTime(2016, 02, 19, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 02, 19, 1, 0, 0, DateTimeKind.Utc),
+				Created = now.AddDays(-10),
 				PersonRequest = pastId
 			});
 
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = _now.AddDays(1),
-				EndDateTime = _now.AddDays(1).AddHours(1),
-				Created = _now.AddMinutes(-2),
+				StartDateTime = new DateTime(2016, 03, 2, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 03, 2, 1, 0, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-2),
 				PersonRequest = Guid.NewGuid()
 			});
 
@@ -434,40 +478,46 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = _now.AddDays(5),
-				EndDateTime = _now.AddDays(5).AddHours(1),
-				Created = _now.AddMinutes(-2),
+				StartDateTime = new DateTime(2016, 03, 6, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 03, 6, 1, 0, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-2),
 				PersonRequest = futureId
 			});
 
-			var queuedAbsenceRequests = Target.Get(_thresholdTime, _pastThreshold, _initialPeriod, _windowSize);
+			var queuedAbsenceRequests = Target.Get(thresholdTime, pastThreshold, initialPeriod, _windowSize);
 			queuedAbsenceRequests.First().Count().Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldPickUpYesterdayPeriodRequestsAsNearFuture()
 		{
+			var now = new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+			var pastThreshold = now;
+			var thresholdTime = now.AddMinutes(-10);
+			var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)), new DateOnly(now.AddDays(_windowSize)));
+			
 			var yesterdayId = Guid.NewGuid();
 			var fatFutureId = Guid.NewGuid();
 
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = _now.AddDays(-1).AddHours(1),
-				EndDateTime = _now.AddDays(-1).AddHours(2),
-				Created = _now.AddMinutes(-22),
+				StartDateTime = new DateTime(2016, 02, 29,1, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 02, 29, 2, 0, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-22),
 				PersonRequest = yesterdayId
 			});
 
 			//Add far future to make sure yesterday is not picked up as a Past Request
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = _now.AddDays(4),
-				EndDateTime = _now.AddDays(4).AddHours(1),
-				Created = _now.AddMinutes(-22),
+				StartDateTime = new DateTime(2016, 03, 5, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 03, 5, 1, 0, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-22),
 				PersonRequest = fatFutureId
 			});
 
-			var queuedAbsenceRequests = Target.Get(_thresholdTime, _pastThreshold, _initialPeriod, _windowSize);
+			var queuedAbsenceRequests = Target.Get(thresholdTime, pastThreshold, initialPeriod, _windowSize);
 			queuedAbsenceRequests.First().Count().Should().Be.EqualTo(1);
 			queuedAbsenceRequests.First().First().PersonRequest.Should().Be.EqualTo(yesterdayId);
 		}
@@ -475,53 +525,59 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldNotSendRequestInProcessingPeriod()
 		{
+			var now = new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+			var pastThreshold = now;
+			var thresholdTime = now.AddMinutes(-10);
+			var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)), new DateOnly(now.AddDays(_windowSize)));
+
 			var id = Guid.NewGuid();
-			var timeStamp1 = _now.AddMinutes(-10);
+			var timeStamp1 = now.AddMinutes(-10);
 
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = _now.AddDays(4),
-				EndDateTime = _now.AddDays(4).AddHours(1),
-				Created = _now.AddMinutes(-22),
+				StartDateTime = new DateTime(2016, 03, 5, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 03, 5, 1, 0, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-22),
 				PersonRequest = Guid.NewGuid(),
 				Sent = timeStamp1
 			});
 
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = _now.AddDays(5),
-				EndDateTime = _now.AddDays(5).AddHours(1),
-				Created = _now.AddMinutes(-22),
+				StartDateTime = new DateTime(2016, 03, 6, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 03, 6, 1, 0, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-22),
 				PersonRequest = Guid.NewGuid(),
 				Sent = timeStamp1
 			});
 
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = _now.AddDays(8),
-				EndDateTime = _now.AddDays(8).AddHours(1),
-				Created = _now.AddMinutes(-22),
+				StartDateTime = new DateTime(2016, 03, 9, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 03, 9, 1, 0, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-22),
 				PersonRequest = Guid.NewGuid(),
-				Sent = _now.AddMinutes(-8)
+				Sent = now.AddMinutes(-8)
 			});
 
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = _now.AddDays(5),
-				EndDateTime = _now.AddDays(6).AddHours(1),
-				Created = _now.AddMinutes(-22),
+				StartDateTime = new DateTime(2016, 03, 6, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 03, 7, 1, 0, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-22),
 				PersonRequest = Guid.NewGuid()
 			});
 
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = _now.AddDays(7),
-				EndDateTime = _now.AddDays(7).AddHours(1),
-				Created = _now.AddMinutes(-22),
+				StartDateTime = new DateTime(2016, 03, 8, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 03, 8, 1, 0, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-22),
 				PersonRequest = id
 			});
 
-			var queuedAbsenceRequests = Target.Get(_thresholdTime, _pastThreshold, _initialPeriod, _windowSize);
+			var queuedAbsenceRequests = Target.Get(thresholdTime, pastThreshold, initialPeriod, _windowSize);
 			queuedAbsenceRequests.Count.Should().Be.EqualTo(1);
 			queuedAbsenceRequests.First().Count().Should().Be.EqualTo(1);
 			queuedAbsenceRequests.First().First().PersonRequest.Should().Be.EqualTo(id);
@@ -530,13 +586,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldIgnoreRequestThatAreLongerThanMaximumDays()
 		{
+			var now = new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+			var pastThreshold = now;
+			var thresholdTime = now.AddMinutes(-10);
+			var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)), new DateOnly(now.AddDays(_windowSize)));
+
 			ConfigReader.FakeSetting("MaximumDayLengthForAbsenceRequest", "20");
 			var id = Guid.NewGuid();
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
 				StartDateTime = new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 4, 2, 23, 59, 00, DateTimeKind.Utc),
-				Created = _now.AddMinutes(-13),
+				Created = now.AddMinutes(-13),
 				PersonRequest = id
 			});
 
@@ -544,17 +606,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 5, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 5, 23, 59, 00, DateTimeKind.Utc),
-				Created = _now.AddMinutes(-12),
+				Created = now.AddMinutes(-12),
 				PersonRequest = Guid.NewGuid()
 			});
 
-			var queuedAbsenceRequests = Target.Get(_thresholdTime, _pastThreshold, _initialPeriod, _windowSize);
+			var queuedAbsenceRequests = Target.Get(thresholdTime, pastThreshold, initialPeriod, _windowSize);
 			queuedAbsenceRequests.Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldDenyAbsenceThatAreLongerThanConfiguredDays()
 		{
+			var now = new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+			var pastThreshold = now;
+			var thresholdTime = now.AddMinutes(-10);
+			var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)), new DateOnly(now.AddDays(_windowSize)));
+
 			ConfigReader.FakeSetting("MaximumDayLengthForAbsenceRequest", "20");
 
 			var longPeriodPersonRequest = createAbsenceRequest(new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc), new DateTime(2016, 4, 2, 23, 59, 00, DateTimeKind.Utc));
@@ -562,8 +630,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = longPeriodPersonRequest.Request.Period.StartDateTime,
 				EndDateTime = longPeriodPersonRequest.Request.Period.EndDateTime,
-				Created = _now.AddMinutes(-13),
-				PersonRequest = longPeriodPersonRequest.Id.Value
+				Created = now.AddMinutes(-13),
+				PersonRequest = longPeriodPersonRequest.Id.GetValueOrDefault()
 			});
 
 			var normalPersonRequest = createAbsenceRequest(new DateTime(2016, 3, 5, 0, 0, 0, DateTimeKind.Utc), new DateTime(2016, 3, 5, 23, 59, 00, DateTimeKind.Utc));
@@ -571,11 +639,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = normalPersonRequest.Request.Period.StartDateTime,
 				EndDateTime = normalPersonRequest.Request.Period.EndDateTime,
-				Created = _now.AddMinutes(-12),
-				PersonRequest = normalPersonRequest.Id.Value
+				Created = now.AddMinutes(-12),
+				PersonRequest = normalPersonRequest.Id.GetValueOrDefault()
 			});
 
-			Target.Get(_thresholdTime, _pastThreshold, _initialPeriod, _windowSize);
+			Target.Get(thresholdTime, pastThreshold, initialPeriod, _windowSize);
 			longPeriodPersonRequest.IsDenied.Should().Be(true);
 			longPeriodPersonRequest.DenyReason.Should().Be("The requested period is too long");
 			normalPersonRequest.IsPending.Should().Be(true);
@@ -584,13 +652,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldNotSetAbsenceRequestAsWaitlistedThatAreLongerThanConfiguredDays()
 		{
-			Now.Is(_now);
+			var now = new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+			var pastThreshold = now;
+			var thresholdTime = now.AddMinutes(-10);
+			var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)), new DateOnly(now.AddDays(_windowSize)));
+
+			Now.Is(now);
 
 			ConfigReader.FakeSetting("MaximumDayLengthForAbsenceRequest", "20");
 
 			var longPeriodPersonRequest = createAbsenceRequest(new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc), new DateTime(2016, 4, 2, 23, 59, 00, DateTimeKind.Utc));
-			var person = longPeriodPersonRequest.Person;
-
+			
 			var workflowControlSet = new WorkflowControlSet()
 			{
 				AbsenceRequestWaitlistEnabled = true
@@ -600,8 +673,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				Absence = absence,
 				AbsenceRequestProcess = new GrantAbsenceRequest(),
-				Period = new DateOnlyPeriod(new DateOnly(_now.Date), new DateOnly(_now.Date.AddDays(40))),
-				OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(_now.Date), new DateOnly(_now.Date.AddDays(40)))
+				Period = new DateOnlyPeriod(new DateOnly(now.Date), new DateOnly(now.Date.AddDays(40))),
+				OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(now.Date), new DateOnly(now.Date.AddDays(40)))
 			});
 
 			longPeriodPersonRequest.Person.WorkflowControlSet = workflowControlSet;
@@ -610,11 +683,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = longPeriodPersonRequest.Request.Period.StartDateTime,
 				EndDateTime = longPeriodPersonRequest.Request.Period.EndDateTime,
-				Created = _now.AddMinutes(-13),
+				Created = now.AddMinutes(-13),
 				PersonRequest = longPeriodPersonRequest.Id.Value
 			});
 
-			Target.Get(_thresholdTime, _pastThreshold, _initialPeriod, _windowSize);
+			Target.Get(thresholdTime, pastThreshold, initialPeriod, _windowSize);
 			longPeriodPersonRequest.IsDenied.Should().Be(true);
 			longPeriodPersonRequest.DenyReason.Should().Be("The requested period is too long");
 			longPeriodPersonRequest.IsWaitlisted.Should().Be(false);
@@ -623,13 +696,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldRemoveAbsenceThatAreLongerThanConfiguredDays()
 		{
+			var now = new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+			var pastThreshold = now;
+			var thresholdTime = now.AddMinutes(-10);
+			var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)), new DateOnly(now.AddDays(_windowSize)));
+
 			ConfigReader.FakeSetting("MaximumDayLengthForAbsenceRequest", "20");
 			var id = Guid.NewGuid();
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
 				StartDateTime = new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 4, 2, 23, 59, 00, DateTimeKind.Utc),
-				Created = _now.AddMinutes(-13),
+				Created = now.AddMinutes(-13),
 				PersonRequest = id
 			});
 
@@ -637,22 +716,28 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 5, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 5, 23, 59, 00, DateTimeKind.Utc),
-				Created = _now.AddMinutes(-12),
+				Created = now.AddMinutes(-12),
 				PersonRequest = Guid.NewGuid()
 			});
 
-			Target.Get(_thresholdTime, _pastThreshold, _initialPeriod, _windowSize);
+			Target.Get(thresholdTime, pastThreshold, initialPeriod, _windowSize);
 			QueuedAbsenceRequestRepository.LoadAll().Count().Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldIncludePlaceholderRequests()
 		{
+			var now = new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc);
+			Now.Is(now);
+			var pastThreshold = now;
+			var thresholdTime = now.AddMinutes(-10);
+			var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)), new DateOnly(now.AddDays(_windowSize)));
+
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
 				StartDateTime = new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 2, 23, 59, 00, DateTimeKind.Utc),
-				Created = _now.AddMinutes(-20),
+				Created =now.AddMinutes(-20),
 				PersonRequest = Guid.Empty
 			});
 
@@ -660,11 +745,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 2, 23, 59, 00, DateTimeKind.Utc),
-				Created = _now.AddMinutes(-21),
+				Created = now.AddMinutes(-21),
 				PersonRequest = Guid.NewGuid()
 			});
 
-			var queuedAbsenceRequests = Target.Get(_thresholdTime, _pastThreshold, _initialPeriod, _windowSize);
+			var queuedAbsenceRequests = Target.Get(thresholdTime, pastThreshold, initialPeriod, _windowSize);
 			queuedAbsenceRequests.Count.Should().Be.EqualTo(1);
 			queuedAbsenceRequests.First().Select(x => x.PersonRequest).Should().Contain(Guid.Empty);
 		}
