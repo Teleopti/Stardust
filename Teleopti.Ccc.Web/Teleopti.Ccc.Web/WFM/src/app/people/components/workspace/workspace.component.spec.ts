@@ -1,6 +1,7 @@
 import { DebugElement } from '@angular/core';
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { configureTestSuite } from '../../../../configure-test-suit';
 import { PeopleTestModule } from '../../people.test.module';
 import { adina, eva, myles } from '../../services';
 import { WorkspaceComponent } from './workspace.component';
@@ -9,6 +10,8 @@ describe('WorkspaceComponent', () => {
 	let component: WorkspaceComponent;
 	let fixture: ComponentFixture<WorkspaceComponent>;
 	let page: Page;
+
+	configureTestSuite();
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
