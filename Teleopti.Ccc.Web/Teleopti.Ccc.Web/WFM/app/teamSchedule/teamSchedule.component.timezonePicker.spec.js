@@ -5,7 +5,7 @@
 
 	var mockCurrentUserInfo = {
 		CurrentUserInfo: function () {
-			return { DefaultTimeZone: "Asia/Hong_Kong" };
+			return { DefaultTimeZone: "Asia/Hong_Kong", DefaultTimeZoneName: '(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi' };
 		}
 	};
 
@@ -38,13 +38,16 @@
 		expect(selectionDisplayValue.innerText).toEqual('UTC+08:00');
 	});
 
-	xit('should include current user timezone if avaliable timezones without it', function () {
+	it('should include current user timezone if avaliable timezones without it', function () {
 		var panel = setUp(null, [
 			{
 				IanaId: "America/New_York",
 				DisplayName: "(UTC-05:00) Estern Time"
 			}
-		] );
+		]);
+		var timezoneOptions = panel[0].querySelectorAll("md-option");
+		expect(timezoneOptions[0].innerText.trim()).toEqual("(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi");
+		expect(timezoneOptions[1].innerText.trim()).toEqual("(UTC-05:00) Estern Time");
 	});
 
 	it('should expose default timezone to be currentUserInfo timezone', function () {
@@ -74,8 +77,6 @@
 		var panel = setUp('America/New_York');
 		var selectedOption = panel[0].querySelector('md-option[selected] .md-text');
 		expect(selectedOption.innerText).toEqual('(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi');
-		var scope = panel.isolateScope().$parent;
-		expect(scope.timezone).toEqual('Asia/Hong_Kong');
 	});
 
 
