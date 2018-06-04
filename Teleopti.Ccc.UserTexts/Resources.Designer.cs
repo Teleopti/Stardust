@@ -2087,15 +2087,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Agents that failed inspection.
-        /// </summary>
-        public static string AgentsThatFailedInspection {
-            get {
-                return ResourceManager.GetString("AgentsThatFailedInspection", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Agents without bookings.
         /// </summary>
         public static string AgentsWithoutBookings {
@@ -25633,15 +25624,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Primary {
             get {
                 return ResourceManager.GetString("Primary", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Primary reason.
-        /// </summary>
-        public static string PrimaryReason {
-            get {
-                return ResourceManager.GetString("PrimaryReason", resourceCulture);
             }
         }
         
