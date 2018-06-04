@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Autofac;
 using NUnit.Framework.Interfaces;
 using Teleopti.Ccc.Domain.Aop;
@@ -91,9 +92,14 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			using (DataSource.OnThisThreadUse(DataSourceHelper.TestTenantName))
 				businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.Value;
 			AsSystem.Logon(DataSourceHelper.TestTenantName, businessUnitId);
+			Thread.Sleep(30000);
 			TestSiteConfigurationSetup.TearDown();
 
+			Thread.Sleep(60000);
+
 			TestSiteConfigurationSetup.Setup();
+			Thread.Sleep(30000);
+
 			((TestConfigReader) ConfigReader).ConfigValues.Remove("ManagerLocation");
 			((TestConfigReader) ConfigReader).ConfigValues.Remove("MessageBroker");
 			((TestConfigReader) ConfigReader).ConfigValues.Remove("NumberOfNodes");
