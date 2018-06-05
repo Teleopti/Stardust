@@ -144,7 +144,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 
 		var isJalaali = options.UseJalaaliCalendar;
 		Teleopti.MyTimeWeb.Common.UseJalaaliCalendar = isJalaali;
-		Teleopti.MyTimeWeb.Common.DateFormat = isJalaali ? "jYYYY/jMM/jDD" : options.DateFormat.replace(/'([^\[\]]*)'/g, "[$1]");
+		Teleopti.MyTimeWeb.Common.DateFormat = isJalaali ? "jYYYY/jMM/jDD" : options.DateFormat;
 		Teleopti.MyTimeWeb.Common.DayOnlyFormat = isJalaali ? "jDD" : 'DD';
 		Teleopti.MyTimeWeb.Common.MonthOnlyFormat = isJalaali ? "jMMMM" : 'MMMM';
 		Teleopti.MyTimeWeb.Common.TimeFormat = timeFormat;
