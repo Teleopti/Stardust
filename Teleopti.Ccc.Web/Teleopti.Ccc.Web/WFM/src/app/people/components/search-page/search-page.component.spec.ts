@@ -1,7 +1,8 @@
 import { HttpClientModule } from '@angular/common/http';
 import { DebugElement } from '@angular/core';
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { configureTestSuite } from '../../../../configure-test-suit';
 import { PeopleTestModule } from '../../people.test.module';
 import { fakeBackendProvider } from '../../services';
 import { SearchPageComponent } from './search-page.component';
@@ -10,6 +11,8 @@ describe('SearchPageComponent', () => {
 	let component: SearchPageComponent;
 	let fixture: ComponentFixture<SearchPageComponent>;
 	let page: Page;
+
+	configureTestSuite();
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({

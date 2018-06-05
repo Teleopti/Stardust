@@ -392,15 +392,12 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Areas\Forecasting\Models\CampaignInput.cs" />
-    <Compile Include="Areas\Forecasting\Models\EvaluateMethodsInput.cs" />
     <Compile Include="Areas\Forecasting\Models\ExportForecastInput.cs" />
     <Compile Include="Areas\Forecasting\Controllers\ForecastExportController.cs" />
     <Compile Include="Areas\Forecasting\Core\ForecastExportToExcel.cs" />
     <Compile Include="Areas\Forecasting\Models\ForecastResultInput.cs" />
     <Compile Include="Areas\Forecasting\Models\ForecastResultViewModel.cs" />
-    <Compile Include="Areas\Forecasting\Models\IntradayPatternInput.cs" />
     <Compile Include="Areas\Forecasting\Models\OverrideInput.cs" />
-    <Compile Include="Areas\Forecasting\Models\QueueStatisticsInput.cs" />
     <Compile Include="Areas\Forecasting\Models\SkillsViewModel.cs" />
     <Compile Include="Areas\Gamification\Controller\GamificationCalculationController.cs" />
     <Compile Include="Areas\Gamification\Controller\GamificationController.cs" />
@@ -424,8 +421,6 @@
     <Compile Include="Areas\Anywhere\Controllers\GroupScheduleController.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleProjectionViewModel.cs" />
     <Compile Include="Areas\Anywhere\Controllers\AnywhereReportsController.cs" />
-    <Compile Include="Areas\Forecasting\Core\WorkloadNameBuilder.cs" />
-    <Compile Include="Areas\Forecasting\Core\IWorkloadNameBuilder.cs" />
     <Compile Include="Areas\Global\DataProtectionController.cs" />
     <Compile Include="Areas\Global\Core\GroupPageViewModelFactory.cs" />
     <Compile Include="Areas\Global\ScenarioController.cs" />
@@ -446,13 +441,7 @@
     <Compile Include="Areas\Anywhere\Core\GroupScheduleShiftViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelMapper.cs" />
-    <Compile Include="Areas\Forecasting\Models\EvaluateInput.cs" />
     <Compile Include="Areas\Forecasting\Controllers\SkillController.cs" />
-    <Compile Include="Areas\Forecasting\Core\ForecastProvider.cs" />
-    <Compile Include="Areas\Forecasting\Core\IForecastViewModelFactory.cs" />
-    <Compile Include="Areas\Forecasting\Core\ForecastViewModelFactory.cs" />
-    <Compile Include="Areas\Forecasting\Core\IntradayPatternViewModelFactory.cs" />
-    <Compile Include="Areas\Forecasting\Core\WorkloadEvaluateViewModel.cs" />
     <Compile Include="Areas\Global\ApplicationController.cs" />
     <Compile Include="Areas\Global\AreaWithPermissionPath.cs" />
     <Compile Include="Areas\Global\GlobalAreaController.cs" />

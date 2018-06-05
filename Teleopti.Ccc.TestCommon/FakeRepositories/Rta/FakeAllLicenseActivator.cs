@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using NHibernate.Util;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using NHibernate.Util;
+using System.Linq;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;

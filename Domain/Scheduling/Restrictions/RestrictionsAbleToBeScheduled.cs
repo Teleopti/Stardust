@@ -144,7 +144,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			}
 
 			schedulePartModifyAndRollbackServiceForContractDaysOff.RollbackMinimumChecks();
-			return null;
+			return new RestrictionsNotAbleToBeScheduledResult
+			{
+				Agent = schedulePeriod.Person,
+				Reason = RestrictionNotAbleToBeScheduledReason.NoIssue,
+				Period = selectedPeriod,
+				Matrix = matrixList.First()
+			};
 		}
 
 		private bool toManyDaysOff(IScheduleMatrixPro matrix)

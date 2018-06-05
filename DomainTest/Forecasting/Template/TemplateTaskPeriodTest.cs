@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -44,14 +43,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
         /// Created date: 2008-03-04
         /// </remarks>
         [Test]
-        public void VerifyConstructorWithCampaignAndOverrideWorks()
+        public void VerifyConstructorWithCampaignWorks()
         {
-	        var overrideTask = new OverrideTask(45, TimeSpan.FromSeconds(50), null);
-			  _target = new TemplateTaskPeriod(_task, _campaign, overrideTask, _timePeriod);
+			  _target = new TemplateTaskPeriod(_task, _campaign, _timePeriod);
             Assert.IsNotNull(_target);
             Assert.AreEqual(_task, _target.Task);
             Assert.AreEqual(_campaign, _target.Campaign);
-            Assert.AreEqual(overrideTask, _target.OverrideTask);
             Assert.AreEqual(_timePeriod, _target.Period);
         }
 
@@ -61,7 +58,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
             Assert.AreEqual(_target.Task, _task);
             Assert.AreEqual(_target.Period, _timePeriod);
             Assert.AreEqual(new Campaign(), _target.Campaign);
-            Assert.AreEqual(new OverrideTask(), _target.OverrideTask);
         }
 
         [Test]
@@ -455,7 +451,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
             Assert.AreEqual(_target.AggregatedTasks, taskPeriodClone.AggregatedTasks);
             Assert.AreEqual(_target.Task, taskPeriodClone.Task);
             Assert.AreEqual(_target.Campaign, taskPeriodClone.Campaign);
-            Assert.AreEqual(_target.OverrideTask, taskPeriodClone.OverrideTask);
             Assert.AreEqual(_target.Period, taskPeriodClone.Period);
             
             taskPeriodClone = _target.NoneEntityClone();
@@ -463,7 +458,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
             Assert.AreEqual(_target.AggregatedTasks, taskPeriodClone.AggregatedTasks);
             Assert.AreEqual(_target.Task, taskPeriodClone.Task);
             Assert.AreEqual(_target.Campaign, taskPeriodClone.Campaign);
-				Assert.AreEqual(_target.OverrideTask, taskPeriodClone.OverrideTask);
             Assert.AreEqual(_target.Period, taskPeriodClone.Period);
             
             taskPeriodClone = _target.EntityClone();
@@ -471,7 +465,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
             Assert.AreEqual(_target.AggregatedTasks, taskPeriodClone.AggregatedTasks);
             Assert.AreEqual(_target.Task, taskPeriodClone.Task);
             Assert.AreEqual(_target.Campaign, taskPeriodClone.Campaign);
-				Assert.AreEqual(_target.OverrideTask, taskPeriodClone.OverrideTask);
             Assert.AreEqual(_target.Period, taskPeriodClone.Period);
         }
 
@@ -578,54 +571,5 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
 			_target.AverageAfterTaskTime = TimeSpan.FromHours(-2);
 			Assert.AreEqual(TimeSpan.FromHours(1), _target.AverageAfterTaskTime);
 		}
-
-		[Test]
-		public void ShouldOverrideTasks()
-		{
-			_target.SetTasks(100);
-			_target.SetOverrideTasks( 200d, null );
-
-			_target.TotalTasks.Should().Be.EqualTo(200d);
-		}
-
-		[Test]
-		public void ShouldOverrideCampaign()
-		{
-			_target.SetTasks(100);
-			_target.CampaignTasks = new Percent(0.2);
-			_target.SetOverrideTasks(200d, null);
-
-			_target.TotalTasks.Should().Be.EqualTo(200d);
-		}
-
-		[Test]
-		public void ShouldOverrideWithZero()
-		{
-			_target.SetTasks(100);
-			_target.SetOverrideTasks(0d, null);
-
-			_target.TotalTasks.Should().Be.EqualTo(0d);
-		}
-
-	     [Test]
-	     public void ShouldOverrideAverageTaskTime()
-	     {
-		     _target.AverageTaskTime = TimeSpan.FromSeconds(100);
-			 _target.TotalAverageTaskTime.Should().Be.EqualTo(TimeSpan.FromSeconds(100));
-			 _target.OverrideAverageTaskTime = TimeSpan.FromSeconds(200);
-			 _target.TotalAverageTaskTime.Should().Be.EqualTo(TimeSpan.FromSeconds(200));
-
-	     }
-
-		 [Test]
-		 public void ShouldOverrideAverageAfterTaskTime()
-		 {
-			 _target.AverageAfterTaskTime = TimeSpan.FromSeconds(100);
-			 _target.TotalAverageAfterTaskTime.Should().Be.EqualTo(TimeSpan.FromSeconds(100));
-			 _target.OverrideAverageAfterTaskTime = TimeSpan.FromSeconds(200);
-			 _target.TotalAverageAfterTaskTime.Should().Be.EqualTo(TimeSpan.FromSeconds(200));
-
-		 }
-
     }
 }

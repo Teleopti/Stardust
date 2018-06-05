@@ -8,18 +8,18 @@
 </div>
 
 <div class="team-schedule panel wfm-block material-depth-1 week-view" ng-click="vm.showDatePicker && (vm.showDatePicker = false)"
- wait-for="vm.boostrap">
+	 wait-for="vm.boostrap">
 	<div class="teamschedule-header">
 		<div class="leftside-part">
 
 			<favorite-search current-favorite="vm.selectedFavorite" apply-favorite="vm.applyFavorite(currentFavorite)" get-search="vm.getSearch()"
-			 on-init-async="vm.onFavoriteSearchInitDefer"></favorite-search>
+							 on-init-async="vm.onFavoriteSearchInitDefer"></favorite-search>
 
 			<group-page-picker ng-if="vm.toggles.Wfm_GroupPages_45057" on-close="vm.onSelectedTeamsChanged()" group-pages="vm.availableGroups" selected-groups="vm.selectedGroups"></group-page-picker>
 
 			<organization-picker ng-if="!vm.toggles.Wfm_GroupPages_45057" sites-and-teams="vm.sitesAndTeams" class="organization-picker-container"
-			 on-open="vm.searchOptions.focusingSearch = false" on-close="vm.onSelectedTeamsChanged()" selected-text="vm.orgPickerSelectedText()"
-			 selected-team-ids="vm.selectedGroups.groupIds"></organization-picker>
+								 on-open="vm.searchOptions.focusingSearch = false" on-close="vm.onSelectedTeamsChanged()" selected-text="vm.orgPickerSelectedText()"
+								 selected-team-ids="vm.selectedGroups.groupIds"></organization-picker>
 
 			<div class="people-search-container inline-block" ng-style="{'visibility': vm.hideSearchIfNoSelectedTeam()}">
 				<wfm-multiple-search-input search-options="vm.searchOptions" search-title="vm.searchPlaceholder" search-callback="vm.onKeyWordInSearchInputChanged"></wfm-multiple-search-input>
@@ -29,14 +29,14 @@
 				<team-schedule-datepicker selected-date="vm.startOfWeek" status="vm.showDatePicker" on-date-change="vm.onStartOfWeekChanged()" step="7"></team-schedule-datepicker>
 			</span>
 
-			<view-changer
-						selected-date="vm.scheduleDate"
-						keyword="vm.searchOptions.keyword" 
-						team-name-map="vm.teamNameMap" 
-						selected-groups="vm.selectedGroups"
-						selected-favorite="vm.selectedFavorite"
-						selected-sort-option="vm.sortOption"
-						staffing-enabled="vm.staffingEnabled"></view-changer>
+			<view-changer selected-date="vm.scheduleDate"
+						  keyword="vm.searchOptions.keyword"
+						  team-name-map="vm.teamNameMap"
+						  selected-groups="vm.selectedGroups"
+						  selected-favorite="vm.selectedFavorite"
+						  selected-sort-option="vm.sortOption"
+						  staffing-enabled="vm.staffingEnabled"
+						  timezone="vm.timezone"></view-changer>
 		</div>
 	</div>
 

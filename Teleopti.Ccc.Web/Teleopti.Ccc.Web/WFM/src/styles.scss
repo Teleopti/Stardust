@@ -10,6 +10,15 @@ mat-header-cell.mat-header-cell {
 	overflow: visible;
 }
 
+// IE 11 flexbox fix - https://github.com/philipwalton/flexbugs/blob/master/README.md#flexbug-3
+.mat-table {
+	mat-cell,
+	mat-footer-cell,
+	mat-header-cell {
+		min-height: 100%;
+	}
+}
+
 // Overriding styleguide overrides
 // to make Material work properly
 @import './themes/overrides_for_overrides';

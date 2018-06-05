@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Web;
 using Newtonsoft.Json;
-using Teleopti.Ccc.Infrastructure.Util;
+using Polly;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
@@ -44,17 +45,17 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 		private static T responseToJson<T>(WebRequest request)
 		{
-			T returnValue = default(T);
-			Retry.Handle<WebException>()
-				.WaitAndRetry(TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10))
-				.Do(() =>
+			var returnValue = Policy.Handle<WebException>()
+				.Or<HttpException>()
+				.WaitAndRetry(new []{TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10)})
+				.Execute(() =>
 				{
 					using (var response = request.GetResponse())
 					{
 						using (var reader = new StreamReader(response.GetResponseStream()))
 						{
 							var jsonString = reader.ReadToEnd();
-							returnValue = JsonConvert.DeserializeObject<T>(jsonString);
+							return JsonConvert.DeserializeObject<T>(jsonString);
 						}
 					}
 				});

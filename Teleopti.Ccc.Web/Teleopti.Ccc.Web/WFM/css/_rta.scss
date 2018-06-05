@@ -153,23 +153,24 @@
   &.historical {
 	overflow-x: hidden;
 
-	.adherence-percent-huge {
-	  font-size: 60px;
-	  position: relative;
-	  margin-left: 20px;
-	  line-height: 1;
-	  color: #1c94c4;
-	  display: inline-block;
-	  top: 50%;
-	  left: 50%;
-	  transform: translate(-50%, -50%);
-	}
+	.adherence-percent-container {
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
 
-	.adherence-percent-sign {
-	  font-size: 30px;
-	  color: #1c94c4;
-	  padding-left: 2px;
-	  opacity: 0.4
+	  .huge {
+		font-size: 60px;
+		line-height: 1;
+		color: #1c94c4;
+	  }
+
+	  .sign {
+		font-size: 30px;
+		color: #1c94c4;
+		padding-left: 2px;
+		opacity: 0.4
+	  }
+
 	}
 
 	.twocolumns {

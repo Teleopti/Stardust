@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.DistributedLock;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -46,8 +47,6 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.Services;
-using Teleopti.Ccc.Web.Areas.Forecasting.Core;
-using Teleopti.Ccc.Web.Areas.Global;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
@@ -136,10 +135,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			isolate.UseTestDouble<FakePurgeSettingRepository>().For<IPurgeSettingRepository>();
 
 			// Forecast
-			isolate.UseTestDouble<ForecastViewModelFactory>().For<IForecastViewModelFactory>();
 			isolate.UseTestDouble<ForecastProvider>().For<ForecastProvider>();
 			isolate.UseTestDouble<ForecastDayModelMapper>().For<ForecastDayModelMapper>();
-			isolate.UseTestDouble<IntradayPatternViewModelFactory>().For<IIntradayPatternViewModelFactory>();
 			isolate.UseTestDouble<WorkloadNameBuilder>().For<IWorkloadNameBuilder>();
 			isolate.UseTestDouble<FetchAndFillSkillDays>().For<IFetchAndFillSkillDays>();
 

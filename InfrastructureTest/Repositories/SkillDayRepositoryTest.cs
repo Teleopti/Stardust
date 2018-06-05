@@ -71,9 +71,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			workloadDay.Tasks = 7*20;
 			workloadDay.AverageTaskTime = TimeSpan.FromSeconds(22);
 			workloadDay.AverageAfterTaskTime = TimeSpan.FromSeconds(233);
-			workloadDay.SetOverrideTasks(10*20, null);
-			workloadDay.OverrideAverageTaskTime = TimeSpan.FromSeconds(60);
-			workloadDay.OverrideAverageAfterTaskTime = TimeSpan.FromSeconds(120);
 
 			IList<ISkillDataPeriod> skillDataPeriods = new List<ISkillDataPeriod>();
 			skillDataPeriods.Add(
@@ -110,12 +107,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				loadedAggregateFromDatabase.WorkloadDayCollection[0].AverageTaskTime);
 			Assert.AreEqual(skillDay.WorkloadDayCollection[0].TotalTasks,
 				loadedAggregateFromDatabase.WorkloadDayCollection[0].TotalTasks);
-			Assert.AreEqual(skillDay.WorkloadDayCollection[0].OverrideTasks,
-				loadedAggregateFromDatabase.WorkloadDayCollection[0].OverrideTasks);
-			Assert.AreEqual(skillDay.WorkloadDayCollection[0].OverrideAverageTaskTime,
-				loadedAggregateFromDatabase.WorkloadDayCollection[0].OverrideAverageTaskTime);
-			Assert.AreEqual(skillDay.WorkloadDayCollection[0].OverrideAverageAfterTaskTime,
-				loadedAggregateFromDatabase.WorkloadDayCollection[0].OverrideAverageAfterTaskTime);
 		}
 		
 		[Test]

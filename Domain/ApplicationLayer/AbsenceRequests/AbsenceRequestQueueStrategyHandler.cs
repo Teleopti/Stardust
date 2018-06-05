@@ -77,7 +77,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			            new DateOnly(now.AddDays(windowSize)));
 
 					var listOfAbsenceRequests = _absenceRequestStrategyProcessor.Get(
-						thresholdTime, //same value for near and far - pbi #44752
 						thresholdTime,
 						pastThresholdTime, initialPeriod, windowSize);
 

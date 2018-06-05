@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NPOI.HSSF.Record.Chart;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 {
@@ -65,6 +69,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 		private readonly AdherenceEventPublisher _adherenceEventPublisher;
 		private readonly IEventPublisherScope _eventPublisherScope;
 		private readonly ICurrentEventPublisher _currentEventPublisher;
+		private readonly ILateForWorkEventPublisher _lateForWorkEventPublisher;
 		private readonly IRtaTracer _tracer;
 
 		public AgentStateProcessor(
@@ -75,7 +80,9 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 			AdherenceEventPublisher adherenceEventPublisher,
 			IEventPublisherScope eventPublisherScope,
 			ICurrentEventPublisher currentEventPublisher,
-			IRtaTracer tracer)
+			ILateForWorkEventPublisher lateForWorkEventPublisher,
+			IRtaTracer tracer
+		)
 		{
 			_shiftEventPublisher = shiftEventPublisher;
 			_activityEventPublisher = activityEventPublisher;
@@ -84,6 +91,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 			_adherenceEventPublisher = adherenceEventPublisher;
 			_eventPublisherScope = eventPublisherScope;
 			_currentEventPublisher = currentEventPublisher;
+			_lateForWorkEventPublisher = lateForWorkEventPublisher;
 			_tracer = tracer;
 		}
 
@@ -165,7 +173,8 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 			_stateEventPublisher.Publish(context);
 			_ruleEventPublisher.Publish(context);
 			_adherenceEventPublisher.Publish(context);
-
+			_lateForWorkEventPublisher.Publish(context);
+			
 			_currentEventPublisher.Current().Publish(new AgentStateChangedEvent
 			{
 				PersonId = context.PersonId,
@@ -177,4 +186,5 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 			});
 		}
 	}
+
 }

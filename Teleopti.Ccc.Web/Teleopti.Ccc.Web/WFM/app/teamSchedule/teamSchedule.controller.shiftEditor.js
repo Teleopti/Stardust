@@ -9,14 +9,13 @@
 			'ShiftEditorViewModelFactory',
 			'signalRSVC',
 			'serviceDateFormatHelper',
-			'ViewStateKeeper',
-			function ($stateParams, $state, TeamSchedule, ShiftEditorViewModelFactory, signalRSVC, serviceDateFormatHelper, ViewStateKeeper) {
+			function ($stateParams, $state, TeamSchedule, ShiftEditorViewModelFactory, signalRSVC, serviceDateFormatHelper) {
 				var vm = this;
 				vm.personId = $stateParams.personId;
 				vm.timezone = decodeURIComponent($stateParams.timezone);
 				vm.date = $stateParams.date;
 				vm.gotoDayView = function () {
-					$state.go('teams.dayView', ViewStateKeeper.get());
+					$state.go('teams.dayView');
 				}
 
 				function init() {
@@ -62,14 +61,20 @@
 
 	function ShiftEditorController($element, $timeout, $window, $interval, $filter, serviceDateFormatHelper, ShiftEditorViewModelFactory) {
 		var vm = this;
+		var timeLineTimeRange = {
+			Start: moment.tz(vm.date, vm.timezone).add(-1, 'days').hours(0),
+			End: moment.tz(vm.date, vm.timezone).add(2, 'days').hours(0)
+		};
 		vm.showScrollLeftButton = false;
 		vm.showScrollRightButton = false;
 		vm.selectedShiftLayer = null;
 		vm.displayDate = moment(vm.date).format("YYYY-MM-DD");
 
+
 		vm.$onInit = function () {
-			vm.timelineVm = ShiftEditorViewModelFactory.CreateTimeline(vm.date, vm.timezone);
+			vm.timelineVm = ShiftEditorViewModelFactory.CreateTimeline(vm.date, vm.timezone, timeLineTimeRange);
 		}
+
 		vm.$onChanges = function (changesObj) {
 			if (!!changesObj.schedules.currentValue && changesObj.schedules.currentValue !== changesObj.schedules.previousValue) {
 				vm.scheduleVm = ShiftEditorViewModelFactory.CreateSchedule(vm.date, vm.timezone, changesObj.schedules.currentValue[0]);
@@ -101,10 +106,11 @@
 		}
 
 		vm.getShiftLayerWidth = function (layer) {
-			return layer.Minutes;
+			var start = moment.tz(layer.Start, vm.timezone);
+			return getDiffMinutes(layer.End, start);
 		}
 		vm.getShiftLayerLeft = function (layer) {
-			return getTotalMinutes(layer.Start);
+			return getDiffMinutes(layer.Start, timeLineTimeRange.Start);
 		}
 
 		function initAndBindScrollEvent() {
@@ -143,8 +149,8 @@
 			$timeout(function () {
 				var viewportEl = $element[0].querySelector('.viewport');
 				var shiftProjectionTimeRange = vm.scheduleVm.ProjectionTimeRange;
-				var shiftStart = getTotalMinutes(shiftProjectionTimeRange.Start);
-				var shiftLength = getTotalMinutes(shiftProjectionTimeRange.End) - shiftStart;
+				var shiftStart = getDiffMinutes(shiftProjectionTimeRange.Start, timeLineTimeRange.Start);
+				var shiftLength = getDiffMinutes(shiftProjectionTimeRange.End, timeLineTimeRange.Start) - shiftStart;
 				var scrollTo = viewportEl.clientWidth <= shiftLength ?
 					(shiftStart - 120) : (shiftStart - ((viewportEl.clientWidth - shiftLength) / 2));
 				if (scrollTo <= 0) scrollTo = 0;
@@ -163,15 +169,16 @@
 			return !!vm.scheduleVm && !!vm.scheduleVm.ShiftLayers && !!vm.scheduleVm.ShiftLayers.length;
 		}
 
-		function getTotalMinutes(dateTime) {
+		function getDiffMinutes(dateTime, fromTime) {
 			var hours = 0;
-			var currentDate = moment.tz(vm.date, vm.timezone);
+			var startTime = fromTime.clone();
 			var dateTimeMoment = moment.tz(dateTime, vm.timezone);
-			while (dateTimeMoment.diff(currentDate, 'hours') > 0) {
+
+			while (dateTimeMoment.diff(startTime, 'hours') > 0) {
 				hours += 1;
-				currentDate = currentDate.add(1, 'hours');
+				startTime = startTime.add(1, 'hours');
 			}
-			return hours * 60 + moment(dateTime).minutes();
+			return hours * 60 + dateTimeMoment.diff(startTime, 'minutes');
 		}
 	}
 

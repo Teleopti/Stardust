@@ -396,7 +396,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 			this.labelAbandonRate.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this.labelAbandonRate.Size = new System.Drawing.Size(149, 28);
 			this.labelAbandonRate.TabIndex = 19;
-			this.labelAbandonRate.Text = "xxAbandonedRateParenthesisPercentSign";
+			this.labelAbandonRate.Text = "xxAbandonRateParenthesisPercentSign";
 			this.labelAbandonRate.Click += new System.EventHandler(this.label2_Click);
 			// 
 			// percentTextBoxAbandonRate

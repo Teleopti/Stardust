@@ -20,7 +20,7 @@ describe('ForecastCtrl', function() {
       $httpBackend = _$httpBackend_;
       fakeBackend = _fakeForecastingBackend_;
 
-      vm = $controller('ForecastModController');
+      vm = $controller('ForecastModController', {$scope: scope});
 
       skill = {
         IsPermittedToModifySkill: true,
@@ -67,14 +67,14 @@ describe('ForecastCtrl', function() {
     });
   });
 
-  xit('should handle stateParam data', function() {
+  it('should handle stateParam data', function() {
     expect(vm.selectedWorkload.Id).toBe('dfg');
     expect(vm.selectedWorkload.Workload.Id).toBe('abc');
     expect(vm.selectedWorkload.Workload.Name).toBe('workloadName');
     expect(vm.selectedWorkload.Name).toBe('skillName');
   });
 
-  xit("should get workload with days", inject(function ($controller) {
+  it("should get workload with days", inject(function ($controller) {
     fakeBackend.withSkill(skill);
     fakeBackend.withForecastStatus(true);
     fakeBackend.withScenario(scenario);
@@ -84,7 +84,7 @@ describe('ForecastCtrl', function() {
     expect(vm.selectedScenario.Id).toEqual(scenario.Id);
   }));
 
-  xit("should default forecasting period to next 6 month", inject(function () {
+  it("should default forecasting period to next 6 month", inject(function () {
     var today = moment().utc().add(1, 'days').format("MMM Do YY");
     var testStartDate = moment(vm.forecastPeriod.startDate).utc().format("MMM Do YY");
     var testEndDate = moment(vm.forecastPeriod.endDate).utc().format("MMM Do YY");
@@ -92,14 +92,14 @@ describe('ForecastCtrl', function() {
     expect(testEndDate).toEqual(moment().utc().add(6, 'months').format("MMM Do YY"));
   }));
 
-  xit('should get correct data for export', inject(function () {
+  it('should get correct data for export', inject(function () {
     vm.selectedScenario = scenario;
 
     expect(vm.selectedWorkload.Id).toEqual('dfg');
     expect(vm.selectedScenario.Id).toEqual('e21d813c-238c-4c3f-9b49-9b5e015ab432');
   }));
 
-  xit('should be able to forecast clean scenario', inject(function () {
+  it('should be able to forecast clean scenario', inject(function () {
     vm.changeScenario(scenario2);
 
     expect(vm.selectedWorkload.Days.length).toEqual(0);

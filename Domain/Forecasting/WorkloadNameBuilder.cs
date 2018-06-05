@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
+namespace Teleopti.Ccc.Domain.Forecasting
 {
 	public class WorkloadNameBuilder : IWorkloadNameBuilder
 	{

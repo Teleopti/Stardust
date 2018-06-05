@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 
 		public void Apply(PersonRuleChangedEvent @event) => applySolidProof(@event);
 
-		public void Apply(PersonInAdherenceAfterLateForWorkEvent @event)
+		public void Apply(PersonArrivalAfterLateForWorkEvent @event)
 		{
 			var model = applySolidProof(@event);
 			if (model != null)
@@ -52,8 +52,12 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 		{
 			closeOpenPeriod(_recordedOutOfAdherences);
 			closeOpenPeriod(_recordedNeutralAdherences);
+			
 			_recordedOutOfAdherences = removeTinyPeriods(_recordedOutOfAdherences);
+			_recordedOutOfAdherences = mergePeriods(_recordedOutOfAdherences);
+			
 			_recordedNeutralAdherences = removeTinyPeriods(_recordedNeutralAdherences);
+			_recordedNeutralAdherences = mergePeriods(_recordedNeutralAdherences);
 		}
 
 		private HistoricalChangeModel applySolidProof(ISolidProof @event)
@@ -113,6 +117,17 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 			if (period != null && period.EndTime == null)
 				period.EndTime = _now;
 		}
+
+		private static IList<AdherencePeriod> mergePeriods(IEnumerable<AdherencePeriod> periods)
+			=> periods.Aggregate(new List<AdherencePeriod>(), (acc, i) =>
+				{
+					var lastPeriod = acc.LastOrDefault();
+					if (lastPeriod != null && lastPeriod.EndTime.Value == i.StartTime)
+						lastPeriod.EndTime = i.EndTime;
+					else
+						acc.Add(i);
+					return acc;
+				});
 
 		private static IList<AdherencePeriod> removeTinyPeriods(IEnumerable<AdherencePeriod> periods)
 			=> periods

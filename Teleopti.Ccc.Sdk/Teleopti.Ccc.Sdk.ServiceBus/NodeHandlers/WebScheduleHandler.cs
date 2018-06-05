@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			Action<string> sendProgress,
 			ref IEnumerable<object> returnObjects)
 		{
-			_stardustJobFeedback.SendProgress = sendProgress;
+			//_stardustJobFeedback.SendProgress = sendProgress;
 			using (_dataSourceScope.OnThisThreadUse(parameters.LogOnDatasource))
 			{
 				var theRealOne = _componentContext.Resolve<IHandleEvent<WebScheduleStardustEvent>>();

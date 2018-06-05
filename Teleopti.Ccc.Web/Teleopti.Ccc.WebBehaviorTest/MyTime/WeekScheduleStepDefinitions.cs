@@ -34,6 +34,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			AssertShowingWeekForDay(DateHelper.GetFirstDateInWeek(date.Date, DataMaker.Data().MyCulture));
 		}
 
+		[Then(@"I should see the start and end dates of current week in Bulgarian culture for date '(.*)'")]
+		public void ThenIShouldSeeTheStartAndEndDatesOfCurrentWeekInBulgarianCultureForDate(DateTime date)
+		{
+			var day = DateHelper.GetFirstDateInWeek(date.Date, DataMaker.Data().MyCulture);
+			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(day, DataMaker.Data().MyCulture).ToString("d.M.yyyy");
+			var lastDayOfWeek = DateHelper.GetLastDateInWeek(day, DataMaker.Data().MyCulture).ToString("d.M.yyyy");
+
+			Browser.Interactions.AssertInputValue($".form-control.text-center.date-input-style", string.Format("{0} 'Г.' - {1} 'Г.'", firstDayOfWeek, lastDayOfWeek));
+		}
+
+
 		[Then(@"I should not see the end of the shift on date '(.*)'")]
 		public void ThenIShouldNotSeeTheEndOfTheShiftOnDate(DateTime date)
 		{

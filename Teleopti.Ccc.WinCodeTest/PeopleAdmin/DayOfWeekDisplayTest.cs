@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin;
@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin
 		public void ShouldDisplayWeekdayNamesInSwedish()
 		{
 			var days = DayOfWeekDisplay.ListOfDayOfWeek;
-			Assert.That(days[0].DisplayName, Is.EqualTo("måndag"));
-			Assert.That(days[6].DisplayName, Is.EqualTo("söndag"));
+			Assert.That(days[0].DisplayName, Is.EqualTo("mÃ¥ndag"));
+			Assert.That(days[6].DisplayName, Is.EqualTo("sÃ¶ndag"));
 		}
 
 		[Test, SetUICulture("en-US")]

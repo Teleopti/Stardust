@@ -1,5 +1,5 @@
 ﻿using System;
-using NHibernate.Util;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var result = CurrentUnitOfWork.Current().FetchSession().CreateSQLQuery("select LockTimestamp from JobStartTime where BusinessUnit = :bu")
 				.SetGuid("bu", businessUnitId)
 				.List<DateTime?>();
-			result.First().Should().Be.Null();
+			result.First().HasValue.Should().Be.False();
 		}
 
 		[Test]
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var result = CurrentUnitOfWork.Current().FetchSession().CreateSQLQuery("select LockTimestamp from JobStartTime where BusinessUnit = :bu")
 				.SetGuid("bu", businessUnitId)
 				.List<DateTime?>();
-			result.First().Should().Be.Null();
+			result.First().HasValue.Should().Be.False();
 		}
 
 		[Test]
@@ -142,9 +142,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var result = CurrentUnitOfWork.Current().FetchSession().CreateSQLQuery("select LockTimestamp from JobStartTime where BusinessUnit = :bu")
 				.SetGuid("bu", businessUnitId)
 				.List<DateTime?>();
-			result.First().Should().Be.Null();
+			result.First().HasValue.Should().Be.False();
 		}
 	}
-
-
 }

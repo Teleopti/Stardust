@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-    public class PeopleAndSkillLoaderDeciderForTeamLeaderMode : IPeopleAndSkillLoaderDecider
+	public class PeopleAndSkillLoaderDeciderForTeamLeaderMode : IPeopleAndSkillLoaderDecider
     {
         public ILoaderDeciderResult Execute(IScenario scenario, DateTimePeriod period, IEnumerable<IPerson> people)
         {
@@ -33,7 +34,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			public int FilterSkills(ISkill[] skills, Action<ISkill> removeSkill, Action<ISkill> addSkill)
 		    {
-			    return 0;
+				skills.ForEach(removeSkill);
+				return skills.Length;
 		    }
 	    }
     }

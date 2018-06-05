@@ -185,6 +185,7 @@
     <Compile Include="ApplicationLayer\Commands\ShiftCategorySelectorWithPrediction.cs" />
     <Compile Include="ApplicationLayer\Events\ProjectionChangedEventForShiftExchangeOffer.cs" />
     <Compile Include="ApplicationLayer\Events\RefreshPayrollFormatsEvent.cs" />
+    <Compile Include="ApplicationLayer\IPersonInAdherenceAfterLateForWorkEventPublisher.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\IOvertimeRequestContractWorkRulesValidator.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\IOvertimeRequestOpenPeriodProvider.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestOpenPeriodProvider.cs" />
@@ -208,9 +209,12 @@
     <Compile Include="Common\CalculatePersonAccount.cs" />
     <Compile Include="Config\WebTenantAuthenticationConfiguration.cs" />
     <Compile Include="Forecasting\ForecastDayOverride.cs" />
+    <Compile Include="Forecasting\ForecastProvider.cs" />
+    <Compile Include="Forecasting\IWorkloadNameBuilder.cs" />
     <Compile Include="Forecasting\Models\ForecastDayModel.cs" />
     <Compile Include="Forecasting\Models\ForecastDayModelMapper.cs" />
     <Compile Include="Forecasting\Models\ForecastModel.cs" />
+    <Compile Include="Forecasting\WorkloadNameBuilder.cs" />
     <Compile Include="InterfaceLegacy\Domain\OvertimeRequestStaffingCheckMethod.cs" />
     <Compile Include="Intraday\BacklogSkillTypesForecastCalculator.cs" />
     <Compile Include="Optimization\PredictorResult.cs" />
@@ -222,6 +226,8 @@
     <Compile Include="Optimization\WasReallyBetterResult.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayLoaderLateForWork.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayWithLateForWork.cs" />
+    <Compile Include="RealTimeAdherence\Domain\Events\ISolidProof.cs" />
+    <Compile Include="RealTimeAdherence\Domain\Events\PersonArrivalAfterLateForWorkEvent.cs" />
     <Compile Include="RegisterEventHandlerInLifetimeScopeAttribute.cs" />
     <Compile Include="Repositories\IAllSkillForSkillGroupProvider.cs" />
     <Compile Include="Repositories\IForecastDayOverrideRepository.cs" />

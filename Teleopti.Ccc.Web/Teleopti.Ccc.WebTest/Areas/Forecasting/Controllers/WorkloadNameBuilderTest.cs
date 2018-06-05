@@ -1,6 +1,6 @@
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Web.Areas.Forecasting.Core;
+using Teleopti.Ccc.Domain.Forecasting;
 
 namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 {

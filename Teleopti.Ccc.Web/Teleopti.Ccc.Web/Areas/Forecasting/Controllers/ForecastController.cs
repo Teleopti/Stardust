@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -11,13 +10,10 @@ using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Web.Areas.Forecasting.Core;
 using Teleopti.Ccc.Web.Areas.Forecasting.Models;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
-using Task = System.Threading.Tasks.Task;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 {
@@ -26,9 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 	{
 		private readonly IForecastCreator _forecastCreator;
 		private readonly ISkillRepository _skillRepository;
-		private readonly IForecastViewModelFactory _forecastViewModelFactory;
 		private readonly ForecastProvider _forecastProvider;
-		private readonly IIntradayPatternViewModelFactory _intradayPatternViewModelFactory;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IWorkloadRepository _workloadRepository;
 		private readonly IAuthorization _authorization;
@@ -41,9 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		public ForecastController(
 			IForecastCreator forecastCreator,
 			ISkillRepository skillRepository,
-			IForecastViewModelFactory forecastViewModelFactory,
 			ForecastProvider forecastProvider,
-			IIntradayPatternViewModelFactory intradayPatternViewModelFactory,
 			IScenarioRepository scenarioRepository,
 			IWorkloadRepository workloadRepository,
 			IAuthorization authorization,
@@ -55,9 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		{
 			_forecastCreator = forecastCreator;
 			_skillRepository = skillRepository;
-			_forecastViewModelFactory = forecastViewModelFactory;
 			_forecastProvider = forecastProvider;
-			_intradayPatternViewModelFactory = intradayPatternViewModelFactory;
 			_scenarioRepository = scenarioRepository;
 			_workloadRepository = workloadRepository;
 			_authorization = authorization;
@@ -87,30 +77,12 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			};
 		}
 
-		[UnitOfWork, HttpPost, Route("api/Forecasting/Evaluate")]
-		public virtual Task<WorkloadEvaluateViewModel> Evaluate(EvaluateInput input)
-		{
-			return Task.FromResult(_forecastViewModelFactory.Evaluate(input));
-		}
-
-		[UnitOfWork, HttpPost, Route("api/Forecasting/QueueStatistics")]
-		public virtual Task<WorkloadQueueStatisticsViewModel> QueueStatistics(QueueStatisticsInput input)
-		{
-			return Task.FromResult(_forecastViewModelFactory.QueueStatistics(input));
-		}
-
 		[HttpPost, Route("api/Forecasting/LoadForecast"), UnitOfWork]
 		public virtual IHttpActionResult LoadForecast(ForecastResultInput input)
 		{
 			var period = new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd));
 			var scenario = _scenarioRepository.Get(input.ScenarioId);
 			return Ok(_forecastProvider.Load(input.WorkloadId, period, scenario));
-		}
-
-		[HttpPost, Route("api/Forecasting/EvaluateMethods"), UnitOfWork]
-		public virtual Task<WorkloadEvaluateMethodsViewModel> EvaluateMethods(EvaluateMethodsInput input)
-		{
-			return Task.FromResult(_forecastViewModelFactory.EvaluateMethods(input));
 		}
 
 		[HttpPost, Route("api/Forecasting/Forecast"), ReadonlyUnitOfWork]
@@ -122,16 +94,10 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			return Ok(forecast);
 		}
 
-		[HttpPost, Route("api/Forecasting/IntradayPattern"), UnitOfWork]
-		public virtual Task<IntradayPatternViewModel> IntradayPattern(IntradayPatternInput input)
-		{
-			return Task.FromResult(_intradayPatternViewModelFactory.Create(input));
-		}
-
 		[UnitOfWork, HttpPost, Route("api/Forecasting/Campaign")]
 		public virtual IHttpActionResult AddCampaign(CampaignInput input)
 		{
-			var warning = "";
+			var hasWarning = false;
 			foreach (var selectedDay in input.SelectedDays)
 			{
 				var forecastDay = input.ForecastDays.Single(x => x.Date == selectedDay);
@@ -142,8 +108,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 
 				if (forecastDay.HasOverride)
 				{
-					if (warning == "")
-						warning = Resources.CampaignNotAppliedWIthExistingOverride;
+					hasWarning = true;
 					continue;
 				}
 
@@ -154,7 +119,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 
 			return Ok(new
 			{
-				WarningMessage = warning,
+				WarningMessage = hasWarning ? Resources.CampaignNotAppliedWIthExistingOverride : string.Empty,
 				input.ForecastDays
 			});
 		}
@@ -162,7 +127,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		[UnitOfWork, HttpPost, Route("api/Forecasting/Override")]
 		public virtual IHttpActionResult AddOverride(OverrideInput input)
 		{
-			var warning = "";
+			var hasWarning = false;
 			foreach (var selectedDay in input.SelectedDays)
 			{
 				var forecastDay = input.ForecastDays.Single(x => x.Date == selectedDay);
@@ -205,8 +170,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 										  input.OverrideAverageAfterTaskTime.HasValue;
 				if (forecastDay.HasOverride)
 				{
-					if (forecastDay.HasCampaign && warning == "")
-						warning = Resources.ClearCampaignWIthOverride;
+					hasWarning = hasWarning || forecastDay.HasCampaign;
 					forecastDay.HasCampaign = false;
 					forecastDay.CampaignTasksPercentage = 0;
 				}
@@ -218,8 +182,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 
 			return Ok(new
 			{
-				WarningMessage = warning,
-				ForecastDays = input.ForecastDays
+				WarningMessage = hasWarning ? Resources.ClearCampaignWIthOverride : string.Empty,
+				input.ForecastDays
 			});
 		}
 
@@ -238,10 +202,13 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 
 			foreach (var skillDay in skillDays)
 			{
-				var forecastedWorkloadDay =
-					skillDay.WorkloadDayCollection.SingleOrDefault(x => x.Workload.Id.Value == forecastResult.WorkloadId);
+				var forecastedWorkloadDay = skillDay.WorkloadDayCollection
+					.SingleOrDefault(x => x.Workload.Id.Value == forecastResult.WorkloadId);
 				if (!forecastedWorkloadDay.OpenForWork.IsOpen)
+				{
 					continue;
+				}
+
 				var model = forecastResult.ForecastDays.SingleOrDefault(x => x.Date == forecastedWorkloadDay.CurrentDate);
 				forecastedWorkloadDay.Tasks = model.OverrideTasks ?? model.Tasks;
 				forecastedWorkloadDay.AverageTaskTime = TimeSpan.FromSeconds(model.OverrideAverageTaskTime ?? model.AverageTaskTime);
@@ -263,34 +230,13 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 							? overrideNote
 							: overrideNote + forecastedWorkloadDay.Annotation;
 
-						forecastDayOverride =
-							new ForecastDayOverride(skillDay.CurrentDate, workload, scenario)
-							{
-								OriginalTasks = model.Tasks,
-								OriginalAverageTaskTime = TimeSpan.FromSeconds(model.AverageTaskTime),
-								OriginalAverageAfterTaskTime = TimeSpan.FromSeconds(model.AverageAfterTaskTime),
-								OverriddenTasks = model.OverrideTasks,
-								OverriddenAverageTaskTime = model.OverrideAverageTaskTime.HasValue
-									? TimeSpan.FromSeconds(model.OverrideAverageTaskTime.Value)
-									: (TimeSpan?)null,
-								OverriddenAverageAfterTaskTime = model.OverrideAverageAfterTaskTime.HasValue
-									? TimeSpan.FromSeconds(model.OverrideAverageAfterTaskTime.Value)
-									: (TimeSpan?)null
-							};
+						forecastDayOverride = new ForecastDayOverride(skillDay.CurrentDate, workload, scenario);
+						mapDayModelToOverride(forecastDayOverride, model);
 						_forecastDayOverrideRepository.Add(forecastDayOverride);
 					}
 					else
 					{
-						forecastDayOverride.OriginalTasks = model.Tasks;
-						forecastDayOverride.OriginalAverageTaskTime = TimeSpan.FromSeconds(model.AverageTaskTime);
-						forecastDayOverride.OriginalAverageAfterTaskTime = TimeSpan.FromSeconds(model.AverageAfterTaskTime);
-						forecastDayOverride.OverriddenTasks = model.OverrideTasks;
-						forecastDayOverride.OverriddenAverageTaskTime = model.OverrideAverageTaskTime.HasValue
-							? TimeSpan.FromSeconds(model.OverrideAverageTaskTime.Value)
-							: (TimeSpan?) null;
-						forecastDayOverride.OverriddenAverageAfterTaskTime = model.OverrideAverageAfterTaskTime.HasValue
-							? TimeSpan.FromSeconds(model.OverrideAverageAfterTaskTime.Value)
-							: (TimeSpan?) null;
+						mapDayModelToOverride(forecastDayOverride, model);
 					}
 				}
 				else
@@ -299,8 +245,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 					{
 						if (!string.IsNullOrEmpty(forecastedWorkloadDay.Annotation))
 						{
-							forecastedWorkloadDay.Annotation =
-								forecastedWorkloadDay.Annotation.Replace($"[*{Resources.ForecastDayIsOverrided}*]", "");
+							forecastedWorkloadDay.Annotation = forecastedWorkloadDay.Annotation.Replace(overrideNote, "");
 						}
 
 						_forecastDayOverrideRepository.Remove(forecastDayOverride);
@@ -316,6 +261,20 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			}
 
 			return Ok();
+		}
+
+		private static void mapDayModelToOverride(IForecastDayOverride forecastDayOverride, ForecastDayModel forecastDay)
+		{
+			forecastDayOverride.OriginalTasks = forecastDay.Tasks;
+			forecastDayOverride.OriginalAverageTaskTime = TimeSpan.FromSeconds(forecastDay.AverageTaskTime);
+			forecastDayOverride.OriginalAverageAfterTaskTime = TimeSpan.FromSeconds(forecastDay.AverageAfterTaskTime);
+			forecastDayOverride.OverriddenTasks = forecastDay.OverrideTasks;
+			forecastDayOverride.OverriddenAverageTaskTime = forecastDay.OverrideAverageTaskTime.HasValue
+				? TimeSpan.FromSeconds(forecastDay.OverrideAverageTaskTime.Value)
+				: (TimeSpan?) null;
+			forecastDayOverride.OverriddenAverageAfterTaskTime = forecastDay.OverrideAverageAfterTaskTime.HasValue
+				? TimeSpan.FromSeconds(forecastDay.OverrideAverageAfterTaskTime.Value)
+				: (TimeSpan?) null;
 		}
 	}
 }

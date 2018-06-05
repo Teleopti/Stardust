@@ -160,6 +160,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Abandon rate (%).
+        /// </summary>
+        public static string AbandonRateParenthesisPercentSign {
+            get {
+                return ResourceManager.GetString("AbandonRateParenthesisPercentSign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to About.
         /// </summary>
         public static string About {
@@ -2074,15 +2083,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AgentState {
             get {
                 return ResourceManager.GetString("AgentState", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Agents that failed inspection.
-        /// </summary>
-        public static string AgentsThatFailedInspection {
-            get {
-                return ResourceManager.GetString("AgentsThatFailedInspection", resourceCulture);
             }
         }
         
@@ -25628,15 +25628,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Primary reason.
-        /// </summary>
-        public static string PrimaryReason {
-            get {
-                return ResourceManager.GetString("PrimaryReason", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Print.
         /// </summary>
         public static string Print {
@@ -28310,6 +28301,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string RestrictionNotAbleToBeScheduledReasonNightlyRestMightBeBroken {
             get {
                 return ResourceManager.GetString("RestrictionNotAbleToBeScheduledReasonNightlyRestMightBeBroken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No issues in period.
+        /// </summary>
+        public static string RestrictionNotAbleToBeScheduledReasonNoIssue {
+            get {
+                return ResourceManager.GetString("RestrictionNotAbleToBeScheduledReasonNoIssue", resourceCulture);
             }
         }
         
@@ -32407,6 +32407,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShowNextShift {
             get {
                 return ResourceManager.GetString("ShowNextShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show top {0} of agents with no issues.
+        /// </summary>
+        public static string ShowNoneIssuedAgents {
+            get {
+                return ResourceManager.GetString("ShowNoneIssuedAgents", resourceCulture);
             }
         }
         

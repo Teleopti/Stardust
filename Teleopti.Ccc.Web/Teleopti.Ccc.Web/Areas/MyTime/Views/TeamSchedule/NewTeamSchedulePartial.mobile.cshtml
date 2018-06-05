@@ -13,7 +13,7 @@
 		padding-top: 50px;
 	}
 	#body-inner{
-		height: calc(100% - 21px);
+		height: 100%;
 	}
 	ul li ul li.select2-result:nth-child(odd) {
 		background: rgba(0, 0, 0, 0.1);
@@ -25,6 +25,9 @@
 	.tooltip.top {
 		margin: 0;
 		min-width: 120px;
+	}
+	.mobile-foot {
+		display: none !important;
 	}
 </style>
 <div class="mobile-teamschedule-view">
@@ -72,7 +75,7 @@
 
 		<div class="my-schedule-column relative" data-bind="style: {height: scheduleContainerHeight + 'px'}">
 			<!-- ko if: mySchedule -->
-			<div class="agent-name">
+			<div class="agent-name" data-bind="tooltip: { title: mySchedule().name, trigger: 'click', placement: 'bottom'}, hideTooltipAfterMouseLeave: true">
 				<span data-bind="text: mySchedule().name"></span>
 			</div>
 			<div class="mobile-schedule-container relative">
@@ -101,7 +104,7 @@
 		<div class="teammates-schedules-container" data-bind="style: {height: scheduleContainerHeight + 'px'}">
 			<!-- ko foreach: teamSchedules -->
 			<div class="teammates-schedules-column relative">
-				<div class="agent-name">
+				<div class="agent-name" data-bind="tooltip: { title: name, trigger: 'click', placement: 'bottom'}, hideTooltipAfterMouseLeave: true">
 					<span data-bind="text: name"></span>
 				</div>
 				<div class="mobile-schedule-container relative">
@@ -127,5 +130,21 @@
 			<!-- /ko -->
 		</div>
 		<!-- /ko -->
+
+		<!-- ko if: isPageVisible-->
+		<ul class="pagination pagination-sm">
+			<li>
+				<a data-bind="click: goToPreviousPage, enable: isPreviousPageEnabled, css: {'paging-disabled': !isPreviousPageEnabled()}"><i class="glyphicon glyphicon-fast-backward"></i></a>
+			</li>
+			<li>
+				<span data-bind="text: currentPageNum"></span>
+				<span>/</span>
+				<span data-bind="text: totalPageNum"></span>
+			</li>
+			<li>
+				<a data-bind="click: goToNextPage, enable: isNextPageEnabled, css: {'paging-disabled': !isNextPageEnabled()}"><i class="glyphicon glyphicon-fast-forward"></i></a>
+			</li>
+		</ul>
+		<!--/ko-->
 	</div>
 </div>

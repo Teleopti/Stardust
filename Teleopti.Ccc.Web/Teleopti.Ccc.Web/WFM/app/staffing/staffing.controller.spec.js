@@ -1,22 +1,118 @@
 'use strict';
 describe('StaffingController', function() {
-	var $httpBackend, $controller, scope, UtilService, fakeBackend, $window, vm;
+	var $q, $httpBackend, $controller, scope, UtilService, fakeBackend, $window, vm, mockStaffingService;
 
 	beforeEach(function() {
 		module('wfm.staffing');
 	});
+	var deafultSkill = { DoDisplayData: true, IsMultisiteSkill: false, SkillType: 'SkillTypeChat', Id: '123' };
+	var deafultSkillArea = [
+		{"Id":"123","Name":"Skill1","DoDisplayData":true,"SkillType":"SkillTypeInboundTelephony","IsMultisiteSkill":false,"ShowAbandonRate":true,"ShowReforecastedAgents":true},
+		{"Id":"321","Name":"Skill2","DoDisplayData":true,"SkillType":"SkillTypeInboundTelephony","IsMultisiteSkill":false,"ShowAbandonRate":true,"ShowReforecastedAgents":true}
+	];
+
+	var mockCompensation = [
+		{
+			"Id":"9019d62f-0086-44b1-a977-9bb900b8c361",
+			"Name":"Overtime time"
+		}
+	]
+
+	var mockedImportData ={
+		"DataSeries": {
+			"AbsoluteDifference": [1,2,3],
+			"ActualStaffing": null,
+			"Date": "2018-05-31T00:00:00",
+			"ForecastedStaffing": [1,2,3],
+			"ScheduledStaffing": [1,2,3],
+			"Time": [1,2,3],
+			"UpdatedForecastedStaffing": null,
+		},
+		"ImportBpoInfoList": [
+			{
+				"Firstname":"Teleopti",
+				"ImportFilename":"BpoImportMagnusOutsourcer.csv",
+				"ImportedDateTime":"2018-05-31T09:36:55.307",
+				"ImportedDateTimeString":"Thursday, May 31, 2018 11:36 AM",
+				"Lastname":"Demo",
+				"Source":"DemoOutsourcer"
+			}
+		],
+		"StaffingHasData": true
+	}
 
 	beforeEach(
-		inject(function(_$rootScope_, _$httpBackend_, _$controller_, _UtilService_, _$window_) {
+		inject(function(_$q_, _$rootScope_, _$httpBackend_, _$controller_, _UtilService_, _$window_) {
+			$q = _$q_;
 			$httpBackend = _$httpBackend_;
 			$controller = _$controller_;
 			UtilService = _UtilService_;
 			$window = _$window_;
 			scope = _$rootScope_.$new();
 
+
+			mockStaffingService = {
+				getSkills: {
+					query: function () {
+						var queryDeferred = $q.defer();
+						var result = [deafultSkill];
+						queryDeferred.resolve(result);
+						return { $promise: queryDeferred.promise };
+					}
+				},
+				getSkillAreas: {
+					get: function () {
+						var queryDeferred = $q.defer();
+						var result = {SkillAreas: deafultSkillArea};
+						queryDeferred.resolve(result);
+						return { $promise: queryDeferred.promise };
+					}
+				},
+				getCompensations: {
+					query: function () {
+						var queryDeferred = $q.defer();
+						var result = mockCompensation;
+						queryDeferred.resolve(result);
+						return { $promise: queryDeferred.promise };
+					}
+				},
+				staffingSettings: {
+					get: function () {
+						var queryDeferred = $q.defer();
+						var result = {
+							"HasPermissionForBpoExchange":true,
+							"isLicenseAvailable": true
+						};
+						queryDeferred.resolve(result);
+						return { $promise: queryDeferred.promise };
+					}
+				},
+				getSkillStaffingByDate: {
+					get: function () {
+						var queryDeferred = $q.defer();
+						var result = mockedImportData;
+						queryDeferred.resolve(result);
+						return { $promise: queryDeferred.promise };
+					}
+				},
+				getSkillAreaStaffingByDate: {
+					get: function () {
+						var queryDeferred = $q.defer();
+						var result = mockedImportData;
+						queryDeferred.resolve(result);
+						return { $promise: queryDeferred.promise };
+					}
+				}
+			};
+
 			$httpBackend.whenGET('../api/staffing/exportforecastandstaffing').respond(function() {
 				return [200, '123'];
 			});
+
+			$httpBackend.whenGET('../ToggleHandler/AllToggles').respond(function() {
+				return [200];
+			});
+
 		})
 	);
 
@@ -150,7 +246,7 @@ describe('StaffingController', function() {
 			$scope: scope
 		});
 		$window.sessionStorage.staffingSelectedSkill =
-			'{"Id":"111","Name":"Demo","DoDisplayData":true,"SkillType":"SkillTypeInboundTelephony","IsMultisiteSkill":false,"ShowAbandonRate":true,"ShowReforecastedAgents":true}';
+		'{"Id":"111","Name":"Demo","DoDisplayData":true,"SkillType":"SkillTypeInboundTelephony","IsMultisiteSkill":false,"ShowAbandonRate":true,"ShowReforecastedAgents":true}';
 
 		vm.testSessionStorage(1);
 
@@ -162,7 +258,7 @@ describe('StaffingController', function() {
 			$scope: scope
 		});
 		$window.sessionStorage.staffingSelectedArea =
-			'{"Name":"Demo2","Id":"123","Skills":[{"Name":"Skill1","Id":"abc","IsDeleted":false,"SkillType":"SkillTypeEmail","DoDisplayData":true,"IsMultisiteSkill":false,"ShowAbandonRate":false,"ShowReforecastedAgents":false},{"Name":"Skill2","Id":"xyz","IsDeleted":false,"SkillType":"SkillTypeInboundTelephony","DoDisplayData":true,"IsMultisiteSkill":true,"ShowAbandonRate":true,"ShowReforecastedAgents":true}]}';
+		'{"Name":"Demo2","Id":"123","Skills":[{"Name":"Skill1","Id":"abc","IsDeleted":false,"SkillType":"SkillTypeEmail","DoDisplayData":true,"IsMultisiteSkill":false,"ShowAbandonRate":false,"ShowReforecastedAgents":false},{"Name":"Skill2","Id":"xyz","IsDeleted":false,"SkillType":"SkillTypeInboundTelephony","DoDisplayData":true,"IsMultisiteSkill":true,"ShowAbandonRate":true,"ShowReforecastedAgents":true}]}';
 
 		vm.testSessionStorage(2);
 
@@ -187,7 +283,7 @@ describe('StaffingController', function() {
 		});
 		vm.selectedDate = undefined;
 		$window.sessionStorage.staffingSelectedDate =
-			'Tue Jan 30 2018 14:56:27 GMT+0100 (Central Europe Standard Time)';
+		'Tue Jan 30 2018 14:56:27 GMT+0100 (Central Europe Standard Time)';
 
 		vm.testSessionStorage(4);
 
@@ -208,5 +304,38 @@ describe('StaffingController', function() {
 
 		expect(vm.ErrorMessage).toBe(undefined);
 	});
+
+	it('should show import file information', function() {
+		var vm = $controller('StaffingController', {
+			$scope: scope,
+			staffingService: mockStaffingService
+		});
+
+		scope.$digest();
+		expect(vm.importedBboInfos).toBe(mockedImportData.ImportBpoInfoList);
+	});
+
+	it('should check staffing settings', function() {
+		var vm = $controller('StaffingController', {
+			$scope: scope,
+			staffingService: mockStaffingService
+		});
+
+		scope.$digest();
+		expect(vm.showBpoInterface).toBe(true);
+		expect(vm.hasPermissionForBpoExchange).toBe(true);
+	});
+
+	it('should be get compensations', function() {
+		var vm = $controller('StaffingController', {
+			$scope: scope,
+			staffingService: mockStaffingService
+		});
+
+		scope.$digest();
+		expect(vm.compensations.length).toBe(1);
+		expect(vm.overtimeForm.Compensation).toBe(vm.compensations[0].Id);
+	});
+
 
 });

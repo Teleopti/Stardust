@@ -1,16 +1,19 @@
 import { DebugElement } from '@angular/core';
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { configureTestSuite } from '../../../../configure-test-suit';
 import { PeopleTestModule } from '../../people.test.module';
-import { AppLogonPageComponent } from './app-logon-page.component';
-import { WorkspaceService, adina } from '../../services';
+import { adina, WorkspaceService } from '../../services';
 import { adinaLogon } from '../../services/fake-backend/logons';
+import { AppLogonPageComponent } from './app-logon-page.component';
 
 describe('AppLogonPageComponent', () => {
 	let component: AppLogonPageComponent;
 	let fixture: ComponentFixture<AppLogonPageComponent>;
 	let workspaceService: WorkspaceService;
 	let page: Page;
+
+	configureTestSuite();
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({

@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
@@ -47,7 +47,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 
         #endregion
 
-        // Public Methods (7) 
+        // Public Methods (7)Â 
         [Test]
         public void VerifyMonth()
         {
@@ -79,7 +79,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
             Assert.AreEqual(7, _dateList3[2].WeekdayNumber); //US
 
             Assert.AreEqual("Monday", _dateList2[0].WeekdayName); //GB
-            Assert.AreEqual("söndag", _dateList1[2].WeekdayName); //SE
+            Assert.AreEqual("sÃ¶ndag", _dateList1[2].WeekdayName); //SE
 
             Assert.AreEqual(1, _dateList1[0].WeekNumber); //SE
             Assert.AreEqual(52, _dateList1[2].WeekNumber); //SE

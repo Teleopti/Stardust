@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Data;
@@ -293,6 +294,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 					layers.Add(new TeamScheduleLayerViewModel
 					{
+						Meeting = mapMeeting(layer.Payload as IMeetingPayload),
 						TitleHeader = description.Name,
 						Color = isPayloadAbsence
 							? (isAbsenceConfidential && !isPermittedToViewConfidential
@@ -356,6 +358,19 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				return false;
 			return workflowControlSet.SchedulePublishedToDate.HasValue &&
 				   workflowControlSet.SchedulePublishedToDate.Value >= date.Date;
+		}
+
+		private static MeetingViewModel mapMeeting(IMeetingPayload meetingPayload)
+		{
+			if (meetingPayload == null)
+				return null;
+			var formatter = new NoFormatting();
+			return new MeetingViewModel
+			{
+				Location = meetingPayload.Meeting.GetLocation(formatter),
+				Title = meetingPayload.Meeting.GetSubject(formatter),
+				Description = meetingPayload.Meeting.GetDescription(formatter)
+			};
 		}
 	}
 }
