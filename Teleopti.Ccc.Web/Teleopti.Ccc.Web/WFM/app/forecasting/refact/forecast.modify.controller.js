@@ -304,11 +304,13 @@
 					vm.forecastModal = false;
 					vm.selectedWorkload.Days = data.ForecastDays;
 					vm.scenarioNotForecasted = vm.selectedWorkload.Days.length === 0;
+					vm.changesMade = true;
 				},
 				function(data, status, headers, config) {
 					vm.isForecastRunning = false;
 					vm.forecastModal = false;
 					vm.scenarioNotForecasted = vm.selectedWorkload.Days.length === 0;
+					vm.changesMade = true;
 				}
 			);
 		}
