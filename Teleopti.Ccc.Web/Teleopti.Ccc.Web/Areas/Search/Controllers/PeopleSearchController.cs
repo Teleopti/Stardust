@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.Search.Models;
 using Teleopti.Ccc.Web.Filters;
@@ -22,20 +21,18 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 		private readonly IPeopleSearchProvider _searchProvider;
 		private readonly ILoggedOnUser _loggonUser;
 		private readonly IPersonFinderReadOnlyRepository _personFinder;
-		private readonly IAuthorization _principalAuthorization;
+
 
 		public PeopleSearchController(
-			IPeopleSearchProvider searchProvider, 
-			ILoggedOnUser loggonUser, 
-			IPersonFinderReadOnlyRepository personFinder, 
-			IPersonRepository personRepository,
-			IAuthorization principalAuthorization)
+			IPeopleSearchProvider searchProvider,
+			ILoggedOnUser loggonUser,
+			IPersonFinderReadOnlyRepository personFinder,
+			IPersonRepository personRepository)
 		{
 			_searchProvider = searchProvider;
 			_loggonUser = loggonUser;
 			_personFinder = personFinder;
 			_personRepository = personRepository;
-			_principalAuthorization = principalAuthorization;
 		}
 
 		[UnitOfWork]
@@ -44,13 +41,16 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 		{
 			searchCritera.SearchDate = DateTime.Now;
 
-			var personFinderSearchCriteria = new PeoplePersonFinderSearchWithPermissionCriteria(PersonFinderField.All, searchCritera.KeyWord, searchCritera.PageIndex + 1, searchCritera.PageSize, DateOnly.Today, 1, 1, 
+			var personFinderSearchCriteria = new PeoplePersonFinderSearchWithPermissionCriteria(PersonFinderField.All, searchCritera.KeyWord, searchCritera.PageIndex + 1, searchCritera.PageSize, DateOnly.Today, searchCritera.SortColumn, searchCritera.Direction,
 				searchCritera.SearchDate.ToDateOnly(), _loggonUser.CurrentUser().Id.GetValueOrDefault(), DefinedRaptorApplicationFunctionForeignIds.PeopleAccess);
 			_personFinder.FindPeopleWithDataPermission(personFinderSearchCriteria);
 
 			var findPeopleViewModel = new FindPeopleViewModel();
+
 			var validPersons = personFinderSearchCriteria.DisplayRows.Where(x => x.PersonId != Guid.Empty);
 			var persons = _personRepository.FindPeople(validPersons.Select(x => x.PersonId));
+
+			var pvm = new List<PeopleViewModel>();
 
 			foreach (var person in persons)
 			{
@@ -68,8 +68,28 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 						Name = x.DescriptionText,
 					}).ToList()
 				};
-				findPeopleViewModel.People.Add(pers);
+				pvm.Add(pers);
 			}
+
+			IOrderedEnumerable<PeopleViewModel> genericPvm;
+
+			switch (searchCritera.SortColumn)
+			{
+				case 0:
+					genericPvm = searchCritera.Direction == 1 ? pvm.OrderBy(person => person.FirstName) : pvm.OrderByDescending(person => person.FirstName);
+					break;
+				case 1:
+					genericPvm = searchCritera.Direction == 1 ? pvm.OrderBy(person => person.LastName) : pvm.OrderByDescending(person => person.LastName);
+					break;
+				case 2:
+					genericPvm = searchCritera.Direction == 1 ? pvm.OrderBy(person => person.Site) : pvm.OrderByDescending(person => person.Site);
+					break;
+				default:
+					genericPvm = searchCritera.Direction == 1 ? pvm.OrderBy(person => person.LastName) : pvm.OrderByDescending(person => person.LastName);
+					break;
+			}
+
+			findPeopleViewModel.People.AddRange(genericPvm.ToList());
 
 			findPeopleViewModel.TotalRows = personFinderSearchCriteria.TotalRows;
 			findPeopleViewModel.PageIndex = searchCritera.PageIndex;

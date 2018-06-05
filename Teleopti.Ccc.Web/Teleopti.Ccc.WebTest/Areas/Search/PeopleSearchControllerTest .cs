@@ -3,13 +3,10 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Claims;
 using System.Linq;
-using System.Security.Claims;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -18,7 +15,6 @@ using Teleopti.Ccc.Web.Areas.Search.Controllers;
 using Teleopti.Ccc.Web.Areas.Search.Models;
 using Teleopti.Ccc.WebTest.Areas.Global;
 using Teleopti.Interfaces.Domain;
-using Claim = System.IdentityModel.Claims.Claim;
 
 namespace Teleopti.Ccc.WebTest.Areas.Search
 {
@@ -57,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			person.SetOptionalColumnValue(optionalColumnValue, optionalColumn);
 
 			target = new PeopleSearchController(new FakePeopleSearchProvider(new[] { person }, new[] { optionalColumn }), loggonUser,
-				new FakePersonFinderReadOnlyRepository(), PersonRepository, PrincipalAuthorization.Current());
+				new FakePersonFinderReadOnlyRepository(), PersonRepository);
 
 			var result = ((dynamic)target).GetResult("Ashley", 10, 1, "");
 
@@ -90,7 +86,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			target =
 				new PeopleSearchController(
 					new FakePeopleSearchProvider(new[] { firstPerson, secondPerson }, new List<IOptionalColumn>()), loggonUser,
-					new FakePersonFinderReadOnlyRepository(), PersonRepository, PrincipalAuthorization.Current());
+					new FakePersonFinderReadOnlyRepository(), PersonRepository);
 
 			var result = ((dynamic)target).GetResult("a", 10, 1, "");
 
@@ -113,7 +109,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 
 			target =
 				new PeopleSearchController(new FakePeopleSearchProvider(new[] { person, currentUser }, new List<IOptionalColumn>()),
-					loggonUser, new FakePersonFinderReadOnlyRepository(), PersonRepository, PrincipalAuthorization.Current());
+					loggonUser, new FakePersonFinderReadOnlyRepository(), PersonRepository);
 
 			var result = ((dynamic)target).GetResult("", 10, 1, "");
 			var peopleList = (IEnumerable<dynamic>)result.Content.People;
@@ -136,7 +132,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			target =
 				new PeopleSearchController(
 					new FakePeopleSearchProvider(new[] { firstPerson, secondPerson, thirdPerson }, new List<IOptionalColumn>()),
-					loggonUser, new FakePersonFinderReadOnlyRepository(), PersonRepository, PrincipalAuthorization.Current());
+					loggonUser, new FakePersonFinderReadOnlyRepository(), PersonRepository);
 
 			var result = ((dynamic)target).GetResult("a", 10, 1, "lastname:true;firstname:true;employmentnumber:true");
 
@@ -169,8 +165,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 
 			target =
 				new PeopleSearchController(
-					new FakePeopleSearchProvider(new[] {p1, p2, p3}, new List<IOptionalColumn>()), loggonUser,
-					PersonFinderRepository, PersonRepository, new FullPermission());
+					new FakePeopleSearchProvider(new[] { p1, p2, p3 }, new List<IOptionalColumn>()), loggonUser,
+					PersonFinderRepository, PersonRepository);
 
 			var result = target.FindPeople(inputModel);
 
@@ -214,7 +210,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			target =
 				new PeopleSearchController(
 					new FakePeopleSearchProvider(new List<IPerson>(), new List<IOptionalColumn>()), loggonUser,
-					PersonFinderRepository, PersonRepository, new FullPermission());
+					PersonFinderRepository, PersonRepository);
 
 			var result = target.FindPeople(inputModel);
 			result.People.Count().Should().Be.EqualTo(10);
@@ -264,7 +260,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			target =
 				new PeopleSearchController(
 					new FakePeopleSearchProvider(new[] { ash }, new List<IOptionalColumn>()), loggonUser,
-					PersonFinderRepository, PersonRepository, new FullPermission());
+					PersonFinderRepository, PersonRepository);
 
 			var result = target.FindPeople(inputModel);
 			result.People.Count().Should().Be.EqualTo(1);
@@ -278,6 +274,81 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			var role = person.Roles.First();
 			role.Id.Should().Be.EqualTo(appRole.Id);
 			role.Name.Should().Be.EqualTo(appRole.DescriptionText);
+		}
+
+		[Test]
+		public void FindPeople_ShouldSortResultBasedOnFirstName()
+		{
+			for (int i = 65; i <= 90; i++)
+			{
+				var asciiChar = Convert.ToChar(i);
+				var ash = PersonFactory.CreatePersonWithGuid($"{asciiChar}a", $"Andeen {i}");
+				PersonFinderRepository.Has(ash);
+
+				ash.PermissionInformation.AddApplicationRole(ApplicationRoleFactory.CreateRole("Agent", "Agent").WithId());
+				var ashPP = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today).WithId();
+				ashPP.Team = TeamFactory.CreateTeam("Prefrences", "London");
+				ash.AddPersonPeriod(ashPP);
+
+				PersonRepository.Add(ash);
+			}
+
+			var inputModel = new FindPeopleInputModel
+			{
+				KeyWord = "a",
+				PageSize = 50,
+				PageIndex = 0,
+				Direction = 1,
+				SortColumn = 0
+
+			};
+
+			target =
+				new PeopleSearchController(
+					new FakePeopleSearchProvider(new List<IPerson>(), new List<IOptionalColumn>()), loggonUser,
+					PersonFinderRepository, PersonRepository);
+
+			var result = target.FindPeople(inputModel);
+			var person = result.People.First();
+			person.FirstName.Should().StartWith("A");
+		}
+
+		[Test]
+		public void FindPeople_ShouldSortDescending()
+		{
+			for (int i = 65; i <= 90; i++)
+			{
+				var asciiChar = Convert.ToChar(i);
+				var ash = PersonFactory.CreatePersonWithGuid($"{asciiChar}a", $"Andeen {i}");
+				PersonFinderRepository.Has(ash);
+
+				ash.PermissionInformation.AddApplicationRole(ApplicationRoleFactory.CreateRole("Agent", "Agent").WithId());
+				var ashPP = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today).WithId();
+				ashPP.Team = TeamFactory.CreateTeam("Prefrences", "London");
+				ash.AddPersonPeriod(ashPP);
+
+				PersonRepository.Add(ash);
+			}
+
+			var inputModel = new FindPeopleInputModel
+			{
+				KeyWord = "a",
+				PageSize = 50,
+				PageIndex = 0,
+				Direction = 0,
+				SortColumn = 0
+
+			};
+
+			target =
+				new PeopleSearchController(
+					new FakePeopleSearchProvider(new List<IPerson>(), new List<IOptionalColumn>()), loggonUser,
+					PersonFinderRepository, PersonRepository);
+
+
+			var result = target.FindPeople(inputModel);
+			var person = result.People.First();
+			person.FirstName.Should().StartWith("Z");
 		}
 	}
 }
