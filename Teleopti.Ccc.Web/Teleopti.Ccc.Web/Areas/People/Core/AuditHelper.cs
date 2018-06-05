@@ -4,10 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.People.Models;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.People.Core
 {
@@ -22,20 +19,16 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 		private readonly IApplicationRoleRepository _roleRepository;
 		private readonly ILoggedOnUser _loggonUser;
 		private readonly IRepository<IPersonAccess> _personAccessRepository;
-		private readonly IAuthorization _principalAuthorization;
 
 		public AuditHelper(IPersonRepository personRepository,
 			IApplicationRoleRepository roleRepository,
 			ILoggedOnUser loggedOnUser,
-			IRepository<IPersonAccess> personAccessRepository,
-			IAuthorization principalAuthorization)
-
+			IRepository<IPersonAccess> personAccessRepository)
 		{
 			_roleRepository = roleRepository;
 			_personRepository = personRepository;
 			_loggonUser = loggedOnUser;
 			_personAccessRepository = personAccessRepository;
-			_principalAuthorization = principalAuthorization;
 		}
 
 		public void AuditCall(PersonAuditActionType actionType, PersonRolesBaseModel inputmodel)
@@ -66,12 +59,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 						rolesThatMakesNOChange = selectedRoles.Except(person.PermissionInformation.ApplicationRoleCollection);
 						break;
 				}
-				if (!_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.PeopleAccess, DateOnly.Today, person))
-				{
-					persistAudit(actionType, rolesThatMakesNOChange, updatingUser, person, correlationId, PersonAuditActionResult.NotPermitted);
-					persistAudit(actionType, rolesThatMakesChange, updatingUser, person, correlationId, PersonAuditActionResult.NotPermitted);
-					continue;
-				}
+
 				persistAudit(actionType, rolesThatMakesNOChange, updatingUser, person, correlationId, PersonAuditActionResult.NoChange);
 				persistAudit(actionType, rolesThatMakesChange, updatingUser, person, correlationId, PersonAuditActionResult.Change);
 			}
@@ -104,8 +92,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core
 	public enum PersonAuditActionResult
 	{
 		Change,
-		NoChange,
-		NotPermitted
+		NoChange
 	}
 
 	public enum PersonAuditActionType
