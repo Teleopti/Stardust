@@ -107,5 +107,10 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 		{
 			throw new NotImplementedException();
 		}
+
+		public int GetQueueCount()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

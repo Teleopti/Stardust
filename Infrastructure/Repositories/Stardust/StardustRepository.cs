@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 			return job;
 		}
 
-		public int GetQueueCunt()
+		public int GetQueueCount()
 		{
 			const string selectCommandText = "SELECT count(*) FROM Stardust.JobQueue";
 			using (var sqlConnection = new SqlConnection(_connectionString))

@@ -19,6 +19,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 		List<string> GetAllTypes();
 		List<string> GetAllTypesInQueue();
 		Job GetOldestJob();
-		int GetQueueCunt();
+		int GetQueueCount();
 	}
 }

@@ -129,7 +129,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[HttpGet, Route("Stardust/QueueCount")]
 		public IHttpActionResult GetQueueCount()
 		{
-			return Ok(_stardustRepository.GetQueueCunt());
+			return Ok(_stardustRepository.GetQueueCount());
 		}
 
 		[HttpPost, Route("Stardust/TriggerResourceCalculation")]
