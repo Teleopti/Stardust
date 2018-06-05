@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
@@ -136,10 +137,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 			const string selectCommandText = "SELECT count(*) FROM Stardust.JobQueue";
 			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
-				_retryPolicy.Execute(sqlConnection.Open);
+				sqlConnection.OpenWithRetry(_retryPolicy);
 				using (var countCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
-					using (var reader = _retryPolicy.Execute(countCommand.ExecuteReader))
+					using (var reader = countCommand.ExecuteReaderWithRetry(_retryPolicy))
 					{
 						if (!reader.HasRows) return 0;
 						while (reader.Read())
