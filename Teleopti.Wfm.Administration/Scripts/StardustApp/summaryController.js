@@ -20,6 +20,7 @@
 		vm.showFailureAlert = vm.showNodesAlert = vm.showHistoryAlert = vm.showHealthAlert = false;
 		vm.result = "";
 		vm.showRefreshPayrollFormats = false;
+		vm.queueCount = 0;
 		vm.showIntradayTool = false;
 		refresh();
 
@@ -99,6 +100,11 @@
 					if (xhr !== "") {
 						vm.JobError = vm.JobError + " " + xhr.Message + ": " + xhr.ExceptionMessage;
 					}
+				});
+
+			$http.get("./Stardust/QueueCount", tokenHeaderService.getHeaders())
+				.success(function (data) {
+					vm.queueCount = data;
 				});
 
 			$http.get("./Stardust/AliveWorkerNodes", tokenHeaderService.getHeaders())

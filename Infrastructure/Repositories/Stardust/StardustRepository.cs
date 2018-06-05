@@ -132,6 +132,27 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Stardust
 			return job;
 		}
 
+		public int GetQueueCunt()
+		{
+			const string selectCommandText = "SELECT count(*) FROM Stardust.JobQueue";
+			using (var sqlConnection = new SqlConnection(_connectionString))
+			{
+				sqlConnection.OpenWithRetry(_retryPolicy);
+				using (var countCommand = new SqlCommand(selectCommandText, sqlConnection))
+				{
+					using (var reader = countCommand.ExecuteReaderWithRetry(_retryPolicy))
+					{
+						if (!reader.HasRows) return 0;
+						while (reader.Read())
+						{
+							return reader.GetInt32(0);
+						}
+					}
+				}
+			}
+			return 0;
+		}
+
 		public IList<Job> GetJobs(JobFilterModel filter)
 		{
 			var jobs = new List<Job>();

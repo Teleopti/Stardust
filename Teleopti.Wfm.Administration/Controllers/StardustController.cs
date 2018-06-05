@@ -126,6 +126,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Ok(_stardustRepository.GetOldestJob());
 		}
 
+		[HttpGet, Route("Stardust/QueueCount")]
+		public IHttpActionResult GetQueueCount()
+		{
+			return Ok(_stardustRepository.GetQueueCunt());
+		}
+
 		[HttpPost, Route("Stardust/TriggerResourceCalculation")]
 		[TenantUnitOfWork]
 		public virtual IHttpActionResult TriggerResourceCalculation([FromBody] LogOnModel logOnModel)
