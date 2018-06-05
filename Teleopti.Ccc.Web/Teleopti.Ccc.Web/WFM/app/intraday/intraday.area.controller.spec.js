@@ -1,6 +1,6 @@
 'use strict';
 
-fdescribe('IntradayAreaController', function() {
+describe('IntradayAreaController', function() {
 	var defaultToggles = {
 		WFM_Remember_My_Selection_In_Intraday_47254: true,
 		togglesLoaded: {
