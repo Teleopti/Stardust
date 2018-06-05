@@ -43,6 +43,9 @@ SQLCMD -S%dbServer% -E -d"%appDb%" -i"%RepoRoot%\.debug-Setup\database\tsql\Demo
 COPY "%sourceFolder%\app.config" "%RepoRoot%\Teleopti.Ccc.Scheduling.PerformanceTest\bin\debug\SettingsForTest.config" /Y
 COPY "%sourceFolder%\app.config" "%RepoRoot%\Teleopti.Ccc.Scheduling.PerformanceTest\bin\release\SettingsForTest.config" /Y
 
+::apply teleopti license
+SQLCMD -S. -E -d"%appDb%" -i"%RepoRoot%\.debug-Setup\database\tsql\AddLic.sql" -v LicFile="%sourceFolder%\20300523_Teleopti_RD.xml"
+
 exit
 
 :wrongInput
