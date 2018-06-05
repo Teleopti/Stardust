@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Threading;
 
-namespace Teleopti.Ccc.Intraday.TestApplication.Infrastructure
+namespace Teleopti.Ccc.Intraday.TestCommon.Infrastructure
 {
 	public class DatabaseCommand
 	{
@@ -105,9 +105,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication.Infrastructure
 
 		protected virtual SqlCommand SetCommand(SqlTransaction transaction)
 		{
-			var timeout = "60";
-            if (ConfigurationManager.AppSettings["databaseTimeout"] != null)
-                timeout = ConfigurationManager.AppSettings["databaseTimeout"];
+			var timeout = "120";
             return new SqlCommand
 				{
 					CommandText = _commandText,

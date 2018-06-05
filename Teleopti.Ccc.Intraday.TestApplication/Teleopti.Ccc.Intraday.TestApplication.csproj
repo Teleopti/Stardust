@@ -58,30 +58,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ForecastProvider.cs" />
-    <Compile Include="Infrastructure\BulkWriter.cs" />
-    <Compile Include="Infrastructure\CloudSafeSqlExecute.cs" />
-    <Compile Include="Infrastructure\DatabaseCommand.cs" />
-    <Compile Include="ForecastInterval.cs" />
-    <Compile Include="IForecastProvider.cs" />
-    <Compile Include="Infrastructure\fact_queue.cs" />
-    <Compile Include="IntervalHelper.cs" />
-    <Compile Include="IntradayTestApplicationInput.cs" />
-    <Compile Include="IntradayTestDateTimePeriod.cs" />
-    <Compile Include="IQueueDataPersister.cs" />
-    <Compile Include="IWorkloadQueuesProvider.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="QueueDataPersister.cs" />
-    <Compile Include="QueueInterval.cs" />
-    <Compile Include="QueueInfo.cs" />
-    <Compile Include="TimeZoneInfoExtensions.cs" />
-    <Compile Include="TimeZoneInterval.cs" />
-    <Compile Include="TimeZoneprovider.cs" />
-    <Compile Include="UniqueQueueProvider.cs" />
-    <Compile Include="UserTimeZoneProvider.cs" />
-    <Compile Include="WorkloadInfo.cs" />
-    <Compile Include="WorkloadQueuesProvider.cs" />
-    <Compile Include="Infrastructure\SqlTransientErrorChecker.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
@@ -89,6 +66,12 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Teleopti.Ccc.Intraday.TestCommon\Teleopti.Ccc.Intraday.TestCommon.csproj">
+      <Project>{13e7ca1e-393b-4dd5-944e-90a19e736dff}</Project>
+      <Name>Teleopti.Ccc.Intraday.TestCommon</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

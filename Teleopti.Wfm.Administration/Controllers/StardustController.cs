@@ -5,6 +5,7 @@ using System.Threading;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.Infrastructure.Events;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -216,6 +217,27 @@ namespace Teleopti.Wfm.Administration.Controllers
 		public IHttpActionResult ShowRefreshPayrollFormats()
 		{
 			return Ok(!string.IsNullOrEmpty(_configReader.AppConfig("IsContainer")));
+		}
+
+		[HttpGet, Route("Stardust/IntradayToolGoWithTheFlow")]
+		public IHttpActionResult IntradayToolGoWithTheFlow()
+		{
+			var showIntradayTool = _configReader.AppConfig("ShowIntradayTool");
+			if (string.IsNullOrEmpty(showIntradayTool) && showIntradayTool != "true") return BadRequest("");
+
+			_stardustSender.Send(
+				new IntradayToolEvent
+				{
+					LogOnBusinessUnitId = Guid.NewGuid()
+				});
+
+			return Ok("");
+		}
+
+		[HttpGet, Route("Stardust/ShowIntradayTool")]
+		public IHttpActionResult ShowIntradayTool()
+		{
+			return Ok(!string.IsNullOrEmpty(_configReader.AppConfig("ShowIntradayTool")));
 		}
 	}
 }

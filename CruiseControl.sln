@@ -236,6 +236,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Support.Security.L
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Develop.Batflow", "Teleopti.Develop.Batflow\Teleopti.Develop.Batflow.csproj", "{12DF00EB-8FB7-48E2-9567-B2A730D08D17}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Intraday.TestCommon", "Teleopti.Ccc.Intraday.TestCommon\Teleopti.Ccc.Intraday.TestCommon.csproj", "{13E7CA1E-393B-4DD5-944E-90A19E736DFF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|.NET = Debug|.NET
@@ -1342,6 +1344,22 @@ Global
 		{12DF00EB-8FB7-48E2-9567-B2A730D08D17}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{12DF00EB-8FB7-48E2-9567-B2A730D08D17}.Release|x86.ActiveCfg = Release|Any CPU
 		{12DF00EB-8FB7-48E2-9567-B2A730D08D17}.Release|x86.Build.0 = Release|Any CPU
+		{13E7CA1E-393B-4DD5-944E-90A19E736DFF}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{13E7CA1E-393B-4DD5-944E-90A19E736DFF}.Debug|.NET.Build.0 = Debug|Any CPU
+		{13E7CA1E-393B-4DD5-944E-90A19E736DFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13E7CA1E-393B-4DD5-944E-90A19E736DFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13E7CA1E-393B-4DD5-944E-90A19E736DFF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{13E7CA1E-393B-4DD5-944E-90A19E736DFF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{13E7CA1E-393B-4DD5-944E-90A19E736DFF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{13E7CA1E-393B-4DD5-944E-90A19E736DFF}.Debug|x86.Build.0 = Debug|Any CPU
+		{13E7CA1E-393B-4DD5-944E-90A19E736DFF}.Release|.NET.ActiveCfg = Release|Any CPU
+		{13E7CA1E-393B-4DD5-944E-90A19E736DFF}.Release|.NET.Build.0 = Release|Any CPU
+		{13E7CA1E-393B-4DD5-944E-90A19E736DFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13E7CA1E-393B-4DD5-944E-90A19E736DFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13E7CA1E-393B-4DD5-944E-90A19E736DFF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{13E7CA1E-393B-4DD5-944E-90A19E736DFF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{13E7CA1E-393B-4DD5-944E-90A19E736DFF}.Release|x86.ActiveCfg = Release|Any CPU
+		{13E7CA1E-393B-4DD5-944E-90A19E736DFF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1387,13 +1405,14 @@ Global
 		{D164065C-2F33-431B-80A4-A4F59CE77486} = {DF7B23CB-0FDA-4C03-93EA-3A136C6D7A7B}
 		{4A63DC5B-70BE-4F56-993D-B045C28ED438} = {5AC253DA-DE38-4EB4-8ECB-4E5E332D6011}
 		{5914E02A-AA82-43A0-B4B7-F563E5C9482B} = {FEFF4A24-4851-4A21-BF0F-68A36655E0E7}
+		{13E7CA1E-393B-4DD5-944E-90A19E736DFF} = {AA2B64E2-1EF7-4242-916F-815411F23E66}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_CodeReferences = {"Items":[{"Expression":"\\W($File.$Key)\\W","Extensions":".xaml,.cshtml","IsCaseSensitive":true,"SingleLineComment":"\/\/"},{"Expression":"ResourceManager.GetString\\(\"$Key\"(,.*)?\\)|\\\"xx(x)?($Key)\\\"|StringResourceKey\\.($Key)","Extensions":".cs","IsCaseSensitive":true,"SingleLineComment":"\/\/"},{"Expression":"typeof\\((\\w+\\.)*($File)\\).+\"($Key)\"|\"($Key)\".+typeof\\((\\w+\\.)*($File)\\)","Extensions":".cs12","IsCaseSensitive":true,"SingleLineComment":"\/\/"},{"Expression":"\\W($Key)\\W","Extensions":".vb","IsCaseSensitive":false,"SingleLineComment":"'"},{"Expression":"\\W($File::$Key)\\W","Extensions":".cpp,.c,.hxx,.h","IsCaseSensitive":true,"SingleLineComment":"\/\/"},{"Expression":"&lt;%\\$\\s+Resources:\\s*($File)\\s*,\\s*($Key)\\s*%&gt;","Extensions":".aspx,.ascx,.master","IsCaseSensitive":true,"SingleLineComment":null},{"Expression":"{{'$Key'[\\s]*\\|[\\s]*translate}}","Extensions":".html","IsCaseSensitive":false,"SingleLineComment":null}]}
-		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45;packages\EnterpriseLibrary.TransientFaultHandling.WindowsAzure.Storage.6.0.1304.0\lib\NET45
-		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
-		RESX_MoveToResources = {"Items":[{"Extensions":".cs,.vb","Patterns":"$File.$Key|$File.$Key|StringResourceKey.$Key|$Namespace.StringResourceKey.$Key"},{"Extensions":".cshtml,.vbhtml","Patterns":"@$Namespace.$File.$Key|@$File.$Key|@StringResourceKey.$Key|@$Namespace.StringResourceKey.$Key"},{"Extensions":".cpp,.c,.hxx,.h","Patterns":"$File::$Key"},{"Extensions":".aspx,.ascx","Patterns":"<%$ Resources:$File,$Key %>"},{"Extensions":".xaml","Patterns":"\"{x:Static properties:$File.$Key}\""},{"Extensions":".cs","Patterns":""}]}
 		SolutionGuid = {11E3E7A7-5B00-4514-9B17-892CE32AD321}
+		RESX_MoveToResources = {"Items":[{"Extensions":".cs,.vb","Patterns":"$File.$Key|$File.$Key|StringResourceKey.$Key|$Namespace.StringResourceKey.$Key"},{"Extensions":".cshtml,.vbhtml","Patterns":"@$Namespace.$File.$Key|@$File.$Key|@StringResourceKey.$Key|@$Namespace.StringResourceKey.$Key"},{"Extensions":".cpp,.c,.hxx,.h","Patterns":"$File::$Key"},{"Extensions":".aspx,.ascx","Patterns":"<%$ Resources:$File,$Key %>"},{"Extensions":".xaml","Patterns":"\"{x:Static properties:$File.$Key}\""},{"Extensions":".cs","Patterns":""}]}
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45;packages\EnterpriseLibrary.TransientFaultHandling.WindowsAzure.Storage.6.0.1304.0\lib\NET45
+		RESX_CodeReferences = {"Items":[{"Expression":"\\W($File.$Key)\\W","Extensions":".xaml,.cshtml","IsCaseSensitive":true,"SingleLineComment":"\/\/"},{"Expression":"ResourceManager.GetString\\(\"$Key\"(,.*)?\\)|\\\"xx(x)?($Key)\\\"|StringResourceKey\\.($Key)","Extensions":".cs","IsCaseSensitive":true,"SingleLineComment":"\/\/"},{"Expression":"typeof\\((\\w+\\.)*($File)\\).+\"($Key)\"|\"($Key)\".+typeof\\((\\w+\\.)*($File)\\)","Extensions":".cs12","IsCaseSensitive":true,"SingleLineComment":"\/\/"},{"Expression":"\\W($Key)\\W","Extensions":".vb","IsCaseSensitive":false,"SingleLineComment":"'"},{"Expression":"\\W($File::$Key)\\W","Extensions":".cpp,.c,.hxx,.h","IsCaseSensitive":true,"SingleLineComment":"\/\/"},{"Expression":"&lt;%\\$\\s+Resources:\\s*($File)\\s*,\\s*($Key)\\s*%&gt;","Extensions":".aspx,.ascx,.master","IsCaseSensitive":true,"SingleLineComment":null},{"Expression":"{{'$Key'[\\s]*\\|[\\s]*translate}}","Extensions":".html","IsCaseSensitive":false,"SingleLineComment":null}]}
 	EndGlobalSection
 	GlobalSection(TextTemplating) = postSolution
 		TextTemplating = 1

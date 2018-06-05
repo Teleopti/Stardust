@@ -169,6 +169,7 @@
     <Compile Include="NodeHandlers\ImportAgentHandler.cs" />
     <Compile Include="NodeHandlers\ImportExternalPerformanceHandler.cs" />
     <Compile Include="NodeHandlers\IndexMaintenanceHandler.cs" />
+    <Compile Include="NodeHandlers\IntradayToolHandler.cs" />
     <Compile Include="NodeHandlers\ProcessWaitlistedRequestsHandler.cs" />
     <Compile Include="NodeHandlers\MultiAbsenceRequestsHandler.cs" />
     <Compile Include="NodeHandlers\PersonAbsenceRemovedHandler.cs" />
@@ -217,6 +218,7 @@
     <None Include="..\..\Teleopti.Ccc.snk">
       <Link>Teleopti.Ccc.snk</Link>
     </None>
+    <None Include="app.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -229,6 +231,10 @@
     <ProjectReference Include="..\..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
       <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
       <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.Intraday.TestCommon\Teleopti.Ccc.Intraday.TestCommon.csproj">
+      <Project>{13e7ca1e-393b-4dd5-944e-90a19e736dff}</Project>
+      <Name>Teleopti.Ccc.Intraday.TestCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
       <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
@@ -277,6 +283,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="IntradayTool\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

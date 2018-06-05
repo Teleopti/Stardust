@@ -13,12 +13,14 @@
 		vm.JobError = "";
 		vm.triggerResourceCalculation = triggerResourceCalculation;
 		vm.refreshPayrollFormats = refreshPayrollFormats;
+		vm.intradayToolGoWithTheFlow = intradayToolGoWithTheFlow;
 		vm.healthCheck = healthCheck;
 		vm.selectTenant = selectTenant;
 		vm.anyQueuedJobs = vm.anyFailedJobs = vm.anyHistory = vm.anyNodes = false;
 		vm.showFailureAlert = vm.showNodesAlert = vm.showHistoryAlert = vm.showHealthAlert = false;
 		vm.result = "";
 		vm.showRefreshPayrollFormats = false;
+		vm.showIntradayTool = false;
 		refresh();
 
 		var refreshPromise = $interval(refresh, 3000);
@@ -36,6 +38,11 @@
 		$http.get("./Stardust/ShowRefreshPayrollFormats", tokenHeaderService.getHeaders())
 			.success(function (data) {
 				vm.showRefreshPayrollFormats = data;
+			});
+
+		$http.get("./Stardust/ShowIntradayTool", tokenHeaderService.getHeaders())
+			.success(function (data) {
+				vm.showIntradayTool = data;
 			});
 
 		function refresh() {
@@ -154,6 +161,14 @@
 				{
 					"Tenant": vm.selectedTenantName
 				},
+				tokenHeaderService.getHeaders()
+			).success(function () {
+				refresh();
+			});
+		}
+
+		function intradayToolGoWithTheFlow() {
+			$http.get("./Stardust/IntradayToolGoWithTheFlow",
 				tokenHeaderService.getHeaders()
 			).success(function () {
 				refresh();
