@@ -26,15 +26,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 		public void Publish(Context context)
 		{
-			// I THINK that maybe a solution to these tests is to only publish this event if the state is changed.
-			// maybe state changes is the only trigger for this.. and not going out of alarm for other reasons
-			var isInAlarm = context.Time >= context.AlarmStartTime;			
-			var wthIsThis = context.Time > context.Stored.AlarmStartTime;
-			
-			
-			if (wthIsThis && !isInAlarm)
+			var isInAlarm = context.Time >= context.AlarmStartTime;
+			//var wasInAlarm = context.Time >= context.Stored.AlarmStartTime;
+			if (context.Time > context.Stored.AlarmStartTime && !isInAlarm)
 			{
-				_eventPublisher.Publish(new PersonArrivalAfterLateForWorkEvent
+				_eventPublisher.Publish(new PersonArrivalAfterLateForWorkEvent()
 				{
 					PersonId = context.PersonId,
 					ActivityName = context.Schedule.CurrentActivityName(),
