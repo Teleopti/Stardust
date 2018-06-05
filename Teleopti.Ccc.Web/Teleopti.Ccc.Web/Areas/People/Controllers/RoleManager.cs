@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.People.Core.Aspects;
 using Teleopti.Ccc.Web.Areas.People.Models;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.People.Controllers
 {
@@ -18,12 +20,16 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 	{
 		private readonly IPersonRepository personRepository;
 		private readonly IApplicationRoleRepository roleRepository;
+		private readonly IAuthorization principalAuthorization;
 
 		public RoleManager(IPersonRepository personRepository,
-			IApplicationRoleRepository roleRepository)
+						   IApplicationRoleRepository roleRepository,
+						   IAuthorization principalAuthorization)
+
 		{
 			this.roleRepository = roleRepository;
 			this.personRepository = personRepository;
+			this.principalAuthorization = principalAuthorization;
 		}
 
 		[AuditPerson]
@@ -35,6 +41,10 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 
 			foreach (var person in persons)
 			{
+				if (!principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.PeopleAccess, DateOnly.Today, person))
+				{
+					continue;
+				}
 				selectedRoles.ForEach(role => person.PermissionInformation.AddApplicationRole(role));
 			}
 		}
@@ -48,6 +58,10 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 
 			foreach (var person in persons)
 			{
+				if (!principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.PeopleAccess, DateOnly.Today, person))
+				{
+					continue;
+				}
 				selectedRoles.ForEach(role => person.PermissionInformation.RemoveApplicationRole(role));
 			}
 		}
