@@ -1,13 +1,14 @@
 'use strict';
-var defaultToggles = {
-	WFM_Remember_My_Selection_In_Intraday_47254: false,
-	togglesLoaded: {
-		then: function(cb) {
-			cb();
+
+fdescribe('IntradayAreaController', function() {
+	var defaultToggles = {
+		WFM_Remember_My_Selection_In_Intraday_47254: true,
+		togglesLoaded: {
+			then: function(cb) {
+				cb();
+			}
 		}
-	}
-};
-describe('IntradayAreaController', function() {
+	};
 	var $httpBackend,
 		$controller,
 		$filter,
@@ -60,6 +61,15 @@ describe('IntradayAreaController', function() {
 			{
 				Id: '502632DC-7A0C-434D-8A75-3153D5160787',
 				Name: 'skill y',
+				DoDisplayData: true,
+				ShowAbandonRate: false,
+				ShowReforecastedAgents: false
+			},
+			{
+				Id: '6152d498-9168-4070-9004-a58cefab5017',
+				Name: 'Skill BackOffice',
+				Activity: 'activity3',
+				SkillType: 'SkillTypeBackoffice',
 				DoDisplayData: true,
 				ShowAbandonRate: false,
 				ShowReforecastedAgents: false
@@ -780,39 +790,41 @@ describe('IntradayAreaController', function() {
 		});
 	}
 
-	beforeEach(
-		inject(function(
-			_$httpBackend_,
-			_$controller_,
-			_$rootScope_,
-			_$filter_,
-			_$translate_,
-			_$interval_,
-			_NoticeService_
-		) {
-			$controller = _$controller_;
-			$httpBackend = _$httpBackend_;
-			$filter = _$filter_;
-			$translate = _$translate_;
-			scope = _$rootScope_.$new();
-			$interval = _$interval_;
-			NoticeService = _NoticeService_;
+	beforeEach(inject(function(
+		_$httpBackend_,
+		_$controller_,
+		_$rootScope_,
+		_$filter_,
+		_$translate_,
+		_$interval_,
+		_NoticeService_
+	) {
+		$controller = _$controller_;
+		$httpBackend = _$httpBackend_;
+		$filter = _$filter_;
+		$translate = _$translate_;
+		scope = _$rootScope_.$new();
+		$interval = _$interval_;
+		NoticeService = _NoticeService_;
 
-			$httpBackend.whenGET('../api/skillgroup/skillgroups').respond(function() {
-				return [200, skillGroupInfo];
-			});
+		$httpBackend.whenGET('../api/skillgroup/skillgroups').respond(function() {
+			return [200, skillGroupInfo];
+		});
 
-			$httpBackend.whenGET('../api/skillgroup/skills').respond(function() {
-				if (isUnsupportedSkillTest) {
-					return [200, skillsWithFirstUnsupported];
-				} else {
-					return [200, skills];
-				}
-			});
+		$httpBackend.whenGET('../api/skillgroup/skills').respond(function() {
+			if (isUnsupportedSkillTest) {
+				return [200, skillsWithFirstUnsupported];
+			} else {
+				return [200, skills];
+			}
+		});
 
-			initBackend();
-		})
-	);
+		$httpBackend.whenGET('../ToggleHandler/AllToggles').respond(function() {
+			return [200];
+		});
+
+		initBackend();
+	}));
 
 	function FakeCurrentUserInfo() {
 		this.CurrentUserInfo = function() {
@@ -820,10 +832,10 @@ describe('IntradayAreaController', function() {
 		};
 	}
 
-	var createController = function(isNewlyCreatedSkillGroup, toggleObj) {
+	var createController = function(isNewlyCreatedSkillArea, toggleObj) {
 		vm = $controller('IntradayAreaController', { $scope: scope, $translate: $translate });
 		vm.toggles = Object.assign(defaultToggles, toggleObj);
-		vm.onStateChanged(undefined, { name: 'intraday.area' }, { isNewSkillArea: isNewlyCreatedSkillGroup });
+		vm.onStateChanged(undefined, { name: 'intraday.area' }, { isNewSkillArea: isNewlyCreatedSkillArea });
 		scope.$digest();
 		$httpBackend.flush();
 	};
@@ -1096,7 +1108,7 @@ describe('IntradayAreaController', function() {
 		jasmine.clock().uninstall();
 	});
 
-	it('should not show abandon rate data when toggle is enabled and email-like skill chosen', function() {
+	it('should not show abandon rate data and email-like skill chosen', function() {
 		createController(false);
 		vm.moduleState.activeTab = 1;
 
@@ -1108,7 +1120,7 @@ describe('IntradayAreaController', function() {
 		expect(vm.viewObj.summary.summaryAbandonedRate).toEqual(undefined);
 	});
 
-	it('should not show reforcasted agents data when toggle is enabled and email-like skill chosen', function() {
+	it('should not show reforcasted agents data when email-like skill chosen', function() {
 		createController(false);
 		vm.moduleState.activeTab = 2;
 		vm.clickedSkillInPicker(skills[1]);
@@ -1167,5 +1179,33 @@ describe('IntradayAreaController', function() {
 		vm.loadState();
 
 		expect(vm.moduleState.chosenOffset.value).toEqual(0);
+	});
+
+	it('should see staffing data when switching tab on other day', function() {
+		createController(false);
+		vm.changeChosenOffset(1);
+		vm.clickedSkillInPicker(skills[0]);
+
+		vm.moduleState.activeTab = 0;
+		vm.pollActiveTabDataHelper(vm.moduleState.activeTab);
+		$httpBackend.flush();
+
+		expect(vm.viewObj.forecastedCallsObj.series.length).toEqual(27);
+
+		vm.moduleState.activeTab = 2;
+		vm.pollActiveTabDataHelper(vm.moduleState.activeTab);
+		$httpBackend.flush();
+
+		expect(vm.viewObj.forecastedStaffing.updatedSeries.length).toEqual(4);
+	});
+
+	it('should be able to select a skill of type back office', function() {
+		createController(false);
+		vm.clickedSkillInPicker(skills[2]);
+		vm.moduleState.activeTab = 0;
+		vm.pollActiveTabDataHelper(vm.moduleState.activeTab);
+		$httpBackend.flush();
+
+		expect(vm.viewObj.forecastedCallsObj.series.length).toEqual(27);
 	});
 });

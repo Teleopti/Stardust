@@ -90,10 +90,6 @@
 			return;
 		};
 
-		// vm.moduleState = function() {
-		// 	$state.go('intraday.skill-area-config', { isNewSkillArea: false });
-		// };
-
 		function skillOrGroupIsSelected() {
 			return (
 				(vm.moduleState.selectedSkill !== null && angular.isDefined(vm.moduleState.selectedSkill)) ||
@@ -102,34 +98,31 @@
 		}
 
 		vm.exportIntradayData = function() {
-				if (skillOrGroupIsSelected() && !vm.exporting) {
-					vm.exporting = true;
-					if (
-						angular.isDefined(vm.moduleState.selectedSkillGroup) &&
-						vm.moduleState.selectedSkillGroup !== null
-					) {
-						intradayService.getIntradayExportForSkillGroup(
-							angular.toJson({
-								id: vm.moduleState.selectedSkillGroup.Id,
-								dayOffset: vm.moduleState.chosenOffset.value
-							}),
-							saveData,
-							errorSaveData
-						);
-					} else if (
-						angular.isDefined(vm.moduleState.selectedSkill) &&
-						vm.moduleState.selectedSkill !== null
-					) {
-						intradayService.getIntradayExportForSkill(
-							angular.toJson({
-								id: vm.moduleState.selectedSkill.Id,
-								dayOffset: vm.moduleState.chosenOffset.value
-							}),
-							saveData,
-							errorSaveData
-						);
-					}
+			if (skillOrGroupIsSelected() && !vm.exporting) {
+				vm.exporting = true;
+				if (
+					angular.isDefined(vm.moduleState.selectedSkillGroup) &&
+					vm.moduleState.selectedSkillGroup !== null
+				) {
+					intradayService.getIntradayExportForSkillGroup(
+						angular.toJson({
+							id: vm.moduleState.selectedSkillGroup.Id,
+							dayOffset: vm.moduleState.chosenOffset.value
+						}),
+						saveData,
+						errorSaveData
+					);
+				} else if (angular.isDefined(vm.moduleState.selectedSkill) && vm.moduleState.selectedSkill !== null) {
+					intradayService.getIntradayExportForSkill(
+						angular.toJson({
+							id: vm.moduleState.selectedSkill.Id,
+							dayOffset: vm.moduleState.chosenOffset.value
+						}),
+						saveData,
+						errorSaveData
+					);
 				}
+			}
 		};
 
 		vm.getLocalDate = function(offset) {
@@ -204,12 +197,24 @@
 		};
 
 		vm.clearSkillSelection = function() {
-			resetModuleState();
+			setModuleState({
+				showGroupInfo: false,
+				showIncluded: false,
+				selectedSkill: null,
+				selectedSkillGroup: null,
+				hasMonitorData: false
+			});
 			vm.saveState();
 		};
 
 		vm.clearSkillGroupSelection = function() {
-			resetModuleState();
+			setModuleState({
+				showGroupInfo: false,
+				showIncluded: false,
+				selectedSkill: null,
+				selectedSkillGroup: null,
+				hasMonitorData: false
+			});
 			vm.saveState();
 		};
 
