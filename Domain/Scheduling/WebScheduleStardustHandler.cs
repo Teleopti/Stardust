@@ -42,9 +42,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					{
 						JobResultId = @event.JobResultId
 					});
-					
-					//just a hack to see if hangfire (incorrectly) keeps an implicit ref to this object
-					result = null;
+
+					//trying release "stardust references" manually here for now
+					_fullScheduling = null;
+					///////////////////////////////////////////////////////////
 				}
 			}
 			catch (Exception e)
