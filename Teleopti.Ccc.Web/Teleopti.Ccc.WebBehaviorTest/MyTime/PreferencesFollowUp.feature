@@ -54,6 +54,7 @@ Scenario: See preference on scheduled day
 	| Shift category | Late       |
 	| Preference     | Late       |
 
+	@NotKeyExample
 Scenario: See extended indication on preference on scheduled day
 	Given I have an extended preference with
 	| Field            | Value      |

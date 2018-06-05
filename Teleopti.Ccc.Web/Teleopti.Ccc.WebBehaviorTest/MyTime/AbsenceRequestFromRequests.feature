@@ -28,6 +28,7 @@ And I input absence request values with 'Vacation' for date '2014-10-03'
 Then I should see the remaining days is '22 Days'
 And I should see the used days is '3 Days'
 
+@NotKeyExample
 Scenario: When requesting absence tracked by hours view remaining and used time
 Given I am an agent
 And I have a requestable absence with
@@ -125,6 +126,7 @@ When I input absence request values with 'Vacation' for date '2015-10-03'
 Then I should see the remaining days is '25 Days'
 And I should see the used days is '0 Days'
 
+@NotKeyExample
 Scenario: When requesting absence over multiple account periods show remaining and used time according to end date period
 Given I am an agent
 And I am american
@@ -153,6 +155,7 @@ And I input absence request values with "Vacation" from "2014-12-28" to "2015-10
 Then I should see the remaining days is '25 Days'
 And I should see the used days is '0 Days'
 
+@NotKeyExample
 Scenario: Do Not show personal account when you do not have permission
 Given there is a role with
 	| Field                              | Value                                 |
@@ -172,6 +175,7 @@ And I am viewing requests
 When I click to add a new absence request
 Then I should not see the remaining and used time
 
+@NotKeyExample
 Scenario: Do not show personal account when absence requests is not editable
 Given I am an agent
 And I have a requestable absence with
@@ -198,6 +202,7 @@ Scenario: Add absence request
 	And I click the send button
 	Then I should see the request of type 'Vacation' in the list
 
+	@NotKeyExample
 @suppressHangfireQueue
 Scenario: Add absence request when multiple absences exist
 	Given I am an agent
@@ -209,6 +214,7 @@ Scenario: Add absence request when multiple absences exist
 	And I click the send button
 	Then I should see the request of type 'Holiday' in the list
 
+	@NotKeyExample
 Scenario: Can not add absence request from request view if no permission
 	Given I have a role with
          | Field                      | Value |
@@ -241,6 +247,7 @@ Scenario: Default absence request values from request view when unchecked Fullda
 	Then I should see the request form with today's date as default
 	And I should see 08:00 - 17:00 as the default times
 
+	@NotKeyExample
 @suppressHangfireQueue
 Scenario: Adding invalid absence request values
 	Given I am an agent
@@ -251,6 +258,7 @@ Scenario: Adding invalid absence request values
 	Then I should see subject is missing error
 	And I should not see any requests in the list
 
+	@NotKeyExample
 @suppressHangfireQueue
 Scenario: Adding too long message on absence request
 	Given I am an agent
@@ -259,6 +267,7 @@ Scenario: Adding too long message on absence request
 	And I try to input too long message request values
 	Then I should see message adjusted to maximum length
 	
+	@NotKeyExample
 Scenario: Adding too long subject on absence request
 	Given I am an agent
 	And I am viewing requests
@@ -268,6 +277,7 @@ Scenario: Adding too long subject on absence request
 	Then I should see texts describing too long subject error
 	And I should not see any requests in the list
 
+	@NotKeyExample
 Scenario: View absence types
 	Given I am an agent
 	And I have a requestable absence called Vacation
@@ -275,6 +285,7 @@ Scenario: View absence types
 	When I click to add a new absence request
 	Then I should see an absence type called Vacation in droplist
 
+	@NotKeyExample
 Scenario: View absence request details
 	Given I am an agent
 	And I have an existing absence request
@@ -283,6 +294,7 @@ Scenario: View absence request details
 	Then I should see the detail form for the existing request in the list
 	And I should see the values of the absence request
 
+	@NotKeyExample
 Scenario: View absence request waitlist
 	Given I am an agent
 	And I have an open workflow control set with absence request waitlisting enabled
@@ -363,6 +375,7 @@ Scenario: Can not delete denied absence request
 	When I am viewing requests
 	Then I should not be able to delete the existing request in the list
 	
+	@NotKeyExample
 Scenario: Can see why absence request was denied
 	Given I am an agent
 	And I have a denied absence request beacuse of missing workflow control set

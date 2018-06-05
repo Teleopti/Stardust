@@ -3,11 +3,13 @@
 	As an agent
 	I want to be able to view my reports
 
+	@NotKeyExample
 Scenario: Show reports with permissions
 	When I am viewing an application page
 	And I click reports menu
 	Then I should see the dropdown report list 
 
+	@NotKeyExample
 Scenario: Should not show the reports menu with no permission for any report
 	Given there is a role with
 	| Field                    | Value                 |
@@ -18,6 +20,7 @@ Scenario: Should not show the reports menu with no permission for any report
 	When I am viewing an application page
 	Then I should not see any report menu
 
+	@NotKeyExample
 Scenario: Show MyReport menu
 	Given there is a role with
 	| Field                    | Value                       |
@@ -35,7 +38,8 @@ Scenario: Open standard report new
 	And I click reports menu
 	And I click the report at position '4' in the list
 	Then The report should not be opened in the same tab
-
+	
+	@NotKeyExample
 Scenario: Open MyReport
 	When I am viewing an application page
 	And I click reports menu

@@ -47,6 +47,7 @@ Scenario: See indication of a pre-scheduled meeting
 	When I view preferences for date '2012-10-19'
 	Then I should see that I have a pre-scheduled meeting on '2012-10-19'
 
+	@NotKeyExample
 Scenario: Tooltip of a pre-scheduled meeting
 	Given I have a person period that starts on '2012-10-01'
 	And I have a pre-scheduled meeting with
@@ -72,6 +73,7 @@ Scenario: See indication of a pre-scheduled personal shift
 	When I view preferences for date '2012-10-19'
 	Then I should see that I have a pre-scheduled personal shift on '2012-10-19'
 
+	@NotKeyExample
 Scenario: Tooltip of a pre-scheduled personal shift
 	Given I have a person period that starts on '2012-10-01'
 	And I have a pre-scheduled personal shift with

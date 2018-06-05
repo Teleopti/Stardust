@@ -19,24 +19,28 @@ Scenario: Show details for queue metrics
 	When I view my queue metrics report for '2013-10-02'
 	Then I should see the queue metrics report with data for '2013-10-02'
 
+	@NotKeyExample
 Scenario: Navigate within agent queue  to previous day
 	Given I am an agent
 	And I view my queue metrics report for '2014-05-15'
 	When I navigate to the previous day
 	Then I should see the queue metrics report for '2014-05-14'
 	
+	@NotKeyExample
 Scenario: Navigate within agent queue view to next day
 	Given I am an agent
 	And I view my queue metrics report for '2014-05-15'
 	When I navigate to the next day
 	Then I should see the queue metrics report for '2014-05-16'
 
+	@NotKeyExample
 Scenario: Navigate within agent queue view using date picker
 	Given I am an agent
 	And I view my queue metrics report for '2014-05-15'
 	When I select the date '2014-05-20'
 	Then I should see the queue metrics report for '2014-05-20'
 
+	@NotKeyExample
 Scenario: Show friendly message when no report data
 	Given I am an agent
 	And I do not have any report data for date '2013-10-02'

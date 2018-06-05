@@ -31,6 +31,7 @@ Scenario: View team schedule
 	When I view team schedule
 	Then I should see my colleague's schedule
 
+	@NotKeyExample
 Scenario: View only my team's schedule
 	Given I am an agent in a team with access to the whole site
 	And I have an assigned shift with
@@ -49,7 +50,7 @@ Scenario: View only my team's schedule
 	And I should not see the other colleague's schedule
 
  
-
+ @NotKeyExample
 Scenario: View team schedule, day off
 	Given I am an agent in a team
 	And I have a colleague
@@ -60,6 +61,7 @@ Scenario: View team schedule, day off
 	When I view group schedule for '2014-05-02'
 	Then I should see my colleague's day off
 
+	@NotKeyExample
 Scenario: Should not see unpublished schedule
 	Given I am an agent in a team
 	And I have a colleague 'Unpublished Yet'
@@ -70,6 +72,7 @@ Scenario: Should not see unpublished schedule
 	When I view group schedule for '2014-05-02'
 	Then Agent 'Unpublished Yet' schedule should be empty
 
+	@NotKeyExample
 Scenario: View team schedule, absence 
 	Given I am an agent in a team
 	And I have a colleague
@@ -82,6 +85,7 @@ Scenario: View team schedule, absence
 	When I view group schedule for '2014-05-02'
 	Then I should see my colleague's absence
 
+	@NotKeyExample
 Scenario: View team schedule, no shift
 	Given I am an agent in a team
 	And I have a colleague
@@ -104,6 +108,7 @@ Scenario: Can't see confidential absence
 	Then I should see my colleague's schedule
 	And I should see the absence with color Gray
  
+ @NotKeyExample
 Scenario: Can't see the team schedule tab without permission 
 	Given I have a role with
          | Field                   | Value |
@@ -111,6 +116,7 @@ Scenario: Can't see the team schedule tab without permission
 	When I am viewing an application page
 	Then I should not see the team schedule tab
 
+	@NotKeyExample
 Scenario: Can't navigate to team schedule without permission 
 	Given I have a role with
          | Field                   | Value |
@@ -119,6 +125,7 @@ Scenario: Can't navigate to team schedule without permission
 	And I navigate to the team schedule
 	Then I should see an error message
 
+	@NotKeyExample
 Scenario: Can't see colleagues schedule without permission
 	Given I have a role with
 	| Field            | Value |
@@ -132,7 +139,7 @@ Scenario: Can't see colleagues schedule without permission
 	Then I should not see my colleagues schedule
 
 
-
+	@NotKeyExample
 Scenario: View time line +/- whole quarter of an hour
 	Given I am an agent in a team
 	And I have an assigned shift with
@@ -149,29 +156,34 @@ Scenario: View time line +/- whole quarter of an hour
 	When I view group schedule for '2014-05-02'
 	Then The time line should span from 8:00 to 18:00
 
+	@NotKeyExample
 Scenario: View time line default
 	Given I am an agent in my own team
 	When I view team schedule
 	Then The time line should span from 08:00 to 17:00
 
+	@NotKeyExample
 Scenario: View time line default in hawaii
 	Given I am an agent in my own team
 	And I am located in hawaii
 	When I view team schedule
 	Then The time line should span from 08:00 to 17:00
 
+	@NotKeyExample
 Scenario: Navigate to the next day
 	Given I am an agent
 	And I am viewing team schedule for '2014-05-02'
 	When I click the next day button in datepicker
 	Then I should see the next day
 
+	@NotKeyExample
 Scenario: Navigate to the previous day
 	Given I am an agent
 	And I am viewing team schedule for '2014-05-02'
 	When I click the previous day button in datepicker
 	Then I should see the previous day
 
+	@NotKeyExample
 Scenario: Show team-picker with multiple teams
 	Given I am an agent in a team with access to the whole site
 	And the site has another team
@@ -180,6 +192,7 @@ Scenario: Show team-picker with multiple teams
 	Then I should see the team-picker with both teams
 	And the teams should be sorted alphabetically
 	
+	@NotKeyExample
 Scenario: Show default team when no access to a team on a date
 	Given I am an agent in a team with access to the whole site
 	And I belong to another site's team on '2014-05-03'
@@ -196,6 +209,7 @@ Scenario: Don't show team-picker with no team access
 	When I view team schedule
 	Then I should not see the team-picker
 
+	@NotKeyExample
 Scenario: Should show date-picker with no team access
 	Given I have a role with
          | Field            | Value |
@@ -204,6 +218,7 @@ Scenario: Should show date-picker with no team access
 	When I view team schedule
 	Then I should see the date-picker
 
+	@NotKeyExample
 Scenario: Default team when no own team but everyone access
 	Given I have a role with
          | Field              | Value |
@@ -212,6 +227,7 @@ Scenario: Default team when no own team but everyone access
 	When I view team schedule
 	Then I should see the team-picker
 
+	@NotKeyExample
 Scenario: Show error message when acces to my team but no own team
 	Given I am an agent in no team with access to my team
 	When I view team schedule
@@ -223,6 +239,7 @@ Scenario: Show friendly message when after leaving date
 	When I am viewing team schedule for '2030-05-03'
 	Then I should see a user-friendly message explaining I dont have anything to view
 
+	@NotKeyExample
 Scenario: Navigate next date without team
 	Given I have a role with
          | Field            | Value |

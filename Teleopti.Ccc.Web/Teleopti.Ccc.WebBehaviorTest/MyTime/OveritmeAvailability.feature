@@ -38,6 +38,7 @@ Background:
 	| Field      | Value      |
 	| Start date | 2013-08-19 |
 
+	@NotKeyExample
 Scenario: Cannot add overtime availability if no permission
 	Given I have the role 'No access to overtime availability'
 	And I view my week schedule for date '2013-08-20'
@@ -107,6 +108,7 @@ Scenario: Submit overtime availability
 	| Start time | 16:30      |
 	| End time   | 03:00 +1   |
 
+	@NotKeyExample
 Scenario: Cancel adding overtime availability
 	Given I have the role 'Access to overtime availability'
 	And I view my week schedule for date '2013-08-20'
@@ -120,6 +122,7 @@ Scenario: Cancel adding overtime availability
 	And I click the cancel button
 	Then I should not see an overtime availability symbol for date '2013-08-20'
 
+	@NotKeyExample
 Scenario: Add invalid overtime availability
 	Given I have the role 'Access to overtime availability'
 	And I view my week schedule for date '2013-08-20'
@@ -152,6 +155,7 @@ Scenario: See existing overtime availability
 	| Start time | 16:30      |
 	| End time   | 17:30      |
 
+	@NotKeyExample
 Scenario: See existing overtime availability over midnight
 	Given I have the role 'Access to overtime availability'
 	And I have an overtime availability with
@@ -195,6 +199,7 @@ Scenario: Click overtime availability bar
 	| End time          | 03:15      |
 	| End time next day | true       |
 
+	@NotKeyExample
 Scenario: Click overtime availability bar span to next day
 	Given I have the role 'Access to overtime availability'
 	And I have an overtime availability with
@@ -213,6 +218,7 @@ Scenario: Click overtime availability bar span to next day
 	| End time          | 03:15      |
 	| End time next day | true       |
 
+	@NotKeyExample
 Scenario: Default values on existing overtime availability
 	Given I have the role 'Access to overtime availability'
 	And I have an overtime availability with
@@ -263,7 +269,8 @@ Scenario: Delete overtime availability
 	And I click overtime availability
 	And I click delete button
 	Then I should not see an overtime availability symbol for date '2013-08-20'
-
+	
+	@NotKeyExample
 Scenario: Cannot see delete button when no existing overtime availability
 	Given I have the role 'Access to overtime availability'
 	And I view my week schedule for date '2013-08-20'

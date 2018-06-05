@@ -46,6 +46,7 @@ Background:
 	| Start date | 2012-06-18 |
 	And I have a shift bag with category 'Late' and start times 8 to 9 and end times 4 to 5
 
+	@NotKeyExample
 Scenario: Can see indication of an extended preference
 	Given I have the role 'Access to extended preferences'
 	And I have an extended preference on '2012-06-20'
@@ -59,6 +60,7 @@ Scenario: Can see extended preference
 	And I click the extended preference indication on '2012-06-20'
 	Then I should see the extended preference on '2012-06-20'
 
+	@NotKeyExample
 Scenario: Can see extended preference without permission
 	Given I have the role 'No access to extended preferences'
 	And I have an extended preference on '2012-06-20'
@@ -68,12 +70,13 @@ Scenario: Can see extended preference without permission
 
 
 
-
+	@NotKeyExample
 Scenario: Can not add extended preference without permission
 	Given I have the role 'No access to extended preferences'
 	When I am viewing preferences
 	Then I should not see the extended preference button
 
+	@NotKeyExample
 Scenario: Add standard preference
 	Given I have the role 'Access to extended preferences'
 	And I am viewing preferences for date '2012-06-20'
@@ -127,6 +130,7 @@ Scenario: Add extended preference
 	| Activity time minimum       | 0:30       |
 	| Activity time maximum       | 1:00       |
 
+	@NotKeyExample
 Scenario: Add extended preference when span to next day
 	Given I have the role 'Access to extended preferences'
 	And I am viewing preferences for date '2012-09-05'
@@ -146,6 +150,7 @@ Scenario: Add extended preference when span to next day
 	| End time minimum | 02:00 +1   |
 	| End time maximum | 02:30 +1   |
 
+	@NotKeyExample
 Scenario: View available preference list when adding extended preference 
 	Given I have the role 'Access to extended preferences'
 	And I am viewing preferences
@@ -157,6 +162,7 @@ Scenario: View available preference list when adding extended preference
 	| Dayoff  |
 	| Illness |
 
+	@NotKeyExample
 Scenario: View available activity list when adding extended preference
 	Given I have the role 'Access to extended preferences'
 	And I am viewing preferences
@@ -166,7 +172,7 @@ Scenario: View available activity list when adding extended preference
 	| Value |
 	| Lunch |
 
-
+	@NotKeyExample
 Scenario: Validate preference times
 	Given I have the role 'Access to extended preferences'
 	And I am viewing preferences for date '2012-06-20'
@@ -180,6 +186,7 @@ Scenario: Validate preference times
 	And I click the apply extended preferences button
 	Then I should see add extended preferences panel with error 'Invalid time startTime'
 
+	@NotKeyExample
 Scenario: Hide all time fields, when day off is selected
 	Given I have the role 'Access to extended preferences'
 	And I am viewing preferences
@@ -189,6 +196,7 @@ Scenario: Hide all time fields, when day off is selected
 	| Preference | Dayoff |
 	Then I should not see the edit time fields
 	
+	@NotKeyExample
 Scenario: Reset time input fields when day off is selected
 	Given I have the role 'Access to extended preferences'
 	And I am viewing preferences
@@ -217,6 +225,7 @@ Scenario: Reset time input fields when day off is selected
 	| Preference | Late |
 	Then all the time fields should be reset
 	
+	@NotKeyExample
 Scenario: Reset time input fields when absence is selected
 	Given I have the role 'Access to extended preferences'
 	And I am viewing preferences
@@ -245,6 +254,7 @@ Scenario: Reset time input fields when absence is selected
 	| Preference | Late |
 	Then all the time fields should be reset
 		 
+		 @NotKeyExample
 Scenario: Show activity time fields when activity is selected
 	Given I have the role 'Access to extended preferences'
 	And I am viewing preferences
@@ -254,12 +264,14 @@ Scenario: Show activity time fields when activity is selected
 	| Activity   | Lunch |
 	Then I should see the activity minimum and maximum fields
 
+	@NotKeyExample
 Scenario: Hide activity time fields when no activity selected
 	Given I have the role 'Access to extended preferences'
 	And I am viewing preferences
 	When I click the add extended preference button
 	Then I should not see the edit activity minimum and maximum fields
-
+	
+	@NotKeyExample
 Scenario: Reset extended preference form 
 	Given I have the role 'Access to extended preferences'
 	And I am viewing preferences

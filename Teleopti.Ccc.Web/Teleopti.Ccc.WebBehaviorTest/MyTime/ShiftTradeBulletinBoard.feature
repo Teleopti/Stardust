@@ -37,7 +37,7 @@ Background:
 	| Late  |
 	And there is a dayoff named 'Day Off'
 	
-
+	@NotKeyExample
 Scenario: Shift trade in Bulletin board should start from tomorrow
 	Given I have the role 'Full access to mytime'
 	And I have a person period with 
@@ -54,6 +54,7 @@ Scenario: Shift trade in Bulletin board should start from tomorrow
 	When I click to shift trade bulletin board
 	Then I cannot navigate to the bulletin previous date
 
+	@NotKeyExample
 Scenario: Should show my shift and other shift in bulletin board
 	Given I have the role 'Full access to mytime'
 	And I have a person period with 
@@ -126,6 +127,7 @@ Scenario: Should possible make shift trade in Bulletin board
 	Then Shift trade bulletin board view should not be visible
 	And I should see a shift trade request in the list with subject 'A nice subject'
 
+	@NotKeyExample
 Scenario: Should possible make shift trade in Bulletin board with day off
 	Given I have the role 'Full access to mytime'
 	And I have a person period with 
@@ -162,6 +164,7 @@ Scenario: Should possible make shift trade in Bulletin board with day off
 	Then Shift trade bulletin board view should not be visible
 	And I should see a shift trade request in the list with subject 'A nice subject'
 
+	@NotKeyExample
 Scenario: Should possibly make my empty day trade with main shift day in Bulletin board
 	Given I have the role 'Full access to mytime'
 	And I have a person period with 
@@ -197,6 +200,7 @@ Scenario: Should possibly make my empty day trade with main shift day in Bulleti
 	Then Shift trade bulletin board view should not be visible
 	And I should see a shift trade request in the list with subject 'A nice subject'
 
+	@NotKeyExample
 Scenario: Should possible make shift trade with empty day in Bulletin board
 	Given I have the role 'Full access to mytime'
 	And I have a person period with 
@@ -230,6 +234,7 @@ Scenario: Should possible make shift trade with empty day in Bulletin board
 	Then Shift trade bulletin board view should not be visible
 	And I should see a shift trade request in the list with subject 'A nice subject'
 
+	@NotKeyExample
 Scenario: Should see the anonymous name when viewing empty day in Bulletin board
 	Given I have the role 'Full access to mytime'
 	And I have a person period with 
@@ -308,6 +313,7 @@ Scenario: Delete shift exchange offer in request list
 	When I delete the existing request in the list
 	Then I should not see any requests in the list
 
+	@NotKeyExample
 Scenario: View shift trade post details
 	Given  I have the role 'Full access to mytime'
 	And I have a person period with 
@@ -374,6 +380,7 @@ Scenario: Should modify shift trade post
 	| Start time     | 8:00       |
 	| End time       | 16:00      |
 
+	@NotKeyExample
 Scenario: Should not show agent name in shift trade board list
 	Given I have the role 'Full access to mytime'
 	And I have a person period with 
@@ -405,6 +412,7 @@ Scenario: Should not show agent name in shift trade board list
 	When I see 'the other agent' shift on Shift Trade Bulletin Board on date '2030-01-01'
 	Then I should not see agent name in the possible schedule trade list
 
+	@NotKeyExample
 Scenario: Should not show subject and message box
 	Given I have the role 'Full access to mytime'
 	And I have a person period with 
@@ -437,6 +445,7 @@ Scenario: Should not show subject and message box
 	And I click OtherAgent shift
 	Then I should see a confirm message on bulletin trade board
 
+	@NotKeyExample
 Scenario: Should not show agent name in shift trade request detail view
 	Given I have the role 'Full access to mytime'
 	And I have a person period with 

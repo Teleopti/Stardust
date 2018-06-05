@@ -137,6 +137,7 @@ Scenario: Show the user a red indication when there is only a little or no allow
 	When I view my week schedule for date '2023-04-01'
 	Then I should see an 'red' indication for chance of absence request on '2023-04-01'
 
+	@NotKeyExample
 Scenario: Show the user an empty indication when there is no budgetgroup for that day
 	Given there is a budgetday
 	| Field						| Value                |
@@ -164,6 +165,7 @@ Scenario: Show the user an empty indication when there is no budgetgroup for tha
 	Then I should see an 'green' indication for chance of absence request on '2023-04-03'
 	And I should see no indication for chance of absence request on '2023-04-04'
 
+	@NotKeyExample
 Scenario: Show the user an empty indication when today is outside open absence periods
 	Given the time is '2023-05-02 20:00'
 	And there is a budgetday
@@ -185,6 +187,7 @@ Scenario: Show the user an empty indication when today is outside open absence p
 	When I view my week schedule for date '2023-04-28'
 	Then I should see no indication for chance of absence request on '2023-04-28'
 
+	@NotKeyExample
 Scenario: Show the user an empty indication when absence day is outside absence preference periods
 	Given the time is '2023-05-15 20:00'
 	And there is a budgetday
@@ -206,6 +209,7 @@ Scenario: Show the user an empty indication when absence day is outside absence 
 	When I view my week schedule for date '2023-05-28'
 	Then I should see no indication for chance of absence request on '2023-05-28'
 
+	@NotKeyExample
 Scenario: Do not show the user any indication when there is no staffing check for that day
 	Given the time is '2023-05-25 20:00'
 	And there is a budgetday
@@ -224,6 +228,7 @@ Scenario: Do not show the user any indication when there is no staffing check fo
 	When I view my week schedule for date '2023-05-28'
 	Then I should not see any indication of how many agents can go on holiday
 
+	@NotKeyExample
 Scenario: Do not show the user any indication when there is intraday staffing check for that day
 	Given the time is '2023-05-25 20:00'
 	And there is a budgetday
@@ -243,6 +248,7 @@ Scenario: Do not show the user any indication when there is intraday staffing ch
 	When I view my week schedule for date '2023-05-28'
 	Then I should not see any indication of how many agents can go on holiday
 	
+	@NotKeyExample
 Scenario: Show the user a green indication when there is budgetgroup check for that day
 	Given the time is '2023-05-25 20:00'
 	And there is a budgetday
@@ -262,6 +268,7 @@ Scenario: Show the user a green indication when there is budgetgroup check for t
 	When I view my week schedule for date '2023-05-28'
 	Then I should see an 'green' indication for chance of absence request on '2023-05-28'
 	
+	@NotKeyExample
 Scenario: Show the user a green indication when there is no auto grant for absence requests for that day
 	Given the time is '2023-05-25 20:00'
 	And there is a budgetday
@@ -281,6 +288,7 @@ Scenario: Show the user a green indication when there is no auto grant for absen
 	When I view my week schedule for date '2023-05-28'
 	Then I should see an 'green' indication for chance of absence request on '2023-05-28'
 
+	@NotKeyExample
 Scenario: Show the user a green indication when absence requests are auto granted for that day
 	Given the time is '2023-05-25 20:00'
 	And there is a budgetday
@@ -301,6 +309,7 @@ Scenario: Show the user a green indication when absence requests are auto grante
 	When I view my week schedule for date '2023-05-28'
 	Then I should see an 'green' indication for chance of absence request on '2023-05-28'
 
+	@NotKeyExample
 Scenario: Show the user an empty indication when absence requests are auto denied for that day
 	Given the time is '2023-05-25 20:00'
 	And there is a budgetday
@@ -321,6 +330,7 @@ Scenario: Show the user an empty indication when absence requests are auto denie
 	When I view my week schedule for date '2023-05-28'
 	Then I should see no indication for chance of absence request on '2023-05-28'
 
+	@NotKeyExample
 Scenario: Show the user a red indication when left absence is less than one fulltime equivalent
 	Given there is a budgetday
 	| Field						| Value                |
@@ -338,6 +348,7 @@ Scenario: Show the user a red indication when left absence is less than one full
 	When I view my week schedule for date '2023-04-01'
 	Then I should see an 'red' indication for chance of absence request on '2023-04-01'
 
+	@NotKeyExample
 Scenario: Show the user a green indication when left absence is more than two fulltime equivalents and more than 30 percent
 	Given there is a budgetday
 	| Field						| Value                |
@@ -355,6 +366,7 @@ Scenario: Show the user a green indication when left absence is more than two fu
 	When I view my week schedule for date '2023-04-01'
 	Then I should see an 'green' indication for chance of absence request on '2023-04-01'
 
+	@NotKeyExample
 Scenario: Show the user a yellow indication when left absence is more than two fulltime equivalents and less than 30 percent
 	Given there is a budgetday
 	| Field						| Value                |
@@ -408,6 +420,7 @@ Scenario: Show the user a red indication when allowance exceeds used absence but
 	When I view my week schedule for date '2013-04-01'
 	Then I should see an 'red' indication for chance of absence request on '2013-04-01'
 
+	@NotKeyExample
 Scenario: Do not show indication of the amount of agents that can go on holiday if no permission to absence request
 	Given I have the role 'No access to absence requests'
 	When I view my week schedule for date '2023-02-15'

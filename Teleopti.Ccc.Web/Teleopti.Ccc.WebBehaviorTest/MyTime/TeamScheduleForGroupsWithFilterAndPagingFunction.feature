@@ -67,6 +67,7 @@ Scenario: View available custom group options
 	| Kontraktsschema/A contract schedule   |
 	| Deltidsprocent/A part time percentage |
 
+	@NotKeyExample
 Scenario: Keep selected group when changing date
 	Given I have the role 'Access to view all group pages'
 	And I have a shift with
@@ -81,12 +82,14 @@ Scenario: Keep selected group when changing date
 	Then I should see colleague 'Pierre Baldi'
 	And I should not see myself
 
+	@NotKeyExample
 Scenario: Keep selected date when changing group
 	Given I have the role 'Access to view all group pages'
 	And I am viewing group schedule for '2014-05-03'
 	When I select something in the team picker
 	Then I should see tomorrow
 
+	@NotKeyExample
 Scenario: View available team options if not have view all group pages permission
 	Given I have the role 'Without view group pages permission'
 	When I view group schedule for '2013-03-25'

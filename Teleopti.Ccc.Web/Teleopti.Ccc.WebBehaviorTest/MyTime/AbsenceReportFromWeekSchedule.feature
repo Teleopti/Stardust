@@ -29,7 +29,7 @@ Feature: Absence Report On Desktop Week Schedule
 	| Field      | Value      |
 	| Start date | 2022-08-19 |
 	
-
+	@NotKeyExample
 Scenario: Open add absence report form from day summary only for today and tomorrow
 	Given I have the role 'Full access to mytime'
 	And the time is '2020-10-05 08:00:00'
@@ -43,6 +43,7 @@ Scenario: Open add absence report form from day summary only for today and tomor
 	When I click on the day summary for date '2020-10-07'
 	Then I should not see the add absence report button
 
+	@NotKeyExample
 Scenario: Cancel a draft absence report
 	Given I have the role 'Full access to mytime'
 	And the time is '2020-10-05'
@@ -61,6 +62,7 @@ Scenario: Save an absence report
 	And I save the current absence report
 	Then I should not see the add absence report form
 
+	@NotKeyExample
 Scenario: Can not add absence report if no permission
 	Given I have the role 'No access to absence report'
 	And I view my week schedule for date '2020-10-05'

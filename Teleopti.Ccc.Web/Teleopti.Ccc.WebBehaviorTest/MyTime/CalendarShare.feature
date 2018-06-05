@@ -23,6 +23,7 @@ Background:
 	| Name                       | Schedule published to 0909 |
 	| Schedule published to date | 2084-09-09                 |
 
+	@NotKeyExample
 Scenario: Cannot share calendar without permission
 	Given I have the role 'No access to CalendarLink'
 	When I view my settings
@@ -36,6 +37,7 @@ Scenario: View calendar sharing activation status
 	Then I should see 'share my calendar' active
 	And I should see a sharing link
 
+	@NotKeyExample
 Scenario: Should see warning message when has no workflow control set
 	Given I have the role 'Access to CalendarLink'
 	When I view my settings
@@ -58,12 +60,14 @@ Scenario: Revoke calendar sharing
 	Then I should see 'share my calendar' inactive
 	And I should not see a sharing link
 
+	@NotKeyExample
 Scenario: Dont share calendar when sharing is revoked
 	Given I have the role 'Access to CalendarLink'
 	And I have revoked calendar sharing
 	When Someone is viewing sharing link
 	Then Someone should not see ical calendar
 
+	@NotKeyExample
 Scenario: Dont share calendar when permission is revoked
 	Given I have the role 'No access to CalendarLink'
 	And I have shared my calendar before

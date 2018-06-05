@@ -29,7 +29,7 @@ Background:
 	| Contract   | A test contract |
 	| Skill      | Phone           |
 
-
+	@NotKeyExample
 Scenario: Add a new overtime request
 	Given I have the role 'Full access to mytime'
 	And I view my next week schedule
@@ -41,6 +41,7 @@ Scenario: Add a new overtime request
 	Then I should see my existing overtime request with subject 'my test overtime'
 	Then I should see my existing overtime request with status 'Denied'
 
+	@NotKeyExample
 Scenario: Edit a pending overtime request
 	Given I have created an overtime request with subject 'test overtime request'
 	When I am viewing requests

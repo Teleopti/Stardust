@@ -12,6 +12,7 @@ When I view preferences for date '2014-05-02'
 Then I should see min hours per week as '23'
 And I should see max hours per week as '81'
 
+@NotKeyExample
 Scenario: Do not show min and max hours per week for week that is not in current period and without published schedule
 Given I am an agent
 And I have a shift bag with start times 8 to 9 and end times 12 to 20

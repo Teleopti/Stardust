@@ -5,7 +5,7 @@ Feature: Preferences period feedback
 	I want feedback of my preferences compared to my contract for the period
 
 
-
+	@NotKeyExample
 Scenario: Period feedback of contract day off
 	Given I am an agent
 	And I have a scheduling period of 1 week
@@ -13,7 +13,7 @@ Scenario: Period feedback of contract day off
 	When I view preferences
 	Then I should see a message that I should have 2 days off
 
-
+	@NotKeyExample
 Scenario: Period feedback of day off preferences
 	Given I am an agent
 	And I have a scheduling period of 1 week
@@ -27,6 +27,7 @@ Scenario: Period feedback of day off preferences
 	Then I should see a message that my preferences can result 2 days off
 	And I should not see a warning for my dayoff preferences outside the target
 
+	@NotKeyExample
 Scenario: Period feedback of day off scheduled
 	Given I am an agent
 	And I have a scheduling period of 1 week
@@ -39,6 +40,7 @@ Scenario: Period feedback of day off scheduled
 	When I view preferences for date '2014-05-02'
 	Then I should see a message that my preferences can result 2 days off
 
+	@NotKeyExample
 Scenario: Period feedback of day off preferences and scheduled
 	Given I am an agent
 	And I have a scheduling period of 1 week
@@ -52,7 +54,7 @@ Scenario: Period feedback of day off preferences and scheduled
 	Then I should see a message that my preferences can result 2 days off
 
 
-
+	@NotKeyExample
 Scenario: Period feedback of contract day off tolerance
 	Given I am an agent
 	And I have a scheduling period of 1 week
@@ -65,7 +67,7 @@ Scenario: Period feedback of contract day off tolerance
 	Then I should see a message that I should have between 1 and 3 days off
 
 
-
+	@NotKeyExample
 Scenario: Period feedback of absence on contract schedule day off
 	Given I am an agent
 	And I am swedish
@@ -89,7 +91,7 @@ Scenario: Period feedback of absence on contract schedule day off
 	Then I should see a message that my preferences can result 1 days off
 
 
-
+	@NotKeyExample
 Scenario: Period feedback of contract time for employment type Fixed staff normal work time
 	Given I am an agent
 	And I have a scheduling period of 1 week
@@ -101,6 +103,7 @@ Scenario: Period feedback of contract time for employment type Fixed staff norma
 	When I view preferences
 	Then I should see a message that I should work 40 hours
 
+	@NotKeyExample
 Scenario: Period feedback of contract time for employment type Fixed staff day work time
 	Given I am an agent
 	And I have a scheduling period of 1 week
@@ -117,6 +120,7 @@ Scenario: Period feedback of contract time for employment type Fixed staff day w
 	When I view preferences for date '2014-05-02'
 	Then I should see a message that I should work 40 hours
 
+	@NotKeyExample
 Scenario: Period feedback of contract time with target tolerance
 	Given I am an agent
 	And I have a scheduling period of 1 week
@@ -131,7 +135,7 @@ Scenario: Period feedback of contract time with target tolerance
 	Then I should see a message that I should work 35 to 45 hours
 
 
-
+	@NotKeyExample
 Scenario: Period feedback of nothing
 	Given I am an agent
 	And I have a scheduling period of 1 week
@@ -139,6 +143,7 @@ Scenario: Period feedback of nothing
 	When I view preferences
 	Then I should see a message that my preferences can result in 42 to 70 hours
 
+	@NotKeyExample
 Scenario: Period feedback of preferences
 	Given I am an agent
 	And I have a scheduling period of 1 week
@@ -191,6 +196,7 @@ Scenario: Period feedback of schedules
 	When I view preferences for date '2014-05-02'
 	Then I should see a message that my preferences can result in 40 hours
 
+	@NotKeyExample
 Scenario: Period feedback of contract time absence
 	Given I am an agent
 	And I have a scheduling period of 1 week
@@ -276,7 +282,7 @@ Scenario: Period feedback of non-contract time absence
 	Then I should see a message that my preferences can result in 0 hours
 
 	
-
+	@NotKeyExample
 Scenario: Period feedback of day off preferences with warning
 	Given I am an agent
 	And I have a scheduling period of 1 week

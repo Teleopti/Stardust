@@ -65,6 +65,7 @@ Scenario: Feedback from blacklisted shift with preference
 	| Date                  | 2012-10-10  |
 	| Contract time boundry | 12:00-12:00 |
 
+	@NotKeyExample
 Scenario: Feedback from blacklisted shift with availability
 	Given I have a person period with 
 	| Field      | Value                  |
@@ -85,6 +86,7 @@ Scenario: Feedback from blacklisted shift with availability
 	| Date                  | 2012-10-10  |
 	| Contract time boundry | 12:00-12:00 |
 
+	@NotKeyExample
 Scenario: No feedback from blacklisted shift without preference
 	Given I have a person period with 
 	| Field      | Value                  |

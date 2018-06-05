@@ -21,6 +21,7 @@ Background:
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
 
+	@NotKeyExample
 Scenario: Display student availabilities outside current period
 	Given I have the role 'Access to student availability'
 	And I have a student availability with
@@ -75,6 +76,7 @@ Scenario: Add student availability for multiple days
 	| Start time | 10:30      |
 	| End time   | 11:00      |
 
+	@NotKeyExample
 Scenario: Add student availability with end time on next day
 	Given I have the role 'Access to student availability'
 	And I am viewing student availability for date '2012-06-20'
@@ -93,6 +95,7 @@ Scenario: Add student availability with end time on next day
 	| End time   | 01:00 +1   |
 	And I should not see the student availability on '2012-06-21'
 	
+	@NotKeyExample
 Scenario: Cancel student availability editing
 	Given I have the role 'Access to student availability'
 	And I have a student availability with
@@ -152,6 +155,7 @@ Scenario: Delete student availability
 	And I click the delete button in student availability
 	Then I should not see the student availability on '2012-06-20'
 
+	@NotKeyExample
 Scenario: Add invalid student availability
 	Given I have the role 'Access to student availability'
 	And I am viewing student availability for date '2012-06-20'

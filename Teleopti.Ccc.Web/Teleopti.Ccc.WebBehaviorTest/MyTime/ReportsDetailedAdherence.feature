@@ -15,24 +15,28 @@ Scenario: Show the detailed adherence report
 	When I view my adherence report for '2013-10-02'
 	Then I should see the detailed adherence report for '2013-10-02'
 
+	@NotKeyExample
 Scenario: Navigate to previous day
 	Given I am an agent
 	And I view my adherence report for '2013-10-04'
 	When I navigate to the previous day
 	Then I should end up in my adherence report for '2013-10-03'
 	
+	@NotKeyExample
 Scenario: Navigate to next day
 	Given I am an agent
 	And I view my adherence report for '2013-10-04'
 	When I navigate to the next day
 	Then I should end up in my adherence report for '2013-10-05'
 
+	@NotKeyExample
 Scenario: Navigate using date picker
 	Given I am an agent
 	And I view my adherence report for '2013-10-04'
 	When I select the date '2013-10-10'
 	Then I should end up in my adherence report for '2013-10-10'
 	
+	@NotKeyExample
 Scenario: Navigate to overview with same date
 	Given I am an agent
 	And I view my adherence report for '2013-10-04'

@@ -47,6 +47,7 @@ Scenario: Close details when approving shift trade request
 	And I click the Approve button on the shift request
 	Then Details should be closed
 
+	@NotKeyExample
 Scenario: Can not approve or deny shift trade request created by me
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -73,6 +74,7 @@ Scenario: Deny shift trade request
 	And I click the Deny button on the shift request
 	Then Details should be closed
 
+	@NotKeyExample
 Scenario: Should not be able to delete received shift trade request
 	Given I am an agent
 	And I have received a shift trade request
@@ -81,6 +83,7 @@ Scenario: Should not be able to delete received shift trade request
 	When I view requests
 	Then I should not see a delete button on the request
 
+	@NotKeyExample
 Scenario: Show name of sender of a received shifttrade
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -109,6 +112,7 @@ Scenario: Show name of sender of a received shifttrade
 	When I click on the existing request in the list
 	Then I should see 'Ashley Andeen' as the sender of the request
 
+	@NotKeyExample
 Scenario: Show name of the person of a shifttrade that I have created
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -204,6 +208,7 @@ Scenario: shift trade date should in sync
 	Then I should see shift trade date as '2030-01-01'
 	And I should see trade date in detail as '2030-01-01'
 
+	@NotKeyExample
 Scenario: Show day off in a shifttrade
 	Given I have the role 'Full access to mytime'
 	And there is a dayoff with
@@ -237,6 +242,7 @@ Scenario: Show day off in a shifttrade
 	Then I should see my details scheduled day off 'DayOff'
 	And I should see other details scheduled day off 'VacationButWithAReallyLongName'
 
+	@NotKeyExample
 Scenario: Show subject of the shift trade in shifttrade details
 Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -268,6 +274,7 @@ Given I have the role 'Full access to mytime'
 	Then I should see details with subject 'Swap with me'
 	And I should see details with message 'CornercaseMessageWithAReallyReallyLongWordThatWillProbablyNeverHappenInTheRealWorldButItCausedATestIssueSoWePutItHereForTesting'
 
+	@NotKeyExample
 Scenario: Show information that we dont show schedules in a shifttrade that isnt pending
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -279,6 +286,7 @@ Scenario: Show information that we dont show schedules in a shifttrade that isnt
 	Then I should see details with message that tells the user that the status of the shifttrade is new
 	And I should not see timelines
 
+	@NotKeyExample
 Scenario: Can not approve or deny shift trade request that is already approved
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -321,6 +329,7 @@ Scenario: Resend referred shifttrade
 	Then I should see that the existing request is processing
 	And I should not see resend shifttrade button for the request
 
+	@NotKeyExample
 Scenario: Cancel referred shifttrade 
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -350,6 +359,7 @@ Scenario: Cancel referred shifttrade
 	And I click on shifttrade cancel button
 	Then I should not see any requests
 
+	@NotKeyExample
 Scenario: Do not show referred shifttrade to reciever
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -377,6 +387,7 @@ Scenario: Do not show referred shifttrade to reciever
 	And I am viewing requests
 	Then I should not see any requests
 
+	@NotKeyExample
 Scenario: Do not show resend and cancel buttons to sender when shifttrade is not referred
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -407,6 +418,7 @@ Scenario: Do not show resend and cancel buttons to sender when shifttrade is not
 	Then I should not see resend shifttrade button for the request
 	And I should not see cancel shifttrade button for the request
 
+	@NotKeyExample
 Scenario:  Should input comment when seeing a shift trade request from other agent in pending status
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -418,6 +430,7 @@ Scenario:  Should input comment when seeing a shift trade request from other age
 	When I click on the existing request in the list
 	Then I could edit message for the reason why I approve or deny this request
 
+	@NotKeyExample
 Scenario:  Should see the updated comment after approved
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -432,6 +445,7 @@ Scenario:  Should see the updated comment after approved
 	And I am viewing requests
 	Then I should see 'OK, you owe me a dinner' in message area
 	
+	@NotKeyExample
 Scenario:  Should see the updated comment after denied
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
