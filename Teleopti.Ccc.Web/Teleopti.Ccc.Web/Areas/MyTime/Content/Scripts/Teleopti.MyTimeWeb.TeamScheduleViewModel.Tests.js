@@ -1,7 +1,11 @@
 ﻿
 $(document).ready(function () {
 
-	module("Teleopti.MyTimeWeb.TeamScheduleViewModel");
+	module("Teleopti.MyTimeWeb.TeamScheduleViewModel", {
+		setup: function() {
+			Teleopti.MyTimeWeb.Common.IsToggleEnabled = function() {};
+		}
+	});
 
 	var timeLineTemplate = [{ HourText: "", LengthInMinutesToDisplay: 15, StartTime: 1433634300000, EndTime: 1433635200000 },
 							{ HourText: "08:00", LengthInMinutesToDisplay: 60, StartTime: 1433635200000, EndTime: 1433638800000 },

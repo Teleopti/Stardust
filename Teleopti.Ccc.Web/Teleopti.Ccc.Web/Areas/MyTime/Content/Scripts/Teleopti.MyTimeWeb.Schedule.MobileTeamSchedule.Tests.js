@@ -1,7 +1,8 @@
 ﻿$(document).ready(function() {
-	var hash = '',
+	var agentSchedulesHtml = '',
 		completeLoadedCount = 0,
 		fakeTeamScheduleData,
+		fakeOriginalAgentSchedulesData,
 		fakeDefaultTeamData,
 		fakeAvailableTeamsData,
 		fakeWindow,
@@ -21,7 +22,9 @@
 		}
 	});
 
-	test('should select today as selectedDate(displayDate)', function() {
+	test('should select today as selectedDate(displayDate)', function () {
+		initVm();
+
 		var html = [
 			'<li class="mobile-datepicker">',
 			'					<div class="input-group">',
@@ -43,7 +46,7 @@
 			'				</li>'
 		].join('');
 		$('.mobile-teamschedule-view').append(html);
-
+		
 		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
 
 		var today = moment().format(dateFormat);
@@ -52,7 +55,8 @@
 		equal($('.mobile-teamschedule-view .mobile-datepicker input').val(), today);
 	});
 
-	test('should change selected date after clicking on "previous day" icon', function() {
+	test('should change selected date after clicking on "previous day" icon', function () {
+		initVm();
 		var today = moment();
 
 		var html = [
@@ -76,7 +80,7 @@
 			'				</li>'
 		].join('');
 		$('.mobile-teamschedule-view').append(html);
-
+		
 		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
 		$('.previous-day').click();
 
@@ -86,7 +90,9 @@
 		equal($('.mobile-teamschedule-view .mobile-datepicker input').val(), expectDateStr);
 	});
 
-	test('should change selected date after clicking on "next day" icon', function() {
+	test('should change selected date after clicking on "next day" icon', function () {
+		initVm();
+
 		var today = moment();
 
 		var html = [
@@ -120,7 +126,9 @@
 		equal($('.mobile-teamschedule-view .mobile-datepicker input').val(), expectDateStr);
 	});
 
-	test('should change display date after changing selected date', function() {
+	test('should change display date after changing selected date', function () {
+		initVm();
+
 		var today = moment();
 
 		var html = [
@@ -154,7 +162,9 @@
 		equal($('.mobile-teamschedule-view .mobile-datepicker input').val(), expectDateStr);
 	});
 
-	test('should render sites and teams', function() {
+	test('should render sites and teams', function () {
+		initVm();
+
 		var html = [
 			'	<div class="teamschedule-filter-component">',
 			'		<select data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">',
@@ -180,7 +190,9 @@
 		equal($($('.mobile-teamschedule-view .teamschedule-filter-component select')[0][10]).text(), 'Contract Group/Team Rotations');
 	});
 
-	test('should select default team', function() {
+	test('should select default team', function () {
+		initVm();
+
 		var html = [
 			'	<div class="teamschedule-filter-component">',
 			'		<select data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">',
@@ -200,6 +212,8 @@
 	});
 
 	test('should render timeline', function () {
+		initVm();
+
 		var html = ['<div class="mobile-timeline floatleft" data-bind="style: {height: scheduleContainerHeight + \'px\'}">',
 			'	<!-- ko foreach: timeLines -->',
 			'	<div class="mobile-timeline-label absolute" data-bind="style: {top: topPosition}, text: timeText, visible: isHour">',
@@ -219,6 +233,8 @@
 	});
 
 	test('should render overnight timeline', function () {
+		initVm();
+
 		var html = ['<div class="mobile-timeline floatleft" data-bind="style: {height: scheduleContainerHeight + \'px\'}">',
 			'	<!-- ko foreach: timeLines -->',
 			'	<div class="mobile-timeline-label absolute" data-bind="style: {top: topPosition}, text: timeText, visible: isHour">',
@@ -240,6 +256,8 @@
 	});
 
 	test('should render my schedule', function () {
+		initVm();
+
 		var html = [
 			'<div class="my-schedule-column relative" data-bind="style: {height: scheduleContainerHeight + \'px\'}">',
 			'	<!-- ko if: mySchedule -->',
@@ -278,48 +296,19 @@
 	});
 
 	test('should render teammates\'s schedules', function () {
-		var html = [
-			'<!-- ko if: teamSchedules -->',
-			'<div class="teammates-schedules-container" data-bind="style: {height: scheduleContainerHeight + \'px\'}">',
-			'	<!-- ko foreach: teamSchedules -->',
-			'	<div class="teammates-schedules-column relative">',
-			'		<div class="agent-name">',
-			'			<span data-bind="text: name"></span>',
-			'		</div>',
-			'		<div class="mobile-schedule-container relative">',
-			'			<!-- ko foreach: layers -->',
-			'			<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: \'click\' }, style: styleJson, css:{\'overtime-background-image-light\': isOvertime, overTimeLighterBackgroundStyle, \'overtime-background-image-dark\': isOvertime, overTimeDarkerBackgroundStyle, \'last-layer\': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">',
-			'				<div data-bind="visible: showTitle() && !isOvertimeAvailability()"></div>',
-			'				<strong data-bind="visible: false, text: title()"></strong>',
-			'				<!-- ko if: hasMeeting -->',
-			'				<div class="meeting floatright">',
-			'					<i class="meeting-icon mr10">',
-			'						<i class="glyphicon glyphicon-user ml10"></i>',
-			'					</i>',
-			'				</div>',
-			'				<!-- /ko -->',
-			'				<span class="fullwidth displayblock" data-bind="visible: false && showDetail, text: timeSpan"></span>',
-			'			</div>',
-			'			<div data-bind="visible: false && showTitle() && isOvertimeAvailability()">',
-			'				<i class="glyphicon glyphicon-time"></i>',
-			'			</div>',
-			'			<!-- /ko -->',
-			'		</div>',
-			'	</div>',
-			'	<!-- /ko -->',
-			'</div>',
-			'<!-- /ko -->'].join("");
-
-		$('.mobile-teamschedule-view').append(html);
+		initVm();
+		$('.mobile-teamschedule-view').append(agentSchedulesHtml);
 
 		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
 
-		equal($('.mobile-teamschedule-view .teammates-schedules-column .agent-name span').text(), 'Jon Kleinsmith');
-		equal($('.mobile-teamschedule-view .teammates-schedules-column .mobile-schedule-layer').length, 1);
+		equal($('.mobile-teamschedule-view .teammates-schedules-column:first .agent-name span').text(), 'Jon Kleinsmith1');
+		equal($('.mobile-teamschedule-view .teammates-schedules-column .mobile-schedule-layer').length, 5);
 		equal($('.mobile-teamschedule-view .teammates-schedules-column .mobile-schedule-layer strong:visible').length, 0);
 	});
 
-	test('should reload schedule after clicking on "previous day" icon', function() {
+	test('should reload schedule after clicking on "previous day" icon', function () {
+		initVm();
+
 		var html = [
 			'<li class="mobile-datepicker">',
 			'					<div class="input-group">',
@@ -349,6 +338,8 @@
 	});
 
 	test('should reload schedule after clicking on "next day" icon', function () {
+		initVm();
+
 		var html = [
 			'<li class="mobile-datepicker">',
 			'					<div class="input-group">',
@@ -370,7 +361,6 @@
 			'				</li>'
 		].join('');
 		$('.mobile-teamschedule-view').append(html);
-
 		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
 		$('.next-day').click();
 
@@ -378,6 +368,8 @@
 	});
 
 	test('should reload schedule after changing selectedTeam', function () {
+		initVm();
+
 		var html = [
 			'	<div class="teamschedule-filter-component">',
 			'		<select data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">',
@@ -400,6 +392,130 @@
 	});
 
 	test('should reload schedule after select allTeam', function () {
+		initVm();
+
+		var html = [
+			'	<div class="teamschedule-filter-component">',
+			'		<select data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">',
+			'			<optgroup data-bind="attr: { label: text }, foreach: children">',
+			'				<option data-bind="text: text, value: id"></option>',
+			'			</optgroup>',
+			'		</select>',
+			'	</div>'
+		].join('');
+
+		$('.mobile-teamschedule-view').append(html);
+		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+
+		equal($('.mobile-teamschedule-view .teamschedule-filter-component select').val(), fakeDefaultTeamData.DefaultTeam);
+
+		vm.selectedTeam('-1');
+
+		equal(fetchTeamScheduleDataRequestCount, 2);
+		equal(vm.selectedTeamIds.length, 5);
+	});
+
+
+	test('should reset skip count after changing selected date', function () {
+		initVm();
+
+		var today = moment();
+
+		var html = [
+			'<li class="mobile-datepicker">',
+			'					<div class="input-group">',
+			'						<span class="input-group-btn">',
+			'							<button class="btn btn-default">',
+			'								<i class="glyphicon glyphicon-chevron-left"></i>',
+			'							</button>',
+			'						</span>',
+			'						<input class="form-control text-center date-input-style" data-bind="value: displayDate" type="text" readonly="readonly"/>',
+			'						<span class="input-group-btn">',
+			'							<span class="btn btn-default moment-datepicker" type="button">',
+			'								<i class="glyphicon glyphicon-calendar"></i>',
+			'							</span>',
+			'							<button class="btn btn-default next-day" data-bind="click: nextDay">',
+			'								<i class="glyphicon glyphicon-chevron-right"></i>',
+			'							</button>',
+			'						</span>',
+			'					</div>',
+			'				</li>'
+		].join('');
+
+		$('.mobile-teamschedule-view').append(html);
+		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+		vm.paging.skip = 10;
+
+		vm.selectedDate(today.add(9, 'days'));
+
+		equal(vm.paging.skip, 0);
+	});
+
+	test('should reset skip count after clicking on "previous day" icon', function () {
+		initVm();
+		var html = [
+			'<li class="mobile-datepicker">',
+			'					<div class="input-group">',
+			'						<span class="input-group-btn">',
+			'							<button class="btn btn-default previous-day" data-bind="click: previousDay">',
+			'								<i class="glyphicon glyphicon-chevron-left"></i>',
+			'							</button>',
+			'						</span>',
+			'						<input class="form-control text-center date-input-style" data-bind="value: displayDate" type="text" readonly="readonly"/>',
+			'						<span class="input-group-btn">',
+			'							<span class="btn btn-default moment-datepicker" type="button">',
+			'								<i class="glyphicon glyphicon-calendar"></i>',
+			'							</span>',
+			'							<button class="btn btn-default">',
+			'								<i class="glyphicon glyphicon-chevron-right"></i>',
+			'							</button>',
+			'						</span>',
+			'					</div>',
+			'				</li>'
+		].join('');
+		$('.mobile-teamschedule-view').append(html);
+
+		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+		vm.paging.skip = 10;
+		$('.previous-day').click();
+
+		equal(vm.paging.skip, 0);
+	});
+
+	test('should reset skip count after clicking on "next day" icon', function () {
+		initVm();
+
+		var html = [
+			'<li class="mobile-datepicker">',
+			'					<div class="input-group">',
+			'						<span class="input-group-btn">',
+			'							<button class="btn btn-default">',
+			'								<i class="glyphicon glyphicon-chevron-left"></i>',
+			'							</button>',
+			'						</span>',
+			'						<input class="form-control text-center date-input-style" data-bind="value: displayDate" type="text" readonly="readonly"/>',
+			'						<span class="input-group-btn">',
+			'							<span class="btn btn-default moment-datepicker" type="button">',
+			'								<i class="glyphicon glyphicon-calendar"></i>',
+			'							</span>',
+			'							<button class="btn btn-default next-day" data-bind="click: nextDay">',
+			'								<i class="glyphicon glyphicon-chevron-right"></i>',
+			'							</button>',
+			'						</span>',
+			'					</div>',
+			'				</li>'
+		].join('');
+		$('.mobile-teamschedule-view').append(html);
+		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+		vm.paging.skip = 10;
+		$('.next-day').click();
+
+		equal(vm.paging.skip, 0);
+	});
+
+	test('should reset skip count after changing selectedTeam', function () {
+		initVm();
+
 		var html = [
 			'	<div class="teamschedule-filter-component">',
 			'		<select data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">',
@@ -414,13 +530,107 @@
 
 		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
 
-		equal($('.mobile-teamschedule-view .teamschedule-filter-component select').val(), fakeDefaultTeamData.DefaultTeam);
+		vm.paging.skip = 10;
+		vm.selectedTeam('d7a9c243-8cd8-406e-9889-9b5e015ab495');
 
-		vm.selectedTeam('-1');
-
-		equal(fetchTeamScheduleDataRequestCount, 2);
-		equal(vm.selectedTeamIds.length, 5);
+		equal(vm.paging.skip, 0);
 	});
+
+	test('should display paging', function () {
+		initVm();
+
+		var html = [
+		'<!-- ko if: isPageVisible-->',
+		'<div class="pull-right">',
+		'	<ul class="pagination pagination-sm">',
+		'		<li>',
+		'			<a data-bind="click: goToPreviousPage, enable: isPreviousPageEnabled"><i class="glyphicon glyphicon-fast-backward"></i></a>',
+		'		</li>',
+		'		<li>',
+		'			<span data-bind="text: currentPageNum"></span>/<span data-bind="text: totalPageNum"></span>',
+		'		</li>',
+		'		<li>',
+		'			<a data-bind="click: goToNextPage, enable: isNextPageEnabled"><i class="glyphicon glyphicon-fast-forward"></i></a>',
+		'		</li>',
+		'	</ul>',
+		'</div>',
+		'<!--/ko-->'].join("");
+
+		$('.mobile-teamschedule-view').append(html);
+
+		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+
+		equal(vm.isNextPageEnabled(), true);
+		equal(vm.isPreviousPageEnabled(), false);
+		equal(vm.isNextPageEnabled(), true);
+		equal(vm.currentPageNum(), 1);
+		equal(vm.totalPageNum(), 4);
+	});
+
+	test('should update current page when go to next page', function () {
+		initVm();
+
+		var html = [
+		'<!-- ko if: isPageVisible-->',
+		'<div class="pull-right">',
+		'	<ul class="pagination pagination-sm">',
+		'		<li>',
+		'			<a data-bind="click: goToPreviousPage, enable: isPreviousPageEnabled"><i class="glyphicon glyphicon-fast-backward"></i></a>',
+		'		</li>',
+		'		<li>',
+		'			<span data-bind="text: currentPageNum"></span>/<span data-bind="text: totalPageNum"></span>',
+		'		</li>',
+		'		<li>',
+		'			<a data-bind="click: goToNextPage, enable: isNextPageEnabled"><i class="glyphicon glyphicon-fast-forward"></i></a>',
+		'		</li>',
+		'	</ul>',
+		'</div>',
+		'<!--/ko-->'].join("");
+
+		$('.mobile-teamschedule-view').append(html).append(agentSchedulesHtml);
+
+		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+
+		equal(vm.currentPageNum(), 1);
+		equal($('.mobile-teamschedule-view .teammates-schedules-column:last .agent-name span').text(), 'Jon Kleinsmith5');
+
+		$(".glyphicon.glyphicon-fast-forward").click();
+
+		equal(vm.currentPageNum(), 2);
+		equal($('.mobile-teamschedule-view .teammates-schedules-column:last .agent-name span').text(), 'Jon Kleinsmith10');
+	});
+
+	test('should update current page when go to previous page', function () {
+		initVm();
+
+		var html = [
+		'<!-- ko if: isPageVisible-->',
+		'	<ul class="pagination pagination-sm">',
+		'		<li>',
+		'			<a data-bind="click: goToPreviousPage, enable: isPreviousPageEnabled"><i class="glyphicon glyphicon-fast-backward"></i></a>',
+		'		</li>',
+		'		<li>',
+		'			<span data-bind="text: currentPageNum"></span>/<span data-bind="text: totalPageNum"></span>',
+		'		</li>',
+		'		<li>',
+		'			<a data-bind="click: goToNextPage, enable: isNextPageEnabled"><i class="glyphicon glyphicon-fast-forward"></i></a>',
+		'		</li>',
+		'	</ul>',
+		'<!--/ko-->'].join("");
+
+		$('.mobile-teamschedule-view').append(html).append(agentSchedulesHtml);
+
+		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+	
+		$(".glyphicon.glyphicon-fast-forward").click();
+		equal(vm.currentPageNum(), 2);
+		equal($('.mobile-teamschedule-view .teammates-schedules-column:last .agent-name span').text(), 'Jon Kleinsmith10');
+
+		$(".glyphicon.glyphicon-fast-backward").click();
+		equal(vm.currentPageNum(), 1);
+		equal($('.mobile-teamschedule-view .teammates-schedules-column:last .agent-name span').text(), 'Jon Kleinsmith5');
+	});
+
 
 	function setUpFakeData() {
 		fakeAvailableTeamsData = {
@@ -453,44 +663,7 @@
 		fakeDefaultTeamData = { DefaultTeam: fakeAvailableTeamsData.teams[0].children[0].id };
 
 		fakeTeamScheduleData = {
-			"AgentSchedules": [
-				{
-					"Name": "Jon Kleinsmith",
-					"StartTimeUtc": "2018-05-24T05:00:00",
-					"PersonId": "a74e1f94-6331-4a7f-9746-9b5e015b257c",
-					"MinStart": null,
-					"Total": 1,
-					"DayOffName": null,
-					"ContractTimeInMinute": 480.0,
-					"Date": "",
-					"FixedDate": "",
-					"Header": "",
-					"HasMainShift": "",
-					"HasOvertime": "",
-					"IsFullDayAbsence": false,
-					"IsDayOff": false,
-					"Summary": "",
-					"Periods": [
-						{
-							"Title": "Email",
-							"TimeSpan": "05:00 - 06:45",
-							"StartTime": "2018-05-24T05:00:00",
-							"EndTime": "2018-05-24T06:45:00",
-							"Summary": "",
-							"StyleClassName": "",
-							"Meeting": "",
-							"StartPositionPercentage": "",
-							"EndPositionPercentage": "",
-							"Color": "#80FF80",
-							"IsOvertime": false,
-							"IsAbsenceConfidential": false,
-							"TitleTime": "05:00 - 06:45"
-						}
-					],
-					"DayOfWeekNumber": "",
-					"HasNotScheduled": ""
-				}
-			],
+			"AgentSchedules": [],
 			"TimeLine": [
 				{ "Time": "05:00:00", "TimeLineDisplay": "05:00", "PositionPercentage": 0.0714, "TimeFixedFormat": null },
 				{ "Time": "06:00:00", "TimeLineDisplay": "06:00", "PositionPercentage": 0.3571, "TimeFixedFormat": null },
@@ -503,7 +676,7 @@
 				{ "Time": "1.03:00:00", "TimeLineDisplay": "03:00", "PositionPercentage": 0.6429, "TimeFixedFormat": null },
 			],
 			"TimeLineLengthInMinutes": 210,
-			"PageCount": 1,
+			"PageCount": 4,
 			"MySchedule": {
 				"Name": "Ashley Andeen",
 				"StartTimeUtc": "2018-05-24T05:00:00",
@@ -541,6 +714,49 @@
 				"HasNotScheduled": ""
 			}
 		};
+		
+		if (fakeOriginalAgentSchedulesData == undefined || fakeOriginalAgentSchedulesData == null) {
+			fakeOriginalAgentSchedulesData = [];
+			for (var i = 0; i < 20; i++) {
+				var agentSchedule = {
+					"Name": "Jon Kleinsmith" + (i + 1),
+					"StartTimeUtc": "2018-05-24T05:00:00",
+					"PersonId": "a74e1f94-6331-4a7f-9746-9b5e015b257c",
+					"MinStart": null,
+					"Total": 1,
+					"DayOffName": null,
+					"ContractTimeInMinute": 480.0,
+					"Date": "",
+					"FixedDate": "",
+					"Header": "",
+					"HasMainShift": "",
+					"HasOvertime": "",
+					"IsFullDayAbsence": false,
+					"IsDayOff": false,
+					"Summary": "",
+					"Periods": [
+						{
+							"Title": "Email",
+							"TimeSpan": "05:00 - 06:45",
+							"StartTime": "2018-05-24T05:00:00",
+							"EndTime": "2018-05-24T06:45:00",
+							"Summary": "",
+							"StyleClassName": "",
+							"Meeting": "",
+							"StartPositionPercentage": "",
+							"EndPositionPercentage": "",
+							"Color": "#80FF80",
+							"IsOvertime": false,
+							"IsAbsenceConfidential": false,
+							"TitleTime": "05:00 - 06:45"
+						}
+					],
+					"DayOfWeekNumber": "",
+					"HasNotScheduled": ""
+				};
+				fakeOriginalAgentSchedulesData.push(agentSchedule);
+			}
+		}
 	}
 
 	function setupAjax() {
@@ -556,15 +772,62 @@
 
 				if (option.url === '../api/TeamSchedule/TeamSchedule') {
 					fetchTeamScheduleDataRequestCount++;
+
+					var data = JSON.parse(option.data);
+					var skip = data.Paging.Skip;
+					var take = data.Paging.Take;
+					var pagedAgentSchedules = [];
+					for (var i = skip; i < skip + take; i++) {
+						if (fakeOriginalAgentSchedulesData[i]) {
+							pagedAgentSchedules.push(fakeOriginalAgentSchedulesData[i]);
+						}
+					}
+					fakeTeamScheduleData.AgentSchedules = [];
+					fakeTeamScheduleData.AgentSchedules = pagedAgentSchedules;
 					option.success(fakeTeamScheduleData);
 				}
 			}
 		};
 	}
 
+	function setUpHtml() {
+		agentSchedulesHtml = [
+			'<!-- ko if: teamSchedules -->',
+			'<div class="teammates-schedules-container" data-bind="style: {height: scheduleContainerHeight + \'px\'}">',
+			'	<!-- ko foreach: teamSchedules -->',
+			'	<div class="teammates-schedules-column relative">',
+			'		<div class="agent-name">',
+			'			<span data-bind="text: name"></span>',
+			'		</div>',
+			'		<div class="mobile-schedule-container relative">',
+			'			<!-- ko foreach: layers -->',
+			'			<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: \'click\' }, style: styleJson, css:{\'overtime-background-image-light\': isOvertime, overTimeLighterBackgroundStyle, \'overtime-background-image-dark\': isOvertime, overTimeDarkerBackgroundStyle, \'last-layer\': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">',
+			'				<div data-bind="visible: showTitle() && !isOvertimeAvailability()"></div>',
+			'				<strong data-bind="visible: false, text: title()"></strong>',
+			'				<!-- ko if: hasMeeting -->',
+			'				<div class="meeting floatright">',
+			'					<i class="meeting-icon mr10">',
+			'						<i class="glyphicon glyphicon-user ml10"></i>',
+			'					</i>',
+			'				</div>',
+			'				<!-- /ko -->',
+			'				<span class="fullwidth displayblock" data-bind="visible: false && showDetail, text: timeSpan"></span>',
+			'			</div>',
+			'			<div data-bind="visible: false && showTitle() && isOvertimeAvailability()">',
+			'				<i class="glyphicon glyphicon-time"></i>',
+			'			</div>',
+			'			<!-- /ko -->',
+			'		</div>',
+			'	</div>',
+			'	<!-- /ko -->',
+			'</div>',
+			'<!-- /ko -->'].join("");
+	}
+
 	function setup() {
 		fetchTeamScheduleDataRequestCount = 0;
 		completeLoadedCount = 0;
+		setUpHtml();
 		setUpFakeData();
 		setupAjax();
 
@@ -586,13 +849,15 @@
 				'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1'
 			}
 		};
+	}
+
+	function initVm() {
 		Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule.PartialInit(
 			fakeReadyForInteractionCallback,
 			fakeCompletelyLoadedCallback,
 			ajax,
 			fakeWindow
 		);
-
 		vm = Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule.Vm();
 	}
 
