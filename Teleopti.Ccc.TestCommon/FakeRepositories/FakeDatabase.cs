@@ -1079,12 +1079,20 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_skill = skill;
 		}
 
-
+		public FakeDatabase WithLoggedOutStateGroup(string name)
+		{	
+			return WithStateGroup(null, name, _stateGroups.LoadAll().IsEmpty(), true);
+		}
+		public FakeDatabase WithStateGroup(string name)
+		{
+			return WithStateGroup(null, name, _stateGroups.LoadAll().IsEmpty(), false);
+		}
+		
 		public FakeDatabase WithStateGroup(Guid? id, string name)
 		{
-			return WithStateGroup(id, name, _stateGroups.LoadAll().IsEmpty());
+			return WithStateGroup(id, name, _stateGroups.LoadAll().IsEmpty(), false);
 		}
-
+		
 		public FakeDatabase WithStateGroup(Guid? id, string name, bool @default)
 		{
 			return WithStateGroup(id, name, @default, false);
@@ -1303,5 +1311,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_personRequests.Add(_personRequest);
 			return this;
 		}
+
 	}
 }

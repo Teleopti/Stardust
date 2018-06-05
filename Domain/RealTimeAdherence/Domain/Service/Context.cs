@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 {
@@ -120,7 +121,8 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 
 				AlarmStartTime = AlarmStartTime,
 
-				TimeWindowCheckSum = Schedule.TimeWindowCheckSum()
+				TimeWindowCheckSum = Schedule.TimeWindowCheckSum(),
+				LateForWork = !State.IsLoggedIn() && Schedule.ShiftStarted()
 			};
 		}
 

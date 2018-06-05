@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
@@ -18,6 +20,18 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 						context.StateMapper.StateFor(context.Stored.StateGroupId)
 			);
 			_mappedRule = new Lazy<MappedRule>(() => context.StateMapper.RuleFor(context.BusinessUnitId, context.State.StateGroupId(), context.Schedule.CurrentActivityId()));
+		}
+
+		public bool IsLoggedIn()
+		{
+			var stateGroupId = StateGroupId();
+			
+			//TODO: Look into. we are assuming that if there is no stategroup the person is logged in 
+			if (stateGroupId == null)
+				return true;
+			
+			//TODO: Look into. we are also assuming that if there is nothing in LoggedOutStateGroupIds the person is logged in
+			return !_context.StateMapper.LoggedOutStateGroupIds().Contains(stateGroupId.Value); 
 		}
 		
 		public bool StateChanged()

@@ -1,4 +1,7 @@
-﻿using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
+﻿using System;
+using System.Linq;
+using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
@@ -26,14 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 		public void Publish(Context context)
 		{
-			// I THINK that maybe a solution to these tests is to only publish this event if the state is changed.
-			// maybe state changes is the only trigger for this.. and not going out of alarm for other reasons
-			var isInAlarm = context.Time >= context.AlarmStartTime;			
-			var wthIsThis = context.Time > context.Stored.AlarmStartTime;
-			
-			
-			if (wthIsThis && !isInAlarm)
-			{
+			if (context.Stored.LateForWork && context.State.IsLoggedIn())
 				_eventPublisher.Publish(new PersonArrivalAfterLateForWorkEvent
 				{
 					PersonId = context.PersonId,
@@ -44,9 +40,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					Timestamp = context.Time,
 					RuleName = context.State.RuleName(),
 					RuleColor = context.State.RuleDisplayColor(),
-					Adherence = context.Adherence.Adherence(),
+					Adherence = context.Adherence.Adherence()
 				});
-			}
 		}
 	}
 }
