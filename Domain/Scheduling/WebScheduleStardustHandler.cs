@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class WebScheduleStardustHandler : IHandleEvent<WebScheduleStardustEvent>, IRunOnStardust
 	{
-		private readonly FullScheduling _fullScheduling;
+		private FullScheduling _fullScheduling;
 		private readonly IEventPopulatingPublisher _eventPublisher;
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly ILowThreadPriorityScope _lowThreadPriorityScope;
@@ -36,11 +36,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				using (_lowThreadPriorityScope.OnThisThread())
 				{
 					var result = _fullScheduling.DoScheduling(@event.PlanningPeriodId);
+					
 					SaveDetailToJobResult(@event, DetailLevel.Info, JsonConvert.SerializeObject(result), null);
 					_eventPublisher.Publish(new WebDayoffOptimizationStardustEvent(@event)
 					{
 						JobResultId = @event.JobResultId
 					});
+					
+					//just a hack to see if hangfire (incorrectly) keeps an implicit ref to this object
+					result = null;
 				}
 			}
 			catch (Exception e)
