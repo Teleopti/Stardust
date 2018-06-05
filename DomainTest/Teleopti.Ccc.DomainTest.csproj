@@ -362,7 +362,7 @@
     <Compile Include="RealTimeAdherence\Domain\Service\PersonAdherenceEventsTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\PersonAdherenceScheduleRemovedTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\PersonInAdherenceEventTest.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\LateForWorkEventTest.cs" />
+    <Compile Include="RealTimeAdherence\Domain\Service\LateForWorkTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\PersonNeutralAdherenceEventTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\PersonOutOfAdherenceEventTest.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\PersonRuleChangedEventTest.cs" />

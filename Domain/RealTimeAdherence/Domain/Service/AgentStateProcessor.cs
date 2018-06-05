@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 				CurrentActivityName = context.Schedule.CurrentActivityName(),
 				NextActivityName = context.Schedule.NextActivityName(),
 				NextActivityStartTime = context.Schedule.NextActivityStartTime(),
-				ActivitiesInTimeWindow = context.Schedule.ActivitiesInTimeWindow()
+				ActivitiesInTimeWindow = context.Schedule.ActivitiesInTimeWindow(),
 			});
 		}
 	}
