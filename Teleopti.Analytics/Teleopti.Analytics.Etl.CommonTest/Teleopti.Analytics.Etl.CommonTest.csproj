@@ -165,6 +165,7 @@
     <Compile Include="Transformer\Job\Steps\RequestJobsTest.cs" />
     <Compile Include="Transformer\Job\Steps\ScheduleDayRestrictorTest.cs" />
     <Compile Include="Transformer\Job\Steps\ScheduleJobStepsTest.cs" />
+    <Compile Include="Transformer\Job\Steps\StageDateJobStepTest.cs" />
     <Compile Include="Transformer\Job\Steps\StageGroupPagePersonJobStepTest.cs" />
     <Compile Include="Transformer\Job\Steps\StageScheduleDayOffCountJobStepTest.cs" />
     <Compile Include="Transformer\Job\Steps\StageSchedulePreferenceJobStepTest.cs" />
