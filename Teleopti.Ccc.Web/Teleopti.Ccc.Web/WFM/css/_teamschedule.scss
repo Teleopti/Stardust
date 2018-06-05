@@ -1182,6 +1182,7 @@ teams-time-picker.ng-invalid-dst {
 
 	.activity-info {
 		display: inline-block;
+
 		span {
 			background-color: #DCDCDC;
 			border-radius: 2px;
@@ -1292,6 +1293,7 @@ teams-time-picker.ng-invalid-dst {
 				display: inline-block;
 				height: 25px;
 				background-color: gainsboro;
+				cursor: pointer;
 
 				&:first-of-type {
 					border-radius: 4px 0 0 4px;
