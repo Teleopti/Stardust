@@ -94,7 +94,7 @@
 						<tbody>
 						<tr ng-repeat="job in vm.FailedJobs">
 							<td>{{job.DataSource}}</td>
-							<td><a href="#StardustDashboard/jobs/{{job.JobId}}">{{job.Type}}</a></td>
+							<td><a target="_blank" href="#StardustDashboard/jobs/{{job.JobId}}">{{job.Type}}</a></td>
 							<td>{{job.Started | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 							<td>{{job.SentToWorkerNodeUri}}</td>
 							<td ng-class="job.Result=='Success' ? 'green' : (job.Result==null ? 'hide' : 'red')">{{job.Result}}</td>
@@ -146,7 +146,7 @@
 						<tbody>
 						<tr ng-repeat="job in vm.RunningJobs">
 							<td>{{job.DataSource}}</td>
-							<td><a href="#StardustDashboard/jobs/{{job.JobId}}">{{job.Type}}</a></td>
+							<td><a target="_blank"  href="#StardustDashboard/jobs/{{job.JobId}}">{{job.Type}}</a></td>
 							<td>{{job.Started | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 							<td>{{job.SentToWorkerNodeUri}}</td>
 							<td ng-class="job.Result=='Success' ? 'green' : (job.Result==null ? 'hide' : 'red')">{{job.Result}}</td>
