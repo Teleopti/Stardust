@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class WebScheduleStardustHandler : IHandleEvent<WebScheduleStardustEvent>, IRunOnStardust
 	{
-		private FullScheduling _fullScheduling;
+		private readonly FullScheduling _fullScheduling;
 		private readonly IEventPopulatingPublisher _eventPublisher;
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly ILowThreadPriorityScope _lowThreadPriorityScope;
