@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Intraday.TestCommon
 			_timeZoneprovider = timeZoneprovider;
 		}
 
-		
+
 		public void GenerateData(IntradayTestInput input, bool consoleApplication = true)
 		{
 			if (consoleApplication)
@@ -74,7 +74,14 @@ namespace Teleopti.Ccc.Intraday.TestCommon
 						continue;
 
 					var targetQueue = _uniqueQueueProvider.Get(workloadInfo);
-					_queueDataDictionary.Add(targetQueue.QueueId, generateQueueDataIntervals(forecastIntervals, targetQueue));
+					if (!_queueDataDictionary.ContainsKey(targetQueue.QueueId))
+					{
+						_queueDataDictionary.Add(targetQueue.QueueId, generateQueueDataIntervals(forecastIntervals, targetQueue));
+					}
+					else if (consoleApplication)
+					{
+						Console.WriteLine($"Found duplicate for QueueId: ${targetQueue.QueueId}, QueueName: ${targetQueue.QueueName}, DatasourceId: ${targetQueue.DatasourceId}");
+					}
 				}
 
 				_queueDataPersister.Persist(_queueDataDictionary, fromDateUtc.Date, fromIntervalIdUtc, deleteToDateUtc.Date, deleteToIntervalIdUtc);
