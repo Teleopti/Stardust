@@ -146,14 +146,14 @@
 	});
 
 	it('should see a disabled button when everyone in selected is not allowed to add current activity', function () {
-		var result = setUp();
+		var result = setUp("2016-06-15");
 
 		var vm = result.commandControl;
 		vm.isNextDay = true;
 		vm.disableNextDay = false;
 		vm.timeRange = {
-			startTime: new Date('2016-06-16T18:00:00Z'),
-			endTime: new Date('2016-06-16T19:00:00Z')
+			startTime: '2016-06-16 18:00',
+			endTime: '2016-06-16 19:00'
 		};
 
 		vm.selectedAgents = [
@@ -163,6 +163,7 @@
 				ScheduleStartTime: new Date('2016-06-15T08:00:00Z'),
 				ScheduleEndTime: new Date('2016-06-15T17:00:00Z')
 			}];
+		vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
 
 		var timezone1 = {
 			IanaId: "Asia/Shanghai",
@@ -174,22 +175,21 @@
 			PersonId: 'agent1',
 			Timezone: timezone1,
 			Shifts: [
-			{
-				Date: '2016-06-15',
-				Projections: [
 				{
-					Start: '2016-06-15 08:00',
-					End: '2016-06-15 17:00',
-					Minutes: 540
-				}],
-				ProjectionTimeRange: {
-					Start: '2016-06-15 08:00',
-					End: '2016-06-15 17:00',
-				}
-			}]
+					Date: '2016-06-15',
+					Projections: [
+						{
+							Start: '2016-06-15 08:00',
+							End: '2016-06-15 17:00',
+							Minutes: 540
+						}],
+					ProjectionTimeRange: {
+						Start: '2016-06-15 08:00',
+						End: '2016-06-15 17:00',
+					}
+				}]
 		});
 
-		vm.updateInvalidAgents(true);
 		result.scope.$apply();
 
 		var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
@@ -236,12 +236,12 @@
 			PersonId: 'agent1',
 			Timezone: timezone1,
 			Shifts: [
-			{
-				Date: '2016-06-15',
-				Projections: [
-				],
-				ProjectionTimeRange: null
-			}]
+				{
+					Date: '2016-06-15',
+					Projections: [
+					],
+					ProjectionTimeRange: null
+				}]
 		});
 
 		result.scope.$apply();
@@ -394,7 +394,7 @@
 		});
 
 		it('should apply with correct time range based on the selected time zone', function () {
-			var result = setUp();
+			var result = setUp('2018-03-25');
 			var vm = result.commandControl;
 			vm.isNextDay = false;
 			vm.disableNextDay = false;
@@ -410,7 +410,6 @@
 					ScheduleStartTime: null,
 					ScheduleEndTime: null
 				}];
-
 			vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
 
 			fakePersonSelectionService.setFakeCheckedPersonInfoList(vm.selectedAgents);
@@ -489,7 +488,7 @@
 		} else {
 			scope.timezone = "Asia/Hong_Kong";
 		}
-		
+
 		fakeActivityService.setAvailableActivities(getAvailableActivities());
 
 		var container = $compile(html)(scope);
@@ -552,11 +551,11 @@
 		var latestStartTime = null;
 		var latestEndTime = null;
 
-		this.setEarliestStartTime = function(date) {
+		this.setEarliestStartTime = function (date) {
 			earliestStartTime = date;
 		};
 
-		this.setLatestStartTime = function(date) {
+		this.setLatestStartTime = function (date) {
 			latestStartTime = date;
 		};
 
@@ -564,11 +563,11 @@
 			latestEndTime = date;
 		};
 
-		this.getEarliestStartOfSelectedSchedules = function() {
+		this.getEarliestStartOfSelectedSchedules = function () {
 			return earliestStartTime;
 		};
 
-		this.getLatestStartOfSelectedSchedules = function() {
+		this.getLatestStartOfSelectedSchedules = function () {
 			return latestStartTime;
 		};
 
@@ -582,29 +581,29 @@
 			data: []
 		};
 		var checkStatus = false,
-		fakeOverlappingList = [];
+			fakeOverlappingList = [];
 
-		this.checkOverlappingCertainActivities = function() {
+		this.checkOverlappingCertainActivities = function () {
 			return {
-				then: function(cb) {
+				then: function (cb) {
 					checkStatus = true;
 					cb(fakeResponse);
 				}
 			}
 		}
 
-		this.getCommandCheckStatus = function() {
+		this.getCommandCheckStatus = function () {
 			return checkStatus;
 		}
 
-		this.resetCommandCheckStatus = function() {
+		this.resetCommandCheckStatus = function () {
 			checkStatus = false;
 		}
 
-		this.getCheckFailedList = function() {
+		this.getCheckFailedList = function () {
 			return fakeOverlappingList;
 		}
-		this.checkAddActivityOverlapping = function(requestedData){
+		this.checkAddActivityOverlapping = function (requestedData) {
 			return {
 				then: function (cb) {
 					cb(requestedData);
@@ -613,40 +612,40 @@
 		};
 	}
 
-	function FakePersonSelectionService(){
+	function FakePersonSelectionService() {
 		var fakePersonList = [];
 
-		this.setFakeCheckedPersonInfoList = function(input){
+		this.setFakeCheckedPersonInfoList = function (input) {
 			fakePersonList = input;
 		}
 
-		this.getCheckedPersonInfoList = function(){
+		this.getCheckedPersonInfoList = function () {
 			return fakePersonList;
 		}
 	}
 
 	function getAvailableActivities() {
 		return [
-				{
-					"Id": "472e02c8-1a84-4064-9a3b-9b5e015ab3c6",
-					"Name": "E-mail"
-				},
-				{
-					"Id": "5c1409de-a0f1-4cd4-b383-9b5e015ab3c6",
-					"Name": "Invoice"
-				},
-				{
-					"Id": "0ffeb898-11bf-43fc-8104-9b5e015ab3c2",
-					"Name": "Phone"
-				},
-				{
-					"Id": "84db44f4-22a8-44c7-b376-a0a200da613e",
-					"Name": "Sales"
-				},
-				{
-					"Id": "35e33821-862f-461c-92db-9f0800a8d095",
-					"Name": "Social Media"
-				}
+			{
+				"Id": "472e02c8-1a84-4064-9a3b-9b5e015ab3c6",
+				"Name": "E-mail"
+			},
+			{
+				"Id": "5c1409de-a0f1-4cd4-b383-9b5e015ab3c6",
+				"Name": "Invoice"
+			},
+			{
+				"Id": "0ffeb898-11bf-43fc-8104-9b5e015ab3c2",
+				"Name": "Phone"
+			},
+			{
+				"Id": "84db44f4-22a8-44c7-b376-a0a200da613e",
+				"Name": "Sales"
+			},
+			{
+				"Id": "35e33821-862f-461c-92db-9f0800a8d095",
+				"Name": "Social Media"
+			}
 		];
 	}
 
