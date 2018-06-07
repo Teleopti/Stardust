@@ -215,18 +215,18 @@ ko.bindingHandlers.adjustTooltipPositionOnMobileTeamSchedule = {
 
 			$(tooltipEle).css({ 'margin-left': '0px' });
 
-			var offsetTop = $(tooltipEle).offset().top;			
+			var offsetTop = $(tooltipEle).offset().top;
 			var offsetLeft = $(tooltipEle).offset().left;
 
 			//15 + 30 + 70 is the left-padding, timeline width and my schedule column width sum
-			var leftSideMarginValue = offsetLeft - 15 - 30 - 70;
+			var leftSideMarginValue = offsetLeft - 30 - 70;
 			var rightSideMarginValue = tooltipEle.clientWidth + offsetLeft - window.screen.width;
 
 			if (leftSideMarginValue < 0) {
 				$(tooltipEle).css({ 'margin-left': Math.abs(leftSideMarginValue) + 'px' });
 
 				var arrowMarginValue =
-					Math.abs(leftSideMarginValue) <= (tooltipEle.clientWidth / 2 - 5)
+					Math.abs(leftSideMarginValue) <= tooltipEle.clientWidth / 2 - 5
 						? Math.abs(leftSideMarginValue)
 						: tooltipEle.clientWidth / 2 - 5;
 
@@ -238,20 +238,42 @@ ko.bindingHandlers.adjustTooltipPositionOnMobileTeamSchedule = {
 			} else if (rightSideMarginValue > 0) {
 				$(tooltipEle).css({ 'margin-left': -rightSideMarginValue + 'px' });
 
-				var arrowMarginValue = rightSideMarginValue <= (tooltipEle.clientWidth / 2 - 5)
+				var arrowMarginValue =
+					rightSideMarginValue <= tooltipEle.clientWidth / 2 - 5
 						? rightSideMarginValue
 						: tooltipEle.clientWidth / 2 - 5;
 
 				$(tooltipEle)
 					.find('.tooltip-arrow')
 					.css({
-						left: 'calc(50% + ' + rightSideMarginValue + 'px)'
+						left: 'calc(50% + ' + arrowMarginValue + 'px)'
 					});
 			}
 
-			//50 + 53 is header and toolbar height
-			if(offsetTop < 50 + 53) {
-				$(tooltipEle).css({ 'top': event.offsetY + 'px' });
+			var headerHeight = 50,
+				toolbarHeight = 53;
+
+			if (offsetTop < headerHeight + toolbarHeight) {
+				$(tooltipEle).css({ top: $('.mobile-teamschedule-view-body').scrollTop() + 'px' });
+			}
+		});
+	}
+};
+
+ko.bindingHandlers.adjustMyScheduleTooltipPositionOnMobileTeamSchedule = {
+	init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+		$(element).click(function (event) {
+			var tooltipEle = $(this)
+			.siblings()
+			.filter('.tooltip.in')[0];
+
+			if (!tooltipEle) return;
+
+			var headerHeight = 50,
+			toolbarHeight = 53;
+
+			if($(tooltipEle).offset().top < headerHeight + toolbarHeight) {
+				$(tooltipEle).css({ 'top': $('.mobile-teamschedule-view-body').scrollTop() + 'px' });
 			}
 		});
 	}

@@ -302,7 +302,7 @@
 		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
 
 		equal($('.mobile-teamschedule-view .teammates-schedules-column:first .agent-name span').text(), 'Jon Kleinsmith1');
-		equal($('.mobile-teamschedule-view .teammates-schedules-column .mobile-schedule-layer').length, 5);
+		equal($('.mobile-teamschedule-view .teammates-schedules-column .mobile-schedule-layer').length, 10);
 		equal($('.mobile-teamschedule-view .teammates-schedules-column .mobile-schedule-layer strong:visible').length, 0);
 	});
 
@@ -366,55 +366,6 @@
 
 		equal(fetchTeamScheduleDataRequestCount, 2);
 	});
-
-	test('should reload schedule after changing selectedTeam', function () {
-		initVm();
-
-		var html = [
-			'	<div class="teamschedule-filter-component">',
-			'		<select data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">',
-			'			<optgroup data-bind="attr: { label: text }, foreach: children">',
-			'				<option data-bind="text: text, value: id"></option>',
-			'			</optgroup>',
-			'		</select>',
-			'	</div>'
-		].join('');
-
-		$('.mobile-teamschedule-view').append(html);
-
-		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
-
-		equal($('.mobile-teamschedule-view .teamschedule-filter-component select').val(), fakeDefaultTeamData.DefaultTeam);
-
-		vm.selectedTeam('d7a9c243-8cd8-406e-9889-9b5e015ab495');
-
-		equal(fetchTeamScheduleDataRequestCount, 2);
-	});
-
-	test('should reload schedule after select allTeam', function () {
-		initVm();
-
-		var html = [
-			'	<div class="teamschedule-filter-component">',
-			'		<select data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">',
-			'			<optgroup data-bind="attr: { label: text }, foreach: children">',
-			'				<option data-bind="text: text, value: id"></option>',
-			'			</optgroup>',
-			'		</select>',
-			'	</div>'
-		].join('');
-
-		$('.mobile-teamschedule-view').append(html);
-		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
-
-		equal($('.mobile-teamschedule-view .teamschedule-filter-component select').val(), fakeDefaultTeamData.DefaultTeam);
-
-		vm.selectedTeam('-1');
-
-		equal(fetchTeamScheduleDataRequestCount, 2);
-		equal(vm.selectedTeamIds.length, 5);
-	});
-
 
 	test('should reset skip count after changing selected date', function () {
 		initVm();
@@ -513,122 +464,45 @@
 		equal(vm.paging.skip, 0);
 	});
 
-	test('should reset skip count after changing selectedTeam', function () {
+	test('should filter agent schedules', function () {
 		initVm();
 
 		var html = [
-			'	<div class="teamschedule-filter-component">',
-			'		<select data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">',
-			'			<optgroup data-bind="attr: { label: text }, foreach: children">',
-			'				<option data-bind="text: text, value: id"></option>',
-			'			</optgroup>',
-			'		</select>',
-			'	</div>'
-		].join('');
-
-		$('.mobile-teamschedule-view').append(html);
-
-		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
-
-		vm.paging.skip = 10;
-		vm.selectedTeam('d7a9c243-8cd8-406e-9889-9b5e015ab495');
-
-		equal(vm.paging.skip, 0);
-	});
-
-	test('should display paging', function () {
-		initVm();
-
-		var html = [
-		'<!-- ko if: isPageVisible-->',
-		'<div class="pull-right">',
-		'	<ul class="pagination pagination-sm">',
-		'		<li>',
-		'			<a data-bind="click: goToPreviousPage, enable: isPreviousPageEnabled"><i class="glyphicon glyphicon-fast-backward"></i></a>',
-		'		</li>',
-		'		<li>',
-		'			<span data-bind="text: currentPageNum"></span>/<span data-bind="text: totalPageNum"></span>',
-		'		</li>',
-		'		<li>',
-		'			<a data-bind="click: goToNextPage, enable: isNextPageEnabled"><i class="glyphicon glyphicon-fast-forward"></i></a>',
-		'		</li>',
-		'	</ul>',
-		'</div>',
-		'<!--/ko-->'].join("");
-
-		$('.mobile-teamschedule-view').append(html);
-
-		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
-
-		equal(vm.isNextPageEnabled(), true);
-		equal(vm.isPreviousPageEnabled(), false);
-		equal(vm.isNextPageEnabled(), true);
-		equal(vm.currentPageNum(), 1);
-		equal(vm.totalPageNum(), 4);
-	});
-
-	test('should update current page when go to next page', function () {
-		initVm();
-
-		var html = [
-		'<!-- ko if: isPageVisible-->',
-		'<div class="pull-right">',
-		'	<ul class="pagination pagination-sm">',
-		'		<li>',
-		'			<a data-bind="click: goToPreviousPage, enable: isPreviousPageEnabled"><i class="glyphicon glyphicon-fast-backward"></i></a>',
-		'		</li>',
-		'		<li>',
-		'			<span data-bind="text: currentPageNum"></span>/<span data-bind="text: totalPageNum"></span>',
-		'		</li>',
-		'		<li>',
-		'			<a data-bind="click: goToNextPage, enable: isNextPageEnabled"><i class="glyphicon glyphicon-fast-forward"></i></a>',
-		'		</li>',
-		'	</ul>',
-		'</div>',
-		'<!--/ko-->'].join("");
+			'<div class="teamschedule-filter-component">',
+			'	<p>',
+			'		<b>@Resources.Team: </b>',
+			'	</p>',
+			'	<select data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">',
+			'		<optgroup data-bind="attr: { label: text }, foreach: children">',
+			'			<option data-bind="text: text, value: id"></option>',
+			'		</optgroup>',
+			'	</select>',
+			'</div>',
+			'<div class="teamschedule-search-component">',
+			'	<p>',
+			'		<b>@Resources.AgentName: </b>',
+			'	</p>',
+			'	<form data-bind="submit: submitSearchForm">',
+			'		<input type="search" class="form-control" placeholder=\'@Resources.SearchHintForName\' data-bind="value: searchNameText" />',
+			'		<input type="submit" style="display: none"/>',
+			'	</form>',
+			'</div>',
+			'<div class="mobile-teamschedule-submit-buttons">',
+			'	<button class="btn btn-default pull-right" data-bind="click: toggleFilterPanel">@Resources.Cancel</button>',
+			'	<button class="btn btn-primary pull-left" data-bind="click: submitSearchForm">@Resources.Search</button>',
+			'</div>'].join("");
 
 		$('.mobile-teamschedule-view').append(html).append(agentSchedulesHtml);
 
 		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
 
+		$('.mobile-teamschedule-view input.form-control').val('Kleinsmith10');
+		$('.mobile-teamschedule-view input.form-control').change();
+		$('.mobile-teamschedule-submit-buttons button.btn-primary').click();
+
 		equal(vm.currentPageNum(), 1);
-		equal($('.mobile-teamschedule-view .teammates-schedules-column:last .agent-name span').text(), 'Jon Kleinsmith5');
-
-		$(".glyphicon.glyphicon-fast-forward").click();
-
-		equal(vm.currentPageNum(), 2);
+		equal($('.mobile-teamschedule-view .teammates-schedules-column:first .agent-name span').text(), 'Jon Kleinsmith10');
 		equal($('.mobile-teamschedule-view .teammates-schedules-column:last .agent-name span').text(), 'Jon Kleinsmith10');
-	});
-
-	test('should update current page when go to previous page', function () {
-		initVm();
-
-		var html = [
-		'<!-- ko if: isPageVisible-->',
-		'	<ul class="pagination pagination-sm">',
-		'		<li>',
-		'			<a data-bind="click: goToPreviousPage, enable: isPreviousPageEnabled"><i class="glyphicon glyphicon-fast-backward"></i></a>',
-		'		</li>',
-		'		<li>',
-		'			<span data-bind="text: currentPageNum"></span>/<span data-bind="text: totalPageNum"></span>',
-		'		</li>',
-		'		<li>',
-		'			<a data-bind="click: goToNextPage, enable: isNextPageEnabled"><i class="glyphicon glyphicon-fast-forward"></i></a>',
-		'		</li>',
-		'	</ul>',
-		'<!--/ko-->'].join("");
-
-		$('.mobile-teamschedule-view').append(html).append(agentSchedulesHtml);
-
-		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
-	
-		$(".glyphicon.glyphicon-fast-forward").click();
-		equal(vm.currentPageNum(), 2);
-		equal($('.mobile-teamschedule-view .teammates-schedules-column:last .agent-name span').text(), 'Jon Kleinsmith10');
-
-		$(".glyphicon.glyphicon-fast-backward").click();
-		equal(vm.currentPageNum(), 1);
-		equal($('.mobile-teamschedule-view .teammates-schedules-column:last .agent-name span').text(), 'Jon Kleinsmith5');
 	});
 
 
@@ -779,7 +653,14 @@
 					var pagedAgentSchedules = [];
 					for (var i = skip; i < skip + take; i++) {
 						if (fakeOriginalAgentSchedulesData[i]) {
-							pagedAgentSchedules.push(fakeOriginalAgentSchedulesData[i]);
+							if (data.ScheduleFilter.searchNameText){
+								if (fakeOriginalAgentSchedulesData[i].Name.indexOf(data.ScheduleFilter.searchNameText) > -1){
+									pagedAgentSchedules.push(fakeOriginalAgentSchedulesData[i]);
+								}
+							}
+							else{
+								pagedAgentSchedules.push(fakeOriginalAgentSchedulesData[i]);
+							}
 						}
 					}
 					fakeTeamScheduleData.AgentSchedules = [];

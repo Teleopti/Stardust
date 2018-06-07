@@ -6,7 +6,7 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Portal.js" />
 
-Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, parent, layersOnMobile, offset) {
+Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, parent, layersOnMobile, offset, useFixedContainerHeight, timelineStart, selectedDate) {
 	var self = this;
 	var userTexts = Teleopti.MyTimeWeb.Common.GetUserTexts();
 	var constants = Teleopti.MyTimeWeb.Common.Constants;
@@ -72,10 +72,35 @@ Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, parent, layersOnMo
 
 	var scheduleHeight = Teleopti.MyTimeWeb.Schedule.GetScheduleHeight();
 	self.top = ko.computed(function () {
-		return Math.round(scheduleHeight * self.startPositionPercentage()) + (offset || 0);
+		if(useFixedContainerHeight) {
+			return Math.round(scheduleHeight * self.startPositionPercentage()) + (offset || 0);
+		} else if(timelineStart) {
+			var minutesToTimeLineStart = moment.duration(layer.TimeSpan.split('-')[0]) - moment.duration(timelineStart.slice(0,5));
+
+			if(!moment(layer.StartTime.split('T')[0]).isSame(moment(selectedDate), 'day')) {
+				minutesToTimeLineStart += 24 * 60 * 60 * 1000;
+			}
+
+			var top = parseInt(minutesToTimeLineStart/(60 *1000))+ minutesToTimeLineStart % (60 *1000) + (offset || 0);
+			return top;
+		}
 	});
+
 	self.height = ko.computed(function () {
-		var bottom = Math.round(scheduleHeight * self.endPositionPercentage()) + 1 + (offset || 0);
+		var bottom = 0;
+
+		if(useFixedContainerHeight) {
+			bottom = Math.round(scheduleHeight * self.endPositionPercentage()) + 1 + (offset || 0);
+		} else if(timelineStart) {
+			var bottomDuration = moment.duration(layer.TimeSpan.split('-')[1]) - moment.duration(timelineStart.slice(0,5));
+
+			if(!moment(layer.EndTime.split('T')[0]).isSame(moment(selectedDate), 'day')) {
+				bottomDuration += 24 * 60 * 60 * 1000;
+			}
+
+			bottom = parseInt(bottomDuration/(60 *1000))+ bottomDuration % (60 *1000) + (offset || 0);
+		}
+
 		var top = self.top();
 
 		return bottom > top ? bottom - top : 0;
