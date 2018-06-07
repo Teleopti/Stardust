@@ -243,7 +243,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[HttpGet, Route("Stardust/ShowIntradayTool")]
 		public IHttpActionResult ShowIntradayTool()
 		{
-			return Ok(!string.IsNullOrEmpty(_configReader.AppConfig("ShowIntradayTool")));
+			var showIntradayTool = _configReader.AppConfig("ShowIntradayTool");
+			return Ok(!string.IsNullOrEmpty(showIntradayTool) && showIntradayTool == "true");
 		}
 	}
 }
