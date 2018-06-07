@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using NPOI.HSSF.Record.Chart;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -71,6 +72,8 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 		private readonly ICurrentEventPublisher _currentEventPublisher;
 		private readonly ILateForWorkEventPublisher _lateForWorkEventPublisher;
 		private readonly IRtaTracer _tracer;
+
+		private const int threshold = 59;
 
 		public AgentStateProcessor(
 			ShiftEventPublisher shiftEventPublisher,
@@ -157,6 +160,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 					processInput.AppliedAlarm);
 				if (context.ShouldProcessState())
 				{
+					new ChocaChocaDoer().DoesItNow(context);
 					process(context);
 					workingState = context.MakeAgentState();
 					outState = workingState;
@@ -166,6 +170,33 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 			return outState;
 		}
 
+		private class ChocaChocaDoer
+		{
+			public void DoesItNow(Context context)
+			{
+				context.ArrivingAfterLateForWork = context.Stored.LateForWork &&
+												   context.State.IsLoggedIn() &&
+												   isOutsideTreshold(context.Time, context.Schedule.CurrentShiftStartTime);
+
+				var lateForWork = context.Schedule.ShiftStarted() && context.State.IsLoggedOut();
+				if (!context.ArrivingAfterLateForWork)
+					context.LateForWork = context.Stored.LateForWork || lateForWork;
+
+				if (context.Schedule.ShiftEnded())
+				{
+					context.LateForWork = false;
+					context.ArrivingAfterLateForWork = false;
+				}
+			}
+		}
+
+		private static bool isOutsideTreshold(DateTime stateTime, DateTime shiftStart)
+		{
+			var timeSinceShiftStart = stateTime - shiftStart;
+			return timeSinceShiftStart.TotalSeconds > threshold;
+		}
+
+
 		private void process(Context context)
 		{
 			_shiftEventPublisher.Publish(context);
@@ -174,7 +205,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 			_ruleEventPublisher.Publish(context);
 			_adherenceEventPublisher.Publish(context);
 			_lateForWorkEventPublisher.Publish(context);
-			
+
 			_currentEventPublisher.Current().Publish(new AgentStateChangedEvent
 			{
 				PersonId = context.PersonId,
@@ -186,5 +217,4 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 			});
 		}
 	}
-
 }

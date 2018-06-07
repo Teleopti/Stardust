@@ -216,6 +216,69 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service
 		}
 		
 		[Test]
+		public void ShouldPublishWhenLateMoreThanOneActivity()
+		{
+			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			var email = Guid.NewGuid();
+			Database
+				.WithAgent("usercode", personId)
+				.WithSchedule(personId, phone, "2018-05-30 08:00", "2018-05-30 17:00")
+				.WithAssignedActivity(email, "2018-05-30 08:00", "2018-05-30 09:00")
+				.WithStateGroup("Phone").WithStateCode("phone")
+				.WithLoggedOutStateGroup("Logged Out").WithStateCode("loggedOut")
+				;
+			Now.Is("2018-05-29 17:00");
+			Target.ProcessState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "loggedOut"
+			});
+			Now.Is("2018-05-30 09:30");
+
+			Target.ProcessState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+
+			var @event = Publisher.PublishedEvents.OfType<PersonArrivalAfterLateForWorkEvent>().Single();
+			@event.ShiftStart.Should().Be("2018-05-30 08:00".Utc());
+			@event.Timestamp.Should().Be("2018-05-30 09:30".Utc());
+		}	
+		
+		
+		[Test]
+		public void ShouldNotPublishWhenArrivingEarlyAfterSkippingOneDay()
+		{
+			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithAgent("usercode", personId)
+				.WithSchedule(personId, phone, "2018-05-30 08:00", "2018-05-30 17:00")
+				.WithSchedule(personId, phone, "2018-05-31 08:00", "2018-05-31 17:00")
+				.WithStateGroup("Phone").WithStateCode("phone")
+				.WithLoggedOutStateGroup("Logged Out").WithStateCode("loggedOut")
+				;
+			Now.Is("2018-05-29 17:00");
+			Target.ProcessState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "loggedOut"
+			});
+			Now.Is("2018-05-31 07:58:00");
+
+			Target.ProcessState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+
+			Publisher.PublishedEvents.OfType<PersonArrivalAfterLateForWorkEvent>().Should().Be.Empty();
+		}
+		
+		
+		[Test]
 		[Ignore("Maybe implement later")]
 		public void ShouldWhatShouldBeDoneReallyIfScheduleIsChangedAndTheShiftStartIsChanged()
 		{
