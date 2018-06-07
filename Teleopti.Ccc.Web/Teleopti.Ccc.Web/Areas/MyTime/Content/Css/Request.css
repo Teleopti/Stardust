@@ -614,7 +614,8 @@
 	Border: 1px solid #007fff;
 }
 
-.btn-group .glyphicon-arrow-up, .glyphicon-arrow-down {
+.request-body-inner .btn-group .glyphicon-arrow-up,
+.request-body-inner .glyphicon-arrow-down {
 	color: silver;
 	padding-left: 25px;
 }
