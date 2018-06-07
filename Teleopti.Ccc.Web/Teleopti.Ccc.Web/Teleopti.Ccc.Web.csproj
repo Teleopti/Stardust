@@ -1799,6 +1799,7 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.component.underlyingInfo.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.controller.week.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.shiftEditorViewModelFactory.spec.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.factory.timezoneListFactory.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.exportScheduleService.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.exportScheduleService.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.dayOffService.js" />
@@ -1809,6 +1810,7 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.staffing.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.staffingChart.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.staffingChart.spec.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.service.timezone.js" />
     <Content Include="WFM\app\teamSchedule\utilities\teamSchedule.service.bootstrapData.js" />
     <Content Include="WFM\app\teapot\controller.js" />
     <Content Include="WFM\app\teapot\view.html" />
@@ -2188,6 +2190,7 @@
     <Content Include="Areas\MultiTenancy\Views\web.config" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.factory.shiftEditorViewModelFactory.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.viewStateKeeper.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.factory.timezoneListFactory.js" />
     <None Include="WFM\css\_forecasting.scss" />
     <Content Include="WFM\app\outbound\outbound.controller.campaign-edit.js" />
     <Content Include="WFM\app\outbound\outbound.service.campaign.js" />

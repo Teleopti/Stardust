@@ -1,6 +1,8 @@
 ﻿<div class="con-row">
 	<div class="con-flex">
 		<span class="name">{{vm.scheduleVm.Name}}</span>
+		<span class="date">{{vm.displayDate }}</span>
+		<span class="timezone">{{vm.timezoneName}}</span>
 		<span ng-if="vm.scheduleVm.HasUnderlyingSchedules">
 			<span class="underlying-info">
 				<i class="mdi mdi-information mdi-alert info"></i>
@@ -14,11 +16,11 @@
 </div>
 <div class="con-row">
 	<div class="con-flex">
-		<span class="date">{{vm.displayDate }}</span>
-		
-		<div class="activity-info" ng-if="vm.selectedShiftLayer">
-			<span class="timespan">{{vm.selectedShiftLayer.TimeSpan}}</span>
-			<span class="activity-type">{{vm.selectedShiftLayer.Description}}</span>
+		<div class="activity-info">
+			<div ng-if="vm.selectedShiftLayer">
+				<span class="timespan">{{vm.selectedShiftLayer.TimeSpan}}</span>
+				<span class="activity-type">{{vm.selectedShiftLayer.Description}}</span>
+			</div>
 		</div>
 	</div>
 </div>
@@ -32,7 +34,7 @@
 					<span class="right-scroll" ng-show="vm.showScrollRightButton" ng-click="vm.scroll(60)"><i class="mdi mdi-chevron-right"></i></span>
 				</div>
 				<div ng-repeat="interval in vm.timelineVm.Intervals" class="interval">
-					<div class="label label-info">
+					<div class="label label-info" ng-class="{'highlight': vm.isSameDate(interval)}">
 						<span>{{ interval.Label}}</span>
 					</div>
 					<div class="ticks">

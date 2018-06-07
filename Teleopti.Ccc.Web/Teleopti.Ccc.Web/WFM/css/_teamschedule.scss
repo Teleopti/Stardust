@@ -1172,7 +1172,8 @@ teams-time-picker.ng-invalid-dst {
 .shift-editor {
 	position: relative;
 
-	.underlying-info {
+
+	.underlying-info, .timezone , .date{
 		margin-left: 10px;
 	}
 
@@ -1228,7 +1229,7 @@ teams-time-picker.ng-invalid-dst {
 
 				.left-scroll, .right-scroll {
 					border-radius: 50%;
-					background-color: #0099FF;
+					background-color: #5bc0de;
 					opacity: 0.7;
 					text-align: center;
 					height: 16px;
@@ -1257,6 +1258,11 @@ teams-time-picker.ng-invalid-dst {
 					z-index: 11;
 					transform: translateX(-50%);
 					padding: 0 0.3em;
+					background-color: $gray-500;
+
+					&.highlight {
+						background-color: #5bc0de;
+					}
 				}
 
 				.ticks {
