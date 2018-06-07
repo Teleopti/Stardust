@@ -3,6 +3,7 @@ using SharpTestsEx;
 using System.Linq;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		public RoleController Target;
 		public FakeApplicationRoleRepository ApplicationRoleRepository;
 		public FakePersonRepository PersonRepository;
+		public FakePermissions Permissions;
 		private IPerson _person1;
 		private IPerson _person2;
 		private IApplicationRole _role1;
@@ -77,7 +79,8 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			/// Setup
 			PersonRepository.Add(_person1);
 			ApplicationRoleRepository.Add(_role1);
-
+			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.PeopleAccess);
+			
 			/// Test
 			var result = Target.GrantRoles(new GrantRolesInputModel() { Persons = new [] { _person1.Id.GetValueOrDefault() }, Roles = new [] { _role1.Id.GetValueOrDefault()} } );
 			result.Should().Be.OfType<OkResult>();
@@ -103,6 +106,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			PersonRepository.Add(_person2);
 			ApplicationRoleRepository.Add(_role1);
 			ApplicationRoleRepository.Add(_role2);
+			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.PeopleAccess);
 
 			/// Test
 			var result = Target.GrantRoles(new GrantRolesInputModel()
@@ -130,6 +134,8 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			_person1.PermissionInformation.AddApplicationRole(_role1);
 			PersonRepository.Add(_person1);
 			ApplicationRoleRepository.Add(_role1);
+			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.PeopleAccess);
+
 
 			/// Test
 			_person1.PermissionInformation.ApplicationRoleCollection.Should().Contain(_role1);
@@ -171,6 +177,8 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			PersonRepository.Add(_person2);
 			ApplicationRoleRepository.Add(_role1);
 			ApplicationRoleRepository.Add(_role2);
+			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.PeopleAccess);
+
 
 			/// Test
 			_person1.PermissionInformation.ApplicationRoleCollection.Should().Contain(_role1);
