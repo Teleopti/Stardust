@@ -159,7 +159,8 @@
 		MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889,
 
 		Tech_Moving_ResilientConnectionLogic,
-		Tenant_PurgeLogonAttempts_75782
+		Tenant_PurgeLogonAttempts_75782,
+		Tenant_PurgeNoneEmployeesData_76291
 		// ReSharper restore InconsistentNaming
 	}
 }

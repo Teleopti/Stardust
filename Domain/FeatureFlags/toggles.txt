@@ -163,6 +163,7 @@ AddOrRemoveTenantsWithoutRestart_43635 = RC
 People_ImprovePersonAccountAccuracy_74914 = true
 Staffing_BPO_Visualization_74958 = RC
 Tenant_PurgeLogonAttempts_75782 = RC
+Tenant_PurgeNoneEmployeesData_76291 = RC
 
 # Squids #
 WFM_Forecaster_Refact_44480 = true
