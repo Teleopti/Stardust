@@ -256,12 +256,9 @@
 			vm.isForecastRunning = true;
 			vm.scenarioNotForecasted = false;
 
-			var resultStartDate = moment().utc();
-			var resultEndDate = moment(resultStartDate).add(6, 'months');
-
 			var wl = {
-				ForecastStart: vm.forecastPeriod.startDate,
-				ForecastEnd: vm.forecastPeriod.endDate,
+				ForecastStart: moment(vm.forecastPeriod.startDate).format("L"),
+				ForecastEnd: moment(vm.forecastPeriod.endDate).format("L"),
 				WorkloadId: vm.selectedWorkload.Workload.Id,
 				ScenarioId: vm.selectedScenario.Id
 			};
@@ -273,6 +270,7 @@
 					vm.isForecastRunning = false;
 					vm.periodModal = false;
 					vm.scenarioNotForecasted = vm.selectedWorkload.Days.length === 0;
+					vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
 				},
 				function(data, status, headers, config) {
 					vm.selectedWorkload.Days = data.ForecastDays;
@@ -292,8 +290,8 @@
 
 			forecastingService.forecast(
 				angular.toJson({
-					ForecastStart: vm.forecastPeriod.startDate,
-					ForecastEnd: vm.forecastPeriod.endDate,
+					ForecastStart: moment(vm.forecastPeriod.startDate).format("L"),
+					ForecastEnd: moment(vm.forecastPeriod.endDate).format("L"),
 					Workload: temp,
 					ScenarioId: vm.selectedScenario.Id,
 					BlockToken: vm.blockToken,
@@ -305,6 +303,7 @@
 					vm.selectedWorkload.Days = data.ForecastDays;
 					vm.scenarioNotForecasted = vm.selectedWorkload.Days.length === 0;
 					vm.changesMade = true;
+					vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
 				},
 				function(data, status, headers, config) {
 					vm.isForecastRunning = false;
@@ -343,8 +342,8 @@
 			vm.isForecastRunning = true;
 			forecastingService.exportForecast(
 				angular.toJson({
-					ForecastStart: vm.forecastPeriod.startDate,
-					ForecastEnd: vm.forecastPeriod.endDate,
+					ForecastStart: moment(vm.forecastPeriod.startDate).format("L"),
+					ForecastEnd: moment(vm.forecastPeriod.endDate).format("L"),
 					ScenarioId: vm.selectedScenario.Id,
 					SkillId: vm.selectedWorkload.SkillId,
 					WorkloadId: vm.selectedWorkload.Workload.Id
