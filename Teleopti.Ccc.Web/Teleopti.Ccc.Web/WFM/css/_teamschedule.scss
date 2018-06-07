@@ -1177,6 +1177,10 @@ teams-time-picker.ng-invalid-dst {
 		font-weight: bold;
 	}
 
+	.mdi:before {
+		font-size: 14px !important;
+	}
+
 	.underlying-info, .timezone, .date {
 		margin-left: 20px;
 	}
