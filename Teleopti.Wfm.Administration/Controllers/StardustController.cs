@@ -229,7 +229,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		public IHttpActionResult IntradayToolGoWithTheFlow()
 		{
 			var showIntradayTool = _configReader.AppConfig("ShowIntradayTool");
-			if (string.IsNullOrEmpty(showIntradayTool) && showIntradayTool != "true") return BadRequest("");
+			if (string.IsNullOrEmpty(showIntradayTool) || showIntradayTool != "true") return BadRequest("");
 
 			_stardustSender.Send(
 				new IntradayToolEvent
