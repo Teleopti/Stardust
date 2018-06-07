@@ -29,7 +29,7 @@
 
 			this.Date = date;
 			this.Name = schedule.Name;
-			this.Timezone = currentTimezone;
+			this.Timezone = schedule.Timezone.IanaId;
 			this.ProjectionTimeRange = getProjectionTimeRange(layers);
 			this.ShiftLayers = layers;
 			this.HasUnderlyingSchedules = hasUnderlyingSchedules;

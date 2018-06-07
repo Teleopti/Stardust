@@ -68,6 +68,7 @@
 		vm.showScrollLeftButton = false;
 		vm.showScrollRightButton = false;
 		vm.selectedShiftLayer = null;
+		vm.isInDifferentTimezone = false;
 		vm.displayDate = moment(vm.date).format("YYYY-MM-DD");
 
 		vm.$onInit = function () {
@@ -80,6 +81,7 @@
 		vm.$onChanges = function (changesObj) {
 			if (!!changesObj.schedules.currentValue && changesObj.schedules.currentValue !== changesObj.schedules.previousValue) {
 				vm.scheduleVm = ShiftEditorViewModelFactory.CreateSchedule(vm.date, vm.timezone, changesObj.schedules.currentValue[0]);
+				vm.isInDifferentTimezone = (vm.scheduleVm.Timezone !== vm.timezone);
 				initAndBindScrollEvent();
 			}
 		}

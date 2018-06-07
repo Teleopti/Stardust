@@ -99,7 +99,7 @@
 				"Minutes": 120,
 				"IsOvertime": false
 			}],
-			"Timezone": { "IanaId": "Europe/Berlin" },
+			"Timezone": { "IanaId": "Asia/Hong_Kong" },
 			"UnderlyingScheduleSummary": underlyingScheduleSummary
 		};
 
@@ -107,7 +107,7 @@
 		var shiftLayers = schedule.ShiftLayers;
 		expect(schedule.Date).toEqual("2018-05-28");
 		expect(schedule.Name).toEqual("Annika Andersson");
-		expect(schedule.Timezone).toEqual("Europe/Berlin");
+		expect(schedule.Timezone).toEqual("Asia/Hong_Kong");
 		expect(schedule.HasUnderlyingSchedules).toBe(true);
 		expect(schedule.ProjectionTimeRange.Start).toBe("2018-05-28 08:00");
 		expect(schedule.ProjectionTimeRange.End).toBe("2018-05-28 12:00");
@@ -227,7 +227,8 @@
 				"Start": "2018-06-01 22:00",
 				"Minutes": 240,
 				"IsOvertime": false
-			}]
+			}],
+			"Timezone": { "IanaId": "Europe/Berlin" }
 		};
 
 		var viewModel = target.CreateSchedule("2018-06-01", "Asia/Hong_Kong", schedule);
@@ -246,7 +247,8 @@
 			"Date": "2018-06-01",
 			"WorkTimeMinutes": 240,
 			"ContractTimeMinutes": 240,
-			"UnderlyingScheduleSummary": underlyingScheduleSummary
+			"UnderlyingScheduleSummary": underlyingScheduleSummary,
+			"Timezone": { "IanaId": "Europe/Berlin" }
 		};
 
 		var viewModel = target.CreateSchedule("2018-06-01", "Asia/Hong_Kong", schedule);

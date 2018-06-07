@@ -1,8 +1,15 @@
 ﻿<div class="con-row">
 	<div class="con-flex">
 		<span class="name">{{vm.scheduleVm.Name}}</span>
-		<span class="date">{{vm.displayDate }}</span>
-		<span class="timezone">{{vm.timezoneName}}</span>
+		<span class="date">
+			<i class="mdi mdi-calendar"></i>
+			<span>{{vm.displayDate }}</span>
+		</span>
+		<span class="timezone">
+			<span>{{vm.timezoneName}}</span>
+			<i ng-if="vm.isInDifferentTimezone" class="mdi mdi-earth"></i>
+		</span>
+
 		<span ng-if="vm.scheduleVm.HasUnderlyingSchedules">
 			<span class="underlying-info">
 				<i class="mdi mdi-information mdi-alert info"></i>

@@ -1172,9 +1172,13 @@ teams-time-picker.ng-invalid-dst {
 .shift-editor {
 	position: relative;
 
+	.name {
+		font-size: 16px;
+		font-weight: bold;
+	}
 
-	.underlying-info, .timezone , .date{
-		margin-left: 10px;
+	.underlying-info, .timezone, .date {
+		margin-left: 20px;
 	}
 
 	.mdi-alert {
