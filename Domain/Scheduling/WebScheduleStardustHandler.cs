@@ -42,10 +42,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					{
 						JobResultId = @event.JobResultId
 					});
-
-					//trying release "stardust references" manually here for now
-					_fullScheduling = null;
-					///////////////////////////////////////////////////////////
 				}
 			}
 			catch (Exception e)
