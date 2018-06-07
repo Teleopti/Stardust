@@ -1720,7 +1720,6 @@
     <Compile Include="WorkflowControl\OpenAbsenceRequestPeriodProjectionTest.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenPeriodTest.cs" />
     <Compile Include="WorkflowControl\PendingAbsenceRequestTest.cs" />
-    <Compile Include="WorkflowControl\PersonAccountBalanceCalculatorTest.cs" />
     <Compile Include="WorkflowControl\PersonAccountBalanceValidatorTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\IsShiftTradeRequestNotNullSpecificationTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\OpenShiftTradePeriodSpecificationTest.cs" />

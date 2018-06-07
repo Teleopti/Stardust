@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 					return !account.IsExceeded;	               
                 }
             }
-            return true;
+            return false;
         }
     }
 }
