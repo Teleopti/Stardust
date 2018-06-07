@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.Tracking;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	internal class PersonAccountModule : Module
+	public class PersonAccountModule : Module
 	{
 		private readonly IIocConfiguration _configuration;
 
@@ -24,7 +24,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<ClearPersonRelatedInformation>().As<IPersonLeavingUpdater>().SingleInstance();
 			}
-
+			else
+			{
+				builder.RegisterType<DummyPersonLeavingUpdater>().As<IPersonLeavingUpdater>().SingleInstance();
+			}
 		}
 	}
 }
