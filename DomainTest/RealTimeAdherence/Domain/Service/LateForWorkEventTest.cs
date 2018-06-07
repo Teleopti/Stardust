@@ -188,6 +188,34 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service
 		}
 		
 		[Test]
+		public void ShouldNotPublishLessThanOneMinute()
+		{
+			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithAgent("usercode", personId)
+				.WithSchedule(personId, phone, "2018-05-30 08:00", "2018-05-30 17:00")
+				.WithStateGroup("Phone").WithStateCode("phone")
+				.WithLoggedOutStateGroup("Logged Out").WithStateCode("loggedOut")
+				;
+			Now.Is("2018-05-29 17:00");
+			Target.ProcessState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "loggedOut"
+			});
+			Now.Is("2018-05-30 08:00:59");
+
+			Target.ProcessState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+
+			Publisher.PublishedEvents.OfType<PersonArrivalAfterLateForWorkEvent>().Should().Be.Empty();
+		}
+		
+		[Test]
 		[Ignore("Maybe implement later")]
 		public void ShouldWhatShouldBeDoneReallyIfScheduleIsChangedAndTheShiftStartIsChanged()
 		{
