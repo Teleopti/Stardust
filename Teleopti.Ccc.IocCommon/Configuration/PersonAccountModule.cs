@@ -26,6 +26,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 			else
 			{
+				// IPersonLeavingUpdater should be removed when toggle WFM_Clear_Data_After_Leaving_Date_47768 removed.
+				// By now we just apply the dummy implementation for it.
 				builder.RegisterType<DummyPersonLeavingUpdater>().As<IPersonLeavingUpdater>().SingleInstance();
 			}
 		}
