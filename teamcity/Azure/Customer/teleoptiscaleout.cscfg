@@ -17,7 +17,7 @@
 		</ConfigurationSettings>
 		<Certificates>
 			<Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="3206E29CF2B81CF830CE6E026A4148849EA06F27" thumbprintAlgorithm="sha1" />
-			<Certificate name="fakedress.teleopticloud.com" thumbprint="3206E29CF2B81CF830CE6E026A4148849EA06F27" thumbprintAlgorithm="sha1"/>
+			<Certificate name="fakedress.teleopticloud.com" thumbprint="570BFA116439CAB373E61D53053F13D96FB4EC11" thumbprintAlgorithm="sha1"/>
 		</Certificates>
 	</Role>
    <NetworkConfiguration> 
