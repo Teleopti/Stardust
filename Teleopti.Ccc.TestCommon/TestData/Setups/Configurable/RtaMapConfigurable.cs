@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string Adherence { get; set; }
 		public string IsAlarm { get; set; }
 		public string AlarmThreshold { get; set; }
+		public bool IsLogOutState { get; set; }
 
 		public IRtaStateGroup RtaStateGroup { get; private set; }
 
@@ -66,6 +67,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				if (stateGroup == null)
 				{
 					stateGroup = new RtaStateGroup(PhoneState, false, true);
+					stateGroup.IsLogOutState = IsLogOutState;
 					stateGroup.AddState(PhoneState, PhoneState);
 					stateGroupRepository.Add(stateGroup);
 				}
