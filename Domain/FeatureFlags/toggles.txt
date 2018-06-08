@@ -71,7 +71,7 @@ OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944 = true
 OvertimeRequestSupportMultiSelectionSkillTypes_74945 = true
 OvertimeRequestStaffingCheckMethod_74949 = true
 OvertimeRequestChangeBelongsToDateForOverNightShift_74984 = RC
-OvertimeRequestUsePrimarySkillOption_75573 = RC
+OvertimeRequestUsePrimarySkillOption_75573 = true
 
 Wfm_People_ImportAndCreateAgentFromFile_42528 = true
 Wfm_People_SetFallbackValuesForImporting_43289 = true
@@ -95,12 +95,12 @@ Staffing_Info_Configuration_44687 = true
 # Kittens, Bugs&Roses and Micke #
 Scheduler_RestrictionReport_47013 = true
 Scheduler_RestrictionReportToggleAll_76224 = RC
-Wfm_SkillPriorityRoutingGUI_39885 = RC
+Wfm_SkillPriorityRoutingGUI_39885 = RC #Skill priorities, aka Cascading, is not ready for release yet
 Wfm_ArchiveSchedule_41498 = true #Can be removed
 Wfm_ImportSchedule_41247 = true #Can be removed
 WFM_WebScheduling_LowPriority_44320 = false #The feature and code should be removed
 Wfm_WebPlan_Pilot_46815 = RC #Switch this on to try out the new web based scheduling in Plans#
-ResourcePlanner_HideSkillPrioSliders_41312 = RC
+ResourcePlanner_HideSkillPrioSliders_41312 = RC #Skill priorities, aka Cascading, is not ready for release yet
 ResourcePlanner_BlockSchedulingValidation_46092 = true #Can be removed
 ResourcePlanner_UseErlangAWithInfinitePatience_45845 = true
 ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899 = true
@@ -161,7 +161,7 @@ Wfm_Requests_ProcessWaitlistBefore24hRequests_45767 = true
 Wfm_Requests_DenyRequestWhenAllSkillsClosed_46384 = true
 AddOrRemoveTenantsWithoutRestart_43635 = RC
 People_ImprovePersonAccountAccuracy_74914 = true
-Staffing_BPO_Visualization_74958 = RC
+Staffing_BPO_Visualization_74958 = true
 Tenant_PurgeLogonAttempts_75782 = RC
 Tenant_PurgeNoneEmployeesData_76291 = RC
 
