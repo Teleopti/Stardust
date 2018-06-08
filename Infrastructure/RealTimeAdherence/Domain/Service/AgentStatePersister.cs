@@ -84,7 +84,8 @@ SET
 	RuleStartTime = :RuleStartTime,
 	AlarmStartTime = :AlarmStartTime,
 	TimeWindowCheckSum = :TimeWindowCheckSum,
-	Adherence = :Adherence
+	Adherence = :Adherence,
+	LateForWork = :LateForWork
 WHERE
 	PersonId = :PersonId";
 			var query = _unitOfWork.Current().Session()
@@ -101,6 +102,7 @@ WHERE
 					.SetParameter("AlarmStartTime", model.AlarmStartTime)
 					.SetParameter("TimeWindowCheckSum", model.TimeWindowCheckSum)
 					.SetParameter("Adherence", (int?) model.Adherence)
+					.SetParameter("LateForWork", model.LateForWork)
 				;
 
 			query.ExecuteUpdate();

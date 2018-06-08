@@ -57,23 +57,37 @@
 		}
 	});
 
-	ShiftEditorController.$inject = ['$element', '$timeout', '$window', '$interval', '$filter', 'serviceDateFormatHelper', 'ShiftEditorViewModelFactory'];
+	ShiftEditorController.$inject = ['$element', '$timeout', '$window', '$interval', '$filter', 'serviceDateFormatHelper', 'ShiftEditorViewModelFactory', 'TimezoneListFactory'];
 
-	function ShiftEditorController($element, $timeout, $window, $interval, $filter, serviceDateFormatHelper, ShiftEditorViewModelFactory) {
+	function ShiftEditorController($element, $timeout, $window, $interval, $filter, serviceDateFormatHelper, ShiftEditorViewModelFactory, TimezoneListFactory) {
 		var vm = this;
+		var timeLineTimeRange = {
+			Start: moment.tz(vm.date, vm.timezone).add(-1, 'days').hours(0),
+			End: moment.tz(vm.date, vm.timezone).add(3, 'days').hours(0)
+		};
 		vm.showScrollLeftButton = false;
 		vm.showScrollRightButton = false;
 		vm.selectedShiftLayer = null;
+		vm.isInDifferentTimezone = false;
 		vm.displayDate = moment(vm.date).format("YYYY-MM-DD");
 
 		vm.$onInit = function () {
-			vm.timelineVm = ShiftEditorViewModelFactory.CreateTimeline(vm.date, vm.timezone);
+			vm.timelineVm = ShiftEditorViewModelFactory.CreateTimeline(vm.date, vm.timezone, timeLineTimeRange);
+			TimezoneListFactory.Create().then(function (timezoneList) {
+				vm.timezoneName = timezoneList.GetShortName(vm.timezone);
+			});
 		}
+
 		vm.$onChanges = function (changesObj) {
 			if (!!changesObj.schedules.currentValue && changesObj.schedules.currentValue !== changesObj.schedules.previousValue) {
 				vm.scheduleVm = ShiftEditorViewModelFactory.CreateSchedule(vm.date, vm.timezone, changesObj.schedules.currentValue[0]);
+				vm.isInDifferentTimezone = (vm.scheduleVm.Timezone !== vm.timezone);
 				initAndBindScrollEvent();
 			}
+		}
+
+		vm.isSameDate = function (interval) {
+			return moment.tz(vm.date, vm.timezone).isSame(interval.Time, 'days');
 		}
 
 		vm.scroll = function (step) {
@@ -100,10 +114,11 @@
 		}
 
 		vm.getShiftLayerWidth = function (layer) {
-			return layer.Minutes;
+			var start = moment.tz(layer.Start, vm.timezone);
+			return getDiffMinutes(layer.End, start);
 		}
 		vm.getShiftLayerLeft = function (layer) {
-			return getTotalMinutes(layer.Start);
+			return getDiffMinutes(layer.Start, timeLineTimeRange.Start);
 		}
 
 		function initAndBindScrollEvent() {
@@ -131,7 +146,7 @@
 				cancelScrollIntervalPromise();
 				scrollIntervalPromise = $interval(function () {
 					vm.scroll(step);
-				}, 300);
+				}, 150);
 			}, false);
 			el.addEventListener('mouseup', function () {
 				cancelScrollIntervalPromise();
@@ -142,8 +157,8 @@
 			$timeout(function () {
 				var viewportEl = $element[0].querySelector('.viewport');
 				var shiftProjectionTimeRange = vm.scheduleVm.ProjectionTimeRange;
-				var shiftStart = getTotalMinutes(shiftProjectionTimeRange.Start);
-				var shiftLength = getTotalMinutes(shiftProjectionTimeRange.End) - shiftStart;
+				var shiftStart = getDiffMinutes(shiftProjectionTimeRange.Start, timeLineTimeRange.Start);
+				var shiftLength = getDiffMinutes(shiftProjectionTimeRange.End, timeLineTimeRange.Start) - shiftStart;
 				var scrollTo = viewportEl.clientWidth <= shiftLength ?
 					(shiftStart - 120) : (shiftStart - ((viewportEl.clientWidth - shiftLength) / 2));
 				if (scrollTo <= 0) scrollTo = 0;
@@ -162,15 +177,16 @@
 			return !!vm.scheduleVm && !!vm.scheduleVm.ShiftLayers && !!vm.scheduleVm.ShiftLayers.length;
 		}
 
-		function getTotalMinutes(dateTime) {
+		function getDiffMinutes(dateTime, fromTime) {
 			var hours = 0;
-			var currentDate = moment.tz(vm.date, vm.timezone);
+			var startTime = fromTime.clone();
 			var dateTimeMoment = moment.tz(dateTime, vm.timezone);
-			while (dateTimeMoment.diff(currentDate, 'hours') > 0) {
+
+			while (dateTimeMoment.diff(startTime, 'hours') > 0) {
 				hours += 1;
-				currentDate = currentDate.add(1, 'hours');
+				startTime = startTime.add(1, 'hours');
 			}
-			return hours * 60 + moment(dateTime).minutes();
+			return hours * 60 + dateTimeMoment.diff(startTime, 'minutes');
 		}
 	}
 

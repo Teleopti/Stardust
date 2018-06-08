@@ -17095,10 +17095,6 @@ Do you want to participate?</value>
     <value>Analyzing restrictions</value>
     <comment>Analyzing restrictions</comment>
   </data>
-  <data name="AgentsThatFailedInspection" xml:space="preserve">
-    <value>Agents that failed inspection</value>
-    <comment>Agents that failed inspction</comment>
-  </data>
   <data name="ManyAgentsAlert" xml:space="preserve">
     <value>{0} Agents selected, click Refresh to start analyzing</value>
     <comment>999 Agents selected, click Refresh to start analyzing</comment>
@@ -17106,10 +17102,6 @@ Do you want to participate?</value>
   <data name="RestrictionNotAbleToBeScheduledReasonNightlyRestMightBeBroken" xml:space="preserve">
     <value>Nightly rest will be broken</value>
     <comment>Nightly rest will be broken</comment>
-  </data>
-  <data name="PrimaryReason" xml:space="preserve">
-    <value>Primary reason</value>
-    <comment>Primary reason</comment>
   </data>
   <data name="RestrictionNotAbleToBeScheduledReasonTooLittleWorkTimeInPeriod" xml:space="preserve">
     <value>The period results in too little work time</value>
@@ -17380,5 +17372,9 @@ The application will now exit.</value>
   </data>
   <data name="ShowNoneIssuedAgents" xml:space="preserve">
     <value>Show top {0} of agents with no issues</value>
+  </data>
+  <data name="NoResultForCurrentFilter" xml:space="preserve">
+    <value>No result for current filter</value>
+    <comment>No result tip for mobile teamschedule view filter</comment>
   </data>
 </root>

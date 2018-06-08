@@ -15,18 +15,21 @@ Background:
 	| Name  |
 	| Day   |
     
+	@NotKeyExample
 Scenario: Do not show time indicator if no permission
 	Given I have the role 'No access to ASM'
 	And the time is '2030-10-03 12:00'
 	When I view my week schedule for date '2030-10-03'
 	Then I should not see the time indicator for date '2030-10-03'
 
+	@NotKeyExample
 Scenario: Show the time indicator at correct time
 	Given I have the role 'Full access to mytime'
 	And the time is '2030-10-03 12:00'
 	When I view my week schedule for date '2030-10-03'
 	Then I should see the time indicator at time '2030-10-03 12:00'
-
+	
+	@NotKeyExample
 Scenario: Show time indicator movement
 	Given I have the role 'Full access to mytime'
 	And the time is '2030-03-12 11:00'
@@ -43,12 +46,14 @@ Scenario: Show time indicator movement at midnight
 	When the time is '2030-09-21 0:00'
 	Then I should see the time indicator at time '2030-09-21 0:00'
 
+	@NotKeyExample
 Scenario: Do not show time indicator when viewing other week than current
 	Given I have the role 'Full access to mytime'
 	And the time is '2030-03-12 12:00'
 	When I view my week schedule for date '2030-03-05'
 	Then I should not see the time indicator
 
+	@NotKeyExample
 Scenario: Show the time indicator at correct time with a shift
 	Given I have the role 'Full access to mytime'
 	And I have a workflow control set with
@@ -72,6 +77,7 @@ Scenario: Show the time indicator at correct time with a shift
 	When I view my week schedule for date '2030-01-01'
 	Then I should see the time indicator at time '2030-01-01 11:00'
 
+	@NotKeyExample
 Scenario: Do not show the time indicator after passing end of timeline
 	Given I have the role 'Full access to mytime'
 	And I have a workflow control set with
@@ -97,6 +103,7 @@ Scenario: Do not show the time indicator after passing end of timeline
 	When the time is '2030-03-12 12:16'
 	Then I should not see the time indicator
 	
+	@NotKeyExample
 Scenario: Show the time indicator at correct time for Brasilia
 	Given I have the role 'Full access to mytime'
 	And I am located in Brasilia
@@ -113,6 +120,7 @@ Scenario: Show the time indicator at correct time for Brasilia
 	And I view my week schedule for date '2016-10-16'
 	Then I should see the time indicator at time '2016-10-16 01:01'
 
+	@NotKeyExample
 Scenario: Make sure DST works in Stockholm
 	Given I have the role 'Full access to mytime'
 	And I am located in Stockholm

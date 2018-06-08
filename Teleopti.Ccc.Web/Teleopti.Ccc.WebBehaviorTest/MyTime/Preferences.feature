@@ -4,6 +4,7 @@ Feature: Preferences
 	As an agent
 	I want to view and submit my work preferences
 
+	@NotKeyExample
 Scenario: View preferences
 	Given I am an agent
 	And the time is '2014-05-02 08:00'
@@ -20,6 +21,7 @@ Scenario: See shift category preference
 	When I view preferences for date '2014-05-02'
 	Then I should see my existing 'Night' preference
 
+	@NotKeyExample
 Scenario: See day off preference
 	Given I am an agent
 	And there is a dayoff named 'Day off'
@@ -30,6 +32,7 @@ Scenario: See day off preference
 	When I view preferences for date '2014-05-02'
 	Then I should see my existing 'Day off' preference
 
+	@NotKeyExample
 Scenario: See absence preference
 	Given I am an agent
 	And there is an absence named 'Vacation'
@@ -40,18 +43,21 @@ Scenario: See absence preference
 	When I view preferences for date '2014-05-02'
 	Then I should see my existing 'Vacation' preference
 	
+	@NotKeyExample
 Scenario: No schedule period
 	Given I am an agent
 	And I do not have a schedule period
 	When I view preferences
 	Then I should see a user-friendly message explaining I dont have anything to view
 	
+	@NotKeyExample
 Scenario: No person period
 	Given I am an agent
 	And I do not have a person period
 	When I view preferences
 	Then I should see a user-friendly message explaining I dont have anything to view
 
+	@NotKeyExample
 Scenario: No access to preferences menu item
 	Given I have a role with
          | Field                          | Value |
@@ -60,6 +66,7 @@ Scenario: No access to preferences menu item
 	When I am viewing an application page
 	Then I should not be able to see preferences link
 
+	@NotKeyExample
 Scenario: No access to preferences page
 	Given I have a role with
          | Field                          | Value |
@@ -69,6 +76,7 @@ Scenario: No access to preferences page
 	And I navigate to the preferences page
 	Then I should see an error message
 
+	@NotKeyExample
 Scenario: Navigate next virtual schedule period
 	Given I am an agent
 	And I have several virtual schedule periods
@@ -76,6 +84,7 @@ Scenario: Navigate next virtual schedule period
 	When I click next virtual schedule period button
 	Then I should see the virtual schedule period from '2001-01-15' to '2001-01-28'
 
+	@NotKeyExample
 Scenario: Navigate previous virtual schedule period
 	Given I am an agent
 	And I have several virtual schedule periods
@@ -83,6 +92,7 @@ Scenario: Navigate previous virtual schedule period
 	When I click previous virtual schedule period button
 	Then I should see the virtual schedule period from '2001-01-15' to '2001-01-28'
 
+	@NotKeyExample
 Scenario: View standard preference list
 	Given I have a role with
          | Field                          | Value |
@@ -109,6 +119,7 @@ Scenario: View standard preference list
 	| Day off    |
 	| Vacation   |
 
+	@NotKeyExample
 Scenario: Remember selected standard preference
 	Given I have a role with
          | Field                          | Value |
@@ -251,6 +262,7 @@ Scenario: Set multiple preference
 	And I select shift category 'Night' as standard preference
 	Then I should see the 2 standard preferences 'Night' in the calendar
 
+	@NotKeyExample
 Scenario: Can not edit preference without workflow control set
 	Given I am an agent
 	And I do not have a workflow control set
@@ -258,6 +270,7 @@ Scenario: Can not edit preference without workflow control set
 	Then I should see a message saying I am missing a workflow control set
 	And the preference calendar should not be editable
 
+	@NotKeyExample
 Scenario: Display preference period information
 	Given I am an agent
 	And the time is '2014-05-02 08:00'
@@ -265,12 +278,14 @@ Scenario: Display preference period information
 	When I view preferences
 	Then I should see the preference period information with open from '1900-04-30' to '2077-11-16' and input from '1900-04-30' to '2077-11-16'
 
+	@NotKeyExample
 Scenario: Can not edit preference in closed period
 	Given I am an agent
 	And I have a workflow control set with closed preference periods
 	When I view preferences
 	Then the preference calendar should not be editable
 
+	@NotKeyExample
 Scenario: Can edit preference in open period
 	Given I am an agent
 	And the time is '2014-05-02 08:00'
@@ -278,6 +293,7 @@ Scenario: Can edit preference in open period
 	When I view preferences
 	Then the preference calendar should be editable
 
+	@NotKeyExample
 Scenario: Default to first virtual schedule period overlapping open preference period
 	Given I am an agent
 	And the time is '2014-05-02 08:00'
@@ -285,6 +301,7 @@ Scenario: Default to first virtual schedule period overlapping open preference p
 	When I view preferences
 	Then I should see the first virtual schedule period overlapping open preference period starting at '2014-06-01'
 	
+	@NotKeyExample
 Scenario: Show friendly message on preference page when selected date is after leaving date
 	Given the time is '2014-05-02 08:00'
 	And I am an agent in a team that leaves on '2028-12-31'

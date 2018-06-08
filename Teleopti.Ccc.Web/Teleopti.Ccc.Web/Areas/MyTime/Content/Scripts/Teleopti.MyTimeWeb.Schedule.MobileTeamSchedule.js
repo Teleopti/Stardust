@@ -23,7 +23,18 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 		currentPage = 'Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule',
 		subscribed = false,
 		dataService,
+		timeLineOffset = 50,
+		agentScheduleColumnWidth = 50,
 		ajax;
+
+	var headerHeight = 50,
+		toolbarHeight = 53,
+		agentNameRowHeight = 50,
+		timeLineWidth = 30,
+		myScheduleWidth = 70,
+		shiftArrowWidth = 20,
+		offsetTopValue = headerHeight + toolbarHeight + agentNameRowHeight,
+		windowHeight = $(window).height();
 
 	function cleanBinding() {
 		ko.cleanNode($('#page')[0]);
@@ -57,11 +68,123 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 				'data-bind',
 				"datepicker: selectedDate, datepickerOptions: { calendarPlacement: 'center', autoHide: true, weekStart: " +
 					data.WeekStart +
-					'}'
+					'}, ' +
+					'text: displayDate'
 			);
 			initViewModel();
 			fetchData(initialMomentDate);
 		});
+	}
+
+	function registerSwipeEvent() {
+		$('.mobile-teamschedule-view-body').swipe({
+			swipeLeft: function() {
+				var ele = $('.teammates-schedules-container');
+				if (
+					(vm.paging.skip + vm.paging.take) * agentScheduleColumnWidth - (ele.scrollLeft() + ele.width()) <=
+						agentScheduleColumnWidth - 10 &&
+					vm.currentPageNum() < vm.totalPageNum()
+				) {
+					showLoadingGif();
+					loadMoreSchedules();
+				}
+			},
+			preventDefaultEvents: false,
+			threshold: 20
+		});
+	}
+
+	function registerScrollEvent() {
+		$('.teammates-schedules-container').scroll(function() {
+			$('.teammates-agent-name-row').css({ left: timeLineWidth + myScheduleWidth - $(this).scrollLeft() });
+
+			$('.teammates-schedules-column').each(function(i, e) {
+				toggleShiftArrows($(e), false, i);
+			});
+		});
+
+		$('.mobile-teamschedule-view-body').scroll(function() {
+			adjustArrowPositions();
+		});
+	}
+
+	function adjustArrowPositions() {
+		$('.my-schedule-column').each(function(i, e) {
+			toggleShiftArrows($(e), true);
+		});
+
+		$('.teammates-schedules-column').each(function(i, e) {
+			toggleShiftArrows($(e), false, i);
+		});
+	}
+
+	function toggleShiftArrows(container, underMySchedule, index) {
+		var firstLayer = container.find('.mobile-schedule-layer:first');
+		if (!firstLayer || firstLayer.length == 0) return;
+
+		var lastLayer = container.find('.mobile-schedule-layer:last');
+
+		var leftPosition = container.offset().left + container[0].offsetWidth / 2;
+		var onlyShowAgentsArrowOnRightSide = leftPosition > timeLineWidth + myScheduleWidth + shiftArrowWidth / 2;
+
+		var agentNameContainer;
+		if (underMySchedule) {
+			agentNameContainer = $('.mobile-teamschedule-agent-name.my-name');
+		} else {
+			var childIndex = isNaN(index) ? '' : (index + 1);
+			agentNameContainer = $(
+				'.teammates-agent-name-row .mobile-teamschedule-agent-name:nth-child(' + childIndex + ')'
+			);
+		}
+
+		if (firstLayer.offset().top > windowHeight && (underMySchedule || onlyShowAgentsArrowOnRightSide)) {
+			agentNameContainer.find('.team-schedule-arrow-down').show();
+		} else {
+			agentNameContainer.find('.team-schedule-arrow-down').hide();
+		}
+
+		if (
+			lastLayer.offset().top + lastLayer.height() < offsetTopValue &&
+			(underMySchedule || onlyShowAgentsArrowOnRightSide)
+		) {
+			agentNameContainer.find('.team-schedule-arrow-up').show();
+		} else {
+			agentNameContainer.find('.team-schedule-arrow-up').hide();
+		}
+	}
+
+	function showLoadingGif() {
+		$('#loading').show();
+	}
+
+	function hideLoadingGif() {
+		$('#loading').hide();
+	}
+
+	function adjustScroll() {
+		var container = $('.teammates-schedules-container');
+		container.animate({
+			scrollLeft: container.scrollLeft() + agentScheduleColumnWidth
+		});
+	}
+
+	function loadMoreSchedules() {
+		if (vm.paging.skip + vm.paging.take < vm.paging.take * vm.totalPageNum()) {
+			vm.paging.skip += vm.paging.take;
+
+			dataService.loadScheduleData(
+				vm.selectedDate().format('YYYY/MM/DD'),
+				vm.selectedTeamIds,
+				vm.paging,
+				vm.filter,
+				function(schedules) {
+					vm.readMoreTeamScheduleData(schedules);
+
+					adjustScroll();
+					fetchDataSuccessCallback();
+				}
+			);
+		}
 	}
 
 	function initViewModel() {
@@ -70,9 +193,10 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 	}
 
 	function filterChangedCallback(dateStr) {
-		dataService.loadScheduleData(dateStr, vm.selectedTeamIds, vm.paging, function (schedules) {
+		dataService.loadScheduleData(dateStr, vm.selectedTeamIds, vm.paging, vm.filter, function(schedules) {
 			vm.readScheduleData(schedules, moment(dateStr));
 
+			focusMySchedule();
 			fetchDataSuccessCallback();
 		});
 	}
@@ -82,6 +206,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 	}
 
 	function fetchData(momentDate) {
+		showLoadingGif();
 		dataService.loadGroupAndTeams(function(teams) {
 			vm.readTeamsData(teams);
 
@@ -93,16 +218,36 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 					Teleopti.MyTimeWeb.Portal.ParseHash().dateHash ||
 					vm.selectedDate().format('YYYY/MM/DD');
 
-				dataService.loadScheduleData(dateStr, vm.selectedTeamIds, vm.paging, function(schedules) {
+				dataService.loadScheduleData(dateStr, vm.selectedTeamIds, vm.paging, vm.filter, function(schedules) {
 					vm.readScheduleData(schedules, dateStr);
 
+					focusMySchedule();
 					fetchDataSuccessCallback();
 				});
 			});
 		});
 	}
 
+	function focusMySchedule() {
+		if (!vm.mySchedule().layers[0]) {
+			$('.mobile-teamschedule-view-body')
+				.stop()
+				.animate({ scrollTop: 1 });
+		} else {
+			$('.mobile-teamschedule-view-body')
+				.stop()
+				.animate(
+					{
+						scrollTop: vm.mySchedule().layers[0].top() - (timeLineOffset + 10)
+					},
+					0
+				);
+		}
+		adjustArrowPositions();
+	}
+
 	function fetchDataSuccessCallback() {
+		hideLoadingGif();
 		completelyLoaded();
 		if (!subscribed) subscribeForChanges();
 	}
@@ -128,6 +273,8 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 			dataService = new Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule.DataService(ajax);
 			completelyLoaded = completelyLoadedCallback;
 			registerUserInfoLoadedCallback(initialMomentDate);
+			registerSwipeEvent();
+			registerScrollEvent();
 			readyForInteractionCallback();
 		},
 		ReloadScheduleListener: function(notification) {

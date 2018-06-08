@@ -14,6 +14,7 @@ Scenario: Feedback for a day with shift category preference
 	And I should see the end time boundry 16 to 16
 	And I should see the contract time boundry 8 to 8
 
+	@NotKeyExample
 Scenario: Feedback for a day with start time limitation preference
 	Given I am an agent
 	And I have a shift bag with start times 8 to 13 and end times 12 to 22
@@ -21,6 +22,7 @@ Scenario: Feedback for a day with start time limitation preference
 	When I view preferences for date '2014-05-02'
 	Then I should see the start time boundry 8 to 10
 
+	@NotKeyExample
 Scenario: Feedback for a day with end time limitation preference
 	Given I am an agent
 	And I have a shift bag with start times 8 to 9 and end times 12 to 22
@@ -28,6 +30,7 @@ Scenario: Feedback for a day with end time limitation preference
 	When I view preferences for date '2014-05-02'
 	Then I should see the end time boundry 13 to 19
 
+	@NotKeyExample
 Scenario: Feedback for a day with work time limitation preference
 	Given I am an agent
 	And I have a shift bag with start times 8 to 9 and end times 12 to 22
@@ -35,6 +38,7 @@ Scenario: Feedback for a day with work time limitation preference
 	When I view preferences for date '2014-05-02'
 	Then I should see the contract time boundry 4 to 5
 
+	@NotKeyExample
 Scenario: Feedback for a day with lunch start time limitation preference
 	Given I am an agent
 	And there is an activity named 'Lunch'
@@ -45,6 +49,7 @@ Scenario: Feedback for a day with lunch start time limitation preference
 	And I should see the end time boundry 19 to 19
 	And I should see the contract time boundry 10 to 10 
 
+	@NotKeyExample
 Scenario: Feedback for a day with lunch end time limitation preference
 	Given I am an agent
 	And there is an activity named 'Lunch'
@@ -55,6 +60,7 @@ Scenario: Feedback for a day with lunch end time limitation preference
 	And I should see the end time boundry 18 to 18
 	And I should see the contract time boundry 9 to 9 
 
+	@NotKeyExample
 Scenario: Feedback for a day with lunch length limitation preference
 	Given I am an agent
 	And there is an activity named 'Lunch'
@@ -65,6 +71,7 @@ Scenario: Feedback for a day with lunch length limitation preference
 	And I should see the end time boundry 17 to 17
 	And I should see the contract time boundry 9 to 9 
 
+	@NotKeyExample
 Scenario: Feedback for a day with start time limitation availability
 	Given I am an agent
 	And I have a shift bag with start times 8 to 13 and end times 12 to 22
@@ -72,6 +79,7 @@ Scenario: Feedback for a day with start time limitation availability
 	When I view preferences for date '2014-05-02'
 	Then I should see the start time boundry 10 to 13
 
+	@NotKeyExample
 Scenario: Feedback for a day with end time limitation availability
 	Given I am an agent
 	And I have a shift bag with start times 8 to 13 and end times 12 to 22
@@ -79,6 +87,7 @@ Scenario: Feedback for a day with end time limitation availability
 	When I view preferences for date '2014-05-02'
 	Then I should see the end time boundry 12 to 21
 
+	@NotKeyExample
 Scenario: Feedback for a day with work time limitation availability
 	Given I am an agent
 	And I have a shift bag with start times 8 to 13 and end times 12 to 22
@@ -86,6 +95,7 @@ Scenario: Feedback for a day with work time limitation availability
 	When I view preferences for date '2014-05-02'
 	Then I should see the contract time boundry 5 to 7
 
+	@NotKeyExample
 Scenario: Feedback for a day with availability and preference
 	Given I am an agent
 	And I have a shift bag with two categories with shift start from 8 to 10 and from 12 to 14 and end from 16 to 18 and from 12 to 20
@@ -143,6 +153,7 @@ Scenario: Feedback from a deleted preference
 	And I click the delete preference button
 	Then I should see the preference feedback for date "2014-05-03"
 
+	@NotKeyExample
 Scenario: Feedback for a day with a shift
 	Given I am an agent
 	And I have a shift bag
@@ -154,6 +165,7 @@ Scenario: Feedback for a day with a shift
 	When I view preferences for date '2014-05-02'
 	Then I should see the contract time of '8' hours
 
+	@NotKeyExample
 Scenario: Feedback for a day with a contract time absence
 	Given I am an agent
 	And I have a scheduling period of 1 week

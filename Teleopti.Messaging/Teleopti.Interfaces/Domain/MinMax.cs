@@ -18,8 +18,6 @@ namespace Teleopti.Interfaces.Domain
         private readonly T _minimum;
         private readonly T _maximum;
 
-
-
         /// <summary>
         /// Initializes a new instance of the <see cref="MinMax&lt;T&gt;"/> struct.
         /// </summary>
@@ -32,8 +30,12 @@ namespace Teleopti.Interfaces.Domain
         public MinMax(T minimum, T maximum)
         {
             if (minimum.CompareTo(maximum) > 0)
-                throw new ArgumentOutOfRangeException("minimum",
-                                                      "[minimum] value can not be higher than [maximum] value");
+            {
+                var message =
+                    $"[{nameof(minimum)}] value \"{minimum}\" can not be higher than [{nameof(maximum)}] value \"{maximum}\"";
+                throw new ArgumentOutOfRangeException(nameof(minimum), message);
+            }
+
             _minimum = minimum;
             _maximum = maximum;
         }
@@ -63,9 +65,6 @@ namespace Teleopti.Interfaces.Domain
         {
             get { return _maximum; }
         }
-
-
-
 
         #region Equals and GetHashCode stuff
 

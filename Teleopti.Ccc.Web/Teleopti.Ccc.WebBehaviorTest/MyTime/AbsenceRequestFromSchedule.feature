@@ -19,7 +19,7 @@ Background:
 	| Requestable | True     |
 	| TrackerType | Day      |
 	
-
+	@NotKeyExample
 Scenario: Open add absence request form from day summary
 	Given I have the role 'Full access to mytime'
 	And I view my week schedule for date '2013-10-03'
@@ -84,7 +84,8 @@ Scenario: Cancel adding absence request
 	And I input absence request values with 'Vacation' for date '2013-10-03'
 	When I click the cancel button
 	Then I should not see a symbol at the top of the schedule for date '2013-10-03'
-	
+
+	@NotKeyExample
 Scenario: Adding invalid absence request values
 	Given I have the role 'Full access to mytime'
 	And I view my week schedule for date '2013-10-03'
@@ -123,6 +124,7 @@ And I input absence request values with 'Vacation' for date '2014-10-03'
 Then I should see the remaining days is '22 Days'
 And I should see the used days is '3 Days'
 
+@NotKeyExample
 Scenario: When requesting absence tracked by hours view remaining and used time
 Given I am an agent
 And there is an absence with
@@ -220,6 +222,7 @@ When I input absence request values with 'Vacation' for date '2015-10-03'
 Then I should see the remaining days is '25 Days'
 And I should see the used days is '0 Days'
 
+@NotKeyExample
 Scenario: When requesting absence over multiple account periods show remaining and used time according to end date period
 Given I am an agent
 And I am american

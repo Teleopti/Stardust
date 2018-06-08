@@ -56,7 +56,6 @@ export class IdentityLogonPageComponent implements OnDestroy, OnInit {
 		});
 		this.people.valueChanges.pipe(debounceTime(100)).subscribe({
 			next: val => {
-				console.log(val);
 				this.logons.filter(logon => logon.invalid).forEach(control => {
 					control.updateValueAndValidity();
 				});

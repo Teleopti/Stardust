@@ -38,6 +38,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 						new ExitApplication() {ExitCode = 0}
 					};
 			}
+			else
+			{
+				throw new Exception("Check that isContainer and AzureStorage is set in the config.");
+			}
 		}
 	}
 }

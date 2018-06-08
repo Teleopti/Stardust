@@ -42,7 +42,7 @@ namespace Teleopti.Wfm.Administration
 			});
 
 			container.Resolve<HangfireDashboardStarter>().Start(app);
-			container.Resolve<IRecurrentEventTimer>().Init(TimeSpan.FromHours(1));
+			container.Resolve<RecurrentEventTimer>().Init(TimeSpan.FromDays(1)); 
 		}
 	}
 }

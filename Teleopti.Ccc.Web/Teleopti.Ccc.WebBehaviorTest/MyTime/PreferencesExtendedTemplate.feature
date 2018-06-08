@@ -37,6 +37,7 @@ Background:
 	| Start time minimum | 10:30     |
 	And I have the role 'Access to extended preferences'
 
+	@NotKeyExample
 Scenario: View available templates 
 	Given I am viewing preferences
 	When I click the add extended preference button

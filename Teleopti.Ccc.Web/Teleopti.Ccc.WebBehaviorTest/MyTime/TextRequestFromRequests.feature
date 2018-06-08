@@ -11,6 +11,7 @@ Scenario: Add text request
 	And I click send request button
 	Then I should see the text request in the list
 
+	@NotKeyExample
 Scenario: Adding invalid text request values
 	Given I am an agent
 	And I am viewing requests
@@ -20,6 +21,7 @@ Scenario: Adding invalid text request values
 	Then I should see subject is missing error
 	And I should not see any requests in the list
 
+	@NotKeyExample
 Scenario: Adding too long text request
 	Given I am an agent
 	And I am viewing requests
@@ -27,6 +29,7 @@ Scenario: Adding too long text request
 	And I input too long text request values
 	Then I should see message adjusted to maximum length
 
+	@NotKeyExample
 Scenario: Adding too long subject request
 	Given I am an agent
 	And I am viewing requests
@@ -36,6 +39,7 @@ Scenario: Adding too long subject request
 	Then I should see texts describing too long subject error
 	And I should not see any requests in the list
 
+	@NotKeyExample
 Scenario: View text request details
 	Given I am an agent
 	And I have an existing text request
@@ -67,6 +71,7 @@ Scenario: Delete pending text request
 	When I delete the existing request in the list
 	Then I should not see any requests in the list
 
+	@NotKeyExample
 Scenario: Can not edit approved text requests
 	Given I am an agent
 	And I have an approved text request
@@ -76,6 +81,7 @@ Scenario: Can not edit approved text requests
 	And I should not be able to edit the values for the existing text request
 	And I should not be able to submit possible changes for the existing request
 
+	@NotKeyExample
 Scenario: Can not edit denied text requests
 	Given I am an agent
 	And I have a denied text request
@@ -85,18 +91,21 @@ Scenario: Can not edit denied text requests
 	And I should not be able to edit the values for the existing text request
 	And I should not be able to submit possible changes for the existing request
 
+	@NotKeyExample
 Scenario: Can not delete approved text request
 	Given I am an agent
 	And I have an approved text request
 	When I am viewing requests
 	Then I should not be able to delete the existing request in the list
 
+	@NotKeyExample
 Scenario: Can not delete denied text request
 	Given I am an agent
 	And I have a denied text request
 	When I am viewing requests
 	Then I should not be able to delete the existing request in the list
 
+	@NotKeyExample
 Scenario: Cancel adding a new text request
 	Given I am an agent
 	And I am viewing requests

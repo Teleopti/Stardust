@@ -1,12 +1,21 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading;
+using log4net;
 
 namespace Teleopti.Wfm.Administration.Core
 {
-	public class RecurrentEventTimer : IRecurrentEventTimer
+	public class RecurrentEventTimer
 	{
+		private readonly IPurgeOldSignInAttempts _purgeOldSignInAttempts;
+		private readonly IPurgeNoneEmployeeData _purgeNoneEmployeeData;
 		private Timer _timer;
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(RecurrentEventTimer));
+
+		public RecurrentEventTimer(IPurgeOldSignInAttempts purgeOldSignInAttempts, IPurgeNoneEmployeeData purgeNoneEmployeeData)
+		{
+			_purgeOldSignInAttempts = purgeOldSignInAttempts;
+			_purgeNoneEmployeeData = purgeNoneEmployeeData;
+		}
 
 		public void Init(TimeSpan tickInterval)
 		{
@@ -16,19 +25,25 @@ namespace Teleopti.Wfm.Administration.Core
 			_timer = new Timer(timerCallback, null, 0, (int)tickInterval.TotalMilliseconds);
 		}
 
-		private static void timerCallback(object state)
+		private void timerCallback(object state)
 		{
-			// Create an EventLog instance and assign its source.
-			var myLog = new EventLog {Source = "Teleopti Service Bus"};
-			// Write an informational entry to the event log.    
-			myLog.WriteEntry("1 hour tick test for RecurrentEventTimer",EventLogEntryType.Information);
-		}
-	}
+			try
+			{
+				_purgeOldSignInAttempts.Purge();
+			}
+			catch (Exception exception)
+			{
+				Logger.Error("Purging of login attempts failed", exception);
+			}
 
-	public class RecurrentEventTimerNoTick : IRecurrentEventTimer
-	{
-		public void Init(TimeSpan tickInterval)
-		{
+			try
+			{
+				_purgeNoneEmployeeData.Purge();
+			}
+			catch (Exception exception)
+			{
+				Logger.Error("Purging of person info failed", exception);
+			}
 		}
 	}
 }

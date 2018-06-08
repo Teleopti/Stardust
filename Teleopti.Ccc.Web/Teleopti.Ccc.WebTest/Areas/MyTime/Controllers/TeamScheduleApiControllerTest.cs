@@ -184,13 +184,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			(teamScheduleViewModel.TimeLine == null).Should().Be(false);
 			(teamScheduleViewModel.TimeLine.Length > 0).Should().Be(true);
 
-			var diff = TimeSpan.FromHours(17).Add(TimeSpan.FromMinutes(15)) - TimeSpan.FromHours(7).Add(TimeSpan.FromMinutes(45));
+			var diff = TimeSpan.FromHours(17).Add(TimeSpan.FromMinutes(15)) - TimeSpan.FromHours(8);
 
-			var firstTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.First() as TeamScheduleTimeLineViewModel;
-			firstTeamScheduleTimeLineViewModel.PositionPercentage.Should().Be(Math.Round((decimal)TimeSpan.FromMinutes(15).Ticks / diff.Ticks, 4));
+			var firstTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.First();
+			firstTeamScheduleTimeLineViewModel.PositionPercentage.Should().Be(0);
 
-			var lastTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.Last() as TeamScheduleTimeLineViewModel;
-			lastTeamScheduleTimeLineViewModel.PositionPercentage.Should().Be(Math.Round((decimal)TimeSpan.FromMinutes(555).Ticks / diff.Ticks, 4));
+			var lastTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.Last();
+			lastTeamScheduleTimeLineViewModel.PositionPercentage.Should().Be(Math.Round((decimal)TimeSpan.FromHours(9).Ticks / diff.Ticks, 4));
 		}
 
 		[Test]
@@ -235,13 +235,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			(teamScheduleViewModel.TimeLine == null).Should().Be(false);
 			(teamScheduleViewModel.TimeLine.Length > 0).Should().Be(true);
 
-			var diff = TimeSpan.FromHours(16).Add(TimeSpan.FromMinutes(15)) - TimeSpan.FromHours(8).Add(TimeSpan.FromMinutes(45));
+			var diff = TimeSpan.FromHours(16).Add(TimeSpan.FromMinutes(15)) - TimeSpan.FromHours(9);
 
-			var firstTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.First() as TeamScheduleTimeLineViewModel;
-			firstTeamScheduleTimeLineViewModel.PositionPercentage.Should().Be(Math.Round((decimal)TimeSpan.FromMinutes(15).Ticks / diff.Ticks, 4));
+			var firstTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.First();
+			firstTeamScheduleTimeLineViewModel.PositionPercentage.Should().Be(0);
 
-			var lastTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.Last() as TeamScheduleTimeLineViewModel;
-			lastTeamScheduleTimeLineViewModel.PositionPercentage.Should().Be(Math.Round((decimal)TimeSpan.FromMinutes(7 * 60 + 15).Ticks / diff.Ticks, 4));
+			var lastTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.Last();
+			lastTeamScheduleTimeLineViewModel.PositionPercentage.Should().Be(Math.Round((decimal)TimeSpan.FromMinutes(7 * 60).Ticks / diff.Ticks, 4));
 		}
 
 
@@ -288,13 +288,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			(teamScheduleViewModel.TimeLine == null).Should().Be(false);
 			(teamScheduleViewModel.TimeLine.Length > 0).Should().Be(true);
 
-			var diff = TimeSpan.FromHours(17).Add(TimeSpan.FromMinutes(12)) - TimeSpan.FromHours(9).Add(TimeSpan.FromMinutes(02));
+			var diff = TimeSpan.FromHours(17).Add(TimeSpan.FromMinutes(12)) - TimeSpan.FromHours(9);
 
-			var firstTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.First() as TeamScheduleTimeLineViewModel;
-			firstTeamScheduleTimeLineViewModel.PositionPercentage.Should().Be(Math.Round((decimal)TimeSpan.FromMinutes(58).Ticks / diff.Ticks, 4));
+			var firstTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.First();
+			firstTeamScheduleTimeLineViewModel.PositionPercentage.Should().Be(0);
 
-			var lastTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.Last() as TeamScheduleTimeLineViewModel;
-			lastTeamScheduleTimeLineViewModel.PositionPercentage.Should().Be(Math.Round((decimal)TimeSpan.FromMinutes(7 * 60 + 58).Ticks / diff.Ticks, 4));
+			var lastTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.Last();
+			lastTeamScheduleTimeLineViewModel.PositionPercentage.Should().Be(Math.Round((decimal)TimeSpan.FromMinutes(8 * 60).Ticks / diff.Ticks, 4));
 		}
 
 		[Test]
@@ -338,15 +338,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			(teamScheduleViewModel == null).Should().Be(false);
 			(teamScheduleViewModel.TimeLine == null).Should().Be(false);
 			(teamScheduleViewModel.TimeLine.Length > 0).Should().Be(true);
-			((TeamScheduleTimeLineViewModel)teamScheduleViewModel.TimeLine.Last()).Time.Should().Be(TimeSpan.FromDays(1).Add(TimeSpan.FromHours(2)));
+			teamScheduleViewModel.TimeLine.Last().Time.Should().Be(TimeSpan.FromDays(1).Add(TimeSpan.FromHours(2)));
 
-			var diff = TimeSpan.FromHours(26).Add(TimeSpan.FromMinutes(15)) - TimeSpan.FromHours(8).Add(TimeSpan.FromMinutes(45));
+			var diff = TimeSpan.FromHours(26).Add(TimeSpan.FromMinutes(15)) - TimeSpan.FromHours(9);
 
-			var firstTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.First() as TeamScheduleTimeLineViewModel;
-			firstTeamScheduleTimeLineViewModel.PositionPercentage.Should().Be(Math.Round((decimal)TimeSpan.FromMinutes(15).Ticks / diff.Ticks, 4));
+			var firstTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.First();
+			firstTeamScheduleTimeLineViewModel.PositionPercentage.Should().Be(0);
 
-			var lastTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.Last() as TeamScheduleTimeLineViewModel;
-			lastTeamScheduleTimeLineViewModel.PositionPercentage.Should().Be(Math.Round((decimal)TimeSpan.FromMinutes(17 * 60 + 15).Ticks / diff.Ticks, 4));
+			var lastTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.Last();
+			lastTeamScheduleTimeLineViewModel.PositionPercentage.Should().Be(Math.Round((decimal)TimeSpan.FromMinutes(17 * 60).Ticks / diff.Ticks, 4));
 		}
 
 		[Test]

@@ -3,6 +3,7 @@ using SharpTestsEx;
 using System.Linq;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		public FakePersonRepository PersonRepository;
 		public FakePersonAccessRepository PersonAccessRepository;
 		public FakeLoggedOnUser LoggedOnUser;
+		public FakePermissions Permissions;
 
 		private IPerson _person1;
 		private IPerson _person2;
@@ -43,6 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			/// Setup
 			PersonRepository.Add(_person1);
 			ApplicationRoleRepository.Add(_role1);
+			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.PeopleAccess);
 
 			var inputModel = new GrantRolesInputModel()
 			{
@@ -75,6 +78,32 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		}
 
 		[Test]
+		public void GrantRoles_ShouldMakeNotPermittedAuditLogEntry()
+		{
+			/// Setup
+			PersonRepository.Add(_person1);
+			ApplicationRoleRepository.Add(_role1);
+
+			var inputModel = new GrantRolesInputModel()
+			{
+				Persons = new[] { _person1.Id.GetValueOrDefault() },
+				Roles = new[] { _role1.Id.GetValueOrDefault() }
+			};
+
+			/// Test
+			// Check Change, SingleGrant
+			var result = Target.GrantRoles(inputModel);
+			result.Should().Be.OfType<OkResult>();
+			PersonAccessRepository.LoadAll().Count().Should().Be.EqualTo(1);
+
+			var auditRow = PersonAccessRepository.LoadAll().First();
+			auditRow.Action.Should().Be.EqualTo(PersonAuditActionType.SingleGrantRole.ToString());
+			auditRow.ActionResult.Should().Be.EqualTo(PersonAuditActionResult.NotPermitted.ToString());
+			auditRow.ActionPerformedBy.Id.Should().Be.EqualTo(LoggedOnUser.CurrentUser().Id);
+			auditRow.ActionPerformedOn.Id.Should().Be.EqualTo(_person1.Id);
+		}
+
+		[Test]
 		public void GrantMultipleRolesNewAndPresent_ShouldMakeAuditLogChangeAndNoChangeEntries()
 		{
 			/// Setup
@@ -82,6 +111,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			PersonRepository.Add(_person2);
 			ApplicationRoleRepository.Add(_role1);
 			ApplicationRoleRepository.Add(_role2);
+			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.PeopleAccess);
 
 			/// Test
 			// Check Change, MultiGrant
@@ -129,6 +159,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			PersonRepository.Add(_person1);
 			ApplicationRoleRepository.Add(_role1);
 			_person1.PermissionInformation.AddApplicationRole(_role1);
+			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.PeopleAccess);
 
 			var inputModel = new RevokeRolesInputModel()
 			{
@@ -172,6 +203,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			_person1.PermissionInformation.AddApplicationRole(_role2);
 			_person2.PermissionInformation.AddApplicationRole(_role1);
 			_person2.PermissionInformation.AddApplicationRole(_role2);
+			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.PeopleAccess);
 
 			/// Test
 			// Check Change, MultiRevoke

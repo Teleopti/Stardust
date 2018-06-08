@@ -1,6 +1,7 @@
 import { DebugElement } from '@angular/core';
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { configureTestSuite } from '../../../../configure-test-suit';
 import { PeopleTestModule } from '../../people.test.module';
 import { WorkspaceService } from '../../services';
 import { adina, eva, myles } from '../../services/fake-backend';
@@ -12,6 +13,8 @@ describe('GrantPageComponent', () => {
 	let fixture: ComponentFixture<GrantPageComponent>;
 	let page: Page;
 	let workspaceService: WorkspaceService;
+
+	configureTestSuite();
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({

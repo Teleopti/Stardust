@@ -39,6 +39,7 @@ Given there is a role with
 	| Field      | Value      |
 	| Start date | 2013-08-19 |
        
+	   @NotKeyExample
 Scenario: View full month with full first and last week
 Given I have the role 'Full access to mytime'
     And I have the workflow control set 'Published schedule'
@@ -143,6 +144,7 @@ Then I should see the absence with
 	| Name      | Illness          |
 	| Date      | 2014-01-07       |
 
+	@NotKeyExample
 Scenario: Distinguish day out of current month 
 Given I have the role 'Full access to mytime'
     And I have the workflow control set 'Published schedule'
@@ -162,13 +164,14 @@ And I have a shift with
 When I view my month schedule for date '2014-02-02'
 Then I should not see any indication for day '2014-02-02'
 
+@NotKeyExample
 Scenario: Do not show indication for an empty day 
 Given I have the role 'Full access to mytime'
     And I have the workflow control set 'Published schedule'
 When I view my month schedule for date '2014-01-02'
 Then I should not see any indication for day '2014-01-02'
 
-
+@NotKeyExample
 Scenario: Language setting
 Given I have the role 'Full access to mytime'
     And I have the workflow control set 'Published schedule'
@@ -176,6 +179,7 @@ And I am german
 When I view my month schedule for date '2014-01-07'
 Then I should see the month name being 'Januar'
 
+@NotKeyExample
 Scenario: First day of week
 Given I have the role 'Full access to mytime'
     And I have the workflow control set 'Published schedule'
@@ -192,6 +196,7 @@ When I view my week schedule for date '2014-01-07'
 And I choose to go to month view
 Then I should end up in month view for '2014-01-07'
 
+@NotKeyExample
 Scenario: View current month
 Given I have the role 'Full access to mytime'
     And I have the workflow control set 'Published schedule'
@@ -205,6 +210,7 @@ When I view my month schedule for date '2014-01-07'
 And I choose the day '2014-01-14'
 Then I should end up in week view for '2014-01-14'
 
+@NotKeyExample
 Scenario: Navigate to next month
 Given I have the role 'Full access to mytime'
     And I have the workflow control set 'Published schedule'
@@ -212,6 +218,7 @@ And I view my month schedule for date '2014-01-07'
 When I choose to go to next month
 Then I should end up in month view for '2014-02-01' 
 
+@NotKeyExample
 Scenario: Navigate to previous month
 Given I have the role 'Full access to mytime'
     And I have the workflow control set 'Published schedule'
@@ -219,6 +226,7 @@ And I view my month schedule for date '2014-01-07'
 When I choose to go to previous month
 Then I should end up in month view for '2013-12-01' 
 
+@NotKeyExample
 Scenario: Pick a month in the calendar
 Given I have the role 'Full access to mytime'
     And I have the workflow control set 'Published schedule'

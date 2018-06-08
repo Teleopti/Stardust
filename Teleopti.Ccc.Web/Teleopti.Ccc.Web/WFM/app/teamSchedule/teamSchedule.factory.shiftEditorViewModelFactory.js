@@ -5,8 +5,8 @@
 	ShiftEditorViewModelFactory.$inject = ['serviceDateFormatHelper', 'Toggle', 'CurrentUserInfo'];
 	function ShiftEditorViewModelFactory(serviceDateFormatHelper, toggleSvc, CurrentUserInfo) {
 		var factory = {
-			CreateTimeline: function (date, timezone) {
-				return new TimelineViewModel(date, timezone);
+			CreateTimeline: function (date, timezone, timeRange) {
+				return new TimelineViewModel(date, timezone, timeRange);
 			},
 			CreateSchedule: function (date, timezone, schedule) {
 				return new ScheduleViewModel(date, timezone, schedule);
@@ -29,7 +29,7 @@
 
 			this.Date = date;
 			this.Name = schedule.Name;
-			this.Timezone = currentTimezone;
+			this.Timezone = schedule.Timezone.IanaId;
 			this.ProjectionTimeRange = getProjectionTimeRange(layers);
 			this.ShiftLayers = layers;
 			this.HasUnderlyingSchedules = hasUnderlyingSchedules;
@@ -77,24 +77,27 @@
 		}
 
 		function ShiftLayerViewModel(layer, date, timezone, fromTimezone) {
-			var startInToTimezone = moment.tz(layer.Start, fromTimezone).clone().tz(timezone);
-			var endInToTimezone = startInToTimezone.clone().add(layer.Minutes, 'minutes')
+			var isSameTimezone = timezone === fromTimezone;
+			var startInTimezone = isSameTimezone ? moment.tz(layer.Start, timezone) : moment.tz(layer.Start, fromTimezone).clone().tz(timezone);
+			var endInTimezone = isSameTimezone ? moment.tz(layer.End, timezone) : startInTimezone.clone().add(layer.Minutes, 'minutes');
+
 			return {
 				Description: layer.Description,
-				Start: serviceDateFormatHelper.getDateTime(startInToTimezone),
-				End: serviceDateFormatHelper.getDateTime(endInToTimezone),
+				Start: serviceDateFormatHelper.getDateTime(startInTimezone),
+				End: serviceDateFormatHelper.getDateTime(endInTimezone),
 				Minutes: layer.Minutes,
 				ShiftLayerIds: layer.ShiftLayerIds,
 				Color: layer.Color,
 				UseLighterBorder: useLighterColor(layer.Color),
-				TimeSpan: getTimeSpan(date, startInToTimezone, endInToTimezone),
+				TimeSpan: getTimeSpan(date, startInTimezone, endInTimezone),
 				IsOvertime: layer.IsOvertime
 			};
 		}
 
-		function TimelineViewModel(date, timezone) {
+		function TimelineViewModel(date, timezone, timeRange) {
 			return {
-				Intervals: getIntervals(date, timezone)
+				Intervals: getIntervals(date, timezone, timeRange),
+				TimeRange: timeRange
 			};
 		}
 
@@ -115,10 +118,7 @@
 		}
 
 		function getTimeSpan(date, start, end) {
-			if (!start.isSame(end, 'day') || serviceDateFormatHelper.getDateOnly(start) !== date) {
-				return start.format('YYYY-MM-DD LT') + ' - ' + end.format('YYYY-MM-DD LT');
-			}
-			return start.format('LT') + ' - ' + end.format('LT');
+			return start.format('YYYY-MM-DD LT') + ' - ' + end.format('YYYY-MM-DD LT');
 		}
 
 
@@ -135,10 +135,10 @@
 			return Math.abs(lumi - getLumi(lightColor)) > Math.abs(lumi - getLumi(darkColor));
 		}
 
-		function getIntervals(date, timezone) {
+		function getIntervals(date, timezone, timeRange) {
 			var intervals = [];
-			var startTime = moment.tz(date, timezone);
-			var endTime = moment.tz(date, timezone).add(1, 'days').hours(12);
+			var startTime = timeRange.Start.clone();
+			var endTime = timeRange.End.clone();
 			while (startTime <= endTime) {
 				intervals.push(new IntervalViewModel(startTime.clone(), startTime.isSame(endTime)));
 				startTime = startTime.add(1, 'hours');

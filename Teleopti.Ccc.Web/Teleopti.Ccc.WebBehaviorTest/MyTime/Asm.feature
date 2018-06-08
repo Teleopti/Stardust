@@ -44,6 +44,7 @@ Background:
 	| Scheduled activity start time | 2030-01-01 11:00 |
 	| Scheduled activity end time   | 2030-01-01 12:00 |
 
+	@NotKeyExample
 Scenario: No permission to ASM module
 	Given I have the role 'No access to ASM'
 	When I am viewing week schedule
@@ -55,17 +56,20 @@ Scenario: Show part of agent's schedule in popup
 	When I view ASM
 	Then I should see a schedule in popup
 
+	@NotKeyExample
 Scenario: Show title in popup
 	Given I have the role 'Full access to mytime'
 	When I view ASM
 	Then I should see a popup with title AgentScheduleMessenger 
 
+	@NotKeyExample
 Scenario: Current activity should be shown
 	Given I have the role 'Full access to mytime'
 	And the time is '2030-01-01 16:00'
 	When I view ASM
 	Then I should see Phone as current activity
 
+	@NotKeyExample
 Scenario: No current activity to show
 	Given I have the role 'Full access to mytime'
 	And the time is '2030-01-01 07:00'
@@ -85,6 +89,7 @@ Scenario: Upcoming activity time period should be displayed
 	When I view ASM
 	Then I should see next activity time as '08:00-11:00'
 
+	@NotKeyExample
 Scenario: Upcoming activity time period starting after midnight should be indicated as next day
 	Given I have the role 'Full access to mytime'
 	And the time is '2029-12-31 23:59'
@@ -113,11 +118,13 @@ Scenario: Asm should be automatically reloaded when time passes
 	When the time is '2030-01-02 00:01Z'
 	Then Now indicator should be at hour '24'
 
+	@NotKeyExample
 Scenario: Asm should not indicate unread messages if no messages
 	Given I have the role 'Full access to mytime'
 	When I view ASM
 	Then I shoud not see an indication that I have an unread message
 
+	@NotKeyExample
 Scenario: Asm should indicate unread messages
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with

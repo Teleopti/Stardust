@@ -14,6 +14,19 @@ export interface PeopleSearchQuery {
 	keyword: string;
 	pageIndex: number;
 	pageSize: number;
+	sortColumn: number;
+	direction: number;
+}
+
+export enum COLUMNS {
+	FirstName = 0,
+	LastName = 1,
+	SiteTeam = 2
+}
+
+export enum DIRECTION {
+	asc = 1,
+	desc = 0
 }
 
 @Injectable()
@@ -25,14 +38,11 @@ export class SearchService {
 	public pageIndex: number = 0;
 	public pageSize: number = 20;
 	public lastQuerySize: number = 0;
+	public sortColumn: number = COLUMNS.LastName;
+	public direction: number = DIRECTION.asc;
 
 	searchPeople(query: PeopleSearchQuery): Observable<PeopleSearchResult> {
-		return this.http.post('../api/Search/FindPeople', query).pipe(
-			tap((result: PeopleSearchResult) => {
-				this.peopleCache$.next(result.People);
-				this.lastQuerySize = result.TotalRows;
-			})
-		) as Observable<PeopleSearchResult>;
+		return this.http.post('../api/Search/FindPeople', query) as Observable<PeopleSearchResult>;
 	}
 
 	async getPersons({ Date = '2017-02-08', PersonIdList }): Promise<Array<Person>> {

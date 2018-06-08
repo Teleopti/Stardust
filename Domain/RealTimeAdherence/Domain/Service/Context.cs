@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 {
@@ -84,6 +85,9 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 			return $"Time: {Time}, UserCode: {_input?.UserCode}, StateCode: {_input?.StateCode}, SourceId: {_input?.SourceId}, PersonId: {PersonId}, BusinessUnitId: {BusinessUnitId}, TeamId: {TeamId}, SiteId: {SiteId}";
 		}
 
+		public bool ArrivingAfterLateForWork;
+		public bool LateForWork;
+		
 		public string InputStateCode() => _input?.StateCode;
 		public string InputStateDescription() => _input?.StateDescription;
 
@@ -120,7 +124,8 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 
 				AlarmStartTime = AlarmStartTime,
 
-				TimeWindowCheckSum = Schedule.TimeWindowCheckSum()
+				TimeWindowCheckSum = Schedule.TimeWindowCheckSum(),
+				LateForWork = LateForWork
 			};
 		}
 

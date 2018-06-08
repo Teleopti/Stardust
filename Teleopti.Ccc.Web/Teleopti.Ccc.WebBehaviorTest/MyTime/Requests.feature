@@ -9,18 +9,21 @@ Scenario: View request list
 	When I view requests
 	Then I should see a requests list
 
+	@NotKeyExample
 Scenario: See text request
 	Given I am an agent
 	And I have an existing text request
 	When I view requests
 	Then I should see my existing text request
 
+	@NotKeyExample
 Scenario: See absence request
 	Given I am an agent
 	And I have an existing absence request
 	When I view requests
 	Then I should see my existing absence request
 
+	@NotKeyExample
 Scenario: Show created shift trade request
 	Given I am an agent
 	And I have created a shift trade request
@@ -29,12 +32,14 @@ Scenario: Show created shift trade request
 	When I view requests
 	Then I should see my existing shift trade request with subject 'swap with me'
 
+	@NotKeyExample
 Scenario: Show created overtime request
 	Given I am an agent
 	And I have created an overtime request with subject 'test overtime request'
 	When I am viewing requests
 	Then I should see my existing overtime request with subject 'test overtime request'
 
+	@NotKeyExample
 Scenario: Show status of a created shift trade request
 	Given I am an agent
 	And I have created a shift trade request
@@ -44,6 +49,7 @@ Scenario: Show status of a created shift trade request
 	And I am viewing requests
 	Then I should see my existing shift trade request with status waiting for other part
 
+	@NotKeyExample
 Scenario: Show status of a recieved shift trade request
 	Given I am an agent
 	And I have received a shift trade request
@@ -63,11 +69,13 @@ Scenario: Show received shift trade request
 	When I view requests
 	Then I should see my existing shift trade request with subject 'swap with me'
 
+	@NotKeyExample
 Scenario: Requests tab
 	Given I am an agent
 	When I am viewing an application page
 	Then I should be able to see requests link
 
+	@NotKeyExample
 Scenario: No access to requests tab 
 	Given I have a role with
          | Field                          | Value |
@@ -77,6 +85,7 @@ Scenario: No access to requests tab
 	When I am viewing an application page
 	Then I should not be able to see requests link
 
+	@NotKeyExample
 Scenario: No access to requests page
 	Given I have a role with
          | Field                          | Value |
@@ -87,36 +96,42 @@ Scenario: No access to requests page
 	When I navigate to the requests page
 	Then I should see an error message
 
+	@NotKeyExample
 Scenario: No requests
 	Given I am an agent
 	And I have no existing requests
 	When I view requests
 	Then I should see a user-friendly message explaining that no requests exists
 
+	@NotKeyExample
 Scenario: Default sorting
 	Given I am an agent
 	And I have 2 existing request changed on different times
 	When I view requests
 	Then I should see that the list is sorted on changed date and time
 
+	@NotKeyExample
 Scenario: Show single page
 	Given I am an agent
 	And I have more than one page of requests
 	When I view requests
 	Then I should only see one page of requests
 
+	@NotKeyExample
 Scenario: Indicate that there are more items to load
 	Given I am an agent
 	And I have more than one page of requests
 	When I view requests
 	Then I should see an indication that there are more requests
 
+	@NotKeyExample
 Scenario: Hide indication that there are more items to load if no more items
 	Given I am an agent
 	And I have an existing absence request
 	When I view requests
 	Then I should not see an indication that there are more requests
 
+	@NotKeyExample
 Scenario: Show auto denied shift trade request for sender
 	Given I am an agent
 	And I have created a shift trade request

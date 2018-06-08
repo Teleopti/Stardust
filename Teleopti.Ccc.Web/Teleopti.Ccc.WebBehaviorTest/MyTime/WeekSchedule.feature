@@ -86,6 +86,7 @@ Scenario: View night shift
 	Then I should not see the end of the shift on date '2012-08-27'
 	And I should see the the shift ending at '04:00' on date '2012-08-28'
 	
+	@NotKeyExample
 Scenario: Do not show unpublished schedule
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule to 2012-08-27'
@@ -97,6 +98,7 @@ Scenario: Do not show unpublished schedule
 	When I view my week schedule for date '2012-08-28'
 	Then I should not see any shifts on date '2012-08-28'
 	
+	@NotKeyExample
 Scenario: Do not show unpublished schedule for part of week
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule to 2012-08-28'
@@ -124,6 +126,7 @@ Scenario: View public note
 	When I view my week schedule for date '2012-08-28'
 	Then I should see the public note on date '2012-08-28'
 
+	@NotKeyExample
 Scenario: Show text request symbol
 	Given I have the role 'Full access to mytime'
 	And I have an existing text request with
@@ -133,6 +136,7 @@ Scenario: Show text request symbol
 	When I view my week schedule for date '2013-10-03'
 	Then I should see a symbol at the top of the schedule for date '2013-10-03'
 
+	@NotKeyExample
 Scenario: Multiple day text requests symbol
 	Given I have the role 'Full access to mytime'
 	And I have an existing text request with
@@ -143,6 +147,7 @@ Scenario: Multiple day text requests symbol
 	Then I should see a symbol at the top of the schedule for date '2013-10-03'
 	And I should not see a symbol at the top of the schedule for date '2013-10-04'
 
+	@NotKeyExample
 Scenario: Show both text and absence requests
 	Given I have the role 'Full access to mytime'
 	And I have an existing absence request with
@@ -152,6 +157,7 @@ Scenario: Show both text and absence requests
 	When I view my week schedule for date '2013-10-03'
 	Then I should see a symbol at the top of the schedule for date '2013-10-03'
 
+	@NotKeyExample
 Scenario: Navigate to request page by clicking request symbol
 	Given I have the role 'Full access to mytime'
 	And I have an existing text request with
@@ -162,6 +168,7 @@ Scenario: Navigate to request page by clicking request symbol
 	And I click the request symbol for date '2013-10-03'
 	Then I should see request page
 
+	@NotKeyExample
 Scenario: Navigate to current week
 	Given I have the role 'Full access to mytime'
 	And the time is '2030-01-01 07:00'
@@ -200,6 +207,7 @@ Scenario: Show timeline with schedule
 	| end timeline				| 20:00 |
 	| number of timeline labels	| 13    |
 
+	@NotKeyExample
 Scenario: Show timeline with night shift
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
@@ -216,6 +224,7 @@ Scenario: Show timeline with night shift
 	| end timeline				| 23:00 |
 	| number of timeline labels	| 24    |
 
+	@NotKeyExample
 Scenario: Show timeline with night shift from the last day of the previous week
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
@@ -232,6 +241,7 @@ Scenario: Show timeline with night shift from the last day of the previous week
 	| end timeline				| 4:00	|
 	| number of timeline labels	| 5		|
 
+	@NotKeyExample
 Scenario: Show timeline with night shift starting on the last day of current week
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
@@ -248,6 +258,7 @@ Scenario: Show timeline with night shift starting on the last day of current wee
 	| end timeline				| 23:00 |
 	| number of timeline labels	| 4		|
 
+	@NotKeyExample
 Scenario: Show activity at correct times
 	Given I have the role 'Full access to mytime'
 	And I am swedish
@@ -279,6 +290,7 @@ Scenario: Update schedule when schedule has changed
 	And My schedule between '2013-08-28 12:00' to '2013-08-28 15:00' reloads
 	Then I should see activities on date '2012-08-28'
 
+	@NotKeyExample
 Scenario: Show black day summary text when background color is white 
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
@@ -291,6 +303,7 @@ Scenario: Show black day summary text when background color is white
 	When I view my week schedule for date '2013-01-30'
 	Then I should see the day summary text for date '2013-01-30' in 'black'
 
+	@NotKeyExample
 Scenario: Show white day summary text when background color is black 
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
@@ -303,6 +316,7 @@ Scenario: Show white day summary text when background color is black
 	When I view my week schedule for date '2013-01-30'
 	Then I should see the day summary text for date '2013-01-30' in 'white'
 
+	@NotKeyExample
 Scenario: Show black activity text when activity background color is white
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
@@ -315,6 +329,7 @@ Scenario: Show black activity text when activity background color is white
 	When I view my week schedule for date '2013-01-30'
 	Then I should see the text for date '2013-01-30' in 'black'
 
+	@NotKeyExample
 Scenario: Show white activity text when activity background color is black
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
@@ -327,6 +342,7 @@ Scenario: Show white activity text when activity background color is black
 	When I view my week schedule for date '2013-01-30'
 	Then I should see the text for date '2013-01-30' in 'white'
 
+	@NotKeyExample
 Scenario: Show white absence text when absence background color is black
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
@@ -337,6 +353,7 @@ Scenario: Show white absence text when absence background color is black
 	When I view my week schedule for date '2013-01-01'
 	Then I should see the text for date '2013-01-01' in 'white'
 
+	@NotKeyExample
 Scenario: Show black absence text when absence background color is white
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
@@ -347,6 +364,7 @@ Scenario: Show black absence text when absence background color is white
 	When I view my week schedule for date '2013-01-01'
 	Then I should see the text for date '2013-01-01' in 'black'
 
+	@NotKeyExample
 Scenario: Should not show absence probability option when staffing check is not intraday staffing check
 	Given I have the role 'Full access to mytime'
 	And I am englishspeaking swede
@@ -354,6 +372,7 @@ Scenario: Should not show absence probability option when staffing check is not 
 	When I view my week schedule for date '2013-01-01'
 	Then I should not see option 'Show absence probability'in probability value list
 
+	@NotKeyExample
 Scenario: View Correct Date for Bulgarian culture
 	Given I have the role 'Full access to mytime'
 	And the time is '2030-10-03 12:00'

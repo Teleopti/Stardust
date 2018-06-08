@@ -3,6 +3,7 @@
 	As a student agent
 	I want to view and submit my availability
 
+	@NotKeyExample
 Scenario: View student availability
 	Given I am a student agent
 	And the time is '2014-05-02 08:00'
@@ -21,12 +22,14 @@ Scenario: See student availability
 	When I view student availability for '2014-05-02'
 	Then I should see my existing student availability 
 
+	@NotKeyExample
 Scenario: No virtual schedule period
 	Given I am a student agent
 	And I do not have a virtual schedule period
 	When I view student availability
 	Then I should see a user-friendly message explaining I dont have anything to view
 
+	@NotKeyExample
 Scenario: No access to student availability menu item
 	Given I have a role with
          | Field                          | Value |
@@ -34,6 +37,7 @@ Scenario: No access to student availability menu item
 	When I am viewing an application page
 	Then I should not be able to see student availability link
 
+	@NotKeyExample
 Scenario: No access to student availability page
 	Given I have a role with
          | Field                          | Value |
@@ -42,6 +46,7 @@ Scenario: No access to student availability page
 	And I navigate to the student availability page
 	Then I should see an error message
 	
+	@NotKeyExample
 Scenario: Navigate next virtual schedule period
 	Given I am a student agent
 	And I have several virtual schedule periods
@@ -49,6 +54,7 @@ Scenario: Navigate next virtual schedule period
 	When I click next virtual schedule period button
 	Then I should see the virtual schedule period from '2001-01-15' to '2001-01-28'
 
+	@NotKeyExample
 Scenario: Navigate previous virtual schedule period
 	Given I am a student agent
 	And I have several virtual schedule periods
@@ -56,6 +62,7 @@ Scenario: Navigate previous virtual schedule period
 	When I click previous virtual schedule period button
 	Then I should see the virtual schedule period from '2001-01-15' to '2001-01-28'
 
+	@NotKeyExample
 Scenario: Can not edit student availability without workflow control set
 	Given I am a student agent
 	And I do not have a workflow control set
@@ -70,6 +77,7 @@ Scenario: Display student availability period information
 	When I view student availability
 	Then I should see the student availability period information with period '1900-04-30' to '2077-11-16', and input period '1900-04-30' to '2077-11-16'
 	
+	@NotKeyExample
 Scenario: Can not edit student availability in closed period
 	Given I am a student agent
 	And I have a workflow control set with closed student availability periods
@@ -83,6 +91,7 @@ Scenario: Can edit student availability in open period
 	When I view student availability
 	Then the student availabilty calendar should be editable
 
+	@NotKeyExample
 Scenario: Default to first virtual schedule period overlapping open student availability period
 	Given I am a student agent
 	And the time is '2014-05-02 08:00'
@@ -110,7 +119,7 @@ Scenario: Should indicate days have no valid shift for availability setting
 	When I view student availability
 	Then I should see there is no valid shift for my availability on '2014-05-03'
 
-
+	@NotKeyExample
 Scenario: Should show valid shift for days with availability setting
 	Given I am a student agent
 	And I have a shift bag with start times 8 to 9 and end times 12 to 22
@@ -123,7 +132,7 @@ Scenario: Should show valid shift for days with availability setting
 	When I view student availability
 	Then I should see valid shift for my availability on '2014-05-03'
 
-
+	@NotKeyExample
 Scenario:  Should display period feedback 
 	Given I am a student agent
 	And the time is '2014-05-02 08:00'

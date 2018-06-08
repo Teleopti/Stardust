@@ -12,11 +12,13 @@ Background:
 	| Name          | No access to ASM |
 	| Access To Asm | False            |
 	
+	@NotKeyExample
 Scenario: Do not show message tab if no permission to ASM
 	Given I have the role 'No access to ASM'
 	When I am viewing week schedule
 	Then Message tab should not be visible 
 
+	@NotKeyExample
 Scenario: Show message tab 
 	Given I have the role 'Full access to mytime'
 	When I am viewing week schedule
@@ -30,6 +32,7 @@ Scenario: Indicate new message at logon
 	When I am viewing week schedule
 	Then I should be notified that I have '1' unread message(s)
 
+	@NotKeyExample
 Scenario: Navigate to message tab
 	Given I have the role 'Full access to mytime'
 	And I have no unread messages
@@ -38,6 +41,7 @@ Scenario: Navigate to message tab
 	Then I should not see any messages
 	And I should see a user-friendly message explaining I dont have any messages
 
+	@NotKeyExample
 Scenario: View unread messages
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with
@@ -67,6 +71,7 @@ Scenario: Confirm message is read
 	Then I should not see any messages
 	And I should see a user-friendly message explaining I dont have any messages
 
+	@NotKeyExample
 Scenario: Confirm message is read after entering a textreply
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with
@@ -97,12 +102,14 @@ Scenario: Reduce number of unread messages in message tab title
 	And I am viewing week schedule
 	Then I should be notified that I have '1' unread message(s)
 
+	@NotKeyExample
 Scenario: Receive a new message when viewing message page
 	Given I have the role 'Full access to mytime'
 	And I am viewing messages
 	When I receive message number '1'
 	Then I should see '1' message(s) in the list
 
+	@NotKeyExample
 Scenario: Open unread message where text reply is allowed
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with
@@ -130,6 +137,7 @@ Scenario: See reply dialogue in message text
 	| Ok if you buy me dinner?  |
 	| It´s a deal!				|
 
+	@NotKeyExample
 Scenario: Allow empty reply
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with
@@ -141,6 +149,7 @@ Scenario: Allow empty reply
 	When I click on the message with the title 'New message'
 	Then I should be able to send response for the message with the title 'New message'
  
+ @NotKeyExample
 Scenario: Show reply options for message with multiple options
 Given I have the role 'Full access to mytime'
 	And I have an unread message with
@@ -174,6 +183,7 @@ Given I have the role 'Full access to mytime'
 	And I confirm reading the message with the title 'Ashley is ill'
 	Then I should not see any messages
 
+	@NotKeyExample
 Scenario: Enable confirmbutton when user has selected a replyoption
 Given I have the role 'Full access to mytime'
 	And I have an unread message with
@@ -188,6 +198,7 @@ Given I have the role 'Full access to mytime'
 	And I choose reply option 'No' for the message with the title 'New message'
 	Then I should be able to send response for the message with the title 'New message'
  
+ @NotKeyExample
 Scenario: Confirmbutton should be disabled when user hasnt selected a replyoption
 Given I have the role 'Full access to mytime'
 	And I have an unread message with
@@ -216,6 +227,7 @@ Given I have the role 'Full access to mytime'
 	And I choose reply option 'Yes' for the message with the title 'New message'
 	Then the reply option 'No' should not be selected for the message with the title 'New message'
 
+	@NotKeyExample
 Scenario: Do not show replyoptions if there is only one option
 Given I have the role 'Full access to mytime'
 	And I have an unread message with
@@ -229,6 +241,7 @@ Given I have the role 'Full access to mytime'
 	Then I should not see any options for the message with the title 'New message'
 	And I should be able to send response for the message with the title 'New message'
 
+	@NotKeyExample
 Scenario: User do not have to write textreply if she selects one of the replyoptions
 Given I have the role 'Full access to mytime'
 	And I have an unread message with

@@ -759,4 +759,20 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		expect(vm.organizationPickerSelectionText).toContain("Site");
 	});
 
+	it('should display empty string', function (t) {
+
+		t.backend.withOrganization({
+			Id: 'id1',
+			Name: 'Site1'
+		})
+		.withOrganization({
+			Id: 'id2',
+			Name: 'Site2'
+		});
+
+		var vm = t.createController();
+
+		expect(vm.organizationPickerSelectionText).toEqual("");
+	});
+
 });

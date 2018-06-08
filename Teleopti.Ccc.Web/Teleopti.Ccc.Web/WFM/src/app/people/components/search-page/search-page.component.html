@@ -30,7 +30,7 @@
       <mat-menu #menu="matMenu">
         <button mat-menu-item (click)="selectAllMatches()" data-test-selectallonallpages-button>Select all on all pages</button>
       </mat-menu>
-      <mat-table #table [dataSource]="dataSource" data-test-search>
+      <mat-table #table matSort (matSortChange)="sortData($event)" [dataSource]="dataSource" data-test-search>
 
         <!-- Checkbox Column -->
         <ng-container matColumnDef="select">
@@ -46,13 +46,13 @@
         </ng-container>
 
         <ng-container matColumnDef="FirstName">
-          <mat-header-cell *matHeaderCellDef> First name </mat-header-cell>
+          <mat-header-cell mat-sort-header *matHeaderCellDef data-test-sort-fn> First name </mat-header-cell>
           <mat-cell *matCellDef="let person" data-test-person-firstname> {{person.FirstName}} </mat-cell>
         </ng-container>
 
         <!-- Name Column -->
         <ng-container matColumnDef="LastName">
-          <mat-header-cell *matHeaderCellDef> Last name </mat-header-cell>
+          <mat-header-cell mat-sort-header *matHeaderCellDef> Last name </mat-header-cell>
           <mat-cell *matCellDef="let person" data-test-person-lastname> {{person.LastName}} </mat-cell>
         </ng-container>
 
@@ -62,7 +62,7 @@
         </ng-container>
 
         <ng-container matColumnDef="SiteTeam">
-          <mat-header-cell *matHeaderCellDef> Site/Team </mat-header-cell>
+          <mat-header-cell mat-sort-header *matHeaderCellDef> Site/Team </mat-header-cell>
           <mat-cell *matCellDef="let person" data-test-person-site-team> {{person.Site}}/{{person.Team}} </mat-cell>
         </ng-container>
 

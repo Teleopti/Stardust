@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(day, DataMaker.Data().MyCulture).ToString("d.M.yyyy");
 			var lastDayOfWeek = DateHelper.GetLastDateInWeek(day, DataMaker.Data().MyCulture).ToString("d.M.yyyy");
 
-			Browser.Interactions.AssertInputValue($".form-control.text-center.date-input-style", string.Format("{0} 'Г.' - {1} 'Г.'", firstDayOfWeek, lastDayOfWeek));
+			Browser.Interactions.AssertInputValue($".form-control.text-center.date-input-style", string.Format("{0} Г. - {1} Г.", firstDayOfWeek, lastDayOfWeek));
 		}
 
 

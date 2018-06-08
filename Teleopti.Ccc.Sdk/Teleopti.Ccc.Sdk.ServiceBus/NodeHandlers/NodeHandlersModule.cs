@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			builder.RegisterType<RecalculateBadgeHandler>().As<IHandle<RecalculateBadgeEvent>>().SingleInstance().ApplyAspects();
 			builder.RegisterType<ScheduleDayDifferenceSaver>().As<IScheduleDayDifferenceSaver>().SingleInstance();
 			builder.RegisterType<RefreshPayrollFormatsHandler>().As<IHandle<RefreshPayrollFormatsEvent>>().SingleInstance();
+			builder.RegisterType<IntradayToolHandler>().As<IHandle<IntradayToolEvent>>().SingleInstance();
 		}
 	}
 }

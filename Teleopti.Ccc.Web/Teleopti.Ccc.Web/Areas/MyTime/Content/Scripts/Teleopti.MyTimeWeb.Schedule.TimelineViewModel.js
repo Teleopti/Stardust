@@ -1,4 +1,4 @@
-Teleopti.MyTimeWeb.Schedule.TimelineViewModel = function(rawTimeline, scheduleHeight, offset) {
+Teleopti.MyTimeWeb.Schedule.TimelineViewModel = function(rawTimeline, scheduleHeight, offset, useFixedContainerHeight, index) {
 	var self = this;
 	var fullDayHour = "1.00";
 	var hourMinuteSecond = rawTimeline.Time.split(':');
@@ -21,9 +21,13 @@ Teleopti.MyTimeWeb.Schedule.TimelineViewModel = function(rawTimeline, scheduleHe
 		.add('minutes', self.minutes);
 
 	self.timeText = rawTimeline.TimeLineDisplay;
+	self.time = rawTimeline.Time;
 
 	self.topPosition = ko.computed(function() {
-		return Math.round(scheduleHeight * self.positionPercentage()) + (offset || 0) + 'px';
+		if (useFixedContainerHeight)
+			return Math.round(scheduleHeight * self.positionPercentage()) + (offset || 0) + 'px';
+		else
+			return index * 60 + (offset || 0) + 'px';
 	});
 
 	self.isHour = ko.computed(function() {

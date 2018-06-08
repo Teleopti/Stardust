@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
@@ -19,71 +21,22 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 			);
 			_mappedRule = new Lazy<MappedRule>(() => context.StateMapper.RuleFor(context.BusinessUnitId, context.State.StateGroupId(), context.Schedule.CurrentActivityId()));
 		}
-		
-		public bool StateChanged()
-		{
-			return _mappedState.Value?.StateGroupId != _context.Stored.StateGroupId;
-		}
 
-		public Guid? StateGroupId()
-		{
-			return _mappedState.Value?.StateGroupId;
-		}
+		public bool IsLoggedIn() => StateGroupId().HasValue ? !_context.StateMapper.LoggedOutStateGroupIds().Contains(StateGroupId().Value): true;
+		public bool IsLoggedOut() => !IsLoggedIn();
 
-		public string StateGroupName()
-		{
-			return _mappedState.Value?.StateGroupName;
-		}
+		public bool StateChanged() => _mappedState.Value?.StateGroupId != _context.Stored.StateGroupId;
+		public Guid? StateGroupId() => _mappedState.Value?.StateGroupId;
+		public string StateGroupName() => _mappedState.Value?.StateGroupName;
 
+		public bool RuleChanged() => _mappedRule.Value?.RuleId != _context.Stored.RuleId;
+		public Guid? RuleId() => _mappedRule.Value?.RuleId;
+		public string RuleName() => _mappedRule.Value?.RuleName;
+		public int? RuleDisplayColor() => _mappedRule.Value?.DisplayColor;
+		public double? StaffingEffect() => _mappedRule.Value?.StaffingEffect;
 
-
-		public bool RuleChanged()
-		{
-			return _mappedRule.Value?.RuleId != _context.Stored.RuleId;
-		}
-
-		public Guid? RuleId()
-		{
-			return _mappedRule.Value?.RuleId;
-		}
-
-		public string RuleName()
-		{
-			return _mappedRule.Value?.RuleName;
-		}
-
-		public int? RuleDisplayColor()
-		{
-			return _mappedRule.Value?.DisplayColor;
-		}
-
-		public double? StaffingEffect()
-		{
-			return _mappedRule.Value?.StaffingEffect;
-		}
-
-		public Adherence? Adherence()
-		{
-			return _mappedRule.Value?.Adherence;
-		}
-
-
-
-		public bool IsAlarm()
-		{
-			return _mappedRule.Value?.IsAlarm ?? false;
-		}
-
-		public int AlarmThresholdTime()
-		{
-			return _mappedRule.Value?.ThresholdTime ?? 0;
-		}
-
-		public int? AlarmColor()
-		{
-			return _mappedRule.Value?.AlarmColor;
-		}
-
-
+		public bool IsAlarm() => _mappedRule.Value?.IsAlarm ?? false;
+		public int AlarmThresholdTime() => _mappedRule.Value?.ThresholdTime ?? 0;
+		public int? AlarmColor() => _mappedRule.Value?.AlarmColor;
 	}
 }

@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 		protected override void Load(ContainerBuilder builder)
 		{
 			var pathToToggle = _iocArgs.FeatureToggle;
-			var toggleModeArg = _iocArgs.ToggleMode;
 
 			if (string.IsNullOrEmpty(pathToToggle))
 			{
@@ -49,7 +48,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 					const string developerMode = "ALL";
 					const string rcMode = "RC";
 
-					var toggleMode = toggleModeArg?.Trim() ?? string.Empty;
+					var toggleMode = _iocArgs.ToggleMode?.Trim() ?? string.Empty;
 
 					var defaultSpecification = toggleMode.Equals(developerMode, StringComparison.OrdinalIgnoreCase)
 						? (IToggleSpecification) new TrueSpecification()

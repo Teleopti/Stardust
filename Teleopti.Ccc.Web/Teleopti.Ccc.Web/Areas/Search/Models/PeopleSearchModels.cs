@@ -10,6 +10,8 @@ namespace Teleopti.Ccc.Web.Areas.Search.Models
 		public string KeyWord { get; set; }
 		public int PageSize { get; set; } 
 		public int PageIndex { get; set; }
+		public int Direction { get; set; }
+		public int SortColumn { get; set; }
 	}
 
 	public class FindPeopleViewModel

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource, PageEvent } from '@angular/material';
+import { MatTableDataSource, PageEvent, Sort } from '@angular/material';
 
 import {
 	NavigationService,
@@ -7,13 +7,21 @@ import {
 	RolesService,
 	WorkspaceService,
 	PeopleSearchResult,
-	SearchService
+	SearchService,
+	COLUMNS,
+	DIRECTION
 } from '../../services';
 import { Person, Role } from '../../types';
 import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { SearchPageService } from './search-page.service';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { SrvRecord } from 'dns';
+
+interface SortModel {
+	active: 'FirstName' | 'LastName' | 'EmpNum' | 'Note' | 'TerminalDate' | 'TeamSite';
+	direction: 'asc' | 'desc' | '';
+}
 
 @Component({
 	selector: 'people-search-page',
@@ -75,13 +83,27 @@ export class SearchPageComponent implements OnInit {
 		const query: PeopleSearchQuery = {
 			keyword: this.searchService.keyword,
 			pageSize: this.searchService.pageSize,
-			pageIndex: this.searchService.pageIndex
+			pageIndex: this.searchService.pageIndex,
+			sortColumn: this.searchService.sortColumn,
+			direction: this.searchService.direction
 		};
 		this.searchPageService.searchPeople(query).subscribe({
 			next: searchResult => {
 				this.pagination.length = searchResult.TotalRows;
 			}
 		});
+	}
+
+	sortData(data: SortModel) {
+		if (data.direction === '') {
+			this.searchService.sortColumn = COLUMNS.LastName;
+			this.searchService.direction = DIRECTION.asc;
+		} else {
+			this.searchService.sortColumn = COLUMNS[data.active];
+			this.searchService.direction = DIRECTION[data.direction];
+		}
+
+		this.searchPeople();
 	}
 
 	toggleSelectedPerson(id: string): void {

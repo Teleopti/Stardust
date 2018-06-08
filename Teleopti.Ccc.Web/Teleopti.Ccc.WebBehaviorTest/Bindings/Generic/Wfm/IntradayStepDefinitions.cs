@@ -196,8 +196,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void GivenIPickTheSkill(string skillName)
 		{
 			Browser.Interactions.AssertExists("the-skill-picker");
-			Browser.Interactions.ClickVisibleOnly("the-skill-picker .con-flex:nth-child(1n) div.wfm-form input");
-			Browser.Interactions.ClickContaining("the-skill-picker .con-flex:nth-child(1n) div.wfm-form .wfm-dropdown-panel li", skillName);
+			const string skillPicker = "the-skill-picker .con-flex:nth-child(1n) div.wfm-form";
+			if (Browser.Interactions.IsVisible(skillPicker + " .mdi-close"))
+			{
+				Browser.Interactions.ClickVisibleOnly(skillPicker + " .mdi-close");
+			}
+			else
+			{
+				Browser.Interactions.ClickVisibleOnly(skillPicker + " input");
+			}
+			Browser.Interactions.ClickContaining(skillPicker + " .wfm-dropdown-panel li", skillName);
 		}
 
 		[Given(@"I pick the skillgroup '(.*)'")]
@@ -205,8 +213,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void GivenIPickTheSkillGroup(string skillName)
 		{
 			Browser.Interactions.AssertExists("the-skill-picker");
-			Browser.Interactions.ClickVisibleOnly("the-skill-picker .con-flex:nth-child(2n) div.wfm-form input");
-			Browser.Interactions.ClickContaining("the-skill-picker .con-flex:nth-child(2n) div.wfm-form .wfm-dropdown-panel li", skillName);
+			const string skillGroupPicker = "the-skill-picker .con-flex:nth-child(2n) div.wfm-form";
+			if (Browser.Interactions.IsVisible(skillGroupPicker + " .mdi-close"))
+			{
+				Browser.Interactions.ClickVisibleOnly(skillGroupPicker + " .mdi-close");
+			}
+			else
+			{
+				Browser.Interactions.ClickVisibleOnly(skillGroupPicker + " input");
+			}
+			Browser.Interactions.ClickContaining(skillGroupPicker + " .wfm-dropdown-panel li", skillName);
 		}
 
 		[Given(@"I select the skill '(.*)'")]
@@ -240,27 +256,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Then(@"I close the Skill Manager")]
 		public void WhenICloseTheSkillManager()
 		{
-			//try
-			//{
-			//	var n = 10;
-			//	while (Browser.Interactions.IsVisible("#exit_sgm") && !Browser.Interactions.IsVisible("#confirmExitButton"))
-			//	{
-			//		Browser.Interactions.Click("#exit_sgm");
-			//		n--;
-			//		if (n == 0)
-			//		{
-			//			break;
-			//		}
-			//	}
-			//	if (Browser.Interactions.IsVisible("#confirmExitButton"))
-			//		Browser.Interactions.Click("#confirmExitButton");
-			//}
-			//catch (Exception e)
-			//{
-			//	Console.WriteLine(e);
-			//	throw;
-			//}
-
 			Browser.Interactions.ClickVisibleOnly("#exit_sgm");
 			if (Browser.Interactions.IsVisible("#confirmExitButton"))
 			{
@@ -353,22 +348,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void ThenIShouldSeeIncomingTrafficDataInTheChart()
 		{
 			Browser.Interactions.AssertJavascriptResultContains(
-				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var scope = angular.element(document.querySelector('md-tabs')).scope();" +
 				"var forecastedCalls = parseFloat(scope.vm.viewObj.forecastedCallsObj.series[1]);" +
 				"return (forecastedCalls >= 0);"
 				, "True");
 			Browser.Interactions.AssertJavascriptResultContains(
-				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var scope = angular.element(document.querySelector('md-tabs')).scope();" +
 				"var calls = parseFloat(scope.vm.viewObj.actualCallsObj.series[1]);" +
 				"return (calls >= 0);"
 				, "True");
 			Browser.Interactions.AssertJavascriptResultContains(
-				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var scope = angular.element(document.querySelector('md-tabs')).scope();" +
 				"var faht = parseFloat(scope.vm.viewObj.forecastedAverageHandleTimeObj.series[1]);" +
 				"return (faht >= 0);"
 				, "True");
 			Browser.Interactions.AssertJavascriptResultContains(
-				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var scope = angular.element(document.querySelector('md-tabs')).scope();" +
 				"var aaht = parseFloat(scope.vm.viewObj.actualAverageHandleTimeObj.series[1]);" +
 				"return (aaht >= 0);"
 				, "True");
@@ -408,22 +403,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void ThenIShouldSeePerformanceDataInTheChart()
 		{
 			Browser.Interactions.AssertJavascriptResultContains(
-				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var scope = angular.element(document.querySelector('md-tabs')).scope();" +
 				"var asa = parseFloat(scope.vm.viewObj.averageSpeedOfAnswerObj.series[1]);" +
 				"return (asa >= 0);"
 				, "True");
 			Browser.Interactions.AssertJavascriptResultContains(
-				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var scope = angular.element(document.querySelector('md-tabs')).scope();" +
 				"var abandonedRate = parseFloat(scope.vm.viewObj.abandonedRateObj.series[1]);" +
 				"return (abandonedRate >= 0);"
 				, "True");
 			Browser.Interactions.AssertJavascriptResultContains(
-				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var scope = angular.element(document.querySelector('md-tabs')).scope();" +
 				"var sl = parseFloat(scope.vm.viewObj.serviceLevelObj.series[1]);" +
 				"return (sl >= 0);"
 				, "True");
 			Browser.Interactions.AssertJavascriptResultContains(
-				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var scope = angular.element(document.querySelector('md-tabs')).scope();" +
 				"var esl = parseFloat(scope.vm.viewObj.estimatedServiceLevelObj.series[1]);" +
 				"return (esl >= 0) + ' |scopeViewObjSeries: ' + scope.vm.viewObj.estimatedServiceLevelObj.series[1] + ' |esl: ' + esl;"
 				, "true");
@@ -456,18 +451,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void ThenIShouldSeeStaffingDataInTheChart()
 		{
 			Browser.Interactions.AssertJavascriptResultContains(
-				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var scope = angular.element(document.querySelector('md-tabs')).scope();" +
 				"var forecastedStaffing = parseFloat(scope.vm.viewObj.forecastedStaffing.series[1]);" +
 				"return (forecastedStaffing >= 0);"
 				, "True");
 			Browser.Interactions.AssertJavascriptResultContains(
-				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var scope = angular.element(document.querySelector('md-tabs')).scope();" +
 				"var count = scope.vm.viewObj.forecastedStaffing.updatedSeries.length;" +
 				"var forecastedStaffing = parseFloat(scope.vm.viewObj.forecastedStaffing.updatedSeries[count-1]);" +
 				"return (forecastedStaffing >= 0);"
 				, "True");
 			Browser.Interactions.AssertJavascriptResultContains(
-				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var scope = angular.element(document.querySelector('md-tabs')).scope();" +
 				"var scheduledStaffing = parseFloat(scope.vm.viewObj.scheduledStaffing[1]);" +
 				"return (scheduledStaffing >= 0) + ' |sopeViewObjScheduledStaffing: ' + scope.vm.viewObj.scheduledStaffing[1] + ' |scheduledStaffing: ' + scheduledStaffing;"
 				, "true");
@@ -478,7 +473,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void ThenIShouldSeeForecastedStaffingDataInTheChart()
 		{
 			Browser.Interactions.AssertJavascriptResultContains(
-				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var scope = angular.element(document.querySelector('md-tabs')).scope();" +
 				"var forecastedStaffing = parseFloat(scope.vm.viewObj.forecastedStaffing.series[1]);" +
 				"return (forecastedStaffing >= 0);"
 				, "True");
@@ -514,9 +509,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I change date offset to '(.*)'")]
 		public void WhenIChangeDateOffsetTo(int offset)
 		{
-			Browser.Interactions.Javascript("var scope = angular.element(document.querySelector('date-offset')).scope();" +
-											$"scope.vm.changeChosenOffset('{offset}');" +
-											"setTimeout(function(){console.log('delay')}, 1000);");
+			var selector = $"div#materialcontainer div:nth-child({8 + offset})";
+			Browser.Interactions.ClickVisibleOnly(selector);
+			//Browser.Interactions.Javascript("var scope = angular.element(document.querySelector('date-offset')).scope();" +
+			//								$"scope.vm.changeChosenOffset('{offset}');" +
+			//								"setTimeout(function(){console.log('delay')}, 1000);");
 		}
 
 		[Then(@"I should see the offset is set to '(.*)'")]

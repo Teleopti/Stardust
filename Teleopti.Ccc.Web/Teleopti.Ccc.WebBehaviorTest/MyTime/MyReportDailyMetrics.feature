@@ -25,18 +25,21 @@ Scenario: Show friendly message when no report data
 	When I navigate to my report for '2013-10-02'
 	Then I should see a user-friendly message explaining I dont have anything to view
 	
+	@NotKeyExample
 Scenario: Navigate within my report view to previous day
 	Given I am an agent
 	And I view my report for '2013-10-04'
 	When I navigate to the previous day
 	Then I should end up in my report for '2013-10-03'
 	
+	@NotKeyExample
 Scenario: Navigate within my report view to next day
 	Given I am an agent
 	And I view my report for '2013-10-04'
 	When I navigate to the next day
 	Then I should end up in my report for '2013-10-05'
 
+	@NotKeyExample
 Scenario: Navigate within my report using date picker
 	Given I am an agent
 	And I view my report for '2013-10-04'
@@ -57,6 +60,7 @@ Scenario: Navigate to detailed my queue metrics
 	When I choose to view my queue metrics
 	Then I should see the queue metrics report for '2014-05-15'
 
+	@NotKeyExample
 Scenario: No permission to my report queue metrics
 	Given there is a role with
 	| Field                             | Value                                |

@@ -54,9 +54,9 @@
 	) {
 		var _ = $rootScope._;
 		var originalGroups = [];
-		var isNew = true;
 		var vm = this;
 
+		vm.isNew = true;
 		vm.selectedTabIndex = 0;
 		vm.selectedGroupIndex = -1;
 		vm.skills = [];
@@ -123,12 +123,12 @@
 					Saved: false
 				}
 			);
-			isNew = true;
+			vm.isNew = true;
 			vm.editGroupNameBox = true;
-			ev.stopPropagation();
+			ev && ev.stopPropagation();
 		};
 
-		vm.deleteSkillGroup = function() {
+		vm.deleteSkillGroup = function(deleted) {
 			if (
 				vm.skillGroups[vm.selectedGroupIndex].Id.indexOf('Copy') === 0 ||
 				vm.skillGroups[vm.selectedGroupIndex].Id.indexOf('New') === 0
@@ -142,6 +142,7 @@
 					getAllSkillGroups();
 					unselectAllSkills();
 					vm.skillGroups[vm.selectedGroupIndex] = null;
+					deleted();
 				});
 			}
 		};
@@ -150,7 +151,7 @@
 			vm.skillGroups[vm.selectedGroupIndex] = skillGroup;
 			vm.newGroupName = skillGroup.Name;
 			vm.editGroupNameBox = true;
-			isNew = false;
+			vm.isNew = false;
 			vm.oldName = vm.skillGroups[vm.selectedGroupIndex].Name;
 		};
 
@@ -158,7 +159,7 @@
 			if (vm.stateName.length > 0) {
 				$state.go(vm.stateName);
 			} else {
-				$state.go($state.params.returnState, { isNewSkillArea: false });
+				vm.$state.go($state.params.returnState, { isNewSkillArea: false });
 			}
 		};
 
@@ -219,7 +220,7 @@
 		};
 
 		vm.saveNameEdit = function(ev) {
-			if (isNew) {
+			if (vm.isNew) {
 				if (vm.newGroupName && vm.newGroupName.length > 0) {
 					vm.newGroup.Name = vm.newGroupName;
 					vm.skills = vm.allSkills.slice();
@@ -232,7 +233,9 @@
 				vm.skillGroups[vm.selectedGroupIndex].Name = vm.newGroupName;
 			}
 			setSaveableState();
-			ev.stopPropagation();
+			if (ev) {
+				ev.stopPropagation();
+			}
 			vm.editGroupNameBox = false;
 			vm.newGroupName = '';
 		};
@@ -259,7 +262,7 @@
 				})
 				.$promise.then(function(result) {
 					notifySkillGroupCreation();
-					$state.go('intraday', { isNewSkillArea: true });
+					vm.$state.go('intraday', { isNewSkillArea: true });
 				});
 		};
 

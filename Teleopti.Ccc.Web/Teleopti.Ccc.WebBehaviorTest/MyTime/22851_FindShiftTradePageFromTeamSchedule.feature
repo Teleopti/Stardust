@@ -10,7 +10,7 @@ Scenario: Initialize a shift trade from team schedule and also see existing requ
 	Then I should navigate to shift trade for '2013-10-07'
 	And I should see my existing text request
 	
-
+	@NotKeyExample
 Scenario: Can not see shift trade button if no permission
 	Given I have a role with
          | Field                          | Value |

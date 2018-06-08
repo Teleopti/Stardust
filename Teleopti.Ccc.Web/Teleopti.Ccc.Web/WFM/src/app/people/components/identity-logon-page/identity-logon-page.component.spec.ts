@@ -1,11 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { IdentityLogonPageComponent } from './identity-logon-page.component';
+import { configureTestSuite } from '../../../../configure-test-suit';
 import { PeopleModule } from '../../people.module';
+import { IdentityLogonPageComponent } from './identity-logon-page.component';
 
 describe('AppLogonPageComponent', () => {
 	let component: IdentityLogonPageComponent;
 	let fixture: ComponentFixture<IdentityLogonPageComponent>;
+
+	configureTestSuite();
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({

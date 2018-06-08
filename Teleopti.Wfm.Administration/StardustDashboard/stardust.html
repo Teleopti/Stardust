@@ -43,7 +43,19 @@
 						</button>
 					</div>
 				</div>
-			</div>		
+			</div>
+
+			<div ng-show="vm.showIntradayTool" class="panel panel-default ">
+				<div class="panel-heading">IntradayTool</div>
+				<div class="panel-body">
+					<p>If you see this in production please contact the support team. Do not use this in production!</p>
+					<div class="row" style="padding: 10px">
+						<button class="btn btn-primary" ng-click="vm.intradayToolGoWithTheFlow()">
+							<span class="text-white">Go with the flow</span>
+						</button>
+					</div>
+				</div>
+			</div>
 
 
 			<div class="panel panel-default ">
@@ -82,7 +94,7 @@
 						<tbody>
 						<tr ng-repeat="job in vm.FailedJobs">
 							<td>{{job.DataSource}}</td>
-							<td><a href="#StardustDashboard/jobs/{{job.JobId}}">{{job.Type}}</a></td>
+							<td><a target="_blank" href="#StardustDashboard/jobs/{{job.JobId}}">{{job.Type}}</a></td>
 							<td>{{job.Started | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 							<td>{{job.SentToWorkerNodeUri}}</td>
 							<td ng-class="job.Result=='Success' ? 'green' : (job.Result==null ? 'hide' : 'red')">{{job.Result}}</td>
@@ -94,7 +106,8 @@
 				</div>
 			</div>
 			<div class="panel panel-default ">
-				<div class="panel-heading">Queue
+				<div class="panel-heading">
+					Queue ({{vm.queueCount}})
 				</div>
 				<div class="panel-body">
 					<table ng-show="vm.anyQueuedJobs">
@@ -133,7 +146,7 @@
 						<tbody>
 						<tr ng-repeat="job in vm.RunningJobs">
 							<td>{{job.DataSource}}</td>
-							<td><a href="#StardustDashboard/jobs/{{job.JobId}}">{{job.Type}}</a></td>
+							<td><a target="_blank"  href="#StardustDashboard/jobs/{{job.JobId}}">{{job.Type}}</a></td>
 							<td>{{job.Started | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 							<td>{{job.SentToWorkerNodeUri}}</td>
 							<td ng-class="job.Result=='Success' ? 'green' : (job.Result==null ? 'hide' : 'red')">{{job.Result}}</td>

@@ -1,0 +1,1 @@
+-- Previously added stored procedure defined here moved to '/Programmability/03StoredProcedures/ReadModel.PersonFinderWithDataPermission.sql'

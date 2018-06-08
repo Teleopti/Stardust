@@ -75,6 +75,7 @@ Background:
 	| StartTime                     | 2030-01-04 08:00 |
 	| EndTime                       | 2030-01-04 17:00 |
 
+	@NotKeyExample
 Scenario: Alert agent before first activity starts
 	Given I have the role 'Full access to mytime'
 	And Alert Time setting is '180' seconds
@@ -101,6 +102,7 @@ Scenario: Alert agent before last activity ends
 	Then I should see a notify message contains text Current shift will end
 	And I should see a notify message contains text 5:00 PM
 
+	@NotKeyExample
 Scenario: Do not alert agent Before Alert Time
 	Given I have the role 'Full access to mytime'
 	And Alert Time setting is '120' seconds
@@ -108,14 +110,15 @@ Scenario: Do not alert agent Before Alert Time
 	When I am viewing week schedule
 	Then I should not see any notify
 
+	@NotKeyExample
 Scenario: Do not alert agent After Alert Time 
 	Given I have the role 'Full access to mytime'
 	And Alert Time setting is '60' seconds
 	And the time is '2030-01-01 11:45:01'
 	When I am viewing week schedule
-	
 	Then I should not see any notify
 
+	@NotKeyExample
 Scenario: Do not alert agent without permission for ASM
 	Given I have the role 'No access to ASM'
 	And Alert Time setting is '120' seconds
@@ -123,16 +126,17 @@ Scenario: Do not alert agent without permission for ASM
 	When I am viewing week schedule
 	Then I should not see any notify
 
+	@NotKeyExample
 Scenario: Automatical close pop up notify message
 	Given I have the role 'Full access to mytime'
 	And Alert Time setting is '120' seconds
 	And the time is '2030-01-01 10:58:00'
 	When I am viewing week schedule
-	
 	Then I should see a notify message contains text Lunch
 	And I should see a notify message contains text start
-	Then I should not see pop up notify message within one minute
+	And I should not see pop up notify message within one minute
 
+	@NotKeyExample
 Scenario: Do not show pop up notify message to agent without permission for ASM
 	Given I have the role 'No access to ASM'
 	And Alert Time setting is '120' seconds
@@ -140,6 +144,7 @@ Scenario: Do not show pop up notify message to agent without permission for ASM
 	When I am viewing week schedule
 	Then I should not see pop up notify message
 
+	@NotKeyExample
 Scenario: Should alert agent when now is between 2 shift
 	Given I have the role 'Full access to mytime'
 	And Alert Time setting is '180' seconds	
@@ -149,6 +154,7 @@ Scenario: Should alert agent when now is between 2 shift
 	And I should see a notify message contains text start
 	And I should see a notify message contains text 3:00 PM
 
+	@NotKeyExample
 Scenario: Should alert agent latest activity when now is at latest activity of 2 nearby shift
 	Given I have the role 'Full access to mytime'
 	And Alert Time setting is '180' seconds

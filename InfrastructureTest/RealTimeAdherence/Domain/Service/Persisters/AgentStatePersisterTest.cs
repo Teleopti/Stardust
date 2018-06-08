@@ -164,5 +164,16 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Persi
 				.Should().Be.Empty();
 		}
 		
+		[Test]
+		public void ShouldPersistLateForWork()
+		{
+			var state = new AgentStateForUpsert { LateForWork = true};
+
+			Target.Upsert(state);
+
+			Target.ReadForTest(state.PersonId).Single()
+				.LateForWork.Should().Be(true);
+		}
+		
 	}
 }

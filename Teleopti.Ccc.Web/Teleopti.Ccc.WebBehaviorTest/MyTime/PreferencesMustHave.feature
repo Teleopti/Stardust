@@ -53,6 +53,7 @@ Scenario: Set must have on preference
 	| Must have      | true       |
 	| Shift category | Late       |
 
+	@NotKeyExample
 Scenario: Set must have on empty day should do nothing
 	When I view preferences for date '2012-08-23'
 	And I select day '2012-08-23'

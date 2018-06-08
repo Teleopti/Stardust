@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Persi
 				ReceivedTime = "2014-11-11 10:36".Utc(),
 				StateGroupId = Guid.NewGuid(),
 				StateStartTime = "2014-11-11 10:37".Utc(),
+				LateForWork = true
 			};
 			writer.Upsert(state);
 
@@ -67,6 +68,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Persi
 			result.ReceivedTime.Should().Be(state.ReceivedTime);
 			result.StateGroupId.Should().Be(state.StateGroupId);
 			result.StateStartTime.Should().Be(state.StateStartTime);
+			result.LateForWork.Should().Be(state.LateForWork);
 		}
 		
 	}

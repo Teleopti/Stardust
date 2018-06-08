@@ -1,9 +1,12 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using System;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Models
 {
 	public class ForecastDayModelMapper
 	{
+		private const double tolerance = 0.0001d;
+
 		public void SetCampaignAndOverride(IWorkloadDayBase workLoadDay, ForecastDayModel forecastDayModel,
 			IForecastDayOverride overrideDay)
 		{
@@ -50,9 +53,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Models
 
 		private bool hasCampaign(IWorkloadDayBase workloadDay)
 		{
-			return workloadDay.CampaignTasks.Value > 0.0001 ||
-				   workloadDay.CampaignTaskTime.Value > 0.0001 ||
-				   workloadDay.CampaignAfterTaskTime.Value > 0.0001;
+			return Math.Abs(workloadDay.CampaignTasks.Value) > tolerance ||
+				   Math.Abs(workloadDay.CampaignTaskTime.Value) > tolerance ||
+				   Math.Abs(workloadDay.CampaignAfterTaskTime.Value) > tolerance;
 		}
 
 		private bool hasOverride(IForecastDayOverride overrideDay)

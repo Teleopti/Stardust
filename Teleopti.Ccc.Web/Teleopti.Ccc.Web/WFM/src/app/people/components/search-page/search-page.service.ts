@@ -8,7 +8,9 @@ import {
 	PeopleSearchResult,
 	PeopleSearchQuery,
 	SearchOverridesService,
-	PeopleOverride
+	PeopleOverride,
+	COLUMNS,
+	DIRECTION
 } from '../../services';
 import { Person } from '../../types';
 import { PeopleSearch } from '../../../../../e2e/people/search.po';
@@ -42,14 +44,21 @@ export class SearchPageService {
 			this[key] = query[key];
 		});
 
-		return this.searchService.searchPeople(query);
+		return this.searchService.searchPeople(query).pipe(
+			tap((result: PeopleSearchResult) => {
+				this.searchService.lastQuerySize = result.TotalRows;
+				this.peopleCache$.next(result.People);
+			})
+		);
 	}
 
 	searchPeopleAllPages(): Observable<PeopleSearchResult> {
 		const query: PeopleSearchQuery = {
 			keyword: this.searchService.keyword,
 			pageIndex: 0,
-			pageSize: this.searchService.lastQuerySize
+			pageSize: this.searchService.lastQuerySize,
+			sortColumn: COLUMNS.LastName,
+			direction: DIRECTION.asc
 		};
 		return this.searchService.searchPeople(query);
 	}
