@@ -179,6 +179,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		}
 
 		[Test]
+		public void SorryNeedAnOutputThatWeDontWantToRelease()
+		{
+			2.Should().Be(3);
+		}
+
+		
+		[Test]
 		public void ShouldConsiderDayOffPreferences()
 		{
 			//hard-to-understand-test... setup is like in bugdb mentioned here: http://challenger:8080/tfs/web/UI/Pages/WorkItems/WorkItemEdit.aspx?Id=40314
