@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 					continue;
 				}
 
-				forecastDay.HasCampaign = input.CampaignTasksPercent > 0d;
+				forecastDay.HasCampaign = Math.Abs(input.CampaignTasksPercent) > 0.0001;
 				forecastDay.CampaignTasksPercentage = input.CampaignTasksPercent;
 				forecastDay.TotalTasks = (input.CampaignTasksPercent + 1) * forecastDay.Tasks;
 			}
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 				}
 				else
 				{
-					forecastDay.HasCampaign = forecastDay.CampaignTasksPercentage > 0;
+					forecastDay.HasCampaign = Math.Abs(forecastDay.CampaignTasksPercentage) > 0.0001;
 				}
 			}
 
