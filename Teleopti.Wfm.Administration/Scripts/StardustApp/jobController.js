@@ -54,7 +54,7 @@
 				vm.minFrom = new Date(oldestJob.Created);
 				vm.maxTo = new Date(new Date());
 				vm.selectedFromDate = vm.minFrom;
-				vm.selectedToDate = maxTo;
+				vm.selectedToDate = vm.maxTo;
 			});
 
 		function getJobsByFilter() {
