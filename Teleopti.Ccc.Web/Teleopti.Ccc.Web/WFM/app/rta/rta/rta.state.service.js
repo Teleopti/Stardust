@@ -172,7 +172,7 @@
 					})
 				})
 				.filter(function (x) {
-					return x;
+					return x && x.length > 0;
 				})
 				.slice(0, 9)
 				.join(', ');
