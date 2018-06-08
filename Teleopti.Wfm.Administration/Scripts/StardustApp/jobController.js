@@ -29,7 +29,6 @@
 		vm.dataSourceFilter = allTenantsString;
 		vm.jobTypeFilter = allTypesString;
 		var refreshInterval = 5000;
-		getJobsByFilter();
 
 		var refreshPromise = $interval(getJobsByFilter, refreshInterval);
 
@@ -55,6 +54,9 @@
 				vm.maxTo = new Date(new Date());
 				vm.selectedFromDate = vm.minFrom;
 				vm.selectedToDate = vm.maxTo;
+				vm.fromDateFilter = vm.minFrom;
+				vm.toDateFilter = vm.maxTo;
+				getJobsByFilter();
 			});
 
 		function getJobsByFilter() {
