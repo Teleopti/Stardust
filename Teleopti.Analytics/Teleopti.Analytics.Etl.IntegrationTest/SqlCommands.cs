@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
 {
@@ -65,6 +66,46 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				{
 					sqlCommand.Parameters.AddWithValue("@target_date", targetDate);
 					sqlCommand.ExecuteNonQuery();
+				}
+			}
+		}
+
+		public static void EtlJobIntradaySettingsDelete()
+		{
+			using (var sqlConnection = connectAndOpen(InfraTestConfigReader.AnalyticsConnectionString))
+			{
+				string sql = "delete from mart.etl_job_intraday_settings";
+				using (var sqlCommand = new SqlCommand(sql, sqlConnection))
+				{
+					sqlCommand.ExecuteNonQuery();
+				}
+			}
+		}
+
+		public static IntradaySettingValue GetEtlJobIntradaySettingsValue(int businessUnitId, int dataSourceId, int detailId)
+		{
+			using (var sqlConnection = connectAndOpen(InfraTestConfigReader.AnalyticsConnectionString))
+			{
+				string sql = "select target_date, target_interval from mart.etl_job_intraday_settings where business_unit_id=@business_unit_id and datasource_id=@datasource_id";
+				using (var sqlCommand = new SqlCommand(sql, sqlConnection))
+				{
+					IntradaySettingValue intradaySettingValue = null;
+					sqlCommand.Parameters.AddWithValue("@business_unit_id", businessUnitId);
+					sqlCommand.Parameters.AddWithValue("@datasource_id", dataSourceId);
+					using (var reader = sqlCommand.ExecuteReader())
+					{
+						if (reader.HasRows)
+						{
+							reader.Read();
+							intradaySettingValue = new IntradaySettingValue
+							{
+								TargetDate = new DateOnly(reader.GetDateTime(0)),
+								TargetInterval = reader.GetInt16(1)
+							};
+						}
+					}
+
+					return intradaySettingValue;
 				}
 			}
 		}
@@ -155,6 +196,24 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			}
 		}
 
+		public static int SumFactScheduleDeviation(DateTime utcDate, string columnName)
+		{
+			using (var sqlConnection = connectAndOpen(InfraTestConfigReader.AnalyticsConnectionString))
+			{
+				string sql = string.Format("select sum(f.{0}) from mart.fact_schedule_deviation f " +
+										   "inner join mart.dim_date d " +
+										   "on f.shift_startdate_id = d.date_id " +
+										   "where d.date_date = @date and is_logged_in = 1",
+					columnName);
+				using (var sqlCommand = new SqlCommand(sql, sqlConnection))
+				{
+					sqlCommand.Parameters.AddWithValue("@date", utcDate.Date);
+					var deviationSum = sqlCommand.ExecuteScalar();
+					return Convert.ToInt32(deviationSum == DBNull.Value ? 0 : deviationSum, CultureInfo.CurrentCulture);
+				}
+			}
+		}
+
 		public static DataTable ReportDataAgentScheduleAdherence(DateTime date_from, DateTime date_to, int adherence_id, IPerson person, string timeZoneId)
 		{
 			using (var sqlConnection = connectAndOpen(InfraTestConfigReader.AnalyticsConnectionString))
@@ -208,5 +267,11 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			sqlConnection.Open();
 			return sqlConnection;
 		}
+	}
+
+	public class IntradaySettingValue
+	{
+		public DateOnly TargetDate { get; set; }
+		public int TargetInterval { get; set; }
 	}
 }

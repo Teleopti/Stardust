@@ -29,17 +29,17 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			return table;
 		}
 
-		public static void AddFactScheduleDeviation(
-			this DataTable dataTable,
+		public static void AddFactScheduleDeviation(this DataTable dataTable,
 			int shiftStartdateLocalId,
-			int dateId, 
-			int intervalId, 
-			int personId, 
+			int dateId,
+			int intervalId,
+			int personId,
 			int contractTimeS,
 			int deviationScheduleS,
 			int deviationScheduleReadyS,
 			int deviationContractS,
-			bool isLoggedIn)
+			bool isLoggedIn, 
+			int? businessunitId)
 		{
 			var row = dataTable.NewRow();
 			row["shift_startdate_local_id"] = shiftStartdateLocalId;
@@ -55,6 +55,10 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			row["shift_startinterval_id"] = intervalId;
 			row["insert_date"] = DateTime.Now;
 			row["update_date"] = DateTime.Now;
+			if (businessunitId.HasValue)
+			{
+				row["business_unit_id"] = businessunitId.Value;
+			}
 			dataTable.Rows.Add(row);
 		}
 	}

@@ -61,15 +61,14 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			return table;
 		}
 
-		public static void AddPerson(
-			this DataTable dataTable,
+		public static void AddPerson(this DataTable dataTable,
 			int personId,
 			Guid? personCode,
 			string firstName,
 			string lastName,
 			DateTime validFrom,
 			DateTime validTo,
-			int validFromDateId, 
+			int validFromDateId,
 			int validFromIntervalId,
 			int validToDateId,
 			int validToIntervalId,
@@ -79,7 +78,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			int datasourceId,
 			bool toBeDeleted,
 			int timeZoneId,
-			Guid? personPeriodCode)
+			Guid? personPeriodCode, 
+			int validToDateIdMaxDate)
 		{
 			var row = dataTable.NewRow();
 
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			row["windows_domain"] = "";
 			row["windows_username"] = "";
 			row["to_be_deleted"] = toBeDeleted;
-			row["valid_to_date_id_maxDate"] = validToDateId;
+			row["valid_to_date_id_maxDate"] = validToDateIdMaxDate > 0 ? validToDateIdMaxDate : validFromDateId;
             row["valid_to_interval_id_maxDate"] = 95;
 			row["valid_from_date_id_local"]= validFromDateId;
 			row["valid_to_date_id_local"]= validToDateId;

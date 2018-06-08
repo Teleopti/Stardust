@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.TestCommon
 		[AnalyticsUnitOfWork]
 		public virtual AnalyticsDatabase WithDefaultAcdLogin()
 		{
-			return apply(new DefaultAcdLogin());
+			return apply(new DefaultAcdLogin(-1, -1));
 		}
 
 		private AnalyticsDatabase apply(IAnalyticsDataSetup setup)
