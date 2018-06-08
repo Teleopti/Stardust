@@ -179,6 +179,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		}
 
 		[Test]
+		public void ShouldHandleEmptyForecastDaysOnSavingForecastResult()
+		{
+			var forecastResult = new ForecastModel
+			{
+				WorkloadId = Guid.NewGuid(),
+				ScenarioId = Guid.NewGuid(),
+				ForecastDays = new List<ForecastDayModel>()
+			};
+
+			var result = Target.ApplyForecast(forecastResult);
+			result.Should().Be.OfType<OkResult>();
+		}
+
+		[Test]
 		public void ShouldSaveForecastWithIntradayPatternWithOutAvialableHistory()
 		{
 			var forecastedDay = new DateOnly(2018, 05, 02);

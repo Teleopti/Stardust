@@ -190,6 +190,11 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		[UnitOfWork, HttpPost, Route("api/Forecasting/ApplyForecast")]
 		public virtual IHttpActionResult ApplyForecast(ForecastModel forecastResult)
 		{
+			if (!forecastResult.ForecastDays.Any())
+			{
+				return Ok();
+			}
+
 			var overrideNote = $"[*{Resources.ForecastDayIsOverrided}*]";
 
 			var workload = _workloadRepository.Get(forecastResult.WorkloadId);
