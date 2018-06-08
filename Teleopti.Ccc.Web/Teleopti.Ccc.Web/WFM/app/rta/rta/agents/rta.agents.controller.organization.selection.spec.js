@@ -775,4 +775,26 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 		expect(vm.organizationPickerSelectionText).toEqual("");
 	});
 
+	it('should display empty string when sites have teams', function (t) {
+
+		t.backend.withOrganization({
+			Id: 'id1',
+			Name: 'Site1',
+			Teams: [{
+				Name: 'Team1'
+			}]
+		})
+			.withOrganization({
+				Id: 'id2',
+				Name: 'Site2',
+				Teams: [{
+					Name: 'Team2'
+				}]
+			});
+
+		var vm = t.createController();
+
+		expect(vm.organizationPickerSelectionText).toEqual("");
+	});
+
 });

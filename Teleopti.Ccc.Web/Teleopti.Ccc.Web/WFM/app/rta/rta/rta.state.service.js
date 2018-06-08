@@ -169,9 +169,10 @@
 					return site.Teams.map(function (team) {
 						if (isTeamSelected(team.Id))
 							return team.Name;
+					}).filter(function (t) {
+						return t && t.length > 0;
 					})
-				})
-				.filter(function (x) {
+				}).filter(function (x) {
 					return x && x.length > 0;
 				})
 				.slice(0, 9)
@@ -335,8 +336,8 @@
 				});
 			}).forEach(function (site) {
 				if (!state.siteIds.some(function (siteId) {
-						return siteId == site.Id
-					}))
+					return siteId == site.Id
+				}))
 					state.siteIds.push(site.Id);
 			});
 
