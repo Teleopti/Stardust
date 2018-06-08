@@ -3,10 +3,15 @@
 /// <reference path="~/Content/Scripts/qunit.js" />
 
 $(document).ready(function() {
-	module("Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel");
+	module("Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel", {
+		setup: function() {
+			Teleopti.MyTimeWeb.Common.IsToggleEnabled = function() {};
+		}
+	});
 
 	var resetLocale = function () {
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
+			DateFormat: 'YYYY-MM-DD',
 			UseJalaaliCalendar: false
 		});
 	};

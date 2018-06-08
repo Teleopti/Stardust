@@ -23,6 +23,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function (filterChange
 	self.timeLines = ko.observableArray();
 	self.mySchedule = ko.observable();
 	self.teamSchedules = ko.observableArray();
+	self.agentNames = ko.observableArray();
 	self.filterChangedCallback = filterChangedCallback;
 	self.selectedDateSubscription = null;
 	self.selectedTeamSubscription = null;
@@ -30,11 +31,11 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function (filterChange
 	self.totalPageNum = ko.observable(0);
 	self.isPanelVisible = ko.observable(false);
 	self.searchNameText = ko.observable('');
+	self.hasFiltered = ko.observable(false);
+	self.emptySearchResult = ko.observable(false);
 	self.filter = {
 		searchNameText: ''
 	};
-	self.hasFiltered = ko.observable(false);
-	self.emptySearchResult = ko.observable(false);
 
 	self.paging = {
 		skip: 0,
@@ -102,6 +103,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function (filterChange
 	self.readScheduleData = function (data, date) {
 		disposeSelectedDateSubscription();
 
+		self.agentNames(getAgentNames(data.AgentSchedules));
 		self.selectedDate(moment(date));
 		self.displayDate(moment(date).format(Teleopti.MyTimeWeb.Common.DateFormat));
 		self.timeLines(createTimeLine(data.TimeLine));
@@ -125,14 +127,28 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function (filterChange
 	};
 
 	self.readMoreTeamScheduleData = function(data) {
-		var teamSchedule = createTeamSchedules(data.AgentSchedules, self.timeLines()[0].time);
+		var teamSchedule = createTeamSchedules(data, self.timeLines()[0].time);
 
 		teamSchedule.forEach(function(schedule) {
 			self.teamSchedules.push(schedule);
+			self.agentNames.push(schedule.name);
 		});
 
 		setPaging(data.PageCount);
 	};
+
+	function getAgentNames(agentSchedulesData) {
+		var agentNames = [];
+		if (!agentSchedulesData) {
+			return agentNames;
+		}
+
+		agentSchedulesData.forEach(function (agentSchedule) {
+			agentNames.push(agentSchedule.Name)
+		});
+
+		return agentNames;
+	}
 
 	function setPaging(pageCount){
 		self.totalPageNum(pageCount);

@@ -179,15 +179,16 @@
 
 		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
 
-		equal($('.mobile-teamschedule-view .teamschedule-filter-component select')[0].length, 11);
+		var selector = '.mobile-teamschedule-view .teamschedule-filter-component select';
+		equal($(selector)[0].length, 11);
 
-		equal($($('.mobile-teamschedule-view .teamschedule-filter-component select')[0][0]).text(), 'All Teams');
-		equal($($('.mobile-teamschedule-view .teamschedule-filter-component select')[0][1]).text(), 'London/Students');
-		equal($($('.mobile-teamschedule-view .teamschedule-filter-component select')[0][2]).text(), 'London/Team Flexible');
-		equal($($('.mobile-teamschedule-view .teamschedule-filter-component select')[0][3]).text(), 'London/Team Outbound');
-		equal($($('.mobile-teamschedule-view .teamschedule-filter-component select')[0][4]).text(), 'London/Team Preferences');
-		equal($($('.mobile-teamschedule-view .teamschedule-filter-component select')[0][5]).text(), 'London/Team Rotations');
-		equal($($('.mobile-teamschedule-view .teamschedule-filter-component select')[0][10]).text(), 'Contract Group/Team Rotations');
+		equal($($(selector)[0][0]).text(), 'All Teams');
+		equal($($(selector)[0][1]).text(), 'London/Students');
+		equal($($(selector)[0][2]).text(), 'London/Team Flexible');
+		equal($($(selector)[0][3]).text(), 'London/Team Outbound');
+		equal($($(selector)[0][4]).text(), 'London/Team Preferences');
+		equal($($(selector)[0][5]).text(), 'London/Team Rotations');
+		equal($($(selector)[0][10]).text(), 'Contract Group/Team Rotations');
 	});
 
 	test('should select default team', function () {
@@ -225,11 +226,12 @@
 
 		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
 
-		equal($('.mobile-teamschedule-view .mobile-timeline .mobile-timeline-label').length, 9);
-		equal($('.mobile-teamschedule-view .mobile-timeline .mobile-timeline-label')[0].innerText, '05:00');
-		equal($('.mobile-teamschedule-view .mobile-timeline .mobile-timeline-label')[1].innerText, '06:00');
-		equal($('.mobile-teamschedule-view .mobile-timeline .mobile-timeline-label')[2].innerText, '07:00');
-		equal($('.mobile-teamschedule-view .mobile-timeline .mobile-timeline-label')[3].innerText, '08:00');
+		var labelSelector = '.mobile-teamschedule-view .mobile-timeline .mobile-timeline-label';
+		equal($(labelSelector).length, 9);
+		equal($(labelSelector)[0].innerText, '05:00');
+		equal($(labelSelector)[1].innerText, '06:00');
+		equal($(labelSelector)[2].innerText, '07:00');
+		equal($(labelSelector)[3].innerText, '08:00');
 	});
 
 	test('should render overnight timeline', function () {
@@ -248,60 +250,35 @@
 
 		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
 
-		equal($('.mobile-teamschedule-view .mobile-timeline .mobile-timeline-label:visible')[4].innerText, '23:00');
-		equal($('.mobile-teamschedule-view .mobile-timeline .mobile-timeline-label:visible')[5].innerText, '00:00');
-		equal($('.mobile-teamschedule-view .mobile-timeline .mobile-timeline-label:visible')[6].innerText, '01:00');
-		equal($('.mobile-teamschedule-view .mobile-timeline .mobile-timeline-label:visible')[7].innerText, '02:00');
+		var labelSelector = '.mobile-teamschedule-view .mobile-timeline .mobile-timeline-label:visible';
+
+		equal($(labelSelector)[4].innerText, '23:00');
+		equal($(labelSelector)[5].innerText, '00:00');
+		equal($(labelSelector)[6].innerText, '01:00');
+		equal($(labelSelector)[7].innerText, '02:00');
 		
 	});
 
 	test('should render my schedule', function () {
 		initVm();
 
-		var html = [
-			'<div class="my-schedule-column relative" data-bind="style: {height: scheduleContainerHeight + \'px\'}">',
-			'	<!-- ko if: mySchedule -->',
-			'	<div class="agent-name">',
-			'		<span data-bind="text: mySchedule().name"></span>',
-			'	</div>',
-			'	<div class="mobile-schedule-container relative" >',
-			'		<!-- ko foreach: mySchedule().layers -->',
-			'		<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: \'click\' }, style: styleJson, css:{\'overtime-background-image-light\': isOvertime, overTimeLighterBackgroundStyle, \'overtime-background-image-dark\': isOvertime, overTimeDarkerBackgroundStyle, \'last-layer\': isLastLayer}, hideTooltipAfterMouseLeave: true">',
-			'			<div data-bind="visible: showTitle() && !isOvertimeAvailability()"></div>',
-			'			<strong data-bind="text: title()"></strong>',
-			'			<!-- ko if: hasMeeting -->',
-			'			<div class="meeting floatright">',
-			'				<i class="meeting-icon mr10">',
-			'					<i class="glyphicon glyphicon-user ml10"></i>',
-			'				</i>',
-			'			</div>',
-			'			<!-- /ko -->',
-			'			<span class="fullwidth displayblock" data-bind="visible: false && showDetail, text: timeSpan"></span>',
-			'		</div>',
-			'		<div data-bind="visible: false && showTitle() && isOvertimeAvailability()">',
-			'			<i class="glyphicon glyphicon-time"></i>',
-			'		</div>',
-			'		<!-- /ko -->',
-			'	</div>',
-			'	<!-- /ko -->',
-			'</div>'].join("");
-
-		$('.mobile-teamschedule-view').append(html);
+		$('.mobile-teamschedule-view').append(agentSchedulesHtml);
 
 		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
 
-		equal($('.mobile-teamschedule-view .my-schedule-column .agent-name span').text(), 'Ashley Andeen');
+		equal($('.mobile-teamschedule-view .mobile-teamschedule-agent-name.my-name span').text(), '@Resources.MySchedule');
 		equal($('.mobile-teamschedule-view .my-schedule-column .mobile-schedule-layer').length, 1);
 		equal($('.mobile-teamschedule-view .my-schedule-column .mobile-schedule-layer strong').text(), 'Phone');
 	});
 
 	test('should render teammates\'s schedules', function () {
 		initVm();
+
 		$('.mobile-teamschedule-view').append(agentSchedulesHtml);
 
 		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
 
-		equal($('.mobile-teamschedule-view .teammates-schedules-column:first .agent-name span').text(), 'Jon Kleinsmith1');
+		equal($('.teammates-agent-name-row .mobile-teamschedule-agent-name:nth-child(1) .text-name').text(), 'Jon Kleinsmith1');
 		equal($('.mobile-teamschedule-view .teammates-schedules-column .mobile-schedule-layer').length, 10);
 		equal($('.mobile-teamschedule-view .teammates-schedules-column .mobile-schedule-layer strong:visible').length, 0);
 	});
@@ -501,10 +478,34 @@
 		$('.mobile-teamschedule-submit-buttons button.btn-primary').click();
 
 		equal(vm.currentPageNum(), 1);
-		equal($('.mobile-teamschedule-view .teammates-schedules-column:first .agent-name span').text(), 'Jon Kleinsmith10');
-		equal($('.mobile-teamschedule-view .teammates-schedules-column:last .agent-name span').text(), 'Jon Kleinsmith10');
+		equal($('.teammates-agent-name-row .mobile-teamschedule-agent-name:nth-child(1) .text-name').text(), 'Jon Kleinsmith10');
 	});
 
+	test('should update agent names after loaded schedules', function () {
+		initVm();
+
+		$('.mobile-teamschedule-view').append(agentSchedulesHtml);
+
+		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+
+		equal($('.teammates-agent-name-row .mobile-teamschedule-agent-name:nth-child(1) .text-name').text(), 'Jon Kleinsmith1');
+		equal($('.teammates-agent-name-row .mobile-teamschedule-agent-name:nth-child(10) .text-name').text(), 'Jon Kleinsmith10');
+	});
+
+	test('should update agent names after loaded more schedules', function () {
+		initVm();
+
+		$('.mobile-teamschedule-view').append(agentSchedulesHtml);
+
+		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+
+		vm.readMoreTeamScheduleData(fakeOriginalAgentSchedulesData.slice(10));
+
+		equal($('.teammates-agent-name-row .mobile-teamschedule-agent-name:nth-child(1) .text-name').text(), 'Jon Kleinsmith1');
+		equal($('.teammates-agent-name-row .mobile-teamschedule-agent-name:nth-child(10) .text-name').text(), 'Jon Kleinsmith10');
+		equal($('.teammates-agent-name-row .mobile-teamschedule-agent-name:nth-child(11) .text-name').text(), 'Jon Kleinsmith11');
+		equal($('.teammates-agent-name-row .mobile-teamschedule-agent-name:nth-child(20) .text-name').text(), 'Jon Kleinsmith20');
+	});
 
 	function setUpFakeData() {
 		fakeAvailableTeamsData = {
@@ -628,9 +629,11 @@
 					"DayOfWeekNumber": "",
 					"HasNotScheduled": ""
 				};
+				
 				fakeOriginalAgentSchedulesData.push(agentSchedule);
 			}
 		}
+
 	}
 
 	function setupAjax() {
@@ -673,13 +676,49 @@
 
 	function setUpHtml() {
 		agentSchedulesHtml = [
+			'<!-- ko if: mySchedule -->',
+			'<div class="mobile-teamschedule-agent-name my-name" data-bind="tooltip: { title: mySchedule().name, trigger: \'click\', placement: \'bottom\'}, hideTooltipAfterMouseLeave: true">',
+			'	<span class="text-name">@Resources.MySchedule</span>',
+			'	<span class="team-schedule-arrow-up"><i class="glyphicon glyphicon-chevron-up"></i></span>',
+			'	<span class="team-schedule-arrow-down"><i class="glyphicon glyphicon-chevron-down"></i></span>',
+			'</div>',
+			'<!-- /ko -->',
+			'<div class="teammates-agent-name-row">',
+			'	<!-- ko foreach: agentNames -->',
+			'	<div class="mobile-teamschedule-agent-name" data-bind="tooltip: { title: $data, trigger: \'click\', placement: \'bottom\'}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">',
+			'		<span class="text-name" data-bind="text: $data"></span>',
+			'		<span class="team-schedule-arrow-up"><i class="glyphicon glyphicon-chevron-up"></i></span>',
+			'		<span class="team-schedule-arrow-down"><i class="glyphicon glyphicon-chevron-down"></i></span>',
+			'	</div>',
+			'	<!-- /ko -->',
+			'</div>',
+			'<div class="my-schedule-column relative" data-bind="style: {height: scheduleContainerHeight() + \'px\'}">',
+			'	<!-- ko if: mySchedule -->',
+			'	<div class="mobile-schedule-container relative">',
+			'		<!-- ko foreach: mySchedule().layers -->',
+			'		<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: \'click\' }, style: styleJson, css:{\'overtime-background-image-light\': isOvertime, overTimeLighterBackgroundStyle, \'overtime-background-image-dark\': isOvertime, overTimeDarkerBackgroundStyle, \'last-layer\': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustMyScheduleTooltipPositionOnMobileTeamSchedule: true">',
+			'			<div data-bind="visible: showTitle() && !isOvertimeAvailability()"></div>',
+			'			<strong data-bind="text: title()"></strong>',
+			'			<!-- ko if: hasMeeting -->',
+			'			<div class="meeting floatright">',
+			'				<i class="meeting-icon mr10">',
+			'					<i class="glyphicon glyphicon-user ml10"></i>',
+			'				</i>',
+			'			</div>',
+			'			<!-- /ko -->',
+			'			<span class="fullwidth displayblock" data-bind="visible: false && showDetail, text: timeSpan"></span>',
+			'		</div>',
+			'		<div data-bind="visible: false && showTitle() && isOvertimeAvailability()">',
+			'			<i class="glyphicon glyphicon-time"></i>',
+			'		</div>',
+			'		<!-- /ko -->',
+			'	</div>',
+			'	<!-- /ko -->',
+			'</div>',
 			'<!-- ko if: teamSchedules -->',
-			'<div class="teammates-schedules-container" data-bind="style: {height: scheduleContainerHeight + \'px\'}">',
+			'<div class="teammates-schedules-container" data-bind="style: {height: scheduleContainerHeight() + \'px\'}">',
 			'	<!-- ko foreach: teamSchedules -->',
 			'	<div class="teammates-schedules-column relative">',
-			'		<div class="agent-name">',
-			'			<span data-bind="text: name"></span>',
-			'		</div>',
 			'		<div class="mobile-schedule-container relative">',
 			'			<!-- ko foreach: layers -->',
 			'			<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: \'click\' }, style: styleJson, css:{\'overtime-background-image-light\': isOvertime, overTimeLighterBackgroundStyle, \'overtime-background-image-dark\': isOvertime, overTimeDarkerBackgroundStyle, \'last-layer\': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">',

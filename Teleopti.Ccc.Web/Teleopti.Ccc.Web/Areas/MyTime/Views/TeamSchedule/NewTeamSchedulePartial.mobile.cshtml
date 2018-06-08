@@ -86,13 +86,26 @@
 			<!-- /ko -->
 		</div>
 
-		<div class="my-schedule-column relative" data-bind="style: {height: scheduleContainerHeight() + 'px'}">
-			<!-- ko if: mySchedule -->
-			<div class="agent-name" data-bind="tooltip: { title: mySchedule().name, trigger: 'click', placement: 'bottom'}, hideTooltipAfterMouseLeave: true">
-				<span class="text-name">@Resources.MySchedule</span>
+		<!-- ko if: mySchedule -->
+		<div class="mobile-teamschedule-agent-name my-name" data-bind="tooltip: { title: mySchedule().name, trigger: 'click', placement: 'bottom'}, hideTooltipAfterMouseLeave: true">
+			<span class="text-name">@Resources.MySchedule</span>
+			<span class="team-schedule-arrow-up"><i class="glyphicon glyphicon-chevron-up"></i></span>
+			<span class="team-schedule-arrow-down"><i class="glyphicon glyphicon-chevron-down"></i></span>
+		</div>
+		<!-- /ko -->
+
+		<div class="teammates-agent-name-row">
+			<!-- ko foreach: agentNames -->
+			<div class="mobile-teamschedule-agent-name" data-bind="tooltip: { title: $data, trigger: 'click', placement: 'bottom'}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">
+				<span class="text-name" data-bind="text: $data"></span>
 				<span class="team-schedule-arrow-up"><i class="glyphicon glyphicon-chevron-up"></i></span>
 				<span class="team-schedule-arrow-down"><i class="glyphicon glyphicon-chevron-down"></i></span>
 			</div>
+			<!-- /ko -->
+		</div>
+
+		<div class="my-schedule-column relative" data-bind="style: {height: scheduleContainerHeight() + 'px'}">
+			<!-- ko if: mySchedule -->
 			<div class="mobile-schedule-container relative">
 				<!-- ko foreach: mySchedule().layers -->
 				<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-background-image-light': isOvertime, overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime, overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustMyScheduleTooltipPositionOnMobileTeamSchedule: true">
@@ -119,11 +132,6 @@
 		<div class="teammates-schedules-container" data-bind="style: {height: scheduleContainerHeight() + 'px'}">
 			<!-- ko foreach: teamSchedules -->
 			<div class="teammates-schedules-column relative">
-				<div class="agent-name" data-bind="tooltip: { title: name, trigger: 'click', placement: 'bottom'}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">
-					<span class="text-name" data-bind="text: name"></span>
-					<span class="team-schedule-arrow-up"><i class="glyphicon glyphicon-chevron-up"></i></span>
-					<span class="team-schedule-arrow-down"><i class="glyphicon glyphicon-chevron-down"></i></span>
-				</div>
 				<div class="mobile-schedule-container relative">
 					<!-- ko foreach: layers -->
 					<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-background-image-light': isOvertime, overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime, overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">
