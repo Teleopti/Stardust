@@ -1775,7 +1775,7 @@
                 <TablixMember>
                   <Group Name="table2_Group2">
                     <GroupExpressions>
-                      <GroupExpression>=Fields!person_id.Value</GroupExpression>
+                      <GroupExpression>=Fields!person_code.Value</GroupExpression>
                     </GroupExpressions>
                   </Group>
                   <TablixMembers>
@@ -2079,9 +2079,9 @@
           <DataField>team_name</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="person_id">
-          <DataField>person_id</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
+        <Field Name="person_code">
+          <DataField>person_code</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="person_name">
           <DataField>person_name</DataField>

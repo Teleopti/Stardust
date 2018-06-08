@@ -46,18 +46,8 @@ CREATE TABLE #fact_schedule(
 	[interval_id] [smallint] NOT NULL,
 	[scenario_id] [smallint] NOT NULL,
 	[scheduled_over_time_m] [int] NULL,
-	[overtime_id] [int] NOT NULL
-)
-
-CREATE TABLE #result(
-	date_id int,
-	date smalldatetime,
-	team_name nvarchar(100),
-	person_id int,
-	person_name nvarchar(200),
-	overtime_name nvarchar(100),
-	scheduled_over_time_m int,
-	hide_time_zone bit
+	[overtime_id] [int] NOT NULL,
+	[person_code] [uniqueidentifier] NOT NULL
 )
 
 CREATE TABLE #rights_teams (right_id int)
@@ -83,7 +73,7 @@ INSERT INTO #overtime
 SELECT * FROM mart.SplitStringInt(@overtime_set)
 
 /*Snabba upp fraga mot fact_schedule*/
-INSERT INTO #fact_schedule(shift_startdate_local_id,schedule_date_id,person_id,interval_id,scenario_id,scheduled_over_time_m,overtime_id)
+INSERT INTO #fact_schedule(shift_startdate_local_id,schedule_date_id,person_id,interval_id,scenario_id,scheduled_over_time_m,overtime_id, person_code)
 SELECT 
 [shift_startdate_local_id],
 	[schedule_date_id],
@@ -91,7 +81,8 @@ SELECT
 	[interval_id],
 	[scenario_id],
 	[scheduled_over_time_m],
-	[overtime_id]
+	[overtime_id],
+	p.person_code
 FROM mart.fact_schedule fs WITH (NOLOCK)
 INNER JOIN mart.dim_person p WITH (NOLOCK)
 	ON fs.person_id=p.person_id
@@ -104,7 +95,7 @@ AND p.person_id IN (SELECT right_id FROM #rights_agents)--check permissions
 SELECT	d.date_id as 'date_id',
 		d.date_date as 'date',
 		p.team_name as 'team_name',
-		p.person_id as 'person_id',
+		p.person_code as 'person_code',
 		p.person_name as 'person_name',
 		ot.overtime_name as 'overtime_name',
 		sum(ISNULL(f.scheduled_over_time_m,0)) as  'scheduled_over_time_m',
@@ -128,7 +119,7 @@ AND i.interval_id BETWEEN @interval_from AND @interval_to
 AND b.time_zone_id = @time_zone_id
 AND ot.overtime_id<>-1 --is overtime
 AND ot.overtime_id in (SELECT * FROM #overtime)
-GROUP BY d.date_id,	d.date_date,p.team_name,p.person_id,p.person_name,ot.overtime_name
+GROUP BY d.date_id,	d.date_date,p.team_name,p.person_code,p.person_name,ot.overtime_name
 ORDER BY p.team_name,p.person_name,d.date_id,ot.overtime_name
 
 
