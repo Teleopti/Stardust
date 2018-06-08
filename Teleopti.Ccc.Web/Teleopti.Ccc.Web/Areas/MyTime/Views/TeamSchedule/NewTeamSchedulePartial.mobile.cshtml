@@ -170,6 +170,11 @@
 					<input type="submit" style="display: none"/>
 				</form>
 			</div>
+			<div class="empty-search-result">
+				<!-- ko if: emptySearchResult -->
+				<p><b>@Resources.NoResultForCurrentFilter</b></p>
+				<!--/ko-->
+			</div>
 			<div class="mobile-teamschedule-submit-buttons">
 				<button class="btn btn-default pull-right" data-bind="click: toggleFilterPanel">@Resources.Cancel</button>
 				<button class="btn btn-primary pull-left" data-bind="click: submitSearchForm">@Resources.Search</button>

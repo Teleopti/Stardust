@@ -141,7 +141,7 @@
 	text-align: left;
 	z-index: 1;
 	background: white;
-	transform: translate3d(0,0,0);
+	transform: translate3d(0, 0, 0);
 }
 
 .my-schedule-column .agent-name .text-name,
@@ -149,7 +149,7 @@
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
-	display: inline-block	;
+	display: inline-block;
 }
 
 .my-schedule-column .agent-name {
@@ -293,6 +293,7 @@ div.teammates-schedules-column:last-of-type .agent-name {
 	display: flex;
 	justify-content: space-between;
 	padding: 10px 0;
+	margin-bottom: 0;
 }
 
 .mobile-teamschedule-submit-buttons button {
@@ -311,4 +312,18 @@ div.teammates-schedules-column:last-of-type .agent-name {
 
 .teamschedule-filter-component .select2-arrow b {
 	transform: scale(1.5);
+}
+
+.mobile-teamschedule-view .empty-search-result {
+	width: 100%;
+	min-height: 1.5em;
+	margin: 0;
+}
+
+.mobile-teamschedule-view .empty-search-result p {
+	margin: 0;
+}
+
+.mobile-teamschedule-view .glyphicon-warning-sign {
+	transform: scale(5);
 }

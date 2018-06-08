@@ -34,6 +34,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function (filterChange
 		searchNameText: ''
 	};
 	self.hasFiltered = ko.observable(false);
+	self.emptySearchResult = ko.observable(false);
 
 	self.paging = {
 		skip: 0,
@@ -66,8 +67,6 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function (filterChange
 		self.paging.skip = 0;
 		self.filter.searchNameText = self.searchNameText();
 		self.filterChangedCallback(self.selectedDate().format(requestDateOnlyFormat));
-
-		self.toggleFilterPanel();
 	};
 
 	self.goToPreviousPage = function() {
@@ -109,16 +108,20 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function (filterChange
 
 		self.scheduleContainerHeight(self.timeLines().length * 60 + timeLineOffset);
 
-		self.teamSchedules([]);
 		var timelineStart = data.TimeLine[0].Time;
-		
 		self.mySchedule(createMySchedule(data.MySchedule, timelineStart));
+
 		self.teamSchedules(createTeamSchedules(data.AgentSchedules, timelineStart));
 		
 		setSelectedDateSubscription();
 		setPaging(data.PageCount);
-
+		
 		self.hasFiltered(!!self.filter.searchNameText || (self.selectedTeamIds[0] && self.selectedTeamIds[0] != self.defaultTeamId));
+		self.emptySearchResult(data.AgentSchedules.length == 0);
+
+		if(!self.emptySearchResult() && self.isPanelVisible()) {
+			self.toggleFilterPanel();
+		}
 	};
 
 	self.readMoreTeamScheduleData = function(data) {

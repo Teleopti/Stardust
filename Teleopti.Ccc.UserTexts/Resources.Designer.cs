@@ -21428,6 +21428,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No result for current filter.
+        /// </summary>
+        public static string NoResultForCurrentFilter {
+            get {
+                return ResourceManager.GetString("NoResultForCurrentFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No roles available.
         /// </summary>
         public static string NoRolesAvailable {
