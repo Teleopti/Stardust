@@ -113,9 +113,9 @@
 				},
 				function() {
 					if (vm.modifyMessage) {
-						NoticeService.warning(vm.modifyMessage, 5000, true);
+						NoticeService.warning(vm.modifyMessage, 15000, true);
 					} else {
-						NoticeService.success('Applied campaign', 5000, true);
+						NoticeService.success($translate.instant('AppliedACampaign'), 15000, true);
 					}
 					modifyPanelHelper();
 					vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
@@ -161,9 +161,9 @@
 				},
 				function() {
 					if (vm.modifyMessage) {
-						NoticeService.warning(vm.modifyMessage, 5000, true);
+						NoticeService.warning(vm.modifyMessage, 15000, true);
 					} else {
-						NoticeService.success('Applied override', 5000, true);
+						NoticeService.success($translate.instant('AppliedAOverride'), 15000, true);
 					}
 
 					modifyPanelHelper();
@@ -197,7 +197,7 @@
 					vm.changesMade = true;
 				},
 				function() {
-					NoticeService.success('Override removed', 5000, true);
+					NoticeService.success($translate.instant('ClearOverride'), 15000, true);
 
 					modifyPanelHelper();
 					vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
@@ -328,7 +328,7 @@
 					vm.savingToScenario = false;
 					vm.changesMade = false;
 					getWorkloadForecastData();
-					NoticeService.success(vm.selectedScenario.Name + ' ' + 'scenario was updated', 5000, true);
+					NoticeService.success($translate.instant('SuccessfullyUpdatedPeopleCountColon') + ' ' + vm.selectedScenario.Name, 15000, true);
 				},
 				function(data, status, headers, config) {
 					vm.savingToScenario = false;
