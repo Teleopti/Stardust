@@ -3,9 +3,9 @@
 
 	angular.module('wfm.forecasting').controller('ForecastModController', ForecastModCtrl);
 
-	ForecastModCtrl.$inject = ['forecastingService', '$stateParams', '$window', 'NoticeService', '$translate', '$state', '$scope'];
+	ForecastModCtrl.$inject = ['forecastingService', '$stateParams', '$window', 'NoticeService', '$translate', '$state', '$scope', 'skillIconService'];
 
-	function ForecastModCtrl(forecastingService, $stateParams, $window, NoticeService, $translate, $state, $scope) {
+	function ForecastModCtrl(forecastingService, $stateParams, $window, NoticeService, $translate, $state, $scope, skillIconService) {
 		var vm = this;
 
 		var storage = {};
@@ -27,6 +27,7 @@
 			.toDate()
 		};
 		vm.savingToScenario = false;
+    vm.getSkillIcon = skillIconService.get;
 
 		vm.applyOverride = applyOverride;
 		vm.applyCampaign = applyCampaign;
