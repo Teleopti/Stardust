@@ -1260,16 +1260,20 @@ teams-time-picker.ng-invalid-dst {
 				display: inline-block;
 				width: 60px;
 
-				.label {
-					font-size: x-small;
-					height: 1.32em;
-					z-index: 11;
-					transform: translateX(-50%);
-					padding: 0 0.3em;
-					background-color: $gray-500;
+				.time-label {
+					text-align: center;
 
-					&.highlight {
-						background-color: #5bc0de;
+					.label {
+						font-size: x-small;
+						height: 1.32em;
+						z-index: 11;
+						transform: translateX(-50%);
+						padding: 0 0.3em;
+						background-color: $gray-500;
+
+						&.highlight {
+							background-color: #5bc0de;
+						}
 					}
 				}
 
@@ -1315,6 +1319,10 @@ teams-time-picker.ng-invalid-dst {
 
 				&:last-of-type {
 					border-radius: 0 4px 4px 0;
+				}
+
+				&:first-of-type:last-of-type {
+					border-radius: 4px;
 				}
 
 				&.overtime {
