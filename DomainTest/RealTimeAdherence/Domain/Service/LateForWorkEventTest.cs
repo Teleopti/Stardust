@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service
 		public FakeDatabase Database;
 		public FakeEventPublisher Publisher;
 		public MutableNow Now;
-		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
+		public Rta Target;
 
 		[Test]
 		public void ShouldPublish()
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service
 			@event.RuleName.Should().Be("InAdherence");
 			@event.StateName.Should().Be("Phone");
 		}
-		
+
 		[Test]
 		public void ShouldNotPublishWhenNotLateForWork()
 		{
@@ -162,6 +162,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service
 				UserCode = "usercode",
 				StateCode = "loggedOut"
 			});
+
 			Now.Is("2018-05-30 08:30");
 			Target.ProcessState(new StateForTest
 			{
@@ -175,7 +176,6 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service
 				StateCode = "loggedOut"
 			});
 			Now.Is("2018-05-30 09:00");
-			
 			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
@@ -186,9 +186,9 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service
 			@event.ShiftStart.Should().Be("2018-05-30 08:00".Utc());
 			@event.Timestamp.Should().Be("2018-05-30 08:30".Utc());
 		}
-		
+
 		[Test]
-		public void ShouldNotPublishLessThanOneMinute()
+		public void ShouldNotPublishWhenWithin1MinuteThreshold()
 		{
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
@@ -214,9 +214,9 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service
 
 			Publisher.PublishedEvents.OfType<PersonArrivalAfterLateForWorkEvent>().Should().Be.Empty();
 		}
-		
+
 		[Test]
-		public void ShouldPublishWhenLateMoreThanOneActivity()
+		public void ShouldPublishWhenLateOnSecondActivity()
 		{
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
@@ -245,9 +245,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service
 			var @event = Publisher.PublishedEvents.OfType<PersonArrivalAfterLateForWorkEvent>().Single();
 			@event.ShiftStart.Should().Be("2018-05-30 08:00".Utc());
 			@event.Timestamp.Should().Be("2018-05-30 09:30".Utc());
-		}	
-		
-		
+		}
+
 		[Test]
 		public void ShouldNotPublishWhenArrivingEarlyAfterSkippingOneDay()
 		{
@@ -276,8 +275,30 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service
 
 			Publisher.PublishedEvents.OfType<PersonArrivalAfterLateForWorkEvent>().Should().Be.Empty();
 		}
-		
-		
+
+		[Test]
+		[Ignore("Implement later")]
+		public void ShouldPublishWhenLateTheFirstDay()
+		{
+			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithAgent("usercode", personId)
+				.WithSchedule(personId, phone, "2018-05-30 08:00", "2018-05-30 17:00")
+				.WithStateGroup("Phone").WithStateCode("phone")
+				.WithLoggedOutStateGroup("Logged Out").WithStateCode("loggedOut")
+				;
+
+			Now.Is("2018-05-30 08:30");
+			Target.ProcessState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+
+			Publisher.PublishedEvents.OfType<PersonArrivalAfterLateForWorkEvent>().Should().Not.Be.Empty();
+		}
+
 		[Test]
 		[Ignore("Maybe implement later")]
 		public void ShouldWhatShouldBeDoneReallyIfScheduleIsChangedAndTheShiftStartIsChanged()
