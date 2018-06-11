@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		protected WebScheduleStardustBaseEvent()
 		{
-			Policy = HalfNodesAffinity;
+			Policy = "";
 		}
 		protected WebScheduleStardustBaseEvent(WebScheduleStardustBaseEvent @event):this()
 		{
