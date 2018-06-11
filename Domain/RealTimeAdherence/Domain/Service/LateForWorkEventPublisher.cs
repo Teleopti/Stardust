@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer
+namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 {
 	public interface ILateForWorkEventPublisher
 	{
@@ -32,19 +32,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			if (context.Schedule.CurrentActivity() == null)
 				return;
 
+			var timeSinceShiftStart = context.Time - context.Schedule.CurrentShiftStartTime;
+			var isAfterThreshold = timeSinceShiftStart.TotalSeconds > threshold.TotalSeconds;
+
 			var arrivingAfterLateForWork = previousStateWasBeforeShiftAndLoggedOff(context) &&
 										   context.State.IsLoggedIn() &&
-										   isOutsideTreshold(context.Time, context.Schedule.CurrentShiftStartTime);
-
-			var lateForWork = context.Schedule.ShiftStarted() && context.State.IsLoggedOut();
-			if (!arrivingAfterLateForWork)
-				context.LateForWork = previousStateWasBeforeShiftAndLoggedOff(context) || lateForWork;
-
-			if (context.Schedule.ShiftEnded())
-			{
-				context.LateForWork = false;
-				arrivingAfterLateForWork = false;
-			}
+										   isAfterThreshold;
 
 			if (arrivingAfterLateForWork)
 				_eventPublisher.Publish(new PersonArrivalAfterLateForWorkEvent
@@ -74,10 +67,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			return false;
 		}
 
-		private bool isOutsideTreshold(DateTime stateTime, DateTime shiftStart)
-		{
-			var timeSinceShiftStart = stateTime - shiftStart;
-			return timeSinceShiftStart.TotalSeconds > threshold.TotalSeconds;
-		}
 	}
 }
