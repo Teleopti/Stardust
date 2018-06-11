@@ -67,9 +67,9 @@ module.exports = env => {
 			'./vendor/fabricjs/fabric.min.js',
 			'./vendor/fabricjs/fabricjs_viewport.js',
 			'./vendor/ng-image-input-with-preview/ng-image-input-with-preview.js',
-			'./vendor/d3/d3.min.js',
-			'./vendor/c3/c3.min.js',
-			'./vendor/c3/c3-angular.min.js',
+			'./node_modules/d3/d3.min.js',
+			'./node_modules/c3/c3.min.js',
+			'./node_modules/c3-angular/c3-angular.min.js',
 			'./vendor/ui-bootstrap-custom-build/datepicker.directive.ext.js',
 			'./vendor/ui-bootstrap-custom-build/timepicker.directive.ext.js',
 			'./node_modules/angular-dialog-service/dist/dialogs.min.js',
@@ -123,7 +123,7 @@ module.exports = env => {
 			'./node_modules/angular-gantt/assets/angular-gantt-plugins.css',
 			'./node_modules/angular-gantt/assets/angular-gantt-table-plugin.css',
 			'./node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.css',
-			'./vendor/c3/c3.min.css',
+			'./node_modules/c3/c3.min.css',
 			'./node_modules/teleopti-styleguide/styleguide/dist/main.min.css'
 		],
 		attributes: {
@@ -146,7 +146,7 @@ module.exports = env => {
 			'./node_modules/angular-gantt/assets/angular-gantt-plugins.css',
 			'./node_modules/angular-gantt/assets/angular-gantt-table-plugin.css',
 			'./node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.css',
-			'./vendor/c3/c3.min.css',
+			'./node_modules/c3/c3.min.css',
 			'./node_modules/teleopti-styleguide/styleguide/dist/main_dark.min.css'
 		],
 		attributes: {
