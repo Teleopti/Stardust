@@ -499,7 +499,9 @@
 
 		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
 
-		vm.readMoreTeamScheduleData(fakeOriginalAgentSchedulesData.slice(10));
+		vm.readMoreTeamScheduleData({
+			AgentSchedules: fakeOriginalAgentSchedulesData.slice(10)
+		});
 
 		equal($('.teammates-agent-name-row .mobile-teamschedule-agent-name:nth-child(1) .text-name').text(), 'Jon Kleinsmith1');
 		equal($('.teammates-agent-name-row .mobile-teamschedule-agent-name:nth-child(10) .text-name').text(), 'Jon Kleinsmith10');

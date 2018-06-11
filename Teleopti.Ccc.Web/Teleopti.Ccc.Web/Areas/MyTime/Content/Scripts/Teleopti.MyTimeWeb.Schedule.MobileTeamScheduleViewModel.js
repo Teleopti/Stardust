@@ -143,7 +143,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function (filterChange
 			self.agentNames.push(schedule.name);
 		});
 
-		setPaging(data.PageCount);
+		setPaging();
 	};
 
 	function getAgentNames(agentSchedulesData) {
@@ -159,8 +159,10 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function (filterChange
 		return agentNames;
 	}
 
-	function setPaging(pageCount){
-		self.totalPageNum(pageCount);
+	function setPaging(pageCount) {
+		if (pageCount > 0)
+			self.totalPageNum(pageCount);
+
 		self.currentPageNum(parseInt(self.paging.skip / self.paging.take) + 1);
 	}
 
