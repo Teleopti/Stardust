@@ -135,11 +135,11 @@
       <div class="panel material-depth-1">
         <div class="con-row">
           <div class="con-flex">
-            {{'NoForecast'|translate}}
+            This skill is not supported yet. Check back here later to run a forecast for this scenario.
           </div>
         </div>
         <div class="con-footer">
-          <button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.forecastModal = true">{{'ForecastDo'|translate}}</button>
+          <button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.forecastModal = true" ng-if="vm.selectedWorkload.SkillType.DoDisplayData" >{{'ForecastDo'|translate}}</button>
         </div>
       </div>
     </div>
