@@ -33,16 +33,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			};
 		}
 
-		private static IEnumerable<IVisualLayer> createVisualLayerCollection(IPerson person, TimeSpan start, TimeSpan end,
-			IActivity activity)
-		{
-			return new List<IVisualLayer>
-			{
-				factory.CreateShiftSetupLayer(activity,
-					new DateTimePeriod(WorkShift.BaseDate.Add(start), WorkShift.BaseDate.Add(end)), person)
-			};
-		}
-
 		private static IEnumerable<IVisualLayer> createVisualLayerCollectionWithAbsence(IPerson person, TimeSpan start,
 			TimeSpan end)
 		{
