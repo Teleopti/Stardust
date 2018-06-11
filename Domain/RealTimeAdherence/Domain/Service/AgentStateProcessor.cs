@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using NPOI.HSSF.Record.Chart;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -174,7 +175,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 			_ruleEventPublisher.Publish(context);
 			_adherenceEventPublisher.Publish(context);
 			_lateForWorkEventPublisher.Publish(context);
-			
+
 			_currentEventPublisher.Current().Publish(new AgentStateChangedEvent
 			{
 				PersonId = context.PersonId,
@@ -186,5 +187,4 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 			});
 		}
 	}
-
 }

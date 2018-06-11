@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 			var name = RandomName.Make();
 			History
 				.StateChanged(personId, "2018-05-28 10:00")
-				.BackFromLateForWork(personId, "2018-05-28 09:00", "2018-05-28 10:00")
+				.ArrivedLateForWork(personId, "2018-05-28 09:00", "2018-05-28 10:00")
 				;
 
 			var result = Target.Build(personId).Changes.Single();

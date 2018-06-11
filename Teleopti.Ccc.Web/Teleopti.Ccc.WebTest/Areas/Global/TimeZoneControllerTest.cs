@@ -8,13 +8,14 @@ using Teleopti.Ccc.Web.Areas.Global;
 
 namespace Teleopti.Ccc.WebTest.Areas.Global
 {
+
 	public class TimeZoneControllerTest
 	{
 		[Test]
 		public void ShouldGetDefaultTimezone()
 		{
 			var loggedOnUser = new FakeLoggedOnUser(PersonFactory.CreatePerson("test1"));
-			var target = new TimeZoneController(loggedOnUser);
+			var target = new TimeZoneController(loggedOnUser, new FakeIanaTimeZoneProvider());
 			var result = target.Timezones();
 			Assert.AreEqual(loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone().Id, result.DefaultTimezone);
 		}
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public void ShouldGetTimezones()
 		{
 			var loggedOnUser = new FakeLoggedOnUser(PersonFactory.CreatePerson("test1"));
-			var target = new TimeZoneController(loggedOnUser);
+			var target = new TimeZoneController(loggedOnUser, new FakeIanaTimeZoneProvider());
 			var timezones = TimeZoneInfo.GetSystemTimeZones();
 			var result = target.Timezones();
 			Assert.AreEqual(timezones.Count, ((IEnumerable<dynamic>)result.Timezones).Count());

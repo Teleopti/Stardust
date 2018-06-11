@@ -72,9 +72,9 @@ DECLARE @from_date_date_utc smalldatetime
 DECLARE @intervals_back smallint
 DECLARE @detail_id int
 DECLARE @isAzure bit
-DECLARE @latest_deviation_date_id int
-DECLARE @latest_deviation_interval_id smallint
-DECLARE @latest_deviation_date smalldatetime
+DECLARE @agent_stats_date_id int
+DECLARE @agent_stats_interval_id smallint
+DECLARE @agent_stats_date smalldatetime
 
 SET @detail_id=4 --deviation
 
@@ -361,20 +361,54 @@ BEGIN
 
 	if (@isIntraday=2)
 	BEGIN
-		-- Find latest schedule deviation data
-		select
-			@latest_deviation_date_id = ISNULL(MAX(fsd.date_id), -1),
-			@latest_deviation_date = MAX(d.date_date)
-		from mart.fact_schedule_deviation fsd
-		inner join mart.dim_date d on fsd.date_id = d.date_id
-		where business_unit_id = @business_unit_id
+		-- Find latest last log date tomatch schedule deviation data to most recent aggregation
+		select distinct l.[datasource_id]
+		into #ds_filter
+		from [mart].[dim_person] p
+		inner join [mart].[bridge_acd_login_person] b
+		on b.person_id = p.person_id
+		inner join [mart].[dim_acd_login] l
+		on l.[acd_login_id] = b.[acd_login_id]
+		where p.business_unit_id = @business_unit_id
 
-		select @latest_deviation_interval_id = ISNULL(MAX(interval_id), 0)
-		from mart.fact_schedule_deviation
-		where date_id = @latest_deviation_date_id
-		and business_unit_id = @business_unit_id
+		--select * from #ds_filter
 
-		IF (@latest_deviation_date_id = -1)
+		select min(l.date_value) [min_local_date], min(l.int_value) [min_local_int], max(l.date_value) [max_local_date], max(l.int_value) [max_local_int], d.[time_zone_id]
+		into #date_filter
+		from [mart].[v_log_object_detail] l
+		inner join [mart].[sys_datasource] d
+		on l.log_object_id = d.log_object_id
+		where d.[datasource_id] in (select * from #ds_filter) and l.detail_id = 2
+			and l.date_value >= convert(date, dateadd(day, -1, @now_utc))
+		group by d.[time_zone_id]
+
+		select min(bt.[date_id]) [date_id], min(bt.[interval_id]) [interval_id], dd.date_date
+		into #tz_corrected_filter_min
+		from #date_filter d
+		inner join [mart].[dim_date] dd
+		on d.[min_local_date] = dd.date_date
+		inner join [mart].[bridge_time_zone] bt
+		on bt.[local_date_id] = dd.date_id and bt.[local_interval_id] = d.[min_local_int] and bt.[time_zone_id] = d.[time_zone_id]
+		group by dd.date_date
+
+		select max(bt.[date_id]) [date_id], max(bt.[interval_id]) [interval_id], dd.date_date
+		into #tz_corrected_filter_max
+		from #date_filter d
+		inner join [mart].[dim_date] dd
+		on d.[max_local_date] = dd.date_date
+		inner join [mart].[bridge_time_zone] bt
+		on bt.[local_date_id] = dd.date_id and bt.[local_interval_id] = d.[max_local_int] and bt.[time_zone_id] = d.[time_zone_id]
+		group by dd.date_date
+
+		--use minimum last log date to set 10 intervals back
+		select @agent_stats_date_id = isnull(min([date_id]),-1), @agent_stats_date = min([date_date])
+		from #tz_corrected_filter_min
+
+		select @agent_stats_interval_id = min([interval_id])
+		from #tz_corrected_filter_min
+		where [date_id] = @agent_stats_date_id
+
+		IF (@agent_stats_date_id = -1)
 		BEGIN
 			SELECT @from_date_id_utc = -1, @from_interval_id_utc = 0
 		END
@@ -396,9 +430,10 @@ BEGIN
 			
 			-- If any "go back number of intervals"
 			SELECT
-				@from_date_id_utc=d.date_id,
-				@from_interval_id_utc=d_i.interval_id
-			FROM [mart].[SubtractInterval](@latest_deviation_date, @latest_deviation_interval_id, @intervals_back) d_i
+				@from_date_date_utc = d.date_date,
+				@from_date_id_utc = d.date_id,
+				@from_interval_id_utc = d_i.interval_id
+			FROM [mart].[SubtractInterval](@agent_stats_date, @agent_stats_interval_id, @intervals_back) d_i
 			INNER JOIN mart.dim_date d
 			 ON d_i.date_from = d.date_date
 
@@ -409,6 +444,19 @@ BEGIN
 				)
 			Raiserror ('@from_date_id_utc or @from_interval_id_utc values inside [mart].[etl_fact_schedule_deviation_load] contained null values. Transaction should be aborted by ADO.NET!',16,1) WITH NOWAIT
 		END
+
+		declare @max_deviation_table_date_id int, @max_deviation_table_interval int
+
+		select @max_deviation_table_date_id = max([date_id])
+		from [mart].[fact_schedule_deviation] 
+		where business_unit_id = @business_unit_id 
+			and is_logged_in = 1
+
+		select @max_deviation_table_interval = max([interval_id]) 
+		from [mart].[fact_schedule_deviation] 
+		where business_unit_id = @business_unit_id 
+			and date_id = @max_deviation_table_date_id
+			and is_logged_in = 1
 
 		select
 			@now_date_id_utc	= date_id,
@@ -427,6 +475,35 @@ BEGIN
 			@now_interval_id_utc IS NULL
 			)
 		Raiserror ('@now_date_id_utc or @now_interval_id_utc values inside [mart].[etl_fact_schedule_deviation_load] contained null values. Transaction should be aborted by ADO.NET!',16,1) WITH NOWAIT
+
+		--Make sure 10 intervals before last log date goes back at least as far as data in schedule deviation table for current/previous day
+		if @max_deviation_table_date_id >= @now_date_id_utc-1
+		BEGIN
+			IF (@from_date_id_utc > @max_deviation_table_date_id OR (@from_date_id_utc = @max_deviation_table_date_id and @from_interval_id_utc > @max_deviation_table_interval))
+			BEGIN
+				SELECT @agent_stats_date = date_date FROM mart.dim_date WHERE date_id = @max_deviation_table_date_id
+
+				SELECT
+					@from_date_id_utc=d.date_id,
+					@from_interval_id_utc=d_i.interval_id
+				FROM [mart].[SubtractInterval](@agent_stats_date, @max_deviation_table_interval, @intervals_back) d_i
+				INNER JOIN mart.dim_date d
+					ON d_i.date_from = d.date_date
+			END
+		END
+
+		--Use latest log date for BU to set upper filter limits
+		select @agent_stats_date_id = max([date_id]), @agent_stats_date = max([date_date])
+		from #tz_corrected_filter_max
+
+		select @agent_stats_interval_id = max([interval_id])
+		from #tz_corrected_filter_max
+		where [date_id] = @agent_stats_date_id
+
+		drop table #ds_filter
+		drop table #date_filter
+		drop table #tz_corrected_filter_min
+		drop table #tz_corrected_filter_max
 
 		--get last n intervals according to mart.etl_job_intraday_settings
 		INSERT INTO #fact_schedule
@@ -447,13 +524,11 @@ BEGIN
 		FROM mart.fact_schedule fs
 		INNER JOIN mart.dim_person p WITH (NOLOCK)
 			ON fs.person_id = p.person_id
-		WHERE shift_startdate_local_id between @from_date_id_utc-1 and @now_date_id_utc+1
-		AND
+		WHERE fs.shift_startdate_id between @from_date_id_utc and @agent_stats_date_id+1 AND		
 		(
-			(schedule_date_id = @from_date_id_utc AND interval_id >= @from_interval_id_utc)
-			OR (schedule_date_id between @from_date_id_utc+1 AND @now_date_id_utc-1)
-			--OR (schedule_date_id = @now_date_id_utc AND interval_id < @now_interval_id_utc)
-			OR (schedule_date_id > @from_date_id_utc AND schedule_date_id = @now_date_id_utc AND interval_id > @now_interval_id_utc)
+			(@from_date_id_utc = @agent_stats_date_id and schedule_date_id = @agent_stats_date_id and interval_id between @from_interval_id_utc and @agent_stats_interval_id) 
+			OR (@from_date_id_utc < @agent_stats_date_id and schedule_date_id = @from_date_id_utc AND interval_id >= @from_interval_id_utc)
+			OR (@from_date_id_utc < @agent_stats_date_id and schedule_date_id between @from_date_id_utc + 1 AND @agent_stats_date_id + 1)
 		)
 		AND fs.scenario_id = @scenario_id
 		AND fs.business_unit_id= @business_unit_id
@@ -470,14 +545,14 @@ BEGIN
 			p.person_code
 
 		--remove intervals for today in the future
-		DELETE FROM #fact_schedule WHERE schedule_date_id = @now_date_id_utc AND interval_id > @now_interval_id_utc
+		--DELETE #fact_schedule WHERE (schedule_date_id = @now_date_id_utc AND interval_id > @now_interval_id_utc) OR schedule_date_id > @now_date_id_utc
 
 		INSERT INTO #fact_schedule_deviation
 			(
 			date_id,
 			interval_id,
 			person_id,
-			acd_login_id,--new 20131128
+			acd_login_id,
 			ready_time_s,
 			is_logged_in,
 			business_unit_id,
@@ -487,7 +562,7 @@ BEGIN
 			date_id					= fa.date_id,
 			interval_id				= fa.interval_id,
 			person_id				= b.person_id,
-			acd_login_id			= fa.acd_login_id, --new 20131128
+			acd_login_id			= fa.acd_login_id,
 			ready_time_s			= fa.ready_time_s,
 			is_logged_in			= 1, --marks that we do have logged in time
 			business_unit_id		= b.business_unit_id,
@@ -506,12 +581,12 @@ BEGIN
 					OR (fa.date_id = p.valid_from_date_id AND fa.interval_id >= p.valid_from_interval_id)
 					OR (fa.date_id = p.valid_to_date_id_maxdate AND fa.interval_id <= p.valid_to_interval_id_maxdate)
 			)
-		WHERE (date_id between @from_date_id_utc+1 AND @now_date_id_utc)
-			OR
-			(
-				date_id = @from_date_id_utc
-				AND interval_id >= @from_interval_id_utc
-			)
+		WHERE (
+			(@from_date_id_utc = @agent_stats_date_id and date_id = @agent_stats_date_id and interval_id between @from_interval_id_utc and @agent_stats_interval_id)
+			OR (@from_date_id_utc < @agent_stats_date_id and date_id = @from_date_id_utc AND interval_id >= @from_interval_id_utc)
+			OR (@from_date_id_utc < @agent_stats_date_id and date_id between @from_date_id_utc+1 AND @now_date_id_utc-1)
+			OR (@from_date_id_utc < @agent_stats_date_id AND date_id = @agent_stats_date_id AND interval_id <= @agent_stats_interval_id)
+		)
 	END
 
 	if (@isIntraday=3)--service bus changes
@@ -533,7 +608,6 @@ BEGIN
 						(ch.schedule_date_local <= p.valid_to_date_local)
 				)
 		WHERE ch.scenario_code = @scenario_code
-
 
 		--REMOVE DATES IN THE FUTURE(SHOULD NOT EXIST BUT ANYWAY)
 		DELETE FROM #stg_schedule_changed
@@ -660,6 +734,7 @@ BEGIN
 					OR (fa.date_id = p.valid_from_date_id AND fa.interval_id >= p.valid_from_interval_id)
 					OR (fa.date_id = p.valid_to_date_id_maxdate AND fa.interval_id <= p.valid_to_interval_id_maxdate)
 			)
+
 		END
 	END
 END
@@ -694,6 +769,7 @@ SELECT
 	business_unit_id		= fs.business_unit_id,
 	person_code				= fs.person_code
 FROM #fact_schedule fs
+
 
 /*#26421 Update schedule data with acd_login_id to handle nights shifts and person_period change*/
 UPDATE #fact_schedule_deviation
@@ -789,7 +865,7 @@ AND stat.date_id >= shifts.date_id --make sure the stat intervals are after shif
 AND stat.interval_id >= shifts.interval_id
 AND shifts.shift_startdate_local_id IS NOT NULL
 
-DELETE FROM #fact_schedule_deviation WHERE shift_startdate_local_id IS NULL
+DELETE #fact_schedule_deviation WHERE shift_startdate_local_id IS NULL
 
 /*Merge data*/
 INSERT INTO #fact_schedule_deviation_merge
@@ -974,28 +1050,12 @@ FROM
 --update with now interval
 IF @isIntraday = 2
 BEGIN
-	-- Find latest schedule deviation data
-	select
-		@latest_deviation_date_id = ISNULL(MAX(fsd.date_id), -1),
-		@latest_deviation_date = MAX(d.date_date)
-	from mart.fact_schedule_deviation fsd
-	inner join mart.dim_date d on fsd.date_id = d.date_id
-	where business_unit_id = @business_unit_id
-
-	IF (@latest_deviation_date_id > -1)
-	BEGIN
-		select @latest_deviation_interval_id = ISNULL(MAX(interval_id), 0)
-		from mart.fact_schedule_deviation
-		where date_id = @latest_deviation_date_id
-		and business_unit_id = @business_unit_id
-
-		UPDATE [mart].[etl_job_intraday_settings]
-		SET
-			target_date		= @latest_deviation_date,
-			target_interval	= @latest_deviation_interval_id
-		WHERE business_unit_id = @business_unit_id
+	UPDATE [mart].[etl_job_intraday_settings]
+	SET
+		target_date		= @agent_stats_date,
+		target_interval	= @agent_stats_interval_id
+	WHERE business_unit_id = @business_unit_id
 		AND detail_id = @detail_id
-	END
 END
 
 IF @isIntraday = 3 --changed day by SB

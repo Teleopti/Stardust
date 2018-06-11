@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Linq;
-using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer
+namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 {
 	public interface ILateForWorkEventPublisher
 	{
@@ -21,6 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 	public class LateForWorkEventPublisher : ILateForWorkEventPublisher
 	{
 		private readonly IEventPopulatingPublisher _eventPublisher;
+		private readonly TimeSpan threshold = TimeSpan.FromMinutes(1);
 
 		public LateForWorkEventPublisher(IEventPopulatingPublisher eventPublisher)
 		{
@@ -29,8 +29,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 		public void Publish(Context context)
 		{
-			if (context.Stored.LateForWork && context.State.IsLoggedIn())
-				_eventPublisher.Publish(new PersonArrivalAfterLateForWorkEvent
+			var arrivingAfterLateForWork = context.Schedule.OngoingShift() &&
+										   context.State.IsLoggedIn() &&
+										   previousStateChangeWasBeforeShift(context) &&
+										   previousStateChangeWasLoggedOut(context) &&
+										   isAfterThreshold(context);
+
+			if (arrivingAfterLateForWork)
+				_eventPublisher.Publish(new PersonArrivedLateForWorkEvent
 				{
 					PersonId = context.PersonId,
 					ActivityName = context.Schedule.CurrentActivityName(),
@@ -43,5 +49,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					Adherence = context.Adherence.Adherence()
 				});
 		}
+
+		private static bool previousStateChangeWasLoggedOut(Context context) => context.State.IsLoggedOut(context.Stored.StateGroupId);
+		private static bool previousStateChangeWasBeforeShift(Context context) => context.Stored.StateStartTime == null || context.Stored.StateStartTime < context.Schedule.CurrentShiftStartTime;
+		private bool isAfterThreshold(Context context) => context.Time >= context.Schedule.CurrentShiftStartTime + threshold;
 	}
 }

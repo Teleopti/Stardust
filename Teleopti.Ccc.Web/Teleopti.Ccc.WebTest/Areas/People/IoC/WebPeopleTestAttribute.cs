@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
@@ -35,6 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.IoC
 			isolate.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
 			isolate.UseTestDouble<FakePersonAccessRepository>().For<IRepository<IPersonAccess>>();
 			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<FakePermissions>().For<IAuthorization>();
 		}
 	}
 }

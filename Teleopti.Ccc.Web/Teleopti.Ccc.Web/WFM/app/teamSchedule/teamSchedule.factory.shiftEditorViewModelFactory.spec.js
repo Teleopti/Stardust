@@ -99,7 +99,7 @@
 				"Minutes": 120,
 				"IsOvertime": false
 			}],
-			"Timezone": { "IanaId": "Europe/Berlin" },
+			"Timezone": { "IanaId": "Asia/Hong_Kong" },
 			"UnderlyingScheduleSummary": underlyingScheduleSummary
 		};
 
@@ -107,18 +107,18 @@
 		var shiftLayers = schedule.ShiftLayers;
 		expect(schedule.Date).toEqual("2018-05-28");
 		expect(schedule.Name).toEqual("Annika Andersson");
-		expect(schedule.Timezone).toEqual("Europe/Berlin");
+		expect(schedule.Timezone).toEqual("Asia/Hong_Kong");
 		expect(schedule.HasUnderlyingSchedules).toBe(true);
 		expect(schedule.ProjectionTimeRange.Start).toBe("2018-05-28 08:00");
 		expect(schedule.ProjectionTimeRange.End).toBe("2018-05-28 12:00");
-		expect(schedule.UnderlyingScheduleSummary.PersonalActivities[0].TimeSpan).toBe("08:00 - 09:00");
+		expect(schedule.UnderlyingScheduleSummary.PersonalActivities[0].TimeSpan).toBe("2018-05-28 08:00 - 2018-05-28 09:00");
 		expect(schedule.UnderlyingScheduleSummary.PersonalActivities[0].Description).toBe("Chat");
 
 		expect(shiftLayers.length).toEqual(2);
 		expect(shiftLayers[0].Description).toEqual('E-mail');
 		expect(shiftLayers[0].Start).toEqual("2018-05-28 08:00");
 		expect(shiftLayers[0].End).toEqual("2018-05-28 10:00");
-		expect(shiftLayers[0].TimeSpan).toEqual("08:00 - 10:00");
+		expect(shiftLayers[0].TimeSpan).toEqual("2018-05-28 08:00 - 2018-05-28 10:00");
 		expect(shiftLayers[0].IsOvertime).toEqual(false);
 		expect(shiftLayers[0].Minutes).toEqual(120);
 		expect(shiftLayers[0].ShiftLayerIds).toEqual(["61678e5a-ac3f-4daa-9577-a83800e49622"]);
@@ -154,14 +154,14 @@
 
 		var viewModel = target.CreateSchedule("2018-05-28", "Asia/Hong_Kong", schedule);
 
-		expect(viewModel.UnderlyingScheduleSummary.PersonalActivities[0].TimeSpan).toEqual("14:00 - 15:00");
-		expect(viewModel.UnderlyingScheduleSummary.PersonPartTimeAbsences[0].TimeSpan).toEqual("15:00 - 16:00");
-		expect(viewModel.UnderlyingScheduleSummary.PersonMeetings[0].TimeSpan).toEqual("16:00 - 17:00");
+		expect(viewModel.UnderlyingScheduleSummary.PersonalActivities[0].TimeSpan).toEqual("2018-05-28 14:00 - 2018-05-28 15:00");
+		expect(viewModel.UnderlyingScheduleSummary.PersonPartTimeAbsences[0].TimeSpan).toEqual("2018-05-28 15:00 - 2018-05-28 16:00");
+		expect(viewModel.UnderlyingScheduleSummary.PersonMeetings[0].TimeSpan).toEqual("2018-05-28 16:00 - 2018-05-28 17:00");
 		expect(viewModel.ProjectionTimeRange.Start).toEqual("2018-05-28 14:00");
 		expect(viewModel.ProjectionTimeRange.End).toEqual("2018-05-28 16:00");
 		expect(viewModel.ShiftLayers[0].Start).toEqual("2018-05-28 14:00");
 		expect(viewModel.ShiftLayers[0].End).toEqual("2018-05-28 16:00");
-		expect(viewModel.ShiftLayers[0].TimeSpan).toEqual("14:00 - 16:00");
+		expect(viewModel.ShiftLayers[0].TimeSpan).toEqual("2018-05-28 14:00 - 2018-05-28 16:00");
 
 	});
 
@@ -187,7 +187,7 @@
 		var viewModel = target.CreateSchedule("2018-03-25", "Europe/Berlin", schedule);
 		expect(viewModel.ShiftLayers[0].Start).toEqual("2018-03-25 01:00");
 		expect(viewModel.ShiftLayers[0].End).toEqual("2018-03-25 03:00");
-		expect(viewModel.ShiftLayers[0].TimeSpan).toEqual("01:00 - 03:00");
+		expect(viewModel.ShiftLayers[0].TimeSpan).toEqual("2018-03-25 01:00 - 2018-03-25 03:00");
 	});
 
 	it('should create shift layers with correct time span for overnight shift', function () {
@@ -227,7 +227,8 @@
 				"Start": "2018-06-01 22:00",
 				"Minutes": 240,
 				"IsOvertime": false
-			}]
+			}],
+			"Timezone": { "IanaId": "Europe/Berlin" }
 		};
 
 		var viewModel = target.CreateSchedule("2018-06-01", "Asia/Hong_Kong", schedule);
@@ -246,7 +247,8 @@
 			"Date": "2018-06-01",
 			"WorkTimeMinutes": 240,
 			"ContractTimeMinutes": 240,
-			"UnderlyingScheduleSummary": underlyingScheduleSummary
+			"UnderlyingScheduleSummary": underlyingScheduleSummary,
+			"Timezone": { "IanaId": "Europe/Berlin" }
 		};
 
 		var viewModel = target.CreateSchedule("2018-06-01", "Asia/Hong_Kong", schedule);
@@ -291,7 +293,7 @@
 			};
 
 			var viewModel = target.CreateSchedule("2018-03-25", "Europe/Berlin", schedule);
-			expect(viewModel.ShiftLayers[0].TimeSpan).toEqual("1:00 AM - 3:00 AM");
+			expect(viewModel.ShiftLayers[0].TimeSpan).toEqual("03/25/2018 1:00 AM - 03/25/2018 3:00 AM");
 		});
 	});
 });

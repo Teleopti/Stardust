@@ -48,10 +48,7 @@
 			endTime: getDefaultActvityEndTime()
 		};
 
-		vm.updateInvalidAgents = updateInvalidAgents;
-
-		updateInvalidAgents(true);
-
+		
 		activityService.fetchAvailableActivities().then(function (activities) {
 			vm.availableActivities = activities;
 			vm.availableActivitiesLoaded = true;
@@ -75,11 +72,12 @@
 		}
 
 		vm.anyValidAgent = function () {
+			updateInvalidAgents();
 			return vm.invalidAgents.length != vm.selectedAgents.length;
 		};
 
-		function updateInvalidAgents(isTimeRangeValid) {
-			if (!isTimeRangeValid) return;
+		function updateInvalidAgents() {
+			if ($scope.newActivityForm && !$scope.newActivityForm.$valid) return;
 			var belongsToDates = decidePersonBelongsToDates(vm.selectedAgents, getTimeRangeMoment());
 			vm.invalidAgents = [];
 

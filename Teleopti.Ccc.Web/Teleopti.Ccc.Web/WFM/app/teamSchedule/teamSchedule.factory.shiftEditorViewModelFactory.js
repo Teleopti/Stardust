@@ -29,7 +29,7 @@
 
 			this.Date = date;
 			this.Name = schedule.Name;
-			this.Timezone = currentTimezone;
+			this.Timezone = schedule.Timezone.IanaId;
 			this.ProjectionTimeRange = getProjectionTimeRange(layers);
 			this.ShiftLayers = layers;
 			this.HasUnderlyingSchedules = hasUnderlyingSchedules;
@@ -118,10 +118,7 @@
 		}
 
 		function getTimeSpan(date, start, end) {
-			if (!start.isSame(end, 'day') || serviceDateFormatHelper.getDateOnly(start) !== date) {
-				return start.format('YYYY-MM-DD LT') + ' - ' + end.format('YYYY-MM-DD LT');
-			}
-			return start.format('LT') + ' - ' + end.format('LT');
+			return start.format('L LT') + ' - ' + end.format('L LT');
 		}
 
 

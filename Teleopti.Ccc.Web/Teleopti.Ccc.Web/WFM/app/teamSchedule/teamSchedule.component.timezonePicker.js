@@ -10,34 +10,36 @@
 				ngModelCtrl: 'ngModel'
 			},
 			bindings: {
-				availableTimezones: '<',
+				avaliableTimezones: '<',
 				ngModel: '=?'
 			}
 		});
 
-	timezonePickerCtrl.$inject = ['$timeout', 'CurrentUserInfo'];
+	timezonePickerCtrl.$inject = ['$timeout', 'CurrentUserInfo', 'TimezoneListFactory'];
 
-	function timezonePickerCtrl($timeout, currentUserInfo) {
+	function timezonePickerCtrl($timeout, currentUserInfo, TimezoneListFactory) {
 		var ctrl = this;
 		var defaultTimezone = currentUserInfo.CurrentUserInfo().DefaultTimeZone;
-		var defaultTimezoneName = currentUserInfo.CurrentUserInfo().DefaultTimeZoneName;
+
 		ctrl.ngModel = ctrl.ngModel || defaultTimezone;
 		ctrl.selectedTimezone = ctrl.ngModel;
+		ctrl.timezoneList = {};
 
 		ctrl.$onChanges = function (changesObj) {
-			if (!changesObj.availableTimezones) return;
-
-			populateTimezoneList();
-
-			if (!!ctrl.timezoneList.length && !isInTimezoneList(ctrl.selectedTimezone)) {
+			if (!ctrl.avaliableTimezones) return;
+			ctrl.avaliableTimezones = ctrl.avaliableTimezones || [];
+			if (!!ctrl.avaliableTimezones.length && ctrl.avaliableTimezones.indexOf(ctrl.selectedTimezone) < 0) {
 				ctrl.selectedTimezone = defaultTimezone;
 				$timeout(function () {
 					ctrl.onSelectionChanged();
 				});
 			}
-
-			unshiftDefaultTimezone();
+			ctrl.avaliableTimezones.push(defaultTimezone);
+			TimezoneListFactory.Create(ctrl.avaliableTimezones).then(function (timezoneList) {
+				ctrl.timezoneList = timezoneList;
+			});
 		}
+
 
 		ctrl.isSelectedEnabled = function (timezoneId) {
 			return timezoneId && (timezoneId.indexOf('invalidIanaId') < 0);
@@ -47,52 +49,6 @@
 			ctrl.ngModel = ctrl.selectedTimezone;
 			ctrl.ngModelCtrl.$setViewValue(ctrl.ngModel);
 		}
-
-		ctrl.shortDisplayNameOfTheSelected = function () {
-			var reg = /\((.+?)\)/;
-			var displayName = '';
-			for (var i = 0; i < ctrl.timezoneList.length; i++) {
-				if (ctrl.timezoneList[i].ianaId === ctrl.selectedTimezone) {
-					displayName = ctrl.timezoneList[i].displayName;
-					break;
-				}
-			}
-			var result = reg.exec(displayName);
-			return result ? result[1] : displayName;
-		}
-
-		function populateTimezoneList() {
-			var timezoneDict = {};
-			ctrl.availableTimezones.forEach(function (z) {
-				if (z.IanaId === "") {
-					timezoneDict['invalidIanaId' + ' ' + z.DisplayName] = z.DisplayName;
-				} else {
-					timezoneDict[z.IanaId] = z.DisplayName;
-				}
-
-			});
-			ctrl.timezoneList = [];
-
-			angular.forEach(timezoneDict, function (value, key) {
-				ctrl.timezoneList.push({
-					ianaId: key,
-					displayName: value
-				});
-			});
-		}
-
-		function unshiftDefaultTimezone() {
-			if (!isInTimezoneList(defaultTimezone))
-				ctrl.timezoneList.unshift({
-					ianaId: defaultTimezone,
-					displayName: defaultTimezoneName
-				});
-		}
-
-		function isInTimezoneList(timezone) {
-			return !!ctrl.timezoneList.filter(function (tz) { return tz.ianaId == timezone; }).length;
-		}
-
 	}
 
 })();

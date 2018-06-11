@@ -38,7 +38,7 @@
 			return moment(vm.scheduleDate);
 		};
 		vm.currentTimezone = stateParams.timezone;
-		vm.availableTimezones = [];
+		vm.avaliableTimezones = [];
 		vm.sitesAndTeams = undefined;
 		vm.staffingEnabled = stateParams.staffingEnabled;
 		vm.selectedGroups = {
@@ -386,9 +386,10 @@
 		}
 
 		function populateAvailableTimezones(schedules) {
-			vm.availableTimezones = schedules.Schedules.map(function (s) {
-				return s.Timezone;
+			var availableTimezones = schedules.Schedules.map(function (s) {
+				return s.Timezone.IanaId;
 			});
+			vm.avaliableTimezones = availableTimezones;
 		}
 
 		vm.changeTimezone = function () {

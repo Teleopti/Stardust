@@ -2960,6 +2960,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Applied campaign.
+        /// </summary>
+        public static string AppliedACampaign {
+            get {
+                return ResourceManager.GetString("AppliedACampaign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Applied override.
+        /// </summary>
+        public static string AppliedAOverride {
+            get {
+                return ResourceManager.GetString("AppliedAOverride", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings are applied to the following:.
         /// </summary>
         public static string AppliedFilters {
@@ -5466,7 +5484,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Campaign not applied for overrided days.
+        ///   Looks up a localized string similar to Campaign not applied for days with override.
         /// </summary>
         public static string CampaignNotAppliedWIthExistingOverride {
             get {
@@ -6542,7 +6560,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Override replaced existing campaign values.
+        ///   Looks up a localized string similar to Override removed existing campaign values.
         /// </summary>
         public static string ClearCampaignWIthOverride {
             get {
@@ -20066,6 +20084,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This is the current forecast for this workload.
+        /// </summary>
+        public static string NewForecastIntro {
+            get {
+                return ResourceManager.GetString("NewForecastIntro", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New gamification setting.
         /// </summary>
         public static string NewGamificationSetting {
@@ -20987,6 +21014,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No forecast data was found. Try running a forecast for this scenario..
+        /// </summary>
+        public static string NoForecast {
+            get {
+                return ResourceManager.GetString("NoForecast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No functions available.
         /// </summary>
         public static string NoFunctionsAvailable {
@@ -21424,6 +21460,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoRestrictionDefinedFor {
             get {
                 return ResourceManager.GetString("NoRestrictionDefinedFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No result for current filter.
+        /// </summary>
+        public static string NoResultForCurrentFilter {
+            get {
+                return ResourceManager.GetString("NoResultForCurrentFilter", resourceCulture);
             }
         }
         
@@ -29043,6 +29088,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Saving. This might take a while....
+        /// </summary>
+        public static string Saving {
+            get {
+                return ResourceManager.GetString("Saving", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scenario.
         /// </summary>
         public static string Scenario {
@@ -35406,6 +35460,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ThisRoleCannotBeDeleted {
             get {
                 return ResourceManager.GetString("ThisRoleCannotBeDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This scenario has unsaved changes.
+        /// </summary>
+        public static string ThisScenarioHasChanges {
+            get {
+                return ResourceManager.GetString("ThisScenarioHasChanges", resourceCulture);
             }
         }
         

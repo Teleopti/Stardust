@@ -139,10 +139,10 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.229\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.231\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.229\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.231\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -1720,7 +1720,6 @@
     <Compile Include="WorkflowControl\OpenAbsenceRequestPeriodProjectionTest.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenPeriodTest.cs" />
     <Compile Include="WorkflowControl\PendingAbsenceRequestTest.cs" />
-    <Compile Include="WorkflowControl\PersonAccountBalanceCalculatorTest.cs" />
     <Compile Include="WorkflowControl\PersonAccountBalanceValidatorTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\IsShiftTradeRequestNotNullSpecificationTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\OpenShiftTradePeriodSpecificationTest.cs" />

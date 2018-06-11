@@ -104,6 +104,12 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 				builder.RegisterType<PurgeOldSignInAttempts>().As<IPurgeOldSignInAttempts>().SingleInstance();
 			else
 				builder.RegisterType<PurgeOldSignInAttemptsEmpty>().As<IPurgeOldSignInAttempts>().SingleInstance();
+
+			if (_configuration.Toggle(Toggles.Tenant_PurgeNoneEmployeesData_76291))
+				builder.RegisterType<PurgeNoneEmployeeData>().As<IPurgeNoneEmployeeData>().SingleInstance();
+			else
+				builder.RegisterType<PurgeNoneEmployeeDataEmpty>().As<IPurgeNoneEmployeeData>().SingleInstance();
+
 		}
 	}
 

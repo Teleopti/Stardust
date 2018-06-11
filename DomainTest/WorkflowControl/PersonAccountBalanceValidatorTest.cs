@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -7,6 +8,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -196,6 +198,46 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var accountDay = AbsenceAccountFactory.CreateAbsenceAccountDays(person, absence, new DateOnly(2016, 1, 1),
 				TimeSpan.Zero, TimeSpan.Zero, TimeSpan.Zero, TimeSpan.Zero, TimeSpan.Zero, TimeSpan.Zero);
 			var personAccountBalanceCalculator = new PersonAccountBalanceCalculator(new[] { accountDay });
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(schedulingResultStateHolder,
+				personAccountBalanceCalculator, null, null);
+
+			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
+
+			Assert.IsTrue(((PersonAccountBalanceValidator)_target).InvalidReason.Equals(nameof(Resources.RequestDenyReasonPersonAccount)));
+			Assert.IsFalse(result.IsValid);
+
+			var errorMessage = Resources.RequestDenyReasonPersonAccount;
+			Assert.IsTrue(result.ValidationErrors.Equals(errorMessage));
+		}
+
+		[Test]
+		public void ShouldGetDenyReasonPersonAccountWhenNoAccountIntersectsRequest()
+		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
+
+			var absence = new Absence().WithId();
+			var person = PersonFactory.CreatePersonWithId();
+			person.WorkflowControlSet = WorkflowControlSetFactory.CreateWorkFlowControlSet(absence, new GrantAbsenceRequest(),
+				true);
+			var period = new DateTimePeriod(2016, 9, 9, 9, 2016, 9, 9, 17);
+			var absenceRequest = new AbsenceRequest(absence, period);
+			var personRequest = new PersonRequest(person, absenceRequest);
+
+			var schedulingResultStateHolder = new SchedulingResultStateHolder();
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			var absenceLayer = new AbsenceLayer(absence, period);
+			var personAbsence = new PersonAbsence(person, scenario, absenceLayer).WithId();
+
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, period);
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(person,
+				scenario, period);
+			scheduleDictionary.AddPersonAssignment(assignment);
+			scheduleDictionary.AddPersonAbsence(personAbsence);
+			schedulingResultStateHolder.Schedules = scheduleDictionary;
+
+			var accountDay = AbsenceAccountFactory.CreateAbsenceAccountDays(person, absence, new DateOnly(2016, 10, 9),
+				TimeSpan.FromDays(10), TimeSpan.FromDays(5), TimeSpan.FromDays(5), TimeSpan.FromDays(5), TimeSpan.FromDays(5), TimeSpan.Zero);
+			var personAccountBalanceCalculator = new PersonAccountBalanceCalculator(new List<AccountDay>{ accountDay });
 			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(schedulingResultStateHolder,
 				personAccountBalanceCalculator, null, null);
 

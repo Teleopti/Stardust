@@ -14,25 +14,23 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Persi
 	public class AgentStatePersisterGetTest
 	{
 		public IAgentStatePersister Persister;
-		public ICurrentAnalyticsUnitOfWork UnitOfWork;
-		public MutableNow Now;
-		
+
 		[Test]
 		public void ShouldGetByPersonIds()
 		{
-			var state1 = new AgentStateForUpsert { PersonId = Guid.NewGuid() };
-			var state2 = new AgentStateForUpsert { PersonId = Guid.NewGuid() };
-			var state3 = new AgentStateForUpsert { PersonId = Guid.NewGuid() };
+			var state1 = new AgentStateForUpsert {PersonId = Guid.NewGuid()};
+			var state2 = new AgentStateForUpsert {PersonId = Guid.NewGuid()};
+			var state3 = new AgentStateForUpsert {PersonId = Guid.NewGuid()};
 			Persister.Upsert(state1);
 			Persister.Upsert(state2);
 			Persister.Upsert(state3);
 
 			var result = Persister.ReadForTest(new[] {state1.PersonId, state3.PersonId});
-			
+
 			result.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(state1.PersonId, state3.PersonId);
 		}
-		
+
 		[Test]
 		public void ShouldGetWithAllData()
 		{
@@ -49,11 +47,11 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Persi
 				SnapshotDataSourceId = 1,
 				ReceivedTime = "2014-11-11 10:36".Utc(),
 				StateGroupId = Guid.NewGuid(),
-				StateStartTime = "2014-11-11 10:37".Utc(),
+				StateStartTime = "2014-11-11 10:37".Utc()
 			};
 			writer.Upsert(state);
 
-			var result = Persister.ReadForTest(new[] { state.PersonId})
+			var result = Persister.ReadForTest(new[] {state.PersonId})
 				.Single();
 
 			result.PersonId.Should().Be(state.PersonId);
@@ -68,6 +66,5 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Persi
 			result.StateGroupId.Should().Be(state.StateGroupId);
 			result.StateStartTime.Should().Be(state.StateStartTime);
 		}
-		
 	}
 }

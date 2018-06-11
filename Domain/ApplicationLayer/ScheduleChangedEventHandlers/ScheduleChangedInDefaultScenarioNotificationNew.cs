@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		[UnitOfWork]
 		public virtual void Handle(ScheduleChangedEvent message)
 		{
-			if (!_scenarioRepository.Get(message.ScenarioId).DefaultScenario) return;
+			if (!(_scenarioRepository.Get(message.ScenarioId)?.DefaultScenario ?? false)) return;
 			var firstDate = message.StartDateTime;
 			var lastDate = message.EndDateTime;
 			_messageBroker.Send(

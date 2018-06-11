@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 
 		public void Apply(PersonRuleChangedEvent @event) => applySolidProof(@event);
 
-		public void Apply(PersonArrivalAfterLateForWorkEvent @event)
+		public void Apply(PersonArrivedLateForWorkEvent @event)
 		{
 			var model = applySolidProof(@event);
 			if (model != null)

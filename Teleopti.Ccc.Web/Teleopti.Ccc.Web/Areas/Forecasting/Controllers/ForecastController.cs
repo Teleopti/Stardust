@@ -20,6 +20,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebForecasts)]
 	public class ForecastController : ApiController
 	{
+		private const double tolerance = 0.000001d;
+
 		private readonly IForecastCreator _forecastCreator;
 		private readonly ISkillRepository _skillRepository;
 		private readonly ForecastProvider _forecastProvider;
@@ -112,7 +114,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 					continue;
 				}
 
-				forecastDay.HasCampaign = input.CampaignTasksPercent > 0d;
+				forecastDay.HasCampaign = Math.Abs(input.CampaignTasksPercent) > tolerance;
 				forecastDay.CampaignTasksPercentage = input.CampaignTasksPercent;
 				forecastDay.TotalTasks = (input.CampaignTasksPercent + 1) * forecastDay.Tasks;
 			}
@@ -142,7 +144,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 					{
 						forecastDay.TotalTasks = input.OverrideTasks.Value;
 					}
-					else if (forecastDay.CampaignTasksPercentage > 0)
+					else if (Math.Abs(forecastDay.CampaignTasksPercentage) > tolerance)
 					{
 						forecastDay.TotalTasks = (forecastDay.CampaignTasksPercentage + 1) * forecastDay.Tasks;
 					}
@@ -176,7 +178,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 				}
 				else
 				{
-					forecastDay.HasCampaign = forecastDay.CampaignTasksPercentage > 0;
+					forecastDay.HasCampaign = Math.Abs(forecastDay.CampaignTasksPercentage) > tolerance;
 				}
 			}
 
@@ -190,6 +192,11 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		[UnitOfWork, HttpPost, Route("api/Forecasting/ApplyForecast")]
 		public virtual IHttpActionResult ApplyForecast(ForecastModel forecastResult)
 		{
+			if (!forecastResult.ForecastDays.Any())
+			{
+				return Ok();
+			}
+
 			var overrideNote = $"[*{Resources.ForecastDayIsOverrided}*]";
 
 			var workload = _workloadRepository.Get(forecastResult.WorkloadId);

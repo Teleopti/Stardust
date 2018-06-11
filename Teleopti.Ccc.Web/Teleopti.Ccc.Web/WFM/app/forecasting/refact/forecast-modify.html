@@ -3,12 +3,12 @@
   <div class="view-header with-desc with-fab">
     <div class="view-title">
       <h1><i class="mdi mdi-chart-line"></i> {{vm.selectedWorkload.Workload.Name}}</h1>
-      <p>This is the current forecast for this workload</p>
+      <p>{{'NewForecastIntro' | translate}}</p>
     </div>
     <div class="fab-wrapper grow-out" ng-if="vm.changesMade">
       <button ng-click="vm.applyWipToScenario()" ng-class="{'shrink-in':vm.savingToScenario}" class="wfm-fab material-depth-1">
         <i ng-cloak class="mdi mdi-content-save"></i>
-        <md-tooltip>Save changes to scenario</md-tooltip>
+        <md-tooltip>{{'SaveAsScenario' | translate}}</md-tooltip>
       </button>
     </div>
   </div>
@@ -20,7 +20,7 @@
           <div class="con-flex">
             <div style="display: flex; align-items: center; justify-content:space-between;">
               <label class="inline-flex" style="align-items: center;">
-                Scenario: &nbsp;
+                {{'ScenarioColon'|translate}} &nbsp;
                 <md-select ng-model="vm.selectedScenario" ng-change="vm.changeScenario(vm.selectedScenario)" placeholder="{{'Scenario' | translate}}" ng-disabled="vm.savingToScenario || vm.isForecastRunning">
                   <md-option ng-repeat="scenario in vm.scenarios" ng-value="scenario">{{scenario.Name}}</md-option>
                 </md-select>
@@ -29,9 +29,9 @@
               <div>
                 <button tabindex=0 class="context-menu card-context" ng-click="vm.periodModal = true" ng-disabled="vm.savingToScenario || vm.isForecastRunning">
                   <i class="mdi mdi-calendar"></i>
-                  <md-tooltip>Period</md-tooltip>
+                  <md-tooltip>{{'SelectForecastPeriodIntro'|translate}}</md-tooltip>
                 </button>
-                From: {{vm.forecastPeriod.startDate | date: L}} To: {{vm.forecastPeriod.endDate  | date: L}}
+                {{'DateFrom' | translate}}: {{vm.forecastPeriod.startDate | date: L}} {{'DateTo' | translate}}: {{vm.forecastPeriod.endDate  | date: L}}
               </div>
 
               <button tabindex=0 class="context-menu card-context" ng-click="vm.exportModal = true" ng-disabled="vm.savingToScenario || vm.isForecastRunning">
@@ -81,7 +81,7 @@
     <div class="con-flex">
       <div class="con-row">
         <div class="con-flex notice-warning">
-          <i class="mdi mdi-alert"></i> This scenario has unsaved changes
+          <i class="mdi mdi-alert"></i> {{'ThisScenarioHasChanges' | translate}}
         </div>
       </div>
     </div>
@@ -127,7 +127,7 @@
         <div class="panel material-depth-1">
           <div class="con-row">
             <div class="con-flex">
-              Scenario "{{vm.selectedScenario.Name}}" has no forecast data, please run a forecast for it
+              {{'NoForecast'|translate}}
             </div>
           </div>
           <div class="con-footer">
@@ -143,15 +143,15 @@
     <div class="con-flex">
       <div class="panel material-depth-1 full-padding">
         <div>
-          <span ng-if="vm.isForecastRunning" >Loading..</span>
-          <span ng-if="vm.savingToScenario" >Saving to scenario..</span>
+          <span ng-if="vm.isForecastRunning" >{{'RunningForecast'|translate}}</span>
+          <span ng-if="vm.savingToScenario" >{{'Saving' | translate}}</span>
           <md-progress-linear md-mode="indeterminate"></md-progress-linear>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="con-row" ng-if="vm.selectedWorkload.Days.length > 1 && !vm.savingToScenario">
+  <div class="con-row" ng-if="vm.selectedWorkload.Days.length > 0 && !vm.savingToScenario">
     <div class="con-flex">
       <div class="panel material-depth-1">
         <div class="sub-header">
@@ -175,7 +175,7 @@
         </div>
         <div class="con-row">
           <div class="con-flex" >
-            <forecast-chart  chart-id="vm.selectedWorkload.ChartId" selectable="true" refresh="vm.loadChart" on-click="vm.pointClick" days="vm.selectedWorkload.Days"> </forecast-chart>
+            <forecast-chart chart-id="vm.selectedWorkload.ChartId" selectable="true" refresh="vm.loadChart" on-click="vm.pointClick" days="vm.selectedWorkload.Days"> </forecast-chart>
           </div>
         </div>
         <div class="con-footer">
@@ -201,7 +201,7 @@
       </div>
       <div class="modal-actions">
         <aside>
-          <button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.forecastWorkload()">{{'Apply'|translate}}</button>
+          <button class="wfm-btn wfm-btn-invis-primary" ng-disabled="!vm.forecastPeriod.startDate || !vm.forecastPeriod.endDate" ng-click="vm.forecastWorkload()">{{'Apply'|translate}}</button>
         </aside>
       </div>
       <div ng-if="vm.isForecastRunning">
@@ -225,7 +225,7 @@
       </div>
       <div class="modal-actions">
         <aside>
-          <button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.getWorkloadForecastData()">{{'Apply'|translate}}</button>
+          <button class="wfm-btn wfm-btn-invis-primary" ng-disabled="!vm.forecastPeriod.startDate || !vm.forecastPeriod.endDate" ng-click="vm.getWorkloadForecastData()">{{'Apply'|translate}}</button>
         </aside>
       </div>
       <div ng-if="vm.isForecastRunning">
@@ -246,7 +246,7 @@
       </div>
       <div class="modal-actions">
         <aside>
-          <button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.exportToFile()">{{'Export'|translate}}</button>
+          <button class="wfm-btn wfm-btn-invis-primary" ng-disabled="!vm.forecastPeriod.startDate || !vm.forecastPeriod.endDate" ng-click="vm.exportToFile()">{{'Export'|translate}}</button>
         </aside>
       </div>
       <div ng-if="vm.isForecastRunning">
@@ -284,5 +284,5 @@
 </div>
 </div>
 <div ng-cloak ng-if="vm.noWorkloadFound">
-  No workload found, please select one
+{{'YouHaveToSelectAtLeastOneWorkload'|translate}}
 </div>

@@ -139,6 +139,15 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 				.Should().Not.Be.Empty();
 		}
 
+		[Test]
+		public void ShouldStorePersonArrivalAfterLateForWorkEvent()
+		{
+			WithUnitOfWork.Do(() => Target.Publish(new PersonArrivedLateForWorkEvent()));
+
+			WithUnitOfWork.Get(() => Events.LoadAll())
+				.Should().Not.Be.Empty();
+		}
+
 		public class TestEvent : IRtaStoredEvent, IEvent
 		{
 			public Guid Id;

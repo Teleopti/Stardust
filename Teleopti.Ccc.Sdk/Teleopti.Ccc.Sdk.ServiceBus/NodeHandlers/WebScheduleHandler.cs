@@ -13,14 +13,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 {
 	public class WebScheduleHandler : IHandle<WebScheduleStardustEvent>
 	{
-		private readonly IComponentContext _componentContext;
 		private readonly IDataSourceScope _dataSourceScope;
 		private readonly IStardustJobFeedback _stardustJobFeedback;
+		private readonly IHandleEvent<WebScheduleStardustEvent> _realEventHandler;
 
-		public WebScheduleHandler(IStardustJobFeedback stardustJobFeedback, IComponentContext componentContext, IDataSourceScope dataSourceScope)
+		public WebScheduleHandler(IStardustJobFeedback stardustJobFeedback, IHandleEvent<WebScheduleStardustEvent> realEventHandler, IDataSourceScope dataSourceScope)
 		{
 			_stardustJobFeedback = stardustJobFeedback;
-			_componentContext = componentContext;
+			_realEventHandler = realEventHandler;
 			_dataSourceScope = dataSourceScope;
 		}
 
@@ -33,8 +33,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			_stardustJobFeedback.SendProgress = sendProgress;
 			using (_dataSourceScope.OnThisThreadUse(parameters.LogOnDatasource))
 			{
-				var theRealOne = _componentContext.Resolve<IHandleEvent<WebScheduleStardustEvent>>();
-				theRealOne.Handle(parameters);
+				_realEventHandler.Handle(parameters);
 			}
 			_stardustJobFeedback.SendProgress = null;
 		}

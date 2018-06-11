@@ -5,6 +5,7 @@ $(document).ready(function() {
 
 	var resetLocale = function () {
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
+			DateFormat: 'YYYY-MM-DD',
 			UseJalaaliCalendar: false
 		});
 	};

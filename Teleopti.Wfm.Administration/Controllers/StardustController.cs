@@ -126,6 +126,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Ok(_stardustRepository.GetOldestJob());
 		}
 
+		[HttpGet, Route("Stardust/QueueCount")]
+		public IHttpActionResult GetQueueCount()
+		{
+			return Ok(_stardustRepository.GetQueueCount());
+		}
+
 		[HttpPost, Route("Stardust/TriggerResourceCalculation")]
 		[TenantUnitOfWork]
 		public virtual IHttpActionResult TriggerResourceCalculation([FromBody] LogOnModel logOnModel)
@@ -223,7 +229,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		public IHttpActionResult IntradayToolGoWithTheFlow()
 		{
 			var showIntradayTool = _configReader.AppConfig("ShowIntradayTool");
-			if (string.IsNullOrEmpty(showIntradayTool) && showIntradayTool != "true") return BadRequest("");
+			if (string.IsNullOrEmpty(showIntradayTool) || showIntradayTool != "true") return BadRequest("");
 
 			_stardustSender.Send(
 				new IntradayToolEvent
@@ -237,7 +243,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[HttpGet, Route("Stardust/ShowIntradayTool")]
 		public IHttpActionResult ShowIntradayTool()
 		{
-			return Ok(!string.IsNullOrEmpty(_configReader.AppConfig("ShowIntradayTool")));
+			var showIntradayTool = _configReader.AppConfig("ShowIntradayTool");
+			return Ok(!string.IsNullOrEmpty(showIntradayTool) && showIntradayTool == "true");
 		}
 	}
 }

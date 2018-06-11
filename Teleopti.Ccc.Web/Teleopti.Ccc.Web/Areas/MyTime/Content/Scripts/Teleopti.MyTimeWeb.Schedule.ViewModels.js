@@ -196,6 +196,6 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, parent) {
 	});
 
 	self.layers = ko.utils.arrayMap(scheduleDay.Periods, function (item) {
-		return new Teleopti.MyTimeWeb.Schedule.LayerViewModel(item, self);
+		return new Teleopti.MyTimeWeb.Schedule.LayerViewModel(item, self, false, 0, true);
 	});
 };

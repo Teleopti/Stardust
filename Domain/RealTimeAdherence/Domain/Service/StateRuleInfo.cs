@@ -15,89 +15,27 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 		{
 			_context = context;
 			_mappedState = new Lazy<MappedState>(() =>
-					context.HasInput() ?
-						context.StateMapper.StateFor(context.BusinessUnitId, context.InputStateCode(), context.InputStateDescription()) :
-						context.StateMapper.StateFor(context.Stored.StateGroupId)
+				context.HasInput() ? context.StateMapper.StateFor(context.BusinessUnitId, context.InputStateCode(), context.InputStateDescription()) : context.StateMapper.StateFor(context.Stored.StateGroupId)
 			);
 			_mappedRule = new Lazy<MappedRule>(() => context.StateMapper.RuleFor(context.BusinessUnitId, context.State.StateGroupId(), context.Schedule.CurrentActivityId()));
 		}
 
-		public bool IsLoggedIn()
-		{
-			var stateGroupId = StateGroupId();
-			
-			//TODO: Look into. we are assuming that if there is no stategroup the person is logged in 
-			if (stateGroupId == null)
-				return true;
-			
-			//TODO: Look into. we are also assuming that if there is nothing in LoggedOutStateGroupIds the person is logged in
-			return !_context.StateMapper.LoggedOutStateGroupIds().Contains(stateGroupId.Value); 
-		}
-		
-		public bool StateChanged()
-		{
-			return _mappedState.Value?.StateGroupId != _context.Stored.StateGroupId;
-		}
+		public bool IsLoggedIn() => isLoggedIn(StateGroupId());
+		public bool IsLoggedOut(Guid? stateGroupid) => !isLoggedIn(stateGroupid);
+		private bool isLoggedIn(Guid? stateGroupId) => stateGroupId.HasValue && !_context.StateMapper.LoggedOutStateGroupIds().Contains(stateGroupId.Value);
 
-		public Guid? StateGroupId()
-		{
-			return _mappedState.Value?.StateGroupId;
-		}
+		public bool StateChanged() => _mappedState.Value?.StateGroupId != _context.Stored.StateGroupId;
+		public Guid? StateGroupId() => _mappedState.Value?.StateGroupId;
+		public string StateGroupName() => _mappedState.Value?.StateGroupName;
 
-		public string StateGroupName()
-		{
-			return _mappedState.Value?.StateGroupName;
-		}
+		public bool RuleChanged() => _mappedRule.Value?.RuleId != _context.Stored.RuleId;
+		public Guid? RuleId() => _mappedRule.Value?.RuleId;
+		public string RuleName() => _mappedRule.Value?.RuleName;
+		public int? RuleDisplayColor() => _mappedRule.Value?.DisplayColor;
+		public double? StaffingEffect() => _mappedRule.Value?.StaffingEffect;
 
-
-
-		public bool RuleChanged()
-		{
-			return _mappedRule.Value?.RuleId != _context.Stored.RuleId;
-		}
-
-		public Guid? RuleId()
-		{
-			return _mappedRule.Value?.RuleId;
-		}
-
-		public string RuleName()
-		{
-			return _mappedRule.Value?.RuleName;
-		}
-
-		public int? RuleDisplayColor()
-		{
-			return _mappedRule.Value?.DisplayColor;
-		}
-
-		public double? StaffingEffect()
-		{
-			return _mappedRule.Value?.StaffingEffect;
-		}
-
-		public Adherence? Adherence()
-		{
-			return _mappedRule.Value?.Adherence;
-		}
-
-
-
-		public bool IsAlarm()
-		{
-			return _mappedRule.Value?.IsAlarm ?? false;
-		}
-
-		public int AlarmThresholdTime()
-		{
-			return _mappedRule.Value?.ThresholdTime ?? 0;
-		}
-
-		public int? AlarmColor()
-		{
-			return _mappedRule.Value?.AlarmColor;
-		}
-
-
+		public bool IsAlarm() => _mappedRule.Value?.IsAlarm ?? false;
+		public int AlarmThresholdTime() => _mappedRule.Value?.ThresholdTime ?? 0;
+		public int? AlarmColor() => _mappedRule.Value?.AlarmColor;
 	}
 }

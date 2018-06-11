@@ -72,12 +72,13 @@
 		}
 
 		vm.anyValidAgent = function () {
+			vm.updateInvalidAgents();
 			return vm.invalidAgents.length != vm.selectedAgents.length;
 		};
 
 		vm.updateInvalidAgents = function () {
 			vm.invalidAgents = [];
-			if (!$scope.newPersonalActivityForm.$valid)
+			if (!$scope.newPersonalActivityForm && !$scope.newPersonalActivityForm.$valid)
 				return;
 			var belongsToDates = decidePersonBelongsToDates(vm.selectedAgents, getTimeRangeMoment());
 

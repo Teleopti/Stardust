@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Persi
 		public void ShouldPersistBusinessUnit()
 		{
 			var businessUnitId = Guid.NewGuid();
-			var state = new AgentStateForUpsert { BusinessUnitId = businessUnitId};
+			var state = new AgentStateForUpsert {BusinessUnitId = businessUnitId};
 
 			Target.Upsert(state);
 
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Persi
 		public void ShouldPersistTeamId()
 		{
 			var teamId = Guid.NewGuid();
-			var state = new AgentStateForUpsert { TeamId = teamId};
+			var state = new AgentStateForUpsert {TeamId = teamId};
 
 			Target.Upsert(state);
 
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Persi
 		public void ShouldPersistSiteId()
 		{
 			var siteId = Guid.NewGuid();
-			var state = new AgentStateForUpsert { SiteId = siteId};
+			var state = new AgentStateForUpsert {SiteId = siteId};
 
 			Target.Upsert(state);
 
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Persi
 		[Test]
 		public void ShouldPersistAlarmStartTime()
 		{
-			var state = new AgentStateForUpsert { AlarmStartTime = "2015-12-11 08:00".Utc()};
+			var state = new AgentStateForUpsert {AlarmStartTime = "2015-12-11 08:00".Utc()};
 
 			Target.Upsert(state);
 
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Persi
 		[Test]
 		public void ShouldUpdateTimeWindowCheckSum()
 		{
-			var state = new AgentStateForUpsert { TimeWindowCheckSum = 375 };
+			var state = new AgentStateForUpsert {TimeWindowCheckSum = 375};
 			Target.Upsert(state);
 			state.TimeWindowCheckSum = 475;
 
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Persi
 		[Test]
 		public void ShouldUpdateAdherence()
 		{
-			var state = new AgentStateForUpsert { Adherence = EventAdherence.Neutral };
+			var state = new AgentStateForUpsert {Adherence = EventAdherence.Neutral};
 
 			Target.Upsert(state);
 
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Persi
 		public void ShouldDelete()
 		{
 			var personId = Guid.NewGuid();
-			var state = new AgentStateForUpsert { PersonId = personId };
+			var state = new AgentStateForUpsert {PersonId = personId};
 			Target.Upsert(state);
 
 			Target.Delete(personId, DeadLockVictim.Yes);
@@ -163,6 +163,5 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain.Service.Persi
 			Target.ReadForTest(state.PersonId)
 				.Should().Be.Empty();
 		}
-		
 	}
 }
