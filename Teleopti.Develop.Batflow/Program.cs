@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -125,29 +127,46 @@ namespace Teleopti.Develop.Batflow
 			public string SqlPassword() => "cadadi";
 			public string SqlUserName() => "sa";
 
-			public string ApplicationDatabaseBackup() => findFile($"{_baseline}_teleopticcc7.bak");
-			public string AnalyticsDatabaseBackup() => findFile($"{_baseline}_TeleoptiAnalytics.bak");
-			public string AggDatabaseBackup() => findFile($"{_baseline}_teleopticccagg.bak");
+			public string ApplicationDatabaseBackup() => findBackupByHint("teleopticcc7", "ccc7", "app", "db");
+			public string AnalyticsDatabaseBackup() => findBackupByHint("TeleoptiAnalytics", "analytics");
+			public string AggDatabaseBackup() => findBackupByHint("TeleoptiAgg", "teleopticccagg", "agg");
 
-			public string DatabasePrefix() =>
+			private string databasePrefix() =>
 				string.IsNullOrEmpty(_databasePrefix) ? $"{RepositoryName()}_{_baseline}" : _databasePrefix;
 
-			public string ApplicationDatabase() => $"{DatabasePrefix()}_TeleoptiWfm";
-			public string AnalyticsDatabase() => $"{DatabasePrefix()}_TeleoptiAnalytics";
-			public string AggDatabase() => $"{DatabasePrefix()}_TeleoptiAgg";
+			public string ApplicationDatabase() => $"{databasePrefix()}_TeleoptiWfm";
+			public string AnalyticsDatabase() => $"{databasePrefix()}_TeleoptiAnalytics";
+			public string AggDatabase() => $"{databasePrefix()}_TeleoptiAgg";
 
-			private string findFile(string name)
+			private string findBackupByHint(params string[] hints)
+			{
+				var hintsUpper = hints.Select(x => x.ToUpper());
+				var asda = allBackups()
+					.Where(x =>
+					{
+						var name = x.Name.ToUpper();
+						if (_baseline != null)
+							return hintsUpper.Any(hint => name == $"{_baseline}_{hint}.bak".ToUpper());
+						return hintsUpper.Any(hint => name.Contains(hint));
+					})
+					.Select(x => x.FullName)
+					.FirstOrDefault();
+				return asda;
+			}
+
+			private IEnumerable<FileInfo> allBackups()
 			{
 				var folders = new[] {".", ".com.teleopti.wfm.developer.tools"};
 
 				var files = from d in folders
 					let folderPath = Path.Combine(RepositoryPath(), d)
-					where Directory.Exists(folderPath)
-					let foundFiles = Directory.GetFiles(folderPath, name, SearchOption.TopDirectoryOnly)
+					let directory = new DirectoryInfo(folderPath)
+					where directory.Exists
+					let foundFiles = directory.GetFiles("*.bak", SearchOption.TopDirectoryOnly)
 					from f in foundFiles
 					select f;
 
-				return files.FirstOrDefault();
+				return files;
 			}
 
 			public void ConsoleWrite()
