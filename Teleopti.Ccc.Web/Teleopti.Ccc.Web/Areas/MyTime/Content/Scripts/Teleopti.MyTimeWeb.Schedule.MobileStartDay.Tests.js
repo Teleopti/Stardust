@@ -12,6 +12,12 @@
 			absenceReporting: "add-absence-report-detail-template",
 			postShiftForTrade: "shift-exchange-offer-template",
 			overtimeAvailability: "add-overtime-availability-template"
+		},
+		fakeWindow = {
+			navigator: {
+				appVersion: '5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1',
+				userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1'
+			}
 		};
 
 	module("Teleopti.MyTimeWeb.Schedule.MobileStartDay",
@@ -48,12 +54,6 @@
 			+ '</div>';
 
 		$("body").append(brandEle);
-		var fakeWindow = {
-			navigator: {
-				appVersion: '5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1',
-				userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1'
-			}
-		};
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax, fakeWindow);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 		var currentDate = vm.selectedDate();
@@ -66,6 +66,65 @@
 		equal(vm.selectedDate().format('YYYY-MM-DD'), vm.currentUserDate().format('YYYY-MM-DD'));
 
 		$('.fake-navbar-brand').remove();
+	});
+
+	test("should navigate to default start date when clicking schedule menu item", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggle) {
+			if (toggle == 'MyTimeWeb_DayScheduleForStartPage_43446')
+				return true;
+		};
+
+		var html = [
+			'<div class="navbar-offcanvas navmenu-fixed-left offcanvas menu-top-adjust" id="bs-example-navbar-collapse-1">',
+			'	<ul class="nav navbar-nav">',
+			'		<li class="active">',
+			'			<a href="#ScheduleTab" onclick="hideNavMenu();" data-mytime-action="Schedule/Week">',
+			'				Schedule',
+			'				<span class="badge hide no-unread-msg"></span>',
+			'			</a>',
+			'		</li>',
+			'		<li>',
+			'			<a href="#TeamScheduleTab" onclick="hideNavMenu();" data-mytime-action="TeamSchedule/NewIndex">',
+			'				Team Schedule',
+			'				<span class="badge hide no-unread-msg"></span>',
+			'			</a>',
+			'		</li>',
+			'		<li>',
+			'			<a href="#AvailabilityTab" onclick="hideNavMenu();" data-mytime-action="Availability/Index">',
+			'				Availability',
+			'				<span class="badge hide no-unread-msg"></span>',
+			'			</a>',
+			'		</li>',
+			'		<li>',
+			'			<a href="#PreferenceTab" onclick="hideNavMenu();" data-mytime-action="Preference/Index">',
+			'				Preferences',
+			'				<span class="badge hide no-unread-msg"></span>',
+			'			</a>',
+			'		</li>',
+			'		<li>',
+			'			<a href="#RequestsTab" onclick="hideNavMenu();" data-mytime-action="Requests/Index">',
+			'				Requests',
+			'				<span class="badge hide no-unread-msg"></span>',
+			'			</a>',
+			'		</li>',
+			'		<li>',
+			'			<a href="#MessageTab" onclick="hideNavMenu();" data-mytime-action="Message/Index" class="asm-new-message-indicator ">',
+			'				Messages',
+			'				<span class="badge badge-important">146</span>',
+			'			</a>',
+			'		</li>',
+			'	</ul>',
+			'</div>'].join("");
+
+		$("body").append(html);
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax, fakeWindow);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+		var currentDate = vm.selectedDate();
+		vm.nextDay();
+
+		equal($('a[href="#Schedule/MobileDay"]').attr('data-mytime-action'), 'Schedule/MobileDay');
+
+		$('#bs-example-navbar-collapse-1').remove();
 	});
 
 	test("should navigate to next date when swiping left", function () {
