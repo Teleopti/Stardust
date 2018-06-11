@@ -20,7 +20,9 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 			_mappedRule = new Lazy<MappedRule>(() => context.StateMapper.RuleFor(context.BusinessUnitId, context.State.StateGroupId(), context.Schedule.CurrentActivityId()));
 		}
 
-		public bool IsLoggedIn() => StateGroupId().HasValue ? !_context.StateMapper.LoggedOutStateGroupIds().Contains(StateGroupId().Value) : false;
+		public bool IsLoggedIn() => isLoggedIn(StateGroupId());
+		public bool IsLoggedOut(Guid? stateGroupid) => !isLoggedIn(stateGroupid);
+		private bool isLoggedIn(Guid? stateGroupId) => stateGroupId.HasValue && !_context.StateMapper.LoggedOutStateGroupIds().Contains(stateGroupId.Value);
 
 		public bool StateChanged() => _mappedState.Value?.StateGroupId != _context.Stored.StateGroupId;
 		public Guid? StateGroupId() => _mappedState.Value?.StateGroupId;

@@ -56,12 +56,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
-		public FakeRtaHistory BackFromLateForWork(Guid personId, string shiftStart, string time) =>
-			BackFromLateForWork(personId, shiftStart, time, null, null, null, null, null, null);
+		public FakeRtaHistory ArrivedLateForWork(Guid personId, string shiftStart, string time) =>
+			ArrivedLateForWork(personId, shiftStart, time, null, null, null, null, null, null);
 
-		public FakeRtaHistory BackFromLateForWork(Guid personId, string shiftStart, string time, string state, string activity, Color? activityColor, string rule, Color? ruleColor, Adherence? adherence)
+		public FakeRtaHistory ArrivedLateForWork(Guid personId, string shiftStart, string time, string state, string activity, Color? activityColor, string rule, Color? ruleColor, Adherence? adherence)
 		{
-			_store.Add(new PersonArrivalAfterLateForWorkEvent
+			_store.Add(new PersonArrivedLateForWorkEvent
 			{
 				PersonId = personId,
 				Timestamp = time.Utc(),

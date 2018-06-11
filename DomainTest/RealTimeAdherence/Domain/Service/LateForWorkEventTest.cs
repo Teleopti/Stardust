@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service
 				StateCode = "phone"
 			});
 
-			Publisher.PublishedEvents.OfType<PersonArrivalAfterLateForWorkEvent>().Should().Not.Be.Empty();
+			Publisher.PublishedEvents.OfType<PersonArrivedLateForWorkEvent>().Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service
 				StateCode = "phone"
 			});
 
-			var @event = Publisher.PublishedEvents.OfType<PersonArrivalAfterLateForWorkEvent>().Single();
+			var @event = Publisher.PublishedEvents.OfType<PersonArrivedLateForWorkEvent>().Single();
 			@event.ShiftStart.Should().Be("2018-05-30 08:00".Utc());
 			@event.Timestamp.Should().Be("2018-05-30 08:30".Utc());
 		}
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service
 				StateCode = "phone"
 			});
 
-			var @event = Publisher.PublishedEvents.OfType<PersonArrivalAfterLateForWorkEvent>().Single();
+			var @event = Publisher.PublishedEvents.OfType<PersonArrivedLateForWorkEvent>().Single();
 
 			@event.PersonId.Should().Be(personId);
 			@event.ActivityColor.Should().Be(Color.Aqua.ToArgb());
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service
 				StateCode = "phone"
 			});
 
-			Publisher.PublishedEvents.OfType<PersonArrivalAfterLateForWorkEvent>().Should().Be.Empty();
+			Publisher.PublishedEvents.OfType<PersonArrivedLateForWorkEvent>().Should().Be.Empty();
 		}
 
 		[Test]
@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service
 				StateCode = "phone"
 			});
 
-			var @event = Publisher.PublishedEvents.OfType<PersonArrivalAfterLateForWorkEvent>().Single();
+			var @event = Publisher.PublishedEvents.OfType<PersonArrivedLateForWorkEvent>().Single();
 			@event.ShiftStart.Should().Be("2018-05-30 08:00".Utc());
 			@event.Timestamp.Should().Be("2018-05-30 08:30".Utc());
 		}
@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service
 				StateCode = "phone"
 			});
 
-			Publisher.PublishedEvents.OfType<PersonArrivalAfterLateForWorkEvent>().Should().Be.Empty();
+			Publisher.PublishedEvents.OfType<PersonArrivedLateForWorkEvent>().Should().Be.Empty();
 		}
 
 		[Test]
@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service
 				StateCode = "phone"
 			});
 
-			var @event = Publisher.PublishedEvents.OfType<PersonArrivalAfterLateForWorkEvent>().Single();
+			var @event = Publisher.PublishedEvents.OfType<PersonArrivedLateForWorkEvent>().Single();
 			@event.ShiftStart.Should().Be("2018-05-30 08:00".Utc());
 			@event.Timestamp.Should().Be("2018-05-30 09:30".Utc());
 		}
@@ -273,11 +273,10 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service
 				StateCode = "phone"
 			});
 
-			Publisher.PublishedEvents.OfType<PersonArrivalAfterLateForWorkEvent>().Should().Be.Empty();
+			Publisher.PublishedEvents.OfType<PersonArrivedLateForWorkEvent>().Should().Be.Empty();
 		}
 
 		[Test]
-		[Ignore("Implement later")]
 		public void ShouldPublishWhenLateTheFirstDay()
 		{
 			var personId = Guid.NewGuid();
@@ -296,7 +295,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service
 				StateCode = "phone"
 			});
 
-			Publisher.PublishedEvents.OfType<PersonArrivalAfterLateForWorkEvent>().Should().Not.Be.Empty();
+			Publisher.PublishedEvents.OfType<PersonArrivedLateForWorkEvent>().Should().Not.Be.Empty();
 		}
 	}
 }

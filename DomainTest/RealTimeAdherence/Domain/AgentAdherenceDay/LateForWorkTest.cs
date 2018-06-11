@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 			Now.Is("2018-05-28 17:00");
 			var personId = Guid.NewGuid();
 			History
-				.BackFromLateForWork(personId, "2018-05-28 09:00", "2018-05-28 10:00")
+				.ArrivedLateForWork(personId, "2018-05-28 09:00", "2018-05-28 10:00")
 				;
 
 			var data = Target.Load(personId, "2018-05-28".Date());
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 			var personId = Guid.NewGuid();
 			History
 				.StateChanged(personId, "2018-05-28 10:00")
-				.BackFromLateForWork(personId, "2018-05-28 09:00", "2018-05-28 10:00")
+				.ArrivedLateForWork(personId, "2018-05-28 09:00", "2018-05-28 10:00")
 				;
 
 			var data = Target.Load(personId, "2018-05-28".Date());
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 			History
 				.StateChanged(personId, "2018-05-28 09:55")
 				.StateChanged(personId, "2018-05-28 10:00")
-				.BackFromLateForWork(personId, "2018-05-28 09:00", "2018-05-28 10:00")
+				.ArrivedLateForWork(personId, "2018-05-28 09:00", "2018-05-28 10:00")
 				;
 
 			var data = Target.Load(personId, "2018-05-28".Date());
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 			Now.Is("2018-05-28 17:00");
 			var personId = Guid.NewGuid();
 			History
-				.BackFromLateForWork(personId, "2018-05-28 09:00", "2018-05-28 10:00", "InCall", "Phone", Color.Crimson, "InAdherence", Color.DarkKhaki, Adherence.In)
+				.ArrivedLateForWork(personId, "2018-05-28 09:00", "2018-05-28 10:00", "InCall", "Phone", Color.Crimson, "InAdherence", Color.DarkKhaki, Adherence.In)
 				;
 
 			var data = Target.Load(personId, "2018-05-28".Date());

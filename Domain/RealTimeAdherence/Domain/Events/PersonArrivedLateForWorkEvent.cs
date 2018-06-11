@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events
 {
-	public class PersonArrivalAfterLateForWorkEvent : IRtaStoredEvent, IEvent, ISolidProof
+	public class PersonArrivedLateForWorkEvent : IRtaStoredEvent, IEvent, ISolidProof
 	{
 		public Guid PersonId { get; set; }
 
