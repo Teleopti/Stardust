@@ -1,27 +1,20 @@
-﻿(function () {
+﻿(function() {
 	'use strict';
 
 	angular
 		.module('wfm.i18n', ['ui.grid', 'pascalprecht.translate', 'tmh.dynamicLocale'])
-		.service('wfmI18nService', ['i18nService', '$translate', 'amMoment', 'tmhDynamicLocale', '$locale', wfmI18nService]);
+		.service('wfmI18nService', ['i18nService', '$translate', 'amMoment', 'tmhDynamicLocale', wfmI18nService]);
 
-	function wfmI18nService(i18nService, $translate, angularMoment, dynamicLocaleService, $locale) {
+	function wfmI18nService(i18nService, $translate, angularMoment, dynamicLocaleService) {
 		var service = {};
 		service.setLocales = setLocales;
 		return service;
 
 		function setLocales(data) {
 			$translate.use(data.Language);
+			angularMoment.changeLocale(data.DateFormatLocale);
+			dynamicLocaleService.set(data.DateFormatLocale);
 
-			dynamicLocaleService.set(data.DateFormatLocale).then(function () {
-				//For startingDay of datepicker, the default value is ($locale.DATETIME_FORMATS.FIRSTDAYOFWEEK + 8) % 7
-				$locale.DATETIME_FORMATS.FIRSTDAYOFWEEK = data.FirstDayOfWeek - 1;
-			});
-			angularMoment.changeLocale(data.DateFormatLocale, {
-				week: {
-					dow: data.FirstDayOfWeek
-				}
-			});
 			// i18nService is for UI Grid localization.
 			// Languages supported by it is less than languages in server side (Refer to http://ui-grid.info/docs/#/tutorial/104_i18n).
 			// Need do some primary language checking.

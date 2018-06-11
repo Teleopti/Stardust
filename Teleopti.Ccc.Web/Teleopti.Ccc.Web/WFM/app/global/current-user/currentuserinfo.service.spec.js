@@ -17,7 +17,7 @@
 		it('should set the current user info', inject(function (CurrentUserInfo) {
 			var data = {
 				UserName: 'Ashley', DefaultTimeZone: '',
-				Language: '', DateFormatLocale: '', NumberFormat: '', FirstDayOfWeek: 0
+				Language: '', DateFormatLocale: '', NumberFormat: ''
 			};
 
 			CurrentUserInfo.SetCurrentUserInfo(data);
@@ -25,7 +25,6 @@
 			var result = CurrentUserInfo.CurrentUserInfo();
 			expect(result).not.toBe(null);
 			expect(result.UserName).toBe('Ashley');
-			expect(result.FirstDayOfWeek).toBe(0);
 		}));
 
 		it('should get the current user from the server', function (done) {

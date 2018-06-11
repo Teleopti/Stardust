@@ -35,8 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 				DefaultTimeZoneName = defaultTimezone.DisplayName,
 				Language = regionnal.UICulture.IetfLanguageTag,
 				DateFormatLocale = regionnal.Culture.Name,
-				CultureInfo.CurrentCulture.NumberFormat,
-				FirstDayOfWeek = (int)regionnal.Culture.DateTimeFormat.FirstDayOfWeek
+				CultureInfo.CurrentCulture.NumberFormat
 			};
 		}
 	}

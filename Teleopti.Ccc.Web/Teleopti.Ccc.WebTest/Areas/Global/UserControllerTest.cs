@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			dynamic result = target.CurrentUser();
 			Assert.AreEqual(TimeZoneInfo.Local.DisplayName, result.DefaultTimeZoneName);
 		}
-
+		
 
 		[Test]
 		public void ShouldGetTheCurrentLoggonUserCulture()
@@ -49,20 +49,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			dynamic result = target.CurrentUser();
 			Assert.AreEqual(uiCulture.IetfLanguageTag, result.Language);
 			Assert.AreEqual(culture.Name, result.DateFormatLocale);
-		}
-
-		[Test]
-		public void ShouldGetFirstDayOfWeekForTheCurrentLoggonUserCulture()
-		{
-			var person = PersonFactory.CreatePerson();
-			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Local);
-			var culture = CultureInfoFactory.CreateChineseCulture();
-			person.PermissionInformation.SetCulture(culture);
-			var principal = new TeleoptiPrincipal(new TeleoptiIdentity("Pelle", null, null, null, null), person);
-			var currentPrinciple = new FakeCurrentTeleoptiPrincipal(principal);
-			var target = new UserController(currentPrinciple, new FakeIanaTimeZoneProvider());
-			dynamic result = target.CurrentUser();
-			Assert.AreEqual(result.FirstDayOfWeek, 1);
 		}
 	}
 
