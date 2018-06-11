@@ -1048,7 +1048,7 @@ FROM
 
 --finally
 --update with now interval
-IF @isIntraday = 2
+IF (@isIntraday = 2 AND (@agent_stats_date IS NOT NUll))
 BEGIN
 	UPDATE [mart].[etl_job_intraday_settings]
 	SET
