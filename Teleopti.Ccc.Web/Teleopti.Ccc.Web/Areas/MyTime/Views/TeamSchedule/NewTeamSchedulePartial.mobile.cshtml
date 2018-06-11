@@ -30,6 +30,8 @@
 		display: none !important;
 	}
 	#loading {
+		width: 100%;
+		text-align: center;
 		top: 40vh;
 		background: transparent;
 	}
@@ -184,8 +186,8 @@
 				<!--/ko-->
 			</div>
 			<div class="mobile-teamschedule-submit-buttons">
-				<button class="btn btn-default pull-right" data-bind="click: toggleFilterPanel">@Resources.Cancel</button>
-				<button class="btn btn-primary pull-left" data-bind="click: submitSearchForm">@Resources.Search</button>
+				<button class="btn btn-default" data-bind="click: cancelClick">@Resources.Cancel</button>
+				<button class="btn btn-primary" data-bind="click: submitSearchForm">@Resources.Search</button>
 			</div>
 		</div>
 		<!--/ko-->

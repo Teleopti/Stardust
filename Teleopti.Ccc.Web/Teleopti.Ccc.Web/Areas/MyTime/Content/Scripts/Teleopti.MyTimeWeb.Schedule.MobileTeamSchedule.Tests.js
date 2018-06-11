@@ -507,6 +507,75 @@
 		equal($('.teammates-agent-name-row .mobile-teamschedule-agent-name:nth-child(20) .text-name').text(), 'Jon Kleinsmith20');
 	});
 
+	test('should reset search name to empty after click cancel button in panel', function () {
+		initVm();
+
+		$('.mobile-teamschedule-view').append(agentSchedulesHtml);
+
+		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+
+		vm.toggleFilterPanel();
+
+		vm.searchNameText('test search name text');
+
+		$('.mobile-teamschedule-submit-buttons button:first-child').click();
+
+		equal(vm.searchNameText(), '');
+	});
+
+	test('should reset search name text to last submitted value after click cancel button in panel', function () {
+		initVm();
+
+		$('.mobile-teamschedule-view').append(agentSchedulesHtml);
+
+		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+		vm.searchNameText('10');
+		vm.submitSearchForm();
+
+		vm.toggleFilterPanel();
+
+		vm.searchNameText('test search name text');
+
+		$('.mobile-teamschedule-submit-buttons button:first-child').click();
+
+		equal(vm.searchNameText(), '10');
+	});
+
+	test('should reset to selected team default team after click cancel button in panel', function () {
+		initVm();
+
+		$('.mobile-teamschedule-view').append(agentSchedulesHtml);
+
+		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+
+		vm.toggleFilterPanel();
+
+		vm.selectedTeam('d7a9c243-8cd8-406e-9889-9b5e015ab495');
+
+		$('.mobile-teamschedule-submit-buttons button:first-child').click();
+
+		equal(vm.selectedTeam(), fakeDefaultTeamData.DefaultTeam);
+	});
+
+	test('should reset selected team to last submitted team after click cancel button in panel', function () {
+		initVm();
+
+		$('.mobile-teamschedule-view').append(agentSchedulesHtml);
+
+		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+
+		vm.selectedTeam('allTeams');
+		vm.submitSearchForm();
+
+		vm.toggleFilterPanel();
+
+		vm.selectedTeam('a74e1f94-7662-4a7f-9746-a56e00a66f17');
+
+		$('.mobile-teamschedule-submit-buttons button:first-child').click();
+
+		equal(vm.selectedTeam(), 'allTeams');
+	});
+
 	function setUpFakeData() {
 		fakeAvailableTeamsData = {
 			allTeam: { id: 'allTeams', text: 'All Teams' },
@@ -741,7 +810,39 @@
 			'	</div>',
 			'	<!-- /ko -->',
 			'</div>',
-			'<!-- /ko -->'].join("");
+			'<!-- /ko -->',
+			'<!-- ko if: isPanelVisible -->',
+			'<div class="mobile-teamschedule-panel">',
+			'	<div class="teamschedule-filter-component">',
+			'		<p>',
+			'			<b>@Resources.Team: </b>',
+			'		</p>',
+			'		<select data-bind="foreach: availableTeams, select2: { value: selectedTeam, minimumResultsForSearch: \'Infinity\'}" id="team-selection">',
+			'			<optgroup data-bind="attr: { label: text }, foreach: children">',
+			'				<option data-bind="text: text, value: id"></option>',
+			'			</optgroup>',
+			'		</select>',
+			'	</div>',
+			'	<div class="teamschedule-search-component">',
+			'		<p>',
+			'			<b>@Resources.AgentName: </b>',
+			'		</p>',
+			'		<form data-bind="submit: submitSearchForm">',
+			'			<input type="search" class="form-control" placeholder=\'@Resources.SearchHintForName\' data-bind="value: searchNameText" />',
+			'			<input type="submit" style="display: none"/>',
+			'		</form>',
+			'	</div>',
+			'	<div class="empty-search-result">',
+			'		<!-- ko if: emptySearchResult -->',
+			'		<p><b>@Resources.NoResultForCurrentFilter</b></p>',
+			'		<!--/ko-->',
+			'	</div>',
+			'	<div class="mobile-teamschedule-submit-buttons">',
+			'		<button class="btn btn-default" data-bind="click: cancelClick">@Resources.Cancel</button>',
+			'		<button class="btn btn-primary" data-bind="click: submitSearchForm">@Resources.Search</button>',
+			'	</div>',
+			'</div>',
+			'<!--/ko-->'].join("");
 	}
 
 	function setup() {

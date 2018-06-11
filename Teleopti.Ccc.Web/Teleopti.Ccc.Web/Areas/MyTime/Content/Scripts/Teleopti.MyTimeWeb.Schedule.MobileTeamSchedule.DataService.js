@@ -19,7 +19,7 @@
 		});
 	};
 
-	self.loadScheduleData = function (date, selectedTeamIds, paging, filter, callback) {
+	self.loadScheduleData = function (date, paging, filter, callback) {
 		ajax.Ajax({
 			url: '../api/TeamSchedule/TeamSchedule',
 			dataType: "json",
@@ -28,7 +28,7 @@
 			data: JSON.stringify({
 				SelectedDate: date,
 				ScheduleFilter: {
-					teamIds: selectedTeamIds.join(','),
+					teamIds: filter.selectedTeamIds.join(','),
 					searchNameText: filter.searchNameText
 				},
 				Paging: {
