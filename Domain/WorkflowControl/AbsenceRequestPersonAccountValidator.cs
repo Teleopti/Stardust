@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		public IValidatedRequest ValidatedRequestWithPersonAccount(IPersonRequest personRequest, IScheduleRange scheduleRange,
 			IPersonAbsenceAccount personAbsenceAccount)
 		{
+			
 			var person = personRequest.Person;
 
 			var absenceRequest = personRequest.Request as IAbsenceRequest;
@@ -56,11 +57,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 			var requestPeriod = personRequest.Request.Period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
 
-			var affectedAccounts = personAbsenceAccount?.Find(requestPeriod);
+			var affectedAccounts = personAbsenceAccount.Find(requestPeriod).ToList();
+
+			if (!affectedAccounts.Any())
+				return new ValidatedRequest{IsValid = false};
 
 			var validatedRequest = ValidatedRequest.Valid;
-			if (affectedAccounts == null)
-				return validatedRequest;
 
 			foreach (var affectedAccount in affectedAccounts)
 			{
