@@ -12,20 +12,18 @@ namespace Teleopti.Ccc.TestCommon
 		private readonly IEventPopulatingPublisher _eventPublisher;
 		private readonly IFakeStorage _storage;
 		private readonly IEnumerable<ITransactionHook> _hooks;
-		private readonly INow _now;
 
-		public FakeDataSourcesFactoryWithEvents(IFakeStorage storage, IEventPopulatingPublisher eventPublisher, IEnumerable<ITransactionHook> hooks, INow now)
+		public FakeDataSourcesFactoryWithEvents(IFakeStorage storage, IEventPopulatingPublisher eventPublisher, IEnumerable<ITransactionHook> hooks)
 		{
 			_eventPublisher = eventPublisher;
 			_storage = storage;
 			_hooks = hooks;
-			_now = now;
 		}
 
 		public IDataSource Create(IDictionary<string, string> applicationNhibConfiguration, string statisticConnectionString)
 		{
 			return new DataSource(
-				new FakeUnitOfWorkFactory(_storage, _eventPublisher, _hooks, _now),
+				new FakeUnitOfWorkFactory(_storage, _eventPublisher, _hooks),
 				new FakeAnalyticsUnitOfWorkFactory { ConnectionString = statisticConnectionString },
 				new FakeReadModelUnitOfWorkFactory()
 			);
@@ -34,7 +32,7 @@ namespace Teleopti.Ccc.TestCommon
 		public IDataSource Create(string tenantName, string applicationConnectionString, string statisticConnectionString)
 		{
 			return new DataSource(
-				new FakeUnitOfWorkFactory(_storage, _eventPublisher, _hooks, _now) { ConnectionString = applicationConnectionString, Name = tenantName },
+				new FakeUnitOfWorkFactory(_storage, _eventPublisher, _hooks) { ConnectionString = applicationConnectionString, Name = tenantName },
 				new FakeAnalyticsUnitOfWorkFactory { ConnectionString = statisticConnectionString },
 				new FakeReadModelUnitOfWorkFactory()
 			);
@@ -43,7 +41,7 @@ namespace Teleopti.Ccc.TestCommon
 		public IDataSource Create(string tenantName, string applicationConnectionString, string statisticConnectionString, IDictionary<string, string> applicationNhibConfiguration)
 		{
 			return new DataSource(
-				new FakeUnitOfWorkFactory(_storage, _eventPublisher, _hooks, _now) { ConnectionString = applicationConnectionString, Name = tenantName },
+				new FakeUnitOfWorkFactory(_storage, _eventPublisher, _hooks) { ConnectionString = applicationConnectionString, Name = tenantName },
 				new FakeAnalyticsUnitOfWorkFactory { ConnectionString = statisticConnectionString },
 				new FakeReadModelUnitOfWorkFactory()
 			);
@@ -62,7 +60,7 @@ namespace Teleopti.Ccc.TestCommon
 		public IDataSource Create(IDictionary<string, string> applicationNhibConfiguration, string statisticConnectionString)
 		{
 			return new DataSource(
-				new FakeUnitOfWorkFactory(_storage, null, null, null),
+				new FakeUnitOfWorkFactory(_storage, null, null),
 				new FakeAnalyticsUnitOfWorkFactory { ConnectionString = statisticConnectionString },
 				new FakeReadModelUnitOfWorkFactory()
 				);
@@ -71,7 +69,7 @@ namespace Teleopti.Ccc.TestCommon
 		public IDataSource Create(string tenantName, string applicationConnectionString, string statisticConnectionString)
 		{
 			return new DataSource(
-				new FakeUnitOfWorkFactory(_storage, null, null, null) { ConnectionString = applicationConnectionString, Name = tenantName },
+				new FakeUnitOfWorkFactory(_storage, null, null) { ConnectionString = applicationConnectionString, Name = tenantName },
 				new FakeAnalyticsUnitOfWorkFactory { ConnectionString = statisticConnectionString },
 				new FakeReadModelUnitOfWorkFactory()
 				);
@@ -80,7 +78,7 @@ namespace Teleopti.Ccc.TestCommon
 		public IDataSource Create(string tenantName, string applicationConnectionString, string statisticConnectionString, IDictionary<string, string> applicationNhibConfiguration)
 		{
 			return new DataSource(
-				new FakeUnitOfWorkFactory(_storage, null, null, null) { ConnectionString = applicationConnectionString, Name = tenantName },
+				new FakeUnitOfWorkFactory(_storage, null, null) { ConnectionString = applicationConnectionString, Name = tenantName },
 				new FakeAnalyticsUnitOfWorkFactory { ConnectionString = statisticConnectionString },
 				new FakeReadModelUnitOfWorkFactory()
 				);

@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifyAccrued()
         {
-			var unitOfWorkFactory = new FakeUnitOfWorkFactory(null, null, null, null);
+			var unitOfWorkFactory = new FakeUnitOfWorkFactory(null, null, null);
 			var scenarioRepository = new FakeScenarioRepository();
 			scenarioRepository.Has("Default");
 			var scenario = new DefaultScenarioFromRepository(scenarioRepository);
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifyBalanceIn()
         {
-            var unitOfWorkFactory = new FakeUnitOfWorkFactory(null, null, null, null);
+            var unitOfWorkFactory = new FakeUnitOfWorkFactory(null, null, null);
 			var scenarioRepository = new FakeScenarioRepository();
 			scenarioRepository.Has("Default");
 			var scenario = new DefaultScenarioFromRepository(scenarioRepository);
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifyBalanceOut()
         {
-			var unitOfWorkFactory = new FakeUnitOfWorkFactory(null, null, null, null);
+			var unitOfWorkFactory = new FakeUnitOfWorkFactory(null, null, null);
 			var scenarioRepository = new FakeScenarioRepository();
 			scenarioRepository.Has("Default");
 			var scenario = new DefaultScenarioFromRepository(scenarioRepository);
@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifyDate()
         {
-			var unitOfWorkFactory = new FakeUnitOfWorkFactory(null, null, null, null);
+			var unitOfWorkFactory = new FakeUnitOfWorkFactory(null, null, null);
 			var personAccountUpdater = MockRepository.GenerateMock<IPersonAccountUpdater>();
 			
             _targetDay = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account1, null,
@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifyExtra()
         {
-			var unitOfWorkFactory = new FakeUnitOfWorkFactory(null, null, null, null);
+			var unitOfWorkFactory = new FakeUnitOfWorkFactory(null, null, null);
 			var scenarioRepository = new FakeScenarioRepository();
 			scenarioRepository.Has("Default");
 			var scenario = new DefaultScenarioFromRepository(scenarioRepository);

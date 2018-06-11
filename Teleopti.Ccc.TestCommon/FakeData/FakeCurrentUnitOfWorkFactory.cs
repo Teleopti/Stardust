@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IUnitOfWorkFactory Current()
 		{
-			return _current ?? new FakeUnitOfWorkFactory(_storage, null, null, null){Name = "Fake"};
+			return _current ?? new FakeUnitOfWorkFactory(_storage, null, null){Name = "Fake"};
 		}
 	}
 }

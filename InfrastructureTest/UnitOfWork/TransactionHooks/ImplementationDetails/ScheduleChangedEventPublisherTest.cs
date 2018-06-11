@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario);
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(personAssignment, DomainUpdateType.Update);
 			var publisher = new eventPopulatingPublisherProbe();
-			var target = new ScheduleChangedEventPublisher(publisher, new Now());
+			var target = new ScheduleChangedEventPublisher(publisher);
 			target.AfterCompletion(new[] { rootChangeInfo });
 
 			Assert.That(publisher.PublishedEvent.StartDateTime, Is.EqualTo(personAssignment.Period.StartDateTime));
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(personAbsence, DomainUpdateType.Update);
 			var publisher = new eventPopulatingPublisherProbe();
-			var target = new ScheduleChangedEventPublisher(publisher, new Now());
+			var target = new ScheduleChangedEventPublisher(publisher);
 			target.AfterCompletion(new[] {rootChangeInfo});
 
 			Assert.That(publisher.PublishedEvent.StartDateTime, Is.EqualTo(period.StartDateTime.AddHours(-12)));
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(personAbsence, DomainUpdateType.Update);
 			IRootChangeInfo rootChangeInfo1 = new RootChangeInfo(personAssignment, DomainUpdateType.Update);
 			var publisher = new eventPopulatingPublisherProbe();
-			var target = new ScheduleChangedEventPublisher(publisher, new Now());
+			var target = new ScheduleChangedEventPublisher(publisher);
 			target.AfterCompletion(new[] {rootChangeInfo, rootChangeInfo1});
 
 			Assert.That(publisher.PublishedEvent.StartDateTime, Is.EqualTo(baseTimePoint.AddHours(expectedPeriodStart)));
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks.Implementa
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario);
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(personAssignment, DomainUpdateType.Update);
 			var publisher = new eventPopulatingPublisherTrowingSqlExeption();
-			var target = new ScheduleChangedEventPublisher(publisher, new Now());
+			var target = new ScheduleChangedEventPublisher(publisher);
 			try
 			{
 				target.AfterCompletion(new[] { rootChangeInfo });
