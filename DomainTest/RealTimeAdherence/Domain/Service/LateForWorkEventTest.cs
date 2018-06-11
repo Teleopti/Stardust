@@ -298,17 +298,5 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service
 
 			Publisher.PublishedEvents.OfType<PersonArrivalAfterLateForWorkEvent>().Should().Not.Be.Empty();
 		}
-
-		[Test]
-		[Ignore("Maybe implement later")]
-		public void ShouldWhatShouldBeDoneReallyIfScheduleIsChangedAndTheShiftStartIsChanged()
-		{
-		}
-
-		[Test]
-		[Ignore("Maybe implement later")]
-		public void ShouldWhatShouldBeDoneReallyIfScheduleIsRemoved()
-		{
-		}
 	}
 }
