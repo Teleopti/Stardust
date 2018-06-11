@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 
@@ -28,13 +29,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 		public void Publish(Context context)
 		{
-			var arrivingAfterLateForWork = context.Stored.LateForWork &&
+			if (context.Schedule.CurrentActivity() == null)
+				return;
+
+			var arrivingAfterLateForWork = previousStateWasBeforeShiftAndLoggedOff(context) &&
 										   context.State.IsLoggedIn() &&
 										   isOutsideTreshold(context.Time, context.Schedule.CurrentShiftStartTime);
 
 			var lateForWork = context.Schedule.ShiftStarted() && context.State.IsLoggedOut();
 			if (!arrivingAfterLateForWork)
-				context.LateForWork = context.Stored.LateForWork || lateForWork;
+				context.LateForWork = previousStateWasBeforeShiftAndLoggedOff(context) || lateForWork;
 
 			if (context.Schedule.ShiftEnded())
 			{
@@ -55,6 +59,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					RuleColor = context.State.RuleDisplayColor(),
 					Adherence = context.Adherence.Adherence()
 				});
+		}
+
+		private static bool previousStateWasBeforeShiftAndLoggedOff(Context context)
+		{
+			if (context.Stored.StateGroupId == null)
+				return true;
+			if (context.Stored.StateStartTime == null)
+				return true;
+			if (context.Stored.StateStartTime > context.Schedule.CurrentShiftStartTime)
+				return false;
+			if (context.StateMapper.LoggedOutStateGroupIds().Contains(context.Stored.StateGroupId.Value))
+				return true;
+			return false;
 		}
 
 		private bool isOutsideTreshold(DateTime stateTime, DateTime shiftStart)
