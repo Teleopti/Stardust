@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private void nodeStarter()
 		{
 			var port = _configReader.ReadValue("port", 14100);
-			var totalNodes = _configReader.ReadValue("NumberOfNodes", Environment.ProcessorCount);
+			var totalNodes = _configReader.ReadValue("NumberOfNodes", 20);
 			for (var portIndex = 1; portIndex <= totalNodes; portIndex++)
 			{
 				var nodeName = "Node" + portIndex;
