@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 	public class LateForWorkEventPublisher : ILateForWorkEventPublisher
 	{
 		private readonly IEventPopulatingPublisher _eventPublisher;
-		private readonly TimeSpan threshold = TimeSpan.FromSeconds(59);
+		private readonly TimeSpan threshold = TimeSpan.FromMinutes(1);
 
 		public LateForWorkEventPublisher(IEventPopulatingPublisher eventPublisher)
 		{
@@ -29,15 +29,11 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 
 		public void Publish(Context context)
 		{
-			if (context.Schedule.CurrentActivity() == null)
-				return;
-
-			var timeSinceShiftStart = context.Time - context.Schedule.CurrentShiftStartTime;
-			var isAfterThreshold = timeSinceShiftStart.TotalSeconds > threshold.TotalSeconds;
-
-			var arrivingAfterLateForWork = previousStateWasBeforeShiftAndLoggedOff(context) &&
+			var arrivingAfterLateForWork = context.Schedule.OngoingShift() &&
 										   context.State.IsLoggedIn() &&
-										   isAfterThreshold;
+										   previousStateChangeWasBeforeShift(context) &&
+										   previousStateChangeWasLoggedOut(context) &&
+										   isAfterThreshold(context);
 
 			if (arrivingAfterLateForWork)
 				_eventPublisher.Publish(new PersonArrivalAfterLateForWorkEvent
@@ -54,18 +50,8 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 				});
 		}
 
-		private static bool previousStateWasBeforeShiftAndLoggedOff(Context context)
-		{
-			if (context.Stored.StateGroupId == null)
-				return true;
-			if (context.Stored.StateStartTime == null)
-				return true;
-			if (context.Stored.StateStartTime > context.Schedule.CurrentShiftStartTime)
-				return false;
-			if (context.StateMapper.LoggedOutStateGroupIds().Contains(context.Stored.StateGroupId.Value))
-				return true;
-			return false;
-		}
-
+		private static bool previousStateChangeWasLoggedOut(Context context) => context.StateMapper.LoggedOutStateGroupIds().Contains(context.Stored.StateGroupId.Value);
+		private static bool previousStateChangeWasBeforeShift(Context context) => context.Stored.StateStartTime == null || context.Stored.StateStartTime < context.Schedule.CurrentShiftStartTime;
+		private bool isAfterThreshold(Context context) => context.Time >= context.Schedule.CurrentShiftStartTime + threshold;
 	}
 }
