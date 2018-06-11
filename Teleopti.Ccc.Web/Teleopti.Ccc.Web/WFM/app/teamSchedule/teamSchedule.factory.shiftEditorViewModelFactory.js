@@ -118,7 +118,7 @@
 		}
 
 		function getTimeSpan(date, start, end) {
-			return start.format('YYYY-MM-DD LT') + ' - ' + end.format('YYYY-MM-DD LT');
+			return start.format('L LT') + ' - ' + end.format('L LT');
 		}
 
 

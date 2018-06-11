@@ -293,7 +293,7 @@
 			};
 
 			var viewModel = target.CreateSchedule("2018-03-25", "Europe/Berlin", schedule);
-			expect(viewModel.ShiftLayers[0].TimeSpan).toEqual("2018-03-25 1:00 AM - 2018-03-25 3:00 AM");
+			expect(viewModel.ShiftLayers[0].TimeSpan).toEqual("03/25/2018 1:00 AM - 03/25/2018 3:00 AM");
 		});
 	});
 });
