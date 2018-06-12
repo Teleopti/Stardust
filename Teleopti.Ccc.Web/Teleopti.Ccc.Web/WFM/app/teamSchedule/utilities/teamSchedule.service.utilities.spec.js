@@ -4,9 +4,16 @@
 
 	beforeEach(module('wfm.teamSchedule'));
 	beforeEach(module(function ($provide) {
-		currentUserInfo = new FakeCurrentUserInfo();
 		$provide.service('CurrentUserInfo', function () {
-			return currentUserInfo;
+			return {
+				CurrentUserInfo: function () {
+					return {
+						DateFormatLocale: "sv-SE",
+						DefaultTimeZone: 'Asia/Hong_Kong',
+						FirstDayOfWeek: 1
+					};
+				}
+			};
 		});
 	}));
 	beforeAll(function () {
@@ -20,7 +27,7 @@
 		target = _UtilityService_;
 		target.setNowDate(new Date('2018-02-26T15:00:00+08:00'));
 	}));
-	
+
 
 	it('should get correct week day names', function () {
 
@@ -30,10 +37,10 @@
 	});
 
 	it('should get correct weekdays for the given date', function () {
-		var result = target.getWeekdays(moment('2016-08-17').toDate());
+		var result = target.getWeekdays(moment('2018-06-12').toDate());
 		expect(result.length).toBe(7);
 		expect(result[0].name).toBe('måndag');
-		expect(moment(result[0].date).locale('en').format('YYYY-MM-DD')).toBe('2016-08-15');
+		expect(moment(result[0].date).locale('en').format('YYYY-MM-DD')).toBe('2018-06-11');
 	});
 
 	function commonTestsInDifferentLocale() {
@@ -71,13 +78,6 @@
 
 		commonTestsInDifferentLocale();
 	});
-	function FakeCurrentUserInfo() {
-		this.CurrentUserInfo = function () {
-			return {
-				DateFormatLocale: "en-US",
-				DefaultTimeZone: 'Asia/Hong_Kong'
-			};
-		};
-	}
+	
 
 });
