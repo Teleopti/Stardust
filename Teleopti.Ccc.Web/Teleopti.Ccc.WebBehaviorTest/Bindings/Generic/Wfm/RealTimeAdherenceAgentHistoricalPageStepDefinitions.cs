@@ -3,7 +3,9 @@ using System.Globalization;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
@@ -14,6 +16,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 	[Binding]
 	public class RealTimeAdherenceAgentHistoricalPageStepDefinitions
 	{
+		private readonly IToggleManager _toggles;
+
+		public RealTimeAdherenceAgentHistoricalPageStepDefinitions(IToggleManager toggles)
+		{
+			_toggles = toggles;
+		}
+
 		[When(@"I view historical adherence for '(\D*)'")]
 		public void WhenIViewHistoricalAdherenceFor(string name)
 		{
@@ -47,7 +56,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void ThenIShouldSeeOutOfAdherences(Table table)
 		{
 			var outOfAdherences = table.CreateSet<StartEndTimePair>();
-			outOfAdherences.ForEach(x => { Browser.Interactions.AssertExists(".out-of-adherence[data-starttime='{0}'][data-endtime='{1}']", x.StartTime, x.EndTime); });
+			outOfAdherences.ForEach(x =>
+			{
+				Browser.Interactions.AssertExists(".out-of-adherence[data-starttime='{0}'][data-endtime='{1}']", x.StartTime,
+					x.EndTime);
+			});
 		}
 
 		[Then(@"I should see out of adherence between '(.*)' and '(.*)'")]
@@ -101,7 +114,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void ThenIShouldSeeActivities(Table table)
 		{
 			var activities = table.CreateSet<StartEndTimePair>();
-			activities.ForEach(x => { Browser.Interactions.AssertExists(".activity[data-starttime='{0}'][data-endtime='{1}']", x.StartTime, x.EndTime); });
+			activities.ForEach(x =>
+			{
+				Browser.Interactions.AssertExists(".activity[data-starttime='{0}'][data-endtime='{1}']", x.StartTime, x.EndTime);
+			});
 		}
 
 		[Then(@"I should see adherence percentage of (.*)%")]
@@ -109,7 +125,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		{
 			Browser.Interactions.AssertFirstContains(".adherence-percent", adherence);
 		}
-		
+
 		[Then(@"I should be informed she is (.*) minutes late for work")]
 		public void ThenIShouldBeInformedSheIsLateForWorkWithMinutes(string minutes) =>
 			Browser.Interactions.AssertFirstContains(".late-for-work", minutes);
@@ -126,20 +142,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void ThenIShouldSeeRuleChange(string rule, string time) =>
 			assertRuleAndStateChange(new RuleAndStateChanges {Time = time, Rule = rule});
 
-		private static void assertRuleAndStateChange(RuleAndStateChanges change)
+		private void assertRuleAndStateChange(RuleAndStateChanges change)
 		{
 			var selector = $".change[data-time='{change.Time}']";
 
-			// because....
-			// in some rare cases if you use a table, where the td only has content in a child span
-			// sometimes other td:s do not get rendered/or something due to something height something
-			// forcing hight "fixes" it
-			var forceRowHeight = $@"
+			if (!_toggles.IsEnabled(Toggles.RTA_EasilySpotLateForWork_75668))
+			{
+				// because....
+				// in some rare cases if you use a table, where the td only has content in a child span
+				// sometimes other td:s do not get rendered/or something due to something height something
+				// forcing hight "fixes" it
+				var forceRowHeight = $@"
 var element = document.querySelector(""{selector}"");
 element.style.height = '50px';
 return 'OK';
 ";
-			Browser.Interactions.AssertJavascriptResultContains(forceRowHeight, "OK");
+				Browser.Interactions.AssertJavascriptResultContains(forceRowHeight, "OK");
+			}
 
 			Browser.Interactions.AssertFirstContains(selector, change.Time);
 			if (!string.IsNullOrEmpty(change.Activity))
