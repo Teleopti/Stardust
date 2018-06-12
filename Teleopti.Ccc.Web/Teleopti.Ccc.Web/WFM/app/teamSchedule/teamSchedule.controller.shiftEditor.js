@@ -69,7 +69,7 @@
 		vm.showScrollRightButton = false;
 		vm.selectedShiftLayer = null;
 		vm.isInDifferentTimezone = false;
-		vm.displayDate = moment(vm.date).format("YYYY-MM-DD");
+		vm.displayDate = moment(vm.date).format("L");
 
 		vm.$onInit = function () {
 			vm.timelineVm = ShiftEditorViewModelFactory.CreateTimeline(vm.date, vm.timezone, timeLineTimeRange);
