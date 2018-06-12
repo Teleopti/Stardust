@@ -23,8 +23,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 					from @event in events
 #pragma warning disable 618
 					from handlerType in _resolver.HandlerTypesFor<IRunInSyncInFatClientProcess>(@event)
-					select Task.Run(() =>
-							_processor.Process(@event, handlerType)
+					select Task.Factory.StartNew(() =>
+							_processor.Process(@event, handlerType),
+						TaskCreationOptions.LongRunning
 #pragma warning restore 618
 					))
 				.ToArray());

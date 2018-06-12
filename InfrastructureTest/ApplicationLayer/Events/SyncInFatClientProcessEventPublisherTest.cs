@@ -21,6 +21,12 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		public IncorrectTestEventHandler IncorrectHandler;
 
 		[Test]
+		public void LetsGetARedBuildToRun()
+		{
+			2.Should().Be.EqualTo(3);
+		}
+		
+		[Test]
 		public void ShouldCreateNewScope()
 		{
 			var event1 = new TestEvent();
