@@ -46,7 +46,6 @@ Feature: Solid proof
 	  | Phone state | LoggedOff |
 	  | Adherence   | In        |
 
-  @ignore
   Scenario: See rule changes
 	Given Mikkey Dee has a shift with
 	  | Field                    | Value            |
