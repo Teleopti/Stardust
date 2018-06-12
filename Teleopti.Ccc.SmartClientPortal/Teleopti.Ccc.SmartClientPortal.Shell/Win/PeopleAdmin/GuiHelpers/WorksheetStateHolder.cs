@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -26,6 +29,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 {
 	public class WorksheetStateHolder : IDisposable
 	{
+		private readonly bool _peopleSpeedUpOpening76365;
 		private  IDictionary<ViewType, IRotationStateHolder> _rotationStateHolderCache = new Dictionary<ViewType, IRotationStateHolder>();
 
 		private IList<IShiftCategory> _shiftCategories = new List<IShiftCategory>();
@@ -36,8 +40,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		private readonly List<PersonGeneralModel> _tobeDeleteFromGridDataAfterRomove = new List<PersonGeneralModel>();
 
 		private readonly TypedBindingCollection<IContract> _contractBindingCollection = new TypedBindingCollection<IContract>();
-		private readonly List<Culture> _cultureCollection = new List<Culture>();
-		private readonly List<Culture> _uiCultureCollection = new List<Culture>();
+		private List<Culture> _cultureCollection = new List<Culture>();
+		private List<Culture> _uiCultureCollection = new List<Culture>();
 
 		private List<PersonPeriodChildModel> _personPeriodGridViewChildCollection = new List<PersonPeriodChildModel>();
 		private List<SchedulePeriodChildModel> _schedulePeriodGridViewChildCollection;
@@ -52,6 +56,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		private List<IPersonAccountChildModel> _personaccountGridViewChildCollection;
 
 		private readonly TypedBindingCollection<IWorkflowControlSet> _workflowControlSetCollection = new TypedBindingCollection<IWorkflowControlSet>();
+
+		[RemoveMeWithToggle(Toggles.People_SpeedUpOpening_76365)]
+		public WorksheetStateHolder(bool peopleSpeedUpOpening76365)
+		{
+			_peopleSpeedUpOpening76365 = peopleSpeedUpOpening76365;
+		}
 
 		public TypedBindingCollection<IContract> ContractCollection
 		{
@@ -70,12 +80,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 		public void Dispose()
 		{
-			Dispose(true);
+			dispose(true);
 
 			GC.SuppressFinalize(this);
 		}
 
-		private void Dispose(bool disposing)
+		private void dispose(bool disposing)
 		{
 			if (disposing)
 			{
@@ -90,7 +100,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			get { return new ReadOnlyCollection<Culture>(_cultureCollection); }
 		}
 
-		public ReadOnlyCollection<Culture> UICultureCollection
+		public ReadOnlyCollection<Culture> UiCultureCollection
 		{
 			get { return new ReadOnlyCollection<Culture>(_uiCultureCollection); }
 		}
@@ -101,33 +111,63 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			Culture uiCulture;
 
 			CultureInfo[] cInfo = CultureInfo.GetCultures(CultureTypes.SpecificCultures);
-			for (int i = 0; i < cInfo.Length - 1; i++)
+			if (_peopleSpeedUpOpening76365)
 			{
-				culture = new Culture(cInfo[i].LCID, cInfo[i].DisplayName);
-				try
-				{
-					CultureInfo.GetCultureInfo(cInfo[i].LCID);
-				}
-				catch (Exception)
-				{				
-					continue;
-				}
+				var cultureCollection = new ConcurrentBag<Culture>();
+				var uiCultureCollection = new ConcurrentBag<Culture>();
+				Parallel.For(0, cInfo.Length - 1, i => {
+					var cultureToTest = cInfo[i];
+					try
+					{
+						// ReSharper disable ReturnValueOfPureMethodIsNotUsed
+						CultureInfo.GetCultureInfo(cultureToTest.LCID);
+						// ReSharper restore ReturnValueOfPureMethodIsNotUsed
 
-				_cultureCollection.Add(culture);
+						culture = new Culture(cultureToTest.LCID, cultureToTest.DisplayName);
+						cultureCollection.Add(culture);
 
-				uiCulture = new Culture(cInfo[i].LCID, cInfo[i].Name);
-				_uiCultureCollection.Add(uiCulture);
+						uiCulture = new Culture(cultureToTest.LCID, cultureToTest.Name);
+						uiCultureCollection.Add(uiCulture);
+					}
+					catch (CultureNotFoundException)
+					{}
+				});
+
+				_cultureCollection = cultureCollection.ToList();
+				_uiCultureCollection = uiCultureCollection.ToList();
 			}
+			else
+			{
+				for (int i = 0; i < cInfo.Length - 1; i++)
+				{
+					try
+					{
+						// ReSharper disable ReturnValueOfPureMethodIsNotUsed
+						CultureInfo.GetCultureInfo(cInfo[i].LCID);
+						// ReSharper restore ReturnValueOfPureMethodIsNotUsed
+					}
+					catch (Exception)
+					{
+						continue;
+					}
 
+					culture = new Culture(cInfo[i].LCID, cInfo[i].DisplayName);
+					_cultureCollection.Add(culture);
+
+					uiCulture = new Culture(cInfo[i].LCID, cInfo[i].Name);
+					_uiCultureCollection.Add(uiCulture);
+				}
+			}
+			
 			_cultureCollection.Sort(
 				 (c1, c2) => string.Compare(c1.DisplayName, c2.DisplayName, StringComparison.CurrentCulture));
 			_uiCultureCollection.Sort(
 				 (c1, c2) => string.Compare(c1.DisplayName, c2.DisplayName, StringComparison.CurrentCulture));
 
-			culture = new Culture(0, UserTexts.Resources.ChangeYourCultureSettings);
+			var emergencyText = UserTexts.Resources.ChangeYourCultureSettings;
+			culture = new Culture(0, emergencyText);
 			_cultureCollection.Insert(0, culture);
-			uiCulture = new Culture(0, UserTexts.Resources.ChangeYourCultureSettings);
-			_uiCultureCollection.Insert(0, uiCulture);
+			_uiCultureCollection.Insert(0, culture);
 		}
 
 		internal void AddAndSavePerson(int rowIndex, FilteredPeopleHolder filteredPeopleHolder)
@@ -935,7 +975,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			{
 				personRotationModelParent = new PersonRotationModelParent(selectedPersonRotation.Person, null)
 													  {
-														  PersonRotation = currentPersonRotation,
+														  PersonRotation = null,
 														  RotationCount = _childrenPersonRotationCollection.Count > 0 ? 2 : 0
 													  };
 

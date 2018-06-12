@@ -93,7 +93,7 @@ MyTimeWeb_MobileResponsive_43826 = true
 Staffing_Info_Configuration_44687 = true
 
 # Kittens, Bugs&Roses and Micke #
-People_SpeedUpOpening_76365 = false
+People_SpeedUpOpening_76365 = RC
 Scheduler_RestrictionReport_47013 = true
 Scheduler_RestrictionReportToggleAll_76224 = RC
 Wfm_SkillPriorityRoutingGUI_39885 = RC #Skill priorities, aka Cascading, is not ready for release yet
