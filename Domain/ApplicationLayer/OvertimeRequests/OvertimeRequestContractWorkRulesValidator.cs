@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -11,6 +13,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 {
+
 	public class OvertimeRequestContractWorkRulesValidator : IOvertimeRequestContractWorkRulesValidator
 	{
 		private readonly ICurrentScenario _scenarioRepository;
@@ -18,34 +21,37 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 		private readonly ILoadSchedulesForRequestWithoutResourceCalculation
 			_loadSchedulingDataForRequestWithoutResourceCalculation;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
+		private readonly IOvertimeActivityBelongsToDateProvider _overtimeActivityBelongsToDateProvider;
 
 		public OvertimeRequestContractWorkRulesValidator(ICurrentScenario scenarioRepository,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation,
-			IScheduleDayChangeCallback scheduleDayChangeCallback)
+			IScheduleDayChangeCallback scheduleDayChangeCallback, IOvertimeActivityBelongsToDateProvider overtimeActivityBelongsToDateProvider)
 		{
 			_scenarioRepository = scenarioRepository;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_loadSchedulingDataForRequestWithoutResourceCalculation = loadSchedulingDataForRequestWithoutResourceCalculation;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
+			_overtimeActivityBelongsToDateProvider = overtimeActivityBelongsToDateProvider;
 		}
 
 		public OvertimeRequestValidationResult Validate(IPersonRequest personRequest, OvertimeRequestSkillTypeFlatOpenPeriod overtimeRequestOpenPeriod)
 		{
 			var person = personRequest.Person;
-			var timeZone = person.PermissionInformation.DefaultTimeZone();
 
 			if (!overtimeRequestOpenPeriod.EnableWorkRuleValidation)
 				return new OvertimeRequestValidationResult { IsValid = true };
 
-			loadSchedules(personRequest.Request.Period, person, _scenarioRepository.Current());
+			var loadSchedulePeriod = personRequest.Request.Period.ChangeStartTime(TimeSpan.FromDays(-1)).ChangeEndTime(TimeSpan.FromDays(1));
+
+			loadSchedules(loadSchedulePeriod, person, _scenarioRepository.Current());
 
 			var scheduleDictionary = _schedulingResultStateHolder.Schedules;
 
 			var undoRedoContainer = new UndoRedoContainer();
 			setupUndo(undoRedoContainer, _schedulingResultStateHolder);
 
-			var personLocalDate = new DateOnly(personRequest.Request.Period.StartDateTimeLocal(timeZone));
+			var personLocalDate = _overtimeActivityBelongsToDateProvider.GetBelongsToDate(person, personRequest.Request.Period);
 			var scheduleDay = scheduleDictionary[person].ScheduledDay(personLocalDate);
 			scheduleDay.CreateAndAddOvertime(new Scheduling.Activity("fake") { InWorkTime = true }, personRequest.Request.Period, ((IOvertimeRequest)personRequest.Request).MultiplicatorDefinitionSet, true);
 
