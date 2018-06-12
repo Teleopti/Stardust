@@ -73,6 +73,8 @@
 		Scheduler_RestrictionReport_47013,
 		Scheduler_RestrictionReportToggleAll_76224,
 
+		People_SpeedUpOpening_76365,
+
 		WfmGlobalLayout_personalOptions_37114,
 		
 		ResourcePlanner_HideSkillPrioSliders_41312,
