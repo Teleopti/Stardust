@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 
-namespace Teleopti.Support.Tool.Tool
+namespace Teleopti.Support.Library.Config
 {
 	public class CustomSectionContainer
 	{
