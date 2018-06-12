@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 		[Test]
 		public void ShouldStorePersonArrivalAfterLateForWorkEvent()
 		{
-			WithUnitOfWork.Do(() => Target.Publish(new PersonArrivalAfterLateForWorkEvent()));
+			WithUnitOfWork.Do(() => Target.Publish(new PersonArrivedLateForWorkEvent()));
 
 			WithUnitOfWork.Get(() => Events.LoadAll())
 				.Should().Not.Be.Empty();

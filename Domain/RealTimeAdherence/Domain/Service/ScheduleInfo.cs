@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 		private readonly Lazy<DateOnly?> _belongsToDate;
 		private readonly Lazy<int> _timeWindowCheckSum;
 		private readonly Lazy<IEnumerable<ScheduledActivity>> _timeWindowActivities;
-		
+
 		public ScheduleInfo(Context context, Lazy<IEnumerable<ScheduledActivity>> schedule)
 		{
 			_context = context;
@@ -40,23 +40,12 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 			_timeWindowCheckSum = new Lazy<int>(() => _timeWindowActivities.Value.CheckSum());
 		}
 
-		public bool ActivityChanged()
-		{
-			return _context.Stored.ActivityId != CurrentActivityId();
-		}
+		public bool ActivityChanged() => _context.Stored.ActivityId != CurrentActivityId();
+		public bool ShiftStarted() => _context.Stored.ActivityId == null && CurrentActivity() != null;
 
-		public bool ShiftStarted()
-		{
-			return _context.Stored.ActivityId == null &&
-				   CurrentActivity() != null;
-		}
-
-		public bool ShiftEnded()
-		{
-			return _context.Stored.ActivityId != null &&
-				   CurrentActivity() == null &&
-				   PreviousActivity() != null;
-		}
+		public bool ShiftEnded() => _context.Stored.ActivityId != null &&
+									CurrentActivity() == null &&
+									PreviousActivity() != null;
 
 		public int? TimeWindowCheckSum()
 		{
@@ -65,45 +54,15 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 			return _timeWindowCheckSum.Value;
 		}
 
-		public IEnumerable<ScheduledActivity> ActivitiesInTimeWindow()
-		{
-			return _timeWindowActivities.Value;
-		}
-
-		public ScheduledActivity CurrentActivity()
-		{
-			return _currentActivity.Value;
-		}
-
-		public Guid? CurrentActivityId()
-		{
-			return _currentActivity.Value?.PayloadId;
-		}
-
-		public string CurrentActivityName()
-		{
-			return _currentActivity.Value?.Name;
-		}
-
-		public ScheduledActivity PreviousActivity()
-		{
-			return _previousActivity.Value;
-		}
-		
-		public ScheduledActivity NextActivity()
-		{
-			return _nextActivity.Value;
-		}
-
-		public DateTime? NextActivityStartTime()
-		{
-			return _nextActivity.Value?.StartDateTime ?? _currentActivity.Value?.EndDateTime;
-		}
-
-		public string NextActivityName()
-		{
-			return _nextActivity.Value?.Name;
-		}
+		public IEnumerable<ScheduledActivity> ActivitiesInTimeWindow() => _timeWindowActivities.Value;
+		public ScheduledActivity CurrentActivity() => _currentActivity.Value;
+		public bool OngoingShift() => CurrentActivity() != null;
+		public Guid? CurrentActivityId() => _currentActivity.Value?.PayloadId;
+		public string CurrentActivityName() => _currentActivity.Value?.Name;
+		public ScheduledActivity PreviousActivity() => _previousActivity.Value;
+		public ScheduledActivity NextActivity() => _nextActivity.Value;
+		public DateTime? NextActivityStartTime() => _nextActivity.Value?.StartDateTime ?? _currentActivity.Value?.EndDateTime;
+		public string NextActivityName() => _nextActivity.Value?.Name;
 
 		public DateTime CurrentShiftStartTime => _currentShiftStartTime.Value;
 		public DateTime CurrentShiftEndTime => _currentShiftEndTime.Value;
@@ -112,8 +71,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 		public DateTime ShiftEndTimeForPreviousActivity => _shiftEndTimeForPreviousActivity.Value;
 
 		public DateOnly? BelongsToDate => _belongsToDate.Value;
-
-
 
 
 		private DateTime startTimeOfShift(ScheduledActivity activity)
@@ -156,14 +113,8 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 				let starting = l.StartDateTime <= _context.Time.AddHours(1) && l.EndDateTime > time
 				where ended || starting
 				select l
-				).FirstOrDefault();
+			).FirstOrDefault();
 		}
-		
-
-
-
-
-
 
 
 		private static readonly TimeSpan timeWindowFuture = TimeSpan.FromHours(3);
@@ -210,11 +161,11 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 				return nextActivity;
 			return null;
 		}
-		
+
 		public static DateTime? NextCheck(IEnumerable<ScheduledActivity> schedule, int? lastTimeWindowCheckSum, DateTime? lastCheck)
 		{
 			// note to self: return null means check now ;)
-			
+
 			if (!lastCheck.HasValue)
 				return null;
 
@@ -227,7 +178,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 			var activityEnteringTimeWindow = schedule.FirstOrDefault(x => x.StartDateTime >= timeWindowEnd(lastCheck.Value));
 			var activityEntersTimeWindowAt = activityEnteringTimeWindow?.StartDateTime.Subtract(timeWindowFuture);
 			var noSchedule = DateTime.MaxValue;
-			
+
 			// {null, null, 2017-11-29 10:00, DateTime.MaxValue}.Min() = 2017-11-29 10:00
 			return new[]
 			{
@@ -237,6 +188,5 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 				noSchedule
 			}.Min();
 		}
-
 	}
 }

@@ -41,7 +41,64 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		public FakeDatabase Database;
 		public FakeEventPublisher Publisher;
 		public MutableNow Now;
-		
+
+		[Test]
+		public void ShouldPublishLeavingDateScheduleDay()
+		{
+			var person = Guid.NewGuid();
+			var scenario = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithAgent(person, "jågej")
+				.WithScenario(scenario)
+				.WithActivity(phone)
+				.WithAssignment("2016-06-28")
+				.WithAssignedActivity("2016-06-28 08:00", "2016-06-28 17:00")
+				.WithTerminalDate("2016-06-28")
+				;
+
+			Target.Handle(new ScheduleChangedEventForTest
+			{
+				StartDateTime = "2016-06-28 08:00".Utc(),
+				EndDateTime = "2016-06-28 17:00".Utc(),
+				PersonId = person,
+				ScenarioId = scenario
+			});
+
+			var scheduleDay28 = Publisher.PublishedEvents.OfType<T>().Single().ScheduleDays.Single(x => x.Date == "2016-06-28".Utc());
+			scheduleDay28.Shift.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldPublishAfterLeavingDateScheduleDay()
+		{
+			var person = Guid.NewGuid();
+			var scenario = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithAgent(person, "jågej")
+				.WithScenario(scenario)
+				.WithActivity(phone)
+				.WithAssignment("2016-06-29")
+				.WithAssignedActivity("2016-06-29 08:00", "2016-06-29 17:00")
+				.WithTerminalDate("2016-06-28")
+				;
+
+			Target.Handle(new ScheduleChangedEventForTest
+			{
+				StartDateTime = "2016-06-29 08:00".Utc(),
+				EndDateTime = "2016-06-29 17:00".Utc(),
+				PersonId = person,
+				ScenarioId = scenario
+			});
+
+			var scheduleDay29 = Publisher.PublishedEvents.OfType<T>().Single().ScheduleDays.Single(x => x.Date == "2016-06-29".Utc());
+			scheduleDay29.Shift.Should().Be.Null();
+			scheduleDay29.SiteId.Should().Be(Guid.Empty);
+			scheduleDay29.TeamId.Should().Be(Guid.Empty);
+			scheduleDay29.PersonPeriodId.Should().Be(Guid.Empty);
+		}
+
 		[Test]
 		public void ShouldPublishWithActivity()
 		{

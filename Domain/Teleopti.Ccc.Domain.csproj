@@ -185,7 +185,6 @@
     <Compile Include="ApplicationLayer\Commands\ShiftCategorySelectorWithPrediction.cs" />
     <Compile Include="ApplicationLayer\Events\ProjectionChangedEventForShiftExchangeOffer.cs" />
     <Compile Include="ApplicationLayer\Events\RefreshPayrollFormatsEvent.cs" />
-    <Compile Include="ApplicationLayer\LateForWorkEventPublisher.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\IOvertimeRequestContractWorkRulesValidator.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\IOvertimeRequestOpenPeriodProvider.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestOpenPeriodProvider.cs" />
@@ -228,7 +227,8 @@
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayLoaderLateForWork.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayWithLateForWork.cs" />
     <Compile Include="RealTimeAdherence\Domain\Events\ISolidProof.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Events\PersonArrivalAfterLateForWorkEvent.cs" />
+    <Compile Include="RealTimeAdherence\Domain\Events\PersonArrivedLateForWorkEvent.cs" />
+    <Compile Include="RealTimeAdherence\Domain\Service\LateForWorkEventPublisher.cs" />
     <Compile Include="RegisterEventHandlerInLifetimeScopeAttribute.cs" />
     <Compile Include="Repositories\IAllSkillForSkillGroupProvider.cs" />
     <Compile Include="Repositories\IForecastDayOverrideRepository.cs" />

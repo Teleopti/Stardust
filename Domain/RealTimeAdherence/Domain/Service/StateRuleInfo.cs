@@ -15,15 +15,14 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 		{
 			_context = context;
 			_mappedState = new Lazy<MappedState>(() =>
-					context.HasInput() ?
-						context.StateMapper.StateFor(context.BusinessUnitId, context.InputStateCode(), context.InputStateDescription()) :
-						context.StateMapper.StateFor(context.Stored.StateGroupId)
+				context.HasInput() ? context.StateMapper.StateFor(context.BusinessUnitId, context.InputStateCode(), context.InputStateDescription()) : context.StateMapper.StateFor(context.Stored.StateGroupId)
 			);
 			_mappedRule = new Lazy<MappedRule>(() => context.StateMapper.RuleFor(context.BusinessUnitId, context.State.StateGroupId(), context.Schedule.CurrentActivityId()));
 		}
 
-		public bool IsLoggedIn() => StateGroupId().HasValue ? !_context.StateMapper.LoggedOutStateGroupIds().Contains(StateGroupId().Value): true;
-		public bool IsLoggedOut() => !IsLoggedIn();
+		public bool IsLoggedIn() => isLoggedIn(StateGroupId());
+		public bool IsLoggedOut(Guid? stateGroupid) => !isLoggedIn(stateGroupid);
+		private bool isLoggedIn(Guid? stateGroupId) => stateGroupId.HasValue && !_context.StateMapper.LoggedOutStateGroupIds().Contains(stateGroupId.Value);
 
 		public bool StateChanged() => _mappedState.Value?.StateGroupId != _context.Stored.StateGroupId;
 		public Guid? StateGroupId() => _mappedState.Value?.StateGroupId;

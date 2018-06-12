@@ -22,12 +22,12 @@ Feature: Absence Report On Desktop Week Schedule
 	| Reportable absence         | Illness            |
 	And I have a schedule period with 
 	| Field      | Value      |
-	| Start date | 2022-08-19 |
+	| Start date | 2020-08-19 |
 	| Type       | Week       |
 	| Length     | 1          |
 	And I have a person period with 
 	| Field      | Value      |
-	| Start date | 2022-08-19 |
+	| Start date | 2020-08-19 |
 	
 	@NotKeyExample
 Scenario: Open add absence report form from day summary only for today and tomorrow

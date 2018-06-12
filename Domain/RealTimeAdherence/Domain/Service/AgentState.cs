@@ -40,8 +40,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 		public DateTime? AlarmStartTime { get; set; }
 
 		public int? TimeWindowCheckSum { get; set; }
-		public bool LateForWork { get; set; }
-		
 	}
 
 	public static class AgentStateExtensions

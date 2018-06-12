@@ -11,8 +11,10 @@ using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.SkillGroup
 {
-	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebIntraday,
-		DefinedRaptorApplicationFunctionPaths.WebStaffing)]
+	[ApplicationFunctionApi(
+		DefinedRaptorApplicationFunctionPaths.WebIntraday,
+		DefinedRaptorApplicationFunctionPaths.WebStaffing,
+		DefinedRaptorApplicationFunctionPaths.MyTeamSchedules)]
 	public class SkillGroupController : ApiController
 	{
 		private readonly IAuthorization _authorization;

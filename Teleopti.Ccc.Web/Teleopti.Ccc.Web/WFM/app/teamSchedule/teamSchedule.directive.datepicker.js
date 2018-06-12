@@ -19,12 +19,13 @@
 		};
 	}
 
-	teamScheduleDatePickerCtrl.$inject = ['$timeout', '$locale', 'serviceDateFormatHelper'];
-	function teamScheduleDatePickerCtrl($timeout, $locale, serviceDateFormatHelper) {
+	teamScheduleDatePickerCtrl.$inject = ['$timeout', '$locale', 'serviceDateFormatHelper', 'CurrentUserInfo'];
+	function teamScheduleDatePickerCtrl($timeout, $locale, serviceDateFormatHelper, CurrentUserInfo) {
 		var vm = this;
 		vm.dateFormat = $locale.DATETIME_FORMATS.shortDate;
 		vm.step = parseInt(vm.step) || 1;
 		vm.selectedDateObj = moment(vm.selectedDate).toDate();
+		vm.dateOptions = { startingDay : CurrentUserInfo.CurrentUserInfo().FirstDayOfWeek };
 
 		var date = vm.selectedDate;
 

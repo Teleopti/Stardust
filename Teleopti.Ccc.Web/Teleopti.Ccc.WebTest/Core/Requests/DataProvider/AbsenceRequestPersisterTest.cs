@@ -995,7 +995,41 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			CommandDispatcher.LatestCommand.Should().Not.Be.Null();
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
 		}
-		
+
+		[Test]
+		public void ShouldDenyWhenPersonAccountIsOutsidePeriod()
+		{
+			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
+				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
+			_absence = createAbsence();
+
+			var isWaitlisted = false;
+
+			setWorkflowControlSet(usePersonAccountValidator: true, autoGrant: false, absenceRequestWaitlistEnabled: isWaitlisted);
+
+			var accountDay = new AccountDay(_today.AddDays(10))
+			{
+				Accrued = TimeSpan.FromDays(100)
+			};
+			createPersonAbsenceAccount(_person, _absence, accountDay);
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today,
+				EndDate = _today.AddDays(1),
+				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(17))
+			});
+
+			var personRequest = Persister.Persist(form);
+			var request = PersonRequestRepository.Get(Guid.Parse(personRequest.Id));
+
+			request.Should().Not.Be(null);
+			request.IsDenied.Should().Be.True();
+			
+			request.DenyReason.Should().Be(Resources.RequestDenyReasonPersonAccount);
+		}
+
 		private void setWorkflowControlSet(int? absenceRequestExpiredThreshold = null, bool autoGrant = false
 			, bool usePersonAccountValidator = false, bool autoDeny = false, bool absenceRequestWaitlistEnabled = false)
 		{

@@ -274,7 +274,7 @@
 	}
 
 
-	.mdi-alert {
+	.teamschedule-body.mdi-alert {
 		color: $orange-500;
 	}
 }
@@ -1098,6 +1098,10 @@ note-editor {
 		font-size: 60px !important;
 	}
 
+	.nodata {
+		height: 200px;
+	}
+
 	.skills-row {
 		flex-direction: row;
 
@@ -1261,14 +1265,13 @@ teams-time-picker.ng-invalid-dst {
 				width: 60px;
 
 				.time-label {
-					text-align: center;
-
 					.label {
 						font-size: x-small;
 						height: 1.32em;
 						z-index: 11;
 						transform: translateX(-50%);
-						padding: 0 0.3em;
+						padding: 0.1em 0.3em;
+						display: inline-block;
 						background-color: $gray-500;
 
 						&.highlight {

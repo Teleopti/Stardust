@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		private readonly IFakeStorage _storage;
 		private readonly IEventPopulatingPublisher _publisher;
 		private readonly IEnumerable<ITransactionHook> _hooks;
-		private readonly INow _now;
 
 		public string Name { get; set; }
 		public IAuditSetter AuditSetting { get; set; }
@@ -25,22 +24,21 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			_storage = storage;
 		}
 
-		public FakeUnitOfWorkFactory(IFakeStorage storage, IEventPopulatingPublisher publisher, IEnumerable<ITransactionHook> hooks, INow now)
+		public FakeUnitOfWorkFactory(IFakeStorage storage, IEventPopulatingPublisher publisher, IEnumerable<ITransactionHook> hooks)
 		{
 			_storage = storage;
 			_publisher = publisher;
 			_hooks = hooks;
-			_now = now;
 		}
 
 		public IUnitOfWork CreateAndOpenUnitOfWork()
 		{
-			return new FakeUnitOfWork(_storage, _publisher, _hooks, _now);
+			return new FakeUnitOfWork(_storage, _publisher, _hooks);
 		}
 
 		public IUnitOfWork CreateAndOpenUnitOfWork(IQueryFilter businessUnitFilter)
 		{
-			return new FakeUnitOfWork(_storage, _publisher, _hooks, _now);
+			return new FakeUnitOfWork(_storage, _publisher, _hooks);
 		}
 
 		public IStatelessUnitOfWork CreateAndOpenStatelessUnitOfWork()
@@ -50,7 +48,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IUnitOfWork CurrentUnitOfWork()
 		{
-			return new FakeUnitOfWork(_storage, _publisher, _hooks, _now);
+			return new FakeUnitOfWork(_storage, _publisher, _hooks);
 		}
 
 		public bool HasCurrentUnitOfWork()

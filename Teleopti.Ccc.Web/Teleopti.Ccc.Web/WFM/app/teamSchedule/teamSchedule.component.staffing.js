@@ -14,9 +14,9 @@
 		}
 	});
 
-	StaffingInfoController.$inject = ['$scope', '$document', '$timeout', '$q', 'TeamScheduleSkillService', 'StaffingInfoService', 'TeamScheduleChartService', 'teamsToggles', 'skillIconService','serviceDateFormatHelper'];
+	StaffingInfoController.$inject = ['$scope', '$document', '$timeout', '$q', 'SkillGroupSvc', 'StaffingInfoService', 'TeamScheduleChartService', 'teamsToggles', 'skillIconService','serviceDateFormatHelper'];
 
-	function StaffingInfoController($scope, $document, $timeout, $q, SkillService, StaffingInfoService, ChartService, teamsToggles, skillIconService, serviceDateFormatHelper) {
+	function StaffingInfoController($scope, $document, $timeout, $q, SkillGroupSvc, StaffingInfoService, ChartService, teamsToggles, skillIconService, serviceDateFormatHelper) {
 		var vm = this;
 
 		vm.skills = [];
@@ -119,13 +119,13 @@
 		}
 
 		function loadSkillsAndSkillGroups() {
-			var getSkillsPromise = SkillService.getAllSkills().then(function (data) {
-				vm.skills = data;
-				checkIconForSkills(data)
+			var getSkillsPromise = SkillGroupSvc.getSkills().then(function (response) {
+				vm.skills = response.data;
+				checkIconForSkills(response.data)
 			});
 
-			var getSkillsGroupPromise = SkillService.getAllSkillGroups().then(function (data) {
-				vm.skillGroups = data.SkillAreas;
+			var getSkillsGroupPromise = SkillGroupSvc.getSkillGroups().then(function (response) {
+				vm.skillGroups = response.data.SkillAreas;
 			});
 			return $q.all([getSkillsPromise, getSkillsGroupPromise]);
 		}

@@ -1,13 +1,22 @@
 ﻿(function () {
 
 	var $compile,
-		$rootScope,
-		fakeCurrentUserInfo;
+		$rootScope;
 
 	describe("<teamschedule-datepicker>", function () {
-
-		beforeEach(module('wfm.templates'));
-		beforeEach(module('wfm.teamSchedule'));
+		beforeEach(function () {
+			module('wfm.templates');
+			module("wfm.teamSchedule");
+			module(function ($provide) {
+				$provide.service('CurrentUserInfo', function () {
+					return {
+						CurrentUserInfo: function () {
+							return { "FirstDayOfWeek": 0, DefaultTimeZone: 'Europe/Berlin' };
+						}
+					};
+				});
+			});
+		});
 
 		beforeEach(inject(function (_$rootScope_, _$compile_) {
 			$compile = _$compile_;
@@ -60,6 +69,77 @@
 
 
 	});
+
+	describe('<teams-time-picker> in ar-OM', function () {
+		beforeEach(function () { moment.locale("ar-OM"); });
+		afterEach(function () { moment.locale("en"); });
+		beforeEach(function () {
+			module('wfm.templates');
+			module("wfm.teamSchedule");
+			module(function ($provide) {
+				$provide.service('CurrentUserInfo', function () {
+					return {
+						CurrentUserInfo: function () {
+							return { "FirstDayOfWeek": 0, DefaultTimeZone: 'Europe/Berlin' };
+						}
+					};
+				});
+			});
+		});
+
+		beforeEach(inject(function (_$rootScope_, _$compile_) {
+			$compile = _$compile_;
+			$rootScope = _$rootScope_;
+		}));
+
+		it('should render first day of week correctly', function () {
+			var result = setUp('2018-06-12');
+			var picker = result.container[0].querySelector('.toggle-datepicker');
+			picker.click();
+
+			var currentWeekEl = result.container[0].querySelectorAll('.wfm-datepicker tbody tr')[1];
+			var firstDayOfWeekEl = currentWeekEl.querySelectorAll("td span")[0];
+			expect(firstDayOfWeekEl.innerHTML).toEqual("03");
+		});
+
+	});
+
+
+	describe('<teams-time-picker> in sv',
+		function () {
+			beforeEach(function () { moment.locale("zh-CN"); });
+			afterEach(function () { moment.locale("en"); });
+
+			beforeEach(function () {
+				module('wfm.templates');
+				module("wfm.teamSchedule");
+				module(function ($provide) {
+					$provide.service('CurrentUserInfo', function () {
+						return {
+							CurrentUserInfo: function () {
+								return { "FirstDayOfWeek": 1, DefaultTimeZone: 'Europe/Berlin' };
+							}
+						};
+					});
+				});
+			});
+
+			beforeEach(inject(function (_$rootScope_, _$compile_) {
+				$compile = _$compile_;
+				$rootScope = _$rootScope_;
+			}));
+			it('should render first day of week correctly', function () {
+				var result = setUp('2018-06-12');
+				var picker = result.container[0].querySelector('.toggle-datepicker');
+				picker.click();
+
+				var currentWeekEl = result.container[0].querySelectorAll('.wfm-datepicker tbody tr')[1];
+				var firstDayOfWeekEl = currentWeekEl.querySelectorAll("td span")[0];
+				expect(firstDayOfWeekEl.innerHTML).toEqual("04");
+			});
+
+		});
+
 
 	function setUp(inputDate) {
 		var date;
