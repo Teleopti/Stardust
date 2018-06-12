@@ -13,17 +13,9 @@ namespace Teleopti.Ccc.Web.Filters
 
 		public ApplicationFunctionApiAttribute() : this(new string[] { }) { }
 
-		private  ApplicationFunctionApiAttribute(params string[] applicationFunctionPaths) : base(null)
+		public  ApplicationFunctionApiAttribute(params string[] applicationFunctionPaths) : base(null)
 		{
 			_applicationFunctionPaths = applicationFunctionPaths;
-		}
-
-		public ApplicationFunctionApiAttribute(string applicationFunctionPath) : this(new []{applicationFunctionPath})
-		{
-		}
-
-		public ApplicationFunctionApiAttribute(string applicationFunctionPath1, string applicationFunctionPath2) : this(new []{applicationFunctionPath1,applicationFunctionPath2})
-		{
 		}
 
 		public IPermissionProvider PermissionProvider { get; set; }
