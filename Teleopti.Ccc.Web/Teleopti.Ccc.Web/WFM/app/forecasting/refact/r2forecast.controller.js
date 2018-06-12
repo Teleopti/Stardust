@@ -10,8 +10,10 @@
     var vm = this;
 
     vm.skills = [];
+    vm.skilltypes = [];
     vm.goToModify = goToModify;
     vm.getSkillIcon = skillIconService.get;
+
 
     (function getAllSkills() {
       vm.skills = [];
@@ -28,6 +30,9 @@
               ChartId: "chart" + w.Id
             }
             vm.skills.push(temp)
+            if (!vm.skilltypes.includes(temp.SkillType.SkillType)) {
+              vm.skilltypes.push(temp.SkillType.SkillType)
+            }
           });
         });
       });
@@ -44,8 +49,8 @@
     }
 
     function goToModify(skill) {
-       sessionStorage.currentForecastWorkload = JSON.stringify(skill);
-        $state.go("modify", {workloadId:skill.Workload.Id})
+      sessionStorage.currentForecastWorkload = JSON.stringify(skill);
+      $state.go("modify", {workloadId:skill.Workload.Id})
     }
 
   }
