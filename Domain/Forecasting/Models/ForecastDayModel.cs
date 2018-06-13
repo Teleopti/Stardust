@@ -20,5 +20,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Models
 
 		public bool HasCampaign { get; set; }
 		public bool HasOverride { get; set; }
+		public bool IsInModification { get; set; }
 	}
 }

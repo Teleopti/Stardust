@@ -84,7 +84,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 					TotalTasks = target.Tasks,
 					TotalAverageTaskTime = target.AverageTaskTime.TotalSeconds,
 					TotalAverageAfterTaskTime = target.AverageAfterTaskTime.TotalSeconds,
-					IsOpen = currentWorkLoadDay.OpenForWork.IsOpen
+					IsOpen = currentWorkLoadDay.OpenForWork.IsOpen,
+					IsInModification = currentWorkLoadDay.OpenForWork.IsOpen
 				};
 
 				_forecastDayModelMapper.SetCampaignAndOverride(currentWorkLoadDay, model, overrideDay);
