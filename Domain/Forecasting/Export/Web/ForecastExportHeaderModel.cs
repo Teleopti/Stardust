@@ -10,5 +10,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export.Web
 		public Percent? ServiceLevelPercent { get; set; }
 		public double? ServiceLevelSeconds { get; set; }
 		public Percent? ShrinkagePercent { get; set; }
+		public string Scenario { get; set; }
 	}
 }

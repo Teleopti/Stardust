@@ -38,13 +38,17 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 			var theDate = new DateOnly(2016, 8, 26);
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30), false, 0);
 			var period = new DateOnlyPeriod(theDate, theDate.AddDays(1));
-			var scenario = IntradayStaffingApplicationServiceTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
-			var skillDay = SkillSetupHelper.CreateSkillDay(skill, scenario, theDate.Date, new TimePeriod(8, 0, 8, 30), false);
+			var scenario1 = ScenarioFactory.CreateScenario("scenario1", true, true).WithId();
+			var scenario2 = ScenarioFactory.CreateScenario("scenario2", true, true).WithId();
+			IntervalLengthFetcher.Has(minutesPerInterval);
+			ScenarioRepository.Has(scenario1);
+			ScenarioRepository.Has(scenario2);
+			var skillDay = SkillSetupHelper.CreateSkillDay(skill, scenario1, theDate.Date, new TimePeriod(8, 0, 8, 30), false);
 			SkillRepository.Has(skill);
 			WorkloadRepository.Add(skill.WorkloadCollection.First());
 			SkillDayRepository.Add(skillDay);
 
-			var model = Target.Load(skill.WorkloadCollection.First().Id.Value, period);
+			var model = Target.Load(scenario1.Id.Value, skill.WorkloadCollection.First().Id.Value, period);
 
 			model.Header.Period.Should().Be.EqualTo(period);
 			model.Header.SkillName.Should().Be.EqualTo(skill.Name);
@@ -52,6 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 			model.Header.ServiceLevelPercent.Value.Should().Be.EqualTo(ServiceAgreement.DefaultValues().ServiceLevel.Percent);
 			model.Header.ServiceLevelSeconds.Value.Should().Be.EqualTo(ServiceAgreement.DefaultValues().ServiceLevel.Seconds);
 			model.Header.ShrinkagePercent.Value.Should().Be.EqualTo(skillDay.SkillDataPeriodCollection.First().Shrinkage);
+			model.Header.Scenario.Should().Be.EqualTo(scenario1.Description.Name);
 		}
 
 		[Test]
@@ -74,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 			SkillDayRepository.Add(skillDay1);
 			SkillDayRepository.Add(skillDay2);
 
-			var model = Target.Load(skill.WorkloadCollection.First().Id.Value, period);
+			var model = Target.Load(scenario.Id.Value, skill.WorkloadCollection.First().Id.Value, period);
 
 			model.DailyModelForecast.Count().Should().Be.EqualTo(2);
 			var dailyModel1 = model.DailyModelForecast.First();
@@ -113,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 			SkillRepository.Add(skill);
 			WorkloadRepository.Add(skill.WorkloadCollection.First());
 
-			var model = Target.Load(skill.WorkloadCollection.First().Id.Value, period);
+			var model = Target.Load(scenario.Id.Value, skill.WorkloadCollection.First().Id.Value, period);
 
 			model.DailyModelForecast.Should().Be.Empty();
 			model.IntervalModelForecast.Should().Be.Empty();
@@ -130,12 +135,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 			var theDate = new DateOnly(2016, 8, 26);
 			var period = new DateOnlyPeriod(theDate, theDate.AddDays(1));
 			var openHour = new TimePeriod(8, 0, 8, 30);
-			IntradayStaffingApplicationServiceTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
+			var scenario = IntradayStaffingApplicationServiceTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
 			var skill = createSkill(minutesPerInterval, "skill", openHour, false, 0);
 			SkillRepository.Add(skill);
 			WorkloadRepository.Add(skill.WorkloadCollection.First());
 
-			var model = Target.Load(skill.WorkloadCollection.First().Id.Value, period);
+			var model = Target.Load(scenario.Id.Value, skill.WorkloadCollection.First().Id.Value, period);
 
 			model.DailyModelForecast.Should().Be.Empty();
 			model.IntervalModelForecast.Should().Be.Empty();
@@ -165,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 			SkillDayRepository.Add(skillDay1);
 			SkillDayRepository.Add(skillDay2);
 
-			var model = Target.Load(skill.WorkloadCollection.First().Id.Value, period);
+			var model = Target.Load(scenario.Id.Value, skill.WorkloadCollection.First().Id.Value, period);
 
 			var todayOpenStartTime = theDate.Date.AddHours(openHour.StartTime.TotalHours);
 			var skilldDay1TaskPeriods = skillDay1.WorkloadDayCollection.First().OpenTaskPeriodList;
@@ -221,7 +226,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 			SkillDayRepository.Add(skillDay2);
 			SkillDayRepository.Add(skillDay3);
 
-			var model = Target.Load(skill.WorkloadCollection.First().Id.Value, period);
+			var model = Target.Load(scenario.Id.Value, skill.WorkloadCollection.First().Id.Value, period);
 
 			model.DailyModelForecast.Count.Should().Be.EqualTo(1);
 			model.DailyModelForecast.First().ForecastDate.Should().Be.EqualTo(theDate.Date);

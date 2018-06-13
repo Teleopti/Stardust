@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export.Web
 			_scenarioRepository = scenarioRepository;
 			_workloadRepository = workloadRepository;
 		}
-		public ForecastExportModel Load(Guid workloadId, DateOnlyPeriod period)
+		public ForecastExportModel Load(Guid scenarioId, Guid workloadId, DateOnlyPeriod period)
 		{
-			var scenario = _scenarioRepository.LoadDefaultScenario();
+			var scenario = _scenarioRepository.Get(scenarioId);
 			var workload = _workloadRepository.Get(workloadId);
 			var skillDaysBySkills = _skillDayLoadHelper.LoadSchedulerSkillDays(period, new List<ISkill> { workload.Skill }, scenario);
 
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export.Web
 				.ToList();
 			return new ForecastExportModel
 			{
-				Header = ForecastExportHeaderModelCreator.Load(workload.Skill, skillDays, period),
+				Header = ForecastExportHeaderModelCreator.Load(scenario.Description.Name, workload.Skill, skillDays, period),
 				DailyModelForecast = ForecastExportDailyModelCreator.Load(skillDays),
 				IntervalModelForecast = ForecastExportIntervalModelCreator.Load(workload, skillDays)
 			};
