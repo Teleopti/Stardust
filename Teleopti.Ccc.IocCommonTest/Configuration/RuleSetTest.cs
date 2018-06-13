@@ -2,25 +2,18 @@ using System;
 using Autofac;
 using MbCache.Core;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
 	[DomainTest]
 	public class RuleSetTest
 	{
-		public ShiftProjectionCacheFetcher ShiftProjectionCacheFetcher;
-		
 		[Test]
 		public void VerifyProjectionServiceIsCached()
 		{
