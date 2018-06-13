@@ -259,11 +259,6 @@
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\TeamCardReaderSiteTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\UnorderedEventsTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\ExternalLogon\ExternalLogonReadModelPersisterTest.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\HistoricalAdherence\ApprovedPeriodsPersisterTest.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\HistoricalAdherence\ApprovedPeriodsReaderTest.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\HistoricalAdherence\HistoricalChangeConcurrencyTest.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\HistoricalAdherence\HistoricalChangeReadModelPersisterTest.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\HistoricalAdherence\HistoricalChangeReadModelReaderTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\Mappings\MappingReadModelPersisterTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\Mappings\MappingReadModelReaderTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\Mappings\MappingReadModelUpdaterTest.cs" />
