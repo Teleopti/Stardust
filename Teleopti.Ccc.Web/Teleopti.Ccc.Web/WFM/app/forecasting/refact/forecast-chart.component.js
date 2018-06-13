@@ -104,8 +104,8 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 				],
 				names: {
 					TotalTasks: $translate.instant('TotalCalls' + ' ←'),
-					Campaign: $translate.instant('Campaign'),
-					Override: $translate.instant('Override'),
+					Campaign: $translate.instant('AppliedACampaign'),
+					Override: $translate.instant('AppliedAOverride'),
 					CampaignAndOverride: $translate.instant('BothOverrideAndCampaignAdded'),
 					Tasks: $translate.instant('Calls' + ' ←'),
 					TotalAverageTaskTime: $translate.instant('TotalTalkTime' + ' ←'),
