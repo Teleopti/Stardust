@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -31,17 +29,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 	{
 		private readonly bool _peopleSpeedUpOpening76365;
 		private  IDictionary<ViewType, IRotationStateHolder> _rotationStateHolderCache = new Dictionary<ViewType, IRotationStateHolder>();
-
-		private IList<IShiftCategory> _shiftCategories = new List<IShiftCategory>();
-		private readonly TypedBindingCollection<IContractSchedule> _contractScheduleBindingCollection = new TypedBindingCollection<IContractSchedule>();
-
-		private readonly TypedBindingCollection<IPartTimePercentage> _partTimePercentageBindingCollection = new TypedBindingCollection<IPartTimePercentage>();
-
 		private readonly List<PersonGeneralModel> _tobeDeleteFromGridDataAfterRomove = new List<PersonGeneralModel>();
-
-		private readonly TypedBindingCollection<IContract> _contractBindingCollection = new TypedBindingCollection<IContract>();
-		private List<Culture> _cultureCollection = new List<Culture>();
-		private List<Culture> _uiCultureCollection = new List<Culture>();
+		private readonly List<Culture> _cultureCollection = new List<Culture>();
+		private readonly List<Culture> _uiCultureCollection = new List<Culture>();
 
 		private List<PersonPeriodChildModel> _personPeriodGridViewChildCollection = new List<PersonPeriodChildModel>();
 		private List<SchedulePeriodChildModel> _schedulePeriodGridViewChildCollection;
@@ -51,11 +41,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 		private IList<IPersonRotation> _childrenPersonRotationCollection = new List<IPersonRotation>();
 		private IList<IPersonAvailability> _childrenPersonAvailabilityCollection = new List<IPersonAvailability>();
-		private TypedBindingCollection<IRotation> _rotationCollection = new TypedBindingCollection<IRotation>();
-		private readonly TypedBindingCollection<IAvailabilityRotation> _availabilityCollection = new TypedBindingCollection<IAvailabilityRotation>();
 		private List<IPersonAccountChildModel> _personaccountGridViewChildCollection;
-
-		private readonly TypedBindingCollection<IWorkflowControlSet> _workflowControlSetCollection = new TypedBindingCollection<IWorkflowControlSet>();
 
 		[RemoveMeWithToggle(Toggles.People_SpeedUpOpening_76365)]
 		public WorksheetStateHolder(bool peopleSpeedUpOpening76365)
@@ -63,20 +49,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			_peopleSpeedUpOpening76365 = peopleSpeedUpOpening76365;
 		}
 
-		public TypedBindingCollection<IContract> ContractCollection
-		{
-			get { return _contractBindingCollection; }
-		}
+		public TypedBindingCollection<IContract> ContractCollection { get; } = new TypedBindingCollection<IContract>();
 
-		public TypedBindingCollection<IContractSchedule> ContractScheduleCollection
-		{
-			get { return _contractScheduleBindingCollection; }
-		}
-
-		public TypedBindingCollection<IPartTimePercentage> PartTimePercentageCollection
-		{
-			get { return _partTimePercentageBindingCollection; }
-		}
+		public TypedBindingCollection<IContractSchedule> ContractScheduleCollection { get; } = new TypedBindingCollection<IContractSchedule>();
+		public TypedBindingCollection<IPartTimePercentage> PartTimePercentageCollection { get; } = new TypedBindingCollection<IPartTimePercentage>();
 
 		public void Dispose()
 		{
@@ -89,21 +65,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		{
 			if (disposing)
 			{
-				_rotationCollection = null;
+				AllRotations = null;
 				_rotationStateHolderCache = null;
 				RotationStateHolder = null;
 			}
 		}
 
-		public ReadOnlyCollection<Culture> CultureCollection
-		{
-			get { return new ReadOnlyCollection<Culture>(_cultureCollection); }
-		}
+		public ReadOnlyCollection<Culture> CultureCollection => new ReadOnlyCollection<Culture>(_cultureCollection);
 
-		public ReadOnlyCollection<Culture> UiCultureCollection
-		{
-			get { return new ReadOnlyCollection<Culture>(_uiCultureCollection); }
-		}
+		public ReadOnlyCollection<Culture> UiCultureCollection => new ReadOnlyCollection<Culture>(_uiCultureCollection);
 
 		public void LoadCultureInfo()
 		{
@@ -113,28 +83,26 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			CultureInfo[] cInfo = CultureInfo.GetCultures(CultureTypes.SpecificCultures);
 			if (_peopleSpeedUpOpening76365)
 			{
-				var cultureCollection = new ConcurrentBag<Culture>();
-				var uiCultureCollection = new ConcurrentBag<Culture>();
-				Parallel.For(0, cInfo.Length - 1, i => {
+				for (int i = 0; i < cInfo.Length - 1; i++)
+				{
 					var cultureToTest = cInfo[i];
 					try
 					{
+						if(cultureToTest.LCID == 4096)
+							continue;
 						// ReSharper disable ReturnValueOfPureMethodIsNotUsed
 						CultureInfo.GetCultureInfo(cultureToTest.LCID);
 						// ReSharper restore ReturnValueOfPureMethodIsNotUsed
 
 						culture = new Culture(cultureToTest.LCID, cultureToTest.DisplayName);
-						cultureCollection.Add(culture);
+						_cultureCollection.Add(culture);
 
 						uiCulture = new Culture(cultureToTest.LCID, cultureToTest.Name);
-						uiCultureCollection.Add(uiCulture);
+						_uiCultureCollection.Add(uiCulture);
 					}
 					catch (CultureNotFoundException)
-					{}
-				});
-
-				_cultureCollection = cultureCollection.ToList();
-				_uiCultureCollection = uiCultureCollection.ToList();
+					{ }
+				}
 			}
 			else
 			{
@@ -449,9 +417,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 				}
 			}
 
-			else if ((_contractBindingCollection.Count == 0)
-				 || (_partTimePercentageBindingCollection.Count == 0)
-				 || (_contractScheduleBindingCollection.Count == 0) ||
+			else if ((ContractCollection.Count == 0)
+				 || (PartTimePercentageCollection.Count == 0)
+				 || (ContractScheduleCollection.Count == 0) ||
 				 filteredHolder.SiteTeamAdapterCollection.Count == 0)
 				return null;
 			else
@@ -459,9 +427,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 				DateOnly dateOnly = PeriodDateService.GetValidPeriodDate
 						  (PeriodDateDictionaryBuilder.GetDateOnlyDictionary(null, ViewType.PeoplePeriodView, person), date);
 				personPeriod = new PersonPeriod(dateOnly,
-														  new PersonContract(_contractBindingCollection[0],
-																					_partTimePercentageBindingCollection[0],
-																					_contractScheduleBindingCollection[0]),
+														  new PersonContract(ContractCollection[0],
+																					PartTimePercentageCollection[0],
+																					ContractScheduleCollection[0]),
 														  filteredHolder.SiteTeamAdapterCollection[0].Team);
 			}
 			return personPeriod;
@@ -484,20 +452,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 		public void LoadContractSchedules(FilteredPeopleHolder filterPeopleHolder)
 		{
-			_contractScheduleBindingCollection.Clear();
+			ContractScheduleCollection.Clear();
 
 			var repository = new ContractScheduleRepository(filterPeopleHolder.GetUnitOfWork);
 			var list = repository.FindAllContractScheduleByDescription().Where(ptp => !((IDeleteTag)ptp).IsDeleted);
 
 			foreach (IContractSchedule item in list)
 			{
-				_contractScheduleBindingCollection.Add(item);
+				ContractScheduleCollection.Add(item);
 			}
 		}
 
 		public void LoadPartTimePercentages(FilteredPeopleHolder filterPeopleHolder)
 		{
-			_partTimePercentageBindingCollection.Clear();
+			PartTimePercentageCollection.Clear();
 			var partTimePercentageRepository = new PartTimePercentageRepository(filterPeopleHolder.GetUnitOfWork);
 			var list = partTimePercentageRepository.FindAllPartTimePercentageByDescription().Where(ptp => ptp.IsChoosable);
 
@@ -506,19 +474,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 			foreach (IPartTimePercentage item in list)
 			{
-				_partTimePercentageBindingCollection.Add(item);
+				PartTimePercentageCollection.Add(item);
 			}
 		}
 
 		public void LoadContracts(FilteredPeopleHolder filterPeopleHolder)
 		{
-			_contractBindingCollection.Clear();
+			ContractCollection.Clear();
 			var repository = new ContractRepository(filterPeopleHolder.GetUnitOfWork);
 			var list = repository.FindAllContractByDescription().Where(ptp => ptp.IsChoosable).ToList();
 
 			foreach (IContract item in list)
 			{
-				_contractBindingCollection.Add(item);
+				ContractCollection.Add(item);
 			}
 		}
 
@@ -625,14 +593,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			{
 				IPersonPeriod currentPeriod = personPeriodModel.Period;
 				var person = personPeriodModel.Parent;
-				if (currentPeriod != null)
+				IExternalLogOn externalLogOnFromCollection = currentPeriod?.ExternalLogOnCollection.FirstOrDefault(s => s.Equals(externalLogOn));
+				if (externalLogOnFromCollection != null)
 				{
-					IExternalLogOn externalLogOnFromCollection = currentPeriod.ExternalLogOnCollection.FirstOrDefault(s => s.Equals(externalLogOn));
-					if (externalLogOnFromCollection != null)
-					{
-						person.RemoveExternalLogOn(externalLogOnFromCollection, currentPeriod);
-						personPeriodModel.CanBold = true;
-					}
+					person.RemoveExternalLogOn(externalLogOnFromCollection, currentPeriod);
+					personPeriodModel.CanBold = true;
 				}
 			}
 		}
@@ -640,7 +605,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 		public void LoadShiftCategories(IUnitOfWork unitOfWork)
 		{
 			IShiftCategoryRepository repository = new ShiftCategoryRepository(unitOfWork);
-			_shiftCategories = repository.FindAll();
+			ShiftCategories = repository.FindAll();
 		}
 
 		public void GetChildSchedulePeriods(int index, Collection<SchedulePeriodModel> schedulePeriodGridViewCollection, CommonNameDescriptionSetting commonNameDescription)
@@ -748,39 +713,30 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 		public ReadOnlyCollection<PersonRotationModelChild> PersonRotationChildGridData
 		{
-			get { return new ReadOnlyCollection<PersonRotationModelChild>(_personRotationChildAdapterCollection); }
-			set { _personRotationChildAdapterCollection = value; }
+			get => new ReadOnlyCollection<PersonRotationModelChild>(_personRotationChildAdapterCollection);
+			set => _personRotationChildAdapterCollection = value;
 		}
 
 		public ReadOnlyCollection<PersonAvailabilityModelChild> PersonAvailabilityChildGridData
 		{
-			get { return new ReadOnlyCollection<PersonAvailabilityModelChild>(_personAvailablityChildAdapterCollection); }
-			set { _personAvailablityChildAdapterCollection = value; }
+			get => new ReadOnlyCollection<PersonAvailabilityModelChild>(_personAvailablityChildAdapterCollection);
+			set => _personAvailablityChildAdapterCollection = value;
 		}
 
 		public ReadOnlyCollection<IPersonRotation> ChildPersonRotationCollection
 		{
-			get { return new ReadOnlyCollection<IPersonRotation>(_childrenPersonRotationCollection); }
-			set { _childrenPersonRotationCollection = value; }
+			get => new ReadOnlyCollection<IPersonRotation>(_childrenPersonRotationCollection);
+			set => _childrenPersonRotationCollection = value;
 		}
 
 		public ReadOnlyCollection<IPersonAvailability> ChildPersonAvailabilityCollection
 		{
-			get { return new ReadOnlyCollection<IPersonAvailability>(_childrenPersonAvailabilityCollection); }
-			set { _childrenPersonAvailabilityCollection = value; }
+			get => new ReadOnlyCollection<IPersonAvailability>(_childrenPersonAvailabilityCollection);
+			set => _childrenPersonAvailabilityCollection = value;
 		}
 
-		public TypedBindingCollection<IRotation> AllRotations
-		{
-
-			get { return _rotationCollection; }
-		}
-
-		public TypedBindingCollection<IAvailabilityRotation> AllAvailabilities
-		{
-
-			get { return _availabilityCollection; }
-		}
+		public TypedBindingCollection<IRotation> AllRotations { get; private set; } = new TypedBindingCollection<IRotation>();
+		public TypedBindingCollection<IAvailabilityRotation> AllAvailabilities { get; } = new TypedBindingCollection<IAvailabilityRotation>();
 
 		public static void AddPersonRotation(IPersonRotation personRotation, int parentRowIndex, FilteredPeopleHolder filteredPeopleHolder)
 		{
@@ -910,27 +866,27 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 		public void LoadAllRotations(IUnitOfWork uow)
 		{
-			_rotationCollection.Clear();
+			AllRotations.Clear();
 
 			var rep = new RotationRepository(uow);
 			var rotations = rep.LoadAllRotationsWithDays();
 
 			IEnumerable<IRotation> sorted = rotations.OrderBy(n2 => n2.Name);
 			rotations = sorted.ToList();
-			rotations.ForEach(_rotationCollection.Add);
+			rotations.ForEach(AllRotations.Add);
 		}
 
 		public void LoadAllAvailabilities(IUnitOfWork uow)
 		{
-			_availabilityCollection.Clear();
+			AllAvailabilities.Clear();
 			var availabilities = new AvailabilityRepository(uow).LoadAllSortedByNameAscending();
-			availabilities.ForEach(_availabilityCollection.Add);
+			availabilities.ForEach(AllAvailabilities.Add);
 		}
 
 		public void LoadAllWorkflowControlSets(IUnitOfWork uow)
 		{
-			_workflowControlSetCollection.Clear();
-			_workflowControlSetCollection.Add(PersonGeneralModel.NullWorkflowControlSet);
+			WorkflowControlSetCollection.Clear();
+			WorkflowControlSetCollection.Add(PersonGeneralModel.NullWorkflowControlSet);
 
 			var rep = new WorkflowControlSetRepository(uow);
 			var workflowControlSets = rep.LoadAll();
@@ -940,7 +896,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 			foreach (var workflowControlSet in workflowControlSets)
 			{
-				_workflowControlSetCollection.Add(workflowControlSet);
+				WorkflowControlSetCollection.Add(workflowControlSet);
 			}
 		}
 
@@ -1010,18 +966,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 		private IRotation getDefaultRotation()
 		{
-			if (_rotationCollection != null && _rotationCollection.Count > 0)
+			if (AllRotations != null && AllRotations.Count > 0)
 			{
-				return _rotationCollection[0];
+				return AllRotations[0];
 			}
 			return null;
 		}
 
 		private IAvailabilityRotation getDefaultAvailability()
 		{
-			if (_availabilityCollection != null && _availabilityCollection.Count > 0)
+			if (AllAvailabilities != null && AllAvailabilities.Count > 0)
 			{
-				return _availabilityCollection[0];
+				return AllAvailabilities[0];
 			}
 			return null;
 		}
@@ -1161,19 +1117,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			set;
 		}
 
-		public IList<IShiftCategory> ShiftCategories
-		{
-			get { return _shiftCategories; }
-		}
-
-		public TypedBindingCollection<IWorkflowControlSet> WorkflowControlSetCollection
-		{
-			get
-			{
-				return _workflowControlSetCollection;
-			}
-		}
-
+		public IList<IShiftCategory> ShiftCategories { get; private set; } = new List<IShiftCategory>();
+		public TypedBindingCollection<IWorkflowControlSet> WorkflowControlSetCollection { get; } = new TypedBindingCollection<IWorkflowControlSet>();
 
 		public IRotationStateHolder CreatorRotationStateHolder(ViewType type, FilteredPeopleHolder filteredStateHolder)
 		{
