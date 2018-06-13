@@ -319,7 +319,12 @@
 
 		function applyWipToScenario() {
 			vm.savingToScenario = true;
-			var tempForecastDays = vm.selectedWorkload.Days;
+			var tempForecastDays = [];
+			for (var i = 0; i < vm.selectedWorkload.Days.length; i++) {
+				if (vm.selectedWorkload.Days[i].IsInModification) {
+					tempForecastDays.push(vm.selectedWorkload.Days[i]);
+				}
+			}
 
 			forecastingService.applyToScenario(
 				angular.toJson({
