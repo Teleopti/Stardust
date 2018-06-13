@@ -56,7 +56,6 @@
 
 		function createRole(roleName) {
 			if (angular.isUndefined(roleName) || vm.sendingNewRole === true) {
-				console.log('returned');
 				return;
 			}
 
