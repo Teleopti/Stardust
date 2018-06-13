@@ -63,13 +63,15 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		[UnitOfWork, Route("api/Forecasting/Skills"), HttpGet]
 		public virtual SkillsViewModel Skills()
 		{
-			var skillList = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
+			var skillList = _skillRepository.FindSkillsWithAtLeastOneQueueSource().ToList();
+			var skillTypes = skillList.ToDictionary(x => x.Id, x => x.SkillType.Description.Name);
 			return new SkillsViewModel
 			{
 				IsPermittedToModifySkill = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebModifySkill),
 				Skills = skillList.Select(skill => new SkillAccuracy
 				{
 					Id = skill.Id.Value,
+					SkillType = skillTypes[skill.Id.Value],
 					Workloads = skill.WorkloadCollection.Select(x => new WorkloadAccuracy
 					{
 						Id = x.Id.Value,
