@@ -1,18 +1,7 @@
-//This is the SGM used in PBI #43727 (the new one as of november 2017)
 (function() {
 	'use strict';
 
 	angular.module('wfm.skillGroup').directive('focusMe', ['$timeout', '$parse', setTheFocus]);
-
-	/*
-		skillgroup interface
-		{
-			Name: string,
-			Id: string,
-			Skills: skill[],
-			Saved: boolean
-		}
-	*/
 
 	function setTheFocus($timeout, $parse) {
 		return {
