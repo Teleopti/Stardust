@@ -86,5 +86,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch
 		public bool Grayed { get; set; }
 		public int TotalCount { get; set; }
 		public Int64 RowNumber { get; set; }
+		public string SiteName { get; set; }
+		public string TeamName { get; set; }
 	}
 }

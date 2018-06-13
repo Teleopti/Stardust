@@ -21,7 +21,7 @@ export interface PeopleSearchQuery {
 export enum COLUMNS {
 	FirstName = 0,
 	LastName = 1,
-	SiteTeam = 2
+	SiteTeam = 4
 }
 
 export enum DIRECTION {
