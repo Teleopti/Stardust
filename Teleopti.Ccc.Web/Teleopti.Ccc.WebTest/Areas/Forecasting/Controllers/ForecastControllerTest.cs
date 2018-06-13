@@ -1553,6 +1553,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			result.Skills.Single().Id.Should().Be.EqualTo(skill.Id.Value);
 			result.Skills.Single().Workloads.Single().Id.Should().Be.EqualTo(workload.Id.Value);
 			result.Skills.Single().Workloads.Single().Name.Should().Be.EqualTo(workloadName);
+			result.Skills.Single().SkillType.Should().Be.EqualTo(skill.SkillType.Description.Name);
 		}
 
 		[Test]
