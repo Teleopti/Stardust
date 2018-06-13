@@ -196,17 +196,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CreateSkillSets>().SingleInstance();
 			builder.RegisterType<ReduceIslandsLimits>().SingleInstance();
 			builder.RegisterType<LongestPeriodForAssignmentCalculator>().As<ILongestPeriodForAssignmentCalculator>().SingleInstance();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_LessResourcesXXL_74915))
-			{
-				builder.CacheByClassProxy<ShiftProjectionCacheFetcher>().SingleInstance();
-				_configuration.Cache().This<ShiftProjectionCacheFetcher>(b => b.CacheMethod(m => m.Execute(null, null)), "SPCF");
-				builder.RegisterType<ShiftProjectionCacheManager>().As<IShiftProjectionCacheManager>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<ShiftProjectionCacheFetcher>().SingleInstance();
-				builder.RegisterType<ShiftProjectionCacheManagerOLD>().As<IShiftProjectionCacheManager>().InstancePerLifetimeScope();	
-			}
+			builder.RegisterType<ShiftProjectionCacheFetcher>().SingleInstance();
+			builder.RegisterType<ShiftProjectionCacheManager>().As<IShiftProjectionCacheManager>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftsFromMasterActivityBaseActivityService>().As<IShiftFromMasterActivityService>().SingleInstance();			
 			builder.RegisterType<RuleSetDeletedActivityChecker>().As<IRuleSetDeletedActivityChecker>().SingleInstance();
 			builder.RegisterType<RuleSetDeletedShiftCategoryChecker>()
@@ -647,14 +638,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<TeamMemberTerminationOnBlockSpecification>().As<ITeamMemberTerminationOnBlockSpecification>().SingleInstance();
 			builder.RegisterType<SplitSchedulePeriodToWeekPeriod>().As<ISplitSchedulePeriodToWeekPeriod>().SingleInstance();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_LessResourcesXXL_74915))
-			{
-				builder.RegisterType<TeamSchedulingNoSetDate>().As<TeamScheduling>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<TeamScheduling>().SingleInstance();				
-			}
+			builder.RegisterType<TeamScheduling>().SingleInstance();
 			builder.RegisterType<TeamBlockSingleDayScheduler>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockScheduler>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftProjectionCachesForIntraInterval>().InstancePerLifetimeScope();
