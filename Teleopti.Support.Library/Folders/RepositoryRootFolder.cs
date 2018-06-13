@@ -6,6 +6,8 @@ namespace Teleopti.Support.Library.Folders
 	{
 		public string Path() => System.IO.Path.GetFullPath(locateFolderUsingBlackMagic());
 
+		public bool IsRunningFromRepository() => Path() != null;
+
 		private static string locateFolderUsingBlackMagic()
 		{
 			if (Directory.Exists(@"..\..\..\..\.debug-Setup"))

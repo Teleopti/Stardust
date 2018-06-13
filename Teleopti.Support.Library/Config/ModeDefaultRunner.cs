@@ -1,6 +1,4 @@
-﻿using Teleopti.Support.Library.Config;
-
-namespace Teleopti.Support.Tool.Tool
+﻿namespace Teleopti.Support.Library.Config
 {
 	public class ModeDebugCommand
 	{
@@ -33,7 +31,7 @@ namespace Teleopti.Support.Tool.Tool
 	{
 		protected static void Run(ConfigFiles configFiles)
 		{
-			new RefreshConfigsRunner(new RefreshConfigFile(), () => configFiles).Execute();
+			new RefreshConfigsRunner(new RefreshConfigFile(), configFiles).Execute();
 			new ConfigurationRestorer()
 				.Restore(
 					new ConfigurationRestoreCommand

@@ -1,6 +1,4 @@
-﻿using Teleopti.Support.Library.Config;
-
-namespace Teleopti.Support.Tool.Tool
+﻿namespace Teleopti.Support.Library.Config
 {
 	public class ModeDeployWebCommand
 	{
@@ -24,7 +22,7 @@ namespace Teleopti.Support.Tool.Tool
 	{
 		protected void Run(ConfigFiles configFiles)
 		{
-			new RefreshConfigsRunner(new RefreshConfigFile(), () => configFiles).Execute();
+			new RefreshConfigsRunner(new RefreshConfigFile(), configFiles).Execute();
 			new ConfigurationRestorer().Restore(
 				new ConfigurationRestoreCommand
 				{
