@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Intraday
 {
-	public class ReforecastedStaffingProvider
+	public class ReforecastedStaffingProvider : IReforecastedStaffingProvider
 	{
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;

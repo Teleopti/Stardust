@@ -12,6 +12,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Intraday.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Staffing
 {

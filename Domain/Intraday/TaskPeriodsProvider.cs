@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Intraday
 {
-	public class TaskPeriodsProvider
+	public class TaskPeriodsProvider : ITaskPeriodsProvider
 	{
 		private readonly IUserTimeZone _timeZone;
 		private readonly INow _now;
@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_timeZone = timeZone;
 			_now = now;
 		}
+
 
 		public IEnumerable<ITemplateTaskPeriod> Load(ISkillDay skillDay,
 			int minutesPerInterval,

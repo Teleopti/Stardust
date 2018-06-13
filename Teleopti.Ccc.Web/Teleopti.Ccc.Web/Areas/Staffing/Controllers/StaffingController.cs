@@ -6,6 +6,7 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -18,6 +19,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
@@ -25,8 +27,8 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 	public class StaffingController : ApiController
 	{
 		private readonly AddOverTime _addOverTime;
-		private readonly ScheduledStaffingToDataSeries _scheduledStaffingToDataSeries;
-		private readonly ForecastedStaffingToDataSeries _forecastedStaffingToDataSeries;
+		private readonly IScheduledStaffingToDataSeries _scheduledStaffingToDataSeries;
+		private readonly IForecastedStaffingToDataSeries _forecastedStaffingToDataSeries;
 		private readonly IUserTimeZone _timeZone;
 		private readonly IMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSetRepository;
 		private readonly ISkillGroupRepository _skillGroupRepository;
@@ -41,14 +43,16 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		private readonly BpoGanttProvider _bpoGanttProvider;
 		//private readonly ILoadAllSkillInIntradays _loadAllSkillInIntradays;
 		private readonly IAllSkillForSkillGroupProvider _allSkillForSkillGroupProvider;
+		private readonly IToggleManager _toggleManager;
 
-		public StaffingController(AddOverTime addOverTime, ScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
-								  ForecastedStaffingToDataSeries forecastedStaffingToDataSeries, IUserTimeZone timeZone,
+		public StaffingController(AddOverTime addOverTime, IScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
+								  IForecastedStaffingToDataSeries forecastedStaffingToDataSeries, IUserTimeZone timeZone,
 								  IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository, ISkillGroupRepository skillGroupRepository,
 								  ScheduledStaffingViewModelCreator staffingViewModelCreator, ImportBpoFile bpoFile, ICurrentDataSource currentDataSource, 
 								  IExportBpoFile exportBpoFile, ISkillRepository skillRepository, IAuthorization authorization,
 			ExportForecastAndStaffingFile exportForecastAndStaffingFile, ExportStaffingPeriodValidationProvider periodValidationProvider,
-			BpoGanttProvider bpoGanttProvider, IAllSkillForSkillGroupProvider allSkillForSkillGroupProvider)
+			BpoGanttProvider bpoGanttProvider, IAllSkillForSkillGroupProvider allSkillForSkillGroupProvider,
+			IToggleManager toggleManager)
 		{
 			_addOverTime = addOverTime;
 			_scheduledStaffingToDataSeries = scheduledStaffingToDataSeries;
@@ -66,6 +70,9 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			_periodValidationProvider = periodValidationProvider;
 			_bpoGanttProvider = bpoGanttProvider;
 			_allSkillForSkillGroupProvider = allSkillForSkillGroupProvider;
+
+			_toggleManager = toggleManager ?? throw new ArgumentNullException(nameof(toggleManager));
+
 		}
 
 		[UnitOfWork, HttpGet, Route("api/staffing/getallganttdataforbpotimeline")]
@@ -91,7 +98,13 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		{
 			var skillArea = _skillGroupRepository.Get(SkillAreaId);
 			var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
-			var model = _staffingViewModelCreator.Load(skillIdList, new DateOnly(DateTime), UseShrinkage);
+
+			var model = new ScheduledStaffingViewModel();
+			if (_toggleManager.IsEnabled(Toggles.WFM_Intraday_Refactoring_74652))
+				model = _staffingViewModelCreator.Load(skillIdList, new DateOnly(DateTime), UseShrinkage);
+			else
+				model = _staffingViewModelCreator.Load_old(skillIdList, new DateOnly(DateTime), UseShrinkage);
+
 			model.ImportBpoInfoList = _bpoGanttProvider.ImportInfoOnSkillGroup(SkillAreaId, DateTime); ;
 			return Ok(model);
 		}
@@ -99,7 +112,12 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		[UnitOfWork, HttpGet, Route("api/staffing/monitorskillstaffing")]
 		public virtual IHttpActionResult MonitorSkillStaffingByDate(Guid SkillId, DateTime DateTime, bool UseShrinkage)
 		{
-			var model = _staffingViewModelCreator.Load(new[] {SkillId}, new DateOnly(DateTime), UseShrinkage);
+			var model = new ScheduledStaffingViewModel();
+			if (_toggleManager.IsEnabled(Toggles.WFM_Intraday_Refactoring_74652))
+				model = _staffingViewModelCreator.Load(new[] { SkillId }, new DateOnly(DateTime), UseShrinkage);
+			else 
+				model = _staffingViewModelCreator.Load_old(new[] { SkillId }, new DateOnly(DateTime), UseShrinkage);
+
 			model.ImportBpoInfoList = _bpoGanttProvider.ImportInfoOnSkill(SkillId, DateTime);
 			return Ok(model);
 		}

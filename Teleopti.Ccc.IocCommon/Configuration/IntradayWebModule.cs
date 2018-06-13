@@ -1,10 +1,10 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
+using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SkillGroupManagement;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -24,13 +24,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<StaffingViewModelCreator>().As<IStaffingViewModelCreator>().SingleInstance();
-			builder.RegisterType<ForecastedCallsProvider>().SingleInstance();
-			builder.RegisterType<RequiredStaffingProvider>().SingleInstance();
-			builder.RegisterType<ScheduledStaffingProvider>().SingleInstance();
-			builder.RegisterType<ScheduledStaffingToDataSeries>().SingleInstance();
-			builder.RegisterType<ForecastedStaffingProvider>().SingleInstance();
-			builder.RegisterType<ForecastedStaffingToDataSeries>().SingleInstance();
-			builder.RegisterType<ReforecastedStaffingProvider>().SingleInstance();
+			builder.RegisterType<ForecastedCallsProvider>().As<IForecastedCallsProvider>().SingleInstance();
+			builder.RegisterType<RequiredStaffingProvider>().As<IRequiredStaffingProvider>().SingleInstance();
+			builder.RegisterType<ScheduledStaffingProvider>().As<IScheduledStaffingProvider>().SingleInstance();
+			builder.RegisterType<ScheduledStaffingToDataSeries>().As<IScheduledStaffingToDataSeries>().SingleInstance();
+			builder.RegisterType<ForecastedStaffingProvider>().As<IForecastedStaffingProvider>().SingleInstance();
+			builder.RegisterType<ForecastedStaffingToDataSeries>().As<IForecastedStaffingToDataSeries>().SingleInstance();
+			builder.RegisterType<ReforecastedStaffingProvider>().As<IReforecastedStaffingProvider>().SingleInstance();
 			builder.RegisterType<SupportedSkillsInIntradayProvider>().As<ISupportedSkillsInIntradayProvider>().SingleInstance();
 			builder.RegisterType<SkillTypeInfoProvider>().As<ISkillTypeInfoProvider>();
 			builder.RegisterType<InboundPhoneSkillSupported>().As<ISupportedSkillCheck>();
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<MultisiteSkillSupportedCheckAlwaysTrue>().As<IMultisiteSkillSupportedCheck>();
 			builder.RegisterType<OtherSkillsLikeEmailSupported>().As<ISupportedSkillCheck>();
 			builder.RegisterType<SkillTypeInfoTypesLikePhone>().As<ISkillTypeInfo>();
-			builder.RegisterType<TaskPeriodsProvider>().SingleInstance();
+			builder.RegisterType<TaskPeriodsProvider>().As<ITaskPeriodsProvider>().SingleInstance();
 			builder.RegisterType<FetchSkillInIntraday>().SingleInstance();
 			builder.RegisterType<SkillGroupViewModelBuilder>().SingleInstance();
 			builder.RegisterType<AllSkillForSkillGroupProvider>().As<IAllSkillForSkillGroupProvider>();
@@ -70,9 +70,20 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.SingleInstance();
 			}
 
-			builder.RegisterType<EmailBacklogProvider>().SingleInstance();
+			builder.RegisterType<EmailBacklogProvider>().As<IEmailBacklogProvider>().SingleInstance();
 			builder.RegisterType<SkillStaffingIntervalProvider>().SingleInstance();
 			builder.RegisterType<IntradaySkillProvider>().As<IIntradaySkillProvider>().SingleInstance();
+
+			// Intraday - application layer
+			builder.RegisterType<IntradayStaffingApplicationService>().As<IIntradayStaffingApplicationService>();
+			builder.RegisterType<IntradayPerformanceApplicationService>().As<IIntradayPerformanceApplicationService>();
+			builder.RegisterType<IntradayIncomingTrafficApplicationService>().As<IIntradayIncomingTrafficApplicationService>();
+
+			// Intraday - domain layer
+			builder.RegisterType<IntradayForecastingService>().As<IIntradayForecastingService>();
+			builder.RegisterType<IntradayReforecastingService>().As<IIntradayReforecastingService>();
+			builder.RegisterType<IntradayStatisticsService>().As<IIntradayStatisticsService>();
+			builder.RegisterType<IntradayStaffingService>().As<IIntradayStaffingService>();
 		}
 	}
 }

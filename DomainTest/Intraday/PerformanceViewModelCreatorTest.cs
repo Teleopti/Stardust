@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillDayRepository.Add(skillDay);
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue,scheduledStaffingList);
 
-			var result = Target.Load(new Guid[] { skill.Id.Value });
+			var result = Target.Load_old(new Guid[] { skill.Id.Value });
 
 			var esl = calculateEsl(scheduledStaffingList, skillDay, skillDay.WorkloadDayCollection.First().TaskPeriodList.First().Tasks, 0);
 
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillDayRepository.Add(skillDay);
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue, scheduledStaffingList);
 
-			var result = Target.Load(new Guid[] { skill.Id.Value });
+			var result = Target.Load_old(new Guid[] { skill.Id.Value });
 
 			var esl = calculateEsl(scheduledStaffingList, skillDay, skillDay.WorkloadDayCollection.First().TaskPeriodList.First().Tasks, 0);
 
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillDayRepository.Add(skillDaySaturday);
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue, scheduledStaffingList);
 
-			var result = Target.Load(new Guid[] { skillClosedOnWeekends.Id.Value });
+			var result = Target.Load_old(new Guid[] { skillClosedOnWeekends.Id.Value });
 
 			var esl = calculateEsl(scheduledStaffingList, skillDayFriday, skillDayFriday.WorkloadDayCollection.First().TaskPeriodList.First().Tasks, 0);
 
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			createStatistics(latestStatsTime.AddMinutes(-minutesPerInterval), userNow, latestStatsTime);
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue, scheduledStaffingList);
 
-			var result = Target.Load(new Guid[] { skill.Id.Value });
+			var result = Target.Load_old(new Guid[] { skill.Id.Value });
 
 			var esl = calculateEsl(scheduledStaffingList, skillDay, skillDay.WorkloadDayCollection.First().TaskPeriodList.First().Tasks / 2, 0);
 
@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			createStatistics(userNow.AddMinutes(-minutesPerInterval), userNow.AddMinutes(minutesPerInterval), latestStatsTime);
 
-			var result = Target.Load(new[] { skill1.Id.Value, skill2.Id.Value });
+			var result = Target.Load_old(new[] { skill1.Id.Value, skill2.Id.Value });
 
 			var forecastedCallsSkill1 = skillDay1.WorkloadDayCollection.First().TaskPeriodList.First().Tasks;
 			var forecastedCallsSkill2 = skillDay2.WorkloadDayCollection.First().TaskPeriodList[1].Tasks;
@@ -257,7 +257,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skill);
 
-			var result = Target.Load(new Guid[] { skill.Id.Value });
+			var result = Target.Load_old(new Guid[] { skill.Id.Value });
 
 			result.DataSeries.Time.Length.Should().Be.EqualTo(96);
 			result.DataSeries.EstimatedServiceLevels.Length.Should().Be.EqualTo(96);
@@ -283,7 +283,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skill);
 
-			var result = Target.Load(new Guid[] { skill.Id.Value });
+			var result = Target.Load_old(new Guid[] { skill.Id.Value });
 
 			result.DataSeries.Time.Length.Should().Be.EqualTo(96);
 			result.DataSeries.EstimatedServiceLevels.Length.Should().Be.EqualTo(96);
@@ -310,7 +310,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skill);
 
-			var result = Target.Load(new Guid[] { skill.Id.Value }, dayOffset);
+			var result = Target.Load_old(new Guid[] { skill.Id.Value }, dayOffset);
 
 			result.DataSeries.Time.Length.Should().Be.EqualTo(96);
 			result.DataSeries.EstimatedServiceLevels.Length.Should().Be.EqualTo(96);
@@ -337,7 +337,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skill);
 
-			var result = Target.Load(new Guid[] { skill.Id.Value }, dayOffset);
+			var result = Target.Load_old(new Guid[] { skill.Id.Value }, dayOffset);
 
 			result.DataSeries.Time.Length.Should().Be.EqualTo(96);
 			result.DataSeries.EstimatedServiceLevels.Length.Should().Be.EqualTo(96);
@@ -367,7 +367,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillDayRepository.Add(skillDay);
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue, scheduledStaffingList);
 
-			var result = Target.Load(new Guid[] { skill.Id.Value }, dayOffset);
+			var result = Target.Load_old(new Guid[] { skill.Id.Value }, dayOffset);
 
 			var esl = calculateEsl(scheduledStaffingList, skillDay, skillDay.WorkloadDayCollection.First().TaskPeriodList.First().Tasks, 0);
 
@@ -393,7 +393,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillDayRepository.Add(skillDay);
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue, scheduledStaffingList);
 
-			var result = Target.Load(new Guid[] { skill.Id.Value });
+			var result = Target.Load_old(new Guid[] { skill.Id.Value });
 
 			var forecastedCallsInterval1 = skillDay.WorkloadDayCollection.First().TaskPeriodList.First().Tasks;
 			var eslInterval1 = calculateEsl(scheduledStaffingList, skillDay, forecastedCallsInterval1, 0);
@@ -435,7 +435,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skill);
 
-			var result = Target.Load(new Guid[] { skill.Id.Value });
+			var result = Target.Load_old(new Guid[] { skill.Id.Value });
 
 			result.DataSeries.Time.Length.Should().Be.EqualTo(1);
 			result.DataSeries.AverageSpeedOfAnswer.Length.Should().Be.EqualTo(1);
@@ -479,7 +479,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillDayRepository.Add(skillDay);
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue, scheduledStaffingList);
 
-			var result = Target.Load(new Guid[] { skill.Id.Value });
+			var result = Target.Load_old(new Guid[] { skill.Id.Value });
 
 			result.DataSeries.EstimatedServiceLevels.Length.Should().Be.EqualTo(2);
 			result.DataSeries.EstimatedServiceLevels.First().Should().Be.GreaterThan(0d);
@@ -501,7 +501,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillRepository.Has(skill);
 			SkillDayRepository.Add(skillDay);
 
-			var result = Target.Load(new Guid[] { skill.Id.Value });
+			var result = Target.Load_old(new Guid[] { skill.Id.Value });
 
 			result.DataSeries.EstimatedServiceLevels.Length.Should().Be.EqualTo(1);
 			result.DataSeries.EstimatedServiceLevels.First().Should().Be.EqualTo(0d);
@@ -530,7 +530,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillRepository.Has(skill);
 			SkillDayRepository.Has(skillDay);
 
-			var result = Target.Load(new Guid[] { skill.Id.Value });
+			var result = Target.Load_old(new Guid[] { skill.Id.Value });
 
 			result.DataSeries.EstimatedServiceLevels.Length.Should().Be.EqualTo(1);
 			result.DataSeries.EstimatedServiceLevels.First().Should().Be.EqualTo(null);
@@ -548,7 +548,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 15), false);
 			SkillRepository.Has(skill);
 
-			var result = Target.Load(new Guid[] { skill.Id.Value });
+			var result = Target.Load_old(new Guid[] { skill.Id.Value });
 
 			result.DataSeries.EstimatedServiceLevels.Should().Be.Empty();
 		}
@@ -577,7 +577,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue, scheduledStaffingList);
 			createStatistics(latestStatsTime, latestStatsTime.AddMinutes(minutesPerInterval), latestStatsTime);
 
-			var result = Target.Load(new Guid[] { skill1.Id.Value, skill2.Id.Value });
+			var result = Target.Load_old(new Guid[] { skill1.Id.Value, skill2.Id.Value });
 
 			var forecastedCallsSkill1 = skillDay1.WorkloadDayCollection.First().TaskPeriodList.First().Tasks;
 			var forecastedCallsSkill2 = skillDay2.WorkloadDayCollection.First().TaskPeriodList.First().Tasks;
@@ -608,7 +608,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skill);
 
-			var result = Target.Load(new Guid[] { skill.Id.Value });
+			var result = Target.Load_old(new Guid[] { skill.Id.Value });
 
 			result.DataSeries.AbandonedRate.Should().Be.Empty();
 			result.DataSeries.ServiceLevel.Should().Be.Empty();
@@ -642,7 +642,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillDayRepository.Add(skillDay);
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue, scheduledStaffingList);
 
-			var result = Target.Load(new Guid[] { skill.Id.Value });
+			var result = Target.Load_old(new Guid[] { skill.Id.Value });
 
 			result.DataSeries.EstimatedServiceLevels.Length.Should().Be.EqualTo(1);
 			result.DataSeries.EstimatedServiceLevels.First().Should().Be.GreaterThan(0d);
@@ -672,7 +672,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillDayRepository.Add(skillDay);
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue, scheduledStaffingList);
 
-			var result = Target.Load(new Guid[] { skill.Id.Value }, testDate);
+			var result = Target.Load_old(new Guid[] { skill.Id.Value }, testDate);
 
 			result.Should().Not.Be.Null();
 			result.LatestActualIntervalStart.Should().Have.Value();
@@ -704,7 +704,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillDayRepository.Add(skillDay);
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue, scheduledStaffingList);
 
-			var result = Target.Load(new Guid[] { skill.Id.Value }, testDate.AddDays(+1));
+			var result = Target.Load_old(new Guid[] { skill.Id.Value }, testDate.AddDays(+1));
 
 			result.LatestActualIntervalStart.Should().Not.Have.Value();
 		}
@@ -734,7 +734,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue, scheduledStaffingList);
 
-			var result = Target.Load(new Guid[] { skill.Id.Value }, 1);
+			var result = Target.Load_old(new Guid[] { skill.Id.Value }, 1);
 
 			result.Should().Not.Be.Null();
 			result.LatestActualIntervalStart.Should().Have.Value();
@@ -766,7 +766,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skill);
 
-			var result = Target.Load(new Guid[] {skill.Id.Value});
+			var result = Target.Load_old(new Guid[] {skill.Id.Value});
 			result.DataSeries.ServiceLevel.Length.Should().Be.EqualTo(1);
 			result.DataSeries.ServiceLevel[0].Should().Not.Be.EqualTo(null);
 			result.DataSeries.AbandonedRate.Length.Should().Be.EqualTo(1);
@@ -789,7 +789,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skill);
 
-			var result = Target.Load(new Guid[] { skill.Id.Value });
+			var result = Target.Load_old(new Guid[] { skill.Id.Value });
 
 			result.DataSeries.Time.Length.Should().Be.EqualTo(96);
 			result.DataSeries.EstimatedServiceLevels.Length.Should().Be.EqualTo(96);
@@ -850,7 +850,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			createStatistics(userNow.AddMinutes(-minutesPerInterval), userNow.AddMinutes(minutesPerInterval), latestStatsTime);
 
-			var result = Target.Load(new[] { skill.Id.Value });
+			var result = Target.Load_old(new[] { skill.Id.Value });
 			result.DataSeries.EstimatedServiceLevels.Length.Should().Be.EqualTo(2);
 		}
 

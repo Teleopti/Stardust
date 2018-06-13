@@ -107,6 +107,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 					{
 						var ret = new SkillDay(skillDay.CurrentDate, skillDay.Skill, skillDay.Scenario, skillDay.WorkloadDayCollection,
 							skillDay.SkillDataPeriodCollection);
+						ret.SetId(skillDay.Id);
 						ret.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = skillDay.SkillDataPeriodCollection.First().Shrinkage);
 						return ret;
 					}

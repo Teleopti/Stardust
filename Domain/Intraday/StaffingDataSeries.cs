@@ -5,6 +5,15 @@ namespace Teleopti.Ccc.Domain.Intraday
 {
 	public class StaffingDataSeries
 	{
+		public StaffingDataSeries()
+		{
+			ForecastedStaffing = new double?[] { };
+			UpdatedForecastedStaffing = new double?[] { };
+			ActualStaffing = new double?[] { };
+			ScheduledStaffing = new double?[] { };
+			AbsoluteDifference = new double?[] { };
+ 		}
+
 		public DateOnly Date { get; set; }
 		public DateTime[] Time { get; set; }
 		public double?[] ForecastedStaffing { get; set; }

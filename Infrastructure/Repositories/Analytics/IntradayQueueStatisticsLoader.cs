@@ -6,7 +6,7 @@ using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -15,6 +15,47 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
 	public class IntradayQueueStatisticsLoader : IIntradayQueueStatisticsLoader
 	{
+		public IList<SkillIntervalStatistics> LoadSkillVolumeStatistics(IList<ISkill> skills, DateTime startOfDayUtc)
+		{
+			var skillIdArray = skills.Select(x => x.Id.Value.ToString()).ToArray();
+			var endOfDayUtc = startOfDayUtc.AddDays(1);
+			var timeZone = TimeZoneInfo.Utc;
+
+			var datesToLoad = Enumerable.Range(0, 1 + endOfDayUtc.Subtract(startOfDayUtc).Days)
+				.Select(offset => startOfDayUtc.AddDays(offset))
+				.ToArray();
+
+			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				var skillIdString = String.Join(",", skillIdArray);
+				var allIntervals = new List<SkillIntervalStatistics>();
+
+				foreach (var day in datesToLoad)
+				{
+					var callsPerSkillInterval =
+						uow.Session()
+							.CreateSQLQuery(
+								@"mart.web_intraday_calls_per_skill_interval @time_zone_code=:TimeZone, @today=:Today, @skill_list=:SkillList")
+							.AddScalar("SkillId", NHibernateUtil.Guid)
+							.AddScalar("WorkloadId", NHibernateUtil.Guid)
+							.AddScalar("StartTime", NHibernateUtil.DateTime)
+							.AddScalar("Calls", NHibernateUtil.Double)
+							.AddScalar("AverageHandleTime", NHibernateUtil.Double)
+							.AddScalar("AnsweredCalls", NHibernateUtil.Int32)
+							.AddScalar("HandleTime", NHibernateUtil.Double)
+							.SetString("TimeZone", timeZone.Id)
+							.SetString("Today", day.ToString("d", (CultureInfo.InvariantCulture)))
+							.SetParameter("SkillList", skillIdString, NHibernateUtil.StringClob)
+							.SetResultTransformer(Transformers.AliasToBean(typeof(SkillIntervalStatistics)))
+							.List<SkillIntervalStatistics>();
+
+					allIntervals.AddRange(callsPerSkillInterval);
+				}
+
+				return allIntervals.Where(x => x.StartTime >= startOfDayUtc).ToList();
+			}
+		}
+
 		public IList<SkillIntervalStatistics> LoadActualCallPerSkillInterval(IList<ISkill> skills, TimeZoneInfo timeZone, DateOnly today)
 		{
 			var skillIdArray = skills.Select(x => x.Id.Value.ToString()).ToArray();

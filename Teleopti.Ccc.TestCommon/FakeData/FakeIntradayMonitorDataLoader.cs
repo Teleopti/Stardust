@@ -15,11 +15,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IList<IncomingIntervalModel> Load(IList<Guid> skillList, TimeZoneInfo timeZone, DateOnly today)
 		{
-			if (ShouldCompareDate && _intervals.Any() && new DateOnly(_intervals[0].IntervalDate) != today)
-				return new List<IncomingIntervalModel>();
+			//if (ShouldCompareDate && _intervals.Any() && new DateOnly(_intervals[0].IntervalDate) != today)
+			//	return new List<IncomingIntervalModel>();
 
 			Skills = skillList;
-			return intervals;
+			return intervals.Where(x => x.IntervalDate.Date == today.Date).ToList();
 		}
 
 		public IList<Guid> Skills

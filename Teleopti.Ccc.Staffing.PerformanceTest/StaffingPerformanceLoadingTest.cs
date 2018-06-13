@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -47,7 +47,8 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 		public IActivityRepository ActivityRepository;
 		public IScenarioRepository ScenarioRepository;
 		public AddOverTime AddOverTime;
-		public StaffingViewModelCreator StaffingViewModelCreator;
+
+		public IIntradayStaffingApplicationService Target;
 
 		//private IList<IPersonRequest> requests;
 		private DateTime _nowDateTime;
@@ -101,7 +102,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 				{
 					foreach (var skill in selectedSkills)
 					{
-						var model = StaffingViewModelCreator.Load(new[] {skill});
+						var model = Target.GenerateStaffingViewModel(new[] {skill});
 					}
 				});
 			});

@@ -19,7 +19,7 @@
 						not-null="true"
 						unique-key="UQ_SkillAreaSkillCollection"/>
 			</key>
-			<many-to-many class="Teleopti.Ccc.Domain.Intraday.SkillInIntraday"
+			<many-to-many class="Teleopti.Ccc.Domain.Intraday.Domain.SkillInIntraday"
 						  foreign-key="FK_SkillAreaSkillCollection_Skill">
 				<column name="Skill"
 						unique-key="UQ_SkillAreaSkillCollection"

@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Intraday
 {
-	public class ScheduledStaffingProvider
+	public class ScheduledStaffingProvider : IScheduledStaffingProvider
 	{
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;

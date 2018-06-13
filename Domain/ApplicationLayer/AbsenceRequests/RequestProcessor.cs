@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly INow _now;
 		private readonly SmartDeltaDoer _smartDeltaDoer;
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
-		private readonly ScheduledStaffingProvider _scheduledStaffingProvider;
+		private readonly IScheduledStaffingProvider _scheduledStaffingProvider;
 		private readonly IExtensiveLogRepository _extensiveLogRepository;
 
 		public RequestProcessor(ICommandDispatcher commandDispatcher,
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			ISkillRepository skillRepository, SkillCombinationResourceReadModelValidator skillCombinationResourceReadModelValidator,
 			IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, SkillStaffingIntervalProvider skillStaffingIntervalProvider,
 			IActivityRepository activityRepository, IPersonRequestRepository personRequestRepository, INow now, SmartDeltaDoer smartDeltaDoer,
-			ISkillDayLoadHelper skillDayLoadHelper, ScheduledStaffingProvider scheduledStaffingProvider, IExtensiveLogRepository extensiveLogRepositor)
+			ISkillDayLoadHelper skillDayLoadHelper, IScheduledStaffingProvider scheduledStaffingProvider, IExtensiveLogRepository extensiveLogRepositor)
 		{
 			_commandDispatcher = commandDispatcher;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;

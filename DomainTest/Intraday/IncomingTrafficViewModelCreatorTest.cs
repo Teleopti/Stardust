@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -66,6 +66,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ServiceLevelShouldNotExceed100Percent()
 		{
+			Now.Is(new DateTime(2016, 12, 2, 12, 0, 0, DateTimeKind.Utc));
+
 			var interval = new IncomingIntervalModel()
 			{
 				IntervalDate = new DateTime(2016, 12, 02),
@@ -86,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			IntradayMonitorDataLoader.AddInterval(interval);
 			IntervalLengthFetcher.Has(minutesPerInterval);
 
-			var result = Target.Load(new[] {Guid.NewGuid() });
+			var result = Target.Load_old(new[] {Guid.NewGuid() });
 
 			result.DataSeries.ServiceLevel[0].Should().Not.Be.GreaterThan(100).And.Be.GreaterThan(0);
 			result.Summary.ServiceLevel.Should().Not.Be.GreaterThan(1).And.Be.GreaterThan(0);
@@ -95,6 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldSummariseUpUntilLatestUpdate()
 		{
+			Now.Is(new DateTime(2016, 12, 2, 12, 0, 0, DateTimeKind.Utc));
 			var thirdInterval = new IncomingIntervalModel()
 			{
 				IntervalDate = new DateTime(2016, 12, 02),
@@ -111,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			IntervalLengthFetcher.Has(minutesPerInterval);
 			
 
-			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+			var viewModel = Target.Load_old(new[] { Guid.NewGuid() });
 
 			var expectedForecastedCallsSum = _firstInterval.ForecastedCalls + _secondInterval.ForecastedCalls;
 			var expectedForecastedHandleTimeSum = _firstInterval.ForecastedHandleTime + _secondInterval.ForecastedHandleTime;
@@ -130,11 +133,12 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test, SetCulture("sv-SE")]
 		public void ShouldReturnTimeSeries()
 		{
+			Now.Is(new DateTime(2016, 12, 2, 12, 0, 0, DateTimeKind.Utc));
 			IntradayMonitorDataLoader.AddInterval(_firstInterval);
 			IntradayMonitorDataLoader.AddInterval(_secondInterval);
 			IntervalLengthFetcher.Has(minutesPerInterval);
 
-			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+			var viewModel = Target.Load_old(new[] { Guid.NewGuid() });
 
 			viewModel.DataSeries.Time.Length.Should().Be.EqualTo(2);
 			viewModel.DataSeries.Time.First().Should().Be.EqualTo(_firstInterval.IntervalDate.AddMinutes(_firstInterval.IntervalId * minutesPerInterval));
@@ -144,11 +148,12 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldReturnForecastedCallsSeries()
 		{
+			Now.Is(new DateTime(2016, 12, 2, 12, 0, 0, DateTimeKind.Utc));
 			IntradayMonitorDataLoader.AddInterval(_firstInterval);
 			IntradayMonitorDataLoader.AddInterval(_secondInterval);
 			IntervalLengthFetcher.Has(minutesPerInterval);
 
-			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+			var viewModel = Target.Load_old(new[] { Guid.NewGuid() });
 
 			viewModel.DataSeries.ForecastedCalls.Length.Should().Be.EqualTo(2);
 			viewModel.DataSeries.ForecastedCalls.First().Should().Be.EqualTo(_firstInterval.ForecastedCalls);
@@ -158,11 +163,12 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldReturnForecastedAverageHandleTimeSeries()
 		{
+			Now.Is(new DateTime(2016, 12, 2, 12, 0, 0, DateTimeKind.Utc));
 			IntradayMonitorDataLoader.AddInterval(_firstInterval);
 			IntradayMonitorDataLoader.AddInterval(_secondInterval);
 			IntervalLengthFetcher.Has(minutesPerInterval);
 
-			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+			var viewModel = Target.Load_old(new[] { Guid.NewGuid() });
 
 			viewModel.DataSeries.ForecastedAverageHandleTime.Length.Should().Be.EqualTo(2);
 			viewModel.DataSeries.ForecastedAverageHandleTime.First().Should().Be.EqualTo(_firstInterval.ForecastedAverageHandleTime);
@@ -172,11 +178,12 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldReturnOfferedCallsSeries()
 		{
+			Now.Is(new DateTime(2016, 12, 2, 12, 0, 0, DateTimeKind.Utc));
 			IntradayMonitorDataLoader.AddInterval(_firstInterval);
 			IntradayMonitorDataLoader.AddInterval(_secondInterval);
 			IntervalLengthFetcher.Has(minutesPerInterval);
 
-			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+			var viewModel = Target.Load_old(new[] { Guid.NewGuid() });
 
 			viewModel.DataSeries.CalculatedCalls.Length.Should().Be.EqualTo(2);
 			viewModel.DataSeries.CalculatedCalls.First().Should().Be.EqualTo(_firstInterval.CalculatedCalls);
@@ -186,11 +193,12 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldReturnAverageHandleTimeSeries()
 		{
+			Now.Is(new DateTime(2016, 12, 2, 12, 0, 0, DateTimeKind.Utc));
 			IntradayMonitorDataLoader.AddInterval(_firstInterval);
 			IntradayMonitorDataLoader.AddInterval(_secondInterval);
 			IntervalLengthFetcher.Has(minutesPerInterval);
 
-			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+			var viewModel = Target.Load_old(new[] { Guid.NewGuid() });
 
 			viewModel.DataSeries.AverageHandleTime.Length.Should().Be.EqualTo(2);
 			viewModel.DataSeries.AverageHandleTime.First().Should().Be.EqualTo(_firstInterval.AverageHandleTime);
@@ -200,6 +208,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldFillWithNullValueIfNoOfferedCalls()
 		{
+			Now.Is(new DateTime(2016, 12, 2, 12, 0, 0, DateTimeKind.Utc));
 			var thirdInterval = new IncomingIntervalModel()
 			{
 				IntervalDate = new DateTime(2016, 12, 02),
@@ -217,7 +226,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			IntradayMonitorDataLoader.AddInterval(thirdInterval);
 			IntervalLengthFetcher.Has(minutesPerInterval);
 
-			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+			var viewModel = Target.Load_old(new[] { Guid.NewGuid() });
 
 			viewModel.DataSeries.CalculatedCalls.Length.Should().Be.EqualTo(3);
 			viewModel.DataSeries.CalculatedCalls[1].Should().Be.EqualTo(null);
@@ -226,6 +235,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldFillWithNullValueIfNoAverageHandleTime()
 		{
+			Now.Is(new DateTime(2016, 12, 2, 12, 0, 0, DateTimeKind.Utc));
 			var thirdInterval = new IncomingIntervalModel()
 			{
 				IntervalDate = new DateTime(2016, 12, 02),
@@ -243,7 +253,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			IntradayMonitorDataLoader.AddInterval(thirdInterval);
 			IntervalLengthFetcher.Has(minutesPerInterval);
 
-			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+			var viewModel = Target.Load_old(new[] { Guid.NewGuid() });
 
 			viewModel.DataSeries.AverageHandleTime.Length.Should().Be.EqualTo(3);
 			viewModel.DataSeries.AverageHandleTime[1].Should().Be.EqualTo(null);
@@ -253,6 +263,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldReturnLatestStatsTime()
 		{
+			Now.Is(new DateTime(2016, 12, 2, 12, 0, 0, DateTimeKind.Utc));
 			_secondInterval.CalculatedCalls = null;
 			_secondInterval.HandleTime = null;
 			_secondInterval.AverageHandleTime = null;
@@ -260,7 +271,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			IntradayMonitorDataLoader.AddInterval(_secondInterval);
 			IntervalLengthFetcher.Has(minutesPerInterval);
 
-			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+			var viewModel = Target.Load_old(new[] { Guid.NewGuid() });
 
 			viewModel.DataSeries.AverageHandleTime.Length.Should().Be.EqualTo(2);
 			viewModel.LatestActualIntervalStart.Should().Be.EqualTo(_firstInterval.IntervalDate.AddMinutes(_firstInterval.IntervalId * minutesPerInterval));
@@ -272,7 +283,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		{
 			IntervalLengthFetcher.Has(minutesPerInterval);
 
-			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+			var viewModel = Target.Load_old(new[] { Guid.NewGuid() });
 
 			viewModel.DataSeries.AverageHandleTime.Length.Should().Be.EqualTo(0);
 			viewModel.LatestActualIntervalStart.Should().Be.EqualTo(null);
@@ -282,11 +293,12 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldReturnDifferenceBetweenForecastedAndActualCalls()
 		{
+			Now.Is(new DateTime(2016, 12, 2, 12, 0, 0, DateTimeKind.Utc));
 			IntradayMonitorDataLoader.AddInterval(_firstInterval);
 			IntradayMonitorDataLoader.AddInterval(_secondInterval);
 			IntervalLengthFetcher.Has(minutesPerInterval);
 
-			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+			var viewModel = Target.Load_old(new[] { Guid.NewGuid() });
 			double allForecastedCalls = _firstInterval.ForecastedCalls + _secondInterval.ForecastedCalls;
 			double allOfferedCalls = _firstInterval.CalculatedCalls.Value + _secondInterval.CalculatedCalls.Value;
 			var expectedDiff = (allOfferedCalls - allForecastedCalls) * 100 / allForecastedCalls;
@@ -297,11 +309,12 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldReturnDifferenceBetweenForecastedAndActualAverageHandleTime()
 		{
+			Now.Is(new DateTime(2016, 12, 2, 12, 0, 0, DateTimeKind.Utc));
 			IntradayMonitorDataLoader.AddInterval(_firstInterval);
 			IntradayMonitorDataLoader.AddInterval(_secondInterval);
 			IntervalLengthFetcher.Has(minutesPerInterval);
 
-			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+			var viewModel = Target.Load_old(new[] { Guid.NewGuid() });
 
 			double allForecastedCalls = _firstInterval.ForecastedCalls + _secondInterval.ForecastedCalls;
 			double allAnsweredCalls = _firstInterval.AnsweredCalls.Value + _secondInterval.AnsweredCalls.Value;
@@ -318,11 +331,12 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldSetAverageSpeedOfAnswer()
 		{
+			Now.Is(new DateTime(2016, 12, 2, 12, 0, 0, DateTimeKind.Utc));
 			IntradayMonitorDataLoader.AddInterval(_firstInterval);
 			IntradayMonitorDataLoader.AddInterval(_secondInterval);
 			IntervalLengthFetcher.Has(minutesPerInterval);
 
-			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+			var viewModel = Target.Load_old(new[] { Guid.NewGuid() });
 
 			viewModel.DataSeries.AverageSpeedOfAnswer.Length.Should().Be.EqualTo(2);
 			viewModel.DataSeries.AverageSpeedOfAnswer.First().Should().Be.EqualTo(_firstInterval.AverageSpeedOfAnswer);
@@ -332,11 +346,12 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldSetAbandonedRate()
 		{
+			Now.Is(new DateTime(2016, 12, 2, 12, 0, 0, DateTimeKind.Utc));
 			IntradayMonitorDataLoader.AddInterval(_firstInterval);
 			IntradayMonitorDataLoader.AddInterval(_secondInterval);
 			IntervalLengthFetcher.Has(minutesPerInterval);
 
-			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+			var viewModel = Target.Load_old(new[] { Guid.NewGuid() });
 
 			viewModel.DataSeries.AbandonedRate.Length.Should().Be.EqualTo(2);
 			viewModel.DataSeries.AbandonedRate.First().Should().Be.EqualTo(_firstInterval.AbandonedRate * 100);
@@ -346,11 +361,12 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldSetServiceLevel()
 		{
+			Now.Is(new DateTime(2016, 12, 2, 12, 0, 0, DateTimeKind.Utc));
 			IntradayMonitorDataLoader.AddInterval(_firstInterval);
 			IntradayMonitorDataLoader.AddInterval(_secondInterval);
 			IntervalLengthFetcher.Has(minutesPerInterval);
 
-			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+			var viewModel = Target.Load_old(new[] { Guid.NewGuid() });
 
 			viewModel.DataSeries.ServiceLevel.Length.Should().Be.EqualTo(2);
 			viewModel.DataSeries.ServiceLevel.First().Should().Be.EqualTo(_firstInterval.ServiceLevel * 100);
@@ -360,11 +376,12 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldSetSummaryForAverageSpeedOfAnswer()
 		{
+			Now.Is(new DateTime(2016, 12, 2, 12, 0, 0, DateTimeKind.Utc));
 			IntradayMonitorDataLoader.AddInterval(_firstInterval);
 			IntradayMonitorDataLoader.AddInterval(_secondInterval);
 			IntervalLengthFetcher.Has(minutesPerInterval);
 
-			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+			var viewModel = Target.Load_old(new[] { Guid.NewGuid() });
 
 			viewModel.Summary.AverageSpeedOfAnswer.Should()
 					.Be.EqualTo((_firstInterval.SpeedOfAnswer + _secondInterval.SpeedOfAnswer) / (_firstInterval.AnsweredCalls + _secondInterval.AnsweredCalls));
@@ -373,11 +390,12 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldSetSummaryForServiceLevel()
 		{
+			Now.Is(new DateTime(2016, 12, 2, 12, 0, 0, DateTimeKind.Utc));
 			IntradayMonitorDataLoader.AddInterval(_firstInterval);
 			IntradayMonitorDataLoader.AddInterval(_secondInterval);
 			IntervalLengthFetcher.Has(minutesPerInterval);
 
-			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+			var viewModel = Target.Load_old(new[] { Guid.NewGuid() });
 
 			viewModel.Summary.ServiceLevel.Should()
 					.Be.EqualTo((_firstInterval.AnsweredCallsWithinSL + _secondInterval.AnsweredCallsWithinSL) / (_firstInterval.CalculatedCalls + _secondInterval.CalculatedCalls));
@@ -388,7 +406,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		{
 			IntervalLengthFetcher.Has(minutesPerInterval);
 
-			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+			var viewModel = Target.Load_old(new[] { Guid.NewGuid() });
 
 			viewModel.Summary.ForecastedAverageHandleTime.Should().Be.EqualTo(0);
 			viewModel.Summary.AverageHandleTime.Should().Be.EqualTo(0);
@@ -402,10 +420,11 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldShowThatIncomingTrafficHasData()
 		{
+			Now.Is(new DateTime(2016, 12, 2, 12, 0, 0, DateTimeKind.Utc));
 			IntradayMonitorDataLoader.AddInterval(_firstInterval);
 			IntervalLengthFetcher.Has(minutesPerInterval);
 
-			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+			var viewModel = Target.Load_old(new[] { Guid.NewGuid() });
 
 			viewModel.IncomingTrafficHasData.Should().Be.EqualTo(true);
 		}
@@ -415,7 +434,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		{
 			IntervalLengthFetcher.Has(minutesPerInterval);
 
-			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+			var viewModel = Target.Load_old(new[] { Guid.NewGuid() });
 
 			viewModel.IncomingTrafficHasData.Should().Be.EqualTo(false);
 		}
@@ -423,11 +442,12 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldSetSummaryForAbandonRate()
 		{
+			Now.Is(new DateTime(2016, 12, 2, 12, 0, 0, DateTimeKind.Utc));
 			IntradayMonitorDataLoader.AddInterval(_firstInterval);
 			IntradayMonitorDataLoader.AddInterval(_secondInterval);
 			IntervalLengthFetcher.Has(minutesPerInterval);
 
-			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+			var viewModel = Target.Load_old(new[] { Guid.NewGuid() });
 
 			viewModel.Summary.AbandonRate.Should()
 					.Be.EqualTo((_firstInterval.AbandonedCalls + _secondInterval.AbandonedCalls) / (_firstInterval.CalculatedCalls + _secondInterval.CalculatedCalls));
@@ -436,6 +456,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldFillAverageSpeedOfAnswerWithNullValueIfNoSpeedOfAnswer()
 		{
+			Now.Is(new DateTime(2016, 12, 2, 12, 0, 0, DateTimeKind.Utc));
 			var thirdInterval = new IncomingIntervalModel()
 			{
 				IntervalDate = new DateTime(2016, 12, 02),
@@ -453,7 +474,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			IntradayMonitorDataLoader.AddInterval(thirdInterval);
 			IntervalLengthFetcher.Has(minutesPerInterval);
 
-			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+			var viewModel = Target.Load_old(new[] { Guid.NewGuid() });
 
 			viewModel.DataSeries.AverageSpeedOfAnswer.Length.Should().Be.EqualTo(3);
 			viewModel.DataSeries.AbandonedRate.Length.Should().Be.EqualTo(3);
@@ -475,7 +496,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			IntradayMonitorDataLoader.AddInterval(_firstInterval);
 			IntervalLengthFetcher.Has(minutesPerInterval);
 
-			Target.Load(new[] { phoneSkill.Id.Value, multisiteSkill.Id.Value, emailSkill.Id.Value });
+			Target.Load_old(new[] { phoneSkill.Id.Value, multisiteSkill.Id.Value, emailSkill.Id.Value });
 
 			IntradayMonitorDataLoader.Skills.Count.Should().Be.EqualTo(2);
 			IntradayMonitorDataLoader.Skills.Should().Contain(phoneSkill.Id.Value);
@@ -485,6 +506,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldLoadDataForSkillTypesLikeEmail()
 		{
+			Now.Is(new DateTime(2016, 12, 2, 8, 20, 0, DateTimeKind.Utc));
 			var backOfficeSkill = SkillFactory.CreateSkill("backOffice",
 					new SkillTypeEmail(new Description("SkillTypeBackoffice"), ForecastSource.Backoffice), 60)
 				.WithId();
@@ -505,7 +527,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			IntradayMonitorDataLoader.AddInterval(_firstInterval);
 			IntervalLengthFetcher.Has(minutesPerInterval);
 
-			Target.Load(new[] {backOfficeSkill.Id.Value, projectSkill.Id.Value, faxSkill.Id.Value, timeSkill.Id.Value});
+			Target.Load_old(new[] {backOfficeSkill.Id.Value, projectSkill.Id.Value, faxSkill.Id.Value, timeSkill.Id.Value});
 
 			IntradayMonitorDataLoader.Skills.Count.Should().Be.EqualTo(4);
 			IntradayMonitorDataLoader.Skills.Should().Contain(backOfficeSkill.Id.Value);
@@ -522,7 +544,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			IntervalLengthFetcher.Has(minutesPerInterval);
 			IntradayMonitorDataLoader.ShouldCompareDate = true;
 
-			var viewModel = Target.Load(new[] { Guid.NewGuid() }, _firstInterval.IntervalDate);
+			var viewModel = Target.Load_old(new[] { Guid.NewGuid() }, _firstInterval.IntervalDate);
 			viewModel.LatestActualIntervalStart.Should().Not.Be.EqualTo(null);
 			viewModel.LatestActualIntervalEnd.Should().Not.Be.EqualTo(null);
 
@@ -541,7 +563,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			IntervalLengthFetcher.Has(minutesPerInterval);
 			IntradayMonitorDataLoader.ShouldCompareDate = true;
 
-			var viewModel = Target.Load(new[] { Guid.NewGuid() }, new DateTime(2017, 1, 1));
+			var viewModel = Target.Load_old(new[] { Guid.NewGuid() }, new DateTime(2017, 1, 1));
 			viewModel.LatestActualIntervalStart.Should().Be.EqualTo(null);
 		}
 
@@ -554,7 +576,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			IntradayMonitorDataLoader.ShouldCompareDate = true;
 			Now.Is(_firstInterval.IntervalDate.AddDays(-1));
 			
-			var viewModel = Target.Load(new[] { Guid.NewGuid() }, 1);
+			var viewModel = Target.Load_old(new[] { Guid.NewGuid() }, 1);
 			viewModel.LatestActualIntervalStart.Should().Not.Be.EqualTo(null);
 			viewModel.LatestActualIntervalEnd.Should().Not.Be.EqualTo(null);
 

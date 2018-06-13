@@ -1,9 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
+using Teleopti.Ccc.Domain.Intraday.ApplicationLayer.ViewModels;
+using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
@@ -14,37 +19,39 @@ namespace Teleopti.Ccc.Domain.Intraday
 	{
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
-		private readonly ForecastedCallsProvider _forecastedCallsProvider;
-		private readonly RequiredStaffingProvider _requiredStaffingProvider;
+		private readonly IForecastedCallsProvider _forecastedCallsProvider;
+		private readonly IRequiredStaffingProvider _requiredStaffingProvider;
 		private readonly IIntradayQueueStatisticsLoader _intradayQueueStatisticsLoader;
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
 		private readonly IScenarioRepository _scenarioRepository;
-		private readonly ScheduledStaffingProvider _scheduledStaffingProvider;
-		private readonly ScheduledStaffingToDataSeries _scheduledStaffingToDataSeries;
-		private readonly ForecastedStaffingProvider _forecastedStaffingProvider;
-		private readonly ForecastedStaffingToDataSeries _forecastedStaffingToDataSeries;
-		private readonly ReforecastedStaffingProvider _reforecastedStaffingProvider;
+		private readonly IScheduledStaffingProvider _scheduledStaffingProvider;
+		private readonly IScheduledStaffingToDataSeries _scheduledStaffingToDataSeries;
+		private readonly IForecastedStaffingProvider _forecastedStaffingProvider;
+		private readonly IForecastedStaffingToDataSeries _forecastedStaffingToDataSeries;
+		private readonly IReforecastedStaffingProvider _reforecastedStaffingProvider;
 		private readonly ISupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
-		private readonly EmailBacklogProvider _emailBacklogProvider;
+		private readonly IEmailBacklogProvider _emailBacklogProvider;
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
+		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly ISkillTypeInfoProvider _skillTypeInfoProvider;
 
 		public StaffingViewModelCreator(
 			INow now,
 			IUserTimeZone timeZone,
-			ForecastedCallsProvider forecastedCallsProvider,
-			RequiredStaffingProvider requiredStaffingProvider,
+			IForecastedCallsProvider forecastedCallsProvider,
+			IRequiredStaffingProvider requiredStaffingProvider,
 			IIntradayQueueStatisticsLoader intradayQueueStatisticsLoader,
 			IIntervalLengthFetcher intervalLengthFetcher,
 			IScenarioRepository scenarioRepository,
-			ScheduledStaffingProvider scheduledStaffingProvider,
-			ScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
-			ForecastedStaffingProvider forecastedStaffingProvider,
-			ForecastedStaffingToDataSeries forecastedStaffingToDataSeries,
-			ReforecastedStaffingProvider reforecastedStaffingProvider,
+			IScheduledStaffingProvider scheduledStaffingProvider,
+			IScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
+			IForecastedStaffingProvider forecastedStaffingProvider,
+			IForecastedStaffingToDataSeries forecastedStaffingToDataSeries,
+			IReforecastedStaffingProvider reforecastedStaffingProvider,
 			ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider,
-			EmailBacklogProvider emailBacklogProvider,
+			IEmailBacklogProvider emailBacklogProvider,
 			ISkillDayLoadHelper skillDayLoadHelper,
+			ISkillDayRepository skillDayRepository,
 			ISkillTypeInfoProvider skillTypeInfoProvider
 			)
 		{
@@ -63,16 +70,16 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
 			_emailBacklogProvider = emailBacklogProvider;
 			_skillDayLoadHelper = skillDayLoadHelper;
+			_skillDayRepository = skillDayRepository;
 			_skillTypeInfoProvider = skillTypeInfoProvider;
 		}
 
-		public IntradayStaffingViewModel Load(Guid[] skillIdList, int dayOffset)
+		public IntradayStaffingViewModel Load_old(Guid[] skillIdList, int dayOffset)
 		{
 			var userDate = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()).AddDays(dayOffset);
-			return Load(skillIdList, new DateOnly(userDate));
+			return Load_old(skillIdList, new DateOnly(userDate));
 		}
-
-		public IntradayStaffingViewModel Load(Guid[] skillIdList, DateOnly? dateOnly = null,  bool useShrinkage = false)
+		public IntradayStaffingViewModel Load_old(Guid[] skillIdList, DateOnly? dateOnly = null,  bool useShrinkage = false)
 		{
 			var minutesPerInterval = _intervalLengthFetcher.IntervalLength;
 			if (minutesPerInterval <= 0) throw new Exception($"IntervalLength is cannot be {minutesPerInterval}!");
@@ -172,9 +179,9 @@ namespace Teleopti.Ccc.Domain.Intraday
 			}
 		}
 
-		public IEnumerable<IntradayStaffingViewModel> Load(Guid[] skillIdList, DateOnlyPeriod dateOnlyPeriod, bool useShrinkage = false)
+		public IEnumerable<IntradayStaffingViewModel> Load_old(Guid[] skillIdList, DateOnlyPeriod dateOnlyPeriod, bool useShrinkage = false)
 		{
-			return dateOnlyPeriod.DayCollection().Select(day => Load(skillIdList, day, useShrinkage)).ToList();
+			return dateOnlyPeriod.DayCollection().Select(day => Load_old(skillIdList, day, useShrinkage)).ToList();
 		}
 
 		private static DateTime? getLastestStatsTime(IList<SkillIntervalStatistics> actualCallsPerSkillInterval)

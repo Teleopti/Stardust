@@ -149,6 +149,7 @@ ETL_Show_Web_Based_ETL_Tool_74837 = true
 WfmIntraday_MonitorActualvsForecasted_35176 = true
 WFM_Modify_Skill_Groups_43727 = true
 WFM_Remember_My_Selection_In_Intraday_47254 = true
+WFM_Intraday_Refactoring_74652 = RC
 
 # Ziggy #
 Wfm_Staffing_45411 = true #Enables the entire Staffing page!

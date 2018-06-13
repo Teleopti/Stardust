@@ -160,6 +160,8 @@
 		People_ImprovePersonAccountAccuracy_74914,
 		MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889,
 
+		WFM_Intraday_Refactoring_74652,
+
 		Tech_Moving_ResilientConnectionLogic,
 		Tenant_PurgeLogonAttempts_75782,
 		Tenant_PurgeNoneEmployeesData_76291

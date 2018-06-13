@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Intraday
 {
-	public class ScheduledStaffingToDataSeries
+	public class ScheduledStaffingToDataSeries : IScheduledStaffingToDataSeries
 	{
 		public double?[] DataSeries(IList<SkillStaffingIntervalLightModel> scheduledStaffing, DateTime[] timeSeries)
 		{

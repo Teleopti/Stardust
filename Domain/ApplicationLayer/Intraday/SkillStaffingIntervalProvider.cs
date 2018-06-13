@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 			_activityRepository = activityRepository;
 		}
 
+
 		public IList<SkillStaffingIntervalLightModel> StaffingForSkills(Guid[] skillIdList, DateTimePeriod period, TimeSpan resolution, bool useShrinkage)
 		{
 			var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(period).ToList();
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 			{
 				return new List<SkillStaffingIntervalLightModel>();
 			}
+
 
 			var allSkillStaffingIntervals = GetSkillStaffIntervalsAllSkills(period, combinationResources, useShrinkage);
 			var relevantSkillStaffingIntervals = allSkillStaffingIntervals.Where(x => x.StartDateTime >= period.StartDateTime && x.EndDateTime <= period.EndDateTime && skillIdList.Contains(x.SkillId)).ToList();
@@ -53,12 +55,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 			return relevantSkillStaffingIntervals;
 		}
 
-		public List<SkillStaffingInterval> GetSkillStaffIntervalsAllSkills(DateTimePeriod period, List<SkillCombinationResource> combinationResources, bool useShrinkage)
+		public List<SkillStaffingInterval> GetSkillStaffIntervalsAllSkills(DateTimePeriod periodUtc, List<SkillCombinationResource> combinationResources, bool useShrinkage)
 		{
-			_activityRepository.LoadAll();
 			var skills = _skillRepository.LoadAll().ToList();
 
-			var skillStaffingIntervals = _extractSkillForecastIntervals.GetBySkills(skills, period, useShrinkage).ToList();
+			var skillStaffingIntervals = _extractSkillForecastIntervals.GetBySkills(skills, periodUtc, useShrinkage).ToList();
 			skillStaffingIntervals.ForEach(s => s.StaffingLevel = 0);
 
 			var relevantSkillStaffPeriods =
@@ -69,14 +70,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 									  new ResourceCalculationPeriodDictionary(v.ToDictionary(d => d.DateTimePeriod,
 																							 s => (IResourceCalculationPeriod)s)));
 			var resCalcData = new ResourceCalculationData(skills, new SlimSkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods));
-			//var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfo.Utc);
-		    var dateOnlyPeriod = ExtractSkillForecastIntervals.GetLongestPeriod(skills, period);
 
             using (getContext(combinationResources, skills, false))
 			{
+				//var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfo.Utc);
+				var dateOnlyPeriod = ExtractSkillForecastIntervals.GetLongestPeriod(skills, periodUtc);
 				_resourceCalculation.ResourceCalculate(dateOnlyPeriod, resCalcData, () => getContext(combinationResources, skills, true));
 			}
-
 			return skillStaffingIntervals;
 		}
 
@@ -84,7 +84,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 		{
 			return new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => new ResourceCalculationDataContainerFromSkillCombinations(combinationResources, skills, useAllSkills)));
 		}
-
-	
 	}
 }

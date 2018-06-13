@@ -265,6 +265,12 @@
     <Compile Include="Helper\CellExtensionTest.cs" />
     <Compile Include="Helper\RowExtensionsTest.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentJobServiceTest.cs" />
+    <Compile Include="Intraday\Domain\IntradayReforecastingServiceTest.cs" />
+    <Compile Include="Intraday\IncomingTrafficViewModelCreatorTest.cs" />
+    <Compile Include="Intraday\PerformanceViewModelCreatorTest.cs" />
+    <Compile Include="Intraday\StaffingViewModelCreatorEmailTest.cs" />
+    <Compile Include="Intraday\StaffingViewModelCreatorTest.cs" />
+    <Compile Include="Intraday\StaffingViewModelCreatorTestHelper.cs" />
     <Compile Include="Intraday\TimeSeriesProviderTest.cs" />
     <Compile Include="Notification\ClickatellNotificationClientTest.cs" />
     <Compile Include="Notification\RawPostNotificationWebClientTest.cs" />
@@ -520,7 +526,7 @@
     <Compile Include="Security\Permissions\AvailableTeamAuthorizationTest.cs" />
     <Compile Include="Security\Permissions\AvailableTeamTest.cs" />
     <Compile Include="SkillGroups\ModifySkillGroupTest.cs" />
-    <Compile Include="Intraday\PerformanceViewModelCreatorTest.cs" />
+    <Compile Include="Intraday\ApplicationLayer\IntradayPerformanceApplicationServiceTest.cs" />
     <Compile Include="Common\PublishPersoEmploymentNumberChangedEventTest.cs" />
     <Compile Include="Common\PublishPersonPeriodChangedEventTest.cs" />
     <Compile Include="Common\PublishPersonTerminatedChangeEventTest.cs" />
@@ -608,9 +614,9 @@
     <Compile Include="Common\ScheduleChangedEventDetector.cs" />
     <Compile Include="ApplicationLayer\Skill\AnalyticsSkillUpdaterTest.cs" />
     <Compile Include="Forecasting\SkillPriorityProviderTest.cs" />
-    <Compile Include="Intraday\StaffingViewModelCreatorEmailTest.cs" />
-    <Compile Include="Intraday\StaffingViewModelCreatorTestHelper.cs" />
-    <Compile Include="Intraday\StaffingViewModelCreatorTest.cs" />
+    <Compile Include="Intraday\ApplicationLayer\IntradayStaffingApplicationServiceEmailTest.cs" />
+    <Compile Include="Intraday\ApplicationLayer\IntradayStaffingApplicationServiceTestHelper.cs" />
+    <Compile Include="Intraday\ApplicationLayer\IntradayStaffingApplicationServiceTest.cs" />
     <Compile Include="Intraday\LatestStatisticsTimeProviderTest.cs" />
     <Compile Include="Notification\UserDeviceServiceTest.cs" />
     <Compile Include="Optimization\BlockPreferenceProviderTest.cs" />
@@ -727,7 +733,7 @@
     <Compile Include="Forecasting\OverrideTaskTest.cs" />
     <Compile Include="Forecasting\StaffingCalculatorServiceFacadeTest.cs" />
     <Compile Include="SkillGroups\CreateSkillGroupTest.cs" />
-    <Compile Include="Intraday\IncomingTrafficViewModelCreatorTest.cs" />
+    <Compile Include="Intraday\ApplicationLayer\IntradayIncomingTrafficApplicationServiceTest.cs" />
     <Compile Include="SkillGroups\DeleteSkillGroupTest.cs" />
     <Compile Include="SkillGroups\SkillGroupViewModelBuilderTest.cs" />
     <Compile Include="Intraday\FetchSkillInIntradayTest.cs" />

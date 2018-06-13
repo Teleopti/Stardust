@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var vm = Target.Load(new[] { skill.Id.GetValueOrDefault() });
 
 			vm.DataSeries.Time.Length.Should().Be.EqualTo(2);
-			vm.DataSeries.Time.First().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(userNow.AddMinutes(-minutesPerInterval), TimeZone.TimeZone()));
+			vm.DataSeries.Time.First().Should().Be.EqualTo(userNow.AddMinutes(-minutesPerInterval));
 			var scheduledSeries = vm.DataSeries.ScheduledStaffing;
 			var forecastedSeries = vm.DataSeries.ForecastedStaffing;
 			var relativeDiffSeries = vm.DataSeries.AbsoluteDifference;
