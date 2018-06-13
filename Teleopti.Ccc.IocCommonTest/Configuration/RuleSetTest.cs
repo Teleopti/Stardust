@@ -2,7 +2,6 @@ using System;
 using Autofac;
 using MbCache.Core;
 using NUnit.Framework;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -87,13 +86,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 					Assert.AreNotSame(projSvc.ProjectionCollection(wsRs, callback), projSvc.ProjectionCollection(wsRs, callback));
 				}
 			}
-		}
-
-		[Test]
-		public void Fail()
-		{
-			//rollback soon
-			2.Should().Be.EqualTo(3);
 		}
 
 		private static IWorkShiftRuleSet createRuleset(bool withId)

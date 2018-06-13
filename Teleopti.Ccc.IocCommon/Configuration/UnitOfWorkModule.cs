@@ -71,9 +71,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			/**************************************/
 			/*         Order dependant            */
-		//	builder.RegisterType<EventsMessageSender>().As<ITransactionHook>();
-		//	if (_configuration.Args().OptimizeScheduleChangedEvents_DontUseFromWeb)
-		//		builder.RegisterType<ScheduleChangedEventPublisher>().As<ITransactionHook>();
+			builder.RegisterType<EventsMessageSender>().As<ITransactionHook>();
+			if (_configuration.Args().OptimizeScheduleChangedEvents_DontUseFromWeb)
+				builder.RegisterType<ScheduleChangedEventPublisher>().As<ITransactionHook>();
 			/*           End                      */
 			/**************************************/
 		
