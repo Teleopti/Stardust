@@ -16,6 +16,7 @@
 		vm.campaignPanel = false;
 		vm.overridePanel = false;
 		vm.selectedScenario = null;
+		vm.targetScenario = null;
 		vm.forecastPeriod = {
 			startDate: moment()
 			.utc()
@@ -40,6 +41,7 @@
 		vm.loadChart = loadChart;
 		vm.applyWipToScenario = applyWipToScenario;
 		vm.exportToFile = exportToFile;
+		vm.exportToScenario = exportToScenario;
 
 		vm.isForecastRunning = false;
 		vm.overrideStatus = {
@@ -335,6 +337,31 @@
 					vm.savingToScenario = false;
 					vm.changesMade = false;
 					getWorkloadForecastData();
+				}
+			);
+		}
+
+		function exportToScenario() {
+			vm.savingToScenario = true;
+			var tempForecastDays = vm.selectedWorkload.Days;
+
+			forecastingService.applyToScenario(
+				angular.toJson({
+					WorkloadId: vm.selectedWorkload.Workload.Id,
+					ScenarioId: vm.targetScenario.Id,
+					ForecastDays: tempForecastDays
+				}),
+				function(data, status, headers, config) {
+					vm.savingToScenario = false;
+					vm.changesMade = false;
+					vm.targetScenario = null;
+					vm.scenarioExportModal = false;
+					NoticeService.success($translate.instant('SuccessfullyUpdatedPeopleCountColon') + ' ' + vm.selectedScenario.Name, 15000, true);
+				},
+				function(data, status, headers, config) {
+					vm.savingToScenario = false;
+					vm.scenarioExportModal = false;
+					vm.changesMade = false;
 				}
 			);
 		}

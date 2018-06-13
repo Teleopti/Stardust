@@ -42,10 +42,18 @@
                 </button>
                 {{'DateFrom' | translate}}: {{vm.forecastPeriod.startDate | date: L}} {{'DateTo' | translate}}: {{vm.forecastPeriod.endDate  | date: L}}
               </div>
-              <button tabindex=0 class="context-menu card-context" ng-click="vm.exportModal = true" ng-disabled="vm.savingToScenario || vm.isForecastRunning">
-                <i class="mdi mdi-file-excel"></i>
-                <md-tooltip>{{'ExportToFile'|translate}}</md-tooltip>
-              </button>
+
+              <div>
+                <button tabindex=0 class="context-menu card-context" ng-click="vm.scenarioExportModal = true" ng-disabled="vm.savingToScenario || vm.isForecastRunning">
+                  <i class="mdi mdi-share"></i>
+                  <md-tooltip>Save to other scenario</md-tooltip>
+                </button>
+
+                <button tabindex=0 class="context-menu card-context" ng-click="vm.exportModal = true" ng-disabled="vm.savingToScenario || vm.isForecastRunning">
+                  <i class="mdi mdi-file-excel"></i>
+                  <md-tooltip>{{'ExportToFile'|translate}}</md-tooltip>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -129,13 +137,26 @@
   </div>
 </form>
 
-<div ng-if="vm.scenarioNotForecasted" >
+<div ng-if="vm.scenarioNotForecasted && !vm.selectedWorkload.SkillType.DoDisplayData">
   <div class="con-row">
     <div class="con-flex">
       <div class="panel material-depth-1">
         <div class="con-row">
           <div class="con-flex">
             This skill is not supported yet. Check back here later to run a forecast for this scenario.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div ng-if="vm.scenarioNotForecasted && vm.selectedWorkload.SkillType.DoDisplayData">
+  <div class="con-row">
+    <div class="con-flex">
+      <div class="panel material-depth-1">
+        <div class="con-row">
+          <div class="con-flex">
+            There is no forecast data for this scenario, please run a forecast or save from another scenario.
           </div>
         </div>
         <div class="con-footer">
@@ -262,6 +283,31 @@
     </div>
   </div>
 </modal-dialog>
+
+<modal-dialog show='vm.scenarioExportModal' ng-cloak>
+  <div>
+    <div class="con-row">
+      <div class="con-flex">
+        <b>Save to other scenario</b>
+      </div>
+    </div>
+    <div class="modal-inner-content">
+      select target scenario:
+      <md-select ng-model="vm.targetScenario" placeholder="{{'Scenario' | translate}}" ng-disabled="vm.savingToScenario || vm.isForecastRunning">
+        <md-option ng-repeat="scenario in vm.scenarios" ng-value="scenario">{{scenario.Name}}</md-option>
+      </md-select>
+    </div>
+    <div class="modal-actions">
+      <aside>
+        <button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.exportToScenario()">{{'Save'|translate}}</button>
+      </aside>
+    </div>
+    <div ng-if="vm.savingToScenario || vm.isForecastRunning">
+      <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+    </div>
+  </div>
+</modal-dialog>
+
 
 <div ng-cloak
 class="modal-box">
