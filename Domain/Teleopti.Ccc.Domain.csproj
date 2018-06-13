@@ -538,7 +538,6 @@
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\IHistoricalChangeReadModelPersister.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\IHistoricalChangeReadModelReader.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\IRtaEventStore.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\NoRtaEventStore.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AdherencePeriod.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\ScheduleLoader.cs" />
     <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\ApprovedPeriod.cs" />

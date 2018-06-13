@@ -50,8 +50,6 @@ using Teleopti.Ccc.TestCommon.Services;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
-	
-	[Toggle(Domain.FeatureFlags.Toggles.RTA_StoreEvents_47721)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_RemoveApprovedOOA_47721)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_EasilySpotLateForWork_75668)]
 	public class DomainTestAttribute : IoCTestAttribute

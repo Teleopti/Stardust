@@ -17,7 +17,6 @@
 		Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850,
 
 		RTA_RemoveApprovedOOA_47721,
-		RTA_StoreEvents_47721,
 		RTA_ImprovedStateGroupFilter_48724,
 		RTA_KillFattyIntradayUntilItDies_74939,
 		RTA_RestrictModifyAdherenceWithPermission_74898,

@@ -6,14 +6,14 @@ call ..\..\..\packages\NodeEnv.1.0.9\nodevars.bat
 
 SET /A ERRORLEV=0
 :: Runs from [repo]\Teleopti.Ccc.Web\Teleopti.Ccc.Web\WFM
-npm test
+call npm test
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 :: Clear all dev dependencies and only install what we need for production
 call npm install rimraf
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=2 & GOTO :error
-npx rimraf node_modules
+call npx rimraf node_modules
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=3 & GOTO :error
-npm install --production
+call npm install --production
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=4 & GOTO :error
 echo %errorlevel%
 
