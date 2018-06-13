@@ -90,17 +90,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RemoveApprovedPeriodCommandHandler>().SingleInstance();
 			builder.RegisterType<RemoveApprovedPeriod>().SingleInstance();
 
-			if (_config.Toggle(Toggles.RTA_StoreEvents_47721))
-				builder.RegisterType<RtaEventStore>()
-					.As<IRtaEventStore>()
-					.As<IRtaEventStoreReader>()
-					.As<IRtaEventStoreTestReader>()
-					.SingleInstance();
-			else
-				builder.RegisterType<NoRtaEventStore>()
-					.As<IRtaEventStore>()
-					.As<IRtaEventStoreReader>()
-					.SingleInstance();
+			builder.RegisterType<RtaEventStore>()
+				.As<IRtaEventStore>()
+				.As<IRtaEventStoreReader>()
+				.As<IRtaEventStoreTestReader>()
+				.SingleInstance();
 
 			if (_config.Toggle(Toggles.RTA_EasilySpotLateForWork_75668))
 				builder.RegisterType<AgentAdherenceDayLoaderLateForWork>().As<IAgentAdherenceDayLoader>().SingleInstance();
