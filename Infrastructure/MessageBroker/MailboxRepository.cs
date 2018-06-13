@@ -112,6 +112,7 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker
 		private class InternalMessage : Message
 		{
 			public Guid MailboxId { get; set; }
+			public int Id { get; set; }
 		}
 	}
 }
