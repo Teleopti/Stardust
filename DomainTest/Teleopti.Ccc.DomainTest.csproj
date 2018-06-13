@@ -1146,7 +1146,6 @@
     <Compile Include="Scheduling\Assignment\MergeScheduleDayTest.cs" />
     <Compile Include="Scheduling\Assignment\PersonAssignment_MoveActivityTest.cs" />
     <Compile Include="Scheduling\Assignment\ScheduleDaySignificantPartTest.cs" />
-    <Compile Include="Scheduling\BackToLegalShift\LegalShiftDeciderTest.cs" />
     <Compile Include="Scheduling\Overtime\AdjustOvertimeLengthBasedOnAvailabilityTest.cs" />
     <Compile Include="Scheduling\Overtime\MergeOvertimeSkillIntervalDataTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeDateTimePeriodExtractorTest.cs" />
