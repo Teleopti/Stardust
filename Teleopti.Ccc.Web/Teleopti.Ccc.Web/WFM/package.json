@@ -135,7 +135,9 @@
     "webpack-extraneous-file-cleanup-plugin": "2.0.0"
   },
   "scripts": {
+    "pretest": "grunt buildAngularJsPart",
     "test": "ng test",
+    "predevTest": "grunt buildAngularJsPart",
     "devTest": "ng test --karma-config test/karma.conf.js",
     "pretestRta": "grunt devDistRta",
     "rtaTest": "ng test --karma-config test/karma.conf.rta.js",
