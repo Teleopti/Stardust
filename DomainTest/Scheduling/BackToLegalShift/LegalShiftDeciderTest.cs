@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 	{
 		private MockRepository _mocks;
 		private ILegalShiftDecider _target;
-		private IShiftProjectionCacheManager _shiftProjectionCacheManager;
+		private ShiftProjectionCacheManager _shiftProjectionCacheManager;
 		private IScheduleDayEquator _scheduleDayEquator;
 		private IRuleSetBag _ruleSetBag;
 		private ShiftProjectionCache _shiftProjectionCache;
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_shiftProjectionCacheManager = _mocks.StrictMock<IShiftProjectionCacheManager>();
+			_shiftProjectionCacheManager = _mocks.StrictMock<ShiftProjectionCacheManager>();
 			_scheduleDayEquator = _mocks.StrictMock<IScheduleDayEquator>();
 			_target = new LegalShiftDecider(_shiftProjectionCacheManager, _scheduleDayEquator);
 			_ruleSetBag = _mocks.StrictMock<IRuleSetBag>();

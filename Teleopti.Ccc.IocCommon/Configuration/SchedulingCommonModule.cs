@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ReduceIslandsLimits>().SingleInstance();
 			builder.RegisterType<LongestPeriodForAssignmentCalculator>().As<ILongestPeriodForAssignmentCalculator>().SingleInstance();
 			builder.RegisterType<ShiftProjectionCacheFetcher>().SingleInstance();
-			builder.RegisterType<ShiftProjectionCacheManager>().As<IShiftProjectionCacheManager>().InstancePerLifetimeScope();
+			builder.RegisterType<ShiftProjectionCacheManager>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftsFromMasterActivityBaseActivityService>().As<IShiftFromMasterActivityService>().SingleInstance();			
 			builder.RegisterType<RuleSetDeletedActivityChecker>().As<IRuleSetDeletedActivityChecker>().SingleInstance();
 			builder.RegisterType<RuleSetDeletedShiftCategoryChecker>()

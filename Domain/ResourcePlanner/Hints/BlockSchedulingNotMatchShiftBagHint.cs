@@ -1,7 +1,6 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -9,9 +8,9 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
 	public class BlockSchedulingNotMatchShiftBagHint : IScheduleHint
 	{
-		private readonly IShiftProjectionCacheManager _shiftProjectionCacheManager;
+		private readonly ShiftProjectionCacheManager _shiftProjectionCacheManager;
 
-		public BlockSchedulingNotMatchShiftBagHint(IShiftProjectionCacheManager shiftProjectionCacheManager)
+		public BlockSchedulingNotMatchShiftBagHint(ShiftProjectionCacheManager shiftProjectionCacheManager)
 		{
 			_shiftProjectionCacheManager = shiftProjectionCacheManager;
 		}

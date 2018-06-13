@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public class ShiftProjectionCacheManager : IShiftProjectionCacheManager, IDisposable
+	public class ShiftProjectionCacheManager : IDisposable
     {
         private readonly IDictionary<IWorkShiftRuleSet, List<ShiftProjectionCache>> _ruleSetListDictionary = new Dictionary<IWorkShiftRuleSet, List<ShiftProjectionCache>>();
         private readonly IRuleSetDeletedActivityChecker _ruleSetDeletedActivityChecker;
