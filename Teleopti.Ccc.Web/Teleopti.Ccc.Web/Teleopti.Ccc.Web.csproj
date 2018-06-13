@@ -1673,10 +1673,8 @@
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.createform.controller.js.orig" />
     <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
     <Content Include="WFM\app\resourceplanner\web_performance_tests\temp.html" />
-    <Content Include="WFM\app\rta\rta\agents\rta-agents.RTA_ModifySkillGroup_48191.html" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents.RTA_ImprovedStateGroupFilter_48724.html" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.configurationValidation.spec.js" />
-    <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.RTA_ConfigurationValidationNotification_46933.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.filter.sort.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.RTA_ImprovedStateGroupFilter_48724.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.organization.selection.spec.js" />

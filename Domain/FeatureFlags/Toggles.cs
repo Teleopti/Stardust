@@ -16,7 +16,6 @@
 		
 		Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850,
 
-		RTA_ImprovedStateGroupFilter_48724,
 		RTA_KillFattyIntradayUntilItDies_74939,
 		RTA_RestrictModifyAdherenceWithPermission_74898,
 		RTA_EasilySpotLateForWork_75668,

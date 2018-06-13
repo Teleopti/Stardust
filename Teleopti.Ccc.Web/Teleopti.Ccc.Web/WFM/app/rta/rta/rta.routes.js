@@ -43,14 +43,10 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 				es: {array: true}
 			},
 			templateUrl: function () {
-				if (toggles.RTA_ImprovedStateGroupFilter_48724)
-					return 'app/rta/rta/agents/rta-agents.RTA_ImprovedStateGroupFilter_48724.html';
-				return 'app/rta/rta/agents/rta-agents.RTA_ModifySkillGroup_48191.html';
+				return 'app/rta/rta/agents/rta-agents.RTA_ImprovedStateGroupFilter_48724.html';
 			},
 			controllerProvider: function () {
-				if (toggles.RTA_ImprovedStateGroupFilter_48724)
-					return 'RtaAgentsController48724 as vm';
-				return 'RtaAgentsController46933 as vm';
+				return 'RtaAgentsController48724 as vm';
 			}
 		})
 		.state('rta-historical-without-date', {
