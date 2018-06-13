@@ -3,12 +3,31 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Collection
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_LessResourcesXXL_74915)]
+	public class CreateMergedCollection
+	{
+		public virtual Lazy<IEnumerable<IVisualLayer>> Execute(IProjectionMerger projectionMerger, IVisualLayer[] unmergedCollection, IPerson person)
+		{
+			return new Lazy<IEnumerable<IVisualLayer>>(() => projectionMerger.MergedCollection(unmergedCollection, person).ToList());
+		}
+	}
+	
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_LessResourcesXXL_74915)]
+	public class CreateMergedCollectionNoState : CreateMergedCollection
+	{
+		public override Lazy<IEnumerable<IVisualLayer>> Execute(IProjectionMerger projectionMerger, IVisualLayer[] unmergedCollection, IPerson person)
+		{
+			return null;
+		}
+	}
+	
 	/// <summary>
 	/// Collection for visual layers.
 	/// Note! The layercollection sent to this instance must be sorted correctly,
@@ -22,6 +41,7 @@ namespace Teleopti.Ccc.Domain.Collection
 	public class VisualLayerCollection : IVisualLayerCollection
 	{
 		private readonly IProjectionMerger _merger;
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_LessResourcesXXL_74915)]
 		private readonly Lazy<IEnumerable<IVisualLayer>> _mergedCollection;
 		
 		private readonly Lazy<DateTimePeriod?> _period;
@@ -51,12 +71,15 @@ namespace Teleopti.Ccc.Domain.Collection
 				}
 				return ret;
 			});
-			_mergedCollection = new Lazy<IEnumerable<IVisualLayer>>(() => _merger.MergedCollection(UnMergedCollection, Person).ToList());
+			_mergedCollection = ServiceLocatorForLegacy.CreateMergedCollection.Execute(merger, UnMergedCollection, Person);
 		}
 
+		[RemoveMeWithToggle("Remove condition", Toggles.ResourcePlanner_LessResourcesXXL_74915)]
 		public IEnumerable<IVisualLayer> MergedCollection()
 		{
-			return _mergedCollection.Value;
+			return _mergedCollection == null ? 
+				_merger.MergedCollection(UnMergedCollection, Person).ToList() : 
+				_mergedCollection.Value;
 		} 
 
 		public static IVisualLayerCollection CreateEmptyProjection(IPerson assignedPerson)

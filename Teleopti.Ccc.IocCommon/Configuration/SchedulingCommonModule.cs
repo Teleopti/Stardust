@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytic
 using Teleopti.Ccc.Domain.Backlog;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Cascading;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
@@ -506,6 +507,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<AssignScheduledLayers>().SingleInstance();
 
+			if (_configuration.Toggle(Toggles.ResourcePlanner_LessResourcesXXL_74915))
+			{
+				builder.RegisterType<CreateMergedCollectionNoState>().As<CreateMergedCollection>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<CreateMergedCollection>().SingleInstance();
+			}
+			
 			registerForJobs(builder);
 			registerValidators(builder);
 		}
