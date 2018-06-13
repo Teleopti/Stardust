@@ -344,7 +344,6 @@
 		function exportToScenario() {
 			vm.savingToScenario = true;
 			var tempForecastDays = vm.selectedWorkload.Days;
-
 			forecastingService.applyToScenario(
 				angular.toJson({
 					WorkloadId: vm.selectedWorkload.Workload.Id,
@@ -354,9 +353,9 @@
 				function(data, status, headers, config) {
 					vm.savingToScenario = false;
 					vm.changesMade = false;
-					vm.targetScenario = null;
 					vm.scenarioExportModal = false;
-					NoticeService.success($translate.instant('SuccessfullyUpdatedPeopleCountColon') + ' ' + vm.selectedScenario.Name, 15000, true);
+					NoticeService.success($translate.instant('SuccessfullyUpdatedPeopleCountColon') + ' ' + vm.targetScenario.Name, 15000, true);
+					vm.targetScenario = null;
 				},
 				function(data, status, headers, config) {
 					vm.savingToScenario = false;
