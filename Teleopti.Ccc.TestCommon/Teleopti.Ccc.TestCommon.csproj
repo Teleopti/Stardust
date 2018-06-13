@@ -222,7 +222,6 @@
     <Compile Include="FakeRepositories\FakeAgentBadgeRepository.cs" />
     <Compile Include="FakeRepositories\FakeAgentBadgeWithRankRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsSiteRepository.cs" />
-    <Compile Include="FakeRepositories\FakeApprovedPeriodsStorage.cs" />
     <Compile Include="FakeRepositories\FakeASMScheduleChangeTimeRepository.cs" />
     <Compile Include="FakeRepositories\FakeBadgeCalculationRepository.cs" />
     <Compile Include="FakeRepositories\FakeExtensiveLogRepository.cs" />
@@ -312,7 +311,6 @@
     <Compile Include="FakeRepositories\Rta\FakeKeyValueStorePersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeMappingReadModelPersister.cs" />
     <Compile Include="FakeData\FakeRequestFactory.cs" />
-    <Compile Include="FakeRepositories\Rta\FakeHistoricalChangeReadModelPersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeOrganizationReader.cs" />
     <Compile Include="FakeRepositories\Rta\FakeRtaTracerConfigPersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeTeamCardReader.cs" />

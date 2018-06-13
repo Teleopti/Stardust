@@ -339,16 +339,12 @@
     <Compile Include="RealTimeAdherence\ApplicationLayer\CurrentScheduleReadModelPersister.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ExternalLogonReadModelPersister.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\HardcodedSkillGroupingPageId.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\HistoricalChangeReadModelPersister.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\HistoricalChangeReadModelReader.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\KeyValueStorePersister.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\MappingReadModelPersister.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\MappingReadModelReader.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\OrganizationReader.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\RtaTracerConfigPersister.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\TeamCardReader.cs" />
-    <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\ApprovedPeriodsPersister.cs" />
-    <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\ApprovedPeriodsReader.cs" />
     <Compile Include="RealTimeAdherence\Domain\Repositories\RtaMapRepository.cs" />
     <Compile Include="RealTimeAdherence\Domain\Repositories\RtaRuleRepository.cs" />
     <Compile Include="RealTimeAdherence\Domain\Repositories\RtaStateGroupRepository.cs" />

@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.TestCommon
 		private readonly IRtaMapRepository _mappings;
 		private readonly IExternalLogOnRepository _externalLogOns;
 		private readonly IGroupingReadOnlyRepository _groupings;
-		private readonly HistoricalChange _historicalChange;
 
 		private DateOnly _date;
 		private string _person;
@@ -71,8 +70,7 @@ namespace Teleopti.Ccc.TestCommon
 			IRtaRuleRepository rules,
 			IRtaMapRepository mappings,
 			IExternalLogOnRepository externalLogOns,
-			IGroupingReadOnlyRepository groupings,
-			HistoricalChange historicalChange
+			IGroupingReadOnlyRepository groupings
 		)
 		{
 			_analytics = analytics;
@@ -93,7 +91,6 @@ namespace Teleopti.Ccc.TestCommon
 			_mappings = mappings;
 			_externalLogOns = externalLogOns;
 			_groupings = groupings;
-			_historicalChange = historicalChange;
 		}
 
 		[UnitOfWork]
@@ -107,7 +104,7 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return stateGroup().Id.Value;
 		}
-		
+
 		[UnitOfWork]
 		public virtual Guid CurrentScenarioId()
 		{
@@ -569,68 +566,11 @@ namespace Teleopti.Ccc.TestCommon
 			return this;
 		}
 
-		[ReadModelUnitOfWork, UnitOfWork]
-		public virtual Database WithAdherenceIn(string time)
-		{
-			_historicalChange.Change(new HistoricalChangeModel
-			{
-				PersonId = person().Id.Value,
-				Timestamp = time.Utc(),
-				Adherence = HistoricalChangeAdherence.In
-			});
-			return this;
-		}
-
-		[ReadModelUnitOfWork, UnitOfWork]
-		public virtual Database WithAdherenceOut(string time)
-		{
-			_historicalChange.Change(new HistoricalChangeModel
-			{
-				PersonId = person().Id.Value,
-				Timestamp = time.Utc(),
-				Adherence = HistoricalChangeAdherence.Out
-			});
-			return this;
-		}
-
-		[ReadModelUnitOfWork, UnitOfWork]
-		public virtual Database WithAdherenceNeutral(string time)
-		{
-			_historicalChange.Change(new HistoricalChangeModel
-			{
-				PersonId = person().Id.Value,
-				Timestamp = time.Utc(),
-				Adherence = HistoricalChangeAdherence.Neutral
-			});
-			return this;
-		}
-
-		[ReadModelUnitOfWork, UnitOfWork]
-		public virtual Database WithHistoricalChange(string time)
-		{
-			_historicalChange.Change(new HistoricalChangeModel
-			{
-				PersonId = person().Id.Value,
-				BelongsToDate = time.Date(),
-				Timestamp = time.Utc(),
-				StateName = stateGroup().Name,
-				StateGroupId = stateGroup().Id.Value,
-				ActivityName = activity().Name,
-				ActivityColor = activity().DisplayColor.ToArgb(),
-				RuleName = rule().Description.Name,
-				RuleColor = rule().DisplayColor.ToArgb(),
-				Adherence = (HistoricalChangeAdherence) Enum.Parse(typeof(HistoricalChangeAdherence), rule().Adherence.ToString())
-			});
-			return this;
-		}
-
-		
 		public Database PublishRecurringEvents()
 		{
 			_eventPublisher.Current().Publish(new TenantMinuteTickEvent(), new TenantHourTickEvent());
 			return this;
 		}
-
 
 		[UnitOfWork]
 		public virtual Database UpdateGroupings()
@@ -638,6 +578,5 @@ namespace Teleopti.Ccc.TestCommon
 			_groupings.UpdateGroupingReadModel(_persons.LoadAll().Select(x => x.Id.Value).ToArray());
 			return this;
 		}
-
 	}
 }

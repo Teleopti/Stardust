@@ -38,7 +38,6 @@ Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850 = true
 WebByPassDefaultPermissionCheck_37984 = true
 
 # LevelUp #
-RTA_RemoveApprovedOOA_47721 = true
 RTA_ImprovedStateGroupFilter_48724 = true
 RTA_KillFattyIntradayUntilItDies_74939 = true
 RTA_RestrictModifyAdherenceWithPermission_74898 = true
