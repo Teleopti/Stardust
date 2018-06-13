@@ -10,7 +10,8 @@
 		'pascalprecht.translate',
 		'wfm.modal',
 		'wfm.autofocus',
-		'wfm.notice']);
+		'wfm.notice',
+		'wfm.utilities']);
 
 
 	forecaster.run([

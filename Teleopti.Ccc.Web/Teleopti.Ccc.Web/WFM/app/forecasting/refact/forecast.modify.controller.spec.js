@@ -6,7 +6,8 @@ describe('ForecastCtrl', function() {
   $httpBackend,
   fakeBackend,
   skill,
-  scenario;
+  scenario,
+  scenario2;
 
   sessionStorage.currentForecastWorkload = '{"ChartId":"123","SkillId":"xyz","Workload":{"Id":"abc","Name":"workloadName","Accuracies":null},"Accuracies":null,"Id":"dfg","Name":"skillName"}';
 
