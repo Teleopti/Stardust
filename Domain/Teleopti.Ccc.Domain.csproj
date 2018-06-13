@@ -505,8 +505,7 @@
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\CurrentBelongsToDate.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\CurrentScheduleReadModelUpdater.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\ExternalLogonReadModelUpdater.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\HistoricalChangeMaintainer.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\HistoricalChangeUpdater.cs" />
+    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\RtaEventStoreMaintainer.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\IMappingReadModelPersister.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\IOrganizationReader.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\ITeamCardReader.cs" />
@@ -527,16 +526,11 @@
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AdherencePercentageCalculator.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDay.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayLoaderFromEventStore.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayLoader.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayWithEventStore.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\HistoricalChange.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\HistoricalChangeAdherence.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\HistoricalChangeModel.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\IAgentAdherenceDay.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\IAgentAdherenceDayLoader.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\IApprovedPeriodsReader.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\IHistoricalChangeReadModelPersister.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\IHistoricalChangeReadModelReader.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\IRtaEventStore.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AdherencePeriod.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\ScheduleLoader.cs" />
@@ -544,7 +538,6 @@
     <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\ApprovePeriodAsInAdherence.cs" />
     <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\ApprovePeriodAsInAdherenceCommand.cs" />
     <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\ApprovePeriodAsInAdherenceCommandHandler.cs" />
-    <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\IApprovedPeriodsPersister.cs" />
     <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\RemoveApprovedPeriod.cs" />
     <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\RemoveApprovedPeriodCommand.cs" />
     <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\RemoveApprovedPeriodCommandHandler.cs" />

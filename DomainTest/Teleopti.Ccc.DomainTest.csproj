@@ -283,9 +283,6 @@
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\TeamNameChangedTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\UnorderedEventsTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\ExternalLogons\ExternalLogonReadModelUpdaterTest.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\HistoricalAdherence\HistoricalRuleChangeUpdaterTest.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\HistoricalAdherence\HistoricalStateChangeUpdaterTest.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\HistoricalAdherence\PackageTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\Mappings\MappingsTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\Schedules\CurrentScheduleReadModelUpdaterTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\TestCaseExtensions.cs" />
