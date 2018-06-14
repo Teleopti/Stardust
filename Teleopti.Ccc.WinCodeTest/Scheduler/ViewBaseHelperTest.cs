@@ -423,7 +423,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var parts = _scheduleRange.ScheduledDay(new DateOnly(2001,1,1));
 
             string tt = ViewBaseHelper.GetToolTip(parts);
-            int pos = tt.IndexOf("There must be a daily rest of at least",StringComparison.OrdinalIgnoreCase );
+            int pos = tt.IndexOf("There must be a nightly rest of at least",StringComparison.OrdinalIgnoreCase );
             Assert.AreNotEqual(-1, pos);
         }
 
