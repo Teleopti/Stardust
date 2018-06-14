@@ -695,4 +695,19 @@ rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
 		expect(t.lastGoParams.teamIds).toEqual(['greenId']);
 	});
 
+	it('should highlight on selection', function (t) {
+		t.backend
+			.withSiteAdherence({
+				Id: 'parisId',
+				Color: 'warning'
+			});
+		var vm = t.createController();
+
+		t.apply(function () {
+			vm.siteCards[0].isSelected = true;
+		});
+
+		expect(vm.siteCards[0].ClassesOnSelection).toContain('warning-selected');
+	});
+
 });
