@@ -64,6 +64,34 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				personFinderDisplayRows.Add(personFinderDisplayRow);
 			}
 
+			IOrderedEnumerable<PersonFinderDisplayRow> tempList;
+
+			switch (personFinderSearchCriteria.SortColumn)
+			{
+				case 0:
+					tempList = personFinderSearchCriteria.SortDirection == 1
+						? personFinderDisplayRows.OrderBy(p => p.FirstName)
+						: personFinderDisplayRows.OrderByDescending(p => p.FirstName);
+					break;
+				case 1:
+					tempList = personFinderSearchCriteria.SortDirection == 1
+						? personFinderDisplayRows.OrderBy(p => p.FirstName)
+						: personFinderDisplayRows.OrderByDescending(p => p.FirstName);
+					break;
+				case 4:
+					tempList = personFinderSearchCriteria.SortDirection == 1
+						? personFinderDisplayRows.OrderBy(p => p.SiteName).ThenBy(p => p.TeamName)
+						: personFinderDisplayRows.OrderByDescending(p => p.SiteName).ThenByDescending(p => p.TeamName);
+					break;
+				default:
+					tempList = personFinderSearchCriteria.SortDirection == 1
+						? personFinderDisplayRows.OrderBy(p => p.LastName)
+						: personFinderDisplayRows.OrderByDescending(p => p.LastName);
+					break;
+			}
+
+			personFinderDisplayRows = tempList.ToList();
+
 			personFinderSearchCriteria.SetRows(personFinderDisplayRows);
 
 			personFinderSearchCriteria.TotalRows = personList.Count();
