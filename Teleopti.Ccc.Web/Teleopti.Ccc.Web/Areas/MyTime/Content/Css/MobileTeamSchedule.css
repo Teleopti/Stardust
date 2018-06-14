@@ -172,7 +172,8 @@
 	padding: 0 2px;
 	overflow: hidden !important;
 	text-overflow: ellipsis;
-	display: block;
+	display: inline-block;
+	vertical-align: bottom;
 }
 
 .team-schedule-arrow-up,
