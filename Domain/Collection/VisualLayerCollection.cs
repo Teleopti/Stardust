@@ -77,9 +77,7 @@ namespace Teleopti.Ccc.Domain.Collection
 		[RemoveMeWithToggle("Remove condition", Toggles.ResourcePlanner_LessResourcesXXL_74915)]
 		public IEnumerable<IVisualLayer> MergedCollection()
 		{
-			return _mergedCollection == null ? 
-				_merger.MergedCollection(UnMergedCollection, Person).ToList() : 
-				_mergedCollection.Value;
+			return _mergedCollection == null ? ((IProjectionMerger)_merger.Clone()).MergedCollection(UnMergedCollection, Person).ToList() : _mergedCollection.Value;
 		} 
 
 		public static IVisualLayerCollection CreateEmptyProjection(IPerson assignedPerson)
