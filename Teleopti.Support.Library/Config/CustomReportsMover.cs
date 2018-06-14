@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using log4net;
 
-namespace Teleopti.Support.Library.Config
+namespace Teleopti.Support.Tool.Tool
 {
 	public class CustomReportsMover
 	{

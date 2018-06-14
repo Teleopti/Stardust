@@ -2,7 +2,7 @@
 using System.IO;
 using Teleopti.Support.Library.ConfigFiles;
 
-namespace Teleopti.Support.Library.Config
+namespace Teleopti.Support.Tool.Tool
 {
 	public class ConfigFiles
 	{

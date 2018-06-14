@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Support.Library.Config
+﻿using Teleopti.Support.Library.Config;
+
+namespace Teleopti.Support.Tool.Tool
 {
 	public class SetSettingCommand
 	{

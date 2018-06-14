@@ -1,7 +1,6 @@
 ﻿using System;
 using log4net;
 using log4net.Config;
-using Teleopti.Support.Library.Config;
 using Teleopti.Support.Tool.Tool;
 
 namespace Teleopti.Support.Tool

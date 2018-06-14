@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Teleopti.Support.Library.Folders;
 
-namespace Teleopti.Support.Library.Config
+namespace Teleopti.Support.Tool.Tool
 {
 	public class FixMyConfigCommand
 	{

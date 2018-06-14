@@ -1,27 +1,10 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace Teleopti.Support.Library.Folders
 {
 	public class RepositoryRootFolder
 	{
-		private readonly string _path;
-
-		public RepositoryRootFolder()
-		{
-			_path = locateFolderUsingBlackMagic();
-			if (_path != null)
-				_path = System.IO.Path.GetFullPath(_path);
-		}
-
-		public string Path()
-		{
-			if (IsRunningFromRepository())
-				return _path;
-			throw new ArgumentNullException($"Not a repository!");
-		}
-
-		public bool IsRunningFromRepository() => _path != null;
+		public string Path() => System.IO.Path.GetFullPath(locateFolderUsingBlackMagic());
 
 		private static string locateFolderUsingBlackMagic()
 		{
