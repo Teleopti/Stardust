@@ -18,6 +18,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	self.currentUserDate = ko.observable();
 	self.isToday = ko.observable(false);
 	self.selectedDateSubscription = null;
+	self.baseUtcOffsetInMinutes = 0;
 
 	self.summaryColor = ko.observable();
 	self.textColor = ko.observable();
@@ -36,24 +37,23 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	self.requestsCount = ko.observable(0);
 	self.requestViewModel = ko.observable();
 
-	self.textRequestPermission = ko.observable();
-	self.absenceRequestPermission = ko.observable();
-	self.absenceReportPermission = ko.observable();
-	self.overtimeAvailabilityPermission = ko.observable();
-	self.shiftTradeRequestPermission = ko.observable();
-	self.personAccountPermission = ko.observable();
-	self.requestPermission = ko.observable();
-	self.showAbsenceReportingCommandItem = ko.observable();
+	self.textRequestPermission = ko.observable(false);
+	self.absenceRequestPermission = ko.observable(false);
+	self.absenceReportPermission = ko.observable(false);
+	self.overtimeAvailabilityPermission = ko.observable(false);
+	self.shiftTradeRequestPermission = ko.observable(false);
+	self.personAccountPermission = ko.observable(false);
+	self.requestPermission = ko.observable(false);
+	self.showAbsenceReportingCommandItem = ko.observable(false);
 	self.showPostShiftTradeMenu = ko.observable(false);
-	self.showAddOvertimeRequestMenu = ko.observable(true);
-	self.baseUtcOffsetInMinutes = 0;
+	self.showAddOvertimeRequestMenu = ko.observable(false);
 
 	self.overtimeAvailabililty = null;
 
 	self.menuIsVisible = ko.observable(false);
 	self.menuIconIsVisible = ko.observable(true);
 	self.focusingRequestForm = ko.observable(false);
-	self.isCommandEnable = Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_DayScheduleForStartPage_Command_44209");
+	self.isCommandEnable = ko.observable(false);
 	self.mobileMonthEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_MonthlyScheduleMobileView_45004");
 
 	self.datePickerFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
@@ -147,6 +147,10 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 			self.personAccountPermission(!!data.RequestPermission.PersonAccountPermission);
 			self.showAddOvertimeRequestMenu(!!data.RequestPermission.OvertimeRequestPermission);
 		}
+
+		var hasAtLeastOnePermission = self.overtimeAvailabilityPermission() || self.absenceReportPermission() || self.textRequestPermission() || self.absenceRequestPermission() || self.shiftTradeRequestPermission() || self.showAddOvertimeRequestMenu();
+
+		self.isCommandEnable(Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_DayScheduleForStartPage_Command_44209') && hasAtLeastOnePermission);
 
 		setSelectedDateSubscription(data.Date);
 
