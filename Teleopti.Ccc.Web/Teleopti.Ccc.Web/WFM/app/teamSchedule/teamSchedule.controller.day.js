@@ -7,6 +7,7 @@
 		'$translate',
 		'$state',
 		'$mdSidenav',
+		'$stateParams',
 		'$mdComponentRegistry',
 		'$document',
 		'TeamSchedule',
@@ -25,33 +26,35 @@
 		'ViewStateKeeper',
 		TeamScheduleController]);
 
-	function TeamScheduleController($scope, $q, $timeout, $translate, $state, $mdSidenav, $mdComponentRegistry, $document,
+	function TeamScheduleController($scope, $q, $timeout, $translate, $state, $mdSidenav, $stateParams, $mdComponentRegistry, $document,
 		teamScheduleSvc, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService,
 		CommandCheckService, ScheduleNoteManagementService, teamsToggles, toggleSvc, bootstrapCommon, groupPageService,
 		StaffingConfigStorageService, serviceDateFormatHelper, ViewStateKeeper) {
 		var vm = this;
-		var stateParams = ViewStateKeeper.get();
+		var viewState = ViewStateKeeper.get();
 		vm.isLoading = false;
 		vm.scheduleFullyLoaded = false;
 		vm.scheduleDateMoment = function () {
 			return moment(vm.scheduleDate);
 		};
-		vm.currentTimezone = stateParams.timezone;
+		vm.preSelectPersonIds = $stateParams.personId ? [$stateParams.personId] : [];
+		vm.scheduleDate = $stateParams.selectedDate || viewState.selectedDate || new Date();
+		vm.currentTimezone = viewState.timezone;
 		vm.avaliableTimezones = [];
 		vm.sitesAndTeams = undefined;
-		vm.staffingEnabled = stateParams.staffingEnabled;
+		vm.staffingEnabled = viewState.staffingEnabled;
 		vm.selectedGroups = {
 			mode: 'BusinessHierarchy',
 			groupIds: [],
 			groupPageId: ''
 		};
-		if (angular.isArray(stateParams.selectedTeamIds) && stateParams.selectedTeamIds.length > 0) {
-			replaceArrayValues(stateParams.selectedTeamIds, vm.selectedGroups.groupIds);
+		if (angular.isArray(viewState.selectedTeamIds) && viewState.selectedTeamIds.length > 0) {
+			replaceArrayValues(viewState.selectedTeamIds, vm.selectedGroups.groupIds);
 		}
-		else if (stateParams.selectedGroupPage && stateParams.selectedGroupPage.groupIds.length > 0) {
-			replaceArrayValues(stateParams.selectedGroupPage.groupIds, vm.selectedGroups.groupIds);
+		else if (viewState.selectedGroupPage && viewState.selectedGroupPage.groupIds.length > 0) {
+			replaceArrayValues(viewState.selectedGroupPage.groupIds, vm.selectedGroups.groupIds);
 			vm.selectedGroups.mode = 'GroupPages';
-			vm.selectedGroups.groupPageId = stateParams.selectedGroupPage.pageId;
+			vm.selectedGroups.groupPageId = viewState.selectedGroupPage.pageId;
 		}
 
 		vm.lastCommandTrackId = '';
@@ -239,16 +242,14 @@
 			return skillsRow ? skillsRow.offsetHeight : 0;
 		}
 
-		vm.scheduleDate = stateParams.selectedDate || new Date();
-
-		vm.teamNameMap = stateParams.teamNameMap || {};
+		vm.teamNameMap = viewState.teamNameMap || {};
 		vm.searchOptions = {
-			keyword: stateParams.keyword || '',
+			keyword: viewState.keyword || '',
 			searchKeywordChanged: false,
 			focusingSearch: false
 		};
-		vm.selectedFavorite = stateParams.do ? stateParams.selectedFavorite : null;
-		vm.sortOption = stateParams.selectedSortOption;
+		vm.selectedFavorite = viewState.do ? viewState.selectedFavorite : null;
+		vm.sortOption = viewState.selectedSortOption;
 
 		vm.openSettingsPanel = function () {
 			closeAllCommandSidenav();
@@ -399,7 +400,7 @@
 		vm.loadSchedules = function () {
 			closeAllCommandSidenav();
 			vm.isLoading = true;
-			var preSelectPersonIds = stateParams.personId ? [stateParams.personId] : [];
+			
 			if (vm.searchEnabled) {
 				var params = getParamsForLoadingSchedules();
 
@@ -419,10 +420,10 @@
 					vm.isLoading = false;
 					vm.searchOptions.focusingSearch = false;
 				});
-			} else if (preSelectPersonIds.length > 0) {
+			} else if (vm.preSelectPersonIds.length > 0) {
 				var date = serviceDateFormatHelper.getDateOnly(vm.scheduleDate);
 
-				teamScheduleSvc.getSchedules(date, preSelectPersonIds).then(function (result) {
+				teamScheduleSvc.getSchedules(date, vm.preSelectPersonIds).then(function (result) {
 					scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment(), vm.currentTimezone);
 					ScheduleNoteManagementService.resetScheduleNotes(result.Schedules, vm.scheduleDateMoment());
 					afterSchedulesLoaded(result);
@@ -432,7 +433,7 @@
 					}
 					personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
 
-					personSelectionSvc.preSelectPeople(preSelectPersonIds, scheduleMgmtSvc.groupScheduleVm.Schedules, vm.scheduleDate);
+					personSelectionSvc.preSelectPeople(vm.preSelectPersonIds, scheduleMgmtSvc.groupScheduleVm.Schedules, vm.scheduleDate);
 
 					vm.checkValidationWarningForCurrentPage();
 					populateAvailableTimezones(result);
@@ -508,14 +509,12 @@
 		vm.toggles = teamsToggles.all();
 		vm.toggles.WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871 = toggleSvc.WfmTeamSchedule_IncreaseLimitionTo750ForScheduleQuery_74871;
 
-		vm.scheduleDate = stateParams.selectedDate || new Date();
-
 		vm.searchOptions = {
-			keyword: stateParams.keyword || '',
+			keyword: viewState.keyword || '',
 			searchKeywordChanged: false,
 			focusingSearch: false
 		};
-		vm.selectedFavorite = stateParams.do ? stateParams.selectedFavorite : null;
+		vm.selectedFavorite = viewState.do ? viewState.selectedFavorite : null;
 
 		vm.validateWarningEnabled = false;
 
@@ -650,7 +649,7 @@
 				var defaultFavoriteSearch = data.defaultFavoriteSearch;
 				var loggedonUsersTeamId = data.loggedonUsersTeamId;
 
-				if (!stateParams.do) {
+				if (!viewState.do) {
 					if (defaultFavoriteSearch) {
 						replaceArrayValues(defaultFavoriteSearch.TeamIds, vm.selectedGroups.groupIds);
 						vm.searchOptions.keyword = defaultFavoriteSearch.SearchTerm;
