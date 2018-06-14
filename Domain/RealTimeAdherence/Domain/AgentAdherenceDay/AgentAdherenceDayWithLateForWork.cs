@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 		{
 			var model = applySolidProof(@event);
 			if (model != null)
-				model.LateForWork = string.Format(UserTexts.Resources.LateXMinutes, Math.Floor(new DateTimePeriod(@event.ShiftStart, @event.Timestamp).ElapsedTime().TotalMinutes));
+				model.LateForWork = string.Format(UserTexts.Resources.LateXMinutes, Math.Round(new DateTimePeriod(@event.ShiftStart, @event.Timestamp).ElapsedTime().TotalMinutes));
 		}
 
 		public void Apply(PeriodApprovedAsInAdherenceEvent @event) =>
