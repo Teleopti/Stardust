@@ -90,5 +90,19 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 			data.Changes().Single().RuleColor.Should().Be(Color.DarkKhaki.ToArgb());
 			data.Changes().Single().Adherence.Should().Be(HistoricalChangeAdherence.In);
 		}
+		
+		
+		[Test]
+		public void ShouldNotHaveLateForWorkWithSecondResolution()
+		{
+			Now.Is("2018-06-14 17:00");
+			var personId = Guid.NewGuid();
+			History
+				.ArrivedLateForWork(personId, "2018-06-14 09:00", "2018-06-14 10:00:01");
+
+			var data = Target.Load(personId, "2018-06-14".Date());
+
+			data.Changes().Single().LateForWork.Should().Be(string.Format(UserTexts.Resources.LateXMinutes, "60"));
+		}
 	}
 }
