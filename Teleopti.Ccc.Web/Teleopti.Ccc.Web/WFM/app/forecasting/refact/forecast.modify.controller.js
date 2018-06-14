@@ -357,7 +357,6 @@
 				}),
 				function(data, status, headers, config) {
 					vm.savingToScenario = false;
-					vm.changesMade = false;
 					vm.scenarioExportModal = false;
 					NoticeService.success($translate.instant('SuccessfullyUpdatedPeopleCountColon') + ' ' + vm.targetScenario.Name, 15000, true);
 					vm.targetScenario = null;
@@ -365,7 +364,6 @@
 				function(data, status, headers, config) {
 					vm.savingToScenario = false;
 					vm.scenarioExportModal = false;
-					vm.changesMade = false;
 				}
 			);
 		}
