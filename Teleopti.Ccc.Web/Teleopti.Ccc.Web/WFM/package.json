@@ -146,7 +146,7 @@
     "minify:css": "cleancss --source-map './css/style_classic.css' -o ./dist/dist.min.css",
     "prestart": "grunt devDist",
     "start": "run-p iis openWeb watch:* ",
-    "startAlpha": "npm run concat:html && run-p iis openWeb webpack:watch watch:html fisk",
+    "startAlpha": "npm run concat:html && run-p iis openWeb webpack:watch watch:html angular:watch",
     "startBeta": "npm run concat:html && npm run webpack:prod && ng build --configuration production",
     "webpack:watch": "webpack --watch",
     "webpack:prod": "webpack --env.production",
@@ -169,7 +169,7 @@
     "preeslint:js": "npm run concat:js",
     "ng": "ng",
     "build": "ng build --watch",
-    "fisk": "ng build --watch",
+    "angular:watch": "ng build --watch",
     "lint": "ng lint",
     "e2e": "ng e2e"
   }
