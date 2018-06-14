@@ -160,11 +160,30 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var anotherSite = new Site("Rome");
 			PersistAndRemoveFromUnitOfWork(site);
 			PersistAndRemoveFromUnitOfWork(anotherSite);
-			PersistAndRemoveFromUnitOfWork(new Team {Site = site}
+			PersistAndRemoveFromUnitOfWork(new Team { Site = site }
 				.WithDescription(new Description("A")));
 			var teams = new TeamRepository(UnitOfWork).FindTeamsForSite(site.Id.Value);
 
 			teams.Select(x => x.Description.Name).Single().Should().Be("A");
+		}
+
+		[Test]
+		public void ShouldDistinctTeamsWhenCallFindTeams()
+		{
+			var site = SiteFactory.CreateSimpleSite("Site");
+			var team = TeamFactory.CreateSimpleTeam("Team 1");
+			team.Site = site;
+			PersistAndRemoveFromUnitOfWork(site);
+			PersistAndRemoveFromUnitOfWork(team);
+
+			var teamIds =new List<Guid>();
+
+			for (var i = 0; i < 500; i++) {
+				teamIds.Add(team.Id.Value);
+			}
+			var teams = new TeamRepository(UnitOfWork).FindTeams(teamIds);
+
+			teams.Count.Should().Be.EqualTo(1);
 		}
 
 
