@@ -3389,8 +3389,8 @@ Replace</value>
     <comment>The week contains to much work time ({0}) the max is {1}.</comment>
   </data>
   <data name="BusinessRuleNightlyRestRuleErrorMessage" xml:space="preserve">
-    <value>There must be a daily rest of at least {0} hours between 2 shifts. Between {1} and {2} there are only {3} hours.</value>
-    <comment>There must be a daily rest of at least {0} hours between 2 shifts. Between {1} and {2} there are only {3} hours.</comment>
+    <value>There must be a nightly rest of at least {0} hours between 2 shifts. Between {1} and {2} there are only {3} hours.</value>
+    <comment>There must be a nightly rest of at least {0} hours between 2 shifts. Between {1} and {2} there are only {3} hours.</comment>
   </data>
   <data name="BusinessRuleNoContractErrorMessage" xml:space="preserve">
     <value>Person {0} has no contract defined for the current date {1}.</value>

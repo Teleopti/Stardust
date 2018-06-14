@@ -4899,7 +4899,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There must be a daily rest of at least {0} hours between 2 shifts. Between {1} and {2} there are only {3} hours..
+        ///   Looks up a localized string similar to There must be a nightly rest of at least {0} hours between 2 shifts. Between {1} and {2} there are only {3} hours..
         /// </summary>
         public static string BusinessRuleNightlyRestRuleErrorMessage {
             get {
