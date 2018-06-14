@@ -274,7 +274,7 @@
 	}
 
 
-	.teamschedule-body.mdi-alert {
+	.teamschedule-body .mdi-alert {
 		color: $orange-500;
 	}
 }
@@ -746,7 +746,7 @@ team-schedule-datepicker {
 
 			.info {
 				position: absolute;
-				top: -8px;
+				top: -7px;
 				right: -2px;
 				transform: scale(0.6)
 			}
