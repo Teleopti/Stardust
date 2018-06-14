@@ -1028,7 +1028,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			getTarget().Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
-			personRequest.DenyReason.Trim().Should().Be("There must be a daily rest of at least 10:00 hours between 2 shifts. Between 7/13/2017 and 7/14/2017 there are only 7:00 hours.");
+			personRequest.DenyReason.Trim().Should().Be(string.Format(Resources.BusinessRuleNightlyRestRuleErrorMessage, "10:00", "7/13/2017", "7/14/2017", "7:00"));
 			personRequest.BrokenBusinessRules.Should().Be(BusinessRuleFlags.NewNightlyRestRule);
 		}
 
