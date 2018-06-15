@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourcePlanner.Hints;
@@ -20,6 +21,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
+	[Toggle(Toggles.ResourcePlanner_BlockSchedulingValidation_46092)]
 	public class BlockSchedulingExistingShiftNotMatchingEachOtherHintForSchedulePeriodTest
 	{
 		public CheckScheduleHints Target;

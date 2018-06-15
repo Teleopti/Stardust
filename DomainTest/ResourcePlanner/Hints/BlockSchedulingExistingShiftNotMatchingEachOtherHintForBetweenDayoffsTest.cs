@@ -21,6 +21,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Hints
 {
 	[DomainTest]
+	[Toggle(Toggles.ResourcePlanner_BlockSchedulingValidation_46092)]
 	public class BlockSchedulingExistingShiftNotMatchingEachOtherHintForBetweenDayoffsTest
 	{
 		public CheckScheduleHints Target;

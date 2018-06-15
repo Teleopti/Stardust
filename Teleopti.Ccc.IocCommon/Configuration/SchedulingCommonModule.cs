@@ -522,10 +522,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PersonPartTimePercentageHint>().As<IScheduleHint>().SingleInstance();
 			builder.RegisterType<PersonContractHint>().As<IScheduleHint>().SingleInstance();
 			builder.RegisterType<PersonContractScheduleHint>().As<IScheduleHint>().SingleInstance();
-			builder.RegisterType<BlockSchedulingNotMatchShiftBagHint>().As<IScheduleHint>().SingleInstance();
-			builder.RegisterType<BlockSchedulingPreviousShiftNotMatchingEachOtherHint>().As<IScheduleHint>().SingleInstance();
-			builder.RegisterType<BlockSchedulingExistingShiftNotMatchingEachOtherHint>().As<IScheduleHint>().SingleInstance();
-			builder.RegisterType<BlockSchedulingPreferenceHint>().As<IScheduleHint>().SingleInstance();
+			if (_configuration.Toggle(Toggles.ResourcePlanner_BlockSchedulingValidation_46092))
+			{
+				builder.RegisterType<BlockSchedulingNotMatchShiftBagHint>().As<IScheduleHint>().SingleInstance();
+				builder.RegisterType<BlockSchedulingPreviousShiftNotMatchingEachOtherHint>().As<IScheduleHint>().SingleInstance();
+				builder.RegisterType<BlockSchedulingExistingShiftNotMatchingEachOtherHint>().As<IScheduleHint>().SingleInstance();
+				builder.RegisterType<BlockSchedulingPreferenceHint>().As<IScheduleHint>().SingleInstance();
+			}
+			
+
 		}
 
 		private static void registerMoveTimeOptimizationClasses(ContainerBuilder builder)
