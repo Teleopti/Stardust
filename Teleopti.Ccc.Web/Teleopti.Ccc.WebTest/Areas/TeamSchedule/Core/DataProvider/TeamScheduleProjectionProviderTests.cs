@@ -698,7 +698,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var layer = result.ScheduleLayers[0];
 			Assert.AreEqual(phoneActivity.Name, layer.TitleHeader);
 			Assert.AreEqual(getPeriodString(phoneActivityStart, lunchActivityStart), layer.TitleTime);
-			Assert.AreEqual(phoneActivity.DisplayColor.Name, layer.Color);
+			Assert.AreEqual(phoneActivity.DisplayColor.ToCSV(), layer.Color);
 			Assert.AreEqual(phoneActivityStart, layer.Start);
 			Assert.AreEqual(lunchActivityStart, layer.End);
 			Assert.AreEqual((int)(lunchActivityStart - phoneActivityStart).TotalMinutes, layer.LengthInMinutes);
@@ -708,7 +708,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			layer = result.ScheduleLayers[1];
 			Assert.AreEqual(lunchActivity.Name, layer.TitleHeader);
 			Assert.AreEqual(getPeriodString(lunchActivityStart, absencePeriodStart), layer.TitleTime);
-			Assert.AreEqual(lunchActivity.DisplayColor.Name, layer.Color);
+			Assert.AreEqual(lunchActivity.DisplayColor.ToCSV(), layer.Color);
 			Assert.AreEqual(lunchActivityStart, layer.Start);
 			Assert.AreEqual(absencePeriodStart, layer.End);
 			Assert.AreEqual((int)(absencePeriodStart - lunchActivityStart).TotalMinutes, layer.LengthInMinutes);
@@ -718,7 +718,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			layer = result.ScheduleLayers[2];
 			Assert.AreEqual(testAbsence.Name, layer.TitleHeader);
 			Assert.AreEqual(getPeriodString(absencePeriodStart, absencePeriodEnd), layer.TitleTime);
-			Assert.AreEqual(testAbsence.DisplayColor.Name, layer.Color);
+			Assert.AreEqual(testAbsence.DisplayColor.ToCSV(), layer.Color);
 			Assert.AreEqual(absencePeriodStart, layer.Start);
 			Assert.AreEqual(absencePeriodEnd, layer.End);
 			Assert.AreEqual((int)(absencePeriodEnd - absencePeriodStart).TotalMinutes, layer.LengthInMinutes);
@@ -728,7 +728,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			layer = result.ScheduleLayers[3];
 			Assert.AreEqual(phoneActivity.Name, layer.TitleHeader);
 			Assert.AreEqual(getPeriodString(absencePeriodEnd, phoneActivityEnd), layer.TitleTime);
-			Assert.AreEqual(phoneActivity.DisplayColor.Name, layer.Color);
+			Assert.AreEqual(phoneActivity.DisplayColor.ToCSV(), layer.Color);
 			Assert.AreEqual(absencePeriodEnd, layer.Start);
 			Assert.AreEqual(phoneActivityEnd, layer.End);
 			Assert.AreEqual((int)(phoneActivityEnd - absencePeriodEnd).TotalMinutes, layer.LengthInMinutes);

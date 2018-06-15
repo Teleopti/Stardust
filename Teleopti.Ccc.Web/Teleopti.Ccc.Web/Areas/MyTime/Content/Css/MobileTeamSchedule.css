@@ -91,7 +91,7 @@
 
 .mobile-teamschedule-view-body {
 	-webkit-overflow-scrolling: touch;
-	height: calc(100% - 56px);
+	height: calc(100% - 53px);
 	display: flex;
 	justify-content: flex-start;
 	overflow: auto;
@@ -110,7 +110,7 @@
 }
 
 .mobile-teamschedule-view .mobile-timeline-label {
-	font-size: 7pt;
+	font-size: 10px;
 	width: 30px;
 	height: 10px;
 	text-align: center;
@@ -227,6 +227,7 @@
 	-webkit-overflow-scrolling: touch;
 	font-size: 0;
 	flex-grow: 1;
+	z-index: 9;
 }
 
 .teammates-schedules-column {
@@ -366,4 +367,19 @@ div.teammates-schedules-column:last-of-type .agent-name {
 
 .mobile-teamschedule-view .glyphicon-warning-sign {
 	transform: scale(5);
+}
+
+.mobile-teamschedule-view .dayoff {
+	margin-top: 50px;
+	height: calc(100% - 50px - 50px - 10px);
+	width: calc(100%);
+}
+
+.mobile-teamschedule-view .dayoff .dayoff-text {
+	position: relative;
+	top: 50%;
+	width: 100%;
+	font-weight: bold;
+	text-align: center;
+	display: inline-block;
 }

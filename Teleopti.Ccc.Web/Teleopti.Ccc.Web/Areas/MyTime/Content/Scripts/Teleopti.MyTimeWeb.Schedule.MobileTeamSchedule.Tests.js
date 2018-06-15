@@ -578,6 +578,41 @@
 		equal(vm.selectedTeam(), 'allTeams');
 	});
 
+	test('should map dayOff of MySchedule', function () {
+		initVm();
+		var html = ['<!--ko if:mySchedule().isDayOff-->',
+		'<div class="shift-trade-layer-container floatleft shift-trade-dayoff">',
+		'<div class="dayoff" data-bind="text:mySchedule().dayOffName"></div>',
+		'</div>',
+		'<!--/ko-->'].join("");
+
+		$('.mobile-teamschedule-view').append(html);
+
+		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+
+		equal(vm.mySchedule().isDayOff, true);
+		equal(vm.mySchedule().dayOffName, 'Day off');
+		equal($('.dayoff').text(), 'Day off');
+	});
+
+	
+	test('should map dayOff of agents\' schedule', function () {
+		initVm();
+
+		$('.mobile-teamschedule-view').append(agentSchedulesHtml);
+
+		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+
+		vm.paging.take = 100;
+		vm.toggleFilterPanel();
+		vm.searchNameText('dayoffAgent');
+		$('.mobile-teamschedule-submit-buttons button.btn-primary').click();
+
+		equal($('.teammates-schedules-container .dayoff-text:first').text(), 'Day off');
+	});
+
+
+
 	function setUpFakeData() {
 		fakeAvailableTeamsData = {
 			allTeam: { id: 'allTeams', text: 'All Teams' },
@@ -629,7 +664,7 @@
 				"PersonId": "b46a2588-8861-42e3-ab03-9b5e015b257c",
 				"MinStart": null,
 				"Total": 1,
-				"DayOffName": null,
+				"DayOffName": 'Day off',
 				"ContractTimeInMinute": 480.0,
 				"Date": "",
 				"FixedDate": "",
@@ -637,7 +672,7 @@
 				"HasMainShift": "",
 				"HasOvertime": "",
 				"IsFullDayAbsence": false,
-				"IsDayOff": false,
+				"IsDayOff": true,
 				"Summary": "",
 				"Periods": [
 					{
@@ -703,6 +738,13 @@
 				
 				fakeOriginalAgentSchedulesData.push(agentSchedule);
 			}
+
+			fakeOriginalAgentSchedulesData.push({
+				"Name":"dayoffAgent",
+				"IsDayOff": true,
+				"DayOffName": "Day off",
+				"Periods": []
+			});
 		}
 
 	}
@@ -818,6 +860,11 @@
 			'				</div>',
 			'				<!-- /ko -->',
 			'			</div>',
+			'				<!--ko if:isDayOff-->',
+			'				<div class=\"dayoff\">',
+			'					<strong class="dayoff-text" data-bind="text: dayOffName"></strong>',
+			'				</div>',
+			'				<!-- /ko -->',
 			'		</div>',
 			'		<!-- /ko -->',
 			'	</div>',

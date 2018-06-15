@@ -227,7 +227,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function (filterChange
 			mySchedulePeriods.push(layerViewModel);
 		});
 
-		return { name: myScheduleData.Name, layers: mySchedulePeriods };
+		return { name: myScheduleData.Name, layers: mySchedulePeriods, isDayOff:myScheduleData.IsDayOff,dayOffName: myScheduleData.DayOffName };
 	}
 
 	function createTeamSchedules(agentSchedulesData, timelineStart) {
@@ -256,7 +256,9 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function (filterChange
 
 			teamSchedules.push({
 				name: agentSchedule.Name,
-				layers: layers
+				layers: layers,
+				isDayOff: agentSchedule.IsDayOff,
+				dayOffName: agentSchedule.DayOffName
 			});
 		});
 

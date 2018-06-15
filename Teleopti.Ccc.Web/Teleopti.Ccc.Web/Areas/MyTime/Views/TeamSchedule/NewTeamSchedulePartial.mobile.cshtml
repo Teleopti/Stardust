@@ -128,12 +128,17 @@
 					</div>
 				</div>
 				<!-- /ko -->
+				<!--ko if:mySchedule().isDayOff-->
+				<div class="dayoff" data-bind="tooltip: { title: mySchedule().dayOffName, html: true, trigger: 'click' }">
+					<span class="dayoff-text" data-bind="text: mySchedule().dayOffName"></span>
+				</div>
+				<!--/ko-->
 			</div>
 			<!-- /ko -->
 		</div>
 
 		<!-- ko if: teamSchedules -->
-		<div class="teammates-schedules-container" data-bind="style: {height: scheduleContainerHeight() + 'px'}">
+		<div class="teammates-schedules-container relative" data-bind="style: {height: scheduleContainerHeight() + 'px'}">
 			<!-- ko foreach: teamSchedules -->
 			<div class="teammates-schedules-column relative">
 				<div class="mobile-schedule-container relative">
@@ -155,6 +160,9 @@
 						</div>
 					</div>
 					<!-- /ko -->
+					<!--ko if:isDayOff-->
+					<div class="dayoff" data-bind="tooltip: { title: dayOffName, html: true, trigger: 'click' }, adjustTooltipPositionOnMobileTeamSchedule: true"></div>
+					<!--/ko-->
 				</div>
 			</div>
 			<!-- /ko -->
