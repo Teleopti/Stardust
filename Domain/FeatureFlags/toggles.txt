@@ -105,7 +105,6 @@ ResourcePlanner_UseErlangAWithFinitePatience_47738 = RC
 ResourcePlanner_SpeedUpEvents_48769 = true #batch deletes of dates - can be deleted early
 ResourcePlanner_SpeedUpEvents_74996 = true #caching different data - can be deleted early
 ResourcePlanner_SpeedUpEvents_75415 = true #restructure of events - dont remove toggle too early
-ResourcePlanner_MinimumAgents_75339 = true #Can be removed
 ResourcePlanner_LessResourcesXXL_74915 = false # not to influense perf test when we now switch over to stardust tests
 
 # Bugs&Roses #

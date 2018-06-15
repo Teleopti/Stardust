@@ -238,7 +238,6 @@
     <Compile Include="Forecasting\WorkloadNameBuilder.cs" />
     <Compile Include="Optimization\PredictorResult.cs" />
     <Compile Include="Optimization\TeamBlock\CreatePersonalSkillDataExtractor.cs" />
-    <Compile Include="Optimization\TeamBlock\CreatePersonalSkillDataExtractorOLD.cs" />
     <Compile Include="MultiTenancy\PersonIdentitiesInputModel.cs" />
     <Compile Include="MultiTenancy\PersonIdentityModel.cs" />
     <Compile Include="Optimization\TeamBlock\ForecastAndScheduleSumForDay.cs" />
@@ -1790,7 +1789,6 @@
     <Compile Include="Optimization\OptimizerHelperHelper.cs" />
     <Compile Include="Optimization\ScheduleChangesAffectedDates.cs" />
     <Compile Include="Optimization\ClassicLegacy\ScheduleBlankSpots.cs" />
-    <Compile Include="Optimization\ScheduleMatrixesPrimarySkillExtractor.cs" />
     <Compile Include="Optimization\SmartDayOffBackToLegalStateSolverContainer.cs" />
     <Compile Include="Optimization\TeamBlock\RestrictionOverLimitValidator.cs" />
     <Compile Include="Optimization\WorkShiftBackToLegalStateServiceProFactory.cs" />

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
@@ -12,9 +11,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		IScheduleResultDataExtractor CreatePersonalSkillDataExtractor(IScheduleMatrixPro scheduleMatrix, IAdvancedPreferences optimizerPreferences, ISchedulingResultStateHolder schedulingResultStateHolder);
 
         IScheduleResultDataExtractor CreateAllSkillsDataExtractor(DateOnlyPeriod selectedPeriod, ISchedulingResultStateHolder stateHolder, IAdvancedPreferences optimizerPreferences);
-
-		IScheduleResultDataExtractor CreatePrimarySkillsDataExtractor(DateOnlyPeriod selectedPeriod, ISchedulingResultStateHolder stateHolder, IAdvancedPreferences optimizerPreferences, IEnumerable<IScheduleMatrixPro> allScheduleMatrixPros );
-
 		IScheduleResultDataExtractor CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(IEnumerable<DateOnly> dates, SchedulingOptions schedulingOptions, ISchedulingResultStateHolder schedulingResultStateHolder);
     }
 
@@ -66,25 +62,6 @@ namespace Teleopti.Ccc.Domain.Optimization
                 dailySkillForecastAndScheduledValueCalculator,
                 allSkillExtractor);
         }
-
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_MinimumAgents_75339)]
-		public IScheduleResultDataExtractor CreatePrimarySkillsDataExtractor(DateOnlyPeriod selectedPeriod, ISchedulingResultStateHolder stateHolder, IAdvancedPreferences optimizerPreferences, IEnumerable<IScheduleMatrixPro> allScheduleMatrixPros)
-		{
-			ISkillExtractor primarySkillExtractor = new ScheduleMatrixesPrimarySkillExtractor(allScheduleMatrixPros, _personalSkillsProvider);
-			IDailySkillForecastAndScheduledValueCalculator dailySkillForecastAndScheduledValueCalculator;
-			if (optimizerPreferences.UseTweakedValues)
-			{
-				dailySkillForecastAndScheduledValueCalculator = new DailyBoostedSkillForecastAndScheduledValueCalculator(() => stateHolder, _skillPriorityProvider, _userTimeZone);
-				return new RelativeBoostedDailyDifferencesByAllSkillsExtractor(selectedPeriod,
-																			   dailySkillForecastAndScheduledValueCalculator,
-																			   primarySkillExtractor);
-			}
-			dailySkillForecastAndScheduledValueCalculator = new DailySkillForecastAndScheduledValueCalculator(() => stateHolder, _userTimeZone);
-			return new RelativeDailyDifferencesByAllSkillsExtractor(
-				selectedPeriod,
-				dailySkillForecastAndScheduledValueCalculator,
-				primarySkillExtractor);
-		}
 
 		public IScheduleResultDataExtractor CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(IEnumerable<DateOnly> dates, SchedulingOptions schedulingOptions, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{

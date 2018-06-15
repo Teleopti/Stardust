@@ -506,10 +506,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				.And.Not.Be.EqualTo(date.AddDays(6));
 		}
 		
-		public DayOffOptimizationMinimumAgentsTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerMinimumAgents75339, bool resourcePlannerLessResourcesXXL74915) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerMinimumAgents75339, resourcePlannerLessResourcesXXL74915)
+		public DayOffOptimizationMinimumAgentsTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerLessResourcesXXL74915) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerLessResourcesXXL74915)
 		{
-			if(!ResourcePlannerMinimumAgents75339)
-				Assert.Ignore("Only available when ResourcePlanner_MinimumAgents_75339 is true");
 		}
 	}
 }

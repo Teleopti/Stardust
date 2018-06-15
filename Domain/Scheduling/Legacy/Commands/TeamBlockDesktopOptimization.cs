@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ITeamBlockMoveTimeBetweenDaysCommand _teamBlockMoveTimeBetweenDaysCommand;
 		private readonly IntraIntervalOptimizationCommand _intraIntervalOptimizationCommand;
 		private readonly IOptimizerHelperHelper _optimizerHelper;
-		private readonly ITeamBlockDayOffOptimizer _teamBlockDayOffOptimizer;
+		private readonly TeamBlockDayOffOptimizer _teamBlockDayOffOptimizer;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly DayOffOptimizationDesktop _dayOffOptimizationDesktop;
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ITeamBlockMoveTimeBetweenDaysCommand teamBlockMoveTimeBetweenDaysCommand,
 			IntraIntervalOptimizationCommand intraIntervalOptimizationCommand,
 			IOptimizerHelperHelper optimizerHelper,
-			ITeamBlockDayOffOptimizer teamBlockDayOffOptimizer,
+			TeamBlockDayOffOptimizer teamBlockDayOffOptimizer,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 			TeamInfoFactoryFactory teamInfoFactoryFactory,
 			DayOffOptimizationDesktop dayOffOptimizationDesktop,
