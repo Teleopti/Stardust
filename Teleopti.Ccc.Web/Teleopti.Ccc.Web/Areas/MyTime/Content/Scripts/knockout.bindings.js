@@ -207,7 +207,6 @@ ko.bindingHandlers.outsideClickCallback = {
 ko.bindingHandlers.adjustTooltipPositionOnMobileTeamSchedule = {
 	init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
 		$(element).click(function (event) {
-			console.log(event);
 			var tooltipEle = $(this)
 				.siblings()
 				.filter('.tooltip.in')[0];
