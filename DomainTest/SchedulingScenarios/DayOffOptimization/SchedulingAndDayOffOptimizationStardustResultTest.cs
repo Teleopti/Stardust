@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date, 1, 1, 1));
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, date.ToDateOnlyPeriod(), new TimePeriod(0, 24));
 
-			Target.Execute(planningPeriod.Id.Value, true);
+			Target.Execute(planningPeriod.Id.Value);
 
 			var result = JsonConvert.DeserializeObject<OptimizationResultModel>(
 					JobResultRepository.LoadAllWithNoLock().Single().Details.Last().Message); 

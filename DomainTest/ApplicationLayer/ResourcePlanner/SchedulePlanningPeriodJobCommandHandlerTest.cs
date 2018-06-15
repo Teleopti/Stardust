@@ -14,7 +14,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 {
-	[TestFixture]
 	[DomainTest]
 	public class SchedulePlanningPeriodCommandHandlerTest
 	{
@@ -22,13 +21,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 		public FakeJobResultRepository JobResultRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakeEventPublisher EventPublisher;
+		
 		[Test]
 		public void ShouldPublishWebScheduleStardustEvent()
 		{
 			var planningPeriod = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()));
 			PlanningPeriodRepository.Add(planningPeriod);
 			planningPeriod.JobResults.Count.Should().Be.EqualTo(0);
-			Target.Execute(planningPeriod.Id.GetValueOrDefault(), true);
+			Target.Execute(planningPeriod.Id.GetValueOrDefault());
 
 			JobResultRepository.LoadAll()
 				.Single(x => x.JobCategory == JobCategory.WebSchedule)
@@ -40,5 +40,4 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			webScheduleStardustEvent.Policy.Should().Be.EqualTo(WebScheduleStardustBaseEvent.HalfNodesAffinity);
 		}
 	}
-
 }

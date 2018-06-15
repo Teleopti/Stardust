@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 				25,
 				25));
 
-			Target.Execute(planningPeriod.Id.Value, true);
+			Target.Execute(planningPeriod.Id.Value);
 
 			var lastJobResult = JobResultRepository.LoadAll().First();
 			var result = JsonConvert.DeserializeObject<OptimizationResultModel>(lastJobResult.Details.Last().Message);
