@@ -123,7 +123,7 @@ module.exports = env => {
 			'./node_modules/angular-gantt/assets/angular-gantt-plugins.css',
 			'./node_modules/angular-gantt/assets/angular-gantt-table-plugin.css',
 			'./node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.css',
-			'./vendor/c3/c3.min.css',
+			'./node_modules/c3/c3.min.css',
 			'./node_modules/teleopti-styleguide/styleguide/dist/main.min.css'
 		],
 		attributes: {
@@ -146,7 +146,7 @@ module.exports = env => {
 			'./node_modules/angular-gantt/assets/angular-gantt-plugins.css',
 			'./node_modules/angular-gantt/assets/angular-gantt-table-plugin.css',
 			'./node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.css',
-			'./vendor/c3/c3.min.css',
+			'./node_modules/c3/c3.min.css',
 			'./node_modules/teleopti-styleguide/styleguide/dist/main_dark.min.css'
 		],
 		attributes: {
