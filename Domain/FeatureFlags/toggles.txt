@@ -106,7 +106,7 @@ ResourcePlanner_UseErlangAWithFinitePatience_47738 = RC
 ResourcePlanner_SpeedUpEvents_48769 = true #batch deletes of dates - can be deleted early
 ResourcePlanner_SpeedUpEvents_74996 = true #caching different data - can be deleted early
 ResourcePlanner_SpeedUpEvents_75415 = true #restructure of events - dont remove toggle too early
-ResourcePlanner_MinimumAgents_75339 = true
+ResourcePlanner_MinimumAgents_75339 = true #Can be removed
 ResourcePlanner_LessResourcesXXL_74915 = false # not to influense perf test when we now switch over to stardust tests
 
 # Bugs&Roses #
@@ -151,23 +151,23 @@ WFM_Intraday_Refactoring_74652 = RC
 # Ziggy #
 Wfm_Staffing_45411 = true #Enables the entire Staffing page!
 WfmStaffing_AddOvertime_42524 = RC 
-Wfm_Staffing_StaffingReadModel28DaysStep1_45109 = true
+Wfm_Staffing_StaffingReadModel28DaysStep1_45109 = true 
 Wfm_Staffing_StaffingReadModel49DaysStep2_45109 = true
 Wfm_Requests_HandleFourteenDaysFast_43390 = true
 Staffing_BPOExchangeImport_45202 = true
 Forecast_FileImport_UnifiedFormat_46585 = true
 Wfm_Requests_ProcessWaitlistBefore24hRequests_45767 = true
 Wfm_Requests_DenyRequestWhenAllSkillsClosed_46384 = true
-AddOrRemoveTenantsWithoutRestart_43635 = RC
+AddOrRemoveTenantsWithoutRestart_43635 = true
 People_ImprovePersonAccountAccuracy_74914 = true
 Staffing_BPO_Visualization_74958 = true
-Tenant_PurgeLogonAttempts_75782 = RC
-Tenant_PurgeNoneEmployeesData_76291 = RC
+Tenant_PurgeLogonAttempts_75782 = true
+Tenant_PurgeNoneEmployeesData_76291 = true
 
 # Squids #
 WFM_Forecaster_Refact_44480 = true
 WFM_Export_Forecast_44716 = true
-WFM_TrainingPlanner_44780 = RC
+WFM_TrainingPlanner_44780 = RC #So that large customers can use TP for up to 7 weeks from readmodels. Hard to set to true for everyone as they may book trinings further out...
 Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560 = true
 Report_Remove_Realtime_Scheduled_Time_vs_Target_45559 = true
 Report_Remove_Scheduled_Time_Per_Activity_From_Scheduler_45640 = true
