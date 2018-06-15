@@ -124,7 +124,7 @@
     "onchange": "3.2.1",
     "protractor": "~5.1.2",
     "sass-loader": "6.0.7",
-    "teleopti-styleguide": "^1.12.13",
+    "teleopti-styleguide": "^1.13.0",
     "ts-node": "4.1.0",
     "tslint": "~5.7.0",
     "typescript": "2.7.2",
