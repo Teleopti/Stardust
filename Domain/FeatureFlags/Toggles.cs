@@ -76,7 +76,6 @@
 		
 		ResourcePlanner_HideSkillPrioSliders_41312,
 		ResourcePlanner_RunPerfTestAsTeam_43537,
-		ResourcePlanner_BlockSchedulingValidation_46092,
 		ResourcePlanner_UseErlangAWithInfinitePatience_45845,
 		ResourcePlanner_DayOffOptimizationIslands_47208,
 		ResourcePlanner_PrepareToRemoveExportSchedule_46576,
