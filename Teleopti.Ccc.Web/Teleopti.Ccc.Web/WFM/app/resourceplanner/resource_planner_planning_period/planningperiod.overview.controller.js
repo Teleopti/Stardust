@@ -211,7 +211,7 @@
               NoticeService.success(
                 $translate.instant('SuccessfullyIntradayOptimizationPlanningPeriodFromTo')
                   .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
-                  .replace('{1}', moment(vm.selectedPp.EndDate).format('L')));
+                  .replace('{1}', moment(vm.selectedPp.EndDate).format('L')), null, true);
               return loadLastResult();
             }
             if (result.Failed) {
