@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using System.Threading;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -44,12 +45,50 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void VerifyLoadActiveAgentCount()
 		{
-			ISkill skill = Mocks.StrictMock<ISkill>();
-			Expect.Call(skill.Id).Return(Guid.NewGuid());
-			Mocks.ReplayAll();
+			var skill = SkillFactory.CreateSkill("test").WithId();
 			DateTimePeriod period = DateTimeFactory.CreateDateTimePeriod(new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc), 0);
 			var result = target.LoadActiveAgentCount(skill, period);
 			Assert.AreEqual(0, result.Count);
+		}
+
+		[Test]
+		public void ShouldImportQueue()
+		{
+			target.DeleteStgQueues();
+			target.PersistFactQueues(createEmptyDataTable());
+			target.LoadDimQueues();
+			target.LoadFactQueues();
+		}
+		
+		private DataTable createEmptyDataTable()
+		{
+			var table = new DataTable { Locale = Thread.CurrentThread.CurrentCulture };
+
+			table.Columns.Add("datetime", typeof(DateTime));
+			table.Columns.Add("interval", typeof(string));
+			table.Columns.Add("queue_code", typeof(int));
+			table.Columns.Add("queue_name", typeof(string));
+			table.Columns.Add("offd_direct_call_cnt", typeof(int));
+			table.Columns.Add("overflow_in_call_cnt", typeof(int));
+			table.Columns.Add("aband_call_cnt", typeof(int));
+			table.Columns.Add("overflow_out_call_cnt", typeof(int));
+			table.Columns.Add("answ_call_cnt", typeof(int));
+			table.Columns.Add("queued_and_answ_call_dur", typeof(int));
+			table.Columns.Add("queued_and_aband_call_dur", typeof(int));
+			table.Columns.Add("talking_call_dur", typeof(int));
+			table.Columns.Add("wrap_up_dur", typeof(int));
+			table.Columns.Add("queued_answ_longest_que_dur", typeof(int));
+			table.Columns.Add("queued_aband_longest_que_dur", typeof(int));
+			table.Columns.Add("avg_avail_member_cnt", typeof(int));
+			table.Columns.Add("ans_servicelevel_cnt", typeof(int));
+			table.Columns.Add("wait_dur", typeof(int));
+			table.Columns.Add("aband_short_call_cnt", typeof(int));
+			table.Columns.Add("aband_within_sl_cnt", typeof(int));
+
+			DataColumn[] keys = { table.Columns[0], table.Columns[1], table.Columns[2], table.Columns[3] };
+			table.PrimaryKey = keys;
+
+			return table;
 		}
 
 		[Test]

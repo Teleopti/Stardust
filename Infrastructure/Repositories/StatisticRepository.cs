@@ -168,11 +168,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			using (IStatelessUnitOfWork uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
-				IDbConnection dbConnection = ((NHibernateStatelessUnitOfWork)uow).Session.Connection;
-
-				
-
-				using (SqlBulkCopy bulkCopy = new SqlBulkCopy((SqlConnection)dbConnection))
+				var dbConnection = ((NHibernateStatelessUnitOfWork)uow).Session.Connection.Unwrap();
+				using (SqlBulkCopy bulkCopy = new SqlBulkCopy(dbConnection))
 				{
 					bulkCopy.DestinationTableName = "stage.stg_queue";
 					bulkCopy.BulkCopyTimeout = 600;
