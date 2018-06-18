@@ -67,7 +67,11 @@
     <Compile Include="QueryDtoProvider.cs" />
     <Compile Include="QueryHandlerProvider.cs" />
     <Compile Include="QueryResultDto.cs" />
+    <Compile Include="Query\GetScheduleChangesListenerSubscriptionDto.cs" />
+    <Compile Include="Query\ScheduleChangesListenerDto.cs" />
     <Compile Include="Query\ScheduleByPersonIdDto.cs" />
+    <Compile Include="Query\ScheduleChangesListenersHandler.cs" />
+    <Compile Include="Query\ScheduleChangesListenerSubscriptionDto.cs" />
     <Compile Include="Query\ScheduleDto.cs" />
     <Compile Include="Query\ShiftLayerDto.cs" />
     <Compile Include="Query\UserByEmailDto.cs" />
