@@ -146,6 +146,7 @@
     "start": "run-p iis openWeb watch:* ",
     "startAlpha": "npm run concat:html && run-p iis openWeb webpack:watch watch:html angular:watch",
     "startBeta": "npm run concat:html && npm run webpack:prod && ng build --configuration production",
+    "startDelta": "npm run concat:html && run-p webpack:watch watch:html angular:watch",
     "webpack:watch": "webpack --watch",
     "webpack:prod": "webpack --env.production",
     "prestartProd": "grunt dist",
