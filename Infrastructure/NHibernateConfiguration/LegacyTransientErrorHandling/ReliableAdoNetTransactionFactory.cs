@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErr
 	/// <remarks>
 	/// Requires the connection to be a <see cref="ReliableSqlDbConnection"/>
 	/// </remarks>
-	[RemoveMeWithToggle(Toggles.Tech_Moving_ResilientConnectionLogic)]
+	[RemoveMeWithToggle(Toggles.Tech_Moving_ResilientConnectionLogic_76181)]
 	public class ReliableAdoNetTransactionFactory : AdoNetTransactionFactory, ITransactionFactory
 	{
 		public new ITransaction CreateTransaction(ISessionImplementor session)

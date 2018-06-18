@@ -158,7 +158,7 @@
 
 		WFM_Intraday_Refactoring_74652,
 
-		Tech_Moving_ResilientConnectionLogic,
+		Tech_Moving_ResilientConnectionLogic_76181,
 		Tenant_PurgeLogonAttempts_75782,
 		Tenant_PurgeNoneEmployeesData_76291
 		// ReSharper restore InconsistentNaming

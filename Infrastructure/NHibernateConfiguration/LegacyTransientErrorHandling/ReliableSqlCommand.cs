@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErr
 	/// <remarks>
 	/// Note: For this to work it requires that the Connection property be set with a <see cref="ReliableSqlConnection"/> object.
 	/// </remarks>
-	[RemoveMeWithToggle(Toggles.Tech_Moving_ResilientConnectionLogic)]
+	[RemoveMeWithToggle(Toggles.Tech_Moving_ResilientConnectionLogic_76181)]
 	public class ReliableSqlCommand : DbCommand
 	{
 		/// <summary>

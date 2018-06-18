@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErrorHandling
 {
-	[RemoveMeWithToggle(Toggles.Tech_Moving_ResilientConnectionLogic)]
+	[RemoveMeWithToggle(Toggles.Tech_Moving_ResilientConnectionLogic_76181)]
 	public class RetryPolicy<T> : RetryPolicy where T : ITransientErrorDetectionStrategy, new()
 	{
 		public RetryPolicy(RetryStrategy retryStrategy)

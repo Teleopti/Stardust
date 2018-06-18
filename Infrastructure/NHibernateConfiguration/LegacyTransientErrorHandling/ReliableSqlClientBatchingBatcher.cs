@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErr
 	/// Exposes <see cref="SqlClientBatchingBatcher"/> functionality when a <see cref="ReliableSqlDbConnection"/>
 	/// connection is being used.
 	/// </summary>
-	[RemoveMeWithToggle(Toggles.Tech_Moving_ResilientConnectionLogic)]
+	[RemoveMeWithToggle(Toggles.Tech_Moving_ResilientConnectionLogic_76181)]
 	public class ReliableSqlClientBatchingBatcher : SqlClientBatchingBatcher
 	{
 		#region Impersonate private fields in base class

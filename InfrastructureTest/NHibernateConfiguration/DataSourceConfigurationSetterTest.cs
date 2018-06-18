@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 	public class DataSourceConfigurationSetterTest
 	{
 		[Test]
-		[Toggle(Toggles.Tech_Moving_ResilientConnectionLogic)]
+		[Toggle(Toggles.Tech_Moving_ResilientConnectionLogic_76181)]
 		public void ShouldHaveStaticDefaultValuesWithResilientDriverSet()
 		{
 			var cfg = new Configuration();
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		}
 
 		[Test]
-		[ToggleOff(Toggles.Tech_Moving_ResilientConnectionLogic)]
+		[ToggleOff(Toggles.Tech_Moving_ResilientConnectionLogic_76181)]
 		public void ShouldHaveStaticDefaultValuesSet()
 		{
 			var cfg = new Configuration();
