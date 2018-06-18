@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 				result.ErrorInformation.Add(Resources.ImportBpoResourcesCannotBeLessThanZero);
 			}
 
-			if (resourceBpo.StartDateTime.Date < _userNow.DateTime().Date)
+			if (resourceBpo.StartDateTime < TimeZoneHelper.ConvertToUtc(_userNow.DateTime().Date, _userTimeZone.TimeZone()))
 			{
 				result.Success = false;
 				result.ErrorInformation.Add(Resources.IntervalStartMustBeTodaysDateOrLater);

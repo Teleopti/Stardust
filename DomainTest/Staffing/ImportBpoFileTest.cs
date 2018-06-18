@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -828,6 +827,26 @@ TPBRZIL; DIRECTSALES; 2017-07-24 10:30; 2017-07-24 10:45; 6.25";
 			skillCombResources.Should().Not.Be.Empty();
 			skillCombResources[0].ImportFileName.Should().Be("import.csv");
 			skillCombResources[0].PersonId.Should().Not.Be(Guid.Empty);
+		}
+
+		[Test]
+		public void ShouldImportDataOnMidnight()
+		{
+			var timezone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			UserTimeZone.Is(timezone);
+
+			Now.Is("2017-07-24 10:00");
+			var fileContents = @"source; skillcombination; startdatetime; enddatetime; agents
+TPBRZIL; DIRECTSALES; 2017-07-24 0:0; 2017-07-24 0:15; 6.25";
+
+			SkillRepository.Has("Directsales", new Activity());
+
+			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture, "import.csv");
+
+			result.Success.Should().Be.True();
+			var skillCombResources = SkillCombinationResourceRepository.ImportedBpoData();
+
+			skillCombResources.Should().Not.Be.Empty();
 		}
 	}
 }
