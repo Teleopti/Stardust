@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		private readonly IEventPopulatingPublisher _publisher;
 		private readonly IFakeStorage _storage;
 		private readonly IEnumerable<ITransactionHook> _hooks;
-		private readonly INow _now;
 
 		public FakeUnitOfWork()
 		{
@@ -28,12 +27,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			_storage = storage;
 		}
 
-		public FakeUnitOfWork(IFakeStorage storage, IEventPopulatingPublisher publisher, IEnumerable<ITransactionHook> hooks, INow now)
+		public FakeUnitOfWork(IFakeStorage storage, IEventPopulatingPublisher publisher, IEnumerable<ITransactionHook> hooks)
 		{
 			_publisher = publisher;
 			_storage = storage;
 			_hooks = hooks;
-			_now = now;
 		}
 
 		public void Dispose()
@@ -85,7 +83,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			//changes.ForEach(x => Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} {x.Root.GetType()} {x.Status}"));
 
 			// required for rta tests, really, PA is missing events...
-			new ScheduleChangedEventPublisher(_publisher, _now).AfterCompletion(changes);
+			new ScheduleChangedEventPublisher(_publisher).AfterCompletion(changes);
 			_hooks.ForEach(x => x.AfterCompletion(changes));
 			_publisher.Publish(new TenantMinuteTickEvent());
 

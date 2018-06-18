@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErr
 	/// <summary>
 	/// Provides a transaction implementation that includes transient fault-handling retry logic.
 	/// </summary>
-	[RemoveMeWithToggle(Toggles.Tech_Moving_ResilientConnectionLogic)]
+	[RemoveMeWithToggle(Toggles.Tech_Moving_ResilientConnectionLogic_76181)]
 	public class ReliableAdoTransaction : AdoTransaction, ITransaction
 	{
 		private readonly ISessionImplementor _session;

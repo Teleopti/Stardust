@@ -3,9 +3,9 @@
 
 	angular.module('wfm.forecasting').controller('ForecastModController', ForecastModCtrl);
 
-	ForecastModCtrl.$inject = ['forecastingService', '$stateParams', '$window', 'NoticeService', '$translate', '$state', '$scope'];
+	ForecastModCtrl.$inject = ['forecastingService', '$stateParams', '$window', 'NoticeService', '$translate', '$state', '$scope', 'skillIconService'];
 
-	function ForecastModCtrl(forecastingService, $stateParams, $window, NoticeService, $translate, $state, $scope) {
+	function ForecastModCtrl(forecastingService, $stateParams, $window, NoticeService, $translate, $state, $scope, skillIconService) {
 		var vm = this;
 
 		var storage = {};
@@ -16,6 +16,7 @@
 		vm.campaignPanel = false;
 		vm.overridePanel = false;
 		vm.selectedScenario = null;
+		vm.targetScenario = null;
 		vm.forecastPeriod = {
 			startDate: moment()
 			.utc()
@@ -27,6 +28,7 @@
 			.toDate()
 		};
 		vm.savingToScenario = false;
+    vm.getSkillIcon = skillIconService.get;
 
 		vm.applyOverride = applyOverride;
 		vm.applyCampaign = applyCampaign;
@@ -39,6 +41,7 @@
 		vm.loadChart = loadChart;
 		vm.applyWipToScenario = applyWipToScenario;
 		vm.exportToFile = exportToFile;
+		vm.exportToScenario = exportToScenario;
 
 		vm.isForecastRunning = false;
 		vm.overrideStatus = {
@@ -113,9 +116,9 @@
 				},
 				function() {
 					if (vm.modifyMessage) {
-						NoticeService.warning(vm.modifyMessage, 5000, true);
+						NoticeService.warning(vm.modifyMessage, 15000, true);
 					} else {
-						NoticeService.success('Applied campaign', 5000, true);
+						NoticeService.success($translate.instant('AppliedACampaign'), 15000, true);
 					}
 					modifyPanelHelper();
 					vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
@@ -161,9 +164,9 @@
 				},
 				function() {
 					if (vm.modifyMessage) {
-						NoticeService.warning(vm.modifyMessage, 5000, true);
+						NoticeService.warning(vm.modifyMessage, 15000, true);
 					} else {
-						NoticeService.success('Applied override', 5000, true);
+						NoticeService.success($translate.instant('AppliedAOverride'), 15000, true);
 					}
 
 					modifyPanelHelper();
@@ -197,7 +200,7 @@
 					vm.changesMade = true;
 				},
 				function() {
-					NoticeService.success('Override removed', 5000, true);
+					NoticeService.success($translate.instant('ClearOverride'), 15000, true);
 
 					modifyPanelHelper();
 					vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
@@ -316,7 +319,12 @@
 
 		function applyWipToScenario() {
 			vm.savingToScenario = true;
-			var tempForecastDays = vm.selectedWorkload.Days;
+			var tempForecastDays = [];
+			for (var i = 0; i < vm.selectedWorkload.Days.length; i++) {
+				if (vm.selectedWorkload.Days[i].IsInModification) {
+					tempForecastDays.push(vm.selectedWorkload.Days[i]);
+				}
+			}
 
 			forecastingService.applyToScenario(
 				angular.toJson({
@@ -328,12 +336,34 @@
 					vm.savingToScenario = false;
 					vm.changesMade = false;
 					getWorkloadForecastData();
-					NoticeService.success(vm.selectedScenario.Name + ' ' + 'scenario was updated', 5000, true);
+					NoticeService.success($translate.instant('SuccessfullyUpdatedPeopleCountColon') + ' ' + vm.selectedScenario.Name, 15000, true);
 				},
 				function(data, status, headers, config) {
 					vm.savingToScenario = false;
 					vm.changesMade = false;
 					getWorkloadForecastData();
+				}
+			);
+		}
+
+		function exportToScenario() {
+			vm.savingToScenario = true;
+			var tempForecastDays = vm.selectedWorkload.Days;
+			forecastingService.applyToScenario(
+				angular.toJson({
+					WorkloadId: vm.selectedWorkload.Workload.Id,
+					ScenarioId: vm.targetScenario.Id,
+					ForecastDays: tempForecastDays
+				}),
+				function(data, status, headers, config) {
+					vm.savingToScenario = false;
+					vm.scenarioExportModal = false;
+					NoticeService.success($translate.instant('SuccessfullyUpdatedPeopleCountColon') + ' ' + vm.targetScenario.Name, 15000, true);
+					vm.targetScenario = null;
+				},
+				function(data, status, headers, config) {
+					vm.savingToScenario = false;
+					vm.scenarioExportModal = false;
 				}
 			);
 		}

@@ -16,11 +16,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	{
 		private readonly ISmartDayOffBackToLegalStateService _daysOffBackToLegal;
 		private readonly IDayOffOptimizationDecisionMakerFactory _dayOffOptimizationDecisionMakerFactory;
-		private readonly ICreatePersonalSkillDataExtractor _createPersonalSkillDataExtractor;
+		private readonly CreatePersonalSkillDataExtractor _createPersonalSkillDataExtractor;
 
 		public TeamBlockDaysOffMoveFinder(ISmartDayOffBackToLegalStateService daysOffBackToLegal,
 		                                  IDayOffOptimizationDecisionMakerFactory dayOffOptimizationDecisionMakerFactory,
-										ICreatePersonalSkillDataExtractor createPersonalSkillDataExtractor)
+										CreatePersonalSkillDataExtractor createPersonalSkillDataExtractor)
 		{
 			_daysOffBackToLegal = daysOffBackToLegal;
 			_dayOffOptimizationDecisionMakerFactory = dayOffOptimizationDecisionMakerFactory;

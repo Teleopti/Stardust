@@ -139,10 +139,10 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.230\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.231\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.230\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.231\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -265,6 +265,12 @@
     <Compile Include="Helper\CellExtensionTest.cs" />
     <Compile Include="Helper\RowExtensionsTest.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentJobServiceTest.cs" />
+    <Compile Include="Intraday\Domain\IntradayReforecastingServiceTest.cs" />
+    <Compile Include="Intraday\IncomingTrafficViewModelCreatorTest.cs" />
+    <Compile Include="Intraday\PerformanceViewModelCreatorTest.cs" />
+    <Compile Include="Intraday\StaffingViewModelCreatorEmailTest.cs" />
+    <Compile Include="Intraday\StaffingViewModelCreatorTest.cs" />
+    <Compile Include="Intraday\StaffingViewModelCreatorTestHelper.cs" />
     <Compile Include="Intraday\TimeSeriesProviderTest.cs" />
     <Compile Include="Notification\ClickatellNotificationClientTest.cs" />
     <Compile Include="Notification\RawPostNotificationWebClientTest.cs" />
@@ -277,9 +283,6 @@
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\TeamNameChangedTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\UnorderedEventsTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\ExternalLogons\ExternalLogonReadModelUpdaterTest.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\HistoricalAdherence\HistoricalRuleChangeUpdaterTest.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\HistoricalAdherence\HistoricalStateChangeUpdaterTest.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\HistoricalAdherence\PackageTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\Mappings\MappingsTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\Schedules\CurrentScheduleReadModelUpdaterTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\TestCaseExtensions.cs" />
@@ -520,7 +523,7 @@
     <Compile Include="Security\Permissions\AvailableTeamAuthorizationTest.cs" />
     <Compile Include="Security\Permissions\AvailableTeamTest.cs" />
     <Compile Include="SkillGroups\ModifySkillGroupTest.cs" />
-    <Compile Include="Intraday\PerformanceViewModelCreatorTest.cs" />
+    <Compile Include="Intraday\ApplicationLayer\IntradayPerformanceApplicationServiceTest.cs" />
     <Compile Include="Common\PublishPersoEmploymentNumberChangedEventTest.cs" />
     <Compile Include="Common\PublishPersonPeriodChangedEventTest.cs" />
     <Compile Include="Common\PublishPersonTerminatedChangeEventTest.cs" />
@@ -608,9 +611,9 @@
     <Compile Include="Common\ScheduleChangedEventDetector.cs" />
     <Compile Include="ApplicationLayer\Skill\AnalyticsSkillUpdaterTest.cs" />
     <Compile Include="Forecasting\SkillPriorityProviderTest.cs" />
-    <Compile Include="Intraday\StaffingViewModelCreatorEmailTest.cs" />
-    <Compile Include="Intraday\StaffingViewModelCreatorTestHelper.cs" />
-    <Compile Include="Intraday\StaffingViewModelCreatorTest.cs" />
+    <Compile Include="Intraday\ApplicationLayer\IntradayStaffingApplicationServiceEmailTest.cs" />
+    <Compile Include="Intraday\ApplicationLayer\IntradayStaffingApplicationServiceTestHelper.cs" />
+    <Compile Include="Intraday\ApplicationLayer\IntradayStaffingApplicationServiceTest.cs" />
     <Compile Include="Intraday\LatestStatisticsTimeProviderTest.cs" />
     <Compile Include="Notification\UserDeviceServiceTest.cs" />
     <Compile Include="Optimization\BlockPreferenceProviderTest.cs" />
@@ -727,7 +730,7 @@
     <Compile Include="Forecasting\OverrideTaskTest.cs" />
     <Compile Include="Forecasting\StaffingCalculatorServiceFacadeTest.cs" />
     <Compile Include="SkillGroups\CreateSkillGroupTest.cs" />
-    <Compile Include="Intraday\IncomingTrafficViewModelCreatorTest.cs" />
+    <Compile Include="Intraday\ApplicationLayer\IntradayIncomingTrafficApplicationServiceTest.cs" />
     <Compile Include="SkillGroups\DeleteSkillGroupTest.cs" />
     <Compile Include="SkillGroups\SkillGroupViewModelBuilderTest.cs" />
     <Compile Include="Intraday\FetchSkillInIntradayTest.cs" />
@@ -1143,7 +1146,6 @@
     <Compile Include="Scheduling\Assignment\MergeScheduleDayTest.cs" />
     <Compile Include="Scheduling\Assignment\PersonAssignment_MoveActivityTest.cs" />
     <Compile Include="Scheduling\Assignment\ScheduleDaySignificantPartTest.cs" />
-    <Compile Include="Scheduling\BackToLegalShift\LegalShiftDeciderTest.cs" />
     <Compile Include="Scheduling\Overtime\AdjustOvertimeLengthBasedOnAvailabilityTest.cs" />
     <Compile Include="Scheduling\Overtime\MergeOvertimeSkillIntervalDataTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeDateTimePeriodExtractorTest.cs" />

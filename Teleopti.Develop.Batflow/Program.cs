@@ -1,12 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using CommandLine;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Support.Library;
-using Teleopti.Support.Library.Config;
 using Teleopti.Support.Library.Folders;
 using Teleopti.Support.Security.Library;
 using Teleopti.Support.Tool.Tool;
@@ -25,20 +24,22 @@ namespace Teleopti.Develop.Batflow
 				.MapResult(
 					(FlowArguments arguments) =>
 					{
-						var flower = new DatabaseFlower(log);
+						var databaseBuilder = new DatabaseBuilder(log);
 
-						var develop = new DatabaseFlowCommand(arguments.DevelopBaseline, arguments.DevelopServer, null);
+						var develop = new BuildDatabasesCommand(arguments.DevelopBaseline, arguments.DevelopServer, null);
 						develop.ConsoleWrite();
-						flower.Flow(develop);
+						if (buildDatabases(arguments.DevelopBaseline, arguments.DevelopBuildDatabases))
+							databaseBuilder.Build(develop);
 						new FixMyConfigFixer().Fix(new FixMyConfigCommand
 						{
 							ApplicationDatabase = develop.ApplicationDatabase(),
 							AnalyticsDatabase = develop.AnalyticsDatabase()
 						});
 
-						var test = new DatabaseFlowCommand(arguments.TestBaseline, arguments.TestServer, "InfraTest");
+						var test = new BuildDatabasesCommand(arguments.TestBaseline, arguments.TestServer, "InfraTest");
 						test.ConsoleWrite();
-						flower.Flow(test);
+						if (buildDatabases(arguments.TestBaseline, arguments.TestBuildDatabases))
+							databaseBuilder.Build(test);
 						new InfraTestConfigurator().Configure(new InfraTestConfigCommand
 						{
 							ApplicationDatabase = test.ApplicationDatabase(),
@@ -52,11 +53,12 @@ namespace Teleopti.Develop.Batflow
 					},
 					(TestArguments arguments) =>
 					{
-						var flower = new DatabaseFlower(log);
+						var databaseBuilder = new DatabaseBuilder(log);
 
-						var test = new DatabaseFlowCommand(arguments.Baseline, arguments.Server, "InfraTest");
+						var test = new BuildDatabasesCommand(arguments.Baseline, arguments.Server, "InfraTest");
 						test.ConsoleWrite();
-						flower.Flow(test);
+						if (buildDatabases(arguments.Baseline, arguments.BuildDatabases))
+							databaseBuilder.Build(test);
 						new InfraTestConfigurator().Configure(new InfraTestConfigCommand
 						{
 							ApplicationDatabase = test.ApplicationDatabase(),
@@ -71,46 +73,58 @@ namespace Teleopti.Develop.Batflow
 					errs => 1);
 		}
 
+		public static bool buildDatabases(string baseline, bool buildDatabases) =>
+			!string.IsNullOrEmpty(baseline) || buildDatabases;
+
 		[Verb("test", HelpText = "Set up test projects according to convention.")]
 		public class TestArguments
 		{
-			[Option("server", Default = ".", HelpText = "Database server")]
+			[Option("buildDatabases", Default = false, HelpText = "Build databases.")]
+			public bool BuildDatabases { get; set; }
+
+			[Option("server", Default = ".", HelpText = "Database server.")]
 			public string Server { get; set; }
 
-			[Option("baseline", Default = "", HelpText = "Database baseline to restore")]
+			[Option("baseline", Default = null, HelpText = "Database baseline to restore. Builds databases if specified.")]
 			public string Baseline { get; set; }
 		}
 
 		[Verb("flow", HelpText = "Set up everything according to convention. Dont worry about it.")]
 		public class FlowArguments
 		{
-			[Option("develop.server", Default = ".", HelpText = "Development database server")]
+			[Option("develop.buildDatabases", Default = false, HelpText = "Build development databases.")]
+			public bool DevelopBuildDatabases { get; set; }
+
+			[Option("develop.server", Default = ".", HelpText = "Development database server.")]
 			public string DevelopServer { get; set; }
 
-			[Option("develop.baseline", Default = "DemoSales2017", HelpText = "Development database baseline to restore")]
+			[Option("develop.baseline", Default = "DemoSales2017",
+				HelpText = "Development database baseline to restore. Builds databases if specified.")]
 			public string DevelopBaseline { get; set; }
 
-			[Option("test.server", Default = ".", HelpText = "Test database server")]
+			[Option("test.buildDatabases", Default = false, HelpText = "Build test databases.")]
+			public bool TestBuildDatabases { get; set; }
+
+			[Option("test.server", Default = ".", HelpText = "Test database server.")]
 			public string TestServer { get; set; }
 
-			[Option("test.baseline", Default = "", HelpText = "Test database baseline to restore")]
+			[Option("test.baseline", Default = null,
+				HelpText = "Test database baseline to restore. Builds databases if specified.")]
 			public string TestBaseline { get; set; }
 		}
 
-		public class DatabaseFlowCommand
+		public class BuildDatabasesCommand
 		{
 			private readonly string _baseline;
 			private readonly string _server;
 			private readonly string _databasePrefix;
 
-			public DatabaseFlowCommand(string baseline, string server, string databasePrefix)
+			public BuildDatabasesCommand(string baseline, string server, string databasePrefix)
 			{
 				_baseline = baseline;
 				_server = server;
 				_databasePrefix = databasePrefix;
 			}
-
-			public bool ShouldRestore() => !string.IsNullOrEmpty(_baseline);
 
 			public string Server() => _server;
 
@@ -125,29 +139,46 @@ namespace Teleopti.Develop.Batflow
 			public string SqlPassword() => "cadadi";
 			public string SqlUserName() => "sa";
 
-			public string ApplicationDatabaseBackup() => findFile($"{_baseline}_teleopticcc7.bak");
-			public string AnalyticsDatabaseBackup() => findFile($"{_baseline}_TeleoptiAnalytics.bak");
-			public string AggDatabaseBackup() => findFile($"{_baseline}_teleopticccagg.bak");
+			public string ApplicationDatabaseBackup() => findBackupByHint("teleopticcc7", "ccc7", "app", "db");
+			public string AnalyticsDatabaseBackup() => findBackupByHint("TeleoptiAnalytics", "analytics");
+			public string AggDatabaseBackup() => findBackupByHint("TeleoptiAgg", "teleopticccagg", "agg");
 
-			public string DatabasePrefix() =>
+			private string databasePrefix() =>
 				string.IsNullOrEmpty(_databasePrefix) ? $"{RepositoryName()}_{_baseline}" : _databasePrefix;
 
-			public string ApplicationDatabase() => $"{DatabasePrefix()}_TeleoptiWfm";
-			public string AnalyticsDatabase() => $"{DatabasePrefix()}_TeleoptiAnalytics";
-			public string AggDatabase() => $"{DatabasePrefix()}_TeleoptiAgg";
+			public string ApplicationDatabase() => $"{databasePrefix()}_TeleoptiWfm";
+			public string AnalyticsDatabase() => $"{databasePrefix()}_TeleoptiAnalytics";
+			public string AggDatabase() => $"{databasePrefix()}_TeleoptiAgg";
 
-			private string findFile(string name)
+			private string findBackupByHint(params string[] hints)
+			{
+				var hintsUpper = hints.Select(x => x.ToUpper());
+				var file = allBackups()
+					.Where(x =>
+					{
+						var name = x.Name.ToUpper();
+						if (_baseline != null)
+							return hintsUpper.Any(hint => name == $"{_baseline}_{hint}.bak".ToUpper());
+						return hintsUpper.Any(hint => name.Contains(hint));
+					})
+					.Select(x => x.FullName)
+					.FirstOrDefault();
+				return file;
+			}
+
+			private IEnumerable<FileInfo> allBackups()
 			{
 				var folders = new[] {".", ".com.teleopti.wfm.developer.tools"};
 
 				var files = from d in folders
 					let folderPath = Path.Combine(RepositoryPath(), d)
-					where Directory.Exists(folderPath)
-					let foundFiles = Directory.GetFiles(folderPath, name, SearchOption.TopDirectoryOnly)
+					let directory = new DirectoryInfo(folderPath)
+					where directory.Exists
+					let foundFiles = directory.GetFiles("*.bak", SearchOption.TopDirectoryOnly)
 					from f in foundFiles
 					select f;
 
-				return files.FirstOrDefault();
+				return files;
 			}
 
 			public void ConsoleWrite()
@@ -168,21 +199,17 @@ namespace Teleopti.Develop.Batflow
 			}
 		}
 
-		public class DatabaseFlower
+		public class DatabaseBuilder
 		{
 			private readonly IUpgradeLog _log;
 
-
-			public DatabaseFlower(IUpgradeLog log)
+			public DatabaseBuilder(IUpgradeLog log)
 			{
 				_log = log;
 			}
 
-			public void Flow(DatabaseFlowCommand command)
+			public void Build(BuildDatabasesCommand command)
 			{
-				if (!command.ShouldRestore())
-					return;
-
 				new DatabasePatcher(_log).Run(new PatchCommand
 				{
 					ServerName = command.Server(),
@@ -194,6 +221,7 @@ namespace Teleopti.Develop.Batflow
 					AppUserName = command.SqlUserName(),
 					AppUserPassword = command.SqlPassword(),
 					DbManagerFolderPath = command.DatabaseSourcePath(),
+					CreateDatabase = command.ApplicationDatabaseBackup() == null,
 					RestoreBackupIfNotExistsOrNewer = command.ApplicationDatabaseBackup()
 				});
 
@@ -208,6 +236,7 @@ namespace Teleopti.Develop.Batflow
 					AppUserName = command.SqlUserName(),
 					AppUserPassword = command.SqlPassword(),
 					DbManagerFolderPath = command.DatabaseSourcePath(),
+					CreateDatabase = command.AnalyticsDatabaseBackup() == null,
 					RestoreBackupIfNotExistsOrNewer = command.AnalyticsDatabaseBackup()
 				});
 
@@ -222,6 +251,7 @@ namespace Teleopti.Develop.Batflow
 					AppUserName = command.SqlUserName(),
 					AppUserPassword = command.SqlPassword(),
 					DbManagerFolderPath = command.DatabaseSourcePath(),
+					CreateDatabase = command.AggDatabaseBackup() == null,
 					RestoreBackupIfNotExistsOrNewer = command.AggDatabaseBackup()
 				});
 

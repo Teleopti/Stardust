@@ -68,7 +68,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 
 		public ScheduleDayReadModel Build(IPerson person,IScheduleDay scheduleDay)
 		{
-			var eventScheduleDay = _builder.BuildEventScheduleDay(scheduleDay);
+			var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
+			var personPeriod = scheduleDay.Person.Period(date);
+
+			ProjectionChangedEventScheduleDay eventScheduleDay = null;
+			if (personPeriod != null)
+			{
+				eventScheduleDay = _builder.BuildEventScheduleDay(scheduleDay);
+			}
 			return _scheduleDayReadModelsCreator.GetReadModel(eventScheduleDay,person);
 		}
 

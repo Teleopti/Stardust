@@ -83,6 +83,9 @@
 						set isSelected(newValue) {
 							rtaStateService.selectSite(site.Id, newValue);
 						},
+						get ClassesOnSelection() {
+							return this.isSelected ? (this.Color + classSuffixOnSelection + ' ' + noBorderClass) : (this.Color + classSuffixNoSelection);
+						},
 						teams: [],
 						AgentsCount: site.AgentsCount,
 						href: rtaStateService.agentsHrefForSite(site.Id)
@@ -90,9 +93,8 @@
 
 					vm.siteCards.push(siteCard);
 				}
-
+				siteCard.Color = site.Color; 	//internal
 				updateTeams(siteCard, site.Teams);
-				siteCard.ClassesOnSelection = siteCard.isSelected ? (site.Color + classSuffixOnSelection + ' ' + noBorderClass) : (site.Color + classSuffixNoSelection);
 				siteCard.InAlarmCount = site.InAlarmCount;
 			});
 		}

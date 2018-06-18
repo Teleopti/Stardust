@@ -30,6 +30,8 @@
 		display: none !important;
 	}
 	#loading {
+		width: 100%;
+		text-align: center;
 		top: 40vh;
 		background: transparent;
 	}
@@ -87,6 +89,7 @@
 		</div>
 
 		<!-- ko if: mySchedule -->
+		<div class="timeline-margin-block"></div>
 		<div class="mobile-teamschedule-agent-name my-name" data-bind="tooltip: { title: mySchedule().name, trigger: 'click', placement: 'bottom'}, hideTooltipAfterMouseLeave: true">
 			<span class="text-name">@Resources.MySchedule</span>
 			<span class="team-schedule-arrow-up"><i class="glyphicon glyphicon-chevron-up"></i></span>
@@ -108,35 +111,9 @@
 			<!-- ko if: mySchedule -->
 			<div class="mobile-schedule-container relative">
 				<!-- ko foreach: mySchedule().layers -->
-				<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-background-image-light': isOvertime, overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime, overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustMyScheduleTooltipPositionOnMobileTeamSchedule: true">
-					<div data-bind="visible: showTitle() && !isOvertimeAvailability()"></div>
-					<strong data-bind="text: title()"></strong>
-					<!-- ko if: hasMeeting -->
-					<div class="meeting floatright">
-						<i class="meeting-icon mr10">
-							<i class="glyphicon glyphicon-user ml10"></i>
-						</i>
-					</div>
-					<!-- /ko -->
-					<span class="fullwidth displayblock" data-bind="visible: false && showDetail, text: timeSpan"></span>
-				</div>
-				<div data-bind="visible: false && showTitle() && isOvertimeAvailability()">
-					<i class="glyphicon glyphicon-time"></i>
-				</div>
-				<!-- /ko -->
-			</div>
-			<!-- /ko -->
-		</div>
-
-		<!-- ko if: teamSchedules -->
-		<div class="teammates-schedules-container" data-bind="style: {height: scheduleContainerHeight() + 'px'}">
-			<!-- ko foreach: teamSchedules -->
-			<div class="teammates-schedules-column relative">
-				<div class="mobile-schedule-container relative">
-					<!-- ko foreach: layers -->
-					<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-background-image-light': isOvertime, overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime, overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">
-						<div data-bind="visible: showTitle() && !isOvertimeAvailability()"></div>
-						<strong data-bind="visible: false, text: title()"></strong>
+				<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-background-image-light': isOvertime, overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime, overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true">
+					<div data-bind="visible: showTitle() && !isOvertimeAvailability()">
+						<strong data-bind="text: title()"></strong>
 						<!-- ko if: hasMeeting -->
 						<div class="meeting floatright">
 							<i class="meeting-icon mr10">
@@ -149,7 +126,43 @@
 					<div data-bind="visible: false && showTitle() && isOvertimeAvailability()">
 						<i class="glyphicon glyphicon-time"></i>
 					</div>
+				</div>
+				<!-- /ko -->
+				<!--ko if:mySchedule().isDayOff-->
+				<div class="dayoff" data-bind="tooltip: { title: mySchedule().dayOffName, html: true, trigger: 'click' }">
+					<span class="dayoff-text" data-bind="text: mySchedule().dayOffName"></span>
+				</div>
+				<!--/ko-->
+			</div>
+			<!-- /ko -->
+		</div>
+
+		<!-- ko if: teamSchedules -->
+		<div class="teammates-schedules-container relative" data-bind="style: {height: scheduleContainerHeight() + 'px'}">
+			<!-- ko foreach: teamSchedules -->
+			<div class="teammates-schedules-column relative">
+				<div class="mobile-schedule-container relative">
+					<!-- ko foreach: layers -->
+					<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-background-image-light': isOvertime, overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime, overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">
+						<div data-bind="visible: showTitle() && !isOvertimeAvailability()">
+							<strong data-bind="visible: false, text: title()"></strong>
+							<!-- ko if: hasMeeting -->
+							<div class="meeting floatright">
+								<i class="meeting-icon mr10">
+									<i class="glyphicon glyphicon-user ml10"></i>
+								</i>
+							</div>
+							<!-- /ko -->
+							<span class="fullwidth displayblock" data-bind="visible: false && showDetail, text: timeSpan"></span>
+						</div>
+						<div data-bind="visible: false && showTitle() && isOvertimeAvailability()">
+							<i class="glyphicon glyphicon-time"></i>
+						</div>
+					</div>
 					<!-- /ko -->
+					<!--ko if:isDayOff-->
+					<div class="dayoff" data-bind="tooltip: { title: dayOffName, html: true, trigger: 'click' }, adjustTooltipPositionOnMobileTeamSchedule: true"></div>
+					<!--/ko-->
 				</div>
 			</div>
 			<!-- /ko -->
@@ -184,8 +197,8 @@
 				<!--/ko-->
 			</div>
 			<div class="mobile-teamschedule-submit-buttons">
-				<button class="btn btn-default pull-right" data-bind="click: toggleFilterPanel">@Resources.Cancel</button>
-				<button class="btn btn-primary pull-left" data-bind="click: submitSearchForm">@Resources.Search</button>
+				<button class="btn btn-default" data-bind="click: cancelClick">@Resources.Cancel</button>
+				<button class="btn btn-primary" data-bind="click: submitSearchForm">@Resources.Search</button>
 			</div>
 		</div>
 		<!--/ko-->

@@ -131,6 +131,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 
 			$('a[href="#ScheduleTab"]').attr({
 				href: '#Schedule/MobileDay',
+				'data-mytime-action': 'Schedule/MobileDay'
 			});
 		}
 	}

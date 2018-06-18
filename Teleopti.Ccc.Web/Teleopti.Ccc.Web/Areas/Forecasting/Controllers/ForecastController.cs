@@ -20,6 +20,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebForecasts)]
 	public class ForecastController : ApiController
 	{
+		private const double tolerance = 0.000001d;
+
 		private readonly IForecastCreator _forecastCreator;
 		private readonly ISkillRepository _skillRepository;
 		private readonly ForecastProvider _forecastProvider;
@@ -61,13 +63,15 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		[UnitOfWork, Route("api/Forecasting/Skills"), HttpGet]
 		public virtual SkillsViewModel Skills()
 		{
-			var skillList = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
+			var skillList = _skillRepository.FindSkillsWithAtLeastOneQueueSource().ToList();
+			var skillTypes = skillList.ToDictionary(x => x.Id, x => x.SkillType.Description.Name);
 			return new SkillsViewModel
 			{
 				IsPermittedToModifySkill = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebModifySkill),
 				Skills = skillList.Select(skill => new SkillAccuracy
 				{
 					Id = skill.Id.Value,
+					SkillType = skillTypes[skill.Id.Value],
 					Workloads = skill.WorkloadCollection.Select(x => new WorkloadAccuracy
 					{
 						Id = x.Id.Value,
@@ -112,7 +116,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 					continue;
 				}
 
-				forecastDay.HasCampaign = Math.Abs(input.CampaignTasksPercent) > 0.0001;
+				forecastDay.HasCampaign = Math.Abs(input.CampaignTasksPercent) > tolerance;
+				forecastDay.IsInModification = true;
 				forecastDay.CampaignTasksPercentage = input.CampaignTasksPercent;
 				forecastDay.TotalTasks = (input.CampaignTasksPercent + 1) * forecastDay.Tasks;
 			}
@@ -136,13 +141,14 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 					continue;
 				}
 
+				forecastDay.IsInModification = true;
 				if (input.ShouldOverrideTasks)
 				{
 					if (input.OverrideTasks.HasValue)
 					{
 						forecastDay.TotalTasks = input.OverrideTasks.Value;
 					}
-					else if (forecastDay.CampaignTasksPercentage > 0)
+					else if (Math.Abs(forecastDay.CampaignTasksPercentage) > tolerance)
 					{
 						forecastDay.TotalTasks = (forecastDay.CampaignTasksPercentage + 1) * forecastDay.Tasks;
 					}
@@ -176,7 +182,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 				}
 				else
 				{
-					forecastDay.HasCampaign = Math.Abs(forecastDay.CampaignTasksPercentage) > 0.0001;
+					forecastDay.HasCampaign = Math.Abs(forecastDay.CampaignTasksPercentage) > tolerance;
 				}
 			}
 
@@ -202,11 +208,12 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			var periodStart = new DateOnly(forecastResult.ForecastDays.Min(x => x.Date).Date);
 			var periodEnd = new DateOnly(forecastResult.ForecastDays.Max(x => x.Date).Date);
 			var forecastPeriod = new DateOnlyPeriod(periodStart, periodEnd);
-			var skillDays = _fetchAndFillSkillDays.FindRange(forecastPeriod, workload.Skill, scenario);
+			var skillDays = _fetchAndFillSkillDays.FindRange(forecastPeriod, workload.Skill, scenario).ToDictionary(x => x.CurrentDate);
 			var overrideDays = _forecastDayOverrideRepository.FindRange(forecastPeriod, workload, scenario).ToDictionary(k => k.Date);
 
-			foreach (var skillDay in skillDays)
+			foreach (var forecastDay in forecastResult.ForecastDays)
 			{
+				var skillDay = skillDays[forecastDay.Date];
 				var forecastedWorkloadDay = skillDay.WorkloadDayCollection
 					.SingleOrDefault(x => x.Workload.Id.Value == forecastResult.WorkloadId);
 				if (!forecastedWorkloadDay.OpenForWork.IsOpen)

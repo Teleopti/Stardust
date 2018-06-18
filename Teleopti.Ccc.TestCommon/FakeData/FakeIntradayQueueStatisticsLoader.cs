@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -12,6 +12,14 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	{
 		private IList<SkillIntervalStatistics> _latestStatisticsTimeAndWorkload = new List<SkillIntervalStatistics>();
 		private IDictionary<Guid, int> _workloadBacklogDictionary = new Dictionary<Guid, int>();
+
+		public IList<SkillIntervalStatistics> LoadSkillVolumeStatistics(IList<ISkill> skills, DateTime startOfDayUtc)
+		{
+			return _latestStatisticsTimeAndWorkload
+				.Where(x => x.StartTime >= startOfDayUtc)
+				.OrderBy(o => o.StartTime)
+				.ToList();
+		}
 
 		public IList<SkillIntervalStatistics> LoadActualCallPerSkillInterval(IList<ISkill> skillList, TimeZoneInfo timeZone, DateOnly today)
 		{
@@ -36,5 +44,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			_workloadBacklogDictionary.Add(workloadId, backLog);
 		}
+
+
 	}
 }

@@ -4,7 +4,6 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 {
-	
 	public class Context
 	{
 		private readonly ProperAlarm _appliedAlarm;
@@ -14,8 +13,8 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 		public Context(
 			DateTime time,
 			DeadLockVictim deadLockVictim,
-			InputInfo input, 
-			AgentState stored, 
+			InputInfo input,
+			AgentState stored,
 			IEnumerable<ScheduledActivity> schedule,
 			StateMapper stateMapper,
 			ProperAlarm appliedAlarm)
@@ -78,21 +77,18 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 				return true;
 			return false;
 		}
-		
+
 		// for logging
 		public override string ToString()
 		{
 			return $"Time: {Time}, UserCode: {_input?.UserCode}, StateCode: {_input?.StateCode}, SourceId: {_input?.SourceId}, PersonId: {PersonId}, BusinessUnitId: {BusinessUnitId}, TeamId: {TeamId}, SiteId: {SiteId}";
 		}
 
-		public bool ArrivingAfterLateForWork;
-		public bool LateForWork;
-		
 		public string InputStateCode() => _input?.StateCode;
 		public string InputStateDescription() => _input?.StateDescription;
 
 		public DateTime? SnapshotId => _input?.SnapshotId ?? Stored.SnapshotId;
-		public int? SnapshotDataSourceId => _input?.SnapshotDataSourceId ??  Stored.SnapshotDataSourceId;
+		public int? SnapshotDataSourceId => _input?.SnapshotDataSourceId ?? Stored.SnapshotDataSourceId;
 		public DateTime? StateStartTime => State.StateChanged() ? Time : Stored.StateStartTime;
 		public DateTime? RuleStartTime => State.RuleChanged() ? Time : Stored.RuleStartTime;
 		public bool IsAlarm => _appliedAlarm.IsAlarm(State);
@@ -124,10 +120,8 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 
 				AlarmStartTime = AlarmStartTime,
 
-				TimeWindowCheckSum = Schedule.TimeWindowCheckSum(),
-				LateForWork = LateForWork
+				TimeWindowCheckSum = Schedule.TimeWindowCheckSum()
 			};
 		}
-
 	}
 }

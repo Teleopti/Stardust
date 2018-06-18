@@ -32,10 +32,17 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 			foreach (var staffingPeriodData in staffingPeriodDatas)
 			{
-				skillCombinationResources.AddRange(createSkillCombinationResources(skill, staffingPeriodData.Period,
-					staffingPeriodData.ScheduledStaffing));
-				skillForecastedStaffings.AddRange(createSkillForecastedStaffings(skill, staffingPeriodData.Period,
-					staffingPeriodData.ForecastedStaffing, timezone));
+				skillCombinationResources.AddRange(
+					createSkillCombinationResources(
+						skill, 
+						staffingPeriodData.Period,
+						staffingPeriodData.ScheduledStaffing));
+				skillForecastedStaffings.AddRange(
+					createSkillForecastedStaffings(
+						skill, 
+						staffingPeriodData.Period,
+						staffingPeriodData.ForecastedStaffing, 
+						timezone));
 			}
 
 			setupIntradayStaffingForSkill(skill, date, skillCombinationResources, skillForecastedStaffings, serviceAgreement);

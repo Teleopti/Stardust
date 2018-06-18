@@ -20,6 +20,8 @@
 *.scc
 *.tokens
 *.orig
+*.ldf
+*.mdf
 
 # teleopti things
 *.[Cc]onfig

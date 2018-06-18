@@ -1,3 +1,5 @@
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -13,6 +15,7 @@ namespace Teleopti.Ccc.Domain.Common
 	{
 		private static ICurrentAuthorization _currentAuthorization;
 		private static ITimeZoneGuard _timeZoneGuard;
+		private static CreateMergedCollection _createMergedCollection;
 
 		public static ICurrentAuthorization CurrentAuthorization
 		{
@@ -24,6 +27,13 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			get { return _timeZoneGuard ?? (_timeZoneGuard = new TimeZoneGuard()); }
 			set { _timeZoneGuard = value; }
+		}
+
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_LessResourcesXXL_74915)]
+		public static CreateMergedCollection CreateMergedCollection
+		{
+			get => _createMergedCollection ?? new CreateMergedCollection();
+			set => _createMergedCollection = value;
 		}
 	}
 

@@ -3389,8 +3389,8 @@ Replace</value>
     <comment>The week contains to much work time ({0}) the max is {1}.</comment>
   </data>
   <data name="BusinessRuleNightlyRestRuleErrorMessage" xml:space="preserve">
-    <value>There must be a daily rest of at least {0} hours between 2 shifts. Between {1} and {2} there are only {3} hours.</value>
-    <comment>There must be a daily rest of at least {0} hours between 2 shifts. Between {1} and {2} there are only {3} hours.</comment>
+    <value>There must be a nightly rest of at least {0} hours between 2 shifts. Between {1} and {2} there are only {3} hours.</value>
+    <comment>There must be a nightly rest of at least {0} hours between 2 shifts. Between {1} and {2} there are only {3} hours.</comment>
   </data>
   <data name="BusinessRuleNoContractErrorMessage" xml:space="preserve">
     <value>Person {0} has no contract defined for the current date {1}.</value>
@@ -17352,11 +17352,11 @@ The application will now exit.</value>
     <comment>Late x minutes alert</comment>
   </data>
   <data name="CampaignNotAppliedWIthExistingOverride" xml:space="preserve">
-    <value>Campaign not applied for overrided days</value>
+    <value>Campaign not applied for days with override</value>
     <comment>Warning message to show when campaign not applied for overrided days</comment>
   </data>
   <data name="ClearCampaignWIthOverride" xml:space="preserve">
-    <value>Override replaced existing campaign values</value>
+    <value>Override removed existing campaign values</value>
     <comment>Warning message to show when override is added on top of existing campaign</comment>
   </data>
   <data name="RestrictionNotAbleToBeScheduledReasonNoIssue" xml:space="preserve">
@@ -17376,5 +17376,25 @@ The application will now exit.</value>
   <data name="NoResultForCurrentFilter" xml:space="preserve">
     <value>No result for current filter</value>
     <comment>No result tip for mobile teamschedule view filter</comment>
+  </data>
+  <data name="AppliedACampaign" xml:space="preserve">
+    <value>Applied campaign</value>
+    <comment>confirmation message</comment>
+  </data>
+  <data name="AppliedAOverride" xml:space="preserve">
+    <value>Applied override</value>
+    <comment>confirmation message</comment>
+  </data>
+  <data name="NewForecastIntro" xml:space="preserve">
+    <value>This is the current forecast for this workload</value>
+  </data>
+  <data name="NoForecast" xml:space="preserve">
+    <value>No forecast data was found. Try running a forecast for this scenario.</value>
+  </data>
+  <data name="Saving" xml:space="preserve">
+    <value>Saving. This might take a while...</value>
+  </data>
+  <data name="ThisScenarioHasChanges" xml:space="preserve">
+    <value>This scenario has unsaved changes</value>
   </data>
 </root>

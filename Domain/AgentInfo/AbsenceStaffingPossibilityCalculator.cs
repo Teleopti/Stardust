@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 				if (hasFairPossibilityInThisInterval(intervalPossibilities, skillStaffingData.Time))
 					continue;
-
+				
 				substractUsersSchedule(skillStaffingData, personAssignmentDictionary[skillStaffingData.Date]);
 
 				var possibility = calculatePossibility(skillStaffingData);
@@ -164,7 +164,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			if (!skillScheduled) return;
 			// we can't calculate current user's schedule for a skill in a specific period
 			// so we just substract 1 which means user's schedule is removed(#44607)
-			skillStaffingData.ScheduledStaffing -= 1;
+			if (skillStaffingData.ScheduledStaffing <= 1)
+				skillStaffingData.ScheduledStaffing = 0;
 		}
 
 		private static bool hasFairPossibilityInThisInterval(Dictionary<DateTime, int> intervalPossibilities, DateTime time)

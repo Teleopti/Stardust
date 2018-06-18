@@ -442,28 +442,51 @@
 			var schedule = {
 				"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
 				"Name": "Annika Andersson",
-				"Date": "2018-05-21",
+				"Date": "2018-06-11",
 				"WorkTimeMinutes": 240,
 				"ContractTimeMinutes": 240,
 				"Projection": [{
 					"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
 					"Color": "#ffffff",
 					"Description": "Phone",
-					"Start": "2018-05-21 05:30",
-					"End": "2018-05-21 07:30",
+					"Start": "2018-06-11 05:30",
+					"End": "2018-06-11 07:30",
 					"Minutes": 120,
 					"IsOvertime": false
 				}],
 				"Timezone": { "IanaId": "Europe/Berlin" }
 			};
-			var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", [schedule], "2018-05-21", "Europe/Berlin");
+			var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", [schedule], "2018-06-11", "Europe/Berlin");
 
 			var shiftLayers = panel[0].querySelectorAll(".shift-layer");
 			shiftLayers[0].click();
 
 			var timespanEl = panel[0].querySelector(".timespan");
-			expect(timespanEl.innerText.trim()).toBe("2018-05-21 5:30 AM - 2018-05-21 7:30 AM");
+			expect(timespanEl.innerText.trim()).toBe("06/11/2018 5:30 AM - 06/11/2018 7:30 AM");
 
+		});
+
+		it("should render date correctly", function () {
+			var schedule = {
+				"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+				"Name": "Annika Andersson",
+				"Date": "2018-06-12",
+				"WorkTimeMinutes": 240,
+				"ContractTimeMinutes": 240,
+				"Projection": [{
+					"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+					"Color": "#ffffff",
+					"Description": "E-mail",
+					"Start": "2018-06-12 08:00",
+					"Minutes": 120,
+					"IsOvertime": false
+				}],
+				"Timezone": { "IanaId": "Europe/Berlin" }
+			};
+			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', [schedule], '2018-06-12', 'Europe/Berlin');
+			var element = panel[0];
+
+			expect(element.querySelector('.date').innerText.trim()).toEqual('06/12/2018');
 		});
 	});
 
@@ -491,7 +514,7 @@
 			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', [schedule], '2018-05-24', 'Europe/Berlin');
 			var element = panel[0];
 
-			expect(element.querySelector('.date').innerText.trim()).toEqual('۲۰۱۸-۰۵-۲۴');
+			expect(element.querySelector('.date').innerText.trim()).toEqual('۲۴/۰۵/۲۰۱۸');
 		});
 	});
 

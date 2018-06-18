@@ -11,12 +11,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	public class ScheduleChangedEventPublisher : ITransactionHook
 	{
 		private readonly IEventPopulatingPublisher _eventPublisher;
-		private readonly INow _now;
 
-		public ScheduleChangedEventPublisher(IEventPopulatingPublisher eventPublisher, INow now)
+		public ScheduleChangedEventPublisher(IEventPopulatingPublisher eventPublisher)
 		{
 			_eventPublisher = eventPublisher;
-			_now = now;
 		}
 
 		public void AfterCompletion(IEnumerable<IRootChangeInfo> modifiedRoots)

@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErr
 	/// An <see cref="IBatcherFactory"/> implementation that creates
 	/// <see cref="ReliableSqlClientBatchingBatcher"/> instances.
 	/// </summary>
-	[RemoveMeWithToggle(Toggles.Tech_Moving_ResilientConnectionLogic)]
+	[RemoveMeWithToggle(Toggles.Tech_Moving_ResilientConnectionLogic_76181)]
 	public class ReliableSqlClientBatchingBatcherFactory : IBatcherFactory
 	{
 		/// <summary>

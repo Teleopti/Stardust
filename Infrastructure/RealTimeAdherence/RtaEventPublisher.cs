@@ -18,14 +18,6 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence
 	{
 	}
 
-	[RemoveMeWithToggle(Toggles.RTA_RemoveApprovedOOA_47721)]
-	public class NoRtaEventPublisher : IRtaEventPublisher
-	{
-		public void Publish(params IEvent[] events)
-		{
-		}
-	}
-
 	public class RtaEventPublisher : IRtaEventPublisher
 	{
 		private readonly IRtaEventStore _store;
@@ -41,8 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence
 			_store = store;
 			_currentDataSource = currentDataSource;
 		}
-		
-		
+
 		public void Publish(params IEvent[] events)
 		{
 			var storedEvents = events.OfType<IRtaStoredEvent>().Cast<IEvent>().ToArray();

@@ -73,8 +73,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 		private readonly ILateForWorkEventPublisher _lateForWorkEventPublisher;
 		private readonly IRtaTracer _tracer;
 
-		private const int threshold = 59;
-
 		public AgentStateProcessor(
 			ShiftEventPublisher shiftEventPublisher,
 			ActivityEventPublisher activityEventPublisher,
@@ -160,7 +158,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 					processInput.AppliedAlarm);
 				if (context.ShouldProcessState())
 				{
-					new ChocaChocaDoer().DoesItNow(context);
 					process(context);
 					workingState = context.MakeAgentState();
 					outState = workingState;
@@ -169,33 +166,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 
 			return outState;
 		}
-
-		private class ChocaChocaDoer
-		{
-			public void DoesItNow(Context context)
-			{
-				context.ArrivingAfterLateForWork = context.Stored.LateForWork &&
-												   context.State.IsLoggedIn() &&
-												   isOutsideTreshold(context.Time, context.Schedule.CurrentShiftStartTime);
-
-				var lateForWork = context.Schedule.ShiftStarted() && context.State.IsLoggedOut();
-				if (!context.ArrivingAfterLateForWork)
-					context.LateForWork = context.Stored.LateForWork || lateForWork;
-
-				if (context.Schedule.ShiftEnded())
-				{
-					context.LateForWork = false;
-					context.ArrivingAfterLateForWork = false;
-				}
-			}
-		}
-
-		private static bool isOutsideTreshold(DateTime stateTime, DateTime shiftStart)
-		{
-			var timeSinceShiftStart = stateTime - shiftStart;
-			return timeSinceShiftStart.TotalSeconds > threshold;
-		}
-
 
 		private void process(Context context)
 		{

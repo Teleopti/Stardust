@@ -7,14 +7,15 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export.Web
 {
 	public static class ForecastExportHeaderModelCreator
 	{
-		public static ForecastExportHeaderModel Load(ISkill skill, IList<ISkillDay> skillDays, DateOnlyPeriod period)
+		public static ForecastExportHeaderModel Load(string scenario, ISkill skill, IList<ISkillDay> skillDays, DateOnlyPeriod period)
 		{
 			var model = new ForecastExportHeaderModel
 			{
 				Period = period,
 				SkillName = skill.Name,
-				SkillTimeZoneName = skill.TimeZone.DisplayName
-			};
+				SkillTimeZoneName = skill.TimeZone.DisplayName,
+				Scenario = scenario
+		};
 
 			if (!skillDays.Any())
 				return model;
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export.Web
 			model.ServiceLevelPercent = firstSkillDaysDataPeriodFirst.ServiceLevelPercent;
 			model.ServiceLevelSeconds = firstSkillDaysDataPeriodFirst.ServiceLevelSeconds;
 			model.ShrinkagePercent = firstSkillDaysDataPeriodFirst.Shrinkage;
-
+			
 			return model;
 		}
 	}

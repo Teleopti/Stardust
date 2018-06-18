@@ -11,29 +11,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 	public class SchedulePlanningPeriodCommandHandler
 	{
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
-		private readonly FullScheduling _fullScheduling;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly IEventPopulatingPublisher _eventPopulatingPublisher;
 
-		public SchedulePlanningPeriodCommandHandler(IPlanningPeriodRepository planningPeriodRepository, FullScheduling fullScheduling, ILoggedOnUser loggedOnUser, IJobResultRepository jobResultRepository, IEventPopulatingPublisher eventPopulatingPublisher)
+		public SchedulePlanningPeriodCommandHandler(IPlanningPeriodRepository planningPeriodRepository, ILoggedOnUser loggedOnUser, IJobResultRepository jobResultRepository, IEventPopulatingPublisher eventPopulatingPublisher)
 		{
 			_planningPeriodRepository = planningPeriodRepository;
-			_fullScheduling = fullScheduling;
 			_loggedOnUser = loggedOnUser;
 			_jobResultRepository = jobResultRepository;
 			_eventPopulatingPublisher = eventPopulatingPublisher;
 		}
-
-		public object Execute(Guid planningPeriodId, bool runAsynchronously)
-		{
-			if(runAsynchronously)
-				return ExecuteAsync(planningPeriodId);
-			return ExecuteSync(planningPeriodId);
-		}
-
+		
 		[UnitOfWork]
-		protected virtual Guid ExecuteAsync(Guid planningPeriodId)
+		public virtual object Execute(Guid planningPeriodId)
 		{
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var jobResult = new JobResult(JobCategory.WebSchedule, planningPeriod.Range, _loggedOnUser.CurrentUser(), DateTime.UtcNow);
@@ -45,11 +36,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 				JobResultId = jobResult.Id.Value
 			});
 			return jobResult.Id.Value;
-		}
-
-		protected SchedulingResultModel ExecuteSync(Guid planningPeriodId)
-		{
-			return _fullScheduling.DoScheduling(planningPeriodId);
 		}
 	}
 }

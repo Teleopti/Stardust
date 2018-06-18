@@ -17,10 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 
 		public static string ToCSV(this Color color)
 		{
-			return string.Format("{0},{1},{2}", color.R, color.G, color.B);
+			return $"{color.R},{color.G},{color.B}";
 		}
-
-
-
 	}
 }

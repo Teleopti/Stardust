@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 				25,
 				25));
 
-			Target.Execute(planningPeriod.Id.Value, true);
+			Target.Execute(planningPeriod.Id.Value);
 
 			var lastJobResult = JobResultRepository.LoadAll().First();
 			var result = JsonConvert.DeserializeObject<OptimizationResultModel>(lastJobResult.Details.Last().Message);
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			dayCount[6].RelativeDifference.Should().Be.EqualTo(-0.96);
 		}
 
-		public SchedulePlanningPeriodCommandHandlerHeatMapTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerMinimumAgents75339, bool resourcePlannerLessResourcesXXL74915) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerMinimumAgents75339, resourcePlannerLessResourcesXXL74915)
+		public SchedulePlanningPeriodCommandHandlerHeatMapTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerLessResourcesXXL74915) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerLessResourcesXXL74915)
 		{
 		}
 	}

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -68,13 +68,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			}
 
 			var validateSkillsResult = validateSkills(personRequest);
-			if (!validateSkillsResult.IsValid)
+
+			if (validateSkillsResult.SkillDictionary == null)
 			{
 				handleOvertimeRequestValidationResult(personRequest, validateSkillsResult);
 				return;
 			}
 
 			var overTimeRequestOpenPeriod = getOvertimeRequestOpenPeriod(validateSkillsResult, personRequest);
+			if (!validateSkillsResult.IsValid)
+			{
+				validateSkillsResult.ShouldDenyIfInValid =
+					overTimeRequestOpenPeriod.AutoGrantType == OvertimeRequestAutoGrantType.Yes;
+				handleOvertimeRequestValidationResult(personRequest, validateSkillsResult);
+				return;
+			}
 
 			var workRuleValidationResult = validateWorkRules(personRequest, overTimeRequestOpenPeriod);
 			if (!workRuleValidationResult.IsValid)
@@ -150,7 +158,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 
 		private OvertimeRequestSkillTypeFlatOpenPeriod getOvertimeRequestOpenPeriod(OvertimeRequestAvailableSkillsValidationResult validateSkillsResult, IPersonRequest personRequest)
 		{
-			var skillTypes = validateSkillsResult.SkillDictionary.SelectMany(x => x.Value).Distinct().ToArray();
+			var skills = validateSkillsResult.SkillDictionary.SelectMany(x => x.Value).Distinct().ToArray();
 			if (personRequest.Person.WorkflowControlSet == null)
 				return new OvertimeRequestSkillTypeFlatOpenPeriod
 				{
@@ -163,7 +171,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				new SkillTypeFlatOvertimeOpenPeriodMapper().Map(personRequest.Person.WorkflowControlSet.OvertimeRequestOpenPeriods, defaultSkillType).Where(x =>
 				{
 					var skillType = x.SkillType;
-					var matchedSkillTypes = skillTypes.Where(s => s.SkillType.Equals(skillType)).ToList();
+					var matchedSkillTypes = skills.Where(s => s.SkillType.Equals(skillType)).ToList();
 					return matchedSkillTypes.Any();
 				}).ToList();
 

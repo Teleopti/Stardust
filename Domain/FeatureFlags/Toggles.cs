@@ -16,9 +16,6 @@
 		
 		Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850,
 
-		RTA_RemoveApprovedOOA_47721,
-		RTA_StoreEvents_47721,
-		RTA_ImprovedStateGroupFilter_48724,
 		RTA_KillFattyIntradayUntilItDies_74939,
 		RTA_RestrictModifyAdherenceWithPermission_74898,
 		RTA_EasilySpotLateForWork_75668,
@@ -73,6 +70,8 @@
 		Scheduler_RestrictionReport_47013,
 		Scheduler_RestrictionReportToggleAll_76224,
 
+		People_SpeedUpOpening_76365,
+
 		WfmGlobalLayout_personalOptions_37114,
 		
 		ResourcePlanner_HideSkillPrioSliders_41312,
@@ -85,7 +84,6 @@
 		ResourcePlanner_SpeedUpEvents_74996,
 		ResourcePlanner_SpeedUpEvents_75415,
 		ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899,
-		ResourcePlanner_MinimumAgents_75339,
 		ResourcePlanner_UseErlangAWithFinitePatience_47738,
 		ResourcePlanner_LessResourcesXXL_74915,
 
@@ -158,7 +156,9 @@
 		People_ImprovePersonAccountAccuracy_74914,
 		MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889,
 
-		Tech_Moving_ResilientConnectionLogic,
+		WFM_Intraday_Refactoring_74652,
+
+		Tech_Moving_ResilientConnectionLogic_76181,
 		Tenant_PurgeLogonAttempts_75782,
 		Tenant_PurgeNoneEmployeesData_76291
 		// ReSharper restore InconsistentNaming

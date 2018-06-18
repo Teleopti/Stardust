@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			dynamic content = response;
 			Type typeOfContent = content.GetType();
-			var exist = typeOfContent.GetProperties().Where(p => p.Name.Equals("DefaultTeam")).Any();
+			var exist = typeOfContent.GetProperties().Any(p => p.Name.Equals("DefaultTeam"));
 			Assert.That(exist, Is.EqualTo(false));
 			Assert.That((object)content.Message, Is.EqualTo(Resources.NoTeamsAvailable));
 		}
@@ -243,7 +243,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var lastTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.Last();
 			lastTeamScheduleTimeLineViewModel.PositionPercentage.Should().Be(Math.Round((decimal)TimeSpan.FromMinutes(7 * 60).Ticks / diff.Ticks, 4));
 		}
-
 
 		[Test]
 		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
@@ -474,11 +473,117 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
 			var firstPeriod = teamScheduleViewModel.AgentSchedules[0].Periods.ElementAt(0);
 
-			firstPeriod.Color.Should().Be(Color.Green.Name);
+			firstPeriod.Color.Should().Be("0,128,0");
 			firstPeriod.Title.Should().Be("Phone");
 			firstPeriod.StartTime.Should().Be(period.StartDateTime);
 			firstPeriod.EndTime.Should().Be(period.EndDateTime);
 			firstPeriod.TimeSpan.Should().Be("9:00 AM - 4:00 PM");
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
+		public void ShouldReturnMySchedule()
+		{
+			var today = new DateOnly(2014, 12, 15);
+			var team = TeamFactory.CreateSimpleTeam("test team").WithId();
+			TeamRepository.Add(team);
+
+			var person = User.CurrentUser();
+			PersonRepository.Add(person);
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var assignment = new PersonAssignment(person, Scenario.Current(), today);
+			var period = new DateTimePeriod(2014, 12, 15, 9, 2014, 12, 15, 16);
+			assignment.AddOvertimeActivity(ActivityFactory.CreateActivity("overtime"),
+				period, new MultiplicatorDefinitionSet("a", MultiplicatorType.Overtime));
+			ScheduleData.Add(assignment);
+
+			var teamScheduleRequest = new TeamScheduleRequest
+			{
+				SelectedDate = today.Date,
+				Paging = new Paging
+				{
+					Take = 10
+				},
+				ScheduleFilter = new Domain.Repositories.ScheduleFilter
+				{
+					TeamIds = team.Id.ToString()
+				}
+			};
+			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
+			var mySchedule = teamScheduleViewModel.MySchedule;
+			(mySchedule != null).Should().Be(true);
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
+		public void ShouldReturnFalseForDayOff()
+		{
+			var today = new DateOnly(2014, 12, 15);
+			var team = TeamFactory.CreateSimpleTeam("test team").WithId();
+			TeamRepository.Add(team);
+
+			var person = User.CurrentUser();
+			PersonRepository.Add(person);
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var assignment = new PersonAssignment(person, Scenario.Current(), today);
+			var period = new DateTimePeriod(2014, 12, 15, 9, 2014, 12, 15, 16);
+			assignment.AddOvertimeActivity(ActivityFactory.CreateActivity("overtime"),
+				period, new MultiplicatorDefinitionSet("a", MultiplicatorType.Overtime));
+			ScheduleData.Add(assignment);
+
+			var teamScheduleRequest = new TeamScheduleRequest
+			{
+				SelectedDate = today.Date,
+				Paging = new Paging
+				{
+					Take = 10
+				},
+				ScheduleFilter = new Domain.Repositories.ScheduleFilter
+				{
+					TeamIds = team.Id.ToString()
+				}
+			};
+			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
+			var mySchedule = teamScheduleViewModel.MySchedule;
+			mySchedule.IsDayOff.Should().Be(false);
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
+		public void ShouldReturnTrueForDayOff()
+		{
+			var today = new DateOnly(2014, 12, 15);
+			var team = TeamFactory.CreateSimpleTeam("test team").WithId();
+			TeamRepository.Add(team);
+
+			var person = User.CurrentUser();
+			PersonRepository.Add(person);
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, Scenario.Current(), today, new DayOffTemplate(new Description("dayoff")));
+			var period = new DateTimePeriod(2014, 12, 15, 9, 2014, 12, 15, 16);
+			assignment.AddOvertimeActivity(ActivityFactory.CreateActivity("overtime"),
+				period, new MultiplicatorDefinitionSet("a", MultiplicatorType.Overtime));
+			ScheduleData.Add(assignment);
+
+			var teamScheduleRequest = new TeamScheduleRequest
+			{
+				SelectedDate = today.Date,
+				Paging = new Paging
+				{
+					Take = 10
+				},
+				ScheduleFilter = new Domain.Repositories.ScheduleFilter
+				{
+					TeamIds = team.Id.ToString()
+				}
+			};
+			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
+			var mySchedule = teamScheduleViewModel.MySchedule;
+			mySchedule.IsDayOff.Should().Be(true);
+			mySchedule.DayOffName.Should().Be("dayoff");
 		}
 
 		[Test]
@@ -516,7 +621,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			firstPeriod.IsOvertime.Should().Be(true);
 		}
-
+		
 		[Test]
 		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
 		public void ShouldReturnPositionPercentageInMySchedule()

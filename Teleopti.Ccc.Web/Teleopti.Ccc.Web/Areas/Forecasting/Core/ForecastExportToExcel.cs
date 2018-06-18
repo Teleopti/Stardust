@@ -89,6 +89,11 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			});
 			addRow(dailySheet, new[]
 			{
+				new CellData("Scenario:"),
+				new CellData(exportModel.Header.Scenario)
+			});
+			addRow(dailySheet, new[]
+			{
 				new CellData("Skill Name:"),
 				new CellData(exportModel.Header.SkillName)
 			});

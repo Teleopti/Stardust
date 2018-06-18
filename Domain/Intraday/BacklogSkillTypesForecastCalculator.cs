@@ -9,9 +9,9 @@ namespace Teleopti.Ccc.Domain.Intraday
 {
 	public class BacklogSkillTypesForecastCalculator
 	{
-		private readonly ScheduledStaffingProvider _scheduledStaffingProvider;
+		private readonly IScheduledStaffingProvider _scheduledStaffingProvider;
 
-		public BacklogSkillTypesForecastCalculator(ScheduledStaffingProvider scheduledStaffingProvider)
+		public BacklogSkillTypesForecastCalculator(IScheduledStaffingProvider scheduledStaffingProvider)
 		{
 			_scheduledStaffingProvider = scheduledStaffingProvider;
 		}

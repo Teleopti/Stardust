@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		public bool UseIntegratedSecurity { get; set; }
 		public DatabaseType DatabaseType { get; set; }
 		public string DatabaseTypeName => DatabaseType.GetName();
-		public bool CreateDatabase { get; private set; }
+		public bool CreateDatabase { get; set; }
 		public bool CreatePermissions { get; set; }
 		public bool UpgradeDatabase { get; set; }
 		public string RestoreBackup { get; private set; }

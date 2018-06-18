@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 {
 	public class ExportForecastAndStaffingFile
 	{
-		private readonly ScheduledStaffingProvider _scheduledStaffingProvider;
+		private readonly IScheduledStaffingProvider _scheduledStaffingProvider;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 		private readonly ISkillRepository _skillRepository;
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly ExportStaffingPeriodValidationProvider _periodValidationProvider;
 		private const int numberOfDecimals = 2;
 
-		public ExportForecastAndStaffingFile(ScheduledStaffingProvider scheduledStaffingProvider, IUserTimeZone userTimeZone, 
+		public ExportForecastAndStaffingFile(IScheduledStaffingProvider scheduledStaffingProvider, IUserTimeZone userTimeZone, 
 			ISkillCombinationResourceRepository skillCombinationResourceRepository, ISkillRepository skillRepository, 
 			IUserCulture userCulture, ExportStaffingPeriodValidationProvider periodValidationProvider)
 		{

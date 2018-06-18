@@ -164,8 +164,8 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 	function adjustScroll() {
 		var container = $('.teammates-schedules-container');
 		container.animate({
-			scrollLeft: container.scrollLeft() + agentScheduleColumnWidth
-		});
+			scrollLeft: container.scrollLeft() + agentScheduleColumnWidth * 1.5
+		}, 100);
 	}
 
 	function loadMoreSchedules() {
@@ -174,7 +174,6 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 
 			dataService.loadScheduleData(
 				vm.selectedDate().format('YYYY/MM/DD'),
-				vm.selectedTeamIds,
 				vm.paging,
 				vm.filter,
 				function(schedules) {
@@ -193,7 +192,8 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 	}
 
 	function filterChangedCallback(dateStr) {
-		dataService.loadScheduleData(dateStr, vm.selectedTeamIds, vm.paging, vm.filter, function(schedules) {
+		showLoadingGif();
+		dataService.loadScheduleData(dateStr, vm.paging, vm.filter, function(schedules) {
 			vm.readScheduleData(schedules, moment(dateStr));
 
 			focusMySchedule();
@@ -218,7 +218,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 					Teleopti.MyTimeWeb.Portal.ParseHash().dateHash ||
 					vm.selectedDate().format('YYYY/MM/DD');
 
-				dataService.loadScheduleData(dateStr, vm.selectedTeamIds, vm.paging, vm.filter, function(schedules) {
+				dataService.loadScheduleData(dateStr, vm.paging, vm.filter, function(schedules) {
 					vm.readScheduleData(schedules, dateStr);
 
 					focusMySchedule();
@@ -243,6 +243,9 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 					0
 				);
 		}
+
+		$('.team-schedule-arrow-up').hide();
+		$('.team-schedule-arrow-down').hide();
 		adjustArrowPositions();
 	}
 

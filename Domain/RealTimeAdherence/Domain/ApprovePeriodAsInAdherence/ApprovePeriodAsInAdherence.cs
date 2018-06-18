@@ -8,13 +8,10 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherenc
 	public class ApprovePeriodAsInAdherence
 	{
 		private readonly IEventPublisher _publisher;
-		[RemoveMeWithToggle(Toggles.RTA_RemoveApprovedOOA_47721)]
-		private readonly IApprovedPeriodsPersister _persister;
 
-		public ApprovePeriodAsInAdherence(IEventPublisher publisher, IApprovedPeriodsPersister persister)
+		public ApprovePeriodAsInAdherence(IEventPublisher publisher)
 		{
 			_publisher = publisher;
-			_persister = persister;
 		}
 
 		public void Approve(ApprovedPeriod period)
@@ -26,7 +23,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherenc
 				StartTime = p.StartDateTime,
 				EndTime = p.EndDateTime
 			});
-			_persister.Persist(period);
 		}
 	}
 }

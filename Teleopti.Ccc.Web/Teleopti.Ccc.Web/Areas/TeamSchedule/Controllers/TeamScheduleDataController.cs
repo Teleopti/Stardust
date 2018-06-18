@@ -3,16 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.ApplicationLayer.Skill;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.SkillGroupManagement;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
-using Teleopti.Ccc.Web.Areas.SkillGroup;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Ccc.Web.Core;
@@ -28,10 +25,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		private readonly IShiftCategoryProvider _shiftCategoryProvider;
 		private readonly ITeamsProvider _teamProvider;
 		private readonly IToggleManager _toggleManager;
-		private readonly SkillViewModelBuilder _skillBuilder;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IOptionalColumnRepository _optionalColumnRepository;
-		private readonly SkillGroupViewModelBuilder _skillGroupViewModelBuilder;
 		private readonly IDayOffTemplateRepository _dayOffTemplateRepository;
 
 		public TeamScheduleDataController(IActivityProvider activityProvider,
@@ -39,10 +34,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			IShiftCategoryProvider shiftCategoryProvider,
 			ITeamsProvider teamProvider,
 			IToggleManager toggleManager,
-			SkillViewModelBuilder skillBuilder,
 			IScenarioRepository scenarioRepository,
 			IOptionalColumnRepository optionalColumnRepository,
-			SkillGroupViewModelBuilder skillGroupViewModelBuilder,
 			IDayOffTemplateRepository dayOffTemplateRepository)
 		{
 			_activityProvider = activityProvider;
@@ -50,10 +43,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			_shiftCategoryProvider = shiftCategoryProvider;
 			_teamProvider = teamProvider;
 			_toggleManager = toggleManager;
-			_skillBuilder = skillBuilder;
 			_scenarioRepository = scenarioRepository;
 			_optionalColumnRepository = optionalColumnRepository;
-			_skillGroupViewModelBuilder = skillGroupViewModelBuilder;
 			_dayOffTemplateRepository = dayOffTemplateRepository;
 		}
 
@@ -140,21 +131,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 				: _teamProvider.GetOrganizationBasedOnRawData(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)),
 					DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 		}
-
-		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/skills")]
-		public virtual IHttpActionResult GetAllSkills()
-		{
-			return Ok(_skillBuilder.BuildSkillsConnectedWithQueue());
-		}
-		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/skillgroups")]
-		public virtual IHttpActionResult GetSkillGroups()
-		{
-			return Ok(new SkillGroupInfo
-			{
-				SkillAreas = _skillGroupViewModelBuilder.GetAll()
-			});
-		}
-
+		
 		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/Scenarios")]
 		public virtual IHttpActionResult GetAllScenarios()
 		{

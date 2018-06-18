@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			_gridColumns.Add(_languageColumn);
 
 			_uiCultureColumn = new DropDownCultureColumn<PersonGeneralModel, Culture>("CultureInfo", Resources.Format,
-																						PeopleWorksheet.StateHolder.UICultureCollection, "DisplayName");
+																						PeopleWorksheet.StateHolder.UiCultureCollection, "DisplayName");
 			_uiCultureColumn.CellDisplayChanged += columnCellDisplayChanged;
 			_uiCultureColumn.CellChanged += columnCellChanged;
 			// Sets the comparer for the sorting

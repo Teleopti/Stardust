@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytic
 using Teleopti.Ccc.Domain.Backlog;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Cascading;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
@@ -196,17 +197,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CreateSkillSets>().SingleInstance();
 			builder.RegisterType<ReduceIslandsLimits>().SingleInstance();
 			builder.RegisterType<LongestPeriodForAssignmentCalculator>().As<ILongestPeriodForAssignmentCalculator>().SingleInstance();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_LessResourcesXXL_74915))
-			{
-				builder.CacheByClassProxy<ShiftProjectionCacheFetcher>().SingleInstance();
-				_configuration.Cache().This<ShiftProjectionCacheFetcher>(b => b.CacheMethod(m => m.Execute(null, null)), "SPCF");
-				builder.RegisterType<ShiftProjectionCacheManager>().As<IShiftProjectionCacheManager>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<ShiftProjectionCacheFetcher>().SingleInstance();
-				builder.RegisterType<ShiftProjectionCacheManagerOLD>().As<IShiftProjectionCacheManager>().InstancePerLifetimeScope();	
-			}
+			builder.RegisterType<ShiftProjectionCacheFetcher>().SingleInstance();
+			builder.RegisterType<ShiftProjectionCacheManager>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftsFromMasterActivityBaseActivityService>().As<IShiftFromMasterActivityService>().SingleInstance();			
 			builder.RegisterType<RuleSetDeletedActivityChecker>().As<IRuleSetDeletedActivityChecker>().SingleInstance();
 			builder.RegisterType<RuleSetDeletedShiftCategoryChecker>()
@@ -308,18 +300,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<DayOffOptimizationDirectCallCommandHandler>().As<IDayOffOptimizationCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
 			}
 
-			if (_configuration.Toggle(Toggles.ResourcePlanner_MinimumAgents_75339))
-			{
-				builder.RegisterType<TeamBlockDayOffOptimizer>().As<ITeamBlockDayOffOptimizer>().InstancePerLifetimeScope().ApplyAspects();
-				builder.RegisterType<DayOffOptimizerStandard>().InstancePerLifetimeScope();
-				builder.RegisterType<DayOffOptimizerPreMoveResultPredictor>().InstancePerLifetimeScope();
-			}
-			else
-			{
-				builder.RegisterType<TeamBlockDayOffOptimizerOLD>().As<ITeamBlockDayOffOptimizer>().InstancePerLifetimeScope().ApplyAspects();
-				builder.RegisterType<DayOffOptimizerStandardOLD>().InstancePerLifetimeScope();
-				builder.RegisterType<DayOffOptimizerPreMoveResultPredictorOLD>().InstancePerLifetimeScope();
-			}
+			builder.RegisterType<TeamBlockDayOffOptimizer>().InstancePerLifetimeScope().ApplyAspects();
+			builder.RegisterType<DayOffOptimizerStandard>().InstancePerLifetimeScope();
+			builder.RegisterType<DayOffOptimizerPreMoveResultPredictor>().SingleInstance();
 
 			builder.RegisterType<AffectedDayOffs>().SingleInstance();
 
@@ -341,15 +324,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<MatrixDataWithToFewDaysOff>().As<IMatrixDataWithToFewDaysOff>().InstancePerLifetimeScope();
 
 			builder.RegisterType<ScheduleResultDataExtractorProvider>().As<IScheduleResultDataExtractorProvider>().SingleInstance();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_MinimumAgents_75339))
-			{
-				builder.RegisterType<CreatePersonalSkillDataExtractor>().As<ICreatePersonalSkillDataExtractor>().SingleInstance();
-				builder.RegisterType<ForecastAndScheduleSumForDay>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<CreatePersonalSkillDataExtractorOLD>().As<ICreatePersonalSkillDataExtractor>().SingleInstance();				
-			}
+			builder.RegisterType<CreatePersonalSkillDataExtractor>().SingleInstance();
+			builder.RegisterType<ForecastAndScheduleSumForDay>().SingleInstance();
+	
 			builder.RegisterType<TrueFalseRandomizer>().As<ITrueFalseRandomizer>().SingleInstance();
 			builder.RegisterType<OfficialWeekendDays>().As<IOfficialWeekendDays>().SingleInstance();
 			builder.RegisterType<CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker>().As<IDayOffDecisionMaker>().SingleInstance();
@@ -515,6 +492,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<AssignScheduledLayers>().SingleInstance();
 
+			if (_configuration.Toggle(Toggles.ResourcePlanner_LessResourcesXXL_74915))
+			{
+				builder.RegisterType<CreateMergedCollectionNoState>().As<CreateMergedCollection>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<CreateMergedCollection>().SingleInstance();
+			}
+			
 			registerForJobs(builder);
 			registerValidators(builder);
 		}
@@ -647,14 +633,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<TeamMemberTerminationOnBlockSpecification>().As<ITeamMemberTerminationOnBlockSpecification>().SingleInstance();
 			builder.RegisterType<SplitSchedulePeriodToWeekPeriod>().As<ISplitSchedulePeriodToWeekPeriod>().SingleInstance();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_LessResourcesXXL_74915))
-			{
-				builder.RegisterType<TeamSchedulingNoSetDate>().As<TeamScheduling>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<TeamScheduling>().SingleInstance();				
-			}
+			builder.RegisterType<TeamScheduling>().SingleInstance();
 			builder.RegisterType<TeamBlockSingleDayScheduler>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockScheduler>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftProjectionCachesForIntraInterval>().InstancePerLifetimeScope();

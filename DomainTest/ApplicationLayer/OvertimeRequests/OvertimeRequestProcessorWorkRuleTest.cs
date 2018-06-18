@@ -6,6 +6,9 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
@@ -171,7 +174,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			getTarget().Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
-			personRequest.DenyReason.Trim().Should().Be("There must be a daily rest of at least 6:00 hours between 2 shifts. Between 7/13/2017 and 7/14/2017 there are only 5:00 hours.");
+			personRequest.DenyReason.Trim().Should().Be(string.Format(Resources.BusinessRuleNightlyRestRuleErrorMessage, "6:00", "7/13/2017", "7/14/2017", "5:00"));
 			personRequest.BrokenBusinessRules.Should().Be(BusinessRuleFlags.NewNightlyRestRule);
 		}
 
@@ -218,7 +221,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			getTarget().Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
-			personRequest.DenyReason.Trim().Should().Be("There must be a daily rest of at least 20:00 hours between 2 shifts. Between 7/15/2017 and 7/16/2017 there are only -16:00 hours.");
+			personRequest.DenyReason.Trim().Should().Be(string.Format(Resources.BusinessRuleNightlyRestRuleErrorMessage, "20:00", "7/15/2017", "7/16/2017", "-16:00"));
 			personRequest.BrokenBusinessRules.Should().Be(BusinessRuleFlags.NewNightlyRestRule);
 		}
 
@@ -294,7 +297,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			var denyReason = personRequest.DenyReason;
 			(denyReason.IndexOf(
-				 "There must be a daily rest of at least 20:00 hours between 2 shifts. Between 7/13/2017 and 7/14/2017 there are only 11:00 hours.", StringComparison.Ordinal) >
+				 string.Format(Resources.BusinessRuleNightlyRestRuleErrorMessage, "20:00", "7/13/2017", "7/14/2017", "11:00"), StringComparison.Ordinal) >
 			 -1).Should().Be(true);
 		}
 
@@ -357,8 +360,83 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			getTarget().Process(personRequest);
 
 			personRequest.IsDenied.Should().Be.True();
-			personRequest.DenyReason.Should().Be("The week contains too much work time (27:00). Max is 10:00.\r\nThere must be a daily rest of at least 6:00 hours between 2 shifts. Between 7/13/2017 and 7/14/2017 there are only 5:00 hours.");
-			personRequest.BrokenBusinessRules.Should().Be(BusinessRuleFlags.NewNightlyRestRule | BusinessRuleFlags.NewMaxWeekWorkTimeRule);
+			personRequest.DenyReason.Should()
+				.Be(
+					$"The week contains too much work time (27:00). Max is 10:00.\r\n{string.Format(Resources.BusinessRuleNightlyRestRuleErrorMessage, "6:00", "7/13/2017", "7/14/2017", "5:00")}");
+			personRequest.BrokenBusinessRules.Should()
+				.Be(BusinessRuleFlags.NewNightlyRestRule | BusinessRuleFlags.NewMaxWeekWorkTimeRule);
+		}
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestChangeBelongsToDateForOverNightShift_74984)]
+		public void ShouldApproveWhenNotVoilatingNightlyRestRuleAfterChangingBelongsToDateForOvernightShift()
+		{
+			setupPerson(0, 24);
+			var person = LoggedOnUser.CurrentUser();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var personPeriod = person.PersonPeriods(_periodStartDate.ToDateOnlyPeriod()).FirstOrDefault();
+			personPeriod.PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40),
+				TimeSpan.FromHours(60), TimeSpan.FromHours(6), TimeSpan.FromHours(10));
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				EnableWorkRuleValidation = true,
+				WorkRuleValidationHandleType = OvertimeValidationHandleType.Pending,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(40)))
+			});
+			person.WorkflowControlSet = workflowControlSet;
+
+			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 1d);
+
+			var scheduleDataOne = createMainPersonAssignment(person, new DateTimePeriod(2017, 7, 12, 18, 2017, 7, 13, 2));
+			var scheduleDataTwo = createMainPersonAssignment(person, new DateTimePeriod(2017, 7, 13, 18, 2017, 7, 14, 5));
+
+			ScheduleStorage.Add(scheduleDataOne);
+			ScheduleStorage.Add(scheduleDataTwo);
+
+			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 13, 2, 0, 0, DateTimeKind.Utc), 1);
+			getTarget().Process(personRequest);
+
+			personRequest.IsApproved.Should().Be.True();
+		}
+
+
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestChangeBelongsToDateForOverNightShift_74984)]
+		public void ShouldDenyWhenViolatingNightlyRestRuleAfterChangingBelongsToDateForOvernightShift()
+		{
+			setupPerson(0, 24);
+			var person = LoggedOnUser.CurrentUser();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var personPeriod = person.PersonPeriods(_periodStartDate.ToDateOnlyPeriod()).FirstOrDefault();
+			personPeriod.PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40),
+				TimeSpan.FromHours(60), TimeSpan.FromHours(10), TimeSpan.FromHours(10));
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				EnableWorkRuleValidation = true,
+				WorkRuleValidationHandleType = OvertimeValidationHandleType.Deny,
+				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(40)))
+			});
+			person.WorkflowControlSet = workflowControlSet;
+
+			setupIntradayStaffingForSkill(setupPersonSkill(new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1))), 10d, 1d);
+
+			var scheduleDataOne = createMainPersonAssignment(person, new DateTimePeriod(2017, 7, 12, 18, 2017, 7, 13, 2));
+			var scheduleDataTwo = createMainPersonAssignment(person, new DateTimePeriod(2017, 7, 13, 18, 2017, 7, 14, 5));
+
+			ScheduleStorage.Add(scheduleDataOne);
+			ScheduleStorage.Add(scheduleDataTwo);
+
+			var personRequest = createOvertimeRequest(new DateTime(2017, 7, 13, 2, 0, 0, DateTimeKind.Utc), 7);
+			getTarget().Process(personRequest);
+
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Trim().Should().Be(string.Format(Resources.BusinessRuleNightlyRestRuleErrorMessage, "10:00", "7/12/2017", "7/13/2017", "9:00"));
 		}
 	}
 }

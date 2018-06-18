@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
-	public class CreatePersonalSkillDataExtractor : ICreatePersonalSkillDataExtractor
+	public class CreatePersonalSkillDataExtractor
 	{
 		private readonly PersonalSkillsProvider _personalSkillsProvider;
 		private readonly ForecastAndScheduleSumForDay _forecastAndScheduleSumForDay;

@@ -3,12 +3,31 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Collection
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_LessResourcesXXL_74915)]
+	public class CreateMergedCollection
+	{
+		public virtual Lazy<IEnumerable<IVisualLayer>> Execute(IProjectionMerger projectionMerger, IVisualLayer[] unmergedCollection, IPerson person)
+		{
+			return new Lazy<IEnumerable<IVisualLayer>>(() => projectionMerger.MergedCollection(unmergedCollection, person).ToList());
+		}
+	}
+	
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_LessResourcesXXL_74915)]
+	public class CreateMergedCollectionNoState : CreateMergedCollection
+	{
+		public override Lazy<IEnumerable<IVisualLayer>> Execute(IProjectionMerger projectionMerger, IVisualLayer[] unmergedCollection, IPerson person)
+		{
+			return null;
+		}
+	}
+	
 	/// <summary>
 	/// Collection for visual layers.
 	/// Note! The layercollection sent to this instance must be sorted correctly,
@@ -22,7 +41,8 @@ namespace Teleopti.Ccc.Domain.Collection
 	public class VisualLayerCollection : IVisualLayerCollection
 	{
 		private readonly IProjectionMerger _merger;
-		private readonly Lazy<IList<IVisualLayer>> _mergedCollection;
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_LessResourcesXXL_74915)]
+		private readonly Lazy<IEnumerable<IVisualLayer>> _mergedCollection;
 		
 		private readonly Lazy<DateTimePeriod?> _period;
 		private readonly Lazy<LayerCollectionNumbers> _timeNumbers;
@@ -51,17 +71,23 @@ namespace Teleopti.Ccc.Domain.Collection
 				}
 				return ret;
 			});
-			_mergedCollection = new Lazy<IList<IVisualLayer>>(() => _merger.MergedCollection(UnMergedCollection, Person).ToList());
+			_mergedCollection = ServiceLocatorForLegacy.CreateMergedCollection.Execute(merger, UnMergedCollection, Person);
 		}
+
+		[RemoveMeWithToggle("Remove condition", Toggles.ResourcePlanner_LessResourcesXXL_74915)]
+		public IEnumerable<IVisualLayer> MergedCollection()
+		{
+			return _mergedCollection == null ? ((IProjectionMerger)_merger.Clone()).MergedCollection(UnMergedCollection, Person).ToList() : _mergedCollection.Value;
+		} 
 
 		public static IVisualLayerCollection CreateEmptyProjection(IPerson assignedPerson)
 		{
 			return new VisualLayerCollection(new Person(), Enumerable.Empty<IVisualLayer>(), new NoProjectionMerger());
 		}
 
-		public bool HasLayers { get; private set; }
+		public bool HasLayers { get; }
 
-		public IPerson Person { get; private set; }
+		public IPerson Person { get; }
 		
 		public IFilterOnPeriodOptimizer PeriodOptimizer
 		{
@@ -247,12 +273,12 @@ namespace Teleopti.Ccc.Domain.Collection
 
 		public int Count()
 		{
-			return _mergedCollection.Value.Count;
+			return MergedCollection().Count();
 		}
 
 		public IEnumerator GetEnumerator()
 		{
-			return _mergedCollection.Value.GetEnumerator();
+			return MergedCollection().GetEnumerator();
 		}
 
 		public DateTimePeriod? Period()
@@ -283,7 +309,7 @@ namespace Teleopti.Ccc.Domain.Collection
 
 		IEnumerator<IVisualLayer> IEnumerable<IVisualLayer>.GetEnumerator()
 		{
-			return _mergedCollection.Value.GetEnumerator();
+			return MergedCollection().GetEnumerator();
 		}
 
 		private struct LayerCollectionNumbers

@@ -375,10 +375,10 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.230\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.231\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.230\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\..\packages\Teleopti.Secrets.8.0.0.231\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
     <Reference Include="Validation">
       <HintPath>..\..\packages\Validation.2.0.2.13022\lib\portable-windows8+net40+sl5+windowsphone8\Validation.dll</HintPath>
@@ -1673,10 +1673,8 @@
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.createform.controller.js.orig" />
     <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
     <Content Include="WFM\app\resourceplanner\web_performance_tests\temp.html" />
-    <Content Include="WFM\app\rta\rta\agents\rta-agents.RTA_ModifySkillGroup_48191.html" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents.RTA_ImprovedStateGroupFilter_48724.html" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.configurationValidation.spec.js" />
-    <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.RTA_ConfigurationValidationNotification_46933.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.filter.sort.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.RTA_ImprovedStateGroupFilter_48724.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.organization.selection.spec.js" />
@@ -1699,10 +1697,8 @@
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.easilySpotLateForWork_75668.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.timeline.service.js" />
     <Content Include="WFM\app\rta\rta\historical\_rta.card.panel.component.js" />
-    <Content Include="WFM\app\rta\rta\historical\rta-historical.approvePreviousOOA_47230.html" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.adherence7DaysBack.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.adherencepercentage.spec.js" />
-    <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA_47230.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.currenttime.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.schedule.spec.js" />
     <Content Include="WFM\app\rta\rta\overview\controller.configurationValidation.spec.js" />
@@ -1806,7 +1802,6 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.scheduleHelper.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.scheduleHelper.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.teamsStaffingConfigurationStorage.js" />
-    <Content Include="WFM\app\teamSchedule\teamSchedule.service.skill.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.staffing.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.staffingChart.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.staffingChart.spec.js" />

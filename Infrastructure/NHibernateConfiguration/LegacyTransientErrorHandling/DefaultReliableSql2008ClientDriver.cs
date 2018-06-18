@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErrorHandling
 {
-	[RemoveMeWithToggle(Toggles.Tech_Moving_ResilientConnectionLogic)]
+	[RemoveMeWithToggle(Toggles.Tech_Moving_ResilientConnectionLogic_76181)]
 	public abstract class DefaultReliableSql2008ClientDriver<TTransientErrorDetectionStrategy> : ReliableSql2008ClientDriver
 		where TTransientErrorDetectionStrategy : ITransientErrorDetectionStrategy, new()
 	{

@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 		public SchedulePlanningPeriodCommandHandler Target;
 
-		public SchedulingAndDayOffOptimizationStardustResultTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerMinimumAgents75339, bool resourcePlannerLessResourcesXXL74915) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerMinimumAgents75339, resourcePlannerLessResourcesXXL74915)
+		public SchedulingAndDayOffOptimizationStardustResultTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerLessResourcesXXL74915) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerLessResourcesXXL74915)
 		{
 		}
 
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date, 1, 1, 1));
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, date.ToDateOnlyPeriod(), new TimePeriod(0, 24));
 
-			Target.Execute(planningPeriod.Id.Value, true);
+			Target.Execute(planningPeriod.Id.Value);
 
 			var result = JsonConvert.DeserializeObject<OptimizationResultModel>(
 					JobResultRepository.LoadAllWithNoLock().Single().Details.Last().Message); 

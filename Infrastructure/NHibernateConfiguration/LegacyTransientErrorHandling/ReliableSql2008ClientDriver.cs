@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErr
 	/// Abstract base class that enables the creation of an NHibernate client driver that extends the Sql 2008 driver,
 	/// but adds in transient fault handling retry logic via <see cref="ReliableSqlConnection"/>.
 	/// </summary>
-	[RemoveMeWithToggle(Toggles.Tech_Moving_ResilientConnectionLogic)]
+	[RemoveMeWithToggle(Toggles.Tech_Moving_ResilientConnectionLogic_76181)]
 	public abstract class ReliableSql2008ClientDriver : Sql2008ClientDriver, IEmbeddedBatcherFactoryProvider
 	{
 		/// <summary>

@@ -112,10 +112,10 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.230\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.231\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
     </Reference>
     <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Teleopti.Secrets.8.0.0.230\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.8.0.0.231\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -185,7 +185,11 @@
     <Compile Include="ApplicationLayer\Commands\ShiftCategorySelectorWithPrediction.cs" />
     <Compile Include="ApplicationLayer\Events\ProjectionChangedEventForShiftExchangeOffer.cs" />
     <Compile Include="ApplicationLayer\Events\RefreshPayrollFormatsEvent.cs" />
-    <Compile Include="ApplicationLayer\LateForWorkEventPublisher.cs" />
+    <Compile Include="Intraday\ApplicationLayer\DTOs\IntradayForcastedStaffingIntervalDTO.cs" />
+    <Compile Include="Intraday\ApplicationLayer\DTOs\IntradayScheduleStaffingIntervalDTO.cs" />
+    <Compile Include="Intraday\ApplicationLayer\IntradayIncomingTrafficApplicationService.cs" />
+    <Compile Include="Intraday\ApplicationLayer\IntradayPerformanceApplicationService.cs" />
+    <Compile Include="Intraday\ApplicationLayer\IntradayStaffingApplicationService.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\IOvertimeRequestContractWorkRulesValidator.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\IOvertimeRequestOpenPeriodProvider.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestOpenPeriodProvider.cs" />
@@ -208,6 +212,22 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleProjection\ScheduleProjectionReadOnlyChecker.cs" />
     <Compile Include="Common\CalculatePersonAccount.cs" />
     <Compile Include="Config\WebTenantAuthenticationConfiguration.cs" />
+    <Compile Include="InterfaceLegacy\Domain\OvertimeRequestStaffingCheckMethod.cs" />
+    <Compile Include="Intraday\BacklogSkillTypesForecastCalculator.cs" />
+    <Compile Include="Intraday\Extensions\IntradaySkillDayExtensions.cs" />
+    <Compile Include="Intraday\Domain\IEmailBacklogProvider.cs" />
+    <Compile Include="Intraday\IForecastedCallsProvider.cs" />
+    <Compile Include="Intraday\IForecastedStaffingProvider.cs" />
+    <Compile Include="Intraday\IForecastedStaffingToDataSeries.cs" />
+    <Compile Include="Intraday\Domain\IntradayForecastingService.cs" />
+    <Compile Include="Intraday\Domain\IntradayReforecastingService.cs" />
+    <Compile Include="Intraday\Domain\IntradayStaffingService.cs" />
+    <Compile Include="Intraday\IReforecastedStaffingProvider.cs" />
+    <Compile Include="Intraday\Domain\IntradayStatisticsService.cs" />
+    <Compile Include="Intraday\IRequiredStaffingProvider.cs" />
+    <Compile Include="Intraday\IScheduledStaffingProvider.cs" />
+    <Compile Include="Intraday\IScheduledStaffingToDataSeries.cs" />
+    <Compile Include="Intraday\ITaskPeriodsProvider.cs" />
     <Compile Include="Forecasting\ForecastDayOverride.cs" />
     <Compile Include="Forecasting\ForecastProvider.cs" />
     <Compile Include="Forecasting\IWorkloadNameBuilder.cs" />
@@ -216,11 +236,8 @@
     <Compile Include="Forecasting\Models\ForecastModel.cs" />
     <Compile Include="Infrastructure\Events\IntradayToolEvent.cs" />
     <Compile Include="Forecasting\WorkloadNameBuilder.cs" />
-    <Compile Include="InterfaceLegacy\Domain\OvertimeRequestStaffingCheckMethod.cs" />
-    <Compile Include="Intraday\BacklogSkillTypesForecastCalculator.cs" />
     <Compile Include="Optimization\PredictorResult.cs" />
     <Compile Include="Optimization\TeamBlock\CreatePersonalSkillDataExtractor.cs" />
-    <Compile Include="Optimization\TeamBlock\CreatePersonalSkillDataExtractorOLD.cs" />
     <Compile Include="MultiTenancy\PersonIdentitiesInputModel.cs" />
     <Compile Include="MultiTenancy\PersonIdentityModel.cs" />
     <Compile Include="Optimization\TeamBlock\ForecastAndScheduleSumForDay.cs" />
@@ -228,7 +245,8 @@
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayLoaderLateForWork.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayWithLateForWork.cs" />
     <Compile Include="RealTimeAdherence\Domain\Events\ISolidProof.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Events\PersonArrivalAfterLateForWorkEvent.cs" />
+    <Compile Include="RealTimeAdherence\Domain\Events\PersonArrivedLateForWorkEvent.cs" />
+    <Compile Include="RealTimeAdherence\Domain\Service\LateForWorkEventPublisher.cs" />
     <Compile Include="RegisterEventHandlerInLifetimeScopeAttribute.cs" />
     <Compile Include="Repositories\IAllSkillForSkillGroupProvider.cs" />
     <Compile Include="Repositories\IForecastDayOverrideRepository.cs" />
@@ -450,11 +468,11 @@
     <Compile Include="InterfaceLegacy\Domain\PersonIdentityMatchResult.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\IRequeueHangfireRepository.cs" />
     <Compile Include="Intraday\IIntradaySkillProvider.cs" />
-    <Compile Include="Intraday\IntradayExcelCreator.cs" />
-    <Compile Include="Intraday\IntradayExportCreator.cs" />
+    <Compile Include="Intraday\ApplicationLayer\IntradayExcelCreator.cs" />
+    <Compile Include="Intraday\ApplicationLayer\IntradayExportCreator.cs" />
     <Compile Include="Intraday\IntradaySkillProvider.cs" />
-    <Compile Include="Intraday\ISkillTypeInfo.cs" />
-    <Compile Include="Intraday\ISkillTypeInfoProvider.cs" />
+    <Compile Include="Intraday\Domain\ISkillTypeInfo.cs" />
+    <Compile Include="Intraday\Domain\ISkillTypeInfoProvider.cs" />
     <Compile Include="Islands\ICreateIslandCallback.cs" />
     <Compile Include="Islands\LogCreateIslandCallback.cs" />
     <Compile Include="Islands\LogCreateIslandInfo.cs" />
@@ -486,8 +504,7 @@
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\CurrentBelongsToDate.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\CurrentScheduleReadModelUpdater.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\ExternalLogonReadModelUpdater.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\HistoricalChangeMaintainer.cs" />
-    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\HistoricalChangeUpdater.cs" />
+    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\RtaEventStoreMaintainer.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\IMappingReadModelPersister.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\IOrganizationReader.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\ITeamCardReader.cs" />
@@ -508,25 +525,18 @@
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AdherencePercentageCalculator.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDay.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayLoaderFromEventStore.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayLoader.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayWithEventStore.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\HistoricalChange.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\HistoricalChangeAdherence.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\HistoricalChangeModel.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\IAgentAdherenceDay.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\IAgentAdherenceDayLoader.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\IApprovedPeriodsReader.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\IHistoricalChangeReadModelPersister.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\IHistoricalChangeReadModelReader.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\IRtaEventStore.cs" />
-    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\NoRtaEventStore.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AdherencePeriod.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\ScheduleLoader.cs" />
     <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\ApprovedPeriod.cs" />
     <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\ApprovePeriodAsInAdherence.cs" />
     <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\ApprovePeriodAsInAdherenceCommand.cs" />
     <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\ApprovePeriodAsInAdherenceCommandHandler.cs" />
-    <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\IApprovedPeriodsPersister.cs" />
     <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\RemoveApprovedPeriod.cs" />
     <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\RemoveApprovedPeriodCommand.cs" />
     <Compile Include="RealTimeAdherence\Domain\ApprovePeriodAsInAdherence\RemoveApprovedPeriodCommandHandler.cs" />
@@ -662,8 +672,8 @@
     <Compile Include="SkillGroupManagement\ModifySkillGroup.cs" />
     <Compile Include="Intraday\ScheduledStaffingViewModel.cs" />
     <Compile Include="Intraday\ScheduledStaffingViewModelCreator.cs" />
-    <Compile Include="Intraday\SkillTypeIdentifier.cs" />
-    <Compile Include="Intraday\SkillTypeInfo.cs" />
+    <Compile Include="Common\SkillTypeIdentifier.cs" />
+    <Compile Include="Intraday\Domain\SkillTypeInfo.cs" />
     <Compile Include="Intraday\SkillTypeInfoProvider.cs" />
     <Compile Include="Intraday\SkillTypesWithBacklog.cs" />
     <Compile Include="Notification\UserDeviceService.cs" />
@@ -718,11 +728,11 @@
     <Compile Include="InterfaceLegacy\Infrastructure\Analytics\IDateWithDuplicate.cs" />
     <Compile Include="InterfaceLegacy\Messages\InputWithLogOnContext.cs" />
     <Compile Include="Intraday\ClosedPeriodWorkload.cs" />
-    <Compile Include="Intraday\EmailBacklogProvider.cs" />
-    <Compile Include="Intraday\IMultisiteSkillSupportedCheck.cs" />
-    <Compile Include="Intraday\ISupportedSkillCheck.cs" />
-    <Compile Include="Intraday\ISupportedSkillsInIntradayProvider.cs" />
-    <Compile Include="Intraday\SupportedSkillsInIntradayProvider.cs" />
+    <Compile Include="Intraday\Domain\EmailBacklogProvider.cs" />
+    <Compile Include="Intraday\Domain\IMultisiteSkillSupportedCheck.cs" />
+    <Compile Include="Intraday\Domain\ISupportedSkillCheck.cs" />
+    <Compile Include="Intraday\Domain\ISupportedSkillsInIntradayProvider.cs" />
+    <Compile Include="Intraday\Domain\SupportedSkillsInIntradayProvider.cs" />
     <Compile Include="Intraday\ForecastedStaffingToDataSeries.cs" />
     <Compile Include="Intraday\IStaffingViewModelCreator.cs" />
     <Compile Include="Intraday\ScheduledStaffingToDataSeries.cs" />
@@ -1252,7 +1262,6 @@
     <Compile Include="InterfaceLegacy\Domain\IShiftExchangeOffer.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftFromMasterActivityService.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftLengthDecider.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IShiftProjectionCacheManager.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftTradeApproveService.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftTradeBusinessRuleConfig.cs" />
     <Compile Include="InterfaceLegacy\Domain\IShiftTradeMaxSeatValidator.cs" />
@@ -1689,11 +1698,11 @@
     <Compile Include="Intraday\IJobStartTimeRepository.cs" />
     <Compile Include="Intraday\IntradayPerformanceDataSeries.cs" />
     <Compile Include="Intraday\IntradayPerformanceSummary.cs" />
-    <Compile Include="Intraday\IntradayPerformanceViewModel.cs" />
-    <Compile Include="Intraday\IntradayStaffingViewModel.cs" />
-    <Compile Include="Intraday\IntradayIncomingDataSeries.cs" />
+    <Compile Include="Intraday\ApplicationLayer\ViewModels\IntradayPerformanceViewModel.cs" />
+    <Compile Include="Intraday\ApplicationLayer\ViewModels\IntradayStaffingViewModel.cs" />
+    <Compile Include="Intraday\ApplicationLayer\ViewModels\IntradayIncomingDataSeries.cs" />
     <Compile Include="Intraday\IntradayIncomingSummary.cs" />
-    <Compile Include="Intraday\LatestStatisticsTimeAndWorkload.cs" />
+    <Compile Include="Intraday\Domain\SkillIntervalStatistics.cs" />
     <Compile Include="Intraday\LatestStatisticsTimeProvider.cs" />
     <Compile Include="Intraday\LatestStatitsticsTimeModel.cs" />
     <Compile Include="Intraday\PerformanceViewModelCreator.cs" />
@@ -1780,7 +1789,6 @@
     <Compile Include="Optimization\OptimizerHelperHelper.cs" />
     <Compile Include="Optimization\ScheduleChangesAffectedDates.cs" />
     <Compile Include="Optimization\ClassicLegacy\ScheduleBlankSpots.cs" />
-    <Compile Include="Optimization\ScheduleMatrixesPrimarySkillExtractor.cs" />
     <Compile Include="Optimization\SmartDayOffBackToLegalStateSolverContainer.cs" />
     <Compile Include="Optimization\TeamBlock\RestrictionOverLimitValidator.cs" />
     <Compile Include="Optimization\WorkShiftBackToLegalStateServiceProFactory.cs" />
@@ -2007,7 +2015,7 @@
     <Compile Include="Security\SignatureCreator.cs" />
     <Compile Include="Common\ServiceLocatorForEntity.cs" />
     <Compile Include="Islands\CreateIslands.cs" />
-    <Compile Include="Intraday\IntradayIncomingViewModel.cs" />
+    <Compile Include="Intraday\ApplicationLayer\ViewModels\IntradayIncomingViewModel.cs" />
     <Compile Include="Intraday\IncomingTrafficViewModelCreator.cs" />
     <Compile Include="Logon\Aspects\TenantScopeAspect.cs" />
     <Compile Include="Logon\Aspects\TenantScopeAttribute.cs" />
@@ -2275,9 +2283,9 @@
     <Compile Include="SkillGroupManagement\SkillGroupViewModelBuilder.cs" />
     <Compile Include="Logon\Aspects\TenantFromArguments.cs" />
     <Compile Include="Logon\AsSystem.cs" />
-    <Compile Include="Intraday\FetchSkillInIntraday.cs" />
+    <Compile Include="Intraday\ApplicationLayer\FetchSkillInIntraday.cs" />
     <Compile Include="SkillGroupManagement\SkillGroup.cs" />
-    <Compile Include="Intraday\SkillInIntraday.cs" />
+    <Compile Include="Intraday\Domain\SkillInIntraday.cs" />
     <Compile Include="Intraday\SkillStatusMeasure.cs" />
     <Compile Include="Intraday\SkillStatusModel.cs" />
     <Compile Include="Logon\AsSystemAspect.cs" />

@@ -1,19 +1,17 @@
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { of } from 'rxjs/observable/of';
-import { flatMap, map, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import {
-	SearchService,
-	WorkspaceService,
-	PeopleSearchResult,
-	PeopleSearchQuery,
-	SearchOverridesService,
-	PeopleOverride,
 	COLUMNS,
-	DIRECTION
+	DIRECTION,
+	PeopleOverride,
+	PeopleSearchQuery,
+	PeopleSearchResult,
+	SearchOverridesService,
+	SearchService,
+	WorkspaceService
 } from '../../services';
 import { Person } from '../../types';
-import { PeopleSearch } from '../../../../../e2e/people/search.po';
 
 @Injectable()
 export class SearchPageService {

@@ -299,8 +299,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 						Color = isPayloadAbsence
 							? (isAbsenceConfidential && !isPermittedToViewConfidential
 								? ConfidentialPayloadValues.DisplayColorHex
-								: (layer.Payload as IAbsence).DisplayColor.ToHtml())
-							: layer.DisplayColor().ToHtml(),
+								: (layer.Payload as IAbsence).DisplayColor.ToCSV())
+							: layer.DisplayColor().ToCSV(),
 						Start = startDateTimeInUserTimeZone,
 						End = endDateTimeInUserTimeZone,
 						LengthInMinutes = (int)endDateTimeInUserTimeZone.Subtract(startDateTimeInUserTimeZone).TotalMinutes,

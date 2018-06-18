@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.TestCommon
 		public static string ConnectionString => ConfigurationManager.AppSettings["InfraTest.ConnectionString"];
 		public static string InvalidConnectionString => @"Data Source=nakenjanne;Initial Catalog=Demoreg_TeleoptiCCC7;User Id=sa;Password=cadadi;Connect Timeout=1;";
 		public static string AnalyticsConnectionString => ConfigurationManager.AppSettings["InfraTest.AnalyticsConnectionString"];
-		public static string AggConnectionString => getAggConnectionString("Infratest_Agg", AnalyticsConnectionString);
+		public static string AggConnectionString => getAggConnectionString("InfraTest_Agg", AnalyticsConnectionString);
 		public static string SqlServerName => ConfigurationManager.AppSettings["InfraTest.SqlServerName"];
 		public static string SqlAuthString => ConfigurationManager.AppSettings["InfraTest.SqlAuthString"];
 		public static string DatabaseName => ConfigurationManager.AppSettings["InfraTest.DatabaseName"];

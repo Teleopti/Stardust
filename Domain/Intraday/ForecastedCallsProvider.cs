@@ -2,24 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Intraday
-{
-	public class ForecastedCallsProvider
+{ 
+	public class ForecastedCallsProvider : IForecastedCallsProvider
 	{
 		private readonly IUserTimeZone _timeZone;
-		private readonly TaskPeriodsProvider _taskPeriodsProvider;
+		private readonly ITaskPeriodsProvider _taskPeriodsProvider;
 
 		public ForecastedCallsProvider(
 			IUserTimeZone timeZone,
-			TaskPeriodsProvider taskPeriodsProvider
+			ITaskPeriodsProvider taskPeriodsProvider
 			)
 		{
 			_timeZone = timeZone;
 			_taskPeriodsProvider = taskPeriodsProvider;
 		}
-		
+
+
 		public ForecastedCallsModel Load(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, DateTime? latestStatisticsTime, int minutesPerInterval, DateTime? currentDateTime = null)
 		{
 
@@ -51,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			};
 		}
 
-		private List<SkillIntervalStatistics> getForecastedCalls(List<ITemplateTaskPeriod> mergedTaskPeriodList, ISkill skill)
+		private List<SkillIntervalStatistics> getForecastedCalls(IEnumerable<ITemplateTaskPeriod> mergedTaskPeriodList, ISkill skill)
 		{
 			var mergedTaskPeriodPerSkill = mergedTaskPeriodList
 				.Select(x => new SkillIntervalStatistics
@@ -78,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			return forecastedCalls;
 		}
 
-		private static SkillDayStatsRange getSkillStatsRange(List<ITemplateTaskPeriod> templateTaskPeriods,
+		private static SkillDayStatsRange getSkillStatsRange(IEnumerable<ITemplateTaskPeriod> templateTaskPeriods,
 			ISkill skill,
 			ISkillDay skillDay)
 		{

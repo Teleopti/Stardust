@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
+using Teleopti.Ccc.Domain.Intraday.ApplicationLayer.ViewModels;
+using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -29,17 +32,17 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_skillTypeInfoProvider = skillTypeInfoProvider;
 		}
 
-		public IntradayIncomingViewModel Load(Guid[] skillIdList)
+		public IntradayIncomingViewModel Load_old(Guid[] skillIdList)
 		{
-			return Load(skillIdList, _now.UtcDateTime());
+			return Load_old(skillIdList, _now.UtcDateTime());
 		}
 
-		public IntradayIncomingViewModel Load(Guid[] skillIdList, int dayOffset)
+		public IntradayIncomingViewModel Load_old(Guid[] skillIdList, int dayOffset)
 		{
-			return Load(skillIdList, _now.UtcDateTime().AddDays(dayOffset));
+			return Load_old(skillIdList, _now.UtcDateTime().AddDays(dayOffset));
 		}
 
-		public IntradayIncomingViewModel Load(Guid[] skillIdList, DateTime utcDate)
+		public IntradayIncomingViewModel Load_old(Guid[] skillIdList, DateTime utcDate)
 		{
 			var supportedSkills = _supportedSkillsInIntradayProvider.GetSupportedSkills(skillIdList);
 			var abandonRateSupported = supportedSkills.All(x => _skillTypeInfoProvider.GetSkillTypeInfo(x).SupportsAbandonRate);
@@ -149,6 +152,5 @@ namespace Teleopti.Ccc.Domain.Intraday
 				IncomingTrafficHasData = intervals.Any()
 			};
 		}
-
 	}
 }

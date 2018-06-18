@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Domain.Intraday
 {
-	public class ForecastedStaffingToDataSeries
+	public class ForecastedStaffingToDataSeries : IForecastedStaffingToDataSeries
 	{
 		public double?[] DataSeries(IList<StaffingIntervalModel> forecastedStaffingPerSkill, DateTime[] timeSeries)
 		{

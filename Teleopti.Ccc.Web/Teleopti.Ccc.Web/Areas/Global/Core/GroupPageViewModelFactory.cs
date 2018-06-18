@@ -39,17 +39,21 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 		{
 			var stringComparer = StringComparer.Create(_uiCulture.GetUiCulture(), false);
 			var allGroupPages = _groupingReadOnlyRepository.AvailableGroupsBasedOnPeriod(period);
-			var allDynamicOptionalColumns = _optionalColumnRepository.GetOptionalColumns<Person>().Where(o=> o.AvailableAsGroupPage).ToList();
+			var allDynamicOptionalColumns = _optionalColumnRepository.GetOptionalColumns<Person>().Where(o => o.AvailableAsGroupPage).ToList();
 			var allAvailableGroups =
-				_groupingReadOnlyRepository.AvailableGroups(period, allGroupPages.Select(gp=>gp.PageId).ToArray())
+				_groupingReadOnlyRepository.AvailableGroups(period, allGroupPages.Select(gp => gp.PageId).ToArray())
 					.ToLookup(t => t.PageId);
 
 			var actualOrgs = new List<SiteViewModelWithTeams>();
-			
+
 			var orgsLookup = allAvailableGroups[Group.PageMainId].ToLookup(g => g.SiteId);
 			foreach (var siteLookUp in orgsLookup)
 			{
-				var permittedTeamGroups = siteLookUp.Where(team => _permissionProvider.HasOrganisationDetailPermission(functionPath, period.StartDate, team));
+				var permittedTeamGroups = siteLookUp
+					.GroupBy(slu => slu.TeamId)
+					.Select(slu => slu.First())
+					.Where(team => _permissionProvider.HasOrganisationDetailPermission(functionPath, period.StartDate, team));
+
 				if (!permittedTeamGroups.Any())
 					continue;
 				var permittedTeams = _teamRepository.FindTeams(permittedTeamGroups.Select(x => x.TeamId.Value));
@@ -63,7 +67,7 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 
 				actualOrgs.Add(new SiteViewModelWithTeams
 				{
-					
+
 					Name = permittedTeams.First().Site.Description.Name,
 					Id = siteLookUp.Key.GetValueOrDefault(),
 					Children = children.ToList()
@@ -148,9 +152,9 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 				buildInGroupPages.Insert(0, businessHierarchyPage);
 
 			var groupPages = buildInGroupPages.Union(customGroupPages).ToList();
-			
+
 			var allAvailableGroups = _groupingReadOnlyRepository
-				.AvailableGroups(date.ToDateOnlyPeriod(), groupPages.Select(gp=>gp.PageId).ToArray())
+				.AvailableGroups(date.ToDateOnlyPeriod(), groupPages.Select(gp => gp.PageId).ToArray())
 				.ToLookup(t => t.PageId);
 
 			var actualGroupPages = groupPages.Select(gp =>
@@ -172,6 +176,6 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 
 			return new { GroupPages = actualGroupPages, DefaultGroupId = defaultGroupId };
 		}
-		
+
 	}
 }

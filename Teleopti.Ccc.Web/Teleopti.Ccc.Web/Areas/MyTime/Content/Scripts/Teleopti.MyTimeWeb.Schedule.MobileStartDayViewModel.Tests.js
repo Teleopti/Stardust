@@ -5,7 +5,10 @@
 $(document).ready(function() {
 	module("Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel", {
 		setup: function() {
-			Teleopti.MyTimeWeb.Common.IsToggleEnabled = function() {};
+			Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggle) {
+				if(toggle == 'MyTimeWeb_DayScheduleForStartPage_Command_44209')
+					return true;
+			};
 		}
 	});
 
@@ -516,6 +519,62 @@ $(document).ready(function() {
 		};
 		viewModel.readData(rawData);
 		equal(viewModel.showProbabilityOptionsToggleIcon(), false);
+	});
+
+	test('should not show menu icon when has no permission for any operation', function () {
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+		var rawData = {
+			Date: moment().format('YYYY-MM-DD'),
+			Schedule: {
+				FixedDate: null,
+				Summary: {
+					Color: null,
+					Title: null,
+					TimeSpan: null
+				},
+				Header: { Title: null },
+			},
+			ViewPossibilityPermission: false,
+			RequestPermission: {
+				OvertimeAvailabilityPermission: false,
+				AbsenceReportPermission: false,
+				TextRequestPermission: false,
+				AbsenceRequestPermission: false,
+				ShiftTradeRequestPermission: false,
+				PersonAccountPermission: false,
+				OvertimeRequestPermission: false
+			}
+		};
+		viewModel.readData(rawData);
+		equal(viewModel.isCommandEnable(), false);
+	});
+
+	test('should show menu icon when has at least one permission for operation', function () {
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+		var rawData = {
+			Date: moment().format('YYYY-MM-DD'),
+			Schedule: {
+				FixedDate: null,
+				Summary: {
+					Color: null,
+					Title: null,
+					TimeSpan: null
+				},
+				Header: { Title: null },
+			},
+			ViewPossibilityPermission: false,
+			RequestPermission: {
+				OvertimeAvailabilityPermission: true,
+				AbsenceReportPermission: false,
+				TextRequestPermission: false,
+				AbsenceRequestPermission: false,
+				ShiftTradeRequestPermission: false,
+				PersonAccountPermission: false,
+				OvertimeRequestPermission: false
+			}
+		};
+		viewModel.readData(rawData);
+		equal(viewModel.isCommandEnable(), true);
 	});
 
 	test("should not show absence probability option item if CheckStaffingByIntraday is not toggled on ", function () {

@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -65,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillDayRepository.Has(skillDay);
 			IntradayQueueStatisticsLoader.HasStatistics(skillStats);
 
-			var vm1 = Target.Load(new[] { skill.Id.Value });
+			var vm1 = Target.Load_old(new[] { skill.Id.Value });
 
 			skillStats =
 				StaffingViewModelCreatorTestHelper.CreateStatisticsBasedOnForecastedTasks(skillDay, latestStatsTime,
@@ -108,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			});
 
 			IntradayQueueStatisticsLoader.HasStatistics(skillStats);
-			var vm2 = Target.Load(new[] { skill.Id.Value });
+			var vm2 = Target.Load_old(new[] { skill.Id.Value });
 
 			vm2.DataSeries.ActualStaffing.Length.Should().Be.EqualTo(4);
 			vm2.DataSeries.ActualStaffing.First().Should().Be.EqualTo(vm1.DataSeries.ActualStaffing.First());
@@ -136,10 +137,10 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillDayRepository.Has(skillDayToday, skillDayYesterday);
 			IntradayQueueStatisticsLoader.HasStatistics(skillStats);
 
-			var vm1 = Target.Load(new[] { skill.Id.Value });
+			var vm1 = Target.Load_old(new[] { skill.Id.Value });
 
 			skillDayYesterday.WorkloadDayCollection.First().TaskPeriodList.Last().Tasks = 100;
-			var vm2 = Target.Load(new[] { skill.Id.Value });
+			var vm2 = Target.Load_old(new[] { skill.Id.Value });
 
 			vm2.DataSeries.ActualStaffing.Length.Should().Be.EqualTo(4);
 			vm2.DataSeries.ActualStaffing.First().Should().Be.EqualTo(vm1.DataSeries.ActualStaffing.First());
@@ -191,7 +192,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var forecastedAgentsStart = skillDayToday.SkillStaffPeriodCollection.First().FStaff;
 			var forecastedAgentsEnd = skillDayToday.SkillStaffPeriodCollection.Last().FStaff;
 
-			var vm = Target.Load(new[] { skillEmail.Id.Value });
+			var vm = Target.Load_old(new[] { skillEmail.Id.Value });
 
 			vm.DataSeries.Should().Not.Be.EqualTo(null);
 			vm.StaffingHasData.Should().Be.EqualTo(true);
@@ -222,7 +223,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			skillDayTomorrow.SkillDayCalculator = skillDayCalculator;
 			SkillDayRepository.Has(skillDayToday, skillDayTomorrow, skillDayYesterday);
 
-			var vm1 = Target.Load(new[] { skillEmail.Id.Value });
+			var vm1 = Target.Load_old(new[] { skillEmail.Id.Value });
 
 			var forecastedAgentsStart = vm1.DataSeries.ForecastedStaffing.First();
 			var forecastedAgentsEnd = vm1.DataSeries.ForecastedStaffing.Last();
@@ -247,7 +248,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), skillCombinationResources);
 
-			var vm2 = Target.Load(new[] { skillEmail.Id.Value });
+			var vm2 = Target.Load_old(new[] { skillEmail.Id.Value });
 
 			vm2.DataSeries.Should().Not.Be.EqualTo(null);
 			vm2.DataSeries.ForecastedStaffing.First().Should().Not.Be.EqualTo(forecastedAgentsStart);
@@ -277,11 +278,11 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillStats = StaffingViewModelCreatorTestHelper.CreateStatisticsBasedOnForecastedTasks(skillDay, latestStatsTime, minutesPerInterval, TimeZone.TimeZone());
 			IntradayQueueStatisticsLoader.HasStatistics(skillStats);
 			
-			var vm1 = Target.Load(new[] { skillEmail.Id.Value });
+			var vm1 = Target.Load_old(new[] { skillEmail.Id.Value });
 
 			IntradayQueueStatisticsLoader.HasBacklog(skillDay.WorkloadDayCollection.First().Workload.Id.Value, 300);
 
-			var vm2 = Target.Load(new[] { skillEmail.Id.Value });
+			var vm2 = Target.Load_old(new[] { skillEmail.Id.Value });
 
 			vm2.DataSeries.Should().Not.Be.EqualTo(null);
 			vm2.StaffingHasData.Should().Be.EqualTo(true);
@@ -314,11 +315,11 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillStats = StaffingViewModelCreatorTestHelper.CreateStatisticsBasedOnForecastedTasks(skillDay, latestStatsTime, minutesPerInterval, TimeZone.TimeZone());
 			IntradayQueueStatisticsLoader.HasStatistics(skillStats);
 
-			var vm1 = Target.Load(new[] { skillBackOffice.Id.Value });
+			var vm1 = Target.Load_old(new[] { skillBackOffice.Id.Value });
 
 			IntradayQueueStatisticsLoader.HasBacklog(skillDay.WorkloadDayCollection.First().Workload.Id.Value, 300);
 
-			var vm2 = Target.Load(new[] { skillBackOffice.Id.Value });
+			var vm2 = Target.Load_old(new[] { skillBackOffice.Id.Value });
 
 			vm2.DataSeries.Should().Not.Be.EqualTo(null);
 			vm2.StaffingHasData.Should().Be.EqualTo(true);
@@ -351,7 +352,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			skillDayTomorrow.SkillDayCalculator = skillDayCalculator;
 			SkillDayRepository.Has(skillDayToday, skillDayTomorrow, skillDayYesterday);
 
-			var vm1 = Target.Load(new[] { skillBackoffice.Id.Value });
+			var vm1 = Target.Load_old(new[] { skillBackoffice.Id.Value });
 
 			var forecastedAgentsStart = vm1.DataSeries.ForecastedStaffing.First();
 			var forecastedAgentsEnd = vm1.DataSeries.ForecastedStaffing.Last();
@@ -376,7 +377,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), skillCombinationResources);
 
-			var vm2 = Target.Load(new[] { skillBackoffice.Id.Value });
+			var vm2 = Target.Load_old(new[] { skillBackoffice.Id.Value });
 
 			vm2.DataSeries.Should().Not.Be.EqualTo(null);
 			vm2.DataSeries.ForecastedStaffing.First().Should().Not.Be.EqualTo(forecastedAgentsStart);
@@ -404,7 +405,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var skillStats = StaffingViewModelCreatorTestHelper.CreateStatisticsBasedOnForecastedTasks(skillDay, latestStatsTime, minutesPerInterval, TimeZone.TimeZone());
 			IntradayQueueStatisticsLoader.HasStatistics(skillStats);
-			var vm2 = Target.Load(new[] { skillBackOffice.Id.Value });
+			var vm2 = Target.Load_old(new[] { skillBackOffice.Id.Value });
 
 			vm2.DataSeries.Should().Not.Be.EqualTo(null);
 			vm2.DataSeries.UpdatedForecastedStaffing.Length.Should().Be(0);

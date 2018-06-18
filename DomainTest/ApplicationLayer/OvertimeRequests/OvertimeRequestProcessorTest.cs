@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
@@ -18,7 +19,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -167,6 +167,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			personRequest.IsApproved.Should().Be.False();
 			personRequest.IsPending.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldNotDenyWhenAutoGrantoIsOff()
+		{
+			setupPerson();
+			LoggedOnUser.CurrentUser().WorkflowControlSet.OvertimeRequestOpenPeriods.First().AutoGrantType =
+				OvertimeRequestAutoGrantType.No;
+			setupIntradayStaffingForSkill(setupPersonSkill(), 5d, 10d);
+
+			var personRequest = createOvertimeRequest(8, 1);
+			getTarget().Process(personRequest);
+
+			personRequest.IsApproved.Should().Be.False();
+			personRequest.IsPending.Should().Be.True();
+			personRequest.GetMessage(new NoFormatting()).Should().Be(Resources.NoUnderStaffingSkill);
 		}
 
 		[Test]

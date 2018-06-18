@@ -35,11 +35,11 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 
 		public void Apply(PersonRuleChangedEvent @event) => applySolidProof(@event);
 
-		public void Apply(PersonArrivalAfterLateForWorkEvent @event)
+		public void Apply(PersonArrivedLateForWorkEvent @event)
 		{
 			var model = applySolidProof(@event);
 			if (model != null)
-				model.LateForWork = string.Format(UserTexts.Resources.LateXMinutes, new DateTimePeriod(@event.ShiftStart, @event.Timestamp).ElapsedTime().TotalMinutes);
+				model.LateForWork = string.Format(UserTexts.Resources.LateXMinutes, Math.Round(new DateTimePeriod(@event.ShiftStart, @event.Timestamp).ElapsedTime().TotalMinutes));
 		}
 
 		public void Apply(PeriodApprovedAsInAdherenceEvent @event) =>

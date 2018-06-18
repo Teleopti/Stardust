@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Intraday
 {
-	public class ForecastedStaffingProvider
+	public class ForecastedStaffingProvider : IForecastedStaffingProvider
 	{
 		private readonly IUserTimeZone _timeZone;
 		private readonly INow _now;
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_timeZone = timeZone;
 			_now = now;
 		}
-		
+
 		public IList<StaffingIntervalModel> StaffingPerSkill(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, int minutesPerInterval, DateOnly? dateOnly, bool useShrinkage)
 		{
 			var startTimeLocal = dateOnly?.Date ?? TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()).Date;

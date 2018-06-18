@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 	{
 		public Guid Id { get; set; }
 		public WorkloadAccuracy[] Workloads { get; set; }
+		public String SkillType { get; set; }
 	}
 }

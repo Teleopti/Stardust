@@ -16,14 +16,14 @@ namespace Teleopti.Ccc.Domain.Staffing
 	{
 		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly ICurrentScenario _currentScenario;
-		private readonly ScheduledStaffingProvider _scheduledStaffingProvider;
+		private readonly IScheduledStaffingProvider _scheduledStaffingProvider;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IForecastsRowExtractor _forecastsRowExtractor;
 
 		public ExportBpoFileOld() {}
 
 		public ExportBpoFileOld(ISkillDayRepository skillDayRepository, ICurrentScenario currentScenario, 
-			ScheduledStaffingProvider scheduledStaffingProvider, IUserTimeZone userTimeZone, IForecastsRowExtractor forecastsRowExtractor)
+			IScheduledStaffingProvider scheduledStaffingProvider, IUserTimeZone userTimeZone, IForecastsRowExtractor forecastsRowExtractor)
 		{
 			_skillDayRepository = skillDayRepository;
 			_currentScenario = currentScenario;

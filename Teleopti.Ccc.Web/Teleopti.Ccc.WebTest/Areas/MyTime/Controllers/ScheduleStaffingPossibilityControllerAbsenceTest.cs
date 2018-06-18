@@ -7,15 +7,12 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Requests;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -62,7 +59,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldNotReturnAbsencePossibiliesForDaysNotInAbsenceOpenPeriod()
 		{
 			setupSiteOpenHour();
-			setupDefaultTestData();
+			setupTestData();
 			setupWorkFlowControlSet();
 
 			var today = Now.ServerDate_DontUse();
@@ -80,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldReturnPossibiliesForCurrentWeek()
 		{
 			setupSiteOpenHour();
-			setupDefaultTestData();
+			setupTestData();
 			setupWorkFlowControlSet();
 			var result = getPossibilityViewModels(null, StaffingPossiblityType.Absence).ToList();
 			result.Count.Should().Be.EqualTo(6);
@@ -94,7 +91,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldReturnPossibiliesForNextWeek()
 		{
 			setupSiteOpenHour();
-			setupDefaultTestData();
+			setupTestData();
 			setupWorkFlowControlSet();
 			var result = getPossibilityViewModels(Now.ServerDate_DontUse().AddWeeks(1), StaffingPossiblityType.Absence).ToList();
 			result.Count.Should().Be.EqualTo(14);
@@ -111,7 +108,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldNotReturnPossibiliesForPastDays()
 		{
 			setupSiteOpenHour();
-			setupDefaultTestData();
+			setupTestData();
 			setupWorkFlowControlSet();
 			var result = getPossibilityViewModels(Now.ServerDate_DontUse().AddDays(-1), StaffingPossiblityType.Absence).ToList();
 			result.Count.Should().Be.EqualTo(6);
@@ -121,7 +118,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldNotReturnPossibiliesForFarFutureDays()
 		{
 			setupSiteOpenHour();
-			setupDefaultTestData();
+			setupTestData();
 			setupWorkFlowControlSet();
 			var result = getPossibilityViewModels(Now.ServerDate_DontUse().AddWeeks(3), StaffingPossiblityType.Absence);
 			result.Count().Should().Be.EqualTo(0);
@@ -138,7 +135,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetPossibilitiesWhenUsingShrinkageValidator()
 		{
 			setupSiteOpenHour();
-			setupDefaultTestData();
+			setupTestData();
 			var person = User.CurrentUser();
 			var absence = AbsenceFactory.CreateAbsenceWithId();
 
@@ -201,7 +198,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetFairPossibilitiesForAbsenceWhenUnderstaffing()
 		{
 			setupSiteOpenHour();
-			setupDefaultTestData();
+			setupTestData();
 			setupWorkFlowControlSet();
 			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Absence)
 				.Where(d => d.Date == Now.ServerDate_DontUse().ToFixedClientDateOnlyFormat()).ToList();
@@ -214,7 +211,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetGoodPossibilitiesForAbsenceWhenNotUnderstaffing()
 		{
 			setupSiteOpenHour();
-			setupDefaultTestData(new double?[] { 10d, 10d }, new double?[] { 11d, 11d });
+			setupTestData(new double?[] { 10d, 10d }, new double?[] { 11d, 11d });
 			setupWorkFlowControlSet();
 			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Absence)
 				.Where(d => d.Date == Now.ServerDate_DontUse().ToFixedClientDateOnlyFormat()).ToList();
@@ -227,7 +224,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetFairAndGoodPossibilitiesForAbsence()
 		{
 			setupSiteOpenHour();
-			setupDefaultTestData(new double?[] { 10d, 10d }, new double?[] { 8d, 11d });
+			setupTestData(new double?[] { 10d, 10d }, new double?[] { 8d, 11d });
 			setupWorkFlowControlSet();
 			var possibilities = getPossibilityViewModels(null, StaffingPossiblityType.Absence)
 				.Where(d => d.Date == Now.ServerDate_DontUse().ToFixedClientDateOnlyFormat()).ToList();
@@ -265,7 +262,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldOnlyGetOneDayDataIfReturnOneWeekDataIsFalse()
 		{
 			setupSiteOpenHour();
-			setupDefaultTestData();
+			setupTestData();
 			setupWorkFlowControlSet();
 			var result = getPossibilityViewModels(null, StaffingPossiblityType.Absence, false).ToList();
 			result.Count.Should().Be.EqualTo(2);
@@ -278,7 +275,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			Now.Is(Now.UtcDateTime().Date.AddHours(2));
 
 			setupSiteOpenHour();
-			setupDefaultTestData();
+			setupTestData();
 			setupWorkFlowControlSet();
 
 			var timeZoneInfo = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
@@ -294,7 +291,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldSubstractCurrentUsersMainShiftWhenCalculatingAbsenceProbability()
 		{
-			setupDefaultTestData(new double?[] { 1, 1 }, new double?[] { 1, 1 });
+			setupTestData(new double?[] { 1, 1 }, new double?[] { 1, 1 });
 			setupWorkFlowControlSet();
 
 			var possibilities =
@@ -414,6 +411,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
 		}
 
+		[Test]
+		public void ShouldGetAllGoodPossibilitiesWhenUnderStaffingThresholdsIsMinusOne()
+		{
+			var skill = createSkill("test1");
+			skill.StaffingThresholds = new StaffingThresholds(new Percent(-1), new Percent(-1), new Percent(0.1));
+			setupTestData(skill, new double?[] { 1, 1 }, new double?[] { 0.1, 0.2 });
+			setupWorkFlowControlSet();
+
+			var possibilities =
+				getPossibilityViewModels(null, StaffingPossiblityType.Absence)
+					.Where(d => d.Date == Now.ServerDate_DontUse().ToFixedClientDateOnlyFormat())
+					.ToList();
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(1, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(1, possibilities.ElementAt(1).Possibility);
+		}
 		private void setupWorkFlowControlSet()
 		{
 			var absenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod
@@ -467,10 +480,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			}
 		}
 
-		private void setupDefaultTestData(double?[] forecastedStaffing = null, double?[] scheduledStaffing = null)
+		private void setupTestData(double?[] forecastedStaffing = null, double?[] scheduledStaffing = null)
+		{
+			var skill = createSkill("test1");
+			setupTestData(skill, forecastedStaffing, scheduledStaffing);
+		}
+
+		private void setupTestData(ISkill skill, double?[] forecastedStaffing = null, double?[] scheduledStaffing = null)
 		{
 			var activity = createActivity();
-			var skill = createSkill("test1");
 			var personSkill = createPersonSkill(activity, skill);
 			addPersonSkillsToPersonPeriod(personSkill);
 			createAssignment(User.CurrentUser(), activity);

@@ -2,6 +2,7 @@
 	As an agent I need to easily find the shift trade page,
 	so that I find where to look for trade candidates.
 
+@OnlyRunIfDisabled('MyTimeWeb_NewTeamScheduleView_75989')
 Scenario: Initialize a shift trade from team schedule and also see existing request
 	Given I am an agent in a team with access to the whole site
 	And I have an existing text request

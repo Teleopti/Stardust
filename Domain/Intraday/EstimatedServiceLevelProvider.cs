@@ -1,7 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
+using Teleopti.Ccc.Domain.Intraday.ApplicationLayer.ViewModels;
+using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -9,23 +14,35 @@ namespace Teleopti.Ccc.Domain.Intraday
 {
 	public class EstimatedServiceLevelProvider
 	{
-		private readonly ForecastedCallsProvider _forecastedCallsProvider;
-		private readonly ForecastedStaffingProvider _forecastedStaffingProvider;
-		private readonly ScheduledStaffingProvider _scheduledStaffingProvider;
+		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
+		private readonly IScheduledStaffingProvider _scheduledStaffingProvider;
 		private readonly IUserTimeZone _timeZone;
 		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorService;
+		private readonly SkillStaffingIntervalProvider _skillStaffingIntervalProvider;
 
-		public EstimatedServiceLevelProvider(ForecastedCallsProvider forecastedCallsProvider,
-			ForecastedStaffingProvider forecastedStaffingProvider,
-			ScheduledStaffingProvider scheduledStaffingProvider,
+		private readonly IForecastedCallsProvider _forecastedCallsProvider;
+		private readonly IForecastedStaffingProvider _forecastedStaffingProvider;
+		private readonly IIntradayForecastingService _forecastingService;
+
+		public EstimatedServiceLevelProvider(
+			IIntervalLengthFetcher intervalLengthFetcher,
+			IScheduledStaffingProvider scheduledStaffingProvider,
 			IUserTimeZone timeZone,
-			IStaffingCalculatorServiceFacade staffingCalculatorService)
+			IStaffingCalculatorServiceFacade staffingCalculatorService,
+			SkillStaffingIntervalProvider skillStaffingIntervalProvider,
+			IForecastedCallsProvider forecastedCallsProvider,
+			IForecastedStaffingProvider forecastedStaffingProvider,
+			IIntradayForecastingService forecastingService)
 		{
-			_forecastedCallsProvider = forecastedCallsProvider;
-			_forecastedStaffingProvider = forecastedStaffingProvider;
 			_scheduledStaffingProvider = scheduledStaffingProvider;
 			_timeZone = timeZone;
 			_staffingCalculatorService = staffingCalculatorService;
+			_intervalLengthFetcher = intervalLengthFetcher;
+			_skillStaffingIntervalProvider = skillStaffingIntervalProvider;
+			_forecastedCallsProvider = forecastedCallsProvider;
+			_forecastedStaffingProvider = forecastedStaffingProvider;
+
+			this._forecastingService = forecastingService ?? throw new ArgumentNullException(nameof(forecastingService));
 		}
 
 		public double EslSummary(IList<EslInterval> eslIntervals)

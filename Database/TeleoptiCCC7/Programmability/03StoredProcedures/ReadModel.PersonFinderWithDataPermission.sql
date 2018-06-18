@@ -57,7 +57,9 @@ CREATE TABLE #result(
 	[TerminalDate] [datetime] NULL,
 	[TeamId] [uniqueidentifier]  NULL,
 	[SiteId] [uniqueidentifier]  NULL,
-	[BusinessUnitId] [uniqueidentifier]  NULL
+	[BusinessUnitId] [uniqueidentifier]  NULL,
+	[SiteName] [nvarchar] (50) NOT NULL,
+	[TeamName] [nvarchar] (50) NOT NULL
 	)
 
 -- Get searchString into temptable
@@ -189,24 +191,28 @@ DROP TABLE #AvailableBusinessUnits
 IF @search_type <> 'All'
 	BEGIN
 		INSERT INTO #Result 
-		SELECT PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, TeamId, SiteId, BusinessUnitId 
+		SELECT PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, TeamId, SiteId, BusinessUnitId, si.Name AS SiteName, t.Name AS TeamName
 		FROM ReadModel.FindPerson with (nolock) 
-		CROSS JOIN #strings s 
+		CROSS JOIN #strings s
+		INNER JOIN dbo.Site AS si ON si.Id = SiteId
+		INNER JOIN dbo.Team AS t ON t.Id = TeamId
 		WHERE ISNULL(TerminalDate, '2100-01-01') >= @leave_after 
 			AND SearchType=@search_type 
 			AND SearchValue like N'%' + s.SearchWord + '%'
-		GROUP BY PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, TeamId, SiteId, BusinessUnitId 
+		GROUP BY PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, TeamId, SiteId, BusinessUnitId, si.Name, t.Name
 		HAVING COUNT(DISTINCT s.SearchWord) >= @countWords --AND => Must have hit on all words
 	END
 ELSE
 	BEGIN
 		INSERT INTO #Result 
-		SELECT PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, TeamId, SiteId, BusinessUnitId 
+		SELECT PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, TeamId, SiteId, BusinessUnitId, si.Name AS SiteName, t.Name AS TeamName
 		FROM ReadModel.FindPerson with (nolock) 
 		CROSS JOIN #strings s 
+		INNER JOIN dbo.Site AS si ON si.Id = SiteId
+		INNER JOIN dbo.Team AS t ON t.Id = TeamId
 		WHERE ISNULL(TerminalDate, '2100-01-01') >= @leave_after 
 			AND SearchValue like N'%' + s.SearchWord + '%'
-		GROUP BY PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, TeamId, SiteId, BusinessUnitId
+		GROUP BY PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, TeamId, SiteId, BusinessUnitId, si.Name, t.Name
 		HAVING COUNT(DISTINCT s.SearchWord) >= @countWords --AND => Must have hit on all words
 	END
 
@@ -218,13 +224,18 @@ SELECT @dynamicSQL=''
 
 SELECT @dynamicSQL='SELECT ' + cast(@total as nvarchar(10)) + ' AS TotalCount, *
     FROM (
-    SELECT PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, TeamId, SiteId, BusinessUnitId, ROW_NUMBER() OVER(
+    SELECT PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, TeamId, SiteId, BusinessUnitId, SiteName, TeamName, ROW_NUMBER() OVER(
 				ORDER BY ' +
 						CASE @order_by
 							WHEN 0 THEN 'PC.FirstName collate ' + @collation
 							WHEN 1 THEN 'PC.LastName collate ' + @collation
 							WHEN 2 THEN 'PC.EmploymentNumber collate ' + @collation
 							WHEN 3 THEN 'PC.Note collate ' + @collation
+							WHEN 4 THEN 'PC.SiteName collate '+ @collation +
+								CASE @sort_direction
+									WHEN 1 THEN ' ASC, PC.TeamName collate ' + @collation
+									ELSE ' DESC, PC.TeamName collate ' + @collation
+								END
 							ELSE 'CONVERT(varchar(50), PC.TerminalDate, 120) collate ' + @collation
 						END +' ' + 
 						CASE @sort_direction

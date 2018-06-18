@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.WebPages;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -47,49 +48,30 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 
 			var findPeopleViewModel = new FindPeopleViewModel();
 
-			var validPersons = personFinderSearchCriteria.DisplayRows.Where(x => x.PersonId != Guid.Empty);
-			var persons = _personRepository.FindPeople(validPersons.Select(x => x.PersonId));
+			var persons = _personRepository.FindPeople(personFinderSearchCriteria.DisplayRows.Select(x => x.PersonId));
 
-			var pvm = new List<PeopleViewModel>();
-
-			foreach (var person in persons)
+			foreach (var personFinderDisplayRow in personFinderSearchCriteria.DisplayRows)
 			{
+				var person = persons.FirstOrDefault(x => x.Id == personFinderDisplayRow.PersonId);
 				var personPeriod = person.Period(searchCritera.SearchDate.ToDateOnly());
+				var team = personPeriod?.Team?.Description.Name ?? string.Empty;
+				var site = personPeriod?.Team?.Site?.Description.Name ?? string.Empty;
 				var pers = new PeopleViewModel
 				{
 					FirstName = person.Name.FirstName,
 					LastName = person.Name.LastName,
 					Id = person.Id.GetValueOrDefault().ToString(),
-					Team = personPeriod?.Team?.Description.Name ?? string.Empty,
-					Site = personPeriod?.Team?.Site?.Description.Name ?? string.Empty,
+					SiteTeam = string.Concat(site, team.IsEmpty() ? "" : "/", team),
+					Team = team,
+					Site = site,
 					Roles = person.PermissionInformation.ApplicationRoleCollection.Select(x => new SearchPersonRoleViewModel
 					{
 						Id = x.Id.GetValueOrDefault(),
 						Name = x.DescriptionText,
 					}).ToList()
 				};
-				pvm.Add(pers);
+				findPeopleViewModel.People.Add(pers);
 			}
-
-			IOrderedEnumerable<PeopleViewModel> genericPvm;
-
-			switch (searchCritera.SortColumn)
-			{
-				case 0:
-					genericPvm = searchCritera.Direction == 1 ? pvm.OrderBy(person => person.FirstName) : pvm.OrderByDescending(person => person.FirstName);
-					break;
-				case 1:
-					genericPvm = searchCritera.Direction == 1 ? pvm.OrderBy(person => person.LastName) : pvm.OrderByDescending(person => person.LastName);
-					break;
-				case 2:
-					genericPvm = searchCritera.Direction == 1 ? pvm.OrderBy(person => person.Site) : pvm.OrderByDescending(person => person.Site);
-					break;
-				default:
-					genericPvm = searchCritera.Direction == 1 ? pvm.OrderBy(person => person.LastName) : pvm.OrderByDescending(person => person.LastName);
-					break;
-			}
-
-			findPeopleViewModel.People.AddRange(genericPvm.ToList());
 
 			findPeopleViewModel.TotalRows = personFinderSearchCriteria.TotalRows;
 			findPeopleViewModel.PageIndex = searchCritera.PageIndex;

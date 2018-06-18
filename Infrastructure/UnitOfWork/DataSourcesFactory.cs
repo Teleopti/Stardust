@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				.SetProperty(Environment.ConnectionString, connectionString)
 				.SetProperty(Environment.ConnectionProvider, "NHibernate.Connection.DriverConnectionProvider")
 				.SetProperty(Environment.ConnectionDriver,
-					_toggles.IsEnabled(Domain.FeatureFlags.Toggles.Tech_Moving_ResilientConnectionLogic)
+					_toggles.IsEnabled(Domain.FeatureFlags.Toggles.Tech_Moving_ResilientConnectionLogic_76181)
 						? typeof(ResilientSql2008ClientDriver).AssemblyQualifiedName
 						: typeof(SqlAzureClientDriverWithLogRetries).AssemblyQualifiedName)
 				.SetProperty(Environment.Dialect, typeof(MsSql2008Dialect).AssemblyQualifiedName)
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private void setDefaultValuesOnApplicationConf(Configuration cfg)
 		{
-			_dataSourceConfigurationSetter.AddDefaultSettingsTo(cfg, _toggles.IsEnabled(Toggles.Tech_Moving_ResilientConnectionLogic));
+			_dataSourceConfigurationSetter.AddDefaultSettingsTo(cfg, _toggles.IsEnabled(Toggles.Tech_Moving_ResilientConnectionLogic_76181));
 			_enversConfiguration.Configure(cfg);
 		}
 	}

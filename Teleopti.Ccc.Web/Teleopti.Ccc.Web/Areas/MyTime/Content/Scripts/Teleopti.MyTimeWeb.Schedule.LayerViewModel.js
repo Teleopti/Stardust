@@ -52,8 +52,10 @@ Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, parent, layersOnMo
 	self.backgroundColor = ko.observable('');
 	if(layer.Color.indexOf('#') > -1) {
 		self.backgroundColor(layer.Color);
-	} else {
+	} else if(layer.Color && layer.Color.split(',').length == 3) {
 		self.backgroundColor('rgb(' + layer.Color + ')');
+	} else {
+		self.backgroundColor('rgba(' + layer.Color + ')');
 	}
 
 	self.textColor = ko.computed(function () {
@@ -75,7 +77,7 @@ Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, parent, layersOnMo
 		if(useFixedContainerHeight) {
 			return Math.round(scheduleHeight * self.startPositionPercentage()) + (offset || 0);
 		} else if(timelineStart) {
-			var minutesToTimeLineStart = moment.duration(layer.TimeSpan.split('-')[0]) - moment.duration(timelineStart.slice(0,5));
+			var minutesToTimeLineStart = moment.duration(layer.StartTime.split('T')[1]) - moment.duration(timelineStart.slice(0,5));
 
 			if(!moment(layer.StartTime.split('T')[0]).isSame(moment(selectedDate), 'day')) {
 				minutesToTimeLineStart += 24 * 60 * 60 * 1000;
@@ -92,7 +94,7 @@ Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, parent, layersOnMo
 		if(useFixedContainerHeight) {
 			bottom = Math.round(scheduleHeight * self.endPositionPercentage()) + 1 + (offset || 0);
 		} else if(timelineStart) {
-			var bottomDuration = moment.duration(layer.TimeSpan.split('-')[1]) - moment.duration(timelineStart.slice(0,5));
+			var bottomDuration = moment.duration(layer.EndTime.split('T')[1]) - moment.duration(timelineStart.slice(0,5));
 
 			if(!moment(layer.EndTime.split('T')[0]).isSame(moment(selectedDate), 'day')) {
 				bottomDuration += 24 * 60 * 60 * 1000;

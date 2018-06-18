@@ -499,13 +499,119 @@
 
 		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
 
-		vm.readMoreTeamScheduleData(fakeOriginalAgentSchedulesData.slice(10));
+		vm.readMoreTeamScheduleData({
+			AgentSchedules: fakeOriginalAgentSchedulesData.slice(10)
+		});
 
 		equal($('.teammates-agent-name-row .mobile-teamschedule-agent-name:nth-child(1) .text-name').text(), 'Jon Kleinsmith1');
 		equal($('.teammates-agent-name-row .mobile-teamschedule-agent-name:nth-child(10) .text-name').text(), 'Jon Kleinsmith10');
 		equal($('.teammates-agent-name-row .mobile-teamschedule-agent-name:nth-child(11) .text-name').text(), 'Jon Kleinsmith11');
 		equal($('.teammates-agent-name-row .mobile-teamschedule-agent-name:nth-child(20) .text-name').text(), 'Jon Kleinsmith20');
 	});
+
+	test('should reset search name to empty after click cancel button in panel', function () {
+		initVm();
+
+		$('.mobile-teamschedule-view').append(agentSchedulesHtml);
+
+		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+
+		vm.toggleFilterPanel();
+
+		vm.searchNameText('test search name text');
+
+		$('.mobile-teamschedule-submit-buttons button:first-child').click();
+
+		equal(vm.searchNameText(), '');
+	});
+
+	test('should reset search name text to last submitted value after click cancel button in panel', function () {
+		initVm();
+
+		$('.mobile-teamschedule-view').append(agentSchedulesHtml);
+
+		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+		vm.searchNameText('10');
+		vm.submitSearchForm();
+
+		vm.toggleFilterPanel();
+
+		vm.searchNameText('test search name text');
+
+		$('.mobile-teamschedule-submit-buttons button:first-child').click();
+
+		equal(vm.searchNameText(), '10');
+	});
+
+	test('should reset to selected team default team after click cancel button in panel', function () {
+		initVm();
+
+		$('.mobile-teamschedule-view').append(agentSchedulesHtml);
+
+		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+
+		vm.toggleFilterPanel();
+
+		vm.selectedTeam('d7a9c243-8cd8-406e-9889-9b5e015ab495');
+
+		$('.mobile-teamschedule-submit-buttons button:first-child').click();
+
+		equal(vm.selectedTeam(), fakeDefaultTeamData.DefaultTeam);
+	});
+
+	test('should reset selected team to last submitted team after click cancel button in panel', function () {
+		initVm();
+
+		$('.mobile-teamschedule-view').append(agentSchedulesHtml);
+
+		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+
+		vm.selectedTeam('allTeams');
+		vm.submitSearchForm();
+
+		vm.toggleFilterPanel();
+
+		vm.selectedTeam('a74e1f94-7662-4a7f-9746-a56e00a66f17');
+
+		$('.mobile-teamschedule-submit-buttons button:first-child').click();
+
+		equal(vm.selectedTeam(), 'allTeams');
+	});
+
+	test('should map dayOff of MySchedule', function () {
+		initVm();
+		var html = ['<!--ko if:mySchedule().isDayOff-->',
+		'<div class="shift-trade-layer-container floatleft shift-trade-dayoff">',
+		'<div class="dayoff" data-bind="text:mySchedule().dayOffName"></div>',
+		'</div>',
+		'<!--/ko-->'].join("");
+
+		$('.mobile-teamschedule-view').append(html);
+
+		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+
+		equal(vm.mySchedule().isDayOff, true);
+		equal(vm.mySchedule().dayOffName, 'Day off');
+		equal($('.dayoff').text(), 'Day off');
+	});
+
+	
+	test('should map dayOff of agents\' schedule', function () {
+		initVm();
+
+		$('.mobile-teamschedule-view').append(agentSchedulesHtml);
+
+		ko.applyBindings(vm, $('.mobile-teamschedule-view')[0]);
+
+		vm.paging.take = 100;
+		vm.toggleFilterPanel();
+		vm.searchNameText('dayoffAgent');
+		$('.mobile-teamschedule-submit-buttons button.btn-primary').click();
+
+		equal($('.teammates-schedules-container .dayoff-text:first').text(), 'Day off');
+	});
+
+
 
 	function setUpFakeData() {
 		fakeAvailableTeamsData = {
@@ -558,7 +664,7 @@
 				"PersonId": "b46a2588-8861-42e3-ab03-9b5e015b257c",
 				"MinStart": null,
 				"Total": 1,
-				"DayOffName": null,
+				"DayOffName": 'Day off',
 				"ContractTimeInMinute": 480.0,
 				"Date": "",
 				"FixedDate": "",
@@ -566,7 +672,7 @@
 				"HasMainShift": "",
 				"HasOvertime": "",
 				"IsFullDayAbsence": false,
-				"IsDayOff": false,
+				"IsDayOff": true,
 				"Summary": "",
 				"Periods": [
 					{
@@ -632,6 +738,13 @@
 				
 				fakeOriginalAgentSchedulesData.push(agentSchedule);
 			}
+
+			fakeOriginalAgentSchedulesData.push({
+				"Name":"dayoffAgent",
+				"IsDayOff": true,
+				"DayOffName": "Day off",
+				"Periods": []
+			});
 		}
 
 	}
@@ -676,72 +789,119 @@
 
 	function setUpHtml() {
 		agentSchedulesHtml = [
-			'<!-- ko if: mySchedule -->',
-			'<div class="mobile-teamschedule-agent-name my-name" data-bind="tooltip: { title: mySchedule().name, trigger: \'click\', placement: \'bottom\'}, hideTooltipAfterMouseLeave: true">',
-			'	<span class="text-name">@Resources.MySchedule</span>',
-			'	<span class="team-schedule-arrow-up"><i class="glyphicon glyphicon-chevron-up"></i></span>',
-			'	<span class="team-schedule-arrow-down"><i class="glyphicon glyphicon-chevron-down"></i></span>',
-			'</div>',
-			'<!-- /ko -->',
-			'<div class="teammates-agent-name-row">',
-			'	<!-- ko foreach: agentNames -->',
-			'	<div class="mobile-teamschedule-agent-name" data-bind="tooltip: { title: $data, trigger: \'click\', placement: \'bottom\'}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">',
-			'		<span class="text-name" data-bind="text: $data"></span>',
+			'<div class="mobile-teamschedule-view-body container">',
+			'	<div class="mobile-timeline floatleft" data-bind="style: {height: scheduleContainerHeight() + \'px\'}">',
+			'		<!-- ko foreach: timeLines -->',
+			'		<div class="mobile-timeline-label absolute" data-bind="style: {top: topPosition}, text: timeText, visible: isHour">',
+			'		</div>',
+			'		<!-- /ko -->',
+			'	</div>',
+			'	<!-- ko if: mySchedule -->',
+			'	<div class="mobile-teamschedule-agent-name my-name" data-bind="tooltip: { title: mySchedule().name, trigger: \'click\', placement: \'bottom\'}, hideTooltipAfterMouseLeave: true">',
+			'		<span class="text-name">@Resources.MySchedule</span>',
 			'		<span class="team-schedule-arrow-up"><i class="glyphicon glyphicon-chevron-up"></i></span>',
 			'		<span class="team-schedule-arrow-down"><i class="glyphicon glyphicon-chevron-down"></i></span>',
 			'	</div>',
 			'	<!-- /ko -->',
-			'</div>',
-			'<div class="my-schedule-column relative" data-bind="style: {height: scheduleContainerHeight() + \'px\'}">',
-			'	<!-- ko if: mySchedule -->',
-			'	<div class="mobile-schedule-container relative">',
-			'		<!-- ko foreach: mySchedule().layers -->',
-			'		<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: \'click\' }, style: styleJson, css:{\'overtime-background-image-light\': isOvertime, overTimeLighterBackgroundStyle, \'overtime-background-image-dark\': isOvertime, overTimeDarkerBackgroundStyle, \'last-layer\': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustMyScheduleTooltipPositionOnMobileTeamSchedule: true">',
-			'			<div data-bind="visible: showTitle() && !isOvertimeAvailability()"></div>',
-			'			<strong data-bind="text: title()"></strong>',
-			'			<!-- ko if: hasMeeting -->',
-			'			<div class="meeting floatright">',
-			'				<i class="meeting-icon mr10">',
-			'					<i class="glyphicon glyphicon-user ml10"></i>',
-			'				</i>',
+			'	<div class="teammates-agent-name-row">',
+			'		<!-- ko foreach: agentNames -->',
+			'		<div class="mobile-teamschedule-agent-name" data-bind="tooltip: { title: $data, trigger: \'click\', placement: \'bottom\'}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">',
+			'			<span class="text-name" data-bind="text: $data"></span>',
+			'			<span class="team-schedule-arrow-up"><i class="glyphicon glyphicon-chevron-up"></i></span>',
+			'			<span class="team-schedule-arrow-down"><i class="glyphicon glyphicon-chevron-down"></i></span>',
+			'		</div>',
+			'		<!-- /ko -->',
+			'	</div>',
+			'	<div class="my-schedule-column relative" data-bind="style: {height: scheduleContainerHeight() + \'px\'}">',
+			'		<!-- ko if: mySchedule -->',
+			'		<div class="mobile-schedule-container relative">',
+			'			<!-- ko foreach: mySchedule().layers -->',
+			'			<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: \'click\' }, style: styleJson, css:{\'overtime-background-image-light\': isOvertime, overTimeLighterBackgroundStyle, \'overtime-background-image-dark\': isOvertime, overTimeDarkerBackgroundStyle, \'last-layer\': isLastLayer}, hideTooltipAfterMouseLeave: true">',
+			'				<div data-bind="visible: showTitle() && !isOvertimeAvailability()">',
+			'					<strong data-bind="text: title()"></strong>',
+			'					<!-- ko if: hasMeeting -->',
+			'					<div class="meeting floatright">',
+			'						<i class="meeting-icon mr10">',
+			'							<i class="glyphicon glyphicon-user ml10"></i>',
+			'						</i>',
+			'					</div>',
+			'					<!-- /ko -->',
+			'					<span class="fullwidth displayblock" data-bind="visible: false && showDetail, text: timeSpan"></span>',
+			'				</div>',
+			'				<div data-bind="visible: false && showTitle() && isOvertimeAvailability()">',
+			'					<i class="glyphicon glyphicon-time"></i>',
+			'				</div>',
 			'			</div>',
 			'			<!-- /ko -->',
-			'			<span class="fullwidth displayblock" data-bind="visible: false && showDetail, text: timeSpan"></span>',
 			'		</div>',
-			'		<div data-bind="visible: false && showTitle() && isOvertimeAvailability()">',
-			'			<i class="glyphicon glyphicon-time"></i>',
+			'		<!-- /ko -->',
+			'	</div>',
+			'	<!-- ko if: teamSchedules -->',
+			'	<div class="teammates-schedules-container" data-bind="style: {height: scheduleContainerHeight() + \'px\'}">',
+			'		<!-- ko foreach: teamSchedules -->',
+			'		<div class="teammates-schedules-column relative">',
+			'			<div class="mobile-schedule-container relative">',
+			'				<!-- ko foreach: layers -->',
+			'				<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: \'click\' }, style: styleJson, css:{\'overtime-background-image-light\': isOvertime, overTimeLighterBackgroundStyle, \'overtime-background-image-dark\': isOvertime, overTimeDarkerBackgroundStyle, \'last-layer\': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">',
+			'					<div data-bind="visible: showTitle() && !isOvertimeAvailability()">',
+			'						<strong data-bind="visible: false, text: title()"></strong>',
+			'						<!-- ko if: hasMeeting -->',
+			'						<div class="meeting floatright">',
+			'							<i class="meeting-icon mr10">',
+			'								<i class="glyphicon glyphicon-user ml10"></i>',
+			'							</i>',
+			'						</div>',
+			'						<!-- /ko -->',
+			'						<span class="fullwidth displayblock" data-bind="visible: false && showDetail, text: timeSpan"></span>',
+			'					</div>',
+			'					<div data-bind="visible: false && showTitle() && isOvertimeAvailability()">',
+			'						<i class="glyphicon glyphicon-time"></i>',
+			'					</div>',
+			'				</div>',
+			'				<!-- /ko -->',
+			'			</div>',
+			'				<!--ko if:isDayOff-->',
+			'				<div class=\"dayoff\">',
+			'					<strong class="dayoff-text" data-bind="text: dayOffName"></strong>',
+			'				</div>',
+			'				<!-- /ko -->',
 			'		</div>',
 			'		<!-- /ko -->',
 			'	</div>',
 			'	<!-- /ko -->',
-			'</div>',
-			'<!-- ko if: teamSchedules -->',
-			'<div class="teammates-schedules-container" data-bind="style: {height: scheduleContainerHeight() + \'px\'}">',
-			'	<!-- ko foreach: teamSchedules -->',
-			'	<div class="teammates-schedules-column relative">',
-			'		<div class="mobile-schedule-container relative">',
-			'			<!-- ko foreach: layers -->',
-			'			<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: \'click\' }, style: styleJson, css:{\'overtime-background-image-light\': isOvertime, overTimeLighterBackgroundStyle, \'overtime-background-image-dark\': isOvertime, overTimeDarkerBackgroundStyle, \'last-layer\': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">',
-			'				<div data-bind="visible: showTitle() && !isOvertimeAvailability()"></div>',
-			'				<strong data-bind="visible: false, text: title()"></strong>',
-			'				<!-- ko if: hasMeeting -->',
-			'				<div class="meeting floatright">',
-			'					<i class="meeting-icon mr10">',
-			'						<i class="glyphicon glyphicon-user ml10"></i>',
-			'					</i>',
-			'				</div>',
-			'				<!-- /ko -->',
-			'				<span class="fullwidth displayblock" data-bind="visible: false && showDetail, text: timeSpan"></span>',
-			'			</div>',
-			'			<div data-bind="visible: false && showTitle() && isOvertimeAvailability()">',
-			'				<i class="glyphicon glyphicon-time"></i>',
-			'			</div>',
-			'			<!-- /ko -->',
+			'	<!-- ko if: isPanelVisible -->',
+			'	<div class="mobile-teamschedule-panel">',
+			'		<div class="teamschedule-filter-component">',
+			'			<p>',
+			'				<b>@Resources.Team: </b>',
+			'			</p>',
+			'			<select data-bind="foreach: availableTeams, select2: { value: selectedTeam, minimumResultsForSearch: \'Infinity\'}" id="team-selection">',
+			'				<optgroup data-bind="attr: { label: text }, foreach: children">',
+			'					<option data-bind="text: text, value: id"></option>',
+			'				</optgroup>',
+			'			</select>',
+			'		</div>',
+			'		<div class="teamschedule-search-component">',
+			'			<p>',
+			'				<b>@Resources.AgentName: </b>',
+			'			</p>',
+			'			<form data-bind="submit: submitSearchForm">',
+			'				<input type="search" class="form-control" placeholder=\'@Resources.SearchHintForName\' data-bind="value: searchNameText" />',
+			'				<input type="submit" style="display: none"/>',
+			'			</form>',
+			'		</div>',
+			'		<div class="empty-search-result">',
+			'			<!-- ko if: emptySearchResult -->',
+			'			<p><b>@Resources.NoResultForCurrentFilter</b></p>',
+			'			<!--/ko-->',
+			'		</div>',
+			'		<div class="mobile-teamschedule-submit-buttons">',
+			'			<button class="btn btn-default" data-bind="click: cancelClick">@Resources.Cancel</button>',
+			'			<button class="btn btn-primary" data-bind="click: submitSearchForm">@Resources.Search</button>',
 			'		</div>',
 			'	</div>',
-			'	<!-- /ko -->',
-			'</div>',
-			'<!-- /ko -->'].join("");
+			'	<!--/ko-->',
+			'</div>'].join("");
 	}
 
 	function setup() {

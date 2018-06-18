@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Models
 		public string Id { get; set; }
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
+		public string SiteTeam { get; set; }
 		public string Team { get; set; }
 		public string Site { get; set; }
 		public List<SearchPersonRoleViewModel> Roles { get; set; }

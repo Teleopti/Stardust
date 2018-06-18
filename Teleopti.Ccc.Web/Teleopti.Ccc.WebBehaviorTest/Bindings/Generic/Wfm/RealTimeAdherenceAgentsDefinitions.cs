@@ -120,20 +120,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 				Browser.Interactions.AssertAnyContains(selector, state.OutOfAdherenceTimeFormatted());
 
 
-			if (LocalSystem.Toggles.IsEnabled(Toggles.RTA_ImprovedStateGroupFilter_48724))
-			{
-				if (state.AlarmColor != null)
-					Browser.Interactions.AssertExists(selector + " [style*='background-color: " + toHex(state.AlarmColor) + "']");
-				if (state.Color != null)
-					Browser.Interactions.AssertExists(selector + " [style*='background-color: " + toHex(state.Color) + "']");
-			}
-			else
-			{
-				if (state.AlarmColor != null)
-					Browser.Interactions.AssertExists(selector + " [style*='background-color: " + toRGBA(state.AlarmColor, "0.6") + "']");
-				if (state.Color != null)
-					Browser.Interactions.AssertExists(selector + " [style*='background-color: " + toRGBA(state.Color, "0.6") + "']");
-			}
+			if (state.AlarmColor != null)
+				Browser.Interactions.AssertExists(selector + " [style*='background-color: " + toHex(state.AlarmColor) + "']");
+			if (state.Color != null)
+				Browser.Interactions.AssertExists(selector + " [style*='background-color: " + toHex(state.Color) + "']");
 		}
 
 		private static string toRGBA(string colorName, string transparency)

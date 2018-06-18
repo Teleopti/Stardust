@@ -64,11 +64,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
 			var personPeriod = scheduleDay.Person.Period(date);
-			if (personPeriod == null)
-			{
-				Logger.Debug("Person did not have this day in any person period, skipping that day");
-				return null;
-			}
 
 			var projection = scheduleDay.ProjectionService().CreateProjection();
 
@@ -76,12 +71,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 
 			var eventScheduleDay = new ProjectionChangedEventScheduleDay
 			{
-				TeamId = personPeriod.Team.Id.GetValueOrDefault(),
-				SiteId = personPeriod.Team.Site.Id.GetValueOrDefault(),
+				TeamId = personPeriod == null ? Guid.Empty : personPeriod.Team.Id.GetValueOrDefault(),
+				SiteId = personPeriod == null ? Guid.Empty : personPeriod.Team.Site.Id.GetValueOrDefault(),
 				Date = date.Date,
 				WorkTime = projection.WorkTime(),
 				ContractTime = projection.ContractTime(),
-				PersonPeriodId = personPeriod.Id.GetValueOrDefault(),
+				PersonPeriodId = personPeriod == null ? Guid.Empty : personPeriod.Id.GetValueOrDefault(),
 				CheckSum = new ShiftTradeChecksumCalculator(scheduleDay).CalculateChecksum()
 			};
 

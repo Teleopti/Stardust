@@ -38,12 +38,9 @@ Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850 = true
 WebByPassDefaultPermissionCheck_37984 = true
 
 # LevelUp #
-RTA_StoreEvents_47721 = true
-RTA_RemoveApprovedOOA_47721 = true
-RTA_ImprovedStateGroupFilter_48724 = true
 RTA_KillFattyIntradayUntilItDies_74939 = true
 RTA_RestrictModifyAdherenceWithPermission_74898 = true
-RTA_EasilySpotLateForWork_75668 = false
+RTA_EasilySpotLateForWork_75668 = RC
 
 # Dumplings, can any of these be removed? #
 WfmTeamSchedule_ShowStaffingInfo_45206 = true
@@ -85,7 +82,7 @@ MyTimeWeb_DayScheduleForStartPage_Command_44209 = true
 MyTimeWeb_MonthlyScheduleMobileView_45004 = true
 MyTimeWeb_SortRequestList_40711 = true #Please note the feature for this one is 40771!
 MyTimeWeb_WaitListPositionEnhancement_46301 = true
-MyTimeWeb_NewTeamScheduleView_75989 = DEV
+MyTimeWeb_NewTeamScheduleView_75989 = RC
 MyTimeWeb_PollToCheckScheduleChanges_46595 = true
 
 # China, can any of these be removed? #
@@ -93,6 +90,7 @@ MyTimeWeb_MobileResponsive_43826 = true
 Staffing_Info_Configuration_44687 = true
 
 # Kittens, Bugs&Roses and Micke #
+People_SpeedUpOpening_76365 = RC
 Scheduler_RestrictionReport_47013 = true
 Scheduler_RestrictionReportToggleAll_76224 = RC
 Wfm_SkillPriorityRoutingGUI_39885 = RC #Skill priorities, aka Cascading, is not ready for release yet
@@ -108,8 +106,7 @@ ResourcePlanner_UseErlangAWithFinitePatience_47738 = RC
 ResourcePlanner_SpeedUpEvents_48769 = true #batch deletes of dates - can be deleted early
 ResourcePlanner_SpeedUpEvents_74996 = true #caching different data - can be deleted early
 ResourcePlanner_SpeedUpEvents_75415 = true #restructure of events - dont remove toggle too early
-ResourcePlanner_MinimumAgents_75339 = true
-ResourcePlanner_LessResourcesXXL_74915 = false #intraday didn't get happy when this was used, so roll it back
+ResourcePlanner_LessResourcesXXL_74915 = false # not to influense perf test when we now switch over to stardust tests
 
 # Bugs&Roses #
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
@@ -148,27 +145,28 @@ ETL_Show_Web_Based_ETL_Tool_74837 = true
 WfmIntraday_MonitorActualvsForecasted_35176 = true
 WFM_Modify_Skill_Groups_43727 = true
 WFM_Remember_My_Selection_In_Intraday_47254 = true
+WFM_Intraday_Refactoring_74652 = RC
 
 # Ziggy #
 Wfm_Staffing_45411 = true #Enables the entire Staffing page!
 WfmStaffing_AddOvertime_42524 = RC 
-Wfm_Staffing_StaffingReadModel28DaysStep1_45109 = true
+Wfm_Staffing_StaffingReadModel28DaysStep1_45109 = true 
 Wfm_Staffing_StaffingReadModel49DaysStep2_45109 = true
 Wfm_Requests_HandleFourteenDaysFast_43390 = true
 Staffing_BPOExchangeImport_45202 = true
 Forecast_FileImport_UnifiedFormat_46585 = true
 Wfm_Requests_ProcessWaitlistBefore24hRequests_45767 = true
 Wfm_Requests_DenyRequestWhenAllSkillsClosed_46384 = true
-AddOrRemoveTenantsWithoutRestart_43635 = RC
+AddOrRemoveTenantsWithoutRestart_43635 = true
 People_ImprovePersonAccountAccuracy_74914 = true
 Staffing_BPO_Visualization_74958 = true
-Tenant_PurgeLogonAttempts_75782 = RC
-Tenant_PurgeNoneEmployeesData_76291 = RC
+Tenant_PurgeLogonAttempts_75782 = true
+Tenant_PurgeNoneEmployeesData_76291 = true
 
 # Squids #
 WFM_Forecaster_Refact_44480 = true
 WFM_Export_Forecast_44716 = true
-WFM_TrainingPlanner_44780 = RC
+WFM_TrainingPlanner_44780 = RC #So that large customers can use TP for up to 7 weeks from readmodels. Hard to set to true for everyone as they may book trinings further out...
 Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560 = true
 Report_Remove_Realtime_Scheduled_Time_vs_Target_45559 = true
 Report_Remove_Scheduled_Time_Per_Activity_From_Scheduler_45640 = true
@@ -185,4 +183,4 @@ WFM_Gamification_Create_Rolling_Periods_74866 = true
 MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889 = true
 
 # Tech #
-Tech_Moving_ResilientConnectionLogic = RC
+Tech_Moving_ResilientConnectionLogic_76181 = RC

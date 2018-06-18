@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			isolate.UseTestDouble<PrincipalAuthorization>().For<IAuthorization>();
 			isolate.UseTestDouble<PermissionProvider>().For<IPermissionProvider>();
 			isolate.UseTestDouble<CurrentTenantUserFake>().For<ICurrentTenantUser>();
-			isolate.UseTestDouble(new FakeCurrentUnitOfWorkFactory(null).WithCurrent(new FakeUnitOfWorkFactory(null, null, null, null) { Name = MyTimeWebTestAttribute.DefaultTenantName })).For<ICurrentUnitOfWorkFactory>();
+			isolate.UseTestDouble(new FakeCurrentUnitOfWorkFactory(null).WithCurrent(new FakeUnitOfWorkFactory(null, null, null) { Name = MyTimeWebTestAttribute.DefaultTenantName })).For<ICurrentUnitOfWorkFactory>();
 		}
 
 		[Test]

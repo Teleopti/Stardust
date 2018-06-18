@@ -4,6 +4,8 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
+using Teleopti.Ccc.Domain.Intraday.ApplicationLayer.DTOs;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
@@ -12,16 +14,24 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 {
 	public class SkillStaffingDataLoader : ISkillStaffingDataLoader
 	{
-		private readonly ScheduledStaffingProvider _scheduledStaffingProvider;
-		private readonly ForecastedStaffingProvider _forecastedStaffingProvider;
+		private readonly IScheduledStaffingProvider _scheduledStaffingProvider;
+		private readonly IForecastedStaffingProvider _forecastedStaffingProvider;
 		private readonly ICurrentScenario _scenarioRepository;
 		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly BacklogSkillTypesForecastCalculator _backlogSkillTypesForecastCalculator;
 		private readonly IUserTimeZone _userTimeZone;
 
-		public SkillStaffingDataLoader(ScheduledStaffingProvider scheduledStaffingProvider,
-			ForecastedStaffingProvider forecastedStaffingProvider,
-			ICurrentScenario scenarioRepository, ISkillDayRepository skillDayRepository, BacklogSkillTypesForecastCalculator backlogSkillTypesForecastCalculator, IUserTimeZone userTimeZone)
+		private readonly IIntradayStaffingApplicationService _intradayStaffingApplicationService;
+
+		public SkillStaffingDataLoader(
+			IScheduledStaffingProvider scheduledStaffingProvider,
+			IForecastedStaffingProvider forecastedStaffingProvider,
+			ICurrentScenario scenarioRepository, 
+			ISkillDayRepository skillDayRepository, 
+			BacklogSkillTypesForecastCalculator backlogSkillTypesForecastCalculator, 
+			IUserTimeZone userTimeZone,
+			IIntradayStaffingApplicationService intradayStaffingApplicationService
+			)
 		{
 			_scheduledStaffingProvider = scheduledStaffingProvider;
 			_forecastedStaffingProvider = forecastedStaffingProvider;
@@ -29,6 +39,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_skillDayRepository = skillDayRepository;
 			_backlogSkillTypesForecastCalculator = backlogSkillTypesForecastCalculator;
 			_userTimeZone = userTimeZone;
+
+			_intradayStaffingApplicationService = intradayStaffingApplicationService ?? throw new ArgumentNullException(nameof(intradayStaffingApplicationService));
 		}
 
 		public IList<SkillStaffingData> Load(IList<ISkill> skills, DateOnlyPeriod period, bool useShrinkage,
@@ -100,7 +112,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			return skillStaffingDatas;
 		}
 
-		private static double? calculateForecastedStaffing(IList<StaffingIntervalModel> forecasteds)
+		private static double? calculateForecastedStaffing(IEnumerable<StaffingIntervalModel> forecasteds)
 		{
 			return forecasteds.Any() ? forecasteds.Sum(forecasted => forecasted?.Agents) : null;
 		}
@@ -123,6 +135,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		{
 			return _scheduledStaffingProvider.StaffingPerSkill(skills, resolution, day, useShrinkage);
 		}
+		// The method above should be deleted and replaced by the one below when changes in intraday have been tested properly
+		private IEnumerable<IntradayScheduleStaffingIntervalDTO> getScheduledStaffing(IList<Guid> skillIds, int resolution,bool useShrinkage, DateOnly dayLocal)
+		{
+			var startOfDayLocal = dayLocal.Date;
+			return _intradayStaffingApplicationService.GetScheduledStaffing(skillIds.ToArray(), startOfDayLocal, startOfDayLocal.AddDays(1), TimeSpan.FromMinutes(resolution), useShrinkage);
+		}
 
 		private IEnumerable<StaffingIntervalModel> getForecastedStaffing(int resolution, bool useShrinkage,
 			IEnumerable<ISkillDay> skillDays, DateOnly day)
@@ -130,6 +148,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var skillDayDict = skillDays.Where(s => s.CurrentDate >= day.AddDays(-1) && s.CurrentDate <= day.AddDays(1))
 				.GroupBy(x => x.Skill).ToDictionary(y => y.Key, y => y.AsEnumerable());
 			return _forecastedStaffingProvider.StaffingPerSkill(skillDayDict, resolution, day, useShrinkage);
+		}
+		// The method above should be deleted and replaced by the one below when changes in intraday have been tested properly
+		private IEnumerable<IntradayForcastedStaffingIntervalDTO> getForecastedStaffing(IList<Guid> skillIds, int resolution, bool useShrinkage, DateOnly dayLocal)
+		{
+			var startOfDayLocal = dayLocal.Date;
+			return _intradayStaffingApplicationService.GetForecastedStaffing(skillIds, startOfDayLocal, startOfDayLocal.AddDays(1), TimeSpan.FromMinutes(resolution), useShrinkage);
 		}
 	}
 }

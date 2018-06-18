@@ -43,14 +43,10 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 				es: {array: true}
 			},
 			templateUrl: function () {
-				if (toggles.RTA_ImprovedStateGroupFilter_48724)
-					return 'app/rta/rta/agents/rta-agents.RTA_ImprovedStateGroupFilter_48724.html';
-				return 'app/rta/rta/agents/rta-agents.RTA_ModifySkillGroup_48191.html';
+				return 'app/rta/rta/agents/rta-agents.RTA_ImprovedStateGroupFilter_48724.html';
 			},
 			controllerProvider: function () {
-				if (toggles.RTA_ImprovedStateGroupFilter_48724)
-					return 'RtaAgentsController48724 as vm';
-				return 'RtaAgentsController46933 as vm';
+				return 'RtaAgentsController48724 as vm';
 			}
 		})
 		.state('rta-historical-without-date', {
@@ -71,18 +67,14 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 					return 'app/rta/rta/historical/rta-historical.easilySpotLateForWork_75668.html';
 				if (toggles.RTA_RestrictModifyAdherenceWithPermission_74898)
 					return 'app/rta/rta/historical/rta-historical.restrictModifyAdherenceWithPermission_74898.html';
-				if (toggles.RTA_RemoveApprovedOOA_47721)
-					return 'app/rta/rta/historical/rta-historical.removeApprovedOOA_47721.html';
-				return 'app/rta/rta/historical/rta-historical.approvePreviousOOA_47230.html';
+				return 'app/rta/rta/historical/rta-historical.removeApprovedOOA_47721.html';
 			},
 			controllerProvider: function () {
 				if (toggles.RTA_EasilySpotLateForWork_75668)
 					return 'RtaHistoricalController75668 as vm';
 				if (toggles.RTA_RestrictModifyAdherenceWithPermission_74898)
 					return 'RtaHistoricalController74898 as vm';
-				if (toggles.RTA_RemoveApprovedOOA_47721)
-					return 'RtaHistoricalController47721 as vm';
-				return 'RtaHistoricalController47230 as vm';
+				return 'RtaHistoricalController47721 as vm';
 			}
 		})
 		.state('rta-teams-legacy', {

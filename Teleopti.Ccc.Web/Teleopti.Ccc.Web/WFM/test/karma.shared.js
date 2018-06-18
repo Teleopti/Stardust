@@ -19,7 +19,12 @@ function applyBaseConfig(config) {
 		browserNoActivityTimeout: 210000,
 		autoWatchBatchDelay: 1000,
 		autoWatch: true,
-		reporters: ['dots'],
+		reporters: ['mocha'],
+		mochaReporter: {
+			symbols: {
+				success: '✔'
+			}
+		},
 		port: 9876,
 
 		// level of logging

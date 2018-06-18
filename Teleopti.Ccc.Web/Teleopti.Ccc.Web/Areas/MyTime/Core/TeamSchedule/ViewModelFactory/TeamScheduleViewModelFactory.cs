@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 	{
 		private readonly ITeamSchedulePersonsProvider _teamSchedulePersonsProvider;
 		private readonly IAgentScheduleViewModelMapper _agentScheduleViewModelMapper;
-		private readonly ITimeLineViewModelMapper _timeLineViewModelMapper;
 		private readonly IPersonScheduleDayReadModelFinder _scheduleDayReadModelFinder;
 		private readonly IPersonRepository _personRep;
 		private readonly IScheduleProvider _scheduleProvider;
@@ -32,7 +31,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 
 		public TeamScheduleViewModelFactory(ITeamSchedulePersonsProvider teamSchedulePersonsProvider,
 			IAgentScheduleViewModelMapper agentScheduleViewModelMapper,
-			ITimeLineViewModelMapper timeLineViewModelMapper,
 			IPersonScheduleDayReadModelFinder scheduleDayReadModelFinder, IPersonRepository personRep
 			, IScheduleProvider scheduleProvider, ITeamScheduleProjectionProvider projectionProvider
 			, IPermissionProvider permissionProvider, ILoggedOnUser logonUser
@@ -41,7 +39,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 		{
 			_teamSchedulePersonsProvider = teamSchedulePersonsProvider;
 			_agentScheduleViewModelMapper = agentScheduleViewModelMapper;
-			_timeLineViewModelMapper = timeLineViewModelMapper;
 			_scheduleDayReadModelFinder = scheduleDayReadModelFinder;
 			_personRep = personRep;
 			_scheduleProvider = scheduleProvider;

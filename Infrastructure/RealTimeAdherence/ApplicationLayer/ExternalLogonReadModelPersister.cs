@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
 		public IEnumerable<ExternalLogonReadModel> Read()
 		{
 			return _unitOfWork.Current()
-				.CreateSqlQuery("SELECT * FROM ReadModel.ExternalLogon WHERE Added = 0")
+				.CreateSqlQuery("SELECT PersonId, DataSourceId, UserCode, Deleted, Added FROM ReadModel.ExternalLogon WHERE Added = 0")
 				.SetResultTransformer(Transformers.AliasToBean<ExternalLogonReadModel>())
 				.SetReadOnly(true)
 				.List<ExternalLogonReadModel>();

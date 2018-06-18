@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Skill;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
 using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
@@ -17,7 +16,6 @@ using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain;
-using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Tracer;
 using Teleopti.Interfaces.Domain;
@@ -84,38 +82,24 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<HistoricalAdherenceViewModelBuilder>().SingleInstance();
 			builder.RegisterType<HistoricalAdherenceDate>().SingleInstance();
 
-			builder.RegisterType<HistoricalChange>().SingleInstance();
 			builder.RegisterType<ApprovePeriodAsInAdherenceCommandHandler>().SingleInstance();
 			builder.RegisterType<ApprovePeriodAsInAdherence>().SingleInstance();
 			builder.RegisterType<RemoveApprovedPeriodCommandHandler>().SingleInstance();
 			builder.RegisterType<RemoveApprovedPeriod>().SingleInstance();
 
-			if (_config.Toggle(Toggles.RTA_StoreEvents_47721))
-				builder.RegisterType<RtaEventStore>()
-					.As<IRtaEventStore>()
-					.As<IRtaEventStoreReader>()
-					.As<IRtaEventStoreTestReader>()
-					.SingleInstance();
-			else
-				builder.RegisterType<NoRtaEventStore>()
-					.As<IRtaEventStore>()
-					.As<IRtaEventStoreReader>()
-					.SingleInstance();
+			builder.RegisterType<RtaEventStore>()
+				.As<IRtaEventStore>()
+				.As<IRtaEventStoreReader>()
+				.As<IRtaEventStoreTestReader>()
+				.SingleInstance();
 
 			if (_config.Toggle(Toggles.RTA_EasilySpotLateForWork_75668))
 				builder.RegisterType<AgentAdherenceDayLoaderLateForWork>().As<IAgentAdherenceDayLoader>().SingleInstance();
-			else if (_config.Toggle(Toggles.RTA_RemoveApprovedOOA_47721))
-				builder.RegisterType<AgentAdherenceDayLoaderFromEventStore>().As<IAgentAdherenceDayLoader>().SingleInstance();
 			else
-				builder.RegisterType<AgentAdherenceDayLoader>().As<IAgentAdherenceDayLoader>().SingleInstance();
+				builder.RegisterType<AgentAdherenceDayLoaderFromEventStore>().As<IAgentAdherenceDayLoader>().SingleInstance();
 
 			builder.RegisterType<ScheduleLoader>().SingleInstance();
 			builder.RegisterType<AdherencePercentageCalculator>().SingleInstance();
-
-			builder.RegisterType<HistoricalChangeReadModelReader>().As<IHistoricalChangeReadModelReader>().SingleInstance();
-			builder.RegisterType<HistoricalChangeReadModelPersister>().As<IHistoricalChangeReadModelPersister>().SingleInstance();
-			builder.RegisterType<ApprovedPeriodsReader>().As<IApprovedPeriodsReader>().SingleInstance();
-			builder.RegisterType<ApprovedPeriodsPersister>().As<IApprovedPeriodsPersister>().SingleInstance();
 
 			builder.RegisterType<ShiftEventPublisher>().SingleInstance();
 			builder.RegisterType<AdherenceEventPublisher>().SingleInstance();
@@ -126,7 +110,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<LateForWorkEventPublisher>().As<ILateForWorkEventPublisher>().SingleInstance();
 			else
 				builder.RegisterType<NoLateForWorkEventPublisher>().As<ILateForWorkEventPublisher>().SingleInstance();
-			
+
 			builder.RegisterType<CurrentBelongsToDate>().SingleInstance();
 
 			builder.RegisterType<ProperAlarm>().SingleInstance();

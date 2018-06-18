@@ -6,12 +6,12 @@
 	TeamScheduleWeeklyController.$inject = ['$window', '$q', '$translate',
 		'$filter', 'PersonScheduleWeekViewCreator', 'UtilityService', 'weekViewScheduleSvc',
 		'TeamSchedule', 'signalRSVC', '$scope', 'Toggle', 'bootstrapCommon', 'groupPageService',
-		'serviceDateFormatHelper', 'ViewStateKeeper'];
+		'serviceDateFormatHelper', 'ViewStateKeeper', 'CurrentUserInfo'];
 
 	function TeamScheduleWeeklyController($window, $q, $translate, $filter, WeekViewCreator, Util,
 		weekViewScheduleSvc, teamScheduleSvc, signalR,
 		$scope, toggles, bootstrapCommon, groupPageService,
-		serviceDateFormatHelper, ViewStateKeeper) {
+		serviceDateFormatHelper, ViewStateKeeper, CurrentUserInfo) {
 		var vm = this;
 		var stateParams = ViewStateKeeper.get();
 		vm.searchOptions = {
@@ -54,7 +54,8 @@
 		vm.selectedFavorite = stateParams.do ? stateParams.selectedFavorite : null;
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 
-		vm.startOfWeek = serviceDateFormatHelper.getDateOnly(moment(vm.scheduleDate).startOf('week'));
+		var firstDayOfWeek = CurrentUserInfo.CurrentUserInfo().FirstDayOfWeek;
+		vm.startOfWeek = serviceDateFormatHelper.getDateOnly(moment(vm.scheduleDate).isoWeekday(firstDayOfWeek));
 
 		vm.onKeyWordInSearchInputChanged = function () {
 			vm.selectedFavorite = false;
@@ -80,10 +81,9 @@
 
 		vm.onStartOfWeekChanged = function () {
 			vm.scheduleDate = moment(vm.startOfWeek).toDate();
-			if (!moment(vm.startOfWeek).startOf('week').isSame(moment(vm.startOfWeek), 'day')) {
-				vm.startOfWeek = serviceDateFormatHelper.getDateOnly(moment(vm.startOfWeek).startOf('week'));
-			}
-			vm.weekDays = Util.getWeekdays(vm.startOfWeek);
+			vm.startOfWeek = serviceDateFormatHelper.getDateOnly(moment(vm.startOfWeek).isoWeekday(firstDayOfWeek));
+
+			vm.weekDays = Util.getWeekdays(vm.scheduleDate);
 			vm.loadSchedules();
 			if (toggles.Wfm_HideUnusedTeamsAndSites_42690) {
 				loadGroupings();

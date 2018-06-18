@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
@@ -16,24 +17,29 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private readonly IUserTimeZone _timeZone;
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
 		private readonly IScenarioRepository _scenarioRepository;
-		private readonly ScheduledStaffingProvider _scheduledStaffingProvider;
-		private readonly ScheduledStaffingToDataSeries _scheduledStaffingToDataSeries;
-		private readonly ForecastedStaffingProvider _forecastedStaffingProvider;
-		private readonly ForecastedStaffingToDataSeries _forecastedStaffingToDataSeries;
+		private readonly IScheduledStaffingProvider _scheduledStaffingProvider;
+		private readonly IScheduledStaffingToDataSeries _scheduledStaffingToDataSeries;
+		private readonly IForecastedStaffingProvider _forecastedStaffingProvider;
+		private readonly IForecastedStaffingToDataSeries _forecastedStaffingToDataSeries;
 		private readonly ISupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
+
+		private readonly IIntradayForecastingService _forecastingService;
+		private readonly IIntradayStaffingService _staffingScheduleService;
 
 		public ScheduledStaffingViewModelCreator(
 			INow now,
 			IUserTimeZone timeZone,
 			IIntervalLengthFetcher intervalLengthFetcher,
 			IScenarioRepository scenarioRepository,
-			ScheduledStaffingProvider scheduledStaffingProvider,
-			ScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
-			ForecastedStaffingProvider forecastedStaffingProvider,
-			ForecastedStaffingToDataSeries forecastedStaffingToDataSeries,
+			IScheduledStaffingProvider scheduledStaffingProvider,
+			IScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
+			IForecastedStaffingProvider forecastedStaffingProvider,
+			IForecastedStaffingToDataSeries forecastedStaffingToDataSeries,
 			ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider,
-			ISkillDayLoadHelper skillDayLoadHelper
+			ISkillDayLoadHelper skillDayLoadHelper,
+			IIntradayForecastingService forecastingService,
+			IIntradayStaffingService staffingScheduleService
 		)
 		{
 			_now = now;
@@ -46,9 +52,60 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_forecastedStaffingToDataSeries = forecastedStaffingToDataSeries;
 			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
 			_skillDayLoadHelper = skillDayLoadHelper;
+
+			_forecastingService = forecastingService ?? throw new ArgumentNullException(nameof(forecastingService));
+			_staffingScheduleService = staffingScheduleService ?? throw new ArgumentNullException(nameof(staffingScheduleService));
 		}
 
-		public ScheduledStaffingViewModel Load(Guid[] skillIdList, DateOnly? dateOnly = null, bool useShrinkage = false)
+		public ScheduledStaffingViewModel Load(Guid[] skillIdList, DateOnly? dateInLocalTime = null, bool useShrinkage = false)
+		{
+			var startOfDayLocal = dateInLocalTime?.Date ?? TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()).Date;
+
+			var startOfDayUtc = TimeZoneInfo.ConvertTimeToUtc(startOfDayLocal.Date, _timeZone.TimeZone());
+
+			var minutesPerInterval = _intervalLengthFetcher.IntervalLength;
+			if (minutesPerInterval <= 0) throw new Exception($"IntervalLength is cannot be {minutesPerInterval}!");
+
+			var scenario = _scenarioRepository.LoadDefaultScenario();
+			var skills = _supportedSkillsInIntradayProvider.GetSupportedSkills(skillIdList);
+			if (!skills.Any())
+				return new ScheduledStaffingViewModel();
+			
+			// DS: TODO
+			var skillDaysBySkills =
+				_skillDayLoadHelper.LoadSchedulerSkillDays(new DateOnlyPeriod(new DateOnly(startOfDayUtc), new DateOnly(startOfDayUtc.AddDays(1))), skills, scenario);
+			_forecastingService.CalculateForecastedAgentsForEmailSkills(skillDaysBySkills, useShrinkage);
+
+			var forecastedStaffing = _forecastingService.GetForecastedStaffing(
+				skillDaysBySkills.SelectMany(x => x.Value), 
+				startOfDayUtc, 
+				startOfDayUtc.AddDays(1), 
+				TimeSpan.FromMinutes(minutesPerInterval), 
+				useShrinkage);
+
+			var scheduledStaffingPerSkill = _staffingScheduleService
+				.GetScheduledStaffing(skills.Where(x => x.Id.HasValue).Select(x => x.Id.Value).ToArray(), startOfDayUtc, startOfDayUtc.AddDays(1), TimeSpan.FromMinutes(minutesPerInterval), useShrinkage)
+				.ToList();
+
+			var timeSeries = TimeSeriesProvider.DataSeries(forecastedStaffing, scheduledStaffingPerSkill, minutesPerInterval, _timeZone.TimeZone());
+
+			var dataSeries = new StaffingDataSeries
+			{
+				Date = new DateOnly(startOfDayLocal),
+				Time = timeSeries,
+				ForecastedStaffing = _forecastedStaffingToDataSeries.DataSeries(forecastedStaffing, timeSeries),
+				ScheduledStaffing = _scheduledStaffingToDataSeries.DataSeries(scheduledStaffingPerSkill, timeSeries)
+			};
+			calculateAbsoluteDifference(dataSeries);
+			return new ScheduledStaffingViewModel
+			{
+				DataSeries = dataSeries,
+				StaffingHasData = forecastedStaffing.Any()
+			};
+		}
+
+
+		public ScheduledStaffingViewModel Load_old(Guid[] skillIdList, DateOnly? dateOnly = null, bool useShrinkage = false)
 		{
 			var minutesPerInterval = _intervalLengthFetcher.IntervalLength;
 			if (minutesPerInterval <= 0) throw new Exception($"IntervalLength is cannot be {minutesPerInterval}!");
@@ -142,6 +199,10 @@ namespace Teleopti.Ccc.Domain.Intraday
 		public IEnumerable<ScheduledStaffingViewModel> Load(Guid[] skillIdList, DateOnlyPeriod dateOnlyPeriod, bool useShrinkage = false)
 		{
 			return dateOnlyPeriod.DayCollection().Select(day => Load(skillIdList, day, useShrinkage)).ToList();
+		}
+		public IEnumerable<ScheduledStaffingViewModel> Load_old(Guid[] skillIdList, DateOnlyPeriod dateOnlyPeriod, bool useShrinkage = false)
+		{
+			return dateOnlyPeriod.DayCollection().Select(day => Load_old(skillIdList, day, useShrinkage)).ToList();
 		}
 	}
 }
