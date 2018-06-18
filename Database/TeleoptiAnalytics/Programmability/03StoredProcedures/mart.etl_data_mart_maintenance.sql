@@ -12,7 +12,7 @@ GO
 -- Author:		Jonas n
 -- Create date: 2010-06-16
 -- Description:	A maintenance procedure that will ie remove old ETL execution logs and purge old mart data.
--- 20120207 AF: Now also prge of old mart fact data.
+-- 20120207 AF: Now also purge of old mart fact data.
 -- 20130325 AF: Now also Purge of old Agg data
 -- =============================================
 CREATE PROCEDURE [mart].[etl_data_mart_maintenance]
@@ -102,8 +102,7 @@ BEGIN
 
 	update mart.dim_person set person_name = 'Pseudo', first_name = 'Pseudo', last_name = 'Pseudo', employment_number = '', email = '', note = '', windows_username = ''
 	from mart.dim_person dp
-	where not exists (select 1 from mart.dim_person dp2 where dp2.person_code = dp.person_code and dp2.employment_end_date > '2059-12-30')
-	and dp.employment_end_date < @confMinDate
+	where (select max(a.employment_end_date) from mart.dim_person a where a.person_code = dp.person_code) < @confMinDate
 
 	--------------- Fact tables ---------------------
 	SELECT @minDimDate =  MIN(date_date) FROM mart.dim_date WHERE date_id>-1
