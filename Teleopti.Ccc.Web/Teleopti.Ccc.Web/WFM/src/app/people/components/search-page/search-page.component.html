@@ -30,7 +30,8 @@
       <mat-menu #menu="matMenu">
         <button mat-menu-item (click)="selectAllMatches()" data-test-selectallonallpages-button>Select all on all pages</button>
       </mat-menu>
-      <mat-table #table matSort (matSortChange)="sortData($event)" [dataSource]="dataSource" data-test-search>
+      <mat-table #table matSort (matSortChange)="sortData($event)" matSortActive="LastName" matSortDirection="asc" matSortDisableClear
+        [dataSource]="dataSource" data-test-search>
 
         <!-- Checkbox Column -->
         <ng-container matColumnDef="select">
