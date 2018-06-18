@@ -6,23 +6,11 @@ using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl;
 
 namespace Teleopti.Ccc.Scheduling.PerformanceTest.Domain
 {
-	public class PlanTest
+	public class SchedulingAndDOTest
 	{
-		[Test]
-		[Category("IntradayOptimizationStardust")]
-		public void Intraday()
-		{
-			runPerfTest(".intraday-optimization-button");
-		}
-		
 		[Test]
 		[Category("ScheduleOptimizationStardust")]
 		public void SchedulingAndDOOpt()
-		{
-			runPerfTest(".schedule-button");
-		}
-		
-		private static void runPerfTest(string elementToClick)
 		{
 			using (var browserActivator = new CoypuChromeActivator())
 			{
@@ -36,7 +24,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Domain
 					$"{TestSiteConfigurationSetup.URL}wfm/#/resourceplanner/planninggroup/{AppConfigs.PlanningGroupId}/detail/{AppConfigs.PlanningPeriodId}");
 				using (new TimeoutScope(browserActivator, TimeSpan.FromMinutes(30)))
 				{
-					browserInteractions.Click($"{elementToClick}:enabled");
+					browserInteractions.Click(".schedule-button:enabled");
 				}
 
 				browserInteractions.AssertExists(".test-schedule-is-running");
@@ -59,6 +47,6 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Domain
 				browserInteractions.AssertNotExists("body", "#Login-container");
 				browserInteractions.AssertExistsUsingJQuery(".heatmap:visible");
 			}
-		}	
+		}
 	}
 }

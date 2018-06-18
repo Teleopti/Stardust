@@ -60,7 +60,8 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AppConfigs.cs" />
-    <Compile Include="Domain\PlanTest.cs" />
+    <Compile Include="Domain\IntradayTest.cs" />
+    <Compile Include="Domain\SchedulingAndDOTest.cs" />
     <Compile Include="Domain\NUnitSetup.cs" />
     <Compile Include="Infrastructure\EventHandlingAfterSaveScheduleTest.cs" />
     <Compile Include="Infrastructure\HangfireLogger.cs" />
