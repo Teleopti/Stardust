@@ -30,16 +30,17 @@
                 <md-tooltip ng-if="vm.changesMade">Please save or discard changes before changing scenario</md-tooltip>
               </label>
 
-              <div>
-                <button tabindex=0 class="context-menu card-context" ng-click="vm.periodModal = true" ng-disabled="vm.savingToScenario || vm.isForecastRunning">
-                  <i class="mdi mdi-calendar"></i>
-                  <md-tooltip>{{'SelectForecastPeriodIntro'|translate}}</md-tooltip>
-                </button>
-                {{'DateFrom' | translate}}: {{vm.forecastPeriod.startDate | date: L}} {{'DateTo' | translate}}: {{vm.forecastPeriod.endDate  | date: L}}
-              </div>
+			  <div>
+			  	<button tabindex=0 class="context-menu card-context" ng-click="vm.periodModal = true" ng-disabled="vm.savingToScenario || vm.isForecastRunning || vm.changesMade">
+			  		<i class="mdi mdi-calendar"></i>
+			  		<md-tooltip>{{'SelectForecastPeriodIntro'|translate}}</md-tooltip>
+			  	</button>
+			  	<md-tooltip ng-if="vm.changesMade">Please save or discard changes before changing scenario</md-tooltip>
+			  	{{'DateFrom' | translate}}: {{vm.forecastPeriod.startDate | date: L}} {{'DateTo' | translate}}: {{vm.forecastPeriod.endDate  | date: L}}
+			  </div>
 
               <div>
-                <button tabindex=0 class="context-menu card-context" ng-click="vm.scenarioExportModal = true" ng-disabled="vm.savingToScenario || vm.isForecastRunning">
+                <button tabindex=0 class="context-menu card-context" ng-click="vm.scenarioExportModal = true" ng-disabled="vm.savingToScenario || vm.isForecastRunning || !skill.SkillType.DoDisplayData">
                   <i class="mdi mdi-share"></i>
                   <md-tooltip>Save to other scenario</md-tooltip>
                 </button>
