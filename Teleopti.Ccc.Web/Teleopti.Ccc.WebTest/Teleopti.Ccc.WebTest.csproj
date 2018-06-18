@@ -309,7 +309,6 @@
     <Compile Include="Core\TeamSchedule\ScheduleValidationProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamSchedulePersonsProviderTest.cs" />
     <Compile Include="Areas\Permissions\FakeApplicationFunctionsToggleFilter.cs" />
-    <Compile Include="Areas\Permissions\FakeApplicationRolePersonRepository.cs" />
     <Compile Include="Areas\Reporting\Controller\ReportControllerTest.cs" />
     <Compile Include="Areas\Reporting\Core\AnalyticsPermissionsUpdaterTest.cs" />
     <Compile Include="Areas\Reporting\Core\PermissionsConverterTest.cs" />

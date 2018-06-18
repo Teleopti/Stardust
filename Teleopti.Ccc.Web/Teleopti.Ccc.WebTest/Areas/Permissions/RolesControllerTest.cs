@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 		public ISiteRepository SiteRepository;
 		public ITeamRepository TeamRepository;
 		public IBusinessUnitRepository BusinessUnitRepository;
-		public FakeApplicationRolePersonRepository ApplicationRolePersonRepository;
 		public IPersonRepository PersonRepository;
 		public FakeLoggedOnUser LoggedOnUser;
 		

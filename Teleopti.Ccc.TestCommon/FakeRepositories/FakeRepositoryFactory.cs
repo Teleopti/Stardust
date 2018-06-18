@@ -330,12 +330,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return _scheduleTagRepository;
 		}
-
-		public IApplicationRolePersonRepository CreateApplicationRolePersonRepository(IStatelessUnitOfWork unitOfWork)
-		{
-			throw new System.NotImplementedException();
-		}
-
+		
 		public ILicenseStatusRepository CreateLicenseStatusRepository(IUnitOfWork unitOfWork)
 		{
 			throw new System.NotImplementedException();

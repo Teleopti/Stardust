@@ -391,7 +391,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IPublicNoteRepository CreatePublicNoteRepository(IUnitOfWork unitOfWork);
 		IAgentDayScheduleTagRepository CreateAgentDayScheduleTagRepository(IUnitOfWork unitOfWork);
 		IScheduleTagRepository CreateScheduleTagRepository(IUnitOfWork unitOfWork);
-		IApplicationRolePersonRepository CreateApplicationRolePersonRepository(IStatelessUnitOfWork unitOfWork);
 		ILicenseStatusRepository CreateLicenseStatusRepository(IUnitOfWork unitOfWork);
 		ILicenseRepository CreateLicenseRepository(IUnitOfWork unitOfWork);
 		IRequestHistoryReadOnlyRepository CreateRequestHistoryReadOnlyRepository(IStatelessUnitOfWork unitOfWork);

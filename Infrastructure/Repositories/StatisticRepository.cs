@@ -17,7 +17,6 @@ using Teleopti.Ccc.Domain.LogObject;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.LegacyTransientErrorHandling;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TransientErrorHandling;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -168,7 +167,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			using (IStatelessUnitOfWork uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
-				var dbConnection = ((NHibernateStatelessUnitOfWork)uow).Session.Connection.Unwrap();
+				var dbConnection = uow.Session().Connection.Unwrap();
 				using (SqlBulkCopy bulkCopy = new SqlBulkCopy(dbConnection))
 				{
 					bulkCopy.DestinationTableName = "stage.stg_queue";

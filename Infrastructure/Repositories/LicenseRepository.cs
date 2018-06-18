@@ -66,7 +66,7 @@ ORDER BY LastName, FirstName";
 
 			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().CreateAndOpenStatelessUnitOfWork())
 			{ 
-				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
+				return uow.Session().CreateSQLQuery(sql)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(ActiveAgent)))
 				.SetReadOnly(true)
 				.List<ActiveAgent>();

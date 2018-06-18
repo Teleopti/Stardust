@@ -692,7 +692,6 @@
     <Compile Include="Persisters\Refresh\VersionTupleExtensions.cs" />
     <Compile Include="Persisters\WriteProtection\IWriteProtectionPersister.cs" />
     <Compile Include="Persisters\WriteProtection\WriteProtectionPersister.cs" />
-    <Compile Include="Repositories\ApplicationRolePersonRepository.cs" />
     <Compile Include="Repositories\PersonForScheduleFinder.cs" />
     <Compile Include="Repositories\PersonScheduleDayReadModelPersister.cs" />
     <Compile Include="Repositories\OvertimeAvailabilityRepository.cs" />

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using NHibernate;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
@@ -18,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             IList<DateOnly> dates;
             using (IStatelessUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
             {
-                dates = session(uow).GetNamedQuery("ValidationReport")
+                dates = uow.Session().GetNamedQuery("ValidationReport")
                             .SetEntity("workload", workload)
 							.SetDateOnly("startDate", period.StartDate)
 							.SetDateOnly("endDate", period.EndDate)
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             using (IStatelessUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
             {
 
-                budgetDates = session(uow).GetNamedQuery("BudgetReport")
+                budgetDates = uow.Session().GetNamedQuery("BudgetReport")
                             .SetEntity("workload", workload)
                             .SetEntity("scenario", scenario)
 							.SetDateOnly("startDate", period.StartDate)
@@ -46,7 +45,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                             .SetString("longtermKey", TemplateReference.LongtermTemplateKey)
                             .List<DateOnly>();
 
-                detailedDates = session(uow).GetNamedQuery("DetailReport")
+                detailedDates = uow.Session().GetNamedQuery("DetailReport")
                             .SetEntity("workload", workload)
                             .SetEntity("scenario", scenario)
 							.SetDateOnly("startDate", period.StartDate)
@@ -65,7 +64,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             IList<DateOnly> dates;
             using (IStatelessUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
             {
-                dates = session(uow).GetNamedQuery("DetailReport")
+                dates = uow.Session().GetNamedQuery("DetailReport")
                             .SetEntity("workload", workload)
                             .SetEntity("scenario", scenario)
 							.SetDateOnly("startDate", period.StartDate)
@@ -77,11 +76,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             var periods = new DatesToPeriod().Convert(dates);
             var forecasterReport = new ForecastProcessReport(periods);
             return new List<IForecastProcessReport> {forecasterReport};
-        }
-
-        private static IStatelessSession session(IStatelessUnitOfWork uow)
-        {
-            return ((NHibernateStatelessUnitOfWork)uow).Session;
         }
     }
 }

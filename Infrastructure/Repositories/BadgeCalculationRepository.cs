@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -28,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 				try
 				{
-					return ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(sql)
+					return uow.Session().CreateSQLQuery(sql)
 						.SetTimeout(timeoutInSecond)
 						.SetReadOnly(true)
 						.SetInt32("threshold", answeredCallsThreshold)
@@ -65,7 +64,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 				try
 				{
-					return ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(sql)
+					return uow.Session().CreateSQLQuery(sql)
 						.SetTimeout(timeoutInSecond)
 						.SetReadOnly(true)
 						.SetDouble("threshold", adherenceThreshold.Value)
@@ -98,7 +97,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 				try
 				{
-					return ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(sql)
+					return uow.Session().CreateSQLQuery(sql)
 						.SetTimeout(timeoutInSecond)
 						.SetReadOnly(true)
 						.SetDouble("threshold", ahtThreshold.TotalSeconds)

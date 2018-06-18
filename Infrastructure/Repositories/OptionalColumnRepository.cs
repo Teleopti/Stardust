@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
 			{
-				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
+				return uow.Session().CreateSQLQuery(
 					"select distinct Description FROM OptionalColumnValue WHERE ReferenceId =:columnId AND ltrim(description) <> '' ORDER BY description")
 					.SetGuid("columnId", column)
 					.SetResultTransformer(Transformers.AliasToBean<ColumnUniqueValues>())
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
 			{
-				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
+				return uow.Session().CreateSQLQuery(
 					"SELECT DISTINCT Description FROM OptionalColumnValue ocv " +
 					"INNER JOIN Person WITH (NOLOCK) ON Person.Id = ocv.Parent  AND Person.IsDeleted = 0 " +
 					"WHERE ocv.ReferenceId =:columnId AND ltrim(ocv.Description) <> '' " +

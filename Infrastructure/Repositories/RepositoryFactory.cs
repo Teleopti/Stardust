@@ -326,12 +326,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return new ScheduleTagRepository(unitOfWork);
 		}
-
-		public IApplicationRolePersonRepository CreateApplicationRolePersonRepository(IStatelessUnitOfWork unitOfWork)
-		{
-			return new ApplicationRolePersonRepository(unitOfWork);
-		}
-
+		
 		public ILicenseStatusRepository CreateLicenseStatusRepository(IUnitOfWork unitOfWork)
 		{
 			return new LicenseStatusRepository(new ThisUnitOfWork(unitOfWork));

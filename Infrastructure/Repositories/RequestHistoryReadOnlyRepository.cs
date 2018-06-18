@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -21,7 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public IList<IRequestHistoryLightweight> LoadOnPerson(Guid personId, int startRow, int endRow)
         {
-            return ((NHibernateStatelessUnitOfWork)_unitOfWork).Session.CreateSQLQuery(
+            return _unitOfWork.Session().CreateSQLQuery(
                 "exec [ReadModel].[RequestOnPerson] @person=:person, @start_row =:start_row, @end_row=:end_row")
                 .SetGuid("person", personId)
                 .SetInt32("start_row", startRow)
