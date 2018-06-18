@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			dynamic content = response;
 			Type typeOfContent = content.GetType();
-			var exist = typeOfContent.GetProperties().Where(p => p.Name.Equals("DefaultTeam")).Any();
+			var exist = typeOfContent.GetProperties().Any(p => p.Name.Equals("DefaultTeam"));
 			Assert.That(exist, Is.EqualTo(false));
 			Assert.That((object)content.Message, Is.EqualTo(Resources.NoTeamsAvailable));
 		}
@@ -473,7 +473,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
 			var firstPeriod = teamScheduleViewModel.AgentSchedules[0].Periods.ElementAt(0);
 
-			firstPeriod.Color.Should().Be(Color.Green.Name);
+			firstPeriod.Color.Should().Be("0,128,0");
 			firstPeriod.Title.Should().Be("Phone");
 			firstPeriod.StartTime.Should().Be(period.StartDateTime);
 			firstPeriod.EndTime.Should().Be(period.EndDateTime);
