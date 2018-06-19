@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		}
 	}
 
-	public class WebIntradayOptimizationStardustEvent : WebScheduleStardustBaseEvent
+	public class IntradayOptimizationOnStardustWasOrdered : WebScheduleStardustBaseEvent
 	{
 		public int TotalEvents { get; set; }
 	}

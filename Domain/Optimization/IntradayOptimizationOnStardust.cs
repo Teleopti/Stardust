@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	
 		public void Execute(Guid planningPeriodId)
 		{
-			_eventPublisher.Publish(new WebIntradayOptimizationStardustEvent
+			_eventPublisher.Publish(new IntradayOptimizationOnStardustWasOrdered
 			{
 				PlanningPeriodId = planningPeriodId
 			});

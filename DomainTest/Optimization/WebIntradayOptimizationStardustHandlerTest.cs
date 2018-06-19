@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var endDate = new DateOnly(2017, 3, 7);
 			JobResultRepository.Add(new JobResult(JobCategory.WebIntradayOptimiztion, new DateOnlyPeriod(startDate, endDate), PersonFactory.CreatePerson("name1"), DateTime.Now).WithId(jobResultId));
 			var planningPeriod = PlanningPeriodRepository.Has(startDate, endDate, SchedulePeriodType.Week, 1);
-			Target.Handle(new WebIntradayOptimizationStardustEvent
+			Target.Handle(new IntradayOptimizationOnStardustWasOrdered
 			{
 				JobResultId = jobResultId,
 				TotalEvents = 3,
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var endDate = new DateOnly(2017, 3, 7);
 			JobResultRepository.Add(new JobResult(JobCategory.WebIntradayOptimiztion, new DateOnlyPeriod(startDate, endDate), PersonFactory.CreatePerson("name1"), DateTime.Now).WithId(jobResultId));
 			var planningPeriod = PlanningPeriodRepository.Has(startDate, endDate, SchedulePeriodType.Week, 1);
-			Target.Handle(new WebIntradayOptimizationStardustEvent
+			Target.Handle(new IntradayOptimizationOnStardustWasOrdered
 			{
 				JobResultId = jobResultId,
 				TotalEvents = 1,

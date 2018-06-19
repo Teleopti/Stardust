@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class WebIntradayOptimizationStardustHandler : IRunOnStardust, IHandleEvent<WebIntradayOptimizationStardustEvent>
+	public class WebIntradayOptimizationStardustHandler : IRunOnStardust, IHandleEvent<IntradayOptimizationOnStardustWasOrdered>
 	{
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly ISchedulingSourceScope _schedulingSourceScope;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		[AsSystem]
-		public virtual void Handle(WebIntradayOptimizationStardustEvent @event)
+		public virtual void Handle(IntradayOptimizationOnStardustWasOrdered @event)
 		{
 			try
 			{
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		[UnitOfWork]
-		protected virtual void SaveDetailToJobResult(WebIntradayOptimizationStardustEvent @event, DetailLevel level, string message, Exception exception)
+		protected virtual void SaveDetailToJobResult(IntradayOptimizationOnStardustWasOrdered @event, DetailLevel level, string message, Exception exception)
 		{
 			_jobResultRepository.AddDetailAndCheckSuccess(@event.JobResultId, new JobResultDetail(level, message, DateTime.UtcNow, exception), @event.TotalEvents);
 		}

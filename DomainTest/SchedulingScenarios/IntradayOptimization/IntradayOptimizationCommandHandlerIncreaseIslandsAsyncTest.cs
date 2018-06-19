@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod()});
 
-			EventPublisher.PublishedEvents.OfType<WebIntradayOptimizationStardustEvent>()
+			EventPublisher.PublishedEvents.OfType<IntradayOptimizationOnStardustWasOrdered>()
 				.All(x => x.TotalEvents == 2)
 				.Should()
 				.Be.True();
@@ -61,12 +61,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod(), PlanningPeriodId = planningPeriodId});
 
-			EventPublisher.PublishedEvents.OfType<WebIntradayOptimizationStardustEvent>()
+			EventPublisher.PublishedEvents.OfType<IntradayOptimizationOnStardustWasOrdered>()
 				.All(x => x.PlanningPeriodId == planningPeriodId)
 				.Should()
 				.Be.True();
 
-			EventPublisher.PublishedEvents.OfType<WebIntradayOptimizationStardustEvent>()
+			EventPublisher.PublishedEvents.OfType<IntradayOptimizationOnStardustWasOrdered>()
 				.All(x => x.Policy == WebScheduleStardustBaseEvent.HalfNodesAffinity)
 				.Should()
 				.Be.True();
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod(), JobResultId = jobResultId });
 
-			EventPublisher.PublishedEvents.OfType<WebIntradayOptimizationStardustEvent>()
+			EventPublisher.PublishedEvents.OfType<IntradayOptimizationOnStardustWasOrdered>()
 				.All(x => x.JobResultId == jobResultId)
 				.Should()
 				.Be.True();

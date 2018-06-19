@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			Target.Execute(planningPeriodId);
 
-			EventPublisher.PublishedEvents.OfType<WebIntradayOptimizationStardustEvent>().Single().PlanningPeriodId
+			EventPublisher.PublishedEvents.OfType<IntradayOptimizationOnStardustWasOrdered>().Single().PlanningPeriodId
 				.Should().Be.EqualTo(planningPeriodId);
 		}
 	}

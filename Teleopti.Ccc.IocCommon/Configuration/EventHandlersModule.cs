@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				})
 				.Except<WebIntradayOptimizationStardustHandler>(ct =>
 				{
-					ct.As<IHandleEvent<WebIntradayOptimizationStardustEvent>>()
+					ct.As<IHandleEvent<IntradayOptimizationOnStardustWasOrdered>>()
 						.AsSelf()
 						.InstancePerLifetimeScope()
 						.ApplyAspects();

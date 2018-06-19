@@ -10,7 +10,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 {
-	public class WebIntradayOptimizationHandler : IHandle<WebIntradayOptimizationStardustEvent>
+	public class WebIntradayOptimizationHandler : IHandle<IntradayOptimizationOnStardustWasOrdered>
 	{
 		private readonly IStardustJobFeedback _stardustJobFeedback;
 		private readonly IComponentContext _componentContext;
@@ -22,13 +22,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 		}
 
 		[AsSystem]
-		public void Handle(WebIntradayOptimizationStardustEvent parameters, 
+		public void Handle(IntradayOptimizationOnStardustWasOrdered parameters, 
 			CancellationTokenSource cancellationTokenSource, 
 			Action<string> sendProgress,
 			ref IEnumerable<object> returnObjects)
 		{
 			_stardustJobFeedback.SendProgress = sendProgress;
-			var theRealOne = _componentContext.Resolve<IHandleEvent<WebIntradayOptimizationStardustEvent>>();
+			var theRealOne = _componentContext.Resolve<IHandleEvent<IntradayOptimizationOnStardustWasOrdered>>();
 			theRealOne.Handle(parameters);
 			_stardustJobFeedback.SendProgress = null;
 		}
