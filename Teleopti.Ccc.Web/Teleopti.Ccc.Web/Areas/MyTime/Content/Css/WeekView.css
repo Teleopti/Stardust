@@ -200,6 +200,7 @@
 	overflow: hidden;
 	border-top: 1px solid #DFDFDF;
 	border-bottom: 1px solid #DFDFDF;
+	width: calc(98%) !important;
 }
 
 .week-schedule-ASM-permission-granted, .week-schedule-current-week {
