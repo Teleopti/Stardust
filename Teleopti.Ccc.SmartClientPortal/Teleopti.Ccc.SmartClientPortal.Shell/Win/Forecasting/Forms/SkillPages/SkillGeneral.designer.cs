@@ -45,7 +45,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 			this.comboBoxSkillActivity = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.pictureBoxDisplayColor = new System.Windows.Forms.PictureBox();
 			this.tableLayoutPanelForRtl = new System.Windows.Forms.TableLayoutPanel();
-			this.label1 = new System.Windows.Forms.Label();
 			this.labelMidnightBreakOffset = new System.Windows.Forms.Label();
 			this.comboBoxTimeZones = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.labelDefaultResolution = new System.Windows.Forms.Label();
@@ -53,10 +52,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 			this.labelTotalOpeningHours = new System.Windows.Forms.Label();
 			this.office2007OutlookTimePickerMidnightOffsetBreak = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Office2007OutlookTimePicker(this.components);
 			this.comboBoxAdvIntervalLength = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
-			this.numericUpDownMaxParallel = new Syncfusion.Windows.Forms.Tools.NumericUpDownExt();
-			this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
 			this.labelAbandonRate = new System.Windows.Forms.Label();
+			this.label1 = new System.Windows.Forms.Label();
+			this.numericUpDownMaxParallel = new Syncfusion.Windows.Forms.Tools.NumericUpDownExt();
 			this.percentTextBoxAbandonRate = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.TeleoptiPercentTextBox();
+			this.label2 = new System.Windows.Forms.Label();
+			this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.textBoxName)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.textBoxDescription)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxSkillType)).BeginInit();
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 			// 
 			this.textBoxName.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.textBoxName.BackColor = System.Drawing.Color.White;
-			this.textBoxName.BeforeTouchSize = new System.Drawing.Size(488, 23);
+			this.textBoxName.BeforeTouchSize = new System.Drawing.Size(222, 23);
 			this.textBoxName.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tableLayoutPanelForRtl.SetColumnSpan(this.textBoxName, 2);
@@ -245,6 +246,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 			this.tableLayoutPanelForRtl.Controls.Add(this.label1, 0, 9);
 			this.tableLayoutPanelForRtl.Controls.Add(this.numericUpDownMaxParallel, 1, 9);
 			this.tableLayoutPanelForRtl.Controls.Add(this.percentTextBoxAbandonRate, 1, 8);
+			this.tableLayoutPanelForRtl.Controls.Add(this.label2, 2, 8);
 			this.tableLayoutPanelForRtl.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelForRtl.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanelForRtl.Name = "tableLayoutPanelForRtl";
@@ -261,17 +263,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 			this.tableLayoutPanelForRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15F));
 			this.tableLayoutPanelForRtl.Size = new System.Drawing.Size(396, 395);
 			this.tableLayoutPanelForRtl.TabIndex = 14;
-			// 
-			// label1
-			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(3, 359);
-			this.label1.Margin = new System.Windows.Forms.Padding(3, 6, 3, 0);
-			this.label1.Name = "label1";
-			this.label1.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
-			this.label1.Size = new System.Drawing.Size(105, 18);
-			this.label1.TabIndex = 17;
-			this.label1.Text = "xxMaxParallelTasks";
 			// 
 			// labelMidnightBreakOffset
 			// 
@@ -359,6 +350,29 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 			this.comboBoxAdvIntervalLength.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxAdvIntervalLength.TabIndex = 5;
 			// 
+			// labelAbandonRate
+			// 
+			this.labelAbandonRate.AutoSize = true;
+			this.labelAbandonRate.Location = new System.Drawing.Point(3, 325);
+			this.labelAbandonRate.Margin = new System.Windows.Forms.Padding(3, 6, 3, 0);
+			this.labelAbandonRate.Name = "labelAbandonRate";
+			this.labelAbandonRate.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
+			this.labelAbandonRate.Size = new System.Drawing.Size(149, 28);
+			this.labelAbandonRate.TabIndex = 19;
+			this.labelAbandonRate.Text = "xxAbandonRateParenthesisPercentSign";
+			this.labelAbandonRate.Click += new System.EventHandler(this.label2_Click);
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(3, 359);
+			this.label1.Margin = new System.Windows.Forms.Padding(3, 6, 3, 0);
+			this.label1.Name = "label1";
+			this.label1.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
+			this.label1.Size = new System.Drawing.Size(105, 18);
+			this.label1.TabIndex = 17;
+			this.label1.Text = "xxMaxParallelTasks";
+			// 
 			// numericUpDownMaxParallel
 			// 
 			this.numericUpDownMaxParallel.BeforeTouchSize = new System.Drawing.Size(85, 23);
@@ -383,22 +397,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
             0});
 			this.numericUpDownMaxParallel.VisualStyle = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			// 
-			// errorProvider1
-			// 
-			this.errorProvider1.ContainerControl = this;
-			// 
-			// labelAbandonRate
-			// 
-			this.labelAbandonRate.AutoSize = true;
-			this.labelAbandonRate.Location = new System.Drawing.Point(3, 325);
-			this.labelAbandonRate.Margin = new System.Windows.Forms.Padding(3, 6, 3, 0);
-			this.labelAbandonRate.Name = "labelAbandonRate";
-			this.labelAbandonRate.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
-			this.labelAbandonRate.Size = new System.Drawing.Size(149, 28);
-			this.labelAbandonRate.TabIndex = 19;
-			this.labelAbandonRate.Text = "xxAbandonRateParenthesisPercentSign";
-			this.labelAbandonRate.Click += new System.EventHandler(this.label2_Click);
-			// 
 			// percentTextBoxAbandonRate
 			// 
 			this.percentTextBoxAbandonRate.AllowNegativePercentage = true;
@@ -406,12 +404,26 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 			this.percentTextBoxAbandonRate.DoubleValue = 0D;
 			this.percentTextBoxAbandonRate.ForeColor = System.Drawing.Color.Black;
 			this.percentTextBoxAbandonRate.Location = new System.Drawing.Point(161, 322);
-			this.percentTextBoxAbandonRate.Maximum = 100D;
+			this.percentTextBoxAbandonRate.Maximum = 15D;
 			this.percentTextBoxAbandonRate.Minimum = 0D;
 			this.percentTextBoxAbandonRate.Name = "percentTextBoxAbandonRate";
 			this.percentTextBoxAbandonRate.Size = new System.Drawing.Size(57, 23);
 			this.percentTextBoxAbandonRate.TabIndex = 20;
 			this.percentTextBoxAbandonRate.Text = "0%";
+			// 
+			// label2
+			// 
+			this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(252, 328);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(40, 15);
+			this.label2.TabIndex = 21;
+			this.label2.Text = "0-15%";
+			// 
+			// errorProvider1
+			// 
+			this.errorProvider1.ContainerControl = this;
 			// 
 			// SkillGeneral
 			// 
@@ -465,6 +477,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 		private Syncfusion.Windows.Forms.Tools.NumericUpDownExt numericUpDownMaxParallel;
 		private System.Windows.Forms.Label labelAbandonRate;
 		private TeleoptiPercentTextBox percentTextBoxAbandonRate;
+		private System.Windows.Forms.Label label2;
 		//private Teleopti.Ccc.Win.Common.Controls.OutlookTimePicker outlookTimePickerMidnightOffsetBreak;
 	}
 }
