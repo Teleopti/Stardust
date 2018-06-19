@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
@@ -18,8 +15,6 @@ using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
@@ -33,26 +28,20 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		private readonly IMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSetRepository;
 		private readonly ISkillGroupRepository _skillGroupRepository;
 		private readonly ScheduledStaffingViewModelCreator _staffingViewModelCreator;
-		private readonly ImportBpoFile _bpoFile;
-		private readonly IExportBpoFile _exportBpoFile;
 		private readonly ICurrentDataSource _currentDataSource;
-		private readonly ISkillRepository _skillRepository;
 		private readonly IAuthorization _authorization;
 		private readonly ExportForecastAndStaffingFile _exportForecastAndStaffingFile;
 		private readonly ExportStaffingPeriodValidationProvider _periodValidationProvider;
-		private readonly BpoGanttProvider _bpoGanttProvider;
-		//private readonly ILoadAllSkillInIntradays _loadAllSkillInIntradays;
+		private readonly BpoProvider _bpoProvider;
 		private readonly IAllSkillForSkillGroupProvider _allSkillForSkillGroupProvider;
-		private readonly IToggleManager _toggleManager;
 
 		public StaffingController(AddOverTime addOverTime, IScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
 								  IForecastedStaffingToDataSeries forecastedStaffingToDataSeries, IUserTimeZone timeZone,
 								  IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository, ISkillGroupRepository skillGroupRepository,
-								  ScheduledStaffingViewModelCreator staffingViewModelCreator, ImportBpoFile bpoFile, ICurrentDataSource currentDataSource, 
-								  IExportBpoFile exportBpoFile, ISkillRepository skillRepository, IAuthorization authorization,
+								  ScheduledStaffingViewModelCreator staffingViewModelCreator, ICurrentDataSource currentDataSource, 
+			IAuthorization authorization,
 			ExportForecastAndStaffingFile exportForecastAndStaffingFile, ExportStaffingPeriodValidationProvider periodValidationProvider,
-			BpoGanttProvider bpoGanttProvider, IAllSkillForSkillGroupProvider allSkillForSkillGroupProvider,
-			IToggleManager toggleManager)
+			BpoProvider bpoProvider, IAllSkillForSkillGroupProvider allSkillForSkillGroupProvider)
 		{
 			_addOverTime = addOverTime;
 			_scheduledStaffingToDataSeries = scheduledStaffingToDataSeries;
@@ -61,36 +50,12 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			_multiplicatorDefinitionSetRepository = multiplicatorDefinitionSetRepository;
 			_skillGroupRepository = skillGroupRepository;
 			_staffingViewModelCreator = staffingViewModelCreator;
-			_bpoFile = bpoFile;
 			_currentDataSource = currentDataSource;
-			_exportBpoFile = exportBpoFile;
-			_skillRepository = skillRepository;
 			_authorization = authorization;
 			_exportForecastAndStaffingFile = exportForecastAndStaffingFile;
 			_periodValidationProvider = periodValidationProvider;
-			_bpoGanttProvider = bpoGanttProvider;
+			_bpoProvider = bpoProvider;
 			_allSkillForSkillGroupProvider = allSkillForSkillGroupProvider;
-
-			_toggleManager = toggleManager ?? throw new ArgumentNullException(nameof(toggleManager));
-
-		}
-
-		[UnitOfWork, HttpGet, Route("api/staffing/getallganttdataforbpotimeline")]
-		public virtual IHttpActionResult GetAllGanttDataForBpoTimeline()
-		{
-			return Ok(_bpoGanttProvider.GetAllGanttDataForBpoTimeline());
-		}
-
-		[UnitOfWork, HttpGet, Route("api/staffing/getganttdataforbpotimelineonskill")]
-		public virtual IHttpActionResult GetGanttDataForBpoTimelineOnSkill(Guid skillId)
-		{
-			return Ok(_bpoGanttProvider.GetGanttDataForBpoTimelineOnSkill(skillId));
-		}
-
-		[UnitOfWork, HttpGet, Route("api/staffing/getganttdataforbpotimelineonskillgroup")]
-		public virtual IHttpActionResult GetGanttDataForBpoTimelineOnSkillGroup(Guid skillGroupId)
-		{
-			return Ok(_bpoGanttProvider.GetGanttDataForBpoTimelineOnSkillGroup(skillGroupId));
 		}
 
 		[UnitOfWork, HttpGet, Route("api/staffing/monitorskillareastaffing")]
@@ -98,27 +63,16 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		{
 			var skillArea = _skillGroupRepository.Get(SkillAreaId);
 			var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
-
-			var model = new ScheduledStaffingViewModel();
-			if (_toggleManager.IsEnabled(Toggles.WFM_Intraday_Refactoring_74652))
-				model = _staffingViewModelCreator.Load(skillIdList, new DateOnly(DateTime), UseShrinkage);
-			else
-				model = _staffingViewModelCreator.Load_old(skillIdList, new DateOnly(DateTime), UseShrinkage);
-
-			model.ImportBpoInfoList = _bpoGanttProvider.ImportInfoOnSkillGroup(SkillAreaId, DateTime); ;
+			var model = _staffingViewModelCreator.Load(skillIdList, new DateOnly(DateTime), UseShrinkage);
+			model.ImportBpoInfoList = _bpoProvider.ImportInfoOnSkillGroup(SkillAreaId, DateTime); ;
 			return Ok(model);
 		}
 
 		[UnitOfWork, HttpGet, Route("api/staffing/monitorskillstaffing")]
 		public virtual IHttpActionResult MonitorSkillStaffingByDate(Guid SkillId, DateTime DateTime, bool UseShrinkage)
 		{
-			var model = new ScheduledStaffingViewModel();
-			if (_toggleManager.IsEnabled(Toggles.WFM_Intraday_Refactoring_74652))
-				model = _staffingViewModelCreator.Load(new[] { SkillId }, new DateOnly(DateTime), UseShrinkage);
-			else 
-				model = _staffingViewModelCreator.Load_old(new[] { SkillId }, new DateOnly(DateTime), UseShrinkage);
-
-			model.ImportBpoInfoList = _bpoGanttProvider.ImportInfoOnSkill(SkillId, DateTime);
+			var model = _staffingViewModelCreator.Load(new[] {SkillId}, new DateOnly(DateTime), UseShrinkage);
+			model.ImportBpoInfoList = _bpoProvider.ImportInfoOnSkill(SkillId, DateTime);
 			return Ok(model);
 		}
 
@@ -169,42 +123,6 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			}).ToList();
 
 			return Ok(retList);
-		}
-
-		[UnitOfWork, HttpPost, Route("api/staffing/importBpo")]
-		public virtual IHttpActionResult ImportBpo([FromBody]importObj fileContents)
-		{
-			var result = _bpoFile.ImportFile(fileContents.FileContent, CultureInfo.InvariantCulture, fileContents.FileName);
-			return Ok(result);
-		}
-
-		[UnitOfWork, HttpGet, Route("api/staffing/exportStaffingDemand")]
-		public virtual IHttpActionResult ExportBpo(Guid skillId, DateTime exportStartDateTime, DateTime exportEndDateTime)
-		{
-			var returnVal = new ExportStaffingReturnObject();
-
-			var dateOnlyStartDate = new DateOnly(exportStartDateTime);
-			var dateOnlyEndDate = new DateOnly(exportEndDateTime);
-			var validationObject = _periodValidationProvider.ValidateExportBpoPeriod(dateOnlyStartDate, dateOnlyEndDate);
-
-			if (validationObject.Result == false)
-			{
-				returnVal.ErrorMessage = validationObject.ErrorMessage;
-				return Ok(returnVal);
-			}
-			
-			var skill = _skillRepository.Get(skillId);
-			if (skill == null)
-			{
-				returnVal.ErrorMessage = $"Cannot find skill with id: {skillId}";
-				return Ok(returnVal);
-			}
-			var exportedContent = _exportBpoFile.ExportDemand(skill,
-				new DateOnlyPeriod(dateOnlyStartDate, dateOnlyEndDate), CultureInfo.InvariantCulture);
-		
-			returnVal.Content = exportedContent;
-			returnVal.ErrorMessage = "";
-			return Ok(returnVal);
 		}
 		
 		[UnitOfWork, HttpGet, Route("api/staffing/exportforecastandstaffing")]
@@ -308,12 +226,6 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		{
 			public bool isLicenseAvailable { get; set; }
 			public bool HasPermissionForBpoExchange { get; set; }
-		}
-
-		public class importObj
-		{
-			public string FileContent { get; set; }
-			public string FileName { get; set; }
 		}
 	}
 }

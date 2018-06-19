@@ -745,6 +745,7 @@
     <Compile Include="Areas\Rta\Log4NetWcfLogger.cs" />
     <Compile Include="Areas\SkillGroup\SkillGroupInfo.cs" />
     <Compile Include="Areas\SkillGroup\SkillGroupInput.cs" />
+    <Compile Include="Areas\Staffing\Controllers\BpoController.cs" />
     <Compile Include="Areas\Staffing\Controllers\StaffingController.cs" />
     <Compile Include="Areas\Start\Controllers\TeapotController.cs" />
     <Compile Include="Areas\Start\Controllers\UserTokenController.cs" />

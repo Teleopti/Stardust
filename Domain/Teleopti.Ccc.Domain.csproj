@@ -713,7 +713,8 @@
     <Compile Include="Scheduling\WebLegacy\MoveSchedulesToOriginalStateHolderAfterIsland.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiWfmBpoExchangeLicenseOption.cs" />
     <Compile Include="SkillGroupManagement\ModifySkillGroupInput.cs" />
-    <Compile Include="Staffing\BpoGanttProvider.cs" />
+    <Compile Include="Staffing\BpoProvider.cs" />
+    <Compile Include="Staffing\ClearBpoReturnObject.cs" />
     <Compile Include="Staffing\ExportStaffingPeriodValidationProvider.cs" />
     <Compile Include="Staffing\ExportStaffingReturnObject.cs" />
     <Compile Include="Staffing\ExportBpoFile.cs" />

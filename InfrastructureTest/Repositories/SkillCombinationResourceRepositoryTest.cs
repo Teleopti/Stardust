@@ -16,9 +16,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -1350,7 +1347,397 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			skillResources.Any(x => x.StartDateTime == new DateTime(2017, 06, 03, 0, 0, 0)).Should().Be.EqualTo(false);
 		}
 
+		[Test]
+		public void ShouldGetAllActiveBpo()
+		{
+			Now.Is("2017-06-01 08:00");
+			var skillId =  persistSkill() ;
+			var combinationResourcesBpo = new List<ImportSkillCombinationResourceBpo>()
+			{
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 02, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
+					Resources = 5.5,
+					Source = "TPSWEDEN",
+					SkillIds = new List<Guid>{ skillId }
 
-		
+				},
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
+					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
+					Resources = 5.1,
+					Source = "TPBrazil",
+					SkillIds = new List<Guid>{ skillId }
+				}
+			};
+			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
+
+			var activeBpo =Target.LoadActiveBpos().ToList();
+
+			activeBpo.Count.Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldGetAllActiveBpoForCurrentBu()
+		{
+			Now.Is("2017-06-01 08:00");
+			var skillId1 = persistSkill();
+			var skillId2 = persistSkill();
+			var bu1 = CurrentBusinessUnit.Current();
+			var combinationResourcesBpo = new List<ImportSkillCombinationResourceBpo>()
+			{
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 02, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
+					Resources = 5.5,
+					Source = "TPSWEDEN",
+					SkillIds = new List<Guid>{ skillId1 }
+
+				}
+			};
+			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
+
+			var bu2 = BusinessUnitFactory.CreateSimpleBusinessUnit("Test2");
+			BusinessUnitRepository.Add(bu2);
+			CurrentUnitOfWork.Current().PersistAll();
+
+			CurrentBusinessUnit.OnThisThreadUse(bu2);
+
+			combinationResourcesBpo = new List<ImportSkillCombinationResourceBpo>()
+			{
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 02, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
+					Resources = 5.5,
+					Source = "TPBrazil",
+					SkillIds = new List<Guid>{ skillId2 }
+
+				}
+			};
+			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
+
+			CurrentBusinessUnit.OnThisThreadUse(bu1);
+
+			var activeBpo = Target.LoadActiveBpos().ToList();
+
+			activeBpo.Count.Should().Be.EqualTo(1);
+			activeBpo.First().Source.Should().Be.EqualTo("TPSWEDEN");
+		}
+
+		[Test]
+		public void ShouldOnlyReturnEachBpoOnce()
+		{
+			Now.Is("2017-06-01 08:00");
+			var skillId1 = persistSkill();
+			
+			var combinationResourcesBpo = new List<ImportSkillCombinationResourceBpo>()
+			{
+				new ImportSkillCombinationResourceBpo
+				{
+					StartDateTime = new DateTime(2017, 06, 02, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
+					Resources = 5.5,
+					Source = "TPSWEDEN",
+					SkillIds = new List<Guid>{ skillId1 }
+
+				},
+				new ImportSkillCombinationResourceBpo
+				{
+					StartDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
+					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
+					Resources = 5.5,
+					Source = "TPSWEDEN",
+					SkillIds = new List<Guid>{ skillId1 }
+
+				}
+			};
+			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
+
+			var activeBpo = Target.LoadActiveBpos().ToList();
+
+			activeBpo.Count.Should().Be.EqualTo(1);
+			activeBpo.First().Source.Should().Be.EqualTo("TPSWEDEN");
+		}
+
+		[Test]
+		public void ShouldIgnoreInActiveBpo()
+		{
+			Now.Is("2017-06-01 08:00");
+			var skillId = persistSkill();
+			var combinationResourcesBpo = new List<ImportSkillCombinationResourceBpo>()
+			{
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 02, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
+					Resources = 5.5,
+					Source = "TPSWEDEN",
+					SkillIds = new List<Guid>{ skillId }
+
+				},
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
+					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
+					Resources = 5.1,
+					Source = "TPBrazil",
+					SkillIds = new List<Guid>{ skillId }
+				}
+			};
+			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
+
+			using (var connection = new SqlConnection(InfraTestConfigReader.ConnectionString))
+			{
+				connection.Open();
+				using (var insertCommand = new SqlCommand(@"insert into [BusinessProcessOutsourcer] (Id, Source) Values (@id,@source)", connection))
+				{
+					insertCommand.Parameters.AddWithValue("@id", Guid.NewGuid());
+					insertCommand.Parameters.AddWithValue("@source", "TPPakistan");
+					insertCommand.ExecuteNonQuery();
+				}
+			}
+
+			var activeBpo = Target.LoadActiveBpos().ToList();
+			activeBpo.Count.Should().Be.EqualTo(2);
+			activeBpo.Any(x=>x.Source.Equals("TPPakistan")).Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldRemoveBpoResourceOnGivenBpo()
+		{
+			Now.Is("2017-06-01 08:00");
+			var skillId = persistSkill();
+			var combinationResourcesBpo = new List<ImportSkillCombinationResourceBpo>()
+			{
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 02, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
+					Resources = 5.5,
+					Source = "TPSWEDEN",
+					SkillIds = new List<Guid>{ skillId }
+
+				},
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 03, 0, 15, 0),
+					EndDateTime = new DateTime(2017, 06, 03, 0, 30, 0),
+					Resources = 5.1,
+					Source = "TPBrazil",
+					SkillIds = new List<Guid>{ skillId }
+				}
+			};
+			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
+
+			var bpoGuid = Target.LoadActiveBpos().FirstOrDefault(x => x.Source.Equals("TPBrazil")).Id;
+			var dateTimePeriod = new DateTimePeriod(new DateTime(2017, 06, 03, 0, 0, 0,DateTimeKind.Utc), new DateTime(2017, 06, 03, 23, 0, 0, DateTimeKind.Utc));
+			Target.ClearBpoResources(bpoGuid, dateTimePeriod);
+			CurrentUnitOfWork.Current().PersistAll();
+
+			using (var connection = new SqlConnection(InfraTestConfigReader.ConnectionString))
+			{
+				connection.Open();
+				using (var command = new SqlCommand(@"select count(*) from ReadModel.SkillCombinationResourceBpo where sourceId = @bpoGuid", connection))
+				{
+					command.Parameters.AddWithValue("@bpoGuid", bpoGuid);
+					var count = (Int32)command.ExecuteScalar();
+					count.Should().Be.EqualTo(0);
+				}
+			}
+
+		}
+		[Test]
+		public void ShouldRemoveBpoResourceOnGivenDate()
+		{
+			Now.Is("2017-06-01 08:00");
+			var skillId = persistSkill();
+			var combinationResourcesBpo = new List<ImportSkillCombinationResourceBpo>()
+			{
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
+					Resources = 5.5,
+					Source = "TPSWEDEN",
+					SkillIds = new List<Guid>{ skillId }
+
+				},
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 02, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
+					Resources = 5.5,
+					Source = "TPSWEDEN",
+					SkillIds = new List<Guid>{ skillId }
+
+				},
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 03, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 03, 0, 15, 0),
+					Resources = 5.1,
+					Source = "TPSWEDEN",
+					SkillIds = new List<Guid>{ skillId }
+				},
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 4, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 4, 0, 15, 0),
+					Resources = 5.1,
+					Source = "TPSWEDEN",
+					SkillIds = new List<Guid>{ skillId }
+				}
+			};
+			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
+
+			var bpoGuid = Target.LoadActiveBpos().FirstOrDefault(x => x.Source.Equals("TPSWEDEN")).Id;
+			var dateTimePeriod = new DateTimePeriod(new DateTime(2017, 06, 2, 0, 0, 0,DateTimeKind.Utc), new DateTime(2017, 06, 03, 23, 0, 0,DateTimeKind.Utc));
+			Target.ClearBpoResources(bpoGuid, dateTimePeriod);
+			CurrentUnitOfWork.Current().PersistAll();
+
+			using (var connection = new SqlConnection(InfraTestConfigReader.ConnectionString))
+			{
+				connection.Open();
+				var returnList = new List<DateTime>();
+				using (var command = new SqlCommand(@"select StartDateTime from ReadModel.SkillCombinationResourceBpo where sourceId = @bpoGuid", connection))
+				{
+					command.Parameters.AddWithValue("@bpoGuid", bpoGuid);
+					var reader = command.ExecuteReader();
+					while (reader.Read())
+					{
+						returnList.Add(reader.GetDateTime(0));
+
+					}
+				}
+				returnList.Any(x=>x==new DateTime(2017, 06, 2, 0, 0, 0)).Should().Be.False();
+				returnList.Any(x=>x==new DateTime(2017, 06, 3, 0, 0, 0)).Should().Be.False();
+			}
+
+		}
+
+		[Test]
+		public void ShouldGetNumberOfDeletedBpoResource()
+		{
+			Now.Is("2017-06-01 08:00");
+			var skillId = persistSkill();
+			var combinationResourcesBpo = new List<ImportSkillCombinationResourceBpo>()
+			{
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
+					Resources = 5.5,
+					Source = "TPSWEDEN",
+					SkillIds = new List<Guid>{ skillId }
+
+				},
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 02, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
+					Resources = 5.5,
+					Source = "TPSWEDEN",
+					SkillIds = new List<Guid>{ skillId }
+
+				},
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 03, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 03, 0, 15, 0),
+					Resources = 5.1,
+					Source = "TPSWEDEN",
+					SkillIds = new List<Guid>{ skillId }
+				},
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 4, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 4, 0, 15, 0),
+					Resources = 5.1,
+					Source = "TPSWEDEN",
+					SkillIds = new List<Guid>{ skillId }
+				}
+			};
+			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
+
+			var bpoGuid = Target.LoadActiveBpos().FirstOrDefault(x => x.Source.Equals("TPSWEDEN")).Id;
+			var dateTimePeriod = new DateTimePeriod(new DateTime(2017, 06, 2, 0, 0, 0, DateTimeKind.Utc), new DateTime(2017, 06, 03, 23, 0, 0, DateTimeKind.Utc));
+			 Target.ClearBpoResources(bpoGuid, dateTimePeriod).Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldReturnRangeWithData()
+		{
+			Now.Is("2017-06-01 08:00");
+			var skillId1 = persistSkill();
+
+			var combinationResourcesBpo = new List<ImportSkillCombinationResourceBpo>()
+			{
+				new ImportSkillCombinationResourceBpo
+				{
+					StartDateTime = new DateTime(2017, 06, 02, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
+					Resources = 5.5,
+					Source = "TPSWEDEN",
+					SkillIds = new List<Guid>{ skillId1 }
+
+				},
+				new ImportSkillCombinationResourceBpo
+				{
+					StartDateTime = new DateTime(2017, 06, 20, 0, 15, 0),
+					EndDateTime = new DateTime(2017, 06, 20, 0, 30, 0),
+					Resources = 5.5,
+					Source = "TPSWEDEN",
+					SkillIds = new List<Guid>{ skillId1 }
+
+				}
+			};
+			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
+
+			var bpo = Target.LoadActiveBpos().FirstOrDefault();
+			var range = Target.GetRangeForBpo(bpo.Id);
+
+			range.StartDate.Should().Be.EqualTo(new DateTime(2017, 06, 02, 0, 0, 0));
+			range.EndDate.Should().Be.EqualTo(new DateTime(2017, 06, 20, 0, 30, 0));
+		}
+
+		[Test]
+		public void ShouldHandleNoData()
+		{
+			Now.Is("2017-06-01 08:00");
+			var skillId1 = persistSkill();
+
+			var combinationResourcesBpo = new List<ImportSkillCombinationResourceBpo>()
+			{
+				new ImportSkillCombinationResourceBpo
+				{
+					StartDateTime = new DateTime(2017, 06, 02, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
+					Resources = 5.5,
+					Source = "TPSWEDEN",
+					SkillIds = new List<Guid>{ skillId1 }
+
+				},
+				new ImportSkillCombinationResourceBpo
+				{
+					StartDateTime = new DateTime(2017, 06, 20, 0, 15, 0),
+					EndDateTime = new DateTime(2017, 06, 20, 0, 30, 0),
+					Resources = 5.5,
+					Source = "TPSWEDEN",
+					SkillIds = new List<Guid>{ skillId1 }
+
+				}
+			};
+			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
+
+			var bpo = Target.LoadActiveBpos().FirstOrDefault();
+			var range = Target.GetRangeForBpo(Guid.NewGuid());
+
+			range.StartDate.Should().Be.EqualTo(new DateTime());
+			range.EndDate.Should().Be.EqualTo(new DateTime());
+		}
 	}
 }

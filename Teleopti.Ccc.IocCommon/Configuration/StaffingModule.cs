@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Staffing;
@@ -40,7 +39,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<BacklogSkillTypesForecastCalculator>().SingleInstance();
 			builder.RegisterType<ImportBpoFile>().SingleInstance();
 			builder.RegisterType<SkillCombinationBpoTimeLineReader>().As<ISkillCombinationBpoTimeLineReader>().SingleInstance();
-			builder.RegisterType<BpoGanttProvider>().SingleInstance();
+			builder.RegisterType<BpoProvider>().SingleInstance();
 
 			if (_configuration.Toggle(Toggles.Forecast_FileImport_UnifiedFormat_46585))
 				builder.RegisterType<ExportBpoFile>().As<IExportBpoFile>();

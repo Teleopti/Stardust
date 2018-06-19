@@ -17397,4 +17397,32 @@ The application will now exit.</value>
   <data name="ThisScenarioHasChanges" xml:space="preserve">
     <value>This scenario has unsaved changes</value>
   </data>
+  <data name="ClearBPOHeader" xml:space="preserve">
+    <value>Clear staffing</value>
+    <comment>Header on card for remove staffing for BPO</comment>
+  </data>
+  <data name="ImportBpoClearConfirmation" xml:space="preserve">
+    <value>Are you sure you want to remove staffing for this BPO in selected period?</value>
+    <comment>Confimation before clearing staffing</comment>
+  </data>
+  <data name="ImportBpoClearSuccessMessage" xml:space="preserve">
+    <value>Successfully cleared imported resources.</value>
+    <comment>Message after a successful clear of imported resources</comment>
+  </data>
+  <data name="ImportBpoRangeMessage" xml:space="preserve">
+    <value>The BPO {0} contains data from {1} to {2}.</value>
+    <comment>Date range of data for one BPO</comment>
+  </data>
+  <data name="ImportBpoSelectBpo" xml:space="preserve">
+    <value>Select BPO</value>
+    <comment>Text in dropdown before selecting BPO in remove staffing</comment>
+  </data>
+  <data name="ImportBpoTheClearBPOFailed" xml:space="preserve">
+    <value>The clear of staffing failed!</value>
+    <comment>Message if there is a failure for some reason when remoiving staffing</comment>
+  </data>
+  <data name="ImportBpoZeroResourcesWarning" xml:space="preserve">
+    <value>Zero resources deleted. Are you sure you selected the correct BPO and period?</value>
+    <comment>Warning after deletion of resources and zero was deleted</comment>
+  </data>
 </root>

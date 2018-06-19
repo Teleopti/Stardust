@@ -17,7 +17,8 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		private List<ImportSkillCombinationResourceBpo> _combinationResourcesBpo = new List<ImportSkillCombinationResourceBpo>();
 		public List<SkillCombinationResourceForBpo> SkillCombinationResourceForBpos = new List<SkillCombinationResourceForBpo>();
 		public List<ScheduledHeads> ScheduledHeadsForSkillList = new List<ScheduledHeads>();
-		
+		public IList<ActiveBpoModel> ActiveBpos = new List<ActiveBpoModel>();
+		public BpoResourceRangeRaw BpoResourceRange;
 		private readonly INow _now;
 		private DateTime? _lastCalcualted;
 
@@ -77,11 +78,14 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 					}
 				}
 			}
-			
+
 			return resources.Select(resource => new SkillCombinationResource
-									{
-										StartDateTime = resource.StartDateTime, EndDateTime = resource.EndDateTime, Resource = resource.Resource, SkillCombination = resource.SkillCombination
-									}).ToList();
+			{
+				StartDateTime = resource.StartDateTime,
+				EndDateTime = resource.EndDateTime,
+				Resource = resource.Resource,
+				SkillCombination = resource.SkillCombination
+			}).ToList();
 		}
 
 
@@ -106,7 +110,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 					_combinationResources.Add(delta);
 				}
 			}
-			
+
 		}
 
 		public DateTime GetLastCalculatedTime()
@@ -114,7 +118,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return _lastCalcualted ?? _now.UtcDateTime().AddMinutes(-10);
 		}
 
-		public void PersistSkillCombinationResourceBpo( List<ImportSkillCombinationResourceBpo> combinationResources)
+		public void PersistSkillCombinationResourceBpo(List<ImportSkillCombinationResourceBpo> combinationResources)
 		{
 			_combinationResourcesBpo = combinationResources;
 		}
@@ -132,6 +136,25 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public IEnumerable<ScheduledHeads> ScheduledHeadsForSkill(Guid skillId, DateOnlyPeriod period)
 		{
 			return ScheduledHeadsForSkillList;
+		}
+
+		public IEnumerable<ActiveBpoModel> LoadActiveBpos()
+		{
+			return ActiveBpos;
+		}
+
+		public int ClearBpoResources(Guid bpoGuid, DateTimePeriod dateTimePeriod)
+		{
+			var toRemove = _combinationResourcesBpo.Count(x =>
+				x.StartDateTime >= dateTimePeriod.StartDateTime && x.EndDateTime <= dateTimePeriod.EndDateTime);
+			_combinationResourcesBpo = _combinationResourcesBpo.Where(x =>
+				!(x.StartDateTime >= dateTimePeriod.StartDateTime && x.EndDateTime <= dateTimePeriod.EndDateTime)).ToList();
+			return toRemove;
+		}
+
+		public BpoResourceRangeRaw GetRangeForBpo(Guid bpoId)
+		{
+			return BpoResourceRange;
 		}
 
 		public IList<SkillCombinationResourceBpo> LoadSkillCombinationResourcesBpo()

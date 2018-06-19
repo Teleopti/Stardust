@@ -1658,7 +1658,7 @@
     <Compile Include="Scheduling\Assignment\PersonAssignmentTest.cs" />
     <Compile Include="Scheduling\Overtime\AddOvertimeTest.cs" />
     <Compile Include="SiteOpenHours\SiteWithOpenHourProviderTest.cs" />
-    <Compile Include="Staffing\BpoGanttProviderTest.cs" />
+    <Compile Include="Staffing\BpoProviderTest.cs" />
     <Compile Include="Staffing\CompareProjectionTest.cs" />
     <Compile Include="Staffing\ExportBpoFileOldTest.cs" />
     <Compile Include="Staffing\ExportBpoFileTest.cs" />

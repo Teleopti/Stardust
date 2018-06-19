@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Staffing
 {
-	public class BpoGanttProvider
+	public class BpoProvider
 	{
 		private readonly ISkillCombinationBpoTimeLineReader _skillCombinationBpoTimeLineReader;
 		private readonly IStaffingSettingsReader _staffingSettingsReader;
@@ -16,9 +17,10 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IUserUiCulture _userUiCulture;
 		private readonly IUserCulture _userCulture;
-
-		public BpoGanttProvider(ISkillCombinationBpoTimeLineReader skillCombinationBpoTimeLineReader, IStaffingSettingsReader staffingSettingsReader, 
-			INow now, IUserTimeZone userTimeZone, IUserUiCulture userUiCulture, IUserCulture userCulture)
+		private readonly ISkillCombinationResourceRepository _combinationResourceRepository;
+		
+		public BpoProvider(ISkillCombinationBpoTimeLineReader skillCombinationBpoTimeLineReader, IStaffingSettingsReader staffingSettingsReader, 
+			INow now, IUserTimeZone userTimeZone, IUserUiCulture userUiCulture, IUserCulture userCulture, ISkillCombinationResourceRepository combinationResourceRepository)
 		{
 			_skillCombinationBpoTimeLineReader = skillCombinationBpoTimeLineReader;
 			_staffingSettingsReader = staffingSettingsReader;
@@ -26,6 +28,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			_userTimeZone = userTimeZone;
 			_userUiCulture = userUiCulture;
 			_userCulture = userCulture;
+			_combinationResourceRepository = combinationResourceRepository;
 		}
 
 		public BpoGanttData GetAllGanttDataForBpoTimeline()
@@ -139,8 +142,58 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 			return models;
 		}
+
+		public List<ActiveBpoModel> LoadAllActiveBpos()
+		{
+			return _combinationResourceRepository.LoadActiveBpos().ToList();
+		}
+
+		public ClearBpoReturnObject ClearBpoResources(Guid bpoId,DateTime startDate, DateTime endDate)
+		{
+			var returnObject = new ClearBpoReturnObject();
+			var utcDateTimePeriod = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(startDate, _userTimeZone.TimeZone()),
+				TimeZoneHelper.ConvertToUtc(endDate, _userTimeZone.TimeZone()));
+
+			try
+			{
+				var deletedRows = _combinationResourceRepository.ClearBpoResources(bpoId, utcDateTimePeriod);
+				if (deletedRows != 0)
+				{
+					returnObject.SuccessMessage = Resources.ImportBpoClearSuccessMessage;
+				}
+				else
+				{
+					returnObject.ErrorMessage = Resources.ImportBpoZeroResourcesWarning;
+				}
+			}
+			catch (Exception ex)
+			{
+				returnObject.ErrorMessage = ex.Message;
+			}
+			return returnObject;
+		}
+
+		public RangeMessage GetRangeMessage(Guid bpoId)
+		{
+			var bpo = LoadAllActiveBpos().FirstOrDefault(b => b.Id.Equals(bpoId));
+			if(bpo == null)
+				return new RangeMessage();
+
+			var s = Resources.ImportBpoRangeMessage;
+
+			var raw = _combinationResourceRepository.GetRangeForBpo(bpoId);
+			// if nothing what	 
+			return new RangeMessage { Message = string.Format(s, bpo.Source, TimeZoneHelper.ConvertFromUtc(raw.StartDate, _userTimeZone.TimeZone()).Date.ToString("d", _userCulture.GetCulture()),
+				TimeZoneHelper.ConvertFromUtc(raw.EndDate, _userTimeZone.TimeZone()).Date.ToString("d", _userCulture.GetCulture()))
+			};
+		 
+		}
 	}
 
+	public class RangeMessage
+	{
+		public string Message { get; set; }
+	}
 	public class BpoGanttData
 	{
 		public DateTime FromDate{ get; set; }
@@ -201,5 +254,17 @@ namespace Teleopti.Ccc.Domain.Staffing
 		public string ImportedDateTimeString { get; set; }
 		public string Firstname { get; set; }
 		public string Lastname { get; set; }
+	}
+
+	public class ActiveBpoModel
+	{
+		public Guid Id { get; set; }
+		public string Source { get; set; }
+	}
+
+	public class BpoResourceRangeRaw
+	{
+		public DateTime StartDate { get; set; }
+		public DateTime EndDate { get; set; }
 	}
 }

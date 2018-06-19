@@ -1,41 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
+using DateTime = System.DateTime;
 
 namespace Teleopti.Ccc.DomainTest.Staffing
 {
 	[DomainTest]
-	public class BpoGanttProviderTest : IIsolateSystem
+	public class BpoProviderTest : IIsolateSystem
 	{
 		public MutableNow Now;
 		public FakeStaffingSettingsReader StaffingSettingsReader;
-		public BpoGanttProvider Target;
+		public BpoProvider Target;
+		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
+		public FakeUserTimeZone UserTimeZone;
+		public FakeUserCulture UserCulture;
 
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FakeStaffingSettingsReader>().For<FakeStaffingSettingsReader, IStaffingSettingsReader>();
 		}
-
-		//[Test]
-		//public void ShouldInitializeBpoDataWithReadmodelRange()
-		//{
-		//	Now.Is("2018-05-02 12:00");
-		//	StaffingSettingsReader.StaffingSettings[KeyNames.StaffingReadModelNumberOfDays] = 7 * 4;
-		//	StaffingSettingsReader.StaffingSettings[KeyNames.StaffingReadModelHistoricalHours] = 8 * 24;
-
-		//	var bpoGanttData = Target.InitializeReadmodelRange();
-		//	bpoGanttData.PeriodStartDate.Should().Be(new DateTime(2018, 04, 25));
-		//	bpoGanttData.PeriodEndDate.Should().Be(new DateTime(2018, 05, 30));
-		//}
 
 		[Test]
 		public void ShouldCombineConsecutiveDates()
@@ -325,6 +316,78 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			ganttData.First().Tasks.First().To.Should().Be(new DateTime(2018, 05, 01));
 			ganttData.First().Tasks.Second().From.Should().Be(new DateTime(2018, 04, 30));
 			ganttData.First().Tasks.Second().To.Should().Be(new DateTime(2018, 05, 01));
+		}
+
+		[Test]
+		public void ShouldClearBpoResources()
+		{
+			DateTime startDate  = new DateTime(2018,6,14,0,0,0);
+			DateTime endDate = new DateTime(2018, 6, 15, 0, 0, 0);
+			UserTimeZone.IsSweden();
+
+			var combinationResources = new List<ImportSkillCombinationResourceBpo>()
+			{
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2018, 6, 13, 22, 0, 0, DateTimeKind.Utc),
+					EndDateTime = new DateTime(2018, 6, 13, 23, 0, 0, DateTimeKind.Utc)
+				},
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2018, 6, 13, 23, 0, 0, DateTimeKind.Utc),
+					EndDateTime = new DateTime(2018, 6, 14, 0, 0, 0, DateTimeKind.Utc)
+				},
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2018, 6, 14, 0, 0, 0, DateTimeKind.Utc),
+					EndDateTime = new DateTime(2018, 6, 14, 1, 0, 0, DateTimeKind.Utc),
+					
+				}
+			};
+			SkillCombinationResourceRepository.PersistSkillCombinationResourceBpo(combinationResources);
+
+			var ret = Target.ClearBpoResources(Guid.NewGuid(), startDate, endDate);
+
+			ret.SuccessMessage.Should().Not.Be.Empty();
+
+			SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo().Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldReturnRangeMessage()
+		{
+			UserCulture.IsSwedish();
+			UserTimeZone.IsSweden();
+
+			var combinationResources = new List<ImportSkillCombinationResourceBpo>()
+			{
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2018, 6, 13, 22, 0, 0, DateTimeKind.Utc),
+					EndDateTime = new DateTime(2018, 6, 13, 23, 0, 0, DateTimeKind.Utc),
+					Source = "OUTSOURCER"
+				},
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2018, 6, 13, 23, 0, 0, DateTimeKind.Utc),
+					EndDateTime = new DateTime(2018, 6, 14, 0, 0, 0, DateTimeKind.Utc),
+					Source = "OUTSOURCER"
+				},
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2018, 6, 14, 0, 0, 0, DateTimeKind.Utc),
+					EndDateTime = new DateTime(2018, 6, 14, 1, 0, 0, DateTimeKind.Utc),
+					Source = "OUTSOURCER"
+				}
+			};
+			SkillCombinationResourceRepository.PersistSkillCombinationResourceBpo(combinationResources);
+			var id = Guid.NewGuid();
+			SkillCombinationResourceRepository.BpoResourceRange = new BpoResourceRangeRaw{StartDate = new DateTime(2018,06,14,22,00,00), EndDate = new DateTime(2018,06,25,22,00,00)};
+			SkillCombinationResourceRepository.ActiveBpos.Add(new ActiveBpoModel {Id = id, Source = "OUTSOURCER"});
+			var mess = Target.GetRangeMessage(id).Message;
+			mess.Should().Contain("OUTSOURCER");
+			mess.Should().Contain("2018-06-15");
+			mess.Should().Contain("2018-06-26");
 		}
 
 	}

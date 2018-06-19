@@ -395,7 +395,37 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			return result.ToArray();
 		}
-		
+
+		public IEnumerable<ActiveBpoModel> LoadActiveBpos()
+		{
+			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
+			var result = _currentUnitOfWork.Current().Session()
+				.CreateSQLQuery(@"SELECT Id,Source FROM BusinessProcessOutsourcer WHERE Id IN 
+								(SELECT SourceId FROM ReadModel.SkillCombinationResourceBpo WHERE BusinessUnit = :bu)")
+				.SetGuid("bu",bu)
+				.SetResultTransformer(new AliasToBeanResultTransformer(typeof(ActiveBpoModel)))
+				.List<ActiveBpoModel>();
+			return result;
+		}
+
+		public int ClearBpoResources(Guid bpoGuid, DateTimePeriod dateTimePeriod)
+		{
+			return _currentUnitOfWork.Current().Session()
+				.CreateSQLQuery(@"delete from ReadModel.SkillCombinationResourceBpo where sourceid = :bpoID and StartDateTime >= :st and EndDateTime <= :end")
+				.SetGuid("bpoID", bpoGuid)
+				.SetDateTime("st",dateTimePeriod.StartDateTime)
+				.SetDateTime("end",dateTimePeriod.EndDateTime)
+				.ExecuteUpdate();
+		}
+
+		public BpoResourceRangeRaw GetRangeForBpo(Guid bpoId)
+		{
+			return _currentUnitOfWork.Current().Session()
+				.CreateSQLQuery(@"select MIN(StartDateTime) AS StartDate, MAX(EndDateTime)  AS EndDate  from ReadModel.SkillCombinationResourceBpo where SourceId  = :id")
+				.SetGuid("id", bpoId)
+				.SetResultTransformer(new AliasToBeanResultTransformer(typeof(BpoResourceRangeRaw))).UniqueResult<BpoResourceRangeRaw>();
+		}
+
 		public IEnumerable<SkillCombinationResourceForBpo> BpoResourcesForSkill(Guid skillId, DateOnlyPeriod period)
 		{
 			var extendedEndDate = period.EndDate.Date.AddDays(1).AddMinutes(-1);
@@ -447,7 +477,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var result = _currentUnitOfWork.Current().Session()
 				.CreateSQLQuery(
 					@"
-
  SELECT  SkillCombinationId, StartDateTime, EndDateTime, Resource, c.SkillId
  FROM
 (SELECT  SkillCombinationId, StartDateTime, EndDateTime, SUM(Resource) AS Resource FROM 

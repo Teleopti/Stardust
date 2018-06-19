@@ -6551,6 +6551,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear staffing.
+        /// </summary>
+        public static string ClearBPOHeader {
+            get {
+                return ResourceManager.GetString("ClearBPOHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clear campaign.
         /// </summary>
         public static string ClearCampaign {
@@ -14565,6 +14574,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove staffing for this BPO in selected period?.
+        /// </summary>
+        public static string ImportBpoClearConfirmation {
+            get {
+                return ResourceManager.GetString("ImportBpoClearConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully cleared imported resources..
+        /// </summary>
+        public static string ImportBpoClearSuccessMessage {
+            get {
+                return ResourceManager.GetString("ImportBpoClearSuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Duplicate found. The same information is entered on more than one line in the import file, which is not allowed..
         /// </summary>
         public static string ImportBpoDuplicateRecord {
@@ -14691,6 +14718,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The BPO {0} contains data from {1} to {2}..
+        /// </summary>
+        public static string ImportBpoRangeMessage {
+            get {
+                return ResourceManager.GetString("ImportBpoRangeMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The imported agents&apos; interval length ({0} minutes) does not match the interval length of the skill {1} ({2} minutes)..
         /// </summary>
         public static string ImportBpoResourceIntervalLengthDiffersFromTheSkill {
@@ -14705,6 +14741,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ImportBpoResourcesCannotBeLessThanZero {
             get {
                 return ResourceManager.GetString("ImportBpoResourcesCannotBeLessThanZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select BPO.
+        /// </summary>
+        public static string ImportBpoSelectBpo {
+            get {
+                return ResourceManager.GetString("ImportBpoSelectBpo", resourceCulture);
             }
         }
         
@@ -14763,6 +14808,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The clear of staffing failed!.
+        /// </summary>
+        public static string ImportBpoTheClearBPOFailed {
+            get {
+                return ResourceManager.GetString("ImportBpoTheClearBPOFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The import file cannot be empty..
         /// </summary>
         public static string ImportBpoTheImportFileCannotBeEmpty {
@@ -14795,6 +14849,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ImportBpoWrongResourceFormat {
             get {
                 return ResourceManager.GetString("ImportBpoWrongResourceFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zero resources deleted. Are you sure you selected the correct BPO and period?.
+        /// </summary>
+        public static string ImportBpoZeroResourcesWarning {
+            get {
+                return ResourceManager.GetString("ImportBpoZeroResourcesWarning", resourceCulture);
             }
         }
         

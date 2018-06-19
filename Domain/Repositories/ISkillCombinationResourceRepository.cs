@@ -17,5 +17,8 @@ namespace Teleopti.Ccc.Domain.Repositories
 		Dictionary<Guid, string> LoadSourceBpo(SqlConnection connection);
 		IEnumerable<SkillCombinationResourceForBpo> BpoResourcesForSkill(Guid skillId, DateOnlyPeriod period);
 		IEnumerable<ScheduledHeads> ScheduledHeadsForSkill(Guid skillId, DateOnlyPeriod period);
+		IEnumerable<ActiveBpoModel> LoadActiveBpos();
+		int ClearBpoResources(Guid bpoGuid, DateTimePeriod dateTimePeriod);
+		BpoResourceRangeRaw GetRangeForBpo(Guid bpoId);
 	}
 }
