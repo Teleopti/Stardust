@@ -30,47 +30,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public FakeSchedulingSourceScope FakeSchedulingSourceScope;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
-		private IBusinessUnit businessUnit;
-
-
-		public void SetUp()
+		[Test]
+		public void ShouldUpdateFinishOkJobResultWhenAllDone()
 		{
 			Tenants.Has("Teleopti WFM");
 			var person = PersonFactory.CreatePerson().WithId(SystemUser.Id);
 			PersonRepository.Add(person);
-			businessUnit = BusinessUnitFactory.CreateWithId("something");
+			var businessUnit = BusinessUnitFactory.CreateWithId("something");
 			BusinessUnitRepository.Add(businessUnit);
-		}
-
-		[Test]
-		public void ShouldAddJobResultDetail()
-		{
-			SetUp();
-			ScenarioRepository.Has("some name");
-			var jobResultId = Guid.NewGuid();
-			var startDate = new DateOnly(2017, 3, 1);
-			var endDate = new DateOnly(2017, 3, 7);
-			JobResultRepository.Add(new JobResult(JobCategory.WebIntradayOptimization, new DateOnlyPeriod(startDate, endDate), PersonFactory.CreatePerson("name1"), DateTime.Now).WithId(jobResultId));
-			var planningPeriod = PlanningPeriodRepository.Has(startDate, endDate, SchedulePeriodType.Week, 1);
-			Target.Handle(new IntradayOptimizationOnStardustWasOrdered
-			{
-				JobResultId = jobResultId,
-				LogOnBusinessUnitId = businessUnit.Id.Value,
-				LogOnDatasource = "Teleopti WFM",
-				PlanningPeriodId = planningPeriod.Id.Value
-			});
-
-			var jobResult = JobResultRepository.Get(jobResultId);
-			jobResult.Details.Count().Should().Be.EqualTo(1);
-			jobResult.FinishedOk.Should().Be.False();
-
-			FakeSchedulingSourceScope.UsedToBe().ForEach(x => x.Should().Be.EqualTo(ScheduleSource.WebScheduling));
-		}
-
-		[Test]
-		public void ShouldUpdateFinishOkJobResultWhenAllDone()
-		{
-			SetUp();
 			ScenarioRepository.Has("some name");
 			var jobResultId = Guid.NewGuid();
 			var startDate = new DateOnly(2017, 3, 1);
