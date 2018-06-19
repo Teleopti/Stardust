@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		[UnitOfWork]
 		protected virtual void SaveDetailToJobResult(IntradayOptimizationOnStardustWasOrdered @event, DetailLevel level, string message, Exception exception)
 		{
-			_jobResultRepository.AddDetailAndCheckSuccess(@event.JobResultId, new JobResultDetail(level, message, DateTime.UtcNow, exception), @event.TotalEvents);
+			_jobResultRepository.AddDetailAndCheckSuccess(@event.JobResultId, new JobResultDetail(level, message, DateTime.UtcNow, exception), 0);
 		}
 
 		/*

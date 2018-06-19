@@ -55,7 +55,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Target.Handle(new IntradayOptimizationOnStardustWasOrdered
 			{
 				JobResultId = jobResultId,
-				TotalEvents = 3,
 				LogOnBusinessUnitId = businessUnit.Id.Value,
 				LogOnDatasource = "Teleopti WFM",
 				PlanningPeriodId = planningPeriod.Id.Value
@@ -81,7 +80,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Target.Handle(new IntradayOptimizationOnStardustWasOrdered
 			{
 				JobResultId = jobResultId,
-				TotalEvents = 1,
 				LogOnBusinessUnitId = businessUnit.Id.Value,
 				LogOnDatasource = "Teleopti WFM",
 				PlanningPeriodId = planningPeriod.Id.Value
