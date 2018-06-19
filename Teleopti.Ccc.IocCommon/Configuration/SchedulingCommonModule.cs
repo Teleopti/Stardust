@@ -147,7 +147,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PersonListExtractorFromScheduleParts>().As<IPersonListExtractorFromScheduleParts>().SingleInstance();
 			builder.RegisterType<GroupPersonBuilderForOptimizationFactory>().As<IGroupPersonBuilderForOptimizationFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<FlexibelDayOffOptimizationDecisionMakerFactory>().As<IDayOffOptimizationDecisionMakerFactory>().SingleInstance();
-			builder.RegisterType<IntradayOptimizationExecutor>().As<IntradayOptimizationExecutor>().InstancePerLifetimeScope().ApplyAspects();
+			builder.RegisterType<IntradayOptimizationExecutor>().InstancePerLifetimeScope().ApplyAspects();
+			builder.RegisterType<IntradayOptimizationOnStardust>().SingleInstance();
 
 			
 			//change to scope? 

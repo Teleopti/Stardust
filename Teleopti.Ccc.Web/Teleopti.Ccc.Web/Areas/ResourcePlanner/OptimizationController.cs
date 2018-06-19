@@ -11,16 +11,26 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	public class OptimizationController : ApiController
 	{
 		private readonly IntradayOptimizationFromWeb _intradayOptimizationFromWeb;
+		private readonly IntradayOptimizationOnStardust _intradayOptimizationOnStardust;
 
-		public OptimizationController(IntradayOptimizationFromWeb intradayOptimizationFromWeb)
+		public OptimizationController(IntradayOptimizationFromWeb intradayOptimizationFromWeb,
+			IntradayOptimizationOnStardust intradayOptimizationOnStardust)
 		{
 			_intradayOptimizationFromWeb = intradayOptimizationFromWeb;
+			_intradayOptimizationOnStardust = intradayOptimizationOnStardust;
 		}
 
 		[HttpPost, Route("api/resourceplanner/planningperiod/{planningPeriodId}/optimizeintraday")]
 		public void OptimizeIntradayForPlanningPeriod(Guid planningPeriodId, bool runAsynchronously)
 		{
-			_intradayOptimizationFromWeb.Execute(planningPeriodId, runAsynchronously);
+			if (runAsynchronously)
+			{
+				_intradayOptimizationOnStardust.Execute(planningPeriodId);
+			}
+			else
+			{
+				_intradayOptimizationFromWeb.Execute(planningPeriodId, false);
+			}
 		}
 	}
 }

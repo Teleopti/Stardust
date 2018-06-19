@@ -27,10 +27,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			_loggedOnUser = loggedOnUser;
 		}
 
+		//TODO remove param
 		public void Execute(Guid planningPeriodId, bool runAsynchronously)
 		{
 			var intradayOptimizationCommand = IntradayOptimizationCommand(planningPeriodId, runAsynchronously);
-			if (intradayOptimizationCommand == null) return;
 			_intradayOptimizationCommandHandler.Execute(intradayOptimizationCommand);
 		}
 

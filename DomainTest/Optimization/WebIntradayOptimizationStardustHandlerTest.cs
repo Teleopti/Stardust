@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeTenants Tenants;
 		public FakeSchedulingSourceScope FakeSchedulingSourceScope;
+		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
 		private IBusinessUnit businessUnit;
 
@@ -51,12 +52,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var startDate = new DateOnly(2017, 3, 1);
 			var endDate = new DateOnly(2017, 3, 7);
 			JobResultRepository.Add(new JobResult(JobCategory.WebIntradayOptimiztion, new DateOnlyPeriod(startDate, endDate), PersonFactory.CreatePerson("name1"), DateTime.Now).WithId(jobResultId));
+			var planningPeriod = PlanningPeriodRepository.Has(startDate, endDate, SchedulePeriodType.Week, 1);
 			Target.Handle(new WebIntradayOptimizationStardustEvent
 			{
 				JobResultId = jobResultId,
 				TotalEvents = 3,
 				LogOnBusinessUnitId = businessUnit.Id.Value,
 				LogOnDatasource = "Teleopti WFM",
+				PlanningPeriodId = planningPeriod.Id.Value,
 				IntradayOptimizationWasOrdered = new IntradayOptimizationWasOrdered
 				{
 					StartDate = startDate,
@@ -80,12 +83,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var startDate = new DateOnly(2017, 3, 1);
 			var endDate = new DateOnly(2017, 3, 7);
 			JobResultRepository.Add(new JobResult(JobCategory.WebIntradayOptimiztion, new DateOnlyPeriod(startDate, endDate), PersonFactory.CreatePerson("name1"), DateTime.Now).WithId(jobResultId));
+			var planningPeriod = PlanningPeriodRepository.Has(startDate, endDate, SchedulePeriodType.Week, 1);
 			Target.Handle(new WebIntradayOptimizationStardustEvent
 			{
 				JobResultId = jobResultId,
 				TotalEvents = 1,
 				LogOnBusinessUnitId = businessUnit.Id.Value,
 				LogOnDatasource = "Teleopti WFM",
+				PlanningPeriodId = planningPeriod.Id.Value,
 				IntradayOptimizationWasOrdered = new IntradayOptimizationWasOrdered
 				{
 					StartDate = startDate,
