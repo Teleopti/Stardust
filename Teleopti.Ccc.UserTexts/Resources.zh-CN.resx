@@ -4048,6 +4048,12 @@ Periods</comment>
     <value>星期六</value>
     <comment>Saturday</comment>
   </data>
+  <data name="Manage" xml:space="preserve">
+    <value>管理</value>
+  </data>
+  <data name="Discard" xml:space="preserve">
+    <value>放弃</value>
+  </data>
   <data name="Save" xml:space="preserve">
     <value>保存</value>
     <comment>Save</comment>
@@ -11501,6 +11507,9 @@ Teleopti R&amp;D</value>
   <data name="EditCampaign" xml:space="preserve">
     <value>编辑活动</value>
   </data>
+  <data name="CreateOverride" xml:space="preserve">
+    <value>创建覆盖值</value>
+  </data>
   <data name="CreateCampaign" xml:space="preserve">
     <value>创建活动</value>
   </data>
@@ -14659,5 +14668,38 @@ Teleopti R&amp;D</value>
   </data>
   <data name="ImportBpoFileImportInfoHeader" xml:space="preserve">
     <value>BPO文件导入信息</value>
+  </data>
+  <data name="ConfirmDiscardAllModifications" xml:space="preserve">
+    <value>确定要放弃所有改动吗？</value>
+  </data>
+  <data name="ConfirmExitForecastWithoutSaving" xml:space="preserve">
+    <value>确定要放弃所有改动，退出预测模块吗？</value>
+  </data>
+  <data name="ConfirmReforecastWithoutSaving" xml:space="preserve">
+    <value>确定要重新执行预测吗？所有未保存的改动都将丢失。</value>
+  </data>
+  <data name="NoForecastDateForCurrentScenario" xml:space="preserve">
+    <value>当前情景没有预测数据，请执行一次预测操作，或从其他情景导入。</value>
+  </data>
+  <data name="PleaseSaveOrDiscardChangesBeforeChangingScenario" xml:space="preserve">
+    <value>在更改选中情景前，请先保存或放弃改动。</value>
+  </data>
+  <data name="SaveToOtherScenario" xml:space="preserve">
+    <value>保存到其他情景</value>
+  </data>
+  <data name="SelectTargetScenarioWithColon" xml:space="preserve">
+    <value>选择目标情景：</value>
+  </data>
+  <data name="SkillNotSupported" xml:space="preserve">
+    <value>This skill is not supported yet. Check back here later to run a forecast for this scenario.</value>
+  </data>
+  <data name="ThisScenarioHasChanges" xml:space="preserve">
+    <value>当前情景有未保存的更改</value>
+  </data>
+  <data name="NewForecastIntro" xml:space="preserve">
+    <value>当前工作量的预测结果</value>
+  </data>
+  <data name="SkillTypeFilter" xml:space="preserve">
+    <value>按技能类别过滤</value>
   </data>
 </root>

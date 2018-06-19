@@ -6984,6 +6984,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to discard all modifications?.
+        /// </summary>
+        public static string ConfirmDiscardAllModifications {
+            get {
+                return ResourceManager.GetString("ConfirmDiscardAllModifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to exit forecaster without saving?.
+        /// </summary>
+        public static string ConfirmExitForecastWithoutSaving {
+            get {
+                return ResourceManager.GetString("ConfirmExitForecastWithoutSaving", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm Grouping Deletion.
         /// </summary>
         public static string ConfirmGroupingDeletion {
@@ -7007,6 +7025,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ConfirmPeopleRemove {
             get {
                 return ResourceManager.GetString("ConfirmPeopleRemove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to forecast again? all modification not saved will lost..
+        /// </summary>
+        public static string ConfirmReforecastWithoutSaving {
+            get {
+                return ResourceManager.GetString("ConfirmReforecastWithoutSaving", resourceCulture);
             }
         }
         
@@ -7765,6 +7792,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string CreateNextPp {
             get {
                 return ResourceManager.GetString("CreateNextPp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Override.
+        /// </summary>
+        public static string CreateOverride {
+            get {
+                return ResourceManager.GetString("CreateOverride", resourceCulture);
             }
         }
         
@@ -9952,6 +9988,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Disable {
             get {
                 return ResourceManager.GetString("Disable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Discard.
+        /// </summary>
+        public static string Discard {
+            get {
+                return ResourceManager.GetString("Discard", resourceCulture);
             }
         }
         
@@ -17203,6 +17248,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manage.
+        /// </summary>
+        public static string Manage {
+            get {
+                return ResourceManager.GetString("Manage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manage Absence.
         /// </summary>
         public static string ManageAbsence {
@@ -21082,6 +21136,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoForecast {
             get {
                 return ResourceManager.GetString("NoForecast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is no forecast data for this scenario, please run a forecast or save from another scenario..
+        /// </summary>
+        public static string NoForecastDateForCurrentScenario {
+            get {
+                return ResourceManager.GetString("NoForecastDateForCurrentScenario", resourceCulture);
             }
         }
         
@@ -25437,6 +25500,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please save or discard changes before changing scenario.
+        /// </summary>
+        public static string PleaseSaveOrDiscardChangesBeforeChangingScenario {
+            get {
+                return ResourceManager.GetString("PleaseSaveOrDiscardChangesBeforeChangingScenario", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please select an employment type..
         /// </summary>
         public static string PleaseSelectAnEmploymentType {
@@ -29142,6 +29214,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save to other scenario.
+        /// </summary>
+        public static string SaveToOtherScenario {
+            get {
+                return ResourceManager.GetString("SaveToOtherScenario", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save to .
         /// </summary>
         public static string SaveToSpace {
@@ -31027,6 +31108,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SelectSuitableColor {
             get {
                 return ResourceManager.GetString("SelectSuitableColor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select target scenario:.
+        /// </summary>
+        public static string SelectTargetScenarioWithColon {
+            get {
+                return ResourceManager.GetString("SelectTargetScenarioWithColon", resourceCulture);
             }
         }
         
@@ -33086,6 +33176,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This skill is not supported yet. Check back here later to run a forecast for this scenario..
+        /// </summary>
+        public static string SkillNotSupported {
+            get {
+                return ResourceManager.GetString("SkillNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Skill open hours.
         /// </summary>
         public static string SkillOpeningHours {
@@ -33190,6 +33289,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SkillTypeFax {
             get {
                 return ResourceManager.GetString("SkillTypeFax", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skill type filter.
+        /// </summary>
+        public static string SkillTypeFilter {
+            get {
+                return ResourceManager.GetString("SkillTypeFilter", resourceCulture);
             }
         }
         

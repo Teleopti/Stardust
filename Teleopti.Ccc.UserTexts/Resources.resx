@@ -17425,4 +17425,51 @@ The application will now exit.</value>
     <value>Zero resources deleted. Are you sure you selected the correct BPO and period?</value>
     <comment>Warning after deletion of resources and zero was deleted</comment>
   </data>
+  <data name="Manage" xml:space="preserve">
+    <value>Manage</value>
+    <comment>Manage</comment>
+  </data>
+  <data name="Discard" xml:space="preserve">
+    <value>Discard</value>
+    <comment>Discard</comment>
+  </data>
+  <data name="CreateOverride" xml:space="preserve">
+    <value>Create Override</value>
+    <comment>Create new override</comment>
+  </data>
+  <data name="ConfirmDiscardAllModifications" xml:space="preserve">
+    <value>Are you sure you want to discard all modifications?</value>
+    <comment>Text message in web forecast</comment>
+  </data>
+  <data name="ConfirmExitForecastWithoutSaving" xml:space="preserve">
+    <value>Are you sure you want to exit forecaster without saving?</value>
+    <comment>Text message in web forecast</comment>
+  </data>
+  <data name="ConfirmReforecastWithoutSaving" xml:space="preserve">
+    <value>Are you sure you want to forecast again? all modification not saved will lost.</value>
+    <comment>Text message in web forecast</comment>
+  </data>
+  <data name="NoForecastDateForCurrentScenario" xml:space="preserve">
+    <value>There is no forecast data for this scenario, please run a forecast or save from another scenario.</value>
+    <comment>Text message in web forecast</comment>
+  </data>
+  <data name="PleaseSaveOrDiscardChangesBeforeChangingScenario" xml:space="preserve">
+    <value>Please save or discard changes before changing scenario</value>
+    <comment>Text message in web forecast</comment>
+  </data>
+  <data name="SaveToOtherScenario" xml:space="preserve">
+    <value>Save to other scenario</value>
+    <comment>Text message in web forecast</comment>
+  </data>
+  <data name="SelectTargetScenarioWithColon" xml:space="preserve">
+    <value>Select target scenario:</value>
+    <comment>Text message in web forecast</comment>
+  </data>
+  <data name="SkillNotSupported" xml:space="preserve">
+    <value>This skill is not supported yet. Check back here later to run a forecast for this scenario.</value>
+    <comment>Text message in web forecast</comment>
+  </data>
+  <data name="SkillTypeFilter" xml:space="preserve">
+    <value>Skill type filter</value>
+  </data>
 </root>
