@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Domain.Common
         public const string ArchiveSchedule = "ArchiveSchedule";
         public const string ImportSchedule = "ImportSchedule";
         public const string WebSchedule = "WebSchedule";
-        public const string WebIntradayOptimiztion = "WebIntradayOptimiztion";
+        public const string WebIntradayOptimization = "WebIntradayOptimization";
 	    public const string WebImportAgent = "WebImportAgent";
 	    public const string WebImportExternalGamification = "WebImportExternalGamification";
 		public const string WebRecalculateBadge = "WebRecalculateBadge";

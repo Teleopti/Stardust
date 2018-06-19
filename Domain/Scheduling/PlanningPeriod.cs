@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public virtual IJobResult GetLastIntradayOptimizationJob()
 		{
-			return getLastJobResult(JobCategory.WebIntradayOptimiztion);
+			return getLastJobResult(JobCategory.WebIntradayOptimization);
 		}
 
 		public virtual void Reset()

@@ -421,7 +421,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 
 			var periodStart = new DateOnly(2017, 04, 26);
 			var planningPeriod = PlanningPeriodRepository.Has(periodStart, 1, planningGroup);
-			var jobResult = new JobResult(JobCategory.WebIntradayOptimiztion, planningPeriod.Range, PersonFactory.CreatePerson(), DateTime.UtcNow);
+			var jobResult = new JobResult(JobCategory.WebIntradayOptimization, planningPeriod.Range, PersonFactory.CreatePerson(), DateTime.UtcNow);
 			jobResult.AddDetail(new JobResultDetail(DetailLevel.Error, "Whatever", DateTime.Now, new Exception()));
 			planningPeriod.JobResults.Add(jobResult);
 

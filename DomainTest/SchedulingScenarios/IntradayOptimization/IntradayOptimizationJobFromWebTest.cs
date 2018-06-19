@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			Target.Execute(planningPeriod.Id.GetValueOrDefault());
 
 			var jobResult = JobResultRepository.LoadAll().Single();
-			jobResult.JobCategory.Should().Be.EqualTo(JobCategory.WebIntradayOptimiztion);
+			jobResult.JobCategory.Should().Be.EqualTo(JobCategory.WebIntradayOptimization);
 			jobResult.Period.Should().Be.EqualTo(planningPeriod.Range);
 		}
 	}

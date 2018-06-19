@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var planningPeriod = _planningPeriodRepository.Get(planningPeriodId);
 			var planningPeriodRange = planningPeriod?.Range ?? new DateOnlyPeriod();
-			var jobResult = new JobResult(JobCategory.WebIntradayOptimiztion, planningPeriodRange, _loggedOnUser.CurrentUser(), DateTime.UtcNow);
+			var jobResult = new JobResult(JobCategory.WebIntradayOptimization, planningPeriodRange, _loggedOnUser.CurrentUser(), DateTime.UtcNow);
 			_jobResultRepository.Add(jobResult);
 			planningPeriod.JobResults.Add(jobResult);
 			_eventPublisher.Publish(new IntradayOptimizationOnStardustWasOrdered
