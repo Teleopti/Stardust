@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			using (CommandScope.Create(@event))
 			{
-				_intradayOptimizationExecutor.HandleEvent(@event, null, () => new FixedBlockPreferenceProvider(_optimizationPreferencesProvider.Fetch().Extra));
+				_intradayOptimizationExecutor.HandleEvent(@event, new FixedBlockPreferenceProvider(_optimizationPreferencesProvider.Fetch().Extra));
 			}
 		}
 	}

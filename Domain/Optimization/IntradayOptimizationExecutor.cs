@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		//if below is needed on more places - make an attribute/"something" instead?
 		[TestLog]
-		public virtual void HandleEvent(IntradayOptimizationWasOrdered @event, Guid? planningPeriodId, Func<IBlockPreferenceProvider> blockPreferenceProvider)
+		public virtual void HandleEvent(IntradayOptimizationWasOrdered @event, IBlockPreferenceProvider blockPreferenceProvider)
 		{
 			var numberOfTries = 0;
 			while (true)
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				try
 				{
 					numberOfTries++;
-					execute(@event, planningPeriodId, blockPreferenceProvider);
+					execute(@event, blockPreferenceProvider);
 					return;
 				}
 				catch (DeadLockVictimException deadLockEx)
@@ -64,27 +64,26 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 		
 
-		private void execute(IntradayOptimizationWasOrdered @event, Guid? planningPeriodId, Func<IBlockPreferenceProvider> blockPreferenceProvider)
+		private void execute(IntradayOptimizationWasOrdered @event, IBlockPreferenceProvider blockPreferenceProvider)
 		{
 			var period = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
-			DoOptimization(blockPreferenceProvider, period, @event.AgentsInIsland, @event.Agents, @event.UserLocks, @event.Skills, @event.RunResolveWeeklyRestRule, planningPeriodId);
+			DoOptimization(blockPreferenceProvider, period, @event.AgentsInIsland, @event.Agents, @event.UserLocks, @event.Skills, @event.RunResolveWeeklyRestRule);
 			_synchronizeSchedulesAfterIsland.Synchronize(_schedulerStateHolder().Schedules, period);
 		}
 
 		[ReadonlyUnitOfWork]
 		protected virtual void DoOptimization(
-			Func<IBlockPreferenceProvider> blockPreferenceProvider,
+			IBlockPreferenceProvider blockPreferenceProvider,
 			DateOnlyPeriod period,
 			IEnumerable<Guid> agentsInIsland,
 			IEnumerable<Guid> agentsToOptimize,
 			IEnumerable<LockInfo> locks,
 			IEnumerable<Guid> onlyUseSkills,
-			bool runResolveWeeklyRestRule,
-			Guid? planningPeriodId)
+			bool runResolveWeeklyRestRule)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
 			_fillSchedulerStateHolder.Fill(schedulerStateHolder, agentsInIsland, new LockInfoForStateHolder(_gridlockManager, locks), period, onlyUseSkills);
-			_intradayOptimization.Execute(period, schedulerStateHolder.ChoosenAgents.Filter(agentsToOptimize), runResolveWeeklyRestRule, blockPreferenceProvider());
+			_intradayOptimization.Execute(period, schedulerStateHolder.ChoosenAgents.Filter(agentsToOptimize), runResolveWeeklyRestRule, blockPreferenceProvider);
 		}
 	}
 }
