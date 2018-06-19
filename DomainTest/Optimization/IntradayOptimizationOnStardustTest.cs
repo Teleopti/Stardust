@@ -1,12 +1,9 @@
-using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -24,23 +21,24 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		
 		[Test]
-		public void ShouldPublishEvent()
+		public void ShouldPublishEventWothPlanningPeriodId()
 		{
-			var planningPeriodId = Guid.NewGuid();
-
-			Target.Execute(planningPeriodId);
+			var planningPeriod = PlanningPeriodRepository.Has(DateOnly.Today, DateOnly.Today.AddDays(6), SchedulePeriodType.Week, 1);
+			
+			Target.Execute(planningPeriod.Id.Value);
 
 			EventPublisher.PublishedEvents.OfType<IntradayOptimizationOnStardustWasOrdered>().Single().PlanningPeriodId
-				.Should().Be.EqualTo(planningPeriodId);
+				.Should().Be.EqualTo(planningPeriod.Id.Value);
 		}
 
 		[Test]
 		public void ShouldIncludeCreatedJobResult()
 		{
-			Target.Execute(Guid.NewGuid());
+			var planningPeriod = PlanningPeriodRepository.Has(DateOnly.Today, DateOnly.Today.AddDays(6), SchedulePeriodType.Week, 1);
+			
+			Target.Execute(planningPeriod.Id.Value);
 
 			var createdJobResult = JobResultRepository.LoadAll().Single();
-			
 			EventPublisher.PublishedEvents.OfType<IntradayOptimizationOnStardustWasOrdered>().Single().JobResultId
 				.Should().Be.EqualTo(createdJobResult.Id.Value);
 		}
@@ -48,9 +46,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldSetLoggedOnUserOnJobResult()
 		{
+			var planningPeriod = PlanningPeriodRepository.Has(DateOnly.Today, DateOnly.Today.AddDays(6), SchedulePeriodType.Week, 1);
 			var loggedOnPerson = LoggedOnUser.CurrentUser();
 			
-			Target.Execute(Guid.NewGuid());
+			Target.Execute(planningPeriod.Id.Value);
 			
 			var createdJobResult = JobResultRepository.LoadAll().Single();
 			loggedOnPerson.Should().Not.Be.Null();
