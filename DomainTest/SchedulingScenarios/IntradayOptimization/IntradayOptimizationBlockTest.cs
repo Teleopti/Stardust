@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1);
 
 
-			Target.Execute(planningPeriod.Id.Value, false);
+			Target.Execute(planningPeriod.Id.Value);
 
 			for (int i = 0; i < 7; i++)
 			{
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			};
 			OptimizationPreferencesDefaultValueProvider.SetFromTestsOnly(optimizationPreferences);
 
-			Target.Execute(planningPeriod.Id.Value, false);
+			Target.Execute(planningPeriod.Id.Value);
 
 			for (int i = 0; i < 7; i++)
 			{

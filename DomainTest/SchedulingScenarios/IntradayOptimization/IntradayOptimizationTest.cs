@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, dateOnly, new TimePeriod(8, 0, 17, 0));
 
-			Target.Execute(planningPeriod.Id.Value, false);
+			Target.Execute(planningPeriod.Id.Value);
 
 			var dateTime = TimeZoneHelper.ConvertToUtc(dateOnly.Date, agent.PermissionInformation.DefaultTimeZone());
 			PersonAssignmentRepository.GetSingle(dateOnly).Period
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategoryBefore, dateOnly.AddDays(2), new TimePeriod(8, 0, 17, 0));		//1
 			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategoryBefore, dateOnly.AddDays(3), new TimePeriod(8, 15, 17, 15));	//2
 	
-			Target.Execute(planningPeriod.Id.Value, false);
+			Target.Execute(planningPeriod.Id.Value);
 
 			PersonAssignmentRepository.GetSingle(dateOnly.AddDays(2)).ShiftCategory.Should().Be.EqualTo(shiftCategoryAfter);
 		}
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, dateOnly, new TimePeriod(8, 0, 17, 0));
 			((IPersonSkillModify)agent.Period(dateOnly).PersonSkillCollection.Single()).Active = false;
 
-			Target.Execute(planningPeriod.Id.Value, false);
+			Target.Execute(planningPeriod.Id.Value);
 
 			var dateTime = TimeZoneHelper.ConvertToUtc(dateOnly.Date, agent.PermissionInformation.DefaultTimeZone());
 			PersonAssignmentRepository.GetSingle(dateOnly).Period
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 											MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("multiplicator", MultiplicatorType.Overtime));
 			PersonAssignmentRepository.Add(assignment);
 
-			Target.Execute(planningPeriod.Id.Value, false);
+			Target.Execute(planningPeriod.Id.Value);
 
 			PersonAssignmentRepository.GetSingle(dateOnly).Period
 				.Should().Be.EqualTo(new DateTimePeriod(dateTime.AddHours(8), dateTime.AddHours(17)));
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1);
 			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, new DateOnlyPeriod(dateOnly, dateOnly.AddDays(7)), new TimePeriod(8, 0, 16, 0));
 
-			Target.Execute(planningPeriod.Id.Value, false);
+			Target.Execute(planningPeriod.Id.Value);
 
 			var agentRange = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(agent, new ScheduleDictionaryLoadOptions(false, false, false), weekPeriod, scenario)[agent];
 			CheckWeeklyRestRule.IsSatisfyBy(agentRange, weekPeriod, weeklyRest).Should().Be.True();	
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				skill.CreateSkillDayWithDemand(scenario, dateOnly.AddDays(1), TimeSpan.FromMinutes(60)));
 			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, dateOnly, new TimePeriod(16, 0, 25, 0));
 
-			Target.Execute(planningPeriod.Id.Value, false);
+			Target.Execute(planningPeriod.Id.Value);
 			
 			var skillDays = SkillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(dateOnly.AddDays(1), dateOnly.AddDays(1)), new List<ISkill> { skill }, scenario);
 			skillDays.First().SkillStaffPeriodCollection.First().CalculatedResource
@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				skill.CreateSkillDayWithDemand(scenario, dateOnly.AddDays(1), 1));
 			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, dateOnly, new TimePeriod(0, 0, 10, 0)); //ska börja tidigt! för att få rött
 
-			Target.Execute(planningPeriod.Id.Value, false);
+			Target.Execute(planningPeriod.Id.Value);
 
 			var skillDays = SkillDayRepository.FindReadOnlyRange(dateOnly.AddDays(-1).ToDateOnlyPeriod(), new List<ISkill> { skill }, scenario);
 			skillDays.First().SkillStaffPeriodCollection.Any(x => x.CalculatedResource == 1)
@@ -247,7 +247,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360))));
 			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, dateOnly, new TimePeriod(8, 0, 8, 10));
 
-			Target.Execute(planningPeriod.Id.Value, false);
+			Target.Execute(planningPeriod.Id.Value);
 
 			var skillDays = SkillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(dateOnly, dateOnly), new List<ISkill> { skill }, scenario);
 			var skillStaffPeriods = skillDays.First().SkillStaffPeriodCollection;
@@ -274,7 +274,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, dateOnly, new TimePeriod(8, 0, 17, 0));
 
 			Assert.DoesNotThrow(() =>
-				Target.Execute(planningPeriod.Id.Value, false));
+				Target.Execute(planningPeriod.Id.Value));
 		}
 
 		[Test]
@@ -295,7 +295,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, dateOnly, new TimePeriod(8, 0, 17, 0));
 			LockManager().AddLock(agent, dateOnly, LockType.Normal);
 
-			Target.Execute(planningPeriod.Id.Value, false);
+			Target.Execute(planningPeriod.Id.Value);
 
 			var dateTime = TimeZoneHelper.ConvertToUtc(dateOnly.Date, agent.PermissionInformation.DefaultTimeZone());
 			PersonAssignmentRepository.GetSingle(dateOnly).Period

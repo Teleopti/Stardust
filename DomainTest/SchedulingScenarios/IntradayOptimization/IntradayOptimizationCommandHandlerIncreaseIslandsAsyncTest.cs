@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -6,7 +5,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
@@ -42,53 +40,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			EventPublisher.PublishedEvents.OfType<IntradayOptimizationOnStardustWasOrdered>()
 				.All(x => x.TotalEvents == 2)
-				.Should()
-				.Be.True();
-		}
-
-		[Test]
-		public void ShouldSetPlanningPeriodId()
-		{
-			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 4);
-			var skillA = new Skill("A");
-			var skillB = new Skill("B");
-			var skillC = new Skill("C");
-			var skillAagents21 = Enumerable.Range(0, 11).Select(x => new Person().WithPersonPeriod(skillA));
-			var skillABagents5 = Enumerable.Range(0, 5).Select(x => new Person().WithPersonPeriod(skillA, skillB));
-			var skillACagents5 = Enumerable.Range(0, 5).Select(x => new Person().WithPersonPeriod(skillA, skillC));
-			skillAagents21.Union(skillABagents5).Union(skillACagents5).ForEach(x => PersonRepository.Has(x));
-			var planningPeriodId = Guid.NewGuid();
-
-			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod(), PlanningPeriodId = planningPeriodId});
-
-			EventPublisher.PublishedEvents.OfType<IntradayOptimizationOnStardustWasOrdered>()
-				.All(x => x.PlanningPeriodId == planningPeriodId)
-				.Should()
-				.Be.True();
-
-			EventPublisher.PublishedEvents.OfType<IntradayOptimizationOnStardustWasOrdered>()
-				.All(x => x.Policy == WebScheduleStardustBaseEvent.HalfNodesAffinity)
-				.Should()
-				.Be.True();
-		}
-
-		[Test]
-		public void ShouldSetJobResultId()
-		{
-			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 4);
-			var skillA = new Skill("A");
-			var skillB = new Skill("B");
-			var skillC = new Skill("C");
-			var skillAagents21 = Enumerable.Range(0, 11).Select(x => new Person().WithPersonPeriod(skillA));
-			var skillABagents5 = Enumerable.Range(0, 5).Select(x => new Person().WithPersonPeriod(skillA, skillB));
-			var skillACagents5 = Enumerable.Range(0, 5).Select(x => new Person().WithPersonPeriod(skillA, skillC));
-			skillAagents21.Union(skillABagents5).Union(skillACagents5).ForEach(x => PersonRepository.Has(x));
-			var jobResultId = Guid.NewGuid();
-
-			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod(), JobResultId = jobResultId });
-
-			EventPublisher.PublishedEvents.OfType<IntradayOptimizationOnStardustWasOrdered>()
-				.All(x => x.JobResultId == jobResultId)
 				.Should()
 				.Be.True();
 		}

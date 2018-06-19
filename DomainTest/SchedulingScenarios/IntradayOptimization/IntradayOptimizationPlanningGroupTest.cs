@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, dateOnly, new TimePeriod(8, 0, 17, 0));
 
-			Target.Execute(planningPeriod.Id.GetValueOrDefault(), false);
+			Target.Execute(planningPeriod.Id.GetValueOrDefault());
 
 			var dateTime = TimeZoneHelper.ConvertToUtc(dateOnly.Date, agent.PermissionInformation.DefaultTimeZone());
 			PersonAssignmentRepository.GetSingle(dateOnly).Period
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, dateOnly, new TimePeriod(8, 0, 17, 0));
 
-			Target.Execute(planningPeriod.Id.GetValueOrDefault(), false);
+			Target.Execute(planningPeriod.Id.GetValueOrDefault());
 
 			var dateTime = TimeZoneHelper.ConvertToUtc(dateOnly.Date, agent.PermissionInformation.DefaultTimeZone());
 			PersonAssignmentRepository.GetSingle(dateOnly).Period

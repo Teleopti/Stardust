@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			}
 			else
 			{
-				_intradayOptimizationFromWeb.Execute(planningPeriodId, false);
+				_intradayOptimizationFromWeb.Execute(planningPeriodId);
 			}
 		}
 	}

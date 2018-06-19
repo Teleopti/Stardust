@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			PersonAssignmentRepository.Has(agent1, scenario, activity, shiftCategory, dateOnly, new TimePeriod(8, 0, 17, 0));
 			PersonAssignmentRepository.Has(agent2, scenario, activity, shiftCategory, dateOnly, new TimePeriod(8, 0, 17, 0));
 
-			Target.Execute(planningPeriod.Id.Value, false);
+			Target.Execute(planningPeriod.Id.Value);
 
 			var dateTime1 = TimeZoneHelper.ConvertToUtc(dateOnly.Date, agent1.PermissionInformation.DefaultTimeZone());
 			PersonAssignmentRepository.GetSingle(dateOnly, agent1).Period

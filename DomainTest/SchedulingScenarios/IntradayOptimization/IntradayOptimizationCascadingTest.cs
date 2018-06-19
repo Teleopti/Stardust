@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			PersonAssignmentRepository.Has(agentA, scenario, activity, shiftCategory, dateOnly, new TimePeriod(8, 0, 17, 0));
 
-			Target.Execute(planningPeriod.Id.Value, false);
+			Target.Execute(planningPeriod.Id.Value);
 
 			PersonAssignmentRepository.GetSingle(dateOnly, agentA).Period
 					.Should().Be.EqualTo(dateOnly.ToDateTimePeriod(new TimePeriod(8, 15, 17, 15), agentA.PermissionInformation.DefaultTimeZone()));
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			PersonAssignmentRepository.Has(agentA, scenario, activity, shiftCategory, dateOnly, new TimePeriod(8, 0, 17, 0));
 
-			Target.Execute(planningPeriod.Id.Value, false);
+			Target.Execute(planningPeriod.Id.Value);
 
 			PersonAssignmentRepository.GetSingle(dateOnly, agentA).Period
 					.Should().Be.EqualTo(dateOnly.ToDateTimePeriod(new TimePeriod(7, 45, 16, 45), agentA.PermissionInformation.DefaultTimeZone()));

@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				skillB.CreateSkillDayWithDemand(scenario, date, 1),
 				skillC.CreateSkillDayWithDemand(scenario, date, 10));
 
-			Target.Execute(planningPeriod.Id.Value, false);
+			Target.Execute(planningPeriod.Id.Value);
 
 			var shiftLayer = PersonAssignmentRepository.GetSingle(date, agentABC).ShiftLayers.Single();
 			shiftLayer.Period.StartDateTime.TimeOfDay.Should().Be.EqualTo(TimeSpan.FromHours(8));

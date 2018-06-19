@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 				uow.PersistAll();
 			}
 			
-			Target.Execute(planningPeriod.Id.Value, true);
+			Target.Execute(planningPeriod.Id.Value);
 
 			using (CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 				uow.PersistAll();
 			}
 
-			Target.Execute(planningPeriod.Id.Value, true);
+			Target.Execute(planningPeriod.Id.Value);
 
 			using (CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
