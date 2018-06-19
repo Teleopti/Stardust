@@ -146,6 +146,7 @@
     </div>
   </div>
 </div>
+
 <div ng-if="vm.scenarioNotForecasted && vm.selectedWorkload.SkillType.DoDisplayData">
   <div class="con-row">
     <div class="con-flex">
@@ -204,7 +205,7 @@
         </div>
       </div>
       <div class="con-footer">
-        <button class="wfm-btn wfm-btn-invis-default" ng-click="vm.forecastModal = true" ng-if="vm.selectedWorkload.SkillType.DoDisplayData">
+        <button class="wfm-btn wfm-btn-invis-default" ng-click="vm.reforecastConfirmation = vm.changesMade; vm.forecastModal = !vm.changesMade;" ng-if="vm.selectedWorkload.SkillType.DoDisplayData">
           {{'ForecastDo'|translate}}
         </button>
         <button class="wfm-btn wfm-btn-invis-default" ng-if="vm.changesMade && vm.selectedWorkload.SkillType.DoDisplayData" ng-click="vm.confirmDiscardDialog = true;">
@@ -234,7 +235,7 @@
     </div>
     <div class="modal-actions">
       <aside>
-        <button class="wfm-btn wfm-btn-invis-primary" ng-disabled="!vm.forecastPeriod.startDate || !vm.forecastPeriod.endDate" ng-click="vm.forecastWorkload()">{{'Apply'|translate}}</button>
+        <button class="wfm-btn wfm-btn-invis-primary" ng-disabled="!vm.forecastPeriod.startDate || !vm.forecastPeriod.endDate" ng-click="vm.changesMade=false; vm.forecastWorkload()">{{'Apply'|translate}}</button>
       </aside>
     </div>
     <div ng-if="vm.isForecastRunning">
@@ -367,7 +368,36 @@ ng-show="vm.closeConfirmation">
 </div>
 </div>
 </div>
+	<div ng-cloak class="modal-box">
+		<div ng-cloak ng-show="vm.reforecastConfirmation">
+			<div class="modalbg">
+				<div class="dialog-mini material-depth-1">
+					<div class="modal-inner-content">
+						<h3>{{'ThisScenarioHasChanges' | translate}}</h3>
+						Are you sure you want to forecast again? all modification not saved will lost.
+					</div>
+					<div class="modal-actions">
+						<aside>
+							<button type="button"
+									focus-me="vm.closeConfirmation"
+									id="confirmReforecastButton"
+									ng-click="vm.reforecastConfirmation=false; vm.forecastModal=true; $event.stopPropagation();"
+									class="wfm-btn wfm-btn-invis-default">
+								{{'Yes'|translate}}
+							</button>
+							<button type="button"
+									id="cancelReforecastButton"
+									ng-click="vm.stateName=''; vm.reforecastConfirmation=false; $event.stopPropagation();"
+									class="wfm-btn wfm-btn-invis-primary">
+								{{'No'|translate}}
+							</button>
+						</aside>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 <div ng-cloak ng-if="vm.noWorkloadFound">
-  {{'YouHaveToSelectAtLeastOneWorkload'|translate}}
+	{{'YouHaveToSelectAtLeastOneWorkload'|translate}}
 </div>
