@@ -14481,17 +14481,11 @@ Teleopti R&amp;D</value>
   <data name="AgentsAnalyzed" xml:space="preserve">
     <value>正在分析限制規則</value>
   </data>
-  <data name="AgentsThatFailedInspection" xml:space="preserve">
-    <value>座席代表檢查失敗</value>
-  </data>
   <data name="ManyAgentsAlert" xml:space="preserve">
     <value>已選擇了{0}個座席代表， 點擊刷新開始分析</value>
   </data>
   <data name="RestrictionNotAbleToBeScheduledReasonNightlyRestMightBeBroken" xml:space="preserve">
     <value>夜間休息時間規則將被打破</value>
-  </data>
-  <data name="PrimaryReason" xml:space="preserve">
-    <value>主要原因</value>
   </data>
   <data name="RestrictionNotAbleToBeScheduledReasonTooLittleWorkTimeInPeriod" xml:space="preserve">
     <value>此週期導致了太少的工作時間</value>

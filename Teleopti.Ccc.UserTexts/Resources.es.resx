@@ -12501,9 +12501,6 @@ Verifique su conexión a internet o contacte a su administrador.</value>
   <data name="ProbabilityToGetAbsenceColon" xml:space="preserve">
     <value>Probabilidad de obtener la ausencia:</value>
   </data>
-  <data name="PrimaryReason" xml:space="preserve">
-    <value>Razón principal</value>
-  </data>
   <data name="PressEscToClose" xml:space="preserve">
     <value>Presiona ESC para cerrar</value>
   </data>
@@ -13184,9 +13181,6 @@ Verifique su conexión a internet o contacte a su administrador.</value>
   </data>
   <data name="AllSkillGroups" xml:space="preserve">
     <value>Todos los grupos de skills</value>
-  </data>
-  <data name="AgentsThatFailedInspection" xml:space="preserve">
-    <value>Agentes que no pasaron la inspección</value>
   </data>
   <data name="AgentsHaveScheduled" xml:space="preserve">
     <value>agentes han sido planificados</value>

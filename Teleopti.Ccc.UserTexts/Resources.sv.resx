@@ -15000,7 +15000,7 @@ Vill du registrera dig?</value>
     <value>Ange mål för gamification</value>
   </data>
   <data name="AppliedSetting" xml:space="preserve">
-    <value>Använd inställning</value>
+    <value>Inställningar gjorda</value>
   </data>
   <data name="BlockSchedulingNotWorkingWhenUsingPreferences" xml:space="preserve">
     <value>Blockschemaläggning fungerar eventuellt inte vid användning av önskemål. </value>
@@ -15130,10 +15130,6 @@ Vill du registrera dig?</value>
     <value>Analyserar restriktioner</value>
     <comment>Analyzing restrictions</comment>
   </data>
-  <data name="AgentsThatFailedInspection" xml:space="preserve">
-    <value>Agenter som inte klarade analysen</value>
-    <comment>Agents that failed inspction</comment>
-  </data>
   <data name="ManyAgentsAlert" xml:space="preserve">
     <value>{0} Agenter valda, tryck på refresh-knappen för att starta analysen</value>
     <comment>Agents selected, click Refresh to start analyzing</comment>
@@ -15141,10 +15137,6 @@ Vill du registrera dig?</value>
   <data name="RestrictionNotAbleToBeScheduledReasonNightlyRestMightBeBroken" xml:space="preserve">
     <value>Nattvilan kommer att brytas</value>
     <comment>Nightly rest will be broken</comment>
-  </data>
-  <data name="PrimaryReason" xml:space="preserve">
-    <value>Primär anledning</value>
-    <comment>Primary reason</comment>
   </data>
   <data name="RestrictionNotAbleToBeScheduledReasonTooLittleWorkTimeInPeriod" xml:space="preserve">
     <value>Perioden kommer att ge för lite arbetstid</value>
@@ -15506,5 +15498,47 @@ Applikationen kommer nu att stängas. </value>
   </data>
   <data name="ImportBpoImportedAt" xml:space="preserve">
     <value>importerad</value>
+  </data>
+  <data name="ModifyAdherence" xml:space="preserve">
+    <value>Justera schemauppföljning</value>
+  </data>
+  <data name="LateXMinutes" xml:space="preserve">
+    <value>Sen {0} min</value>
+  </data>
+  <data name="CampaignNotAppliedWIthExistingOverride" xml:space="preserve">
+    <value>Kampanj läggs inte på för dagar med ersättningsvärde</value>
+  </data>
+  <data name="ClearCampaignWIthOverride" xml:space="preserve">
+    <value>Ersättningsvärdet tog bort befintliga kampanjvärden</value>
+  </data>
+  <data name="ForecastDayIsOverrided" xml:space="preserve">
+    <value>Dagen har ett ersättningsvärde på webben</value>
+  </data>
+  <data name="AppliedACampaign" xml:space="preserve">
+    <value>Kampanj har lagts på</value>
+  </data>
+  <data name="AppliedAOverride" xml:space="preserve">
+    <value>Ersättningsvärde har lagts på</value>
+  </data>
+  <data name="ApproveAsInAdherence" xml:space="preserve">
+    <value>Godkänn som "följer schema"</value>
+  </data>
+  <data name="AbandonRateParenthesisPercentSign" xml:space="preserve">
+    <value>Andel tappade (%)</value>
+  </data>
+  <data name="NoResultForCurrentFilter" xml:space="preserve">
+    <value>Inget resultat för aktuellt filter</value>
+  </data>
+  <data name="NewForecastIntro" xml:space="preserve">
+    <value>Detta är nuvarande prognos för denna workload</value>
+  </data>
+  <data name="NoForecast" xml:space="preserve">
+    <value>Ingen prognosdata hittades. Prova att köra en prognos för detta scenario.</value>
+  </data>
+  <data name="Saving" xml:space="preserve">
+    <value>Sparar. Detta kan ta en stund...</value>
+  </data>
+  <data name="ThisScenarioHasChanges" xml:space="preserve">
+    <value>Detta scenario har osparade ändringar</value>
   </data>
 </root>

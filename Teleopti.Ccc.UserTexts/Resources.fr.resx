@@ -13155,17 +13155,11 @@ L'application va maintenant se fermer.</value>
   <data name="AgentsAnalyzed" xml:space="preserve">
     <value>Analyse les restrictions</value>
   </data>
-  <data name="AgentsThatFailedInspection" xml:space="preserve">
-    <value>Agents pour qui l'inspection a échoué</value>
-  </data>
   <data name="ManyAgentsAlert" xml:space="preserve">
     <value>{0} agents sélectionnés, cliquer sur actualiser pour commencer l'analyse</value>
   </data>
   <data name="RestrictionNotAbleToBeScheduledReasonNightlyRestMightBeBroken" xml:space="preserve">
     <value>Le temps de repos de nuit va être enfreint</value>
-  </data>
-  <data name="PrimaryReason" xml:space="preserve">
-    <value>Raison principale</value>
   </data>
   <data name="RestrictionNotAbleToBeScheduledReasonTooLittleWorkTimeInPeriod" xml:space="preserve">
     <value>Les résultats donnent trop peu de temps de travail pour la période</value>
