@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 			this.label1 = new System.Windows.Forms.Label();
 			this.numericUpDownMaxParallel = new Syncfusion.Windows.Forms.Tools.NumericUpDownExt();
 			this.percentTextBoxAbandonRate = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.TeleoptiPercentTextBox();
-			this.label2 = new System.Windows.Forms.Label();
+			this.percentIntervalAbandonRate = new System.Windows.Forms.Label();
 			this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.textBoxName)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.textBoxDescription)).BeginInit();
@@ -246,7 +246,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 			this.tableLayoutPanelForRtl.Controls.Add(this.label1, 0, 9);
 			this.tableLayoutPanelForRtl.Controls.Add(this.numericUpDownMaxParallel, 1, 9);
 			this.tableLayoutPanelForRtl.Controls.Add(this.percentTextBoxAbandonRate, 1, 8);
-			this.tableLayoutPanelForRtl.Controls.Add(this.label2, 2, 8);
+			this.tableLayoutPanelForRtl.Controls.Add(this.percentIntervalAbandonRate, 2, 8);
 			this.tableLayoutPanelForRtl.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelForRtl.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanelForRtl.Name = "tableLayoutPanelForRtl";
@@ -411,15 +411,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 			this.percentTextBoxAbandonRate.TabIndex = 20;
 			this.percentTextBoxAbandonRate.Text = "0%";
 			// 
-			// label2
+			// percentIntervalAbandonRate
 			// 
-			this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(252, 328);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(40, 15);
-			this.label2.TabIndex = 21;
-			this.label2.Text = "0-15%";
+			this.percentIntervalAbandonRate.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.percentIntervalAbandonRate.AutoSize = true;
+			this.percentIntervalAbandonRate.Location = new System.Drawing.Point(252, 328);
+			this.percentIntervalAbandonRate.Name = "percentIntervalAbandonRate";
+			this.percentIntervalAbandonRate.Size = new System.Drawing.Size(40, 15);
+			this.percentIntervalAbandonRate.TabIndex = 21;
+			this.percentIntervalAbandonRate.Text = "0-15%";
 			// 
 			// errorProvider1
 			// 
@@ -477,7 +477,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 		private Syncfusion.Windows.Forms.Tools.NumericUpDownExt numericUpDownMaxParallel;
 		private System.Windows.Forms.Label labelAbandonRate;
 		private TeleoptiPercentTextBox percentTextBoxAbandonRate;
-		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.Label percentIntervalAbandonRate;
 		//private Teleopti.Ccc.Win.Common.Controls.OutlookTimePicker outlookTimePickerMidnightOffsetBreak;
 	}
 }

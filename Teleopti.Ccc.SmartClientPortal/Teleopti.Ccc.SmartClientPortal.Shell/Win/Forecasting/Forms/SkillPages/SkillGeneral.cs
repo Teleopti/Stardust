@@ -125,11 +125,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 				labelAbandonRate.Visible = true;
 				percentTextBoxAbandonRate.Enabled = true;
 				percentTextBoxAbandonRate.DoubleValue = skill.AbandonRate.Value;
+				percentIntervalAbandonRate.Visible = true;
 			}
 			else
 			{
 				percentTextBoxAbandonRate.Visible = false;
 				labelAbandonRate.Visible = false;
+				percentIntervalAbandonRate.Visible = false;
 			}
 		}
 
