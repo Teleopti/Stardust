@@ -42,8 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			{
 				Period = planningPeriod.Range,
 				RunResolveWeeklyRestRule = true,
-				PlanningPeriodId = planningPeriodId,
-				RunAsynchronously = runAsynchronously
+				PlanningPeriodId = planningPeriodId
 			};
 			if (planningPeriod.PlanningGroup != null)
 			{

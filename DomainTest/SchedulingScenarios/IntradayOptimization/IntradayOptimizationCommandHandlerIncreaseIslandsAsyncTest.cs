@@ -16,7 +16,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
-	[TestFixture]
 	[DomainTest]
 	public class IntradayOptimizationCommandHandlerIncreaseIslandsAsyncTest
 	{
@@ -37,9 +36,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var skillAagents21 = Enumerable.Range(0, 11).Select(x => new Person().WithPersonPeriod(skillA));
 			var skillABagents5 = Enumerable.Range(0, 5).Select(x => new Person().WithPersonPeriod(skillA, skillB));
 			var skillACagents5 = Enumerable.Range(0, 5).Select(x => new Person().WithPersonPeriod(skillA, skillC));
-			skillAagents21.Union(skillABagents5).Union(skillACagents5).ForEach(x => PersonRepository.Has((IPerson) x));
+			skillAagents21.Union(skillABagents5).Union(skillACagents5).ForEach(x => PersonRepository.Has(x));
 
-			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod(), RunAsynchronously = true});
+			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod()});
 
 			EventPublisher.PublishedEvents.OfType<WebIntradayOptimizationStardustEvent>()
 				.All(x => x.TotalEvents == 2)
@@ -60,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			skillAagents21.Union(skillABagents5).Union(skillACagents5).ForEach(x => PersonRepository.Has(x));
 			var planningPeriodId = Guid.NewGuid();
 
-			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod(), PlanningPeriodId = planningPeriodId, RunAsynchronously = true });
+			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod(), PlanningPeriodId = planningPeriodId});
 
 			EventPublisher.PublishedEvents.OfType<WebIntradayOptimizationStardustEvent>()
 				.All(x => x.PlanningPeriodId == planningPeriodId)
@@ -86,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			skillAagents21.Union(skillABagents5).Union(skillACagents5).ForEach(x => PersonRepository.Has(x));
 			var jobResultId = Guid.NewGuid();
 
-			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod(), JobResultId = jobResultId, RunAsynchronously = true });
+			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod(), JobResultId = jobResultId });
 
 			EventPublisher.PublishedEvents.OfType<WebIntradayOptimizationStardustEvent>()
 				.All(x => x.JobResultId == jobResultId)

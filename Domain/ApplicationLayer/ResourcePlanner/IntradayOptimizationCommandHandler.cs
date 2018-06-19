@@ -39,9 +39,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		public void Execute(IntradayOptimizationCommand command)
 		{
 			var islands = CreateIslands(command.Period, command);
-			var events = command.RunAsynchronously
-				? createWebIntradayOptimizationStardustEvents(command, islands, _gridLockManager.LockInfos())
-				: createOptimizationWasOrderedEvents(command, islands, _gridLockManager.LockInfos());
+			var events = createOptimizationWasOrderedEvents(command, islands, _gridLockManager.LockInfos());
 			_eventPublisher.Publish(events.ToArray());
 		}
 
@@ -91,22 +89,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 				}
 			}
 			return events;
-		}
-
-		private IEnumerable<IEvent> createWebIntradayOptimizationStardustEvents(IntradayOptimizationCommand command, IEnumerable<Island> islands, IEnumerable<LockInfo> lockInfos)
-		{
-			var orgEvents = createOptimizationWasOrderedEvents(command, islands, lockInfos);
-			var stardustEvents = orgEvents.Select(x => new WebIntradayOptimizationStardustEvent { IntradayOptimizationWasOrdered = (IntradayOptimizationWasOrdered)x }).ToArray();
-			var numberOfEvents = stardustEvents.Length;
-			foreach (var stardustEvent in stardustEvents)
-			{
-				stardustEvent.TotalEvents = numberOfEvents;
-				if (command.JobResultId.HasValue)
-					stardustEvent.JobResultId = command.JobResultId.Value;
-				if (command.PlanningPeriodId.HasValue)
-					stardustEvent.PlanningPeriodId = command.PlanningPeriodId.Value;
-			}
-			return stardustEvents;
 		}
 
 		[UnitOfWork]

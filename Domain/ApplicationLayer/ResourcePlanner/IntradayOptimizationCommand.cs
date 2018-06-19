@@ -18,6 +18,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		public Guid CommandId { get; set; }
 		public Guid? JobResultId { get; set; }
 		public Guid? PlanningPeriodId { get; set; }
-		public bool RunAsynchronously { get; set; }
 	}
 }

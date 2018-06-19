@@ -36,8 +36,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var command = new IntradayOptimizationCommand
 			{
 				Period = selectedPeriod,
-				AgentsToOptimize = agents,
-				RunAsynchronously = false
+				AgentsToOptimize = agents
 			};
 
 			using (_desktopOptimizationContext.Set(command, stateHolder, optimizerPreferences, null, optimizationCallback))

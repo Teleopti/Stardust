@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -59,12 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				TotalEvents = 3,
 				LogOnBusinessUnitId = businessUnit.Id.Value,
 				LogOnDatasource = "Teleopti WFM",
-				PlanningPeriodId = planningPeriod.Id.Value,
-				IntradayOptimizationWasOrdered = new IntradayOptimizationWasOrdered
-				{
-					StartDate = startDate,
-					EndDate = endDate
-				}
+				PlanningPeriodId = planningPeriod.Id.Value
 			});
 
 			var jobResult = JobResultRepository.Get(jobResultId);
@@ -90,12 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				TotalEvents = 1,
 				LogOnBusinessUnitId = businessUnit.Id.Value,
 				LogOnDatasource = "Teleopti WFM",
-				PlanningPeriodId = planningPeriod.Id.Value,
-				IntradayOptimizationWasOrdered = new IntradayOptimizationWasOrdered
-				{
-					StartDate = startDate,
-					EndDate = endDate
-				}
+				PlanningPeriodId = planningPeriod.Id.Value
 			});
 
 			var jobResult = JobResultRepository.Get(jobResultId);
