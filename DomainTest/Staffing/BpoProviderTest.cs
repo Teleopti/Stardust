@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 using DateTime = System.DateTime;
 
 namespace Teleopti.Ccc.DomainTest.Staffing
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FakeStaffingSettingsReader>().For<FakeStaffingSettingsReader, IStaffingSettingsReader>();
+			isolate.UseTestDouble<FakeUserCulture>().For<IUserCulture>();
 		}
 
 		[Test]

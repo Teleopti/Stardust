@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			isolate.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
 			isolate.UseTestDouble<PersonRequestAuthorizationCheckerForTest>().For<IPersonRequestCheckAuthorization>();
 			isolate.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
-			isolate.UseTestDouble<FakeUserCulture>().For<IUserCulture>();
+			//isolate.UseTestDouble<FakeUserCulture>().For<IUserCulture>();
 
 			// Tenant (and datasource) stuff
 			var tenants = new FakeTenants();
