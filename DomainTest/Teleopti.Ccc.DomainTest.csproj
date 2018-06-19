@@ -648,7 +648,6 @@
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationTeamBlockTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayDesktopQualityTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationPlanningGroupTest.cs" />
-    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCommandHandlerIncreaseIslandsAsyncTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationReduceUnnecessaryCallsTest.cs" />
     <Compile Include="Optimization\PlanningGroupModelPersisterTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationClassicTest.cs" />
