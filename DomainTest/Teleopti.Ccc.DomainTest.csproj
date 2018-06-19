@@ -471,6 +471,7 @@
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiCccPilotCustomersReportsLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiCccPilotCustomersSchedulerLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiCccPilotCustomersShiftsLicenseOptionTest.cs" />
+    <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiCccRealTimeAdherenceLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiCccShiftTradesLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiCccSmsLinkLicenseOptionTest.cs" />
     <Compile Include="Security\ImplementationDetails\LicenseOptions\TeleoptiCccVacationPlannerLicenseOptionTest.cs" />
