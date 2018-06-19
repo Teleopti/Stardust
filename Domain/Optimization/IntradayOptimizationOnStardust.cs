@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -28,7 +29,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public virtual void Execute(Guid planningPeriodId)
 		{
 			var planningPeriod = _planningPeriodRepository.Get(planningPeriodId);
-			var jobResult = new JobResult(JobCategory.WebIntradayOptimiztion, planningPeriod.Range, _loggedOnUser.CurrentUser(), DateTime.UtcNow);
+			var planningPeriodRange = planningPeriod?.Range ?? new DateOnlyPeriod();
+			var jobResult = new JobResult(JobCategory.WebIntradayOptimiztion, planningPeriodRange, _loggedOnUser.CurrentUser(), DateTime.UtcNow);
 			_jobResultRepository.Add(jobResult);
 			_eventPublisher.Publish(new IntradayOptimizationOnStardustWasOrdered
 			{
