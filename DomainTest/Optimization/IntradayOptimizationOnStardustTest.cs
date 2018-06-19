@@ -67,5 +67,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			JobResultRepository.LoadAll().Single().Period
 				.Should().Be.EqualTo(DateOnlyPeriod.CreateWithNumberOfWeeks(DateOnly.Today, 1));
 		}
+
+		[Test]
+		public void ShouldAddJobResultToPlanningPeriod()
+		{
+			var planningPeriod = PlanningPeriodRepository.Has(DateOnly.Today, DateOnly.Today.AddDays(6), SchedulePeriodType.Week, 1);
+			
+			Target.Execute(planningPeriod.Id.Value);
+
+			planningPeriod.JobResults.Count()
+				.Should().Be.EqualTo(1);
+		}
 	}
 }
