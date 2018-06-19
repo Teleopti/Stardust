@@ -1,6 +1,5 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
