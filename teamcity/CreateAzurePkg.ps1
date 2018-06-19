@@ -6,6 +6,7 @@ properties {
     $base_dir = resolve-path .\
     #$source_dir = "$base_dir\src"
     
+	
 	#TC Properties
     #Reading all TC Parametes, This is how you call them: $TCParams['build.number']
 	$TCParams = ConvertFrom-StringData (Get-Content $env:TEAMCITY_BUILD_PROPERTIES_FILE -Raw)
