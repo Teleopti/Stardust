@@ -155,6 +155,7 @@
 
 		People_ImprovePersonAccountAccuracy_74914,
 		MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889,
+		MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947,
 
 		WFM_Intraday_Refactoring_74652,
 
