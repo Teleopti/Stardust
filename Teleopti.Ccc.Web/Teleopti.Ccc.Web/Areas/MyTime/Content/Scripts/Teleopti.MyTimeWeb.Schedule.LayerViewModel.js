@@ -70,7 +70,8 @@ Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, parent, layersOnMo
 		if(useFixedContainerHeight) {
 			return Math.round(scheduleHeight * self.startPositionPercentage()) + (offset || 0);
 		} else if(timelineStart) {
-			var minutesToTimeLineStart = moment.duration(layer.StartTime.split('T')[1]) - moment.duration(timelineStart.slice(0,5));
+			var startStr = timelineStart.length == 10 ? timelineStart.slice(-8, -3) : timelineStart.slice(0, 5);
+			var minutesToTimeLineStart = moment.duration(layer.StartTime.split('T')[1]) - moment.duration(startStr);
 
 			if(!moment(layer.StartTime.split('T')[0]).isSame(moment(selectedDate), 'day')) {
 				minutesToTimeLineStart += 24 * 60 * 60 * 1000;

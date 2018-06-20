@@ -3,9 +3,10 @@
 }
 
 .mobile-teamschedule-view-nav .navbar-teleopti {
-	margin: 5px;
+	margin: 0;
 	display: flex;
 	justify-content: space-between;
+	height: 51px;
 }
 
 .mobile-teamschedule-view-nav input.form-control {
@@ -126,7 +127,7 @@
 	height: 50px;
 	position: fixed;
 	left: 0;
-	top: 103px;
+	top: 101px;
 	z-index: 12;
 	border-right: 2px solid #dfdfdf;
 	background: white;
@@ -140,11 +141,12 @@
 	text-align: center;
 	position: fixed;
 	left: 31px;
-	top: 103px;
+	top: 101px;
 	z-index: 12;
 	border-left: none;
 	border-right: 2px solid rgba(0, 0, 0, 0.1);
 	box-shadow: none;
+	background: white;
 }
 
 .mobile-teamschedule-agent-name.my-name .text-name {
@@ -157,11 +159,12 @@
 	height: 50px;
 	position: fixed !important;
 	left: calc(30px + 70px);
-	top: 103px !important;
+	top: 101px !important;
 	white-space: nowrap;
 	font-size: 0;
 	transform: translate3d(0, 0, 0);
 	z-index: 11;
+	background: white;
 }
 
 .mobile-teamschedule-agent-name {
