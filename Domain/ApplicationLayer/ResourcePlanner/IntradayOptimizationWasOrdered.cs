@@ -17,6 +17,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		public Guid CommandId { get; set; }
 		public IEnumerable<LockInfo> UserLocks { get; set; }
 		public IEnumerable<Guid> Skills { get; set; }
-		public Guid PlanningPeriodId { get; set; }
+		public Guid PlanningPeriodId { get; set; } //null if from desktop. if that is "fixed", we can remove the two dates as well
 	}
 }
