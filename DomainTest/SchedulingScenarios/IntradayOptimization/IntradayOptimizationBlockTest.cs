@@ -1,11 +1,14 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -32,6 +35,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesDefaultValueProvider;
+		public FakePlanningGroupSettingsRepository PlanningGroupSettingsRepository;
 
 		[Test]
 		public void ShouldIndividualFlexableWhenNotBlock()
@@ -129,6 +133,46 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				PersonAssignmentRepository.GetSingle(date, agent1).Period
 					.Should().Be.EqualTo(new DateTimePeriod(dateTime1.AddHours(10), dateTime1.AddHours(18)));
 			}
+		}
+
+		[Test]
+		[Ignore("to be fixed")]
+		public void ShouldHandleAgentsWithDifferentSameStartTime()
+		{
+			var date = new DateOnly(2017, 9, 25);
+			var activity = ActivityFactory.CreateActivity("phone");
+			var skill = SkillRepository.Has("skill", activity);
+			var scenario = ScenarioRepository.Has("some name");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(9, 0, 10, 0, 15), new TimePeriodWithSegment(17, 0, 18, 0, 15), shiftCategory));
+			ruleSet.AddLimiter(new ContractTimeLimiter(new TimePeriod(new TimeSpan(8, 0, 0), new TimeSpan(8, 0, 0)), TimeSpan.FromMinutes(15)));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), 10));
+			var agentWithSameStarttime = PersonRepository.Has(ruleSet, skill);
+			var agentWithNotSameStarttime = PersonRepository.Has(ruleSet, skill);
+			PersonAssignmentRepository.Has(new PersonAssignment(agentWithSameStarttime, scenario, date.AddDays(0)).WithDayOff());
+			PersonAssignmentRepository.Has(new PersonAssignment(agentWithNotSameStarttime, scenario, date.AddDays(0)).WithDayOff());
+			Enumerable.Range(1, 5).ForEach(x =>
+			{
+				PersonAssignmentRepository.Has(agentWithSameStarttime, scenario, activity, shiftCategory, date.AddDays(x), new TimePeriod(8, 17));
+				PersonAssignmentRepository.Has(agentWithNotSameStarttime, scenario, activity, shiftCategory, date.AddDays(x), new TimePeriod(8, 17));
+			});
+			PersonAssignmentRepository.Has(new PersonAssignment(agentWithSameStarttime, scenario, date.AddDays(6)).WithDayOff());
+			PersonAssignmentRepository.Has(new PersonAssignment(agentWithNotSameStarttime, scenario, date.AddDays(6)).WithDayOff());
+			var planningPeriod = PlanningPeriodRepository.Has(date, 1);
+			var planningGroupSettings = PlanningGroupSettings.CreateDefault(planningPeriod.PlanningGroup);
+			planningGroupSettings.AddFilter(new TeamFilter(agentWithSameStarttime.MyTeam(date)));
+			planningGroupSettings.BlockFinderType = BlockFinderType.BetweenDayOff;
+			planningGroupSettings.BlockSameStartTime = true;
+			PlanningGroupSettingsRepository.Add(planningGroupSettings);
+			
+			Target.Execute(planningPeriod.Id.Value);
+
+			PersonAssignmentRepository.LoadAll().Where(x => x.Person.Equals(agentWithSameStarttime) && x.DayOff()==null)
+				.Select(x => x.Period.StartDateTime.TimeOfDay).Distinct().Count()
+				.Should().Be.EqualTo(1);
+			PersonAssignmentRepository.LoadAll().Where(x => x.Person.Equals(agentWithNotSameStarttime) && x.DayOff()==null)
+				.Select(x => x.Period.StartDateTime.TimeOfDay).Distinct().Count()
+				.Should().Be.GreaterThan(1);
 		}
 	}
 }
