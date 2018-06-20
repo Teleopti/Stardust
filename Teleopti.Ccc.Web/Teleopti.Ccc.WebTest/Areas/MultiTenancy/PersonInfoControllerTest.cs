@@ -2,15 +2,20 @@
 using SharpTestsEx;
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Web.Http.Results;
+using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MultiTenancy;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
-using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.Web.Areas.Global;
 using Teleopti.Ccc.Web.Areas.MultiTenancy;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
 using Teleopti.Ccc.WebTest.TestHelper;
@@ -50,15 +55,21 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 	public class PersonInfoControllerExtendedTest : IIsolateSystem
 	{
 		public PersonInfoController Target;
+		public DataTokenController TokenTarget;
 		public FindLogonInfoFake FindLogonInfo;
 		public TenantAuthenticationFake TenantAuthentication;
 		public PersonInfoPersisterFake PersonInfoPersisterFake;
-		
+		public DataTokenManager DataTokenManager;
+		public FakePersonFinderReadOnlyRepository PersonFinderReadOnlyRepository;
+
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<PersistPersonInfo>().For<IPersistPersonInfo>();
 			isolate.UseTestDouble<PersonInfoPersisterFake>().For<IPersonInfoPersister>();
 			isolate.UseTestDouble<TenantAuditPersisterFake>().For<ITenantAuditPersister>();
+			isolate.UseTestDouble<FakePersonFinderReadOnlyRepository>().For<IPersonFinderReadOnlyRepository>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<ConfigReader>().For<IConfigReader>();
 		}
 
 		[Test]
@@ -69,13 +80,17 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 
 			var inputModel = new PersonApplicationLogonInputModel
 			{
+				
 				People = new List<PersonApplicationLogonModel>
-				{
-					new PersonApplicationLogonModel {PersonId = p1.Id.GetValueOrDefault(), ApplicationLogonName = "aaa1"},
-					new PersonApplicationLogonModel {PersonId = p2.Id.GetValueOrDefault(), ApplicationLogonName = "aaa2"}
-				}
+					{
+						new PersonApplicationLogonModel {PersonId = p1.Id.GetValueOrDefault(), ApplicationLogonName = "aaa1"},
+						new PersonApplicationLogonModel {PersonId = p2.Id.GetValueOrDefault(), ApplicationLogonName = "aaa2"}
+					}
 			};
-			var result = Target.PersistApplicationLogonNames(inputModel);
+
+			var signedResult = DataTokenManager.GetTokenForPersistApplicationLogonNames(inputModel);
+
+			var result = Target.PersistApplicationLogonNames(signedResult);
 			result.Should().Be.OfType<OkNegotiatedContentResult<BaseResultModel>>();
 			PersonInfoPersisterFake.PersistedData.Count.Should().Be.EqualTo(2);
 		}
@@ -93,7 +108,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 					new PersonApplicationLogonModel {PersonId = p1.Id.GetValueOrDefault(), ApplicationLogonName = "aaa1"}
 				}
 			};
-			var result = Target.PersistApplicationLogonNames(inputModel);
+
+			var signedResult = DataTokenManager.GetTokenForPersistApplicationLogonNames(inputModel);
+			var result = Target.PersistApplicationLogonNames(signedResult);
 			result.Should().Be.OfType<OkNegotiatedContentResult<BaseResultModel>>();
 			PersonInfoPersisterFake.PersistedData.Count.Should().Be.EqualTo(1);
 
@@ -104,7 +121,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 					new PersonApplicationLogonModel {PersonId = p2.Id.GetValueOrDefault(), ApplicationLogonName = "aaa1"}//, // Should Fail, same as p1
 				}
 			};
-			var result2 = Target.PersistApplicationLogonNames(inputModelRoundTwo);
+
+			var signedResult2 = DataTokenManager.GetTokenForPersistApplicationLogonNames(inputModelRoundTwo);
+			var result2 = Target.PersistApplicationLogonNames(signedResult2);
 			PersonInfoPersisterFake.PersistedData.Count.Should().Be.EqualTo(1);
 			var contentResult = result2 as OkNegotiatedContentResult<BaseResultModel>;
 			contentResult.Content.Success.Should().Be.EqualTo(false);
@@ -126,7 +145,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 					new PersonIdentityModel {PersonId = p2.Id.GetValueOrDefault(), Identity = "TOPTINET/aaa2"}
 				}
 			};
-			var result = Target.PersistIdentities(inputModel);
+
+			var signedResult = DataTokenManager.GetTokenForPersistIdentities(inputModel);
+			var result = Target.PersistIdentities(signedResult);
 			result.Should().Be.OfType<OkNegotiatedContentResult<BaseResultModel>>();
 			PersonInfoPersisterFake.PersistedData.Count.Should().Be.EqualTo(2);
 		}
@@ -144,7 +165,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 					new PersonIdentityModel {PersonId = p1.Id.GetValueOrDefault(), Identity = "aaa1"}
 				}
 			};
-			var result = Target.PersistIdentities(inputModel);
+
+			var signedResult = DataTokenManager.GetTokenForPersistIdentities(inputModel);
+			var result = Target.PersistIdentities(signedResult);
 			result.Should().Be.OfType<OkNegotiatedContentResult<BaseResultModel>>();
 			PersonInfoPersisterFake.PersistedData.Count.Should().Be.EqualTo(1);
 
@@ -155,7 +178,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 					new PersonIdentityModel {PersonId = p2.Id.GetValueOrDefault(), Identity = "aaa1"}//, // Should Fail, same as p1
 				}
 			};
-			var result2 = Target.PersistIdentities(inputModelRoundTwo);
+
+			var signedResult2 = DataTokenManager.GetTokenForPersistIdentities(inputModelRoundTwo);
+			var result2 = Target.PersistIdentities(signedResult2);
 			PersonInfoPersisterFake.PersistedData.Count.Should().Be.EqualTo(1);
 			var contentResult = result2 as OkNegotiatedContentResult<BaseResultModel>;
 			contentResult.Content.Success.Should().Be.EqualTo(false);

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.MultiTenancy;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Util;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
@@ -19,19 +21,21 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		private readonly IDeletePersonInfo _deletePersonInfo;
 		private readonly IFindLogonInfo _findLogonInfo;
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
-
+		private readonly SignatureCreator _signatureCreator; 
 
 		public PersonInfoController(IPersistPersonInfo persister,
 									IPersonInfoMapper mapper,
 									IDeletePersonInfo deletePersonInfo,
 									IFindLogonInfo findLogonInfo,
-									ITenantUnitOfWork tenantUnitOfWork)
+									ITenantUnitOfWork tenantUnitOfWork,
+									SignatureCreator signatureCreator)
 		{
 			_persister = persister;
 			_mapper = mapper;
 			_deletePersonInfo = deletePersonInfo;
 			_findLogonInfo = findLogonInfo;
 			_tenantUnitOfWork = tenantUnitOfWork;
+			_signatureCreator = signatureCreator;
 		}
 
 		[HttpPost, Route("PersonInfo/Persist")]
@@ -61,18 +65,26 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 
 		[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.PeopleAccess)]
 		[TenantUnitOfWork, HttpPost, Route("PersonInfo/PersistApplicationLogonNames")]
-		public virtual IHttpActionResult PersistApplicationLogonNames(PersonApplicationLogonInputModel personApplicationLogonInputModel)
+		public virtual IHttpActionResult PersistApplicationLogonNames(SignedArgument<PersonApplicationLogonInputModel> input)
 		{
+			// Verify signature. Do this with attribute and HTTP headers later.
+			if (input == null || !CheckValidSignedArgument(input.Body.ToJson(), input.Body.Intent, input.Signature, input.Body.TimeStamp, TimeSpan.FromMinutes(1), DefinedRaptorApplicationFunctionForeignIds.PeopleAccess))
+			{
+				var res = new BaseResultModel();
+				res.Errors.Add("Invalid argument");
+				return Ok(res);
+			}
+
 			var resultModel = new BaseResultModel
 			{
-				Errors = personApplicationLogonInputModel.People
-								.Select(p =>
-								{
-									var model = new PersonInfoModel { PersonId = p.PersonId, ApplicationLogonName = p.ApplicationLogonName };
-									return new { PersistResult = _persister.PersistApplicationLogonName(_mapper.Map(model), throwOnError: false), p.PersonId };
-								})
-								.Where(r => !string.IsNullOrEmpty(r.PersistResult))
-								.Select(r => (object)new PersonInfoGenericModel { Message = r.PersistResult, PersonId = r.PersonId }).ToList()
+				Errors = input.Body.People
+					.Select(p =>
+					{
+						var model = new PersonInfoModel { PersonId = p.PersonId, ApplicationLogonName = p.ApplicationLogonName };
+						return new { PersistResult = _persister.PersistApplicationLogonName(_mapper.Map(model), throwOnError: false), p.PersonId };
+					})
+					.Where(r => !string.IsNullOrEmpty(r.PersistResult))
+					.Select(r => (object)new PersonInfoGenericModel { Message = r.PersistResult, PersonId = r.PersonId }).ToList()
 			};
 
 			if (resultModel.Errors.Any())
@@ -83,14 +95,22 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 
 			return Ok(resultModel);
 		}
-
+		
 		[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.PeopleAccess)]
 		[TenantUnitOfWork, HttpPost, Route("PersonInfo/PersistIdentities")]
-		public virtual IHttpActionResult PersistIdentities(PersonIdentitiesInputModel personIdentitiesInputModel)
+		public virtual IHttpActionResult PersistIdentities(SignedArgument<PersonIdentitiesInputModel> input)
 		{
+			// Verify signature. Do this with attribute and HTTP headers later.
+			if (input == null || !CheckValidSignedArgument(input.Body.ToJson(), input.Body.Intent, input.Signature, input.Body.TimeStamp, TimeSpan.FromMinutes(1), DefinedRaptorApplicationFunctionForeignIds.PeopleAccess))
+			{
+				var res = new BaseResultModel();
+				res.Errors.Add("Invalid argument");
+				return Ok(res);
+			}
+
 			var resultModel = new BaseResultModel
 			{
-				Errors = personIdentitiesInputModel.People
+				Errors = input.Body.People
 					.Select(p =>
 					{
 						var model = new PersonInfoModel { PersonId = p.PersonId, Identity = p.Identity };
@@ -107,6 +127,12 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 			}
 
 			return Ok(resultModel);
+		}
+
+		private bool CheckValidSignedArgument(string body, string intent, string signature, string timeStampString, TimeSpan validAge, string appFuncForeginId)
+		{
+			var timeSpan = DateTime.Parse(timeStampString);
+			return timeSpan.Add(validAge) > DateTime.UtcNow && intent == appFuncForeginId && _signatureCreator.Verify(body, signature);
 		}
 
 		[TenantUnitOfWork]

@@ -25,5 +25,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 			string[] dynamicValues, IDictionary<PersonFinderField, string> searchCriteria);
 
 		IList<PersonIdentityMatchResult> FindPersonByIdentities(IEnumerable<string> identities);
+
+		bool ValidatePersonIds(List<Guid> ids, DateOnly date, Guid userId, string appFuncForeginId);
 	}
 }

@@ -5,6 +5,7 @@ using Autofac.Integration.Mvc;
 using Autofac.Integration.SignalR;
 using Autofac.Integration.WebApi;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
@@ -167,6 +168,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			builder.RegisterType<UserTextTranslator>().As<IUserTextTranslator>().SingleInstance();
 			builder.RegisterType<GroupPageViewModelFactory>().SingleInstance();
+			builder.RegisterType<DataTokenManager>().As<IDataTokenManager>();
 		}
 
 		private static void tenantWebSpecificTypes(ContainerBuilder builder)

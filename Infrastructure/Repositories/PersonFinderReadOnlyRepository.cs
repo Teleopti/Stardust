@@ -379,6 +379,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			personFinderSearchCriteria.TotalRows = personFinderSearchCriteria.DisplayRows.FirstOrDefault()?.TotalCount ?? 0;
 		}
 
+		public bool ValidatePersonIds(List<Guid> ids, DateOnly date, Guid userId, string appFuncForeginId)
+		{
+			var uow = _currentUnitOfWork.Current();
+			var result = ((NHibernateUnitOfWork)uow).Session.CreateSQLQuery(
+					"exec [dbo].[ValidateDataPermissions] @idsString=:idsString, @date=:date, @userId=:userId, @appFuncForeginId=:appFuncForeginId")
+				.SetString("idsString", String.Join(",", ids))
+				.SetDateOnly("date", date)
+				.SetGuid("userId", userId)
+				.SetString("appFuncForeginId", appFuncForeginId)
+				.SetReadOnly(true)
+				.UniqueResult<bool>();
+
+			return result;
+		}
+
 		public void UpdateFindPerson(ICollection<Guid> ids)
 		{
 			if (ids.Count == 1 && ids.First() == Guid.Empty)

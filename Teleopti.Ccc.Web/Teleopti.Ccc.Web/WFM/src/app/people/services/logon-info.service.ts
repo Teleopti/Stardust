@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Person } from '../types';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap, switchMap } from 'rxjs/operators';
 
 interface PersonApplicationLogonModel {
 	ApplicationLogonName: string;
@@ -21,6 +21,18 @@ interface PersistApplicationLogonNamesQuery {
 interface PersistIdentityLogonNamesQuery {
 	People: PersonIdentityLogonModel[];
 }
+interface Poop {
+	Body: {
+		People: PersonApplicationLogonModel[] | PersonIdentityLogonModel[];
+		TimeStamp: string;
+		Intent: string;
+	};
+}
+
+interface PersistChallengeResponse {
+	Body: Poop;
+	Signature: string;
+}
 
 export interface LogonInfo {
 	PersonId: string;
@@ -38,14 +50,28 @@ export class LogonInfoService {
 		const body: PersistApplicationLogonNamesQuery = {
 			People: people
 		};
-		return this.http.post('../PersonInfo/PersistApplicationLogonNames', body);
+
+		return this.http
+			.post('../api/Global/GetTokenForPersistApplicationLogonNames', body)
+			.pipe(
+				switchMap((challenge: PersistChallengeResponse) =>
+					this.http.post('../PersonInfo/PersistApplicationLogonNames', challenge)
+				)
+			);
 	}
 
 	persistIdentityLogonNames(people: PersonIdentityLogonModel[]) {
 		const body: PersistIdentityLogonNamesQuery = {
 			People: people
 		};
-		return this.http.post('../PersonInfo/PersistIdentities', body);
+
+		return this.http
+			.post('../api/Global/GetTokenForPersistIdentities', body)
+			.pipe(
+				switchMap((challenge: PersistChallengeResponse) =>
+					this.http.post('../PersonInfo/PersistIdentities', challenge)
+				)
+			);
 	}
 
 	getLogonInfo(personIdsToGet: string[]): Observable<LogonInfoFromGuidsResponse> {

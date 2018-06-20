@@ -33,5 +33,10 @@ namespace Teleopti.Ccc.Domain.Security
 		{
 			return Convert.ToBase64String(provider.Value.SignData(Encoding.UTF8.GetBytes(content), CryptoConfig.MapNameToOID("SHA1")));
 		}
+
+		public bool Verify(string content, string signature)
+		{
+			return provider.Value.VerifyData(Encoding.UTF8.GetBytes(content), CryptoConfig.MapNameToOID("SHA1"), Convert.FromBase64String(signature));
+		}
 	}
 }

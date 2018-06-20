@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable ,  of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { LogonInfoService, WorkspaceService, LogonInfoFromGuidsResponse, LogonInfo } from '../../services';
 import { map, switchMap, filter, flatMap } from 'rxjs/operators';
 

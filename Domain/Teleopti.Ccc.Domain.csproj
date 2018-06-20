@@ -669,7 +669,10 @@
     <Compile Include="Scheduling\Restrictions\RestrictionsAbleToBeScheduled.cs" />
     <Compile Include="Scheduling\ShiftCategorySelection.cs" />
     <Compile Include="Scheduling\SuccessfulScheduledAgents.cs" />
+    <Compile Include="Security\DataTokenManager.cs" />
+    <Compile Include="Security\IDataTokenManager.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccOvertimeRequestsLicenseOption.cs" />
+    <Compile Include="Security\SignedArgument.cs" />
     <Compile Include="SkillGroupManagement\ModifySkillGroup.cs" />
     <Compile Include="Intraday\ScheduledStaffingViewModel.cs" />
     <Compile Include="Intraday\ScheduledStaffingViewModelCreator.cs" />
@@ -3616,6 +3619,7 @@
     <Compile Include="UnitOfWork\WithUnitOfWork.cs" />
     <Compile Include="DisabledBy.cs" />
     <Compile Include="EnabledBy.cs" />
+    <Compile Include="Util\JsonSerializationExtensions.cs" />
     <Compile Include="Util\StringHelper.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestNoneValidator.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenDatePeriod.cs" />

@@ -8,13 +8,13 @@ using System.Runtime.Serialization.Json;
 using System.Text;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.MyTime.Core
+namespace Teleopti.Ccc.Domain.Util
 {
 	public static class JsonSerializationExtensions
 	{
 		public static string ToJson<T>(this T target)
 		{
-			var ser = createSurrogateSerializer(typeof (T));
+			var ser = createSurrogateSerializer(typeof(T));
 
 			using (var ms = new MemoryStream())
 			{

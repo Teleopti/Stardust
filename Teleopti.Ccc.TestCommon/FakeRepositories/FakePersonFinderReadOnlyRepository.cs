@@ -158,5 +158,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 			return result;
 		}
+
+		public bool ValidatePersonIds(List<Guid> ids, DateOnly date, Guid userId, string appFuncForeginId)
+		{
+			return true;
+		}
 	}
 }

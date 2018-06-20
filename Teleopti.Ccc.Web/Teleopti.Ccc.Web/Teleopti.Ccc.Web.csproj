@@ -423,6 +423,7 @@
     <Compile Include="Areas\Anywhere\Controllers\AnywhereReportsController.cs" />
     <Compile Include="Areas\Global\DataProtectionController.cs" />
     <Compile Include="Areas\Global\Core\GroupPageViewModelFactory.cs" />
+    <Compile Include="Areas\Global\DataTokenController.cs" />
     <Compile Include="Areas\Global\ScenarioController.cs" />
     <Compile Include="Areas\Global\ScenarioViewModel.cs" />
     <Compile Include="Areas\Global\ThemeController.cs" />
@@ -1339,7 +1340,6 @@
     <Compile Include="Areas\MyTime\Controllers\AvailabilityController.cs" />
     <Compile Include="Core\ErrorMessageProvider.cs" />
     <Compile Include="Core\IErrorMessageProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\JsonSerializationExtensions.cs" />
     <Compile Include="Areas\MyTime\Core\LayoutBase\DatePickerGlobalizationViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\LayoutBase\IDatePickerGlobalizationViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Portal\ViewModelFactory\PortalViewModelFactory.cs" />
