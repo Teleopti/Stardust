@@ -57,15 +57,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
         }
 
         public void SortSkills()
-        {
-			foreach (var skill in allSkillsCorrectSorted())
+		{
+			var allSkillsSorted = allSkillsCorrectSorted();
+			foreach (var skill in allSkillsSorted)
 			{
 				if (!skill.Id.HasValue)
 					continue;
 				var tabPage = findPageWithSkill(skill.Id.Value, _tabControlAdv.TabPages);
 				if (tabPage != null)
 				{
-					var idx = allSkillsCorrectSorted().IndexOf(skill);
+					var idx = allSkillsSorted.IndexOf(skill);
 					if (idx != _tabControlAdv.TabPages.IndexOf(tabPage))
 					{
 						_tabControlAdv.TabPages.Remove(tabPage);

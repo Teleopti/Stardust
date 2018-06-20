@@ -24,8 +24,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			var tabControlAdv = ((TabControlAdv)TabControl);
 			tabControlAdv.TabPanelBackColor = Color.White;
-			tabControlAdv.Font = new Font("Segoe UI", 8.25F,FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
-			tabControlAdv.ActiveTabFont = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
+			//tabControlAdv.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+			//tabControlAdv.ActiveTabFont = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -63,5 +63,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 	public class SkillTabPanelProperty : TabUIDefaultProperties
 	{
+		private readonly Font _inactiveTabFont = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, ((byte)(0)));
+		private readonly Font _activeTabFont = new Font("Segoe UI", 8.25F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
+		public override Font DefaultInactiveTabFont(ITabPanelData panelData, ITabControl tabControl)
+		{
+			return _inactiveTabFont;
+		}
+
+		public override Font DefaultActiveTabFont(ITabPanelData panelData, ITabControl tabControl)
+		{
+			return _activeTabFont;
+		}
 	}
 }

@@ -2482,7 +2482,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_scheduleView.SetSelectedDateLocal(dateOnly);
 			_scheduleView.ViewPasteCompleted += currentViewViewPasteCompleted;
 			schedulerSplitters1.ElementHost1.Enabled = true;
-			_splitContainerAdvMain.Visible = true;
+			
 			_grid.Cursor = Cursors.WaitCursor;
 			wpfShiftEditor1.LoadFromStateHolder(_schedulerState.CommonStateHolder);
 			wpfShiftEditor1.Interval = _currentSchedulingScreenSettings.EditorSnapToResolution;
@@ -2507,6 +2507,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (schedulerSplitters1.PinnedPage != null)
 				schedulerSplitters1.TabSkillData.SelectedTab = schedulerSplitters1.PinnedPage;
 
+			_splitContainerAdvMain.Visible = true;
 			toolStripStatusLabelScheduleTag.Visible = true;
 			toolStripStatusLabelNumberOfAgents.Text = LanguageResourceHelper.Translate("XXAgentsColon") + " " +
 													  _schedulerState.FilteredCombinedAgentsDictionary.Count + " " +

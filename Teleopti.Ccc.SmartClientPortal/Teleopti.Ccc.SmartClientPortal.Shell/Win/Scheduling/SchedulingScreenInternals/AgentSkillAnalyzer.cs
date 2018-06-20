@@ -203,7 +203,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			autoResizeColumns(listView);
 			listViewIslands.Sort();
 			listView.ResumeLayout(true);
-			listView.Items[0].Selected = true;
+			if(listView.Items.Count > 0)
+				listView.Items[0].Selected = true;
 		}
 
 		private void listViewAllVirtualGroupsSelectedIndexChanged(object sender, EventArgs e)
@@ -438,16 +439,52 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 				return;
 
 			var selectedItem = listViewGroupsInIsland.SelectedItems[0];
-			if (!(selectedItem.Tag is SkillSetExtendedModel selectedGroup))
+			var selectedGroup = selectedItem.Tag as SkillSetExtendedModel;
+			if (selectedGroup == null)
 				return;
 
-			listViewIslandsSkillsOnGroup.Items.Clear();
 			listViewIslandsSkillsOnGroup.SuspendLayout();
+			listViewIslandsSkillsOnGroup.Items.Clear();
+			var modelList = new List<SkillSetExtendedModel>();
+			for (int i = 0; i < listViewGroupsInIsland.SelectedItems.Count; i++)
+			{
+				selectedItem = listViewGroupsInIsland.SelectedItems[i];
+				selectedGroup = selectedItem.Tag as SkillSetExtendedModel;
+				if (selectedGroup == null)
+					continue;
 
-			fillSkillListView(selectedGroup, listViewIslandsSkillsOnGroup);
+				modelList.Add(selectedGroup);
+			}
 
+			var skillList = createSkillList(modelList);
+			fillSkillListView(skillList, listViewIslandsSkillsOnGroup);
+			listViewIslandsSkillsOnGroup.Columns[0].Text = "#Skills " + skillList.Count;
 			listViewIslandsSkillsOnGroup.Sort();
 			listViewIslandsSkillsOnGroup.ResumeLayout();
+		}
+
+		private void fillSkillListView(IEnumerable<ISkill> skills, ListView view)
+		{
+			foreach (var skill in skills)
+			{
+				var item = createSkillItem(skill);
+				if (item != null)
+					view.Items.Add(item);
+			}
+		}
+
+		private HashSet<ISkill> createSkillList(IEnumerable<SkillSetExtendedModel> models)
+		{
+			var uniqueList = new HashSet<ISkill>();
+			foreach (var model in models)
+			{
+				foreach (var skill in model.SkillsInSkillSet)
+				{
+					uniqueList.Add(skill);
+				}
+			}
+
+			return uniqueList;
 		}
 
 		public void LoadData()

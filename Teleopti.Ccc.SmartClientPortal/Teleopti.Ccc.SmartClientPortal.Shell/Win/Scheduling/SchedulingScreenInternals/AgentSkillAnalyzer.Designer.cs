@@ -548,7 +548,6 @@
 			this.listViewGroupsInIsland.FullRowSelect = true;
 			this.listViewGroupsInIsland.HideSelection = false;
 			this.listViewGroupsInIsland.Location = new System.Drawing.Point(338, 3);
-			this.listViewGroupsInIsland.MultiSelect = false;
 			this.listViewGroupsInIsland.Name = "listViewGroupsInIsland";
 			this.listViewGroupsInIsland.Size = new System.Drawing.Size(329, 503);
 			this.listViewGroupsInIsland.TabIndex = 1;
