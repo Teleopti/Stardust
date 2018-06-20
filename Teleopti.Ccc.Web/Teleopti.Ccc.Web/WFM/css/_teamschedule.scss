@@ -1173,6 +1173,15 @@ teams-time-picker.ng-invalid-dst {
 	}
 }
 
+.type-color {
+	height: 15px;
+	width: 30px;
+	display: inline-block;
+	margin-top: 8px;
+	margin-right: 15px;
+}
+
+
 .shift-editor {
 	position: relative;
 
@@ -1193,14 +1202,25 @@ teams-time-picker.ng-invalid-dst {
 		color: $orange-500;
 	}
 
+
+
 	.activity-info {
 		display: inline-block;
+		height: 40px;
 
-		span {
+
+
+		.timespan {
 			background-color: #DCDCDC;
 			border-radius: 2px;
 			padding: 2px 5px;
 			margin: 0 5px;
+		}
+
+		.activity-selector {
+			display: inline-block;
+			padding-left: 25px;
+			height: 30px;
 		}
 	}
 

@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 
 namespace Teleopti.Ccc.Web.Core.Data
 {
@@ -6,5 +7,7 @@ namespace Teleopti.Ccc.Web.Core.Data
 	{
 		public Guid? Id;
 		public string Name;
+
+		public string Color;
 	}
 }

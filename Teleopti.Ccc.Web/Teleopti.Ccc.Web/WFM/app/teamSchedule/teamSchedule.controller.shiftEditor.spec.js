@@ -3,7 +3,8 @@
 
 	var $rootScope,
 		$compile,
-		$document;
+		$document,
+		fakeActivityService;
 
 	beforeEach(module('wfm.templates', 'wfm.teamSchedule'));
 	beforeEach(module(function ($provide) {
@@ -38,6 +39,10 @@
 					};
 				}
 			};
+		});
+		$provide.service('ActivityService', function () {
+			fakeActivityService = new FakeActivityService();
+			return fakeActivityService;
 		});
 
 	}));
@@ -121,7 +126,7 @@
 		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', [schedule], '2018-06-07', 'Europe/Berlin');
 		var element = panel[0];
 		expect(!!element.querySelector(".timezone .mdi-earth")).toBeTruthy();
-		
+
 		panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', [schedule], '2018-06-07', 'Asia/Hong_Kong');
 		expect(!!panel[0].querySelector(".timezone .mdi-earth")).toBeFalsy();;
 	})
@@ -401,7 +406,7 @@
 		shiftLayers[0].click();
 
 		var timespanEl = panel[0].querySelector(".timespan");
-		var typeEl = panel[0].querySelector(".activity-type");
+		var typeEl = panel[0].querySelector(".activity-selector md-select-value");
 
 		expect(timespanEl.innerText.trim()).toBe("2018-05-28 08:00 - 2018-05-28 09:00");
 		expect(typeEl.innerText.trim()).toBe("Phone");
@@ -433,6 +438,98 @@
 		var timespanEl = panel[0].querySelector(".timespan");
 		expect(timespanEl.innerText.trim()).toBe("2018-03-25 00:30 - 2018-03-25 03:30");
 	});
+
+	it('should list all activity type when select an activity', function () {
+		var schedule = {
+			"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+			"Name": "Annika Andersson",
+			"Date": "2018-06-15",
+			"WorkTimeMinutes": 240,
+			"ContractTimeMinutes": 240,
+			"Projection": [{
+				"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+				"Color": "#ffffff",
+				"Description": "Phone",
+				"Start": "2018-06-15 08:00",
+				"End": "2018-06-15 09:00",
+				"Minutes": 60,
+				"IsOvertime": false
+			}],
+			"Timezone": { "IanaId": "Europe/Berlin" }
+		};
+
+		var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", [schedule], "2018-06-15", "Europe/Berlin");
+
+		var shiftLayers = panel[0].querySelectorAll(".shift-layer");
+		shiftLayers[0].click();
+
+		var typeOptions = panel[0].querySelectorAll('.activity-selector md-option');
+		expect(typeOptions.length).toBe(5);
+
+	});
+
+	it('should set correct activity type when select an activity', function () {
+		var schedule = {
+			"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+			"Name": "Annika Andersson",
+			"Date": "2018-06-15",
+			"WorkTimeMinutes": 240,
+			"ContractTimeMinutes": 240,
+			"Projection": [{
+				"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+				"Color": "#ffffff",
+				"Description": "Phone",
+				"Start": "2018-06-15 08:00",
+				"End": "2018-06-15 09:00",
+				"Minutes": 60,
+				"IsOvertime": false
+			}],
+			"Timezone": { "IanaId": "Europe/Berlin" }
+		};
+
+		var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", [schedule], "2018-06-15", "Europe/Berlin");
+
+		var shiftLayers = panel[0].querySelectorAll(".shift-layer");
+		shiftLayers[0].click();
+
+		var selectedTypeEl = panel[0].querySelector('.activity-selector md-select-value');
+		//var typeColorEl = panel[0].querySelector('.activity-selector md-select-value div');
+		expect(selectedTypeEl.innerText.trim()).toBe('Phone');
+		//expect(typeColorEl.style.backgroundColor).toBe('#ffffff');
+	});
+
+	xit('should change the selected shift layer color when change activity type', function () {
+		var schedule = {
+			"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+			"Name": "Annika Andersson",
+			"Date": "2018-06-15",
+			"WorkTimeMinutes": 240,
+			"ContractTimeMinutes": 240,
+			"Projection": [{
+				"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+				"Color": "#ffffff",
+				"Description": "Phone",
+				"Start": "2018-06-15 08:00",
+				"End": "2018-06-15 09:00",
+				"Minutes": 60,
+				"IsOvertime": false
+			}],
+			"Timezone": { "IanaId": "Europe/Berlin" }
+		};
+
+		var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", [schedule], "2018-06-15", "Europe/Berlin");
+
+		var shiftLayers = panel[0].querySelectorAll(".shift-layer");
+		shiftLayers[0].click();
+		expect(shiftLayers[0].className.indexOf('border-dark') >= 0).toBeTruthy();
+
+		var typeEls = panel[0].querySelectorAll('.activity-selector md-option');
+		typeEls[1].click();
+
+		//expect(shiftLayers[0].style.backgroundColor).toBe('#8080c0');
+		expect(shiftLayers[0].className.indexOf('border-light') >= 0).toBeTruthy();
+	});
+
 
 	describe("in locale en-UK", function () {
 		beforeEach(function () { moment.locale('en-UK'); });
@@ -530,6 +627,42 @@
 		return element;
 	}
 
+	function FakeActivityService() {
+		var activities = [
+			{
+				"Id": "472e02c8-1a84-4064-9a3b-9b5e015ab3c6",
+				"Name": "E-mail",
+				"Color": "#FFa2a2"
+			},
+			{
+				"Id": "5c1409de-a0f1-4cd4-b383-9b5e015ab3c6",
+				"Name": "Invoice",
+				"Color": "#8080c0"
+			},
+			{
+				"Id": "0ffeb898-11bf-43fc-8104-9b5e015ab3c2",
+				"Name": "Phone",
+				"Color": "#ffffff"
+			},
+			{
+				"Id": "84db44f4-22a8-44c7-b376-a0a200da613e",
+				"Name": "Sales",
+				"Color": "#FFCCA2"
+			},
+			{
+				"Id": "35e33821-862f-461c-92db-9f0800a8d095",
+				"Name": "Social Media",
+				"Color": "#FFA2CC"
+			}
+		];
+		this.fetchAvailableActivities = function () {
+			return {
+				then: function (callback) {
+					callback(activities);
+				}
+			}
+		}
+	}
 
 });
 

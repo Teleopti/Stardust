@@ -57,9 +57,9 @@
 		}
 	});
 
-	ShiftEditorController.$inject = ['$element', '$timeout', '$window', '$interval', '$filter', 'serviceDateFormatHelper', 'ShiftEditorViewModelFactory', 'TimezoneListFactory'];
+	ShiftEditorController.$inject = ['$element', '$timeout', '$window', '$interval', '$filter', 'serviceDateFormatHelper', 'ShiftEditorViewModelFactory', 'TimezoneListFactory', 'ActivityService'];
 
-	function ShiftEditorController($element, $timeout, $window, $interval, $filter, serviceDateFormatHelper, ShiftEditorViewModelFactory, TimezoneListFactory) {
+	function ShiftEditorController($element, $timeout, $window, $interval, $filter, serviceDateFormatHelper, ShiftEditorViewModelFactory, TimezoneListFactory, ActivityService) {
 		var vm = this;
 		var timeLineTimeRange = {
 			Start: moment.tz(vm.date, vm.timezone).add(-1, 'days').hours(0),
@@ -70,8 +70,13 @@
 		vm.selectedShiftLayer = null;
 		vm.isInDifferentTimezone = false;
 		vm.displayDate = moment(vm.date).format("L");
+		vm.availableActivities = [];
 
 		vm.$onInit = function () {
+			ActivityService.fetchAvailableActivities().then(function (data) {
+				vm.availableActivities = data;
+			});
+
 			vm.timelineVm = ShiftEditorViewModelFactory.CreateTimeline(vm.date, vm.timezone, timeLineTimeRange);
 			TimezoneListFactory.Create().then(function (timezoneList) {
 				vm.timezoneName = timezoneList.GetShortName(vm.timezone);
@@ -111,6 +116,7 @@
 				//	}
 				//}
 			});
+			vm.selectedActivitiyId = getSelectActivity(shiftLayer).Id
 		}
 
 		vm.getShiftLayerWidth = function (layer) {
@@ -119,6 +125,21 @@
 		}
 		vm.getShiftLayerLeft = function (layer) {
 			return getDiffMinutes(layer.Start, timeLineTimeRange.Start);
+		}
+
+		vm.changeActivityType = function () {
+			var selectActivity = vm.availableActivities.filter(function (activity) {
+				return vm.selectedActivitiyId == activity.Id;
+			})[0];
+			//vm.selectedShiftLayer.Color = selectActivity.Color;
+			//vm.selectedShiftLayer.Description = selectActivity.Name;
+			//vm.selectedShiftLayer.Id = selectActivity.Id;
+		}
+
+		function getSelectActivity(layer) {
+			return vm.availableActivities.filter(function (activity) {
+				return layer.Description == activity.Name;
+			})[0];
 		}
 
 		function initAndBindScrollEvent() {

@@ -26,7 +26,14 @@
 		<div class="activity-info">
 			<div ng-if="vm.selectedShiftLayer">
 				<span class="timespan">{{vm.selectedShiftLayer.TimeSpan}}</span>
-				<span class="activity-type">{{vm.selectedShiftLayer.Description}}</span>
+				<span>
+					<md-select class="activity-selector" ng-model="vm.selectedActivitiyId" ng-change="vm.changeActivityType()" required placeholder="{{'SelectAnActivity'|translate}}">
+						<md-option ng-repeat="activity in vm.availableActivities" ng-value="activity.Id">
+							<div class="type-color" ng-style="{'background-color': activity.Color}"></div>
+							{{activity.Name}}
+						</md-option>
+					</md-select>
+				</span>
 			</div>
 		</div>
 	</div>
