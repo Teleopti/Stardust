@@ -125,10 +125,10 @@
 		};
 		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', [schedule], '2018-06-07', 'Europe/Berlin');
 		var element = panel[0];
-		expect(!!element.querySelector(".timezone .mdi-earth")).toBeTruthy();
+		expect(!!element.querySelector(".mdi-earth")).toBeTruthy();
 
 		panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', [schedule], '2018-06-07', 'Asia/Hong_Kong');
-		expect(!!panel[0].querySelector(".timezone .mdi-earth")).toBeFalsy();;
+		expect(!!panel[0].querySelector(".mdi-earth")).toBeFalsy();;
 	})
 
 	it('should show underlying info icon if schedule has underlying activities', function () {
