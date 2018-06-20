@@ -46,12 +46,12 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			const int intervalPerDay = 96;
 
 			_target = new ScheduleForecastSkillResourceCalculation(new ShovelResources(new ReducePrimarySkillResources(), new AddResourcesToSubSkills(), new SkillSetPerActivityProvider(), new PrimarySkillOverstaff(), new TimeZoneGuard(), new AddBpoResourcesToContext()),
-				_skillDaysDictionary, 
+				_skillDaysDictionary,
 				_schedulingResultService,
-				new SkillStaffPeriodHolder(_skillDaysDictionary),  
+				new SkillStaffPeriodHolder(_skillDaysDictionary),
 				new ScheduleDictionaryForTest(new Scenario("_"), new DateTimePeriod()),
-				new[] {skill},
-				intervalPerDay, 
+				new[] { skill },
+				intervalPerDay,
 				_scheduleLoadedForPeriod,
 				new CascadingResourceCalculationContextFactory(new CascadingPersonSkillProvider(), TimeZoneGuard.Instance, new AddBpoResourcesToContext()));
 		}
@@ -68,7 +68,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			{
 				// First get 
 				Dictionary<IScheduleForecastSkillKey, IScheduleForecastSkill> resourceDataExcludingShrinkage =
-					 _target.GetResourceDataExcludingShrinkage(DateTime.Now);
+					 _target.GetResourceDataExcludingShrinkage(DateTime.Now, null);
 
 				KeyValuePair<IScheduleForecastSkillKey, IScheduleForecastSkill> exclShrinkage = resourceDataExcludingShrinkage.First();
 				IScheduleForecastSkill scheduleForecastSkill;
@@ -79,7 +79,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 				Assert.AreEqual(scheduleForecastSkill.ForecastedResourcesIncludingShrinkage, 0d);
 
 				Dictionary<IScheduleForecastSkillKey, IScheduleForecastSkill> resourceDataIncludingShrinkage =
-					 _target.GetResourceDataIncludingShrinkage(DateTime.Now);
+					 _target.GetResourceDataIncludingShrinkage(DateTime.Now, null);
 
 				Assert.AreSame(resourceDataExcludingShrinkage, resourceDataIncludingShrinkage);
 				Assert.Greater(scheduleForecastSkill.ForecastedResourcesIncludingShrinkage, 0d);

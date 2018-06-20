@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.ReadModel;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Matrix;
@@ -342,7 +343,8 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 		}
 
 		private IDictionary<ISkill, IEnumerable<ISkillDay>> _skillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
-		
+		private List<ExternalStaff> _externalStaff;
+
 		public void SetLoadSkillDays(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays)
 		{
 			_skillDays = skillDays;
@@ -806,6 +808,11 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			throw new NotImplementedException();
 		}
 
+		public IEnumerable<ExternalStaff> GetExternalStaff(IEnumerable<ISkill> skills, DateTimePeriod period, ExternalStaffProvider externalStaffProvider)
+		{
+			return _externalStaff;
+		}
+
 		public DateTime GetMaxDateInDimDate(bool isInitial = false)
 		{
 			return new DateTime(1900, 1, 1, 0, 0, 0, DateTimeKind.Unspecified);
@@ -813,6 +820,11 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 
 		public void TruncateRequest()
 		{
+		}
+
+		public void SetLoadExternalStaffData(List<ExternalStaff> externalStaff)
+		{
+			_externalStaff = externalStaff;
 		}
 	}
 }

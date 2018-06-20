@@ -17,6 +17,7 @@ using Teleopti.Analytics.Etl.CommonTest.Transformer.Job;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.IocCommon;
@@ -62,6 +63,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 			raptorRep.SetLoadScenario(scenario);
 			raptorRep.SetLoadSkillDays(skillDays);
 			raptorRep.SetLoadSchedule(scheduleDictionary);
+			raptorRep.SetLoadExternalStaffData(new List<ExternalStaff>());
 			var jobHelper = new JobHelperForTest(raptorRep, null);
 			var containerHolder = new IocContainerHolder(ComponentContext);
 			var jobParameters = new JobParameters(dateList, 0, "UTC", 15, "", "", null, containerHolder, false) { Helper = jobHelper };
@@ -118,6 +120,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.JobSchedule
 			raptorRep.SetLoadScenario(scenario);
 			raptorRep.SetLoadSkillDays(skillDays);
 			raptorRep.SetLoadSchedule(scheduleDictionary);
+			raptorRep.SetLoadExternalStaffData(new List<ExternalStaff>());
 			var jobHelper = new JobHelperForTest(raptorRep, null);
 			var containerHolder = new IocContainerHolder(ComponentContext);
 			var jobParameters = new JobParameters(dateList, 0, "UTC", 15, "", "", null, containerHolder, false) { Helper = jobHelper};

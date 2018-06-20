@@ -36,5 +36,13 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 				Add(step);
 			}
 		}
+
+		protected void ChooseJobStepUsingToggle(IJobStep stepWhenTrue, IJobStep stepWhenFalse, Toggles toggle)
+		{
+			if (stepWhenTrue.JobParameters.ToggleManager.IsEnabled(toggle))
+				Add(stepWhenTrue);
+			else
+				Add(stepWhenFalse);
+		}
 	}
 }

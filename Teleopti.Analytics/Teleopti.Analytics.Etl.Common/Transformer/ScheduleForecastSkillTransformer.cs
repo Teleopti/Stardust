@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer
@@ -21,15 +22,15 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Transform(IScheduleForecastSkillResourceCalculation scheduleForecastSkillResourceCalculation, DataTable table)
+		public void Transform(IScheduleForecastSkillResourceCalculation scheduleForecastSkillResourceCalculation, DataTable table, ISchedulingResultStateHolder schedulingResultStateHolder = null)
 		{
 			InParameter.NotNull("scheduleForecastSkillResourceCalculation", scheduleForecastSkillResourceCalculation);
 
 			// First get resource calculation data without shrinkage... 
-			scheduleForecastSkillResourceCalculation.GetResourceDataExcludingShrinkage(_insertDateTime);
+			scheduleForecastSkillResourceCalculation.GetResourceDataExcludingShrinkage(_insertDateTime, schedulingResultStateHolder);
 			// ...and then with shrinkage
 			Dictionary<IScheduleForecastSkillKey, IScheduleForecastSkill> scheduleForecastSkillDictionary =
-				 scheduleForecastSkillResourceCalculation.GetResourceDataIncludingShrinkage(_insertDateTime);
+				 scheduleForecastSkillResourceCalculation.GetResourceDataIncludingShrinkage(_insertDateTime, schedulingResultStateHolder);
 
 			foreach (var forecastSkill in scheduleForecastSkillDictionary.Values)
 			{

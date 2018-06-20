@@ -105,6 +105,7 @@
 		ETL_SpeedUpGroupPagePersonNightly_37623,
 		ETL_SpeedUpNightlyWorkload_38928,
 		ETL_SpeedUpNightlyForecastWorkload_38929,
+		ETL_UseBpoResources_75855,
 
 		ETL_SpeedUpIntradayBusinessUnit_38932,
 		ETL_SpeedUpNightlyBusinessUnit_38932,

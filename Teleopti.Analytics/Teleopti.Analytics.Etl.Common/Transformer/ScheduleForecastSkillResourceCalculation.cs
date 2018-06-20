@@ -43,13 +43,13 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			_skillsWithSkillDays = skillsWithSkillDays;
 		}
 
-		public Dictionary<IScheduleForecastSkillKey, IScheduleForecastSkill> GetResourceDataExcludingShrinkage(DateTime insertDateTime)
+		public Dictionary<IScheduleForecastSkillKey, IScheduleForecastSkill> GetResourceDataExcludingShrinkage(DateTime insertDateTime, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			setResourceData(false, insertDateTime);
 			return _scheduleForecastSkillDictionary;
 		}
 
-		public Dictionary<IScheduleForecastSkillKey, IScheduleForecastSkill> GetResourceDataIncludingShrinkage(DateTime insertDateTime)
+		public Dictionary<IScheduleForecastSkillKey, IScheduleForecastSkill> GetResourceDataIncludingShrinkage(DateTime insertDateTime, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			setResourceData(true, insertDateTime);
 			return _scheduleForecastSkillDictionary;

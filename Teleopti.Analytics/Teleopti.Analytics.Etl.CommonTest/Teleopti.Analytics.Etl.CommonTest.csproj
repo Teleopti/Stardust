@@ -88,6 +88,7 @@
     <Compile Include="JobRunnerTest.cs" />
     <Compile Include="FakeBaseConfigurationRepository.cs" />
     <Compile Include="JobSchedule\PBI41857.cs" />
+    <Compile Include="JobSchedule\StageScheduleForecastSkillJobStepTest.cs" />
     <Compile Include="RunControllerTest.cs" />
     <Compile Include="Service\EtlJobScheduleCollectionForTest.cs" />
     <Compile Include="Service\EtlJobScheduleForTest.cs" />

@@ -162,6 +162,7 @@ People_ImprovePersonAccountAccuracy_74914 = true
 Staffing_BPO_Visualization_74958 = true
 Tenant_PurgeLogonAttempts_75782 = true
 Tenant_PurgeNoneEmployeesData_76291 = true
+ETL_UseBpoResources_75855 = RC
 Staffing_BPO_ClearStaffing_75498 = RC
 
 # Squids #

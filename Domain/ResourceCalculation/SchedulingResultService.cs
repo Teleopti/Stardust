@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_personSkillProvider = personSkillProvider;
 		}
 
-		public ISkillResourceCalculationPeriodDictionary SchedulingResult(DateTimePeriod periodToRecalculate, ResourceCalculationData resourceCalculationData = null,  bool emptyCache = true)
+		public ISkillResourceCalculationPeriodDictionary SchedulingResult(DateTimePeriod periodToRecalculate, ResourceCalculationData resourceCalculationData = null, bool emptyCache = true)
 		{
 			if (!emptyCache)
 			{
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var personSkillService = new AffectedPersonSkillService(_allSkills);
 
 			var rc = new ScheduleResourceOptimizer(_relevantProjections, _relevantSkillStaffPeriods, personSkillService,
-			                                       emptyCache, new ActivityDivider());
+												   emptyCache, new ActivityDivider());
 			rc.Optimize(periodToRecalculate, resourceCalculationData);
 
 			return _relevantSkillStaffPeriods;
@@ -118,12 +118,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 	public class SkillResourceCalculationPeriodWrapper : ISkillResourceCalculationPeriodDictionary
 	{
-		private readonly Dictionary<ISkill, IResourceCalculationPeriodDictionary> _wrappedDictionary = new	Dictionary<ISkill, IResourceCalculationPeriodDictionary>();
+		private readonly Dictionary<ISkill, IResourceCalculationPeriodDictionary> _wrappedDictionary = new Dictionary<ISkill, IResourceCalculationPeriodDictionary>();
 
 		public SkillResourceCalculationPeriodWrapper(ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods)
 		{
 			_wrappedDictionary =
-				((SkillSkillStaffPeriodExtendedDictionary) relevantSkillStaffPeriods).ToDictionary(k => k.Key, v => (IResourceCalculationPeriodDictionary)v.Value);
+				((SkillSkillStaffPeriodExtendedDictionary)relevantSkillStaffPeriods).ToDictionary(k => k.Key, v => (IResourceCalculationPeriodDictionary)v.Value);
 		}
 
 		public SkillResourceCalculationPeriodWrapper(List<KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>> result)

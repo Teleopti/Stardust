@@ -22,6 +22,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.ReadModel;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -1309,6 +1310,15 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 			}
 		}
+
+		public IEnumerable<ExternalStaff> GetExternalStaff(IEnumerable<ISkill> skills, DateTimePeriod period, ExternalStaffProvider externalStaffProvider)
+		{
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				return externalStaffProvider.Fetch(skills, period);
+			}
+		}
+
 
 		public int FillSiteDataMart(IBusinessUnit businessUnit)
 		{

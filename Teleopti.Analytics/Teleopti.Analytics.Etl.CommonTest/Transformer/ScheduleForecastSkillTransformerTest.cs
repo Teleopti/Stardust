@@ -45,9 +45,9 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 
             using (mocks.Record())
             {
-                Expect.Call(scheduleForecastSkillResourceCalculation.GetResourceDataExcludingShrinkage(DateTime.Now)).
+                Expect.Call(scheduleForecastSkillResourceCalculation.GetResourceDataExcludingShrinkage(DateTime.Now, null)).
                     Return(new Dictionary<IScheduleForecastSkillKey, IScheduleForecastSkill>()).IgnoreArguments();
-                Expect.Call(scheduleForecastSkillResourceCalculation.GetResourceDataIncludingShrinkage(DateTime.Now)).
+                Expect.Call(scheduleForecastSkillResourceCalculation.GetResourceDataIncludingShrinkage(DateTime.Now, null)).
                     Return(_scheduleForecstSkillDictionary).IgnoreArguments();
             }
 
@@ -58,7 +58,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
                     dataTable.Locale = Thread.CurrentThread.CurrentCulture;
                     ScheduleForecastSkillInfrastructure.AddColumnsToDataTable(dataTable);
 
-                    _target.Transform(scheduleForecastSkillResourceCalculation, dataTable);
+                    _target.Transform(scheduleForecastSkillResourceCalculation, dataTable, null);
 
                     // Check that the datatable values match the ScheduleForecastSkill dictionary
                     Assert.IsNotNull(dataTable);
