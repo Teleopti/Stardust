@@ -19,6 +19,7 @@
 		RTA_KillFattyIntradayUntilItDies_74939,
 		RTA_RestrictModifyAdherenceWithPermission_74898,
 		RTA_EasilySpotLateForWork_75668,
+		RTA_HangfirePerformanceStats_76139,
 		
 		MyTimeWeb_SortRequestList_40711,
 		MyTimeWeb_PreferenceForJalaliCalendar_42965,
