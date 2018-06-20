@@ -37,7 +37,6 @@ namespace Teleopti.Analytics.Parameters
 
 			adap.SelectCommand = cmdType;
 			adap.Fill(ret, "Controls");
-			_connection.Close();
 			return ret;
 		}
 
@@ -57,14 +56,8 @@ namespace Teleopti.Analytics.Parameters
 			cmdType.Parameters.AddWithValue("@report_id", reportId);
 			cmdType.Parameters.AddWithValue("@saved_name_id", savedId);
 
-			if (_connection.State != ConnectionState.Open)
-			{
-				_connection.Open();
-			}
-
 			adap.SelectCommand = cmdType;
 			adap.Fill(ret, "Props");
-			_connection.Close();
 			return ret.Tables[0];
 		}
 
@@ -92,16 +85,11 @@ namespace Teleopti.Analytics.Parameters
 
 				cmdType.CommandType = CommandType.StoredProcedure;
 				cmdType.Connection = _connection;
-				if (_connection.State != ConnectionState.Open)
-				{
-					_connection.Open();
-				}
 
 				adap.SelectCommand = cmdType;
 			}
 
 			adap.Fill(ret, "Controls");
-			_connection.Close();
 			adap.Dispose();
 			return ret;
 		}
