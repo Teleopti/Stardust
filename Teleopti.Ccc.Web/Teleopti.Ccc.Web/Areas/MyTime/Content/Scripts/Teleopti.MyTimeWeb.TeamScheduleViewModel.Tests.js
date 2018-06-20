@@ -242,6 +242,61 @@ $(document).ready(function () {
 		equal(viewModel.mySchedule().layers.length, 8);
 	});
 
+	test("should support color in CSV format", function () {
+
+		var ajaxResult = {
+			MySchedule: {
+				"ScheduleLayers": [{
+					"Start": "\/Date(1450393200000)\/",
+					"End": "\/Date(1450396800000)\/",
+					"LengthInMinutes": 60,
+					"Color": "0,0,0",
+					"TitleHeader": "Invoice",
+					"IsAbsenceConfidential": false,
+					"IsOvertime": false,
+					"TitleTime": "07:00 - 08:00"
+				}
+				],
+				"Name": "John Smith",
+				"StartTimeUtc": "\/Date(1450389600000)\/",
+				"PersonId": "47a3d4aa-3cd8-4235-a7eb-9b5e015b2560",
+				"MinStart": "\/Date(1450364400000)\/",
+				"IsDayOff": false,
+				"Total": 10
+			},
+			AgentSchedules: [
+				{
+					ScheduleLayers: dayOffScheduleLayersTemplate,
+					Name: "Andy Stephen",
+					StartTimeUtc: 1433599200000,
+					PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+					MinStart: 1433599200000,
+					IsDayOff: true,
+					Total: 1
+				}
+			],
+			TimeLine: timeLineTemplate,
+			TimeLineLengthInMinutes: 0,
+			PageCount: 1,
+		};
+
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url === endpoints.loadSchedule) {
+					options.success(ajaxResult);
+				}
+			}
+		};
+
+		Teleopti.MyTimeWeb.TeamScheduleViewModel.initCurrentDate = function () { };
+
+		var viewModel = Teleopti.MyTimeWeb.TeamScheduleViewModelFactory.createViewModel(endpoints, ajax);
+		viewModel.selectedTeam("00000000-0000-0000-0000-000000000000");
+
+		equal(viewModel.mySchedule().layers.length, 1);
+		equal(viewModel.mySchedule().layers[0].styleJson()['background-color'], 'rgb(0,0,0)');
+	});
+
 	test("should show error message when there is no default team", function () {
 
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggle) {

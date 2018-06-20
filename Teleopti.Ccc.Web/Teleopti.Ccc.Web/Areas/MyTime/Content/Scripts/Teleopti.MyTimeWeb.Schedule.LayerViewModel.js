@@ -49,15 +49,8 @@ Teleopti.MyTimeWeb.Schedule.LayerViewModel = function (layer, parent, layersOnMo
 		return tooltipContent + text;
 	});
 
-	self.backgroundColor = ko.observable('');
-	if(layer.Color.indexOf('#') > -1) {
-		self.backgroundColor(layer.Color);
-	} else if(layer.Color && layer.Color.split(',').length == 3) {
-		self.backgroundColor('rgb(' + layer.Color + ')');
-	} else {
-		self.backgroundColor('rgba(' + layer.Color + ')');
-	}
-
+	self.backgroundColor = ko.observable(Teleopti.MyTimeWeb.Common.ConvertColorToRGB(layer.Color));
+	
 	self.textColor = ko.computed(function () {
 		if (layer.Color !== null && layer.Color !== undefined) {
 			var backgroundColor = self.backgroundColor();

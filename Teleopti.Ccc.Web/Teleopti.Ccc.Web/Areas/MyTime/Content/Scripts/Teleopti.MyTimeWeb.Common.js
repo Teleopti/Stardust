@@ -378,6 +378,18 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		return currentUserDateTime;
 	};
 
+	function _convertColorToRGB(color) {
+		if (!color) {
+			return color;
+		}
+		if (color.indexOf('#') > -1) {
+			return color;
+		} else if (color.split(',').length == 3) {
+			return 'rgb(' + color + ')';
+		} else {
+			return 'rgba(' + color + ')';
+		}
+	}
 	return {
 		Init: function (settings, ajax) {
 			_settings = settings;
@@ -494,7 +506,8 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		GetCurrentUserDateTime: _getCurrentUserDateTime,
 		FakeToggles: function(toggles) {
 			toggleCache = toggles;
-		}
+		},
+		ConvertColorToRGB: _convertColorToRGB
 	};
 
 })(jQuery);

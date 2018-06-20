@@ -331,14 +331,14 @@ Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel = function (layer, minute
 				'right': self.leftPx(),
 				'background-size': self.isOvertime ? '11px 11px' : 'initial',
 				'background-image': self.isOvertime ? 'linear-gradient(45deg,transparent,transparent 4px,rgba(251,251,251,.8) 6px,transparent 10px,transparent)' : '',
-				'background-color': self.backgroundColor,
+				'background-color': Teleopti.MyTimeWeb.Common.ConvertColorToRGB(self.backgroundColor),
 				'paddingRight': self.widthPx()
 			};
 		return {
 			'left': self.leftPx(),
 			'background-size': self.isOvertime ? '11px 11px' : 'initial',
 			'background-image': self.isOvertime ? 'linear-gradient(45deg,transparent,transparent 4px,rgba(251,251,251,.8) 6px,transparent 10px,transparent)' : 'initial',
-			'background-color': self.backgroundColor,
+			'background-color': Teleopti.MyTimeWeb.Common.ConvertColorToRGB(self.backgroundColor),
 			'paddingLeft': self.widthPx()
 		};
 
