@@ -50,16 +50,5 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			_jobResultRepository.AddDetailAndCheckSuccess(@event.JobResultId, new JobResultDetail(level, string.Empty, DateTime.UtcNow, exception), 1);
 		}
-
-		/*
-		//TODO
-		private IBlockPreferenceProvider blockPreferenceProvider(Guid? planningPeriodId)
-		{
-			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId.Value);
-			var planningGroup = planningPeriod.PlanningGroup;
-			var blockPreferenceProvider = _blockPreferenceProviderUsingFiltersFactory.Create(planningGroup);
-			return blockPreferenceProvider;
-		}
-		*/
 	}
 }

@@ -36,7 +36,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			var intradayOptimizationCommand = new IntradayOptimizationCommand
 			{
 				Period = planningPeriod.Range,
-				RunResolveWeeklyRestRule = true
+				RunResolveWeeklyRestRule = true,
+				PlanningPeriodId = planningPeriodId
 			};
 			if (planningPeriod.PlanningGroup != null)
 			{

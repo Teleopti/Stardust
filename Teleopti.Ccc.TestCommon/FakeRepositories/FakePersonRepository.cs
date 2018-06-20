@@ -88,6 +88,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				schedulePeriod, skills);
 		}
 
+		public Person Has(IWorkShiftRuleSet ruleSet, params ISkill[] skills)
+		{
+			return Has(new SchedulePeriod(DateOnly.MinValue, SchedulePeriodType.Day, 1), ruleSet, skills);
+		}
+		
 		public Person Has(params ISkill[] skills)
 		{
 			return Has(new ContractWithMaximumTolerance(), new ContractSchedule("_"), new PartTimePercentage("_"),
@@ -288,6 +293,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IList<IPerson> FindPeopleInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period)
 		{
 			var people = _storage.LoadAll<IPerson>().ToList();
+			if (planningGroup.Filters.IsEmpty())
+				return people;
 			var result = new List<IPerson>();
 			foreach (var person in people)
 			{

@@ -403,5 +403,100 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 					new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 			});
 		}
+		
+		
+		[Test]
+		public void ShouldIndividualFlexableWhenNotBlock()
+		{
+			var dateOnly = new DateOnly(2017, 9, 25);
+			var activity = ActivityFactory.CreateActivity("phone");
+			var skill = new Skill().WithId().For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen();
+			var scenario = new Scenario().WithId();
+			var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(0), TimeSpan.FromHours(60), TimeSpan.FromHours(11), TimeSpan.FromHours(8));
+			var contract = new Contract("contract") { WorkTimeDirective = worktimeDirective, PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(0), NegativeDayOffTolerance = 3 };
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(9, 0, 10, 0, 60), new TimePeriodWithSegment(17, 0, 18, 0, 60), shiftCategory));
+			ruleSet.AddLimiter(new ContractTimeLimiter(new TimePeriod(new TimeSpan(8, 0, 0), new TimeSpan(8, 0, 0)), TimeSpan.FromMinutes(15)));
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(dateOnly, new RuleSetBag(ruleSet), contract, 
+				ContractScheduleFactory.Create7DaysWorkingContractSchedule(), new PartTimePercentage("_"), new Team { Site = new Site("site") }, skill).WithSchedulePeriodOneWeek(dateOnly);
+			var skillDays = new List<ISkillDay>();
+			var asses = new List<IPersonAssignment>();
+			for (var i = 0; i < 7; i++)
+			{
+				skillDays.Add(
+					i == 6
+						? skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly.AddDays(i), TimeSpan.FromMinutes(60),
+							new Tuple<int, TimeSpan>(9, TimeSpan.FromMinutes(180)))
+						: skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly.AddDays(i), TimeSpan.FromMinutes(60),
+							new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(180)))
+				);
+				asses.Add(new PersonAssignment(agent, scenario, dateOnly.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 0, 17, 0)).WithId());
+			}
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(dateOnly, 1), agent, asses, skillDays);
+			var optPreferences = new OptimizationPreferences
+			{
+				General = new GeneralPreferences {ScheduleTag = NullScheduleTag.Instance, OptimizationStepShiftsWithinDay = true}
+			};
+			
+			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] {agent}, DateOnlyPeriod.CreateWithNumberOfWeeks(dateOnly, 1), optPreferences,
+				new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
+			
+			for (var i = 0; i < 7; i++)
+			{
+				var date = dateOnly.AddDays(i);
+				var dateTime1 = TimeZoneHelper.ConvertToUtc(date.Date, agent.PermissionInformation.DefaultTimeZone());
+				stateHolder.Schedules[agent].ScheduledDay(date).PersonAssignment().Period
+					.Should()
+					.Be.EqualTo(i == 6
+						? new DateTimePeriod(dateTime1.AddHours(9), dateTime1.AddHours(17))
+						: new DateTimePeriod(dateTime1.AddHours(10), dateTime1.AddHours(18)));
+			}
+		}
+
+		[Test]
+		public void ShouldUseSameShiftWhenBlock()
+		{
+			var dateOnly = new DateOnly(2017, 9, 25);
+			var activity = ActivityFactory.CreateActivity("phone");
+			var skill = new Skill().WithId().For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen();
+			var scenario = new Scenario().WithId();
+			var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(0), TimeSpan.FromHours(60), TimeSpan.FromHours(11), TimeSpan.FromHours(8));
+			var contract = new Contract("contract") { WorkTimeDirective = worktimeDirective, PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(0), NegativeDayOffTolerance = 3 };
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(9, 0, 10, 0, 60), new TimePeriodWithSegment(17, 0, 18, 0, 60), shiftCategory));
+			ruleSet.AddLimiter(new ContractTimeLimiter(new TimePeriod(new TimeSpan(8, 0, 0), new TimeSpan(8, 0, 0)), TimeSpan.FromMinutes(15)));
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(dateOnly, new RuleSetBag(ruleSet), contract, 
+				ContractScheduleFactory.Create7DaysWorkingContractSchedule(), new PartTimePercentage("_"), new Team { Site = new Site("site") }, skill).WithSchedulePeriodOneWeek(dateOnly);
+			var skillDays = new List<ISkillDay>();
+			var asses = new List<IPersonAssignment>();
+			for (var i = 0; i < 7; i++)
+			{
+				skillDays.Add(
+					i == 6
+						? skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly.AddDays(i), TimeSpan.FromMinutes(60),
+							new Tuple<int, TimeSpan>(9, TimeSpan.FromMinutes(180)))
+						: skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly.AddDays(i), TimeSpan.FromMinutes(60),
+							new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(180)))
+				);
+				asses.Add(new PersonAssignment(agent, scenario, dateOnly.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 0, 17, 0)).WithId());
+			}
+			var optimizationPreferences = new OptimizationPreferences
+			{
+				General = new GeneralPreferences { ScheduleTag = NullScheduleTag.Instance, OptimizationStepShiftsWithinDay = true },
+				Extra = new ExtraPreferences { UseTeamBlockOption = true, UseBlockSameShift = true, BlockTypeValue = BlockFinderType.SchedulePeriod }
+			};
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(dateOnly, 1), agent, asses, skillDays);
+			
+			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] {agent}, DateOnlyPeriod.CreateWithNumberOfWeeks(dateOnly, 1), optimizationPreferences,
+				new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
+
+			for (var i = 0; i < 7; i++)
+			{
+				var date = dateOnly.AddDays(i);
+				var dateTime1 = TimeZoneHelper.ConvertToUtc(date.Date, agent.PermissionInformation.DefaultTimeZone());
+				stateHolder.Schedules[agent].ScheduledDay(date).PersonAssignment().Period
+					.Should().Be.EqualTo(new DateTimePeriod(dateTime1.AddHours(10), dateTime1.AddHours(18)));
+			}
+		}
 	}
 }

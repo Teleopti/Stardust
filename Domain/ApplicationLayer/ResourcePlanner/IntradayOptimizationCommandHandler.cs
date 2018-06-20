@@ -83,7 +83,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 							Agents = agentsToOptimize.Select(x => x.Id.Value),
 							CommandId = command.CommandId,
 							UserLocks = lockInfos,
-							Skills = island.SkillIds()
+							Skills = island.SkillIds(),
+							PlanningPeriodId = command.PlanningPeriodId
 						});
 					}
 				}

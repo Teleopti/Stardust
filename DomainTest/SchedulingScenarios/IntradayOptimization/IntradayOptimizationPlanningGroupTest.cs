@@ -66,13 +66,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var dateTime = TimeZoneHelper.ConvertToUtc(dateOnly.Date, agent.PermissionInformation.DefaultTimeZone());
 			PersonAssignmentRepository.GetSingle(dateOnly).Period
 				.Should().Be.EqualTo(new DateTimePeriod(dateTime.AddHours(8).AddMinutes(15), dateTime.AddHours(17).AddMinutes(15)));
-
 		}
 
 		[Test]
 		public void ShouldNotIntradayOptimizeForAgentNotInPlanningGroup()
 		{
 			var planningGroup = new PlanningGroup("Europe");
+			planningGroup.AddFilter(new TeamFilter(new Team()));
 			PlanningGroupRepository.Add(planningGroup);
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
 			var skill = SkillRepository.Has("skill", phoneActivity);

@@ -41,5 +41,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_planningGroups.Add(root);
 			return this;
 		}
+
+		public IPlanningGroup Has()
+		{
+			var planningGroup = new PlanningGroup().WithId();
+			_planningGroups.Add(planningGroup);
+			return planningGroup;
+		}
 	}
 }
