@@ -138,9 +138,6 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 			sqlCommand.Parameters.AddRange(parameters.ToArray());
 			sqlCommand.Connection = _connection;
 
-			if (_connection.State != ConnectionState.Open)
-				_connection.Open();
-
 			adapter.SelectCommand = sqlCommand;
 			adapter.Fill(returnValue, "Data");
 			sqlCommand.Parameters.Clear();

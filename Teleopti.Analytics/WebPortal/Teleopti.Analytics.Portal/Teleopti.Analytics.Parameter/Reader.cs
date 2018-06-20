@@ -35,10 +35,6 @@ namespace Teleopti.Analytics.Parameters
 			cmdType.Parameters.AddWithValue("@report_id", reportId);
 			cmdType.Parameters.AddWithValue("@group_page_code", groupPageIndex);
 
-			if (_connection.State != ConnectionState.Open)
-			{
-				_connection.Open();
-			}
 			adap.SelectCommand = cmdType;
 			adap.Fill(ret, "Controls");
 			_connection.Close();
