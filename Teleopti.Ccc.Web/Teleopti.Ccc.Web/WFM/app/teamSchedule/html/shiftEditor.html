@@ -1,15 +1,15 @@
 ﻿<div class="con-row">
 	<div class="con-flex">
-		<span class="name">{{vm.scheduleVm.Name}}</span>
+		<span>
+			<span class="name">{{vm.scheduleVm.Name}}</span>
+			<i ng-if="vm.isInDifferentTimezone" class="mdi mdi-earth"></i>
+		</span>
 		<span class="date">
 			<i class="mdi mdi-calendar"></i>
 			<span>{{vm.displayDate }}</span>
 		</span>
-		<span class="timezone">
-			<span>{{vm.timezoneName}}</span>
-			<i ng-if="vm.isInDifferentTimezone" class="mdi mdi-earth"></i>
-		</span>
 
+		<span class="timezone">{{vm.timezoneName}}</span>
 		<span ng-if="vm.scheduleVm.HasUnderlyingSchedules">
 			<span class="underlying-info">
 				<i class="mdi mdi-information mdi-alert info"></i>
@@ -42,7 +42,7 @@
 				</div>
 				<div ng-repeat="interval in vm.timelineVm.Intervals" class="interval">
 					<div class="time-label">
-						<span  class="label label-info" ng-class="{'highlight': vm.isSameDate(interval)}">{{ interval.Label}}</span>
+						<span class="label label-info" ng-class="{'highlight': vm.isSameDate(interval)}">{{ interval.Label}}</span>
 					</div>
 					<div class="ticks">
 						<span ng-repeat="tick in interval.Ticks" class="tick" ng-class="{'half-hour': tick.IsHalfHour, 'hour':tick.IsHour}"></span>
