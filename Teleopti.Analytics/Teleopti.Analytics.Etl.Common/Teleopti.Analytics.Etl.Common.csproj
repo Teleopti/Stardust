@@ -393,6 +393,7 @@
     <Compile Include="Transformer\Job\Steps\StageTimeZoneJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\StageWorkloadJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\StatisticsUpdateNotificationJobStep.cs" />
+    <Compile Include="Transformer\ScheduleForecastSkillResourceCalculationWithBpo.cs" />
     <Compile Include="Transformer\TimeZoneDimFactory.cs" />
     <Compile Include="Transformer\WindowsLogonInfo.cs" />
     <Compile Include="Transformer\KpiTargetTeamTransformer.cs" />
