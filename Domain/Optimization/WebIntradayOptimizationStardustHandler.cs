@@ -35,20 +35,20 @@ namespace Teleopti.Ccc.Domain.Optimization
 				using (_schedulingSourceScope.OnThisThreadUse(ScheduleSource.WebScheduling))
 				{
 					_intradayOptimizationFromWeb.Execute(@event.PlanningPeriodId);
-					SaveDetailToJobResult(@event, DetailLevel.Info, "", null);
+					SaveDetailToJobResult(@event, DetailLevel.Info, null);
 				}
 			}
 			catch (Exception e)
 			{
-				SaveDetailToJobResult(@event, DetailLevel.Error, "", e);
+				SaveDetailToJobResult(@event, DetailLevel.Error, e);
 				throw;
 			}
 		}
 
 		[UnitOfWork]
-		protected virtual void SaveDetailToJobResult(IntradayOptimizationOnStardustWasOrdered @event, DetailLevel level, string message, Exception exception)
+		protected virtual void SaveDetailToJobResult(IntradayOptimizationOnStardustWasOrdered @event, DetailLevel level, Exception exception)
 		{
-			_jobResultRepository.AddDetailAndCheckSuccess(@event.JobResultId, new JobResultDetail(level, message, DateTime.UtcNow, exception), 0);
+			_jobResultRepository.AddDetailAndCheckSuccess(@event.JobResultId, new JobResultDetail(level, string.Empty, DateTime.UtcNow, exception), 1);
 		}
 
 		/*

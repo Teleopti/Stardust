@@ -58,5 +58,37 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			FakeSchedulingSourceScope.UsedToBe().ForEach(x => x.Should().Be.EqualTo(ScheduleSource.WebScheduling));
 		}
+		
+		[Test]
+		public void ShouldNotSetFinishOkJobResultWhenExceptionIsThrown()
+		{
+			//AsSystem
+			Tenants.Has("Teleopti WFM");
+			var person = PersonFactory.CreatePerson().WithId(SystemUser.Id);
+			PersonRepository.Add(person);
+			var businessUnit = BusinessUnitFactory.CreateWithId("something");
+			BusinessUnitRepository.Add(businessUnit);
+			ScenarioRepository.Has("some name");
+			//
+			var jobResult = new JobResult(string.Empty, new DateOnlyPeriod(),new Person(), DateTime.UtcNow);
+			JobResultRepository.Add(jobResult);
+			var nonExistingPlanningPeriodId = Guid.NewGuid();
+
+			
+			Assert.That(() =>
+			{
+				Target.Handle(new IntradayOptimizationOnStardustWasOrdered
+				{
+					JobResultId = jobResult.Id.Value,
+					LogOnBusinessUnitId = businessUnit.Id.Value,
+					LogOnDatasource = "Teleopti WFM",
+					PlanningPeriodId = nonExistingPlanningPeriodId
+				});
+				
+			}, Throws.Exception);	
+
+			jobResult.Details.Any().Should().Be.True();
+			jobResult.FinishedOk.Should().Be.False();
+		}
 	}
 }
