@@ -77,6 +77,7 @@
 		vm.activeBpos = [];
 		var skills;
 		vm.isSuccessfulRemove = false;
+		vm.fileName = '';
 		getSkills();
 		getSkillAreas();
 		getMessage();
@@ -144,11 +145,13 @@
 
 				var query = staffingService.importbpo.save({ FileContent: content, FileName: filename });
 				vm.isSuccessful = false;
+				vm.filename = '';
 				vm.isFailed = false;
 				vm.errors = [];
 
 				query.$promise.then(function(response) {
 					if (response.Success) {
+						vm.fileName = filename;
 						vm.isSuccessful = true;
 						getActiveBpos();
 						//getGanttData();

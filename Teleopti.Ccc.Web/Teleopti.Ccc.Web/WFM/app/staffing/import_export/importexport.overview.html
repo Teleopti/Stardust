@@ -67,7 +67,7 @@
 								<md-progress-linear ng-show="vm.isProcessing" md-mode="indeterminate"></md-progress-linear>
 								<div ng-show="vm.isSuccessful">
 									<div class="alert-success notice-spacer">
-										<i class='mdi mdi-thumb-up'> {{'SuccessfullyImported'|translate}}</i>
+										<i class='mdi mdi-thumb-up'>{{vm.fileName}} - {{'SuccessfullyImported'|translate}}</i>
 									</div>
 								</div>
 								<div ng-show="vm.isFailed" class="alert-error notice-spacer">
