@@ -118,8 +118,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var activity = ActivityRepository.Has("_");
 			SkillRepository.Has("skill", activity);
 			ScenarioRepository.Has("some name");
-
-			var planningPeriod = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()));
+			var planningPeriod = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()), new PlanningGroup());
 			var jobResultId = Guid.NewGuid();
 			var jobResult = new JobResult(JobCategory.WebSchedule, new DateOnlyPeriod(2011, 8, 1, 2011, 8, 31), PersonFactory.CreatePerson(), DateTime.UtcNow).WithId(jobResultId);
 			planningPeriod.JobResults.Add(jobResult);
@@ -149,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public void ShouldSaveExceptionToJobResult()
 		{
 			SetUp();
-			var planningPeriod = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()));
+			var planningPeriod = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()), new PlanningGroup());
 			var jobResultId = Guid.NewGuid();
 			var jobResult = new JobResult(JobCategory.WebSchedule, new DateOnlyPeriod(2011, 8, 1, 2011, 8, 31), PersonFactory.CreatePerson(), DateTime.UtcNow).WithId(jobResultId);
 			planningPeriod.JobResults.Add(jobResult);
