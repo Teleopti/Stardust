@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+﻿﻿using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
@@ -20,154 +20,166 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldReturnRulesForContractFilter()
 		{
+			var planningGroup = new PlanningGroup();
 			var contract = new Contract("_");
-			var dayOffRules = new PlanningGroupSettings {DayOffsPerWeek = new MinMax<int>(19, 20)};
+			var dayOffRules = new PlanningGroupSettings(planningGroup) { DayOffsPerWeek = new MinMax<int>(19, 20)};
 			dayOffRules.AddFilter(new ContractFilter(contract));
 			PlanningGroupSettingsRepository.Add(dayOffRules);
 			var agent = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(1900,1,1));
 			agent.Period(new DateOnly(2000,1,1)).PersonContract = new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_"));
 
-			Target.Create().ForAgent(agent, new DateOnly(2000, 1, 1)).DaysOffPerWeekValue
+			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).DaysOffPerWeekValue
 				.Should().Be.EqualTo(new MinMax<int>(19, 20));
 		}
 
 		[Test]
 		public void ShouldNotReturnRulesForContractFilterIfAgentHaveNoContract()
 		{
+			var planningGroup = new PlanningGroup();
 			var contract = new Contract("_");
-			var dayOffRules = new PlanningGroupSettings { DayOffsPerWeek = new MinMax<int>(19, 20) };
+			var dayOffRules = new PlanningGroupSettings(planningGroup) {  DayOffsPerWeek = new MinMax<int>(19, 20) };
 			dayOffRules.AddFilter(new ContractFilter(contract));
 			PlanningGroupSettingsRepository.Add(dayOffRules);
 			var agent = new Person();
 
-			Target.Create().ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveDaysOffValue
+			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveDaysOffValue
 				.Should().Be.EqualTo(PlanningGroupSettings.CreateDefault().ConsecutiveDayOffs);
 		}
 
 		[Test]
 		public void ShouldNotReturnRulesForWrongContractFilter()
 		{
+			var planningGroup = new PlanningGroup();
 			var contract = new Contract("_");
-			var dayOffRules = new PlanningGroupSettings { DayOffsPerWeek = new MinMax<int>(19, 20) };
+			var dayOffRules = new PlanningGroupSettings(planningGroup) {  DayOffsPerWeek = new MinMax<int>(19, 20) };
 			dayOffRules.AddFilter(new ContractFilter(contract));
 			PlanningGroupSettingsRepository.Add(dayOffRules);
 			var agent = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(1900, 1, 1));
 			agent.Period(new DateOnly(2000, 1, 1)).PersonContract = new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_"));
 
 
-			Target.Create().ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
+			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
 				.Should().Be.EqualTo(PlanningGroupSettings.CreateDefault().ConsecutiveWorkdays);
 		}
 
 		[Test]
 		public void ShouldReturnRulesForSiteFilter()
 		{
+			var planningGroup = new PlanningGroup();
 			var agent = PersonFactory.CreatePersonWithPersonPeriodTeamSite(new DateOnly(1900, 1, 1));
-			var dayOffRules = new PlanningGroupSettings { ConsecutiveWorkdays = new MinMax<int>(5, 7) };
+			var dayOffRules = new PlanningGroupSettings(planningGroup) {  ConsecutiveWorkdays = new MinMax<int>(5, 7) };
 			dayOffRules.AddFilter(new SiteFilter(agent.Period(new DateOnly(2000,1,1)).Team.Site));
 			PlanningGroupSettingsRepository.Add(dayOffRules);
 		
-			Target.Create().ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
+			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
 				.Should().Be.EqualTo(new MinMax<int>(5, 7));
 		}
 
 		[Test]
 		public void ShouldNotReturnRulesForSiteFilterIfAgentHaveNoPersonPeriod()
 		{
-			var dayOffRules = new PlanningGroupSettings { DayOffsPerWeek = new MinMax<int>(19, 20) };
+			var planningGroup = new PlanningGroup();
+			var dayOffRules = new PlanningGroupSettings(planningGroup) {  DayOffsPerWeek = new MinMax<int>(19, 20) };
 			dayOffRules.AddFilter(new SiteFilter(new Site("_")));
 			PlanningGroupSettingsRepository.Add(dayOffRules);
 			var agent = new Person();
 
-			Target.Create().ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveDaysOffValue
+			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveDaysOffValue
 				.Should().Be.EqualTo(PlanningGroupSettings.CreateDefault().ConsecutiveDayOffs);
 		}
 
 		[Test]
 		public void ShouldReturnRulesForTeamFilter()
 		{
+			var planningGroup = new PlanningGroup();
 			var agent = PersonFactory.CreatePersonWithPersonPeriodTeamSite(new DateOnly(1900, 1, 1));
-			var dayOffRules = new PlanningGroupSettings { ConsecutiveWorkdays = new MinMax<int>(6, 7) };
+			var dayOffRules = new PlanningGroupSettings(planningGroup) {  ConsecutiveWorkdays = new MinMax<int>(6, 7) };
 			dayOffRules.AddFilter(new TeamFilter(agent.Period(new DateOnly(2000, 1, 1)).Team));
 			PlanningGroupSettingsRepository.Add(dayOffRules);
 
-			Target.Create().ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
+			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
 				.Should().Be.EqualTo(new MinMax<int>(6, 7));
 		}
 
 		[Test]
 		public void ShouldNotReturnRulesForTeamFilterIfAgentHaveNoPersonPeriod()
 		{
-			var dayOffRules = new PlanningGroupSettings { DayOffsPerWeek = new MinMax<int>(1, 1) };
+			var planningGroup = new PlanningGroup();
+			var dayOffRules = new PlanningGroupSettings(planningGroup) {  DayOffsPerWeek = new MinMax<int>(1, 1) };
 			dayOffRules.AddFilter(new TeamFilter(new Team()));
 			PlanningGroupSettingsRepository.Add(dayOffRules);
 			var agent = new Person();
 
-			Target.Create().ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveDaysOffValue
+			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveDaysOffValue
 				.Should().Be.EqualTo(PlanningGroupSettings.CreateDefault().ConsecutiveDayOffs);
 		}
 
 		[Test]
 		public void ShouldUseExplicitFilterWhenDefaultFilterExists()
 		{
+			var planningGroup = new PlanningGroup();
 			PlanningGroupSettingsRepository.Add(PlanningGroupSettings.CreateDefault());
 			var agent = PersonFactory.CreatePersonWithPersonPeriodTeamSite(new DateOnly(1900, 1, 1));
-			var dayOffRules = new PlanningGroupSettings { ConsecutiveWorkdays = new MinMax<int>(6, 7) };
+			var dayOffRules = new PlanningGroupSettings(planningGroup) {  ConsecutiveWorkdays = new MinMax<int>(6, 7) };
 			dayOffRules.AddFilter(new TeamFilter(agent.Period(new DateOnly(2000, 1, 1)).Team));
 			PlanningGroupSettingsRepository.Add(dayOffRules);
 			
-			Target.Create().ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
+			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
 				.Should().Be.EqualTo(new MinMax<int>(6, 7));
 		}
 
 		[Test]
 		public void ShouldDoAndOperationBetweenDifferentFilters()
 		{
+			var planningGroup = new PlanningGroup();
 			var contractNotOnAgent = new Contract("_");
 			var agent = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(1900, 1, 1));
 			agent.Period(new DateOnly(2000, 1, 1)).PersonContract = new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_"));
-			var dayOffRules = new PlanningGroupSettings { ConsecutiveWorkdays = new MinMax<int>(6, 7) };
+			var dayOffRules = new PlanningGroupSettings(planningGroup) {  ConsecutiveWorkdays = new MinMax<int>(6, 7) };
 			dayOffRules.AddFilter(new TeamFilter(agent.Period(new DateOnly(2000, 1, 1)).Team));
 			dayOffRules.AddFilter(new ContractFilter(contractNotOnAgent));
 
 			PlanningGroupSettingsRepository.Add(dayOffRules);
 
-			Target.Create().ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
+			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
 				.Should().Be.EqualTo(PlanningGroupSettings.CreateDefault().ConsecutiveWorkdays);	
 		}
 
 		[Test]
 		public void ShouldDoOrOperationWithinSameFilter()
 		{
+			var planningGroup = new PlanningGroup();
 			var agent = PersonFactory.CreatePersonWithPersonPeriodTeamSite(new DateOnly(1900, 1, 1));
-			var dayOffRules = new PlanningGroupSettings { ConsecutiveWorkdays = new MinMax<int>(1, 2) };
+			var dayOffRules = new PlanningGroupSettings(planningGroup) {  ConsecutiveWorkdays = new MinMax<int>(1, 2) };
 			dayOffRules.AddFilter(new TeamFilter(new Team()));
 			dayOffRules.AddFilter(new TeamFilter(agent.Period(new DateOnly(2000, 1, 1)).Team));
 			PlanningGroupSettingsRepository.Add(dayOffRules);
 
-			Target.Create().ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
+			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
 				.Should().Be.EqualTo(new MinMax<int>(1, 2));
 		}
 
 		[Test]
 		public void ShouldDoOrOperationBetweenTeamAndSite()
 		{
+			var planningGroup = new PlanningGroup();
 			var agent = PersonFactory.CreatePersonWithPersonPeriodTeamSite(new DateOnly(1900, 1, 1));
-			var dayOffRules = new PlanningGroupSettings { ConsecutiveWorkdays = new MinMax<int>(1, 2) };
+			var dayOffRules = new PlanningGroupSettings(planningGroup) {  ConsecutiveWorkdays = new MinMax<int>(1, 2) };
 			dayOffRules.AddFilter(new TeamFilter(new Team()));
 			dayOffRules.AddFilter(new SiteFilter(agent.Period(new DateOnly(2000, 1, 1)).Team.Site));
 			PlanningGroupSettingsRepository.Add(dayOffRules);
 
-			Target.Create().ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
+			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
 				.Should().Be.EqualTo(new MinMax<int>(1, 2));
 		}
 
 		[Test]
 		public void ShouldSelectDayOfffRuleWithHighestPriority()
 		{
+			var planningGroup = new PlanningGroup();
 			var agent = PersonFactory.CreatePersonWithPersonPeriodTeamSite(new DateOnly(1900, 1, 1));
-			var dayOffRules = new PlanningGroupSettings { ConsecutiveWorkdays = new MinMax<int>(1, 2) , Priority = 1};
-			var dayOffRules2 = new PlanningGroupSettings { ConsecutiveWorkdays = new MinMax<int>(1, 3), Priority = 2 };
+			var dayOffRules = new PlanningGroupSettings(planningGroup) {  ConsecutiveWorkdays = new MinMax<int>(1, 2) , Priority = 1};
+			var dayOffRules2 = new PlanningGroupSettings(planningGroup) {  ConsecutiveWorkdays = new MinMax<int>(1, 3), Priority = 2 };
 
 
 			dayOffRules.AddFilter(new SiteFilter(agent.Period(new DateOnly(2000, 1, 1)).Team.Site));
@@ -176,15 +188,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			PlanningGroupSettingsRepository.Add(dayOffRules);
 			PlanningGroupSettingsRepository.Add(dayOffRules2);
 
-			Target.Create().ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
+			Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
 				.Should().Be.EqualTo(new MinMax<int>(1, 3));
 		}
 
 		[Test]
 		public void ShouldMapPropertiesForDayOffRules()
 		{
+			var planningGroup = new PlanningGroup();
 			var agent = PersonFactory.CreatePersonWithPersonPeriodTeamSite(new DateOnly(1900, 1, 1));
-			var dayOffRules = new PlanningGroupSettings
+			var dayOffRules = new PlanningGroupSettings(planningGroup)
 			{
 				ConsecutiveWorkdays = new MinMax<int>(1, 2),
 				DayOffsPerWeek = new MinMax<int>(3, 4),
@@ -194,7 +207,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			};
 			PlanningGroupSettingsRepository.Add(dayOffRules);
 
-			var daysOffPreferences = Target.Create().ForAgent(agent, new DateOnly(2000, 1, 1));
+			var daysOffPreferences = Target.Create(planningGroup).ForAgent(agent, new DateOnly(2000, 1, 1));
 			daysOffPreferences.ConsecutiveWorkdaysValue.Should().Be.EqualTo(new MinMax<int>(1, 2));
 			daysOffPreferences.DaysOffPerWeekValue.Should().Be.EqualTo(new MinMax<int>(3, 4));
 			daysOffPreferences.ConsecutiveDaysOffValue.Should().Be.EqualTo(new MinMax<int>(5, 6));
