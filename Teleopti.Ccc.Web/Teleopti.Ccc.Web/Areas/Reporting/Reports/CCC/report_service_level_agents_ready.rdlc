@@ -1965,7 +1965,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=code.CalcRatio(sum(Fields!calls_answered.Value),sum(Fields!calls_offered.Value),0)</Value>
+                              <Value>=code.CalcRatioPercent(sum(Fields!calls_answered.Value),sum(Fields!calls_offered.Value),0)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
@@ -2006,7 +2006,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=code.CalcRatio(sum(Fields!service_level_numerator.Value),sum(Fields!service_level_denominator.Value),0)</Value>
+                              <Value>=code.CalcRatioPercent(sum(Fields!service_level_numerator.Value),sum(Fields!service_level_denominator.Value),0)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
@@ -2329,7 +2329,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=code.CalcRatio(Fields!calls_answered.Value,Fields!calls_offered.Value,0)</Value>
+                              <Value>=code.CalcRatioPercent(Fields!calls_answered.Value,Fields!calls_offered.Value,0)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <Format>0.0%</Format>
@@ -2735,7 +2735,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=code.CalcRatio(sum(Fields!calls_answered.Value),sum(Fields!calls_offered.Value),0)</Value>
+                              <Value>=code.CalcRatioPercent(sum(Fields!calls_answered.Value),sum(Fields!calls_offered.Value),0)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
@@ -2777,7 +2777,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=code.CalcRatio(sum(Fields!service_level_numerator.Value),sum(Fields!service_level_denominator.Value),0)</Value>
+                              <Value>=code.CalcRatioPercent(sum(Fields!service_level_numerator.Value),sum(Fields!service_level_denominator.Value),0)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
@@ -3808,7 +3808,8 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>
-  <Code>Public Function ToPeriod(ByVal TheDate As DateTime, ByVal Period As String, ByVal PeriodType As Integer) as String
+  <Code>
+Public Function ToPeriod(ByVal TheDate As DateTime, ByVal Period As String, ByVal PeriodType As Integer) as String
 	Select Case PeriodType
 		Case 4
 			return Cstr(FormatDateTime(TheDate, DateFormat.ShortDate))
@@ -3819,7 +3820,7 @@
 	End Select
 End Function
 
-Public Function CalcRatio(ByVal Numerator As Object, ByVal Denominator As object, ByVal DivZeroDefault As Object) As Object
+Public Function CalcRatioPercent(ByVal Numerator As Object, ByVal Denominator As object, ByVal DivZeroDefault As Object) As Object
    If Denominator &lt;&gt; 0 Then
 	select case Numerator/Denominator
 	case &gt;1
@@ -3831,6 +3832,15 @@ Public Function CalcRatio(ByVal Numerator As Object, ByVal Denominator As object
         Return DivZeroDefault 
    End If
 End Function
+	  
+Public Function CalcRatio(ByVal Numerator As Object, ByVal Denominator As object, ByVal DivZeroDefault As Object) As Object
+	If Denominator &lt;&gt; 0 Then
+		Return Numerator/Denominator
+	Else
+		Return DivZeroDefault 
+	End If
+End Function
+
 </Code>
   <Language>=Parameters!culture.Value</Language>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
