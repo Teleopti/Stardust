@@ -24,10 +24,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		private FakeToggleManager _fakeToggleManager;
 
 		[DatapointSource]
-		public Toggles[] ToggleList =
-		{
-			Toggles.Wfm_Staffing_StaffingReadModel49DaysStep2_45109
-		};
+		public Toggles[] ToggleList = {};
 
 		[SetUp]
 		public void Setup()

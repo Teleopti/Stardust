@@ -59,8 +59,6 @@
 		Wfm_Requests_DenyRequestWhenAllSkillsClosed_46384,
 		AddOrRemoveTenantsWithoutRestart_43635,
 
-		Wfm_Staffing_StaffingReadModel49DaysStep2_45109,
-
 		Wfm_People_ImportAndCreateAgentFromFile_42528,
 		Wfm_People_SetFallbackValuesForImporting_43289,
 		Wfm_People_MoveImportJobToBackgroundService_43582,

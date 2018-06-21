@@ -22,14 +22,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CompareProjection>().SingleInstance();
 
 			builder.RegisterType<UpdateStaffingLevelReadModelOnlySkillCombinationResources>().As<IUpdateStaffingLevelReadModel>().InstancePerLifetimeScope();
-
-			builder.RegisterType<StaffingSettingsReader28Days>().As<IStaffingSettingsReader>().SingleInstance();
+			builder.RegisterType<StaffingSettingsReader49Days>().As<IStaffingSettingsReader>().SingleInstance();
 			
-			if (_configuration.Toggle((Toggles.Wfm_Staffing_StaffingReadModel49DaysStep2_45109)))
-			{
-				builder.RegisterType<StaffingSettingsReader49Days>().As<IStaffingSettingsReader>().SingleInstance();
-			}
-
 			builder.RegisterType<SkillStaffingDataLoader>().As<ISkillStaffingDataLoader>().SingleInstance();
 			builder.RegisterType<ScheduledStaffingViewModelCreator>().SingleInstance();
 			builder.RegisterType<BacklogSkillTypesForecastCalculator>().SingleInstance();

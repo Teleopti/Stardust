@@ -7,13 +7,7 @@ namespace Teleopti.Ccc.Infrastructure.Requests
 	{
 		public static int GetDays(IToggleManager toggleManager)
 		{
-			int staffingAvailableDays;
-
-			if (toggleManager.IsEnabled(Toggles.Wfm_Staffing_StaffingReadModel49DaysStep2_45109))
-				staffingAvailableDays = 48;
-			else 
-				staffingAvailableDays = 27;
-			
+			var staffingAvailableDays = 48;
 			return staffingAvailableDays;
 		}
 	}
