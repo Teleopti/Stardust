@@ -21,39 +21,6 @@ namespace Teleopti.Ccc.Domain.Staffing
 		}
 	}
 
-	public class StaffingSettingsReader : IStaffingSettingsReader
-	{
-		
-		public int GetIntSetting(string setting, int defaultValue)
-		{
-			switch (setting)
-			{
-				case KeyNames.StaffingReadModelNumberOfDays:
-					return 14;
-				case KeyNames.StaffingReadModelHistoricalHours:
-					return 8*24;
-			}
-
-			return defaultValue;
-		}
-	}
-
-	public class StaffingSettingsReader28Days : IStaffingSettingsReader
-	{
-		public int GetIntSetting(string setting, int defaultValue)
-		{
-			switch (setting)
-			{
-				case KeyNames.StaffingReadModelNumberOfDays:
-					return 28;
-				case KeyNames.StaffingReadModelHistoricalHours:
-					return 8*24;
-			}
-
-			return defaultValue;
-		}
-	}
-
 	public class StaffingSettingsReader49Days : IStaffingSettingsReader
 	{
 		public int GetIntSetting(string setting, int defaultValue)

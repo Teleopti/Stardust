@@ -271,11 +271,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		int ImmediatePeriodInHours { get; }
 	}
 
-	public class AbsenceRequestOneDaySetting : IAbsenceRequestSetting
-	{
-		public int ImmediatePeriodInHours => 25;
-	}
-
 	public class AbsenceRequestFourteenDaySetting : IAbsenceRequestSetting
 	{
 		public int ImmediatePeriodInHours => 24 * 14 + 1;

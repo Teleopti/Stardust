@@ -21,7 +21,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 			//TODO refactor to ioc
 			StardustRepository = new StardustRepository(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 			Target = new StardustController(StardustRepository, new FakeStardustSender(), new FakeTenants(),
-				new StaffingSettingsReader(), new FakePingNode());
+				new StaffingSettingsReader49Days(), new FakePingNode());
 		}
 
 		[Test]

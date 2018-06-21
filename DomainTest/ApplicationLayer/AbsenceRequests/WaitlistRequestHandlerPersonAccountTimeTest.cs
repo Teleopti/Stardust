@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
 	[Toggle(Toggles.Wfm_Requests_ProcessWaitlistBefore24hRequests_45767)]
-	[Toggle(Toggles.Wfm_Requests_HandleFourteenDaysFast_43390)]
 	public class WaitlistRequestHandlerPersonAccountTimeTest : IIsolateSystem
 	{
 		public WaitlistRequestHandler Target;
