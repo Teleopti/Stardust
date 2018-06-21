@@ -1654,9 +1654,6 @@
     <Content Include="WFM\app\resourceplanner\tree_data\demo.html" />
     <Content Include="WFM\app\resourceplanner\tree_data\main.controller.js" />
     <Content Include="WFM\app\resourceplanner\tree_data\main.html" />
-    <Content Include="WFM\app\resourceplanner\web_performance_tests\planningperiods.service.js" />
-    <Content Include="WFM\app\resourceplanner\web_performance_tests\planningperiods.controller.js" />
-    <Content Include="WFM\app\resourceplanner\web_performance_tests\planningperiods.html" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.debounce.service.js" />
     <Content Include="Areas\MyTime\Views\Schedule\ProbabilityOptionsPartial.cshtml" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel.js" />
@@ -1667,13 +1664,8 @@
     <Content Include="Areas\MyTime\Views\Schedule\MobileDayPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Schedule\MobileMonthPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\AppGuide\WFMAppPartial.cshtml" />
-    <Content Include="WFM\app\resourceplanner\web_performance_tests\resourceplanner-report.html" />
-    <Content Include="WFM\app\resourceplanner\web_performance_tests\resourceplanner.report.controller.js" />
-    <Content Include="WFM\app\resourceplanner\web_performance_tests\resourceplanner.report.service.js" />
-    <Content Include="WFM\app\resourceplanner\web_performance_tests\resourceplanner.temp.controller.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.createform.controller.js.orig" />
     <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
-    <Content Include="WFM\app\resourceplanner\web_performance_tests\temp.html" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents.RTA_ImprovedStateGroupFilter_48724.html" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.configurationValidation.spec.js" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.controller.filter.sort.spec.js" />
