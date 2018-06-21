@@ -22,50 +22,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public FakePlanningGroupSettingsRepository PlanningGroupSettingsRepository;
 
 		[Test]
-		public void ShouldIncludePersistedDayOffRuleWhenLoadingAll()
-		{
-			var presentInDb = new PlanningGroupSettings
-			{
-				DayOffsPerWeek = new MinMax<int>(2, 3),
-				ConsecutiveDayOffs = new MinMax<int>(1, 5),
-				ConsecutiveWorkdays = new MinMax<int>(2, 3),
-				Name = RandomName.Make()
-			}.WithId();
-			PlanningGroupSettingsRepository.Add(presentInDb);
-
-			var loaded = Target.FetchAllWithoutPlanningGroup().Single(x => !x.Default);
-
-			loaded.MinDayOffsPerWeek.Should().Be.EqualTo(presentInDb.DayOffsPerWeek.Minimum);
-			loaded.MaxDayOffsPerWeek.Should().Be.EqualTo(presentInDb.DayOffsPerWeek.Maximum);
-			loaded.MinConsecutiveDayOffs.Should().Be.EqualTo(presentInDb.ConsecutiveDayOffs.Minimum);
-			loaded.MaxConsecutiveDayOffs.Should().Be.EqualTo(presentInDb.ConsecutiveDayOffs.Maximum);
-			loaded.MinConsecutiveWorkdays.Should().Be.EqualTo(presentInDb.ConsecutiveWorkdays.Minimum);
-			loaded.MaxConsecutiveWorkdays.Should().Be.EqualTo(presentInDb.ConsecutiveWorkdays.Maximum);
-			loaded.Id.Should().Be.EqualTo(presentInDb.Id);
-			loaded.Default.Should().Be.False();
-			loaded.Name.Should().Be.EqualTo(presentInDb.Name);
-
-		}
-
-		[Test]
-		public void ShouldReturnDefaultRuleWhenNotExistsInDb()
-		{
-			var loaded = Target.FetchAllWithoutPlanningGroup().Single(x => x.Default);
-			loaded.Should().Not.Be.Null();
-		}
-
-		[Test]
-		public void ShouldNotAddExtraDefaultRuleIfPresentInDb()
-		{
-			var presentDefaultRule = PlanningGroupSettings.CreateDefault().WithId();
-			PlanningGroupSettingsRepository.Add(presentDefaultRule);
-
-			var loaded = Target.FetchAllWithoutPlanningGroup().Single();
-
-			loaded.Id.Should().Be.EqualTo(presentDefaultRule.Id);
-		}
-
-		[Test]
 		public void ShouldIncludeContractFilterWhenFetching()
 		{
 			var filterName = RandomName.Make();
@@ -75,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			dayOffRule.AddFilter(contractFilter);
 			PlanningGroupSettingsRepository.Add(dayOffRule);
 
-			var loaded = Target.FetchAllWithoutPlanningGroup().Single(x => x.Id.Equals(dayOffRule.Id.Value));
+			var loaded = Target.Fetch(dayOffRule.Id.Value);
 
 			var filter = loaded.Filters.Single();
 			filter.FilterType.Should().Be.EqualTo(FilterModel.ContractFilterType);
@@ -93,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			dayOffRule.AddFilter(teamFilter);
 			PlanningGroupSettingsRepository.Add(dayOffRule);
 
-			var loaded = Target.FetchAllWithoutPlanningGroup().Single(x => x.Id.Equals(dayOffRule.Id.Value));
+			var loaded = Target.Fetch(dayOffRule.Id.Value);
 
 			var filter = loaded.Filters.Single();
 			filter.FilterType.Should().Be.EqualTo(FilterModel.TeamFilterType);
@@ -111,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			dayOffRule.AddFilter(siteFilter);
 			PlanningGroupSettingsRepository.Add(dayOffRule);
 
-			var loaded = Target.FetchAllWithoutPlanningGroup().Single(x => x.Id.Equals(dayOffRule.Id.Value));
+			var loaded = Target.Fetch(dayOffRule.Id.Value);
 
 			var filter = loaded.Filters.Single();
 			filter.FilterType.Should().Be.EqualTo(FilterModel.SiteFilterType);

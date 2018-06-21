@@ -17,11 +17,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_planningGroupRepository = planningGroupRepository;
 		}
 
-		public IEnumerable<PlanningGroupSettingsModel> FetchAllWithoutPlanningGroup()
-		{
-			throw new Exception("_");
-		}
-
 		public PlanningGroupSettingsModel Fetch(Guid id)
 		{
 			var planningGroupSettings = _planningGroupSettingsRepository.Get(id);
