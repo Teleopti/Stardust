@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 {
 
 	[RequestPerformanceTuningTest]
-	[Toggle(Toggles.Wfm_Requests_ProcessWaitlistBefore24hRequests_45767)]
 	public class WaitlistRequestProcessorPerformanceTest : PerformanceTestWithOneTimeSetup
 	{
 		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;

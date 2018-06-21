@@ -79,19 +79,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				<IBusinessRuleConfigProvider, BusinessRuleConfigProvider, BusinessRuleConfigProviderToggle74889Off>(builder,
 					Toggles.MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889);
 
-			registerType
-				<IFilterRequests, FilterOutRequestsHandledByReadmodel, NoFilterCheckRequests>(builder,
-						Toggles.Wfm_Requests_ProcessWaitlistBefore24hRequests_45767);
-
+			builder.RegisterType<FilterOutRequestsHandledByReadmodel>().As<IFilterRequests>().SingleInstance();
 			
 			builder.RegisterType<RequestAllowanceProvider>().As<IRequestAllowanceProvider>().SingleInstance();
 			builder.RegisterType<ShiftTradeApproveService>().As<IShiftTradeApproveService>().SingleInstance();
 
 			builder.RegisterType<RequestStrategySettingsReader>().As<IRequestStrategySettingsReader>().SingleInstance();
-			registerType
-				<IRequestProcessor, RequestProcessor, IntradayRequestProcessorOld>(builder,
-						Toggles.Wfm_Requests_ProcessWaitlistBefore24hRequests_45767);
-
+			builder.RegisterType<RequestProcessor>().As<IRequestProcessor>().SingleInstance();
+			
 			builder.RegisterType<AbsenceRequestFourteenDaySetting>().As<IAbsenceRequestSetting>().SingleInstance();
 			
 			if (_configuration.Toggle(Toggles.OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944))

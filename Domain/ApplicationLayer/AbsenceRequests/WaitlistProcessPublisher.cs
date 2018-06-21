@@ -1,13 +1,11 @@
 ﻿using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
-	[EnabledBy(Toggles.Wfm_Requests_ProcessWaitlistBefore24hRequests_45767)]
 	public class WaitlistProcessPublisher : IHandleEvent<TenantHourTickEvent>, IRunOnHangfire
 	{
 		private readonly IEventPublisher _publisher;

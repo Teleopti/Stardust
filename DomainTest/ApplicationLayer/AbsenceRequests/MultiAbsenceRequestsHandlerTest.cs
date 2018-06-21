@@ -318,7 +318,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			personRequest.IsApproved.Should().Be.EqualTo(true);
 		}
 
-		[Test, Toggle(Toggles.Wfm_Requests_ProcessWaitlistBefore24hRequests_45767)]
 		public void ShouldFilterWaitlistedRequests()
 		{
 			var dateTimeNow = new DateTime(2016, 12, 01, 8, 0, 0, 0);
@@ -403,7 +402,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			requestUsingBudgetGroup.IsApproved.Should().Be.True();
 		}
 
-		[Test, Toggle(Toggles.Wfm_Requests_ProcessWaitlistBefore24hRequests_45767)]
 		public void ShouldHandleRequestsWithSeconds()
 		{
 			var dateTimeNow = new DateTime(2016, 12, 01, 8, 0, 0, 0);
@@ -490,7 +488,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			requestUsingBudgetGroup.IsApproved.Should().Be.True();
 		}
 
-		[Test, Toggle(Toggles.Wfm_Requests_ProcessWaitlistBefore24hRequests_45767)]
 		public void ShouldFilterWaitlistedRequestsAndSkipWithNoWCS_48682()
 		{
 			var dateTimeNow = new DateTime(2016, 12, 01, 8, 0, 0, 0);

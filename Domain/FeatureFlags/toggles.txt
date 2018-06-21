@@ -149,8 +149,6 @@ WFM_Intraday_Refactoring_74652 = RC
 
 # Ziggy #
 WfmStaffing_AddOvertime_42524 = RC
-
-Wfm_Requests_ProcessWaitlistBefore24hRequests_45767 = true
 Wfm_Requests_DenyRequestWhenAllSkillsClosed_46384 = true
 AddOrRemoveTenantsWithoutRestart_43635 = true
 People_ImprovePersonAccountAccuracy_74914 = true

@@ -27,7 +27,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
-	[Toggle(Toggles.Wfm_Requests_ProcessWaitlistBefore24hRequests_45767)]
 	public class RequestProcessorTest : IIsolateSystem
 	{
 		public IRequestProcessor Target;
