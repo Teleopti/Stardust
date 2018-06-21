@@ -34,12 +34,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting
 		private static void importForecastView(ContainerBuilder builder)
         {
             builder.RegisterType<SaveImportForecastFileCommand>().As<ISaveImportForecastFileCommand>();
-			
-			if (_configuration.Toggle(Toggles.Forecast_FileImport_UnifiedFormat_46585))
-				builder.RegisterType<ValidateImportForecastFileCommand>().As<IValidateImportForecastFileCommand>();
-			else
-				builder.RegisterType<ValidateImportForecastFileCommandOld>().As<IValidateImportForecastFileCommand>();
-
+			builder.RegisterType<ValidateImportForecastFileCommand>().As<IValidateImportForecastFileCommand>();
+		
             builder.RegisterType<ImportForecastView>()
                 .As<IImportForecastView>()
                 .OnActivated(e => e.Instance.Presenter = e.Context.Resolve<ImportForecastPresenter>())
@@ -61,10 +57,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting
             builder.RegisterType<HandleJobHistoryScope>().As<IJobHistoryViewFactory>();
             builder.RegisterType<JobHistoryPresenter>().InstancePerLifetimeScope();
 			
-			if (_configuration.Toggle(Toggles.Forecast_FileImport_UnifiedFormat_46585))
-            	builder.RegisterType<ForecastsRowExtractor>().As<IForecastsRowExtractor>();
-			else
-				builder.RegisterType<ForecastsRowExtractorOld>().As<IForecastsRowExtractor>();
+			builder.RegisterType<ForecastsRowExtractor>().As<IForecastsRowExtractor>();
+			
         }
 
         private class HandleJobHistoryScope : IJobHistoryViewFactory

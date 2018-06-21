@@ -922,7 +922,6 @@
     <Compile Include="Forecasting\Export\SaveForecastToSkillCommandTest.cs" />
     <Compile Include="Forecasting\ForecastsFile\ForecastsFileValidatorTest.cs" />
     <Compile Include="Forecasting\Import\ForecastFileTest.cs" />
-    <Compile Include="Forecasting\Import\ForecastsFileContentProviderOldTest.cs" />
     <Compile Include="Forecasting\Import\ForecastsRowTest.cs" />
     <Compile Include="Forecasting\Import\ForecastsRowExtractorTest.cs" />
     <Compile Include="Forecasting\Import\IsColumnCountInRowValidTest.cs" />
@@ -1659,7 +1658,6 @@
     <Compile Include="SiteOpenHours\SiteWithOpenHourProviderTest.cs" />
     <Compile Include="Staffing\BpoProviderTest.cs" />
     <Compile Include="Staffing\CompareProjectionTest.cs" />
-    <Compile Include="Staffing\ExportBpoFileOldTest.cs" />
     <Compile Include="Staffing\ExportBpoFileTest.cs" />
     <Compile Include="Staffing\ExportForecastAndStaffingFileTest.cs" />
     <Compile Include="Staffing\ImportBpoFileTest.cs" />

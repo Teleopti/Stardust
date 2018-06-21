@@ -722,7 +722,6 @@
     <Compile Include="Staffing\ExportStaffingPeriodValidationProvider.cs" />
     <Compile Include="Staffing\ExportStaffingReturnObject.cs" />
     <Compile Include="Staffing\ExportBpoFile.cs" />
-    <Compile Include="Staffing\ExportBpoFileOld.cs" />
     <Compile Include="Staffing\ExportForecastAndStaffingFile.cs" />
     <Compile Include="Staffing\IExportBpoFile.cs" />
     <Compile Include="Staffing\ImportBpoFile.cs" />
@@ -2503,8 +2502,6 @@
     <Compile Include="Forecasting\ForecastsFile\ForecastsFileValidator.cs" />
     <Compile Include="Forecasting\Import\ForecastFile.cs" />
     <Compile Include="Forecasting\Import\ForecastParseResult.cs" />
-    <Compile Include="Forecasting\Import\ForecastsFileContentProviderOld.cs" />
-    <Compile Include="Forecasting\Import\ForecastsRowExtractorOld.cs" />
     <Compile Include="Forecasting\Import\IForecastFile.cs" />
     <Compile Include="Forecasting\Import\IsColumnCountInRowValid.cs" />
     <Compile Include="Forecasting\IntervalLengthServiceLevelSpecification.cs" />

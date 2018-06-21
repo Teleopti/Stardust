@@ -26,16 +26,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<WorkloadDayHelper>();
 			
-			if (_configuration.Toggle(Toggles.Forecast_FileImport_UnifiedFormat_46585))
-			{
-				builder.RegisterType<ForecastsRowExtractor>().As<IForecastsRowExtractor>();
-				builder.RegisterType<ForecastsFileContentProvider>().As<IForecastsFileContentProvider>();
-			}
-			else
-			{
-				builder.RegisterType<ForecastsRowExtractorOld>().As<IForecastsRowExtractor>();
-				builder.RegisterType<ForecastsFileContentProviderOld>().As<IForecastsFileContentProvider>();
-			}
+			builder.RegisterType<ForecastsRowExtractor>().As<IForecastsRowExtractor>();
+			builder.RegisterType<ForecastsFileContentProvider>().As<IForecastsFileContentProvider>();
 			
 			builder.RegisterType<ForecastsAnalyzeQuery>().As<IForecastsAnalyzeQuery>();
 			builder.Register(getThreadJobResultFeedback).As<IJobResultFeedback>().SingleInstance();

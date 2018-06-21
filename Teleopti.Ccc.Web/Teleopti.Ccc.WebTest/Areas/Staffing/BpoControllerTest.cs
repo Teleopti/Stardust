@@ -67,22 +67,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Staffing
 
 			result.Content.ErrorMessage.Should().Contain(Resources.BpoOnlyExportPeriodBetweenDates.Substring(0,20));
 		}
-
+	  
 		[Test]
-		[RemoveMeWithToggle(Toggles.Forecast_FileImport_UnifiedFormat_46585)]
-		public void ShouldHandleExportBpo()
-		{
-			ScenarioRepository.Has("Default");
-			var activity = ActivityRepository.Has("Activity");
-			var skill = SkillRepository.Has("Phone", activity);
-			var result = (OkNegotiatedContentResult<ExportStaffingReturnObject>)Target.ExportBpo(skill.Id.GetValueOrDefault(), Now.UtcDateTime(), Now.UtcDateTime().AddDays(1));
-
-			result.Content.ErrorMessage.Should().Be.Empty();
-			result.Content.Content.Should().Be.Empty();
-		}
-
-		[Test]
-		[Toggle(Toggles.Forecast_FileImport_UnifiedFormat_46585)]
 		public void ShouldHandleExportBpoUnifiedFormat()
 		{
 			ScenarioRepository.Has("Default");

@@ -30,11 +30,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ImportBpoFile>().SingleInstance();
 			builder.RegisterType<SkillCombinationBpoTimeLineReader>().As<ISkillCombinationBpoTimeLineReader>().SingleInstance();
 			builder.RegisterType<BpoProvider>().SingleInstance();
-
-			if (_configuration.Toggle(Toggles.Forecast_FileImport_UnifiedFormat_46585))
-				builder.RegisterType<ExportBpoFile>().As<IExportBpoFile>();
-			else
-				builder.RegisterType<ExportBpoFileOld>().As<IExportBpoFile>();
+			builder.RegisterType<ExportBpoFile>().As<IExportBpoFile>();
 			
 			builder.RegisterType<ExportForecastAndStaffingFile>().SingleInstance();
 			builder.RegisterType<ExportStaffingPeriodValidationProvider>().As<ExportStaffingPeriodValidationProvider>().SingleInstance();

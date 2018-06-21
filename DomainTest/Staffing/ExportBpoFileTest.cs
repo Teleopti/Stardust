@@ -5,7 +5,6 @@ using System.Globalization;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Domain.Helper;
@@ -14,7 +13,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -23,7 +21,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Staffing
 {
-	[DomainTest, Toggle(Toggles.Forecast_FileImport_UnifiedFormat_46585)]
+	[DomainTest]
 	public class ExportBpoFileTest : IIsolateSystem
 	{
 		public IExportBpoFile Target;
