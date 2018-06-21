@@ -40,7 +40,7 @@
 						</div>
 
 						<div>
-							<button tabindex=0 class="context-menu card-context" ng-click="vm.scenarioExportModal = true" ng-disabled="vm.savingToScenario || vm.isForecastRunning || !skill.SkillType.DoDisplayData">
+							<button ng-if="vm.selectedWorkload.SkillType.DoDisplayData" tabindex=0 class="context-menu card-context" ng-click="vm.scenarioExportModal = true" ng-disabled="vm.savingToScenario || vm.isForecastRunning">
 								<i class="mdi mdi-share"></i>
 								<md-tooltip>{{'SaveToOtherScenario' | translate}}</md-tooltip>
 							</button>
