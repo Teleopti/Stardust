@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly DayOffOptimizationDesktop _dayOffOptimizationDesktop;
 		private readonly IUserTimeZone _userTimeZone;
-		private readonly ITeamBlockDayOffFairnessOptimizationServiceFacade _teamBlockDayOffFairnessOptimizationServiceFacade;
+		private readonly TeamBlockDayOffFairnessOptimizationServiceFacade _teamBlockDayOffFairnessOptimizationServiceFacade;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly ITeamBlockSeniorityFairnessOptimizationService _teamBlockSeniorityFairnessOptimizationService;
 		private readonly IntraIntervalOptimizationCommand _intraIntervalOptimizationCommand;
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				CascadingResourceCalculationContextFactory cascadingResourceCalculationContextFactory,
 				DayOffOptimizationDesktop dayOffOptimizationDesktop,
 				IUserTimeZone userTimeZone,
-				ITeamBlockDayOffFairnessOptimizationServiceFacade teamBlockDayOffFairnessOptimizationServiceFacade,
+				TeamBlockDayOffFairnessOptimizationServiceFacade teamBlockDayOffFairnessOptimizationServiceFacade,
 				IScheduleDayEquator scheduleDayEquator,
 				ITeamBlockSeniorityFairnessOptimizationService teamBlockSeniorityFairnessOptimizationService,
 				IntraIntervalOptimizationCommand intraIntervalOptimizationCommand,

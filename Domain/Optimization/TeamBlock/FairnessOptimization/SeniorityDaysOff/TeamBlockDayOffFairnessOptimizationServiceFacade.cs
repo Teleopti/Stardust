@@ -7,16 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff
 {
-    public interface ITeamBlockDayOffFairnessOptimizationServiceFacade
-    {
-		void Execute(IEnumerable<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedPersons, SchedulingOptions schedulingOptions, 
-					IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences, 
-					ISeniorityWorkDayRanks seniorityWorkDayRanks, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
-
-        event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
-    }
-
-    public class TeamBlockDayOffFairnessOptimizationServiceFacade : ITeamBlockDayOffFairnessOptimizationServiceFacade
+    public class TeamBlockDayOffFairnessOptimizationServiceFacade
     {
         private readonly IDayOffStep1 _dayOffStep1;
         private readonly IDayOffStep2 _dayOffStep2;

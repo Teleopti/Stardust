@@ -546,7 +546,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		private static void registerDayOffFairnessOptimizationService(ContainerBuilder builder)
 		{
-			builder.RegisterType<TeamBlockDayOffFairnessOptimizationServiceFacade>().As<ITeamBlockDayOffFairnessOptimizationServiceFacade>().InstancePerLifetimeScope();
+			builder.RegisterType<TeamBlockDayOffFairnessOptimizationServiceFacade>().InstancePerLifetimeScope();
 			builder.RegisterType<WeekDayPoints>().As<IWeekDayPoints>();
 			builder.RegisterType<DayOffStep1>().As<IDayOffStep1>().InstancePerLifetimeScope();
 			builder.RegisterType<DayOffStep2>().As<IDayOffStep2>().InstancePerLifetimeScope();

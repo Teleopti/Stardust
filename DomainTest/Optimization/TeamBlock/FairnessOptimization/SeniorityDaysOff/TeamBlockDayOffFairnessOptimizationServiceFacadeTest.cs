@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
     public class TeamBlockDayOffFairnessOptimizationServiceFacadeTest
     {
         private MockRepository _mock;
-        private ITeamBlockDayOffFairnessOptimizationServiceFacade _target;
+        private TeamBlockDayOffFairnessOptimizationServiceFacade _target;
         private IDayOffStep1 _dayOffStep1;
         private IDayOffStep2 _dayOffStep2;
         private ITeamBlockSchedulingOptions _teamBlockSchedulingOption;

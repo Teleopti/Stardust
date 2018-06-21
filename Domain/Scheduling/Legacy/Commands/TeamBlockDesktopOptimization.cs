@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private ISchedulingProgress _backgroundWorker;
 		private readonly IEqualNumberOfCategoryFairnessService _equalNumberOfCategoryFairness;
 		private readonly ITeamBlockSeniorityFairnessOptimizationService _teamBlockSeniorityFairnessOptimizationService;
-		private readonly ITeamBlockDayOffFairnessOptimizationServiceFacade _teamBlockDayOffFairnessOptimizationService;
+		private readonly TeamBlockDayOffFairnessOptimizationServiceFacade _teamBlockDayOffFairnessOptimizationService;
 		private readonly WeeklyRestSolverCommand _weeklyRestSolverCommand;
 		private readonly ITeamBlockMoveTimeBetweenDaysCommand _teamBlockMoveTimeBetweenDaysCommand;
 		private readonly IntraIntervalOptimizationCommand _intraIntervalOptimizationCommand;
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			MatrixListFactory matrixListFactory,
 			IEqualNumberOfCategoryFairnessService equalNumberOfCategoryFairness,
 			ITeamBlockSeniorityFairnessOptimizationService teamBlockSeniorityFairnessOptimizationService,
-			ITeamBlockDayOffFairnessOptimizationServiceFacade teamBlockDayOffFairnessOptimizationService,
+			TeamBlockDayOffFairnessOptimizationServiceFacade teamBlockDayOffFairnessOptimizationService,
 			WeeklyRestSolverCommand weeklyRestSolverCommand,
 			ITeamBlockMoveTimeBetweenDaysCommand teamBlockMoveTimeBetweenDaysCommand,
 			IntraIntervalOptimizationCommand intraIntervalOptimizationCommand,
