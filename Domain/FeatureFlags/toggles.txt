@@ -40,7 +40,7 @@ WebByPassDefaultPermissionCheck_37984 = true
 # LevelUp #
 RTA_KillFattyIntradayUntilItDies_74939 = true
 RTA_RestrictModifyAdherenceWithPermission_74898 = true
-RTA_EasilySpotLateForWork_75668 = RC
+RTA_EasilySpotLateForWork_75668 = true
 
 # Dumplings, can any of these be removed? #
 WfmTeamSchedule_ShowStaffingInfo_45206 = true
@@ -92,7 +92,7 @@ Staffing_Info_Configuration_44687 = true
 # Kittens, Bugs&Roses and Micke #
 People_SpeedUpOpening_76365 = RC
 Scheduler_RestrictionReport_47013 = true
-Scheduler_RestrictionReportToggleAll_76224 = RC
+Scheduler_RestrictionReportToggleAll_76224 = true
 Wfm_SkillPriorityRoutingGUI_39885 = RC #Skill priorities, aka Cascading, is not ready for release yet
 Wfm_ArchiveSchedule_41498 = true #Can be removed
 Wfm_ImportSchedule_41247 = true #Can be removed
@@ -102,7 +102,7 @@ ResourcePlanner_HideSkillPrioSliders_41312 = RC #Skill priorities, aka Cascading
 ResourcePlanner_BlockSchedulingValidation_46092 = true #Can be removed
 ResourcePlanner_UseErlangAWithInfinitePatience_45845 = true
 ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899 = true
-ResourcePlanner_UseErlangAWithFinitePatience_47738 = RC
+ResourcePlanner_UseErlangAWithFinitePatience_47738 = true
 ResourcePlanner_SpeedUpEvents_48769 = true #batch deletes of dates - can be deleted early
 ResourcePlanner_SpeedUpEvents_74996 = true #caching different data - can be deleted early
 ResourcePlanner_SpeedUpEvents_75415 = true #restructure of events - dont remove toggle too early
