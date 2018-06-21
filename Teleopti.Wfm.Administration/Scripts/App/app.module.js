@@ -84,6 +84,9 @@
 				})
 				.when('/HangfireMonitoring', {
 					templateUrl: 'HangfireMonitoring.html'
+				})
+				.when('/HangfirePerformanceStats', {
+					templateUrl: 'HangfireMonitoring_RTA_HangfirePerformanceStats_76139.html'
 				});
 
 

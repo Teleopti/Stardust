@@ -212,6 +212,7 @@
     <Content Include="Etl\modal.html" />
     <Content Include="Etl\schedule.html" />
     <Content Include="Etl\scheduleModal.html" />
+    <Content Include="HangfireMonitoring_RTA_HangfirePerformanceStats_76139.html" />
     <Content Include="HangfireMonitoring.html" />
     <Content Include="login.html" />
     <Content Include="menuitem.html" />
@@ -268,6 +269,7 @@
     <None Include="packages.config" />
     <None Include="Scripts\jquery-3.1.0.intellisense.js" />
     <Content Include="Scripts\Hangfire\hangfireMonitoringController.js" />
+    <Content Include="Scripts\Hangfire\hangfireMonitoringController_RTA_HangfirePerformanceStats_76139.js" />
     <Content Include="Scripts\jquery-3.1.0.js" />
     <Content Include="Scripts\jquery-3.1.0.min.js" />
     <Content Include="Scripts\jquery-3.1.0.slim.js" />
@@ -342,6 +344,7 @@
     <Compile Include="Controllers\ConfigurationController.cs" />
     <Compile Include="Controllers\EtlController.cs" />
     <Compile Include="Controllers\LicenseController.cs" />
+    <Compile Include="Controllers\ToggleController.cs" />
     <Compile Include="Core\PurgeNoneEmployeeData.cs" />
     <Compile Include="Core\PurgeOldSignInAttempts.cs" />
     <Compile Include="Core\RecurrentEventTimer.cs" />

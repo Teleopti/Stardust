@@ -36,6 +36,7 @@
 		//checked if has cookie
 		var cookie = $cookies.getObject('WfmAdminAuth');
 		var token = cookie ? cookie.tokenKey : null;
+		var RTA_HangfirePerformanceStats_76139 = false;
 
 	    vm.user = cookie ? cookie.user : null;
 		vm.shouldShowEtl = false;
@@ -45,17 +46,42 @@
 		
 		vm.Id = cookie ? cookie.id : null;
 
-		$http.get("./Etl/ShouldEtlToolBeVisible", tokenHeaderService.getHeaders())
-			.success(function (data) {
-                vm.shouldShowEtl = data;
+		$http.get("./Toggle/IsEnabled",
+				{
+					params: { toggle: "RTA_HangfirePerformanceStats_76139" }
+				}, 
+				tokenHeaderService.getHeaders())
+			.then(function(data) {
+				RTA_HangfirePerformanceStats_76139 = data.data;
 
-                $scope.menuItems.push(
-	                {
-		                text: "ETL tool",
-		                link: "#/ETL",
-		                toggle: vm.shouldShowEtl
-	                }
-                );
+				$scope.menuItems.push(
+					{
+						text: "Hangfire Monitoring",
+						link: "#/HangfireMonitoring",
+						toggle: !RTA_HangfirePerformanceStats_76139
+					}
+				);
+
+				$scope.menuItems.push(
+					{
+						text: "Hangfire Statistics",
+						link: "#/HangfirePerformanceStats",
+						toggle: RTA_HangfirePerformanceStats_76139
+					}
+				);
+			}).then(function() {
+				$http.get("./Etl/ShouldEtlToolBeVisible", tokenHeaderService.getHeaders())
+					.success(function (data) {
+						vm.shouldShowEtl = data;
+
+						$scope.menuItems.push(
+							{
+								text: "ETL tool",
+								link: "#/ETL",
+								toggle: vm.shouldShowEtl
+							}
+						);
+					});
 			});
 
 	    $scope.state = {
@@ -72,10 +98,6 @@
 		    }, {
 			    text: "Hangfire Dashboard",
 			    link: "#/HangfireDashboard",
-			    toggle: true
-		    }, {
-			    text: "Hangfire Monitoring",
-			    link: "#/HangfireMonitoring",
 			    toggle: true
 		    }
 	    ];
