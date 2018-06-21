@@ -125,7 +125,7 @@ FROM
 		where statename = 'Succeeded'
 	) as d
 GROUP BY EventHandler
-ORDER BY AverageDuration  DESC";
+ORDER BY TotalDuration  DESC";
 
 
 			SqlConnection conn = new SqlConnection(connectionString);
