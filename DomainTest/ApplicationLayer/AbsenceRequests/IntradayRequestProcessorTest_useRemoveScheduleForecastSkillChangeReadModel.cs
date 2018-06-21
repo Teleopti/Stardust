@@ -997,7 +997,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			SkillCombinationResourceRepository.SetLastCalculatedTime(now.AddHours(-3));
 			Target.Process(personRequest);
 			var denyCommand = CommandDispatcher.LatestCommand as DenyRequestCommand;
-			denyCommand.DenyReason.Should().Contain(UserTexts.Resources.ResourceManager.GetString("DenyReasonTechnicalIssues", agent.PermissionInformation.Culture()));
+			denyCommand.DenyReason.Should().Contain(UserTexts.Resources.ResourceManager.GetString("DenyReasonSystemBusy", agent.PermissionInformation.Culture()));
 		}
 
 		[Test, SetCulture("en-US")]
@@ -1025,7 +1025,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Now.Is(now);
 			Target.Process(personRequest);
 			var denyCommand = CommandDispatcher.LatestCommand as DenyRequestCommand;
-			denyCommand.DenyReason.Should().Contain(UserTexts.Resources.ResourceManager.GetString("DenyReasonTechnicalIssues", agent.PermissionInformation.Culture()));
+			denyCommand.DenyReason.Should().Contain(UserTexts.Resources.ResourceManager.GetString("DenyReasonNoSkillCombinationsFound", agent.PermissionInformation.Culture()));
 		}
 
 		[Test]
