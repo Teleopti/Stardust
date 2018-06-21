@@ -48,25 +48,25 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 
 		public IEnumerable<HangfirePerformanceStatisticsViewModel> BuildPerformanceStatistics()
 		{
-			var jobStatistics = new List<HangfirePerformanceStatisticsViewModel>();
+			var performanceStatistics = new List<HangfirePerformanceStatisticsViewModel>();
 
 			using (var reader = _hangfireRepository.PerformanceStatistics(_connectionString))
 			{
 				while (reader.Read())
 				{
-					jobStatistics.Add(new HangfirePerformanceStatisticsViewModel
+					performanceStatistics.Add(new HangfirePerformanceStatisticsViewModel
 					{
 						Type = reader["EventHandler"].ToString(),
-						Count = Convert.ToInt64(reader["TotalExecutions"]),
-						TotalExecutionTime = Convert.ToInt64(reader["TotalDuration"]),
-						AverageExecutionTime = Convert.ToInt64(reader["AverageDuration"]),
-						MinExecutionTime = Convert.ToInt64(reader["MinDuration"]),
-						MaxExecutionTime = Convert.ToInt64(reader["MaxDuration"])
+						Count = Convert.ToInt64(reader["TotalCount"]),
+						TotalTime = Convert.ToInt64(reader["TotalDuration"]),
+						AverageTime = Convert.ToInt64(reader["AverageDuration"]),
+						MinTime = Convert.ToInt64(reader["MinDuration"]),
+						MaxTime = Convert.ToInt64(reader["MaxDuration"])
 					});
 				}
 			}
 
-			return jobStatistics;
+			return performanceStatistics;
 		}
 	}
 
@@ -74,10 +74,10 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 	{
 		public string Type { get; set; }
 		public long Count { get; set; }
-		public long TotalExecutionTime { get; set; }
-		public long AverageExecutionTime { get; set; }
-		public long MaxExecutionTime { get; set; }
-		public long MinExecutionTime { get; set; }
+		public long TotalTime { get; set; }
+		public long AverageTime { get; set; }
+		public long MaxTime { get; set; }
+		public long MinTime { get; set; }
 	}
 
 	public class HangfireStatisticsViewModel

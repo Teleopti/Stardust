@@ -5,7 +5,7 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<strong>Failed jobs</strong>
-					<button class="pull-right ng-click="vm.getTypesOfFailedEvents()" ng-disabled="vm.isFetching">Refresh</button>
+					<button class="pull-right" ng-click="vm.getTypesOfFailedEvents()" ng-disabled="vm.isFetching">Refresh</button>
 				</div>
 				<div class="panel-body">
 					<table class="table table-striped">
@@ -45,7 +45,7 @@
 						<thead>
 							<tr>
 								<th>Job</th>
-								<th>Executions</th>
+								<th>Count</th>
 								<th>Total time</th>
 								<th>Average time</th>
 								<th>Max time</th>
@@ -56,10 +56,10 @@
 							<tr ng-repeat="job in vm.jobs">
 								<td>{{job.Type}}</td>
 								<td>{{job.Count}}</td>
-								<td>{{job.TotalExecutionTime}}</td>
-								<td>{{job.AverageExecutionTime}}</td>
-								<td>{{job.MaxExecutionTime}}</td>
-								<td>{{job.MinExecutionTime}}</td>
+								<td>{{job.TotalTime}}</td>
+								<td>{{job.AverageTime}}</td>
+								<td>{{job.MaxTime}}</td>
+								<td>{{job.MinTime}}</td>
 							</tr>
 						</tbody>
 					</table>

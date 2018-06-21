@@ -58,7 +58,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		}
 
 		[HttpGet, Route("Hangfire/PerformanceStatistics")]
-		public IHttpActionResult HangfireJobPerformance()
+		public IHttpActionResult HangfirePerformanceStatistics()
 		{
 			return Json(_statisticViewModelBuilder.BuildPerformanceStatistics());
 		}
