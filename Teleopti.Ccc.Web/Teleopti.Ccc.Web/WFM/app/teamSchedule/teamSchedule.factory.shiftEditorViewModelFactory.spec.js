@@ -123,8 +123,8 @@
 		expect(shiftLayers[0].Minutes).toEqual(120);
 		expect(shiftLayers[0].ShiftLayerIds).toEqual(["61678e5a-ac3f-4daa-9577-a83800e49622"]);
 		expect(shiftLayers[0].Color).toEqual('#ffffff');
-		expect(shiftLayers[0].UseLighterBorder).toEqual(false);
-		expect(shiftLayers[1].UseLighterBorder).toEqual(true);
+		expect(shiftLayers[0].UseLighterBorder()).toEqual(false);
+		expect(shiftLayers[1].UseLighterBorder()).toEqual(true);
 	});
 
 	it('should create shift layers and underlying summary schedule timespan based on timezone', function () {

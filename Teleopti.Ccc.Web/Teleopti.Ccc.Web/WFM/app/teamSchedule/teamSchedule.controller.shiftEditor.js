@@ -116,7 +116,7 @@
 				//	}
 				//}
 			});
-			vm.selectedActivitiyId = getSelectActivity(shiftLayer).Id
+			vm.selectedActivitiyId = getSelectActivity(shiftLayer).Id;
 		}
 
 		vm.getShiftLayerWidth = function (layer) {
@@ -131,9 +131,9 @@
 			var selectActivity = vm.availableActivities.filter(function (activity) {
 				return vm.selectedActivitiyId == activity.Id;
 			})[0];
-			//vm.selectedShiftLayer.Color = selectActivity.Color;
-			//vm.selectedShiftLayer.Description = selectActivity.Name;
-			//vm.selectedShiftLayer.Id = selectActivity.Id;
+			vm.selectedShiftLayer.Color = selectActivity.Color;
+			vm.selectedShiftLayer.Description = selectActivity.Name;
+			vm.selectedShiftLayer.ActivityId = selectActivity.Id;
 		}
 
 		function getSelectActivity(layer) {

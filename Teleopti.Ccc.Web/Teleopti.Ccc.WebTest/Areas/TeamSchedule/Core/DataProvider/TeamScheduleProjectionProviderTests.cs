@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 		[SetUp]
 		public void SetupTeamScheduleProjectionProvider()
 		{
+			LoggedOnUser = new FakeLoggedOnUser();
 			var projectionProvider = new ProjectionProvider();
 			var fakeGlobalSettingRepo = new FakeGlobalSettingDataRepository();
 			fakeGlobalSettingRepo.PersistSettingValue("CommonNameDescription", new CommonNameDescriptionSetting("{FirstName}{LastName}"));
@@ -269,9 +270,13 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			personAbsenceProjection.ParentPersonAbsences.First().Should().Be(personAbsence.Id);
 			vm.Projection.Last().ParentPersonAbsences.Should().Be.Null();
 
+
+			vm.Projection.First().ActivityId.Should().Be.EqualTo(phoneActivity.Id);
 			vm.Projection.First().Description.Should().Be(phoneActivity.Description.Name);
+			vm.Projection.Second().ActivityId.Should().Be.EqualTo(lunchActivity.Id);
 			vm.Projection.Second().Description.Should().Be(lunchActivity.Description.Name);
 			personAbsenceProjection.Description.Should().Be(testAbsence.Name);
+			vm.Projection.Last().ActivityId.Should().Be(phoneActivity.Id);
 			vm.Projection.Last().Description.Should().Be(phoneActivity.Description.Name);
 
 			var timeSpanForPhoneActivityPeriod = getTimeSpanInMinutesFromPeriod(phoneActivityPeriod);
@@ -524,18 +529,21 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			vm.Projection.Count().Should().Be(3);
 			var visualLayers = vm.Projection.ToArray();
 			visualLayers[0].Description.Should().Be("Meeting");
+			visualLayers[0].ActivityId.Should().Be(meetingActivity.Id);
 			visualLayers[0].ShiftLayerIds.Single().Should().Be(assignment1Person1.ShiftLayers.Single(l => l is MainShiftLayer && l.Payload.Description.Name == "Meeting").Id);
 			visualLayers[0].Start.Should().Be("2015-01-01 08:00");
 			visualLayers[0].End.Should().Be("2015-01-01 08:30");
 			visualLayers[0].Minutes.Should().Be(30);
 
 			visualLayers[1].Description.Should().Be("Meeting");
+			visualLayers[1].ActivityId.Should().Be(meetingActivity.Id);
 			visualLayers[1].ShiftLayerIds.Single().Should().Be(assignment1Person1.ShiftLayers.Single(l => l is PersonalShiftLayer && l.Payload.Description.Name == "Meeting").Id);
 			visualLayers[1].Start.Should().Be("2015-01-01 08:30");
 			visualLayers[1].End.Should().Be("2015-01-01 10:00");
 			visualLayers[1].Minutes.Should().Be(90);
 
 			visualLayers[2].Description.Should().Be("Phone");
+			visualLayers[2].ActivityId.Should().Be(phoneActivity.Id);
 			visualLayers[2].Start.Should().Be("2015-01-01 10:00");
 			visualLayers[2].End.Should().Be("2015-01-01 15:00");
 			visualLayers[2].Minutes.Should().Be(300);

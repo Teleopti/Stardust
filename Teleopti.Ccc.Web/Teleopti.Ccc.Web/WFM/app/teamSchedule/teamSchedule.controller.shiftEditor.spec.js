@@ -493,12 +493,12 @@
 		shiftLayers[0].click();
 
 		var selectedTypeEl = panel[0].querySelector('.activity-selector md-select-value');
-		//var typeColorEl = panel[0].querySelector('.activity-selector md-select-value div');
+		var typeColorEl = panel[0].querySelector('.activity-selector md-select-value div .type-color');
 		expect(selectedTypeEl.innerText.trim()).toBe('Phone');
-		//expect(typeColorEl.style.backgroundColor).toBe('#ffffff');
+		expect(typeColorEl.style.backgroundColor).toBe('rgb(255, 255, 255)');
 	});
 
-	xit('should change the selected shift layer color when change activity type', function () {
+	it('should change shift layer activity', function () {
 		var schedule = {
 			"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
 			"Name": "Annika Andersson",
@@ -512,12 +512,14 @@
 				"Start": "2018-06-15 08:00",
 				"End": "2018-06-15 09:00",
 				"Minutes": 60,
-				"IsOvertime": false
+				"IsOvertime": false,
+				"ActivityId": '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
 			}],
 			"Timezone": { "IanaId": "Europe/Berlin" }
 		};
 
 		var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", [schedule], "2018-06-15", "Europe/Berlin");
+		var vm = panel.isolateScope().vm;
 
 		var shiftLayers = panel[0].querySelectorAll(".shift-layer");
 		shiftLayers[0].click();
@@ -526,8 +528,10 @@
 		var typeEls = panel[0].querySelectorAll('.activity-selector md-option');
 		typeEls[1].click();
 
-		//expect(shiftLayers[0].style.backgroundColor).toBe('#8080c0');
+		expect(shiftLayers[0].style.backgroundColor).toBe('rgb(255, 0, 0)');
 		expect(shiftLayers[0].className.indexOf('border-light') >= 0).toBeTruthy();
+		expect(vm.scheduleVm.ShiftLayers[0].ActivityId).toEqual('5c1409de-a0f1-4cd4-b383-9b5e015ab3c6');
+		expect(vm.scheduleVm.ShiftLayers[0].Description).toEqual('Invoice');
 	});
 
 
@@ -637,7 +641,7 @@
 			{
 				"Id": "5c1409de-a0f1-4cd4-b383-9b5e015ab3c6",
 				"Name": "Invoice",
-				"Color": "#8080c0"
+				"Color": "#FF0000"
 			},
 			{
 				"Id": "0ffeb898-11bf-43fc-8104-9b5e015ab3c2",
@@ -663,7 +667,6 @@
 			}
 		}
 	}
-
 });
 
 describe('#shiftEditorController#', function () {

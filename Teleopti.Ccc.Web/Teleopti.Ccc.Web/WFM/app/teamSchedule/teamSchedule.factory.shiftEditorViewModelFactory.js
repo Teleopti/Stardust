@@ -81,17 +81,20 @@
 			var startInTimezone = isSameTimezone ? moment.tz(layer.Start, timezone) : moment.tz(layer.Start, fromTimezone).clone().tz(timezone);
 			var endInTimezone = isSameTimezone ? moment.tz(layer.End, timezone) : startInTimezone.clone().add(layer.Minutes, 'minutes');
 
-			return {
-				Description: layer.Description,
-				Start: serviceDateFormatHelper.getDateTime(startInTimezone),
-				End: serviceDateFormatHelper.getDateTime(endInTimezone),
-				Minutes: layer.Minutes,
-				ShiftLayerIds: layer.ShiftLayerIds,
-				Color: layer.Color,
-				UseLighterBorder: useLighterColor(layer.Color),
-				TimeSpan: getTimeSpan(date, startInTimezone, endInTimezone),
-				IsOvertime: layer.IsOvertime
-			};
+			this.Description = layer.Description;
+			this.Color = layer.Color;
+			this.ActivityId = layer.ActivityId;
+			this.Start = serviceDateFormatHelper.getDateTime(startInTimezone);
+			this.End = serviceDateFormatHelper.getDateTime(endInTimezone);
+			this.Minutes = layer.Minutes;
+			this.ShiftLayerIds = layer.ShiftLayerIds;
+
+			this.TimeSpan = getTimeSpan(date, startInTimezone, endInTimezone);
+			this.IsOvertime = layer.IsOvertime;
+		}
+
+		ShiftLayerViewModel.prototype.UseLighterBorder = function () {
+			return useLighterColor(this.Color);
 		}
 
 		function TimelineViewModel(date, timezone, timeRange) {

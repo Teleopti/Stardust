@@ -21,20 +21,18 @@
 
 	</div>
 </div>
-<div class="con-row">
+<div class="con-row activity-info">
 	<div class="con-flex">
-		<div class="activity-info">
-			<div ng-if="vm.selectedShiftLayer">
-				<span class="timespan">{{vm.selectedShiftLayer.TimeSpan}}</span>
-				<span>
-					<md-select class="activity-selector" ng-model="vm.selectedActivitiyId" ng-change="vm.changeActivityType()" required placeholder="{{'SelectAnActivity'|translate}}">
-						<md-option ng-repeat="activity in vm.availableActivities" ng-value="activity.Id">
-							<div class="type-color" ng-style="{'background-color': activity.Color}"></div>
-							{{activity.Name}}
-						</md-option>
-					</md-select>
-				</span>
-			</div>
+		<div ng-if="vm.selectedShiftLayer">
+			<span class="timespan">{{vm.selectedShiftLayer.TimeSpan}}</span>
+			<span>
+				<md-select class="activity-selector" ng-model="vm.selectedActivitiyId" ng-change="vm.changeActivityType()" required placeholder="{{'SelectAnActivity'|translate}}">
+					<md-option ng-repeat="activity in vm.availableActivities" ng-value="activity.Id">
+						<div class="type-color" ng-style="{'background-color': activity.Color}"></div>
+						<div class="type-name"> {{activity.Name}}</div>
+					</md-option>
+				</md-select>
+			</span>
 		</div>
 	</div>
 </div>
@@ -61,11 +59,11 @@
 				<div class="shift-layer"
 					 ng-class="{
 					 'overtime': shiftLayer.IsOvertime,
-					 'overtime-light': shiftLayer.UseLighterBorder,
-					 'overtime-dark': !shiftLayer.UseLighterBorder,
+					 'overtime-light': shiftLayer.UseLighterBorder(),
+					 'overtime-dark': !shiftLayer.UseLighterBorder(),
 					 'selected': shiftLayer.Selected,
-					 'border-dark': !shiftLayer.UseLighterBorder,
-					 'border-light': shiftLayer.UseLighterBorder}"
+					 'border-dark': !shiftLayer.UseLighterBorder(),
+					 'border-light': shiftLayer.UseLighterBorder()}"
 					 ng-style="{'width':vm.getShiftLayerWidth(shiftLayer) +'px', 'background-color': shiftLayer.Color, 'left': vm.getShiftLayerLeft(shiftLayer) + 'px'}"
 					 ng-click="vm.toggleSelection(shiftLayer)"
 					 ng-repeat="shiftLayer in vm.scheduleVm.ShiftLayers"></div>

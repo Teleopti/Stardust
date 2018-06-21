@@ -15,5 +15,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public string End { get; set; }
 		public int Minutes { get; set; }
 		public bool IsOvertime { get; set; }
+		public Guid ActivityId { get; set; }
 	}
 }

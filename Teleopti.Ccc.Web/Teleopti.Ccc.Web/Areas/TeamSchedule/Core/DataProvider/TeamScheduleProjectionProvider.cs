@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
@@ -134,7 +133,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				DisplayName = person.PermissionInformation.DefaultTimeZone().DisplayName
 			};
 
-			vm.IsProtected =  pa?.Person.PersonWriteProtection.IsWriteProtected(date) ?? false;
+			vm.IsProtected = pa?.Person.PersonWriteProtection.IsWriteProtected(date) ?? false;
 			return vm;
 		}
 
@@ -218,6 +217,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 						{
 							ParentPersonAbsences = isPayloadAbsence ? _projectionHelper.GetMatchedAbsenceLayers(scheduleDay, layer).ToArray() : null,
 							ShiftLayerIds = isMainShiftLayer ? _projectionHelper.GetMatchedShiftLayerIds(scheduleDay, layer, isOvertime).ToArray() : null,
+							ActivityId = layer.Payload.Id.GetValueOrDefault(),
 							Description = description.Name,
 							Color = isPayloadAbsence
 							? (isAbsenceConfidential && !canViewConfidential
