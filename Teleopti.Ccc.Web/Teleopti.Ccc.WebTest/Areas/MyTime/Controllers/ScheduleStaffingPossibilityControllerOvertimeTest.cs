@@ -60,8 +60,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test, SetCulture("en-US")]
 		public void ShouldReturnPossibiliesForDaysLongerThan14()
 		{
-			ToggleManager.Enable(Toggles.Wfm_Staffing_StaffingReadModel28DaysStep1_45109);
-
 			setupSiteOpenHour();
 			setupDefaultTestData();
 			setupWorkFlowControlSet();
@@ -849,8 +847,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test, SetCulture("en-US")]
 		public void ShouldNotReturnPossibiliesForDaysOutOfOvertimeOpenPeriod()
 		{
-			ToggleManager.Enable(Toggles.Wfm_Staffing_StaffingReadModel28DaysStep1_45109);
-
 			setupSiteOpenHour();
 			setupDefaultTestData();
 

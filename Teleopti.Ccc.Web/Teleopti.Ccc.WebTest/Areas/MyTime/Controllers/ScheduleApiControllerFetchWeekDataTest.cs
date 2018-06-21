@@ -162,8 +162,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnFalseForOvertimeProbabilityEnabledWhenTheWholeWeekIsOutsideOpenPeriod()
 		{
-			ToggleManager.Enable(Toggles.Wfm_Staffing_StaffingReadModel28DaysStep1_45109);
-
 			User.CurrentUser().WorkflowControlSet.OvertimeProbabilityEnabled = true;
 
 			var result = Target.FetchWeekData(Now.ServerDate_DontUse().AddWeeks(3));
@@ -173,8 +171,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnTrueForOvertimeProbabilityEnabledWhenThePartialWeekIsWithinOpenPeriod()
 		{
-			ToggleManager.Enable(Toggles.Wfm_Staffing_StaffingReadModel28DaysStep1_45109);
-
 			var workFlowControlSet = new WorkflowControlSet { OvertimeProbabilityEnabled = true };
 			workFlowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod
 			{

@@ -11,11 +11,9 @@ namespace Teleopti.Ccc.Infrastructure.Requests
 
 			if (toggleManager.IsEnabled(Toggles.Wfm_Staffing_StaffingReadModel49DaysStep2_45109))
 				staffingAvailableDays = 48;
-			else if (toggleManager.IsEnabled(Toggles.Wfm_Staffing_StaffingReadModel28DaysStep1_45109))
+			else 
 				staffingAvailableDays = 27;
-			else
-				staffingAvailableDays = 13;
-
+			
 			return staffingAvailableDays;
 		}
 	}

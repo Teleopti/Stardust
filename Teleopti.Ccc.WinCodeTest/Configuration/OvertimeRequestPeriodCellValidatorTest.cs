@@ -26,8 +26,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		[DatapointSource]
 		public Toggles[] ToggleList =
 		{
-			Toggles.Wfm_Staffing_StaffingReadModel49DaysStep2_45109,
-			Toggles.Wfm_Staffing_StaffingReadModel28DaysStep1_45109,
+			Toggles.Wfm_Staffing_StaffingReadModel49DaysStep2_45109
 		};
 
 		[SetUp]

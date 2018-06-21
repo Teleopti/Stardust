@@ -23,12 +23,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<UpdateStaffingLevelReadModelOnlySkillCombinationResources>().As<IUpdateStaffingLevelReadModel>().InstancePerLifetimeScope();
 
-			builder.RegisterType<StaffingSettingsReader>().As<IStaffingSettingsReader>().SingleInstance();
+			builder.RegisterType<StaffingSettingsReader28Days>().As<IStaffingSettingsReader>().SingleInstance();
 			
-			if (_configuration.Toggle((Toggles.Wfm_Staffing_StaffingReadModel28DaysStep1_45109)))
-			{
-				builder.RegisterType<StaffingSettingsReader28Days>().As<IStaffingSettingsReader>().SingleInstance();
-			}
 			if (_configuration.Toggle((Toggles.Wfm_Staffing_StaffingReadModel49DaysStep2_45109)))
 			{
 				builder.RegisterType<StaffingSettingsReader49Days>().As<IStaffingSettingsReader>().SingleInstance();

@@ -148,8 +148,7 @@ WFM_Remember_My_Selection_In_Intraday_47254 = true
 WFM_Intraday_Refactoring_74652 = RC
 
 # Ziggy #
-WfmStaffing_AddOvertime_42524 = RC 
-Wfm_Staffing_StaffingReadModel28DaysStep1_45109 = true
+WfmStaffing_AddOvertime_42524 = RC
 Wfm_Staffing_StaffingReadModel49DaysStep2_45109 = true
 Wfm_Requests_HandleFourteenDaysFast_43390 = true
 Forecast_FileImport_UnifiedFormat_46585 = true
