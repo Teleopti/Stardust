@@ -27,7 +27,6 @@ Scenario: View staffing for one skillgroup
 	And I change staffing date to '2017-09-25'
 	Then I should see the selected skill group 'Group A' 
 	
-@OnlyRunIfEnabled('Staffing_BPOExchangeImport_45202')
 Scenario: Show bpo exchange page
 	Given I am viewing staffing page
 	When I press the BPO exchange button 

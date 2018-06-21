@@ -22,7 +22,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Staffing.PerformanceTest
 {
 	[StaffingPerformanceTest]
-	[Toggle(Toggles.Staffing_BPOExchangeImport_45202)]
 	public class StaffingPerformanceLoadingTest : PerformanceTestWithOneTimeSetup
 	{
 		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;
