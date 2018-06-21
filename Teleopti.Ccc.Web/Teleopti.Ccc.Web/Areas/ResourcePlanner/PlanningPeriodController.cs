@@ -220,16 +220,12 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		{
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var validationResult = new HintResult();
-
-			if (planningPeriod.PlanningGroup != null)
+			var people = _planningGroupStaffLoader.Load(planningPeriod.Range, planningPeriod.PlanningGroup).AllPeople.ToList();
+			validationResult = _basicCheckScheduleHints.Execute(
+				new HintInput(null, people, planningPeriod.Range, _blockPreferenceProviderUsingFiltersFactory.Create(planningPeriod.PlanningGroup), true));
+			foreach (var res in validationResult.InvalidResources)
 			{
-				var people = _planningGroupStaffLoader.Load(planningPeriod.Range, planningPeriod.PlanningGroup).AllPeople.ToList();
-				validationResult = _basicCheckScheduleHints.Execute(
-					new HintInput(null, people, planningPeriod.Range, _blockPreferenceProviderUsingFiltersFactory.Create(planningPeriod.PlanningGroup), true));
-				foreach (var res in validationResult.InvalidResources)
-				{
-					HintsHelper.BuildErrorMessages(res.ValidationErrors);
-				}
+				HintsHelper.BuildErrorMessages(res.ValidationErrors);
 			}
 			return Ok(validationResult);
 		}
@@ -377,7 +373,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				HasNextPlanningPeriod = hasNextPlanningPeriod(planningPeriod.Range.EndDate.AddDays(1)),
 				State = state.ToString(),
 				TotalAgents = numberOfAgents,
-				PlanningGroupId = planningPeriod.PlanningGroup?.Id,
+				PlanningGroupId = planningPeriod.PlanningGroup.Id,
 				Number = planningPeriod.Number,
 				Type = planningPeriod.PeriodType.ToString()
 			};

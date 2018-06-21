@@ -123,18 +123,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 				var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 				var period = planningPeriod.Range;
 				var planningGroup = planningPeriod.PlanningGroup;
-				IEnumerable<IPerson> agents;
-				if (planningGroup == null)
-				{
-					_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, period);
-					agents = schedulerStateHolder.SchedulingResultState.LoadedAgents.FixedStaffPeople(period);
-				}
-				else
-				{
-					var people = _personRepository.FindPeopleInPlanningGroup(planningGroup, period);
-					_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, period);
-					agents = people.FixedStaffPeople(period);
-				}
+				var people = _personRepository.FindPeopleInPlanningGroup(planningGroup, period);
+				_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, period);
+				IEnumerable<IPerson> agents = people.FixedStaffPeople(period);
 				
 				_dayOffOptimizationCommandHandler.Execute(new DayOffOptimizationCommand
 					{

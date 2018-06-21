@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<IPlanningPeriod> LoadForPlanningGroup(IPlanningGroup planningGroup)
 		{
-			return _planningPeriods.Where(x => x.PlanningGroup?.Id == planningGroup.Id).ToList();
+			return _planningPeriods.Where(x => x.PlanningGroup.Id == planningGroup.Id).ToList();
 		}
 
 		public void CustomData(PlanningPeriod planningPeriod, PlanningPeriodSuggestions planningPeriodSuggestions)
