@@ -125,7 +125,7 @@
 					</div>
 				</div>
 				<div class="con-footer">
-					<div ng-show="vm.showBpoImportInfo() && vm.hasPermissionForBpoExchange" style="padding-left: 50px; width: max-content; text-align: left;">
+					<div ng-show="vm.showBpoInterface && vm.showBpoImportInfo() && vm.hasPermissionForBpoExchange" style="padding-left: 50px; width: max-content; text-align: left;">
 						<div><b>{{'ImportBpoFileImportInfoHeader' | translate}}</b></div>
 						<div ng-repeat="x in vm.importedBboInfos">
 							<div>
