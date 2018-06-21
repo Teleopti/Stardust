@@ -25,8 +25,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 	[EnabledBy(Toggles.OvertimeRequestUsePrimarySkillOption_75573)]
 	public class PrimaryPersonSkillFilter : IPrimaryPersonSkillFilter
 	{
-		private const int primarySkillCascadingIndex = 1;
-
 		public IList<IPersonSkill> Filter(IEnumerable<IPersonSkill> personSkills, IPerson person)
 		{
 			if (!person.WorkflowControlSet.OvertimeRequestUsePrimarySkill)
@@ -34,8 +32,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 				return personSkills.ToList();
 			}
 
+			var minCascadingIndex =
+				personSkills.Min(personSkill => personSkill.Skill.CascadingIndex);
+
 			var primaryPersonSkills =
-				personSkills.Where(a => a.Skill.IsCascading() && a.Skill.CascadingIndex == primarySkillCascadingIndex).ToList();
+				personSkills.Where(a => a.Skill.IsCascading() && a.Skill.CascadingIndex == minCascadingIndex).ToList();
 			if (!primaryPersonSkills.Any())
 			{
 				return personSkills.ToList();

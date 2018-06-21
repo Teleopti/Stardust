@@ -10,12 +10,10 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Requests;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -604,8 +602,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
 			Assert.AreEqual(1, possibilities.ElementAt(1).Possibility);
 		}
-
-
+		
 		[Test]
 		public void ShouldGetPossibilitiesForOvertimeWithDayOff()
 		{
@@ -703,6 +700,42 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var nonPrimaryPersonSkill = createPersonSkill(activity, nonPrimarySkill);
 
 			addPersonSkillsToPersonPeriod(primaryPersonSkill, nonPrimaryPersonSkill);
+
+			var possibilities =
+				getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
+					.Where(d => d.Date == Now.UtcDateTime().Date.ToString("yyyy-MM-dd"))
+					.ToList();
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+		}
+
+		[Test]
+		[Toggle(Toggles.OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944)]
+		[Toggle(Toggles.OvertimeRequestUsePrimarySkillOption_75573)]
+		public void ShouldUsePrimarySkillsForOvertimeProbabilityWhenPrimarySkillIsNotLevel1InCascading()
+		{
+			setupWorkFlowControlSet();
+
+			User.CurrentUser().WorkflowControlSet.OvertimeRequestUsePrimarySkill = true;
+			
+			var primarySkill1 = createSkill("primarySkill");
+			primarySkill1.SetCascadingIndex(1);
+			setupIntradayStaffingForSkill(primarySkill1, new double?[] { 5, 5 }, new double?[] { 10, 10 });
+
+			var primarySkill2 = createSkill("primarySkill2");
+			primarySkill2.SetCascadingIndex(2);
+			setupIntradayStaffingForSkill(primarySkill2, new double?[] { 5, 5 }, new double?[] { 10, 10 });
+
+			var primarySkill3 = createSkill("primarySkill3");
+			setupIntradayStaffingForSkill(primarySkill3, new double?[] { 5, 5 }, new double?[] { 1, 1 });
+
+			var activity = createActivity();
+			createAssignment(User.CurrentUser(), activity);
+			var primaryPersonSkill2 = createPersonSkill(activity, primarySkill2);
+			var primaryPersonSkill3 = createPersonSkill(activity, primarySkill3);
+
+			addPersonSkillsToPersonPeriod(primaryPersonSkill2, primaryPersonSkill3);
 
 			var possibilities =
 				getPossibilityViewModels(null, StaffingPossiblityType.Overtime)
