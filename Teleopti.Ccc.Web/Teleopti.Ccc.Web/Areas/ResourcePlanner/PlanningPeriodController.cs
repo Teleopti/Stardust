@@ -351,7 +351,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				HasNextPlanningPeriod = hasNextPlanningPeriod(planningPeriod.Range.EndDate.AddDays(1)),
 				State = state.ToString(),
 				TotalAgents = numberOfAgents,
-				PlanningGroupId = planningPeriod.PlanningGroup.Id,
+				PlanningGroupId = planningPeriod.PlanningGroup?.Id,
 				Number = planningPeriod.Number,
 				Type = planningPeriod.PeriodType.ToString()
 			};
