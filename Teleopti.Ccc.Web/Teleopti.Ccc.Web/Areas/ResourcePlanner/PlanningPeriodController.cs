@@ -142,28 +142,6 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return buildPlanningPeriodViewModels(allPlanningPeriods, availablePlanningPeriods, false, planningGroup);
 		}
 
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod")]
-		public virtual IHttpActionResult GetAllPlanningPeriods()
-		{
-			var availablePlanningPeriods = new List<PlanningPeriodModel>();
-			var allPlanningPeriods = _planningPeriodRepository.LoadAll()
-				.Where(planningPeriod => planningPeriod.PlanningGroup == null)
-				.ToList();
-			return buildPlanningPeriodViewModels(allPlanningPeriods, availablePlanningPeriods, true);
-		}
-
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod")]
-		public virtual IHttpActionResult GetAllPlanningPeriods(DateTime startDate, DateTime endDate)
-		{
-			var availablePlanningPeriods = new List<PlanningPeriodModel>();
-			var period = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
-			var allPlanningPeriods = _planningPeriodRepository.LoadAll()
-				.Where(planningPeriod => period.Intersection(planningPeriod.Range) != null)
-				.Where(planningPeriod => planningPeriod.PlanningGroup == null)
-				.ToList();
-			return buildPlanningPeriodViewModels(allPlanningPeriods, availablePlanningPeriods, false);
-		}
-
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/planningperiod/{planningPeriodId}", Name = "GetPlanningPeriod")]
 		public virtual IHttpActionResult GetPlanningPeriod(Guid planningPeriodId)
 		{

@@ -77,28 +77,6 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		}
 
 		[Test]
-		public void ShouldSaveDefaultPlanningPeriodIfNoPeriodExists()
-		{
-			var periods = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)Target.GetAllPlanningPeriods();
-			
-			var result = (OkNegotiatedContentResult<PlanningPeriodModel>)Target.GetPlanningPeriod(periods.Content.First().Id);
-			result.Content.Id.Should().Not.Be.EqualTo(Guid.Empty);
-			PlanningPeriodRepository.AddExecuted.Should().Be.True();
-		}
-
-		[Test]
-		public void ShouldSaveNewDefaultPlanningPeriodIfPreviousStarted()
-		{
-			Now.Is(new DateTime(2015, 4, 1));
-			var periods = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)Target.GetAllPlanningPeriods();
-			var result = (OkNegotiatedContentResult<PlanningPeriodModel>)Target.GetPlanningPeriod(periods.Content.First().Id);
-			result.Content.Id.Should().Not.Be.EqualTo(Guid.Empty);
-			result.Content.StartDate.Should().Be.EqualTo(new DateTime(2015, 5, 1));
-
-			PlanningPeriodRepository.AddExecuted.Should().Be.True();
-		}
-
-		[Test]
 		public void ShouldReturnEmptyIfForecastIsAvailable()
 		{
 			ScenarioRepository.Has(ScenarioFactory.CreateScenario("Default", true, true).WithId());
@@ -230,38 +208,6 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			result.Content.First().StartDate.Should().Be.EqualTo(new DateTime(2015, 04, 27));
 			result.Content.First().EndDate.Should().Be.EqualTo(new DateTime(2015, 05, 24));
 		}
-
-		[Test]
-		public void ShouldReturnDefaultPlanningPeriodIfNotCreated()
-		{
-			var result = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)Target.GetAllPlanningPeriods();
-			result.Content.Count.Should().Be.EqualTo(1);
-		}
-
-		[Test]
-		public void ShouldReturnAvailablePlanningPeriods()
-		{
-			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015, 05, 18), new DateOnly(2015, 05, 31)), SchedulePeriodType.Week, 2).WithId());
-			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015, 06, 01), new DateOnly(2015, 06, 14)), SchedulePeriodType.Week, 2).WithId());
-			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015, 06, 15), new DateOnly(2015, 06, 28)), SchedulePeriodType.Week, 2).WithId());
-
-			var result = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)Target.GetAllPlanningPeriods();
-			result.Content.Count.Should().Be.EqualTo(3);
-			result.Content.ForEach(x=>x.PlanningGroupId.Should().Be.EqualTo(null));
-		}
-
-		[Test]
-		public void ShouldReturnAvailablePlanningPeriodsForRange()
-		{
-			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015, 05, 18), new DateOnly(2015, 05, 31)), SchedulePeriodType.Week, 2).WithId());
-			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015, 06, 01), new DateOnly(2015, 06, 14)), SchedulePeriodType.Week, 2).WithId());
-			PlanningPeriodRepository.Add(new PlanningPeriod(new DateOnlyPeriod(new DateOnly(2015, 06, 15), new DateOnly(2015, 06, 28)), SchedulePeriodType.Week, 2).WithId());
-
-			var result = (OkNegotiatedContentResult<List<PlanningPeriodModel>>)
-				Target.GetAllPlanningPeriods(new DateTime(2015, 06, 01), new DateTime(2015, 06, 16));
-			result.Content.Count.Should().Be.EqualTo(2);
-		}
-
 
 		[Test]
 		public void ShouldReturnNextPlanningPeriod()
