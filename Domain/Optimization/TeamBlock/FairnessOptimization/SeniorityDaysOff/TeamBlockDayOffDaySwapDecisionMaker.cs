@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 {
 	public interface ITeamBlockDayOffDaySwapDecisionMaker : ICancellable
 	{
-		IPossibleSwappableDays Decide(DateOnly dateOnly, ITeamBlockInfo teamBlockSenior, ITeamBlockInfo teamBlockJunior,
+		PossibleSwappableDays Decide(DateOnly dateOnly, ITeamBlockInfo teamBlockSenior, ITeamBlockInfo teamBlockJunior,
 		                                                   IScheduleDictionary scheduleDictionary, 
 															IOptimizationPreferences optimizationPreferences, 
 															IList<DateOnly> dayOffsToGiveAway,
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			_dayOffRulesValidator = dayOffRulesValidator;
 		}
 
-		public IPossibleSwappableDays Decide(DateOnly dateOnly, 
+		public PossibleSwappableDays Decide(DateOnly dateOnly, 
 											 ITeamBlockInfo teamBlockSenior, 
 											 ITeamBlockInfo teamBlockJunior,
 		                                     IScheduleDictionary scheduleDictionary,
