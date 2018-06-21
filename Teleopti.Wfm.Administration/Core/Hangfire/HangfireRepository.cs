@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
@@ -103,6 +104,41 @@ ORDER BY CreatedAt ASC";
 
 			return ret;
 		}
+
+		public IDataReader PerformanceStatistics(string connectionString)
+		{
+			var commandText = @"
+ SELECT 
+	EventHandler,
+	count(1) as TotalExecutions,
+	sum(cast(Duration as bigint)) as TotalDuration,
+	sum(cast(Duration as bigint))/count(cast(Duration as bigint)) as AverageDuration,
+	Min(cast(Duration as bigint)) as MinDuration,
+	Max(cast(Duration as bigint)) as MaxDuration
+FROM 
+	( SELECT 
+		substring(j.Arguments,5,charindex(' on',j.Arguments)-4) as EventHandler,
+		JSON_VALUE(s.Data, '$.SucceededAt') as Date,
+		JSON_VALUE(s.Data, '$.PerformanceDuration') as Duration
+		from HangFire.Job j with(nolock)
+			inner join hangfire.state s with(nolock) on s.id= j.stateid
+		where statename = 'Succeeded'
+	) as d
+GROUP BY EventHandler
+ORDER BY AverageDuration  DESC";
+
+
+			SqlConnection conn = new SqlConnection(connectionString);
+
+			using (SqlCommand cmd = new SqlCommand(commandText, conn))
+			{
+				conn.Open();
+				SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+				return reader;
+			}
+		}
+
 
 		private static string deserializeProperty(string propertyName, string json)
 		{

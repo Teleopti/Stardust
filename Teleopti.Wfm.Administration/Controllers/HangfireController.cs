@@ -56,5 +56,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_manageFailedHangfireEvents.DeleteFailed(eventName, null, null);
 			return Ok();
 		}
+
+		[HttpGet, Route("Hangfire/PerformanceStatistics")]
+		public IHttpActionResult HangfireJobPerformance()
+		{
+			return Json(_statisticViewModelBuilder.BuildPerformanceStatistics());
+		}
+
 	}
 }

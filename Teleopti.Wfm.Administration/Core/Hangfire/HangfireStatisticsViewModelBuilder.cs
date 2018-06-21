@@ -45,6 +45,39 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 				return result;
 			}
 		}
+
+		public IEnumerable<HangfirePerformanceStatisticsViewModel> BuildPerformanceStatistics()
+		{
+			var jobStatistics = new List<HangfirePerformanceStatisticsViewModel>();
+
+			using (var reader = _hangfireRepository.PerformanceStatistics(_connectionString))
+			{
+				while (reader.Read())
+				{
+					jobStatistics.Add(new HangfirePerformanceStatisticsViewModel
+					{
+						Type = reader["EventHandler"].ToString(),
+						Count = Convert.ToInt64(reader["TotalExecutions"]),
+						TotalExecutionTime = Convert.ToInt64(reader["TotalDuration"]),
+						AverageExecutionTime = Convert.ToInt64(reader["AverageDuration"]),
+						MinExecutionTime = Convert.ToInt64(reader["MinDuration"]),
+						MaxExecutionTime = Convert.ToInt64(reader["MaxDuration"])
+					});
+				}
+			}
+
+			return jobStatistics;
+		}
+	}
+
+	public class HangfirePerformanceStatisticsViewModel
+	{
+		public string Type { get; set; }
+		public long Count { get; set; }
+		public long TotalExecutionTime { get; set; }
+		public long AverageExecutionTime { get; set; }
+		public long MaxExecutionTime { get; set; }
+		public long MinExecutionTime { get; set; }
 	}
 
 	public class HangfireStatisticsViewModel
