@@ -39,10 +39,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 				RunResolveWeeklyRestRule = true,
 				PlanningPeriodId = planningPeriodId
 			};
-			var people = _personRepository.FindPeopleInPlanningGroup(planningPeriod.PlanningGroup, planningPeriod.Range);
-			if (!people.Any())
-				return null;
-			intradayOptimizationCommand.AgentsToOptimize = people;
+			//TODO: to be removed!
+			if (planningPeriod.PlanningGroup != null)
+			{
+				var people = _personRepository.FindPeopleInPlanningGroup(planningPeriod.PlanningGroup, planningPeriod.Range);
+				if (!people.Any())
+					return null;
+				intradayOptimizationCommand.AgentsToOptimize = people;
+			}
+			//
 			return intradayOptimizationCommand;
 		}
 	}
