@@ -1,101 +1,162 @@
-﻿
-.body-calendarview{background: #f8f8f8 url(../Images/view_repeater_wide_bg.png) bottom left repeat-y;}
-.body-calendarview-inner{background: transparent url(../Images/view_top_wide_bg.png) top left no-repeat;}
+﻿.body-calendarview {
+	background: #f8f8f8 url(../Images/view_repeater_wide_bg.png) bottom left repeat-y;
+}
+.body-calendarview-inner {
+	background: transparent url(../Images/view_top_wide_bg.png) top left no-repeat;
+}
 
 .weekdays li,
-.calendarview-week li
-{
+.calendarview-week li {
 	border-right: 1px solid #dfdfdf;
 }
-.rgba .weekdays li, 
-.rgba .calendarview-week li
-{
+.rgba .weekdays li,
+.rgba .calendarview-week li {
 	border-right: 1px solid rgba(0, 0, 0, 0.15);
 }
 /* rgba on many elements makes scrolling very slow in chrome so lets use static */
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-	.rgba .weekdays li, 
-	.rgba .calendarview-week li
-	{
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+	.rgba .weekdays li,
+	.rgba .calendarview-week li {
 		border-right: 1px solid #dfdfdf;
-	}
-	.rtl .weekdays li, 
-	.rtl .calendarview-week li
-	{
-		/*float: right;*/
 	}
 }
 
-.calendarview-week li:first-child{border-left-color: transparent; color: #fff; padding-bottom: 0px; font-size: 11px; text-align: center; width: 18px;}
-.calendarview-week li:first-child > div{margin-top: 58px; padding-bottom: 0px;}
-.weekdays {
-    font-size: 0; 
-    padding-top: 5px;
-    padding-left: 18px;
-    margin: 0;
-    line-height: normal;
+.calendarview-week li:first-child {
+	border-left-color: transparent;
+	color: #fff;
+	padding-bottom: 0px;
+	font-size: 11px;
+	text-align: center;
+	width: 18px;
 }
-.weekdays li{
+.calendarview-week li:first-child > div {
+	margin-top: 58px;
+	padding-bottom: 0px;
+}
+.weekdays {
+	font-size: 0;
+	padding-top: 5px;
+	padding-left: 18px;
+	margin: 0;
+	line-height: normal;
+}
+.weekdays li {
 	font-size: 11px;
 	display: inline-block;
-	list-style-type: none; 
+	list-style-type: none;
 	text-align: center;
 	width: 130px;
 	background-color: white;
 	border-top: 1px solid #dfdfdf;
 	border-bottom: 1px solid #dfdfdf;
 }
-.ie7 .weekdays li{zoom: 1; display: inline;} /* IE7 inline-block fix */
+.ie7 .weekdays li {
+	zoom: 1;
+	display: inline;
+} /* IE7 inline-block fix */
 
 .calendarview-week {
 	background: transparent;
 	padding-left: 0;
 	font-size: 0;
 	white-space: nowrap;
-    margin: 0;
-    line-height: normal;
+	margin: 0;
+	line-height: normal;
 }
-.body-calendarview-inner ul:nth-child(2){background-image: none;}
-.calendarview-week li{
+.body-calendarview-inner ul:nth-child(2) {
+	background-image: none;
+}
+.calendarview-week li {
 	font-size: 12px;
 	display: inline-block;
 	height: 87px;
 	vertical-align: top;
 	width: 130px;
 }
-.ie7 .calendarview-week li{zoom: 1; display: inline;} /* IE7 inline-block fix */
+.ie7 .calendarview-week li {
+	zoom: 1;
+	display: inline;
+} /* IE7 inline-block fix */
 
-.calendarview-week li div.day-content 
-{
+.calendarview-week li div.day-content {
 	background-color: white;
 }
 
-.calendarview-week li div.border-left 
-{
-	border-left-style: solid; 
-	border-left-width: 8px; 
+.calendarview-week li div.border-left {
+	border-left-style: solid;
+	border-left-width: 8px;
 	border-left-color: transparent;
 }
 
-.calendarview-week .today{background-position: 0 -1600px; text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);}
-.calendarview-week li.ui-selected{background-position: 0 -2019px; border-bottom: none; background: gray;}
-.calendarview-week li.ui-selected .day-header-text{background-color: #bce8f1; color: white; text-shadow: none;}
-.calendarview-week li .day-header{background-color: white; line-height: 19px; min-height: 19px; border-bottom: none;}
-.calendarview-week .today .day-header{background-color: gray;}
+.calendarview-week .today {
+	background-position: 0 -1600px;
+	text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+}
+.calendarview-week li.ui-selected {
+	background-position: 0 -2019px;
+	border-bottom: none;
+	background: gray;
+}
+.calendarview-week li.ui-selected .day-header-text {
+	background-color: #bce8f1;
+	color: white;
+	text-shadow: none;
+}
+.calendarview-week li .day-header {
+	background-color: white;
+	line-height: 19px;
+	min-height: 19px;
+	border-bottom: none;
+}
+.calendarview-week .today .day-header {
+	background-color: gray;
+}
 
-.calendarview-week li.non-editable{background-color: #eaeaea; border-bottom: none;}
-.calendarview-week li.non-editable .day-header-text{background-color: #9ccc33; color: white; text-shadow: none;}
-.calendarview-week li.non-editable .day-content-text{color: black; text-shadow: none;}
-.calendarview-week li.non-editable .preference-text{color: #eaeaea; text-shadow: none;}
-.calendarview-week li.non-editable .extended-indication{ opacity: 0.3;}
-.calendarview-week li.non-editable .dayoff{ opacity: 0.3;}
-.calendarview-week li.non-editable .meeting-icon{ opacity: 0.1;}
-.calendarview-week li.non-editable .preference-must-have{ opacity: 0.1;}
-.calendarview-week li.non-editable .day-content-text{ opacity: 0.5;}
-.calendarview-week li.non-editable .absence{ opacity: 0.5;}
+.calendarview-week li.non-editable {
+	background-color: #eaeaea;
+	border-bottom: none;
+}
+.calendarview-week li.non-editable .day-header-text {
+	background-color: #9ccc33;
+	color: white;
+	text-shadow: none;
+}
+.calendarview-week li.non-editable .day-content-text {
+	color: black;
+	text-shadow: none;
+}
+.calendarview-week li.non-editable .preference-text {
+	color: #eaeaea;
+	text-shadow: none;
+}
+.calendarview-week li.non-editable .extended-indication {
+	opacity: 0.3;
+}
+.calendarview-week li.non-editable .dayoff {
+	opacity: 0.3;
+}
+.calendarview-week li.non-editable .meeting-icon {
+	opacity: 0.1;
+}
+.calendarview-week li.non-editable .preference-must-have {
+	opacity: 0.1;
+}
+.calendarview-week li.non-editable .day-content-text {
+	opacity: 0.5;
+}
+.calendarview-week li.non-editable .absence {
+	opacity: 0.5;
+}
 
-.calendarview-week li .day-content{text-align: center; min-height:66px; border-bottom: none;}
-.calendarview-week li .day-content span{min-height: 15px;}
+.calendarview-week li .day-content {
+	text-align: center;
+	min-height: 66px;
+	border-bottom: none;
+}
+.calendarview-week li .day-content span {
+	min-height: 15px;
+}
 
-
-.calendarview-week li.unvalidated{ font-style: italic;}
+.calendarview-week li.unvalidated {
+	font-style: italic;
+}

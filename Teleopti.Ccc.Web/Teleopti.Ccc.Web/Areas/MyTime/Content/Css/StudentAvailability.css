@@ -74,15 +74,15 @@
 	padding-left: 5px;
 }
 
-.overtime-availability-next-day-container{
+.overtime-availability-next-day-container {
 	padding: 10px 0;
 }
 
-.overtime-availability-next-day-container .input-group{
+.overtime-availability-next-day-container .input-group {
 	margin: 10px 0;
 }
 
-@media(max-width: 768px) {
+@media (max-width: 768px) {
 	.phone-form-availability .form-student-availability {
 		position: fixed;
 		top: 20%;
@@ -107,12 +107,13 @@
 	.phone-warning-indicator + .student-availability-body-container {
 		overflow-x: auto;
 	}
-	.overtime-availability-start-time, .overtime-availability-end-time {
+	.overtime-availability-start-time,
+	.overtime-availability-end-time {
 		padding-left: 5px;
 		padding-right: 5px;
 	}
 
-	.overtime-availability-next-day-container .input-group{
+	.overtime-availability-next-day-container .input-group {
 		float: right;
 	}
 }

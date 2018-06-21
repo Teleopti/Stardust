@@ -63,7 +63,7 @@
 }
 
 .request-body-inner .request-caption {
-	color: #B0B0B0;
+	color: #b0b0b0;
 	font-style: italic;
 	font-size: xx-small;
 }
@@ -151,7 +151,6 @@
 }
 
 #absence-personal-account > div {
-	display: inline-block;
 	float: left;
 	margin-right: 5px;
 	margin-top: 2px;
@@ -161,23 +160,22 @@
 	margin: 4px 0;
 }
 
-
 .shift-trade-add-schedule {
 	position: relative;
 	white-space: nowrap;
 }
 
 .shift-trade-my-schedule-row,
-.shift-trade-person-schedule-row{
+.shift-trade-person-schedule-row {
 	height: 31px;
 	border-bottom: 1px #ddd solid;
 }
 
-.shift-trade-person-schedule-row:nth-child(odd){
+.shift-trade-person-schedule-row:nth-child(odd) {
 	background: #eee;
 }
 
-@media(max-width: 768px) {
+@media (max-width: 768px) {
 	.shift-trade-timeline {
 		height: 100%;
 		position: absolute;
@@ -201,20 +199,20 @@
 	height: 22px;
 }
 
-	.shift-trade-layer-container.shift-trade-empty {
-		width: 100%;
-	}
+.shift-trade-layer-container.shift-trade-empty {
+	width: 100%;
+}
 
-	.shift-trade-layer-container .empty {
-		height: 100%;
-		width: 100%;
-	}
+.shift-trade-layer-container .empty {
+	height: 100%;
+	width: 100%;
+}
 
-	.shift-trade-layer-container:first-child {
-		height: 30px;
-	}
+.shift-trade-layer-container:first-child {
+	height: 30px;
+}
 
-.shift-trade-layer{
+.shift-trade-layer {
 	display: inline-block;
 }
 
@@ -229,14 +227,14 @@
 	position: absolute;
 	zoom: 1;
 	filter: alpha(opacity=80);
-	opacity: 0.80;
+	opacity: 0.8;
 	height: 18px;
 	z-index: 10;
 }
 
-	.shift-trade-layer.edit.my {
-		top: 3px;
-	}
+.shift-trade-layer.edit.my {
+	top: 3px;
+}
 
 .shift-trade-schedule-loading {
 	position: absolute;
@@ -334,18 +332,17 @@
 	margin: 5px 0 0 0;
 }
 
-	.add-shift-trade-detail-section .col-md-6 {
-		margin-bottom: 0;
-	}
+.add-shift-trade-detail-section .col-md-6 {
+	margin-bottom: 0;
+}
 
-	.add-shift-trade-detail-section textarea {
-		max-width: 100%;
-	}
+.add-shift-trade-detail-section textarea {
+	max-width: 100%;
+}
 
 .shift-trade-no-possible-trades {
 	margin-top: 10px;
 }
-
 
 .shift-trade-contract-time {
 	width: 50px;
@@ -365,7 +362,7 @@
 .shift-trade-agent-name-hover {
 	padding-right: 10px;
 	box-shadow: 7px 0px 10px -1px rgba(0, 0, 0, 0.35);
-	border-right: 1px solid rgba(0, 0, 0, 0.20);
+	border-right: 1px solid rgba(0, 0, 0, 0.2);
 	width: auto;
 	z-index: 11;
 }
@@ -381,8 +378,6 @@
 	position: absolute;
 	left: 0px;
 	display: inline;
-	margin-top: 24px;
-	width: 100%;
 }
 
 .shift-trade-swap-detail-schedule-row {
@@ -439,7 +434,7 @@
 .shift-trade-ruler {
 	height: 100%;
 	width: 1px;
-	background-color: rgba(0,0,0,0.2);
+	background-color: rgba(0, 0, 0, 0.2);
 	z-index: 100;
 }
 
@@ -471,9 +466,9 @@
 	height: 86px;
 }
 
-	.trade-day-detail > div {
-		position: relative;
-	}
+.trade-day-detail > div {
+	position: relative;
+}
 
 .trade-date {
 	font-size: smaller;
@@ -504,13 +499,13 @@
 	height: 30px;
 }
 
-	.shift-trade-dayoff .dayoff {
-		height: 20px;
-		z-index: 1;
-		position: relative;
-		top: 5px;
-		width: 100%;
-	}
+.shift-trade-dayoff .dayoff {
+	height: 20px;
+	z-index: 1;
+	position: relative;
+	top: 5px;
+	width: 100%;
+}
 
 .choose-history-divider {
 	border: 0;
@@ -574,30 +569,21 @@
 	position: relative;
 }
 
-	.input-right-inner-addon input {
-		padding-right: 30px;
-	}
-
-	.input-right-inner-addon span {
-		position: absolute;
-		right: 0px;
-		padding: 13px 12px;
-		pointer-events: none;
-	}
-
-.glyphicon-refresh-animate {
-	-animation: spin 2s infinite linear;
-	-webkit-animation: spin2 2s infinite linear;
+.input-right-inner-addon input {
+	padding-right: 30px;
 }
 
-@-webkit-keyframes spin2 {
-	from {
-		-webkit-transform: rotate(0deg);
-	}
+.input-right-inner-addon span {
+	position: absolute;
+	right: 0px;
+	padding: 13px 12px;
+	pointer-events: none;
+}
 
-	to {
-		-webkit-transform: rotate(360deg);
-	}
+.glyphicon-refresh-animate {
+	animation: spin 2s infinite linear;
+	-webkit-animation: spin 2s infinite linear;
+	-moz-animation: spin 2s infinite linear;
 }
 
 @keyframes spin {
@@ -610,8 +596,18 @@
 	}
 }
 
+@-webkit-keyframes spin {
+	from {
+		-webkit-transform: rotate(0deg);
+	}
+
+	to {
+		-webkit-transform: rotate(360deg);
+	}
+}
+
 .filteractived {
-	Border: 1px solid #007fff;
+	border: 1px solid #007fff;
 }
 
 .request-body-inner .btn-group .glyphicon-arrow-up,
@@ -634,9 +630,9 @@
 	align-content: center;
 }
 
-	.btn.dropdown-toggle > b {
-		margin-left: 15%;
-	}
+.btn.dropdown-toggle > b {
+	margin-left: 15%;
+}
 
 .select2-container#s2id_Team-Picker {
 	width: 100% !important;
@@ -646,7 +642,7 @@
 	width: 100% !important;
 }
 
-input[type=search]::-ms-clear {
+input[type='search']::-ms-clear {
 	display: none;
 }
 
@@ -670,7 +666,7 @@ input[type=search]::-ms-clear {
 	margin: 0 !important;
 }
 
-.request-add-container{
+.request-add-container {
 	position: relative;
 }
 
@@ -685,19 +681,19 @@ input[type=search]::-ms-clear {
 	z-index: 100;
 }
 
-	.posting-mask img {
-		position: absolute;
-		top: calc(50% - 16px);
-		left: calc(50% - 16px);
-	}
+.posting-mask img {
+	position: absolute;
+	top: calc(50% - 16px);
+	left: calc(50% - 16px);
+}
 
 /*Mobile tweaks*/
-@media only screen and (max-width : 768px) {
-	.hide-requests-on-phone{
-		display: none!important;
+@media only screen and (max-width: 768px) {
+	.hide-requests-on-phone {
+		display: none !important;
 	}
-	.hide-fab-on-phone{
-		display: none!important;
+	.hide-fab-on-phone {
+		display: none !important;
 	}
 }
 
@@ -726,21 +722,24 @@ input[type=search]::-ms-clear {
 	right: 0;
 }
 
-.overtime-request-duration span.input-group-addon{
+.overtime-request-duration span.input-group-addon {
 	padding: 0;
 }
 
-.overtime-request-duration span.input-group-addon button.btn{
+.overtime-request-duration span.input-group-addon button.btn {
 	border: none;
 }
 
 @media (max-width: 500px) {
-	.overtime-request-type, .overtime-request-date, .overtime-request-starttime, .overtime-request-duration {
+	.overtime-request-type,
+	.overtime-request-date,
+	.overtime-request-starttime,
+	.overtime-request-duration {
 		width: 100%;
 		margin-top: 5px;
 	}
 
-	.overtime-request-duration .dropdown-menu{
+	.overtime-request-duration .dropdown-menu {
 		max-height: 80px;
 	}
 
@@ -754,8 +753,8 @@ input[type=search]::-ms-clear {
 	padding-left: 23px;
 }
 
-.full-day-label input, 
-input.overtime-availability-next-day, 
+.full-day-label input,
+input.overtime-availability-next-day,
 input.shift-exchange-offer-next-day,
 input.use-default-startTime {
 	cursor: pointer;

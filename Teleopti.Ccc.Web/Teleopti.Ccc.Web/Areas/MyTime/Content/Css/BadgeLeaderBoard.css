@@ -1,14 +1,14 @@
 ﻿.leader-board-header {
-	vertical-align: middle; 
+	vertical-align: middle;
 	text-align: center;
-	font-size: xx-large; 
-	color: #ffffff
+	font-size: xx-large;
+	color: #ffffff;
 }
 
 .badge-leader-board-report .agent-badge {
 	border-top: 1px solid #dfdfdf;
-	border-bottom: 1px solid #dfdfdf; 
-	height: 39px
+	border-bottom: 1px solid #dfdfdf;
+	height: 39px;
 }
 
 .agent-badge-header {
@@ -16,27 +16,31 @@
 }
 
 .agent-badge-num {
-	text-align: center
+	text-align: center;
 }
 #s2id_Hierarchy-Picker {
 	min-width: 255px;
 	max-width: 350px;
 }
 
-.site-option {font-weight: bold}
+.site-option {
+	font-weight: bold;
+}
 
-li.team-option {padding-left: 25px;}
+li.team-option {
+	padding-left: 25px;
+}
 
 .datepicker-style {
 	width: 350px !important;
 }
 
 .btn-default[disabled] {
-	border-color: #5ACDF9 !important;
-	background-color: #5ACDF9 !important;
+	border-color: #5acdf9 !important;
+	background-color: #5acdf9 !important;
 }
 
 .date-input-style {
 	padding: 10px 1px;
-	font-size:13px;
+	font-size: 13px;
 }

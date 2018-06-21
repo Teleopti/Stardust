@@ -1,31 +1,31 @@
-﻿.weekview-mobile .mobile-weekview-nav ul.navbar-teleopti{
+﻿.weekview-mobile .mobile-weekview-nav ul.navbar-teleopti {
 	margin: 0;
 	display: inline-block;
 }
 .weekview-mobile .mobile-weekview-nav {
 	display: flex;
 }
-@media(max-width: 500px){
+@media (max-width: 500px) {
 	.weekview-mobile .mobile-weekview-nav {
 		padding-left: 0;
 		padding-right: 0;
 	}
-	.weekview-mobile .mobile-weekview-nav ul.navbar-teleopti > li{
+	.weekview-mobile .mobile-weekview-nav ul.navbar-teleopti > li {
 		padding-left: 0;
 		padding-right: 0;
 	}
 }
-.weekview-mobile .weekview-mobile-nav-input-group{
+.weekview-mobile .weekview-mobile-nav-input-group {
 	max-width: 329px;
 	flex-grow: 1;
 }
-.weekview-mobile .probability-toggle-container{
+.weekview-mobile .probability-toggle-container {
 	margin: 5px;
 }
-.probability-toggle-container{
+.probability-toggle-container {
 	display: inline-block;
 }
-.probability-toggle-container > a.btn{
+.probability-toggle-container > a.btn {
 	background: transparent;
 	border-color: transparent;
 	border-radius: 4px;
@@ -34,16 +34,16 @@
 	padding: 10px;
 	display: flex;
 }
-.probability-toggle-container > a > span{
+.probability-toggle-container > a > span {
 	height: 20px;
 	width: 20px;
 }
 .probability-toggle-container .absence-probability-label,
 .probability-toggle-container .overtime-probability-label {
 	box-shadow: 0 0 1px 2px #888;
-	color:black;
+	color: black;
 }
-.probability-option-container .well{
+.probability-option-container .well {
 	margin-bottom: 0;
 }
 .probability-toggle-container i {
@@ -78,7 +78,7 @@
 	padding: 0;
 	text-align: center;
 }
-.weekview-mobile > .container{
+.weekview-mobile > .container {
 	padding-top: 15px;
 }
 .mobile-view-day {
@@ -87,10 +87,12 @@
 .mobile-bottom-bar {
 	margin-top: 5px;
 }
-.weekview-mobile .dropdown-menu{
+.weekview-mobile .dropdown-menu {
 	overflow-y: auto;
 }
-.weekview-mobile .action-button, .weekview-mobile .probability-icon, .weekview-mobile .background-transparent {
+.weekview-mobile .action-button,
+.weekview-mobile .probability-icon,
+.weekview-mobile .background-transparent {
 	padding: 6.5px 10px;
 	border-radius: 50%;
 }
@@ -99,20 +101,23 @@
 	border-color: transparent;
 	color: #007fff;
 }
-.weekview-mobile .probability-icon > i{
+.weekview-mobile .probability-icon > i {
 	transform: scale(1.2);
 	-webkit-transform: scale(1.2);
 }
-.weekview-mobile a.background-transparent:hover, .weekview-mobile a.background-transparent:focus {
+.weekview-mobile a.background-transparent:hover,
+.weekview-mobile a.background-transparent:focus {
 	background: transparent;
 }
-.weekview-mobile a.background-transparent .absence-probability-label:hover, .weekview-mobile a.background-transparent .overtime-probability-label:hover {
+.weekview-mobile a.background-transparent .absence-probability-label:hover,
+.weekview-mobile a.background-transparent .overtime-probability-label:hover {
 	box-shadow: 0 0 1px 4px #eee;
 }
 .date-input-style {
 	padding: 10px 1px;
 }
-.shift-category-content, .overtime-availability-content {
+.shift-category-content,
+.overtime-availability-content {
 	padding: 5px;
 	display: inline-block;
 	font-size: 1em;
@@ -122,14 +127,16 @@
 	background-color: #f0f8ff;
 	color: #333333;
 }
-.shift-category-content, .overtime-availability-content p {
+.shift-category-content,
+.overtime-availability-content p {
 	margin: 0;
 }
 .mobileWeek-day-view-body {
 	display: inline-block;
 	width: 100%;
 }
-.mobileWeek-day-view-body.has-overtime-availability .shift-category-content, .mobileWeek-day-view-body.has-overtime-availability .overtime-availability-content {
+.mobileWeek-day-view-body.has-overtime-availability .shift-category-content,
+.mobileWeek-day-view-body.has-overtime-availability .overtime-availability-content {
 	height: 70px;
 	text-overflow: ellipsis;
 }
@@ -150,34 +157,36 @@
 	height: 45px;
 	background: #fafafa;
 }
-.probability-horizontal-bar{
+.probability-horizontal-bar {
 	position: relative;
 	width: 100%;
 	height: 20px;
 	margin-bottom: 5px;
 }
-.probability-horizontal-bar .probability-cell{
+.probability-horizontal-bar .probability-cell {
 	position: absolute;
 	top: 0;
 	left: 0;
 	height: 100%;
 	z-index: 10;
 }
-.weekview-mobile .probability-horizontal-bar > .probability-cell{
+.weekview-mobile .probability-horizontal-bar > .probability-cell {
 	height: 20px;
 	float: left;
 }
 .weekview-day-schedule-layer {
 	height: 100%;
 }
-.weekview-mobile .overtime-availability-add, .weekview-mobile .absence-report-add {
+.weekview-mobile .overtime-availability-add,
+.weekview-mobile .absence-report-add {
 	cursor: default;
 }
-@media(max-width:768px) {
+@media (max-width: 768px) {
 	.mobileWeek-day-view-layer .weekview-day-schedule-layer div {
 		display: none;
 	}
-	.weekview-mobile .nav > li > a.overtime-availability-add, .weekview-mobile .nav > li > a.absence-report-add {
+	.weekview-mobile .nav > li > a.overtime-availability-add,
+	.weekview-mobile .nav > li > a.absence-report-add {
 		padding-left: 5px;
 		padding-right: 5px;
 	}
@@ -200,7 +209,7 @@
 	padding-bottom: 10px;
 	vertical-align: top;
 }
-.probability-radios-group .radio input[type="radio"] {
+.probability-radios-group .radio input[type='radio'] {
 	transform: scale(1.8);
 	margin-left: -15px;
 }

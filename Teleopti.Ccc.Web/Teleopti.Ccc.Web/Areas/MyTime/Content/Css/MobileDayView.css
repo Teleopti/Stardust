@@ -6,23 +6,23 @@
 	display: flex;
 	justify-content: space-between;
 }
-.mobile-start-day .mobile-start-day-nav span.input-group-btn .btn.btn-default{
+.mobile-start-day .mobile-start-day-nav span.input-group-btn .btn.btn-default {
 	padding: 9px 10px;
 }
-@media(max-width: 500px){
+@media (max-width: 500px) {
 	.mobile-start-day .mobile-start-day-nav .input-group {
 		max-width: 220px;
 	}
-	.mobile-start-day .mobile-start-day-nav span.input-group-btn .btn{
+	.mobile-start-day .mobile-start-day-nav span.input-group-btn .btn {
 		padding: 10px;
 	}
 }
-@media(max-width: 350px){
+@media (max-width: 350px) {
 	.mobile-start-day .mobile-start-day-nav input.form-control {
 		padding-left: 0;
 		padding-right: 0;
 	}
-	.mobile-start-day .mobile-start-day-nav span.input-group-btn .btn{
+	.mobile-start-day .mobile-start-day-nav span.input-group-btn .btn {
 		padding-left: 15px;
 		padding-right: 15px;
 	}
@@ -106,7 +106,7 @@
 	position: relative;
 }
 
-.mobile-start-day .mobile-summary-content span{
+.mobile-start-day .mobile-summary-content span {
 	display: inline-block;
 }
 
@@ -117,16 +117,16 @@
 .mobile-start-day .mobile-summary-content-text > span {
 	margin: 0 5px;
 }
-.mobile-start-day .mobile-summary-content-text > div{
+.mobile-start-day .mobile-summary-content-text > div {
 	text-transform: uppercase;
 	font-size: 150%;
 }
-.mobile-start-day .probability-toggle-container{
+.mobile-start-day .probability-toggle-container {
 	position: absolute;
 	right: 4px;
 	bottom: 4px;
 }
-.mobile-start-day .probability-toggle-container a.btn{
+.mobile-start-day .probability-toggle-container a.btn {
 	padding: 0;
 }
 .mobile-start-day .mobile-timeline {
@@ -147,7 +147,7 @@
 	display: inline-block;
 	width: calc(100% - 36px);
 }
-.mobile-schedule-container  .data-loading-gif{
+.mobile-schedule-container .data-loading-gif {
 	margin: 100px auto;
 	display: block;
 }
@@ -155,44 +155,44 @@
 	text-align: center;
 	overflow: hidden;
 	border-left: 0;
-	border-top: 1px solid #DFDFDF;
-	border-bottom: 1px solid #DFDFDF;
+	border-top: 1px solid #dfdfdf;
+	border-bottom: 1px solid #dfdfdf;
 }
-.mobile-start-day .mobile-schedule-layer:first-of-type{
+.mobile-start-day .mobile-schedule-layer:first-of-type {
 	border-top-left-radius: 3px;
 	border-top-right-radius: 3px;
 }
-.mobile-start-day .mobile-schedule-layer.last-layer{
+.mobile-start-day .mobile-schedule-layer.last-layer {
 	border-bottom-left-radius: 3px;
 	border-bottom-right-radius: 3px;
 }
-.mobile-start-day .probability-vertical-bar{
+.mobile-start-day .probability-vertical-bar {
 	position: absolute;
 	height: 100%;
 	right: 0;
 	width: 28px;
 }
-.mobile-start-day .probability-vertical-bar .probability-cell:first-of-type{
+.mobile-start-day .probability-vertical-bar .probability-cell:first-of-type {
 	border-top-left-radius: 3px;
 	border-top-right-radius: 3px;
-	border-top: 1px solid #DFDFDF;
+	border-top: 1px solid #dfdfdf;
 }
-.mobile-start-day .probability-vertical-bar .probability-cell:last-of-type{
+.mobile-start-day .probability-vertical-bar .probability-cell:last-of-type {
 	border-bottom-right-radius: 3px;
 	border-bottom-left-radius: 3px;
-	border-bottom: 1px solid #DFDFDF;
+	border-bottom: 1px solid #dfdfdf;
 }
 
-@media(max-width: 768px){
-	.mobile-start-day #Request-add-section{
+@media (max-width: 768px) {
+	.mobile-start-day #Request-add-section {
 		overflow-y: auto;
 		overflow-x: hidden;
 		-webkit-overflow-scrolling: touch;
 	}
 }
 
-.mobile-start-day #Request-add-section{
-	box-shadow: 0 -8px 17px 0 rgba(0,0,0,.2);
+.mobile-start-day #Request-add-section {
+	box-shadow: 0 -8px 17px 0 rgba(0, 0, 0, 0.2);
 	position: fixed;
 	bottom: 0;
 	left: 0;
@@ -205,14 +205,14 @@
 	padding-top: 60px;
 }
 
-.mobile-add-request-form .overtime-add-container .overtime-request-duration .dropdown-menu{
+.mobile-add-request-form .overtime-add-container .overtime-request-duration .dropdown-menu {
 	max-height: 80px;
 }
 
-.mobile-start-day .request-add-container{
+.mobile-start-day .request-add-container {
 	cursor: pointer;
 }
 
-.mobile-start-day .form-control[disabled]{
+.mobile-start-day .form-control[disabled] {
 	background-color: #f1f1f1;
 }

@@ -12,7 +12,7 @@
 	padding: 9px 10px;
 }
 
-@media(max-width:500px) {
+@media (max-width: 500px) {
 	.mobile-month-view .mobile-month-view-nav .input-group {
 		max-width: 300px;
 	}
@@ -20,10 +20,9 @@
 	.mobile-month-view .mobile-month-view-nav span.input-group-btn .btn {
 		padding: 10px;
 	}
-
 }
 
-@media(max-width:350px) {
+@media (max-width: 350px) {
 	.mobile-month-view .mobile-month-view-nav input.form-control {
 		padding-left: 0;
 		padding-right: 0;
@@ -33,7 +32,6 @@
 		padding-left: 15px;
 		padding-right: 15px;
 	}
-
 }
 
 .mobile-month-view .mobile-month-view-nav .submenu li {
@@ -91,29 +89,29 @@
 }
 
 .mobile-month-row-head {
-	height: auto!important;
+	height: auto !important;
 }
 
 .mobile-month-row-fluid:after {
 	clear: both;
 }
 
-.mobile-month-row-fluid{
+.mobile-month-row-fluid {
 	height: 130px;
 }
 
-.mobile-month-row-fluid.has-overtime-or-absence{
+.mobile-month-row-fluid.has-overtime-or-absence {
 	height: 148px;
 }
 
-.mobile-month-row-fluid.has-overtime-and-absence{
+.mobile-month-row-fluid.has-overtime-and-absence {
 	height: 173px;
 }
 
 .mobile-month-row-fluid .mobile-month-cell {
 	height: 100%;
 	width: 13.6%;
-	margin: 4px .28%;
+	margin: 4px 0.28%;
 	float: left;
 }
 
@@ -175,7 +173,7 @@
 
 .mobile-month-day .shift-timespan p {
 	margin: 0;
-	padding: 0
+	padding: 0;
 }
 
 .mobile-month-day .dayoff-img {
@@ -186,12 +184,6 @@
 	position: absolute;
 	bottom: 0;
 	width: 100%;
-}
-
-.mobile-month-view .absence-info-cell {
-}
-
-.mobile-month-view .overtime-info-cell {
 }
 
 .mobile-month-view .absence-and-overtime > div:last-child {

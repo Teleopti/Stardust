@@ -1,12 +1,9 @@
-﻿
-.ui-tooltip-custom 
-{
+﻿.ui-tooltip-custom {
 	border-color: rgb(200, 200, 200);
 	background-color: rgb(255, 255, 255);
 }
 
-.ui-tooltip-custom .ui-tooltip-content
-{
+.ui-tooltip-custom .ui-tooltip-content {
 	text-align: left;
 	padding: 5px;
 	font-size: 12px;
@@ -18,16 +15,14 @@
 	text-align: right;
 }
 
-.ui-tooltip-custom .ui-tooltip-titlebar
-{
-	
+.ui-tooltip-custom .ui-tooltip-titlebar {
 	-moz-border-top-left-radius: 5px;
 	-moz-border-top-right-radius: 5px;
 	-webkit-border-top-left-radius: 5px;
 	-webkit-border-top-right-radius: 5px;
 	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
-	
+
 	border-bottom: 1px solid #dfdfdf;
 	background-color: #f8f8f8;
 	padding-top: 3px;
@@ -39,11 +34,10 @@
 .ui-tooltip-shadow {
 	-webkit-box-shadow: 5px 12px 12px #c7c4c4;
 	-moz-box-shadow: 5px 12px 12px #c7c4c4;
-    box-shadow: 5px 12px 12px #c7c4c4;
+	box-shadow: 5px 12px 12px #c7c4c4;
 }
 
-.ui-tooltip-custom .ui-tooltip-title 
-{
+.ui-tooltip-custom .ui-tooltip-title {
 	text-align: left;
 	font-weight: normal;
 	padding-top: 5px;
@@ -53,8 +47,7 @@
 .rtl .ui-tooltip-custom .ui-tooltip-title {
 	text-align: right;
 }
-.ui-tooltip-custom .ui-tooltip-icon 
-{
+.ui-tooltip-custom .ui-tooltip-icon {
 	margin-top: -7px;
 }
 

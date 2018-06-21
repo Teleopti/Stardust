@@ -59,7 +59,7 @@
 	overflow: hidden;
 }
 
-.weekview-probability-toggle{
+.weekview-probability-toggle {
 	margin-left: 20px;
 }
 
@@ -72,11 +72,25 @@
 }
 
 .overtime-background-image-dark {
-	background: linear-gradient(45deg, transparent, transparent 4px, rgba(0, 0, 0, .5) 6px, transparent 10px, transparent);
+	background: linear-gradient(
+		45deg,
+		transparent,
+		transparent 4px,
+		rgba(0, 0, 0, 0.5) 6px,
+		transparent 10px,
+		transparent
+	);
 }
 
 .overtime-background-image-light {
-	background: linear-gradient(45deg, transparent, transparent 4px, rgba(255, 255, 255, .5) 6px, transparent 10px, transparent);
+	background: linear-gradient(
+		45deg,
+		transparent,
+		transparent 4px,
+		rgba(255, 255, 255, 0.5) 6px,
+		transparent 10px,
+		transparent
+	);
 }
 
 .dayoff {
@@ -97,9 +111,9 @@
 	border-bottom: 1px solid #dfdfdf;
 }
 
-	.weekview-day-symbol div[class="tooltip-inner"] {
-		max-width: none;
-	}
+.weekview-day-symbol div[class='tooltip-inner'] {
+	max-width: none;
+}
 
 .weekview-day-schedule {
 	display: inline-block;
@@ -118,17 +132,17 @@
 	height: 668px;
 }
 
-.probability-vertical-bar .probability-mask{
+.probability-vertical-bar .probability-mask {
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 100%;
 	z-index: 11;
 	background: #eee;
-	opacity: .5;
+	opacity: 0.5;
 }
 
-.probability-vertical-bar .probability-cell{
+.probability-vertical-bar .probability-cell {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -145,7 +159,7 @@
 }
 
 .probability-none {
-	background-color: #F9F9F9;
+	background-color: #f9f9f9;
 }
 
 .probability-high {
@@ -198,12 +212,13 @@
 	border-radius: 2px;
 	border-left: 0;
 	overflow: hidden;
-	border-top: 1px solid #DFDFDF;
-	border-bottom: 1px solid #DFDFDF;
+	border-top: 1px solid #dfdfdf;
+	border-bottom: 1px solid #dfdfdf;
 	width: calc(98%) !important;
 }
 
-.week-schedule-ASM-permission-granted, .week-schedule-current-week {
+.week-schedule-ASM-permission-granted,
+.week-schedule-current-week {
 	display: none;
 }
 

@@ -1,8 +1,8 @@
-﻿.hide-at-start{
+﻿.hide-at-start {
 	display: none;
 }
 
-.hide-at-start.show-after-loaded{
+.hide-at-start.show-after-loaded {
 	display: block;
 }
 
@@ -23,7 +23,7 @@
 	.phone-form-preference input:read-only {
 		background-color: #ffffff;
 	}
-	.phone-form-preference .open[data-bind="click:ToggleOpen"]:before{
+	.phone-form-preference .open[data-bind='click:ToggleOpen']:before {
 		content: '';
 		border: 0;
 		margin: 0;
@@ -39,15 +39,19 @@
 		z-index: 998;
 		background-color: #fff;
 	}
-	.phone-form-preference .form-inline td:nth-child(4) .left-align,.phone-form-preference .preference-activity-section .form-inline td:nth-child(3) .left-align{
+	.phone-form-preference .form-inline td:nth-child(4) .left-align,
+	.phone-form-preference .preference-activity-section .form-inline td:nth-child(3) .left-align {
 		left: auto !important;
 		right: 0 !important;
 	}
-	.phone-form-preference .select-input-auto .dropdown-menu{
+	.phone-form-preference .select-input-auto .dropdown-menu {
 		left: auto;
 		right: 0;
 	}
-	.phone-form-preference .preference-extended-work-time-min + .dropdown-menu ,.phone-form-preference .preference-extended-work-time-max + .dropdown-menu,.phone-form-preference .preference-activity-extended-work-time-min + .dropdown-menu ,.phone-form-preference .preference-activity-extended-work-time-max + .dropdown-menu {
+	.phone-form-preference .preference-extended-work-time-min + .dropdown-menu,
+	.phone-form-preference .preference-extended-work-time-max + .dropdown-menu,
+	.phone-form-preference .preference-activity-extended-work-time-min + .dropdown-menu,
+	.phone-form-preference .preference-activity-extended-work-time-max + .dropdown-menu {
 		max-height: 200px !important;
 		min-width: inherit;
 		width: 100%;
@@ -56,10 +60,11 @@
 		left: auto;
 		right: 0;
 	}
-	.phone-form-preference .form-preference > span > span:nth-child(1) > button{
+	.phone-form-preference .form-preference > span > span:nth-child(1) > button {
 		margin-bottom: 5px;
 	}
-	.phone-form-preference .form-preference > span > span:nth-child(2),.phone-form-preference .form-preference > span > span:nth-child(1){
+	.phone-form-preference .form-preference > span > span:nth-child(2),
+	.phone-form-preference .form-preference > span > span:nth-child(1) {
 		display: block;
 		margin-top: 5px;
 	}
@@ -73,7 +78,8 @@
 	.phone-form-preference .form-preference div:nth-child(5) {
 		padding-left: 0;
 	}
-	.phone-form-preference .preference-end-time-min-next-day,.phone-form-preference .preference-end-time-max-next-day {
+	.phone-form-preference .preference-end-time-min-next-day,
+	.phone-form-preference .preference-end-time-max-next-day {
 		height: 15px;
 		width: 15px;
 	}
@@ -95,7 +101,7 @@
 	.phone-form-preference .form-inline > button:last-child {
 		display: none;
 	}
-	.phone-form-preference .form-preference{
+	.phone-form-preference .form-preference {
 		position: fixed;
 		top: 10%;
 		left: 0;
@@ -151,7 +157,7 @@
 		padding-left: 0;
 		padding-right: 0;
 	}
-	.phone-navbar .phone-navbar-top  .btn {
+	.phone-navbar .phone-navbar-top .btn {
 		padding: 10px 13px;
 	}
 	.phone-navbar .phone-navbar-top .date-input-style {
@@ -170,7 +176,7 @@
 		font-size: 13px;
 		float: inherit;
 	}
-	.phone-navbar .phone-navbar-bottom .navbar-nav{
+	.phone-navbar .phone-navbar-bottom .navbar-nav {
 		position: fixed;
 		bottom: 0;
 		z-index: 110;
@@ -200,16 +206,16 @@
 	.phone-navbar .w-50 {
 		width: 50% !important;
 	}
-	.phone-navbar .phone-navbar-bottom  .input-group {
+	.phone-navbar .phone-navbar-bottom .input-group {
 		padding: 0 !important;
 		width: 100%;
 		margin-left: 0 !important;
 		text-align: center;
 	}
-	.phone-navbar .phone-navbar-bottom  .btn {
+	.phone-navbar .phone-navbar-bottom .btn {
 		padding: 2px 0 0 0;
 	}
-	.phone-navbar .phone-navbar-bottom  .btn-group {
+	.phone-navbar .phone-navbar-bottom .btn-group {
 		width: 100%;
 	}
 	.phone-navbar .phone-navbar-bottom .open .dropdown-menu {
@@ -217,7 +223,7 @@
 		top: inherit;
 		left: inherit;
 		bottom: 40px;
-		background-color: #5ACDF9;
+		background-color: #5acdf9;
 		min-width: inherit;
 		width: 100%;
 	}
@@ -230,7 +236,7 @@
 	.phone-navbar .phone-navbar-bottom .dropdown-toggle .caret {
 		transform: rotate(180deg);
 	}
-	.phone-navbar .phone-navbar-bottom .preference-split-button .navbar-btn{
+	.phone-navbar .phone-navbar-bottom .preference-split-button .navbar-btn {
 		margin-left: 0 !important;
 		margin-top: 10px;
 	}
@@ -239,40 +245,35 @@
 	display: none;
 }
 
-.preference 
-{
-    height: 20px;
+.preference {
+	height: 20px;
 }
-.preference-text 
-{
-    float: left;
-    font-weight: bold;
-    max-width: 77px;
+.preference-text {
+	float: left;
+	font-weight: bold;
+	max-width: 77px;
 	min-width: 35px;
-    overflow: hidden;
+	overflow: hidden;
 	text-shadow: none;
 }
 .preference-must-have {
 	margin-bottom: 3px;
 }
-.nav > li > .input-group.must-have-menu{
+.nav > li > .input-group.must-have-menu {
 	margin: 0;
 }
-.preference-indicator 
-{
+.preference-indicator {
 	float: left;
 	width: 14px;
 	height: 14px;
 }
-.extended-indication
-{
-    position: relative;
-    top: -2px;
-    margin-left: 1px;
-    border-radius: 4px;
-    border: 1px solid lightgray;
+.extended-indication {
+	position: relative;
+	top: -2px;
+	margin-left: 1px;
+	border-radius: 4px;
+	border: 1px solid lightgray;
 	cursor: pointer;
-
 }
 .extended-panel {
 	line-height: 14px;
@@ -283,7 +284,7 @@
 	text-align: center;
 	margin-bottom: 10px;
 	margin-top: 3px;
-    margin-left: 8px;
+	margin-left: 8px;
 	width: 120px;
 	border: 1px solid lightgray;
 }
@@ -298,14 +299,12 @@
 	margin-bottom: 10px;
 }
 
-.calendarview-week li.modified div.day-content
-{
+.calendarview-week li.modified div.day-content {
 	border-left-color: white;
 	border-right-color: white;
 }
 
-.calendarview-week li .loading-small-gray-blue
-{
+.calendarview-week li .loading-small-gray-blue {
 	position: absolute;
 	top: 20px;
 	right: 0;
@@ -318,7 +317,7 @@
 	padding: 0;
 }
 
-.header-week-day{
+.header-week-day {
 	min-height: 17px;
 }
 
@@ -356,8 +355,7 @@
 	padding-bottom: 1px;
 }
 
-.time-limitation 
-{
+.time-limitation {
 	display: block; /* required because chrome will display a different height without content otherwise */
 	height: 13px;
 	font-size: 11px;
@@ -366,15 +364,14 @@
 	white-space: nowrap;
 }
 
-.feedback-detail 
-{
+.feedback-detail {
 	color: black;
 	font-size: 1.15em;
 }
 .preference-next-day-checkbox {
-    width: 17px;
-    padding: 0 0 0 0;
-    vertical-align: baseline;
+	width: 17px;
+	padding: 0 0 0 0;
+	vertical-align: baseline;
 }
 #Preference-must-have-numbers {
 	float: left;
@@ -382,8 +379,8 @@
 }
 
 .grey-out {
-	opacity : 0.4;
-    filter: alpha(opacity=40); 
+	opacity: 0.4;
+	filter: alpha(opacity=40);
 }
 
 .meeting-small {
@@ -392,11 +389,11 @@
 }
 
 .preference-tooltip-subject {
-	max-width: 200px; 
-	word-wrap: break-word; 
+	max-width: 200px;
+	word-wrap: break-word;
 }
 
-.collapse-sign{
+.collapse-sign {
 	text-decoration: none;
 	min-width: 8px;
 	color: black;
@@ -420,11 +417,11 @@
 }
 
 .ie9 .preference-ui-tooltip {
-    box-shadow: none;
+	box-shadow: none;
 }
 
 div.qtip-content {
-    overflow: visible;
+	overflow: visible;
 }
 
 #qtip-add-extended {
@@ -466,8 +463,8 @@ div.qtip-content {
 }
 
 .td-vertical-divider {
-	border-right: 1px solid #E0D9D9; 
-	border-left: 1px solid #ffffff; 
+	border-right: 1px solid #e0d9d9;
+	border-left: 1px solid #ffffff;
 	padding: 0px !important;
 }
 
@@ -480,14 +477,14 @@ div.qtip-content {
 }
 
 .preference-input-icon-cell {
-    width: 16px;
+	width: 16px;
 }
 
 .musthave-textcolor {
 	color: #777777;
 }
 
-.musthave-textcolor>li>a:hover {
+.musthave-textcolor > li > a:hover {
 	color: #333333;
 }
 
@@ -496,12 +493,12 @@ div.qtip-content {
 	font-weight: bold;
 }
 
-.day-content .error{
+.day-content .error {
 	font-weight: 600;
 }
 
 .day-content .weekly-work-time-alert-noneditable {
-	color: rgb(240,118,118);
+	color: rgb(240, 118, 118);
 	font-weight: bold;
 }
 
@@ -525,7 +522,7 @@ div.qtip-content {
 }
 
 .week-view-non-editable {
-	color:#c9c4c4
+	color: #c9c4c4;
 }
 
 .date-input-style {
@@ -536,13 +533,13 @@ div.qtip-content {
 	margin: 10px 5px;
 }
 
-@media(min-width: 768px) {
+@media (min-width: 768px) {
 	.preference-input-left {
 		border-right: 1px solid white;
 	}
 }
 
-@media(max-width: 768px) {
+@media (max-width: 768px) {
 	.preference-input-left {
 		border-bottom: 1px solid white;
 		margin-bottom: 10px;
@@ -550,6 +547,6 @@ div.qtip-content {
 	}
 }
 
-.meeting-tooltip{
+.meeting-tooltip {
 	display: none;
 }

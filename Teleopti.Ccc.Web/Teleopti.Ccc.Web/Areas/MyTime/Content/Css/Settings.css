@@ -1,5 +1,4 @@
-﻿#settings.edit-module
-{
+﻿#settings.edit-module {
 	margin: 0px;
 }
 
@@ -7,67 +6,65 @@
 	text-align: right;
 }
 
-#settings .ui-selectbox
-{
+#settings .ui-selectbox {
 	width: 320px;
 }
 
-.rtl #settings .ui-selectbox
-{
+.rtl #settings .ui-selectbox {
 	direction: ltr;
 	text-align: right;
 }
 
-#settings .ui-selectbox-menu a
-{
+#settings .ui-selectbox-menu a {
 	width: 263px;
 }
 
-.rtl #settings .ui-selectbox-menu a
-{
+.rtl #settings .ui-selectbox-menu a {
 	direction: ltr;
 	text-align: right;
 }
 
 .culture-setting {
-    min-width: 250px;
-    max-width: 100%;
+	min-width: 250px;
+	max-width: 100%;
 }
 
 .setting-padding {
-    padding-top: 20px;
+	padding-top: 20px;
 }
 
-.settings-input-border{
+.settings-input-border {
 	padding-bottom: 20px;
 	border-right: 1px solid #e3e3e3;
 	border-bottom: none;
 }
 
-.qrcode-container{
+.qrcode-container {
 	text-align: center;
 }
 
-@media(max-width: 768px){
-	.settings-input-border{
+@media (max-width: 768px) {
+	.settings-input-border {
 		border-right: none;
 		border-bottom: 1px solid #e3e3e3;
 	}
 
-	body.rtl .qrcode-container{
+	body.rtl .qrcode-container {
 		text-align: right;
 	}
-	
-	.qrcode-container{
+
+	.qrcode-container {
 		text-align: left;
 	}
 }
 
-a.android-app-link, a.ios-app-link{
+a.android-app-link,
+a.ios-app-link {
 	position: relative;
 }
 
-a.android-app-link > div, a.ios-app-link > div{
+a.android-app-link > div,
+a.ios-app-link > div {
 	position: absolute;
 	right: 0;
 	top: 30px;
