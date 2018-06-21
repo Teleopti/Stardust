@@ -53,8 +53,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				1, 2, 2, 2, 2, 2, 2));
 			PlanningGroupSettingsRepository.HasDefault(x =>
 			{
-				x.ConsecutiveWorkdays = new MinMax<int>(1, 20);
-			}); //just to make sure anything goes
+				x.ConsecutiveWorkdays = new MinMax<int>(1, 20); //just to make sure anything goes
+			}, planningPeriod.PlanningGroup); 
 			var optPrefs = OptimizationPreferencesProvider.Fetch();
 			optPrefs.Extra.UseTeams= true;
 			OptimizationPreferencesProvider.SetFromTestsOnly(optPrefs);

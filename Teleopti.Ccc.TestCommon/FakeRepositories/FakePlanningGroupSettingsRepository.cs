@@ -50,9 +50,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return PlanningGroupSettings.CreateDefault();
 		}
 
-		public void HasDefault(Action<PlanningGroupSettings> actionOnDefaultInstance)
+		public void HasDefault(Action<PlanningGroupSettings> actionOnDefaultInstance, IPlanningGroup planningGroup)
 		{
-			var defaultSettings = PlanningGroupSettings.CreateDefault();
+			var defaultSettings = PlanningGroupSettings.CreateDefault(planningGroup);
 			actionOnDefaultInstance(defaultSettings);
 			_workRuleSettings.Add(defaultSettings);
 		}

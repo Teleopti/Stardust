@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -76,7 +77,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 						Number = number,
 						PeriodType = type
 					}
-				}), planningGroup);
+				}), planningGroup ?? new PlanningGroup());
 			planningPeriod.SetId(Guid.NewGuid());
 			_planningPeriods.Add(planningPeriod);
 			return planningPeriod;
