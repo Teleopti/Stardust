@@ -45,7 +45,7 @@
 		vm.showConfirm = function (ev) {
 			// Appending dialog to document.body to cover sidenav in docs app
 			var confirm = $mdDialog.confirm()
-					.title('Would you like to delete this Tenant?')
+					.title('Would you like to detach this Tenant?')
 					.textContent('No database will be removed. You can always import it again if you like.')
 					.targetEvent(ev)
 					.ok('Please do it!')

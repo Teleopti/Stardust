@@ -235,5 +235,10 @@ namespace Teleopti.Ccc.DBManager.Library
   AggregationConnectionString = '{2}'";
 			_usingDatabase.ExecuteTransactionlessNonQuery(string.Format(activateTenant,appConnection,analytConnection, aggConnection), 300);
 		}
+
+		public void RemoveOldPersonInfos()
+		{
+			_usingDatabase.ExecuteTransactionlessNonQuery("DELETE FROM Tenant.PersonInfo", 300);
+		}
 	}
 }

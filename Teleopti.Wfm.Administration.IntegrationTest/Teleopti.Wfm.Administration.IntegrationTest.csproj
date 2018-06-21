@@ -140,6 +140,7 @@
     <Compile Include="Core\AdminAccessTokenRepositoryTest.cs" />
     <Compile Include="Core\CreateBusinessUnitTest.cs" />
     <Compile Include="Core\FakeRunWithUnitOfWork.cs" />
+    <Compile Include="Core\RestorePersonInfoOnDetachTest.cs" />
     <Compile Include="Core\PurgeNoneEmployeeDataTest.cs" />
     <Compile Include="Core\PurgeOldSignInAttemptsTest.cs" />
     <Compile Include="FakeAbsenceRepository.cs" />

@@ -346,6 +346,7 @@
     <Compile Include="Core\PurgeOldSignInAttempts.cs" />
     <Compile Include="Core\RecurrentEventTimer.cs" />
     <Compile Include="Core\PreloadAdminPage.cs" />
+    <Compile Include="Core\RestorePersonInfoOnDetach.cs" />
     <Compile Include="Models\EtlScheduleJobModel.cs" />
     <Compile Include="Models\JobPeriodRelative.cs" />
     <Compile Include="Models\TenantConfigurationModel.cs" />

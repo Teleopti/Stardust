@@ -22,8 +22,11 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly DeleteTenant _deleteTenant;
 		private readonly ICheckDatabaseVersions _checkDatabaseVersions;
 		private readonly IDatabaseHelperWrapper _databaseHelperWrapper;
+		private readonly RestorePersonInfoOnDetach _restorePersonInfo;
 
-		public HomeController(ILoadAllTenants loadAllTenants, SaveTenant saveTenant, ITenantExists tenantExists, DeleteTenant deleteTenant, ICheckDatabaseVersions checkDatabaseVersions, IDatabaseHelperWrapper databaseHelperWrapper)
+		public HomeController(ILoadAllTenants loadAllTenants, SaveTenant saveTenant, ITenantExists tenantExists,
+			DeleteTenant deleteTenant, ICheckDatabaseVersions checkDatabaseVersions,
+			IDatabaseHelperWrapper databaseHelperWrapper, RestorePersonInfoOnDetach restorePersonInfo)
 		{
 			_loadAllTenants = loadAllTenants;
 			_saveTenant = saveTenant;
@@ -31,6 +34,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_deleteTenant = deleteTenant;
 			_checkDatabaseVersions = checkDatabaseVersions;
 			_databaseHelperWrapper = databaseHelperWrapper;
+			_restorePersonInfo = restorePersonInfo;
 		}
 
 
@@ -117,6 +121,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				return Json(new TenantResultModel {Success = false, Message = "This Tenant can not be deleted."});
 
 			var tenant = _loadAllTenants.Tenants().FirstOrDefault(x => x.Name.Equals(name));
+			_restorePersonInfo.Restore(tenant);
 			_deleteTenant.Delete(tenant);
 			_databaseHelperWrapper.ActivateTenantOnDelete(tenant);
 			return Json(new TenantResultModel { Success = true, Message =

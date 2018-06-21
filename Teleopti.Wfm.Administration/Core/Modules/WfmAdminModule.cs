@@ -110,6 +110,8 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 			else
 				builder.RegisterType<PurgeNoneEmployeeDataEmpty>().As<IPurgeNoneEmployeeData>().SingleInstance();
 
+			builder.RegisterType<RestorePersonInfoOnDetach>().SingleInstance();
+
 		}
 	}
 
