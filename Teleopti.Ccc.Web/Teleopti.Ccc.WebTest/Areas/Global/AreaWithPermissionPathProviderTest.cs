@@ -134,14 +134,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		}
 
 		[Test]
-		public void ShouldHaveStaffingAreaWhenFeatureEnabledAndPermitted()
+		public void ShouldHaveStaffingAreaWhenFeaturePermitted()
 		{
 			ApplicationFunctionsToggleFilter
 				.AddFakeFunction(new ApplicationFunction { FunctionCode = DefinedRaptorApplicationFunctionPaths.WebStaffing }
 			, o => true);
 
 			PermissionProvider.Enable();
-			ToggleManager.Enable(Toggles.Wfm_Staffing_45411);
 			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.WebStaffing);
 
 			var areas = Target.GetWfmAreasWithPermissions();
@@ -150,24 +149,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			areas.Single().Name.Invoke().Should().Be(Resources.WebStaffing);
 			areas.Single().InternalName.Should().Be("staffingModule");
 		}
-		[Test]
-		public void ShouldNotHaveStaffingAreaWhenFeatureIsDisabled()
-		{
-			PermissionProvider.Enable();
-			ToggleManager.Disable(Toggles.Wfm_Staffing_45411);
-			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.WebIntraday);
-
-			var areas = Target.GetWfmAreasWithPermissions();
-
-			areas.Count().Should().Be(0);
-		}
-
+		
 		[Test]
 		public void ShouldNotHaveStaffingAreaWhenItIsNotPermitted()
 		{
 			PermissionProvider.Enable();
-			ToggleManager.Enable(Toggles.Wfm_Staffing_45411);
-
+			
 			var areas = Target.GetWfmAreasWithPermissions();
 
 			areas.Count().Should().Be(0);

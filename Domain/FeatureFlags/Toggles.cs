@@ -138,8 +138,7 @@
 		Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560,
 		Report_Remove_Realtime_Scheduled_Time_vs_Target_45559,
 		Report_Remove_Scheduled_Time_Per_Activity_From_Scheduler_45640,
-		Wfm_Staffing_45411, //this is to enable staffing
-
+		
 		WFM_WebScheduling_LowPriority_44320,
 		WFM_Modify_Skill_Groups_43727,
 		WFM_AuditTrail_44006,
