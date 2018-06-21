@@ -65,7 +65,6 @@
     <Compile Include="Domain\NUnitSetup.cs" />
     <Compile Include="Infrastructure\EventHandlingAfterSaveScheduleTest.cs" />
     <Compile Include="Infrastructure\HangfireLogger.cs" />
-    <Compile Include="Domain\IntradayOptTest.cs" />
     <Compile Include="Infrastructure\NUnitSetup.cs" />
     <Compile Include="WebAction.cs" />
   </ItemGroup>
