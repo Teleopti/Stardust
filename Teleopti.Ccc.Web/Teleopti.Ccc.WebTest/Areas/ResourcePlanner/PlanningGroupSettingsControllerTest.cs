@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -21,17 +20,6 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			target.Persist(model);
 
 			persister.AssertWasCalled(x => x.Persist(model));
-		}
-
-		[Test]
-		public void ShouldFetchAll()
-		{
-			var model = new List<PlanningGroupSettingsModel>();
-			var fetchModel = MockRepository.GenerateMock<IFetchPlanningGroupSettingsModel>();
-			fetchModel.Expect(x => x.FetchAllWithoutPlanningGroup()).Return(model);
-			var target = new PlanningGroupSettingsController(fetchModel, null);
-			target.FetchAll().Result<IEnumerable<PlanningGroupSettingsModel>>()
-				.Should().Be.SameInstanceAs(model);
 		}
 
 		[Test]
