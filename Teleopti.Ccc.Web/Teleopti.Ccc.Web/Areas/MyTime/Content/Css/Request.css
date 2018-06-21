@@ -376,8 +376,10 @@
 
 .shift-trade-swap-detail-schedule-to {
 	position: absolute;
+	top: 24px;
 	left: 0px;
-	display: inline;
+	display: inline-block;
+	width: 100%;
 }
 
 .shift-trade-swap-detail-schedule-row {
