@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 				IWorkTimeStartEndExtractor workTimeStartEndExtractor = new WorkTimeStartEndExtractor();
 				INewDayOffRule dayOffRule = new NewDayOffRule(workTimeStartEndExtractor);
-				IDayOffOptimizerValidator dayOffOptimizerValidator = new DayOffOptimizerValidator(dayOffRule);
+				var dayOffOptimizerValidator = new DayOffOptimizerValidator(dayOffRule);
 
 				ISchedulingOptionsCreator schedulingOptionsCreator = new SchedulingOptionsCreator();
 				ICheckerRestriction checkerRestriction = new RestrictionChecker();

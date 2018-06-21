@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-    public class DayOffOptimizerValidator : IDayOffOptimizerValidator
+    public class DayOffOptimizerValidator
     {
         private readonly INewDayOffRule _dayOffRule;
 
@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Domain.Optimization
             _dayOffRule = dayOffRule;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public bool Validate(DateOnly dateOnly, IScheduleMatrixPro scheduleMatrixPro)
         {
             var dictionary = new Dictionary<IPerson, IScheduleRange> { { scheduleMatrixPro.Person, scheduleMatrixPro.ActiveScheduleRange } };

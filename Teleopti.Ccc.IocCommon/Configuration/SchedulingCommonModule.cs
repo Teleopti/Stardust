@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkShiftLegalStateDayIndexCalculator>().SingleInstance();
 
 			builder.RegisterType<WorkTimeStartEndExtractor>().As<IWorkTimeStartEndExtractor>().SingleInstance();
-			builder.RegisterType<DayOffOptimizerValidator>().As<IDayOffOptimizerValidator>().InstancePerLifetimeScope();
+			builder.RegisterType<DayOffOptimizerValidator>().InstancePerLifetimeScope();
 			builder.RegisterType<NewDayOffRule>().As<INewDayOffRule>().InstancePerLifetimeScope();
 
 			builder.RegisterType<SchedulerGroupPagesProvider>().InstancePerLifetimeScope();
