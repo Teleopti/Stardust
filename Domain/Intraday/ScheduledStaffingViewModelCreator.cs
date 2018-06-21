@@ -77,17 +77,32 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_forecastingService.CalculateForecastedAgentsForEmailSkills(skillDaysBySkills, useShrinkage);
 
 			var forecastedStaffing = _forecastingService.GetForecastedStaffing(
-				skillDaysBySkills.SelectMany(x => x.Value), 
-				startOfDayUtc, 
-				startOfDayUtc.AddDays(1), 
-				TimeSpan.FromMinutes(minutesPerInterval), 
-				useShrinkage);
+					skillDaysBySkills.SelectMany(x => x.Value),
+					startOfDayUtc,
+					startOfDayUtc.AddDays(1),
+					TimeSpan.FromMinutes(minutesPerInterval),
+					useShrinkage)
+				.Select(x => new StaffingIntervalModel
+				{
+					SkillId = x.SkillId,
+					StartTime = TimeZoneInfo.ConvertTimeFromUtc(x.StartTime, _timeZone.TimeZone()),
+					Agents = x.Agents
+				})
+				.ToList();
 
 			var scheduledStaffingPerSkill = _staffingScheduleService
 				.GetScheduledStaffing(skills.Where(x => x.Id.HasValue).Select(x => x.Id.Value).ToArray(), startOfDayUtc, startOfDayUtc.AddDays(1), TimeSpan.FromMinutes(minutesPerInterval), useShrinkage)
+				.Select(x => new SkillStaffingIntervalLightModel
+				{
+					Id = x.Id,
+					StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(x.StartDateTime, _timeZone.TimeZone()),
+					EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(x.EndDateTime, _timeZone.TimeZone()),
+					StaffingLevel = x.StaffingLevel
+				})
 				.ToList();
 
 			var timeSeries = TimeSeriesProvider.DataSeries(forecastedStaffing, scheduledStaffingPerSkill, minutesPerInterval, _timeZone.TimeZone());
+
 
 			var dataSeries = new StaffingDataSeries
 			{
