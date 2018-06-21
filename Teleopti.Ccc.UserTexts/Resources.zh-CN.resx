@@ -580,7 +580,7 @@
     <comment>Are you sure you want to delete?</comment>
   </data>
   <data name="AreYouSureYouWantToDeleteGrouping" xml:space="preserve">
-    <value>您确定想要删除 '{0}' 分组吗？</value>
+    <value>您确定想要删除“{0}”分组吗？</value>
     <comment>Are you sure you want to delete '{0}' grouping?</comment>
   </data>
   <data name="ArrowsRemove" xml:space="preserve">
@@ -4596,7 +4596,7 @@ Periods</comment>
     <comment>Sort menu desc</comment>
   </data>
   <data name="SortOn" xml:space="preserve">
-    <value>排序以</value>
+    <value>排序字段</value>
     <comment>SortOn</comment>
   </data>
   <data name="SortOrder" xml:space="preserve">
@@ -5523,13 +5523,13 @@ Periods</comment>
     <value>用于注销</value>
   </data>
   <data name="AreYouSureYouWantToDeleteAvailability" xml:space="preserve">
-    <value>您确定要删除 '{0}' 可用性？</value>
+    <value>您确定要删除“{0}”可用性？</value>
   </data>
   <data name="AreYouSureYouWantToDeleteRotation" xml:space="preserve">
     <value>您确定想要删除 ‘{0}’ 循环？</value>
   </data>
   <data name="AreYouSureYouWantToDeleteScenario" xml:space="preserve">
-    <value>您确定想要删除 '{0}' 情景？</value>
+    <value>您确定想要删除“{0}”情景？</value>
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
     <value>确认删除</value>
@@ -5679,7 +5679,7 @@ Periods</comment>
     <value>您确定要删除计划分组 {0}{1}{0}吗？</value>
   </data>
   <data name="AreYouSureYouWantToDeletePartTimePercentage" xml:space="preserve">
-    <value>您确定要删除 '{0}' 兼职时间百分比吗？</value>
+    <value>您确定要删除“{0}”兼职时间百分比吗？</value>
   </data>
   <data name="StaffingEffect" xml:space="preserve">
     <value>人员配备结果</value>
@@ -5850,7 +5850,7 @@ Periods</comment>
     <value>周：</value>
   </data>
   <data name="AreYouSureYouWantToDeleteContract" xml:space="preserve">
-    <value>您确定要删除 '{0}' 合同吗？</value>
+    <value>您确定要删除“{0}”合同吗？</value>
   </data>
   <data name="ResReportAbandonmentAndSpeedOfAnswer" xml:space="preserve">
     <value>放弃和应答的速度</value>
@@ -5901,7 +5901,7 @@ Periods</comment>
     <value>小组测量指标</value>
   </data>
   <data name="AreYouSureYouWantToDeleteDayOff" xml:space="preserve">
-    <value>您确定想要删除 '{0}' 休息日吗？</value>
+    <value>您确定想要删除“{0}”休息日吗？</value>
   </data>
   <data name="AreYouSureYouWantToDeleteOptionalColumn" xml:space="preserve">
     <value>您确定想要删除 ‘{0}’ 自定义栏位吗？</value>
@@ -7296,7 +7296,7 @@ Teleopti R&amp;D</value>
     <value>结束时间降序</value>
   </data>
   <data name="SortBy" xml:space="preserve">
-    <value>排序以</value>
+    <value>排序字段</value>
   </data>
   <data name="StartTimeAsc" xml:space="preserve">
     <value>开始时间升序</value>
@@ -8523,7 +8523,7 @@ Teleopti R&amp;D</value>
     <value>公开备注：</value>
   </data>
   <data name="AreYouSureYouWantToDeleteContractSchedule" xml:space="preserve">
-    <value>你确定要删除 '{0}' 班表合同吗么？</value>
+    <value>你确定要删除“{0}”班表合同吗么？</value>
   </data>
   <data name="EqualOfEachShiftCategory" xml:space="preserve">
     <value>每个班次类别均等</value>
@@ -8889,7 +8889,7 @@ Teleopti R&amp;D</value>
     <value>使用标准差</value>
   </data>
   <data name="UseTweakedValues" xml:space="preserve">
-    <value>使用微调值 (使用”最大或最小人员配备限制“或要求的"座席代表"时勾选此项)</value>
+    <value>使用微调值 (使用“最大或最小人员配备限制”或要求的“座席代表”时勾选此项)</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerDay" xml:space="preserve">
     <value>每天的班次类别和全天缺勤</value>
@@ -9426,7 +9426,7 @@ Teleopti R&amp;D</value>
     <value>目标值</value>
   </data>
   <data name="Teleopti" xml:space="preserve">
-    <value>Teleopti (当使用”灵活工作时间的班次“及”灵活工作时间的休息“时勾选此项)</value>
+    <value>Teleopti (当使用“灵活工作时间的班次”及“灵活工作时间的休息”时勾选此项)</value>
   </data>
   <data name="SubmitRequest" xml:space="preserve">
     <value>提交</value>
@@ -9549,13 +9549,13 @@ Teleopti R&amp;D</value>
     <value>无活动</value>
   </data>
   <data name="SelectAtleastOneOptimizationOption" xml:space="preserve">
-    <value>请在组排优化中从以下三个选项中至少选择一项：”班次类别“，”开始时间“和”结束时间“。</value>
+    <value>请在组排优化中从以下三个选项中至少选择一项：“班次类别”，“开始时间”和“结束时间”。</value>
   </data>
   <data name="SchedulingOptionMessageBox" xml:space="preserve">
     <value>排班选项</value>
   </data>
   <data name="SelectAtleastOneSchedulingOption" xml:space="preserve">
-    <value>请在组排班中从以下三个选项中至少选择一项：”班次类别“，”开始时间“和”结束时间“。</value>
+    <value>请在组排班中从以下三个选项中至少选择一项：“班次类别”，“开始时间”和“结束时间”。</value>
   </data>
   <data name="ManageSmsSettings" xml:space="preserve">
     <value>管理SMS设置</value>
@@ -10605,7 +10605,7 @@ Teleopti R&amp;D</value>
     <value>作为另一用户签入</value>
   </data>
   <data name="SignInWith" xml:space="preserve">
-    <value>签入以</value>
+    <value>签入方式</value>
   </data>
   <data name="SignOut" xml:space="preserve">
     <value>签出</value>
@@ -10626,7 +10626,7 @@ Teleopti R&amp;D</value>
     <value>小组排班</value>
   </data>
   <data name="BusinessRuleMinWeekWorktimeErrorMessage" xml:space="preserve">
-    <value>一周内包含过少工作时间 ({0})。最小值为{1}。</value>
+    <value>一周内包含工作时间 ({0}) 过少。最小值为{1}。</value>
   </data>
   <data name="ASMTimeAheadOfActivityChangeToAlert" xml:space="preserve">
     <value>活动变更前对座席代表的提醒时间（秒）</value>
@@ -10665,22 +10665,22 @@ Teleopti R&amp;D</value>
     <value>您得到了新的青铜徽章！您在{1:yyyy-MM-dd}的平均处理时间低于{0}秒</value>
   </data>
   <data name="YouGotANewGoldBadgeForAnsweredCalls" xml:space="preserve">
-    <value>您得到了新的金色徽章！您在不同日期中已经应答了{0}或更多的电话在每天{1}</value>
+    <value>您得到了新的金色徽章！您在{1}天中每天应答了{0}或更多的电话</value>
   </data>
   <data name="YouGotANewGoldBadgeForAdherence" xml:space="preserve">
-    <value>您得到了新的金色徽章！您的遵时率超过{0}在{1}的不同日期</value>
+    <value>您得到了新的金色徽章！您在{1}天中每天的遵时率都超过{0}</value>
   </data>
   <data name="YouGotANewGoldBadgeForAHT" xml:space="preserve">
-    <value>您得到了新的金色徽章！您的处理时间低于{0}秒在{1}的不同日期</value>
+    <value>您得到了新的金色徽章！您在{1}天中每天的处理时间低于{0}秒</value>
   </data>
   <data name="YouGotANewSilverBadgeForAnsweredCalls" xml:space="preserve">
-    <value>您得到了新的银色徽章！您在不同日期中已经应答了{0}或更多的电话在每天{1}</value>
+    <value>您得到了新的银色徽章！您在{1}天中每天应答了{0}或更多的电话</value>
   </data>
   <data name="YouGotANewSilverBadgeForAdherence" xml:space="preserve">
-    <value>您得到了新的银色徽章！您的遵时率超过{0}在{1}的不同日期</value>
+    <value>您得到了新的银色徽章！您在{1}天中每天的遵时率超过{0}</value>
   </data>
   <data name="YouGotANewSilverBadgeForAHT" xml:space="preserve">
-    <value>您得到了新的银色徽章！您的处理时间低于{0}秒在{1}的不同日期</value>
+    <value>您得到了新的银色徽章！您在{1}天中每天的处理时间低于{0}秒</value>
   </data>
   <data name="WeeklyWorkTimeBroken" xml:space="preserve">
     <value>您超出了每周工作时间限制</value>
@@ -10730,7 +10730,7 @@ Teleopti R&amp;D</value>
 * 使用下方的“浏览”找到产品密钥文件
 * 应用产品激活密钥
 * 应用程序将会关闭
-* 重新启动MyTime以得到新授权的on功能选项
+* 重新启动MyTime以得到新授权的功能选项
 * 再次开启应用程序</value>
   </data>
   <data name="ApplyTo" xml:space="preserve">
@@ -10746,7 +10746,7 @@ Teleopti R&amp;D</value>
     <value>排行榜</value>
   </data>
   <data name="CannotAddPreferenceSelectedItemNotAvailable" xml:space="preserve">
-    <value>偏好无法被添加由于选定项已不可用</value>
+    <value>由于选定项已不可用，无法添加偏好</value>
   </data>
   <data name="CannotBeBeforeTime" xml:space="preserve">
     <value>{0} 不能早于 {1} </value>
@@ -10755,16 +10755,16 @@ Teleopti R&amp;D</value>
     <value>无法获取偏好设定．</value>
   </data>
   <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
-    <value>产品激活密钥 "{0}" 无法被访问
-错误详细信息: 
+    <value>无法访问产品激活密钥“{0}”
+错误详细信息： 
 {1}</value>
   </data>
   <data name="CouldNotFindAnyValidShiftInShiftBag" xml:space="preserve">
     <value>班次包中无法找到有效的班次</value>
   </data>
   <data name="DatabaseProblem" xml:space="preserve">
-    <value>尝试保存产品激活密钥到数据库中遇到一个问题.
-错误详细信息:
+    <value>尝试保存产品激活密钥到数据库中遇到一个问题。
+错误详细信息：
 {0}</value>
   </data>
   <data name="EmailSettings" xml:space="preserve">
@@ -10807,10 +10807,10 @@ Teleopti R&amp;D</value>
     <value>请启用至少一个徽章类型</value>
   </data>
   <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
-    <value>您试图应用的产品激活密钥 "{0}" 已过期.</value>
+    <value>您试图应用的产品激活密钥“{0}”已过期.</value>
   </data>
   <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
-    <value>产品激活密钥 "{0}" 是无效的，它可能是伪造的</value>
+    <value>产品激活密钥“{0}”是无效的，它可能是伪造的</value>
   </data>
   <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
     <value>此产品激活密钥仅包含{0}个激活的座席代表，但当前有 {1}。 您必须获得一个产品密钥以包含足够激活的座席代表</value>
@@ -10819,7 +10819,7 @@ Teleopti R&amp;D</value>
     <value>此产品激活密钥仅包含 {0} 席位。您必须获得一个包含足够席位的产品密钥。</value>
   </data>
   <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
-    <value>产品激活密钥 "{0}" 不是有效的 xml 格式
+    <value>产品激活密钥“{0}”不是有效的 xml 格式
 错误详细信息:
 {1}</value>
   </data>
@@ -10827,7 +10827,7 @@ Teleopti R&amp;D</value>
     <value>公告板中无可用座席代表</value>
   </data>
   <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
-    <value>您还未应用产品激活密钥．请应用</value>
+    <value>您还未应用产品激活密钥。请应用</value>
   </data>
   <data name="NotificationSettings" xml:space="preserve">
     <value>通知设定</value>
@@ -10908,10 +10908,10 @@ Teleopti R&amp;D</value>
     <value>测试发送到：</value>
   </data>
   <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
-    <value>您当前使用的座席代表数 ({0}) 大于授权数 ({1}). 您现在有 {2} 天时间来减少座席代表或应用能够包含足够座席代表的产品激活密钥。</value>
+    <value>您当前使用的座席代表数 ({0}) 大于授权数 ({1})。您现在有 {2} 天时间来减少座席代表或应用能够包含足够座席代表的产品激活密钥。</value>
   </data>
   <data name="UnSupportedOptimizationBlockAndTimeBetweendays" xml:space="preserve">
-    <value>当批次排班及相同班次被选择时，优化步骤 "每日班次长度" 将不被执行。</value>
+    <value>当批次排班及相同班次被选择时，优化步骤“每日班次长度”将不被执行。</value>
   </data>
   <data name="UpdatingAbsence" xml:space="preserve">
     <value>正在更新缺勤为</value>
@@ -10926,7 +10926,7 @@ Teleopti R&amp;D</value>
     <value>查看徽章排行榜</value>
   </data>
   <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
-    <value>您当前有{0}个激活的座席代表，但您所授权的座席代表数为{1}. 请尽快更新您的产品激活密钥</value>
+    <value>您当前有{0}个激活的座席代表，但您所授权的座席代表数为{1}。请尽快更新您的产品激活密钥</value>
   </data>
   <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
     <value>您即将到达您所授权的席位上限{0} 。请尽快更新您的产品密钥</value>
@@ -10998,7 +10998,7 @@ Teleopti R&amp;D</value>
     <value>银色徽章阈值(%)：</value>
   </data>
   <data name="LogOnFailedIdentityNotFound" xml:space="preserve">
-    <value>登录失败！无账户关联到{0}.</value>
+    <value>登录失败！无关联到{0}的账户。</value>
   </data>
   <data name="GamificationSettingColon" xml:space="preserve">
     <value>游戏化设定：</value>
@@ -11031,7 +11031,7 @@ Teleopti R&amp;D</value>
     <value>班次类别：</value>
   </data>
   <data name="SchedulePeriodNotInRange" xml:space="preserve">
-    <value>排班周期为包含在规划周期内</value>
+    <value>排班周期未包含在规划周期内</value>
   </data>
   <data name="PersonFinderFieldNote" xml:space="preserve">
     <value>备注</value>
@@ -11082,7 +11082,7 @@ Teleopti R&amp;D</value>
     <value>删除游戏化设置</value>
   </data>
   <data name="AreYouSureYouWantToDeleteGamificationSetting" xml:space="preserve">
-    <value>您确认删除 '{0}' 此游戏化设置吗 ?</value>
+    <value>您确认要删除游戏化设置“{0}”吗 ?</value>
   </data>
   <data name="Announcement" xml:space="preserve">
     <value>发布调换班公告</value>
@@ -11238,7 +11238,7 @@ Teleopti R&amp;D</value>
     <value>亲，您获得了一枚银色徽章！您在{1:yyyy-MM-dd}的平均处理时长低于{0}。继续加油哦～</value>
   </data>
   <data name="BadgeWithRank_YouGotANewSilverBadgeForAdherence" xml:space="preserve">
-    <value>亲，您获得了一枚银色徽章！您在{1:yyyy-MM-dd}的遵循度高于{0}。继续加油哦～</value>
+    <value>亲，您获得了一枚银色徽章！您在{1:yyyy-MM-dd}的遵时率高于{0}。继续加油哦～</value>
   </data>
   <data name="BadgeWithRank_YouGotANewGoldBadgeForAnsweredCalls" xml:space="preserve">
     <value>亲，您获得了一枚金色徽章！您在{1:yyyy-MM-dd}的应答量超过了{0}。继续加油哦～</value>
@@ -11259,7 +11259,7 @@ Teleopti R&amp;D</value>
     <value>亲，您获得了一枚金色徽章！您在{1:yyyy-MM-dd}的平均处理时长低于{0}。继续加油哦～</value>
   </data>
   <data name="BadgeWithRank_YouGotANewGoldBadgeForAdherence" xml:space="preserve">
-    <value>亲，您获得了一枚金色徽章！您在{1:yyyy-MM-dd}的遵循度高于{0}。继续加油哦～</value>
+    <value>亲，您获得了一枚金色徽章！您在{1:yyyy-MM-dd}的遵时率高于{0}。继续加油哦～</value>
   </data>
   <data name="BadgeWithRank_YouGotANewBronzeBadgeForAnsweredCalls" xml:space="preserve">
     <value>亲，您获得了一枚青铜徽章！您在{1:yyyy-MM-dd}的应答量超过了{0}。继续加油哦～</value>
@@ -11271,7 +11271,7 @@ Teleopti R&amp;D</value>
     <value>重复</value>
   </data>
   <data name="BadgeWithRank_YouGotANewBronzeBadgeForAdherence" xml:space="preserve">
-    <value>亲，您获得了一枚青铜徽章！您在{1:yyyy-MM-dd}的遵循度高于{0}。继续加油哦～</value>
+    <value>亲，您获得了一枚青铜徽章！您在{1:yyyy-MM-dd}的遵时率高于{0}。继续加油哦～</value>
   </data>
   <data name="NotSelectedItems" xml:space="preserve">
     <value>禁用项目</value>
@@ -11454,7 +11454,7 @@ Teleopti R&amp;D</value>
     <value>无效密码:</value>
   </data>
   <data name="CampaignNameInvalid" xml:space="preserve">
-    <value>提供的活动名称无效. 名称最多包含255个字符.</value>
+    <value>提供的活动名称无效。名称最多包含255个字符.</value>
   </data>
   <data name="BothFirstnameAndLastnameAreEmptyErrorMsgSemicolon" xml:space="preserve">
     <value>名字和姓氏均为空;</value>
@@ -12020,7 +12020,7 @@ Teleopti R&amp;D</value>
   <data name="ProductActivationKeyV8" xml:space="preserve">
     <value>该系统被授权给“{0}”，根据条款和许可协议的条件，产品激活密钥将于{1}过期。
 
-此产品激活密钥支持最多{2}激活的座席代表。
+此产品激活密钥支持最多{2}个激活的座席代表。
 
 主要版本：{5}
 
@@ -12357,7 +12357,7 @@ Teleopti R&amp;D</value>
     <value>{0}已改进! 我们期待您的{1}反馈。{2}</value>
   </data>
   <data name="WFMReleaseNotification" xml:space="preserve">
-    <value>{0}已改进! 我们期待您的{1}反馈。{2} 旧的{3}可在有限时间内访问。</value>
+    <value>{0}已改进! 我们期待您的{1}反馈。{2} 旧版本的{3}可在有限时间内访问。</value>
   </data>
   <data name="UnsupportedSkills" xml:space="preserve">
     <value>{0}未支持的技能</value>
@@ -12414,7 +12414,7 @@ Teleopti R&amp;D</value>
     <value>将班表从默认情景存档到另一个情景，将覆盖目标情景中选定周期的班表。</value>
   </data>
   <data name="ConfirmDeleteCampaign" xml:space="preserve">
-    <value>您确定要删除此活动吗？亲</value>
+    <value>您确定要删除此活动吗？</value>
   </data>
   <data name="AreYouSureToUndoSelectedSchedule" xml:space="preserve">
     <value>您确定想要撤销选定座席代表的最后一次班表变更吗？</value>
@@ -12729,7 +12729,7 @@ Teleopti R&amp;D</value>
     <value>调换班</value>
   </data>
   <data name="ProductActivationKeyV8Perpetual" xml:space="preserve">
-    <value>根据授权协议中的限制性条款此系统授权给"{0}"。
+    <value>根据授权协议中的限制性条款此系统授权给“{0}”。
 
 产品激活密钥包含了最多{1}个激活的座席代表。
 
@@ -12740,7 +12740,7 @@ Teleopti R&amp;D</value>
 {3}</value>
   </data>
   <data name="SeatProductActivationKeyV8Perpetual" xml:space="preserve">
-    <value>根据授权协议中的限制性条款此系统授权给"{0}"。
+    <value>根据授权协议中的限制性条款此系统授权给“{0}”。
 
 产品激活密钥包含了最多{1}个座位。
 
@@ -12790,7 +12790,7 @@ Teleopti R&amp;D</value>
     <value>实时遵时度监控已激活</value>
   </data>
   <data name="RtaPauseEnabledNotice" xml:space="preserve">
-    <value>实时遵时都监控暂停于{0}！点击播放以恢复</value>
+    <value>实时遵时率监控暂停于{0}！点击播放以恢复</value>
   </data>
   <data name="SelectAllPeopleInEveryPage" xml:space="preserve">
     <value>选择每页上的所有人</value>
@@ -12937,7 +12937,7 @@ Teleopti R&amp;D</value>
     <value>重新预测的座席代表数</value>
   </data>
   <data name="ShiftTradeMaxSeatViolationDenyReason" xml:space="preserve">
-    <value>调换班申请已被拒绝因为没有足够的可用座位。</value>
+    <value>调换班申请因为没有足够的可用座位被拒绝。</value>
   </data>
   <data name="ShiftTradeRequestSettings" xml:space="preserve">
     <value>调换班申请设置</value>
@@ -13171,7 +13171,7 @@ Teleopti R&amp;D</value>
     <value>合同时间容差</value>
   </data>
   <data name="AreYouSureToUpdateCurrentFavoriteSearch" xml:space="preserve">
-    <value>"{0}" 已存在。请确认是否覆盖?</value>
+    <value>“{0}”已存在。请确认是否覆盖?</value>
   </data>
   <data name="UpdateConfirmation" xml:space="preserve">
     <value>更新确认</value>
@@ -13219,7 +13219,7 @@ Teleopti R&amp;D</value>
     <value>已超出班表合同时间容差范围</value>
   </data>
   <data name="SignInWithNoColon" xml:space="preserve">
-    <value>签入以</value>
+    <value>登录方式</value>
   </data>
   <data name="SelectOrganization" xml:space="preserve">
     <value>选择组织</value>
@@ -13231,7 +13231,7 @@ Teleopti R&amp;D</value>
     <value>清除所有</value>
   </data>
   <data name="RTAMaxNumberOfAgentsNotice" xml:space="preserve">
-    <value>只能最多查看 {0} 个座席代表。"告警" 开关仅在座席代表数不超过 {1} 时有效。</value>
+    <value>只能最多查看 {0} 个座席代表。“告警”开关仅在座席代表数不超过 {1} 时有效。</value>
   </data>
   <data name="FavoriteSearch" xml:space="preserve">
     <value>喜爱的搜索</value>
@@ -13499,7 +13499,7 @@ Teleopti R&amp;D</value>
     <value>座席代表已排班</value>
   </data>
   <data name="AreYouSureYouWantToDeleteTheDayOffRule" xml:space="preserve">
-    <value>您确定想要删除休息日规则 '{0}' 及相关设定吗？</value>
+    <value>您确定想要删除休息日规则“{0}”及相关设定吗？</value>
   </data>
   <data name="AreYouSureYouWantToDeleteThePlanningPeriod" xml:space="preserve">
     <value>您确定想要删除排班周期 {0}-{1} 及相关设定吗？</value>
@@ -13738,7 +13738,7 @@ Teleopti R&amp;D</value>
     <value>选择计划周期以为您的计划组排班</value>
   </data>
   <data name="AreYouSureYouWantToDeleteThePlanningGroup" xml:space="preserve">
-    <value>Are you sure you want to delete the planning group '{0}' and its related settings?</value>
+    <value>您确定要删除计划组“{0}”及其相关设置吗？</value>
   </data>
   <data name="OvertimeRequestDenyReasonSiteOpenHourClosed" xml:space="preserve">
     <value>您的加班申请已被自动拒绝。站点在请求周期 {0} 已关闭</value>
@@ -13840,7 +13840,7 @@ Teleopti R&amp;D</value>
     <value>加班设置</value>
   </data>
   <data name="PressEscToClose" xml:space="preserve">
-    <value>点击Esc以关闭</value>
+    <value>按Esc键以关闭</value>
   </data>
   <data name="CreateDayOffRule" xml:space="preserve">
     <value>创建休息日规则</value>
@@ -14098,19 +14098,19 @@ Teleopti R&amp;D</value>
     <value>系统中没有定义名称为 {0} 的技能。</value>
   </data>
   <data name="ImportBpoSkillDefinedMultipleTimesInTheSystem" xml:space="preserve">
-    <value>系统中名称为 {0} 的技能已被定义了 {1} 此。使用此功能时仅允许一次。</value>
+    <value>系统中名称为 {0} 的技能已被定义了 {1} 次。使用此功能时仅允许一次。</value>
   </data>
   <data name="ImportBpoLineHasIncorrectParameterCount" xml:space="preserve">
     <value>行中包含 {0} 个参数，但需要 {1} 个参数。</value>
   </data>
   <data name="ImportBpoErrorFoundOnLineNumberXWithContentsY" xml:space="preserve">
-    <value>发现错误在第 {0} 行，包含信息： "{1}" {2}</value>
+    <value>在第 {0} 行发现错误，包含信息： “{1}” {2}</value>
   </data>
   <data name="ImportBpoParameterCannotBeEmpty" xml:space="preserve">
     <value>参数 {0} 不能为空</value>
   </data>
   <data name="ImportBpoInvalidFieldNameInHeader" xml:space="preserve">
-    <value>页头: '{0}' 包含无效栏位名称。无效的栏位名称为：({1})</value>
+    <value>页头: “{0}”包含无效栏位名称。无效的栏位名称为：({1})</value>
   </data>
   <data name="ImportBpoTheImportFileCannotBeEmpty" xml:space="preserve">
     <value>导入文件不能为空。</value>
@@ -14320,7 +14320,7 @@ Teleopti R&amp;D</value>
     <value>Agent ID 过长</value>
   </data>
   <data name="MeasureTypeMustBeEitherNumericOrPercent" xml:space="preserve">
-    <value>测量类型必须为"数字“或”百分比“</value>
+    <value>测量类型必须为“数字”或“百分比”</value>
   </data>
   <data name="MeasureTypeNotMatchExistingDefinition" xml:space="preserve">
     <value>测量类型个与现有定义不符</value>
@@ -14329,13 +14329,13 @@ Teleopti R&amp;D</value>
     <value>ID必须包含一个整数</value>
   </data>
   <data name="RowExceedsLimitOfGamificationMeasures" xml:space="preserve">
-    <value>游戏化测量值有一个 {0} 的限制.此行不能被导入因为会超过此限制. </value>
+    <value>游戏化测量值有一个 {0} 的限制。此行不能被导入因为会超过此限制。</value>
   </data>
   <data name="InvalidScore" xml:space="preserve">
     <value>无效得分</value>
   </data>
   <data name="AgentIdCouldNotBeMatchedToAnyAgent" xml:space="preserve">
-    <value>此agent ID无法对应任何座席代表</value>
+    <value>此Agent ID无法对应任何座席代表</value>
   </data>
   <data name="BusinessHierarchy" xml:space="preserve">
     <value>组织架构</value>
@@ -14386,13 +14386,13 @@ Teleopti R&amp;D</value>
     <value>发现配置问题</value>
   </data>
   <data name="LoggedOutStateGroupMissingInConfiguration" xml:space="preserve">
-    <value>业务单元 '{0}' 没有指定一个座席代表登出的状态组。请设置好后以使用状态快照功能。请在客户端选项中进行设置。</value>
+    <value>业务单元“{0}”没有指定一个座席代表登出的状态组。请设置好后以使用状态快照功能。请在客户端选项中进行设置。</value>
   </data>
   <data name="LoggedOutStateGroupMissingInRtaService" xml:space="preserve">
     <value>实时遵守度服务没有指定一个座席代表登出的状态组。请设置好后以使用状态快照功能。请在客户端选项中进行设置并等待服务缓存更新。</value>
   </data>
   <data name="DefaultStateGroupMissingInConfiguration" xml:space="preserve">
-    <value>业务单元 '{0}' 没有指定一个座席代表默认的状态组。请设置好后以使用未识别的状态。请在客户端选项中进行设置。</value>
+    <value>业务单元“{0}”没有指定一个座席代表默认的状态组。请设置好后以使用未识别的状态。请在客户端选项中进行设置。</value>
   </data>
   <data name="PickATemplate" xml:space="preserve">
     <value>选择一个模板</value>
@@ -14401,7 +14401,7 @@ Teleopti R&amp;D</value>
     <value>移除一个休息日</value>
   </data>
   <data name="ExportAvailableLimitedTime" xml:space="preserve">
-    <value>请注意”导出到“即将被移除。</value>
+    <value>请注意“导出到”即将被移除。</value>
   </data>
   <data name="AreYouSureToRemoveSelectedDayOff" xml:space="preserve">
     <value>您确认想要为座席代表{1}移除 {0} 个休息日吗？</value>
@@ -14524,16 +14524,16 @@ Teleopti R&amp;D</value>
     <value>重复的名字</value>
   </data>
   <data name="YouGotANewBronzeBadge" xml:space="preserve">
-    <value>您获得了新的青铜徽章于 {0} 在 {1}。</value>
+    <value>您由于在{1}日的工作获得了新的{0}青铜徽章。</value>
   </data>
   <data name="RestrictionNotAbleToBeScheduledReasonConflictingRestrictions" xml:space="preserve">
     <value>限制规则冲突</value>
   </data>
   <data name="YouGotANewGoldBadge" xml:space="preserve">
-    <value>您获得了新的金色徽章于 {0} 在 {1}。</value>
+    <value>您由于在{1}日的工作获得了新的{0}金色徽章。</value>
   </data>
   <data name="YouGotANewSilverBadge" xml:space="preserve">
-    <value>您获得了新的银色徽章于 {0} 在 {1}。</value>
+    <value>您由于在{1}日的工作获得了新的{0}银色徽章。</value>
   </data>
   <data name="ImportBpoShowingTheFirstXErrorMessagesOfY" xml:space="preserve">
     <value>正在显示 {0} 个错误信息，总数为 {1}。</value>
@@ -14643,7 +14643,7 @@ Teleopti R&amp;D</value>
     <value>使用技能优先级验证</value>
   </data>
   <data name="DescriptionOfMaximumWorkdayRule" xml:space="preserve">
-    <value>做多连续工作日</value>
+    <value>最多连续工作日</value>
   </data>
   <data name="PeopleAccess" xml:space="preserve">
     <value>访问</value>
