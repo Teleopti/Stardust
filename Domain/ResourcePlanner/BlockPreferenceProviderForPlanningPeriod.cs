@@ -20,9 +20,7 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner
 		{
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var planningGroup = planningPeriod.PlanningGroup;
-			return planningGroup == null ? 
-				_blockPreferenceProviderUsingFiltersFactory.Create() : 
-				_blockPreferenceProviderUsingFiltersFactory.Create(planningGroup);
+			return _blockPreferenceProviderUsingFiltersFactory.Create(planningGroup);
 		}
 	}
 }

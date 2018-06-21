@@ -57,19 +57,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void WhenAddingTwoDefaultSettingsLastWins()
-		{
-			var rep = new PlanningGroupSettingsRepository(CurrUnitOfWork);
-			var lastDefault = PlanningGroupSettings.CreateDefault();
-			rep.Add(PlanningGroupSettings.CreateDefault());
-			UnitOfWork.Flush();
-			rep.Add(lastDefault);
-			UnitOfWork.Flush();
-			rep.LoadAllWithoutPlanningGroup().SingleOrDefault().Should().Not.Be.Null();
-			rep.LoadAllWithoutPlanningGroup().Single().Should().Be.EqualTo(lastDefault);
-		}
-
-		[Test]
 		public void CanUseAddWhenUpdatingAlreadyPersistedDefault()
 		{
 			var dayOffSettings = PlanningGroupSettings.CreateDefault();
@@ -85,21 +72,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var rep = new PlanningGroupSettingsRepository(CurrUnitOfWork);
 			var defaultSetting = PlanningGroupSettings.CreateDefault();
 			Assert.Throws<ArgumentException>(() => rep.Remove(defaultSetting));
-		}
-
-		[Test]
-		public void ShouldReturnDefaultValuesIfNotPresentInDb()
-		{
-			var defaultSetting = PlanningGroupSettings.CreateDefault();
-			var defaultInDb = new PlanningGroupSettingsRepository(CurrUnitOfWork).LoadAllWithoutPlanningGroup().SingleOrDefault();
-
-			defaultInDb.Should().Not.Be.Null();
-			defaultInDb.DayOffsPerWeek.Should().Be.EqualTo(defaultSetting.DayOffsPerWeek);
-			defaultInDb.ConsecutiveDayOffs.Should().Be.EqualTo(defaultSetting.ConsecutiveDayOffs);
-			defaultInDb.ConsecutiveWorkdays.Should().Be.EqualTo(defaultSetting.ConsecutiveWorkdays);
-			defaultInDb.FullWeekendsOff.Should().Be.EqualTo(defaultSetting.FullWeekendsOff);
-			defaultInDb.WeekendDaysOff.Should().Be.EqualTo(defaultSetting.WeekendDaysOff);
-			defaultInDb.Priority.Should().Be.EqualTo(defaultSetting.Priority);
 		}
 
 		[Test]
@@ -204,11 +176,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			result.SingleOrDefault().Should().Not.Be.Null();
 			result.Single().PlanningGroup.Should().Be.EqualTo(planningGroup);
-
-			var result2 = rep.LoadAllWithoutPlanningGroup();
-
-			result2.SingleOrDefault().Should().Not.Be.Null();
-			result2.Single().PlanningGroup.Should().Be.EqualTo(null);
 		}
 
 		[Test]

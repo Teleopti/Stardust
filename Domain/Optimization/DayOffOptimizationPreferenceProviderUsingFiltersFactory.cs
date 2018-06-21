@@ -11,11 +11,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_planningGroupSettingsRepository = planningGroupSettingsRepository;
 		}
 
-		public IDayOffOptimizationPreferenceProvider Create()
-		{
-			return new DayOffOptimizationPreferenceProviderUsingFilters(_planningGroupSettingsRepository.LoadAllWithoutPlanningGroup());
-		}
-
 		public IDayOffOptimizationPreferenceProvider Create(IPlanningGroup planningGroup)
 		{
 			return new DayOffOptimizationPreferenceProviderUsingFilters(_planningGroupSettingsRepository.LoadAllByPlanningGroup(planningGroup));

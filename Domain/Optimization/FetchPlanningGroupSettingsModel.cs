@@ -19,13 +19,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public IEnumerable<PlanningGroupSettingsModel> FetchAllWithoutPlanningGroup()
 		{
-			var all = _planningGroupSettingsRepository.LoadAllWithoutPlanningGroup();
-
-			if (!all.Any(x => x.Default))
-				all.Add(PlanningGroupSettings.CreateDefault());
-
-			var result = all.Select(planningGroupSettings => _planningGroupSettingsMapper.ToModel(planningGroupSettings)).ToList();
-			return result;
+			throw new Exception("_");
 		}
 
 		public PlanningGroupSettingsModel Fetch(Guid id)

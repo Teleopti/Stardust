@@ -61,12 +61,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return _workRuleSettings.Where(x => x.PlanningGroup == planningGroup).ToList();
 		}
-
-		public IList<PlanningGroupSettings> LoadAllWithoutPlanningGroup()
-		{
-			return _workRuleSettings.Where(x => x.PlanningGroup == null).ToList();
-		}
-
+		
 		public void RemoveForPlanningGroup(IPlanningGroup planningGroup)
 		{
 			_workRuleSettings.RemoveAll(dayOffRule => dayOffRule.PlanningGroup == planningGroup);

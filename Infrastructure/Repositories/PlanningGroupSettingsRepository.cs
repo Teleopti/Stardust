@@ -53,20 +53,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				 .List<PlanningGroupSettings>();
 		}
 
-		public IList<PlanningGroupSettings> LoadAllWithoutPlanningGroup()
-		{
-			if (Default() == null)
-				lock (addLocker)
-				{
-					Add(PlanningGroupSettings.CreateDefault());
-					Session.Flush();
-				}
-			return Session.CreateCriteria(typeof(PlanningGroupSettings), "planningGroupSettings")
-				.Add(Restrictions.IsNull("planningGroupSettings.PlanningGroup"))
-				 .SetResultTransformer(Transformers.DistinctRootEntity)
-				 .List<PlanningGroupSettings>();
-		}
-
 		public void RemoveForPlanningGroup(IPlanningGroup planningGroup)
 		{
 			var planningGroupSettingses = LoadAllByPlanningGroup(planningGroup);
