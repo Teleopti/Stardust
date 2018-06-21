@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 		public IActivityRepository ActivityRepository;
 		public IShiftCategoryRepository ShiftCategoryRepository;
 		public IPlanningPeriodRepository PlanningPeriodRepository;
+		public IPlanningGroupRepository PlanningGroupRepository;
 		public IJobResultRepository JobResultRepository;
 		public ISkillRepository SkillRepository;
 		public ISkillTypeRepository SkillTypeRepository;
@@ -70,7 +71,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 				.WithSchedulePeriodOneWeek(date);
 			var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCategory);
 			var period = date.ToDateOnlyPeriod();
-			var planningPeriod = new PlanningPeriod(period, SchedulePeriodType.Day, 1);
+			var planningGroup = new PlanningGroup();
+			var planningPeriod = new PlanningPeriod(period, SchedulePeriodType.Day, 1, planningGroup);
 
 			using (var uow = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
@@ -92,6 +94,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 				PersonAssignmentRepository.Add(ass);
 				var jobResult = new JobResult(JobCategory.WebSchedule, period, agent, DateTime.UtcNow);
 				JobResultRepository.Add(jobResult);
+				PlanningGroupRepository.Add(planningGroup);
 				PlanningPeriodRepository.Add(planningPeriod);
 				uow.PersistAll();
 			}
