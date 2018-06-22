@@ -4,19 +4,16 @@
 
 	angular.module("wfm.teamSchedule").controller("ShiftEditorViewController",
 		['$stateParams',
-			'$state',
 			'TeamSchedule',
 			'ShiftEditorViewModelFactory',
 			'signalRSVC',
 			'serviceDateFormatHelper',
-			function ($stateParams, $state, TeamSchedule, ShiftEditorViewModelFactory, signalRSVC, serviceDateFormatHelper) {
+			function ($stateParams, TeamSchedule, ShiftEditorViewModelFactory, signalRSVC, serviceDateFormatHelper) {
 				var vm = this;
 				vm.personId = $stateParams.personId;
 				vm.timezone = decodeURIComponent($stateParams.timezone);
 				vm.date = $stateParams.date;
-				vm.gotoDayView = function () {
-					$state.go('teams.dayView');
-				}
+
 
 				function init() {
 					getSchedule();
@@ -57,9 +54,12 @@
 		}
 	});
 
-	ShiftEditorController.$inject = ['$element', '$timeout', '$window', '$interval', '$filter', 'serviceDateFormatHelper', 'ShiftEditorViewModelFactory', 'TimezoneListFactory', 'ActivityService'];
+	ShiftEditorController.$inject = ['$element', '$timeout', '$window', '$interval', '$filter', '$state',
+		'serviceDateFormatHelper', 'ShiftEditorViewModelFactory', 'TimezoneListFactory', 'ActivityService',
+		'ShiftEditorService', 'CurrentUserInfo'];
 
-	function ShiftEditorController($element, $timeout, $window, $interval, $filter, serviceDateFormatHelper, ShiftEditorViewModelFactory, TimezoneListFactory, ActivityService) {
+	function ShiftEditorController($element, $timeout, $window, $interval, $filter, $state, serviceDateFormatHelper,
+		ShiftEditorViewModelFactory, TimezoneListFactory, ActivityService, ShiftEditorService, CurrentUserInfo) {
 		var vm = this;
 		var timeLineTimeRange = {
 			Start: moment.tz(vm.date, vm.timezone).add(-1, 'days').hours(0),
@@ -71,6 +71,7 @@
 		vm.isInDifferentTimezone = false;
 		vm.displayDate = moment(vm.date).format("L");
 		vm.availableActivities = [];
+		vm.hasChanges = false;
 
 		vm.$onInit = function () {
 			ActivityService.fetchAvailableActivities().then(function (data) {
@@ -86,9 +87,14 @@
 		vm.$onChanges = function (changesObj) {
 			if (!!changesObj.schedules.currentValue && changesObj.schedules.currentValue !== changesObj.schedules.previousValue) {
 				vm.scheduleVm = ShiftEditorViewModelFactory.CreateSchedule(vm.date, vm.timezone, changesObj.schedules.currentValue[0]);
+
 				vm.isInDifferentTimezone = (vm.scheduleVm.Timezone !== vm.timezone);
 				initAndBindScrollEvent();
 			}
+		}
+
+		vm.gotoDayView = function () {
+			$state.go('teams.dayView');
 		}
 
 		vm.isSameDate = function (interval) {
@@ -116,7 +122,7 @@
 				//	}
 				//}
 			});
-			vm.selectedActivitiyId = getSelectActivity(shiftLayer).Id;
+			vm.selectedActivitiyId = shiftLayer.CurrentActivityId || shiftLayer.ActivityId;
 		}
 
 		vm.getShiftLayerWidth = function (layer) {
@@ -131,9 +137,48 @@
 			var selectActivity = vm.availableActivities.filter(function (activity) {
 				return vm.selectedActivitiyId == activity.Id;
 			})[0];
+
 			vm.selectedShiftLayer.Color = selectActivity.Color;
 			vm.selectedShiftLayer.Description = selectActivity.Name;
-			vm.selectedShiftLayer.ActivityId = selectActivity.Id;
+			vm.selectedShiftLayer.CurrentActivityId = selectActivity.Id;
+			vm.hasChanges = vm.selectedShiftLayer.CurrentActivityId !== vm.selectedShiftLayer.ActivityId;
+		}
+
+		vm.saveChanges = function () {
+			ShiftEditorService.changeActivityType(vm.date, vm.personId, getChangedLayers());
+		}
+
+		function getChangedLayers() {
+			var currentUserTimezone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
+			var changedShiftLayers = vm.scheduleVm.ShiftLayers
+				.filter(function (sl) { return !!sl.CurrentActivityId && sl.ActivityId !== sl.CurrentActivityId; });
+
+			var sameShiftLayers = changedShiftLayers
+				.filter(function (sl) {
+					return !!sl.ShiftLayerIds.filter(function (id) {
+						return vm.scheduleVm.ShiftLayers
+							.filter(function (isl) { return isl.ShiftLayerIds.indexOf(id) >= 0; }).length > 1;
+					}).length;
+				});
+
+			return changedShiftLayers.map(function (sl) {
+				if (sameShiftLayers.indexOf(sl) >= 0) {
+					var startTime = moment.tz(sl.Start, vm.timezone).clone().tz(currentUserTimezone);
+					var endTime = moment.tz(sl.End, vm.timezone).clone().tz(currentUserTimezone);
+					return {
+						ActivityId: sl.CurrentActivityId,
+						ShiftLayerIds: sl.ShiftLayerIds,
+						StartTime: serviceDateFormatHelper.getDateTime(startTime),
+						EndTime: serviceDateFormatHelper.getDateTime(endTime),
+						IsNew: true
+					};
+				} else {
+					return {
+						ActivityId: sl.CurrentActivityId,
+						ShiftLayerIds: !!sl.TopShiftLayerId ? [sl.TopShiftLayerId] : sl.ShiftLayerIds
+					};
+				}
+			});
 		}
 
 		function getSelectActivity(layer) {

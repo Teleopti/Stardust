@@ -10,7 +10,12 @@ namespace Teleopti.Ccc.Domain.Common
 	{
 		public IList<Guid> GetMatchedShiftLayerIds(IScheduleDay scheduleDay, IVisualLayer layer, bool isOvertime = false)
 		{
-			var matchedLayerIds = new List<Guid>();
+			return GetMatchedShiftLayers(scheduleDay, layer, isOvertime).Select(sl => sl.Id.GetValueOrDefault()).ToList();
+		}
+
+		public IList<ShiftLayer> GetMatchedShiftLayers(IScheduleDay scheduleDay, IVisualLayer layer, bool isOvertime = false)
+		{
+			var matchedLayers = new List<ShiftLayer>();
 			var personAssignment = scheduleDay.PersonAssignment();
 			var shiftLayersList = new List<ShiftLayer>();
 			if (personAssignment != null && personAssignment.ShiftLayers.Any())
@@ -26,11 +31,12 @@ namespace Teleopti.Ccc.Domain.Common
 
 				if (layer.Payload.Id.GetValueOrDefault() == shiftLayer.Payload.Id.GetValueOrDefault() && layer.Period.Intersect(shiftLayer.Period))
 				{
-					matchedLayerIds.Add(shiftLayer.Id.GetValueOrDefault());
+					matchedLayers.Add(shiftLayer);
 				}
 			}
-			return matchedLayerIds;
+			return matchedLayers;
 		}
+
 
 		public IList<PersonalShiftLayer> GetMatchedPersonalShiftLayers(IScheduleDay scheduleDay, IVisualLayer layer)
 		{
@@ -83,6 +89,17 @@ namespace Teleopti.Ccc.Domain.Common
 				}
 			}
 			return matchedLayers;
+		}
+
+		public Guid? GetTopShiftLayerId<T>(IList<T> shiftLayers) where T : ShiftLayer
+		{
+			var topShiftLayer = shiftLayers != null && shiftLayers.Count > 1 ?
+							shiftLayers.OrderByDescending(l => l.OrderIndex).First() : null;
+			if (topShiftLayer != null && !shiftLayers.Any(msl => msl != topShiftLayer && topShiftLayer.Period.Contains(msl.Period)))
+			{
+				topShiftLayer = null;
+			}
+			return topShiftLayer?.Id;
 		}
 	}
 }

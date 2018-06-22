@@ -1794,6 +1794,7 @@
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.dayOffService.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.scheduleHelper.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.scheduleHelper.spec.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.service.shiftEditorService.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.teamsStaffingConfigurationStorage.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.staffing.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.staffingChart.js" />

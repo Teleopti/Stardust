@@ -50,7 +50,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					Start = TimeZoneInfo.ConvertTimeFromUtc(l.Period.StartDateTime, userTimeZone).ToFixedDateTimeFormat(),
 					End = TimeZoneInfo.ConvertTimeFromUtc(l.Period.EndDateTime, userTimeZone).ToFixedDateTimeFormat(),
 					Minutes = (int)l.Period.ElapsedTime().TotalMinutes,
-					ActivityId = layer.Payload.Id.GetValueOrDefault()
+					ActivityId = layer.Payload.Id.GetValueOrDefault(),
+					TopShiftLayerId = _projectionHelper.GetTopShiftLayerId(matchedPersonalShiftLayers)
 				});
 			});
 			return splittedVisualLayers;

@@ -11,5 +11,8 @@ namespace Teleopti.Ccc.Domain.Common
 		IList<ShiftLayer> GetMatchedMainShiftLayers(IScheduleDay scheduleDay, IVisualLayer layer);
 		IList<Guid> GetMatchedAbsenceLayers(IScheduleDay scheduleDay, IVisualLayer layer);
 		IList<PersonalShiftLayer> GetMatchedPersonalShiftLayers(IScheduleDay scheduleDay, IVisualLayer layer);
+		IList<ShiftLayer> GetMatchedShiftLayers(IScheduleDay scheduleDay, IVisualLayer layer, bool isOvertime);
+
+		Guid? GetTopShiftLayerId<T>(IList<T> shiftLayers) where T : ShiftLayer;
 	}
 }

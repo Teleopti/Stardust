@@ -98,6 +98,16 @@
 				"End": "2018-05-28 12:00",
 				"Minutes": 120,
 				"IsOvertime": false
+			},
+			{
+				"ShiftLayerIds": ["11678e5a-ac3f-4daa-9577-a83800e49622", "21678e5a-ac3f-4daa-9577-a83800e49622"],
+				"Color": "#8080c0",
+				"Description": "E-mail",
+				"Start": "2018-05-28 12:00",
+				"End": "2018-05-28 13:00",
+				"Minutes": 60,
+				"IsOvertime": false,
+				"TopShiftLayerId": "11678e5a-ac3f-4daa-9577-a83800e49622"
 			}],
 			"Timezone": { "IanaId": "Asia/Hong_Kong" },
 			"UnderlyingScheduleSummary": underlyingScheduleSummary
@@ -110,11 +120,11 @@
 		expect(schedule.Timezone).toEqual("Asia/Hong_Kong");
 		expect(schedule.HasUnderlyingSchedules).toBe(true);
 		expect(schedule.ProjectionTimeRange.Start).toBe("2018-05-28 08:00");
-		expect(schedule.ProjectionTimeRange.End).toBe("2018-05-28 12:00");
+		expect(schedule.ProjectionTimeRange.End).toBe("2018-05-28 13:00");
 		expect(schedule.UnderlyingScheduleSummary.PersonalActivities[0].TimeSpan).toBe("2018-05-28 08:00 - 2018-05-28 09:00");
 		expect(schedule.UnderlyingScheduleSummary.PersonalActivities[0].Description).toBe("Chat");
 
-		expect(shiftLayers.length).toEqual(2);
+		expect(shiftLayers.length).toEqual(3);
 		expect(shiftLayers[0].Description).toEqual('E-mail');
 		expect(shiftLayers[0].Start).toEqual("2018-05-28 08:00");
 		expect(shiftLayers[0].End).toEqual("2018-05-28 10:00");
@@ -125,6 +135,7 @@
 		expect(shiftLayers[0].Color).toEqual('#ffffff');
 		expect(shiftLayers[0].UseLighterBorder()).toEqual(false);
 		expect(shiftLayers[1].UseLighterBorder()).toEqual(true);
+		expect(shiftLayers[2].TopShiftLayerId).toEqual("11678e5a-ac3f-4daa-9577-a83800e49622");
 	});
 
 	it('should create shift layers and underlying summary schedule timespan based on timezone', function () {

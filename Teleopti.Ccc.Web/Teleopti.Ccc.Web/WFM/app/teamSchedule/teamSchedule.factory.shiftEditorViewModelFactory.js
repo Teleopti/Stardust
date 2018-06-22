@@ -88,7 +88,7 @@
 			this.End = serviceDateFormatHelper.getDateTime(endInTimezone);
 			this.Minutes = layer.Minutes;
 			this.ShiftLayerIds = layer.ShiftLayerIds;
-
+			this.TopShiftLayerId = layer.TopShiftLayerId;
 			this.TimeSpan = getTimeSpan(date, startInTimezone, endInTimezone);
 			this.IsOvertime = layer.IsOvertime;
 		}

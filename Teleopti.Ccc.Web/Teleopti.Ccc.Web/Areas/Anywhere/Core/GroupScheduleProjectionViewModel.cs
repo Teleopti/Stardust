@@ -16,5 +16,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public int Minutes { get; set; }
 		public bool IsOvertime { get; set; }
 		public Guid ActivityId { get; set; }
+		public Guid? TopShiftLayerId { get; set; }
 	}
 }

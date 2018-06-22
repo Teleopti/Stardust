@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		public virtual JsonResult<AgentsPerPageSettingViewModel> GetAgentsPerPageSetting()
 		{
 			var agentsPerPageSetting = _agentsPerPagePersisterAndProvider.GetByOwner(_loggonUser.CurrentUser());
-			return Json(new AgentsPerPageSettingViewModel {Agents = agentsPerPageSetting.AgentsPerPage});
+			return Json(new AgentsPerPageSettingViewModel { Agents = agentsPerPageSetting.AgentsPerPage });
 		}
 
 		[HttpPost, UnitOfWork, SwapShiftPermission, Route("api/TeamSchedule/SwapShifts")]
@@ -229,6 +229,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			setTrackedCommandInfo(command.TrackedCommandInfo);
 			var failResults = _swapMainShiftForTwoPersonsHandler.SwapShifts(command);
 			return Json(failResults);
+		}
+
+		[HttpPost, UnitOfWork, Route("api/TeamSchedule/ChangeActivityType")]
+		public virtual IHttpActionResult ChangeActivityType()
+		{
+			return Ok();
 		}
 
 		private void setTrackedCommandInfo(TrackedCommandInfo commandInfo)
