@@ -41,6 +41,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours
 				dateTimePeriodDictionary.Add(new DateOnly(startTime),
 					new TimePeriod(startTime.TimeOfDay, endTime.TimeOfDay));
 			}
+			else if (startTime.Day < endTime.Day && (endTime.Hour == 0 && endTime.Minute == 0))
+			{
+				dateTimePeriodDictionary.Add(new DateOnly(startTime),
+					new TimePeriod(startTime.TimeOfDay, TimeSpan.FromDays(1).Subtract(TimeSpan.FromMinutes(1))));
+			}
 			else
 			{
 				dateTimePeriodDictionary.Add(new DateOnly(startTime),
@@ -73,7 +78,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours
 			}
 			else
 			{
-
 				timePeriods.Add(timePeriod);
 			}
 

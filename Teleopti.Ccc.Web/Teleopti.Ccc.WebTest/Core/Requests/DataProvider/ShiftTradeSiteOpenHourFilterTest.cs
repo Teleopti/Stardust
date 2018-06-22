@@ -514,6 +514,47 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			filteredShiftExchangeOffers.First().Person.Should().Be(person1);
 		}
 
+		[Test]
+		public void ShouldFilterScheduleBySiteOpenHourWithOvernightShift()
+		{
+			var saturday = new DateOnly(2018, 6, 23);
+			var siteOpenHourDic = new Dictionary<DayOfWeek, TimePeriod>
+			{
+				{DayOfWeek.Monday, new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(24))},
+				{DayOfWeek.Tuesday, new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(24))},
+				{DayOfWeek.Wednesday, new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(24))},
+				{DayOfWeek.Thursday, new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(24))},
+				{DayOfWeek.Friday, new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(24))},
+				{DayOfWeek.Saturday, new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(24))},
+				{DayOfWeek.Sunday, new TimePeriod(TimeSpan.FromHours(9), TimeSpan.FromHours(23))}
+			};
+			var personFrom = createPersonWithSiteOpenHours(siteOpenHourDic);
+			var timezone = TimeZoneInfoFactory.NewYorkTimeZoneInfo();
+			personFrom.PermissionInformation.SetDefaultTimeZone(timezone);
+
+			LoggedOnUser.SetFakeLoggedOnUser(personFrom);
+
+			var timePeriod = new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromDays(1));
+			var personFromScheduleView = createShiftTradeAddPersonScheduleViewModel(personFrom, saturday, timePeriod);
+
+			var person1 = createPersonWithSiteOpenHours(siteOpenHourDic);
+			person1.PermissionInformation.SetDefaultTimeZone(timezone);
+			var person2 = createPersonWithSiteOpenHours(siteOpenHourDic);
+			person2.PermissionInformation.SetDefaultTimeZone(timezone);
+
+			var scheduleDays = new[]
+			{
+				createScheduleDay(saturday, person1, timePeriod),
+				createScheduleDay(saturday, person2, timePeriod)
+			};
+
+			var filteredScheduleDays =
+				scheduleDays.Where(scheduleDay => Target.FilterSchedule(scheduleDay, personFromScheduleView)).ToList();
+
+			filteredScheduleDays.Count.Should().Be(2);
+			filteredScheduleDays.First().Person.Should().Be(person1);
+		}
+
 		private void prepareData(IPerson person = null)
 		{
 			_personFrom = person ?? createPersonWithSiteOpenHours(8, 15);
@@ -526,7 +567,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		private static ShiftTradeAddPersonScheduleViewModel createShiftTradeAddPersonScheduleViewModel(IPerson person,
-			DateOnly date, TimePeriod[] timePeriods)
+			DateOnly date, params TimePeriod[] timePeriods)
 		{
 			var teamScheduleLayerViewModels = new List<TeamScheduleLayerViewModel>();
 
@@ -535,6 +576,23 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				teamScheduleLayerViewModels.Add(createTeamScheduleLayerViewModel(date.Date.Add(timePeriod.StartTime),
 					date.Date.Add(timePeriod.EndTime)));
 			}
+
+			return new ShiftTradeAddPersonScheduleViewModel
+			{
+				PersonId = person.Id.GetValueOrDefault(),
+				ScheduleLayers = teamScheduleLayerViewModels.ToArray(),
+				Name = "test",
+				Total = teamScheduleLayerViewModels.Count,
+			};
+		}
+
+		private static ShiftTradeAddPersonScheduleViewModel createShiftTradeAddPersonScheduleViewModel(IPerson person,
+			DateTimePeriod period)
+		{
+			var teamScheduleLayerViewModels = new List<TeamScheduleLayerViewModel>
+			{
+				createTeamScheduleLayerViewModel(period.StartDateTime, period.EndDateTime)
+			};
 
 			return new ShiftTradeAddPersonScheduleViewModel
 			{
@@ -638,13 +696,28 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 		private IScheduleDay createScheduleDay(IPerson person, params TimePeriod[] timePeriods)
 		{
+			return createScheduleDay(_shiftTradeDate, person, timePeriods);
+		}
+
+		private IScheduleDay createScheduleDay(DateOnly shiftDate, IPerson person, params TimePeriod[] timePeriods)
+		{
 			var scenario = CurrentScenario.Current();
-			var scheduleDay = ScheduleDayFactory.Create(_shiftTradeDate, person, scenario);
-			var assignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, _shiftTradeDate);
+			var scheduleDay = ScheduleDayFactory.Create(shiftDate, person, scenario);
+			var assignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, shiftDate);
 			foreach (var timePeriod in timePeriods)
 			{
 				assignment.AddActivity(new Activity("d"), timePeriod);
 			}
+			scheduleDay.Add(assignment);
+			return scheduleDay;
+		}
+
+		private IScheduleDay createScheduleDay(DateOnly shiftDate, IPerson person, DateTimePeriod period)
+		{
+			var scenario = CurrentScenario.Current();
+			var scheduleDay = ScheduleDayFactory.Create(shiftDate, person, scenario);
+			var assignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, shiftDate);
+			assignment.AddActivity(new Activity("d"), period, true);
 			scheduleDay.Add(assignment);
 			return scheduleDay;
 		}
