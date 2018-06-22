@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 			var profilePath = System.IO.Path.Combine(Environment.CurrentDirectory, Guid.NewGuid() + ".ChromeWebDriverProfile");
 			var options = new ChromeOptions();
 			options.AddArgument($"--user-data-dir={profilePath}");
-			options.SetLoggingPreference(LogType.Browser,LogLevel.All);
+			options.SetLoggingPreference(LogType.Browser, LogLevel.All);
 			return new ChromeDriver(options);
 		}
-	}
 
+	}
 }

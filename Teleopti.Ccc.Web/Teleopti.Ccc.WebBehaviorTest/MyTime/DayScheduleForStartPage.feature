@@ -41,6 +41,14 @@ Given there is a role with
 	And I am englishspeaking swede
 	And I have the workflow control set 'Published schedule'
 
+@Mobile
+@OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
+Scenario: Navigate to day schedule when clicking 'Schedule' menu on mobile
+	Given I am american
+	When I am viewing requests
+	And I click Schedule menu item
+	Then I should see mobile day view
+
 @OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
 Scenario: View day schedule after login
 	Given I have a shift with

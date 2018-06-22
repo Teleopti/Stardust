@@ -17,6 +17,16 @@
 			navigator: {
 				appVersion: '5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1',
 				userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1'
+			},
+			location: {
+				hash: "#Schedule/MobileDay",
+				host: "localhost:52858",
+				hostname: "localhost",
+				href: "http://localhost:52858/TeleoptiWFM/Web/MyTime#Schedule/MobileDay",
+				origin: "http://localhost:52858",
+				pathname: "/TeleoptiWFM/Web/MyTime",
+				port: "52858",
+				protocol: "http:"
 			}
 		};
 
@@ -36,25 +46,25 @@
 			}
 		});
 
-	test("should navigate to default start date when clicking logo", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggle) {
-			if (toggle == 'MyTimeWeb_DayScheduleForStartPage_43446')
-				return true;
+	test("should navigate to default start day view when clicking logo", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggle) {
+			if (toggle == 'MyTimeWeb_DayScheduleForStartPage_43446') return true;
 		};
 
-		var brandEle = document.createElement('div');
-		brandEle.innerHTML = '<div class="navbar-header pull-left fake-navbar-brand">'
-			+ '<button id="mainNavbarToggler" type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".navbar-offcanvas">'
-			+ '<span class="icon-bar"></span>'
-			+ '<span class="icon-bar"></span>'
-			+ '<span class="icon-bar"></span>'
-			+ '</button>'
+		var html = [
+			'<div class="navbar-header pull-left fake-navbar-brand">',
+			'	<button id="mainNavbarToggler" type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".navbar-offcanvas">',
+			'		<span class="icon-bar"></span>',
+			'		<span class="icon-bar"></span>',
+			'		<span class="icon-bar"></span>',
+			'	</button>',
+			'	<a class="navbar-brand" href="#Schedule/MobileDay">Teleopti</a>',
+			'</div>'].join("");
 
-			+ '<a class="navbar-brand" href="@string.Format("#{0}Tab", Model.NavigationItems.FirstOrDefault().Controller)">Teleopti</a>'
-			+ '</div>';
-
-		$("body").append(brandEle);
+		$('body').append(html);
+		Teleopti.MyTimeWeb.Portal.Init({ defaultNavigation: 'Schedule/Week', baseUrl: '/', startBaseUrl: '/' }, fakeWindow, ajax);
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax, fakeWindow);
+
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 		var currentDate = vm.selectedDate();
 		vm.nextDay();
@@ -117,12 +127,12 @@
 			'</div>'].join("");
 
 		$("body").append(html);
+		Teleopti.MyTimeWeb.Portal.Init({ defaultNavigation: 'Schedule/Week', baseUrl: '/', startBaseUrl: '/' }, fakeWindow, ajax);
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax, fakeWindow);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
-		var currentDate = vm.selectedDate();
 		vm.nextDay();
 
-		equal($('a[href="#Schedule/MobileDay"]').attr('data-mytime-action'), 'Schedule/MobileDay');
+		equal($('ul.navbar-nav li a[href="#Schedule/MobileDay"]').attr('data-mytime-action'), 'Schedule/MobileDay');
 
 		$('#bs-example-navbar-collapse-1').remove();
 	});

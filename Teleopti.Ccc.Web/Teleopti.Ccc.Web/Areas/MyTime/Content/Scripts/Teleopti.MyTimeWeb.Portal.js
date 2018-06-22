@@ -383,6 +383,20 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		Teleopti.MyTimeWeb.Test.TestMessage("Completely loaded");
 	}
 
+	function _setUpLogoHref(mywindow) {
+		$(document).ready(function () {
+			if (Teleopti.MyTimeWeb.Portal.IsMobile(mywindow) && Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_DayScheduleForStartPage_43446')) {
+				var brand = $('a.navbar-brand');
+				brand.attr({ href: '#Schedule/MobileDay' });
+
+				$('a[href="#ScheduleTab"]').attr({
+					href: '#Schedule/MobileDay',
+					'data-mytime-action': 'Schedule/MobileDay'
+				});
+			}
+		});
+	}
+
 	return {
 		Init: function (settings, thewindow, ajax) {
 			_ajax = ajax ? ajax : new Teleopti.MyTimeWeb.Ajax();
@@ -395,6 +409,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			_initNavigation(thewindow);
 			_setupRoutes();
 			_initializeHasher();
+			_setUpLogoHref(thewindow);
 		},
 
 		NavigateTo: function (action, date, id) {

@@ -766,6 +766,7 @@
     <Compile Include="Web\WebInteractions\BrowserDriver\CoypuImpl\CoypuBrowserActivator.cs" />
     <Compile Include="Web\WebInteractions\BrowserDriver\CoypuImpl\CoypuBrowserInteractions.cs" />
     <Compile Include="Web\WebInteractions\BrowserDriver\CoypuImpl\CoypuChromeActivator.cs" />
+    <Compile Include="Web\WebInteractions\BrowserDriver\CoypuImpl\CoypuMobileChromeActivator.cs" />
     <Compile Include="Web\WebInteractions\BrowserDriver\CoypuImpl\CoypuPhantomJsActivator.cs" />
     <Compile Include="Web\WebInteractions\BrowserDriver\CoypuImpl\SeleniumExceptionCatcher.cs" />
     <Compile Include="Web\WebInteractions\BrowserDriver\EventualAssert.cs" />

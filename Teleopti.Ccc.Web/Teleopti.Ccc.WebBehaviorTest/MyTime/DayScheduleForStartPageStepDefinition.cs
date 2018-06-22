@@ -13,6 +13,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 	[Binding]
 	class DayScheduleForStartPageStepDefinition
 	{
+		[Then(@"I should see mobile day view")]
+		public void ThenIShouldSeeMobileDayView()
+		{
+			Browser.Interactions.AssertExists(".mobile-start-day");
+		}
+
+		[When(@"I open MyTime menu on the left")]
+		[Then(@"I open MyTime menu on the left")]
+		public void ThenIOpenMyTimeMenuOnTheLeft()
+		{
+			Browser.Interactions.Click("#mainNavbarToggler");
+		}
+
+		[When(@"I click Schedule menu item")]
+		public void WhenIClickScheduleMenuItem()
+		{
+			Browser.Interactions.ClickContaining("ul li a", "Schedule");
+		}
+
 		[When(@"I am viewing mobile view for date '(.*)'")]
 		public void WhenIAmViewingMobileViewForDate(DateTime date)
 		{
@@ -27,7 +46,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Navigation.GotoMobileDaySchedulePage(DateTime.Now.AddDays(1));
 		}
 
-
 		[When(@"I am viewing mobile view for today")]
 		public void WhenIAmViewingMobileViewForToday()
 		{
@@ -39,7 +57,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeMyDayViewScheduleWith(Table table)
 		{
 			var content = table.CreateInstance<MobileDayScheduleContentItem>();
-
 			Browser.Interactions.AssertAnyContains(".mobile-summary-content", content.ShiftCategory);
 			Browser.Interactions.AssertAnyContains(".mobile-summary-content", content.TimeSpan);
 		}

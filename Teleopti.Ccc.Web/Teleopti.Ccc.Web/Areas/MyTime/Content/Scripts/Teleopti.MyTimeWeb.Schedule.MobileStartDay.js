@@ -74,6 +74,17 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 		});
 	}
 
+	function setUpLogoClick(mywindow) {
+		if (Teleopti.MyTimeWeb.Portal.IsMobile(mywindow) && Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_DayScheduleForStartPage_43446')) {
+			var brand = $('a.navbar-brand');
+			if (brand.data('events') && brand.data('events')['click']) brand.unbind('click');
+
+			brand.click(function () {
+				if (!vm.selectedDate().isSame(vm.currentUserDate().format('YYYY-MM-DD'), 'day')) vm.today();
+			});
+		}
+	}
+
 	function registerUserInfoLoadedCallback(initialMomentDate) {
 		Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
 			$(".moment-datepicker").attr("data-bind",
@@ -115,27 +126,6 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 		ko.applyBindings(vm, $("#page")[0]);
 	}
 
-	function setUpLogoClickFn(mywindow) {
-		if (Teleopti.MyTimeWeb.Portal.IsMobile(mywindow) && Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_DayScheduleForStartPage_43446")) {
-			var brand = $('a.navbar-brand');
-			if (brand.data('events') && brand.data('events')['click'])
-				brand.unbind('click');
-
-			brand.attr({
-				href: '#Schedule/MobileDay'
-			})
-				.click(function () {
-					if (!vm.selectedDate().isSame(vm.currentUserDate().format('YYYY-MM-DD'), 'day'))
-						vm.today();
-				});
-
-			$('a[href="#ScheduleTab"]').attr({
-				href: '#Schedule/MobileDay',
-				'data-mytime-action': 'Schedule/MobileDay'
-			});
-		}
-	}
-
 	return {
 		Init: function () {
 			if ($.isFunction(Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack)) {
@@ -151,10 +141,10 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 			completelyLoaded = completelyLoadedCallback;
 			registerUserInfoLoadedCallback(initialMomentDate);
 			registerSwipeEvent();
-			mywindow = mywindow || window;
-			setUpLogoClickFn(mywindow);
 			readyForInteractionCallback();
 			registPollListener();
+			mywindow = mywindow || window;
+			setUpLogoClick(mywindow);
 		},
 		ReloadScheduleListener: function (notification) {
 			if (notification.DomainType === "IScheduleChangedInDefaultScenario") {

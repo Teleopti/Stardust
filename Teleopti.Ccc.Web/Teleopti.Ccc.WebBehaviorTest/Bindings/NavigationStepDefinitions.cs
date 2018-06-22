@@ -142,6 +142,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoWeekSchedulePageNoWait();
 		}
 
+		[When(@"I am viewing MyTime")]
+		public void WhenIAmViewingMyTime()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoMyTime();
+		}
+
 		[When(@"I logon to mytime web")]
 		public void WhenILogonToMytimeWeb()
 		{
@@ -587,6 +594,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		}
 
 		[When(@"I navigate to the team schedule")]
+		[Then(@"I navigate to the team schedule")]
 		public void WhenINavigateToTheTeamSchedule()
 		{
 			Navigation.GotoTeamSchedule();
