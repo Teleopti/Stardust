@@ -1,0 +1,10 @@
+<div class="wfm-chip-wrap">
+	<span class="wfm-chip" [ngClass]="{'chip-disabled':disabled}">
+		<span class="chip-handle" [ngClass]="active ? activeClass : ''">
+			<i class="mdi" [ngClass]="active ? activeIcon : inactiveIcon"></i>
+		</span>
+		<span class="chip-text">
+			<ng-content></ng-content>
+		</span>
+	</span>
+</div>

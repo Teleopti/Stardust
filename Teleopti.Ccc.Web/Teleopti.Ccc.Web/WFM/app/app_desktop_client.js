@@ -49,6 +49,7 @@ var wfm = angular.module('wfm', [
 	'wfm.dataProtection',
 	'wfm.templates',
 	'wfm.gamification',
+	'wfm.apiaccess'
 ]).config([
 	'$stateProvider', '$urlRouterProvider', '$translateProvider', '$httpProvider', 
 	function($stateProvider, $urlRouterProvider, $translateProvider, $httpProvider) {

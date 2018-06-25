@@ -17,7 +17,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 {
-	[EnabledBy(Toggles.Wfm_ImportSchedule_41247)]
 	public class ImportScheduleHandler : ScheduleManagementHandlerBase,
 		IHandleEvent<ImportScheduleEvent>,
 		IRunOnHangfire

@@ -15,6 +15,11 @@ import {
 	TitleBarComponent,
 	IdentityLogonPageComponent
 } from './app/people/components';
+import {
+	ListPageComponent,
+	AddAppPageComponent,
+	ApiAccessTitleBarComponent
+} from './app/api-access/components';
 import { AppModule } from './app/app.module';
 
 export interface IWfmRootScopeService extends IRootScopeService {
@@ -40,6 +45,7 @@ const wfm = angular.module('wfm', [
 	'wfm.http',
 	'wfm.exceptionHandler',
 	'wfm.permissions',
+	'wfm.apiaccess',
 	'wfm.peopleold',
 	'wfm.people',
 	'wfm.outbound',
@@ -86,6 +92,10 @@ const wfm = angular.module('wfm', [
 ]);
 
 wfm.controller('MainController', MainController as IControllerConstructor);
+
+wfm.directive('ng2ApiAccessTitleBar', downgradeComponent({ component: ApiAccessTitleBarComponent }) as angular.IDirectiveFactory);
+wfm.directive('ng2ApiAccessListPage', downgradeComponent({ component: ListPageComponent }) as angular.IDirectiveFactory);
+wfm.directive('ng2ApiAccessAddAppPage', downgradeComponent({ component:	AddAppPageComponent }) as angular.IDirectiveFactory);
 
 wfm.directive('ng2PeopleTitleBar', downgradeComponent({ component: TitleBarComponent }) as angular.IDirectiveFactory);
 wfm.directive('ng2PeopleSearchPage', downgradeComponent({

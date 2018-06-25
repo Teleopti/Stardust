@@ -19,7 +19,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 {
 	[Category("BucketB")]
-	[Toggle(Toggles.Wfm_ArchiveSchedule_41498)]
 	[DatabaseTest]
 	public class ArchiveScheduleHandlerTest : ScheduleManagementTestBase
 	{

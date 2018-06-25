@@ -45,43 +45,40 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[Route("api/ResourcePlanner/Importing/Run"), HttpPost, UnitOfWork]
 		public virtual IHttpActionResult RunImporting([FromBody] ManageSchedulesModel model)
 		{
-			return ManageSchedules(model, JobCategory.ImportSchedule, model.CreateImportEvent<ImportScheduleEvent>, Toggles.Wfm_ImportSchedule_41247, DefinedRaptorApplicationFunctionPaths.ImportSchedule);
+			return ManageSchedules(model, JobCategory.ImportSchedule, model.CreateImportEvent<ImportScheduleEvent>, DefinedRaptorApplicationFunctionPaths.ImportSchedule);
 		}
 
 		[Route("api/ResourcePlanner/Archiving/Run"), HttpPost, UnitOfWork]
 		public virtual IHttpActionResult RunArchiving([FromBody] ManageSchedulesModel model)
 		{
-			return ManageSchedules(model, JobCategory.ArchiveSchedule, model.CreateImportEvent<ArchiveScheduleEvent>, Toggles.Wfm_ArchiveSchedule_41498, DefinedRaptorApplicationFunctionPaths.ArchiveSchedule);
+			return ManageSchedules(model, JobCategory.ArchiveSchedule, model.CreateImportEvent<ArchiveScheduleEvent>, DefinedRaptorApplicationFunctionPaths.ArchiveSchedule);
 		}
 
-		public IHttpActionResult ManageSchedules(ManageSchedulesModel model, string jobCategory, Func<IEnumerable<IPerson>, ManageScheduleBaseEvent> eventCreator, Toggles toggle, string requiredPermission)
+		public IHttpActionResult ManageSchedules(ManageSchedulesModel model, string jobCategory, Func<IEnumerable<IPerson>, ManageScheduleBaseEvent> eventCreator, string requiredPermission)
 		{
 			var response = new ManageSchedulesResponse
 			{
 				TotalMessages = 0,
 				TotalSelectedPeople = 0
 			};
-			if (_toggleManager.IsEnabled(toggle))
+			var people = getPeople(model, requiredPermission);
+			response.TotalSelectedPeople = people.Count;
+			if (response.TotalSelectedPeople > 0)
 			{
-				var people = getPeople(model, requiredPermission);
-				response.TotalSelectedPeople = people.Count;
-				if (response.TotalSelectedPeople > 0)
-				{
-					var jobResult = new JobResult(jobCategory, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), _loggedOnUser.CurrentUser(), DateTime.UtcNow);
-					_jobResultRepository.Add(jobResult);
-					response.JobId = jobResult.Id;
-					model.JobResultId = jobResult.Id.GetValueOrDefault();
+				var jobResult = new JobResult(jobCategory, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), _loggedOnUser.CurrentUser(), DateTime.UtcNow);
+				_jobResultRepository.Add(jobResult);
+				response.JobId = jobResult.Id;
+				model.JobResultId = jobResult.Id.GetValueOrDefault();
 
-					var events = people
-						.Batch(getBatchSize(response.TotalSelectedPeople))
-						.Select(eventCreator)
-						.Where(x => x.PersonIds.Any())
-						.ToList();
-					events.ForEach(e => e.TotalMessages = events.Count);
+				var events = people
+					.Batch(getBatchSize(response.TotalSelectedPeople))
+					.Select(eventCreator)
+					.Where(x => x.PersonIds.Any())
+					.ToList();
+				events.ForEach(e => e.TotalMessages = events.Count);
 
-					Task.Run(() => _eventPublisher.Publish(events.Cast<IEvent>().ToArray()));
-					response.TotalMessages = events.Count;
-				}
+				Task.Run(() => _eventPublisher.Publish(events.Cast<IEvent>().ToArray()));
+				response.TotalMessages = events.Count;
 			}
 			return Ok(response);
 		}

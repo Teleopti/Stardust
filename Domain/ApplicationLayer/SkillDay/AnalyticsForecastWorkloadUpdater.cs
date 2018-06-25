@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 						IntervalId = new IntervalBase(taskPeriod.Period.StartDateTime, intervals).Id,
 						StartTime = taskPeriod.Period.StartDateTime,
 						EndTime = taskPeriod.Period.EndDateTime,
-						PeriodLengthMinutes = taskPeriod.Period.EndDateTime.Subtract(taskPeriod.Period.StartDateTime).TotalMinutes,
+						PeriodLengthMinutes = taskPeriod.Period.ElapsedTime().TotalMinutes,
 						DatasourceUpdateDate = skillDay.UpdatedOn ?? DateTime.UtcNow,
 						ForecastedAfterCallWorkExclCampaignSeconds = forecastedAfterCallWorkExclCampaignSeconds,
 						ForecastedAfterCallWorkSeconds = forecastedAfterCallWorkSeconds,

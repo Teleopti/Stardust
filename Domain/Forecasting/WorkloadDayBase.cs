@@ -70,17 +70,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		    _useSkewedDistribution = value;
 	    }
 
-        protected bool IsEmailWorkload
-        {
-            get
-            {
-                return _workload.Skill.SkillType.ForecastSource != ForecastSource.InboundTelephony &&
-            	       _workload.Skill.SkillType.ForecastSource != ForecastSource.Retail &&
-					   _workload.Skill.SkillType.ForecastSource != ForecastSource.Chat;
-            }
-        }
+        protected bool IsEmailWorkload => _workload.Skill.SkillType.ForecastSource != ForecastSource.InboundTelephony &&
+										  _workload.Skill.SkillType.ForecastSource != ForecastSource.Retail &&
+										  _workload.Skill.SkillType.ForecastSource != ForecastSource.Chat;
 
-        protected void EntityCloneTaskPeriodList(WorkloadDayBase targetClone)
+		protected void EntityCloneTaskPeriodList(WorkloadDayBase targetClone)
         {
             targetClone._taskPeriodList = new HashSet<ITemplateTaskPeriod>(_taskPeriodList.Select(templateTaskPeriod => {
 				var clonedTaskPeriod = templateTaskPeriod.EntityClone();
@@ -1458,7 +1452,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             if (list.Count == 0) return;
             if (!list.All(i => Equals(i.Parent)))
             {
-                throw new ArgumentException("All items in supplied list must have this entity as parent.", "list");
+                throw new ArgumentException("All items in supplied list must have this entity as parent.", nameof(list));
             }
 
             lockAction(this);
@@ -1497,9 +1491,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		                splittedTaskOwnerPeriod.CampaignTasks = templateTaskPeriod.CampaignTasks;
 		                splittedTaskOwnerPeriod.CampaignTaskTime = templateTaskPeriod.CampaignTaskTime;
 		                splittedTaskOwnerPeriod.CampaignAfterTaskTime = templateTaskPeriod.CampaignAfterTaskTime;
-		                //splittedTaskOwnerPeriod.SetOverrideTasks(templateTaskPeriod.OverrideTasks, null);
-		                //splittedTaskOwnerPeriod.OverrideAverageTaskTime = templateTaskPeriod.OverrideAverageTaskTime;
-		                //splittedTaskOwnerPeriod.OverrideAverageAfterTaskTime = templateTaskPeriod.OverrideAverageAfterTaskTime;
 	                }
                 }
             }
@@ -1540,16 +1531,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
             return !IsWithinOpenHours(templateTaskPeriod);
         }
 
-        public virtual ReadOnlyCollection<ITemplateTaskPeriod> OpenTaskPeriodList
-        {
-            get
-            {
-                return new ReadOnlyCollection<ITemplateTaskPeriod>(
-                    _taskPeriodList.Where(IsWithinOpenHours).ToList());
-            }
-        }
+        public virtual ReadOnlyCollection<ITemplateTaskPeriod> OpenTaskPeriodList => new ReadOnlyCollection<ITemplateTaskPeriod>(
+			_taskPeriodList.Where(IsWithinOpenHours).ToList());
 
-        /// <summary>
+		/// <summary>
         /// Gets the parents. (Mostly for test reasons)
         /// </summary>
         /// <value>The parents.</value>
@@ -1557,30 +1542,19 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: zoet
         /// Created date: 2008-10-13
         /// </remarks>
-        public virtual IList<ITaskOwner> Parents
-        {
-            get { return _parents; }
-        }
+        public virtual IList<ITaskOwner> Parents => _parents;
 
-        public virtual ReadOnlyCollection<ITemplateTaskPeriodView> TemplateTaskPeriodViewCollection(TimeSpan periodLength)
+		public virtual ReadOnlyCollection<ITemplateTaskPeriodView> TemplateTaskPeriodViewCollection(TimeSpan periodLength)
         {
-            IList<ITemplateTaskPeriodView> views = new List<ITemplateTaskPeriodView>();
-            TimeSpan myPeriodLength = new TimeSpan();
+            var myPeriodLength = TimeSpan.Zero;
             if (SortedTaskPeriodList.Count > 0)
             {
                 myPeriodLength = SortedTaskPeriodList[0].Period.ElapsedTime();
             }
-            if (myPeriodLength >= periodLength)
-            {
-                foreach (ITemplateTaskPeriod period in SortedTaskPeriodList)
-                {
-                    IList<ITemplateTaskPeriodView> tmpViews = period.Split(periodLength);
-                    foreach (ITemplateTaskPeriodView view in tmpViews)
-                    {
-                        views.Add(view);
-                    }
-                }
-            }
+
+			var views = myPeriodLength >= periodLength
+				? SortedTaskPeriodList.SelectMany(period => period.Split(periodLength)).ToList()
+				: new List<ITemplateTaskPeriodView>();
 
             return new ReadOnlyCollection<ITemplateTaskPeriodView>(views);
         }
@@ -1653,8 +1627,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
     public class LocalPeriodCache
     {
-        public DateTime LocalStart { get; private set; }
-        public DateTime LocalEnd { get; private set; }
+        public DateTime LocalStart { get; }
+        public DateTime LocalEnd { get; }
 
         public LocalPeriodCache(DateTime localStart, DateTime localEnd)
         {
@@ -1663,3 +1637,4 @@ namespace Teleopti.Ccc.Domain.Forecasting
         }
     }
 }
+

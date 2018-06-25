@@ -16,7 +16,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 {
-	[EnabledBy(Toggles.Wfm_ArchiveSchedule_41498)]
 	public class ArchiveScheduleHandler : ScheduleManagementHandlerBase,
 		IHandleEvent<ArchiveScheduleEvent>, 
 		IRunOnHangfire

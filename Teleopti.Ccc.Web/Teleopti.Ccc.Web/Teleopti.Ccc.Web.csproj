@@ -1482,6 +1482,9 @@
     </None>
     <Content Include="WFM\ai.js" />
     <Content Include="WFM\appInsights.js" />
+    <Content Include="WFM\app\api-access\api-access.routes.js" />
+    <Content Include="WFM\app\api-access\api-access.start.controller.js" />
+    <Content Include="WFM\app\api-access\_modules.js" />
     <Content Include="WFM\app\forecasting\forecasting.default.controller.js" />
     <Content Include="WFM\app\forecasting\html\forecasting.html" />
     <Content Include="WFM\app\forecasting\refact\r2forecast.controller.js" />
@@ -1543,7 +1546,6 @@
     <Content Include="WFM\app\intraday\services\intraday.service.js" />
     <Content Include="WFM\app\intraday\services\intraday.time.service.js" />
     <Content Include="WFM\app\intraday\services\intraday.traffic.service.js" />
-    <Content Include="WFM\app\people\html\people.html" />
     <Content Include="WFM\app\people\people.routes.js" />
     <Content Include="WFM\app\people\people.start.controller.js" />
     <Content Include="WFM\app\people\_modules.js" />
@@ -2865,6 +2867,7 @@
     <Folder Include="Areas\Start\Views\Config\" />
     <Folder Include="Areas\TeamSchedule\Views\TeamScheduleData\" />
     <Folder Include="Core\Aop\Aspects\" />
+    <Folder Include="WFM\app\people\html\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\MyTime\Views\Settings\RegionalSettingsPartial.cshtml" />

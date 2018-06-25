@@ -1,0 +1,52 @@
+<api-access-page-container>
+	<div class="sub-header">
+		<div class="con-row">
+			<div class="con-flex x2">
+				<button mat-raised-button color="primary" data-test-add-app-button (click)="nav.navToAddApp()">
+					Add App
+				</button>
+				<button mat-raised-button color="warning" [disabled]="!selection.hasValue()" data-test-revoke-app-button (click)="revokeSelected()">
+					Revoke Selected
+				</button>
+			</div>
+		</div>
+	</div>
+	<div class="con-row">
+		<div class="con-flex table-container">
+			<button *ngIf="false" mat-icon-button class="action-button" [matMenuTriggerFor]="menu" data-test-action-menu>
+				<i class="mdi mdi-dots-vertical"></i>
+			</button>
+			<mat-table #table [dataSource]="dataSource" data-test-search>
+				<!-- Checkbox Column -->
+				<ng-container matColumnDef="select">
+					<mat-header-cell *matHeaderCellDef>
+						<mat-checkbox (change)="$event ? masterToggle() : null"
+									  [checked]="selection.hasValue() && isAllSelected()"
+									  [indeterminate]="selection.hasValue() && !isAllSelected()">
+						</mat-checkbox>
+					</mat-header-cell>
+					<mat-cell *matCellDef="let row">
+						<mat-checkbox (click)="$event.stopPropagation()"
+									  (change)="$event ? selection.toggle(row) : null"
+									  [checked]="selection.isSelected(row)">
+						</mat-checkbox>
+					</mat-cell>
+				</ng-container>
+
+				<ng-container matColumnDef="Name">
+					<mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+					<mat-cell *matCellDef="let app" data-test-person-firstname> {{app.Name}} </mat-cell>
+				</ng-container>
+
+				<ng-container matColumnDef="Id">
+					<mat-header-cell *matHeaderCellDef> Id</mat-header-cell>
+					<mat-cell *matCellDef="let app" data-test-person-lastname> {{app.Id}} </mat-cell>
+				</ng-container>
+
+				<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+				<mat-row *matRowDef="let row; columns: displayedColumns;" data-test-person>
+				</mat-row>
+			</mat-table>
+		</div>
+	</div>
+</api-access-page-container>
