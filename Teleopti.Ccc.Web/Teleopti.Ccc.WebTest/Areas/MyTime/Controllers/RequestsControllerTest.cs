@@ -99,6 +99,42 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldRetriveMultiSchedulesForShiftTrade()
+		{
+			var currentUser = PersonFactory.CreatePersonWithId(Guid.NewGuid());
+			var personTo = PersonFactory.CreatePersonWithId(Guid.NewGuid());
+			var startDate = new DateOnly(2018, 6, 22);
+			var endDate = new DateOnly(2018, 6, 27);
+			createSchedules(new DateOnlyPeriod(startDate, endDate), currentUser, personTo);
+			var form = new ShiftTradeMultiSchedulesForm
+			{
+				StartDate = startDate,
+				EndDate = endDate,
+				PersonToId = personTo.Id.GetValueOrDefault()
+			};
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+
+			data.MySchedules.Count().Should().Be.EqualTo(6);
+			data.PersonToSchedules.Count().Should().Be.EqualTo(6);
+		}
+
+		private void createSchedules(DateOnlyPeriod period, IPerson currentUser, IPerson personTo)
+		{
+			LoggedOnUser.SetFakeLoggedOnUser(currentUser);
+			currentUser.WorkflowControlSet = new WorkflowControlSet("test")
+			{
+				SchedulePublishedToDate = DateTime.MaxValue
+			};
+
+			setPermissions(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
+
+			PersonAssignmentRepository.Has(currentUser, CurrentScenario.Current(), new Activity(), period, new TimePeriod(8, 10));
+			PersonAssignmentRepository.Has(personTo, CurrentScenario.Current(), new Activity(), period, new TimePeriod(8, 10));
+		}
+
+		[Test]
 		public void ShouldPersistShiftTradeRequest()
 		{
 			var personFrom = PersonFactory.CreatePersonWithId(Guid.NewGuid());

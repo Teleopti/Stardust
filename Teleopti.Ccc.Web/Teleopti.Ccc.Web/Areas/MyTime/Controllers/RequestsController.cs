@@ -233,6 +233,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWork]
+		[HttpPostOrPut]
+		public virtual ActionResult ShiftTradeMultiDaysSchedule(ShiftTradeMultiSchedulesForm input)
+		{
+			return Json(_requestsViewModelFactory.CreateShiftTradeMultiSchedulesViewModel(input));
+		}
+
+		[UnitOfWork]
 		[HttpGet]
 		public virtual JsonResult ShiftTradeRequestPeriod()
 		{

@@ -20,4 +20,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		[StringLength(2000, ErrorMessageResourceType = typeof(Resources), ErrorMessageResourceName = "MessageTooLong")]
 		public string Message { get; set; }
 	}
+
+	public class ShiftTradeMultiSchedulesForm
+	{
+		public DateOnly StartDate { get; set; }
+		public DateOnly EndDate { get; set; }
+		public Guid PersonToId { get; set; }
+	}
 }

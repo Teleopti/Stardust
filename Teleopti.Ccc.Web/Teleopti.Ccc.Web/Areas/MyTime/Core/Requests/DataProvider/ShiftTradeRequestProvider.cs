@@ -39,6 +39,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				: null;
 		}
 
+		public IEnumerable<IPersonScheduleDayReadModel> RetrieveTradeMultiSchedules(DateOnlyPeriod period, List<Guid> personList)
+		{
+			var dateTimePeriod = period.ToDateTimePeriod(_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
+			return _scheduleDayReadModelFinder.ForPeople(dateTimePeriod, personList);
+		}
+
 		public IEnumerable<IPersonScheduleDayReadModel> RetrievePossibleTradeSchedules(DateOnly date,
 			IEnumerable<IPerson> possibleShiftTradePersons, Paging paging, string timeSortOrder = "")
 		{

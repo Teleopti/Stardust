@@ -1,4 +1,7 @@
-﻿using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+﻿using System;
+using System.Collections.Generic;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 {
@@ -6,5 +9,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 	{
 		ShiftTradeScheduleViewModel Map(ShiftTradeScheduleViewModelData data);
 		ShiftTradeScheduleViewModel MapForBulletin(ShiftTradeScheduleViewModelData data);
+		IEnumerable<ShiftTradeAddPersonScheduleViewModel> GetMeAndPersonToSchedules(DateOnlyPeriod period, Guid personToId);
 	}
 }

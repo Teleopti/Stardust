@@ -12,4 +12,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 
 		public int PageCount { get; set; }
 	}
+
+	public class ShiftTradeMultiSchedulesViewModel
+	{
+		public IEnumerable<ShiftTradeAddPersonScheduleViewModel> MySchedules { get; set; }
+		public IEnumerable<ShiftTradeAddPersonScheduleViewModel> PersonToSchedules { get; set; }
+	}
 }

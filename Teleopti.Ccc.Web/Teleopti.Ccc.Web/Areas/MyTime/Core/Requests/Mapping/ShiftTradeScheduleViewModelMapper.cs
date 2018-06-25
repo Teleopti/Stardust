@@ -143,6 +143,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			return getShiftTradeScheduleViewModel(data.Paging, myScheduleViewModel, possibleTradeSchedule, data.ShiftTradeDate);
 		}
 
+		public IEnumerable<ShiftTradeAddPersonScheduleViewModel> GetMeAndPersonToSchedules(DateOnlyPeriod period, Guid personToId)
+		{
+			var allSchedules = _shiftTradeRequestProvider.RetrieveTradeMultiSchedules(period,
+				new List<Guid> {_loggedOnUser.CurrentUser().Id.GetValueOrDefault(), personToId});
+
+			return _shiftTradePersonScheduleViewModelMapper.Map(allSchedules);
+		}
+
 		private ShiftTradeScheduleViewModel getShiftTradeScheduleViewModel(Paging paging,
 			ShiftTradeAddPersonScheduleViewModel mySchedule, IEnumerable<ShiftTradeAddPersonScheduleViewModel> possibleTradeSchedule, DateOnly shiftTradeDate)
 		{

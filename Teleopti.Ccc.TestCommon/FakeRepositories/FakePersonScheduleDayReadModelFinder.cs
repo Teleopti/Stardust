@@ -82,7 +82,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<PersonScheduleDayReadModel> ForPeople(DateTimePeriod period, IEnumerable<Guid> personIds)
 		{
-			throw new NotImplementedException();
+			var schedules = new List<PersonScheduleDayReadModel>();
+			foreach (var date in period.ToDateOnlyPeriod(TimeZoneInfo.Utc).DayCollection())
+			{
+				schedules.AddRange(ForPersons(date, personIds, Paging.Empty));
+			}
+
+			return schedules;
 		}
 
 		public IEnumerable<PersonScheduleDayReadModel> ForBulletinPersons(IEnumerable<string> shiftExchangeOfferIdList,

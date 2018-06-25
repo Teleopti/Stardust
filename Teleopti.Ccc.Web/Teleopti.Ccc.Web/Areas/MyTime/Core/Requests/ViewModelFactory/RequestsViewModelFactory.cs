@@ -147,6 +147,26 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			return _shiftTradeScheduleViewModelMapper.Map(data);
 		}
 
+		public ShiftTradeMultiSchedulesViewModel CreateShiftTradeMultiSchedulesViewModel(ShiftTradeMultiSchedulesForm input)
+		{
+			var period = new DateOnlyPeriod(input.StartDate, input.EndDate);
+			var allSchedules = _shiftTradeScheduleViewModelMapper.GetMeAndPersonToSchedules(period, input.PersonToId);
+
+			var mySchedules = new List<ShiftTradeAddPersonScheduleViewModel>();
+			var personToSchedules = new List<ShiftTradeAddPersonScheduleViewModel>();
+			foreach (var schedule in allSchedules)
+			{
+				if (schedule.PersonId == _loggedOnUser.CurrentUser().Id.GetValueOrDefault()) mySchedules.Add(schedule);
+				else personToSchedules.Add(schedule);
+			}
+
+			return new ShiftTradeMultiSchedulesViewModel
+			{
+				MySchedules = mySchedules,
+				PersonToSchedules = personToSchedules
+			};
+		}
+
 		public IList<ShiftTradeSwapDetailsViewModel> CreateShiftTradeRequestSwapDetails(Guid id)
 		{
 			var shiftTradeSwapDetailsList = new List<ShiftTradeSwapDetailsViewModel>();
