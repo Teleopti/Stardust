@@ -21,7 +21,7 @@ interface PersistApplicationLogonNamesQuery {
 interface PersistIdentityLogonNamesQuery {
 	People: PersonIdentityLogonModel[];
 }
-interface Poop {
+interface PeopleLogonModel {
 	Body: {
 		People: PersonApplicationLogonModel[] | PersonIdentityLogonModel[];
 		TimeStamp: string;
@@ -30,7 +30,7 @@ interface Poop {
 }
 
 interface PersistChallengeResponse {
-	Body: Poop;
+	Body: PeopleLogonModel;
 	Signature: string;
 }
 
