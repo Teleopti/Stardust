@@ -14691,7 +14691,7 @@ Teleopti R&amp;D</value>
     <value>选择目标情景：</value>
   </data>
   <data name="SkillNotSupported" xml:space="preserve">
-    <value>This skill is not supported yet. Check back here later to run a forecast for this scenario.</value>
+    <value>请使用 Windows 客户端打开对此技能的预测进行编辑</value>
   </data>
   <data name="ThisScenarioHasChanges" xml:space="preserve">
     <value>当前情景有未保存的更改</value>

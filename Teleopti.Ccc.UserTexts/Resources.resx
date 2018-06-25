@@ -17466,7 +17466,7 @@ The application will now exit.</value>
     <comment>Text message in web forecast</comment>
   </data>
   <data name="SkillNotSupported" xml:space="preserve">
-    <value>This skill is not supported yet. Check back here later to run a forecast for this scenario.</value>
+    <value>Please open forecast for current skill in Windows client to edit</value>
     <comment>Text message in web forecast</comment>
   </data>
   <data name="SkillTypeFilter" xml:space="preserve">

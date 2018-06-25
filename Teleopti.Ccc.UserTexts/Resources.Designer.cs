@@ -33176,7 +33176,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This skill is not supported yet. Check back here later to run a forecast for this scenario..
+        ///   Looks up a localized string similar to Please open forecast for current skill in Windows client to edit.
         /// </summary>
         public static string SkillNotSupported {
             get {
