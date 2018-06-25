@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 		}
 		
 		[Test]
-		[Timeout(12000)]
+		[Timeout(20000)]
 		public void ShouldNotHangWhenMultipleThreadsCallingMultipleDates()
 		{
 			var targetDate = new DateTime(2010, 1, 5, 0,0,0,DateTimeKind.Utc);
