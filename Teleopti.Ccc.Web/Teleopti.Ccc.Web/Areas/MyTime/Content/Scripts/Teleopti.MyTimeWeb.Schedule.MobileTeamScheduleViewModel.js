@@ -11,6 +11,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function (filterChange
 		constants = Teleopti.MyTimeWeb.Common.Constants,
 		dateOnlyFormat = constants.serviceDateTimeFormat.dateOnly,
 		timeLineOffset = 50,
+		minPixelsToDisplayTitle = 30,
 		requestDateOnlyFormat = 'YYYY/MM/DD';
 
 	self.selectedDate = ko.observable(moment());
@@ -222,12 +223,18 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function (filterChange
 		var mySchedulePeriods = [];
 
 		myScheduleData.Periods.forEach(function (layer, index, periods) {
-			var layerViewModel = new Teleopti.MyTimeWeb.Schedule.LayerViewModel(layer, null, true, timeLineOffset, false, timelineStart, self.selectedDate());
-			layerViewModel.isLastLayer = index === periods.length - 1;
-			mySchedulePeriods.push(layerViewModel);
+			var myLayerViewModel = new Teleopti.MyTimeWeb.Schedule.LayerViewModel(layer, null, true, timeLineOffset, false, timelineStart, self.selectedDate());
+
+			myLayerViewModel.showTitle = ko.computed(function () {
+				return myLayerViewModel.height() > minPixelsToDisplayTitle;
+			});
+
+			myLayerViewModel.isLastLayer = index === periods.length - 1;
+
+			mySchedulePeriods.push(myLayerViewModel);
 		});
 
-		return { name: myScheduleData.Name, layers: mySchedulePeriods, isDayOff:myScheduleData.IsDayOff,dayOffName: myScheduleData.DayOffName };
+		return { name: myScheduleData.Name, layers: mySchedulePeriods, isDayOff: myScheduleData.IsDayOff, dayOffName: myScheduleData.DayOffName };
 	}
 
 	function createTeamSchedules(agentSchedulesData, timelineStart) {

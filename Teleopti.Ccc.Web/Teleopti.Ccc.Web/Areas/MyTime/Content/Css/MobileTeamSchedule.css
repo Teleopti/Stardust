@@ -283,6 +283,10 @@ div.teammates-schedules-column:last-of-type .agent-name {
 	border-bottom-right-radius: 3px;
 }
 
+.mobile-teamschedule-view .mobile-schedule-layer .activity-info {
+	line-height: 1;
+}
+
 .mobile-teamschedule-view .form-control[disabled] {
 	background-color: #f1f1f1;
 }

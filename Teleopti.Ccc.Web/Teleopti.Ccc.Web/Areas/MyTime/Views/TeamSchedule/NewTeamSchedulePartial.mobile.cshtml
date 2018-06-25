@@ -112,7 +112,7 @@
 			<div class="mobile-schedule-container relative">
 				<!-- ko foreach: mySchedule().layers -->
 				<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-background-image-light': isOvertime, overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime, overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true">
-					<div data-bind="visible: showTitle() && !isOvertimeAvailability()">
+					<div class="activity-info" data-bind="visible: showTitle() && !isOvertimeAvailability()">
 						<strong data-bind="text: title()"></strong>
 						<!-- ko if: hasMeeting -->
 						<div class="meeting floatright">
@@ -121,7 +121,7 @@
 							</i>
 						</div>
 						<!-- /ko -->
-						<span class="fullwidth displayblock" data-bind="visible: false && showDetail, text: timeSpan"></span>
+						<span class="fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan"></span>
 					</div>
 					<div data-bind="visible: false && showTitle() && isOvertimeAvailability()">
 						<i class="glyphicon glyphicon-time"></i>
@@ -153,7 +153,7 @@
 								</i>
 							</div>
 							<!-- /ko -->
-							<span class="fullwidth displayblock" data-bind="visible: false && showDetail, text: timeSpan"></span>
+							<span class="fullwidth displayblock" data-bind="visible: false && showDetail(), text: timeSpan"></span>
 						</div>
 						<div data-bind="visible: false && showTitle() && isOvertimeAvailability()">
 							<i class="glyphicon glyphicon-time"></i>
