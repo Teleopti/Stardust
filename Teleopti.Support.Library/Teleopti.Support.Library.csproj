@@ -71,6 +71,7 @@
     <Compile Include="Config\SetToggleModeCommand.cs" />
     <Compile Include="DatabaseType.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Folders\BuildArtifactsFolder.cs" />
     <Compile Include="Folders\DatabaseFolder.cs" />
     <Compile Include="Folders\DbManagerFolder.cs" />
     <Compile Include="Folders\DebugSetupDatabaseFolder.cs" />

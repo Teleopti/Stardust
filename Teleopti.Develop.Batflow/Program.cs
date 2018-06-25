@@ -6,9 +6,9 @@ using CommandLine;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Support.Library;
+using Teleopti.Support.Library.Config;
 using Teleopti.Support.Library.Folders;
 using Teleopti.Support.Security.Library;
-using Teleopti.Support.Tool.Tool;
 using Parser = CommandLine.Parser;
 
 namespace Teleopti.Develop.Batflow

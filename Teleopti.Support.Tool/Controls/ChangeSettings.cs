@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using log4net;
+using log4net.Appender;
 using Teleopti.Support.Library.Config;
 using Teleopti.Support.Tool.Tool;
 
@@ -41,8 +44,7 @@ namespace Teleopti.Support.Tool.Controls
 
 		private void buttonRefreshThem_Click(object sender, EventArgs e)
 		{
-
-            var mode = "DeployConfigFiles.txt";
+			var mode = "DeployConfigFiles.txt";
 #if (DEBUG)
 			{
 				mode = "ConfigFiles.txt";
@@ -55,8 +57,7 @@ namespace Teleopti.Support.Tool.Controls
 		{
 			new SettingsFileManager().SaveFile(_settings);
 
-			var refreshRunner = new RefreshConfigsRunner(new RefreshConfigFile(), () => new ConfigFiles(mode));
-			refreshRunner.Execute();
+			refreshConfigs(mode);
 
 			if (mode.Equals("DEPLOY"))
 			{
@@ -78,7 +79,33 @@ namespace Teleopti.Support.Tool.Controls
 				{
 					MessageBox.Show(exception.Message + Environment.NewLine + theFile, "Some Error occurred");
 				}
+			}
+		}
 
+		private static void refreshConfigs(string mode)
+		{
+			try
+			{
+				var refreshRunner = new RefreshConfigsRunner(new RefreshConfigFile(), new ConfigFiles(mode));
+				refreshRunner.Execute();
+			}
+			catch (Exception e)
+			{
+				var logger = LogManager.GetLogger(typeof(RefreshConfigsRunner));
+				logger.Error("Failed to process the config files", e);
+				foreach (IAppender appender in LogManager.GetRepository().GetAppenders())
+				{
+					var theAppender = appender as FileAppender;
+					if (theAppender != null)
+					{
+						var fileAppender = theAppender;
+						string filePath = fileAppender.File;
+						if (new FileInfo(filePath).Length != 0)
+						{
+							Process.Start("Notepad.exe", filePath);
+						}
+					}
+				}
 			}
 		}
 
@@ -86,14 +113,12 @@ namespace Teleopti.Support.Tool.Controls
 		{
 			_mainForm.ShowPTracks();
 			Hide();
-
 		}
 
 		private void dataGridView1_Resize(object sender, EventArgs e)
 		{
 			//dataGridView1.Columns[0].Width = Width / 2 - 37;
 			//dataGridView1.Columns[1].Width = Width / 2 - 37;
-
 		}
 	}
 }
