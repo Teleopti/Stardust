@@ -310,7 +310,6 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="default-certificate.pfx" />
     <None Include="Scripts\jquery-1.9.0.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -322,6 +321,7 @@
     </Content>
     <Content Include="Scripts\jquery-1.9.0.min.map" />
     <Content Include="Views\Web.config" />
+    <Content Include="test-certificate.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
