@@ -3327,6 +3327,7 @@
     <Compile Include="Win\Scheduling\SchedulingScreenInternals\AgentSkillAnalyzer.Designer.cs">
       <DependentUpon>AgentSkillAnalyzer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Win\Scheduling\SchedulingScreenInternals\AgentSkillAnalyzerIslandView.cs" />
     <Compile Include="Win\Scheduling\SchedulingScreenInternals\BaseCutPasteHandler.cs" />
     <Compile Include="Win\Scheduling\SchedulingScreenInternals\CutPasteHandlerFactory.cs" />
     <Compile Include="Win\Scheduling\SchedulingScreenInternals\DummyCutPasteHandler.cs" />
