@@ -107,17 +107,13 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 			var intervalLength = _intervalLengthFetcher.IntervalLength;
 			var eslIntervals = new List<EslInterval>();
 
-			if (!skillDays.Any())
+			if (skillDays == null || !skillDays.Any())
 				return eslIntervals;
 
 			skillDays = skillDays.Where(x => !(x.Skill is IChildSkill) && x.Skill.Id.HasValue);
-
 			var skills = skillDays.GroupBy(x => x.Skill).Select(x => x.Key).ToList();
-
-			var forcastedVolumes = this.GetForecastedCalls(skillDays, startOfPeriodUtc, endOfPeriodUtc);
-
-			var forecastedStaffing = this
-				.GetForecastedStaffing(skillDays, startOfPeriodUtc, endOfPeriodUtc, TimeSpan.FromMinutes(intervalLength), false)
+			var forcastedVolumes = GetForecastedCalls(skillDays, startOfPeriodUtc, endOfPeriodUtc);
+			var forecastedStaffing = GetForecastedStaffing(skillDays, startOfPeriodUtc, endOfPeriodUtc, TimeSpan.FromMinutes(intervalLength), false)
 				.Where(x => x.StartTime >= startOfPeriodUtc && x.StartTime <= endOfPeriodUtc);
 
 			if (!forcastedVolumes.Any() || !forecastedStaffing.Any())
