@@ -13,13 +13,6 @@ describe('Iframe azure', function() {
 		browser.waitForExist('iframe');
 		var my_frame = browser.element('iframe').value;
 		browser.frame(my_frame);
-		
-		if (ASMWidgetPage.isCurrentPage()) {
-			return;
-		}
-		if (IdentityProvidersPage.isCurrentPage()) {
-			IdentityProvidersPage.teleoptiProvider.click();
-		}
 		ASMWidgetPage.signin();		
     }, 2);
 });
