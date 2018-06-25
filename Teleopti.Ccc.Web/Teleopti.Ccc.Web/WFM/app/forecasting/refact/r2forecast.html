@@ -13,16 +13,7 @@
     </a>
   </div>
 </div>
-<!--
-<div class="con-row" ng-cloak>
-<div class="con-flex">
-<div class="line-center">
-<i class="mdi mdi-information-outline huge-icon line-center"></i>
-<h2>No skills or workloads found</h2>
-<button class="wfm-btn wfm-btn-primary">Create a skill</button>
-</div>
-</div>
-</div> -->
+
 <div ng-if="vm.skills">
   <div class="con-row">
     <div class="con-flex">
@@ -62,8 +53,6 @@
                 &nbsp;
                 {{skill.Workload.Name}}
               </h2>
-              <hr/>
-              <p>{{skill.SkillType.SkillType | translate}}</p>
             </div>
             <div class="card-footer con-row">
               <span class="con-flex line-right card-footer-section">
