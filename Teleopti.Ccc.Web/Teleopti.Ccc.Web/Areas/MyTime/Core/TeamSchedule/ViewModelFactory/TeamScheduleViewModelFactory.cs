@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -81,17 +82,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 				agentSchedules.Remove(mySchedule);
 			}
 
-			var shceulePeriod =
+			var schedulePeriod =
 				getSchedulePeriod(agentSchedules.Concat(Enumerable.Repeat(myScheduleViewModel, 1)), data.ScheduleDate);
 
-			var timeLineHours = _timeLineViewModelFactory.CreateTimeLineHours(shceulePeriod);
+			var timeLineHours = _timeLineViewModelFactory.CreateTimeLineHours(schedulePeriod);
 			var timezone = currentUser.PermissionInformation.DefaultTimeZone();
 
 			return new TeamScheduleViewModel
 			{
 				MySchedule = _teamScheduleAgentScheduleViewModelMapper
-					.Map(new[] {myScheduleViewModel}, shceulePeriod, timezone).FirstOrDefault(),
-				AgentSchedules = _teamScheduleAgentScheduleViewModelMapper.Map(agentSchedules, shceulePeriod, timezone)
+					.Map(new[] {myScheduleViewModel}, schedulePeriod, timezone).FirstOrDefault(),
+				AgentSchedules = _teamScheduleAgentScheduleViewModelMapper.Map(agentSchedules, schedulePeriod, timezone)
 					.ToArray(),
 				TimeLine = timeLineHours,
 				PageCount = pageCount
@@ -167,11 +168,25 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 
 			var timeZone = _logonUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 
-			var returnPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date.Date.AddHours(8),
-				date.Date.AddHours(17), timeZone);
+			var returnPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date.Date.AddHours(DefaultSchedulePeriodProvider.DefaultStartHour),
+				date.Date.AddHours(DefaultSchedulePeriodProvider.DefaultEndHour), timeZone);
 
 			if (scheduleMinMaxPeriod.HasValue)
-				returnPeriod = scheduleMinMaxPeriod.Value;
+			{
+				var startDateTime = scheduleMinMaxPeriod.Value.StartDateTime;
+				if (returnPeriod.StartDateTime < startDateTime)
+				{
+					startDateTime = returnPeriod.StartDateTime;
+				}
+
+				var endDateTime = scheduleMinMaxPeriod.Value.EndDateTime;
+				if (returnPeriod.EndDateTime > endDateTime)
+				{
+					endDateTime = returnPeriod.EndDateTime;
+				}
+
+				returnPeriod = new DateTimePeriod(startDateTime, endDateTime);
+			}
 
 			returnPeriod = returnPeriod.ChangeStartTime(new TimeSpan(0, -15, 0));
 			returnPeriod = returnPeriod.ChangeEndTime(new TimeSpan(0, 15, 0));

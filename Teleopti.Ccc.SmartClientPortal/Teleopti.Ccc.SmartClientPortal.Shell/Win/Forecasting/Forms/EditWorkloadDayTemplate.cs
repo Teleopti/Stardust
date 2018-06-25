@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -86,8 +87,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 				_openHours = openHours[0];
 			else
 				_openHours = new TimePeriod(
-					TimeHelper.FitToDefaultResolution(TimeSpan.FromHours(8), workload.Skill.DefaultResolution),
-					TimeHelper.FitToDefaultResolution(TimeSpan.FromHours(17), workload.Skill.DefaultResolution)); //Must to this to enable users with higher resolution than one hour
+					TimeHelper.FitToDefaultResolution(TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultStartHour), workload.Skill.DefaultResolution),
+					TimeHelper.FitToDefaultResolution(TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultEndHour), workload.Skill.DefaultResolution)); //Must to this to enable users with higher resolution than one hour
 
 			_workloadDayTemplate.Create("New Template", DateTime.UtcNow, _workload, new List<TimePeriod> { _openHours });
 			textBoxTemplateName.ReadOnly = false;

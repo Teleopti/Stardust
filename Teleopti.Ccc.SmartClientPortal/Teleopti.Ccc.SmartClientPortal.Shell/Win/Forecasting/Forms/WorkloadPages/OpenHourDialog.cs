@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Time;
@@ -47,8 +48,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WorkloadPag
             else
             {
                 _displayPeriod = new TimePeriod(
-                    TimeHelper.FitToDefaultResolution(TimeSpan.FromHours(8), workload.Skill.DefaultResolution),
-                    TimeHelper.FitToDefaultResolution(TimeSpan.FromHours(17), workload.Skill.DefaultResolution)); //Must to this to enable users with higher resolution than one hour
+                    TimeHelper.FitToDefaultResolution(TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultStartHour), workload.Skill.DefaultResolution),
+                    TimeHelper.FitToDefaultResolution(TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultEndHour), workload.Skill.DefaultResolution)); //Must to this to enable users with higher resolution than one hour
             }
 
             timePicker.StartTime.Select();

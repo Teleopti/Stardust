@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					InContractTime = false
 				});
 
-		private static readonly TimeSpan fakeLayerStart = TimeSpan.FromHours(8);
+		private static readonly TimeSpan fakeLayerStart = TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultStartHour);
 		private static readonly VisualLayerFactory _visualLayerFactory = new VisualLayerFactory();
 
 		/// <summary>

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
@@ -28,8 +29,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			var startDateTimeLocal = part.Period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone);
 			DateTimePeriod defaultPeriod =
 				TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-					startDateTimeLocal.Add(TimeSpan.FromHours(8)),
-					startDateTimeLocal.Add(TimeSpan.FromHours(17)), TimeZoneHelper.CurrentSessionTimeZone);
+					startDateTimeLocal.Add(TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultStartHour)),
+					startDateTimeLocal.Add(TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultEndHour)), TimeZoneHelper.CurrentSessionTimeZone);
 
 			if (part.SignificantPart() == SchedulePartView.MainShift)
 			{

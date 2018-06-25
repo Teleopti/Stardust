@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
@@ -37,8 +38,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 			var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 
-			var returnPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(shiftTradeDate.Date.AddHours(8),
-																					shiftTradeDate.Date.AddHours(17), timeZone);
+			var returnPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
+				shiftTradeDate.Date.AddHours(DefaultSchedulePeriodProvider.DefaultStartHour),
+				shiftTradeDate.Date.AddHours(DefaultSchedulePeriodProvider.DefaultEndHour), timeZone);
 
 			if (myScheduleMinMax.HasValue)
 				returnPeriod = possibleTradeScheduleMinMax.HasValue

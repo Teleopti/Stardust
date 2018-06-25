@@ -2,6 +2,7 @@ using System;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -57,8 +58,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 				.Apply(new AssignedShift
 				{
 					Date = date.ToShortDateString(),
-					StartTime = TimeSpan.FromHours(8).ToString(),
-					EndTime = TimeSpan.FromHours(8 + hours).ToString(),
+					StartTime = TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultStartHour).ToString(),
+					EndTime = TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultStartHour + hours).ToString(),
 					WithLunch = false
 				});
 		}

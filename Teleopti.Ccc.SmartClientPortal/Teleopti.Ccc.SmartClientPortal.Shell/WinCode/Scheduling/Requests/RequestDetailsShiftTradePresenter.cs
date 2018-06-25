@@ -103,8 +103,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Requests
 			}
 			if (_startSpan == TimeSpan.MaxValue && _endSpan == TimeSpan.MinValue)
 			{
-				_startSpan = TimeSpan.FromHours(8);
-				_endSpan = TimeSpan.FromHours(17);
+				_startSpan = TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultStartHour);
+				_endSpan = TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultEndHour);
 			}
 			var firstReqeustedStartDateTime = _currentPeriods[0].StartDateTime;
 			var startDateTime = (firstReqeustedStartDateTime + _startSpan).AddHours(-1);

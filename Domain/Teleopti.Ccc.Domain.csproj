@@ -185,6 +185,7 @@
     <Compile Include="ApplicationLayer\Commands\ShiftCategorySelectorWithPrediction.cs" />
     <Compile Include="ApplicationLayer\Events\ProjectionChangedEventForShiftExchangeOffer.cs" />
     <Compile Include="ApplicationLayer\Events\RefreshPayrollFormatsEvent.cs" />
+    <Compile Include="Common\DefaultSchedulePeriodProvider.cs" />
     <Compile Include="Intraday\ApplicationLayer\DTOs\IntradayForcastedStaffingIntervalDTO.cs" />
     <Compile Include="Intraday\ApplicationLayer\DTOs\IntradayScheduleStaffingIntervalDTO.cs" />
     <Compile Include="Intraday\ApplicationLayer\IntradayIncomingTrafficApplicationService.cs" />

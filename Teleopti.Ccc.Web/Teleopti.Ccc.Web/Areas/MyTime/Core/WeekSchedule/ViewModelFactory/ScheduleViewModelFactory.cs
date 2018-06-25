@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping;
@@ -69,9 +70,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 			if (!hasVisualSchedule)
 			{
-				// Set timeline to 8:00-15:00 if no schedule
+				// Set timeline to 8:00-17:00 if no schedule
 				// Refer to Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping.ShiftTradeTimeLineHoursViewModelMapper.getTimeLinePeriod()
-				var defaultTimeLinePeriod = new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(15));
+				var defaultTimeLinePeriod = new TimePeriod(TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultStartHour), TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultEndHour));
 				daySchedule.MinMaxTime = defaultTimeLinePeriod;
 				daySchedule.ScheduleDay.MinMaxTime = defaultTimeLinePeriod;
 			}
