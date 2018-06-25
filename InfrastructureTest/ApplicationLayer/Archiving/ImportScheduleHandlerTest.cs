@@ -22,7 +22,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 {
 	[Category("BucketB")]
-	[Toggle(Toggles.Wfm_ImportSchedule_41247)]
 	[DatabaseTest]
 	public class ImportScheduleHandlerTest : ScheduleManagementTestBase
 	{

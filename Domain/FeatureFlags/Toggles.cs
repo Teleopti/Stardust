@@ -111,8 +111,6 @@
 		ETL_RemoveTimeZoneAndDateNightly_40870,
 		ETL_EventBasedAgentNameDescription_41432,
 		ETL_FixScheduleForPersonPeriod_41393,
-		Wfm_ArchiveSchedule_41498,
-		Wfm_ImportSchedule_41247,
 
 		Staffing_Info_Configuration_44687,
 		WfmStaffing_AddOvertime_42524,

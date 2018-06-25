@@ -386,11 +386,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void enableArchiveSchedule()
 		{
-			var toggleManager = _container.Resolve<IToggleManager>();
-			var toggled = toggleManager.IsEnabled(Toggles.Wfm_ArchiveSchedule_41498);
 			var permitted = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ArchiveSchedule);
-
-			toolStripButtonArchiveSchedule.Visible = toggled && permitted;
+			toolStripButtonArchiveSchedule.Visible = permitted;
 			if (toolStripButtonArchiveSchedule.Visible)
 				toolStripSeparator1.Visible = true;
 		}
@@ -402,12 +399,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void enableImportSchedule()
 		{
-			var toggleManager = _container.Resolve<IToggleManager>();
-			var toggled = toggleManager.IsEnabled(Toggles.Wfm_ImportSchedule_41247);
 			var permitted = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ImportSchedule);
-
-			toolStripButtonImportSchedule.Visible = toggled && permitted;
-
+			toolStripButtonImportSchedule.Visible = permitted;
 			if (toolStripButtonImportSchedule.Visible)
 				toolStripSeparator1.Visible = true;
 		}
