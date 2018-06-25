@@ -299,8 +299,8 @@ Teleopti.MyTimeWeb.Request.LayerEditShiftTradeViewModel = function (layer, minut
 	});
 	self.styleJson = ko.computed(function () {
 		if (Teleopti.MyTimeWeb.Common.IsRtl())
-			return { 'right': self.leftPercentage(), 'backgroundColor': self.backgroundColor, 'width': self.widthPercentage() };
-		return { 'left': self.leftPercentage(), 'backgroundColor': self.backgroundColor, 'width': self.widthPercentage() };
+			return { 'right': self.leftPercentage(), 'backgroundColor': Teleopti.MyTimeWeb.Common.ConvertColorToRGB(self.backgroundColor), 'width': self.widthPercentage() };
+		return { 'left': self.leftPercentage(), 'backgroundColor': Teleopti.MyTimeWeb.Common.ConvertColorToRGB(self.backgroundColor), 'width': self.widthPercentage() };
 	});
 };
 
@@ -371,14 +371,14 @@ Teleopti.MyTimeWeb.Request.CloneLayerAddShiftTradeViewModel = function (layer, m
 				'right': self.leftPx(),
 				'background-size': self.isOvertime ? '11px 11px' : 'initial',
 				'background-image': self.isOvertime ? 'linear-gradient(45deg,transparent,transparent 4px,rgba(251,251,251,.8) 6px,transparent 10px,transparent)' : '',
-				'background-color': self.backgroundColor,
+				'background-color': Teleopti.MyTimeWeb.Common.ConvertColorToRGB(self.backgroundColor),
 				'paddingRight': self.widthPx()
 			};
 		return {
 			'left': self.leftPx(),
 			'background-size': self.isOvertime ? '11px 11px' : 'initial',
 			'background-image': self.isOvertime ? 'linear-gradient(45deg,transparent,transparent 4px,rgba(251,251,251,.8) 6px,transparent 10px,transparent)' : 'initial',
-			'background-color': self.backgroundColor,
+			'background-color': Teleopti.MyTimeWeb.Common.ConvertColorToRGB(self.backgroundColor),
 			'paddingLeft': self.widthPx()
 		};
 	});
