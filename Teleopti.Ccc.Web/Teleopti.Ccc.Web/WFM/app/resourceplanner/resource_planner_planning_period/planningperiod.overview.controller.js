@@ -11,7 +11,7 @@
     var vm = this;
     var selectedPpId = $stateParams.ppId ? $stateParams.ppId : null;
     var checkProgressRef;
-    var keepAliveRef;
+    var checkIntradayProcessRef;
     var preMessage = '';
     vm.planningGroup = planningGroupInfo ? planningGroupInfo : null;
     vm.selectedPp = selectedPp ? selectedPp : {};
@@ -49,7 +49,7 @@
 
     $scope.$on('$destroy', function () {
       $interval.cancel(checkProgressRef);
-      $interval.cancel(keepAliveRef);
+      $interval.cancel(checkIntradayProcessRef);
     });
 
     checkState();
@@ -78,7 +78,7 @@
       }, 10000);
 
       checkIntradayOptimizationProgress();
-      keepAliveRef = $interval(function () {
+      checkIntradayProcessRef = $interval(function () {
         checkIntradayOptimizationProgress();
       }, 10000);
     }

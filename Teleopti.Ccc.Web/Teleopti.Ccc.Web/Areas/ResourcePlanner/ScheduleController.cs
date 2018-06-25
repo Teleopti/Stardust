@@ -18,12 +18,6 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_clearPlanningPeriodSchedulingCommandHandler = clearPlanningPeriodSchedulingCommandHandler;
 		}
 
-		//remove me when we move scheduling/optimization out of http request
-		[HttpPost, Route("api/ResourcePlanner/KeepAlive")]
-		public virtual void KeepAlive()
-		{
-		}
-
 		[HttpPost, Route("api/resourceplanner/planningperiod/{planningPeriodId}/schedule")]
 		public virtual IHttpActionResult ScheduleForPlanningPeriod(Guid planningPeriodId)
 		{
