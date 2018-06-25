@@ -31,7 +31,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 {
-	[TestFixture, DomainTest]
+	[DomainTest]
 	public class WfmTeamScheduleViewModelFactoryTestNotUseFakeScheduleStorage : IIsolateSystem, IExtendSystem
 	{
 		public ITeamScheduleViewModelFactory Target;
@@ -660,6 +660,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectProjectionWhenThereIsNoScheduleForScheduleSearch()
 		{
+			CurrentScenario.Has("Default");
 			var scheduleDate = new DateOnly(2019, 12, 30);
 			setUpPersonAndCulture();
 
@@ -2292,6 +2293,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnTimezoneWhenThereIsForScheduleSearch()
 		{
+			CurrentScenario.Has("Default");
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			setUpPersonAndCulture();
 			personInUtc.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("China Standard Time"));

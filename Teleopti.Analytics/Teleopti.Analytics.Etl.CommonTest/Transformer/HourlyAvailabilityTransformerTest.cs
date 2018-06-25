@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using NUnit.Framework;
@@ -36,7 +36,8 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			HourlyAvailabilityInfrastructure.AddColumnsToDataTable(table);
 			var schedDay = _mocks.DynamicMock<IScheduleDay>();
 			var studRestriction = new StudentAvailabilityRestriction();
-		
+			new StudentAvailabilityDay(person, new DateOnly(2013, 5, 15), new List<IStudentAvailabilityRestriction> { studRestriction });
+			
 			var projService = _mocks.DynamicMock<IProjectionService>();
 			var layers = _mocks.DynamicMock<IVisualLayerCollection>();
 
@@ -71,6 +72,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			var schedDay = _mocks.DynamicMock<IScheduleDay>();
 			var projService = _mocks.DynamicMock<IProjectionService>();
 			var layers = _mocks.DynamicMock<IVisualLayerCollection>();
+			new StudentAvailabilityDay(person, new DateOnly(2013, 5, 15), new List<IStudentAvailabilityRestriction> { studRestriction1, studRestriction2 });
 
 			Expect.Call(schedDay.RestrictionCollection()).Return(new List<IRestrictionBase> { studRestriction1, studRestriction2 });
 			Expect.Call(schedDay.Scenario).Return(scenario);
