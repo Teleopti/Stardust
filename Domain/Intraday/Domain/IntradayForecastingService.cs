@@ -143,10 +143,12 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 				{
 					var forecastedVolume = forcastedVolumes.Where(x => x.StartTime == iTime && x.SkillId == skill.Id);
 					var skillData = skillDays
-						.Where(x => x.CurrentDate.Date == iTime.Date && x.Skill.Id == skill.Id)
-						.Select(x => x.SkillDataPeriodCollection
-							.FirstOrDefault(d => d.Period.StartDateTime <= iTime && d.Period.EndDateTime > iTime))
+						.Where(x => x.Skill.Id == skill.Id)
+						.SelectMany(x => x.SkillDataPeriodCollection.Where(d => d.Period.StartDateTime <= iTime && d.Period.EndDateTime > iTime))
 						.FirstOrDefault();
+
+					if (forecastedVolume == null || skillData?.ServiceAgreement == null)
+						continue;
 
 					var esl = _staffingCalculatorService.ServiceLevelAchievedOcc(
 						scheduledStaffingPerSkill.Where(x => x.StartDateTime == iTime && x.SkillId == skill.Id).Sum(x => x.StaffingLevel),

@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 				estServiceLevels = timesUtc
 				.Select(x => new
 				{
-					LocalTime = TimeZoneHelper.ConvertFromUtc(x, _timeZone.TimeZone()),
+					LocalTime = TimeZoneInfo.ConvertTimeFromUtc(x, _timeZone.TimeZone()),
 					Esl = eslIntervals.Any(e => e.StartTime == x && e.Esl.HasValue) ? eslIntervals.Where(e => e.StartTime == x && e.Esl.HasValue).Sum(e => e.Esl * 100) : null
 				})
 				.GroupBy(x => x.LocalTime)
