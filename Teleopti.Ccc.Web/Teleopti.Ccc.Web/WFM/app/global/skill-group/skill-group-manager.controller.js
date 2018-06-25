@@ -148,7 +148,7 @@
 			if (vm.stateName.length > 0) {
 				$state.go(vm.stateName);
 			} else {
-				vm.$state.go($state.params.returnState, { isNewSkillArea: false });
+				$state.go($state.params.returnState, { isNewSkillArea: false });
 			}
 		};
 
@@ -251,7 +251,7 @@
 				})
 				.$promise.then(function(result) {
 					notifySkillGroupCreation();
-					vm.$state.go('intraday', { isNewSkillArea: true });
+					$state.go('intraday', { isNewSkillArea: true });
 				});
 		};
 
