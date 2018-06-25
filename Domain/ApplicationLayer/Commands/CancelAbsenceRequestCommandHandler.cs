@@ -91,8 +91,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			try
 			{				
-				var startDate = personAbsences.Min(pa => pa.Period.StartDateTime);
-				var endDate = personAbsences.Max(pa => pa.Period.EndDateTime);
+				var startDate = personAbsences.Min(pa => pa.Period.StartDateTime).AddDays(-1);
+				var endDate = personAbsences.Max(pa => pa.Period.EndDateTime).AddDays(1);
 				var scheduleRange = getScheduleRange(person, startDate, endDate);
 				scheduleRange.CanSeeUnpublishedSchedules = true;
 

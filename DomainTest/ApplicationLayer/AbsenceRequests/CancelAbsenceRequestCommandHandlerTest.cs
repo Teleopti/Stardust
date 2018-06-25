@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -19,6 +20,7 @@ using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.DomainTest.Common;
 using Teleopti.Ccc.IocCommon;
@@ -34,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
 	[TestFixture]
-	public class CancelAbsenceRequestCommandHandlerEventTest :IIsolateSystem, IExtendSystem
+	public class CancelAbsenceRequestCommandHandlerEventTest : IIsolateSystem, IExtendSystem
 	{
 		public CancelAbsenceRequestCommandHandler Target;
 		public ScheduleChangedEventDetector ScheduleChangedEventDetector;
@@ -52,23 +54,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakeUserCulture UserCulture;
 		public FakeScheduleDifferenceSaver_DoNotUse ScheduleDifferenceSaver;
 		public FakeGlobalSettingDataRepository GlobalSetting;
-		public INow Now;
+		public MutableNow Now;
 		public FullPermission FullPermission;
 
 		private IPerson person;
 		private IAbsence absence;
 
 		public void Extend(IExtend extend, IIocConfiguration configuration)
-		{	
-			extend.AddService<CancelAbsenceRequestCommandHandler>();	
+		{
+			extend.AddService<CancelAbsenceRequestCommandHandler>();
 		}
-		
+
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<ScheduleChangedEventDetector>().For<IHandleEvent<ScheduleChangedEvent>>();
-			isolate.UseTestDouble<PersonAbsenceRemover>().For<IPersonAbsenceRemover>(); 
+			isolate.UseTestDouble<PersonAbsenceRemover>().For<IPersonAbsenceRemover>();
 			isolate.UseTestDouble<SaveSchedulePartService>().For<ISaveSchedulePartService>();
-			isolate.UseTestDouble<PersonAbsenceCreator>().For<IPersonAbsenceCreator>();		
+			isolate.UseTestDouble<PersonAbsenceCreator>().For<IPersonAbsenceCreator>();
 			isolate.UseTestDouble<PersonRequestAuthorizationCheckerConfigurable>().For<IPersonRequestCheckAuthorization>();
 			isolate.UseTestDouble<ApprovalServiceForTest>().For<IRequestApprovalService>();
 			isolate.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
@@ -81,21 +83,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			isolate.UseTestDouble<FakeScheduleDifferenceSaver_DoNotUse>().For<IScheduleDifferenceSaver>();
 			isolate.UseTestDouble<FakeEventHandler>().For<FakeEventHandler>();
 			var userCulture = new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture());
-			isolate.UseTestDouble(userCulture).For<IUserCulture>();				
+			isolate.UseTestDouble(userCulture).For<IUserCulture>();
 		}
-		
+
 		private void commonSetup()
 		{
 			absence = AbsenceFactory.CreateAbsence("Holiday").WithId();
-			person = PersonFactory.CreatePerson("Yngwie","Malmsteen").WithId();
+			person = PersonFactory.CreatePerson("Yngwie", "Malmsteen").WithId();
 			PersonRepository.Add(person);
 			UserCulture.IsSwedish();
 			ScheduleDifferenceSaver.SetScheduleStorage(ScheduleStorage);
 
 			GlobalSetting.PersistSettingValue("FullDayAbsenceRequestStartTime", new TimeSpanSetting(new TimeSpan(0, 0, 0)));
-			GlobalSetting.PersistSettingValue("FullDayAbsenceRequestEndTime",new TimeSpanSetting(new TimeSpan(23,59,0)));
+			GlobalSetting.PersistSettingValue("FullDayAbsenceRequestEndTime", new TimeSpanSetting(new TimeSpan(23, 59, 0)));
 		}
-		
+
 		[Test]
 		public void TargetShouldBeDefined()
 		{
@@ -149,11 +151,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			commonSetup();
 
-			var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(2016,03,01,08, 2016,03,01, 14);
-			var absenceRequest = createApprovedAbsenceRequest(absence,dateTimePeriodOfAbsenceRequest,person);
+			var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(2016, 03, 01, 08, 2016, 03, 01, 14);
+			var absenceRequest = createApprovedAbsenceRequest(absence, dateTimePeriodOfAbsenceRequest, person);
 			var personRequest = absenceRequest.Parent as PersonRequest;
 
-			createPersonAbsence(absence,new DateTimePeriod(2016,03,01, 09, 2016,03,01,13 ),person);
+			createPersonAbsence(absence, new DateTimePeriod(2016, 03, 01, 09, 2016, 03, 01, 13), person);
 
 			var cancelRequestCommand = new CancelAbsenceRequestCommand()
 			{
@@ -162,10 +164,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			Target.Handle(cancelRequestCommand);
 
-			Assert.AreEqual(1,cancelRequestCommand.ErrorMessages.Count);
+			Assert.AreEqual(1, cancelRequestCommand.ErrorMessages.Count);
 			Assert.AreEqual(string.Format(Resources.CouldNotCancelRequestNoAbsence,
 				CommonAgentNameProvider.CommonAgentNameSettings.BuildFor(person),
-				absenceRequest.Period.StartDateTimeLocal(LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()).Date.ToString("d",UserCulture.GetCulture())),
+				absenceRequest.Period.StartDateTimeLocal(LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()).Date.ToString("d", UserCulture.GetCulture())),
 				cancelRequestCommand.ErrorMessages[0]);
 		}
 
@@ -173,22 +175,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public void ShouldBeAbleToCancelRequestWhenScheduleIsUnpublished()
 		{
 			commonSetup();
-			
+
 			var permissions = PrincipalAuthorization.Current() as FullPermission;
 			permissions.AddToBlackList(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
 
 			var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc),
-				new DateTime(2016, 03, 01, 23, 59, 0,DateTimeKind.Utc));
+				new DateTime(2016, 03, 01, 23, 59, 0, DateTimeKind.Utc));
 
-			var absenceRequest = createApprovedAbsenceRequest(absence,dateTimePeriodOfAbsenceRequest,person);
+			var absenceRequest = createApprovedAbsenceRequest(absence, dateTimePeriodOfAbsenceRequest, person);
 			var personRequest = absenceRequest.Parent as PersonRequest;
 			createShiftsForPeriod(new DateTimePeriod(2016, 03, 01, 08, 2016, 03, 01, 13));
-			createPersonAbsence(absence,new DateTimePeriod(2016,03,01,08,2016,03,01,13),person);
+			createPersonAbsence(absence, new DateTimePeriod(2016, 03, 01, 08, 2016, 03, 01, 13), person);
 
 			person.WorkflowControlSet = new WorkflowControlSet();
 			person.WorkflowControlSet.SchedulePublishedToDate = new DateTime(2016, 01, 01);
 			person.WorkflowControlSet.PreferenceInputPeriod = new DateOnlyPeriod(2016, 8, 1, 2016, 9, 1);
-			person.WorkflowControlSet.PreferencePeriod = new DateOnlyPeriod(2016,9,1,2016,10,1);
+			person.WorkflowControlSet.PreferencePeriod = new DateOnlyPeriod(2016, 9, 1, 2016, 10, 1);
 
 			var cancelRequestCommand = new CancelAbsenceRequestCommand()
 			{
@@ -197,7 +199,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			Target.Handle(cancelRequestCommand);
 
-			Assert.AreEqual(0,cancelRequestCommand.ErrorMessages.Count);
+			Assert.AreEqual(0, cancelRequestCommand.ErrorMessages.Count);
 
 			var schedules = ScheduleStorage.LoadAll();
 			schedules.Single().Period.Should().Be.EqualTo(new DateTimePeriod(2016, 03, 01, 08, 2016, 03, 01, 13));
@@ -282,7 +284,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			events[0].Should().Be.OfType<PersonAbsenceRemovedEvent>();
 			events[1].Should().Be.OfType<RequestPersonAbsenceRemovedEvent>();
 		}
-		
+
 		[Test]
 		public void ShouldUpdateMessageWhenThereIsAReplyMessage()
 		{
@@ -326,6 +328,46 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 		[Test]
+		public void ShouldRecoverPersonalAccountWhenAgentCancellingAnAbsenceRequest()
+		{
+			Now.Is(new DateTime(2018, 04, 14, 08, 00, 00, DateTimeKind.Utc));
+			commonSetup();
+			var timeInLieuabsence = AbsenceFactory.CreateAbsenceWithTracker("Time in lieu", Tracker.CreateTimeTracker());
+			var workflowControlSet =
+				WorkflowControlSetFactory.CreateWorkFlowControlSet(absence, new GrantAbsenceRequest(), false);
+			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenRollingPeriod
+			{
+				Absence = timeInLieuabsence,
+				AbsenceRequestProcess = new GrantAbsenceRequest(),
+				PersonAccountValidator = new PersonAccountBalanceValidator(),
+				StaffingThresholdValidator = new AbsenceRequestNoneValidator(),
+				BetweenDays = new MinMax<int>(0, 30)
+			});
+			person.WorkflowControlSet = workflowControlSet;
+
+			var overnightShiftPeriod = new DateTimePeriod(2018, 04, 15, 17, 2018, 04, 16, 6);
+			createShiftsForPeriod(overnightShiftPeriod);
+
+			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, CurrentScenario.Current(),
+				new DateOnly(2018, 04, 16), new DayOffTemplate(new Description("dayoff template")));
+			ScheduleStorage.Add(dayOff);
+
+			var absenceDateTimePeriod = new DateTimePeriod(2018, 04, 16, 05, 2018, 04, 16, 06);
+			var absenceRequest = createApprovedAbsenceRequest(timeInLieuabsence, absenceDateTimePeriod, person);
+			var personRequest = absenceRequest.Parent as PersonRequest;
+			createPersonAbsence(timeInLieuabsence, absenceDateTimePeriod, person);
+
+			var accountDay =
+				createAccountDay(new DateOnly(2017, 7, 1), TimeSpan.FromHours(1), TimeSpan.Zero, TimeSpan.FromHours(1));
+			createPersonAbsenceAccount(person, timeInLieuabsence, accountDay);
+
+			var cancelRequestCommand = new CancelAbsenceRequestCommand {PersonRequestId = personRequest.Id.GetValueOrDefault()};
+			Target.Handle(cancelRequestCommand);
+
+			Assert.AreEqual(1, accountDay.Remaining.TotalHours);
+		}
+
+		[Test]
 		public void ShouldGetErrorMessageWhenCancellingTextRequest()
 		{
 			commonSetup();
@@ -335,7 +377,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var personRequest = new PersonRequest(person, textRequest).WithId();
 			RequestRepository.Add(personRequest);
 
-			var cancelRequestCommand = new CancelAbsenceRequestCommand {PersonRequestId = personRequest.Id.GetValueOrDefault()};
+			var cancelRequestCommand = new CancelAbsenceRequestCommand { PersonRequestId = personRequest.Id.GetValueOrDefault() };
 
 			Target.Handle(cancelRequestCommand);
 
@@ -368,7 +410,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				TimeSpan.FromDays(5));
 			createPersonAbsenceAccount(person, absence, accountDay1);
 
-			var cancelRequestCommand = new CancelAbsenceRequestCommand {PersonRequestId = personRequest.Id.GetValueOrDefault()};
+			var cancelRequestCommand = new CancelAbsenceRequestCommand { PersonRequestId = personRequest.Id.GetValueOrDefault() };
 			Target.Handle(cancelRequestCommand);
 
 			Assert.AreEqual(5, accountDay1.Remaining.TotalDays);
@@ -429,16 +471,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return personRequest;
 		}
 
-		private AbsenceRequest createApprovedAbsenceRequest(IAbsence absence,DateTimePeriod dateTimePeriodOfAbsenceRequest,IPerson person)
+		private AbsenceRequest createApprovedAbsenceRequest(IAbsence absence, DateTimePeriod dateTimePeriodOfAbsenceRequest, IPerson person)
 		{
-			var absenceRequest = new AbsenceRequest(absence,dateTimePeriodOfAbsenceRequest);
-			createApprovedPersonRequest(person,absenceRequest);
+			var absenceRequest = new AbsenceRequest(absence, dateTimePeriodOfAbsenceRequest);
+			createApprovedPersonRequest(person, absenceRequest);
 			return absenceRequest;
 		}
 
-		private PersonRequest createApprovedPersonRequest(IPerson person,AbsenceRequest absenceRequest)
+		private PersonRequest createApprovedPersonRequest(IPerson person, AbsenceRequest absenceRequest)
 		{
-			var personRequest = new PersonRequest(person,absenceRequest).WithId();
+			var personRequest = new PersonRequest(person, absenceRequest).WithId();
 			RequestRepository.Add(personRequest);
 
 			personRequest.Pending();
@@ -446,9 +488,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return personRequest;
 		}
 
-		private void createPersonAbsence(IAbsence absence,DateTimePeriod dateTimePeriodOfAbsenceRequest,IPerson person)
+		private void createPersonAbsence(IAbsence absence, DateTimePeriod dateTimePeriodOfAbsenceRequest, IPerson person)
 		{
-			var absenceLayer = new AbsenceLayer(absence,dateTimePeriodOfAbsenceRequest);
+			var absenceLayer = new AbsenceLayer(absence, dateTimePeriodOfAbsenceRequest);
 			var personAbsence = new PersonAbsence(person, CurrentScenario.Current(), absenceLayer).WithId();
 
 			PersonAbsenceRepository.Add(personAbsence);
@@ -457,17 +499,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		private void createShiftsForPeriod(DateTimePeriod period)
 		{
-			foreach(var day in period.WholeDayCollection(TimeZoneInfo.Utc))
+			foreach (var day in period.WholeDayCollection(TimeZoneInfo.Utc))
 			{
 				// need to have a shift otherwise personAccount day off will not be affected
-				ScheduleStorage.Add(createAssignment(person, day.StartDateTime,day.EndDateTime, CurrentScenario.Current()));
+				ScheduleStorage.Add(createAssignment(person, day.StartDateTime, day.EndDateTime, CurrentScenario.Current()));
 			}
 		}
 
-		private static IPersonAssignment createAssignment(IPerson person,DateTime startDate,DateTime endDate, IScenario scenario)
+		private static IPersonAssignment createAssignment(IPerson person, DateTime startDate, DateTime endDate, IScenario scenario)
 		{
 			return PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(person,
-				scenario, new DateTimePeriod(startDate,endDate)).WithId();
+				scenario, new DateTimePeriod(startDate, endDate)).WithId();
 		}
 
 	}
@@ -476,7 +518,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 	{
 		public void Handle(RequestPersonAbsenceRemovedEvent requestPersonAbsenceEvent)
 		{
-			
+
 		}
 	}
 }
