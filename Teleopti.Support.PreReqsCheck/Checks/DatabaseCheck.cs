@@ -46,7 +46,7 @@ namespace CheckPreRequisites.Checks
 		public void RunDbChecks(string dbServer)
 		{
 			var sqlVersion = CheckDatabaseVersion();
-			CheckDatabaseServicesAndComponents(dbServer,sqlVersion);
+			CheckDatabaseServicesAndComponents(dbServer);
 			DBSoftwareCheck(sqlVersion);
 		}
 
@@ -57,14 +57,11 @@ namespace CheckPreRequisites.Checks
 			return sqlVersion;
 		}
 
-		private void CheckDatabaseServicesAndComponents(string dbServer, double sqlVersion)
+		private void CheckDatabaseServicesAndComponents(string dbServer)
 		{
 			var sqlEngineService = "MSSQLSERVER";
 			var sqlAgentService = "SQLSERVERAGENT";
 			var olapService = "MSSQLServerOLAPService";
-			//var ssis = "MSDTSSERVER100";
-			//if (sqlVersion >= 11)
-			//	ssis = "MSDTSSERVER110";
 
 			//Next, find out if this is a named instance
 			var index = dbServer.IndexOf(@"\", StringComparison.Ordinal);

@@ -179,17 +179,5 @@ namespace Teleopti.Ccc.WebTest.TestHelper
 			InitializeController(controller);
 			return controller as T;
 		}
-
-		/// <summary>
-		/// Creates the controller with proper environment variables setup, using IoC for arguments
-		/// </summary>
-		/// <typeparam name="T">The type of controller to create</typeparam>
-		/// <returns>A new controller of the specified type</returns>
-		public T CreateIoCController<T>() where T : Controller
-		{
-			var controller = DependencyResolver.Current.GetService<T>();
-			InitializeController(controller);
-			return controller;
-		}
 	}
 }

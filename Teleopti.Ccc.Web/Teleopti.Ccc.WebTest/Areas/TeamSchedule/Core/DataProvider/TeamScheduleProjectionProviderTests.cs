@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 		public Areas.Global.FakePermissionProvider PermissionProvider;
 		public FakeLoggedOnUser LoggedOnUser;
 		public IScheduleStorage ScheduleStorage;
-		public IGlobalSettingDataRepository FakeGlobalSettingRepo;
 		public ISettingsPersisterAndProvider<NameFormatSettings> NameFormatSettingsPersisterAndProvider;
 
 		public void Isolate(IIsolate isolate)

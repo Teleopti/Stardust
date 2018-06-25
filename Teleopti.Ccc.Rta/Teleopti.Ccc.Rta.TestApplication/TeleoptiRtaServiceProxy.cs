@@ -21,19 +21,6 @@ namespace Teleopti.Ccc.Rta.TestApplication
 			GetUpdatedScheduleChange(personId.ToString(), businessUnitId.ToString(), timestamp, true);
 		}
 
-	    public WaitHandle ProcessRtaData(Guid platformTypeId, string sourceId, ICollection<ITeleoptiRtaState> rtaStates)
-		{
-			var listOfStates = new List<ExternalUserState>();
-			foreach (var externalUserState in rtaStates)
-			{
-				listOfStates.Add(ProxyExtensions.ToDto(externalUserState));
-			}
-			int result;
-			bool resultSpecified;
-			SaveBatchExternalUserState("!#¤atAbgT%", platformTypeId.ToString(), sourceId, listOfStates.ToArray(), out result, out resultSpecified);
-			return new AutoResetEvent(true);
-		}
-
         public bool IsAlive
         {
             get { return true; }

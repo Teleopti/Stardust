@@ -26,13 +26,10 @@ using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Licensing;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -1286,19 +1283,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			{
 				personPeriod.AddPersonSkill(personSkill);
 			}
-		}
-
-		private void initData()
-		{
-			var workFlowControlSet = new WorkflowControlSet();
-			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
-			//var person = User.CurrentUser();
-			var skillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
-				.WithId();
-			
-			//person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriodWithSkills(new DateOnly(Now.UtcDateTime()), skill));
-
-			SkillTypeRepository.Add(skillType);
 		}
 	}
 }

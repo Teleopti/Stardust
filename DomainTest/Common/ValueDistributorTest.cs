@@ -535,13 +535,6 @@ namespace Teleopti.Ccc.DomainTest.Common
 				throw new NotImplementedException();
 			}
 
-			public TimeSpan? OverrideAverageAfterTaskTime { get; set; }
-
-			public void SetOverrideTasks(double? task, IEnumerable<ITaskOwner> intradayPattern)
-			{
-				_overrideTasks = task;
-			}
-
 			/// <summary>
 			/// Gets the total average after task time.
 			/// </summary>
@@ -583,17 +576,6 @@ namespace Teleopti.Ccc.DomainTest.Common
 					throw new NotImplementedException();
 				}
 			}
-
-			private double? _overrideTasks;
-			public double? OverrideTasks
-			{
-				get
-				{
-					return _overrideTasks;
-				}
-			}
-
-			public TimeSpan? OverrideAverageTaskTime { get; set; }
 
 			/// <summary>
 			/// Gets or sets the campaign tasks.

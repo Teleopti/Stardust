@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 	{
 		public WithAnalyticsUnitOfWork WithAnalyticsUnitOfWork;
 		public IAnalyticsGroupPageRepository Target;
-		public IAnalyticsBridgeGroupPagePersonRepository BridgeGroupPagePersonRepository;
 		public IAnalyticsPersonPeriodRepository AnalyticsPersonPeriodRepository;
 
 		[SetUp]

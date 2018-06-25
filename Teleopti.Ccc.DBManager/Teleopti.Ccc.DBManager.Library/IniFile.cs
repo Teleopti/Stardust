@@ -10,17 +10,10 @@ namespace Teleopti.Ccc.DBManager.Library
         private uint MAX_BUFFER = 32767;
 		private string _path;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", MessageId = "return"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1060:MovePInvokesToNativeMethodsClass"), DllImport("kernel32")]
-        private static extern long WritePrivateProfileString(string section,
-            string key, string val, string filePath);
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "5"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1060:MovePInvokesToNativeMethodsClass"), DllImport("kernel32")]
-        private static extern int GetPrivateProfileString(string section,
-                 string key, string def, StringBuilder retVal,
-            int size, string filePath);
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1060:MovePInvokesToNativeMethodsClass"), DllImport("kernel32.dll", CharSet = CharSet.Auto)]
+		[DllImport("kernel32.dll", CharSet = CharSet.Auto)]
         static extern uint GetPrivateProfileSectionNames(IntPtr lpszReturnBuffer,
            uint nSize, string lpFileName);
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA2101:SpecifyMarshalingForPInvokeStringArguments", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1060:MovePInvokesToNativeMethodsClass"), DllImport("kernel32.dll", CharSet = CharSet.Auto)]
+		[DllImport("kernel32.dll", CharSet = CharSet.Auto)]
         static extern uint GetPrivateProfileSection(string lpAppName,
            IntPtr lpReturnedString, uint nSize, string lpFileName);
 
@@ -73,38 +66,6 @@ namespace Teleopti.Ccc.DBManager.Library
         public IniFile(string path)
         {
             _path = path;
-        }
-
-        /// <summary>
-        /// Inis the write value.
-        /// </summary>
-        /// <param name="section">The section.</param>
-        /// <param name="key">The key.</param>
-        /// <param name="value">The value.</param>
-        /// <remarks>
-        /// Created by: henryg
-        /// Created date: 2008-09-19
-        /// </remarks>
-        public void IniWriteValue(string section, string key, string value)
-        {
-            WritePrivateProfileString(section, key, value, _path);
-        }
-
-        /// <summary>
-        /// Inis the read value.
-        /// </summary>
-        /// <param name="section">The section.</param>
-        /// <param name="key">The key.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: henryg
-        /// Created date: 2008-09-19
-        /// </remarks>
-        public string IniReadValue(string section, string key)
-        {
-            StringBuilder stringBuilder = new StringBuilder(255);
-            int i = GetPrivateProfileString(section, key, "", stringBuilder, 255, _path);
-            return stringBuilder.ToString();
         }
 
         /// <summary>

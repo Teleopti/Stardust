@@ -36,13 +36,6 @@ END", userName, password, personId, tenantPassword);
 			_execute.ExecuteNonQuery(sql);
 		}
 
-		public void AddBusinessUnit(string name)
-		{
-			var sql = string.Format(@"INSERT INTO BusinessUnit
-SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', null, 0", name);
-			_execute.ExecuteNonQuery(sql);
-		}
-
 		public void CleanByAnalyticsProcedure()
 		{
 			_execute.ExecuteNonQuery("EXEC [mart].[etl_data_mart_delete] @DeleteAll=1", 60);

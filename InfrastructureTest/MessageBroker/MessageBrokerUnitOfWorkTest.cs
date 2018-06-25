@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading;
-using NHibernate;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using SharpTestsEx;
@@ -233,16 +232,6 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 		public static void DoesUpdate(this TheService instance, string query)
 		{
 			instance.Does(uow => uow.CreateSqlQuery(query).ExecuteUpdate());
-		}
-
-		public static T MakesQuery<T>(this TheService instance, string query, Func<ISQLQuery, T> queryAction)
-		{
-			var result = default(T);
-			instance.Does(uow =>
-			{
-				result = queryAction(uow.CreateSqlQuery(query));
-			});
-			return result;
 		}
 	}
 

@@ -3,7 +3,6 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -16,7 +15,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 	[AnalyticsDatabaseTest]
 	public class AnalyticsPermissionsRepositoryTest
 	{
-		public ICurrentAnalyticsUnitOfWorkFactory CurrentAnalyticsUnitOfWorkFactory;
 		public IAnalyticsPermissionRepository Target;
 		private ExistingDatasources datasource;
 		private BusinessUnit businessUnit;

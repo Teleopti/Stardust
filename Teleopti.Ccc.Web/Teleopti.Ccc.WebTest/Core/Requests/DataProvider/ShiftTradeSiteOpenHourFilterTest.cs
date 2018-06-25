@@ -586,23 +586,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			};
 		}
 
-		private static ShiftTradeAddPersonScheduleViewModel createShiftTradeAddPersonScheduleViewModel(IPerson person,
-			DateTimePeriod period)
-		{
-			var teamScheduleLayerViewModels = new List<TeamScheduleLayerViewModel>
-			{
-				createTeamScheduleLayerViewModel(period.StartDateTime, period.EndDateTime)
-			};
-
-			return new ShiftTradeAddPersonScheduleViewModel
-			{
-				PersonId = person.Id.GetValueOrDefault(),
-				ScheduleLayers = teamScheduleLayerViewModels.ToArray(),
-				Name = "test",
-				Total = teamScheduleLayerViewModels.Count,
-			};
-		}
-
 		private static ShiftTradeAddPersonScheduleViewModel createShiftTradeAddPersonScheduleViewModelWithDayOff(IPerson person)
 		{
 			var teamScheduleLayerViewModels = new List<TeamScheduleLayerViewModel>();
@@ -708,16 +691,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			{
 				assignment.AddActivity(new Activity("d"), timePeriod);
 			}
-			scheduleDay.Add(assignment);
-			return scheduleDay;
-		}
-
-		private IScheduleDay createScheduleDay(DateOnly shiftDate, IPerson person, DateTimePeriod period)
-		{
-			var scenario = CurrentScenario.Current();
-			var scheduleDay = ScheduleDayFactory.Create(shiftDate, person, scenario);
-			var assignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, shiftDate);
-			assignment.AddActivity(new Activity("d"), period, true);
 			scheduleDay.Add(assignment);
 			return scheduleDay;
 		}

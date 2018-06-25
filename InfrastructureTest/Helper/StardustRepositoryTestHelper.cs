@@ -69,30 +69,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
 			}
 		}
 
-		public static void ClearQueue()
-		{
-			using (var connection = new SqlConnection(connectionString()))
-			{
-				connection.Open();
-				using (var comm = new SqlCommand("truncate table Stardust.JobQueue", connection))
-				{
-					comm.ExecuteNonQuery();
-				}
-			}
-		}
-
-		public static void ClearJobs()
-		{
-			using (var connection = new SqlConnection(connectionString()))
-			{
-				connection.Open();
-				using (var comm = new SqlCommand("delete from Stardust.Job", connection))
-				{
-					comm.ExecuteNonQuery();
-				}
-			}
-		}
-
 		private static string connectionString()
 		{
 			return ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString;

@@ -126,14 +126,5 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 		public class Lock2
 		{
 		}
-
-		private static Thread onAnotherThread(Action action)
-		{
-			var thread = new Thread(() => action());
-			thread.Start();
-			return thread;
-		}
-
 	}
-
 }
