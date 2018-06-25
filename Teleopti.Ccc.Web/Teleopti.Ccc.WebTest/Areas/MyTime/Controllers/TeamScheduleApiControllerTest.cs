@@ -523,7 +523,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			firstPeriod.Title.Should().Be("Phone");
 			firstPeriod.StartTime.Should().Be(period.StartDateTime);
 			firstPeriod.EndTime.Should().Be(period.EndDateTime);
-			firstPeriod.TimeSpan.Should().Be("09:00 AM - 04:00 PM");
+			firstPeriod.TimeSpan.Should().Be("9:00 AM - 4:00 PM");
 		}
 
 		[Test]

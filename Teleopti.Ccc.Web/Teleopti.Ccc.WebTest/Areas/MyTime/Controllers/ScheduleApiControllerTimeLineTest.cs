@@ -585,7 +585,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var result = Target.FetchDayData(date);
 
-			AssertTimeLine(result.TimeLine.ToList(),8,0,15,0);
+			AssertTimeLine(result.TimeLine.ToList(), 8, 0, 17, 0);
 		}
 
 		[Test]
@@ -596,7 +596,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			result.Should().Be.EqualTo(1);
 		}
-		
+
 		[Test]
 		public void ShouldUseDefaultTimelineForDayWithoutScheduleAndOvertimeYesterdayInvisible()
 		{
@@ -604,7 +604,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var period = new DateTimePeriod(new DateTime(2014, 12, 17, 22, 0, 0, DateTimeKind.Utc),
 				new DateTime(2014, 12, 17, 23, 59, 0, DateTimeKind.Utc));
 
-			var activity = new Activity("test activity") { InWorkTime = true, DisplayColor = Color.Blue };
+			var activity = new Activity("test activity") {InWorkTime = true, DisplayColor = Color.Blue};
 			var multiplicatorDefinicationSet = new MultiplicatorDefinitionSet("aa", MultiplicatorType.Overtime);
 
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), dateOnly);
@@ -613,7 +613,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var result = Target.FetchDayData(dateOnly, StaffingPossiblityType.Overtime);
 
-			AssertTimeLine(result.TimeLine.ToList(),8,0,15,0);
+			AssertTimeLine(result.TimeLine.ToList(), 8, 0, 17, 0);
 		}
 
 		[Test]
@@ -877,7 +877,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			ScheduleData.Add(overtimeAvailability);
 			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
 
-			AssertTimeLine(result.TimeLine.ToList(), 8, 0, 15, 0);
+			AssertTimeLine(result.TimeLine.ToList(), 8, 0, 17, 0);
 		}
 
 		[Test]
@@ -892,7 +892,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			ScheduleData.Add(overtimeAvailability);
 			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
 
-			AssertTimeLine(result.TimeLine.ToList(), 8, 0, 15, 0);
+			AssertTimeLine(result.TimeLine.ToList(), 8, 0, 17, 0);
 		}
 
 		[Test]
