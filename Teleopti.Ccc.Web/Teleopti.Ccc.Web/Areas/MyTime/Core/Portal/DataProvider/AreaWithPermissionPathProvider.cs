@@ -37,7 +37,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebStaffing, () => Resources.WebStaffing, "staffingModule"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage, () => Resources.Gamification, "gamification"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.MyTimeWeb, () => Resources.MyTimeWeb, "myTime"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.BpoExchange, () => Resources.BpoExchange, "bpo-gatekeeper")
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.BpoExchange, () => Resources.BpoExchange, "bpo-gatekeeper"),
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.All, () => "API access", "apiaccess")
 		};
 
 		public AreaWithPermissionPathProvider(IPermissionProvider permissionProvider, IToggleManager toggleManager, ILicenseActivatorProvider licenseActivatorProvider, IApplicationFunctionsToggleFilter applicationFunctionsToggleFilter)
