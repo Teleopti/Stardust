@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AgentSkillAnalyzer));
 			this.listViewAllVirtualGroups = new System.Windows.Forms.ListView();
 			this.columnHeaderVirtualGroup = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -88,6 +89,8 @@
 			this.beforeReducingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.afterReducingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.afterMergingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.contextMenuStriplistViewGroupsInIsland = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.toolStripMenuItemFilterOnIntersecting = new System.Windows.Forms.ToolStripMenuItem();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tabControl1.SuspendLayout();
 			this.tabPage2.SuspendLayout();
@@ -100,6 +103,7 @@
 			this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
 			this.toolStripContainer1.SuspendLayout();
 			this.toolStripMain.SuspendLayout();
+			this.contextMenuStriplistViewGroupsInIsland.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// listViewAllVirtualGroups
@@ -543,6 +547,7 @@
             this.columnHeader16,
             this.columnHeader17,
             this.columnHeader18});
+			this.listViewGroupsInIsland.ContextMenuStrip = this.contextMenuStriplistViewGroupsInIsland;
 			this.listViewGroupsInIsland.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listViewGroupsInIsland.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.listViewGroupsInIsland.FullRowSelect = true;
@@ -645,6 +650,20 @@
 			this.afterMergingToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
 			this.afterMergingToolStripMenuItem.Text = "After merging";
 			// 
+			// contextMenuStriplistViewGroupsInIsland
+			// 
+			this.contextMenuStriplistViewGroupsInIsland.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemFilterOnIntersecting});
+			this.contextMenuStriplistViewGroupsInIsland.Name = "contextMenuStriplistViewGroupsInIsland";
+			this.contextMenuStriplistViewGroupsInIsland.Size = new System.Drawing.Size(183, 48);
+			// 
+			// toolStripMenuItemFilterOnIntersecting
+			// 
+			this.toolStripMenuItemFilterOnIntersecting.Name = "toolStripMenuItemFilterOnIntersecting";
+			this.toolStripMenuItemFilterOnIntersecting.Size = new System.Drawing.Size(182, 22);
+			this.toolStripMenuItemFilterOnIntersecting.Text = "Filter on intersecting";
+			this.toolStripMenuItemFilterOnIntersecting.Click += new System.EventHandler(this.toolStripMenuItemFilterOnIntersectingClick);
+			// 
 			// AgentSkillAnalyzer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -669,6 +688,7 @@
 			this.toolStripContainer1.PerformLayout();
 			this.toolStripMain.ResumeLayout(false);
 			this.toolStripMain.PerformLayout();
+			this.contextMenuStriplistViewGroupsInIsland.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -734,5 +754,7 @@
 		private System.Windows.Forms.ToolStripMenuItem beforeReducingToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem afterReducingToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem afterMergingToolStripMenuItem;
+		private System.Windows.Forms.ContextMenuStrip contextMenuStriplistViewGroupsInIsland;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemFilterOnIntersecting;
 	}
 }
