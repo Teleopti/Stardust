@@ -22,6 +22,8 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 			var people = input.People;
 			var period = input.Period;
 			var blockPreferenceProvider = input.BlockPreferenceProvider;
+			if (blockPreferenceProvider == null)
+				return;
 			
 			foreach (var schedule in input.Schedules)
 			{
