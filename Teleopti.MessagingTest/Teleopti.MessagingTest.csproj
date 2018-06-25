@@ -46,7 +46,6 @@
     <Compile Include="Http\Mailbox\SystemCheckTest.cs" />
     <Compile Include="Http\Mailbox\SubscriptionsTest.cs" />
     <Compile Include="Http\Mailbox\TestMessage.cs" />
-    <Compile Include="RequestInfo.cs" />
     <Compile Include="SignalR\ImplementationDetailsTests\DisabledSignalRClientTest.cs" />
     <Compile Include="SignalR\ImplementationDetailsTests\SignalRSubscriptionsTest.cs" />
     <Compile Include="SignalR\SignalRSubscriptionsTest.cs" />

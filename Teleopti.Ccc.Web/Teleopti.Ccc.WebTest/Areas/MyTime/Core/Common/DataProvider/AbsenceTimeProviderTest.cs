@@ -205,8 +205,3 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		}
 	}
 }
-
-
-namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
-{
-} ;
