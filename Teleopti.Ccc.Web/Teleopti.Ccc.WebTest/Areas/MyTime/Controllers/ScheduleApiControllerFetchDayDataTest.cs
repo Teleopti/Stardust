@@ -717,7 +717,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.FetchDayData(date);
 			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(8);
 			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(0);
-			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(15);
+			result.TimeLine.Last().Time.Hours.Should().Be.EqualTo(17);
 			result.TimeLine.Last().Time.Minutes.Should().Be.EqualTo(0);
 
 			var schedule = result.Schedule;
