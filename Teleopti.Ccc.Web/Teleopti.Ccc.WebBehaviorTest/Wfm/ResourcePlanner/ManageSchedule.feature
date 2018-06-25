@@ -4,7 +4,6 @@ Feature: ManageSchedule
 	I want to be able to archive schedules from default scenario to another scenario
 	I want to be able to import schedules from another scenario to default scenario
 
-@OnlyRunIfEnabled('Wfm_ArchiveSchedule_41498')
 Scenario: Run archiving for one agent
 	Given there is a scenario
 	| Field          | Value        |
