@@ -45,7 +45,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		private IAbsenceRequestValidator getStaffingThresholdValidator(bool useShrinkage,
 			IWorkflowControlSet workflowControlSet = null)
 		{
-			var toggleManager = new FakeToggleManager();
 			var absenceRequestValidatorProvider = new AbsenceRequestValidatorProvider(null);
 
 			var person = createPerson();

@@ -347,7 +347,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var phoneActivity = createActivity("phoneActivity");
 			var emailActivity = createActivity("emailActivity");
 
-			var userTimeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var skillTimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 			var criticalUnderStaffedPhoneSkill = createSkill("criticalUnderStaffedPhoneSkill", null, skillTimeZone);
 			criticalUnderStaffedPhoneSkill.SkillType = _phoneSkillType;

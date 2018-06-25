@@ -58,8 +58,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			isolate.UseTestDouble<FakePersonFinderReadOnlyRepository>().For<IPersonFinderReadOnlyRepository>();
 			isolate.UseTestDouble<Areas.Global.FakePermissionProvider>().For<IPermissionProvider>();
 			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-
-
 		}
 
 		private void setUpLogon()
@@ -662,7 +660,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectProjectionWhenThereIsNoScheduleForScheduleSearch()
 		{
-			var scenario = CurrentScenario.Has("Default");
 			var scheduleDate = new DateOnly(2019, 12, 30);
 			setUpPersonAndCulture();
 
@@ -2298,7 +2295,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			setUpPersonAndCulture();
 			personInUtc.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("China Standard Time"));
-			var scenario = CurrentScenario.Has("Default");
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{

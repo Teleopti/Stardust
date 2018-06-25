@@ -162,7 +162,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 		public void ShouldReturnCorrectOccupationForPeriod()
 		{
 			var period = new DateOnlyPeriod(new DateOnly(2029, 1, 1), new DateOnly(2029, 1, 7));
-			var test = new TimeSpan(2, 06, 15, 0 );
 			var occupations = target.GetPreferencePeriodOccupation(person, period);
 
 			Assert.IsTrue(scheduleProvider.LatestScheduleLoadOptions.LoadRestrictions);

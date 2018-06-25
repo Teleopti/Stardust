@@ -429,7 +429,6 @@ namespace Teleopti.Ccc.DomainTest.Collection
 					dOff1.SetTargetAndFlexibility(TimeSpan.FromHours(4), TimeSpan.FromHours(1));
 					Guid assId = Guid.NewGuid();
 					Guid absId = Guid.NewGuid();
-					Guid dayOffId = Guid.NewGuid();
 					ass.SetId(assId);
 					abs.SetId(absId);
 					Schedule schedule = (Schedule)part;

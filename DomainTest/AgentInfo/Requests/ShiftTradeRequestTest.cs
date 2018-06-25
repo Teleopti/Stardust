@@ -508,7 +508,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		[Test]
 		public void ShouldPendingMessageBeOnTheReceiverCultureLanguage()
 		{
-
 			setPersonCulture(_tradePerson, CultureInfoFactory.CreateSwedishCulture());
 			setPersonLanguage(_tradePerson, CultureInfoFactory.CreateSwedishCulture());
 
@@ -521,20 +520,12 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			_authorization = new PersonRequestAuthorizationCheckerForTest();
 			var target = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail1, shiftTradeSwapDetail2 });
 
-			MockRepository mocks = new MockRepository();
-			IRequestApprovalService requestApprovalService =
-				mocks.StrictMock<IRequestApprovalService>();
 			PersonRequest personRequest = new PersonRequest(_requestedPerson, target);
-
-			mocks.ReplayAll();
-
 			personRequest.Pending();
 
 			var notificationString = "Ny skiftbytesförfrågan 2008-07-16 - 2008-07-17, godkänn eller avslå i din lista.";
 
 			Assert.AreEqual(notificationString, target.TextForNotification, "Pending message should be in the receiver's language");
-
-			mocks.VerifyAll();
 		}
 
         [Test]

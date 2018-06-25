@@ -565,7 +565,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			setup();
 			Assert.Throws<ArgumentOutOfRangeException>(() =>
 			{
-				var periodException = new SchedulePeriod(new DateOnly(), SchedulePeriodType.Day, 0);
+				new SchedulePeriod(new DateOnly(), SchedulePeriodType.Day, 0);
 			});
         }
 

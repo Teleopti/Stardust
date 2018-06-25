@@ -7,14 +7,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	[TestFixture]
 	public class PeriodResourceDetailTest
 	{
-		
-
 		 [Test]
 		 public void ShouldNotAcceptValueValueLowerThanZero()
 		 {
 			Assert.Throws<ArgumentOutOfRangeException>(() =>
 			{
-				var target = new PeriodResourceDetail(1, -1);
+				new PeriodResourceDetail(1, -1);
 			});
 		}
 
@@ -24,9 +22,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		 {
 			Assert.Throws<ArgumentOutOfRangeException>(() =>
 			{
-				var target = new PeriodResourceDetail(-1, 1);
+				new PeriodResourceDetail(-1, 1);
 			});
-			
 		 }
 	}
 }

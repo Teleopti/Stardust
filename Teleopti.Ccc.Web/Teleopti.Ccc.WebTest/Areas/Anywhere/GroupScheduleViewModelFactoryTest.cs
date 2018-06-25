@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			var target = new GroupScheduleViewModelFactory(new GroupScheduleViewModelMapper(), loggedOnUser, personScheduleDayReadModelRepository,
 				new FakePermissionProvider(), new FakeSchedulePersonProvider(new[] { person }), _commonAgentNameProvider);
 
-			var result = target.CreateViewModel(Guid.Empty, date);
+			target.CreateViewModel(Guid.Empty, date);
 
 			var startTime = TimeZoneInfo.ConvertTime(new DateTime(2016, 3, 27), userTimeZone, TimeZoneInfo.Utc);
 			var endTime = TimeZoneInfo.ConvertTime(new DateTime(2016, 3, 28), userTimeZone, TimeZoneInfo.Utc);
@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			var target = new GroupScheduleViewModelFactory(new GroupScheduleViewModelMapper(), loggedOnUser, personScheduleDayReadModelRepository,
 				new FakePermissionProvider(), new FakeSchedulePersonProvider(new[] { person }), _commonAgentNameProvider);
 
-			var result = target.CreateViewModel(Guid.Empty, date);
+			target.CreateViewModel(Guid.Empty, date);
 
 			var startTime = TimeZoneInfo.ConvertTime(new DateTime(2016, 3, 13), userTimeZone, TimeZoneInfo.Utc);
 			var endTime = TimeZoneInfo.ConvertTime(new DateTime(2016, 3, 14), userTimeZone, TimeZoneInfo.Utc);
@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			var target = new GroupScheduleViewModelFactory(new GroupScheduleViewModelMapper(), loggedOnUser, personScheduleDayReadModelRepository,
 				new FakePermissionProvider(), new FakeSchedulePersonProvider(new[] { person }), _commonAgentNameProvider);
 
-			var result = target.CreateViewModel(Guid.Empty, date);
+			target.CreateViewModel(Guid.Empty, date);
 
 			var startTime = TimeZoneInfo.ConvertTime(new DateTime(2016, 10, 30), userTimeZone, TimeZoneInfo.Utc);
 			var endTime = TimeZoneInfo.ConvertTime(new DateTime(2016, 10, 31), userTimeZone, TimeZoneInfo.Utc);
@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			var target = new GroupScheduleViewModelFactory(new GroupScheduleViewModelMapper(), loggedOnUser, personScheduleDayReadModelRepository,
 				new FakePermissionProvider(), new FakeSchedulePersonProvider(new[] { person }), _commonAgentNameProvider);
 
-			var result = target.CreateViewModel(Guid.Empty, date);
+			target.CreateViewModel(Guid.Empty, date);
 
 			var startTime = TimeZoneInfo.ConvertTime(new DateTime(2016, 11, 6), userTimeZone, TimeZoneInfo.Utc);
 			var endTime = TimeZoneInfo.ConvertTime(new DateTime(2016, 11, 7), userTimeZone, TimeZoneInfo.Utc);

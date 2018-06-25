@@ -25,7 +25,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			_target = new HourlyAvailabilityTransformer();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "studDay"), Test]
+		[Test]
 		public void ShouldTransformAvailability()
 		{
 			var person = new Person();
@@ -36,8 +36,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			HourlyAvailabilityInfrastructure.AddColumnsToDataTable(table);
 			var schedDay = _mocks.DynamicMock<IScheduleDay>();
 			var studRestriction = new StudentAvailabilityRestriction();
-			var studDay = new StudentAvailabilityDay(person, new DateOnly(2013, 5, 15), new List<IStudentAvailabilityRestriction> { studRestriction });
-			
+		
 			var projService = _mocks.DynamicMock<IProjectionService>();
 			var layers = _mocks.DynamicMock<IVisualLayerCollection>();
 
@@ -72,7 +71,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			var schedDay = _mocks.DynamicMock<IScheduleDay>();
 			var projService = _mocks.DynamicMock<IProjectionService>();
 			var layers = _mocks.DynamicMock<IVisualLayerCollection>();
-			var studDay = new StudentAvailabilityDay(person, new DateOnly(2013, 5, 15), new List<IStudentAvailabilityRestriction> { studRestriction1, studRestriction2 });
 
 			Expect.Call(schedDay.RestrictionCollection()).Return(new List<IRestrictionBase> { studRestriction1, studRestriction2 });
 			Expect.Call(schedDay.Scenario).Return(scenario);

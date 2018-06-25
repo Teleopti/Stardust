@@ -104,7 +104,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			if (model.Key == logonAttempsDays)
 			{
-				if(!int.TryParse(model.Value, out int days))
+				if(!int.TryParse(model.Value, out _))
 					return new UpdateConfigurationResultModel
 					{
 						Success = false,

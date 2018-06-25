@@ -47,7 +47,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 			var s1 = new Site("london");
 			var s2 = new Site("amsterdam");
 			var s3 = new Site("berlin");
-			var bu = new BusinessUnit("BU");
 			var sites = new[] { s1, s2, s3 };
 			s1.SetId(Guid.NewGuid());
 			s2.SetId(Guid.NewGuid());
