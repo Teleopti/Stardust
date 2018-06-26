@@ -1010,6 +1010,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 
 	self.displayView = function () {
 		var toggleOn = Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947");
-		return toggleOn ? 'new-shift-trade-request-panel-74947' : 'new-shift-trade-request-panel';
+		// return toggleOn ? 'new-shift-trade-request-panel-74947' : 'new-shift-trade-request-panel';
+		return 'new-shift-trade-request-panel';
 	};
 };
