@@ -328,7 +328,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				return Session.GetNamedQuery("findSkillsWithAtLeastOneQueueSource")
 					.SetResultTransformer(Transformers.DistinctRootEntity)
-					.List<ISkill>();
+					.List<ISkill>()
+					.OrderBy(y => y.Name);
 			}
     }
 }
