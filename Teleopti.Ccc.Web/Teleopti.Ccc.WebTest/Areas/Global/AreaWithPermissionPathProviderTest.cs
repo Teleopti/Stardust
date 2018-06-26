@@ -269,5 +269,39 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			areas.Single().Name.Invoke().Should().Be(Resources.People);
 			areas.Single().InternalName.Should().Be("people");
 		}
+
+		[Test]
+		public void ShouldNotHaveWebForecastWhenFeatureDisabled()
+		{
+			ApplicationFunctionsToggleFilter
+				.AddFakeFunction(new ApplicationFunction { FunctionCode = DefinedRaptorApplicationFunctionPaths.WebForecasts }
+					, o => true);
+
+			PermissionProvider.Enable();
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.WebForecasts);
+			ToggleManager.Disable(Toggles.WFM_Forecaster_Preview_74801);
+
+			var areas = Target.GetWfmAreasWithPermissions();
+
+			areas.Count().Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldHaveWebForecastWhenFeatureEnabledAndPermitted()
+		{
+			ApplicationFunctionsToggleFilter
+				.AddFakeFunction(new ApplicationFunction { FunctionCode = DefinedRaptorApplicationFunctionPaths.WebForecasts }
+					, o => true);
+
+			PermissionProvider.Enable();
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.WebForecasts);
+			ToggleManager.Enable(Toggles.WFM_Forecaster_Preview_74801);
+
+			var areas = Target.GetWfmAreasWithPermissions();
+
+			areas.Single().Path.Should().Be(DefinedRaptorApplicationFunctionPaths.WebForecasts);
+			areas.Single().Name.Invoke().Should().Be(Resources.Forecasts);
+			areas.Single().InternalName.Should().Be("forecast");
+		}
 	}
 }

@@ -116,21 +116,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			{
 				return _toggleManager.IsEnabled(Toggles.WfmIntraday_MonitorActualvsForecasted_35176);
 			}
-			if (path.Equals(DefinedRaptorApplicationFunctionPaths.WebRequests))
+			if (path.Equals(DefinedRaptorApplicationFunctionPaths.WebForecasts))
 			{
-				return true;
-			}
-			if (path.Equals(DefinedRaptorApplicationFunctionPaths.WebIntraday))
-			{
-				return true;
-			}
-			if (path.Equals(DefinedRaptorApplicationFunctionPaths.AccessToReports))
-			{
-				return true;
-			}
-			if (path.Equals(DefinedRaptorApplicationFunctionPaths.WebStaffing))
-			{
-				return true;
+				return _toggleManager.IsEnabled(Toggles.WFM_Forecaster_Preview_74801);
 			}
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.MyTimeWeb))
 			{
