@@ -122,6 +122,11 @@
     <Compile Include="Bindings\Generic\Messages\MessageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\OutboundStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PhoneStateStepDefinitions.cs" />
+    <Compile Include="MyTime\ShiftTradeRequestViewShowingMultipleShifts.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ShiftTradeRequestViewShowingMultipleShifts.feature</DependentUpon>
+    </Compile>
     <Compile Include="Wfm\Intraday\Intraday.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1061,6 +1066,10 @@
     <None Include="MyTime\ReportsDetailedAdherence.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ReportsDetailedAdherence.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\ShiftTradeRequestViewShowingMultipleShifts.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ShiftTradeRequestViewShowingMultipleShifts.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\TeamScheduleForGroupsWithFilterAndPagingFunction.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

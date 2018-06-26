@@ -4,9 +4,11 @@ using System.Net;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -34,6 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly ITimeFilterHelper _timeFilterHelper;
 		private readonly IRequestsShiftTradeScheduleViewModelFactory _shiftTradeScheduleViewModelFactory;
 		private readonly ICancelAbsenceRequestCommandProvider _cancelAbsenceRequestCommandProvider;
+		private readonly IToggleManager _toggleManager;
 
 		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory,
 			ITextRequestPersister textRequestPersister,
@@ -44,7 +47,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			ITimeFilterHelper timeFilterHelper,
 			IRequestsShiftTradeScheduleViewModelFactory shiftTradeScheduleViewModelFactory,
 			IAbsenceRequestDetailViewModelFactory absenceRequestDetailViewModelFactory,
-			ICancelAbsenceRequestCommandProvider cancelAbsenceRequestCommandProvider)
+			ICancelAbsenceRequestCommandProvider cancelAbsenceRequestCommandProvider,
+			IToggleManager toggleManager)
 		{
 			AbsenceRequestDetailViewModelFactory = absenceRequestDetailViewModelFactory;
 			_requestsViewModelFactory = requestsViewModelFactory;
@@ -56,12 +60,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_timeFilterHelper = timeFilterHelper;
 			_shiftTradeScheduleViewModelFactory = shiftTradeScheduleViewModelFactory;
 			_cancelAbsenceRequestCommandProvider = cancelAbsenceRequestCommandProvider;
+			_toggleManager = toggleManager;
 		}
 
 		[EnsureInPortal]
 		[UnitOfWork]
 		public virtual ViewResult Index()
 		{
+			ViewBag.ShowMultipleShifts = _toggleManager.IsEnabled(Toggles.MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947);
 			return View("RequestsPartial", _requestsViewModelFactory.CreatePageViewModel());
 		}
 

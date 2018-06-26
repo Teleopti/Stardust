@@ -476,5 +476,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertNotExists("#shift-trade-request-detail-view", "#reciever-info");
 		}
 
+		[Then(@"I should see the shift trade request view showing multiple shifts")]
+		public void ThenIShouldSeeTheShiftTradeRequestViewShowingMultipleShifts()
+		{
+			Browser.Interactions.AssertExists(".feature-showing-multiple-shifts");
+		}
 	}
 }
