@@ -36,17 +36,14 @@ Scenario: Show manage skill group page
 	When I press the create skill button 
 	Then I should see the manage skill group page
 
-@OnlyRunIfEnabled('Staffing_BPOExchangeImport_45202')
 Scenario: Show import staffing card in bpo exchange
 	Given I am viewing BPO exhange page
 	Then I should see the bpo import card
 
-@OnlyRunIfEnabled('Staffing_BPOExchangeImport_45202')
 Scenario: Show export gap card in bpo exchange
 	Given I am viewing BPO exhange page
 	Then I should see the bpo export card
 
-@OnlyRunIfEnabled('Staffing_BPOExchangeImport_45202')
 @OnlyRunIfEnabled('Staffing_BPO_ClearStaffing_75498')
 Scenario: Show clear staffing card in bpo exchange
 	Given I am viewing BPO exhange page
