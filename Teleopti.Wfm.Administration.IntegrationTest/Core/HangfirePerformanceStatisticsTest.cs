@@ -17,6 +17,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 {
 	[TestFixture]
 	[WfmAdminTest]
+	[Ignore("Ignore for now until we figure how to deal with json_value in query")]
 	public class HangfirePerformanceStatisticsTest : IExtendSystem
 	{
 		public HangfireUtilities Hangfire;
