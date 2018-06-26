@@ -158,5 +158,6 @@
 		//People
 		public const string WebPeople = "Raptor/Anywhere/WebPeople";
 		public const string PeopleAccess = "Raptor/Anywhere/WebPeople/Access";
+		public const string PeopleManageUsers = "Raptor/Anywhere/WebPeople/ManageUser";
 	}
 }

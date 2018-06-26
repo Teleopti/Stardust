@@ -17,7 +17,6 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 {
 	[TestFixture]
 	[WfmAdminTest]
-	[Ignore("Ignore for now until we figure how to deal with json_value in query")]
 	public class HangfirePerformanceStatisticsTest : IExtendSystem
 	{
 		public HangfireUtilities Hangfire;
@@ -40,7 +39,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 
 			result.Count().Should().Be(1);
 		}
-		
+
 		[Test]
 		public void ShouldReadWithProperties()
 		{
@@ -50,14 +49,42 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 
 			var result = Target.BuildPerformanceStatistics();
 
-			result.Single().Type.Should().Contain("TestEvent");
-			result.Single().Type.Should().Contain("TestHandler");
-			result.Single().AverageTime.Should().Be.GreaterThan(1000);
+			result.Single().Type.Should().Be("TestHandler got TestEvent");
 			result.Single().Count.Should().Be(1);
-			result.Single().MaxTime.Should().Be.GreaterThan(1000);
-			result.Single().MinTime.Should().Be.GreaterThan(1000);
+			result.Single().TotalTime.Should().Be.GreaterThan(100);
+			result.Single().AverageTime.Should().Be.GreaterThan(100);
+			result.Single().MaxTime.Should().Be.GreaterThan(100);
+			result.Single().MinTime.Should().Be.GreaterThan(100);
 		}
 
+		[Test]
+		public void ShouldReadCount()
+		{
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			Publisher.Publish(new TestEvent());
+			Publisher.Publish(new TestEvent());
+			Hangfire.EmulateWorkerIteration();
+			Hangfire.EmulateWorkerIteration();
+
+			var result = Target.BuildPerformanceStatistics();
+
+			result.Single().Count.Should().Be(2);
+		}
+		
+		
+		[Test]
+		public void ShouldReadTotalTime()
+		{
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			Publisher.Publish(new TestEvent());
+			Publisher.Publish(new TestEvent());
+			Hangfire.EmulateWorkerIteration();
+			Hangfire.EmulateWorkerIteration();
+
+			var result = Target.BuildPerformanceStatistics();
+
+			result.Single().TotalTime.Should().Be.GreaterThan(200);
+		}
 
 		public class TestEvent : IEvent
 		{
@@ -69,7 +96,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 		{
 			public void Handle(TestEvent @event)
 			{
-				Thread.Sleep(1000);
+				Thread.Sleep(100);
 			}
 		}
 	}

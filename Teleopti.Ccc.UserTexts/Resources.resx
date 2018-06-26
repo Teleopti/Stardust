@@ -17472,4 +17472,7 @@ The application will now exit.</value>
   <data name="SkillTypeFilter" xml:space="preserve">
     <value>Skill type filter</value>
   </data>
+  <data name="PeopleManageUsers" xml:space="preserve">
+    <value>Manage users</value>
+  </data>
 </root>

@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.Search.Models;
 using Teleopti.Ccc.Web.Filters;
@@ -22,18 +23,21 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 		private readonly IPeopleSearchProvider _searchProvider;
 		private readonly ILoggedOnUser _loggonUser;
 		private readonly IPersonFinderReadOnlyRepository _personFinder;
+		private readonly IAuthorization _auth;
 
 
 		public PeopleSearchController(
 			IPeopleSearchProvider searchProvider,
 			ILoggedOnUser loggonUser,
 			IPersonFinderReadOnlyRepository personFinder,
-			IPersonRepository personRepository)
+			IPersonRepository personRepository,
+			IAuthorization auth)
 		{
 			_searchProvider = searchProvider;
 			_loggonUser = loggonUser;
 			_personFinder = personFinder;
 			_personRepository = personRepository;
+			_auth = auth;
 		}
 
 		[UnitOfWork]
@@ -42,8 +46,10 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 		{
 			searchCritera.SearchDate = DateTime.Now;
 
+			var canSeeUsers = _auth.IsPermitted(DefinedRaptorApplicationFunctionPaths.PeopleManageUsers, DateOnly.Today, _loggonUser.CurrentUser());
+
 			var personFinderSearchCriteria = new PeoplePersonFinderSearchWithPermissionCriteria(PersonFinderField.All, searchCritera.KeyWord, searchCritera.PageIndex + 1, searchCritera.PageSize, DateOnly.Today, searchCritera.SortColumn, searchCritera.Direction,
-				searchCritera.SearchDate.ToDateOnly(), _loggonUser.CurrentUser().Id.GetValueOrDefault(), DefinedRaptorApplicationFunctionForeignIds.PeopleAccess);
+				searchCritera.SearchDate.ToDateOnly(), _loggonUser.CurrentUser().Id.GetValueOrDefault(), DefinedRaptorApplicationFunctionForeignIds.PeopleAccess, canSeeUsers);
 			_personFinder.FindPeopleWithDataPermission(personFinderSearchCriteria);
 
 			var findPeopleViewModel = new FindPeopleViewModel();

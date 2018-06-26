@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using System.Linq;
+using System.Web.UI.WebControls;
+using Teleopti.Ccc.Domain.InterfaceLegacy;
 
 namespace Teleopti.Wfm.Administration.Core.Hangfire
 {
 	public class HangfireStatisticsViewModelBuilder
 	{
 		private readonly HangfireRepository _hangfireRepository;
+		private readonly IJsonDeserializer _deserializer;
 
-		public HangfireStatisticsViewModelBuilder(HangfireRepository hangfireRepository)
+		public HangfireStatisticsViewModelBuilder(HangfireRepository hangfireRepository, IJsonDeserializer deserializer)
 		{
 			_hangfireRepository = hangfireRepository;
+			_deserializer = deserializer;
 		}
-		
+
 		public Statistics Build()
 		{
 			var totalEvents = _hangfireRepository.CountActiveJobs();
@@ -33,8 +37,28 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 		}
 
 		public IEnumerable<JobStatistics> BuildPerformanceStatistics()
-		{			
-			return _hangfireRepository.PerformanceStatistics();			
+		{
+			return
+			(
+				from j in _hangfireRepository.SucceededJobs()
+				let arguments = _deserializer.DeserializeObject<string[]>(j.Arguments)
+				let data = _deserializer.DeserializeObject<dynamic>(j.Data)
+				let name = _deserializer.DeserializeObject<string>(arguments.First())
+				let type = name.Substring(0, name.IndexOf(" on "))
+				let duration = data.PerformanceDuration
+				let typeAndDuration = new {type, duration}
+				group typeAndDuration by typeAndDuration.type
+				into g
+				select new JobStatistics
+				{
+					Type = g.Key,
+					Count = g.Count(),
+					TotalTime = g.Sum(x => x.duration),
+					AverageTime = (long) Math.Floor(g.Average(x => x.duration)),
+					MaxTime = g.Max(x => x.duration),
+					MinTime = g.Min(x => x.duration),
+				}
+			).ToArray();
 		}
 	}
 
@@ -46,6 +70,12 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 		public long AverageTime { get; set; }
 		public long MaxTime { get; set; }
 		public long MinTime { get; set; }
+	}
+
+	public class Job
+	{
+		public string Arguments { get; set; }
+		public string Data { get; set; }
 	}
 
 	public class Statistics
@@ -62,7 +92,8 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 		public int Count { get; set; }
 	}
 
-	public class OldEvent {
+	public class OldEvent
+	{
 		public string Type { get; set; }
 		public string CreatedAt { get; set; }
 		public string Duration { get; set; }
