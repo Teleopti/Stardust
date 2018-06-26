@@ -121,7 +121,7 @@
 							</i>
 						</div>
 						<!-- /ko -->
-						<span class="fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan"></span>
+						<span class="fullwidth displayblock" data-bind="visible: false && showDetail(), text: timeSpan"></span>
 					</div>
 					<div data-bind="visible: false && showTitle() && isOvertimeAvailability()">
 						<i class="glyphicon glyphicon-time"></i>
@@ -129,7 +129,7 @@
 				</div>
 				<!-- /ko -->
 				<!--ko if:mySchedule().isDayOff-->
-				<div class="dayoff" data-bind="tooltip: { title: mySchedule().dayOffName, html: true, trigger: 'click' }">
+				<div class="dayoff" data-bind="tooltip: { title: mySchedule().dayOffName, html: true, trigger: 'click'}, hideTooltipAfterMouseLeave: true">
 					<span class="dayoff-text" data-bind="text: mySchedule().dayOffName"></span>
 				</div>
 				<!--/ko-->
@@ -144,8 +144,8 @@
 				<div class="mobile-schedule-container relative">
 					<!-- ko foreach: layers -->
 					<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-background-image-light': isOvertime, overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime, overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">
-						<div data-bind="visible: showTitle() && !isOvertimeAvailability()">
-							<strong data-bind="visible: false, text: title()"></strong>
+						<div data-bind="visible: false && showTitle() && !isOvertimeAvailability()">
+							<strong data-bind="text: title()"></strong>
 							<!-- ko if: hasMeeting -->
 							<div class="meeting floatright">
 								<i class="meeting-icon mr10">
@@ -153,7 +153,7 @@
 								</i>
 							</div>
 							<!-- /ko -->
-							<span class="fullwidth displayblock" data-bind="visible: false && showDetail(), text: timeSpan"></span>
+							<span class="fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan"></span>
 						</div>
 						<div data-bind="visible: false && showTitle() && isOvertimeAvailability()">
 							<i class="glyphicon glyphicon-time"></i>
@@ -161,7 +161,7 @@
 					</div>
 					<!-- /ko -->
 					<!--ko if:isDayOff-->
-					<div class="dayoff" data-bind="tooltip: { title: dayOffName, html: true, trigger: 'click' }, adjustTooltipPositionOnMobileTeamSchedule: true"></div>
+					<div class="dayoff" data-bind="tooltip: { title: dayOffName, html: true, trigger: 'click' }, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true"></div>
 					<!--/ko-->
 				</div>
 			</div>
