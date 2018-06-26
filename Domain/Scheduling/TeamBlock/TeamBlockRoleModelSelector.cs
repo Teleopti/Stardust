@@ -2,7 +2,6 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
@@ -15,12 +14,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	public class TeamBlockRoleModelSelector
 	{
 		private readonly ITeamBlockRestrictionAggregator _teamBlockRestrictionAggregator;
-		private readonly IWorkShiftFilterService _workShiftFilterService;
+		private readonly WorkShiftFilterService _workShiftFilterService;
 		private readonly ISameOpenHoursInTeamBlock _sameOpenHoursInTeamBlock;
 		private readonly IFirstShiftInTeamBlockFinder _firstShiftInTeamBlockFinder;
 
 		public TeamBlockRoleModelSelector(ITeamBlockRestrictionAggregator teamBlockRestrictionAggregator,
-			IWorkShiftFilterService workShiftFilterService,
+			WorkShiftFilterService workShiftFilterService,
 			ISameOpenHoursInTeamBlock sameOpenHoursInTeamBlock,
 			IFirstShiftInTeamBlockFinder firstShiftInTeamBlockFinder)
 		{

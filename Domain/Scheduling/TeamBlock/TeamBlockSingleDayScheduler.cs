@@ -15,13 +15,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	{
 		private readonly ITeamBlockSchedulingCompletionChecker _teamBlockSchedulingCompletionChecker;
 		private readonly ProposedRestrictionAggregator _proposedRestrictionAggregator;
-		private readonly IWorkShiftFilterService _workShiftFilterService;
+		private readonly WorkShiftFilterService _workShiftFilterService;
 		private readonly TeamScheduling _teamScheduling;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
 		public TeamBlockSingleDayScheduler(ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker,
 			ProposedRestrictionAggregator proposedRestrictionAggregator,
-			IWorkShiftFilterService workShiftFilterService,
+			WorkShiftFilterService workShiftFilterService,
 			TeamScheduling teamScheduling,
 			IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{

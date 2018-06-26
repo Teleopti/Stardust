@@ -8,13 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
-	public interface IWorkShiftFilterService
-	{
-		IList<ShiftProjectionCache> FilterForRoleModel(IGroupPersonSkillAggregator groupPersonSkillAggregator, IScheduleDictionary schedules, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, SchedulingOptions schedulingOptions, bool isSameOpenHoursInBlock, bool useShiftsForRestrictions, IEnumerable<ISkillDay> skillDays);
-		IList<ShiftProjectionCache> FilterForTeamMember(IScheduleDictionary schedules, DateOnly dateOnly, IPerson person, ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, SchedulingOptions schedulingOptions, bool useShiftsForRestrictions, IEnumerable<ISkillDay> skillDays);
-	}
-
-	public class WorkShiftFilterService : IWorkShiftFilterService
+	public class WorkShiftFilterService
 	{
 		private readonly ActivityRestrictionsShiftFilter _activityRestrictionsShiftFilter;
 		private readonly BusinessRulesShiftFilter _businessRulesShiftFilter;
