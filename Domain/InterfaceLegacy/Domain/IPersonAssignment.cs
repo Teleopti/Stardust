@@ -57,6 +57,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 			IMultiplicatorDefinitionSet multiplicatorDefinitionSet, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null);
 
 		DayOff DayOff();
+		IDayOffTemplate DayOffTemplate { get; }
 		void SetDayOff(IDayOffTemplate template, bool muteEvent = false, TrackedCommandInfo trackedCommandInfo = null);
 		void SetThisAssignmentsDayOffOn(IPersonAssignment dayOffDestination, bool muteEvent = false, TrackedCommandInfo trackedCommandInfo = null);
 		bool AssignedWithDayOff(IDayOffTemplate template);

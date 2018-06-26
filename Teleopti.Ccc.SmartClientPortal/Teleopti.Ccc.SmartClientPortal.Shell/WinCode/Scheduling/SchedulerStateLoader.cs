@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 				var period = scheduleDateTimePeriod.RangeToLoadCalculator.RequestedPeriod.ToDateOnlyPeriod(_schedulerState.TimeZoneInfo);
 				foreach (var scheduleRange in _schedulerState.Schedules.Values)
 				{
-					scheduleRange.ScheduledDayCollection(period).ForEach(x => _lazyManager.Initialize(x.PersonAssignment(true).DayOff()));	
+					scheduleRange.ScheduledDayCollection(period).ForEach(x => _lazyManager.Initialize(x.PersonAssignment(true).DayOffTemplate));
 				}
 			}
 		}
