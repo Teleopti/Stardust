@@ -11,7 +11,7 @@ using Teleopti.Wfm.Administration.Controllers;
 
 namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 {
-	[TenantTest]
+	[WfmAdminTest]
 	public class CheckFirstUser
 	{
 		public DatabaseController Target;

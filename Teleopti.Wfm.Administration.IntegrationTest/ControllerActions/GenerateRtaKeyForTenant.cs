@@ -14,7 +14,7 @@ using Teleopti.Wfm.Administration.Core;
 
 namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 {
-	[TenantTest]
+	[WfmAdminTest]
 	public class GenerateRtaKeyForTenant : IIsolateSystem
 	{
 		public DatabaseController Database;

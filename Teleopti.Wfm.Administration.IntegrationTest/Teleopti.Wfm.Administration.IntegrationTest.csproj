@@ -159,7 +159,8 @@
     <Compile Include="ControllerActions\GetVersionsTest.cs" />
     <Compile Include="JobTest.cs" />
     <Compile Include="NoCacheFilterTests.cs" />
-    <Compile Include="TenantTestAttribute.cs" />
+    <Compile Include="SetUpFixtureForAssembly.cs" />
+    <Compile Include="WfmAdminTestAttribute.cs" />
     <Compile Include="TestPollutionCleaner.cs" />
     <Compile Include="UpdateCrossDatabaseViewFake.cs" />
   </ItemGroup>

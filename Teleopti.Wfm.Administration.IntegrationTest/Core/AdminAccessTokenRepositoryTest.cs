@@ -14,7 +14,7 @@ using Teleopti.Wfm.Administration.Models;
 
 namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 {
-	[TenantTest]
+	[WfmAdminTest]
 	public class AdminAccessTokenRepositoryTest : IIsolateSystem
 	{
 		public ITenantUnitOfWork TenantUnitOfWork;

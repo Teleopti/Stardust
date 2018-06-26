@@ -11,11 +11,12 @@ using Teleopti.Wfm.Administration.Models;
 
 namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 {
-	[TenantTest]
+	[WfmAdminTest]
 	public class LoginTest
 	{
 		public AccountController Target;
 		public ITenantUnitOfWork TenantUnitOfWork;
+		public ICurrentTenantSession TenantSession;
 
 		[Test]
 		public void ShouldReturnFalseIfWrongEmail()
@@ -77,7 +78,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		public void ShouldSetHangfireCookie()
 		{
 			var hangfireCookie = new FakeHangfireCookie();
-			Target = new AccountController(TenantTestAttribute.TenantUnitOfWorkForTest(), hangfireCookie, new OneWayEncryption(), new[] { new OneWayEncryption(),}, 
+			Target = new AccountController(TenantSession, hangfireCookie, new OneWayEncryption(), new[] { new OneWayEncryption(),}, 
 				new AdminAccessTokenRepository(new BCryptHashFunction(), new Now()));
 			hangfireCookie.CookieIsSet.Should().Be.False();
 
@@ -101,7 +102,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 		public void ShouldNotSetHangfireCookie()
 		{
 			var hangfireCookie = new FakeHangfireCookie();
-			Target = new AccountController(TenantTestAttribute.TenantUnitOfWorkForTest(), hangfireCookie, new OneWayEncryption(), new []{ new OneWayEncryption()},
+			Target = new AccountController(TenantSession, hangfireCookie, new OneWayEncryption(), new []{ new OneWayEncryption()},
 				new AdminAccessTokenRepository(new BCryptHashFunction(), new Now()));
 			hangfireCookie.CookieIsSet.Should().Be.False();
 

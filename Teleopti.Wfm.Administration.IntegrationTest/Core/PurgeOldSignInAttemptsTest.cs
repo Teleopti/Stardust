@@ -15,7 +15,7 @@ using Teleopti.Wfm.Administration.Core;
 
 namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 {
-	[TenantTest]
+	[WfmAdminTest]
 	[AllTogglesOn]
 	public class PurgeOldSignInAttemptsTest
 	{

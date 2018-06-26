@@ -15,7 +15,7 @@ using Teleopti.Wfm.Administration.Core;
 
 namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 {
-	[TenantTest]
+	[WfmAdminTest]
 	public class DeleteTenantTest
 	{
 		public TestPollutionCleaner TestPollutionCleaner;

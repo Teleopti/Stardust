@@ -8,7 +8,7 @@ using Teleopti.Wfm.Administration.Controllers;
 
 namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 {
-	[TenantTest]
+	[WfmAdminTest]
 	public class SaveUserTest
 	{
 		public AccountController Target;

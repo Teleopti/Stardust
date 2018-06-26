@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -16,27 +14,10 @@ using Teleopti.Wfm.Administration.Core.Modules;
 
 namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 {
-	public class BlipTestAttribute : IoCTestAttribute
-	{
-		protected override FakeConfigReader Config()
-		{
-			var config = base.Config();
-			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
-			return config;
-		}
-
-		protected override void Extend(IExtend extend, IIocConfiguration configuration)
-		{
-			base.Extend(extend, configuration);
-			extend.AddModule(new WfmAdminModule2(configuration));
-		}
-	}
-
 	[TestFixture]
-	[BlipTest]
+	[WfmAdminTest]
 	public class HangfirePerformanceStatisticsTest : IExtendSystem
 	{
-		public HangfireClientStarter HangfireClientStarter;
 		public HangfireUtilities Hangfire;
 		public IEventPublisher Publisher;
 		public HangfireStatisticsViewModelBuilder Target;
@@ -49,9 +30,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 		[Test]
 		public void ShouldGetSomething()
 		{
-			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
 			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
-			HangfireClientStarter.Start();
 			Publisher.Publish(new TestEvent());
 			Hangfire.EmulateWorkerIteration();
 

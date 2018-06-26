@@ -23,7 +23,7 @@ using Teleopti.Wfm.Administration.Models;
 
 namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 {
-	[TenantTest]
+	[WfmAdminTest]
 	[AllTogglesOn]
 	public class PurgeNoneEmployeeDataTest 
 	{ 

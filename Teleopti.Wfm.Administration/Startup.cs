@@ -26,7 +26,7 @@ namespace Teleopti.Wfm.Administration
 			config.Filters.Add(new NoCacheFilterHttp());
 
 			var builder = new ContainerBuilder();
-			builder.RegisterModule<WfmAdminModule>();
+			builder.RegisterModule<WfmAdminAppModule>();
 			var container = builder.Build();
 
 			// Set the dependency resolver to be Autofac.

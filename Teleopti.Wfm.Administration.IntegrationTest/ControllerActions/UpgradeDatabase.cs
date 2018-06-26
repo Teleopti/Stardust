@@ -10,7 +10,7 @@ using Teleopti.Wfm.Administration.Core;
 
 namespace Teleopti.Wfm.Administration.IntegrationTest.ControllerActions
 {
-	[TenantTest]
+	[WfmAdminTest]
 	public class UpgradeDatabase
 	{
 		public UpgradeDatabasesController UpgradeDatabasesController;
