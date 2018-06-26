@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable, of, throwError } from 'rxjs';
+import { flatMap, map, switchMap } from 'rxjs/operators';
 import { Person } from '../types';
-import { Observable } from 'rxjs';
-import { map, tap, switchMap } from 'rxjs/operators';
 
 interface PersonApplicationLogonModel {
 	ApplicationLogonName: string;
@@ -42,6 +42,20 @@ export interface LogonInfo {
 
 export interface LogonInfoFromGuidsResponse extends Array<LogonInfo> {}
 
+export interface PersistResponse {
+	success: boolean;
+	result: Array<any>;
+	errors: Array<{ personId: string; message: string }>;
+}
+
+const parseError = () => <T>(source: Observable<PersistResponse>) =>
+	source.pipe(
+		flatMap((res: PersistResponse) => {
+			if (res.success === true) return of(res);
+			else if (res.success === false) return throwError(res);
+		})
+	);
+
 @Injectable()
 export class LogonInfoService {
 	constructor(private http: HttpClient) {}
@@ -51,13 +65,12 @@ export class LogonInfoService {
 			People: people
 		};
 
-		return this.http
-			.post('../api/Global/GetTokenForPersistApplicationLogonNames', body)
-			.pipe(
-				switchMap((challenge: PersistChallengeResponse) =>
-					this.http.post('../PersonInfo/PersistApplicationLogonNames', challenge)
-				)
-			);
+		return this.http.post('../api/Global/GetTokenForPersistApplicationLogonNames', body).pipe(
+			switchMap((challenge: PersistChallengeResponse) =>
+				this.http.post('../PersonInfo/PersistApplicationLogonNames', challenge)
+			),
+			parseError()
+		);
 	}
 
 	persistIdentityLogonNames(people: PersonIdentityLogonModel[]) {
@@ -65,13 +78,12 @@ export class LogonInfoService {
 			People: people
 		};
 
-		return this.http
-			.post('../api/Global/GetTokenForPersistIdentities', body)
-			.pipe(
-				switchMap((challenge: PersistChallengeResponse) =>
-					this.http.post('../PersonInfo/PersistIdentities', challenge)
-				)
-			);
+		return this.http.post('../api/Global/GetTokenForPersistIdentities', body).pipe(
+			switchMap((challenge: PersistChallengeResponse) =>
+				this.http.post('../PersonInfo/PersistIdentities', challenge)
+			),
+			parseError()
+		);
 	}
 
 	getLogonInfo(personIdsToGet: string[]): Observable<LogonInfoFromGuidsResponse> {
