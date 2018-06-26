@@ -7,70 +7,38 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 	public class HangfireStatisticsViewModelBuilder
 	{
 		private readonly HangfireRepository _hangfireRepository;
-		private readonly string _connectionString;
 
-		public HangfireStatisticsViewModelBuilder(HangfireRepository hangfireRepository, string connectionString)
+		public HangfireStatisticsViewModelBuilder(HangfireRepository hangfireRepository)
 		{
 			_hangfireRepository = hangfireRepository;
-			_connectionString = connectionString;
 		}
 		
-		public HangfireStatisticsViewModel Build()
+		public Statistics Build()
 		{
-			using (var connection = new SqlConnection(_connectionString))
+			var totalEvents = _hangfireRepository.CountActiveJobs();
+			var succeededEvents = _hangfireRepository.CountSucceededJobs();
+			var oldestEvents = _hangfireRepository.OldestEvents();
+			return new Statistics
 			{
-				connection.Open();
-				var totalEvents = _hangfireRepository.CountActiveJobs(connection);
-				var succeededEvents = _hangfireRepository.CountSucceededJobs(connection);
-				var oldestEvents = _hangfireRepository.OldestEvents(connection);
-				connection.Close();
-				return new HangfireStatisticsViewModel
-				{
-					Time = DateTime.UtcNow.ToString("HH:mm:ss"),
-					TotalEventCount = totalEvents,
-					SucceededEventCount = succeededEvents,
-					OldestEvents = oldestEvents
-				};
-			}
+				Time = DateTime.UtcNow.ToString("HH:mm:ss"),
+				TotalEventCount = totalEvents,
+				SucceededEventCount = succeededEvents,
+				OldestEvents = oldestEvents
+			};
 		}
 
 		public IEnumerable<EventCount> BuildTypesOfEvents(string stateName)
 		{
-			using (var connection = new SqlConnection(_connectionString))
-			{
-				connection.Open();
-				var result = _hangfireRepository.EventCounts(connection, stateName);
-				connection.Close();
-
-				return result;
-			}
+			return _hangfireRepository.EventCounts(stateName);
 		}
 
-		public IEnumerable<HangfirePerformanceStatisticsViewModel> BuildPerformanceStatistics()
-		{
-			var performanceStatistics = new List<HangfirePerformanceStatisticsViewModel>();
-
-			using (var reader = _hangfireRepository.PerformanceStatistics(_connectionString))
-			{
-				while (reader.Read())
-				{
-					performanceStatistics.Add(new HangfirePerformanceStatisticsViewModel
-					{
-						Type = reader["EventHandler"].ToString(),
-						Count = Convert.ToInt64(reader["TotalCount"]),
-						TotalTime = Convert.ToInt64(reader["TotalDuration"]),
-						AverageTime = Convert.ToInt64(reader["AverageDuration"]),
-						MinTime = Convert.ToInt64(reader["MinDuration"]),
-						MaxTime = Convert.ToInt64(reader["MaxDuration"])
-					});
-				}
-			}
-
-			return performanceStatistics;
+		public IEnumerable<JobStatistics> BuildPerformanceStatistics()
+		{			
+			return _hangfireRepository.PerformanceStatistics();			
 		}
 	}
 
-	public class HangfirePerformanceStatisticsViewModel
+	public class JobStatistics
 	{
 		public string Type { get; set; }
 		public long Count { get; set; }
@@ -80,7 +48,7 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 		public long MinTime { get; set; }
 	}
 
-	public class HangfireStatisticsViewModel
+	public class Statistics
 	{
 		public string Time { get; set; }
 		public long TotalEventCount { get; set; }

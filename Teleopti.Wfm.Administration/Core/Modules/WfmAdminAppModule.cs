@@ -81,11 +81,7 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 			builder.RegisterType<HangfireCookie>().As<IHangfireCookie>().SingleInstance();
 			builder.Register(c => new LoadPasswordPolicyService(ConfigurationManager.AppSettings["ConfigurationFilesPath"])).SingleInstance().As<ILoadPasswordPolicyService>();
 			builder.RegisterType<PasswordPolicy>().SingleInstance().As<IPasswordPolicy>();
-			builder
-				.Register(c => new HangfireStatisticsViewModelBuilder(c.Resolve<HangfireRepository>(), c.Resolve<IConfigReader>().ConnectionString("Hangfire")))
-				.SingleInstance().AsSelf();
-			builder.RegisterType<HangfireRepository>().SingleInstance();
-
+			builder.RegisterType<HangfireStatisticsViewModelBuilder>().SingleInstance();
 			builder.RegisterType<HangfireUtilities>().AsSelf().As<IManageFailedHangfireEvents>().SingleInstance();
 			builder.Register<Func<ICurrentUnitOfWork, IBusinessUnitRepository>>(context => uow => new BusinessUnitRepository(uow));
 			builder.Register<Func<ICurrentUnitOfWork, IPersonRepository>>(context => uow => new PersonRepository(uow));
