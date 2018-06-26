@@ -7,11 +7,13 @@ namespace Teleopti.Support.Library.Config
 	public class RefreshConfigFile
 	{
 		private readonly FileConfigurator _fileConfigurator;
+		private readonly RepositoryRootFolder _repositortRootFolder;
 		private readonly string _buildArtifacts;
 
 		public RefreshConfigFile()
 		{
 			_fileConfigurator = new FileConfigurator();
+			_repositortRootFolder = new RepositoryRootFolder();
 			_buildArtifacts = new BuildArtifactsFolder().Path();
 		}
 
@@ -38,7 +40,10 @@ namespace Teleopti.Support.Library.Config
 		{
 			if (file.StartsWith("$"))
 			{
+				if (_repositortRootFolder.IsRunningFromRepository())
+					file = file.Replace("$(Repository)", $@"{_repositortRootFolder.Path()}\");
 				file = file.Replace("$(BuildArtifacts)", $@"{_buildArtifacts}\");
+				file = file.Replace("$(SupportTool)", $@"{AppDomain.CurrentDomain.BaseDirectory}\");
 				return file;
 			}
 
