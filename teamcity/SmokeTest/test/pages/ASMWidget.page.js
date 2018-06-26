@@ -11,7 +11,7 @@ var ASMWidgetPage = Object.create(LoginPage, {
 	
 	signin: { value: function() {
 		LoginPage.signin(this);
-		this.widget.waitForExist(60 * 1000);
+		this.widget.waitForExist(180 * 1000);
     } },
 });
 
