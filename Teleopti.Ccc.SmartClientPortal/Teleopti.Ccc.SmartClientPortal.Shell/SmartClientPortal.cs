@@ -20,6 +20,7 @@ using log4net;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -433,6 +434,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 						//break;
 					case DefinedRaptorApplicationFunctionPaths.OpenForecasterPage:
 						outlookBarSmartPartInfo.Icon = Resources.Forecasts2_filled_32x32;
+						if (_toggleManager.IsEnabled(Toggles.WFM_Forecaster_Preview_74801) &&
+							PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebForecasts))
+						{
+							outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewForecasts;
+							outlookBarSmartPartInfo.PreviewUrl = buildWfmUri("WFM/#/forecasting");
+						}
 						break;
 					case DefinedRaptorApplicationFunctionPaths.OpenSchedulePage:
 						outlookBarSmartPartInfo.Icon = Resources.Schedules_filled_space_32x32;

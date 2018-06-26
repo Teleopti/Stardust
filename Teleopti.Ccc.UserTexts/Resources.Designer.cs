@@ -25744,6 +25744,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Preview the new Forecasts!.
+        /// </summary>
+        public static string PreviewTheNewForecasts {
+            get {
+                return ResourceManager.GetString("PreviewTheNewForecasts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preview the new Intraday tool!.
         /// </summary>
         public static string PreviewTheNewIntradayTool {
