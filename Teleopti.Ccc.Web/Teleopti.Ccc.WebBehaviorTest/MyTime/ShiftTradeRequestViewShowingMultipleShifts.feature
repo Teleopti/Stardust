@@ -1,5 +1,4 @@
-﻿@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947')
-Feature: ShiftTradeRequestViewShowingMultipleShifts
+﻿Feature: ShiftTradeRequestViewShowingMultipleShifts
 	As an agent who intends to trade shifts with a colleague,
 	I want to view more than one shift on one page.
 
@@ -33,6 +32,7 @@ Background:
 	| Day   |
 	| Night |
 
+@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947')
 Scenario: See the new view
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
