@@ -422,6 +422,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				{
 					case DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage:
 						outlookBarSmartPartInfo.Icon = Resources.People_filled_space_32x32;
+						if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebRequests))
+						{
+							outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewPeopleModule;
+							outlookBarSmartPartInfo.PreviewUrl = buildWfmUri("WFM/#/people");
+						}
 						break;
 						//WebPeople link should be hidden while in development.Add this back later on when we want customers to preview the new web people module.
 						//if (_toggleManager.IsEnabled(Toggles.Wfm_PeopleWeb_PrepareForRelease_47766) &&
