@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -28,7 +29,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 		}
 
 		[Test]
-		public void ShouldGetSomething()
+		public void ShouldRead()
 		{
 			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
 			Publisher.Publish(new TestEvent());
@@ -38,6 +39,24 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 
 			result.Count().Should().Be(1);
 		}
+		
+		[Test]
+		public void ShouldReadWithProperties()
+		{
+			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
+			Publisher.Publish(new TestEvent());
+			Hangfire.EmulateWorkerIteration();
+
+			var result = Target.BuildPerformanceStatistics();
+
+			result.Single().Type.Should().Contain("TestEvent");
+			result.Single().Type.Should().Contain("TestHandler");
+			result.Single().AverageTime.Should().Be.GreaterThan(1000);
+			result.Single().Count.Should().Be(1);
+			result.Single().MaxTime.Should().Be.GreaterThan(1000);
+			result.Single().MinTime.Should().Be.GreaterThan(1000);
+		}
+
 
 		public class TestEvent : IEvent
 		{
@@ -49,6 +68,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 		{
 			public void Handle(TestEvent @event)
 			{
+				Thread.Sleep(1000);
 			}
 		}
 	}

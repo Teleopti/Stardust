@@ -82,6 +82,7 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 			builder.Register(c => new LoadPasswordPolicyService(ConfigurationManager.AppSettings["ConfigurationFilesPath"])).SingleInstance().As<ILoadPasswordPolicyService>();
 			builder.RegisterType<PasswordPolicy>().SingleInstance().As<IPasswordPolicy>();
 			builder.RegisterType<HangfireStatisticsViewModelBuilder>().SingleInstance();
+			builder.RegisterType<HangfireRepository>().SingleInstance();
 			builder.RegisterType<HangfireUtilities>().AsSelf().As<IManageFailedHangfireEvents>().SingleInstance();
 			builder.Register<Func<ICurrentUnitOfWork, IBusinessUnitRepository>>(context => uow => new BusinessUnitRepository(uow));
 			builder.Register<Func<ICurrentUnitOfWork, IPersonRepository>>(context => uow => new PersonRepository(uow));
