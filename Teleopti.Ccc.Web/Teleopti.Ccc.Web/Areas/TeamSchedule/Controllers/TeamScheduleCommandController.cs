@@ -73,6 +73,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return _commandHandlingProvider.RemoveShift(input);
 		}
 
+		[HttpPost, UnitOfWork, Route("api/TeamScheduleCommand/ChangeActivityType")]
+		public virtual IList<ActionResult> ChangeActivityType(ChangeActivityTypeFormData input)
+		{
+			return _commandHandlingProvider.ChangeActivityType(input);
+		}
+
 	}
 
 

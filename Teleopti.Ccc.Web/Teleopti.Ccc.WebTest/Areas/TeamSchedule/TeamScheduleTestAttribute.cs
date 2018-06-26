@@ -15,6 +15,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.IoC;
 using Teleopti.Ccc.Web.Core;
@@ -55,6 +56,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			isolate.UseTestDouble<PersonNameProvider>().For<IPersonNameProvider>();
 			isolate.UseTestDouble<TeamScheduleProjectionProvider>().For<ITeamScheduleProjectionProvider>();
 			isolate.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
+			isolate.UseTestDouble<ChangeActivityTypeFormValidator>().For<IChangeActivityTypeFormValidator>();
 
 			var fakeCommandHandler = new FakeCommandHandler();
 			isolate.UseTestDouble(fakeCommandHandler).For<IHandleCommand<BackoutScheduleChangeCommand>>();
@@ -70,6 +72,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			isolate.UseTestDouble(fakeCommandHandler).For<IHandleCommand<RemoveActivityCommand>>();
 			isolate.UseTestDouble(fakeCommandHandler).For<IHandleCommand<RemoveDayOffCommand>>();
 			isolate.UseTestDouble(fakeCommandHandler).For<IHandleCommand<RemoveShiftCommand>>();
+			isolate.UseTestDouble(fakeCommandHandler).For<IHandleCommand<ChangeActivityTypeCommand>>();
+
 
 			isolate.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
 			isolate.UseTestDouble<FullPermission>().For<IAuthorization>();

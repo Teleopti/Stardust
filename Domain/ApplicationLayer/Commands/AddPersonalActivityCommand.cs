@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
-	public class AddPersonalActivityCommand : IErrorAttachedCommand, ITrackableCommand
+	public class AddPersonalActivityCommand : IErrorAttachedCommand, ITrackableCommand, IScheduleCommand
 	{
 		public IPerson Person { get; set; }
 		public DateOnly Date { get; set; }

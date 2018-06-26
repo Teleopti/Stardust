@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 
@@ -19,15 +20,16 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		IHandleCommand<AddOvertimeActivityCommand>,
 		IHandleCommand<AddPersonalActivityCommand>,
 		IHandleCommand<RemoveDayOffCommand>,
-		IHandleCommand<RemoveShiftCommand>
+		IHandleCommand<RemoveShiftCommand>,
+		IHandleCommand<ChangeActivityTypeCommand>
 	{
 		private int calledCount;
-		private IList<ITrackableCommand> commands = new List<ITrackableCommand>();
+		private IList<Object> commands = new List<Object>();
 
 		public int CalledCount => calledCount;
 		public bool HasError { get; set; }
 
-		public IList<ITrackableCommand> CalledCommands => commands;
+		public IList<Object> CalledCommands => commands;
 		public void ResetCalledCount() => calledCount = 0;
 		public void Handle(MoveShiftLayerCommand command) { handle(command); }
 		public void Handle(BackoutScheduleChangeCommand command) { handle(command); }
@@ -46,7 +48,10 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		{
 			handle(command);
 		}
-
+		public T GetSingleCommand<T>()
+		{
+			return (T)commands.Single();
+		}
 
 		private void handle(ITrackableCommand command)
 		{
@@ -60,6 +65,10 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			commands.Add(command);
 		}
 
-	
+		public void Handle(ChangeActivityTypeCommand command)
+		{
+			calledCount++;
+			commands.Add(command);
+		}
 	}
 }

@@ -128,7 +128,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 		public DateOnly EndDate { get; set; }
 		public Guid TemplateId { get; set; }
 		public Guid[] PersonIds { get; set; }
-		public IDayOffTemplate Template { get;  set; }
+		public IDayOffTemplate Template { get; set; }
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 	}
+
+	
 }

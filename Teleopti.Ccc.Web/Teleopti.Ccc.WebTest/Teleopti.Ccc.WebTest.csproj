@@ -290,6 +290,7 @@
     <Compile Include="Areas\Staffing\BpoControllerTest.cs" />
     <Compile Include="Areas\Start\Core\IanaTimeZoneProviderTest.cs" />
     <Compile Include="Areas\TeamSchedule\Core\AbsenceHandler\AbsencePersisterTest_NoMock.cs" />
+    <Compile Include="Areas\TeamSchedule\Core\ChangeActivityTypeFormValidatorTest.cs" />
     <Compile Include="Areas\TeamSchedule\FakeCommandHandler.cs" />
     <Compile Include="Areas\TeamSchedule\Core\TeamScheduleActivityCommandServiceTest.cs" />
     <Compile Include="Core\BlockOtherOriginFilterTests.cs" />

@@ -17,5 +17,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		IList<ActionResult> AddDayOff(AddDayOffFormData input);
 		IList<ActionResult> RemoveDayOff(RemoveDayOffFormData input);
 		IList<ActionResult> RemoveShift(RemoveShiftFormData input);
+		IList<ActionResult> ChangeActivityType(ChangeActivityTypeFormData command);
 	}
 }

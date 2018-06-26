@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -32,6 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeShiftCategoryRepository ShiftCategoryRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
+		public FakeActivityRepository ActivityRepository;
 
 		public void Isolate(IIsolate isolate)
 		{
@@ -459,7 +462,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 
 			});
 			CommandHandler.CalledCount.Should().Be.EqualTo(1);
-			CommandHandler.CalledCommands.Single().TrackedCommandInfo.TrackId.Should().Be.EqualTo(trackId);
+			CommandHandler.GetSingleCommand<ITrackableCommand>().TrackedCommandInfo.TrackId.Should().Be.EqualTo(trackId);
 			results.Count.Should().Be.EqualTo(0);
 		}
 
@@ -524,7 +527,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			});
 
 			CommandHandler.CalledCount.Should().Be.EqualTo(1);
-			CommandHandler.CalledCommands.Single().TrackedCommandInfo.TrackId.Should().Be.EqualTo(trackId);
+			CommandHandler.GetSingleCommand<ITrackableCommand>().TrackedCommandInfo.TrackId.Should().Be.EqualTo(trackId);
 			results.Count.Should().Be.EqualTo(0);
 		}
 
@@ -544,7 +547,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			});
 
 			CommandHandler.CalledCount.Should().Be.EqualTo(1);
-			CommandHandler.CalledCommands.Single().TrackedCommandInfo.TrackId.Should().Be.EqualTo(trackId);
+			CommandHandler.GetSingleCommand<ITrackableCommand>().TrackedCommandInfo.TrackId.Should().Be.EqualTo(trackId);
 			results.Single().ErrorMessages.Single().Should().Be.EqualTo("Execute command failed.");
 		}
 
@@ -589,8 +592,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			var results = Target.RemoveShift(new RemoveShiftFormData
 			{
 				Date = new DateOnly(2018, 2, 2),
-				PersonIds = new[] {person.Id.GetValueOrDefault()},
-				TrackedCommandInfo = new TrackedCommandInfo {TrackId = Guid.NewGuid()}
+				PersonIds = new[] { person.Id.GetValueOrDefault() },
+				TrackedCommandInfo = new TrackedCommandInfo { TrackId = Guid.NewGuid() }
 			});
 
 			results.Single().ErrorMessages.Single().Should().Be.EqualTo(Resources.NoPermissionRemovingShift);
@@ -610,8 +613,213 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 				TrackedCommandInfo = new TrackedCommandInfo { TrackId = trackId }
 			});
 			CommandHandler.CalledCount.Should().Be.EqualTo(1);
-			CommandHandler.CalledCommands.Single().TrackedCommandInfo.TrackId.Should().Be.EqualTo(trackId);
+			CommandHandler.GetSingleCommand<ITrackableCommand>().TrackedCommandInfo.TrackId.Should().Be.EqualTo(trackId);
 			results.Count.Should().Be.EqualTo(0);
 		}
+
+		[Test]
+		public void ShouldInvokeChangeActivityTypeCommand()
+		{
+			var date = new DateOnly(2018, 6, 22);
+			var person = PersonFactory.CreatePerson("test").WithId();
+			PersonRepository.Has(person);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.Has(scenario);
+
+			var phoneActivity = ActivityFactory.CreateActivity("phone", Color.Yellow);
+			ActivityRepository.Has(phoneActivity);
+			var invoiceActivity = ActivityFactory.CreateActivity("invoice", Color.Yellow);
+			ActivityRepository.Has(invoiceActivity);
+
+			var personAss = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, date);
+			PersonAssignmentRepo.Add(personAss);
+
+			personAss.AddActivity(phoneActivity, new DateTimePeriod(2018, 6, 22, 8, 2018, 6, 22, 9));
+			personAss.AddActivity(invoiceActivity, new DateTimePeriod(2018, 6, 22, 9, 2018, 6, 22, 10));
+
+			personAss.ShiftLayers.ForEach(sl => sl.SetId(Guid.NewGuid()));
+			var layerIds = personAss.ShiftLayers.Select(sl => sl.Id.Value).ToArray();
+			var result = Target.ChangeActivityType(new ChangeActivityTypeFormData
+			{
+				Date = new DateTime(2018, 6, 22),
+				PersonId = person.Id.Value,
+				Layers = new[] {  new EditingLayerModel
+					{
+						ActivityId = invoiceActivity.Id.GetValueOrDefault(),
+						ShiftLayerIds = layerIds
+					} }
+			});
+
+
+			CommandHandler.CalledCount.Should().Be.EqualTo(2);
+			var firstCommand = CommandHandler.CalledCommands.First() as ChangeActivityTypeCommand;
+			firstCommand.Date.Should().Be.EqualTo(date);
+			firstCommand.Person.Should().Be.EqualTo(person);
+			firstCommand.Layer.ShiftLayer.Id.Should().Be.EqualTo(layerIds[0]);
+			firstCommand.Layer.Activity.Id.Should().Be.EqualTo(invoiceActivity.Id);
+
+			var secondCommand = CommandHandler.CalledCommands.Second() as ChangeActivityTypeCommand;
+			secondCommand.Date.Should().Be.EqualTo(date);
+			secondCommand.Person.Should().Be.EqualTo(person);
+			secondCommand.Layer.ShiftLayer.Id.Should().Be.EqualTo(layerIds[1]);
+			secondCommand.Layer.Activity.Id.Should().Be.EqualTo(invoiceActivity.Id);
+		}
+
+
+		[Test]
+		public void ShouldInvokeAddActivityCommandWhenChangeActivityTypeLayersContainsNewActivityLayer()
+		{
+			var date = new DateOnly(2018, 6, 22);
+			var person = PersonFactory.CreatePerson("test").WithId();
+			PersonRepository.Has(person);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.Has(scenario);
+
+			var phoneActivity = ActivityFactory.CreateActivity("phone", Color.Yellow);
+			ActivityRepository.Has(phoneActivity);
+			var invoiceActivity = ActivityFactory.CreateActivity("invoice", Color.Yellow);
+			ActivityRepository.Has(invoiceActivity);
+
+			var personAss = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, date);
+			PersonAssignmentRepo.Add(personAss);
+
+			personAss.AddActivity(phoneActivity, new DateTimePeriod(2018, 6, 22, 8, 2018, 6, 22, 16));
+			personAss.AddActivity(invoiceActivity, new DateTimePeriod(2018, 6, 22, 9, 2018, 6, 22, 10));
+			personAss.ShiftLayers.ForEach(sl => sl.SetId(Guid.NewGuid()));
+
+			var layerIds = personAss.ShiftLayers.Select(sl => sl.Id.Value).ToArray();
+
+			var startTime = new DateTime(2018, 6, 22, 8, 0, 0, 0);
+			var endTime = new DateTime(2018, 6, 22, 9, 0, 0, 0);
+			Target.ChangeActivityType(new ChangeActivityTypeFormData
+			{
+				Date = new DateTime(2018, 6, 22),
+				PersonId = person.Id.Value,
+				Layers = new[] {  new EditingLayerModel
+					{
+						ActivityId = invoiceActivity.Id.GetValueOrDefault(),
+						ShiftLayerIds =new [ ]{ layerIds[0]},
+						StartTime =startTime,
+						EndTime =endTime,
+						IsNew = true
+					} }
+			});
+
+			CommandHandler.CalledCount.Should().Be.EqualTo(1);
+			var addActivityCommand = CommandHandler.CalledCommands.Single() as AddActivityCommand;
+			addActivityCommand.Date.Should().Be.EqualTo(date);
+			addActivityCommand.Person.Should().Be.EqualTo(person);
+			addActivityCommand.ActivityId.Should().Be.EqualTo(invoiceActivity.Id);
+			addActivityCommand.StartTime.Should().Be.EqualTo(startTime);
+			addActivityCommand.EndTime.Should().Be.EqualTo(endTime);
+		}
+
+		[Test]
+		public void ShouldInvokeAddPersonalActivityCommandWhenChangeActivityTypeLayersContainsNewPersonalActivityLayer()
+		{
+			var date = new DateOnly(2018, 6, 22);
+			var person = PersonFactory.CreatePerson("test").WithId();
+			PersonRepository.Has(person);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.Has(scenario);
+
+			var phoneActivity = ActivityFactory.CreateActivity("phone", Color.Yellow);
+			ActivityRepository.Has(phoneActivity);
+			var invoiceActivity = ActivityFactory.CreateActivity("invoice", Color.Yellow);
+			ActivityRepository.Has(invoiceActivity);
+
+			var personAss = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, date);
+			PersonAssignmentRepo.Add(personAss);
+
+			personAss.AddActivity(phoneActivity, new DateTimePeriod(2018, 6, 22, 8, 2018, 6, 22, 16));
+			personAss.AddPersonalActivity(invoiceActivity, new DateTimePeriod(2018, 6, 22, 9, 2018, 6, 22, 12));
+			personAss.AddPersonalActivity(phoneActivity, new DateTimePeriod(2018, 6, 22, 10, 2018, 6, 22, 11));
+			personAss.ShiftLayers.ForEach(sl => sl.SetId(Guid.NewGuid()));
+
+			var layerIds = personAss.ShiftLayers.Select(sl => sl.Id.Value).ToArray();
+
+			var startTime = new DateTime(2018, 6, 22, 11, 0, 0, 0);
+			var endTime = new DateTime(2018, 6, 22, 12, 0, 0, 0);
+			Target.ChangeActivityType(new ChangeActivityTypeFormData
+			{
+				Date = new DateTime(2018, 6, 22),
+				PersonId = person.Id.Value,
+				Layers = new[] {  new EditingLayerModel
+					{
+						ActivityId = invoiceActivity.Id.GetValueOrDefault(),
+						ShiftLayerIds =new [ ]{ layerIds[1]},
+						StartTime = startTime,
+						EndTime = endTime,
+						IsNew = true
+					} }
+			});
+
+			CommandHandler.CalledCount.Should().Be.EqualTo(1);
+			var addPersonalActivityCommand = CommandHandler.CalledCommands.Single() as AddPersonalActivityCommand;
+			addPersonalActivityCommand.Date.Should().Be.EqualTo(date);
+			addPersonalActivityCommand.Person.Should().Be.EqualTo(person);
+			addPersonalActivityCommand.PersonalActivityId.Should().Be.EqualTo(invoiceActivity.Id);
+			addPersonalActivityCommand.StartTime.Should().Be.EqualTo(startTime);
+			addPersonalActivityCommand.EndTime.Should().Be.EqualTo(endTime);
+		}
+
+		[Test]
+		public void ShouldInvokeAddOvertimeActivityCommandWhenChangeActivityTypeLayersContainsNewOvertimeActivityLayer()
+		{
+			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfoFactory.ChinaTimeZoneInfo());
+
+			var date = new DateOnly(2018, 6, 22);
+			var person = PersonFactory.CreatePerson("test").WithId();
+			PersonRepository.Has(person);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.Has(scenario);
+
+			var phoneActivity = ActivityFactory.CreateActivity("phone", Color.Yellow);
+			ActivityRepository.Has(phoneActivity);
+			var invoiceActivity = ActivityFactory.CreateActivity("invoice", Color.Yellow);
+			ActivityRepository.Has(invoiceActivity);
+
+			var definitionSet = new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime);
+
+			var personAss = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, date);
+			PersonAssignmentRepo.Add(personAss);
+
+			personAss.AddActivity(phoneActivity, new DateTimePeriod(2018, 6, 22, 8, 2018, 6, 22, 16));
+			personAss.AddOvertimeActivity(invoiceActivity, new DateTimePeriod(2018, 6, 22, 9, 2018, 6, 22, 12), definitionSet);
+			personAss.AddOvertimeActivity(phoneActivity, new DateTimePeriod(2018, 6, 22, 10, 2018, 6, 22, 11), definitionSet);
+			personAss.ShiftLayers.ForEach(sl => sl.SetId(Guid.NewGuid()));
+
+			var layerIds = personAss.ShiftLayers.Select(sl => sl.Id.Value).ToArray();
+
+			var startTime = new DateTime(2018, 6, 22, 11, 0, 0, 0);
+			var endTime = new DateTime(2018, 6, 22, 12, 0, 0, 0);
+			Target.ChangeActivityType(new ChangeActivityTypeFormData
+			{
+				Date = new DateTime(2018, 6, 22),
+				PersonId = person.Id.Value,
+				Layers = new[] {  new EditingLayerModel
+					{
+						ActivityId = invoiceActivity.Id.GetValueOrDefault(),
+						ShiftLayerIds =new [ ]{ layerIds[1]},
+						StartTime = startTime,
+						EndTime = endTime,
+						IsNew = true
+					} }
+			});
+
+			CommandHandler.CalledCount.Should().Be.EqualTo(1);
+			var addOvertimeActivityCommand = CommandHandler.CalledCommands.Single() as AddOvertimeActivityCommand;
+			addOvertimeActivityCommand.Date.Should().Be.EqualTo(date);
+			addOvertimeActivityCommand.Person.Should().Be.EqualTo(person);
+			addOvertimeActivityCommand.ActivityId.Should().Be.EqualTo(invoiceActivity.Id);
+			addOvertimeActivityCommand.Period.StartDateTime.Should().Be.EqualTo(new DateTime(2018, 6, 22, 3, 0, 0, 0));
+			addOvertimeActivityCommand.Period.EndDateTime.Should().Be.EqualTo(new DateTime(2018, 6, 22, 4, 0, 0, 0));
+		}
+
+
 	}
 }

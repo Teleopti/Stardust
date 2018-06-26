@@ -4,9 +4,11 @@ using System.Linq;
 using DotNetOpenAuth.Messaging;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers;
@@ -24,6 +26,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		private readonly IDayOffTemplateRepository _dayOffTemplateRepository;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IScheduleStorage _scheduleStorage;
+		private readonly IActivityRepository _activityRepository;
+		private readonly IChangeActivityTypeFormValidator _changeActivityTypeFormValidator;
 		private readonly IDictionary<string, string> _permissionDic = new Dictionary<string, string>
 		{
 			{DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, Resources.YouDoNotHavePermissionsToViewTeamSchedules},
@@ -40,7 +44,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			IPermissionProvider permissionProvider,
 			IDayOffTemplateRepository dayOffTemplateRepository,
 			ICurrentScenario currentScenario,
-			IScheduleStorage scheduleStorage)
+			IScheduleStorage scheduleStorage,
+			IActivityRepository activityRepository,
+			IChangeActivityTypeFormValidator changeActivityTypeFormValidator)
 		{
 			_commandDispatcher = commandDispatcher;
 			_loggedOnUser = loggedOnUser;
@@ -49,6 +55,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			_dayOffTemplateRepository = dayOffTemplateRepository;
 			_currentScenario = currentScenario;
 			_scheduleStorage = scheduleStorage;
+			_activityRepository = activityRepository;
+			_changeActivityTypeFormValidator = changeActivityTypeFormValidator;
 		}
 
 		public IEnumerable<Guid> CheckWriteProtectedAgents(DateOnly date, IEnumerable<Guid> agentIds)
@@ -66,8 +74,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			{
 				var absenceDateGroups = selectedPersonAbsence.AbsenceDates.GroupBy(absenceDate => absenceDate.Date, absenceDate => absenceDate.PersonAbsenceId);
 				var person = people[selectedPersonAbsence.PersonId];
-				
-				
+
+
 
 				foreach (var absenceGroup in absenceDateGroups)
 				{
@@ -366,9 +374,28 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			return result;
 		}
 
+		public IList<ActionResult> ChangeActivityType(ChangeActivityTypeFormData input)
+		{
+			var result = new List<ActionResult>();
+			var validateResult = _changeActivityTypeFormValidator.Validate(input);
+
+			if (!validateResult.IsValid)
+			{
+				result.Add(new ActionResult
+				{
+					ErrorMessages = validateResult.ErrorMessages
+				});
+				return result;
+			}
+			var cmds = getChangeActivityTypeCommands(input, validateResult.Person, validateResult.Activities, validateResult.ShiftLayers);
+
+			cmds.ForEach(cmd => _commandDispatcher.Execute(cmd));
+
+			return result;
+		}
 		private bool validateRemoveShiftInput(RemoveShiftFormData input)
 		{
-			if (input.Date.Date == DateTime.MinValue || input.PersonIds == null || !input.PersonIds.Any() )
+			if (input.Date.Date == DateTime.MinValue || input.PersonIds == null || !input.PersonIds.Any())
 			{
 				return false;
 			}
@@ -431,6 +458,81 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				return false;
 
 			return true;
+		}
+
+		private IList<IScheduleCommand> getChangeActivityTypeCommands(
+			ChangeActivityTypeFormData input,
+			IPerson person,
+			IDictionary<Guid, IActivity> activities,
+			IDictionary<Guid?, ShiftLayer> shiftLayers)
+		{
+			var commands = new List<IScheduleCommand>();
+			var date = new DateOnly(input.Date);
+			var timezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			foreach (var layer in input.Layers)
+			{
+				foreach (var layerId in layer.ShiftLayerIds)
+				{
+					var shiftLayer = shiftLayers[layerId];
+					if (layer.IsNew)
+					{
+						if (shiftLayer is PersonalShiftLayer)
+						{
+							commands.Add(new AddPersonalActivityCommand
+							{
+								StartTime = layer.StartTime.Value,
+								EndTime = layer.EndTime.Value,
+								Person = person,
+								Date = date,
+								PersonalActivityId = layer.ActivityId
+							});
+							continue;
+						}
+						if (shiftLayer is OvertimeShiftLayer)
+						{
+							var overtimeShiftLayer = shiftLayer as OvertimeShiftLayer;
+							var overtimePeriod = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(layer.StartTime.Value, timezone),
+								TimeZoneHelper.ConvertToUtc(layer.EndTime.Value, timezone));
+							commands.Add(new AddOvertimeActivityCommand
+							{
+								Date = date,
+								ActivityId = layer.ActivityId,
+								Person = person,
+								Period = overtimePeriod,
+								MultiplicatorDefinitionSetId = overtimeShiftLayer.DefinitionSet.Id.GetValueOrDefault()
+							});
+							continue;
+						}
+						commands.Add(new AddActivityCommand
+						{
+							StartTime = layer.StartTime.Value,
+							EndTime = layer.EndTime.Value,
+							Person = person,
+							Date = date,
+							ActivityId = layer.ActivityId
+						});
+						continue;
+					}
+
+					commands.Add(new ChangeActivityTypeCommand
+					{
+
+						Date = new DateOnly(input.Date),
+						Person = person,
+
+						Layer = new EditingLayer
+						{
+							Activity = activities[layer.ActivityId],
+							StartTime = layer.StartTime,
+							EndTime = layer.EndTime,
+							IsNew = layer.IsNew,
+							ShiftLayer = shiftLayers[layerId]
+						}
+					});
+
+				}
+			}
+			return commands;
 		}
 
 
