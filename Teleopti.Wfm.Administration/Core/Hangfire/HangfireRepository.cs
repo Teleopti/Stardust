@@ -119,30 +119,20 @@ ORDER BY CreatedAt ASC";
 			return ret;
 		}
 
-		public IEnumerable<JobStatistics> PerformanceStatistics()
+		public IEnumerable<Job> SucceededJobs()
 		{
 			var commandText = @"
 SELECT 
-	EventHandler,
-	count(1) as TotalCount,
-	sum(cast(Duration as bigint)) as TotalDuration,
-	sum(cast(Duration as bigint))/count(cast(Duration as bigint)) as AverageDuration,
-	Min(cast(Duration as bigint)) as MinDuration,
-	Max(cast(Duration as bigint)) as MaxDuration
-FROM (
-		SELECT 
-			substring(j.Arguments,5,charindex(' on',j.Arguments)-4) as EventHandler,
-			JSON_VALUE(s.Data, '$.SucceededAt') as Date,
-			JSON_VALUE(s.Data, '$.PerformanceDuration') as Duration
-		FROM HangFire.Job j with(nolock)
-				inner join hangfire.state s with(nolock) on s.id= j.stateid
-		WHERE statename = 'Succeeded'
-	) as d
-GROUP BY EventHandler
-ORDER BY TotalDuration  DESC";
+	j.Arguments,
+	s.Data
+FROM Hangfire.Job j WITH (NOLOCK)
+JOIN Hangfire.State s WITH (NOLOCK) ON 
+	s.Id = j.StateId 
+WHERE
+	j.StateName = 'Succeeded'
+";
 
-
-			var performanceStatistics = new List<JobStatistics>();
+			var jobs = new List<Job>();
 
 			executeSql(commandText, cmd =>
 			{
@@ -150,20 +140,16 @@ ORDER BY TotalDuration  DESC";
 				{
 					while (reader.Read())
 					{
-						performanceStatistics.Add(new JobStatistics
+						jobs.Add(new Job
 						{
-							Type = reader["EventHandler"].ToString(),
-							Count = Convert.ToInt64(reader["TotalCount"]),
-							TotalTime = Convert.ToInt64(reader["TotalDuration"]),
-							AverageTime = Convert.ToInt64(reader["AverageDuration"]),
-							MinTime = Convert.ToInt64(reader["MinDuration"]),
-							MaxTime = Convert.ToInt64(reader["MaxDuration"])
+							Arguments = reader["Arguments"].ToString(),
+							Data = reader["Data"].ToString(),
 						});
 					}
 				}
 			});
 
-			return performanceStatistics;
+			return jobs;
 		}
 
 		private void executeSql(string sql, Action<SqlCommand> action)
