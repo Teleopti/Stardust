@@ -255,6 +255,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Staffing
 			Browser.Interactions.AssertUrlContains(urlString);
 		}
 
+		[Then(@"I should see the bpo import card")]
+		public void ThenIShouldSeeTheBpoImportCard()
+		{
+			Browser.Interactions.AssertExists("[staffing-test-bpo-import]");
+		}
+
+		[Then(@"I should see the bpo export card")]
+		public void ThenIShouldSeeTheBpoExportCard()
+		{
+			Browser.Interactions.AssertExists("[staffing-test-bpo-export]");
+		}
+
+		[Then(@"I should see the bpo remove card")]
+		public void ThenIShouldSeeTheBpoRemoveCard()
+		{
+			Browser.Interactions.AssertExists("[staffing-test-bpo-remove]");
+		}
+
 
 		[When(@"I can see overtime settings")]
 		[Then(@"I should see overtime settings")]

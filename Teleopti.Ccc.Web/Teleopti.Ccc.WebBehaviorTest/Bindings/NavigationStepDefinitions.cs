@@ -800,6 +800,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GoToStaffing();
 		}
 
+		[Given(@"I am viewing BPO exhange page")]
+		[When(@"I am viewing BPO exhange page")]
+		public void GivenIAmViewingBpoExchangePage()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GoToBpoExchange();
+		}
+
 		[When(@"I am viewing archive schedule page")]
 		public void GivenIViewArchiveSchedule()
 		{
