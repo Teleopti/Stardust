@@ -210,11 +210,6 @@
       <DependentUpon>HealthCheck.feature</DependentUpon>
     </Compile>
     <Compile Include="JalaaliCalendarStepDefinitions.cs" />
-    <Compile Include="License.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>License.feature</DependentUpon>
-    </Compile>
     <Compile Include="MyTime\AgentBadge.feature.cs">
       <DependentUpon>AgentBadge.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -1519,10 +1514,6 @@
     <None Include="MyTime\StudentAvailability.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>StudentAvailability.feature.cs</LastGenOutput>
-    </None>
-    <None Include="License.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>License.feature.cs</LastGenOutput>
     </None>
     <None Include="Security.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

@@ -6,7 +6,8 @@
 	margin: 0;
 	display: flex;
 	justify-content: space-between;
-	height: 51px;
+	align-items: center;
+	height: 50px;
 }
 
 .mobile-teamschedule-view-nav input.form-control {
@@ -92,7 +93,7 @@
 
 .mobile-teamschedule-view-body {
 	-webkit-overflow-scrolling: touch;
-	height: calc(100% - 53px);
+	height: calc(100% - 50px);
 	display: flex;
 	justify-content: flex-start;
 	overflow: auto;
@@ -127,7 +128,7 @@
 	height: 50px;
 	position: fixed;
 	left: 0;
-	top: 101px;
+	top: 100px;
 	z-index: 12;
 	border-right: 2px solid #dfdfdf;
 	background: white;
@@ -141,7 +142,7 @@
 	text-align: center;
 	position: fixed;
 	left: 31px;
-	top: 101px;
+	top: 100px;
 	z-index: 12;
 	border-left: none;
 	border-right: 2px solid rgba(0, 0, 0, 0.1);
@@ -159,7 +160,7 @@
 	height: 50px;
 	position: fixed !important;
 	left: calc(30px + 70px);
-	top: 101px !important;
+	top: 100px !important;
 	white-space: nowrap;
 	font-size: 0;
 	transform: translate3d(0, 0, 0);

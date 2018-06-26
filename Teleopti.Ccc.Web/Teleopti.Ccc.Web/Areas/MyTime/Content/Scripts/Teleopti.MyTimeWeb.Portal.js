@@ -48,7 +48,6 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		$('#loading').hide();  // hide it initially
 
 		$(document).ajaxStart(function () {
-			$('#body-bottom').hide();
 			var bodyInner = $('#body-inner');
 			$('#loading')
 				.css({
@@ -63,7 +62,6 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		});
 		$(document).ajaxStop(function () {
 			$('#loading').hide();
-			$('#body-bottom').show();
 		});
 	}
 

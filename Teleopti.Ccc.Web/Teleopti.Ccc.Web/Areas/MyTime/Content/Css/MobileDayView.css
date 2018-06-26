@@ -2,9 +2,11 @@
 	padding: 0;
 }
 .mobile-start-day .mobile-start-day-nav .navbar-teleopti {
-	margin: 5px;
+	height: 50px;
+	margin: 0;
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 }
 .mobile-start-day .mobile-start-day-nav span.input-group-btn .btn.btn-default {
 	padding: 9px 10px;
@@ -90,7 +92,7 @@
 
 .mobile-start-day-body {
 	-webkit-overflow-scrolling: touch;
-	height: calc(100% - 53px);
+	height: calc(100% - 50px);
 	padding-bottom: 50px;
 	overflow-y: auto;
 	cursor: pointer;

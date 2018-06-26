@@ -3,9 +3,11 @@
 }
 
 .mobile-month-view .mobile-month-view-nav .navbar-teleopti {
-	margin: 5px;
+	height: 50px;
+	margin: 0;
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 }
 
 .mobile-month-view .mobile-month-view-nav span.input-group-btn .btn.btn-default {

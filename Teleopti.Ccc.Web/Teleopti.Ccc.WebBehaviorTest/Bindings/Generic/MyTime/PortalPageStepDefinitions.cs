@@ -18,13 +18,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertExists(".cisco-widget");
 		}
 
-		[Then(@"I should see licensed to information")]
-		public void ThenIShouldSeeLicensedToInformation()
-		{
-			Browser.Interactions.AssertFirstContains("#licensed-to-label", UserTexts.Resources.LicensedToColon);
-			Browser.Interactions.AssertExists("#licensed-to-text"); 
-		}
-
 		[Then(@"I should see an application page")]
 		public void ThenIShouldSeeAnApplicationPage()
 		{
