@@ -149,11 +149,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 
 		public ShiftTradeMultiSchedulesViewModel CreateShiftTradeMultiSchedulesViewModel(ShiftTradeMultiSchedulesForm input)
 		{
-			var period = new DateOnlyPeriod(input.StartDate, input.EndDate);
-			var allSchedules = _shiftTradeScheduleViewModelMapper.GetMeAndPersonToSchedules(period, input.PersonToId);
-
 			var mySchedules = new List<ShiftTradeAddPersonScheduleViewModel>();
 			var personToSchedules = new List<ShiftTradeAddPersonScheduleViewModel>();
+
+			var period = new DateOnlyPeriod(input.StartDate, input.EndDate);
+			var fixedPeriod = fixPeriod(period);
+			if (fixedPeriod == null)
+			{
+				return new ShiftTradeMultiSchedulesViewModel
+				{
+					MySchedules = mySchedules,
+					PersonToSchedules = personToSchedules
+				};
+			}
+
+			var allSchedules = _shiftTradeScheduleViewModelMapper.GetMeAndPersonToSchedules(fixedPeriod.Value, input.PersonToId);
 			foreach (var schedule in allSchedules)
 			{
 				if (schedule.PersonId == _loggedOnUser.CurrentUser().Id.GetValueOrDefault()) mySchedules.Add(schedule);
@@ -165,6 +175,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 				MySchedules = mySchedules,
 				PersonToSchedules = personToSchedules
 			};
+		}
+
+		private DateOnlyPeriod? fixPeriod(DateOnlyPeriod periodInput)
+		{
+			var openPeriodStart = DateOnly.Today.AddDays(_loggedOnUser.CurrentUser().WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum);
+			var openPeriodEnd = openPeriodStart.AddDays(_loggedOnUser.CurrentUser().WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Maximum-1);
+			var realStart = periodInput.StartDate;
+			var realEnd = periodInput.EndDate;
+
+			if (periodInput.EndDate < openPeriodStart || periodInput.StartDate > openPeriodEnd) return null;
+			if (periodInput.Contains(openPeriodStart)) realStart = openPeriodStart;
+			if (periodInput.Contains(openPeriodEnd)) realEnd = openPeriodEnd;
+
+			return new DateOnlyPeriod(realStart, realEnd);
 		}
 
 		public IList<ShiftTradeSwapDetailsViewModel> CreateShiftTradeRequestSwapDetails(Guid id)

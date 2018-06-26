@@ -101,17 +101,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldRetriveMultiSchedulesForShiftTrade()
 		{
-			var currentUser = PersonFactory.CreatePersonWithId(Guid.NewGuid());
-			var personTo = PersonFactory.CreatePersonWithId(Guid.NewGuid());
-			var startDate = new DateOnly(2018, 6, 22);
-			var endDate = new DateOnly(2018, 6, 27);
-			createSchedules(new DateOnlyPeriod(startDate, endDate), currentUser, personTo);
-			var form = new ShiftTradeMultiSchedulesForm
-			{
-				StartDate = startDate,
-				EndDate = endDate,
-				PersonToId = personTo.Id.GetValueOrDefault()
-			};
+			var startDate = DateOnly.Today.AddDays(1);
+			var endDate = startDate.AddDays(5);
+			var form = prepareData(startDate, endDate);
 
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
@@ -120,18 +112,82 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			data.PersonToSchedules.Count().Should().Be.EqualTo(6);
 		}
 
-		private void createSchedules(DateOnlyPeriod period, IPerson currentUser, IPerson personTo)
+		[Test]
+		public void ShouldReriveSchedulesWithinOpenPeriodStart()
 		{
+			var startDate = DateOnly.Today.AddDays(-5);
+			var endDate = startDate.AddDays(11);
+			var form = prepareData(startDate, endDate);
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+
+			data.MySchedules.Count().Should().Be.EqualTo(6);
+			data.PersonToSchedules.Count().Should().Be.EqualTo(6);
+		}
+
+		[Test]
+		public void ShouldReriveSchedulesWithinOpenPeriodEnd()
+		{
+			var startDate = DateOnly.Today.AddDays(1);
+			var endDate = startDate.AddDays(11);
+			var form = prepareData(startDate, endDate);
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+
+			data.MySchedules.Count().Should().Be.EqualTo(10);
+			data.PersonToSchedules.Count().Should().Be.EqualTo(10);
+		}
+
+		[Test]
+		public void ShouldNotReriveSchedulesWhenRequestEarlierThanOpenPeriod()
+		{
+			var startDate = DateOnly.Today.AddDays(-15);
+			var endDate = startDate.AddDays(11);
+			var form = prepareData(startDate, endDate);
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+
+			data.MySchedules.Count().Should().Be.EqualTo(0);
+			data.PersonToSchedules.Count().Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldNotReriveSchedulesWhenRequestLateThanOpenPeriod()
+		{
+			var startDate = DateOnly.Today.AddDays(15);
+			var endDate = startDate.AddDays(11);
+			var form = prepareData(startDate, endDate);
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+
+			data.MySchedules.Count().Should().Be.EqualTo(0);
+			data.PersonToSchedules.Count().Should().Be.EqualTo(0);
+		}
+
+		private ShiftTradeMultiSchedulesForm prepareData(DateOnly startDate, DateOnly endDate)
+		{
+			var period = new DateOnlyPeriod(startDate, endDate);
+			var workflowControlSet = new WorkflowControlSet { ShiftTradeOpenPeriodDaysForward = new MinMax<int>(1, 10), SchedulePublishedToDate = DateTime.MaxValue };
+			var currentUser = PersonFactory.CreatePersonWithId(Guid.NewGuid());
+			currentUser.WorkflowControlSet = workflowControlSet;
 			LoggedOnUser.SetFakeLoggedOnUser(currentUser);
-			currentUser.WorkflowControlSet = new WorkflowControlSet("test")
-			{
-				SchedulePublishedToDate = DateTime.MaxValue
-			};
+			var personTo = PersonFactory.CreatePersonWithId(Guid.NewGuid());
 
 			setPermissions(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
 
 			PersonAssignmentRepository.Has(currentUser, CurrentScenario.Current(), new Activity(), period, new TimePeriod(8, 10));
 			PersonAssignmentRepository.Has(personTo, CurrentScenario.Current(), new Activity(), period, new TimePeriod(8, 10));
+
+			return new ShiftTradeMultiSchedulesForm
+			{
+				StartDate = startDate,
+				EndDate = endDate,
+				PersonToId = personTo.Id.GetValueOrDefault()
+			};
 		}
 
 		[Test]
