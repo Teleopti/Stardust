@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.UI.WebControls;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 
 namespace Teleopti.Wfm.Administration.Core.Hangfire
@@ -39,26 +38,29 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 		public IEnumerable<JobStatistics> BuildPerformanceStatistics()
 		{
 			return
-			(
-				from j in _hangfireRepository.SucceededJobs()
-				let arguments = _deserializer.DeserializeObject<string[]>(j.Arguments)
-				let data = _deserializer.DeserializeObject<dynamic>(j.Data)
-				let name = _deserializer.DeserializeObject<string>(arguments.First())
-				let type = name.Substring(0, name.IndexOf(" on "))
-				let duration = data.PerformanceDuration
-				let typeAndDuration = new {type, duration}
-				group typeAndDuration by typeAndDuration.type
-				into g
-				select new JobStatistics
-				{
-					Type = g.Key,
-					Count = g.Count(),
-					TotalTime = g.Sum(x => x.duration),
-					AverageTime = (long) Math.Floor(g.Average(x => x.duration)),
-					MaxTime = g.Max(x => x.duration),
-					MinTime = g.Min(x => x.duration),
-				}
-			).ToArray();
+				(
+					from j in _hangfireRepository.SucceededJobs()
+					let arguments = _deserializer.DeserializeObject<string[]>(j.Arguments)
+					let data = _deserializer.DeserializeObject<dynamic>(j.Data)
+					let name = _deserializer.DeserializeObject<string>(arguments.First())
+					let type = name.Substring(0, name.IndexOf(" on "))
+					let duration = data.PerformanceDuration
+					let typeAndDuration = new {type, duration}
+					group typeAndDuration by typeAndDuration.type
+					into g
+					let totalTime = g.Sum(x => x.duration)
+					orderby totalTime descending
+					select new JobStatistics
+					{
+						Type = g.Key,
+						Count = g.Count(),
+						TotalTime = totalTime,
+						AverageTime = (long) Math.Floor(g.Average(x => x.duration)),
+						MaxTime = g.Max(x => x.duration),
+						MinTime = g.Min(x => x.duration)
+					}
+				)
+				.ToArray();
 		}
 	}
 
