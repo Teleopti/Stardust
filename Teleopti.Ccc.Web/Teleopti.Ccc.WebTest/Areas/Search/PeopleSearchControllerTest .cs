@@ -7,7 +7,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -53,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			person.SetOptionalColumnValue(optionalColumnValue, optionalColumn);
 
 			target = new PeopleSearchController(new FakePeopleSearchProvider(new[] { person }, new[] { optionalColumn }), loggonUser,
-				new FakePersonFinderReadOnlyRepository(), PersonRepository);
+				new FakePersonFinderReadOnlyRepository(), PersonRepository, new FullPermission());
 
 			var result = ((dynamic)target).GetResult("Ashley", 10, 1, "");
 
@@ -86,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			target =
 				new PeopleSearchController(
 					new FakePeopleSearchProvider(new[] { firstPerson, secondPerson }, new List<IOptionalColumn>()), loggonUser,
-					new FakePersonFinderReadOnlyRepository(), PersonRepository);
+					new FakePersonFinderReadOnlyRepository(), PersonRepository, new FullPermission());
 
 			var result = ((dynamic)target).GetResult("a", 10, 1, "");
 
@@ -109,7 +108,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 
 			target =
 				new PeopleSearchController(new FakePeopleSearchProvider(new[] { person, currentUser }, new List<IOptionalColumn>()),
-					loggonUser, new FakePersonFinderReadOnlyRepository(), PersonRepository);
+					loggonUser, new FakePersonFinderReadOnlyRepository(), PersonRepository, new FullPermission());
 
 			var result = ((dynamic)target).GetResult("", 10, 1, "");
 			var peopleList = (IEnumerable<dynamic>)result.Content.People;
@@ -132,7 +131,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			target =
 				new PeopleSearchController(
 					new FakePeopleSearchProvider(new[] { firstPerson, secondPerson, thirdPerson }, new List<IOptionalColumn>()),
-					loggonUser, new FakePersonFinderReadOnlyRepository(), PersonRepository);
+					loggonUser, new FakePersonFinderReadOnlyRepository(), PersonRepository, new FullPermission());
 
 			var result = ((dynamic)target).GetResult("a", 10, 1, "lastname:true;firstname:true;employmentnumber:true");
 
@@ -166,7 +165,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			target =
 				new PeopleSearchController(
 					new FakePeopleSearchProvider(new[] { p1, p2, p3 }, new List<IOptionalColumn>()), loggonUser,
-					PersonFinderRepository, PersonRepository);
+					PersonFinderRepository, PersonRepository, new FullPermission());
 
 			var result = target.FindPeople(inputModel);
 
@@ -210,7 +209,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			target =
 				new PeopleSearchController(
 					new FakePeopleSearchProvider(new List<IPerson>(), new List<IOptionalColumn>()), loggonUser,
-					PersonFinderRepository, PersonRepository);
+					PersonFinderRepository, PersonRepository, new FullPermission());
 
 			var result = target.FindPeople(inputModel);
 			result.People.Count().Should().Be.EqualTo(10);
@@ -260,7 +259,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			target =
 				new PeopleSearchController(
 					new FakePeopleSearchProvider(new[] { ash }, new List<IOptionalColumn>()), loggonUser,
-					PersonFinderRepository, PersonRepository);
+					PersonFinderRepository, PersonRepository, new FullPermission());
 
 			var result = target.FindPeople(inputModel);
 			result.People.Count().Should().Be.EqualTo(1);
@@ -306,7 +305,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			target =
 				new PeopleSearchController(
 					new FakePeopleSearchProvider(new List<IPerson>(), new List<IOptionalColumn>()), loggonUser,
-					PersonFinderRepository, PersonRepository);
+					PersonFinderRepository, PersonRepository, new FullPermission());
 
 			var result = target.FindPeople(inputModel);
 			var person = result.People.First();
@@ -343,7 +342,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			target =
 				new PeopleSearchController(
 					new FakePeopleSearchProvider(new List<IPerson>(), new List<IOptionalColumn>()), loggonUser,
-					PersonFinderRepository, PersonRepository);
+					PersonFinderRepository, PersonRepository, new FullPermission());
 
 
 			var result = target.FindPeople(inputModel);

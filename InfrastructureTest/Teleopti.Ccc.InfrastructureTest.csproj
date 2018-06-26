@@ -310,6 +310,7 @@
     <Compile Include="Repositories\GroupingReadOnlyBug46991Test.cs" />
     <Compile Include="Repositories\PersonAccessAuditRepositoryTest.cs" />
     <Compile Include="Repositories\PersonFinderBug46991Test.cs" />
+    <Compile Include="Repositories\PersonFinderReadOnlyRepositoryPermissionsTest.cs" />
     <Compile Include="Repositories\PersonFinderReadOnlyRepositoryWithGroupsTest.cs" />
     <Compile Include="Repositories\PersonFinderReadOnlyRepositoryWithTeamsTest.cs" />
     <Compile Include="Repositories\JobStartTimeTest.cs" />

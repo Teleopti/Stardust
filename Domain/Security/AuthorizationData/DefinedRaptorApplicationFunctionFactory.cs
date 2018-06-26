@@ -178,6 +178,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.AddDayOff, "xxAddDayOff", DefinedRaptorApplicationFunctionForeignIds.AddDayOff);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.RemoveDayOff, "xxRemoveDayOff", DefinedRaptorApplicationFunctionForeignIds.RemoveDayOff);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.PeopleAccess, "xxPeopleAccess", DefinedRaptorApplicationFunctionForeignIds.PeopleAccess);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.PeopleManageUsers, "xxPeopleManageUsers", DefinedRaptorApplicationFunctionForeignIds.PeopleManageUsers);
 
 			return result.ToArray();
 		}

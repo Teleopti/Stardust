@@ -359,7 +359,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					"exec [ReadModel].[PersonFinderWithDataPermission] @search_string=:search_string, @search_type=:search_type, "
 					+ "@leave_after=:leave_after, @start_row =:start_row, @end_row=:end_row, @order_by=:order_by, "
 					+ "@sort_direction=:sort_direction, @culture=:culture, " 
-					+ "@perm_date=:perm_date, @perm_userid=:perm_userid, @perm_foreignId=:perm_foreignId")
+					+ "@perm_date=:perm_date, @perm_userid=:perm_userid, @perm_foreignId=:perm_foreignId, @can_see_users=:can_see_users")
 				.SetString("search_string", personFinderSearchCriteria.SearchValue)
 				.SetString("search_type", Enum.GetName(typeof(PersonFinderField), personFinderSearchCriteria.Field))
 				.SetDateOnly("leave_after", personFinderSearchCriteria.TerminalDate)
@@ -371,6 +371,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetDateOnly("perm_date", personFinderSearchCriteria.PermissionDate)
 				.SetGuid("perm_userid", personFinderSearchCriteria.PermissionUserId)
 				.SetString("perm_foreignId", personFinderSearchCriteria.PermissionAppFuncForeignId)
+				.SetBoolean("can_see_users", personFinderSearchCriteria.CanSeeUsers)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(PersonFinderDisplayRow)))
 				.SetReadOnly(true)
 				.List<IPersonFinderDisplayRow>();
@@ -545,15 +546,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			int sortDirection, 
 			DateOnly permissionDate, 
 			Guid permissionUserId, 
-			string permissionAppFuncForeignId) : 
+			string permissionAppFuncForeignId,
+			bool canSeeUsers) : 
 				base(field, searchValue, pageSize, terminalDate, sortColumn, sortDirection)
 		{
 			this.CurrentPage = currentPage;
 			this.PermissionDate = permissionDate;
 			this.PermissionUserId = permissionUserId;
 			this.PermissionAppFuncForeignId = permissionAppFuncForeignId;
+			this.CanSeeUsers = canSeeUsers;
 		}
 
+		public bool CanSeeUsers { get; set; }
 		public DateOnly PermissionDate { get; set; }
 		public Guid PermissionUserId { get; set; }
 		public string PermissionAppFuncForeignId { get; set; }

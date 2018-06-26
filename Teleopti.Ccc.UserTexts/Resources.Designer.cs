@@ -24399,6 +24399,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manage users.
+        /// </summary>
+        public static string PeopleManageUsers {
+            get {
+                return ResourceManager.GetString("PeopleManageUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Person
         ///Periods.
         /// </summary>

@@ -140,6 +140,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// The ApplicationFunction ForeignId to use when checking data permission on searchresult
 		/// </summary>
 		string PermissionAppFuncForeignId { get; set; }
+
+		bool CanSeeUsers { get; set; }
 	}
 
 	/// <summary>

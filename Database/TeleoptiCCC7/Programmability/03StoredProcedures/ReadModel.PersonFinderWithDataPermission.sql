@@ -8,7 +8,7 @@ GO
 -- Date: 2018-05-30
 -- Desc: New procedure for searching persons while taking data permission into account.
 ----------------------------------------------------------------------------------------
---exec [ReadModel].[PersonFinderWithDataPermission] @search_string='a', @search_type='All', @leave_after='2018-05-28 00:00:00', @start_row=1, @end_row=500, @order_by=1, @sort_direction=1, @culture=1053, @perm_date='2018-05-28 00:00:00', @perm_userid='76939942-AE47-46FF-86BB-A1410093C99A' , @perm_foreignId='0154' 
+--exec [ReadModel].[PersonFinderWithDataPermission] @search_string='din', @search_type='All', @leave_after='2018-05-28 00:00:00', @start_row=1, @end_row=500, @order_by=1, @sort_direction=1, @culture=1053, @perm_date='2018-05-28 00:00:00', @perm_userid='10957AD5-5489-48E0-959A-9B5E015B2B5C' , @perm_foreignId='0154', @can_see_users=0
 
 CREATE PROCEDURE [ReadModel].[PersonFinderWithDataPermission]
 @search_string nvarchar(max),
@@ -21,7 +21,8 @@ CREATE PROCEDURE [ReadModel].[PersonFinderWithDataPermission]
 @culture int,
 @perm_date datetime, 
 @perm_userid uniqueidentifier, 
-@perm_foreignId nvarchar(255) 
+@perm_foreignId nvarchar(255),
+@can_see_users bit
 AS
 SET NOCOUNT ON
 
@@ -58,8 +59,8 @@ CREATE TABLE #result(
 	[TeamId] [uniqueidentifier]  NULL,
 	[SiteId] [uniqueidentifier]  NULL,
 	[BusinessUnitId] [uniqueidentifier]  NULL,
-	[SiteName] [nvarchar] (50) NOT NULL,
-	[TeamName] [nvarchar] (50) NOT NULL
+	[SiteName] [nvarchar] (50) NULL,
+	[TeamName] [nvarchar] (50) NULL
 	)
 
 -- Get searchString into temptable
@@ -168,6 +169,11 @@ IF (@allAvailable = 1)
         INNER JOIN dbo.Site s ON t.Site = s.Id
         WHERE 
         @perm_date BETWEEN pp.StartDate AND pp.EndDate
+		IF(@can_see_users = 1)
+		BEGIN
+			INSERT INTO #PermittedIds
+			SELECT p.Id FROM dbo.Person p WHERE NOT EXISTS (SELECT 1 FROM dbo.PersonPeriod pp WHERE pp.Parent = p.Id)
+		END
     END
 ELSE
     BEGIN
@@ -180,7 +186,13 @@ ELSE
         @perm_date BETWEEN pp.StartDate AND pp.EndDate AND
         (EXISTS (SELECT 1 FROM #AvailableTeams WHERE team=t.Id) OR
         EXISTS (SELECT 1 FROM #AvailableSites WHERE site=s.Id) OR
-        EXISTS (SELECT 1 FROM #AvailableBusinessUnits WHERE businessunit=s.BusinessUnit)) 
+        EXISTS (SELECT 1 FROM #AvailableBusinessUnits WHERE businessunit=s.BusinessUnit))
+		 
+		IF(@can_see_users = 1)
+		BEGIN
+			INSERT INTO #PermittedIds
+			SELECT p.Id FROM dbo.Person p WHERE NOT EXISTS (SELECT 1 FROM dbo.PersonPeriod pp WHERE pp.Parent = p.Id)
+		END
     END
 
 DROP TABLE #AvailableTeams
@@ -201,6 +213,21 @@ IF @search_type <> 'All'
 			AND SearchValue like N'%' + s.SearchWord + '%'
 		GROUP BY PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, TeamId, SiteId, BusinessUnitId, si.Name, t.Name
 		HAVING COUNT(DISTINCT s.SearchWord) >= @countWords --AND => Must have hit on all words
+
+		IF(@can_see_users = 1)
+		BEGIN
+			INSERT INTO #Result 
+			SELECT PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, TeamId, SiteId, BusinessUnitId, null AS SiteName, null AS TeamName
+			FROM ReadModel.FindPerson with (nolock) 
+			CROSS JOIN #strings s
+			WHERE ISNULL(TerminalDate, '2100-01-01') >= @leave_after 
+				AND SearchType=@search_type 
+				AND SearchValue like N'%' + s.SearchWord + '%'
+				AND SiteId is null
+				AND TeamId is null
+			GROUP BY PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, TeamId, SiteId, BusinessUnitId
+			HAVING COUNT(DISTINCT s.SearchWord) >= @countWords; --AND => Must have hit on all words
+		END
 	END
 ELSE
 	BEGIN
@@ -214,6 +241,20 @@ ELSE
 			AND SearchValue like N'%' + s.SearchWord + '%'
 		GROUP BY PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, TeamId, SiteId, BusinessUnitId, si.Name, t.Name
 		HAVING COUNT(DISTINCT s.SearchWord) >= @countWords --AND => Must have hit on all words
+
+		IF(@can_see_users = 1)
+		BEGIN
+			INSERT INTO #Result 
+			SELECT PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, TeamId, SiteId, BusinessUnitId, null AS SiteName, null AS TeamName
+			FROM ReadModel.FindPerson with (nolock) 
+			CROSS JOIN #strings s
+			WHERE ISNULL(TerminalDate, '2100-01-01') >= @leave_after 
+				AND SearchValue like N'%' + s.SearchWord + '%'
+				AND SiteId is null
+				AND TeamId is null
+			GROUP BY PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, TeamId, SiteId, BusinessUnitId
+			HAVING COUNT(DISTINCT s.SearchWord) >= @countWords; --AND => Must have hit on all words
+		END
 	END
 
 --get total count
@@ -248,4 +289,4 @@ SELECT @dynamicSQL='SELECT ' + cast(@total as nvarchar(10)) + ' AS TotalCount, *
 --print @dynamicSQL
 
 --return
-EXEC sp_executesql @dynamicSQL   
+EXEC sp_executesql @dynamicSQL    
