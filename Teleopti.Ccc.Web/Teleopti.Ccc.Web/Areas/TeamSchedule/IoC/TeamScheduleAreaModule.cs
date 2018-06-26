@@ -3,9 +3,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler;
@@ -36,6 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.IoC
 
 			builder.RegisterType<FavoriteSearchProvider>().As<IFavoriteSearchProvider>().SingleInstance();
 			builder.RegisterType<ExportScheduleService>().SingleInstance();
+			builder.RegisterType<ChangeActivityTypeFormValidator>().As<IChangeActivityTypeFormValidator>().SingleInstance();
 		}
 	}
 }
