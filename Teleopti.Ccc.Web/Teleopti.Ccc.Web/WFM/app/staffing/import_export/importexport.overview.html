@@ -15,8 +15,8 @@
 				</div>
 				<div class="con-flex">
 					<the-skill-picker skills="vm.skills" skill-groups="vm.allSkillAreas" on-skill-selected="vm.selectedSkillChange(skill)" on-skill-group-selected="vm.selectedAreaChange(skillGroup)"
-											preselected-skill="vm.selectedSkill" on-clear-skill-group-selection="vm.clearSelectedSkillGroup()" on-clear-skill-selection="vm.clearSelectedSkill()"
-											preselected-skill-group="vm.selectedSkillArea">
+					 preselected-skill="vm.selectedSkill" on-clear-skill-group-selection="vm.clearSelectedSkillGroup()" on-clear-skill-selection="vm.clearSelectedSkill()"
+					 preselected-skill-group="vm.selectedSkillArea">
 					</the-skill-picker>
 
 				</div>
@@ -36,7 +36,7 @@
 <div>
 </div>
 <wfm-card-list>
-	<wfm-card>
+	<wfm-card staffing-test-bpo-import>
 		<card-header tabindex="-1">
 			<div tabindex="0">
 				<span>
@@ -56,7 +56,7 @@
 							<!--<staffing-import-data></staffing-import-data>-->
 							<div class="wfm-block">
 								<div ngf-drop ngf-select class="drop-box" ngf-allow-dir="false" ngf-pattern="'.csv'" ngf-accept="text/csv" ngf-change="vm.checkValid($files)"
-									  ngf-model-options="{allowInvalid: true}">
+								 ngf-model-options="{allowInvalid: true}">
 									{{'DragAndDropCSVFilesHereOrClickToUpload'|translate}}
 								</div>
 								<div class="import-file-template">
@@ -89,7 +89,7 @@
 			</div>
 		</card-body>
 	</wfm-card>
-	<wfm-card>
+	<wfm-card staffing-test-bpo-export>
 		<card-header tabindex="-1">
 			<div tabindex="0">
 				<b>{{'ExportGap'|translate}}</b>
@@ -102,8 +102,8 @@
 			<div class="con-row ">
 				<div class="con-flex">
 					<md-autocomplete id="skill-id" class="autocomplete-skill" md-selected-item="vm.selectedSkill" md-search-text="searchSkillText"
-										  md-selected-item-change="vm.selectedSkillChange(vm.selectedSkill)" md-items="skill in vm.querySearchSkills(searchSkillText)"
-										  md-item-text="skill.Name" md-min-length="0" placeholder="{{'SelectSkill'|translate}}">
+					 md-selected-item-change="vm.selectedSkillChange(vm.selectedSkill)" md-items="skill in vm.querySearchSkills(searchSkillText)"
+					 md-item-text="skill.Name" md-min-length="0" placeholder="{{'SelectSkill'|translate}}">
 						<md-item-template>
 							<i ng-class="vm.dynamicIcon(skill)"></i>
 							<span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
@@ -142,7 +142,7 @@
 			</div>
 		</card-body>
 	</wfm-card>
-	<wfm-card ng-show="vm.isClearBpoEnabled()">
+	<wfm-card ng-show="vm.isClearBpoEnabled()" staffing-test-bpo-remove>
 		<card-header tabindex="-1">
 			<div tabindex="0">
 				<b>{{'ClearBPOHeader'|translate}}</b>
@@ -161,53 +161,53 @@
 						</md-option>
 					</md-select>
 				</div>
-				
+
 			</div>
 			<div class="con-row ">
 				<div class="con-flex">{{vm.RangeMessage}}</div>
 			</div>
-				<div class="con-row ">
-					<div class="con-flex ">
-						<wfm-calendar-picker ng-model="vm.bpoClearPeriod "></wfm-calendar-picker>
-					</div>
-					<div class="con-flex ">
-						<md-progress-linear ng-show="vm.isProcessing" md-mode="indeterminate "></md-progress-linear>
-						<div ng-show="vm.isSuccessfulRemove && vm.selectedBpo === null">
-							<div class="alert-success notice-spacer ">
-								<i class='mdi mdi-thumb-up'>{{vm.ClearSuccessMessage}}</i>
-							</div>
-						</div>
-						<div ng-show="vm.noSuccessfulRemove" class="alert-error notice-spacer ">
-							<h3>
-								<i class='mdi mdi-alert-octagon'></i>{{'ImportBpoTheClearBPOFailed'|translate}}
-							</h3>
-							<div class="alert-warning notice-spacer ">
-								{{vm.ClearErrorMessage}}
-							</div>
+			<div class="con-row ">
+				<div class="con-flex ">
+					<wfm-calendar-picker ng-model="vm.bpoClearPeriod "></wfm-calendar-picker>
+				</div>
+				<div class="con-flex ">
+					<md-progress-linear ng-show="vm.isProcessing" md-mode="indeterminate "></md-progress-linear>
+					<div ng-show="vm.isSuccessfulRemove && vm.selectedBpo === null">
+						<div class="alert-success notice-spacer ">
+							<i class='mdi mdi-thumb-up'>{{vm.ClearSuccessMessage}}</i>
 						</div>
 					</div>
-					<div class="con-footer ">
-						<button class="wfm-btn wfm-btn-invis-primary" ng-click="confirmRemoveBpo=true" ng-disabled="vm.selectedBpo === null">{{'Remove'|translate}}</button>
-						<div ng-cloak class="modal-box">
-							<div ng-cloak ng-show="confirmRemoveBpo">
-								<div class="modalbg">
-									<div class="dialog-mini material-depth-1">
-										<div class="modal-inner-content">
-											<div>{{vm.RangeMessage}}</div>
-											<div>{{'ImportBpoClearConfirmation'|translate}}</div>
-										</div>
-										<div class="modal-actions">
-											<aside>
-												<button ng-click="vm.clearBpoPeriod(); confirmRemoveBpo=false" class="wfm-btn wfm-btn-invis-default">Yes</button>
-												<button ng-click="confirmRemoveBpo=false" class="wfm-btn wfm-btn-invis-primary">No</button>
-											</aside>
-										</div>
+					<div ng-show="vm.noSuccessfulRemove" class="alert-error notice-spacer ">
+						<h3>
+							<i class='mdi mdi-alert-octagon'></i>{{'ImportBpoTheClearBPOFailed'|translate}}
+						</h3>
+						<div class="alert-warning notice-spacer ">
+							{{vm.ClearErrorMessage}}
+						</div>
+					</div>
+				</div>
+				<div class="con-footer ">
+					<button class="wfm-btn wfm-btn-invis-primary" ng-click="confirmRemoveBpo=true" ng-disabled="vm.selectedBpo === null">{{'Remove'|translate}}</button>
+					<div ng-cloak class="modal-box">
+						<div ng-cloak ng-show="confirmRemoveBpo">
+							<div class="modalbg">
+								<div class="dialog-mini material-depth-1">
+									<div class="modal-inner-content">
+										<div>{{vm.RangeMessage}}</div>
+										<div>{{'ImportBpoClearConfirmation'|translate}}</div>
+									</div>
+									<div class="modal-actions">
+										<aside>
+											<button ng-click="vm.clearBpoPeriod(); confirmRemoveBpo=false" class="wfm-btn wfm-btn-invis-default">Yes</button>
+											<button ng-click="confirmRemoveBpo=false" class="wfm-btn wfm-btn-invis-primary">No</button>
+										</aside>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
+			</div>
 		</card-body>
 	</wfm-card>
 </wfm-card-list>

@@ -590,6 +590,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			GoToPage("wfm/#/staffing");
 		}
 
+		public static void GoToBpoExchange()
+		{
+			GoToPage("wfm/#/bpo");
+		}
+
 
 		public static void GotoResourcePlanner()
 		{
