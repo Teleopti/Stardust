@@ -6,8 +6,12 @@ using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ShiftEditor;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -23,10 +27,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public MultipleChangeScheduleCommandHandler Target;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
-
+		public FakeEventPublisher EventPublisher;
+		public FakeCurrentDatasource CurrentDatasource;
+	
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<MultipleChangeScheduleCommandHandler>().For<IHandleCommand<MultipleChangeScheduleCommand>>();
+			isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+			isolate.UseTestDouble<FakeCurrentDatasource>().For<ICurrentDataSource>();
+			isolate.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 		}
 
 
@@ -124,14 +133,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldAddPersonalActivity()
 		{
 			var date = new DateTime(2018, 6, 27);
-			var person = PersonFactory.CreatePerson("sherklock", "holms");
+			var person = PersonFactory.CreatePerson("sherklock", "holms").WithId();
 			var scenario = ScenarioRepository.Has("default");
 
 			var pa = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(date));
 
 			var phoneActivity = ActivityFactory.CreateActivity("phone", Color.Yellow);
 
-			var phonePeriod = new DateTimePeriod(new DateTime(2018, 6, 27, 8, 0, 0,DateTimeKind.Utc), new DateTime(2018, 6, 27, 16, 0, 0, DateTimeKind.Utc));
+			var phonePeriod = new DateTimePeriod(new DateTime(2018, 6, 27, 8, 0, 0, DateTimeKind.Utc), new DateTime(2018, 6, 27, 16, 0, 0, DateTimeKind.Utc));
 			pa.AddActivity(phoneActivity, phonePeriod);
 
 			var period = new DateTimePeriod(new DateTime(2018, 6, 27, 8, 0, 0, DateTimeKind.Utc), new DateTime(2018, 6, 27, 9, 0, 0, DateTimeKind.Utc));
@@ -172,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldAddOvertimeActivity()
 		{
 			var date = new DateTime(2018, 6, 27);
-			var person = PersonFactory.CreatePerson("sherklock", "holms");
+			var person = PersonFactory.CreatePerson("sherklock", "holms").WithId();
 			var scenario = ScenarioRepository.Has("default");
 
 			var pa = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(date));
@@ -198,6 +207,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				Date = new DateOnly(date),
 				Person = person
 			};
+
 			Target.Handle(multipleCommand);
 
 			pa = scheduleDic[person].ScheduledDay(new DateOnly(date)).PersonAssignment();
@@ -216,5 +226,71 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			pa.ShiftLayers.Second().OrderIndex.Should().Be.EqualTo(1);
 
 		}
+
+		[Test]
+		public void ShouldRaiseScheduleChangedEvent()
+		{
+			var date = new DateTime(2018, 6, 27);
+			var person = PersonFactory.CreatePerson("sherklock", "holms").WithId();
+			var scenario = ScenarioRepository.Has("default");
+			scenario.BusinessUnit.WithId();
+			CurrentDatasource.FakeName("datasource");
+
+			var pa = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(date));
+
+			var phoneActivity = ActivityFactory.CreateActivity("phone", Color.Yellow);
+			var emailActivity = ActivityFactory.CreateActivity("email", Color.Yellow);
+
+			var phonePeriod = new DateTimePeriod(new DateTime(2018, 6, 27, 8, 0, 0, DateTimeKind.Utc), new DateTime(2018, 6, 27, 16, 0, 0, DateTimeKind.Utc));
+			var emailPeriod = new DateTimePeriod(new DateTime(2018, 6, 27, 9, 0, 0, DateTimeKind.Utc), new DateTime(2018, 6, 27, 10, 0, 0, DateTimeKind.Utc));
+			pa.AddActivity(phoneActivity, phonePeriod);
+			pa.AddActivity(emailActivity, emailPeriod);
+
+			var shiftLayers = pa.ShiftLayers.ToArray();
+			shiftLayers.ForEach(sl => sl.SetId(Guid.NewGuid()));
+
+			var period = new DateTimePeriod(new DateTime(2018, 6, 27, 13, 0, 0, DateTimeKind.Utc), new DateTime(2018, 6, 27, 14, 0, 0, DateTimeKind.Utc));
+
+			var scheduleDic = ScheduleDictionaryForTest.WithPersonAssignment(scenario, date, pa);
+
+			var trackId = Guid.NewGuid();
+			var operatedPersonId = Guid.NewGuid();
+
+			Target.Handle(new MultipleChangeScheduleCommand
+			{
+				Commands = new List<IScheduleCommand>{
+					new ChangeActivityTypeCommand{
+						Activity = phoneActivity,
+						ShiftLayer = shiftLayers[1]
+					},
+					new AddActivityCommandSimply {
+						Activity = emailActivity,
+						Period = period
+					}
+				},
+				ScheduleDictionary = scheduleDic,
+				Date = new DateOnly(date),
+				Person = person,
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					TrackId = trackId,
+					OperatedPersonId = operatedPersonId
+				}
+			});
+
+			var @event = EventPublisher.PublishedEvents.Single() as ScheduleChangedEvent;
+			@event.Date.Should().Be.EqualTo(date);
+			@event.PersonId.Should().Be.EqualTo(person.Id.Value);
+			@event.StartDateTime.Should().Be.EqualTo(new DateTime(2018, 6, 27, 8, 0, 0));
+			@event.EndDateTime.Should().Be.EqualTo(new DateTime(2018, 6, 27, 16, 0, 0));
+			@event.ScenarioId.Should().Be.EqualTo(scenario.Id.Value);
+			@event.CommandId.Should().Be.EqualTo(trackId);
+			@event.LogOnBusinessUnitId.Should().Be.EqualTo(scenario.BusinessUnit.Id.GetValueOrDefault());
+			@event.InitiatorId.Should().Be.EqualTo(operatedPersonId);
+			@event.LogOnDatasource.Should().Be.EqualTo(CurrentDatasource.CurrentName());
+
+		}
+
+
 	}
 }

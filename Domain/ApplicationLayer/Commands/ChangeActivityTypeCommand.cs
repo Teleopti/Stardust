@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
-	public class MultipleChangeScheduleCommand : IErrorAttachedCommand
+	public class MultipleChangeScheduleCommand : IErrorAttachedCommand, ITrackableCommand
 	{
 		public MultipleChangeScheduleCommand()
 		{
@@ -17,6 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public DateOnly Date { get; set; }
 		public IScheduleDictionary ScheduleDictionary { get; set; }
 		public IList<string> ErrorMessages { get; set; }
+		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 	}
 
 	public class ChangeActivityTypeCommand : IScheduleCommand

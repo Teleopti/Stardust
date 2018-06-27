@@ -836,5 +836,47 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			addOvertimeActivityCommand.MultiplicatorDefinitionSet.Should().Be.EqualTo(definitionSet);
 		}
 
+		[Test]
+		public void ShouldInvokeMultipleChangeScheduleCommandWithTrackCommandInfo()
+		{
+			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfoFactory.ChinaTimeZoneInfo());
+
+			var date = new DateOnly(2018, 6, 22);
+			var person = PersonFactory.CreatePerson("test").WithId();
+			PersonRepository.Has(person);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.Has(scenario);
+
+			var phoneActivity = ActivityFactory.CreateActivity("phone", Color.Yellow);
+			ActivityRepository.Has(phoneActivity);
+			var invoiceActivity = ActivityFactory.CreateActivity("invoice", Color.Yellow);
+			ActivityRepository.Has(invoiceActivity);
+
+			var personAss = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, date);
+			PersonAssignmentRepo.Add(personAss);
+			personAss.AddActivity(phoneActivity, new DateTimePeriod(new DateTime(2018, 6, 22, 11, 0, 0, 0, DateTimeKind.Utc), new DateTime(2018, 6, 22, 12, 0, 0, 0, DateTimeKind.Utc)));
+
+			personAss.ShiftLayers.ForEach(l => l.SetId(Guid.NewGuid()));
+			var layerIds = personAss.ShiftLayers.Select(sl => sl.Id.Value).ToArray();
+			
+			var trackCommandInfo = new TrackedCommandInfo { TrackId = Guid.NewGuid(), OperatedPersonId = Guid.NewGuid() };
+			Target.ChangeActivityType(new ChangeActivityTypeFormData
+			{
+				Date = new DateTime(2018, 6, 22),
+				PersonId = person.Id.Value,
+				TrackedCommandInfo = trackCommandInfo,
+				Layers = new[] {  new EditingLayerModel
+					{
+						ActivityId = invoiceActivity.Id.GetValueOrDefault(),
+						ShiftLayerIds =new [ ]{ layerIds[0]}
+					} }
+			});
+
+			CommandHandler.CalledCount.Should().Be.EqualTo(1);
+			var multipleCommand = CommandHandler.CalledCommands.Single() as MultipleChangeScheduleCommand;
+			multipleCommand.TrackedCommandInfo.Should().Be.EqualTo(trackCommandInfo);
+		}
+
 	}
 }

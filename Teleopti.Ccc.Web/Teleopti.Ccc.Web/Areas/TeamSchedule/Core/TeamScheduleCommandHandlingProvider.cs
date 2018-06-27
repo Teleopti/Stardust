@@ -395,7 +395,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				Commands = cmds,
 				Person = validateResult.Person,
 				Date = new DateOnly(input.Date),
-				ScheduleDictionary = validateResult.ScheduleDictionary
+				ScheduleDictionary = validateResult.ScheduleDictionary,
+				TrackedCommandInfo = input.TrackedCommandInfo
 			};
 
 			_commandDispatcher.Execute(mulitpleCommand);

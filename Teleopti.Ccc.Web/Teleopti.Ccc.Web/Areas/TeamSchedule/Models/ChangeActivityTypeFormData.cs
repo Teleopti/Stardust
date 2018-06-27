@@ -14,6 +14,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 		public DateTime Date { get; set; }
 
 		public EditingLayerModel[] Layers { get; set; }
+
+		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 	}
 	public class EditingLayerModel
 	{
