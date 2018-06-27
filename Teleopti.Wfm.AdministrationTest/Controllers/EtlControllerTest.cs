@@ -846,6 +846,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			savedDailyJob.JobName.Should().Be(dailyJob.JobName);
 			savedDailyJob.Enabled.Should().Be(dailyJob.Enabled);
 			savedDailyJob.Tenant.Should().Be(dailyJob.TenantName);
+			savedDailyJob.LogDataSourceId.Should().Be(dailyJob.DataSourceId);
 			savedDailyJob.DailyFrequencyStart.Should().Be(DateTime.MinValue.AddMinutes(dailyJob.OccursOnceAt));
 			savedDailyJob.DailyFrequencyEnd.Should().Be(DateTime.MinValue);
 			savedDailyJob.DailyFrequencyMinute.Should().Be(string.Empty);

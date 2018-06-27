@@ -349,6 +349,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 						JobName = job.JobName,
 						Enabled = job.Enabled,
 						Tenant = job.TenantName,
+						LogDataSourceId = job.DataSourceId,
 						DailyFrequencyStart = dailyFrequencyStart,
 						DailyFrequencyEnd = dailyFrequencyEnd,
 						DailyFrequencyMinute = dailyFrequencyMinute,
