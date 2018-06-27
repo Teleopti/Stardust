@@ -26,6 +26,7 @@ using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -143,6 +144,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			// licensing
 			isolate.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository, ILicenseRepositoryForLicenseVerifier>();
+			
 
 			// Repositories
 			if (QueryAllAttributes<ThrowIfRepositoriesAreUsedAttribute>().Any())
@@ -273,6 +275,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			}
 
 			isolate.UseTestDouble<ScheduleStorageRepositoryWrapper>().For<IScheduleStorageRepositoryWrapper>();
+			isolate.UseTestDouble<ReplaceLayerInSchedule>().For<IReplaceLayerInSchedule>();
+
+			
 
 			if (QueryAllAttributes<LoggedOnAppDomainAttribute>().Any())
 				isolate.UseTestDouble<FakeAppDomainPrincipalContext>().For<IThreadPrincipalContext>();

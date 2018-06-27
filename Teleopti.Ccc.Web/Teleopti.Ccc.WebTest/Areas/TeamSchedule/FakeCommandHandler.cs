@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		IHandleCommand<AddPersonalActivityCommand>,
 		IHandleCommand<RemoveDayOffCommand>,
 		IHandleCommand<RemoveShiftCommand>,
-		IHandleCommand<ChangeActivityTypeCommand>
+		IHandleCommand<MultipleChangeScheduleCommand>
 	{
 		private int calledCount;
 		private IList<Object> commands = new List<Object>();
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			commands.Add(command);
 		}
 
-		public void Handle(ChangeActivityTypeCommand command)
+		public void Handle(MultipleChangeScheduleCommand command)
 		{
 			calledCount++;
 			commands.Add(command);

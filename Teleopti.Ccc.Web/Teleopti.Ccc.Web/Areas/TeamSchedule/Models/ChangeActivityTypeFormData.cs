@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 {
@@ -13,8 +14,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 		public DateTime Date { get; set; }
 
 		public EditingLayerModel[] Layers { get; set; }
-
-
 	}
 	public class EditingLayerModel
 	{

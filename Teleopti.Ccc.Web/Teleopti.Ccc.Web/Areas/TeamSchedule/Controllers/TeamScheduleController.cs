@@ -231,12 +231,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return Json(failResults);
 		}
 
-		[HttpPost, UnitOfWork, Route("api/TeamSchedule/ChangeActivityType")]
-		public virtual IHttpActionResult ChangeActivityType()
-		{
-			return Ok();
-		}
-
 		private void setTrackedCommandInfo(TrackedCommandInfo commandInfo)
 		{
 			if (commandInfo == null) return;

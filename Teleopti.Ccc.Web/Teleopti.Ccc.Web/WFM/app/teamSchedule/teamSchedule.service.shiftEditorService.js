@@ -6,7 +6,7 @@
 
 	function ShiftEditorService($http, $q) {
 		var self = this;
-		var changeActivityTypeUrl = '../api/TeamSchedule/ChangeActivityType';
+		var changeActivityTypeUrl = '../api/TeamScheduleCommand/ChangeActivityType';
 
 		self.changeActivityType = changeActivityType;
 

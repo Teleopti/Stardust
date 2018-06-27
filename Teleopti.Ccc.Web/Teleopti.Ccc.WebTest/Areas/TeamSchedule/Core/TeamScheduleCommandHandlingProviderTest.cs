@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		public FakeShiftCategoryRepository ShiftCategoryRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public FakeActivityRepository ActivityRepository;
+		public IScheduleStorage ScheduleStorage;
 
 		public void Isolate(IIsolate isolate)
 		{
@@ -618,7 +619,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		}
 
 		[Test]
-		public void ShouldInvokeChangeActivityTypeCommand()
+		public void ShouldInvokeMultipleChangeScheduleCommandWithChangeActivityTypeCommand()
 		{
 			var date = new DateOnly(2018, 6, 22);
 			var person = PersonFactory.CreatePerson("test").WithId();
@@ -640,6 +641,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 
 			personAss.ShiftLayers.ForEach(sl => sl.SetId(Guid.NewGuid()));
 			var layerIds = personAss.ShiftLayers.Select(sl => sl.Id.Value).ToArray();
+
 			var result = Target.ChangeActivityType(new ChangeActivityTypeFormData
 			{
 				Date = new DateTime(2018, 6, 22),
@@ -651,25 +653,30 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 					} }
 			});
 
+			CommandHandler.CalledCount.Should().Be.EqualTo(1);
 
-			CommandHandler.CalledCount.Should().Be.EqualTo(2);
-			var firstCommand = CommandHandler.CalledCommands.First() as ChangeActivityTypeCommand;
-			firstCommand.Date.Should().Be.EqualTo(date);
-			firstCommand.Person.Should().Be.EqualTo(person);
-			firstCommand.Layer.ShiftLayer.Id.Should().Be.EqualTo(layerIds[0]);
-			firstCommand.Layer.Activity.Id.Should().Be.EqualTo(invoiceActivity.Id);
+			var dateonly = new DateOnly(new DateTime(2018, 6, 22));
+			var multipleCommand = CommandHandler.CalledCommands.Single() as MultipleChangeScheduleCommand;
+			multipleCommand.Person.Should().Be(person);
+			multipleCommand.Date.Should().Be(dateonly);
+			multipleCommand.ScheduleDictionary[person].ScheduledDay(dateonly).PersonAssignment().ShiftLayers.Count().Should().Be.EqualTo(2);
 
-			var secondCommand = CommandHandler.CalledCommands.Second() as ChangeActivityTypeCommand;
-			secondCommand.Date.Should().Be.EqualTo(date);
-			secondCommand.Person.Should().Be.EqualTo(person);
-			secondCommand.Layer.ShiftLayer.Id.Should().Be.EqualTo(layerIds[1]);
-			secondCommand.Layer.Activity.Id.Should().Be.EqualTo(invoiceActivity.Id);
+			multipleCommand.Commands.Count().Should().Be.EqualTo(2);
+
+			var firstCommand = multipleCommand.Commands.First() as ChangeActivityTypeCommand;
+			firstCommand.ShiftLayer.Id.Should().Be.EqualTo(layerIds[0]);
+			firstCommand.Activity.Id.Should().Be.EqualTo(invoiceActivity.Id);
+
+			var secondCommand = multipleCommand.Commands.Second() as ChangeActivityTypeCommand;
+			secondCommand.ShiftLayer.Id.Should().Be.EqualTo(layerIds[1]);
+			secondCommand.Activity.Id.Should().Be.EqualTo(invoiceActivity.Id);
 		}
 
-
 		[Test]
-		public void ShouldInvokeAddActivityCommandWhenChangeActivityTypeLayersContainsNewActivityLayer()
+		public void ShouldInvokeMultipleChangeScheduleCommandWithAddActivityCommandWhenChangeActivityTypeLayersContainsNewActivityLayer()
 		{
+			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfoFactory.ChinaTimeZoneInfo());
+
 			var date = new DateOnly(2018, 6, 22);
 			var person = PersonFactory.CreatePerson("test").WithId();
 			PersonRepository.Has(person);
@@ -708,17 +715,21 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			});
 
 			CommandHandler.CalledCount.Should().Be.EqualTo(1);
-			var addActivityCommand = CommandHandler.CalledCommands.Single() as AddActivityCommand;
-			addActivityCommand.Date.Should().Be.EqualTo(date);
-			addActivityCommand.Person.Should().Be.EqualTo(person);
-			addActivityCommand.ActivityId.Should().Be.EqualTo(invoiceActivity.Id);
-			addActivityCommand.StartTime.Should().Be.EqualTo(startTime);
-			addActivityCommand.EndTime.Should().Be.EqualTo(endTime);
+			var multipleCommand = CommandHandler.CalledCommands.Single() as MultipleChangeScheduleCommand;
+			var cmd = multipleCommand.Commands.First() as AddActivityCommandSimply;
+
+			multipleCommand.Date.Should().Be.EqualTo(date);
+			multipleCommand.Person.Should().Be.EqualTo(person);
+			cmd.Activity.Should().Be.EqualTo(invoiceActivity);
+			cmd.Period.StartDateTime.Should().Be.EqualTo(new DateTime(2018, 6, 22, 0, 0, 0, 0));
+			cmd.Period.EndDateTime.Should().Be.EqualTo(new DateTime(2018, 6, 22, 1, 0, 0, 0));
 		}
 
 		[Test]
-		public void ShouldInvokeAddPersonalActivityCommandWhenChangeActivityTypeLayersContainsNewPersonalActivityLayer()
+		public void ShouldInvokeMultipleChangeScheduleCommandWithAddPersonalActivityCommandWhenChangeActivityTypeLayersContainsNewPersonalActivityLayer()
 		{
+			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfoFactory.ChinaTimeZoneInfo());
+
 			var date = new DateOnly(2018, 6, 22);
 			var person = PersonFactory.CreatePerson("test").WithId();
 			PersonRepository.Has(person);
@@ -758,16 +769,17 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			});
 
 			CommandHandler.CalledCount.Should().Be.EqualTo(1);
-			var addPersonalActivityCommand = CommandHandler.CalledCommands.Single() as AddPersonalActivityCommand;
-			addPersonalActivityCommand.Date.Should().Be.EqualTo(date);
-			addPersonalActivityCommand.Person.Should().Be.EqualTo(person);
-			addPersonalActivityCommand.PersonalActivityId.Should().Be.EqualTo(invoiceActivity.Id);
-			addPersonalActivityCommand.StartTime.Should().Be.EqualTo(startTime);
-			addPersonalActivityCommand.EndTime.Should().Be.EqualTo(endTime);
+			var multipleCommand = CommandHandler.CalledCommands.Single() as MultipleChangeScheduleCommand;
+			var addPersonalActivityCommand = multipleCommand.Commands.First() as AddPersonalActivityCommandSimply;
+			multipleCommand.Date.Should().Be.EqualTo(date);
+			multipleCommand.Person.Should().Be.EqualTo(person);
+			addPersonalActivityCommand.Activity.Should().Be.EqualTo(invoiceActivity);
+			addPersonalActivityCommand.Period.StartDateTime.Should().Be.EqualTo(new DateTime(2018, 6, 22, 3, 0, 0, 0));
+			addPersonalActivityCommand.Period.EndDateTime.Should().Be.EqualTo(new DateTime(2018, 6, 22, 4, 0, 0, 0));
 		}
 
 		[Test]
-		public void ShouldInvokeAddOvertimeActivityCommandWhenChangeActivityTypeLayersContainsNewOvertimeActivityLayer()
+		public void ShouldInvokeMultipleChangeScheduleCommandWithAddOvertimeActivityCommandWhenChangeActivityTypeLayersContainsNewOvertimeActivityLayer()
 		{
 			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfoFactory.ChinaTimeZoneInfo());
 
@@ -812,14 +824,15 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			});
 
 			CommandHandler.CalledCount.Should().Be.EqualTo(1);
-			var addOvertimeActivityCommand = CommandHandler.CalledCommands.Single() as AddOvertimeActivityCommand;
-			addOvertimeActivityCommand.Date.Should().Be.EqualTo(date);
-			addOvertimeActivityCommand.Person.Should().Be.EqualTo(person);
-			addOvertimeActivityCommand.ActivityId.Should().Be.EqualTo(invoiceActivity.Id);
+			var multipleCommand = CommandHandler.CalledCommands.Single() as MultipleChangeScheduleCommand;
+			var addOvertimeActivityCommand = multipleCommand.Commands.First() as AddOvertimeActivityCommandSimply;
+			multipleCommand.Date.Should().Be.EqualTo(date);
+			multipleCommand.Person.Should().Be.EqualTo(person);
+			addOvertimeActivityCommand.Activity.Should().Be.EqualTo(invoiceActivity);
 			addOvertimeActivityCommand.Period.StartDateTime.Should().Be.EqualTo(new DateTime(2018, 6, 22, 3, 0, 0, 0));
 			addOvertimeActivityCommand.Period.EndDateTime.Should().Be.EqualTo(new DateTime(2018, 6, 22, 4, 0, 0, 0));
+			addOvertimeActivityCommand.MultiplicatorDefinitionSet.Should().Be.EqualTo(definitionSet);
 		}
-
 
 	}
 }

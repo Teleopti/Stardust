@@ -170,6 +170,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistRequestHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\SkillSetupHelper.cs" />
     <Compile Include="ApplicationLayer\AddActivityCommandHandlerWithBetterShiftCategorySelectionTest.cs" />
+    <Compile Include="ApplicationLayer\MultipleChangeScheduleCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestProcessorAtLeastOneCriticalUnderStaffedSkillTest.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestStaffingCheckMethodTest.cs" />
     <Compile Include="ApplicationLayer\PersonAccount\PersonEmploymentChangedTest.cs" />

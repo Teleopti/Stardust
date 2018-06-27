@@ -182,13 +182,14 @@
     <Compile Include="ApplicationLayer\Commands\IScheduleCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\IShiftCategorySelector.cs" />
     <Compile Include="ApplicationLayer\Commands\ChangeActivityTypeCommand.cs" />
+    <Compile Include="ApplicationLayer\Events\ActivityTypeChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonEmployementChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Commands\ShiftCategorySelector.cs" />
     <Compile Include="ApplicationLayer\Commands\ShiftCategorySelectorWithPrediction.cs" />
     <Compile Include="ApplicationLayer\Events\ProjectionChangedEventForShiftExchangeOffer.cs" />
     <Compile Include="ApplicationLayer\Events\RefreshPayrollFormatsEvent.cs" />
     <Compile Include="Common\DefaultSchedulePeriodProvider.cs" />
-    <Compile Include="ApplicationLayer\Commands\ChangeActivityTypeCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\Commands\MultipleChangeScheduleCommandHandler.cs" />
     <Compile Include="Intraday\ApplicationLayer\DTOs\IntradayForcastedStaffingIntervalDTO.cs" />
     <Compile Include="Intraday\ApplicationLayer\DTOs\IntradayScheduleStaffingIntervalDTO.cs" />
     <Compile Include="Intraday\ApplicationLayer\IntradayIncomingTrafficApplicationService.cs" />

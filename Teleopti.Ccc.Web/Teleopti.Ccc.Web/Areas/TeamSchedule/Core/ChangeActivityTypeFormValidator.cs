@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
@@ -75,11 +74,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			}
 			result.Activities = activities;
 
+			var scheduleDic =  _scheduleStorage.FindSchedulesForPersons(_currentScenario.Current(),
+				new[] { person },
+				new ScheduleDictionaryLoadOptions(false, false),
+				date.ToDateTimePeriod(TimeZoneInfo.Utc), new[] { person }, false);
 
-			var loadOption = new ScheduleDictionaryLoadOptions(false, false);
-			var dictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, loadOption,
-					new DateOnlyPeriod(date, date), _currentScenario.Current());
-			var scheduleRange = dictionary[person];
+			var scheduleRange = scheduleDic[person];
 			var scheduleDay = scheduleRange.ScheduledDay(date);
 			var shiftLayers = scheduleDay.PersonAssignment().ShiftLayers.ToDictionary(sl => sl.Id);
 
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				return invalidInputResult(result);
 			}
 
-			result.ShiftLayers = shiftLayers;
+			result.ScheduleDictionary = scheduleDic;
 
 			return result;
 
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		public bool IsValid { get; set; }
 		public IPerson Person { get; set; }
 		public IDictionary<Guid, IActivity> Activities { get; set; }
-		public IDictionary<Guid?, ShiftLayer> ShiftLayers { get; set; }
+		public IScheduleDictionary ScheduleDictionary { get; set; }
 		public IList<string> ErrorMessages { get; set; }
 	}
 }

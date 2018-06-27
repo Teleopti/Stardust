@@ -387,9 +387,18 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				});
 				return result;
 			}
-			var cmds = getChangeActivityTypeCommands(input, validateResult.Person, validateResult.Activities, validateResult.ShiftLayers);
 
-			cmds.ForEach(cmd => _commandDispatcher.Execute(cmd));
+			var cmds = getChangeActivityTypeCommands(input, validateResult.Person, validateResult.ScheduleDictionary, validateResult.Activities);
+
+			var mulitpleCommand = new MultipleChangeScheduleCommand
+			{
+				Commands = cmds,
+				Person = validateResult.Person,
+				Date = new DateOnly(input.Date),
+				ScheduleDictionary = validateResult.ScheduleDictionary
+			};
+
+			_commandDispatcher.Execute(mulitpleCommand);
 
 			return result;
 		}
@@ -463,12 +472,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		private IList<IScheduleCommand> getChangeActivityTypeCommands(
 			ChangeActivityTypeFormData input,
 			IPerson person,
-			IDictionary<Guid, IActivity> activities,
-			IDictionary<Guid?, ShiftLayer> shiftLayers)
+			IScheduleDictionary scheduleDictionary,
+			IDictionary<Guid, IActivity> activities)
 		{
 			var commands = new List<IScheduleCommand>();
 			var date = new DateOnly(input.Date);
 			var timezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var shiftLayers = scheduleDictionary[person].ScheduledDay(date).PersonAssignment().ShiftLayers.ToDictionary(sl => sl.Id);
+
 			foreach (var layer in input.Layers)
 			{
 				foreach (var layerId in layer.ShiftLayerIds)
@@ -476,58 +487,42 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 					var shiftLayer = shiftLayers[layerId];
 					if (layer.IsNew)
 					{
-						if (shiftLayer is PersonalShiftLayer)
-						{
-							commands.Add(new AddPersonalActivityCommand
-							{
-								StartTime = layer.StartTime.Value,
-								EndTime = layer.EndTime.Value,
-								Person = person,
-								Date = date,
-								PersonalActivityId = layer.ActivityId
-							});
-							continue;
-						}
-						if (shiftLayer is OvertimeShiftLayer)
-						{
-							var overtimeShiftLayer = shiftLayer as OvertimeShiftLayer;
-							var overtimePeriod = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(layer.StartTime.Value, timezone),
+						var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(layer.StartTime.Value, timezone),
 								TimeZoneHelper.ConvertToUtc(layer.EndTime.Value, timezone));
-							commands.Add(new AddOvertimeActivityCommand
-							{
-								Date = date,
-								ActivityId = layer.ActivityId,
-								Person = person,
-								Period = overtimePeriod,
-								MultiplicatorDefinitionSetId = overtimeShiftLayer.DefinitionSet.Id.GetValueOrDefault()
-							});
-							continue;
-						}
-						commands.Add(new AddActivityCommand
+
+						switch (shiftLayer.GetType().Name)
 						{
-							StartTime = layer.StartTime.Value,
-							EndTime = layer.EndTime.Value,
-							Person = person,
-							Date = date,
-							ActivityId = layer.ActivityId
-						});
-						continue;
+							case nameof(PersonalShiftLayer):
+								commands.Add(new AddPersonalActivityCommandSimply
+								{
+									Period = period,
+									Activity = activities[layer.ActivityId]
+								});
+								break;
+							case nameof(OvertimeShiftLayer):
+								var overtimeShiftLayer = shiftLayer as OvertimeShiftLayer;
+
+								commands.Add(new AddOvertimeActivityCommandSimply
+								{
+									Activity = activities[layer.ActivityId],
+									Period = period,
+									MultiplicatorDefinitionSet = overtimeShiftLayer.DefinitionSet
+								});
+								break;
+							default:
+								commands.Add(new AddActivityCommandSimply
+								{
+									Period = period,
+									Activity = activities[layer.ActivityId]
+								});
+								break;
+						}
 					}
 
 					commands.Add(new ChangeActivityTypeCommand
 					{
-
-						Date = new DateOnly(input.Date),
-						Person = person,
-
-						Layer = new EditingLayer
-						{
-							Activity = activities[layer.ActivityId],
-							StartTime = layer.StartTime,
-							EndTime = layer.EndTime,
-							IsNew = layer.IsNew,
-							ShiftLayer = shiftLayers[layerId]
-						}
+						Activity = activities[layer.ActivityId],
+						ShiftLayer = shiftLayers[layerId]
 					});
 
 				}

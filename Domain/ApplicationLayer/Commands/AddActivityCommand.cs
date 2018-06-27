@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
-	public class AddActivityCommand : ITrackableCommand, IErrorAttachedCommand, IScheduleCommand
+	public class AddActivityCommand : ITrackableCommand, IErrorAttachedCommand
 	{
 		public IPerson Person { get; set; }
 		public DateOnly Date { get; set; }
@@ -16,5 +16,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public bool MoveConflictLayerAllowed { get; set; }
 		public IList<string> ErrorMessages { get; set; }
 		public IList<string> WarningMessages { get; set; }
+	}
+
+	public class AddActivityCommandSimply :  IScheduleCommand
+	{
+		public IActivity Activity { get; set; }
+		public DateTimePeriod Period { get; set; }
 	}
 }

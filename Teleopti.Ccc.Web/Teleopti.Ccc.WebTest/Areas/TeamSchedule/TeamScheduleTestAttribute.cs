@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			isolate.UseTestDouble(fakeCommandHandler).For<IHandleCommand<RemoveActivityCommand>>();
 			isolate.UseTestDouble(fakeCommandHandler).For<IHandleCommand<RemoveDayOffCommand>>();
 			isolate.UseTestDouble(fakeCommandHandler).For<IHandleCommand<RemoveShiftCommand>>();
-			isolate.UseTestDouble(fakeCommandHandler).For<IHandleCommand<ChangeActivityTypeCommand>>();
+			isolate.UseTestDouble(fakeCommandHandler).For<IHandleCommand<MultipleChangeScheduleCommand>>();
 
 
 			isolate.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
