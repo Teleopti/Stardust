@@ -127,7 +127,7 @@
 	angular.module('wfm.peopleold')
 		.component('wfmImportAgents',
 		{
-			templateUrl: 'app/people/html/wfm-import-agents.tpl.html',
+			templateUrl: 'app/peopleold/html/wfm-import-agents.tpl.html',
 			controller: ['$translate', '$q', 'importAgentsService', 'PeopleService', 'Toggle',  WfmImportAgentsCtrl]
 		});
 })(angular);

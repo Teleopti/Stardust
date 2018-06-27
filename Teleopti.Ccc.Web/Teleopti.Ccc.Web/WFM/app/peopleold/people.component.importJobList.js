@@ -90,7 +90,7 @@
 		require: {
 			parent: '^wfmImportAgents'
 		},
-		templateUrl: 'app/people/html/import-job-list.tpl.html',
+		templateUrl: 'app/peopleold/html/import-job-list.tpl.html',
 		controller: ['NoticeService', 'importAgentsService', '$translate', Ctrl]
 	};
 
