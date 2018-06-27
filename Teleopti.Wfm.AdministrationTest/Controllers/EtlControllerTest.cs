@@ -145,7 +145,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 
 			var firstDataSource = result.Content.First();
 			firstDataSource.Id.Should().Be(-2);
-			firstDataSource.Name.Should().Be(Tenants.AllTenantName);
+			firstDataSource.Name.Should().Be(Tenants.NameForOptionAll);
 
 			var secondDataSource = result.Content.Second();
 			secondDataSource.Id.Should().Be(3);
@@ -198,7 +198,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 
 			var result = (OkNegotiatedContentResult<IList<DataSourceModel>>)Target.TenantAllLogDataSources(testTenantName);
 			result.Content.Count.Should().Be(4);
-			result.Content.Any(x => x.Id == -2 && x.Name == Tenants.AllTenantName).Should().Be.True();
+			result.Content.Any(x => x.Id == -2 && x.Name == Tenants.NameForOptionAll).Should().Be.True();
 			result.Content.Any(x => x.Id == 3 && x.Name == "myDs").Should().Be.True();
 			result.Content.Any(x => x.Id == 4 && x.Name == "anotherDs" && x.TimeZoneCode == null)
 				.Should().Be.True();
@@ -814,7 +814,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 		[TestCase(false, false)]
 		public void ShouldGetJobsForAllTenant(bool toggle38131Enabled, bool pmInstalled)
 		{
-			var jobs = getJobs(Tenants.AllTenantName, toggle38131Enabled, pmInstalled);
+			var jobs = getJobs(Tenants.NameForOptionAll, toggle38131Enabled, pmInstalled);
 
 			foreach (var job in jobs)
 			{

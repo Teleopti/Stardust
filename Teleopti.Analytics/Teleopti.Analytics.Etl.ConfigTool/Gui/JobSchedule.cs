@@ -438,7 +438,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 			if (_isNewSchedule)
 			{
 				scheduleId = -1;
-				tenantName = Tenants.AllTenantName;
+				tenantName = Tenants.NameForOptionAll;
 			}
 			else
 			{

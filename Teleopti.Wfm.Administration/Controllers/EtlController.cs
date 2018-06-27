@@ -413,7 +413,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 					new BusinessUnitItem
 					{
 						Id = new Guid(allBusinessUnitId),
-						Name = Tenants.AllTenantName
+						Name = Tenants.NameForOptionAll
 					}
 				};
 				return Ok(allBuList);
