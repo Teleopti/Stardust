@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
-using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
@@ -64,19 +63,22 @@ namespace Teleopti.Analytics.Etl.Common
 
 			using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
+				var generalInfrastructure = new GeneralInfrastructure(_baseConfigurationRepository);
+				var generalFunctions = new GeneralFunctions(generalInfrastructure);
+				var configurationHandler = new ConfigurationHandler(generalFunctions, new BaseConfigurationValidator());
+
 				var loaded = _loadAllTenants.Tenants().ToList();
 				foreach (var tenant in loaded)
 				{
-					var configurationHandler = new ConfigurationHandler(new GeneralFunctions(new GeneralInfrastructure(_baseConfigurationRepository)), new BaseConfigurationValidator());
-					configurationHandler.SetConnectionString(tenant.DataSourceConfiguration.AnalyticsConnectionString);
-					IBaseConfiguration baseConfiguration = null;
-					if (configurationHandler.IsConfigurationValid)
-						baseConfiguration = configurationHandler.BaseConfiguration;
+					var dataSourceConfiguration = tenant.DataSourceConfiguration;
+					configurationHandler.SetConnectionString(dataSourceConfiguration.AnalyticsConnectionString);
+					var baseConfiguration = configurationHandler.IsConfigurationValid
+						? configurationHandler.BaseConfiguration
+						: null;
 
-					var dataSource = _dataSourcesFactory.Create(
-						tenant.Name,
-						tenant.DataSourceConfiguration.ApplicationConnectionString,
-						tenant.DataSourceConfiguration.AnalyticsConnectionString);
+					var dataSource = _dataSourcesFactory.Create(tenant.Name,
+						dataSourceConfiguration.ApplicationConnectionString,
+						dataSourceConfiguration.AnalyticsConnectionString);
 
 					loadedTenants.Add(new TenantInfo
 					{

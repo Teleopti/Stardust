@@ -13,7 +13,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		{
 			if (!uiCultureId.HasValue)
 			{
-				_logger.Warn("Configuration for Culture in db is invalid It cannot be null.");
+				_logger.Warn("Configuration for Culture in db is invalid, It should not be null.");
 				return false;
 			}
 
@@ -37,7 +37,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		{
 			if (!intervalLength.HasValue)
 			{
-				_logger.Warn("Configuration for TimeZone in db is invalid It cannot be null or empty.");
+				_logger.Warn("Configuration for TimeZone in db is invalid, It should not be null or empty.");
 				return false;
 			}
 
@@ -54,7 +54,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		{
 			if (string.IsNullOrEmpty(timeZone))
 			{
-				_logger.Warn("Configuration for TimeZone in db is invalid It cannot be null or empty.");
+				_logger.Warn("Configuration for TimeZone in db is invalid, It should not be null or empty.");
 				return false;
 			}
 

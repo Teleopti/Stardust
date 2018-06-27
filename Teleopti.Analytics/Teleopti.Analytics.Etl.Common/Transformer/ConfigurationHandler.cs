@@ -17,18 +17,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 
 		public bool IsConfigurationValid => _baseConfigurationValidator.IsConfigurationValid(BaseConfiguration);
 
-		public IBaseConfiguration BaseConfiguration
-		{
-			get
-			{
-				return _baseConfiguration ?? (_baseConfiguration = _generalFunctions.LoadBaseConfiguration());
-			}
-		}
+		public IBaseConfiguration BaseConfiguration =>
+			_baseConfiguration ?? (_baseConfiguration = _generalFunctions.LoadBaseConfiguration());
 
-		public int? IntervalLengthInUse
-		{
-			get { return _generalFunctions.LoadIntervalLengthInUse(); }
-		}
+		public int? IntervalLengthInUse => _generalFunctions.LoadIntervalLengthInUse();
 
 		public void SaveBaseConfiguration(IBaseConfiguration configuration)
 		{
@@ -40,7 +32,5 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		{
 			_generalFunctions.SetConnectionString(dataMartConnectionString);
 		}
-
-
 	}
 }
