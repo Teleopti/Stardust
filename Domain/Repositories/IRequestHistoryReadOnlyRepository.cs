@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Domain.Repositories
          int ShiftTradeStatus { get; set; }
          string SavedByFirstName { get; set; }
          string SavedByLastName { get; set; }
+         string SavedByEmploymentNumber { get; set; }
          DateTime LastUpdatedDateTime { get; set; }
          Int64 RowNumber { get; set; }
          string RequestStatusText { get; }
