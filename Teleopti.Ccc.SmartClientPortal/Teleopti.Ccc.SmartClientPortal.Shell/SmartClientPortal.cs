@@ -20,6 +20,7 @@ using log4net;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -422,20 +423,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				{
 					case DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage:
 						outlookBarSmartPartInfo.Icon = Resources.People_filled_space_32x32;
-						if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebRequests))
+						if (_toggleManager.IsEnabled(Toggles.Wfm_PeopleWeb_PrepareForRelease_47766) && PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebPeople))
 						{
 							outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewPeopleModule;
 							outlookBarSmartPartInfo.PreviewUrl = buildWfmUri("WFM/#/people");
 						}
 						break;
-						//WebPeople link should be hidden while in development.Add this back later on when we want customers to preview the new web people module.
-						//if (_toggleManager.IsEnabled(Toggles.Wfm_PeopleWeb_PrepareForRelease_47766) &&
-						//	PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebPeople))
-						//{
-						//	outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewPeopleModule;
-						//	outlookBarSmartPartInfo.PreviewUrl = buildWfmUri("WFM/#/people");
-						//}
-						//break;
+
 					case DefinedRaptorApplicationFunctionPaths.OpenForecasterPage:
 						outlookBarSmartPartInfo.Icon = Resources.Forecasts2_filled_32x32;
 						break;
