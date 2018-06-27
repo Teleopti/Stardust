@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
@@ -21,17 +22,18 @@ namespace Teleopti.Ccc.Domain.Kpi
         private Color _lowerThanMinColor;
         private Color _higherThanMaxColor;
         private Color _betweenColor;
+		private readonly LocalizedUpdateInfo _localizer = new LocalizedUpdateInfo();
 
-        /// <summary>
-        /// Gets the team description.
-        /// For readonly use in databindings.
-        /// </summary>
-        /// <value>The team description.</value>
-        /// <remarks>
-        ///  Created by: Ola
-        ///  Created date: 2008-04-10    
-        /// </remarks>
-        public virtual string TeamDescription
+		/// <summary>
+		/// Gets the team description.
+		/// For readonly use in databindings.
+		/// </summary>
+		/// <value>The team description.</value>
+		/// <remarks>
+		///  Created by: Ola
+		///  Created date: 2008-04-10    
+		/// </remarks>
+		public virtual string TeamDescription
         {
             get { return Team.Description.ToString(); }
         }
@@ -159,5 +161,7 @@ namespace Teleopti.Ccc.Domain.Kpi
             get { return _higherThanMaxColor; }
             set { _higherThanMaxColor = value; }
         }
-    }
+
+		public virtual string UpdatedTimeInUserPerspective => _localizer.UpdatedTimeInUserPerspective(this);
+	}
 }

@@ -50,5 +50,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		IEnumerable<ISiteOpenHour> OpenHourCollection { get; }
 		void ClearOpenHourCollection();
 		bool AddOpenHour(ISiteOpenHour siteOpenHour);
-    }
+
+		string UpdatedTimeInUserPerspective { get; }
+
+	}
 }

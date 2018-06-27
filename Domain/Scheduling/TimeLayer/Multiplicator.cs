@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -13,8 +14,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
         private double _multiplicatorValue;
         private string _exportCode = string.Empty;
         private bool _isDeleted;
+		private readonly LocalizedUpdateInfo _localizer = new LocalizedUpdateInfo();
 
-        protected Multiplicator() { }
+		protected Multiplicator() { }
 
         public Multiplicator(MultiplicatorType multiplicatorType)
             : this()
@@ -93,7 +95,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
             set { _exportCode = value; }
         }
 
-        public virtual bool IsDeleted
+		public virtual string UpdatedTimeInUserPerspective => _localizer.UpdatedTimeInUserPerspective(this);
+
+		public virtual bool IsDeleted
         {
             get { return _isDeleted; }
         }

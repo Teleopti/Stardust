@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Domain.Common
 		private bool _isDeleted;
 		private int? _maxSeats;
 		private IList<ISiteOpenHour> _openHourCollection;
+		private readonly LocalizedUpdateInfo _localizer = new LocalizedUpdateInfo();
 
 		protected Site()
 		{
@@ -98,6 +99,8 @@ namespace Teleopti.Ccc.Domain.Common
 
 			return false;
 		}
+
+		public virtual string UpdatedTimeInUserPerspective => _localizer.UpdatedTimeInUserPerspective(this);
 
 		public virtual void SetDeleted()
 		{

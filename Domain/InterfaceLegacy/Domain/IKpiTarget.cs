@@ -97,5 +97,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         ///  Created date: 2008-04-07    
         /// </remarks>
         Color HigherThanMaxColor { get; set; }
-    }
+
+		string UpdatedTimeInUserPerspective { get; }
+	}
 }

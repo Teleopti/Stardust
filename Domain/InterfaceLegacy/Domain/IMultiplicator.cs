@@ -57,5 +57,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </remarks>
         string ExportCode { get; set; }
 
-    }
+		string UpdatedTimeInUserPerspective { get; }
+
+	}
 }
