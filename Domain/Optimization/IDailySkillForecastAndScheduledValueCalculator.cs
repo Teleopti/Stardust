@@ -17,14 +17,6 @@ namespace Teleopti.Ccc.Domain.Optimization
         ForecastScheduleValuePair CalculateDailyForecastAndScheduleDataForSkill(ISkill skill, DateOnly scheduleDay);
 
         /// <summary>
-        /// Calculates the intraday forecast and schedule data for skill and a period.
-        /// </summary>
-        /// <param name="skill">The skill.</param>
-        /// <param name="scheduleDay">The schedule day.</param>
-        /// <returns></returns>
-        ForecastScheduleValuePair[] CalculateIntradayForecastAndScheduleDataForSkill(ISkill skill,DateOnly scheduleDay);
-
-        /// <summary>
         /// Calculates the skill staff period.
         /// </summary>
         /// <param name="skill">The skill.</param>

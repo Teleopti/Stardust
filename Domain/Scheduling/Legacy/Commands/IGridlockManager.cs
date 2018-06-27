@@ -6,7 +6,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public interface IGridlockManager
 	{
-		IDictionary<string, GridlockDictionary> GridlocksDictionary { get; }
 		bool HasLocks { get; }
 		void AddLock(IPerson person, DateOnly dateOnly, LockType lockType);
 		void AddLock(IScheduleDay schedulePart, LockType lockType);
