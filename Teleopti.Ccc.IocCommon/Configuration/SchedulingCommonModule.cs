@@ -401,7 +401,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<FindFilter>().SingleInstance();
 			builder.RegisterType<ViolatedSchedulePeriodBusinessRule>().SingleInstance();
 			builder.RegisterType<DayOffBusinessRuleValidation>().SingleInstance();
-			builder.RegisterType<LimitForNoResourceCalculation>().As<ILimitForNoResourceCalculation>().AsSelf().SingleInstance();
 			builder.RegisterType<NoSchedulingProgress>().As<ISchedulingProgress>().SingleInstance();
 			builder.RegisterType<IntradayOptimizationCommandHandler>().InstancePerLifetimeScope().ApplyAspects(); //cannot be single due to gridlockmanager dep
 			builder.RegisterType<SchedulePlanningPeriodCommandHandler>().InstancePerLifetimeScope().ApplyAspects();

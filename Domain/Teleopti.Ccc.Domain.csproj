@@ -2380,8 +2380,6 @@
     <Compile Include="Repositories\ILoadAllSkillInIntradays.cs" />
     <Compile Include="Repositories\ISkillGroupRepository.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationContextFactory.cs" />
-    <Compile Include="Scheduling\Assignment\ILimitForNoResourceCalculation.cs" />
-    <Compile Include="Scheduling\Assignment\LimitForNoResourceCalculation.cs" />
     <Compile Include="Scheduling\DayOffBusinessRuleValidation.cs" />
     <Compile Include="Scheduling\FullScheduling.cs" />
     <Compile Include="Scheduling\IScheduleDictionaryPersister.cs" />
