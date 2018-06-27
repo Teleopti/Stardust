@@ -108,6 +108,7 @@
     <Compile Include="Query\ScheduleByPersonIdTest.cs" />
     <Compile Include="Query\ScheduleChangesListenersTest.cs" />
     <Compile Include="Query\UserByEmailTest.cs" />
+    <Compile Include="Query\UserByIdTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

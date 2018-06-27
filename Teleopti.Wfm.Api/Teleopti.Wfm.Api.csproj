@@ -68,6 +68,7 @@
     <Compile Include="QueryHandlerProvider.cs" />
     <Compile Include="QueryResultDto.cs" />
     <Compile Include="Query\GetScheduleChangesListenerSubscriptionDto.cs" />
+    <Compile Include="Query\UserByIdDto.cs" />
     <Compile Include="Query\ScheduleChangesListenerDto.cs" />
     <Compile Include="Query\ScheduleByPersonIdDto.cs" />
     <Compile Include="Query\ScheduleChangesListenersHandler.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Query\ShiftLayerDto.cs" />
     <Compile Include="Query\UserByEmailDto.cs" />
     <Compile Include="Query\UserByEmailHandler.cs" />
+    <Compile Include="Query\UserByIdHandler.cs" />
     <Compile Include="Query\UserDto.cs" />
     <Compile Include="ResultDto.cs" />
     <Compile Include="Startup.cs" />
