@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var startDate = DateOnly.Today.AddDays(1);
 			var endDate = startDate.AddDays(5);
-			var form = prepareData(startDate, endDate);
+			var form = prepareData(startDate, endDate, DateTime.MaxValue);
 
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
@@ -113,11 +113,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldReriveSchedulesWithinOpenPeriodStart()
+		public void ShouldRetriveSchedulesWithinOpenPeriodStart()
 		{
 			var startDate = DateOnly.Today.AddDays(-5);
 			var endDate = startDate.AddDays(11);
-			var form = prepareData(startDate, endDate);
+			var form = prepareData(startDate, endDate, DateTime.MaxValue);
 
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
@@ -127,11 +127,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldReriveSchedulesWithinOpenPeriodEnd()
+		public void ShouldRetriveSchedulesWithinOpenPeriodEnd()
 		{
 			var startDate = DateOnly.Today.AddDays(1);
 			var endDate = startDate.AddDays(11);
-			var form = prepareData(startDate, endDate);
+			var form = prepareData(startDate, endDate, DateTime.MaxValue);
 
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
@@ -141,11 +141,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldNotReriveSchedulesWhenRequestEarlierThanOpenPeriod()
+		public void ShouldNotRetriveSchedulesWhenRequestEarlierThanOpenPeriod()
 		{
 			var startDate = DateOnly.Today.AddDays(-15);
 			var endDate = startDate.AddDays(11);
-			var form = prepareData(startDate, endDate);
+			var form = prepareData(startDate, endDate, DateTime.MaxValue);
 
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
@@ -155,11 +155,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldNotReriveSchedulesWhenRequestLateThanOpenPeriod()
+		public void ShouldNotRetriveSchedulesWhenRequestLateThanOpenPeriod()
 		{
 			var startDate = DateOnly.Today.AddDays(15);
 			var endDate = startDate.AddDays(11);
-			var form = prepareData(startDate, endDate);
+			var form = prepareData(startDate, endDate, DateTime.MaxValue);
 
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
@@ -168,16 +168,62 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			data.PersonToSchedules.Count().Should().Be.EqualTo(0);
 		}
 
-		private ShiftTradeMultiSchedulesForm prepareData(DateOnly startDate, DateOnly endDate)
+		[Test]
+		public void ShouldNotRetriveUnpublishedSchedulesWithoutPermission()
+		{
+			var startDate = DateOnly.Today.AddDays(1);
+			var endDate = startDate.AddDays(9);
+			var form = prepareData(startDate, endDate, DateOnly.Today.Date, false);
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+
+			data.MySchedules.Count().Should().Be.EqualTo(0);
+			data.PersonToSchedules.Count().Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldRetriveUnpublishedSchedulesWithPermission()
+		{
+			var startDate = DateOnly.Today.AddDays(1);
+			var endDate = startDate.AddDays(9);
+			var form = prepareData(startDate, endDate, DateOnly.Today.Date);
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+
+			data.MySchedules.Count().Should().Be.EqualTo(10);
+			data.PersonToSchedules.Count().Should().Be.EqualTo(10);
+		}
+
+		[Test]
+		public void ShouldOnlyRetrivePublishedSchedules()
+		{
+			var startDate = DateOnly.Today.AddDays(1);
+			var endDate = startDate.AddDays(9);
+			var form = prepareData(startDate, endDate, new DateTime(DateOnly.Today.AddDays(3).Date.Ticks, DateTimeKind.Utc), false);
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+
+			data.MySchedules.Count().Should().Be.EqualTo(2);
+			data.PersonToSchedules.Count().Should().Be.EqualTo(2);
+		}
+
+		private ShiftTradeMultiSchedulesForm prepareData(DateOnly startDate, DateOnly endDate, DateTime publishedDate, bool isViewUnpublishedSchedules = true)
 		{
 			var period = new DateOnlyPeriod(startDate, endDate);
-			var workflowControlSet = new WorkflowControlSet { ShiftTradeOpenPeriodDaysForward = new MinMax<int>(1, 10), SchedulePublishedToDate = DateTime.MaxValue };
+			var workflowControlSet = new WorkflowControlSet
+			{
+				ShiftTradeOpenPeriodDaysForward = new MinMax<int>(1, 10),
+				SchedulePublishedToDate = publishedDate
+			};
 			var currentUser = PersonFactory.CreatePersonWithId(Guid.NewGuid());
 			currentUser.WorkflowControlSet = workflowControlSet;
 			LoggedOnUser.SetFakeLoggedOnUser(currentUser);
 			var personTo = PersonFactory.CreatePersonWithId(Guid.NewGuid());
 
-			setPermissions(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
+			if (isViewUnpublishedSchedules) setPermissions(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
 
 			PersonAssignmentRepository.Has(currentUser, CurrentScenario.Current(), new Activity(), period, new TimePeriod(8, 10));
 			PersonAssignmentRepository.Has(personTo, CurrentScenario.Current(), new Activity(), period, new TimePeriod(8, 10));

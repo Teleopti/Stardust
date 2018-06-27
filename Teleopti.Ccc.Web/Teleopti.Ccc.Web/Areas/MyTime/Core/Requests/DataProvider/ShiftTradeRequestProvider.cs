@@ -41,8 +41,26 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 		public IEnumerable<IPersonScheduleDayReadModel> RetrieveTradeMultiSchedules(DateOnlyPeriod period, List<Guid> personList)
 		{
-			var dateTimePeriod = period.ToDateTimePeriod(_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
-			return _scheduleDayReadModelFinder.ForPeople(dateTimePeriod, personList);
+			var fixedPeriod = fixPeriodForUnpublishedSchedule(period);
+			if (fixedPeriod == null) return new List<IPersonScheduleDayReadModel>(); 
+
+			return _scheduleDayReadModelFinder.ForPeople(fixedPeriod.Value, personList);
+		}
+
+		private DateTimePeriod? fixPeriodForUnpublishedSchedule(DateOnlyPeriod periodInput)
+		{
+			var dateTimePeriod = periodInput.ToDateTimePeriod(_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
+			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)) return dateTimePeriod;
+
+			var publishedToDate = _loggedOnUser.CurrentUser().WorkflowControlSet.SchedulePublishedToDate;
+			if (!publishedToDate.HasValue) return null;
+
+			var startTime = dateTimePeriod.StartDateTime;
+			var endTime = dateTimePeriod.EndDateTime;
+			if (publishedToDate >= dateTimePeriod.StartDateTime && publishedToDate < dateTimePeriod.EndDateTime) endTime = publishedToDate.Value;
+			if (publishedToDate < dateTimePeriod.StartDateTime) return null;
+
+			return new DateTimePeriod(startTime, endTime);
 		}
 
 		public IEnumerable<IPersonScheduleDayReadModel> RetrievePossibleTradeSchedules(DateOnly date,
