@@ -114,11 +114,10 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		///</summary>
 		int SortDirection { get; set; }
 
-		///<summary>
-		/// Set row
-		///</summary>
-		///<param name="rowNumber"></param>
-		///<param name="theRow"></param>
+		/// <summary>
+		///  Set row
+		/// </summary>
+		/// <param name="theRow"></param>
 		void SetRow(IPersonFinderDisplayRow theRow);
 
 		void SetRows(IEnumerable<IPersonFinderDisplayRow> rows);

@@ -34,6 +34,5 @@ window.onload = function(){
   document.forms['botforward'].submit();
 }
 </script>
-</form>
 </body>
 </html>
