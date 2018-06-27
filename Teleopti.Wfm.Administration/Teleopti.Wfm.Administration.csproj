@@ -185,12 +185,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\images\error_alert_24px.svg" />
+    <Content Include="Content\images\ic_search_white_24px.svg" />
     <Content Include="Etl\config.html" />
     <Content Include="Etl\etlBaseConfigModal.component.js" />
     <Content Include="Etl\etlConfigController.js" />
     <Content Include="Etl\etlHistoryController.js" />
     <Content Include="Etl\etlScheduleController.js" />
-    <Content Include="Etl\etlScheduleFormgModal.component.js" />
+    <Content Include="Etl\etlScheduleModal.component.js" />
     <Content Include="firstuser.html" />
     <Content Include="App_Data\RtaStates.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
