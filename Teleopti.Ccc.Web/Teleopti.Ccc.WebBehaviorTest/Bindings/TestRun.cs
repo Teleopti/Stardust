@@ -72,6 +72,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			DataMaker.AfterTest();
 
 			// some scenarios should not trigger handfire queue jobs which may throw an exception caused by no data available.
+			// THIS IS A BAD IDEA. SUPPRESSING WAITING FOR QUEUE WILL JUST PUSH THE PROBLEM TO THE NEXT SCENARIO!
 			if (!TestInfo().IsTaggedWith("suppressHangfireQueue"))
 				LocalSystem.Hangfire.WaitForQueue();
 

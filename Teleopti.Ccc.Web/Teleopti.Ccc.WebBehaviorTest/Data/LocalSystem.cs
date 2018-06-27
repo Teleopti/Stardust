@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static MutableNow Now;
 		public static ITenantUnitOfWork TenantUnitOfWork;
 		public static ICurrentTenantSession CurrentTenantSession;
-		public static StateQueueUtilities StateQueue;
 
 		public static void Setup()
 		{
@@ -55,8 +54,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			DataMaker = IntegrationIoCTest.Container.Resolve<DataMakerImpl>();
 			DefaultDataCreator = IntegrationIoCTest.Container.Resolve<DefaultDataCreator>();
 			DefaultAnalyticsDataCreator = IntegrationIoCTest.Container.Resolve<DefaultAnalyticsDataCreator>();
-
-			StateQueue = IntegrationIoCTest.Container.Resolve<StateQueueUtilities>();
 		}
 
 		public static void Start()

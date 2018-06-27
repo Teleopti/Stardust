@@ -31,7 +31,6 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 		public IBusinessUnitRepository BusinessUnits;
 		public HangfireClientStarter HangfireClientStarter;
 		public HangfireUtilities Hangfire;
-		public StateQueueUtilities StateQueue;
 		public IConfigReader ConfigReader;
 		public TestLog TestLog;
 
@@ -119,7 +118,6 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			{
 				TestLog.Debug("In teardown stopping all services");
 				Hangfire.WaitForQueue();
-				StateQueue.WaitForQueue();
 
 
 				TestSiteConfigurationSetup.TearDown();

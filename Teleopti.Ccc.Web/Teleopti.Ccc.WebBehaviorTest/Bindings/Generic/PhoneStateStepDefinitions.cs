@@ -1,4 +1,9 @@
-﻿using TechTalk.SpecFlow;
+﻿using System;
+using System.Linq;
+using Polly;
+using TechTalk.SpecFlow;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
@@ -10,20 +15,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	[Binding]
 	public class PhoneStateStepDefinitions
 	{
+		private readonly IRtaEventStoreTestReader _events;
+		private readonly DataMakerImpl _data;
+
 		// this is the analytics data source id
 		// and is saved with the external logon in wfm
 		public static int DataSourceId = 9;
 
 		// this is the switch id
 		// and is sent with the state
-		public static string SourceId = "8"; 
+		public static string SourceId = "8";
+
+		public PhoneStateStepDefinitions(IRtaEventStoreTestReader events, DataMakerImpl data)
+		{
+			_events = events;
+			_data = data;
+		}
 
 		[Given(@"there is a switch")]
 		public void GivenThereIsADatasouce()
 		{
 			// this maps the analytics data source id with the switch id
 			var datasource = new Datasources(DataSourceId, " ", -1, " ", -1, " ", " ", 1, false, SourceId, false);
-			DataMaker.Analytics().Apply(datasource);
+			_data.Data().Analytics().Apply(datasource);
 		}
 
 		[When(@"at '(.*)' '(.*)' sets (?:his|her) phone state to '(.*)'")]
@@ -48,9 +62,39 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 						StateCode = stateCode,
 						SourceId = SourceId
 					});
-			LocalSystem.StateQueue.WaitForQueue();
-			LocalSystem.Hangfire.WaitForQueue();
+
+			waitForStateProcessing(userCode, stateCode);
 		}
 
+		private void waitForStateProcessing(string userCode, string stateCode)
+		{
+			var personId = _data.Data().Person(userCode).Person.Id.GetValueOrDefault();
+			var time = CurrentTime.Value();
+			Policy.Handle<WaitForStateProcessException>()
+				.WaitAndRetry(50, attempt => TimeSpan.FromMilliseconds(100))
+				.Execute(() =>
+				{
+					var matchingEvents = from e in _events.LoadAll()
+						let stateChanged = e as PersonStateChangedEvent
+						where stateChanged != null &&
+							  stateChanged.PersonId == personId &&
+							  stateChanged.Timestamp == time &&
+							  stateChanged.StateName == stateCode
+						select stateChanged;
+
+					var stateChangedIsFullyProcessed = matchingEvents.Any();
+
+					if (!stateChangedIsFullyProcessed)
+						throw new WaitForStateProcessException(
+							$"State {userCode}/{stateCode} was not processed in time");
+				});
+		}
+
+		public class WaitForStateProcessException : Exception
+		{
+			public WaitForStateProcessException(string message) : base(message)
+			{
+			}
+		}
 	}
 }

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			PerformanceTest.Measure("1mKUHvBlk5wIk0LDZESO2prWvRuimhpjiWaSvoKk2gsE", "QueueWorkSmallBatchesTest", () =>
 			{
 				States.SendAllAsSmallBatches();
-				StateQueue.WaitForQueue();
+				StateQueue.WaitForDequeue();
 				Hangfire.WaitForQueue();
 			});
 		}

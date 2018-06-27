@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			base.AfterTest(testDetails);
 
 			Hangfire.WaitForQueue();
-			StateQueue.WaitForQueue();
+			StateQueue.WaitForDequeue();
 
 			TestSiteConfigurationSetup.TearDown();
 

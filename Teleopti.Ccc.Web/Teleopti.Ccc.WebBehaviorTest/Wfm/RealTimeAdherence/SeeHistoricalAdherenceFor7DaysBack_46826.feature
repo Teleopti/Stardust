@@ -39,8 +39,7 @@ Feature: See historical adherence for 7 days back
 	And at '2018-01-06 13:00:00' 'Mikkey Dee' sets his phone state to 'Ready'
 	And at '2018-01-07 14:00:00' 'Mikkey Dee' sets his phone state to 'LoggedOff'
 	And at '2018-01-08 15:00:00' 'Mikkey Dee' sets his phone state to 'Ready'
-	#And the time is '2018-01-08 16:00:00' commented out because it sometimes
-    #updates clock while still processing the previous state
+	And the time is '2018-01-08 16:00:00'
 	When I view historical adherence for 'Mikkey Dee' on '2018-01-02'
 	Then I should see rule change 'Adhering' at '09:00:00'
 	When I view historical adherence for 'Mikkey Dee' on '2018-01-03'
