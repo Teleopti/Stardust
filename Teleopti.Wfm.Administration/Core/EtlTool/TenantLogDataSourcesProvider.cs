@@ -8,6 +8,7 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 {
 	public class TenantLogDataSourcesProvider
 	{
+		private const string NameForOptionAll = "<All>";
 		private readonly AnalyticsConnectionsStringExtractor _analyticsConnectionsStringExtractor;
 		private readonly IGeneralFunctions _generalFunctions;
 
@@ -20,16 +21,16 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 
 		public IList<DataSourceModel> Load(string tenantName, bool includeInvalidDataSource = false)
 		{
+			var modelForAllDataSource = new DataSourceModel
+			{
+				Id = -2,
+				Name = NameForOptionAll,
+				TimeZoneCode = "All"
+			};
+
 			if (Tenants.IsAllTenants(tenantName))
 			{
-				return new List<DataSourceModel>
-				{
-					new DataSourceModel {
-						Id = -2,
-						Name = "< All >",
-						TimeZoneCode = "All"
-					}
-				};
+				return new List<DataSourceModel> {modelForAllDataSource};
 			}
 
 			_generalFunctions.SetConnectionString(_analyticsConnectionsStringExtractor.Extract(tenantName));
@@ -45,16 +46,29 @@ namespace Teleopti.Wfm.Administration.Core.EtlTool
 				logDataSources = _generalFunctions.DataSourceValidListIncludedOptionAll.ToList();
 			}
 
-			return logDataSources.Select(x => new DataSourceModel
+			var result = logDataSources.Select(x => new DataSourceModel
 				{
 					Id = x.DataSourceId,
 					Name = x.DataSourceName,
 					TimeZoneCode = x.TimeZoneCode,
 					IntervalLength = x.IntervalLength,
 					IsIntervalLengthSameAsTenant = isIntervalLengthValid(x.IntervalLength)
-			})
+				})
 				.OrderBy(x => x.Name)
 				.ToList();
+
+			var optionAll = result.SingleOrDefault(x => x.Id == -2);
+			if (optionAll == null)
+			{
+				result.Insert(0, modelForAllDataSource);
+			}
+			else
+			{
+				// The name for option "All" comes from UserTexts.Resource.AllSelection, it's "< All >"
+				optionAll.Name = NameForOptionAll;
+			}
+
+			return result;
 		}
 
 		private bool isIntervalLengthValid(int argIntervalLength)

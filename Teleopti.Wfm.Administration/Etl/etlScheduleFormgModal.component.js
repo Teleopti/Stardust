@@ -92,10 +92,6 @@
       )
       .success(function(data) {
         ctrl.tenantLogData = data;
-        ctrl.tenantLogData.unshift({
-          Name: '<All>',
-          Id: 0
-        })
       });
     }
 
@@ -151,10 +147,6 @@
       )
       .success(function(data) {
         ctrl.tenantLogData = data;
-        ctrl.tenantLogData.unshift({
-          Name: '<All>',
-          Id: 0
-        })
         ctrl.form.LogDataSourceId = getItemBasedOnName(ctrl.tenantLogData, ctrl.job.LogDataSourceId, 'Id');
         handleRelativePeriods();
       });

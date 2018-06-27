@@ -21,9 +21,17 @@ namespace Teleopti.Wfm.AdministrationTest.FakeData
 
 		public IList<IDataSourceEtl> GetDataSourceList(bool getValidDataSources, bool includeOptionAll)
 		{
-			return getValidDataSources
+			var result = getValidDataSources
 				? dataSourceEtls.Where(x => x.TimeZoneCode != null).ToList()
 				: dataSourceEtls.Where(x => x.TimeZoneCode == null).ToList();
+
+			if (includeOptionAll)
+			{
+				// Refer to SP mart.sys_get_datasources
+				result.Insert(0, new DataSourceEtl(-2, "< All >", 0, "UTC", 15, false));
+			}
+
+			return result;
 		}
 
 		public void HasAggDataSources(IDataSourceEtl dataSource)

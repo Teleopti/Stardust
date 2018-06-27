@@ -141,9 +141,15 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			GeneralInfrastructure.HasDataSources(new DataSourceEtl(3, "myDs", 1, "UTC", 15, false));
 
 			var result = (OkNegotiatedContentResult<IList<DataSourceModel>>) Target.TenantValidLogDataSources(testTenantName);
-			result.Content.Count.Should().Be(1);
-			result.Content.First().Id.Should().Be(3);
-			result.Content.First().Name.Should().Be("myDs");
+			result.Content.Count.Should().Be(2);
+
+			var firstDataSource = result.Content.First();
+			firstDataSource.Id.Should().Be(-2);
+			firstDataSource.Name.Should().Be(Tenants.AllTenantName);
+
+			var secondDataSource = result.Content.Second();
+			secondDataSource.Id.Should().Be(3);
+			secondDataSource.Name.Should().Be("myDs");
 		}
 
 		[Test]
@@ -167,12 +173,14 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 				null, 15, false));
 
 			var result = (OkNegotiatedContentResult<IList<DataSourceModel>>)Target.TenantAllLogDataSources(testTenantName);
+			result.Content.Count.Should().Be(3);
+
 			var myds = result.Content.Single(x => x.Id == 3 && x.Name == "myDs");
-			var anotherDs = result.Content.Single(x => x.Id == 4 && x.Name == "anotherDs");
-			result.Content.Count.Should().Be(2);
 			myds.TimeZoneCode.Should().Be("UTC");
 			myds.IntervalLength.Should().Be(60);
 			myds.IsIntervalLengthSameAsTenant.Should().Be(false);
+
+			var anotherDs = result.Content.Single(x => x.Id == 4 && x.Name == "anotherDs");
 			anotherDs.TimeZoneCode.Should().Be(null);
 			anotherDs.IntervalLength.Should().Be(15);
 			anotherDs.IsIntervalLengthSameAsTenant.Should().Be(true);
@@ -189,7 +197,8 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			GeneralInfrastructure.HasAggDataSources(new DataSourceEtl(89, "newDs", 2, timezoneName, 15, false));
 
 			var result = (OkNegotiatedContentResult<IList<DataSourceModel>>)Target.TenantAllLogDataSources(testTenantName);
-			result.Content.Count.Should().Be(3);
+			result.Content.Count.Should().Be(4);
+			result.Content.Any(x => x.Id == -2 && x.Name == Tenants.AllTenantName).Should().Be.True();
 			result.Content.Any(x => x.Id == 3 && x.Name == "myDs").Should().Be.True();
 			result.Content.Any(x => x.Id == 4 && x.Name == "anotherDs" && x.TimeZoneCode == null)
 				.Should().Be.True();
@@ -433,7 +442,8 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 
 			Target.PersistDataSource(tenantDataSources);
 			var dataSources = (OkNegotiatedContentResult<IList<DataSourceModel>>)Target.TenantValidLogDataSources(testTenantName);
-			dataSources.Content.Single().TimeZoneCode.Should().Be(myDsModel.TimeZoneCode);
+			var dataSourceInResultt = dataSources.Content.Single(x=>x.Name== "myDs");
+			dataSourceInResultt.TimeZoneCode.Should().Be(myDsModel.TimeZoneCode);
 
 			var scheduledJob = JobScheduleRepository.GetSchedules(null, DateTime.Now).First();
 			var scheduledPeriods = JobScheduleRepository.GetSchedulePeriods(1);
