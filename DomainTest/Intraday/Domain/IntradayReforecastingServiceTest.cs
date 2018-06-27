@@ -3,7 +3,6 @@ using Rhino.Mocks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Intraday.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Intraday.Domain
@@ -74,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday.Domain
 				.Select(offset => opensAt.AddMinutes(offset * intervalLength))
 				.ToList();
 
-			var forecastedAgentsList = new List<StaffingIntervalModel>();
+			var forecastedAgentsList = new List<StaffingInterval>();
 			var forcastedVolmeList = new List<SkillIntervalStatistics>();
 			var actualVolumeList = new List<SkillIntervalStatistics>();
 			for (int i = 0; i < timeSeries.Count; i++)
@@ -82,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday.Domain
 				if (i < forcastedVolume.Length)
 					forcastedVolmeList.Add(new SkillIntervalStatistics { Calls = forcastedVolume[i], SkillId = skillId, StartTime = timeSeries[i] });
 				if (i < forcastedAgents.Length)
-					forecastedAgentsList.Add(new StaffingIntervalModel { Agents = forcastedAgents[i], SkillId = skillId, StartTime = timeSeries[i] });
+					forecastedAgentsList.Add(new StaffingInterval { Agents = forcastedAgents[i], SkillId = skillId, StartTime = timeSeries[i] });
 				if (i < actualVolume.Length)
 					actualVolumeList.Add(new SkillIntervalStatistics { Calls = actualVolume[i], SkillId = skillId, StartTime = timeSeries[i] });
 			}
@@ -121,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday.Domain
 				.Select(offset => opensAt.AddMinutes(offset * intervalLength))
 				.ToList();
 
-			var forecastedAgentsList = new List<StaffingIntervalModel>();
+			var forecastedAgentsList = new List<StaffingInterval>();
 			var forcastedVolmeList = new List<SkillIntervalStatistics>();
 			var actualVolumeList = new List<SkillIntervalStatistics>();
 			for (int i = 0; i < timeSeries.Count; i++)
@@ -129,15 +128,15 @@ namespace Teleopti.Ccc.DomainTest.Intraday.Domain
 				if (i < forcastedVolume.Length)
 					forcastedVolmeList.Add(new SkillIntervalStatistics { Calls = forcastedVolume[i], SkillId = skillId, StartTime = timeSeries[i] });
 				if (i < forcastedAgents.Length)
-					forecastedAgentsList.Add(new StaffingIntervalModel { Agents = forcastedAgents[i], SkillId = skillId, StartTime = timeSeries[i] });
+					forecastedAgentsList.Add(new StaffingInterval { Agents = forcastedAgents[i], SkillId = skillId, StartTime = timeSeries[i] });
 				if (i < actualVolume.Length)
 					actualVolumeList.Add(new SkillIntervalStatistics { Calls = actualVolume[i], SkillId = skillId, StartTime = timeSeries[i] });
 			}
 
 			var provider = new IntradayReforecastingService();
 
-			var noForecastedAgents = provider.ReforecastAllSkills(new List<StaffingIntervalModel>(), forcastedVolmeList, actualVolumeList, timeSeries, new DateTime(2018, 3, 28, 13, 38, 14));
-			Assert.That(noForecastedAgents, Is.TypeOf(typeof(List<StaffingIntervalModel>)));
+			var noForecastedAgents = provider.ReforecastAllSkills(new List<StaffingInterval>(), forcastedVolmeList, actualVolumeList, timeSeries, new DateTime(2018, 3, 28, 13, 38, 14));
+			Assert.That(noForecastedAgents, Is.TypeOf(typeof(List<StaffingInterval>)));
 			Assert.That(noForecastedAgents.Count(), Is.EqualTo(0));
 		}
 
@@ -158,18 +157,18 @@ namespace Teleopti.Ccc.DomainTest.Intraday.Domain
 				.Select(offset => opensAt.AddMinutes(offset * intervalLength))
 				.ToList();
 
-			var forecastedAgentsList = new List<StaffingIntervalModel>();
+			var forecastedAgentsList = new List<StaffingInterval>();
 			var forcastedVolmeList = new List<SkillIntervalStatistics>();
 			for (int i = 0; i < timeSeries.Count; i++)
 			{
 				forcastedVolmeList.Add(new SkillIntervalStatistics { Calls = forcastedVolume[i], SkillId = skillId, StartTime = timeSeries[i] });
-				forecastedAgentsList.Add(new StaffingIntervalModel { Agents = forcastedAgents[i], SkillId = skillId, StartTime = timeSeries[i] });
+				forecastedAgentsList.Add(new StaffingInterval { Agents = forcastedAgents[i], SkillId = skillId, StartTime = timeSeries[i] });
 			}
 
 			var provider = new IntradayReforecastingService();
 
 			var noForecastedAgents = provider.ReforecastAllSkills(forecastedAgentsList, forcastedVolmeList, new List<SkillIntervalStatistics>(), timeSeries, new DateTime(2018, 3, 28, 13, 38, 14));
-			Assert.That(noForecastedAgents, Is.TypeOf(typeof(List<StaffingIntervalModel>)));
+			Assert.That(noForecastedAgents, Is.TypeOf(typeof(List<StaffingInterval>)));
 			Assert.That(noForecastedAgents.Count(), Is.EqualTo(0));
 		}
 
@@ -198,13 +197,13 @@ namespace Teleopti.Ccc.DomainTest.Intraday.Domain
 			var timeSeries_skill2 = this.GenerateTimes(new DateTime(2018, 3, 28, 7, 0, 0), new DateTime(2018, 3, 29, 0, 0, 0), 30);
 			var timeSeries_total = this.GenerateTimes(new DateTime(2018, 3, 28, 7, 0, 0), new DateTime(2018, 3, 29, 0, 0, 0), 30);
 
-			var forecastedAgentsList = new List<StaffingIntervalModel>();
+			var forecastedAgentsList = new List<StaffingInterval>();
 			var forcastedVolmeList = new List<SkillIntervalStatistics>();
 			var actualVolumeList = new List<SkillIntervalStatistics>();
 			for (int i = 0; i < timeSeries_skill1.Count; i++)
 			{
 				forcastedVolmeList.Add(new SkillIntervalStatistics { Calls = forcastedVolume_skill1[i], SkillId = skillId1, StartTime = timeSeries_skill1[i] });
-				forecastedAgentsList.Add(new StaffingIntervalModel { Agents = forcastedAgents_skill1[i], SkillId = skillId1, StartTime = timeSeries_skill1[i] });
+				forecastedAgentsList.Add(new StaffingInterval { Agents = forcastedAgents_skill1[i], SkillId = skillId1, StartTime = timeSeries_skill1[i] });
 				if (i < 12)
 				{
 					actualVolumeList.Add(new SkillIntervalStatistics { Calls = actualVolume_skill1[i], SkillId = skillId1, StartTime = timeSeries_skill1[i] });
@@ -213,7 +212,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday.Domain
 			for (int i = 0; i < timeSeries_skill2.Count; i++)
 			{
 				forcastedVolmeList.Add(new SkillIntervalStatistics { Calls = forcastedVolume_skill2[i], SkillId = skillId2, StartTime = timeSeries_skill2[i] });
-				forecastedAgentsList.Add(new StaffingIntervalModel { Agents = forcastedAgents_skill2[i], SkillId = skillId2, StartTime = timeSeries_skill2[i] });
+				forecastedAgentsList.Add(new StaffingInterval { Agents = forcastedAgents_skill2[i], SkillId = skillId2, StartTime = timeSeries_skill2[i] });
 				if (i < 14)
 				{
 					actualVolumeList.Add(new SkillIntervalStatistics { Calls = actualVolume_skill2[i], SkillId = skillId2, StartTime = timeSeries_skill2[i] });

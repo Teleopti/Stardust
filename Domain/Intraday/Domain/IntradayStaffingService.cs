@@ -21,11 +21,11 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 			TimeSpan resolution, 
 			bool useShrinkage);
 
-		IList<StaffingIntervalModel> GetRequiredStaffing(
+		IList<StaffingInterval> GetRequiredStaffing(
 			IList<SkillIntervalStatistics> actualStatistics,
 			IList<ISkill> skills,
 			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays,
-			IList<StaffingIntervalModel> forecastedStaffingIntervals,
+			IList<StaffingInterval> forecastedStaffingIntervals,
 			TimeSpan resolution, IList<SkillDayStatsRange> skillDayStatsRange,
 			Dictionary<Guid, int> workloadBacklog);
 	}
@@ -137,16 +137,16 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 				.ToList();
 		}
 
-		public IList<StaffingIntervalModel> GetRequiredStaffing(
+		public IList<StaffingInterval> GetRequiredStaffing(
 			IList<SkillIntervalStatistics> actualStatistics,
 			IList<ISkill> skills,
 			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays,
-			IList<StaffingIntervalModel> forecastedStaffingIntervals,
+			IList<StaffingInterval> forecastedStaffingIntervals,
 			TimeSpan resolution, IList<SkillDayStatsRange> skillDayStatsRange,
 			Dictionary<Guid, int> workloadBacklog)
 		{
 
-			var actualStaffingIntervals = new List<StaffingIntervalModel>();
+			var actualStaffingIntervals = new List<StaffingInterval>();
 			if (actualStatistics == null || !actualStatistics.Any())
 				return actualStaffingIntervals;
 
@@ -304,10 +304,10 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 			clonedSkillDay.Release();
 		}
 
-		private IList<StaffingIntervalModel> GetRequiredStaffing(TimeSpan resolution, IList<SkillIntervalStatistics> skillDayStats,
+		private IList<StaffingInterval> GetRequiredStaffing(TimeSpan resolution, IList<SkillIntervalStatistics> skillDayStats,
 			ISkillDay skillDay)
 		{
-			var actualStaffingIntervals = new List<StaffingIntervalModel>();
+			var actualStaffingIntervals = new List<StaffingInterval>();
 			var staffing = skillDay.SkillStaffPeriodViewCollection(resolution, false);
 			var skillIntervals = skillDayStats.GroupBy(x => x.StartTime);
 			foreach (var interval in skillIntervals)
@@ -318,7 +318,7 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 				if (staffingInterval == null)
 					continue;
 
-				actualStaffingIntervals.Add(new StaffingIntervalModel
+				actualStaffingIntervals.Add(new StaffingInterval
 				{
 					SkillId = skillDay.Skill.Id.Value,
 					StartTime = interval.Key,

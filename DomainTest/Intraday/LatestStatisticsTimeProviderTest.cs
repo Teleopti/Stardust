@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 	[DomainTest]
 	public class LatestStatisticsTimeProviderTest
 	{
-		public LatestStatisticsTimeProvider Target;
+		public ILatestStatisticsTimeProvider Target;
 		public FakeLatestStatisticsIntervalIdLoader LatestStatisticsIntervalIdLoader;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public MutableNow Now;

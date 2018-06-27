@@ -16,6 +16,7 @@ using System.Globalization;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.Staffing;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {

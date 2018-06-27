@@ -2,6 +2,7 @@
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
 
@@ -10,10 +11,10 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebIntraday)]
 	public class IntradayController : ApiController
 	{
-		private readonly LatestStatisticsTimeProvider _latestStatisticsTimeProvider;
+		private readonly ILatestStatisticsTimeProvider _latestStatisticsTimeProvider;
 		private readonly IIntradaySkillProvider _intradaySkillProvider;
 
-		public IntradayController(LatestStatisticsTimeProvider latestStatisticsTimeProvider, IIntradaySkillProvider intradaySkillProvider)
+		public IntradayController(ILatestStatisticsTimeProvider latestStatisticsTimeProvider, IIntradaySkillProvider intradaySkillProvider)
 		{
 			_latestStatisticsTimeProvider = latestStatisticsTimeProvider;
 			_intradaySkillProvider = intradaySkillProvider;

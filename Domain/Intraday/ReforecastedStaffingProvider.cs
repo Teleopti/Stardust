@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday.Domain;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Intraday
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			if (latestStatsTime > usersNow) // This case only for dev, test and demo
 				usersNow = latestStatsTime.Value.AddMinutes(minutesPerInterval);
 
-			var reforecastedStaffingPerSkill = new List<StaffingIntervalModel>();
+			var reforecastedStaffingPerSkill = new List<StaffingInterval>();
 
 			foreach (var skillId in forecastedCallsPerSkillDictionary.Keys)
 			{
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 				var reforecastedStaffing = forecastedStaffingList
 					.Where(x => x.SkillId == skillId && x.StartTime >= usersNow)
-					.Select(t => new StaffingIntervalModel
+					.Select(t => new StaffingInterval
 					{
 						SkillId = skillId,
 						Agents = t.Agents*averageDeviation,
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 				: getDataSeries(minutesPerInterval, timeSeries, reforecastedStaffingPerSkill);
 		}
 
-		private static double?[] getDataSeries(int minutesPerInterval, DateTime[] timeSeries, List<StaffingIntervalModel> reforecastedStaffingPerSkill)
+		private static double?[] getDataSeries(int minutesPerInterval, DateTime[] timeSeries, List<StaffingInterval> reforecastedStaffingPerSkill)
 		{
 			var returnValue = reforecastedStaffingPerSkill
 				.OrderBy(g => g.StartTime)

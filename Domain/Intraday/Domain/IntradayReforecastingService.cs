@@ -7,8 +7,8 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 {
 	public interface IIntradayReforecastingService
 	{
-		IEnumerable<StaffingIntervalModel> ReforecastAllSkills(
-			IEnumerable<StaffingIntervalModel> forecastedAgents,
+		IEnumerable<StaffingInterval> ReforecastAllSkills(
+			IEnumerable<StaffingInterval> forecastedAgents,
 			IEnumerable<SkillIntervalStatistics> forecastedVolume,
 			IEnumerable<SkillIntervalStatistics> actualVolume,
 			IEnumerable<DateTime> timeSeries,
@@ -22,27 +22,27 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 
 		}
 
-		public IEnumerable<StaffingIntervalModel> ReforecastAllSkills(
-			IEnumerable<StaffingIntervalModel> forecastedAgents,
+		public IEnumerable<StaffingInterval> ReforecastAllSkills(
+			IEnumerable<StaffingInterval> forecastedAgents,
 			IEnumerable<SkillIntervalStatistics> forecastedVolume,
 			IEnumerable<SkillIntervalStatistics> actualVolume,
 			IEnumerable<DateTime> timeSeries,
 			DateTime startReforecastFromTimeUtc)
 		{
 			if (!forecastedAgents.Any())
-				return new List<StaffingIntervalModel>();
+				return new List<StaffingInterval>();
 
 			if (!forecastedVolume.Any())
-				return new List<StaffingIntervalModel>();
+				return new List<StaffingInterval>();
 
 			if (!actualVolume.Any())
-				return new List<StaffingIntervalModel>();
+				return new List<StaffingInterval>();
 
 			var skills = forecastedAgents
 				.GroupBy(x => x.SkillId)
 				.Select(x => x.First());
 
-			var allSkillsReforecasted = new List<StaffingIntervalModel>();
+			var allSkillsReforecasted = new List<StaffingInterval>();
 			foreach (var skill in skills)
 			{
 				var actualVolumeForThisSkill = actualVolume
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 						.Where(f => f.SkillId == skill.SkillId && f.StartTime >= startReforecastFromTimeUtc &&
 									timeSeries.Any(t => t == f.StartTime))
 						.Select(t =>
-							new StaffingIntervalModel
+							new StaffingInterval
 							{
 								SkillId = t.SkillId,
 								Agents = t.Agents * averageDeviation,

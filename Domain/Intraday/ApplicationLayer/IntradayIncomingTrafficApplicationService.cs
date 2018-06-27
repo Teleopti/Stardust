@@ -95,8 +95,10 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 			{
 				var firstIntervalStartTimeLocal =
 					TimeZoneInfo.ConvertTimeFromUtc(orderedIntervals.Min(x => x.IntervalTime), _timeZone.TimeZone());
+				
 				var lastIntervalStartTimeLocal =
 					TimeZoneInfo.ConvertTimeFromUtc(orderedIntervals.Max(x => x.IntervalTime), _timeZone.TimeZone());
+
 				timesLocal = this.GenerateTimeSeries(firstIntervalStartTimeLocal, lastIntervalStartTimeLocal,
 					intervalLength);
 
@@ -142,12 +144,24 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 				}
 			}
 
+			var firstIntervalStartUtc = orderedIntervals?.FirstOrDefault()?.IntervalTime;
+			firstIntervalStartUtc = firstIntervalStartUtc.HasValue
+				? (DateTime?) TimeZoneInfo.ConvertTimeFromUtc(firstIntervalStartUtc.Value, _timeZone.TimeZone())
+				: null;
+
+			var latestActualIntervalStartUtc = orderedIntervals?.LastOrDefault(x => x.CalculatedCalls.HasValue)?.IntervalTime;
+			latestActualIntervalStartUtc = latestActualIntervalStartUtc.HasValue
+				? (DateTime?) TimeZoneInfo.ConvertTimeFromUtc(latestActualIntervalStartUtc.Value, _timeZone.TimeZone())
+				: null;
+			
 			return new IntradayIncomingViewModel()
 			{
-				FirstIntervalStart = orderedIntervals?.FirstOrDefault()?.IntervalTime,
-				FirstIntervalEnd = orderedIntervals?.FirstOrDefault()?.IntervalTime.AddMinutes(intervalLength),
-				LatestActualIntervalStart = orderedIntervals?.LastOrDefault(x => x.CalculatedCalls.HasValue)?.IntervalTime,
-				LatestActualIntervalEnd = orderedIntervals?.LastOrDefault(x => x.CalculatedCalls.HasValue)?.IntervalTime.AddMinutes(intervalLength),
+				FirstIntervalStart = firstIntervalStartUtc,
+				FirstIntervalEnd = firstIntervalStartUtc.HasValue 
+					? (DateTime ?) firstIntervalStartUtc.Value.AddMinutes(intervalLength) : null,
+				LatestActualIntervalStart = latestActualIntervalStartUtc,
+				LatestActualIntervalEnd = latestActualIntervalStartUtc.HasValue 
+					? (DateTime ?) latestActualIntervalStartUtc.Value.AddMinutes(intervalLength) : null,
 				Summary = summary,
 				DataSeries = new IntradayIncomingDataSeries
 				{

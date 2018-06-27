@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Intraday.Domain;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Intraday
@@ -22,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var startTimeLocal = dateOnly?.Date ?? TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()).Date;
 			var endTimeLocal = startTimeLocal.AddDays(1);
 
-			var staffingIntervals = new List<StaffingIntervalModel>();
+			var staffingIntervals = new List<StaffingInterval>();
 			var resolution = TimeSpan.FromMinutes(minutesPerInterval);
 			foreach (var skill in skillDays.Keys)
 			{
@@ -33,14 +35,20 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			return staffingIntervals
 				.Where(t => t.StartTime >= startTimeLocal && t.StartTime < endTimeLocal)
+				.Select(x => new StaffingIntervalModel
+				{
+					SkillId = x.SkillId,
+					Agents = x.Agents,
+					StartTime = x.StartTime
+				})
 				.ToList();
 		}
 
-		private IEnumerable<StaffingIntervalModel> getStaffingIntervalModels(ISkillDay skillDay, TimeSpan resolution, bool useShrinkage)
+		private IEnumerable<StaffingInterval> getStaffingIntervalModels(ISkillDay skillDay, TimeSpan resolution, bool useShrinkage)
 		{
 			var skillStaffPeriods = skillDay.SkillStaffPeriodViewCollection(resolution, useShrinkage);
 	
-			return skillStaffPeriods.Select(skillStaffPeriod => new StaffingIntervalModel
+			return skillStaffPeriods.Select(skillStaffPeriod => new StaffingInterval
 			{
 				SkillId = skillDay.Skill.Id.Value,
 				StartTime = TimeZoneHelper.ConvertFromUtc(skillStaffPeriod.Period.StartDateTime, _timeZone.TimeZone()),

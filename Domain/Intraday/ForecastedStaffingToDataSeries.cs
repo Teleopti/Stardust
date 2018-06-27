@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Intraday.Domain;
+using Teleopti.Ccc.Domain.Staffing;
 
 namespace Teleopti.Ccc.Domain.Intraday
 {
@@ -13,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 				.Select(s =>
 				{
 					var staffingIntervalModel = s.First();
-					return new StaffingIntervalModel
+					return new StaffingInterval
 					{
 						SkillId = staffingIntervalModel.SkillId,
 						StartTime = staffingIntervalModel.StartTime,

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 {
 	public interface IIntradayForecastingService
 	{
-		IList<StaffingIntervalModel> GetForecastedStaffing(
+		IList<StaffingInterval> GetForecastedStaffing(
 			IEnumerable<ISkillDay> skillDays, 
 			DateTime startTimeUtc,
 			DateTime endTimeUtc,
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 			DateTime endAtUtc);
 
 		IList<EslInterval> CalculateEstimatedServiceLevels(IEnumerable<ISkillDay> skillDays, DateTime startOfPeriodUtc, DateTime endOfPeriodUtc);
-		void CalculateForecastedAgentsForEmailSkills(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, bool useShrinkage);
+		void CalculateForecastedAgentsForEmailSkills(IEnumerable<ISkillDay> skillDays, bool useShrinkage);
 	}
 
 	public class IntradayForecastingService : IIntradayForecastingService
@@ -50,13 +50,14 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 			_staffingService = staffingService ?? throw new ArgumentNullException(nameof(staffingService));
 		}
 
-		public IList<StaffingIntervalModel> GetForecastedStaffing(
+		public IList<StaffingInterval> GetForecastedStaffing(
 			IEnumerable<ISkillDay> skillDays, 
 			DateTime startTimeUtc, 
 			DateTime endTimeUtc,
 			TimeSpan resolution,
 			bool useShrinkage)
 		{
+			this.CalculateForecastedAgentsForEmailSkills(skillDays, useShrinkage);
 			var staffingIntervals = skillDays
 				.Where(x => !(x.Skill is IChildSkill) && x.Skill.Id.HasValue)
 				.SelectMany(x =>
@@ -65,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 
 					return skillStaffPeriods
 						.Where(t => t.Period.StartDateTime >= startTimeUtc && t.Period.StartDateTime < endTimeUtc)
-						.Select(skillStaffPeriod => new StaffingIntervalModel
+						.Select(skillStaffPeriod => new StaffingInterval
 						{
 							SkillId = x.Skill.Id.Value,
 							StartTime = skillStaffPeriod.Period.StartDateTime,
@@ -107,13 +108,17 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 			var intervalLength = _intervalLengthFetcher.IntervalLength;
 			var eslIntervals = new List<EslInterval>();
 
-			if (skillDays == null || !skillDays.Any())
+			if (!skillDays.Any())
 				return eslIntervals;
 
 			skillDays = skillDays.Where(x => !(x.Skill is IChildSkill) && x.Skill.Id.HasValue);
+
 			var skills = skillDays.GroupBy(x => x.Skill).Select(x => x.Key).ToList();
-			var forcastedVolumes = GetForecastedCalls(skillDays, startOfPeriodUtc, endOfPeriodUtc);
-			var forecastedStaffing = GetForecastedStaffing(skillDays, startOfPeriodUtc, endOfPeriodUtc, TimeSpan.FromMinutes(intervalLength), false)
+
+			var forcastedVolumes = this.GetForecastedCalls(skillDays, startOfPeriodUtc, endOfPeriodUtc);
+
+			var forecastedStaffing = this
+				.GetForecastedStaffing(skillDays, startOfPeriodUtc, endOfPeriodUtc, TimeSpan.FromMinutes(intervalLength), false)
 				.Where(x => x.StartTime >= startOfPeriodUtc && x.StartTime <= endOfPeriodUtc);
 
 			if (!forcastedVolumes.Any() || !forecastedStaffing.Any())
@@ -138,22 +143,25 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 				foreach (var skill in skills)
 				{
 					var forecastedVolume = forcastedVolumes.Where(x => x.StartTime == iTime && x.SkillId == skill.Id);
-					var skillData = skillDays
-						.Where(x => x.Skill.Id == skill.Id)
-						.SelectMany(x => x.SkillDataPeriodCollection.Where(d => d.Period.StartDateTime <= iTime && d.Period.EndDateTime > iTime))
+					var one = skillDays
+						.Where(x => x.CurrentDate.Date == iTime.Date && x.Skill.Id == skill.Id);
+					var skillData = one.Select(x => x.SkillDataPeriodCollection
+							.FirstOrDefault(d => d.Period.StartDateTime <= iTime && d.Period.EndDateTime > iTime))
 						.FirstOrDefault();
 
 					if (forecastedVolume == null || skillData?.ServiceAgreement == null)
 						continue;
 
 					var esl = _staffingCalculatorService.ServiceLevelAchievedOcc(
-						scheduledStaffingPerSkill.Where(x => x.StartDateTime == iTime && x.SkillId == skill.Id).Sum(x => x.StaffingLevel),
+						scheduledStaffingPerSkill.Where(x => x.StartDateTime == iTime && x.SkillId == skill.Id)
+							.Sum(x => x.StaffingLevel),
 						skillData.ServiceAgreement.ServiceLevel.Seconds,
 						forecastedVolume.Sum(x => x.Calls),
 						forecastedVolume.Sum(x => x.AverageHandleTime),
 						TimeSpan.FromMinutes(intervalLength),
 						skillData.ServiceAgreement.ServiceLevel.Percent.Value,
-						forecastedStaffing.Where(x => x.StartTime == iTime && x.SkillId == skill.Id).Sum(x => x.Agents),
+						forecastedStaffing.Where(x => x.StartTime == iTime && x.SkillId == skill.Id)
+							.Sum(x => x.Agents),
 						1,
 						skill.AbandonRate.Value);
 
@@ -179,19 +187,23 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 		}
 	
 		
-		public void CalculateForecastedAgentsForEmailSkills(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, bool useShrinkage)
+		public void CalculateForecastedAgentsForEmailSkills(IEnumerable<ISkillDay> skillDays, bool useShrinkage)
 		{
+			var skills = skillDays.Select(x => x.Skill);
+
 			var scheduledStaffingPerSkill = new List<SkillStaffingIntervalLightModel>();
-			var skillGroupsByResuolution = skillDays.Keys
+
+			var skillGroupsByResuolution = skills
 				.Where(SkillTypesWithBacklog.IsBacklogSkillType)
 				.GroupBy(x => x.DefaultResolution);
+
 			foreach (var group in skillGroupsByResuolution)
 			{
 				var emailSkillsForOneResoultion = group.ToList();
 
 				foreach (var skill in emailSkillsForOneResoultion)
 				{
-					var skillDaysEmail = skillDays[skill];
+					var skillDaysEmail = skillDays.Where(x => x.Skill.Equals(skill));
 					foreach (var skillDay in skillDaysEmail)
 					{
 						var skillDayStartUtc = DateTime.SpecifyKind(skillDay.CurrentDate.Date, DateTimeKind.Utc);
@@ -217,6 +229,7 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 				}
 			}
 		}
+
 		public IEnumerable<ITemplateTaskPeriod> GetTemplateTaskPeriods(ISkillDay skillDay, int minutesPerInterval, DateTime startOfPeriodUtc, DateTime endOfPeriodUtc)
 		{
 			if (startOfPeriodUtc == null || endOfPeriodUtc == null)

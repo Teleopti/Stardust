@@ -13,6 +13,7 @@ using Teleopti.Interfaces.Domain;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Intraday.Domain;
+using Teleopti.Ccc.Domain.Staffing;
 
 namespace Teleopti.Ccc.DomainTest.Staffing
 {

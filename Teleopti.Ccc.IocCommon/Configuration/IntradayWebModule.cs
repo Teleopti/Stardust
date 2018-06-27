@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Intraday.ApplicationLayer;
 using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SkillGroupManagement;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PerformanceViewModelCreator>().SingleInstance();
 			builder.RegisterType<EstimatedServiceLevelProvider>().SingleInstance();
 
-			builder.RegisterType<LatestStatisticsTimeProvider>().SingleInstance();
+			builder.RegisterType<LatestStatisticsTimeProvider>().As<ILatestStatisticsTimeProvider>().SingleInstance();
 			builder.RegisterType<ExtractSkillForecastIntervals>().SingleInstance();
 			builder.RegisterType<IntradayQueueStatisticsLoader>().As<IIntradayQueueStatisticsLoader>().SingleInstance();
 			builder.RegisterType<SplitSkillStaffInterval>().As<SplitSkillStaffInterval>().SingleInstance();

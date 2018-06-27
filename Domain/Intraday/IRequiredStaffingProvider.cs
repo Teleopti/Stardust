@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday.Domain;
+using Teleopti.Ccc.Domain.Staffing;
 
 namespace Teleopti.Ccc.Domain.Intraday
 {

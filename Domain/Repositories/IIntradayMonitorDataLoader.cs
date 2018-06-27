@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.Intraday.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
