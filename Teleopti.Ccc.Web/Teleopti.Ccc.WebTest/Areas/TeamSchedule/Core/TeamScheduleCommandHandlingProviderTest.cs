@@ -716,7 +716,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 
 			CommandHandler.CalledCount.Should().Be.EqualTo(1);
 			var multipleCommand = CommandHandler.CalledCommands.Single() as MultipleChangeScheduleCommand;
-			var cmd = multipleCommand.Commands.First() as AddActivityCommandSimply;
+
+
+			var cmd = multipleCommand.Commands.Single() as AddActivityCommandSimply;
 
 			multipleCommand.Date.Should().Be.EqualTo(date);
 			multipleCommand.Person.Should().Be.EqualTo(person);
@@ -770,7 +772,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 
 			CommandHandler.CalledCount.Should().Be.EqualTo(1);
 			var multipleCommand = CommandHandler.CalledCommands.Single() as MultipleChangeScheduleCommand;
-			var addPersonalActivityCommand = multipleCommand.Commands.First() as AddPersonalActivityCommandSimply;
+			var addPersonalActivityCommand = multipleCommand.Commands.Single() as AddPersonalActivityCommandSimply;
 			multipleCommand.Date.Should().Be.EqualTo(date);
 			multipleCommand.Person.Should().Be.EqualTo(person);
 			addPersonalActivityCommand.Activity.Should().Be.EqualTo(invoiceActivity);
@@ -825,7 +827,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 
 			CommandHandler.CalledCount.Should().Be.EqualTo(1);
 			var multipleCommand = CommandHandler.CalledCommands.Single() as MultipleChangeScheduleCommand;
-			var addOvertimeActivityCommand = multipleCommand.Commands.First() as AddOvertimeActivityCommandSimply;
+			var addOvertimeActivityCommand = multipleCommand.Commands.Single() as AddOvertimeActivityCommandSimply;
 			multipleCommand.Date.Should().Be.EqualTo(date);
 			multipleCommand.Person.Should().Be.EqualTo(person);
 			addOvertimeActivityCommand.Activity.Should().Be.EqualTo(invoiceActivity);

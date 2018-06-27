@@ -517,6 +517,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 								});
 								break;
 						}
+
+						continue;
 					}
 
 					commands.Add(new ChangeActivityTypeCommand
