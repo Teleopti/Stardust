@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	[TestFixture]
 	public class NewSchedulePeriodTargetCalculatorFactoryTest
 	{
-		private ISchedulePeriodTargetCalculatorFactory _target;
+		private NewSchedulePeriodTargetCalculatorFactory _target;
 		private MockRepository _mocks;
 		private IScheduleMatrixPro _matrix;
 		private IPerson _person;

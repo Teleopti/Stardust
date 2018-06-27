@@ -1228,7 +1228,6 @@
     <Compile Include="InterfaceLegacy\Domain\ISchedulePartModifyAndRollbackService.cs" />
     <Compile Include="InterfaceLegacy\Domain\ISchedulePeriod.cs" />
     <Compile Include="InterfaceLegacy\Domain\ISchedulePeriodTargetCalculator.cs" />
-    <Compile Include="InterfaceLegacy\Domain\ISchedulePeriodTargetCalculatorFactory.cs" />
     <Compile Include="InterfaceLegacy\Domain\ISchedulePeriodTargetDayOffCalculator.cs" />
     <Compile Include="InterfaceLegacy\Domain\ISchedulePeriodTargetTimeCalculator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleRange.cs" />

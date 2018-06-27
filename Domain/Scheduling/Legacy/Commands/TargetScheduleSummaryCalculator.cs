@@ -20,8 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				IFullWeekOuterWeekPeriodCreator fullWeekOuterWeekPeriodCreator =
 						new FullWeekOuterWeekPeriodCreator(virtualSchedulePeriod.DateOnlyPeriod, virtualSchedulePeriod.Person);
 				IScheduleMatrixPro matrix = new ScheduleMatrixPro(range, fullWeekOuterWeekPeriodCreator, virtualSchedulePeriod);
-				ISchedulePeriodTargetCalculatorFactory schedulePeriodTargetCalculatorFactory =
-					new NewSchedulePeriodTargetCalculatorFactory(matrix);
+				var schedulePeriodTargetCalculatorFactory = new NewSchedulePeriodTargetCalculatorFactory(matrix);
 				var calculator = schedulePeriodTargetCalculatorFactory.CreatePeriodTargetCalculator();
 				if (calculator == null)
 					return new TargetScheduleSummary();

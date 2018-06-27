@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-	public class NewSchedulePeriodTargetCalculatorFactory : ISchedulePeriodTargetCalculatorFactory
+	public class NewSchedulePeriodTargetCalculatorFactory
 	{
 		private readonly IScheduleMatrixPro _matrix;
 
@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				return null;
 
 		    var employmentType = schedulePeriod.Contract.EmploymentType;
-			//EmploymentType employmentType = schedulePeriod.PersonPeriod.PersonContract.Contract.EmploymentType;
 
 			if (employmentType == EmploymentType.FixedStaffDayWorkTime)
 			{
