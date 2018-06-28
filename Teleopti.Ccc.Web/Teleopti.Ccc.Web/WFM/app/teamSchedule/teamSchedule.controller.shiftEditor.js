@@ -8,38 +8,12 @@
 			'ShiftEditorViewModelFactory',
 			'signalRSVC',
 			'serviceDateFormatHelper',
-			function ($stateParams, TeamSchedule, ShiftEditorViewModelFactory, signalRSVC, serviceDateFormatHelper) {
+			'guidgenerator',
+			function ($stateParams) {
 				var vm = this;
 				vm.personId = $stateParams.personId;
 				vm.timezone = decodeURIComponent($stateParams.timezone);
 				vm.date = $stateParams.date;
-
-
-				function init() {
-					getSchedule();
-					subscribeToScheduleChange();
-				}
-
-				function subscribeToScheduleChange() {
-					var domainType = 'IScheduleChangedInDefaultScenario';
-					signalRSVC.subscribeBatchMessage({ DomainType: domainType }, function (messages) {
-						for (var i = 0; i < messages.length; i++) {
-							var message = messages[i];
-							if (message.DomainReferenceId === vm.personId
-								&& serviceDateFormatHelper.getDateOnly(message.StartDate.substring(1, message.StartDate.length)) === vm.date) {
-								getSchedule();
-								return;
-							}
-						}
-					}, 300);
-				}
-
-				function getSchedule() {
-					TeamSchedule.getSchedules(vm.date, [vm.personId]).then(function (data) {
-						vm.schedules = data.Schedules;
-					});
-				}
-				init();
 			}]);
 
 	angular.module("wfm.teamSchedule").component("shiftEditor", {
@@ -48,49 +22,47 @@
 		templateUrl: 'app/teamSchedule/html/shiftEditor.html',
 		bindings: {
 			personId: '<',
-			schedules: '<',
 			date: '<',
 			timezone: '<'
 		}
 	});
 
 	ShiftEditorController.$inject = ['$element', '$timeout', '$window', '$interval', '$filter', '$state',
-		'serviceDateFormatHelper', 'ShiftEditorViewModelFactory', 'TimezoneListFactory', 'ActivityService',
-		'ShiftEditorService', 'CurrentUserInfo'];
+		'TeamSchedule', 'serviceDateFormatHelper', 'ShiftEditorViewModelFactory', 'TimezoneListFactory', 'ActivityService',
+		'ShiftEditorService', 'CurrentUserInfo', 'guidgenerator', 'signalRSVC'];
 
-	function ShiftEditorController($element, $timeout, $window, $interval, $filter, $state, serviceDateFormatHelper,
-		ShiftEditorViewModelFactory, TimezoneListFactory, ActivityService, ShiftEditorService, CurrentUserInfo) {
+	function ShiftEditorController($element, $timeout, $window, $interval, $filter, $state, TeamSchedule, serviceDateFormatHelper,
+		ShiftEditorViewModelFactory, TimezoneListFactory, ActivityService, ShiftEditorService, CurrentUserInfo, guidgenerator, signalRSVC) {
 		var vm = this;
 		var timeLineTimeRange = {
 			Start: moment.tz(vm.date, vm.timezone).add(-1, 'days').hours(0),
 			End: moment.tz(vm.date, vm.timezone).add(3, 'days').hours(0)
 		};
+
 		vm.showScrollLeftButton = false;
 		vm.showScrollRightButton = false;
-		vm.selectedShiftLayer = null;
 		vm.isInDifferentTimezone = false;
 		vm.displayDate = moment(vm.date).format("L");
 		vm.availableActivities = [];
-		vm.hasChanges = false;
+		vm.trackId = guidgenerator.newGuid();
+		var isSaving = false;
 
 		vm.$onInit = function () {
+			initScheduleState();
+			
+			getSchedule();
+
 			ActivityService.fetchAvailableActivities().then(function (data) {
 				vm.availableActivities = data;
 			});
 
 			vm.timelineVm = ShiftEditorViewModelFactory.CreateTimeline(vm.date, vm.timezone, timeLineTimeRange);
+
 			TimezoneListFactory.Create().then(function (timezoneList) {
 				vm.timezoneName = timezoneList.GetShortName(vm.timezone);
 			});
-		}
 
-		vm.$onChanges = function (changesObj) {
-			if (!!changesObj.schedules.currentValue && changesObj.schedules.currentValue !== changesObj.schedules.previousValue) {
-				vm.scheduleVm = ShiftEditorViewModelFactory.CreateSchedule(vm.date, vm.timezone, changesObj.schedules.currentValue[0]);
-
-				vm.isInDifferentTimezone = (vm.scheduleVm.Timezone !== vm.timezone);
-				initAndBindScrollEvent();
-			}
+			subscribeToScheduleChange();
 		}
 
 		vm.gotoDayView = function () {
@@ -113,14 +85,6 @@
 			vm.scheduleVm.ShiftLayers.forEach(function (otherShiftLayer) {
 				if (otherShiftLayer === shiftLayer) return;
 				otherShiftLayer.Selected = false;
-				//if (!!otherShiftLayer.ShiftLayerIds) {
-				//	otherShiftLayer.Selected = otherShiftLayer.ShiftLayerIds.some(function (shiftLayerId) {
-				//		return shiftLayer.ShiftLayerIds.indexOf(shiftLayerId) >= 0;
-				//	});
-				//	if (otherShiftLayer.Selected) {
-				//		vm.selectedShiftLayer.End = otherShiftLayer.Start
-				//	}
-				//}
 			});
 			vm.selectedActivitiyId = shiftLayer.CurrentActivityId || shiftLayer.ActivityId;
 		}
@@ -145,7 +109,52 @@
 		}
 
 		vm.saveChanges = function () {
-			ShiftEditorService.changeActivityType(vm.date, vm.personId, getChangedLayers());
+			isSaving = true;
+			ShiftEditorService.changeActivityType(vm.date, vm.personId, getChangedLayers(), { TrackId: vm.trackId }).then(function () {
+				initScheduleState();
+			});
+		}
+
+		vm.isSaveButtonDisabled = function () {
+			return !vm.hasChanges || vm.scheduleChanged || isSaving;
+		}
+
+
+		vm.refreshData = function () {
+			if (vm.scheduleChanged) {
+				getSchedule();
+				initScheduleState();
+			}
+		};
+
+
+		function getSchedule() {
+			TeamSchedule.getSchedules(vm.date, [vm.personId]).then(function (data) {
+				vm.scheduleVm = ShiftEditorViewModelFactory.CreateSchedule(vm.date, vm.timezone, data.Schedules[0]);
+				vm.isInDifferentTimezone = (vm.scheduleVm.Timezone !== vm.timezone);
+				initAndBindScrollEvent();
+			});
+		}
+
+		function initScheduleState() {
+			isSaving = false;
+			vm.hasChanges = false;
+			vm.scheduleChanged = false;
+			vm.selectedShiftLayer = null;
+		}
+
+		function subscribeToScheduleChange() {
+			signalRSVC.subscribeBatchMessage({ DomainType: 'IScheduleChangedInDefaultScenario' }, function (messages) {
+				for (var i = 0; i < messages.length; i++) {
+					var message = messages[i];
+					if (message.DomainReferenceId === vm.personId
+						&& serviceDateFormatHelper.getDateOnly(message.StartDate.substring(1, message.StartDate.length)) === vm.date
+						&& vm.trackId !== message.TrackId) {
+						vm.scheduleChanged = true;
+						return;
+					}
+				}
+			}, 300);
 		}
 
 		function getChangedLayers() {

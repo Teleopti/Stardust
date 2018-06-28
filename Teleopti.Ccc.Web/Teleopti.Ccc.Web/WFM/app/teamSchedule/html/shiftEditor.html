@@ -18,6 +18,9 @@
 				<underlying-schedule-info person-schedule="vm.scheduleVm" date="vm.date"></underlying-schedule-info>
 			</md-tooltip>
 		</span>
+		<span>
+			<button type="button" class="wfm-btn wfm-btn-invis-default btn-refresh" ng-class="{'wfm-btn-primary': vm.scheduleChanged}" ng-disabled="!vm.scheduleChanged" ng-click="vm.refreshData()">{{ 'Refresh'|translate }}</button>
+		</span>
 
 	</div>
 </div>
@@ -76,5 +79,5 @@
 
 <div class="con-footer">
 	<button type="button" class="wfm-btn wfm-btn-invis-default btn-back" ng-click="vm.gotoDayView()">{{ 'Back'|translate }}</button>
-	<button type="button" class="wfm-btn wfm-btn-invis-default btn-save" ng-click="vm.saveChanges()" ng-disabled="!vm.hasChanges">{{ 'Save'|translate }}</button>
+	<button type="button" class="wfm-btn wfm-btn-invis-default btn-save" ng-click="vm.saveChanges()" ng-disabled="vm.isSaveButtonDisabled()">{{ 'Save'|translate }}</button>
 </div>

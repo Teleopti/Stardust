@@ -10,12 +10,13 @@
 
 		self.changeActivityType = changeActivityType;
 
-		function changeActivityType(date, personId, layers) {
+		function changeActivityType(date, personId, layers, trackInfo) {
 			var deferred = $q.defer();
 			var inputData = {
 				Date: date,
 				PersonId: personId,
-				Layers: layers
+				Layers: layers,
+				TrackedCommandInfo: trackInfo
 			}
 			$http.post(changeActivityTypeUrl, inputData).then(function (response) {
 				deferred.resolve(response.data);
