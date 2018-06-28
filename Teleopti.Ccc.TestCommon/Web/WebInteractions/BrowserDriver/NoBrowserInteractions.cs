@@ -34,9 +34,11 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 		{
 		}
 
-		public void CloseWindow(string name)
+		public void CloseOtherTabs_Experimental()
 		{
 		}
+
+		public void SwitchToLastTab_Experimental() => throw new NotImplementedException();
 
 		public void TryUntil_DontUseShouldBeInternal(Action tryThis, Func<bool> until, TimeSpan waitBeforeRetry) => throw new NotImplementedException();
 		public bool IsVisible_IsFlaky(string selector) => throw new NotImplementedException();

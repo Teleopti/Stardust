@@ -1,11 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Coypu;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.Extensions;
+using Teleopti.Support.Library;
 
 namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 {
@@ -174,9 +178,23 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 				() => "Failed to assert that current url did not contain " + urlNotContains);
 		}
 
-		public void CloseWindow(string name)
+		public void CloseOtherTabs_Experimental() => focusOnTab(t => t.First());
+
+		public void SwitchToLastTab_Experimental() => focusOnTab(t => t.Last());
+
+		private void focusOnTab(Func<IEnumerable<string>, string> tabSelection)
 		{
-			_browser.FindWindow(name).ExecuteScript("window.close();");
+			var driver = (IWebDriver) _browser.Driver.Native;
+			var tabs = driver.WindowHandles;
+			var keepTab = tabSelection.Invoke(tabs);
+			tabs
+				.Where(x => x != keepTab)
+				.ForEach(w =>
+				{
+					driver.SwitchTo().Window(w);
+					driver.Close();
+				});
+			driver.SwitchTo().Window(keepTab);
 		}
 
 		public void AssertJavascriptResultContains(string javascript, string text)
