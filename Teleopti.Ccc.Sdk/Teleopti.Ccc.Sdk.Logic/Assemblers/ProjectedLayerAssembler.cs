@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 {
     public interface IProjectedLayerAssembler : IAssembler<IVisualLayer,ProjectedLayerDto>
     {
-        void SetCurrentProjection(IVisualLayerCollection visualLayerCollection);
+        void SetCurrentProjection(IVisualLayerCollection visualLayerCollection, IPerson assignedAgent);
     }
 
     public class ProjectedLayerAssembler : Assembler<IVisualLayer,ProjectedLayerDto>, IProjectedLayerAssembler

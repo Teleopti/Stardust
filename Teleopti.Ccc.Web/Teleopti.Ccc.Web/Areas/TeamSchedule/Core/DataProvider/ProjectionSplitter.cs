@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 								.Except(matchedPersonalShiftLayers.Select(pl => pl.Id.GetValueOrDefault()))
 								.ToArray(),
 					Description = layer.DisplayDescription().Name,
-					Color = layer.DisplayColor().ToHtml(),
+					Color = layer.Payload.ConfidentialDisplayColor(scheduleDay.Person).ToHtml(),
 					Start = TimeZoneInfo.ConvertTimeFromUtc(l.Period.StartDateTime, userTimeZone).ToFixedDateTimeFormat(),
 					End = TimeZoneInfo.ConvertTimeFromUtc(l.Period.EndDateTime, userTimeZone).ToFixedDateTimeFormat(),
 					Minutes = (int)l.Period.ElapsedTime().TotalMinutes,

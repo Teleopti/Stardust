@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             if (proj.IsSatisfiedBy(VisualLayerCollectionSpecification.OneAbsenceLayer))
                 part.IsFullDayAbsence = true;
 
-            _projectedLayerAssembler.SetCurrentProjection(proj);
+            _projectedLayerAssembler.SetCurrentProjection(proj, scheduleDay.Person);
             _projectedLayerAssembler.DomainEntitiesToDtos(proj).ForEach(
                 part.ProjectedLayerCollection.Add);
         }
