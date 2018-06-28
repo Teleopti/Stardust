@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -177,24 +178,23 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 				() => "Failed to assert that current url did not contain " + urlNotContains);
 		}
 
-		public void CloseWindow(string name)
-		{
-			_browser.FindWindow(name).ExecuteScript("window.close();");
-		}
+		public void CloseOtherTabs_Experimental() => focusOnTab(t => t.First());
 
-		public void SwitchToLastTab_Experimental()
+		public void SwitchToLastTab_Experimental() => focusOnTab(t => t.Last());
+
+		private void focusOnTab(Func<IEnumerable<string>, string> tabSelection)
 		{
 			var driver = (IWebDriver) _browser.Driver.Native;
-			var windows = driver.WindowHandles;
-			var windowWeWant = windows.Last();
-			windows
-				.Where(x => x != windowWeWant)
+			var tabs = driver.WindowHandles;
+			var keepTab = tabSelection.Invoke(tabs);
+			tabs
+				.Where(x => x != keepTab)
 				.ForEach(w =>
 				{
 					driver.SwitchTo().Window(w);
 					driver.Close();
 				});
-			driver.SwitchTo().Window(windowWeWant);
+			driver.SwitchTo().Window(keepTab);
 		}
 
 		public void AssertJavascriptResultContains(string javascript, string text)

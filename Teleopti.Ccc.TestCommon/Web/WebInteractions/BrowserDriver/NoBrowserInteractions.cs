@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 		{
 		}
 
-		public void CloseWindow(string name)
+		public void CloseOtherTabs_Experimental()
 		{
 		}
 

@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void ThenTheMessageToolShouldBeOpenedInANewWindow()
 		{
 			Browser.Interactions.AssertUrlNotContains("Anywhere", "ids");
-			Browser.Interactions.CloseWindow("Messages");
+			Browser.Interactions.CloseOtherTabs_Experimental();
 		}
 
 		[Then(@"I should be able to change the scehdule for '(.*)'")]

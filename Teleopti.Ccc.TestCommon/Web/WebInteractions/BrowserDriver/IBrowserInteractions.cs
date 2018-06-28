@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 		void DumpInfo(Action<string> writer);
 		void DumpUrl(Action<string> writer);
 
-		void CloseWindow(string name);
+		void CloseOtherTabs_Experimental();
 		void SwitchToLastTab_Experimental();
 
 		void TryUntil_DontUseShouldBeInternal(Action tryThis, Func<bool> until, TimeSpan waitBeforeRetry);
