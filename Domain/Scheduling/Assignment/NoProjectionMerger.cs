@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -10,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return new NoProjectionMerger();
 		}
 
-		public IEnumerable<IVisualLayer> MergedCollection(IEnumerable<IVisualLayer> unmergedCollection, IPerson person)
+		public IVisualLayer[] MergedCollection(IVisualLayer[] unmergedCollection, IPerson person)
 		{
 			return unmergedCollection;
 		}

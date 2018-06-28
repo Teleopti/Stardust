@@ -31,6 +31,8 @@ import {
 	TitleBarComponent,
 	WorkspaceComponent
 } from './components';
+import { TranslateModule } from '@ngx-translate/core';
+
 import {
 	LogonInfoService,
 	NavigationService,
@@ -71,7 +73,8 @@ import {
 		MatDatepickerModule,
 		MatNativeDateModule,
 		MatTooltipModule,
-		MatMenuModule
+		MatMenuModule,
+		TranslateModule.forChild()
 	],
 	providers: [
 		WorkspaceService,

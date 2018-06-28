@@ -15,8 +15,6 @@ import { Person, Role } from '../../types';
 import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { SearchPageService } from './search-page.service';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
-import { SrvRecord } from 'dns';
 
 interface SortModel {
 	active: 'FirstName' | 'LastName' | 'EmpNum' | 'Note' | 'TerminalDate' | 'TeamSite';
