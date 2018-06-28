@@ -29,10 +29,11 @@
 
 	ShiftEditorController.$inject = ['$element', '$timeout', '$window', '$interval', '$filter', '$state',
 		'TeamSchedule', 'serviceDateFormatHelper', 'ShiftEditorViewModelFactory', 'TimezoneListFactory', 'ActivityService',
-		'ShiftEditorService', 'CurrentUserInfo', 'guidgenerator', 'signalRSVC'];
+		'ShiftEditorService', 'CurrentUserInfo', 'guidgenerator', 'signalRSVC', 'teamScheduleNotificationService'];
 
 	function ShiftEditorController($element, $timeout, $window, $interval, $filter, $state, TeamSchedule, serviceDateFormatHelper,
-		ShiftEditorViewModelFactory, TimezoneListFactory, ActivityService, ShiftEditorService, CurrentUserInfo, guidgenerator, signalRSVC) {
+		ShiftEditorViewModelFactory, TimezoneListFactory, ActivityService, ShiftEditorService, CurrentUserInfo, guidgenerator,
+		signalRSVC, teamScheduleNotificationService) {
 		var vm = this;
 		var timeLineTimeRange = {
 			Start: moment.tz(vm.date, vm.timezone).add(-1, 'days').hours(0),
@@ -49,7 +50,7 @@
 
 		vm.$onInit = function () {
 			initScheduleState();
-			
+
 			getSchedule();
 
 			ActivityService.fetchAvailableActivities().then(function (data) {
@@ -80,12 +81,7 @@
 		}
 
 		vm.toggleSelection = function (shiftLayer) {
-			shiftLayer.Selected = !shiftLayer.Selected;
-			vm.selectedShiftLayer = shiftLayer.Selected ? shiftLayer : null;
-			vm.scheduleVm.ShiftLayers.forEach(function (otherShiftLayer) {
-				if (otherShiftLayer === shiftLayer) return;
-				otherShiftLayer.Selected = false;
-			});
+			vm.selectedShiftLayer = shiftLayer !== vm.selectedShiftLayer ? shiftLayer : null;
 			vm.selectedActivitiyId = shiftLayer.CurrentActivityId || shiftLayer.ActivityId;
 		}
 
@@ -110,8 +106,16 @@
 
 		vm.saveChanges = function () {
 			isSaving = true;
-			ShiftEditorService.changeActivityType(vm.date, vm.personId, getChangedLayers(), { TrackId: vm.trackId }).then(function () {
+			ShiftEditorService.changeActivityType(vm.date, vm.personId, getChangedLayers(), { TrackId: vm.trackId }).then(function (response) {
 				initScheduleState();
+				teamScheduleNotificationService.reportActionResult({
+					success: 'SuccessfulMessageForSavingScheduleChanges'
+				},
+				[{
+					PersonId: vm.personId,
+					Name: vm.scheduleVm.Name
+				}],
+				response.data);
 			});
 		}
 

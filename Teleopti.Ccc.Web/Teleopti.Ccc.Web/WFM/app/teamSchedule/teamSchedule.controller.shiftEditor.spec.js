@@ -7,7 +7,8 @@
 		fakeActivityService,
 		fakeShiftEditorService,
 		fakeTeamSchedule,
-		mockSignalRBackendServer = {};
+		mockSignalRBackendServer = {},
+		fakeNoticeService;
 
 	beforeEach(module('wfm.templates', 'wfm.teamSchedule'));
 	beforeEach(module(function ($provide) {
@@ -55,6 +56,9 @@
 
 		fakeTeamSchedule = new FakeTeamSchedule();
 		$provide.service('TeamSchedule', function () { return fakeTeamSchedule; });
+
+		fakeNoticeService = new FakeNoticeService();
+		$provide.service('NoticeService', function () { return fakeNoticeService; });
 	}));
 	beforeEach(inject(function (_$rootScope_, _$compile_, _$document_) {
 		$rootScope = _$rootScope_;
@@ -1028,6 +1032,85 @@
 
 	});
 
+	it('should show succeed notification when saving changes successfully', function () {
+		var date = "2018-06-15";
+		var personId = "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22";
+		fakeTeamSchedule.has({
+			"PersonId": personId,
+			"Name": "Annika Andersson",
+			"Date": date,
+			"WorkTimeMinutes": 240,
+			"ContractTimeMinutes": 240,
+			"Projection": [{
+				"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+				"Color": "#ffffff",
+				"Description": "Phone",
+				"Start": "2018-06-15 08:00",
+				"End": "2018-06-15 09:00",
+				"Minutes": 60,
+				"IsOvertime": false,
+				"ActivityId": '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+			}],
+			"Timezone": { "IanaId": "Europe/Berlin" }
+		});
+
+		var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", "2018-06-15", "Europe/Berlin");
+		var vm = panel.isolateScope().vm;
+
+		var shiftLayers = panel[0].querySelectorAll(".shift-layer");
+		shiftLayers[0].click();
+
+		var typeEls = panel[0].querySelectorAll('.activity-selector md-option');
+		typeEls[1].click();
+
+		var saveButton = panel[0].querySelector('.btn-save');
+		saveButton.click();
+
+		expect(fakeNoticeService.successMessage).toEqual('SuccessfulMessageForSavingScheduleChanges');
+	});
+
+	it('should show error notification when saving changes failed', function () {
+		var date = "2018-06-15";
+		var personId = "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22";
+		fakeTeamSchedule.has({
+			"PersonId": personId,
+			"Name": "Annika Andersson",
+			"Date": date,
+			"WorkTimeMinutes": 240,
+			"ContractTimeMinutes": 240,
+			"Projection": [{
+				"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+				"Color": "#ffffff",
+				"Description": "Phone",
+				"Start": "2018-06-15 08:00",
+				"End": "2018-06-15 09:00",
+				"Minutes": 60,
+				"IsOvertime": false,
+				"ActivityId": '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+			}],
+			"Timezone": { "IanaId": "Europe/Berlin" }
+		});
+
+		var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", "2018-06-15", "Europe/Berlin");
+		var vm = panel.isolateScope().vm;
+
+		var shiftLayers = panel[0].querySelectorAll(".shift-layer");
+		shiftLayers[0].click();
+
+		var typeEls = panel[0].querySelectorAll('.activity-selector md-option');
+		typeEls[1].click();
+
+		fakeShiftEditorService.setSavingApplyResponseData([{
+			PersonId: personId, ErrorMessages: ['Invalid input']
+		}]);
+
+		var saveButton = panel[0].querySelector('.btn-save');
+		saveButton.click();
+
+		expect(!!fakeNoticeService.successMessage).toEqual(false);
+		expect(fakeNoticeService.errorMessage).toEqual('Invalid input : Annika Andersson');
+	});
+
 	describe("in locale en-UK", function () {
 		beforeEach(function () { moment.locale('en-UK'); });
 		afterEach(function () { moment.locale('en'); });
@@ -1050,7 +1133,7 @@
 				}],
 				"Timezone": { "IanaId": "Europe/Berlin" }
 			});
-			var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22","2018-06-11", "Europe/Berlin");
+			var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", "2018-06-11", "Europe/Berlin");
 
 			var shiftLayers = panel[0].querySelectorAll(".shift-layer");
 			shiftLayers[0].click();
@@ -1131,6 +1214,10 @@
 
 	function FakeShiftEditorService() {
 		this.lastRequestData = {};
+		var applyResponse = { data: [] };
+		this.setSavingApplyResponseData = function (data) {
+			applyResponse.data = data;
+		}
 		this.changeActivityType = function (date, personId, layers, trackCommandInfo) {
 			this.lastRequestData = {
 				Date: date,
@@ -1138,8 +1225,9 @@
 				Layers: layers,
 				TrackedCommandInfo: trackCommandInfo
 			};
+
 			return {
-				then: function (callback) { callback(); }
+				then: function (callback) { callback(applyResponse); }
 			}
 		}
 	}
@@ -1185,6 +1273,22 @@
 				mockSignalRBackendServer.notifyClients = messageHandler;
 			}
 		};
+	}
+
+
+	function FakeNoticeService() {
+		this.successMessage = '';
+		this.errorMessage = '';
+		this.warningMessage = '';
+		this.success = function (message, time, destroyOnStateChange) {
+			this.successMessage = message;
+		}
+		this.error = function (message, time, destroyOnStateChange) {
+			this.errorMessage = message;
+		}
+		this.warning = function (message, time, destroyOnStateChange) {
+			this.warningMessage = message;
+		}
 	}
 
 });

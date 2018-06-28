@@ -34373,6 +34373,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Successfully saved schedule changes..
+        /// </summary>
+        public static string SuccessfulMessageForSavingScheduleChanges {
+            get {
+                return ResourceManager.GetString("SuccessfulMessageForSavingScheduleChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Successfully undone last schedule change for selected agents.
         /// </summary>
         public static string SuccessfulMessageForUndoSchedule {

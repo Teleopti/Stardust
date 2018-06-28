@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function () {
 	'use strict';
 
 	if (!Array.prototype.find) {
@@ -36,7 +36,7 @@
 		function reportActionResult(commandInfo, actionTargets, actionResults) {
 			var failActionResults = [];
 			var warningActionResults = [];
-			actionResults.forEach(function(x) {
+			actionResults.forEach(function (x) {
 				if (x.ErrorMessages && x.ErrorMessages.length > 0) {
 					failActionResults.push({
 						PersonId: x.PersonId,
@@ -51,9 +51,9 @@
 				}
 			});
 			var actionInfo = [actionTargets.length, actionTargets.length - failActionResults.length, failActionResults.length];
-			var successMessage = replaceParams($translate.instant(commandInfo.success), actionInfo);
-			var warningMessage = replaceParams($translate.instant(commandInfo.warning), actionInfo);
-			
+			var successMessage = !!commandInfo.success ? replaceParams($translate.instant(commandInfo.success), actionInfo) : '';
+			var warningMessage = !!commandInfo.warning ? replaceParams($translate.instant(commandInfo.warning), actionInfo) : '';
+
 			var warningResults = {};
 			if (failActionResults.length === 0 && warningActionResults.length === 0) {
 				NoticeService.success(successMessage, 5000, true);
@@ -75,15 +75,15 @@
 				});
 				return;
 			}
-			
+
 			NoticeService.warning(warningMessage, 5000, true);
 
 			var errorResults = {}
 
-			angular.forEach(failActionResults, function(result) {
+			angular.forEach(failActionResults, function (result) {
 				var messages = result.Messages;
-				var personName = actionTargets.find(function(t) { return t.PersonId === result.PersonId; }).Name;
-				angular.forEach(messages, function(message) {
+				var personName = actionTargets.find(function (t) { return t.PersonId === result.PersonId; }).Name;
+				angular.forEach(messages, function (message) {
 					collectResult(message, personName, errorResults);
 				});
 			});
@@ -103,7 +103,7 @@
 				var warning = key + " : " + value.join(", ");
 				NoticeService.warning(warning, null, true);
 			});
-			
+
 		}
 
 		function buildConfirmationMessage(template, personCount, activityCount, needTranslate) {

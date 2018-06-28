@@ -65,7 +65,7 @@
 					 'overtime': shiftLayer.IsOvertime,
 					 'overtime-light': shiftLayer.UseLighterBorder(),
 					 'overtime-dark': !shiftLayer.UseLighterBorder(),
-					 'selected': shiftLayer.Selected,
+					 'selected': shiftLayer === vm.selectedShiftLayer,
 					 'border-dark': !shiftLayer.UseLighterBorder(),
 					 'border-light': shiftLayer.UseLighterBorder()}"
 					 ng-style="{'width':vm.getShiftLayerWidth(shiftLayer) +'px', 'background-color': shiftLayer.Color, 'left': vm.getShiftLayerLeft(shiftLayer) + 'px'}"

@@ -19,7 +19,7 @@
 				TrackedCommandInfo: trackInfo
 			}
 			$http.post(changeActivityTypeUrl, inputData).then(function (response) {
-				deferred.resolve(response.data);
+				deferred.resolve(response);
 			}, function (error) {
 				deferred.reject(error);
 			});

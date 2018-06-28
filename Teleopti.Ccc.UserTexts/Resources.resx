@@ -17475,4 +17475,7 @@ The application will now exit.</value>
   <data name="PeopleManageUsers" xml:space="preserve">
     <value>Manage users</value>
   </data>
+  <data name="SuccessfulMessageForSavingScheduleChanges" xml:space="preserve">
+    <value>Successfully saved schedule changes.</value>
+  </data>
 </root>
