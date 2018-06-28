@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			workingColl.AddRange(((VisualLayerCollection)projectionService.CreateProjection()).UnMergedCollection);
 			removeUnusedFakeActivities(workingColl);
-			return new VisualLayerCollection(ScheduleDay.Person, workingColl, ProjectionMerger);
+			return new VisualLayerCollection(workingColl, ProjectionMerger);
 		}
 
 		private void addFakeLayers(ICollection<IVisualLayer> projection)
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				{
 					var intersectPeriod = visualLayer.Period.Intersection(personAbsence.Period);
 					if (!intersectPeriod.HasValue) continue;
-					var absenceLayer = layerFactory.CreateAbsenceSetupLayer(personAbsence.Layer.Payload, visualLayer, intersectPeriod.Value, personAbsence.Id);
+					var absenceLayer = layerFactory.CreateAbsenceSetupLayer(personAbsence.Layer.Payload, visualLayer, intersectPeriod.Value);
 					projectionService.Add(absenceLayer);
 				}
 			}

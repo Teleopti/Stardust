@@ -9,11 +9,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private IVisualLayer[] _mergedCollection;
 		private static readonly ILog log = LogManager.GetLogger(typeof(ProjectionMerger));
 
-		public IVisualLayer[] MergedCollection(IVisualLayer[] unmergedCollection, IPerson person)
+		public IVisualLayer[] MergedCollection(IVisualLayer[] unmergedCollection)
 		{
 			if (_mergedCollection == null)
 			{
-				var clonedUnmergedCollection = cloneUnMergedCollection(unmergedCollection, person);
+				var clonedUnmergedCollection = cloneUnMergedCollection(unmergedCollection);
 				_mergedCollection = ModifyCollection(clonedUnmergedCollection);
 			}
 			return _mergedCollection;
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		protected abstract IVisualLayer[] ModifyCollection(IVisualLayer[] clonedUnmergedCollection);
 		public abstract object Clone();
 
-		private static IVisualLayer[] cloneUnMergedCollection(IVisualLayer[] unmergedCollection, IPerson person)
+		private static IVisualLayer[] cloneUnMergedCollection(IVisualLayer[] unmergedCollection)
 		{
 			var layers = new List<IVisualLayer>(unmergedCollection.Length);
 			foreach (var layer in unmergedCollection)
@@ -31,8 +31,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				var casted = layerClone as VisualLayer;
 				if (casted == null)
 					log.Warn("Cannot cast " + layerClone + " to VisualLayer.");
-				else
-					casted.Person = person;
 				layers.Add(layerClone);
 			}
 			return layers.ToArray();

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -10,14 +11,14 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	{
 		private readonly IList<ISkill> _allSkills;
 		private readonly IDictionary<string, ISkill> _containedSkills;
-		private readonly IList<IProjectionService> _projectionServices;
+		private readonly IList<Tuple<IProjectionService, IPerson>> _projectionServices;
 		public IList<IPersonAssignment> PersonAssignmentListForActivityDividerTest { get; private set; }
 		public IScenario Scenario { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PersonAssignmentListContainer"/> class.
 		/// </summary>
-		public PersonAssignmentListContainer(IList<IProjectionService> projectionServices)
+		public PersonAssignmentListContainer(IList<Tuple<IProjectionService, IPerson>> projectionServices)
 		{
 			_projectionServices = projectionServices;
 			_allSkills = new List<ISkill>();
@@ -35,13 +36,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		
 		public IDictionary<string, IPerson> ContainedPersons { get; }
 
-		public IList<IVisualLayerCollection> TestVisualLayerCollection()
+		public IList<Tuple<IVisualLayerCollection, IPerson>> TestVisualLayerCollection()
 		{
-			IList<IVisualLayerCollection> ret = new List<IVisualLayerCollection>();
+			var ret = new List<Tuple<IVisualLayerCollection, IPerson>>();
 			foreach (var projectionService in _projectionServices)
 			{
-				var projection = projectionService.CreateProjection();
-				ret.Add(projection);
+				var projection = projectionService.Item1.CreateProjection();
+				ret.Add(new Tuple<IVisualLayerCollection, IPerson>(projection, projectionService.Item2));
 			}
 
 			return ret;
@@ -49,11 +50,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IList<IFilteredVisualLayerCollection> TestFilteredVisualLayerCollectionWithSamePerson()
 		{
-			IPerson person = _projectionServices[0].CreateProjection().Person;
-
 			return _projectionServices
-				.Select(projectionService => projectionService.CreateProjection())
-				.Select(projection => new FilteredVisualLayerCollection(person, projection.ToList(), new ProjectionIntersectingPeriodMerger(), projection))
+				.Select(projectionService => projectionService.Item1.CreateProjection())
+				.Select(projection => new FilteredVisualLayerCollection(projection.ToList(), new ProjectionIntersectingPeriodMerger(), projection))
 				.Take(2)
 				.Cast<IFilteredVisualLayerCollection>().ToList();
 		}

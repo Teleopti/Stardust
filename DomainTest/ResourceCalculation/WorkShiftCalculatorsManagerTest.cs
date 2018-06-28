@@ -36,8 +36,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var personalShiftMeetingTimeChecker = new PersonalShiftMeetingTimeChecker();
 			var cache1 = new ShiftProjectionCache(workShift1,personalShiftMeetingTimeChecker, day);
 			var cache2 = new ShiftProjectionCache(workShift2,personalShiftMeetingTimeChecker, day);
-			var proj1v = new VisualLayerCollection(person, new IVisualLayer[] { }, new ProjectionIntersectingPeriodMerger());
-			var proj2v = new VisualLayerCollection(person, new IVisualLayer[] { }, new ProjectionIntersectingPeriodMerger());
+			var proj1v = new VisualLayerCollection(new IVisualLayer[] { }, new ProjectionIntersectingPeriodMerger());
+			var proj2v = new VisualLayerCollection(new IVisualLayer[] { }, new ProjectionIntersectingPeriodMerger());
 			var caches = new List<ShiftProjectionCache> { cache1, cache2 };
 			var dataHolders = MockRepository.GenerateMock<IWorkShiftCalculatorSkillStaffPeriodData>();
 			var nonBlendSkillPeriods = MockRepository.GenerateMock<IDictionary<ISkill, ISkillStaffPeriodDictionary>>();

@@ -98,16 +98,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		bool HasLayers { get; }
 
 		/// <summary>
-		/// Gets the person.
-		/// </summary>
-		/// <value>The person.</value>
-		/// <remarks>
-		/// Created by: micke
-		/// Created date: 2008-03-04
-		/// </remarks>
-		IPerson Person { get; }
-
-		/// <summary>
 		/// Gets the count.
 		/// RK: If you just want to know it empty; use HasLayers instead - much faster!
 		/// </summary>

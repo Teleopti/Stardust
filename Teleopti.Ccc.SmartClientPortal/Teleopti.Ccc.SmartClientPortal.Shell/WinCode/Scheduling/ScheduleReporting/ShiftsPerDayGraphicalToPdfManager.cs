@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReport
 								 select p;
 
 
-					sortedPersons.AddRange(sorted.Select(projection => projection.Item1.Person));
+					sortedPersons.AddRange(sorted.Select(projection => projection.Item2));
 				}
 				else
 				{
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReport
 								 orderby p.Item1.Period().Value.EndDateTime
 								 select p;
 
-					sortedPersons.AddRange(sorted.Select(projection => projection.Item1.Person));
+					sortedPersons.AddRange(sorted.Select(projection => projection.Item2));
 				}
 			}
 

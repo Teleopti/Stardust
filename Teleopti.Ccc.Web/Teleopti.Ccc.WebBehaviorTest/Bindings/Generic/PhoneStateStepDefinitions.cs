@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			var personId = _data.Data().Person(userCode).Person.Id.GetValueOrDefault();
 			var time = CurrentTime.Value();
-			Policy.Handle<WaitForStateProcessException>()
+			var stateChangeProcessed = Policy.HandleResult(false)
 				.WaitAndRetry(50, attempt => TimeSpan.FromMilliseconds(100))
 				.Execute(() =>
 				{
@@ -82,12 +82,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 							  stateChanged.StateName == stateCode
 						select stateChanged;
 
-					var stateChangedIsFullyProcessed = matchingEvents.Any();
-
-					if (!stateChangedIsFullyProcessed)
-						throw new WaitForStateProcessException(
-							$"State {userCode}/{stateCode} was not processed in time");
+					return matchingEvents.Any();
 				});
+			if (!stateChangeProcessed)
+				throw new WaitForStateProcessException($"State {userCode}/{stateCode} was not processed in time");
 		}
 
 		public class WaitForStateProcessException : Exception

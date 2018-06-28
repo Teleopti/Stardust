@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IVisualLayer vl2 = mocks.StrictMock<IVisualLayer>();
             var pl1 = new Activity("1");
 				var pl2 = new Activity("d");
-            IVisualLayerCollection visualLayerCollection = new VisualLayerCollection(null, new List<IVisualLayer>{vl1,vl2}, new ProjectionPayloadMerger());
+            IVisualLayerCollection visualLayerCollection = new VisualLayerCollection(new List<IVisualLayer>{vl1,vl2}, new ProjectionPayloadMerger());
 
             var schedulePart = CreateScheduleDayAndSetBasicExpectation(SchedulePartView.FullDayAbsence);
             Expect.Call(schedulePart.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();

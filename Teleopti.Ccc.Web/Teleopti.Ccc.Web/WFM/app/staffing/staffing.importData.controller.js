@@ -194,9 +194,10 @@
 			query.$promise.then(function(result) {
 				if ($window.sessionStorage.staffingSelectedSkill) {
 					manageSkillSessionStorage();
-				} else if (!$window.sessionStorage.staffingSelectedArea) {
-					selectSkill(skills[0]);
 				}
+				//else if (!$window.sessionStorage.staffingSelectedArea) {
+				//	selectedSkillChange(skills[0]);
+				//}
 				skills = result;
 				vm.skills = skills;
 			});

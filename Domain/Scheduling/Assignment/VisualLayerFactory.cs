@@ -35,26 +35,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		}
 
 
-		public IVisualLayer CreateAbsenceSetupLayer(IAbsence absence, IVisualLayer originalLayer, DateTimePeriod period,
-			Guid? personAbsenceId)
+		public IVisualLayer CreateAbsenceSetupLayer(IAbsence absence, IVisualLayer originalLayer, DateTimePeriod period)
 		{
-			return new VisualLayer(absence, period, ((VisualLayer) originalLayer).HighestPriorityActivity, originalLayer.Person,
-				personAbsenceId)
+			return new VisualLayer(absence, period, ((VisualLayer) originalLayer).HighestPriorityActivity, originalLayer.Person)
 			{
 				HighestPriorityAbsence = absence,
 				DefinitionSet = originalLayer.DefinitionSet
 			};
 		}
 
-		public IVisualLayer CreateResultLayer(IPayload payload, IVisualLayer originalLayer, DateTimePeriod period,
-			Guid? personAbsenceId = null)
+		public IVisualLayer CreateResultLayer(IPayload payload, IVisualLayer originalLayer, DateTimePeriod period)
 		{
 			var castedLayer = ((VisualLayer) originalLayer);
 			return new VisualLayer(payload, period, castedLayer.HighestPriorityActivity, originalLayer.Person)
 			{
 				HighestPriorityAbsence = castedLayer.HighestPriorityAbsence,
 				DefinitionSet = originalLayer.DefinitionSet,
-				PersonAbsenceId = personAbsenceId
 			};
 		}
 	}

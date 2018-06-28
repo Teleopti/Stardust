@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 		private IVisualLayerCollection _layerCollection2;
 		private ISkillStaffPeriod _skillStaffPeriod;
 		private IPerson _person1;
-		private IPerson _person2;
 		private IVisualLayer _visualLayer1;
 		private IVisualLayer _visualLayer2;
 		private IActivity _mejeriVaror;
@@ -46,14 +45,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 		    _skillPhone.Activity = _mejeriVaror;
 			_skillPhone.SetId(Guid.NewGuid());
 			_person1 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill> { _skillCarnaby, _skillPhone });
-			_person2 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill> { _skillCarnaby, _skillPhone });
 			_visualLayerFactory = new VisualLayerFactory();
 			_shiftPeriod = new DateTimePeriod(new DateTime(2010, 1, 1, 9, 30, 0, DateTimeKind.Utc),
 															 new DateTime(2010, 1, 1, 11, 0, 0, DateTimeKind.Utc));
 			_visualLayer1 = _visualLayerFactory.CreateShiftSetupLayer(_mejeriVaror, _shiftPeriod,_person1);
-			_layerCollection1 = new VisualLayerCollection(_person1, new List<IVisualLayer> { _visualLayer1 }, new ProjectionPayloadMerger());
+			_layerCollection1 = new VisualLayerCollection(new List<IVisualLayer> { _visualLayer1 }, new ProjectionPayloadMerger());
 			_visualLayer2 = _visualLayerFactory.CreateShiftSetupLayer(_lunch, _shiftPeriod, _person1);
-			_layerCollection2 = new VisualLayerCollection(_person2, new List<IVisualLayer> { _visualLayer2 }, new ProjectionPayloadMerger());
+			_layerCollection2 = new VisualLayerCollection(new List<IVisualLayer> { _visualLayer2 }, new ProjectionPayloadMerger());
 
 			_personSkillProvider = new PersonSkillProvider();
 
@@ -62,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 			{
 				foreach (var resourceLayer in layer.ToResourceLayers(15))
 				{
-					_resources.AddResources(layer.Person, new DateOnly(2008, 1, 1), resourceLayer);
+					_resources.AddResources(_person1, new DateOnly(2008, 1, 1), resourceLayer);
 				}
 			}
 

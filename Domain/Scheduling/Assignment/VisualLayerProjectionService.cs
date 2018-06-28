@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var boundariesTemp = _layerCollectionOriginal.Period();
 
 			if (!boundariesTemp.HasValue)
-				return new VisualLayerCollection(_person, workingColl, new ProjectionPayloadMerger());
+				return new VisualLayerCollection(workingColl, new ProjectionPayloadMerger());
 
 			var currentTime = boundariesTemp.Value.StartDateTime;
 			var endTime = boundariesTemp.Value.EndDateTime;
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 					var layerEndTime = findLayerEndTime(inverseLoop, workingLayer, currentTime);
 					var newLayer = standardVisualLayerFactory.CreateResultLayer(workingLayer.Payload,
-						workingLayer, new DateTimePeriod(currentTime, layerEndTime), workingLayer.PersonAbsenceId);
+						workingLayer, new DateTimePeriod(currentTime, layerEndTime));
 					workingColl.Add(newLayer);
 					currentTime = layerEndTime;
 					layerFound = true;
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				if (!layerFound)
 					currentTime = findNextTimeSlot(currentTime);
 			}
-			return new VisualLayerCollection(_person, workingColl, new ProjectionPayloadMerger());
+			return new VisualLayerCollection(workingColl, new ProjectionPayloadMerger());
 		}
 
 		private DateTime findLayerEndTime(int currentLayerIndex, IVisualLayer workingLayer, DateTime currentTime)

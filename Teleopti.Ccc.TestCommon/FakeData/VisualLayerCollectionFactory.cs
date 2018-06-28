@@ -15,13 +15,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public static IVisualLayerCollection CreateForWorkShift(IPerson person, TimeSpan start, TimeSpan end)
 		{
 			var coll = createVisualLayerCollection(person, start, end);
-			return new VisualLayerCollection(person, coll, new ProjectionPayloadMerger());
+			return new VisualLayerCollection(coll, new ProjectionPayloadMerger());
 		}
 
 		public static IVisualLayerCollection CreateForAbsence(IPerson person, TimeSpan start, TimeSpan end)
 		{
 			var coll = createVisualLayerCollectionWithAbsence(person, start, end);
-			return new VisualLayerCollection(person, coll, new ProjectionPayloadMerger());
+			return new VisualLayerCollection(coll, new ProjectionPayloadMerger());
 		}
 
 		private static IEnumerable<IVisualLayer> createVisualLayerCollection(IPerson person, TimeSpan start, TimeSpan end)
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 				new DateTimePeriod(WorkShift.BaseDate.Add(start), WorkShift.BaseDate.Add(end)), person);
 			var holidayAbsence = AbsenceFactory.CreateAbsence("TestHoliday");
 			var absenceVisualLayer = factory.CreateAbsenceSetupLayer(holidayAbsence, originalVisualLayer,
-				originalVisualLayer.Period, Guid.NewGuid());
+				originalVisualLayer.Period);
 
 			return new List<IVisualLayer> {absenceVisualLayer};
 		}

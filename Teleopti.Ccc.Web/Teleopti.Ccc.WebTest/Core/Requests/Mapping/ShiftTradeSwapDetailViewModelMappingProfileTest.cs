@@ -74,8 +74,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var scheduleDayTo = _scheduleFactory.ScheduleDayStub();
 			
-			_projectionProvider.Stub(x => x.Projection(scheduleDayFrom)).Return(new VisualLayerCollection(_fromPerson,new IVisualLayer[0], new ProjectionPayloadMerger()));
-			_projectionProvider.Stub(x => x.Projection(scheduleDayTo)).Return(new VisualLayerCollection(_toPerson,new IVisualLayer[0], new ProjectionPayloadMerger()));
+			_projectionProvider.Stub(x => x.Projection(scheduleDayFrom)).Return(new VisualLayerCollection(new IVisualLayer[0], new ProjectionPayloadMerger()));
+			_projectionProvider.Stub(x => x.Projection(scheduleDayTo)).Return(new VisualLayerCollection(new IVisualLayer[0], new ProjectionPayloadMerger()));
 
 			var shiftTradeRequest = CreateShiftTrade(_dateFrom, _dateTo, scheduleDayFrom, scheduleDayTo);
 			var result = target.Map(shiftTradeRequest.ShiftTradeSwapDetails.First(),_nameFormatSettings);

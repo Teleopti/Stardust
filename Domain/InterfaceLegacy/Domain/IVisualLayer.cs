@@ -57,6 +57,5 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		IPerson Person { get; }
 
 		IVisualLayer CloneWithNewPeriod(DateTimePeriod newPeriod);
-		Guid? PersonAbsenceId { get; set; }
 	}
 }

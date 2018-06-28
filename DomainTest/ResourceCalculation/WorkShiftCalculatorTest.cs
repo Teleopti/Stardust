@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 
             IList<IVisualLayer> layers = new List<IVisualLayer> { layer1, layer2, layer3, layer4 };
-            IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
+            IVisualLayerCollection layerCollection = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
             SkillStaffPeriodDataInfo dataHolder1 = new SkillStaffPeriodDataInfo(5, 80, period1, 1, 5, 0, null);
 
@@ -329,7 +329,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IVisualLayer layer1 = _layerFactory.CreateShiftSetupLayer(activity1, new DateTimePeriod(_date, _date.AddMinutes(60)),_person);
 
             IList<IVisualLayer> layers = new List<IVisualLayer> { layer1 };
-            IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
+            IVisualLayerCollection layerCollection = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
             SkillStaffPeriodDataInfo dataHolder1 = new SkillStaffPeriodDataInfo(5, 80, period2, 1, 5, 0, null);
 
@@ -355,7 +355,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IVisualLayer layer1 = _layerFactory.CreateShiftSetupLayer(activity1, new DateTimePeriod(_date, _date.AddMinutes(60)),_person);
 
             IList<IVisualLayer> layers = new List<IVisualLayer> { layer1 };
-            IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
+            IVisualLayerCollection layerCollection = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
             ISkillStaffPeriodDataHolder dataHolder1 = new SkillStaffPeriodDataInfo(5, 80, period1, 1, 5, 0, null);
 
@@ -381,7 +381,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IVisualLayer layer1 = _layerFactory.CreateShiftSetupLayer(activity1, new DateTimePeriod(_date, _date.AddMinutes(60)),_person);
 
             IList<IVisualLayer> layers = new List<IVisualLayer> { layer1 };
-            IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
+            IVisualLayerCollection layerCollection = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
             var dataHolder1 = new SkillStaffPeriodDataInfo(5, 80, period1, 1, 5, 0, null);
 
@@ -412,7 +412,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IVisualLayer layer1 = _layerFactory.CreateShiftSetupLayer(activity1, oddPeriod1, _person);
 
             IList<IVisualLayer> layers = new List<IVisualLayer> { layer1 };
-            IVisualLayerCollection layerCollection = new VisualLayerCollection(_person, layers, new ProjectionPayloadMerger());
+            IVisualLayerCollection layerCollection = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
             SkillStaffPeriodDataInfo dataHolder1 = new SkillStaffPeriodDataInfo(5, 80, period1, 1, 5, 0, null);
 
@@ -456,7 +456,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IVisualLayer layerBreak2 = _layerFactory.CreateShiftSetupLayer(activityBreak, new DateTimePeriod(_date.AddMinutes(75), _date.AddMinutes(90)),_person);
 
             IList<IVisualLayer> layers = new List<IVisualLayer> { layerPhone, layerBreak };
-            IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
+            IVisualLayerCollection layerCollection = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
             var dataHolder1 = new SkillStaffPeriodDataInfo(5, 80, period1, 1, 5, 0, null);
             var dataHolder2 = new SkillStaffPeriodDataInfo(5, 80, period2, 1, 5, 0, null);
@@ -477,7 +477,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.Greater(result, double.MinValue);
 
             layers = new List<IVisualLayer> { layerPhone, layerBreak2 };
-            layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
+            layerCollection = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
 			var result2 = _target.CalculateShiftValue(new WorkShiftCalculatableVisualLayerCollection(layerCollection), new WorkShiftCalculatorSkillStaffPeriodData(skillStaffPeriods), WorkShiftLengthHintOption.Free, true, true);
 
@@ -498,7 +498,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IVisualLayer layerPhone = _layerFactory.CreateShiftSetupLayer(activityPhone, new DateTimePeriod(_date, _date.AddMinutes(120)),_person);
 
             IList<IVisualLayer> layers = new List<IVisualLayer> { layerPhone };
-            IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
+            IVisualLayerCollection layerCollection = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
             var dataHolder1 = new SkillStaffPeriodDataInfo(5, 80, period1, 1, 5, 0, null);
             var dataHolder2 = new SkillStaffPeriodDataInfo(5, 80, period2, 1, 5, 0, null);

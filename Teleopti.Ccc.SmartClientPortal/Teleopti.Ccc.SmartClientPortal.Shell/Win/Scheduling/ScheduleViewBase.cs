@@ -559,8 +559,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						IVisualLayer actLayer = layerFactory.CreateShiftSetupLayer(new Activity("activity"), personAbsence.Period,
 							personAbsence.Person);
 
-						var layer = layerFactory.CreateAbsenceSetupLayer(personAbsence.Layer.Payload, actLayer, personAbsence.Period,
-							actLayer.PersonAbsenceId);
+						var layer = layerFactory.CreateAbsenceSetupLayer(personAbsence.Layer.Payload, actLayer, personAbsence.Period);
 						DrawLayer(e, layer, timeSpans, scheduleRange.Person, significantPart);
 					}
                 }

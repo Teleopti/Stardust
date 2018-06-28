@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             using (_mocker.Record())
             {
                 Expect.Call(_schedulePart.ProjectionService()).Return(_projectionService);
-                Expect.Call(_projectionService.CreateProjection()).Return(new VisualLayerCollection(_person, new List<IVisualLayer>(), new ProjectionPayloadMerger()));
+                Expect.Call(_projectionService.CreateProjection()).Return(new VisualLayerCollection(new List<IVisualLayer>(), new ProjectionPayloadMerger()));
                 Expect.Call(_schedulePart.Person).Return(_person);
             }
             using (_mocker.Playback())
@@ -259,7 +259,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             using (_mocker.Record())
             {
                 Expect.Call(_schedulePart.ProjectionService()).Return(_projectionService);
-                Expect.Call(_projectionService.CreateProjection()).Return(new VisualLayerCollection(_person, new List<IVisualLayer>(), new ProjectionPayloadMerger()));
+                Expect.Call(_projectionService.CreateProjection()).Return(new VisualLayerCollection(new List<IVisualLayer>(), new ProjectionPayloadMerger()));
                 Expect.Call(_schedulePart.Person).Return(_person);
             }
             using (_mocker.Playback())
@@ -345,7 +345,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             {
                 Expect.Call(_schedulePart.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(_dateOnly, _timeZone));
                 Expect.Call(_schedulePart.ProjectionService()).Return(_projectionService);
-                Expect.Call(_projectionService.CreateProjection()).Return(new VisualLayerCollection(_person, overtimeShift.ToList(), new ProjectionPayloadMerger()));
+                Expect.Call(_projectionService.CreateProjection()).Return(new VisualLayerCollection(overtimeShift.ToList(), new ProjectionPayloadMerger()));
                 Expect.Call(_schedulePart.Person).Return(_person);
                 Expect.Call(_schedulePart.TimeZone).Return(_timeZone);
                 Expect.Call(_definitionSet.CreateProjectionForPeriod(new DateOnlyPeriod(start, end), _timeZone)).Return(_multiplicatorLayers);
@@ -372,7 +372,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             using (_mocker.Record())
             {
                 Expect.Call(_schedulePart.ProjectionService()).Return(_projectionService);
-                Expect.Call(_projectionService.CreateProjection()).Return(new VisualLayerCollection(_person, overtimeShift.ToList(), new ProjectionPayloadMerger()));
+                Expect.Call(_projectionService.CreateProjection()).Return(new VisualLayerCollection(overtimeShift.ToList(), new ProjectionPayloadMerger()));
                 Expect.Call(_schedulePart.Person).Return(_person);
                 Expect.Call(_schedulePart.TimeZone).Return(_timeZone);
                 Expect.Call(_definitionSet.CreateProjectionForPeriod(new DateOnlyPeriod(start, end), _timeZone)).Return(_multiplicatorLayers);
@@ -400,7 +400,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             {
                 Expect.Call(_schedulePart.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(_dateOnly, _timeZone));
                 Expect.Call(_schedulePart.ProjectionService()).Return(_projectionService);
-                Expect.Call(_projectionService.CreateProjection()).Return(new VisualLayerCollection(_person, overtimeShift.ToList(), new ProjectionPayloadMerger()));
+                Expect.Call(_projectionService.CreateProjection()).Return(new VisualLayerCollection(overtimeShift.ToList(), new ProjectionPayloadMerger()));
                 Expect.Call(_schedulePart.Person).Return(_person);
                 Expect.Call(_schedulePart.TimeZone).Return(_timeZone);
                 Expect.Call(_definitionSet.CreateProjectionForPeriod(new DateOnlyPeriod(start, end), _timeZone)).Return(_multiplicatorLayers);
@@ -515,7 +515,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             {
                 Expect.Call(_schedulePart.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(_dateOnly, _timeZone));
                 Expect.Call(_schedulePart.ProjectionService()).Return(_projectionService);
-                Expect.Call(_projectionService.CreateProjection()).Return(new VisualLayerCollection(_person, overtimeShift.ToList(), new ProjectionPayloadMerger()));
+                Expect.Call(_projectionService.CreateProjection()).Return(new VisualLayerCollection(overtimeShift.ToList(), new ProjectionPayloadMerger()));
                 
                 Expect.Call(_schedulePart.Person).Return(_person);
                 Expect.Call(_schedulePart.TimeZone).Return(_timeZone);
@@ -614,7 +614,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             {
                 Expect.Call(_schedulePart.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(_dateOnly, _timeZone)).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePart.ProjectionService()).Return(_projectionService);
-                Expect.Call(_projectionService.CreateProjection()).Return(new VisualLayerCollection(_person, overtimeShift1.Concat(overtimeShift2).ToList(), new ProjectionPayloadMerger()));
+                Expect.Call(_projectionService.CreateProjection()).Return(new VisualLayerCollection(overtimeShift1.Concat(overtimeShift2).ToList(), new ProjectionPayloadMerger()));
                 Expect.Call(_schedulePart.Person).Return(_person);
                 Expect.Call(_schedulePart.TimeZone).Return(_timeZone).Repeat.AtLeastOnce();
                 Expect.Call(_definitionSet.CreateProjectionForPeriod(new DateOnlyPeriod(start, end), _timeZone)).Return(_multiplicatorLayers);
@@ -736,7 +736,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
                 retList.Add(layer);
             }
 
-            return new VisualLayerCollection(_person, retList, new ProjectionPayloadMerger());
+            return new VisualLayerCollection(retList, new ProjectionPayloadMerger());
         }
 
         private IEnumerable<IVisualLayer> CreateVisualLayerCollectionForOvertime(IEnumerable<DateTimePeriod> layersWithMultiplicator, IMultiplicatorDefinitionSet definitionSet)
@@ -782,7 +782,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             IVisualLayer layerToAdd = _factory.CreateShiftSetupLayer(_activity, period, _person);
             SetDefinitionSetOnVisualLayer(layerToAdd, definitionSet);
             layers.Add(layerToAdd);
-            return new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
+            return new VisualLayerCollection(layers, new ProjectionPayloadMerger());
         }
 
         private DateOnly start

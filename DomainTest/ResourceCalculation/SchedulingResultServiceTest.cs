@@ -35,9 +35,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var layers = _personAssignmentListContainer.TestVisualLayerCollection();
 			foreach (var layer in layers)
 			{
-				foreach (var resourceLayer in layer.ToResourceLayers(15))
+				foreach (var resourceLayer in layer.Item1.ToResourceLayers(15))
 				{
-					_resources.AddResources(layer.Person, new DateOnly(2008,1,1), resourceLayer);
+					_resources.AddResources(layer.Item2, new DateOnly(2008,1,1), resourceLayer);
 				}
 			}
 

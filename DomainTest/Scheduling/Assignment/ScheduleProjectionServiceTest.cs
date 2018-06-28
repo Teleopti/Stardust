@@ -112,35 +112,30 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(createPeriod(2, 3), layer.Period);
 			Assert.AreSame(actLayer1.Payload, layer.HighestPriorityActivity);
 			Assert.AreSame(layer.Payload, layer.HighestPriorityAbsence);
-			Assert.AreEqual(layer.PersonAbsenceId, abs2.Id);
 
 			layer = (VisualLayer)resWrapper[1];
 			Assert.AreEqual("första", layer.Payload.ConfidentialDescription(null).Name);
 			Assert.AreEqual(createPeriod(3, 8), layer.Period);
 			Assert.AreSame(actLayer1.Payload, layer.HighestPriorityActivity);
 			Assert.IsNull(layer.HighestPriorityAbsence);
-			Assert.IsNull(layer.PersonAbsenceId);
 
 			layer = (VisualLayer)resWrapper[2];
 			Assert.AreEqual("10", layer.Payload.ConfidentialDescription(null).Name);
 			Assert.AreEqual(createPeriod(8, 9), layer.Period);
 			Assert.AreSame(actLayer1.Payload, layer.HighestPriorityActivity);
 			Assert.AreSame(layer.Payload, layer.HighestPriorityAbsence);
-			Assert.AreEqual(layer.PersonAbsenceId, abs7.Id);
 
 			layer = (VisualLayer)resWrapper[3];
 			Assert.AreEqual("10", layer.Payload.ConfidentialDescription(null).Name);
 			Assert.AreEqual(createPeriod(11, 12), layer.Period);
 			Assert.AreSame(actLayer2.Payload, layer.HighestPriorityActivity);
 			Assert.AreSame(layer.Payload, layer.HighestPriorityAbsence);
-			Assert.AreEqual(layer.PersonAbsenceId, abs7.Id);
 
 			layer = (VisualLayer)resWrapper[4];
 			Assert.AreEqual("andra", layer.Payload.ConfidentialDescription(null).Name);
 			Assert.AreEqual(createPeriod(12, 19), layer.Period);
 			Assert.AreSame(actLayer2.Payload, layer.HighestPriorityActivity);
 			Assert.IsNull(layer.HighestPriorityAbsence);
-			Assert.IsNull(layer.PersonAbsenceId);
 		}
 
 		[Test]
@@ -161,7 +156,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual("100", retLayer.Payload.ConfidentialDescription(null).Name);
 			Assert.AreSame(ass.MainActivities().First().Payload, retLayer.HighestPriorityActivity);
 			Assert.AreSame(abs.Layer.Payload, retLayer.HighestPriorityAbsence);
-			Assert.AreEqual(abs.Id, retLayer.PersonAbsenceId);
 		}
 
 		[Test]
@@ -189,7 +183,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var layer = resWrapper[0];
 			Assert.IsFalse(layer.Payload.InContractTime);
 			Assert.IsTrue(layer.Payload is IAbsence);
-			Assert.AreEqual(layer.PersonAbsenceId, personAbsence.Id);
 			Assert.AreEqual(layer.Period.ElapsedTime(), avgWorkTimePerDay);
 		}
 
@@ -231,7 +224,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(ass.MainActivities().First().Payload.Description, resWrapper[1].Payload.ConfidentialDescription(null));
 			Assert.AreSame(ass.MainActivities().First().Payload, ((VisualLayer)resWrapper[0]).HighestPriorityActivity);
 			Assert.AreSame(abs.Layer.Payload, ((VisualLayer)resWrapper[0]).HighestPriorityAbsence);
-			Assert.AreEqual(abs.Id, ((VisualLayer)resWrapper[0]).PersonAbsenceId);
 			Assert.AreSame(ass.MainActivities().First().Payload, ((VisualLayer)resWrapper[1]).HighestPriorityActivity);
 			Assert.IsNull(((VisualLayer)resWrapper[1]).HighestPriorityAbsence);
 		}
@@ -255,7 +247,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var shiftLayer = ass.MainActivities().First();
 			Assert.AreEqual(shiftLayer.Payload.Description, resWrapper[0].Payload.ConfidentialDescription(null));
 			Assert.AreEqual("100", resWrapper[1].Payload.ConfidentialDescription(null).Name);
-			Assert.AreEqual(abs.Id, ((VisualLayer)resWrapper[1]).PersonAbsenceId);
 			Assert.AreEqual(shiftLayer.Payload.Description, resWrapper[2].Payload.ConfidentialDescription(null));
 
 			Assert.AreSame(shiftLayer.Payload, resWrapper[0].Payload);
@@ -283,7 +274,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			var layer = (VisualLayer)res[0];
 			Assert.AreSame(ass.MainActivities().First().Payload, layer.HighestPriorityActivity);
-			Assert.AreEqual(abs.Id, layer.PersonAbsenceId);
 			Assert.AreSame(abs.Layer.Payload, layer.HighestPriorityAbsence);
 		}
 
@@ -308,7 +298,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(createPeriod(2, 6), res[2].Period);
 			Assert.AreEqual("activity", ((VisualLayer)res[2]).HighestPriorityActivity.Description.Name);
 			Assert.AreSame(abs.Layer.Payload, ((VisualLayer)res[4]).HighestPriorityAbsence);
-			Assert.AreEqual(abs.Id, ((VisualLayer)res[4]).PersonAbsenceId);
 		}
 
 		[Test]
@@ -327,7 +316,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(1, res.Count());
 			Assert.AreSame(abs.Layer.Payload, ((VisualLayer)res.First()).Payload);
 			Assert.AreEqual(createPeriod(10, 20), res.First().Period);
-			Assert.AreEqual(abs.Id, res.First().PersonAbsenceId);
 		}
 
 		[Test]
@@ -354,7 +342,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(new TimeSpan(2, 0, 0, 0), res.ContractTime());
 			Assert.AreEqual(1, res.Count());
 			Assert.AreSame(sjuk, new List<IVisualLayer>(res)[0].Payload);
-			Assert.AreEqual(abs.Id, new List<IVisualLayer>(res)[0].PersonAbsenceId);
 		}
 
 		private IPersonMeeting createPersonMeeting(DateTimePeriod period)
@@ -421,7 +408,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var projection = target.CreateProjection();
 			Assert.AreEqual(1, projection.Count());
 			Assert.AreEqual(new TimeSpan(12, 0, 0), projection.ContractTime());
-			Assert.AreEqual(pAbs.Id, projection.First().PersonAbsenceId);
 		}
 
 		[Test]
@@ -442,7 +428,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var fakeLayer = projection.First();
 			Assert.AreSame(target.FakeActivity, ((VisualLayer)fakeLayer).HighestPriorityActivity);
 			Assert.AreSame(pAbs.Layer.Payload, fakeLayer.Payload);
-			Assert.AreEqual(pAbs.Id, fakeLayer.PersonAbsenceId);
 			Assert.AreEqual("Fake activity", target.FakeActivity.Description.Name);
 		}
 
@@ -538,7 +523,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(TimeSpan.Zero, res.ContractTime());
 			Assert.AreEqual(createPeriod(10, 12), res.Period());
 			Assert.IsInstanceOf<IAbsence>(new List<IVisualLayer>(res)[0].Payload);
-			Assert.AreEqual(abs.Id, res.First().PersonAbsenceId);
 		}
 
 		[Test]

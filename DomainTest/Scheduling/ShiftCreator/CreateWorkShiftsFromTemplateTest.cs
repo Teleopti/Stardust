@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             IWorkShiftLimiter limiter = mocks.StrictMock<IWorkShiftLimiter>();
             IList<IWorkShift> retValue = new List<IWorkShift>();
             IWorkShift retShift = mocks.StrictMock<IWorkShift>();
-            IVisualLayerCollection projTemplate = new VisualLayerCollection(null, new List<IVisualLayer>(), new ProjectionPayloadMerger());
+            IVisualLayerCollection projTemplate = new VisualLayerCollection(new List<IVisualLayer>(), new ProjectionPayloadMerger());
             retValue.Add(retShift);
             limiters.Add(limiter);
 
@@ -151,8 +151,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             IList<IWorkShift> retValue1 = new List<IWorkShift>();
             IWorkShift retShift1 = mocks.StrictMock<IWorkShift>();
             IWorkShift retShift2 = mocks.StrictMock<IWorkShift>();
-            IVisualLayerCollection projShift1 = new VisualLayerCollection(null, new List<IVisualLayer>(), new ProjectionPayloadMerger());
-            IVisualLayerCollection projShift2 = new VisualLayerCollection(null, new List<IVisualLayer>(), new ProjectionPayloadMerger());
+            IVisualLayerCollection projShift1 = new VisualLayerCollection(new List<IVisualLayer>(), new ProjectionPayloadMerger());
+            IVisualLayerCollection projShift2 = new VisualLayerCollection(new List<IVisualLayer>(), new ProjectionPayloadMerger());
             retValue1.Add(retShift1);
             retValue1.Add(retShift2);
             limiters.Add(limiter1);

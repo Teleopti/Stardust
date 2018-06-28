@@ -48,7 +48,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading
 							if (period.HasValue && scheduleProjectionService.SchedulePartProjection.HasLayers)
 							{
 								var layers = scheduleProjectionService.SchedulePartProjection.FilterLayers(period.Value);
-								isFullDayAbsence = layers.All(x => x.PersonAbsenceId.HasValue);
+								isFullDayAbsence = layers.All(x => x.Payload is IAbsence);
+								
 							}
 							if(isFullDayAbsence)
 								absenceDayCountDataTable.Rows.Add(

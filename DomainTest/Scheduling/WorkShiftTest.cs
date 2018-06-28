@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             using (mocks.Record())
             {
                 Expect.Call(projSvc.CreateProjection())
-                    .Return(new VisualLayerCollection(null, new List<IVisualLayer>(), new ProjectionPayloadMerger()))
+                    .Return(new VisualLayerCollection(new List<IVisualLayer>(), new ProjectionPayloadMerger()))
                     .Repeat.Once();
             }
 
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         {
             IProjectionService projSvc = mocks.StrictMock<IProjectionService>();
             workShiftInTest workShift = new workShiftInTest(projSvc);
-            VisualLayerCollection collection = new VisualLayerCollection(null, new List<IVisualLayer>(), new ProjectionPayloadMerger());
+            VisualLayerCollection collection = new VisualLayerCollection(new List<IVisualLayer>(), new ProjectionPayloadMerger());
 
             using (mocks.Record())
             {

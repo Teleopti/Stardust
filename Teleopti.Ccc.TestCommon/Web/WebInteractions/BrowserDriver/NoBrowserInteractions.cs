@@ -24,7 +24,9 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 		public void AssertInputValue(string selector, string value) => throw new NotImplementedException();
 		public void AssertUrlContains(string url) => throw new NotImplementedException();
 		public void AssertUrlNotContains(string urlContains, string urlNotContains) => throw new NotImplementedException();
-		public void AssertJavascriptResultContains(string javascript, string text) => throw new NotImplementedException();
+		public void AssertJavascriptResultContains(string javascript, string text)
+		{
+		}
 
 		public void DumpInfo(Action<string> writer)
 		{

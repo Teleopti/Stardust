@@ -97,8 +97,8 @@ rtaTester.describe('RtaHistoricalController', function (it, fit, xit) {
 			vm.recordedOutOfAdherences[0].click();
 		});
 
-		expect(vm.approveStartTimeString).toEqual('08:00:00');
-		expect(vm.approveEndTimeString).toEqual('09:00:00');
+		expect(vm.approveStartTimeString).toEqual(moment('8', 'H').format('LTS'));
+		expect(vm.approveEndTimeString).toEqual(moment('9', 'H').format('LTS'));
 	});
 
 });

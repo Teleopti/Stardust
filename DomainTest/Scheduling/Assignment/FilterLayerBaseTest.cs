@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             internalCollection.Add(createLayer(16, 17));
             internalCollection.Add(createLayer(17, 18));
 			
-			var target = new VisualLayerCollection(person, internalCollection, new ProjectionPayloadMerger());
+			var target = new VisualLayerCollection(internalCollection, new ProjectionPayloadMerger());
 			target.PeriodOptimizer = Optimizer;
 
 			Assert.AreEqual(3, target.FilterLayers(createPeriod(12, 17)).Count());
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             internalCollection.Add(createLayer(10, 12));
             internalCollection.Add(createLayer(13, 14));
 
-			var target = new VisualLayerCollection(person, internalCollection, new ProjectionPayloadMerger());
+			var target = new VisualLayerCollection(internalCollection, new ProjectionPayloadMerger());
 			target.PeriodOptimizer = Optimizer;
 
             Assert.AreEqual(0, target.FilterLayers(createPeriod(9, 10)).Count());
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             internalCollection.Add(createLayer(21, 24));
             internalCollection.Add(createLayer(24, 27));
 
-			var target = new VisualLayerCollection(person, internalCollection, new ProjectionPayloadMerger());
+			var target = new VisualLayerCollection(internalCollection, new ProjectionPayloadMerger());
 			target.PeriodOptimizer = Optimizer;
 
 			Assert.AreEqual(0, target.FilterLayers(createPeriod(2, 3)).Count());
