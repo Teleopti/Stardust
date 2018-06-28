@@ -3,10 +3,22 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { configureTestSuite } from '../../../../configure-test-suit';
 import { PeopleTestModule } from '../../people.test.module';
-import { WorkspaceService } from '../../services';
-import { adina, eva, myles } from '../../services/fake-backend';
+import {
+	WorkspaceService,
+	RolesService,
+	SearchService,
+	SearchOverridesService,
+	NavigationService
+} from '../../services';
+import { adina, eva, myles, fakeBackendProvider } from '../../services/fake-backend';
 import { countUniqueRolesFromPeople } from '../../utils';
 import { GrantPageComponent } from './grant-page.component';
+import { MockTranslationModule } from '../../../../mocks/translation';
+import { ChipComponent, ChipAddComponent, PageContainerComponent } from '../shared';
+import { MatDividerModule } from '@angular/material';
+import { WorkspaceComponent } from '..';
+import { GrantPageService } from './grant-page.service';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('GrantPageComponent', () => {
 	let component: GrantPageComponent;
@@ -18,7 +30,23 @@ describe('GrantPageComponent', () => {
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			imports: [PeopleTestModule]
+			declarations: [
+				GrantPageComponent,
+				ChipComponent,
+				ChipAddComponent,
+				PageContainerComponent,
+				WorkspaceComponent
+			],
+			imports: [MockTranslationModule, MatDividerModule, HttpClientModule],
+			providers: [
+				GrantPageService,
+				RolesService,
+				fakeBackendProvider,
+				WorkspaceService,
+				SearchService,
+				SearchOverridesService,
+				NavigationService
+			]
 		}).compileComponents();
 	}));
 

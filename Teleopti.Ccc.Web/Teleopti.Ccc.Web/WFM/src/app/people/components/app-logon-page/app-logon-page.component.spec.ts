@@ -3,9 +3,22 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { configureTestSuite } from '../../../../configure-test-suit';
 import { PeopleTestModule } from '../../people.test.module';
-import { adina, WorkspaceService } from '../../services';
+import {
+	adina,
+	WorkspaceService,
+	NavigationService,
+	fakeBackendProvider,
+	LogonInfoService,
+	SearchService
+} from '../../services';
 import { adinaLogon } from '../../services/fake-backend/logons';
 import { AppLogonPageComponent } from './app-logon-page.component';
+import { MockTranslationModule } from '../../../../mocks/translation';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material';
+import { PageContainerComponent, WorkspaceComponent } from '..';
+import { HttpClientModule } from '@angular/common/http';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('AppLogonPageComponent', () => {
 	let component: AppLogonPageComponent;
@@ -17,7 +30,15 @@ describe('AppLogonPageComponent', () => {
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			imports: [PeopleTestModule]
+			declarations: [AppLogonPageComponent, PageContainerComponent, WorkspaceComponent],
+			imports: [
+				MockTranslationModule,
+				ReactiveFormsModule,
+				MatInputModule,
+				HttpClientModule,
+				NoopAnimationsModule
+			],
+			providers: [fakeBackendProvider, WorkspaceService, NavigationService, LogonInfoService, SearchService]
 		}).compileComponents();
 	}));
 

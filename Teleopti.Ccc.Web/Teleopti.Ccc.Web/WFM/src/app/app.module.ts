@@ -1,15 +1,30 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { UpgradeModule, downgradeComponent } from '@angular/upgrade/static';
-
+import { BrowserModule } from '@angular/platform-browser';
+import { UpgradeModule } from '@angular/upgrade/static';
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { CoreModule } from './core/core.module';
 import { PeopleModule } from './people/people.module';
 import { ApiAccessModule } from './api-access/api-access.module';
-import { HttpClientModule } from '@angular/common/http';
-import { CoreModule } from './core/core.module';
 
 @NgModule({
-	declarations: [],
-	imports: [CoreModule, BrowserModule, UpgradeModule, PeopleModule, ApiAccessModule, HttpClientModule],
+	declarations: [AppComponent],
+	imports: [
+		CoreModule,
+		BrowserModule,
+		UpgradeModule,
+		PeopleModule,
+		ApiAccessModule,
+		HttpClientModule,
+		TranslateModule.forRoot({
+			loader: {
+				provide: TranslateLoader,
+				useFactory: HttpLoaderFactory,
+				deps: [HttpClient]
+			}
+		})
+	],
 	entryComponents: []
 })
 export class AppModule {

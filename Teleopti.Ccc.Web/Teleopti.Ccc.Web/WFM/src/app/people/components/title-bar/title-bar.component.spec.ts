@@ -1,25 +1,26 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TitleBarComponent } from './title-bar.component';
+import { MockTranslationModule } from '../../../../mocks/translation';
 
 describe('TitleBarComponent', () => {
-  let component: TitleBarComponent;
-  let fixture: ComponentFixture<TitleBarComponent>;
+	let component: TitleBarComponent;
+	let fixture: ComponentFixture<TitleBarComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ TitleBarComponent ]
-    })
-    .compileComponents();
-  }));
+	beforeEach(async(() => {
+		TestBed.configureTestingModule({
+			declarations: [TitleBarComponent],
+			imports: [MockTranslationModule]
+		}).compileComponents();
+	}));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(TitleBarComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+	beforeEach(() => {
+		fixture = TestBed.createComponent(TitleBarComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+	});
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	it('should create', () => {
+		expect(component).toBeTruthy();
+	});
 });

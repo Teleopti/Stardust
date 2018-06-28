@@ -11,14 +11,14 @@
       </div>
       <div class="con-flex x3">
         <button mat-raised-button color="primary" data-test-grant-button [disabled]="!workspaceService.isAnySelected()" (click)="nav.navToGrant()">
-          Grant role</button>
+          {{'PeopleGrantRole' | translate}}</button>
         <button mat-raised-button color="primary" data-test-revoke-button [disabled]="!workspaceService.isAnySelected()" (click)="nav.navToRevoke()">
-          Revoke role</button>
+          {{'PeopleRevokeRole' | translate}}</button>
         <button mat-raised-button color="primary" data-test-applicationlogon-button [disabled]="!workspaceService.isAnySelected()"
           (click)="nav.navToApplicationLogon()">
-          Application logon</button>
+          {{'PeopleApplicationLogon' | translate}}</button>
         <button mat-raised-button color="primary" data-test-identitylogon-button [disabled]="!workspaceService.isAnySelected()" (click)="nav.navToIdentityLogon()">
-          Identity logon</button>
+          {{'PeopleIdentityLogon' | translate}}</button>
       </div>
     </div>
   </div>
@@ -28,7 +28,7 @@
         <i class="mdi mdi-dots-vertical"></i>
       </button>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="selectAllMatches()" data-test-selectallonallpages-button>Select all on all pages</button>
+        <button mat-menu-item (click)="selectAllMatches()" data-test-selectallonallpages-button>{{'PeopleSelectAllOnAllPages' | translate}}</button>
       </mat-menu>
       <mat-table #table matSort (matSortChange)="sortData($event)" matSortActive="LastName" matSortDirection="asc" matSortDisableClear
         [dataSource]="dataSource" data-test-search>
@@ -47,23 +47,23 @@
         </ng-container>
 
         <ng-container matColumnDef="FirstName">
-          <mat-header-cell mat-sort-header *matHeaderCellDef data-test-sort-fn> First name </mat-header-cell>
+          <mat-header-cell mat-sort-header *matHeaderCellDef data-test-sort-fn> {{ 'FirstName' | translate}} </mat-header-cell>
           <mat-cell *matCellDef="let person" data-test-person-firstname> {{person.FirstName}} </mat-cell>
         </ng-container>
 
         <!-- Name Column -->
         <ng-container matColumnDef="LastName">
-          <mat-header-cell mat-sort-header *matHeaderCellDef> Last name </mat-header-cell>
+          <mat-header-cell mat-sort-header *matHeaderCellDef> {{'LastName' | translate}} </mat-header-cell>
           <mat-cell *matCellDef="let person" data-test-person-lastname> {{person.LastName}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="Roles">
-          <mat-header-cell *matHeaderCellDef> Roles </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef> {{'Roles' | translate}} </mat-header-cell>
           <mat-cell *matCellDef="let person" data-test-person-role> {{personToRoles(person)}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="SiteTeam">
-          <mat-header-cell mat-sort-header *matHeaderCellDef> Site/Team </mat-header-cell>
+          <mat-header-cell mat-sort-header *matHeaderCellDef> {{'PeopleSiteTeam' | translate}} </mat-header-cell>
           <mat-cell *matCellDef="let person" data-test-person-site-team> {{person.SiteTeam}} </mat-cell>
         </ng-container>
 

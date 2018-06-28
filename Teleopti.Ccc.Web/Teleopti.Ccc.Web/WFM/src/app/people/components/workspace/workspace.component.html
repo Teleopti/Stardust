@@ -5,7 +5,7 @@
     </button>
   </div>
   <h2>
-    <i class="mdi mdi-account-switch"></i> Workspace
+    <i class="mdi mdi-account-switch"></i> {{'PeopleWorkspace' | translate}}
     <span *ngIf="(workspaceService.people$ | async).length as peopleCount">({{peopleCount}})</span>
   </h2>
   <ul>

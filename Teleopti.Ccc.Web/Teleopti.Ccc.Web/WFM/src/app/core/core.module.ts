@@ -1,17 +1,25 @@
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthenticatedInterceptor } from './interceptors';
-import { TogglesService } from './services';
+import { TogglesService, UserPreferences, UserService } from './services';
+import { LanguageLoaderFactory } from './translation';
 
 @NgModule({
-	imports: [HttpClientModule],
-	exports: [],
+	imports: [
+		HttpClientModule,
+		TranslateModule.forRoot({
+			loader: {
+				provide: TranslateLoader,
+				useFactory: LanguageLoaderFactory,
+				deps: [HttpClient]
+			}
+		})
+	],
+	exports: [TranslateModule],
 	providers: [
 		TogglesService,
-		// {
-		// 	provide: MAT_RIPPLE_GLOBAL_OPTIONS,
-		// 	useValue: globalRippleConfig
-		// }
+		UserService,
 		{
 			provide: HTTP_INTERCEPTORS,
 			useClass: AuthenticatedInterceptor,
@@ -20,4 +28,13 @@ import { TogglesService } from './services';
 	],
 	entryComponents: []
 })
-export class CoreModule {}
+export class CoreModule {
+	constructor(private userService: UserService, private translate: TranslateService) {
+		translate.setDefaultLang('en');
+		userService.getPreferences().subscribe({
+			next: (preferences: UserPreferences) => {
+				translate.use(preferences.Language);
+			}
+		});
+	}
+}

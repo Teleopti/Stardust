@@ -12,11 +12,28 @@ import {
 	myles,
 	PeopleSearchQuery,
 	COLUMNS,
-	DIRECTION
+	DIRECTION,
+	WorkspaceService,
+	SearchService,
+	SearchOverridesService,
+	NavigationService,
+	RolesService
 } from '../../services';
 import { SearchPageComponent } from './search-page.component';
 import { of } from 'rxjs';
 import { asElementData } from '@angular/core/src/view';
+import {
+	MatTableModule,
+	MatPaginatorModule,
+	MatCheckboxModule,
+	MatMenuModule,
+	MatInputModule,
+	MatSortModule
+} from '@angular/material';
+import { MockTranslationModule } from '../../../../mocks/translation';
+import { ReactiveFormsModule } from '@angular/forms';
+import { PageContainerComponent, WorkspaceComponent } from '..';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('SearchPageComponent', () => {
 	let component: SearchPageComponent;
@@ -27,8 +44,27 @@ describe('SearchPageComponent', () => {
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			imports: [PeopleTestModule, HttpClientModule],
-			providers: [fakeBackendProvider]
+			declarations: [SearchPageComponent, PageContainerComponent, WorkspaceComponent],
+			imports: [
+				MockTranslationModule,
+				HttpClientModule,
+				MatTableModule,
+				MatPaginatorModule,
+				MatCheckboxModule,
+				MatMenuModule,
+				MatInputModule,
+				ReactiveFormsModule,
+				NoopAnimationsModule,
+				MatSortModule
+			],
+			providers: [
+				fakeBackendProvider,
+				WorkspaceService,
+				SearchService,
+				SearchOverridesService,
+				NavigationService,
+				RolesService
+			]
 		}).compileComponents();
 	}));
 

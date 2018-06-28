@@ -8,13 +8,13 @@ import {
 	MatGridListModule,
 	MatInputModule,
 	MatListModule,
+	MatMenuModule,
 	MatNativeDateModule,
 	MatPaginatorModule,
 	MatProgressSpinnerModule,
 	MatSortModule,
 	MatTableModule,
-	MatTooltipModule,
-	MatMenuModule
+	MatTooltipModule
 } from '@angular/material';
 import { SharedModule } from '../shared/shared.module';
 import {

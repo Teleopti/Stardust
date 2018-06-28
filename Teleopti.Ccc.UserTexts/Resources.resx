@@ -17475,6 +17475,52 @@ The application will now exit.</value>
   <data name="PeopleManageUsers" xml:space="preserve">
     <value>Manage users</value>
   </data>
+  <data name="PeopleUsernameIsAlreadyInUse" xml:space="preserve">
+    <value>Username is already in use</value>
+    <comment>Username is taken</comment>
+  </data>
+  <data name="PeopleDuplicateUsernameInForm" xml:space="preserve">
+    <value>Duplicate username in form</value>
+    <comment>User has entered duplicate usernames in same form</comment>
+  </data>
+  <data name="PeopleGrantRoles" xml:space="preserve">
+    <value>Grant roles</value>
+  </data>
+  <data name="PeopleCurrentRoles" xml:space="preserve">
+    <value>Current roles</value>
+  </data>
+  <data name="PeopleAvailableRoles" xml:space="preserve">
+    <value>Available roles</value>
+  </data>
+  <data name="PeopleIdentityLogon" xml:space="preserve">
+    <value>Identity logon</value>
+  </data>
+  <data name="PeopleRevokeRoles" xml:space="preserve">
+    <value>Revoke roles</value>
+  </data>
+  <data name="PeopleGrantRole" xml:space="preserve">
+    <value>Grant role</value>
+  </data>
+  <data name="PeopleRevokeRole" xml:space="preserve">
+    <value>Revoke role</value>
+  </data>
+  <data name="PeopleApplicationLogon" xml:space="preserve">
+    <value>Application logon</value>
+  </data>
+  <data name="PeopleSelectAllOnAllPages" xml:space="preserve">
+    <value>Select all on all pages</value>
+  </data>
+  <data name="PeopleSiteTeam" xml:space="preserve">
+    <value>Site/Team</value>
+    <comment>Used for combined column of site and team name</comment>
+  </data>
+  <data name="PeopleWorkspace" xml:space="preserve">
+    <value>Workspace</value>
+  </data>
+  <data name="PeopleUsernameHasALimitOfXCharacters" xml:space="preserve">
+    <value>Username has a limit of {0} characters</value>
+    <comment>Limit for username in validation</comment>
+  </data>
   <data name="SuccessfulMessageForSavingScheduleChanges" xml:space="preserve">
     <value>Successfully saved schedule changes.</value>
   </data>

@@ -1,9 +1,9 @@
 <people-page-container>
 	<div class="blue-box con-flex">
-		<h2>Revoke roles</h2>
+		<h2>{{'PeopleRevokeRoles' | translate}}</h2>
 	</div>
 	<div class="role-content">
-		<h3>Current roles</h3>
+		<h3>{{'PeopleCurrentRoles' | translate}}</h3>
 		<div class="con-fluid-row" data-test-revoke-current>
 			<div class="con-fluid-flex" *ngFor="let role of revokePageService.rolesOfPeople$ | async">
 				<chip-remove (click)="toggleSelectedRole(role)" [active]="isRoleSelected(role.Id)" data-test-chip>{{role.Name}}</chip-remove>
@@ -11,8 +11,8 @@
 		</div>
 
 		<aside class="action-buttons">
-			<button mat-button (click)="close()">Cancel</button>
-			<button #saveBtn mat-button color="primary" (click)="save()" [disabled]="!isAnyRoleSelected()" data-test-save>Save</button>
+			<button mat-button (click)="close()">{{'Cancel' | translate}}</button>
+			<button #saveBtn mat-button color="primary" (click)="save()" [disabled]="!isAnyRoleSelected()" data-test-save>{{'Save' | translate}}</button>
 		</aside>
 	</div>
 </people-page-container>

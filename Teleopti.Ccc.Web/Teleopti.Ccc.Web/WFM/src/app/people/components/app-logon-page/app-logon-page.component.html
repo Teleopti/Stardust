@@ -17,13 +17,13 @@
             <mat-form-field class="full-width">
               <input matInput formControlName="Logon" maxlength="50" placeholder="Application logon" data-test-person-logon>
               <mat-error *ngIf="personGroup.get('Logon').hasError('duplicateNameValidator')">
-                Username is already in use
+                {{'PeopleUsernameIsAlreadyInUse' | translate}}
               </mat-error>
               <mat-error *ngIf="personGroup.get('Logon').hasError('duplicateFormNameValidator')">
-                Duplicate username in form
+                {{'PeopleDuplicateUsernameInForm' | translate}}
               </mat-error>
               <mat-error *ngIf="personGroup.get('Logon').hasError('maxLength')">
-                Username has a limit of 50 characters
+                <ng-container translate [translateParams]="{'0':50}">PeopleUsernameHasALimitOfXCharacters</ng-container>
               </mat-error>
             </mat-form-field>
           </div>
@@ -34,8 +34,8 @@
   <div class="con-row">
     <div class="con-flex">
       <aside class="action-buttons">
-        <button mat-button (click)="nav.navToSearch()">Cancel</button>
-        <button mat-button color="primary" [disabled]="!isValid()" (click)="save()" data-test-save>Save</button>
+        <button mat-button (click)="nav.navToSearch()">{{'Cancel' | translate}}</button>
+        <button mat-button color="primary" [disabled]="!isValid()" (click)="save()" data-test-save>{{'Save' | translate}}</button>
       </aside>
     </div>
   </div>

@@ -3,8 +3,10 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { configureTestSuite } from '../../../../configure-test-suit';
 import { PeopleTestModule } from '../../people.test.module';
-import { adina, eva, myles } from '../../services';
+import { adina, eva, myles, fakeBackendProvider, SearchService, WorkspaceService } from '../../services';
 import { WorkspaceComponent } from './workspace.component';
+import { MockTranslationModule } from '../../../../mocks/translation';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('WorkspaceComponent', () => {
 	let component: WorkspaceComponent;
@@ -15,7 +17,9 @@ describe('WorkspaceComponent', () => {
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			imports: [PeopleTestModule]
+			declarations: [WorkspaceComponent],
+			imports: [MockTranslationModule, HttpClientModule],
+			providers: [fakeBackendProvider, SearchService, WorkspaceService]
 		}).compileComponents();
 	}));
 
