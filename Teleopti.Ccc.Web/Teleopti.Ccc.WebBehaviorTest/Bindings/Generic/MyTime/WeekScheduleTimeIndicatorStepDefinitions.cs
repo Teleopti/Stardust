@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 
 			Browser.Interactions.AssertExists(".weekview-timeline-label");
 
-			var result = (string)Browser.Interactions.Javascript("return $('.weekview-timeline-label').first().html();");
+			var result = (string)Browser.Interactions.Javascript_IsFlaky("return $('.weekview-timeline-label').first().html();");
 			var startText = result.Split('<')[0];
 			var returnCharAt = startText.IndexOf('\n');
 			if (returnCharAt>=0)
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 				throw new ValidationException("Could not find timeline start label time.");
 			}
 
-			result = (string)Browser.Interactions.Javascript("return $('.weekview-timeline-label').last().html();");
+			result = (string)Browser.Interactions.Javascript_IsFlaky("return $('.weekview-timeline-label').last().html();");
 			var endText = result.Split('<')[0];
 			returnCharAt = endText.IndexOf('\n');
 			if (returnCharAt >= 0)

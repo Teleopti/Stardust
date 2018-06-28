@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private IVisualLayer[] _mergedCollection;
 		private static readonly ILog log = LogManager.GetLogger(typeof(ProjectionMerger));
 
-		public IVisualLayer[] MergedCollection(IVisualLayer[] unmergedCollection, IPerson person)
+		public IEnumerable<IVisualLayer> MergedCollection(IEnumerable<IVisualLayer> unmergedCollection, IPerson person)
 		{
 			if (_mergedCollection == null)
 			{
@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		protected abstract IVisualLayer[] ModifyCollection(IVisualLayer[] clonedUnmergedCollection);
 		public abstract object Clone();
 
-		private static IVisualLayer[] cloneUnMergedCollection(IVisualLayer[] unmergedCollection, IPerson person)
+		private static IVisualLayer[] cloneUnMergedCollection(IEnumerable<IVisualLayer> unmergedCollection, IPerson person)
 		{
-			var layers = new List<IVisualLayer>(unmergedCollection.Length);
+			var layers = new List<IVisualLayer>();
 			foreach (var layer in unmergedCollection)
 			{
 				var layerClone = (IVisualLayer)layer.EntityClone();

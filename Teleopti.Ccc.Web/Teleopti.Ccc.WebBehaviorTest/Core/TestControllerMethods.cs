@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void ExpireMyCookieInsidePortal()
 		{
-			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
+			Browser.Interactions.Javascript_IsFlaky("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
 			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.GetTestMessages();", "Cookie is expired!");
 		}
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
@@ -14,6 +15,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <param name="unmergedCollection"></param>
 		/// <param name="person"></param>
 		/// <returns></returns>
-		IVisualLayer[] MergedCollection(IVisualLayer[] unmergedCollection, IPerson person);
+		IEnumerable<IVisualLayer> MergedCollection(IEnumerable<IVisualLayer> unmergedCollection, IPerson person);
 	}
 }

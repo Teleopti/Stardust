@@ -4,18 +4,12 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 {
 	public interface IBrowserInteractions
 	{
-		string Javascript(string javascript);
-
 		void GoTo(string uri);
-		void TryUntil(Action tryThis, Func<bool> until, TimeSpan waitBeforeRetry);
-		bool IsVisible(string selector);
-		bool IsExists(string selector);
-		bool IsContain(string selector, string text);
+
 		void Click(string selector);
 		void ClickVisibleOnly(string selector);
 		void ClickContaining(string selector, string text);
 
-		void Clear(string selector);
 		void FillWith(string selector, string value);
 		void PressEnter(string selector);
 		void HoverOver(string selector, string value = null);
@@ -39,7 +33,13 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 
 		void DumpInfo(Action<string> writer);
 		void DumpUrl(Action<string> writer);
-	    void CloseWindow(string name);
-		void DragnDrop(string selector, int x, int y);
+
+		void CloseWindow(string name);
+
+		void TryUntil_DontUseShouldBeInternal(Action tryThis, Func<bool> until, TimeSpan waitBeforeRetry);
+		bool IsVisible_IsFlaky(string selector);
+		bool IsExists_IsFlaky(string selector);
+		bool IsContain_Flaky(string selector, string text);
+		string Javascript_IsFlaky(string javascript);
 	}
 }

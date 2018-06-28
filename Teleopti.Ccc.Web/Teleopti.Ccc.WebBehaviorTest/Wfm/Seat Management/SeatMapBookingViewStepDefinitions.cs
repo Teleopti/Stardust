@@ -17,21 +17,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 		[When(@"I navigate to seat map view")]
 		public void WhenINavigateToSeatMapView()
 		{
-			Browser.Interactions.TryUntil(() =>
+			Browser.Interactions.TryUntil_DontUseShouldBeInternal(() =>
 				{
 					Browser.Interactions.Click(".nav-item-active");
 					Browser.Interactions.Click("#view-seatbookings-button");
 				},
-				() => Browser.Interactions.IsVisible(".seatbooking-operations-add .add-agents"),
+				() => Browser.Interactions.IsVisible_IsFlaky(".seatbooking-operations-add .add-agents"),
 				TimeSpan.FromMilliseconds(1000));
 		}
 
 		[When(@"I see advanced search")]
 		public void WhenISeeAdvancedSearch()
 		{
-			Browser.Interactions.TryUntil(
+			Browser.Interactions.TryUntil_DontUseShouldBeInternal(
 				() => Browser.Interactions.Click(".seatbooking-operations-add .add-agents"),
-				() => Browser.Interactions.IsVisible("#advanced-search"),
+				() => Browser.Interactions.IsVisible_IsFlaky("#advanced-search"),
 				TimeSpan.FromMilliseconds(1000));
 		}
 
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 							 @"var utils = injector.get('seatMapCanvasUtilsService');" +
 							 @"var canvas = angular.element(document.getElementsByClassName('seatmap')).scope().vm.getCanvas();;" +
 							 function;
-			Browser.Interactions.Javascript(javascript);
+			Browser.Interactions.Javascript_IsFlaky(javascript);
 		}
 		
 	}

@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"the preference calendar should not be editable")]
 		public void ThenThePreferenceCalendarShouldNotBeEditable()
 		{
-			var amount = Convert.ToInt32(Browser.Interactions.Javascript("return $('li[data-mytime-date]').length;"));
+			var amount = Convert.ToInt32(Browser.Interactions.Javascript_IsFlaky("return $('li[data-mytime-date]').length;"));
 			for (var i = 0; i < amount; i++)
 			{
 				var cell = $"li[data-mytime-date]:nth({i})";

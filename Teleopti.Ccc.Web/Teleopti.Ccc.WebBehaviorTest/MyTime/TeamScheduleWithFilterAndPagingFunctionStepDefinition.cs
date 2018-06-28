@@ -432,7 +432,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertExistsUsingJQuery(".shift-trade-agent-name:contains('I')");
 			var mouseEnterScript = "$(\".shift-trade-agent-name:contains('I') + .shift-trade-possible-trade-schedule .shift-trade-layer-container .shift-trade-layer\").first().mouseenter(); ";
 
-			Browser.Interactions.Javascript(mouseEnterScript);
+			Browser.Interactions.Javascript_IsFlaky(mouseEnterScript);
 			var tooltipScript =
 				"return $(\".shift-trade-agent-name:contains('I') + .shift-trade-possible-trade-schedule .shift-trade-layer-container .tooltip-inner\").text();";
 

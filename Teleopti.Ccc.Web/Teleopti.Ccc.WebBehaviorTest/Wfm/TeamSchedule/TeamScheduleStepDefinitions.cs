@@ -459,7 +459,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		public void WhenIChooseNotToViewValidationResult(string ruleType)
 		{
 			Browser.Interactions.AssertExists($"md-checkbox[test-attr={ruleType}][aria-checked=true]");
-			Browser.Interactions.Javascript($"document.querySelector('md-checkbox[test-attr={ruleType}][aria-checked=true]').click();");
+			Browser.Interactions.Javascript_IsFlaky($"document.querySelector('md-checkbox[test-attr={ruleType}][aria-checked=true]').click();");
 			Browser.Interactions.AssertExists($"md-checkbox[test-attr={ruleType}][aria-checked=false]");
 		}
 

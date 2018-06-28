@@ -4,7 +4,7 @@
 	{
 		public static string Javascript(this IBrowserInteractions interactions, string javascript, params object[] args)
 		{
-			return interactions.Javascript(string.Format(javascript, args));
+			return interactions.Javascript_IsFlaky(string.Format(javascript, args));
 		}
 
 		public static void AssertExists(this IBrowserInteractions interactions, string selector, params object[] args)

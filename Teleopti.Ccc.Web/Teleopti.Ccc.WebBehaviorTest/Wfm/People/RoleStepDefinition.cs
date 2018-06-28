@@ -36,14 +36,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 		public void INavigateToGrant()
 		{
 			Browser.Interactions.AssertExists("[data-test-grant-button]");
-			Browser.Interactions.Javascript("document.querySelector('[data-test-grant-button]').click()");
+			Browser.Interactions.Javascript_IsFlaky("document.querySelector('[data-test-grant-button]').click()");
 		}
 
 		[When("I navigate to revoke page")]
 		public void INavigateToRevoke()
 		{
 			Browser.Interactions.AssertExists("[data-test-revoke-button]");
-			Browser.Interactions.Javascript("document.querySelector('[data-test-revoke-button]').click()");
+			Browser.Interactions.Javascript_IsFlaky("document.querySelector('[data-test-revoke-button]').click()");
 		}
 
 		[Then("The grant page is shown")]
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 				return Array.from(
 					document.querySelectorAll('"+selector+@"'))
 				.findIndex(p => p.textContent.includes('" + rolename + "')) !== -1", "True");
-			Browser.Interactions.Javascript(@"
+			Browser.Interactions.Javascript_IsFlaky(@"
 				Array.from(
 					document.querySelectorAll('"+selector+@"'))
 				.forEach(p => {if(p.textContent.includes('" + rolename + "')) p.click()})");
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 		public void WhenISave()
 		{
 			Browser.Interactions.AssertExists("[data-test-save]");
-			Browser.Interactions.Javascript("document.querySelector('[data-test-save]').click()");
+			Browser.Interactions.Javascript_IsFlaky("document.querySelector('[data-test-save]').click()");
 		}
 
 		[Then("Person '(.*)' should have role '(.*)'")]

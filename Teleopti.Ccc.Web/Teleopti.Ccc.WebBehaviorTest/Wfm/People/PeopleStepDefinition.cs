@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 				return Array.from(
 					document.querySelectorAll('[data-test-search] [data-test-person] [data-test-person-firstname]'))
 				.findIndex(p => p.textContent.includes('" + name + "')) !== -1", "True");
-			Browser.Interactions.Javascript(@"
+			Browser.Interactions.Javascript_IsFlaky(@"
 				Array.from(
 					document.querySelectorAll('[data-test-search] [data-test-person] [data-test-person-firstname]'))
 				.forEach(p => {if(p.textContent.includes('" + name+"')) p.click()})");
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 		[When("I remove '(.*)' from the workspace")]
 		public void IRemoveXFromWorkspace(string name)
 		{
-			Browser.Interactions.Javascript(@"
+			Browser.Interactions.Javascript_IsFlaky(@"
 				Array.from(
 					document.querySelectorAll('[data-test-workspace] [data-test-person]'))
 				.forEach(row => {

@@ -6,7 +6,6 @@ using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Interactions;
 
 namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 {
@@ -66,35 +65,9 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 			specialTimeout = originalTimeOut;
 		}
 
-		public string Javascript(string javascript)
-		{
-			return retryJavascript(javascript);
-		}
-
 		public void GoTo(string uri)
 		{
 			_browser.Visit(uri);
-		}
-
-		public void TryUntil(Action tryThis, Func<bool> until, TimeSpan waitBeforeRetry)
-		{
-			tryUntil(tryThis, until, waitBeforeRetry);
-		}
-
-		public bool IsVisible(string selector)
-		{
-			return _browser.FindCss(selector, optionsVisibleOnly()).Exists(options());
-		}
-
-		public bool IsExists(string selector)
-		{
-			return _browser.FindCss(selector, options()).Exists(options());
-		}
-
-		public bool IsContain(string selector, string text)
-		{
-			var regex = new Regex(Regex.Escape(text));
-			return _browser.FindCss(selector, regex, optionsVisibleOnly()).Exists(options());
 		}
 
 		public void Click(string selector)
@@ -102,7 +75,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 			var opts = options();
 			_browser.FindCss(selector, opts).Click(opts);
 		}
-		
+
 		public void ClickVisibleOnly(string selector)
 		{
 			_browser.FindCss(selector, optionsVisibleOnly()).Click(optionsVisibleOnly());
@@ -111,15 +84,6 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 		public void ClickContaining(string selector, string text)
 		{
 			_browser.FindCss(selector, new Regex(Regex.Escape(text)), optionsVisibleOnly()).Click(optionsVisibleOnly());
-		}
-
-		public void Clear(string selector)
-		{
-			_browser.RetryUntilTimeout(() =>
-			{
-				var selenium = (OpenQA.Selenium.Remote.RemoteWebDriver) _browser.Native;
-				selenium.FindElement(By.CssSelector(selector)).Clear();
-			}, options());
 		}
 
 		public void FillWith(string selector, string value)
@@ -144,40 +108,38 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 			}
 		}
 
-		public void DragnDrop(string selector, int x, int y)
-		{
-			var selenium = ((OpenQA.Selenium.Remote.RemoteWebDriver) _browser.Native);
-			var start = selenium.FindElement(By.CssSelector(selector));
-			new Actions(selenium).DragAndDropToOffset(start, x, y).Perform();
-		}
-
 		public void AssertExists(string selector)
 		{
-			assert(_browser.FindCss(selector, options()).Exists(options()), Is.True, "Could not find element matching selector " + selector);
+			assert(_browser.FindCss(selector, options()).Exists(options()), Is.True,
+				"Could not find element matching selector " + selector);
 		}
 
 		public void AssertXPathExists(string xpath)
 		{
-			assert(_browser.FindXPath(xpath, options()).Exists(options()), Is.True, "Could not find element matching xpath " + xpath);
+			assert(_browser.FindXPath(xpath, options()).Exists(options()), Is.True,
+				"Could not find element matching xpath " + xpath);
 		}
 
 		public void AssertNotExists(string existsSelector, string notExistsSelector)
 		{
 			AssertExists(existsSelector);
-			assert(_browser.FindCss(notExistsSelector, options()).Missing(options()), Is.True, "Found element matching selector " + notExistsSelector + " although I shouldnt");
+			assert(_browser.FindCss(notExistsSelector, options()).Missing(options()), Is.True,
+				"Found element matching selector " + notExistsSelector + " although I shouldnt");
 		}
 
 		public void AssertAnyContains(string selector, string text)
 		{
 			var regex = new Regex(Regex.Escape(text));
-			assert(_browser.FindCss(selector, regex, optionsVisibleOnly()).Exists(options()), Is.True, string.Format("Could not find element matching selector \"{0}\" with text \"{1}\"", selector, text));
+			assert(_browser.FindCss(selector, regex, optionsVisibleOnly()).Exists(options()), Is.True,
+				string.Format("Could not find element matching selector \"{0}\" with text \"{1}\"", selector, text));
 		}
 
 		public void AssertNoContains(string existsSelector, string notExistsSelector, string text)
 		{
 			AssertExists(existsSelector);
 			var regex = new Regex(Regex.Escape(text));
-			assert(_browser.FindCss(notExistsSelector, regex, optionsVisibleOnly()).Missing(options()), Is.True, "Failed to assert that " + notExistsSelector + " did not find anything containing text " + text);
+			assert(_browser.FindCss(notExistsSelector, regex, optionsVisibleOnly()).Missing(options()), Is.True,
+				"Failed to assert that " + notExistsSelector + " did not find anything containing text " + text);
 		}
 
 		public void AssertFirstContains(string selector, string text)
@@ -195,18 +157,21 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 
 		public void AssertInputValue(string selector, string value)
 		{
-			eventualAssert(() => _browser.FindCss(selector, options()).Value, Is.EqualTo(value), () => "Failed to assert that input value was " + value);
+			eventualAssert(() => _browser.FindCss(selector, options()).Value, Is.EqualTo(value),
+				() => "Failed to assert that input value was " + value);
 		}
 
 		public void AssertUrlContains(string url)
 		{
-			eventualAssert(() => _browser.Location.ToString(), Contains.Substring(url), () => "Failed to assert that current url contains " + url);
+			eventualAssert(() => _browser.Location.ToString(), Contains.Substring(url),
+				() => "Failed to assert that current url contains " + url);
 		}
 
 		public void AssertUrlNotContains(string urlContains, string urlNotContains)
 		{
 			AssertUrlContains(urlContains);
-			eventualAssert(() => _browser.Location.ToString(), Does.Not.Contain(urlNotContains), () => "Failed to assert that current url did not contain " + urlNotContains);
+			eventualAssert(() => _browser.Location.ToString(), Does.Not.Contain(urlNotContains),
+				() => "Failed to assert that current url did not contain " + urlNotContains);
 		}
 
 		public void CloseWindow(string name)
@@ -232,7 +197,8 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 		{
 			writer($" Time: {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
 			writer($" Current culture: {CultureInfo.CurrentCulture.Name}");
-			writer($" Current time zone: {TimeZone.CurrentTimeZone.StandardName} [Daylight saving time: {TimeZone.CurrentTimeZone.IsDaylightSavingTime(DateTime.Now)}]");
+			writer(
+				$" Current time zone: {TimeZone.CurrentTimeZone.StandardName} [Daylight saving time: {TimeZone.CurrentTimeZone.IsDaylightSavingTime(DateTime.Now)}]");
 			writer($" Url: {_browser.Location}");
 			writer(" Html: ");
 			try
@@ -267,17 +233,10 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 				writer("Failed to dump console log");
 			}
 		}
-		
+
 		public void DumpUrl(Action<string> writer)
 		{
 			writer(_browser.Location.ToString());
-		}
-
-		private string retryJavascript(string javascript)
-		{
-			object result = null;
-			_browser.RetryUntilTimeout(() => { result = _browser.ExecuteScript(javascript); }, options());
-			return result?.ToString();
 		}
 
 		private void assert<T>(T value, Constraint constraint, string message)
@@ -296,6 +255,35 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 		{
 			var o = options();
 			EventualAssert.That(value, constraint, message, new SeleniumExceptionCatcher(), o.RetryInterval, o.Timeout);
+		}
+
+
+		public string Javascript_IsFlaky(string javascript)
+		{
+			object result = null;
+			_browser.RetryUntilTimeout(() => { result = _browser.ExecuteScript(javascript); }, options());
+			return result?.ToString();
+		}
+
+		public void TryUntil_DontUseShouldBeInternal(Action tryThis, Func<bool> until, TimeSpan waitBeforeRetry)
+		{
+			tryUntil(tryThis, until, waitBeforeRetry);
+		}
+
+		public bool IsVisible_IsFlaky(string selector)
+		{
+			return _browser.FindCss(selector, optionsVisibleOnly()).Exists(options());
+		}
+
+		public bool IsExists_IsFlaky(string selector)
+		{
+			return _browser.FindCss(selector, options()).Exists(options());
+		}
+
+		public bool IsContain_Flaky(string selector, string text)
+		{
+			var regex = new Regex(Regex.Escape(text));
+			return _browser.FindCss(selector, regex, optionsVisibleOnly()).Exists(options());
 		}
 	}
 }

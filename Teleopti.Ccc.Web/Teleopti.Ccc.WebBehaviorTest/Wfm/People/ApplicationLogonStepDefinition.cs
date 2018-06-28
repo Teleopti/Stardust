@@ -38,14 +38,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 		public void INavigateToApplicationLogon()
 		{
 			Browser.Interactions.AssertExists("[data-test-applicationlogon-button]:not([disabled])");
-			Browser.Interactions.Javascript("document.querySelector('[data-test-applicationlogon-button]').click()");
+			Browser.Interactions.Javascript_IsFlaky("document.querySelector('[data-test-applicationlogon-button]').click()");
 		}
 
 
 		[When("I change Application logon for '(.*)' into '(.*)'")]
 		public void IChangeApplicationLogonFor(string name, string appLogon)
 		{
-			Browser.Interactions.Javascript($@"
+			Browser.Interactions.Javascript_IsFlaky($@"
 				Array.from(document.querySelectorAll('[data-test-person]'))
 					.find(r => r.querySelector('[data-test-person-name]').value.includes('{name}'))
 					.querySelector('[data-test-person-logon]').value = '{appLogon}'

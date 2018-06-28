@@ -74,9 +74,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			var fields = table.CreateInstance<StudentAvailabilityFields>();
 
 			if (fields.StartTime != null)
-				Browser.Interactions.Javascript(string.Format("$('.availability-start-time').timepicker('setTime', '{0}');", fields.StartTime));
+				Browser.Interactions.Javascript_IsFlaky(string.Format("$('.availability-start-time').timepicker('setTime', '{0}');", fields.StartTime));
 			if (fields.EndTime != null)
-				Browser.Interactions.Javascript(string.Format("$('.availability-end-time').timepicker('setTime', '{0}');", fields.EndTime));
+				Browser.Interactions.Javascript_IsFlaky(string.Format("$('.availability-end-time').timepicker('setTime', '{0}');", fields.EndTime));
 			if (fields.NextDay)
 				Browser.Interactions.Click(".availability-next-day");
 		}

@@ -54,6 +54,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void ThenIShouldSeeTheOptionToChangeSchedule(string name)
 		{
 			Browser.Interactions.AssertExists($".change-schedule");
+
+//			Browser.Interactions.SwitchToLastTabAndCloseEverythingElse();
+//			Browser.Interactions.AssertFirstContains("td.person-name-column", name);
+//			Browser.Interactions.AssertExists("td.schedule .layer");
+//			Browser.Interactions.AssertExists("td.schedule-tool-column span i");
+
+
 //			Browser.Interactions.Click($".change-schedule");
 //			
 //			Browser.Interactions.AssertJavascriptResultContains(@"

@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void WhenIClickSaveAbsenceReport()
 		{
 			Browser.Interactions.Click("div.mobile-start-day button.absence-report-send");
-			Browser.Interactions.Javascript("window.setTimeout(function(){ window.location.reload();}, 1000);");
+			Browser.Interactions.Javascript_IsFlaky("window.setTimeout(function(){ window.location.reload();}, 1000);");
 		}
 
 		[When(@"I click save request")]

@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		{
 			var javascript = "window.localStorage.clear();";
 
-			Browser.Interactions.Javascript(javascript);
+			Browser.Interactions.Javascript_IsFlaky(javascript);
 		}
 
 		[Given(@"there is queue statistics for the skill '(.*)' up until '(.*)'")]
@@ -154,9 +154,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I name the Skill Group '(.*)'")]
 		public void GivenINameTheSkillGroup(string skillGroupName)
 		{
-			Browser.Interactions.TryUntil(
+			Browser.Interactions.TryUntil_DontUseShouldBeInternal(
 				() => { Browser.Interactions.FillWith("#groupNameBox", skillGroupName); },
-				() => Browser.Interactions.IsVisible("#confirmEditNameButton"),
+				() => Browser.Interactions.IsVisible_IsFlaky("#confirmEditNameButton"),
 				TimeSpan.FromMilliseconds(1000));
 			Browser.Interactions.Click("#confirmEditNameButton");
 		}
@@ -164,9 +164,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Given(@"I select the Skill Group '(.*)'")]
 		public void GivenISelectTheSkillGroup(string skillGroupName)
 		{
-			Browser.Interactions.TryUntil(
+			Browser.Interactions.TryUntil_DontUseShouldBeInternal(
 				() => { Browser.Interactions.ClickContaining("#available_skill_groups_list", skillGroupName); },
-				() => Browser.Interactions.IsVisible("#available_skill_groups_list"),
+				() => Browser.Interactions.IsVisible_IsFlaky("#available_skill_groups_list"),
 				TimeSpan.FromSeconds(1));
 		}
 
@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 							 "scope.vm.selectedSkillGroup = group;" +
 							 "scope.vm.editNameClicked(group);";
 
-			Browser.Interactions.Javascript(javascript);
+			Browser.Interactions.Javascript_IsFlaky(javascript);
 		}
 
 
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		{
 			Browser.Interactions.AssertExists("the-skill-picker");
 			const string skillPicker = "the-skill-picker .con-flex:nth-child(1n) div.wfm-form";
-			if (Browser.Interactions.IsVisible(skillPicker + " .mdi-close"))
+			if (Browser.Interactions.IsVisible_IsFlaky(skillPicker + " .mdi-close"))
 			{
 				Browser.Interactions.ClickVisibleOnly(skillPicker + " .mdi-close");
 			}
@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		{
 			Browser.Interactions.AssertExists("the-skill-picker");
 			const string skillGroupPicker = "the-skill-picker .con-flex:nth-child(2n) div.wfm-form";
-			if (Browser.Interactions.IsVisible(skillGroupPicker + " .mdi-close"))
+			if (Browser.Interactions.IsVisible_IsFlaky(skillGroupPicker + " .mdi-close"))
 			{
 				Browser.Interactions.ClickVisibleOnly(skillGroupPicker + " .mdi-close");
 			}
@@ -257,7 +257,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void WhenICloseTheSkillManager()
 		{
 			Browser.Interactions.ClickVisibleOnly("#exit_sgm");
-			if (Browser.Interactions.IsVisible("#confirmExitButton"))
+			if (Browser.Interactions.IsVisible_IsFlaky("#confirmExitButton"))
 			{
 				Browser.Interactions.ClickVisibleOnly("#confirmExitButton");
 			}
@@ -274,7 +274,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		{
 			var elementSelector = $"$(\"span:contains('{skill}')\").parent(\"div.wfm-chip-wrap\")";
 
-			Browser.Interactions.Javascript($"{elementSelector}.click();");
+			Browser.Interactions.Javascript_IsFlaky($"{elementSelector}.click();");
 		}
 
 		[Then(@"I should not see '(.*)' as included skill")]
@@ -287,7 +287,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void GivenISelectFromAvailableSkill(string skill)
 		{
 			var elementSelector = $"$(\"span:contains('{skill}')\").parent()";
-			Browser.Interactions.Javascript($"{elementSelector}.click();");
+			Browser.Interactions.Javascript_IsFlaky($"{elementSelector}.click();");
 		}
 
 		[Given(@"I select to monitor skill area '(.*)'")]
@@ -295,16 +295,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void ThenISelectToMonitorSkillArea(string skillArea)
 		{
 			Thread.Sleep(1000);
-			Browser.Interactions.Javascript("document.querySelector(\"#skill-area-input\").focus();");
-			var listId = "#" + Browser.Interactions.Javascript("return $('#skill-area-id input').attr(\"aria-owns\")");
-			Browser.Interactions.Javascript($"$('{listId} li:contains(\"{skillArea}\")').click()");
+			Browser.Interactions.Javascript_IsFlaky("document.querySelector(\"#skill-area-input\").focus();");
+			var listId = "#" + Browser.Interactions.Javascript_IsFlaky("return $('#skill-area-id input').attr(\"aria-owns\")");
+			Browser.Interactions.Javascript_IsFlaky($"$('{listId} li:contains(\"{skillArea}\")').click()");
 		}
 
 		[Then(@"I should no longer be able to monitor '(.*)'")]
 		public void ThenIShouldNoLongerBeAbleToMonitor(string skillArea)
 		{
-			Browser.Interactions.Javascript("document.querySelector(\"#skill-area-input\").focus();");
-			var listId = "#" + Browser.Interactions.Javascript("return $('#skill-area-id input').attr(\"aria-owns\")");
+			Browser.Interactions.Javascript_IsFlaky("document.querySelector(\"#skill-area-input\").focus();");
+			var listId = "#" + Browser.Interactions.Javascript_IsFlaky("return $('#skill-area-id input').attr(\"aria-owns\")");
 			Browser.Interactions.AssertFirstNotContains(listId, skillArea);
 		}
 
@@ -384,7 +384,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Given(@"There's no data available")]
 		public void GivenIShouldNotSeeIncomingTrafficDataInTheChart()
 		{
-			Browser.Interactions.IsVisible(".no-data-available");
+			Browser.Interactions.IsVisible_IsFlaky(".no-data-available");
 		}
 
 		[When(@"I choose to monitor '(.*)'")]
@@ -396,7 +396,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I am navigating to intraday performance view")]
 		public void WhenIAmNavigatingToIntradayPerformanceView()
 		{
-			Browser.Interactions.Javascript("$('md-tab-item:nth-child(2)').click();");
+			Browser.Interactions.Javascript_IsFlaky("$('md-tab-item:nth-child(2)').click();");
 		}
 
 		[Then(@"I should see performance data in the chart")]
@@ -444,7 +444,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I am navigating to intraday staffing view")]
 		public void WhenIAmNavigatingToIntradayStaffingView()
 		{
-			Browser.Interactions.Javascript("setTimeout(function(){ $('md-tab-item:nth-child(3)').click(); }, 500);");
+			Browser.Interactions.Javascript_IsFlaky("setTimeout(function(){ $('md-tab-item:nth-child(3)').click(); }, 500);");
 		}
 
 		[Then(@"I should see staffing data in the chart")]
@@ -554,7 +554,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		{
 			var elementSelector = $"$(\"span:contains('{skill}')\").parent(\"span.wfm-chip\")";
 			Browser.Interactions.AssertJavascriptResultContains($"return {elementSelector}[0] !== undefined", "True");
-			Browser.Interactions.Javascript($"{elementSelector}.click();");
+			Browser.Interactions.Javascript_IsFlaky($"{elementSelector}.click();");
 		}
 
 		[Then(@"I Should see skill '(.*)' as selected skill")]
@@ -578,7 +578,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		{
 			var elementSelector = $"$(\"span:contains('{skill}')\").parent(\"span.wfm-chip\")";
 			Browser.Interactions.AssertJavascriptResultContains($"return {elementSelector}[0] !== undefined", "True");
-			Browser.Interactions.Javascript($"{elementSelector}.click();");
+			Browser.Interactions.Javascript_IsFlaky($"{elementSelector}.click();");
 		}
 
 
@@ -598,7 +598,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void ThenIShouldNotSeeTheChart()
 		{
 			Browser.Interactions.AssertExists("#chartPanel");
-			Assert.IsFalse(Browser.Interactions.IsVisible("#chartPanel"), "Chart panel should not be visible");
+			Assert.IsFalse(Browser.Interactions.IsVisible_IsFlaky("#chartPanel"), "Chart panel should not be visible");
 		}
 	}
 }

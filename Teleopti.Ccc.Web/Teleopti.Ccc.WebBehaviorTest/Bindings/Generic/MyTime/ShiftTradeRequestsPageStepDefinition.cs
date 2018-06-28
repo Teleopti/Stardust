@@ -38,13 +38,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			TestControllerMethods.Logon();
 
-			Browser.Interactions.TryUntil(
+			Browser.Interactions.TryUntil_DontUseShouldBeInternal(
 				() =>
 				{
 					Navigation.GotoRequests();
 					Browser.Interactions.Click("#addShiftTradeRequest");
 				},
-				() => Browser.Interactions.IsExists(".ready-loading-flag.is-ready-loaded"),
+				() => Browser.Interactions.IsExists_IsFlaky(".ready-loading-flag.is-ready-loaded"),
 				TimeSpan.FromMilliseconds(2000));
 		}
 
@@ -52,24 +52,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			TestControllerMethods.Logon();
 
-			Browser.Interactions.TryUntil(
+			Browser.Interactions.TryUntil_DontUseShouldBeInternal(
 				() =>
 				{
 					Navigation.GotoRequests();
 					Browser.Interactions.Click("#addShiftTradeRequestFromBulletinBoard");
 				},
-				() => Browser.Interactions.IsExists(".bulletin-ready-loading-flag.is-ready-loaded"),
+				() => Browser.Interactions.IsExists_IsFlaky(".bulletin-ready-loading-flag.is-ready-loaded"),
 				TimeSpan.FromMilliseconds(1000));
 		}
 
 		private static bool theGauntlet(string owner)
 		{
 			if (owner == "anonym")
-				return Browser.Interactions.IsContain("#Request-shift-trade-bulletin-board .shift-trade-agent-name", "Anonym");
+				return Browser.Interactions.IsContain_Flaky("#Request-shift-trade-bulletin-board .shift-trade-agent-name", "Anonym");
 			if (owner == "my")
-				return Browser.Interactions.IsVisible(".shift-trade-my-schedule .shift-trade-layer");
+				return Browser.Interactions.IsVisible_IsFlaky(".shift-trade-my-schedule .shift-trade-layer");
 
-			return Browser.Interactions.IsVisible("#agent-in-bulletin-board");
+			return Browser.Interactions.IsVisible_IsFlaky("#agent-in-bulletin-board");
 
 		}
 
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 
 			gotoShiftTradeBulletinBoardToday();
 
-			Browser.Interactions.TryUntil(
+			Browser.Interactions.TryUntil_DontUseShouldBeInternal(
 				() => Browser.Interactions.AssertJavascriptResultContains(script, dateAsSwedishString),
 				() => theGauntlet(owner),
 				TimeSpan.FromMilliseconds(1000));
@@ -97,9 +97,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 
 			gotoShiftTradeBulletinBoardToday();
 
-			Browser.Interactions.TryUntil(
+			Browser.Interactions.TryUntil_DontUseShouldBeInternal(
 				() => Browser.Interactions.AssertJavascriptResultContains(script, dateAsSwedishString),
-				() => Browser.Interactions.IsContain("#Request-shift-trade-bulletin-board .shift-trade-agent-name", "Anonym"),
+				() => Browser.Interactions.IsContain_Flaky("#Request-shift-trade-bulletin-board .shift-trade-agent-name", "Anonym"),
 				TimeSpan.FromMilliseconds(1000));
 		}
 
@@ -451,9 +451,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see a confirm message on bulletin trade board")]
 		public void ThenIShouldSeeAConfirmMessageOnBulletinTradeBoard()
 		{
-			Browser.Interactions.TryUntil(
+			Browser.Interactions.TryUntil_DontUseShouldBeInternal(
 				() => Browser.Interactions.Click("#agent-in-bulletin-board"),
-				() => Browser.Interactions.IsVisible("#Request-add-shift-trade-detail-section"),
+				() => Browser.Interactions.IsVisible_IsFlaky("#Request-add-shift-trade-detail-section"),
 				TimeSpan.FromMilliseconds(1000));
 
 			Browser.Interactions.AssertAnyContains("#Request-add-shift-trade-detail-section", Resources.SureToMakeShiftTrade);
@@ -463,9 +463,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Given(@"I click OtherAgent shift")]
 		public void WhenIClickOtherAgentShift()
 		{
-			Browser.Interactions.TryUntil(
+			Browser.Interactions.TryUntil_DontUseShouldBeInternal(
 				() => Browser.Interactions.Click("#agent-in-bulletin-board"),
-				() => Browser.Interactions.IsVisible("#Request-add-shift-trade-detail-section"),
+				() => Browser.Interactions.IsVisible_IsFlaky("#Request-add-shift-trade-detail-section"),
 				TimeSpan.FromMilliseconds(1000));
 		}
 

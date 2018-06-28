@@ -46,8 +46,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			Thread.Sleep(700); //wait for last step loading
 			var exchangeOffer = table.CreateInstance<ShiftExchangeOfferFields>();
 
-			Browser.Interactions.Javascript(string.Format("$('.shift-exchange-offer-start-time').timepicker('setTime', '{0}');", exchangeOffer.StartTime));
-			Browser.Interactions.Javascript(string.Format("$('.shift-exchange-offer-end-time').timepicker('setTime', '{0}');", exchangeOffer.EndTime));
+			Browser.Interactions.Javascript_IsFlaky(string.Format("$('.shift-exchange-offer-start-time').timepicker('setTime', '{0}');", exchangeOffer.StartTime));
+			Browser.Interactions.Javascript_IsFlaky(string.Format("$('.shift-exchange-offer-end-time').timepicker('setTime', '{0}');", exchangeOffer.EndTime));
 		}
 
 		[Then(@"I should see an announcement in request list")]

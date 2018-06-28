@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 				+ "Date.prototype.getTeleoptiTimeInUserTimezone = Date.prototype.getTeleoptiTime; ";
 			var setJsDate = string.Format(setJsDateTemplate, time.Year, time.Month - 1, time.Day, time.Hour, time.Minute,
 				time.Second);
-			Browser.Interactions.Javascript(setJsDate);
+			Browser.Interactions.Javascript_IsFlaky(setJsDate);
 
 		}
 	}

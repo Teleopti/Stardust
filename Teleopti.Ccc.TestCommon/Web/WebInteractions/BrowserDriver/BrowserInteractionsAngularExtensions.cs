@@ -17,13 +17,13 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 						 runnerByQuerySelector(selector) +
 						 "runner(function() {" + assignments +  runAction + " });";		
 		
-			interactions.Javascript(script);		
+			interactions.Javascript_IsFlaky(script);		
 		}
 
 		public static void InvokeServiceAction(this IBrowserInteractions interactions, string selector, string serviceName, string actionName)
 		{
 			var script = getInjectableService(selector, serviceName) + string.Format(" service.{0}();", actionName);
-			interactions.Javascript(script);
+			interactions.Javascript_IsFlaky(script);
 		}
 
 		public static void InvokeScopeAction(this IBrowserInteractions interactions, string selector, string actionName,
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 			var script = scopeByQuerySelector(selector, useIsolateScope) +
 						 runnerByQuerySelector(selector) +
 						 "runner(function() {" + run + " });";
-			interactions.Javascript(script);
+			interactions.Javascript_IsFlaky(script);
 		}
 
 		public static void WaitScopeCondition<T>(this IBrowserInteractions interactions, string selector, string name,
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 		{
 			var script = string.Format(scopeByQuerySelector(selector, useIsolateScope) + " return scope.{0}; ", name);
 			var readerName = getTmpName(name);
-			interactions.Javascript(waitForAngular(selector, script, readerName, useIsolateScope));
+			interactions.Javascript_IsFlaky(waitForAngular(selector, script, readerName, useIsolateScope));
 			var query = scopeByQuerySelector(selector, useIsolateScope) +
 						string.Format("return scope.$result{0} == null ?'True': 'False' ; ", readerName);
 			
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 			var script = string.Format(scopeByQuerySelector(selector, useIsolateScope) + " return scope.{0}; ", name);
 			var readerName = getTmpName(name);
 		
-			interactions.Javascript(waitForAngular(selector, script, readerName, useIsolateScope));
+			interactions.Javascript_IsFlaky(waitForAngular(selector, script, readerName, useIsolateScope));
 			
 			if (typeof (T) == typeof (bool))
 			{
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 			var triggerChange = string.Format("{0}.triggerHandler(\"change\")", elementByQuerySelector(selector));
 
 			var script = runScript(selector, selectAction + triggerChange, useIsolateScope);
-			interactions.Javascript(script);
+			interactions.Javascript_IsFlaky(script);
 		}
 
 
