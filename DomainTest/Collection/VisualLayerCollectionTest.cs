@@ -119,18 +119,6 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		}
 
 		[Test]
-		public void PersonShouldBeSetOnLayerWhenEnumerating()
-		{
-			internalCollection.Add(visualLayerFactory.CreateShiftSetupLayer(dummyPayload, new DateTimePeriod(2000, 1, 1, 2001, 1, 1), null));
-			var target = new VisualLayerCollection(internalCollection, new ProjectionPayloadMerger())
-			{
-				PeriodOptimizer = new FilterLayerNoOptimizer()
-			};
-			Assert.AreNotSame(dummyPerson, ((VisualLayer)internalCollection.First()).Person);
-			Assert.AreSame(dummyPerson, ((VisualLayer)target.First()).Person);
-		}
-
-		[Test]
 		public void VerifyFilterLayersWithAdjacentLayers()
 		{
 			IActivity phone = ActivityFactory.CreateActivity("phone");
