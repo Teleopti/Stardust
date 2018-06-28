@@ -218,19 +218,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 				Select2Box.OpenWhenOptionsAreLoaded("Preference-Picker");
 				Select2Box.SelectItemByText("Preference-Picker", fields.Preference);
 
-				Browser.Interactions.Javascript(string.Format("$('#{0}').select2('close');", "Preference-Picker")); // for IE
+				Browser.Interactions.Javascript_IsFlaky(string.Format("$('#{0}').select2('close');", "Preference-Picker")); // for IE
 			}
 
 			if (fields.StartTimeMinimum != null)
-				Browser.Interactions.Javascript(string.Format("$('.preference-start-time-min').timepicker('setTime', '{0}');", fields.StartTimeMinimum));
+				Browser.Interactions.Javascript_IsFlaky(string.Format("$('.preference-start-time-min').timepicker('setTime', '{0}');", fields.StartTimeMinimum));
 			if (fields.StartTimeMaximum != null)
-				Browser.Interactions.Javascript(string.Format("$('.preference-start-time-max').timepicker('setTime', '{0}');", fields.StartTimeMaximum));
+				Browser.Interactions.Javascript_IsFlaky(string.Format("$('.preference-start-time-max').timepicker('setTime', '{0}');", fields.StartTimeMaximum));
 			if (fields.EndTimeMinimum != null)
-				Browser.Interactions.Javascript(string.Format("$('.preference-end-time-min').timepicker('setTime', '{0}');", fields.EndTimeMinimum));
+				Browser.Interactions.Javascript_IsFlaky(string.Format("$('.preference-end-time-min').timepicker('setTime', '{0}');", fields.EndTimeMinimum));
 			if (fields.EndTimeMinimumNextDay)
 				Browser.Interactions.Click(".preference-end-time-min-next-day");
 			if (fields.EndTimeMaximum != null)
-				Browser.Interactions.Javascript(string.Format("$('.preference-end-time-max').timepicker('setTime', '{0}');", fields.EndTimeMaximum));
+				Browser.Interactions.Javascript_IsFlaky(string.Format("$('.preference-end-time-max').timepicker('setTime', '{0}');", fields.EndTimeMaximum));
 			if (fields.EndTimeMaximumNextDay)
 				Browser.Interactions.Click(".preference-end-time-max-next-day");
 			if (fields.WorkTimeMinimum != null)
@@ -243,17 +243,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 				Select2Box.OpenWhenOptionsAreLoaded("Preference-extended-activity-Picker");
 				Select2Box.SelectItemByText("Preference-extended-activity-Picker", fields.Activity);
 
-				Browser.Interactions.Javascript(string.Format("$('#{0}').select2('close');", "Preference-extended-activity-Picker")); // for IE
+				Browser.Interactions.Javascript_IsFlaky(string.Format("$('#{0}').select2('close');", "Preference-extended-activity-Picker")); // for IE
 			}
 
 			if (fields.ActivityStartTimeMinimum != null)
-				Browser.Interactions.Javascript(string.Format("$('.preference-activity-start-time-min').timepicker('setTime', '{0}');", fields.ActivityStartTimeMinimum));
+				Browser.Interactions.Javascript_IsFlaky(string.Format("$('.preference-activity-start-time-min').timepicker('setTime', '{0}');", fields.ActivityStartTimeMinimum));
 			if (fields.ActivityStartTimeMaximum != null)
-				Browser.Interactions.Javascript(string.Format("$('.preference-activity-start-time-max').timepicker('setTime', '{0}');", fields.ActivityStartTimeMaximum));
+				Browser.Interactions.Javascript_IsFlaky(string.Format("$('.preference-activity-start-time-max').timepicker('setTime', '{0}');", fields.ActivityStartTimeMaximum));
 			if (fields.ActivityEndTimeMinimum != null)
-				Browser.Interactions.Javascript(string.Format("$('.preference-activity-end-time-min').timepicker('setTime', '{0}');", fields.ActivityEndTimeMinimum));
+				Browser.Interactions.Javascript_IsFlaky(string.Format("$('.preference-activity-end-time-min').timepicker('setTime', '{0}');", fields.ActivityEndTimeMinimum));
 			if (fields.ActivityEndTimeMaximum != null)
-				Browser.Interactions.Javascript(string.Format("$('.preference-activity-end-time-max').timepicker('setTime', '{0}');", fields.ActivityEndTimeMaximum));
+				Browser.Interactions.Javascript_IsFlaky(string.Format("$('.preference-activity-end-time-max').timepicker('setTime', '{0}');", fields.ActivityEndTimeMaximum));
 			if (fields.ActivityTimeMinimum != null)
 				Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".preference-activity-extended-work-time-min", fields.ActivityTimeMinimum);
 			if (fields.ActivityTimeMaximum != null)
@@ -313,7 +313,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			if (fields.EndTimeMaximum != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.EndTimeMaximum);
 
 			// sometimes the tooltip will hide, and will lose the tooltip content
-			var resultHtml = Browser.Interactions.Javascript("return $(\"" + tooltip + "\").html()") as string;
+			var resultHtml = Browser.Interactions.Javascript_IsFlaky("return $(\"" + tooltip + "\").html()") as string;
 			Console.WriteLine(@"resultHtml: {0}", resultHtml);
 
 			if (fields.Preference != null && resultHtml != null) Assert.IsTrue(resultHtml.Contains(fields.Preference));

@@ -158,11 +158,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			UncheckFullDayCheckbox();
 
-			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .request-new-datefrom').datepicker('set', '{0}');",
+			Browser.Interactions.Javascript_IsFlaky(string.Format("$('#Request-add-section .request-new-datefrom').datepicker('set', '{0}');",
 							  fromDate.ToShortDateString(DataMaker.Data().MyCulture)));
 			BrowserInteractionsControlExtensions.TypeTextIntoInputTextUsingJQuery(Browser.Interactions, "#Request-add-section .request-new-timefrom", fromTime.ToShortTimeString(DataMaker.Data().MyCulture));
 
-			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .request-new-dateto').datepicker('set', '{0}');",
+			Browser.Interactions.Javascript_IsFlaky(string.Format("$('#Request-add-section .request-new-dateto').datepicker('set', '{0}');",
 							  toDate.ToShortDateString(DataMaker.Data().MyCulture)));
 			BrowserInteractionsControlExtensions.TypeTextIntoInputTextUsingJQuery(Browser.Interactions, "#Request-add-section .request-new-timeto", toTime.ToShortTimeString(DataMaker.Data().MyCulture));
 		}

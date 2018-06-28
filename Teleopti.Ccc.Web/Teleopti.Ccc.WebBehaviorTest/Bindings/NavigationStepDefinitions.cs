@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenIAmStillViewingASM()
 		{
 			Navigation.GotoAsm();
-			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.Asm.MakeSureWeAreLoggedOn();");
+			Browser.Interactions.Javascript_IsFlaky("Teleopti.MyTimeWeb.Asm.MakeSureWeAreLoggedOn();");
 		}
 
 		[Given(@"I am viewing messages")]

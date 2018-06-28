@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"the student availability calendar should not be editable")]
 		public void ThenTheCalendarShouldNotBeEditable()
 		{
-			var amount = Convert.ToInt32(Browser.Interactions.Javascript("return $('li[data-mytime-date]').length;"));
+			var amount = Convert.ToInt32(Browser.Interactions.Javascript_IsFlaky("return $('li[data-mytime-date]').length;"));
 			for (int i = 0; i < amount; i++)
 			{
 				var cell = string.Format("li[data-mytime-date]:nth({0})", i);

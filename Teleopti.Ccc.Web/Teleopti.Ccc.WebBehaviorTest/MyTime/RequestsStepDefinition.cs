@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var data = DataMaker.Data().UserData<MoreThanOnePageOfRequests>();
 			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".request:nth({0})", data.PageSize-1));
 
-			var top = Browser.Interactions.Javascript("return $('.bottom-of-requests-page').position().top");
+			var top = Browser.Interactions.Javascript_IsFlaky("return $('.bottom-of-requests-page').position().top");
 			Browser.Interactions.AssertJavascriptResultContains("window.scroll(0," + top + "); return '1';", "1");
 		}
 

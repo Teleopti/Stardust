@@ -67,8 +67,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void WhenIAmLookingForAnEmptyDay()
 		{
 			Browser.Interactions.AssertNotExistsUsingJQuery("select#wish-list option:first", "#ELEMENT_NOT_EXISTS");
-			Browser.Interactions.Javascript("$('select#wish-list option:last').prop('selected', 'selected');");
-			Browser.Interactions.Javascript("$('select#wish-list').change();");						
+			Browser.Interactions.Javascript_IsFlaky("$('select#wish-list option:last').prop('selected', 'selected');");
+			Browser.Interactions.Javascript_IsFlaky("$('select#wish-list').change();");						
 		}
 
 		[Then(@"no shift detail is needed")]
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I checked the full day checkbox")]
 		public void WhenIClickFullDayCheckbox()
 		{
-			if (Browser.Interactions.Javascript("return $('#Request-add-section .request-new-fullday:enabled').prop('checked')").ToString() == "false")
+			if (Browser.Interactions.Javascript_IsFlaky("return $('#Request-add-section .request-new-fullday:enabled').prop('checked')").ToString() == "false")
 				Browser.Interactions.Click("#Request-add-section .request-new-fullday");
 		}
 

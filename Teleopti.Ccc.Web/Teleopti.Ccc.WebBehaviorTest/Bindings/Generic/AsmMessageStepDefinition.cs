@@ -52,14 +52,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I receive message number '(.*)' while not viewing message page")]
 		public void WhenIReceiveMessageNumberWhileNotViewingMessagePage(int messageCount)
 		{
-			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + messageCount.ToString(CultureInfo.InvariantCulture) + ");");
+			Browser.Interactions.Javascript_IsFlaky("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + messageCount.ToString(CultureInfo.InvariantCulture) + ");");
 		}
 
 		[When(@"I receive message number '(.*)'")]
 		public void WhenIReceiveMessageNumber(int messageCount)
 		{
 			Browser.Interactions.AssertExists(".message-list");
-			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + messageCount.ToString(CultureInfo.InvariantCulture) + ");");
+			Browser.Interactions.Javascript_IsFlaky("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + messageCount.ToString(CultureInfo.InvariantCulture) + ");");
 
 			var pushMessageDialogueJsonObject = new StringBuilder();
 			pushMessageDialogueJsonObject.Append("var messageItem = {");
@@ -72,14 +72,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			pushMessageDialogueJsonObject.Append("IsRead: 'false'}; ");
 			pushMessageDialogueJsonObject.Append("Teleopti.MyTimeWeb.AsmMessageList.AddNewMessageAtTop(messageItem);");
 
-			Browser.Interactions.Javascript(pushMessageDialogueJsonObject.ToString());
+			Browser.Interactions.Javascript_IsFlaky(pushMessageDialogueJsonObject.ToString());
 		}
 
 		[Then(@"I should not see any messages")]
 		public void ThenIShouldNotSeeAnyMessages()
 		{
 			Browser.Interactions.AssertNotExists(".container", ".header");
-			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(0)");
+			Browser.Interactions.Javascript_IsFlaky("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(0)");
 		}
 
 		[Then(@"I should see '(.*)' message\(s\) in the list")]
@@ -112,12 +112,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should see a user-friendly message explaining I dont have any messages")]
 		public void ThenIShouldSeeAUser_FriendlyMessageExplainingIDontHaveAnyMessages()
 		{
-			Browser.Interactions.TryUntil(
+			Browser.Interactions.TryUntil_DontUseShouldBeInternal(
 				() =>
 				{
 					Browser.Interactions.AssertKnockoutContextContains(".no-messages", "shouldShowMessage()", "True");
 				},
-				() => Browser.Interactions.IsVisible(".no-messages"),
+				() => Browser.Interactions.IsVisible_IsFlaky(".no-messages"),
 				TimeSpan.FromMilliseconds(2000));
 		}
 
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void WhenIEnterTheTextReply(string reply)
 		{
 			const string js = @"Teleopti.MyTimeWeb.AsmMessageList.AddReplyText('{0}');";
-			Browser.Interactions.Javascript(string.Format(js, reply));
+			Browser.Interactions.Javascript_IsFlaky(string.Format(js, reply));
 		}
 
 		[Then(@"I should be able to write a text reply for the message with the title '(.*)'")]
@@ -198,13 +198,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			var pushMessageDialogue = repository.LoadAll().First(m => m.PushMessage.GetTitle(new NoFormatting()).Equals(title));
 			var id = pushMessageDialogue.Id.GetValueOrDefault();
 
-			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(1);");
+			Browser.Interactions.Javascript_IsFlaky("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(1);");
 			
 			Thread.Sleep(400); //wait for making sure the message has been added
 			var javaScript = new StringBuilder();
 			javaScript.AppendFormat(CultureInfo.InvariantCulture, "Teleopti.MyTimeWeb.AsmMessageList.DeleteMessage( '{0}' );", id.ToString());
 
-			Browser.Interactions.Javascript(javaScript.ToString());
+			Browser.Interactions.Javascript_IsFlaky(javaScript.ToString());
 		}
 
 		[Then(@"the reply option '(.*)' should not be selected for the message with the title '(.*)'")]

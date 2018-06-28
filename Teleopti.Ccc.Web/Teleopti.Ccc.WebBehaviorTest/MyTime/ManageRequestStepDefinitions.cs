@@ -49,9 +49,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			BrowserInteractionsControlExtensions.TypeTextIntoInputTextUsingJQuery(Browser.Interactions, "#Request-add-section .request-new-message", "A message. A very very very short message. Or maybe not.");
 			BrowserInteractionsControlExtensions.SelectOptionByTextUsingJQuery(Browser.Interactions, "#Request-add-section .request-new-absence", absenceName);
 
-			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .request-new-datefrom').datepicker('set', '{0}');",
+			Browser.Interactions.Javascript_IsFlaky(string.Format("$('#Request-add-section .request-new-datefrom').datepicker('set', '{0}');",
 							  dateFrom.ToShortDateString(DataMaker.Data().MyCulture)));
-			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .request-new-dateto').datepicker('set', '{0}');",
+			Browser.Interactions.Javascript_IsFlaky(string.Format("$('#Request-add-section .request-new-dateto').datepicker('set', '{0}');",
 							  dateTo.ToShortDateString(DataMaker.Data().MyCulture)));
 
 			// I don't trust the timing of the ko subscription which will hide #absence-personal-account while making AJAX call.  Give it a little time to hide the person account info.
@@ -63,8 +63,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void WhenIInputOvertimeAvailabilityWith(Table table)
 		{
 			var overtimeAvailability = table.CreateInstance<OvertimeAvailabilityFields>();
-			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .overtime-availability-start-time').timepicker('setTime', '{0}');", overtimeAvailability.StartTime));
-			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .overtime-availability-end-time').timepicker('setTime', '{0}');", overtimeAvailability.EndTime));
+			Browser.Interactions.Javascript_IsFlaky(string.Format("$('#Request-add-section .overtime-availability-start-time').timepicker('setTime', '{0}');", overtimeAvailability.StartTime));
+			Browser.Interactions.Javascript_IsFlaky(string.Format("$('#Request-add-section .overtime-availability-end-time').timepicker('setTime', '{0}');", overtimeAvailability.EndTime));
 			if (overtimeAvailability.EndTimeNextDay)
 				Browser.Interactions.Click(".overtime-availability-next-day");
 		}

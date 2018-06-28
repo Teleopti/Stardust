@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			const string js = @"var notification = {{StartDate : '{0}', EndDate : '{1}', DomainType : 'IScheduleChangedInDefaultScenario'}};Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);";
 
 			var formattedJs = string.Format(js, xmlStartDate, xmlEndDate);
-			Browser.Interactions.Javascript(formattedJs);
+			Browser.Interactions.Javascript_IsFlaky(formattedJs);
 		}
 
 		[Then(@"Now indicator should be at hour '(.*)'")]

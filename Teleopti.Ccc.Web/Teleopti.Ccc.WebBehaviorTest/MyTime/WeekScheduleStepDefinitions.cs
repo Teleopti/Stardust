@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			const string js = @"var notification = {{StartDate : '{0}', EndDate : '{1}'}};Teleopti.MyTimeWeb.Schedule.ReloadScheduleListener(notification);";
 
 			var formattedJs = string.Format(js, xmlStartDate, xmlEndDate);
-			Browser.Interactions.Javascript(formattedJs);
+			Browser.Interactions.Javascript_IsFlaky(formattedJs);
 		}
 
 		[Then(@"I should see the day summary text for date '(.*)' in '(.*)'")]
