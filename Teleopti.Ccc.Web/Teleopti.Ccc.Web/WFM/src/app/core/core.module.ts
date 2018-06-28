@@ -6,17 +6,8 @@ import { TogglesService, UserPreferences, UserService } from './services';
 import { LanguageLoaderFactory } from './translation';
 
 @NgModule({
-	imports: [
-		HttpClientModule,
-		TranslateModule.forRoot({
-			loader: {
-				provide: TranslateLoader,
-				useFactory: LanguageLoaderFactory,
-				deps: [HttpClient]
-			}
-		})
-	],
-	exports: [TranslateModule],
+	imports: [HttpClientModule],
+	exports: [],
 	providers: [
 		TogglesService,
 		UserService,
@@ -28,13 +19,4 @@ import { LanguageLoaderFactory } from './translation';
 	],
 	entryComponents: []
 })
-export class CoreModule {
-	constructor(private userService: UserService, private translate: TranslateService) {
-		translate.setDefaultLang('en');
-		userService.getPreferences().subscribe({
-			next: (preferences: UserPreferences) => {
-				translate.use(preferences.Language);
-			}
-		});
-	}
-}
+export class CoreModule {}
