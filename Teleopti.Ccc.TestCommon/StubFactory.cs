@@ -5,7 +5,6 @@ using System.Linq;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -235,6 +234,7 @@ namespace Teleopti.Ccc.TestCommon
 			var visualLayer = MockRepository.GenerateMock<IVisualLayer>();
 			visualLayer.Stub(x => x.DisplayDescription()).Return(new Description(activtyName));
 			visualLayer.Stub(x => x.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
+			visualLayer.Stub(x => x.Payload).Return(new Activity());
 			return visualLayer;
 		}
 
@@ -242,6 +242,7 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			var visualLayer = MockRepository.GenerateMock<IVisualLayer>();
 			visualLayer.Stub(x => x.Period).Return(period);
+			visualLayer.Stub(x => x.Payload).Return(new Activity());
 			return visualLayer;
 		}
 
@@ -250,6 +251,7 @@ namespace Teleopti.Ccc.TestCommon
 			var visualLayer = MockRepository.GenerateMock<IVisualLayer>();
 			visualLayer.Stub(x => x.Period).Return(period);
 			visualLayer.Stub(x => x.Person).Return(person);
+			visualLayer.Stub(x => x.Payload).Return(new Activity());
 			return visualLayer;
 		}
 	}
