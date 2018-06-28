@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		{
 			Browser.Interactions.ClickContaining("." + cssClass.Name, text);
 		}
-		
+
 		[Then(@"I should see a message that I have no permission for this function")]
 		public void ThenIShouldSeeAMessageThatIHaveNoPermissionForThisFunction()
 		{
@@ -49,11 +49,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.AssertUrlNotContains("Anywhere", "ids");
 			Browser.Interactions.CloseWindow("Messages");
 		}
-		
-		[Then(@"I should see the option to change schedule")]
-		public void ThenIShouldSeeTheOptionToChangeSchedule()
+
+		[Then(@"I should be able to change the scehdule for '(.*)'")]
+		public void ThenIShouldSeeTheOptionToChangeSchedule(string name)
 		{
 			Browser.Interactions.AssertExists($".change-schedule");
+//			Browser.Interactions.Click($".change-schedule");
+//			
+//			Browser.Interactions.AssertJavascriptResultContains(@"
+//document.title = 'BLIPBLOP';
+//return document.title;
+//", "BLIPBLOP");
+//			Browser.Interactions.CloseWindow("BLIPBLOP");
+//			
+//			Browser.Interactions.CloseWindow("WFM");
+//			//Browser.Interactions.CloseWindow("http://localhost");
+//			Browser.Interactions.CloseWindow("#/rta/");
+//			Browser.Interactions.AssertUrlContains("personId");
+//			Browser.Interactions.AssertFirstContains("td.person-name-column", name);
+////			Browser.Interactions.AssertExists("td.schedule .layer");
+////			Browser.Interactions.AssertExists("td.schedule-tool-column span i");
 		}
 
 		[When(@"I click the toggle to see all agents")]
@@ -61,7 +76,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		{
 			Browser.Interactions.Click(".rta-agents-in-alarm-switch");
 		}
-		
+
 		[When(@"I choose business unit '(.*)'")]
 		public void WhenIChooseBusinessUnit(string businessUnitName)
 		{

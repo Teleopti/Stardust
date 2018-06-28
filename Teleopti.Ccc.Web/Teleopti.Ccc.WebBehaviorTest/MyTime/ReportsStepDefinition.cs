@@ -44,13 +44,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.Click(string.Format("#report-list :nth-child({0})", position));
 		}
 
-		[Then(@"The report should not be opened in the same window")]
-		public void ThenTheReportShouldNotBeOpenedInTheSameWindow()
+		[When(@"I click one report in drop down list")]
+		public void WhenIClickOneReportInDropDownList()
 		{
-			Browser.Interactions.AssertUrlNotContains("MyTime", "Selection.aspx");
-		    Browser.Interactions.CloseWindow("http://localhost");
+			Browser.Interactions.Click("#report-list :nth-child(1)");
 		}
-
+		
 		[Then(@"The report should not be opened in the same tab")]
 		public void ThenTheReportShouldNotBeOpenedInTheSameTab()
 		{
@@ -58,24 +57,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.CloseWindow("Agent");
 		}
 
-		[When(@"I click one report in drop down list")]
-		public void WhenIClickOneReportInDropDownList()
-		{
-			Browser.Interactions.Click("#report-list :nth-child(1)");
-		}
-
-		[Then(@"The report should be opened in a new window")]
-		public void ThenTheReportShouldBeOpenedInANewWindow()
-		{
-			Browser.Interactions.AssertUrlNotContains("Anywhere", "Selection.aspx");
-			Browser.Interactions.CloseWindow("http://localhost");
-		}
-
-		[Then(@"The report should be opened in another tab")]
-		public void ThenTheReportShouldBeOpenedInAnotherTab()
-		{
-			Browser.Interactions.AssertUrlNotContains("Anywhere","Reporting" );
-			Browser.Interactions.CloseWindow("Agent");
-		}
 	}
 }

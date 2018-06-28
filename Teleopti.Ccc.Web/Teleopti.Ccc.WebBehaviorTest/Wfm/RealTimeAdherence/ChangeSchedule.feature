@@ -30,4 +30,4 @@ Scenario: Change schedule
 	| End time       | 2014-09-09 17:00 |
 	When I view real time adherence for all agents on team 'Red'
 	And the time is '2014-09-09 12:45:00'
-	Then I should see the option to change schedule
+	Then I should be able to change the scehdule for 'Pierre Baldi'
