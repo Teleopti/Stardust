@@ -13214,7 +13214,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Trigger modal window in advanced web forecast</comment>
   </data>
   <data name="SelectForecastPeriodIntro" xml:space="preserve">
-    <value>Choose a future period to forecast</value>
+    <value>Choose a period to display</value>
     <comment>Pick a period before web forecast</comment>
   </data>
   <data name="ForecastPeriod" xml:space="preserve">
@@ -17523,5 +17523,13 @@ The application will now exit.</value>
   </data>
   <data name="SuccessfulMessageForSavingScheduleChanges" xml:space="preserve">
     <value>Successfully saved schedule changes.</value>
+  </data>
+  <data name="PleaseSaveOrDiscardChangesBeforeChangingPeriod" xml:space="preserve">
+    <value>Please save or discard changes before changing period</value>
+    <comment>Text in web forecast</comment>
+  </data>
+	<data name="NoQueueStatisticsAvailable" xml:space="preserve">
+    <value>No forecast could be produced. Make sure you have imported queue statistics</value>
+    <comment>Text for web forecasting</comment>
   </data>
 </root>

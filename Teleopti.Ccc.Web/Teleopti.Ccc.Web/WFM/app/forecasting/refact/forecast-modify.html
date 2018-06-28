@@ -12,7 +12,6 @@
 			{{vm.selectedWorkload.Workload.Name}}
 			<span ng-if="!vm.selectedWorkload.SkillType.DoDisplayData">({{'UnsupportedSkill' | translate}})</span>
 		</h1>
-		<p>{{'NewForecastIntro' | translate}}</p>
 	</div>
 </div>
 
@@ -35,7 +34,7 @@
 								<i class="mdi mdi-calendar"></i>
 								<md-tooltip>{{'SelectForecastPeriodIntro'|translate}}</md-tooltip>
 							</button>
-							<md-tooltip ng-if="vm.changesMade">{{'PleaseSaveOrDiscardChangesBeforeChangingScenario' | translate}}</md-tooltip>
+							<md-tooltip ng-if="vm.changesMade">{{'PleaseSaveOrDiscardChangesBeforeChangingPeriod' | translate}}</md-tooltip>
 							{{'DateFrom' | translate}}: {{vm.forecastPeriod.startDate | date: L}} {{'DateTo' | translate}}: {{vm.forecastPeriod.endDate  | date: L}}
 						</div>
 
@@ -171,8 +170,6 @@
 	<div class="con-flex">
 		<div class="panel material-depth-1 full-padding">
 			<div>
-				<span ng-if="vm.isForecastRunning" >{{'RunningForecast'|translate}}</span>
-				<span ng-if="vm.savingToScenario" >{{'Saving' | translate}}</span>
 				<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 			</div>
 		</div>

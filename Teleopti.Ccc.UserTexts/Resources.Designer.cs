@@ -21554,6 +21554,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No forecast could be produced. Make sure you have imported queue statistics.
+        /// </summary>
+        public static string NoQueueStatisticsAvailable {
+            get {
+                return ResourceManager.GetString("NoQueueStatisticsAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No Report for Current Conditions.
         /// </summary>
         public static string NoReportForCurrentConditions {
@@ -24526,6 +24535,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Username has a limit of {0} characters.
+        /// </summary>
+        public static string PeopleUsernameHasALimitOfXCharacters {
+            get {
+                return ResourceManager.GetString("PeopleUsernameHasALimitOfXCharacters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Username is already in use.
         /// </summary>
         public static string PeopleUsernameIsAlreadyInUse {
@@ -25622,6 +25640,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PleaseSaveAgainWhenYouHaveReviewedTheAppliedChanges {
             get {
                 return ResourceManager.GetString("PleaseSaveAgainWhenYouHaveReviewedTheAppliedChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please save or discard changes before changing period.
+        /// </summary>
+        public static string PleaseSaveOrDiscardChangesBeforeChangingPeriod {
+            get {
+                return ResourceManager.GetString("PleaseSaveOrDiscardChangesBeforeChangingPeriod", resourceCulture);
             }
         }
         
@@ -30914,7 +30941,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose a future period to forecast.
+        ///   Looks up a localized string similar to Choose a period to display.
         /// </summary>
         public static string SelectForecastPeriodIntro {
             get {

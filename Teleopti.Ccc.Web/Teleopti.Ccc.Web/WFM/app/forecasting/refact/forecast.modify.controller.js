@@ -285,6 +285,7 @@
 		}
 
 		function forecastWorkload() {
+					vm.forecastModal = false;
 			vm.isForecastRunning = true;
 			var temp = {
 				WorkloadId: vm.selectedWorkload.Workload.Id,
@@ -300,13 +301,17 @@
 					BlockToken: vm.blockToken,
 					IsLastWorkload: true
 				}),
-				function(data, status, headers, config) {
+				function (data, status, headers, config) {
 					vm.isForecastRunning = false;
-					vm.forecastModal = false;
-					vm.selectedWorkload.Days = data.ForecastDays;
-					vm.scenarioNotForecasted = vm.selectedWorkload.Days.length === 0;
-					vm.changesMade = true;
-					vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
+					if (data.WarningMessage !== "") {
+						NoticeService.warning(data.WarningMessage, 15000, true);
+					} else {
+						vm.selectedWorkload.Days = data.ForecastDays;
+						vm.scenarioNotForecasted = vm.selectedWorkload.Days.length === 0;
+						vm.changesMade = true;
+						vm.WarningMessage = "";
+						vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
+					}
 				},
 				function(data, status, headers, config) {
 					vm.isForecastRunning = false;
@@ -347,6 +352,7 @@
 		}
 
 		function exportToScenario() {
+			vm.scenarioExportModal = false;
 			vm.savingToScenario = true;
 			var tempForecastDays = vm.selectedWorkload.Days;
 			forecastingService.applyToScenario(
@@ -357,18 +363,17 @@
 				}),
 				function(data, status, headers, config) {
 					vm.savingToScenario = false;
-					vm.scenarioExportModal = false;
 					NoticeService.success($translate.instant('SuccessfullyUpdatedPeopleCountColon') + ' ' + vm.targetScenario.Name, 15000, true);
 					vm.targetScenario = null;
 				},
 				function(data, status, headers, config) {
 					vm.savingToScenario = false;
-					vm.scenarioExportModal = false;
 				}
 			);
 		}
 
 		function exportToFile() {
+			vm.exportModal = false;
 			vm.isForecastRunning = true;
 			forecastingService.exportForecast(
 				angular.toJson({
@@ -389,7 +394,6 @@
 					'.xlsx';
 					saveAs(blob, fileName);
 					vm.isForecastRunning = false;
-					vm.exportModal = false;
 				},
 				function(data, status, headers, config) {
 					vm.isForecastRunning = false;
