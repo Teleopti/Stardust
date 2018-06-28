@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReport
 		private DateOnlyPeriod _period;
 		private readonly ISchedulingResultStateHolder _stateHolder;
 		private readonly bool _rightToLeft;
-		public const int ProjectionRectangleHeight = 20;
 		public const int NoteWidth = 50;
 		public const int NameWidth = 130;
 		private float _nameDateWidth;
@@ -47,7 +46,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReport
 			var sortedPersons = new List<IPerson>();
 			IList<IPerson> noLayerPersons = new List<IPerson>();
 
-			IList<IVisualLayerCollection> projections = new List<IVisualLayerCollection>();
+			var projections = new List<Tuple<IVisualLayerCollection, IPerson>>();
 
 			foreach (var scheduleDay in scheduleDays)
 			{
@@ -55,7 +54,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReport
 				var visualLayerCollection = projection.CreateProjection();
 
 				if (visualLayerCollection.Period().HasValue)
-					projections.Add(visualLayerCollection);
+					projections.Add(new Tuple<IVisualLayerCollection, IPerson>(visualLayerCollection, scheduleDay.Person));
 				else
 					noLayerPersons.Add(scheduleDay.Person);
 			}
@@ -65,19 +64,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReport
 				if (startTime)
 				{
 					var sorted = from p in projections
-								 orderby p.Period().Value.StartDateTime
+								 orderby p.Item1.Period().Value.StartDateTime
 								 select p;
 
 
-					sortedPersons.AddRange(sorted.Select(projection => projection.Person));
+					sortedPersons.AddRange(sorted.Select(projection => projection.Item1.Person));
 				}
 				else
 				{
 					var sorted = from p in projections
-								 orderby p.Period().Value.EndDateTime
+								 orderby p.Item1.Period().Value.EndDateTime
 								 select p;
 
-					sortedPersons.AddRange(sorted.Select(projection => projection.Person));
+					sortedPersons.AddRange(sorted.Select(projection => projection.Item1.Person));
 				}
 			}
 
