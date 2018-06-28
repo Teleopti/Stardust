@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
+﻿using System.Collections.Generic;
+
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
 	/// <summary>
 	/// Creates a projection
@@ -12,6 +14,6 @@
 		/// <returns>The projection</returns>
 		IVisualLayerCollection Projection(IScheduleDay scheduleDay);
 
-		IVisualLayer[] UnmergedProjection(IScheduleDay scheduleDay);
+		IEnumerable<IVisualLayer> UnmergedProjection(IScheduleDay scheduleDay);
 	}
 }

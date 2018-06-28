@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			             		createLayer(new DateTimePeriod(start, end))
 			             	};
 			var res = target.MergedCollection(layers, person);
-			res.Length.Should().Be.EqualTo(2);
+			res.Count().Should().Be.EqualTo(2);
 			var period1 = res.First().Period;
 			var period2 = res.Last().Period;
 
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				overtimeLayer
 			};
 			var res = target.MergedCollection(layers, person);
-			res.Length.Should().Be.EqualTo(4);
+			res.Count().Should().Be.EqualTo(4);
 			var period2 = res.Last().Period;
 			
 			period2.Should().Be.EqualTo(new DateTimePeriod(midnightInUtc.AddHours(24).Add(-tzDiffTime), end.AddHours(24)));
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				createLayer(new DateTimePeriod(start, end))
 			};
 			var res = target.MergedCollection(layers, person);
-			res.Length.Should().Be.EqualTo(3);
+			res.Count().Should().Be.EqualTo(3);
 			var period2 = res.Last().Period;
 
 			period2.Should().Be.EqualTo(new DateTimePeriod(midnightInUtc.Add(-tzDiffTime), end));
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var layers = new IVisualLayer[] { layer };
 
 			var res = target.MergedCollection(layers, person);
-			res.Length.Should().Be.EqualTo(2);
+			res.Count().Should().Be.EqualTo(2);
 			foreach (var visualLayer in res)
 			{
 				visualLayer.DefinitionSet
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             var layers = new IVisualLayer[] { layer };
 
             var res = target.MergedCollection(layers, person);
-            res.Length.Should().Be.EqualTo(2);
+            res.Count().Should().Be.EqualTo(2);
             foreach (VisualLayer visualLayer in res)
             {
                 visualLayer.Person.Should().Not.Be.Null();
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var layers = new IVisualLayer[] { layer };
 
 			var res = target.MergedCollection(layers, person);
-			res.Length.Should().Be.EqualTo(2);
+			res.Count().Should().Be.EqualTo(2);
 			foreach (VisualLayer visualLayer in res)
 			{
 				visualLayer.HighestPriorityAbsence
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             var res = target.MergedCollection(layers, person);
 
             var expected = new DateTime(2000, 1, 2, 0, 0, 0, DateTimeKind.Utc).Add(-userDefinedTimeZone.BaseUtcOffset);
-            res[0].Period.EndDateTime
+            res.First().Period.EndDateTime
                 .Should().Be.EqualTo(expected);
         }
 

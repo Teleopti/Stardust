@@ -51,15 +51,15 @@ namespace Teleopti.Ccc.Domain.Collection
 		
 		public VisualLayerCollection(IPerson assignedPerson, IEnumerable<IVisualLayer> layerCollection, IProjectionMerger merger)
 		{
-			UnMergedCollection = layerCollection.ToArray();
+			var layerCollectionClone = layerCollection.ToArray();
 			Person = assignedPerson;
 			_merger = merger;
-			HasLayers = UnMergedCollection.Length > 0;
+			HasLayers = layerCollectionClone.Length > 0;
 			_period = new Lazy<DateTimePeriod?>(extractPeriod);
 			_timeNumbers = new Lazy<LayerCollectionNumbers>(() =>
 			{
 				var ret = new LayerCollectionNumbers();
-				foreach (VisualLayer layer in UnMergedCollection)
+				foreach (VisualLayer layer in layerCollectionClone)
 				{
 					ret = new LayerCollectionNumbers(
 						ret.WorkTime.Add(layer.WorkTime()),
@@ -71,7 +71,8 @@ namespace Teleopti.Ccc.Domain.Collection
 				}
 				return ret;
 			});
-			_mergedCollection = ServiceLocatorForLegacy.CreateMergedCollection.Execute(merger, UnMergedCollection, Person);
+			_mergedCollection = ServiceLocatorForLegacy.CreateMergedCollection.Execute(merger, layerCollectionClone, Person);
+			UnMergedCollection = layerCollectionClone;
 		}
 
 		[RemoveMeWithToggle("Remove condition", Toggles.ResourcePlanner_LessResourcesXXL_74915)]
@@ -98,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Collection
 			}
 		}
 
-		internal IVisualLayer[] UnMergedCollection { get; private set; }
+		internal IEnumerable<IVisualLayer> UnMergedCollection { get; }
 
 
 		public bool IsSatisfiedBy(ISpecification<IVisualLayerCollection> specification)
@@ -235,7 +236,8 @@ namespace Teleopti.Ccc.Domain.Collection
 		{
 			IVisualLayerFactory visualLayerFactory = new VisualLayerFactory();
 			IList<IVisualLayer> retColl = new List<IVisualLayer>();
-			int collCount = UnMergedCollection.Length;
+			var layers = UnMergedCollection.ToArray();
+			int collCount = layers.Length;
 			if (collCount > 0)
 			{
 				DateTime endDateTimeSearch = periodToSearch.EndDateTime;
@@ -245,11 +247,11 @@ namespace Teleopti.Ccc.Domain.Collection
 				int foundIndex = collCount - 1; //if no hits
 				int startIndex = 0;
 				if (collCount > 1)
-					startIndex = opt.FindStartIndex(UnMergedCollection, startDateTimeSearch);
+					startIndex = opt.FindStartIndex(layers, startDateTimeSearch);
 
 				for (int index = startIndex; index < collCount; index++)
 				{
-					IVisualLayer layer = UnMergedCollection[index];
+					IVisualLayer layer = layers[index];
 					DateTimePeriod layerPeriod = layer.Period;
 					DateTime layerPeriodStartDateTime = layerPeriod.StartDateTime;
 
@@ -288,15 +290,15 @@ namespace Teleopti.Ccc.Domain.Collection
 
 		private DateTimePeriod? extractPeriod()
 		{
-			switch (UnMergedCollection.Length)
+			switch (UnMergedCollection.Count())
 			{
 				case 0:
 					return null;
 				case 1:
-					return UnMergedCollection[0].Period;
+					return UnMergedCollection.Single().Period;
 				default:
-					var startDateTime = UnMergedCollection[0].Period.StartDateTime;
-					var endDateTime = UnMergedCollection[UnMergedCollection.Length - 1].Period.EndDateTime;
+					var startDateTime = UnMergedCollection.First().Period.StartDateTime;
+					var endDateTime = UnMergedCollection.Last().Period.EndDateTime;
 					if (endDateTime < startDateTime)
 					{
 						throw new ArgumentOutOfRangeException(string.Format("The start datetime cannot be greater than the layer end datetime. ({0} - {1})", startDateTime, endDateTime));
