@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 		void DumpUrl(Action<string> writer);
 
 		void CloseWindow(string name);
+		void SwitchToLastTab_Experimental();
 
 		void TryUntil_DontUseShouldBeInternal(Action tryThis, Func<bool> until, TimeSpan waitBeforeRetry);
 		bool IsVisible_IsFlaky(string selector);

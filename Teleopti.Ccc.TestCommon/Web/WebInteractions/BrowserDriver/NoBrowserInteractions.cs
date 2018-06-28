@@ -38,6 +38,8 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 		{
 		}
 
+		public void SwitchToLastTab_Experimental() => throw new NotImplementedException();
+
 		public void TryUntil_DontUseShouldBeInternal(Action tryThis, Func<bool> until, TimeSpan waitBeforeRetry) => throw new NotImplementedException();
 		public bool IsVisible_IsFlaky(string selector) => throw new NotImplementedException();
 		public bool IsExists_IsFlaky(string selector) => throw new NotImplementedException();

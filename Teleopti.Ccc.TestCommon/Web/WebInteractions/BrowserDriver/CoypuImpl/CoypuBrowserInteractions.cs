@@ -1,11 +1,14 @@
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Coypu;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.Extensions;
+using Teleopti.Support.Library;
 
 namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 {
@@ -177,6 +180,21 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 		public void CloseWindow(string name)
 		{
 			_browser.FindWindow(name).ExecuteScript("window.close();");
+		}
+
+		public void SwitchToLastTab_Experimental()
+		{
+			var driver = (IWebDriver) _browser.Driver.Native;
+			var windows = driver.WindowHandles;
+			var windowWeWant = windows.Last();
+			windows
+				.Where(x => x != windowWeWant)
+				.ForEach(w =>
+				{
+					driver.SwitchTo().Window(w);
+					driver.Close();
+				});
+			driver.SwitchTo().Window(windowWeWant);
 		}
 
 		public void AssertJavascriptResultContains(string javascript, string text)
