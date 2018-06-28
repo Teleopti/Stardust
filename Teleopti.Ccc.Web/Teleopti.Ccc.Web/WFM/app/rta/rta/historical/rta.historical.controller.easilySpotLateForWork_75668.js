@@ -130,8 +130,8 @@
 						vm.approveStartTime = putTimeBetween(moment(interval.StartTime), moment(timelineStart), moment(timelineEnd)).toDate();
 						vm.approveEndTime = putTimeBetween(moment(interval.EndTime), moment(timelineStart), moment(timelineEnd)).toDate();
 
-						startTime = moment(vm.approveStartTime).format("HH:mm:ss");
-						endTime = moment(vm.approveEndTime).format("HH:mm:ss");
+						startTime = moment(vm.approveStartTime).format("LTS");
+						endTime = moment(vm.approveEndTime).format("LTS");
 
 						if (moment(vm.approveStartTime).isBefore(timelineStart))
 							vm.approveStartTime = moment(timelineStart).toDate();
@@ -140,7 +140,7 @@
 					return o
 				});
 		}
-
+		
 		var startTime;
 		Object.defineProperty(vm, 'approveStartTimeString', {
 			get: function () {
@@ -148,7 +148,7 @@
 			},
 			set: function (value) {
 				startTime = value;
-				var m = moment('1970-01-01T' + startTime);
+				var m = moment('1970-01-01T' + moment(startTime, "LTS").format('HH:mm:ss'));
 				vm.approveStartTime = m.isValid() ? m.toDate() : undefined;
 			}
 		});
@@ -160,7 +160,7 @@
 			},
 			set: function (value) {
 				endTime = value;
-				var m = moment('1970-01-01T' + endTime);
+				var m = moment('1970-01-01T' + moment(endTime, "LTS").format('HH:mm:ss'));
 				vm.approveEndTime = m.isValid() ? m.toDate() : undefined;
 			}
 		});
