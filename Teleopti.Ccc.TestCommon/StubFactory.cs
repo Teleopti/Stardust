@@ -204,15 +204,11 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IVisualLayerCollection ProjectionStub(IEnumerable<IVisualLayer> visualLayerCollection)
 		{
-			//var projection = MockRepository.GenerateStub<IVisualLayerCollection>();
-			//projection.Stub(x => x.ContractTime()).Return(TimeSpan.FromHours(8));
-			//return projection;
-
 			// extremely ugly, but I find no better way of stubbing this hybrid collection class
 			var visualLayers = visualLayerCollection.ToArray();
 			var projectionMerger = MockRepository.GenerateMock<IProjectionMerger>();
-			projectionMerger.Stub(x => x.MergedCollection(visualLayers, null)).IgnoreArguments().Return(visualLayers);
-			var projection = new VisualLayerCollection(null, visualLayers, projectionMerger);
+			projectionMerger.Stub(x => x.MergedCollection(visualLayers)).IgnoreArguments().Return(visualLayers);
+			var projection = new VisualLayerCollection(visualLayers, projectionMerger);
 			return projection;
 		}
 

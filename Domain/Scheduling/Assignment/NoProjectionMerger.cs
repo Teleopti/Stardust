@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return new NoProjectionMerger();
 		}
 
-		public IVisualLayer[] MergedCollection(IVisualLayer[] unmergedCollection, IPerson person)
+		public IVisualLayer[] MergedCollection(IVisualLayer[] unmergedCollection)
 		{
 			return unmergedCollection;
 		}

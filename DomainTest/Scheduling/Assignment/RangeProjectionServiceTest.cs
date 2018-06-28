@@ -42,14 +42,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             var visualLayer1 = visualLayerFactory.CreateShiftSetupLayer(activity,
                                                                         new DateTimePeriod(period.StartDateTime.AddHours(2),
                                                                                            period.StartDateTime.AddHours(4)),person);
-            var visualLayerCollection1 = new VisualLayerCollection(person, new List<IVisualLayer>{visualLayer1}, new ProjectionPayloadMerger());
+            var visualLayerCollection1 = new VisualLayerCollection(new List<IVisualLayer>{visualLayer1}, new ProjectionPayloadMerger());
             var visualLayer2 = visualLayerFactory.CreateShiftSetupLayer(activity,
                                                                         new DateTimePeriod(period.EndDateTime.AddHours(-4),
                                                                                            period.EndDateTime.AddHours(-2)),person);
             var visualLayer3 = visualLayerFactory.CreateShiftSetupLayer(activity,
                                                                         new DateTimePeriod(period.EndDateTime.AddHours(2),
                                                                                            period.EndDateTime.AddHours(4)),person);
-            var visualLayerCollection2 = new VisualLayerCollection(person, new List<IVisualLayer> { visualLayer2,visualLayer3 }, new ProjectionPayloadMerger());
+            var visualLayerCollection2 = new VisualLayerCollection(new List<IVisualLayer> { visualLayer2,visualLayer3 }, new ProjectionPayloadMerger());
             using (_mocks.Record())
             {
                 Expect.Call(_scheduleRange.Person).Return(person);

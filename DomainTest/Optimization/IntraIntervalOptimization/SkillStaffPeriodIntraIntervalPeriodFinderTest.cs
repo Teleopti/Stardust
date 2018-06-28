@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			var person = PersonFactory.CreatePerson("person");
 			var visualLayer1 = new VisualLayer(activity, activityPeriod, activity, person);
 			var visualLayer2 = new VisualLayer(activity, activityPeriod.MovePeriod(TimeSpan.FromHours(1)), activity, person);
-			var visualLayerCollection = new VisualLayerCollection(person, new List<IVisualLayer> {visualLayer1, visualLayer2},
+			var visualLayerCollection = new VisualLayerCollection(new List<IVisualLayer> {visualLayer1, visualLayer2},
 				new ProjectionPayloadMerger());
 
 			workShift.Stub(x => x.ToEditorShift(dateOnlyAsDateTimePeriod,TimeZoneInfo.Utc)).Return(editorShift);

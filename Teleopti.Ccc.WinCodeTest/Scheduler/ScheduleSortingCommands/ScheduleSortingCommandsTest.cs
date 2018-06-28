@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ScheduleSortingCommands
 			IVisualLayerCollection layerCollection2 = VisualLayerCollectionFactory.CreateForWorkShift(person2, new TimeSpan(6, 0, 0), new TimeSpan(16, 0, 0));
 			IVisualLayerCollection layerCollection3 = VisualLayerCollectionFactory.CreateForWorkShift(person3, new TimeSpan(5, 30, 0), new TimeSpan(15, 0, 0));
 			IVisualLayerCollection layerCollection4 = VisualLayerCollectionFactory.CreateForWorkShift(person4, new TimeSpan(10, 0, 0), new TimeSpan(12, 0, 0));
-			IVisualLayerCollection layerCollectionAllDay = new VisualLayerCollection(person7, new List<IVisualLayer> { absenceLayer }, new ProjectionPayloadMerger());
+			IVisualLayerCollection layerCollectionAllDay = new VisualLayerCollection(new List<IVisualLayer> { absenceLayer }, new ProjectionPayloadMerger());
         	IVisualLayerCollection layerCollection8 = VisualLayerCollectionFactory.CreateForWorkShift(person8, new TimeSpan(18, 0, 0), new TimeSpan(18, 30, 0));
 
 			using (_mocks.Record())

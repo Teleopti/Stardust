@@ -8,12 +8,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	/// </summary>
 	public interface IProjectionMerger : ICloneable
 	{
-		/// <summary>
-		/// Transforms an unmergedCollection to a merged collection
-		/// </summary>
-		/// <param name="unmergedCollection"></param>
-		/// <param name="person"></param>
-		/// <returns></returns>
-		IVisualLayer[] MergedCollection(IVisualLayer[] unmergedCollection, IPerson person);
+		IVisualLayer[] MergedCollection(IVisualLayer[] unmergedCollection);
 	}
 }

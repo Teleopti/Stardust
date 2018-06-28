@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             DateTimePeriod assPeriod2 = new DateTimePeriod(new DateTime(2011, 1, 1, 8, 0, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 1, 16, 0, 0, 0, DateTimeKind.Utc));
             IPersonAssignment ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, assPeriod2);
 	        IProjectionService projectionService = mocks.StrictMock<IProjectionService>();
-			IVisualLayerCollection visualLayerCollection = new VisualLayerCollection(person, new List<IVisualLayer>(), null);
+			IVisualLayerCollection visualLayerCollection = new VisualLayerCollection(new List<IVisualLayer>(), null);
 
             using (mocks.Record())
             {

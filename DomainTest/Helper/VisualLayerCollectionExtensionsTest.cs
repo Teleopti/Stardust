@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 											  secondActivity, person);
 
 			var layers = new List<IVisualLayer> { visualLayer1, visualLayer2, visualLayer3 };
-			var visualLayers = new VisualLayerCollection(person, layers, new ProjectionPayloadMerger());
+			var visualLayers = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
 			var result = visualLayers.ToResourceLayers(15).ToArray();
 
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			                                  activity, person);
 			
 			var layers = new List<IVisualLayer> { visualLayer };
-			var visualLayers = new VisualLayerCollection(person,layers,new ProjectionPayloadMerger());
+			var visualLayers = new VisualLayerCollection(layers,new ProjectionPayloadMerger());
 
 			var result = visualLayers.ToResourceLayers(15).ToArray();
 
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 											  activity, person);
 
 			var layers = new List<IVisualLayer> { visualLayer };
-			var visualLayers = new VisualLayerCollection(person, layers, new ProjectionPayloadMerger());
+			var visualLayers = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
 			var result = visualLayers.ToResourceLayers(15).ToArray();
 
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 											  activity, person);
 
 			var layers = new List<IVisualLayer> { visualLayer };
-			var visualLayers = new VisualLayerCollection(person, layers, new ProjectionPayloadMerger());
+			var visualLayers = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
 			var result = visualLayers.ToResourceLayers(15).ToArray();
 
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 											  activity, person);
 
 			var layers = new List<IVisualLayer> { visualLayer };
-			var visualLayers = new VisualLayerCollection(person, layers, new ProjectionPayloadMerger());
+			var visualLayers = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
 			var result = visualLayers.ToResourceLayers(15).ToArray();
 
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 											  activity, person);
 
 			var layers = new List<IVisualLayer> { visualLayer };
-			var visualLayers = new VisualLayerCollection(person, layers, new ProjectionPayloadMerger());
+			var visualLayers = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
 			var result = visualLayers.ToResourceLayers(15).ToArray();
 
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			var visualLayer2 = new VisualLayer(activity, dateTimePeriod2, activity, person);
 
 			var layers = new List<IVisualLayer> {visualLayer1, visualLayer2};
-			var visualLayers = new VisualLayerCollection(person, layers, new ProjectionPayloadMerger());
+			var visualLayers = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
 			var result = visualLayers.ToResourceLayers(15).ToArray();
 			Assert.AreEqual(2, result.Count());

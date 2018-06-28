@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.MatrixLockers
 			_period = new DateTimePeriod(new DateTime(2014, 1, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2014, 1, 1, 0, 0, 0, DateTimeKind.Utc));
 			_projectionService = _mock.StrictMock<IProjectionService>();
 			_visualLayer = new VisualLayer(_activity, _period, _activity,_person);
-			_visualLayerCollection = new VisualLayerCollection(_person, new List<IVisualLayer>{_visualLayer}, new ProjectionPayloadMerger());
+			_visualLayerCollection = new VisualLayerCollection(new List<IVisualLayer>{_visualLayer}, new ProjectionPayloadMerger());
 		}
 
 		[Test]

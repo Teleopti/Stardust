@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				_personAbsence.Period, _agent);
 			_visualLayer = _layerFactory.CreateAbsenceSetupLayer(_personAbsence.Layer.Payload, actLayer, _personAbsence.Period,
 				actLayer.PersonAbsenceId);
-            _visualLayerCollection = new VisualLayerCollection(_agent, _visualLayers, new ProjectionPayloadMerger());
+            _visualLayerCollection = new VisualLayerCollection(_visualLayers, new ProjectionPayloadMerger());
 
             _underlyingDictionary = new Dictionary<IPerson, IScheduleRange>();
             _dic = new ScheduleDictionaryForTest(_scenario,

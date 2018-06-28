@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
         [Test]
         public void VerifyEmptyReturnFalse()
         {
-            VisualLayerCollection coll = new VisualLayerCollection(null, new List<IVisualLayer>(), new ProjectionPayloadMerger());
+            VisualLayerCollection coll = new VisualLayerCollection(new List<IVisualLayer>(), new ProjectionPayloadMerger());
             Assert.IsFalse(target.IsSatisfiedBy(coll));
         }
 
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
         public void VerifyMoreThanOneReturnFalse()
         {
             IList<IVisualLayer> vList = new List<IVisualLayer> {correctAbsenceLayer(), correctAbsenceLayer()};
-            Assert.IsFalse(target.IsSatisfiedBy(new VisualLayerCollection(null, vList, new ProjectionPayloadMerger())));
+            Assert.IsFalse(target.IsSatisfiedBy(new VisualLayerCollection(vList, new ProjectionPayloadMerger())));
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
         {
             var layerOne = correctAbsenceLayer();
             IList<IVisualLayer> vList = new List<IVisualLayer> { layerOne, layerOne};
-            Assert.IsTrue(target.IsSatisfiedBy(new VisualLayerCollection(null, vList, new ProjectionPayloadMerger())));
+            Assert.IsTrue(target.IsSatisfiedBy(new VisualLayerCollection(vList, new ProjectionPayloadMerger())));
         }
 
         [Test]
@@ -57,14 +57,14 @@ namespace Teleopti.Ccc.DomainTest.Collection
         {
             IVisualLayer actLayer = visualLayerFactory.CreateShiftSetupLayer(new Activity("sdf"), new DateTimePeriod(2000, 1, 1, 2001, 1, 1),person);
             IList<IVisualLayer> vList = new List<IVisualLayer> { actLayer };
-            Assert.IsFalse(target.IsSatisfiedBy(new VisualLayerCollection(null, vList, new ProjectionPayloadMerger())));
+            Assert.IsFalse(target.IsSatisfiedBy(new VisualLayerCollection(vList, new ProjectionPayloadMerger())));
         }
 
         [Test]
         public void VerifyTrue()
         {
             IList<IVisualLayer> vList = new List<IVisualLayer> {correctAbsenceLayer()};
-            Assert.IsTrue(target.IsSatisfiedBy(new VisualLayerCollection(null, vList, new ProjectionPayloadMerger())));
+            Assert.IsTrue(target.IsSatisfiedBy(new VisualLayerCollection(vList, new ProjectionPayloadMerger())));
         }
 
 	    private IVisualLayer correctAbsenceLayer()

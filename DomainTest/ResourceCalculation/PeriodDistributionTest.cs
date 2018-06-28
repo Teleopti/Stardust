@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(2.33, _target.PeriodDetailAverage, 0.01);
 
 			IList<IVisualLayer> lst = new List<IVisualLayer> { layerFactory.CreateShiftSetupLayer(_activity, period, PersonFactory.CreatePerson()) };
-            IVisualLayerCollection proj = new VisualLayerCollection(null, lst, new ProjectionPayloadMerger());
+            IVisualLayerCollection proj = new VisualLayerCollection(lst, new ProjectionPayloadMerger());
             
 			// create one on the other 8 minutes
 			var resourceContainer2 = MockRepository.GenerateMock<IResourceCalculationDataContainerWithSingleOperation>();

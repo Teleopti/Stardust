@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			workingColl.AddRange(((VisualLayerCollection)projectionService.CreateProjection()).UnMergedCollection);
 			removeUnusedFakeActivities(workingColl);
-			return new VisualLayerCollection(ScheduleDay.Person, workingColl, ProjectionMerger);
+			return new VisualLayerCollection(workingColl, ProjectionMerger);
 		}
 
 		private void addFakeLayers(ICollection<IVisualLayer> projection)

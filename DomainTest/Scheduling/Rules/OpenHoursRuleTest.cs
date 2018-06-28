@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var period = new DateTimePeriod(_date, _date.AddMinutes(30));
 			var layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period, _person);
 			IList<IVisualLayer> layers = new List<IVisualLayer> { layer };
-			IVisualLayerCollection layerCollection = new VisualLayerCollection(_person, layers, new ProjectionPayloadMerger());
+			IVisualLayerCollection layerCollection = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
 			var projectionService = _mocks.StrictMock<IProjectionService>();
 			var skillSkillStaffPeriodExtendedDictionary = _mocks.StrictMock<ISkillSkillStaffPeriodExtendedDictionary>();
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period, _person);
 
 			IList<IVisualLayer> layers = new List<IVisualLayer> { layer };
-			IVisualLayerCollection layerCollection = new VisualLayerCollection(_person, layers, new ProjectionPayloadMerger());
+			IVisualLayerCollection layerCollection = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
 			var projectionService = _mocks.StrictMock<IProjectionService>();
 			var skillSkillStaffPeriodExtendedDictionary = _mocks.StrictMock<ISkillSkillStaffPeriodExtendedDictionary>();
@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var period = new DateTimePeriod(_date, _date.AddMinutes(30));
 			var layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period, _person);
 			IList<IVisualLayer> layers = new List<IVisualLayer> { layer };
-			IVisualLayerCollection layerCollection = new VisualLayerCollection(_person, layers, new ProjectionPayloadMerger());
+			IVisualLayerCollection layerCollection = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
 			var projectionService = _mocks.StrictMock<IProjectionService>();
 
@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var period = new DateTimePeriod(_date, _date.AddMinutes(30));
 			var layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period, _person);
 			IList<IVisualLayer> layers = new List<IVisualLayer> { layer };
-			IVisualLayerCollection layerCollection = new VisualLayerCollection(_person, layers, new ProjectionPayloadMerger());
+			IVisualLayerCollection layerCollection = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
 			var projectionService = _mocks.StrictMock<IProjectionService>();
 			var skillSkillStaffPeriodExtendedDictionary = _mocks.StrictMock<ISkillSkillStaffPeriodExtendedDictionary>();
@@ -260,7 +260,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public void WhenLayerCollectionIsNullOrEmptyRuleSaysOk()
 		{
 			IList<IVisualLayer> layers = new List<IVisualLayer>();
-			IVisualLayerCollection layerCollection = new VisualLayerCollection(_person, layers, new ProjectionPayloadMerger());
+			IVisualLayerCollection layerCollection = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
 			var projectionService = _mocks.StrictMock<IProjectionService>();
 
@@ -284,7 +284,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var period = new DateTimePeriod(_date, _date.AddMinutes(30));
 			var layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period, _person);
 			IList<IVisualLayer> layers = new List<IVisualLayer> { layer };
-			IVisualLayerCollection layerCollection = new VisualLayerCollection(_person, layers, new ProjectionPayloadMerger());
+			IVisualLayerCollection layerCollection = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
 			var projectionService = _mocks.StrictMock<IProjectionService>();
 
@@ -318,7 +318,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var period = new DateTimePeriod(_date, _date.AddMinutes(30));
 			var layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period, _person);
 			IList<IVisualLayer> layers = new List<IVisualLayer> { layer };
-			IVisualLayerCollection layerCollection = new VisualLayerCollection(_person, layers, new ProjectionPayloadMerger());
+			IVisualLayerCollection layerCollection = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
 			var projectionService = _mocks.StrictMock<IProjectionService>();
 			var skillSkillStaffPeriodExtendedDictionary = _mocks.StrictMock<ISkillSkillStaffPeriodExtendedDictionary>();

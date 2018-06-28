@@ -17,8 +17,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			_schedulePart = schedule;
 			_projection = projection;
 
-			_schedulePartProjectionMerged = new VisualLayerCollection(projection.Person,
-												 projection.ToList(),
+			_schedulePartProjectionMerged = new VisualLayerCollection(projection.ToList(),
 												 new ProjectionIntersectingPeriodMerger());
 		}
 
