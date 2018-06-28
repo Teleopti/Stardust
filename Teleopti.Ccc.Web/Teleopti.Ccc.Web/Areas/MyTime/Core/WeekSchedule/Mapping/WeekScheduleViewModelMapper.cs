@@ -362,10 +362,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			IEnumerable<PeriodViewModel> periodsViewModels;
 			if (forWeek)
 				periodsViewModels = periodViewModelFactory.CreatePeriodViewModelsForWeek(projectionList, minMaxTime, s.Date,
-					s.ScheduleDay?.TimeZone);
+					s.ScheduleDay?.TimeZone, s.ScheduleDay.Person);
 			else
 				periodsViewModels = periodViewModelFactory.CreatePeriodViewModelsForDay(projectionList, minMaxTime, s.Date,
-					s.ScheduleDay?.TimeZone);
+					s.ScheduleDay?.TimeZone, s.ScheduleDay.Person);
 
 			periodsViewModels = periodsViewModels ?? new PeriodViewModel[0];
 

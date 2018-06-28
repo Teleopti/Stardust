@@ -7,11 +7,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 {
 	public class ScheduleColorProvider : IScheduleColorProvider
 	{
+		private readonly ILoggedOnUser _loggedOnUser;
+
+		public ScheduleColorProvider(ILoggedOnUser loggedOnUser)
+		{
+			_loggedOnUser = loggedOnUser;
+		}
+		
 		public IEnumerable<Color> GetColors(IScheduleColorSource source)
 		{
 			if (source == null)
 				return new Color[] {};
-
 			var scheduleDays = source.ScheduleDays ?? new IScheduleDay[] {};
 			var projections = source.Projections ?? new IVisualLayerCollection[] { };
 			var preferenceDays = source.PreferenceDays ?? new IPreferenceDay[] { };
@@ -22,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			var layerColors = from p in projections
 							  let layers = p as IEnumerable<IVisualLayer>
 							  from l in layers
-							  select l.DisplayColor();
+							  select l.Payload.ConfidentialDisplayColor(_loggedOnUser.CurrentUser()); //probably not needed because always looking at its own schedule
 
 			var assignments = scheduleDays.Select(x => x.PersonAssignment()).Where(x => x != null);
 			

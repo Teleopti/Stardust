@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		[Test]
 		public void ShouldReturnEmptyEnumerableOnNullSource()
 		{
-			var target = new ScheduleColorProvider();
+			var target = new ScheduleColorProvider(new FakeLoggedOnUser());
 
 			var result = target.GetColors(null);
 
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			             		Projections = new[] {projection1, projection2, projection3}
 			             	};
 
-			var target = new ScheduleColorProvider();
+			var target = new ScheduleColorProvider(new FakeLoggedOnUser());
 
 			var result = target.GetColors(source);
 
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var projection = stubs.ProjectionStub(new[] {stubs.VisualLayerStub(Color.Red)});
 			var source = new ScheduleColorSource { Projections = new[] { projection } };
 
-			var target = new ScheduleColorProvider();
+			var target = new ScheduleColorProvider(new FakeLoggedOnUser());
 
 			var result = target.GetColors(source);
 
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var scheduleDay = stubs.ScheduleDayStub(DateTime.Now, SchedulePartView.MainShift, personAssignment);
 			var source = new ScheduleColorSource { ScheduleDays = new[] { scheduleDay } };
 
-			var target = new ScheduleColorProvider();
+			var target = new ScheduleColorProvider(new FakeLoggedOnUser());
 
 			var result = target.GetColors(source);
 
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var scheduleDay = stubs.ScheduleDayStub(DateTime.Now, SchedulePartView.FullDayAbsence, personAbsence);
 			var source = new ScheduleColorSource { ScheduleDays = new[] { scheduleDay } };
 
-			var target = new ScheduleColorProvider();
+			var target = new ScheduleColorProvider(new FakeLoggedOnUser());
 
 			var result = target.GetColors(source);
 
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			                                      	});
 			var source = new ScheduleColorSource { PreferenceDays = new[] { preferenceDay } };
 
-			var target = new ScheduleColorProvider();
+			var target = new ScheduleColorProvider(new FakeLoggedOnUser());
 
 			var result = target.GetColors(source);
 
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 												  });
 			var source = new ScheduleColorSource { PreferenceDays = new[] { preferenceDay } };
 
-			var target = new ScheduleColorProvider();
+			var target = new ScheduleColorProvider(new FakeLoggedOnUser());
 
 			var result = target.GetColors(source);
 
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			                                      	});
 			var source = new ScheduleColorSource { PreferenceDays = new[] { preferenceDay } };
 
-			var target = new ScheduleColorProvider();
+			var target = new ScheduleColorProvider(new FakeLoggedOnUser());
 
 			var result = target.GetColors(source);
 
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			                         	};
 			var source = new ScheduleColorSource {WorkflowControlSet = workflowControlSet};
 
-			var target = new ScheduleColorProvider();
+			var target = new ScheduleColorProvider(new FakeLoggedOnUser());
 
 			var result = target.GetColors(source);
 
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			                         	};
 			var source = new ScheduleColorSource { WorkflowControlSet = workflowControlSet };
 
-			var target = new ScheduleColorProvider();
+			var target = new ScheduleColorProvider(new FakeLoggedOnUser());
 
 			var result = target.GetColors(source);
 
@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			                         	};
 			var source = new ScheduleColorSource { WorkflowControlSet = workflowControlSet };
 
-			var target = new ScheduleColorProvider();
+			var target = new ScheduleColorProvider(new FakeLoggedOnUser());
 
 			var result = target.GetColors(source);
 
@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 								Projections = new[] { projection }
 							};
 
-			var target = new ScheduleColorProvider();
+			var target = new ScheduleColorProvider(new FakeLoggedOnUser());
 
 			var result = target.GetColors(source);
 
@@ -241,7 +241,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 				Projections = new[] { projection }
 			};
 
-			var target = new ScheduleColorProvider();
+			var target = new ScheduleColorProvider(new FakeLoggedOnUser());
 
 			var result = target.GetColors(source);
 

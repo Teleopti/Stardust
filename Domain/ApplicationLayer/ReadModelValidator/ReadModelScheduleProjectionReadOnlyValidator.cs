@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			if(scheduleDay != null)
 			{
 				var projection = scheduleDay.ProjectionService().CreateProjection();
-				var layers = _builder.BuildProjectionChangedEventLayers(projection);
+				var layers = _builder.BuildProjectionChangedEventLayers(projection, scheduleDay.Person);
 
 				return layers.Select(layer => new ScheduleProjectionReadOnlyModel
 				{

@@ -226,6 +226,7 @@ namespace Teleopti.Ccc.TestCommon
 			var visualLayer = MockRepository.GenerateMock<IVisualLayer>();
 			visualLayer.Stub(x => x.DisplayColor()).Return(displayColor);
 			visualLayer.Stub(x => x.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
+			visualLayer.Stub(x => x.Payload).Return(new Activity {DisplayColor = displayColor});
 			return visualLayer;
 		}
 

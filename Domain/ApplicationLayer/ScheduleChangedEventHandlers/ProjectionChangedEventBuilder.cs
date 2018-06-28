@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					break;
 			}
 
-			var layers = BuildProjectionChangedEventLayers(projection).ToList();
+			var layers = BuildProjectionChangedEventLayers(projection, scheduleDay.Person).ToList();
 
 			ProjectionChangedEventShift shift = null;
 
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			return eventScheduleDay;
 		}
 
-		public IEnumerable<ProjectionChangedEventLayer> BuildProjectionChangedEventLayers(IVisualLayerCollection projection)
+		public IEnumerable<ProjectionChangedEventLayer> BuildProjectionChangedEventLayers(IVisualLayerCollection projection, IPerson person)
 		{
 			var layers = new List<ProjectionChangedEventLayer>();
 
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					PayloadId = layer.Payload.UnderlyingPayload.Id.GetValueOrDefault(),
 					IsAbsence = layer.Payload.UnderlyingPayload is IAbsence,
 					DisplayColor =
-						isPayloadAbsence ? (layer.Payload as IAbsence).DisplayColor.ToArgb() : layer.DisplayColor().ToArgb(),
+						isPayloadAbsence ? (layer.Payload as IAbsence).DisplayColor.ToArgb() : layer.Payload.ConfidentialDisplayColor(person).ToArgb(),
 					RequiresSeat = requiresSeat,
 					WorkTime = workTime,
 					PaidTime = paidTime,

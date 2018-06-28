@@ -30,14 +30,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting
 			var start = projectedPeriod.StartDateTimeLocal(timeZoneInfo);
 			var end = projectedPeriod.EndDateTimeLocal(timeZoneInfo);
 
-			Height = render(top, dayOff.Period.StartDateTimeLocal(timeZoneInfo), UserTexts.Resources.Overtime, projection, details, timeZoneInfo, start, end);
+			Height = render(top, dayOff.Period.StartDateTimeLocal(timeZoneInfo), UserTexts.Resources.Overtime, projection, details, timeZoneInfo, start, end, schedulePart.Person);
 
             Template.Reset(new SizeF(columnWidth, Height));
-            Height = render(top, dayOff.Period.StartDateTimeLocal(timeZoneInfo), UserTexts.Resources.Overtime, projection, details, timeZoneInfo, start, end);
+            Height = render(top, dayOff.Period.StartDateTimeLocal(timeZoneInfo), UserTexts.Resources.Overtime, projection, details, timeZoneInfo, start, end, schedulePart.Person);
         }
 
 
-        private float render(float top, DateTime startDateTime, string text, IVisualLayerCollection projection, ScheduleReportDetail details, TimeZoneInfo timeZoneInfo, DateTime start, DateTime end)
+        private float render(float top, DateTime startDateTime, string text, IVisualLayerCollection projection, ScheduleReportDetail details, TimeZoneInfo timeZoneInfo, DateTime start, DateTime end, IPerson person)
         {
             top = RenderDate(startDateTime, top);
             top = RenderText(text, top);
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting
 	        top = RenderPeriod(start, end, top);
 	        if (details == ScheduleReportDetail.None) return top;
 	        top = RenderSplitter(Color.Gray, top, 1);
-	        top = render(top, projection, timeZoneInfo, details);
+	        top = render(top, projection, timeZoneInfo, details, person);
 	        return top;
         }
         protected float RenderGraphics(float top)
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting
 
 	        return top + RowSpace + 10;
         }
-        private float render(float top, IVisualLayerCollection payLoads, TimeZoneInfo timeZoneInfo, ScheduleReportDetail details)
+        private float render(float top, IVisualLayerCollection payLoads, TimeZoneInfo timeZoneInfo, ScheduleReportDetail details, IPerson person)
         {
 	        if (details == ScheduleReportDetail.None) return top;
 
@@ -72,13 +72,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting
 			        {
 				        if (activty.ReportLevelDetail != ReportLevelDetail.None)
 				        {
-					        top = RenderPayLoad(visualLayer, top, timeZoneInfo);
+					        top = RenderPayLoad(visualLayer, top, timeZoneInfo, person);
 				        }
 			        }
 		        }
 		        else
 		        {
-			        top = RenderPayLoad(visualLayer, top, timeZoneInfo);
+			        top = RenderPayLoad(visualLayer, top, timeZoneInfo, person);
 		        }
 	        }
 	        return top;
@@ -103,8 +103,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting
 			return dt.ToShortTimeString();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "Teleopti.Interfaces.Domain.TimePeriod.ToShortTimeString")]
-        private float RenderPayLoad(IVisualLayer visualLayer, float top, TimeZoneInfo timeZoneInfo)
+        private float RenderPayLoad(IVisualLayer visualLayer, float top, TimeZoneInfo timeZoneInfo, IPerson person)
         {
             Format.Alignment = PdfTextAlignment.Center;
             const float fontSize = 7f;
@@ -135,7 +134,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting
             float lineStart = timeRect.Top;
             float lineEnd = nameRect.Bottom;
 
-            Graphics.DrawLine(new PdfPen(visualLayer.DisplayColor(), 5), 7, lineStart, 7, lineEnd);
+            Graphics.DrawLine(new PdfPen(visualLayer.Payload.ConfidentialDisplayColor(person), 5), 7, lineStart, 7, lineEnd);
 
             return nameRect.Bottom + 2;
         }

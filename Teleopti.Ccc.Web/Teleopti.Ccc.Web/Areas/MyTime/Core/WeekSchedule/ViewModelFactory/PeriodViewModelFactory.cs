@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			_now = now;
 		}
 
-		public IEnumerable<PeriodViewModel> CreatePeriodViewModelsForWeek(IEnumerable<IVisualLayer> visualLayerCollection, TimePeriod minMaxTime, DateOnly localDate, TimeZoneInfo timeZone)
+		public IEnumerable<PeriodViewModel> CreatePeriodViewModelsForWeek(IEnumerable<IVisualLayer> visualLayerCollection, TimePeriod minMaxTime, DateOnly localDate, TimeZoneInfo timeZone, IPerson person)
 		{
 			var calendarDayExtractor = new VisualLayerCalendarDayExtractor();
 			var layerExtendedList = calendarDayExtractor.CreateVisualPeriods(localDate, visualLayerCollection, timeZone);
@@ -53,9 +53,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 					TimeSpan = visualLayer.Period.TimePeriod(timezone).ToShortTimeString(),
 					StartTime = visualLayer.Period.StartDateTimeLocal(timezone),
 					EndTime = visualLayer.Period.EndDateTimeLocal(timezone),
-					StyleClassName = colorToString(visualLayer.DisplayColor()),
+					StyleClassName = colorToString(visualLayer.Payload.ConfidentialDisplayColor(person)),
 					Meeting = meetingModel,
-					Color = visualLayer.DisplayColor().ToCSV(),
+					Color = visualLayer.Payload.ConfidentialDisplayColor(person).ToCSV(),
 					StartPositionPercentage = positionPercentage.Start,
 					EndPositionPercentage = positionPercentage.End,
 					IsOvertime = isOvertimeLayer
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			return newList;
 		}
 
-		public IEnumerable<PeriodViewModel> CreatePeriodViewModelsForDay(IEnumerable<IVisualLayer> visualLayerCollection, TimePeriod minMaxTime, DateOnly localDate, TimeZoneInfo timeZone)
+		public IEnumerable<PeriodViewModel> CreatePeriodViewModelsForDay(IEnumerable<IVisualLayer> visualLayerCollection, TimePeriod minMaxTime, DateOnly localDate, TimeZoneInfo timeZone, IPerson person)
 		{
 			var calendarDayExtractor = new VisualLayerCalendarDayExtractor();
 			var layerExtendedList = calendarDayExtractor.CreateVisualPeriods(localDate, visualLayerCollection, timeZone);
@@ -106,9 +106,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 					TimeSpan = visualLayer.Period.TimePeriod(timezone).ToShortTimeString(),
 					StartTime = visualLayer.Period.StartDateTimeLocal(timezone),
 					EndTime = visualLayer.Period.EndDateTimeLocal(timezone),
-					StyleClassName = colorToString(visualLayer.DisplayColor()),
+					StyleClassName = colorToString(visualLayer.Payload.ConfidentialDisplayColor(person)),
 					Meeting = meetingModel,
-					Color = visualLayer.DisplayColor().ToCSV(),
+					Color = visualLayer.Payload.ConfidentialDisplayColor(person).ToCSV(),
 					StartPositionPercentage = positionPercentage.Start,
 					EndPositionPercentage = positionPercentage.End,
 					IsOvertime = isOvertimeLayer
