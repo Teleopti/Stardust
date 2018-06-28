@@ -1,10 +1,8 @@
 using System;
 using System.Web.Http;
-using System.Web.Http.ModelBinding;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.Global.Core;
-using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Global

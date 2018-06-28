@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -36,7 +37,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 {
-	public class FakeDisableDeletedFilter : IDisableDeletedFilter
+	class FakeDisableDeletedFilter : IDisableDeletedFilter
 	{
 		public IDisposable Disable()
 		{
@@ -76,8 +77,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			_workflowControlSet = new WorkflowControlSet().WithId();
 			_person.WorkflowControlSet = _workflowControlSet;
 
-			var personRepository = new FakePersonRepositoryLegacy();
-			personRepository.Add(_person);
+			var personRepository = new FakePersonRepositoryLegacy {_person};
 			_now = new ThisIsNow(nowTime);
 			
 			isolate.UseTestDouble(personRepository).For<IPersonRepository>();
@@ -802,6 +802,94 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
+		public void ShouldApproveWithOvernightSkillOpenHour()
+		{
+			_absence = createAbsence();
+			setWorkflowControlSet();
+
+			var skillOpenPeriod = new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(25));
+			var skill = SkillFactory.CreateSkill("Phone");
+			skill.MidnightBreakOffset = TimeSpan.FromHours(1);
+			setupPersonSkills(skill,skillOpenPeriod);
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today.AddDays(1),
+				EndDate = _today.AddDays(1),
+				StartTime = new TimeOfDay(TimeSpan.FromHours(0)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(1))
+			});
+
+			Persister.Persist(form);
+
+			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
+			request.IsDenied.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldDenyRequestWhenSkillOpenHourIsClosedOnPreviousDay()
+		{
+			_absence = createAbsence();
+			setWorkflowControlSet();
+
+			var skillOpenPeriod = new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(25));
+			var skill = SkillFactory.CreateSkill("Phone");
+			skill.MidnightBreakOffset = TimeSpan.FromHours(1);
+			WorkloadFactory.CreateWorkloadWithOpenHoursOnDays(skill, new Dictionary<DayOfWeek, TimePeriod>
+			{
+				{DayOfWeek.Wednesday, skillOpenPeriod},
+				{DayOfWeek.Thursday, skillOpenPeriod}
+			});
+			var date = new DateOnly(2016, 10, 18);
+			_person.AddSkill(skill, date);
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today.AddDays(1),
+				EndDate = _today.AddDays(1),
+				StartTime = new TimeOfDay(TimeSpan.FromHours(0)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(1))
+			});
+
+			Persister.Persist(form);
+
+			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
+			request.IsDenied.Should().Be.True();
+			request.DenyReason.Should(Resources.RequestDenyReasonNoPersonSkillOpen);
+		}
+
+		[Test]
+		public void ShouldApproveRequestWhenOvernightSkillOpenHourIsOpenOnToday()
+		{
+			_absence = createAbsence();
+			setWorkflowControlSet();
+
+			var skillOpenPeriod = new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(25));
+			var skill = SkillFactory.CreateSkill("Phone");
+			skill.MidnightBreakOffset = TimeSpan.FromHours(1);
+			WorkloadFactory.CreateWorkloadWithOpenHoursOnDays(skill, new Dictionary<DayOfWeek, TimePeriod>
+			{
+				{DayOfWeek.Tuesday, skillOpenPeriod},
+				{DayOfWeek.Thursday, skillOpenPeriod}
+			});
+			var date = new DateOnly(2016, 10, 18);
+			_person.AddSkill(skill, date);
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today.AddDays(1),
+				EndDate = _today.AddDays(1),
+				StartTime = new TimeOfDay(TimeSpan.FromHours(0)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(1))
+			});
+
+			Persister.Persist(form);
+
+			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
+			request.IsDenied.Should().Be.False();
+		}
+
+		[Test]
 		public void ShouldNotDenyRequestWhenPeriodIsOutsideSkillOpenHoursAndOnSkillessActivity()
 		{
 			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
@@ -1123,7 +1211,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		private void setupPersonSkills()
 		{
 			var skill = SkillFactory.CreateSkill("Phone");
-			var timePeriods = Enumerable.Repeat(new TimePeriod(8, 18), 5).ToArray();
+			setupPersonSkills(skill);
+		}
+
+		private void setupPersonSkills(ISkill skill,TimePeriod? skillOpenPeriod = null)
+		{
+			var timePeriods = skillOpenPeriod.HasValue ? new[] { skillOpenPeriod.Value } : Enumerable.Repeat(new TimePeriod(8, 18), 5).ToArray();
 			WorkloadFactory.CreateWorkloadClosedOnWeekendsWithOpenHours(skill, timePeriods);
 			var date = new DateOnly(2016, 10, 18);
 			_person.AddSkill(skill, date);
