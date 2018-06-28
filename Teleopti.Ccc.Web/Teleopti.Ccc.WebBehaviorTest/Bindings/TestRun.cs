@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 			GlobalPrincipalState.EnsureThreadPrincipal();
 
-			Browser.Interactions.AssertJavascriptResultContains("sessionStorage.clear(); return true;", "true");
+			Browser.Interactions.AssertJavascriptResultContains("sessionStorage.clear(); return true;", "True");
 
 			log.Debug($"Starting test {TestInfo().Name()}");
 		}
