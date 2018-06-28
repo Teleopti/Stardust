@@ -2865,7 +2865,6 @@
     <Folder Include="Areas\MyTime\Core\BadgeLeaderBoardReport\DataProvider\" />
     <Folder Include="Areas\MyTime\Core\Mapping\" />
     <Folder Include="Areas\SSO\Views\Authentication\" />
-    <Folder Include="Areas\Staffing\Core\" />
     <Folder Include="Areas\Start\Views\Config\" />
     <Folder Include="Areas\TeamSchedule\Views\TeamScheduleData\" />
     <Folder Include="Core\Aop\Aspects\" />

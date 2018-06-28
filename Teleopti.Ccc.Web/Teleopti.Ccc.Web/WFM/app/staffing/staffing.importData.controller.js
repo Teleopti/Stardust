@@ -49,17 +49,15 @@
 
 		vm.selectedSkillChange = selectedSkillChange;
 		vm.selectedAreaChange = selectedAreaChange;
-		vm.clearSelectedSkill = clearSelectedSkill;
-		vm.clearSelectedSkillGroup = clearSelectedSkillGroup;
 		vm.querySearchSkills = querySearchSkills;
 		vm.exportFile = exportFile;
 		vm.ErrorMessage = '';
-		vm.ClearBpoErrorMessage = '';
+		vm.ClearErrorMessage = '';
 		vm.ExportPeriodMessage = 'DefaultHejsan';
 		vm.ExportBpoPeriodMessage = 'DefaultHejsan';
-		vm.ClearBpoPeriodMessage = $translate.instant('ClearBpoPeriodDefaultMessage - TODO');
 		vm.isBpoVisualizeEnabled = isBpoVisualizeEnabled;
 		vm.isClearBpoEnabled = isClearBpoEnabled;
+		vm.isMultiSkillExportEnabled = isMultiSkillExportEnabled;
 		vm.GetRangeMessage = getRangeMessage;
 		vm.clearBpoPeriod = clearBpoPeriod;
 		vm.setSelectedBpo = setSelectedBpo;
@@ -75,6 +73,7 @@
 		vm.AllSkills = $translate.instant('ImportBpoImportInformationAllSkills');
 		vm.selectedBpo = null;
 		vm.activeBpos = [];
+		vm.disableNewSkillSelectorWithToggle = disableNewSkillSelectorWithToggle;
 		var skills;
 		vm.isSuccessfulRemove = false;
 		vm.fileName = '';
@@ -122,6 +121,16 @@
 		//		});
 		//	}
 		//}
+
+		function disableNewSkillSelectorWithToggle() {
+			if (isMultiSkillExportEnabled())
+				return (vm.selectedSkill === null && vm.selectedSkillArea === null) ||
+					vm.exportPeriod.startDate === null ||
+					vm.exportPeriod.endDate === null;
+			else
+				return vm.selectedSkill === null || vm.exportPeriod.startDate === null ||
+					vm.exportPeriod.endDate === null;
+		}
 
 		function resetFileLists() {
 			vm.invalidFile = {};
@@ -235,6 +244,9 @@
 		function isClearBpoEnabled() {
 			return toggleService.Staffing_BPO_ClearStaffing_75498;
 		}
+		function isMultiSkillExportEnabled() {
+			return toggleService.Staffing_BPO_ExportMultipleSkills_74968;
+		}
 
 		function getMessage() {
 			var query = staffingService.getExportStaffingPeriodMessage.get();
@@ -246,12 +258,6 @@
 			queryBpo.$promise.then(function(response) {
 				vm.ExportBpoPeriodMessage = response.ExportPeriodMessage;
 			});
-
-			//// TODO: Get BPO Period message
-			//var queryClearBpo = staffingService.getclearBpoPeriodMessage.get();
-			//queryClearBpo.$promise.then(function(response) {
-			//	vm.ClearBpoPeriodMessage = response.ExportPeriodMessage;
-			//});
 		}
 
 		function getRangeMessage() {
@@ -264,36 +270,22 @@
 				vm.RangeMessage = response.Message;
 			});
 		}
-
+		
 		function setSelectedBpo(bpo) {
 			vm.selectedBpo = bpo.Id;
 		}
 
 		function selectedSkillChange(skill) {
-			if (skill == null) return;
-			selectSkill(skill);
-			//getGanttData();
-		}
-
-		function clearSelectedSkill() {
-			vm.selectedSkill = null;
-			//getGanttData();
-		}
-
-		function clearSelectedSkillGroup() {
-			vm.selectedSkillArea = null;
-			//getGanttData();
+			if (skill != null) { 
+				vm.selectedSkillArea = null;
+			}
+			vm.selectedSkill = skill;
 		}
 
 		function selectedAreaChange(area) {
-			vm.selectedSkillArea = area;
 			vm.selectedSkill = null;
+			vm.selectedSkillArea = area;
 			//getGanttData();
-		}
-
-		function selectSkill(skill) {
-			vm.selectedSkill = skill;
-			vm.selectedSkillGroup = null;
 		}
 
 		function createFilterFor(query) {
@@ -311,27 +303,59 @@
 		}
 
 		function exportFile() {
-			if (vm.exportPeriod.startDate === null || vm.exportPeriod.endDate === null) {
-				vm.ErrorMessage = $translate.instant('DiscardSuggestionData');
-				return;
+			if (!isMultiSkillExportEnabled()) {
+				multiSkillExportIsDisabled();
 			}
+			else {
+				multiSkillExportIsEnabled();
+			}
+		}
+
+		function multiSkillExportIsEnabled() {
+			if (vm.selectedSkill != null) {
+				var request = staffingService.postFileExport.get({
+					skillId: vm.selectedSkill.Id,
+					exportStartDateTime: vm.exportPeriod.startDate,
+					exportEndDateTime: vm.exportPeriod.endDate
+				});
+				request.$promise.then(function(response) {
+					vm.ErrorMessage = response.ErrorMessage;
+					if (vm.ErrorMessage !== '') return;
+					UtilService.saveToFs(response.Content, vm.selectedSkill.Name + '.csv', 'text/csv');
+				});
+			} else {
+				var request = staffingService.postFileExportForSkillArea.get({
+					skillAreaId: vm.selectedSkillArea.Id,
+					exportStartDateTime: vm.exportPeriod.startDate,
+					exportEndDateTime: vm.exportPeriod.endDate
+				});
+				request.$promise.then(function (response) {
+					vm.ErrorMessage = response.ErrorMessage;
+					if (vm.ErrorMessage !== '') return;
+					UtilService.saveToFs(response.Content, vm.selectedSkillArea.Name + '.csv', 'text/csv');
+				});
+			}
+		}
+
+		function multiSkillExportIsDisabled() {
 			if (vm.selectedSkill === null) {
 				vm.ErrorMessage = $translate.instant('BpoExportYouMustSelectASkill');
 				return;
 			}
+
 			var request = staffingService.postFileExport.get({
 				skillId: vm.selectedSkill.Id,
 				exportStartDateTime: vm.exportPeriod.startDate,
 				exportEndDateTime: vm.exportPeriod.endDate
 			});
-			request.$promise.then(function(response) {
+			request.$promise.then(function (response) {
 				vm.ErrorMessage = response.ErrorMessage;
 				if (vm.ErrorMessage !== '') return;
-				var data = angular.toJson(response.Content);
 				UtilService.saveToFs(response.Content, vm.selectedSkill.Name + '.csv', 'text/csv');
 			});
 		}
-
+		
+		
 		function getActiveBpos() {
 			if (vm.isClearBpoEnabled() === false)
 				return;
@@ -343,20 +367,10 @@
 		}
 
 		function clearBpoPeriod() {
-			vm.ClearBpoErrorMessage = '';
+			vm.ClearErrorMessage = '';
 			vm.ClearSuccessMessage = '';
 			vm.isSuccessfulRemove = false;
 			vm.noSuccessfulRemove = false;
-			vm.ClearErrorMessage = '';
-			if (vm.bpoPeriod.startDate === null || vm.bpoPeriod.endDate === null) {
-				vm.ClearBpoErrorMessage = "You must select good dates";
-				return;
-			}
-
-			if (vm.selectedBpo === null) {
-				vm.ClearBpoErrorMessage = "You must select a Bpo";
-				return;
-			}
 
 			vm.isProcessing = true;
 			var query = staffingService.clearBpoPeriod.get({
@@ -366,7 +380,7 @@
 			});
 			query.$promise.then(function (clearBpoReturnObject) {
 				vm.isProcessing = false;
-				if (clearBpoReturnObject.ErrorMessage != null && clearBpoReturnObject.ErrorMessage !== "") {
+				if (clearBpoReturnObject.ErrorMessage !== null && clearBpoReturnObject.ErrorMessage !== "") {
 					vm.ClearErrorMessage = clearBpoReturnObject.ErrorMessage;
 					vm.noSuccessfulRemove = true;
 				} else {

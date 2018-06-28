@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public SkillGroup Get(Guid id)
 		{
-			return _skillAreas.Single(x => x.Id == id);
+			return _skillAreas.FirstOrDefault(x => x.Id == id);
 		}
 
 		public IEnumerable<SkillGroup> LoadAll()

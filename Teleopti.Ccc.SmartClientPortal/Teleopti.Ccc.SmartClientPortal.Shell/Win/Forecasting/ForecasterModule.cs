@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting
         {
             builder.RegisterType<SaveImportForecastFileCommand>().As<ISaveImportForecastFileCommand>();
 			builder.RegisterType<ValidateImportForecastFileCommand>().As<IValidateImportForecastFileCommand>();
-		
+
             builder.RegisterType<ImportForecastView>()
                 .As<IImportForecastView>()
                 .OnActivated(e => e.Instance.Presenter = e.Context.Resolve<ImportForecastPresenter>())

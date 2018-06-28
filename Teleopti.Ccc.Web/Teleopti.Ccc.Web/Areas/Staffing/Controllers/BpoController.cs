@@ -13,14 +13,16 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		private readonly ImportBpoFile _bpoFile;
 		private readonly IExportBpoFile _exportBpoFile;
 		private readonly ISkillRepository _skillRepository;
+		private readonly ISkillGroupRepository _skillGroupRepository;
 		private readonly ExportStaffingPeriodValidationProvider _periodValidationProvider;
 		private readonly BpoProvider _bpoProvider;
 
-		public BpoController(ImportBpoFile bpoFile, BpoProvider bpoProvider, IExportBpoFile exportBpoFile, ExportStaffingPeriodValidationProvider periodValidationProvider, ISkillRepository skillRepository )
+		public BpoController(ImportBpoFile bpoFile, BpoProvider bpoProvider, IExportBpoFile exportBpoFile, ExportStaffingPeriodValidationProvider periodValidationProvider, ISkillRepository skillRepository, ISkillGroupRepository skillGroupRepository)
 		{
 			_bpoFile = bpoFile;
 			_exportBpoFile = exportBpoFile;
 			_skillRepository = skillRepository;
+			_skillGroupRepository = skillGroupRepository;
 			_periodValidationProvider = periodValidationProvider;
 			_bpoProvider = bpoProvider;
 		}
@@ -72,6 +74,35 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 				return Ok(returnVal);
 			}
 			var exportedContent = _exportBpoFile.ExportDemand(skill,
+				new DateOnlyPeriod(dateOnlyStartDate, dateOnlyEndDate), CultureInfo.InvariantCulture);
+
+			returnVal.Content = exportedContent;
+			returnVal.ErrorMessage = "";
+			return Ok(returnVal);
+		}
+
+		[UnitOfWork, HttpGet, Route("api/staffing/exportStaffingDemandskillArea")]
+		public virtual IHttpActionResult ExportBpoForSkillArea(Guid skillAreaId, DateTime exportStartDateTime, DateTime exportEndDateTime)
+		{
+			var returnVal = new ExportStaffingReturnObject();
+
+			var dateOnlyStartDate = new DateOnly(exportStartDateTime);
+			var dateOnlyEndDate = new DateOnly(exportEndDateTime);
+			var validationObject = _periodValidationProvider.ValidateExportBpoPeriod(dateOnlyStartDate, dateOnlyEndDate);
+
+			if (validationObject.Result == false)
+			{
+				returnVal.ErrorMessage = validationObject.ErrorMessage;
+				return Ok(returnVal);
+			}
+
+			var skill = _skillGroupRepository.Get(skillAreaId);
+			if (skill == null)
+			{
+				returnVal.ErrorMessage = $"Cannot find skill area with id: {skillAreaId}";
+				return Ok(returnVal);
+			}
+			var exportedContent = _exportBpoFile.ExportDemand(skillAreaId,
 				new DateOnlyPeriod(dateOnlyStartDate, dateOnlyEndDate), CultureInfo.InvariantCulture);
 
 			returnVal.Content = exportedContent;

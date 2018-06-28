@@ -461,7 +461,6 @@
 				if (vm.ErrorMessage !== '') {
 					return;
 				} else {
-					var data = angular.toJson(response.Content);
 					vm.exportModal = false;
 					utilService.saveToFs(response.Content, vm.selectedSkill.Name + '.csv', 'text/csv');
 				}

@@ -153,7 +153,8 @@
 		Tech_Moving_ResilientConnectionLogic_76181,
 		Tenant_PurgeLogonAttempts_75782,
 		Tenant_PurgeNoneEmployeesData_76291,
-		Staffing_BPO_ClearStaffing_75498
+		Staffing_BPO_ClearStaffing_75498,
+		Staffing_BPO_ExportMultipleSkills_74968
 		// ReSharper restore InconsistentNaming
 	}
 }
