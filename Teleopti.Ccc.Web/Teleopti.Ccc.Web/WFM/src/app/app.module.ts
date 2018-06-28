@@ -9,22 +9,8 @@ import { PeopleModule } from './people/people.module';
 import { ApiAccessModule } from './api-access/api-access.module';
 
 @NgModule({
-	declarations: [AppComponent],
-	imports: [
-		CoreModule,
-		BrowserModule,
-		UpgradeModule,
-		PeopleModule,
-		ApiAccessModule,
-		HttpClientModule,
-		TranslateModule.forRoot({
-			loader: {
-				provide: TranslateLoader,
-				useFactory: HttpLoaderFactory,
-				deps: [HttpClient]
-			}
-		})
-	],
+	declarations: [],
+	imports: [CoreModule, BrowserModule, UpgradeModule, PeopleModule, ApiAccessModule, HttpClientModule],
 	entryComponents: []
 })
 export class AppModule {
