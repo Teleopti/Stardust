@@ -80,9 +80,15 @@
 			displayScrollButton();
 		}
 
+		vm.isNotAllowedToChange = function (shiftLayer) {
+			return !shiftLayer.ShiftLayerIds || !shiftLayer.ShiftLayerIds.length;
+		}
+
 		vm.toggleSelection = function (shiftLayer) {
+			if (vm.isNotAllowedToChange(shiftLayer)) return;
 			vm.selectedShiftLayer = shiftLayer !== vm.selectedShiftLayer ? shiftLayer : null;
 			vm.selectedActivitiyId = shiftLayer.CurrentActivityId || shiftLayer.ActivityId;
+
 		}
 
 		vm.getShiftLayerWidth = function (layer) {
@@ -111,11 +117,11 @@
 				teamScheduleNotificationService.reportActionResult({
 					success: 'SuccessfulMessageForSavingScheduleChanges'
 				},
-				[{
-					PersonId: vm.personId,
-					Name: vm.scheduleVm.Name
-				}],
-				response.data);
+					[{
+						PersonId: vm.personId,
+						Name: vm.scheduleVm.Name
+					}],
+					response.data);
 			});
 		}
 

@@ -259,6 +259,75 @@
 		expect(shiftLayers[0].className.indexOf('selected') >= 0).toBeTruthy();
 	});
 
+	it('should not allow select intraday absence', function () {
+		fakeTeamSchedule.has({
+			"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+			"Name": "Annika Andersson",
+			"Date": "2018-06-28",
+			"WorkTimeMinutes": 240,
+			"ContractTimeMinutes": 240,
+			"Projection": [{
+				"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+				"Color": "#ffffff",
+				"Description": "E-mail",
+				"Start": "2018-06-28 08:00",
+				"Minutes": 240,
+				"IsOvertime": false
+			},
+			{
+				"ShiftLayerIds": null,
+				"ParentPersonAbsences": ['eba97a99-8d36-47c4-b326-a90d006bac52'],
+				"Color": "#ffffff",
+				"Description": "E-mail",
+				"Start": "2018-06-28 09:00",
+				"Minutes": 60,
+				"IsOvertime": false
+			}],
+			"Timezone": { "IanaId": "Europe/Berlin" }
+		});
+		var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", "2018-06-28", "Europe/Berlin");
+
+		var shiftLayers = panel[0].querySelectorAll(".shift-layer");
+		shiftLayers[1].click();
+
+		expect(shiftLayers[1].className.indexOf('selected') >= 0).toBeFalsy();
+		expect(shiftLayers[1].className.indexOf('disabled') >= 0).toBeTruthy();
+	});
+
+	it('should not allow select meeting', function () {
+		fakeTeamSchedule.has({
+			"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+			"Name": "Annika Andersson",
+			"Date": "2018-06-28",
+			"WorkTimeMinutes": 240,
+			"ContractTimeMinutes": 240,
+			"Projection": [{
+				"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+				"Color": "#ffffff",
+				"Description": "E-mail",
+				"Start": "2018-06-28 08:00",
+				"Minutes": 240,
+				"IsOvertime": false
+			},
+			{
+				"ShiftLayerIds": null,
+				"ParentPersonAbsences": null,
+				"Color": "#ffffff",
+				"Description": "Administration",
+				"Start": "2018-06-28 09:00",
+				"Minutes": 60,
+				"IsOvertime": false
+			}],
+			"Timezone": { "IanaId": "Europe/Berlin" }
+		});
+		var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", "2018-06-28", "Europe/Berlin");
+
+		var shiftLayers = panel[0].querySelectorAll(".shift-layer");
+		shiftLayers[1].click();
+
+		expect(shiftLayers[1].className.indexOf('selected') >= 0).toBeFalsy();
+		expect(shiftLayers[1].className.indexOf('disabled') >= 0).toBeTruthy();
+	});
 
 	it('should can select only one activity', function () {
 		fakeTeamSchedule.has({
@@ -1110,6 +1179,8 @@
 		expect(!!fakeNoticeService.successMessage).toEqual(false);
 		expect(fakeNoticeService.errorMessage).toEqual('Invalid input : Annika Andersson');
 	});
+
+
 
 	describe("in locale en-UK", function () {
 		beforeEach(function () { moment.locale('en-UK'); });
