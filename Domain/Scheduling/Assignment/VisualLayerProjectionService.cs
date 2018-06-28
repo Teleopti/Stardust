@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 					var layerEndTime = findLayerEndTime(inverseLoop, workingLayer, currentTime);
 					var newLayer = standardVisualLayerFactory.CreateResultLayer(workingLayer.Payload,
-						workingLayer, new DateTimePeriod(currentTime, layerEndTime), workingLayer.PersonAbsenceId);
+						workingLayer, new DateTimePeriod(currentTime, layerEndTime));
 					workingColl.Add(newLayer);
 					currentTime = layerEndTime;
 					layerFound = true;

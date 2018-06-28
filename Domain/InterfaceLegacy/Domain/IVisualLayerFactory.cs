@@ -49,8 +49,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// Created by: rogerkr
 		/// Created date: 2009-02-13
 		/// </remarks>
-		IVisualLayer CreateResultLayer(IPayload payload, IVisualLayer originalLayer, DateTimePeriod period,
-			Guid? personAbsenceId);
+		IVisualLayer CreateResultLayer(IPayload payload, IVisualLayer originalLayer, DateTimePeriod period);
 
 		/// <summary>
 		/// Creates the result layer.
@@ -71,13 +70,11 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <param name="absence">The absence.</param>
 		/// <param name="originalLayer">The original layer.</param>
 		/// <param name="period">The period.</param>
-		/// <param name="personAbsenceId">The ID of person absence for current layer</param>
 		/// <returns></returns>
 		/// <remarks>
 		/// Created by: rogerkr
 		/// Created date: 2009-02-13
 		/// </remarks>
-		IVisualLayer CreateAbsenceSetupLayer(IAbsence absence, IVisualLayer originalLayer, DateTimePeriod period,
-			Guid? personAbsenceId);
+		IVisualLayer CreateAbsenceSetupLayer(IAbsence absence, IVisualLayer originalLayer, DateTimePeriod period);
 	}
 }

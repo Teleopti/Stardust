@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		    var actLayer = visualLayerFactory.CreateShiftSetupLayer(new Activity("sdf"),
 			    new DateTimePeriod(2000, 1, 1, 2001, 1, 1), person);
 		    return visualLayerFactory.CreateAbsenceSetupLayer(new Absence(), actLayer,
-			    new DateTimePeriod(2000, 1, 1, 2001, 1, 1), actLayer.PersonAbsenceId);
+			    new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 	    }
     }
 }

@@ -17,21 +17,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
     /// </remarks>
 	public class VisualLayer : Layer<IPayload>, IVisualLayer, IActivityRestrictableVisualLayer
     {
-	    public VisualLayer(IPayload payload, DateTimePeriod period, IActivity highestPriorityActivity, IPerson person,
-		    Guid? personAbsenceId = null) : base(payload, period)
+	    public VisualLayer(IPayload payload, DateTimePeriod period, IActivity highestPriorityActivity, IPerson person) 
+			: base(payload, period)
 	    {
 		    InParameter.NotNull(nameof(highestPriorityActivity), highestPriorityActivity);
 
 		    HighestPriorityActivity = highestPriorityActivity;
 		    Person = person;
-		    PersonAbsenceId = personAbsenceId;
 	    }
 
 	    public IMultiplicatorDefinitionSet DefinitionSet { get; set; }
 		public IPerson Person { get; internal set; }
         public IAbsence HighestPriorityAbsence { get; set; }
         public IActivity HighestPriorityActivity { get; set; }
-        public Guid? PersonAbsenceId { get; set; }
 
         public Color DisplayColor()
         {
@@ -111,7 +109,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 	    public IVisualLayer CloneWithNewPeriod(DateTimePeriod newPeriod)
 		{
-			var ret = new VisualLayer(Payload, newPeriod, HighestPriorityActivity, Person, PersonAbsenceId)
+			var ret = new VisualLayer(Payload, newPeriod, HighestPriorityActivity, Person)
 			{
 				HighestPriorityAbsence = HighestPriorityAbsence,
 				DefinitionSet = DefinitionSet

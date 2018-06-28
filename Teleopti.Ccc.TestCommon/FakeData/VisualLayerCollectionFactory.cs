@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 				new DateTimePeriod(WorkShift.BaseDate.Add(start), WorkShift.BaseDate.Add(end)), person);
 			var holidayAbsence = AbsenceFactory.CreateAbsence("TestHoliday");
 			var absenceVisualLayer = factory.CreateAbsenceSetupLayer(holidayAbsence, originalVisualLayer,
-				originalVisualLayer.Period, Guid.NewGuid());
+				originalVisualLayer.Period);
 
 			return new List<IVisualLayer> {absenceVisualLayer};
 		}
