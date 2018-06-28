@@ -14,8 +14,9 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
     {
         private readonly IAssembler<DateTimePeriod, DateTimePeriodDto> _dateTimePeriodAssembler;
         private IVisualLayerCollection _visualLayerCollection;
+		private IPerson _assignedAgent;
 
-        public ProjectedLayerAssembler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler)
+		public ProjectedLayerAssembler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler)
         {
             _dateTimePeriodAssembler = dateTimePeriodAssembler;
         }
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             var layer = new ProjectedLayerDto
                             {
                                 Period = _dateTimePeriodAssembler.DomainEntityToDto(entity.Period),
-                                DisplayColor = new ColorDto(entity.DisplayColor()),
+                                DisplayColor = new ColorDto(entity.Payload.ConfidentialDisplayColor(_assignedAgent)),
                                 Description = entity.DisplayDescription().Name,
                                 ContractTime = layerForPeriod.ContractTime(),
 								WorkTime = layerForPeriod.WorkTime(),
@@ -57,9 +58,10 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             throw new NotSupportedException("Not supported to create projected layers from DTO.");
         }
 
-        public void SetCurrentProjection(IVisualLayerCollection visualLayerCollection)
+        public void SetCurrentProjection(IVisualLayerCollection visualLayerCollection, IPerson assignedAgent)
         {
             _visualLayerCollection = visualLayerCollection;
-        }
+			_assignedAgent = assignedAgent;
+		}
     }
 }
