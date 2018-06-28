@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Panels;
 using Teleopti.Interfaces.Domain;
 
@@ -131,18 +132,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
 				_toolTipLists.Remove(rowIndex);
 
 			IList<ToolTipData> tipDatas = new List<ToolTipData>();
+			var projectionCellValue = (ProjectionCellValue) style.CellValue;
 
-			foreach (var layer in (IList<IVisualLayer>)style.CellValue)
+			foreach (var layer in projectionCellValue.VisualLayers)
 			{
 				var rect = GetLayerRectangle(pixelConverter, layer.Period, clientRectangle);
 				if (!rect.IsEmpty)
 				{
 					var rect2 = rect;
 					rect2.Inflate(1, 1);
-					using (Brush brush = new LinearGradientBrush(rect2, Color.WhiteSmoke, layer.DisplayColor(), 90, false))
+					using (Brush brush = new LinearGradientBrush(rect2, Color.WhiteSmoke, layer.Payload.ConfidentialDisplayColor(projectionCellValue.AssignedPerson), 90, false))
 					{
 						g.FillRectangle(brush, rect);
-						var tipData = new ToolTipData(rect.X, rect.X + rect.Width, layer.DisplayDescription() + "  " + layer.Period.TimePeriod(timeZoneInfo).ToShortTimeString());
+						var tipData = new ToolTipData(rect.X, rect.X + rect.Width, layer.Payload.ConfidentialDescription(projectionCellValue.AssignedPerson) + "  " + layer.Period.TimePeriod(timeZoneInfo).ToShortTimeString());
 						tipDatas.Add(tipData);
 					}
 				}

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Collection;
@@ -106,11 +107,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
                     else
                     {
 						IEnumerable<IVisualLayer> visualLayers = _presenter.GetVisualLayersForPerson(personViewModel, _presenter.CurrentPeriods[e.RowIndex - 1]);
-                        if (!visualLayers.IsEmpty())
+                        if (visualLayers.Any())
                         {
                             e.Style.CellType = "ProjectionCell";
-                            e.Style.CellValue = visualLayers;
-                        }
+							e.Style.CellValue =
+								new ProjectionCellValue {AssignedPerson = personViewModel.ContainedEntity, VisualLayers = visualLayers};
+						}
                     }
 				}
 				if (e.ColIndex == 0 && e.RowIndex > 0)
@@ -140,5 +142,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			gridControlSchedule.InvalidateRange(GridRangeInfo.Table());
 			base.Refresh();
 		}
+	}
+
+	public class ProjectionCellValue
+	{
+		public IPerson AssignedPerson { get; set; }
+		public IEnumerable<IVisualLayer> VisualLayers { get; set; }
 	}
 }
