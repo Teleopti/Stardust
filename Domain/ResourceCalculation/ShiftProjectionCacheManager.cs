@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		ShiftProjectionCache ShiftProjectionCacheFromShift(IEditableShift shift, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod);
 	}
 
-	public class ShiftProjectionCacheManagerLessResources : IShiftProjectionCacheManager
+	public class ShiftProjectionCacheManagerLessResources : IShiftProjectionCacheManager, IDisposable
 	{
 		private readonly IDictionary<IWorkShiftRuleSet, List<ShiftProjectionCache>> _ruleSetListDictionary = new Dictionary<IWorkShiftRuleSet, List<ShiftProjectionCache>>();
 		private readonly IRuleSetDeletedActivityChecker _ruleSetDeletedActivityChecker;
