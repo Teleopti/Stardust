@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<IntraIntervalOptimizer>().As<IIntraIntervalOptimizer>();
+			builder.RegisterType<IntraIntervalOptimizer>();
 			builder.RegisterType<ScheduleDayIntraIntervalIssueExtractor>().SingleInstance();
 			builder.RegisterType<SkillDayIntraIntervalIssueExtractor>().As<ISkillDayIntraIntervalIssueExtractor>().SingleInstance();
 			builder.RegisterType<SkillStaffPeriodEvaluator>().SingleInstance();
