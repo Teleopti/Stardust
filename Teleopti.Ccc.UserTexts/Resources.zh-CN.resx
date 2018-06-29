@@ -14691,13 +14691,13 @@ Teleopti R&amp;D</value>
     <value>选择目标情景：</value>
   </data>
   <data name="SkillNotSupported" xml:space="preserve">
-    <value>请使用 Windows 客户端打开对此技能的预测进行编辑</value>
+    <value>请在 Windows 客户端对此技能进行预测。</value>
   </data>
   <data name="ThisScenarioHasChanges" xml:space="preserve">
     <value>当前情景有未保存的更改</value>
   </data>
   <data name="NewForecastIntro" xml:space="preserve">
-    <value>当前工作量的预测结果</value>
+    <value>当前技能的预测结果</value>
   </data>
   <data name="SkillTypeFilter" xml:space="preserve">
     <value>按技能类别过滤</value>

@@ -20201,7 +20201,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This is the current forecast for this workload.
+        ///   Looks up a localized string similar to This is the current forecast for this skill.
         /// </summary>
         public static string NewForecastIntro {
             get {
@@ -33329,7 +33329,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please open forecast for current skill in Windows client to edit.
+        ///   Looks up a localized string similar to Please use Windows client to forecast this skill..
         /// </summary>
         public static string SkillNotSupported {
             get {

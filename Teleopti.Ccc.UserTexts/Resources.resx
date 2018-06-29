@@ -17386,7 +17386,7 @@ The application will now exit.</value>
     <comment>confirmation message</comment>
   </data>
   <data name="NewForecastIntro" xml:space="preserve">
-    <value>This is the current forecast for this workload</value>
+    <value>This is the current forecast for this skill</value>
   </data>
   <data name="NoForecast" xml:space="preserve">
     <value>No forecast data was found. Try running a forecast for this scenario.</value>
@@ -17466,7 +17466,7 @@ The application will now exit.</value>
     <comment>Text message in web forecast</comment>
   </data>
   <data name="SkillNotSupported" xml:space="preserve">
-    <value>Please open forecast for current skill in Windows client to edit</value>
+    <value>Please use Windows client to forecast this skill.</value>
     <comment>Text message in web forecast</comment>
   </data>
   <data name="SkillTypeFilter" xml:space="preserve">
