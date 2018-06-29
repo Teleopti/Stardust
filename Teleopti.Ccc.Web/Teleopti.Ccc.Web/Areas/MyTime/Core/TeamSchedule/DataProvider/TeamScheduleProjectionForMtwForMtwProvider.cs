@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
 			                     	{
 			                     		Period = l.Period,
 			                     		DisplayColor = l.Payload.ConfidentialDisplayColor(person),
-										ActivityName = l.DisplayDescription().Name
+										ActivityName = l.Payload.ConfidentialDescription(person).Name
 			                     	})
 				.ToArray();
 			var sortDate = isFullDayAbsence(projection)

@@ -15,16 +15,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
   public interface IVisualLayer : ILayer<IPayload>, ICloneableEntity<ILayer<IPayload>>
 	{
 		/// <summary>
-		/// Displays the description.
-		/// </summary>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: rogerkr
-		/// Created date: 2010-02-12
-		/// </remarks>
-		Description DisplayDescription();
-
-		/// <summary>
 		/// Gets a value indicating whether this <see cref="IVisualLayer"/> is overtime.
 		/// Note: I would really like to remove this prop from here
 		/// </summary>

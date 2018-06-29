@@ -117,11 +117,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting
   
             if (visualLayer.DefinitionSet != null)
             {
-                string overtimeText = string.Concat(visualLayer.DisplayDescription().Name, ", ",
+                string overtimeText = string.Concat(visualLayer.Payload.ConfidentialDescription(person).Name, ", ",
                                                     visualLayer.DefinitionSet.Name);
                 if (overtimeText.Length > MAX_NUMBER_OF_CHARACTERS)
                 {
-                    Graphics.DrawString(string.Concat(visualLayer.DisplayDescription().Name, ", "), font, Brush, nameRect, Format);
+                    Graphics.DrawString(string.Concat(visualLayer.Payload.ConfidentialDescription(person).Name, ", "), font, Brush, nameRect, Format);
                     nameRect = new RectangleF(0, top + fontSize + 2, ColumnWidth, fontSize + 2);
                     Graphics.DrawString(visualLayer.DefinitionSet.Name, font, Brush, nameRect, Format);
                 }
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting
                     Graphics.DrawString(overtimeText, font, Brush, nameRect, Format);
             }
             else
-                Graphics.DrawString(visualLayer.DisplayDescription().Name, font, Brush, nameRect, Format);
+                Graphics.DrawString(visualLayer.Payload.ConfidentialDescription(person).Name, font, Brush, nameRect, Format);
 
             float lineStart = timeRect.Top;
             float lineEnd = nameRect.Bottom;

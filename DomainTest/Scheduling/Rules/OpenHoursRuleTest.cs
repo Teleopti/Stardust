@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
 			var expectedErrorMessage = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
 				UserTexts.Resources.BusinessRuleNoSkillsOpenErrorMessage,
-				layer.DisplayDescription(),
+				layer.Payload.ConfidentialDescription(_person),
 				TimeZoneHelper.ConvertFromUtc(layer.Period.StartDateTime, _timeZone),
 				TimeZoneHelper.ConvertFromUtc(layer.Period.EndDateTime, _timeZone));
 

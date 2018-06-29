@@ -576,7 +576,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 				IVisualLayerCollection layerCollection = schedulePart.ProjectionService().CreateProjection();
 				foreach (IVisualLayer layer in layerCollection)
 				{
-					infoText = layer.DisplayDescription().Name;
+					infoText = layer.Payload.ConfidentialDescription(schedulePart.Person).Name;
 					break;
 				}
 				if (layerCollection.Count() == 0)

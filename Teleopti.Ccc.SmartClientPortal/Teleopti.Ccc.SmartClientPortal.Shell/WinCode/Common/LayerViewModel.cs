@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 			get
 			{
 				var vs = Layer as IVisualLayer;
-				return vs == null ? Layer.Payload.ConfidentialDescription(SchedulePart.Person).Name : vs.DisplayDescription().Name;
+				return vs == null ? Layer.Payload.ConfidentialDescription(SchedulePart.Person).Name : vs.Payload.ConfidentialDescription(SchedulePart.Person).Name;
 			}
 		}
 

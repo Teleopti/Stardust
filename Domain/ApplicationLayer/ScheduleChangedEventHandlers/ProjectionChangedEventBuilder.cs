@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 				var isPayloadAbsence = (layer.Payload is IAbsence);
 				var description = isPayloadAbsence
 					? (layer.Payload as IAbsence).Description
-					: layer.DisplayDescription();
+					: layer.Payload.ConfidentialDescription(person);
 				var contractTime = projection.ContractTime(layer.Period);
 				var overTime = projection.Overtime(layer.Period);
 				var paidTime = projection.PaidTime(layer.Period);

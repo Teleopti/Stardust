@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 						? (isAbsenceConfidential && !canViewConfidential
 							? ConfidentialPayloadValues.Description
 							: ((IAbsence)layer.Payload).Description)
-						: layer.DisplayDescription();
+						: layer.Payload.ConfidentialDescription(person);
 					var matchedPersonalLayers = _projectionHelper.GetMatchedPersonalShiftLayers(scheduleDay, layer);
 					if (_projectionHelper.GetMatchedShiftLayerIds(scheduleDay, layer).Count > 1
 						&& matchedPersonalLayers.Count > 0)
@@ -293,7 +293,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 						? (isAbsenceConfidential && !isPermittedToViewConfidential
 							? ConfidentialPayloadValues.Description
 							: ((IAbsence)layer.Payload).Description)
-						: layer.DisplayDescription();
+						: layer.Payload.ConfidentialDescription(person);
 					var expectedTime = string.Format(CultureInfo.CurrentCulture, "{0} - {1}",
 						startDateTimeInUserTimeZone.ToShortTimeString(), endDateTimeInUserTimeZone.ToShortTimeString());
 

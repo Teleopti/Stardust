@@ -31,11 +31,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         public IAbsence HighestPriorityAbsence { get; set; }
         public IActivity HighestPriorityActivity { get; set; }
 
-        public Description DisplayDescription()
-        {
-			return Payload.ConfidentialDescription(Person);
-        }
-
         internal TimeSpan ThisLayerContractTime()
         {
             return hasContractTime() ? Period.ElapsedTime() : TimeSpan.Zero;

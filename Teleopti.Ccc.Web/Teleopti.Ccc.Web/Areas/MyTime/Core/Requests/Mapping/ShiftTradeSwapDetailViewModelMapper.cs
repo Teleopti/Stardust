@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				let length = visualLayer.Period.ElapsedTime().TotalMinutes
 				select new ShiftTradeEditScheduleLayerViewModel
 				{
-					Payload = visualLayer.DisplayDescription().Name,
+					Payload = visualLayer.Payload.ConfidentialDescription(person).Name,
 					LengthInMinutes = (int)length,
 					Color = ColorTranslator.ToHtml(visualLayer.Payload.ConfidentialDisplayColor(person)),
 					TitleTime = createTitle(startDate, endDate),

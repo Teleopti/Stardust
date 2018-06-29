@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
                     {
                         g.FillRectangle(brush, upperRect);
                         var tipData = new ToolTipData(rect.X, rect.X + rect.Width,
-                                                      layer.DisplayDescription() + "  " +
+                                                      layer.Payload.ConfidentialDescription(revisionDisplayRow.ScheduleDay.Person) + "  " +
                                                       layer.Period.TimePeriod(TimeZoneHelper.CurrentSessionTimeZone).ToShortTimeString());
                         tipDatas.Add(tipData);
                     }

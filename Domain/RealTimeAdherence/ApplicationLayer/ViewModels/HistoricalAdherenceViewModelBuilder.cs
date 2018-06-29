@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 					from layer in layers
 					select new HistoricalAdherenceActivityViewModel
 					{
-						Name = layer.DisplayDescription().Name,
+						Name = layer.Payload.ConfidentialDescription(person).Name,
 						Color = ColorTranslator.ToHtml(layer.Payload.ConfidentialDisplayColor(person)),
 						StartTime = formatForUser(layer.Period.StartDateTime),
 						EndTime = formatForUser(layer.Period.EndDateTime),

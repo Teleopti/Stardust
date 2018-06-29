@@ -30,25 +30,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
-		public void VerifyPersonIsSentToDisplayMethods()
-		{
-			MockRepository mocks = new MockRepository();
-			var act = mocks.StrictMock<IActivity>();
-			target = (VisualLayer)layerFactory.CreateShiftSetupLayer(act, period, person);
-
-			Description d = new Description("sdfsdf");
-			using (mocks.Record())
-			{
-				Expect.Call(act.ConfidentialDescription(target.Person))
-					.Return(d);
-			}
-			using (mocks.Playback())
-			{
-				Assert.AreEqual(d, target.DisplayDescription());
-			}
-		}
-
-		[Test]
 		public void CanCreate()
 		{
 			Assert.IsNotNull(target);

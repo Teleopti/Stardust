@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 					Summary =
 						TimeHelper.GetLongHourMinuteTimeString(visualLayer.Period.ElapsedTime(),
 							CultureInfo.CurrentUICulture),
-					Title = visualLayer.DisplayDescription().Name,
+					Title = visualLayer.Payload.ConfidentialDescription(person).Name,
 					TimeSpan = visualLayer.Period.TimePeriod(timezone).ToShortTimeString(),
 					StartTime = visualLayer.Period.StartDateTimeLocal(timezone),
 					EndTime = visualLayer.Period.EndDateTimeLocal(timezone),
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 					Summary =
 						TimeHelper.GetLongHourMinuteTimeString(visualLayer.Period.ElapsedTime(),
 							CultureInfo.CurrentUICulture),
-					Title = visualLayer.DisplayDescription().Name,
+					Title = visualLayer.Payload.ConfidentialDescription(person).Name,
 					TimeSpan = visualLayer.Period.TimePeriod(timezone).ToShortTimeString(),
 					StartTime = visualLayer.Period.StartDateTimeLocal(timezone),
 					EndTime = visualLayer.Period.EndDateTimeLocal(timezone),

@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 			                 let length = visualLayer.Period.ElapsedTime().TotalMinutes
 			                 select new AsmLayer
 			                        	{														    
-			                        		Payload = visualLayer.DisplayDescription().Name,
+			                        		Payload = visualLayer.Payload.ConfidentialDescription(_loggedOnUser.CurrentUser()).Name,
 											StartMinutesSinceAsmZero = getStartMinutesSinceAsmZero(dstJudgement, startDate,asmZero),
 			                        		LengthInMinutes = length,
 			                        		Color = ColorTranslator.ToHtml(visualLayer.Payload.ConfidentialDisplayColor(_loggedOnUser.CurrentUser())),

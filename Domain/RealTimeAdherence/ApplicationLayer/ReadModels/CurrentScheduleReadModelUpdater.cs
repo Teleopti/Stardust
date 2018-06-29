@@ -149,10 +149,10 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels
 								BelongsToDate = belongsToDate,
 								DisplayColor = layer.Payload.ConfidentialDisplayColor(x).ToArgb(),
 								EndDateTime = layer.Period.EndDateTime,
-								Name = layer.DisplayDescription().Name,
+								Name = layer.Payload.ConfidentialDescription(x).Name,
 								PayloadId = layer.Payload.UnderlyingPayload.Id.GetValueOrDefault(),
 								PersonId = x.Id.GetValueOrDefault(),
-								ShortName = layer.DisplayDescription().ShortName,
+								ShortName = layer.Payload.ConfidentialDescription(x).ShortName,
 								StartDateTime = layer.Period.StartDateTime
 							})
 							.ToArray();

@@ -63,7 +63,7 @@ namespace Teleopti.Wfm.Api.Query
 					Date = p.DateOnlyAsPeriod.DateOnly.Date,
 					Shift = p.ProjectionService().CreateProjection().Select(l => new ShiftLayerDto
 					{
-						Name = l.DisplayDescription().Name,
+						Name = l.Payload.ConfidentialDescription(person).Name,
 						StartTime = l.Period.StartDateTime,
 						EndTime = l.Period.EndDateTime,
 						PayloadId = l.Payload.Id.GetValueOrDefault()
