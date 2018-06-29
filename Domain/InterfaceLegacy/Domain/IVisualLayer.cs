@@ -31,11 +31,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <returns></returns>
 		TimeSpan WorkTime();
 
-		/// <summary>
-		/// Gets the person.
-		/// </summary>
-		IPerson Person { get; }
-
 		IVisualLayer CloneWithNewPeriod(DateTimePeriod newPeriod);
 	}
 }

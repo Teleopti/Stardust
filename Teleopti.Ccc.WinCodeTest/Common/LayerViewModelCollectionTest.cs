@@ -257,8 +257,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void VerifyChangingTheIntervalChangesAllTheModelsInterval()
         {
             TimeSpan interval = TimeSpan.FromMinutes(5);
-            ILayerViewModel model1 = new MainShiftLayerViewModel(new VisualLayer(new Activity("df"),new DateTimePeriod(), new Activity("sdf"), null  ), new Person()) { Interval = TimeSpan.FromMinutes(12) };
-						ILayerViewModel model2 = new MainShiftLayerViewModel(new VisualLayer(new Activity("df"), new DateTimePeriod(), new Activity("sdf"), null), new Person()) { Interval = TimeSpan.FromMinutes(14) };
+            ILayerViewModel model1 = new MainShiftLayerViewModel(new VisualLayer(new Activity("df"),new DateTimePeriod(), new Activity("sdf")  ), new Person()) { Interval = TimeSpan.FromMinutes(12) };
+						ILayerViewModel model2 = new MainShiftLayerViewModel(new VisualLayer(new Activity("df"), new DateTimePeriod(), new Activity("sdf")), new Person()) { Interval = TimeSpan.FromMinutes(14) };
             target.Add(model1);
             target.Add(model2);
             target.Interval = interval;
@@ -273,7 +273,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             IScheduleDay newPart = mocks.StrictMock<IScheduleDay>();
             IProjectionService projectionService = mocks.StrictMock<IProjectionService>();
             IScheduleDay part = new SchedulePartFactoryForDomain().CreatePartWithMainShift();
-            IVisualLayerCollection newProjection = VisualLayerCollectionFactory.CreateForWorkShift(part.Person, TimeSpan.FromHours(8), TimeSpan.FromHours(12));
+            IVisualLayerCollection newProjection = VisualLayerCollectionFactory.CreateForWorkShift(TimeSpan.FromHours(8), TimeSpan.FromHours(12));
             target.CreateViewModels(part);
             IList<ILayerViewModel> projectionLayers = target.Where(l => l.IsProjectionLayer).ToList();
             IList<ILayerViewModel> deletedLayers = new List<ILayerViewModel>(); //For holding the deleted layers

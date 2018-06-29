@@ -48,9 +48,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 			_visualLayerFactory = new VisualLayerFactory();
 			_shiftPeriod = new DateTimePeriod(new DateTime(2010, 1, 1, 9, 30, 0, DateTimeKind.Utc),
 															 new DateTime(2010, 1, 1, 11, 0, 0, DateTimeKind.Utc));
-			_visualLayer1 = _visualLayerFactory.CreateShiftSetupLayer(_mejeriVaror, _shiftPeriod,_person1);
+			_visualLayer1 = _visualLayerFactory.CreateShiftSetupLayer(_mejeriVaror, _shiftPeriod);
 			_layerCollection1 = new VisualLayerCollection(new List<IVisualLayer> { _visualLayer1 }, new ProjectionPayloadMerger());
-			_visualLayer2 = _visualLayerFactory.CreateShiftSetupLayer(_lunch, _shiftPeriod, _person1);
+			_visualLayer2 = _visualLayerFactory.CreateShiftSetupLayer(_lunch, _shiftPeriod);
 			_layerCollection2 = new VisualLayerCollection(new List<IVisualLayer> { _visualLayer2 }, new ProjectionPayloadMerger());
 
 			_personSkillProvider = new PersonSkillProvider();

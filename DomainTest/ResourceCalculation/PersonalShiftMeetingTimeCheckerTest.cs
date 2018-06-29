@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var period = new DateTimePeriod(2014, 1, 1, 2014, 1, 2);
 			var meetingPeriod = new DateTimePeriod(2014, 1, 1, 10, 2014, 1, 1, 11);
 			var activity = new Activity("activity"){AllowOverwrite = false};
-			var visualLayer = new VisualLayer(activity, period, activity, _person);
+			var visualLayer = new VisualLayer(activity, period, activity);
 			var visualLayers = new List<IVisualLayer> {visualLayer};
 			var visualLayerCollection = mock.StrictMock<IVisualLayerCollection>();
 	

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Drawing;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -17,7 +15,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		private DateTimePeriod period;
 		private IActivity activity;
 		private IVisualLayerFactory layerFactory;
-		private IPerson person;
 
 		[SetUp]
 		public void Setup()
@@ -25,8 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			layerFactory = new VisualLayerFactory();
 			period = new DateTimePeriod(2000, 1, 1, 2001, 1, 1);
 			activity = ActivityFactory.CreateActivity("df");
-			person = PersonFactory.CreatePerson();
-			target = (VisualLayer)layerFactory.CreateShiftSetupLayer(activity, period, person);
+			target = (VisualLayer)layerFactory.CreateShiftSetupLayer(activity, period);
 		}
 
 		[Test]
@@ -42,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyUnderlyingActivityMustNotBeNull()
 		{
-			Assert.Throws<ArgumentNullException>(() => layerFactory.CreateShiftSetupLayer(null, period, person));
+			Assert.Throws<ArgumentNullException>(() => layerFactory.CreateShiftSetupLayer(null, period));
 		}
 
 		[Test]

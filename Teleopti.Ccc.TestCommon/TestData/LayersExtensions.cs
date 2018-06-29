@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.TestCommon.TestData
 	{
 		public static IVisualLayerCollection CreateProjection(this IEnumerable<MainShiftLayer> layers)
 		{
-			var projSvc = new VisualLayerProjectionService(null);
+			var projSvc = new VisualLayerProjectionService();
 			projSvc.Add(layers, new VisualLayerFactory());
 			return projSvc.CreateProjection();
 		}

@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		private static IVisualLayer cloneLayerWithNewPeriod(VisualLayer orgLayer, DateTimePeriod newPeriod)
 		{
-			return new VisualLayer(orgLayer.Payload, newPeriod, orgLayer.HighestPriorityActivity, orgLayer.Person)
+			return new VisualLayer(orgLayer.Payload, newPeriod, orgLayer.HighestPriorityActivity)
 			{
 				HighestPriorityAbsence = orgLayer.HighestPriorityAbsence,
 				DefinitionSet = orgLayer.DefinitionSet

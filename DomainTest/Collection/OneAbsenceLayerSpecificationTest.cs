@@ -14,12 +14,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
     {
         private ISpecification<IVisualLayerCollection> target;
         private IVisualLayerFactory visualLayerFactory;
-    	private IPerson person;
 
     	[SetUp]
         public void Setup()
         {
-        	person = PersonFactory.CreatePerson();
             target = VisualLayerCollectionSpecification.OneAbsenceLayer;
             visualLayerFactory = new VisualLayerFactory();
         }
@@ -55,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
         [Test]
         public void VerifyOneActivityLayerReturnFalse()
         {
-            IVisualLayer actLayer = visualLayerFactory.CreateShiftSetupLayer(new Activity("sdf"), new DateTimePeriod(2000, 1, 1, 2001, 1, 1),person);
+            IVisualLayer actLayer = visualLayerFactory.CreateShiftSetupLayer(new Activity("sdf"), new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
             IList<IVisualLayer> vList = new List<IVisualLayer> { actLayer };
             Assert.IsFalse(target.IsSatisfiedBy(new VisualLayerCollection(vList, new ProjectionPayloadMerger())));
         }
@@ -70,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 	    private IVisualLayer correctAbsenceLayer()
 	    {
 		    var actLayer = visualLayerFactory.CreateShiftSetupLayer(new Activity("sdf"),
-			    new DateTimePeriod(2000, 1, 1, 2001, 1, 1), person);
+			    new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 		    return visualLayerFactory.CreateAbsenceSetupLayer(new Absence(), actLayer,
 			    new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 	    }

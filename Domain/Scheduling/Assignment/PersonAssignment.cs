@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual IProjectionService ProjectionService()
 		{
-			var proj = new VisualLayerProjectionService(Person);
+			var proj = new VisualLayerProjectionService();
 			if (hasProjection())
 			{
 				proj.Add(MainActivities(), new VisualLayerFactory());

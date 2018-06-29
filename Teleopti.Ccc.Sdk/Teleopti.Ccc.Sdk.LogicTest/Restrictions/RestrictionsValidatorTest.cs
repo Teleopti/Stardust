@@ -161,9 +161,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             IAbsence payload = AbsenceFactory.CreateAbsence("abs");
             payload.Description = new Description("borta", "bra");
             payload.DisplayColor = Color.Green;
-
-            IPerson somePerson = PersonFactory.CreatePerson("Kalle", "Kula");
-            IVisualLayerCollection visualLayerCollection = VisualLayerCollectionFactory.CreateForAbsence(somePerson, TimeSpan.FromHours(5), TimeSpan.FromHours(17));
+            IVisualLayerCollection visualLayerCollection = VisualLayerCollectionFactory.CreateForAbsence(TimeSpan.FromHours(5), TimeSpan.FromHours(17));
             var projService = _mocks.StrictMock<IProjectionService>();
             var partWithFullDayAbcence = _mocks.StrictMock<IScheduleDay>();
             IEnumerable<IPersistableScheduleData> data = new List<IPersistableScheduleData>();

@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.TestCommon
 			return
 				ProjectionStub(new List<IVisualLayer>
 					{
-						new VisualLayer(new Activity("for test"), period, new Activity("also for test"), new Person())
+						new VisualLayer(new Activity("for test"), period, new Activity("also for test"))
 					});
 		}
 
@@ -248,7 +248,6 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			var visualLayer = MockRepository.GenerateMock<IVisualLayer>();
 			visualLayer.Stub(x => x.Period).Return(period);
-			visualLayer.Stub(x => x.Person).Return(person);
 			visualLayer.Stub(x => x.Payload).Return(new Activity());
 			return visualLayer;
 		}

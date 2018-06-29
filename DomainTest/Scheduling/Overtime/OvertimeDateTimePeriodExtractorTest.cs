@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		private IVisualLayer _visualLayerFirst;
 		private IMultiplicatorDefinitionSet _multiplicatorDefinitionSet;
 		private IList<IVisualLayer> _visualLayers;
-		private IPerson _person;
 		private IList<IOvertimeSkillIntervalData> _overtimeSkillIntervalDatas;
 
 		[SetUp]
@@ -42,12 +41,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			_visualLayerCollection = _mock.StrictMock<IVisualLayerCollection>();
 
 			_multiplicatorDefinitionSet = _mock.StrictMock<IMultiplicatorDefinitionSet>();
-			_person = PersonFactory.CreatePerson("name");
 			var activity = ActivityFactory.CreateActivity("activity");
 			_visualLayerLast = new VisualLayer(activity, new DateTimePeriod(_shiftEndingTime.AddMinutes(-15), _shiftEndingTime),
-				activity, _person);
+				activity);
 			_visualLayerFirst = new VisualLayer(activity, new DateTimePeriod(_shiftStartTime, _shiftStartTime.AddMinutes(15)),
-				activity, _person);
+				activity);
 			_visualLayers = new List<IVisualLayer> {_visualLayerFirst, _visualLayerLast};
 			var overtimeSkillIntervalData =
 				new OvertimeSkillIntervalData(new DateTimePeriod(_shiftStartTime.AddHours(-5), _shiftEndingTime.AddHours(5)), 0, 0);

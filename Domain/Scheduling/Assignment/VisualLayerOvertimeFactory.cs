@@ -6,11 +6,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
     public class VisualLayerOvertimeFactory : VisualLayerFactory
     {
-        public override IVisualLayer CreateShiftSetupLayer(IActivity activity, DateTimePeriod period, IPerson person)
+        public override IVisualLayer CreateShiftSetupLayer(IActivity activity, DateTimePeriod period)
         {
-            VisualLayer ret = new VisualLayer(activity, period, activity,person);
-            ret.DefinitionSet = new MultiplicatorDefinitionSet("sdf", MultiplicatorType.Overtime);
-            return ret;
+			var ret = new VisualLayer(activity, period, activity)
+			{
+				DefinitionSet = new MultiplicatorDefinitionSet("sdf", MultiplicatorType.Overtime)
+			};
+			return ret;
         }
 
     }

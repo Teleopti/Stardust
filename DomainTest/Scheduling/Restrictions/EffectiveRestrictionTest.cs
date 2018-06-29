@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		private IWorkShiftProjection _info5;
 
         private IActivity _activity;
-    	private IPerson _person;
 		private ICommonActivity _commonActivity;
 
 		[SetUp]
@@ -47,7 +46,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             _startTimeLimitation = new StartTimeLimitation();
             _endTimeLimitation = new EndTimeLimitation();
             _workTimeLimitation = new WorkTimeLimitation();
-        	_person = PersonFactory.CreatePerson();
             _shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Test");
 			_shiftCategory.SetId(Guid.NewGuid());
 
@@ -802,10 +800,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             var factory = new VisualLayerFactory();
             var layer1 = factory.CreateShiftSetupLayer(activity2,
                                          new DateTimePeriod(new DateTime(2009, 2, 2, 8, 0, 0, DateTimeKind.Utc),
-                                                            new DateTime(2009, 2, 2, 11, 0, 0, DateTimeKind.Utc)),_person);
+                                                            new DateTime(2009, 2, 2, 11, 0, 0, DateTimeKind.Utc)));
             var layerLunch = factory.CreateShiftSetupLayer(activity,
                                          new DateTimePeriod(new DateTime(2009, 2, 2, 12, 0, 0, DateTimeKind.Utc),
-                                                            new DateTime(2009, 2, 2, 13, 0, 0, DateTimeKind.Utc)),_person);
+                                                            new DateTime(2009, 2, 2, 13, 0, 0, DateTimeKind.Utc)));
 
 			var layerCollection = new WorkShiftProjectionLayer[] { };
             Assert.IsFalse(_target.VisualLayerCollectionSatisfiesActivityRestriction(dateOnly, timeZoneInfo, layerCollection));

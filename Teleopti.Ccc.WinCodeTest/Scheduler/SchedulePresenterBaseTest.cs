@@ -344,7 +344,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 new IPersonMeeting[0]).Repeat.AtLeastOnce();
             Expect.Call(schedulePart.BusinessRuleResponseCollection).Return(
                 new List<IBusinessRuleResponse>()).Repeat.AtLeastOnce();
-            Expect.Call(schedulePart.ProjectionService()).Return(new VisualLayerProjectionService(person1)).Repeat.Any();
+            Expect.Call(schedulePart.ProjectionService()).Return(new VisualLayerProjectionService()).Repeat.Any();
             Expect.Call(_viewBase.RowHeaders).Return(1).Repeat.AtLeastOnce();
             Expect.Call(_viewBase.ColHeaders).Return(1).Repeat.AtLeastOnce();
             _viewBase.SetCellBackTextAndBackColor(null, _date, false, false, null);

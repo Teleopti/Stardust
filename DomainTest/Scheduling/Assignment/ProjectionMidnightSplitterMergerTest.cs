@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	{
 		private IProjectionMerger target;
 		private IActivity activity;
-		private IPerson person;
 		private IVisualLayerFactory visualLayerFactory;
 		private TimeSpan tzDiffTime;
 
@@ -26,7 +25,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			tzDiffTime = userZone.BaseUtcOffset;
 			target = new ProjectionMidnightSplitterMerger(userZone);
             activity = ActivityFactory.CreateActivity("f");
-            person = PersonFactory.CreatePerson();
 			visualLayerFactory = new VisualLayerFactory();
 		}
 
@@ -108,25 +106,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			}
 		}
 
-        [Test]
-        public void ShouldKeepPersonWhenSplit()
-        {
-			var start = new DateTime(2000, 1, 1, 20, 0, 0, DateTimeKind.Utc);
-            var end = new DateTime(2000, 1, 2, 7, 0, 0, DateTimeKind.Utc);
-            var layer = createLayer(new DateTimePeriod(start, end));
-
-            var layers = new IVisualLayer[] { layer };
-
-            var res = target.MergedCollection(layers);
-            res.Length.Should().Be.EqualTo(2);
-            foreach (VisualLayer visualLayer in res)
-            {
-                visualLayer.Person.Should().Not.Be.Null();
-                visualLayer.Person
-                    .Should().Be.SameInstanceAs(person);
-            }
-        }
-
 		[Test]
 		public void ShouldKeepAbsenceWhenSplit()
 		{
@@ -166,7 +145,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 		private VisualLayer createLayer(DateTimePeriod period)
 		{
-			return (VisualLayer)visualLayerFactory.CreateShiftSetupLayer(activity, period, person);
+			return (VisualLayer)visualLayerFactory.CreateShiftSetupLayer(activity, period);
 		}
 
 	}

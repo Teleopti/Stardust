@@ -286,12 +286,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             activity.InWorkTime = true;
             activity.AllowOverwrite = true;
             var layerBefore = new VisualLayer(activity, wholePeriod,
-                                activity, null);
+                                activity);
             var layerLunch =
                 new VisualLayer(lunchActivity, lunch,
-                                lunchActivity, null);
+                                lunchActivity);
             var layerAfter = new VisualLayer(activity , wholePeriod ,
-                                activity , null); 
+                                activity); 
 
             var layers = new List<IVisualLayer> { layerBefore , layerLunch, layerAfter};
             var layerCollection = _mocks.StrictMock<IVisualLayerCollection>();
@@ -331,12 +331,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             activity.InWorkTime = true;
             activity.AllowOverwrite = true ;
             var layerBefore = new VisualLayer(activity, wholePeriod,
-                                activity, null);
+                                activity);
             var layerLunch =
                 new VisualLayer(lunchActivity, lunch,
-                                lunchActivity, null);
+                                lunchActivity);
             var layerAfter = new VisualLayer(activity, wholePeriod,
-                                activity, null);
+                                activity);
 
             var layers = new List<IVisualLayer> { layerBefore, layerLunch, layerAfter };
             var layerCollection = _mocks.StrictMock<IVisualLayerCollection>();

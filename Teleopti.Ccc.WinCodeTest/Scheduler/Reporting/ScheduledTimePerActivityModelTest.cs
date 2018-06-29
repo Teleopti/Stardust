@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 			_scheduleDay = _mockRepository.StrictMock<IScheduleDay>();
 			_projectionService = _mockRepository.StrictMock<IProjectionService>();
 			_activity = new Activity("activity");
-			_visualLayer = new VisualLayer(_payload, _period , _activity ,_person);
+			_visualLayer = new VisualLayer(_payload, _period , _activity);
 			_visualLayers = new List<IVisualLayer>{_visualLayer};
 			_visualLayerCollection = _mockRepository.StrictMock<IVisualLayerCollection>();
 			_dateOnlyAsDateTimePeriod = _mockRepository.StrictMock<IDateOnlyAsDateTimePeriod>();
