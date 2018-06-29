@@ -404,6 +404,66 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
+		public void ShouldNotGetImportInfoForSkillForMidnightInterval()
+		{
+			var skillId1 = persistSkill();
+			Now.Is("2017-06-29 08:00");
+			var person = PersonFactory.CreatePerson("Magnus", "Wedmark");
+			PersonRepository.Add(person);
+			CurrentUnitOfWork.Current().PersistAll();
+
+			var combinationResourcesBpo = new List<ImportSkillCombinationResourceBpo>()
+			{
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 29, 22, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 29, 22, 15, 0),
+					Resources = 5.5,
+					Source = "TPSWEDEN",
+					SkillIds = new List<Guid>{skillId1},
+					ImportFileName = "20170601_TPSWEDEN",
+					PersonId = person.Id.GetValueOrDefault()
+
+				}
+			};
+			SkillCombinationResourceRepository.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
+			var fromDate = new DateTime(2017, 06, 28,22,0,0,DateTimeKind.Utc);
+			var bpoImportInfoModels = Target.GetBpoImportInfoForSkill(skillId1, fromDate, fromDate.AddDays(1)).ToList();
+
+			bpoImportInfoModels.Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldGetImportInfoForSkillForMidnightInterval()
+		{
+			var skillId1 = persistSkill();
+			Now.Is("2017-06-29 08:00");
+			var person = PersonFactory.CreatePerson("Magnus", "Wedmark");
+			PersonRepository.Add(person);
+			CurrentUnitOfWork.Current().PersistAll();
+
+			var combinationResourcesBpo = new List<ImportSkillCombinationResourceBpo>()
+			{
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 29, 22, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 29, 22, 15, 0),
+					Resources = 5.5,
+					Source = "TPSWEDEN",
+					SkillIds = new List<Guid>{skillId1},
+					ImportFileName = "20170601_TPSWEDEN",
+					PersonId = person.Id.GetValueOrDefault()
+
+				}
+			};
+			SkillCombinationResourceRepository.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
+			var fromDate = new DateTime(2017, 06, 29, 22, 0, 0, DateTimeKind.Utc);
+			var bpoImportInfoModels = Target.GetBpoImportInfoForSkill(skillId1, fromDate, fromDate.AddDays(1)).ToList();
+
+			bpoImportInfoModels.Count.Should().Be.EqualTo(1);
+		}
+
+		[Test]
 		public void ShouldGetImportInfoForSkillGroup()
 		{
 			var skillId1 = persistSkill();

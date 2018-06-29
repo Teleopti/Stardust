@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var holder = _mocks.StrictMock<ISkillStaffPeriodHolder>();
 
 			var period = new DateTimePeriod(_date, _date.AddMinutes(30));
-			var layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period, _person);
+			var layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period);
 			IList<IVisualLayer> layers = new List<IVisualLayer> { layer };
 			IVisualLayerCollection layerCollection = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var holder = _mocks.StrictMock<ISkillStaffPeriodHolder>();
 
 			var period = new DateTimePeriod(_date, _date.AddMinutes(30));
-			var layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period, _person);
+			var layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period);
 
 			IList<IVisualLayer> layers = new List<IVisualLayer> { layer };
 			IVisualLayerCollection layerCollection = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
 			var expectedErrorMessage = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
 				UserTexts.Resources.BusinessRuleNoSkillsOpenErrorMessage,
-				layer.DisplayDescription(),
+				layer.Payload.ConfidentialDescription(_person),
 				TimeZoneHelper.ConvertFromUtc(layer.Period.StartDateTime, _timeZone),
 				TimeZoneHelper.ConvertFromUtc(layer.Period.EndDateTime, _timeZone));
 
@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			activity.RequiresSkill = false;
 
 			var period = new DateTimePeriod(_date, _date.AddMinutes(30));
-			var layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period, _person);
+			var layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period);
 			IList<IVisualLayer> layers = new List<IVisualLayer> { layer };
 			IVisualLayerCollection layerCollection = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var holder = _mocks.StrictMock<ISkillStaffPeriodHolder>();
 
 			var period = new DateTimePeriod(_date, _date.AddMinutes(30));
-			var layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period, _person);
+			var layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period);
 			IList<IVisualLayer> layers = new List<IVisualLayer> { layer };
 			IVisualLayerCollection layerCollection = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
@@ -282,7 +282,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			IList<IPersonSkill> personSkills = new List<IPersonSkill>();
 
 			var period = new DateTimePeriod(_date, _date.AddMinutes(30));
-			var layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period, _person);
+			var layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period);
 			IList<IVisualLayer> layers = new List<IVisualLayer> { layer };
 			IVisualLayerCollection layerCollection = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 
@@ -316,7 +316,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var holder = _mocks.StrictMock<ISkillStaffPeriodHolder>();
 
 			var period = new DateTimePeriod(_date, _date.AddMinutes(30));
-			var layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period, _person);
+			var layer = _visualLayerFactory.CreateShiftSetupLayer(activity, period);
 			IList<IVisualLayer> layers = new List<IVisualLayer> { layer };
 			IVisualLayerCollection layerCollection = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
 

@@ -41,7 +41,7 @@ WebByPassDefaultPermissionCheck_37984 = true
 RTA_KillFattyIntradayUntilItDies_74939 = true
 RTA_RestrictModifyAdherenceWithPermission_74898 = true
 RTA_EasilySpotLateForWork_75668 = true
-RTA_HangfirePerformanceStats_76139 = RC
+RTA_HangfireStatistics_76139_76373 = RC
 
 # Dumplings, can any of these be removed? #
 WfmTeamSchedule_ShowStaffingInfo_45206 = true
@@ -104,7 +104,7 @@ ResourcePlanner_UseErlangAWithFinitePatience_47738 = true
 ResourcePlanner_SpeedUpEvents_48769 = true #batch deletes of dates - can be deleted early
 ResourcePlanner_SpeedUpEvents_74996 = true #caching different data - can be deleted early
 ResourcePlanner_SpeedUpEvents_75415 = true #restructure of events - dont remove toggle too early
-ResourcePlanner_LessResourcesXXL_74915 = false
+ResourcePlanner_LessResourcesXXL_74915 = DEV
 
 # Bugs&Roses #
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production

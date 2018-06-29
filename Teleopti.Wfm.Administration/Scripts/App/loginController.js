@@ -36,7 +36,7 @@
 		//checked if has cookie
 		var cookie = $cookies.getObject('WfmAdminAuth');
 		var token = cookie ? cookie.tokenKey : null;
-		var RTA_HangfirePerformanceStats_76139 = false;
+		var RTA_HangfireStatistics_76139_76373 = false;
 
 	    vm.user = cookie ? cookie.user : null;
 		vm.shouldShowEtl = false;
@@ -48,17 +48,17 @@
 
 		$http.get("./Toggle/IsEnabled",
 				{
-					params: { toggle: "RTA_HangfirePerformanceStats_76139" }
+					params: { toggle: "RTA_HangfireStatistics_76139_76373" }
 				}, 
 				tokenHeaderService.getHeaders())
 			.then(function(data) {
-				RTA_HangfirePerformanceStats_76139 = data.data;
+				RTA_HangfireStatistics_76139_76373 = data.data;
 
 				$scope.menuItems.push(
 					{
 						text: "Hangfire Monitoring",
 						link: "#/HangfireMonitoring",
-						toggle: !RTA_HangfirePerformanceStats_76139
+						toggle: !RTA_HangfireStatistics_76139_76373
 					}
 				);
 
@@ -66,7 +66,7 @@
 					{
 						text: "Hangfire Statistics",
 						link: "#/HangfirePerformanceStats",
-						toggle: RTA_HangfirePerformanceStats_76139
+						toggle: RTA_HangfireStatistics_76139_76373
 					}
 				);
 			}).then(function() {

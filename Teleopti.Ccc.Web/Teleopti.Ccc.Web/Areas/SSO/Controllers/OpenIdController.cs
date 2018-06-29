@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 			_formsAuthentication = formsAuthentication;
 		}
 
+		[HttpGet]
 		public ActionResult Identifier()
 		{
 			if (Request.AcceptTypes != null && Request.AcceptTypes.Contains("application/xrds+xml"))
@@ -52,6 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 
 		[ValidateInput(false)]
 		[TenantUnitOfWork]
+		[AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post | HttpVerbs.Head)]
 		[NoTenantAuthentication]
 		public virtual ActionResult Provider()
 		{
@@ -97,6 +99,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 			return Request.HttpMethod.Equals(HttpMethod.Head.Method, StringComparison.InvariantCultureIgnoreCase);
 		}
 
+		[HttpGet]
 		public ViewResult SignIn()
 		{
 			ViewBag.LayoutBase = _layoutBaseViewModelFactory.CreateLayoutBaseViewModel();
@@ -104,6 +107,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 			return View("SignIn");
 		}
 
+		[HttpGet]
 		public ActionResult AskUser()
 		{
 			return View();

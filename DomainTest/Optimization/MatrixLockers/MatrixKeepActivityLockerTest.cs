@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.MatrixLockers
 		private IScheduleDayPro _scheduleDayPro;
 		private IScheduleDayPro[] _unlockedScheduleDayPros;
 		private IScheduleDay _scheduleDay;
-		private IPerson _person;
 		private DateTimePeriod _period;
 		private IProjectionService _projectionService;
 		private IVisualLayerCollection _visualLayerCollection;
@@ -44,10 +43,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.MatrixLockers
 			_scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
 			_unlockedScheduleDayPros = new []{_scheduleDayPro};
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
-			_person = new Person();
 			_period = new DateTimePeriod(new DateTime(2014, 1, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2014, 1, 1, 0, 0, 0, DateTimeKind.Utc));
 			_projectionService = _mock.StrictMock<IProjectionService>();
-			_visualLayer = new VisualLayer(_activity, _period, _activity,_person);
+			_visualLayer = new VisualLayer(_activity, _period, _activity);
 			_visualLayerCollection = new VisualLayerCollection(new List<IVisualLayer>{_visualLayer}, new ProjectionPayloadMerger());
 		}
 

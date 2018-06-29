@@ -28,12 +28,6 @@ Background:
 Scenario: Search for a selection of users
 	When Searching for 'le'
 	Then I should see all matches for 'le'
-	And I should see columns
-	| Columns		|
-	| First name	|
-	| Last name		|
-	| Roles			|
-	| Site/Team		|
 
 
 

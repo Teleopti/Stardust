@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory.ScheduleReporting
             }
             else
             {
-                Graphics.DrawString(visualLayer.DisplayDescription().Name, font, Brush, nameRect, Format);
+                Graphics.DrawString(visualLayer.Payload.ConfidentialDescription(agent).Name, font, Brush, nameRect, Format);
             }
 
             float lineStart = timeRect.Top;

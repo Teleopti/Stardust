@@ -32,9 +32,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			var activity = ActivityFactory.CreateActivity("activity");
 			var skill = SkillFactory.CreateSkill("skill");
 			skill.Activity = activity;
-			var person = PersonFactory.CreatePerson("person");
-			var visualLayer1 = new VisualLayer(activity, activityPeriod, activity, person);
-			var visualLayer2 = new VisualLayer(activity, activityPeriod.MovePeriod(TimeSpan.FromHours(1)), activity, person);
+			var visualLayer1 = new VisualLayer(activity, activityPeriod, activity);
+			var visualLayer2 = new VisualLayer(activity, activityPeriod.MovePeriod(TimeSpan.FromHours(1)), activity);
 			var visualLayerCollection = new VisualLayerCollection(new List<IVisualLayer> {visualLayer1, visualLayer2},
 				new ProjectionPayloadMerger());
 

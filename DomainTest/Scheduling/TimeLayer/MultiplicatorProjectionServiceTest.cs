@@ -726,12 +726,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             //Create the normallayers
             foreach (var period in layers)
             {
-                retList.Add(factory.CreateShiftSetupLayer(_activity, period, _person));
+                retList.Add(factory.CreateShiftSetupLayer(_activity, period));
             }
 
             foreach (var period in layersWithMultiplicator)
             {
-                var layer = factory.CreateShiftSetupLayer(_activity, period, _person);
+                var layer = factory.CreateShiftSetupLayer(_activity, period);
                 SetDefinitionSetOnVisualLayer(layer, definitionSet);
                 retList.Add(layer);
             }
@@ -744,7 +744,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             var factory = new VisualLayerFactory();
             foreach (var period in layersWithMultiplicator)
             {
-                var layer = factory.CreateShiftSetupLayer(_activity, period, _person);
+                var layer = factory.CreateShiftSetupLayer(_activity, period);
                 SetDefinitionSetOnVisualLayer(layer, definitionSet);
                 yield return layer;
             }
@@ -779,7 +779,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
         private IVisualLayerCollection Add(IVisualLayerCollection collection,DateTimePeriod period,IMultiplicatorDefinitionSet definitionSet)
         {
             var layers = collection.ToList();
-            IVisualLayer layerToAdd = _factory.CreateShiftSetupLayer(_activity, period, _person);
+            IVisualLayer layerToAdd = _factory.CreateShiftSetupLayer(_activity, period);
             SetDefinitionSetOnVisualLayer(layerToAdd, definitionSet);
             layers.Add(layerToAdd);
             return new VisualLayerCollection(layers, new ProjectionPayloadMerger());

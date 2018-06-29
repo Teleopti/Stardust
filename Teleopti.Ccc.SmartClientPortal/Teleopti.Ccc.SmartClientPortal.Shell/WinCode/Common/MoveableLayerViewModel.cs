@@ -14,13 +14,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 	    private readonly ILayer<IActivity> _layer;
 	    private readonly IPersonAssignment _assignment;
 
-	    protected MoveableLayerViewModel(ILayer<IPayload> layer)
-						: base(null, layer, null, true)
+	    protected MoveableLayerViewModel(ILayer<IPayload> layer, IPerson person)
+						: base(null, layer, null, true, person)
         {
         }
 
         protected MoveableLayerViewModel(ILayerViewModelObserver observer, ILayer<IActivity> layer, IPersonAssignment assignment,IEventAggregator eventAggregator)
-            : base(observer, layer, eventAggregator, false)
+            : base(observer, layer, eventAggregator, false, assignment.Person)
         {
 	        _layer = layer;
 	        _assignment = assignment;

@@ -282,7 +282,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var absenceRequest = GetAbsenceRequest(absence, requestedDateTimePeriod);
 			var date = new DateOnly(2010, 02, 01);
 			var existingLayerWithSameAbsence = new VisualLayer(absence, new DateTimePeriod(new DateTime(2010, 02, 02, 3, 0, 0, DateTimeKind.Utc), new DateTime(2010, 02, 02, 4, 0, 0, DateTimeKind.Utc)),
-															   ActivityFactory.CreateActivity("Phone"), _person);
+															   ActivityFactory.CreateActivity("Phone"));
 
 
 			_skillDay = SkillDayFactory.CreateSkillDay(_skill, new DateOnly(requestedDateTimePeriod.StartDateTime));
@@ -560,10 +560,10 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var absenceRequest = GetAbsenceRequest(absence, requestedDateTimePeriod);
 			var date = new DateOnly(2010, 02, 01);
 			var existingLayerWithSameAbsence = new VisualLayer(absence, new DateTimePeriod(new DateTime(2010, 02, 01, 3, 0, 0, DateTimeKind.Utc), new DateTime(2010, 02, 01, 4, 0, 0, DateTimeKind.Utc)),
-															   ActivityFactory.CreateActivity("Phone"), _person);
+															   ActivityFactory.CreateActivity("Phone"));
 
 			var existingLayerWithSameAbsence2 = new VisualLayer(absence, new DateTimePeriod(new DateTime(2010, 02, 02, 3, 0, 0, DateTimeKind.Utc), new DateTime(2010, 02, 02, 4, 0, 0, DateTimeKind.Utc)),
-															   ActivityFactory.CreateActivity("Phone"), _person);
+															   ActivityFactory.CreateActivity("Phone"));
 
 			_skillDay = SkillDayFactory.CreateSkillDay(_skill, new DateOnly(requestedDateTimePeriod.StartDateTime));
 			var skillDay = SkillDayFactory.CreateSkillDay(_skill, new DateOnly(requestedDateTimePeriod.StartDateTime.AddDays(1)));

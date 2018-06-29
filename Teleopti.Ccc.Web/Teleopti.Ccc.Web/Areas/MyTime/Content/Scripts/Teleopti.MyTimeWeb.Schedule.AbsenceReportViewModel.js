@@ -1,10 +1,4 @@
-﻿/// <reference path="~/Content/jquery/jquery-1.12.4.js" />
-/// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
-/// <reference path="~/Content/moment/moment.js" />
-/// <reference path="Teleopti.MyTimeWeb.Common.js"/>
-/// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
-
-Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel = function(ajax, reloadSchedule) {
+﻿Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel = function(ajax, reloadSchedule) {
 	var self = this;
 	
 	this.Template = "add-absence-report-detail-template";

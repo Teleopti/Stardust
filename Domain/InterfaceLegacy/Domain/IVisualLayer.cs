@@ -15,26 +15,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
   public interface IVisualLayer : ILayer<IPayload>, ICloneableEntity<ILayer<IPayload>>
 	{
 		/// <summary>
-		/// Displays the color.
-		/// </summary>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: rogerkr
-		/// Created date: 2010-02-12
-		/// </remarks>
-		Color DisplayColor();
-
-		/// <summary>
-		/// Displays the description.
-		/// </summary>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: rogerkr
-		/// Created date: 2010-02-12
-		/// </remarks>
-		Description DisplayDescription();
-
-		/// <summary>
 		/// Gets a value indicating whether this <see cref="IVisualLayer"/> is overtime.
 		/// Note: I would really like to remove this prop from here
 		/// </summary>
@@ -50,11 +30,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// </summary>
 		/// <returns></returns>
 		TimeSpan WorkTime();
-
-		/// <summary>
-		/// Gets the person.
-		/// </summary>
-		IPerson Person { get; }
 
 		IVisualLayer CloneWithNewPeriod(DateTimePeriod newPeriod);
 	}

@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 {
     public class VisualLayerForWebDisplay : VisualLayer
     {
-        public VisualLayerForWebDisplay(IPayload payload, DateTimePeriod period, IActivity highestPriorityActivity, IPerson person) : base(payload, period, highestPriorityActivity, person)
+        public VisualLayerForWebDisplay(IPayload payload, DateTimePeriod period, IActivity highestPriorityActivity) : base(payload, period, highestPriorityActivity)
         {
         }
 

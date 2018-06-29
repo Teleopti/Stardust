@@ -1,8 +1,4 @@
-﻿/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js"/>
-/// <reference path="~/Areas/MyTime/Content/Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel.js" />
-/// <reference path="~/Content/Scripts/qunit.js" />
-
-$(document).ready(function () {
+﻿$(document).ready(function () {
 	module("Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel");
 	var constants = Teleopti.MyTimeWeb.Common.Constants;
 

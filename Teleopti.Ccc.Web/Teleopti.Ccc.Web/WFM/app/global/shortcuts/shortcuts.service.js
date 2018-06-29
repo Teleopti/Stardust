@@ -1,8 +1,8 @@
 (function (angular) {
 	'use strict';
 	angular
-	.module('shortcutsService')
-	.service('ShortCuts', ShortCuts);
+		.module('shortcutsService')
+		.service('ShortCuts', ShortCuts);
 
 	ShortCuts.$inject = ['$document', 'keyCodes'];
 
@@ -18,19 +18,19 @@
 		this.checkSpecialKey = checkSpecialKey;
 
 
-		$document.on('keydown', function(event) {
-			if (event.target.tagName !== 'INPUT' || event.target.type === 'checkbox')
-			handleKeyEvent(event);
+		$document.on('keydown', function (event) {
+			if ((event.target.tagName !== 'INPUT' && event.target.tagName !== 'TEXTAREA') || event.target.type === 'checkbox')
+				handleKeyEvent(event);
 		});
 
-		$document.on('keyup', function(event){
+		$document.on('keyup', function (event) {
 			checkSpecialKey(event, false)
 		});
 
 		function handleKeyEvent(event) {
 			var arr = [];
 			if (checkSpecialKey(event, true) || !keySequenceTable[event.keyCode])
-			return;
+				return;
 
 			arr = keySequenceTable[event.keyCode];
 
@@ -43,11 +43,11 @@
 			} while (match && i < arr[0].length);
 
 			if (arr[0].length === 0)
-			match = true;
+				match = true;
 
 			if (match) {
 				event.preventDefault ? event.preventDefault() : event.returnValue = false;
-				
+
 				arr[1].apply(null, [event]);
 			}
 			return match;

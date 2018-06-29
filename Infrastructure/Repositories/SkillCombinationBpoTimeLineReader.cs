@@ -83,7 +83,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							INNER JOIN BusinessProcessOutsourcer bpo ON r.SourceId = bpo.Id
 							INNER JOIN Person p ON p.Id = r.PersonId
 							WHERE k.SkillId = :skillId
-							AND r.StartDateTime between :startDateTimeUtc AND :endDateTimeUtc
+							AND r.StartDateTime  >= :startDateTimeUtc 
+							AND r.EndDateTime < :endDateTimeUtc
 							GROUP BY bpo.Source, ImportFilename, r.InsertedOn, p.Firstname, p.Lastname
 							ORDER BY bpo.Source")
 				.SetParameter("skillId", skillId)

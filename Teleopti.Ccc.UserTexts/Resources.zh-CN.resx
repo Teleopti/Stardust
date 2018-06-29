@@ -1278,7 +1278,7 @@
     <comment>Data available</comment>
   </data>
   <data name="DataSourceInitialized" xml:space="preserve">
-    <value>数据源初始化</value>
+    <value>数据源已初始化</value>
     <comment>Data source initialized</comment>
   </data>
   <data name="DataSourceLoading" xml:space="preserve">
@@ -5487,7 +5487,7 @@ Periods</comment>
     <value>百分比值必须在1到100之间</value>
   </data>
   <data name="YouCannotHaveABlankName" xml:space="preserve">
-    <value>您不能有空白名称</value>
+    <value>名称不能为空</value>
   </data>
   <data name="ManageAlarmSituations" xml:space="preserve">
     <value>管理告警状况</value>
@@ -12351,10 +12351,10 @@ Teleopti R&amp;D</value>
     <value>(多个座位已选定)</value>
   </data>
   <data name="WFMReleaseNotificationWithoutOldModuleLink" xml:space="preserve">
-    <value>{0}已改进! 我们期待您的{1}反馈。{2}</value>
+    <value>{0}已改进! 我们期待您的{1}反馈{2}。</value>
   </data>
   <data name="WFMReleaseNotification" xml:space="preserve">
-    <value>{0}已改进! 我们期待您的{1}反馈。{2} 旧版本的{3}可在有限时间内访问。</value>
+    <value>{0}已改进! 我们期待您的{1}反馈{2}。旧版本的{3}可在有限时间内访问。</value>
   </data>
   <data name="UnsupportedSkills" xml:space="preserve">
     <value>{0}未支持的技能</value>
@@ -12477,7 +12477,7 @@ Teleopti R&amp;D</value>
     <value>日期范围</value>
   </data>
   <data name="DateRangeIsAMaximumOfSixtyDays" xml:space="preserve">
-    <value>日期方位最大为60天</value>
+    <value>日期范围最大为60天</value>
   </data>
   <data name="BusinessRuleDayOffFriendlyName" xml:space="preserve">
     <value>休息日冲突</value>
@@ -12492,7 +12492,7 @@ Teleopti R&amp;D</value>
     <value>这些座席代表不做变更</value>
   </data>
   <data name="DoneArchivingForXPeopleDot" xml:space="preserve">
-    <value>已为{0}个人完成存档</value>
+    <value>已为{0}个人完成存档。</value>
   </data>
   <data name="DoneImportingForXPeopleDot" xml:space="preserve">
     <value>已为{0}个人完成导入</value>
@@ -13861,7 +13861,7 @@ Teleopti R&amp;D</value>
     <value>申请周期超出技能开放时间</value>
   </data>
   <data name="NoUnderStaffingSkill" xml:space="preserve">
-    <value>整个申请周期内没有技能是严重人力不足</value>
+    <value>整个申请周期内没有严重人力不足的技能</value>
   </data>
   <data name="HelpCreatePlanningGroup" xml:space="preserve">
     <value>必须要有一个计划组以为您的座席代表排班。您想要创建一个计划组吗？</value>
@@ -14149,7 +14149,7 @@ Teleopti R&amp;D</value>
     <value>{0:d}: 班次不允许开始于该日期之前或之后。这可能是因为座席代表在人员模块中的时区设置被更改。请修正时区设置或直接点击删除改日期。</value>
   </data>
   <data name="MaximumAgentToExport" xml:space="preserve">
-    <value>您每次最多可到处1000个座席代表的班表，您正在导出{0}。</value>
+    <value>您每次最多可导出1000个座席代表的班表，您正在导出 {0}。</value>
   </data>
   <data name="SelectedGroups" xml:space="preserve">
     <value>已选定的组</value>
@@ -14491,7 +14491,7 @@ Teleopti R&amp;D</value>
     <value>已选择了{0}个座席代表， 点击刷新开始分析</value>
   </data>
   <data name="RestrictionNotAbleToBeScheduledReasonNightlyRestMightBeBroken" xml:space="preserve">
-    <value>夜间休息时间规则将被打破</value>
+    <value>将违反夜间休息时间规则</value>
   </data>
   <data name="RestrictionNotAbleToBeScheduledReasonTooLittleWorkTimeInPeriod" xml:space="preserve">
     <value>此周期导致了太少的工作时间</value>

@@ -1,11 +1,4 @@
-﻿/// <reference path="~/Content/jquery/jquery-1.12.4.js" />
-/// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
-/// <reference path="Teleopti.MyTimeWeb.Common.js"/>
-/// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
-/// <reference path="Teleopti.MyTimeWeb.Request.js"/>
-/// <reference path="Teleopti.MyTimeWeb.Request.List.js"/>
-
-Teleopti.MyTimeWeb.Request.RequestViewModel = function (addRequestMethod, callback, firstDayOfWeek, defaultDateTimes, mywindow) {
+﻿Teleopti.MyTimeWeb.Request.RequestViewModel = function (addRequestMethod, callback, firstDayOfWeek, defaultDateTimes, mywindow) {
 	var self = this;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	mywindow = mywindow || window;

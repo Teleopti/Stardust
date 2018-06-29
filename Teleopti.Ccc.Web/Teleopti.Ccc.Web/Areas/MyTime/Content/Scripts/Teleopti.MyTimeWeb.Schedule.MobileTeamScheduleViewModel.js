@@ -1,12 +1,4 @@
-﻿/// <reference path="~/Content/jquery/jquery-1.12.4.js" />
-/// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
-/// <reference path="~/Content/moment/moment.js" />
-/// <reference path="~/Content/Scripts/knockout-2.2.1.debug.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.LayerViewModel.js" />
-
-Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function (filterChangedCallback) {
+﻿Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function (filterChangedCallback) {
 	var self = this,
 		constants = Teleopti.MyTimeWeb.Common.Constants,
 		dateOnlyFormat = constants.serviceDateTimeFormat.dateOnly,

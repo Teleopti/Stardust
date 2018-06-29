@@ -9,13 +9,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 {
     public class AbsenceLayerViewModel : LayerViewModel
     {
-	    public AbsenceLayerViewModel(ILayerViewModelObserver observer, ILayer<IAbsence> layer, IEventAggregator eventAggregator)
-				: base(observer, layer, eventAggregator, false)
+	    public AbsenceLayerViewModel(ILayerViewModelObserver observer, IPersonAbsence personAbsence, IEventAggregator eventAggregator)
+				: base(observer, personAbsence.Layer, eventAggregator, false, personAbsence.Person)
 			{
 			}
 
-			public AbsenceLayerViewModel(IVisualLayer layer)
-				: base(null, layer, null, true)
+			public AbsenceLayerViewModel(IVisualLayer layer, IPerson person)
+				: base(null, layer, null, true, person)
 			{
 			}
 

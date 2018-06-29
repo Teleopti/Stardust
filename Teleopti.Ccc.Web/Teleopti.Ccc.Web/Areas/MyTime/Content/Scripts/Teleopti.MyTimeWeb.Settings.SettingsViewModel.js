@@ -1,6 +1,4 @@
-﻿/// <reference path="~/Content/Scripts/knockout-2.2.1.debug.js"/>
-
-Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
+﻿Teleopti.MyTimeWeb.Settings.SettingsViewModel = function (ajax) {
 	var self = this;
 	
 	self.customMobileAppBaseUrl = ko.observable(false);

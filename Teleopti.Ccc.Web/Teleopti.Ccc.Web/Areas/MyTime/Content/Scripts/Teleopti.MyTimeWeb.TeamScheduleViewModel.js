@@ -1,5 +1,3 @@
-/// <reference path="Teleopti.MyTimeWeb.Common.js"/>
-/// <reference path="Teleopti.MyTimeWeb.Request.js"/>
 Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 	var self = this;
 

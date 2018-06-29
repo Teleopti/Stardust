@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(expected, _target.CalculateStandardDeviation(), 0.01);
             Assert.AreEqual(2.33, _target.PeriodDetailAverage, 0.01);
 
-			IList<IVisualLayer> lst = new List<IVisualLayer> { layerFactory.CreateShiftSetupLayer(_activity, period, PersonFactory.CreatePerson()) };
+			IList<IVisualLayer> lst = new List<IVisualLayer> { layerFactory.CreateShiftSetupLayer(_activity, period) };
             IVisualLayerCollection proj = new VisualLayerCollection(lst, new ProjectionPayloadMerger());
             
 			// create one on the other 8 minutes

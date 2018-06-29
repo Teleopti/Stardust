@@ -1,9 +1,4 @@
-﻿/// <reference path="~/Content/jquery/jquery-1.12.4.js" />
-/// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
-/// <reference path="~/Content/moment/moment.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
-
-if (typeof Teleopti === "undefined") {
+﻿if (typeof Teleopti === "undefined") {
 	Teleopti = {};
 }
 if (typeof Teleopti.MyTimeWeb === "undefined") {

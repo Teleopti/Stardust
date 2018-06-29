@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -9,7 +10,20 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
-    public class TeamScheduling
+	[RemoveMeWithToggle("use in assignShiftProjection in TeamScheduling", Toggles.ResourcePlanner_LessResourcesXXL_74915)]
+	public class TeamSchedulingLessResources : TeamScheduling
+	{
+		public TeamSchedulingLessResources(AssignScheduledLayers assignScheduledLayers, IDayOffsInPeriodCalculator dayOffsInPeriodCalculator, IResourceCalculation resourceCalculation, ScheduleChangesAffectedDates scheduleChangesAffectedDates) : base(assignScheduledLayers, dayOffsInPeriodCalculator, resourceCalculation, scheduleChangesAffectedDates)
+		{
+		}
+
+		protected override void ForDate(ShiftProjectionCache shiftProjectionCache, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
+		{
+			shiftProjectionCache.SetDateLessResources(dateOnlyAsDateTimePeriod);
+		}
+	}
+
+	public class TeamScheduling
     {
 	    private readonly AssignScheduledLayers _assignScheduledLayers;
 	    private readonly IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
@@ -61,13 +75,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return dayScheduled != null && dayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
 		}
 
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_LessResourcesXXL_74915)]
+		protected virtual void ForDate(ShiftProjectionCache shiftProjectionCache, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
+		{
+			shiftProjectionCache.SetDate(dateOnlyAsDateTimePeriod);
+		}
+
 		private void assignShiftProjection(IEnumerable<IPersonAssignment> orginalPersonAssignments, ShiftProjectionCache shiftProjectionCache, IScheduleDay destinationScheduleDay, 
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, INewBusinessRuleCollection businessRules, 
 			SchedulingOptions schedulingOptions, ResourceCalculationData resourceCalculationData)
 		{
-			shiftProjectionCache.SetDate(destinationScheduleDay.DateOnlyAsPeriod);
+			ForDate(shiftProjectionCache, destinationScheduleDay.DateOnlyAsPeriod);
 
-	        var personAssignment = destinationScheduleDay.PersonAssignment();
+			var personAssignment = destinationScheduleDay.PersonAssignment();
 	        if (personAssignment != null && personAssignment.PersonalActivities().Any())
 			{
 				var mainShiftPeriod = shiftProjectionCache.MainShiftProjection.Period().GetValueOrDefault();

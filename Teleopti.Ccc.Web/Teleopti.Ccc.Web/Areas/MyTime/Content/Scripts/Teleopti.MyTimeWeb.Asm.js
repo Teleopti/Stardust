@@ -1,12 +1,4 @@
-﻿/// <reference path="Teleopti.MyTimeWeb.Common.js"/>
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.MessageBroker.js"/>
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Notifier.js"/>
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js"/>
-/// <reference path="~/Content/Scripts/knockout-2.2.1.js" />
-/// <reference path="../../../../Content/moment/moment.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/noty/jquery.noty.js" />
-
-if (typeof (Teleopti) === 'undefined') {
+﻿if (typeof (Teleopti) === 'undefined') {
 	Teleopti = {};
 	if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
 		Teleopti.MyTimeWeb = {};

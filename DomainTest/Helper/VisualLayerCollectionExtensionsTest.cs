@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.DomainTest.Helper
 	[TestFixture]
 	public class VisualLayerCollectionExtensionsTest
 	{
-		private readonly IPerson person = PersonFactory.CreatePerson();
 		private readonly IActivity activity = ActivityFactory.CreateActivity("Phone");
 		private readonly IActivity secondActivity = ActivityFactory.CreateActivity("Break");
 
@@ -23,13 +22,13 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		{
 			var visualLayer1 = new VisualLayer(secondActivity, new DateTimePeriod(new DateTime(2001, 1, 1, 9, 45, 0, DateTimeKind.Utc),
 																		   new DateTime(2001, 1, 1, 10, 12, 0, DateTimeKind.Utc)),
-											  secondActivity, person);
+											  secondActivity);
 			var visualLayer2 = new VisualLayer(activity, new DateTimePeriod(new DateTime(2001, 1, 1, 10, 12, 0, DateTimeKind.Utc),
 																		   new DateTime(2001, 1, 1, 10, 15, 0, DateTimeKind.Utc)),
-											  activity, person);
+											  activity);
 			var visualLayer3 = new VisualLayer(secondActivity, new DateTimePeriod(new DateTime(2001, 1, 1, 10, 15, 0, DateTimeKind.Utc),
 																		   new DateTime(2001, 1, 1, 10, 30, 0, DateTimeKind.Utc)),
-											  secondActivity, person);
+											  secondActivity);
 
 			var layers = new List<IVisualLayer> { visualLayer1, visualLayer2, visualLayer3 };
 			var visualLayers = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
@@ -45,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		{
 			var visualLayer = new VisualLayer(activity, new DateTimePeriod(new DateTime(2001, 1, 1, 10, 12, 0, DateTimeKind.Utc),
 			                                                               new DateTime(2001, 1, 1, 10, 15, 0, DateTimeKind.Utc)),
-			                                  activity, person);
+			                                  activity);
 			
 			var layers = new List<IVisualLayer> { visualLayer };
 			var visualLayers = new VisualLayerCollection(layers,new ProjectionPayloadMerger());
@@ -62,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		{
 			var visualLayer = new VisualLayer(activity, new DateTimePeriod(new DateTime(2001, 1, 1, 10, 45, 0, DateTimeKind.Utc),
 																		   new DateTime(2001, 1, 1, 10, 48, 0, DateTimeKind.Utc)),
-											  activity, person);
+											  activity);
 
 			var layers = new List<IVisualLayer> { visualLayer };
 			var visualLayers = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
@@ -79,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		{
 			var visualLayer = new VisualLayer(activity, new DateTimePeriod(new DateTime(2001, 1, 1, 10, 48, 0, DateTimeKind.Utc),
 																		   new DateTime(2001, 1, 1, 10, 51, 0, DateTimeKind.Utc)),
-											  activity, person);
+											  activity);
 
 			var layers = new List<IVisualLayer> { visualLayer };
 			var visualLayers = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
@@ -96,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		{
 			var visualLayer = new VisualLayer(activity, new DateTimePeriod(new DateTime(2001, 1, 1, 10, 45, 0, DateTimeKind.Utc),
 																		   new DateTime(2001, 1, 1, 11, 0, 0, DateTimeKind.Utc)),
-											  activity, person);
+											  activity);
 
 			var layers = new List<IVisualLayer> { visualLayer };
 			var visualLayers = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
@@ -111,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		{
 			var visualLayer = new VisualLayer(activity, new DateTimePeriod(new DateTime(2001, 1, 1, 10, 45, 0, DateTimeKind.Utc),
 																		   new DateTime(2001, 1, 1, 11, 0, 0, DateTimeKind.Utc)),
-											  activity, person);
+											  activity);
 
 			var layers = new List<IVisualLayer> { visualLayer };
 			var visualLayers = new VisualLayerCollection(layers, new ProjectionPayloadMerger());
@@ -127,8 +126,8 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			var dateTimePeriod1 = new DateTimePeriod(new DateTime(2001, 1, 1, 10, 45, 0, DateTimeKind.Utc), new DateTime(2001, 1, 1, 11, 0, 0, DateTimeKind.Utc));
 			var dateTimePeriod2 = new DateTimePeriod(new DateTime(2001, 1, 1, 12, 45, 0, DateTimeKind.Utc), new DateTime(2001, 1, 1, 13, 0, 0, DateTimeKind.Utc));
 
-			var visualLayer1 = new VisualLayer(activity, dateTimePeriod1 , activity, person);
-			var visualLayer2 = new VisualLayer(activity, dateTimePeriod2, activity, person);
+			var visualLayer1 = new VisualLayer(activity, dateTimePeriod1 , activity);
+			var visualLayer2 = new VisualLayer(activity, dateTimePeriod2, activity);
 
 			var layers = new List<IVisualLayer> {visualLayer1, visualLayer2};
 			var visualLayers = new VisualLayerCollection(layers, new ProjectionPayloadMerger());

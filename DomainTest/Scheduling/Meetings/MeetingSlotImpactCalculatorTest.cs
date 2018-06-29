@@ -86,12 +86,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             activity.InWorkTime = true;
             activity.AllowOverwrite = true ;
             var layerBefore = new VisualLayer(activity, dateTimePeriod,
-                                activity, null);
+                                activity);
             var layerLunch =
                 new VisualLayer(lunchActivity, dateTimePeriod,
-                                lunchActivity, null);
+                                lunchActivity);
             var layerAfter = new VisualLayer(activity, dateTimePeriod,
-                                activity, null);
+                                activity);
             var layers = new List<IVisualLayer> { layerBefore, layerLunch, layerAfter };
            
 			var virtualPeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();

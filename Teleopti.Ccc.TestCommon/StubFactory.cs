@@ -216,25 +216,23 @@ namespace Teleopti.Ccc.TestCommon
 			return
 				ProjectionStub(new List<IVisualLayer>
 					{
-						new VisualLayer(new Activity("for test"), period, new Activity("also for test"), new Person())
+						new VisualLayer(new Activity("for test"), period, new Activity("also for test"))
 					});
 		}
 
 		public IVisualLayer VisualLayerStub(Color displayColor)
 		{
 			var visualLayer = MockRepository.GenerateMock<IVisualLayer>();
-			visualLayer.Stub(x => x.DisplayColor()).Return(displayColor);
 			visualLayer.Stub(x => x.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
 			visualLayer.Stub(x => x.Payload).Return(new Activity {DisplayColor = displayColor});
 			return visualLayer;
 		}
 
-		public IVisualLayer VisualLayerStub(string activtyName)
+		public IVisualLayer VisualLayerStub(string activityName)
 		{
 			var visualLayer = MockRepository.GenerateMock<IVisualLayer>();
-			visualLayer.Stub(x => x.DisplayDescription()).Return(new Description(activtyName));
 			visualLayer.Stub(x => x.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
-			visualLayer.Stub(x => x.Payload).Return(new Activity());
+			visualLayer.Stub(x => x.Payload).Return(new Activity{Description = new Description(activityName)});
 			return visualLayer;
 		}
 
@@ -250,7 +248,6 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			var visualLayer = MockRepository.GenerateMock<IVisualLayer>();
 			visualLayer.Stub(x => x.Period).Return(period);
-			visualLayer.Stub(x => x.Person).Return(person);
 			visualLayer.Stub(x => x.Payload).Return(new Activity());
 			return visualLayer;
 		}

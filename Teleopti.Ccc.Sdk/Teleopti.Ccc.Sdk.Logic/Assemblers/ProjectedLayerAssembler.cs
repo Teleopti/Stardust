@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                             {
                                 Period = _dateTimePeriodAssembler.DomainEntityToDto(entity.Period),
                                 DisplayColor = new ColorDto(entity.Payload.ConfidentialDisplayColor(_assignedAgent)),
-                                Description = entity.DisplayDescription().Name,
+                                Description = entity.Payload.ConfidentialDescription(_assignedAgent).Name,
                                 ContractTime = layerForPeriod.ContractTime(),
 								WorkTime = layerForPeriod.WorkTime(),
 								PaidTime = layerForPeriod.PaidTime(),

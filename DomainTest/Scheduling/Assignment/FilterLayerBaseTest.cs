@@ -14,14 +14,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
     {
         private IList<IVisualLayer> internalCollection;
         private IVisualLayerFactory layerFactory;
-    	private IPerson person;
 
     	[SetUp]
         public void Setup()
         {
             layerFactory = new VisualLayerFactory();
             internalCollection = new List<IVisualLayer>();
-        	person = PersonFactory.CreatePerson();
             Optimizer = CreateOptimizer();
         }
 
@@ -107,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
         private IVisualLayer createLayer(int startHour, int endHour)
         {
-            return layerFactory.CreateShiftSetupLayer(ActivityFactory.CreateActivity("sdf"), createPeriod(startHour, endHour), person);
+            return layerFactory.CreateShiftSetupLayer(ActivityFactory.CreateActivity("sdf"), createPeriod(startHour, endHour));
         }
 
         private static DateTimePeriod createPeriod(int startHour, int endHour)

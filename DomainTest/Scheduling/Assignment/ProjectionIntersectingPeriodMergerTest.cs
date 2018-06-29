@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	{
 		private IProjectionMerger target;
 		private IActivity activity;
-		private IPerson person;
 		private IVisualLayerFactory visualLayerFactory;
 
 		[SetUp]
@@ -21,7 +20,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			target = new ProjectionIntersectingPeriodMerger();
 			activity = ActivityFactory.CreateActivity("f");
-			person = PersonFactory.CreatePerson();
 			visualLayerFactory = new VisualLayerFactory();
 		}
 
@@ -59,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 		private IVisualLayer createLayer(DateTimePeriod period)
 		{
-			return visualLayerFactory.CreateShiftSetupLayer(activity, period,person);
+			return visualLayerFactory.CreateShiftSetupLayer(activity, period);
 		}
 	}
 }

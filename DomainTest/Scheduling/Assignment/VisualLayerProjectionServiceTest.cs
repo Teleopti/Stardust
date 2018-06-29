@@ -421,9 +421,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var layerFactory = new VisualLayerFactory();
 			var refAct = ActivityFactory.CreateActivity("f");
 			var period = new DateTimePeriod(2000,1,1,2001,1,2);
-			var actLayer = layerFactory.CreateShiftSetupLayer(refAct, period, person);
+			var actLayer = layerFactory.CreateShiftSetupLayer(refAct, period);
 			var absenceLayer = layerFactory.CreateAbsenceSetupLayer(AbsenceFactory.CreateAbsence("vacation"), actLayer, period);
-			var target = new VisualLayerProjectionService(person);
+			var target = new VisualLayerProjectionService();
 			target.Add(absenceLayer);
 			foreach (var vlayer in target.CreateProjection())
 			{

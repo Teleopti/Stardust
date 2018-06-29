@@ -15,13 +15,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	/// </remarks>
 	public class VisualLayerProjectionService : IProjectionService
 	{
-		private readonly IPerson _person;
 		private readonly ILayerCollection<IPayload> _layerCollectionOriginal;
 		private static readonly IVisualLayerFactory standardVisualLayerFactory = new VisualLayerFactory();
 
-		public VisualLayerProjectionService(IPerson person)
+		public VisualLayerProjectionService()
 		{
-			_person = person;
 			_layerCollectionOriginal = new LayerCollection<IPayload>();
 		}
 
@@ -35,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public void Add(ILayer<IActivity> layer, IVisualLayerFactory visualLayerFactory)
 		{
-			_layerCollectionOriginal.Add(visualLayerFactory.CreateShiftSetupLayer(layer, _person));
+			_layerCollectionOriginal.Add(visualLayerFactory.CreateShiftSetupLayer(layer));
 		}
 
 		public void Add(IVisualLayer layer)

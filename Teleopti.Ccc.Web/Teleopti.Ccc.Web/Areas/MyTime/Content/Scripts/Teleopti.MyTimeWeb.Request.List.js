@@ -1,12 +1,4 @@
-﻿/// <reference path="~/Content/jquery/jquery-1.12.4.js" />
-/// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
-/// <reference path="Teleopti.MyTimeWeb.Common.js"/>
-/// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
-/// <reference path="Teleopti.MyTimeWeb.Request.js"/>
-/// <reference path="Teleopti.MyTimeWeb.Request.RequestDetail.js"/>
-/// <reference path="~/Content/Scripts/knockout-2.2.1.debug.js" />
-
-Teleopti.MyTimeWeb.Request.List = (function ($) {
+﻿Teleopti.MyTimeWeb.Request.List = (function ($) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var pageViewModel;
 

@@ -28,7 +28,6 @@
 .team-schedule {
 	background-color: $white;
 	border-right: 1px solid $white;
-	overflow: hidden;
 	padding: 0;
 	padding-bottom: 0;
 	margin-bottom: 0;
@@ -646,7 +645,7 @@ team-schedule-datepicker {
 		tbody {
 			height: 100%;
 			display: block;
-			overflow-y: scroll;
+			overflow-y: auto;
 			max-height: 62vh;
 			min-height: 500px;
 			min-width: 680px;

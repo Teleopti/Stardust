@@ -157,8 +157,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 	       
             
 
-                ILayerViewModel model1 = new MainShiftLayerViewModel(target, layer, null,null);
-                ILayerViewModel model2 = new MainShiftLayerViewModel(target, layer, null,null);
+                ILayerViewModel model1 = new MainShiftLayerViewModel(target, layer, new PersonAssignment(new Person(), new Scenario(), DateOnly.Today), null);
+                ILayerViewModel model2 = new MainShiftLayerViewModel(target, layer, new PersonAssignment(new Person(), new Scenario(), DateOnly.Today),null);
                 model1.CanMoveAll = true;
                 model2.CanMoveAll = true;
                 target.Add(model1);
@@ -257,8 +257,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void VerifyChangingTheIntervalChangesAllTheModelsInterval()
         {
             TimeSpan interval = TimeSpan.FromMinutes(5);
-            ILayerViewModel model1 = new MainShiftLayerViewModel(new VisualLayer(new Activity("df"),new DateTimePeriod(), new Activity("sdf"), null  )) { Interval = TimeSpan.FromMinutes(12) };
-						ILayerViewModel model2 = new MainShiftLayerViewModel(new VisualLayer(new Activity("df"), new DateTimePeriod(), new Activity("sdf"), null)) { Interval = TimeSpan.FromMinutes(14) };
+            ILayerViewModel model1 = new MainShiftLayerViewModel(new VisualLayer(new Activity("df"),new DateTimePeriod(), new Activity("sdf")  ), new Person()) { Interval = TimeSpan.FromMinutes(12) };
+						ILayerViewModel model2 = new MainShiftLayerViewModel(new VisualLayer(new Activity("df"), new DateTimePeriod(), new Activity("sdf")), new Person()) { Interval = TimeSpan.FromMinutes(14) };
             target.Add(model1);
             target.Add(model2);
             target.Interval = interval;
@@ -273,7 +273,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             IScheduleDay newPart = mocks.StrictMock<IScheduleDay>();
             IProjectionService projectionService = mocks.StrictMock<IProjectionService>();
             IScheduleDay part = new SchedulePartFactoryForDomain().CreatePartWithMainShift();
-            IVisualLayerCollection newProjection = VisualLayerCollectionFactory.CreateForWorkShift(part.Person, TimeSpan.FromHours(8), TimeSpan.FromHours(12));
+            IVisualLayerCollection newProjection = VisualLayerCollectionFactory.CreateForWorkShift(TimeSpan.FromHours(8), TimeSpan.FromHours(12));
             target.CreateViewModels(part);
             IList<ILayerViewModel> projectionLayers = target.Where(l => l.IsProjectionLayer).ToList();
             IList<ILayerViewModel> deletedLayers = new List<ILayerViewModel>(); //For holding the deleted layers
@@ -310,6 +310,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             using (mocks.Record())
             {
                 Expect.Call(newPart.ProjectionService()).Return(projectionService);
+                Expect.Call(newPart.Person).Return(new Person());
                 Expect.Call(projectionService.CreateProjection()).Return(newProjection);
             }
 
@@ -343,7 +344,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             MainShiftLayerViewModel mainShiftModel2 = new MainShiftLayerViewModel(null, assignment.MainActivities().Last(), assignment, null);
 			OvertimeLayerViewModel overtimeLayerViewModel = new OvertimeLayerViewModel(null, assignment.OvertimeActivities().Single(), assignment, null);
 			PersonalShiftLayerViewModel personalShiftLayerViewModel = new PersonalShiftLayerViewModel(null,assignment.PersonalActivities().Single(), assignment, null);
-            AbsenceLayerViewModel absenceLayerViewModel = new AbsenceLayerViewModel(null, absenceLayer,null);
+            AbsenceLayerViewModel absenceLayerViewModel = new AbsenceLayerViewModel(null, new PersonAbsence(new Person(), new Scenario(), absenceLayer),null);
 	        var meetingPerson = new MeetingPerson(new Person(), false);
 						Meeting meeting = new Meeting(new Person(), new[]{meetingPerson }, "subject", "location", "description", ActivityFactory.CreateActivity("activity"), ScenarioFactory.CreateScenarioAggregate());
 						PersonMeeting personMeeting = new PersonMeeting(meeting, meetingPerson, new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
