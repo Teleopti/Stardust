@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			isolate.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
 			isolate.UseTestDouble<FakeScheduleProvider>().For<IScheduleProvider>();
 			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			isolate.UseTestDouble<FakeAbsenceRepository>().For<IAbsenceRepository>();
 		}
 	}
 
