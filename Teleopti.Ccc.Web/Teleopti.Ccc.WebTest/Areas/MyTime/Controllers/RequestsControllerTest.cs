@@ -61,6 +61,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakePersonScheduleDayReadModelFinder PersonScheduleDayReadModelFinder;
 		public FakeThreadPrincipalContext ThreadPrincipalContext;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
+		public FakePersonAbsenceRepository PersonAbsenceRepository;
 
 		public void Isolate(IIsolate isolate)
 		{
@@ -74,6 +75,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			isolate.UseTestDouble<RequestApprovalServiceFactory>().For<IRequestApprovalServiceFactory>();
 			isolate.UseTestDouble<FakeLicensedFunctionProvider>().For<ILicensedFunctionsProvider>();
 			isolate.UseTestDouble<FakePersonScheduleDayReadModelFinder>().For<IPersonScheduleDayReadModelFinder>();
+			isolate.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
@@ -210,7 +212,36 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			data.PersonToSchedules.Count().Should().Be.EqualTo(2);
 		}
 
-		private ShiftTradeMultiSchedulesForm prepareData(DateOnly startDate, DateOnly endDate, DateTime publishedDate, bool isViewUnpublishedSchedules = true)
+		[Test]
+		public void ShouldLoadScheduleWhenPersonToHasAbsence()
+		{
+			var startDate = DateOnly.Today.AddDays(2);
+			var endDate = startDate;
+			var form = prepareData(startDate, endDate, DateTime.MaxValue, false, 2);
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+
+			data.MySchedules.Count().Should().Be.EqualTo(1);
+			data.PersonToSchedules.Count().Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldLoadScheduleWhenIHaveAbsence()
+		{
+			var startDate = DateOnly.Today.AddDays(2);
+			var endDate = startDate;
+			var form = prepareData(startDate, endDate, DateTime.MaxValue, false, 1);
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+
+			data.MySchedules.Count().Should().Be.EqualTo(1);
+			data.PersonToSchedules.Count().Should().Be.EqualTo(1);
+		}
+
+		private ShiftTradeMultiSchedulesForm prepareData(DateOnly startDate, DateOnly endDate, DateTime publishedDate,
+			bool isViewUnpublishedSchedules = true, int hasAbsence = 0)
 		{
 			var period = new DateOnlyPeriod(startDate, endDate);
 			var workflowControlSet = new WorkflowControlSet
@@ -227,6 +258,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			PersonAssignmentRepository.Has(currentUser, CurrentScenario.Current(), new Activity(), period, new TimePeriod(8, 10));
 			PersonAssignmentRepository.Has(personTo, CurrentScenario.Current(), new Activity(), period, new TimePeriod(8, 10));
+			if (hasAbsence == 1)
+			{
+				var absence = new Absence().WithId();
+				AbsenceRepository.Add(absence);
+				var absenceLayer = new AbsenceLayer(absence, period.ToDateTimePeriod(currentUser.PermissionInformation.DefaultTimeZone()));
+				var personAbsence = new PersonAbsence(currentUser, CurrentScenario.Current(), absenceLayer);
+				PersonAbsenceRepository.Has(personAbsence);
+			}
+			if (hasAbsence == 2)
+			{
+				var absence = new Absence().WithId();
+				AbsenceRepository.Add(absence);
+				var absenceLayer = new AbsenceLayer(absence, period.ToDateTimePeriod(currentUser.PermissionInformation.DefaultTimeZone()));
+				var personAbsence = new PersonAbsence(personTo, CurrentScenario.Current(), absenceLayer);
+				PersonAbsenceRepository.Has(personAbsence);
+			}
 
 			return new ShiftTradeMultiSchedulesForm
 			{

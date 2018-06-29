@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		}
 
 		public ShiftTradeAddPersonScheduleViewModel Map(IPersonScheduleDayReadModel scheduleReadModel,
-			bool isMySchedule = false)
+			bool isMySchedule = false, bool excludAbsence = true)
 		{
 			if (scheduleReadModel == null)
 				return null;
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				: null;
 
 			//Full day absence for other agent should be excluded from possible tradable schedules.
-			if (!isMySchedule && shiftReadModel?.Shift != null && shiftReadModel.Shift.IsFullDayAbsence)
+			if (!isMySchedule && shiftReadModel?.Shift != null && shiftReadModel.Shift.IsFullDayAbsence && excludAbsence)
 			{
 				return null;
 			}
@@ -96,7 +96,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		public IList<ShiftTradeAddPersonScheduleViewModel> Map(IEnumerable<IPersonScheduleDayReadModel> scheduleReadModels)
 		{
-			return scheduleReadModels.Select(scheduleReadModel => Map(scheduleReadModel)).Where(s => s != null).ToList();
+			return Map(scheduleReadModels, true);
+		}
+
+		public IList<ShiftTradeAddPersonScheduleViewModel> Map(IEnumerable<IPersonScheduleDayReadModel> scheduleReadModels, bool excludAbsence)
+		{
+			return scheduleReadModels.Select(scheduleReadModel => Map(scheduleReadModel, excludAbsence: excludAbsence)).Where(s => s != null).ToList();
 		}
 	}
 }

@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			var ianaTimeZoneProvider = new IanaTimeZoneProvider();
 			var userTimeZone = new FakeUserTimeZone(TimeZoneInfoFactory.BrazilTimeZoneInfo());
 			var fakePersonRepository = FakePersonRepository(person);
-			var target = new PersonScheduleViewModelFactory(fakePersonRepository, new FakePersonScheduleDayReadModelFinder(new FakePersonAssignmentRepository(null), fakePersonRepository), 
+			var target = new PersonScheduleViewModelFactory(fakePersonRepository, new FakePersonScheduleDayReadModelFinder(new FakePersonAssignmentRepository(null), fakePersonRepository, null, null, null), 
 				new FakeAbsenceRepository(), new FakeActivityRepository(), personScheduleViewModelMapper, 
 				new FakePersonAbsenceRepository(null), new NewtonsoftJsonSerializer(), _permissionProvider, _commonAgentNameProvider, 
 				ianaTimeZoneProvider, userTimeZone, _currentScenario);
@@ -313,7 +313,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			var personAbsenceRepository = new FakePersonAbsenceRepository(null);
 			var personScheduleViewModelMapper = new PersonScheduleViewModelMapper(new FakeUserTimeZone(TimeZoneInfo.Local), new Now());
 			var personScheduleDayReadModelRepository =
-				new FakePersonScheduleDayReadModelFinder(new FakePersonAssignmentRepository(null), personRepository);
+				new FakePersonScheduleDayReadModelFinder(new FakePersonAssignmentRepository(null), personRepository, null, null, null);
 			var absenceRepository = new FakeAbsenceRepository();
 			var activityRepository = new FakeActivityRepository();
 			var permissionProvider = new FakePermissionProvider();

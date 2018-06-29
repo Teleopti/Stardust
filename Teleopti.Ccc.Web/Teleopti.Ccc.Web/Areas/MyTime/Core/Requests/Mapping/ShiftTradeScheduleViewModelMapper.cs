@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			}
 
 			var myScheduleDayReadModel = _shiftTradeRequestProvider.RetrieveMySchedule(data.ShiftTradeDate);
-			var myScheduleViewModel = _shiftTradePersonScheduleViewModelMapper.Map(myScheduleDayReadModel, true);
+			var myScheduleViewModel = _shiftTradePersonScheduleViewModelMapper.Map(myScheduleDayReadModel, true, false);
 
 			if (myScheduleViewModel != null)
 			{
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var allSchedules = _shiftTradeRequestProvider.RetrieveTradeMultiSchedules(period,
 				new List<Guid> {_loggedOnUser.CurrentUser().Id.GetValueOrDefault(), personToId});
 
-			return _shiftTradePersonScheduleViewModelMapper.Map(allSchedules);
+			return _shiftTradePersonScheduleViewModelMapper.Map(allSchedules, false);
 		}
 
 		private ShiftTradeScheduleViewModel getShiftTradeScheduleViewModel(Paging paging,
@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		{
 			var ret = new ShiftTradeScheduleViewModel();
 			var myScheduleDayReadModel = _shiftTradeRequestProvider.RetrieveMySchedule(shiftTradeDate);
-			var mySchedule = _shiftTradePersonScheduleViewModelMapper.Map(myScheduleDayReadModel, true);
+			var mySchedule = _shiftTradePersonScheduleViewModelMapper.Map(myScheduleDayReadModel, true, false);
 			ret.MySchedule = mySchedule;
 			var possibleTradeSchedule = new List<ShiftTradeAddPersonScheduleViewModel>();
 			if (mySchedule == null || !mySchedule.IsFullDayAbsence)

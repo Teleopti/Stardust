@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -18,18 +19,24 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private bool _isInitilized;
 		private readonly IPersonAssignmentRepository _personAssignmentRepository;
 		private readonly IPersonRequestRepository _personRequestRepository;
+		private readonly IPersonAbsenceRepository _personAbsenceRepository;
+		private readonly IAbsenceRepository _absenceRepository;
+		private readonly ICurrentScenario _scenario;
 
 		public FakePersonScheduleDayReadModelFinder(IPersonAssignmentRepository personAssignmentRepository,
-			IPersonRepository personRepository, IPersonRequestRepository personRequestRepository)
-			: this(personAssignmentRepository, personRepository)
+			IPersonRepository personRepository, IPersonRequestRepository personRequestRepository, IPersonAbsenceRepository personAbsenceRepository, IAbsenceRepository absenceRepository, ICurrentScenario scenario)
+			: this(personAssignmentRepository, personRepository, personAbsenceRepository, absenceRepository, scenario)
 		{
 			_personRequestRepository = personRequestRepository;
 		}
 
-		public FakePersonScheduleDayReadModelFinder(IPersonAssignmentRepository personAssignmentRepository, IPersonRepository personRepository)
+		public FakePersonScheduleDayReadModelFinder(IPersonAssignmentRepository personAssignmentRepository, IPersonRepository personRepository, IPersonAbsenceRepository personAbsenceRepository, IAbsenceRepository absenceRepository, ICurrentScenario scenario)
 		{
 			_personAssignmentRepository = personAssignmentRepository;
 			_personRepository = personRepository;
+			_personAbsenceRepository = personAbsenceRepository;
+			_absenceRepository = absenceRepository;
+			_scenario = scenario;
 		}
 
 		public IEnumerable<PersonScheduleDayReadModel> ForPerson(DateOnlyPeriod period, Guid personId)
@@ -163,9 +170,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 					End = shiftLayer.Period.EndDateTime,
 					Description = shiftLayer.Payload.Name
 				}).ToList();
+				var isFullDayAbsence = false;
+				if (_personAbsenceRepository != null && _absenceRepository != null && _scenario != null)
+				{
 
+					var period = date.ToDateTimePeriod(TimeZoneInfo.Utc);
+					var absence = _absenceRepository.LoadAll().FirstOrDefault();
+					var scenario = _scenario.Current();
+					isFullDayAbsence = _personAbsenceRepository.FindExact(assignment.Person, period, absence, scenario).Count > 0;
+				}
 				return PersonScheduleDayReadModelFactory.CreatePersonScheduleDayReadModelWithSimpleShift(assignment.Person, date,
-					simpleLayers);
+					simpleLayers, isFullDayAbsence);
 			});
 		}
 
