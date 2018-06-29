@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -31,10 +32,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public IPersonAssignmentRepository PersonAssignmentRepository;
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakePeopleForShiftTradeFinder PeopleForShiftTradeFinder;
+		public FakeAbsenceRepository AbsenceRepository;
 
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FakePeopleForShiftTradeFinder>().For<IPeopleForShiftTradeFinder>();
+			isolate.UseTestDouble<FakeAbsenceRepository>().For<IAbsenceRepository>();
 		}
 
 		protected void setUpData()
