@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 			_currentHttpContext = currentHttpContext;
 		}
 
+		[HttpGet]
 		public ActionResult Identifier()
 		{
 			if (Request.AcceptTypes != null && Request.AcceptTypes.Contains("application/xrds+xml"))
@@ -43,6 +44,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 
 		[ValidateInput(false)]
 		[TenantUnitOfWork]
+		[AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post | HttpVerbs.Head)]
 		[NoTenantAuthentication]
 		public virtual ActionResult Provider()
 		{
@@ -84,6 +86,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 
 		[Authorize]
 		[TenantUnitOfWork]
+		[AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post | HttpVerbs.Head)]
 		[NoTenantAuthentication]
 		public virtual ActionResult TriggerWindowsAuthorization(string pendingRequest)
 		{
@@ -206,6 +209,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 			return fetchResponse;
 		}
 
+		[HttpGet]
 		public ActionResult AskUser()
 		{
 			return View();
