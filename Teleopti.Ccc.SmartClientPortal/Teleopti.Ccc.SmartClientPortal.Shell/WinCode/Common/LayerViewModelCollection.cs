@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
             AddFromSchedulePart(part);
             foreach (IVisualLayer visualLayer in part.ProjectionService().CreateProjection())
             {
-                Add(CreateViewModelFromVisualLayer(visualLayer));
+                Add(CreateViewModelFromVisualLayer(visualLayer, part.Person));
             }
 			_layersThatShouldBeUpdated.Clear();
         }
@@ -172,12 +172,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 
             foreach (IVisualLayer visualLayer in scheduleDay.ProjectionService().CreateProjection())
             {
-                Add(CreateViewModelFromVisualLayer(visualLayer));
+                Add(CreateViewModelFromVisualLayer(visualLayer, scheduleDay.Person));
             }
 			_layersThatShouldBeUpdated.Clear();
         }
 
-        public void CreateProjectionViewModels(IProjectionSource projectionSource)
+        public void CreateProjectionViewModels(IScheduleDay projectionSource)
         {
             IList<ILayerViewModel> projectionLayers =
                 this.Where(l => l.IsProjectionLayer).ToList();
@@ -247,12 +247,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
             CreateProjectionViewModels(_schedule);
         }
 		
-	    private ILayerViewModel CreateViewModelFromVisualLayer(IVisualLayer visualLayer)
+	    private ILayerViewModel CreateViewModelFromVisualLayer(IVisualLayer visualLayer, IPerson person)
         {
             ILayerViewModel visualLayerViewModel;
-            if (visualLayer.DefinitionSet != null) visualLayerViewModel = new OvertimeLayerViewModel(visualLayer);
-            else if (visualLayer.Payload is IAbsence) visualLayerViewModel = new AbsenceLayerViewModel(visualLayer);
-            else visualLayerViewModel = new MainShiftLayerViewModel(visualLayer);
+            if (visualLayer.DefinitionSet != null) visualLayerViewModel = new OvertimeLayerViewModel(visualLayer, person);
+            else if (visualLayer.Payload is IAbsence) visualLayerViewModel = new AbsenceLayerViewModel(visualLayer, person);
+            else visualLayerViewModel = new MainShiftLayerViewModel(visualLayer, person);
 
             visualLayerViewModel.Interval = Interval;
             return visualLayerViewModel;

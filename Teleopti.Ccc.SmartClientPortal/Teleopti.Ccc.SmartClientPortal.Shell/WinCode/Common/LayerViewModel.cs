@@ -25,15 +25,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 		private IScheduleDay _part;
 		private bool _canMoveAll;
 		private readonly IEventAggregator _eventAggregator;
+		private readonly IPerson _person;
 		private bool _isSelected;
 		private IPayload _payload;
 
 
-		protected LayerViewModel(ILayerViewModelObserver observer, ILayer<IPayload> layer, IEventAggregator eventAggregator, bool isProjectionLayer)
+		protected LayerViewModel(ILayerViewModelObserver observer, ILayer<IPayload> layer, IEventAggregator eventAggregator, bool isProjectionLayer, IPerson person)
 		{
 			_payload = layer.Payload;
 			_parentObservingCollection = observer;
 			_eventAggregator = eventAggregator;
+			_person = person;
 			Layer = layer;
 			_period = Layer.Period;
 			MoveUpCommand = CommandModelFactory.CreateCommandModel(MoveUp, CanExecuteMoveUp, UserTexts.Resources.MoveUp, ShiftEditorRoutedCommands.MoveUp);
@@ -135,7 +137,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 			get
 			{
 				var vs = Layer as IVisualLayer;
-				return vs?.DisplayColor() ?? Layer.Payload.ConfidentialDisplayColor(SchedulePart.Person);
+				return vs?.Payload.ConfidentialDisplayColor(_person) ?? Layer.Payload.ConfidentialDisplayColor(SchedulePart.Person);
 			}
 		}
 

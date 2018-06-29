@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         private readonly TesterForCommandModels _models = new TesterForCommandModels();
         private readonly IEventAggregator _eventAggregator = new EventAggregator();
 		private AbsenceLayerViewModel _target;
-		private ILayer<IAbsence> _layerWithPayload;
+		private IPersonAbsence _personAbsence;
 		private IScheduleDay scheduleDay;
 		private PropertyChangedListener _listener;
 		private IPerson person;
@@ -42,13 +42,13 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		    scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
 		    person = PersonFactory.CreatePerson();
 		    _period = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 12, 5, 0, 0, 0, DateTimeKind.Utc), new DateTime(2008, 12, 6, 0, 0, 0, DateTimeKind.Utc));
-		    _layerWithPayload = new AbsenceLayer(new Absence(), _period);
-
+		    var layerWithPayload = new AbsenceLayer(new Absence(), _period);
+			_personAbsence = new PersonAbsence(person, new Scenario(), layerWithPayload);
 		    scheduleDay.Stub(x => x.Person).Return(person);
 		    var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TimeZoneHelper.CurrentSessionTimeZone);
 		    scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);
 
-		    _target = new AbsenceLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _layerWithPayload, null);
+		    _target = new AbsenceLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _personAbsence, null);
 	    }
 
 		[Test]
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
          
             IScheduleDay part = _factory.CreateSchedulePartWithMainShiftAndAbsence();
             var absenceLayer = part.PersonAbsenceCollection().First().Layer;
-            var model = new AbsenceLayerViewModel(observer, absenceLayer, _eventAggregator);
+            var model = new AbsenceLayerViewModel(observer, new PersonAbsence(part.Person, part.Scenario, absenceLayer), _eventAggregator);
 
 	        _models.ExecuteCommandModel(model.DeleteCommand);
 
@@ -89,11 +89,11 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		{
 			_target.SchedulePart = scheduleDay;
 
-			var payloadFromLayer = _layerWithPayload.Payload;
+			var payloadFromLayer = _personAbsence.Layer.Payload;
 
 			Assert.AreEqual(payloadFromLayer.ConfidentialDisplayColor(person), _target.DisplayColor);
 			Assert.AreEqual(payloadFromLayer.ConfidentialDescription(person).Name, _target.Description);
-			Assert.AreEqual(_layerWithPayload.Period, _target.Period);
+			Assert.AreEqual(_personAbsence.Layer.Period, _target.Period);
 			Assert.AreEqual(TimeSpan.FromMinutes(15), _target.Interval);
 			Assert.IsFalse(_target.IsChanged);
 			Assert.AreSame(scheduleDay, _target.SchedulePart);
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		{
 			var layerObserver = MockRepository.GenerateMock<ILayerViewModelObserver>();
 
-			_target = new AbsenceLayerViewModel(layerObserver, _layerWithPayload, new EventAggregator()) {IsChanged = true};
+			_target = new AbsenceLayerViewModel(layerObserver, _personAbsence, new EventAggregator()) {IsChanged = true};
 
 			_target.UpdatePeriod();
 
