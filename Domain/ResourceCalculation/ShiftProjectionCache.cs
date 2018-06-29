@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	{
 		private Lazy<IEditableShift> _mainShift;
 		private readonly IWorkShift _workShift;
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_LessResourcesXXL_74915)]
 		private Lazy<IVisualLayerCollection> _mainshiftProjection;
 		private readonly IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 		private IDateOnlyAsDateTimePeriod _dateOnlyAsPeriod;

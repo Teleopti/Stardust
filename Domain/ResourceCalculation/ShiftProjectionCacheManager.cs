@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		ShiftProjectionCache ShiftProjectionCacheFromShift(IEditableShift shift, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod);
 	}
 
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_LessResourcesXXL_74915)]
 	public class ShiftProjectionCacheManagerLessResources : IShiftProjectionCacheManager
 	{
 		private readonly IDictionary<IWorkShiftRuleSet, List<ShiftProjectionCache>> _ruleSetListDictionary = new Dictionary<IWorkShiftRuleSet, List<ShiftProjectionCache>>();
@@ -63,7 +62,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			foreach (var shiftProjectionCache in shiftProjectionCaches)
 			{
-				//shiftProjectionCache.SetDate(dateOnlyAsDateTimePeriod);
 				shiftProjectionCache.SetDateLessResources(dateOnlyAsDateTimePeriod);
 			}
 
@@ -81,9 +79,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		private IEnumerable<ShiftProjectionCache> getShiftsForRuleSet(IWorkShiftRuleSet ruleSet)
 		{
-			List<ShiftProjectionCache> shiftProjectionCacheList;
-
-			if (!_ruleSetListDictionary.TryGetValue(ruleSet, out shiftProjectionCacheList))
+			if (!_ruleSetListDictionary.TryGetValue(ruleSet, out var shiftProjectionCacheList))
 			{
 				shiftProjectionCacheList = _shiftProjectionCacheFetcher.Execute(ruleSet).ToList();
 
@@ -97,6 +93,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_ruleSetListDictionary.Clear();
 		}
 	}
+	
+	
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_LessResourcesXXL_74915)]
 	public class ShiftProjectionCacheManager : IShiftProjectionCacheManager, IDisposable
 	{
         private readonly IDictionary<IWorkShiftRuleSet, List<ShiftProjectionCache>> _ruleSetListDictionary = new Dictionary<IWorkShiftRuleSet, List<ShiftProjectionCache>>();

@@ -17,10 +17,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		{
 		}
 
-		protected override ShiftProjectionCache ForDate(ShiftProjectionCache shiftProjectionCache, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
+		protected override void ForDate(ShiftProjectionCache shiftProjectionCache, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
 		{
 			shiftProjectionCache.SetDateLessResources(dateOnlyAsDateTimePeriod);
-			return shiftProjectionCache;
 		}
 	}
 
@@ -77,19 +76,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		}
 
 		[RemoveMeWithToggle(Toggles.ResourcePlanner_LessResourcesXXL_74915)]
-		protected virtual ShiftProjectionCache ForDate(ShiftProjectionCache shiftProjectionCache, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
+		protected virtual void ForDate(ShiftProjectionCache shiftProjectionCache, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
 		{
-#pragma warning disable 618
 			shiftProjectionCache.SetDate(dateOnlyAsDateTimePeriod);
-#pragma warning restore 618
-			return shiftProjectionCache;
 		}
 
 		private void assignShiftProjection(IEnumerable<IPersonAssignment> orginalPersonAssignments, ShiftProjectionCache shiftProjectionCache, IScheduleDay destinationScheduleDay, 
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, INewBusinessRuleCollection businessRules, 
 			SchedulingOptions schedulingOptions, ResourceCalculationData resourceCalculationData)
 		{
-			shiftProjectionCache = ForDate(shiftProjectionCache, destinationScheduleDay.DateOnlyAsPeriod);
+			ForDate(shiftProjectionCache, destinationScheduleDay.DateOnlyAsPeriod);
 
 			var personAssignment = destinationScheduleDay.PersonAssignment();
 	        if (personAssignment != null && personAssignment.PersonalActivities().Any())
