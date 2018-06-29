@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 					{
 						Id = x.Id.Value,
 						Name = _workloadNameBuilder.WorkloadName(skill.Name, x.Name)
-					}).ToArray()
+					}).OrderBy(w=>w.Name).ToArray()
 				})
 			};
 		}
