@@ -3093,7 +3093,7 @@
     <Compile Include="ResourceCalculation\PopulationStatisticsData.cs" />
     <Compile Include="ResourceCalculation\PreSchedulingStatusChecker.cs" />
     <Compile Include="Optimization\ScheduleMatrixPro.cs" />
-    <Compile Include="ResourceCalculation\ShiftProjectionCacheManagerOLD.cs" />
+    <Compile Include="ResourceCalculation\ShiftProjectionCacheManager.cs" />
     <Compile Include="ResourceCalculation\ShiftProjectionCacheFilter.cs" />
     <Compile Include="ResourceCalculation\SkillStaffPeriodHolder.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyService.cs" />
