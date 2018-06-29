@@ -6,8 +6,10 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.ScheduleReporting;
+using Teleopti.Ccc.WinCodeTest.Common;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 {
@@ -78,6 +80,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
 				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly, true)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
+				Expect.Call(_scheduleDay.Person).Return(new Person());
 				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
 				Expect.Call(_visualLayerCollection.GetEnumerator()).Return(_visualLayers.GetEnumerator());
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
@@ -103,7 +106,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
 				Expect.Call(_visualLayerCollection.GetEnumerator()).Return(_visualLayers.GetEnumerator());
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
-				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly);	
+				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly);
+				Expect.Call(_scheduleDay.Person).Return(new Person());
 			}
 
 			using (_mockRepository.Playback())
@@ -126,6 +130,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
 				Expect.Call(_visualLayerCollection.GetEnumerator()).Return(_visualLayers.GetEnumerator());
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly);
+				Expect.Call(_scheduleDay.Person).Return(new Person());
 			}
 
 			using (_mockRepository.Playback())

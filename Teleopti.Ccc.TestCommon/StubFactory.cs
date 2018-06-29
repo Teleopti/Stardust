@@ -228,11 +228,11 @@ namespace Teleopti.Ccc.TestCommon
 			return visualLayer;
 		}
 
-		public IVisualLayer VisualLayerStub(string activtyName)
+		public IVisualLayer VisualLayerStub(string activityName)
 		{
 			var visualLayer = MockRepository.GenerateMock<IVisualLayer>();
 			visualLayer.Stub(x => x.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
-			visualLayer.Stub(x => x.Payload).Return(new Activity());
+			visualLayer.Stub(x => x.Payload).Return(new Activity{Description = new Description(activityName)});
 			return visualLayer;
 		}
 
