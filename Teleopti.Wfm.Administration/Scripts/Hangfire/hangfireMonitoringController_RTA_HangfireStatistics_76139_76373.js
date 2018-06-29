@@ -8,8 +8,6 @@
 	function hangfireMonitoringController($http, $interval, tokenHeaderService) {
 		var vm = this;
 		vm.getTypesOfFailedEvents = getTypesOfFailedEvents;
-		vm.requeueFailedEvents = requeueFailedEvents;
-		vm.deleteFailedEvents = deleteFailedEvents;
 		vm.getPerformanceStatistics = getPerformanceStatistics;
 		vm.isFetching = false;
 
@@ -24,19 +22,7 @@
 					vm.isFetching = false;
 				});
 		}
-
-		function requeueFailedEvents(type) {
-			return $http.post("./Hangfire/RequeueFailed", '"' + type + '"', tokenHeaderService.getHeaders()).then(function() {
-				getTypesOfFailedEvents();
-			});
-		}
-
-		function deleteFailedEvents(type) {
-			return $http.post("./Hangfire/DeleteFailed", '"' + type + '"', tokenHeaderService.getHeaders()).then(function () {
-				getTypesOfFailedEvents();
-			});
-		}
-
+		
 		function byCount(e1, e2) {
 			return e2.Count - e1.Count;
 		}

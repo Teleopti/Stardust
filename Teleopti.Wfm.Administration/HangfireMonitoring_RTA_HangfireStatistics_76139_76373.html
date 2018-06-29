@@ -5,7 +5,6 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<strong>Failed jobs</strong>
-					<button class="pull-right" ng-click="vm.getTypesOfFailedEvents()" ng-disabled="vm.isFetching">Refresh</button>
 				</div>
 				<div class="panel-body">
 					<table class="table table-striped">
@@ -13,21 +12,12 @@
 							<tr>
 								<th>Event</th>
 								<th>Count</th>
-								<th></th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr ng-repeat="event in vm.eventCountFailed">
 								<td>{{event.Type}}</td>
 								<td>{{event.Count}}</td>
-								<td>
-									<button ng-click="vm.requeueFailedEvents(event.Type)">
-										Requeue
-									</button>
-									<button ng-click="vm.deleteFailedEvents(event.Type)">
-										Delete
-									</button>
-								</td>
 							</tr>
 						</tbody>
 					</table>
@@ -38,7 +28,6 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<strong>Job Performance</strong>
-					<button class="pull-right" ng-click="vm.getPerformanceStatistics()" ng-disabled="vm.isFetching">Refresh</button>
 				</div>
 				<div class="panel-body">
 					<table class="table table-striped">
