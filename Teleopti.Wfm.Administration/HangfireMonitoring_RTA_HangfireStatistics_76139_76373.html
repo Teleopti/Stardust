@@ -4,7 +4,7 @@
 		<div class="col-md-5">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<strong>Failed Jobs</strong>
+					<strong>Job Failures</strong>
 				</div>
 				<div class="panel-body">
 					<table class="table table-striped">
@@ -15,9 +15,9 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="event in vm.eventCountFailed">
-								<td>{{event.Type}}</td>
-								<td>{{event.Count}}</td>
+							<tr ng-repeat="failedJob in vm.jobFailures">
+								<td>{{failedJob.Type}}</td>
+								<td>{{failedJob.Count}}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -42,7 +42,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="job in vm.jobs">
+							<tr ng-repeat="job in vm.jobPerformance">
 								<td>{{job.Type}}</td>
 								<td>{{job.Count}}</td>
 								<td>{{job.TotalTime}}</td>

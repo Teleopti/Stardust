@@ -63,5 +63,15 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Json(_statisticViewModelBuilder.BuildPerformanceStatistics());
 		}
 
+		[HttpGet, Route("Hangfire/Statistics2")]
+		public IHttpActionResult HangfireStatistics2()
+		{
+			return Json(new
+			{
+				JobFailures =  _statisticViewModelBuilder.BuildTypesOfEvents("Failed"),
+				JobPerformance = _statisticViewModelBuilder.BuildPerformanceStatistics()
+			});
+		}
+
 	}
 }
