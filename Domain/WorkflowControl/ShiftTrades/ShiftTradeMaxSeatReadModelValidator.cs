@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 			List<IVisualLayer> incomingActivitiesRequiringSeat, IList<ISeatUsageForInterval> seatUsageOnEachIntervalDic,
 			TimeZoneInfo timeZoneInfo)
 		{
-			var incomingSiteActivies = toSiteActivities(incomingActivitiesRequiringSeat);
+			var incomingSiteActivies = toSiteActivities(incomingActivitiesRequiringSeat, scheduleDayIncoming.Person);
 			var siteActivities = _scheduleProjectionReadOnlyActivityProvider.GetActivitiesBySite(site,
 				scheduleDayIncoming.Period,
 				_currentScenario.Current(), true);
@@ -33,13 +33,13 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 			return personScheduleCausesMaxSeatViolation(site, scheduleDayOutgoing, siteActivities, seatUsageOnEachIntervalDic);
 		}
 
-		private IEnumerable<ISiteActivity> toSiteActivities(IEnumerable<IVisualLayer> visualLayers)
+		private IEnumerable<ISiteActivity> toSiteActivities(IEnumerable<IVisualLayer> visualLayers, IPerson agent)
 		{
 			return visualLayers.Select(visualLayer => new SiteActivity
 			{
 				ActivityId = visualLayer.Payload.Id.GetValueOrDefault(),
-				PersonId = visualLayer.Person.Id.GetValueOrDefault(),
-				SiteId = visualLayer.Person.MyTeam(new DateOnly(visualLayer.Period.StartDateTime)).Site.Id.GetValueOrDefault(),
+				PersonId = agent.Id.GetValueOrDefault(),
+				SiteId = agent.MyTeam(new DateOnly(visualLayer.Period.StartDateTime)).Site.Id.GetValueOrDefault(),
 				StartDateTime = visualLayer.Period.StartDateTime,
 				EndDateTime = visualLayer.Period.EndDateTime,
 				RequiresSeat = true

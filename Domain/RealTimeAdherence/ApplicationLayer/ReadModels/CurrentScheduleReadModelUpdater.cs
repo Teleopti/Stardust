@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels
 							select new ScheduledActivity
 							{
 								BelongsToDate = belongsToDate,
-								DisplayColor = layer.DisplayColor().ToArgb(),
+								DisplayColor = layer.Payload.ConfidentialDisplayColor(x).ToArgb(),
 								EndDateTime = layer.Period.EndDateTime,
 								Name = layer.DisplayDescription().Name,
 								PayloadId = layer.Payload.UnderlyingPayload.Id.GetValueOrDefault(),

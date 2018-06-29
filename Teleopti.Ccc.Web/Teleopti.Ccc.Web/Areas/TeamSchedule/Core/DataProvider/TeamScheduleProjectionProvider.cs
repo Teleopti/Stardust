@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 													? (isAbsenceConfidential && !canViewConfidential
 														? ConfidentialPayloadValues.DisplayColorHex
 														: ((IAbsence)layer.Payload).DisplayColor.ToHtml())
-													: layer.DisplayColor().ToHtml(),
+													: layer.Payload.ConfidentialDisplayColor(scheduleDay.Person).ToHtml(),
 							Start = startDateTimeInUserTimeZone.ToGregorianDateTimeString().Replace("T", " ").Remove(16),
 							End = startDateTimeInUserTimeZone.Add(layer.Period.ElapsedTime()).ToGregorianDateTimeString().Replace("T", " ").Remove(16),
 							Minutes = (int)layer.Period.ElapsedTime().TotalMinutes,
@@ -305,7 +305,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 							? (isAbsenceConfidential && !isPermittedToViewConfidential
 								? ConfidentialPayloadValues.DisplayColorHex
 								: (layer.Payload as IAbsence).DisplayColor.ToCSV())
-							: layer.DisplayColor().ToCSV(),
+							: layer.Payload.ConfidentialDisplayColor(scheduleDay.Person).ToCSV(),
 						Start = startDateTimeInUserTimeZone,
 						End = endDateTimeInUserTimeZone,
 						LengthInMinutes = (int)endDateTimeInUserTimeZone.Subtract(startDateTimeInUserTimeZone).TotalMinutes,

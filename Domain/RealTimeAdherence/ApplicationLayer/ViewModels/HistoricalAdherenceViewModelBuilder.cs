@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 				Now = formatForUser(_now.UtcDateTime()),
 				PersonId = personId,
 				AgentName = person?.Name.ToString(),
-				Schedules = buildSchedules(_schedule.Load(personId, date)),
+				Schedules = buildSchedules(_schedule.Load(personId, date), person),
 				Changes = buildChanges(adherenceDay.Changes()),
 				OutOfAdherences = buildOutOfAdherences(adherenceDay.OutOfAdherences()),
 				RecordedOutOfAdherences = buildOutOfAdherences(adherenceDay.RecordedOutOfAdherences()),
@@ -79,14 +79,14 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 			};
 		}
 
-		private IEnumerable<HistoricalAdherenceActivityViewModel> buildSchedules(IEnumerable<IVisualLayer> layers)
+		private IEnumerable<HistoricalAdherenceActivityViewModel> buildSchedules(IEnumerable<IVisualLayer> layers, IPerson person)
 		{
 			return (
 					from layer in layers
 					select new HistoricalAdherenceActivityViewModel
 					{
 						Name = layer.DisplayDescription().Name,
-						Color = ColorTranslator.ToHtml(layer.DisplayColor()),
+						Color = ColorTranslator.ToHtml(layer.Payload.ConfidentialDisplayColor(person)),
 						StartTime = formatForUser(layer.Period.StartDateTime),
 						EndTime = formatForUser(layer.Period.EndDateTime),
 					})

@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 			    if (significant == SchedulePartView.FullDayAbsence || significant == SchedulePartView.ContractDayOff)
 			    {
 				    IVisualLayerCollection visualLayerCollection = scheduleDay.ProjectionService().CreateProjection();
-				    dto = AddFullDayAbsence(visualLayerCollection, dto);
+				    dto = AddFullDayAbsence(visualLayerCollection, dto, person);
 			    }
 
 			    if (significant == SchedulePartView.ContractDayOff)
@@ -260,7 +260,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
             resultSoFar.ScheduledItemShortName = cat.Description.ShortName;
         }
 
-    	private static ValidatedSchedulePartDto AddFullDayAbsence(IEnumerable<IVisualLayer> visualLayerCollection, ValidatedSchedulePartDto resultSoFar)
+    	private static ValidatedSchedulePartDto AddFullDayAbsence(IEnumerable<IVisualLayer> visualLayerCollection, ValidatedSchedulePartDto resultSoFar, IPerson person)
         {
             if (visualLayerCollection.IsEmpty())
                 return resultSoFar;
@@ -269,7 +269,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
             resultSoFar.HasAbsence = true;
             resultSoFar.ScheduledItemName = layer.DisplayDescription().Name;
             resultSoFar.ScheduledItemShortName = layer.DisplayDescription().ShortName;
-            resultSoFar.DisplayColor = new ColorDto(layer.DisplayColor());
+            resultSoFar.DisplayColor = new ColorDto(layer.Payload.ConfidentialDisplayColor(person));
             
             return resultSoFar;
         }

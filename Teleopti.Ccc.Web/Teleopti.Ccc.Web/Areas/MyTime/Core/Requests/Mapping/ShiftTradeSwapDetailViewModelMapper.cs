@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var myScheduleViewModel = new ShiftTradeEditPersonScheduleViewModel
 			{
 				Name = _personNameProvider.BuildNameFromSetting(o.Person.Name),
-				ScheduleLayers = createShiftTradeLayers(myScheduleDay, timeZoneInfo, timeLineRangeTot),
+				ScheduleLayers = createShiftTradeLayers(myScheduleDay, timeZoneInfo, timeLineRangeTot, o.Person),
 				HasUnderlyingDayOff = myScheduleDay.SignificantPartForDisplay == SchedulePartView.ContractDayOff,
 				DayOffText = myScheduleDay.DayOffText,
 				StartTimeUtc = myScheduleDay.ScheduleLayers != null && myScheduleDay.ScheduleLayers.Any()
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			return returnDay;
 		}
 
-		private IEnumerable<ShiftTradeEditScheduleLayerViewModel> createShiftTradeLayers(ShiftTradePersonDayData personDay, TimeZoneInfo timeZone, DateTimePeriod timeLineRange)
+		private IEnumerable<ShiftTradeEditScheduleLayerViewModel> createShiftTradeLayers(ShiftTradePersonDayData personDay, TimeZoneInfo timeZone, DateTimePeriod timeLineRange, IPerson person)
 		{
 			if (personDay.SignificantPartForDisplay == SchedulePartView.DayOff)
 				return createShiftTradeDayOffLayer(timeLineRange, timeZone);
@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				{
 					Payload = visualLayer.DisplayDescription().Name,
 					LengthInMinutes = (int)length,
-					Color = ColorTranslator.ToHtml(visualLayer.DisplayColor()),
+					Color = ColorTranslator.ToHtml(visualLayer.Payload.ConfidentialDisplayColor(person)),
 					TitleTime = createTitle(startDate, endDate),
 					ElapsedMinutesSinceShiftStart = (int)startDate.Subtract(TimeZoneHelper.ConvertFromUtc(shiftStartTime, timeZone)).TotalMinutes
 				}).ToList();

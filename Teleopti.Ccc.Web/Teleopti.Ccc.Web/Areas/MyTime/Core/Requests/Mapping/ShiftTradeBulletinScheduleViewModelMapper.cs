@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				return new ShiftTradeScheduleViewModel();
 			}
 
-			var mySchedule = _shiftTradePersonScheduleViewModelMapper.Map(myScheduleDayReadModel, true);
+			var mySchedule = _shiftTradePersonScheduleViewModelMapper.Map(myScheduleDayReadModel, true, false);
 			var possibleTradeSchedule = data.TimeFilter == null
 				? getPossibleTradeSchedules(possibleTradePersons, data.Paging, data.TimeSortOrder).ToList()
 				: getFilteredTimesPossibleTradeSchedules(possibleTradePersons, data.Paging, data.TimeFilter, data.TimeSortOrder).ToList();

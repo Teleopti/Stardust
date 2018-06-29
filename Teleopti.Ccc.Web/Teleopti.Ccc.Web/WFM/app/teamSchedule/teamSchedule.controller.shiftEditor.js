@@ -46,7 +46,7 @@
 		vm.displayDate = moment(vm.date).format("L");
 		vm.availableActivities = [];
 		vm.trackId = guidgenerator.newGuid();
-		var isSaving = false;
+		vm.isSaving = false;
 
 		vm.$onInit = function () {
 			initScheduleState();
@@ -111,7 +111,7 @@
 		}
 
 		vm.saveChanges = function () {
-			isSaving = true;
+			vm.isSaving = true;
 			ShiftEditorService.changeActivityType(vm.date, vm.personId, getChangedLayers(), { TrackId: vm.trackId }).then(function (response) {
 				initScheduleState();
 				teamScheduleNotificationService.reportActionResult({
@@ -126,7 +126,7 @@
 		}
 
 		vm.isSaveButtonDisabled = function () {
-			return !vm.hasChanges || vm.scheduleChanged || isSaving;
+			return !vm.hasChanges || vm.scheduleChanged || vm.isSaving;
 		}
 
 
@@ -147,10 +147,11 @@
 		}
 
 		function initScheduleState() {
-			isSaving = false;
+			vm.isSaving = false;
 			vm.hasChanges = false;
 			vm.scheduleChanged = false;
 			vm.selectedShiftLayer = null;
+			vm.selectedActivitiyId = null;
 		}
 
 		function subscribeToScheduleChange() {
@@ -159,8 +160,13 @@
 					var message = messages[i];
 					if (message.DomainReferenceId === vm.personId
 						&& serviceDateFormatHelper.getDateOnly(message.StartDate.substring(1, message.StartDate.length)) === vm.date
-						&& vm.trackId !== message.TrackId) {
-						vm.scheduleChanged = true;
+					) {
+						if (vm.trackId !== message.TrackId) {
+							vm.scheduleChanged = true;
+						} else {
+							getSchedule();
+							initScheduleState();
+						}
 						return;
 					}
 				}
@@ -176,7 +182,7 @@
 				.filter(function (sl) {
 					return !!sl.ShiftLayerIds.filter(function (id) {
 						return vm.scheduleVm.ShiftLayers
-							.filter(function (isl) { return isl.ShiftLayerIds.indexOf(id) >= 0; }).length > 1;
+							.filter(function (isl) { return isl.ShiftLayerIds && isl.ShiftLayerIds.indexOf(id) >= 0; }).length > 1;
 					}).length;
 				});
 
@@ -234,6 +240,9 @@
 				}, 150);
 			}, false);
 			el.addEventListener('mouseup', function () {
+				cancelScrollIntervalPromise();
+			}, false);
+			el.addEventListener('mouseleave', function () {
 				cancelScrollIntervalPromise();
 			}, false);
 

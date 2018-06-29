@@ -15,12 +15,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 		private readonly IProjectionProvider _projectionProvider;
 		private readonly IUserTimeZone _userTimeZoneInfo;
 		private readonly IUserCulture _userCulture;
+		private readonly ILoggedOnUser _loggedOnUser;
 
-		public AsmViewModelMapper(IProjectionProvider projectionProvider, IUserTimeZone userTimeZoneInfo, IUserCulture userCulture)
+		public AsmViewModelMapper(IProjectionProvider projectionProvider, IUserTimeZone userTimeZoneInfo, IUserCulture userCulture, ILoggedOnUser loggedOnUser)
 		{
 			_projectionProvider = projectionProvider;
 			_userTimeZoneInfo = userTimeZoneInfo;
 			_userCulture = userCulture;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		public AsmViewModel Map(DateTime asmZeroLocal, IEnumerable<IScheduleDay> scheduleDays, int unreadMessageCount)
@@ -93,7 +95,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 			                        		Payload = visualLayer.DisplayDescription().Name,
 											StartMinutesSinceAsmZero = getStartMinutesSinceAsmZero(dstJudgement, startDate,asmZero),
 			                        		LengthInMinutes = length,
-			                        		Color = ColorTranslator.ToHtml(visualLayer.DisplayColor()),
+			                        		Color = ColorTranslator.ToHtml(visualLayer.Payload.ConfidentialDisplayColor(_loggedOnUser.CurrentUser())),
 											StartTimeText = startDate.ToString(culture.DateTimeFormat.ShortTimePattern, culture),
 											EndTimeText = endDate.ToString(culture.DateTimeFormat.ShortTimePattern, culture)
 							 }).ToList();

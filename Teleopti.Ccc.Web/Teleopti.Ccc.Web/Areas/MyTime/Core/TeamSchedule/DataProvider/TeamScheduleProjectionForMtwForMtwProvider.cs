@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
 		{
 			var projection = _projectionProvider.Projection(scheduleDay);
 			if (projection != null && projection.HasLayers)
-				return MakeProjection(projection);
+				return MakeProjection(projection, scheduleDay.Person);
 
 			if (scheduleDay.HasDayOff())
 				return MakeDayOffProjection(scheduleDay);
@@ -48,13 +48,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
 			       	};
 				       			}
 
-		private static ITeamScheduleProjection MakeProjection(IVisualLayerCollection projection)
+		private static ITeamScheduleProjection MakeProjection(IVisualLayerCollection projection, IPerson person)
 		{
 			var layers = (from l in projection
 			              select new TeamScheduleLayer
 			                     	{
 			                     		Period = l.Period,
-			                     		DisplayColor = l.DisplayColor(),
+			                     		DisplayColor = l.Payload.ConfidentialDisplayColor(person),
 										ActivityName = l.DisplayDescription().Name
 			                     	})
 				.ToArray();

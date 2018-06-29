@@ -75,13 +75,14 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		}
 
 
-		static public PersonScheduleDayReadModel CreatePersonScheduleDayReadModelWithSimpleShift(IPerson person, DateOnly date,  IList<SimpleLayer> simpleLayers)
+		static public PersonScheduleDayReadModel CreatePersonScheduleDayReadModelWithSimpleShift(IPerson person, DateOnly date,  IList<SimpleLayer> simpleLayers, bool isFulldayAbsence = false)
 		{
 			var contractTimeMinutes = (int)simpleLayers.Last().End.Subtract(simpleLayers.First().Start).TotalMinutes;
 			var shift = new Shift
 			{
 				Projection = simpleLayers,
-				ContractTimeMinutes = contractTimeMinutes
+				ContractTimeMinutes = contractTimeMinutes,
+				IsFullDayAbsence = isFulldayAbsence
 			};
 			var model = new Model
 			{

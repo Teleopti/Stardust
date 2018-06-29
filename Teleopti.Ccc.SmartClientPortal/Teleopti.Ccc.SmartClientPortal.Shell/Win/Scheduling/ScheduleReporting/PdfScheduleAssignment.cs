@@ -42,16 +42,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting
 				categoryName = category.Description.Name;
 			}
 
-        	Height = render(top, start, categoryName, end, projection.ContractTime(), categoryColor, headerTop, projection, timeZoneInfo, details);
+        	Height = render(top, start, categoryName, end, projection.ContractTime(), categoryColor, headerTop, projection, timeZoneInfo, details, schedulePart.Person);
 
 
             Template.Reset(new SizeF(columnWidth, Height));
-            Height = render(top, start, categoryName, end, projection.ContractTime(), categoryColor, headerTop, projection, timeZoneInfo, details);
+            Height = render(top, start, categoryName, end, projection.ContractTime(), categoryColor, headerTop, projection, timeZoneInfo, details, schedulePart.Person);
         }
 
 
         private float render(float top, DateTime startDateTime, string category, DateTime endDateTime, TimeSpan contractTime,
-            Color categoryColor, float headerTop, IVisualLayerCollection payLoads, TimeZoneInfo timeZoneInfo, ScheduleReportDetail details)
+            Color categoryColor, float headerTop, IVisualLayerCollection payLoads, TimeZoneInfo timeZoneInfo, ScheduleReportDetail details, IPerson person)
         {
             top = RenderDate(startDateTime, top);
             top = RenderCategory(category, top);
@@ -75,13 +75,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting
                         {
                             if (activty.ReportLevelDetail != ReportLevelDetail.None)
                             {
-                                top = RenderPayLoad(visualLayer, top, timeZoneInfo);
+                                top = RenderPayLoad(visualLayer, top, timeZoneInfo, person);
                             }
                         }
                     }
                     else
                     {
-                        top = RenderPayLoad(visualLayer, top, timeZoneInfo);
+                        top = RenderPayLoad(visualLayer, top, timeZoneInfo, person);
                     }
                     
                     
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting
         private const int MAX_NUMBER_OF_CHARACTERS = 20;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "Teleopti.Interfaces.Domain.TimePeriod.ToShortTimeString")]
-        private float RenderPayLoad(IVisualLayer visualLayer, float top, TimeZoneInfo timeZoneInfo)
+        private float RenderPayLoad(IVisualLayer visualLayer, float top, TimeZoneInfo timeZoneInfo, IPerson person)
         {
             Format.Alignment = PdfTextAlignment.Center;
             const float fontSize = 7f;
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting
             float lineStart = timeRect.Top;
             float lineEnd = nameRect.Bottom;
 
-            Graphics.DrawLine(new PdfPen(visualLayer.DisplayColor(), 5), 7, lineStart, 7, lineEnd);
+            Graphics.DrawLine(new PdfPen(visualLayer.Payload.ConfidentialDisplayColor(person), 5), 7, lineStart, 7, lineEnd);
 
             return nameRect.Bottom + 2;
             //return top + fontSize + 2 + RowSpace;

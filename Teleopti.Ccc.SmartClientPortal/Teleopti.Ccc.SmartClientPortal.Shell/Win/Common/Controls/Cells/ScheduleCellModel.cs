@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
                     var rect2 = rect;
                     rect2.Inflate(1, 1);
                     using (
-                        Brush brush = new LinearGradientBrush(rect2, Color.WhiteSmoke, layer.DisplayColor(), 90, false))
+                        Brush brush = new LinearGradientBrush(rect2, Color.WhiteSmoke, layer.Payload.ConfidentialDisplayColor(scheduleDisplayRow.ScheduleDay.Person), 90, false))
                     {
                         g.FillRectangle(brush, upperRect);
                         var tipData = new ToolTipData(rect.X, rect.X + rect.Width,
@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
                         tipDatas.Add(tipData);
                     }
 
-                    using (var sBrush = new SolidBrush(layer.DisplayColor()))
+                    using (var sBrush = new SolidBrush(layer.Payload.ConfidentialDisplayColor(scheduleDisplayRow.ScheduleDay.Person)))
                     {
                         g.FillRectangle(sBrush, lowerRect);
                     }
@@ -259,7 +259,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
                 var lowerRect = new RectangleF(rect.X, rect.Y + rect.Height / 2 - 5, rect.Width, rect.Height / 2 + 5);
                 if (!rect.IsEmpty)
                 {
-                    var color = Color.FromArgb(80, layer.DisplayColor());
+                    var color = Color.FromArgb(80, layer.Payload.ConfidentialDisplayColor(scheduleDisplayRow.ScheduleDayBefore.Person));
                     var colorSmoke = Color.FromArgb(80, Color.WhiteSmoke);
                     var rect2 = rect;
                     rect2.Inflate(1, 1);
@@ -309,7 +309,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.Cells
                 var lowerRect = new RectangleF(rect.X, rect.Y + rect.Height / 2 - 5, rect.Width, rect.Height / 2 + 5);
                 if (!rect.IsEmpty)
                 {
-                    var color = Color.FromArgb(80, layer.DisplayColor());
+                    var color = Color.FromArgb(80, layer.Payload.ConfidentialDisplayColor(scheduleDisplayRow.ScheduleDayAfter.Person));
                     var colorSmoke = Color.FromArgb(80, Color.WhiteSmoke);
                     var rect2 = rect;
                     rect2.Inflate(1, 1);
