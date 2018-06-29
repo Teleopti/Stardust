@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_agentBadgeWithinPeriodProvider = agentBadgeWithinPeriodProvider;
 		}
 
+		[HttpGet]
 		[UnitOfWork]
 		[TenantUnitOfWork]
 		public virtual ActionResult Index()

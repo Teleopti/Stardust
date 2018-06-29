@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_absenceReportPersister = absenceReportPersister;
 		}
 
+		[HttpGet]
 		[EnsureInPortal]
 		[UnitOfWork]
 		public virtual ActionResult Week()
@@ -35,6 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return View("WeekPartial", _requestsViewModelFactory.CreatePageViewModel());
 		}
 
+		[HttpGet]
 		[EnsureInPortal]
 		[UnitOfWork]
 		public virtual ActionResult MobileDay()
@@ -42,6 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return View("MobileDayPartial", _requestsViewModelFactory.CreatePageViewModel());
 		}
 
+		[HttpGet]
 		[EnsureInPortal]
 		[UnitOfWork]
 		public virtual ActionResult MobileWeek()
@@ -49,18 +52,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return View("MobileWeekPartial", _requestsViewModelFactory.CreatePageViewModel());
 		}
 
+		[HttpGet]
 		[EnsureInPortal]
 		public virtual ActionResult Month()
 		{
 			return View("MonthPartial");
 		}
 
+		[HttpGet]
 		[EnsureInPortal]
 		public virtual ActionResult MobileMonth()
 		{
 			return View("MobileMonthPartial");
 		}
 
+		[HttpGet]
 		public ActionResult Index()
 		{
 			return RedirectToAction("Week");

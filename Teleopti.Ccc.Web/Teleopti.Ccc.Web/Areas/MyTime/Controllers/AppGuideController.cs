@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_currentTenant = currentTenant;
 		}
 
+		[HttpGet]
 		[TenantUnitOfWork]
 		public virtual PartialViewResult WFMApp()
 		{

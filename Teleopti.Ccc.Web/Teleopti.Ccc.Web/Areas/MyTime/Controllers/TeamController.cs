@@ -26,16 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWork]
-		public virtual JsonResult TeamsAndOrGroupings(DateOnly? date)
-		{
-			if (!date.HasValue)
-				date = _now.ServerDate_DontUse();
-			return Json(
-				_teamViewModelFactory.CreateTeamOrGroupOptionsViewModel(date.Value),
-				JsonRequestBehavior.AllowGet);
-		}
-
-		[UnitOfWork]
+		[HttpGet]
 		public virtual JsonResult TeamsForShiftTrade(DateOnly? date)
 		{
 			if (!date.HasValue)
@@ -60,6 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWork]
+		[HttpGet]
 		public virtual JsonResult TeamsForShiftTradeBoard(DateOnly? date)
 		{
 			if (!date.HasValue)
@@ -71,6 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWork]
+		[HttpGet]
 		public virtual JsonResult SitesForShiftTrade(DateOnly? date)
 		{
 			if (!date.HasValue) date = _now.ServerDate_DontUse();

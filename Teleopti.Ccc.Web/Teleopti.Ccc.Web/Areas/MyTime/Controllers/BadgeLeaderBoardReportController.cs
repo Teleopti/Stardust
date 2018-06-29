@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 	    //
         // GET: /MyTime/BadgeLeaderBoardReport/
-
+		[HttpGet]
 		[EnsureInPortal]
 		[UnitOfWork]
 		public virtual ViewResult Index()
@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(_badgeLeaderBoardReportViewModelFactory.CreateBadgeLeaderBoardReportViewModel(query), JsonRequestBehavior.AllowGet);
 		}
 
+		[HttpGet]
 	    [UnitOfWork]
 	    public virtual JsonResult OptionsForLeaderboard()
 	    {

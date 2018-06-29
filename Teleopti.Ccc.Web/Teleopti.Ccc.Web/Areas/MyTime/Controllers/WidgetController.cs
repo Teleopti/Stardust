@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_myReportViewModelFactory = myReportViewModelFactory;
 		}
 
+		[HttpGet]
 		public ViewResult Index()
 		{
 			var layoutViewModel = _layoutBaseViewModelFactory.CreateLayoutBaseViewModel(Resources.AgentScheduleMessenger);
