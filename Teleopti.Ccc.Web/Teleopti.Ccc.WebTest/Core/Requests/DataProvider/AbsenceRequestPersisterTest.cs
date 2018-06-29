@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Tracking;
@@ -817,6 +818,48 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				StartDate = _today.AddDays(1),
 				EndDate = _today.AddDays(1),
 				StartTime = new TimeOfDay(TimeSpan.FromHours(0)),
+				EndTime = new TimeOfDay(TimeSpan.FromHours(1))
+			});
+
+			Persister.Persist(form);
+
+			var request = PersonRequestRepository.LoadAll().FirstOrDefault();
+			request.IsDenied.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldCheckPersonalAccountCorrectlyWhenApprovingCrossDayAbsence()
+		{
+			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
+				, CurrentScenario.Current(),
+				_today.ToDateTimePeriod(
+					new TimePeriod(TimeSpan.FromHours(16), TimeSpan.FromDays(1).Add(TimeSpan.FromHours(1))),
+					UserTimeZone.TimeZone())));
+
+			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_person
+				, CurrentScenario.Current(), _today.AddDays(1), new DayOffTemplate(new Description("test"))));
+
+			_absence = createAbsence();
+			_absence.Tracker = Tracker.CreateTimeTracker();
+
+			var accountTime = new AccountTime(_today)
+			{
+				Accrued = TimeSpan.FromHours(2)
+			};
+			createPersonAbsenceAccount(_person, _absence, accountTime);
+
+			setWorkflowControlSet(usePersonAccountValidator:true);
+
+			var skillOpenPeriod = new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(25));
+			var skill = SkillFactory.CreateSkill("Phone");
+			skill.MidnightBreakOffset = TimeSpan.FromHours(1);
+			setupPersonSkills(skill, skillOpenPeriod);
+
+			var form = createAbsenceRequestForm(new DateTimePeriodForm
+			{
+				StartDate = _today,
+				EndDate = _today.AddDays(1),
+				StartTime = new TimeOfDay(TimeSpan.FromHours(23)),
 				EndTime = new TimeOfDay(TimeSpan.FromHours(1))
 			});
 
