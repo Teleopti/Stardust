@@ -2,6 +2,7 @@
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -182,7 +183,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
 
         private class ModelForTest : MainShiftLayerViewModel
         {
-            public ModelForTest(ILayerViewModelObserver observer, MainShiftLayer layer) : base(observer, layer, null,new EventAggregator())
+            public ModelForTest(ILayerViewModelObserver observer, MainShiftLayer layer) : base(observer,layer , new PersonAssignment(new Person(), new Scenario(), DateOnly.Today),new EventAggregator())
             {
                 MovePermitted = true;
             }

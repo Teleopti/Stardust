@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TimeZoneHelper.CurrentSessionTimeZone)).Repeat.Any();
 
 			_mocks.ReplayAll();
-			_target = new OvertimeLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _layerWithPayload, null, null);
+			_target = new OvertimeLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _layerWithPayload, new PersonAssignment(_person, new Scenario(), DateOnly.Today), null);
 			_testRunner = new CrossThreadTestRunner();
 		}
 
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 			_mocks.ReplayAll();
 
-			var target = new OvertimeLayerViewModel(null, overtimeLayer, null, null);
+			var target = new OvertimeLayerViewModel(null, overtimeLayer, new PersonAssignment(_person, new Scenario(), DateOnly.Today), null);
 			Assert.AreEqual("Qualified overtime", target.LayerDescription);
 		}
 
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		{
 			var layerObserver = MockRepository.GenerateMock<ILayerViewModelObserver>();
 
-			_target = new OvertimeLayerViewModel(layerObserver, _layerWithPayload, null, null);
+			_target = new OvertimeLayerViewModel(layerObserver, _layerWithPayload, new PersonAssignment(_person, new Scenario(), DateOnly.Today), null);
 			
 			_target.IsChanged = true;
 			_target.UpdatePeriod();
@@ -287,13 +287,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 					_target.TimeChanged(panel, 1);
 					Assert.AreEqual(_expectMovePermitted, _target.IsChanged);
 				});
-		}
-
-		[Test]
-		public void VerifyMoveUpDownReturnsFalseIfParentCollectionIsNull()
-		{
-			Assert.IsFalse(_target.CanMoveUp);
-			Assert.IsFalse(_target.CanMoveDown);
 		}
 
 		[Test]

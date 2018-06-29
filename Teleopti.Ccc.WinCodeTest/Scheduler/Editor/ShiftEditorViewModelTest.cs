@@ -5,6 +5,7 @@ using System;
 using System.Threading;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -358,7 +359,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
             IActivity activity = new Activity("test");
             DateTimePeriod period= new DateTimePeriod(2001,1,1,2001,1,2);
             var layer = new MainShiftLayer(activity, period);
-						ILayerViewModel model = new MainShiftLayerViewModel(null, layer, null, null);
+						ILayerViewModel model = new MainShiftLayerViewModel(null, layer, new PersonAssignment(new Person(), new Scenario(), DateOnly.Today), null);
             
             #endregion
 
@@ -443,7 +444,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
             IActivity activity = new Activity("test");
             DateTimePeriod period = new DateTimePeriod(2001, 1, 1, 2001, 1, 2);
             var layer = new MainShiftLayer(activity, period);
-						return new MainShiftLayerViewModel(null, layer, null, null);
+						return new MainShiftLayerViewModel(null, layer, new PersonAssignment(new Person(), new Scenario(), DateOnly.Today), null);
         }
 
         private static void VerifyApplicationCommandModel(CommandModel commandModel,string appFunction)
@@ -457,7 +458,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
         {
             TesterForCommandModels testerForCommandModels = new TesterForCommandModels();
             var layer = new MainShiftLayer(new Activity("asfdgh"), new DateTimePeriod(2001, 1, 1, 2001, 2, 2));
-						MainShiftLayerViewModel mainShiftLayerViewModel = new MainShiftLayerViewModel(null, layer, null, null);
+						MainShiftLayerViewModel mainShiftLayerViewModel = new MainShiftLayerViewModel(null, layer, new PersonAssignment(new Person(), new Scenario(), DateOnly.Today), null);
             _target.SelectLayer(mainShiftLayerViewModel);
             Assert.IsFalse(testerForCommandModels.CanExecute(model), "Should not be able to execute if the selected layer isnt a meeting");
             CreateAndSelectAMeeting();

@@ -4,6 +4,7 @@ using System.Threading;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
@@ -61,7 +62,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void VerifyThatSelectedLayerStillSelectedByCallingWithASelectorIfALayerIsSelected()
         {
             var mainShiftActivityLayer = new MainShiftLayer(ActivityFactory.CreateActivity("dummy"), new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
-						ILayerViewModel layer = new MainShiftLayerViewModel(null, mainShiftActivityLayer, null, null);
+						ILayerViewModel layer = new MainShiftLayerViewModel(null, mainShiftActivityLayer, new PersonAssignment(new Person(), new Scenario(), DateOnly.Today), null);
             _shifteditorViewModel.SelectedLayer = layer;
 
             using (_mocker.Record())

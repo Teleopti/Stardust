@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 			_mocks.ReplayAll();
 
-			_target = new PersonalShiftLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _layerWithPayload, null, null);
+			_target = new PersonalShiftLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _layerWithPayload, new PersonAssignment(person, new Scenario(), DateOnly.Today), null);
 
 			_testRunner = new CrossThreadTestRunner();
 		}
