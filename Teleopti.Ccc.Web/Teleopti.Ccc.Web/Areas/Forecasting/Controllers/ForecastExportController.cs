@@ -22,7 +22,9 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		public virtual HttpResponseMessage Export(ExportForecastInput input)
 		{
 			var response = new HttpResponseMessage();
-			var exportModel = _forecastExportModelCreator.Load(input.ScenarioId, input.WorkloadId, new DateOnlyPeriod(new DateOnly(input.ForecastStart.Date), new DateOnly(input.ForecastEnd.Date)));
+			var period = new DateOnlyPeriod(new DateOnly(input.ForecastStart.Date),
+				new DateOnly(input.ForecastEnd.Date));
+			var exportModel = _forecastExportModelCreator.Load(input.ScenarioId, input.WorkloadId, period);
 
 			var excelExport = new ForecastExportToExcel();
 			

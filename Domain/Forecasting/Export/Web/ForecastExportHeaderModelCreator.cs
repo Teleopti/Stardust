@@ -7,15 +7,17 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export.Web
 {
 	public static class ForecastExportHeaderModelCreator
 	{
-		public static ForecastExportHeaderModel Load(string scenario, ISkill skill, IList<ISkillDay> skillDays, DateOnlyPeriod period)
+		public static ForecastExportHeaderModel Load(string scenario, IWorkload workload, IList<ISkillDay> skillDays, DateOnlyPeriod period)
 		{
+			var workloadNameBuilder = new WorkloadNameBuilder();
+
 			var model = new ForecastExportHeaderModel
 			{
 				Period = period,
-				SkillName = skill.Name,
-				SkillTimeZoneName = skill.TimeZone.DisplayName,
+				SkillName = workloadNameBuilder.WorkloadName(workload.Skill.Name, workload.Name),
+				SkillTimeZoneName = workload.Skill.TimeZone.DisplayName,
 				Scenario = scenario
-		};
+			};
 
 			if (!skillDays.Any())
 				return model;
