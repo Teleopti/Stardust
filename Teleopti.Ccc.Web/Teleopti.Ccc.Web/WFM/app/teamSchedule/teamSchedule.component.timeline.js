@@ -15,30 +15,23 @@
 		var ctrl = this;
 		ctrl.height = 0;
 		ctrl.$onChanges = function (changesObj) {
-			if (changesObj.scheduleCount) {
-				if (changesObj.scheduleCount.currentValue > 0) {					
-					updateRulerHeight();
-				}
+			if (changesObj.scheduleCount && !!changesObj.scheduleCount.currentValue) {
+				updateRulerHeight();
 			}
 		};
 
-		ctrl.$onInit = function() {
+		ctrl.$onInit = function () {
 			updateRulerHeight();
 			angular.element($window).bind('resize', function () {
-				updateRulerHeight();				
+				updateRulerHeight();
 			});
 		};
 
 		function updateRulerHeight() {
-			$timeout(function() {
-				var height = 0;
-				var rows = angular.element($document.find('schedule-table')).find('tr');
-				angular.forEach(rows, function(r) {
-					height += r.offsetHeight;
-				});
-
-				ctrl.height = height - 5;				
-			}, 500);
+			$timeout(function () {
+				var tHeader = $document[0].querySelector('schedule-table thead');
+				ctrl.height = (ctrl.scheduleCount * 32.5) + tHeader.offsetHeight - 5;
+			});
 		}
 
 	}
