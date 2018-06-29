@@ -159,18 +159,24 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<ISkill> LoadAllSkills()
 		{
-			var workloads = DetachedCriteria.For<Skill>()
-				.SetFetchMode("WorkloadCollection", FetchMode.Join);
+			DetachedCriteria workloadSubquery = DetachedCriteria.For<Workload>("w")
+				.SetProjection(Projections.Property("w.Id"));
 
-			var workloadIds = getWorkloadIds();
-			var templates = getWorkloadTemplates(workloadIds);
-			var templateIds = getWorkloadDayTemplateIds(workloadIds);
-			var openhours = getOpenhours(templateIds);
+			var skills = Session.CreateCriteria<Skill>("skill")
+				.SetFetchMode("WorkloadCollection", FetchMode.Join)
+				.Future<Skill>();
 
-			var multiCriteria = Session.CreateMultiCriteria().Add(workloads).Add(templates).Add(openhours);
-			var fetchedSkills = CollectionHelper.ToDistinctGenericCollection<ISkill>(wrapMultiCriteria(multiCriteria));
+			Session.CreateCriteria<Workload>("workload")
+				.SetFetchMode("TemplateWeekCollection", FetchMode.Join)
+				.Future<Workload>();
+			
+			Session.CreateCriteria<WorkloadDayTemplate>()
+				.Add(Subqueries.PropertyIn("Parent", workloadSubquery))
+				.SetFetchMode("OpenHourList", FetchMode.Join)
+				.SetFetchMode("TaskPeriodList", FetchMode.Join)
+				.Future<WorkloadDayTemplate>();
 
-			return fetchedSkills;
+			return skills.Distinct().ToList();
 		}
 
 		public IMultisiteSkill LoadMultisiteSkill(ISkill skill)
