@@ -11,12 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 {
-	public interface IIntraIntervalOptimizer
-	{
-		IIntraIntervalIssues Optimize(SchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingResultStateHolder schedulingResultStateHolder, IPerson person, DateOnly dateOnly, IEnumerable<IScheduleMatrixPro> allScheduleMatrixPros, IResourceCalculateDelayer resourceCalculateDelayer, ISkill skill, IIntraIntervalIssues intervalIssuesBefore, bool checkDayAfter);
-	}
-
-	public class IntraIntervalOptimizer : IIntraIntervalOptimizer
+	public class IntraIntervalOptimizer
 	{
 		private readonly ITeamInfoFactory _teamInfoFactory;
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;

@@ -163,53 +163,95 @@ from WorkloadDayBase wdb
 inner join WorkloadDay wd on wdb.id = wd.WorkloadDayBase
 where wdb.WorkloadDate > '19600101' --Avoid hitting templates
 
-delete TemplateTaskPeriod
-from TemplateTaskPeriod ttp
-inner join WorkloadDayBase wdb on ttp.Parent = wdb.Id
-inner join WorkloadDay wd on wdb.id = wd.WorkloadDayBase
-where 1=1
-and wdb.WorkloadDate < @KeepUntil
-and wdb.WorkloadDate < @MaxDate
-and wdb.WorkloadDate > '19600101' --Avoid hitting templates
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top(1000) TemplateTaskPeriod
+	from TemplateTaskPeriod ttp
+	inner join WorkloadDayBase wdb on ttp.Parent = wdb.Id
+	inner join WorkloadDay wd on wdb.id = wd.WorkloadDayBase
+	where 1=1
+	and wdb.WorkloadDate < @MaxDate
+	and wdb.WorkloadDate > '19600101' --Avoid hitting templates
 
-delete WorkloadDay 
-from WorkloadDay wd
-inner join WorkloadDayBase wdb on wdb.id = wd.WorkloadDayBase
-where 1=1
-and wdb.WorkloadDate < @KeepUntil
-and wdb.WorkloadDate < @MaxDate
-and wdb.WorkloadDate > '19600101' --Avoid hitting templates
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > @timeout 
+		return
+end
 
-delete OpenhourList
-from OpenhourList ol
-inner join WorkloadDayBase wdb on wdb.id = ol.Parent
-where 1=1
-and wdb.WorkloadDate < @KeepUntil
-and wdb.WorkloadDate < @MaxDate
-and wdb.WorkloadDate > '19600101' --Avoid hitting templates
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top(1000) WorkloadDay 
+	from WorkloadDay wd
+	inner join WorkloadDayBase wdb on wdb.id = wd.WorkloadDayBase
+	where 1=1
+	and wdb.WorkloadDate < @MaxDate
+	and wdb.WorkloadDate > '19600101' --Avoid hitting templates
 
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > @timeout 
+		return
+end
 
-delete WorkloadDayBase
-from WorkloadDayBase wdb
-where 1=1
-and Not exists (select 1 from WorkloadDayTemplate wdt
-				where wdt.WorkloadDayBase = wdb.Id) --At one customer I found templates on incorrect dates, avoid those and do not try to fix them here in the purge.
-and wdb.WorkloadDate < @KeepUntil
-and wdb.WorkloadDate < @MaxDate
-and wdb.WorkloadDate > '19600101' --Avoid hitting templates
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top(1000) OpenhourList
+	from OpenhourList ol
+	inner join WorkloadDayBase wdb on wdb.id = ol.Parent
+	where 1=1
+	and wdb.WorkloadDate < @MaxDate
+	and wdb.WorkloadDate > '19600101' --Avoid hitting templates
 
-delete SkillDataPeriod
-from SkillDataPeriod sdp
-inner join SkillDay sd on sdp.Parent = sd.Id
-where 1=1
-and sd.SkillDayDate < @KeepUntil
-and sd.SkillDayDate < @MaxDate
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > @timeout 
+		return
+end
 
-delete SkillDay
-from SkillDay sd
-where 1=1
-and sd.SkillDayDate < @KeepUntil
-and sd.SkillDayDate < @MaxDate
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top(1000) WorkloadDayBase
+	from WorkloadDayBase wdb
+	where 1=1
+	and Not exists (select 1 from WorkloadDayTemplate wdt
+					where wdt.WorkloadDayBase = wdb.Id) --At one customer I found templates on incorrect dates, avoid those and do not try to fix them here in the purge.
+	and wdb.WorkloadDate < @MaxDate
+	and wdb.WorkloadDate > '19600101' --Avoid hitting templates
+
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > @timeout 
+		return
+end
+
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top(1000) SkillDataPeriod
+	from SkillDataPeriod sdp
+	inner join SkillDay sd on sdp.Parent = sd.Id
+	where 1=1
+	and sd.SkillDayDate < @MaxDate
+
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > @timeout 
+		return
+end
+
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top(1000) SkillDay
+	from SkillDay sd
+	where 1=1
+	and not exists (select 1 from SkillDayTemplate sdt where sdt.id = sd.TemplateId)
+	and sd.SkillDayDate < @MaxDate
+
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > @timeout 
+		return
+end
 
 if datediff(second,@start,getdate()) > @timeout 
 	return

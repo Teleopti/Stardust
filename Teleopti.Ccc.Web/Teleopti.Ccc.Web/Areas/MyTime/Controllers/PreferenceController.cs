@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[EnsureInPortal]
+		[HttpGet]
 		[UnitOfWork]
 		public virtual ViewResult Index(DateOnly? date)
 		{
@@ -107,6 +108,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWork]
+		[HttpGet]
 		[ActionName("PeriodFeedback")]
 		public virtual JsonResult GetPreferenceFeedbackForPeriod(DateOnly startDate, DateOnly endDate)
 		{

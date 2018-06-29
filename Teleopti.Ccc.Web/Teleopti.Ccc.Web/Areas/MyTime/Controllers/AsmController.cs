@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_scheduleChangePoller = scheduleChangePoller;
 		}
 
+		[HttpGet]
 		public ViewResult Index()
 		{
 			var layoutViewModel = _layoutBaseViewModelFactory.CreateLayoutBaseViewModel(Resources.AgentScheduleMessenger);

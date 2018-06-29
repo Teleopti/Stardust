@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_studentAvailabilityPersister = studentAvailabilityPersister;
 		}
 
+		[HttpGet]
 		[EnsureInPortal]
 		[UnitOfWork]
 		public virtual ActionResult Index(DateOnly? dateParam)

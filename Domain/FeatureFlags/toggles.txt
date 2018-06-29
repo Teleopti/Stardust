@@ -143,7 +143,7 @@ ETL_Show_Web_Based_ETL_Tool_74837 = true
 WfmIntraday_MonitorActualvsForecasted_35176 = true
 WFM_Modify_Skill_Groups_43727 = true
 WFM_Remember_My_Selection_In_Intraday_47254 = true
-WFM_Intraday_Refactoring_74652 = RC
+WFM_Intraday_Refactoring_74652 = true
 
 # Ziggy #
 WfmStaffing_AddOvertime_42524 = RC
@@ -153,8 +153,8 @@ People_ImprovePersonAccountAccuracy_74914 = true
 Staffing_BPO_Visualization_74958 = true
 Tenant_PurgeLogonAttempts_75782 = true
 Tenant_PurgeNoneEmployeesData_76291 = true
-ETL_UseBpoResources_75855 = RC
-Staffing_BPO_ClearStaffing_75498 = RC
+ETL_UseBpoResources_75855 = true
+Staffing_BPO_ClearStaffing_75498 = true
 Staffing_BPO_ExportMultipleSkills_74968 = RC
 
 # Squids #
@@ -178,4 +178,4 @@ MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889 = true
 MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947 = DEV
 
 # Tech #
-Tech_Moving_ResilientConnectionLogic_76181 = RC
+Tech_Moving_ResilientConnectionLogic_76181 = true

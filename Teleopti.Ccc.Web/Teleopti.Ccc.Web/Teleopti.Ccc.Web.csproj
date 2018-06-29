@@ -1413,6 +1413,8 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AsmMessage.List.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.BadgeCountsDropdownViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.PollScheduleUpdates.Tests.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.FakeData.js" />
@@ -1478,6 +1480,9 @@
     <Content Include="Content\moment-datepicker\moment-datepicker-ext.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.2.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.2.min.js" />
+    <Content Include="Content\jasny-bootstrap\config.json" />
+    <Content Include="Areas\MyTime\Views\StudentAvailability\NoSchedulePeriodPartial.cshtml" />
+    <Content Include="Areas\MyTime\Views\StudentAvailability\StudentAvailabilityPartial.cshtml" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -1531,11 +1536,18 @@
     <Content Include="WFM\app\global\shortcuts\shortcuts.tab.service.js" />
     <Content Include="WFM\app\global\shortcuts\_modules.js" />
     <Content Include="WFM\app\global\skill-group\skill-group-manager.controller.js" />
+    <Content Include="WFM\app\global\skill-group\skill-group-manager.controller.spec.js" />
     <Content Include="WFM\app\global\skill-group\skill-group-manager.html" />
     <Content Include="WFM\app\global\skill-group\skillGroupManagerButton.component.js" />
     <Content Include="WFM\app\global\skill-group\skillGroupManagerButton.html" />
+    <Content Include="WFM\app\global\utilities\filesize.filter.js" />
+    <Content Include="WFM\app\global\utilities\indexOf.polyfill.util.js" />
     <Content Include="WFM\app\global\utilities\serviceDateFormatHelper.service.spec.js" />
     <Content Include="WFM\app\global\utilities\serviceDateFormatHelper.service.js" />
+    <Content Include="WFM\app\global\utilities\skillIcon.service.js" />
+    <Content Include="WFM\app\global\work-hour-picker\work-hour-picker.component.js" />
+    <Content Include="WFM\app\global\work-hour-picker\work-hour-picker.component.spec.js" />
+    <Content Include="WFM\app\global\work-hour-picker\work-hour-picker.tpl.html" />
     <Content Include="WFM\app\intraday\components\intradayPerformanceChart.component.js" />
     <Content Include="WFM\app\intraday\components\intradayPerformanceChart.html" />
     <Content Include="WFM\app\intraday\components\intradayStaffingChart.component.js" />
@@ -1547,9 +1559,11 @@
     <Content Include="WFM\app\intraday\services\intraday.service.js" />
     <Content Include="WFM\app\intraday\services\intraday.time.service.js" />
     <Content Include="WFM\app\intraday\services\intraday.traffic.service.js" />
+    <Content Include="WFM\app\people\people.default.controller.js" />
     <Content Include="WFM\app\people\people.routes.js" />
     <Content Include="WFM\app\people\people.start.controller.js" />
     <Content Include="WFM\app\people\_modules.js" />
+    <Content Include="WFM\app\permissions\functionsrefact\permissions.function.component.js" />
     <Content Include="WFM\app\reports\audit.controller.spec.js" />
     <Content Include="WFM\app\forecasting\refact\forecast-chart.component.js" />
     <Content Include="WFM\app\forecasting\refact\forecast-chart.html" />
@@ -1666,7 +1680,6 @@
     <Content Include="Areas\MyTime\Views\Schedule\MobileDayPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Schedule\MobileMonthPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\AppGuide\WFMAppPartial.cshtml" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.createform.controller.js.orig" />
     <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
     <Content Include="WFM\app\rta\rta\agents\rta-agents.RTA_ImprovedStateGroupFilter_48724.html" />
     <Content Include="WFM\app\rta\rta\agents\rta.agents.configurationValidation.spec.js" />
@@ -1757,11 +1770,15 @@
     <Content Include="WFM\app\rta\rta\rta.routes.js" />
     <Content Include="WFM\app\rta\rta\rta.state.service.js" />
     <Content Include="WFM\app\rta\rta\_modules.js" />
+    <Content Include="WFM\app\seatManagement\images\group.svg" />
+    <Content Include="WFM\app\seatManagement\images\seatIcon.svg" />
+    <Content Include="WFM\app\seatManagement\images\ungroup.svg" />
     <Content Include="WFM\app\staffing\import_export\importexport.overview.controller.spec.js" />
     <Content Include="WFM\app\staffing\import_export\importexport.overview.html" />
     <Content Include="WFM\app\staffing\import_export\importexport.overview.service.js" />
     <Content Include="WFM\app\staffing\import_export\importexport.service.js" />
     <Content Include="WFM\app\staffing\staffing.importData.controller.js" />
+    <Content Include="WFM\app\staffing\staffing.overtime.service.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addDayOff.spec.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addDayOff.html" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addDayOff.js" />
@@ -2518,7 +2535,6 @@
     <Content Include="Content\bootstrap-timepicker\css\bootstrap-timepicker.css" />
     <Content Include="Content\bootstrap-timepicker\css\bootstrap-timepicker.min.css" />
     <Content Include="Content\bootstrap-timepicker\js\bootstrap-timepicker.js" />
-    <Content Include="Content\bootstrap-timepicker\js\bootstrap-timepicker.min.js" />
     <Content Include="Content\bootstrap\Content\bootstrap-theme.min.css">
       <DependentUpon>bootstrap-theme.css</DependentUpon>
     </Content>
@@ -2858,7 +2874,6 @@
     <Content Include="Areas\MyTime\Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\Forecasting\Views\ForecastExport\" />
     <Folder Include="Areas\Mart\Views\Shared\" />
     <Folder Include="Areas\MyTime\Core\BadgeLeaderBoardReport\DataProvider\" />
     <Folder Include="Areas\MyTime\Core\Mapping\" />
@@ -2866,7 +2881,6 @@
     <Folder Include="Areas\Start\Views\Config\" />
     <Folder Include="Areas\TeamSchedule\Views\TeamScheduleData\" />
     <Folder Include="Core\Aop\Aspects\" />
-    <Folder Include="WFM\app\people\html\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\MyTime\Views\Settings\RegionalSettingsPartial.cshtml" />

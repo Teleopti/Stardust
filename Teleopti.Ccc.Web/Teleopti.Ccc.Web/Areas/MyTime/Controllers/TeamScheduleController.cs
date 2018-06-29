@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_teamSchedulePermissionViewModelFactory = teamSchedulePermissionViewModelFactory;
 		}
 
+		[HttpGet]
 		[EnsureInPortal]
 		[UnitOfWork]
 		public virtual ViewResult Index(DateOnly? date, Guid? id)
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return View("TeamSchedulePartial", _teamSchedulePermissionViewModelFactory.CreateTeamSchedulePermissionViewModel());
 		}
 
+		[HttpGet]
 		[EnsureInPortal]
 		[UnitOfWork]
 		public virtual ViewResult NewIndex(DateOnly? date, Guid? id)

@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 	public class IntraIntervalOptimizationService
 	{
 		private readonly ScheduleDayIntraIntervalIssueExtractor _scheduleDayIntraIntervalIssueExtractor;
-		private readonly IIntraIntervalOptimizer _intraIntervalOptimizer;
+		private readonly IntraIntervalOptimizer _intraIntervalOptimizer;
 		private readonly IntraIntervalIssueCalculator _intraIntervalIssueCalculator;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly IUserCulture _userCulture;
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 
 		public IntraIntervalOptimizationService(
 			ScheduleDayIntraIntervalIssueExtractor scheduleDayIntraIntervalIssueExtractor,
-			IIntraIntervalOptimizer intraIntervalOptimizer, IntraIntervalIssueCalculator intraIntervalIssueCalculator,
+			IntraIntervalOptimizer intraIntervalOptimizer, IntraIntervalIssueCalculator intraIntervalIssueCalculator,
 			ISchedulingOptionsCreator schedulingOptionsCreator,
 			IUserCulture userCulture)
 		{

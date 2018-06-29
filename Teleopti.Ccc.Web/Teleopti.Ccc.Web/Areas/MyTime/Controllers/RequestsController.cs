@@ -58,6 +58,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_cancelAbsenceRequestCommandProvider = cancelAbsenceRequestCommandProvider;
 		}
 
+		[HttpGet]
 		[EnsureInPortal]
 		[UnitOfWork]
 		public virtual ViewResult Index()

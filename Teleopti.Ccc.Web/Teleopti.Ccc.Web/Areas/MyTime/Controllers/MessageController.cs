@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_pushMessageProvider = pushMessageProvider;
 		}
 
+		[HttpGet]
 		[EnsureInPortal]
 		public ViewResult Index()
 		{
@@ -62,12 +63,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public virtual JsonResult Message(Guid messageId)
 		{
 			return Json(_messageViewModelFactory.CreateMessagesInformationViewModel(messageId), JsonRequestBehavior.AllowGet);
-		}
-
-		[UnitOfWork]
-		public virtual void Send(string title, string message)
-		{
-			_pushMessageDialoguePersister.SendNewPushMessageToLoggedOnUser(title,message);
 		}
 	}
 }

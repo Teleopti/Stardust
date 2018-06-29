@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_userCulture = userCulture;
 		}
 
+		[HttpGet]
 		[EnsureInPortal]
 		public ViewResult Index()
 		{
@@ -35,6 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(_myReportViewModelFactory.CreateDailyMetricsViewModel(date), JsonRequestBehavior.AllowGet);
 		}
 
+		[HttpGet]
 		[EnsureInPortal]
 		public ViewResult Adherence()
 		{
@@ -50,6 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(_myReportViewModelFactory.CreateDetailedAherenceViewModel(date), JsonRequestBehavior.AllowGet);
 		}
 
+		[HttpGet]
         [EnsureInPortal]
 		[MyReportQueueMetricsPermission]
         public ViewResult QueueMetrics()

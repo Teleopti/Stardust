@@ -11058,7 +11058,7 @@ Teleopti R&amp;D</value>
     <value>发布调换班公告</value>
   </data>
   <data name="ConfirmDeleteRequest" xml:space="preserve">
-    <value>您确定要删除此请求吗？亲</value>
+    <value>您确定要删除此请求吗？</value>
   </data>
   <data name="RuleWithRatioConvertor" xml:space="preserve">
     <value>使用换算比率</value>
@@ -11148,7 +11148,7 @@ Teleopti R&amp;D</value>
     <value>查询名称</value>
   </data>
   <data name="SureToMakeShiftTrade" xml:space="preserve">
-    <value>您确定要执行此调换班吗？亲</value>
+    <value>您确定要执行此调换班吗？</value>
   </data>
   <data name="LockBulletinBoardTrading" xml:space="preserve">
     <value>先到先得公告栏</value>
@@ -11226,19 +11226,19 @@ Teleopti R&amp;D</value>
     <value>数据筛选器...</value>
   </data>
   <data name="BadgeWithRank_YouGotANewSilverBadgeForAnsweredCalls" xml:space="preserve">
-    <value>亲，您获得了一枚银色徽章！您在{1:yyyy-MM-dd}的应答量超过了{0}。继续加油哦～</value>
+    <value>您获得了一枚银色徽章！您在{1:yyyy-MM-dd}的应答量超过了{0}。继续加油哦～</value>
   </data>
   <data name="OutboundCampaigns" xml:space="preserve">
     <value>外呼活动</value>
   </data>
   <data name="BadgeWithRank_YouGotANewSilverBadgeForAHT" xml:space="preserve">
-    <value>亲，您获得了一枚银色徽章！您在{1:yyyy-MM-dd}的平均处理时长低于{0}。继续加油哦～</value>
+    <value>您获得了一枚银色徽章！您在{1:yyyy-MM-dd}的平均处理时长低于{0}。继续加油哦～</value>
   </data>
   <data name="BadgeWithRank_YouGotANewSilverBadgeForAdherence" xml:space="preserve">
-    <value>亲，您获得了一枚银色徽章！您在{1:yyyy-MM-dd}的遵时率高于{0}。继续加油哦～</value>
+    <value>您获得了一枚银色徽章！您在{1:yyyy-MM-dd}的遵时率高于{0}。继续加油哦～</value>
   </data>
   <data name="BadgeWithRank_YouGotANewGoldBadgeForAnsweredCalls" xml:space="preserve">
-    <value>亲，您获得了一枚金色徽章！您在{1:yyyy-MM-dd}的应答量超过了{0}。继续加油哦～</value>
+    <value>您获得了一枚金色徽章！您在{1:yyyy-MM-dd}的应答量超过了{0}。继续加油哦～</value>
   </data>
   <data name="DeleteCampaign" xml:space="preserve">
     <value>删除活动</value>
@@ -11253,22 +11253,22 @@ Teleopti R&amp;D</value>
     <value>活动</value>
   </data>
   <data name="BadgeWithRank_YouGotANewGoldBadgeForAHT" xml:space="preserve">
-    <value>亲，您获得了一枚金色徽章！您在{1:yyyy-MM-dd}的平均处理时长低于{0}。继续加油哦～</value>
+    <value>您获得了一枚金色徽章！您在{1:yyyy-MM-dd}的平均处理时长低于{0}。继续加油哦～</value>
   </data>
   <data name="BadgeWithRank_YouGotANewGoldBadgeForAdherence" xml:space="preserve">
-    <value>亲，您获得了一枚金色徽章！您在{1:yyyy-MM-dd}的遵时率高于{0}。继续加油哦～</value>
+    <value>您获得了一枚金色徽章！您在{1:yyyy-MM-dd}的遵时率高于{0}。继续加油哦～</value>
   </data>
   <data name="BadgeWithRank_YouGotANewBronzeBadgeForAnsweredCalls" xml:space="preserve">
-    <value>亲，您获得了一枚青铜徽章！您在{1:yyyy-MM-dd}的应答量超过了{0}。继续加油哦～</value>
+    <value>您获得了一枚青铜徽章！您在{1:yyyy-MM-dd}的应答量超过了{0}。继续加油哦～</value>
   </data>
   <data name="BadgeWithRank_YouGotANewBronzeBadgeForAHT" xml:space="preserve">
-    <value>亲，您获得了一枚青铜徽章！您在{1:yyyy-MM-dd}的平均处理时间低于{0}。继续加油哦～</value>
+    <value>您获得了一枚青铜徽章！您在{1:yyyy-MM-dd}的平均处理时间低于{0}。继续加油哦～</value>
   </data>
   <data name="Duplicate" xml:space="preserve">
     <value>重复</value>
   </data>
   <data name="BadgeWithRank_YouGotANewBronzeBadgeForAdherence" xml:space="preserve">
-    <value>亲，您获得了一枚青铜徽章！您在{1:yyyy-MM-dd}的遵时率高于{0}。继续加油哦～</value>
+    <value>您获得了一枚青铜徽章！您在{1:yyyy-MM-dd}的遵时率高于{0}。继续加油哦～</value>
   </data>
   <data name="NotSelectedItems" xml:space="preserve">
     <value>禁用项目</value>
@@ -11355,7 +11355,7 @@ Teleopti R&amp;D</value>
     <value>选择一个全局级别的授权：</value>
   </data>
   <data name="AreYouSureYouWantToDeleteThisCampaign" xml:space="preserve">
-    <value>您确定要删除此活动吗？亲</value>
+    <value>您确定要删除此活动吗？</value>
   </data>
   <data name="Campaign" xml:space="preserve">
     <value>活动</value>
@@ -11619,7 +11619,7 @@ Teleopti R&amp;D</value>
     <value>放置到前面</value>
   </data>
   <data name="BothOverrideAndCampaignAdded" xml:space="preserve">
-    <value>override和活动已被添加</value>
+    <value>已添加覆写值和活动</value>
   </data>
   <data name="ChangePlanningPeriod" xml:space="preserve">
     <value>变更计划周期</value>
@@ -12495,7 +12495,7 @@ Teleopti R&amp;D</value>
     <value>已为{0}个人完成存档。</value>
   </data>
   <data name="DoneImportingForXPeopleDot" xml:space="preserve">
-    <value>已为{0}个人完成导入</value>
+    <value>已为{0}个人完成导入。</value>
   </data>
   <data name="EditLocationProperty" xml:space="preserve">
     <value>编辑位置属性</value>
@@ -13312,7 +13312,7 @@ Teleopti R&amp;D</value>
     <value>新建导入</value>
   </data>
   <data name="ImportAgentsColumnFixedWithFallbackValue" xml:space="preserve">
-    <value>{0} 已固定回退值 ‘{1}’</value>
+    <value>{0} 已固定回退值“{1}”</value>
   </data>
   <data name="EnterANumber" xml:space="preserve">
     <value>输入一个数字</value>
@@ -13385,7 +13385,7 @@ Teleopti R&amp;D</value>
 您希望加入进来吗?</value>
   </data>
   <data name="MonitorUpToXAgents" xml:space="preserve">
-    <value>监控最多５０个坐席代表</value>
+    <value>最多监控５０个坐席代表</value>
   </data>
   <data name="NoThanks" xml:space="preserve">
     <value>不需要</value>
@@ -14698,5 +14698,83 @@ Teleopti R&amp;D</value>
   </data>
   <data name="SkillTypeFilter" xml:space="preserve">
     <value>按技能类别过滤</value>
+  </data>
+  <data name="NoForecast" xml:space="preserve">
+    <value>没有找到预测数据，请为当前场景运行一次预测。</value>
+  </data>
+  <data name="Saving" xml:space="preserve">
+    <value>正在保存，请耐心等候……</value>
+  </data>
+  <data name="ModifyAdherence" xml:space="preserve">
+    <value>修改遵时率</value>
+  </data>
+  <data name="LateXMinutes" xml:space="preserve">
+    <value>最后 {0} 分钟</value>
+  </data>
+  <data name="NoResultForCurrentFilter" xml:space="preserve">
+    <value>应用当前过滤器后没有结果</value>
+  </data>
+  <data name="AppliedAOverride" xml:space="preserve">
+    <value>已应用覆写值</value>
+  </data>
+  <data name="PeopleManageUsers" xml:space="preserve">
+    <value>管理用户</value>
+  </data>
+  <data name="PeopleUsernameIsAlreadyInUse" xml:space="preserve">
+    <value>用户名已经在使用</value>
+  </data>
+  <data name="PeopleDuplicateUsernameInForm" xml:space="preserve">
+    <value>表单中有重复用户名</value>
+  </data>
+  <data name="PeopleGrantRoles" xml:space="preserve">
+    <value>设置角色</value>
+  </data>
+  <data name="PeopleCurrentRoles" xml:space="preserve">
+    <value>当前角色</value>
+  </data>
+  <data name="PeopleAvailableRoles" xml:space="preserve">
+    <value>可用角色</value>
+  </data>
+  <data name="PeopleRevokeRoles" xml:space="preserve">
+    <value>移除角色</value>
+  </data>
+  <data name="PeopleGrantRole" xml:space="preserve">
+    <value>设置角色</value>
+  </data>
+  <data name="PeopleRevokeRole" xml:space="preserve">
+    <value>移除角色</value>
+  </data>
+  <data name="PeopleApplicationLogon" xml:space="preserve">
+    <value>登录账户</value>
+  </data>
+  <data name="PeopleSelectAllOnAllPages" xml:space="preserve">
+    <value>选择所有页面中的所有数据</value>
+  </data>
+  <data name="PeopleSiteTeam" xml:space="preserve">
+    <value>站点/班组</value>
+  </data>
+  <data name="PeopleUsernameHasALimitOfXCharacters" xml:space="preserve">
+    <value>用户名长度最大为 {0}</value>
+  </data>
+  <data name="SuccessfulMessageForSavingScheduleChanges" xml:space="preserve">
+    <value>成功保存班表变更。</value>
+  </data>
+  <data name="PleaseSaveOrDiscardChangesBeforeChangingPeriod" xml:space="preserve">
+    <value>更改预测时间段之前请先保存或放弃更改。</value>
+  </data>
+  <data name="NoQueueStatisticsAvailable" xml:space="preserve">
+    <value>没有生成预测，请确定已经导入相应队列的统计数据。</value>
+  </data>
+  <data name="AppliedACampaign" xml:space="preserve">
+    <value>应用活动</value>
+  </data>
+  <data name="CampaignNotAppliedWIthExistingOverride" xml:space="preserve">
+    <value>没有为已设置覆写值的日期应用活动</value>
+  </data>
+  <data name="ClearCampaignWIthOverride" xml:space="preserve">
+    <value>应用覆写值移除了已有的活动设置</value>
+  </data>
+  <data name="ForecastDayIsOverrided" xml:space="preserve">
+    <value>日期已经在 Web 被覆写</value>
   </data>
 </root>
