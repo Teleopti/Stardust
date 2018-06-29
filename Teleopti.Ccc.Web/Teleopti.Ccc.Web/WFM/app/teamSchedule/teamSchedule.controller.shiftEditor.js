@@ -242,6 +242,9 @@
 			el.addEventListener('mouseup', function () {
 				cancelScrollIntervalPromise();
 			}, false);
+			el.addEventListener('mouseleave', function () {
+				cancelScrollIntervalPromise();
+			}, false);
 
 		}
 		function initScrollState() {
