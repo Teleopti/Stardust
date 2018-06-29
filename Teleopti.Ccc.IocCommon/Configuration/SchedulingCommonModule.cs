@@ -494,11 +494,23 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			if (_configuration.Toggle(Toggles.ResourcePlanner_LessResourcesXXL_74915))
 			{
-				builder.RegisterType<CreateMergedCollectionNoState>().As<CreateMergedCollection>().SingleInstance();
+				//fix VisualLayerCollection remove state MergedCollection
+				//builder.RegisterType<CreateMergedCollectionNoState>().As<CreateMergedCollection>().SingleInstance();
+				builder.RegisterType<CreateMergedCollection>().SingleInstance();
+
+				//fix no state MainShiftProjection
+				builder.RegisterType<ShiftProjectionCacheManagerLessResources>().As<IShiftProjectionCacheManager>().InstancePerLifetimeScope();
+				builder.RegisterType<TeamSchedulingLessResources>().As<TeamScheduling>().SingleInstance();
 			}
 			else
 			{
+				//fix VisualLayerCollection remove state MergedCollection
 				builder.RegisterType<CreateMergedCollection>().SingleInstance();
+
+				//fix no state MainShiftProjection
+				builder.RegisterType<ShiftProjectionCacheManager>().As<IShiftProjectionCacheManager>().InstancePerLifetimeScope();
+				builder.RegisterType<TeamScheduling>().SingleInstance();
+			
 			}
 			
 			registerForJobs(builder);

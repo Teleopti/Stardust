@@ -12,9 +12,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 	public class FirstShiftInTeamBlockFinder : IFirstShiftInTeamBlockFinder
 	{
-		private readonly ShiftProjectionCacheManager _shiftProjectionCacheManager;
+		private readonly IShiftProjectionCacheManager _shiftProjectionCacheManager;
 
-		public FirstShiftInTeamBlockFinder(ShiftProjectionCacheManager shiftProjectionCacheManager)
+		public FirstShiftInTeamBlockFinder(IShiftProjectionCacheManager shiftProjectionCacheManager)
 		{
 			_shiftProjectionCacheManager = shiftProjectionCacheManager;
 		}
