@@ -4,9 +4,9 @@
   angular.module('wfm.forecasting')
   .controller('r2ForecastRefactController', r2ForecastCtrl);
 
-  r2ForecastCtrl.$inject = ['forecastingService', '$state', '$stateParams', 'NoticeService', '$translate', '$window', 'skillIconService'];
+  r2ForecastCtrl.$inject = ['forecastingService', '$state', '$translate', 'NoticeService', 'skillIconService'];
 
-  function r2ForecastCtrl(forecastingService, $state, $stateParams, noticeSvc, $translate, $window, skillIconService) {
+  function r2ForecastCtrl(forecastingService, $state, $translate, noticeSvc, skillIconService) {
     var vm = this;
 
     vm.skills = [];
@@ -61,7 +61,7 @@
     }
 
     function goToModify(skill) {
-      sessionStorage.currentForecastWorkload = JSON.stringify(skill);
+      sessionStorage.currentForecastWorkload = angular.toJson(skill);
       $state.go("modify", {workloadId:skill.Workload.Id});
     }
 

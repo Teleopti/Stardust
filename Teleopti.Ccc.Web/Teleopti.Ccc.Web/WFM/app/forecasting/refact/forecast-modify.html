@@ -64,12 +64,6 @@
 				<div class="sub-header">
 					<h2>{{'Campaign' | translate}}</h2>
 				</div>
-				<!-- <div class="con-row" ng-if="vm.selectedDayCount.length === 1">
-					<div class="con-flex">
-						<span>Preview - Original: {{vm.selectedDayCount[0].value | number}}</span>
-						<span ng-show="vm.sumOfCallsForSelectedDays">New: {{vm.sumOfCallsForSelectedDays | number}}</span>
-					</div>
-				</div> -->
 				<div class="con-row">
 					<div class="con-flex">
 						<label for="campaignPercentageId" class="input-icon">
@@ -218,7 +212,6 @@
 	</div>
 </div>
 
-
 <modal-dialog show='vm.forecastModal' ng-cloak>
 	<div>
 		<div class="con-row">
@@ -253,7 +246,6 @@
 		</div>
 
 		<div class="modal-inner-content" style="text-align:center;">
-			<!-- <label>{{'ForecastPeriod' | translate}}:</label><br/> -->
 			<wfm-calendar-picker ng-model="vm.forecastPeriod"></wfm-calendar-picker>
 		</div>
 		<div class="modal-actions">

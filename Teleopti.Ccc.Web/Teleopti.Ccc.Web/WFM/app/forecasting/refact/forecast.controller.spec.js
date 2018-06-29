@@ -8,7 +8,6 @@ describe('ForecastCtrl', function () {
   fakeBackend,
   vm,
   skill,
-  skill1,
   scenario;
 
   beforeEach(function() {
@@ -21,17 +20,16 @@ describe('ForecastCtrl', function () {
     $interval = _$interval_;
     fakeBackend = _fakeForecastingBackend_;
 
-    // fakeBackend.clear();
     vm = $controller('ForecastRefactController');
     skill = {
       IsPermittedToModifySkill: true,
       Skills: [
         {
-          Id: 'f08d75b3-fdb4-484a-ae4c-9f0800e2f753',
+          Id: 'SkillId-123',
           Workloads: [
             {
-              Id: "b8a74a6c-3125-4c13-a19a-9f0800e35a1f",
-              Name: "Channel Sales - Marketing",
+              Id: "WorkloadId-456",
+              Name: "WorkloadName-789",
               Accuracies: null
             }
           ]
@@ -40,17 +38,17 @@ describe('ForecastCtrl', function () {
     }
 
     vm.forecastModalObj = {
-      SkillId:'f08d75b3-fdb4-484a-ae4c-9f0800e2f753',
-      ChartId: 'chartb8a74a6c-3125-4c13-a19a-9f0800e35a1f',
+      SkillId:'SkillId-123',
+      ChartId: 'chartWorkloadId-456',
       Workload:[{
-        Id:"b8a74a6c-3125-4c13-a19a-9f0800e35a1f",
-        Name:"Channel Sales - Marketing",
+        Id:"WorkloadId-456",
+        Name:"WorkloadName-789",
         Accuracies:null
       }]
     };
 
     scenario = {
-      Id:"e21d813c-238c-4c3f-9b49-9b5e015ab432",
+      Id:"ScenarioId-ABC",
       Name:"Default",
       DefaultScenario:true
     }
@@ -90,8 +88,8 @@ describe('ForecastCtrl', function () {
     expect(vm.exportModal).toEqual(true);
     expect(vm.forecastPeriod.startDate).toEqual(moment().utc().add(1, 'months').startOf('month').toDate());
     expect(vm.forecastPeriod.endDate).toEqual(moment().utc().add(2, 'months').startOf('month').toDate());
-    expect(vm.forecastModalObj.SkillId).toEqual('f08d75b3-fdb4-484a-ae4c-9f0800e2f753');
-    expect(vm.selectedScenario.Id).toEqual('e21d813c-238c-4c3f-9b49-9b5e015ab432');
+    expect(vm.forecastModalObj.SkillId).toEqual('SkillId-123');
+    expect(vm.selectedScenario.Id).toEqual('ScenarioId-ABC');
   }));
 
   it('should not allow forecasts longer than one year', inject(function () {

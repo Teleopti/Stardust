@@ -3,12 +3,11 @@
 
 	angular.module('wfm.forecasting').controller('ForecastModController', ForecastModCtrl);
 
-	ForecastModCtrl.$inject = ['forecastingService', '$stateParams', '$window', 'NoticeService', '$translate', '$state', '$scope', 'skillIconService'];
+	ForecastModCtrl.$inject = ['forecastingService', 'NoticeService', '$translate', '$state', '$scope', 'skillIconService'];
 
-	function ForecastModCtrl(forecastingService, $stateParams, $window, NoticeService, $translate, $state, $scope, skillIconService) {
+	function ForecastModCtrl(forecastingService, noticeSvc, $translate, $state, $scope, skillIconService) {
 		var vm = this;
 
-		var storage = {};
 		vm.loadChart = loadChart;
 		vm.pointClick = pointClick;
 		vm.selectedDayCount = [];
@@ -28,7 +27,7 @@
 			.toDate()
 		};
 		vm.savingToScenario = false;
-    vm.getSkillIcon = skillIconService.get;
+		vm.getSkillIcon = skillIconService.get;
 
 		vm.applyOverride = applyOverride;
 		vm.applyCampaign = applyCampaign;
@@ -65,11 +64,11 @@
 				vm.overridePanel = false;
 				return;
 			}
-			if (state == true) {
+			if (state === true) {
 				//overide
 				vm.campaignPanel = false;
 				vm.overridePanel = true;
-			} else if (state == false) {
+			} else if (state === false) {
 				//campaign
 				vm.campaignPanel = true;
 				vm.overridePanel = false;
@@ -86,9 +85,7 @@
 		}
 
 		function updateCampaignPreview() {
-			vm.sumOfCallsForSelectedDays = (vm.selectedDayCount[0].value * (vm.campaignPercentage + 100) / 100).toFixed(
-				1
-			);
+			vm.sumOfCallsForSelectedDays = (vm.selectedDayCount[0].value * (vm.campaignPercentage + 100) / 100).toFixed(1);
 		}
 
 		function applyCampaign() {
@@ -116,9 +113,9 @@
 				},
 				function() {
 					if (vm.modifyMessage) {
-						NoticeService.warning(vm.modifyMessage, 15000, true);
+						noticeSvc.warning(vm.modifyMessage, 15000, true);
 					} else {
-						NoticeService.success($translate.instant('AppliedACampaign'), 15000, true);
+						noticeSvc.success($translate.instant('AppliedACampaign'), 15000, true);
 					}
 					modifyPanelHelper();
 					vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
@@ -127,11 +124,7 @@
 		}
 
 		function checkData(data) {
-			if (data == null) {
-				return false;
-			} else {
-				return true;
-			}
+			return data != null;
 		}
 
 		function applyOverride(form) {
@@ -164,9 +157,9 @@
 				},
 				function() {
 					if (vm.modifyMessage) {
-						NoticeService.warning(vm.modifyMessage, 15000, true);
+						noticeSvc.warning(vm.modifyMessage, 15000, true);
 					} else {
-						NoticeService.success($translate.instant('AppliedAOverride'), 15000, true);
+						noticeSvc.success($translate.instant('AppliedAOverride'), 15000, true);
 					}
 
 					modifyPanelHelper();
@@ -200,7 +193,7 @@
 					vm.changesMade = true;
 				},
 				function() {
-					NoticeService.success($translate.instant('ClearOverride'), 15000, true);
+					noticeSvc.success($translate.instant('ClearOverride'), 15000, true);
 
 					modifyPanelHelper();
 					vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
@@ -216,24 +209,10 @@
 			vm.selectedDayCount = days;
 		}
 
-		function UniqueArraybyId(collection, keyname) {
-			var output = [],
-			keys = [];
-
-			angular.forEach(collection, function(item) {
-				var key = item[keyname];
-				if (keys.indexOf(key) === -1) {
-					keys.push(key);
-					output.push(item);
-				}
-			});
-			return output;
-		}
-
 		function manageLocalStorage() {
 			vm.noWorkloadFound = null;
 			if (sessionStorage.currentForecastWorkload) {
-				vm.selectedWorkload = JSON.parse(sessionStorage.currentForecastWorkload);
+				vm.selectedWorkload = angular.fromJson(sessionStorage.currentForecastWorkload);
 			} else {
 				vm.noWorkloadFound = true;
 			}
@@ -285,7 +264,7 @@
 		}
 
 		function forecastWorkload() {
-					vm.forecastModal = false;
+			vm.forecastModal = false;
 			vm.isForecastRunning = true;
 			var temp = {
 				WorkloadId: vm.selectedWorkload.Workload.Id,
@@ -304,7 +283,7 @@
 				function (data, status, headers, config) {
 					vm.isForecastRunning = false;
 					if (data.WarningMessage !== "") {
-						NoticeService.warning(data.WarningMessage, 15000, true);
+						noticeSvc.warning(data.WarningMessage, 15000, true);
 					} else {
 						vm.selectedWorkload.Days = data.ForecastDays;
 						vm.scenarioNotForecasted = vm.selectedWorkload.Days.length === 0;
@@ -341,7 +320,7 @@
 					vm.savingToScenario = false;
 					vm.changesMade = false;
 					getWorkloadForecastData();
-					NoticeService.success($translate.instant('SuccessfullyUpdatedPeopleCountColon') + ' ' + vm.selectedScenario.Name, 15000, true);
+					noticeSvc.success($translate.instant('SuccessfullyUpdatedPeopleCountColon') + ' ' + vm.selectedScenario.Name, 15000, true);
 				},
 				function(data, status, headers, config) {
 					vm.savingToScenario = false;
@@ -363,7 +342,7 @@
 				}),
 				function(data, status, headers, config) {
 					vm.savingToScenario = false;
-					NoticeService.success($translate.instant('SuccessfullyUpdatedPeopleCountColon') + ' ' + vm.targetScenario.Name, 15000, true);
+					noticeSvc.success($translate.instant('SuccessfullyUpdatedPeopleCountColon') + ' ' + vm.targetScenario.Name, 15000, true);
 					vm.targetScenario = null;
 				},
 				function(data, status, headers, config) {
