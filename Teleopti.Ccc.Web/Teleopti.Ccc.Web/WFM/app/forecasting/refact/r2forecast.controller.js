@@ -30,34 +30,29 @@
     function getAllSkills() {
       vm.skills = [];
       forecastingService.skills.query().$promise.then(function (result) {
-        result.Skills.forEach(function(s){
-          s.Workloads.forEach(function(w){
-            var temp = {
-              Workload: w,
-              SkillId: s.Id,
+        result.Skills.forEach(function(skill){
+          skill.Workloads.forEach(function(workload){
+            var skillModel = {
+              Workload: workload,
+              SkillId: skill.Id,
               SkillType:{
-                DoDisplayData: checkSupportedTypes(s.SkillType),
-                SkillType: s.SkillType
+                DoDisplayData: isSkillTypeSupported(skill.SkillType),
+                SkillType: skill.SkillType
               },
-              ChartId: "chart" + w.Id
+              ChartId: "chart" + workload.Id
             };
-            vm.skills.push(temp)
-            if (!vm.skilltypes.includes(temp.SkillType.SkillType)) {
-              vm.skilltypes.push(temp.SkillType.SkillType);
+            vm.skills.push(skillModel);
+
+            if (!vm.skilltypes.includes(skillModel.SkillType.SkillType)) {
+              vm.skilltypes.push(skillModel.SkillType.SkillType);
             }
           });
         });
       });
     }
 
-    function checkSupportedTypes(type) {
-      var supportedSkillTypes = ['SkillTypeInboundTelephony'];
-      for (var i = 0; i < supportedSkillTypes.length; i++) {
-        if (supportedSkillTypes[i] === type) {
-          return true;
-        }
-      }
-      return false;
+    function isSkillTypeSupported(skillType) {
+      return skillType === "SkillTypeInboundTelephony";
     }
 
     function goToModify(skill) {
