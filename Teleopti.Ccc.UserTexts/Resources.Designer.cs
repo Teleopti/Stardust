@@ -24526,6 +24526,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Username has a limit of {0} characters.
+        /// </summary>
+        public static string PeopleUsernameHasALimitOfXCharacters {
+            get {
+                return ResourceManager.GetString("PeopleUsernameHasALimitOfXCharacters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Username is already in use.
         /// </summary>
         public static string PeopleUsernameIsAlreadyInUse {
