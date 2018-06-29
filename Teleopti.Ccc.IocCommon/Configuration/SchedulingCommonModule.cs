@@ -498,7 +498,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<CreateMergedCollection>().SingleInstance();
 
 				//fix no state MainShiftProjection
-				builder.RegisterType<ShiftProjectionCacheManagerLessResources>().As<IShiftProjectionCacheManager>().InstancePerLifetimeScope();
+				builder.RegisterType<ShiftProjectionCacheManager>().As<IShiftProjectionCacheManager>().InstancePerLifetimeScope();
 				builder.RegisterType<TeamSchedulingLessResources>().As<TeamScheduling>().SingleInstance();
 			}
 			else
@@ -507,7 +507,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<CreateMergedCollection>().SingleInstance();
 
 				//fix no state MainShiftProjection
-				builder.RegisterType<ShiftProjectionCacheManager>().As<IShiftProjectionCacheManager>().InstancePerLifetimeScope();
+				builder.RegisterType<ShiftProjectionCacheManagerOLD>().As<IShiftProjectionCacheManager>().InstancePerLifetimeScope();
 				builder.RegisterType<TeamScheduling>().SingleInstance();
 			
 			}
