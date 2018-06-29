@@ -18,8 +18,8 @@
   <div class="con-flex">
     <div class="line-center">
       <i class="mdi mdi-information-outline huge-icon line-center"></i>
-      <h2>No skills or workloads found</h2>
-      <button class="wfm-btn wfm-btn-primary">Create a skill</button>
+      <h2>{{'NoSkillFound' | translate}}</h2>
+      <button class="wfm-btn wfm-btn-primary">{{'CreateSkill' | translate}}</button>
     </div>
   </div>
 </div>
@@ -45,7 +45,7 @@
                 <div class="con-row baseline">
                   <div class="con-flex">
                     <span ng-cloak ng-if="!vm.noForecastedDaysFound">This is the current forecast for this workload.</span>
-                    <span ng-cloak ng-if="vm.noForecastedDaysFound">No data found, try running a forecast here.</span>
+                    <span ng-cloak ng-if="vm.noForecastedDaysFound">{{'NoForecastDateForCurrentScenario' | translate}}</span>
                   </div>
                   <div class="con-flex line-right">
                     <div tabindex=0 class="context-menu card-context" ng-click="vm.loadChart(skill.ChartId, vm.currentWorkload.Days)">

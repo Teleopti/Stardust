@@ -11967,7 +11967,7 @@ Teleopti R&amp;D</value>
     <value>秒/呼叫</value>
   </data>
   <data name="SelectToModify" xml:space="preserve">
-    <value>修改前在图表中选择日期</value>
+    <value>在图表中选择日期进行修改</value>
   </data>
   <data name="Accuracy" xml:space="preserve">
     <value>准确性</value>
