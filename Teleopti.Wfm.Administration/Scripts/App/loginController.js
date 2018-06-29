@@ -65,7 +65,7 @@
 				$scope.menuItems.push(
 					{
 						text: "Hangfire Statistics",
-						link: "#/HangfirePerformanceStats",
+						link: "#/HangfireStatistics",
 						toggle: RTA_HangfireStatistics_76139_76373
 					}
 				);
