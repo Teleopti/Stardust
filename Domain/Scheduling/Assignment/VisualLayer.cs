@@ -31,11 +31,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         public IAbsence HighestPriorityAbsence { get; set; }
         public IActivity HighestPriorityActivity { get; set; }
 
-        public Color DisplayColor()
-        {
-			return Payload.ConfidentialDisplayColor(Person);
-        }
-
         public Description DisplayDescription()
         {
 			return Payload.ConfidentialDescription(Person);
