@@ -17425,10 +17425,6 @@ The application will now exit.</value>
     <value>Zero resources deleted. Are you sure you selected the correct BPO and period?</value>
     <comment>Warning after deletion of resources and zero was deleted</comment>
   </data>
-  <data name="Manage" xml:space="preserve">
-    <value>Manage</value>
-    <comment>Manage</comment>
-  </data>
   <data name="Discard" xml:space="preserve">
     <value>Discard</value>
     <comment>Discard</comment>

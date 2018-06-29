@@ -4048,9 +4048,6 @@ Periods</comment>
     <value>星期六</value>
     <comment>Saturday</comment>
   </data>
-  <data name="Manage" xml:space="preserve">
-    <value>管理</value>
-  </data>
   <data name="Discard" xml:space="preserve">
     <value>放弃</value>
   </data>

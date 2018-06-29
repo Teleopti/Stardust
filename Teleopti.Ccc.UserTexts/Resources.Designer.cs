@@ -17248,15 +17248,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manage.
-        /// </summary>
-        public static string Manage {
-            get {
-                return ResourceManager.GetString("Manage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Manage Absence.
         /// </summary>
         public static string ManageAbsence {
