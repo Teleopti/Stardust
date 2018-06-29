@@ -3,7 +3,7 @@
 
 	angular
         .module("adminApp")
-        .controller("hangfireMonitoringController_RTA_HangfirePerformanceStats_76139", hangfireMonitoringController, ["tokenHeaderService"]);
+        .controller("hangfireMonitoringController_RTA_HangfireStatistics_76139_76373", hangfireMonitoringController, ["tokenHeaderService"]);
 
 	function hangfireMonitoringController($http, $interval, tokenHeaderService) {
 		var vm = this;
