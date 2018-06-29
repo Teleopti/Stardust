@@ -1,10 +1,4 @@
-﻿/// <reference path="~/Content/Scripts/qunit.js" />
-/// <reference path="~/Content/moment/moment.js" />
-/// <reference path="~/Content/hasher/hasher.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.js" />
-
-$(document).ready(function () {
+﻿$(document).ready(function () {
 	module("Teleopti.MyTimeWeb.Schedule", {
 		setup: function() {
 			Teleopti.MyTimeWeb.Common.IsToggleEnabled = function() {}

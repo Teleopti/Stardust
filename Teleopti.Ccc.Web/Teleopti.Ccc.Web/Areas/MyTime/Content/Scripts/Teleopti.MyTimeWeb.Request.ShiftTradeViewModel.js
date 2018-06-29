@@ -1,13 +1,3 @@
-/// <reference path="~/Content/jquery/jquery-1.12.4.js" />
-/// <reference path="~/Content/Scripts/knockout-2.2.1.js"/>
-/// <reference path="~/Content/moment/moment.js" />
-/// <reference path="jquery.visible.js" />
-/// <reference path="Teleopti.MyTimeWeb.Common.js"/>
-/// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
-/// <reference path="Teleopti.MyTimeWeb.Request.js"/>
-/// <reference path="Teleopti.MyTimeWeb.Request.List.js"/>
-/// <reference path="Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.js"/>
-
 Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	var self = this;
 	self.layerCanvasPixelWidth = ko.observable();

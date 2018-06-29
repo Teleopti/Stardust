@@ -1,13 +1,4 @@
-﻿/// <reference path="~/Content/Scripts/knockout-2.2.1.debug.js" />
-/// <reference path="~/Content/jalaali-calendar-datepicker/moment-jalaali.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js"/>
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.js"/>
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.ProbabilityViewModel.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.ProbabilityModels.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.LayerViewModel.js" />
-
-Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, parent) {
+﻿Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, parent) {
 	var self = this;
 
 	var constants = Teleopti.MyTimeWeb.Common.Constants;

@@ -1,7 +1,4 @@
-﻿/// <reference path="Teleopti.MyTimeWeb.Common.js"/>
-/// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
-
-Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
+﻿Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 	var self = this;
 	self.DetailedDays = ko.observableArray();
 	self.Link = ko.observable();

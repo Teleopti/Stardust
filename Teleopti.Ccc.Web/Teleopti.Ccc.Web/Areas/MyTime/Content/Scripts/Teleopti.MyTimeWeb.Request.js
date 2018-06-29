@@ -1,11 +1,4 @@
-﻿/// <reference path="~/Content/jquery/jquery-1.12.4.js" />
-/// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
-/// <reference path="Teleopti.MyTimeWeb.Common.js"/>
-/// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
-/// <reference path="Teleopti.MyTimeWeb.Request.RequestDetail.js"/>
-/// <reference path="Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.js"/>
-
-if (typeof (Teleopti) === 'undefined') {
+﻿if (typeof (Teleopti) === 'undefined') {
 	Teleopti = {};
 	if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
 		Teleopti.MyTimeWeb = {};

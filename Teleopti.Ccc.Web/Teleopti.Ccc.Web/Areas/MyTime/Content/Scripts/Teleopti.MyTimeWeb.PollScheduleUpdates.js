@@ -1,9 +1,4 @@
-﻿/// <reference path="Teleopti.MyTimeWeb.Common.js"/>
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.MessageBroker.js"/>
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Notifier.js"/>
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js"/>
-
-Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
+﻿Teleopti.MyTimeWeb.PollScheduleUpdates = (function ($) {
 	var interval;
 	var currentListener;
 	var settings = null;

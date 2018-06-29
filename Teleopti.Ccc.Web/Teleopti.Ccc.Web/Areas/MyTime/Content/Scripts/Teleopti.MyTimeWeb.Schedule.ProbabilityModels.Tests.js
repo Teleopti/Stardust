@@ -1,9 +1,4 @@
-﻿/// <reference path="~/Content/Scripts/qunit.js" />
-/// <reference path="~/Content/moment/moment.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
-/// <reference path="Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel.js" />
-
-$(document).ready(function () {
+﻿$(document).ready(function () {
 	module("Teleopti.MyTimeWeb.Schedule.ProbabilityModels");
 
 	var probabilityLevel = {

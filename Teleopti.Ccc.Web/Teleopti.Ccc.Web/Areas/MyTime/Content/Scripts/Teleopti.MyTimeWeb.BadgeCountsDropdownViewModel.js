@@ -1,7 +1,4 @@
-﻿/// <reference path="~/Content/Scripts/knockout-2.2.1.js" />
-/// <reference path="~/Content/moment/moment.js" />
-
-if (typeof (Teleopti) === 'undefined') {
+﻿if (typeof (Teleopti) === 'undefined') {
 	Teleopti = {};
 	if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
 		Teleopti.MyTimeWeb = {};

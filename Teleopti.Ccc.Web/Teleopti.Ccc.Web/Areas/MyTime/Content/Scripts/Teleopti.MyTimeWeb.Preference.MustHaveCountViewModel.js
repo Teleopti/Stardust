@@ -1,12 +1,4 @@
-﻿/// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
-/// <reference path="~/Content/Scripts/jquery-1.9.1.js" />
-/// <reference path="~/Content/jqueryui/jquery-ui-1.10.1.custom.js" />
-/// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.DayViewModel.js" />
-
-if (typeof (Teleopti) === 'undefined') {
+﻿if (typeof (Teleopti) === 'undefined') {
 	Teleopti = {};
 	if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
 		Teleopti.MyTimeWeb = {};

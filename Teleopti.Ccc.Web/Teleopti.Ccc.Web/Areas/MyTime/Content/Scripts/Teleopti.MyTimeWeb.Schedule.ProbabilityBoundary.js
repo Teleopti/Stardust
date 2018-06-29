@@ -1,6 +1,4 @@
-﻿/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js"/>
-
-Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary = function (dayViewModel, timelines, probabilityType,
+﻿Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary = function (dayViewModel, timelines, probabilityType,
 	probabilities, daylightSavingTimeAdjustment) {
 	var constants = Teleopti.MyTimeWeb.Common.Constants;
 

@@ -1,10 +1,4 @@
-﻿/// <reference path="~/Content/Scripts/qunit.js" />
-/// <reference path="~/Content/moment/moment.js" />
-/// <reference path="~/Content/hasher/hasher.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.js" />
-
-Teleopti.MyTimeWeb.Schedule.FakeData = (function ($) {
+﻿Teleopti.MyTimeWeb.Schedule.FakeData = (function ($) {
 	var constants = Teleopti.MyTimeWeb.Common.Constants;
 	var fakeAddRequestViewModel = function () {
 		return {

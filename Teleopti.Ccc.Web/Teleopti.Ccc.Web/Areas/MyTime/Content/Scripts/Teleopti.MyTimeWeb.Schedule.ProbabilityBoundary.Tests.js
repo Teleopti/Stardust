@@ -1,10 +1,4 @@
-﻿/// <reference path="~/Content/Scripts/qunit.js" />
-/// <reference path="~/Content/moment/moment.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Portal.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary.js" />
-
-$(document).ready(function() {
+﻿$(document).ready(function() {
 	module("Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary");
 	Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
 

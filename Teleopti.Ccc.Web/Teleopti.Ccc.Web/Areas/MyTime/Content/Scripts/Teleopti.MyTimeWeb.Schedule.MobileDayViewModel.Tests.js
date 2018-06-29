@@ -1,11 +1,4 @@
-﻿/// <reference path="~/Content/Scripts/qunit.js" />
-/// <reference path="~/Content/moment/moment.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.MobileDayViewModel.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel.js" />
-
-$(document).ready(function () {
+﻿$(document).ready(function () {
 	module("Teleopti.MyTimeWeb.Schedule.MobileDayViewModel");
 
 	Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";

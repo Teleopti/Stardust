@@ -1,9 +1,4 @@
-﻿/// <reference path="~/Content/Scripts/jquery-1.9.1.js" />
-/// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
-/// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
-
-
-Teleopti.SSO.Common = (function ($) {
+﻿Teleopti.SSO.Common = (function ($) {
 	function _log() {
 		if (window.console && window.console.log)
 			window.console.log(Array.prototype.join.call(arguments, ' '));
