@@ -684,6 +684,16 @@
 				"Minutes": 60,
 				"IsOvertime": false,
 				"ActivityId": '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+			},
+			{
+				"ShiftLayerIds": null,
+				"Color": "#ffffff",
+				"Description": "Phone",
+				"Start": "2018-06-15 10:00",
+				"End": "2018-06-15 11:00",
+				"Minutes": 60,
+				"IsOvertime": false,
+				"ActivityId": '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
 			}],
 			"Timezone": { "IanaId": "Europe/Berlin" }
 		});
@@ -968,7 +978,7 @@
 		expect(saveButton.disabled).toBeTruthy();
 	});
 
-	it('should not disable save button when schedule was changed by itself', function () {
+	it('should disable refresh button when schedule was changed by itself and and enable save button after changed something', function () {
 		var date = "2018-06-28";
 		var personId = "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22";
 		fakeTeamSchedule.has({
@@ -996,6 +1006,25 @@
 
 		var vm = panel.isolateScope().vm;
 
+		var newSchedule = {
+			"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+			"Name": "Annika Andersson",
+			"Date": "2018-06-28",
+			"WorkTimeMinutes": 240,
+			"ContractTimeMinutes": 240,
+			"Projection": [{
+				"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+				"Color": "#ffffff",
+				"Description": "E-mail",
+				"Start": "2018-06-28 08:00",
+				"Minutes": 120,
+				"IsOvertime": false,
+				"ActivityId": "472e02c8-1a84-4064-9a3b-9b5e015ab3c6"
+			}],
+			"Timezone": { "IanaId": "Europe/Berlin" }
+		};
+		fakeTeamSchedule.has(newSchedule);
+
 		mockSignalRBackendServer.notifyClients([
 			{
 				"DomainReferenceId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
@@ -1005,18 +1034,22 @@
 			}
 		]);
 
+		scope.$apply();
+
 		var shiftLayers = panel[0].querySelectorAll(".shift-layer");
 		shiftLayers[0].click();
 
 		var typeEls = panel[0].querySelectorAll('.activity-selector md-option');
-		typeEls[1].click();
+		typeEls[2].click();
 
 		var saveButton = panel[0].querySelector('.btn-save');
+		var refreshButton = panel[0].querySelector('.btn-refresh');
 		expect(saveButton.disabled).toBeFalsy();
+		expect(refreshButton.disabled).toBeTruthy();
 
 	});
 
-	it('should get latest schedule when click refresh data button and should be able to save changes after changed some', function () {
+	it('should get latest schedule when click refresh data button and should be able to save changes after changed something', function () {
 		var schedule = {
 			"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
 			"Name": "Annika Andersson",

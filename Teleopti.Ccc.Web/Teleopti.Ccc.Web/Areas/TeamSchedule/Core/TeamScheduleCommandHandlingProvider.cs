@@ -377,11 +377,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		public IList<ActionResult> ChangeActivityType(ChangeActivityTypeFormData input)
 		{
 			var result = new List<ActionResult>();
+			
 			var validateResult = _changeActivityTypeFormValidator.Validate(input);
 
 			if (!validateResult.IsValid)
 			{
-				result.Add(new ActionResult
+				result.Add(new ActionResult(input.PersonId)
 				{
 					ErrorMessages = validateResult.ErrorMessages
 				});

@@ -151,6 +151,7 @@
 			vm.hasChanges = false;
 			vm.scheduleChanged = false;
 			vm.selectedShiftLayer = null;
+			vm.selectedActivitiyId = null;
 		}
 
 		function subscribeToScheduleChange() {
@@ -159,8 +160,13 @@
 					var message = messages[i];
 					if (message.DomainReferenceId === vm.personId
 						&& serviceDateFormatHelper.getDateOnly(message.StartDate.substring(1, message.StartDate.length)) === vm.date
-						&& vm.trackId !== message.TrackId) {
-						vm.scheduleChanged = true;
+					) {
+						if (vm.trackId !== message.TrackId) {
+							vm.scheduleChanged = true;
+						} else {
+							getSchedule();
+							initScheduleState();
+						}
 						return;
 					}
 				}
@@ -176,7 +182,7 @@
 				.filter(function (sl) {
 					return !!sl.ShiftLayerIds.filter(function (id) {
 						return vm.scheduleVm.ShiftLayers
-							.filter(function (isl) { return isl.ShiftLayerIds.indexOf(id) >= 0; }).length > 1;
+							.filter(function (isl) { return isl.ShiftLayerIds && isl.ShiftLayerIds.indexOf(id) >= 0; }).length > 1;
 					}).length;
 				});
 

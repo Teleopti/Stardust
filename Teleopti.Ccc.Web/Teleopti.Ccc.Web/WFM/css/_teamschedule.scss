@@ -1207,6 +1207,9 @@ teams-time-picker.ng-invalid-dst {
 		color: $orange-500;
 	}
 
+	.btn-refresh:not(:disabled) {
+		background-color: $blue-500 !important;
+	}
 
 
 	.activity-info {
@@ -1248,8 +1251,8 @@ teams-time-picker.ng-invalid-dst {
 			.scroll-toolbar {
 				display: none;
 				position: absolute;
-				top: 83px;
-				width: 100%;
+				top: 125px;
+				width: 98%;
 
 				.left-scroll {
 					position: absolute;
@@ -1258,7 +1261,7 @@ teams-time-picker.ng-invalid-dst {
 
 				.right-scroll {
 					position: absolute;
-					right: 10px;
+					right: -8px;
 				}
 
 				.left-scroll, .right-scroll {
