@@ -15,16 +15,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
   public interface IVisualLayer : ILayer<IPayload>, ICloneableEntity<ILayer<IPayload>>
 	{
 		/// <summary>
-		/// Displays the color.
-		/// </summary>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: rogerkr
-		/// Created date: 2010-02-12
-		/// </remarks>
-		Color DisplayColor();
-
-		/// <summary>
 		/// Displays the description.
 		/// </summary>
 		/// <returns></returns>

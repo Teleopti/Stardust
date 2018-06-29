@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 		private readonly IPersonAssignment _parent;
 
 		public PersonalShiftLayerViewModel(ILayerViewModelObserver observer, PersonalShiftLayer layer, IPersonAssignment parent, IEventAggregator eventAggregator)
-			: base(observer, layer, eventAggregator, false)
+			: base(observer, layer, eventAggregator, false, parent.Person)
 		{
 			_layer = layer;
 			_parent = parent;

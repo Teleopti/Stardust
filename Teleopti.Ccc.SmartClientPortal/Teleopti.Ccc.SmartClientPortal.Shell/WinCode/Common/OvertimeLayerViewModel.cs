@@ -12,8 +12,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 	    private readonly OvertimeShiftLayer _layer;
 	    private readonly IPersonAssignment _assignment;
 
-	    public OvertimeLayerViewModel(IVisualLayer layer)
-            : base(layer)
+	    public OvertimeLayerViewModel(IVisualLayer layer, IPerson person)
+            : base(layer, person)
         {
         }
 

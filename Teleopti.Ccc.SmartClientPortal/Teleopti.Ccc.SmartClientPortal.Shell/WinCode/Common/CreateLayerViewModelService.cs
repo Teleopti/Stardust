@@ -9,12 +9,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
     public class CreateLayerViewModelService : ICreateLayerViewModelService
     {
 
-        private static ILayerViewModel createViewModelFromVisualLayer(IVisualLayer visualLayer, TimeSpan interval)
+        private static ILayerViewModel createViewModelFromVisualLayer(IVisualLayer visualLayer, TimeSpan interval, IPerson person)
         {
             ILayerViewModel visualLayerViewModel;
-            if (visualLayer.DefinitionSet != null) visualLayerViewModel = new OvertimeLayerViewModel(visualLayer);
-            else if (visualLayer.Payload is IAbsence) visualLayerViewModel = new AbsenceLayerViewModel(visualLayer);
-            else visualLayerViewModel = new MainShiftLayerViewModel(visualLayer);
+            if (visualLayer.DefinitionSet != null) visualLayerViewModel = new OvertimeLayerViewModel(visualLayer, person);
+            else if (visualLayer.Payload is IAbsence) visualLayerViewModel = new AbsenceLayerViewModel(visualLayer, person);
+            else visualLayerViewModel = new MainShiftLayerViewModel(visualLayer, person);
 
             visualLayerViewModel.Interval = interval;
             return visualLayerViewModel;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
                     var projectedLayers = scheduleDay.ProjectionService().CreateProjection().FilterLayers(period);
                     foreach (IVisualLayer visualLayer in projectedLayers)
                     {
-                        var viewModel = createViewModelFromVisualLayer(visualLayer, interval);
+                        var viewModel = createViewModelFromVisualLayer(visualLayer, interval, scheduleDay.Person);
                         viewModel.SchedulePart = scheduleDay;
                         retList.Add(viewModel);
                     }
@@ -43,14 +43,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
             return retList;
         }
 
-        public IList<ILayerViewModel> CreateProjectionViewModelsFromProjectionSource(IProjectionSource projectionSource, TimeSpan interval)
+        public IList<ILayerViewModel> CreateProjectionViewModelsFromProjectionSource(IScheduleDay projectionSource, TimeSpan interval)
         {
             IList<ILayerViewModel> projectionViewModels = new List<ILayerViewModel>();
             if (projectionSource != null)
             {
                 foreach (IVisualLayer visualLayer in projectionSource.ProjectionService().CreateProjection())
                 {
-                    projectionViewModels.Add(createViewModelFromVisualLayer(visualLayer, interval));
+                    projectionViewModels.Add(createViewModelFromVisualLayer(visualLayer, interval, projectionSource.Person));
                 }
             }
             return projectionViewModels;
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 			
             foreach (IPersonAbsence persAbs in scheduleDay.PersonAbsenceCollection())
             {
-                layerViewModels.Add(new AbsenceLayerViewModel(observer, persAbs.Layer, eventAggregator));
+                layerViewModels.Add(new AbsenceLayerViewModel(observer, persAbs, eventAggregator));
             }
 
             //Set interval and part....refact to ctor

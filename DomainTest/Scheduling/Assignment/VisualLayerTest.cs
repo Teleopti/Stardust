@@ -36,18 +36,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var act = mocks.StrictMock<IActivity>();
 			target = (VisualLayer)layerFactory.CreateShiftSetupLayer(act, period, person);
 
-			Color c = Color.Red;
 			Description d = new Description("sdfsdf");
 			using (mocks.Record())
 			{
 				Expect.Call(act.ConfidentialDescription(target.Person))
 					.Return(d);
-				Expect.Call(act.ConfidentialDisplayColor(target.Person))
-					.Return(c);
 			}
 			using (mocks.Playback())
 			{
-				Assert.AreEqual(c, target.DisplayColor());
 				Assert.AreEqual(d, target.DisplayDescription());
 			}
 		}

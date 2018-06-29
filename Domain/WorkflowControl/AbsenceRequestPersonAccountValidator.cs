@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -146,7 +147,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 					.FilterLayers(personRequest.Request.Period).ContractTime();
 				numberMinutes += contractTime.TotalMinutes;
 			}
-			else
+			else if (!day.HasDayOff() && !day.IsFullDayAbsence())
 			{
 				var timeZone = personRequest.Person.PermissionInformation.DefaultTimeZone();
 				var requestedPeriod = personRequest.Request.Period;

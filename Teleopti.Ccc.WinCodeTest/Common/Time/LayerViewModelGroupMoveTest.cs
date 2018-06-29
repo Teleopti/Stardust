@@ -34,13 +34,13 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Time
             _period = new DateTimePeriod(2001, 1, 1, 2001, 1, 2);
             _actLayer = new MainShiftLayer(ActivityFactory.CreateActivity("test"), _period);
 
-            _mainShiftLayerViewModel = new MainShiftLayerViewModel(null, _actLayer, null, null);
-            _absenceLayerViewModel = new AbsenceLayerViewModel(null, new AbsenceLayer(_abs, _period),null);
+            _mainShiftLayerViewModel = new MainShiftLayerViewModel(null, _actLayer, new PersonAssignment(new Person(), new Scenario(), DateOnly.Today), null);
+            _absenceLayerViewModel = new AbsenceLayerViewModel(null, new PersonAbsence(new Person(), new Scenario(), new AbsenceLayer(_abs, _period)),null);
 	        _overtimeLayerViewModel = new OvertimeLayerViewModel(null,
 	                                                             new OvertimeShiftLayer(
 		                                                             ActivityFactory.CreateActivity("d"), _period,
 		                                                             new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime)),
-	                                                             null,
+				new PersonAssignment(new Person(), new Scenario(), DateOnly.Today),
 																															 null);
         }
 
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Time
         public void VerifyAbsenceLayerGroupMove()
         {
          
-            ILayerViewModel anotherAbsenceLayer = new AbsenceLayerViewModel(null, new AbsenceLayer(_abs, _period), null);
+            ILayerViewModel anotherAbsenceLayer = new AbsenceLayerViewModel(null, new PersonAbsence(new Person(), new Scenario(), new AbsenceLayer(_abs, _period)), null);
 
             Assert.IsFalse(_absenceLayerViewModel.ShouldBeIncludedInGroupMove(_absenceLayerViewModel),"Should not move, because its the SAME layer");
             Assert.IsTrue(_absenceLayerViewModel.ShouldBeIncludedInGroupMove(anotherAbsenceLayer), "Should  move");
@@ -59,14 +59,14 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Time
         [Test]
         public void VerifyMainShiftLayerViewModelGroupMove()
         {
-					MainShiftLayerViewModel anotherMainShiftLayerViewModel = new MainShiftLayerViewModel(null, _actLayer, null, null);
+					MainShiftLayerViewModel anotherMainShiftLayerViewModel = new MainShiftLayerViewModel(null, _actLayer, new PersonAssignment(new Person(), new Scenario(), DateOnly.Today), null);
 
             Assert.IsFalse(_mainShiftLayerViewModel.ShouldBeIncludedInGroupMove(_absenceLayerViewModel),"Should not move when an absecnelayerviewmodel is moved");
             Assert.IsFalse(_mainShiftLayerViewModel.ShouldBeIncludedInGroupMove(_mainShiftLayerViewModel), "Should not move when its the SAME layer");
             Assert.IsTrue(_mainShiftLayerViewModel.ShouldBeIncludedInGroupMove(anotherMainShiftLayerViewModel));
             Assert.IsFalse(_mainShiftLayerViewModel.ShouldBeIncludedInGroupMove(_overtimeLayerViewModel), "not moved when overtime layer is moved");
 
-	        _mainShiftLayerViewModel = new MainShiftLayerViewModel(MockRepository.GenerateMock<IVisualLayer>());
+	        _mainShiftLayerViewModel = new MainShiftLayerViewModel(MockRepository.GenerateMock<IVisualLayer>(), new Person());
             Assert.IsTrue(_mainShiftLayerViewModel.IsProjectionLayer,"Just checking that it's a Projectionlayer");
             Assert.False(_mainShiftLayerViewModel.ShouldBeIncludedInGroupMove(anotherMainShiftLayerViewModel),"Projectionlayers should not be moved");
            
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Time
         [Test]
         public void VerifyOvertimeLayerViewModelGroupMove()
         {
-            OvertimeLayerViewModel anotherOvertimeLayerViewModel = new OvertimeLayerViewModel(null, new OvertimeShiftLayer(new Activity("d"), new DateTimePeriod(2000,1,1,2000,1,2), new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime)), null, null);
+            OvertimeLayerViewModel anotherOvertimeLayerViewModel = new OvertimeLayerViewModel(null, new OvertimeShiftLayer(new Activity("d"), new DateTimePeriod(2000,1,1,2000,1,2), new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime)), new PersonAssignment(new Person(), new Scenario(), DateOnly.Today), null);
 
             Assert.IsFalse(_overtimeLayerViewModel.ShouldBeIncludedInGroupMove(_absenceLayerViewModel), "not moved when absencelayerviewmodel layer is moved");
             Assert.IsTrue(_overtimeLayerViewModel.ShouldBeIncludedInGroupMove(anotherOvertimeLayerViewModel), "should be moved when another overtime layer is moved");
@@ -109,8 +109,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Time
         public void VerifyPersonalShiftLayerViewModelGroupMove()
         {
 	        var pLayer = new PersonalShiftLayer(new Activity("d"), _period);
-            PersonalShiftLayerViewModel personalShiftLayerViewModel = new PersonalShiftLayerViewModel(null, pLayer, null, _eventAggregator);
-						PersonalShiftLayerViewModel anotherPersonalShiftLayerViewModel = new PersonalShiftLayerViewModel(null, pLayer, null, _eventAggregator);
+            PersonalShiftLayerViewModel personalShiftLayerViewModel = new PersonalShiftLayerViewModel(null, pLayer, new PersonAssignment(new Person(), new Scenario(), DateOnly.Today), _eventAggregator);
+						PersonalShiftLayerViewModel anotherPersonalShiftLayerViewModel = new PersonalShiftLayerViewModel(null, pLayer, new PersonAssignment(new Person(), new Scenario(), DateOnly.Today), _eventAggregator);
 
             Assert.IsFalse(personalShiftLayerViewModel.ShouldBeIncludedInGroupMove(_overtimeLayerViewModel), "not moved when an overtimelayerviewmodel layer is moved");
             Assert.IsFalse(personalShiftLayerViewModel.ShouldBeIncludedInGroupMove(_mainShiftLayerViewModel), "not moved when a main shift layer is moved");

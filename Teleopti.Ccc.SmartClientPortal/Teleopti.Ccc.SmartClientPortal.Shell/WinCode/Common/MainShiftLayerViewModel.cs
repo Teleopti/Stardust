@@ -12,8 +12,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common
 	    private readonly MainShiftLayer _layer;
 	    private readonly IPersonAssignment _assignment;
 
-	    public MainShiftLayerViewModel(IVisualLayer layer)
-            : base(layer)
+	    public MainShiftLayerViewModel(IVisualLayer layer, IPerson person)
+            : base(layer, person)
         {
         }
 

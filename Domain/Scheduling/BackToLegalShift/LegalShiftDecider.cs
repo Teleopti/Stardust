@@ -11,10 +11,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 
 	public class LegalShiftDecider : ILegalShiftDecider
 	{
-		private readonly ShiftProjectionCacheManager _shiftProjectionCacheManager;
+		private readonly IShiftProjectionCacheManager _shiftProjectionCacheManager;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 
-		public LegalShiftDecider(ShiftProjectionCacheManager shiftProjectionCacheManager, IScheduleDayEquator scheduleDayEquator)
+		public LegalShiftDecider(IShiftProjectionCacheManager shiftProjectionCacheManager, IScheduleDayEquator scheduleDayEquator)
 		{
 			_shiftProjectionCacheManager = shiftProjectionCacheManager;
 			_scheduleDayEquator = scheduleDayEquator;

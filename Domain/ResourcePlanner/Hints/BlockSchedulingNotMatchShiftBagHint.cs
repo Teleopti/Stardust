@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 {
 	public class BlockSchedulingNotMatchShiftBagHint : IScheduleHint
 	{
-		private readonly ShiftProjectionCacheManager _shiftProjectionCacheManager;
+		private readonly IShiftProjectionCacheManager _shiftProjectionCacheManager;
 
-		public BlockSchedulingNotMatchShiftBagHint(ShiftProjectionCacheManager shiftProjectionCacheManager)
+		public BlockSchedulingNotMatchShiftBagHint(IShiftProjectionCacheManager shiftProjectionCacheManager)
 		{
 			_shiftProjectionCacheManager = shiftProjectionCacheManager;
 		}

@@ -185,9 +185,17 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 
 		private void logonSystem()
 		{
-			using (DataSource.OnThisThreadUse(tenantName))
+			try
 			{
-				AsSystem.Logon(tenantName, businessUnitId);
+				using (DataSource.OnThisThreadUse(tenantName))
+				{
+					AsSystem.Logon(tenantName, businessUnitId);
+				}
+			}
+			catch (Exception)
+			{
+				Console.WriteLine($"logon failed using tenantName:{tenantName}");
+				throw;
 			}
 		}
 
