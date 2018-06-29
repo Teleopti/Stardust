@@ -235,7 +235,6 @@
     <Compile Include="Intraday\ITaskPeriodsProvider.cs" />
     <Compile Include="Forecasting\ForecastDayOverride.cs" />
     <Compile Include="Forecasting\ForecastProvider.cs" />
-    <Compile Include="Forecasting\IWorkloadNameBuilder.cs" />
     <Compile Include="Forecasting\Models\ForecastDayModel.cs" />
     <Compile Include="Forecasting\Models\ForecastDayModelMapper.cs" />
     <Compile Include="Forecasting\Models\ForecastModel.cs" />

@@ -9,12 +9,10 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export.Web
 	{
 		public static ForecastExportHeaderModel Load(string scenario, IWorkload workload, IList<ISkillDay> skillDays, DateOnlyPeriod period)
 		{
-			var workloadNameBuilder = new WorkloadNameBuilder();
-
 			var model = new ForecastExportHeaderModel
 			{
 				Period = period,
-				SkillName = workloadNameBuilder.WorkloadName(workload.Skill.Name, workload.Name),
+				SkillName = WorkloadNameBuilder.GetWorkloadName(workload.Skill.Name, workload.Name),
 				SkillTimeZoneName = workload.Skill.TimeZone.DisplayName,
 				Scenario = scenario
 			};

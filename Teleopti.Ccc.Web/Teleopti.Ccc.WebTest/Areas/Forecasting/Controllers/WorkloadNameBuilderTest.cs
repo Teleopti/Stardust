@@ -7,28 +7,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 	[TestFixture]
 	public class WorkloadNameBuilderTest
 	{
-		[Test]
-		public void ShouldCombineSkillNameAndWorkloadName()
+		[TestCase("skill1", "workload1", "skill1 - workload1")]
+		[TestCase("skill1", "", "skill1")]
+		[TestCase("skill1", null, "skill1")]
+		[TestCase("test1", "test1", "test1")]
+		public void ShouldCombineSkillNameAndWorkloadName(string skillName, string workloadName, string expectedWorkloadName)
 		{
-			var target = new WorkloadNameBuilder();
-			var result = target.WorkloadName("skill1", "workload1");
-			result.Should().Be.EqualTo("skill1 - workload1");
-		}
-
-		[Test]
-		public void ShouldNotDuplicateIfSkillNameAndWorkloadNameAreSame()
-		{
-			var target = new WorkloadNameBuilder();
-			var result = target.WorkloadName("test1", "test1");
-			result.Should().Be.EqualTo("test1");
-		}
-
-		[Test]
-		public void ShouldUseSkillNameIfWorkloadNameIsNullOrEmpty()
-		{
-			var target = new WorkloadNameBuilder();
-			var result = target.WorkloadName("test1", "test1");
-			result.Should().Be.EqualTo("test1");
+			var result = WorkloadNameBuilder.GetWorkloadName(skillName, workloadName);
+			result.Should().Be.EqualTo(expectedWorkloadName);
 		}
 	}
 }
