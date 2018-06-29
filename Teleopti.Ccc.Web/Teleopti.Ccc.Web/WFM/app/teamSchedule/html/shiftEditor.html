@@ -1,4 +1,7 @@
 ﻿<div class="con-row">
+	<md-progress-linear  ng-if="vm.isSaving" md-mode="indeterminate"></md-progress-linear>
+</div>
+<div class="con-row">
 	<div class="con-flex">
 		<span>
 			<span class="name">{{vm.scheduleVm.Name}}</span>
@@ -18,8 +21,6 @@
 				<underlying-schedule-info person-schedule="vm.scheduleVm" date="vm.date"></underlying-schedule-info>
 			</md-tooltip>
 		</span>
-
-
 	</div>
 	<div class="con-flex text-right">
 		<button type="button" class="context-menu card-context btn-refresh" ng-disabled="!vm.scheduleChanged" ng-click="vm.refreshData()">

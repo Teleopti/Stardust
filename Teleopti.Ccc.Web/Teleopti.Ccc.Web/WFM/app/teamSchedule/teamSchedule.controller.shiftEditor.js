@@ -46,7 +46,7 @@
 		vm.displayDate = moment(vm.date).format("L");
 		vm.availableActivities = [];
 		vm.trackId = guidgenerator.newGuid();
-		var isSaving = false;
+		vm.isSaving = false;
 
 		vm.$onInit = function () {
 			initScheduleState();
@@ -111,7 +111,7 @@
 		}
 
 		vm.saveChanges = function () {
-			isSaving = true;
+			vm.isSaving = true;
 			ShiftEditorService.changeActivityType(vm.date, vm.personId, getChangedLayers(), { TrackId: vm.trackId }).then(function (response) {
 				initScheduleState();
 				teamScheduleNotificationService.reportActionResult({
@@ -126,7 +126,7 @@
 		}
 
 		vm.isSaveButtonDisabled = function () {
-			return !vm.hasChanges || vm.scheduleChanged || isSaving;
+			return !vm.hasChanges || vm.scheduleChanged || vm.isSaving;
 		}
 
 
@@ -147,7 +147,7 @@
 		}
 
 		function initScheduleState() {
-			isSaving = false;
+			vm.isSaving = false;
 			vm.hasChanges = false;
 			vm.scheduleChanged = false;
 			vm.selectedShiftLayer = null;
