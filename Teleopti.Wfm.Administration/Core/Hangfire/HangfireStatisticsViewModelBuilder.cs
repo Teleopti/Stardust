@@ -62,6 +62,19 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 				)
 				.ToArray();
 		}
+
+		public HangfireStatisticsViewModel BuildStatistics()
+		{
+			return new HangfireStatisticsViewModel
+			{
+				JobStatistics = BuildPerformanceStatistics()
+			};
+		}
+	}
+
+	public class HangfireStatisticsViewModel
+	{
+		public IEnumerable<JobStatistics> JobStatistics { get; set; }
 	}
 
 	public class JobStatistics

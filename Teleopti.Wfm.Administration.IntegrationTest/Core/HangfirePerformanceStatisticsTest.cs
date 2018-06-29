@@ -35,7 +35,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 			Publisher.Publish(new TestEvent());
 			Hangfire.EmulateWorkerIteration();
 
-			var result = Target.BuildPerformanceStatistics();
+			var result = Target.BuildStatistics().JobStatistics;
 
 			result.Count().Should().Be(1);
 		}
@@ -47,7 +47,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 			Publisher.Publish(new TestEvent());
 			Hangfire.EmulateWorkerIteration();
 
-			var result = Target.BuildPerformanceStatistics();
+			var result = Target.BuildStatistics().JobStatistics;
 
 			result.Single().Type.Should().Be("TestHandler got TestEvent");
 			result.Single().Count.Should().Be(1);
@@ -66,11 +66,10 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 			Hangfire.EmulateWorkerIteration();
 			Hangfire.EmulateWorkerIteration();
 
-			var result = Target.BuildPerformanceStatistics();
+			var result = Target.BuildStatistics().JobStatistics;
 
 			result.Single().Count.Should().Be(2);
 		}
-		
 		
 		[Test]
 		public void ShouldReadTotalTime()
@@ -81,7 +80,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 			Hangfire.EmulateWorkerIteration();
 			Hangfire.EmulateWorkerIteration();
 
-			var result = Target.BuildPerformanceStatistics();
+			var result = Target.BuildStatistics().JobStatistics;
 
 			result.Single().TotalTime.Should().Be.GreaterThan(200);
 		}
