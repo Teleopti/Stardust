@@ -4,14 +4,12 @@ using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -103,42 +101,36 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .Add(Restrictions.Between("CurrentDate", periodWithSkillDays.StartDate,
                                           periodWithSkillDays.EndDate));
 
-            var skills = Session.CreateCriteria(typeof(Skill), "skill")
-                .SetFetchMode("SkillType", FetchMode.Join)
-                .Add(Subqueries.Exists(subQuery))
-                .Add(Restrictions.Not(Property.ForName("skill.class").Eq(typeof(ChildSkill))))
-                .List<ISkill>();
+			var skills = Session.CreateCriteria(typeof(Skill), "skill")
+				.SetFetchMode("SkillType", FetchMode.Join)
+				.SetFetchMode("Activity", FetchMode.Join)
+				.SetFetchMode("WorkloadCollection", FetchMode.Join)
+				.Add(Subqueries.Exists(subQuery))
+				.Add(Restrictions.Not(Property.ForName("skill.class").Eq(typeof(ChildSkill))))
+				.Future<ISkill>();
 
-            var guidList = skills.Select(s => s.Id.GetValueOrDefault());
+			Session.CreateCriteria<MultisiteSkill>("skill")
+				.SetFetchMode("SkillType", FetchMode.Join)
+				.SetFetchMode("Activity", FetchMode.Join)
+				.SetFetchMode("WorkloadCollection", FetchMode.Join)
+				.SetFetchMode("ChildSkills", FetchMode.Join)
+				.Add(Subqueries.Exists(subQuery))
+				.Future<MultisiteSkill>();
 
-            Session.CreateCriteria(typeof(Skill), "skill")
-                .Add(Restrictions.In("Id", guidList.ToArray()))
-                .SetFetchMode("WorkloadCollection", FetchMode.Join)
-                .SetFetchMode("WorkloadCollection.QueueSourceCollection", FetchMode.Join)
-                .List<ISkill>();
+			Session.CreateCriteria<ChildSkill>()
+				.SetFetchMode("SkillType", FetchMode.Join)
+				.SetFetchMode("Activity", FetchMode.Join)
+				.SetFetchMode("WorkloadCollection", FetchMode.Join)
+				.Future<ChildSkill>();
 
-            //Made like this because of an error where the proxy couldn't be resolved to the correct type
-            foreach (var multisiteSkill in skills.OfType<IMultisiteSkill>().ToList())
-            {
-                multisiteSkill.ChildSkills.ForEach(s =>
-                                                       {
-                                                           LazyLoadingManager.Initialize(s);
-                                                           LazyLoadingManager.Initialize(s.Activity);
-                                                           LazyLoadingManager.Initialize(s.WorkloadCollection);
-                                                           foreach (var workload in s.WorkloadCollection)
-                                                           {
-                                                               LazyLoadingManager.Initialize(workload.QueueSourceCollection);
-                                                           }
-                                                           skills.Add(s);
-                                                       });
-            }
-            skills.ForEach(s =>
-            {
-                LazyLoadingManager.Initialize(s);
-                LazyLoadingManager.Initialize(s.Activity);
-            });
-            var unique = new HashSet<ISkill>(skills);
-            return new List<ISkill>(unique);
+			Session.CreateCriteria<Workload>()
+				.SetFetchMode("QueueSourceCollection", FetchMode.Join)
+				.Future<Workload>();
+
+			Session.CreateCriteria<QueueSource>()
+				.Future<QueueSource>();
+			
+			return skills.Concat(skills.OfType<IMultisiteSkill>().SelectMany(m => m.ChildSkills)).Distinct().ToList();
         }
 
         public ISkill LoadSkill(ISkill skill)
@@ -294,13 +286,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .Add(Restrictions.Eq("Skill", skill))
                 .SetProjection(Projections.Property("Id")).SetResultTransformer(Transformers.DistinctRootEntity);
         }
-
-		private DetachedCriteria getWorkloadIds()
-		{
-			return DetachedCriteria.For<Workload>()
-				.SetProjection(Projections.Property("Id")).SetResultTransformer(Transformers.DistinctRootEntity);
-		}
-
+		
 		public IEnumerable<ISkill> LoadInboundTelephonySkills(int defaultResolution)
         {
             return Session.GetNamedQuery("loadInboundTelephonySkills")
