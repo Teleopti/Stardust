@@ -42,23 +42,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// </remarks>
         public ICollection<ISkill> FindAllWithWorkloadAndQueues()
         {
-            ICriteria query1 = Session.CreateCriteria(typeof (Skill))
+            var skills = Session.CreateCriteria(typeof (Skill))
                 .SetFetchMode("Activity", FetchMode.Join)
                 .SetFetchMode("SkillType", FetchMode.Join)
                 .SetFetchMode("WorkloadCollection", FetchMode.Join)
-                .AddOrder(Order.Asc("Name"));
+                .AddOrder(Order.Asc("Name"))
+				.Future<ISkill>();
 
-            ICriteria query2 = Session.CreateCriteria(typeof (Workload))
-                                .SetFetchMode("QueueSourceCollection", FetchMode.Join);
-            ICriteria query3 = Session.CreateCriteria(typeof (QueueSource));
+			Session.CreateCriteria(typeof(Workload))
+				.SetFetchMode("QueueSourceCollection", FetchMode.Join)
+				.Future<Workload>();
 
-            var criteria = Session.CreateMultiCriteria()
-                                        .Add(query1)
-                                        .Add(query2)
-                                        .Add(query3);
-
-            var skills = CollectionHelper.ToDistinctGenericCollection<ISkill>(wrapMultiCriteria(criteria));
-            return skills;
+            Session.CreateCriteria(typeof (QueueSource))
+				.Future<QueueSource>();
+			
+            return skills.Distinct().ToList();
         }
 
         private static object wrapMultiCriteria(IMultiCriteria multi)
