@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		private readonly ILicenseAvailability _licenseAvailability;
 		private readonly IToggleManager _toggleManager;
 		private readonly IAgentBadgeWithinPeriodProvider _agentBadgeWithinPeriodProvider;
+		private readonly INow _now;
 
 		public PortalViewModelFactory(IPermissionProvider permissionProvider,
 			ILicenseActivatorProvider licenseActivatorProviderProvider,
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			ICurrentTenantUser currentTenantUser,
 			IUserCulture userCulture,
 			ICurrentTeleoptiPrincipal currentIdentity, IToggleManager toggleManager, ILicenseAvailability licenseAvailability,
-			IAgentBadgeWithinPeriodProvider agentBadgeWithinPeriodProvider)
+			IAgentBadgeWithinPeriodProvider agentBadgeWithinPeriodProvider, INow now)
 		{
 			_permissionProvider = permissionProvider;
 			_licenseActivatorProvider = licenseActivatorProviderProvider;
@@ -61,6 +62,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			_toggleManager = toggleManager;
 			_licenseAvailability = licenseAvailability;
 			_agentBadgeWithinPeriodProvider = agentBadgeWithinPeriodProvider;
+			_now = now;
 		}
 
 		public PortalViewModel CreatePortalViewModel()
@@ -86,7 +88,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 
 			ITeamGamificationSetting teamSetting = null;
 			var person = _loggedOnUser.CurrentUser();
-			var myTeam = person.MyTeam(DateOnly.Today);
+			var today = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), person.PermissionInformation.DefaultTimeZone())
+				.ToDateOnly();
+			var myTeam = person.MyTeam(today);
 			if (myTeam != null)
 			{
 				teamSetting =
@@ -142,24 +146,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 
 		private DateOnlyPeriod getDefaultPeriod(IGamificationSetting gamificationSetting)
 		{
-			var onGoingPeriod = new DateOnlyPeriod(new DateOnly(1900, 1, 1), DateOnly.Today);
+			var person = _loggedOnUser.CurrentUser();
+			var today = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), person.PermissionInformation.DefaultTimeZone())
+				.ToDateOnly();
+			var onGoingPeriod = new DateOnlyPeriod(new DateOnly(1900, 1, 1), today);
 			if (!_toggleManager.IsEnabled(Toggles.WFM_Gamification_Create_Rolling_Periods_74866)) return onGoingPeriod;
 
-			var firstDayOfWeek = _loggedOnUser.CurrentUser().FirstDayOfWeek;
-			DateOnly start, end;
-
+			var firstDayOfWeek = person.FirstDayOfWeek;
+			
 			switch (gamificationSetting.RollingPeriodSet)
 			{
 				case GamificationRollingPeriodSet.Weekly:
-					var diff = DateTime.Today.DayOfWeek - firstDayOfWeek;
-					start = diff == 0 ? DateOnly.Today : DateOnly.Today.AddDays(-diff);
-					end = start.AddDays(6);
-					return new DateOnlyPeriod(start, end);
+					return DateHelper.GetWeekPeriod(today, firstDayOfWeek);
 				case GamificationRollingPeriodSet.Monthly:
-					var year = DateTime.Today.Year;
-					var month = DateTime.Today.Month;
-					start = new DateOnly(year, month, 1);
-					end = new DateOnly(year, month, DateTime.DaysInMonth(year, month));
+					var year = today.Year;
+					var month = today.Month;
+					var start = new DateOnly(year, month, 1);
+					var end = new DateOnly(year, month, DateTime.DaysInMonth(year, month));
 					return new DateOnlyPeriod(start, end);
 
 				default: return onGoingPeriod;

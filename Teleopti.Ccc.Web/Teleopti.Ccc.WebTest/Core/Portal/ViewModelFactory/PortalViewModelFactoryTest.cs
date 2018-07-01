@@ -2,8 +2,8 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Security;
 using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -33,6 +32,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		public IPortalViewModelFactory Target;
 		public FakeCurrentUnitOfWorkFactory CurrentUnitOfWorkFactory;
 		public CurrentTenantUserFake CurrentTenantUser;
+		public MutableNow Now;
 
 		public FakeTeamGamificationSettingRepository TeamGamificationSettingRepository;
 		public FakeLoggedOnUser LoggedOnUser;
@@ -214,6 +214,8 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		[Test]
 		public void ShouldGetOngoingPeriodAgentBadgesWhenToggleOff()
 		{
+			Now.Is(new DateTime(2017, 04, 09, 23, 0, 0, DateTimeKind.Utc));
+
 			ToggleManager.Disable(Toggles.WFM_Gamification_Create_Rolling_Periods_74866);
 			var calculatedDate = new DateOnly(2017, 4, 9);
 			var gamificationSetting = createGamificationSetting();
@@ -221,13 +223,13 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			setAgentBadge(gamificationSetting, calculatedDate);
 			setAgentBadgeWithRank(gamificationSetting, calculatedDate);
 
-			var result = Target.CreatePortalViewModel().Badges;
-			result.ToList()[0].BronzeBadge.Should().Be.EqualTo(1);
-			result.ToList()[0].SilverBadge.Should().Be.EqualTo(0);
-			result.ToList()[0].GoldBadge.Should().Be.EqualTo(0);
-			result.ToList()[1].BronzeBadge.Should().Be.EqualTo(5);
-			result.ToList()[1].SilverBadge.Should().Be.EqualTo(0);
-			result.ToList()[1].GoldBadge.Should().Be.EqualTo(1);
+			var result = Target.CreatePortalViewModel().Badges.ToList();
+			result[0].BronzeBadge.Should().Be.EqualTo(1);
+			result[0].SilverBadge.Should().Be.EqualTo(0);
+			result[0].GoldBadge.Should().Be.EqualTo(0);
+			result[1].BronzeBadge.Should().Be.EqualTo(5);
+			result[1].SilverBadge.Should().Be.EqualTo(0);
+			result[1].GoldBadge.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -240,13 +242,35 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			setAgentBadge(gamificationSetting, calculatedDate);
 			setAgentBadgeWithRank(gamificationSetting, calculatedDate);
 
-			var result = Target.CreatePortalViewModel().Badges;
-			result.ToList()[0].BronzeBadge.Should().Be.EqualTo(0);
-			result.ToList()[0].SilverBadge.Should().Be.EqualTo(0);
-			result.ToList()[0].GoldBadge.Should().Be.EqualTo(0);
-			result.ToList()[1].BronzeBadge.Should().Be.EqualTo(0);
-			result.ToList()[1].SilverBadge.Should().Be.EqualTo(0);
-			result.ToList()[1].GoldBadge.Should().Be.EqualTo(0);
+			var result = Target.CreatePortalViewModel().Badges.ToList();
+			result[0].BronzeBadge.Should().Be.EqualTo(0);
+			result[0].SilverBadge.Should().Be.EqualTo(0);
+			result[0].GoldBadge.Should().Be.EqualTo(0);
+			result[1].BronzeBadge.Should().Be.EqualTo(0);
+			result[1].SilverBadge.Should().Be.EqualTo(0);
+			result[1].GoldBadge.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldGetWeeklyDefaultSettingPeriodAgentBadgesWhenToggleOn()
+		{
+			var calculatedDate = new DateOnly(2017, 4, 9);
+
+			Now.Is(new DateTime(2017,04,08,23,0,0,DateTimeKind.Utc));
+			ToggleManager.Enable(Toggles.WFM_Gamification_Create_Rolling_Periods_74866);
+
+			var gamificationSetting = createWeeklyGamificationSetting();
+			createTeamGamificationSetting(gamificationSetting, calculatedDate);
+			setAgentBadge(gamificationSetting, calculatedDate);
+			setAgentBadgeWithRank(gamificationSetting, calculatedDate);
+
+			var result = Target.CreatePortalViewModel().Badges.ToList();
+			result[0].BronzeBadge.Should().Be.EqualTo(1);
+			result[0].SilverBadge.Should().Be.EqualTo(0);
+			result[0].GoldBadge.Should().Be.EqualTo(0);
+			result[1].BronzeBadge.Should().Be.EqualTo(5);
+			result[1].SilverBadge.Should().Be.EqualTo(0);
+			result[1].GoldBadge.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -308,17 +332,55 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			CurrentTeleoptiPrincipal.Fake(principal);
 		}
 
-		private void createTeamGamificationSetting(IGamificationSetting gamificationSetting = null)
+		private void createTeamGamificationSetting(IGamificationSetting gamificationSetting = null, DateOnly? date = null)
 		{
 			setupLoggedOnUser();
 			if (gamificationSetting == null) return;
 		
 			var teamGamificationSetting = new TeamGamificationSetting
 			{
-				Team = LoggedOnUser.CurrentUser().MyTeam(DateOnly.Today),
+				Team = LoggedOnUser.CurrentUser().MyTeam(date ?? DateOnly.Today),
 				GamificationSetting = gamificationSetting
 			};
 			TeamGamificationSettingRepository.Add(teamGamificationSetting);
+		}
+
+		private IGamificationSetting createWeeklyGamificationSetting()
+		{
+			var gSetting = new GamificationSetting("bla")
+			{
+				GamificationSettingRuleSet = GamificationSettingRuleSet.RuleWithDifferentThreshold,
+				AnsweredCallsBadgeEnabled = false,
+				AHTBadgeEnabled = false,
+				AdherenceBadgeEnabled = false,
+
+				AnsweredCallsThreshold = 30,
+				AnsweredCallsBronzeThreshold = 30,
+				AnsweredCallsSilverThreshold = 40,
+				AnsweredCallsGoldThreshold = 50,
+
+				AHTThreshold = TimeSpan.FromSeconds(60),
+				AHTBronzeThreshold = TimeSpan.FromSeconds(60),
+				AHTSilverThreshold = TimeSpan.FromSeconds(50),
+				AHTGoldThreshold = TimeSpan.FromSeconds(40),
+
+				AdherenceThreshold = new Percent(0.70),
+				AdherenceBronzeThreshold = new Percent(0.70),
+				AdherenceSilverThreshold = new Percent(0.85),
+				AdherenceGoldThreshold = new Percent(0.95),
+
+				SilverToBronzeBadgeRate = 5,
+				GoldToSilverBadgeRate = 2,
+				RollingPeriodSet = GamificationRollingPeriodSet.Weekly
+			};
+
+			gSetting.BadgeSettings.Add(new BadgeSetting { QualityId = 2, DataType = ExternalPerformanceDataType.Numeric, Enabled = true });
+			gSetting.BadgeSettings.Add(new BadgeSetting { QualityId = 1, DataType = ExternalPerformanceDataType.Percent, Enabled = true });
+
+			gSetting.WithId(Guid.NewGuid());
+
+			GamificationSettingRepository.Add(gSetting);
+			return gSetting;
 		}
 
 		private IGamificationSetting createGamificationSetting()
