@@ -14511,6 +14511,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Login credentials not found.
+        /// </summary>
+        public static string IdentityLogonMissing {
+            get {
+                return ResourceManager.GetString("IdentityLogonMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ignored Schedule.
         /// </summary>
         public static string IgnoredScheduleHint {

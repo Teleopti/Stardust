@@ -31,6 +31,10 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 			nodatasource: function() {
 				self.ErrorMessage($('#Signin-error').data('nodatasourcetext'));
 				self.ShowSignInAsAnotherUser(true);
+			},
+			nocredentials: function () {
+				self.ErrorMessage($('#Signin-error').data('credentialsmissingtext'));
+				self.ShowSignInAsAnotherUser(true);
 			}
 		});
 

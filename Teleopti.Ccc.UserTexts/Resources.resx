@@ -17524,4 +17524,8 @@ The application will now exit.</value>
   <data name="SuccessfulMessageForSavingScheduleChanges" xml:space="preserve">
     <value>Successfully saved schedule changes.</value>
   </data>
+  <data name="IdentityLogonMissing" xml:space="preserve">
+    <value>Login credentials not found</value>
+    <comment>Credentials for loging in using identity logon missing</comment>
+  </data>
 </root>

@@ -61,7 +61,7 @@
 			data: authenticationModel,
 			success: function (responseData, textStatus, jqXHR) {
 				if (responseData === "NoUserFound") {
-					options.nodatasource();
+					options.nocredentials();
 				} else {
 					businessUnits = responseData;
 					success(responseData, textStatus, jqXHR);
