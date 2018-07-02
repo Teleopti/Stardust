@@ -54,7 +54,7 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 				(
 					from j in _hangfireRepository.SucceededJobs()
 					let arguments = _deserializer.DeserializeObject<string[]>(j.Arguments)
-					let data = _deserializer.DeserializeObject<dynamic>(j.Data)
+					let data = _deserializer.DeserializeObject<SuccessData>(j.Data)
 					let name = _deserializer.DeserializeObject<string>(arguments.First())
 					let type = name.Substring(0, name.IndexOf(" on "))
 					let duration = data.PerformanceDuration
@@ -103,11 +103,16 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 		public IEnumerable<JobPerformance> JobPerformance { get; set; }
 		public IEnumerable<JobFailure> JobFailures { get; set; }
 	}
-
+	
 	public class JobFailure
 	{
 		public string Type { get; set; }
 		public long Count { get; set; }
+	}
+	
+	public class SuccessData
+	{
+		public long PerformanceDuration { get; set; }
 	}
 
 	public class JobPerformance
