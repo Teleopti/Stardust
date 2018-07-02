@@ -18,8 +18,9 @@ namespace Teleopti.Support.Library.Config
 			var file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ConfigFiles", _file);
 			if (File.Exists(file))
 				return File.ReadAllLines(file);
-			return new ResourceLoader().Load(_file)
-				.Split(new[] {Environment.NewLine}, StringSplitOptions.None);
+			var text = new ResourceLoader().Load(_file);
+			var lines = text.Split(new[] {"\r\n", "\r", "\n"}, StringSplitOptions.None);
+			return lines;
 		}
 	}
 }
