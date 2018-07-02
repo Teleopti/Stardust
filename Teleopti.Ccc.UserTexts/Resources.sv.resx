@@ -15541,4 +15541,106 @@ Applikationen kommer nu att stängas. </value>
   <data name="ThisScenarioHasChanges" xml:space="preserve">
     <value>Detta scenario har osparade ändringar</value>
   </data>
+  <data name="ClearBPOHeader" xml:space="preserve">
+    <value>Rensa bemanning</value>
+  </data>
+  <data name="ImportBpoClearConfirmation" xml:space="preserve">
+    <value>Är du säker på att du vill ta bort bemanningen för denna BPO för den valda perioden?</value>
+  </data>
+  <data name="ImportBpoClearSuccessMessage" xml:space="preserve">
+    <value>Importerade resurser rensade.</value>
+  </data>
+  <data name="ImportBpoRangeMessage" xml:space="preserve">
+    <value>BPO {0} innehåller data från {1} till {2}.</value>
+  </data>
+  <data name="ImportBpoSelectBpo" xml:space="preserve">
+    <value>Välj BPO</value>
+  </data>
+  <data name="ImportBpoTheClearBPOFailed" xml:space="preserve">
+    <value>Rensning av bemanning misslyckades!</value>
+  </data>
+  <data name="ImportBpoZeroResourcesWarning" xml:space="preserve">
+    <value>Noll resurser togs bort. Är du säker på att du valde rätt BPO och period?</value>
+  </data>
+  <data name="Manage" xml:space="preserve">
+    <value>Hantera</value>
+  </data>
+  <data name="Discard" xml:space="preserve">
+    <value>Kasta bort</value>
+  </data>
+  <data name="CreateOverride" xml:space="preserve">
+    <value>Skapa ersättningsvärde</value>
+  </data>
+  <data name="ConfirmDiscardAllModifications" xml:space="preserve">
+    <value>Är du säker på att du vill kasta bort alla ändringar?</value>
+  </data>
+  <data name="ConfirmExitForecastWithoutSaving" xml:space="preserve">
+    <value>Är du säker på att du vill lämna prognosen utan att spara?</value>
+  </data>
+  <data name="ConfirmReforecastWithoutSaving" xml:space="preserve">
+    <value>Är du säker på att du vill prognostisera om? Alla ändringar som inte är sparade kommer att förloras.</value>
+  </data>
+  <data name="NoForecastDateForCurrentScenario" xml:space="preserve">
+    <value>Det finns ingen prognosdata för detta scenario. Kör en prognos eller spara från ett annat scenario. </value>
+  </data>
+  <data name="PleaseSaveOrDiscardChangesBeforeChangingScenario" xml:space="preserve">
+    <value>Spara eller kasta bort ändringarna innan du byter scenario</value>
+  </data>
+  <data name="SaveToOtherScenario" xml:space="preserve">
+    <value>Spara till ett annat scenario</value>
+  </data>
+  <data name="SelectTargetScenarioWithColon" xml:space="preserve">
+    <value>Välj målscenario:</value>
+  </data>
+  <data name="SkillNotSupported" xml:space="preserve">
+    <value>Öppna prognosen för aktuell kompetens i Windowsklienten för att ändra</value>
+  </data>
+  <data name="SkillTypeFilter" xml:space="preserve">
+    <value>Filter på kompetenstyp</value>
+  </data>
+  <data name="PeopleManageUsers" xml:space="preserve">
+    <value>Hantera användare</value>
+  </data>
+  <data name="PeopleUsernameIsAlreadyInUse" xml:space="preserve">
+    <value>Användarnamnet används redan</value>
+  </data>
+  <data name="PeopleGrantRoles" xml:space="preserve">
+    <value>Bevilja roller</value>
+  </data>
+  <data name="PeopleCurrentRoles" xml:space="preserve">
+    <value>Nuvarande roller</value>
+  </data>
+  <data name="PeopleAvailableRoles" xml:space="preserve">
+    <value>Tillgängliga roller</value>
+  </data>
+  <data name="PeopleRevokeRoles" xml:space="preserve">
+    <value>Upphäv roller</value>
+  </data>
+  <data name="PeopleGrantRole" xml:space="preserve">
+    <value>Bevilja roll</value>
+  </data>
+  <data name="PeopleRevokeRole" xml:space="preserve">
+    <value>Upphäv roll</value>
+  </data>
+  <data name="PeopleSelectAllOnAllPages" xml:space="preserve">
+    <value>Välj alla på alla sidor</value>
+  </data>
+  <data name="PeopleSiteTeam" xml:space="preserve">
+    <value>Enhet/team</value>
+  </data>
+  <data name="PeopleApplicationLogon" xml:space="preserve">
+    <value>Applikationsinloggning</value>
+  </data>
+  <data name="PeopleWorkspace" xml:space="preserve">
+    <value>Arbetsyta</value>
+  </data>
+  <data name="PeopleUsernameHasALimitOfXCharacters" xml:space="preserve">
+    <value>Användarnamnet har en begränsning på {0} tecken</value>
+  </data>
+  <data name="SuccessfulMessageForSavingScheduleChanges" xml:space="preserve">
+    <value>Schemaändringar sparade.</value>
+  </data>
+  <data name="PeopleAccess" xml:space="preserve">
+    <value>Hantera rättigheter</value>
+  </data>
 </root>

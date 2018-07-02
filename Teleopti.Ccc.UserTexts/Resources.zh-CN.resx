@@ -14762,12 +14762,6 @@ Teleopti R&amp;D</value>
   <data name="SuccessfulMessageForSavingScheduleChanges" xml:space="preserve">
     <value>成功保存班表变更。</value>
   </data>
-  <data name="PleaseSaveOrDiscardChangesBeforeChangingPeriod" xml:space="preserve">
-    <value>更改预测时间段之前请先保存或放弃更改。</value>
-  </data>
-  <data name="NoQueueStatisticsAvailable" xml:space="preserve">
-    <value>没有生成预测，请确定已经导入相应队列的统计数据。</value>
-  </data>
   <data name="AppliedACampaign" xml:space="preserve">
     <value>应用活动</value>
   </data>

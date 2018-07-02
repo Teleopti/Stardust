@@ -17402,7 +17402,7 @@ The application will now exit.</value>
     <comment>Header on card for remove staffing for BPO</comment>
   </data>
   <data name="ImportBpoClearConfirmation" xml:space="preserve">
-    <value>Are you sure you want to remove staffing for this BPO in selected period?</value>
+    <value>Are you sure you want to remove staffing for this BPO for the selected period?</value>
     <comment>Confimation before clearing staffing</comment>
   </data>
   <data name="ImportBpoClearSuccessMessage" xml:space="preserve">
@@ -17446,11 +17446,11 @@ The application will now exit.</value>
     <comment>Text message in web forecast</comment>
   </data>
   <data name="ConfirmReforecastWithoutSaving" xml:space="preserve">
-    <value>Are you sure you want to forecast again? all modification not saved will lost.</value>
+    <value>Are you sure you want to forecast again? All modification not saved will lost.</value>
     <comment>Text message in web forecast</comment>
   </data>
   <data name="NoForecastDateForCurrentScenario" xml:space="preserve">
-    <value>There is no forecast data for this scenario, please run a forecast or save from another scenario.</value>
+    <value>There is no forecast data for this scenario. Please run a forecast or save from another scenario.</value>
     <comment>Text message in web forecast</comment>
   </data>
   <data name="PleaseSaveOrDiscardChangesBeforeChangingScenario" xml:space="preserve">
