@@ -1,4 +1,4 @@
-﻿using System.IO;
+﻿using System;
 using System.Linq;
 using System.Threading;
 using NUnit.Framework;
@@ -11,13 +11,12 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Wfm.Administration.Core.Hangfire;
-using Teleopti.Wfm.Administration.Core.Modules;
 
-namespace Teleopti.Wfm.Administration.IntegrationTest.Core
+namespace Teleopti.Wfm.Administration.IntegrationTest.Hangfire
 {
 	[TestFixture]
 	[WfmAdminTest]
-	public class HangfirePerformanceStatisticsTest : IExtendSystem
+	public class HangfireJobFailuresTest: IExtendSystem
 	{
 		public HangfireUtilities Hangfire;
 		public IEventPublisher Publisher;
@@ -35,28 +34,24 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 			Publisher.Publish(new TestEvent());
 			Hangfire.EmulateWorkerIteration();
 
-			var result = Target.BuildStatistics().JobStatistics;
+			var result = Target.BuildStatistics().JobFailures;
 
 			result.Count().Should().Be(1);
 		}
-
+		
 		[Test]
-		public void ShouldReadWithProperties()
+		public void ShouldReadAllProperties()
 		{
 			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
 			Publisher.Publish(new TestEvent());
 			Hangfire.EmulateWorkerIteration();
 
-			var result = Target.BuildStatistics().JobStatistics;
+			var result = Target.BuildStatistics().JobFailures;
 
 			result.Single().Type.Should().Be("TestHandler got TestEvent");
 			result.Single().Count.Should().Be(1);
-			result.Single().TotalTime.Should().Be.GreaterThan(100);
-			result.Single().AverageTime.Should().Be.GreaterThan(100);
-			result.Single().MaxTime.Should().Be.GreaterThan(100);
-			result.Single().MinTime.Should().Be.GreaterThan(100);
 		}
-
+		
 		[Test]
 		public void ShouldReadCount()
 		{
@@ -66,25 +61,11 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 			Hangfire.EmulateWorkerIteration();
 			Hangfire.EmulateWorkerIteration();
 
-			var result = Target.BuildStatistics().JobStatistics;
+			var result = Target.BuildStatistics().JobFailures;
 
 			result.Single().Count.Should().Be(2);
-		}
-		
-		[Test]
-		public void ShouldReadTotalTime()
-		{
-			DataSourceHelper.CreateDatabasesAndDataSource(DataSourceHelper.MakeLegacyWay());
-			Publisher.Publish(new TestEvent());
-			Publisher.Publish(new TestEvent());
-			Hangfire.EmulateWorkerIteration();
-			Hangfire.EmulateWorkerIteration();
-
-			var result = Target.BuildStatistics().JobStatistics;
-
-			result.Single().TotalTime.Should().Be.GreaterThan(200);
-		}
-
+		}		
+			
 		public class TestEvent : IEvent
 		{
 		}
@@ -93,10 +74,13 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 			IHandleEvent<TestEvent>,
 			IRunOnHangfire
 		{
+			//[AllowFailures(0)]
+			[Attempts(1)]
 			public void Handle(TestEvent @event)
 			{
-				Thread.Sleep(100);
+				throw new Exception("Intended fail for test");
 			}
 		}
+		
 	}
 }

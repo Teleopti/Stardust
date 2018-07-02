@@ -140,7 +140,6 @@
     <Compile Include="Core\AdminAccessTokenRepositoryTest.cs" />
     <Compile Include="Core\CreateBusinessUnitTest.cs" />
     <Compile Include="Core\FakeRunWithUnitOfWork.cs" />
-    <Compile Include="Core\HangfirePerformanceStatisticsTest.cs" />
     <Compile Include="Core\RestorePersonInfoOnDetachTest.cs" />
     <Compile Include="Core\PurgeNoneEmployeeDataTest.cs" />
     <Compile Include="Core\PurgeOldSignInAttemptsTest.cs" />
@@ -157,6 +156,8 @@
     <Compile Include="ControllerActions\GetAllTenantsTest.cs" />
     <Compile Include="ControllerActions\ImportTenantTest.cs" />
     <Compile Include="ControllerActions\GetVersionsTest.cs" />
+    <Compile Include="Hangfire\HangfireJobFailuresTest.cs" />
+    <Compile Include="Hangfire\HangfireJobPerformanceTest.cs" />
     <Compile Include="JobTest.cs" />
     <Compile Include="NoCacheFilterTests.cs" />
     <Compile Include="SetUpFixtureForAssembly.cs" />
