@@ -1769,8 +1769,51 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			result.Total.Should().Be(0);
 		}
 
-		[Test]
+		[Test, SetCulture("en-US")]
 		public void ShouldReturnCorrectDayScheduleSummaryForWorkingDay()
+		{
+			var scheduleDate = new DateOnly(2019, 12, 30);
+			setUpPersonAndCulture();
+
+			var scenario = CurrentScenario.Has("Default");
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
+				scenario,
+				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)), ShiftCategoryFactory.CreateShiftCategory("Day", "blue"));
+
+			ScheduleStorage.Add(pa);
+
+			var searchTerm = new Dictionary<PersonFinderField, string>
+			{
+				{PersonFinderField.FirstName, "Sherlock"}
+			};
+
+			var result = Target.CreateWeekScheduleViewModel(new SearchSchedulesInput
+			{
+
+				GroupIds = new[] { team.Id.Value },
+				CriteriaDictionary = searchTerm,
+				DateInUserTimeZone = scheduleDate,
+				PageSize = 20,
+				CurrentPageIndex = 1
+			});
+
+			result.Total.Should().Be(1);
+
+			var first = result.PersonWeekSchedules.First();
+
+			first.PersonId.Should().Be(personInUtc.Id.GetValueOrDefault());
+			first.DaySchedules.Count().Should().Be(7);
+			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019, 12, 29));
+			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020, 1, 4));
+			first.DaySchedules[3].Date.Should().Be(new DateOnly(2020, 1, 1));
+			first.DaySchedules[3].Title.Should().Be("Day");
+			first.DaySchedules[3].Color.Should().Be("rgb(0,0,255)");
+			first.DaySchedules[3].DateTimeSpan.GetValueOrDefault().Should().Be(new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)));
+		}
+
+		[Test, SetCulture("sv-SE")]
+		public void ShouldReturnCorrectDayScheduleSummaryInAnotherCultureForWorkingDay()
 		{
 			var scheduleDate = new DateOnly(2019, 12, 30);
 			setUpPersonAndCulture();
@@ -1806,13 +1849,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			first.DaySchedules.Count().Should().Be(7);
 			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019, 12, 30));
 			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020, 1, 5));
-			first.DaySchedules[2].Date.Should().Be(new DateOnly(2020, 1, 1));
-			first.DaySchedules[2].Title.Should().Be("Day");
-			first.DaySchedules[2].Color.Should().Be("rgb(0,0,255)");
-			first.DaySchedules[2].DateTimeSpan.GetValueOrDefault().Should().Be(new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 17, 0, 0, DateTimeKind.Utc)));
+			
 		}
 
-		[Test]
+		[Test, SetCulture("en-US")]
 		public void ShouldReturnCorrectDayScheduleSummaryForDayOff()
 		{
 			var queryDate = new DateOnly(2019, 12, 30);
@@ -1844,14 +1884,14 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			first.PersonId.Should().Be(personInUtc.Id.GetValueOrDefault());
 			first.DaySchedules.Count().Should().Be(7);
-			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019, 12, 30));
-			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020, 1, 5));
-			first.DaySchedules[2].Date.Should().Be(new DateOnly(2020, 1, 1));
-			first.DaySchedules[2].Title.Should().Be("DayOff");
-			first.DaySchedules[2].IsDayOff.Should().Be.True();
+			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019, 12, 29));
+			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020, 1, 4));
+			first.DaySchedules[3].Date.Should().Be(new DateOnly(2020, 1, 1));
+			first.DaySchedules[3].Title.Should().Be("DayOff");
+			first.DaySchedules[3].IsDayOff.Should().Be.True();
 		}
 
-		[Test]
+		[Test, SetCulture("en-US")]
 		public void ShouldReturnCorrectDayScheduleSummaryForFullDayAbsence()
 		{
 			var scheduleDate = new DateOnly(2019, 12, 30);
@@ -1889,14 +1929,14 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			first.PersonId.Should().Be(personInUtc.Id.GetValueOrDefault());
 			first.DaySchedules.Count.Should().Be(7);
-			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019, 12, 30));
-			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020, 1, 5));
-			first.DaySchedules[2].Date.Should().Be(new DateOnly(2020, 1, 1));
-			first.DaySchedules[2].Title.Should().Be("abs");
-			first.DaySchedules[2].IsDayOff.Should().Be.False();
+			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019, 12, 29));
+			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020, 1, 4));
+			first.DaySchedules[3].Date.Should().Be(new DateOnly(2020, 1, 1));
+			first.DaySchedules[3].Title.Should().Be("abs");
+			first.DaySchedules[3].IsDayOff.Should().Be.False();
 		}
 
-		[Test]
+		[Test, SetCulture("en-US")]
 		public void ShouldReturnCorrectDateTimePeriodWhenPersonalActivityStartTimeRightAfterTheEndTimeOfMainShift()
 		{
 			var scheduleDate = new DateOnly(2018, 4, 23);
@@ -1929,11 +1969,11 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var first = result.PersonWeekSchedules.FirstOrDefault();
 
-			first.DaySchedules[1].DateTimeSpan.GetValueOrDefault().StartDateTime.Should().Be(new DateTime(2018, 4, 24, 9, 0, 0, DateTimeKind.Utc));
-			first.DaySchedules[1].DateTimeSpan.GetValueOrDefault().EndDateTime.Should().Be(new DateTime(2018, 4, 24, 19, 0, 0, DateTimeKind.Utc));
+			first.DaySchedules[2].DateTimeSpan.GetValueOrDefault().StartDateTime.Should().Be(new DateTime(2018, 4, 24, 9, 0, 0, DateTimeKind.Utc));
+			first.DaySchedules[2].DateTimeSpan.GetValueOrDefault().EndDateTime.Should().Be(new DateTime(2018, 4, 24, 19, 0, 0, DateTimeKind.Utc));
 		}
 
-		[Test]
+		[Test, SetCulture("en-US")]
 		public void ShouldReturnCorrectDateTimePeriodWhenStartTimeOfPersonalActivityIsAfterTheEndTimeOfMainShift()
 		{
 			var scheduleDate = new DateOnly(2018, 4, 23);
@@ -1966,10 +2006,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var first = result.PersonWeekSchedules.FirstOrDefault();
 
-			first.DaySchedules[1].DateTimeSpan.GetValueOrDefault().StartDateTime.Should().Be(new DateTime(2018, 4, 24, 9, 0, 0, DateTimeKind.Utc));
-			first.DaySchedules[1].DateTimeSpan.GetValueOrDefault().EndDateTime.Should().Be(new DateTime(2018, 4, 24, 18, 0, 0, DateTimeKind.Utc));
+			first.DaySchedules[2].DateTimeSpan.GetValueOrDefault().StartDateTime.Should().Be(new DateTime(2018, 4, 24, 9, 0, 0, DateTimeKind.Utc));
+			first.DaySchedules[2].DateTimeSpan.GetValueOrDefault().EndDateTime.Should().Be(new DateTime(2018, 4, 24, 18, 0, 0, DateTimeKind.Utc));
 		}
-		[Test]
+		[Test, SetCulture("en-US")]
 		public void ShouldIndicateTerminationForTerminatedPerson()
 		{
 
@@ -2009,17 +2049,16 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			first.PersonId.Should().Be(personInUtc.Id.GetValueOrDefault());
 			first.DaySchedules.Count.Should().Be(7);
-			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019, 12, 30));
-			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020, 1, 5));
-			first.DaySchedules[2].Date.Should().Be(new DateOnly(2020, 1, 1));
-			first.DaySchedules[2].Title.Should().Be(null);
+			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019, 12, 29));
+			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020, 1, 4));
+			first.DaySchedules[3].Date.Should().Be(new DateOnly(2020, 1, 1));
+			first.DaySchedules[3].Title.Should().Be(null);
 			first.DaySchedules.All(d => d.IsTerminated).Should().Be.True();
 		}
 
-		[Test]
+		[Test, SetCulture("en-US")]
 		public void ShouldShowPersonScheduleOnTheTerminationDate()
 		{
-
 			var scheduleDate = new DateOnly(2019, 12, 30);
 			setUpPersonAndCulture();
 			var scenario = CurrentScenario.Has("Default");
@@ -2054,14 +2093,14 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			first.PersonId.Should().Be(personInUtc.Id.GetValueOrDefault());
 			first.DaySchedules.Count.Should().Be(7);
-			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019, 12, 30));
-			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020, 1, 5));
-			first.DaySchedules[2].Date.Should().Be(new DateOnly(2020, 1, 1));
-			first.DaySchedules[2].Title.Should().Not.Be(null);
-			first.DaySchedules[2].IsTerminated.Should().Be.False();
+			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019, 12, 29));
+			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020, 1, 4));
+			first.DaySchedules[3].Date.Should().Be(new DateOnly(2020, 1, 1));
+			first.DaySchedules[3].Title.Should().Not.Be(null);
+			first.DaySchedules[3].IsTerminated.Should().Be.False();
 		}
 
-		[Test]
+		[Test, SetCulture("en-US")]
 		public void ShouldReturnCorrectDayScheduleSummaryForNotPermittedConfidentialAbs()
 		{
 			var queryDate = new DateOnly(2019, 12, 30);
@@ -2101,14 +2140,14 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			first.PersonId.Should().Be(personInUtc.Id.GetValueOrDefault());
 			first.DaySchedules.Count.Should().Be(7);
-			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019, 12, 30));
-			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020, 1, 5));
-			first.DaySchedules[2].Date.Should().Be(new DateOnly(2020, 1, 1));
-			first.DaySchedules[2].Title.Should().Be(ConfidentialPayloadValues.Description.Name);
-			first.DaySchedules[2].Color.Should().Be(ConfidentialPayloadValues.DisplayColorHex);
-			first.DaySchedules[2].IsDayOff.Should().Be.False();
+			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019, 12, 29));
+			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020, 1, 4));
+			first.DaySchedules[3].Date.Should().Be(new DateOnly(2020, 1, 1));
+			first.DaySchedules[3].Title.Should().Be(ConfidentialPayloadValues.Description.Name);
+			first.DaySchedules[3].Color.Should().Be(ConfidentialPayloadValues.DisplayColorHex);
+			first.DaySchedules[3].IsDayOff.Should().Be.False();
 		}
-		[Test]
+		[Test, SetCulture("en-US")]
 		public void ShouldReturnCorrectDayScheduleSummaryForPermittedConfidentialAbs()
 		{
 
@@ -2151,14 +2190,14 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			first.PersonId.Should().Be(personInUtc.Id.GetValueOrDefault());
 			first.DaySchedules.Count.Should().Be(7);
-			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019, 12, 30));
-			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020, 1, 5));
-			first.DaySchedules[2].Date.Should().Be(new DateOnly(2020, 1, 1));
-			first.DaySchedules[2].Title.Should().Be("absence");
-			first.DaySchedules[2].Color.Should().Be("rgb(0,0,255)");
-			first.DaySchedules[2].IsDayOff.Should().Be.False();
+			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019, 12, 29));
+			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020, 1, 4));
+			first.DaySchedules[3].Date.Should().Be(new DateOnly(2020, 1, 1));
+			first.DaySchedules[3].Title.Should().Be("absence");
+			first.DaySchedules[3].Color.Should().Be("rgb(0,0,255)");
+			first.DaySchedules[3].IsDayOff.Should().Be.False();
 		}
-		[Test]
+		[Test, SetCulture("en-US")]
 		public void ShouldReturnCorrectDayScheduleSummaryForNotPermittedUnpublishedSchedule()
 		{
 
@@ -2202,13 +2241,13 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			first.PersonId.Should().Be(personInUtc.Id.GetValueOrDefault());
 			first.DaySchedules.Count.Should().Be(7);
-			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019, 12, 30));
-			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020, 1, 5));
-			first.DaySchedules[2].Date.Should().Be(new DateOnly(2020, 1, 1));
-			first.DaySchedules[2].Title.Should().Be(null);
-			first.DaySchedules[2].IsDayOff.Should().Be.False();
+			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019, 12, 29));
+			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020, 1, 4));
+			first.DaySchedules[3].Date.Should().Be(new DateOnly(2020, 1, 1));
+			first.DaySchedules[3].Title.Should().Be(null);
+			first.DaySchedules[3].IsDayOff.Should().Be.False();
 		}
-		[Test]
+		[Test, SetCulture("en-US")]
 		public void ShouldReturnCorrectDayScheduleSummaryForPermittedUnpublishedSchedule()
 		{
 
@@ -2253,11 +2292,11 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			first.PersonId.Should().Be(personInUtc.Id.GetValueOrDefault());
 			first.DaySchedules.Count.Should().Be(7);
-			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019, 12, 30));
-			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020, 1, 5));
-			first.DaySchedules[2].Date.Should().Be(new DateOnly(2020, 1, 1));
-			first.DaySchedules[2].Title.Should().Be("abs");
-			first.DaySchedules[2].IsDayOff.Should().Be.False();
+			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019, 12, 29));
+			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020, 1, 4));
+			first.DaySchedules[3].Date.Should().Be(new DateOnly(2020, 1, 1));
+			first.DaySchedules[3].Title.Should().Be("abs");
+			first.DaySchedules[3].IsDayOff.Should().Be.False();
 		}
 
 		[Test]
