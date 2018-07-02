@@ -11,10 +11,12 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Requests.PerformanceTuningTest;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -66,6 +68,8 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 		public AbsenceStaffingPossibilityCalculator AbsenceStaffingPossibilityCalculator;
 		public OvertimeStaffingPossibilityCalculator OvertimeStaffingPossibilityCalculator;
 		public FakeLoggedOnUser LoggedOnUser;
+
+		private LicenseSchema schema;
 
 		[Test]
 		public void ShouldProcessCalculationOfAbsencePossibilitiesIntradayForMultipleAgents()
@@ -169,6 +173,8 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 
 		private void initialise()
 		{
+			schema = LicenseDataFactory.CreateDefaultActiveLicenseSchemaForTest();
+			LicenseSchema.SetActiveLicenseSchema(tenantName, schema);
 			logonSystem();
 			Now.Is(baseDate);
 		}

@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -23,6 +24,7 @@ using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Messaging.Client;
@@ -44,13 +46,18 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		public IGlobalSettingDataRepository GlobalSettingDataRepository;
 		public IReadModelScheduleProjectionReadOnlyValidator ReadModelScheduleProjectionUpdater;
 		public IReadModelFixer ReadModelFixer;
-		
-		
+
+		private const string tenantName = "Teleopti WFM";
+		private LicenseSchema schema;
+
 		[Test]
 		public void ShouldBePerformantWhenValidatingAndReferringShiftTradeRequests()
 		{
-			using (DataSource.OnThisThreadUse ("Teleopti WFM"))
-				AsSystem.Logon ("Teleopti WFM", new Guid ("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+			schema = LicenseDataFactory.CreateDefaultActiveLicenseSchemaForTest();
+			LicenseSchema.SetActiveLicenseSchema(tenantName, schema);
+
+			using (DataSource.OnThisThreadUse (tenantName))
+				AsSystem.Logon (tenantName, new Guid ("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 
 			var personRequests = new List<IPersonRequest>();
 			
