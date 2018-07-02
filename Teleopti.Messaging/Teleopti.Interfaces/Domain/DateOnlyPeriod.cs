@@ -234,7 +234,7 @@ namespace Teleopti.Interfaces.Domain
         /// <returns></returns>
         public int CalendarWeeksAffected(DayOfWeek workweekStartsAt)
         {
-            var start = StartDate.Date;
+            var start = StartDate;
             var firstDateInWeek = DateHelper.GetFirstDateInWeek(start, workweekStartsAt);
             var dateDiff = start.Date.Subtract(firstDateInWeek.Date).TotalDays;
             if (dateDiff == 0)
