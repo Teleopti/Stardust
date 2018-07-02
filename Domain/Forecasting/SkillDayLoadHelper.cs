@@ -77,8 +77,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             foreach (var skill in skills)
             {
                 if (skill is IMultisiteSkill) throw new ArgumentException("Should have no multisite skill.");
-                var childSkill = skill as IChildSkill;
-                if (childSkill != null)
+				if (skill is IChildSkill childSkill)
                 {
                     var multisiteSkill = childSkill.ParentSkill;
                     if (!skillsToLoad.Contains(multisiteSkill))
@@ -102,8 +101,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	        {
 	            var skillDays = testSkillDays[skill].OrderBy(s => s.CurrentDate).ToArray();
 
-	            var multisiteSkill = skill as IMultisiteSkill;
-	            if (multisiteSkill != null)
+				if (skill is IMultisiteSkill multisiteSkill)
 	            {
 	                IList<IMultisiteDay> multisiteDays =
 	                    _multisiteDayRepository.FindRange(periodToLoad, multisiteSkill, scenario).ToList();

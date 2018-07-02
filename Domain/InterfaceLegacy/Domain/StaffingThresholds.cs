@@ -134,13 +134,9 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// true if obj and this instance are the same type and represent the same value; otherwise, false.
         /// </returns>
         public override bool Equals(object obj)
-        {
-            if (obj == null || !(obj is StaffingThresholds))
-            {
-                return false;
-            }
-            return Equals((StaffingThresholds)obj);
-        }
+		{
+			return obj is StaffingThresholds thresholds && Equals(thresholds);
+		}
 
         /// <summary>
         /// Returns the hash code for this instance.

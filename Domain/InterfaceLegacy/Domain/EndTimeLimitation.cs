@@ -168,13 +168,9 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         ///  Created date: 2008-10-16    
         /// </remarks>
         public override bool Equals(object obj)
-        {
-            if (!(obj is EndTimeLimitation))
-            {
-                return false;
-            }
-            return Equals((EndTimeLimitation)obj);
-        }
+		{
+			return obj is EndTimeLimitation limitation && Equals(limitation);
+		}
 
         /// <summary>
         /// </summary>

@@ -245,10 +245,7 @@ namespace Teleopti.Interfaces.Domain
 		/// </remarks>
 		public override bool Equals(object obj)
 		{
-			if (obj is DateOnly only)
-				return Equals(only);
-
-			return false;
+			return obj is DateOnly only && Equals(only);
 		}
 
 		/// <summary>

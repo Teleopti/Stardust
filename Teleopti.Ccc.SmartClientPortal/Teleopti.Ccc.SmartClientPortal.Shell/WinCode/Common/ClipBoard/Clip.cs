@@ -28,28 +28,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard
         /// <summary>
         /// get column offset
         /// </summary>
-        public int ColOffset
-        {
-            get { return _colOffset; }
-        }
+        public int ColOffset => _colOffset;
 
-        /// <summary>
+		/// <summary>
         /// get row offset
         /// </summary>
-        public int RowOffset
-        {
-            get { return _rowOffset; }
-        }
+        public int RowOffset => _rowOffset;
 
-        /// <summary>
+		/// <summary>
         /// get value in clip
         /// </summary>
-        public T ClipValue
-        {
-            get { return _value; }
-        }
+        public T ClipValue => _value;
 
-        /// <summary>
+		/// <summary>
         /// Equals
         /// </summary>
         /// <param name="obj"></param>
@@ -67,16 +58,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard
         /// <param name="other"></param>
         /// <returns></returns>
         public bool Equals(Clip<T> other)
-        {
-            if (other.RowOffset == RowOffset && other.ColOffset == ColOffset)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+		{
+			return other.RowOffset == RowOffset && other.ColOffset == ColOffset;
+		}
 
         /// <summary>
         /// GetHashCode

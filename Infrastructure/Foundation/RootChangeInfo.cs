@@ -53,13 +53,9 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
         /// true if obj and this instance are the same type and represent the same value; otherwise, false.
         /// </returns>
         public override bool Equals(object obj)
-        {
-            if (obj == null || !(obj is RootChangeInfo))
-            {
-                return false;
-            }
-            return Equals((RootChangeInfo)obj);
-        }
+		{
+			return obj is RootChangeInfo info && Equals(info);
+		}
 
         /// <summary>
         /// Operator ==.

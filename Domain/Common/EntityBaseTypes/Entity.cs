@@ -20,10 +20,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 		/// Gets the unique id for this entity.
 		/// </summary>
 		/// <value>The id.</value>
-		public virtual Guid? Id
-		{
-			get { return _id; }
-		}
+		public virtual Guid? Id => _id;
 
 
 		/// <summary>
@@ -91,10 +88,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 		/// </returns>
 		public override bool Equals(object obj)
 		{
-			IEntity ent = obj as IEntity;
-			if (ent == null)
-				return false;
-			return Equals(ent);
+			return obj is IEntity ent && Equals(ent);
 		}
 
 		///<summary>
@@ -115,7 +109,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 			if (!other.Id.HasValue || !Id.HasValue)
 				return false;
 
-			return (Id.Value == other.Id.Value);
+			return Id.Value == other.Id.Value;
 		}
 
 		#endregion

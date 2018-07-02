@@ -140,13 +140,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// true if obj and this instance are the same type and represent the same value; otherwise, false.
         /// </returns>
         public override bool Equals(object obj)
-        {
-            if (!(obj is SkillCollectionKey))
-            {
-                return false;
-            }
-            return Equals((SkillCollectionKey)obj);
-        }
+		{
+			return obj is SkillCollectionKey key && Equals(key);
+		}
 
         /// <summary>
         /// Implements the operator ==.

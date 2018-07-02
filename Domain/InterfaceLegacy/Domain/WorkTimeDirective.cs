@@ -86,13 +86,9 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// true if obj and this instance are the same type and represent the same value; otherwise, false.
         /// </returns>
         public override bool Equals(object obj)
-        {
-	        if (!(obj is WorkTimeDirective))
-            {
-                return false;
-            }
-	        return Equals((WorkTimeDirective)obj);
-        }
+		{
+			return obj is WorkTimeDirective directive && Equals(directive);
+		}
 
         /// <summary>
         /// Operator ==.

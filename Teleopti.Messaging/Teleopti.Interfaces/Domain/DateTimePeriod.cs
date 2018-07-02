@@ -311,10 +311,10 @@ namespace Teleopti.Interfaces.Domain
 			if (elapsedTime == TimeSpan.Zero) return new List<IntervalDefinition>();
 
 			if (resolution <= 0)
-				throw new ArgumentException("resolution to low");
+				throw new ArgumentException("resolution to low", nameof(resolution));
 
 			if (StartDateTime.Add(TimeSpan.FromMinutes(resolution)) > EndDateTime)
-				throw new ArgumentException("resolution to high");
+				throw new ArgumentException("resolution to high", nameof(resolution));
 
 			// Removed this check due to bug 9873
 			//if ((int)elapsedTime.TotalMinutes % resolution != 0)
@@ -357,12 +357,7 @@ namespace Teleopti.Interfaces.Domain
 		/// </returns>
 		public override bool Equals(object obj)
 		{
-			if (obj == null || !(obj is DateTimePeriod))
-			{
-				return false;
-			}
-
-			return Equals((DateTimePeriod) obj);
+			return obj is DateTimePeriod timePeriod && Equals(timePeriod);
 		}
 
 		/// <summary>
@@ -440,7 +435,7 @@ namespace Teleopti.Interfaces.Domain
 		/// </remarks>
 		public static bool operator <(DateTimePeriod per1, DateTimePeriod per2)
 		{
-			return (per1.ElapsedTime() < per2.ElapsedTime());
+			return per1.ElapsedTime() < per2.ElapsedTime();
 		}
 
 		/// <summary>
@@ -455,7 +450,7 @@ namespace Teleopti.Interfaces.Domain
 		/// </remarks>
 		public static bool operator >(DateTimePeriod per1, DateTimePeriod per2)
 		{
-			return (per1.ElapsedTime() > per2.ElapsedTime());
+			return per1.ElapsedTime() > per2.ElapsedTime();
 		}
 
 		/// <summary>

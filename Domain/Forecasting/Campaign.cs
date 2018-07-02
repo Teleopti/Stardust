@@ -122,13 +122,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
         public override bool Equals(object obj)
-        {
-            if (obj == null || !(obj is Campaign))
-            {
-                return false;
-            }
-            return Equals((Campaign)obj);
-        }
+		{
+			return obj is Campaign campaign && Equals(campaign);
+		}
 
         /// <summary>
         /// Returns the hash code for this instance.
