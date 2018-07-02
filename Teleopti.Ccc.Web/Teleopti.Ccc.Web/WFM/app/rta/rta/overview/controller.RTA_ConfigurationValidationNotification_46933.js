@@ -5,15 +5,15 @@
 		.module('wfm.rta')
 		.controller('RtaOverviewController46933', RtaOverviewController);
 
-	RtaOverviewController.$inject = ['rtaService', 'rtaStateService', 'rtaPollingService', 'rtaConfigurationValidator', 'skills', 'skillAreas', '$http', '$state', '$stateParams', '$scope'];
+	RtaOverviewController.$inject = ['rtaService', 'rtaStateService', 'rtaDataService', 'rtaPollingService', 'rtaConfigurationValidator', '$http', '$state', '$stateParams', '$scope'];
 
-	function RtaOverviewController(rtaService, rtaStateService, rtaPollingService, rtaConfigurationValidator, skills, skillAreas, $http, $state, $stateParams, $scope) {
+	function RtaOverviewController(rtaService, rtaStateService, rtaDataService, rtaPollingService, rtaConfigurationValidator, $http, $state, $stateParams, $scope) {
 		var vm = this;
 
 		rtaConfigurationValidator.validate();
 
-		vm.skills = skills || [];
-		vm.skillAreas = skillAreas || [];
+		vm.skills = [];
+		vm.skillAreas = [];
 		vm.siteCards = [];
 		vm.totalAgentsInAlarm = 0;
 
@@ -41,6 +41,11 @@
 				poller.start();
 			});
 		$scope.$on('$destroy', poller.destroy);
+
+		rtaDataService.load().then(function (data) {
+			vm.skills = data.skills;
+			vm.skillAreas = data.skillAreas;
+		});
 
 		vm.selectTeamOrSite = function (selectable) {
 			selectable.isSelected = !selectable.isSelected;

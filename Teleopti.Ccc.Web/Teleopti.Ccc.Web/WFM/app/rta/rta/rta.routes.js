@@ -24,14 +24,6 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 			},
 			controllerProvider: function () {
 				return 'RtaOverviewController46933 as vm';
-			},
-			resolve: {
-				skills: function (rtaService) {
-					return rtaService.getSkills();
-				},
-				skillAreas: function (rtaService) {
-					return rtaService.getSkillAreas();
-				}
 			}
 		})
 		.state('rta-agents', {
