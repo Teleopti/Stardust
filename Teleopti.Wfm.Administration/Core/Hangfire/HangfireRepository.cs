@@ -19,7 +19,7 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 			_connectionString = config.ConnectionString("Hangfire");
 		}
 
-		[RemoveMeWithToggle(Toggles.RTA_HangfireStatistics_76139_76373)]		
+		[RemoveMeWithToggle(Toggles.LevelUp_HangfireStatistics_76139_76373)]		
 		public long CountActiveJobs()
 		{
 			var selectCommandText = "SELECT COUNT(*) FROM HangFire.Job WITH (NOLOCK) WHERE StateName IN ('Enqueued', 'Processing')";
@@ -34,7 +34,7 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 			return ret;
 		}
 
-		[RemoveMeWithToggle(Toggles.RTA_HangfireStatistics_76139_76373)]		
+		[RemoveMeWithToggle(Toggles.LevelUp_HangfireStatistics_76139_76373)]		
 		public long CountSucceededJobs()
 		{
 			var selectCommandText = "SELECT COUNT(*) FROM HangFire.Job WITH (NOLOCK) WHERE StateName = 'Succeeded'";
@@ -49,7 +49,7 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 			return ret;
 		}
 
-		[RemoveMeWithToggle(Toggles.RTA_HangfireStatistics_76139_76373)]		
+		[RemoveMeWithToggle(Toggles.LevelUp_HangfireStatistics_76139_76373)]		
 		public IEnumerable<EventCount> EventCounts(string stateName)
 		{
 			var selectCommandText = "SELECT Arguments FROM HangFire.Job WITH (NOLOCK) WHERE StateName = '" + stateName + "'";
@@ -92,7 +92,7 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 				.Values;
 		}
 
-		[RemoveMeWithToggle(Toggles.RTA_HangfireStatistics_76139_76373)]		
+		[RemoveMeWithToggle(Toggles.LevelUp_HangfireStatistics_76139_76373)]		
 		public IEnumerable<OldEvent> OldestEvents()
 		{
 			var selectCommandText = @"
@@ -200,7 +200,7 @@ WHERE
 			}
 		}
 		
-		[RemoveMeWithToggle(Toggles.RTA_HangfireStatistics_76139_76373)]
+		[RemoveMeWithToggle(Toggles.LevelUp_HangfireStatistics_76139_76373)]
 		private static string deserializeProperty(string propertyName, string json)
 		{
 			using (var stringReader = new StringReader(json))

@@ -17,7 +17,7 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 			_deserializer = deserializer;
 		}
 
-		[RemoveMeWithToggle(Toggles.RTA_HangfireStatistics_76139_76373)]
+		[RemoveMeWithToggle(Toggles.LevelUp_HangfireStatistics_76139_76373)]
 		public Statistics Build()
 		{
 			var totalEvents = _hangfireRepository.CountActiveJobs();
@@ -32,7 +32,7 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 			};
 		}
 		
-		[RemoveMeWithToggle(Toggles.RTA_HangfireStatistics_76139_76373)]
+		[RemoveMeWithToggle(Toggles.LevelUp_HangfireStatistics_76139_76373)]
 		public IEnumerable<EventCount> BuildTypesOfEvents(string stateName)
 		{
 			return _hangfireRepository.EventCounts(stateName);
@@ -126,7 +126,7 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 		public string Data { get; set; }
 	}
 
-	[RemoveMeWithToggle(Toggles.RTA_HangfireStatistics_76139_76373)]	
+	[RemoveMeWithToggle(Toggles.LevelUp_HangfireStatistics_76139_76373)]	
 	public class Statistics
 	{
 		public string Time { get; set; }
@@ -135,14 +135,14 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 		public IEnumerable<OldEvent> OldestEvents { get; set; }
 	}
 	
-	[RemoveMeWithToggle(Toggles.RTA_HangfireStatistics_76139_76373)]
+	[RemoveMeWithToggle(Toggles.LevelUp_HangfireStatistics_76139_76373)]
 	public class EventCount
 	{
 		public string Type { get; set; }
 		public int Count { get; set; }
 	}
 
-	[RemoveMeWithToggle(Toggles.RTA_HangfireStatistics_76139_76373)]	
+	[RemoveMeWithToggle(Toggles.LevelUp_HangfireStatistics_76139_76373)]	
 	public class OldEvent
 	{
 		public string Type { get; set; }

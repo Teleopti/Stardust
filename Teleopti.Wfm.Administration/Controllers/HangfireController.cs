@@ -25,28 +25,28 @@ namespace Teleopti.Wfm.Administration.Controllers
 			//return Ok("http://localhost:52858/hangfire");
 			return Ok("hangfire");
 		}
-		[RemoveMeWithToggle(Toggles.RTA_HangfireStatistics_76139_76373)]
+		[RemoveMeWithToggle(Toggles.LevelUp_HangfireStatistics_76139_76373)]
 		[HttpGet, Route("Hangfire/Statistics")]
 		public IHttpActionResult HangfireStatistics()
 		{
 			return Json(_statisticViewModelBuilder.Build());
 		}
 		
-		[RemoveMeWithToggle(Toggles.RTA_HangfireStatistics_76139_76373)]
+		[RemoveMeWithToggle(Toggles.LevelUp_HangfireStatistics_76139_76373)]
 		[HttpGet, Route("Hangfire/TypesOfSucceededEvents")]
 		public IHttpActionResult HangfireTypesOfSucceededEvents()
 		{
 			return Json(_statisticViewModelBuilder.BuildTypesOfEvents("Succeeded"));
 		}
 
-		[RemoveMeWithToggle(Toggles.RTA_HangfireStatistics_76139_76373)]
+		[RemoveMeWithToggle(Toggles.LevelUp_HangfireStatistics_76139_76373)]
 		[HttpGet, Route("Hangfire/TypesOfFailedEvents")]
 		public IHttpActionResult HangfireTypesOfFailedEvents()
 		{
 			return Json(_statisticViewModelBuilder.BuildTypesOfEvents("Failed"));
 		}
 		
-		[RemoveMeWithToggle(Toggles.RTA_HangfireStatistics_76139_76373)]
+		[RemoveMeWithToggle(Toggles.LevelUp_HangfireStatistics_76139_76373)]
 		[HttpPost, Route("Hangfire/RequeueFailed")]
 		public IHttpActionResult RequeueFailed([FromBody]string eventName)
 		{
@@ -54,7 +54,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Ok();
 		}
 		
-		[RemoveMeWithToggle(Toggles.RTA_HangfireStatistics_76139_76373)]
+		[RemoveMeWithToggle(Toggles.LevelUp_HangfireStatistics_76139_76373)]
 		[HttpPost, Route("Hangfire/DeleteFailed")]
 		public IHttpActionResult DeleteFailed([FromBody]string eventName)
 		{
