@@ -173,7 +173,7 @@ module.exports = env => {
 		sourceMap: true,
 		name: 'darkCss',
 		// outputPath: 'dist',
-		fileName: 'resources/modules_dark.css', // prod env uses a .min.css name instead
+		fileName: 'resources/modules_dark.min.css', // prod env uses a .min.css name instead
 		filesToConcat: [
 			'./node_modules/bootstrap/dist/css/bootstrap.css',
 			'./node_modules/angular-resizable/src/angular-resizable.css',
