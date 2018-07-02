@@ -491,26 +491,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<AssignScheduledLayers>().SingleInstance();
 
-			if (_configuration.Toggle(Toggles.ResourcePlanner_LessResourcesXXL_74915))
-			{
-				//fix VisualLayerCollection remove state MergedCollection
-				//builder.RegisterType<CreateMergedCollectionNoState>().As<CreateMergedCollection>().SingleInstance();
-				builder.RegisterType<CreateMergedCollection>().SingleInstance();
-
-				//fix no state MainShiftProjection
-				builder.RegisterType<ShiftProjectionCacheManager>().As<IShiftProjectionCacheManager>().InstancePerLifetimeScope();
-				builder.RegisterType<TeamSchedulingLessResources>().As<TeamScheduling>().SingleInstance();
-			}
-			else
-			{
-				//fix VisualLayerCollection remove state MergedCollection
-				builder.RegisterType<CreateMergedCollection>().SingleInstance();
-
-				//fix no state MainShiftProjection
-				builder.RegisterType<ShiftProjectionCacheManagerOLD>().As<IShiftProjectionCacheManager>().InstancePerLifetimeScope();
-				builder.RegisterType<TeamScheduling>().SingleInstance();
-			
-			}
+			builder.RegisterType<ShiftProjectionCacheManager>().InstancePerLifetimeScope();
+			builder.RegisterType<TeamScheduling>().As<TeamScheduling>().SingleInstance();
 			
 			registerForJobs(builder);
 			registerValidators(builder);

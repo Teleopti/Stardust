@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     {
         private readonly ShiftProjectionCacheFilter _shiftProjectionCacheFilter;
         private readonly Func<IPersonSkillPeriodsDataHolderManager> _personSkillPeriodsDataHolderManager;
-        private readonly IShiftProjectionCacheManager _shiftProjectionCacheManager;
+        private readonly ShiftProjectionCacheManager _shiftProjectionCacheManager;
         private readonly IWorkShiftCalculatorsManager _workShiftCalculatorsManager;
         private readonly Func<ISchedulingResultStateHolder> _resultStateHolder;
         private readonly Func<IPreSchedulingStatusChecker> _preSchedulingStatusChecker;
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 	    public WorkShiftFinderService(Func<ISchedulingResultStateHolder> resultStateHolder, Func<IPreSchedulingStatusChecker> preSchedulingStatusChecker
             ,ShiftProjectionCacheFilter shiftProjectionCacheFilter, Func<IPersonSkillPeriodsDataHolderManager> personSkillPeriodsDataHolderManager,  
-            IShiftProjectionCacheManager shiftProjectionCacheManager ,  IWorkShiftCalculatorsManager workShiftCalculatorsManager,  
+            ShiftProjectionCacheManager shiftProjectionCacheManager ,  IWorkShiftCalculatorsManager workShiftCalculatorsManager,  
             Func<IWorkShiftMinMaxCalculator> workShiftMinMaxCalculator, FairnessAndMaxSeatCalculatorsManager28317 fairnessAndMaxSeatCalculatorsManager,
 			IShiftLengthDecider shiftLengthDecider, IPersonSkillDayCreator personSkillDayCreator)
         {

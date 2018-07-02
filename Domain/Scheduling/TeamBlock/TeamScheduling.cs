@@ -10,19 +10,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
-	[RemoveMeWithToggle("use in assignShiftProjection in TeamScheduling", Toggles.ResourcePlanner_LessResourcesXXL_74915)]
-	public class TeamSchedulingLessResources : TeamScheduling
-	{
-		public TeamSchedulingLessResources(AssignScheduledLayers assignScheduledLayers, IDayOffsInPeriodCalculator dayOffsInPeriodCalculator, IResourceCalculation resourceCalculation, ScheduleChangesAffectedDates scheduleChangesAffectedDates) : base(assignScheduledLayers, dayOffsInPeriodCalculator, resourceCalculation, scheduleChangesAffectedDates)
-		{
-		}
-
-		protected override void ForDate(ShiftProjectionCache shiftProjectionCache, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
-		{
-			shiftProjectionCache.SetDateLessResources(dateOnlyAsDateTimePeriod);
-		}
-	}
-
 	public class TeamScheduling
     {
 	    private readonly AssignScheduledLayers _assignScheduledLayers;
