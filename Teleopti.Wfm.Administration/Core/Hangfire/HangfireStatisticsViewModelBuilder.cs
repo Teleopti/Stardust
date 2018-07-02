@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 
 namespace Teleopti.Wfm.Administration.Core.Hangfire
@@ -16,6 +17,7 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 			_deserializer = deserializer;
 		}
 
+		[RemoveMeWithToggle(Toggles.RTA_HangfireStatistics_76139_76373)]
 		public Statistics Build()
 		{
 			var totalEvents = _hangfireRepository.CountActiveJobs();
@@ -29,13 +31,24 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 				OldestEvents = oldestEvents
 			};
 		}
-
+		
+		[RemoveMeWithToggle(Toggles.RTA_HangfireStatistics_76139_76373)]
 		public IEnumerable<EventCount> BuildTypesOfEvents(string stateName)
 		{
 			return _hangfireRepository.EventCounts(stateName);
 		}
 
-		public IEnumerable<JobStatistics> BuildPerformanceStatistics()
+
+		public HangfireStatisticsViewModel BuildStatistics()
+		{
+			return new HangfireStatisticsViewModel
+			{
+				JobPerformance = buildPerformanceStatistics(),
+				JobFailures = buildJobFailures()					
+			};
+		}
+		
+		private IEnumerable<JobPerformance> buildPerformanceStatistics()
 		{
 			return
 				(
@@ -50,7 +63,7 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 					into g
 					let totalTime = g.Sum(x => x.duration)
 					orderby totalTime descending
-					select new JobStatistics
+					select new JobPerformance
 					{
 						Type = g.Key,
 						Count = g.Count(),
@@ -63,21 +76,41 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 				.ToArray();
 		}
 
-		public HangfireStatisticsViewModel BuildStatistics()
-		{
-			return new HangfireStatisticsViewModel
-			{
-				JobStatistics = BuildPerformanceStatistics()
-			};
+		private IEnumerable<JobFailure> buildJobFailures()
+		{					
+			return						
+				(
+					from j in _hangfireRepository.FailedJobs()
+					let arguments = _deserializer.DeserializeObject<string[]>(j.Arguments)
+					let name = _deserializer.DeserializeObject<string>(arguments.First())
+					let type = name.Substring(0, name.IndexOf(" on "))
+					group type by type
+					into g
+					let count = g.Count()
+					orderby count descending
+					select new JobFailure()
+					{
+						Type = g.Key,
+						Count = count,
+					}
+				)
+				.ToArray();			
 		}
 	}
 
 	public class HangfireStatisticsViewModel
 	{
-		public IEnumerable<JobStatistics> JobStatistics { get; set; }
+		public IEnumerable<JobPerformance> JobPerformance { get; set; }
+		public IEnumerable<JobFailure> JobFailures { get; set; }
 	}
 
-	public class JobStatistics
+	public class JobFailure
+	{
+		public string Type { get; set; }
+		public long Count { get; set; }
+	}
+
+	public class JobPerformance
 	{
 		public string Type { get; set; }
 		public long Count { get; set; }
@@ -93,6 +126,7 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 		public string Data { get; set; }
 	}
 
+	[RemoveMeWithToggle(Toggles.RTA_HangfireStatistics_76139_76373)]	
 	public class Statistics
 	{
 		public string Time { get; set; }
@@ -100,13 +134,15 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 		public long SucceededEventCount { get; set; }
 		public IEnumerable<OldEvent> OldestEvents { get; set; }
 	}
-
+	
+	[RemoveMeWithToggle(Toggles.RTA_HangfireStatistics_76139_76373)]
 	public class EventCount
 	{
 		public string Type { get; set; }
 		public int Count { get; set; }
 	}
 
+	[RemoveMeWithToggle(Toggles.RTA_HangfireStatistics_76139_76373)]	
 	public class OldEvent
 	{
 		public string Type { get; set; }

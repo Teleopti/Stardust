@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Wfm.Administration.Core.Hangfire
 {
@@ -18,6 +19,7 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 			_connectionString = config.ConnectionString("Hangfire");
 		}
 
+		[RemoveMeWithToggle(Toggles.RTA_HangfireStatistics_76139_76373)]		
 		public long CountActiveJobs()
 		{
 			var selectCommandText = "SELECT COUNT(*) FROM HangFire.Job WITH (NOLOCK) WHERE StateName IN ('Enqueued', 'Processing')";
@@ -32,6 +34,7 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 			return ret;
 		}
 
+		[RemoveMeWithToggle(Toggles.RTA_HangfireStatistics_76139_76373)]		
 		public long CountSucceededJobs()
 		{
 			var selectCommandText = "SELECT COUNT(*) FROM HangFire.Job WITH (NOLOCK) WHERE StateName = 'Succeeded'";
@@ -46,6 +49,7 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 			return ret;
 		}
 
+		[RemoveMeWithToggle(Toggles.RTA_HangfireStatistics_76139_76373)]		
 		public IEnumerable<EventCount> EventCounts(string stateName)
 		{
 			var selectCommandText = "SELECT Arguments FROM HangFire.Job WITH (NOLOCK) WHERE StateName = '" + stateName + "'";
@@ -88,6 +92,7 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 				.Values;
 		}
 
+		[RemoveMeWithToggle(Toggles.RTA_HangfireStatistics_76139_76373)]		
 		public IEnumerable<OldEvent> OldestEvents()
 		{
 			var selectCommandText = @"
@@ -151,6 +156,36 @@ WHERE
 
 			return jobs;
 		}
+		
+		
+		public IEnumerable<Job> FailedJobs()
+		{
+			var commandText = @"
+SELECT 
+	Arguments
+FROM Hangfire.Job WITH (NOLOCK)
+WHERE
+	StateName = 'Failed'
+";
+
+			var jobs = new List<Job>();
+
+			executeSql(commandText, cmd =>
+			{
+				using (var reader = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+				{
+					while (reader.Read())
+					{
+						jobs.Add(new Job
+						{
+							Arguments = reader["Arguments"].ToString(),
+						});
+					}
+				}
+			});
+
+			return jobs;
+		}
 
 		private void executeSql(string sql, Action<SqlCommand> action)
 		{
@@ -164,7 +199,8 @@ WHERE
 				action(command);
 			}
 		}
-
+		
+		[RemoveMeWithToggle(Toggles.RTA_HangfireStatistics_76139_76373)]
 		private static string deserializeProperty(string propertyName, string json)
 		{
 			using (var stringReader = new StringReader(json))

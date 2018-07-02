@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -74,7 +73,6 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Hangfire
 			IHandleEvent<TestEvent>,
 			IRunOnHangfire
 		{
-			//[AllowFailures(0)]
 			[Attempts(1)]
 			public void Handle(TestEvent @event)
 			{
