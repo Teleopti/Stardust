@@ -200,10 +200,14 @@
 		</div>
 	</div>
 
-	<div class="panel material-depth-1" ng-if="vm.displayNoAgentsMessage()">
-		<div class="con-row">
-			<div class="con-flex">
-				{{'NoAgentsToBeDisplayed' | translate}}
+	<div class="con-row" ng-if="vm.displayNoAgentsMessage()">
+		<div class="con-flex">
+			<div class="panel material-depth-1 con-padding">
+				<div class="con-row">
+					<div class="con-flex">
+						{{'NoRealTimeAdherenceResultMessage'|translate}}
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -81,7 +81,6 @@
 		vm.displayNoAgentsMessage = function () {
 			return vm.agentStates.length === 0;
 		};
-		vm.displayNoAgentsForSkillMessage = rtaStateService.hasSkillSelection;
 
 		vm.changeScheduleUrl = function (personId) {
 			return $state.href('teams.for', {personId: personId});
