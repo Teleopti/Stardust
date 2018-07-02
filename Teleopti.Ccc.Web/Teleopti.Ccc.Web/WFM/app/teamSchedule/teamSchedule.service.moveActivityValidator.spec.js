@@ -452,7 +452,6 @@
 			});
 
 			it('should validate move to time when moving shift to time in current date', function () {
-				var currentDate = "2016-05-13";
 				var localSchedule = {
 					"PersonId": "221B-Baker-SomeoneElse",
 					"Name": "SomeoneElse",
@@ -478,9 +477,66 @@
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 				personSchedule.IsSelected = true;
 				personSelection.updatePersonSelection(personSchedule);
-				var newStartMoment = moment(scheduleDate + " 02:00");
+				var newStartMoment = moment.tz(scheduleDate + " 02:00", "Asia/Hong_Kong");
 
 				target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
+
+				expect(target.getInvalidPeople().length).toEqual(0);
+			});
+
+			it('should validate move to time when moving shift to time in current date on timezone that is different from logon user timezone', function () {
+				var nextDay = '2016-05-13';
+				var localSchedule = {
+					"PersonId": "221B-Baker-SomeoneElse",
+					"Name": "SomeoneElse",
+					"Date": scheduleDate,
+					"Timezone": {
+						IanaId: "Asia/Hong_Kong"
+					},
+					"Projection": [
+						{
+							"ShiftLayerIds": ["layer1"],
+							"ParentPersonAbsences": null,
+							"Color": "#80FF80",
+							"Description": "Email",
+							"Start": scheduleDate + " 08:00",
+							"End": scheduleDate + " 17:00",
+							"Minutes": 540
+						}
+					],
+					"IsFullDayAbsence": false,
+					"DayOff": null
+				};
+
+				var nextDaySchedule = {
+					"PersonId": "221B-Baker-SomeoneElse",
+					"Name": "SomeoneElse",
+					"Date": nextDay,
+					"Timezone": {
+						IanaId: "Asia/Hong_Kong"
+					},
+					"Projection": [
+						{
+							"ShiftLayerIds": ["layer1"],
+							"ParentPersonAbsences": null,
+							"Color": "#80FF80",
+							"Description": "Email",
+							"Start": nextDay + " 08:00",
+							"End": nextDay + " 17:00",
+							"Minutes": 540
+						}
+					],
+					"IsFullDayAbsence": false,
+					"DayOff": null
+				};
+
+				scheduleMgmt.resetSchedules([localSchedule, nextDaySchedule], moment(scheduleDate), "America/Denver");
+				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
+				personSchedule.IsSelected = true;
+				personSelection.updatePersonSelection(personSchedule);
+				var newStartMoment = moment.tz(scheduleDate + " 08:00", "America/Denver");
+
+				target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment, "America/Denver");
 
 				expect(target.getInvalidPeople().length).toEqual(0);
 			});
@@ -512,7 +568,7 @@
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 				personSchedule.IsSelected = true;
 				personSelection.updatePersonSelection(personSchedule);
-				var newStartMoment = moment(nextDay + " 02:00");
+				var newStartMoment = moment.tz(nextDay + " 02:00", "Asia/Hong_Kong");
 
 				target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
 
@@ -567,7 +623,7 @@
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 				personSchedule.IsSelected = true;
 				personSelection.updatePersonSelection(personSchedule);
-				var newStartMoment = moment(scheduleDate + " 23:00");
+				var newStartMoment = moment.tz(scheduleDate + " 23:00", "Asia/Hong_Kong");
 
 				target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
 
@@ -622,7 +678,7 @@
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 				personSchedule.IsSelected = true;
 				personSelection.updatePersonSelection(personSchedule);
-				var newStartMoment = moment(scheduleDate + " 23:00");
+				var newStartMoment = moment.tz(scheduleDate + " 23:00", "Asia/Hong_Kong");
 
 				target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
 
@@ -677,7 +733,7 @@
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 				personSchedule.IsSelected = true;
 				personSelection.updatePersonSelection(personSchedule);
-				var newStartMoment = moment(scheduleDate + " 5:00");
+				var newStartMoment = moment.tz(scheduleDate + " 5:00", "Asia/Hong_Kong");
 
 				target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
 
@@ -710,7 +766,7 @@
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 				personSchedule.IsSelected = true;
 				personSelection.updatePersonSelection(personSchedule);
-				var newStartMoment = moment(scheduleDate + " 10:00");
+				var newStartMoment = moment.tz(scheduleDate + " 10:00", "Asia/Hong_Kong");
 
 				target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
 
@@ -735,7 +791,7 @@
 				var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 				personSchedule.IsSelected = true;
 				personSelection.updatePersonSelection(personSchedule);
-				var newStartMoment = moment(scheduleDate + " 10:00");
+				var newStartMoment = moment.tz(scheduleDate + " 10:00", "Asia/Hong_Kong");
 
 				target.validateMoveToTimeForShift(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
 
