@@ -104,7 +104,7 @@ ResourcePlanner_UseErlangAWithFinitePatience_47738 = true
 ResourcePlanner_SpeedUpEvents_48769 = true #batch deletes of dates - can be deleted early
 ResourcePlanner_SpeedUpEvents_74996 = true #caching different data - can be deleted early
 ResourcePlanner_SpeedUpEvents_75415 = true #restructure of events - dont remove toggle too early
-ResourcePlanner_LessResourcesXXL_74915 = DEV
+ResourcePlanner_LessResourcesXXL_74915 = false #temp to false
 
 # Bugs&Roses #
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
