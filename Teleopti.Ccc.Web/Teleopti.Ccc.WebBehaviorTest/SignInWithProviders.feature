@@ -28,7 +28,7 @@ Scenario: Sign in without being a windows user in CCC
 	| Field                  | Value |
 	| Windows authentication | false |
 	When I go to mytime web
-	Then I should see a log on error 'NoDatasource'
+	Then I should see a log on error 'IdentityLogonMissing'
 @WindowsAsDefaultIdentityProviderLogon
 Scenario: Sign in as a windows user in CCC
 	Given I have the role 'Role for business unit 1'
