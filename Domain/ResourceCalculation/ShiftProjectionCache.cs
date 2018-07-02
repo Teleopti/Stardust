@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Interfaces.Domain;
@@ -80,12 +79,5 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public TimeSpan WorkShiftEndTime => WorkShiftProjectionPeriod.EndDateTime.Subtract(WorkShiftProjectionPeriod.StartDateTime.Date);
 
 		public DateOnly SchedulingDate => _dateOnlyAsPeriod?.DateOnly ?? DateOnly.MinValue;
-
-		public ShiftProjectionCache GetOrCreateNew(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
-		{
-			return dateOnlyAsDateTimePeriod.Equals(_dateOnlyAsPeriod) ?
-				this :
-				new ShiftProjectionCache(_workShift, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
-		}
 	}
 }
