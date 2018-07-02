@@ -118,8 +118,8 @@
 				var hasConflict = personSchedule.Shifts.concat(personSchedule.ExtraShifts).some(function (shift) {
 					if (currentDateMoment.isSame(shift.Date, 'day') || !shift.ProjectionTimeRange) return false;
 
-					return (currentDateMoment.isAfter(shift.Date, 'day') && newStartMoment.isSameOrBefore(moment(shift.ProjectionTimeRange.End), 'minute')) ||
-						(currentDateMoment.isBefore(shift.Date, 'day') && newEndMoment.isSameOrAfter(moment(shift.ProjectionTimeRange.Start), 'minute'));
+					return (currentDateMoment.isAfter(shift.Date, 'day') && newStartMoment.isSameOrBefore(moment.tz(shift.ProjectionTimeRange.End, currentTimezone), 'minute')) ||
+						(currentDateMoment.isBefore(shift.Date, 'day') && newEndMoment.isSameOrAfter(moment.tz(shift.ProjectionTimeRange.Start, currentTimezone), 'minute'));
 				});
 
 				if (hasConflict) {
