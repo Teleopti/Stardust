@@ -1108,7 +1108,6 @@
     <Compile Include="Areas\Start\Models\Authentication\IIpAddressResolver.cs" />
     <Compile Include="Areas\Start\Models\Authentication\IpAddressResolver.cs" />
     <Compile Include="Areas\Start\Models\Authentication\PasswordWarningViewModel.cs" />
-    <Compile Include="Areas\Anywhere\Controllers\PersonController.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IShiftTradeRequestProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\ShiftTradeRequestProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradePeriodViewModelMapper.cs" />
