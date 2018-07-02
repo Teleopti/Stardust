@@ -25,69 +25,107 @@ module.exports = env => {
 		filename: '[name].css'
 	});
 
+	const uglifyDev = {
+		mangle: false,
+		compress: false,
+		keep_fnames: true,
+		keep_classnames: true,
+		output: {
+			ascii_only: false,
+			beautify: false,
+			bracketize: false,
+			comments: true,
+			ecma: 5,
+			inline_script: false,
+			keep_quoted_props: false,
+			preamble: null,
+			quote_keys: false,
+			quote_style: 0,
+			wrap_iife: false
+		}
+	};
+	const uglifyProd = {
+		mangle: false,
+		compress: true,
+		keep_fnames: true,
+		keep_classnames: true,
+		output: {
+			ascii_only: false,
+			beautify: false,
+			bracketize: false,
+			comments: false,
+			ecma: 5,
+			inline_script: false,
+			keep_quoted_props: false,
+			preamble: null,
+			quote_keys: false,
+			quote_style: 0,
+			wrap_iife: false
+		}
+	};
 	const concatJsModules = new ConcatPlugin({
 		// examples
 		uglify: false,
 		sourceMap: false,
-		name: 'devJsModules',
+		name: 'jsModules',
 		// outputPath: 'dist',
 		fileName: 'resources/modules.js',
 		filesToConcat: [
-			'./node_modules/angular/angular.min.js',
-			'./node_modules/angular-ui-router/release/angular-ui-router.min.js',
-			'./node_modules/angular-resizable/angular-resizable.min.js',
-			'./node_modules/angular-resource/angular-resource.min.js',
-			'./node_modules/angular-sanitize/angular-sanitize.min.js',
-			'./node_modules/angular-translate/dist/angular-translate.min.js',
-			'./node_modules/angular-translate/dist/angular-translate-loader-url/angular-translate-loader-url.min.js',
-			'./node_modules/angular-dynamic-locale/tmhDynamicLocale.min.js',
-			'./node_modules/moment/min/moment-with-locales.min.js',
-			'./node_modules/moment-timezone/builds/moment-timezone-with-data.min.js',
-			'./node_modules/angular-moment/angular-moment.min.js',
-			'./node_modules/ng-file-upload/dist/ng-file-upload-shim.min.js',
-			'./node_modules/ng-file-upload/dist/ng-file-upload.min.js',
-			'./node_modules/angular-ui-grid/ui-grid.min.js',
-			'./node_modules/angular-ui-indeterminate/dist/indeterminate.min.js',
-			'./node_modules/ngstorage/ngStorage.min.js',
+			'./node_modules/angular/angular.js',
+			'./node_modules/angular-ui-router/release/angular-ui-router.js',
+			'./node_modules/angular-resizable/src/angular-resizable.js',
+			'./node_modules/angular-resource/angular-resource.js',
+			'./node_modules/angular-sanitize/angular-sanitize.js',
+			'./node_modules/angular-translate/dist/angular-translate.js',
+			'./node_modules/angular-translate/dist/angular-translate-loader-url/angular-translate-loader-url.js',
+			'./node_modules/angular-dynamic-locale/src/tmhDynamicLocale.js',
+			'./node_modules/moment/min/moment-with-locales.js',
+			'./node_modules/moment-timezone/builds/moment-timezone-with-data.js',
+			'./node_modules/angular-moment/angular-moment.js',
+			'./node_modules/ng-file-upload/dist/ng-file-upload-shim.js',
+			'./node_modules/ng-file-upload/dist/ng-file-upload.js',
+			'./node_modules/angular-ui-grid/ui-grid.js',
+			'./node_modules/angular-ui-indeterminate/dist/indeterminate.js',
+			'./node_modules/ngstorage/ngStorage.js',
 			'./node_modules/default-passive-events/dist/index.js',
-			'./node_modules/angular-ui-tree/dist/angular-ui-tree.min.js',
-			'./node_modules/angular-aria/angular-aria.min.js',
-			'./node_modules/angular-animate/angular-animate.min.js',
+			'./node_modules/angular-ui-tree/dist/angular-ui-tree.js',
+			'./node_modules/angular-aria/angular-aria.js',
+			'./node_modules/angular-animate/angular-animate.js',
 			'./node_modules/angular-gantt/assets/angular-gantt.js',
 			'./node_modules/angular-gantt/assets/angular-gantt-plugins.js',
 			'./node_modules/angular-gantt/assets/angular-gantt-table-plugin.js',
 			'./node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.js',
 			'./node_modules/teleopti-styleguide/styleguide/dist/wfmdirectives.min.js',
 			'./node_modules/teleopti-styleguide/styleguide/dist/templates.js',
-			'./node_modules/filesaver.js/FileSaver.min.js',
-			'./node_modules/jquery/dist/jquery.min.js',
-			'./node_modules/hammerjs/hammer.min.js',
-			'./node_modules/angular-material/angular-material.min.js',
+			'./node_modules/filesaver.js/FileSaver.js',
+			'./node_modules/jquery/dist/jquery.js',
+			'./node_modules/hammerjs/hammer.js',
+			'./node_modules/angular-material/angular-material.js',
 			'./node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
-			'./vendor/fabricjs/fabric.min.js',
+			'./vendor/fabricjs/fabric.js',
 			'./vendor/fabricjs/fabricjs_viewport.js',
 			'./vendor/ng-image-input-with-preview/ng-image-input-with-preview.js',
-			'./node_modules/d3/d3.min.js',
-			'./node_modules/c3/c3.min.js',
-			'./node_modules/c3-angular/c3-angular.min.js',
+			'./node_modules/d3/d3.js',
+			'./node_modules/c3/c3.js',
+			'./node_modules/c3-angular/c3-angular.js',
 			'./vendor/ui-bootstrap-custom-build/datepicker.directive.ext.js',
 			'./vendor/ui-bootstrap-custom-build/timepicker.directive.ext.js',
-			'./node_modules/angular-dialog-service/dist/dialogs.min.js',
-			'./node_modules/angular-dialog-service/dist/dialogs-default-translations.min.js',
+			'./node_modules/angular-dialog-service/dist/dialogs.js',
+			'./node_modules/angular-dialog-service/dist/dialogs-default-translations.js',
 			'./vendor/angular-bootstrap-persian-datepicker-master/persiandate.js',
 			'./vendor/angular-bootstrap-persian-datepicker-master/persian-datepicker-tpls.js',
 			'../Content/signalr/jquery.signalR-2.2.2.js',
 			'../Content/signalr/broker-hubs.js',
-			'./node_modules/lodash/lodash.min.js'
+			'./node_modules/lodash/lodash.js'
 		],
 		attributes: {
 			async: false
 		}
 	});
 	const concatJs = new ConcatPlugin({
-		uglify: false, // broken on prod
-		sourceMap: isDev,
-		name: 'devJS',
+		uglify: isProd ? uglifyProd : uglifyDev,
+		sourceMap: true,
+		name: 'js',
 		// outputPath: 'dist',
 		fileName: 'main.js',
 		filesToConcat: [
@@ -107,46 +145,46 @@ module.exports = env => {
 			async: false
 		}
 	});
-	const concatDistCss = new ConcatPlugin({
+	const concatCss = new ConcatPlugin({
 		uglify: false,
-		sourceMap: false,
+		sourceMap: true,
 		name: 'distCss',
 		// outputPath: 'dist',
 		fileName: 'resources/modules_classic.min.css',
 		filesToConcat: [
-			'./node_modules/bootstrap/dist/css/bootstrap.min.css',
-			'./node_modules/angular-resizable/angular-resizable.min.css',
-			'./node_modules/angular-ui-tree/dist/angular-ui-tree.min.css',
-			'./node_modules/angular-ui-grid/ui-grid.min.css',
-			'./node_modules/angular-material/angular-material.min.css',
+			'./node_modules/bootstrap/dist/css/bootstrap.css',
+			'./node_modules/angular-resizable/src/angular-resizable.css',
+			'./node_modules/angular-ui-tree/source/angular-ui-tree.css',
+			'./node_modules/angular-ui-grid/ui-grid.css',
+			'./node_modules/angular-material/angular-material.css',
 			'./node_modules/angular-gantt/assets/angular-gantt.css',
 			'./node_modules/angular-gantt/assets/angular-gantt-plugins.css',
 			'./node_modules/angular-gantt/assets/angular-gantt-table-plugin.css',
 			'./node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.css',
-			'./node_modules/c3/c3.min.css',
+			'./node_modules/c3/c3.css',
 			'./node_modules/teleopti-styleguide/styleguide/dist/main.min.css'
 		],
 		attributes: {
 			async: false
 		}
 	});
-	const concatDistDarkCss = new ConcatPlugin({
+	const concatDarkCss = new ConcatPlugin({
 		uglify: false,
-		sourceMap: false,
-		name: 'distDarkCss',
+		sourceMap: true,
+		name: 'darkCss',
 		// outputPath: 'dist',
 		fileName: 'resources/modules_dark.css', // prod env uses a .min.css name instead
 		filesToConcat: [
-			'./node_modules/bootstrap/dist/css/bootstrap.min.css',
-			'./node_modules/angular-resizable/angular-resizable.min.css',
-			'./node_modules/angular-ui-tree/dist/angular-ui-tree.min.css',
-			'./node_modules/angular-ui-grid/ui-grid.min.css',
-			'./node_modules/angular-material/angular-material.min.css',
+			'./node_modules/bootstrap/dist/css/bootstrap.css',
+			'./node_modules/angular-resizable/src/angular-resizable.css',
+			'./node_modules/angular-ui-tree/source/angular-ui-tree.css',
+			'./node_modules/angular-ui-grid/ui-grid.css',
+			'./node_modules/angular-material/angular-material.css',
 			'./node_modules/angular-gantt/assets/angular-gantt.css',
 			'./node_modules/angular-gantt/assets/angular-gantt-plugins.css',
 			'./node_modules/angular-gantt/assets/angular-gantt-table-plugin.css',
 			'./node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.css',
-			'./node_modules/c3/c3.min.css',
+			'./node_modules/c3/c3.css',
 			'./node_modules/teleopti-styleguide/styleguide/dist/main_dark.min.css'
 		],
 		attributes: {
@@ -193,7 +231,7 @@ module.exports = env => {
 			'style_classic.min': './css/style.scss',
 			'style_dark.min': './css/darkstyle.scss'
 		},
-		mode: 'development',
+		mode: isProd ? 'production' : 'development',
 		output: {
 			path: __dirname + '/dist',
 			filename: '[name].js'
@@ -233,32 +271,32 @@ module.exports = env => {
 			postCleanUpPlugin,
 			concatJsModules,
 			concatJs,
-			concatDistCss,
-			concatDistDarkCss,
+			concatCss,
+			concatDarkCss,
 			extractSass,
 			copyPlugin,
-			htmlPlugin,
-			new UglifyJsPlugin({
-				uglifyOptions: {
-					mangle: false,
-					compress: false,
-					keep_fnames: true,
-					keep_classnames: true,
-					output: {
-						ascii_only: false,
-						beautify: false,
-						bracketize: false,
-						comments: false,
-						ecma: 5,
-						inline_script: false,
-						keep_quoted_props: false,
-						preamble: null,
-						quote_keys: false,
-						quote_style: 0,
-						wrap_iife: false
-					}
-				}
-			})
+			htmlPlugin
+			// new UglifyJsPlugin({
+			// 	uglifyOptions: {
+			// 		mangle: false,
+			// 		compress: false,
+			// 		keep_fnames: true,
+			// 		keep_classnames: true,
+			// 		output: {
+			// 			ascii_only: false,
+			// 			beautify: false,
+			// 			bracketize: false,
+			// 			comments: false,
+			// 			ecma: 5,
+			// 			inline_script: false,
+			// 			keep_quoted_props: false,
+			// 			preamble: null,
+			// 			quote_keys: false,
+			// 			quote_style: 0,
+			// 			wrap_iife: false
+			// 		}
+			// 	}
+			// })
 		]
 	};
 
