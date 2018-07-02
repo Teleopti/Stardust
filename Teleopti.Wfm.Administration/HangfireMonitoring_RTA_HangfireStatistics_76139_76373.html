@@ -1,6 +1,10 @@
 ﻿<div ng-controller="hangfireMonitoringController_RTA_HangfireStatistics_76139_76373 as vm" class="container body-content">
 	<h2>Hangfire Statistics</h2>
-	<div class="row">
+	<div ng-if="vm.loading">
+		<h2 ng-if="vm.loading">Loading...</h2>
+		<span>(May take a few minutes)</span>
+	</div>
+	<div class="row" ng-if="!vm.loading">
 		<div class="col-md-5">
 			<div class="panel panel-default">
 				<div class="panel-heading">
@@ -28,6 +32,7 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<strong>Job Performance</strong>
+					<span> - Statistics based on successes</span>
 				</div>
 				<div class="panel-body">
 					<table class="table table-striped">

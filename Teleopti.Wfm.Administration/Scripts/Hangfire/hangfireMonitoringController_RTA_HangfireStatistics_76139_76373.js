@@ -7,12 +7,13 @@
 
 	function hangfireMonitoringController($http, $interval, tokenHeaderService) {
 		var vm = this;
+		vm.loading = true;
 
 		$http.get("./Hangfire/Statistics2", tokenHeaderService.getHeaders())
 			.then(function (response) {
-				console.log(response.data);
 				vm.jobFailures = response.data.JobFailures;
 				vm.jobPerformance = response.data.JobPerformance;
+				vm.loading = false;
 			});
 	}
 })();
