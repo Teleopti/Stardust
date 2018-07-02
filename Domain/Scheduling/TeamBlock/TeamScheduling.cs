@@ -61,18 +61,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			return dayScheduled != null && dayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
 		}
-
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_LessResourcesXXL_74915)]
-		protected virtual void ForDate(ShiftProjectionCache shiftProjectionCache, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
-		{
-			shiftProjectionCache.SetDate(dateOnlyAsDateTimePeriod);
-		}
-
+		
 		private void assignShiftProjection(IEnumerable<IPersonAssignment> orginalPersonAssignments, ShiftProjectionCache shiftProjectionCache, IScheduleDay destinationScheduleDay, 
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, INewBusinessRuleCollection businessRules, 
 			SchedulingOptions schedulingOptions, ResourceCalculationData resourceCalculationData)
 		{
-			ForDate(shiftProjectionCache, destinationScheduleDay.DateOnlyAsPeriod);
+			shiftProjectionCache.SetDate(destinationScheduleDay.DateOnlyAsPeriod);
 
 			var personAssignment = destinationScheduleDay.PersonAssignment();
 	        if (personAssignment != null && personAssignment.PersonalActivities().Any())
