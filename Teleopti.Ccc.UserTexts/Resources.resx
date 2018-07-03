@@ -17537,4 +17537,8 @@ The application will now exit.</value>
   <data name="ActivityTypeChangedByOthers" xml:space="preserve">
     <value>THe Activity type was changed by someone else</value>
   </data>
+	<data name="NoRealTimeAdherenceResultMessage" xml:space="preserve">
+    <value>There is nothing to display based on your organization and skill selection together with your permissions. Note that this page shows information based on agents that are currently working in a team and have external logons configured.</value>
+	<comment>Message to be displayed when RTA doesn't have anything to display</comment>
+  </data>
 </root>
