@@ -26,6 +26,9 @@
 	<div class="con-flex text-right">
 		<button type="button" class="context-menu card-context btn-refresh" ng-disabled="!vm.scheduleChanged" ng-click="vm.refreshData()">
 			<i class="mdi mdi-refresh"></i>
+			<md-tooltip>
+				{{'Refresh' | translate}}
+			</md-tooltip>
 		</button>
 	</div>
 
