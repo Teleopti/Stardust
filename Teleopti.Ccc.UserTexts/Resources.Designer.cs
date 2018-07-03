@@ -727,6 +727,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to THe Activity type was changed by someone else.
+        /// </summary>
+        public static string ActivityTypeChangedByOthers {
+            get {
+                return ResourceManager.GetString("ActivityTypeChangedByOthers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Actual.
         /// </summary>
         public static string Actual {
