@@ -52,6 +52,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public void ClearMainShiftProjection()
 		{
+			//strange but...
+			//to lower mem usage, because this instance is held by ShiftProjectionCacheManager (would be nice to redesign this)
 			_mainshiftProjection = null;
 		}
 
