@@ -111,6 +111,10 @@
 		}
 
 		vm.saveChanges = function () {
+			if (vm.scheduleChanged) {
+				vm.showError = true;
+				return;
+			}
 			vm.isSaving = true;
 			ShiftEditorService.changeActivityType(vm.date, vm.personId, getChangedLayers(), { TrackId: vm.trackId }).then(function (response) {
 				initScheduleState();
@@ -126,7 +130,7 @@
 		}
 
 		vm.isSaveButtonDisabled = function () {
-			return !vm.hasChanges || vm.scheduleChanged || vm.isSaving;
+			return !vm.hasChanges || vm.isSaving || vm.showError;
 		}
 
 
@@ -152,6 +156,7 @@
 			vm.scheduleChanged = false;
 			vm.selectedShiftLayer = null;
 			vm.selectedActivitiyId = null;
+			vm.showError = false;
 		}
 
 		function subscribeToScheduleChange() {

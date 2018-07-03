@@ -96,6 +96,7 @@
 		expect(!!element.querySelector('.btn-save')).toBeTruthy();
 		expect(!!element.querySelector('.btn-back')).toBeTruthy();
 		expect(!!element.querySelector('.btn-refresh').disabled).toBeTruthy();
+		expect(!!element.querySelector('.text-danger')).toBeFalsy();
 	});
 
 	it("should highlight the selected date time labels", function () {
@@ -933,7 +934,7 @@
 		});
 	});
 
-	it('should disable save button when schedule was changed by others', function () {
+	it('should show error message if schedule was changed by others when saving changes', function () {
 		var date = "2018-06-28";
 		var personId = "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22";
 		fakeTeamSchedule.has({
@@ -973,9 +974,16 @@
 
 		var typeEls = panel[0].querySelectorAll('.activity-selector md-option');
 		typeEls[1].click();
+		scope.$apply();
 
 		var saveButton = panel[0].querySelector('.btn-save');
+		expect(saveButton.disabled).toBeFalsy();
+		saveButton.click();
+
+		var errorEl = panel[0].querySelector(".text-danger");
+		expect(!!errorEl).toBeTruthy();
 		expect(saveButton.disabled).toBeTruthy();
+		
 	});
 
 	it('should disable refresh button when schedule was changed by itself and and enable save button after changed something', function () {
@@ -1049,7 +1057,7 @@
 
 	});
 
-	it('should get latest schedule when click refresh data button and should be able to save changes after changed something', function () {
+	it('should get latest schedule and not show error message when click refresh data button and should be able to save changes after changed something', function () {
 		var schedule = {
 			"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
 			"Name": "Annika Andersson",
@@ -1114,11 +1122,16 @@
 		]);
 		scope.$apply();
 
+		var saveButton = panel[0].querySelector('.btn-save');
+		saveButton.click();
 
 		var refreshButton = panel[0].querySelector('.btn-refresh');
 		refreshButton.click();
 
-		var saveButton = panel[0].querySelector('.btn-save');
+		var errorEl = panel[0].querySelector('.text-danger');
+		expect(!!errorEl).toBeFalsy();
+
+		saveButton = panel[0].querySelector('.btn-save');
 		expect(saveButton.disabled).toBeTruthy();
 		expect(refreshButton.disabled).toBeTruthy();
 
@@ -1129,7 +1142,7 @@
 		typeEls = panel[0].querySelectorAll('.activity-selector md-option');
 		typeEls[1].click();
 
-		var saveButton = panel[0].querySelector('.btn-save');
+		saveButton = panel[0].querySelector('.btn-save');
 		expect(saveButton.disabled).toBeFalsy();
 
 	});
@@ -1378,7 +1391,6 @@
 			}
 		};
 	}
-
 
 	function FakeNoticeService() {
 		this.successMessage = '';

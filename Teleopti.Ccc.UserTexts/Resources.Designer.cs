@@ -727,15 +727,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The activity type was changed by others.
-        /// </summary>
-        public static string ActivityTypeChangedByOthers {
-            get {
-                return ResourceManager.GetString("ActivityTypeChangedByOthers", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Actual.
         /// </summary>
         public static string Actual {
@@ -29484,6 +29475,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The schedule was changed by someone else, please refresh first..
+        /// </summary>
+        public static string scheduleChangedByOthers {
+            get {
+                return ResourceManager.GetString("scheduleChangedByOthers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Schedule:.
         /// </summary>
         public static string ScheduleColon {
@@ -32093,7 +32093,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The shift was changed by others..
+        ///   Looks up a localized string similar to The shift was changed by someone else.
         /// </summary>
         public static string ShiftChangedByOthers {
             get {

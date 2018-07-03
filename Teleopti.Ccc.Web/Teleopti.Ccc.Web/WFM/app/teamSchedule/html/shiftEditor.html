@@ -22,11 +22,13 @@
 			</md-tooltip>
 		</span>
 	</div>
+	
 	<div class="con-flex text-right">
 		<button type="button" class="context-menu card-context btn-refresh" ng-disabled="!vm.scheduleChanged" ng-click="vm.refreshData()">
 			<i class="mdi mdi-refresh"></i>
 		</button>
 	</div>
+
 </div>
 
 <div class="con-row activity-info">
@@ -79,6 +81,15 @@
 			</div>
 		</div>
 
+	</div>
+</div>
+
+<div class="con-row error-info">
+	<div class="con-flex text-right">
+		<div class="text-danger" ng-if="vm.showError">
+			<i class="mdi mdi-alert-octagon"></i>
+			<span>{{'scheduleChangedByOthers' | translate}}</span>
+		</div>
 	</div>
 </div>
 
