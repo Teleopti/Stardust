@@ -14,7 +14,6 @@
 
 		vm.skills = [];
 		vm.skillAreas = [];
-		vm.siteCards = [];
 		vm.totalAgentsInAlarm = 0;
 
 		Object.defineProperty(vm, 'skillPickerPreselectedItem', {
@@ -24,6 +23,8 @@
 		});
 
 		vm.displayNoSitesMessage = function () {
+			if (!vm.siteCards) 
+				return false;
 			return vm.siteCards.length == 0;
 		};
 		

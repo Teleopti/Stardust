@@ -17,4 +17,10 @@ rtaTester.describe('RtaOverviewController', function (it, fit, xit) {
 
 		expect(vm.displayNoSitesMessage()).toEqual(false);
 	});
+	
+	it('should not display message until sites are returned', function (t) {
+		var vm = t.createController({flush: false});
+
+		expect(vm.displayNoSitesMessage()).toEqual(false);
+	});
 });

@@ -14,7 +14,15 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit) {
 			});
 		
 		var vm = t.createController();
-		t.apply(vm.showInAlarm = false);
+		t.apply(function () {
+			vm.showInAlarm = false;
+		});
+
+		expect(vm.displayNoAgentsMessage()).toEqual(false);
+	});
+
+	it('should not display message until agents are returned', function (t) {
+		var vm = t.createController({flush: false});
 
 		expect(vm.displayNoAgentsMessage()).toEqual(false);
 	});

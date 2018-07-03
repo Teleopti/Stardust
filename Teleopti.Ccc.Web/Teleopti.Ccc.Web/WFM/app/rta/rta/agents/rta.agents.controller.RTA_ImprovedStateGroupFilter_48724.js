@@ -42,8 +42,7 @@
 		var vm = this;
 
 		rtaConfigurationValidator.validate();
-
-		vm.agentStates = [];
+		
 		vm.sites = [];
 		vm.states = [];
 		vm.skills = [];
@@ -79,6 +78,8 @@
 		defaultSorting();
 
 		vm.displayNoAgentsMessage = function () {
+			if (!vm.agentStates)
+				return false;
 			return vm.agentStates.length === 0;
 		};
 
