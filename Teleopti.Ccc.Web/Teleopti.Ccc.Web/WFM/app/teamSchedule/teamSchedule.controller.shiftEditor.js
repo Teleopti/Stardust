@@ -27,13 +27,13 @@
 		}
 	});
 
-	ShiftEditorController.$inject = ['$element', '$timeout', '$window', '$interval', '$filter', '$state',
+	ShiftEditorController.$inject = ['$element', '$timeout', '$window', '$interval', '$filter', '$state', '$translate',
 		'TeamSchedule', 'serviceDateFormatHelper', 'ShiftEditorViewModelFactory', 'TimezoneListFactory', 'ActivityService',
-		'ShiftEditorService', 'CurrentUserInfo', 'guidgenerator', 'signalRSVC', 'teamScheduleNotificationService'];
+		'ShiftEditorService', 'CurrentUserInfo', 'guidgenerator', 'signalRSVC', 'NoticeService'];
 
-	function ShiftEditorController($element, $timeout, $window, $interval, $filter, $state, TeamSchedule, serviceDateFormatHelper,
+	function ShiftEditorController($element, $timeout, $window, $interval, $filter, $state, $translate, TeamSchedule, serviceDateFormatHelper,
 		ShiftEditorViewModelFactory, TimezoneListFactory, ActivityService, ShiftEditorService, CurrentUserInfo, guidgenerator,
-		signalRSVC, teamScheduleNotificationService) {
+		signalRSVC, NoticeService) {
 		var vm = this;
 		var timeLineTimeRange = {
 			Start: moment.tz(vm.date, vm.timezone).add(-1, 'days').hours(0),
@@ -118,21 +118,13 @@
 			vm.isSaving = true;
 			ShiftEditorService.changeActivityType(vm.date, vm.personId, getChangedLayers(), { TrackId: vm.trackId }).then(function (response) {
 				initScheduleState();
-				teamScheduleNotificationService.reportActionResult({
-					success: 'SuccessfulMessageForSavingScheduleChanges'
-				},
-					[{
-						PersonId: vm.personId,
-						Name: vm.scheduleVm.Name
-					}],
-					response.data);
+				showNotice(response.data);
 			});
 		}
 
 		vm.isSaveButtonDisabled = function () {
 			return !vm.hasChanges || vm.isSaving || vm.showError;
 		}
-
 
 		vm.refreshData = function () {
 			if (vm.scheduleChanged) {
@@ -141,6 +133,24 @@
 			}
 		};
 
+		function showNotice(actionResults) {
+			var failActionResults = [];
+			actionResults.forEach(function (x) {
+				if (x.ErrorMessages && x.ErrorMessages.length > 0) {
+					x.ErrorMessages.forEach(function (message) {
+						failActionResults.push(message);
+					})
+				}
+			});
+			if (!!failActionResults.length) {
+				angular.forEach(failActionResults, function (message) {
+					NoticeService.error(message, null, true);
+				});
+			} else {
+				var successMessage = $translate.instant('SuccessfulMessageForSavingScheduleChanges');
+				NoticeService.success(successMessage, 5000, true);
+			}
+		}
 
 		function getSchedule() {
 			TeamSchedule.getSchedules(vm.date, [vm.personId]).then(function (data) {

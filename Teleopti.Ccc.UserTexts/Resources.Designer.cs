@@ -32102,7 +32102,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The shift was changed by someone else.
+        ///   Looks up a localized string similar to The shift was changed by someone else..
         /// </summary>
         public static string ShiftChangedByOthers {
             get {

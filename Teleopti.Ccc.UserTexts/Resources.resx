@@ -17533,7 +17533,7 @@ The application will now exit.</value>
     <comment>Credentials for loging in using identity logon missing</comment>
   </data>
   <data name="ShiftChangedByOthers" xml:space="preserve">
-    <value>The shift was changed by someone else</value>
+    <value>The shift was changed by someone else.</value>
   </data>
   <data name="scheduleChangedByOthers" xml:space="preserve">
     <value>The schedule was changed by someone else, please refresh first.</value>

@@ -1216,14 +1216,14 @@
 		typeEls[1].click();
 
 		fakeShiftEditorService.setSavingApplyResponseData([{
-			PersonId: personId, ErrorMessages: ['Invalid input']
+			PersonId: personId, ErrorMessages: ['Error happens']
 		}]);
 
 		var saveButton = panel[0].querySelector('.btn-save');
 		saveButton.click();
 
 		expect(!!fakeNoticeService.successMessage).toEqual(false);
-		expect(fakeNoticeService.errorMessage).toEqual('Invalid input : Annika Andersson');
+		expect(fakeNoticeService.errorMessage).toEqual('Error happens');
 	});
 
 
