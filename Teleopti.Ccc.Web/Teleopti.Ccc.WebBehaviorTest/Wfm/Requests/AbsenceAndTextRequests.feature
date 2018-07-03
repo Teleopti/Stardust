@@ -38,3 +38,9 @@ Scenario: Should view absence and text requests
 	And I select all the team
 	And I click button for search requests
 	Then I should see a absence and text request from 'Ashley Andeen' in the list
+
+Scenario: Should not see an error message when using persian culture
+Background:
+	Given I am persian
+	When I view wfm requests
+	Then I should not see an error message

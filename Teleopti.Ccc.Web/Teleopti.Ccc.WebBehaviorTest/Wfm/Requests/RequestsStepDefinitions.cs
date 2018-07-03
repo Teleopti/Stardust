@@ -314,6 +314,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 			Browser.Interactions.AssertExists(".notice-container .notice-success");
 		}
 
+		[Then(@"I should not see an error message")]
+		public void ThenIShouldNotSeeAnErrorMessage()
+		{
+			Browser.Interactions.AssertNotExists(".request-body", "div.notice-container .notice-error");
+		}
+
 		private void fillMessage(string message)
 		{
 			displayReplyDialog();
