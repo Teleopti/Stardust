@@ -1,7 +1,7 @@
 using System;
 using System.Web;
 
-namespace Teleopti.Ccc.Web.Core.Exception
+namespace Teleopti.Ccc.Web.Core.Exceptions
 {
 	[Serializable]
 	public class CustomMessageException : HttpException

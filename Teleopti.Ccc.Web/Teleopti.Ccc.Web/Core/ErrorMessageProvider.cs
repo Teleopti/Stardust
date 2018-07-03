@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Web.Core.Exception;
+using Teleopti.Ccc.Web.Core.Exceptions;
 
 namespace Teleopti.Ccc.Web.Core
 {
