@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				|| input.Layers.Any(l => l.IsNew && (!l.StartTime.HasValue || !l.EndTime.HasValue))
 				|| (person = _personRepository.Get(input.PersonId)) == null)
 			{
-				return invalidInputResult(result);
+				return invalidInputResult(result, null);
 			}
 			result.Person = person;
 
@@ -68,13 +68,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				var activity = _activityRepository.Get(activityId);
 				if (activity == null)
 				{
-					return invalidInputResult(result);
+					return invalidInputResult(result, Resources.ActivityTypeChangedByOthers);
 				}
 				activities.Add(activityId, activity);
 			}
 			result.Activities = activities;
 
-			var scheduleDic =  _scheduleStorage.FindSchedulesForPersons(_currentScenario.Current(),
+			var scheduleDic = _scheduleStorage.FindSchedulesForPersons(_currentScenario.Current(),
 				new[] { person },
 				new ScheduleDictionaryLoadOptions(false, false),
 				date.ToDateTimePeriod(TimeZoneInfo.Utc), new[] { person }, false);
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			var inputLayerIds = input.Layers.SelectMany(l => l.ShiftLayerIds);
 			if (shiftLayers.IsNullOrEmpty() || inputLayerIds.Any(id => !shiftLayers.ContainsKey(id)))
 			{
-				return invalidInputResult(result);
+				return invalidInputResult(result, Resources.ShiftChangedByOthers);
 			}
 
 			result.ScheduleDictionary = scheduleDic;
@@ -118,10 +118,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			return result;
 		}
 
-		private ChangeActivityTypeFormValidateResult invalidInputResult(ChangeActivityTypeFormValidateResult result)
+		private ChangeActivityTypeFormValidateResult invalidInputResult(ChangeActivityTypeFormValidateResult result, string errorMessage)
 		{
+			var message = errorMessage.IsNullOrEmpty() ? Resources.InvalidInput : errorMessage;
 			result.IsValid = false;
-			result.ErrorMessages.Add(Resources.InvalidInput);
+			result.ErrorMessages.Add(message);
 			return result;
 		}
 	}

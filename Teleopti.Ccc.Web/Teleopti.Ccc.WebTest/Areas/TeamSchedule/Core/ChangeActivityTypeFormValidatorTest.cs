@@ -1,11 +1,8 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -99,8 +96,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 				}
 			});
 			result.IsValid.Should().Be.False();
-			result.ErrorMessages.Single().Should().Be.EqualTo(Resources.InvalidInput);
-
+			result.ErrorMessages.Single().Should().Be.EqualTo(Resources.ActivityTypeChangedByOthers);
 		}
 
 		[Test]
@@ -134,7 +130,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 				}
 			});
 			result.IsValid.Should().Be.False();
-			result.ErrorMessages.Single().Should().Be.EqualTo(Resources.InvalidInput);
+			result.ErrorMessages.Single().Should().Be.EqualTo(Resources.ShiftChangedByOthers);
 		}
 
 		[Test]

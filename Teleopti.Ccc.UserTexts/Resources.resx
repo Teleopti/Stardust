@@ -17532,4 +17532,10 @@ The application will now exit.</value>
     <value>Login credentials not found</value>
     <comment>Credentials for loging in using identity logon missing</comment>
   </data>
+  <data name="ActivityTypeChangedByOthers" xml:space="preserve">
+    <value>The activity type was changed by others</value>
+  </data>
+  <data name="ShiftChangedByOthers" xml:space="preserve">
+    <value>The shift was changed by others.</value>
+  </data>
 </root>
