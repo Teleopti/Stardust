@@ -16,12 +16,14 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service
 		}
 
 		[TestLog]
-		public virtual void WaitForDequeue()
+		public virtual void WaitForDequeue(TimeSpan timeout)
 		{
 			_unitOfWork.Do(uow =>
 			{
+				var interval = TimeSpan.FromMilliseconds(100);
+				var attempts = timeout.Milliseconds / interval.Milliseconds;
 				var queueIsEmpty = Policy.HandleResult(false)
-					.WaitAndRetry(50, attempt => TimeSpan.FromMilliseconds(100))
+					.WaitAndRetry(attempts, attempt => interval)
 					.Execute(() => uow.Current()
 									   .Session()
 									   .CreateSQLQuery(@"SELECT COUNT(1) FROM Rta.StateQueue")
