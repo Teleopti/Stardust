@@ -5754,6 +5754,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Overtime Availability not found..
+        /// </summary>
+        public static string CannotDeleteOvertimeAvailability {
+            get {
+                return ResourceManager.GetString("CannotDeleteOvertimeAvailability", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot delete site:.
         /// </summary>
         public static string CannotDeleteSiteColon {
@@ -7029,7 +7038,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to forecast again? all modification not saved will lost..
+        ///   Looks up a localized string similar to Are you sure you want to forecast again? All modification not saved will lost..
         /// </summary>
         public static string ConfirmReforecastWithoutSaving {
             get {
@@ -14628,7 +14637,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to remove staffing for this BPO in selected period?.
+        ///   Looks up a localized string similar to Are you sure you want to remove staffing for this BPO for the selected period?.
         /// </summary>
         public static string ImportBpoClearConfirmation {
             get {
@@ -21149,7 +21158,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is no forecast data for this scenario, please run a forecast or save from another scenario..
+        ///   Looks up a localized string similar to There is no forecast data for this scenario. Please run a forecast or save from another scenario..
         /// </summary>
         public static string NoForecastDateForCurrentScenario {
             get {

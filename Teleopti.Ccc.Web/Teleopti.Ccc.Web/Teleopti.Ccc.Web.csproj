@@ -471,6 +471,7 @@
     <Compile Include="Areas\MyTime\Controllers\OvertimeRequestsController.cs" />
     <Compile Include="Areas\MyTime\Controllers\TeamScheduleController.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AgentBadgeWithinPeriodProvider.cs" />
+    <Compile Include="Core\Exception\CustomMessageException.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\SingleOwnedPerson.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\AgentScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\IAgentScheduleViewModelMapper.cs" />

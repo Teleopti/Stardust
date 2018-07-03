@@ -16,6 +16,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.Web.Core.Exception;
 using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
 using Teleopti.Interfaces.Domain;
 
@@ -105,7 +106,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 			var id = Guid.NewGuid();
 			
-			var exception = Assert.Throws<RequestPersistException>(() => Target.Delete(id));
+			var exception = Assert.Throws<CustomMessageException>(() => Target.Delete(id));
 			exception.GetHttpCode().Should().Be(404);
 		}
 		

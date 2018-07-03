@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
+using Teleopti.Ccc.Web.Core.Exception;
 
 namespace Teleopti.Ccc.Web.Core
 {
@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Web.Core
 
 		public string ResolveMessage(HandleErrorInfo handleErrorInfo)
 		{
-			if (handleErrorInfo.Exception is PermissionException || handleErrorInfo.Exception is RequestPersistException)
+			if (handleErrorInfo.Exception is PermissionException || handleErrorInfo.Exception is CustomMessageException)
 			{
 				return handleErrorInfo.Exception.Message;
 			}
@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.Web.Core
 
 		public string ResolveShortMessage(HandleErrorInfo handleErrorInfo)
 		{
-			if (handleErrorInfo.Exception is RequestPersistException)
+			if (handleErrorInfo.Exception is CustomMessageException)
 			{
-				return (handleErrorInfo.Exception as RequestPersistException).Shortmessage;
+				return (handleErrorInfo.Exception as CustomMessageException).Shortmessage;
 			}
 			return GenericShortMessage;
 		}
