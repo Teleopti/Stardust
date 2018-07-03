@@ -104,13 +104,14 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels
 		{
 			var time = _now.UtcDateTime();
 			var from = new DateOnly(time.AddDays(-1));
+			var date = new DateOnly(time);
 			var to = new DateOnly(time.AddDays(1));
-			var loadPeriod = new DateOnlyPeriod(from.AddDays(-1), to.AddDays(1));
 			var persistPeriod = new DateOnlyPeriod(from, to);
+			var loadPeriod = persistPeriod.Inflate(1);
 			var persons = _persons.FindPeople(personIds)
 				.Select(x => new
 				{
-					businessUnitId = x.Period(new DateOnly(time))?.Team?.Site?.BusinessUnit?.Id,
+					businessUnitId = x.Period(date)?.Team?.Site?.BusinessUnit?.Id,
 					person = x
 				})
 				.ToArray();
