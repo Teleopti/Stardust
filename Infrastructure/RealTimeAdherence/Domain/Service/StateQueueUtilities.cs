@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service
 			_unitOfWork.Do(uow =>
 			{
 				var interval = TimeSpan.FromMilliseconds(100);
-				var attempts = timeout.Milliseconds / interval.Milliseconds;
+				var attempts = (int) (timeout.TotalMilliseconds / interval.TotalMilliseconds);
 				var queueIsEmpty = Policy.HandleResult(false)
 					.WaitAndRetry(attempts, attempt => interval)
 					.Execute(() => uow.Current()
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service
 									   .UniqueResult<int>() == 0
 					);
 				if (!queueIsEmpty)
-					throw new WaitForDequeueException($"Batches still in state queue after waiting 5 seconds");
+					throw new WaitForDequeueException($"Batches still in state queue after waiting {timeout.TotalSeconds} seconds");
 			});
 		}
 
