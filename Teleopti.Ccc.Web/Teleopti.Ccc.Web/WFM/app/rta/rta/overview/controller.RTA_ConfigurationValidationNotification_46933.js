@@ -11,9 +11,7 @@
 		var vm = this;
 
 		rtaConfigurationValidator.validate();
-
-		vm.skills = [];
-		vm.skillAreas = [];
+		
 		vm.totalAgentsInAlarm = 0;
 
 		Object.defineProperty(vm, 'skillPickerPreselectedItem', {
@@ -21,6 +19,10 @@
 				return rtaStateService.skillPickerPreselectedItem();
 			}
 		});
+		
+		vm.loading = function() {
+			return !vm.siteCards;
+		};
 
 		vm.displayNoSitesMessage = function () {
 			if (!vm.siteCards) 

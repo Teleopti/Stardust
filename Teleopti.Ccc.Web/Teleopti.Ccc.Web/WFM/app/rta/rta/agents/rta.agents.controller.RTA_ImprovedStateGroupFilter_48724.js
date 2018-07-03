@@ -43,9 +43,6 @@
 
 		rtaConfigurationValidator.validate();
 		
-		vm.sites = [];
-		vm.states = [];
-		vm.skills = [];
 		vm.showInAlarm = !$stateParams.showAllAgents;
 
 		var lastUpdate;
@@ -76,6 +73,10 @@
 			vm.direction = vm.showInAlarm ? undefined : 'asc';
 		};
 		defaultSorting();
+
+		vm.loading = function() {
+			return !vm.agentStates;
+		};
 
 		vm.displayNoAgentsMessage = function () {
 			if (!vm.agentStates)
@@ -237,7 +238,8 @@
 		};
 
 		function buildSites(organization) {
-
+			vm.sites = [];
+			
 			organization.forEach(function (site) {
 				var siteModel = {
 					Id: site.Id,
@@ -286,7 +288,7 @@
 
 		function updateOrganizationPicker() {
 			vm.organizationPickerSelectionText = rtaStateService.organizationSelectionText();
-			vm.organizationPickerClearEnabled = vm.sites.some(function (site) {
+			vm.organizationPickerClearEnabled = (vm.sites || []).some(function (site) {
 				return site.isChecked || site.isMarked;
 			});
 		}
