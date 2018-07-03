@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Web;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -10,6 +9,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
+using Teleopti.Ccc.Web.Core.Exceptions;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.WeekSchedule.DataProvider
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.WeekSchedule.DataProvider
 										  .Return(new List<IOvertimeAvailability>());
 			var target = new OvertimeAvailabilityPersister(overtimeAvailabilityRepository, loggedOnUser, new OvertimeAvailabilityInputMapper(loggedOnUser), new OvertimeAvailabilityViewModelMapper(new SwedishCulture()));
 
-			var exception = Assert.Throws<HttpException>(() => target.Delete(DateOnly.Today));
+			var exception = Assert.Throws<CustomMessageException>(() => target.Delete(DateOnly.Today));
 			exception.GetHttpCode().Should().Be(404);
 		}
 	}
