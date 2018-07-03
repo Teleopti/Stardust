@@ -1,10 +1,8 @@
 ﻿using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
-using Teleopti.Ccc.Web.Core.Exceptions;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
@@ -45,13 +43,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 		public OvertimeAvailabilityViewModel Delete(DateOnly date)
 		{
 			var overtimeAvailabilities = _overtimeAvailabilityRepository.Find(date, _loggedOnUser.CurrentUser());
-			if (overtimeAvailabilities.IsEmpty())
-				throw new CustomMessageException(404, Resources.CannotDeleteOvertimeAvailability);
 
-			foreach (var overtimeAvailability in overtimeAvailabilities)
+			if (!overtimeAvailabilities.IsEmpty())
 			{
-				_overtimeAvailabilityRepository.Remove(overtimeAvailability);
+				foreach (var overtimeAvailability in overtimeAvailabilities)
+				{
+					_overtimeAvailabilityRepository.Remove(overtimeAvailability);
+				}
 			}
+
 			return new OvertimeAvailabilityViewModel
 			{
 				HasOvertimeAvailability = false,

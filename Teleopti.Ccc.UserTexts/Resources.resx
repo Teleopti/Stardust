@@ -5657,10 +5657,6 @@ Availability</value>
     <value>Cannot delete default scenario '{0}'.</value>
     <comment>Cannot delete default scenario '{0}'. Zero is the name of the scenario.</comment>
   </data>
-  <data name="CannotDeleteOvertimeAvailability" xml:space="preserve">
-    <value>Overtime Availability not found.</value>
-    <comment>Use for error message when deleting overtime avaliability.</comment>
-  </data>
   <data name="ScoreCardPreviewHeaderToolTip" xml:space="preserve">
     <value>Double click here to open in main view.</value>
     <comment>Tooltip text to show when user move mouse over header area of score card preview in Agent Portal</comment>

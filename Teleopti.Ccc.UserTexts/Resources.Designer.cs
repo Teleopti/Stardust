@@ -5763,15 +5763,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Overtime Availability not found..
-        /// </summary>
-        public static string CannotDeleteOvertimeAvailability {
-            get {
-                return ResourceManager.GetString("CannotDeleteOvertimeAvailability", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Cannot delete site:.
         /// </summary>
         public static string CannotDeleteSiteColon {

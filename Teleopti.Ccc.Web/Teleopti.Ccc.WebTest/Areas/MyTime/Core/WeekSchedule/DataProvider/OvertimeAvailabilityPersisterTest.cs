@@ -9,7 +9,6 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
-using Teleopti.Ccc.Web.Core.Exceptions;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.WeekSchedule.DataProvider
@@ -105,22 +104,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.WeekSchedule.DataProvider
 
 			overtimeAvailabilityRepository.AssertWasCalled(x => x.Remove(overtimeAvailability));
 			result.HasOvertimeAvailability.Should().Be.False();
-		}
-
-		[Test]
-		public void ShouldThrowHttp404OIfOvertimeAvailabilityDoesNotExists()
-		{
-			var overtimeAvailabilityRepository = MockRepository.GenerateMock<IOvertimeAvailabilityRepository>();
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			var date = DateOnly.Today;
-			var person = new Person();
-			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-			overtimeAvailabilityRepository.Stub(x => x.Find(date, person))
-										  .Return(new List<IOvertimeAvailability>());
-			var target = new OvertimeAvailabilityPersister(overtimeAvailabilityRepository, loggedOnUser, new OvertimeAvailabilityInputMapper(loggedOnUser), new OvertimeAvailabilityViewModelMapper(new SwedishCulture()));
-
-			var exception = Assert.Throws<CustomMessageException>(() => target.Delete(DateOnly.Today));
-			exception.GetHttpCode().Should().Be(404);
 		}
 	}
 }
