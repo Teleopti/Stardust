@@ -50,9 +50,9 @@
 		vm.filterText = null;
 		vm.pause = false;
 		vm.pausedAt = null;
-		var phoneStates = [];
-		var skills = [];
-		var skillGroups = [];
+		var phoneStates;
+		var skills;
+		var skillGroups;
 
 		rtaStateService.setCurrentState($stateParams)
 			.then(function () {
@@ -75,7 +75,7 @@
 		defaultSorting();
 
 		vm.loading = function() {
-			return !vm.agentStates;
+			return !(vm.agentStates && skillGroups && skills && phoneStates && vm.sites);
 		};
 
 		vm.displayNoAgentsMessage = function () {
@@ -159,6 +159,7 @@
 		}
 
 		function buildPhoneStates(data) {
+			phoneStates = [];
 			data.forEach(function (phoneState) {
 				var id = phoneState.Id;
 				phoneStates.push({
@@ -178,7 +179,7 @@
 
 		function updatePhoneStates(states) {
 
-			vm.states = phoneStates.filter(function (phoneState) {
+			vm.states = (phoneStates || []).filter(function (phoneState) {
 				var stateInView = states.States.some(function (agentState) {
 					return agentState.StateId === phoneState.Id;
 				});
