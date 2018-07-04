@@ -21,7 +21,7 @@
 		});
 		
 		vm.loading = function() {
-			return !vm.siteCards;
+			return !(vm.siteCards && vm.skills && vm.skillAreas);
 		};
 
 		vm.displayNoSitesMessage = function () {
