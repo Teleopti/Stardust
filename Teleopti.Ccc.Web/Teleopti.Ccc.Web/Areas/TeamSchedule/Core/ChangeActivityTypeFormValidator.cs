@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				&& person.PersonWriteProtection.IsWriteProtected(date))
 			{
 				result.IsValid = false;
-				result.ErrorMessages.Add(Resources.ModifyWriteProtectedSchedule);
+				result.ErrorMessages.Add(Resources.SaveFailedForModifyWriteProtectedSchedule);
 			}
 
 			if (!_permissionProvider.IsPersonSchedulePublished(date, person) &&
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 					person))
 			{
 				result.IsValid = false;
-				result.ErrorMessages.Add(Resources.NoPermissionToEditUnpublishedSchedule);
+				result.ErrorMessages.Add(Resources.SaveFailedForNoPermissionToEditUnpublishedSchedule);
 			}
 
 			return result;
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 		private ChangeActivityTypeFormValidateResult invalidInputResult(ChangeActivityTypeFormValidateResult result, string errorMessage)
 		{
-			var message = errorMessage.IsNullOrEmpty() ? Resources.InvalidInput : errorMessage;
+			var message = errorMessage.IsNullOrEmpty() ? Resources.SaveFailedForInvalidInput : errorMessage;
 			result.IsValid = false;
 			result.ErrorMessages.Add(message);
 			return result;

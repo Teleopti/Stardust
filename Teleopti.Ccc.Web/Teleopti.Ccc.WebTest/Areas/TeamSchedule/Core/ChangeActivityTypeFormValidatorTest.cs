@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 				Layers = new EditingLayerModel[] { }
 			});
 			result.IsValid.Should().Be.False();
-			result.ErrorMessages.Single().Should().Be.EqualTo(Resources.InvalidInput);
+			result.ErrorMessages.Single().Should().Be.EqualTo(Resources.SaveFailedForInvalidInput);
 		}
 
 		[Test]
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 				Layers = new EditingLayerModel[] { }
 			});
 			result.IsValid.Should().Be.False();
-			result.ErrorMessages.Single().Should().Be.EqualTo(Resources.InvalidInput);
+			result.ErrorMessages.Single().Should().Be.EqualTo(Resources.SaveFailedForInvalidInput);
 		}
 
 		[Test]
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 				Layers = new EditingLayerModel[] { }
 			});
 			result.IsValid.Should().Be.False();
-			result.ErrorMessages.Single().Should().Be.EqualTo(Resources.InvalidInput);
+			result.ErrorMessages.Single().Should().Be.EqualTo(Resources.SaveFailedForInvalidInput);
 		}
 
 		[Test]
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 				Layers = new EditingLayerModel[] { }
 			});
 			result.IsValid.Should().Be.False();
-			result.ErrorMessages.Single().Should().Be.EqualTo(Resources.InvalidInput);
+			result.ErrorMessages.Single().Should().Be.EqualTo(Resources.SaveFailedForInvalidInput);
 		}
 
 
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 				}
 			});
 			result.IsValid.Should().Be.False();
-			result.ErrorMessages.Single().Should().Be.EqualTo(Resources.InvalidInput);
+			result.ErrorMessages.Single().Should().Be.EqualTo(Resources.SaveFailedForInvalidInput);
 		}
 		[Test]
 		public void ShouldReturnPermissionErrorResultWhenEditingProtectedSchedule()
@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 				}
 			});
 			result.IsValid.Should().Be.False();
-			result.ErrorMessages.Single().Should().Be.EqualTo(Resources.ModifyWriteProtectedSchedule);
+			result.ErrorMessages.Single().Should().Be.EqualTo(Resources.SaveFailedForModifyWriteProtectedSchedule);
 		}
 
 
@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 				}
 			});
 			result.IsValid.Should().Be.False();
-			result.ErrorMessages.Single().Should().Be.EqualTo(Resources.NoPermissionToEditUnpublishedSchedule);
+			result.ErrorMessages.Single().Should().Be.EqualTo(Resources.SaveFailedForNoPermissionToEditUnpublishedSchedule);
 
 		}
 

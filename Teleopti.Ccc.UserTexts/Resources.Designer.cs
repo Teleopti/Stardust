@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -727,7 +727,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to THe Activity type was changed by someone else.
+        ///   Looks up a localized string similar to Save failed, the activity type was changed by someone else..
         /// </summary>
         public static string ActivityTypeChangedByOthers {
             get {
@@ -29340,6 +29340,33 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save failed, Invalid input.
+        /// </summary>
+        public static string SaveFailedForInvalidInput {
+            get {
+                return ResourceManager.GetString("SaveFailedForInvalidInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save failed, No permission to modify Write Protected Schedule.
+        /// </summary>
+        public static string SaveFailedForModifyWriteProtectedSchedule {
+            get {
+                return ResourceManager.GetString("SaveFailedForModifyWriteProtectedSchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save failed, No permission to edit unpublished schedule for agent.
+        /// </summary>
+        public static string SaveFailedForNoPermissionToEditUnpublishedSchedule {
+            get {
+                return ResourceManager.GetString("SaveFailedForNoPermissionToEditUnpublishedSchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save Favorite Search.
         /// </summary>
         public static string SaveFavoriteSearch {
@@ -29484,7 +29511,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The schedule was changed by someone else, please refresh first..
+        ///   Looks up a localized string similar to The shift was changed by someone else, please refresh first..
         /// </summary>
         public static string scheduleChangedByOthers {
             get {
@@ -32102,7 +32129,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The shift was changed by someone else..
+        ///   Looks up a localized string similar to Save failed, the shift was changed by someone else..
         /// </summary>
         public static string ShiftChangedByOthers {
             get {

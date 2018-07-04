@@ -17529,16 +17529,25 @@ The application will now exit.</value>
     <comment>Credentials for loging in using identity logon missing</comment>
   </data>
   <data name="ShiftChangedByOthers" xml:space="preserve">
-    <value>The shift was changed by someone else.</value>
+    <value>Save failed, the shift was changed by someone else.</value>
   </data>
   <data name="scheduleChangedByOthers" xml:space="preserve">
-    <value>The schedule was changed by someone else, please refresh first.</value>
+    <value>The shift was changed by someone else, please refresh first.</value>
   </data>
   <data name="ActivityTypeChangedByOthers" xml:space="preserve">
-    <value>THe Activity type was changed by someone else</value>
+    <value>Save failed, the activity type was changed by someone else.</value>
   </data>
-	<data name="NoRealTimeAdherenceResultMessage" xml:space="preserve">
+  <data name="NoRealTimeAdherenceResultMessage" xml:space="preserve">
     <value>There is nothing to display based on your organization and skill selection together with your permissions. Note that this page shows information based on agents that are currently working in a team and have external logons configured.</value>
-	<comment>Message to be displayed when RTA doesn't have anything to display</comment>
+    <comment>Message to be displayed when RTA doesn't have anything to display</comment>
+  </data>
+  <data name="SaveFailedForInvalidInput" xml:space="preserve">
+    <value>Save failed, Invalid input</value>
+  </data>
+  <data name="SaveFailedForModifyWriteProtectedSchedule" xml:space="preserve">
+    <value>Save failed, No permission to modify Write Protected Schedule</value>
+  </data>
+  <data name="SaveFailedForNoPermissionToEditUnpublishedSchedule" xml:space="preserve">
+    <value>Save failed, No permission to edit unpublished schedule for agent</value>
   </data>
 </root>
