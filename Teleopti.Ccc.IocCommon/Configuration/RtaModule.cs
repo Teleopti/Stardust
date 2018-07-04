@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Skill;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
 using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;

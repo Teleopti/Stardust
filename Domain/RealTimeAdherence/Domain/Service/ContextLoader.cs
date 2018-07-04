@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
