@@ -130,14 +130,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ScheduleExecutor>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<Scheduling>().InstancePerLifetimeScope();
 			builder.RegisterType<RuleSetAccordingToAccessabilityFilter>().SingleInstance();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_LessResourcesXXL_74915))
-			{
-				builder.RegisterType<WorkShiftFilterServiceWithPerfHack>().As<WorkShiftFilterService>().InstancePerLifetimeScope();
-			}
-			else
-			{
-				builder.RegisterType<WorkShiftFilterService>().InstancePerLifetimeScope();				
-			}
+			builder.RegisterType<WorkShiftFilterService>().InstancePerLifetimeScope();				
 			builder.RegisterType<AdvanceDaysOffSchedulingService>().InstancePerLifetimeScope();
 			builder.RegisterType<AbsencePreferenceScheduling>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamDayOffScheduling>().InstancePerLifetimeScope();

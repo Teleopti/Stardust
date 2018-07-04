@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -9,18 +8,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
-	public class WorkShiftFilterServiceWithPerfHack : WorkShiftFilterService
-	{
-		public WorkShiftFilterServiceWithPerfHack(ActivityRestrictionsShiftFilter activityRestrictionsShiftFilter, BusinessRulesShiftFilter businessRulesShiftFilter, CommonMainShiftFilter commonMainShiftFilter, ContractTimeShiftFilter contractTimeShiftFilter, DisallowedShiftCategoriesShiftFilter disallowedShiftCategoriesShiftFilter, EffectiveRestrictionShiftFilter effectiveRestrictionShiftFilter, IMainShiftOptimizeActivitiesSpecificationShiftFilter mainShiftOptimizeActivitiesSpecificationShiftFilter, INotOverWritableActivitiesShiftFilter notOverWritableActivitiesShiftFilter, PersonalShiftsShiftFilter personalShiftsShiftFilter, ShiftCategoryRestrictionShiftFilter shiftCategoryRestrictionShiftFilter, TimeLimitsRestrictionShiftFilter timeLimitsRestrictionShiftFilter, WorkTimeLimitationShiftFilter workTimeLimitationShiftFilter, IShiftLengthDecider shiftLengthDecider, IWorkShiftMinMaxCalculator minMaxCalculator, CommonActivityFilter commonActivityFilter, RuleSetAccordingToAccessabilityFilter ruleSetAccordingToAccessabilityFilter, ShiftProjectionCacheManager shiftProjectionCacheManager, IRuleSetPersonalSkillsActivityFilter ruleSetPersonalSkillsActivityFilter, DisallowedShiftProjectionCachesFilter disallowedShiftProjectionCachesFilter, ActivityRequiresSkillProjectionFilter activityRequiresSkillProjectionFilter, OpenHoursFilter openHoursFilter) : base(activityRestrictionsShiftFilter, businessRulesShiftFilter, commonMainShiftFilter, contractTimeShiftFilter, disallowedShiftCategoriesShiftFilter, effectiveRestrictionShiftFilter, mainShiftOptimizeActivitiesSpecificationShiftFilter, notOverWritableActivitiesShiftFilter, personalShiftsShiftFilter, shiftCategoryRestrictionShiftFilter, timeLimitsRestrictionShiftFilter, workTimeLimitationShiftFilter, shiftLengthDecider, minMaxCalculator, commonActivityFilter, ruleSetAccordingToAccessabilityFilter, shiftProjectionCacheManager, ruleSetPersonalSkillsActivityFilter, disallowedShiftProjectionCachesFilter, activityRequiresSkillProjectionFilter, openHoursFilter)
-		{
-		}
-
-		protected override void ClearMainShiftProjectionState(IEnumerable<ShiftProjectionCache> shifts)
-		{
-			shifts.ForEach(x => x.ClearMainShiftProjection());
-		}
-	}
-	
 	public class WorkShiftFilterService
 	{
 		private readonly ActivityRestrictionsShiftFilter _activityRestrictionsShiftFilter;
@@ -199,14 +186,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			shiftList = _activityRestrictionsShiftFilter.Filter(dateOnly, person, shiftList, effectiveRestriction);
 			shiftList = _notOverWritableActivitiesShiftFilter.Filter(schedules, dateOnly, person, shiftList);
 			
-			ClearMainShiftProjectionState(shiftList);
-			
 			return shiftList;
-		}
-
-
-		protected virtual void ClearMainShiftProjectionState(IEnumerable<ShiftProjectionCache> shifts)
-		{
 		}
 
 		private IList<ShiftProjectionCache> runPersonalShiftFilterForEachMember(IScheduleDictionary schedules, IList<ShiftProjectionCache> shiftList, ITeamBlockInfo teamBlockInfo)
