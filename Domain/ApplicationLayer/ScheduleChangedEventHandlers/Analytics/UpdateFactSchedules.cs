@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			if (!dateTimes.Any()) return;
 
 			var dates = dateTimes.Select(d => new DateOnly(d));
-			var dateIds = dates.ToDictionary(k => k, MapDate);
+			var dateIds = dates.Distinct().ToDictionary(k => k, MapDate);
 
 			DoWork(person, scenario, businessUnitId, timestamp, dateIds);
 		}
@@ -321,7 +321,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		{
 			if (!dates.Any()) return;
 
-			var dateOnly = dates.Select(d => new DateOnly(d)).ToArray();
+			var dateOnly = dates.Select(d => new DateOnly(d)).Distinct().ToArray();
 			IList<AnalyticsDayOff> dayOffs = null;
 			var schedule = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 				new ScheduleDictionaryLoadOptions(false, false, false), new DateOnlyPeriod(dateOnly.Min(), dateOnly.Max()), scenario);
