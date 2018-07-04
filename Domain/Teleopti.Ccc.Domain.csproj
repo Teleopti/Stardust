@@ -262,6 +262,7 @@
     <Compile Include="Repositories\IExtensiveLogRepository.cs" />
     <Compile Include="Scheduling\IPredictShiftCategory.cs" />
     <Compile Include="Scheduling\IShiftCategoryPredictionModelLoader.cs" />
+    <Compile Include="Scheduling\NonSecretWorkShiftCalculatorClassic.cs" />
     <Compile Include="Scheduling\Rules\MaximumWorkdayRule.cs" />
     <Compile Include="Scheduling\ShiftCategoryExample.cs" />
     <Compile Include="Scheduling\IShiftCategoryPredictionModel.cs" />
