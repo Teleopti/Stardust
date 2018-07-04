@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 
 			_scheduleDay.Date = new DateTime(2014, 12, 01);
 
-			var result = Target.Map(_scheduleDay, _personPart, AnalyticsDates.Date(_scheduleDay.Date)?.DateId ?? -1, scenarioId, shiftCategoryId);
+			var result = Target.Map(_scheduleDay, _personPart, scenarioId, shiftCategoryId);
 
 			result.Should().Be.Null();
 		}
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		{
 			AnalyticsDates.HasDatesBetween(new DateTime(2014, 12, 3), new DateTime(2014, 12, 4), 1);
 
-			var result = Target.Map(_scheduleDay, _personPart, AnalyticsDates.Date(_scheduleDay.Date)?.DateId ?? -1, scenarioId, shiftCategoryId);
+			var result = Target.Map(_scheduleDay, _personPart, scenarioId, shiftCategoryId);
 
 			result.ShiftStartDateLocalId.Should().Be.EqualTo(dateId);
 
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		{
 			AnalyticsDates.HasDatesBetween(new DateTime(2014, 12, 3), new DateTime(2014, 12, 4), 1);
 
-			var result = Target.Map(_scheduleDay, _personPart, AnalyticsDates.Date(_scheduleDay.Date)?.DateId ?? -1, scenarioId, -1);
+			var result = Target.Map(_scheduleDay, _personPart, scenarioId, -1);
 			result.Should().Be.Null();
 		}
 
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			};
 			AnalyticsAbsences.AddAbsence(absence);
 
-			var result = Target.Map(_scheduleDay, _personPart, AnalyticsDates.Date(_scheduleDay.Date)?.DateId ?? -1, scenarioId, -1);
+			var result = Target.Map(_scheduleDay, _personPart, scenarioId, -1);
 
 			result.AbsenceId.Should().Be.EqualTo(absence.AbsenceId);
 			result.StartTime.Should().Be.EqualTo(_scheduleDay.Shift.Layers.First().StartDateTime);
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				}
 			};
 
-			var result = Target.Map(_scheduleDay, _personPart, AnalyticsDates.Date(_scheduleDay.Date)?.DateId ?? -1, scenarioId, -1);
+			var result = Target.Map(_scheduleDay, _personPart, scenarioId, -1);
 
 			result.Should().Be.Null();
 		}
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_scheduleDay.Name = "MyDayOff";
 			_scheduleDay.ShortName = "DO";
 
-			var result = Target.Map(_scheduleDay, _personPart, AnalyticsDates.Date(_scheduleDay.Date)?.DateId ?? -1, scenarioId, -1);
+			var result = Target.Map(_scheduleDay, _personPart, scenarioId, -1);
 
 			result.DayOffName.Should().Be.EqualTo(_scheduleDay.Name);
 			result.DayOffShortName.Should().Be.EqualTo(_scheduleDay.ShortName);

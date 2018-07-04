@@ -71,12 +71,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 
 			var eventScheduleDay = new ProjectionChangedEventScheduleDay
 			{
-				TeamId = personPeriod?.Team.Id ?? Guid.Empty,
-				SiteId = personPeriod?.Team.Site.Id ?? Guid.Empty,
+				TeamId = personPeriod == null ? Guid.Empty : personPeriod.Team.Id.GetValueOrDefault(),
+				SiteId = personPeriod == null ? Guid.Empty : personPeriod.Team.Site.Id.GetValueOrDefault(),
 				Date = date.Date,
 				WorkTime = projection.WorkTime(),
 				ContractTime = projection.ContractTime(),
-				PersonPeriodId = personPeriod?.Id ?? Guid.Empty,
+				PersonPeriodId = personPeriod == null ? Guid.Empty : personPeriod.Id.GetValueOrDefault(),
 				CheckSum = new ShiftTradeChecksumCalculator(scheduleDay).CalculateChecksum()
 			};
 

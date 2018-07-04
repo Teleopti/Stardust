@@ -85,15 +85,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		{
 			if (!dateTimes.Any()) return;
 
-			var dates = dateTimes.Select(d => new DateOnly(d));
-			var dateIds = dates.ToDictionary(k => k, MapDate);
+			var dates = dateTimes.Select(d => new DateOnly(d)).ToArray();
 
-			DoWork(person, scenario, businessUnitId, timestamp, dateIds);
+			var dateIds = new List<int>();
+			foreach (var date in dates)
+			{
+				MapDate(date, dateIds);
+			}
+
+			DoWork(person, scenario, businessUnitId, timestamp, dateIds, dates);
 		}
 
 		[AnalyticsUnitOfWork]
-		protected virtual void DoWork(IPerson person, IScenario scenario, Guid businessUnitId, DateTime timestamp,
-			Dictionary<DateOnly, int?> dateIds)
+		protected virtual void DoWork(IPerson person, IScenario scenario, Guid businessUnitId, DateTime timestamp, IEnumerable<int> dateIds, IEnumerable<DateOnly> dates)
 		{
 			var analyticsScenario = _analyticsScenarioRepository.Get(scenario.Id.Value);
 			if (analyticsScenario == null)
@@ -104,19 +108,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				throw new ScenarioMissingInAnalyticsException();
 			}
 
-			_analyticsScheduleRepository.DeleteFactSchedules(dateIds.Values.Where(v => v.HasValue).Select(v => v.Value), person.Id.GetValueOrDefault(),
+			_analyticsScheduleRepository.DeleteFactSchedules(dateIds, person.Id.GetValueOrDefault(),
 				analyticsScenario.ScenarioId);
 
 
 			var schedule = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
-				new ScheduleDictionaryLoadOptions(false, true, false), new DateOnlyPeriod(dateIds.Keys.Min(), dateIds.Keys.Max()), scenario);
+				new ScheduleDictionaryLoadOptions(true, true, true), new DateOnlyPeriod(dates.Min(), dates.Max()), scenario);
 
-			Dictionary<Guid,int> dayOffs = null;
-			foreach (var date in dateIds)
+			IList<AnalyticsDayOff> dayOffs = null;
+			foreach (var date in dates)
 			{
-				if (!date.Value.HasValue) continue;
-				
-				var scheduleDay = schedule.SchedulesForDay(date.Key).FirstOrDefault();
+				var scheduleDay = schedule.SchedulesForDay(date).FirstOrDefault();
 				if (scheduleDay == null)
 				{
 					continue;
@@ -125,7 +127,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				var currentEventScheduleDay = _projectionChangedEventBuilder.BuildEventScheduleDay(scheduleDay);
 				if (currentEventScheduleDay == null)
 				{
-					logger.Warn($"No schedule found for {person.Id.GetValueOrDefault()} {date.Key.Date:yyyy-MM-dd}");
+					logger.Warn($"No schedule found for {person.Id.GetValueOrDefault()} {date.Date:yyyy-MM-dd}");
 					continue;
 				}
 
@@ -142,7 +144,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					var shiftCategoryId = -1;
 					if (currentEventScheduleDay.Shift != null)
 						shiftCategoryId = getCategory(currentEventScheduleDay.ShiftCategoryId);
-					var dayCount = _factScheduleDayCountMapper.Map(currentEventScheduleDay, personPart, date.Value.Value, analyticsScenario.ScenarioId, shiftCategoryId);
+					var dayCount = _factScheduleDayCountMapper.Map(currentEventScheduleDay, personPart, analyticsScenario.ScenarioId, shiftCategoryId);
 					var agentDaySchedule = _factScheduleMapper.AgentDaySchedule(currentEventScheduleDay, scheduleDay, personPart,
 						timestamp, shiftCategoryId, analyticsScenario.ScenarioId, scenario.Id.GetValueOrDefault(),
 						person.Id.GetValueOrDefault());
@@ -158,12 +160,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 						{
 							if (dayOffs == null)
 							{
-								dayOffs = _analyticsDayOffRepository.DayOffs().ToDictionary(k => k.DayOffCode, v => v.DayOffId);
+								dayOffs = _analyticsDayOffRepository.DayOffs();
 							}
 
 							var dayOff = scheduleDay.PersonAssignment().DayOff();
 
-							if (!dayOffs.TryGetValue(dayOff.DayOffTemplateId, out var dayOffId))
+							if (dayOffs.All(x => x.DayOffCode != dayOff.DayOffTemplateId))
 							{
 								_analyticsDayOffRepository.AddOrUpdate(new AnalyticsDayOff
 								{
@@ -176,11 +178,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 									DatasourceUpdateDate = DateHelper.GetSmallDateTime(DateTime.UtcNow),
 									DatasourceId = 1
 								});
-								dayOffs = _analyticsDayOffRepository.DayOffs().ToDictionary(k => k.DayOffCode, v => v.DayOffId);
-								dayOffs.TryGetValue(dayOff.DayOffTemplateId, out dayOffId);
 							}
 
-							dayCount.DayOffId = dayOffId;
+							dayOffs = _analyticsDayOffRepository.DayOffs();
+							dayCount.DayOffId = dayOffs.Single(x => x.DayOffCode == dayOff.DayOffTemplateId).DayOffId;
 						}
 						else
 						{
@@ -197,7 +198,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				{
 					if (currentEventScheduleDay.Date < DateTime.Now.AddDays(1))
 					{
-						_analyticsScheduleRepository.InsertStageScheduleChangedServicebus(date.Key, person.Id.GetValueOrDefault(),
+						_analyticsScheduleRepository.InsertStageScheduleChangedServicebus(date, person.Id.GetValueOrDefault(),
 							scenario.Id.GetValueOrDefault(), businessUnitId, DateTime.Now);
 					}
 				}
@@ -205,14 +206,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		}
 
 		[AnalyticsUnitOfWork]
-		protected virtual int? MapDate(DateOnly date)
+		protected virtual void MapDate(DateOnly date, List<int> dateIds)
 		{
 			if (_factScheduleDateMapper.MapDateId(date, out var dateId))
 			{
-				return dateId;
+				dateIds.Add(dateId);
 			}
-
-			return null;
 		}
 
 		private int getCategory(Guid shiftCategoryCode)
@@ -324,7 +323,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			var dateOnly = dates.Select(d => new DateOnly(d)).ToArray();
 			IList<AnalyticsDayOff> dayOffs = null;
 			var schedule = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
-				new ScheduleDictionaryLoadOptions(false, false, false), new DateOnlyPeriod(dateOnly.Min(), dateOnly.Max()), scenario);
+				new ScheduleDictionaryLoadOptions(true, true, true), new DateOnlyPeriod(dateOnly.Min(), dateOnly.Max()), scenario);
 			foreach (var date in dateOnly)
 			{
 				dayOffs = UpdateForDate(person, scenario, scenarioId, businessUnitId, timestamp, date, schedule, dayOffs);
@@ -372,7 +371,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				var shiftCategoryId = -1;
 				if (currentEventScheduleDay.Shift != null)
 					shiftCategoryId = getCategory(currentEventScheduleDay.ShiftCategoryId);
-				var dayCount = _factScheduleDayCountMapper.Map(currentEventScheduleDay, personPart, dateId, scenarioId, shiftCategoryId);
+				var dayCount = _factScheduleDayCountMapper.Map(currentEventScheduleDay, personPart, scenarioId, shiftCategoryId);
 				var agentDaySchedule = _factScheduleMapper.AgentDaySchedule(currentEventScheduleDay, scheduleDay, personPart,
 					timestamp, shiftCategoryId, scenarioId, scenario.Id.GetValueOrDefault(), person.Id.GetValueOrDefault());
 
