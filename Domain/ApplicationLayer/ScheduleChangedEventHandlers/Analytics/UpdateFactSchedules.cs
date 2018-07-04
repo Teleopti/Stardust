@@ -322,27 +322,41 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			if (!dates.Any()) return;
 
 			var dateOnly = dates.Select(d => new DateOnly(d)).Distinct().ToArray();
-			IList<AnalyticsDayOff> dayOffs = null;
+			IDictionary<Guid,int> dayOffs = null;
 			var schedule = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 				new ScheduleDictionaryLoadOptions(false, false, false), new DateOnlyPeriod(dateOnly.Min(), dateOnly.Max()), scenario);
 			foreach (var date in dateOnly)
 			{
-				dayOffs = UpdateForDate(person, scenario, scenarioId, businessUnitId, timestamp, date, schedule, dayOffs);
+				var dateId = MapDate(date);
+				if (dateId.HasValue)
+				{
+					dayOffs = UpdateForDate(person, scenario, scenarioId, businessUnitId, timestamp, date, dateId.Value, schedule, dayOffs);
+				}
+				else
+				{
+					logger.Warn($"Date {date} could not be mapped to Analytics date_id. Schedule changes for " +
+								$"agent {person.Id.GetValueOrDefault()} is not saved into Analytics database.");
+
+				}
 			}
 		}
 
 		[AnalyticsUnitOfWork]
-		protected virtual IList<AnalyticsDayOff> UpdateForDate(IPerson person, IScenario scenario, int scenarioId,
-			Guid businessUnitId, DateTime timestamp,
-			DateOnly date, IScheduleDictionary schedule, IList<AnalyticsDayOff> dayOffs)
+		protected virtual int? MapDate(DateOnly date)
 		{
 			if (!_factScheduleDateMapper.MapDateId(date, out var dateId))
 			{
-				logger.Warn($"Date {date} could not be mapped to Analytics date_id. Schedule changes for " +
-							$"agent {person.Id.GetValueOrDefault()} is not saved into Analytics database.");
-				return dayOffs;
+				return null;
 			}
 
+			return dateId;
+		}
+
+		[AnalyticsUnitOfWork]
+		protected virtual IDictionary<Guid, int> UpdateForDate(IPerson person, IScenario scenario, int scenarioId,
+			Guid businessUnitId, DateTime timestamp,
+			DateOnly date, int dateId, IScheduleDictionary schedule, IDictionary<Guid, int> dayOffs)
+		{
 			var scheduleDay = schedule.SchedulesForDay(date).FirstOrDefault();
 			if (scheduleDay == null)
 			{
@@ -387,12 +401,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					{
 						if (dayOffs == null)
 						{
-							dayOffs = _analyticsDayOffRepository.DayOffs();
+							dayOffs = _analyticsDayOffRepository.DayOffs().ToDictionary(k => k.DayOffCode, v => v.DayOffId);
 						}
 
 						var dayOff = scheduleDay.PersonAssignment().DayOff();
 
-						if (dayOffs.All(x => x.DayOffCode != dayOff.DayOffTemplateId))
+						if (!dayOffs.TryGetValue(dayOff.DayOffTemplateId, out var dayOffId))
 						{
 							_analyticsDayOffRepository.AddOrUpdate(new AnalyticsDayOff
 							{
@@ -405,10 +419,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 								DatasourceUpdateDate = DateHelper.GetSmallDateTime(DateTime.UtcNow),
 								DatasourceId = 1
 							});
+							dayOffs = _analyticsDayOffRepository.DayOffs().ToDictionary(k => k.DayOffCode, v => v.DayOffId);
+							dayOffs.TryGetValue(dayOff.DayOffTemplateId, out dayOffId);
 						}
 
-						dayOffs = _analyticsDayOffRepository.DayOffs();
-						dayCount.DayOffId = dayOffs.Single(x => x.DayOffCode == dayOff.DayOffTemplateId).DayOffId;
+						dayCount.DayOffId = dayOffId;
 					}
 					else
 					{
