@@ -9,7 +9,10 @@
 
 	function RtaOverviewController(rtaService, rtaStateService, rtaDataService, rtaPollingService, rtaConfigurationValidator, $http, $state, $stateParams, $scope) {
 		var vm = this;
-
+		vm.skills = [];
+		vm.skillAreas = [];
+		var skills, skillAreas;
+ 
 		rtaConfigurationValidator.validate();
 		
 		vm.totalAgentsInAlarm = 0;
@@ -21,7 +24,7 @@
 		});
 		
 		vm.loading = function() {
-			return !(vm.siteCards && vm.skills && vm.skillAreas);
+			return !(vm.siteCards && skills && skillAreas);
 		};
 
 		vm.displayNoSitesMessage = function () {
@@ -46,6 +49,8 @@
 		$scope.$on('$destroy', poller.destroy);
 
 		rtaDataService.load().then(function (data) {
+			skills = data.skills;
+			skillAreas = data.skillAreas; 
 			vm.skills = data.skills;
 			vm.skillAreas = data.skillAreas;
 		});
