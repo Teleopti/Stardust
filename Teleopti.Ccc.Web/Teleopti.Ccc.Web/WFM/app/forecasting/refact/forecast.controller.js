@@ -144,7 +144,7 @@
       }
 
       vm.forecastModal = false;
-      forecastingService.forecast(angular.toJson(
+      forecastingService.forecast(
         {
           ForecastStart: vm.forecastPeriod.startDate,
           ForecastEnd: vm.forecastPeriod.endDate,
@@ -152,7 +152,7 @@
           ScenarioId: vm.selectedScenario.Id,
           BlockToken: blockToken,
           IsLastWorkload: true
-        }), function(data, status, headers, config) {
+        }, function(data, status, headers, config) {
           vm.skillMaster.IsForecastRunning = false;
           blockToken = data.BlockToken;
           getWorkloadForecastData(vm.forecastModalObj);
@@ -174,14 +174,14 @@
 
       function exportToFile() {
         vm.skillMaster.isForecastRunning = true;
-        forecastingService.exportForecast(angular.toJson(
+        forecastingService.exportForecast(
           {
             ForecastStart: vm.forecastPeriod.startDate,
             ForecastEnd: vm.forecastPeriod.endDate,
             ScenarioId: vm.selectedScenario.Id,
             SkillId: vm.forecastModalObj.SkillId,
             WorkloadId: vm.currentWorkload.Id
-          }), function (data, status, headers, config) {
+          }, function (data, status, headers, config) {
             var blob = new Blob([data], {
               type: headers['content-type']
             });

@@ -239,8 +239,8 @@
 			vm.scenarioNotForecasted = false;
 
 			var wl = {
-				ForecastStart: moment(vm.forecastPeriod.startDate).format("L"),
-				ForecastEnd: moment(vm.forecastPeriod.endDate).format("L"),
+				ForecastStart: vm.forecastPeriod.startDate,
+				ForecastEnd: vm.forecastPeriod.endDate,
 				WorkloadId: vm.selectedWorkload.Workload.Id,
 				ScenarioId: vm.selectedScenario.Id
 			};
@@ -272,14 +272,14 @@
 			};
 
 			forecastingService.forecast(
-				angular.toJson({
-					ForecastStart: moment(vm.forecastPeriod.startDate).format("L"),
-					ForecastEnd: moment(vm.forecastPeriod.endDate).format("L"),
+				{
+					ForecastStart: vm.forecastPeriod.startDate,
+					ForecastEnd: vm.forecastPeriod.endDate,
 					Workload: temp,
 					ScenarioId: vm.selectedScenario.Id,
 					BlockToken: vm.blockToken,
 					IsLastWorkload: true
-				}),
+				},
 				function (data, status, headers, config) {
 					vm.isForecastRunning = false;
 					if (data.WarningMessage !== "") {
@@ -355,13 +355,13 @@
 			vm.exportModal = false;
 			vm.isForecastRunning = true;
 			forecastingService.exportForecast(
-				angular.toJson({
-					ForecastStart: moment(vm.forecastPeriod.startDate).format("L"),
-					ForecastEnd: moment(vm.forecastPeriod.endDate).format("L"),
+				{
+					ForecastStart: vm.forecastPeriod.startDate,
+					ForecastEnd:vm.forecastPeriod.endDate,
 					ScenarioId: vm.selectedScenario.Id,
 					SkillId: vm.selectedWorkload.SkillId,
 					WorkloadId: vm.selectedWorkload.Workload.Id
-				}),
+				},
 				function(data, status, headers, config) {
 					var blob = new Blob([data], {
 						type: headers['content-type']
