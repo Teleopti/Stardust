@@ -165,6 +165,7 @@ wfm
 		'areasService',
 		'NoticeService',
 		'TabShortCut',
+		'rtaDataService',
 		'$q',
 		'$http',
 		function(
@@ -178,6 +179,7 @@ wfm
 			areasService,
 			noticeService,
 			TabShortCut,
+			rtaDataService,
 			$q,
 			$http
 		) {
@@ -296,5 +298,7 @@ wfm
 			}
 
 			TabShortCut.unifyFocusStyle();
+			
+			rtaDataService.load();
 		}
 	]);

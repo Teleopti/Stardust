@@ -5,7 +5,7 @@
 		.module('wfm.rta')
 		.service('rtaDataService', rtaDataService);
 
-	function rtaDataService($state, rtaService, $q, $http, $translate) {
+	function rtaDataService(rtaService, $q, $http, $translate) {
 
 		var organization = [];
 		var skills = [];
