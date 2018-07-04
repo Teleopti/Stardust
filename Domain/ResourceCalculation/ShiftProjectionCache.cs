@@ -48,14 +48,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public DateTimePeriod WorkShiftProjectionPeriod => _workShift.Projection.Period().Value;
 
-		public IVisualLayerCollection MainShiftProjection => _mainshiftProjection?.Value ?? TheMainShift.ProjectionService().CreateProjection();
-
-		public void ClearMainShiftProjection()
-		{
-			//strange but...
-			//to lower mem usage, because this instance is held by ShiftProjectionCacheManager (would be nice to redesign this)
-			_mainshiftProjection = null;
-		}
+		public IVisualLayerCollection MainShiftProjection => _mainshiftProjection.Value;
 
 		public IEnumerable<IWorkShiftCalculatableLayer> WorkShiftCalculatableLayers => _workShiftCalculatableLayers ??
 																					   (_workShiftCalculatableLayers = new WorkShiftCalculatableVisualLayerCollection(MainShiftProjection));
