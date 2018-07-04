@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -25,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<SkillMissingForecast> ExistingForecastForAllSkills(DateOnlyPeriod range,
 			IScenario scenario)
 		{
-			var existingForecastPerSkills = session(_currentUnitOfWork.Current()).GetNamedQuery("ExistingForecast")
+			var existingForecastPerSkills = _currentUnitOfWork.Current().Session().GetNamedQuery("ExistingForecast")
 				.SetEntity("scenario", scenario)
 				.SetEntity("businessUnit", scenario.BusinessUnit)
 				.SetDateOnly("startDate", range.StartDate)
@@ -42,11 +40,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				SkillId = x.Key.Id,
 				Periods = datesToPeriod.Convert(x.Where(d => d.CurrentDate.HasValue).Select(y => new DateOnly(y.CurrentDate.Value)))
 			});
-		}
-
-		private static ISession session(IUnitOfWork uow)
-		{
-			return ((NHibernateUnitOfWork) uow).Session;
 		}
 	}
 	
