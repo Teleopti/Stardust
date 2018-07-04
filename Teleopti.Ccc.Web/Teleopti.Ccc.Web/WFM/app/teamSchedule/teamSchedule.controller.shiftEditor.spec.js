@@ -364,6 +364,38 @@
 		expect(shiftLayers[1].className.indexOf('selected') >= 0).toBeTruthy();
 	});
 
+	it('should show divide line if personal activity interset another same type regular activity', function () {
+		fakeTeamSchedule.has({
+			"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+			"Name": "Annika Andersson",
+			"Date": "2018-05-28",
+			"WorkTimeMinutes": 240,
+			"ContractTimeMinutes": 240,
+			"Projection": [{
+				"ActivityId": "472e02c8-1a84-4064-9a3b-9b5e015ab3c6",
+				"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+				"Color": "#808080",
+				"Description": "E-mail",
+				"Start": "2018-05-28 08:00",
+				"Minutes": 60,
+				"IsOvertime": false
+			}, {
+				"ActivityId": "472e02c8-1a84-4064-9a3b-9b5e015ab3c6",
+				"ShiftLayerIds": ["71678e5a-ac3f-4daa-9577-a83800e49623"],
+				"Color": "#808080",
+				"Description": "E-mail",
+				"Start": "2018-05-28 09:00",
+				"Minutes": 60,
+				"IsOvertime": false
+			}],
+			"Timezone": { "IanaId": "Europe/Berlin" }
+		});
+		var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", "2018-05-28", "Europe/Berlin");
+
+		var shiftLayers = panel[0].querySelectorAll(".shift-layer");
+		expect(shiftLayers[1].className.indexOf('divide-line') >= 0).toBeTruthy();
+	});
+
 	it('should clear selection when click the selected activity again', function () {
 		fakeTeamSchedule.has({
 			"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
@@ -983,7 +1015,7 @@
 		var errorEl = panel[0].querySelector(".text-danger");
 		expect(!!errorEl).toBeTruthy();
 		expect(saveButton.disabled).toBeTruthy();
-		
+
 	});
 
 	it('should disable refresh button when schedule was changed by itself and and enable save button after changed something', function () {

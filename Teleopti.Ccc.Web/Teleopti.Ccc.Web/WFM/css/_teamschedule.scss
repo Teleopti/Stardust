@@ -1209,7 +1209,8 @@ teams-time-picker.ng-invalid-dst {
 	.btn-refresh:not(:disabled) {
 		background-color: $blue-500 !important;
 	}
-	.error-info{
+
+	.error-info {
 		height: 40px;
 	}
 
@@ -1353,6 +1354,11 @@ teams-time-picker.ng-invalid-dst {
 
 				&:first-of-type:last-of-type {
 					border-radius: 4px;
+				}
+
+				&.divide-line {
+					border-left-style: solid;
+					border-left-width: 1px;
 				}
 
 				&.overtime {
