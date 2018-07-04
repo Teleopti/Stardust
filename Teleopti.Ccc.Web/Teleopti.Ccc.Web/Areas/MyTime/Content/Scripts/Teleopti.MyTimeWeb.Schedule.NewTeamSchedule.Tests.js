@@ -163,7 +163,7 @@
 			$('.teammates-agent-name-row .new-teamschedule-agent-name:nth-child(1) .text-name').text(),
 			'Jon Kleinsmith1'
 		);
-		equal($('.new-teamschedule-view .teammates-schedules-column .new-teamschedule-layer').length, 10);
+		equal($('.new-teamschedule-view .teammates-schedules-column .new-teamschedule-layer').length, 20);
 		equal($('.new-teamschedule-view .teammates-schedules-column .new-teamschedule-layer strong:visible').length, 0);
 	});
 
@@ -557,7 +557,7 @@
 
 	function setUpHtml() {
 		agentSchedulesHtml = [
-			'<div class="new-teamschedule-view relative" data-bind="style: {display: isMobileEnabled() ? \'block\': \'none\'}">',
+			'<div class="new-teamschedule-view relative" data-bind="style: {display: isMobileEnabled() || isDesktopEnabled() ? \'block\': \'none\'}">',
 			'	<div class="navbar navbar-teleopti subnavbar">',
 			'		<div class="container new-teamschedule-view-nav">',
 			'			<ul class="nav navbar-nav navbar-teleopti row submenu">',

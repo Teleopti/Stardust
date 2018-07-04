@@ -396,37 +396,15 @@ div.teammates-schedules-column:last-of-type .agent-name {
 	background-color: #f1f1f1;
 }
 
-/* .load-more-schedules-arrow {
-	width: 60px;
-	height: 60px;
-	position: absolute;
-	right: 10px;
-	top: 50%;
-	opacity: 0.5;
-	z-index: 13;
-	transform: translateY(-50%);
-	display: none;
-	justify-content: center;
-	align-items: center;
-}
-
-.load-more-schedules-arrow:hover {
-	opacity: 1;
-	transition: all ease-in-out 0.3s;
-}
-
-.load-more-schedules-arrow img {
-	display: inline-block;
-	width: 100%;
-	height: 100%;
-} */
-
 .teamschedule-scroll-block-container {
 	width: calc(100% - 30px - 100px);
 	height: 20px;
 	position: absolute;
 	left: calc(30px + 100px);
 	bottom: 0;
+	border: 1px dashed rgba(0, 0, 0, 0.1);
+	border-radius: 9px;
+	overflow: visible;
 }
 
 .teamschedule-scroll-block {
