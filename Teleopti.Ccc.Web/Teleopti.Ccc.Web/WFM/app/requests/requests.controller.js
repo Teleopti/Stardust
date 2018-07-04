@@ -146,7 +146,7 @@
 		};
 
 		vm.getGroupPagesAsync = function () {
-			groupPageService.fetchAvailableGroupPages(vm.period.startDate, vm.period.endDate).then(function (data) {
+			groupPageService.fetchAvailableGroupPages(vm.period.startDate.toLocaleDateString(), vm.period.endDate.toLocaleDateString()).then(function (data) {
 				vm.availableGroups = data;
 				loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
 			});

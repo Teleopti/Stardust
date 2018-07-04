@@ -44,3 +44,11 @@ Background:
 	Given I am persian
 	When I view wfm requests
 	Then I should not see an error message
+
+Scenario: Should not see an error message when searching request with using persian culture
+Background:
+	Given I am persian
+	When I view wfm requests
+	And I select all the team
+	And I click button for search requests
+	Then I should not see an error message

@@ -107,8 +107,8 @@
 			var filters = svc.formatFilters(filter.filters);
 			var terms = svc.formatAgentSearchTerm(filter.agentSearchTerm);
 			var target = {
-				StartDate: moment(filter.period.startDate).format('YYYY-MM-DD'),
-				EndDate: moment(filter.period.endDate).format('YYYY-MM-DD'),
+				StartDate: filter.period.startDate.toLocaleDateString(),
+				EndDate: filter.period.endDate.toLocaleDateString(),
 				SortingOrders: sortingOrders,
 				AgentSearchTerm: terms, 
 				SelectedGroupIds: filter.selectedGroupIds,
