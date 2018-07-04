@@ -1,10 +1,17 @@
-﻿Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel = function (filterChangedCallback) {
+﻿Teleopti.MyTimeWeb.Schedule.NewTeamScheduleViewModel = function (filterChangedCallback) {
 	var self = this,
 		constants = Teleopti.MyTimeWeb.Common.Constants,
 		dateOnlyFormat = constants.serviceDateTimeFormat.dateOnly,
 		timeLineOffset = 50,
 		minPixelsToDisplayTitle = 30,
 		requestDateOnlyFormat = 'YYYY/MM/DD';
+
+		
+	self.isHostAMobile = Teleopti.MyTimeWeb.Common.IsHostAMobile();
+	self.isHostAniPad = Teleopti.MyTimeWeb.Common.IsHostAniPad();
+
+	self.isMobileEnabled = ko.observable(self.isHostAMobile && Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_NewTeamScheduleView_75989'));
+	self.isDesktopEnabled = ko.observable(!self.isHostAMobile && Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_NewTeamScheduleViewDesktop_76313'));
 
 	self.selectedDate = ko.observable(moment());
 	self.displayDate = ko.observable(self.selectedDate().format(dateOnlyFormat));

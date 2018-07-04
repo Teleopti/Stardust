@@ -1,0 +1,508 @@
+﻿.mobile-teamschedule-view {
+	display: none;
+}
+.new-teamschedule-view {
+	max-height: calc(100vh - 50px - 5px);
+}
+
+.new-teamschedule-view-nav {
+	padding: 0;
+}
+
+.new-teamschedule-view-nav .navbar-teleopti {
+	min-width: 600px;
+	justify-content: space-between;
+	margin: 0;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	height: 50px;
+}
+
+.new-teamschedule-view-nav .navbar-teleopti > li > * {
+	cursor: pointer;
+}
+
+.new-teamschedule-view-nav input.form-control {
+	background: transparent !important;
+	border-color: white;
+	box-shadow: none;
+	color: white;
+	font-size: 1.1em;
+	font-weight: bold;
+}
+
+.new-teamschedule-view-nav span.input-group-btn .btn.btn-default {
+	padding: 9px 10px;
+}
+
+.new-teamschedule-view-nav .input-group {
+	width: 192px;
+}
+@media (max-width: 500px) {
+	.new-teamschedule-view-nav span.input-group-btn .btn {
+		padding: 10px;
+	}
+}
+@media (max-width: 350px) {
+	.new-teamschedule-view-nav input.form-control {
+		padding-left: 0;
+		padding-right: 0;
+	}
+	.new-teamschedule-view-nav span.input-group-btn .btn {
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+}
+
+.new-teamschedule-view i {
+	transform: scale(1.3);
+}
+
+.new-teamschedule-view-nav .submenu li {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	white-space: nowrap;
+	min-width: 35px;
+	margin: 0 20px;
+}
+
+.new-teamschedule-view-nav .submenu li:first-child {
+	margin-left: 15px;
+}
+
+.new-teamschedule-view-nav .submenu li.mobile-datepicker {
+	padding: 0 5px 0 0;
+	max-width: 329px;
+	width: 192px;
+}
+
+.new-teamschedule-view-nav .submenu li.mobile-datepicker .moment-datepicker {
+	border: none;
+	text-decoration: none !important;
+	color: white !important;
+}
+
+.new-teamschedule-view-nav .submenu li.mobile-datepicker > .input-group {
+	padding: 0;
+}
+
+.new-teamschedule-view-nav .submenu li.mobile-datepicker .date-input-style {
+	min-width: 80px;
+}
+
+.new-teamschedule-view-nav .teamschedule-filter .select2-container {
+	margin: 0 !important;
+	border-radius: 0;
+	border: none;
+	box-shadow: none !important;
+	width: 100% !important;
+}
+
+.formatted-date-text {
+	font-weight: bold;
+	color: white;
+	display: inline-block;
+	font-size: 1.1em;
+	width: 120px;
+	padding: 10px 5px !important;
+}
+
+.new-teamschedule-view > .container {
+	height: calc(100% - 50px);
+	overflow: hidden;
+	padding: 0 0 20px 0;
+}
+
+.new-teamschedule-view .mobile-timeline {
+	width: 30px;
+	min-width: 30px;
+	background: white;
+	border-right: 1px solid #dfdfdf;
+	position: relative;
+	z-index: 10;
+	text-align: right;
+}
+
+.new-teamschedule-view .mobile-timeline-label {
+	font-size: 10px;
+	width: 100%;
+	height: 10px;
+	text-align: right;
+	white-space: normal;
+	line-height: 1;
+	padding-right: 1px;
+}
+
+.new-teamschedule-view .timeline-margin-block {
+	position: relative;
+	z-index: 10;
+	width: 30px;
+	min-width: 30px;
+	height: 100%;
+	border-right: 1px solid #dfdfdf;
+	background: white;
+}
+
+.new-teamschedule-agent-name.my-name.relative {
+	width: 100px;
+	min-width: 100px;
+	max-width: 100px;
+	height: 50px;
+	font-weight: bold;
+	text-align: center;
+	border-left: 1px solid rgba(0, 0, 0, 0.1);
+	border-right: 2px solid rgba(0, 0, 0, 0.1);
+	border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+	box-shadow: none;
+	background: white;
+	z-index: 15;
+	top: 0;
+}
+
+.new-teamschedule-agent-name.my-name span.text-name {
+	background: rgba(100, 100, 100, 0.04);
+}
+
+.agent-name-row.container.relative {
+	height: 50px;
+	width: 100%;
+	max-width: 100%;
+	font-size: 0;
+	padding: 0;
+	display: flex;
+	overflow: visible;
+	z-index: 10;
+}
+
+.agent-name-row.container.relative > div {
+	display: inline-block;
+	font-size: 0;
+}
+
+.agent-name-row.container.relative::before,
+.agent-name-row.container.relative::after {
+	display: none;
+}
+
+.new-teamschedule-view .teammates-agent-name-row.relative {
+	white-space: nowrap;
+	font-size: 0;
+	height: 50px;
+	left: 0;
+	top: 0;
+	overflow: visible;
+}
+
+.new-teamschedule-agent-name {
+	height: 50px;
+	width: 80px;
+	display: inline-block;
+	background: white;
+	white-space: normal;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+	border-left: 2px solid rgba(0, 0, 0, 0.1);
+	position: relative;
+	overflow: visible;
+}
+
+.teammates-agent-name-row .new-teamschedule-agent-name:first-child {
+	border-left: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.teammates-agent-name-row .new-teamschedule-agent-name:last-child {
+	border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+.new-teamschedule-agent-name .text-name {
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	overflow: hidden !important;
+	text-overflow: ellipsis;
+	display: inline-block;
+	vertical-align: bottom;
+	text-align: center;
+	white-space: pre-wrap;
+	font-size: 15px;
+}
+
+.agent-index-num {
+	width: 50px;
+	height: 20px;
+	display: inline-block;
+	position: absolute;
+	bottom: -10px;
+	left: calc(50% - 25px);
+	width: 10px;
+	height: 10px;
+}
+
+.teamschedule-arrow-up,
+.teamschedule-arrow-down {
+	display: none;
+	position: absolute;
+	top: calc(100% + 10px);
+	left: 50%;
+	width: 20px;
+	height: 20px;
+	color: gray;
+	transform: translateX(-50%);
+	text-align: center;
+	font-size: 15px;
+}
+
+.teamschedule-arrow-down {
+	top: calc(100vh - 50px - 50px - 50px);
+	transform: translateX(-50%) translateY(calc(-100% - 10px));
+}
+
+.new-teamschedule-table.relative {
+	-webkit-overflow-scrolling: touch;
+	overflow-y: auto;
+	overflow-x: hidden;
+	max-width: 100%;
+	padding: 0;
+	height: calc(100% - 51px);
+	font-size: 0;
+	display: flex;
+	z-index: 9;
+}
+
+.new-teamschedule-table::-webkit-scrollbar {
+	width: 5px;
+}
+
+.new-teamschedule-table::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	/* background: rgba(90, 205, 249, 0.5); */
+	background: rgba(0, 0, 0, 0.3);
+	box-shadow: none;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+}
+
+.new-teamschedule-view .my-schedule-column.relative {
+	left: 0;
+	width: 100px;
+	min-width: 100px;
+	max-width: 100px;
+	display: inline-block;
+	padding: 0 2px;
+	border-right: 1px solid rgba(0, 0, 0, 0.1);
+	z-index: 15;
+	background: #f9f9f9;
+}
+
+.teammates-schedules-container.relative {
+	width: 1000px;
+	left: 0;
+	display: inline-block;
+	overflow: visible;
+	white-space: nowrap;
+	-webkit-overflow-scrolling: touch;
+	font-size: 0;
+	z-index: 9;
+}
+
+.teammates-schedules-container.relative > div {
+	overflow: visible;
+}
+
+.new-teamschedule-view .teammates-schedules-column {
+	height: 100%;
+	width: 80px;
+	padding: 0 7px;
+	border-left: 1px solid rgba(0, 0, 0, 0.1);
+	font-size: 15px;
+	display: inline-block;
+	flex-grow: 1;
+}
+
+div.teammates-schedules-column:last-child {
+	border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+div.teammates-schedules-column:last-of-type .agent-name {
+	border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.new-teamschedule-view .new-teamschedule-layer-container {
+	display: inline-block;
+	width: 100%;
+	height: 100%;
+}
+
+.new-teamschedule-view .new-teamschedule-layer-container strong {
+	display: inline-block;
+	max-width: 100%;
+	overflow: hidden;
+}
+
+.new-teamschedule-view .new-teamschedule-layer {
+	text-align: center;
+	border-left: 0;
+	border-top: 1px solid #dfdfdf;
+	border-bottom: 1px solid #dfdfdf;
+	width: 100%;
+}
+
+.new-teamschedule-view .new-teamschedule-layer:first-of-type {
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+}
+
+.new-teamschedule-view .new-teamschedule-layer.last-layer {
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
+}
+
+.new-teamschedule-view .new-teamschedule-layer .glyphicon {
+	transform: scale(1);
+}
+
+.new-teamschedule-view .dayoff {
+	margin-top: 50px;
+	height: calc(100% - 50px - 50px - 10px);
+	width: calc(100%);
+	border-radius: 4px;
+}
+
+.new-teamschedule-view .dayoff .dayoff-text {
+	position: relative;
+	top: 50%;
+	width: 100%;
+	font-weight: bold;
+	text-align: center;
+	display: inline-block;
+}
+
+.new-teamschedule-view .new-teamschedule-layer .activity-info {
+	line-height: 1;
+	white-space: normal;
+	font-size: 14px;
+}
+
+.new-teamschedule-view .displayblock {
+	white-space: normal;
+	opacity: 0.8;
+}
+
+.new-teamschedule-view .teammates-schedules-column .new-teamschedule-layer-container .displayblock {
+	display: none;
+}
+
+.new-teamschedule-view .form-control[disabled] {
+	background-color: #f1f1f1;
+}
+
+/* .load-more-schedules-arrow {
+	width: 60px;
+	height: 60px;
+	position: absolute;
+	right: 10px;
+	top: 50%;
+	opacity: 0.5;
+	z-index: 13;
+	transform: translateY(-50%);
+	display: none;
+	justify-content: center;
+	align-items: center;
+}
+
+.load-more-schedules-arrow:hover {
+	opacity: 1;
+	transition: all ease-in-out 0.3s;
+}
+
+.load-more-schedules-arrow img {
+	display: inline-block;
+	width: 100%;
+	height: 100%;
+} */
+
+.teamschedule-scroll-block-container {
+	width: calc(100% - 30px - 100px);
+	height: 20px;
+	position: absolute;
+	left: calc(30px + 100px);
+	bottom: 0;
+}
+
+.teamschedule-scroll-block {
+	width: 100px;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.3);
+	border-radius: 10px;
+	display: inline-block;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	z-index: 13;
+	cursor: move;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: white;
+}
+
+.teamschedule-scroll-block i {
+	transform: scale(1.2);
+}
+
+.new-teamschedule-panel {
+	position: absolute;
+	top: 1px;
+	left: calc(50% - 200px);
+	right: initial;
+	bottom: initial;
+	width: 400px;
+	max-width: 400px;
+	box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.2);
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	background: white;
+	padding: 10px;
+	z-index: 100;
+}
+
+.new-teamschedule-panel > * {
+	margin: 10px 0;
+	width: 100%;
+}
+
+.teamschedule-filter-component,
+.teamschedule-filter-component .select2-container {
+	width: 100% !important;
+}
+
+.teamschedule-filter-component .select2-arrow b {
+	transform: scale(1.5);
+}
+
+.new-teamschedule-view .empty-search-result {
+	width: 100%;
+	min-height: 1.5em;
+	margin: 0;
+}
+
+.new-teamschedule-view .empty-search-result p {
+	margin: 0;
+}
+
+.new-teamschedule-submit-buttons {
+	display: flex;
+	justify-content: space-between;
+	padding: 10px 0;
+	margin-bottom: 0;
+}
+
+.new-teamschedule-submit-buttons button {
+	width: 45%;
+}
+
+.new-teamschedule-submit-buttons button.btn-default {
+	border-color: #ccc;
+	background: #ccc;
+}

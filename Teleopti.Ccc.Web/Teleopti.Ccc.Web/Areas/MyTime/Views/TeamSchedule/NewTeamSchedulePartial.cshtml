@@ -2,6 +2,294 @@
 @{
 	Layout = null;
 }
-<script>	
-	window.location.replace('MyTime#TeamSchedule/Index');
-</script>
+<style>
+	html, body, section#page, article#body, #body-inner, .new-teamschedule-view {
+		height: 100%;
+		overflow-x: hidden;
+	}
+	body {
+		overflow: hidden;
+	}
+	ul li ul li.select2-result:nth-child(odd) {
+		background: rgba(0, 0, 0, 0.1);
+	}
+	ul li ul li.select2-result.select2-highlighted {
+		background: #5ACDF9;
+	}
+	.tooltip.top {
+		margin: 0;
+		min-width: 120px;
+	}
+	#loading {
+		width: 100%;
+		text-align: center;
+		top: 40vh;
+		background: transparent;
+	}
+	.select2-focusser,
+	.select2-search,
+	.select2-search input {
+		display: none!important;
+	}
+	.select2-results {
+		-webkit-overflow-scrolling: touch;
+	}
+</style>
+<!-- ko if: isHostAniPad || isHostAMobile -->
+<style>
+	html, body, section#page, article#body, #body-inner, .new-teamschedule-view {
+		cursor: pointer;
+	}
+	.new-teamschedule-view {
+		max-height: calc(100vh - 50px);
+	}
+	.teammates-schedules-container.relative {
+		max-width: calc(100% - 30px - 70px);
+		overflow-y: hidden;
+		overflow-x: auto;
+	}
+	.teamschedule-scroll-block-container {
+		display: none;
+	}
+	.teamschedule-arrow-down {
+		top: calc(100vh - 50px - 50px);
+	}
+	.new-teamschedule-view > .container {
+		padding: 0;
+	}
+</style>
+<!-- /ko -->
+<!-- ko if: isHostAMobile -->
+<style id="mobile-teamschedule-styles">
+	.new-teamschedule-view-nav .navbar-teleopti {
+		min-width: initial;
+		justify-content: space-between;
+	}
+	.new-teamschedule-view-nav .submenu li,
+	.new-teamschedule-view-nav .submenu li:first-child {
+		margin: 0;
+	}
+	.new-teamschedule-agent-name.my-name.relative{
+		width: 71px;
+		min-width: 71px;
+		max-width: 71px;
+	}
+	.new-teamschedule-agent-name {
+		width: 50px;
+	}
+	.new-teamschedule-agent-name .text-name {
+		white-space: normal;
+	}
+	.teamschedule-arrow-down {
+		top: calc(100vh - 50px - 50px);
+	}
+	.new-teamschedule-view .my-schedule-column.relative {
+		width: 70px;
+		min-width: 70px;
+		max-width: 70px;
+	}
+	.teammates-schedules-container.relative {
+		max-width: calc(100% - 30px - 70px);
+		overflow-y: hidden;
+		overflow-x: auto;
+	}
+	.new-teamschedule-view .teammates-schedules-column {
+		width: 50px;
+	}
+	.new-teamschedule-view .teammates-schedules-column .new-teamschedule-layer-container strong,
+	.new-teamschedule-view .displayblock {
+		display: none;
+	}
+	.teammates-schedules-container {
+		overflow-y: hidden;
+		overflow-x: auto;
+	}
+	.new-teamschedule-panel {
+		width: 100%;
+		max-width: 100%;
+		min-height: 300px;
+		position: fixed;
+		top: initial;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		box-shadow: 0 -2px 2px 2px rgba(0, 0, 0, 0.2);
+	}
+	.load-more-schedules-arrow {
+		display: none;
+	}
+	.teamschedule-scroll-block-container {
+		display: none;
+	}
+</style>
+<!-- /ko -->
+
+<div class="new-teamschedule-view relative" data-bind="style: {display: isMobileEnabled() || isDesktopEnabled() ? 'block': 'none'}">
+	<div class="navbar navbar-teleopti subnavbar">
+		<div class="container new-teamschedule-view-nav">
+			<ul class="nav navbar-nav navbar-teleopti row submenu">
+				<li class="mobile-datepicker">
+					<div class="input-group">
+						<span class="input-group-btn">
+							<button class="btn btn-default previous-day" data-bind="click: previousDay">
+								<i class="glyphicon glyphicon-chevron-left"></i>
+							</button>
+						</span>
+						<a class="text-center formatted-date-text moment-datepicker"></a>
+						<span class="input-group-btn">
+							<button class="btn btn-default next-day" data-bind="click: nextDay">
+								<i class="glyphicon glyphicon-chevron-right"></i>
+							</button>
+						</span>
+					</div>
+				</li>
+				<li class="mobile-today" data-bind="click: today">
+					<a>
+						<i class="glyphicon glyphicon-home"></i>
+					</a>
+				</li>
+				<li class="new-teamschedule-filter" data-bind="click: toggleFilterPanel">
+					<a>
+						<i class="glyphicon glyphicon-filter" data-bind="style: {color: hasFiltered() ? 'yellow' : 'white'}"></i>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="container relative">
+		<div class="agent-name-row container relative">
+			<!-- ko if: mySchedule -->
+			<div class="timeline-margin-block"></div>
+			<div class="new-teamschedule-agent-name my-name relative" data-bind="tooltip: { title: mySchedule().name, trigger: 'click', placement: 'bottom'}, hideTooltipAfterMouseLeave: true">
+				<span class="text-name">@Resources.MySchedule</span>
+				<span class="teamschedule-arrow-up"><i class="glyphicon glyphicon-chevron-up"></i></span>
+				<span class="teamschedule-arrow-down"><i class="glyphicon glyphicon-chevron-down"></i></span>
+			</div>
+			<!-- /ko -->
+
+			<div class="teammates-agent-name-row relative">
+				<!-- ko foreach: agentNames -->
+				<div class="new-teamschedule-agent-name" data-bind="tooltip: { title: $data, trigger: 'click', placement: 'bottom'}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">
+					<span class="text-name" data-bind="text: $data"></span>
+					<span class="teamschedule-arrow-up"><i class="glyphicon glyphicon-chevron-up"></i></span>
+					<span class="teamschedule-arrow-down"><i class="glyphicon glyphicon-chevron-down"></i></span>
+				</div>
+				<!-- /ko -->
+			</div>
+		</div>
+
+		<div class="new-teamschedule-table relative container">
+			<div class="mobile-timeline" data-bind="style: {height: scheduleContainerHeight() + 'px'}">
+				<!-- ko foreach: timeLines -->
+				<div class="mobile-timeline-label absolute" data-bind="style: {top: topPosition}, text: timeText, visible: isHour">
+				</div>
+				<!-- /ko -->
+			</div>
+
+			<div class="my-schedule-column relative" data-bind="style: {height: scheduleContainerHeight() + 'px'}">
+				<!-- ko if: mySchedule -->
+				<div class="new-teamschedule-layer-container relative">
+					<!-- ko foreach: mySchedule().layers -->
+					<div class="new-teamschedule-layer cursorpointer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle(), 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle(), 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true">
+						<div class="activity-info" data-bind="visible: showTitle() && !isOvertimeAvailability()">
+							<strong data-bind="text: title()"></strong>
+							<!-- ko if: hasMeeting -->
+							<div class="meeting floatright">
+								<i class="meeting-icon mr10">
+									<i class="glyphicon glyphicon-user ml10"></i>
+								</i>
+							</div>
+							<!-- /ko -->
+							<span class="fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan"></span>
+						</div>
+						<div data-bind="visible: showTitle() && isOvertimeAvailability()">
+							<i class="glyphicon glyphicon-time"></i>
+						</div>
+					</div>
+					<!-- /ko -->
+					<!--ko if:mySchedule().isDayOff-->
+					<div class="dayoff cursorpointer" data-bind="tooltip: { title: mySchedule().dayOffName, html: true, trigger: 'click'}, hideTooltipAfterMouseLeave: true">
+						<span class="dayoff-text" data-bind="text: mySchedule().dayOffName"></span>
+					</div>
+					<!--/ko-->
+				</div>
+				<!-- /ko -->
+			</div>
+
+			<!-- ko if: teamSchedules -->
+			<div class="teammates-schedules-container relative" data-bind="style: {height: scheduleContainerHeight() + 'px'}">
+				<!-- ko foreach: teamSchedules -->
+				<div class="teammates-schedules-column relative">
+					<div class="new-teamschedule-layer-container relative">
+						<!-- ko foreach: layers -->
+						<div class="new-teamschedule-layer cursorpointer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle(), 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle(), 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">
+							<div class="activity-info" data-bind="visible: showTitle() && !isOvertimeAvailability()">
+								<strong data-bind="text: title()"></strong>
+								<!-- ko if: hasMeeting -->
+								<div class="meeting floatright">
+									<i class="meeting-icon mr10">
+										<i class="glyphicon glyphicon-user ml10"></i>
+									</i>
+								</div>
+								<!-- /ko -->
+								<span class="fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan"></span>
+							</div>
+							<div data-bind="visible: showTitle() && isOvertimeAvailability()">
+								<i class="glyphicon glyphicon-time"></i>
+							</div>
+						</div>
+						<!-- /ko -->
+						<!--ko if:isDayOff-->
+						<div class="dayoff cursorpointer" data-bind="tooltip: { title: dayOffName, html: true, trigger: 'click' }, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true"></div>
+						<!--/ko-->
+					</div>
+				</div>
+				<!-- /ko -->
+			</div>
+			<!-- /ko -->
+		</div>
+
+		<div class="teamschedule-scroll-block-container">
+			<!-- ko if: teamSchedules().length > 10 -->
+			<div class="teamschedule-scroll-block">
+				<i class="glyphicon glyphicon-resize-horizontal"></i>
+			</div>
+			<!-- /ko -->
+		</div>
+
+		<!-- ko if: isPanelVisible -->
+		<div class="new-teamschedule-panel">
+			<div class="teamschedule-filter-component">
+				<p>
+					<b>@Resources.Team: </b>
+				</p>
+				<select data-bind="foreach: availableTeams, select2: { value: selectedTeam, minimumResultsForSearch: 'Infinity'}" id="team-selection">
+					<optgroup data-bind="attr: { label: text }, foreach: children">
+						<option data-bind="text: text, value: id"></option>
+					</optgroup>
+				</select>
+			</div>
+
+			<div class="teamschedule-search-component">
+				<p>
+					<b>@Resources.AgentName: </b>
+				</p>
+				<form data-bind="submit: submitSearchForm">
+					<input type="search" class="form-control" placeholder='@Resources.SearchHintForName' data-bind="value: searchNameText" />
+					<input type="submit" style="display: none"/>
+				</form>
+			</div>
+			<div class="empty-search-result">
+				<!-- ko if: emptySearchResult -->
+				<p><b>@Resources.NoResultForCurrentFilter</b></p>
+				<!--/ko-->
+			</div>
+			<div class="new-teamschedule-submit-buttons">
+				<button class="btn btn-default" data-bind="click: cancelClick">@Resources.Cancel</button>
+				<button class="btn btn-primary" data-bind="click: submitSearchForm">@Resources.Search</button>
+			</div>
+		</div>
+		<!--/ko-->
+	</div>
+</div>

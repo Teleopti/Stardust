@@ -482,6 +482,9 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		IsHostAMobile: function () {
 			return (/Mobile/i.test(navigator.userAgent) && !/ipad/i.test(navigator.userAgent));
 		},
+		IsHostAniPad: function () {
+			return (/ipad/i.test(navigator.userAgent));
+		},
 		Constants: constants,
 		SubscribeToMessageBroker: _subscribeToMessageBroker,
 		GetUserData: _getUserData,
