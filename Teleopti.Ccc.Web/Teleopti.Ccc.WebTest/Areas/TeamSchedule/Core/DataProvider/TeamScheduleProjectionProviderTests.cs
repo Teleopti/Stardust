@@ -8,7 +8,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
@@ -16,7 +15,6 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
@@ -29,7 +27,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 {
 	[TestFixture, TeamScheduleTest]
-	public class TeamScheduleProjectionProviderTests: IIsolateSystem
+	public class TeamScheduleProjectionProviderTests : IIsolateSystem
 	{
 		public TeamScheduleProjectionProvider Target;
 		private readonly Scenario scenario = new Scenario("d");
@@ -315,6 +313,59 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			vm.Projection.Single().TopShiftLayerId.Should().Be.EqualTo(assignment1Person1.ShiftLayers.Second().Id.Value);
 		}
 
+
+		[Test]
+		public void ShouldGetProjectionWithTopShiftLayerIdWhenAnTopLayerNotSplitByAnotherActivity()
+		{
+			var date = new DateTime(2018, 06, 21, 0, 0, 0, DateTimeKind.Utc);
+			var person1 = PersonFactory.CreatePersonWithGuid("agent", "1");
+			var phoneActivity = ActivityFactory.CreateActivity("Phone", Color.Blue);
+			var emailActivity = ActivityFactory.CreateActivity("Email", Color.Blue);
+
+			var assignment1Person1 = PersonAssignmentFactory.CreatePersonAssignment(person1, scenario, new DateOnly(date));
+			var scheduleDayOnePerson1 = ScheduleDayFactory.Create(new DateOnly(date), person1, scenario);
+
+			assignment1Person1.AddActivity(phoneActivity, new DateTimePeriod(date.AddHours(8), date.AddHours(11)));
+			assignment1Person1.AddActivity(emailActivity, new DateTimePeriod(date.AddHours(9), date.AddHours(10)));
+			assignment1Person1.AddActivity(phoneActivity, new DateTimePeriod(date.AddHours(10), date.AddHours(11)));
+
+			assignment1Person1.ShiftLayers.ForEach(sl =>
+			{
+				sl.WithId();
+			});
+			scheduleDayOnePerson1.Add(assignment1Person1);
+
+			var vm = Target.Projection(scheduleDayOnePerson1, true, CommonAgentNameProvider.CommonAgentNameSettings);
+			vm.Projection.Last().TopShiftLayerId.Should().Be.EqualTo(assignment1Person1.ShiftLayers.Last().Id.Value);
+
+		}
+
+		[Test]
+		public void ShouldGetProjectionWithoutTopShiftLayerIdWhenTopLayerSplitByAnotherActivity()
+		{
+			var date = new DateTime(2018, 06, 21, 0, 0, 0, DateTimeKind.Utc);
+			var person1 = PersonFactory.CreatePersonWithGuid("agent", "1");
+			var phoneActivity = ActivityFactory.CreateActivity("Phone", Color.Blue);
+			var emailActivity = ActivityFactory.CreateActivity("Email", Color.Blue);
+
+			var assignment1Person1 = PersonAssignmentFactory.CreatePersonAssignment(person1, scenario, new DateOnly(date));
+			var scheduleDayOnePerson1 = ScheduleDayFactory.Create(new DateOnly(date), person1, scenario);
+
+			assignment1Person1.AddActivity(phoneActivity, new DateTimePeriod(date.AddHours(7), date.AddHours(13)));
+			assignment1Person1.AddActivity(phoneActivity, new DateTimePeriod(date.AddHours(9), date.AddHours(14)));
+			assignment1Person1.AddActivity(emailActivity, new DateTimePeriod(date.AddHours(10), date.AddHours(11)));
+
+			assignment1Person1.ShiftLayers.ForEach(sl =>
+			{
+				sl.WithId();
+			});
+			scheduleDayOnePerson1.Add(assignment1Person1);
+
+			var vm = Target.Projection(scheduleDayOnePerson1, true, CommonAgentNameProvider.CommonAgentNameSettings);
+			vm.Projection.Last().TopShiftLayerId.Should().Be.EqualTo(null);
+
+		}
+
 		[Test]
 		public void ShouldGetProjectionWithoutTopShiftLayerIdWhenAnActivityIntersectAnotherActivity()
 		{
@@ -389,6 +440,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 
 			result.Projection.Second().TopShiftLayerId.Should().Be(null);
 		}
+
 
 		[Test]
 		public void ShouldProjectWithOverTime()
@@ -934,6 +986,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 
 		}
 
-	
+
 	}
 }

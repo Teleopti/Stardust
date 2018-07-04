@@ -202,12 +202,12 @@
 				});
 
 			return changedShiftLayers.map(function (sl) {
-				if (sameShiftLayers.indexOf(sl) >= 0) {
+				if (!sl.TopShiftLayerId && sameShiftLayers.indexOf(sl) >= 0) {
 					var startTime = moment.tz(sl.Start, vm.timezone).clone().tz(currentUserTimezone);
 					var endTime = moment.tz(sl.End, vm.timezone).clone().tz(currentUserTimezone);
 					return {
 						ActivityId: sl.CurrentActivityId,
-						ShiftLayerIds: sl.ShiftLayerIds,
+						ShiftLayerIds: [sl.ShiftLayerIds[0]],
 						StartTime: serviceDateFormatHelper.getDateTime(startTime),
 						EndTime: serviceDateFormatHelper.getDateTime(endTime),
 						IsNew: true

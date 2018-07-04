@@ -817,6 +817,72 @@
 		});
 	});
 
+	it('should save changes with correct data when change activity type for part of an activity that has underlying layers', function () {
+		var date = "2018-06-15";
+		var personId = "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22";
+		fakeTeamSchedule.has({
+			"PersonId": personId,
+			"Name": "Annika Andersson",
+			"Date": date,
+			"WorkTimeMinutes": 240,
+			"ContractTimeMinutes": 240,
+			"Projection": [{
+				"ShiftLayerIds": ["layer1"],
+				"Color": "#ffffff",
+				"Description": "Phone",
+				"Start": "2018-06-15 08:00",
+				"End": "2018-06-15 10:00",
+				"Minutes": 120,
+				"IsOvertime": false,
+				"ActivityId": '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+			}, {
+					"ShiftLayerIds": ["layer2"],
+				"Color": "#FFa2a2",
+				"Description": "E-mail",
+				"Start": "2018-06-15 10:00",
+				"End": "2018-06-15 11:00",
+				"Minutes": 60,
+				"IsOvertime": false,
+				"ActivityId": '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
+			},
+			{
+				"ShiftLayerIds": ["layer1", "layer3"],
+				"Color": "#ffffff",
+				"Description": "Phone",
+				"Start": "2018-06-15 11:00",
+				"End": "2018-06-15 12:00",
+				"Minutes": 60,
+				"IsOvertime": false,
+				"ActivityId": '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+			}],
+			"Timezone": { "IanaId": "Europe/Berlin" }
+		});
+
+		var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", "2018-06-15", "Europe/Berlin");
+		var vm = panel.isolateScope().vm;
+		var shiftLayers = panel[0].querySelectorAll(".shift-layer");
+		shiftLayers[2].click();
+
+		var typeEls = panel[0].querySelectorAll('.activity-selector md-option');
+		typeEls[1].click();
+
+		var saveButton = panel[0].querySelector('.btn-save');
+		saveButton.click();
+
+		expect(fakeShiftEditorService.lastRequestData).toEqual({
+			Date: date,
+			PersonId: personId,
+			Layers: [{
+				ActivityId: '5c1409de-a0f1-4cd4-b383-9b5e015ab3c6',
+				ShiftLayerIds: ['layer1'],
+				StartTime: '2018-06-15 11:00',
+				EndTime: '2018-06-15 12:00',
+				IsNew: true
+			}],
+			TrackedCommandInfo: { TrackId: vm.trackId }
+		});
+	});
+
 	it('should save changes with correct data based on loggon user timezone when change activity type for part of base activity ', function () {
 		var date = "2018-06-15";
 		var personId = "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22";
@@ -962,6 +1028,70 @@
 			Date: date,
 			PersonId: personId,
 			Layers: [{ ActivityId: '5c1409de-a0f1-4cd4-b383-9b5e015ab3c6', ShiftLayerIds: ["11678e5a-ac3f-4daa-9577-a83800e49622"] }],
+			TrackedCommandInfo: { TrackId: vm.trackId }
+		});
+	});
+
+	it('should save changes with correct data when change activity type for part of an activity that another part of this activity was covered by another activity completely ', function () {
+		var date = "2018-06-15";
+		var personId = "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22";
+		fakeTeamSchedule.has({
+			"PersonId": personId,
+			"Name": "Annika Andersson",
+			"Date": date,
+			"WorkTimeMinutes": 240,
+			"ContractTimeMinutes": 240,
+			"Projection": [{
+				"ShiftLayerIds": ["layer1"],
+				"Color": "#ffffff",
+				"Description": "Phone",
+				"Start": "2018-06-15 08:00",
+				"End": "2018-06-15 10:00",
+				"Minutes": 120,
+				"IsOvertime": false,
+				"ActivityId": '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+			}, {
+				"ShiftLayerIds": ["layer2"],
+				"Color": "#FFa2a2",
+				"Description": "E-mail",
+				"Start": "2018-06-15 10:00",
+				"End": "2018-06-15 11:00",
+				"Minutes": 60,
+				"IsOvertime": false,
+				"ActivityId": '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
+			},
+			{
+				"ShiftLayerIds": ["layer3", "layer1"],
+				"Color": "#ffffff",
+				"Description": "Phone",
+				"Start": "2018-06-15 11:00",
+				"End": "2018-06-15 12:00",
+				"Minutes": 60,
+				"IsOvertime": false,
+				"ActivityId": '0ffeb898-11bf-43fc-8104-9b5e015ab3c2',
+				"TopShiftLayerId": "layer3"
+			}],
+			"Timezone": { "IanaId": "Europe/Berlin" }
+		});
+
+		var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", "2018-06-15", "Europe/Berlin");
+		var vm = panel.isolateScope().vm;
+		var shiftLayers = panel[0].querySelectorAll(".shift-layer");
+		shiftLayers[2].click();
+
+		var typeEls = panel[0].querySelectorAll('.activity-selector md-option');
+		typeEls[1].click();
+
+		var saveButton = panel[0].querySelector('.btn-save');
+		saveButton.click();
+
+		expect(fakeShiftEditorService.lastRequestData).toEqual({
+			Date: date,
+			PersonId: personId,
+			Layers: [{
+				ActivityId: '5c1409de-a0f1-4cd4-b383-9b5e015ab3c6',
+				ShiftLayerIds: ['layer3']
+			}],
 			TrackedCommandInfo: { TrackId: vm.trackId }
 		});
 	});
