@@ -70,14 +70,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			var myScheduleViewModel = _projectionProvider.MakeScheduleReadModel(currentUser, myScheduleDay, true);
 
 			int pageCount;
+			int totalAgentCount;
 			List<AgentInTeamScheduleViewModel> agentSchedules;
 			if (data.TimeFilter == null && data.TimeSortOrder.IsNullOrEmpty())
 			{
-				agentSchedules = constructAgentSchedulesWithoutReadModel(data, out pageCount);
+				var result = constructAgentSchedulesWithoutReadModel(data);
+				agentSchedules = result.Item1;
+				pageCount = result.Item2;
+				totalAgentCount = result.Item3;
 			}
 			else
 			{
-				agentSchedules = constructAgentSchedulesFromReadModel(data, false, out pageCount);
+				var result = constructAgentSchedulesFromReadModel(data, false);
+				agentSchedules = result.Item1;
+				pageCount = result.Item2;
+				totalAgentCount = result.Item3;
 				var mySchedule = agentSchedules.SingleOrDefault(x => x.PersonId == currentUser.Id.GetValueOrDefault());
 				agentSchedules.Remove(mySchedule);
 			}
@@ -95,10 +102,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 				AgentSchedules = _teamScheduleAgentScheduleViewModelMapper.Map(agentSchedules, schedulePeriod, timezone)
 					.ToArray(),
 				TimeLine = timeLineHours,
-				PageCount = pageCount
+				PageCount = pageCount,
+				TotalAgentCount = totalAgentCount
 			};
 		}
-		private List<AgentInTeamScheduleViewModel> constructAgentSchedulesFromReadModel(TeamScheduleViewModelData data, bool isMyScheduleIncluded, out int pageCount)
+		private Tuple<List<AgentInTeamScheduleViewModel>, int, int> constructAgentSchedulesFromReadModel(TeamScheduleViewModelData data, bool isMyScheduleIncluded)
 		{
 			var personIds = _teamSchedulePersonsProvider.RetrievePersonIds(data).ToList();
 			var currentUser = _logonUser.CurrentUser();
@@ -121,12 +129,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 
 			var agentSchedules = _agentScheduleViewModelMapper.Map(schedulesWithPersons).ToList();
 			var scheduleCount = agentSchedules.Any() ? agentSchedules.First().Total : 0;
-			pageCount = (int)Math.Ceiling((double)scheduleCount / data.Paging.Take);
+			var pageCount = (int)Math.Ceiling((double)scheduleCount / data.Paging.Take);
 
-			return agentSchedules;
+			return new Tuple<List<AgentInTeamScheduleViewModel>, int, int>(agentSchedules, pageCount, scheduleCount);
 		}
 
-		private List<AgentInTeamScheduleViewModel> constructAgentSchedulesWithoutReadModel(TeamScheduleViewModelData data, out int pageCount)
+		private Tuple<List<AgentInTeamScheduleViewModel>, int, int> constructAgentSchedulesWithoutReadModel(TeamScheduleViewModelData data)
 		{
 			var people = _teamSchedulePersonsProvider.RetrievePeople(data).ToList();
 			var currentUser = _logonUser.CurrentUser();
@@ -135,12 +143,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			var isPermittedToViewConfidential =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential);
 			var agentSchedules = new List<AgentInTeamScheduleViewModel>();
-			pageCount = 1;
+			var pageCount = 1;
+			var totalAgentCount = people.Count;
 			var canSeeUnpublishedSchedules =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
 			if (people.Any())
 			{
-				pageCount = (int)Math.Ceiling((double)people.Count / data.Paging.Take);
+				pageCount = (int)Math.Ceiling((double)totalAgentCount / data.Paging.Take);
 				var scheduleDays = _scheduleProvider.GetScheduleForPersons(data.ScheduleDate, people).ToLookup(s => s.Person);
 
 				var personScheduleDays = people.Select(p => new Tuple<IPerson, IScheduleDay>(p, scheduleDays[p].FirstOrDefault())).ToArray();
@@ -158,7 +167,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 					agentSchedules.Add(scheduleReadModel);
 				}
 			}
-			return agentSchedules;
+			return new Tuple<List<AgentInTeamScheduleViewModel>, int, int>(agentSchedules, pageCount, totalAgentCount);
 		}
 
 		private DateTimePeriod getSchedulePeriod(IEnumerable<AgentInTeamScheduleViewModel>

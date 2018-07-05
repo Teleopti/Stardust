@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 		public TeamScheduleTimeLineViewModel[] TimeLine { get; set; }
 		public int PageCount { get; set; }
 		public TeamScheduleAgentScheduleViewModel MySchedule { get; set; }
+		public int TotalAgentCount { get; set; }
 	}
 
 	public class TeamScheduleAgentScheduleViewModel
