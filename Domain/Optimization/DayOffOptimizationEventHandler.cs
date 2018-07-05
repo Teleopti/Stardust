@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	[RemoveMeWithToggle("Copy/paste to base impl", Toggles.ResourcePlanner_LessResourcesXXL_74915)]
 	[EnabledBy(Toggles.ResourcePlanner_LessResourcesXXL_74915)]
+	[RegisterEventHandlerInLifetimeScope]
 	public class DayOffOptimizationEventHandlerWithRetry : DayOffOptimizationEventHandler
 	{
 		private readonly DeadLockRetrier _deadLockRetrier;
