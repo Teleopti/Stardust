@@ -4,15 +4,12 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
 	[DomainTest]
-	[Toggle(Toggles.ResourcePlanner_SpeedUpEvents_74996)]
 	public class AnalyticsFactScheduleTimeMapperCacheTest : IIsolateSystem
 	{
 		public AnalyticsAbsenceMapper Target;

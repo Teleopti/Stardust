@@ -77,7 +77,6 @@
 		ResourcePlanner_DayOffOptimizationIslands_47208,
 		ResourcePlanner_PrepareToRemoveExportSchedule_46576,
 		ResourcePlanner_SpeedUpEvents_48769,
-		ResourcePlanner_SpeedUpEvents_74996,
 		ResourcePlanner_SpeedUpEvents_75415,
 		ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899,
 		ResourcePlanner_UseErlangAWithFinitePatience_47738,

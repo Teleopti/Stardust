@@ -142,18 +142,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CommonAgentNameProvider>().As<ICommonAgentNameProvider>().SingleInstance();
 			builder.RegisterType<TrackingMessageSender>().As<ITrackingMessageSender>().SingleInstance();
 			builder.RegisterType<IntervalLengthFetcher>().As<IIntervalLengthFetcher>().SingleInstance();
-			if (_config.Toggle(Toggles.ResourcePlanner_SpeedUpEvents_74996))
-			{
-				builder.CacheByClassProxy<AnalyticsAbsenceMapper>().SingleInstance();
-				_config.Cache().This<AnalyticsAbsenceMapper>(b => b.CacheMethod(m => m.Map(Guid.Empty)));
-				builder.CacheByClassProxy<FetchAnalyticsScenarios>().SingleInstance();
-				_config.Cache().This<FetchAnalyticsScenarios>(b => b.CacheMethod(m => m.Execute()));
-			}
-			else
-			{
-				builder.RegisterType<AnalyticsAbsenceMapper>().SingleInstance();
-				builder.RegisterType<FetchAnalyticsScenarios>().SingleInstance();
-			}
+			builder.CacheByClassProxy<AnalyticsAbsenceMapper>().SingleInstance();
+			_config.Cache().This<AnalyticsAbsenceMapper>(b => b.CacheMethod(m => m.Map(Guid.Empty)));
+			builder.CacheByClassProxy<FetchAnalyticsScenarios>().SingleInstance();
+			_config.Cache().This<FetchAnalyticsScenarios>(b => b.CacheMethod(m => m.Execute()));
 			builder.RegisterType<AnalyticsFactScheduleTimeMapper>().As<IAnalyticsFactScheduleTimeMapper>().SingleInstance();				
 			builder.RegisterType<AnalyticsFactScheduleDateMapper>().As<IAnalyticsFactScheduleDateMapper>().SingleInstance();
 			builder.RegisterType<AnalyticsFactSchedulePersonMapper>().As<IAnalyticsFactSchedulePersonMapper>().SingleInstance();
