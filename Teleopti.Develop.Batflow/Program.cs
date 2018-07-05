@@ -168,7 +168,7 @@ namespace Teleopti.Develop.Batflow
 
 			private IEnumerable<FileInfo> allBackups()
 			{
-				var folders = new[] {".", ".com.teleopti.wfm.developer.tools"};
+				var folders = new[] {"."};
 
 				var files = from d in folders
 					let folderPath = Path.Combine(RepositoryPath(), d)
