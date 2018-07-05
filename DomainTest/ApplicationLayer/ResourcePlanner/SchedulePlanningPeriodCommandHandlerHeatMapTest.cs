@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 	[DomainTest]
 	[ExtendScope(typeof(WebDayoffOptimizationStardustHandler))]
 	[ExtendScope(typeof(DayOffOptimizationEventHandler))]
+	[ExtendScope(typeof(DayOffOptimizationEventHandlerWithRetry))]
 	[ExtendScope(typeof(WebScheduleStardustHandler))]
 	[ExtendScope(typeof(SchedulingEventHandler))]
 	public class SchedulePlanningPeriodCommandHandlerHeatMapTest : DayOffOptimizationScenario
