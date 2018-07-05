@@ -37,12 +37,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			FactScheduleDayCountRows.Add(dayCount);
 		}
 
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_48769)]
-		public void DeleteFactSchedule(int dateId, Guid personCode, int scenarioId)
-		{
-			deleteFactSchedule(dateId, personCode, scenarioId);
-		}
-
 		private void deleteFactSchedule(int dateId, Guid personCode, int scenarioId)
 		{
 			var periods = _personPeriodRepository.GetPersonPeriods(personCode);

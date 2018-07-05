@@ -161,19 +161,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.ExecuteUpdate();
 		}
 
-		[RemoveMeWithToggle("script and remove sproc mart.etl_fact_schedule_delete as well", Toggles.ResourcePlanner_SpeedUpEvents_48769)]
-		public void DeleteFactSchedule(int dateId, Guid personCode, int scenarioId)
-		{
-			_analyticsUnitOfWork.Current().Session().CreateSQLQuery($@"mart.etl_fact_schedule_delete 
-												@shift_startdate_local_id=:{nameof(dateId)}, 
-												@person_code=:{nameof(personCode)}, 
-												@scenario_id=:{nameof(scenarioId)}")
-				.SetParameter(nameof(dateId), dateId)
-				.SetParameter(nameof(personCode), personCode)
-				.SetParameter(nameof(scenarioId), scenarioId)
-				.ExecuteUpdate();
-		}
-
 		public void DeleteFactSchedules(IEnumerable<int> dateIds, Guid personCode, int scenarioId)
 		{
 			_analyticsUnitOfWork.Current().Session().CreateSQLQuery($@"mart.etl_fact_schedule_delete_days

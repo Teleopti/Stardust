@@ -14,9 +14,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		IHandleEvent<ReloadSchedules>,
 		IRunOnHangfire
 	{
-		private readonly IUpdateFactSchedules _updateFactSchedules;
+		private readonly UpdateFactSchedules _updateFactSchedules;
 
-		public AnalyticsScheduleChangeUpdater(IUpdateFactSchedules updateFactSchedules)
+		public AnalyticsScheduleChangeUpdater(UpdateFactSchedules updateFactSchedules)
 		{
 			_updateFactSchedules = updateFactSchedules;
 		}

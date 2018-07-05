@@ -17,7 +17,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
-using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -27,13 +26,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
-	[Toggle(Toggles.ResourcePlanner_SpeedUpEvents_48769)]
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_48769)]
-	public class AnalyticsScheduleChangeUpdaterTestToggleOn : AnalyticsScheduleChangeUpdaterTest
-	{
-	}
-	
-	
 	[DomainTest]
 	public class AnalyticsScheduleChangeUpdaterTest : IIsolateSystem, IExtendSystem
 	{

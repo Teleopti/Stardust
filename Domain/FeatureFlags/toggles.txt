@@ -102,8 +102,7 @@ ResourcePlanner_HideSkillPrioSliders_41312 = RC #Skill priorities, aka Cascading
 ResourcePlanner_UseErlangAWithInfinitePatience_45845 = true
 ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899 = true
 ResourcePlanner_UseErlangAWithFinitePatience_47738 = true
-ResourcePlanner_SpeedUpEvents_48769 = true #batch deletes of dates - can be deleted early
-ResourcePlanner_SpeedUpEvents_75415 = true #restructure of events - dont remove toggle too early
+ResourcePlanner_SpeedUpEvents_75415 = true
 ResourcePlanner_LessResourcesXXL_74915 = DEV
 
 # Bugs&Roses #

@@ -10,8 +10,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 	{
 		void PersistFactScheduleBatch(IList<IFactScheduleRow> factScheduleRows);
 		void PersistFactScheduleDayCountRow(IAnalyticsFactScheduleDayCount dayCount);
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_48769)]
-		void DeleteFactSchedule(int dateId, Guid personCode, int scenarioId);
 		void DeleteFactSchedules(IEnumerable<int> dateIds, Guid personCode, int scenarioId);
 		
 		int ShiftLengthId(int shiftLength);

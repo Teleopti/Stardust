@@ -16,8 +16,6 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
-using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -30,11 +28,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 	[Category("BucketB")]
 	[MultiDatabaseTest]
 	[Toggle(Toggles.ETL_EventbasedDate_39562)]
-	[TestFixture(true)]
-	[TestFixture(false)]
-	public class AnalyticsScheduleChangeUpdaterTest : IIsolateSystem, IConfigureToggleManager
+	public class AnalyticsScheduleChangeUpdaterTest : IIsolateSystem
 	{
-		private readonly bool _resourcePlannerSpeedUpEvents48769;
 		public AnalyticsScheduleChangeUpdater Target;
 		public IPersonRepository PersonRepository;
 		public WithUnitOfWork WithUnitOfWork;
@@ -47,11 +42,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 		public IContractRepository ContractRepository;
 		public IContractScheduleRepository ContractScheduleRepository;
 		public IShiftCategoryRepository ShiftCategoryRepository;
-
-		public AnalyticsScheduleChangeUpdaterTest(bool resourcePlannerSpeedUpEvents48769)
-		{
-			_resourcePlannerSpeedUpEvents48769 = resourcePlannerSpeedUpEvents48769;
-		}
 		
 		[Test]
 		[Timeout(20000)]
@@ -95,12 +85,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 
 			Task.WaitAll(tasksToRunInParallell.ToArray());
 		}
-		
-		public void Configure(FakeToggleManager toggleManager)
-		{
-			if (_resourcePlannerSpeedUpEvents48769)
-				toggleManager.Enable(Toggles.ResourcePlanner_SpeedUpEvents_48769);
-		}
 
 		public void Isolate(IIsolate isolate)
 		{
@@ -129,11 +113,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 			public void PersistFactScheduleDayCountRow(IAnalyticsFactScheduleDayCount dayCount)
 			{
 				throw new NotImplementedException();
-			}
-
-			public void DeleteFactSchedule(int dateId, Guid personCode, int scenarioId)
-			{
-				throwIfUowDoesntExist();
 			}
 
 			public void DeleteFactSchedules(IEnumerable<int> dateIds, Guid personCode, int scenarioId)

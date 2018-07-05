@@ -313,16 +313,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			analyticsDataFactory.Setup(new Absence(22, Guid.NewGuid(), "Freee", Color.LightGreen, _datasource, businessUnitId));
 			analyticsDataFactory.Setup(new DimDayOff(-1, new Guid("00000000-0000-0000-0000-000000000000"), "Not Defined", _datasource, -1));
 		}
-
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_48769)]
-		[Test]
-		public void ShouldBeAbleToDeleteADay()
-		{
-			WithAnalyticsUnitOfWork.Do(() =>
-			{
-				Target.DeleteFactSchedule(1, Guid.NewGuid(), 1);
-			});
-		}
 		
 		[Test]
 		public void ShouldBeAbleToDeleteADays()
