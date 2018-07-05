@@ -1766,7 +1766,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			Target.Process(personRequest);
 
-			ExtensiveLogRepository.LoadAll().Count.Should().Be.EqualTo(1);
+			ExtensiveLogRepository.LoadAll().Count.Should().Be.EqualTo(2);
 		}
 
 		private static SkillCombinationResource createSkillCombinationResource(DateTimePeriod interval, Guid[] skillCombinations, double resource)
