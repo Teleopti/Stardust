@@ -18,9 +18,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<PersonAssociationCheckSum> Get()
 		{
 			return _unitOfWork.Current().Session()
-				.CreateSQLQuery("SELECT * FROM dbo.PersonAssociationCheckSum")
+				.CreateSQLQuery("SELECT * FROM dbo.PersonAssociationCheckSum WITH (NOLOCK)")
 				.SetResultTransformer(Transformers.AliasToBean<PersonAssociationCheckSum>())
 				.List<PersonAssociationCheckSum>();
+		}
+
+		public PersonAssociationCheckSum Get(Guid personId)
+		{
+			return _unitOfWork.Current().Session()
+				.CreateSQLQuery("SELECT * FROM dbo.PersonAssociationCheckSum WITH (NOLOCK) WHERE PersonId = :PersonId")
+				.SetParameter("PersonId", personId)
+				.SetResultTransformer(Transformers.AliasToBean<PersonAssociationCheckSum>())
+				.UniqueResult<PersonAssociationCheckSum>();
 		}
 
 		public void Persist(PersonAssociationCheckSum checkSum)
@@ -55,15 +64,6 @@ VALUES (:PersonId, :CheckSum)")
 					.SetParameter("PersonId", checkSum.PersonId)
 					.SetParameter("CheckSum", checkSum.CheckSum)
 					.ExecuteUpdate();
-		}
-
-		public PersonAssociationCheckSum Get(Guid personId)
-		{
-			return _unitOfWork.Current().Session()
-				.CreateSQLQuery("SELECT * FROM dbo.PersonAssociationCheckSum WHERE PersonId = :PersonId")
-				.SetParameter("PersonId", personId)
-				.SetResultTransformer(Transformers.AliasToBean<PersonAssociationCheckSum>())
-				.UniqueResult<PersonAssociationCheckSum>();
 		}
 	}
 }

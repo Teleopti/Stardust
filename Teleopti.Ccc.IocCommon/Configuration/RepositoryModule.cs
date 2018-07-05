@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				}
 			}
 
-			builder.RegisterType<PersonLoadAllWithPeriodAndExternalLogOn>().As<IPersonLoadAllWithPeriodAndExternalLogOn>().SingleInstance();
+			builder.RegisterType<PersonLoadAllWithAssociation>().As<IPersonLoadAllWithAssociation>().SingleInstance();
 			
 			builder.RegisterType<ScheduleStorageRepositoryWrapper>().As<IScheduleStorageRepositoryWrapper>();
 			builder.RegisterType<ProjectionVersionPersister>()

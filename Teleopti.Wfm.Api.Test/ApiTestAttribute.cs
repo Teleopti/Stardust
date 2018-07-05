@@ -118,7 +118,7 @@ namespace Teleopti.Wfm.Api.Test
 			isolate.UseTestDouble(fakeStorage).For<IFakeStorage>();
 			isolate.UseTestDouble(personRepository).For<IPersonRepository>();
 			isolate.UseTestDouble(personRepository).For<IProxyForId<IPerson>>();
-			isolate.UseTestDouble(personRepository).For<IPersonLoadAllWithPeriodAndExternalLogOn>();
+			isolate.UseTestDouble(personRepository).For<IPersonLoadAllWithAssociation>();
 			isolate.UseTestDouble(businessUnitRepository).For<IBusinessUnitRepository>();
 		}
 		

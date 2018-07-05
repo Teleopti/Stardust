@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		IRunOnHangfire
 	{
 		private readonly IPersonRepository _persons;
-		private readonly IPersonLoadAllWithPeriodAndExternalLogOn _persons2;
+		private readonly IPersonLoadAllWithAssociation _personsWithAssociation;
 		private readonly ICurrentEventPublisher _eventPublisher;
 		private readonly INow _now;
 		private readonly IDistributedLockAcquirer _distributedLock;
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 		public PersonAssociationChangedEventPublisher(
 			IPersonRepository persons,
-			IPersonLoadAllWithPeriodAndExternalLogOn persons2,
+			IPersonLoadAllWithAssociation personsWithAssociation,
 			ICurrentEventPublisher eventPublisher,
 			INow now,
 			IDistributedLockAcquirer distributedLock,
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			IPersonAssociationPublisherCheckSumPersister checkSums)
 		{
 			_persons = persons;
-			_persons2 = persons2;
+			_personsWithAssociation = personsWithAssociation;
 			_eventPublisher = eventPublisher;
 			_now = now;
 			_distributedLock = distributedLock;
@@ -45,7 +46,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_checkSums = checkSums;
 		}
 
-		[UnitOfWork]
 		[ReadModelUnitOfWork]
 		public virtual void Handle(TenantMinuteTickEvent @event)
 		{
@@ -59,55 +59,46 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			});
 		}
 
-		[UnitOfWork]
-		public virtual void Handle(TenantHourTickEvent @event)
-		{
-			publishForAllPersons();
-		}
-
-		[UnitOfWork]
-		public virtual void Handle(PersonTeamChangedEvent @event)
-		{
-			publishForPerson(@event.PersonId);
-		}
-
-		[UnitOfWork]
-		public virtual void Handle(PersonPeriodChangedEvent @event)
-		{
-			publishForPerson(@event.PersonId);
-		}
-
-		[UnitOfWork]
-		public virtual void Handle(PersonTerminalDateChangedEvent @event)
-		{
-			publishForPerson(@event.PersonId);
-		}
-
-		[UnitOfWork]
-		public virtual void Handle(PersonDeletedEvent @event)
-		{
-			publishForPerson(@event.PersonId);
-		}
+		public void Handle(TenantHourTickEvent @event) => publishForAllPersons();
+		public void Handle(PersonTeamChangedEvent @event) => PublishForPerson(@event.PersonId);
+		public void Handle(PersonPeriodChangedEvent @event) => PublishForPerson(@event.PersonId);
+		public void Handle(PersonTerminalDateChangedEvent @event) => PublishForPerson(@event.PersonId);
+		public void Handle(PersonDeletedEvent @event) => PublishForPerson(@event.PersonId);
 
 		private void publishForAllPersons()
 		{
 			var now = _now.UtcDateTime();
-			var checkSums = _checkSums.Get().ToLookup(c => c.PersonId);
+			var checkSums = LoadAllCheckSums();
 
-			_persons2
-				.LoadAll()
-				.ForEach(person =>
-				{
-					var personId = person.Id.Value;
-					publishForPerson(personId, person, now, checkSums[personId].SingleOrDefault()?.CheckSum ?? 0);
-				});
+			LoadAllPersons()
+				.Batch(100)
+				.ForEach(batch =>
+					PublishForPersons(now, batch, id => checkSums[id].SingleOrDefault()?.CheckSum ?? 0)
+				);
 		}
 
-		private void publishForPerson(Guid personId)
+		[UnitOfWork]
+		protected virtual IEnumerable<IPerson> LoadAllPersons() => _personsWithAssociation.LoadAll();
+
+		[UnitOfWork]
+		protected virtual ILookup<Guid, PersonAssociationCheckSum> LoadAllCheckSums() => _checkSums.Get().ToLookup(c => c.PersonId);
+
+		[UnitOfWork]
+		protected virtual void PublishForPersons(DateTime now, IEnumerable<IPerson> persons, Func<Guid, int> checkSum)
+		{
+			persons.ForEach(person =>
+			{
+				var personId = person.Id.Value;
+				publishForPerson(person.Id.Value, person, now, checkSum(personId));
+			});
+		}
+
+		[UnitOfWork]
+		protected virtual void PublishForPerson(Guid personId)
 		{
 			publishForPerson(
 				personId,
-				 _persons.Get(personId),
+				_persons.Get(personId),
 				_now.UtcDateTime(),
 				_checkSums.Get(personId)?.CheckSum ?? 0
 			);
@@ -150,9 +141,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			if (currentCheckSum == lastCheckSum)
 				return;
 
+			var personId = @event.PersonId;
 			_checkSums.Persist(new PersonAssociationCheckSum
 			{
-				PersonId = @event.PersonId,
+				PersonId = personId,
 				CheckSum = currentCheckSum
 			});
 
@@ -170,15 +162,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					.Aggregate(0, (acc, el) =>
 					{
 						var hc = acc;
-						hc = (hc*397) ^ el.DataSourceId.GetHashCode();
-						hc = (hc*397) ^ el.UserCode.GetHashCode();
+						hc = (hc * 397) ^ el.DataSourceId.GetHashCode();
+						hc = (hc * 397) ^ el.UserCode.GetHashCode();
 						return hc;
 					});
-				hashCode = (hashCode*397) ^ teamId.GetHashCode();
+				hashCode = (hashCode * 397) ^ teamId.GetHashCode();
 
 				return hashCode;
 			}
 		}
-
 	}
 }
