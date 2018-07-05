@@ -17402,7 +17402,7 @@ The application will now exit.</value>
     <comment>Header on card for remove staffing for BPO</comment>
   </data>
   <data name="ImportBpoClearConfirmation" xml:space="preserve">
-    <value>Are you sure you want to remove staffing for this BPO in selected period?</value>
+    <value>Are you sure you want to remove staffing for this BPO for the selected period?</value>
     <comment>Confimation before clearing staffing</comment>
   </data>
   <data name="ImportBpoClearSuccessMessage" xml:space="preserve">
@@ -17442,7 +17442,7 @@ The application will now exit.</value>
     <comment>Text message in web forecast</comment>
   </data>
   <data name="ConfirmReforecastWithoutSaving" xml:space="preserve">
-    <value>Are you sure you want to forecast again? all modification not saved will lost.</value>
+    <value>Are you sure you want to forecast again? All modification not saved will lost.</value>
     <comment>Text message in web forecast</comment>
   </data>
   <data name="NoForecastDateForCurrentScenario" xml:space="preserve">
@@ -17520,11 +17520,37 @@ The application will now exit.</value>
   <data name="SuccessfulMessageForSavingScheduleChanges" xml:space="preserve">
     <value>Successfully saved schedule changes.</value>
   </data>
+  <data name="IdentityLogonMissing" xml:space="preserve">
+    <value>Login credentials not found</value>
+    <comment>Credentials for loging in using identity logon missing</comment>
+  </data>
+  <data name="ShiftChangedByOthers" xml:space="preserve">
+    <value>Save failed, the shift was changed by someone else.</value>
+  </data>
+  <data name="scheduleChangedByOthers" xml:space="preserve">
+    <value>The shift was changed by someone else, please refresh first.</value>
+  </data>
+  <data name="ActivityTypeChangedByOthers" xml:space="preserve">
+    <value>Save failed, the activity type was changed by someone else.</value>
+  </data>
+  <data name="NoRealTimeAdherenceResultMessage" xml:space="preserve">
+    <value>There is nothing to display based on your organization and skill selection together with your permissions. Note that this page shows information based on agents that are currently working in a team and have external logons configured.</value>
+    <comment>Message to be displayed when RTA doesn't have anything to display</comment>
+  </data>
+  <data name="SaveFailedForInvalidInput" xml:space="preserve">
+    <value>Save failed, Invalid input</value>
+  </data>
+  <data name="SaveFailedForModifyWriteProtectedSchedule" xml:space="preserve">
+    <value>Save failed, No permission to modify Write Protected Schedule</value>
+  </data>
+  <data name="SaveFailedForNoPermissionToEditUnpublishedSchedule" xml:space="preserve">
+    <value>Save failed, No permission to edit unpublished schedule for agent</value>
+  </data>
   <data name="PleaseSaveOrDiscardChangesBeforeChangingPeriod" xml:space="preserve">
     <value>Please save or discard changes before changing period</value>
     <comment>Text in web forecast</comment>
   </data>
-	<data name="NoQueueStatisticsAvailable" xml:space="preserve">
+  <data name="NoQueueStatisticsAvailable" xml:space="preserve">
     <value>No forecast could be produced. Make sure you have imported queue statistics</value>
     <comment>Text for web forecasting</comment>
   </data>

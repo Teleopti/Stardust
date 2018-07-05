@@ -48,12 +48,9 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: rogerkr
         /// Created date: 2007-11-01
         /// </remarks>
-        public T Minimum
-        {
-            get { return _minimum; }
-        }
+        public T Minimum => _minimum;
 
-        /// <summary>
+		/// <summary>
         /// Gets the maximum value.
         /// </summary>
         /// <value>The maximum.</value>
@@ -61,12 +58,9 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: rogerkr
         /// Created date: 2007-11-01
         /// </remarks>
-        public T Maximum
-        {
-            get { return _maximum; }
-        }
+        public T Maximum => _maximum;
 
-        #region Equals and GetHashCode stuff
+		#region Equals and GetHashCode stuff
 
 
         /// <summary>
@@ -114,10 +108,9 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public override bool Equals(object obj)
         {
-            if (obj == null || !(obj is MinMax<T>))
-                return false;
-            return Equals((MinMax<T>)obj);
-        }
+			if (obj is MinMax<T> max) return Equals(max);
+			return false;
+		}
 
         ///<summary>
         ///Indicates whether the current object is equal to another object of the same type.
@@ -130,7 +123,7 @@ namespace Teleopti.Interfaces.Domain
         ///<param name="other">An object to compare with this object.</param>
         public bool Equals(MinMax<T> other)
         {
-            return (_minimum.Equals(other.Minimum) && _maximum.Equals(other.Maximum));
+            return _minimum.Equals(other.Minimum) && _maximum.Equals(other.Maximum);
         }
 
         /// <summary>
@@ -177,7 +170,7 @@ namespace Teleopti.Interfaces.Domain
 		/// </remarks>
 		public override string ToString()
 		{
-			return Minimum.ToString() + "-" + Maximum.ToString();
+			return $"{Minimum}-{Maximum}";
 		}
     }
 }

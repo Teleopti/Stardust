@@ -1,10 +1,12 @@
 using System;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
@@ -55,7 +57,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			IPersonRequest personRequest = null;
 			if (form.EntityId.HasValue)
 			{
-				personRequest = _personRequestRepository.Find(form.EntityId.Value);
+				Retry.Handle<DeadLockVictimException>().WaitAndRetry(TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(4)).Do(() =>
+				{
+					personRequest = _personRequestRepository.Find(form.EntityId.Value);
+				});
 			}
 
 			if (personRequest != null)

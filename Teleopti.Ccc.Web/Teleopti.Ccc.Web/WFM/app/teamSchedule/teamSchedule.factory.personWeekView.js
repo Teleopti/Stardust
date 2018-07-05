@@ -23,6 +23,7 @@
 				personId: personWeek.PersonId,
 				name: personWeek.Name,
 				days: days,
+				firstDayOfWeek: days[0].date.Date.split('T')[0],
 				contractTime: formatContractTimeMinutes(personWeek.ContractTimeMinutes)
 			}
 			return personWeekViewModel;

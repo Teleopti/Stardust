@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using System.Windows.Markup;
 using Autofac;
 using EO.WebBrowser;
+using EO.WebEngine;
 using log4net;
 using log4net.Config;
 using Microsoft.Practices.CompositeUI;
@@ -84,9 +85,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				"tKbC4q1pmaTA6YxDl6Sxy7to2PD9GvZ3hI6xy59Zs/MDD+SrwPL3Gp+d2Pj2" +
 				"6KFvprfA3a9qq6axHvSbvPwBFPE=");
 
-			bool enableLargeAddressSpace;
+			Engine.CleanUpCacheFolders(CacheFolderCleanUpPolicy.AllVersions);
+
 			var enableLargeAddressSpaceSetting = ConfigurationManager.AppSettings["EOEnableLargeAddressSpace"];
-			if (bool.TryParse(enableLargeAddressSpaceSetting, out enableLargeAddressSpace) && enableLargeAddressSpace)
+			if (bool.TryParse(enableLargeAddressSpaceSetting, out var enableLargeAddressSpace) && enableLargeAddressSpace)
 			{
 				EO.Base.Runtime.EnableEOWP = true;
 				EO.Base.Runtime.InitWorkerProcessExecutable(System.IO.Path.Combine(Application.StartupPath, "eowp.exe"));

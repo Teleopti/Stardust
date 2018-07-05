@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Requests.PerformanceTuningTest;
@@ -21,9 +22,19 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 {
-	[TestFixture]
-	[RequestPerformanceTuningTest]
-	public class ProcessCalcuateIntradayIntervalPossibilities : IIsolateSystem
+	public class ProcessCalcuateIntradayIntervalPossibilitiesTestAttribute : RequestPerformanceTuningTestAttribute
+	{
+		protected override void Isolate(IIsolate isolate)
+		{
+			base.Isolate(isolate);
+			isolate.UseTestDouble<AbsenceStaffingPossibilityCalculator>().For<IAbsenceStaffingPossibilityCalculator>();
+			isolate.UseTestDouble<OvertimeStaffingPossibilityCalculator>().For<IOvertimeStaffingPossibilityCalculator>();
+			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+		}
+	}
+
+	[ProcessCalcuateIntradayIntervalPossibilitiesTest]
+	public class ProcessCalcuateIntradayIntervalPossibilities
 	{
 		private const string tenantName = "Teleopti WFM";
 		private readonly Guid businessUnitId = new Guid("1FA1F97C-EBFF-4379-B5F9-A11C00F0F02B");
@@ -58,15 +69,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 		public OvertimeStaffingPossibilityCalculator OvertimeStaffingPossibilityCalculator;
 		public FakeLoggedOnUser LoggedOnUser;
 
-		public void Isolate(IIsolate isolate)
-		{
-			var fakeIntervalLengthFetcher = new FakeIntervalLengthFetcher();
-			fakeIntervalLengthFetcher.Has(15);
-			isolate.UseTestDouble(fakeIntervalLengthFetcher).For<IIntervalLengthFetcher>();
-			isolate.UseTestDouble<AbsenceStaffingPossibilityCalculator>().For<IAbsenceStaffingPossibilityCalculator>();
-			isolate.UseTestDouble<OvertimeStaffingPossibilityCalculator>().For<IOvertimeStaffingPossibilityCalculator>();
-			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-		}
+		private LicenseSchema schema;
 
 		[Test]
 		public void ShouldProcessCalculationOfAbsencePossibilitiesIntradayForMultipleAgents()
@@ -170,6 +173,8 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 
 		private void initialise()
 		{
+			schema = LicenseDataFactory.CreateDefaultActiveLicenseSchemaForTest();
+			LicenseSchema.SetActiveLicenseSchema(tenantName, schema);
 			logonSystem();
 			Now.Is(baseDate);
 		}

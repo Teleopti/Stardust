@@ -1,12 +1,11 @@
 using System;
-using System.Web;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.Web.Core.Exceptions;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 {
@@ -47,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		{
 			var personRequest = _personRequestRepository.Find(id);
 			if (personRequest == null)
-				throw new RequestPersistException(404, "PersonRequest not found", Resources.Request);
+				throw new CustomMessageException(404, "PersonRequest not found", Resources.Request);
 			try
 			{
 				_personRequestRepository.Remove(personRequest);
@@ -55,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			}
 			catch (DataSourceException)
 			{
-				throw new RequestPersistException(404, Resources.RequestCannotUpdateDelete, Resources.Request);
+				throw new CustomMessageException(404, Resources.RequestCannotUpdateDelete, Resources.Request);
 			}
 		}
 
@@ -67,18 +66,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			{
 				offer.Status = ShiftExchangeOfferStatus.Pending;
 			}
-		}
-	}
-	
-	[Serializable]
-	public class RequestPersistException : HttpException
-	{
-		public string Shortmessage { get; set; }
-
-		public RequestPersistException(int httpCode, string message, string shortmessage)
-			: base(httpCode, message)
-		{
-			Shortmessage = shortmessage;
 		}
 	}
 }

@@ -35,12 +35,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ScheduleReporting
             Control owner, bool singleFile, string path)
         {
 			if(culture == null)
-				throw new ArgumentNullException("culture");
+				throw new ArgumentNullException(nameof(culture));
 
             DayOfWeek firstDayOfWeek = culture.DateTimeFormat.FirstDayOfWeek;
-            var outerStart = new DateOnly(DateHelper.GetFirstDateInWeek(period.StartDate.Date, culture).Date);
-            var outerEnd = new DateOnly(DateHelper.GetLastDateInWeek(period.EndDate.Date, culture).Date);
-            var fullWeekPeriod = new DateOnlyPeriod(outerStart, outerEnd);
+            var fullWeekPeriod = DateHelper.GetWeekPeriod(period.StartDate, firstDayOfWeek);
 
             _brush = new PdfSolidBrush(Color.DimGray);
             _greyBrush = new PdfSolidBrush(Color.Gray);

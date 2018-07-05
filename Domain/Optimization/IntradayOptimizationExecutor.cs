@@ -14,22 +14,21 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class IntradayOptimizationExecutor
 	{
-		private const int maxNumberOfTries = 3;
-		private static readonly ILog log = LogManager.GetLogger(typeof(IntradayOptimizationExecutor));
-		
 		private readonly IntradayOptimization _intradayOptimization;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly FillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly ISynchronizeSchedulesAfterIsland _synchronizeSchedulesAfterIsland;
 		private readonly IGridlockManager _gridlockManager;
 		private readonly IBlockPreferenceProviderForPlanningPeriod _blockPreferenceProviderForPlanningPeriod;
+		private readonly DeadLockRetrier _deadLockRetrier;
 
 		public IntradayOptimizationExecutor(IntradayOptimization intradayOptimization,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			FillSchedulerStateHolder fillSchedulerStateHolder,
 			ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland,
 			IGridlockManager gridlockManager,
-			IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod)
+			IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod,
+			DeadLockRetrier deadLockRetrier)
 		{
 			_intradayOptimization = intradayOptimization;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -37,36 +36,18 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_synchronizeSchedulesAfterIsland = synchronizeSchedulesAfterIsland;
 			_gridlockManager = gridlockManager;
 			_blockPreferenceProviderForPlanningPeriod = blockPreferenceProviderForPlanningPeriod;
+			_deadLockRetrier = deadLockRetrier;
 		}
 
-		//if below is needed on more places - make an attribute/"something" instead?
 		[TestLog]
 		public virtual void HandleEvent(IntradayOptimizationWasOrdered @event)
 		{
-			var numberOfTries = 0;
-			while (true)
+			_deadLockRetrier.RetryOnDeadlock(() =>
 			{
-				try
-				{
-					numberOfTries++;
-					var period = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
-					DoOptimization(period, @event.AgentsInIsland, @event.Agents, @event.UserLocks, @event.Skills, @event.RunResolveWeeklyRestRule, @event.PlanningPeriodId);
-					_synchronizeSchedulesAfterIsland.Synchronize(_schedulerStateHolder().Schedules, period);
-					return;
-				}
-				catch (DeadLockVictimException deadLockEx)
-				{
-					if (numberOfTries < maxNumberOfTries)
-					{
-						log.Warn($"Deadlock during intraday optimization. Attempt {numberOfTries} - retrying... {deadLockEx}");	
-					}
-					else
-					{
-						log.Warn($"Deadlock during intraday optimization. Attempt {numberOfTries} - giving up... {deadLockEx}");
-						throw;
-					}
-				}
-			}
+				var period = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
+				DoOptimization(period, @event.AgentsInIsland, @event.Agents, @event.UserLocks, @event.Skills, @event.RunResolveWeeklyRestRule, @event.PlanningPeriodId);
+				_synchronizeSchedulesAfterIsland.Synchronize(_schedulerStateHolder().Schedules, period);
+			});
 		}
 		
 		[ReadonlyUnitOfWork]

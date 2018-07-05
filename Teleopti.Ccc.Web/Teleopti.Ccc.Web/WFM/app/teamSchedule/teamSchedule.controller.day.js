@@ -205,6 +205,7 @@
 
 		$scope.$on('angular-resizable.resizeEnd', function (e, d) {
 			var container = $document[0].querySelector('#materialcontainer');
+			var myTeamContainer = $document[0].querySelector('.my-team');
 			var viewHeader = $document[0].querySelector('.view-header');
 			var header = $document[0].querySelector('.team-schedule .teamschedule-header');
 			var tHeader = $document[0].querySelector('.teamschedule-body .big-table-wrapper table thead');
@@ -213,7 +214,9 @@
 			var tableHeight = d.height - footer.offsetHeight;
 			var tBodyHeight = tableHeight - tHeaderHeight;
 			var staffingHeader = 50;
-			var chartHeight = container.offsetHeight - viewHeader.offsetHeight
+			var containerHeight = myTeamContainer.offsetHeight - container.offsetHeight >= 20 ? myTeamContainer.offsetHeight : container.offsetHeight;
+
+			var chartHeight = containerHeight - viewHeader.offsetHeight
 				- header.offsetHeight - d.height - staffingHeader - getSkillsRowHeight() - 30;
 
 			if (tableHeight <= 100) {
@@ -400,7 +403,7 @@
 		vm.loadSchedules = function () {
 			closeAllCommandSidenav();
 			vm.isLoading = true;
-			
+
 			if (vm.searchEnabled) {
 				var params = getParamsForLoadingSchedules();
 

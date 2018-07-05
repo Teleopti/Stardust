@@ -138,16 +138,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created date: 2007-11-16
         /// </remarks>
         public override bool Equals(object obj)
-        {
-            if (obj == null || !(obj is Task))
-            {
-                return false;
-            }
-            else
-            {
-                return Equals((Task)obj);
-            }
-        }
+		{
+			return obj is Task task && Equals(task);
+		}
 
         /// <summary>
         /// Returns the hash code for this instance.

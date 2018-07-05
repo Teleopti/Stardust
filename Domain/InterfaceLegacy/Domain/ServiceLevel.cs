@@ -28,13 +28,9 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         }
 		
         public override bool Equals(object obj)
-        {
-            if (!(obj is ServiceLevel))
-            {
-                return false;
-            }
-            return Equals((ServiceLevel)obj);
-        }
+		{
+			return obj is ServiceLevel level && Equals(level);
+		}
 		
         public override int GetHashCode()
         {

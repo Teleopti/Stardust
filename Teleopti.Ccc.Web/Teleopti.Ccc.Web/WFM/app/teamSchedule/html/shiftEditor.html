@@ -22,11 +22,16 @@
 			</md-tooltip>
 		</span>
 	</div>
+	
 	<div class="con-flex text-right">
 		<button type="button" class="context-menu card-context btn-refresh" ng-disabled="!vm.scheduleChanged" ng-click="vm.refreshData()">
 			<i class="mdi mdi-refresh"></i>
+			<md-tooltip>
+				{{'Refresh' | translate}}
+			</md-tooltip>
 		</button>
 	</div>
+
 </div>
 
 <div class="con-row activity-info">
@@ -72,6 +77,7 @@
 					 'selected': shiftLayer === vm.selectedShiftLayer,
 					 'border-dark': !shiftLayer.UseLighterBorder(),
 					 'border-light': shiftLayer.UseLighterBorder(),
+					 'divide-line': shiftLayer.SameTypeAsLast,
 					 'disabled': vm.isNotAllowedToChange(shiftLayer)}"
 					 ng-style="{'width':vm.getShiftLayerWidth(shiftLayer) +'px', 'background-color': shiftLayer.Color, 'left': vm.getShiftLayerLeft(shiftLayer) + 'px'}"
 					 ng-click="vm.toggleSelection(shiftLayer)"
@@ -79,6 +85,15 @@
 			</div>
 		</div>
 
+	</div>
+</div>
+
+<div class="con-row error-info">
+	<div class="con-flex text-right">
+		<div class="text-danger" ng-if="vm.showError">
+			<i class="mdi mdi-alert-octagon"></i>
+			<span>{{'scheduleChangedByOthers' | translate}}</span>
+		</div>
 	</div>
 </div>
 

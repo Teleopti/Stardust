@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<SkillInIntraday> AllExceptSubSkills()
 		{
 			_skillTypeRepository.LoadAll();
-			var skills = _skillRepository.LoadAllSkills();
+			var skills = _skillRepository.LoadAll();
 			skills = skills.Where(x => !(x is IChildSkill));
 			return map(skills);
 		}

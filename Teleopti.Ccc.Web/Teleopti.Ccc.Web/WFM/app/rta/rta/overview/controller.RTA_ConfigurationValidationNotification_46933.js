@@ -5,16 +5,16 @@
 		.module('wfm.rta')
 		.controller('RtaOverviewController46933', RtaOverviewController);
 
-	RtaOverviewController.$inject = ['rtaService', 'rtaStateService', 'rtaPollingService', 'rtaConfigurationValidator', 'skills', 'skillAreas', '$http', '$state', '$stateParams', '$scope'];
+	RtaOverviewController.$inject = ['rtaService', 'rtaStateService', 'rtaDataService', 'rtaPollingService', 'rtaConfigurationValidator', '$http', '$state', '$stateParams', '$scope'];
 
-	function RtaOverviewController(rtaService, rtaStateService, rtaPollingService, rtaConfigurationValidator, skills, skillAreas, $http, $state, $stateParams, $scope) {
+	function RtaOverviewController(rtaService, rtaStateService, rtaDataService, rtaPollingService, rtaConfigurationValidator, $http, $state, $stateParams, $scope) {
 		var vm = this;
-
+		vm.skills = [];
+		vm.skillAreas = [];
+		var skills, skillAreas;
+ 
 		rtaConfigurationValidator.validate();
-
-		vm.skills = skills || [];
-		vm.skillAreas = skillAreas || [];
-		vm.siteCards = [];
+		
 		vm.totalAgentsInAlarm = 0;
 
 		Object.defineProperty(vm, 'skillPickerPreselectedItem', {
@@ -22,11 +22,17 @@
 				return rtaStateService.skillPickerPreselectedItem();
 			}
 		});
+		
+		vm.loading = function() {
+			return !(vm.siteCards && skills && skillAreas);
+		};
 
 		vm.displayNoSitesMessage = function () {
+			if (!vm.siteCards) 
+				return false;
 			return vm.siteCards.length == 0;
 		};
-		vm.displayNoSitesForSkillMessage = rtaStateService.hasSkillSelection;
+		
 		vm.highlightAgentsButton = rtaStateService.hasSelection;
 		vm.goToAgents = rtaStateService.goToAgents;
 
@@ -41,6 +47,13 @@
 				poller.start();
 			});
 		$scope.$on('$destroy', poller.destroy);
+
+		rtaDataService.load().then(function (data) {
+			skills = data.skills;
+			skillAreas = data.skillAreas; 
+			vm.skills = data.skills;
+			vm.skillAreas = data.skillAreas;
+		});
 
 		vm.selectTeamOrSite = function (selectable) {
 			selectable.isSelected = !selectable.isSelected;

@@ -31,8 +31,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public override bool Equals(object obj)
 		{
-			var that = obj as ActivitySkillsCombination;
-			if (that == null)
+			if (!(obj is ActivitySkillsCombination that))
 				return false;
 			return _activity == that._activity &&
 				_skills.MergedKey().Equals(that._skills.MergedKey());

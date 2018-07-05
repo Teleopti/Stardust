@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
-using System.Threading;
 using Autofac;
 using Autofac.Integration.WebApi;
 using log4net.Config;
@@ -12,7 +10,6 @@ using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Core.Modules;
 using System.Web.Http;
-using Autofac.Core;
 
 namespace Teleopti.Wfm.Administration
 {
@@ -28,7 +25,7 @@ namespace Teleopti.Wfm.Administration
 			var builder = new ContainerBuilder();
 			builder.RegisterModule<WfmAdminAppModule>();
 			var container = builder.Build();
-
+			container.Resolve<InitializeApplicationInsight>().Init();
 			// Set the dependency resolver to be Autofac.
 			config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
 

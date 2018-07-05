@@ -727,6 +727,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save failed, the activity type was changed by someone else..
+        /// </summary>
+        public static string ActivityTypeChangedByOthers {
+            get {
+                return ResourceManager.GetString("ActivityTypeChangedByOthers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Actual.
         /// </summary>
         public static string Actual {
@@ -7029,7 +7038,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to forecast again? all modification not saved will lost..
+        ///   Looks up a localized string similar to Are you sure you want to forecast again? All modification not saved will lost..
         /// </summary>
         public static string ConfirmReforecastWithoutSaving {
             get {
@@ -14511,6 +14520,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Login credentials not found.
+        /// </summary>
+        public static string IdentityLogonMissing {
+            get {
+                return ResourceManager.GetString("IdentityLogonMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ignored Schedule.
         /// </summary>
         public static string IgnoredScheduleHint {
@@ -14619,7 +14637,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to remove staffing for this BPO in selected period?.
+        ///   Looks up a localized string similar to Are you sure you want to remove staffing for this BPO for the selected period?.
         /// </summary>
         public static string ImportBpoClearConfirmation {
             get {
@@ -17244,6 +17262,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string MainScreen {
             get {
                 return ResourceManager.GetString("MainScreen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage.
+        /// </summary>
+        public static string Manage {
+            get {
+                return ResourceManager.GetString("Manage", resourceCulture);
             }
         }
         
@@ -20192,7 +20219,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This is the current forecast for this skill.
+        ///   Looks up a localized string similar to This is the current forecast for this workload.
         /// </summary>
         public static string NewForecastIntro {
             get {
@@ -21131,7 +21158,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is no forecast data for this scenario, please run a forecast or save from another scenario..
+        ///   Looks up a localized string similar to There is no forecast data for this scenario. Please run a forecast or save from another scenario..
         /// </summary>
         public static string NoForecastDateForCurrentScenario {
             get {
@@ -21545,11 +21572,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No forecast could be produced. Make sure you have imported queue statistics.
+        ///   Looks up a localized string similar to There is nothing to display based on your organization and skill selection together with your permissions. Note that this page shows information based on agents that are currently working in a team and have external logons configured..
         /// </summary>
-        public static string NoQueueStatisticsAvailable {
+        public static string NoRealTimeAdherenceResultMessage {
             get {
-                return ResourceManager.GetString("NoQueueStatisticsAvailable", resourceCulture);
+                return ResourceManager.GetString("NoRealTimeAdherenceResultMessage", resourceCulture);
             }
         }
         
@@ -25635,15 +25662,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please save or discard changes before changing period.
-        /// </summary>
-        public static string PleaseSaveOrDiscardChangesBeforeChangingPeriod {
-            get {
-                return ResourceManager.GetString("PleaseSaveOrDiscardChangesBeforeChangingPeriod", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Please save or discard changes before changing scenario.
         /// </summary>
         public static string PleaseSaveOrDiscardChangesBeforeChangingScenario {
@@ -29322,6 +29340,33 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save failed, Invalid input.
+        /// </summary>
+        public static string SaveFailedForInvalidInput {
+            get {
+                return ResourceManager.GetString("SaveFailedForInvalidInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save failed, No permission to modify Write Protected Schedule.
+        /// </summary>
+        public static string SaveFailedForModifyWriteProtectedSchedule {
+            get {
+                return ResourceManager.GetString("SaveFailedForModifyWriteProtectedSchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save failed, No permission to edit unpublished schedule for agent.
+        /// </summary>
+        public static string SaveFailedForNoPermissionToEditUnpublishedSchedule {
+            get {
+                return ResourceManager.GetString("SaveFailedForNoPermissionToEditUnpublishedSchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save Favorite Search.
         /// </summary>
         public static string SaveFavoriteSearch {
@@ -29462,6 +29507,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ScheduleBlockDayWith {
             get {
                 return ResourceManager.GetString("ScheduleBlockDayWith", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The shift was changed by someone else, please refresh first..
+        /// </summary>
+        public static string scheduleChangedByOthers {
+            get {
+                return ResourceManager.GetString("scheduleChangedByOthers", resourceCulture);
             }
         }
         
@@ -30932,7 +30986,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose a period to display.
+        ///   Looks up a localized string similar to Choose a future period to forecast.
         /// </summary>
         public static string SelectForecastPeriodIntro {
             get {
@@ -32071,6 +32125,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShiftCategoryValueColon {
             get {
                 return ResourceManager.GetString("ShiftCategoryValueColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save failed, the shift was changed by someone else..
+        /// </summary>
+        public static string ShiftChangedByOthers {
+            get {
+                return ResourceManager.GetString("ShiftChangedByOthers", resourceCulture);
             }
         }
         
@@ -33320,7 +33383,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please use Windows client to forecast this skill..
+        ///   Looks up a localized string similar to Please open forecast for current skill in Windows client to edit.
         /// </summary>
         public static string SkillNotSupported {
             get {

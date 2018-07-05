@@ -815,6 +815,56 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		}
 
 		[Test]
+		public void ShouldSaveScheduleWithDuplicateBelongsToDate()
+		{
+			AnalyticsDates.HasDatesBetween(new DateTime(2017, 3, 6), new DateTime(2030, 12, 31));
+			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("Default BU").WithId(businessUnitId);
+			var scenario = ScenarioFactory.CreateScenario("Default", true, true).WithId(scenarioId);
+			var person = PersonFactory.CreatePerson().WithId(personId);
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2017, 3, 6)).WithId(personPeriodId);
+			personPeriod.Team = TeamFactory.CreateTeam("Team", "Site");
+			person.AddPersonPeriod(personPeriod);
+			var assignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario,
+				new DateTimePeriod(new DateTime(2017, 03, 07, 08, 00, 00, DateTimeKind.Utc), new DateTime(2017, 03, 07, 18, 00, 00, DateTimeKind.Utc)));
+
+			var analyticsScenario = new AnalyticsScenario
+			{
+				ScenarioCode = scenarioId,
+				ScenarioId = 3
+			};
+
+			var analyticsPersonPeriod = new AnalyticsPersonPeriod
+			{
+				PersonId = 1,
+				BusinessUnitId = 2,
+				PersonPeriodCode = personPeriodId
+			};
+
+			BusinessUnits.Add(businessUnit);
+			Scenarios.Add(scenario);
+			Persons.Add(person);
+			Schedules.Add(assignment1);
+
+			AnalyticsScenarios.AddScenario(analyticsScenario);
+			AnalyticsPersonPeriods.AddOrUpdatePersonPeriod(analyticsPersonPeriod);
+			
+			var belongsToDate = new DateTime(2017, 03, 07, 1, 0, 0, DateTimeKind.Utc);
+			Target.Handle(new ScheduleChangedEvent
+			{
+				StartDateTime = assignment1.Period.StartDateTime,
+				EndDateTime = assignment1.Period.EndDateTime,
+				ScenarioId = scenarioId,
+				LogOnBusinessUnitId = businessUnitId,
+				PersonId = personId,
+				Date = belongsToDate
+			});
+
+			var schedules =
+				AnalyticsSchedules.FactScheduleRows.Where(a => a.DatePart.ShiftStartTime.Date.Equals(belongsToDate.Date)).ToList();
+			schedules.Any().Should().Be(true);
+		}
+
+		[Test]
 		public void ShouldeRemoveScheduleForOvertimeActivityWhenActivityStartTimeIsDifferentWithBelongsToDate()
 		{
 			AnalyticsDates.HasDatesBetween(new DateTime(2017, 3, 6), new DateTime(2030, 12, 31));

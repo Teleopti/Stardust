@@ -16,24 +16,21 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service
 		}
 
 		[TestLog]
-		public virtual void WaitForDequeue()
+		public virtual void WaitForDequeue(TimeSpan timeout)
 		{
 			_unitOfWork.Do(uow =>
 			{
-				while (true)
-				{
-					Policy.Handle<WaitForDequeueException>()
-						.WaitAndRetry(5000, attempt => TimeSpan.FromSeconds(1))
-						.Execute(() =>
-						{
-							var count = uow.Current()
-								.Session()
-								.CreateSQLQuery(@"SELECT COUNT(1) FROM Rta.StateQueue")
-								.UniqueResult<int>();
-							if (count > 0)
-								throw new WaitForDequeueException($"{count} batches still in state queue after waiting 5000 seconds");
-						});
-				}
+				var interval = TimeSpan.FromMilliseconds(100);
+				var attempts = (int) (timeout.TotalMilliseconds / interval.TotalMilliseconds);
+				var queueIsEmpty = Policy.HandleResult(false)
+					.WaitAndRetry(attempts, attempt => interval)
+					.Execute(() => uow.Current()
+									   .Session()
+									   .CreateSQLQuery(@"SELECT COUNT(1) FROM Rta.StateQueue")
+									   .UniqueResult<int>() == 0
+					);
+				if (!queueIsEmpty)
+					throw new WaitForDequeueException($"Batches still in state queue after waiting {timeout.TotalSeconds} seconds");
 			});
 		}
 

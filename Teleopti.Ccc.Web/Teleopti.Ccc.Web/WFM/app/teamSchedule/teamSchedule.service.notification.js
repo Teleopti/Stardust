@@ -76,7 +76,9 @@
 				return;
 			}
 
-			NoticeService.warning(warningMessage, 5000, true);
+			if (!!commandInfo.warning) {
+				NoticeService.warning(warningMessage, 5000, true);
+			}
 
 			var errorResults = {}
 

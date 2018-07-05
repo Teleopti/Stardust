@@ -484,7 +484,6 @@
     <Compile Include="Areas\SSO\OpenIdProviderWapperTest.cs" />
     <Compile Include="Areas\SSO\Contollers\ApplicationAuthenticationApiControllerTest.cs" />
     <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\BusinessUnitsViewModelFactoryTest.cs" />
-    <Compile Include="Areas\Anywhere\PersonControllerTest.cs" />
     <Compile Include="Areas\Anywhere\AnywhereAreaRegistrationTest.cs" />
     <Compile Include="Areas\Anywhere\ApplicationControllerTest.cs" />
     <Compile Include="Areas\SSO\SSOAreaRegistrationTest.cs" />

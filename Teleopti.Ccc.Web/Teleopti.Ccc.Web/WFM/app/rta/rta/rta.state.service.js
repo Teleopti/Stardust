@@ -64,9 +64,6 @@
 			skillPickerPreselectedItem: function () {
 				return state.skillPickerPreselectedItem;
 			},
-			hasSkillSelection: function () {
-				return state.skillIds.length > 0;
-			},
 
 
 			selectSite: selectSite,

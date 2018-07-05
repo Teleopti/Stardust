@@ -10,19 +10,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
-	[RemoveMeWithToggle("use in assignShiftProjection in TeamScheduling", Toggles.ResourcePlanner_LessResourcesXXL_74915)]
-	public class TeamSchedulingLessResources : TeamScheduling
-	{
-		public TeamSchedulingLessResources(AssignScheduledLayers assignScheduledLayers, IDayOffsInPeriodCalculator dayOffsInPeriodCalculator, IResourceCalculation resourceCalculation, ScheduleChangesAffectedDates scheduleChangesAffectedDates) : base(assignScheduledLayers, dayOffsInPeriodCalculator, resourceCalculation, scheduleChangesAffectedDates)
-		{
-		}
-
-		protected override void ForDate(ShiftProjectionCache shiftProjectionCache, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
-		{
-			shiftProjectionCache.SetDateLessResources(dateOnlyAsDateTimePeriod);
-		}
-	}
-
 	public class TeamScheduling
     {
 	    private readonly AssignScheduledLayers _assignScheduledLayers;
@@ -74,18 +61,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			return dayScheduled != null && dayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
 		}
-
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_LessResourcesXXL_74915)]
-		protected virtual void ForDate(ShiftProjectionCache shiftProjectionCache, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
-		{
-			shiftProjectionCache.SetDate(dateOnlyAsDateTimePeriod);
-		}
-
+		
 		private void assignShiftProjection(IEnumerable<IPersonAssignment> orginalPersonAssignments, ShiftProjectionCache shiftProjectionCache, IScheduleDay destinationScheduleDay, 
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, INewBusinessRuleCollection businessRules, 
 			SchedulingOptions schedulingOptions, ResourceCalculationData resourceCalculationData)
 		{
-			ForDate(shiftProjectionCache, destinationScheduleDay.DateOnlyAsPeriod);
+			shiftProjectionCache.SetDate(destinationScheduleDay.DateOnlyAsPeriod);
 
 			var personAssignment = destinationScheduleDay.PersonAssignment();
 	        if (personAssignment != null && personAssignment.PersonalActivities().Any())

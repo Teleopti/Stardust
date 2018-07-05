@@ -99,13 +99,9 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Created date: 2007-11-22
         /// </remarks>
         public override bool Equals(object obj)
-        {
-            if (!(obj is SkillPersonData))
-            {
-                return false;
-            }
-            return Equals((SkillPersonData)obj);
-        }
+		{
+			return obj is SkillPersonData data && Equals(data);
+		}
 
 
         /// <summary>

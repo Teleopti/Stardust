@@ -41,13 +41,9 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         }
 		
         public override bool Equals(object obj)
-        {
-            if (!(obj is ServiceAgreement))
-            {
-                return false;
-            }
-            return Equals((ServiceAgreement)obj);
-        }
+		{
+			return obj is ServiceAgreement agreement && Equals(agreement);
+		}
 		
         public override int GetHashCode()
         {

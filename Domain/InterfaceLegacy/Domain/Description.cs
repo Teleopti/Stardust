@@ -147,13 +147,9 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// true if obj and this instance are the same type and represent the same value; otherwise, false.
         /// </returns>
         public override bool Equals(object obj)
-        {
-            if (obj == null || !(obj is Description))
-            {
-                return false;
-            }
-            return Equals((Description)obj);
-        }
+		{
+			return obj is Description description && Equals(description);
+		}
 
         /// <summary>
         /// Returns the hash code for this instance.

@@ -478,7 +478,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 						returnDate = _taskOwnerDayCollection.Min(wd => wd.CurrentDate);
 					break;
 				case TaskOwnerPeriodType.Week:
-					returnDate = new DateOnly(DateHelper.GetFirstDateInWeek(CurrentDate.Date, CultureInfo.CurrentCulture));
+					returnDate = DateHelper.GetFirstDateInWeek(CurrentDate, CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek);
 					break;
 			}
 

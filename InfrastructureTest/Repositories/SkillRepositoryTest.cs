@@ -16,9 +16,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-    /// <summary>
-    /// Tests for PersonAssignmentRepository
-    /// </summary>
     [TestFixture]
     [Category("BucketB")]
     public class SkillRepositoryTest : RepositoryTest<ISkill>

@@ -28,19 +28,18 @@
 		target.setNowDate(new Date('2018-02-26T15:00:00+08:00'));
 	}));
 
-
 	it('should get correct week day names', function () {
-
 		expect(target.getWeekdayNames().length).toBe(7);
 		expect(target.getWeekdayNames()[0]).toBe("måndag");
 		expect(target.getWeekdayNames()[6]).toBe("söndag");
 	});
 
 	it('should get correct weekdays for the given date', function () {
-		var result = target.getWeekdays(moment('2018-06-12').toDate());
+		var result = target.getWeekdays(moment('2018-06-11').toDate());
 		expect(result.length).toBe(7);
 		expect(result[0].name).toBe('måndag');
 		expect(moment(result[0].date).locale('en').format('YYYY-MM-DD')).toBe('2018-06-11');
+		expect(moment(result[6].date).locale('en').format('YYYY-MM-DD')).toBe('2018-06-17');
 	});
 
 	function commonTestsInDifferentLocale() {

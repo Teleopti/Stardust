@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(null, obj)) return false;
-			return obj is DoubleGuidCombinationKey && Equals((DoubleGuidCombinationKey) obj);
+			return obj is DoubleGuidCombinationKey doubleGuidCombinationKey && Equals(doubleGuidCombinationKey);
 		}
 
 		public override int GetHashCode()

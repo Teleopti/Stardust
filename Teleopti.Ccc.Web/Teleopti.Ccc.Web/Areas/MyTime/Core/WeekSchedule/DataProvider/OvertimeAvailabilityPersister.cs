@@ -1,5 +1,4 @@
-﻿using System.Web;
-using Teleopti.Ccc.Domain.Collection;
+﻿using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
@@ -15,7 +14,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 		private readonly OvertimeAvailabilityInputMapper _inputMapper;
 		private readonly OvertimeAvailabilityViewModelMapper _mapper;
 
-		public OvertimeAvailabilityPersister(IOvertimeAvailabilityRepository overtimeAvailabilityRepository, ILoggedOnUser loggedOnUser,OvertimeAvailabilityInputMapper inputMapper,OvertimeAvailabilityViewModelMapper mapper)
+		public OvertimeAvailabilityPersister(IOvertimeAvailabilityRepository overtimeAvailabilityRepository, ILoggedOnUser loggedOnUser, OvertimeAvailabilityInputMapper inputMapper, OvertimeAvailabilityViewModelMapper mapper)
 		{
 			_overtimeAvailabilityRepository = overtimeAvailabilityRepository;
 			_loggedOnUser = loggedOnUser;
@@ -44,20 +43,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 		public OvertimeAvailabilityViewModel Delete(DateOnly date)
 		{
 			var overtimeAvailabilities = _overtimeAvailabilityRepository.Find(date, _loggedOnUser.CurrentUser());
-			if (overtimeAvailabilities.IsEmpty())
-				throw new HttpException(404, "OvertimeAvailability not found");
 
-			foreach (var overtimeAvailability in overtimeAvailabilities)
+			if (!overtimeAvailabilities.IsEmpty())
 			{
-				_overtimeAvailabilityRepository.Remove(overtimeAvailability);
-			}
-			return new OvertimeAvailabilityViewModel
+				foreach (var overtimeAvailability in overtimeAvailabilities)
 				{
-					HasOvertimeAvailability = false,
-					StartTime = null,
-					EndTime = null,
-					EndTimeNextDay = false
-				};
+					_overtimeAvailabilityRepository.Remove(overtimeAvailability);
+				}
+			}
+
+			return new OvertimeAvailabilityViewModel
+			{
+				HasOvertimeAvailability = false,
+				StartTime = null,
+				EndTime = null,
+				EndTimeNextDay = false
+			};
 		}
 	}
 }

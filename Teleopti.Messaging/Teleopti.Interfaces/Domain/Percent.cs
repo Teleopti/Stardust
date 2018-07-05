@@ -11,7 +11,7 @@ namespace Teleopti.Interfaces.Domain
     /// Created date: 2007-11-01
     /// </remarks>
 	 [Serializable]
-    public struct Percent
+    public struct Percent : IEquatable<Percent>, IComparable<Percent>
     {
         private readonly double _value;
 
@@ -37,12 +37,9 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: rogerkr
         /// Created date: 2007-11-01
         /// </remarks>
-        public double Value
-        {
-            get { return _value; }
-        }
+        public double Value => _value;
 
-	    public double ValueAsPercent()
+		public double ValueAsPercent()
 	    {
 		    return Value*100;
 	    }
@@ -106,10 +103,9 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public override bool Equals(object obj)
         {
-            if(obj==null || !(obj is Percent))
-                return false;
-            return Equals((Percent)obj);
-        }
+			if (obj is Percent percent) return Equals(percent);
+			return false;
+		}
 
         ///<summary>
         ///Indicates whether the current object is equal to another object of the same type.

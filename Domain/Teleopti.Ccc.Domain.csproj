@@ -189,6 +189,7 @@
     <Compile Include="ApplicationLayer\Events\RefreshPayrollFormatsEvent.cs" />
     <Compile Include="Common\DefaultSchedulePeriodProvider.cs" />
     <Compile Include="ApplicationLayer\Commands\MultipleChangeScheduleCommandHandler.cs" />
+    <Compile Include="Infrastructure\DeadLockRetrier.cs" />
     <Compile Include="Intraday\ApplicationLayer\DTOs\IntradayForcastedStaffingIntervalDTO.cs" />
     <Compile Include="Intraday\ApplicationLayer\DTOs\IntradayScheduleStaffingIntervalDTO.cs" />
     <Compile Include="Intraday\ApplicationLayer\IntradayIncomingTrafficApplicationService.cs" />
@@ -252,6 +253,7 @@
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayWithLateForWork.cs" />
     <Compile Include="RealTimeAdherence\Domain\Events\ISolidProof.cs" />
     <Compile Include="RealTimeAdherence\Domain\Events\PersonArrivedLateForWorkEvent.cs" />
+    <Compile Include="RealTimeAdherence\Domain\Service\DeadLockVictim.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\LateForWorkEventPublisher.cs" />
     <Compile Include="RegisterEventHandlerInLifetimeScopeAttribute.cs" />
     <Compile Include="Repositories\IAllSkillForSkillGroupProvider.cs" />
@@ -259,6 +261,7 @@
     <Compile Include="Repositories\IExtensiveLogRepository.cs" />
     <Compile Include="Scheduling\IPredictShiftCategory.cs" />
     <Compile Include="Scheduling\IShiftCategoryPredictionModelLoader.cs" />
+    <Compile Include="Scheduling\NonSecretWorkShiftCalculatorClassic.cs" />
     <Compile Include="Scheduling\Rules\MaximumWorkdayRule.cs" />
     <Compile Include="Scheduling\ShiftCategoryExample.cs" />
     <Compile Include="Scheduling\IShiftCategoryPredictionModel.cs" />
@@ -580,7 +583,6 @@
     <Compile Include="RealTimeAdherence\Domain\Service\Context.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\ContextLoader.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\DataSourceMapper.cs" />
-    <Compile Include="RealTimeAdherence\Domain\Service\DeadLockRetrier.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\EventCollector.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\ExternalLogonMapper.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\ExternalUserStateWebModel.cs" />
@@ -3525,7 +3527,6 @@
     <Compile Include="ResourceCalculation\ScheduleProjectionExtractor.cs" />
     <Compile Include="ResourceCalculation\DividedActivityData.cs" />
     <Compile Include="ResourceCalculation\KeyedSkillResourceDictionary.cs" />
-    <Compile Include="ResourceCalculation\SkillCollectionKey.cs" />
     <Compile Include="Scheduling\AbsenceSorter.cs" />
     <Compile Include="Scheduling\Rules\NightlyRestRule.cs" />
     <Compile Include="Scheduling\Assignment\Schedule.cs" />

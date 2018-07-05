@@ -1,23 +1,27 @@
-﻿<div ng-controller="hangfireMonitoringController_RTA_HangfireStatistics_76139_76373 as vm" class="container body-content">
-	<h2>Hangfire Monitoring</h2>
-	<div class="row">
+﻿<div ng-controller="hangfireMonitoringController_LevelUp_HangfireStatistics_76139_76373 as vm" class="container body-content">
+	<h2>Hangfire Statistics</h2>
+	<div ng-if="vm.loading">
+		<h2 ng-if="vm.loading">Loading...</h2>
+		<span>(May take a few minutes)</span>
+	</div>
+	<div class="row" ng-if="!vm.loading">
 		<div class="col-md-5">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<strong>Failed jobs</strong>
+					<strong>Job Failures</strong>
 				</div>
 				<div class="panel-body">
 					<table class="table table-striped">
 						<thead>
 							<tr>
-								<th>Event</th>
+								<th>Job</th>
 								<th>Count</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="event in vm.eventCountFailed">
-								<td>{{event.Type}}</td>
-								<td>{{event.Count}}</td>
+							<tr ng-repeat="failedJob in vm.jobFailures">
+								<td>{{failedJob.Type}}</td>
+								<td>{{failedJob.Count}}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -28,6 +32,7 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<strong>Job Performance</strong>
+					<span> - Statistics based on successes (times in milliseconds)</span>
 				</div>
 				<div class="panel-body">
 					<table class="table table-striped">
@@ -42,7 +47,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="job in vm.jobs">
+							<tr ng-repeat="job in vm.jobPerformance">
 								<td>{{job.Type}}</td>
 								<td>{{job.Count}}</td>
 								<td>{{job.TotalTime}}</td>

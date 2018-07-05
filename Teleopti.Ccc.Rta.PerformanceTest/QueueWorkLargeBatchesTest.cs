@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Rta.PerformanceTest.Code;
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			PerformanceTest.Measure("1mKUHvBlk5wIk0LDZESO2prWvRuimhpjiWaSvoKk2gsE", "QueueWorkLargeBatchesTest", () =>
 			{
 				States.SendAllAsLargeBatches();
-				StateQueue.WaitForDequeue();
+				StateQueue.WaitForDequeue(TimeSpan.FromMinutes(30));
 				Hangfire.WaitForQueue();
 			});
 		}

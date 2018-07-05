@@ -1628,7 +1628,6 @@
     <Compile Include="ResourceCalculation\FurnessEvaluatorTestSet2.cs" />
     <Compile Include="ResourceCalculation\PersonSkillDictionaryTest.cs" />
     <Compile Include="ResourceCalculation\ScheduleResourceOptimizerTest.cs" />
-    <Compile Include="ResourceCalculation\SkillCollectionKeyTest.cs" />
     <Compile Include="Scheduling\Assignment\VisualLayerProjectionServiceTest.cs" />
     <Compile Include="Scheduling\Assignment\ScheduleParametersTest.cs" />
     <Compile Include="Scheduling\Assignment\SchedulePeriodTest.cs" />

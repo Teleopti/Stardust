@@ -79,8 +79,8 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		{
 			base.AfterTest(testDetails);
 
+			StateQueue.WaitForDequeue(TimeSpan.FromMinutes(30));
 			Hangfire.WaitForQueue();
-			StateQueue.WaitForDequeue();
 
 			TestSiteConfigurationSetup.TearDown();
 

@@ -7,7 +7,13 @@ var rtaTester = (function () {
 		var makeLegacyPolyfill = function () {
 			return {
 				createController: function () {
-					return sharedTestState.$controllerBuilder.createController();
+					var controller = sharedTestState.createController();
+					return {
+						controller: controller,
+						vm: controller,
+						apply: sharedTestState.applyAndWait.apply,
+						wait: sharedTestState.applyAndWait.wait
+					}
 				},
 
 				get current() {
@@ -86,11 +92,9 @@ var rtaTester = (function () {
 		};
 
 		var makeTester = function () {
-			var controllerTester;
-			return {
-				createController: function () {
-					controllerTester = sharedTestState.$controllerBuilder.createController();
-					return controllerTester.controller;
+			var tester = {
+				createController: function (o) {
+					return sharedTestState.createController(o);
 				},
 				destroyController: function () {
 					// simulate destroy atleast...
@@ -116,10 +120,12 @@ var rtaTester = (function () {
 				},
 				href: sharedTestState.$state.href,
 				apply: function (a) {
-					return controllerTester.apply(a)
+					sharedTestState.applyAndWait.apply(a);
+					return tester;
 				},
-				wait: function (a) {
-					return controllerTester.wait(a)
+				wait: function (m) {
+					sharedTestState.applyAndWait.wait(m);
+					return tester;
 				},
 				randomId: function () {
 					return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -130,7 +136,8 @@ var rtaTester = (function () {
 				randomString: function (prefix) {
 					return (prefix || '') + Math.random().toString(36).substring(8);
 				}
-			}
+			};
+			return tester;
 		};
 
 		var wit = function (s, fn) {
@@ -185,6 +192,16 @@ var rtaTester = (function () {
 
 	};
 
+	function safeBackendFlush($httpBackend) {
+		try { // the internal mock will throw if no requests were made
+			$httpBackend.flush();
+		} catch (e) {
+			if (e.message && e.message.includes("No pending request to flush !"))
+				return;
+			throw e;
+		}
+	}
+
 	var setup = function (tests, stateName, controllerName) {
 
 		var state = {
@@ -201,27 +218,50 @@ var rtaTester = (function () {
 					state.stateParams = {};
 					return state.stateParams;
 				});
-				$provide.factory('skills', function () {
-					return state.$fakeBackend.skills;
-				});
-				$provide.factory('skillAreas', function () {
-					return state.$fakeBackend.skillAreas;
-				});
 			});
 		});
 
 		beforeEach(inject(
-			['$httpBackend', '$interval', '$state', '$sessionStorage', 'FakeRtaBackend', 'ControllerBuilder', 'NoticeService', '$translate',
-				function ($httpBackend, $interval, $state, $sessionStorage, $fakeBackend, $controllerBuilder, NoticeService, $translate) {
+			['$httpBackend', '$interval', '$state', '$sessionStorage', 'FakeRtaBackend', 'NoticeService', '$translate', '$controller', '$timeout', '$rootScope',
+				function ($httpBackend, $interval, $state, $sessionStorage, $fakeBackend, NoticeService, $translate, $controller, $timeout, $rootScope) {
+					state.NoticeService = NoticeService;
 					state.$interval = $interval;
 					state.$state = $state;
 					state.$sessionStorage = $sessionStorage;
 					state.$httpBackend = $httpBackend;
 					state.$fakeBackend = $fakeBackend;
-					state.$controllerBuilder = $controllerBuilder;
-					state.NoticeService = NoticeService;
 					state.$state.current.name = stateName;
-					state.scope = state.$controllerBuilder.setup(controllerName);
+					state.scope = $rootScope.$new();
+
+					state.createController = function (o) {
+						o = o || {};
+						if (!angular.isDefined(o.flush))
+							o.flush = true;
+						var controller = $controller(controllerName, {$scope: state.scope});
+						state.scope.$digest();
+						if (o.flush)
+							safeBackendFlush($httpBackend);
+						return controller;
+					};
+
+					state.applyAndWait = {
+						apply: function (apply) {
+							if (angular.isFunction(apply)) {
+								apply();
+								state.scope.$digest();
+							} else {
+								state.scope.$apply(apply);
+							}
+							safeBackendFlush(state.$httpBackend);
+							return state.applyAndWait;
+						},
+						wait: function (milliseconds) {
+							$interval.flush(milliseconds);
+							$timeout.flush(milliseconds);
+							safeBackendFlush(state.$httpBackend);
+							return state.applyAndWait;
+						}
+					};
 
 					spyOn($state, 'go').and.callFake(function (stateName, params) {
 						state.lastGoState = stateName;

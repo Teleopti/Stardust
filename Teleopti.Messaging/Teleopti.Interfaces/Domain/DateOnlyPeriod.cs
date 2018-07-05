@@ -11,7 +11,7 @@ namespace Teleopti.Interfaces.Domain
     ///  Created date: 2009-03-17    
     /// </remarks>
     [Serializable]
-    public struct DateOnlyPeriod
+    public struct DateOnlyPeriod : IEquatable<DateOnlyPeriod>
     {
         private MinMax<DateOnly> period;
         private const string DATETIME_SEPARATOR = " - ";
@@ -63,21 +63,15 @@ namespace Teleopti.Interfaces.Domain
         /// Gets the start date.
         /// </summary>
         /// <value>The start date.</value>
-        public DateOnly StartDate
-        {
-            get { return period.Minimum; }
-        }
+        public DateOnly StartDate => period.Minimum;
 
-        /// <summary>
+		/// <summary>
         /// Gets the end date.
         /// </summary>
         /// <value>The end date.</value>
-        public DateOnly EndDate
-        {
-            get { return period.Maximum; }
-        }
+        public DateOnly EndDate => period.Maximum;
 
-        /// <summary>
+		/// <summary>
         /// Determines whether [contains] [the specified date].
         /// </summary>
         /// <param name="date">The date.</param>
@@ -138,16 +132,9 @@ namespace Teleopti.Interfaces.Domain
         ///  Created by: Ola
         ///  Created date: 2009-03-17    
         /// </remarks>
-        public string DateString
-        {
-            get
-            {
-                return
-                    StartDate.Date.ToShortDateString() + DATETIME_SEPARATOR + EndDate.Date.ToShortDateString();
-            }
-        }
+        public string DateString => StartDate.Date.ToShortDateString() + DATETIME_SEPARATOR + EndDate.Date.ToShortDateString();
 
-		
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -234,7 +221,7 @@ namespace Teleopti.Interfaces.Domain
         /// <returns></returns>
         public int CalendarWeeksAffected(DayOfWeek workweekStartsAt)
         {
-            var start = StartDate.Date;
+            var start = StartDate;
             var firstDateInWeek = DateHelper.GetFirstDateInWeek(start, workweekStartsAt);
             var dateDiff = start.Date.Subtract(firstDateInWeek.Date).TotalDays;
             if (dateDiff == 0)
@@ -296,13 +283,9 @@ namespace Teleopti.Interfaces.Domain
         ///  Created date: 2009-03-17    
         /// </remarks>
         public override bool Equals(object obj)
-        {
-            if (obj.GetType() != typeof (DateOnlyPeriod))
-            {
-                return false;
-            }
-            return Equals((DateOnlyPeriod) obj);
-        }
+		{
+			return obj is DateOnlyPeriod onlyPeriod && Equals(onlyPeriod);
+		}
 
         /// <summary>
         /// Returns the hash code for this instance.
@@ -325,7 +308,7 @@ namespace Teleopti.Interfaces.Domain
         ///<returns>The number of days.</returns>
         public int DayCount()
         {
-            return ((int) period.Maximum.Date.Subtract(period.Minimum.Date).TotalDays) + 1;
+            return (int) period.Maximum.Date.Subtract(period.Minimum.Date).TotalDays + 1;
         }
     }
 }

@@ -164,9 +164,9 @@ Given I have the role 'Full access to mytime'
 	When I click on the message with the title 'New message'
 	Then I should be able to select one of the following options for the message with the title 'New message'
 	| Captions				|
-	| Yes					|
-	| No					|
 	| A longer replyoption	|
+	| No					|
+	| Yes					|
 	
 Scenario: Confirm message with multiple reply options
 Given I have the role 'Full access to mytime'

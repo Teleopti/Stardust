@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -12,8 +13,8 @@ namespace Teleopti.Interfaces.Domain
 		static DateHelper()
 		{
 			var calendar = new UmAlQuraCalendar();
-			maxSmallDateTime = calendar.MaxSupportedDateTime.Date;
-			minSmallDateTime = calendar.MinSupportedDateTime;
+			MaxSmallDateTime = calendar.MaxSupportedDateTime.Date;
+			MinSmallDateTime = calendar.MinSupportedDateTime;
 		}
 
 		/// <summary>
@@ -34,9 +35,6 @@ namespace Teleopti.Interfaces.Domain
 		/// </remarks>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")]
 		public static readonly IList<int> Iso8601Cultures = new List<int> { 2068, 1044, 1053, 1031, 3079, 2055, 1030, 1035, 1036, 2057, 3082 };
-
-		private static readonly DateTime minSmallDateTime;
-		private static readonly DateTime maxSmallDateTime;
 
 		/// <summary>
 		/// Returns quarter from month.
@@ -232,26 +230,9 @@ namespace Teleopti.Interfaces.Domain
 		/// </remarks>
 		public static DateTime GetFirstDateInWeek(DateTime theDate, CultureInfo culture)
 		{
-			var firstDayOfWeek = (int) culture.DateTimeFormat.FirstDayOfWeek;
 			var currentDayOfWeek = (int) theDate.DayOfWeek;
 
-			var differenceAsDays = currentDayOfWeek - firstDayOfWeek;
-			if (differenceAsDays < 0) differenceAsDays += 7;
-
-			return theDate.AddDays(-differenceAsDays);
-		}
-
-		///<summary>
-		/// Used when getting the first date in work week for person
-		///</summary>
-		///<param name="theDate"></param>
-		///<param name="workweekStartsAt"></param>
-		///<returns></returns>
-		public static DateTime GetFirstDateInWeek(DateTime theDate, DayOfWeek workweekStartsAt)
-		{
-			var currentDayOfWeek = (int) theDate.DayOfWeek;
-
-			var differenceAsDays = currentDayOfWeek - (int) workweekStartsAt;
+			var differenceAsDays = currentDayOfWeek - (int)culture.DateTimeFormat.FirstDayOfWeek;
 			if (differenceAsDays < 0) differenceAsDays += 7;
 
 			return theDate.AddDays(-differenceAsDays);
@@ -288,11 +269,6 @@ namespace Teleopti.Interfaces.Domain
 		///<param name="theDate"></param>
 		///<param name="workweekStartsAt"></param>
 		///<returns></returns>
-		public static DateTime GetLastDateInWeek(DateTime theDate, DayOfWeek workweekStartsAt)
-		{
-			return GetFirstDateInWeek(theDate, workweekStartsAt).AddDays(6);
-		}
-
 		public static DateOnly GetLastDateInWeek(DateOnly theDate, DayOfWeek workweekStartsAt)
 		{
 			return GetFirstDateInWeek(theDate, workweekStartsAt).AddDays(6);
@@ -310,10 +286,7 @@ namespace Teleopti.Interfaces.Domain
 		/// </remarks>
 		public static DateOnlyPeriod GetWeekPeriod(DateOnly theDate, CultureInfo culture)
 		{
-			var localStartDate = GetFirstDateInWeek(theDate.Date, culture);
-			var localEndDate = localStartDate.AddDays(6);
-
-			return new DateOnlyPeriod(new DateOnly(localStartDate), new DateOnly(localEndDate));
+			return GetWeekPeriod(theDate, culture.DateTimeFormat.FirstDayOfWeek);
 		}
 
 		///<summary>
@@ -324,10 +297,10 @@ namespace Teleopti.Interfaces.Domain
 		///<returns></returns>
 		public static DateOnlyPeriod GetWeekPeriod(DateOnly theDate, DayOfWeek workweekStartsAt)
 		{
-			var localStartDate = GetFirstDateInWeek(theDate.Date, workweekStartsAt);
+			var localStartDate = GetFirstDateInWeek(theDate, workweekStartsAt);
 			var localEndDate = localStartDate.AddDays(6);
 
-			return new DateOnlyPeriod(new DateOnly(localStartDate), new DateOnly(localEndDate));
+			return new DateOnlyPeriod(localStartDate, localEndDate);
 		}
 
 		/// <summary>
@@ -365,13 +338,8 @@ namespace Teleopti.Interfaces.Domain
 		/// </remarks>
 		public static IEnumerable<string> GetWeekdayNames(CultureInfo culture)
 		{
-			var dayNames = new List<string>();
 			var daysOfWeek = GetDaysOfWeek(culture);
-			foreach (var dayOfWeek in daysOfWeek)
-			{
-				dayNames.Add(culture.DateTimeFormat.GetDayName(dayOfWeek));
-			}
-			return dayNames;
+			return daysOfWeek.Select(d => culture.DateTimeFormat.GetDayName(d)).ToList();
 		}
 
 		/// <summary>
@@ -429,7 +397,7 @@ namespace Teleopti.Interfaces.Domain
 		/// Created by: robink
 		/// Created date: 2009-01-28
 		/// </remarks>
-		public static DateTime MinSmallDateTime => minSmallDateTime;
+		public static DateTime MinSmallDateTime { get; }
 
 		/// <summary>
 		/// Gets the max small date time.
@@ -439,7 +407,7 @@ namespace Teleopti.Interfaces.Domain
 		/// Created by: robink
 		/// Created date: 2009-01-28
 		/// </remarks>
-		public static DateTime MaxSmallDateTime => maxSmallDateTime;
+		public static DateTime MaxSmallDateTime { get; }
 
 		// Matched to work similar to SQL small date time. https://msdn.microsoft.com/en-us/library/ms182418.aspx
 		public static DateTime GetSmallDateTime(DateTime value)

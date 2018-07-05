@@ -43,8 +43,7 @@ namespace Teleopti.Interfaces.Domain
 		/// </remarks>
 		public TimePeriod(string startAndEnd)
         {
-            TimePeriod tp;
-            if (TryParse(startAndEnd, out tp))
+			if (TryParse(startAndEnd, out var tp))
             {
                 period = new MinMax<TimeSpan>(tp.StartTime, tp.EndTime);
             } else

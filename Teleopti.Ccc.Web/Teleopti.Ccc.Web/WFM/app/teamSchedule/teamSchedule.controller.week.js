@@ -41,6 +41,7 @@
 			groupIds: [],
 			groupPageId: ''
 		};
+		vm.startOfWeek = stateParams.selectedDate || new Date();
 
 		if (angular.isArray(stateParams.selectedTeamIds) && stateParams.selectedTeamIds.length > 0) {
 			replaceArrayValues(stateParams.selectedTeamIds, vm.selectedGroups.groupIds);
@@ -53,9 +54,6 @@
 
 		vm.selectedFavorite = stateParams.do ? stateParams.selectedFavorite : null;
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
-
-		var firstDayOfWeek = CurrentUserInfo.CurrentUserInfo().FirstDayOfWeek;
-		vm.startOfWeek = serviceDateFormatHelper.getDateOnly(moment(vm.scheduleDate).isoWeekday(firstDayOfWeek));
 
 		vm.onKeyWordInSearchInputChanged = function () {
 			vm.selectedFavorite = false;
@@ -80,10 +78,8 @@
 		};
 
 		vm.onStartOfWeekChanged = function () {
-			vm.scheduleDate = moment(vm.startOfWeek).toDate();
-			vm.startOfWeek = serviceDateFormatHelper.getDateOnly(moment(vm.startOfWeek).isoWeekday(firstDayOfWeek));
-
-			vm.weekDays = Util.getWeekdays(vm.scheduleDate);
+			vm.scheduleDate = angular.copy(vm.startOfWeek);
+			
 			vm.loadSchedules();
 			if (toggles.Wfm_HideUnusedTeamsAndSites_42690) {
 				loadGroupings();
@@ -118,6 +114,10 @@
 				vm.scheduleFullyLoaded = true;
 				vm.searchOptions.focusingSearch = false;
 				vm.total = data.Total;
+				if (!!vm.groupWeeks.length) {
+					vm.startOfWeek = vm.groupWeeks[0].firstDayOfWeek;
+					vm.weekDays = Util.getWeekdays(vm.startOfWeek);
+				}
 			}, function () {
 				vm.isLoading = false;
 				vm.searchOptions.focusingSearch = false;
@@ -155,7 +155,6 @@
 				SearchTerm: vm.searchOptions.keyword
 			};
 		};
-		vm.weekDays = Util.getWeekdays(vm.scheduleDate);
 		vm.paginationOptions.totalPages = 1;
 
 		vm.orgPickerSelectedText = function () {
@@ -248,7 +247,7 @@
 			options = options || {};
 			var params = {
 				Keyword: options.keyword || vm.searchOptions.keyword,
-				Date: options.date || serviceDateFormatHelper.getDateOnly(vm.startOfWeek),
+				Date: options.date || serviceDateFormatHelper.getDateOnly(vm.scheduleDate),
 				PageSize: options.pageSize || vm.paginationOptions.pageSize,
 				CurrentPageIndex: options.currentPageIndex || vm.paginationOptions.pageNumber,
 				SelectedGroupIds: vm.selectedGroups.groupIds,

@@ -100,13 +100,9 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// true if obj and this instance are the same type and represent the same value; otherwise, false.
         /// </returns>
         public override bool Equals(object obj)
-        {
-            if (obj == null || !(obj is TimePeriodWithSegment))
-            {
-                return false;
-            }
-            return Equals((TimePeriodWithSegment)obj);
-        }
+		{
+			return obj is TimePeriodWithSegment segment && Equals(segment);
+		}
 
         /// <summary>
         /// Operator ==.

@@ -17,14 +17,9 @@
 			if (!schedule)
 				return;
 			var currentTimezone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
-			var layers = [];
-			schedule.Projection && schedule.Projection.forEach(function (projection) {
-				var layer = new ShiftLayerViewModel(projection, date, timezone, currentTimezone);
-				layers.push(layer);
-			});
+			var layers = createShiftLayers(schedule.Projection, date, timezone, currentTimezone);
 
 			var hasUnderlyingSchedules = toggleSvc.WfmTeamSchedule_ShowInformationForUnderlyingSchedule_74952 && !!schedule.UnderlyingScheduleSummary;
-
 			var underlyingScheduleSummary = hasUnderlyingSchedules ? getUnderlyingSummarySchedule(schedule.UnderlyingScheduleSummary, date, timezone, currentTimezone) : null;
 
 			this.Date = date;
@@ -34,12 +29,25 @@
 			this.ShiftLayers = layers;
 			this.HasUnderlyingSchedules = hasUnderlyingSchedules;
 			this.UnderlyingScheduleSummary = underlyingScheduleSummary;
-
 		}
 
 		ScheduleViewModel.prototype.GetSummaryTimeSpan = function (info) {
 			return info.TimeSpan;
 		};
+		function createShiftLayers(projections, date, timezone, currentTimezone) {
+			var layers = [];
+			projections && projections.forEach(function (projection) {
+				var layer = new ShiftLayerViewModel(projection, date, timezone, currentTimezone);
+				layers.push(layer);
+			});
+
+			for (var i = 0; i < layers.length; i++) {
+				if (i == 0) continue;
+				layers[i].SameTypeAsLast = layers[i].ActivityId === layers[i - 1].ActivityId;
+			}
+
+			return layers;
+		}
 
 		function getUnderlyingSummarySchedule(underlyingScheduleSummary, date, timezone, currentTimezone) {
 			return {
@@ -91,11 +99,13 @@
 			this.TopShiftLayerId = layer.TopShiftLayerId;
 			this.TimeSpan = getTimeSpan(date, startInTimezone, endInTimezone);
 			this.IsOvertime = layer.IsOvertime;
+			this.SameTypeAsLast = false;
 		}
 
 		ShiftLayerViewModel.prototype.UseLighterBorder = function () {
 			return useLighterColor(this.Color);
 		}
+
 
 		function TimelineViewModel(date, timezone, timeRange) {
 			return {

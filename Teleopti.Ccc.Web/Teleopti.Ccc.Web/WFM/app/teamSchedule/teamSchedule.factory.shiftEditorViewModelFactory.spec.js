@@ -88,16 +88,18 @@
 				"Start": "2018-05-28 08:00",
 				"End": "2018-05-28 10:00",
 				"Minutes": 120,
-				"IsOvertime": false
+				"IsOvertime": false,
+				"ActivityId": "472e02c8-1a84-4064-9a3b-9b5e015ab3c6"
 			},
 			{
-				"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+				"ShiftLayerIds": ["31678e5a-ac3f-4daa-9577-a83800e49622"],
 				"Color": "#8080c0",
 				"Description": "E-mail",
 				"Start": "2018-05-28 10:00",
 				"End": "2018-05-28 12:00",
 				"Minutes": 120,
-				"IsOvertime": false
+				"IsOvertime": false,
+				"ActivityId": "472e02c8-1a84-4064-9a3b-9b5e015ab3c6"
 			},
 			{
 				"ShiftLayerIds": ["11678e5a-ac3f-4daa-9577-a83800e49622", "21678e5a-ac3f-4daa-9577-a83800e49622"],
@@ -107,6 +109,7 @@
 				"End": "2018-05-28 13:00",
 				"Minutes": 60,
 				"IsOvertime": false,
+				"ActivityId": "272e02c8-1a84-4064-9a3b-9b5e015ab3c6",
 				"TopShiftLayerId": "11678e5a-ac3f-4daa-9577-a83800e49622"
 			}],
 			"Timezone": { "IanaId": "Asia/Hong_Kong" },
@@ -135,7 +138,9 @@
 		expect(shiftLayers[0].Color).toEqual('#ffffff');
 		expect(shiftLayers[0].UseLighterBorder()).toEqual(false);
 		expect(shiftLayers[1].UseLighterBorder()).toEqual(true);
+		expect(shiftLayers[1].SameTypeAsLast).toEqual(true);
 		expect(shiftLayers[2].TopShiftLayerId).toEqual("11678e5a-ac3f-4daa-9577-a83800e49622");
+		expect(shiftLayers[2].SameTypeAsLast).toEqual(false);
 	});
 
 	it('should create shift layers and underlying summary schedule timespan based on timezone', function () {

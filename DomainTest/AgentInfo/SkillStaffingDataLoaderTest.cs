@@ -66,9 +66,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			skill1.SkillType = emailSkillType;
 
 			var utcDate = Now.UtcDateTime().Date;
-			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(utcDate, CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek);
-			var weekPeriod = new DateOnlyPeriod(new DateOnly(firstDayOfWeek), new DateOnly(firstDayOfWeek.AddDays(6)));
-
+			var weekPeriod = DateHelper.GetWeekPeriod(new DateOnly(utcDate), CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek);
+			
 			foreach (var dateOnly in weekPeriod.DayCollection())
 			{
 				var staffingPeriodDataList = createStaffingPeriodDataForOneDay(utcDate);
@@ -79,9 +78,9 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 
 			var skillStaffingDatas = Target.Load(new[] { skill1 }, weekPeriod, true);
 			Assert.AreEqual(1.2d,
-				skillStaffingDatas.FirstOrDefault(p => p.Time.Equals(firstDayOfWeek.AddHours(7))).ForecastedStaffing);
+				skillStaffingDatas.FirstOrDefault(p => p.Time.Equals(weekPeriod.StartDate.Date.AddHours(7))).ForecastedStaffing);
 			Assert.AreEqual(1.2d,
-				skillStaffingDatas.FirstOrDefault(p => p.Time.Equals(firstDayOfWeek.AddDays(6).AddHours(7))).ForecastedStaffing);
+				skillStaffingDatas.FirstOrDefault(p => p.Time.Equals(weekPeriod.StartDate.Date.AddDays(6).AddHours(7))).ForecastedStaffing);
 		}
 
 		private List<StaffingPeriodData> createStaffingPeriodDataForOneDay(DateTime date)

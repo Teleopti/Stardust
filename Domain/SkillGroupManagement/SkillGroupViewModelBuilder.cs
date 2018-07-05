@@ -25,9 +25,10 @@ namespace Teleopti.Ccc.Domain.SkillGroupManagement
 
 		public IEnumerable<SkillGroupViewModel> GetAll()
 		{
+			var comparer = StringComparer.Create(_uiCulture.GetUiCulture(), false);
 			var skillGroups = _skillGroupRepository.LoadAll()
 				.Where(x => x.Skills.Any(y => y.IsDeleted == false))
-				.OrderBy(x => x.Name, StringComparer.Create(_uiCulture.GetUiCulture(), false));
+				.OrderBy(x => x.Name, comparer);
 
 			var skills = _allSkillForSkillGroupProvider.AllExceptSubSkills().ToDictionary(x => x.Id, x => x);
 

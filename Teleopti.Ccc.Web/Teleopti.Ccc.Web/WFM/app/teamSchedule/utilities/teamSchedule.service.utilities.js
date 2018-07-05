@@ -64,8 +64,7 @@
 
 		function getWeekDays(date) {
 			var names = getWeekdayNames();
-			var startOfWeek = moment(date).isoWeekday(CurrentUserInfo.CurrentUserInfo().FirstDayOfWeek);
-			//var startOfWeek = moment(date).startOf('week');
+			var startOfWeek = moment(date);
 
 			var dates = [];
 			for (var i = 0; i < 7; i++) {

@@ -1,7 +1,7 @@
-﻿(function() {
+﻿(function () {
 	'use strict';
 
-	describe('teamScheduleNotificationService test', function() {
+	describe('teamScheduleNotificationService test', function () {
 		var target, fakeNotice;
 		beforeEach(function () {
 			module("wfm.teamSchedule");
@@ -15,12 +15,12 @@
 			});
 
 		});
-		beforeEach(inject(function(teamScheduleNotificationService) {
+		beforeEach(inject(function (teamScheduleNotificationService) {
 			target = teamScheduleNotificationService;
 		}));
 
 
-		it('should notify warning when action result contains warnings', function() {
+		it('should notify warning when action result contains warnings', function () {
 			var actionResults = [
 				{
 					PersonId: 'testPerson1',
@@ -40,6 +40,29 @@
 			target.reportActionResult(commandTemplates, actionTargets, actionResults);
 
 			expect(fakeNotice.getLastWarning()).toBe('warning1 : testPerson1');
+			expect(fakeNotice.calledCountForWarning).toBe(1);
+		});
+
+		it('should not notify warning when action result contains WarningMessages and command info not include warning object', function () {
+			var actionResults = [
+				{
+					PersonId: 'testPerson1',
+					ErrorMessages: ['error happens'],
+					WarningMessages: []
+				}
+			];
+			var actionTargets = [
+				{
+					PersonId: 'testPerson1',
+					Name: 'testPerson1'
+				}
+			];
+			var commandInfo = {
+				error: 'error'
+			};
+			target.reportActionResult(commandInfo, actionTargets, actionResults);
+
+			expect(fakeNotice.calledCountForWarning).toBe(0);
 
 		});
 
@@ -72,7 +95,9 @@
 			var warning = '';
 			var error = '';
 			var success = '';
+			this.calledCountForWarning = 0;
 			this.warning = function (message, time, destroyOnStateChange) {
+				this.calledCountForWarning++;
 				warning = message;
 			}
 			this.success = function (message, time, destroyOnStateChange) {
@@ -92,6 +117,7 @@
 			this.getLastError = function () {
 				return error;
 			}
+
 		};
 	});
 })();

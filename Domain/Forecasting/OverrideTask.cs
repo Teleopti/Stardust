@@ -32,9 +32,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 		public override bool Equals(object obj)
 		{
-			if (!(obj is OverrideTask))
-				return false;
-			return Equals((OverrideTask)obj);
+			return obj is OverrideTask task && Equals(task);
 		}
 
 		public override int GetHashCode()

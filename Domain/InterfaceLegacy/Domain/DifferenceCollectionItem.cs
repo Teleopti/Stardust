@@ -136,13 +136,9 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// true if obj and this instance are the same type and represent the same value; otherwise, false.
         /// </returns>
         public override bool Equals(object obj)
-        {
-            if (obj == null || !(obj is DifferenceCollectionItem<T>))
-            {
-                return false;
-            }
-            return Equals((DifferenceCollectionItem<T>)obj);
-        }
+		{
+			return obj is DifferenceCollectionItem<T> item && Equals(item);
+		}
 
         /// <summary>
         /// Operator ==.

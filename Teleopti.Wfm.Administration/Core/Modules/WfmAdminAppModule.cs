@@ -95,6 +95,7 @@ namespace Teleopti.Wfm.Administration.Core.Modules
 
 			builder.RegisterType<AdminAccessTokenRepository>().AsSelf();
 			builder.RegisterType<RecurrentEventTimer>().SingleInstance();
+			builder.RegisterType<InitializeApplicationInsight>().SingleInstance();
 
 			if (_configuration.Toggle(Toggles.Tenant_PurgeLogonAttempts_75782))
 				builder.RegisterType<PurgeOldSignInAttempts>().As<IPurgeOldSignInAttempts>().SingleInstance();

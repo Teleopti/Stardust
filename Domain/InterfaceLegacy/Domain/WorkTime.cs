@@ -76,16 +76,9 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// true if obj and this instance are the same type and represent the same value; otherwise, false.
         /// </returns>
         public override bool Equals(object obj)
-        {
-            if (obj == null || !(obj is WorkTime))
-            {
-                return false;
-            }
-            else
-            {
-                return Equals((WorkTime)obj);
-            }
-        }
+		{
+			return obj is WorkTime time && Equals(time);
+		}
 
         /// <summary>
         /// Operator ==.

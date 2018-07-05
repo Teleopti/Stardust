@@ -71,12 +71,8 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         /// true if <paramref name="obj"/> and this instance are the same type and represent the same value; otherwise, false.
         /// </returns>
         public override bool Equals(object obj)
-        {
-            if (obj == null || !(obj is TimeLimitationDto))
-            {
-                return false;
-            }
-            return Equals((TimeLimitationDto)obj);
-        }
+		{
+			return obj is TimeLimitationDto dto && Equals(dto);
+		}
     }
 }

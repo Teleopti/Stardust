@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IWorkShiftMinMaxCalculator _minMaxCalculator;
 		private readonly CommonActivityFilter _commonActivityFilter;
         private readonly RuleSetAccordingToAccessabilityFilter _ruleSetAccordingToAccessabilityFilter;
-		private readonly IShiftProjectionCacheManager _shiftProjectionCacheManager;
+		private readonly ShiftProjectionCacheManager _shiftProjectionCacheManager;
 		private readonly IRuleSetPersonalSkillsActivityFilter _ruleSetPersonalSkillsActivityFilter;
 		private readonly DisallowedShiftProjectionCachesFilter _disallowedShiftProjectionCachesFilter;
 		private readonly ActivityRequiresSkillProjectionFilter _activityRequiresSkillProjectionFilter;
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IWorkShiftMinMaxCalculator minMaxCalculator,
 			CommonActivityFilter commonActivityFilter, 
 			RuleSetAccordingToAccessabilityFilter ruleSetAccordingToAccessabilityFilter,
-			IShiftProjectionCacheManager shiftProjectionCacheManager,
+			ShiftProjectionCacheManager shiftProjectionCacheManager,
 			IRuleSetPersonalSkillsActivityFilter ruleSetPersonalSkillsActivityFilter,
 			DisallowedShiftProjectionCachesFilter disallowedShiftProjectionCachesFilter,
 			ActivityRequiresSkillProjectionFilter activityRequiresSkillProjectionFilter,
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			shiftList = _activityRequiresSkillProjectionFilter.Filter(person, shiftList, dateOnly);
 			shiftList = _activityRestrictionsShiftFilter.Filter(dateOnly, person, shiftList, effectiveRestriction);
 			shiftList = _notOverWritableActivitiesShiftFilter.Filter(schedules, dateOnly, person, shiftList);
-
+			
 			return shiftList;
 		}
 

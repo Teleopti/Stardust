@@ -21,6 +21,12 @@ module.exports = function(grunt) {
 					open: true,
 					verbose: true
 				}
+			},
+			admin: {
+				options: {
+					site: 'Teleopti.Wfm.Administration',
+					verbose: true
+				}
 			}
 		},
 		msbuild: {
@@ -514,7 +520,7 @@ module.exports = function(grunt) {
 	grunt.registerTask('devDist', ['buildAngularJsPart', 'exec:ngbuild_dev']);
 	grunt.registerTask('devDistRta', ['buildAngularJsPart']);
 	grunt.registerTask('test-continuous', ['ngtemplates', 'exec:karmaTeamcity']);
-	grunt.registerTask('nova', ['devDist', 'iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
+	grunt.registerTask('nova', ['devDist', 'iisexpress:web', 'iisexpress:admin', 'watch:dev']); // this task run the main task and then watch for file changes
 	grunt.registerTask('build', ['msbuild:build']); // build the solution
 	grunt.registerTask('buildWeb', ['msbuild:buildWeb']); // build the web project
 	grunt.registerTask('rebuild', ['msbuild:rebuild']); // rebuild the solution

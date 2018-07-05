@@ -15,6 +15,7 @@ using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Data;
 using Teleopti.Ccc.Web.Core.Extensions;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 {
@@ -186,6 +187,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			}
 
 			var visualLayerCollection = _projectionProvider.Projection(scheduleDay);
+
 			if (visualLayerCollection != null && visualLayerCollection.HasLayers)
 			{
 				scheduleVm.WorkTimeMinutes = visualLayerCollection.WorkTime().TotalMinutes;
@@ -219,7 +221,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 						{
 							ParentPersonAbsences = isPayloadAbsence ? _projectionHelper.GetMatchedAbsenceLayers(scheduleDay, layer).ToArray() : null,
 							ShiftLayerIds = matchedShiftLayers?.Select(sl => sl.Id.GetValueOrDefault()).ToArray(),
-							TopShiftLayerId = _projectionHelper.GetTopShiftLayerId(matchedShiftLayers),
+							TopShiftLayerId = _projectionHelper.GetTopShiftLayerId(matchedShiftLayers, layer),
 							ActivityId = layer.Payload.Id.GetValueOrDefault(),
 							Description = description.Name,
 							Color = isPayloadAbsence
@@ -237,9 +239,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					}
 				}
 			}
+
+			resetTopLayerIdIfItWasSplited(projections);
+
 			scheduleVm.Projection = projections;
 			return scheduleVm;
 		}
+
 
 		public AgentInTeamScheduleViewModel MakeScheduleReadModel(IPerson person, IScheduleDay scheduleDay, bool isPermittedToViewConfidential)
 		{
@@ -376,6 +382,18 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				Title = meetingPayload.Meeting.GetSubject(formatter),
 				Description = meetingPayload.Meeting.GetDescription(formatter)
 			};
+		}
+
+		private void resetTopLayerIdIfItWasSplited(IList<GroupScheduleProjectionViewModel> projections) {
+
+			foreach (var projection in projections)
+			{
+				if (projection.TopShiftLayerId.HasValue
+					&& projections.Where(p => !p.ShiftLayerIds.IsNullOrEmpty() && p.ShiftLayerIds.Contains(projection.TopShiftLayerId.Value)).Count() > 1)
+				{
+					projection.TopShiftLayerId = null;
+				}
+			}
 		}
 	}
 }

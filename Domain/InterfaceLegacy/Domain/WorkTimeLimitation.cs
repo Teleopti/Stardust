@@ -186,19 +186,10 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <returns>
         /// true if <paramref name="obj"/> and this instance are the same type and represent the same value; otherwise, false.
         /// </returns>
-        /// /// 
-        /// <remarks>
-        ///  Created by: Ola
-        ///  Created date: 2008-10-16    
-        /// /// </remarks>
         public override bool Equals(object obj)
-        {
-            if (!(obj is WorkTimeLimitation))
-            {
-                return false;
-            }
-            return Equals((WorkTimeLimitation)obj);
-        }
+		{
+			return obj is WorkTimeLimitation limitation && Equals(limitation);
+		}
 
         /// <summary>
         /// </summary>

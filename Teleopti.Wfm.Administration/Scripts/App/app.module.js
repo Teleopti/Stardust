@@ -85,8 +85,8 @@
 				.when('/HangfireMonitoring', {
 					templateUrl: 'HangfireMonitoring.html'
 				})
-				.when('/HangfirePerformanceStats', {
-					templateUrl: 'HangfireMonitoring_RTA_HangfireStatistics_76139_76373.html'
+				.when('/HangfireStatistics', {
+					templateUrl: 'HangfireMonitoring_LevelUp_HangfireStatistics_76139_76373.html'
 				});
 
 

@@ -4,6 +4,7 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
+using EO.WebEngine;
 using Newtonsoft.Json.Linq;
 
 namespace Teleopti.Runtime.Environment
@@ -18,7 +19,10 @@ namespace Teleopti.Runtime.Environment
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            var client = new WebClient();
+
+			Engine.CleanUpCacheFolders(CacheFolderCleanUpPolicy.AllVersions);
+
+			var client = new WebClient();
 	        client.Credentials = CredentialCache.DefaultNetworkCredentials;
             var starturl = ConfigurationManager.AppSettings["url"];
             try

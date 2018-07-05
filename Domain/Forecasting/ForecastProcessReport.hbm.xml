@@ -14,13 +14,14 @@
     <query-param name="endDate" type="datetime"/>
   </query>
 
-  <query name="BudgetReport">
+  <sql-query name="BudgetReport">
     <![CDATA[
-    select wldb.CurrentDate from WorkloadDay wldb
-                                inner join wldb.Parent sdb
+    select sdb.SkillDayDate as CurrentDate from SkillDay sdb WITH (NOLOCK) 
+																left join WorkloadDay wld WITH (NOLOCK) on (wld.Parent = sdb.Id)
+																left join WorkloadDayBase wldb WITH (NOLOCK) on wld.WorkloadDayBase = wldb.Id
                                 where wldb.Workload = :workload
-                                and wldb.TemplateReference.TemplateName = :longtermKey
-                                and wldb.CurrentDate between :startDate and :endDate
+                                and wld.TemplateName = :longtermKey
+                                and sdb.SkillDayDate between :startDate and :endDate
                                 and sdb.Scenario = :scenario
     ]]>
     <query-param name="scenario" type="Teleopti.Ccc.Domain.Common.Scenario"/>
@@ -28,15 +29,16 @@
     <query-param name="startDate" type="datetime"/>
     <query-param name="endDate" type="datetime"/>
     <query-param name="longtermKey" type="string"/>
-  </query>
+  </sql-query>
 
-  <query name="DetailReport">
+  <sql-query name="DetailReport">
     <![CDATA[
-    select wldb.CurrentDate from WorkloadDay wldb
-                                inner join wldb.Parent sdb 
+    select sdb.SkillDayDate as CurrentDate from SkillDay sdb WITH (NOLOCK) 
+																left join WorkloadDay wld WITH (NOLOCK) on (wld.Parent = sdb.Id)
+																left join WorkloadDayBase wldb WITH (NOLOCK) on wld.WorkloadDayBase = wldb.Id
                                 where wldb.Workload = :workload
-                                and (wldb.TemplateReference.TemplateName is null OR wldb.TemplateReference.TemplateName <> :longtermKey)
-                                and wldb.CurrentDate between :startDate and :endDate
+                                and (wld.TemplateName is null OR wld.TemplateName <> :longtermKey)
+                                and sdb.SkillDayDate between :startDate and :endDate
                                 and sdb.Scenario = :scenario
     ]]>
     <query-param name="scenario" type="Teleopti.Ccc.Domain.Common.Scenario"/>
@@ -44,7 +46,7 @@
     <query-param name="startDate" type="datetime"/>
     <query-param name="endDate" type="datetime"/>
     <query-param name="longtermKey" type="string"/>
-  </query>
+  </sql-query>
 
 	<sql-query name="ExistingForecast">
 		<![CDATA[

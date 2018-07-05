@@ -15,6 +15,7 @@ using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Ccc.Web.Core;
+using Teleopti.Ccc.Web.Core.Extensions;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
@@ -85,7 +86,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					Keyword = ""
 				};
 
-			var week = new DateOnlyPeriod(input.DateInUserTimeZone, input.DateInUserTimeZone.AddDays(6));
+			var week = DateHelper.GetWeekPeriod(input.DateInUserTimeZone, DateTimeFormatExtensions.FirstDayOfWeek);
 			var personIds = new List<Guid>();
 			if (_toggleManager.IsEnabled(Toggles.Wfm_SearchAgentBasedOnCorrectPeriod_44552) ||
 				_toggleManager.IsEnabled(Toggles.Wfm_GroupPages_45057))
@@ -279,7 +280,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 		private GroupWeekScheduleViewModel createWeekViewModelForPeople(IList<Guid> personIds, SearchSchedulesInput input)
 		{
-			var week = new DateOnlyPeriod(input.DateInUserTimeZone, input.DateInUserTimeZone.AddDays(6));
+			var week = DateHelper.GetWeekPeriod(input.DateInUserTimeZone, DateTimeFormatExtensions.FirstDayOfWeek);
 			var weekDays = week.DayCollection();
 			var people = new List<IPerson>();
 			foreach (var batch in personIds.Batch(251))

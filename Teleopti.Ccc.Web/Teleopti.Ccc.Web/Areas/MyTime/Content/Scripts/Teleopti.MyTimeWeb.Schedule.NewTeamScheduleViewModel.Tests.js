@@ -3,7 +3,7 @@
 
 	module('Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule', {
 		setup: function() {
-			vm = new Teleopti.MyTimeWeb.Schedule.MobileTeamScheduleViewModel();
+			vm = new Teleopti.MyTimeWeb.Schedule.NewTeamScheduleViewModel();
 
 			readFakeScheduleData(vm);
 		},
