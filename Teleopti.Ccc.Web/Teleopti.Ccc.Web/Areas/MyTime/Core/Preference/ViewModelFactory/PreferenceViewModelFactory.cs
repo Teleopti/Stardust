@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
@@ -90,6 +91,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory
 		public IDictionary<DateOnly, PreferenceWeeklyWorkTimeViewModel> CreatePreferenceWeeklyWorkTimeViewModels(
 			IEnumerable<DateOnly> dates)
 		{
+			if (dates.IsNullOrEmpty())
+				return new Dictionary<DateOnly, PreferenceWeeklyWorkTimeViewModel>();
 			return dates.Distinct().ToDictionary(date => date, CreatePreferenceWeeklyWorkTimeViewModel);
 		}
 	}
