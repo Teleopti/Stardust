@@ -96,6 +96,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				//what if the agent changes personPeriod in the middle of the request period?
 				//what if the request is 8:00-8:05, only a third of a resource should be removed
 				var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(personRequest.Request.Period).ToArray();
+
+				dynamic skillCombLogObject = new ExpandoObject();
+				skillCombLogObject.SkillCombinationResourcesRaw = combinationResources;
+				skillCombLogObject.SkillCombinationResourcesZeroresources = combinationResources.Where(x => x.Resource <= 0);
+				
+
 				if (!combinationResources.Any())
 				{
 					logger.Error(Resources.ResourceManager.GetString(Resources.DenyReasonNoSkillCombinationsFound, CultureInfo.GetCultureInfo("en-US")) + $" Can not find any skillcombinations for period {personRequest.Request.Period} and Request {personRequest.Request.Id}.");
@@ -136,6 +142,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					
 					_smartDeltaDoer.Do(layers, personRequest.Person, dateOnlyPeriod.StartDate, combinationResources);
 				}
+
+				skillCombLogObject.SkillCombinationAfterDeltaDist = combinationResources;
+				skillCombLogObject.SkillCombinationZeroResourcesAfterDeltaDist = combinationResources.Where(x => x.Resource <= 0);
+				_extensiveLogRepository.Add(skillCombLogObject, personRequest.Id.GetValueOrDefault(), "PersonRequest.CombinationResources");
 
 				var staffingThresholdValidators = validators.OfType<StaffingThresholdValidator>().ToList();
 				if (staffingThresholdValidators.Any())
