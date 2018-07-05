@@ -1,5 +1,4 @@
-
-using Teleopti.Ccc.Secrets.WorkShiftCalculator;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain

@@ -65,6 +65,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Ccc.Secrets.WorkShiftPeriodValueCalculator;
 using Teleopti.Interfaces.Domain;
+using IWorkShiftCalculator = Teleopti.Ccc.Domain.Scheduling.IWorkShiftCalculator;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -372,7 +373,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ExtendReduceTimeHelper>().InstancePerLifetimeScope();
 			builder.RegisterType<ReplaceActivityService>().SingleInstance();
 
-			builder.RegisterType<WorkShiftCalculator>().As<IWorkShiftCalculator>().SingleInstance();
+			builder.RegisterType<NonSecretWorkShiftCalculatorClassic>().As<IWorkShiftCalculator>().SingleInstance();
 			builder.RegisterType<WorkShiftPeriodValueCalculator>().As<IWorkShiftPeriodValueCalculator>().SingleInstance();
 
 			builder.RegisterType<DayOffOptimizationDesktop>().InstancePerLifetimeScope(); 

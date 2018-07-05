@@ -4,7 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Secrets.WorkShiftCalculator;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				}
 			}
 
-			foundValues = WorkShiftCalculator.CalculateListForBestImprovementAfterAssignment(foundValues, dataHolders).OfType<IWorkShiftCalculationResultHolder>().ToArray();
+			foundValues = NonSecretWorkShiftCalculatorClassic.CalculateListForBestImprovementAfterAssignment(foundValues, dataHolders).OfType<IWorkShiftCalculationResultHolder>().ToArray();
 	        int foundValuesCount = foundValues.Length;
 	        if (foundValuesCount == 1)
 		        return foundValues[0];

@@ -4,8 +4,8 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void Setup()
         {
             _layerFactory = new VisualLayerFactory();
-			_target = new WorkShiftCalculator();
+			_target = new NonSecretWorkShiftCalculatorClassic();
         }
 
 		[Test]
