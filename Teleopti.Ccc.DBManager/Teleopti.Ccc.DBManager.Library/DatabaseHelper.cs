@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Configuration;
 using System.Data.SqlClient;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Support.Library;
@@ -19,7 +21,8 @@ namespace Teleopti.Ccc.DBManager.Library
 			DatabaseName = new SqlConnectionStringBuilder(connectionString).InitialCatalog;
 			DatabaseType = databaseType;
 			Logger = log;
-			IsAzure = new SqlConnectionStringBuilder(connectionString).DataSource.Contains(".database.windows.net");
+			var dataSource = new SqlConnectionStringBuilder(connectionString).DataSource;
+			IsAzure = ConfigurationManager.AppSettings["AzurePattern"].Split(';').Any(d => dataSource.Contains(d.Trim()));
 
 			if (IsAzure)  //in Azure
 				_usingMaster = new ExecuteSql(() => openConnection(forceMasterInAzure), Logger);
