@@ -4,9 +4,9 @@
   angular.module('wfm.forecasting')
   .controller('ForecastRefactController', ForecastCtrl);
 
-  ForecastCtrl.$inject = ['forecastingService', '$interval', '$state', '$stateParams',  'NoticeService', '$translate'];
+  ForecastCtrl.$inject = ['forecastingService', '$interval', '$state', 'NoticeService', '$translate'];
 
-  function ForecastCtrl(forecastingService, $interval, $state, $stateParams, NoticeService, $translate) {
+  function ForecastCtrl(forecastingService, $interval, $state, noticeSvc, $translate) {
     var vm = this;
     vm.forecastModal = false;
     vm.selectedDayCount = [];
@@ -54,7 +54,7 @@
       .replace('{0}', $translate.instant('Forecasts'))
       .replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank' rel='noopener'>")
       .replace('{2}', '</a>');
-      NoticeService.info(message, null, true);
+      noticeSvc.info(message, null, true);
     }
     init();
 
@@ -80,7 +80,7 @@
               SkillId: s.Id,
               ChartId: "chart" + w.Id
             }
-            vm.skillMaster.Skills.push(temp)
+            vm.skillMaster.Skills.push(temp);
           });
         });
         vm.skillMaster.IsPermittedToModify = result.IsPermittedToModifySkill;
@@ -144,7 +144,7 @@
       }
 
       vm.forecastModal = false;
-      forecastingService.forecast(angular.toJson(
+      forecastingService.forecast(
         {
           ForecastStart: vm.forecastPeriod.startDate,
           ForecastEnd: vm.forecastPeriod.endDate,
@@ -152,7 +152,7 @@
           ScenarioId: vm.selectedScenario.Id,
           BlockToken: blockToken,
           IsLastWorkload: true
-        }), function(data, status, headers, config) {
+        }, function(data, status, headers, config) {
           vm.skillMaster.IsForecastRunning = false;
           blockToken = data.BlockToken;
           getWorkloadForecastData(vm.forecastModalObj);
@@ -174,14 +174,14 @@
 
       function exportToFile() {
         vm.skillMaster.isForecastRunning = true;
-        forecastingService.exportForecast(angular.toJson(
+        forecastingService.exportForecast(
           {
             ForecastStart: vm.forecastPeriod.startDate,
             ForecastEnd: vm.forecastPeriod.endDate,
             ScenarioId: vm.selectedScenario.Id,
             SkillId: vm.forecastModalObj.SkillId,
             WorkloadId: vm.currentWorkload.Id
-          }), function (data, status, headers, config) {
+          }, function (data, status, headers, config) {
             var blob = new Blob([data], {
               type: headers['content-type']
             });

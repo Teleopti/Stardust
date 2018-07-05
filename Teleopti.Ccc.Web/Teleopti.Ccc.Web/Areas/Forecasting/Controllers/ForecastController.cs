@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IWorkloadRepository _workloadRepository;
 		private readonly IAuthorization _authorization;
-		private readonly IWorkloadNameBuilder _workloadNameBuilder;
 		private readonly IFetchAndFillSkillDays _fetchAndFillSkillDays;
 		private readonly IHistoricalPeriodProvider _historicalPeriodProvider;
 		private readonly IIntradayForecaster _intradayForecaster;
@@ -41,7 +40,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			IScenarioRepository scenarioRepository,
 			IWorkloadRepository workloadRepository,
 			IAuthorization authorization,
-			IWorkloadNameBuilder workloadNameBuilder,
 			IFetchAndFillSkillDays fetchAndFillSkillDays,
 			IHistoricalPeriodProvider historicalPeriodProvider,
 			IIntradayForecaster intradayForecaster,
@@ -53,7 +51,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_scenarioRepository = scenarioRepository;
 			_workloadRepository = workloadRepository;
 			_authorization = authorization;
-			_workloadNameBuilder = workloadNameBuilder;
 			_fetchAndFillSkillDays = fetchAndFillSkillDays;
 			_historicalPeriodProvider = historicalPeriodProvider;
 			_intradayForecaster = intradayForecaster;
@@ -75,8 +72,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 					Workloads = skill.WorkloadCollection.Select(x => new WorkloadAccuracy
 					{
 						Id = x.Id.Value,
-						Name = _workloadNameBuilder.WorkloadName(skill.Name, x.Name)
-					}).ToArray()
+						Name = WorkloadNameBuilder.GetWorkloadName(skill.Name, x.Name)
+					}).OrderBy(w=>w.Name).ToArray()
 				})
 			};
 		}

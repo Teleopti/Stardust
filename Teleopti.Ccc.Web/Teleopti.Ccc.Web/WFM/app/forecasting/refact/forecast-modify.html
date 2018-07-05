@@ -5,14 +5,12 @@
 		<h1>
 			<i ng-class="vm.getSkillIcon(vm.selectedWorkload.SkillType)">
 				<md-tooltip>
-					<span ng-if="skill.SkillType.DoDisplayData">{{skill.SkillType.SkillType | translate}}</span>
-					<span ng-if="!skill.SkillType.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
+					<span ng-if="vm.selectedWorkload.SkillType.DoDisplayData">{{vm.selectedWorkload.SkillType.SkillType | translate}}</span>
+					<span ng-if="!vm.selectedWorkload.SkillType.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
 				</md-tooltip>
 			</i>
-			{{vm.selectedWorkload.Workload.Name}}
-			<span ng-if="!vm.selectedWorkload.SkillType.DoDisplayData">({{'UnsupportedSkill' | translate}})</span>
+			<span>{{vm.selectedWorkload.Workload.Name}}</span>
 		</h1>
-		<p>{{'NewForecastIntro' | translate}}</p>
 	</div>
 </div>
 
@@ -35,7 +33,7 @@
 								<i class="mdi mdi-calendar"></i>
 								<md-tooltip>{{'SelectForecastPeriodIntro'|translate}}</md-tooltip>
 							</button>
-							<md-tooltip ng-if="vm.changesMade">{{'PleaseSaveOrDiscardChangesBeforeChangingScenario' | translate}}</md-tooltip>
+							<md-tooltip ng-if="vm.changesMade">{{'PleaseSaveOrDiscardChangesBeforeChangingPeriod' | translate}}</md-tooltip>
 							{{'DateFrom' | translate}}: {{vm.forecastPeriod.startDate | date: L}} {{'DateTo' | translate}}: {{vm.forecastPeriod.endDate  | date: L}}
 						</div>
 
@@ -65,12 +63,6 @@
 				<div class="sub-header">
 					<h2>{{'Campaign' | translate}}</h2>
 				</div>
-				<!-- <div class="con-row" ng-if="vm.selectedDayCount.length === 1">
-					<div class="con-flex">
-						<span>Preview - Original: {{vm.selectedDayCount[0].value | number}}</span>
-						<span ng-show="vm.sumOfCallsForSelectedDays">New: {{vm.sumOfCallsForSelectedDays | number}}</span>
-					</div>
-				</div> -->
 				<div class="con-row">
 					<div class="con-flex">
 						<label for="campaignPercentageId" class="input-icon">
@@ -171,8 +163,6 @@
 	<div class="con-flex">
 		<div class="panel material-depth-1 full-padding">
 			<div>
-				<span ng-if="vm.isForecastRunning" >{{'RunningForecast'|translate}}</span>
-				<span ng-if="vm.savingToScenario" >{{'Saving' | translate}}</span>
 				<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 			</div>
 		</div>
@@ -183,7 +173,8 @@
 	<div class="con-flex">
 		<div class="panel material-depth-1">
 			<div class="sub-header">
-				<h2>{{'SelectToModify'|translate}}</h2>
+				<h2 ng-if="vm.selectedWorkload.SkillType.DoDisplayData">{{'SelectToModify'|translate}}</h2>
+				<h2 ng-if="!vm.selectedWorkload.SkillType.DoDisplayData">{{'SkillNotSupported'|translate}}</h2>
 				<div class="head-actions panel-menu" >
 					<div tabindex=0 ng-show="vm.selectedDayCount.length > 0" class="grow-out context-menu card-context">
 						<i class="mdi mdi-dots-vertical"></i>
@@ -203,7 +194,7 @@
 			</div>
 			<div class="con-row">
 				<div class="con-flex" >
-					<forecast-chart chart-id="vm.selectedWorkload.ChartId" selectable="true" refresh="vm.loadChart" on-click="vm.pointClick" days="vm.selectedWorkload.Days"> </forecast-chart>
+					<forecast-chart chart-id="vm.selectedWorkload.ChartId" selectable="vm.selectedWorkload.SkillType.DoDisplayData" refresh="vm.loadChart" on-click="vm.pointClick" days="vm.selectedWorkload.Days"> </forecast-chart>
 				</div>
 			</div>
 			<div class="con-footer">
@@ -220,7 +211,6 @@
 		</div>
 	</div>
 </div>
-
 
 <modal-dialog show='vm.forecastModal' ng-cloak>
 	<div>
@@ -256,7 +246,6 @@
 		</div>
 
 		<div class="modal-inner-content" style="text-align:center;">
-			<!-- <label>{{'ForecastPeriod' | translate}}:</label><br/> -->
 			<wfm-calendar-picker ng-model="vm.forecastPeriod"></wfm-calendar-picker>
 		</div>
 		<div class="modal-actions">

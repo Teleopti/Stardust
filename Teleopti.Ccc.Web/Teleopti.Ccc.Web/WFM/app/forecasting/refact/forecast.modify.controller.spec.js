@@ -1,7 +1,6 @@
 describe('ForecastCtrl', function() {
 
   var vm,
-  $stateParams,
   $controller,
   $httpBackend,
   fakeBackend,

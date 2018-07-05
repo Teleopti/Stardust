@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export.Web
 				.ToList();
 			return new ForecastExportModel
 			{
-				Header = ForecastExportHeaderModelCreator.Load(scenario.Description.Name, workload.Skill, skillDays, period),
+				Header = ForecastExportHeaderModelCreator.Load(scenario.Description.Name, workload, skillDays, period),
 				DailyModelForecast = ForecastExportDailyModelCreator.Load(skillDays),
 				IntervalModelForecast = ForecastExportIntervalModelCreator.Load(workload, skillDays)
 			};

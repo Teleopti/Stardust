@@ -13214,7 +13214,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Trigger modal window in advanced web forecast</comment>
   </data>
   <data name="SelectForecastPeriodIntro" xml:space="preserve">
-    <value>Choose a future period to forecast</value>
+    <value>Choose a period to display</value>
     <comment>Pick a period before web forecast</comment>
   </data>
   <data name="ForecastPeriod" xml:space="preserve">
@@ -17386,7 +17386,7 @@ The application will now exit.</value>
     <comment>confirmation message</comment>
   </data>
   <data name="NewForecastIntro" xml:space="preserve">
-    <value>This is the current forecast for this workload</value>
+    <value>This is the current forecast for this skill</value>
   </data>
   <data name="NoForecast" xml:space="preserve">
     <value>No forecast data was found. Try running a forecast for this scenario.</value>
@@ -17425,10 +17425,6 @@ The application will now exit.</value>
     <value>Zero resources deleted. Are you sure you selected the correct BPO and period?</value>
     <comment>Warning after deletion of resources and zero was deleted</comment>
   </data>
-  <data name="Manage" xml:space="preserve">
-    <value>Manage</value>
-    <comment>Manage</comment>
-  </data>
   <data name="Discard" xml:space="preserve">
     <value>Discard</value>
     <comment>Discard</comment>
@@ -17450,7 +17446,7 @@ The application will now exit.</value>
     <comment>Text message in web forecast</comment>
   </data>
   <data name="NoForecastDateForCurrentScenario" xml:space="preserve">
-    <value>There is no forecast data for this scenario. Please run a forecast or save from another scenario.</value>
+    <value>There is no forecast data for this scenario, please run a forecast or save from another scenario.</value>
     <comment>Text message in web forecast</comment>
   </data>
   <data name="PleaseSaveOrDiscardChangesBeforeChangingScenario" xml:space="preserve">
@@ -17466,7 +17462,7 @@ The application will now exit.</value>
     <comment>Text message in web forecast</comment>
   </data>
   <data name="SkillNotSupported" xml:space="preserve">
-    <value>Please open forecast for current skill in Windows client to edit</value>
+    <value>Please use Windows client to forecast this skill.</value>
     <comment>Text message in web forecast</comment>
   </data>
   <data name="SkillTypeFilter" xml:space="preserve">
@@ -17549,5 +17545,13 @@ The application will now exit.</value>
   </data>
   <data name="SaveFailedForNoPermissionToEditUnpublishedSchedule" xml:space="preserve">
     <value>Save failed, No permission to edit unpublished schedule for agent</value>
+  </data>
+  <data name="PleaseSaveOrDiscardChangesBeforeChangingPeriod" xml:space="preserve">
+    <value>Please save or discard changes before changing period</value>
+    <comment>Text in web forecast</comment>
+  </data>
+  <data name="NoQueueStatisticsAvailable" xml:space="preserve">
+    <value>No forecast could be produced. Make sure you have imported queue statistics</value>
+    <comment>Text for web forecasting</comment>
   </data>
 </root>

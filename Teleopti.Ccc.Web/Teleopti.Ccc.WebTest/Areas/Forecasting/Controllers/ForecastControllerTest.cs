@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		public ForecastProvider ForecastProvider;
 		public FakeForecastDayOverrideRepository ForecastDayOverrideRepository;
 		public FullPermission FullPermission;
-		public IWorkloadNameBuilder WorkloadNameBuilder;
 
 		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
@@ -1547,7 +1546,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			SkillRepository.Has(skill);
 
 			var target = new ForecastController(null, SkillRepository, null, null, null, FullPermission,
-				WorkloadNameBuilder, null, null, null, null);
+				null, null, null, null);
 
 			var result = target.Skills();
 			result.Skills.Single().Id.Should().Be.EqualTo(skill.Id.Value);
@@ -1560,7 +1559,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		public void ShouldHavePermissionForModifySkill()
 		{
 			var target = new ForecastController(null, SkillRepository, null, null, null, FullPermission,
-				null, null, null, null, null);
+				null, null, null, null);
 
 			var result = target.Skills();
 			result.IsPermittedToModifySkill.Should().Be.EqualTo(true);

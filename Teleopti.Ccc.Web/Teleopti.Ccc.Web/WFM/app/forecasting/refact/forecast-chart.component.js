@@ -13,18 +13,7 @@ angular.module('wfm.forecasting').component('forecastChart', {
 function ForecastChartCtrl($translate, $filter, $timeout) {
 	var ctrl = this;
 	var chart;
-	var selectedItems = [];
 	ctrl.refresh = generateForecastChart;
-
-	function checkSelection(arr, item) {
-		var i = arr.length;
-		while (i--) {
-			if (arr[i] === item) {
-				return true;
-			}
-		}
-		return false;
-	}
 
 	$timeout(function() {
 		if (ctrl.days != null && ctrl.days.length > 0) {
@@ -40,7 +29,6 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 		}
 
 		var selectedItems = [];
-		var preparedData = {};
 		ctrl.onClick(ctrl.selectedDays);
 
 		var preparedData = {
@@ -55,6 +43,7 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 			overrideSeries: ['Override'],
 			campaignAndOverrideSeries: ['CampaignAndOverride']
 		};
+
 		for (var i = 0; i < days.length; i++) {
 			preparedData.dateSeries.push(moment(days[i].Date).format('DD/MM/YYYY'));
 			preparedData.averageAfterTaskTimeSeries.push(days[i].AverageAfterTaskTime);

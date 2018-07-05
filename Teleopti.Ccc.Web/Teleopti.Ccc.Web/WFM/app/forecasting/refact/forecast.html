@@ -18,8 +18,8 @@
   <div class="con-flex">
     <div class="line-center">
       <i class="mdi mdi-information-outline huge-icon line-center"></i>
-      <h2>No skills or workloads found</h2>
-      <button class="wfm-btn wfm-btn-primary">Create a skill</button>
+      <h2>{{'NoSkillFound' | translate}}</h2>
+      <button class="wfm-btn wfm-btn-primary">{{'CreateSkill' | translate}}</button>
     </div>
   </div>
 </div>
@@ -37,7 +37,6 @@
               <div ng-if="vm.skillMaster.IsForecastRunning">
                 <div class="con-row">
                   <div class="con-flex">
-                    {{'RunningForecast' | translate}}
                     <md-progress-linear md-mode="indeterminate"></md-progress-linear>
                   </div>
                 </div>
@@ -45,9 +44,8 @@
               <div ng-if="!vm.skillMaster.IsForecastRunning">
                 <div class="con-row baseline">
                   <div class="con-flex">
-                    <!-- {{'ForecastWorkloadIntro' | translate}} -->
                     <span ng-cloak ng-if="!vm.noForecastedDaysFound">This is the current forecast for this workload.</span>
-                    <span ng-cloak ng-if="vm.noForecastedDaysFound">No data found, try running a forecast here.</span>
+                    <span ng-cloak ng-if="vm.noForecastedDaysFound">{{'NoForecastDateForCurrentScenario' | translate}}</span>
                   </div>
                   <div class="con-flex line-right">
                     <div tabindex=0 class="context-menu card-context" ng-click="vm.loadChart(skill.ChartId, vm.currentWorkload.Days)">
@@ -115,7 +113,7 @@
     <div class="modal-inner-content" style="text-align:center;">
       <label>{{'ForecastPeriod' | translate}}: </label><br/>
 		    <wfm-calendar-picker ng-model="vm.forecastPeriod"></wfm-calendar-picker>
-      <div class="text-warning" ng-cloak class="animate-show" ng-show="vm.disableMoreThanOneYear()">
+      <div class="text-warning animate-show" ng-cloak ng-show="vm.disableMoreThanOneYear()">
         <i class='mdi mdi-alert'></i>
         {{ 'ForecastPeriodLength' | translate }}.
       </div>

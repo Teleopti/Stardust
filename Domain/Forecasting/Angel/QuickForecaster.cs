@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
 using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel
@@ -45,7 +46,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 				{
 					WorkloadId = workloadInput.WorkloadId,
 					ScenarioId = scenario.Id.Value,
-					ForecastDays = new List<ForecastDayModel>()
+					ForecastDays = new List<ForecastDayModel>(),
+					WarningMessage = Resources.NoQueueStatisticsAvailable
 				};
 			}
 

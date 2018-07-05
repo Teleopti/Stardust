@@ -1,8 +1,8 @@
 namespace Teleopti.Ccc.Domain.Forecasting
 {
-	public class WorkloadNameBuilder : IWorkloadNameBuilder
+	public class WorkloadNameBuilder
 	{
-		public string WorkloadName(string skillName, string workloadName)
+		public static string GetWorkloadName(string skillName, string workloadName)
 		{
 			if (string.IsNullOrEmpty(workloadName) || workloadName == skillName)
 			{

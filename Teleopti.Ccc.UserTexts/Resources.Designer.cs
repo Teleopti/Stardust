@@ -17266,15 +17266,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manage.
-        /// </summary>
-        public static string Manage {
-            get {
-                return ResourceManager.GetString("Manage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Manage Absence.
         /// </summary>
         public static string ManageAbsence {
@@ -20219,7 +20210,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This is the current forecast for this workload.
+        ///   Looks up a localized string similar to This is the current forecast for this skill.
         /// </summary>
         public static string NewForecastIntro {
             get {
@@ -21158,7 +21149,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is no forecast data for this scenario. Please run a forecast or save from another scenario..
+        ///   Looks up a localized string similar to There is no forecast data for this scenario, please run a forecast or save from another scenario..
         /// </summary>
         public static string NoForecastDateForCurrentScenario {
             get {
@@ -21568,6 +21559,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoProductActivationKeyPleaseApplyANewOne {
             get {
                 return ResourceManager.GetString("NoProductActivationKeyPleaseApplyANewOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No forecast could be produced. Make sure you have imported queue statistics.
+        /// </summary>
+        public static string NoQueueStatisticsAvailable {
+            get {
+                return ResourceManager.GetString("NoQueueStatisticsAvailable", resourceCulture);
             }
         }
         
@@ -25658,6 +25658,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PleaseSaveAgainWhenYouHaveReviewedTheAppliedChanges {
             get {
                 return ResourceManager.GetString("PleaseSaveAgainWhenYouHaveReviewedTheAppliedChanges", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please save or discard changes before changing period.
+        /// </summary>
+        public static string PleaseSaveOrDiscardChangesBeforeChangingPeriod {
+            get {
+                return ResourceManager.GetString("PleaseSaveOrDiscardChangesBeforeChangingPeriod", resourceCulture);
             }
         }
         
@@ -30986,7 +30995,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose a future period to forecast.
+        ///   Looks up a localized string similar to Choose a period to display.
         /// </summary>
         public static string SelectForecastPeriodIntro {
             get {
@@ -33383,7 +33392,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please open forecast for current skill in Windows client to edit.
+        ///   Looks up a localized string similar to Please use Windows client to forecast this skill..
         /// </summary>
         public static string SkillNotSupported {
             get {
