@@ -2,10 +2,13 @@
 wfm-multiple-search-input {
 	margin: 5px;
 }
+@media screen and (min-width: 768px) {
+	.con-flex {
+		max-width: 100%;
+	}
+}
 
 .wfm-requests {
-	padding: 0;
-
 	.request-footer {
 		min-height: 40px;
 
@@ -22,10 +25,11 @@ wfm-multiple-search-input {
 	}
 
 	.request-body {
-		border-bottom: 1px solid rgba(0,0,0,.26);
+		border-bottom: 1px solid rgba(0, 0, 0, 0.26);
 	}
 
-	.requests-uigrid-table-container, .requests-uigrid-table {
+	.requests-uigrid-table-container,
+	.requests-uigrid-table {
 		height: 60vh;
 	}
 
@@ -206,7 +210,7 @@ wfm-multiple-search-input {
 		}
 	}
 
-	.ui-grid-filter-container > input[type="text"] {
+	.ui-grid-filter-container > input[type='text'] {
 		max-width: 100%;
 		overflow: hidden;
 		white-space: nowrap;
@@ -272,11 +276,12 @@ wfm-multiple-search-input {
 			padding-right: 3px;
 		}
 
-		.arrow-box:after, .arrow-box:before {
+		.arrow-box:after,
+		.arrow-box:before {
 			left: 100%;
 			top: 50%;
 			border: solid transparent;
-			content: " ";
+			content: ' ';
 			height: 0;
 			width: 0;
 			position: absolute;
@@ -301,18 +306,20 @@ wfm-multiple-search-input {
 			margin-right: 2px !important;
 		}
 
-		.arrow-box-no-border:after, .arrow-box-no-border:before {
+		.arrow-box-no-border:after,
+		.arrow-box-no-border:before {
 			border: none !important;
 		}
 
 		div.ui-grid-viewport.ng-isolate-scope {
-			overflow-x: hidden !important
+			overflow-x: hidden !important;
 		}
 	}
 
 	.text-absence-view {
 		.ui-grid-pinned-container-right {
-			.ui-grid-header-cell:first-child, .ui-grid-cell:first-child {
+			.ui-grid-header-cell:first-child,
+			.ui-grid-cell:first-child {
 				border-left: none;
 			}
 		}
@@ -334,13 +341,14 @@ wfm-multiple-search-input {
 		}
 
 		.ui-grid-pinned-container-right {
-			.ui-grid-header-cell:first-child, .ui-grid-cell:first-child {
+			.ui-grid-header-cell:first-child,
+			.ui-grid-cell:first-child {
 				border-left: none;
 			}
 		}
 		/* Fixes for layout of the non-pinned container used for the Shift Trade View so that it takes up space appropriately*/
-		[container-id="body"], .ui-grid-render-container-body {
-
+		[container-id='body'],
+		.ui-grid-render-container-body {
 			.ui-grid-header-viewport {
 				width: 100%;
 				background-color: #99d6ff;
@@ -386,7 +394,14 @@ wfm-multiple-search-input {
 		}
 
 		.is-day-off {
-			background-image: linear-gradient(135deg, transparent, transparent 7px, rgba(0, 0, 0, 0.2) 8px, transparent 8px, transparent);
+			background-image: linear-gradient(
+				135deg,
+				transparent,
+				transparent 7px,
+				rgba(0, 0, 0, 0.2) 8px,
+				transparent 8px,
+				transparent
+			);
 			background-size: 11px 11px;
 		}
 
@@ -475,6 +490,6 @@ wfm-multiple-search-input {
 	.clear-all-filters {
 		position: absolute;
 		top: 4rem;
-		left: .8rem;
+		left: 0.8rem;
 	}
 }
