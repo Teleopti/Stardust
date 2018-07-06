@@ -86,6 +86,37 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return res;
 		}
 
+		public IEnumerable<PersonScheduleDayReadModel> ForPeople(DateTimePeriod period, IEnumerable<PersonInfoForShiftTradeFilter> personInfos)
+		{
+			var res = new List<PersonScheduleDayReadModel>();
+			if (personInfos.Count() != 2) return res;
+
+			var myPersonId = personInfos.First().PersonId;
+			var myDayoffSet = personInfos.First().IsDayOff;
+			var personToId = personInfos.Last().PersonId;
+			var personToDayoffSet = personInfos.Last().IsDayOff;
+
+			const string sql = "exec ReadModel.PersonScheduleDayForShiftTrade @start_date=:DateStart,"
+							   + "@end_date=:DateEnd,"
+							   + "@my_person_id = :myPersonId,"
+							   + "@person_to_id = :personToId,"
+							   + "@is_my_dayoff = :myDayoffSet,"
+							   + "@is_person_dayoff = :personToDayoffSet";
+
+			res.AddRange(_unitOfWork.Session().CreateSQLQuery(sql)
+				.SetDateTime("DateStart", period.StartDateTime)
+				.SetDateTime("DateEnd", period.EndDateTime)
+				.SetGuid("myPersonId", myPersonId)
+				.SetGuid("personToId", personToId)
+				.SetBoolean("myDayoffSet", myDayoffSet)
+				.SetBoolean("personToDayoffSet", personToDayoffSet)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(PersonScheduleDayReadModel)))
+				.SetReadOnly(true)
+				.List<PersonScheduleDayReadModel>());
+
+			return res;
+		}
+
 		public IEnumerable<PersonScheduleDayReadModel> ForBulletinPersons(IEnumerable<string> shiftExchangeOfferIdList, Paging paging)
 		{
 			var idlist = string.Join(",", shiftExchangeOfferIdList);

@@ -190,6 +190,7 @@
     <Compile Include="Common\DefaultSchedulePeriodProvider.cs" />
     <Compile Include="ApplicationLayer\Commands\MultipleChangeScheduleCommandHandler.cs" />
     <Compile Include="Infrastructure\DeadLockRetrier.cs" />
+    <Compile Include="InterfaceLegacy\Domain\PersonInfoForShiftTradeFilter.cs" />
     <Compile Include="Intraday\ApplicationLayer\DTOs\IntradayForcastedStaffingIntervalDTO.cs" />
     <Compile Include="Intraday\ApplicationLayer\DTOs\IntradayScheduleStaffingIntervalDTO.cs" />
     <Compile Include="Intraday\ApplicationLayer\IntradayIncomingTrafficApplicationService.cs" />

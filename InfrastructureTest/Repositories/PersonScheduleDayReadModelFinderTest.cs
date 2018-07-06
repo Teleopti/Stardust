@@ -248,6 +248,150 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			}
 		}
 
+		[Test]
+		public void ShouldLoadBothWorkingSchedules()
+		{
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			var date = new DateTime(2012, 8, 29, 0, 0, 0, DateTimeKind.Utc);
+			createAndSaveReadModel(personId1, businessUnitId, date, 10);
+			createAndSaveReadModel(personId2, businessUnitId, date, 10);
+			var personInfo1 = new PersonInfoForShiftTradeFilter(){PersonId = personId1, IsDayOff = false};
+			var personInfo2 = new PersonInfoForShiftTradeFilter(){PersonId = personId2, IsDayOff = false};
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var ret = Target.ForPeople(new DateTimePeriod(date, date.AddHours(23)), new List<PersonInfoForShiftTradeFilter>{ personInfo1 , personInfo2});
+				Assert.That(ret.Count(), Is.EqualTo(2));
+			}
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				clearReadModel(personId1, businessUnitId, date);
+				clearReadModel(personId2, businessUnitId, date);
+				uow.PersistAll();
+			}
+		}
+
+		[Test]
+		public void ShouldLoadMyDayoffAndPersonToWorkingSchedule()
+		{
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			var date = new DateTime(2012, 8, 29, 0, 0, 0, DateTimeKind.Utc);
+			createAndSaveReadModel(personId1, businessUnitId, date, 10, isDayoff: true);
+			createAndSaveReadModel(personId2, businessUnitId, date, 10);
+			var personInfo1 = new PersonInfoForShiftTradeFilter() { PersonId = personId1, IsDayOff = true };
+			var personInfo2 = new PersonInfoForShiftTradeFilter() { PersonId = personId2, IsDayOff = false };
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var ret = Target.ForPeople(new DateTimePeriod(date, date.AddHours(23)), new List<PersonInfoForShiftTradeFilter> { personInfo1, personInfo2 });
+				Assert.That(ret.Count(), Is.EqualTo(2));
+			}
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				clearReadModel(personId1, businessUnitId, date);
+				clearReadModel(personId2, businessUnitId, date);
+				uow.PersistAll();
+			}
+		}
+
+		[Test]
+		public void ShouldLoadMyWorkingScheduleAndPersonToDayoff()
+		{
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			var date = new DateTime(2012, 8, 29, 0, 0, 0, DateTimeKind.Utc);
+			createAndSaveReadModel(personId1, businessUnitId, date, 10);
+			createAndSaveReadModel(personId2, businessUnitId, date, 10, isDayoff: true);
+			var personInfo1 = new PersonInfoForShiftTradeFilter() { PersonId = personId1, IsDayOff = false };
+			var personInfo2 = new PersonInfoForShiftTradeFilter() { PersonId = personId2, IsDayOff = true };
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var ret = Target.ForPeople(new DateTimePeriod(date, date.AddHours(23)), new List<PersonInfoForShiftTradeFilter> { personInfo1, personInfo2 });
+				Assert.That(ret.Count(), Is.EqualTo(2));
+			}
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				clearReadModel(personId1, businessUnitId, date);
+				clearReadModel(personId2, businessUnitId, date);
+				uow.PersistAll();
+			}
+		}
+
+		[Test]
+		public void ShouldNotLoadScheduleWhenNotFitFilterSet()
+		{
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			var date = new DateTime(2012, 8, 29, 0, 0, 0, DateTimeKind.Utc);
+			createAndSaveReadModel(personId1, businessUnitId, date, 10, isDayoff:true);
+			createAndSaveReadModel(personId2, businessUnitId, date, 10);
+			var personInfo1 = new PersonInfoForShiftTradeFilter() { PersonId = personId1, IsDayOff = false };
+			var personInfo2 = new PersonInfoForShiftTradeFilter() { PersonId = personId2, IsDayOff = false };
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var ret = Target.ForPeople(new DateTimePeriod(date, date.AddHours(23)), new List<PersonInfoForShiftTradeFilter> { personInfo1, personInfo2 });
+				Assert.That(ret.Count(), Is.EqualTo(0));
+			}
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				clearReadModel(personId1, businessUnitId, date);
+				clearReadModel(personId2, businessUnitId, date);
+				uow.PersistAll();
+			}
+		}
+
+		[Test]
+		public void ShouldNotLoadScheduleThatBeforePeriod()
+		{
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			var date = new DateTime(2012, 8, 29, 0, 0, 0, DateTimeKind.Utc);
+			createAndSaveReadModel(personId1, businessUnitId, date, 10);
+			createAndSaveReadModel(personId2, businessUnitId, date, 10);
+			var personInfo1 = new PersonInfoForShiftTradeFilter() { PersonId = personId1, IsDayOff = false };
+			var personInfo2 = new PersonInfoForShiftTradeFilter() { PersonId = personId2, IsDayOff = false };
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var ret = Target.ForPeople(new DateTimePeriod(date.AddDays(1), date.AddDays(1).AddHours(23)), new List<PersonInfoForShiftTradeFilter> { personInfo1, personInfo2 });
+				Assert.That(ret.Count(), Is.EqualTo(0));
+			}
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				clearReadModel(personId1, businessUnitId, date);
+				clearReadModel(personId2, businessUnitId, date);
+				uow.PersistAll();
+			}
+		}
+
+		[Test]
+		public void ShouldNotLoadScheduleThatAfterPeriod()
+		{
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			var date = new DateTime(2012, 8, 29, 0, 0, 0, DateTimeKind.Utc);
+			createAndSaveReadModel(personId1, businessUnitId, date, 10);
+			createAndSaveReadModel(personId2, businessUnitId, date, 10);
+			var personInfo1 = new PersonInfoForShiftTradeFilter() { PersonId = personId1, IsDayOff = false };
+			var personInfo2 = new PersonInfoForShiftTradeFilter() { PersonId = personId2, IsDayOff = false };
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var ret = Target.ForPeople(new DateTimePeriod(date.AddDays(-1), date.AddDays(-1).AddHours(23)), new List<PersonInfoForShiftTradeFilter> { personInfo1, personInfo2 });
+				Assert.That(ret.Count(), Is.EqualTo(0));
+			}
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				clearReadModel(personId1, businessUnitId, date);
+				clearReadModel(personId2, businessUnitId, date);
+				uow.PersistAll();
+			}
+		}
+
 		private void clearReadModel(Guid personId, Guid businessUnitId, DateTime date)
 		{
 			var persister = new PersonScheduleDayReadModelPersister(CurrentUnitOfWork.Make(), new DoNotSend(), new FakeCurrentDatasource("asd"));
@@ -255,13 +399,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			persister.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), personId, businessUnitId, null, false);
 		}
 
-		private void createAndSaveReadModel(Guid personId, Guid businessUnitId, DateTime date, int shiftStartHour, int? shiftEndHour = null)
+		private void createAndSaveReadModel(Guid personId, Guid businessUnitId, DateTime date, int shiftStartHour, int? shiftEndHour = null, bool isDayoff = false)
 		{
 			var model = new PersonScheduleDayReadModel
 			{
 				Date = date,			
 				PersonId = personId,
 				Model = "{shift: blablabla}",
+				IsDayOff = isDayoff,
 				ScheduleLoadTimestamp = DateTime.UtcNow
 			};
 			//Not empty schedule
