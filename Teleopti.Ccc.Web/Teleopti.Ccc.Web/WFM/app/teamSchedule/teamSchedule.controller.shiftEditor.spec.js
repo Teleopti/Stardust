@@ -1200,7 +1200,7 @@
 
 	});
 
-	it('should disable refresh button when schedule was changed by itself and and enable save button after changed something', function () {
+	it('should disable refresh button when schedule was changed by itself and enable save button after changing back to the previous type', function () {
 		var date = "2018-06-28";
 		var personId = "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22";
 		fakeTeamSchedule.has({
@@ -1226,8 +1226,15 @@
 		var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", "2018-06-28", "Europe/Berlin", scope);
 		scope.$apply();
 
-		var vm = panel.isolateScope().vm;
+		var shiftLayers = panel[0].querySelectorAll(".shift-layer");
+		shiftLayers[0].click();
+		var typeEls = panel[0].querySelectorAll('.activity-selector md-option');
+		typeEls[2].click();
+		shiftLayers[0].click();
+		var saveButton = panel[0].querySelector('.btn-save');
+		saveButton.click();
 
+		var vm = panel.isolateScope().vm;
 		var newSchedule = {
 			"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
 			"Name": "Annika Andersson",
@@ -1246,7 +1253,6 @@
 			"Timezone": { "IanaId": "Europe/Berlin" }
 		};
 		fakeTeamSchedule.has(newSchedule);
-
 		mockSignalRBackendServer.notifyClients([
 			{
 				"DomainReferenceId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
@@ -1255,16 +1261,14 @@
 				"TrackId": vm.trackId
 			}
 		]);
-
 		scope.$apply();
 
-		var shiftLayers = panel[0].querySelectorAll(".shift-layer");
+		shiftLayers = panel[0].querySelectorAll(".shift-layer");
 		shiftLayers[0].click();
 
-		var typeEls = panel[0].querySelectorAll('.activity-selector md-option');
-		typeEls[2].click();
+		typeEls = panel[0].querySelectorAll('.activity-selector md-option');
+		typeEls[1].click();
 
-		var saveButton = panel[0].querySelector('.btn-save');
 		var refreshButton = panel[0].querySelector('.btn-refresh');
 		expect(saveButton.disabled).toBeFalsy();
 		expect(refreshButton.disabled).toBeTruthy();
