@@ -35,6 +35,8 @@
 	self.selectedTeamSubscription = null;
 	self.currentPageNum = ko.observable(1);
 	self.totalPageNum = ko.observable(0);
+	self.totalAgentCount = ko.observable(0);
+	self.isScrollbarVisible = ko.observable(false);
 	self.isPanelVisible = ko.observable(false);
 	self.searchNameText = ko.observable('');
 	self.hasFiltered = ko.observable(false);
@@ -135,6 +137,7 @@
 
 		setSelectedDateSubscription();
 		setPaging(data.PageCount);
+		self.totalAgentCount(data.TotalAgentCount);
 
 		self.hasFiltered(
 			!!self.filter.searchNameText || (self.selectedTeamIds[0] && self.selectedTeamIds[0] != self.defaultTeamId)
