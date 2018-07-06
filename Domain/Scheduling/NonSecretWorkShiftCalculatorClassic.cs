@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public interface IWorkShiftCalculator
 	{
-		double CalculateShiftValue(
+		IWorkShiftCalculationResultHolder CalculateShiftValue(
 			IEnumerable<IWorkShiftCalculatableLayer> mainShiftLayers,
 			IWorkShiftCalculatorSkillStaffPeriodData skillStaffPeriodData,
 			WorkShiftLengthHintOption lengthFactor,
@@ -26,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 	public class NonSecretWorkShiftCalculatorClassic : IWorkShiftCalculator
 	{
-		public double CalculateShiftValue(
+		public IWorkShiftCalculationResultHolder CalculateShiftValue(
 		  IEnumerable<IWorkShiftCalculatableLayer> mainShiftLayers,
 		  IWorkShiftCalculatorSkillStaffPeriodData skillStaffPeriodData,
 		  WorkShiftLengthHintOption lengthFactor,
@@ -35,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			Func<TimeSpan, int, TimeSpan> fitToDefaultResolution)
 		{
 			if (skillStaffPeriodData.Empty())
-				return double.MinValue;
+				return new WorkShiftCalculationResult{Value = double.MinValue };
 
 			double periodValue = 0;
 			int resourceInMinutes = 0;
@@ -71,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					{
 						if (activity.RequiresSkill)
 						{
-							return double.MinValue;
+							return new WorkShiftCalculationResult { Value = double.MinValue };
 						}
 						// try to find a SkillStaffPeriodDataHolder
 						do
@@ -109,7 +111,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 							if (calculatableSkillStaffPeriod == null)
 							{
 								if (activity.RequiresSkill)
-									return double.MinValue;
+									return new WorkShiftCalculationResult { Value = double.MinValue };
 								do
 								{
 									currentStart = currentStart.AddMinutes(resolution);
@@ -122,7 +124,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 							if (calculatableSkillStaffPeriod == null)
 							{
 								if (activity.RequiresSkill)
-									return double.MinValue;
+									return new WorkShiftCalculationResult { Value = double.MinValue };
 								break;
 							}
 
@@ -138,14 +140,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				else
 				{
 					if (activity.RequiresSkill)
-						return double.MinValue;
+						return new WorkShiftCalculationResult { Value = double.MinValue };
 				}
 
 			}
 
-			var lengthCorrectedValue = CalculateShiftValueForPeriod(periodValue, resourceInMinutes, lengthFactor, resolution);
-
-			return Math.Round(lengthCorrectedValue, 5);
+			var recalculated = CalculateShiftValueForPeriod(periodValue, resourceInMinutes, lengthFactor, resolution);
+			return new WorkShiftCalculationResult { Value = Math.Round(recalculated, 5), LengthInMinutes = resourceInMinutes};
+			//return new WorkShiftCalculationResult { Value = Math.Round(periodValue, 5), LengthInMinutes = resourceInMinutes};
 		}
 
 		/// <summary>

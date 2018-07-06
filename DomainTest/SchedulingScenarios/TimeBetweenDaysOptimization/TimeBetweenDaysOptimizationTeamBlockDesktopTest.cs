@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TimeBetweenDaysOptimizatio
 		public OptimizationDesktopExecuter Target;
 		public FakeRuleSetBagRepository RuleSetBagRepository;
 
-		[Test, Ignore("Until Bug76273 is solved")]
+		[Test, Ignore("Until bug 76273 is solved")]
 		public void ShouldHonorMaxStaffBug76273()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
@@ -49,20 +49,19 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TimeBetweenDaysOptimizatio
 			agent2.SchedulePeriod(firstDay).SetDaysOff(2);
 			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
 				5,
+				5,
+				5,
 				1,
-				5,
-				5,
 				25,
 				5,
 				5);
 
-			var dt1 = new DateTime(2015, 10, 12, 16, 0, 0, DateTimeKind.Utc);
-			var dt2 = new DateTime(2015, 10, 12, 16, 15, 0, DateTimeKind.Utc);
+			var dt1 = new DateTime(2015, 10, 16, 16, 0, 0, DateTimeKind.Utc);
+			var dt2 = new DateTime(2015, 10, 16, 16, 15, 0, DateTimeKind.Utc);
 			var dtp = new DateTimePeriod(dt1, dt2);
-			foreach (var skillDay in skillDays)
-			{
-				skillDay.SplitSkillDataPeriods(skillDay.SkillDataPeriodCollection);
-				foreach (var skillDataPeriod in skillDay.SkillDataPeriodCollection)
+			
+				skillDays[4].SplitSkillDataPeriods(skillDays[4].SkillDataPeriodCollection);
+				foreach (var skillDataPeriod in skillDays[4].SkillDataPeriodCollection)
 				{
 					if (skillDataPeriod.Period == dtp || 
 						skillDataPeriod.Period == dtp.MovePeriod(TimeSpan.FromMinutes(15)) ||
@@ -73,9 +72,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TimeBetweenDaysOptimizatio
 						skillDataPeriod.MaximumPersons = 1;
 					}
 				}
-			}
-			var asses1 = Enumerable.Range(0, 7).Select(i => new PersonAssignment(agent1, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(7, 15))).ToList();
-			var asses2 = Enumerable.Range(0, 7).Select(i => new PersonAssignment(agent2, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 17))).ToList();
+
+			var asses1 = Enumerable.Range(0, 7).Select(i =>
+				new PersonAssignment(agent1, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory)
+					.WithLayer(activity, new TimePeriod(7, 15))).ToList();
+			var asses2 = Enumerable.Range(0, 7).Select(i =>
+				new PersonAssignment(agent2, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory)
+					.WithLayer(activity, new TimePeriod(9, 17))).ToList();
 			asses1[5].SetDayOff(new DayOffTemplate()); //saturday
 			asses1[6].SetDayOff(new DayOffTemplate()); //sunday
 			asses2[5].SetDayOff(new DayOffTemplate()); //saturday
@@ -91,7 +94,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TimeBetweenDaysOptimizatio
 			};
 			var daysOffPreferences = new DaysOffPreferences();
 			var dayOffOptimizationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(daysOffPreferences);
-			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent1, agent2 }, period, optPreferences, dayOffOptimizationPreferenceProvider);
+			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] {agent1},
+				new DateOnlyPeriod(2015, 10, 15, 2015, 10, 16), optPreferences, dayOffOptimizationPreferenceProvider);
 			skillDays[4].SkillStaffPeriodCollection.Last().CalculatedLoggedOn.Should().Be.EqualTo(1);
 		}
 

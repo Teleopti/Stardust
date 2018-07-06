@@ -472,7 +472,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			var result = _target.CalculateShiftValue(new WorkShiftCalculatableVisualLayerCollection(layerCollection),new WorkShiftCalculatorSkillStaffPeriodData(skillStaffPeriods), WorkShiftLengthHintOption.Free, true, true);
 
-            Assert.Greater(result, double.MinValue);
+            Assert.Greater(result.Value, double.MinValue);
 
             layers = new List<IVisualLayer> { layerPhone, layerBreak2 };
             layerCollection = new VisualLayerCollection(layers, new ProjectionPayloadMerger());

@@ -110,18 +110,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             if (allValues.Count == 0)
                 return null;
 
-            double minValue = double.MaxValue;
-            double maxValue = double.MinValue;
-            foreach (var workShiftCalculationResultHolder in allValues)
-            {
-                if (workShiftCalculationResultHolder.Value > maxValue)
-                    maxValue = workShiftCalculationResultHolder.Value;
-                if (workShiftCalculationResultHolder.Value < minValue)
-                    minValue = workShiftCalculationResultHolder.Value;
-            }
+			IWorkShiftCalculationResultHolder[] foundValues = { };
+			if (schedulingOptions.WorkShiftLengthHintOption != WorkShiftLengthHintOption.Long)
+			{
+				foundValues = _fairnessAndMaxSeatCalculatorsManager.FindBestShiftAccordingToValue(allValues).ToArray();
+			}
+			else
+			{
+				foundValues = _fairnessAndMaxSeatCalculatorsManager.FindBestShiftAccordingToValue(allValues).ToArray();
+				//foundValues = _fairnessAndMaxSeatCalculatorsManager.FindBestLongShiftAccordingToValue(allValues).ToArray();
+			}
 
-        	var foundValues = _fairnessAndMaxSeatCalculatorsManager.RecalculateFoundValues(allValues).ToArray();
-	        if (foundValues.IsEmpty())
+			if (foundValues.IsEmpty())
 		        return null;
 
 			// if we only want shifts that don't overstaff

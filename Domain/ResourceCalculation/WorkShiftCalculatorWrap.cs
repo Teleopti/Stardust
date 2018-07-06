@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public static class WorkShiftCalculatorExtensions
 	{
-		public static double CalculateShiftValue(
+		public static IWorkShiftCalculationResultHolder CalculateShiftValue(
 			this IWorkShiftCalculator instance,
 			IEnumerable<IWorkShiftCalculatableLayer> mainShiftLayers,
 			IWorkShiftCalculatorSkillStaffPeriodData skillStaffPeriodData,

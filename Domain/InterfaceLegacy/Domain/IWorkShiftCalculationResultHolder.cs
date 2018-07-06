@@ -19,5 +19,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </summary>
         /// <value>The shift projection.</value>
         ShiftProjectionCache ShiftProjection { get; set; }
+
+		int LengthInMinutes { get; set; }
     }
 }

@@ -52,10 +52,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 							schedulingOptions.UseMaximumStaffing)
 						: null
 				};
-				double value = v.shiftValue;
+				double value = v.shiftValue.Value;
 				if (v.nonBlendValue.HasValue)
 				{
-					if (v.shiftValue.Equals(double.MinValue))
+					if (v.shiftValue.Value.Equals(double.MinValue))
 					{
 						value = v.nonBlendValue.Value;
 					}
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						value += v.nonBlendValue.Value;
 					}
 				}
-				return (IWorkShiftCalculationResultHolder)new WorkShiftCalculationResult { ShiftProjection = v.shiftProjection, Value = value };
+				return (IWorkShiftCalculationResultHolder)new WorkShiftCalculationResult { ShiftProjection = v.shiftProjection, Value = value, LengthInMinutes = v.shiftValue.LengthInMinutes};
 			}).Where(w => w.Value > double.MinValue).ToList();
 
 			return allValues;

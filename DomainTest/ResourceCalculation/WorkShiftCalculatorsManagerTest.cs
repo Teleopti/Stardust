@@ -48,8 +48,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			editableShift2.Stub(x => x.ProjectionService()).Return(projectionService2);
 			projectionService1.Stub(x => x.CreateProjection()).Return(proj1v);
 			projectionService2.Stub(x => x.CreateProjection()).Return(proj2v);
-			workShiftCalculator.Stub(x => x.CalculateShiftValue(cache1.WorkShiftCalculatableLayers, dataHolders, WorkShiftLengthHintOption.AverageWorkTime, true, true, TimeHelper.FitToDefaultResolution)).Return(double.MinValue);
-			workShiftCalculator.Stub(x => x.CalculateShiftValue(cache2.WorkShiftCalculatableLayers, dataHolders, WorkShiftLengthHintOption.AverageWorkTime, true, true, TimeHelper.FitToDefaultResolution)).Return(5);
+			workShiftCalculator.Stub(x => x.CalculateShiftValue(cache1.WorkShiftCalculatableLayers, dataHolders, WorkShiftLengthHintOption.AverageWorkTime, true, true, TimeHelper.FitToDefaultResolution)).Return(new WorkShiftCalculationResult{Value = Double.MinValue});
+			workShiftCalculator.Stub(x => x.CalculateShiftValue(cache2.WorkShiftCalculatableLayers, dataHolders, WorkShiftLengthHintOption.AverageWorkTime, true, true, TimeHelper.FitToDefaultResolution)).Return(new WorkShiftCalculationResult { Value = 5 });
 
 			nonBlendSkillPeriods.Stub(x => x.Count).Return(5);
 			nonBlendWorkShiftCalculator.Stub(x => x.CalculateShiftValue(person, proj1v, nonBlendSkillPeriods, WorkShiftLengthHintOption.AverageWorkTime, true, true)).Return(5);
