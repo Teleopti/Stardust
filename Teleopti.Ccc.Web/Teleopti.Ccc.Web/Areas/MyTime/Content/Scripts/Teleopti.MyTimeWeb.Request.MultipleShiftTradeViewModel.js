@@ -1,4 +1,14 @@
-Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
+﻿/// <reference path="~/Content/jquery/jquery-1.12.4.js" />
+/// <reference path="~/Content/Scripts/knockout-2.2.1.js"/>
+/// <reference path="~/Content/moment/moment.js" />
+/// <reference path="jquery.visible.js" />
+/// <reference path="Teleopti.MyTimeWeb.Common.js"/>
+/// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
+/// <reference path="Teleopti.MyTimeWeb.Request.js"/>
+/// <reference path="Teleopti.MyTimeWeb.Request.List.js"/>
+/// <reference path="Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.js"/>
+
+Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 	var self = this;
 	self.layerCanvasPixelWidth = ko.observable();
 	self.weekStart = ko.observable(1);
@@ -47,6 +57,14 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	self.refocusToNameSearch = null;
 	self.allTeamsId = "allTeams";
 	self.allSitesId = "allSites";
+	self.shiftRequestStartDate = null;
+	self.shiftPageSize = 7;
+
+	self.myScheduleList = ko.observableArray();
+	self.targetScheduleList = ko.observableArray();
+
+	self.loadedSchedulePairs = ko.observableArray();
+	self.loadedSchedulePairsRaw = [];
 
 	self.chooseHistorys = ko.observableArray();
 	self.isDetailVisible = ko.computed(function () {
@@ -223,9 +241,9 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	self.chooseAgent = function (agent) {
 		//hide or show all agents
 		var showAllAgent = agent === null;
-		$.each(self.possibleTradeSchedules(), function (index, value) {
-			value.isVisible(showAllAgent);
-		});
+		//$.each(self.possibleTradeSchedules(), function (index, value) {
+		//	value.isVisible(showAllAgent);
+		//});
 		if (!showAllAgent) {
 			agent.isVisible(true);
 			redrawLayers();
@@ -244,7 +262,20 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		} else {
 			self.add();
 		}
+
+		if (agent == null) {
+			return;
+		}
+
+		self.shiftRequestStartDate = self.requestedDateInternal();
+
+		var startDate = self.shiftRequestStartDate;
+		var endDate = moment(self.shiftRequestStartDate).add("days", self.shiftPageSize);
+		var agentId = agent.personId;
+		loadPeriodSchedule(startDate, endDate, agentId);
 	};
+
+
 
 	self.hideShiftTradeWindow = function () {
 		$('#Request-add-shift-trade').hide();
@@ -790,6 +821,58 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		return self.availableTeams().filter(function (team) { return team.id !== self.allTeamsId; }).map(function (team) { return team.id; });
 	}
 
+	function loadPeriodSchedule(startDate, endDate, agentId) {
+		if (!startDate || !endDate || !agentId) {
+			return;
+		}
+
+		ajax.Ajax({
+			url: 'Requests/ShiftTradeMultiDaysSchedule',
+			dataType: 'json',
+			contentType: 'application/json; charset=utf-8',
+			type: 'POST',
+			data: JSON.stringify({
+				StartDate: startDate,
+				EndDate: endDate,
+				PersonToId: agentId
+			}),
+			success: function (data) {
+				var mySchedules = [];
+				var targetSchedules = []
+				if (data.MySchedules && data.MySchedules.length > 0) {
+					mySchedules = createShiftTradeSchedules(data.MySchedules);
+				}
+
+				if (data.PersonToSchedules && data.PersonToSchedules.length > 0) {
+					targetSchedules = createShiftTradeSchedules(data.PersonToSchedules);
+				}
+
+				if (mySchedules.length > 0 && targetSchedules.length > 0) {
+					mySchedules.forEach(function(model) {
+						var date = model.date;
+						var targetModel = targetSchedules.find(function(m) {
+							return m.date.format("YYYY-MM-DD") == date.format("YYYY-MM-DD");
+						});
+
+						if (targetModel) {
+							self.loadedSchedulePairs.push({ date: date, mySchedule: model, targetSchedule: targetModel });
+						}
+
+					});
+				}
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				if (jqXHR.status === 400) {
+					var data = $.parseJSON(jqXHR.responseText);
+					self.errorMessage(data.Errors.join('</br>'));
+					setSendEnableStatus();
+					return;
+				}
+				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+			}
+		});
+	}
+
 	function loadSchedule(date, selectedTeamOption) {
 		if (selectedTeamOption === undefined) return;
 		if (self.IsLoading()) return;
@@ -888,6 +971,31 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		});
 
 		self.noPossibleShiftTrades(mappedPersonsSchedule.length === 0 ? true : false);
+	}
+
+
+	function createShiftTradeSchedules(shiftTradeSchedules) {
+		var models = ko.utils.arrayMap(shiftTradeSchedules, function (personSchedule) {
+			var mappedLayers = [];
+			if (personSchedule !== null && personSchedule.ScheduleLayers !== null && personSchedule.ScheduleLayers.length > 0) {
+				var layers = personSchedule.ScheduleLayers;
+				var scheduleStartTime = moment(layers[0].Start);
+				var scheduleEndTime = moment(layers[layers.length - 1].End);
+				var scheduleLength = scheduleEndTime.diff(scheduleStartTime, 'minutes');
+
+				mappedLayers = ko.utils.arrayMap(personSchedule.ScheduleLayers, function (layer) {
+					var minutesSinceTimeLineStart = moment(layer.Start).diff(self.timeLineStartTime(), 'minutes');
+					var offsetFromScheduleStart = moment(layer.Start).diff(scheduleStartTime, 'minutes');
+					return new Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel(layer, minutesSinceTimeLineStart, self.pixelPerMinute(), offsetFromScheduleStart, scheduleLength);
+				});
+			}
+			var model = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedLayers, scheduleStartTime, scheduleEndTime, personSchedule.Name,
+				personSchedule.PersonId, personSchedule.IsDayOff, personSchedule.DayOffName, false, false, null, Teleopti.MyTimeWeb.Common.FormatTimeSpan(personSchedule.ContractTimeInMinute),undefined, scheduleStartTime);
+
+			return model;
+		});
+
+		return models;
 	}
 
 	function setPossibleTradeSchedulesRaw(date, data) {
@@ -999,6 +1107,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	}
 
 	self.displayView = function () {
-		return 'new-shift-trade-request-panel';
+		return 'new-shift-trade-request-panel-74947';
 	};
 };

@@ -199,6 +199,14 @@
 	height: 22px;
 }
 
+.shift-trade-layer-container-new {
+	position: relative;
+	padding-left: 0;
+	padding-right: 0;
+	height: 22px;
+	width:200px;
+}
+
 .shift-trade-layer-container.shift-trade-empty {
 	width: 100%;
 }
@@ -220,6 +228,13 @@
 	height: 20px;
 	top: 5px;
 	position: absolute;
+	z-index: 2;
+}
+
+.shift-trade-layer.add-new {
+	height: 20px;
+	top: 5px;
+	/*position: absolute;*/
 	z-index: 2;
 }
 
@@ -322,7 +337,7 @@
 .shift-trade-dayoff-name {
 	position: absolute;
 	left: 0;
-	width: 100%;
+	width: 150px;
 	text-align: center;
 	display: inline-block;
 	overflow: hidden;
@@ -762,4 +777,77 @@ input.use-default-startTime {
 	cursor: pointer;
 	transform: scale(1.3);
 	margin: 5px 10px;
+}
+
+.shift-trade-request-74947 {
+	display: flex;
+}
+
+.side-by-side-header {
+	display: flex;
+	font-weight: bold;
+}
+
+.shift-to-trade-row {
+	display: flex;
+	border-top: 1px solid #e3e3e3;
+}
+
+	.shift-to-trade-row + .shift-to-trade-row {
+	}
+
+.shift-detail {
+	overflow: hidden;
+	padding: 10px 4px;
+	flex: 4 4 40%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.shift-date, .shift-selection {
+	flex: 1 1 10%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.shift-trade-contract {
+	clear: both;
+	font-size: .8em;
+}
+
+.schedules-side-by-side {
+	flex: 1 1 70%;
+	overflow: hidden;
+	background-color: white;
+	border: 1px solid #e3e3e3;
+}
+
+.shift-trade-cart {
+	flex: 1 1 30%;
+	padding: 0 10px;
+}
+
+.shift-visual-indication-wrapper {
+	box-sizing: border-box;
+	padding: 0 10%;
+	align-self: stretch;
+}
+
+.shift-visual-indication {
+	position: relative;
+	width: 100%;
+	height: 14px;
+	overflow: hidden;
+}
+
+.shift-visual-indication-block {
+	position: absolute;
+	height: 14px;
+}
+
+.shift-visual-indication-block.dayoff {
+	width: 100%;
 }

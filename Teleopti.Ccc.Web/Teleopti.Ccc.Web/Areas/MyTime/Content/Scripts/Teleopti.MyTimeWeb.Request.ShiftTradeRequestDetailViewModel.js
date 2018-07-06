@@ -301,7 +301,7 @@ Teleopti.MyTimeWeb.Request.LayerEditShiftTradeViewModel = function (layer, minut
 	});
 };
 
-Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel = function (layer, minutesSinceTimeLineStart, pixelPerMinute) {
+Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel = function (layer, minutesSinceTimeLineStart, pixelPerMinute, layerOffset, shiftLength) {
 	var self = this;
 	self.payload = layer.Payload;
 	self.backgroundColor = layer.Color;
@@ -315,8 +315,14 @@ Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel = function (layer, minute
 	self.leftPx = ko.computed(function () {
 		return (self.minutesSinceTimeLineStart() * self.pixelPerMinute()) + 'px';
 	});
+	self.leftPercentage = ko.computed(function () {
+		return 100 * layerOffset / shiftLength + '%';
+	});
 	self.widthPx = ko.computed(function () {
 		return self.lengthInMinutes() * self.pixelPerMinute() + 'px';
+	});
+	self.widthPercentage = ko.computed(function () {
+		return 100 * self.lengthInMinutes() / shiftLength + '%';
 	});
 	self.tooltipText = ko.computed(function () {
 		return "<div>{0}</div>{1}".format(layer.TitleHeader, layer.TitleTime);
@@ -339,6 +345,23 @@ Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel = function (layer, minute
 			'paddingLeft': self.widthPx()
 		};
 
+	});
+	self.styleJson74947 = ko.computed(function () {
+		if (isRtl)
+			return {
+				'right': self.leftPercentage(),
+				'background-size': self.isOvertime ? '11px 11px' : 'initial',
+				'background-image': self.isOvertime ? 'linear-gradient(45deg,transparent,transparent 4px,rgba(251,251,251,.8) 6px,transparent 10px,transparent)' : '',
+				'background-color': Teleopti.MyTimeWeb.Common.ConvertColorToRGB(self.backgroundColor),
+				'width': self.widthPercentage()
+			};
+		return {
+			'left': self.leftPercentage(),
+			'background-size': self.isOvertime ? '11px 11px' : 'initial',
+			'background-image': self.isOvertime ? 'linear-gradient(45deg,transparent,transparent 4px,rgba(251,251,251,.8) 6px,transparent 10px,transparent)' : 'initial',
+			'background-color': Teleopti.MyTimeWeb.Common.ConvertColorToRGB(self.backgroundColor),
+			'width': self.widthPercentage()
+		};
 	});
 };
 
@@ -411,7 +434,7 @@ Teleopti.MyTimeWeb.Request.PersonScheduleEditShiftTradeViewModel = function (lay
 };
 
 Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel = function (layers, scheduleStartTime, scheduleEndTime,
-	agentName, personId, isDayOff, dayOffName, isEmptyDay, isFullDayAbsence, offerId, contractTime, isNotScheduled) {
+	agentName, personId, isDayOff, dayOffName, isEmptyDay, isFullDayAbsence, offerId, contractTime, isNotScheduled, scheduleDate) {
 	var self = this;
 
 	self.scheduleStartTime = ko.observable(scheduleStartTime);
@@ -427,6 +450,7 @@ Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel = function (laye
 	self.ShiftExchangeOfferId = offerId;
 	self.contractTime = contractTime === undefined ? "0:00" : contractTime;
 	self.isNotScheduled = isNotScheduled;
+	self.date = scheduleDate;
 };
 
 function ShiftTradeRequestDetailedDayViewModel (data) {
