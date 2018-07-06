@@ -22,6 +22,7 @@ namespace Teleopti.Wfm.Administration.Core
 		}
 
 		[TenantUnitOfWork]
+		[NoTenantAuthentication]
 		public virtual void Purge()
 		{
 			var manager = _currentTenantSession as TenantUnitOfWorkManager;
