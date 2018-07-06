@@ -17,11 +17,13 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		constants = {
 			scheduleHeight: 668, // Same value as height of class "weekview-day-schedule"
 			mobileMinScheduleHeight: 700,
+			pixelOfOneHourInTeamSchedule: 60,
 			pixelToDisplayAll: 38,
 			pixelToDisplayTitle: 16,
 
 			timelineMarginInMinutes: 15, // Refer to Teleopti.Ccc.Web.Areas.MyTime.Core.WeekScheduleDomainDataProvider.getMinMaxTime()
 			totalMinutesOfOneDay: 1440, //: 24 * 60, Total minutes of a day
+			fullDayHourStr: '1.00', //: 24 * 60, Total minutes of a day
 			probabilityIntervalLengthInMinute: 15,
 			probabilityType: {
 				none: 0,

@@ -126,6 +126,40 @@
 		equal($(labelSelector)[3].innerText, '08:00');
 	});
 
+	test('should update timeline after load more schedules', function() {
+		$('body').append(agentSchedulesHtml);
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+
+		vm.readMoreTeamScheduleData({
+			AgentSchedules: [],
+			TimeLine: [
+				{ Time: '08:00:00', TimeLineDisplay: '08:00', PositionPercentage: 0.0714, TimeFixedFormat: null },
+				{ Time: '09:00:00', TimeLineDisplay: '09:00', PositionPercentage: 0.3571, TimeFixedFormat: null },
+				{ Time: '10:00:00', TimeLineDisplay: '10:00', PositionPercentage: 0.6429, TimeFixedFormat: null },
+				{ Time: '11:00:00', TimeLineDisplay: '11:00', PositionPercentage: 0.9286, TimeFixedFormat: null },
+				{ Time: '23:00:00', TimeLineDisplay: '23:00', PositionPercentage: 0.0714, TimeFixedFormat: null },
+				{ Time: '1.00:00:00', TimeLineDisplay: '00:00', PositionPercentage: 0.3571, TimeFixedFormat: null },
+				{ Time: '1.01:00:00', TimeLineDisplay: '01:00', PositionPercentage: 0.6429, TimeFixedFormat: null },
+				{ Time: '1.02:00:00', TimeLineDisplay: '02:00', PositionPercentage: 0.6429, TimeFixedFormat: null },
+				{ Time: '1.03:00:00', TimeLineDisplay: '03:00', PositionPercentage: 0.6429, TimeFixedFormat: null },
+				{ Time: '1.04:00:00', TimeLineDisplay: '04:00', PositionPercentage: 0.6429, TimeFixedFormat: null },
+				{ Time: '1.05:00:00', TimeLineDisplay: '05:00', PositionPercentage: 0.6429, TimeFixedFormat: null }
+			]
+		});
+
+		var labelSelector = '.new-teamschedule-view .mobile-timeline .mobile-timeline-label';
+		equal($(labelSelector).length, 14);
+		equal($(labelSelector)[0].innerText, '05:00');
+		equal($(labelSelector)[1].innerText, '06:00');
+		equal($(labelSelector)[2].innerText, '07:00');
+		equal($(labelSelector)[3].innerText, '08:00');
+		equal($(labelSelector)[4].innerText, '09:00');
+		equal($(labelSelector)[12].innerText, '04:00');
+		equal($(labelSelector)[13].innerText, '05:00');
+	});
+
 	test('should render overnight timeline', function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
@@ -264,7 +298,11 @@
 		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
 
 		vm.readMoreTeamScheduleData({
-			AgentSchedules: fakeOriginalAgentSchedulesData.slice(10)
+			AgentSchedules: fakeOriginalAgentSchedulesData.slice(10),
+			TimeLine: [
+				{ Time: '05:00:00', TimeLineDisplay: '05:00', PositionPercentage: 0.0714, TimeFixedFormat: null },
+				{ Time: '06:00:00', TimeLineDisplay: '06:00', PositionPercentage: 0.3571, TimeFixedFormat: null }
+			]
 		});
 
 		equal(

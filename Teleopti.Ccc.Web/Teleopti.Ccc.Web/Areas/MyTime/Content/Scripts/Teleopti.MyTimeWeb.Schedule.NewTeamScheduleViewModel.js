@@ -4,10 +4,14 @@
 ) {
 	var self = this,
 		constants = Teleopti.MyTimeWeb.Common.Constants,
+		TOTAL_MINUTES_OF_ONE_DAY = constants.totalMinutesOfOneDay,
+		FULL_DAY_HOUR_STR = constants.fullDayHourStr,
+		PIXEL_OF_ONE_HOUR = constants.pixelOfOneHourInTeamSchedule,
 		dateOnlyFormat = constants.serviceDateTimeFormat.dateOnly,
 		timeLineOffset = 50,
 		minPixelsToDisplayTitle = 30,
-		requestDateOnlyFormat = 'YYYY/MM/DD';
+		requestDateOnlyFormat = 'YYYY/MM/DD',
+		rawTimeline = [];
 
 	self.isHostAMobile = Teleopti.MyTimeWeb.Common.IsHostAMobile();
 	self.isHostAniPad = Teleopti.MyTimeWeb.Common.IsHostAniPad();
@@ -126,9 +130,10 @@
 		self.agentNames(getAgentNames(data.AgentSchedules));
 		self.selectedDate(moment(date));
 		self.displayDate(moment(date).format(Teleopti.MyTimeWeb.Common.DateFormat));
-		self.timeLines(createTimeLine(data.TimeLine));
 
-		self.scheduleContainerHeight(self.timeLines().length * 60 + timeLineOffset);
+		rawTimeline = data.TimeLine;
+		self.timeLines(createTimeLineViewModel(rawTimeline));
+		self.scheduleContainerHeight(self.timeLines().length * PIXEL_OF_ONE_HOUR + timeLineOffset);
 
 		var timelineStart = data.TimeLine[0].Time;
 		self.mySchedule(createMySchedule(data.MySchedule, timelineStart));
@@ -152,17 +157,56 @@
 	};
 
 	self.readMoreTeamScheduleData = function(data, callback) {
-		var teamSchedule = createTeamSchedules(data.AgentSchedules, self.timeLines()[0].time);
+		rawTimeline = mergeRawTimeLine(rawTimeline, data.TimeLine);
+		self.timeLines(createTimeLineViewModel(rawTimeline));
+		self.scheduleContainerHeight(self.timeLines().length * PIXEL_OF_ONE_HOUR + timeLineOffset);
 
+		var teamSchedule = createTeamSchedules(data.AgentSchedules, self.timeLines()[0].time);
 		teamSchedule.forEach(function(schedule) {
 			self.teamSchedules.push(schedule);
 			self.agentNames.push(schedule.name);
 		});
 
 		setPaging();
-
 		callback && callback();
 	};
+
+	function mergeRawTimeLine(rawTimeline, newTimeLine) {
+		rawTimeline = rawTimeline.concat(newTimeLine);
+
+		rawTimeline.sort(function(cur, next) {
+			return getMinuteOfRawTimeline(cur) - getMinuteOfRawTimeline(next);
+		});
+
+		var hash = {},
+			distinctRawTimeline = [];
+		rawTimeline.forEach(function(value) {
+			if (!hash[value.Time]) {
+				hash[value.Time] = true;
+				distinctRawTimeline.push(value);
+			}
+		});
+
+		return distinctRawTimeline;
+	}
+
+	function getMinuteOfRawTimeline(t) {
+		var hourMinuteSecond = t.Time.split(':'),
+			hour = hourMinuteSecond[0],
+			minute = hourMinuteSecond[1],
+			minutes = 0;
+
+		if (hour.toString() === FULL_DAY_HOUR_STR) {
+			minutes = TOTAL_MINUTES_OF_ONE_DAY;
+		} else {
+			if (hour.indexOf('.') > -1) {
+				hour = 24 * parseInt(hour.split('.')[0]) + parseInt(hour.split('.')[1]);
+			}
+			minutes = hour * PIXEL_OF_ONE_HOUR + parseInt(minute);
+		}
+
+		return minutes;
+	}
 
 	function getAgentNames(agentSchedulesData) {
 		var agentNames = [];
@@ -299,7 +343,7 @@
 		return teamSchedules;
 	}
 
-	function createTimeLine(timeLine) {
+	function createTimeLineViewModel(timeLine) {
 		var timelineArr = [];
 		var scheduleHeight = Teleopti.MyTimeWeb.Schedule.GetScheduleHeight();
 
