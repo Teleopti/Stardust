@@ -730,6 +730,7 @@
 		var saveButton = panel[0].querySelector(".btn-save");
 		expect(saveButton.disabled).toBeFalsy();
 	});
+	
 
 	it('should save changes with correct data', function () {
 		var date = "2018-06-15";

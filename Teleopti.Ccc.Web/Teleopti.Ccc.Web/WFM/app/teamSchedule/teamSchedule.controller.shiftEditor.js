@@ -49,8 +49,6 @@
 		vm.isSaving = false;
 
 		vm.$onInit = function () {
-			initScheduleState();
-
 			getSchedule();
 
 			ActivityService.fetchAvailableActivities().then(function (data) {
@@ -116,7 +114,7 @@
 			}
 			vm.isSaving = true;
 			ShiftEditorService.changeActivityType(vm.date, vm.personId, getChangedLayers(), { TrackId: vm.trackId }).then(function (response) {
-				initScheduleState();
+				getSchedule();
 				showNotice(response.data);
 			});
 		}
@@ -128,7 +126,6 @@
 		vm.refreshData = function () {
 			if (vm.scheduleChanged) {
 				getSchedule();
-				initScheduleState();
 			}
 		};
 
@@ -152,10 +149,14 @@
 		}
 
 		function getSchedule() {
+			initScheduleState();
+
+			vm.isLoading = true;
 			TeamSchedule.getSchedules(vm.date, [vm.personId]).then(function (data) {
 				vm.scheduleVm = ShiftEditorViewModelFactory.CreateSchedule(vm.date, vm.timezone, data.Schedules[0]);
 				vm.isInDifferentTimezone = (vm.scheduleVm.Timezone !== vm.timezone);
 				initAndBindScrollEvent();
+				vm.isLoading = false;
 			});
 		}
 
@@ -165,7 +166,6 @@
 			vm.selectedShiftLayer = null;
 			vm.selectedActivitiyId = null;
 			vm.showError = false;
-			clearChanges();
 		}
 
 		function subscribeToScheduleChange() {
@@ -173,13 +173,9 @@
 				for (var i = 0; i < messages.length; i++) {
 					var message = messages[i];
 					if (message.DomainReferenceId === vm.personId
-						&& serviceDateFormatHelper.getDateOnly(message.StartDate.substring(1, message.StartDate.length)) === vm.date
-					) {
+						&& serviceDateFormatHelper.getDateOnly(message.StartDate.substring(1, message.StartDate.length)) === vm.date) {
 						if (vm.trackId !== message.TrackId) {
 							vm.scheduleChanged = true;
-						} else {
-							getSchedule();
-							initScheduleState();
 						}
 						return;
 					}
@@ -225,13 +221,6 @@
 			return hasShift() && !!vm.scheduleVm.ShiftLayers.filter(function (layer) { return layer.CurrentActivityId && layer.CurrentActivityId !== layer.ActivityId; }).length;
 		}
 
-		function clearChanges() {
-			if (hasShift()) {
-				vm.scheduleVm.ShiftLayers.forEach(function (layer) {
-					delete layer.CurrentActivityId;
-				});
-			}
-		}
 
 		function getSelectActivity(layer) {
 			return vm.availableActivities.filter(function (activity) {
