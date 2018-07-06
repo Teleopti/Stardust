@@ -680,6 +680,57 @@
 		expect(saveButton.disabled).toBeTruthy();
 	});
 
+	it('should enable save button when has changes although some of those changes are back', function () {
+		fakeTeamSchedule.has({
+			"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+			"Name": "Annika Andersson",
+			"Date": "2018-06-15",
+			"WorkTimeMinutes": 240,
+			"ContractTimeMinutes": 240,
+			"Projection": [{
+				"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+				"Color": "#ffffff",
+				"Description": "Phone",
+				"Start": "2018-06-15 08:00",
+				"End": "2018-06-15 09:00",
+				"Minutes": 60,
+				"IsOvertime": false,
+				"ActivityId": '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+			},
+			{
+				"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+				"Color": "#ffffff",
+				"Description": "Email",
+				"Start": "2018-06-15 09:00",
+				"End": "2018-06-15 10:00",
+				"Minutes": 60,
+				"IsOvertime": false,
+				"ActivityId": '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
+			}],
+			"Timezone": { "IanaId": "Europe/Berlin" }
+		});
+
+		var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", "2018-06-15", "Europe/Berlin");
+		var shiftLayers = panel[0].querySelectorAll(".shift-layer");
+
+		shiftLayers[0].click();
+		var typeEls = panel[0].querySelectorAll('.activity-selector md-option');
+		typeEls[1].click();
+		shiftLayers[0].click();
+
+		shiftLayers[1].click();
+		typeEls = panel[0].querySelectorAll('.activity-selector md-option');
+		typeEls[1].click();
+		shiftLayers[1].click();
+
+		shiftLayers[0].click();
+		typeEls = panel[0].querySelectorAll('.activity-selector md-option');
+		typeEls[2].click();
+
+		var saveButton = panel[0].querySelector(".btn-save");
+		expect(saveButton.disabled).toBeFalsy();
+	});
+
 	it('should save changes with correct data', function () {
 		var date = "2018-06-15";
 		var personId = "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22";
@@ -836,7 +887,7 @@
 				"IsOvertime": false,
 				"ActivityId": '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
 			}, {
-					"ShiftLayerIds": ["layer2"],
+				"ShiftLayerIds": ["layer2"],
 				"Color": "#FFa2a2",
 				"Description": "E-mail",
 				"Start": "2018-06-15 10:00",

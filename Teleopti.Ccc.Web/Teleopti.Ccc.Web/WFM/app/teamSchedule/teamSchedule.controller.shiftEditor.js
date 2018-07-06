@@ -107,7 +107,6 @@
 			vm.selectedShiftLayer.Color = selectActivity.Color;
 			vm.selectedShiftLayer.Description = selectActivity.Name;
 			vm.selectedShiftLayer.CurrentActivityId = selectActivity.Id;
-			vm.hasChanges = vm.selectedShiftLayer.CurrentActivityId !== vm.selectedShiftLayer.ActivityId;
 		}
 
 		vm.saveChanges = function () {
@@ -123,7 +122,7 @@
 		}
 
 		vm.isSaveButtonDisabled = function () {
-			return !vm.hasChanges || vm.isSaving || vm.showError;
+			return !hasChanges() || vm.isSaving || vm.showError;
 		}
 
 		vm.refreshData = function () {
@@ -162,11 +161,11 @@
 
 		function initScheduleState() {
 			vm.isSaving = false;
-			vm.hasChanges = false;
 			vm.scheduleChanged = false;
 			vm.selectedShiftLayer = null;
 			vm.selectedActivitiyId = null;
 			vm.showError = false;
+			clearChanges();
 		}
 
 		function subscribeToScheduleChange() {
@@ -219,6 +218,19 @@
 					};
 				}
 			});
+		}
+
+
+		function hasChanges() {
+			return hasShift() && !!vm.scheduleVm.ShiftLayers.filter(function (layer) { return layer.CurrentActivityId && layer.CurrentActivityId !== layer.ActivityId; }).length;
+		}
+
+		function clearChanges() {
+			if (hasShift()) {
+				vm.scheduleVm.ShiftLayers.forEach(function (layer) {
+					delete layer.CurrentActivityId;
+				});
+			}
 		}
 
 		function getSelectActivity(layer) {
