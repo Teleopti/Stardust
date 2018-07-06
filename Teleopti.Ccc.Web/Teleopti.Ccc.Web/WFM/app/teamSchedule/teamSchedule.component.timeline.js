@@ -27,10 +27,10 @@
 			});
 		};
 
+
 		function updateRulerHeight() {
 			$timeout(function () {
-				var tHeader = $document[0].querySelector('schedule-table thead');
-				ctrl.height = (ctrl.scheduleCount * 32.5) + tHeader.offsetHeight - 5;
+				ctrl.height = (ctrl.scheduleCount * 32.5) + 50 - 5;
 			});
 		}
 
