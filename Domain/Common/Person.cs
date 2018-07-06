@@ -52,7 +52,8 @@ namespace Teleopti.Ccc.Domain.Common
 			base.PopAllEvents()
 				.KeepLastOfType<PersonNameChangedEvent>()
 				.KeepLastOfType<PersonPeriodChangedEvent>()
-				.KeepLastOfType<OptionalColumnValueChangedEvent>();
+				.KeepLastOfType<OptionalColumnValueChangedEvent>()
+				.KeepLastOfType<PersonTerminalDateChangedEvent>();
 
 		public virtual ITeam MyTeam(DateOnly theDate)
 		{

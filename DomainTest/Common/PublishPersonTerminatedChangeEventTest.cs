@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		public MutableNow Now;
 
 		[Test]
-		public void ShouldPublishWhenChangingTerminationlDate()
+		public void ShouldPublishWhenChangingTerminationDate()
 		{
 			var person = PersonFactory.CreatePersonWithId();
 			Now.Is("2017-01-25");
@@ -59,6 +59,19 @@ namespace Teleopti.Ccc.DomainTest.Common
 			((Person) person).PopAllEvents().OfType<PersonTerminalDateChangedEvent>()
 				.Single()
 				.TerminationDate.Should().Be(null);
+		}
+
+		[Test]
+		public void ShouldNotPublishMoreThanOneEvent()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			Now.Is("2017-01-25");
+
+			person.TerminatePerson("2017-01-31".Date(), new PersonAccountUpdaterDummy());
+			person.TerminatePerson("2017-02-01".Date(), new PersonAccountUpdaterDummy());
+
+			var theEvent = ((Person)person).PopAllEvents().OfType<PersonTerminalDateChangedEvent>().Single();
+			theEvent.TerminationDate.Value.Should().Be(new DateTime(2017, 2, 1));
 		}
 	}
 }
