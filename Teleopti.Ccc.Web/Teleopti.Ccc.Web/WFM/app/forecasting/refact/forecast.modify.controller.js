@@ -282,7 +282,7 @@
 				},
 				function (data, status, headers, config) {
 					vm.isForecastRunning = false;
-					if (data.WarningMessage !== "") {
+					if (data.WarningMessage && data.WarningMessage !== "") {
 						noticeSvc.warning(data.WarningMessage, 15000, true);
 					} else {
 						vm.selectedWorkload.Days = data.ForecastDays;
