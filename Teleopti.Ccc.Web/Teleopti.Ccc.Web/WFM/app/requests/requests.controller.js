@@ -282,7 +282,6 @@
 			else 
 				vm.getSitesAndTeamsAsync();
 
-			setReleaseNotification();
 			vm.onFavoriteSearchInitDefer.promise.then(function(defaultSearch) {
 				if (defaultSearch) {
 					replaceArrayValues(defaultSearch.TeamIds, vm.selectedGroups.groupIds);
@@ -313,14 +312,6 @@
 				vm.overtimeRequestsLicenseAvailable = result.data;
 			}))
 			.then(vm.init);
-
-		function setReleaseNotification() {
-			var message = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink')
-				.replace('{0}', $translate.instant('Requests'))
-				.replace('{1}', '<a href="http://www.teleopti.com/wfm/customer-feedback.aspx" target="_blank">')
-				.replace('{2}', '</a>');
-			noticeSvc.info(message, null, true);
-		}
 
 		function forceRequestsReloadWithoutSelection() {
 			$scope.$broadcast('reload.requests.without.selection');
