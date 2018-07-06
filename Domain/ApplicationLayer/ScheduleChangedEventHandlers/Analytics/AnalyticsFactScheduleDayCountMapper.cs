@@ -1,37 +1,42 @@
 ﻿using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
 	public interface IAnalyticsFactScheduleDayCountMapper
 	{
-		IAnalyticsFactScheduleDayCount Map(ProjectionChangedEventScheduleDay scheduleDay, IAnalyticsFactSchedulePerson personPart, int dateId, int scenarioId, int shiftCategoryId);
+		IAnalyticsFactScheduleDayCount Map(ProjectionChangedEventScheduleDay scheduleDay, IAnalyticsFactSchedulePerson personPart, int scenarioId, int shiftCategoryId);
 	}
 
 	public class AnalyticsFactScheduleDayCountMapper : IAnalyticsFactScheduleDayCountMapper
 	{
+		private readonly IAnalyticsFactScheduleDateMapper _dateMapper;
 		private readonly IAnalyticsFactScheduleTimeMapper _timeMapper;
 
 		public AnalyticsFactScheduleDayCountMapper(
+			IAnalyticsFactScheduleDateMapper dateMapper,
 			IAnalyticsFactScheduleTimeMapper timeMapper)
 
 		{
+			_dateMapper = dateMapper;
 			_timeMapper = timeMapper;
 		}
 
 		public IAnalyticsFactScheduleDayCount Map(
 			ProjectionChangedEventScheduleDay scheduleDay,
-			IAnalyticsFactSchedulePerson personPart, 
-			int dateId,
-			int scenarioId, 
+			IAnalyticsFactSchedulePerson personPart,
+			int scenarioId,
 			int shiftCategoryId)
 
 		{
+			int dateId;
+			if (!_dateMapper.MapDateId(new DateOnly(scheduleDay.Date), out dateId)) return null;
+
 			DateTime starTime;
 			var absenceId = -1;
 
-			if (dateId == -1) return null;
 			if (scheduleDay.IsFullDayAbsence)
 			{
 				var firstLayer = scheduleDay.Shift.Layers.First();
