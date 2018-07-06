@@ -49,8 +49,6 @@
 		vm.isSaving = false;
 
 		vm.$onInit = function () {
-			initScheduleState();
-
 			getSchedule();
 
 			ActivityService.fetchAvailableActivities().then(function (data) {
@@ -107,7 +105,6 @@
 			vm.selectedShiftLayer.Color = selectActivity.Color;
 			vm.selectedShiftLayer.Description = selectActivity.Name;
 			vm.selectedShiftLayer.CurrentActivityId = selectActivity.Id;
-			vm.hasChanges = vm.selectedShiftLayer.CurrentActivityId !== vm.selectedShiftLayer.ActivityId;
 		}
 
 		vm.saveChanges = function () {
@@ -117,19 +114,18 @@
 			}
 			vm.isSaving = true;
 			ShiftEditorService.changeActivityType(vm.date, vm.personId, getChangedLayers(), { TrackId: vm.trackId }).then(function (response) {
-				initScheduleState();
+				getSchedule();
 				showNotice(response.data);
 			});
 		}
 
 		vm.isSaveButtonDisabled = function () {
-			return !vm.hasChanges || vm.isSaving || vm.showError;
+			return !hasChanges() || vm.isSaving || vm.showError;
 		}
 
 		vm.refreshData = function () {
 			if (vm.scheduleChanged) {
 				getSchedule();
-				initScheduleState();
 			}
 		};
 
@@ -153,16 +149,19 @@
 		}
 
 		function getSchedule() {
+			initScheduleState();
+
+			vm.isLoading = true;
 			TeamSchedule.getSchedules(vm.date, [vm.personId]).then(function (data) {
 				vm.scheduleVm = ShiftEditorViewModelFactory.CreateSchedule(vm.date, vm.timezone, data.Schedules[0]);
 				vm.isInDifferentTimezone = (vm.scheduleVm.Timezone !== vm.timezone);
 				initAndBindScrollEvent();
+				vm.isLoading = false;
 			});
 		}
 
 		function initScheduleState() {
 			vm.isSaving = false;
-			vm.hasChanges = false;
 			vm.scheduleChanged = false;
 			vm.selectedShiftLayer = null;
 			vm.selectedActivitiyId = null;
@@ -174,13 +173,9 @@
 				for (var i = 0; i < messages.length; i++) {
 					var message = messages[i];
 					if (message.DomainReferenceId === vm.personId
-						&& serviceDateFormatHelper.getDateOnly(message.StartDate.substring(1, message.StartDate.length)) === vm.date
-					) {
+						&& serviceDateFormatHelper.getDateOnly(message.StartDate.substring(1, message.StartDate.length)) === vm.date) {
 						if (vm.trackId !== message.TrackId) {
 							vm.scheduleChanged = true;
-						} else {
-							getSchedule();
-							initScheduleState();
 						}
 						return;
 					}
@@ -220,6 +215,12 @@
 				}
 			});
 		}
+
+
+		function hasChanges() {
+			return hasShift() && !!vm.scheduleVm.ShiftLayers.filter(function (layer) { return layer.CurrentActivityId && layer.CurrentActivityId !== layer.ActivityId; }).length;
+		}
+
 
 		function getSelectActivity(layer) {
 			return vm.availableActivities.filter(function (activity) {

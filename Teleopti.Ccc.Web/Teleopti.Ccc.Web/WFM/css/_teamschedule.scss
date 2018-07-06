@@ -1193,6 +1193,10 @@ teams-time-picker.ng-invalid-dst {
 .shift-editor {
 	position: relative;
 
+	.progress-linear-container {
+		height: 15px;
+	}
+
 	.name {
 		font-size: 16px;
 		font-weight: bold;
@@ -1257,7 +1261,7 @@ teams-time-picker.ng-invalid-dst {
 			.scroll-toolbar {
 				display: none;
 				position: absolute;
-				top: 125px;
+				top: 140px;
 				width: 98%;
 
 				.left-scroll {
