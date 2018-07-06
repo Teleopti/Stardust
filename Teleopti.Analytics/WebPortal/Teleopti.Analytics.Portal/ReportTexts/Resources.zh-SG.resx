@@ -1114,7 +1114,7 @@
     <value>多个活动/缺勤</value>
   </data>
   <data name="ResPlannedOvertimeH" xml:space="preserve">
-    <value>已排定的加班 (hh:mm)</value>
+    <value>已计划的加班 (hh:mm)</value>
   </data>
   <data name="ResESLInclShrinkagePercent" xml:space="preserve">
     <value>考虑损耗的预估服务水平(%)</value>

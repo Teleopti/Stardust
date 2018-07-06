@@ -15562,9 +15562,6 @@ Applikationen kommer nu att stängas. </value>
   <data name="ImportBpoZeroResourcesWarning" xml:space="preserve">
     <value>Noll resurser togs bort. Är du säker på att du valde rätt BPO och period?</value>
   </data>
-  <data name="Manage" xml:space="preserve">
-    <value>Hantera</value>
-  </data>
   <data name="Discard" xml:space="preserve">
     <value>Kasta bort</value>
   </data>
