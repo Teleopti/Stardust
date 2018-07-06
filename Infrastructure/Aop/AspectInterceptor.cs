@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.Infrastructure.Aop
 {
+	[DebuggerStepThrough]
 	public class AspectInterceptor : IInterceptor
 	{
 		private readonly Lazy<IEnumerable<IAspect>> _aspects;
@@ -19,7 +20,6 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 			_aspects = aspects;
 		}
 
-		[DebuggerStepThrough]
 		public void Intercept(IInvocation invocation)
 		{
 			var allAttributes = aspectAttributesOnMethod(invocation);
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 			return attributesOnClass.Union(attributesOnInterfaces);
 		}
 
-		private void runBefores(InvocationInfo invocation, IEnumerable<IAspect> aspects)
+		private static void runBefores(InvocationInfo invocation, IEnumerable<IAspect> aspects)
 		{
 			var completedBefores = new List<IAspect>();
 
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 			}
 		}
 
-		private void runAfters(InvocationInfo invocation, IEnumerable<IAspect> aspects)
+		private static void runAfters(InvocationInfo invocation, IEnumerable<IAspect> aspects)
 		{
 			aspects
 				.Reverse()
