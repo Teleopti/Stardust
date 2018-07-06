@@ -68,7 +68,7 @@ OvertimeRequestUseMostUnderStaffedSkill_47853 = RC
 OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944 = true
 OvertimeRequestSupportMultiSelectionSkillTypes_74945 = true
 OvertimeRequestStaffingCheckMethod_74949 = true
-OvertimeRequestChangeBelongsToDateForOverNightShift_74984 = RC
+OvertimeRequestChangeBelongsToDateForOverNightShift_74984 = true
 OvertimeRequestUsePrimarySkillOption_75573 = true
 
 Wfm_People_ImportAndCreateAgentFromFile_42528 = true
@@ -154,7 +154,7 @@ Tenant_PurgeLogonAttempts_75782 = true
 Tenant_PurgeNoneEmployeesData_76291 = true
 ETL_UseBpoResources_75855 = true
 Staffing_BPO_ClearStaffing_75498 = true
-Staffing_BPO_ExportMultipleSkills_74968 = RC
+Staffing_BPO_ExportMultipleSkills_74968 = true
 
 # Squids #
 WFM_Forecaster_Refact_44480 = true
