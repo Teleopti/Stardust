@@ -20,6 +20,7 @@
 		RTA_RestrictModifyAdherenceWithPermission_74898,
 		RTA_EasilySpotLateForWork_75668,
 		LevelUp_HangfireStatistics_76139_76373,
+		RTA_DurationOfHistoricalEvents_76470,
 		
 		MyTimeWeb_SortRequestList_40711,
 		MyTimeWeb_PreferenceForJalaliCalendar_42965,
