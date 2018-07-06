@@ -8,7 +8,12 @@
 --@start_date='2012-08-29',@end_date='2012-08-29 23:00:00',@my_person_id = '2C24C166-3940-4487-B8A0-8BC449A10926',
 --@person_to_id = '0E8AA7D0-4235-45E8-81E2-D88F88FF3AF3',@is_my_dayoff = false,@is_person_dayoff = false
 
-CREATE PROCEDURE ReadModel.PersonScheduleDayForShiftTrade
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[PersonScheduleDayForShiftTrade]')
+   AND type in (N'P', N'PC'))
+DROP PROCEDURE [ReadModel].[PersonScheduleDayForShiftTrade]
+GO
+
+CREATE PROCEDURE [ReadModel].[PersonScheduleDayForShiftTrade]
 @start_date datetime,
 @end_date datetime,
 @my_person_id uniqueidentifier,
