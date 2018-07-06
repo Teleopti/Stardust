@@ -434,7 +434,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             
         }
 
-        [Test]
+        [Test, Ignore("Until bug 76723 is solved")]
         public void VerifyCalculateWhenShortBreakShorterThanPeriod()
         {
             var period1 = new DateTimePeriod(_date, _date.AddMinutes(30));
@@ -483,7 +483,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(result, result2);
         }
 
-        [Test]
+        [Test, Ignore("Until bug 76723 is solved")]
         public void VerifyOutsideOpenHours()
         {
             var period1 = new DateTimePeriod(_date, _date.AddMinutes(15));

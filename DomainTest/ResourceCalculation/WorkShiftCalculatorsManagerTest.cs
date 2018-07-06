@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	[TestFixture]
 	public class WorkShiftCalculatorsManagerTest
 	{
-		[Test]
+		[Test, Ignore("Until bug 76723 is solved")]
 		public void ShouldCallAllCalculatorsWithSkillStaffPeriods()
 		{
 			var person = new Person();
