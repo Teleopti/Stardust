@@ -107,8 +107,8 @@
 			var filters = svc.formatFilters(filter.filters);
 			var terms = svc.formatAgentSearchTerm(filter.agentSearchTerm);
 			var target = {
-				StartDate: filter.period.startDate.toLocaleDateString(),
-				EndDate: filter.period.endDate.toLocaleDateString(),
+				StartDate: toShortDate(filter.period.startDate),
+				EndDate: toShortDate(filter.period.endDate),
 				SortingOrders: sortingOrders,
 				AgentSearchTerm: terms, 
 				SelectedGroupIds: filter.selectedGroupIds,
@@ -169,5 +169,9 @@
 				return null;
 			}
 		};
+
+		function toShortDate(datetime) {
+			return datetime.getFullYear() + '-' + (datetime.getMonth() + 1) + '-' + datetime.getDate();
+		}
 	}
 })();
