@@ -1,12 +1,12 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { NgModule, Injectable } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
-import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule, TranslateService, TranslateDefaultParser } from '@ngx-translate/core';
 import { ApiAccessModule } from './api-access/api-access.module';
 import { CoreModule } from './core/core.module';
 import { UserPreferences, UserService } from './core/services';
-import { LanguageLoaderFactory } from './core/translation';
+import { LanguageLoaderFactory, CustomTranslateParser } from './core/translation';
 import { PeopleModule } from './people/people.module';
 
 @NgModule({
@@ -23,20 +23,25 @@ import { PeopleModule } from './people/people.module';
 				provide: TranslateLoader,
 				useFactory: LanguageLoaderFactory,
 				deps: [HttpClient]
-			}
+			},
+			parser: { provide: TranslateDefaultParser, useClass: CustomTranslateParser }
 		})
 	],
 	entryComponents: []
 })
 export class AppModule {
-	constructor(private upgrade: UpgradeModule, private userService: UserService, private translate: TranslateService) {
-		translate.setDefaultLang('en-GB');
-		userService.getPreferences().subscribe({
+	constructor(
+		private upgrade: UpgradeModule,
+		private userService: UserService,
+		private translate: TranslateService
+	) {}
+
+	ngDoBootstrap() {
+		this.translate.setDefaultLang('en-GB');
+		this.userService.getPreferences().subscribe({
 			next: (preferences: UserPreferences) => {
-				translate.use(preferences.Language);
+				this.translate.use(preferences.Language);
 			}
 		});
 	}
-
-	ngDoBootstrap() {}
 }
