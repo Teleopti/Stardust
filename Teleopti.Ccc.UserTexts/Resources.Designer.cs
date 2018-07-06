@@ -29349,7 +29349,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save failed, Invalid input.
+        ///   Looks up a localized string similar to Save failed. Invalid input..
         /// </summary>
         public static string SaveFailedForInvalidInput {
             get {
@@ -29358,7 +29358,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save failed, No permission to modify Write Protected Schedule.
+        ///   Looks up a localized string similar to Save failed. No permission to modify write protected schedule..
         /// </summary>
         public static string SaveFailedForModifyWriteProtectedSchedule {
             get {
@@ -29367,7 +29367,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save failed, No permission to edit unpublished schedule for agent.
+        ///   Looks up a localized string similar to Save failed. No permission to edit unpublished schedule..
         /// </summary>
         public static string SaveFailedForNoPermissionToEditUnpublishedSchedule {
             get {

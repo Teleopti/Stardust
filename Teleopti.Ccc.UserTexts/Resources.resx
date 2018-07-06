@@ -17538,13 +17538,13 @@ The application will now exit.</value>
     <comment>Message to be displayed when RTA doesn't have anything to display</comment>
   </data>
   <data name="SaveFailedForInvalidInput" xml:space="preserve">
-    <value>Save failed, Invalid input</value>
+    <value>Save failed. Invalid input.</value>
   </data>
   <data name="SaveFailedForModifyWriteProtectedSchedule" xml:space="preserve">
-    <value>Save failed, No permission to modify Write Protected Schedule</value>
+    <value>Save failed. No permission to modify write protected schedule.</value>
   </data>
   <data name="SaveFailedForNoPermissionToEditUnpublishedSchedule" xml:space="preserve">
-    <value>Save failed, No permission to edit unpublished schedule for agent</value>
+    <value>Save failed. No permission to edit unpublished schedule.</value>
   </data>
   <data name="PleaseSaveOrDiscardChangesBeforeChangingPeriod" xml:space="preserve">
     <value>Please save or discard changes before changing period</value>
