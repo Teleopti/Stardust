@@ -334,7 +334,18 @@ wfm-multiple-search-input {
 
 	.shift-trade-view {
 		height: 60vh;
-		overflow: hidden;
+		overflow-y: hidden;
+		overflow-x: auto;
+
+		.requests-uigrid-table-container,
+		.requests-uigrid-table {
+			height: calc(60vh - 15px);
+		}
+
+		.requests-uigrid-table {
+			min-width: 1400px;
+		}
+
 		/* show scroll bar outside of grid*/
 		.ui-grid-render-container-body .ui-grid-viewport {
 			position: absolute;
@@ -451,7 +462,8 @@ wfm-multiple-search-input {
 
 		.ui-grid-pinned-container-left .ui-grid-header-viewport,
 		.ui-grid-pinned-container-right .ui-grid-header-viewport {
-			overflow: visible;
+			overflow-y: visible;
+			overflow-x: hidden;
 		}
 	}
 

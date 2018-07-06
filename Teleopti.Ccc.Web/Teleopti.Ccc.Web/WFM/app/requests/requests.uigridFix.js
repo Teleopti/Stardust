@@ -1,14 +1,19 @@
 ﻿(function() {
-	"use strict";
+	'use strict';
 
 	// Bug #43683 seems caused by design problm of ui-grid.
 	// DOM updating of grid menu items was block by something in IE.
 	// I did not find root cause of this problem, but this modification works :-p
 	// -- by xinfli
-	angular.module("ui.grid").decorator("uiGridGridMenuService", ["$delegate", "$timeout", "uiGridConstants",
+	angular.module('ui.grid').decorator('uiGridGridMenuService', [
+		'$delegate',
+		'$timeout',
+		'uiGridConstants',
 		function($delegate, $timeout, uiGridConstants) {
 			$delegate.toggleColumnVisibility = function(gridCol) {
-				gridCol.colDef.visible = !(gridCol.colDef.visible === true || angular.isUndefined(gridCol.colDef.visible));
+				gridCol.colDef.visible = !(
+					gridCol.colDef.visible === true || angular.isUndefined(gridCol.colDef.visible)
+				);
 
 				$timeout(function() {
 					gridCol.grid.refresh();
@@ -21,23 +26,31 @@
 	]);
 })();
 
-(function(){
-		angular.module('wfm.requests').service('uiGridFixService', function(){
-			var svc = this;
+(function() {
+	angular.module('wfm.requests').service('uiGridFixService', function() {
+		var svc = this;
 
-			svc.fixColumneMenuToggling = function(){
-				//Add another 'click' event hanlder for '.ui-grid-column-menu-button' 
-				//and manually trigger 'click' which is binded to document to close popup ColumnVisibility menu list.
-				angular.element(document.querySelectorAll('.ui-grid-column-menu-button')).on('click', function(event){ 
-					angular.element(document).triggerHandler('click');
-				});
-			}
-		})
+		svc.fixColumneMenuToggling = function() {
+			//Add another 'click' event hanlder for '.ui-grid-column-menu-button'
+			//and manually trigger 'click' which is binded to document to close popup ColumnVisibility menu list.
+			angular.element(document.querySelectorAll('.ui-grid-column-menu-button')).on('click', function(event) {
+				angular.element(document).triggerHandler('click');
+			});
+		};
+
+		svc.fixTableMinWidth = function() {
+			var menuItemsNum = document.querySelectorAll('.ui-grid-header-cell[ui-grid-header-cell]').length - 1;
+			document.querySelector('.wfm-requests .shift-trade-view .requests-uigrid-table').style.minWidth =
+				menuItemsNum * 100 + 300 + 'px';
+		};
+	});
 })();
 
 (function() {
-	"use strict";
-	angular.module("ui.grid").decorator("i18nService", ["$delegate", function($delegate) {
+	'use strict';
+	angular.module('ui.grid').decorator('i18nService', [
+		'$delegate',
+		function($delegate) {
 			$delegate.add('da', {
 				pinning: {
 					pinLeft: 'Fastgør til venstre',
