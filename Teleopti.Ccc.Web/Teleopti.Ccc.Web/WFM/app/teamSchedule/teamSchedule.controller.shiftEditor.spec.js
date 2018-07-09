@@ -803,7 +803,7 @@
 		});
 	});
 
-	it('should save changes with correct data when change activity type for part of base activity', function () {
+	it('should save changes with correct data when change activity type for part of base activity and should reload schedule after saving changes', function () {
 		var date = "2018-06-15";
 		var personId = "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22";
 		fakeTeamSchedule.has({
@@ -844,7 +844,8 @@
 			"Timezone": { "IanaId": "Europe/Berlin" }
 		});
 
-		var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", "2018-06-15", "Europe/Berlin");
+		var scope = $rootScope.$new();
+		var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", "2018-06-15", "Europe/Berlin", scope);
 		var vm = panel.isolateScope().vm;
 		var shiftLayers = panel[0].querySelectorAll(".shift-layer");
 		shiftLayers[2].click();
@@ -852,8 +853,47 @@
 		var typeEls = panel[0].querySelectorAll('.activity-selector md-option');
 		typeEls[1].click();
 
+		fakeTeamSchedule.has({
+			"PersonId": personId,
+			"Name": "Annika Andersson",
+			"Date": date,
+			"WorkTimeMinutes": 240,
+			"ContractTimeMinutes": 240,
+			"Projection": [{
+				"ShiftLayerIds": ["xxxxxx-a0f1-4cd4-b383-9b5e015ab3c6"],
+				"Color": "#ffffff",
+				"Description": "Invoice",
+				"Start": "2018-06-15 08:00",
+				"End": "2018-06-15 10:00",
+				"Minutes": 120,
+				"IsOvertime": false,
+				"ActivityId": '5c1409de-a0f1-4cd4-b383-9b5e015ab3c6'
+			}, {
+				"ShiftLayerIds": ["91678e5a-ac3f-4daa-9577-a83800e49622"],
+				"Color": "#FFa2a2",
+				"Description": "E-mail",
+				"Start": "2018-06-15 10:00",
+				"End": "2018-06-15 11:00",
+				"Minutes": 60,
+				"IsOvertime": false,
+				"ActivityId": '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
+			},
+			{
+				"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+				"Color": "#ffffff",
+				"Description": "Phone",
+				"Start": "2018-06-15 11:00",
+				"End": "2018-06-15 12:00",
+				"Minutes": 60,
+				"IsOvertime": false,
+				"ActivityId": '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+			}],
+			"Timezone": { "IanaId": "Europe/Berlin" }
+		});
+
 		var saveButton = panel[0].querySelector('.btn-save');
 		saveButton.click();
+
 
 		expect(fakeShiftEditorService.lastRequestData).toEqual({
 			Date: date,
@@ -867,6 +907,8 @@
 			}],
 			TrackedCommandInfo: { TrackId: vm.trackId }
 		});
+
+		expect(vm.scheduleVm.ShiftLayers[0].ShiftLayerIds[0]).toEqual('xxxxxx-a0f1-4cd4-b383-9b5e015ab3c6');
 	});
 
 	it('should save changes with correct data when change activity type for part of an activity that has underlying layers', function () {
@@ -1398,7 +1440,7 @@
 
 		var saveButton = panel[0].querySelector('.btn-save');
 		saveButton.click();
-
+		
 		expect(fakeNoticeService.successMessage).toEqual('SuccessfulMessageForSavingScheduleChanges');
 	});
 
@@ -1440,6 +1482,7 @@
 		var saveButton = panel[0].querySelector('.btn-save');
 		saveButton.click();
 
+		expect(vm.scheduleVm.ShiftLayers[0].CurrentActivityId).toEqual('5c1409de-a0f1-4cd4-b383-9b5e015ab3c6');
 		expect(!!fakeNoticeService.successMessage).toEqual(false);
 		expect(fakeNoticeService.errorMessage).toEqual('Error happens');
 	});

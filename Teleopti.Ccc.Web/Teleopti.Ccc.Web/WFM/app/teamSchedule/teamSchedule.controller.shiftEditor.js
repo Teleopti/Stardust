@@ -114,8 +114,16 @@
 			}
 			vm.isSaving = true;
 			ShiftEditorService.changeActivityType(vm.date, vm.personId, getChangedLayers(), { TrackId: vm.trackId }).then(function (response) {
+				vm.isSaving = false;
+				var errorMessages = getErrorMessagesFromActionResults(response.data);
+				if (!!errorMessages.length) {
+					showErrorNotice(errorMessages);
+					return;
+				}
 				getSchedule();
-				showNotice(response.data);
+				showSuccessNotice();
+			}, function () {
+				vm.isSaving = false;
 			});
 		}
 
@@ -129,23 +137,27 @@
 			}
 		};
 
-		function showNotice(actionResults) {
-			var failActionResults = [];
+		function showErrorNotice(errorMessages) {
+			angular.forEach(errorMessages, function (message) {
+				NoticeService.error(message, null, true);
+			});
+		}
+
+		function showSuccessNotice() {
+			var successMessage = $translate.instant('SuccessfulMessageForSavingScheduleChanges');
+			NoticeService.success(successMessage, 5000, true);
+		}
+
+		function getErrorMessagesFromActionResults(actionResults) {
+			var errorMessages = [];
 			actionResults.forEach(function (x) {
 				if (x.ErrorMessages && x.ErrorMessages.length > 0) {
 					x.ErrorMessages.forEach(function (message) {
-						failActionResults.push(message);
+						errorMessages.push(message);
 					})
 				}
 			});
-			if (!!failActionResults.length) {
-				angular.forEach(failActionResults, function (message) {
-					NoticeService.error(message, null, true);
-				});
-			} else {
-				var successMessage = $translate.instant('SuccessfulMessageForSavingScheduleChanges');
-				NoticeService.success(successMessage, 5000, true);
-			}
+			return errorMessages;
 		}
 
 		function getSchedule() {
@@ -161,7 +173,6 @@
 		}
 
 		function initScheduleState() {
-			vm.isSaving = false;
 			vm.scheduleChanged = false;
 			vm.selectedShiftLayer = null;
 			vm.selectedActivitiyId = null;
