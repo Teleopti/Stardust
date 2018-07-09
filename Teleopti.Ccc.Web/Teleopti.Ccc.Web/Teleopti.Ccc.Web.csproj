@@ -1700,6 +1700,7 @@
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA.timepicking.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.approvePreviousOOA_47230.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.durationOfHistoricalEvents_76470.js" />
+    <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.durationOfHistoricalEvents_76470.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.outOfAdherences.spec.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.removeApprovedOOA_47721.js" />
     <Content Include="WFM\app\rta\rta\historical\rta.historical.controller.removeApprovedOOA_47721.spec.js" />

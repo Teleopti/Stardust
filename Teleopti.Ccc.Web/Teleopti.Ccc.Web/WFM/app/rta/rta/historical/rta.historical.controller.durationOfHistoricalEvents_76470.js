@@ -365,6 +365,7 @@
 
 					return {
 						Time: change.Time,
+						Duration: change.Duration,
 						Activity: change.Activity,
 						ActivityColor: change.ActivityColor,
 						Rule: change.Rule,
