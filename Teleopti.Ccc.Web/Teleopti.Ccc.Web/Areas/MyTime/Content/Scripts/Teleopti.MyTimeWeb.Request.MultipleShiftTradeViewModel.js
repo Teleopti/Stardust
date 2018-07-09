@@ -59,6 +59,8 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 	self.allSitesId = "allSites";
 	self.shiftRequestStartDate = null;
 	self.shiftPageSize = 7;
+	self.isLoadingSchedules = false;
+
 
 	self.myScheduleList = ko.observableArray();
 	self.targetScheduleList = ko.observableArray();
@@ -82,6 +84,38 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 
 		return dates;
 	});
+
+
+	self.formatTime = function (dateTime) {
+		return Teleopti.MyTimeWeb.Common.FormatTime(dateTime);
+	}
+
+	self.scrolled = function (data, event) {
+		var element = event.target;
+		var wholeHeight = element.scrollHeight;
+		var scrollTop = element.scrollTop;
+		var divHeight = element.clientHeight;
+
+		if (!self.isLoadingSchedules) {
+			//scroll to bottom
+			if ((scrollTop + divHeight >= wholeHeight)) {
+				var agentId = self.agentChoosed().personId;
+				var startDate = self.shiftRequestStartDate;
+				var endDate = moment(self.shiftRequestStartDate).add("days", self.shiftPageSize);
+				loadPeriodSchedule(startDate, endDate, agentId);
+			}
+
+			//scroll to top
+			if (scrollTop === 0) {
+				var agentId = self.agentChoosed().personId;
+				var startDate = self.shiftRequestStartDate;
+				var endDate = moment(self.shiftRequestStartDate).add("days", self.shiftPageSize);
+				loadPeriodSchedule(startDate, endDate, agentId);
+			}
+
+		}
+	}
+
 	
 	self.dateChanged = ko.observable(false);
 	self.requestedDate = ko.computed({
@@ -826,6 +860,8 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 			return;
 		}
 
+		self.isLoadingSchedules = true;
+
 		ajax.Ajax({
 			url: 'Requests/ShiftTradeMultiDaysSchedule',
 			dataType: 'json',
@@ -860,6 +896,9 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 
 					});
 				}
+
+				self.shiftRequestStartDate = endDate;
+				self.isLoadingSchedules = false;
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status === 400) {

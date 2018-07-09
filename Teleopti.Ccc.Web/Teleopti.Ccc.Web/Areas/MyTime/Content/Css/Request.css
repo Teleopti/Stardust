@@ -183,6 +183,19 @@
 		left: 114px;
 	}
 
+	.hide-on-mobile {
+		display: none;
+	}
+
+	.mobile-shift-category {
+		background-color:aquamarine;
+	}
+
+	.mobile-shift-category1 {
+		background-color: mediumpurple;
+	}
+
+
 	.shift-trade-agent-name {
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -566,7 +579,7 @@
 	font-size: 14px;
 }
 
-.request-body .alert-link {
+.request-body .alert-link {s
 	padding-left: 5px;
 }
 
@@ -839,15 +852,20 @@ input.use-default-startTime {
 .shift-visual-indication {
 	position: relative;
 	width: 100%;
-	height: 14px;
+	height: 18px;
 	overflow: hidden;
 }
 
 .shift-visual-indication-block {
 	position: absolute;
-	height: 14px;
+	height: 18px;
 }
 
 .shift-visual-indication-block.dayoff {
 	width: 100%;
+}
+
+.shift-trade-list-panel {
+	height:600px;
+	overflow:scroll;
 }

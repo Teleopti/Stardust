@@ -259,20 +259,26 @@
 		<div class="schedules-side-by-side">
 			<div class="side-by-side-header">
 				<div class="shift-date"></div>
-				<div class="shift-detail own-shift">@Resources.Me</div>
-				<div class="shift-detail shift-to-trade">John</div>
+				<div class="shift-detail own-shift">@Resources.MySchedule</div>
+				<div class="shift-detail shift-to-trade" data-bind="text:agentChoosed() ? agentChoosed().agentName : ''">John</div>
 				<div class="shift-selection"></div>
 			</div>
 			<div style="margin: 14px; color: #e3e3e3;"><i>Filter(s)</i></div>
 			<div>
-				<div class="" data-bind="foreach: loadedSchedulePairs">
+				<div class="shift-trade-list-panel" data-bind="foreach: loadedSchedulePairs, event:{scroll: scrolled}">
 					<div class="shift-to-trade-row">
 						<div class="shift-date" data-bind="text:date.format('YYYY-MM-DD')"></div>
-						<div class="shift-detail own-shift">
-							<div>8:00 - 18:00</div>
-							<div class="shift-trade-contract">10 hrs</div>
+						<div class="shift-detail own-shift mobile-shift-category">
+							<!--ko if:targetSchedule.isDayOff-->
+							<div>DO</div>
+							<!--/ko-->
+							<!--ko if:!targetSchedule.isDayOff-->
+							<div>Early</div>
+							<div><span data-bind="text:mySchedule.scheduleStart.format('HH:MM')"></span> - <span data-bind="text:mySchedule.scheduleEnd.format('HH:MM')"></span></div>
+							<div class="shift-trade-contract"><span data-bind="text:mySchedule.contractTime"></span></div>
+							<!--/ko-->
 							<!--ko if:mySchedule.isFullDayAbsence-->
-							<div class="shift-visual-indication">
+							<div class="shift-visual-indication hide-on-mobile">
 								<div data-bind="foreach: mySchedule.layers">
 									<!--ko if: !$parent.mySchedule.isDayOff-->
 									<div class="shift-trade-layer-container floatleft">
@@ -288,7 +294,7 @@
 							</div>
 							<!--/ko-->
 							<!--ko if: !mySchedule.isFullDayAbsence-->
-							<div class="shift-visual-indication-wrapper">
+							<div class="shift-visual-indication-wrapper hide-on-mobile">
 								<div class="shift-visual-indication">
 									<!-- ko foreach: mySchedule.layers -->
 									<div class="shift-visual-indication-block" data-bind="style: styleJson74947, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
@@ -300,11 +306,17 @@
 							</div>
 							<!--/ko-->
 						</div>
-						<div class="shift-detail shift-to-trade">
-							<div>8:00 - 18:00</div>
-							<div class="shift-trade-contract">10 hrs</div>
+						<div class="shift-detail shift-to-trade mobile-shift-category1">
+							<!--ko if:targetSchedule.isDayOff-->
+							<div>DO</div>
+							<!--/ko-->
+							<!--ko if:!targetSchedule.isDayOff-->
+							<div>Early</div>
+							<div><span data-bind="text:targetSchedule.scheduleStart.format('HH:MM')"></span> - <span data-bind="text:targetSchedule.scheduleEnd.format('HH:MM')"></span></div>
+							<div class="shift-trade-contract"><span data-bind="text:targetSchedule.contractTime"></span></div>
+							<!--/ko-->
 							<!--ko if: targetSchedule.isFullDayAbsence-->
-							<div class="shift-visual-indication">
+							<div class="shift-visual-indication hide-on-mobile">
 								<div data-bind="foreach: targetSchedule.layers">
 									<!--ko if:!$parent.targetSchedule.isDayOff-->
 									<div class="shift-trade-layer-container floatleft">
@@ -322,7 +334,7 @@
 							</div>
 							<!--/ko-->
 							<!--ko if: !targetSchedule.isFullDayAbsence-->
-							<div class="shift-visual-indication-wrapper">
+							<div class="shift-visual-indication-wrapper hide-on-mobile">
 								<div class="shift-visual-indication">
 									<!-- ko foreach: targetSchedule.layers -->
 									<div class="shift-visual-indication-block" data-bind="style: styleJson74947, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
@@ -341,7 +353,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="shift-trade-cart">
+		<div class="shift-trade-cart hide-on-mobile">
 			Shift Trade Cart
 			<div class="row add-shift-trade-detail-section">
 				<div id="Request-add-shift-trade-detail-section" data-bind="visible: isDetailVisible" class="well well-sm col-xs-12 col-md-6">
