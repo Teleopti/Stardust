@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -14,6 +15,7 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.DomainTest.Scheduling;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -195,6 +197,26 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.SkillStaffPeriodCollection.Single(x => x.Period.StartDateTime.TimeOfDay == TimeSpan.FromHours(9))
 				.Payload.CalculatedUsedSeats
 				.Should().Be.EqualTo(1);
+		}
+
+		[Ignore("PBI75509 to be fixed")]
+		[TestCase("Arabian Standard Time")] //+04:00
+		[TestCase("Iran Standard Time")]	//+03:30
+		public void ShouldHandleSkillInHalfHourTimeZone(string timeZoneId)
+		{
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+			var scenario = new Scenario();
+			var activity = new Activity();
+			var dateOnly = DateOnly.Today;
+			var skill = new Skill("_", "_", Color.Empty, 60, new SkillTypeEmail(new Description(), ForecastSource.InboundTelephony)).For(activity).InTimeZone(timeZone).WithId().IsOpenBetween(8, 9);
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, dateOnly, 2);
+			var agent = new Person().InTimeZone(timeZone).WithPersonPeriod(skill);
+			var assignment = new PersonAssignment(agent, scenario, dateOnly).WithLayer(activity, new TimePeriod(5, 10));
+
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { assignment }, new[] { skillDay }, false, false));
+
+			skillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
+				.Should().Be.EqualTo(-1);
 		}
 	}
 }
