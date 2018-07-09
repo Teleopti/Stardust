@@ -70,6 +70,22 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 			data.Changes().First().Duration.Should().Be("01:00:00");
 			data.Changes().Second().Duration.Should().Be("02:00:00");
 		}
+		
+				
+		[Test]
+		public void ShouldHaveDurationOfEventsWithSecondResolution()
+		{
+			Now.Is("2018-07-09 17:00");
+			var personId = Guid.NewGuid();
+			History
+				.StateChanged(personId, "2018-07-09 10:00")
+				.StateChanged(personId, "2018-07-09 11:00:00.888")
+				;
+
+			var data = Target.Load(personId, "2018-07-09".Date());
+
+			data.Changes().First().Duration.Should().Be("01:00:00");
+		}
 	}
 	
 }
