@@ -91,6 +91,32 @@
 
 		});
 
+		it('should not list agent names and showing how many agents are effected if more than 20 agents have same error', function () {
+			fakeNotice.reset();
+			var actionResults = [];
+			var actionTargets = [];
+
+			for (var i = 0; i <= 21; i++) {
+				actionTargets.push({
+					PersonId: 'testPerson' + i,
+					Name: 'testPerson' + i
+				});
+				actionResults.push({
+					PersonId: 'testPerson' + i,
+					ErrorMessages: ['error happens']
+				})
+			}
+
+			var commandTemplates = {
+				success: 'success',
+				warning: 'partial success'
+			};
+
+			target.reportActionResult(commandTemplates, actionTargets, actionResults);
+
+			expect(fakeNotice.getLastError()).toBe('error happens : EffectingXAgents');
+		})
+
 		function FakeNotice() {
 			var warning = '';
 			var error = '';

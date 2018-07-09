@@ -1709,6 +1709,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Affecting {0} agents.
+        /// </summary>
+        public static string AffectingXAgents {
+            get {
+                return ResourceManager.GetString("AffectingXAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A file containing the error message could not be created. Please copy to clipboard and paste the message in an e-mail..
         /// </summary>
         public static string AFileContainingTheErrorMessageCouldNotBeCreated {

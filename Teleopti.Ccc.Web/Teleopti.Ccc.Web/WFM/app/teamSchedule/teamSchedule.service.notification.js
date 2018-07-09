@@ -91,7 +91,7 @@
 			});
 
 			angular.forEach(errorResults, function (value, key) {
-				var errorMessage = key + " : " + value.join(", ");
+				var errorMessage = key + " : " + (value.length > 20 ? $translate.instant('AffectingXAgents').replace('{0}', value.length) : value.join(", "));
 				NoticeService.error(errorMessage, null, true);
 			});
 			angular.forEach(warningActionResults, function (result) {

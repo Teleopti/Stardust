@@ -17554,4 +17554,7 @@ The application will now exit.</value>
     <value>No forecast could be produced. Make sure you have imported queue statistics</value>
     <comment>Text for web forecasting</comment>
   </data>
+  <data name="AffectingXAgents" xml:space="preserve">
+    <value>Affecting {0} agents</value>
+  </data>
 </root>
