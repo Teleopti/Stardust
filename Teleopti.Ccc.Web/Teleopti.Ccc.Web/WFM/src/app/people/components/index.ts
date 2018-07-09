@@ -7,3 +7,4 @@ export * from './shared';
 export * from './title-bar';
 export * from './workspace';
 export * from './playground';
+export * from './feedback-message';

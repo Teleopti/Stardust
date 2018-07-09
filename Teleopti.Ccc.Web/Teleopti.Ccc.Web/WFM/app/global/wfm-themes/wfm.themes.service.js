@@ -1,9 +1,7 @@
 (function() {
 	'use strict';
 
-	angular
-	.module('wfm.themes')
-	.factory('ThemeService', ThemeService);
+	angular.module('wfm.themes').factory('ThemeService', ThemeService);
 
 	ThemeService.$inject = ['$http', '$rootScope', '$q', 'Toggle'];
 
@@ -20,27 +18,29 @@
 			return $http.get('../api/Theme');
 		}
 
-		function init(){
+		function init() {
 			var themeToggle = Toggle.togglesLoaded.then(function() {
 				return service.getTheme();
 			});
-			themeToggle.then(function(response) {
-				var theme = response.data.Name ? response.data.Name : 'classic';
-				$rootScope.setTheme(theme);
-			}, function() {
-				$rootScope.setTheme('classic');
-			});
+			themeToggle.then(
+				function(response) {
+					var theme = response.data.Name ? response.data.Name : 'classic';
+					$rootScope.setTheme(theme);
+				},
+				function() {
+					$rootScope.setTheme('classic');
+				}
+			);
 			return themeToggle;
 		}
 
 		function saveTheme(name, overlay) {
 			if (name === 'classic' || name === 'dark') {
-				$http.post("../api/Theme/Change", {
+				$http.post('../api/Theme/Change', {
 					Name: name,
 					Overlay: overlay
 				});
 			}
 		}
-
 	}
-})();﻿
+})();

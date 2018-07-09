@@ -29,7 +29,8 @@ import {
 	RevokePageComponent,
 	SearchPageComponent,
 	TitleBarComponent,
-	WorkspaceComponent
+	WorkspaceComponent,
+	FeedbackMessageComponent
 } from './components';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -55,7 +56,8 @@ import {
 		PageContainerComponent,
 		AppLogonPageComponent,
 		IdentityLogonPageComponent,
-		PlaygroundComponent
+		PlaygroundComponent,
+		FeedbackMessageComponent
 	],
 	imports: [
 		SharedModule,
@@ -92,7 +94,8 @@ import {
 		RevokePageComponent,
 		AppLogonPageComponent,
 		IdentityLogonPageComponent,
-		PlaygroundComponent
+		PlaygroundComponent,
+		FeedbackMessageComponent
 	]
 })
 export class PeopleModule {

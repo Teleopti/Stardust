@@ -17524,6 +17524,10 @@ The application will now exit.</value>
     <value>Login credentials not found</value>
     <comment>Credentials for loging in using identity logon missing</comment>
   </data>
+  <data name="WFMNewReleaseNotification" xml:space="preserve">
+    <value>{0} has been launched! We appreciate your {1}feedback{2}!</value>
+    <comment>Notification message to the user in the web released WFM when an entirely new module is released. {0} is the module name, like MyTime for example.{1} and {2} are used to embed a link to the customer feedback form.</comment>
+  </data>
   <data name="ShiftChangedByOthers" xml:space="preserve">
     <value>Save failed, the shift was changed by someone else.</value>
   </data>

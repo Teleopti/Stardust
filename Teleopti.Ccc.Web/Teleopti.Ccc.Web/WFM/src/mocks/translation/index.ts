@@ -1,4 +1,6 @@
-import { Directive, NgModule, Pipe, PipeTransform } from '@angular/core';
+import { Directive, NgModule, Pipe, PipeTransform, Injectable } from '@angular/core';
+import { inject } from '../../../node_modules/@angular/core/testing';
+import { TranslateService } from '../../../node_modules/@ngx-translate/core';
 
 @Directive({
 	selector: '[translate]',
@@ -16,8 +18,20 @@ export class MockTranslationPipe implements PipeTransform {
 	}
 }
 
+@Injectable()
+export class MockTranslateService {
+	public instant(keyString: string) {
+		return keyString;
+	}
+}
+export const mockTranslateServiceProvider = {
+	provide: TranslateService,
+	useClass: MockTranslateService
+};
+
 @NgModule({
 	declarations: [MockTranslateParamsDirective, MockTranslationPipe],
-	exports: [MockTranslationPipe, MockTranslateParamsDirective]
+	exports: [MockTranslationPipe, MockTranslateParamsDirective],
+	providers: [mockTranslateServiceProvider]
 })
 export class MockTranslationModule {}
