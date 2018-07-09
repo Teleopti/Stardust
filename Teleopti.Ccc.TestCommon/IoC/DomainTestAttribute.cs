@@ -53,6 +53,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.TestCommon.IoC
 {
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_EasilySpotLateForWork_75668)]
+	[Toggle(Domain.FeatureFlags.Toggles.RTA_DurationOfHistoricalEvents_76470)]
 	public class DomainTestAttribute : IoCTestAttribute
 	{
 		public static string DefaultTenantName = "default";

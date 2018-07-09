@@ -94,7 +94,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IRtaEventStoreTestReader>()
 				.SingleInstance();
 
-			if (_config.Toggle(Toggles.RTA_EasilySpotLateForWork_75668))
+			if (_config.Toggle(Toggles.RTA_DurationOfHistoricalEvents_76470))
+				builder.RegisterType<AgentAdherenceDayLoaderDurationOfEvents>().As<IAgentAdherenceDayLoader>().SingleInstance();
+			else if (_config.Toggle(Toggles.RTA_EasilySpotLateForWork_75668))
 				builder.RegisterType<AgentAdherenceDayLoaderLateForWork>().As<IAgentAdherenceDayLoader>().SingleInstance();
 			else
 				builder.RegisterType<AgentAdherenceDayLoaderFromEventStore>().As<IAgentAdherenceDayLoader>().SingleInstance();
@@ -144,4 +146,5 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ConfigurationValidator>().SingleInstance();
 		}
 	}
+
 }
