@@ -55,6 +55,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 		public string Adherence { get; set; }
 		public string AdherenceColor { get; set; }
 		public string LateForWork { get; set; }
+		public string Duration { get; set; }
 	}
 
 	public class ScheduleTimeline

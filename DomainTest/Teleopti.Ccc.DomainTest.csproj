@@ -302,6 +302,7 @@
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\BuildTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\ChangesTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\DateTest.cs" />
+    <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\DurationOfEventsTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\HistoricalAdherenceViewModelBuilderEx.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\LateForWorkTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\NavigationTest.cs" />

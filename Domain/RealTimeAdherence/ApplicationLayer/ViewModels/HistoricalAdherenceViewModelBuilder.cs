@@ -123,6 +123,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 				.Select(x => new HistoricalChangeViewModel
 				{
 					Time = formatForUser(x.Timestamp),
+					Duration = x.Duration,
 					LateForWork = x.LateForWork,
 					Activity = x.ActivityName,
 					ActivityColor = x.ActivityColor.HasValue ? ColorTranslator.ToHtml(Color.FromArgb(x.ActivityColor.Value)) : null,
