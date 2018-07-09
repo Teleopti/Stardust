@@ -114,7 +114,7 @@
 
 			target.reportActionResult(commandTemplates, actionTargets, actionResults);
 
-			expect(fakeNotice.getLastError()).toBe('error happens : EffectingXAgents');
+			expect(fakeNotice.getLastError()).toBe('error happens : AffectingXAgents');
 		})
 
 		function FakeNotice() {
