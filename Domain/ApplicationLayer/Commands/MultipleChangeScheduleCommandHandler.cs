@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftEditor
 
 		private void handle(IPersonAssignment personAssignment, AddActivityCommandSimply command)
 		{
-			personAssignment.AddActivity(command.Activity, command.Period);
+			personAssignment.AddActivity(command.Activity, command.Period, true);
 		}
 		private void handle(IPersonAssignment personAssignment, AddPersonalActivityCommandSimply command)
 		{

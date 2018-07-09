@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeEventPublisher EventPublisher;
 		public FakeCurrentDatasource CurrentDatasource;
-	
+
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<MultipleChangeScheduleCommandHandler>().For<IHandleCommand<MultipleChangeScheduleCommand>>();
@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
-		public void ShouldRaiseScheduleChangedEvent()
+		public void ShouldRaiseOnlyOneScheduleChangedEvent()
 		{
 			var date = new DateTime(2018, 6, 27);
 			var person = PersonFactory.CreatePerson("sherklock", "holms").WithId();
@@ -243,8 +243,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var phonePeriod = new DateTimePeriod(new DateTime(2018, 6, 27, 8, 0, 0, DateTimeKind.Utc), new DateTime(2018, 6, 27, 16, 0, 0, DateTimeKind.Utc));
 			var emailPeriod = new DateTimePeriod(new DateTime(2018, 6, 27, 9, 0, 0, DateTimeKind.Utc), new DateTime(2018, 6, 27, 10, 0, 0, DateTimeKind.Utc));
-			pa.AddActivity(phoneActivity, phonePeriod);
-			pa.AddActivity(emailActivity, emailPeriod);
+			pa.AddActivity(phoneActivity, phonePeriod, true);
+			pa.AddActivity(emailActivity, emailPeriod, true);
 
 			var shiftLayers = pa.ShiftLayers.ToArray();
 			shiftLayers.ForEach(sl => sl.SetId(Guid.NewGuid()));
@@ -266,6 +266,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 					new AddActivityCommandSimply {
 						Activity = emailActivity,
 						Period = period
+					},
+					new AddPersonalActivityCommandSimply {
+						Activity = emailActivity,
+						Period = period
+					},
+					new AddOvertimeActivityCommandSimply {
+						Activity = emailActivity,
+						Period = period,
+						MultiplicatorDefinitionSet = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("ds", MultiplicatorType.Overtime).WithId()
 					}
 				},
 				ScheduleDictionary = scheduleDic,
@@ -277,6 +286,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 					OperatedPersonId = operatedPersonId
 				}
 			});
+
+			scheduleDic[person].ScheduledDay(new DateOnly(date)).PersonAssignment().HasEvents().Should().Be.False();
 
 			var @event = EventPublisher.PublishedEvents.Single() as ScheduleChangedEvent;
 			@event.Date.Should().Be.EqualTo(date);
