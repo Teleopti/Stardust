@@ -327,7 +327,7 @@ begin
 		return
 end
 
---Audit trails must be purged as part of schedules, at least until they get their own setting. Purge based on schedule date, not change date.
+--Schedule - Audit trails must be purged as part of schedules, at least until they get their own setting. Purge based on schedule date, not change date.
 set @RowCount = 1
 while @RowCount > 0
 begin
@@ -369,6 +369,59 @@ begin
 		return
 end
 
+--Schedule - now Meetings
+delete RecurrentWeeklyMeetingWeekDays
+from RecurrentWeeklyMeetingWeekDays rwd
+inner join RecurrentWeeklyMeeting rwm on rwd.RecurrentWeeklyMeeting = rwm.RecurrentMeetingOption
+inner join RecurrentMeetingOption rmo on rwm.RecurrentMeetingOption = rmo.Id
+inner join Meeting m on rmo.Parent = m.Id
+where m.EndDate < @KeepUntil
+
+delete RecurrentWeeklyMeeting
+from RecurrentWeeklyMeeting rm
+inner join RecurrentMeetingOption rmo on rm.RecurrentMeetingOption = rmo.Id
+inner join Meeting m on rmo.Parent = m.Id
+where m.EndDate < @KeepUntil
+
+delete RecurrentDailyMeeting
+from RecurrentDailyMeeting rm
+inner join RecurrentMeetingOption rmo on rm.RecurrentMeetingOption = rmo.Id
+inner join Meeting m on rmo.Parent = m.Id
+where m.EndDate < @KeepUntil
+
+delete RecurrentMonthlyByDayMeeting
+from RecurrentMonthlyByDayMeeting rm
+inner join RecurrentMeetingOption rmo on rm.RecurrentMeetingOption = rmo.Id
+inner join Meeting m on rmo.Parent = m.Id
+where m.EndDate < @KeepUntil
+
+delete RecurrentMonthlyByWeekMeeting
+from RecurrentMonthlyByWeekMeeting rm
+inner join RecurrentMeetingOption rmo on rm.RecurrentMeetingOption = rmo.Id
+inner join Meeting m on rmo.Parent = m.Id
+where m.EndDate < @KeepUntil
+
+delete RecurrentMeetingOption
+from RecurrentMeetingOption rmo
+inner join Meeting m on rmo.Parent = m.Id
+where m.EndDate < @KeepUntil
+
+if datediff(second,@start,getdate()) > @timeout 
+	return
+
+delete MeetingPerson
+from MeetingPerson mp
+inner join Meeting m on mp.Parent = m.Id
+where m.EndDate < @KeepUntil
+
+if datediff(second,@start,getdate()) > @timeout 
+	return
+
+delete Meeting
+where EndDate < @KeepUntil
+
+if datediff(second,@start,getdate()) > @timeout 
+	return
 /*
 exec Purge
 */
