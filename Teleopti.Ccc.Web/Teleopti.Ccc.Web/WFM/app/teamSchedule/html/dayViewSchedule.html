@@ -99,7 +99,8 @@
 									   selected-date="vm.scheduleDate"></teamschedule-command-menu>
 		</div>
 	</div>
-	<div resizable r-directions="['bottom']" r-flex="true">
+
+	<div ng-class="{'hide-resize-bar': !vm.staffingEnabled}" resizable="{{vm.staffingEnabled}}" r-directions="['bottom']" r-flex="true">
 		<div class="con-row teamschedule-body relative">
 			<div class="big-table-wrapper relative" ng-style="vm.scheduleTableWrapperStyle">
 				<div class="alert-warning notice-spacer" ng-if="vm.isResultTooMany()">
@@ -130,6 +131,7 @@
 			</md-sidenav>
 
 		</div>
+
 		<div class="teamschedule-footer">
 			<div ng-if="vm.commandPanelClosed()">
 				<div class="select-all" ng-show="vm.selectAllVisible()" ng-click="vm.selectAllForAllPages()">

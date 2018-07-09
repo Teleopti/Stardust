@@ -43,6 +43,7 @@
 		vm.avaliableTimezones = [];
 		vm.sitesAndTeams = undefined;
 		vm.staffingEnabled = viewState.staffingEnabled;
+
 		vm.selectedGroups = {
 			mode: 'BusinessHierarchy',
 			groupIds: [],
@@ -218,7 +219,6 @@
 			var totalHeightForScheduleTableAndChart = containerHeight
 				- viewHeader.offsetHeight
 				- header.offsetHeight
-				- footer.offsetHeight
 				- staffingHeaderHeight
 				- getSkillsRowHeight()
 				- 30;
@@ -228,11 +228,11 @@
 			if (tableHeight <= 100) {
 				tableHeight = 100;
 				tBodyHeight = 100 - tHeaderHeight;
-				chartHeight = totalHeightForScheduleTableAndChart - tableHeight;
+				chartHeight = totalHeightForScheduleTableAndChart - tableHeight - footer.offsetHeight;
 			}
 			if (chartHeight <= 150) {
 				chartHeight = 150;
-				tableHeight = totalHeightForScheduleTableAndChart - chartHeight;
+				tableHeight = totalHeightForScheduleTableAndChart - chartHeight - footer.offsetHeight;
 				tBodyHeight = tableHeight - tHeaderHeight;
 			}
 			StaffingConfigStorageService.setSize(tableHeight, tBodyHeight, chartHeight);
