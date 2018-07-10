@@ -137,6 +137,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Then(@"I should rule and state changes")]
 		public void ThenIShouldRuleAndStateChanges(Table table) =>
 			table.CreateSet<RuleAndStateChanges>().ForEach(assertRuleAndStateChange);
+		
+		[Then(@"I should see duration for historical events")]
+		public void ThenIShouldSeeDurationForHistoricalEvents(Table table) =>
+			table.CreateSet<RuleAndStateChanges>().ForEach(assertRuleAndStateChange);
 
 		[Then(@"I should see rule change '(.*)' at '(.*)'")]
 		public void ThenIShouldSeeRuleChange(string rule, string time) =>
@@ -150,14 +154,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			// in some rare cases if you use a table, where the td only has content in a child span
 			// sometimes other td:s do not get rendered/or something due to something height something
 			// forcing hight "fixes" it
-//			var forceRowHeight = $@"
-//var element = document.querySelector(""{selector}"");
-//element.style.height = '50px';
-//return 'OK';
-//";
-//			Browser.Interactions.AssertJavascriptResultContains(forceRowHeight, "OK");
+			var forceRowHeight = $@"
+var element = document.querySelector(""{selector}"");
+element.style.height = '50px';
+return 'OK';
+";
+			
+			//because...
+			//this magic is needed because after adding padding on the wrapping div to fix some shadows
+			//behaviour tests started failing
+			var removePadding = $@"
+var wrapper = document.querySelector('.rta-view');
+wrapper.style.padding = '0px';
+return 'OK';
+";
+			
+			Browser.Interactions.AssertJavascriptResultContains(forceRowHeight, "OK");
+			Browser.Interactions.AssertJavascriptResultContains(removePadding, "OK");
 
 			Browser.Interactions.AssertFirstContains(selector, change.Time);
+			if (!string.IsNullOrEmpty(change.Duration))
+				Browser.Interactions.AssertFirstContains(selector, change.Duration);
 			if (!string.IsNullOrEmpty(change.Activity))
 				Browser.Interactions.AssertFirstContains(selector, change.Activity);
 			if (!string.IsNullOrEmpty(change.State))
@@ -171,6 +188,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public class RuleAndStateChanges
 		{
 			public string Time;
+			public string Duration;
 			public string Activity;
 			public string State;
 			public string Rule;
