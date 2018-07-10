@@ -137,6 +137,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Then(@"I should rule and state changes")]
 		public void ThenIShouldRuleAndStateChanges(Table table) =>
 			table.CreateSet<RuleAndStateChanges>().ForEach(assertRuleAndStateChange);
+		
+		[Then(@"I should see duration for historical events")]
+		public void ThenIShouldSeeDurationForHistoricalEvents(Table table) =>
+			table.CreateSet<RuleAndStateChanges>().ForEach(assertRuleAndStateChange);
 
 		[Then(@"I should see rule change '(.*)' at '(.*)'")]
 		public void ThenIShouldSeeRuleChange(string rule, string time) =>
@@ -158,6 +162,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 //			Browser.Interactions.AssertJavascriptResultContains(forceRowHeight, "OK");
 
 			Browser.Interactions.AssertFirstContains(selector, change.Time);
+			if (!string.IsNullOrEmpty(change.Duration))
+				Browser.Interactions.AssertFirstContains(selector, change.Duration);
 			if (!string.IsNullOrEmpty(change.Activity))
 				Browser.Interactions.AssertFirstContains(selector, change.Activity);
 			if (!string.IsNullOrEmpty(change.State))
@@ -171,6 +177,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public class RuleAndStateChanges
 		{
 			public string Time;
+			public string Duration;
 			public string Activity;
 			public string State;
 			public string Rule;
