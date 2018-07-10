@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Support.Library;
@@ -99,7 +100,8 @@ namespace Teleopti.Ccc.DBManager.Library
 
 
 		public string DbManagerFolderPath { get; set; }
-		public bool IsAzure => ServerName.Contains(".database.windows.net");
+		public bool IsAzure => ConfigurationManager.AppSettings["AzurePattern"].Split(';').Any(d => ServerName.Contains(d.Trim()));
+
 		public string ServerName { get; set; } = ".";
 		public string DatabaseName { get; set; }
 		public string UserName { get; set; }
