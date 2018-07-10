@@ -130,6 +130,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					continue;
 				}
 
+				if (currentEventScheduleDay.PersonPeriodId.Equals(Guid.Empty))
+				{
+					continue;
+				}
+
 				var personPart = _factSchedulePersonMapper.Map(currentEventScheduleDay.PersonPeriodId);
 				if (personPart.PersonId == -1)
 				{
