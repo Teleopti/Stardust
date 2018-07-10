@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { Observable } from 'rxjs';
 
 @Component({
 	selector: 'app-feedback-message',
@@ -12,17 +13,17 @@ export class FeedbackMessageComponent {
 
 	constructor(private translate: TranslateService) {}
 
-	params = {};
+	ngOnInit() {}
 
-	ngOnInit() {
-		this.params = {
-			'0': this.translate.instant(this.name),
-			'1': '<a href="http://www.teleopti.com/wfm/customer-feedback.aspx" target="_blank">',
-			'2': '</a>'
+	getFeedbackMessage(): Observable<string> {
+		let params = {
+			0: this.translate.instant(this.name),
+			1: '<a href="http://www.teleopti.com/wfm/customer-feedback.aspx" target="_blank">',
+			2: '</a>'
 		};
-	}
 
-	getFeedbackMessage(): string {
-		return this.translate.instant('WFMNewReleaseNotification', this.params);
+		const translatedString = this.translate.get('WFMNewReleaseNotification', params);
+
+		return translatedString;
 	}
 }

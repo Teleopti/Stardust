@@ -2,7 +2,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule, Injectable } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
-import { TranslateLoader, TranslateModule, TranslateService, TranslateDefaultParser } from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule, TranslateService, TranslateParser } from '@ngx-translate/core';
 import { ApiAccessModule } from './api-access/api-access.module';
 import { CoreModule } from './core/core.module';
 import { UserPreferences, UserService } from './core/services';
@@ -24,7 +24,7 @@ import { PeopleModule } from './people/people.module';
 				useFactory: LanguageLoaderFactory,
 				deps: [HttpClient]
 			},
-			parser: { provide: TranslateDefaultParser, useClass: CustomTranslateParser }
+			parser: { provide: TranslateParser, useClass: CustomTranslateParser }
 		})
 	],
 	entryComponents: []

@@ -1,5 +1,5 @@
 <ng-template #feedbackTemplate>
-  <span [innerHTML]="getFeedbackMessage()"></span>
+  <span [innerHTML]="getFeedbackMessage() | async"></span>
 </ng-template>
 
 <nz-alert nzType="info" [nzMessage]="feedbackTemplate"></nz-alert>

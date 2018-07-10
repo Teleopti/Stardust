@@ -32,7 +32,7 @@ import {
 	WorkspaceComponent,
 	FeedbackMessageComponent
 } from './components';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService, TranslateParser } from '@ngx-translate/core';
 
 import {
 	LogonInfoService,
@@ -42,6 +42,7 @@ import {
 	SearchService,
 	WorkspaceService
 } from './services';
+import { CustomTranslateParser } from '../core/translation';
 
 @NgModule({
 	declarations: [
