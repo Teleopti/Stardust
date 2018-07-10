@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -14,7 +15,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		private readonly IAnalyticsConfigurationRepository _analyticsConfigurationRepository;
 		private static bool shouldPublish;
 
-		public AnalyticsDateRepositoryWithCreation(ICurrentAnalyticsUnitOfWork analyticsUnitOfWork, IEventPublisher eventPublisher, IAnalyticsConfigurationRepository analyticsConfigurationRepository) : base(analyticsUnitOfWork)
+		public AnalyticsDateRepositoryWithCreation(ICurrentAnalyticsUnitOfWork analyticsUnitOfWork,
+			IAnalyticsConfigurationRepository analyticsConfigurationRepository,
+			IEventPublisher eventPublisher) : base(analyticsUnitOfWork)
 		{
 			_eventPublisher = eventPublisher;
 			_analyticsConfigurationRepository = analyticsConfigurationRepository;
@@ -25,22 +28,40 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			return base.Date(dateDate) ?? createDatesTo(dateDate.Date);
 		}
 
+		public override IList<IAnalyticsDate> GetRange(DateTime fromDate, DateTime toDate)
+		{
+			if (fromDate > toDate)
+			{
+				return new List<IAnalyticsDate>();
+			}
+
+			if (base.Date(toDate) == null)
+			{
+				createDatesTo(toDate);
+			}
+
+			return base.GetRange(fromDate, toDate);
+		}
+
 		private IAnalyticsDate createDatesTo(DateTime dateDate)
 		{
 			var toDate = dateDate.AddDays(42);
-			var currentDay = base.MaxDate().DateDate;
+			var currentDay = MaxDate().DateDate;
 			var culture = _analyticsConfigurationRepository.GetCulture();
+
 			while ((currentDay += TimeSpan.FromDays(1)) <= toDate)
 			{
 				AnalyticsUnitOfWork.Current().Session().Save(new AnalyticsDate(currentDay, culture));
 				shouldPublish = true;
 			}
+
 			AnalyticsUnitOfWork.Current().AfterSuccessfulTx(() =>
 			{
 				if (!shouldPublish) return;
 				_eventPublisher.Publish(new AnalyticsDatesChangedEvent());
 				shouldPublish = false;
 			});
+
 			return base.Date(dateDate);
 		}
 	}
