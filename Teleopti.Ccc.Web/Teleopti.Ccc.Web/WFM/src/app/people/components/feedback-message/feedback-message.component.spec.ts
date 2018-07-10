@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FeedbackMessageComponent } from './feedback-message.component';
-import { NzAlertModule } from 'ng-zorro-antd';
+import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { HttpClientModule } from '@angular/common/http';
 import { configureTestSuite } from '../../../../configure-test-suit';
 import { MockTranslationModule } from '../../../../mocks/translation';
@@ -16,7 +16,7 @@ describe('FeedbackMessageComponent', () => {
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
 			declarations: [FeedbackMessageComponent],
-			imports: [MockTranslationModule, HttpClientModule, NzAlertModule, NoopAnimationsModule]
+			imports: [MockTranslationModule, HttpClientModule, NgZorroAntdModule, NoopAnimationsModule]
 		}).compileComponents();
 	}));
 

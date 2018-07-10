@@ -5,11 +5,25 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 
-import { NzAlertModule } from 'ng-zorro-antd';
+import { NgZorroAntdModule } from 'ng-zorro-antd';
 
 @NgModule({
-	imports: [CommonModule, FormsModule, ReactiveFormsModule, BrowserAnimationsModule, HttpClientModule, NzAlertModule],
-	exports: [CommonModule, FormsModule, ReactiveFormsModule, BrowserAnimationsModule, HttpClientModule, NzAlertModule],
+	imports: [
+		CommonModule,
+		FormsModule,
+		ReactiveFormsModule,
+		BrowserAnimationsModule,
+		HttpClientModule,
+		NgZorroAntdModule
+	],
+	exports: [
+		CommonModule,
+		FormsModule,
+		ReactiveFormsModule,
+		BrowserAnimationsModule,
+		HttpClientModule,
+		NgZorroAntdModule
+	],
 	providers: [],
 	entryComponents: []
 })
