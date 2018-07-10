@@ -319,6 +319,11 @@
 	flex-grow: 1;
 }
 
+.teammates-agent-name-row .new-teamschedule-agent-name:nth-child(2n),
+.new-teamschedule-view .teammates-schedules-column:nth-child(2n) {
+	background: rgba(200, 200, 200, 0.05);
+}
+
 div.teammates-schedules-column:last-child {
 	border-right: 1px solid rgba(0, 0, 0, 0.1);
 }
@@ -375,6 +380,7 @@ div.teammates-schedules-column:last-of-type .agent-name {
 	font-weight: bold;
 	text-align: center;
 	display: inline-block;
+	font-size: 14px;
 }
 
 .new-teamschedule-view .new-teamschedule-layer .activity-info {

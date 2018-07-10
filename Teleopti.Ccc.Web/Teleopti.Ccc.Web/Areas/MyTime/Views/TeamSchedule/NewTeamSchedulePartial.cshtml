@@ -100,6 +100,9 @@
 	.new-teamschedule-view .displayblock {
 		display: none;
 	}
+	.new-teamschedule-view .teammates-schedules-column .dayoff .dayoff-text {
+		display: none;
+	}
 	.teammates-schedules-container {
 		overflow-y: hidden;
 		overflow-x: auto;
@@ -161,7 +164,7 @@
 		<div class="agent-name-row container relative">
 			<!-- ko if: mySchedule -->
 			<div class="timeline-margin-block"></div>
-			<div class="new-teamschedule-agent-name my-name relative" data-bind="tooltip: { title: mySchedule().name, trigger: 'click', placement: 'bottom'}, hideTooltipAfterMouseLeave: true">
+			<div class="new-teamschedule-agent-name my-name relative">
 				<span class="text-name">@Resources.MySchedule</span>
 				<span class="teamschedule-arrow-up"><i class="glyphicon glyphicon-chevron-up"></i></span>
 				<span class="teamschedule-arrow-down"><i class="glyphicon glyphicon-chevron-down"></i></span>
@@ -241,7 +244,9 @@
 						</div>
 						<!-- /ko -->
 						<!--ko if:isDayOff-->
-						<div class="dayoff cursorpointer" data-bind="tooltip: { title: dayOffName, html: true, trigger: 'click' }, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true"></div>
+						<div class="dayoff cursorpointer" data-bind="tooltip: { title: dayOffName, html: true, trigger: 'click' }, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">
+							<span class="dayoff-text" data-bind="text: dayOffName"></span>
+						</div>
 						<!--/ko-->
 					</div>
 				</div>
