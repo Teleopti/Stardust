@@ -496,13 +496,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var pastThreshold = now;
 			var thresholdTime = now.AddMinutes(-10);
 			var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)), new DateOnly(now.AddDays(_windowSize)));
-			
+
 			var yesterdayId = Guid.NewGuid();
 			var fatFutureId = Guid.NewGuid();
 
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
-				StartDateTime = new DateTime(2016, 02, 29,1, 0, 0, DateTimeKind.Utc),
+				StartDateTime = new DateTime(2016, 02, 29, 1, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 02, 29, 2, 0, 0, DateTimeKind.Utc),
 				Created = now.AddMinutes(-22),
 				PersonRequest = yesterdayId
@@ -663,7 +663,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			ConfigReader.FakeSetting("MaximumDayLengthForAbsenceRequest", "20");
 
 			var longPeriodPersonRequest = createAbsenceRequest(new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc), new DateTime(2016, 4, 2, 23, 59, 00, DateTimeKind.Utc));
-			
+
 			var workflowControlSet = new WorkflowControlSet()
 			{
 				AbsenceRequestWaitlistEnabled = true
@@ -737,7 +737,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 2, 23, 59, 00, DateTimeKind.Utc),
-				Created =now.AddMinutes(-20),
+				Created = now.AddMinutes(-20),
 				PersonRequest = Guid.Empty
 			});
 
@@ -897,6 +897,274 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var queuedAbsenceRequests = Target.Get(thresholdTime, pastThreshold, initialPeriod, windowSize);
 			queuedAbsenceRequests.Count.Should().Be.EqualTo(1);
 			queuedAbsenceRequests.First().Count().Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void FetchRequestsThatSpansForMoreThanTwoWindows()
+		{
+			var now = new DateTime(2018, 07, 09, 9, 19, 0, DateTimeKind.Utc);
+			var pastThreshold = now;
+			var thresholdTime = now.AddMinutes(-10);
+			var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)), new DateOnly(now.AddDays(_windowSize)));
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2018, 07, 15, 22, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2018, 07, 22, 21, 59, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-11),
+				PersonRequest = Guid.NewGuid()
+			});
+
+			var queuedAbsenceRequests = Target.Get(thresholdTime, pastThreshold, initialPeriod, _windowSize);
+			queuedAbsenceRequests.Count.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldSplitTheNonOverlappingRequestsInFarWindow()
+		{
+			var now = new DateTime(2018, 07, 09, 9, 19, 0, DateTimeKind.Utc);
+			var pastThreshold = now;
+			var thresholdTime = now.AddMinutes(-10);
+			var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)), new DateOnly(now.AddDays(_windowSize)));
+			var personR1 = Guid.NewGuid();
+			var personR2 = Guid.NewGuid();
+			var personR3 = Guid.NewGuid();
+			var personR4 = Guid.NewGuid();
+			var personR5 = Guid.NewGuid();
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2018, 07, 15, 22, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2018, 07, 22, 21, 59, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-11),
+				PersonRequest = personR1
+			});
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2018, 07, 15, 22, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2018, 07, 16, 21, 59, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-11),
+				PersonRequest = personR2
+			});
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2018, 07, 16, 22, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2018, 07, 17, 21, 59, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-11),
+				PersonRequest = personR3
+			});
+
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2018, 07, 18, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2018, 07, 18, 21, 59, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-11),
+				PersonRequest = personR4
+			});
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2018, 07, 18, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2018, 07, 21, 21, 59, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-11),
+				PersonRequest = personR5
+			});
+
+			var queuedAbsenceRequests = Target.Get(thresholdTime, pastThreshold, initialPeriod, _windowSize);
+			queuedAbsenceRequests.Count.Should().Be.EqualTo(2);
+			queuedAbsenceRequests.First().ToList().Count.Should().Be.EqualTo(3);
+			queuedAbsenceRequests.First().Any(x => x.PersonRequest == personR1).Should().Be.True();
+			queuedAbsenceRequests.First().Any(x => x.PersonRequest == personR2).Should().Be.True();
+			queuedAbsenceRequests.First().Any(x => x.PersonRequest == personR3).Should().Be.True();
+			queuedAbsenceRequests.Second().ToList().Count.Should().Be.EqualTo(2);
+			queuedAbsenceRequests.Second().Any(x => x.PersonRequest == personR4).Should().Be.True();
+			queuedAbsenceRequests.Second().Any(x => x.PersonRequest == personR5).Should().Be.True();
+		}
+
+		[Test]
+		public void FetchAllFarThatExpandsALongerReuqest()
+		{
+			var now = new DateTime(2018, 07, 09, 9, 19, 0, DateTimeKind.Utc);
+			var pastThreshold = now;
+			var thresholdTime = now.AddMinutes(-10);
+			var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)), new DateOnly(now.AddDays(_windowSize)));
+			var personR1 = Guid.NewGuid();
+			var personR2 = Guid.NewGuid();
+			var personR3 = Guid.NewGuid();
+			var personR4 = Guid.NewGuid();
+			var personR5 = Guid.NewGuid();
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2018, 07, 15, 22, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2018, 07, 22, 21, 59, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-11),
+				PersonRequest = personR1
+			});
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2018, 07, 15, 22, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2018, 07, 16, 21, 59, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-11),
+				PersonRequest = personR2
+			});
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2018, 07, 16, 22, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2018, 07, 17, 21, 59, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-11),
+				PersonRequest = personR3
+			});
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2018, 07, 17, 22, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2018, 07, 18, 21, 59, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-11),
+				PersonRequest = personR4
+			});
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2018, 07, 17, 22, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2018, 07, 21, 21, 59, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-11),
+				PersonRequest = personR5
+			});
+
+			var queuedAbsenceRequests = Target.Get(thresholdTime, pastThreshold, initialPeriod, _windowSize);
+			queuedAbsenceRequests.Count.Should().Be.EqualTo(1);
+			queuedAbsenceRequests.First().ToList().Count.Should().Be.EqualTo(5);
+			queuedAbsenceRequests.First().Any(x => x.PersonRequest == personR1).Should().Be.True();
+			queuedAbsenceRequests.First().Any(x => x.PersonRequest == personR2).Should().Be.True();
+			queuedAbsenceRequests.First().Any(x => x.PersonRequest == personR3).Should().Be.True();
+			queuedAbsenceRequests.First().Any(x => x.PersonRequest == personR4).Should().Be.True();
+			queuedAbsenceRequests.First().Any(x => x.PersonRequest == personR5).Should().Be.True();
+		}
+
+		[Test]
+		public void FetchFarFutureRequestsWithMultipleBulks()
+		{
+			var now = new DateTime(2018, 07, 09, 9, 19, 0, DateTimeKind.Utc);
+			var pastThreshold = now;
+			var thresholdTime = now.AddMinutes(-10);
+			var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)), new DateOnly(now.AddDays(_windowSize)));
+			var personR1 = Guid.NewGuid();
+			var personR2 = Guid.NewGuid();
+			var personR3 = Guid.NewGuid();
+			var personR4 = Guid.NewGuid();
+			var personR5 = Guid.NewGuid();
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2018, 07, 15, 22, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2018, 07, 22, 21, 59, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-11),
+				PersonRequest = personR1
+			});
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2018, 07, 15, 22, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2018, 07, 16, 21, 59, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-11),
+				PersonRequest = personR2
+			});
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2018, 07, 16, 22, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2018, 07, 17, 21, 59, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-11),
+				PersonRequest = personR3
+			});
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2018, 07, 17, 22, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2018, 07, 18, 21, 59, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-11),
+				PersonRequest = personR4
+			});
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2018, 07, 12, 22, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2018, 07, 14, 21, 59, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-11),
+				PersonRequest = personR5
+			});
+
+			var queuedAbsenceRequests = Target.Get(thresholdTime, pastThreshold, initialPeriod, _windowSize);
+			queuedAbsenceRequests.Count.Should().Be.EqualTo(2);
+			queuedAbsenceRequests.First().ToList().Count.Should().Be.EqualTo(1);
+			queuedAbsenceRequests.First().Any(x => x.PersonRequest == personR5).Should().Be.True();
+
+			queuedAbsenceRequests.Second().ToList().Count.Should().Be.EqualTo(4);
+			queuedAbsenceRequests.Second().Any(x => x.PersonRequest == personR1).Should().Be.True();
+			queuedAbsenceRequests.Second().Any(x => x.PersonRequest == personR2).Should().Be.True();
+			queuedAbsenceRequests.Second().Any(x => x.PersonRequest == personR3).Should().Be.True();
+			queuedAbsenceRequests.Second().Any(x => x.PersonRequest == personR4).Should().Be.True();
+		}
+
+		[Test]
+		public void FetchAllNearfutureIfOneIsOlderThan10Minutes()
+		{
+			var now = new DateTime(2018, 07, 09, 9, 19, 0, DateTimeKind.Utc);
+			var pastThreshold = now;
+			var thresholdTime = now.AddMinutes(-10);
+			var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)), new DateOnly(now.AddDays(_windowSize)));
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2018, 07, 10, 22, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2018, 07, 12, 21, 59, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-11),
+				PersonRequest = Guid.NewGuid()
+			});
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2018, 07, 10, 22, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2018, 07, 11, 21, 59, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-2),
+				PersonRequest = Guid.NewGuid()
+			});
+
+			var queuedAbsenceRequests = Target.Get(thresholdTime, pastThreshold, initialPeriod, _windowSize);
+			queuedAbsenceRequests.Count.Should().Be(1);
+			queuedAbsenceRequests.First().Count().Should().Be(2);
+		}
+
+		[Test]
+		public void FetchFetchOneNearFutureIfItsOlderThan10Minutes()
+		{
+			var now = new DateTime(2018, 07, 09, 9, 19, 0, DateTimeKind.Utc);
+			var pastThreshold = now;
+			var thresholdTime = now.AddMinutes(-10);
+			var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)), new DateOnly(now.AddDays(_windowSize)));
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2018, 07, 10, 22, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2018, 07, 12, 21, 59, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-11),
+				PersonRequest = Guid.NewGuid()
+			});
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2018, 07, 12, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2018, 07, 12, 21, 59, 0, DateTimeKind.Utc),
+				Created = now.AddMinutes(-2),
+				PersonRequest = Guid.NewGuid()
+			});
+
+			var queuedAbsenceRequests = Target.Get(thresholdTime, pastThreshold, initialPeriod, _windowSize);
+			queuedAbsenceRequests.Count.Should().Be(1);
+			queuedAbsenceRequests.First().Count().Should().Be(2);
 		}
 
 		private IPersonRequest createAbsenceRequest(DateTime startDateTime, DateTime endDateTime)
