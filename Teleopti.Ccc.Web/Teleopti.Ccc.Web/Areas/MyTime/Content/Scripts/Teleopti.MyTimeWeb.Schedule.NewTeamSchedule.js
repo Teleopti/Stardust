@@ -151,8 +151,9 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 					var leftDistance = ui.position.left;
 
 					if (scrollIntervalsInPixelsRepresentingAPageOfAgents <= 0) return;
-
-					setScrollPositionForNameAndSchedule(-leftDistance * pixelsRatioOfHorizontalScrolling - 1);
+					setScrollPositionForNameAndSchedule(
+						-leftDistance * pixelsRatioOfHorizontalScrolling - (oniPad ? -1 : 1)
+					);
 					adjustArrowPositions();
 
 					loadSchedulesBasedOnPageDiffAndUpdateCurrentPageNum(leftDistance);

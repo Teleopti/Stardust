@@ -715,7 +715,7 @@
 			'			</div>',
 			'			<!-- /ko -->',
 			'		</div>',
-			'		<div class="teamschedule-scroll-block-container" style="{border: isScrollbarVisible ? \'1px dashed rgba(0, 0, 0, 0.1)\' : \'none\'">',
+			'		<div class="teamschedule-scroll-block-container" data-bind="style: {border: isScrollbarVisible() ? \'1px dashed rgba(0, 0, 0, 0.1)\' : \'none\'}"',
 			'			<!-- ko if: isScrollbarVisible -->',
 			'			<div class="teamschedule-scroll-block">',
 			'				<i class="glyphicon glyphicon-resize-horizontal"></i>',

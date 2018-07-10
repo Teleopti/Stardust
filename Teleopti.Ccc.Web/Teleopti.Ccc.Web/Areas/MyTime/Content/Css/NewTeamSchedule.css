@@ -408,7 +408,6 @@ div.teammates-schedules-column:last-of-type .agent-name {
 	position: absolute;
 	left: calc(30px + 100px);
 	bottom: 0;
-	border: 1px dashed rgba(0, 0, 0, 0.1);
 	border-radius: 9px;
 	overflow: visible;
 }
