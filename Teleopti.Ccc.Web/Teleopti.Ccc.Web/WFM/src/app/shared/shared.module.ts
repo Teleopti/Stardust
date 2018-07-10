@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 
-import { NgZorroAntdModule } from 'ng-zorro-antd';
+import { en_US, NgZorroAntdModule, NZ_I18N } from 'ng-zorro-antd';
 
 @NgModule({
 	imports: [
@@ -24,7 +24,7 @@ import { NgZorroAntdModule } from 'ng-zorro-antd';
 		HttpClientModule,
 		NgZorroAntdModule
 	],
-	providers: [],
+	providers: [{ provide: NZ_I18N, useValue: en_US }],
 	entryComponents: []
 })
 export class SharedModule {}
