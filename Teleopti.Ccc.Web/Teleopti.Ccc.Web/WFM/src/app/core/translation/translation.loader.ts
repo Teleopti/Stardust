@@ -11,5 +11,5 @@ class LanguageLoader implements TranslateLoader {
 }
 
 export function LanguageLoaderFactory(http: HttpClient) {
-	return new LanguageLoader(http, '/TeleoptiWFM/Web/api/Global/Language?lang=');
+	return new LanguageLoader(http, '../api/Global/Language?lang=');
 }
