@@ -7,7 +7,7 @@ import {
 	HttpResponse
 } from '@angular/common/http';
 import { Injectable, Provider } from '@angular/core';
-import { Observable ,  of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { PeopleSearchResult } from '..';
 import { Person, Role } from '../../types';
 import { ROLES } from './roles';
