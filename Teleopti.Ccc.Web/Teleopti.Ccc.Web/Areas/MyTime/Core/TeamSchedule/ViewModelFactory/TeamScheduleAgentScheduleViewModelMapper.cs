@@ -17,22 +17,25 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			{
 				var periods = new List<TeamScheduleAgentScheduleLayerViewModel>();
 				var layers = agentInTeamScheduleViewModel.ScheduleLayers;
-				var diff = (decimal)(endTime - startTime).Ticks;
-				foreach (var layer in layers)
+				if (layers != null)
 				{
-					var scheduleLayerViewModel = new TeamScheduleAgentScheduleLayerViewModel
+					var diff = (decimal)(endTime - startTime).Ticks;
+					foreach (var layer in layers)
 					{
-						Color = layer.Color,
-						Title = layer.TitleHeader,
-						StartTime = layer.Start,
-						EndTime = layer.End,
-						IsOvertime = layer.IsOvertime,
-						Meeting = layer.Meeting,
-						StartPositionPercentage = calculatePosition(layer.Start, startTime, diff),
-						EndPositionPercentage = calculatePosition(layer.End , startTime, diff),
-						TimeSpan = TimeHelper.TimeOfDayFromTimeSpan(layer.Start.TimeOfDay, CultureInfo.CurrentCulture) + " - " + TimeHelper.TimeOfDayFromTimeSpan(layer.End.TimeOfDay, CultureInfo.CurrentCulture)
-					};
-					periods.Add(scheduleLayerViewModel);
+						var scheduleLayerViewModel = new TeamScheduleAgentScheduleLayerViewModel
+						{
+							Color = layer.Color,
+							Title = layer.TitleHeader,
+							StartTime = layer.Start,
+							EndTime = layer.End,
+							IsOvertime = layer.IsOvertime,
+							Meeting = layer.Meeting,
+							StartPositionPercentage = calculatePosition(layer.Start, startTime, diff),
+							EndPositionPercentage = calculatePosition(layer.End, startTime, diff),
+							TimeSpan = TimeHelper.TimeOfDayFromTimeSpan(layer.Start.TimeOfDay, CultureInfo.CurrentCulture) + " - " + TimeHelper.TimeOfDayFromTimeSpan(layer.End.TimeOfDay, CultureInfo.CurrentCulture)
+						};
+						periods.Add(scheduleLayerViewModel);
+					}
 				}
 				var model = new TeamScheduleAgentScheduleViewModel
 				{
@@ -46,7 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			return result;
 		}
 
-		private static decimal calculatePosition(DateTime time , DateTime timeLineStartTime, decimal diff)
+		private static decimal calculatePosition(DateTime time, DateTime timeLineStartTime, decimal diff)
 		{
 			return Math.Round((time - timeLineStartTime).Ticks / diff, 4);
 		}

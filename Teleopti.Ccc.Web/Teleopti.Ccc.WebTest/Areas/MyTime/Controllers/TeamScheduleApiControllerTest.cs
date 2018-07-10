@@ -4,12 +4,16 @@ using System;
 using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -26,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	[TestFixture]
 	[MyTimeWebTest]
 	[SetCulture("en-US")]
-	public class TeamScheduleControllerTest
+	public class TeamScheduleControllerTest : IIsolateSystem
 	{
 		public TeamScheduleApiController Target;
 		public FakeTeamRepository TeamRepository;
@@ -36,7 +40,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public IScheduleStorage ScheduleData;
 		public FakeUserTimeZone UserTimeZone;
 		public FakeMeetingRepository MeetingRepository;
-		
+		public FullPermission Permission;
+		public MutableNow Now;
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<PermissionProvider>().For<IPermissionProvider>();
+		}
+
 		[Test]
 		public void ShouldGiveSuccessResponseButWithRightBusinessReasonWhenThereIsNoDefaultTeam()
 		{
@@ -559,6 +570,44 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
 			var mySchedule = teamScheduleViewModel.MySchedule;
 			(mySchedule != null).Should().Be(true);
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
+		public void ShouldNotReturnMyScheduleWhenTodayIsAfterPublishScheduledPeriod()
+		{
+			Permission.AddToBlackList(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
+			Now.Is(new DateTime(2015,12,25,0,0,0,DateTimeKind.Utc));
+			var today = new DateOnly(2015, 12, 15);
+			var team = TeamFactory.CreateSimpleTeam("test team").WithId();
+			TeamRepository.Add(team);
+
+			var person = User.CurrentUser();
+			PersonRepository.Add(person);
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			person.WorkflowControlSet = new WorkflowControlSet("test")
+			{
+				SchedulePublishedToDate = new DateTime(2015, 12, 14),
+				PreferencePeriod = new DateOnlyPeriod(2015, 12, 12, 2015, 12, 13)
+			};
+
+			var teamScheduleRequest = new TeamScheduleRequest
+			{
+				SelectedDate = today.Date,
+				Paging = new Paging
+				{
+					Take = 10
+				},
+				ScheduleFilter = new Domain.Repositories.ScheduleFilter
+				{
+					TeamIds = team.Id.ToString()
+				}
+			};
+			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
+			var mySchedule = teamScheduleViewModel.MySchedule;
+			
+			mySchedule.Periods.Count().Should().Be(0);
 		}
 
 		[Test]

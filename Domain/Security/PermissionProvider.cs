@@ -35,13 +35,10 @@ namespace Teleopti.Ccc.Domain.Security
 			return _authorization.IsPermitted(applicationFunctionPath, date, personAuthorization);
 		}
 
-		public bool IsPersonSchedulePublished(DateOnly date,
-			IPerson person, ScheduleVisibleReasons reason = ScheduleVisibleReasons.Published)
+		public bool IsPersonSchedulePublished(DateOnly date, IPerson person, ScheduleVisibleReasons reason = ScheduleVisibleReasons.Published)
 		{
-			var dayAndPeriod = new DateOnlyAsDateTimePeriod(date,
-				person.PermissionInformation.DefaultTimeZone());
-			var schedulePublishedSpecification = new SchedulePublishedSpecification(person.WorkflowControlSet,
-				reason);
+			var dayAndPeriod = new DateOnlyAsDateTimePeriod(date, person.PermissionInformation.DefaultTimeZone());
+			var schedulePublishedSpecification = new SchedulePublishedSpecification(person.WorkflowControlSet, reason);
 			var schedIsPublished = schedulePublishedSpecification.IsSatisfiedBy(dayAndPeriod.DateOnly);
 			return schedIsPublished;
 		}
