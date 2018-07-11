@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		[TestCase("Iran Standard Time", 15)]    //+03:30
 		[TestCase("Arabian Standard Time", 60)] //+04:00
 		[TestCase("Iran Standard Time", 60)]    //+03:30
-		public void ShouldHandleSkillInHalfHourTimeZoneAndOneHourResolution(string timeZoneId, int defaultResolution)
+		public void ShouldHandleSkillInHalfHourTimeZoneWithDifferentResolutions(string timeZoneId, int defaultResolution)
 		{
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
 			var scenario = new Scenario();
