@@ -316,7 +316,6 @@
 	border-left: 1px solid rgba(0, 0, 0, 0.1);
 	font-size: 15px;
 	display: inline-block;
-	flex-grow: 1;
 }
 
 .teammates-agent-name-row .new-teamschedule-agent-name:nth-child(2n),
@@ -374,13 +373,13 @@ div.teammates-schedules-column:last-of-type .agent-name {
 }
 
 .new-teamschedule-view .dayoff .dayoff-text {
-	position: relative;
+	position: absolute;
 	top: 50%;
 	width: 100%;
-	font-weight: bold;
-	text-align: center;
 	display: inline-block;
 	font-size: 14px;
+	font-weight: bold;
+	text-align: center;
 }
 
 .new-teamschedule-view .new-teamschedule-layer .activity-info {
@@ -472,6 +471,7 @@ div.teammates-schedules-column:last-of-type .agent-name {
 
 .new-teamschedule-view .empty-search-result p {
 	margin: 0;
+	color: orange;
 }
 
 .new-teamschedule-submit-buttons {

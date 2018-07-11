@@ -221,7 +221,7 @@
 					</div>
 					<!-- /ko -->
 					<!--ko if:mySchedule().isDayOff-->
-					<div class="dayoff cursorpointer" data-bind="tooltip: { title: mySchedule().dayOffName, html: true, trigger: 'click'}, hideTooltipAfterMouseLeave: true">
+					<div class="dayoff cursorpointer relative" data-bind="tooltip: { title: mySchedule().dayOffName, html: true, trigger: 'click'}, hideTooltipAfterMouseLeave: true">
 						<span class="dayoff-text" data-bind="text: mySchedule().dayOffName"></span>
 					</div>
 					<!--/ko-->
@@ -253,7 +253,7 @@
 						</div>
 						<!-- /ko -->
 						<!--ko if:isDayOff-->
-						<div class="dayoff cursorpointer" data-bind="tooltip: { title: dayOffName, html: true, trigger: 'click' }, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">
+						<div class="dayoff cursorpointer relative" data-bind="tooltip: { title: dayOffName, html: true, trigger: 'click' }, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">
 							<span class="dayoff-text" data-bind="text: dayOffName"></span>
 						</div>
 						<!--/ko-->

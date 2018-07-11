@@ -132,6 +132,43 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 				adjustArrowPositions();
 			});
 		}
+
+		$('body').on('keydown', function(e) {
+			if (oniPad || onMobile) return;
+			if ((e.keyCode !== 37 && e.keyCode !== 39) || scrollIntervalsInPixelsRepresentingAPageOfAgents <= 0) return;
+
+			var scrollIntervalOfPixelsFRepresentingOneAgent =
+				scrollIntervalsInPixelsRepresentingAPageOfAgents / vm.paging.take;
+
+			var orginalLeft = parseInt(
+				$('.teamschedule-scroll-block')
+					.css('left')
+					.slice(0, -2)
+			);
+
+			var newLeft = 0;
+			if (e.keyCode == 37) {
+				newLeft = orginalLeft - scrollIntervalOfPixelsFRepresentingOneAgent;
+				if (newLeft < scrollIntervalOfPixelsFRepresentingOneAgent) newLeft = 0;
+			}
+
+			if (e.keyCode == 39) {
+				newLeft = orginalLeft + scrollIntervalOfPixelsFRepresentingOneAgent;
+				var containerWidth = $('.teamschedule-scroll-block-container').width();
+				var scrollBlockWidth = $('.teamschedule-scroll-block').width();
+				if (containerWidth - scrollBlockWidth - newLeft < scrollIntervalOfPixelsFRepresentingOneAgent) {
+					newLeft = containerWidth - scrollBlockWidth;
+				}
+
+				loadSchedulesBasedOnPageDiffAndUpdateCurrentPageNum(newLeft);
+			}
+
+			setScrollPositionForNameAndSchedule(-newLeft * pixelsRatioOfHorizontalScrolling - (oniPad ? -1 : 1));
+			adjustArrowPositions();
+			$('.teamschedule-scroll-block').css({
+				left: newLeft
+			});
+		});
 	}
 
 	function setDraggableScrollBlockOnDesktop() {
