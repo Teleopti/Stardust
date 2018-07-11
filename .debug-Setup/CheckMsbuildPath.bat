@@ -1,4 +1,4 @@
-@ECHO OFF
+@ECHO OFF 
 
 SET VS2017_PATH=%PROGRAMFILES(X86)%\Microsoft Visual Studio\2017\
 SET MSBUILD_PATH=\MSBuild\15.0\Bin\MSBuild.exe
