@@ -85,6 +85,28 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 		}
 
+		[Ignore("PBI75509 to be fixed")]
+		[Test]
+		public void ShouldHandleSkillInHalfHourTimeZoneWithDifferentResolutions(
+			[Values("Iran Standard Time", "GMT Standard Time")] string userAndAgentTimeZone,	//Iran +03:30
+			[Values("Iran Standard Time", "GMT Standard Time")] string skillTimeZone,           //Iran +03:30
+			[Values(5, 15, 60)] int defaultResolution)
+		{
+			TimeZoneGuard.SetTimeZone(TimeZoneInfo.FindSystemTimeZoneById(userAndAgentTimeZone));
+			var date = new DateOnly(2017, 9, 7);
+			var activity = new Activity { RequiresSkill = true }.WithId();
+			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.FindSystemTimeZoneById(skillTimeZone)).DefaultResolution(defaultResolution).WithId().IsOpen();
+			var scenario = new Scenario();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(6, 0, 6, 0, 15), new TimePeriodWithSegment(14, 0, 14, 0, 15), new ShiftCategory("_").WithId()));
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.FindSystemTimeZoneById(userAndAgentTimeZone)).WithPersonPeriod(ruleSet, skill).WithSchedulePeriodOneDay(date);
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date.AddDays(-1), 1, 1, 1);
+			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, date, agent, skillDays);
+
+			Target.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, date.ToDateOnlyPeriod());
+
+			schedulerStateHolder.Schedules[agent].ScheduledDay(date).IsScheduled().Should().Be.True();
+		}
+
 		public SchedulingTimeZoneTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerLessResourcesXXL74915) : base(seperateWebRequest, resourcePlannerLessResourcesXXL74915)
 		{
 		}
