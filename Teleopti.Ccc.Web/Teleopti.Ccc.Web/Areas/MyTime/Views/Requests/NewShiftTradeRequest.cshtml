@@ -263,16 +263,15 @@
 				<div class="shift-detail shift-to-trade" data-bind="text:agentChoosed() ? agentChoosed().agentName : ''">John</div>
 				<div class="shift-selection"></div>
 			</div>
-			<div style="margin: 14px; color: #e3e3e3;"><i>Filter(s)</i></div>
 			<div>
 				<div class="shift-trade-list-panel" data-bind="foreach: loadedSchedulePairs, event:{scroll: scrolled}">
 					<div class="shift-to-trade-row">
 						<div class="shift-date" data-bind="text:date.format('YYYY-MM-DD')"></div>
 						<div class="shift-detail own-shift mobile-shift-category">
-							<!--ko if:targetSchedule.isDayOff-->
+							<!--ko if:mySchedule.isDayOff-->
 							<div>DO</div>
 							<!--/ko-->
-							<!--ko if:!targetSchedule.isDayOff-->
+							<!--ko if:!mySchedule.isDayOff-->
 							<div>Early</div>
 							<div><span data-bind="text:mySchedule.scheduleStart.format('HH:MM')"></span> - <span data-bind="text:mySchedule.scheduleEnd.format('HH:MM')"></span></div>
 							<div class="shift-trade-contract"><span data-bind="text:mySchedule.contractTime"></span></div>
@@ -353,24 +352,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="shift-trade-cart hide-on-mobile">
-			Shift Trade Cart
-			<div class="row add-shift-trade-detail-section">
-				<div id="Request-add-shift-trade-detail-section" data-bind="visible: isDetailVisible" class="well well-sm col-xs-12 col-md-6">
-					<div class="form-group">
-						<input id="Request-add-shift-trade-subject-input" class="form-control input-block-level" type="text" data-bind="value: subject" placeholder="@Resources.Subject" maxlength="80" />
-					</div>
-					<div class="form-group">
-						<textarea id="Request-add-shift-trade-message-input" class="form-control input-block-level" data-bind="value: message, valueUpdate: 'afterkeydown', event:{change : checkMessageLength}" rows="4" placeholder="@Resources.Message" />
-					</div>
-					<div class="pull-right">
-						<button class="btn cancel-button" data-bind="click: cancelRequest">@Resources.Cancel</button>
-						<button class="btn btn-primary send-button" data-bind="enable: isSendEnabled, click: sendRequest">@Resources.Send</button>
-					</div>
-					<div class="error" data-bind="html: errorMessage"></div>
-				</div>
-			</div>
-		</div>
+		<div class="shift-trade-cart hide-on-mobile"></div>
 	</div>
 	</div>
 

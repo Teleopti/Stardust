@@ -57,7 +57,9 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 	self.refocusToNameSearch = null;
 	self.allTeamsId = "allTeams";
 	self.allSitesId = "allSites";
-	self.shiftRequestStartDate = null;
+	self.earliestScheduleDate = null;
+	self.lastScheduleDate = null;
+
 	self.shiftPageSize = 7;
 	self.isLoadingSchedules = false;
 
@@ -102,15 +104,24 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 				var agentId = self.agentChoosed().personId;
 				var startDate = self.shiftRequestStartDate;
 				var endDate = moment(self.shiftRequestStartDate).add("days", self.shiftPageSize);
-				loadPeriodSchedule(startDate, endDate, agentId);
+				loadPeriodSchedule(startDate, endDate, agentId,1);
 			}
 
 			//scroll to top
 			if (scrollTop === 0) {
 				var agentId = self.agentChoosed().personId;
-				var startDate = self.shiftRequestStartDate;
-				var endDate = moment(self.shiftRequestStartDate).add("days", self.shiftPageSize);
-				loadPeriodSchedule(startDate, endDate, agentId);
+				var endDate = self.earliestScheduleDate;
+				var tomorrow = moment().add("days", 1);
+				if (moment(endDate).format("YYYY-MM-DD") == tomorrow.format("YYYY-MM-DD")) {
+					return;
+				}
+
+				var startDate = moment(self.shiftRequestStartDate).add("days", -self.shiftPageSize);
+				if (startDate < tomorrow) {
+					startDate = tomorrow
+				}
+
+				loadPeriodSchedule(startDate, endDate, agentId, 0);
 			}
 
 		}
@@ -301,10 +312,11 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 			return;
 		}
 
-		self.shiftRequestStartDate = self.requestedDateInternal();
+		self.lastScheduleDate = self.requestedDateInternal();
+		self.earliestScheduleDate = self.requestedDateInternal();
 
-		var startDate = self.shiftRequestStartDate;
-		var endDate = moment(self.shiftRequestStartDate).add("days", self.shiftPageSize);
+		var startDate = self.lastScheduleDate;
+		var endDate = moment(self.lastScheduleDate).add("days", self.shiftPageSize);
 		var agentId = agent.personId;
 		loadPeriodSchedule(startDate, endDate, agentId);
 	};
@@ -855,7 +867,7 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 		return self.availableTeams().filter(function (team) { return team.id !== self.allTeamsId; }).map(function (team) { return team.id; });
 	}
 
-	function loadPeriodSchedule(startDate, endDate, agentId) {
+	function loadPeriodSchedule(startDate, endDate, agentId, direction) {
 		if (!startDate || !endDate || !agentId) {
 			return;
 		}
@@ -886,21 +898,39 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 				if (mySchedules.length > 0 && targetSchedules.length > 0) {
 					mySchedules.forEach(function(model) {
 						var date = model.date;
-						var targetModel = targetSchedules.find(function(m) {
+						var targetModel = targetSchedules.filter(function (m) {
 							return m.date.format("YYYY-MM-DD") == date.format("YYYY-MM-DD");
 						});
 
-						if (targetModel) {
-							self.loadedSchedulePairs.push({ date: date, mySchedule: model, targetSchedule: targetModel });
+						if (targetModel.length > 0) {
+							self.loadedSchedulePairs.push({ date: date, mySchedule: model, targetSchedule: targetModel[0] });
 						}
 
 					});
 				}
 
-				self.shiftRequestStartDate = endDate;
+				self.loadedSchedulePairs.sort(function (a, b) {
+					var val1 = a.date;
+					var val2 = b.date;
+					if (val1 < val2) {
+						return -1;
+					} else if (val1 > val2) {
+						return 1;
+					} else {
+						return 0;
+					}
+				});
+
+				if (direction == 0) {
+					self.earliestScheduleDate = startDate;
+				} else {
+					self.lastScheduleDate = endDate;
+				}
+				
 				self.isLoadingSchedules = false;
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
+				self.isLoadingSchedules = false;
 				if (jqXHR.status === 400) {
 					var data = $.parseJSON(jqXHR.responseText);
 					self.errorMessage(data.Errors.join('</br>'));
@@ -1016,6 +1046,7 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 	function createShiftTradeSchedules(shiftTradeSchedules) {
 		var models = ko.utils.arrayMap(shiftTradeSchedules, function (personSchedule) {
 			var mappedLayers = [];
+			var startDateTime = moment(personSchedule.StartTimeUtc);
 			if (personSchedule !== null && personSchedule.ScheduleLayers !== null && personSchedule.ScheduleLayers.length > 0) {
 				var layers = personSchedule.ScheduleLayers;
 				var scheduleStartTime = moment(layers[0].Start);
@@ -1029,7 +1060,7 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 				});
 			}
 			var model = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedLayers, scheduleStartTime, scheduleEndTime, personSchedule.Name,
-				personSchedule.PersonId, personSchedule.IsDayOff, personSchedule.DayOffName, false, false, null, Teleopti.MyTimeWeb.Common.FormatTimeSpan(personSchedule.ContractTimeInMinute),undefined, scheduleStartTime);
+				personSchedule.PersonId, personSchedule.IsDayOff, personSchedule.DayOffName, false, false, null, Teleopti.MyTimeWeb.Common.FormatTimeSpan(personSchedule.ContractTimeInMinute), undefined, startDateTime);
 
 			return model;
 		});

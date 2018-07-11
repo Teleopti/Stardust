@@ -803,7 +803,7 @@ input.use-default-startTime {
 
 .shift-to-trade-row {
 	display: flex;
-	border-top: 1px solid #e3e3e3;
+	border-top: .8px solid #e3e3e3;
 }
 
 	.shift-to-trade-row + .shift-to-trade-row {
@@ -835,7 +835,7 @@ input.use-default-startTime {
 	flex: 1 1 70%;
 	overflow: hidden;
 	background-color: white;
-	border: 1px solid #e3e3e3;
+	border: .8px solid #e3e3e3;
 }
 
 .shift-trade-cart {
