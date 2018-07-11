@@ -339,8 +339,11 @@ div.teammates-schedules-column:last-of-type .agent-name {
 
 .new-teamschedule-view .new-teamschedule-layer-container strong {
 	display: inline-block;
+	width: 100%;
+	padding: 3px;
 	max-width: 100%;
 	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .new-teamschedule-view .new-teamschedule-layer {
