@@ -21158,7 +21158,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is no forecast data for this scenario. Please run a forecast or save from another scenario..
+        ///   Looks up a localized string similar to There is no forecast data for this scenario, please run a forecast or save from another scenario..
         /// </summary>
         public static string NoForecastDateForCurrentScenario {
             get {
@@ -25920,6 +25920,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PreviewOrEditGroupPage {
             get {
                 return ResourceManager.GetString("PreviewOrEditGroupPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preview the new Forecasts!.
+        /// </summary>
+        public static string PreviewTheNewForecasts {
+            get {
+                return ResourceManager.GetString("PreviewTheNewForecasts", resourceCulture);
             }
         }
         

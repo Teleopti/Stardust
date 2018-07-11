@@ -432,6 +432,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 					case DefinedRaptorApplicationFunctionPaths.OpenForecasterPage:
 						outlookBarSmartPartInfo.Icon = Resources.Forecasts2_filled_32x32;
+						if (_toggleManager.IsEnabled(Toggles.WFM_Forecaster_Preview_74801) &&
+							PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebForecasts))
+						{
+							outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewForecasts;
+							outlookBarSmartPartInfo.PreviewUrl = buildWfmUri("WFM/#/forecasting");
+						}
 						break;
 					case DefinedRaptorApplicationFunctionPaths.OpenSchedulePage:
 						outlookBarSmartPartInfo.Icon = Resources.Schedules_filled_space_32x32;

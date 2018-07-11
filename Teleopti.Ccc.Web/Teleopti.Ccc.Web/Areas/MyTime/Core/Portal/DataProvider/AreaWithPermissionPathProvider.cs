@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 
 		private static readonly IEnumerable<AreaWithPermissionPath> wfmAreaWithPermissionPaths = new List<AreaWithPermissionPath>
 		{
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebForecasts, () => Resources.Forecasts, "forecasting"),
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebForecasts, () => Resources.Forecasts, "forecast"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebPlans, () => Resources.OpenPlansPage, "resourceplanner", new Link {href = "api/ResourcePlanner/Filter", rel = "filters"}),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebPermissions, () => Resources.OpenPermissionPage, "permissions"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.Outbound, () => Resources.Outbound, "outbound"),
@@ -116,21 +116,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			{
 				return _toggleManager.IsEnabled(Toggles.WfmIntraday_MonitorActualvsForecasted_35176);
 			}
-			if (path.Equals(DefinedRaptorApplicationFunctionPaths.WebRequests))
+			if (path.Equals(DefinedRaptorApplicationFunctionPaths.WebForecasts))
 			{
-				return true;
-			}
-			if (path.Equals(DefinedRaptorApplicationFunctionPaths.WebIntraday))
-			{
-				return true;
-			}
-			if (path.Equals(DefinedRaptorApplicationFunctionPaths.AccessToReports))
-			{
-				return true;
-			}
-			if (path.Equals(DefinedRaptorApplicationFunctionPaths.WebStaffing))
-			{
-				return true;
+				return _toggleManager.IsEnabled(Toggles.WFM_Forecaster_Preview_74801);
 			}
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.MyTimeWeb))
 			{

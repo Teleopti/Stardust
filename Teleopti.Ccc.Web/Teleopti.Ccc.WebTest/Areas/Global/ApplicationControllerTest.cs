@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 			var results = target.GetWfmAreasList();
 
-			results.Any(x => ((dynamic)(x)).InternalName == "forecasting").Should().Be.True();
+			results.Any(x => ((dynamic)(x)).InternalName == "forecast").Should().Be.True();
 			results.Any(x => ((dynamic)(x)).InternalName == "resourceplanner").Should().Be.True();
 			results.Any(x => ((dynamic)(x)).InternalName == "permissions").Should().Be.True();
 			results.Any(x => ((dynamic)(x)).InternalName == "outbound").Should().Be.True();

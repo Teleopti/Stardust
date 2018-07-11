@@ -10,7 +10,7 @@ function MenuController($state) {
 	var menuItems = [
 		{
 			i: 'mdi mdi-chart-line',
-			name: 'forecasting'
+			name: 'forecast'
 		},
 		{
 			i: 'mdi mdi-calendar',

@@ -17561,4 +17561,8 @@ The application will now exit.</value>
   <data name="AffectingXAgents" xml:space="preserve">
     <value>Affecting {0} agents</value>
   </data>
+  <data name="PreviewTheNewForecasts" xml:space="preserve">
+    <value>Preview the new Forecasts!</value>
+    <comment>Text for notice in navbar of fat client</comment>
+  </data>
 </root>
