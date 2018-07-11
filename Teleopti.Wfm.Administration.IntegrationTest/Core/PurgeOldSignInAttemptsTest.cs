@@ -44,11 +44,16 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 				};
 
 				var initialDate = Now.UtcDateTime().AddDays(-60);
-				foreach (var dayCounter in Enumerable.Range(0,60))
+				foreach (var dayCounter in Enumerable.Range(0, 60))
 				{
 					SaveLoginAttempt(session, model, initialDate.AddDays(dayCounter));
 				}
+
 				Target.Purge();
+			}
+			using (uow.EnsureUnitOfWorkIsStarted())
+			{
+				var session = uow.CurrentSession();
 
 				var loginAttempts = GetAllLoginAttempts(session);
 				loginAttempts.Count.Should().Be(30);
@@ -82,8 +87,12 @@ namespace Teleopti.Wfm.Administration.IntegrationTest.Core
 				{
 					SaveLoginAttempt(session, model, initialDate.AddDays(dayCounter));
 				}
-				Target.Purge();
 
+				Target.Purge();
+			}
+			using (uow.EnsureUnitOfWorkIsStarted())
+			{
+				var session = uow.CurrentSession();
 				var loginAttempts = GetAllLoginAttempts(session);
 				loginAttempts.Count.Should().Be(30);
 			}
