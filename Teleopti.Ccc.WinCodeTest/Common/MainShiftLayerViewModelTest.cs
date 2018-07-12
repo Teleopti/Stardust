@@ -59,7 +59,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			_testRunner = new CrossThreadTestRunner();
 		}
 
-		[Ignore("Bug76840 to be fixed")]
 		[Test]
 		public void ShouldNotCrashOnDescription()
 		{
