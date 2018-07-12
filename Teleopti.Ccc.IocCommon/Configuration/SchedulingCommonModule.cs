@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RuleSetDeletedShiftCategoryChecker>()
 				.As<IRuleSetDeletedShiftCategoryChecker>()
 				.SingleInstance();
-			builder.RegisterType<WorkShiftCalculatorsManager>().As<IWorkShiftCalculatorsManager>().SingleInstance();
+			builder.RegisterType<WorkShiftCalculatorsManager>().SingleInstance();
 			builder.RegisterType<FairnessAndMaxSeatCalculatorsManager28317>().SingleInstance();
 			builder.RegisterType<ScheduleChangesAffectedDates>().SingleInstance();
 			builder.RegisterType<AffectedDates>().SingleInstance();

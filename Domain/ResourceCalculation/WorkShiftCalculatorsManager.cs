@@ -7,16 +7,7 @@ using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public interface IWorkShiftCalculatorsManager
-	{
-		IList<IWorkShiftCalculationResultHolder> RunCalculators(IPerson person,
-			IList<ShiftProjectionCache> shiftProjectionCaches,
-			IWorkShiftCalculatorSkillStaffPeriodData dataHolders,
-			IDictionary<ISkill, ISkillStaffPeriodDictionary> nonBlendSkillPeriods,
-			SchedulingOptions schedulingOptions);
-	}
-
-	public class WorkShiftCalculatorsManager : IWorkShiftCalculatorsManager
+	public class WorkShiftCalculatorsManager
 	{
 		private readonly IWorkShiftCalculator _workShiftCalculator;
 		private readonly INonBlendWorkShiftCalculator _nonBlendWorkShiftCalculator;
