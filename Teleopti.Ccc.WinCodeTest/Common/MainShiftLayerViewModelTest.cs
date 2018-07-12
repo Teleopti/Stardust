@@ -6,6 +6,7 @@ using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -58,6 +59,15 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			_testRunner = new CrossThreadTestRunner();
 		}
 
+		[Ignore("Bug76840 to be fixed")]
+		[Test]
+		public void ShouldNotCrashOnDescription()
+		{
+			var visualLayer = new VisualLayer(_payload, _period, _payload);
+			var mainShiftLayerViewModel = new MainShiftLayerViewModel(visualLayer, _person);
+
+			mainShiftLayerViewModel.Description.Should().Be.EqualTo(_payload.Description.Name);
+		}
 
 		[Test]
 		public void VerifyDeleteCommandForMainShiftCallsObserver()
