@@ -61,13 +61,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 				Expect.Call(_workShiftCalculator.CalculateShiftValueForPeriod(0, 0, 0, 0)).IgnoreArguments().Return(1).Repeat.AtLeastOnce();
 			}
 
-			double? result;
+			IWorkShiftCalculationResultHolder result;
 
 			using (_mocks.Playback())
 			{
 				result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, WorkShiftLengthHintOption.Free, false, false);
 			}
-            Assert.IsTrue(result.HasValue);
             Assert.That(result.Value, Is.EqualTo(1));
 		}
 
@@ -104,15 +103,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
                 Expect.Call(_workShiftCalculator.CalculateShiftValueForPeriod(0, 0, 0, 0)).IgnoreArguments().Return(1).Repeat.AtLeastOnce();
             }
 
-            double? result;
+			IWorkShiftCalculationResultHolder result;
 
-            using (_mocks.Playback())
+			using (_mocks.Playback())
             {
 				result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, WorkShiftLengthHintOption.Free, false, false);
             }
-            Assert.That(result, Is.Not.Null);
-            if (result.HasValue)
-                Assert.That(result.Value, Is.EqualTo(2));
+            Assert.That(result.Value, Is.EqualTo(2));
         }
 
         [Test]
@@ -138,15 +135,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 				Expect.Call(_workShiftCalculator.CalculateShiftValueForPeriod(0, 0, 0, 0)).IgnoreArguments().Return(0).Repeat.AtLeastOnce();
             }
 
-            double? result;
+			IWorkShiftCalculationResultHolder result;
 
-            using (_mocks.Playback())
+			using (_mocks.Playback())
             {
 				result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, WorkShiftLengthHintOption.Free, false, false);
             }
-            Assert.That(result, Is.Not.Null);
-            if (result.HasValue)
-                Assert.That(result.Value, Is.EqualTo(0));
+            Assert.That(result.Value, Is.EqualTo(0));
         }
 		[Test]
 		public void ShouldReturnZeroIfLayerPeriodIsNull()
@@ -168,15 +163,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 				Expect.Call(visualLayerCollection.Period()).Return(null).Repeat.AtLeastOnce();
 			}
 
-			double? result;
+			IWorkShiftCalculationResultHolder result;
 
 			using (_mocks.Playback())
 			{
 				result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, WorkShiftLengthHintOption.Free, false, false);
 			}
-            Assert.That(result,Is.Not.Null);
-            if (result.HasValue)
-			    Assert.That(result.Value,Is.EqualTo(0));
+			Assert.That(result.Value,Is.EqualTo(0));
 		}
 
 		[Test]
@@ -199,15 +192,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 				Expect.Call(visualLayerCollection.Period()).Return(dateTimePeriod.MovePeriod(TimeSpan.FromHours(1))).Repeat.AtLeastOnce();
 			}
 
-			double? result;
+			IWorkShiftCalculationResultHolder result;
 
 			using (_mocks.Playback())
 			{
 				result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, WorkShiftLengthHintOption.Free, false, false);
 			}
-            Assert.That(result, Is.Not.Null);
-            if (result.HasValue)
-                Assert.That(result.Value, Is.EqualTo(0));
+			Assert.That(result.Value, Is.EqualTo(0));
 		}
 	}
 }

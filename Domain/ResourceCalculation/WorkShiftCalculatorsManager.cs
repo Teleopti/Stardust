@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -33,39 +34,89 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				SchedulingOptions schedulingOptions)
 		{
 			var shouldCalculateNonBlendValue = nonBlendSkillPeriods.Count > 0;
-			var allValues = shiftProjectionCaches.AsParallel().Select(shiftProjection =>
+			var allValues = new List<IWorkShiftCalculationResultHolder>();
+
+			if (shouldCalculateNonBlendValue)
 			{
-				var v = new
+				foreach (var shiftProjectionCache in shiftProjectionCaches)
 				{
-					shiftProjection,
-					shiftValue = _workShiftCalculator.CalculateShiftValue(((IWorkShiftCalculatableProjection)shiftProjection).WorkShiftCalculatableLayers,
+					//var shiftProjection = ((IWorkShiftCalculatableProjection)shiftProjectionCache).WorkShiftCalculatableLayers;
+					var resultFromOneCache = _nonBlendWorkShiftCalculator.CalculateShiftValue(person,
+						shiftProjectionCache.MainShiftProjection,
+						nonBlendSkillPeriods,
+						schedulingOptions.WorkShiftLengthHintOption,
+						schedulingOptions.UseMinimumStaffing,
+						schedulingOptions.UseMaximumStaffing);
+
+					if (resultFromOneCache.Value > Double.MinValue)
+					{
+						allValues.Add(new WorkShiftCalculationResult
+						{
+							ShiftProjection = resultFromOneCache.ShiftProjection,
+							Value = resultFromOneCache.Value,
+							LengthInMinutes = resultFromOneCache.LengthInMinutes
+						});
+					}
+				}
+			}
+			else
+			{
+				foreach (var shiftProjectionCache in shiftProjectionCaches)
+				{
+					var shiftProjection = ((IWorkShiftCalculatableProjection)shiftProjectionCache).WorkShiftCalculatableLayers;
+					var resultFromOneCache = _workShiftCalculator.CalculateShiftValue(shiftProjection,
 						dataHolders,
 						schedulingOptions.WorkShiftLengthHintOption,
 						schedulingOptions.UseMinimumStaffing,
-						schedulingOptions.UseMaximumStaffing),
-					nonBlendValue = shouldCalculateNonBlendValue
-						? _nonBlendWorkShiftCalculator.CalculateShiftValue(person,
-							shiftProjection.MainShiftProjection,
-							nonBlendSkillPeriods,
-							schedulingOptions.WorkShiftLengthHintOption,
-							schedulingOptions.UseMinimumStaffing,
-							schedulingOptions.UseMaximumStaffing)
-						: null
-				};
-				double value = v.shiftValue.Value;
-				if (v.nonBlendValue.HasValue)
-				{
-					if (v.shiftValue.Value.Equals(double.MinValue))
+						schedulingOptions.UseMaximumStaffing);
+
+					if(resultFromOneCache.Value > Double.MinValue)
 					{
-						value = v.nonBlendValue.Value;
-					}
-					else
-					{
-						value += v.nonBlendValue.Value;
+						allValues.Add(new WorkShiftCalculationResult
+						{
+							ShiftProjection = shiftProjectionCache,
+							Value = resultFromOneCache.Value,
+							LengthInMinutes = resultFromOneCache.LengthInMinutes
+						});
 					}
 				}
-				return (IWorkShiftCalculationResultHolder)new WorkShiftCalculationResult { ShiftProjection = v.shiftProjection, Value = value, LengthInMinutes = v.shiftValue.LengthInMinutes};
-			}).Where(w => w.Value > double.MinValue).ToList();
+			}
+
+			
+
+			//var allValues = shiftProjectionCaches.Select(shiftProjection =>
+			//{
+			//	var v = new
+			//	{
+			//		shiftProjection,
+			//		shiftValueAndLength = _workShiftCalculator.CalculateShiftValue(((IWorkShiftCalculatableProjection)shiftProjection).WorkShiftCalculatableLayers,
+			//			dataHolders,
+			//			schedulingOptions.WorkShiftLengthHintOption,
+			//			schedulingOptions.UseMinimumStaffing,
+			//			schedulingOptions.UseMaximumStaffing),
+			//		nonBlendValue = shouldCalculateNonBlendValue
+			//			? _nonBlendWorkShiftCalculator.CalculateShiftValue(person,
+			//				shiftProjection.MainShiftProjection,
+			//				nonBlendSkillPeriods,
+			//				schedulingOptions.WorkShiftLengthHintOption,
+			//				schedulingOptions.UseMinimumStaffing,
+			//				schedulingOptions.UseMaximumStaffing)
+			//			: null
+			//	};
+			//	double value = v.shiftValueAndLength.Value;
+			//	if (v.nonBlendValue.HasValue)
+			//	{
+			//		if (v.shiftValueAndLength.Value.Equals(double.MinValue))
+			//		{
+			//			value = v.nonBlendValue.Value;
+			//		}
+			//		else
+			//		{
+			//			value += v.nonBlendValue.Value;
+			//		}
+			//	}
+			//	return (IWorkShiftCalculationResultHolder)new WorkShiftCalculationResult { ShiftProjection = v.shiftProjection, Value = value, LengthInMinutes = v.shiftValueAndLength.LengthInMinutes};
+			//}).Where(w => w.Value > double.MinValue).ToList();
 
 			return allValues;
 		}

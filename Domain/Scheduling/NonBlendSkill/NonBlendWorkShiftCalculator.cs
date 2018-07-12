@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.NonBlendSkill
 {
 	public interface INonBlendWorkShiftCalculator
 	{
-		double? CalculateShiftValue(IPerson person, IVisualLayerCollection layers, IDictionary<ISkill, ISkillStaffPeriodDictionary> skillStaffPeriods,
+		IWorkShiftCalculationResultHolder CalculateShiftValue(IPerson person, IVisualLayerCollection layers, IDictionary<ISkill, ISkillStaffPeriodDictionary> skillStaffPeriods,
 			WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons);
 	}
 
@@ -27,12 +27,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.NonBlendSkill
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-        public double? CalculateShiftValue(IPerson person, IVisualLayerCollection layers, IDictionary<ISkill, ISkillStaffPeriodDictionary> skillStaffPeriods,
+        public IWorkShiftCalculationResultHolder CalculateShiftValue(IPerson person, IVisualLayerCollection layers, IDictionary<ISkill, ISkillStaffPeriodDictionary> skillStaffPeriods,
 			WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons)
 		{
 			DateTimePeriod? vcPeriod = layers.Period();
 			if (!vcPeriod.HasValue)
-				return 0;
+				return new WorkShiftCalculationResult();
 
 			double result = 0;
 	        
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.NonBlendSkill
 				}
 			}
 
-			return result;
+			return new WorkShiftCalculationResult{ Value = result};
         }
     }
 }

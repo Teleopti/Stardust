@@ -117,8 +117,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 			else
 			{
-				foundValues = _fairnessAndMaxSeatCalculatorsManager.FindBestShiftAccordingToValue(allValues).ToArray();
-				//foundValues = _fairnessAndMaxSeatCalculatorsManager.FindBestLongShiftAccordingToValue(allValues).ToArray();
+				foundValues = _fairnessAndMaxSeatCalculatorsManager.FindBestLongShiftAccordingToValue(allValues).ToArray();
 			}
 
 			if (foundValues.IsEmpty())

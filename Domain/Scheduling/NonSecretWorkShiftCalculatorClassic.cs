@@ -145,9 +145,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			}
 
-			var recalculated = CalculateShiftValueForPeriod(periodValue, resourceInMinutes, lengthFactor, resolution);
-			return new WorkShiftCalculationResult { Value = Math.Round(recalculated, 5), LengthInMinutes = resourceInMinutes};
-			//return new WorkShiftCalculationResult { Value = Math.Round(periodValue, 5), LengthInMinutes = resourceInMinutes};
+			return new WorkShiftCalculationResult { Value = Math.Round(periodValue, 5), LengthInMinutes = resourceInMinutes};
 		}
 
 		/// <summary>

@@ -31,8 +31,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TimeBetweenDaysOptimizatio
 		public OptimizationDesktopExecuter Target;
 		public FakeRuleSetBagRepository RuleSetBagRepository;
 
-		[Test, Ignore("Until bug 76273 is solved")]
-		public void ShouldHonorMaxStaffBug76273()
+		[Test]
+		public void ShouldHonorMaxStaffBug76723()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);

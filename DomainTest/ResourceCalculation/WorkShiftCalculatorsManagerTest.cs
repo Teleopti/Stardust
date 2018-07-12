@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	[TestFixture]
 	public class WorkShiftCalculatorsManagerTest
 	{
-		[Test, Ignore("Until bug 76723 is solved")]
+		[Test]
 		public void ShouldCallAllCalculatorsWithSkillStaffPeriods()
 		{
 			var person = new Person();
@@ -52,8 +52,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			workShiftCalculator.Stub(x => x.CalculateShiftValue(cache2.WorkShiftCalculatableLayers, dataHolders, WorkShiftLengthHintOption.AverageWorkTime, true, true, TimeHelper.FitToDefaultResolution)).Return(new WorkShiftCalculationResult { Value = 5 });
 
 			nonBlendSkillPeriods.Stub(x => x.Count).Return(5);
-			nonBlendWorkShiftCalculator.Stub(x => x.CalculateShiftValue(person, proj1v, nonBlendSkillPeriods, WorkShiftLengthHintOption.AverageWorkTime, true, true)).Return(5);
-			nonBlendWorkShiftCalculator.Stub(x => x.CalculateShiftValue(person, proj2v, nonBlendSkillPeriods, WorkShiftLengthHintOption.AverageWorkTime, true, true)).Return(5);
+			nonBlendWorkShiftCalculator.Stub(x => x.CalculateShiftValue(person, proj1v, nonBlendSkillPeriods, WorkShiftLengthHintOption.AverageWorkTime, true, true)).Return(new WorkShiftCalculationResult{ Value = 5});
+			nonBlendWorkShiftCalculator.Stub(x => x.CalculateShiftValue(person, proj2v, nonBlendSkillPeriods, WorkShiftLengthHintOption.AverageWorkTime, true, true)).Return(new WorkShiftCalculationResult { Value = 5 });
 
 			target.RunCalculators(person, caches, dataHolders, nonBlendSkillPeriods, options);
 

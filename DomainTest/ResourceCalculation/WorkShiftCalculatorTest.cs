@@ -434,7 +434,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             
         }
 
-        [Test, Ignore("Until bug 76723 is solved")]
+        [Test]
         public void VerifyCalculateWhenShortBreakShorterThanPeriod()
         {
             var period1 = new DateTimePeriod(_date, _date.AddMinutes(30));
@@ -479,11 +479,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			var result2 = _target.CalculateShiftValue(new WorkShiftCalculatableVisualLayerCollection(layerCollection), new WorkShiftCalculatorSkillStaffPeriodData(skillStaffPeriods), WorkShiftLengthHintOption.Free, true, true);
 
-            Assert.AreEqual(-3240, result);
-            Assert.AreEqual(result, result2);
+            Assert.AreEqual(-3240, result.Value);
+            Assert.AreEqual(result.Value, result2.Value);
         }
 
-        [Test, Ignore("Until bug 76723 is solved")]
+        [Test]
         public void VerifyOutsideOpenHours()
         {
             var period1 = new DateTimePeriod(_date, _date.AddMinutes(15));
@@ -513,7 +513,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 	        var result = _target.CalculateShiftValue(new WorkShiftCalculatableVisualLayerCollection(layerCollection), new WorkShiftCalculatorSkillStaffPeriodData(skillStaffPeriods), 0, false, false);
             
-            Assert.AreEqual(double.MinValue, result);
+            Assert.AreEqual(double.MinValue, result.Value);
         }
 
         [Test]
