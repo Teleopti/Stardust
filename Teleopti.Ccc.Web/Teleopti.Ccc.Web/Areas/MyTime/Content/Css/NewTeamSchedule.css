@@ -368,6 +368,18 @@ div.teammates-schedules-column:last-of-type .agent-name {
 	transform: scale(1);
 }
 
+.new-teamschedule-view .not-scheduled-text {
+	position: absolute;
+    top: 50%;
+    z-index: 12;
+    width: 100%;
+    height: 40px;
+    font-size: 15px;
+	transform: translateY(-50%);
+	padding: 2px;
+	white-space: normal;
+}
+
 .new-teamschedule-view .dayoff {
 	margin-top: 50px;
 	height: calc(100% - 50px - 50px - 10px);

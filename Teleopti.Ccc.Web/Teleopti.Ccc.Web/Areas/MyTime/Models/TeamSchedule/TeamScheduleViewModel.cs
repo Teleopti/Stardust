@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 		public IEnumerable<TeamScheduleAgentScheduleLayerViewModel> Periods { get; set; }
 		public bool IsDayOff { get; set; }
 		public string DayOffName { get; set; }
+		public bool IsNotScheduled { get; set; }
 	}
 
 	public class TeamScheduleAgentScheduleLayerViewModel

@@ -304,6 +304,7 @@
 			name: myScheduleData.Name,
 			layers: mySchedulePeriods,
 			isDayOff: myScheduleData.IsDayOff,
+			isNotScheduled: myScheduleData.IsNotScheduled,
 			dayOffName: myScheduleData.DayOffName
 		};
 	}
@@ -336,6 +337,7 @@
 				name: agentSchedule.Name,
 				layers: layers,
 				isDayOff: agentSchedule.IsDayOff,
+				isNotScheduled: agentSchedule.IsNotScheduled,
 				dayOffName: agentSchedule.DayOffName
 			});
 		});

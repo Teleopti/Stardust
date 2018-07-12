@@ -404,6 +404,21 @@
 		);
 	});
 
+	test('should map notScheduled of MySchedule', function() {
+		$('body').append(agentSchedulesHtml);
+		fakeTeamScheduleData.MySchedule.IsNotScheduled = true;
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+
+		equal(vm.mySchedule().isNotScheduled, true);
+		equal(
+			$('.my-schedule-column .not-scheduled-text')
+				.text(),
+			'NotScheduled'
+		);
+	});
+
 	test("should map dayOff of agents' schedule", function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
@@ -416,6 +431,23 @@
 		$('.new-teamschedule-submit-buttons button.btn-primary').click();
 
 		equal($('.teammates-schedules-container .dayoff').length > 0, true);
+	});
+
+	test("should map notScheduled of agents' schedule", function() {
+		$('body').append(agentSchedulesHtml);
+		if (fakeOriginalAgentSchedulesData.length > 0) {
+			fakeOriginalAgentSchedulesData[0].IsNotScheduled = true;
+		}
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+
+		equal(vm.teamSchedules()[0].isNotScheduled, true);
+		equal(
+			$('.teammates-schedules-container .not-scheduled-text').first()
+				.text(),
+			'NotScheduled'
+		);
 	});
 
 	function setUpFakeData() {
@@ -478,6 +510,7 @@
 				HasOvertime: '',
 				IsFullDayAbsence: false,
 				IsDayOff: true,
+				IsNotScheduled: false,
 				Summary: '',
 				Periods: [
 					{
@@ -518,7 +551,8 @@
 					HasMainShift: '',
 					HasOvertime: '',
 					IsFullDayAbsence: false,
-					IsDayOff: false,
+					IsDayOff: false,					
+					IsNotScheduled: false,
 					Summary: '',
 					Periods: [
 						{
@@ -680,6 +714,9 @@
 			'						<span class="dayoff-text" data-bind="text: mySchedule().dayOffName"></span>',
 			'					</div>',
 			'					<!--/ko-->',
+			'					<!-- ko if:mySchedule().isNotScheduled -->',
+			'					<div class="not-scheduled-text">NotScheduled</div>',
+			'					<!-- /ko -->',
 			'				</div>',
 			'				<!-- /ko -->',
 			'			</div>',
@@ -709,6 +746,9 @@
 			'						<!--ko if:isDayOff-->',
 			'						<div class="dayoff cursorpointer" data-bind="tooltip: { title: dayOffName, html: true, trigger: \'click\' }, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true"></div>',
 			'						<!--/ko-->',
+			'						<!-- ko if:isNotScheduled -->',
+			'						<div class="not-scheduled-text">NotScheduled</div>',
+			'						<!-- /ko -->',
 			'					</div>',
 			'				</div>',
 			'				<!-- /ko -->',

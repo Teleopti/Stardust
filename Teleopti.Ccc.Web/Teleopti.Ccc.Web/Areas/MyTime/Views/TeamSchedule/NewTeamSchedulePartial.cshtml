@@ -225,6 +225,9 @@
 						<span class="dayoff-text" data-bind="text: mySchedule().dayOffName"></span>
 					</div>
 					<!--/ko-->
+					<!-- ko if:mySchedule().isNotScheduled -->
+					<div class="not-scheduled-text">@Resources.NotScheduled</div>
+					<!-- /ko -->
 				</div>
 				<!-- /ko -->
 			</div>
@@ -257,6 +260,9 @@
 							<span class="dayoff-text" data-bind="text: dayOffName"></span>
 						</div>
 						<!--/ko-->
+						<!-- ko if:isNotScheduled -->
+						<div class="not-scheduled-text">@Resources.NotScheduled</div>
+						<!-- /ko -->
 					</div>
 				</div>
 				<!-- /ko -->

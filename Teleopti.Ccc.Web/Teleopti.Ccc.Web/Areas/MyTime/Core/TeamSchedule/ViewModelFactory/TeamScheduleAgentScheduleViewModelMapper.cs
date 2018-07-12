@@ -42,7 +42,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 					Periods = periods,
 					Name = agentInTeamScheduleViewModel.Name,
 					IsDayOff = agentInTeamScheduleViewModel.IsDayOff,
-					DayOffName = agentInTeamScheduleViewModel.DayOffName
+					DayOffName = agentInTeamScheduleViewModel.DayOffName,
+					IsNotScheduled = agentInTeamScheduleViewModel.IsNotScheduled
 				};
 				result.Add(model);
 			}
