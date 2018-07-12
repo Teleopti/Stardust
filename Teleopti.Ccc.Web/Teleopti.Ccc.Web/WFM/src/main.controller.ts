@@ -11,11 +11,6 @@ export function MainController($scope: IScope, $rootScope: IWfmRootScopeService,
 	});
 
 	$rootScope.setTheme = function(theme: string) {
-		var darkThemeElement: any = document.getElementById('darkTheme');
-		if (darkThemeElement) {
-			darkThemeElement.checked = theme === 'dark';
-		}
-
 		if (checkCurrentTheme() != theme) {
 			vm.styleIsFullyLoaded = false;
 			applyThemeToModules(theme);
@@ -57,7 +52,7 @@ export function MainController($scope: IScope, $rootScope: IWfmRootScopeService,
 		} else if (classList.contains('angular-theme-classic')) {
 			return 'classic';
 		} else {
-			return 'classic';
+			return '';
 		}
 	}
 }
