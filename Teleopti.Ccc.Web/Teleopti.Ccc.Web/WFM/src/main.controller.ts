@@ -15,12 +15,12 @@ export function MainController($scope: IScope, $rootScope: IWfmRootScopeService,
 		if (darkThemeElement) {
 			darkThemeElement.checked = theme === 'dark';
 		}
+
 		if (checkCurrentTheme() != theme) {
 			vm.styleIsFullyLoaded = false;
-			switchCssSrcRefs(theme);
+			applyThemeToModules(theme);
 		}
 
-		// material2 theme
 		if (theme === 'dark' && document.body) {
 			document.body.classList.add('angular-theme-dark');
 			document.body.classList.remove('angular-theme-classic');
@@ -31,49 +31,33 @@ export function MainController($scope: IScope, $rootScope: IWfmRootScopeService,
 		}
 	};
 
-	function refreshElement() {
-		destroyElement();
-		var moduleElement = document.createElement('link');
-		var styleElement = document.getElementById('themeStyle');
-		moduleElement.id = 'themeModules';
-		moduleElement.rel = 'stylesheet';
-		moduleElement.href = '';
-		moduleElement.onload = function() {
+	function applyThemeToModules(theme) {
+		var oldNode = document.getElementById('themeModules');
+		var newNode = document.createElement('link');
+
+		newNode.id = 'themeModules';
+		newNode.rel = 'stylesheet';
+		newNode.href = '';
+		newNode.onload = function() {
 			$scope.$apply(function() {
 				vm.styleIsFullyLoaded = true;
 			});
 		};
-		document.head.insertBefore(moduleElement, styleElement);
-		return moduleElement;
-	}
-	function destroyElement() {
-		var themeElement: any = document.getElementById('themeModules');
-		if (themeElement.remove) themeElement.remove();
-		else if (themeElement.removeNode) themeElement.removeNode(true);
-	}
 
-	function applyThemeToModules(theme) {
-		var themeElement = refreshElement();
-		themeElement.setAttribute('href', 'dist/resources/modules_' + theme + '.min.css');
-		themeElement.setAttribute('class', theme);
-	}
+		newNode.setAttribute('href', 'dist/resources/modules_' + theme + '.min.css');
+		newNode.setAttribute('class', theme);
 
-	function applyThemeToMain(theme) {
-		var themeElement = document.getElementById('themeStyle');
-		themeElement.setAttribute('href', 'dist/style_' + theme + '.min.css');
-		themeElement.setAttribute('class', theme);
-	}
-
-	function switchCssSrcRefs(theme) {
-		applyThemeToModules(theme);
-		applyThemeToMain(theme);
+		document.body.replaceChild(newNode, oldNode);
 	}
 
 	function checkCurrentTheme() {
-		var currentStyle;
-		if (document.getElementById('themeStyle').className) {
-			currentStyle = document.getElementById('themeStyle').className;
+		let classList = document.body.classList;
+		if (classList.contains('angular-theme-dark')) {
+			return 'dark';
+		} else if (classList.contains('angular-theme-classic')) {
+			return 'classic';
+		} else {
+			return 'classic';
 		}
-		return currentStyle;
 	}
 }

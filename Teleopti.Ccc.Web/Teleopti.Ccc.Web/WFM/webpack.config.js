@@ -151,19 +151,7 @@ module.exports = env => {
 		name: 'distCss',
 		// outputPath: 'dist',
 		fileName: 'resources/modules_classic.min.css',
-		filesToConcat: [
-			'./node_modules/bootstrap/dist/css/bootstrap.css',
-			'./node_modules/angular-resizable/src/angular-resizable.css',
-			'./node_modules/angular-ui-tree/source/angular-ui-tree.css',
-			'./node_modules/angular-ui-grid/ui-grid.css',
-			'./node_modules/angular-material/angular-material.css',
-			'./node_modules/angular-gantt/assets/angular-gantt.css',
-			'./node_modules/angular-gantt/assets/angular-gantt-plugins.css',
-			'./node_modules/angular-gantt/assets/angular-gantt-table-plugin.css',
-			'./node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.css',
-			'./node_modules/c3/c3.css',
-			'./node_modules/teleopti-styleguide/styleguide/dist/main.min.css'
-		],
+		filesToConcat: ['./node_modules/teleopti-styleguide/styleguide/dist/main.min.css'],
 		attributes: {
 			async: false
 		}
@@ -174,19 +162,7 @@ module.exports = env => {
 		name: 'darkCss',
 		// outputPath: 'dist',
 		fileName: 'resources/modules_dark.min.css', // prod env uses a .min.css name instead
-		filesToConcat: [
-			'./node_modules/bootstrap/dist/css/bootstrap.css',
-			'./node_modules/angular-resizable/src/angular-resizable.css',
-			'./node_modules/angular-ui-tree/source/angular-ui-tree.css',
-			'./node_modules/angular-ui-grid/ui-grid.css',
-			'./node_modules/angular-material/angular-material.css',
-			'./node_modules/angular-gantt/assets/angular-gantt.css',
-			'./node_modules/angular-gantt/assets/angular-gantt-plugins.css',
-			'./node_modules/angular-gantt/assets/angular-gantt-table-plugin.css',
-			'./node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.css',
-			'./node_modules/c3/c3.css',
-			'./node_modules/teleopti-styleguide/styleguide/dist/main_dark.min.css'
-		],
+		filesToConcat: ['./node_modules/teleopti-styleguide/styleguide/dist/main_dark.min.css'],
 		attributes: {
 			async: false
 		}
