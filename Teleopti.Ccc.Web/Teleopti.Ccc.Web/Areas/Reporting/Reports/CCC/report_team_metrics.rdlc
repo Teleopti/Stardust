@@ -529,7 +529,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!ResAdherenceCalculationColon.Value</Value>
+                              <Value>=Parameters!ResReadyTimeAdherenceCalculationColon.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
@@ -1094,7 +1094,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!ResAdherencePercent.Value</Value>
+                              <Value>=Parameters!ResReadyTimeAdherencePercent.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
@@ -3125,10 +3125,10 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0)</Value>
       <AllowBlank>true</AllowBlank>
       <Prompt>ResOccupancyPercent</Prompt>
     </ReportParameter>
-    <ReportParameter Name="ResAdherencePercent">
+    <ReportParameter Name="ResReadyTimeAdherencePercent">
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
-      <Prompt>ResAdherencePercent</Prompt>
+      <Prompt>ResReadyTimeAdherencePercent</Prompt>
     </ReportParameter>
     <ReportParameter Name="ResSiteNameColon">
       <DataType>String</DataType>
@@ -3150,10 +3150,10 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0)</Value>
       <AllowBlank>true</AllowBlank>
       <Prompt>ResTeamDate</Prompt>
     </ReportParameter>
-    <ReportParameter Name="ResAdherenceCalculationColon">
+    <ReportParameter Name="ResReadyTimeAdherenceCalculationColon">
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
-      <Prompt>ResAdherenceCalculationColon</Prompt>
+      <Prompt>ResReadyTimeAdherenceCalculationColon</Prompt>
     </ReportParameter>
     <ReportParameter Name="ResReadyTimePerScheduledReadyTimePercent">
       <DataType>String</DataType>
