@@ -11,24 +11,16 @@ if (typeof Teleopti.MyTimeWeb.Schedule === 'undefined') {
 Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 	var vm,
 		completelyLoaded,
-		currentPage = 'Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule',
+		currentPage = 'Teleopti.MyTimeWeb.Schedule.NewTeamSchedule',
 		subscribed = false,
 		dataService,
 		timeLineOffset = 50,
 		ajax,
-		isLoading = false;
-
-	var onMobile = Teleopti.MyTimeWeb.Common.IsHostAMobile();
-	var oniPad = Teleopti.MyTimeWeb.Common.IsHostAniPad();
-	var headerHeight = 50,
-		toolbarHeight = 53,
-		agentNameRowHeight = 50,
-		offsetTopValue = headerHeight + toolbarHeight + agentNameRowHeight,
-		timeLineWidth = 30,
+		isLoading = false,
+		onMobile = Teleopti.MyTimeWeb.Common.IsHostAMobile(),
+		oniPad = Teleopti.MyTimeWeb.Common.IsHostAniPad(),
 		agentScheduleColumnWidth = onMobile ? 50 : 80,
-		myScheduleColumnWidth = onMobile ? 70 : 100,
-		minScrollBlockWidth = 60,
-		windowHeight = $(window).height();
+		minScrollBlockWidth = 60;
 
 	function cleanBinding() {
 		ko.cleanNode($('#page')[0]);
@@ -122,14 +114,9 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 	}
 
 	function registerScrollEvent() {
-		$('.new-teamschedule-table').scroll(function() {
-			adjustArrowPositions();
-		});
 		if (vm.isHostAMobile || vm.isHostAniPad) {
 			$('.teammates-schedules-container').scroll(function() {
 				$('.teammates-agent-name-row').css({ left: -$(this).scrollLeft() - 1 });
-
-				adjustArrowPositions();
 			});
 		}
 
@@ -164,7 +151,6 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 			}
 
 			setScrollPositionForNameAndSchedule(-newLeft * pixelsRatioOfHorizontalScrolling - (oniPad ? -1 : 1));
-			adjustArrowPositions();
 			$('.teamschedule-scroll-block').css({
 				left: newLeft
 			});
@@ -191,7 +177,6 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 					setScrollPositionForNameAndSchedule(
 						-leftDistance * pixelsRatioOfHorizontalScrolling - (oniPad ? -1 : 1)
 					);
-					adjustArrowPositions();
 
 					loadSchedulesBasedOnPageDiffAndUpdateCurrentPageNum(leftDistance);
 				},
@@ -262,60 +247,6 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 	function setScrollPositionForNameAndSchedule(leftDistance) {
 		$('.teammates-agent-name-row').css({ left: leftDistance });
 		$('.teammates-schedules-container.relative').css({ left: leftDistance });
-	}
-
-	function adjustArrowPositions() {
-		var teamscheduleTableOffsetLeft = $('.new-teamschedule-table.relative').offset().left;
-
-		$('.my-schedule-column').each(function(i, e) {
-			toggleShiftArrows($(e), true, teamscheduleTableOffsetLeft);
-		});
-
-		$('.teammates-schedules-column').each(function(i, e) {
-			toggleShiftArrows($(e), false, i, teamscheduleTableOffsetLeft);
-		});
-	}
-
-	function toggleShiftArrows(container, underMySchedule, index, teamscheduleTableOffsetLeft) {
-		var firstLayer = container.find('.new-teamschedule-layer:first');
-		if (!firstLayer || firstLayer.length == 0) return;
-
-		var lastLayer = container.find('.new-teamschedule-layer:last');
-
-		var agentNameContainer;
-		if (underMySchedule) {
-			agentNameContainer = $('.new-teamschedule-agent-name.my-name');
-		} else {
-			agentNameContainer = $(
-				'.teammates-agent-name-row .new-teamschedule-agent-name:nth-child(' +
-					(isNaN(index) ? '' : index + 1) +
-					')'
-			);
-		}
-
-		var arrowUp = agentNameContainer.find('.teamschedule-arrow-up');
-		var arrowDown = agentNameContainer.find('.teamschedule-arrow-down');
-
-		if (firstLayer.offset().top > (onMobile || oniPad ? windowHeight : windowHeight - 5)) {
-			arrowDown.show();
-		} else {
-			arrowDown.hide();
-		}
-
-		if (lastLayer.offset().top + lastLayer.height() < offsetTopValue) {
-			arrowUp.show();
-		} else {
-			arrowUp.hide();
-		}
-
-		var myScheduleColumnRightOffset = teamscheduleTableOffsetLeft + timeLineWidth + myScheduleColumnWidth;
-		if (!underMySchedule && arrowUp.offset().left < myScheduleColumnRightOffset) {
-			arrowUp.hide();
-		}
-
-		if (!underMySchedule && arrowDown.offset().left < myScheduleColumnRightOffset) {
-			arrowDown.hide();
-		}
 	}
 
 	function showLoadingGif() {
@@ -417,10 +348,6 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 					0
 				);
 		}
-
-		$('.teamschedule-arrow-up').hide();
-		$('.teamschedule-arrow-down').hide();
-		adjustArrowPositions();
 	}
 
 	function fetchDataSuccessCallback() {

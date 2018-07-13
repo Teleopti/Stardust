@@ -35,15 +35,6 @@
 		-webkit-overflow-scrolling: touch;
 	}
 </style>
-<!-- ko if: isHostAniPad -->
-<style>
-	.new-teamschedule-agent-name.my-name.relative {
-		width: 101px;
-		min-width: 101px;
-		max-width: 101px;
-	}
-</style>
-<!-- /ko -->
 <!-- ko if: isHostAniPad || isHostAMobile -->
 <style>
 	html, body, section#page, article#body, #body-inner, .new-teamschedule-view {
@@ -60,11 +51,17 @@
 	.teamschedule-scroll-block-container {
 		display: none;
 	}
-	.teamschedule-arrow-down {
-		top: calc(100vh - 50px - 50px);
-	}
 	.new-teamschedule-view > .container {
 		padding: 0;
+	}
+</style>
+<!-- /ko -->
+<!-- ko if: isHostAniPad -->
+<style>
+	.new-teamschedule-agent-name.my-name.relative {
+		width: 101px;
+		min-width: 101px;
+		max-width: 101px;
 	}
 </style>
 <!-- /ko -->
@@ -88,9 +85,6 @@
 	}
 	.new-teamschedule-agent-name .text-name {
 		white-space: normal;
-	}
-	.teamschedule-arrow-down {
-		top: calc(100vh - 50px - 50px);
 	}
 	.new-teamschedule-view .my-schedule-column.relative {
 		width: 70px;
@@ -126,9 +120,6 @@
 		left: 0;
 		right: 0;
 		box-shadow: 0 -2px 2px 2px rgba(0, 0, 0, 0.2);
-	}
-	.load-more-schedules-arrow {
-		display: none;
 	}
 	.teamschedule-scroll-block-container {
 		display: none;
@@ -175,18 +166,17 @@
 			<div class="timeline-margin-block"></div>
 			<div class="new-teamschedule-agent-name my-name relative">
 				<span class="text-name">@Resources.MySchedule</span>
-				<span class="teamschedule-arrow-up"><i class="glyphicon glyphicon-chevron-up"></i></span>
-				<span class="teamschedule-arrow-down"><i class="glyphicon glyphicon-chevron-down"></i></span>
+				<span class="shift-category-cell" data-bind="text: mySchedule().shiftCategory.name, style: {background: mySchedule().shiftCategory.bgColor, color: mySchedule().shiftCategory.color}, css: {'dayoff': mySchedule().isDayOff}">
+				</span>
 			</div>
 			<!-- /ko -->
 
 			<div class="teammates-agent-name-row relative">
 				<!-- ko foreach: agentNames -->
-				<div class="new-teamschedule-agent-name" data-bind="tooltip: { title: $data, trigger: 'click', placement: 'bottom'}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">
-					<span class="text-name" data-bind="text: $data"></span>
-					<span class="teamschedule-arrow-up"><i class="glyphicon glyphicon-chevron-up"></i></span>
-					<span class="teamschedule-arrow-down"><i class="glyphicon glyphicon-chevron-down"></i></span>
-				</div>
+				<span class="new-teamschedule-agent-name" data-bind="tooltip: { title: $data.name, trigger: 'click', placement: 'bottom'}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">
+					<span class="text-name" data-bind="text: $data.name"></span>
+					<span class="shift-category-cell" data-bind="text: $data.shiftCategory.name, style: {background: $data.shiftCategory.bgColor, color: $data.shiftCategory.color}, css: {'dayoff': $data.isDayOff}"></span>
+				</span>
 				<!-- /ko -->
 			</div>
 		</div>

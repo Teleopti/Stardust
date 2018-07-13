@@ -1,5 +1,6 @@
 using System;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Web.Core.Data;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
@@ -32,6 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 		public string DayOffName { get; set; }
 		public double ContractTimeInMinute { get; set; }
 		public bool IsNotScheduled { get; set; }
+		public ShiftCategoryViewModel ShiftCategory { get; set; }
 	}
 
 	public class LayerViewModel

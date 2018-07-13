@@ -8,6 +8,7 @@
 		FULL_DAY_HOUR_STR = constants.fullDayHourStr,
 		PIXEL_OF_ONE_HOUR = constants.pixelOfOneHourInTeamSchedule,
 		dateOnlyFormat = constants.serviceDateTimeFormat.dateOnly,
+		getTextColoFn = Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor,
 		timeLineOffset = 50,
 		minPixelsToDisplayTitle = 30,
 		requestDateOnlyFormat = 'YYYY/MM/DD',
@@ -127,7 +128,7 @@
 	self.readScheduleData = function(data, date) {
 		disposeSelectedDateSubscription();
 
-		self.agentNames(getAgentNames(data.AgentSchedules));
+		self.agentNames(buildAgentNames(data.AgentSchedules));
 		self.selectedDate(moment(date));
 		self.displayDate(moment(date).format(Teleopti.MyTimeWeb.Common.DateFormat));
 
@@ -161,10 +162,14 @@
 		self.timeLines(createTimeLineViewModel(rawTimeline));
 		self.scheduleContainerHeight(self.timeLines().length * PIXEL_OF_ONE_HOUR + timeLineOffset);
 
+		var agentNames = buildAgentNames(data.AgentSchedules);
+		agentNames.forEach(function(a) {
+			self.agentNames.push(a);
+		});
+
 		var teamSchedule = createTeamSchedules(data.AgentSchedules, self.timeLines()[0].time);
-		teamSchedule.forEach(function(schedule) {
-			self.teamSchedules.push(schedule);
-			self.agentNames.push(schedule.name);
+		teamSchedule.forEach(function(agentSchedule) {
+			self.teamSchedules.push(agentSchedule);
 		});
 
 		setPaging();
@@ -208,14 +213,18 @@
 		return minutes;
 	}
 
-	function getAgentNames(agentSchedulesData) {
+	function buildAgentNames(agentSchedulesData) {
 		var agentNames = [];
 		if (!agentSchedulesData || agentSchedulesData.length == 0) {
 			return agentNames;
 		}
 
 		agentSchedulesData.forEach(function(agentSchedule) {
-			agentNames.push(agentSchedule.Name);
+			agentNames.push({
+				name: agentSchedule.Name,
+				shiftCategory: getShiftCategory(agentSchedule),
+				isDayOff: agentSchedule.IsDayOff
+			});
 		});
 
 		return agentNames;
@@ -305,7 +314,8 @@
 			layers: mySchedulePeriods,
 			isDayOff: myScheduleData.IsDayOff,
 			isNotScheduled: myScheduleData.IsNotScheduled,
-			dayOffName: myScheduleData.DayOffName
+			dayOffName: myScheduleData.DayOffName,
+			shiftCategory: getShiftCategory(myScheduleData)
 		};
 	}
 
@@ -343,6 +353,21 @@
 		});
 
 		return teamSchedules;
+	}
+
+	function getShiftCategory(scheduleData) {
+		var shiftCategory = {
+			name: ''
+		};
+
+		if (scheduleData.ShiftCategory) {
+			var category = scheduleData.ShiftCategory;
+			shiftCategory.name = category.ShortName;
+			shiftCategory.bgColor = category.DisplayColor;
+			shiftCategory.color = getTextColoFn(category.DisplayColor);
+		}
+
+		return shiftCategory;
 	}
 
 	function createTimeLineViewModel(timeLine) {

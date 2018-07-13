@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
+using Teleopti.Ccc.Web.Core.Data;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 {
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 		public bool IsDayOff { get; set; }
 		public string DayOffName { get; set; }
 		public bool IsNotScheduled { get; set; }
+		public ShiftCategoryViewModel ShiftCategory { get; set; }
 	}
 
 	public class TeamScheduleAgentScheduleLayerViewModel

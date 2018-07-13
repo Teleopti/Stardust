@@ -964,20 +964,62 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			Assert.AreEqual(result.IsNotScheduled, true);
 		}
 
-
-
-		private double getTimeSpanInMinutesFromPeriod(DateTimePeriod period)
+		[Test]
+		public void ShouldReturnShiftCategoryInfo()
 		{
-			return (period.EndDateTime - period.StartDateTime).TotalMinutes;
+			SetupProjectionProvider();
+
+			const string firstName = "Sherlock";
+			const string lastName = "Holmes";
+
+			var baseDate = new DateTime(2015, 01, 01, 0, 0, 0, DateTimeKind.Utc);
+			var person = PersonFactory.CreatePersonWithGuid(firstName, lastName);
+
+			var assignment1Person1 = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(baseDate));
+			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(baseDate), person, scenario);
+
+			var phoneActivityStart = baseDate.AddHours(8);
+			var phoneActivityEnd = baseDate.AddHours(16);
+			var phoneActivityPeriod = new DateTimePeriod(phoneActivityStart, phoneActivityEnd);
+
+			var phoneActivity = ActivityFactory.CreateActivity("Phone", Color.Blue);
+			phoneActivity.InContractTime = true;
+			phoneActivity.InWorkTime = true;
+			assignment1Person1.AddActivity(phoneActivity, phoneActivityPeriod);
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day", Color.Green.ToString());
+			
+			assignment1Person1.SetShiftCategory(shiftCategory);
+
+			scheduleDay.Add(assignment1Person1);
+
+			var result = Target.MakeScheduleReadModel(person, scheduleDay, false);
+
+			result.ShiftCategory.Name.Should().Be.EqualTo(shiftCategory.Description.Name);
+			result.ShiftCategory.DisplayColor.Should().Be.EqualTo(shiftCategory.DisplayColor.ToHtml());
 		}
 
-		private string getPeriodString(DateTime start, DateTime end)
+		[Test]
+		public void ShouldReturnShiftCategoryInfoForDayOff()
 		{
-			return string.Format(CultureInfo.CurrentCulture, "{0} - {1}",
-				start.ToShortTimeString(), end.ToShortTimeString());
+			SetupProjectionProvider();
+
+			const string firstName = "Sherlock";
+			const string lastName = "Holmes";
+
+			var baseDate = new DateTime(2015, 01, 01, 0, 0, 0, DateTimeKind.Utc);
+			var person = PersonFactory.CreatePersonWithGuid(firstName, lastName);
+
+			var assignment1Person1 = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, scenario, new DateOnly(baseDate),
+				new DayOffTemplate(new Description("Day Off", "DO")));
+
+			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(baseDate), person, scenario);
+			scheduleDay.Add(assignment1Person1);
+
+			var result = Target.MakeScheduleReadModel(person, scheduleDay, false);
+
+			result.ShiftCategory.Name.Should().Be.EqualTo("Day Off");
+			result.ShiftCategory.ShortName.Should().Be.EqualTo("DO");
 		}
-
-
 
 		[Test]
 		public void ShouldShowCorrectDescriptionNameForConfidentialAbsenceBasedOnUICulture()
@@ -1009,9 +1051,17 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var vmInChineses = Target.Projection(scheduleDayOnePerson1, false, CommonAgentNameProvider.CommonAgentNameSettings);
 			var personAbsenceProjectionInChineses = vmInChineses.Projection.ElementAt(1);
 			personAbsenceProjectionInChineses.Description.Should().Be("其他");
-
 		}
 
+		private double getTimeSpanInMinutesFromPeriod(DateTimePeriod period)
+		{
+			return (period.EndDateTime - period.StartDateTime).TotalMinutes;
+		}
 
+		private string getPeriodString(DateTime start, DateTime end)
+		{
+			return string.Format(CultureInfo.CurrentCulture, "{0} - {1}",
+				start.ToShortTimeString(), end.ToShortTimeString());
+		}
 	}
 }

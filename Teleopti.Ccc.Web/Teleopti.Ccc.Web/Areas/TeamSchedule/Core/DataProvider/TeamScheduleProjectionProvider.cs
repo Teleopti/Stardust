@@ -277,6 +277,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				ret.IsNotScheduled = true;
 			}
 
+			ret.ShiftCategory = getShiftCategoryDescription(scheduleDay);
+
 			var projectionPeriod = projection.Period();
 			if (projectionPeriod != null)
 			{
@@ -357,6 +359,17 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					Name = shiftCategory.Description.Name,
 					ShortName = shiftCategory.Description.ShortName,
 					DisplayColor = shiftCategory.DisplayColor.ToHtml()
+				};
+			}
+
+			if (significantPart == SchedulePartView.DayOff)
+			{
+				var dayOffInfo = scheduleDay.PersonAssignment().DayOff();
+				return new ShiftCategoryViewModel
+				{
+					Name = dayOffInfo.Description.Name,
+					ShortName = dayOffInfo.Description.ShortName,
+					DisplayColor = dayOffInfo.DisplayColor.ToHtml()
 				};
 			}
 			return null;

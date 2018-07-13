@@ -182,7 +182,10 @@
 
 		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
 
-		equal($('.new-teamschedule-view .new-teamschedule-agent-name.my-name span').text(), '@Resources.MySchedule');
+		equal(
+			$('.new-teamschedule-view .new-teamschedule-agent-name.my-name .text-name').text(),
+			'@Resources.MySchedule'
+		);
 		equal($('.new-teamschedule-view .my-schedule-column .new-teamschedule-layer').length, 1);
 		equal($('.new-teamschedule-view .my-schedule-column .new-teamschedule-layer strong').text(), 'Phone');
 	});
@@ -199,6 +202,27 @@
 		);
 		equal($('.new-teamschedule-view .teammates-schedules-column .new-teamschedule-layer').length, 20);
 		equal($('.new-teamschedule-view .teammates-schedules-column .new-teamschedule-layer strong:visible').length, 0);
+	});
+
+	test('should show shift category for my schedule', function() {
+		$('body').append(agentSchedulesHtml);
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+
+		equal($('.new-teamschedule-view .new-teamschedule-agent-name.my-name span.shift-category-cell').text(), 'AM');
+	});
+
+	test('should show day off short name for my schedule', function() {
+		fakeTeamScheduleData.MySchedule.ShiftCategory.Name = 'Day Off';
+		fakeTeamScheduleData.MySchedule.ShiftCategory.ShortName = 'DO';
+
+		$('body').append(agentSchedulesHtml);
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+
+		equal($('.new-teamschedule-view .new-teamschedule-agent-name.my-name span.shift-category-cell').text(), 'DO');
 	});
 
 	test('should reload schedule after clicking on "previous day" icon', function() {
@@ -397,7 +421,7 @@
 		equal(vm.mySchedule().isDayOff, true);
 		equal(vm.mySchedule().dayOffName, 'Day off');
 		equal(
-			$('.dayoff')
+			$('.my-schedule-column .new-teamschedule-layer-container .dayoff')
 				.text()
 				.replace(/(^\s*)|(\s*$)/g, ''),
 			'Day off'
@@ -412,11 +436,7 @@
 		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
 
 		equal(vm.mySchedule().isNotScheduled, true);
-		equal(
-			$('.my-schedule-column .not-scheduled-text')
-				.text(),
-			'NotScheduled'
-		);
+		equal($('.my-schedule-column .not-scheduled-text').text(), '@Resources.NotScheduled');
 	});
 
 	test("should map dayOff of agents' schedule", function() {
@@ -444,9 +464,10 @@
 
 		equal(vm.teamSchedules()[0].isNotScheduled, true);
 		equal(
-			$('.teammates-schedules-container .not-scheduled-text').first()
+			$('.teammates-schedules-container .not-scheduled-text')
+				.first()
 				.text(),
-			'NotScheduled'
+			'@Resources.NotScheduled'
 		);
 	});
 
@@ -530,7 +551,13 @@
 					}
 				],
 				DayOfWeekNumber: '',
-				HasNotScheduled: ''
+				HasNotScheduled: '',
+				ShiftCategory: {
+					DisplayColor: '#80FF80',
+					Id: null,
+					Name: 'Early',
+					ShortName: 'AM'
+				}
 			}
 		};
 
@@ -551,7 +578,7 @@
 					HasMainShift: '',
 					HasOvertime: '',
 					IsFullDayAbsence: false,
-					IsDayOff: false,					
+					IsDayOff: false,
 					IsNotScheduled: false,
 					Summary: '',
 					Periods: [
@@ -572,7 +599,13 @@
 						}
 					],
 					DayOfWeekNumber: '',
-					HasNotScheduled: ''
+					HasNotScheduled: '',
+					ShiftCategory: {
+						DisplayColor: '#80FF80',
+						Id: null,
+						Name: 'Early',
+						ShortName: 'AM'
+					}
 				};
 
 				fakeOriginalAgentSchedulesData.push(agentSchedule);
@@ -665,19 +698,18 @@
 			'		<div class="agent-name-row container relative">',
 			'			<!-- ko if: mySchedule -->',
 			'			<div class="timeline-margin-block"></div>',
-			'			<div class="new-teamschedule-agent-name my-name relative" data-bind="tooltip: { title: mySchedule().name, trigger: \'click\', placement: \'bottom\'}, hideTooltipAfterMouseLeave: true">',
+			'			<div class="new-teamschedule-agent-name my-name relative">',
 			'				<span class="text-name">@Resources.MySchedule</span>',
-			'				<span class="teamschedule-arrow-up"><i class="glyphicon glyphicon-chevron-up"></i></span>',
-			'				<span class="teamschedule-arrow-down"><i class="glyphicon glyphicon-chevron-down"></i></span>',
+			'				<span class="shift-category-cell" data-bind="text: mySchedule().shiftCategory.name, style: {background: mySchedule().shiftCategory.bgColor, color: mySchedule().shiftCategory.color}, css: {\'dayoff\': mySchedule().isDayOff}">',
+			'				</span>',
 			'			</div>',
 			'			<!-- /ko -->',
 			'			<div class="teammates-agent-name-row relative">',
 			'				<!-- ko foreach: agentNames -->',
-			'				<div class="new-teamschedule-agent-name" data-bind="tooltip: { title: $data, trigger: \'click\', placement: \'bottom\'}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">',
-			'					<span class="text-name" data-bind="text: $data"></span>',
-			'					<span class="teamschedule-arrow-up"><i class="glyphicon glyphicon-chevron-up"></i></span>',
-			'					<span class="teamschedule-arrow-down"><i class="glyphicon glyphicon-chevron-down"></i></span>',
-			'				</div>',
+			'				<span class="new-teamschedule-agent-name" data-bind="tooltip: { title: $data.name, trigger: \'click\', placement: \'bottom\'}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">',
+			'					<span class="text-name" data-bind="text: $data.name"></span>',
+			'					<span class="shift-category-cell" data-bind="text: $data.shiftCategory.name, style: {background: $data.shiftCategory.bgColor, color: $data.shiftCategory.color}, css: {\'dayoff\': $data.isDayOff}"></span>',
+			'				</span>',
 			'				<!-- /ko -->',
 			'			</div>',
 			'		</div>',
@@ -710,12 +742,12 @@
 			'					</div>',
 			'					<!-- /ko -->',
 			'					<!--ko if:mySchedule().isDayOff-->',
-			'					<div class="dayoff cursorpointer" data-bind="tooltip: { title: mySchedule().dayOffName, html: true, trigger: \'click\'}, hideTooltipAfterMouseLeave: true">',
+			'					<div class="dayoff cursorpointer relative" data-bind="tooltip: { title: mySchedule().dayOffName, html: true, trigger: \'click\'}, hideTooltipAfterMouseLeave: true">',
 			'						<span class="dayoff-text" data-bind="text: mySchedule().dayOffName"></span>',
 			'					</div>',
 			'					<!--/ko-->',
 			'					<!-- ko if:mySchedule().isNotScheduled -->',
-			'					<div class="not-scheduled-text">NotScheduled</div>',
+			'					<div class="not-scheduled-text">@Resources.NotScheduled</div>',
 			'					<!-- /ko -->',
 			'				</div>',
 			'				<!-- /ko -->',
@@ -744,10 +776,12 @@
 			'						</div>',
 			'						<!-- /ko -->',
 			'						<!--ko if:isDayOff-->',
-			'						<div class="dayoff cursorpointer" data-bind="tooltip: { title: dayOffName, html: true, trigger: \'click\' }, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true"></div>',
+			'						<div class="dayoff cursorpointer relative" data-bind="tooltip: { title: dayOffName, html: true, trigger: \'click\' }, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">',
+			'							<span class="dayoff-text" data-bind="text: dayOffName"></span>',
+			'						</div>',
 			'						<!--/ko-->',
 			'						<!-- ko if:isNotScheduled -->',
-			'						<div class="not-scheduled-text">NotScheduled</div>',
+			'						<div class="not-scheduled-text">@Resources.NotScheduled</div>',
 			'						<!-- /ko -->',
 			'					</div>',
 			'				</div>',
@@ -755,7 +789,7 @@
 			'			</div>',
 			'			<!-- /ko -->',
 			'		</div>',
-			'		<div class="teamschedule-scroll-block-container" data-bind="style: {border: isScrollbarVisible() ? \'1px dashed rgba(0, 0, 0, 0.1)\' : \'none\'}"',
+			'		<div class="teamschedule-scroll-block-container" data-bind="style: {border: isScrollbarVisible() ? \'1px dashed rgba(0, 0, 0, 0.1)\' : \'none\'}">',
 			'			<!-- ko if: isScrollbarVisible -->',
 			'			<div class="teamschedule-scroll-block">',
 			'				<i class="glyphicon glyphicon-resize-horizontal"></i>',
