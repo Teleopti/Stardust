@@ -11220,6 +11220,10 @@ These options are activated:
     <value>Adherence per Agent</value>
     <comment>Adherence per Agent</comment>
   </data>
+	<data name="ResReportReadyTimeAdherencePerAgent" xml:space="preserve">
+    <value>Ready Time Adherence per Agent</value>
+    <comment>Ready Time Adherence per Agent</comment>
+  </data>
   <data name="ResReportAdherencePerDay" xml:space="preserve">
     <value>Adherence per Day</value>
     <comment>Adherence per Day</comment>

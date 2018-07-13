@@ -459,6 +459,10 @@
   <data name="ResAdherencePercent" xml:space="preserve">
     <value>Adherence (%)</value>
     <comment>Adherence (%)</comment>
+  </data> 
+	<data name="ResReadyTimeAdherencePercent" xml:space="preserve">
+    <value>Ready Time Adherence (%)</value>
+    <comment>Ready Time Adherence (%)</comment>
   </data>
   <data name="ResAgentDate" xml:space="preserve">
     <value>Agent / Date</value>
@@ -483,6 +487,10 @@
   <data name="ResAdherenceCalculationColon" xml:space="preserve">
     <value>Adherence Calculation:</value>
     <comment>Adherence Calculation:</comment>
+  </data>
+	 <data name="ResReadyTimeAdherenceCalculationColon" xml:space="preserve">
+    <value>Ready Time Adherence Calculation:</value>
+    <comment>Ready Time Adherence Calculation:</comment>
   </data>
   <data name="ResOfferedCallsPerAgent" xml:space="preserve">
     <value>Offered Calls / Agent</value>
@@ -523,6 +531,10 @@
   <data name="ResAdherencePerIntervalPercent" xml:space="preserve">
     <value>Adherence / Interval (%)</value>
     <comment>Adherence / Interval (%)</comment>
+  </data>  
+	<data name="ResReadyTimeAdherencePerIntervalPercent" xml:space="preserve">
+    <value>Ready Time Adherence / Interval (%)</value>
+    <comment>Ready Time Adherence / Interval (%)</comment>
   </data>
   <data name="ResDeviationPerIntervalMinute" xml:space="preserve">
     <value>Deviation / Interval (m)</value>
@@ -1212,6 +1224,10 @@ Schedule</value>
   <data name="ResReportAdherencePerAgent" xml:space="preserve">
     <value>Adherence per Agent</value>
     <comment>Adherence per Agent</comment>
+  </data>
+	<data name="ResReportReadyTimeAdherencePerAgent" xml:space="preserve">
+    <value>Ready Time Adherence per Agent</value>
+    <comment>Ready Time Adherence per Agent</comment>
   </data>
   <data name="ResReportAdherencePerDay" xml:space="preserve">
     <value>Adherence per Day</value>

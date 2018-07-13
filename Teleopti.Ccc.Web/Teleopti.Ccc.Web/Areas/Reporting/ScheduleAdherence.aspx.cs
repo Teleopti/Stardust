@@ -278,7 +278,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 
 		private void setReportHeaderParmaterLabels()
 		{
-			tdReportName.InnerText = ReportId.Equals(reportAdherencePerAgentGuid) ? Resources.ResReportAdherencePerAgent : Resources.ResReportAdherencePerDay;
+			tdReportName.InnerText = ReportId.Equals(reportAdherencePerAgentGuid) ? Resources.ResReportReadyTimeAdherencePerAgent : Resources.ResReportAdherencePerDay;
 
 			tdDatesLabel.InnerText = Resources.ResShiftStartDateColon;
 			tdGroupPageLabel.InnerText = Resources.ResGroupPageColon;
@@ -288,7 +288,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			tdSiteLabel.InnerText = Resources.ResSiteNameColon;
 			tdTeamLabel.InnerText = Resources.ResTeamNameColon;
 			tdAgentLabel.InnerText = Resources.ResAgentColon;
-			tdAdherenceCalculationLabel.InnerText = Resources.ResAdherenceCalculationColon;
+			tdAdherenceCalculationLabel.InnerText = Resources.ResReadyTimeAdherenceCalculationColon;
 			tdSortOrderLabel.InnerText = Resources.ResSortByColon;
 			tdTimeZoneLabel.InnerText = Resources.ResTimeZoneColon;
 			tdDateLabel.InnerText = Resources.ResShiftStartDateColon;
@@ -330,7 +330,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			// Team adherence total row
 			var tableCellListAdherence = new List<TableCell>
 											 {
-												 makeTableCell(Resources.ResAdherencePerIntervalPercent,
+												 makeTableCell(Resources.ResReadyTimeAdherencePerIntervalPercent,
 															   HorizontalAlign.Left, VerticalAlign.Middle, "ReportTotalAdherence"),
 												 makeTableCell("&nbsp;",
 															   HorizontalAlign.Center,
@@ -651,7 +651,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 								   ? makeTableCell(Resources.ResDate, HorizontalAlign.Left, VerticalAlign.Top, "") //one agent per days
 								   : makeTableCell(Resources.ResAgentName, HorizontalAlign.Left, VerticalAlign.Top, "")); // one day per agents
 
-			tableRow.Cells.Add(makeTableCell(Resources.ResAdherencePercent, HorizontalAlign.Center, VerticalAlign.Top, ""));
+			tableRow.Cells.Add(makeTableCell(Resources.ResReadyTimeAdherencePercent, HorizontalAlign.Center, VerticalAlign.Top, ""));
 
 			tableRow.Cells.Add(makeTableCell(Resources.ResDeviationMinute, HorizontalAlign.Center, VerticalAlign.Top, ""));
 

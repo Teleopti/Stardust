@@ -19,7 +19,7 @@ namespace Teleopti.Analytics.ReportTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -2033,6 +2033,33 @@ namespace Teleopti.Analytics.ReportTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ready Time Adherence Calculation:.
+        /// </summary>
+        public static string ResReadyTimeAdherenceCalculationColon {
+            get {
+                return ResourceManager.GetString("ResReadyTimeAdherenceCalculationColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ready Time Adherence (%).
+        /// </summary>
+        public static string ResReadyTimeAdherencePercent {
+            get {
+                return ResourceManager.GetString("ResReadyTimeAdherencePercent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ready Time Adherence / Interval (%).
+        /// </summary>
+        public static string ResReadyTimeAdherencePerIntervalPercent {
+            get {
+                return ResourceManager.GetString("ResReadyTimeAdherencePerIntervalPercent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ready Time / Scheduled Ready Time (%).
         /// </summary>
         public static string ResReadyTimePerScheduledReadyTimePercent {
@@ -2254,6 +2281,15 @@ namespace Teleopti.Analytics.ReportTexts {
         public static string ResReportQueueStatistics {
             get {
                 return ResourceManager.GetString("ResReportQueueStatistics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ready Time Adherence per Agent.
+        /// </summary>
+        public static string ResReportReadyTimeAdherencePerAgent {
+            get {
+                return ResourceManager.GetString("ResReportReadyTimeAdherencePerAgent", resourceCulture);
             }
         }
         
