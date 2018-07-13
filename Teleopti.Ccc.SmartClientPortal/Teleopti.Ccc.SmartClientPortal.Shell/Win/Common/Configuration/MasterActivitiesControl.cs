@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -148,7 +149,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			comboBoxMasterActivities.DataSource = null;
 			comboBoxMasterActivities.DisplayMember = "Name";
 			comboBoxMasterActivities.ValueMember = "Name";
-			comboBoxMasterActivities.DataSource = masterActivities;
+			if(!masterActivities.IsNullOrEmpty())
+				comboBoxMasterActivities.DataSource = masterActivities;
 		}
 
 		public void LoadTwoList(IList<IActivityModel> allActivities, IList<IActivityModel> selectedActivities)
