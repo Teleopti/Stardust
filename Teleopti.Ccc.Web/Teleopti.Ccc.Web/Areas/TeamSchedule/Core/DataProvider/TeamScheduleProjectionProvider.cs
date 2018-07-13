@@ -277,7 +277,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				ret.IsNotScheduled = true;
 			}
 
-			ret.ShiftCategory = getShiftCategoryDescription(scheduleDay);
+			ret.ShiftCategory = getShiftCategoryDescriptionIncludingDayOff(scheduleDay);
 
 			var projectionPeriod = projection.Period();
 			if (projectionPeriod != null)
@@ -361,17 +361,32 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					DisplayColor = shiftCategory.DisplayColor.ToHtml()
 				};
 			}
+			return null;
+		}
 
-			if (significantPart == SchedulePartView.DayOff)
+		private ShiftCategoryViewModel getShiftCategoryDescriptionIncludingDayOff(IScheduleDay scheduleDay)
+		{
+			var significantPart = scheduleDay.SignificantPart();
+			switch (significantPart)
 			{
-				var dayOffInfo = scheduleDay.PersonAssignment().DayOff();
-				return new ShiftCategoryViewModel
-				{
-					Name = dayOffInfo.Description.Name,
-					ShortName = dayOffInfo.Description.ShortName,
-					DisplayColor = dayOffInfo.DisplayColor.ToHtml()
-				};
+				case SchedulePartView.MainShift:
+					var shiftCategory = scheduleDay.PersonAssignment().ShiftCategory;
+					return new ShiftCategoryViewModel
+					{
+						Name = shiftCategory.Description.Name,
+						ShortName = shiftCategory.Description.ShortName,
+						DisplayColor = shiftCategory.DisplayColor.ToHtml()
+					};
+				case SchedulePartView.DayOff:
+					var dayOffInfo = scheduleDay.PersonAssignment().DayOff();
+					return new ShiftCategoryViewModel
+					{
+						Name = dayOffInfo.Description.Name,
+						ShortName = dayOffInfo.Description.ShortName,
+						DisplayColor = dayOffInfo.DisplayColor.ToHtml()
+					};
 			}
+
 			return null;
 		}
 
