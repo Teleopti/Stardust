@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(169, 15);
 			this.label2.TabIndex = 4;
-			this.label2.Text = "xxAdherenceReportCalculation";
+			this.label2.Text = "xxReadyTimeAdherenceReportCalculation";
 			// 
 			// labelActivityAlertSeconds
 			// 

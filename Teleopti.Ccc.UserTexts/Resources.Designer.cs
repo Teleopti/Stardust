@@ -26664,6 +26664,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ready time adherence calculation for MyReport.
+        /// </summary>
+        public static string ReadyTimeAdherenceReportCalculation {
+            get {
+                return ResourceManager.GetString("ReadyTimeAdherenceReportCalculation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ready Time / Scheduled Ready Time.
         /// </summary>
         public static string ReadyTimePerScheduledReadyTime {

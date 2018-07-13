@@ -7479,6 +7479,10 @@ Updated on: {1}</value>
     <value>Adherence calculation</value>
     <comment>Adherence calculation</comment>
   </data>
+	<data name="ReadyTimeAdherenceReportCalculation" xml:space="preserve">
+    <value>Ready time adherence calculation for MyReport</value>
+    <comment>Ready time adherence calculation for MyReport</comment>
+  </data>
   <data name="AddDays" xml:space="preserve">
     <value>Add Days</value>
     <comment>Add Days</comment>
