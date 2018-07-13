@@ -288,14 +288,13 @@
 			</div>
 		</div>
 		<div class="modal-inner-content">
-			{{'SelectTargetScenarioWithColon'|translate}}
-			<md-select ng-model="vm.targetScenario" placeholder="{{'Scenario' | translate}}" ng-disabled="vm.savingToScenario || vm.isForecastRunning">
+			<md-select ng-model="vm.targetScenario" placeholder="{{'SelectTargetScenarioWithColon' | translate}}" ng-disabled="vm.savingToScenario || vm.isForecastRunning">
 				<md-option ng-repeat="scenario in vm.scenarios" ng-value="scenario">{{scenario.Name}}</md-option>
 			</md-select>
 		</div>
 		<div class="modal-actions">
 			<aside>
-				<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.exportToScenario()">{{'Save'|translate}}</button>
+				<button class="wfm-btn wfm-btn-invis-primary" ng-disabled="!vm.targetScenario" ng-click="vm.exportToScenario()">{{'Save'|translate}}</button>
 			</aside>
 		</div>
 		<div ng-if="vm.savingToScenario || vm.isForecastRunning">
