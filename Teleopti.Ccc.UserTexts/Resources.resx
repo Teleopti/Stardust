@@ -5091,6 +5091,10 @@ Availability</value>
     <value>Adherence</value>
     <comment>Adherence</comment>
   </data>
+	 <data name="ReadyTimeAdherence" xml:space="preserve">
+    <value>Ready Time Adherence</value>
+    <comment>Ready Time Adherence</comment>
+  </data>
   <data name="InvalidAgentName" xml:space="preserve">
     <value>Invalid Name</value>
     <comment>Invalid Name</comment>
