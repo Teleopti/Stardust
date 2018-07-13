@@ -24,7 +24,7 @@ $theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-app-warn);
 
 .angular-theme-classic {
 	@include angular-material-theme($theme);
-
+	@import '../../css/style.scss';
 	$menu-background-color: #e9e9e9;
 	background-color: #fcfcfc;
 
@@ -41,6 +41,4 @@ $theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-app-warn);
 			color: #0099ff;
 		}
 	}
-
-	@import '../../css/style.scss';
 }

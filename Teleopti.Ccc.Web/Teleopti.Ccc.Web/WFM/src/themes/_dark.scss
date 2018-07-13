@@ -24,7 +24,7 @@ $theme: mat-dark-theme($candy-app-primary, $candy-app-accent, $candy-app-warn);
 
 .angular-theme-dark {
 	@include angular-material-theme($theme);
-
+	@import '../../css/darkstyle.scss';
 	$menu-background-color: #424242;
 	background-color: #303030;
 
@@ -41,5 +41,4 @@ $theme: mat-dark-theme($candy-app-primary, $candy-app-accent, $candy-app-warn);
 			color: #0099ff;
 		}
 	}
-	@import '../../css/darkstyle.scss';
 }
