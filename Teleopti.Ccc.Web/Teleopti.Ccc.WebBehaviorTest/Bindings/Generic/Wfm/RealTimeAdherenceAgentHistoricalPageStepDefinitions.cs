@@ -163,14 +163,14 @@ return 'OK';
 			//because...
 			//this magic is needed because after adding padding on the wrapping div to fix some shadows
 			//behaviour tests started failing
-			var removePadding = $@"
-var wrapper = document.querySelector('.rta-view');
-wrapper.style.padding = '0px';
-return 'OK';
-";
+//			var removePadding = $@"
+//var wrapper = document.querySelector('.rta-view');
+//wrapper.style.padding = '0px';
+//return 'OK';
+//";
 			
 			Browser.Interactions.AssertJavascriptResultContains(forceRowHeight, "OK");
-			Browser.Interactions.AssertJavascriptResultContains(removePadding, "OK");
+			//Browser.Interactions.AssertJavascriptResultContains(removePadding, "OK");
 
 			Browser.Interactions.AssertFirstContains(selector, change.Time);
 			if (!string.IsNullOrEmpty(change.Duration))
