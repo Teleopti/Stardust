@@ -374,9 +374,10 @@ div.teammates-schedules-column:last-of-type .agent-name {
 	height: 40px;
 	font-size: 14px;
 	transform: translateY(-50%);
-	padding: 2px;
 	white-space: normal;
 	text-align: center;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .new-teamschedule-layer-container .dayoff {

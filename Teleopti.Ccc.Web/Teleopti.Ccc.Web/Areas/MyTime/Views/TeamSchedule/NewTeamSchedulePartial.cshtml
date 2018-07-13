@@ -216,7 +216,7 @@
 					</div>
 					<!--/ko-->
 					<!-- ko if:mySchedule().isNotScheduled -->
-					<div class="not-scheduled-text">@Resources.NotScheduled</div>
+					<div class="not-scheduled-text" data-bind="tooltip: { title: '@Resources.NotScheduled', html: true, trigger: 'click'}, hideTooltipAfterMouseLeave: true">@Resources.NotScheduled</div>
 					<!-- /ko -->
 				</div>
 				<!-- /ko -->
@@ -251,7 +251,7 @@
 						</div>
 						<!--/ko-->
 						<!-- ko if:isNotScheduled -->
-						<div class="not-scheduled-text">@Resources.NotScheduled</div>
+						<div class="not-scheduled-text" data-bind="tooltip: { title: '@Resources.NotScheduled', html: true, trigger: 'click'}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">@Resources.NotScheduled</div>
 						<!-- /ko -->
 					</div>
 				</div>

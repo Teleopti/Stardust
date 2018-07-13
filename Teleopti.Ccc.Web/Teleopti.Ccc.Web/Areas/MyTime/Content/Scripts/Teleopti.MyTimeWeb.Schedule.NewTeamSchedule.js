@@ -181,15 +181,19 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 					loadSchedulesBasedOnPageDiffAndUpdateCurrentPageNum(leftDistance);
 				},
 				stop: function(event, ui) {
-					loadSchedulesBasedOnPageDiffAndUpdateCurrentPageNum(ui.position.left, true);
+					var interval = setInterval(function() {
+						if (!isLoading) {
+							loadSchedulesBasedOnPageDiffAndUpdateCurrentPageNum(ui.position.left);
+							clearInterval(interval);
+						}
+					});
 				}
 			});
 		}, 0);
 	}
 
-	function loadSchedulesBasedOnPageDiffAndUpdateCurrentPageNum(left, dragStop) {
+	function loadSchedulesBasedOnPageDiffAndUpdateCurrentPageNum(left) {
 		var currentScrollPage = Math.ceil(left / scrollIntervalsInPixelsRepresentingAPageOfAgents) + 1;
-
 		var pageDiff = currentScrollPage - vm.currentPageNum();
 
 		if (!isLoading && pageDiff > 0) {
@@ -206,8 +210,6 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 				}
 			);
 		}
-
-		if (isLoading && dragStop) loadSchedulesBasedOnPageDiffAndUpdateCurrentPageNum(left);
 	}
 
 	function calculateTheScrollingRatio() {
