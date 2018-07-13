@@ -91,14 +91,14 @@ namespace Teleopti.Ccc.Domain.Common
 			return matchedLayers;
 		}
 
-		public Guid? GetTopShiftLayerId<T>(IList<T> shiftLayers, IVisualLayer layer) where T : ShiftLayer
+		public Guid? GetTopShiftLayerId<T>(IList<T> matchedShiftLayers, IVisualLayer layer) where T : ShiftLayer
 		{
-			var topShiftLayer = shiftLayers != null && shiftLayers.Count > 1 ?
-							shiftLayers.OrderByDescending(l => l.OrderIndex).First() : null;
+			var topShiftLayer = matchedShiftLayers != null && matchedShiftLayers.Count > 1 ?
+							matchedShiftLayers.OrderByDescending(l => l.OrderIndex).First() : null;
 		
 			if (topShiftLayer != null
 				&& !topShiftLayer.Period.Contains(layer.Period)
-				&& !shiftLayers.Any(msl => msl != topShiftLayer && topShiftLayer.Period.Contains(msl.Period)))
+				&& !matchedShiftLayers.Any(msl => msl != topShiftLayer && topShiftLayer.Period.Contains(msl.Period)))
 			{
 				topShiftLayer = null;
 			}

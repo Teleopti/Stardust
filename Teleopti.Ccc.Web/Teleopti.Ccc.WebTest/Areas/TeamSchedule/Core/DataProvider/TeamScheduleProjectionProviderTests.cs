@@ -313,7 +313,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			vm.Projection.Single().TopShiftLayerId.Should().Be.EqualTo(assignment1Person1.ShiftLayers.Second().Id.Value);
 		}
 
-
 		[Test]
 		public void ShouldGetProjectionWithTopShiftLayerIdWhenAnTopLayerNotSplitByAnotherActivity()
 		{
@@ -338,6 +337,33 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var vm = Target.Projection(scheduleDayOnePerson1, true, CommonAgentNameProvider.CommonAgentNameSettings);
 			vm.Projection.Last().TopShiftLayerId.Should().Be.EqualTo(assignment1Person1.ShiftLayers.Last().Id.Value);
 
+		}
+
+		
+		[Test]
+		public void ShouldGetProjectionWithTopShiftLayerIdWhenAnTopLayerIntersectAnotherSameTypePersonalActivity() {
+
+			var date = new DateTime(2018, 07, 31, 0, 0, 0, DateTimeKind.Utc);
+			var person1 = PersonFactory.CreatePersonWithGuid("agent", "1");
+			var phoneActivity = ActivityFactory.CreateActivity("Phone", Color.Blue);
+			var emailActivity = ActivityFactory.CreateActivity("Email", Color.Blue);
+
+			var assignment1Person1 = PersonAssignmentFactory.CreatePersonAssignment(person1, scenario, new DateOnly(date));
+			var scheduleDayOnePerson1 = ScheduleDayFactory.Create(new DateOnly(date), person1, scenario);
+
+			assignment1Person1.AddActivity(phoneActivity, new DateTimePeriod(date.AddHours(8), date.AddHours(12)));
+			assignment1Person1.AddActivity(emailActivity, new DateTimePeriod(date.AddHours(9), date.AddHours(10)));
+			assignment1Person1.AddActivity(phoneActivity, new DateTimePeriod(date.AddHours(10), date.AddHours(12)));
+			assignment1Person1.AddPersonalActivity(phoneActivity, new DateTimePeriod(date.AddHours(11), date.AddHours(13)));
+
+			assignment1Person1.ShiftLayers.ForEach(sl =>
+			{
+				sl.WithId();
+			});
+			scheduleDayOnePerson1.Add(assignment1Person1);
+
+			var vm = Target.Projection(scheduleDayOnePerson1, true, CommonAgentNameProvider.CommonAgentNameSettings);
+			vm.Projection.Third().TopShiftLayerId.Should().Be.EqualTo(assignment1Person1.ShiftLayers.Third().Id.Value);
 		}
 
 		[Test]

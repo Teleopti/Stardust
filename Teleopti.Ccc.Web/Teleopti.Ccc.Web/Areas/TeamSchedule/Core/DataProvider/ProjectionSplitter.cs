@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 			splittedLayers.ForEach(l =>
 			{
+				var matchShiftLayers = _projectionHelper.GetMatchedShiftLayers(scheduleDay, l, false);
 				var personalLayersInPeriod = matchedPersonalShiftLayers.Where(pl => pl.Period.Contains(l.Period));
 				splittedVisualLayers.Add(new GroupScheduleProjectionViewModel
 				{
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					End = TimeZoneInfo.ConvertTimeFromUtc(l.Period.EndDateTime, userTimeZone).ToFixedDateTimeFormat(),
 					Minutes = (int)l.Period.ElapsedTime().TotalMinutes,
 					ActivityId = layer.Payload.Id.GetValueOrDefault(),
-					TopShiftLayerId = _projectionHelper.GetTopShiftLayerId(matchedPersonalShiftLayers, layer)
+					TopShiftLayerId = _projectionHelper.GetTopShiftLayerId(matchShiftLayers, l)
 				});
 			});
 			return splittedVisualLayers;
