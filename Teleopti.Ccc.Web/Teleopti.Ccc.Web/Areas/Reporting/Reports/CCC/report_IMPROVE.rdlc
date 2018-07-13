@@ -1031,7 +1031,7 @@
               <Label>service level</Label>
             </ChartMember>
             <ChartMember>
-              <Label>adherence</Label>
+              <Label>ready time adherence</Label>
             </ChartMember>
             <ChartMember>
               <Label>handling time per scheduled paid time</Label>
@@ -1500,7 +1500,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!ResAdherencePercent.Value</Value>
+                              <Value>=Parameters!ResReadyTimeAdherencePercent.Value</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -2542,10 +2542,10 @@
       <AllowBlank>true</AllowBlank>
       <Prompt>ResTimeZoneColon</Prompt>
     </ReportParameter>
-    <ReportParameter Name="ResAdherencePercent">
+    <ReportParameter Name="ResReadyTimeAdherencePercent">
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
-      <Prompt>ResAdherencePercent</Prompt>
+      <Prompt>ResReadyTimeAdherencePercent</Prompt>
     </ReportParameter>
     <ReportParameter Name="ResSelections">
       <DataType>String</DataType>
