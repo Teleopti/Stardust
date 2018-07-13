@@ -2294,6 +2294,15 @@ namespace Teleopti.Analytics.ReportTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ready Time Adherence per Day.
+        /// </summary>
+        public static string ResReportReadyTimeAdherencePerDay {
+            get {
+                return ResourceManager.GetString("ResReportReadyTimeAdherencePerDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Requests Per Agent.
         /// </summary>
         public static string ResReportRequestsPerAgent {

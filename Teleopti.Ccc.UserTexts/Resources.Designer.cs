@@ -28485,6 +28485,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ready Time Adherence per Day.
+        /// </summary>
+        public static string ResReportReadyTimeAdherencePerDay {
+            get {
+                return ResourceManager.GetString("ResReportReadyTimeAdherencePerDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Requests per Agent.
         /// </summary>
         public static string ResReportRequestsPerAgent {

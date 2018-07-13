@@ -278,7 +278,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 
 		private void setReportHeaderParmaterLabels()
 		{
-			tdReportName.InnerText = ReportId.Equals(reportAdherencePerAgentGuid) ? Resources.ResReportReadyTimeAdherencePerAgent : Resources.ResReportAdherencePerDay;
+			tdReportName.InnerText = ReportId.Equals(reportAdherencePerAgentGuid) ? Resources.ResReportReadyTimeAdherencePerAgent : Resources.ResReportReadyTimeAdherencePerDay;
 
 			tdDatesLabel.InnerText = Resources.ResShiftStartDateColon;
 			tdGroupPageLabel.InnerText = Resources.ResGroupPageColon;

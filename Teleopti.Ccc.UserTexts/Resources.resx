@@ -11227,6 +11227,10 @@ These options are activated:
   <data name="ResReportAdherencePerDay" xml:space="preserve">
     <value>Adherence per Day</value>
     <comment>Adherence per Day</comment>
+  </data> 
+	<data name="ResReportReadyTimeAdherencePerDay" xml:space="preserve">
+    <value>Ready Time Adherence per Day</value>
+    <comment>Ready Time Adherence per Day</comment>
   </data>
   <data name="PleaseChooseSkillSet" xml:space="preserve">
     <value>Please choose skill set.</value>

@@ -1232,6 +1232,10 @@ Schedule</value>
   <data name="ResReportAdherencePerDay" xml:space="preserve">
     <value>Adherence per Day</value>
     <comment>Adherence per Day</comment>
+  </data>  
+	<data name="ResReportReadyTimeAdherencePerDay" xml:space="preserve">
+    <value>Ready Time Adherence per Day</value>
+    <comment>Ready Time Adherence per Day</comment>
   </data>
   <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
     <value>Scheduled Agents per Activity</value>
