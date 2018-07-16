@@ -802,6 +802,7 @@ input.use-default-startTime {
 }
 
 .shift-to-trade-row {
+	height: 100px;
 	display: flex;
 	border-top: .8px solid #e3e3e3;
 }
@@ -866,6 +867,7 @@ input.use-default-startTime {
 }
 
 .shift-trade-list-panel {
-	height:600px;
-	overflow:scroll;
+	position: relative;
+	height: 600px;
+	overflow: auto;
 }

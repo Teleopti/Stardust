@@ -264,10 +264,15 @@
 				<div class="shift-selection"></div>
 			</div>
 			<div>
-				<div class="shift-trade-list-panel" data-bind="foreach: loadedSchedulePairs, event:{scroll: scrolled}">
-					<div class="shift-to-trade-row">
+				<div class="shift-trade-list-panel" data-bind="event:{scroll: scrolled}">
+					<div class="loading-gradient" data-bind="if: isLoadingSchedulesOnTop()">
+						<div class="loading"></div>
+					</div>
+					<!--ko foreach: loadedSchedulePairs-->
+					<div class="shift-to-trade-row" data-bind="attr: {id: 'shift-row-' + date.valueOf()}">
 						<div class="shift-date" data-bind="text:date.format('YYYY-MM-DD')"></div>
 						<div class="shift-detail own-shift mobile-shift-category">
+							<!--ko if:mySchedule-->
 							<!--ko if:mySchedule.isDayOff-->
 							<div>DO</div>
 							<!--/ko-->
@@ -304,8 +309,10 @@
 								</div>
 							</div>
 							<!--/ko-->
+							<!--/ko-->
 						</div>
 						<div class="shift-detail shift-to-trade mobile-shift-category1">
+							<!--ko if:targetSchedule-->
 							<!--ko if:targetSchedule.isDayOff-->
 							<div>DO</div>
 							<!--/ko-->
@@ -344,10 +351,15 @@
 								</div>
 							</div>
 							<!--/ko-->
+							<!--/ko-->
 						</div>
 						<div class="shift-selection">
 							<input type="checkbox" />
 						</div>
+					</div>
+					<!--/ko-->
+					<div class="loading-gradient" data-bind="if: isLoadingSchedulesOnBottom()">
+						<div class="loading"></div>
 					</div>
 				</div>
 			</div>
