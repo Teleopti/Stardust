@@ -909,10 +909,19 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 				}
 
 				while (!dateInRange.isSame(startDate, 'day')) {
+					var mySche = mySchedules.filter(filterSchedules)[0];
+					if (mySche && mySche.isNotScheduled) {
+						mySche = null;
+					}
+
+					var tarSche = targetSchedules.filter(filterSchedules)[0];
+					if (tarSche && tarSche.isNotScheduled) {
+						tarSche = null;
+					}
 					schedulePairs.unshift({
 						date: dateInRange.clone(),
-						mySchedule: mySchedules.filter(filterSchedules)[0] || null,
-						targetSchedule: targetSchedules.filter(filterSchedules)[0] || null
+						mySchedule: mySche,
+						targetSchedule: tarSche
 					});
 					dateInRange.add("days", -1);
 				}
@@ -1074,7 +1083,7 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 				});
 			}
 			var model = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedLayers, scheduleStartTime, scheduleEndTime, personSchedule.Name,
-				personSchedule.PersonId, personSchedule.IsDayOff, personSchedule.DayOffName, false, false, null, Teleopti.MyTimeWeb.Common.FormatTimeSpan(personSchedule.ContractTimeInMinute), undefined, startDateTime);
+				personSchedule.PersonId, personSchedule.IsDayOff, personSchedule.DayOffName, false, false, null, Teleopti.MyTimeWeb.Common.FormatTimeSpan(personSchedule.ContractTimeInMinute), personSchedule.IsNotScheduled, startDateTime, personSchedule.CategoryName);
 
 			return model;
 		});
