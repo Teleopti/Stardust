@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -12,8 +13,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 	    {
 		    var personAssembler = new PersonAssembler(null,
 			    new WorkflowControlSetAssembler(new ShiftCategoryAssembler(null), new DayOffAssembler(null),
-				    new ActivityAssembler(null), new AbsenceAssembler(null)), null, tenantPeopleLoader);
-		    return personAssembler.DomainEntitiesToDtos(persons);
-	    }
+				    new ActivityAssembler(null), new AbsenceAssembler(null)), null);
+			var dtos = personAssembler.DomainEntitiesToDtos(persons).ToList();
+
+			  tenantPeopleLoader.FillDtosWithLogonInfo(dtos);
+			return dtos;
+
+		}
     }
 }

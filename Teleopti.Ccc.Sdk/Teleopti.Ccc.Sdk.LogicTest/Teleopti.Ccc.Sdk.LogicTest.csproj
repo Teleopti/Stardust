@@ -176,6 +176,7 @@
     <Compile Include="CommandHandler\SaveAgentPortalSettingsCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\SetPersonAccountForPersonCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\SetSchedulePeriodWorktimeOverrideCommandHandlerTest.cs" />
+    <Compile Include="MultiTenancy\PersonDtoFactoryTest.cs" />
     <Compile Include="MultiTenancy\TenantPeopleSaverTest.cs" />
     <Compile Include="MultiTenancy\TenantPeopleLoaderTest.cs" />
     <Compile Include="OldTests\AbsenceDtoTest.cs" />

@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 			builder.RegisterType<SdkCurrentTenantCredentials>().As<ICurrentTenantCredentials>().InstancePerLifetimeScope();
 			builder.RegisterType<CurrentPersonContainer>().As<ICurrentPersonContainer>();
 			builder.RegisterType<TenantPeopleLoader>().As<ITenantPeopleLoader>().InstancePerLifetimeScope();
+			builder.RegisterType<PersonDtoFactory>().InstancePerLifetimeScope();
 		}
 	}	
 }

@@ -248,11 +248,10 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 		/// <returns>The logged on <see cref="PersonDto"/>.</returns>
 		public PersonDto GetLoggedOnPerson()
 		{
-			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				IPerson currentPerson = TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(new ThisUnitOfWork(unitOfWork)));
-
-				return _factoryProvider.CreatePersonAssembler().DomainEntityToDto(currentPerson);
+				var personDtoFactory = _lifetimeScope.Resolve<PersonDtoFactory>();
+				return personDtoFactory.GetLoggedOnPerson();
 			}
 		}
 
@@ -1687,26 +1686,13 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 		{
 			var func = applicationFunction.FunctionPath;
 
-			var persons = new List<IPerson>();
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var localDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(utcDateTime, TimeZoneHelper.CurrentSessionTimeZone));
 				IPersonCollection personCollection =
 					OrganizationFactory.CreatePersonCollectionLight(unitOfWork, func, localDate);
-
-				foreach (IPerson person in personCollection.AllPermittedPersons)
-				{
-					DateTime localTime = GetPersonLocalTime(utcDateTime, person);
-					localDate = new DateOnly(localTime);
-					ITeam personsTeam = person.MyTeam(localDate);
-					if (personsTeam != null &&
-						personsTeam.Id == team.Id.Value)
-					{
-						persons.Add(person);
-					}
-				}
-
-				return _factoryProvider.CreatePersonAssembler().DomainEntitiesToDtos(persons).ToList();
+				var personDtoFactory = _lifetimeScope.Resolve<PersonDtoFactory>();
+				return personDtoFactory.GetPersonsByTeam(team, utcDateTime, personCollection);
 			}
 		}
 
@@ -1810,28 +1796,10 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 		/// <returns>A collection of <see cref="PersonDto"/>.</returns>
 		public ICollection<PersonDto> GetPersonTeamMembers(PersonDto person, DateTime utcDate)
 		{
-			IEnumerable<PersonDto> dtos;
-
-			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var personAssembler = _factoryProvider.CreatePersonAssembler();
-				IPerson thePerson = personAssembler.DtoToDomainEntity(person);
-				TimeZoneInfo timeZoneInfo = thePerson.PermissionInformation.DefaultTimeZone();
-				DateOnly dateOnlyPerson = new DateOnly(TimeZoneHelper.ConvertFromUtc(utcDate, timeZoneInfo).Date);
-				IPersonPeriod personPeriodForGivenDate = thePerson.Period(dateOnlyPerson);
-
-				if (personPeriodForGivenDate != null)
-				{
-					IRepositoryFactory repositoryFactory = new RepositoryFactory();
-					IPersonRepository personRepository = repositoryFactory.CreatePersonRepository(unitOfWork);
-					ICollection<IPerson> personCollection = personRepository.FindPeopleBelongTeam(personPeriodForGivenDate.Team, personPeriodForGivenDate.Period);
-					dtos = personAssembler.DomainEntitiesToDtos(personCollection);
-				}
-				else
-				{
-					dtos = new List<PersonDto>();
-				}
-				return dtos.OrderBy(d => d.Name).ToList();
+				var personDtoFactory = _lifetimeScope.Resolve<PersonDtoFactory>();
+				return personDtoFactory.GetPersonTeamMembers(person, utcDate);
 			}
 		}
 
@@ -1986,28 +1954,15 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 		/// </returns>
 		public ICollection<PersonDto> GetPersons(bool excludeLoggedOnPerson)
 		{
-			IList<PersonDto> personCollection;
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				using (unitOfWork.DisableFilter(QueryFilter.Deleted))
 				{
-					IRepositoryFactory repositoryFactory = new RepositoryFactory();
-					IPersonRepository personRep = repositoryFactory.CreatePersonRepository(unitOfWork);
-					ICollection<IPerson> memberList = personRep.FindAllSortByName().ToList();
+					var personDtoFactory = _lifetimeScope.Resolve<PersonDtoFactory>();
+					return personDtoFactory.GetPersons(excludeLoggedOnPerson);
 
-
-					// Remove logged person
-					if (excludeLoggedOnPerson)
-					{
-						memberList.Remove(TeleoptiPrincipal.CurrentPrincipal.GetPerson(personRep));
-					}
-
-					var personAssembler = _factoryProvider.CreatePersonAssembler();
-					personCollection = personAssembler.DomainEntitiesToDtos(memberList).ToList();
 				}
 			}
-
-			return personCollection;
 		}
 
 		/// <summary>

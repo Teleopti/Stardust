@@ -23,8 +23,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var assembler = new PersonAssembler(personRepository,
 				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
-					new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy(),
-				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+					new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy());
 
 			var person = PersonFactory.CreatePerson();
 			person.SetEmploymentNumber("1234");

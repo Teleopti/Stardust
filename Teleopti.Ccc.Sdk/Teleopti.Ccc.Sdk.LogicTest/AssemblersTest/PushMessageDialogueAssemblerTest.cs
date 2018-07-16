@@ -34,8 +34,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    var personAssembler = new PersonAssembler(personRepository,
 			    new WorkflowControlSetAssembler(shiftCategoryAssembler,
 				    dayOffAssembler, activityAssembler,
-				    absenceAssembler), new PersonAccountUpdaterDummy(),
-			    new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+				    absenceAssembler), new PersonAccountUpdaterDummy());
 		    var pushMessageAssembler = new PushMessageAssembler {PersonAssembler = personAssembler};
 		    var dialogueMessageAssembler = new DialogueMessageAssembler {PersonAssembler = personAssembler};
 		    var target = new PushMessageDialogueAssembler();
@@ -77,8 +76,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var personAssembler = new PersonAssembler(personRepository,
 				new WorkflowControlSetAssembler(shiftCategoryAssembler,
 					dayOffAssembler, activityAssembler,
-					absenceAssembler), new PersonAccountUpdaterDummy(),
-				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+					absenceAssembler), new PersonAccountUpdaterDummy());
 			var pushMessageAssembler = new PushMessageAssembler { PersonAssembler = personAssembler };
 			var dialogueMessageAssembler = new DialogueMessageAssembler {PersonAssembler = personAssembler};
 		    var target = new PushMessageDialogueAssembler
@@ -117,8 +115,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var personAssembler = new PersonAssembler(personRepository,
 				new WorkflowControlSetAssembler(shiftCategoryAssembler,
 					dayOffAssembler, activityAssembler,
-					absenceAssembler), new PersonAccountUpdaterDummy(),
-				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+					absenceAssembler), new PersonAccountUpdaterDummy());
 			var pushMessageAssembler = new PushMessageAssembler { PersonAssembler = personAssembler };
 			var dialogueMessageAssembler = new DialogueMessageAssembler {PersonAssembler = personAssembler};
 		    var target = new PushMessageDialogueAssembler

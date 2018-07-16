@@ -26,8 +26,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    var personAssembler = new PersonAssembler(new FakePersonRepositoryLegacy(),
 			    new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
 				    new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
-				    new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy(),
-			    new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+				    new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy());
 		    var date = new DateOnly(1900, 1, 1);
 		    var anchorTime = new TimeSpan(23);
 		    var flexibility = new TimeSpan(124);
@@ -58,8 +57,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var personAssembler = new PersonAssembler(new FakePersonRepositoryLegacy(),
 				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
-					new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy(),
-				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+					new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy());
 			var personDayOff = PersonAssignmentFactory.CreatePersonAssignment(person).WithId();
 
 			var target = new PersonDayOffAssembler(personAssembler, new DateTimePeriodAssembler());

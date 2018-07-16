@@ -25,8 +25,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var personAssembler = new PersonAssembler(personRepository,
 				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
-					new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy(),
-				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+					new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy());
 			var target = new DialogueMessageAssembler();
 			target.PersonAssembler = personAssembler;
 			var dialogueMessage = new DialogueMessage("test", person);

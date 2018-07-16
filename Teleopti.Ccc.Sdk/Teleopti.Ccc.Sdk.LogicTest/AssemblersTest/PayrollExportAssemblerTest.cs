@@ -28,8 +28,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    var personAssembler = new PersonAssembler(personRepository,
 			    new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
 				    new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
-				    new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy(),
-			    new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+				    new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy());
 		    var payrollExportRepository = new FakePayrollExportRepository();
 		    var target = new PayrollExportAssembler(payrollExportRepository, personRepository, personAssembler,
 			    new DateTimePeriodAssembler());
@@ -72,8 +71,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    var personAssembler = new PersonAssembler(personRepository,
 			    new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
 				    new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
-				    new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy(),
-			    new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+				    new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy());
 		    var payrollExportRepository = new FakePayrollExportRepository();
 		    var payrollExport = createDo(person);
 		    payrollExportRepository.Add(payrollExport);
@@ -93,8 +91,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    var personAssembler = new PersonAssembler(personRepository,
 			    new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
 				    new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
-				    new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy(),
-			    new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+				    new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy());
 		    var payrollExportRepository = new FakePayrollExportRepository();
 		    var target = new PayrollExportAssembler(payrollExportRepository, personRepository, personAssembler,
 			    new DateTimePeriodAssembler());
@@ -114,8 +111,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    var personAssembler = new PersonAssembler(personRepository,
 			    new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
 				    new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
-				    new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy(),
-			    new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+				    new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy());
 		    var payrollExportRepository = new FakePayrollExportRepository();
 		    var payrollExport = createDo(person);
 		    var target = new PayrollExportAssembler(payrollExportRepository, personRepository, personAssembler,

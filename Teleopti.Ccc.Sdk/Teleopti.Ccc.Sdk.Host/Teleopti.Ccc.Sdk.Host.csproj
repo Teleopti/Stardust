@@ -227,6 +227,7 @@
     <Compile Include="Service\Factory\PartTimePercentageFactory.cs" />
     <Compile Include="Service\Factory\PayrollResultFactory.cs" />
     <Compile Include="Service\Factory\PersistPersonRequest.cs" />
+    <Compile Include="Service\Factory\PersonDtoFactory.cs" />
     <Compile Include="Service\Factory\PersonRequestedShiftTrade.cs" />
     <Compile Include="Service\Factory\PersonRequestFactory.cs" />
     <Compile Include="Service\Factory\PersonsFromLoadOptionFactory.cs" />
@@ -359,6 +360,8 @@
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>1335</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

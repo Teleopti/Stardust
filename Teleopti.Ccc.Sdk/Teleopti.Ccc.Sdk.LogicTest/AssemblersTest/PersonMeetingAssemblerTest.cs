@@ -26,8 +26,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    var personAssembler = new PersonAssembler(new FakePersonRepositoryLegacy(),
 			    new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
 				    new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
-				    new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy(),
-			    new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+				    new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy());
 		    
 		    var dateTime = new DateTime(1999, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 		    var dateTimePeriod = new DateTimePeriod(dateTime, dateTime.AddHours(1));
@@ -60,8 +59,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    var personAssembler = new PersonAssembler(new FakePersonRepositoryLegacy(),
 			    new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
 				    new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
-				    new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy(),
-			    new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+				    new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy());
 
 		    var dateTime = new DateTime(1999, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 		    var dateTimePeriod = new DateTimePeriod(dateTime, dateTime.AddHours(1));

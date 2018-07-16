@@ -36,6 +36,22 @@ namespace SdkTestClientWin.Domain
     		return _personPeriod.Where(personPeriod => personPeriod.PersonId == agent.Dto.Id).ToList();
     	}
 
+	    public void TestToLoadPersons(ServiceApplication sdkService, ApplicationFunctionDto applicationFunctionDto)
+	    {
+		    var persons = sdkService.OrganizationService.GetPersons(false, false);
+		    var x = persons.Where(p => p.ApplicationLogOnName != "").ToList();
+		    var cnt = persons.Length;
+
+		    var loggedOn = sdkService.LogonService.GetLoggedOnPerson();
+
+			var teamDto = new TeamDto{Id = "34590A63-6331-4921-BC9F-9B5E015AB495" }; //preferences
+
+		    var members = sdkService.OrganizationService.GetPersonsByTeam(teamDto, applicationFunctionDto, DateTime.UtcNow,true);
+
+		    var ashley = persons.FirstOrDefault(p => p.Name.Contains("Ashley"));
+		    members = sdkService.OrganizationService.GetPersonTeamMembers(ashley, DateTime.UtcNow, true);
+		 }
+
         public void Load(ServiceApplication sdkService, ApplicationFunctionDto applicationFunctionDto, DateTime date)
         {
            
@@ -58,6 +74,9 @@ namespace SdkTestClientWin.Domain
 		            _agentColl.AddRange(agents.Select(team.CreateAndAddAgent).ToArray());
 	            }
             }
+
+	        TestToLoadPersons(sdkService, applicationFunctionDto);
+
         }
 
 		public void LoadAllPersonPeriods(ServiceApplication sdkService)

@@ -31,8 +31,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 	{
 		private readonly IAssembler<IWorkflowControlSet, WorkflowControlSetDto> _workflowControlSetAssembler;
 		private readonly IPersonAccountUpdater _personAccountUpdater;
-		private readonly ITenantPeopleLoader _tenantPeopleLoader;
-		public IPersonRepository PersonRepository { get; private set; }
+		private readonly IPersonRepository personRepository;
 		public bool IgnorePersonPeriods { get; set; }
 
 		/// <summary>
@@ -47,12 +46,11 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 
 		public PersonAssembler(IPersonRepository personRepository,
 			IAssembler<IWorkflowControlSet, WorkflowControlSetDto> workflowControlSetAssembler,
-			IPersonAccountUpdater personAccountUpdater, ITenantPeopleLoader tenantPeopleLoader)
+			IPersonAccountUpdater personAccountUpdater)
 		{
 			_workflowControlSetAssembler = workflowControlSetAssembler;
 			_personAccountUpdater = personAccountUpdater;
-			_tenantPeopleLoader = tenantPeopleLoader;
-			PersonRepository = personRepository;
+			this.personRepository = personRepository;
 			IgnorePersonPeriods = false;
 		}
 
@@ -97,8 +95,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 					personDto.PersonPeriodCollection.Add(PersonPeriodDoToDto(personPeriod));
 				}
 			}
-			//maybe this will be slow, fetch one by one, but start here. Much easier than find than ALL places needed to replace with this code.
-			_tenantPeopleLoader.FillDtosWithLogonInfo(new List<PersonDto> { personDto });
+			
 			return personDto;
 		}
 
@@ -109,7 +106,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 				return CreateNewPerson(dto);
 			}
 
-			IPerson person = PersonRepository.Get(dto.Id.Value);
+			IPerson person = personRepository.Get(dto.Id.Value);
 			if (EnableSaveOrUpdate)
 			{
 				UpdatePerson(dto, person);

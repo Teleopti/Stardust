@@ -9,8 +9,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
-using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
-using Teleopti.Ccc.Sdk.LogicTest.QueryHandler;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -57,12 +55,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
 					new AbsenceAssembler(new FakeAbsenceRepository()));
 			var personAccountUpdater = new PersonAccountUpdaterDummy();
-			var logonDataManager = new FakeTenantLogonDataManager();
-			var tenantPeopleLoader = new TenantPeopleLoader(logonDataManager);
-			var target = new PersonAssembler(personRepository, workflowControlSetAssembler, personAccountUpdater, tenantPeopleLoader);
+			
+			var target = new PersonAssembler(personRepository, workflowControlSetAssembler, personAccountUpdater);
 
 			var person = CreatePerson(true);
-			logonDataManager.SetLogon(person.Id.GetValueOrDefault(),"aa","domain\\aa");
 			
 			var personDto = target.DomainEntityToDto(person);
 
@@ -80,12 +76,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			Assert.AreEqual(person.Note, personDto.Note);
 			Assert.AreEqual(person.TerminalDate.Value.Date, personDto.TerminationDate.DateTime);
 			Assert.AreEqual(person.FirstDayOfWeek, personDto.FirstDayOfWeek);
-			Assert.AreEqual("aa",personDto.ApplicationLogOnName);
-			Assert.AreEqual("domain\\aa",personDto.Identity);
-#pragma warning disable 618
-			Assert.AreEqual("domain",personDto.WindowsDomain);
-			Assert.AreEqual("aa",personDto.WindowsLogOnName);
-#pragma warning restore 618
+			
 			Assert.AreEqual(((IDeleteTag)person).IsDeleted, personDto.IsDeleted);
 			Assert.AreEqual(person.PersonPeriodCollection.FirstOrDefault().Team.Id.Value, personDto.PersonPeriodCollection.FirstOrDefault().Team.Id.Value);
 			Assert.AreEqual(person.PersonPeriodCollection.FirstOrDefault().PersonContract.ContractSchedule.Id.Value, personDto.PersonPeriodCollection.FirstOrDefault().PersonContract.ContractScheduleId);
@@ -100,8 +91,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
 					new AbsenceAssembler(new FakeAbsenceRepository()));
 			var personAccountUpdater = new PersonAccountUpdaterDummy();
-			var tenantPeopleLoader = new TenantPeopleLoader(new FakeTenantLogonDataManager());
-			var target = new PersonAssembler(personRepository, workflowControlSetAssembler, personAccountUpdater, tenantPeopleLoader);
+			
+			var target = new PersonAssembler(personRepository, workflowControlSetAssembler, personAccountUpdater);
 
 			var person = CreatePerson(false);
 			var personDto = target.DomainEntityToDto(person);
@@ -118,8 +109,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
 					new AbsenceAssembler(new FakeAbsenceRepository()));
 			var personAccountUpdater = new PersonAccountUpdaterDummy();
-			var tenantPeopleLoader = new TenantPeopleLoader(new FakeTenantLogonDataManager());
-			var target = new PersonAssembler(personRepository, workflowControlSetAssembler, personAccountUpdater, tenantPeopleLoader);
+			
+			var target = new PersonAssembler(personRepository, workflowControlSetAssembler, personAccountUpdater);
 			var person = CreatePerson(true);
 			personRepository.Add(person);
 			
@@ -157,8 +148,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
 					new AbsenceAssembler(new FakeAbsenceRepository()));
 			var personAccountUpdater = new PersonAccountUpdaterDummy();
-			var tenantPeopleLoader = new TenantPeopleLoader(new FakeTenantLogonDataManager());
-			var target = new PersonAssembler(personRepository, workflowControlSetAssembler, personAccountUpdater, tenantPeopleLoader);
+			
+			var target = new PersonAssembler(personRepository, workflowControlSetAssembler, personAccountUpdater);
 			var personDto = new PersonDto
 			{
 				ApplicationLogOnName = "kallek",
@@ -198,8 +189,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
 					new AbsenceAssembler(new FakeAbsenceRepository()));
 			var personAccountUpdater = new PersonAccountUpdaterDummy();
-			var tenantPeopleLoader = new TenantPeopleLoader(new FakeTenantLogonDataManager());
-			var target = new PersonAssembler(personRepository, workflowControlSetAssembler, personAccountUpdater, tenantPeopleLoader);
+			
+			var target = new PersonAssembler(personRepository, workflowControlSetAssembler, personAccountUpdater);
 
 			string timeZone = "W. Europe Standard Time";
 			int culture = 1053;
@@ -218,8 +209,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
 					new AbsenceAssembler(new FakeAbsenceRepository()));
 			var personAccountUpdater = new PersonAccountUpdaterDummy();
-			var tenantPeopleLoader = new TenantPeopleLoader(new FakeTenantLogonDataManager());
-			var target = new PersonAssembler(personRepository, workflowControlSetAssembler, personAccountUpdater, tenantPeopleLoader);
+			var target = new PersonAssembler(personRepository, workflowControlSetAssembler, personAccountUpdater);
 			var personId = Guid.NewGuid();
 			personRepository.Add(PersonFactory.CreatePerson().WithId(personId));
 
@@ -243,8 +233,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
 					new AbsenceAssembler(new FakeAbsenceRepository()));
 			var personAccountUpdater = new PersonAccountUpdaterDummy();
-			var tenantPeopleLoader = new TenantPeopleLoader(new FakeTenantLogonDataManager());
-			var target = new PersonAssembler(personRepository, workflowControlSetAssembler, personAccountUpdater, tenantPeopleLoader);
+			
+			var target = new PersonAssembler(personRepository, workflowControlSetAssembler, personAccountUpdater);
 			string firstName = "Kalle";
 			string lastName = "Kula";
 			int culture = 1053;
@@ -263,8 +253,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
 					new AbsenceAssembler(new FakeAbsenceRepository()));
 			var personAccountUpdater = new PersonAccountUpdaterDummy();
-			var tenantPeopleLoader = new TenantPeopleLoader(new FakeTenantLogonDataManager());
-			var target = new PersonAssembler(personRepository, workflowControlSetAssembler, personAccountUpdater, tenantPeopleLoader);
+			
+			var target = new PersonAssembler(personRepository, workflowControlSetAssembler, personAccountUpdater);
 			var personDto = new PersonDto
 			{
 				FirstName = "Personliga",

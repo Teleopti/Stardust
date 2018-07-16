@@ -31,8 +31,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    var personAssembler = new PersonAssembler(personRepository,
 			    new WorkflowControlSetAssembler(new ShiftCategoryAssembler(shiftCategoryRepository),
 				    new DayOffAssembler(new FakeDayOffTemplateRepository()), activityAssembler,
-				    absenceAssembler), new PersonAccountUpdaterDummy(),
-			    new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+				    absenceAssembler), new PersonAccountUpdaterDummy());
 		    var target = new StudentAvailabilityAssembler();
 		    target.PersonAssembler = personAssembler;
 
@@ -80,8 +79,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    var personAssembler = new PersonAssembler(personRepository,
 			    new WorkflowControlSetAssembler(new ShiftCategoryAssembler(shiftCategoryRepository),
 				    new DayOffAssembler(new FakeDayOffTemplateRepository()), activityAssembler,
-				    absenceAssembler), new PersonAccountUpdaterDummy(),
-			    new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+				    absenceAssembler), new PersonAccountUpdaterDummy());
 		    var target = new StudentAvailabilityAssembler();
 		    target.PersonAssembler = personAssembler;
 
@@ -109,8 +107,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    var personAssembler = new PersonAssembler(personRepository,
 			    new WorkflowControlSetAssembler(new ShiftCategoryAssembler(shiftCategoryRepository),
 				    new DayOffAssembler(new FakeDayOffTemplateRepository()), activityAssembler,
-				    absenceAssembler), new PersonAccountUpdaterDummy(),
-			    new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+				    absenceAssembler), new PersonAccountUpdaterDummy());
 		    var target = new StudentAvailabilityAssembler();
 		    target.PersonAssembler = personAssembler;
 
