@@ -218,8 +218,8 @@ ko.bindingHandlers.adjustTooltipPositionOnMobileTeamSchedule = {
 
 			var offsetLeft = $(tooltipEle).offset().left;
 
-			//30 70 is the left-padding, timeline width and my schedule column width sum
-			var leftSideMarginValue = offsetLeft - 30 - 70;
+			var leftSideMarginValue =
+				offsetLeft - ($('.my-schedule-column').offset().left + $('.my-schedule-column').outerWidth());
 			var rightSideMarginValue = tooltipEle.clientWidth + offsetLeft - window.screen.width;
 
 			if (leftSideMarginValue < 0) {
