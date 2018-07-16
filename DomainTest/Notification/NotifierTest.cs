@@ -23,6 +23,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.Notification
 {
 	[DomainTest]
+	[Setting("FCM", "asdf")]
 	public class NotifierTest : IIsolateSystem
 	{
 		public FakeNotificationSender Sender;
@@ -96,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				Token = "device-id-token"
 			});
 
-			ConfigReader.FakeSetting("FCM", "asdf");
+			
 
 			var messages = new NotificationMessage();
 
@@ -160,8 +161,6 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			UserDeviceRepository.Add(new UserDevice {Token = "valid-id-token", Owner = person});
 			UserDeviceRepository.Add(new UserDevice {Token = "invalid-id-token", Owner = person});
 
-			ConfigReader.FakeSetting("FCM", "asdf");
-
 			var messages = new NotificationMessage();
 
 			person.Email = "aa@teleopti.com";
@@ -205,6 +204,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			isolate.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
 			isolate.UseTestDouble<FakeHttpServer>().For<IHttpServer>();
 			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+
 		}
 	}
 
