@@ -322,7 +322,7 @@
 		function buildSkills(s) {
 			skills = s;
 			vm.skills = $filter('filter')(s, vm.skillPickerText);
-			vm.noSkills = vm.skills.length === 0;
+			vm.displayNoSkillsMessage = angular.isDefined(vm.skills) && vm.skills.length === 0;
 		}
 
 		function updateSkillPicker() {
@@ -357,7 +357,7 @@
 		function buildSkillGroups(s) {
 			skillGroups = s;
 			vm.skillGroups = $filter('filter')(s, vm.skillGroupPickerText);
-			vm.noSkillGroups = vm.skillGroups.length === 0;
+			vm.displayNoSkillGroupsMessage = angular.isDefined(vm.skillGroups) && vm.skillGroups.length === 0;
 		}
 
 		function updateSkillGroupPicker() {

@@ -750,4 +750,66 @@ rtaTester.describe('RtaAgentsController', function (it, fit, xit, _,
 
 		expect(vm.skillGroupPickerText).toBeUndefined();
 	});
+
+	it('should display message when no skills', function (t) {
+		var vm = t.createController();
+
+		expect(vm.displayNoSkillsMessage).toBe(true);
+	});
+
+	it('should display message when no skill groups', function (t) {
+		var vm = t.createController();
+
+		expect(vm.displayNoSkillGroupsMessage).toBe(true);
+	});
+
+	it('should not display message when there are skills', function (t) {
+		t.backend.withSkill({
+			Id: "skill",
+			Name: "skill"
+		});
+
+		var vm = t.createController();
+
+		expect(vm.displayNoSkillsMessage).toBeUndefined;
+	});
+
+	it('should not display message when there are skill groups', function (t) {
+		t.backend.withSkillGroup({
+			Id: "group",
+			Name: "group"
+		});
+
+		var vm = t.createController();
+
+		expect(vm.displayNoSkillGroupsMessage).toBeUndefined;
+	});
+
+	it('should display message when no match on skill filter text', function (t) {
+		t.backend.withSkill({
+			Id: "skill",
+			Name: "skill"
+		});
+
+		var vm = t.createController();
+		t.apply(function () {
+			vm.skillPickerText = "x";
+		});
+
+		expect(vm.displayNoSkillsMessage).toBe(true);
+	});
+
+	it('should display message when no match on skill group filter text', function (t) {
+		t.backend.withSkillGroup({
+			Id: "group",
+			Name: "group"
+		});
+
+		var vm = t.createController();
+		t.apply(function () {
+			vm.skillGroupPickerText = "x";
+		});
+
+		expect(vm.displayNoSkillGroupsMessage).toBe(true);
+	});
 });

@@ -110,7 +110,7 @@
 									style="padding: 10px 0px; cursor: pointer">
 									{{skill.Name}}
 								</li>
-								<li ng-show="vm.noSkills" style="padding: 10px 0px; cursor: pointer">
+								<li ng-show="vm.displayNoSkillsMessage" style="padding: 10px 0px; cursor: pointer">
 									{{'RepViewerNoMoreMatches' | translate}}
 								</li>
 							</ul>
@@ -145,7 +145,7 @@
 									style="padding: 10px 0px; cursor: pointer">
 									{{skillGroup.Name}}
 								</li>
-								<li ng-show="vm.noSkillGroups" style="padding: 10px 0px; cursor: pointer">
+								<li ng-show="vm.displayNoSkillGroupsMessage" style="padding: 10px 0px; cursor: pointer">
 									{{'RepViewerNoMoreMatches' | translate}}
 								</li>
 							</ul>
