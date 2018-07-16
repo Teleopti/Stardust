@@ -153,6 +153,7 @@
     <Compile Include="AbsenceWaitlisting\AbsenceRequestWaitlistProviderTest.cs" />
     <Compile Include="AgentInfo\PlanningGroupStaffLoaderTest.cs" />
     <Compile Include="AgentInfo\ExtractBudgetGroupPeriodsTest.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestApprovalServiceTest.cs" />
     <Compile Include="AgentInfo\Requests\OvertimeRequestTest.cs" />
     <Compile Include="AgentInfo\Requests\OvertimeRequestDefaultStartTimeProviderTest.cs" />
     <Compile Include="AgentInfo\Requests\ShiftStartTimeProviderTest.cs" />
@@ -202,7 +203,7 @@
     <Compile Include="AgentInfo\Requests\InvalidRequestStateTransitionExceptionTest.cs" />
     <Compile Include="AgentInfo\Requests\PersonRequestCheckAuthorizationTest.cs" />
     <Compile Include="AgentInfo\Requests\FullDayAbsenceRequestPeriodUtilTest.cs" />
-    <Compile Include="AgentInfo\Requests\RequestApprovalServiceSchedulerNoMockTest.cs" />
+    <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeRequestApprovalServiceTest.cs" />
     <Compile Include="AgentInfo\Requests\RequestApprovalServiceSchedulerTest.cs" />
     <Compile Include="AgentInfo\Requests\ShiftExchangeOfferTest.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestIsAfterLoadedPeriodSpecificationTest.cs" />

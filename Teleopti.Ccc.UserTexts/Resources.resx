@@ -10423,6 +10423,9 @@ These options are activated:
   <data name="NoPermissionToViewRestrictedScenarios" xml:space="preserve">
     <value>You have no permission to view restricted scenarios and all scenarios are restricted.</value>
   </data>
+  <data name="CanNotApproveOrDenyRequestDueToNoPermissionToModifyRestrictedScenarios" xml:space="preserve">
+    <value>You can not approve/deny request since you have no permission to modify restricted scenarios.</value>
+  </data>
   <data name="ExportForecastToOtherBusinessUnit" xml:space="preserve">
     <value>Export forecast to other business unit</value>
     <comment>Export forecast to other business unit</comment>

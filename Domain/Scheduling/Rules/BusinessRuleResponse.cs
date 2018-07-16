@@ -27,7 +27,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 	        FriendlyName = friendlyName;
         }
 
-        public Type TypeOfRule => _typeOfRule;
+		public BusinessRuleResponse(string message)
+		{
+			_typeOfRule = typeof(BusinessRuleResponse);
+			_message = message ?? string.Empty;
+		}
+
+		public Type TypeOfRule => _typeOfRule;
 
 	    public string Message => _message;
 

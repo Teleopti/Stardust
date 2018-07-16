@@ -5718,6 +5718,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can not approve/deny request since you have no permission to modify restricted scenarios..
+        /// </summary>
+        public static string CanNotApproveOrDenyRequestDueToNoPermissionToModifyRestrictedScenarios {
+            get {
+                return ResourceManager.GetString("CanNotApproveOrDenyRequestDueToNoPermissionToModifyRestrictedScenarios", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} cannot be earlier than {1} .
         /// </summary>
         public static string CannotBeBeforeTime {
