@@ -879,8 +879,6 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 	}
 
 	function loadPeriodSchedule(startDate, endDate, agentId, prepend) {
-		prepend = prepend || true;
-
 		if (!startDate || !endDate || !agentId) {
 			return;
 		}
