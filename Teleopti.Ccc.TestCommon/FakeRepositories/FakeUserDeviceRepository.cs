@@ -42,7 +42,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Remove(IUserDevice userDevice)
 		{
+			if (userDevice == null)
+				throw new NullReferenceException("Can not found this user device");
 			_savedUserDevices.Remove(userDevice);
+		}
+
+		public void Remove(params string[] tokens)
+		{
+			foreach (var token in tokens)
+			{
+				Remove(FindByToken(token));
+			}
 		}
 
 		public IUnitOfWork UnitOfWork { get; }

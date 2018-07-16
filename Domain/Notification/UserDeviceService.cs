@@ -20,13 +20,13 @@ namespace Teleopti.Ccc.Domain.Notification
 
 		public void StoreUserDevice(string token)
 		{
-			if(token.IsNullOrEmpty()) return;
+			if (token.IsNullOrEmpty()) return;
 			var currentDevice = _userDeviceRepository.FindByToken(token);
 			if (currentDevice != null)
 			{
 				currentDevice.Owner = _loggedOnUser.CurrentUser();
 			}
-			else 
+			else
 			{
 				_userDeviceRepository.Add(new UserDevice
 				{
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Notification
 				});
 			}
 
-			
+
 		}
 
 		public IList<string> GetUserTokens()
@@ -50,10 +50,7 @@ namespace Teleopti.Ccc.Domain.Notification
 
 		public void Remove(IList<string> tokens)
 		{
-			foreach (var token in tokens)
-			{
-				_userDeviceRepository.Remove(_userDeviceRepository.FindByToken(token));
-			}
+			_userDeviceRepository.Remove(tokens.ToArray());
 		}
 	}
 }

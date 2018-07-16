@@ -98,5 +98,32 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				PersistAndRemoveFromUnitOfWork(duplicate);
 			});
 		}
+
+		[Test]
+		public void ShouldRemoveUserDeviceByTokens()
+		{
+			var persisted = new UserDevice
+			{
+				Owner = person,
+				Token = "newToken"
+			};
+			var persistedAnother = new UserDevice
+			{
+				Owner = person,
+				Token = "anotherToken"
+			};
+			PersistAndRemoveFromUnitOfWork(persisted);
+			PersistAndRemoveFromUnitOfWork(persistedAnother);
+
+			var target = new UserDeviceRepository(CurrUnitOfWork);
+			target.Remove(persisted.Token, persistedAnother.Token);
+			Session.Flush();
+
+			target.LoadAll().Should().Be.Empty();
+		}
+
+
+	}
+	
 	}
 }

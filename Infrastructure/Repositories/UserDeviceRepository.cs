@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using NHibernate.Criterion;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -34,6 +35,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Add(Restrictions.Eq("Token", token))
 				.UniqueResult<IUserDevice>();
 
+		}
+
+		public void Remove(params string[] tokens)
+		{
+			foreach (var batch in tokens.Batch(20))
+			{
+				var devices = Session.CreateCriteria(typeof(UserDevice), "pd")
+				.Add(Restrictions.In("Token", tokens))
+				.List<IUserDevice>();
+
+				devices.ForEach(device => Remove(device));
+			}
 		}
 	}
 }

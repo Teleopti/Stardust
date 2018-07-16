@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		public UserDeviceService Target;
 		public FakeUserDeviceRepository UserDeviceRepository;
 		public FakeLoggedOnUser LogonUser;
-		
+
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			var result = UserDeviceRepository.Find(LogonUser.CurrentUser());
 			result.Single().Token.Should().Be.EqualTo("asdfasdf");
 		}
-		
+
 		[Test]
 		public void ShouldNotStoreDuplicateUserToken()
 		{
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			var result = UserDeviceRepository.Find(LogonUser.CurrentUser());
 			result.Single().Token.Should().Be.EqualTo("asdfasdf");
 		}
-		
+
 		[Test]
 		public void ShouldNotStoreEmptyUserToken()
 		{
@@ -59,9 +59,9 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				Owner = LogonUser.CurrentUser(),
 				Token = token
 			});
-			
-				var result = Target.GetUserTokens();
-				result.Single().Should().Be.EqualTo(token);
+
+			var result = Target.GetUserTokens();
+			result.Single().Should().Be.EqualTo(token);
 		}
 
 		[Test]
@@ -73,8 +73,14 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			Target.StoreUserDevice("asdfasdf");
 			var result = UserDeviceRepository.FindByToken("asdfasdf");
 			result.Owner.Id.Should().Be.EqualTo(person.Id);
-
-
 		}
+
+		[Test]
+		public void ShouldSKipNotExistedTokensWhenRemovingTokens()
+		{
+			Target.StoreUserDevice("asdfasdf");
+			Assert.DoesNotThrow(() => Target.Remove(new[] { "asdfasdf", "not existed" }));
+		}
+
 	}
 }

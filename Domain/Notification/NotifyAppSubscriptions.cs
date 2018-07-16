@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Domain.Notification
 		private readonly IConfigReader _configReader;
 		private readonly ICurrentDataSource _dataSource;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
+		private readonly string _key;
 
 		public NotifyAppSubscriptions(
 			IHttpServer httpServer,
@@ -40,16 +41,23 @@ namespace Teleopti.Ccc.Domain.Notification
 			_configReader = configReader;
 			_dataSource = dataSource;
 			_currentBusinessUnit = currentBusinessUnit;
+			_key = _configReader.AppConfig("FCM");
 		}
 
-		public async Task<bool> TrySend(INotificationMessage messages, IPerson[] persons)
+		public async Task<bool> TrySend(INotificationMessage message, IPerson[] persons)
 		{
-			var key = _configReader.AppConfig("FCM");
-			if (string.IsNullOrEmpty(key)) return false;
+			if (string.IsNullOrEmpty(_key)) return false;
+
 			var hasFail = false;
+			var invalidTokens = new List<string>();
+
+			var logOnContext =
+					new InputWithLogOnContext(_dataSource.CurrentName(), _currentBusinessUnit.Current().Id.GetValueOrDefault());
+
+
 			foreach (var person in persons)
 			{
-				var tokens = _userDeviceService.GetUserTokens(person);
+				var tokens = _userDeviceService.GetUserTokens(person).ToArray();
 				if (!tokens.Any()) continue;
 
 				if (logger.IsDebugEnabled)
@@ -60,32 +68,7 @@ namespace Teleopti.Ccc.Domain.Notification
 
 				try
 				{
-					var logOnContext =
-						new InputWithLogOnContext(_dataSource.CurrentName(), _currentBusinessUnit.Current().Id.GetValueOrDefault());
-					var notification = new {title = messages.Subject, body = string.Join(" ", messages.Messages)};
-
-					dynamic requestBody = new ExpandoObject();
-					requestBody.registration_ids = tokens;
-					requestBody.notification = notification;
-					if (messages.Data == null)
-					{
-						messages.Data = new ExpandoObject();
-					}
-
-					messages.Data.title = notification.title;
-					messages.Data.body = notification.body;
-					requestBody.data = (object) messages.Data;
-					var responseMessage = await _httpServer.Post("https://fcm.googleapis.com/fcm/send",
-						(object) requestBody,
-						s => new NameValueCollection {{"Authorization", key}});
-
-					var invalidTokens = await getUserDevicesInvalidTokenAsync(tokens, responseMessage);
-					if (invalidTokens.IsNullOrEmpty())
-					{
-						continue;
-					}
-
-					PersistUserDevicesSettingValue(logOnContext, person, invalidTokens);
+					await sendNotificationAndCollectInvalidTokensAsync(message, tokens, invalidTokens);
 				}
 				catch (Exception e)
 				{
@@ -94,18 +77,51 @@ namespace Teleopti.Ccc.Domain.Notification
 				}
 			}
 
+			if (!invalidTokens.IsNullOrEmpty())
+			{
+				removeInvalidTokens(logOnContext, invalidTokens.ToArray());
+			}
+
 			return !hasFail;
 		}
 
+		private async Task sendNotificationAndCollectInvalidTokensAsync(INotificationMessage message, string[] tokens, List<string> invalidTokens)
+		{
+			var requestBody = getNotificationRequestBody(message, tokens);
+			var responseMessage = await _httpServer.Post("https://fcm.googleapis.com/fcm/send",
+				   (object)requestBody,
+				   s => new NameValueCollection { { "Authorization", _key } });
 
-		private async Task<List<string>> getUserDevicesInvalidTokenAsync(IEnumerable<string> tokenList, HttpResponseMessage responseMessage)
+			invalidTokens.AddRange(await getInvalidTokensAsync(tokens, responseMessage));
+		}
+
+		private dynamic getNotificationRequestBody(INotificationMessage message, string[] tokens)
+		{
+			var notification = new { title = message.Subject, body = string.Join(" ", message.Messages) };
+
+			dynamic requestBody = new ExpandoObject();
+			requestBody.registration_ids = tokens;
+			requestBody.notification = notification;
+			if (message.Data == null)
+			{
+				message.Data = new ExpandoObject();
+			}
+
+			message.Data.title = notification.title;
+			message.Data.body = notification.body;
+			requestBody.data = (object)message.Data;
+
+			return requestBody;
+		}
+
+
+		private async Task<string[]> getInvalidTokensAsync(string[] tokens, HttpResponseMessage responseMessage)
 		{
 			var invalidTokens = new List<string>();
-			var tokens = tokenList.ToArray();
 			var isJson = responseMessage?.Content?.Headers.ContentType.MediaType == "application/json";
 			if (!isJson)
 			{
-				return invalidTokens;
+				return invalidTokens.ToArray();
 			}
 
 			var content = await responseMessage.Content.ReadAsStringAsync();
@@ -121,18 +137,15 @@ namespace Teleopti.Ccc.Domain.Notification
 						{
 							invalidTokens.Add(tokens[i]);
 						}
-
 						i++;
 					}
 				}
 			}
-
-			return invalidTokens;
+			return invalidTokens.ToArray();
 		}
 
 		[AsSystem, UnitOfWork]
-		protected virtual void PersistUserDevicesSettingValue(InputWithLogOnContext logOnContext, IPerson person,
-			List<string> invalidTokens)
+		protected virtual void removeInvalidTokens(InputWithLogOnContext logOnContext, string[] invalidTokens)
 		{
 			_userDeviceService.Remove(invalidTokens);
 		}

@@ -18,5 +18,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void Add(IUserDevice root);
 
 		void Remove(IUserDevice root);
+
+		void Remove(params string[] tokens);
 	}
 }
