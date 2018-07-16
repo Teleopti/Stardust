@@ -12,6 +12,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core;
+using Teleopti.Ccc.Web.Core.Data;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
@@ -214,30 +215,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			if (scheduleDay == null) return null;
 
 			var eventScheduleDay = _builder.BuildEventScheduleDay(scheduleDay);
-			var layers = new List<SimpleLayer>();
-			if (eventScheduleDay.Shift != null)
-			{
-				var ls = from layer in eventScheduleDay.Shift.Layers
-					select new SimpleLayer
-					{
-						Color = ColorTranslator.ToHtml(Color.FromArgb(layer.DisplayColor)),
-						Description = layer.Name,
-						Start = layer.StartDateTime,
-						End = layer.EndDateTime,
-						Minutes = (int)layer.EndDateTime.Subtract(layer.StartDateTime).TotalMinutes,
-						IsAbsenceConfidential = layer.IsAbsenceConfidential
-					};
-
-				layers.AddRange(ls);
-			}
+			var layers = mapLayers(eventScheduleDay);
 
 			var shiftCategory = scheduleDay.PersonAssignment()?.ShiftCategory;
 			var isDayOff = eventScheduleDay.DayOff != null;
 			var isFulldayAbsence = eventScheduleDay.IsFullDayAbsence;
 			var startTimeUtc = date.Date;
 			var categoryName = shiftCategory?.Description.Name;
+			var shortName = shiftCategory?.Description.ShortName;
 			string displayColor = null;
-			if (shiftCategory != null) displayColor = ColorTranslator.ToHtml(Color.FromArgb(shiftCategory.DisplayColor.ToArgb()));   //$"rgb({shiftCategory.DisplayColor.R},{shiftCategory.DisplayColor.G},{shiftCategory.DisplayColor.B})";
+			if (shiftCategory != null) displayColor = mapColor(shiftCategory.DisplayColor.ToArgb());
 			if (eventScheduleDay.Shift != null) startTimeUtc = eventScheduleDay.Shift.StartDateTime;
 			if (isDayOff) startTimeUtc = eventScheduleDay.DayOff.StartDateTime;
 			if (isFulldayAbsence)
@@ -245,7 +232,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				startTimeUtc = scheduleDay.PersonAbsenceCollection()[0].Layer.Period.StartDateTime;
 				categoryName =  scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.ConfidentialDescription(person).Name;
 				var absenceColor = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.DisplayColor;
-				displayColor = ColorTranslator.ToHtml(Color.FromArgb(absenceColor.ToArgb()));//$"rgb({absenceColor.R},{absenceColor.G},{absenceColor.B})";
+				displayColor = mapColor(absenceColor.ToArgb());
+				shortName = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.Description.ShortName;
 			}
 			return new ShiftTradeAddPersonScheduleViewModel
 			{
@@ -260,9 +248,33 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				PersonId = scheduleDay.Person.Id.GetValueOrDefault(),
 				ScheduleLayers = _layerMapper.Map(layers, person.Id == _loggedOnUser.CurrentUser().Id),
 				ShiftExchangeOfferId = null,
-				CategoryName = categoryName,
-				DisplayColor = displayColor
+				ShiftCategory = new ShiftCategoryViewModel { Name = categoryName, ShortName = shortName, DisplayColor = displayColor}
 			};
+		}
+
+		private string mapColor(int argb)
+		{
+			return ColorTranslator.ToHtml(Color.FromArgb(argb));
+		}
+
+		private IList<SimpleLayer> mapLayers(ProjectionChangedEventScheduleDay eventScheduleDay)
+		{
+			var layers = new List<SimpleLayer>();
+			if (eventScheduleDay.Shift == null) return layers;
+
+			var ls = from layer in eventScheduleDay.Shift.Layers
+				select new SimpleLayer
+				{
+					Color = mapColor(layer.DisplayColor),
+					Description = layer.Name,
+					Start = layer.StartDateTime,
+					End = layer.EndDateTime,
+					Minutes = (int)layer.EndDateTime.Subtract(layer.StartDateTime).TotalMinutes,
+					IsAbsenceConfidential = layer.IsAbsenceConfidential
+				};
+
+			layers.AddRange(ls);
+			return layers;
 		}
 
 		private ShiftTradeScheduleViewModel getShiftTradeScheduleViewModel(Paging paging,

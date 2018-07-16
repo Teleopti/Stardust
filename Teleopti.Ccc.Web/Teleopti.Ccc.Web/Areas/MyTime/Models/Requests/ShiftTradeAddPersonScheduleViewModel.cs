@@ -23,8 +23,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 			Total = input.Total;
 			ShiftExchangeOfferId = null;
 			ContractTimeInMinute = input.ContractTimeInMinute;
-			CategoryName = input.CategoryName;
-			DisplayColor = input.DisplayColor;
 		}
 	}
 }
