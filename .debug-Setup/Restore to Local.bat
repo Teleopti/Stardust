@@ -344,6 +344,13 @@ ECHO ------
 ECHO.
 )
 
+ECHO ------
+ECHO Purge user devices data ...
+SQLCMD -S%INSTANCE% -E -dmaster -i"%ROOTDIR%\database\tsql\PurgeUserDeviceData.sql" -v DATABASEAPP="%TELEOPTICCC%" >> "%ROOTDIR%\fixData.log"
+ECHO Done!
+ECHO ------
+ECHO.
+
 ::PostRestore
 REM If you need create any private data for debug, just create .sql files named PostDbRestore*.sql,
 REM And put these files in %ROOTDIR%\..\.hgprivate folder.

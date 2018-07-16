@@ -97,6 +97,13 @@ GOTO :error
 
 CD "%ROOTDIR%"
 
+ECHO ------
+ECHO Purge user devices data ...
+SQLCMD -S%INSTANCE% -E -dmaster -i"%ROOTDIR%\database\tsql\PurgeUserDeviceData.sql" -v DATABASEAPP="%DATABASEAPP%" >> "%ROOTDIR%\fixData.log"
+ECHO Done!
+ECHO ------
+ECHO.
+
 ECHO Running: securityexe
 "%ROOTDIR%\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%INSTANCE% -AP"%DATABASEAPP%" -AN"%DATABASEANAL%" -CD"%DATABASEAGG%" %Conn2%
 if %errorlevel% NEQ 0 (
