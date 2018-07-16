@@ -187,15 +187,6 @@
 		display: none;
 	}
 
-	.mobile-shift-category {
-		background-color:aquamarine;
-	}
-
-	.mobile-shift-category1 {
-		background-color: mediumpurple;
-	}
-
-
 	.shift-trade-agent-name {
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -870,4 +861,10 @@ input.use-default-startTime {
 	position: relative;
 	height: 600px;
 	overflow: auto;
+}
+
+@media(min-width:768px) {
+	.clear-desktop-color {
+		background-color: transparent !important;
+	}
 }

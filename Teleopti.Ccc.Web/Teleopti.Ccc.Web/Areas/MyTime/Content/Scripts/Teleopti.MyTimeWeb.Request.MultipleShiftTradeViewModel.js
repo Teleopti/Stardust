@@ -1082,8 +1082,16 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 					return new Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel(layer, minutesSinceTimeLineStart, self.pixelPerMinute(), offsetFromScheduleStart, scheduleLength);
 				});
 			}
+
+			if (personSchedule && personSchedule.ShiftCategory) {
+				var categoryName = personSchedule.ShiftCategory.Name;
+				var categoryColor = personSchedule.ShiftCategory.DisplayColor;
+			}
+
 			var model = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedLayers, scheduleStartTime, scheduleEndTime, personSchedule.Name,
-				personSchedule.PersonId, personSchedule.IsDayOff, personSchedule.DayOffName, false, false, null, Teleopti.MyTimeWeb.Common.FormatTimeSpan(personSchedule.ContractTimeInMinute), personSchedule.IsNotScheduled, startDateTime, personSchedule.CategoryName);
+				personSchedule.PersonId, personSchedule.IsDayOff, personSchedule.DayOffName, false, false, null,
+				Teleopti.MyTimeWeb.Common.FormatTimeSpan(personSchedule.ContractTimeInMinute), personSchedule.IsNotScheduled,
+				startDateTime, categoryName, categoryColor);
 
 			return model;
 		});
