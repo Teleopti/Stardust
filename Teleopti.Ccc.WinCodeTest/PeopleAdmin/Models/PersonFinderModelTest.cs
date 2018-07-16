@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -48,6 +49,26 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             _target.Find();
 			Assert.That(_searchCriteria.DisplayRows[0].Grayed, Is.True);
             _mocks.VerifyAll();
-        }   
+        }
+
+		[Ignore("Bug76798 to be fixed")]
+		[Test]
+		public void ShouldSort()
+		{
+			var searchCritiera = new PeoplePersonFinderSearchCriteria(PersonFinderField.All, "_", 1, DateOnly.Today, 2, 0);
+			var row1 = new PersonFinderDisplayRow {EmploymentNumber = "1"};
+			var row2 = new PersonFinderDisplayRow {EmploymentNumber = "2"};
+			var row3 = new PersonFinderDisplayRow {EmploymentNumber = "3"};
+			searchCritiera.SetRow(row3);
+			searchCritiera.SetRow(row1);
+			searchCritiera.SetRow(row2);
+			_target = new PersonFinderModel(_personFinderReadOnlyRepository, searchCritiera);
+
+			//_target.Sort();
+
+			_target.SearchCriteria.DisplayRows[0].EmploymentNumber.Should().Be.EqualTo("1");
+			_target.SearchCriteria.DisplayRows[1].EmploymentNumber.Should().Be.EqualTo("2");
+			_target.SearchCriteria.DisplayRows[2].EmploymentNumber.Should().Be.EqualTo("3");
+		}
     }
 }
