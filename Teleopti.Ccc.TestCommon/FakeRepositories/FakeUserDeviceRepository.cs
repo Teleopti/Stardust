@@ -49,9 +49,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Remove(params string[] tokens)
 		{
-			foreach (var token in tokens)
+			foreach (var t in tokens)
 			{
-				Remove(FindByToken(token));
+				var token = FindByToken(t);
+				if (token != null)
+					Remove(token);
 			}
 		}
 
