@@ -53,12 +53,15 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 
 		[Ignore("Bug76798 to be fixed")]
 		[Test]
-		public void ShouldSort()
+		public void ShouldSort(
+			[Values(0, 1, 2, 3, 4)] int sortColumn, //firstname = 0, lastname = 1, employmentnumber = 2, note = 3, terminaldate = 4
+			[Values(0, 1)] int sortDirection)
 		{
-			var searchCritiera = new PeoplePersonFinderSearchCriteria(PersonFinderField.All, "_", 1, DateOnly.Today, 2, 0);
-			var row1 = new PersonFinderDisplayRow {EmploymentNumber = "1"};
-			var row2 = new PersonFinderDisplayRow {EmploymentNumber = "2"};
-			var row3 = new PersonFinderDisplayRow {EmploymentNumber = "3"};
+
+			var searchCritiera = new PeoplePersonFinderSearchCriteria(PersonFinderField.All, "_", 1, DateOnly.Today, sortColumn, sortDirection);
+			var row1 = new PersonFinderDisplayRow {FirstName = "a", LastName = "a", EmploymentNumber = "1", Note = "a", TerminalDate = DateTime.Now};
+			var row2 = new PersonFinderDisplayRow { FirstName = "b", LastName = "b", EmploymentNumber = "2", Note = "b", TerminalDate = DateTime.Now.AddDays(1) };
+			var row3 = new PersonFinderDisplayRow { FirstName = "c", LastName = "c", EmploymentNumber = "3", Note = "c", TerminalDate = DateTime.Now.AddDays(2) };
 			searchCritiera.SetRow(row3);
 			searchCritiera.SetRow(row1);
 			searchCritiera.SetRow(row2);
@@ -66,9 +69,18 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 
 			//_target.Sort();
 
-			_target.SearchCriteria.DisplayRows[0].EmploymentNumber.Should().Be.EqualTo("1");
-			_target.SearchCriteria.DisplayRows[1].EmploymentNumber.Should().Be.EqualTo("2");
-			_target.SearchCriteria.DisplayRows[2].EmploymentNumber.Should().Be.EqualTo("3");
+			if (sortDirection == 1)
+			{
+				_target.SearchCriteria.DisplayRows[0].Should().Be.EqualTo(row1);
+				_target.SearchCriteria.DisplayRows[1].Should().Be.EqualTo(row2);
+				_target.SearchCriteria.DisplayRows[2].Should().Be.EqualTo(row3);
+			}
+			else
+			{
+				_target.SearchCriteria.DisplayRows[0].Should().Be.EqualTo(row3);
+				_target.SearchCriteria.DisplayRows[1].Should().Be.EqualTo(row2);
+				_target.SearchCriteria.DisplayRows[2].Should().Be.EqualTo(row1);
+			}
 		}
     }
 }
