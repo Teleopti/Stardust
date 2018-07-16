@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -14,14 +15,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPersonScheduleDayReadModelFinder _scheduleDayReadModelFinder;
 		private readonly IPermissionProvider _permissionProvider;
+		private readonly IScheduleStorage _scheduleStorage;
+		private readonly ICurrentScenario _currentScenario;
 
 		public ShiftTradeRequestProvider(ILoggedOnUser loggedOnUser,
 			IPersonScheduleDayReadModelFinder scheduleDayReadModelFinder,
-			IPermissionProvider permissionProvider)
+			IPermissionProvider permissionProvider, IScheduleStorage scheduleStorage, ICurrentScenario scenario)
 		{
 			_loggedOnUser = loggedOnUser;
 			_scheduleDayReadModelFinder = scheduleDayReadModelFinder;
 			_permissionProvider = permissionProvider;
+			_scheduleStorage = scheduleStorage;
+			_currentScenario = scenario;
 		}
 
 		public IWorkflowControlSet RetrieveUserWorkflowControlSet()
@@ -39,28 +44,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				: null;
 		}
 
-		public IEnumerable<IPersonScheduleDayReadModel> RetrieveTradeMultiSchedules(DateOnlyPeriod period, List<Guid> personList)
+		public IScheduleDictionary RetrieveTradeMultiSchedules(DateOnlyPeriod period, IList<IPerson> personList)
 		{
-			var fixedPeriod = fixPeriodForUnpublishedSchedule(period);
-			if (fixedPeriod == null) return new List<IPersonScheduleDayReadModel>(); 
-
-			return _scheduleDayReadModelFinder.ForPeople(fixedPeriod.Value, personList);
-		}
-
-		private DateTimePeriod? fixPeriodForUnpublishedSchedule(DateOnlyPeriod periodInput)
-		{
-			var dateTimePeriod = periodInput.ToDateTimePeriod(_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
-			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)) return dateTimePeriod;
-
-			var publishedToDate = _loggedOnUser.CurrentUser().WorkflowControlSet.SchedulePublishedToDate;
-			if (!publishedToDate.HasValue) return null;
-
-			var startTime = dateTimePeriod.StartDateTime;
-			var endTime = dateTimePeriod.EndDateTime;
-			if (publishedToDate >= dateTimePeriod.StartDateTime && publishedToDate < dateTimePeriod.EndDateTime) endTime = publishedToDate.Value;
-			if (publishedToDate < dateTimePeriod.StartDateTime) return null;
-
-			return new DateTimePeriod(startTime, endTime);
+			return _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(personList, new ScheduleDictionaryLoadOptions(false, false),
+				period, _currentScenario.Current());
 		}
 
 		public IEnumerable<IPersonScheduleDayReadModel> RetrievePossibleTradeSchedules(DateOnly date,

@@ -34,6 +34,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 		public double ContractTimeInMinute { get; set; }
 		public bool IsNotScheduled { get; set; }
 		public ShiftCategoryViewModel ShiftCategory { get; set; }
+		public string CategoryName { get; set; }
+		public string DisplayColor { get; set; }
 	}
 
 	public class LayerViewModel

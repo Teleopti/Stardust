@@ -23,6 +23,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Has(IScenario scenario)
 		{
+			var existing = _scenario.SingleOrDefault(x => x.Id.Equals(scenario.Id));
+			if(existing != null) return;
 			_scenario.Add(scenario);
 		}
 

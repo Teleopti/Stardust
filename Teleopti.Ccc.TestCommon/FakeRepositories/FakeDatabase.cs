@@ -3,26 +3,20 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
-using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -874,6 +868,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			_shiftCategory = new ShiftCategory();
 			_shiftCategory.SetId(Guid.NewGuid());
+			_shiftCategories.Add(_shiftCategory);
 			return this;
 		}
 
@@ -1019,6 +1014,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			workflowControlSet.SetBusinessUnit(_businessUnit);
 			_workflowControlSets.Add(workflowControlSet);
 			_workflowControlSet = workflowControlSet;
+			return this;
+		}
+
+		public FakeDatabase WithMultiSchedulesForShiftTradeWorkflow(DateTime publishedDate)
+		{
+			ensureExists(_workflowControlSets, null, () => WithWorkflowControlSet(null, null));
+			_workflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(1, 10);
+			_workflowControlSet.SchedulePublishedToDate = publishedDate;
 			return this;
 		}
 

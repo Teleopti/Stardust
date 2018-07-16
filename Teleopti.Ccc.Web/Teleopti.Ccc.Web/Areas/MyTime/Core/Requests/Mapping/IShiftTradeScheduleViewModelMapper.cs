@@ -9,6 +9,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 	{
 		ShiftTradeScheduleViewModel Map(ShiftTradeScheduleViewModelData data);
 		ShiftTradeScheduleViewModel MapForBulletin(ShiftTradeScheduleViewModelData data);
-		IEnumerable<ShiftTradeAddPersonScheduleViewModel> GetMeAndPersonToSchedules(DateOnlyPeriod period, Guid personToId);
+		ShiftTradeMultiSchedulesViewModel GetMeAndPersonToSchedules(DateOnlyPeriod period, Guid personToId);
 	}
 }

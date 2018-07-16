@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing.Design;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
@@ -22,6 +23,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 			Total = input.Total;
 			ShiftExchangeOfferId = null;
 			ContractTimeInMinute = input.ContractTimeInMinute;
+			CategoryName = input.CategoryName;
+			DisplayColor = input.DisplayColor;
 		}
 	}
 }

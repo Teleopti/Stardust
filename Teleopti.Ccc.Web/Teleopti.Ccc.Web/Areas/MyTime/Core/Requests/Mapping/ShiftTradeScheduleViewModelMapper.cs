@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
@@ -21,6 +26,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly IScheduleProvider _scheduleProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IShiftTradeSiteOpenHourFilter _shiftTradeSiteOpenHourFilter;
+		private readonly IProjectionChangedEventBuilder _builder;
+		private readonly IPersonRepository _personRepository;
+		private readonly IPersonNameProvider _personNameProvider;
+		private readonly IShiftTradeAddScheduleLayerViewModelMapper _layerMapper;
+		private readonly IPermissionProvider _permissionProvider;
 
 		public ShiftTradeScheduleViewModelMapper(IShiftTradeRequestProvider shiftTradeRequestProvider,
 			IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider,
@@ -28,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			IShiftTradeTimeLineHoursViewModelMapper shiftTradeTimeLineHoursViewModelMapper,
 			IPersonRequestRepository personRequestRepository,
 			IScheduleProvider scheduleProvider,
-			ILoggedOnUser loggedOnUser, IShiftTradeSiteOpenHourFilter shiftTradeSiteOpenHourFilter)
+			ILoggedOnUser loggedOnUser, IShiftTradeSiteOpenHourFilter shiftTradeSiteOpenHourFilter, IProjectionChangedEventBuilder builder, IPersonRepository personRepository, IPersonNameProvider personNameProvider, IShiftTradeAddScheduleLayerViewModelMapper layerMapper, IPermissionProvider permissionProvider)
 		{
 			_shiftTradeRequestProvider = shiftTradeRequestProvider;
 			_possibleShiftTradePersonsProvider = possibleShiftTradePersonsProvider;
@@ -38,6 +48,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			_scheduleProvider = scheduleProvider;
 			_loggedOnUser = loggedOnUser;
 			_shiftTradeSiteOpenHourFilter = shiftTradeSiteOpenHourFilter;
+			_builder = builder;
+			_personRepository = personRepository;
+			_personNameProvider = personNameProvider;
+			_layerMapper = layerMapper;
+			_permissionProvider = permissionProvider;
 		}
 
 		public ShiftTradeScheduleViewModel Map(ShiftTradeScheduleViewModelData data)
@@ -143,12 +158,110 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			return getShiftTradeScheduleViewModel(data.Paging, myScheduleViewModel, possibleTradeSchedule, data.ShiftTradeDate);
 		}
 
-		public IEnumerable<ShiftTradeAddPersonScheduleViewModel> GetMeAndPersonToSchedules(DateOnlyPeriod period, Guid personToId)
+		public ShiftTradeMultiSchedulesViewModel GetMeAndPersonToSchedules(DateOnlyPeriod period, Guid personToId)
 		{
-			var allSchedules = _shiftTradeRequestProvider.RetrieveTradeMultiSchedules(period,
-				new List<Guid> {_loggedOnUser.CurrentUser().Id.GetValueOrDefault(), personToId});
+			var viewModel = new ShiftTradeMultiSchedulesViewModel
+			{
+				MySchedules = new List<ShiftTradeAddPersonScheduleViewModel>(),
+				PersonToSchedules = new List<ShiftTradeAddPersonScheduleViewModel>()
+			};
+			var fixedPeriod = fixPeriodForUnpublishedSchedule(period);
+			if (fixedPeriod == null) return viewModel;
 
-			return _shiftTradePersonScheduleViewModelMapper.Map(allSchedules, false);
+			var personTo = _personRepository.Get(personToId);
+			var allSchedules = _shiftTradeRequestProvider.RetrieveTradeMultiSchedules(period,
+				new List<IPerson> {_loggedOnUser.CurrentUser(), personTo });
+			if (allSchedules == null) return viewModel;
+
+			allSchedules.TryGetValue(_loggedOnUser.CurrentUser(), out var myScheduleRange);
+			allSchedules.TryGetValue(personTo, out var personToScheduleRange);
+			var mySchedules = new List<ShiftTradeAddPersonScheduleViewModel>();
+			var personToSchedules = new List<ShiftTradeAddPersonScheduleViewModel>();
+			foreach (var dateOnly in fixedPeriod.Value.DayCollection())
+			{
+				var mySchedule = mapToShiftTradeAddPersonScheduleViewModel(myScheduleRange, dateOnly, true);
+				if (mySchedule != null) mySchedules.Add(mySchedule);
+				var personToSchedule = mapToShiftTradeAddPersonScheduleViewModel(personToScheduleRange, dateOnly, false);
+				if (personToSchedule != null) personToSchedules.Add(personToSchedule);
+			}
+
+			return new ShiftTradeMultiSchedulesViewModel
+			{
+				MySchedules = mySchedules,
+				PersonToSchedules = personToSchedules
+			};
+		}
+
+		private DateOnlyPeriod? fixPeriodForUnpublishedSchedule(DateOnlyPeriod periodInput)
+		{
+			var dateTimePeriod = periodInput.ToDateTimePeriod(_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
+			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)) return periodInput;
+
+			var publishedToDate = _loggedOnUser.CurrentUser().WorkflowControlSet.SchedulePublishedToDate;
+			if (!publishedToDate.HasValue) return null;
+
+			var startTime = periodInput.StartDate;
+			var endTime = periodInput.EndDate;
+			if (publishedToDate >= dateTimePeriod.StartDateTime && publishedToDate < dateTimePeriod.EndDateTime) endTime = new DateOnly(publishedToDate.Value);
+			if (publishedToDate < dateTimePeriod.StartDateTime) return null;
+
+			return new DateOnlyPeriod(startTime, endTime);
+		}
+
+		private ShiftTradeAddPersonScheduleViewModel mapToShiftTradeAddPersonScheduleViewModel(IScheduleRange scheduleRange, DateOnly date, bool isMySchedule)
+		{
+			var scheduleDay = scheduleRange?.ScheduledDay(date);
+			if (scheduleDay == null) return null;
+
+			var eventScheduleDay = _builder.BuildEventScheduleDay(scheduleDay);
+			var layers = new List<SimpleLayer>();
+			if (eventScheduleDay.Shift != null)
+			{
+				var ls = from layer in eventScheduleDay.Shift.Layers
+					select new SimpleLayer
+					{
+						Color = ColorTranslator.ToHtml(Color.FromArgb(layer.DisplayColor)),
+						Description = layer.Name,
+						Start = layer.StartDateTime,
+						End = layer.EndDateTime,
+						Minutes = (int)layer.EndDateTime.Subtract(layer.StartDateTime).TotalMinutes,
+						IsAbsenceConfidential = layer.IsAbsenceConfidential
+					};
+
+				layers.AddRange(ls);
+			}
+
+			var shiftCategory = scheduleDay.PersonAssignment()?.ShiftCategory;
+			var isDayOff = eventScheduleDay.DayOff != null;
+			var isFulldayAbsence = eventScheduleDay.IsFullDayAbsence;
+			var startTimeUtc = date.Date;
+			var categoryName = shiftCategory?.Description.Name;
+			var displayColor = $"rgb({shiftCategory?.DisplayColor.R},{shiftCategory?.DisplayColor.G},{shiftCategory?.DisplayColor.B})";
+			if (eventScheduleDay.Shift != null) startTimeUtc = eventScheduleDay.Shift.StartDateTime;
+			if (isDayOff) startTimeUtc = eventScheduleDay.DayOff.StartDateTime;
+			if (isFulldayAbsence)
+			{
+				startTimeUtc = scheduleDay.PersonAbsenceCollection()[0].Layer.Period.StartDateTime;
+				categoryName = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.Description.Name;
+				var absenceColor = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.DisplayColor;
+				displayColor = $"rgb({absenceColor.R},{absenceColor.G},{absenceColor.B})";
+			}
+			return new ShiftTradeAddPersonScheduleViewModel
+			{
+				ContractTimeInMinute = eventScheduleDay.ContractTime.TotalMinutes,
+				DayOffName = eventScheduleDay.Name,
+				IsDayOff = isDayOff,
+				IsFullDayAbsence = isFulldayAbsence,
+				IsNotScheduled = eventScheduleDay.Shift == null && !isDayOff && !isFulldayAbsence,
+				MinStart = eventScheduleDay.Shift?.StartDateTime,
+				StartTimeUtc = startTimeUtc,
+				Name = _personNameProvider.BuildNameFromSetting(scheduleDay.Person.Name.FirstName, scheduleDay.Person.Name.LastName),
+				PersonId = scheduleDay.Person.Id.GetValueOrDefault(),
+				ScheduleLayers = _layerMapper.Map(layers, isMySchedule),
+				ShiftExchangeOfferId = null,
+				CategoryName = categoryName,
+				DisplayColor = displayColor
+			};
 		}
 
 		private ShiftTradeScheduleViewModel getShiftTradeScheduleViewModel(Paging paging,

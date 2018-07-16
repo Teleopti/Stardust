@@ -62,6 +62,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakeThreadPrincipalContext ThreadPrincipalContext;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakePersonAbsenceRepository PersonAbsenceRepository;
+		public FakeDatabase Database;
 
 		public void Isolate(IIsolate isolate)
 		{
@@ -105,7 +106,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var startDate = DateOnly.Today.AddDays(1);
 			var endDate = startDate.AddDays(5);
-			var form = prepareData(startDate, endDate, DateTime.MaxValue);
+			var form = prepareData(startDate, endDate, endDate.AddDays(10).Date);
 
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
@@ -119,7 +120,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var startDate = DateOnly.Today.AddDays(-5);
 			var endDate = startDate.AddDays(11);
-			var form = prepareData(startDate, endDate, DateTime.MaxValue);
+			var form = prepareData(startDate, endDate, endDate.AddDays(10).Date);
 
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
@@ -133,7 +134,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var startDate = DateOnly.Today.AddDays(1);
 			var endDate = startDate.AddDays(11);
-			var form = prepareData(startDate, endDate, DateTime.MaxValue);
+			var form = prepareData(startDate, endDate, endDate.AddDays(10).Date);
 
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
@@ -204,7 +205,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var startDate = DateOnly.Today.AddDays(1);
 			var endDate = startDate.AddDays(9);
-			var form = prepareData(startDate, endDate, new DateTime(DateOnly.Today.AddDays(3).Date.Ticks, DateTimeKind.Utc));
+			var form = prepareData(startDate, endDate, new DateTime(DateOnly.Today.AddDays(2).Date.Ticks, DateTimeKind.Utc));
 
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
@@ -218,7 +219,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var startDate = DateOnly.Today.AddDays(2);
 			var endDate = startDate;
-			var form = createDataWithAbsence(startDate, endDate, DateTime.MaxValue, 2);
+			var form = createDataWithAbsence(startDate, endDate, endDate.AddDays(10).Date, 2);
 
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
@@ -232,7 +233,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var startDate = DateOnly.Today.AddDays(2);
 			var endDate = startDate;
-			var form = createDataWithAbsence(startDate, endDate, DateTime.MaxValue, 1);
+			var form = createDataWithAbsence(startDate, endDate, endDate.AddDays(10).Date, 1);
 
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
@@ -241,29 +242,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			data.PersonToSchedules.Count().Should().Be.EqualTo(1);
 		}
 
-		private IPerson createPeopleWithAssignment(DateOnlyPeriod period, DateTime publishedDate)
-		{
-			var workflowControlSet = new WorkflowControlSet
-			{
-				ShiftTradeOpenPeriodDaysForward = new MinMax<int>(1, 10),
-				SchedulePublishedToDate = publishedDate
-			};
-
-			var currentUser = PersonFactory.CreatePersonWithId(Guid.NewGuid());
-			currentUser.WorkflowControlSet = workflowControlSet;
-			LoggedOnUser.SetFakeLoggedOnUser(currentUser);
-			var personTo = PersonFactory.CreatePersonWithId(Guid.NewGuid());
-
-			PersonAssignmentRepository.Has(currentUser, CurrentScenario.Current(), new Activity(), period, new TimePeriod(8, 10));
-			PersonAssignmentRepository.Has(personTo, CurrentScenario.Current(), new Activity(), period, new TimePeriod(8, 10));
-
-			return personTo;
-		}
-
 		private ShiftTradeMultiSchedulesForm prepareData(DateOnly startDate, DateOnly endDate, DateTime publishedDate)
 		{
-			var period = new DateOnlyPeriod(startDate, endDate);
-			var personTo = createPeopleWithAssignment(period, publishedDate);
+			var personTo = createPeopleWithAssignment(new DateOnlyPeriod(startDate, endDate), publishedDate);
 
 			return new ShiftTradeMultiSchedulesForm
 			{
@@ -271,6 +252,30 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				EndDate = endDate,
 				PersonToId = personTo.Id.GetValueOrDefault()
 			};
+		}
+
+		private IPerson createPeopleWithAssignment(DateOnlyPeriod period, DateTime publishedDate)
+		{
+			var personFromId = Guid.NewGuid();
+			var personToId = Guid.NewGuid();
+			var scenarioId = Guid.NewGuid();
+
+
+			foreach (var date in period.DayCollection())
+			{
+				Database.WithMultiSchedulesForShiftTradeWorkflow(publishedDate)
+					.WithPerson(personFromId)
+					.WithScenario(scenarioId)
+					.WithSchedule(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString())
+					.WithPerson(personToId)
+					.WithSchedule(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString());
+			}
+
+			var currentUser = PersonRepository.Get(personFromId);
+			LoggedOnUser.SetFakeLoggedOnUser(currentUser);
+			CurrentScenario.Current().SetId(scenarioId);
+
+			return PersonRepository.Get(personToId);
 		}
 
 		private ShiftTradeMultiSchedulesForm createDataWithAbsence(DateOnly startDate, DateOnly endDate, DateTime publishedDate, int personWithAbsence)

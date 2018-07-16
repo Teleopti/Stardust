@@ -164,17 +164,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			}
 
 			var allSchedules = _shiftTradeScheduleViewModelMapper.GetMeAndPersonToSchedules(fixedPeriod.Value, input.PersonToId);
-			foreach (var schedule in allSchedules)
-			{
-				if (schedule.PersonId == _loggedOnUser.CurrentUser().Id.GetValueOrDefault()) mySchedules.Add(schedule);
-				else personToSchedules.Add(schedule);
-			}
-
-			return new ShiftTradeMultiSchedulesViewModel
-			{
-				MySchedules = mySchedules,
-				PersonToSchedules = personToSchedules
-			};
+			return allSchedules;
 		}
 
 		private DateOnlyPeriod? fixPeriod(DateOnlyPeriod periodInput)
