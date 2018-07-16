@@ -17545,7 +17545,7 @@ The application will now exit.</value>
     <value>Save failed. Invalid input.</value>
   </data>
   <data name="SaveFailedForModifyWriteProtectedSchedule" xml:space="preserve">
-    <value>Save failed. No permission to modify write protected schedule.</value>
+    <value>Save failed. No permission to modify write-protected schedule.</value>
   </data>
   <data name="SaveFailedForNoPermissionToEditUnpublishedSchedule" xml:space="preserve">
     <value>Save failed. No permission to edit unpublished schedule.</value>

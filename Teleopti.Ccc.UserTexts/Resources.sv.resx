@@ -14591,7 +14591,7 @@ Vill du registrera dig?</value>
     <value>Ersättning</value>
   </data>
   <data name="DiscardSuggestionData" xml:space="preserve">
-    <value>Du har aktiva förslag. Om du fortsätter kommer dessa att kastas,</value>
+    <value>Du har aktiva förslag. Om du fortsätter kommer dessa att kastas</value>
   </data>
   <data name="OvertimeSettings" xml:space="preserve">
     <value>Övertidsinställningar</value>
@@ -15639,5 +15639,47 @@ Applikationen kommer nu att stängas. </value>
   </data>
   <data name="PeopleAccess" xml:space="preserve">
     <value>Hantera rättigheter</value>
+  </data>
+  <data name="PeopleDuplicateUsernameInForm" xml:space="preserve">
+    <value>Formuläret innehåller en dubblett av ett användarnamn</value>
+  </data>
+  <data name="IdentityLogonMissing" xml:space="preserve">
+    <value>Inloggningsuppgifter hittades ej </value>
+  </data>
+  <data name="WFMNewReleaseNotification" xml:space="preserve">
+    <value>{0} är släppt! Vi uppskattar din {1}feedback{2}!</value>
+  </data>
+  <data name="ShiftChangedByOthers" xml:space="preserve">
+    <value>Misslyckades att spara, skiftet har ändrats av någon annan.</value>
+  </data>
+  <data name="scheduleChangedByOthers" xml:space="preserve">
+    <value>Skiftet har ändrats av någon annan. Var god uppdatera först. </value>
+  </data>
+  <data name="ActivityTypeChangedByOthers" xml:space="preserve">
+    <value>Misslyckades att spara, aktivitetstypen har ändrats av någon annan.</value>
+  </data>
+  <data name="NoRealTimeAdherenceResultMessage" xml:space="preserve">
+    <value>Det finns inget att visa baserat på ditt val av organisation och kompetens i kombination med dina rättigheter. Notera att denna sida visar information baserat på de agenter som för närvarande arbetar i ett team och har en extern inloggning konfigurerad.</value>
+  </data>
+  <data name="SaveFailedForInvalidInput" xml:space="preserve">
+    <value>Misslyckades att spara. Ogiltig input. </value>
+  </data>
+  <data name="SaveFailedForModifyWriteProtectedSchedule" xml:space="preserve">
+    <value>Misslyckades att spara. Rättigheter att ändra skrivskyddat schema saknas. </value>
+  </data>
+  <data name="SaveFailedForNoPermissionToEditUnpublishedSchedule" xml:space="preserve">
+    <value>Misslyckades att spara. Rättigheter att ändra opublicerat schema saknas. </value>
+  </data>
+  <data name="PleaseSaveOrDiscardChangesBeforeChangingPeriod" xml:space="preserve">
+    <value>Spara eller kasta bort ändringarna innan du byter period</value>
+  </data>
+  <data name="NoQueueStatisticsAvailable" xml:space="preserve">
+    <value>Ingen prognos kunde skapas. Säkerställ att du har importerad köstatistik. </value>
+  </data>
+  <data name="AffectingXAgents" xml:space="preserve">
+    <value>Påverkar {0} agenter</value>
+  </data>
+  <data name="PreviewTheNewForecasts" xml:space="preserve">
+    <value>Ta en förhandstitt på det nya Prognos-verktyget!</value>
   </data>
 </root>
