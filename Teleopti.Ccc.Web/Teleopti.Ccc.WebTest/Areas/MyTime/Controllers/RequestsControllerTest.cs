@@ -278,34 +278,50 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			return PersonRepository.Get(personToId);
 		}
 
-		private ShiftTradeMultiSchedulesForm createDataWithAbsence(DateOnly startDate, DateOnly endDate, DateTime publishedDate, int personWithAbsence)
+		private ShiftTradeMultiSchedulesForm createDataWithAbsence(DateOnly startDate, DateOnly endDate,
+			DateTime publishedDate, int personWithAbsence)
 		{
 			var period = new DateOnlyPeriod(startDate, endDate);
 
-			var personTo = createPeopleWithAssignment(period, publishedDate);
+			var personFromId = Guid.NewGuid();
+			var personToId = Guid.NewGuid();
+			var scenarioId = Guid.NewGuid();
 
 			if (personWithAbsence == 1)
-			{
-				var absence = new Absence().WithId();
-				AbsenceRepository.Add(absence);
-				var absenceLayer = new AbsenceLayer(absence, period.ToDateTimePeriod(LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()));
-				var personAbsence = new PersonAbsence(LoggedOnUser.CurrentUser(), CurrentScenario.Current(), absenceLayer);
-				PersonAbsenceRepository.Has(personAbsence);
+			{ 
+				foreach (var date in period.DayCollection())
+				{
+					Database.WithMultiSchedulesForShiftTradeWorkflow(publishedDate)
+						.WithPerson(personFromId)
+						.WithScenario(scenarioId)
+						.WithPersonAbsence(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString())
+						.WithPerson(personToId)
+						.WithSchedule(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString());
+				}
 			}
+
 			if (personWithAbsence == 2)
 			{
-				var absence = new Absence().WithId();
-				AbsenceRepository.Add(absence);
-				var absenceLayer = new AbsenceLayer(absence, period.ToDateTimePeriod(LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()));
-				var personAbsence = new PersonAbsence(personTo, CurrentScenario.Current(), absenceLayer);
-				PersonAbsenceRepository.Has(personAbsence);
+				foreach (var date in period.DayCollection())
+				{
+					Database.WithMultiSchedulesForShiftTradeWorkflow(publishedDate)
+						.WithPerson(personFromId)
+						.WithScenario(scenarioId)
+						.WithSchedule(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString())
+						.WithPerson(personToId)
+						.WithPersonAbsence(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString());
+				}
 			}
+
+			var currentUser = PersonRepository.Get(personFromId);
+			LoggedOnUser.SetFakeLoggedOnUser(currentUser);
+			CurrentScenario.Current().SetId(scenarioId);
 
 			return new ShiftTradeMultiSchedulesForm
 			{
 				StartDate = startDate,
 				EndDate = endDate,
-				PersonToId = personTo.Id.GetValueOrDefault()
+				PersonToId = personToId
 			};
 		}
 

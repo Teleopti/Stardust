@@ -179,9 +179,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var personToSchedules = new List<ShiftTradeAddPersonScheduleViewModel>();
 			foreach (var dateOnly in fixedPeriod.Value.DayCollection())
 			{
-				var mySchedule = mapToShiftTradeAddPersonScheduleViewModel(myScheduleRange, dateOnly, true);
+				var mySchedule = mapToShiftTradeAddPersonScheduleViewModel(myScheduleRange, dateOnly, _loggedOnUser.CurrentUser());
 				if (mySchedule != null) mySchedules.Add(mySchedule);
-				var personToSchedule = mapToShiftTradeAddPersonScheduleViewModel(personToScheduleRange, dateOnly, false);
+				var personToSchedule = mapToShiftTradeAddPersonScheduleViewModel(personToScheduleRange, dateOnly, personTo);
 				if (personToSchedule != null) personToSchedules.Add(personToSchedule);
 			}
 
@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			return new DateOnlyPeriod(startTime, endTime);
 		}
 
-		private ShiftTradeAddPersonScheduleViewModel mapToShiftTradeAddPersonScheduleViewModel(IScheduleRange scheduleRange, DateOnly date, bool isMySchedule)
+		private ShiftTradeAddPersonScheduleViewModel mapToShiftTradeAddPersonScheduleViewModel(IScheduleRange scheduleRange, DateOnly date, IPerson person)
 		{
 			var scheduleDay = scheduleRange?.ScheduledDay(date);
 			if (scheduleDay == null) return null;
@@ -236,15 +236,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var isFulldayAbsence = eventScheduleDay.IsFullDayAbsence;
 			var startTimeUtc = date.Date;
 			var categoryName = shiftCategory?.Description.Name;
-			var displayColor = $"rgb({shiftCategory?.DisplayColor.R},{shiftCategory?.DisplayColor.G},{shiftCategory?.DisplayColor.B})";
+			string displayColor = null;
+			if (shiftCategory != null) displayColor = ColorTranslator.ToHtml(Color.FromArgb(shiftCategory.DisplayColor.ToArgb()));   //$"rgb({shiftCategory.DisplayColor.R},{shiftCategory.DisplayColor.G},{shiftCategory.DisplayColor.B})";
 			if (eventScheduleDay.Shift != null) startTimeUtc = eventScheduleDay.Shift.StartDateTime;
 			if (isDayOff) startTimeUtc = eventScheduleDay.DayOff.StartDateTime;
 			if (isFulldayAbsence)
 			{
 				startTimeUtc = scheduleDay.PersonAbsenceCollection()[0].Layer.Period.StartDateTime;
-				categoryName = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.Description.Name;
+				categoryName =  scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.ConfidentialDescription(person).Name;
 				var absenceColor = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.DisplayColor;
-				displayColor = $"rgb({absenceColor.R},{absenceColor.G},{absenceColor.B})";
+				displayColor = ColorTranslator.ToHtml(Color.FromArgb(absenceColor.ToArgb()));//$"rgb({absenceColor.R},{absenceColor.G},{absenceColor.B})";
 			}
 			return new ShiftTradeAddPersonScheduleViewModel
 			{
@@ -257,7 +258,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				StartTimeUtc = startTimeUtc,
 				Name = _personNameProvider.BuildNameFromSetting(scheduleDay.Person.Name.FirstName, scheduleDay.Person.Name.LastName),
 				PersonId = scheduleDay.Person.Id.GetValueOrDefault(),
-				ScheduleLayers = _layerMapper.Map(layers, isMySchedule),
+				ScheduleLayers = _layerMapper.Map(layers, person.Id == _loggedOnUser.CurrentUser().Id),
 				ShiftExchangeOfferId = null,
 				CategoryName = categoryName,
 				DisplayColor = displayColor
