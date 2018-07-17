@@ -918,21 +918,29 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 					targetSchedules = createShiftTradeSchedules(data.PersonToSchedules);
 				}
 
-				while (!dateInRange.isSame(startDate, 'day')) {
-					var mySche = mySchedules.filter(filterSchedules)[0];
-					if (mySche && mySche.isNotScheduled) {
-						mySche = null;
+				while (dateInRange.isSame(startDate, 'day') || dateInRange.isAfter(startDate, 'day')) {
+					if (!self.loadedSchedulePairs().filter(function (m) {
+						return (dateInRange.isSame(m.date, 'day'))
+					})[0]) {
+
+						var mySche = mySchedules.filter(filterSchedules)[0];
+						if (mySche && mySche.isNotScheduled) {
+							mySche = null;
+						}
+
+						var tarSche = targetSchedules.filter(filterSchedules)[0];
+						if (tarSche && tarSche.isNotScheduled) {
+							tarSche = null;
+						}
+
+						schedulePairs.unshift({
+							date: dateInRange.clone(),
+							mySchedule: mySche,
+							targetSchedule: tarSche
+						});
+
 					}
 
-					var tarSche = targetSchedules.filter(filterSchedules)[0];
-					if (tarSche && tarSche.isNotScheduled) {
-						tarSche = null;
-					}
-					schedulePairs.unshift({
-						date: dateInRange.clone(),
-						mySchedule: mySche,
-						targetSchedule: tarSche
-					});
 					dateInRange.add("days", -1);
 				}
 
