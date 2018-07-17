@@ -272,6 +272,9 @@
 					<div class="shift-to-trade-row" data-bind="attr: {id: 'shift-row-' + date.valueOf()}">
 						<div class="shift-date" data-bind="text:$root.formatDate(date)"></div>
 						<div data-bind="css:{'mobile-dayoff':mySchedule && mySchedule.isDayOff},style:{'background-color':mySchedule && mySchedule.categoryColor ? mySchedule.categoryColor: 'none'}" class="shift-detail own-shift clear-desktop-color">
+							<!--ko if:!mySchedule-->
+							<div>@Resources.NotScheduled </div>
+							<!--/ko-->
 							<!--ko if:mySchedule-->
 							<!--ko if:mySchedule.isDayOff-->
 							<div data-bind="text:mySchedule.dayOffName"></div>
@@ -312,6 +315,9 @@
 							<!--/ko-->
 						</div>
 						<div data-bind="css:{'mobile-dayoff':targetSchedule && targetSchedule.isDayOff},style:{'background-color':targetSchedule && targetSchedule.categoryColor ? targetSchedule.categoryColor: 'none'}" class="shift-detail shift-to-trade clear-desktop-color">
+							<!--ko if:!targetSchedule-->
+							<div>@Resources.NotScheduled </div>
+							<!--/ko-->
 							<!--ko if:targetSchedule-->
 							<!--ko if:targetSchedule.isDayOff-->
 							<div data-bind="text:targetSchedule.dayOffName"></div>
