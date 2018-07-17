@@ -476,10 +476,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertNotExists("#shift-trade-request-detail-view", "#reciever-info");
 		}
 
-		[Then(@"I should see the shift trade request view showing multiple shifts")]
-		public void ThenIShouldSeeTheShiftTradeRequestViewShowingMultipleShifts()
+		[Then(@"I should see a list for schedule for both me and OtherAgent start from date '(.*)'")]
+		public void ThenIShouldSeeAListForScheduleForBothMeAndOtherAgentStartFromDate(string date)
 		{
-			Browser.Interactions.AssertExists(".feature-showing-multiple-shifts");
+			Browser.Interactions.AssertExists(".shift-detail.own-shift", "My Schedule");
+			Browser.Interactions.AssertExists(".shift-detail.shift-to-trade", "OtherAgent");
+			Browser.Interactions.AssertExists(".shift-to-trade-row .shift-date", date);
 		}
+
 	}
 }

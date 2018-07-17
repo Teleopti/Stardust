@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: ShiftTradeRequestViewShowingMultipleShifts
+﻿Feature: ShiftTradeRequestViewShowingMultipleShifts
 	As an agent who intends to trade shifts with a colleague,
 	I want to view more than one shift on one page.
 
@@ -37,5 +36,19 @@ Background:
 Scenario: See the new view
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And the time is '2030-01-01'
+	And I am american
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-02 06:00 |
+	| EndTime               | 2030-01-02 16:00 |
+	| Shift category		| Day	           |
+	And OtherAgent has a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-02 08:00 |
+	| EndTime               | 2030-01-02 18:00 |
+	| Shift category		| Day	           |
 	When I view Add Shift Trade Request
-	Then I should see the shift trade request view showing multiple shifts
+	And I choose 'OtherAgent' to make a shift trade
+	Then I should see a list for schedule for both me and OtherAgent start from date '1/2/2030'
