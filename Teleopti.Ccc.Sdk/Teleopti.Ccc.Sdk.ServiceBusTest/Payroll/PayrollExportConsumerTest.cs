@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Xml;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -39,10 +40,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 		private IBusinessUnit _currentBusinessUnit;
 		private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private IUnitOfWorkFactory unitOfWorkFactory;
-
+	  private FakeTenantLogonDataManager TenantLogonDataManager;
 		[SetUp]
 		public void Setup()
 		{
+			TenantLogonDataManager = new FakeTenantLogonDataManager();
+
 			payrollExportRepository = mock.StrictMock<IPayrollExportRepository>();
 			payrollPeopleLoader = mock.StrictMock<IPayrollPeopleLoader>();
 			payrollResultRepository = mock.StrictMock<IPayrollResultRepository>();
@@ -52,7 +55,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 			personBusAssembler = mock.StrictMock<IPersonBusAssembler>();
 			serviceBusReportProgress = mock.StrictMock<IServiceBusPayrollExportFeedback>();
 			_resolver = mock.DynamicMock<IDomainAssemblyResolver>();
-			_tenantPeopleLoader = mock.DynamicMock<ITenantPeopleLoader>();
+			_tenantPeopleLoader = new TenantPeopleLoader(TenantLogonDataManager);
+		
 			_currentUnitOfWorkFactory = mock.DynamicMock<ICurrentUnitOfWorkFactory>();
 			unitOfWorkFactory = mock.DynamicMock<IUnitOfWorkFactory>();
 			exportingPerson = new Person().WithName(new Name("Ex", "Porter"));
@@ -68,6 +72,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 		[Test] 
 		public void ShouldConsumePayrollExport()
 		{
+			var pers1 = PersonFactory.CreatePerson().WithId();
+			var pers2 = PersonFactory.CreatePerson().WithId();
+			var persons = new Collection<IPerson> { pers1, pers2 };
+			TenantLogonDataManager.SetLogon(pers1.Id.GetValueOrDefault(), "NGT", "TILL");
+			TenantLogonDataManager.SetLogon(pers2.Id.GetValueOrDefault(), "NGTAnnat", "också");
+
 			var payrollGuid = Guid.NewGuid();
 			var ownerGuid = Guid.NewGuid();
 			var buGuid = Guid.NewGuid();
@@ -83,19 +93,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 
 			var exportMessage = GetExportMessage(payrollGuid, buGuid, ownerGuid, resultId);
 			exportMessage.LogOnBusinessUnitId = _currentBusinessUnit.Id.GetValueOrDefault();
-			var persons = new Collection<IPerson> { PersonFactory.CreatePerson(), PersonFactory.CreatePerson() };
+			
 			var assembler = new PersonBusAssembler();
-			var personDtos = assembler.CreatePersonDto(persons, _tenantPeopleLoader);
+			var personDtos = assembler.CreatePersonDto(persons, _tenantPeopleLoader).ToList();
 
 			var document = new XmlDocument();
 			document.AppendChild(document.CreateElement("stupid_document_for_stupid_test"));
 
 			using (mock.Record())
 			{
-				
 				Expect.Call(_currentUnitOfWorkFactory.Current()).Return(unitOfWorkFactory);
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).IgnoreArguments().Return(unitOfWork);
-
 				prepareUnitOfWork();
 				Expect.Call(payrollPeopleLoader.GetPeopleForExport(exportMessage, new DateOnlyPeriod(), unitOfWork)).Return(persons).IgnoreArguments();
 				Expect.Call(payrollExportRepository.Get(payrollGuid)).Return(payrollExport);
