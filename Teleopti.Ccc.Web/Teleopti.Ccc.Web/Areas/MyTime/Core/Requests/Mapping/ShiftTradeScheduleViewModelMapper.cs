@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonSc
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
@@ -231,7 +232,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			{
 				startTimeUtc = scheduleDay.PersonAbsenceCollection()[0].Layer.Period.StartDateTime;
 				categoryName =  scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.ConfidentialDescription(person).Name;
-				var absenceColor = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.DisplayColor;
+				var absenceColor = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.ConfidentialDisplayColor(person);
 				displayColor = mapColor(absenceColor.ToArgb());
 				shortName = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.Description.ShortName;
 			}

@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Interfaces.Domain;
 
@@ -12,10 +13,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 	public class ShiftTradeAddScheduleLayerViewModelMapper : IShiftTradeAddScheduleLayerViewModelMapper
 	{
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly IPermissionProvider _permissionProvider;
 
-		public ShiftTradeAddScheduleLayerViewModelMapper(IUserTimeZone userTimeZone)
+		public ShiftTradeAddScheduleLayerViewModelMapper(IUserTimeZone userTimeZone, IPermissionProvider permissionProvider)
 		{
 			_userTimeZone = userTimeZone;
+			_permissionProvider = permissionProvider;
 		}
 
 		public TeamScheduleLayerViewModel[] Map(IEnumerable<SimpleLayer> sourceLayers, bool isMySchedule = false)
@@ -34,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 												end.ToShortTimeString());
 			string color = sourceLayer.Color;
 			string titleHeader = sourceLayer.Description;
-			if (!isMySchedule && sourceLayer.IsAbsenceConfidential)
+			if (!isMySchedule && sourceLayer.IsAbsenceConfidential && !_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential))
 			{
 				color = ConfidentialPayloadValues.DisplayColorHex;
 				titleHeader = ConfidentialPayloadValues.Description.Name;

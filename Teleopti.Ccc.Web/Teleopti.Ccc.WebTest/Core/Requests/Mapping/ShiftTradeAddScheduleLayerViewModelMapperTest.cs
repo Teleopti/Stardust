@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Interfaces.Domain;
 
@@ -17,6 +18,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 	{
 		private TimeZoneInfo _timeZone;
 		private IUserTimeZone _userTimeZone;
+		private IPermissionProvider _permissionProvider;
 
 		[SetUp]
 		public void Setup()
@@ -24,7 +26,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 			_userTimeZone.Stub(x => x.TimeZone()).Return(_timeZone);
-
+			_permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			_permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential)).Return(true);
 		}
 
 		[Test]
@@ -40,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				IsAbsenceConfidential = false
 			};
 
-			var target = new ShiftTradeAddScheduleLayerViewModelMapper(_userTimeZone);
+			var target = new ShiftTradeAddScheduleLayerViewModelMapper(_userTimeZone, _permissionProvider);
 			var result = target.Map(new[] { readModelLayer });
 
 			var mappedlayer = result.First();
@@ -64,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				IsAbsenceConfidential = true
 			};
 
-			var target = new ShiftTradeAddScheduleLayerViewModelMapper(_userTimeZone);
+			var target = new ShiftTradeAddScheduleLayerViewModelMapper(_userTimeZone, _permissionProvider);
 			var result = target.Map(new[] { readModelLayer }, true);
 
 			var mappedlayer = result.First();
@@ -87,8 +90,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				Description = "Illness",
 				IsAbsenceConfidential = true
 			};
-
-			var target = new ShiftTradeAddScheduleLayerViewModelMapper(_userTimeZone);
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential)).Return(false);
+			var target = new ShiftTradeAddScheduleLayerViewModelMapper(_userTimeZone, permissionProvider);
 			var result = target.Map(new[] { readModelLayer }, false);
 
 			var mappedlayer = result.First();
@@ -111,7 +115,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				Description = "Phone"
 			};
 
-			var target = new ShiftTradeAddScheduleLayerViewModelMapper(_userTimeZone);
+			var target = new ShiftTradeAddScheduleLayerViewModelMapper(_userTimeZone, _permissionProvider);
 			var result = target.Map(new[] { readModelLayer });
 
 			var expectedTimeString = string.Format(CultureInfo.CurrentCulture, "{0} - {1}",
@@ -134,7 +138,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				Description = "Phone"
 			};
 
-			var target = new ShiftTradeAddScheduleLayerViewModelMapper(_userTimeZone);
+			var target = new ShiftTradeAddScheduleLayerViewModelMapper(_userTimeZone, _permissionProvider);
 			var result = target.Map(new[] { readModelLayer });
 
 			var expectedTimeString = string.Format(CultureInfo.CurrentCulture, "{0} - {1}",
