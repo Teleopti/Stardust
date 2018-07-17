@@ -69,7 +69,10 @@
                 },
                 tooltip: {
                     contents: tooltip_contents
-                },
+					},
+				padding: {
+					right: 10
+				},
                 axis: {
                     x: {
                         label: {
