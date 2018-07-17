@@ -158,11 +158,6 @@ exec Purge
 --Forecast
 select @KeepUntil = dateadd(year,-1*(select isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepForecast'),getdate())
 
-select @MaxDate = dateadd(day,@BatchSize,isnull(min(WorkloadDate),'19900101'))
-from WorkloadDayBase wdb
-inner join WorkloadDay wd on wdb.id = wd.WorkloadDayBase
-where wdb.WorkloadDate > '19600101' --Avoid hitting templates
-
 set @RowCount = 1
 while @RowCount > 0
 begin
@@ -171,7 +166,7 @@ begin
 	inner join WorkloadDayBase wdb on ttp.Parent = wdb.Id
 	inner join WorkloadDay wd on wdb.id = wd.WorkloadDayBase
 	where 1=1
-	and wdb.WorkloadDate < @MaxDate
+	and wdb.WorkloadDate < @KeepUntil
 	and wdb.WorkloadDate > '19600101' --Avoid hitting templates
 
 	select @RowCount = @@rowcount
@@ -186,7 +181,7 @@ begin
 	from WorkloadDay wd
 	inner join WorkloadDayBase wdb on wdb.id = wd.WorkloadDayBase
 	where 1=1
-	and wdb.WorkloadDate < @MaxDate
+	and wdb.WorkloadDate < @KeepUntil
 	and wdb.WorkloadDate > '19600101' --Avoid hitting templates
 
 	select @RowCount = @@rowcount
@@ -201,7 +196,7 @@ begin
 	from OpenhourList ol
 	inner join WorkloadDayBase wdb on wdb.id = ol.Parent
 	where 1=1
-	and wdb.WorkloadDate < @MaxDate
+	and wdb.WorkloadDate < @KeepUntil
 	and wdb.WorkloadDate > '19600101' --Avoid hitting templates
 
 	select @RowCount = @@rowcount
@@ -217,7 +212,7 @@ begin
 	where 1=1
 	and Not exists (select 1 from WorkloadDayTemplate wdt
 					where wdt.WorkloadDayBase = wdb.Id) --At one customer I found templates on incorrect dates, avoid those and do not try to fix them here in the purge.
-	and wdb.WorkloadDate < @MaxDate
+	and wdb.WorkloadDate < @KeepUntil
 	and wdb.WorkloadDate > '19600101' --Avoid hitting templates
 
 	select @RowCount = @@rowcount
@@ -232,7 +227,7 @@ begin
 	from SkillDataPeriod sdp
 	inner join SkillDay sd on sdp.Parent = sd.Id
 	where 1=1
-	and sd.SkillDayDate < @MaxDate
+	and sd.SkillDayDate < @KeepUntil
 
 	select @RowCount = @@rowcount
 	if datediff(second,@start,getdate()) > @timeout 
@@ -246,7 +241,7 @@ begin
 	from SkillDay sd
 	where 1=1
 	and not exists (select 1 from SkillDayTemplate sdt where sdt.id = sd.TemplateId)
-	and sd.SkillDayDate < @MaxDate
+	and sd.SkillDayDate < @KeepUntil
 
 	select @RowCount = @@rowcount
 	if datediff(second,@start,getdate()) > @timeout 
