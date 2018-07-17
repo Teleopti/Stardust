@@ -15,7 +15,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin
         {
             _view = view;
             Model = model;
-        }
+			SortOrder = SortOrder.Ascending;
+		}
 
         public void Find(IExecutableCommand command)
         {
