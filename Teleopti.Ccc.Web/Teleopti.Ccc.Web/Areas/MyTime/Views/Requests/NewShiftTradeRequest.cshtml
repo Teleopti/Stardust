@@ -270,15 +270,15 @@
 					</div>
 					<!--ko foreach: loadedSchedulePairs-->
 					<div class="shift-to-trade-row" data-bind="attr: {id: 'shift-row-' + date.valueOf()}">
-						<div class="shift-date" data-bind="text:date.format('YYYY-MM-DD')"></div>
-						<div data-bind="style:{'background-color':mySchedule && mySchedule.categoryColor ? mySchedule.categoryColor: 'none'}" class="shift-detail own-shift clear-desktop-color">
+						<div class="shift-date" data-bind="text:$root.formatDate(date)"></div>
+						<div data-bind="css:{'mobile-dayoff':mySchedule && mySchedule.isDayOff},style:{'background-color':mySchedule && mySchedule.categoryColor ? mySchedule.categoryColor: 'none'}" class="shift-detail own-shift clear-desktop-color">
 							<!--ko if:mySchedule-->
 							<!--ko if:mySchedule.isDayOff-->
-							<div>DO</div>
+							<div data-bind="text:mySchedule.dayOffName"></div>
 							<!--/ko-->
 							<!--ko if:!mySchedule.isDayOff-->
 							<div data-bind="text:mySchedule.categoryName"></div>
-							<div><span data-bind="text:mySchedule.scheduleStart.format('HH:MM')"></span> - <span data-bind="text:mySchedule.scheduleEnd.format('HH:MM')"></span></div>
+							<div><span data-bind="text:$root.formatTime(mySchedule.scheduleStart)"></span> - <span data-bind="text:$root.formatTime(mySchedule.scheduleEnd)"></span></div>
 							<div class="shift-trade-contract"><span data-bind="text:mySchedule.contractTime"></span></div>
 							<!--/ko-->
 							<!--ko if:mySchedule.isFullDayAbsence-->
@@ -311,14 +311,14 @@
 							<!--/ko-->
 							<!--/ko-->
 						</div>
-						<div data-bind="style:{'background-color':mySchedule && mySchedule.categoryColor ? mySchedule.categoryColor: 'none'}" class="shift-detail shift-to-trade clear-desktop-color">
+						<div data-bind="css:{'mobile-dayoff':targetSchedule && targetSchedule.isDayOff},style:{'background-color':targetSchedule && targetSchedule.categoryColor ? targetSchedule.categoryColor: 'none'}" class="shift-detail shift-to-trade clear-desktop-color">
 							<!--ko if:targetSchedule-->
 							<!--ko if:targetSchedule.isDayOff-->
-							<div>DO</div>
+							<div data-bind="text:targetSchedule.dayOffName"></div>
 							<!--/ko-->
 							<!--ko if:!targetSchedule.isDayOff-->
 							<div data-bind="text:targetSchedule.categoryName"></div>
-							<div><span data-bind="text:targetSchedule.scheduleStart.format('HH:MM')"></span> - <span data-bind="text:targetSchedule.scheduleEnd.format('HH:MM')"></span></div>
+							<div><span data-bind="text:$root.formatTime(targetSchedule.scheduleStart)"></span> - <span data-bind="text:$root.formatTime(targetSchedule.scheduleEnd)"></span></div>
 							<div class="shift-trade-contract"><span data-bind="text:targetSchedule.contractTime"></span></div>
 							<!--/ko-->
 							<!--ko if: targetSchedule.isFullDayAbsence-->

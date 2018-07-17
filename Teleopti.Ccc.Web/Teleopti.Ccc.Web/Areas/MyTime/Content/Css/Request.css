@@ -187,6 +187,11 @@
 		display: none;
 	}
 
+	.mobile-dayoff {
+		background-color: beige;
+		background-image: url(../Images/stripe.png);
+	}
+
 	.shift-trade-agent-name {
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -867,4 +872,8 @@ input.use-default-startTime {
 	.clear-desktop-color {
 		background-color: transparent !important;
 	}
+}
+
+.own-shift + .shift-to-trade {
+	margin-left:1px;
 }

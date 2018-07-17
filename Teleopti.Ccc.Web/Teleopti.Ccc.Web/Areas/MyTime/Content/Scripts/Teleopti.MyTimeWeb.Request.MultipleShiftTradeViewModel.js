@@ -98,7 +98,7 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 		var scrollTop = element.scrollTop;
 		var divHeight = element.clientHeight;
 
-		if (!self.isLoadingSchedulesOnTop()) {
+		if (!self.isLoadingSchedulesOnTop() && !self.isLoadingSchedulesOnBottom()) {
 			//scroll to bottom
 			if ((scrollTop + divHeight >= wholeHeight)) {
 				var agentId = self.agentChoosed().personId;
@@ -329,7 +329,9 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 		var endDate = moment(self.lastScheduleDate).add("days", self.shiftPageSize);
 		var agentId = agent.personId;
 		clearSchedulePairs();
-		loadPeriodSchedule(startDate, endDate, agentId, false);
+		loadPeriodSchedule(startDate, endDate, agentId, false, function () {
+			document.querySelector('.shift-trade-list-panel').scrollTo(0, 10);
+		});
 	};
 
 
@@ -812,6 +814,14 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 		return timeSortOrder() === value.Value;
 	};
 
+	self.formatDate = function (date) {
+		return date.format(self.DatePickerFormat());
+	}
+
+	self.formatTime = function (dateTime) {
+		return dateTime.format(Teleopti.MyTimeWeb.Common.TimeFormat);
+	}
+
 	self.isStartTimeFilterActived = ko.computed(function () {
 		return (self.filteredStartTimesText().length !== 0 || self.isDayoffFiltered() === true || (timeSortOrder() === 'start asc') || (timeSortOrder() === 'start desc'));
 	});
@@ -878,7 +888,7 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 		return self.availableTeams().filter(function (team) { return team.id !== self.allTeamsId; }).map(function (team) { return team.id; });
 	}
 
-	function loadPeriodSchedule(startDate, endDate, agentId, prepend) {
+	function loadPeriodSchedule(startDate, endDate, agentId, prepend, callback) {
 		if (!startDate || !endDate || !agentId) {
 			return;
 		}
@@ -949,6 +959,10 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 
 				function restoreScroll() {
 					document.querySelector('.shift-trade-list-panel').scrollTop = document.querySelector(previousFirstRowId).offsetTop;
+				}
+
+				if (callback) {
+					callback();
 				}
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
