@@ -532,6 +532,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			_displayRows.AddRange(rows);
 		}
+
+		public void ClearResult()
+		{
+			_displayRows.Clear();
+		}
 	}
 
 	public class PeoplePersonFinderSearchWithPermissionCriteria : PeoplePersonFinderSearchCriteria, IPeoplePersonFinderSearchWithPermissionCriteria

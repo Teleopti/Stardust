@@ -121,6 +121,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		void SetRow(IPersonFinderDisplayRow theRow);
 
 		void SetRows(IEnumerable<IPersonFinderDisplayRow> rows);
+		void ClearResult();
 	}
 
 	public interface IPeoplePersonFinderSearchWithPermissionCriteria : IPeoplePersonFinderSearchCriteria

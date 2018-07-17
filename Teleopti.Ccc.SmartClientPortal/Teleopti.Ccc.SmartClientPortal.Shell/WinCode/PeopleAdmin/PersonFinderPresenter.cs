@@ -46,6 +46,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin
             
             Model.SearchCriteria.SortColumn = column;
             Model.SearchCriteria.SortDirection = (int)SortOrder;
+			Model.SearchCriteria.ClearResult();
 
             var command = new PersonFinderFindCommand(Model);
             _view.AttemptDatabaseConnectionFind(command);

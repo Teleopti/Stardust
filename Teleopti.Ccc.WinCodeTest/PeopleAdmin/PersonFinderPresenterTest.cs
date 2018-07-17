@@ -73,6 +73,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin
             Expect.Call(() => _personFinderSearchCriteria.SortDirection = 1);
             Expect.Call(() => _personFinderSearchCriteria.SortDirection = 2);
             Expect.Call(() => _view.AttemptDatabaseConnectionFind(new PersonFinderFindCommand(_model))).IgnoreArguments().Repeat.Twice();
+			Expect.Call(() => _personFinderSearchCriteria.ClearResult()).Repeat.Twice();
             _mocks.ReplayAll();
             _target.ListViewColumnClick(1);
             _target.ListViewColumnClick(1);
