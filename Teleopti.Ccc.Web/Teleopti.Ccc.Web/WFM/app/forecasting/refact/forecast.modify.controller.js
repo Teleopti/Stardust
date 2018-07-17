@@ -239,8 +239,8 @@
 			vm.scenarioNotForecasted = false;
 
 			var wl = {
-				ForecastStart: vm.forecastPeriod.startDate,
-				ForecastEnd: vm.forecastPeriod.endDate,
+				ForecastStart: moment(vm.forecastPeriod.startDate).format(),
+				ForecastEnd: moment(vm.forecastPeriod.endDate).format(),
 				WorkloadId: vm.selectedWorkload.Workload.Id,
 				ScenarioId: vm.selectedScenario.Id
 			};
@@ -273,8 +273,8 @@
 
 			forecastingService.forecast(
 				{
-					ForecastStart: vm.forecastPeriod.startDate,
-					ForecastEnd: vm.forecastPeriod.endDate,
+					ForecastStart: moment(vm.forecastPeriod.startDate).format(),
+					ForecastEnd: moment(vm.forecastPeriod.endDate).format(),
 					Workload: temp,
 					ScenarioId: vm.selectedScenario.Id,
 					BlockToken: vm.blockToken,
@@ -356,8 +356,8 @@
 			vm.isForecastRunning = true;
 			forecastingService.exportForecast(
 				{
-					ForecastStart: vm.forecastPeriod.startDate,
-					ForecastEnd:vm.forecastPeriod.endDate,
+					ForecastStart: moment(vm.forecastPeriod.startDate).format(),
+					ForecastEnd: moment(vm.forecastPeriod.endDate).format(),
 					ScenarioId: vm.selectedScenario.Id,
 					SkillId: vm.selectedWorkload.SkillId,
 					WorkloadId: vm.selectedWorkload.Workload.Id
