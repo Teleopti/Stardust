@@ -73,8 +73,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			personRequest.GetMessage(new NoFormatting()).Should().Be.EqualTo(expectedDenyReason);
 		}
 
-
-
 		[Test]
 		public void ShouldPendingWhenContinuousWorkTimeExceedsMaximumContinuousWorkTimeWithShiftBefore()
 		{

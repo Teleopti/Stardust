@@ -9,12 +9,10 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -47,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public FakeToggleManager ToggleManager;
 
 		private IPerson _person;
-		private DateTime _currentDateTime = new DateTime(2017, 11, 07);
+		private readonly DateTime _currentDateTime = new DateTime(2017, 11, 07);
 		private readonly IMultiplicatorDefinitionSet _multiplicatorDefinitionSet 
 			= new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime).WithId();
 		private TimeSpan[] _intervals;

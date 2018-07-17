@@ -396,6 +396,55 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			personRequest.DenyReason.Should().Be(Resources.NoUnderStaffingSkill);
 		}
 
+		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.OvertimeRequestAtLeastOneCriticalUnderStaffedSkill_74944)]
+		public void ShouldNotCreateOvertimeActivityOutsideOfRequestPeriod()
+		{
+			setupPerson();
+
+			var workflowControlSet = new WorkflowControlSet();
+			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenRollingPeriod(new[] { _phoneSkillType })
+			{
+				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
+				BetweenDays = new MinMax<int>(0, 7),
+				OrderIndex = 1
+			});
+
+			LoggedOnUser.CurrentUser().WorkflowControlSet = workflowControlSet;
+
+			var phoneActivity = createActivity("phone activity");
+			var timeZone = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var underStaffingSkillPhone = createSkill("criticalUnderStaffingSkillPhone", null, timeZone);
+			underStaffingSkillPhone.DefaultResolution = 30;
+			underStaffingSkillPhone.SkillType = _phoneSkillType;
+
+			var personSkillPhone = createPersonSkill(phoneActivity, underStaffingSkillPhone);
+
+			Now.Is(new DateTime(2017, 07, 17, 10, 00, 00, DateTimeKind.Utc));
+			var date = new DateOnly(Now.UtcDateTime());
+			var period = new DateTimePeriod(2017, 7, 17, 11, 2017, 7, 17, 13);
+
+			SkillIntradayStaffingFactory.SetupIntradayStaffingForSkill(underStaffingSkillPhone, date, new List<StaffingPeriodData>
+			{
+				new StaffingPeriodData {ForecastedStaffing = 10d, ScheduledStaffing = 2d, Period = period}
+			}, timeZone);
+
+			addPersonSkillsToPersonPeriod(personSkillPhone);
+
+			var personRequest = createOvertimeRequestInMinutes(TimeSpan.FromHours(11).Add(TimeSpan.FromMinutes(15)), 60);
+			getTarget().Process(personRequest);
+
+			personRequest.IsApproved.Should().Be.True();
+
+			var overtimeActivities = getOvertimeActivities(date);
+
+			overtimeActivities.Length.Should().Be(1);
+			var firstOvertimeActivity = overtimeActivities[0];
+			firstOvertimeActivity.Payload.Should().Be(phoneActivity);
+			firstOvertimeActivity.Period.StartDateTime.Should().Be(new DateTime(2017, 7, 17, 11, 15, 00, DateTimeKind.Utc));
+			firstOvertimeActivity.Period.EndDateTime.Should().Be(new DateTime(2017, 7, 17, 12, 15, 00, DateTimeKind.Utc));
+		}
+
 		private OvertimeShiftLayer[] getOvertimeActivities(DateOnly date)
 		{
 			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(LoggedOnUser.CurrentUser(),
