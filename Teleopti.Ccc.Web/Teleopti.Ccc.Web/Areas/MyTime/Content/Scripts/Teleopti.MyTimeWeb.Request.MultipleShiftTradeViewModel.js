@@ -327,6 +327,11 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 
 		var startDate = self.lastScheduleDate;
 		var endDate = moment(self.lastScheduleDate).add("days", self.shiftPageSize);
+
+		var openPeriodEnd = self.openPeriodEndDate();
+		if (endDate > openPeriodEnd) {
+			endDate = openPeriodEnd;
+		}
 		var agentId = agent.personId;
 		clearSchedulePairs();
 		loadPeriodSchedule(startDate, endDate, agentId, false, function () {

@@ -803,8 +803,9 @@ input.use-default-startTime {
 	border-top: .8px solid #e3e3e3;
 }
 
-	.shift-to-trade-row + .shift-to-trade-row {
-	}
+.shift-to-trade-row + .shift-to-trade-row {
+	margin-top:1px;
+}
 
 .shift-detail {
 	overflow: hidden;
