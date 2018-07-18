@@ -41,7 +41,7 @@ WebByPassDefaultPermissionCheck_37984 = true
 RTA_KillFattyIntradayUntilItDies_74939 = true
 RTA_RestrictModifyAdherenceWithPermission_74898 = true
 RTA_EasilySpotLateForWork_75668 = true
-LevelUp_HangfireStatistics_76139_76373 = RC
+LevelUp_HangfireStatistics_76139_76373 = true
 RTA_DurationOfHistoricalEvents_76470 = RC
 
 # Dumplings, can any of these be removed? #
