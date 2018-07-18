@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: ShiftTradeRequestViewShowingMultipleShifts
+﻿Feature: ShiftTradeRequestViewShowingMultipleShifts
 	As an agent who intends to trade shifts with a colleague,
 	I want to view more than one shift on one page.
 

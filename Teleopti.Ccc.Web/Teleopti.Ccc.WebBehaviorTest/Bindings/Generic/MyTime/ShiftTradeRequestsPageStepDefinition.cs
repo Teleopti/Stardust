@@ -403,7 +403,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I choose '(.*)' to make a shift trade")]
 		public void WhenIChooseToMakeAShiftTrade(string p0)
 		{
-			Browser.Interactions.Click(".shift-trade-possible-trade-schedule .shift-trade-layer-container .shift-trade-layer");
+			Browser.Interactions.ClickUsingJQuery(".shift-trade-possible-trade-schedule .shift-trade-layer-container .shift-trade-layer");
 		}
 
 		[When(@"I add '(.*)' to my shift trade list")]
@@ -476,11 +476,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertNotExists("#shift-trade-request-detail-view", "#reciever-info");
 		}
 
-		[Then(@"I should see a list for schedule for both me and OtherAgent start from date '(.*)'")]
-		public void ThenIShouldSeeAListForScheduleForBothMeAndOtherAgentStartFromDate(string date)
+		[Then(@"I should see a list for schedule for both me and '?(.*)'? start from date '(.*)'")]
+		public void ThenIShouldSeeAListForScheduleForBothMeAndOtherAgentStartFromDate(string personToName, string date)
 		{
 			Browser.Interactions.AssertExists(".shift-detail.own-shift", "My Schedule");
-			Browser.Interactions.AssertExists(".shift-detail.shift-to-trade", "OtherAgent");
+			Browser.Interactions.AssertExists(".shift-detail.shift-to-trade", personToName);
 			Browser.Interactions.AssertExists(".shift-to-trade-row .shift-date", date);
 		}
 
