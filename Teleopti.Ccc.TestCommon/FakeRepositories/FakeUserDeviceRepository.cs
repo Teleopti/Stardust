@@ -19,22 +19,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return _savedUserDevices.SingleOrDefault(d => d.Token == token);
 		}
-
-		public IEnumerable<IUserDevice> LoadAll()
-		{
-			throw new NotImplementedException();
-		}
-
-		public IUserDevice Load(Guid id)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IUserDevice Get(Guid id)
-		{
-			throw new NotImplementedException();
-		}
-
+	
 		public void Add(IUserDevice userDevice)
 		{
 			_savedUserDevices.Add(userDevice);

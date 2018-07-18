@@ -3,127 +3,156 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting;
-using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture]
 	[Category("BucketB")]
-	public class UserDevicesRepositoryTest : RepositoryTest<IUserDevice>
+	[DatabaseTest]
+	public class UserDevicesRepositoryTest
 	{
+		public ICurrentUnitOfWorkFactory currentUnitOfWorkFactory;
+		public IPersonRepository PersonRepository;
+		public IUserDeviceRepository Target;
+		public WithUnitOfWork WithUnitOfWork;
+
 		private IPerson person;
-		protected override void ConcreteSetup()
+		private IPerson person2;
+
+		[Test]
+		public void ShouldAddDevice()
 		{
-			person = PersonFactory.CreatePerson();
-			PersistAndRemoveFromUnitOfWork(person);
-		}
-		protected override IUserDevice CreateAggregateWithCorrectBusinessUnit()
-		{
-			return new UserDevice
+			setUpPerson();
+			WithUnitOfWork.Do(() => Target.Add(new UserDevice
 			{
 				Owner = person,
 				Token = "token1"
-			};
+			}));
+
+			WithUnitOfWork.Do(() =>
+			{
+				var device = Target.Find(person).Single();
+				device.Token.Should().Be.EqualTo("token1");
+				device.Owner.Id.Should().Be.EqualTo(person.Id);
+			});
 		}
 
-		protected override void VerifyAggregateGraphProperties(IUserDevice loadedAggregateFromDatabase)
-		{
-			var newItem = CreateAggregateWithCorrectBusinessUnit();
-
-			Assert.AreEqual(newItem.Owner.Id, person.Id);
-			Assert.AreEqual(newItem.Token, "token1");
-		}
-
-		protected override Repository<IUserDevice> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
-		{
-			return new UserDeviceRepository(currentUnitOfWork);
-		}
 
 		[Test]
 		public void ShouldFindUserDeviceByToken()
 		{
-			var persisted = new UserDevice
+			setUpPerson();
+
+			WithUnitOfWork.Do(() => Target.Add(new UserDevice
 			{
 				Owner = person,
-				Token = "newToken"
-			};
-			PersistAndRemoveFromUnitOfWork(persisted);
+				Token = "token1"
+			}));
 
-			var target = new UserDeviceRepository(CurrUnitOfWork);
-
-			var userDevice = target.FindByToken("newToken");
-
-			userDevice.Id.Should().Be.EqualTo(persisted.Id);
+			WithUnitOfWork.Do(() =>
+			{
+				var device = Target.FindByToken("token1");
+				device.Owner.Id.Should().Be.EqualTo(person.Id);
+				device.Token.Should().Be.EqualTo("token1");
+			});
 		}
 
 		[Test]
 		public void ShouldFindUserDeviceByPerson()
 		{
-			var persisted = new UserDevice
+			setUpPerson();
+
+			WithUnitOfWork.Do(() =>
 			{
-				Owner = person,
-				Token = "newToken"
-			};
-			PersistAndRemoveFromUnitOfWork(persisted);
+				Target.Add(new UserDevice
+				{
+					Owner = person,
+					Token = "token1"
+				});
 
-			var target = new UserDeviceRepository(CurrUnitOfWork);
+				Target.Add(new UserDevice
+				{
+					Owner = person,
+					Token = "token2"
+				});
+			});
 
-			var userDevice = target.Find(person).Single();
+			WithUnitOfWork.Do(() =>
+			{
+				var devices = Target.Find(person).OrderBy(d => d.Token).ToArray();
+				devices.Count().Should().Be.EqualTo(2);
 
-			userDevice.Id.Should().Be.EqualTo(persisted.Id);
+				devices[0].Token.Should().Be.EqualTo("token1");
+				devices[0].Owner.Id.Should().Be.EqualTo(person.Id);
+				devices[1].Token.Should().Be.EqualTo("token2");
+				devices[1].Owner.Id.Should().Be.EqualTo(person.Id);
+			});
 		}
 
 		[Test]
 		public void ShouldThrowAExceptionWhenAddDuplicateUserDeviceToken()
 		{
-			var persisted = new UserDevice
+			setUpPerson(true);
+
+			WithUnitOfWork.Do(() => Target.Add(new UserDevice
 			{
 				Owner = person,
-				Token = "newToken"
-			};
-			PersistAndRemoveFromUnitOfWork(persisted);
-			var newPerson = PersonFactory.CreatePerson();
-			PersistAndRemoveFromUnitOfWork(newPerson);
+				Token = "token1"
+			}));
 
-			Assert.Throws<ConstraintViolationException>(() =>
+			Assert.Throws<Infrastructure.Foundation.ConstraintViolationException>(() =>
 			{
-				var duplicate = new UserDevice
+				WithUnitOfWork.Do(() => Target.Add(new UserDevice
 				{
-					Owner = newPerson,
-					Token = "newToken"
-				};
-				PersistAndRemoveFromUnitOfWork(duplicate);
+					Owner = person2,
+					Token = "token1"
+				}));
 			});
 		}
 
 		[Test]
 		public void ShouldRemoveUserDeviceByTokens()
 		{
-			var persisted = new UserDevice
-			{
-				Owner = person,
-				Token = "newToken"
-			};
-			var persistedAnother = new UserDevice
-			{
-				Owner = person,
-				Token = "anotherToken"
-			};
-			PersistAndRemoveFromUnitOfWork(persisted);
-			PersistAndRemoveFromUnitOfWork(persistedAnother);
+			setUpPerson();
 
-			var target = new UserDeviceRepository(CurrUnitOfWork);
-			target.Remove(persisted.Token, persistedAnother.Token);
-			Session.Flush();
+			WithUnitOfWork.Do(() =>
+			{
+				Target.Add(new UserDevice
+				{
+					Owner = person,
+					Token = "newToken"
+				});
+				Target.Add(new UserDevice
+				{
+					Owner = person,
+					Token = "anotherToken"
+				});
+			});
 
-			target.LoadAll().Should().Be.Empty();
+			WithUnitOfWork.Do(() => Target.Remove("newToken", "anotherToken"));
+
+			WithUnitOfWork.Do(() => Target.Find(person).Should().Be.Empty());
 		}
 
+		private void setUpPerson(bool addAnother = false)
+		{
+			WithUnitOfWork.Do(() =>
+			{
+				person = PersonFactory.CreatePerson("Person1");
+				PersonRepository.Add(person);
+				if (addAnother)
+				{
+					person2 = PersonFactory.CreatePerson("Person2");
+					PersonRepository.Add(person2);
+				}
+			});
 
+		}
 	}
-	
-	
+
+
 }

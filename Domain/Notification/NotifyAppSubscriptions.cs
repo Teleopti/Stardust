@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
@@ -79,7 +80,8 @@ namespace Teleopti.Ccc.Domain.Notification
 
 			if (!invalidTokens.IsNullOrEmpty())
 			{
-				removeInvalidTokens(logOnContext, invalidTokens.ToArray());
+				try { removeInvalidTokens(logOnContext, invalidTokens.ToArray()); }
+				catch (DataSourceException) { }
 			}
 
 			return !hasFail;

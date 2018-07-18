@@ -8,22 +8,23 @@ using Teleopti.Ccc.Domain.SystemSetting;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class UserDeviceRepository : Repository<IUserDevice>, IUserDeviceRepository
+	public class UserDeviceRepository : IUserDeviceRepository
 	{
-		public UserDeviceRepository(IUnitOfWork unitOfWork)
-#pragma warning disable 618
-			: base(unitOfWork)
-#pragma warning restore 618
+		private ICurrentUnitOfWork _unitOfWork;
+
+		public UserDeviceRepository(ICurrentUnitOfWork unitOfWork)
 		{
+			_unitOfWork = unitOfWork;
 		}
 
-		public UserDeviceRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+		public void Add(IUserDevice root)
 		{
+			_unitOfWork.Session().SaveOrUpdate(root);
 		}
 
 		public IList<IUserDevice> Find(IPerson person)
 		{
-			var result = Session.CreateCriteria(typeof(UserDevice), "pd")
+			var result = _unitOfWork.Session().CreateCriteria(typeof(UserDevice), "pd")
 				.Add(Restrictions.Eq("Owner", person))
 				.List<IUserDevice>();
 			return result;
@@ -31,21 +32,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IUserDevice FindByToken(string token)
 		{
-			return Session.CreateCriteria(typeof(UserDevice), "pd")
+			return _unitOfWork.Session().CreateCriteria(typeof(UserDevice), "pd")
 				.Add(Restrictions.Eq("Token", token))
 				.UniqueResult<IUserDevice>();
-
 		}
 
 		public void Remove(params string[] tokens)
 		{
 			foreach (var batch in tokens.Batch(20))
 			{
-				var devices = Session.CreateCriteria(typeof(UserDevice), "pd")
+				var session = _unitOfWork.Session();
+				var devices = session.CreateCriteria(typeof(UserDevice), "pd")
 				.Add(Restrictions.In("Token", tokens))
 				.List<IUserDevice>();
-
-				devices.ForEach(device => Remove(device));
+				devices?.ForEach(device => session.Delete(device));
 			}
 		}
 	}
