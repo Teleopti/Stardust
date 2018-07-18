@@ -51,6 +51,10 @@
 				if (!loaded)
 					loaded = load();
 				return loaded;
+			},
+			reload: function () {
+				loaded = load();
+				return loaded;
 			}
 		};
 

@@ -20,10 +20,18 @@
 
 				$rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams, options) {
 					if (toState.name == 'rta' && fromState.name != 'rta') {
-						// Invoke to delay service creation
-						$injector.invoke(function (rtaStateService) {
-							rtaStateService.gotoLastState();
-						})
+						if (fromState.name == 'rta-skill-area-manager') {
+							// Invoke to delay service creation
+							$injector.invoke(function (rtaStateService) {
+								rtaStateService.gotoLastStateWithDataReload();
+							})
+						}
+						else {
+							$injector.invoke(function (rtaStateService) {
+								rtaStateService.gotoLastState();
+							})
+						}
+						
 					}
 				})
 

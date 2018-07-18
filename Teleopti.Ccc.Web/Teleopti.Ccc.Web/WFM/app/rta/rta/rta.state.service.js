@@ -32,6 +32,11 @@
 				}
 			},
 
+			gotoLastStateWithDataReload: function () {
+				rtaDataService.reload();
+				this.gotoLastState();
+			},
+
 			setCurrentState: function (newState) {
 				mutate(state, newState);
 				cleanState();

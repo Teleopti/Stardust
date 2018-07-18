@@ -82,7 +82,7 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 		.state("rta-skill-area-manager", {
 			params: {
 				isNewSkillArea: false,
-				returnState: "rta-without-slash"
+				returnState: "rta"
 			},
 			url: "/rta/skill-area-manager",
 			templateUrl: "app/global/skill-group/skill-group-manager.html",
