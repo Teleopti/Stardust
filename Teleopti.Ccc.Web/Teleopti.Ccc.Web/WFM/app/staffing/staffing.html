@@ -22,24 +22,26 @@
 				<div class="con-row align-row-center staffing-toolbar" ng-class="{'locked':vm.isSearchRequested}"
                      style="flex-wrap:wrap">
 				
-					<div class="con-flex">
-						<the-skill-picker skills="vm.allSkills"
-										  skill-groups="vm.allSkillAreas"
-										  on-skill-selected="vm.selectedSkillChange(skill)"
-										  on-skill-group-selected="vm.selectedAreaChange(skillGroup)"
-										  preselected-skill="vm.selectedSkill"
-										  preselected-skill-group="vm.selectedSkillArea">
-						</the-skill-picker>
-
+					<div class="con-flex" style="min-width: 520px">
+						<div class="pull-left" style="min-width: 450px; margin-right: 10px">
+							<the-skill-picker skills="vm.allSkills"
+											  skill-groups="vm.allSkillAreas"
+											  on-skill-selected="vm.selectedSkillChange(skill)"
+											  on-skill-group-selected="vm.selectedAreaChange(skillGroup)"
+											  preselected-skill="vm.selectedSkill"
+											  preselected-skill-group="vm.selectedSkillArea">
+							</the-skill-picker>
+						</div>
+						<div >
+							<skill-group-manager-button id="manage_skill_group_button"
+														ng-if="vm.HasPermissionToModifySkillArea"
+														ng-click="vm.configMode()"></skill-group-manager-button>
+						</div>
+						
 					</div>
 
-					<div class="con-flex"
-                         style="display:flex; justify-content:space-around;">
-                        <skill-group-manager-button id="manage_skill_group_button"
-                                                    ng-if="vm.HasPermissionToModifySkillArea"
-                                                    ng-click="vm.configMode()"></skill-group-manager-button>
-                        <team-schedule-datepicker style="margin-top:-5px"
-                                                  selected-date="vm.selectedDate"
+					<div class="con-flex">
+                        <team-schedule-datepicker selected-date="vm.selectedDate"
                                                   status="vm.showDatePicker"
                                                   on-date-change="vm.navigateToNewDay()"></team-schedule-datepicker>
                     </div>
