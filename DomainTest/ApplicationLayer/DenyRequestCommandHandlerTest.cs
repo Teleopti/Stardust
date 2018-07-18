@@ -7,6 +7,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	{
 		public IPersonRequestRepository PersonRequestRepository;
 		public IPersonRequestCheckAuthorization Authorization;
+		public ICurrentScenario CurrentScenario;
 		public INow Now;
 
 		public void Isolate(IIsolate isolate)
@@ -37,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				DenyReason = "RequestDenyReasonSupervisor"
 			};
 
-			var commandHandler = new DenyRequestCommandHandler(PersonRequestRepository, Authorization);
+			var commandHandler = new DenyRequestCommandHandler(PersonRequestRepository, Authorization, CurrentScenario);
 			commandHandler.Handle(command);
 			personRequest.IsDenied.Should().Be(true);
 			personRequest.GetMessage(new NoFormatting()).Should().Be(null);
@@ -65,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				DenyReason = "RequestDenyReasonSupervisor"
 			};
 
-			var commandHandler = new DenyRequestCommandHandler(PersonRequestRepository, Authorization);
+			var commandHandler = new DenyRequestCommandHandler(PersonRequestRepository, Authorization, CurrentScenario);
 			commandHandler.Handle(command);
 
 			personRequest.IsDenied.Should().Be(true);
@@ -87,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				PersonRequestId = personRequest.Id.GetValueOrDefault(),
 				DenyReason = "RequestDenyReasonSupervisor"
 			};
-			var commandHandler = new DenyRequestCommandHandler(PersonRequestRepository, Authorization);
+			var commandHandler = new DenyRequestCommandHandler(PersonRequestRepository, Authorization, CurrentScenario);
 			commandHandler.Handle(command);
 
 			personRequest.IsDenied.Should().Be(true);
@@ -112,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				DenyReason = "RequestDenyReasonSupervisor",
 				IsManualDeny = true
 			};
-			var commandHandler = new DenyRequestCommandHandler(PersonRequestRepository, Authorization);
+			var commandHandler = new DenyRequestCommandHandler(PersonRequestRepository, Authorization, CurrentScenario);
 			commandHandler.Handle(command);
 
 			personRequest.IsDenied.Should().Be(true);

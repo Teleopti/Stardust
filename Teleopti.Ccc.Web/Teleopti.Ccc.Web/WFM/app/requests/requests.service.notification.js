@@ -102,7 +102,7 @@
 		};
 
 		this.notifyCommandError = function(error) {
-			NoticeService.error($translate.instant('CommandFailed').replace('{0}', error), 5000, true);
+			NoticeService.error($translate.instant('CommandFailed').replace('{0}', error), 20000, true);
 		};
 
 		this.notifyMaxSearchPersonCountExceeded = function(maxSearchPersonCount) {

@@ -18,7 +18,6 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -49,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		public FakeQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
 		public FullPermission Permission;
 		private IAbsence _absence;
-		
+
 
 		public void Isolate(IIsolate isolate)
 		{
@@ -639,6 +638,27 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			Assert.IsTrue(result.ErrorMessages.Contains("A request that is Approved cannot be Approved."),
 				string.Join(",", result.ErrorMessages));
 			Assert.IsTrue(personRequest.IsApproved);
+		}
+
+		[Test]
+		public void ShouldNotDenyWhenTeamLeaderHasNoPermissionToEditRestrictedScenarios()
+		{
+			Scenario.Current().Restricted = true;
+			Permission.AddToBlackList(DefinedRaptorApplicationFunctionPaths.ModifyRestrictedScenario);
+
+			Now.Is(new DateTime(2016, 12, 22, 22, 0, 0, DateTimeKind.Utc));
+
+			var absence = AbsenceFactory.CreateAbsence("absence");
+			var person = PersonFactory.CreatePerson("tester");
+
+			var personRequest = createNewAbsenceRequest(person, absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
+			personRequest.Pending();
+
+			var result = Target.DenyRequests(new List<Guid> { personRequest.Id.GetValueOrDefault() }, string.Empty);
+
+			result.AffectedRequestIds.ToList().Count.Should().Be.EqualTo(0);
+			result.ErrorMessages.First().Should().Be
+				.EqualTo(Resources.CanNotApproveOrDenyRequestDueToNoPermissionToModifyRestrictedScenarios);
 		}
 
 		[TearDown]
