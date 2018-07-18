@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesDefaultValueProvider;
 		public FakePlanningGroupSettingsRepository PlanningGroupSettingsRepository;
 		public FakePlanningGroupRepository PlanningGroupRepository;
 
