@@ -131,7 +131,7 @@
 					getAllSkillGroups();
 					unselectAllSkills();
 					vm.skillGroups[vm.selectedGroupIndex] = null;
-					deleted();
+					if (typeof deleted === 'function') deleted();
 				});
 			}
 		};
