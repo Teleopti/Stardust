@@ -140,6 +140,8 @@
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel.Tests.js?bust=<%=version %>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.AsmMessage.List.Tests.js?bust=<%=version %>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel.Tests.js?bust=<%=version %>"></script>
+		<script type="text/javascript" src="Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel.js?bust=<%=version %>"></script>
+		<script type="text/javascript" src="Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel.Tests.js?bust=<%=version %>"></script>
 		
 	</head>
 	<body>
