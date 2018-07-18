@@ -1307,7 +1307,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			ClearTaskList();
 		}
 
-		public override void UpdateTemplateName()
+		public override void ClearTemplateName()
 		{
 		}
 	}

@@ -657,9 +657,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-04-02
         /// </remarks>
-        public virtual void UpdateTemplateName()
+        public virtual void ClearTemplateName()
         {
-            _taskOwnerDay.UpdateTemplateName();
+            _taskOwnerDay.ClearTemplateName();
         }
 
         #endregion

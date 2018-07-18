@@ -25,6 +25,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			foreach (var futureWorkloadDay in futureWorkloadDays)
 			{
 				futureWorkloadDay.DistributeTasks(sortedTemplateTaskPeriodsDic[futureWorkloadDay.CurrentDate.DayOfWeek]);
+
+				if(!(futureWorkloadDay is WorkloadDay workloadDay)) continue;
+				workloadDay.TemplateReference.TemplateName = TemplateReference.WebTemplateKey;
 			}
 		}
 

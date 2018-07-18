@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
             {
                 if (TaskOwner != null)
                 {
-                    TaskOwner.UpdateTemplateName();
+                    TaskOwner.ClearTemplateName();
                 }
             }
         }
@@ -704,7 +704,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
         /// Created by: peterwe
         /// Created date: 2008-02-14
         /// </remarks>
-        public virtual void UpdateTemplateName()
+        public virtual void ClearTemplateName()
         {
             throw new NotImplementedException();
         }

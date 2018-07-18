@@ -14,8 +14,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
     public class TemplateReference : ITemplateReference
     {
         public const string LongtermTemplateKey = "<LONGTERM>";
+        public const string WebTemplateKey = "<WEB>";
         protected const string TemplateNameFormat = "<{0}>";
-        private string _templateName;
+        protected string _templateName;
         private Guid _templateId;
         private int _versionNumber;
         private int? _dayOfWeek;
@@ -75,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
         public virtual string TemplateName
         {
             get
-            {
+			{
                 return DisplayName(dayOfWeek, _templateName, false);
             }
             set { _templateName = value; }

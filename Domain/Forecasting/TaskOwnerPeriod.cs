@@ -675,7 +675,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		/// Created by: peterwe
 		/// Created date: 2008-02-14
 		/// </remarks>
-		public void UpdateTemplateName()
+		public void ClearTemplateName()
 		{
 			throw new NotImplementedException();
 		}

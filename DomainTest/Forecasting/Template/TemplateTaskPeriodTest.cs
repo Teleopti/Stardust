@@ -333,7 +333,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
         [Test]
         public void VerifyUpdateTemplateNameGivesException()
         {
-			Assert.Throws<NotImplementedException>(() => _target.UpdateTemplateName());
+			Assert.Throws<NotImplementedException>(() => _target.ClearTemplateName());
         }
 
         /// <summary>

@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: peterwe
         /// Created date: 2008-02-14
         /// </remarks>
-        public override void UpdateTemplateName()
+        public override void ClearTemplateName()
         {
         }
 

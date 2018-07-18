@@ -1123,7 +1123,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: peterwe
         /// Created date: 2008-02-14
         /// </remarks>
-        public virtual void UpdateTemplateName()
+        public virtual void ClearTemplateName()
         {
             // this really means that when the day is updated, you have broken the reference to the original template
             _templateReference = new SkillDayTemplateReference();

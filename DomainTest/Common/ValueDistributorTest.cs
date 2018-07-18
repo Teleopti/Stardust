@@ -415,7 +415,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 				get { throw new NotImplementedException(); }
 			}
 
-			public void UpdateTemplateName()
+			public void ClearTemplateName()
 			{
 				throw new NotImplementedException();
 			}

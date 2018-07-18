@@ -409,7 +409,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
        
         public void VerifyUpdateTemplateNameNotImplemented()
         {
-	        Assert.Throws<NotImplementedException>(() => target.UpdateTemplateName());
+	        Assert.Throws<NotImplementedException>(() => target.ClearTemplateName());
         }
 
         /// <summary>

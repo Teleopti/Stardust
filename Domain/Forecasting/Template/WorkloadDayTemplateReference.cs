@@ -41,7 +41,10 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
 
         private string GetTemplateName()
         {
-            if (_workload == null)
+			if (_templateName == WebTemplateKey)
+				return _templateName;
+
+			if (_workload == null)
                 return string.Format(CultureInfo.CurrentUICulture, TemplateNameFormat,
                                      UserTexts.Resources.None.ToUpper(CultureInfo.CurrentUICulture));
 

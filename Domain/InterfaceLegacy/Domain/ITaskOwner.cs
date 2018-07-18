@@ -255,7 +255,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Created by: peterwe
         /// Created date: 2008-02-14
         /// </remarks>
-        void UpdateTemplateName();
+        void ClearTemplateName();
 
         /// <summary>
         /// Resets the task owner.

@@ -828,7 +828,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: peterwe
         /// Created date: 2008-02-14
         /// </remarks>
-        public abstract void UpdateTemplateName();
+        public abstract void ClearTemplateName();
 
         /// <summary>
         /// Locks this instance.

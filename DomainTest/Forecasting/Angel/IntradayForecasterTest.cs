@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.LegacyWrappers;
+using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -39,6 +40,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			target.Apply(workload, templatePeriod, new IWorkloadDayBase[] { workloadDay });
 
 			workloadDay.TemplateReference.DayOfWeek.Should().Be.EqualTo(null);
+			workloadDay.TemplateReference.TemplateName.Should().Be.EqualTo(TemplateReference.WebTemplateKey);
+			workloadDay.TemplateReference.TemplateId.Should().Be.EqualTo(Guid.Empty);
 			Math.Round(workloadDay.SortedTaskPeriodList[0].Task.Tasks, 3).Should().Be.EqualTo(91.915);
 			Math.Round(workloadDay.SortedTaskPeriodList[1].Task.Tasks, 3).Should().Be.EqualTo(68.936);
 			Math.Round(workloadDay.SortedTaskPeriodList[2].Task.Tasks, 3).Should().Be.EqualTo(55.149);

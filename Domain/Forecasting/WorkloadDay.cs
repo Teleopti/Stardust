@@ -389,7 +389,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: peterwe
         /// Created date: 2008-02-14
         /// </remarks>
-        public override void UpdateTemplateName()
+        public override void ClearTemplateName()
         {
             // this really means that when the day is updated, you have broken the reference to the original template
             _templateReference = new WorkloadDayTemplateReference(Guid.Empty, 0, string.Empty, null, null);

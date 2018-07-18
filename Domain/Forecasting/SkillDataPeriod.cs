@@ -299,7 +299,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			{
 				parent.ResetSkillStaffPeriods(this);
 				parent.RecalculateStaff();
-				parent.UpdateTemplateName();
+				parent.ClearTemplateName();
 			}
 		}
 
