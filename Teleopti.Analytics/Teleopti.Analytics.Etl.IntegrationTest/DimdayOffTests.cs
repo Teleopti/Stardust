@@ -18,9 +18,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
-using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
-using Teleopti.Ccc.Infrastructure.Web;
-using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
@@ -64,9 +62,11 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				dateList, 1, "UTC", 15, "", "False",
 				CultureInfo.CurrentCulture,
 				new FakeContainerHolder(), false
-				)
+			)
 			{
-				Helper = new JobHelperForTest(raptorRepository, null, new Tenants(tenantUnitOfWorkManager, new LoadAllTenants(tenantUnitOfWorkManager), dsFactory, new BaseConfigurationRepository())),
+				Helper = new JobHelperForTest(raptorRepository, null,
+					new Tenants(tenantUnitOfWorkManager, new LoadAllTenants(tenantUnitOfWorkManager), dsFactory,
+						new BaseConfigurationRepository(), new TrueToggleManager())),
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 

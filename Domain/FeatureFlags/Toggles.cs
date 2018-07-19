@@ -112,6 +112,7 @@
 		ETL_RemoveTimeZoneAndDateNightly_40870,
 		ETL_EventBasedAgentNameDescription_41432,
 		ETL_FixScheduleForPersonPeriod_41393,
+		ETL_Optimize_Memory_Usage_76761,
 
 		Staffing_Info_Configuration_44687,
 		WfmStaffing_AddOvertime_42524,

@@ -12,8 +12,10 @@ using Teleopti.Analytics.Etl.Common.JobLog;
 using Teleopti.Analytics.Etl.Common.JobSchedule;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.DistributedLock;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.Common.Service
@@ -23,6 +25,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private static readonly ILog log = LogManager.GetLogger(typeof(EtlJobStarter));
 		private readonly IBaseConfigurationRepository _baseConfigurationRepository;
 		private readonly PmInfoProvider _pmInfoProvider;
+		private readonly IToggleManager _toggleManager;
 
 		private readonly string _connectionString;
 		private readonly JobExtractor _jobExtractor;
@@ -37,13 +40,15 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			JobExtractor jobExtractor,
 			ITenants tenants,
 			IBaseConfigurationRepository baseConfigurationRepository,
-			PmInfoProvider pmInfoProvider)
+			PmInfoProvider pmInfoProvider,
+			IToggleManager toggleManager)
 		{
 			_jobHelper = jobHelper;
 			_jobExtractor = jobExtractor;
 			_tenants = tenants;
 			_baseConfigurationRepository = baseConfigurationRepository;
 			_pmInfoProvider = pmInfoProvider;
+			_toggleManager = toggleManager;
 			_connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
 		}
 
@@ -149,11 +154,11 @@ namespace Teleopti.Analytics.Etl.Common.Service
 					{
 						if (tenant == null) continue;
 
-						var jobStepsNotToRun = new List<IJobStep>();
-						jobToRun.StepList[0].JobParameters.SetTenantBaseConfigValues(tenant.EtlConfiguration);
+						jobToRun.JobParameters.SetTenantBaseConfigValues(tenant.EtlConfiguration);
+						jobToRun.JobParameters.Helper.SelectDataSourceContainer(tenant.Name);
 
+						var jobStepsNotToRun = new List<IJobStep>();
 						var jobResultCollection = new List<IJobResult>();
-						_jobHelper.SelectDataSourceContainer(tenant.Name);
 
 						var jobRunner = new JobRunner();
 						var jobResults = jobRunner.Run(jobToRun, jobResultCollection, jobStepsNotToRun);
@@ -184,6 +189,18 @@ namespace Teleopti.Analytics.Etl.Common.Service
 				else
 				{
 					log.InfoFormat("Distributed lock could not created. Job '{0}' could not be started.", jobToRun.Name);
+				}
+			}
+			finally
+			{
+				if (_toggleManager.IsEnabled(Toggles.ETL_Optimize_Memory_Usage_76761))
+				{
+					bool.TryParse(ConfigurationManager.AppSettings["ReleaseMemoryOnJobFinished"], out var forceGc);
+					if (forceGc)
+					{
+						GC.Collect();
+						GC.WaitForFullGCComplete();
+					}
 				}
 			}
 
