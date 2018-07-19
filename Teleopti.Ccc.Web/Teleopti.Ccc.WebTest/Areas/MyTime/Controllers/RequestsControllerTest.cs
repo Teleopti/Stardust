@@ -215,6 +215,20 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldMapDateForRetrivedSchedules()
+		{
+			var startDate = DateOnly.Today.AddDays(1);
+			var endDate = startDate.AddDays(9);
+			var form = prepareData(startDate, endDate, new DateTime(DateOnly.Today.AddDays(2).Date.Ticks, DateTimeKind.Utc));
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+
+			data.MySchedules.ToList().First().MinStart.Should().Be.EqualTo(startDate.Date);
+			data.PersonToSchedules.ToList().First().MinStart.Should().Be.EqualTo(startDate.Date);
+		}
+
+		[Test]
 		public void ShouldLoadScheduleWhenPersonToHasAbsence()
 		{
 			var startDate = DateOnly.Today.AddDays(2);

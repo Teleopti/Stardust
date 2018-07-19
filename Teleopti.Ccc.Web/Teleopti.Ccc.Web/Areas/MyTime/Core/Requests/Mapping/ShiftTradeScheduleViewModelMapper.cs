@@ -221,16 +221,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var shiftCategory = scheduleDay.PersonAssignment()?.ShiftCategory;
 			var isDayOff = eventScheduleDay.DayOff != null;
 			var isFulldayAbsence = eventScheduleDay.IsFullDayAbsence;
-			var startTimeUtc = date.Date;
 			var categoryName = shiftCategory?.Description.Name;
 			var shortName = shiftCategory?.Description.ShortName;
 			string displayColor = null;
 			if (shiftCategory != null) displayColor = mapColor(shiftCategory.DisplayColor.ToArgb());
-			if (eventScheduleDay.Shift != null) startTimeUtc = eventScheduleDay.Shift.StartDateTime;
-			if (isDayOff) startTimeUtc = eventScheduleDay.DayOff.StartDateTime;
 			if (isFulldayAbsence)
 			{
-				startTimeUtc = scheduleDay.PersonAbsenceCollection()[0].Layer.Period.StartDateTime;
 				categoryName =  scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.ConfidentialDescription(person).Name;
 				var absenceColor = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.ConfidentialDisplayColor(person);
 				displayColor = mapColor(absenceColor.ToArgb());
@@ -243,8 +239,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				IsDayOff = isDayOff,
 				IsFullDayAbsence = isFulldayAbsence,
 				IsNotScheduled = eventScheduleDay.Shift == null && !isDayOff && !isFulldayAbsence,
-				MinStart = eventScheduleDay.Shift?.StartDateTime,
-				StartTimeUtc = startTimeUtc,
+				MinStart = date.Date,
 				Name = _personNameProvider.BuildNameFromSetting(scheduleDay.Person.Name.FirstName, scheduleDay.Person.Name.LastName),
 				PersonId = scheduleDay.Person.Id.GetValueOrDefault(),
 				ScheduleLayers = _layerMapper.Map(layers, person.Id == _loggedOnUser.CurrentUser().Id),

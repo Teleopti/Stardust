@@ -1100,7 +1100,7 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 	function createShiftTradeSchedules(shiftTradeSchedules) {
 		var models = ko.utils.arrayMap(shiftTradeSchedules, function (personSchedule) {
 			var mappedLayers = [];
-			var startDateTime = moment(personSchedule.StartTimeUtc);
+			var startDateTime = moment(personSchedule.MinStart);
 			if (personSchedule !== null && personSchedule.ScheduleLayers !== null && personSchedule.ScheduleLayers.length > 0) {
 				var layers = personSchedule.ScheduleLayers;
 				var scheduleStartTime = moment(layers[0].Start);
