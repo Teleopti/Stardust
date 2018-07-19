@@ -277,12 +277,14 @@
 							<!--/ko-->
 							<!--ko if:mySchedule-->
 							<!--ko if:mySchedule.isDayOff-->
-							<div data-bind="text:mySchedule.dayOffName"></div>
+							<div class="schedule-layer-text-container dayoff-text-height" data-bind="text:mySchedule.dayOffName"></div>
 							<!--/ko-->
 							<!--ko if:!mySchedule.isDayOff-->
-							<div data-bind="text:mySchedule.categoryName"></div>
-							<div><span data-bind="text:$root.formatTime(mySchedule.scheduleStart)"></span> - <span data-bind="text:$root.formatTime(mySchedule.scheduleEnd)"></span></div>
-							<div class="shift-trade-contract"><span data-bind="text:mySchedule.contractTime"></span></div>
+							<div class="schedule-layer-text-container">
+								<div data-bind="text:mySchedule.categoryName"></div>
+								<div><span data-bind="text:$root.formatTime(mySchedule.scheduleStart)"></span> - <span data-bind="text:$root.formatTime(mySchedule.scheduleEnd)"></span></div>
+								<div class="shift-trade-contract"><span data-bind="text:mySchedule.contractTime"></span></div>
+							</div>
 							<!--/ko-->
 							<!--ko if:mySchedule.isFullDayAbsence-->
 							<div class="shift-visual-indication hide-on-mobile">
@@ -320,12 +322,14 @@
 							<!--/ko-->
 							<!--ko if:targetSchedule-->
 							<!--ko if:targetSchedule.isDayOff-->
-							<div data-bind="text:targetSchedule.dayOffName"></div>
+							<div class="schedule-layer-text-container dayoff-text-height" data-bind="text:targetSchedule.dayOffName"></div>
 							<!--/ko-->
 							<!--ko if:!targetSchedule.isDayOff-->
-							<div data-bind="text:targetSchedule.categoryName"></div>
-							<div><span data-bind="text:$root.formatTime(targetSchedule.scheduleStart)"></span> - <span data-bind="text:$root.formatTime(targetSchedule.scheduleEnd)"></span></div>
-							<div class="shift-trade-contract"><span data-bind="text:targetSchedule.contractTime"></span></div>
+							<div class="schedule-layer-text-container">
+								<div data-bind="text:targetSchedule.categoryName"></div>
+								<div><span data-bind="text:$root.formatTime(targetSchedule.scheduleStart)"></span> - <span data-bind="text:$root.formatTime(targetSchedule.scheduleEnd)"></span></div>
+								<div class="shift-trade-contract"><span data-bind="text:targetSchedule.contractTime"></span></div>
+							</div>
 							<!--/ko-->
 							<!--ko if: targetSchedule.isFullDayAbsence-->
 							<div class="shift-visual-indication hide-on-mobile">

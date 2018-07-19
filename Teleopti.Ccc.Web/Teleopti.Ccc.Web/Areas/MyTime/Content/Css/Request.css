@@ -175,7 +175,13 @@
 	background: #eee;
 }
 
-@media (max-width: 768px) {
+@media(min-width:993px) {
+	.clear-desktop-color {
+		background-color: transparent !important;
+	}
+}
+
+@media (max-width: 993px) {
 	.shift-trade-timeline {
 		height: 100%;
 		position: absolute;
@@ -869,12 +875,16 @@ input.use-default-startTime {
 	overflow: auto;
 }
 
-@media(min-width:768px) {
-	.clear-desktop-color {
-		background-color: transparent !important;
-	}
-}
-
 .own-shift + .shift-to-trade {
 	margin-left:1px;
+}
+.schedule-layer-text-container {
+	display:flex;
+	height: 60px;
+	align-items:center;
+	flex-direction:column;
+}
+
+.dayoff-text-height {
+	line-height:60px;
 }
