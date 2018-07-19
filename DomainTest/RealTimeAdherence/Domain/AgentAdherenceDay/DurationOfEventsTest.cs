@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 		public IAgentAdherenceDayLoader Target;
 		public FakeRtaHistory History;
 		public MutableNow Now;
+		public FakeDatabase Database;
 		
 		[Test]
 		public void ShouldGetNullForOngoing()
@@ -85,6 +86,22 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 			var data = Target.Load(personId, "2018-07-09".Date());
 
 			data.Changes().First().Duration.Should().Be("01:00:00");
+		}
+		
+		
+		[Test]
+		public void ShouldHaveNullDurationWhenIsSameProof()
+		{
+			Now.Is("2018-07-19 10:00");
+			var personId = Guid.NewGuid();
+			History
+				.StateChanged(personId, "2018-07-19 10:00")
+				.RuleChanged(personId, "2018-07-19 10:00", null)
+				;
+
+			var data = Target.Load(personId, "2018-07-19".Date());
+
+			data.Changes().Single().Duration.Should().Be(null);
 		}
 	}
 	

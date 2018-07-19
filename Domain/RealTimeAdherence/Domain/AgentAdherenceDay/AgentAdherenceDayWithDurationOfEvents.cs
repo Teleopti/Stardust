@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 				return null;
 
 			var model = _changes.LastOrDefault();
-			if (model != null)
+			if (model != null && !isSameProof(model, @event))
 				model.Duration = floorToSeconds(@event.Timestamp).Subtract(floorToSeconds(model.Timestamp)).ToString();
 
 			if (model == null || !isSameProof(model, @event))
