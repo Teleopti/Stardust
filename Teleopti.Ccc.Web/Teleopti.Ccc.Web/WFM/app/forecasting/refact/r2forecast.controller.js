@@ -57,7 +57,7 @@
 
     function goToModify(skill) {
       sessionStorage.currentForecastWorkload = angular.toJson(skill);
-      $state.go("modify", {workloadId:skill.Workload.Id});
+      $state.go("forecast-modify", {workloadId:skill.Workload.Id});
     }
 
     init();

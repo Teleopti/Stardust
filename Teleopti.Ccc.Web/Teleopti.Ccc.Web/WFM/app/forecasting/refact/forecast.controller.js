@@ -206,7 +206,7 @@
       };
 
       function goToModify(skillData) {
-        $state.go("modify", {workloadId:skillData.Workload.Id, skill:skillData, scenario:vm.selectedScenario, days:vm.currentWorkload.Days})
+        $state.go("forecast-modify", {workloadId:skillData.Workload.Id, skill:skillData, scenario:vm.selectedScenario, days:vm.currentWorkload.Days})
       }
 
       function goStatistics(workload) {
