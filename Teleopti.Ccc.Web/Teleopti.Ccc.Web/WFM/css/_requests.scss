@@ -2,13 +2,14 @@
 wfm-multiple-search-input {
 	margin: 5px;
 }
-@media screen and (min-width: 768px) {
-	.con-flex {
-		max-width: 100%;
-	}
-}
 
 .wfm-requests {
+	@media screen and (min-width: 768px) {
+		& > .con-flex {
+			max-width: 100%;
+		}
+	}
+
 	.request-footer {
 		min-height: 40px;
 
