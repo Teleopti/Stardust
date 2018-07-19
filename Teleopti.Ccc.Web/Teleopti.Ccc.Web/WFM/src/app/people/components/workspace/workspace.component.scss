@@ -1,23 +1,23 @@
+:host {
+	max-width: 250px;
+}
+
 .workspace {
 	width: 100%;
-	padding: 7px;
 	height: 100%;
 	position: relative;
 
-	.actions {
+	.action {
 		position: absolute;
 		top: 7px;
 		right: 7px;
+		z-index: 1;
+		.mdi:before {
+			font-size: 14px !important;
+		}
 	}
 
-	li {
-		border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-		display: flex;
-		align-items: center;
-		padding: 5px;
-
-		.mdi {
-			cursor: pointer;
-		}
+	.b-person-remove {
+		cursor: pointer;
 	}
 }

@@ -1,22 +1,5 @@
 @import './../shared/pages';
 
-.mat-column-select {
-	flex-grow: 0;
-	flex-basis: 1%;
-	padding-right: 20px;
-}
-
-.mat-raised-button {
-	margin: 2px;
-}
-
 .table-container {
-	position: relative;
-	padding: 0;
-
-	.action-button {
-		position: absolute;
-		right: 0;
-		top: 12px;
-	}
+	margin-bottom: 30px;
 }

@@ -1,24 +1,23 @@
+import { HttpClientModule } from '@angular/common/http';
 import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { NzButtonModule, NzCheckboxModule, NzDividerModule, NzFormModule, NzTableModule } from 'ng-zorro-antd';
+import { WorkspaceComponent } from '..';
 import { configureTestSuite } from '../../../../configure-test-suit';
-import { PeopleTestModule } from '../../people.test.module';
+import { MockTranslationModule } from '../../../../mocks/translation';
 import {
-	WorkspaceService,
+	NavigationService,
 	RolesService,
-	SearchService,
 	SearchOverridesService,
-	NavigationService
+	SearchService,
+	WorkspaceService
 } from '../../services';
-import { adina, eva, myles, fakeBackendProvider } from '../../services/fake-backend';
+import { adina, eva, fakeBackendProvider, myles } from '../../services/fake-backend';
 import { countUniqueRolesFromPeople } from '../../utils';
 import { GrantPageComponent } from './grant-page.component';
-import { MockTranslationModule } from '../../../../mocks/translation';
-import { ChipComponent, ChipAddComponent, PageContainerComponent } from '../shared';
-import { MatDividerModule } from '@angular/material';
-import { WorkspaceComponent } from '..';
 import { GrantPageService } from './grant-page.service';
-import { HttpClientModule } from '@angular/common/http';
 
 describe('GrantPageComponent', () => {
 	let component: GrantPageComponent;
@@ -30,14 +29,17 @@ describe('GrantPageComponent', () => {
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			declarations: [
-				GrantPageComponent,
-				ChipComponent,
-				ChipAddComponent,
-				PageContainerComponent,
-				WorkspaceComponent
+			declarations: [GrantPageComponent, WorkspaceComponent],
+			imports: [
+				MockTranslationModule,
+				HttpClientModule,
+				NzCheckboxModule,
+				NzFormModule,
+				FormsModule,
+				NzDividerModule,
+				NzButtonModule,
+				NzTableModule
 			],
-			imports: [MockTranslationModule, MatDividerModule, HttpClientModule],
 			providers: [
 				GrantPageService,
 				RolesService,

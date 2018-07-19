@@ -11,7 +11,6 @@ import {
 	GrantPageComponent,
 	RevokePageComponent,
 	AppLogonPageComponent,
-	PlaygroundComponent,
 	TitleBarComponent,
 	IdentityLogonPageComponent
 } from './app/people/components';
@@ -110,9 +109,6 @@ wfm.directive('ng2PeopleAppLogonPage', downgradeComponent({
 }) as angular.IDirectiveFactory);
 wfm.directive('ng2PeopleIdentityLogonPage', downgradeComponent({
 	component: IdentityLogonPageComponent
-}) as angular.IDirectiveFactory);
-wfm.directive('ng2PeoplePlayground', downgradeComponent({
-	component: PlaygroundComponent
 }) as angular.IDirectiveFactory);
 
 wfm

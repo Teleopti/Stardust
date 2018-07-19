@@ -147,10 +147,10 @@ module.exports = env => {
 	});
 	const concatCss = new ConcatPlugin({
 		uglify: false,
-		sourceMap: true,
+		sourceMap: false,
 		name: 'distCss',
 		// outputPath: 'dist',
-		fileName: 'resources/modules_classic.min.css',
+		fileName: 'styleguide_classic.css',
 		filesToConcat: ['./node_modules/teleopti-styleguide/styleguide/dist/main.min.css'],
 		attributes: {
 			async: false
@@ -158,11 +158,33 @@ module.exports = env => {
 	});
 	const concatDarkCss = new ConcatPlugin({
 		uglify: false,
-		sourceMap: true,
+		sourceMap: false,
 		name: 'darkCss',
 		// outputPath: 'dist',
-		fileName: 'resources/modules_dark.min.css', // prod env uses a .min.css name instead
+		fileName: 'styleguide_dark.css', // prod env uses a .min.css name instead
 		filesToConcat: ['./node_modules/teleopti-styleguide/styleguide/dist/main_dark.min.css'],
+		attributes: {
+			async: false
+		}
+	});
+	const concatCssDependencies = new ConcatPlugin({
+		uglify: false,
+		sourceMap: false,
+		name: 'dependenciesCss',
+		// outputPath: 'dist',
+		fileName: 'dependencies.css', // prod env uses a .min.css name instead
+		filesToConcat: [
+			'./node_modules/c3/c3.min.css',
+			'./node_modules/bootstrap/dist/css/bootstrap.css',
+			'./node_modules/angular-resizable/src/angular-resizable.css',
+			'./node_modules/angular-ui-tree/source/angular-ui-tree.css',
+			'./node_modules/angular-ui-grid/ui-grid.css',
+			'./node_modules/angular-material/angular-material.css',
+			'./node_modules/angular-gantt/assets/angular-gantt.css',
+			'./node_modules/angular-gantt/assets/angular-gantt-plugins.css',
+			'./node_modules/angular-gantt/assets/angular-gantt-table-plugin.css',
+			'./node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.css'
+		],
 		attributes: {
 			async: false
 		}
@@ -170,15 +192,15 @@ module.exports = env => {
 
 	const copyPlugin = new CopyWebpackPlugin([
 		// sourceMaps from old
-		{
-			from: { glob: 'vendor/*/*.@(ttf|woff|eot)' },
-			to: 'resources',
-			flatten: true
-		},
+		// {
+		// 	from: { glob: 'vendor/*/*.@(ttf|woff|eot)' },
+		// 	to: 'resources',
+		// 	flatten: true
+		// },
 		// extras from old
 		{
 			from: { glob: 'node_modules/angular-ui-grid/*.@(ttf|woff|eot)' },
-			to: 'resources',
+			to: '',
 			flatten: true
 		},
 		// bootstrap from old
@@ -197,15 +219,17 @@ module.exports = env => {
 	});
 	const postCleanUpPlugin = new ExtraneousFileCleanupPlugin({
 		extensions: ['.js'],
-		paths: ['style_classic', 'style_dark'],
+		paths: ['style_classic', 'style_dark', 'ant_classic', 'ant_dark'],
 		minBytes: 3500
 	});
 
 	const config = {
 		entry: {
 			// ignore_entry: './webpack-entry.js',
-			'style_classic.min': './css/style.scss',
-			'style_dark.min': './css/darkstyle.scss'
+			style_classic: './css/style.scss',
+			style_dark: './css/darkstyle.scss',
+			ant_classic: './src/themes/ant_classic.less',
+			ant_dark: './src/themes/ant_dark.less'
 		},
 		mode: isProd ? 'production' : 'development',
 		output: {
@@ -239,6 +263,21 @@ module.exports = env => {
 							}
 						}
 					]
+				},
+				{
+					test: /\.less$/,
+					use: [
+						MiniCssExtractPlugin.loader,
+						{ loader: 'css-loader', options: { url: false } },
+						'postcss-loader',
+						{
+							loader: 'less-loader',
+							options: {
+								javascriptEnabled: true,
+								relativeUrls: false
+							}
+						}
+					]
 				}
 			]
 		},
@@ -247,6 +286,7 @@ module.exports = env => {
 			postCleanUpPlugin,
 			concatJsModules,
 			concatJs,
+			concatCssDependencies,
 			concatCss,
 			concatDarkCss,
 			extractSass,

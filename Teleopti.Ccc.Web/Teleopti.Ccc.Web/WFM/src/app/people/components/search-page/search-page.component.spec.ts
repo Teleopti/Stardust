@@ -1,39 +1,30 @@
 import { HttpClientModule } from '@angular/common/http';
 import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { NzButtonModule, NzFormModule, NzInputModule, NzTableModule } from 'ng-zorro-antd';
+import { of } from 'rxjs';
+import { WorkspaceComponent } from '..';
 import { configureTestSuite } from '../../../../configure-test-suit';
-import { PeopleTestModule } from '../../people.test.module';
+import { MockTranslationModule } from '../../../../mocks/translation';
 import {
-	fakeBackendProvider,
-	PeopleSearchResult,
-	eva,
 	adina,
-	myles,
-	PeopleSearchQuery,
 	COLUMNS,
 	DIRECTION,
-	WorkspaceService,
-	SearchService,
-	SearchOverridesService,
+	eva,
+	fakeBackendProvider,
+	myles,
 	NavigationService,
-	RolesService
+	PeopleSearchQuery,
+	PeopleSearchResult,
+	RolesService,
+	SearchOverridesService,
+	SearchService,
+	WorkspaceService
 } from '../../services';
 import { SearchPageComponent } from './search-page.component';
-import { of } from 'rxjs';
-import { asElementData } from '@angular/core/src/view';
-import {
-	MatTableModule,
-	MatPaginatorModule,
-	MatCheckboxModule,
-	MatMenuModule,
-	MatInputModule,
-	MatSortModule
-} from '@angular/material';
-import { MockTranslationModule } from '../../../../mocks/translation';
-import { ReactiveFormsModule } from '@angular/forms';
-import { PageContainerComponent, WorkspaceComponent } from '..';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('SearchPageComponent', () => {
 	let component: SearchPageComponent;
@@ -44,18 +35,16 @@ describe('SearchPageComponent', () => {
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			declarations: [SearchPageComponent, PageContainerComponent, WorkspaceComponent],
+			declarations: [SearchPageComponent, WorkspaceComponent],
 			imports: [
 				MockTranslationModule,
 				HttpClientModule,
-				MatTableModule,
-				MatPaginatorModule,
-				MatCheckboxModule,
-				MatMenuModule,
-				MatInputModule,
 				ReactiveFormsModule,
 				NoopAnimationsModule,
-				MatSortModule
+				NzFormModule,
+				NzButtonModule,
+				NzTableModule,
+				NzInputModule
 			],
 			providers: [
 				fakeBackendProvider,
@@ -82,6 +71,8 @@ describe('SearchPageComponent', () => {
 	it('should display search results', async(() => {
 		component.searchPeople();
 
+		fixture.detectChanges();
+
 		fixture.whenStable().then(() => {
 			expect(page.resultRows.length).toBeGreaterThan(0);
 		});
@@ -89,6 +80,8 @@ describe('SearchPageComponent', () => {
 
 	it('should be able to select people', async(() => {
 		component.searchPeople();
+
+		fixture.detectChanges();
 
 		fixture.whenStable().then(() => {
 			expect(page.resultRows.length).toBeGreaterThan(0);
@@ -103,6 +96,8 @@ describe('SearchPageComponent', () => {
 
 	it('should be able to select all people', async(() => {
 		component.searchPeople();
+
+		fixture.detectChanges();
 
 		fixture.whenStable().then(() => {
 			expect(page.resultRows.length).toBeGreaterThan(0);

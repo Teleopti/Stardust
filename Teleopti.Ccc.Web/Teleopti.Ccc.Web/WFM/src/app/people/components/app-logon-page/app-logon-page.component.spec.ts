@@ -1,24 +1,23 @@
+import { HttpClientModule } from '@angular/common/http';
 import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { NzButtonModule, NzFormModule, NzGridModule, NzTableModule } from 'ng-zorro-antd';
+import { WorkspaceComponent } from '..';
 import { configureTestSuite } from '../../../../configure-test-suit';
-import { PeopleTestModule } from '../../people.test.module';
+import { MockTranslationModule } from '../../../../mocks/translation';
 import {
 	adina,
-	WorkspaceService,
-	NavigationService,
 	fakeBackendProvider,
 	LogonInfoService,
-	SearchService
+	NavigationService,
+	SearchService,
+	WorkspaceService
 } from '../../services';
 import { adinaLogon } from '../../services/fake-backend/logons';
 import { AppLogonPageComponent } from './app-logon-page.component';
-import { MockTranslationModule } from '../../../../mocks/translation';
-import { ReactiveFormsModule } from '@angular/forms';
-import { MatInputModule } from '@angular/material';
-import { PageContainerComponent, WorkspaceComponent } from '..';
-import { HttpClientModule } from '@angular/common/http';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('AppLogonPageComponent', () => {
 	let component: AppLogonPageComponent;
@@ -30,13 +29,16 @@ describe('AppLogonPageComponent', () => {
 
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
-			declarations: [AppLogonPageComponent, PageContainerComponent, WorkspaceComponent],
+			declarations: [AppLogonPageComponent, WorkspaceComponent],
 			imports: [
 				MockTranslationModule,
 				ReactiveFormsModule,
-				MatInputModule,
 				HttpClientModule,
-				NoopAnimationsModule
+				NoopAnimationsModule,
+				NzFormModule,
+				NzGridModule,
+				NzTableModule,
+				NzButtonModule
 			],
 			providers: [fakeBackendProvider, WorkspaceService, NavigationService, LogonInfoService, SearchService]
 		}).compileComponents();

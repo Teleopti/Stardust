@@ -1,42 +1,38 @@
-<people-page-container data-test-application-logon>
-  <div class="con-row">
-    <div class="blue-box con-flex">
-      <h2>Application logon</h2>
+<div class="con-row" data-test-application-logon>
+  <div class="con-flex">
+    <div class="con-row">
+      <div class="con-flex">
+        <h2>{{'ApplicationLogon' | translate}}</h2>
+      </div>
     </div>
-  </div>
-  <form [formGroup]="form">
-    <form formArrayName="people">
-      <ng-container *ngFor="let personGroup of people.controls; let i=index" [formGroupName]="i">
-        <div class="con-row" data-test-person>
-          <div class="con-flex">
-            <mat-form-field class="full-width">
-              <input matInput formControlName="FullName" placeholder="Full name" data-test-person-name>
-            </mat-form-field>
-          </div>
-          <div class="con-flex">
-            <mat-form-field class="full-width">
-              <input matInput formControlName="Logon" maxlength="50" placeholder="Application logon" data-test-person-logon>
-              <mat-error *ngIf="personGroup.get('Logon').hasError('duplicateNameValidator')">
-                {{'PeopleUsernameIsAlreadyInUse' | translate}}
-              </mat-error>
-              <mat-error *ngIf="personGroup.get('Logon').hasError('duplicateFormNameValidator')">
-                {{'PeopleDuplicateUsernameInForm' | translate}}
-              </mat-error>
-              <mat-error *ngIf="personGroup.get('Logon').hasError('maxLength')">
-                <ng-container translate [translateParams]="{'0':50}">PeopleUsernameHasALimitOfXCharacters</ng-container>
-              </mat-error>
-            </mat-form-field>
-          </div>
-        </div>
-      </ng-container>
+    <form [formGroup]="form">
+      <form formArrayName="people">
+        <ng-container *ngFor="let personGroup of people.controls; let i=index" [formGroupName]="i">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="7">{{ personGroup.get('FullName').value }}</nz-form-label>
+            <nz-form-control [nzSpan]="7" nzHasFeedback>
+              <input nz-input formControlName="Logon" placeholder="Application logon" data-test-person-logon>
+              <nz-form-explain *ngIf="personGroup.get('Logon').dirty && personGroup.get('Logon').errors">
+                <ng-container *ngIf="personGroup.get('Logon').hasError('duplicateNameValidator')">
+                  {{'PeopleUsernameIsAlreadyInUse' | translate}}
+                </ng-container>
+                <ng-container *ngIf="personGroup.get('Logon').hasError('duplicateFormNameValidator')">
+                  {{'PeopleDuplicateUsernameInForm' | translate}}
+                </ng-container>
+                <ng-container *ngIf="personGroup.get('Logon').hasError('maxLength')" translate [translateParams]="{'0':50}">PeopleUsernameHasALimitOfXCharacters</ng-container>
+              </nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+        </ng-container>
+      </form>
     </form>
-  </form>
-  <div class="con-row">
-    <div class="con-flex">
-      <aside class="action-buttons">
-        <button mat-button (click)="nav.navToSearch()">{{'Cancel' | translate}}</button>
-        <button mat-button color="primary" [disabled]="!isValid()" (click)="save()" data-test-save>{{'Save' | translate}}</button>
-      </aside>
+    <div nz-row>
+      <div nz-col [nzSpan]="14">
+        <aside class="action-buttons">
+          <button nz-button nzType="default" (click)="nav.navToSearch()">{{'Cancel' | translate}}</button>
+          <button nz-button nzType="primary" [disabled]="!isValid()" (click)="save()" data-test-save>{{'Save' | translate}}</button>
+        </aside>
+      </div>
     </div>
   </div>
-</people-page-container>
+</div>

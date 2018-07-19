@@ -1,12 +1,12 @@
+import { HttpClientModule } from '@angular/common/http';
 import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { NzButtonModule, NzTableModule } from 'ng-zorro-antd';
 import { configureTestSuite } from '../../../../configure-test-suit';
-import { PeopleTestModule } from '../../people.test.module';
-import { adina, eva, myles, fakeBackendProvider, SearchService, WorkspaceService } from '../../services';
-import { WorkspaceComponent } from './workspace.component';
 import { MockTranslationModule } from '../../../../mocks/translation';
-import { HttpClientModule } from '@angular/common/http';
+import { adina, eva, fakeBackendProvider, myles, SearchService, WorkspaceService } from '../../services';
+import { WorkspaceComponent } from './workspace.component';
 
 describe('WorkspaceComponent', () => {
 	let component: WorkspaceComponent;
@@ -18,7 +18,7 @@ describe('WorkspaceComponent', () => {
 	beforeEach(async(() => {
 		TestBed.configureTestingModule({
 			declarations: [WorkspaceComponent],
-			imports: [MockTranslationModule, HttpClientModule],
+			imports: [MockTranslationModule, HttpClientModule, NzTableModule, NzButtonModule],
 			providers: [fakeBackendProvider, SearchService, WorkspaceService]
 		}).compileComponents();
 	}));

@@ -71,29 +71,51 @@ module.exports = function(grunt) {
 			}
 		},
 		sass: {
-			options: {
-				includePaths: ['node_modules/teleopti-styleguide/styleguide/sass']
+			dev: {
+				options: {
+					includePaths: ['node_modules/teleopti-styleguide/styleguide/sass'],
+					outputStyle: 'nested'
+				},
+				dist: {
+					files: {
+						'css/style_classic.css': ['css/style.scss'],
+						'css/style_dark.css': ['css/darkstyle.scss']
+					}
+				}
 			},
-			dist: {
-				files: {
-					'css/style_classic.css': ['css/style.scss'],
-					'css/style_dark.css': ['css/darkstyle.scss']
+			prod: {
+				options: {
+					includePaths: ['node_modules/teleopti-styleguide/styleguide/sass'],
+					outputStyle: 'compressed'
+				},
+				dist: {
+					files: {
+						'css/style_classic.css': ['css/style.scss'],
+						'css/style_dark.css': ['css/darkstyle.scss']
+					}
 				}
 			}
 		},
-
-		cssmin: {
-			options: {
-				mergeIntoShorthands: false,
-				roundingPrecision: -1,
-				level: 1
-			},
-			target: {
+		less: {
+			development: {
+				options: {
+					javascriptEnabled: true,
+					relativeUrls: false
+				},
 				files: {
-					'dist/style_classic.min.css': ['dist/style_classic.css'],
-					'dist/style_dark.min.css': ['dist/style_dark.css'],
-					'dist/resources/modules_classic.min.css': ['dist/resources/modules_classic.css'],
-					'dist/resources/modules_dark.min.css': ['dist/resources/modules_dark.css']
+					'dist/ant_classic.css': 'src/themes/ant_classic.less',
+					'dist/ant_dark.css': 'src/themes/ant_dark.less'
+				}
+			},
+			production: {
+				options: {
+					compress: true,
+					javascriptEnabled: true,
+					relativeUrls: false
+				},
+				files: {
+					'dist/ant_classic.css': 'src/themes/ant_classic.less',
+					'dist/ant_dark.css': 'src/themes/ant_dark.less'
 				}
 			}
 		},
@@ -216,11 +238,26 @@ module.exports = function(grunt) {
 			},
 			distCss: {
 				src: ['node_modules/teleopti-styleguide/styleguide/dist/main.min.css'],
-				dest: 'dist/resources/modules_classic.css'
+				dest: 'dist/styleguide_classic.css'
 			},
 			distDarkCss: {
 				src: ['node_modules/teleopti-styleguide/styleguide/dist/main_dark.min.css'],
-				dest: 'dist/resources/modules_dark.css'
+				dest: 'dist/styleguide_dark.css'
+			},
+			distCssDependencies: {
+				src: [
+					'node_modules/c3/c3.min.css',
+					'node_modules/bootstrap/dist/css/bootstrap.css',
+					'node_modules/angular-resizable/src/angular-resizable.css',
+					'node_modules/angular-ui-tree/source/angular-ui-tree.css',
+					'node_modules/angular-ui-grid/ui-grid.css',
+					'node_modules/angular-material/angular-material.css',
+					'node_modules/angular-gantt/assets/angular-gantt.css',
+					'node_modules/angular-gantt/assets/angular-gantt-plugins.css',
+					'node_modules/angular-gantt/assets/angular-gantt-table-plugin.css',
+					'node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.css'
+				],
+				dest: 'dist/dependencies.css'
 			}
 		},
 
@@ -310,28 +347,6 @@ module.exports = function(grunt) {
 			}
 		},
 		copy: {
-			devCss: {
-				files: [
-					{
-						expand: true,
-						cwd: 'dist/resources',
-						src: ['*.css', '!*.min.css'],
-						dest: 'dist/resources/',
-						rename: function(dest, src) {
-							return dest + src.replace('.css', '.min.css');
-						}
-					},
-					{
-						expand: true,
-						cwd: 'css',
-						src: '*.css',
-						dest: 'dist/',
-						rename: function(dest, src) {
-							return dest + src.replace('.css', '.min.css');
-						}
-					}
-				]
-			},
 			sourceMaps: {
 				files: [
 					// includes files within path
@@ -351,7 +366,7 @@ module.exports = function(grunt) {
 						expand: true,
 						cwd: 'node_modules/angular-ui-grid',
 						src: ['*.ttf', '*.woff', '*.eot'],
-						dest: 'dist/resources/',
+						dest: 'dist/',
 						filter: 'isFile'
 					}
 				]
@@ -453,8 +468,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-copy');
-	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-contrib-concat');
+	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-sass');
 	grunt.loadNpmTasks('grunt-karma');
 	grunt.loadNpmTasks('grunt-iisexpress');
@@ -473,23 +488,18 @@ module.exports = function(grunt) {
 	grunt.registerTask('default', ['devDist', 'test', 'watch:dev']); // this task run the main task and then watch for file changes
 	grunt.registerTask('test', ['ngtemplates', 'exec:karmaDevTest']);
 	grunt.registerTask('devTest', ['ngtemplates', 'exec:karmaDevTest']);
-	grunt.registerTask('devDistWebpack', [
-		'ngtemplates',
-		'exec:webpackDevDist',
-		// 'copy:devCss', // just renames files from x.css to x.min.css
-		// 'generateIndexDev', // processhtml:dev is mimicked
-		'exec:ngbuild_dev'
-	]);
+	grunt.registerTask('devDistWebpack', ['ngtemplates', 'exec:webpackDevDist', 'exec:ngbuild_dev']);
 	grunt.registerTask('buildAngularJsPart', [
 		'ngtemplates',
-		'sass',
+		'sass:dev',
+		'less:development',
 		'imageEmbed',
+		'concat:distCssDependencies',
 		'concat:distModules',
 		'concat:devJs',
 		'concat:distJsForDesktop',
 		'newer:concat:distCss',
 		'newer:concat:distDarkCss',
-		'copy:devCss',
 		'newer:copy',
 		'generateIndexDev'
 	]);
@@ -516,13 +526,14 @@ module.exports = function(grunt) {
 	grunt.registerTask('devDistWatch', ['devDist', 'watch:dev']);
 	grunt.registerTask('dist', [
 		'ngtemplates',
-		'sass',
+		'sass:prod',
+		'less:production',
 		'imageEmbed',
+		'concat:distCssDependencies',
 		'concat:distModules',
 		'concat:distJsForDesktop',
 		'concat:distCss',
 		'concat:distDarkCss',
-		'cssmin',
 		'uglify:dist',
 		'uglify:distForDesktop',
 		'copy:extras',

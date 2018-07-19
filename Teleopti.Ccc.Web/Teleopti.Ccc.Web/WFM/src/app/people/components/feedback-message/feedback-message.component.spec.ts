@@ -1,11 +1,10 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { FeedbackMessageComponent } from './feedback-message.component';
-import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { HttpClientModule } from '@angular/common/http';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { configureTestSuite } from '../../../../configure-test-suit';
 import { MockTranslationModule } from '../../../../mocks/translation';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { FeedbackMessageComponent } from './feedback-message.component';
 
 describe('FeedbackMessageComponent', () => {
 	let component: FeedbackMessageComponent;

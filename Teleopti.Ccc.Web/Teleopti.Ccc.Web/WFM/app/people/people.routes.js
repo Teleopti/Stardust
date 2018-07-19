@@ -36,13 +36,6 @@
 					content: { template: '<ng2-people-identity-logon-page></ng2-people-identity-logon-page>' }
 				}
 			})
-			.state('people.playground', {
-				url: '/ui/playground',
-				views: {
-					header: { template: '<ng2-people-title-bar></ng2-people-title-bar>' },
-					content: { template: '<ng2-people-playground></ng2-people-playground>' }
-				}
-			})
 			.state('people.index', {
 				url: '/search',
 				views: {

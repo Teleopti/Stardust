@@ -1,7 +1,9 @@
-import { IAngularStatic, IControllerConstructor, IScope, IRootScopeService, IQService } from 'angular';
+import { IQService, IScope } from 'angular';
 import { IWfmRootScopeService } from './main';
 
 MainController.$inject = ['$scope', '$rootScope', 'ThemeService', '$q'];
+
+type ThemeType = 'classic' | 'dark' | '';
 
 export function MainController($scope: IScope, $rootScope: IWfmRootScopeService, ThemeService, $q: IQService) {
 	var vm = this;
@@ -10,43 +12,62 @@ export function MainController($scope: IScope, $rootScope: IWfmRootScopeService,
 		vm.currentStyle = result.data.Name;
 	});
 
-	$rootScope.setTheme = function(theme: string) {
-		if (checkCurrentTheme() != theme) {
+	$rootScope.setTheme = function(theme: ThemeType) {
+		if (getCurrentTheme() != theme) {
 			vm.styleIsFullyLoaded = false;
-			applyThemeToModules(theme);
-		}
-
-		if (theme === 'dark' && document.body) {
-			document.body.classList.add('angular-theme-dark');
-			document.body.classList.remove('angular-theme-classic');
-		}
-		if (theme === 'classic' && document.body) {
-			document.body.classList.add('angular-theme-classic');
-			document.body.classList.remove('angular-theme-dark');
+			const waitForThemes = Promise.all([
+				applyAngularMatrialTheme(theme),
+				applyStyleguideTheme(theme),
+				applyAntTheme(theme)
+			]);
+			waitForThemes.then(() => {
+				$scope.$apply(function() {
+					vm.styleIsFullyLoaded = true;
+				});
+			});
 		}
 	};
 
-	function applyThemeToModules(theme) {
-		var oldNode = document.getElementById('themeModules');
-		var newNode = document.createElement('link');
-
-		newNode.id = 'themeModules';
-		newNode.rel = 'stylesheet';
-		newNode.href = '';
-		newNode.onload = function() {
-			$scope.$apply(function() {
-				vm.styleIsFullyLoaded = true;
-			});
-		};
-
-		newNode.setAttribute('href', 'dist/resources/modules_' + theme + '.min.css');
-		newNode.setAttribute('class', theme);
-
-		document.body.replaceChild(newNode, oldNode);
+	async function applyAngularMatrialTheme(theme: ThemeType) {
+		if (theme === 'dark' && document.documentElement) {
+			document.documentElement.classList.add('angular-theme-dark');
+			document.documentElement.classList.remove('angular-theme-classic');
+		}
+		if (theme === 'classic' && document.documentElement) {
+			document.documentElement.classList.add('angular-theme-classic');
+			document.documentElement.classList.remove('angular-theme-dark');
+		}
+		return;
 	}
 
-	function checkCurrentTheme() {
-		let classList = document.body.classList;
+	function applyStyleguideTheme(theme) {
+		return replaceCssFile(`dist/styleguide_${theme}.css`, 'themeStyleguide', theme);
+	}
+
+	function applyAntTheme(theme: ThemeType) {
+		return replaceCssFile(`dist/ant_${theme}.css`, 'themeAnt', theme);
+	}
+
+	function replaceCssFile(path: string, id: string, theme: ThemeType) {
+		return new Promise((res, rej) => {
+			var oldNode = document.getElementById(id);
+			var newNode = document.createElement('link');
+			newNode.id = id;
+			newNode.rel = 'stylesheet';
+
+			newNode.addEventListener('load', () => {
+				res();
+			});
+
+			newNode.setAttribute('href', path);
+			newNode.setAttribute('class', theme);
+
+			document.body.replaceChild(newNode, oldNode);
+		});
+	}
+
+	function getCurrentTheme(): ThemeType {
+		let classList = document.documentElement.classList;
 		if (classList.contains('angular-theme-dark')) {
 			return 'dark';
 		} else if (classList.contains('angular-theme-classic')) {

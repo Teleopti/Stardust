@@ -5,6 +5,9 @@ import { NavigationService, WorkspaceService } from '../../services';
 import { Person, Role } from '../../types';
 import { RevokePageService } from './revoke-page.service';
 
+interface SelectableRole extends Role {
+	selected: boolean;
+}
 @Component({
 	selector: 'people-revoke',
 	templateUrl: './revoke-page.component.html',
@@ -19,11 +22,17 @@ export class RevokePageComponent implements OnInit, OnDestroy {
 	) {}
 
 	people: Person[] = [];
-	selectedRoles: Role[] = [];
+	selectableRoles: SelectableRole[] = [];
 
 	private componentDestroyed: Subject<any> = new Subject();
 
 	ngOnInit() {
+		this.revokePageService.rolesOfPeople$.subscribe({
+			next: (roles: Role[]) => {
+				const selectableRoles = roles.map(role => ({ ...role, selected: false }));
+				this.selectableRoles = selectableRoles;
+			}
+		});
 		this.workspaceService.people$.pipe(takeUntil(this.componentDestroyed)).subscribe({
 			next: (people: Person[]) => {
 				if (people.length === 0) return this.nav.navToSearch();
@@ -38,21 +47,28 @@ export class RevokePageComponent implements OnInit, OnDestroy {
 	}
 
 	toggleSelectedRole(role: Role): void {
-		this.selectedRoles = this.selectedRoles.find(r => r.Id === role.Id)
-			? this.selectedRoles.filter(r => r.Id !== role.Id)
-			: this.selectedRoles.concat(role);
+		const roleId = role.Id;
+		this.selectableRoles = this.selectableRoles.map(role => {
+			if (roleId === role.Id)
+				return {
+					...role,
+					selected: !role.selected
+				};
+			else return role;
+		});
 	}
 
 	isRoleSelected(roleId: string): boolean {
-		return !!this.selectedRoles.find(r => r.Id === roleId);
+		return !!this.selectableRoles.find(r => r.Id === roleId && r.selected);
 	}
 
 	isAnyRoleSelected(): boolean {
-		return this.selectedRoles.length > 0;
+		return this.selectableRoles.filter(role => role.selected).length > 0;
 	}
 
 	save() {
-		this.revokePageService.revokeRoles(this.selectedRoles, this.people).subscribe({
+		const selectedRoles = this.selectableRoles.filter(role => role.selected);
+		this.revokePageService.revokeRoles(selectedRoles, this.people).subscribe({
 			next: () => this.close()
 		});
 	}

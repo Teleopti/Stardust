@@ -1,39 +1,16 @@
 import { NgModule } from '@angular/core';
-import {
-	MatButtonModule,
-	MatCheckboxModule,
-	MatDatepickerModule,
-	MatDialogModule,
-	MatDividerModule,
-	MatGridListModule,
-	MatInputModule,
-	MatListModule,
-	MatMenuModule,
-	MatNativeDateModule,
-	MatPaginatorModule,
-	MatProgressSpinnerModule,
-	MatSortModule,
-	MatTableModule,
-	MatTooltipModule
-} from '@angular/material';
+import { TranslateModule } from '@ngx-translate/core';
 import { SharedModule } from '../shared/shared.module';
 import {
 	AppLogonPageComponent,
-	ChipAddComponent,
-	ChipComponent,
-	ChipRemoveComponent,
+	FeedbackMessageComponent,
 	GrantPageComponent,
 	IdentityLogonPageComponent,
-	PageContainerComponent,
-	PlaygroundComponent,
 	RevokePageComponent,
 	SearchPageComponent,
 	TitleBarComponent,
-	WorkspaceComponent,
-	FeedbackMessageComponent
+	WorkspaceComponent
 } from './components';
-import { TranslateModule, TranslateService, TranslateParser } from '@ngx-translate/core';
-
 import {
 	LogonInfoService,
 	NavigationService,
@@ -48,37 +25,14 @@ import { CustomTranslateParser } from '../core/translation';
 	declarations: [
 		GrantPageComponent,
 		RevokePageComponent,
-		ChipComponent,
-		ChipAddComponent,
-		ChipRemoveComponent,
 		SearchPageComponent,
 		WorkspaceComponent,
 		TitleBarComponent,
-		PageContainerComponent,
 		AppLogonPageComponent,
 		IdentityLogonPageComponent,
-		PlaygroundComponent,
 		FeedbackMessageComponent
 	],
-	imports: [
-		SharedModule,
-		MatCheckboxModule,
-		MatDialogModule,
-		MatPaginatorModule,
-		MatButtonModule,
-		MatDividerModule,
-		MatTableModule,
-		MatSortModule,
-		MatProgressSpinnerModule,
-		MatInputModule,
-		MatListModule,
-		MatGridListModule,
-		MatDatepickerModule,
-		MatNativeDateModule,
-		MatTooltipModule,
-		MatMenuModule,
-		TranslateModule.forChild()
-	],
+	imports: [SharedModule, TranslateModule.forChild()],
 	providers: [
 		WorkspaceService,
 		RolesService,
@@ -95,7 +49,6 @@ import { CustomTranslateParser } from '../core/translation';
 		RevokePageComponent,
 		AppLogonPageComponent,
 		IdentityLogonPageComponent,
-		PlaygroundComponent,
 		FeedbackMessageComponent
 	]
 })

@@ -17584,4 +17584,8 @@ The application will now exit.</value>
     <value>Preview the new Forecasts!</value>
     <comment>Text for notice in navbar of fat client</comment>
   </data>
+  <data name="ActiveSelection" xml:space="preserve">
+    <value>Active selection</value>
+    <comment>Used in people "workspace" to tell which people are selected</comment>
+  </data>
 </root>

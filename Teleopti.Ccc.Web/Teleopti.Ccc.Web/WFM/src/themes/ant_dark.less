@@ -1,0 +1,67 @@
+@import '../../node_modules/ng-zorro-antd/src/ng-zorro-antd.less';
+@import './ant_common';
+@import './colors';
+
+// Colors & base
+@telop-text-secondary: #c4c4c4;
+
+@primary-color: @telop-dimmed-blue;
+@info-color: @telop-dimmed-blue;
+@success-color: #00ff99;
+@processing-color: @telop-dimmed-blue;
+@error-color: #e72e2e;
+@highlight-color: @red-6;
+@warning-color: @telop-dimmed-yellow;
+@normal-color: #d9d9d9;
+
+@body-background: @telop-black;
+@component-background: #2c2c2c; // Base background color for most components
+
+@heading-color: @telop-dimmed-light-blue;
+
+@text-color: @telop-white;
+@text-color-secondary: @telop-text-secondary;
+
+// Disabled states
+@disabled-color : #666;
+@disabled-bg : #444;
+
+// Input
+@input-color : @telop-white;
+@input-bg : #2c2c2c;
+@input-addon-bg : @background-color-light;
+@input-hover-border-color : @primary-color;
+@input-disabled-bg : @disabled-bg;
+
+// Border color
+@border-color-base : #666; // base border outline a component
+@border-color-split : #666; // split border inside a component
+
+// Buttons
+@btn-primary-color : @telop-white;
+@btn-primary-bg : @primary-color;
+@btn-default-bg : @telop-black;
+@btn-disable-bg : @disabled-bg;
+@btn-default-border : #999;
+
+// Table
+@table-row-hover-bg: #555;
+
+// HACKS FOR NON-THEMABLE PARTS :(
+.ant-checkbox {
+	.ant-checkbox-inner {
+		background-color: @component-background;
+	}
+	&.ant-checkbox-checked,
+	&.ant-checkbox-indeterminate {
+		.ant-checkbox-inner {
+			background-color: @primary-color;
+		}
+	}
+}
+
+.ant-alert {
+	&-info {
+		background-color: @telop-dark-blue;
+	}
+}

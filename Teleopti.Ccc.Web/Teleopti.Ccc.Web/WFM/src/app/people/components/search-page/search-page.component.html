@@ -1,79 +1,70 @@
-<people-page-container>
-  <div class="sub-header">
+<div class="con-row">
+  <div class="con-flex">
+    <div class="sub-header">
+      <div class="con-row">
+        <div class="con-flex">
+          <nz-input-group [nzSuffix]="suffixTemplate" nzPrefixIcon="anticon anticon-search">
+            <input nz-input placeholder="Search" [formControl]="searchControl" (keyup.enter)="onSearch()" data-test-searchinput>
+          </nz-input-group>
+          <ng-template #suffixTemplate>
+            <i class="anticon anticon-close-circle" (click)="searchControl.setValue('')" *ngIf="searchControl.value.length"></i>
+          </ng-template>
+        </div>
+        <div class="con-flex x3">
+          <button nz-button nzType="default" data-test-grant-button [disabled]="!workspaceService.isAnySelected()" (click)="nav.navToGrant()">
+            {{'PeopleGrantRole' | translate}}</button>
+          <button nz-button nzType="default" data-test-revoke-button [disabled]="!workspaceService.isAnySelected()" (click)="nav.navToRevoke()">
+            {{'PeopleRevokeRole' | translate}}</button>
+          <button nz-button nzType="default" data-test-applicationlogon-button [disabled]="!workspaceService.isAnySelected()" (click)="nav.navToApplicationLogon()">
+            {{'PeopleApplicationLogon' | translate}}</button>
+          <button nz-button nzType="default" data-test-identitylogon-button [disabled]="!workspaceService.isAnySelected()" (click)="nav.navToIdentityLogon()">
+            {{'PeopleIdentityLogon' | translate}}</button>
+        </div>
+      </div>
+    </div>
     <div class="con-row">
-      <div class="con-flex">
-        <mat-form-field>
-          <input matInput placeholder="Search" [formControl]="searchControl" (keyup.enter)="onSearch()" data-test-searchinput>
-          <span matPrefix>
-            <i class="mdi mdi-magnify"></i>&nbsp;
-          </span>
-        </mat-form-field>
+      <div class="con-flex table-container" data-test-search>
+        <nz-table #basicTable (nzCurrentPageDataChange)="nzOnCurrentPageDataChange($event)" (nzPageSizeChange)="nzOnPageSizeChange($event)"
+          (nzPageIndexChange)="nzOnPageIndexChange($event)" [nzData]="peopleDataSet" [nzFrontPagination]="false" nzShowPagination
+          [nzPageSizeOptions]="[20, 50, 100, 500]" [nzSize]="'small'" nzShowSizeChanger [nzPageIndex]="searchService.pageIndex + 1"
+          [nzPageSize]="searchService.pageSize" [nzTotal]="searchService.lastQuerySize">
+          <thead>
+            <tr>
+              <th nzWidth="62px" nzShowCheckbox [nzChecked]="isAllSelected()" [nzIndeterminate]="isAnySelected() && !isAllSelected()" (nzCheckedChange)="selectAllOnPage()"></th>
+              <th (click)="sort('FirstName')" data-test-sort-fn>First name
+                <ng-container *ngIf="isSortingBy('FirstName')">
+                  <i *ngIf="isSortingAsc()" class="anticon anticon-arrow-up"></i>
+                  <i *ngIf="isSortingDesc()" class="anticon anticon-arrow-down"></i>
+                </ng-container>
+              </th>
+              <th (click)="sort('LastName')">Last name
+                <ng-container *ngIf="isSortingBy('LastName')">
+                  <i *ngIf="isSortingAsc()" class="anticon anticon-arrow-up"></i>
+                  <i *ngIf="isSortingDesc()" class="anticon anticon-arrow-down"></i>
+                </ng-container>
+              </th>
+              <th (click)="sort('SiteTeam')">Site/Team
+                <ng-container *ngIf="isSortingBy('SiteTeam')">
+                  <i *ngIf="isSortingAsc()" class="anticon anticon-arrow-up"></i>
+                  <i *ngIf="isSortingDesc()" class="anticon anticon-arrow-down"></i>
+                </ng-container>
+              </th>
+              <th>Roles</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let person of basicTable.data" data-test-person>
+              <td nzShowCheckbox [nzChecked]="workspaceService.isPersonSelected(person.Id)" (nzCheckedChange)="toggleSelectedPerson(person.Id)"
+                (click)="$event.stopPropagation()"></td>
+              <td data-test-person-firstname>{{person.FirstName}}</td>
+              <td data-test-person-lastname>{{person.LastName}}</td>
+              <td data-test-person-site-team>{{person.SiteTeam}}</td>
+              <td data-test-person-role>{{personToRoles(person)}}</td>
+            </tr>
+          </tbody>
+        </nz-table>
       </div>
-      <div class="con-flex x3">
-        <button mat-raised-button color="primary" data-test-grant-button [disabled]="!workspaceService.isAnySelected()" (click)="nav.navToGrant()">
-          {{'PeopleGrantRole' | translate}}</button>
-        <button mat-raised-button color="primary" data-test-revoke-button [disabled]="!workspaceService.isAnySelected()" (click)="nav.navToRevoke()">
-          {{'PeopleRevokeRole' | translate}}</button>
-        <button mat-raised-button color="primary" data-test-applicationlogon-button [disabled]="!workspaceService.isAnySelected()"
-          (click)="nav.navToApplicationLogon()">
-          {{'PeopleApplicationLogon' | translate}}</button>
-        <button mat-raised-button color="primary" data-test-identitylogon-button [disabled]="!workspaceService.isAnySelected()" (click)="nav.navToIdentityLogon()">
-          {{'PeopleIdentityLogon' | translate}}</button>
-      </div>
+      <people-workspace class="con-flex"></people-workspace>
     </div>
   </div>
-  <div class="con-row">
-    <div class="con-flex table-container">
-      <button *ngIf="false" mat-icon-button class="action-button" [matMenuTriggerFor]="menu" data-test-action-menu>
-        <i class="mdi mdi-dots-vertical"></i>
-      </button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="selectAllMatches()" data-test-selectallonallpages-button>{{'PeopleSelectAllOnAllPages' | translate}}</button>
-      </mat-menu>
-      <mat-table #table matSort (matSortChange)="sortData($event)" matSortActive="LastName" matSortDirection="asc" matSortDisableClear
-        [dataSource]="dataSource" data-test-search>
-
-        <!-- Checkbox Column -->
-        <ng-container matColumnDef="select">
-          <mat-header-cell *matHeaderCellDef>
-            <mat-checkbox (change)="selectAllOnPage()" [checked]="isAllSelected()" [indeterminate]="isAnySelected() && !isAllSelected()"
-              data-test-selectall-toggle>
-            </mat-checkbox>
-          </mat-header-cell>
-          <mat-cell *matCellDef="let row">
-            <mat-checkbox (click)="$event.stopPropagation()" (change)="toggleSelectedPerson(row.Id)" [checked]="workspaceService.isPersonSelected(row.Id)">
-            </mat-checkbox>
-          </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="FirstName">
-          <mat-header-cell mat-sort-header *matHeaderCellDef data-test-sort-fn> {{ 'FirstName' | translate}} </mat-header-cell>
-          <mat-cell *matCellDef="let person" data-test-person-firstname> {{person.FirstName}} </mat-cell>
-        </ng-container>
-
-        <!-- Name Column -->
-        <ng-container matColumnDef="LastName">
-          <mat-header-cell mat-sort-header *matHeaderCellDef> {{'LastName' | translate}} </mat-header-cell>
-          <mat-cell *matCellDef="let person" data-test-person-lastname> {{person.LastName}} </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="Roles">
-          <mat-header-cell *matHeaderCellDef> {{'Roles' | translate}} </mat-header-cell>
-          <mat-cell *matCellDef="let person" data-test-person-role> {{personToRoles(person)}} </mat-cell>
-        </ng-container>
-
-        <ng-container matColumnDef="SiteTeam">
-          <mat-header-cell mat-sort-header *matHeaderCellDef> {{'PeopleSiteTeam' | translate}} </mat-header-cell>
-          <mat-cell *matCellDef="let person" data-test-person-site-team> {{person.SiteTeam}} </mat-cell>
-        </ng-container>
-
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="toggleRow(row)" data-test-person>
-        </mat-row>
-      </mat-table>
-      <mat-paginator [length]="pagination.length" [pageIndex]="searchService.pageIndex" [pageSize]="searchService.pageSize" [pageSizeOptions]="pagination.pageSizeOptions"
-        (page)="paginationChanged($event)">
-      </mat-paginator>
-    </div>
-  </div>
-</people-page-container>
+</div>
