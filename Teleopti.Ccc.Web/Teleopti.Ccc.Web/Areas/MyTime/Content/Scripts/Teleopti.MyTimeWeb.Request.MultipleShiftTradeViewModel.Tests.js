@@ -1113,4 +1113,28 @@
 		equal(viewModel.loadedSchedulePairs()[0].mySchedule, null)
 		equal(viewModel.loadedSchedulePairs()[1].mySchedule.contractTime, "8:00");
 	});
+
+	test("should add plus one day when end time at day after", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel({});
+		Teleopti.MyTimeWeb.Common.SetupCalendar({
+			UseJalaaliCalendar: false,
+			DateFormat: 'YYYY-MM-DD',
+			TimeFormat: 'HH:mm'
+		});
+
+		var ret = viewModel.formatTime(moment("2018-07-19 02:00:00"), moment("2018-07-18"));
+		equal(ret, "02:00 +1");
+	});
+
+	test("should add minus one day when start time at day before", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel({});
+		Teleopti.MyTimeWeb.Common.SetupCalendar({
+			UseJalaaliCalendar: false,
+			DateFormat: 'YYYY-MM-DD',
+			TimeFormat: 'HH:mm'
+		});
+
+		var ret = viewModel.formatTime(moment("2018-07-19 23:00:00"), moment("2018-07-20"));
+		equal(ret, "23:00(-1)");
+	});
 });

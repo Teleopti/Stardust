@@ -254,7 +254,7 @@
 <div>
 	<style>
 		
-	</style>
+		</style>
 	<div class="shift-trade-request-74947" data-bind="visible: isDetailVisible">
 		<div class="schedules-side-by-side">
 			<div class="side-by-side-header">
@@ -282,7 +282,10 @@
 							<!--ko if:!mySchedule.isDayOff-->
 							<div class="schedule-layer-text-container">
 								<div data-bind="text:mySchedule.categoryName"></div>
-								<div><span data-bind="text:$root.formatTime(mySchedule.scheduleStart)"></span> - <span data-bind="text:$root.formatTime(mySchedule.scheduleEnd)"></span></div>
+								<div>
+									<span data-bind="text:$root.formatTime(mySchedule.scheduleStart, date)"></span> - 
+									<span data-bind="text:$root.formatTime(mySchedule.scheduleEnd, date)"></span>
+								</div>
 								<div class="shift-trade-contract"><span data-bind="text:mySchedule.contractTime"></span></div>
 							</div>
 							<!--/ko-->
@@ -327,7 +330,10 @@
 							<!--ko if:!targetSchedule.isDayOff-->
 							<div class="schedule-layer-text-container">
 								<div data-bind="text:targetSchedule.categoryName"></div>
-								<div><span data-bind="text:$root.formatTime(targetSchedule.scheduleStart)"></span> - <span data-bind="text:$root.formatTime(targetSchedule.scheduleEnd)"></span></div>
+								<div>
+									<span data-bind="text:$root.formatTime(targetSchedule.scheduleStart, date)"></span> - 
+									<span data-bind="text:$root.formatTime(targetSchedule.scheduleEnd, date)"></span>
+								</div>
 								<div class="shift-trade-contract"><span data-bind="text:targetSchedule.contractTime"></span></div>
 							</div>
 							<!--/ko-->

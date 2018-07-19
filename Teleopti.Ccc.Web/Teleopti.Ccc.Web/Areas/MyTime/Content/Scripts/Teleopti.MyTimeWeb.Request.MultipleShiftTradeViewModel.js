@@ -87,9 +87,13 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 		return dates;
 	});
 
-
-	self.formatTime = function (dateTime) {
-		return Teleopti.MyTimeWeb.Common.FormatTime(dateTime);
+	self.formatTime = function (dateTime, scheduleDate) {
+		var formatedDate = dateTime.format(Teleopti.MyTimeWeb.Common.TimeFormat);
+		if (dateTime && scheduleDate) {
+			if (dateTime.isBefore(scheduleDate, 'day')) formatedDate = formatedDate + "(-1)";
+			if (dateTime.isAfter(scheduleDate, 'day')) formatedDate = formatedDate + " +1";
+		} 
+		return formatedDate;
 	}
 
 	self.scrolled = function (data, event) {
@@ -825,10 +829,6 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 
 	self.formatDate = function (date) {
 		return date.format(self.DatePickerFormat());
-	}
-
-	self.formatTime = function (dateTime) {
-		return dateTime.format(Teleopti.MyTimeWeb.Common.TimeFormat);
 	}
 
 	self.isStartTimeFilterActived = ko.computed(function () {
