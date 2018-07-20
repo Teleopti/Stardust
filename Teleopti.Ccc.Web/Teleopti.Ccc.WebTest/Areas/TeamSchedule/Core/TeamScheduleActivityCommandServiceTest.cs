@@ -424,6 +424,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
 		}
 
+
 		[Test]
 		public void ShouldRemoveActivityWithPermission()
 		{
@@ -477,6 +478,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(3);
 		}
 
+		
 		[Test]
 		public void ShouldNotMoveActivityWhenNoMoveActivityPermission()
 		{
@@ -613,9 +615,10 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			ActivityCommandHandler.ResetCalledCount();
 			var results = Target.RemoveActivity(input);
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
-			results.Count.Should().Be.EqualTo(2);
-			results.First().ErrorMessages.Count.Should().Be.EqualTo(1);
-			results.First().ErrorMessages.Single().Should().Be.EqualTo(Resources.WriteProtectSchedule);
+
+			results.Single().ErrorMessages.Count().Should().Be.EqualTo(2);
+			results.Single().ErrorMessages.Should().Contain(Resources.NoPermissionRemoveAgentActivity);
+			results.Single().ErrorMessages.Should().Contain(Resources.WriteProtectSchedule);
 		}
 
 		[Test]

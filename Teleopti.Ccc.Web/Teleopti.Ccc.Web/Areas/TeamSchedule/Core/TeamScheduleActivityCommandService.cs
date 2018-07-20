@@ -174,9 +174,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			foreach (var personActivity in input.PersonActivities)
 			{
 				var person = _personRepository.Get(personActivity.PersonId);
-				var errorMessages = new List<string>();
+
 				foreach (var shiftLayerDate in personActivity.ShiftLayers)
 				{
+					var errorMessages = new List<string>();
 					var hasPermission = shiftLayerDate.IsOvertime
 						? checkFunctionPermission(DefinedRaptorApplicationFunctionPaths.RemoveOvertime, shiftLayerDate.Date, person,
 							errorMessages)
@@ -199,12 +200,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 							errorMessages.AddRange(command.ErrorMessages);
 						}
 					}
+					if (errorMessages.Any())
+						result.Add(new ActionResult(personActivity.PersonId)
+						{
+							ErrorMessages = errorMessages
+						});
 				}
 
-				result.AddRange(errorMessages.Select(msg => new ActionResult(personActivity.PersonId)
-				{
-					ErrorMessages = new List<string> { msg }
-				}));
+
 			}
 
 			return result;
