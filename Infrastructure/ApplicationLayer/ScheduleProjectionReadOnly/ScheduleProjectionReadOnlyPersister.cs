@@ -114,7 +114,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 	                                        from Absence a
 	                                        inner join ReadModel.ScheduleProjectionReadOnly sp 
 	                                        on a.Id = sp.PayloadId
-                                            and a.Requestable = 1
 	                                        inner join Person p
 	                                        on sp.PersonId = p.Id
 	                                        inner join PersonPeriod pp
