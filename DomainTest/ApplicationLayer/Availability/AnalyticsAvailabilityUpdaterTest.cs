@@ -117,6 +117,57 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 		}
 
 		[Test]
+		public void ShouldHandleDuplicateAvailability()
+		{
+			AnalyticsDateRepository.HasDatesBetween(DateTime.Today - TimeSpan.FromDays(100), DateTime.Today + TimeSpan.FromDays(100));
+			var businessUnitCode = Guid.NewGuid();
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(businessUnitCode));
+
+			var personCode = Guid.NewGuid();
+			var scenarioCode = Guid.NewGuid();
+			var personPeroidId = Guid.NewGuid();
+			var today = DateOnly.Today;
+			var person = PersonFactory.CreatePersonWithPersonPeriod(today.AddDays(-1)).WithId(personCode);
+			var personPeriod = person.PersonPeriodCollection.First();
+			personPeriod.SetId(personPeroidId);
+			var scenario = new Scenario("Asd");
+			scenario.SetId(scenarioCode);
+			scenario.EnableReporting = true;
+
+			PersonRepository.Add(person);
+
+			var availabilityDay = new StudentAvailabilityDay(person, today, new IStudentAvailabilityRestriction[]
+			{
+				new StudentAvailabilityRestriction()
+			});
+
+			AvailabilityDayRepository.Add(availabilityDay);
+			AvailabilityDayRepository.Add(availabilityDay);
+			AnalyticsPersonPeriodRepository.AddOrUpdatePersonPeriod(new AnalyticsPersonPeriod
+			{
+				PersonId = personId,
+				PersonCode = personCode,
+				PersonPeriodCode = personPeroidId
+			});
+			AnalyticsScenarioRepository.AddScenario(AnalyticsScenarioFactory.CreateAnalyticsScenario(scenario, businessUnitId));
+			ScenarioRepository.Add(scenario);
+
+			Target.Handle(new AvailabilityChangedEvent
+			{
+				PersonId = personCode,
+				Dates = new List<DateOnly> { today },
+				LogOnBusinessUnitId = businessUnitCode
+			});
+
+			AnalyticsHourlyAvailabilityRepository.AnalyticsHourlyAvailabilities.Should().Not.Be.Empty();
+			var result = AnalyticsHourlyAvailabilityRepository.AnalyticsHourlyAvailabilities.Single();
+			result.PersonId.Should().Be.EqualTo(personId);
+			result.BusinessUnitId.Should().Be.EqualTo(businessUnitId);
+			result.ScenarioId.Should().Be.GreaterThan(0);
+			result.DateId.Should().Be.GreaterThan(0);
+		}
+
+		[Test]
 		public void ShouldNotAddHourlyAvailabilityForNonReportableScenario()
 		{
 			AnalyticsDateRepository.HasDatesBetween(DateTime.Today - TimeSpan.FromDays(100), DateTime.Today + TimeSpan.FromDays(100));

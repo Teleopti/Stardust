@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Analytics;
@@ -71,7 +70,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 				logger.Debug($"No person period found in application for person {personId} on date {date}");
 				return;
 			}
-			var availabilityDay = availabilityDays.Single(); // There can be only one!
+
+			// There should be only one record, but may exists multiple (Refer to bug #76978).
+			var availabilityDay = availabilityDays.OrderByDescending(x=>x.UpdatedOn).First();
 			foreach (var scenario in scenarios)
 			{
 				var scheduledDay = getScheduledDay(availabilityDay, scenario.ScenarioCode.GetValueOrDefault());
@@ -97,7 +98,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 				_analyticsHourlyAvailabilityRepository.AddOrUpdate(analyticsHourlyAvailability);
 			}
 		}
-
 
 		private AnalyticsPersonPeriod getAnalyticsPersonPeriod(DateOnly date, IPerson person)
 		{
@@ -131,7 +131,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 				logger.Debug($"Scenario {scenarioId} is not reportable, skipping.");
 				return null;
 			}
-			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false, false) { LoadDaysAfterLeft = true };
+			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false, false)
+			{
+				LoadDaysAfterLeft = true
+			};
 			var day = availabilityDay.RestrictionDate;
 			var period = day.ToDateOnlyPeriod();
 			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(availabilityDay.Person,
@@ -167,14 +170,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 		private static int scheduledWorkTime(IScheduleDay scheduleDay)
 		{
 			var minutes = 0;
-			if (scheduleDay.IsScheduled())
-			{
-				var visualLayerCollection = scheduleDay.ProjectionService().CreateProjection();
+			if (!scheduleDay.IsScheduled()) return minutes;
 
-				if (visualLayerCollection.HasLayers)
-				{
-					minutes = (int)visualLayerCollection.WorkTime().TotalMinutes;
-				}
+			var visualLayerCollection = scheduleDay.ProjectionService().CreateProjection();
+			if (visualLayerCollection.HasLayers)
+			{
+				minutes = (int)visualLayerCollection.WorkTime().TotalMinutes;
 			}
 			return minutes;
 		}
