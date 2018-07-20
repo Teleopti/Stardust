@@ -13,7 +13,17 @@ let config = {
 		browserName: 'chrome'
 	},
 	directConnect: true,
-	seleniumAddress: 'http://localhost:4444/wd/hub',
+	// seleniumAddress: 'http://localhost:4444/wd/hub',
+	seleniumServerJar: join(
+		'..',
+		'node_modules',
+		'protractor',
+		'node_modules',
+		'webdriver-manager',
+		'selenium',
+		'selenium-server-standalone-3.13.0.jar'
+	),
+	seleniumPort: 4444,
 	baseUrl,
 	framework: 'jasmine',
 	jasmineNodeOpts: {
@@ -29,16 +39,41 @@ let config = {
 
 		browser.driver.get(baseUrl + '/TeleoptiWFM/AuthenticationBridge/authenticate?whr=urn:Teleopti');
 
-		browser.driver.findElement(by.id('Username-input')).sendKeys('tdemo');
-		browser.driver.findElement(by.id('Password-input')).sendKeys('tdemo');
-		browser.driver.findElement(by.id('Signin-button')).click();
+		const page = new LoginPageObject();
 
-		return browser.driver.wait(function() {
-			return browser.driver.getCurrentUrl().then(function(url) {
-				return /TeleoptiWFM\/Web\/WFM\//.test(url);
-			});
+		page.usernameInput.sendKeys('tdemo');
+		page.passwordInput.sendKeys('tdemo');
+		page.signInButton.click();
+
+		let hasSelectedBusinessUnit = false;
+		return browser.driver.wait(async function() {
+			const currentUrl = await browser.driver.getCurrentUrl();
+			const asksForBusinessunit = /businessunit/.test(currentUrl);
+			if (asksForBusinessunit && !hasSelectedBusinessUnit) {
+				console.info('Asking for businessunit');
+				console.info('Selecting second businessunit');
+				page.teleoptiBusinessUnit.click();
+				hasSelectedBusinessUnit = true;
+			}
+
+			return /TeleoptiWFM\/Web\/WFM\//.test(currentUrl);
 		}, 10000);
 	}
 };
+
+class LoginPageObject {
+	get usernameInput() {
+		return browser.driver.findElement(by.id('Username-input'));
+	}
+	get passwordInput() {
+		return browser.driver.findElement(by.id('Password-input'));
+	}
+	get signInButton() {
+		return browser.driver.findElement(by.id('Signin-button'));
+	}
+	get teleoptiBusinessUnit() {
+		return browser.driver.findElement(by.css('#BusinessUnits li:nth-child(2) a'));
+	}
+}
 
 module.exports = { config };
