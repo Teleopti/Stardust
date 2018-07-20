@@ -16,7 +16,7 @@
 			<h3>{{'PeopleAvailableRoles' | translate}}</h3>
 			<div class="con-fluid-row" data-test-grant-available>
 				<div class="con-fluid-flex" *ngFor="let role of getRolesNotOnAll()">
-					<label nz-checkbox [ngModel]="role.selected" (ngModelChange)="toggleSelectedRole(role)">
+					<label nz-checkbox [ngModel]="role.selected" (ngModelChange)="toggleSelectedRole(role)" data-test-chip>
 						{{role.Name}}
 					</label>
 				</div>
