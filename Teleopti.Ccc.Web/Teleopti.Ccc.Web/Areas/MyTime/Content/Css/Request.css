@@ -858,7 +858,6 @@ input.use-default-startTime {
 	position: relative;
 	width: 100%;
 	height: 18px;
-	overflow: hidden;
 }
 
 .shift-visual-indication-block {
