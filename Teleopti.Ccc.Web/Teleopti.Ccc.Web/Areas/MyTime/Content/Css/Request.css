@@ -824,6 +824,11 @@ input.use-default-startTime {
 	text-align:center;
 }
 
+.shift-date {
+	flex: 1 0 80px !important;
+	text-align:center;
+}
+
 .shift-date, .shift-selection {
 	flex: 1 1 10%;
 	display: flex;
