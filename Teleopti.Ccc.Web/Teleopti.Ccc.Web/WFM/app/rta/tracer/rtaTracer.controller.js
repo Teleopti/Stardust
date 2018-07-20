@@ -4,15 +4,18 @@
 		.module('wfm.rtaTracer')
 		.controller('RtaTracerController', constructor);
 
-	constructor.$inject = ['$http', '$scope', 'rtaPollingService', '$stateParams'];
+	constructor.$inject = ['$http', '$scope', 'rtaPollingService', '$stateParams', 'NoticeService'];
 
-	function constructor($http, $scope, rtaPollingService, $stateParams) {
+	function constructor($http, $scope, rtaPollingService, $stateParams, NoticeService) {
 		var vm = this;
 		vm.userCode = $stateParams.userCode || '';
 		vm.tracers = [];
 
 		vm.trace = function () {
 			vm.highlightStopButton = true;
+			var notice = 'You are now tracing user ' + vm.userCode + '. Please remember to manually stop' +
+				' the tracer once you are done troubleshooting to avoid log errors.';
+			NoticeService.warning(notice, 7000, true);
 			$http.get('../api/RtaTracer/Trace', {params: {userCode: vm.userCode}});
 		};
 

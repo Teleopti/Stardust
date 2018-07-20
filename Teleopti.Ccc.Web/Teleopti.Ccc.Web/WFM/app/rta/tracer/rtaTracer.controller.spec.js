@@ -355,4 +355,31 @@ rtaTester.describe('RtaTracerController', function (it, fit, xit) {
 		expect(vm.highlightStopButton).toBe(false);
 	});
 
+	it('should trigger stop tracer notice on starting tracing', function (t) {
+		var vm = t.createController();
+		var userCode = t.randomString('usercode');
+
+		t.apply(function () {
+			vm.userCode = userCode;
+		});
+		t.apply(function () {
+			vm.trace();
+		});
+
+		expect(t.lastNotice.Warning.includes(vm.userCode)).toBeTruthy();
+	});
+
+	it('should dismiss stop tracer notice after 7 seconds', function (t) {
+		var vm = t.createController();
+		var userCode = t.randomString('usercode');
+
+		t.apply(function () {
+			vm.userCode = userCode;
+		});
+		t.apply(function () {
+			vm.trace();
+		});
+
+		expect(t.lastNotice.Lifetime).toEqual(7000);
+	});
 });
