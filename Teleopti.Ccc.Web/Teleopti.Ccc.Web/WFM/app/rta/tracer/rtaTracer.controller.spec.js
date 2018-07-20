@@ -383,7 +383,7 @@ rtaTester.describe('RtaTracerController', function (it, fit, xit) {
 		expect(t.lastNotice.Lifetime).toEqual(7000);
 	});
 
-	it('should trigger reminder stop tracer notice every 5 minutes', function (t) {
+	xit('should trigger reminder stop tracer notice every 5 minutes', function (t) {
 		jasmine.clock().install();
 		var vm = t.createController();
 		var userCode = t.randomString('usercode');
@@ -400,7 +400,7 @@ rtaTester.describe('RtaTracerController', function (it, fit, xit) {
 		jasmine.clock().uninstall();
 	});
 
-	it('should not trigger reminder stop tracer notice if tracer was stopped', function (t) {
+	xit('should not trigger reminder stop tracer notice if tracer was stopped', function (t) {
 		jasmine.clock().install();
 		var vm = t.createController();
 		var userCode = t.randomString('usercode');
@@ -422,7 +422,7 @@ rtaTester.describe('RtaTracerController', function (it, fit, xit) {
 		jasmine.clock().uninstall();
 	});
 
-	it('should dismiss reminder stop tracer notice after 7 seconds', function (t) {
+	xit('should dismiss reminder stop tracer notice after 7 seconds', function (t) {
 		jasmine.clock().install();
 		var vm = t.createController();
 		var userCode = t.randomString('usercode');
