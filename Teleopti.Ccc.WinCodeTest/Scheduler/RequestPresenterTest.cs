@@ -14,11 +14,14 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 
@@ -26,7 +29,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
     [TestFixture, SetUICulture("en-US")]
     public class RequestPresenterTest
-    {
+	{
         private IRequestPresenter _requestPresenter;
         private FakeBusinessRulesResponseHandler _handleBusinessRuleResponse;
         private IList<PersonRequestViewModel> _requestViewAdapters;
@@ -47,13 +50,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private IDictionary<Guid, IPerson> filteredPersons;
 	    private IGlobalSettingDataRepository _globalSettingRepo;
 	    private FakePersonAbsenceAccountRepository _personAbsenceAccountRepository;
+		private FullPermission _permission;
 
 		[SetUp]
         public void Setup()
         {
             _requestViewAdapters = new List<PersonRequestViewModel>();
             _scenario = ScenarioFactory.CreateScenarioAggregate();
-
+			_permission = new FullPermission();
+			
 			DateTime startDateTime = DateTime.SpecifyKind(new DateTime(2010, 1, 1), DateTimeKind.Utc);
 			DateTime endDateTime = startDateTime.AddHours(2);
 
@@ -259,7 +264,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             }
 
             //Change status
-            _requestPresenter.ApproveOrDeny(_requestViewAdapters, new DenyPersonRequestCommand(_requestPresenter, new PersonRequestAuthorizationCheckerForTest()), string.Empty);
+            _requestPresenter.ApproveOrDeny(_requestViewAdapters, new DenyPersonRequestCommand(_requestPresenter, new PersonRequestAuthorizationCheckerForTest(), _scenario, null), string.Empty);
 
             foreach (PersonRequestViewModel adapter in _requestViewAdapters)
             {
@@ -267,7 +272,29 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             }
         }
 
-        [Test]
+		[Test]
+		public void VerifyCanNotDenyStatusOnRequestWhenHasNoPermissionToModifyRestrictedScenario()
+		{
+			foreach (PersonRequestViewModel adapter in _requestViewAdapters)
+			{
+				Assert.IsTrue(adapter.PersonRequest.IsPending);
+			}
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test scenario", true);
+			scenario.Restricted = true;
+
+			_permission.AddToBlackList(DefinedRaptorApplicationFunctionPaths.ModifyRestrictedScenario);
+			CurrentAuthorization.ThreadlyUse(_permission);
+
+			_requestPresenter.ApproveOrDeny(_requestViewAdapters, new DenyPersonRequestCommand(_requestPresenter, new PersonRequestAuthorizationCheckerForTest(), scenario, null), string.Empty);
+
+			foreach (PersonRequestViewModel adapter in _requestViewAdapters)
+			{
+				Assert.IsFalse(adapter.PersonRequest.IsDenied);
+			}
+		}
+
+		[Test]
         public void VerifyReplyOnRequest()
         {
             var undo = new UndoRedoContainer();
@@ -489,5 +516,5 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			_view.AssertWasCalled(x => x.ShowErrorMessage("MandatoryError", "Dont break this rule"),o => o.IgnoreArguments());
         }
-    }
+	}
 }

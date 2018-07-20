@@ -247,7 +247,7 @@ namespace Teleopti.Ccc.Domain.Collection
 			{
 				if (isScenarioRestrictedAndNotPermitted())
 				{
-					lstErrors.Add(new BusinessRuleResponse(Resources.CanNotApproveOrDenyRequestDueToNoPermissionToModifyRestrictedScenarios));
+					lstErrors.Add(new BusinessRuleResponse(Resources.CanNotApproveOrDenyRequestDueToNoPermissionToModifyRestrictedScenarios, true));
 					return lstErrors;
 				}
 

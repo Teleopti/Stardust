@@ -5243,7 +5243,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void replyAndDenyRequestFromRequestDetailsView(EventParameters<ReplyAndDenyRequestFromRequestDetailsView> obj)
 		{
-			var denyCommand = new DenyPersonRequestCommand(_requestPresenter, _personRequestAuthorizationChecker);
+			var denyCommand = new DenyPersonRequestCommand(_requestPresenter, _personRequestAuthorizationChecker, _schedulerState.RequestedScenario, this);
 			IList<PersonRequestViewModel> selectedRequestList = new List<PersonRequestViewModel>() { obj.Value.Request };
 			using (var dialog = new RequestReplyStatusChangeDialog(_requestPresenter, selectedRequestList, denyCommand))
 			{
@@ -5305,7 +5305,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				eventParameters.Value.Request
 			};
 
-			changeRequestStatus(new DenyPersonRequestCommand(_requestPresenter, _personRequestAuthorizationChecker),
+			changeRequestStatus(new DenyPersonRequestCommand(_requestPresenter, _personRequestAuthorizationChecker, _schedulerState.RequestedScenario, this),
 				selectedRequestList);
 
 		}
@@ -5918,7 +5918,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void toolStripButtonDenyRequestClick(object sender, EventArgs e)
 		{
-			changeRequestStatus(new DenyPersonRequestCommand(_requestPresenter, _personRequestAuthorizationChecker),
+			changeRequestStatus(new DenyPersonRequestCommand(_requestPresenter, _personRequestAuthorizationChecker, _schedulerState.RequestedScenario, this),
 				_requestView.SelectedAdapters());
 		}
 
@@ -5977,7 +5977,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void toolStripButtonReplyAndDeny_Click(object sender, EventArgs e)
 		{
-			replyAndChangeStatus(new DenyPersonRequestCommand(_requestPresenter, _personRequestAuthorizationChecker));
+			replyAndChangeStatus(new DenyPersonRequestCommand(_requestPresenter, _personRequestAuthorizationChecker, _schedulerState.RequestedScenario, this));
 		}
 
 		private void toolStripButtonOptions_Click(object sender, EventArgs e)
