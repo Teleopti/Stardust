@@ -12,6 +12,7 @@
 		vm.tracers = [];
 
 		vm.trace = function () {
+			vm.highlightStopButton = true;
 			$http.get('../api/RtaTracer/Trace', {params: {userCode: vm.userCode}});
 		};
 
@@ -19,6 +20,7 @@
 			vm.trace();
 
 		vm.stop = function () {
+			vm.highlightStopButton = false;
 			$http.get('../api/RtaTracer/Stop');
 		};
 

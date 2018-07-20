@@ -324,4 +324,35 @@ rtaTester.describe('RtaTracerController', function (it, fit, xit) {
 		expect(vm.exception).toBeFalsy();
 	});
 
+	it('should hightlight stop button on starting tracing', function (t) {
+		var vm = t.createController();
+		var userCode = t.randomString('usercode');
+
+		t.apply(function () {
+			vm.userCode = userCode;
+		});
+		t.apply(function () {
+			vm.trace();
+		});
+
+		expect(vm.highlightStopButton).toBe(true);
+	});
+
+	it('should not hightlight stop button on stoping tracing', function (t) {
+		var vm = t.createController();
+		var userCode = t.randomString('usercode');
+
+		t.apply(function () {
+			vm.userCode = userCode;
+		});
+		t.apply(function () {
+			vm.trace();
+		});
+		t.apply(function () {
+			vm.stop();
+		});
+
+		expect(vm.highlightStopButton).toBe(false);
+	});
+
 });
