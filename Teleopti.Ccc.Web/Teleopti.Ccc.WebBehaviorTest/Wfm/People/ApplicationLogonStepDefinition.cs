@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 
 				Browser.Interactions.AssertJavascriptResultContains($@"
 					return Array.from(document.querySelectorAll('[data-test-person]'))
-					.find(r => r.querySelector('[data-test-person-name]').value.includes('{name}'))
+					.find(r => r.querySelector('[data-test-person-name]').textContent.includes('{name}'))
 					.querySelector('[data-test-person-logon]').value.includes('{logonName}')
 				", "True");
 			}
