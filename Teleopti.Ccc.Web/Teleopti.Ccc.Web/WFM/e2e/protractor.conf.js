@@ -35,7 +35,13 @@ let config = {
 		require('ts-node').register({
 			project: join(__dirname, 'tsconfig.e2e.json')
 		});
-		jasmine.getEnv().addReporter(new SpecReporter({ spec: { displayStacktrace: true } }));
+		jasmine.getEnv().addReporter(
+			new SpecReporter({
+				spec: { displayStacktrace: true, displayDuration: true },
+				prefixes: { successful: '✔ ' },
+				summary: { displayDuration: true }
+			})
+		);
 
 		browser.driver.get(baseUrl + '/TeleoptiWFM/AuthenticationBridge/authenticate?whr=urn:Teleopti');
 
