@@ -821,6 +821,7 @@ input.use-default-startTime {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	text-align:center;
 }
 
 .shift-date, .shift-selection {
@@ -880,11 +881,22 @@ input.use-default-startTime {
 }
 .schedule-layer-text-container {
 	display:flex;
-	height: 60px;
 	align-items:center;
-	flex-direction:column;
+	flex-direction:column;	
 }
 
 .dayoff-text-height {
 	line-height:60px;
+}
+
+@media (max-width: 500px) {
+	.shift-start-end-time {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.spliter {
+		line-height: 2px;
+	}
 }

@@ -258,9 +258,9 @@
 	<div class="shift-trade-request-74947" data-bind="visible: isDetailVisible">
 		<div class="schedules-side-by-side">
 			<div class="side-by-side-header">
-				<div class="shift-date"></div>
-				<div class="shift-detail own-shift">@Resources.MySchedule</div>
-				<div class="shift-detail shift-to-trade" data-bind="text:agentChoosed() ? agentChoosed().agentName : ''">John</div>
+				<div class="shift-date">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+				<div class="shift-detail own-shift text-center">@Resources.MySchedule</div>
+				<div class="shift-detail shift-to-trade" data-bind="text:agentChoosed() ? agentChoosed().agentName : ''"></div>
 				<div class="shift-selection"></div>
 			</div>
 			<div>
@@ -282,8 +282,9 @@
 							<!--ko if:!mySchedule.isDayOff-->
 							<div class="schedule-layer-text-container">
 								<div data-bind="text:mySchedule.categoryName"></div>
-								<div>
-									<span data-bind="text:$root.formatTime(mySchedule.scheduleStart, date)"></span> - 
+								<div class="shift-start-end-time">
+									<span data-bind="text:$root.formatTime(mySchedule.scheduleStart, date)"></span>
+									<span class="spliter">-</span> 
 									<span data-bind="text:$root.formatTime(mySchedule.scheduleEnd, date)"></span>
 								</div>
 								<div class="shift-trade-contract"><span data-bind="text:mySchedule.contractTime"></span></div>
@@ -330,8 +331,9 @@
 							<!--ko if:!targetSchedule.isDayOff-->
 							<div class="schedule-layer-text-container">
 								<div data-bind="text:targetSchedule.categoryName"></div>
-								<div>
-									<span data-bind="text:$root.formatTime(targetSchedule.scheduleStart, date)"></span> - 
+								<div class="shift-start-end-time">
+									<span data-bind="text:$root.formatTime(targetSchedule.scheduleStart, date)"></span>
+									<span class="spliter">-</span>
 									<span data-bind="text:$root.formatTime(targetSchedule.scheduleEnd, date)"></span>
 								</div>
 								<div class="shift-trade-contract"><span data-bind="text:targetSchedule.contractTime"></span></div>
