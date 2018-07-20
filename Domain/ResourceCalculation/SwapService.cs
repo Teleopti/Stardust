@@ -4,75 +4,77 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-    public class SwapService : ISwapService
-    {
-        private IList<IScheduleDay> _selectedSchedules;
+	public class SwapService : ISwapService
+	{
+		private IList<IScheduleDay> _selectedSchedules;
 
-        public void Init(IList<IScheduleDay> selectedSchedules)
-        {
-            _selectedSchedules = selectedSchedules;
-        }
+		public void Init(IList<IScheduleDay> selectedSchedules)
+		{
+			_selectedSchedules = selectedSchedules;
+		}
 
-        public bool CanSwapAssignments()
-        {
-            if(!checkBasicRules())
-                return false;
-            return true;
-        }
+		public bool CanSwapAssignments()
+		{
+			if(!checkBasicRules())
+				return false;
+			return true;
+		}
 
-        public IList<IScheduleDay> SwapAssignments(IScheduleDictionary schedules, bool ignoreAssignmentPermission)
-        {
-            if(!CanSwapAssignments())
-                throw new ConstraintException("Can not swap assignments");
+		public IList<IScheduleDay> SwapAssignments(IScheduleDictionary schedules, bool ignoreAssignmentPermission)
+		{
+			if(!CanSwapAssignments())
+				throw new ConstraintException("Can not swap assignments");
 
-            List<IScheduleDay> retList = new List<IScheduleDay>();
+			var retList = new List<IScheduleDay>();
+			var toPersonSchedule = _selectedSchedules[1];
+			var fromPersonSchedule = _selectedSchedules[0];
 
-            IScheduleDay schedulePart1 = schedules[_selectedSchedules[1].Person].ReFetch(_selectedSchedules[1]);
-            IScheduleDay schedulePart2 = schedules[_selectedSchedules[0].Person].ReFetch(_selectedSchedules[0]);
-	        var ass1 = schedulePart1.PersonAssignment();
-	        var ass2 = schedulePart2.PersonAssignment();
+			var toPersonSchedulePart = schedules[toPersonSchedule.Person].ReFetch(toPersonSchedule);
+			var fromPersonSchedulePart = schedules[fromPersonSchedule.Person].ReFetch(fromPersonSchedule);
+			var toPersonAssignment = toPersonSchedulePart.PersonAssignment();
+			var fromPersonAssignment = fromPersonSchedulePart.PersonAssignment();
 
-			removeAbsences(schedulePart1);
-			removeAbsences(schedulePart2);
+			removeAbsences(toPersonSchedulePart);
+			removeAbsences(fromPersonSchedulePart);
 
-			if ((ass1==null || ass2==null) && (!schedulePart1.HasDayOff() && !schedulePart2.HasDayOff()))
-            {
-                if (ass1 == null)
-                {
-                    _selectedSchedules[1].Merge(schedulePart2, false,true);
-                    _selectedSchedules[1].DeletePersonalStuff();
-                    _selectedSchedules[0].DeleteMainShift();
-                }
-                else
-                {
-                    _selectedSchedules[0].Merge(schedulePart1, false,true);
-                    _selectedSchedules[0].DeletePersonalStuff();
-                    _selectedSchedules[1].DeleteMainShift();
-                }
-            }
-            else
-            {
-				if (!schedulePart2.IsScheduled() && schedulePart1.IsScheduled())
-	            {
-					_selectedSchedules[0].Merge(schedulePart1, false, true);
-					_selectedSchedules[1].DeleteMainShift();
-					_selectedSchedules[1].DeleteDayOff();
-	            }
-				else if (!schedulePart1.IsScheduled() && schedulePart2.IsScheduled())
+			if ((toPersonAssignment==null || fromPersonAssignment==null) && !toPersonSchedulePart.HasDayOff() && !fromPersonSchedulePart.HasDayOff())
+			{
+				if (toPersonAssignment == null)
 				{
-					_selectedSchedules[1].Merge(schedulePart2, false, true);
-					_selectedSchedules[0].DeleteMainShift();
-					_selectedSchedules[0].DeleteDayOff();
+					toPersonSchedule.Merge(fromPersonSchedulePart, false,true);
+					toPersonSchedule.DeletePersonalStuff();
+					fromPersonSchedule.DeleteMainShift();
 				}
 				else
 				{
-					_selectedSchedules[0].Merge(schedulePart1, false, true, ignoreAssignmentPermission);
-					_selectedSchedules[1].Merge(schedulePart2, false, true, ignoreAssignmentPermission);
+					fromPersonSchedule.Merge(toPersonSchedulePart, false,true);
+					fromPersonSchedule.DeletePersonalStuff();
+					toPersonSchedule.DeleteMainShift();
 				}
-            }
-            retList.AddRange(_selectedSchedules);
-            return retList;
-        }
+			}
+			else
+			{
+				if (!fromPersonSchedulePart.IsScheduled() && toPersonSchedulePart.IsScheduled())
+				{
+					fromPersonSchedule.Merge(toPersonSchedulePart, false, true);
+					toPersonSchedule.DeleteMainShift();
+					toPersonSchedule.DeleteDayOff();
+				}
+				else if (!toPersonSchedulePart.IsScheduled() && fromPersonSchedulePart.IsScheduled())
+				{
+					toPersonSchedule.Merge(fromPersonSchedulePart, false, true);
+					fromPersonSchedule.DeleteMainShift();
+					fromPersonSchedule.DeleteDayOff();
+				}
+				else
+				{
+					fromPersonSchedule.Merge(toPersonSchedulePart, false, true, ignoreAssignmentPermission);
+					toPersonSchedule.Merge(fromPersonSchedulePart, false, true, ignoreAssignmentPermission);
+				}
+			}
+			retList.AddRange(_selectedSchedules);
+			return retList;
+		}
 
 		private static void removeAbsences(IScheduleDay schedulePart)
 		{
@@ -87,14 +89,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		}
 
 		private bool checkBasicRules()
-        {
-            if (_selectedSchedules.Count != 2)
-                return false;
+		{
+			if (_selectedSchedules.Count != 2)
+				return false;
 
-            if (_selectedSchedules[0].Person == _selectedSchedules[1].Person)
-                return false;
+			if (_selectedSchedules[0].Person == _selectedSchedules[1].Person)
+				return false;
 
-            return true;
-        }
-    }
+			return true;
+		}
+	}
 }
