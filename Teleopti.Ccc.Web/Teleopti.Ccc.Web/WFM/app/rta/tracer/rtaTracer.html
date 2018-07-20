@@ -1,4 +1,4 @@
-<section ui-view>
+<section ui-view class="rta-tracer-view">
 
 	<div class="view-header with-fab">
 		<div class="view-title">
@@ -23,7 +23,9 @@
 					</div>
 					<div class="con-flex">
 						<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.trace()">Trace</button>
-						<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.stop()">Stop</button>
+						<button class="wfm-btn wfm-btn-invis-primary animate-button" 
+								style="color: #EE8F7D; font-weight: 900;"
+								ng-click="vm.stop()">Stop</button>
 						<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.clear()">Clear</button>
 					</div>
 				</div>
