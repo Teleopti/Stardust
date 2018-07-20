@@ -4,14 +4,12 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -105,10 +103,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				Assert.AreEqual(1, destination.PersonAbsenceCollection().Length);
 				Assert.IsNotNull(destination.PersonAssignment());
 
-				//verify that day off is pasted, absencense is splitted and assignment is removed
 				destination.Merge(source, false);
 				Assert.IsTrue(destination.HasDayOff());
-				Assert.AreEqual(2, destination.PersonAbsenceCollection(true).Length);
+				Assert.AreEqual(1, destination.PersonAbsenceCollection(true).Length);
 				Assert.IsNotNull(destination.PersonAssignment());
 			}
 		}
