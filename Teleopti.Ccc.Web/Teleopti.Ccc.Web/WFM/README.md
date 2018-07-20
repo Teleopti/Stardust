@@ -23,7 +23,3 @@ Overview of project files.
         - `npx protractor e2e/people/protractor.conf.js`
     * Run single spec
         - `npx protractor e2e/protractor.conf.js --specs e2e/people/search.e2e-spec.ts`
-
-
-
-		for the sake of pull requests
