@@ -47,8 +47,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 				.findIndex(p => p.textContent.includes('" + name + "')) !== -1", "True");
 			Browser.Interactions.Javascript_IsFlaky(@"
 				Array.from(
-					document.querySelectorAll('[data-test-search] [data-test-person] [data-test-person-firstname]'))
-				.forEach(p => {if(p.textContent.includes('" + name+"')) p.click()})");
+					document.querySelectorAll('[data-test-search] [data-test-person]')
+				).filter(
+					p => p.querySelector('[data-test-person-firstname]').textContent.includes('" + name + @"')
+				)
+				.map(node => node.querySelector('input'))
+				.forEach(p => p.click())
+				");
 		}
 
 		[Given("I have selected people")]
