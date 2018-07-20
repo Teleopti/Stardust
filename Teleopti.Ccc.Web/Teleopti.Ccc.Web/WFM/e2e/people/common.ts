@@ -22,10 +22,14 @@ export class CommonPage {
 		return element.all(by.css('[data-test-search] [data-test-person]'));
 	}
 
-	async selectPerson(index: number) {
-		await this.searchResult
-			.get(index)
-			.element(by.tagName('input'))
-			.click();
+	async selectPerson(index: number | Array<number>) {
+		let indexes = Array.isArray(index) ? index : [index];
+
+		for (let i of indexes) {
+			await this.searchResult
+				.get(i)
+				.element(by.tagName('input'))
+				.click();
+		}
 	}
 }
