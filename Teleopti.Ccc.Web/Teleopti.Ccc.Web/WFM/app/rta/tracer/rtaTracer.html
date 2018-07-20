@@ -2,13 +2,12 @@
 
 	<div class="view-header with-fab">
 		<div class="view-title">
-			<h1><i class="mdi mdi-alarm"></i> Rta Tracer - this is an internal troubleshooting tool. 
-				<br/>
-				<span style="color: #EE8F7D; padding-left: 22px">
-					Please manually stop it once you are done using the tracer in order to
-					avoid log errors
-				</span>
+			<h1><i class="mdi mdi-alarm"></i> Rta Tracer - this is an internal troubleshooting tool
 			</h1>
+			<h2 style="color: #EE8F7D; padding-left: 22px">
+				Please manually stop it once you are done using the tracer in order to
+				avoid log errors
+			</h2>
 		</div>
 	</div>
 
@@ -23,10 +22,11 @@
 					</div>
 					<div class="con-flex">
 						<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.trace()">Trace</button>
-						<button class="wfm-btn wfm-btn-invis-primary" 
+						<button class="wfm-btn wfm-btn-invis-primary"
 								style="color: #EE8F7D; font-weight: 900;"
 								ng-click="vm.stop()"
-								ng-class="{'animate-button': vm.highlightStopButton};">Stop</button>
+								ng-class="{'animate-button': vm.highlightStopButton};">Stop
+						</button>
 						<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.clear()">Clear</button>
 					</div>
 				</div>
@@ -46,7 +46,9 @@
 								Received {{recevied.count}} states by {{recevied.by}} at {{recevied.at}}<br/>
 							</span>
 						</td>
-						<td width="400px" style="vertical-align: top" ng-if="tracer.dataReceived.length === 0">Received nothing yet</td>
+						<td width="400px" style="vertical-align: top" ng-if="tracer.dataReceived.length === 0">Received
+							nothing yet
+						</td>
 						<td width="200px" style="vertical-align: top">Checked at {{tracer.activityCheckAt}}</td>
 						<td style="vertical-align: top">Tracing {{tracer.tracing}}</td>
 						<td width="400px" style="vertical-align: top">

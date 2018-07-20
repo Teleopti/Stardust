@@ -382,4 +382,60 @@ rtaTester.describe('RtaTracerController', function (it, fit, xit) {
 
 		expect(t.lastNotice.Lifetime).toEqual(7000);
 	});
+
+	it('should trigger reminder stop tracer notice every 5 minutes', function (t) {
+		jasmine.clock().install();
+		var vm = t.createController();
+		var userCode = t.randomString('usercode');
+
+		t.apply(function () {
+			vm.userCode = userCode;
+		});
+		t.apply(function () {
+			vm.trace();
+		});
+		jasmine.clock().tick(300000);
+
+		expect(t.lastNotice.Warning.includes('Reminder')).toBeTruthy();
+		jasmine.clock().uninstall();
+	});
+
+	it('should not trigger reminder stop tracer notice if tracer was stopped', function (t) {
+		jasmine.clock().install();
+		var vm = t.createController();
+		var userCode = t.randomString('usercode');
+
+		t.apply(function () {
+			vm.userCode = userCode;
+		});
+		t.apply(function () {
+			vm.trace();
+		});
+		jasmine.clock().tick(300000);
+		t.lastNotice = {}; //is this even ok?
+		t.apply(function () {
+			vm.stop();
+		});
+		jasmine.clock().tick(300000);
+
+		expect(t.lastNotice.Warning.includes('Reminder')).toBeFalsy(); //need different notice for every reminder to be able to test?
+		jasmine.clock().uninstall();
+	});
+
+	it('should dismiss reminder stop tracer notice after 7 seconds', function (t) {
+		jasmine.clock().install();
+		var vm = t.createController();
+		var userCode = t.randomString('usercode');
+
+		t.apply(function () {
+			vm.userCode = userCode;
+		});
+		t.apply(function () {
+			vm.trace();
+		});
+		jasmine.clock().tick(300000);
+
+		expect(t.lastNotice.Lifetime).toEqual(7000);
+		jasmine.clock().uninstall();
+	});
 });
