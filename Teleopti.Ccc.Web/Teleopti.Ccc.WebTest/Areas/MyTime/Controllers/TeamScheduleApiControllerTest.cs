@@ -2,6 +2,7 @@
 using SharpTestsEx;
 using System;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -581,7 +582,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			firstPeriod.Title.Should().Be("Phone");
 			firstPeriod.StartTime.Should().Be(period.StartDateTime);
 			firstPeriod.EndTime.Should().Be(period.EndDateTime);
-			firstPeriod.TimeSpan.Should().Be("09:00 AM - 04:00 PM");
+			firstPeriod.TimeSpan.Should().Be(TimeHelper.TimeOfDayFromTimeSpan(TimeSpan.FromHours(9), CultureInfo.CurrentCulture) + " - " + TimeHelper.TimeOfDayFromTimeSpan(TimeSpan.FromHours(16), CultureInfo.CurrentCulture));
 		}
 
 		[Test]
