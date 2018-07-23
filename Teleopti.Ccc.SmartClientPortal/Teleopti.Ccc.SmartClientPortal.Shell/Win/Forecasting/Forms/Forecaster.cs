@@ -44,7 +44,6 @@ using ToolStripItemClickedEventArgs = Teleopti.Ccc.SmartClientPortal.Shell.Win.C
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 {
-
 	public partial class Forecaster : BaseRibbonForm, IFinishWorkload
 	{
 		private readonly ILog _logger = LogManager.GetLogger(typeof(Forecaster));
@@ -322,7 +321,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-
 				_currentForecasterSettings = new PersonalSettingDataRepository(unitOfWork).FindValueByKey("Forecaster", new ForecasterSettings());
 				
 				unitOfWork.Reassociate(_skill);
@@ -358,22 +356,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		private void loadSkillDays(IUnitOfWork unitOfWork, IStatisticHelper statHelper)
 		{
 			var periodToLoad = SkillDayCalculator.GetPeriodToLoad(_dateTimePeriod);
-			IList<ISkillDay> skillDays = statHelper.LoadStatisticData(periodToLoad, _skill, _scenario,
-																																_longterm);
+			var skillDays = statHelper.LoadStatisticData(periodToLoad, _skill, _scenario, _longterm);
 			if (isMultisiteSkill)
 			{
 				backgroundWorker1.ReportProgress(5, UserTexts.Resources.MultisiteSkillLoading);
-				var multisiteDays = MultisiteHelper.LoadMultisiteDays(
-						periodToLoad, _multisiteSkill, _scenario,
-						new MultisiteDayRepository(unitOfWork), false).ToList();
-				var multisiteCalculator = new MultisiteSkillDayCalculator(_multisiteSkill, skillDays, multisiteDays,
-																																	_dateTimePeriod);
-
+				var multisiteDays = MultisiteHelper.LoadMultisiteDays(periodToLoad, _multisiteSkill, _scenario,
+					new MultisiteDayRepository(unitOfWork), false).ToList();
+				var multisiteCalculator = new MultisiteSkillDayCalculator(_multisiteSkill, skillDays, multisiteDays, _dateTimePeriod);
+				
 				foreach (var childSkill in _multisiteSkill.ChildSkills)
 				{
-					multisiteCalculator.SetChildSkillDays(childSkill,
-																								statHelper.LoadStatisticData(periodToLoad, childSkill,
-																																						 _scenario, _longterm));
+					multisiteCalculator.SetChildSkillDays(childSkill, statHelper.LoadStatisticData(periodToLoad, childSkill, _scenario, _longterm));
 				}
 
 				_skillDayCalculator = multisiteCalculator;
@@ -523,7 +516,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		{
 			var skillDay = sender as ISkillDay;
 			if (skillDay == null) return;
-			if (skillDay.Scenario.Equals(_scenario))
+			if (skillDay.Scenario.Equals(_scenario) && _dateTimePeriod.Contains(skillDay.CurrentDate))
 				_dirtyForecastDayContainer.DirtyChildSkillDays.Add(skillDay);
 		}
 
@@ -531,7 +524,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		{
 			var multisiteDay = sender as IMultisiteDay;
 			if (multisiteDay == null) return;
-			if (multisiteDay.Scenario.Equals(_scenario))
+			if (multisiteDay.Scenario.Equals(_scenario) && _dateTimePeriod.Contains(multisiteDay.MultisiteDayDate))
 				_dirtyForecastDayContainer.DirtyMultisiteDays.Add(multisiteDay);
 		}
 
@@ -539,7 +532,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 		{
 			var skillDay = sender as ISkillDay;
 			if (skillDay == null) return;
-			if (skillDay.Scenario.Equals(_scenario))
+			if (skillDay.Scenario.Equals(_scenario) && _dateTimePeriod.Contains(skillDay.CurrentDate))
 				_dirtyForecastDayContainer.DirtySkillDays.Add(skillDay);
 		}
 
@@ -568,11 +561,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			toolStripProgressBarMain.Step++;
 
 			Text = string.Concat(UserTexts.Resources.TeleoptiRaptorColonForecaster, " ",
-													 _dateTimePeriod.StartDate.ToShortDateString(CultureInfo.CurrentUICulture), " - ",
-					 _dateTimePeriod.EndDate.ToShortDateString(CultureInfo.CurrentUICulture), " ",
-					 _skill.Name, " | ",
-													 UserTexts.Resources.ScenarioColon, " ",
-													 _scenario.Description.Name);
+				_dateTimePeriod.StartDate.ToShortDateString(CultureInfo.CurrentUICulture), " - ",
+				_dateTimePeriod.EndDate.ToShortDateString(CultureInfo.CurrentUICulture), " ",
+				_skill.Name, " | ",
+				UserTexts.Resources.ScenarioColon, " ",
+				_scenario.Description.Name);
 			setGridOpeningGridViews();
 			Cursor = Cursors.Default;
 		}
@@ -831,7 +824,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 				createTemplateGalleryRibbonBar(TemplateTarget.Skill, true, true);
 			}
 			else if (typeof(ISkill).IsAssignableFrom(e.EntityType) ||
-							 typeof(IChildSkill).IsAssignableFrom(e.EntityType))
+					 typeof(IChildSkill).IsAssignableFrom(e.EntityType))
 			{
 				createTemplateGalleryRibbonBar(TemplateTarget.Skill, true, true);
 			}
@@ -1444,7 +1437,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			{
 				workload = getWorkload(workload);
 				using (var workflow = new ForecastWorkflow(workload, _scenario, _dateTimePeriod,
-																												 _skillDayCalculator.SkillDays.ToList(), this,_statisticHelper))
+					_skillDayCalculator.SkillDays.ToList(), this, _statisticHelper))
 				{
 					workflow.ShowDialog(this);
 				}
@@ -1846,7 +1839,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 							BindingFlags.Public, null,
 							null,
 							CultureInfo.
-								InvariantCulture) as
+							InvariantCulture) as
 						MultisiteSkill;
 				if (multisiteSkill == null) return;
 
@@ -1997,8 +1990,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			IEnumerable<IRootChangeInfo> changedRoots;
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				IForecastTemplateOwner templateOwnerOriginal = ForecastingTemplateRefresher.LoadNewInstance(rootEntity,
-																																																		uow);
+				IForecastTemplateOwner templateOwnerOriginal = ForecastingTemplateRefresher.LoadNewInstance(rootEntity, uow);
 				templateOwnerOriginal.RemoveTemplate(target, templateName);
 
 				changedRoots = uow.PersistAll();
@@ -2079,11 +2071,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				IForecastTemplateOwner templateOwnerOriginal =
-						ForecastingTemplateRefresher.LoadNewInstance(rootEntity,
-																												 uow);
+						ForecastingTemplateRefresher.LoadNewInstance(rootEntity, uow);
 				IForecastDayTemplate template =
-						templateOwnerOriginal.TryFindTemplateByName(templateTag.Target,
-																												templateTag.OriginalTemplateName);
+						templateOwnerOriginal.TryFindTemplateByName(templateTag.Target, templateTag.OriginalTemplateName);
 				if (template == null) return;
 				template.Name = newName;
 
@@ -2105,8 +2095,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 			IDictionary<int, IForecastDayTemplate> result = null;
 			if (rootEntity != null)
 			{
-				result = rootEntity.GetTemplates(templateTarget).OrderBy(i => i.Key).ToDictionary(k => k.Key,
-																																										v => v.Value);
+				result = rootEntity.GetTemplates(templateTarget).OrderBy(i => i.Key).ToDictionary(k => k.Key, v => v.Value);
 			}
 			return result;
 		}
@@ -2217,10 +2206,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 				if (_splitterManager == null)
 				{
 					_splitterManager = new SplitterManager
-																 {
-																	 MainSplitter = splitContainer2,
-																	 WorkSkillSplitter = splitContainerWorkloadSkill
-																 };
+					{
+						MainSplitter = splitContainer2,
+						WorkSkillSplitter = splitContainerWorkloadSkill
+					};
 				}
 				return _splitterManager;
 			}
