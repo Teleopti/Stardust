@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Drawing;
 using System.IdentityModel.Claims;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -63,6 +65,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakePersonAbsenceRepository PersonAbsenceRepository;
 		public FakeDatabase Database;
+		public IThreadPrincipalContext PrincipalContext;
+		public FakeBusinessUnitRepository BusinessUnitRepository;
+		public FakeActivityRepository ActivityRepository;
 
 		public void Isolate(IIsolate isolate)
 		{
@@ -215,6 +220,34 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldGetCorrectColorOfSchedule()
+		{
+			var targetColor = Color.Blue;
+			var startDate = DateOnly.Today.AddDays(1);
+			var endDate = startDate.AddDays(9);
+			var form = prepareData(startDate, endDate, new DateTime(DateOnly.Today.AddDays(1).Date.Ticks, DateTimeKind.Utc));
+			setScheduleColor(targetColor);
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+
+			data.MySchedules.First().ScheduleLayers.First().Color.Should().Be.EqualTo(ColorTranslator.ToHtml(Color.FromArgb(targetColor.ToArgb())));
+		}
+
+		[Test]
+		public void ShouldSighOvertimeForMyOwnSchedule()
+		{
+			var startDate = DateOnly.Today.AddDays(1);
+			var endDate = startDate.AddDays(9);
+			var form = prepareData(startDate, endDate, new DateTime(DateOnly.Today.AddDays(1).Date.Ticks, DateTimeKind.Utc));
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+
+			data.MySchedules.First().ScheduleLayers.LastOrDefault().IsOvertime.Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldMapDateForRetrivedSchedules()
 		{
 			var startDate = DateOnly.Today.AddDays(1);
@@ -268,25 +301,45 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			};
 		}
 
+		private void setScheduleColor(Color targetColor)
+		{
+			ActivityRepository.LoadAll().FirstOrDefault().DisplayColor = targetColor;
+		}
+
 		private IPerson createPeopleWithAssignment(DateOnlyPeriod period, DateTime publishedDate)
 		{
+			var scenarioId = Guid.NewGuid();
 			var personFromId = Guid.NewGuid();
 			var personToId = Guid.NewGuid();
-			var scenarioId = Guid.NewGuid();
-
 
 			foreach (var date in period.DayCollection())
 			{
 				Database.WithMultiSchedulesForShiftTradeWorkflow(publishedDate)
 					.WithPerson(personFromId)
+					.WithPeriod(DateOnly.MinValue.ToString())
+					.WithTerminalDate(DateOnly.MaxValue.ToString())
 					.WithScenario(scenarioId)
 					.WithSchedule(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString())
+					.WithAssignedOvertimeActivity(date.Date.AddHours(17).ToString(), date.Date.AddHours(18).ToString())
 					.WithPerson(personToId)
+					.WithPeriod(DateOnly.MinValue.ToString())
+					.WithTerminalDate(DateOnly.MaxValue.ToString())
 					.WithSchedule(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString());
 			}
 
 			var currentUser = PersonRepository.Get(personFromId);
 			LoggedOnUser.SetFakeLoggedOnUser(currentUser);
+			var principal = new TeleoptiPrincipal(
+				new TeleoptiIdentity(
+					"Fake Login",
+					null,
+					BusinessUnitRepository.LoadAll().FirstOrDefault(),
+					null,
+					null
+				),
+				currentUser);
+			ThreadPrincipalContext.SetCurrentPrincipal(principal);
+			setPermissions(DefinedRaptorApplicationFunctionPaths.ViewSchedules);
 			CurrentScenario.Current().SetId(scenarioId);
 
 			return PersonRepository.Get(personToId);

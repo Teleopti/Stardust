@@ -699,6 +699,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			if (existing != null)
 			{
 				_person = existing as Person;
+				if (_workflowControlSet != null) _person.WorkflowControlSet = _workflowControlSet;
 				return this;
 			}
 

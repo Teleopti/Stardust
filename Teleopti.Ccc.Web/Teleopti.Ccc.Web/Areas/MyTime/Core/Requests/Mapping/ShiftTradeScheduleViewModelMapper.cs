@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Data;
 using Teleopti.Interfaces.Domain;
@@ -216,8 +217,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			if (scheduleDay == null) return null;
 
 			var eventScheduleDay = _builder.BuildEventScheduleDay(scheduleDay);
-			var layers = mapLayers(eventScheduleDay);
-
 			var shiftCategory = scheduleDay.PersonAssignment()?.ShiftCategory;
 			var isDayOff = eventScheduleDay.DayOff != null;
 			var isFulldayAbsence = eventScheduleDay.IsFullDayAbsence;
@@ -232,6 +231,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				displayColor = mapColor(absenceColor.ToArgb());
 				shortName = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.Description.ShortName;
 			}
+
 			return new ShiftTradeAddPersonScheduleViewModel
 			{
 				ContractTimeInMinute = eventScheduleDay.ContractTime.TotalMinutes,
@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				MinStart = date.Date,
 				Name = _personNameProvider.BuildNameFromSetting(scheduleDay.Person.Name.FirstName, scheduleDay.Person.Name.LastName),
 				PersonId = scheduleDay.Person.Id.GetValueOrDefault(),
-				ScheduleLayers = _layerMapper.Map(layers, person.Id == _loggedOnUser.CurrentUser().Id),
+				ScheduleLayers = getScheduleLayers(eventScheduleDay, scheduleDay.PersonAssignment(), person.Id == _loggedOnUser.CurrentUser().Id),
 				ShiftExchangeOfferId = null,
 				ShiftCategory = new ShiftCategoryViewModel { Name = categoryName, ShortName = shortName, DisplayColor = displayColor}
 			};
@@ -257,7 +257,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		{
 			var layers = new List<SimpleLayer>();
 			if (eventScheduleDay.Shift == null) return layers;
-
 			var ls = from layer in eventScheduleDay.Shift.Layers
 				select new SimpleLayer
 				{
@@ -271,6 +270,26 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 			layers.AddRange(ls);
 			return layers;
+		}
+
+		private TeamScheduleLayerViewModel[] getScheduleLayers( ProjectionChangedEventScheduleDay eventScheduleDay, IPersonAssignment personAssignment, bool isMySchedule)
+		{
+			var layers = mapLayers(eventScheduleDay);
+			var scheduleLayers = _layerMapper.Map(layers, isMySchedule);
+			if (!isMySchedule || personAssignment == null) return scheduleLayers;
+
+			foreach (var overtimeActivity in personAssignment.OvertimeActivities())
+			{
+				foreach (var teamScheduleLayerViewModel in scheduleLayers)
+				{
+					var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+					var start = TimeZoneHelper.ConvertFromUtc(overtimeActivity.Period.StartDateTime, timeZone);
+					var end = TimeZoneHelper.ConvertFromUtc(overtimeActivity.Period.EndDateTime, timeZone);
+					if (start == teamScheduleLayerViewModel.Start && end == teamScheduleLayerViewModel.End) teamScheduleLayerViewModel.IsOvertime = true;
+				}
+			}
+
+			return scheduleLayers;
 		}
 
 		private ShiftTradeScheduleViewModel getShiftTradeScheduleViewModel(Paging paging,
