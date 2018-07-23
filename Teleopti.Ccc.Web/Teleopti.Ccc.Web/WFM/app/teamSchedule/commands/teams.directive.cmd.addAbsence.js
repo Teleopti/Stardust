@@ -112,7 +112,7 @@
 			return moment(vm.timeRange.endTime).isSameOrAfter(moment(vm.timeRange.startTime), 'day');
 		};
 
-		vm.updateInvalidAgents = function () {
+		function updateInvalidAgents() {
 			if (!$scope.newAbsenceForm.$valid)
 				return;
 			if (vm.isFullDayAbsence) {
@@ -176,6 +176,7 @@
 		}
 
 		vm.anyValidAgent = function () {
+			updateInvalidAgents();
 			return vm.invalidAgents.length !== vm.selectedAgents.length;
 		};
 

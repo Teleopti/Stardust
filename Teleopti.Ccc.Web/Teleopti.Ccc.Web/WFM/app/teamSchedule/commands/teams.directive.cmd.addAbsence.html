@@ -14,15 +14,13 @@
 				<h3>{{'From'|translate}}: </h3>
 				<div class="con-row">
 					<teams-datetime-picker class="start-time" ng-model="vm.timeRange.startTime"
-										   timezone="vm.getCurrentTimezone()"
-										   ng-change="vm.updateInvalidAgents()">
+										   timezone="vm.getCurrentTimezone()">
 					</teams-datetime-picker>
 				</div>
 				<h3>{{'To'|translate}}: </h3>
 				<div class="con-row">
 					<teams-datetime-picker class="end-time" ng-model="vm.timeRange.endTime"
-										   timezone="vm.getCurrentTimezone()"
-										   ng-change="vm.updateInvalidAgents()">
+										   timezone="vm.getCurrentTimezone()">
 					</teams-datetime-picker>
 				</div>
 			</div>
@@ -30,11 +28,11 @@
 			<div ng-if="vm.isFullDayAbsence">
 				<h3>{{'From'|translate}}: </h3>
 				<div class="con-row">
-					<team-schedule-datepicker selected-date="vm.timeRange.startTime" ></team-schedule-datepicker>
+					<team-schedule-datepicker class="start-date" selected-date="vm.timeRange.startTime" ></team-schedule-datepicker>
 				</div>
 				<h3>{{'To'|translate}}: </h3>
 				<div class="con-row">
-					<team-schedule-datepicker selected-date="vm.timeRange.endTime" ></team-schedule-datepicker>
+					<team-schedule-datepicker class="end-date" selected-date="vm.timeRange.endTime" ></team-schedule-datepicker>
 				</div>
 			</div>
 			
@@ -45,6 +43,7 @@
 						 aria-label="Checkbox">
 				{{'FullDayAbsence'|translate}}
 			</md-checkbox>
+
 			<p class="text-danger" ng-if="!vm.isFullDayAbsence && !vm.isEndTimeGreaterThanStartTime()">{{'EndTimeMustBeGreaterThanStartTime'|translate}}</p>
 			<p class="text-danger" ng-if="vm.isFullDayAbsence && !vm.isAbsenceDateValid()">{{'EndTimeMustBeGreaterOrEqualToStartTime'|translate}}</p>
 			<div class="text-danger" ng-if="vm.invalidAgentNameListString && vm.invalidAgentNameListString.length > 0">

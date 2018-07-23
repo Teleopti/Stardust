@@ -50,7 +50,7 @@
 	});
 
 
-	beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_,_serviceDateFormatHelper_) {
+	beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_, _serviceDateFormatHelper_) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
@@ -108,8 +108,7 @@
 			Shifts: [
 				{
 					Date: '2015-01-01',
-					Projections: [
-					],
+					Projections: [],
 					ProjectionTimeRange: null
 				}]
 		});
@@ -118,6 +117,107 @@
 		expect(applyButton[0].disabled).toBe(true);
 	});
 
+	it('should not allow to add full day absence if the selected agents timezone is different from the selected time zone', function () {
+		fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: true });
+		var selectedAgents = [
+			{
+				PersonId: 'agent1',
+				Name: 'agent1',
+				ScheduleStartTime: null,
+				ScheduleEndTime: null,
+				Timezone: { IanaId: 'Asia/Hong_Kong' }
+			}];
+		fakePersonSelectionService.setFakeCheckedPersonInfoList(selectedAgents);
+		var result = setUp(moment('2018-07-23').toDate());
+		var vm = result.commandScope.vm;
+		vm.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('agent1', {
+			Date: '2018-07-23',
+			PersonId: 'agent1',
+			Timezone: {
+				IanaId: 'Asia/Hong_Kong'
+			},
+			Shifts: [
+				{
+					Date: '2018-07-23',
+					Projections: [],
+					ProjectionTimeRange: null
+				}]
+		});
+		vm.selectedAbsenceId = getAvailableAbsenceTypes()[0].Id;
+
+		var dateInputElements = result.container[0].querySelectorAll(".teamschedule-datepicker #teamschedule-datepicker-input");
+		dateInputElements[0].value = '7/23/18';
+		angular.element(dateInputElements[0]).triggerHandler('change');
+		dateInputElements[1].value = '7/25/18';
+		angular.element(dateInputElements[1]).triggerHandler('change');
+		result.commandScope.$apply();
+
+		var applyButton = result.container[0].querySelector('#applyAbsence');
+		expect(applyButton.disabled).toBeTruthy();
+	});
+
+	it('should able to add full day absence and show the error message for agents who is in different timezone', function () {
+		fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: true });
+		var selectedAgents = [
+			{
+				PersonId: 'agent1',
+				Name: 'agent1',
+				ScheduleStartTime: null,
+				ScheduleEndTime: null,
+				Timezone: { IanaId: 'Asia/Hong_Kong' }
+			},
+			{
+				PersonId: 'agent2',
+				Name: 'agent2',
+				ScheduleStartTime: null,
+				ScheduleEndTime: null,
+				Timezone: { IanaId: 'Europe/Stockholm' }
+			}];
+		fakePersonSelectionService.setFakeCheckedPersonInfoList(selectedAgents);
+		var result = setUp(moment('2018-07-23').toDate());
+		var vm = result.commandScope.vm;
+		vm.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('agent1', {
+			Date: '2018-07-23',
+			PersonId: 'agent1',
+			Timezone: {
+				IanaId: 'Asia/Hong_Kong'
+			},
+			Shifts: [
+				{
+					Date: '2018-07-23',
+					Projections: [],
+					ProjectionTimeRange: null
+				}]
+		});
+		vm.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('agent2', {
+			Date: '2018-07-23',
+			PersonId: 'agent2',
+			Timezone: {
+				IanaId: 'Europe/Stockholm'
+			},
+			Shifts: [
+				{
+					Date: '2018-07-23',
+					Projections: [],
+					ProjectionTimeRange: null
+				}]
+		});
+		vm.selectedAbsenceId = getAvailableAbsenceTypes()[0].Id;
+
+		var dateInputElements = result.container[0].querySelectorAll(".teamschedule-datepicker #teamschedule-datepicker-input");
+		dateInputElements[0].value = '7/23/18';
+		angular.element(dateInputElements[0]).triggerHandler('change');
+		dateInputElements[1].value = '7/25/18';
+		angular.element(dateInputElements[1]).triggerHandler('change');
+		result.commandScope.$apply();
+
+		var applyButton = result.container[0].querySelector('#applyAbsence');
+		expect(applyButton.disabled).toBeFalsy();
+		expect(result.container[0].innerHTML.indexOf('CannotApplyThisToAgentsInADifferentTimeZone') != -1).toBeTruthy();
+		expect(result.container[0].innerHTML.indexOf('agent1') != -1).toBeTruthy();
+	});
+
+	
 	commonTestsInDifferentLocale();
 
 	function commonTestsInDifferentLocale() {
@@ -228,9 +328,7 @@
 					}]
 			});
 			result.commandScope.$apply();
-
 			result.commandScope.newAbsenceForm.$valid = true;
-			vm.updateInvalidAgents();
 			result.commandScope.$apply();
 
 			var applyButton = result.container[0].querySelectorAll('#applyAbsence');
@@ -276,9 +374,8 @@
 						}
 					}]
 			});
-			
+
 			result.commandScope.newAbsenceForm.$valid = true;
-			vm.updateInvalidAgents();
 			result.commandScope.$apply();
 
 			var panel = result.container;
@@ -366,7 +463,11 @@
 	function FakeScheduleManagementService() {
 
 		this.schedules = function () {
-			return null;
+			var schedules = [];
+			for (var personId in savedPersonScheduleVm) {
+				schedules.push(savedPersonScheduleVm[personId]);
+			}
+			return schedules;
 		};
 
 		this.newService = function () {
@@ -447,7 +548,7 @@
 				})
 			};
 		};
-		
+
 		this.getAddAbsenceCalledWith = function () {
 			return targetAbsence;
 		};
@@ -471,7 +572,7 @@
 	function FakeCommandCheckService() {
 		var checkStatus = false;
 
-		
+
 		this.getCommandCheckStatus = function () {
 			return checkStatus;
 		}
@@ -480,7 +581,7 @@
 			checkStatus = false;
 		}
 
-		
+
 		this.checkPersonalAccounts = function (requestedData) {
 			return {
 				then: function (cb) {
