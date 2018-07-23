@@ -386,6 +386,7 @@
     <Compile Include="RealTimeAdherence\RtaTestAttribute.cs" />
     <Compile Include="RealTimeAdherence\Tracer\RtaTracerActivityCheckTraceTest.cs" />
     <Compile Include="RealTimeAdherence\Tracer\RtaTracerCloseSnapshotTraceTest.cs" />
+    <Compile Include="RealTimeAdherence\Tracer\RtaTracerNullTest.cs" />
     <Compile Include="RealTimeAdherence\Tracer\RtaTracerProcessTraceTest.cs" />
     <Compile Include="RealTimeAdherence\Tracer\RtaTracerStateTraceTest.cs" />
     <Compile Include="RealTimeAdherence\Tracer\RtaTracerTenantTest.cs" />

@@ -49,7 +49,9 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Tracer
 		}
 
 		public void RefreshTracers() =>
-			_tracers = _config.ReadAll().Select(tracer =>
+			_tracers = _config.ReadAll()
+				.Where(x => x.UserCode != null)
+				.Select(tracer =>
 				{
 					var config = makeTracerFromConfig(tracer);
 					justWrite(new TracingLog {Tracing = config.User}, "Tracing", config.Tenant);
