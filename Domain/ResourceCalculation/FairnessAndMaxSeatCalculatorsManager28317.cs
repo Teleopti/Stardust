@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				if (shiftValue < highestValue)
 				{
-					return foundValues;
+					break;
 				}
 
 				if (Math.Abs(shiftValue - highestValue) < 0.000001 && foundValues.Any())
@@ -61,8 +61,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				{
 					foundValues.Add(new WorkShiftCalculationResult { ShiftProjection = workShiftCalculationResultHolder.ShiftProjection, Value = shiftValue });
 				}
+			}
 
-				
+			if (!foundValues.Any() && sortedList.Any())
+			{
+				var holder = sortedList.First();
+				foundValues.Add(new WorkShiftCalculationResult { ShiftProjection = holder.ShiftProjection, Value = holder.Value });
 			}
 			return foundValues;
 		}

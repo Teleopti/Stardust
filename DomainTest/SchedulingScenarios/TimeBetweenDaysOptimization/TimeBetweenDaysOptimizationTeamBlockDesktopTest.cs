@@ -32,6 +32,144 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TimeBetweenDaysOptimizatio
 		public FakeRuleSetBagRepository RuleSetBagRepository;
 
 		[Test]
+		public void ShouldworkWhenOverStaffed()
+		{
+			var firstDay = new DateOnly(2015, 10, 12); //mon
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
+			var activity = new Activity("_");
+			var tp = new TimePeriod(7, 17);
+			var skill = new Skill().WithId().For(activity).IsOpen(tp, tp, tp, tp, tp, tp, tp);
+			var scenario = new Scenario("_");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(7, 0, 9, 0, 60), new TimePeriodWithSegment(15, 0, 17, 0, 60), shiftCategory));
+			var team = new Team { Site = new Site("_") };
+			var agent1 = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, team, skill).WithSchedulePeriodOneWeek(firstDay);
+			var agent2 = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, team, skill).WithSchedulePeriodOneWeek(firstDay);
+			var agent3 = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, team, skill).WithSchedulePeriodOneWeek(firstDay);
+			var agent4 = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, team, skill).WithSchedulePeriodOneWeek(firstDay);
+			agent1.SchedulePeriod(firstDay).SetDaysOff(2);
+			agent2.SchedulePeriod(firstDay).SetDaysOff(2);
+			agent3.SchedulePeriod(firstDay).SetDaysOff(2);
+			agent4.SchedulePeriod(firstDay).SetDaysOff(2);
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
+				1,
+				1,
+				1,
+				0.5,
+				2,
+				1,
+				1);
+
+			var asses1 = Enumerable.Range(0, 7).Select(i =>
+				new PersonAssignment(agent1, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory)
+					.WithLayer(activity, new TimePeriod(7, 15))).ToList();
+			var asses2 = Enumerable.Range(0, 7).Select(i =>
+				new PersonAssignment(agent2, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory)
+					.WithLayer(activity, new TimePeriod(9, 17))).ToList();
+			var asses3 = Enumerable.Range(0, 7).Select(i =>
+				new PersonAssignment(agent3, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory)
+					.WithLayer(activity, new TimePeriod(7, 15))).ToList();
+			var asses4 = Enumerable.Range(0, 7).Select(i =>
+				new PersonAssignment(agent4, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory)
+					.WithLayer(activity, new TimePeriod(9, 17))).ToList();
+			asses1[5].SetDayOff(new DayOffTemplate()); //saturday
+			asses1[6].SetDayOff(new DayOffTemplate()); //sunday
+			asses2[5].SetDayOff(new DayOffTemplate()); //saturday
+			asses2[6].SetDayOff(new DayOffTemplate()); //sunday
+			asses3[5].SetDayOff(new DayOffTemplate()); //saturday
+			asses3[6].SetDayOff(new DayOffTemplate()); //sunday
+			asses4[5].SetDayOff(new DayOffTemplate()); //saturday
+			asses4[6].SetDayOff(new DayOffTemplate()); //sunday
+			asses1.AddRange(asses2);
+			asses1.AddRange(asses3);
+			asses1.AddRange(asses4);
+			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent1, agent2 }, asses1, skillDays);
+			var advanced = new AdvancedPreferences { UseMaximumStaffing = false, UseMinimumStaffing = false };
+			var optPreferences = new OptimizationPreferences
+			{
+				General = { ScheduleTag = new ScheduleTag(), OptimizationStepTimeBetweenDays = true },
+				Extra = { UseTeams = false, TeamGroupPage = new GroupPageLight("_", GroupPageType.RuleSetBag) },
+				Advanced = advanced
+			};
+			var daysOffPreferences = new DaysOffPreferences();
+			var dayOffOptimizationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(daysOffPreferences);
+			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent1 },
+				period, optPreferences, dayOffOptimizationPreferenceProvider);
+			var e15 = stateHolder.Schedules[agent1].ScheduledDay(new DateOnly(2015, 10, 15)).PersonAssignment().ShiftLayers.First().Period.ElapsedTime();
+			var e16 = stateHolder.Schedules[agent1].ScheduledDay(new DateOnly(2015, 10, 16)).PersonAssignment().ShiftLayers.First().Period.ElapsedTime();
+			(e16 > e15).Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldworkWhenUnderStaffed()
+		{
+			var firstDay = new DateOnly(2015, 10, 12); //mon
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
+			var activity = new Activity("_");
+			var tp = new TimePeriod(7, 17);
+			var skill = new Skill().WithId().For(activity).IsOpen(tp, tp, tp, tp, tp, tp, tp);
+			var scenario = new Scenario("_");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(7, 0, 9, 0, 60), new TimePeriodWithSegment(15, 0, 17, 0, 60), shiftCategory));
+			var team = new Team { Site = new Site("_") };
+			var agent1 = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, team, skill).WithSchedulePeriodOneWeek(firstDay);
+			var agent2 = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, team, skill).WithSchedulePeriodOneWeek(firstDay);
+			var agent3 = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, team, skill).WithSchedulePeriodOneWeek(firstDay);
+			var agent4 = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, team, skill).WithSchedulePeriodOneWeek(firstDay);
+			agent1.SchedulePeriod(firstDay).SetDaysOff(2);
+			agent2.SchedulePeriod(firstDay).SetDaysOff(2);
+			agent3.SchedulePeriod(firstDay).SetDaysOff(2);
+			agent4.SchedulePeriod(firstDay).SetDaysOff(2);
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
+				10,
+				10,
+				10,
+				5,
+				20,
+				10,
+				10);
+
+			var asses1 = Enumerable.Range(0, 7).Select(i =>
+				new PersonAssignment(agent1, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory)
+					.WithLayer(activity, new TimePeriod(7, 15))).ToList();
+			var asses2 = Enumerable.Range(0, 7).Select(i =>
+				new PersonAssignment(agent2, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory)
+					.WithLayer(activity, new TimePeriod(9, 17))).ToList();
+			var asses3 = Enumerable.Range(0, 7).Select(i =>
+				new PersonAssignment(agent3, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory)
+					.WithLayer(activity, new TimePeriod(7, 15))).ToList();
+			var asses4 = Enumerable.Range(0, 7).Select(i =>
+				new PersonAssignment(agent4, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory)
+					.WithLayer(activity, new TimePeriod(9, 17))).ToList();
+			asses1[5].SetDayOff(new DayOffTemplate()); //saturday
+			asses1[6].SetDayOff(new DayOffTemplate()); //sunday
+			asses2[5].SetDayOff(new DayOffTemplate()); //saturday
+			asses2[6].SetDayOff(new DayOffTemplate()); //sunday
+			asses3[5].SetDayOff(new DayOffTemplate()); //saturday
+			asses3[6].SetDayOff(new DayOffTemplate()); //sunday
+			asses4[5].SetDayOff(new DayOffTemplate()); //saturday
+			asses4[6].SetDayOff(new DayOffTemplate()); //sunday
+			asses1.AddRange(asses2);
+			asses1.AddRange(asses3);
+			asses1.AddRange(asses4);
+			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent1, agent2 }, asses1, skillDays);
+			var advanced = new AdvancedPreferences { UseMaximumStaffing = false, UseMinimumStaffing = false };
+			var optPreferences = new OptimizationPreferences
+			{
+				General = { ScheduleTag = new ScheduleTag(), OptimizationStepTimeBetweenDays = true },
+				Extra = { UseTeams = false, TeamGroupPage = new GroupPageLight("_", GroupPageType.RuleSetBag) },
+				Advanced = advanced
+			};
+			var daysOffPreferences = new DaysOffPreferences();
+			var dayOffOptimizationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(daysOffPreferences);
+			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent1 },
+				period, optPreferences, dayOffOptimizationPreferenceProvider);
+			var e15 = stateHolder.Schedules[agent1].ScheduledDay(new DateOnly(2015, 10, 15)).PersonAssignment().ShiftLayers.First().Period.ElapsedTime();
+			var e16 = stateHolder.Schedules[agent1].ScheduledDay(new DateOnly(2015, 10, 16)).PersonAssignment().ShiftLayers.First().Period.ElapsedTime();
+			(e16 > e15).Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldHonorMaxStaffBug76723()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
@@ -95,8 +233,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TimeBetweenDaysOptimizatio
 			var daysOffPreferences = new DaysOffPreferences();
 			var dayOffOptimizationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(daysOffPreferences);
 			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] {agent1},
-				new DateOnlyPeriod(2015, 10, 15, 2015, 10, 16), optPreferences, dayOffOptimizationPreferenceProvider);
+				period, optPreferences, dayOffOptimizationPreferenceProvider);
 			skillDays[4].SkillStaffPeriodCollection.Last().CalculatedLoggedOn.Should().Be.EqualTo(1);
+			var e15 = stateHolder.Schedules[agent1].ScheduledDay(new DateOnly(2015, 10, 15)).PersonAssignment().ShiftLayers.First().Period.ElapsedTime();
+			var e16 = stateHolder.Schedules[agent1].ScheduledDay(new DateOnly(2015, 10, 16)).PersonAssignment().ShiftLayers.First().Period.ElapsedTime();
+			(e16 > e15).Should().Be.True();
 		}
 
 
