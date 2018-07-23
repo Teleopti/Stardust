@@ -119,11 +119,13 @@
 		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
 
 		var labelSelector = '.new-teamschedule-view .mobile-timeline .mobile-timeline-label';
-		equal($(labelSelector).length, 9);
-		equal($(labelSelector)[0].innerText, '05:00');
-		equal($(labelSelector)[1].innerText, '06:00');
-		equal($(labelSelector)[2].innerText, '07:00');
-		equal($(labelSelector)[3].innerText, '08:00');
+		equal($(labelSelector).length, 32);
+		equal($(labelSelector)[0].innerText, '23:00 -1');
+		equal($(labelSelector)[1].innerText, '00:00');
+		equal($(labelSelector)[2].innerText, '01:00');
+		equal($(labelSelector)[3].innerText, '02:00');
+		equal($(labelSelector)[30].innerText, '05:00 +1');
+		equal($(labelSelector)[31].innerText, '06:00 +1');
 	});
 
 	test('should update timeline after load more schedules', function() {
@@ -135,29 +137,166 @@
 		vm.readMoreTeamScheduleData({
 			AgentSchedules: [],
 			TimeLine: [
-				{ Time: '08:00:00', TimeLineDisplay: '08:00', PositionPercentage: 0.0714, TimeFixedFormat: null },
-				{ Time: '09:00:00', TimeLineDisplay: '09:00', PositionPercentage: 0.3571, TimeFixedFormat: null },
-				{ Time: '10:00:00', TimeLineDisplay: '10:00', PositionPercentage: 0.6429, TimeFixedFormat: null },
-				{ Time: '11:00:00', TimeLineDisplay: '11:00', PositionPercentage: 0.9286, TimeFixedFormat: null },
-				{ Time: '23:00:00', TimeLineDisplay: '23:00', PositionPercentage: 0.0714, TimeFixedFormat: null },
-				{ Time: '1.00:00:00', TimeLineDisplay: '00:00', PositionPercentage: 0.3571, TimeFixedFormat: null },
-				{ Time: '1.01:00:00', TimeLineDisplay: '01:00', PositionPercentage: 0.6429, TimeFixedFormat: null },
-				{ Time: '1.02:00:00', TimeLineDisplay: '02:00', PositionPercentage: 0.6429, TimeFixedFormat: null },
-				{ Time: '1.03:00:00', TimeLineDisplay: '03:00', PositionPercentage: 0.6429, TimeFixedFormat: null },
-				{ Time: '1.04:00:00', TimeLineDisplay: '04:00', PositionPercentage: 0.6429, TimeFixedFormat: null },
-				{ Time: '1.05:00:00', TimeLineDisplay: '05:00', PositionPercentage: 0.6429, TimeFixedFormat: null }
+				{
+					Time: '2018-07-23T08:00:00',
+					TimeLineDisplay: '23/07/2018T08:00',
+					PositionPercentage: 0.0,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T09:00:00',
+					TimeLineDisplay: '23/07/2018T09:00',
+					PositionPercentage: 0.0412,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T10:00:00',
+					TimeLineDisplay: '23/07/2018T10:00',
+					PositionPercentage: 0.0825,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T11:00:00',
+					TimeLineDisplay: '23/07/2018T11:00',
+					PositionPercentage: 0.1237,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T12:00:00',
+					TimeLineDisplay: '23/07/2018T12:00',
+					PositionPercentage: 0.1649,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T13:00:00',
+					TimeLineDisplay: '23/07/2018T13:00',
+					PositionPercentage: 0.2062,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T14:00:00',
+					TimeLineDisplay: '23/07/2018T14:00',
+					PositionPercentage: 0.2474,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T15:00:00',
+					TimeLineDisplay: '23/07/2018T15:00',
+					PositionPercentage: 0.2887,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T16:00:00',
+					TimeLineDisplay: '23/07/2018T16:00',
+					PositionPercentage: 0.3299,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T17:00:00',
+					TimeLineDisplay: '23/07/2018T17:00',
+					PositionPercentage: 0.3711,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T18:00:00',
+					TimeLineDisplay: '23/07/2018T18:00',
+					PositionPercentage: 0.4124,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T19:00:00',
+					TimeLineDisplay: '23/07/2018T19:00',
+					PositionPercentage: 0.4536,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T20:00:00',
+					TimeLineDisplay: '23/07/2018T20:00',
+					PositionPercentage: 0.4948,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T21:00:00',
+					TimeLineDisplay: '23/07/2018T21:00',
+					PositionPercentage: 0.5361,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T22:00:00',
+					TimeLineDisplay: '23/07/2018T22:00',
+					PositionPercentage: 0.5773,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T23:00:00',
+					TimeLineDisplay: '23/07/2018T23:00',
+					PositionPercentage: 0.6186,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-24T00:00:00',
+					TimeLineDisplay: '24/07/2018T00:00',
+					PositionPercentage: 0.6598,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-24T01:00:00',
+					TimeLineDisplay: '24/07/2018T01:00',
+					PositionPercentage: 0.701,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-24T02:00:00',
+					TimeLineDisplay: '24/07/2018T02:00',
+					PositionPercentage: 0.7423,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-24T03:00:00',
+					TimeLineDisplay: '24/07/2018T03:00',
+					PositionPercentage: 0.7835,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-24T04:00:00',
+					TimeLineDisplay: '24/07/2018T04:00',
+					PositionPercentage: 0.8247,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-24T05:00:00',
+					TimeLineDisplay: '24/07/2018T05:00',
+					PositionPercentage: 0.866,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-24T06:00:00',
+					TimeLineDisplay: '24/07/2018T06:00',
+					PositionPercentage: 0.9072,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-24T07:00:00',
+					TimeLineDisplay: '24/07/2018T07:00',
+					PositionPercentage: 0.9485,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-24T08:00:00',
+					TimeLineDisplay: '24/07/2018T08:00',
+					PositionPercentage: 0.9897,
+					TimeFixedFormat: null
+				}
 			]
 		});
 
 		var labelSelector = '.new-teamschedule-view .mobile-timeline .mobile-timeline-label';
-		equal($(labelSelector).length, 14);
-		equal($(labelSelector)[0].innerText, '05:00');
-		equal($(labelSelector)[1].innerText, '06:00');
-		equal($(labelSelector)[2].innerText, '07:00');
-		equal($(labelSelector)[3].innerText, '08:00');
-		equal($(labelSelector)[4].innerText, '09:00');
-		equal($(labelSelector)[12].innerText, '04:00');
-		equal($(labelSelector)[13].innerText, '05:00');
+		equal($(labelSelector).length, 34);
+		equal($(labelSelector)[0].innerText, '23:00 -1');
+		equal($(labelSelector)[1].innerText, '00:00');
+		equal($(labelSelector)[2].innerText, '01:00');
+		equal($(labelSelector)[32].innerText, '07:00 +1');
+		equal($(labelSelector)[33].innerText, '08:00 +1');
 	});
 
 	test('should render overnight timeline', function() {
@@ -169,11 +308,13 @@
 		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
 
 		var labelSelector = '.new-teamschedule-view .mobile-timeline .mobile-timeline-label:visible';
-
-		equal($(labelSelector)[4].innerText, '23:00');
-		equal($(labelSelector)[5].innerText, '00:00');
-		equal($(labelSelector)[6].innerText, '01:00');
-		equal($(labelSelector)[7].innerText, '02:00');
+		equal($(labelSelector).length, 32);
+		equal($(labelSelector)[0].innerText, '23:00 -1');
+		equal($(labelSelector)[1].innerText, '00:00');
+		equal($(labelSelector)[2].innerText, '01:00');
+		equal($(labelSelector)[3].innerText, '02:00');
+		equal($(labelSelector)[30].innerText, '05:00 +1');
+		equal($(labelSelector)[31].innerText, '06:00 +1');
 	});
 
 	test('should render my schedule', function() {
@@ -504,15 +645,198 @@
 		fakeTeamScheduleData = {
 			AgentSchedules: [],
 			TimeLine: [
-				{ Time: '05:00:00', TimeLineDisplay: '05:00', PositionPercentage: 0.0714, TimeFixedFormat: null },
-				{ Time: '06:00:00', TimeLineDisplay: '06:00', PositionPercentage: 0.3571, TimeFixedFormat: null },
-				{ Time: '07:00:00', TimeLineDisplay: '07:00', PositionPercentage: 0.6429, TimeFixedFormat: null },
-				{ Time: '08:00:00', TimeLineDisplay: '08:00', PositionPercentage: 0.9286, TimeFixedFormat: null },
-				{ Time: '23:00:00', TimeLineDisplay: '23:00', PositionPercentage: 0.0714, TimeFixedFormat: null },
-				{ Time: '1.00:00:00', TimeLineDisplay: '00:00', PositionPercentage: 0.3571, TimeFixedFormat: null },
-				{ Time: '1.01:00:00', TimeLineDisplay: '01:00', PositionPercentage: 0.6429, TimeFixedFormat: null },
-				{ Time: '1.02:00:00', TimeLineDisplay: '02:00', PositionPercentage: 0.6429, TimeFixedFormat: null },
-				{ Time: '1.03:00:00', TimeLineDisplay: '03:00', PositionPercentage: 0.6429, TimeFixedFormat: null }
+				{
+					Time: '2018-07-22T23:00:00',
+					TimeLineDisplay: '22/07/2018T23:00',
+					PositionPercentage: 0.0,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T00:00:00',
+					TimeLineDisplay: '23/07/2018T00:00',
+					PositionPercentage: 0.032,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T01:00:00',
+					TimeLineDisplay: '23/07/2018T01:00',
+					PositionPercentage: 0.064,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T02:00:00',
+					TimeLineDisplay: '23/07/2018T02:00',
+					PositionPercentage: 0.096,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T03:00:00',
+					TimeLineDisplay: '23/07/2018T03:00',
+					PositionPercentage: 0.128,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T04:00:00',
+					TimeLineDisplay: '23/07/2018T04:00',
+					PositionPercentage: 0.16,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T05:00:00',
+					TimeLineDisplay: '23/07/2018T05:00',
+					PositionPercentage: 0.192,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T06:00:00',
+					TimeLineDisplay: '23/07/2018T06:00',
+					PositionPercentage: 0.224,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T07:00:00',
+					TimeLineDisplay: '23/07/2018T07:00',
+					PositionPercentage: 0.256,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T08:00:00',
+					TimeLineDisplay: '23/07/2018T08:00',
+					PositionPercentage: 0.288,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T09:00:00',
+					TimeLineDisplay: '23/07/2018T09:00',
+					PositionPercentage: 0.32,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T10:00:00',
+					TimeLineDisplay: '23/07/2018T10:00',
+					PositionPercentage: 0.352,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T11:00:00',
+					TimeLineDisplay: '23/07/2018T11:00',
+					PositionPercentage: 0.384,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T12:00:00',
+					TimeLineDisplay: '23/07/2018T12:00',
+					PositionPercentage: 0.416,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T13:00:00',
+					TimeLineDisplay: '23/07/2018T13:00',
+					PositionPercentage: 0.448,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T14:00:00',
+					TimeLineDisplay: '23/07/2018T14:00',
+					PositionPercentage: 0.48,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T15:00:00',
+					TimeLineDisplay: '23/07/2018T15:00',
+					PositionPercentage: 0.512,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T16:00:00',
+					TimeLineDisplay: '23/07/2018T16:00',
+					PositionPercentage: 0.544,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T17:00:00',
+					TimeLineDisplay: '23/07/2018T17:00',
+					PositionPercentage: 0.576,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T18:00:00',
+					TimeLineDisplay: '23/07/2018T18:00',
+					PositionPercentage: 0.608,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T19:00:00',
+					TimeLineDisplay: '23/07/2018T19:00',
+					PositionPercentage: 0.64,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T20:00:00',
+					TimeLineDisplay: '23/07/2018T20:00',
+					PositionPercentage: 0.672,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T21:00:00',
+					TimeLineDisplay: '23/07/2018T21:00',
+					PositionPercentage: 0.704,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T22:00:00',
+					TimeLineDisplay: '23/07/2018T22:00',
+					PositionPercentage: 0.736,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-23T23:00:00',
+					TimeLineDisplay: '23/07/2018T23:00',
+					PositionPercentage: 0.768,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-24T00:00:00',
+					TimeLineDisplay: '24/07/2018T00:00',
+					PositionPercentage: 0.8,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-24T01:00:00',
+					TimeLineDisplay: '24/07/2018T01:00',
+					PositionPercentage: 0.832,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-24T02:00:00',
+					TimeLineDisplay: '24/07/2018T02:00',
+					PositionPercentage: 0.864,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-24T03:00:00',
+					TimeLineDisplay: '24/07/2018T03:00',
+					PositionPercentage: 0.896,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-24T04:00:00',
+					TimeLineDisplay: '24/07/2018T04:00',
+					PositionPercentage: 0.928,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-24T05:00:00',
+					TimeLineDisplay: '24/07/2018T05:00',
+					PositionPercentage: 0.96,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-24T06:00:00',
+					TimeLineDisplay: '24/07/2018T06:00',
+					PositionPercentage: 0.992,
+					TimeFixedFormat: null
+				}
 			],
 			TimeLineLengthInMinutes: 210,
 			PageCount: 4,

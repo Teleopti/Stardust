@@ -270,8 +270,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 
 			builder.RegisterType<TimeLineViewModelFactory>().As<ITimeLineViewModelFactory>();
 			builder.RegisterType<TimeLineViewModelFactoryToggle75989Off>().As<ITimeLineViewModelFactoryToggle75989Off>();
-
-			builder.RegisterType<TimeLineViewModelMapper>().As<ITimeLineViewModelMapper>();
 			builder.RegisterType<TimeLineViewModelMapperToggle75989Off>().As<ITimeLineViewModelMapperToggle75989Off>();
 			builder.RegisterType<AgentScheduleViewModelMapper>().As<IAgentScheduleViewModelMapper>();
 			builder.RegisterType<TeamProvider>().As<ITeamProvider>();

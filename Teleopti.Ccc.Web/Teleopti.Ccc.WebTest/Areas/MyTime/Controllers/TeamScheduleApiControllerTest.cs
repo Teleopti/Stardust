@@ -129,13 +129,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			};
 			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
 
-			var firstTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.First() as TeamScheduleTimeLineViewModel;
-			firstTeamScheduleTimeLineViewModel.Time.Should().Be(TimeSpan.FromHours(8));
-			firstTeamScheduleTimeLineViewModel.TimeLineDisplay.Should().Be(today.Date.AddMinutes(480).ToLocalizedTimeFormat());
+			var firstTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.First();
+			firstTeamScheduleTimeLineViewModel.Time.Should().Be(today.Date.AddHours(8));
+			firstTeamScheduleTimeLineViewModel.TimeLineDisplay.Should().Be(today.Date.AddMinutes(480).ToLocalizedDateTimeFormatWithTSpliting());
 
-			var lastTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.Last() as TeamScheduleTimeLineViewModel;
-			lastTeamScheduleTimeLineViewModel.Time.Should().Be(TimeSpan.FromHours(17));
-			lastTeamScheduleTimeLineViewModel.TimeLineDisplay.Should().Be(today.Date.AddMinutes(1020).ToLocalizedTimeFormat());
+			var lastTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.Last();
+			lastTeamScheduleTimeLineViewModel.Time.Should().Be(today.Date.AddHours(17));
+			lastTeamScheduleTimeLineViewModel.TimeLineDisplay.Should().Be(today.Date.AddMinutes(1020).ToLocalizedDateTimeFormatWithTSpliting());
 		}
 
 		[Test]
@@ -164,12 +164,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			(teamScheduleViewModel.TimeLine.Length > 0).Should().Be(true);
 
 			var firstTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.First();
-			firstTeamScheduleTimeLineViewModel.Time.Should().Be(TimeSpan.FromHours(8));
-			firstTeamScheduleTimeLineViewModel.TimeLineDisplay.Should().Be(today.Date.AddMinutes(480).ToLocalizedTimeFormat());
+			firstTeamScheduleTimeLineViewModel.Time.Should().Be(today.Date.AddHours(8));
+			firstTeamScheduleTimeLineViewModel.TimeLineDisplay.Should().Be(today.Date.AddMinutes(480).ToLocalizedDateTimeFormatWithTSpliting());
 
 			var lastTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.Last();
-			lastTeamScheduleTimeLineViewModel.Time.Should().Be(TimeSpan.FromHours(17));
-			lastTeamScheduleTimeLineViewModel.TimeLineDisplay.Should().Be(today.Date.AddMinutes(1020).ToLocalizedTimeFormat());
+			lastTeamScheduleTimeLineViewModel.Time.Should().Be(today.Date.AddHours(17));
+			lastTeamScheduleTimeLineViewModel.TimeLineDisplay.Should().Be(today.Date.AddMinutes(1020).ToLocalizedDateTimeFormatWithTSpliting());
 		}
 
 		[Test]
@@ -213,9 +213,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			(teamScheduleViewModel != null).Should().Be(true);
 
 			var firstTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.First();
-			firstTeamScheduleTimeLineViewModel.Time.Should().Be(TimeSpan.FromHours(8));
-			var lastTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.Last() as TeamScheduleTimeLineViewModel;
-			lastTeamScheduleTimeLineViewModel.Time.Should().Be(TimeSpan.FromHours(17));
+			firstTeamScheduleTimeLineViewModel.Time.Should().Be(today.Date.AddHours(8));
+			var lastTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.Last();
+			lastTeamScheduleTimeLineViewModel.Time.Should().Be(today.Date.AddHours(17));
 		}
 
 		[Test]
@@ -394,7 +394,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			(teamScheduleViewModel == null).Should().Be(false);
 			(teamScheduleViewModel.TimeLine == null).Should().Be(false);
 			(teamScheduleViewModel.TimeLine.Length > 0).Should().Be(true);
-			teamScheduleViewModel.TimeLine.Last().Time.Should().Be(TimeSpan.FromDays(1).Add(TimeSpan.FromHours(2)));
+			teamScheduleViewModel.TimeLine.Last().Time.Should().Be(today.Date.AddDays(1).AddHours(2));
 
 			var diff = TimeSpan.FromHours(26).Add(TimeSpan.FromMinutes(15)) - TimeSpan.FromHours(8);
 
@@ -403,6 +403,52 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var lastTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.Last();
 			lastTeamScheduleTimeLineViewModel.PositionPercentage.Should().Be(Math.Round((decimal)TimeSpan.FromMinutes(18 * 60).Ticks / diff.Ticks, 4));
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
+		public void ShouldReturnTimeLineHoursCorrectlyWithOverNightSchedules()
+		{
+			UserTimeZone.IsHawaii();
+			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.HawaiiTimeZoneInfo());
+
+			var today = new DateOnly(2014, 12, 15);
+			var team = TeamFactory.CreateSimpleTeam("test team").WithId();
+			TeamRepository.Add(team);
+
+			var person = PersonFactory.CreatePersonWithGuid("test", "agent");
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.ChinaTimeZoneInfo());
+			PersonRepository.Add(person);
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var assignment = new PersonAssignment(person, Scenario.Current(), today);
+			var period = new DateTimePeriod(2014, 12, 15, 4, 2014, 12, 15, 12);
+			var phoneActivity = new Activity("Phone")
+			{
+				InWorkTime = true,
+				InContractTime = true,
+				DisplayColor = Color.Green
+			};
+			assignment.AddActivity(phoneActivity, period);
+			assignment.SetShiftCategory(new ShiftCategory("sc"));
+			ScheduleData.Add(assignment);
+
+			var teamScheduleRequest = new TeamScheduleRequest
+			{
+				SelectedDate = today.Date,
+				Paging = new Paging
+				{
+					Take = 10
+				},
+				ScheduleFilter = new Domain.Repositories.ScheduleFilter
+				{
+					TeamIds = team.Id.ToString()
+				}
+			};
+			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
+
+			teamScheduleViewModel.TimeLine.Length.Should().Be(24);
+			teamScheduleViewModel.TimeLine.First().Time.Should().Be(TimeZoneHelper.ConvertFromUtc(new DateTime(2014, 12, 15, 4, 0, 0, DateTimeKind.Utc), TimeZoneInfoFactory.HawaiiTimeZoneInfo()));
 		}
 
 		[Test]
@@ -534,7 +580,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			firstPeriod.Title.Should().Be("Phone");
 			firstPeriod.StartTime.Should().Be(period.StartDateTime);
 			firstPeriod.EndTime.Should().Be(period.EndDateTime);
-			firstPeriod.TimeSpan.Should().Be("9:00 AM - 4:00 PM");
+			firstPeriod.TimeSpan.Should().Be("09:00 AM - 04:00 PM");
 		}
 
 		[Test]

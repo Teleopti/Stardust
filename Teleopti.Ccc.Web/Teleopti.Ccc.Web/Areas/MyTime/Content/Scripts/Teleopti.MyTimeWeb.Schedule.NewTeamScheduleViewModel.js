@@ -137,6 +137,7 @@
 		self.scheduleContainerHeight(self.timeLines().length * PIXEL_OF_ONE_HOUR + timeLineOffset);
 
 		var timelineStart = data.TimeLine[0].Time;
+
 		self.mySchedule(createMySchedule(data.MySchedule, timelineStart));
 
 		self.teamSchedules(createTeamSchedules(data.AgentSchedules, timelineStart));
@@ -160,6 +161,7 @@
 	self.readMoreTeamScheduleData = function(data, callback) {
 		rawTimeline = mergeRawTimeLine(rawTimeline, data.TimeLine);
 		self.timeLines(createTimeLineViewModel(rawTimeline));
+
 		self.scheduleContainerHeight(self.timeLines().length * PIXEL_OF_ONE_HOUR + timeLineOffset);
 
 		var agentNames = buildAgentNames(data.AgentSchedules);
@@ -179,10 +181,6 @@
 	function mergeRawTimeLine(rawTimeline, newTimeLine) {
 		rawTimeline = rawTimeline.concat(newTimeLine);
 
-		rawTimeline.sort(function(cur, next) {
-			return getMinuteOfRawTimeline(cur) - getMinuteOfRawTimeline(next);
-		});
-
 		var hash = {},
 			distinctRawTimeline = [];
 		rawTimeline.forEach(function(value) {
@@ -192,25 +190,11 @@
 			}
 		});
 
+		distinctRawTimeline.sort(function(cur, next) {
+			return moment(cur.Time) - moment(next.Time);
+		});
+
 		return distinctRawTimeline;
-	}
-
-	function getMinuteOfRawTimeline(t) {
-		var hourMinuteSecond = t.Time.split(':'),
-			hour = hourMinuteSecond[0],
-			minute = hourMinuteSecond[1],
-			minutes = 0;
-
-		if (hour.toString() === FULL_DAY_HOUR_STR) {
-			minutes = TOTAL_MINUTES_OF_ONE_DAY;
-		} else {
-			if (hour.indexOf('.') > -1) {
-				hour = 24 * parseInt(hour.split('.')[0]) + parseInt(hour.split('.')[1]);
-			}
-			minutes = hour * PIXEL_OF_ONE_HOUR + parseInt(minute);
-		}
-
-		return minutes;
 	}
 
 	function buildAgentNames(agentSchedulesData) {
@@ -381,7 +365,8 @@
 				scheduleHeight,
 				timeLineOffset - 5,
 				false,
-				index
+				index,
+				self.selectedDate()
 			);
 
 			timelineArr.push(timelineLayer);

@@ -86,6 +86,10 @@ namespace Teleopti.Ccc.Web.Core.Extensions
 		{
 			return instance.ToString(LocalizedDateTimeFormat);
 		}
+		public static string ToLocalizedDateTimeFormatWithTSpliting(this DateTime instance)
+		{
+			return instance.ToString($"{LocalizedDateFormat}T{LocalizedTimeFormat}");
+		}
 
 		public static string ToLocalizedTimeFormat(this DateTime instance)
 		{

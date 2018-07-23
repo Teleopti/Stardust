@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 
 	public class TeamScheduleTimeLineViewModel
 	{
-		public TimeSpan Time { get; set; }
+		public DateTime Time { get; set; }
 		public string TimeLineDisplay { get; set; }
 		public decimal PositionPercentage { get; set; }
 		public string TimeFixedFormat { get; set; }

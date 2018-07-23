@@ -94,7 +94,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 	}
 
 	function registerSwipeEventOnMobileAndiPad() {
-		if (!vm.isHostAMobile && !vm.isHostAniPad) return;
+		if (!onMobile && !oniPad) return;
 
 		$('.new-teamschedule-table').swipe({
 			swipeLeft: function() {
@@ -114,7 +114,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 	}
 
 	function registerScrollEvent() {
-		if (vm.isHostAMobile || vm.isHostAniPad) {
+		if (onMobile || oniPad) {
 			$('.teammates-schedules-container').scroll(function() {
 				$('.teammates-agent-name-row').css({ left: -$(this).scrollLeft() - 1 });
 			});
@@ -160,7 +160,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 	function setDraggableScrollBlockOnDesktop() {
 		if (!vm) throw 'Call this function after initializing vm';
 
-		if (vm.isHostAMobile || vm.isHostAniPad) return;
+		if (onMobile || oniPad) return;
 
 		setTimeout(function() {
 			calculateTheScrollingRatio();
@@ -336,7 +336,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 	}
 
 	function focusMySchedule() {
-		if (!vm.mySchedule().layers[0]) {
+		if (!vm.mySchedule() || !vm.mySchedule().layers[0]) {
 			$('.new-teamschedule-table')
 				.stop()
 				.animate({ scrollTop: 1 });

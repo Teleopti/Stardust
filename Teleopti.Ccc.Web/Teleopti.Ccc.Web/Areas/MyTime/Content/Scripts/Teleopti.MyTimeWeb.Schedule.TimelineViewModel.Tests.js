@@ -19,6 +19,48 @@ $(document).ready(function() {
 		equal(timelineViewModel[21].minutes, 1620);
 	});
 
+	test('should support timeline with date time', function() {
+		var timelineViewModelList = [];
+
+		fakeTimeLineRawData.forEach(function(t, i) {
+			var time = moment().format('YYYY-MM-DD') + 'T' + t.Time;
+			var timeDisplay = moment().format('YYYY-MM-DD') + 'T' + t.TimeLineDisplay;
+			if (t.Time.indexOf('.') > -1) {
+				time =
+					moment()
+						.add(1, 'days')
+						.format('YYYY-MM-DD') +
+					'T' +
+					t.Time;
+
+				timeDisplay =
+					moment()
+						.add(1, 'days')
+						.format('YYYY-MM-DD') +
+					'T' +
+					t.TimeLineDisplay;
+			}
+
+			var timelineViewModel = new Teleopti.MyTimeWeb.Schedule.TimelineViewModel(
+				{
+					Time: time,
+					TimeLineDisplay: moment().format('YYYY-MM-DD') + 'T' + t.TimeLineDisplay,
+					PositionPercentage: null,
+					TimeFixedFormat: null
+				},
+				800,
+				50,
+				false,
+				i + 1
+			);
+
+			timelineViewModelList.push(timelineViewModel);
+		});
+
+		equal(timelineViewModelList[0].timeText, '06:00');
+		equal(timelineViewModelList[21].timeText, '03:00 +1');
+	});
+
 	function setFakeTimeLineData() {
 		fakeTimeLineRawData = [
 			{

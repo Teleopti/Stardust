@@ -88,17 +88,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 				agentSchedules.Remove(mySchedule);
 			}
 
-			var schedulePeriod =
-				getSchedulePeriod(agentSchedules.Concat(Enumerable.Repeat(myScheduleViewModel, 1)), data.ScheduleDate);
+			var schedulePeriodInUtc = getSchedulePeriod(agentSchedules.Concat(Enumerable.Repeat(myScheduleViewModel, 1)), data.ScheduleDate);
 
-			var timeLineHours = _timeLineViewModelFactory.CreateTimeLineHours(schedulePeriod);
+			var timeLineHours = _timeLineViewModelFactory.CreateTimeLineHours(schedulePeriodInUtc, data.ScheduleDate);
 			var timezone = currentUser.PermissionInformation.DefaultTimeZone();
 
 			return new TeamScheduleViewModel
 			{
 				MySchedule = _teamScheduleAgentScheduleViewModelMapper
-					.Map(new[] {myScheduleViewModel}, schedulePeriod, timezone).FirstOrDefault(),
-				AgentSchedules = _teamScheduleAgentScheduleViewModelMapper.Map(agentSchedules, schedulePeriod, timezone)
+					.Map(new[] {myScheduleViewModel}, schedulePeriodInUtc, timezone).FirstOrDefault(),
+				AgentSchedules = _teamScheduleAgentScheduleViewModelMapper.Map(agentSchedules, schedulePeriodInUtc, timezone)
 					.ToArray(),
 				TimeLine = timeLineHours,
 				PageCount = pageCount,
@@ -176,29 +175,29 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 
 			var timeZone = _logonUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 
-			var returnPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date.Date.AddHours(DefaultSchedulePeriodProvider.DefaultStartHour),
+			var returnPeriodInUtc = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date.Date.AddHours(DefaultSchedulePeriodProvider.DefaultStartHour),
 				date.Date.AddHours(DefaultSchedulePeriodProvider.DefaultEndHour), timeZone);
 
 			if (scheduleMinMaxPeriod.HasValue)
 			{
 				var startDateTime = scheduleMinMaxPeriod.Value.StartDateTime;
-				if (returnPeriod.StartDateTime < startDateTime)
+				if (returnPeriodInUtc.StartDateTime < startDateTime)
 				{
-					startDateTime = returnPeriod.StartDateTime;
+					startDateTime = returnPeriodInUtc.StartDateTime;
 				}
 
 				var endDateTime = scheduleMinMaxPeriod.Value.EndDateTime;
-				if (returnPeriod.EndDateTime > endDateTime)
+				if (returnPeriodInUtc.EndDateTime > endDateTime)
 				{
-					endDateTime = returnPeriod.EndDateTime;
+					endDateTime = returnPeriodInUtc.EndDateTime;
 				}
 
-				returnPeriod = new DateTimePeriod(startDateTime, endDateTime);
+				returnPeriodInUtc = new DateTimePeriod(startDateTime, endDateTime);
 			}
 
-			returnPeriod = returnPeriod.ChangeStartTime(new TimeSpan(0, -15, 0));
-			returnPeriod = returnPeriod.ChangeEndTime(new TimeSpan(0, 15, 0));
-			return returnPeriod;
+			returnPeriodInUtc = returnPeriodInUtc.ChangeStartTime(new TimeSpan(0, -15, 0));
+			returnPeriodInUtc = returnPeriodInUtc.ChangeEndTime(new TimeSpan(0, 15, 0));
+			return returnPeriodInUtc;
 		}
 
 		private DateTimePeriod? getScheduleMinMax(IEnumerable<AgentInTeamScheduleViewModel> agentSchedules)
