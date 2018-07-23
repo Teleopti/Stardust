@@ -1739,6 +1739,7 @@
     <Content Include="WFM\app\rta\tool\_modules.js" />
     <Content Include="WFM\app\rta\tracer\rtaTracer.controller.js" />
     <Content Include="WFM\app\rta\tracer\rtaTracer.controller.spec.js" />
+    <Content Include="WFM\app\rta\tracer\rtaTracer.controller.stop-clear-slap-in-the-face.spec.js" />
     <Content Include="WFM\app\rta\tracer\rtaTracer.html" />
     <Content Include="WFM\app\rta\tracer\rtaTracer.state.provider.js" />
     <Content Include="WFM\app\rta\tracer\_modules.js" />
@@ -1832,6 +1833,7 @@
     <Content Include="WFM\app\teapot\view.html" />
     <Content Include="WFM\app\teapot\teapot.state.provider.js" />
     <Content Include="WFM\app\teapot\_modules.js" />
+    <Content Include="WFM\css\_rta-tracer.scss" />
     <Content Include="WFM\css\_rta.legacy.scss" />
     <Content Include="WFM\css\_rta.prototype.scss" />
     <Content Include="WFM\css\_staffing.scss" />

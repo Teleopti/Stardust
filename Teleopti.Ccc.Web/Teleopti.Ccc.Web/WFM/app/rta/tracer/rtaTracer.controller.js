@@ -4,26 +4,14 @@
 		.module('wfm.rtaTracer')
 		.controller('RtaTracerController', constructor);
 
-	constructor.$inject = ['$http', '$scope', 'rtaPollingService', '$stateParams', 'NoticeService'];
+	constructor.$inject = ['$http', '$scope', 'rtaPollingService', '$stateParams'];
 
-	function constructor($http, $scope, rtaPollingService, $stateParams, NoticeService) {
+	function constructor($http, $scope, rtaPollingService, $stateParams) {
 		var vm = this;
 		vm.userCode = $stateParams.userCode || '';
 		vm.tracers = [];
-		var reminderInterval;
 
 		vm.trace = function () {
-			vm.highlightStopButton = true;
-			
-			var notice = 'You are now tracing user ' + vm.userCode + '. Please remember to manually stop' +
-				' the tracer once you are done troubleshooting to avoid log errors.';
-			NoticeService.warning(notice, 7000, true);
-			
-			reminderInterval = setInterval(function () {
-				var reminder = 'Reminder: Please manually stop the tracer once you are done troubleshooting!';
-				NoticeService.warning(reminder, 7000, true);
-			}, 300000);
-			
 			$http.get('../api/RtaTracer/Trace', {params: {userCode: vm.userCode}});
 		};
 
@@ -31,14 +19,16 @@
 			vm.trace();
 
 		vm.stop = function () {
-			clearInterval(reminderInterval);
-			vm.highlightStopButton = false;
 			$http.get('../api/RtaTracer/Stop');
 		};
 
 		vm.clear = function () {
 			$http.get('../api/RtaTracer/Clear');
 			vm.exception = undefined;
+		};
+		
+		vm.displaySlapInTheFace = function () {
+			return vm.tracers.length > 0;
 		};
 
 		var poller = rtaPollingService.create(function () {
