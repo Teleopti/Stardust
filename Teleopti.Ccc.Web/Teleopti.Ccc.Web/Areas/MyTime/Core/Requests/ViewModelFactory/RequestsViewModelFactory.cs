@@ -169,7 +169,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 
 		private DateOnlyPeriod? fixPeriod(DateOnlyPeriod periodInput)
 		{
-			var openPeriodStart = DateOnly.Today.AddDays(_loggedOnUser.CurrentUser().WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum);
+			var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var agentToday = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timeZone));
+			var openPeriodStart = agentToday.AddDays(_loggedOnUser.CurrentUser().WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum);
 			var openPeriodEnd = openPeriodStart.AddDays(_loggedOnUser.CurrentUser().WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Maximum-1);
 			var realStart = periodInput.StartDate;
 			var realEnd = periodInput.EndDate;

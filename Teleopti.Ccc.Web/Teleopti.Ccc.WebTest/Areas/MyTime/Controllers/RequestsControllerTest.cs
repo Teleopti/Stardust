@@ -21,7 +21,6 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -68,6 +67,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public IThreadPrincipalContext PrincipalContext;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public FakeActivityRepository ActivityRepository;
+		public MutableNow _now;
 
 		public void Isolate(IIsolate isolate)
 		{
@@ -109,6 +109,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldRetriveMultiSchedulesForShiftTrade()
 		{
+			_now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var endDate = startDate.AddDays(5);
 			var form = prepareData(startDate, endDate, endDate.AddDays(10).Date);
@@ -123,6 +124,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldRetriveSchedulesWithinOpenPeriodStart()
 		{
+			_now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(-5);
 			var endDate = startDate.AddDays(11);
 			var form = prepareData(startDate, endDate, endDate.AddDays(10).Date);
@@ -137,6 +139,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldRetriveSchedulesWithinOpenPeriodEnd()
 		{
+			_now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var endDate = startDate.AddDays(11);
 			var form = prepareData(startDate, endDate, endDate.AddDays(10).Date);
@@ -151,6 +154,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldNotRetriveSchedulesWhenRequestEarlierThanOpenPeriod()
 		{
+			_now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(-15);
 			var endDate = startDate.AddDays(11);
 			var form = prepareData(startDate, endDate, DateTime.MaxValue);
@@ -165,6 +169,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldNotRetriveSchedulesWhenRequestLateThanOpenPeriod()
 		{
+			_now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(15);
 			var endDate = startDate.AddDays(11);
 			var form = prepareData(startDate, endDate, DateTime.MaxValue);
@@ -179,6 +184,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldNotRetriveUnpublishedSchedulesWithoutPermission()
 		{
+			_now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var endDate = startDate.AddDays(9);
 			var form = prepareData(startDate, endDate, DateOnly.Today.Date);
@@ -193,6 +199,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldRetriveUnpublishedSchedulesWithPermission()
 		{
+			_now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var endDate = startDate.AddDays(9);
 			var form = prepareData(startDate, endDate, DateOnly.Today.Date);
@@ -208,6 +215,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldOnlyRetrivePublishedSchedules()
 		{
+			_now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var endDate = startDate.AddDays(9);
 			var form = prepareData(startDate, endDate, new DateTime(DateOnly.Today.AddDays(2).Date.Ticks, DateTimeKind.Utc));
@@ -223,6 +231,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetCorrectColorOfSchedule()
 		{
 			var targetColor = Color.Blue;
+			_now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var endDate = startDate.AddDays(9);
 			var form = prepareData(startDate, endDate, new DateTime(DateOnly.Today.AddDays(1).Date.Ticks, DateTimeKind.Utc));
@@ -237,6 +246,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldSighOvertimeForMyOwnSchedule()
 		{
+			_now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var endDate = startDate.AddDays(9);
 			var form = prepareData(startDate, endDate, new DateTime(DateOnly.Today.AddDays(1).Date.Ticks, DateTimeKind.Utc));
@@ -248,8 +258,25 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldGetScheduleBaseMyTimeZone()
+		{
+			_now.Is(new DateTime(2018, 07, 09, 0, 0, 0, DateTimeKind.Utc));
+			var startDate = new DateOnly(_now.UtcDateTime()).AddDays(-1);
+			var endDate = startDate.AddDays(9);
+			var form = prepareData(startDate, endDate, 
+				new DateTime(DateOnly.Today.AddDays(1).Date.Ticks, DateTimeKind.Utc), 
+				TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(-5), "", ""));
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+
+			data.MySchedules.First().MinStart.Should().Be.EqualTo(new DateTime(2018, 7, 9));
+		}
+
+		[Test]
 		public void ShouldMapDateForRetrivedSchedules()
 		{
+			_now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var endDate = startDate.AddDays(9);
 			var form = prepareData(startDate, endDate, new DateTime(DateOnly.Today.AddDays(2).Date.Ticks, DateTimeKind.Utc));
@@ -264,6 +291,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldLoadScheduleWhenPersonToHasAbsence()
 		{
+			_now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(2);
 			var endDate = startDate;
 			var form = createDataWithAbsence(startDate, endDate, endDate.AddDays(10).Date, 2);
@@ -278,6 +306,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldLoadScheduleWhenIHaveAbsence()
 		{
+			_now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(2);
 			var endDate = startDate;
 			var form = createDataWithAbsence(startDate, endDate, endDate.AddDays(10).Date, 1);
@@ -289,9 +318,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			data.PersonToSchedules.Count().Should().Be.EqualTo(1);
 		}
 
-		private ShiftTradeMultiSchedulesForm prepareData(DateOnly startDate, DateOnly endDate, DateTime publishedDate)
+		private ShiftTradeMultiSchedulesForm prepareData(DateOnly startDate, DateOnly endDate, DateTime publishedDate, TimeZoneInfo timeZone = null)
 		{
-			var personTo = createPeopleWithAssignment(new DateOnlyPeriod(startDate, endDate), publishedDate);
+			var personTo = createPeopleWithAssignment(new DateOnlyPeriod(startDate, endDate), publishedDate, timeZone);
 
 			return new ShiftTradeMultiSchedulesForm
 			{
@@ -306,7 +335,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			ActivityRepository.LoadAll().FirstOrDefault().DisplayColor = targetColor;
 		}
 
-		private IPerson createPeopleWithAssignment(DateOnlyPeriod period, DateTime publishedDate)
+		private IPerson createPeopleWithAssignment(DateOnlyPeriod period, DateTime publishedDate, TimeZoneInfo timeZone)
 		{
 			var scenarioId = Guid.NewGuid();
 			var personFromId = Guid.NewGuid();
@@ -315,7 +344,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			foreach (var date in period.DayCollection())
 			{
 				Database.WithMultiSchedulesForShiftTradeWorkflow(publishedDate)
-					.WithPerson(personFromId)
+					.WithPerson(personFromId, "logOn", timeZone)
 					.WithPeriod(DateOnly.MinValue.ToString())
 					.WithTerminalDate(DateOnly.MaxValue.ToString())
 					.WithScenario(scenarioId)

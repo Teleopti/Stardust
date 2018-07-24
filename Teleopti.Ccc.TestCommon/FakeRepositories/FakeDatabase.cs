@@ -294,6 +294,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return database.WithPerson(id, null, null, null, null, null, null);
 		}
+
+		public static FakeDatabase WithPerson(this FakeDatabase database, Guid id, string name, TimeZoneInfo timeZone)
+		{
+			return database.WithPerson(id, name, null, timeZone, null, null, null);
+		}
 	}
 
 	public static class FakeDatabaseScheduleExtensions
