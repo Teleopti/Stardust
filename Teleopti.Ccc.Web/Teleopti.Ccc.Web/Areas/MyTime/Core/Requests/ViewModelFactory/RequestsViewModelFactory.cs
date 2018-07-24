@@ -152,8 +152,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			var mySchedules = new List<ShiftTradeAddPersonScheduleViewModel>();
 			var personToSchedules = new List<ShiftTradeAddPersonScheduleViewModel>();
 
-			var period = new DateOnlyPeriod(input.StartDate, input.EndDate);
-			var fixedPeriod = fixPeriod(period);
+			var fixedPeriod = fixPeriod(new DateOnlyPeriod(input.StartDate, input.EndDate));
 			if (fixedPeriod == null)
 			{
 				return new ShiftTradeMultiSchedulesViewModel
@@ -172,7 +171,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var agentToday = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timeZone));
 			var openPeriodStart = agentToday.AddDays(_loggedOnUser.CurrentUser().WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum);
-			var openPeriodEnd = openPeriodStart.AddDays(_loggedOnUser.CurrentUser().WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Maximum-1);
+			var openPeriodEnd = agentToday.AddDays(_loggedOnUser.CurrentUser().WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Maximum);
 			var realStart = periodInput.StartDate;
 			var realEnd = periodInput.EndDate;
 

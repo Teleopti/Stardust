@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Interfaces.Domain;
@@ -24,6 +25,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		public TeamScheduleLayerViewModel[] Map(IEnumerable<SimpleLayer> sourceLayers, bool isMySchedule = false)
 		{
 			return sourceLayers.Select(layer => mapLayer(layer, isMySchedule)).ToArray();
+		}
+
+		public TeamScheduleLayerViewModel[] Map(IEnumerable<SimpleLayer> sourceLayers, IEnumerable<OvertimeShiftLayer> overtimeActivities, bool isMySchedule = false)
+		{
+			return sourceLayers.Select(layer => mapLayer(layer, overtimeActivities, isMySchedule)).ToArray();
+		}
+
+		private TeamScheduleLayerViewModel mapLayer(SimpleLayer sourceLayer, IEnumerable<OvertimeShiftLayer> overtimeActivities, bool isMySchedule = false)
+		{
+			var viewModel = mapLayer(sourceLayer, isMySchedule);
+			var layerPeriod = new DateTimePeriod(sourceLayer.Start, sourceLayer.End);
+			viewModel.IsOvertime = isMySchedule && 
+								   overtimeActivities != null && 
+								   overtimeActivities.Any(overtime => layerPeriod.Intersect(overtime.Period));
+			
+			return viewModel;
 		}
 
 		private TeamScheduleLayerViewModel mapLayer(SimpleLayer sourceLayer, bool isMySchedule = false)

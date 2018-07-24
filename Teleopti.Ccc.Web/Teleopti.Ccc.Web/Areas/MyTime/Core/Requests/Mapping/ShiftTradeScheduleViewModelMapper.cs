@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonSc
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
@@ -172,8 +171,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			if (fixedPeriod == null) return viewModel;
 
 			var personTo = _personRepository.Get(personToId);
-			var allSchedules = _shiftTradeRequestProvider.RetrieveTradeMultiSchedules(period,
-				new List<IPerson> {_loggedOnUser.CurrentUser(), personTo });
+			var allSchedules = _shiftTradeRequestProvider.RetrieveTradeMultiSchedules(period, new List<IPerson> {_loggedOnUser.CurrentUser(), personTo });
 			if (allSchedules == null) return viewModel;
 
 			allSchedules.TryGetValue(_loggedOnUser.CurrentUser(), out var myScheduleRange);
@@ -226,10 +224,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			if (shiftCategory != null) displayColor = mapColor(shiftCategory.DisplayColor.ToArgb());
 			if (isFulldayAbsence)
 			{
-				categoryName =  scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.ConfidentialDescription(person).Name;
-				var absenceColor = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.ConfidentialDisplayColor(person);
+				var payload = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload;
+				categoryName = payload.ConfidentialDescription(person).Name;
+				var absenceColor = payload.ConfidentialDisplayColor(person);
 				displayColor = mapColor(absenceColor.ToArgb());
-				shortName = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.Description.ShortName;
+				shortName = payload.Description.ShortName;
 			}
 
 			return new ShiftTradeAddPersonScheduleViewModel
@@ -257,6 +256,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		{
 			var layers = new List<SimpleLayer>();
 			if (eventScheduleDay.Shift == null) return layers;
+
 			var ls = from layer in eventScheduleDay.Shift.Layers
 				select new SimpleLayer
 				{
@@ -275,21 +275,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private TeamScheduleLayerViewModel[] getScheduleLayers( ProjectionChangedEventScheduleDay eventScheduleDay, IPersonAssignment personAssignment, bool isMySchedule)
 		{
 			var layers = mapLayers(eventScheduleDay);
-			var scheduleLayers = _layerMapper.Map(layers, isMySchedule);
-			if (!isMySchedule || personAssignment == null) return scheduleLayers;
-
-			foreach (var overtimeActivity in personAssignment.OvertimeActivities())
-			{
-				foreach (var teamScheduleLayerViewModel in scheduleLayers)
-				{
-					var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
-					var start = TimeZoneHelper.ConvertFromUtc(overtimeActivity.Period.StartDateTime, timeZone);
-					var end = TimeZoneHelper.ConvertFromUtc(overtimeActivity.Period.EndDateTime, timeZone);
-					if (start == teamScheduleLayerViewModel.Start && end == teamScheduleLayerViewModel.End) teamScheduleLayerViewModel.IsOvertime = true;
-				}
-			}
-
-			return scheduleLayers;
+			return _layerMapper.Map(layers, personAssignment?.OvertimeActivities(), isMySchedule);
 		}
 
 		private ShiftTradeScheduleViewModel getShiftTradeScheduleViewModel(Paging paging,
@@ -302,15 +288,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				? possibleTradeScheduleNum / paging.Take + 1
 				: possibleTradeScheduleNum / paging.Take;
 
-			var timeLineHours = _shiftTradeTimeLineHoursViewModelMapper.Map(mySchedule, possibleTradeSchedule,
-				shiftTradeDate);
+			var timeLineHours = _shiftTradeTimeLineHoursViewModelMapper.Map(mySchedule, possibleTradeSchedule, shiftTradeDate);
 
 			return new ShiftTradeScheduleViewModel
 			{
 				MySchedule = mySchedule,
 				PossibleTradeSchedules = possibleTradeSchedule,
 				TimeLineHours = timeLineHours,
-				PageCount = pageCount,
+				PageCount = pageCount
 			};
 		}
 
