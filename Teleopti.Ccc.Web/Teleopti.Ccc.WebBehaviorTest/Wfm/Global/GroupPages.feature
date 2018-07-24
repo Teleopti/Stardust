@@ -25,8 +25,8 @@ Given I am american
 	| Add Activity                   | true           |
 
 Scenario: search agents using group pages picker in teams
+	Given today is '2016-10-10'
 	When I view wfm team schedules
-	And I set schedule date to '2016-10-10'
 	And I open group pages picker
 	Then I should see group pages picker tab
 	And I click on group page picker icon
