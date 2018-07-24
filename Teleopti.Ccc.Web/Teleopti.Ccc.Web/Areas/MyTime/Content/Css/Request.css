@@ -865,6 +865,12 @@ input.use-default-startTime {
 	height: 18px;
 }
 
+.shift-visual-indication .tooltip-inner {
+	width: 140%;
+	width: -webkit-max-content;
+	width: -moz-max-content;
+}
+
 .shift-visual-indication-block {
 	position: absolute;
 	height: 18px;
