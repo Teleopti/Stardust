@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -49,6 +50,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I remove approved period between '(.*)' and '(.*)'")]
 		public void WhenIRemoveApprovedPeriodBetweenAnd(string from, string to)
 		{
+			// open n close the panel...
+			// attempt to fix that the delete action doesnt always work it seems..
+			// suspect maybe its not completely bound at times when the panel is opened by the url option "open"...
+			var text = Resources.ResourceManager.GetString("ApprovedAsInAdherence", DataMaker.Data().MyCulture);
+			Browser.Interactions.ClickContaining($"rta-card-panel-header", text);
+			Browser.Interactions.ClickContaining($"rta-card-panel-header", text);
+			
 			Browser.Interactions.Click($".remove-approved-period[data-starttime='{from}'][data-endtime='{to}']");
 		}
 
