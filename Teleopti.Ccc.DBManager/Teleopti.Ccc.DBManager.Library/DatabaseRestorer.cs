@@ -35,8 +35,11 @@ namespace Teleopti.Ccc.DBManager.Library
 			var dataFolder = command.DataFolder ?? new FileInfo(bakFile).Directory.FullName;
 			restore(command.DatabaseType, command.DatabaseName, bakFile, dataFolder);
 			waitUntilLoginWorks();
-			createLoginDropUsers(command.DatabaseName, command.AppUserName, command.AppUserPassword);
-			waitUntilLoginWorks();
+			if (!string.IsNullOrEmpty(command.AppUserName))
+			{
+				createLoginDropUsers(command.DatabaseName, command.AppUserName, command.AppUserPassword);
+				waitUntilLoginWorks();
+			}
 			if (command.DatabaseType == DatabaseType.TeleoptiCCC7)
 				_configureSystem.ActivateAllTenants();
 			addLicence(command.DatabaseType);

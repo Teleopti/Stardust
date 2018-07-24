@@ -136,8 +136,6 @@ namespace Teleopti.Develop.Batflow
 					.Replace("'", "");
 
 			public string DatabaseSourcePath() => Path.Combine(RepositoryPath(), "Database");
-			public string SqlPassword() => "cadadi";
-			public string SqlUserName() => "sa";
 
 			public string ApplicationDatabaseBackup() => findBackupByHint("teleopticcc7", "ccc7", "app", "db");
 			public string AnalyticsDatabaseBackup() => findBackupByHint("TeleoptiAnalytics", "analytics");
@@ -217,9 +215,6 @@ namespace Teleopti.Develop.Batflow
 					UseIntegratedSecurity = true,
 					DatabaseType = DatabaseType.TeleoptiCCC7,
 					UpgradeDatabase = true,
-					CreatePermissions = true,
-					AppUserName = command.SqlUserName(),
-					AppUserPassword = command.SqlPassword(),
 					DbManagerFolderPath = command.DatabaseSourcePath(),
 					CreateDatabase = command.ApplicationDatabaseBackup() == null,
 					RestoreBackupIfNotExistsOrNewer = command.ApplicationDatabaseBackup()
@@ -232,9 +227,6 @@ namespace Teleopti.Develop.Batflow
 					UseIntegratedSecurity = true,
 					DatabaseType = DatabaseType.TeleoptiAnalytics,
 					UpgradeDatabase = true,
-					CreatePermissions = true,
-					AppUserName = command.SqlUserName(),
-					AppUserPassword = command.SqlPassword(),
 					DbManagerFolderPath = command.DatabaseSourcePath(),
 					CreateDatabase = command.AnalyticsDatabaseBackup() == null,
 					RestoreBackupIfNotExistsOrNewer = command.AnalyticsDatabaseBackup()
@@ -247,9 +239,6 @@ namespace Teleopti.Develop.Batflow
 					UseIntegratedSecurity = true,
 					DatabaseType = DatabaseType.TeleoptiCCCAgg,
 					UpgradeDatabase = true,
-					CreatePermissions = true,
-					AppUserName = command.SqlUserName(),
-					AppUserPassword = command.SqlPassword(),
 					DbManagerFolderPath = command.DatabaseSourcePath(),
 					CreateDatabase = command.AggDatabaseBackup() == null,
 					RestoreBackupIfNotExistsOrNewer = command.AggDatabaseBackup()
