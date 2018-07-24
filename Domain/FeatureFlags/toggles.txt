@@ -43,6 +43,7 @@ RTA_RestrictModifyAdherenceWithPermission_74898 = true
 RTA_EasilySpotLateForWork_75668 = true
 LevelUp_HangfireStatistics_76139_76373 = true
 RTA_DurationOfHistoricalEvents_76470 = RC
+RTA_ReviewHistoricalAdherence_74770 = false
 
 # Dumplings, can any of these be removed? #
 WfmTeamSchedule_ShowStaffingInfo_45206 = true
