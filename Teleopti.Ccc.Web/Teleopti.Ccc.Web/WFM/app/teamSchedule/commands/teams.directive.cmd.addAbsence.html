@@ -61,7 +61,7 @@
 			{{'AbsenceCannotBeAddedToAgentsInAnotherTimeZone'|translate}}
 		</span>
 		<button id="applyAbsence" class="wfm-btn form-submit"
-				ng-class="{'wfm-btn-primary': newAbsenceForm.$valid && vm.isTimeRangeValid() && vm.anyValidAgent() && (!vm.runningCommand), 'wfm-btn-primary-disabled': !(newAbsenceForm.$valid && vm.isTimeRangeValid() && vm.anyValidAgent() && (!vm.runningCommand))}"
+				ng-class="{'wfm-btn-primary':vm.anyValidAgent() &&  newAbsenceForm.$valid && vm.isTimeRangeValid() && (!vm.runningCommand), 'wfm-btn-primary-disabled': !(newAbsenceForm.$valid && vm.isTimeRangeValid() && vm.anyValidAgent() && (!vm.runningCommand))}"
 				ng-disabled="newAbsenceForm.$valid && vm.isTimeRangeValid() && vm.anyValidAgent() && (! vm.runningCommand)?'':'disabled'"
 				ng-click="vm.addAbsence()">
 			{{'Apply' | translate}}

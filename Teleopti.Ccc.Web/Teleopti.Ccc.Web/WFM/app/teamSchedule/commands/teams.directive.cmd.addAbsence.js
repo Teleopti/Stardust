@@ -113,11 +113,9 @@
 		};
 
 		function updateInvalidAgents() {
-			if (!$scope.newAbsenceForm.$valid)
-				return;
 			if (vm.isFullDayAbsence) {
 				determineIsSameTimezoneForFullDayAbsence();
-			} else {
+			} else if (vm.isAbsenceTimeValid()) {
 				checkIfTimeRangeAllowedForIntradayAbsence();
 			}
 			return;
