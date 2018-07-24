@@ -146,11 +146,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		public void LoadComboWithMasterActivities(IList<IMasterActivityModel> masterActivities)
 		{
+			var tmpList = new List<IMasterActivityModel>(masterActivities);
 			comboBoxMasterActivities.DataSource = null;
 			comboBoxMasterActivities.DisplayMember = "Name";
 			comboBoxMasterActivities.ValueMember = "Name";
-			if(!masterActivities.IsNullOrEmpty())
-				comboBoxMasterActivities.DataSource = masterActivities;
+			comboBoxMasterActivities.DataSource = tmpList;
 		}
 
 		public void LoadTwoList(IList<IActivityModel> allActivities, IList<IActivityModel> selectedActivities)
