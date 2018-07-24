@@ -20,9 +20,13 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 				es: {array: true}
 			},
 			templateUrl: function () {
+				if (toggles.RTA_ReviewHistoricalAdherence_74770)
+					return 'app/rta/rta/overview/view.ReviewHistoricalAdherence_74770.html';
 				return 'app/rta/rta/overview/view.RTA_ModifySkillGroup_48191.html';
 			},
 			controllerProvider: function () {
+				if (toggles.RTA_ReviewHistoricalAdherence_74770)
+					return 'RtaOverviewController74770 as vm';
 				return 'RtaOverviewController46933 as vm';
 			}
 		})
@@ -35,9 +39,13 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 				es: {array: true}
 			},
 			templateUrl: function () {
+				if (toggles.RTA_ReviewHistoricalAdherence_74770)
+					return 'app/rta/rta/agents/rta-agents.ReviewHistoricalAdherence_74770.html';
 				return 'app/rta/rta/agents/rta-agents.RTA_ImprovedStateGroupFilter_48724.html';
 			},
 			controllerProvider: function () {
+				if (toggles.RTA_ReviewHistoricalAdherence_74770)
+					return 'RtaAgentsController74770 as vm';
 				return 'RtaAgentsController48724 as vm';
 			}
 		})
