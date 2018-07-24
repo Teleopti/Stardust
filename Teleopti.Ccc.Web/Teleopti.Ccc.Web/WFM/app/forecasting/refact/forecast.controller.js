@@ -129,7 +129,7 @@
         function(data, status, headers, config) {
           vm.skillMaster.isForecastRunning = false;
         }
-      )
+      );
     }
 
     function forecastWorkload (blockToken) {
@@ -196,14 +196,14 @@
             vm.skillMaster.isForecastRunning = false;
           }
         );
-      };
+      }
 
       function disableMoreThanOneYear() {
         if (vm.forecastPeriod.endDate && vm.forecastPeriod.startDate) {
           return moment(vm.forecastPeriod.endDate).diff(moment(vm.forecastPeriod.startDate), 'years') >= 1;
         } else
         return false;
-      };
+      }
 
       function goToModify(skillData) {
         $state.go("forecast-modify", {workloadId:skillData.Workload.Id, skill:skillData, scenario:vm.selectedScenario, days:vm.currentWorkload.Days})
@@ -211,7 +211,7 @@
 
       function goStatistics(workload) {
         $state.go('statistics', { workloadId: workload });
-      };
+      }
 
       function forecastingModal(forecast, exporting) {
         if (vm.skillMaster.isForecastRunning) {
@@ -227,6 +227,5 @@
           vm.forecastModal = false;
         }
       }
-
     }
   })();

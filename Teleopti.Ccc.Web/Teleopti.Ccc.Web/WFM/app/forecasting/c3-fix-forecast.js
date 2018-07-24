@@ -89,7 +89,7 @@
 			$$.dragging = false;
 			dragendCallback();
 		};
-	}
+	};
 	c3.restoreFixForForecast = function () {
 		c3.chart.internal.fn.dragend = function () {
 			var $$ = this, config = $$.config;
@@ -103,6 +103,6 @@
 				.classed(CLASS.INCLUDED, false);
 			$$.dragging = false;
 		};
-	}
+	};
 
 })();

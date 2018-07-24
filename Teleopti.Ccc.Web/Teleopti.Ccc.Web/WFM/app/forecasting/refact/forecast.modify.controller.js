@@ -234,6 +234,8 @@
 		}
 
 		function getWorkloadForecastData() {
+			vm.periodModal = false;
+
 			vm.selectedWorkload.Days = [];
 			vm.isForecastRunning = true;
 			vm.scenarioNotForecasted = false;
@@ -250,14 +252,12 @@
 				function(data, status, headers, config) {
 					vm.selectedWorkload.Days = data.ForecastDays;
 					vm.isForecastRunning = false;
-					vm.periodModal = false;
 					vm.scenarioNotForecasted = vm.selectedWorkload.Days.length === 0;
 					vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
 				},
 				function(data, status, headers, config) {
 					vm.selectedWorkload.Days = data.ForecastDays;
 					vm.isForecastRunning = false;
-					vm.periodModal = false;
 					vm.scenarioNotForecasted = vm.selectedWorkload.Days.length === 0;
 				}
 			);
