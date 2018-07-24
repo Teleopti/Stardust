@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 {
 	public class ForecastExportToExcel
 	{
+		private ICellStyle _cellStyleTitle;
 		private ICellStyle _cellStyleDate;
 		private ICellStyle _cellStylePercentage;
 		private ICellStyle _cellStyleTwoDecimals;
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 				return exportData.ToArray();
 			}
 		}
-		private void createDailySheet(XSSFWorkbook workbook, ForecastExportModel exportModel)
+		private void createDailySheet(IWorkbook workbook, ForecastExportModel exportModel)
 		{
 			var dailySheet = workbook.CreateSheet("Daily");
 			sheetHeader(dailySheet, exportModel);
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			autoSizeColumns(dailySheet);
 		}
 
-		private void createIntervalSheet(XSSFWorkbook workbook, ForecastExportModel exportModel)
+		private void createIntervalSheet(IWorkbook workbook, ForecastExportModel exportModel)
 		{
 			var intervalSheet = workbook.CreateSheet("Interval");
 			sheetHeader(intervalSheet, exportModel);
@@ -53,14 +54,20 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			var lastCellIndex = lastRow.PhysicalNumberOfCells - 1;
 			var lastColumnIndex = lastRow.GetCell(lastCellIndex).ColumnIndex;
 
-			for (int columnIndex = 0; columnIndex <= lastColumnIndex; columnIndex++)
+			for (var columnIndex = 0; columnIndex <= lastColumnIndex; columnIndex++)
 			{
 				sheet.AutoSizeColumn(columnIndex);
 			}
 		}
 
-		private void initializeCellStyles(XSSFWorkbook workbook)
+		private void initializeCellStyles(IWorkbook workbook)
 		{
+			var titleFont = workbook.CreateFont();
+			titleFont.Boldweight = (short) FontBoldWeight.Bold;
+
+			_cellStyleTitle = workbook.CreateCellStyle();
+			_cellStyleTitle.SetFont(titleFont);
+
 			_cellStyleDate = workbook.CreateCellStyle();
 			_cellStyleDate.DataFormat = HSSFDataFormat.GetBuiltinFormat("m/d/yy");
 
@@ -70,7 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			_cellStyleTwoDecimals = workbook.CreateCellStyle();
 			_cellStyleTwoDecimals.DataFormat = HSSFDataFormat.GetBuiltinFormat("0.00");
 
-			_cellStyleTime= workbook.CreateCellStyle();
+			_cellStyleTime = workbook.CreateCellStyle();
 			_cellStyleTime.DataFormat = HSSFDataFormat.GetBuiltinFormat("h:mm");
 		}
 
@@ -78,46 +85,46 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 		{
 			addRow(dailySheet, new[]
 			{
-				new CellData("Period Start:"),
+				new CellData("Period Start:", _cellStyleTitle),
 				new CellData(exportModel.Header.Period.StartDate.Date, _cellStyleDate)
 			});
 			addRow(dailySheet, new[]
 			{
-				new CellData("Period End:"),
+				new CellData("Period End:", _cellStyleTitle),
 				new CellData(exportModel.Header.Period.EndDate.Date, _cellStyleDate)
 			});
 			addRow(dailySheet, new[]
 			{
-				new CellData("Scenario:"),
+				new CellData("Scenario:", _cellStyleTitle),
 				new CellData(exportModel.Header.Scenario)
 			});
 			addRow(dailySheet, new[]
 			{
-				new CellData("Skill Name:"),
+				new CellData("Skill Name:", _cellStyleTitle),
 				new CellData(exportModel.Header.SkillName)
 			});
 			addRow(dailySheet, new[]
 			{
-				new CellData("Time Zone:"),
+				new CellData("Time Zone:", _cellStyleTitle),
 				new CellData(exportModel.Header.SkillTimeZoneName)
 			});
 			addRow(dailySheet, new[]
 			{
-				new CellData("Service Level:"),
+				new CellData("Service Level:", _cellStyleTitle),
 				exportModel.Header.ServiceLevelPercent.HasValue
 					? new CellData(exportModel.Header.ServiceLevelPercent.Value.Value, _cellStylePercentage)
 					: new CellData(string.Empty)
 			});
 			addRow(dailySheet, new[]
 			{
-				new CellData("Service Level s:"),
+				new CellData("Service Level s:", _cellStyleTitle),
 				exportModel.Header.ServiceLevelSeconds.HasValue
 					? new CellData(exportModel.Header.ServiceLevelSeconds)
 					: new CellData(string.Empty)
 			});
 			addRow(dailySheet, new[]
 			{
-				new CellData("Shrinkage:"),
+				new CellData("Shrinkage:", _cellStyleTitle),
 				exportModel.Header.ShrinkagePercent.HasValue
 					? new CellData(exportModel.Header.ShrinkagePercent.Value.Value, _cellStylePercentage)
 					: new CellData(string.Empty)
@@ -126,23 +133,25 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			addRow(dailySheet, new CellData[0]);
 		}
 
-		private void dailyDetailHeader(ISheet sheet, List<string> workloads)
+		private void dailyDetailHeader(ISheet sheet, IReadOnlyCollection<string> workloads)
 		{
+			const string splitter = "\r\n  ";
+
 			string comment = null;
 			if (workloads.Count > 1)
 			{
-				comment = "This includes hours from:\r\n" + string.Join("\r\n", workloads);
+				comment = "This includes hours from:" + splitter + string.Join(splitter, workloads);
 			}
 
 			addRow(sheet, new[]
 			{
-				new CellData("Date"),
-				new CellData("Calls"),
-				new CellData("Average Talk time (s)"),
-				new CellData("Average ACW (s)"),
-				new CellData("AHT (s)"),
-				new CellData("Hours", null, comment),
-				new CellData("Hours with shrinkage", null, comment),
+				new CellData("Date", _cellStyleTitle),
+				new CellData("Calls", _cellStyleTitle),
+				new CellData("Average Talk time (s)", _cellStyleTitle),
+				new CellData("Average ACW (s)", _cellStyleTitle),
+				new CellData("AHT (s)", _cellStyleTitle),
+				new CellData("Hours", _cellStyleTitle, comment),
+				new CellData("Hours with shrinkage", _cellStyleTitle, comment),
 			});
 		}
 
@@ -167,14 +176,14 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 		{
 			addRow(sheet, new[]
 			{
-				new CellData("Date"),
-				new CellData("Interval (hh:mm)"),
-				new CellData("Calls"),
-				new CellData("Average Talk time (s)"),
-				new CellData("Average ACW (s)"),
-				new CellData("AHT (s)"),
-				new CellData("Agents"),
-				new CellData("Agents with shrinkage"),
+				new CellData("Date", _cellStyleTitle),
+				new CellData("Interval (hh:mm)", _cellStyleTitle),
+				new CellData("Calls", _cellStyleTitle),
+				new CellData("Average Talk time (s)", _cellStyleTitle),
+				new CellData("Average ACW (s)", _cellStyleTitle),
+				new CellData("AHT (s)", _cellStyleTitle),
+				new CellData("Agents", _cellStyleTitle),
+				new CellData("Agents with shrinkage", _cellStyleTitle),
 			});
 		}
 
@@ -198,34 +207,38 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 
 		private void addRow(ISheet sheet, IEnumerable<CellData> cellDataList)
 		{
+			var patriarch = sheet.CreateDrawingPatriarch();
 			var row = sheet.CreateRow(sheet.PhysicalNumberOfRows);
 
 			foreach (var cellData in cellDataList)
 			{
 				var newCell = row.CreateCell(row.PhysicalNumberOfCells);
 
-				if (cellData.CellValue is string)
+				switch (cellData.CellValue)
 				{
-					newCell.SetCellValue(cellData.CellValue.ToString());
-				}
-				else if (cellData.CellValue is double)
-				{
-					newCell.SetCellValue((double)cellData.CellValue);
-				}
-				else if (cellData.CellValue is DateTime)
-				{
-					newCell.SetCellValue((DateTime)cellData.CellValue);
+					case string _:
+						newCell.SetCellValue(cellData.CellValue.ToString());
+						break;
+					case double _:
+						newCell.SetCellValue((double)cellData.CellValue);
+						break;
+					case DateTime _:
+						newCell.SetCellValue((DateTime)cellData.CellValue);
+						break;
 				}
 
-				if (cellData.SetCellStyle)
-					newCell.CellStyle = cellData.CellStyle;
-
-				if(!string.IsNullOrEmpty(cellData.Comment))
+				if (cellData.CellStyle != null)
 				{
-					var patriarch = sheet.CreateDrawingPatriarch();
+					newCell.CellStyle =  cellData.CellStyle;
+				}
 
+				if (!string.IsNullOrEmpty(cellData.Comment))
+				{
 					// Client anchor defines size and position of the comment in the worksheet
-					var comment = patriarch.CreateCellComment(new XSSFClientAnchor(0, 0, 0, 0, 2, 1, 4, 4));
+					var startRowIndex = newCell.RowIndex > 1 ? newCell.RowIndex - 1 : 0;
+					var anchor = new XSSFClientAnchor(0, 0, 0, 0, newCell.ColumnIndex + 2, startRowIndex,
+						newCell.ColumnIndex + 5, startRowIndex + cellData.Comment.Split('\n').Length + 1);
+					var comment = patriarch.CreateCellComment(anchor);
 					comment.String = new XSSFRichTextString(cellData.Comment);
 
 					newCell.CellComment = comment;
@@ -238,37 +251,24 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 	{
 		public object CellValue { get; }
 		public ICellStyle CellStyle { get; }
-		public bool SetCellStyle { get; private set; }
-		
 		public string Comment { get; }
 
 		public CellData(object cellValue)
 		{
 			CellValue = cellValue;
-			SetCellStyle = false;
 		}
 
 		public CellData(object cellValue, ICellStyle cellStyle)
 		{
 			CellValue = cellValue;
-
-			if(cellStyle != null)
-			{
-				SetCellStyle = true;
-				CellStyle = cellStyle;
-			}
+			CellStyle = cellStyle;
 		}
 
 		public CellData(object cellValue, ICellStyle cellStyle, string comment)
 		{
 			CellValue = cellValue;
 			Comment = comment;
-
-			if (cellStyle != null)
-			{
-				SetCellStyle = true;
-				CellStyle = cellStyle;
-			}
+			CellStyle = cellStyle;
 		}
 	}
 }
