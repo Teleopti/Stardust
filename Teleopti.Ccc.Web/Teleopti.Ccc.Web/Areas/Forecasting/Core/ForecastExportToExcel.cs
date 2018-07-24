@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 		{
 			var workbook = new XSSFWorkbook();
 			initializeCellStyles(workbook);
-
 			createDailySheet(workbook, exportModel);
 			createIntervalSheet(workbook, exportModel);
 			
@@ -33,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 		{
 			var dailySheet = workbook.CreateSheet("Daily");
 			sheetHeader(dailySheet, exportModel);
-			dailyDetailHeader(dailySheet);
+			dailyDetailHeader(dailySheet, exportModel.Workloads);
 			dailyDetails(dailySheet, exportModel.DailyModelForecast);
 			autoSizeColumns(dailySheet);
 		}
@@ -127,8 +126,14 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			addRow(dailySheet, new CellData[0]);
 		}
 
-		private void dailyDetailHeader(ISheet sheet)
+		private void dailyDetailHeader(ISheet sheet, List<string> workloads)
 		{
+			string comment = null;
+			if (workloads.Count > 1)
+			{
+				comment = "This includes hours from:\r\n" + string.Join("\r\n", workloads);
+			}
+
 			addRow(sheet, new[]
 			{
 				new CellData("Date"),
@@ -136,8 +141,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 				new CellData("Average Talk time (s)"),
 				new CellData("Average ACW (s)"),
 				new CellData("AHT (s)"),
-				new CellData("Hours"),
-				new CellData("Hours with shrinkage"),
+				new CellData("Hours", null, comment),
+				new CellData("Hours with shrinkage", null, comment),
 			});
 		}
 
@@ -214,6 +219,17 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 
 				if (cellData.SetCellStyle)
 					newCell.CellStyle = cellData.CellStyle;
+
+				if(!string.IsNullOrEmpty(cellData.Comment))
+				{
+					var patriarch = sheet.CreateDrawingPatriarch();
+
+					// Client anchor defines size and position of the comment in the worksheet
+					var comment = patriarch.CreateCellComment(new XSSFClientAnchor(0, 0, 0, 0, 2, 1, 4, 4));
+					comment.String = new XSSFRichTextString(cellData.Comment);
+
+					newCell.CellComment = comment;
+				}
 			}
 		}
 	}
@@ -223,6 +239,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 		public object CellValue { get; }
 		public ICellStyle CellStyle { get; }
 		public bool SetCellStyle { get; private set; }
+		
+		public string Comment { get; }
 
 		public CellData(object cellValue)
 		{
@@ -233,8 +251,24 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 		public CellData(object cellValue, ICellStyle cellStyle)
 		{
 			CellValue = cellValue;
-			SetCellStyle = true;
-			CellStyle = cellStyle;
+
+			if(cellStyle != null)
+			{
+				SetCellStyle = true;
+				CellStyle = cellStyle;
+			}
+		}
+
+		public CellData(object cellValue, ICellStyle cellStyle, string comment)
+		{
+			CellValue = cellValue;
+			Comment = comment;
+
+			if (cellStyle != null)
+			{
+				SetCellStyle = true;
+				CellStyle = cellStyle;
+			}
 		}
 	}
 }
