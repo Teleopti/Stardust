@@ -859,7 +859,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 
 			personAss.ShiftLayers.ForEach(l => l.SetId(Guid.NewGuid()));
 			var layerIds = personAss.ShiftLayers.Select(sl => sl.Id.Value).ToArray();
-			
+
 			var trackCommandInfo = new TrackedCommandInfo { TrackId = Guid.NewGuid(), OperatedPersonId = Guid.NewGuid() };
 			Target.ChangeActivityType(new ChangeActivityTypeFormData
 			{
@@ -876,6 +876,38 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			CommandHandler.CalledCount.Should().Be.EqualTo(1);
 			var multipleCommand = CommandHandler.CalledCommands.Single() as MultipleChangeScheduleCommand;
 			multipleCommand.TrackedCommandInfo.Should().Be.EqualTo(trackCommandInfo);
+		}
+
+		[Test]
+		public void ShouldInvokeRemoveAbsenceCommandWithValidInput()
+		{
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.Has(scenario);
+
+			var person = PersonFactory.CreatePerson("test").WithId();
+			PersonRepository.Has(person);
+			var trackId = Guid.NewGuid();
+			var personAbsenceId = Guid.NewGuid();
+
+			var results = Target.RemoveAbsence(new RemovePersonAbsenceForm
+			{
+				SelectedPersonAbsences = new[] {
+					new SelectedPersonAbsence{
+						AbsenceDates = new []{ new AbsenceDate { Date = new DateOnly(2018,7,23), PersonAbsenceId = personAbsenceId } },
+						PersonId =person.Id.Value
+					}
+				},
+				TrackedCommandInfo = new TrackedCommandInfo { TrackId = trackId }
+			});
+
+			CommandHandler.CalledCount.Should().Be.EqualTo(1);
+			var command = CommandHandler.CalledCommands.Single() as RemoveSelectedPersonAbsenceCommand;
+			command.ScheduleRange.Period.StartDateTime.Should().Be.EqualTo(new DateTime(2018, 7, 22));
+			command.ScheduleRange.Period.EndDateTime.Should().Be.EqualTo(new DateTime(2018, 7, 24));
+			command.TrackedCommandInfo.TrackId.Should().Be.EqualTo(trackId);
+			command.PersonAbsenceId.Should().Be.EqualTo(personAbsenceId);
+			command.Person.Should().Be.EqualTo(person);
 		}
 
 	}

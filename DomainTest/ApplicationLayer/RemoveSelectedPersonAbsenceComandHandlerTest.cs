@@ -294,5 +294,45 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			allPersonAbsences.First().Period.Should().Be.EqualTo(new DateTimePeriod(2017, 2, 20, 0, 2017, 2, 20, 15));
 			allPersonAbsences.Last().Period.Should().Be.EqualTo(new DateTimePeriod(2017, 2, 21, 15, 2017, 2, 23, 8));
 		}
+
+		[Test]
+		public void ShouldExcludeOvernightShiftPeriodWhenRemovingCurrentDateAbsenceButPreviousDayWithOvernightShift()
+		{
+			var date = new DateOnly(2018, 7, 24);
+
+			var periodForAbsence = new DateTimePeriod(2018, 7, 23, 0, 2018, 7, 26, 0);
+			var personAbsence = new PersonAbsence(_person, _scenario.Current(), new AbsenceLayer(new Absence(), periodForAbsence)).WithId();
+			_personAbsenceRepository.Has(personAbsence);
+
+			var mainActivity = ActivityFactory.CreateActivity("Phone");
+			var shiftCatagory = ShiftCategoryFactory.CreateShiftCategory("DY");
+
+			var personAssignmentForPreDay = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				_person, _scenario.Current(),
+				 new DateTimePeriod(2018, 7, 23, 22, 2018, 7, 24, 6), shiftCatagory, mainActivity);
+
+			_scheduleStorage.Add(personAbsence);
+			_scheduleStorage.Add(personAssignmentForPreDay);
+
+			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(_person,
+				new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(new DateOnly(2018, 7, 23), date), _scenario.Current());
+
+			var command = new RemoveSelectedPersonAbsenceCommand
+			{
+				Person = _person,
+				PersonAbsenceId = personAbsence.Id.Value,
+				Date = date,
+				ScheduleRange = scheduleDictionary?[_person]
+			};
+
+			var target = new RemoveSelectedPersonAbsenceCommandHandler(_personAbsenceRepository, _personAbsenceRemover);
+			target.Handle(command);
+
+			var allPersonAbsences = _scheduleStorage.LoadAll().Where(s => s is PersonAbsence).ToList();
+			allPersonAbsences.Count.Should().Be.EqualTo(2);
+
+			allPersonAbsences.First().Period.Should().Be.EqualTo(new DateTimePeriod(2018, 7, 23, 0, 2018, 7, 24, 6));
+			allPersonAbsences.Last().Period.Should().Be.EqualTo(new DateTimePeriod(2018, 7, 25, 0, 2018, 7, 26, 0));
+		}
 	}
 }

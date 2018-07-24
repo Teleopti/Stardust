@@ -43,11 +43,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			var personAssignment = scheduleDay.PersonAssignment();
 			var previousPersonAssignmentPeriod = scheduleRange?.ScheduledDay(command.Date.AddDays(-1))?.PersonAssignment()?.Period;
-			var periodToRemove = personAssignment == null || !personAssignment.ShiftLayers.Any()
-				? scheduleDay.Period
-				: excludeOvernightFromPreviousDay(previousPersonAssignmentPeriod, personAssignment.Period.Contains(personAbsences.Period)
-					? personAssignment.Period
-					: coverWholeDayAndOvernight(personAssignment.Period, person.PermissionInformation.DefaultTimeZone()));
+
+			var period = personAssignment == null || !personAssignment.ShiftLayers.Any() ? scheduleDay.Period : personAssignment.Period;
+			var periodToRemove = excludeOvernightFromPreviousDay(previousPersonAssignmentPeriod, period.Contains(personAbsences.Period)
+					? period : coverWholeDayAndOvernight(period, person.PermissionInformation.DefaultTimeZone()));
 
 			command.ErrorMessages = _personAbsenceRemover.RemovePartPersonAbsence(command.Date, person, personAbsences,
 				periodToRemove, scheduleRange, command.TrackedCommandInfo).ToList();

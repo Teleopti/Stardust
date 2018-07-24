@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 					var actionResult = new ActionResult(selectedPersonAbsence.PersonId);
 					var date = absenceGroup.Key;
 					var loadOptions = new ScheduleDictionaryLoadOptions(false, false);
-					var period = date.ToDateOnlyPeriod();
+					var period = new DateOnlyPeriod(date.AddDays(-1), date); 
 					var currentScenario = _currentScenario.Current();
 					var dictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, loadOptions, period, currentScenario);
 					var scheduleRange = dictionary?[person];

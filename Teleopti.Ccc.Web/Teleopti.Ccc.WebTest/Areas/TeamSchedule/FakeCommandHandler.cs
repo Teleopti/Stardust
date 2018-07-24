@@ -21,7 +21,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		IHandleCommand<AddPersonalActivityCommand>,
 		IHandleCommand<RemoveDayOffCommand>,
 		IHandleCommand<RemoveShiftCommand>,
-		IHandleCommand<MultipleChangeScheduleCommand>
+		IHandleCommand<MultipleChangeScheduleCommand>,
+		IHandleCommand<RemoveSelectedPersonAbsenceCommand>
 	{
 		private int calledCount;
 		private IList<Object> commands = new List<Object>();
@@ -69,6 +70,11 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		{
 			calledCount++;
 			commands.Add(command);
+		}
+
+		public void Handle(RemoveSelectedPersonAbsenceCommand command)
+		{
+			handle(command);
 		}
 	}
 }
