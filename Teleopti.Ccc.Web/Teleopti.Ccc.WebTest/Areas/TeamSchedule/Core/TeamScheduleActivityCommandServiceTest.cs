@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using Castle.Core.Internal;
 using NUnit.Framework;
@@ -478,7 +479,39 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(3);
 		}
 
-		
+		[Test]
+		public void ShouldReturnErrorMessageWhenOnePersonIncludeMultipleActivity()
+		{
+			var scenario = CurrentScenario.Has("Default");
+			var person = PersonFactory.CreatePersonWithGuid("a", "b");
+			PersonRepository.Has(person);
+			var date = new DateOnly(2018, 7, 24);
+			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
+				scenario, new DateTimePeriod(2018, 7, 24, 8, 2018, 7, 24, 16));
+
+			var emailActivity = ActivityFactory.CreateActivity("email", Color.Red).WithId();
+			personAss.AddActivity(emailActivity, new DateTimePeriod(new DateTime(2018, 7, 24, 8, 0, 0, DateTimeKind.Utc), new DateTime(2018, 7, 24, 9, 0, 0, DateTimeKind.Utc)));
+			personAss.ShiftLayers.ForEach(x => x.WithId());
+			PersonAssignmentRepo.Add(personAss);
+
+			var input = new MoveActivityFormData
+			{
+				TrackedCommandInfo = new TrackedCommandInfo(),
+				PersonActivities = new List<PersonActivityItem>
+				{
+					new PersonActivityItem
+					{
+						PersonId = person.Id.Value,
+						Date = date,
+						ShiftLayerIds = new List<Guid> { personAss.ShiftLayers.FirstOrDefault().Id.Value , personAss.ShiftLayers.Last().Id.Value }
+					}
+				},
+
+				StartTime = new DateTime(2018, 7, 24, 10, 0, 0)
+			};
+			var result = Target.MoveActivity(input);
+			result.First().ErrorMessages.Contains(Resources.CanNotMoveMultipleActivitiesForSelectedAgents).Should().Be.True();
+		}
 		[Test]
 		public void ShouldNotMoveActivityWhenNoMoveActivityPermission()
 		{
@@ -657,7 +690,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			results.First().ErrorMessages[1].Should().Be.EqualTo(Resources.NoPermissionAddAgentActivity);
 		}
 
-
 		[Test]
 		public void ShouldCovertNewStartToUTC()
 		{
@@ -697,7 +729,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			((MoveShiftLayerCommand)(ActivityCommandHandler.CalledCommands.First())).NewStartTimeInUtc.Should().Be(TimeZoneHelper.ConvertToUtc(input.StartTime, TimeZoneInfo.Local));
 
 		}
-
 
 		[Test]
 		public void ShouldInvokeMoveShiftLayerCommandWithPermission()
@@ -956,7 +987,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(1);
 			result.Count.Should().Be.EqualTo(0);
 		}
-
 
 		[Test]
 		public void ShouldInvokeMoveShiftCommandWhenHasPermission()

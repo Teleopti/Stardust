@@ -8,8 +8,10 @@
 		$httpBackend,
 		scheduleHelper,
 		fakePersonSelectionService,
+		fakeNoticeService,
 		utility,
-		fakeMoveActivityValidator;
+		fakeMoveActivityValidator,
+		serviceDateFormatHelper;
 
 	var mockCurrentUserInfo = {
 		CurrentUserInfo: function () {
@@ -26,6 +28,7 @@
 		scheduleHelper = new FakeScheduleHelper();
 		fakePersonSelectionService = new FakePersonSelectionService();
 		fakeMoveActivityValidator = new FakeMoveActivityValidator();
+		fakeNoticeService = new FakeNoticeService();
 
 		module(function ($provide) {
 			$provide.service('ActivityService', function () {
@@ -46,14 +49,19 @@
 			$provide.service('CurrentUserInfo', function () {
 				return mockCurrentUserInfo;
 			});
+			$provide.service('NoticeService',
+				function () {
+					return fakeNoticeService;
+				});
 		});
 	});
 
-	beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_, UtilityService) {
+	beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_, UtilityService, _serviceDateFormatHelper_) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
 		utility = UtilityService;
+		serviceDateFormatHelper = _serviceDateFormatHelper_;
 
 		$httpBackend.expectGET('../ToggleHandler/AllToggles').respond(200, 'mock');
 	}));
@@ -133,9 +141,46 @@
 		expect(vm.anyValidAgent()).toBe(false);
 	});
 
+	it('should show warning and error message when move activity partially success', function () {
+		var result = setUp(moment('2018-07-23').toDate());
+		var vm = result.commandControl;
+		vm.nextDay = false;
+		vm.moveToTime = vm.getDefaultMoveToStartTime();
 
-	it('should invoke action callback after calling move activity', function () {
-		var date = moment('2016-06-15');
+		vm.selectedAgents = [
+			{
+				PersonId: 'agent1',
+				Name: 'agent1',
+				ScheduleStartTime: '2018-07-23T08:00:00Z',
+				ScheduleEndTime: '2018-07-23T17:00:00Z',
+				SelectedActivities: [
+					{ shiftLayerId: "4b132007-41f8-4f05-85a9-a927001434a6", date: "2018-07-23" },
+					{ shiftLayerId: "5b132007-41f8-4f05-85a9-a927001434a6", date: "2018-07-23" }]
+			},
+			{
+				PersonId: 'agent2',
+				Name: 'agent2',
+				ScheduleStartTime: '2018-07-23T08:00:00Z',
+				ScheduleEndTime: '2018-07-23T17:00:00Z',
+				SelectedActivities: [{ shiftLayerId: "6b132007-41f8-4f05-85a9-a927001434a6", date: "2018-07-23" }]
+			}];
+
+		result.scope.$apply();
+
+		fakeActivityService.setSavingApplyResponseData([{
+			PersonId: vm.selectedAgents[0].PersonId, ErrorMessages: ['CanNotMoveMultipleActivitiesForSelectedAgents']
+		}]);
+		var applyButton = angular.element(result.container[0].querySelector(".move-activity .form-submit"));
+		applyButton.triggerHandler('click');
+
+		result.scope.$apply();
+
+		expect(fakeNoticeService.warningMessage).toEqual('PartialSuccessMessageForMovingActivity');
+		expect(fakeNoticeService.errorMessage).toEqual('CanNotMoveMultipleActivitiesForSelectedAgents : agent1');
+	});
+
+	it('should show success message and invoke action callback after move activity successfully', function () {
+		var date = moment('2018-07-23');
 
 		var result = setUp(date.toDate());
 
@@ -156,18 +201,21 @@
 			{
 				PersonId: 'agent1',
 				Name: 'agent1',
-				ScheduleStartTime: '2016-06-15T08:00:00Z',
-				ScheduleEndTime: '2016-06-15T17:00:00Z',
-				SelectedActivities: selectedActivities
-			}, {
+				ScheduleStartTime: '2018-07-23T08:00:00Z',
+				ScheduleEndTime: '2018-07-23T17:00:00Z',
+				SelectedActivities: [{ shiftLayerId: "4b132007-41f8-4f05-85a9-a927001434a6", date: "2018-07-23" }]
+			},
+			{
 				PersonId: 'agent2',
 				Name: 'agent2',
-				ScheduleStartTime: '2016-06-15T09:00:00Z',
-				ScheduleEndTime: '2016-06-15T18:00:00Z',
-				SelectedActivities: selectedActivities
+				ScheduleStartTime: '2018-07-23T08:00:00Z',
+				ScheduleEndTime: '2018-07-23T17:00:00Z',
+				SelectedActivities: [{ shiftLayerId: "6b132007-41f8-4f05-85a9-a927001434a6", date: "2018-07-23" }]
 			}];
 
 		result.scope.$apply();
+
+		fakeActivityService.setSavingApplyResponseData([]);
 
 		var applyButton = angular.element(result.container[0].querySelector(".move-activity .form-submit"));
 		applyButton.triggerHandler('click');
@@ -175,6 +223,7 @@
 		result.scope.$apply();
 
 		expect(cbMonitor).toBeTruthy();
+		expect(fakeNoticeService.successMessage).toEqual('SuccessfulMessageForMovingActivity');
 	});
 
 	it('should have later default start time than previous day over night shift end', function () {
@@ -191,7 +240,48 @@
 		expect(moment(defaultMoveToStartTime).hours()).toBe(11);
 	});
 
+	it('should move activity with correct data', function () {
+		var result = setUp(moment('2018-07-23').toDate());
+		var vm = result.commandControl;
+		vm.nextDay = false;
+		vm.moveToTime = vm.getDefaultMoveToStartTime();
 
+		vm.selectedAgents = [
+			{
+				PersonId: 'agent1',
+				Name: 'agent1',
+				ScheduleStartTime: '2018-07-23T08:00:00Z',
+				ScheduleEndTime: '2018-07-23T17:00:00Z',
+				SelectedActivities: [{ shiftLayerId: "4b132007-41f8-4f05-85a9-a927001434a6", date: "2018-07-23" },
+				{ shiftLayerId: "5b132007-41f8-4f05-85a9-a927001434a6", date: "2018-07-23" }]
+			},
+			{
+				PersonId: 'agent2',
+				Name: 'agent2',
+				ScheduleStartTime: '2018-07-23T08:00:00Z',
+				ScheduleEndTime: '2018-07-23T17:00:00Z',
+				SelectedActivities: [{ shiftLayerId: "6b132007-41f8-4f05-85a9-a927001434a6", date: "2018-07-23" }]
+			}];
+
+
+		result.scope.$apply();
+
+		var applyButton = angular.element(result.container[0].querySelector(".move-activity .form-submit"));
+		applyButton.triggerHandler('click');
+
+		result.scope.$apply();
+
+		var requestData = fakeActivityService.getMoveActivityCalledWith();
+		expect(requestData.PersonActivities[0].Date).toEqual("2018-07-23");
+		expect(requestData.PersonActivities[0].PersonId).toEqual('agent1');
+		expect(requestData.PersonActivities[0].ShiftLayerIds).toEqual(['4b132007-41f8-4f05-85a9-a927001434a6', '5b132007-41f8-4f05-85a9-a927001434a6']);
+
+		expect(requestData.PersonActivities[1].Date).toEqual("2018-07-23");
+		expect(requestData.PersonActivities[1].PersonId).toEqual('agent2');
+		expect(requestData.PersonActivities[1].ShiftLayerIds).toEqual(['6b132007-41f8-4f05-85a9-a927001434a6']);
+
+		expect(requestData.TrackedCommandInfo.TrackId).toEqual(vm.trackId);
+	});
 
 	function commonTestsInDifferentLocale() {
 		it('should call move activity when click apply with correct data', function () {
@@ -286,7 +376,7 @@
 		commonTestsInDifferentLocale();
 	});
 
-	function setUp(inputDate ) {
+	function setUp(inputDate) {
 		var date;
 		var html = '<teamschedule-command-container date="curDate" timezone="timezone"></teamschedule-command-container>';
 		var scope = $rootScope.$new();
@@ -346,6 +436,10 @@
 		};
 		var fakeResponse = { data: [] };
 
+		this.setSavingApplyResponseData = function (data) {
+			fakeResponse.data = data;
+		}
+
 		this.moveActivity = function (input) {
 			targetActivity = input;
 			return {
@@ -360,14 +454,14 @@
 		};
 	}
 
-	function FakePersonSelectionService(){
+	function FakePersonSelectionService() {
 		var fakePersonList = [];
 
-		this.setFakeSelectedPersonInfoList = function(input){
+		this.setFakeSelectedPersonInfoList = function (input) {
 			fakePersonList = input;
 		}
 
-		this.getSelectedPersonInfoList = function(){
+		this.getSelectedPersonInfoList = function () {
 			return fakePersonList;
 		}
 	}
@@ -406,7 +500,6 @@
 			}
 		};
 	}
-
 	function FakeMoveActivityValidator() {
 		var validate = false;
 		var invalidPeople = [];
@@ -431,4 +524,19 @@
 			return validate;
 		}
 	};
+	function FakeNoticeService() {
+		this.successMessage = '';
+		this.errorMessage = '';
+		this.warningMessage = '';
+		this.success = function (message, time, destroyOnStateChange) {
+			this.successMessage = message;
+		}
+		this.error = function (message, time, destroyOnStateChange) {
+			this.errorMessage = message;
+		}
+		this.warning = function (message, time, destroyOnStateChange) {
+			this.warningMessage = message;
+		}
+
+	}
 });

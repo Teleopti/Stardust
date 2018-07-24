@@ -78,16 +78,6 @@
 		 
 		vm.moveActivity = function () {
 			var requestData = getRequestData();
-			var multiActivitiesSelectedAgentsList = vm.selectedAgents.filter(function (x) {
-				return (angular.isArray(x.SelectedActivities) && x.SelectedActivities.length > 1);
-			});
-
-			if (multiActivitiesSelectedAgentsList.length > 0) {
-				var errorMessage = $translate.instant('CanNotMoveMultipleActivitiesForSelectedAgents') + ": " + multiActivitiesSelectedAgentsList.map(function (agent) { return agent.Name; }).join(", ") + ".";
-				teamScheduleNotificationService.notify('error', errorMessage);
-				vm.getActionCb(vm.label) && vm.getActionCb(vm.label)(null, null);
-				return;
-			}
 			vm.checkingCommand = true;
 			CommandCheckService.checkMoveActivityOverlapping(requestData).then(function (data) {
 				moveActivity(data);
@@ -132,7 +122,7 @@
 			var validAgents = vm.selectedAgents.filter(function (agent) {
 				return invalidPersonIds.indexOf(agent.PersonId) < 0;
 			}).filter(function (x) {
-				return (angular.isArray(x.SelectedActivities) && x.SelectedActivities.length === 1);
+				return (angular.isArray(x.SelectedActivities));
 			});
 
 			var personActivities = [];

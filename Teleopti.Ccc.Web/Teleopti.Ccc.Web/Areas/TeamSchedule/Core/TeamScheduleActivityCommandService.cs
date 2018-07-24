@@ -224,6 +224,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				var person = _personRepository.Get(personActivity.PersonId);
 				var personError = new ActionResult(person.Id.GetValueOrDefault());
 
+				if (personActivity.ShiftLayerIds.Count != 1) {
+					personError.ErrorMessages.Add(Resources.CanNotMoveMultipleActivitiesForSelectedAgents);
+					result.Add(personError);
+					continue;
+				}
 				if (!_helper.CheckPermission(personActivity.ShiftLayerIds, person, personActivity.Date, out var permissionErrors))
 				{
 					personError.ErrorMessages.AddRange(permissionErrors);
