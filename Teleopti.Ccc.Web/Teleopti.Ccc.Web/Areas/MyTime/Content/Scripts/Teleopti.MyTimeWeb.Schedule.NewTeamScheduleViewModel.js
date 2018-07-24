@@ -4,8 +4,6 @@
 ) {
 	var self = this,
 		constants = Teleopti.MyTimeWeb.Common.Constants,
-		TOTAL_MINUTES_OF_ONE_DAY = constants.totalMinutesOfOneDay,
-		FULL_DAY_HOUR_STR = constants.fullDayHourStr,
 		PIXEL_OF_ONE_HOUR = constants.pixelOfOneHourInTeamSchedule,
 		dateOnlyFormat = constants.serviceDateTimeFormat.dateOnly,
 		getTextColoFn = Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor,
@@ -285,7 +283,10 @@
 			);
 
 			myLayerViewModel.showTitle = ko.computed(function() {
-				return myLayerViewModel.height() > minPixelsToDisplayTitle;
+				return myLayerViewModel.height() >= minPixelsToDisplayTitle;
+			});
+			myLayerViewModel.showDetail = ko.computed(function() {
+				return myLayerViewModel.height() >= PIXEL_OF_ONE_HOUR;
 			});
 
 			myLayerViewModel.isLastLayer = index === periods.length - 1;

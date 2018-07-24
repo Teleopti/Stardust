@@ -96,8 +96,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			return new TeamScheduleViewModel
 			{
 				MySchedule = _teamScheduleAgentScheduleViewModelMapper
-					.Map(new[] {myScheduleViewModel}, schedulePeriodInUtc, timezone).FirstOrDefault(),
-				AgentSchedules = _teamScheduleAgentScheduleViewModelMapper.Map(agentSchedules, schedulePeriodInUtc, timezone)
+					.Map(new[] {myScheduleViewModel}, schedulePeriodInUtc, timezone, data.ScheduleDate).FirstOrDefault(),
+				AgentSchedules = _teamScheduleAgentScheduleViewModelMapper.Map(agentSchedules, schedulePeriodInUtc, timezone, data.ScheduleDate)
 					.ToArray(),
 				TimeLine = timeLineHours,
 				PageCount = pageCount,

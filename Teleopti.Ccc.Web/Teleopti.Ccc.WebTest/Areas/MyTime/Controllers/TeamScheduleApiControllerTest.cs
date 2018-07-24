@@ -586,6 +586,53 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		[SetCulture("en-US")]
+		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
+		public void ShouldReturnTimeSpanCorrectlyForOvernightActivities()
+		{
+			var today = new DateOnly(2014, 12, 15);
+			var team = TeamFactory.CreateSimpleTeam("test team").WithId();
+			TeamRepository.Add(team);
+
+			var person = PersonFactory.CreatePersonWithGuid("test", "agent");
+			PersonRepository.Add(person);
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var assignment = new PersonAssignment(person, Scenario.Current(), today);
+			var period = new DateTimePeriod(2014, 12, 15, 16, 2014, 12, 16, 3);
+			var phoneActivity = new Activity("Phone")
+			{
+				InWorkTime = true,
+				InContractTime = true,
+				DisplayColor = Color.Green
+			};
+			assignment.AddActivity(phoneActivity, period);
+			assignment.SetShiftCategory(new ShiftCategory("sc"));
+			ScheduleData.Add(assignment);
+
+			var teamScheduleRequest = new TeamScheduleRequest
+			{
+				SelectedDate = today.Date,
+				Paging = new Paging
+				{
+					Take = 10
+				},
+				ScheduleFilter = new Domain.Repositories.ScheduleFilter
+				{
+					TeamIds = team.Id.ToString()
+				}
+			};
+			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
+			var firstPeriod = teamScheduleViewModel.AgentSchedules[0].Periods.ElementAt(0);
+
+			firstPeriod.Color.Should().Be("0,128,0");
+			firstPeriod.Title.Should().Be("Phone");
+			firstPeriod.StartTime.Should().Be(period.StartDateTime);
+			firstPeriod.EndTime.Should().Be(period.EndDateTime);
+			firstPeriod.TimeSpan.Should().Be(TimeHelper.TimeOfDayFromTimeSpan(TimeSpan.FromHours(16), CultureInfo.CurrentCulture) + " - " + TimeHelper.TimeOfDayFromTimeSpan(TimeSpan.FromHours(3), CultureInfo.CurrentCulture) + " +1");
+		}
+
+		[Test]
 		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
 		public void ShouldReturnMySchedule()
 		{
