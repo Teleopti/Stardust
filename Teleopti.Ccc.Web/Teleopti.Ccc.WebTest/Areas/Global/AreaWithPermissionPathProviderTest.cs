@@ -303,5 +303,32 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			areas.Single().Name.Invoke().Should().Be(Resources.Forecasts);
 			areas.Single().InternalName.Should().Be("forecast");
 		}
+
+		[Test]
+		public void ShouldHaveGamificationWhenFeatureEnabledAndPermitted()
+		{
+			ApplicationFunctionsToggleFilter
+				.AddFakeFunction(new ApplicationFunction { FunctionCode = DefinedRaptorApplicationFunctionPaths.Gamification }
+					, o => true);
+			ToggleManager.Enable(Toggles.WFM_Gamification_Permission_76546);
+			PermissionProvider.Enable();
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.Gamification);
+
+			var areas = Target.GetWfmAreasWithPermissions();
+
+			areas.Single().Path.Should().Be(DefinedRaptorApplicationFunctionPaths.Gamification);
+			areas.Single().Name.Invoke().Should().Be(Resources.Gamification);
+			areas.Single().InternalName.Should().Be("gamification");
+		}
+
+		[Test]
+		public void ShouldNotHaveGamificationWhenItIsNotPermitted()
+		{
+			PermissionProvider.Enable();
+
+			var areas = Target.GetWfmAreasWithPermissions();
+
+			areas.Count().Should().Be(0);
+		}
 	}
 }

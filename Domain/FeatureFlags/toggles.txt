@@ -178,7 +178,7 @@ WFM_Gamification_Recalculate_Badges_Within_Period_48403 = true
 WFM_Gamification_Create_Rolling_Periods_74866 = true
 MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889 = true
 MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947 = RC
-WFM_Gamification_Permission_76546 = DEV
+WFM_Gamification_Permission_76546 = RC
 
 # Tech #
 Tech_Moving_ResilientConnectionLogic_76181 = true
