@@ -71,6 +71,8 @@
 		People_SpeedUpOpening_76365,
 
 		WfmGlobalLayout_personalOptions_37114,
+
+		WFM_Gamification_Permission_76546,
 		
 		ResourcePlanner_HideSkillPrioSliders_41312,
 		ResourcePlanner_RunPerfTestAsTeam_43537,

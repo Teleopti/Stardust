@@ -161,6 +161,9 @@
 		//Outbound
 		public const string Outbound = "0120";
 
+		//Gamification
+		public const string Gamification = "0160";
+
 		// Reports
 		public const string ViewBadgeLeaderboardUnderReports = "0134";
 

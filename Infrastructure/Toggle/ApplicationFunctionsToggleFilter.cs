@@ -25,7 +25,8 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 			var functions = _applicationFunctionsProvider.AllFunctions();
 
 			hideRealTimeReports(functions);
-
+			if (!_toggleManager.IsEnabled(Toggles.WFM_Gamification_Permission_76546)) hideGamification(functions);
+			
 			hideBpoExchangeIfNotLicensed(functions);
 			return functions;
 		}
@@ -94,6 +95,15 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 				}
 			}
 
+		}
+
+		private void hideGamification(AllFunctions functions)
+		{
+			var foundFunction = functions.FindByForeignId(DefinedRaptorApplicationFunctionForeignIds.Gamification);
+			if (foundFunction != null)
+			{
+				foundFunction.SetHidden();
+			}
 		}
 	}
 }

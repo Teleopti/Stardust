@@ -83,5 +83,13 @@ namespace Teleopti.Ccc.DomainTest.Security.ImplementationDetails.LicenseOptions
             var enabledFunctions = _target.EnabledApplicationFunctions;
             enabledFunctions.Single(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.WebForecasts).Should().Not.Be.Null();
         }
+		[Test]
+        public void ShouldIncludeGamificationInBaseCollection()
+        {
+            var inputList = new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions;
+            _target.EnableApplicationFunctions(inputList);
+            var enabledFunctions = _target.EnabledApplicationFunctions;
+            enabledFunctions.Single(f => f.FunctionPath == DefinedRaptorApplicationFunctionPaths.Gamification).Should().Not.Be.Null();
+        }
 	}
 }

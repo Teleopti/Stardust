@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.PayrollIntegration, "xxPayrollIntegration", DefinedRaptorApplicationFunctionForeignIds.PayrollIntegration, 200);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.SeatPlanner, "xxSeatPlanner", DefinedRaptorApplicationFunctionForeignIds.SeatPlanner);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.Outbound, "xxOutbound", DefinedRaptorApplicationFunctionForeignIds.Outbound);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.Gamification, "xxGamification", DefinedRaptorApplicationFunctionForeignIds.Gamification);
 
 			// Global
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ModifySchedule, "xxModifySchedule", DefinedRaptorApplicationFunctionForeignIds.ModifySchedule);
