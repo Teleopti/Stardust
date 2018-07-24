@@ -196,21 +196,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		}
 
 		[Test]
-		public void ShouldHaveGamificationAreaWhenPermittedAndFeatureIsEnabled()
-		{
-			ApplicationFunctionsToggleFilter
-				.AddFakeFunction(new ApplicationFunction { FunctionCode = DefinedRaptorApplicationFunctionPaths.OpenOptionsPage }
-					, o => true);
-			PermissionProvider.Enable();
-			ToggleManager.Enable(Toggles.WFM_Gamification_Setting_With_External_Quality_Values_45003);
-			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
-
-			var areas = Target.GetWfmAreasWithPermissions();
-
-			areas.Count().Should().Be(1);
-		}
-
-		[Test]
 		public void ShouldNotHaveMyTimeAreaWhenFeatureIsEnabledButWithoutPermission()
 		{
 			ApplicationFunctionsToggleFilter
