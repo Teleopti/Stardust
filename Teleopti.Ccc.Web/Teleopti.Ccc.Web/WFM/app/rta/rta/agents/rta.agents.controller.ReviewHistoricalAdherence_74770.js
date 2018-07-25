@@ -370,6 +370,10 @@
 			updateSkillPicker();
 			updateSkillGroupPicker();
 			forcePoll();
+		};
+
+		vm.goToHistorical = function () {
+			$state.go('rta-historical-overview', {});
 		}
 	}
 })();

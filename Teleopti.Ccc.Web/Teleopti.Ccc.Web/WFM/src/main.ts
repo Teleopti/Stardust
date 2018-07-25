@@ -20,6 +20,7 @@ import {
 	ApiAccessTitleBarComponent
 } from './app/api-access/components';
 import { AppModule } from './app/app.module';
+import {RtaHistoricalOverviewComponent} from "../app/rta/rta/historical-overview/rta.historical.overview.component";
 
 export interface IWfmRootScopeService extends IRootScopeService {
 	_: any;
@@ -95,6 +96,8 @@ wfm.controller('MainController', MainController as IControllerConstructor);
 wfm.directive('ng2ApiAccessTitleBar', downgradeComponent({ component: ApiAccessTitleBarComponent }) as angular.IDirectiveFactory);
 wfm.directive('ng2ApiAccessListPage', downgradeComponent({ component: ListPageComponent }) as angular.IDirectiveFactory);
 wfm.directive('ng2ApiAccessAddAppPage', downgradeComponent({ component:	AddAppPageComponent }) as angular.IDirectiveFactory);
+
+wfm.directive('ng2RtaHistoricalOverview', downgradeComponent({ component:	RtaHistoricalOverviewComponent }) as angular.IDirectiveFactory);
 
 wfm.directive('ng2PeopleTitleBar', downgradeComponent({ component: TitleBarComponent }) as angular.IDirectiveFactory);
 wfm.directive('ng2PeopleSearchPage', downgradeComponent({

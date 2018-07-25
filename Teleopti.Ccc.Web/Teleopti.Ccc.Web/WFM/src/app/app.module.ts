@@ -1,13 +1,14 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { NgModule, Injectable } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { UpgradeModule } from '@angular/upgrade/static';
-import { TranslateLoader, TranslateModule, TranslateService, TranslateParser } from '@ngx-translate/core';
-import { ApiAccessModule } from './api-access/api-access.module';
-import { CoreModule } from './core/core.module';
-import { UserPreferences, UserService } from './core/services';
-import { LanguageLoaderFactory, CustomTranslateParser } from './core/translation';
-import { PeopleModule } from './people/people.module';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {NgModule, Injectable} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {UpgradeModule} from '@angular/upgrade/static';
+import {TranslateLoader, TranslateModule, TranslateService, TranslateParser} from '@ngx-translate/core';
+import {ApiAccessModule} from './api-access/api-access.module';
+import {CoreModule} from './core/core.module';
+import {UserPreferences, UserService} from './core/services';
+import {LanguageLoaderFactory, CustomTranslateParser} from './core/translation';
+import {PeopleModule} from './people/people.module';
+import {RtaHistoricalOverviewModule} from "../../app/rta/rta/historical-overview/rta.historical.overview.module";
 
 @NgModule({
 	declarations: [],
@@ -24,8 +25,9 @@ import { PeopleModule } from './people/people.module';
 				useFactory: LanguageLoaderFactory,
 				deps: [HttpClient]
 			},
-			parser: { provide: TranslateParser, useClass: CustomTranslateParser }
-		})
+			parser: {provide: TranslateParser, useClass: CustomTranslateParser}
+		}),
+		RtaHistoricalOverviewModule
 	],
 	entryComponents: []
 })
@@ -34,7 +36,8 @@ export class AppModule {
 		private upgrade: UpgradeModule,
 		private userService: UserService,
 		private translate: TranslateService
-	) {}
+	) {
+	}
 
 	ngDoBootstrap() {
 		this.translate.setDefaultLang('en-GB');

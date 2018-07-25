@@ -5,6 +5,10 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 	var toggles = ToggleProvider;
 
 	$stateProvider
+		.state('rta-historical-overview', {
+			url: '/rta/historical-overview',
+			template: '<ng2-rta-historical-overview></ng2-rta-historical-overview>'
+		})
 		.state('rta-without-slash', {
 			url: '/rta',
 			controller: function ($state) {

@@ -149,6 +149,10 @@
 				rtaStateService.selectSkill(skillOrSkillArea.Id);
 			vm.siteCards = [];
 			poller.force();
+		};
+
+		vm.goToHistorical = function () {
+			$state.go('rta-historical-overview', {});
 		}
 	}
 
