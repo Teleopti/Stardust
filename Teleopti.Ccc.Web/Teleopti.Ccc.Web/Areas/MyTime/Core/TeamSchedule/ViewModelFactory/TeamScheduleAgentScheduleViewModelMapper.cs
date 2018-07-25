@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 {
 	public class TeamScheduleAgentScheduleViewModelMapper
 	{
-		public IList<TeamScheduleAgentScheduleViewModel> Map(IEnumerable<AgentInTeamScheduleViewModel> agentInTeamScheduleViewModels, DateTimePeriod schedulePeriod, TimeZoneInfo timeZoneInfo, DateOnly selectedDate)
+		public IList<TeamScheduleAgentScheduleViewModel> Map(IEnumerable<AgentInTeamScheduleViewModel> agentInTeamScheduleViewModels, DateTimePeriod schedulePeriod, TimeZoneInfo timeZoneInfo)
 		{
 			var startTime = schedulePeriod.StartDateTimeLocal(timeZoneInfo);
 			var endTime = schedulePeriod.EndDateTimeLocal(timeZoneInfo);
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 							Meeting = layer.Meeting,
 							StartPositionPercentage = calculatePosition(layer.Start, startTime, diff),
 							EndPositionPercentage = calculatePosition(layer.End, startTime, diff),
-							TimeSpan = getStartTimeSpan(layer.Start, selectedDate) + " - " + getEndTimeSpan(layer.End, selectedDate)
+							TimeSpan = TimeHelper.TimeOfDayFromTimeSpan(layer.Start.TimeOfDay, CultureInfo.CurrentCulture) + " - " + TimeHelper.TimeOfDayFromTimeSpan(layer.End.TimeOfDay, CultureInfo.CurrentCulture)
 						};
 						periods.Add(scheduleLayerViewModel);
 					}
@@ -54,46 +54,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 		private static decimal calculatePosition(DateTime time, DateTime timeLineStartTime, decimal diff)
 		{
 			return Math.Round((time - timeLineStartTime).Ticks / diff, 4);
-		}
-
-		private string getStartTimeSpan(DateTime layerStartTime, DateOnly selectedDate)
-		{
-			string timeSpanString;
-
-			if (layerStartTime.Date > selectedDate.Date)
-			{
-				timeSpanString = "+1 " + TimeHelper.TimeOfDayFromTimeSpan(layerStartTime.TimeOfDay, CultureInfo.CurrentCulture);
-			}
-			else if (layerStartTime.Date < selectedDate.Date)
-			{
-				timeSpanString = "-1 " + TimeHelper.TimeOfDayFromTimeSpan(layerStartTime.TimeOfDay, CultureInfo.CurrentCulture);
-			}
-			else
-			{
-				timeSpanString = TimeHelper.TimeOfDayFromTimeSpan(layerStartTime.TimeOfDay, CultureInfo.CurrentCulture);
-			}
-
-			return timeSpanString;
-		}
-
-		private string getEndTimeSpan(DateTime layerEndTime, DateOnly selectedDate)
-		{
-			string timeSpanString;
-
-			if (layerEndTime.Date > selectedDate.Date)
-			{
-				timeSpanString = TimeHelper.TimeOfDayFromTimeSpan(layerEndTime.TimeOfDay, CultureInfo.CurrentCulture) + " +1";
-			}
-			else if (layerEndTime.Date < selectedDate.Date)
-			{
-				timeSpanString = TimeHelper.TimeOfDayFromTimeSpan(layerEndTime.TimeOfDay, CultureInfo.CurrentCulture) + " -1";
-			}
-			else
-			{
-				timeSpanString = TimeHelper.TimeOfDayFromTimeSpan(layerEndTime.TimeOfDay, CultureInfo.CurrentCulture);
-			}
-
-			return timeSpanString;
 		}
 	}
 }
