@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 			var name = isNullShiftCategoryInfo ? null : personAssignment.ShiftCategory.Description.Name;
 			var shortName = isNullShiftCategoryInfo ? null : personAssignment.ShiftCategory.Description.ShortName;
 
-			if (isDayOff(s) && !isNullPersonAssignment)
+			if (isDayOff(s) && !isNullPersonAssignment && personAssignment.DayOff() != null)
 			{
 				name = personAssignment.DayOff().Description.Name;
 				shortName = personAssignment.DayOff().Description.ShortName;
