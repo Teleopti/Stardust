@@ -36,8 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		{
 			var viewModel = mapLayer(sourceLayer, isMySchedule);
 			var layerPeriod = new DateTimePeriod(sourceLayer.Start, sourceLayer.End);
-			viewModel.IsOvertime = isMySchedule && 
-								   overtimeActivities != null && 
+			viewModel.IsOvertime = overtimeActivities != null && 
 								   overtimeActivities.Any(overtime => layerPeriod.Intersect(overtime.Period));
 			
 			return viewModel;
