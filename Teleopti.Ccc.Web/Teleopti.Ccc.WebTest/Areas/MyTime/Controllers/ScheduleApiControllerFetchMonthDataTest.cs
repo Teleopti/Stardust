@@ -162,6 +162,19 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldMapDayOffNameAndShortName()
+		{
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 01));
+			assignment.SetDayOff(new DayOffTemplate(new Description("Day off", "DO")), true);
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchMonthData(null);
+			result.ScheduleDays.First().IsDayOff.Should().Be.True();
+			result.ScheduleDays.First().Shift.Name.Should().Be("Day off");
+			result.ScheduleDays.First().Shift.ShortName.Should().Be("DO");
+		}
+
+		[Test]
 		public void ShouldMapIsNotDayOffForWorkingDay()
 		{
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2014, 12, 01));

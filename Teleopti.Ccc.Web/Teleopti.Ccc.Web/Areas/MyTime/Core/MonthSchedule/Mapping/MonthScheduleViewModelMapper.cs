@@ -60,8 +60,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 
 			var isNullPersonAssignment = personAssignment == null;
 			var isNullShiftCategoryInfo = isNullPersonAssignment || personAssignment.ShiftCategory == null;
+
 			var name = isNullShiftCategoryInfo ? null : personAssignment.ShiftCategory.Description.Name;
 			var shortName = isNullShiftCategoryInfo ? null : personAssignment.ShiftCategory.Description.ShortName;
+
+			if (isDayOff(s) && !isNullPersonAssignment)
+			{
+				name = personAssignment.DayOff().Description.Name;
+				shortName = personAssignment.DayOff().Description.ShortName;
+			}
+
 			var color = isNullShiftCategoryInfo ? null : formatRgbColor(personAssignment.ShiftCategory.DisplayColor);
 			var contractTime = projection?.ContractTime() ?? TimeSpan.Zero;
 			return new ShiftViewModel

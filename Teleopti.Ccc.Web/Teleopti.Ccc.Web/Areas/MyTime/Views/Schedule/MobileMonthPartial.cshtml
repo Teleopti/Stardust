@@ -65,17 +65,18 @@ Layout = null;
 			<div class="mobile-month-row-fluid clearfix" data-bind="foreach: dayViewModels, css: {'has-overtime-or-absence': $parent.hasAbsenceOrOvertime, 'has-overtime-and-absence': $parent.hasAbsenceAndOvertime}">
 				<div class="mobile-month-cell">
 					<div class="mobile-month-day" data-bind="click: navigateToDayView, css: {'mobile-month-day-outmonth': isOutsideMonth}">
+						<span data-bind="text: dayOfMonth, style: {background: currentDayColor}" class="date-number"></span>
 						<!-- ko if: !hasShift && !isFullDayAbsence && !isDayOff-->
 						<div class="shift"></div>
 						<!-- /ko -->
 						<!-- ko if: hasShift && !isFullDayAbsence -->
-						<div class="shift">
+						<div class="shift" data-bind="css: {'is-day-off': isDayOff}">
 							<div data-bind="style: {backgroundColor: shiftColor, color: shiftTextColor}">
-								<div>
+								<div data-bind="css: {'dayoff-img': isDayOff}">
 									<strong data-bind="text: shiftShortName"></strong>
 								</div>
 							</div>
-							<div class="shift-timespan">
+							<div class="shift-timespan" data-bind="ifnot: isDayOff">
 								<span data-bind="text: shiftStartTime"></span>
 								<p> - </p>
 								<span data-bind="text: shiftEndTime"></span>
@@ -113,44 +114,6 @@ Layout = null;
 							</div>
 						</div>
 						<!-- /ko -->
-
-						<!-- ko if: isDayOff && !hasAbsence -->
-						<div class="shift is-day-off">
-							<div class="dayoff-img">
-								<strong> @Resources.DayOffShortName </strong>
-							</div>
-							<div class="absence-and-overtime">
-								<!-- ko if: hasOvertime -->
-								<div class="overtime-info-cell" data-bind="style: {backgroundColor: overtimeColor, color: overtimeTextColor}">
-									<strong>@Resources.OvertimeShortName</strong>
-									<span data-bind="visible: hasMultipleOvertimes">..</span>
-								</div>
-								<!-- /ko -->
-							</div>
-						</div>
-						<!-- /ko -->
-
-						<!-- ko if: isDayOff && hasAbsence -->
-						<div class="shift is-day-off">
-							<div class="dayoff-img">
-								<strong>@Resources.DayOffShortName</strong>
-							</div>
-							<div class="absence-and-overtime">
-								<div class="absence-info-cell" data-bind="style: {backgroundColor: absenceColor, color: absenceTextColor}">
-									<strong data-bind="text: absenceShortName"></strong>
-									<span data-bind="visible: hasMultipleAbsences">..</span>
-								</div>
-								<!-- ko if: hasOvertime -->
-								<div class="overtime-info-cell" data-bind="style: {backgroundColor: overtimeColor, color: overtimeTextColor}">
-									<strong>@Resources.OvertimeShortName</strong>
-									<span data-bind="visible: hasMultipleOvertimes">..</span>
-								</div>
-								<!-- /ko -->
-							</div>
-						</div>
-						<!-- /ko -->
-
-						<span data-bind="text: dayOfMonth, style: {background: currentDayColor}" class="date-number"></span>
 					</div>
 				</div>
 			</div>
