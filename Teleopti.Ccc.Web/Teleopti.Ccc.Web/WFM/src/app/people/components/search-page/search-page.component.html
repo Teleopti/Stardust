@@ -31,25 +31,25 @@
           <thead>
             <tr>
               <th nzWidth="62px" nzShowCheckbox [nzChecked]="isAllSelected()" [nzIndeterminate]="isAnySelected() && !isAllSelected()" (nzCheckedChange)="selectAllOnPage()"></th>
-              <th (click)="sort('FirstName')" data-test-sort-fn>First name
+              <th (click)="sort('FirstName')" data-test-sort-fn>{{'FirstName' | translate}}
                 <ng-container *ngIf="isSortingBy('FirstName')">
                   <i *ngIf="isSortingAsc()" class="anticon anticon-arrow-up"></i>
                   <i *ngIf="isSortingDesc()" class="anticon anticon-arrow-down"></i>
                 </ng-container>
               </th>
-              <th (click)="sort('LastName')">Last name
+              <th (click)="sort('LastName')">{{'LastName' | translate}}
                 <ng-container *ngIf="isSortingBy('LastName')">
                   <i *ngIf="isSortingAsc()" class="anticon anticon-arrow-up"></i>
                   <i *ngIf="isSortingDesc()" class="anticon anticon-arrow-down"></i>
                 </ng-container>
               </th>
-              <th (click)="sort('SiteTeam')">Site/Team
+              <th (click)="sort('SiteTeam')">{{'SiteTeam' | translate}}
                 <ng-container *ngIf="isSortingBy('SiteTeam')">
                   <i *ngIf="isSortingAsc()" class="anticon anticon-arrow-up"></i>
                   <i *ngIf="isSortingDesc()" class="anticon anticon-arrow-down"></i>
                 </ng-container>
               </th>
-              <th>Roles</th>
+              <th>{{'Roles' | translate}}</th>
             </tr>
           </thead>
           <tbody>
