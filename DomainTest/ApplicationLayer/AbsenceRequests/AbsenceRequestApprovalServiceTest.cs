@@ -4,12 +4,14 @@ using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Tracking;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -29,11 +31,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public IRequestApprovalServiceFactory RequestApprovalServiceFactory;
 		public FullPermission Permission;
 		public ICurrentScenario Scenario;
+		public MutableNow Now;
 
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble(new FakeScenarioRepository(new Scenario { DefaultScenario = true,Restricted = true}.WithId()))
 				.For<IScenarioRepository>();
+			isolate.UseTestDouble(new MutableNow(DateTime.Now)).For<INow>();
 		}
 
 		[Test]
@@ -135,7 +139,43 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Assert.AreEqual(Resources.CanNotApproveOrDenyRequestDueToNoPermissionToModifyRestrictedScenarios, responses.ElementAt(0).Message);
 		}
 
+		[Test]
+		public void ShouldApproveWhenTheScenarioIsRestrictedAndAutoGrantIsTrue()
+		{
+			Now.Is(new DateTime(2016, 08, 16, 0, 0, 0, DateTimeKind.Utc));
+			Permission.AddToBlackList(DefinedRaptorApplicationFunctionPaths.ModifyRestrictedScenario);
 
+			var absence = new Absence();
+			var workflowControlSet = WorkflowControlSetFactory.CreateWorkFlowControlSet(absence, new GrantAbsenceRequest(), false);
+			var absenceRollingPeriod = new AbsenceRequestOpenRollingPeriod
+			{
+				BetweenDays = new MinMax<int>(0, 7),
+				OrderIndex = 1,
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new AbsenceRequestNoneValidator(),
+				AbsenceRequestProcess = new GrantAbsenceRequest(),
+				OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(2016, 08, 16), new DateOnly(2016, 12, 31))
+			};
+
+			workflowControlSet.AddOpenAbsenceRequestPeriod(absenceRollingPeriod);
+
+			var person = PersonFactory.CreatePersonWithId();
+			person.WorkflowControlSet = workflowControlSet;
+
+			var absenceDateTimePeriod = new DateTimePeriod(2016, 08, 17, 00, 2016, 08, 19, 23);
+			var personRequest = createAbsenceRequest(person, absence, absenceDateTimePeriod);
+
+			setScheduleDictionary(absenceDateTimePeriod, person);
+
+			var accountDay = createAccountDay(new DateOnly(2015, 12, 1));
+			createAccount(person, absence, accountDay);
+
+			setAbsenceApprovalService(person);
+			var responses = _requestApprovalService.Approve(personRequest.Request);
+
+			Assert.AreEqual(0, responses.Count());
+		}
 		private PersonRequest createAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod dateTimePeriod)
 		{
 			var personRequestFactory = new PersonRequestFactory() { Person = person };

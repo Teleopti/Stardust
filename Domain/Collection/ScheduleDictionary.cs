@@ -239,13 +239,13 @@ namespace Teleopti.Ccc.Domain.Collection
 			return lstErrors;
 		}
 
-		public IEnumerable<IBusinessRuleResponse> Modify(ScheduleModifier modifier, IEnumerable<IScheduleDay> scheduleParts, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTagSetter scheduleTagSetter, bool forceModify = false)
+		public IEnumerable<IBusinessRuleResponse> Modify(ScheduleModifier modifier, IEnumerable<IScheduleDay> scheduleParts, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTagSetter scheduleTagSetter, bool forceModify = false, bool isSystemModifying = false)
 		{
 			var lstErrors = new List<IBusinessRuleResponse>();
 
 			using (PerformanceOutput.ForOperation("Modifying " + scheduleParts.Count() + " schedule(s)"))
 			{
-				if (isScenarioRestrictedAndNotPermitted())
+				if (!isSystemModifying && isScenarioRestrictedAndNotPermitted())
 				{
 					lstErrors.Add(new BusinessRuleResponse(Resources.CanNotApproveOrDenyRequestDueToNoPermissionToModifyRestrictedScenarios, true));
 					return lstErrors;

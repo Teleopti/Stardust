@@ -75,6 +75,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <param name="scheduleDayChangeCallback">The schedule day change callback.</param>
 		/// <param name="scheduleTagSetter">The schedule tag setter.</param>
 		/// <param name="forceModify">Modify schedule regardless of rule check response.</param>
+		/// <param name="isSystemModifying">Whether is system modifying schedule.</param>
 		/// <returns></returns>
 		/// <remarks>
 		/// Created by: rogerkr
@@ -85,7 +86,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
                                                   INewBusinessRuleCollection newBusinessRuleCollection,
                                                   IScheduleDayChangeCallback scheduleDayChangeCallback,
                                                   IScheduleTagSetter scheduleTagSetter,
-												  bool forceModify = false
+												  bool forceModify = false,
+												  bool isSystemModifying = false
 			);
 
 	    IEnumerable<IBusinessRuleResponse> Modify(IScheduleDay scheduleDay,

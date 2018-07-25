@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
@@ -65,10 +66,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			var period = absenceRequest.Period;
 			var absence = absenceRequest.Absence;
 
-			return approveAbsence(person, period, absence);
+			var useSystemAuthorization = absenceRequest.Person.WorkflowControlSet
+				.GetMergedAbsenceRequestOpenPeriod(absenceRequest).AbsenceRequestProcess.GetType() == typeof(GrantAbsenceRequest);
+
+			return approveAbsence(person, period, absence, useSystemAuthorization);
 		}
 
-		private IEnumerable<IBusinessRuleResponse> approveAbsence(IPerson person, DateTimePeriod period, IAbsence absence)
+		private IEnumerable<IBusinessRuleResponse> approveAbsence(IPerson person, DateTimePeriod period, IAbsence absence, bool isSystemModifying = false)
 		{
 			var totalScheduleRange = _scheduleDictionary[person];
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
@@ -96,7 +100,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				scheduleDaysForCheckingAccount.ForEach(s => s.Add(personAbsence));
 
 				var result = _scheduleDictionary.Modify(ScheduleModifier.Request, scheduleDaysForCheckingAccount, _newBusinessRules,
-					_scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
+					_scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance), false, isSystemModifying);
 
 				if (result == null)
 				{

@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IEnumerable<IBusinessRuleResponse> Modify(ScheduleModifier modifier, IEnumerable<IScheduleDay> scheduleParts,
 			INewBusinessRuleCollection newBusinessRuleCollection, IScheduleDayChangeCallback scheduleDayChangeCallback,
-			IScheduleTagSetter scheduleTagSetter, bool forceModify = false)
+			IScheduleTagSetter scheduleTagSetter, bool forceModify = false, bool isSystemModifying = false)
 		{
 			throw new NotImplementedException();
 		}
