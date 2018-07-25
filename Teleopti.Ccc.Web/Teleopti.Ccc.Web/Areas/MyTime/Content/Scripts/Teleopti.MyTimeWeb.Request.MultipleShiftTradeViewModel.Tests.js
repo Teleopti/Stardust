@@ -1110,7 +1110,6 @@
 		viewModel.redrawLayers = function () { };
 
 		viewModel.chooseAgent(agent);
-		console.log(viewModel.loadedSchedulePairs());
 		equal(viewModel.loadedSchedulePairs().length, 8);
 		equal(viewModel.loadedSchedulePairs()[0].mySchedule, null)
 		equal(viewModel.loadedSchedulePairs()[1].mySchedule.contractTime, "8:00");
