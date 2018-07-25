@@ -107,7 +107,7 @@
 				{},
 				{
 					Name: '',
-					Id: _.uniqueId(),
+					Id: 'New' + _.uniqueId(),
 					Skills: [],
 					Saved: false
 				}
