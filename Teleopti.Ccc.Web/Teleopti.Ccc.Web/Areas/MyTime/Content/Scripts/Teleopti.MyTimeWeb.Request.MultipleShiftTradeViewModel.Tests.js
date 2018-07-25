@@ -1050,6 +1050,7 @@
 				}],
 				"StartTimeUtc": "\/Date(1531978200000)\/",
 				"IsDayOff": false,
+				"MinStart": "\/Date(1531978200000)\/",
 				"IsFullDayAbsence": false,
 				"Total": 0,
 				"DayOffName": null,
@@ -1074,6 +1075,7 @@
 					"TitleTime": "07:30 - 09:45",
 					"Meeting": null
 				}],
+				"MinStart": "\/Date(1531978200000)\/",
 				"StartTimeUtc": "\/Date(1531978200000)\/",
 				"IsDayOff": false,
 				"IsFullDayAbsence": false,
@@ -1108,7 +1110,7 @@
 		viewModel.redrawLayers = function () { };
 
 		viewModel.chooseAgent(agent);
-
+		console.log(viewModel.loadedSchedulePairs());
 		equal(viewModel.loadedSchedulePairs().length, 8);
 		equal(viewModel.loadedSchedulePairs()[0].mySchedule, null)
 		equal(viewModel.loadedSchedulePairs()[1].mySchedule.contractTime, "8:00");
@@ -1123,7 +1125,7 @@
 		});
 
 		var ret = viewModel.formatTime(moment("2018-07-19 02:00:00"), moment("2018-07-18"));
-		equal(ret, "02:00 +1");
+		equal(ret, " +1");
 	});
 
 	test("should add minus one day when start time at day before", function () {
@@ -1135,6 +1137,6 @@
 		});
 
 		var ret = viewModel.formatTime(moment("2018-07-19 23:00:00"), moment("2018-07-20"));
-		equal(ret, "23:00(-1)");
+		equal(ret, "(-1)");
 	});
 });

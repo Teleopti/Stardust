@@ -88,12 +88,12 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 	});
 
 	self.formatTime = function (dateTime, scheduleDate) {
-		var formatedDate = dateTime.format(Teleopti.MyTimeWeb.Common.TimeFormat);
 		if (dateTime && scheduleDate) {
-			if (dateTime.isBefore(scheduleDate, 'day')) formatedDate = formatedDate + "(-1)";
-			if (dateTime.isAfter(scheduleDate, 'day')) formatedDate = formatedDate + " +1";
-		} 
-		return formatedDate;
+			if (dateTime.isBefore(scheduleDate, 'day')) return "(-1)";
+			if (dateTime.isAfter(scheduleDate, 'day')) return " +1";
+		}
+
+		return '';
 	}
 
 	self.scrolled = function (data, event) {
@@ -1103,6 +1103,8 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 			var startDateTime = moment(personSchedule.MinStart);
 			if (personSchedule !== null && personSchedule.ScheduleLayers !== null && personSchedule.ScheduleLayers.length > 0) {
 				var layers = personSchedule.ScheduleLayers;
+				var startTimeInString = layers[0].TitleTime.split('-')[0].trim();
+				var endTimeInString = layers[layers.length - 1].TitleTime.split('-')[1].trim();
 				var scheduleStartTime = moment(layers[0].Start);
 				var scheduleEndTime = moment(layers[layers.length - 1].End);
 				var scheduleLength = scheduleEndTime.diff(scheduleStartTime, 'minutes');
@@ -1122,7 +1124,7 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 			var model = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedLayers, scheduleStartTime, scheduleEndTime, personSchedule.Name,
 				personSchedule.PersonId, personSchedule.IsDayOff, personSchedule.DayOffName, false, false, null,
 				Teleopti.MyTimeWeb.Common.FormatTimeSpan(personSchedule.ContractTimeInMinute), personSchedule.IsNotScheduled,
-				startDateTime, categoryName, categoryColor);
+				startDateTime, categoryName, categoryColor, startTimeInString, endTimeInString);
 
 			return model;
 		});
