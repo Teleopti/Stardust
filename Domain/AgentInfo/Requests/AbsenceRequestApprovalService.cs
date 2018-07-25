@@ -66,8 +66,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			var period = absenceRequest.Period;
 			var absence = absenceRequest.Absence;
 
-			var useSystemAuthorization = absenceRequest.Person.WorkflowControlSet
-				.GetMergedAbsenceRequestOpenPeriod(absenceRequest).AbsenceRequestProcess.GetType() == typeof(GrantAbsenceRequest);
+			var useSystemAuthorization = absenceRequest.Person.WorkflowControlSet?.GetMergedAbsenceRequestOpenPeriod(absenceRequest).AbsenceRequestProcess.GetType() == typeof(GrantAbsenceRequest);
 
 			return approveAbsence(person, period, absence, useSystemAuthorization);
 		}
