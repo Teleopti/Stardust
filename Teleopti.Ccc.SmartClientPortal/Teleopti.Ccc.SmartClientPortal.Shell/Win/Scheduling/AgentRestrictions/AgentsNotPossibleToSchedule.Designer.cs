@@ -54,6 +54,7 @@
 			// 
 			// toolStripButtonRefresh
 			// 
+			this.toolStripButtonRefresh.Enabled = false;
 			this.toolStripButtonRefresh.Image = global::Teleopti.Ccc.SmartClientPortal.Shell.Properties.Resources.ccc_Refresh_16x16;
 			this.toolStripButtonRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonRefresh.Name = "toolStripButtonRefresh";
@@ -73,6 +74,7 @@
 			// toolStripButtonShowNonIssued
 			// 
 			this.toolStripButtonShowNonIssued.CheckOnClick = true;
+			this.toolStripButtonShowNonIssued.Enabled = false;
 			this.toolStripButtonShowNonIssued.Image = global::Teleopti.Ccc.SmartClientPortal.Shell.Properties.Resources.ccc_ok_green_16x16;
 			this.toolStripButtonShowNonIssued.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonShowNonIssued.Name = "toolStripButtonShowNonIssued";

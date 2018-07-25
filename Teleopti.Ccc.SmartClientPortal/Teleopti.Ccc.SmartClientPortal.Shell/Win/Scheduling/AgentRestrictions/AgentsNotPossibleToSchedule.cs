@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			if(!DesignMode)
 				SetTexts();
 
+			toolStripLabelManySelected.Text = Resources.NoAgentsToBeDisplayed;
 			toolStripButtonShowNonIssued.Text = string.Format(Resources.ShowNoneIssuedAgents, numOfAgentsWithNoIssue);
 		}
 
@@ -63,6 +64,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 		{
 			Cursor = Cursors.WaitCursor;
 			toolStripButtonRefresh.Enabled = false;
+			toolStripButtonShowNonIssued.Enabled = false;
 			listViewResult.SuspendLayout();
 			listViewResult.Items.Clear();
 			listViewResult.ResumeLayout(true);
@@ -71,6 +73,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 
 		public void SetSelected(IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedDates, AgentRestrictionsDetailView detailView)
 		{
+			toolStripButtonShowNonIssued.Enabled = true;
 			_selectedAgents = selectedAgents;
 			_selectedDates = selectedDates;
 			_detailView = detailView;
@@ -147,6 +150,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 			fillList(toolStripButtonShowNonIssued.Checked);
 
 			toolStripButtonRefresh.Enabled = true;
+			toolStripButtonShowNonIssued.Enabled = true;
 			_detailView.TheGrid.Enabled = true;
 			_detailView.TheGrid.Cursor = Cursors.Default;
 			Cursor = Cursors.Default;
