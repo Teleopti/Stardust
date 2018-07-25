@@ -420,6 +420,75 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			Assert.IsTrue(overnightAbsence.Period.EndDateTime == yesterdayOvernightPeriod.EndDateTime);
 		}
 
+		[Test]
+		public void ShouldNotRemoveCrossNightAbsenceWhenShifTradeTargetPersonHasFulldayAbsenceInNewYorkTimeZone()
+		{
+			setPermissions();
+
+			var personFrom = PersonFactory.CreatePerson("From").WithId();
+			var personTo = PersonFactory.CreatePerson("To").WithId();
+
+			var workflowControlSet = ShiftTradeTestHelper.CreateWorkFlowControlSet(true);
+			personTo.WorkflowControlSet = workflowControlSet;
+			personFrom.WorkflowControlSet = workflowControlSet;
+
+			var timeZone = TimeZoneInfoFactory.NewYorkTimeZoneInfo();
+			personFrom.PermissionInformation.SetDefaultTimeZone(timeZone);
+			personTo.PermissionInformation.SetDefaultTimeZone(timeZone);
+			_personRepository.Add(personFrom);
+			_personRepository.Add(personTo);
+
+			var todayOvernightPeriod = new DateTimePeriod(new DateTime(2018, 07, 20, 1, 0, 0, DateTimeKind.Utc), new DateTime(2018, 07, 20, 10, 0, 0, DateTimeKind.Utc));
+
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(todayOvernightPeriod.StartDateTime.Date.AddDays(-1)));
+			personTo.AddPersonPeriod(personPeriod);
+			personFrom.AddPersonPeriod(personPeriod);
+
+			var contract = ContractFactory.CreateContract("test contract");
+			personTo.PersonPeriodCollection.First().PersonContract.Contract = contract;
+			personFrom.PersonPeriodCollection.First().PersonContract.Contract = contract;
+
+			var assPersonFrom = PersonAssignmentFactory
+				.CreateAssignmentWithMainShift(personFrom, _currentScenario.Current(), new Activity("Shift_PersonFrom"), todayOvernightPeriod, new ShiftCategory("LT")).WithId();
+			_scheduleStorage.Add(assPersonFrom);
+
+			var yesterdayOvernightPeriod = new DateTimePeriod(new DateTime(2018, 07, 19, 1, 0, 0, DateTimeKind.Utc), new DateTime(2018, 07, 19, 10, 0, 0, DateTimeKind.Utc));
+			var ass2PersonFrom = PersonAssignmentFactory
+				.CreateAssignmentWithMainShift(personFrom, _currentScenario.Current(), new Activity("Shift_PersonFrom_Yesterday"), yesterdayOvernightPeriod, new ShiftCategory("LT")).WithId();
+			_scheduleStorage.Add(ass2PersonFrom);
+
+			var fullDayAbsence = PersonAbsenceFactory.CreatePersonAbsence(personFrom, _currentScenario.Current(),
+				yesterdayOvernightPeriod, AbsenceFactory.CreateAbsence("fromPersonFullDayAbsence")).WithId();
+			_scheduleStorage.Add(fullDayAbsence);
+
+			var assPersonTo = PersonAssignmentFactory.CreateAssignmentWithDayOff(personTo, _currentScenario.Current(), new DateOnly(2018, 07, 19),
+				new DayOffTemplate(new Description("DayOff_PersonTo")));
+			_scheduleStorage.Add(assPersonTo);
+
+			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom },
+				null, new DateOnlyPeriod(new DateOnly(2018, 07, 18), new DateOnly(2018, 07, 20)), _currentScenario.Current());
+
+			var shiftTradeRequest = _shiftTradeTestHelper.PrepareAndGetPersonRequest(personFrom, personTo, new DateOnly(2018, 07, 19));
+			shiftTradeRequest.ForcePending();
+			(shiftTradeRequest.Request as IShiftTradeRequest)?.SetShiftTradeStatus(ShiftTradeStatus.OkByBothParts,
+				new PersonRequestCheckAuthorization());
+
+			_shiftTradeTestHelper.SetScheduleDictionary(scheduleDictionary);
+
+			_shiftTradeTestHelper.HandleRequest(
+				_shiftTradeTestHelper.GetAcceptShiftTradeEvent(personTo, shiftTradeRequest.Id.GetValueOrDefault()),
+				getConfigurableBusinessRuleProvider());
+
+			Assert.IsTrue(shiftTradeRequest.IsApproved);
+
+			var overnightAbsence = scheduleDictionary[personFrom].ScheduledDay(new DateOnly(2018, 07, 18)).PersonAbsenceCollection()
+				.First();
+
+			Assert.IsTrue(overnightAbsence.Id == fullDayAbsence.Id);
+			Assert.IsTrue(overnightAbsence.Period.StartDateTime == yesterdayOvernightPeriod.StartDateTime);
+			Assert.IsTrue(overnightAbsence.Period.EndDateTime == yesterdayOvernightPeriod.EndDateTime);
+		}
+
 		private IScheduleDay createScheduleDay(DateOnly date, DateTimePeriod period, IPerson agent, IActivity activity)
 		{
 			var scheduleDay = ScheduleDayFactory.Create(date, agent, _currentScenario.Current());

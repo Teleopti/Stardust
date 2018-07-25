@@ -337,7 +337,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				//loop absences
 				foreach (IPersonAbsence personAbsence in PersonAbsenceCollection())
 				{
-					if (personAbsence.Period.StartDateTime != source.Period.StartDateTime)
+					if (crossNightAbsence(source, personAbsence))
 					{
 						splitList.Add(personAbsence);
 					}
@@ -759,6 +759,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public IPreferenceDay PreferenceDay()
 		{
 			return PersistableScheduleDataCollection().OfType<IPreferenceDay>().SingleOrDefault();
+		}
+
+		private static bool crossNightAbsence(IScheduleDay source, IPersonAbsence personAbsence)
+		{
+			var timeZone = personAbsence.Person.PermissionInformation.DefaultTimeZone();
+
+			return personAbsence.Period.ToDateOnlyPeriod(timeZone).StartDate != source.Period.ToDateOnlyPeriod(timeZone).StartDate;
 		}
 	}
 
