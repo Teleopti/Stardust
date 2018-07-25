@@ -24,7 +24,7 @@ INSERT [dbo].[Person]([Id], [Version], [UpdatedBy],[UpdatedOn], [Email], [Note],
 VALUES (@SuperUserId,1, @SuperUserId, getdate(), '', '', '', NULL, '_Super User', '_Super User', 'UTC', NULL, NULL, 0, NULL, NULL, NULL, NULL, 1)
 
 --get parent level
-SELECT @ParentForeignId = '0001'	--Parent Foreign id that is hardcoded
+SELECT @ParentForeignId = '0080'	--Parent Foreign id that is hardcoded
 SELECT @ParentId = Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ParentForeignId + '%')
 	
 --insert/modify application function

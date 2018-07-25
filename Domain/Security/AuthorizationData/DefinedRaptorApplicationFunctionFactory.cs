@@ -49,7 +49,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.PayrollIntegration, "xxPayrollIntegration", DefinedRaptorApplicationFunctionForeignIds.PayrollIntegration, 200);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.SeatPlanner, "xxSeatPlanner", DefinedRaptorApplicationFunctionForeignIds.SeatPlanner);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.Outbound, "xxOutbound", DefinedRaptorApplicationFunctionForeignIds.Outbound);
-			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.Gamification, "xxGamification", DefinedRaptorApplicationFunctionForeignIds.Gamification);
 
 			// Global
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ModifySchedule, "xxModifySchedule", DefinedRaptorApplicationFunctionForeignIds.ModifySchedule);
@@ -180,6 +179,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.RemoveDayOff, "xxRemoveDayOff", DefinedRaptorApplicationFunctionForeignIds.RemoveDayOff);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.PeopleAccess, "xxPeopleAccess", DefinedRaptorApplicationFunctionForeignIds.PeopleAccess);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.PeopleManageUsers, "xxPeopleManageUsers", DefinedRaptorApplicationFunctionForeignIds.PeopleManageUsers);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.Gamification, "xxGamification", DefinedRaptorApplicationFunctionForeignIds.Gamification);
 
 			return result.ToArray();
 		}

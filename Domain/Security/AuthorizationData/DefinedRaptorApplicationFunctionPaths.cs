@@ -26,7 +26,6 @@
 		public const string Anywhere = "Raptor/Anywhere";
 		public const string SeatPlanner = "Raptor/SeatPlanner";
 		public const string Outbound = "Raptor/Outbound";
-		public const string Gamification = "Raptor/Gamification";
 
 		// Global
 		public const string ModifyPersonAssignment = "Raptor/Global/ModifySchedule/ModifyAssignment";
@@ -142,6 +141,7 @@
 		public const string WebModifySkillGroup = "Raptor/Anywhere/WebModifySkillGroup";
 		public const string AddDayOff = "Raptor/Anywhere/Schedules/AddDayOff";
 		public const string RemoveDayOff = "Raptor/Anywhere/Schedules/RemoveDayOff";
+		public const string Gamification = "Raptor/Anywhere/Gamification";
 
 		// Angel
 		public const string WebForecasts = "Raptor/Anywhere/WebForecasts";
