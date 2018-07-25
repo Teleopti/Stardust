@@ -24,7 +24,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 {
-	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage)]
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.Gamification)]
 	public class GamificationController : ApiController
 	{
 		private readonly string CSV_CONTENT_TYPE = "text/csv";
@@ -243,7 +243,7 @@ namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 		[HttpPost, Route("api/Gamification/LoadSites"), UnitOfWork]
 		public virtual IEnumerable<SelectOptionItem> GetAllSites()
 		{
-			return _siteViewModelFactory.CreateSiteOptionsViewModel(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
+			return _siteViewModelFactory.CreateSiteOptionsViewModel(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.Gamification);
 		}
 
 		[HttpPost, Route("api/Gamification/LoadTeamGamification"), UnitOfWork]

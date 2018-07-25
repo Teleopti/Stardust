@@ -9,7 +9,7 @@ using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Gamification.Controller
 {
-	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage)]
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.Gamification)]
 	public class GamificationCalculationController: ApiController
 	{
 		private readonly CalculateBadges _calculateBadges;
