@@ -115,6 +115,7 @@
 	test('should render timeline', function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
+		vm.selectedDate(moment('2018-07-23'));
 
 		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
 
@@ -131,6 +132,7 @@
 	test('should update timeline after load more schedules', function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
+		vm.selectedDate(moment('2018-07-23'));
 
 		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
 
@@ -302,6 +304,7 @@
 	test('should render overnight timeline', function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
+		vm.selectedDate(moment('2018-07-23'));
 
 		vm = Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule.Vm();
 
@@ -465,8 +468,18 @@
 		vm.readMoreTeamScheduleData({
 			AgentSchedules: fakeOriginalAgentSchedulesData.slice(10),
 			TimeLine: [
-				{ Time: '05:00:00', TimeLineDisplay: '05:00', PositionPercentage: 0.0714, TimeFixedFormat: null },
-				{ Time: '06:00:00', TimeLineDisplay: '06:00', PositionPercentage: 0.3571, TimeFixedFormat: null }
+				{
+					Time: '2018-07-24T07:00:00',
+					TimeLineDisplay: '24/07/2018T07:00',
+					PositionPercentage: 0.9485,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '2018-07-24T08:00:00',
+					TimeLineDisplay: '24/07/2018T08:00',
+					PositionPercentage: 0.9897,
+					TimeFixedFormat: null
+				}
 			]
 		});
 
@@ -600,6 +613,7 @@
 			fakeOriginalAgentSchedulesData[0].IsNotScheduled = true;
 		}
 		initVm();
+		vm.selectedDate(moment('2018-07-23'));
 
 		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
 
