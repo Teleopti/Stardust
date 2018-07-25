@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
     public interface IPeriodViewModelFactory
     {
 		IEnumerable<PeriodViewModel> CreatePeriodViewModelsForWeek(IEnumerable<IVisualLayer> visualLayerCollection, TimePeriod minMaxTime, DateOnly localDate, TimeZoneInfo timeZone, IPerson person);
-		IEnumerable<PeriodViewModel> CreatePeriodViewModelsForDay(IEnumerable<IVisualLayer> visualLayerCollection, TimePeriod minMaxTime, DateOnly localDate, TimeZoneInfo timeZone, IPerson person);
+		IEnumerable<PeriodViewModel> CreatePeriodViewModelsForDay(IEnumerable<IVisualLayer> visualLayerCollection, TimePeriod minMaxTime, DateOnly localDate, TimeZoneInfo timeZone, IPerson person, bool allowCrossNight = false);
 		IEnumerable<OvertimeAvailabilityPeriodViewModel> CreateOvertimeAvailabilityPeriodViewModels(IOvertimeAvailability overtimeAvailability, IOvertimeAvailability overtimeAvailabilityYesterday, TimePeriod minMaxTime);
     }
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
@@ -64,10 +63,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			return newList;
 		}
 
-		public IEnumerable<PeriodViewModel> CreatePeriodViewModelsForDay(IEnumerable<IVisualLayer> visualLayerCollection, TimePeriod minMaxTime, DateOnly localDate, TimeZoneInfo timeZone, IPerson person)
+		public IEnumerable<PeriodViewModel> CreatePeriodViewModelsForDay(IEnumerable<IVisualLayer> visualLayerCollection, TimePeriod minMaxTime, DateOnly localDate, TimeZoneInfo timeZone, IPerson person, bool allowCrossNight)
 		{
 			var calendarDayExtractor = new VisualLayerCalendarDayExtractor();
-			var layerExtendedList = calendarDayExtractor.CreateVisualPeriods(localDate, visualLayerCollection, timeZone);
+			var layerExtendedList = calendarDayExtractor.CreateVisualPeriods(localDate, visualLayerCollection, timeZone, allowCrossNight);
 
 			var newList = new List<PeriodViewModel>();
 

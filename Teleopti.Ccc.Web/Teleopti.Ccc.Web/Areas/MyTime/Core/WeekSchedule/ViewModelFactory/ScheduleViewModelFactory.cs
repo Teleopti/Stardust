@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 		public DayScheduleViewModel CreateDayViewModel(DateOnly date, StaffingPossiblityType staffingPossiblityType)
 		{
-			var daySchedule = _weekScheduleDomainDataProvider.GetDaySchedule(date);
+			var daySchedule = _weekScheduleDomainDataProvider.GetDaySchedule(date, true);
 			var hasVisualSchedule = hasAnyVisualSchedule(date, daySchedule);
 
 			if (!hasVisualSchedule)

@@ -383,8 +383,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			layerDetails.Meeting.Should().Be.Null();
 			layerDetails.Color.Should().Be.EqualTo("0,128,0");
 			layerDetails.StartPositionPercentage.Should()
-				.Be.EqualTo(15M * 60 / ((23M * 3600M + 59M * 60 + 59) - (17M * 3600M + 45M * 60)));
-			layerDetails.EndPositionPercentage.Should().Be.EqualTo(1M);
+				.Be.EqualTo(0.25 / (26.25 - 17.75));
+			layerDetails.EndPositionPercentage.Should().Be.EqualTo((26 - 17.75) / (26.25 - 17.75));
 		}
 
 		[Test]
@@ -846,6 +846,28 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.TimeLine.ElementAt(1).Time.Hours.Should().Be.EqualTo(9);
 			result.TimeLine.ElementAt(1).Time.Minutes.Should().Be.EqualTo(0);
 			result.TimeLine.ElementAt(1).PositionPercentage.Should().Be.EqualTo(0.5 / (17.5 - 8.5));
+		}
+
+		[Test]
+		public void ShouldMapOvernightTimeLineOnFetchDayData()
+		{
+			var date = new DateOnly(2014, 12, 18);
+			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 18, 45, 0, DateTimeKind.Utc),
+				new DateTime(2014, 12, 19, 2, 15, 0, DateTimeKind.Utc));
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
+
+			assignment.AddActivity(new Activity("a") { InWorkTime = true, DisplayColor = Color.Blue }, period);
+			assignment.SetShiftCategory(new ShiftCategory("sc") { DisplayColor = Color.Red });
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchDayData(date);
+			result.TimeLine.Count().Should().Be.EqualTo(10);
+			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(18);
+			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(30);
+			result.TimeLine.First().PositionPercentage.Should().Be.EqualTo(0.0);
+			result.TimeLine.ElementAt(1).Time.Hours.Should().Be.EqualTo(19);
+			result.TimeLine.ElementAt(1).Time.Minutes.Should().Be.EqualTo(0);
+			result.TimeLine.ElementAt(1).PositionPercentage.Should().Be.EqualTo(0.5 / (26.5 - 18.5));
 		}
 
 		[Test]
