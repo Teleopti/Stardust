@@ -363,6 +363,51 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldNotShowYesterdayOvernightShiftCauseItBelongsToYesterdayOnFetchDayData()
+		{
+			var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
+			TimeZone.Is(timeZone);
+			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(timeZone);
+			Now.Is(new DateTime(2018, 03, 11, 6, 0, 0, DateTimeKind.Utc));
+
+			var today = new DateOnly(2018, 03, 11);
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), today);
+			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(new DateTime(2018, 03, 11, 20, 0, 0), timeZone),
+				TimeZoneHelper.ConvertToUtc(new DateTime(2018, 03, 12, 4, 0, 0), timeZone));
+			var phoneActivity = new Activity("Phone")
+			{
+				InWorkTime = true,
+				InContractTime = true,
+				DisplayColor = Color.Green
+			};
+			assignment.AddActivity(phoneActivity, period);
+			assignment.SetShiftCategory(new ShiftCategory("sc"));
+
+			ScheduleData.Add(assignment);
+
+			var assignmentYesterday = new PersonAssignment(User.CurrentUser(), Scenario.Current(), today.AddDays(-1));
+			var periodYesterday = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(new DateTime(2018, 03, 10, 20, 0, 0), timeZone),
+				TimeZoneHelper.ConvertToUtc(new DateTime(2018, 03, 11, 4, 0, 0), timeZone));
+			var phoneActivityYesterday = new Activity("Yesterday Overnight Phone")
+			{
+				InWorkTime = true,
+				InContractTime = true,
+				DisplayColor = Color.Yellow
+			};
+			assignmentYesterday.AddActivity(phoneActivityYesterday, periodYesterday);
+			assignmentYesterday.SetShiftCategory(new ShiftCategory("sc"));
+
+			ScheduleData.Add(assignmentYesterday);
+
+			var result = Target.FetchDayData(today);
+			var activityLayers = result.Schedule.Periods;
+
+			activityLayers.Count().Should().Be.EqualTo(1);
+			activityLayers.First().StartPositionPercentage.Should().Be.EqualTo(0.25M / 8.5M);
+			activityLayers.First().EndPositionPercentage.Should().Be.EqualTo(8.25M / 8.5M);
+		}
+
+		[Test]
 		public void ShouldNotMapDaylightSavingTimeAdjustmentOnFetchDayData()
 		{
 			TimeZone.IsChina();

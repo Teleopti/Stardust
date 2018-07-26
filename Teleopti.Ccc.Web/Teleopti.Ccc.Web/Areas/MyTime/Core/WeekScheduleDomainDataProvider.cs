@@ -54,10 +54,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			public IVisualLayerCollection Projection { get; set; }
 		}
 
-		public DayScheduleDomainData GetDaySchedule(DateOnly date, bool allowCrossNight = false)
+		public DayScheduleDomainData GetDaySchedule(DateOnly date, bool allowCrossNight = false, bool loadSelectedDateScheduleOnly = false)
 		{
 			var period = new DateOnlyPeriod(date, date);
-			var periodSchedule = getScheduleDomainData(date, period, allowCrossNight);
+			var periodSchedule = getScheduleDomainData(date, period, allowCrossNight, loadSelectedDateScheduleOnly);
 			return new DayScheduleDomainData
 			{
 				Date = date,
@@ -86,11 +86,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			return getScheduleDomainData(date, week);
 		}
 
-		private WeekScheduleDomainData getScheduleDomainData(DateOnly date, DateOnlyPeriod period, bool allowCrossNight = false)
+		private WeekScheduleDomainData getScheduleDomainData(DateOnly date, DateOnlyPeriod period, bool allowCrossNight = false, bool loadSelectedDateScheduleOnly = false)
 		{
 			var periodStartDate = period.StartDate;
-			var periodWithPreviousDay = new DateOnlyPeriod(periodStartDate.AddDays(-1), period.EndDate);
-			var scheduleDays = _scheduleProvider.GetScheduleForPeriod(periodWithPreviousDay).ToList();
+
+			List<IScheduleDay> scheduleDays;
+			if (loadSelectedDateScheduleOnly)
+			{
+				scheduleDays = _scheduleProvider.GetScheduleForPeriod(new DateOnlyPeriod(periodStartDate, period.EndDate)).ToList();
+			}
+			else
+			{
+				var periodWithPreviousDay = new DateOnlyPeriod(periodStartDate.AddDays(-1), period.EndDate);
+				scheduleDays = _scheduleProvider.GetScheduleForPeriod(periodWithPreviousDay).ToList();
+			}
+
 			var personRequestPeriods = _personRequestProvider.RetrieveRequestPeriodsForLoggedOnUser(period);
 			var requestProbability = _absenceRequestProbabilityProvider.GetAbsenceRequestProbabilityForPeriod(period);
 			var seatBookings = _seatBookingProvider.GetSeatBookingsForScheduleDays(scheduleDays);
