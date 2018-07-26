@@ -272,6 +272,20 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldSighIntradayAbsenceForPersonToSchedule()
+		{
+			_now.Is(DateOnly.Today.Date);
+			var startDate = DateOnly.Today.AddDays(1);
+			var endDate = startDate.AddDays(9);
+			var form = prepareData(startDate, endDate, new DateTime(DateOnly.Today.AddDays(1).Date.Ticks, DateTimeKind.Utc));
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+
+			data.PersonToSchedules.First().IsIntradayAbsence.Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldGetScheduleBaseMyTimeZone()
 		{
 			_now.Is(new DateTime(2018, 07, 09, 0, 0, 0, DateTimeKind.Utc));
@@ -368,6 +382,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 					.WithPeriod(DateOnly.MinValue.ToString())
 					.WithTerminalDate(DateOnly.MaxValue.ToString())
 					.WithSchedule(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString())
+					.WithPersonAbsence(date.Date.AddHours(8).ToString(), date.Date.AddHours(9).ToString())
 					.WithAssignedOvertimeActivity(date.Date.AddHours(17).ToString(), date.Date.AddHours(18).ToString());
 			}
 

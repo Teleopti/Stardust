@@ -243,7 +243,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				PersonId = scheduleDay.Person.Id.GetValueOrDefault(),
 				ScheduleLayers = getScheduleLayers(eventScheduleDay, scheduleDay.PersonAssignment(), person.Id == _loggedOnUser.CurrentUser().Id),
 				ShiftExchangeOfferId = null,
-				ShiftCategory = new ShiftCategoryViewModel { Name = categoryName, ShortName = shortName, DisplayColor = displayColor}
+				ShiftCategory = new ShiftCategoryViewModel { Name = categoryName, ShortName = shortName, DisplayColor = displayColor},
+				IsIntradayAbsence = !isFulldayAbsence && scheduleDay.PersonAbsenceCollection().Any()
 			};
 		}
 

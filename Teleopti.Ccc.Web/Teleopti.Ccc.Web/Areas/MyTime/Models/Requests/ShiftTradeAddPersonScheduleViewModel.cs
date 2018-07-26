@@ -23,5 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 			ShiftExchangeOfferId = null;
 			ContractTimeInMinute = input.ContractTimeInMinute;
 		}
+
+		public bool IsIntradayAbsence { get; set; }
 	}
 }
