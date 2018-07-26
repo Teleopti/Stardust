@@ -599,7 +599,7 @@ namespace Teleopti.Ccc.UserTexts {
                 return ResourceManager.GetString("ActiveAgentsInUseColon", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Activities.
         /// </summary>
@@ -5716,11 +5716,11 @@ namespace Teleopti.Ccc.UserTexts {
                 return ResourceManager.GetString("CannotApplyThisToAgentsInADifferentTimeZone", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You can not approve/deny request since you have no permission to modify restricted scenarios..
-        /// </summary>
-        public static string CanNotApproveOrDenyRequestDueToNoPermissionToModifyRestrictedScenarios {
+
+		/// <summary>
+		///   Looks up a localized string similar to You can not approve/deny request since you have no permission to modify restricted scenarios..
+		/// </summary>
+		public static string CanNotApproveOrDenyRequestDueToNoPermissionToModifyRestrictedScenarios {
             get {
                 return ResourceManager.GetString("CanNotApproveOrDenyRequestDueToNoPermissionToModifyRestrictedScenarios", resourceCulture);
             }
@@ -29421,7 +29421,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save failed. No permission to modify write protected schedule..
+        ///   Looks up a localized string similar to Save failed. No permission to modify write-protected schedule..
         /// </summary>
         public static string SaveFailedForModifyWriteProtectedSchedule {
             get {
@@ -39051,6 +39051,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string WitAmpersandhinColon {
             get {
                 return ResourceManager.GetString("WitAmpersandhinColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to With Absence.
+        /// </summary>
+        public static string WithAbsence {
+            get {
+                return ResourceManager.GetString("WithAbsence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to With Overtime.
+        /// </summary>
+        public static string WithOvertime {
+            get {
+                return ResourceManager.GetString("WithOvertime", resourceCulture);
             }
         }
         

@@ -1108,6 +1108,7 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 				var scheduleStartTime = moment(layers[0].Start);
 				var scheduleEndTime = moment(layers[layers.length - 1].End);
 				var scheduleLength = scheduleEndTime.diff(scheduleStartTime, 'minutes');
+				var hasOvertime = personSchedule.ScheduleLayers.filter(function (l) { return l.IsOvertime; }).length > 0;
 
 				mappedLayers = ko.utils.arrayMap(personSchedule.ScheduleLayers, function (layer) {
 					var minutesSinceTimeLineStart = moment(layer.Start).diff(self.timeLineStartTime(), 'minutes');
@@ -1122,9 +1123,9 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 			}
 
 			var model = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedLayers, scheduleStartTime, scheduleEndTime, personSchedule.Name,
-				personSchedule.PersonId, personSchedule.IsDayOff, personSchedule.DayOffName, false, false, null,
+				personSchedule.PersonId, personSchedule.IsDayOff, personSchedule.DayOffName, false, personSchedule.IsFullDayAbsence, null,
 				Teleopti.MyTimeWeb.Common.FormatTimeSpan(personSchedule.ContractTimeInMinute), personSchedule.IsNotScheduled,
-				startDateTime, categoryName, categoryColor, startTimeInString, endTimeInString);
+				startDateTime, categoryName, categoryColor, startTimeInString, endTimeInString, hasOvertime, personSchedule.IsIntradayAbsence);
 
 			return model;
 		});

@@ -434,7 +434,8 @@ Teleopti.MyTimeWeb.Request.PersonScheduleEditShiftTradeViewModel = function (lay
 };
 
 Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel = function (layers, scheduleStartTime, scheduleEndTime,
-	agentName, personId, isDayOff, dayOffName, isEmptyDay, isFullDayAbsence, offerId, contractTime, isNotScheduled, scheduleDate, categoryName, categoryColor, startTimeString, endTimeString) {
+	agentName, personId, isDayOff, dayOffName, isEmptyDay, isFullDayAbsence, offerId, contractTime, isNotScheduled,
+	scheduleDate, categoryName, categoryColor, startTimeString, endTimeString, hasOvertime, isIntradayAbsence) {
 	var self = this;
 
 	self.scheduleStart = startTimeString;
@@ -455,6 +456,8 @@ Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel = function (laye
 	self.date = scheduleDate;
 	self.categoryName = categoryName;
 	self.categoryColor = categoryColor;
+	self.hasOvertime = hasOvertime;
+	self.isIntradayAbsence = isIntradayAbsence;
 };
 
 function ShiftTradeRequestDetailedDayViewModel (data) {

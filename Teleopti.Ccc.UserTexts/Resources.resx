@@ -5091,7 +5091,7 @@ Availability</value>
     <value>Adherence</value>
     <comment>Adherence</comment>
   </data>
-	 <data name="ReadyTimeAdherence" xml:space="preserve">
+  <data name="ReadyTimeAdherence" xml:space="preserve">
     <value>Ready Time Adherence</value>
     <comment>Ready Time Adherence</comment>
   </data>
@@ -7479,7 +7479,7 @@ Updated on: {1}</value>
     <value>Adherence calculation</value>
     <comment>Adherence calculation</comment>
   </data>
-	<data name="ReadyTimeAdherenceReportCalculation" xml:space="preserve">
+  <data name="ReadyTimeAdherenceReportCalculation" xml:space="preserve">
     <value>Ready time adherence calculation for MyReport</value>
     <comment>Ready time adherence calculation for MyReport</comment>
   </data>
@@ -11228,15 +11228,15 @@ These options are activated:
     <value>Adherence per Agent</value>
     <comment>Adherence per Agent</comment>
   </data>
-	<data name="ResReportReadyTimeAdherencePerAgent" xml:space="preserve">
+  <data name="ResReportReadyTimeAdherencePerAgent" xml:space="preserve">
     <value>Ready Time Adherence per Agent</value>
     <comment>Ready Time Adherence per Agent</comment>
   </data>
   <data name="ResReportAdherencePerDay" xml:space="preserve">
     <value>Adherence per Day</value>
     <comment>Adherence per Day</comment>
-  </data> 
-	<data name="ResReportReadyTimeAdherencePerDay" xml:space="preserve">
+  </data>
+  <data name="ResReportReadyTimeAdherencePerDay" xml:space="preserve">
     <value>Ready Time Adherence per Day</value>
     <comment>Ready Time Adherence per Day</comment>
   </data>
@@ -17587,5 +17587,13 @@ The application will now exit.</value>
   <data name="ActiveSelection" xml:space="preserve">
     <value>Active selection</value>
     <comment>Used in people "workspace" to tell which people are selected</comment>
+  </data>
+  <data name="WithAbsence" xml:space="preserve">
+    <value>With Absence</value>
+    <comment>With Absence</comment>
+  </data>
+  <data name="WithOvertime" xml:space="preserve">
+    <value>With Overtime</value>
+    <comment>With Overtime</comment>
   </data>
 </root>

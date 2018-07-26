@@ -895,8 +895,9 @@ input.use-default-startTime {
 	flex-direction:column;	
 }
 
-.dayoff-text-height {
+.dayoff-text {
 	line-height:60px;
+	display:inline-block;
 }
 
 @media (max-width: 500px) {
