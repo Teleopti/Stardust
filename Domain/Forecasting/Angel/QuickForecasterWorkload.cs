@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Forecasting.Angel.Outlier;
 using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel
@@ -47,6 +48,16 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			}
 
 			var forecastMethod = _forecastMethodProvider.Get(quickForecasterWorkloadParams.ForecastMethodId);
+			if (forecastMethod == null)
+			{
+				return new ForecastModel
+				{
+					WorkloadId = quickForecasterWorkloadParams.WorkLoad.Id.Value,
+					ScenarioId = quickForecasterWorkloadParams.Scenario.Id.Value,
+					ForecastDays = new List<ForecastDayModel>(),
+					WarningMessage = Resources.NoQueueStatisticsAvailable
+				};
+			}
 			var historicalDataNoOutliers = _outlierRemover.RemoveOutliers(historicalData, forecastMethod);
 			var forecast = forecastMethod.Forecast(historicalDataNoOutliers, quickForecasterWorkloadParams.FuturePeriod);
 			var workloadDays = _futureData.Fetch(quickForecasterWorkloadParams.WorkLoad, quickForecasterWorkloadParams.SkillDays,
