@@ -203,7 +203,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 
 	function _initScrollPaging() {
 		vm = new asmMessageListViewModel();
-		ko.applyBindings(vm, document.getElementById('.asm-messages'));
+		ko.applyBindings(vm, $('div.asm-messages')[0]);
 		_loadAPage();
 		_getAnonymousInfo();
 		$(window).scroll(_loadAPageIfRequired);
