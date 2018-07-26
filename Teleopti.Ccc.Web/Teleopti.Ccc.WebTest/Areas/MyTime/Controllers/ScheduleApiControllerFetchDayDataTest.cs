@@ -320,6 +320,49 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldCalculateCorrectPercentageForOvernightAbsenceLayersOnFetchDayData()
+		{
+			var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
+			TimeZone.Is(timeZone);
+			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(timeZone);
+			Now.Is(new DateTime(2018, 03, 11, 6, 0, 0, DateTimeKind.Utc));
+
+			var date = new DateOnly(2018, 03, 11);
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
+			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(new DateTime(2018, 03, 11, 20, 0, 0), timeZone),
+				TimeZoneHelper.ConvertToUtc(new DateTime(2018, 03, 12, 4, 0, 0), timeZone));
+			var phoneActivity = new Activity("Phone")
+			{
+				InWorkTime = true,
+				InContractTime = true,
+				DisplayColor = Color.Green
+			};
+			assignment.AddActivity(phoneActivity, period);
+			assignment.SetShiftCategory(new ShiftCategory("sc"));
+			ScheduleData.Add(assignment);
+
+			var absence = new Absence
+			{
+				Description = new Description("Holiday", "HO"),
+				DisplayColor = Color.Red
+			};
+			var absencePeriod = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(new DateTime(2018, 03, 12, 1, 0, 0), timeZone),
+				TimeZoneHelper.ConvertToUtc(new DateTime(2018, 03, 12, 4, 0, 0), timeZone));
+
+			var personAbsence = new PersonAbsence(User.CurrentUser(), Scenario.Current(), new AbsenceLayer(absence, absencePeriod));
+			ScheduleData.Add(personAbsence);
+
+			var result = Target.FetchDayData(date);
+			var activityLayer = result.Schedule.Periods.First();
+			activityLayer.StartPositionPercentage.Should().Be.EqualTo(0.25M / 8.5M);
+			activityLayer.EndPositionPercentage.Should().Be.EqualTo(5.25M / 8.5M);
+
+			var absenceLayer = result.Schedule.Periods.Last();
+			absenceLayer.StartPositionPercentage.Should().Be.EqualTo(5.25M / 8.5M);
+			absenceLayer.EndPositionPercentage.Should().Be.EqualTo(8.25M / 8.5M);
+		}
+
+		[Test]
 		public void ShouldNotMapDaylightSavingTimeAdjustmentOnFetchDayData()
 		{
 			TimeZone.IsChina();

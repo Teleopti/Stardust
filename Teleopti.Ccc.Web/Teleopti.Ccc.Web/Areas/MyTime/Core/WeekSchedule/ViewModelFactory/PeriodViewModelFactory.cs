@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
@@ -81,19 +82,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			foreach (var visualLayer in layerExtendedList)
 			{
 				var meetingModel = createMeetingViewModel(visualLayer);
-
 				var isOvertimeLayer = visualLayer.DefinitionSet?.MultiplicatorType == MultiplicatorType.Overtime;
+
+				var timePeriod = getVisualLayerTimePeriod(visualLayer, localDate, timeZone);
 
 				PeriodPositionPercentage positionPercentage;
 				if (isOnDSTStartDay && minMaxTime.Contains(localDaylightStartTime))
 				{
 					totalLengthTicks = totalLengthTicks - daylightTime.Delta.Ticks;
-					positionPercentage = getPeriodPositionPercentage(minMaxTime, visualLayer.VisualPeriod.TimePeriod(timezone),
+					positionPercentage = getPeriodPositionPercentage(minMaxTime, timePeriod,
 						true, localDaylightStartTime, daylightTime, totalLengthTicks);
 				}
 				else
 				{
-					positionPercentage = getPeriodPositionPercentage(minMaxTime, visualLayer.VisualPeriod.TimePeriod(timezone), totalLengthTicks);
+					positionPercentage = getPeriodPositionPercentage(minMaxTime, timePeriod, totalLengthTicks);
 				}
 
 				newList.Add(new PeriodViewModel
@@ -114,6 +116,27 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 				});
 			}
 			return newList;
+		}
+
+		private static TimePeriod getVisualLayerTimePeriod(VisualLayerForWebDisplay visualLayer, DateOnly localDate, TimeZoneInfo timeZone)
+		{
+			var timePeriodStart = TimeZoneHelper.ConvertFromUtc(visualLayer.VisualPeriod.StartDateTime, timeZone);
+			var timePeriodEnd = TimeZoneHelper.ConvertFromUtc(visualLayer.VisualPeriod.EndDateTime, timeZone);
+
+			var timeSpanStart = timePeriodStart.TimeOfDay;
+			var timeSpanEnd = timePeriodEnd.TimeOfDay;
+
+			if (timePeriodStart.Date > localDate.Date)
+			{
+				timeSpanStart = timeSpanStart.Add(TimeSpan.FromDays(1));
+			}
+
+			if (timePeriodEnd.Date > localDate.Date)
+			{
+				timeSpanEnd = timeSpanEnd.Add(TimeSpan.FromDays(1));
+			}
+
+			return new TimePeriod(timeSpanStart, timeSpanEnd);
 		}
 
 		private static MeetingViewModel createMeetingViewModel(VisualLayerForWebDisplay visualLayer)
