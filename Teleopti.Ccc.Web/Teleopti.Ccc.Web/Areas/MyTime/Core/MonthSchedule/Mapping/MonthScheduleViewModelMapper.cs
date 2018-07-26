@@ -21,11 +21,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 			_pushMessageProvider = pushMessageProvider;
 		}
 
-		public MonthScheduleViewModel Map(MonthScheduleDomainData s)
+		public MonthScheduleViewModel Map(MonthScheduleDomainData s, bool mobileMonth = false)
 		{
 			return new MonthScheduleViewModel
 			{
-				ScheduleDays = s.Days.Select(map).ToArray(),
+				ScheduleDays = s.Days.Select(d => map(d, mobileMonth)).ToArray(),
 				CurrentDate = s.CurrentDate.Date,
 				FixedDate = s.CurrentDate.ToFixedClientDateOnlyFormat(),
 				DayHeaders = DateHelper.GetDaysOfWeek(CultureInfo.CurrentCulture)
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 			};
 		}
 
-		private MonthDayViewModel map(MonthScheduleDayDomainData s)
+		private MonthDayViewModel map(MonthScheduleDayDomainData s, bool mobileMonth)
 		{
 			var overtimes = mapOvertimes(s);
 			return new MonthDayViewModel
@@ -49,11 +49,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 				Overtimes = overtimes,
 				SeatBookings = s.SeatBookingInformation,
 				IsDayOff = isDayOff(s),
-				Shift = shift(s)
+				Shift = shift(s, mobileMonth)
 			};
 		}
 
-		private ShiftViewModel shift(MonthScheduleDayDomainData s)
+		private ShiftViewModel shift(MonthScheduleDayDomainData s, bool mobileMonth = false)
 		{
 			var personAssignment = s.ScheduleDay.PersonAssignment();
 			var projection = _projectionProvider.Projection(s.ScheduleDay);
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 			var name = isNullShiftCategoryInfo ? null : personAssignment.ShiftCategory.Description.Name;
 			var shortName = isNullShiftCategoryInfo ? null : personAssignment.ShiftCategory.Description.ShortName;
 
-			if (isDayOff(s) && !isNullPersonAssignment && personAssignment.DayOff() != null)
+			if (mobileMonth && isDayOff(s) && !isNullPersonAssignment && personAssignment.DayOff() != null)
 			{
 				name = personAssignment.DayOff().Description.Name;
 				shortName = personAssignment.DayOff().Description.ShortName;

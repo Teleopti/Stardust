@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		public MonthScheduleViewModel CreateMobileMonthViewModel(DateOnly dateOnly)
 		{
 			var domainData = _monthScheduleDomainDataProvider.Get(dateOnly, false);
-			return _monthMapper.Map(domainData);
+			return _monthMapper.Map(domainData, true);
 		}
 
 		public WeekScheduleViewModel CreateWeekViewModel(DateOnly date, StaffingPossiblityType staffingPossiblityType)
