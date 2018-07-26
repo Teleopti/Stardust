@@ -225,7 +225,7 @@ Teleopti.MyTimeWeb.Common = (function($) {
 
 	function _formatTime(dateTime) {
 		if (moment.isMoment(dateTime)) {
-			return date.format(Teleopti.MyTimeWeb.Common.TimeFormat);
+			return dateTime.format(Teleopti.MyTimeWeb.Common.TimeFormat);
 		}
 		return moment(dateTime).format(Teleopti.MyTimeWeb.Common.TimeFormat);
 	}

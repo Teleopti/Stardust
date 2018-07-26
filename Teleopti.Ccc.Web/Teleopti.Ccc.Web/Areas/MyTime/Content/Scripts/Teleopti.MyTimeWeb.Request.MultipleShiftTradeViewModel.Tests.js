@@ -1123,7 +1123,7 @@
 			TimeFormat: 'HH:mm'
 		});
 
-		var ret = viewModel.formatTime(moment("2018-07-19 02:00:00"), moment("2018-07-18"));
+		var ret = viewModel.getOvernightFlag(moment("2018-07-19 02:00:00"), moment("2018-07-18"));
 		equal(ret, " +1");
 	});
 
@@ -1135,7 +1135,7 @@
 			TimeFormat: 'HH:mm'
 		});
 
-		var ret = viewModel.formatTime(moment("2018-07-19 23:00:00"), moment("2018-07-20"));
+		var ret = viewModel.getOvernightFlag(moment("2018-07-19 23:00:00"), moment("2018-07-20"));
 		equal(ret, "(-1)");
 	});
 });

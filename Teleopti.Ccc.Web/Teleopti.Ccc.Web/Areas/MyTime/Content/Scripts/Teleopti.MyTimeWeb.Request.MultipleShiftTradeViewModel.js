@@ -87,7 +87,7 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 		return dates;
 	});
 
-	self.formatTime = function (dateTime, scheduleDate) {
+	self.getOvernightFlag = function (dateTime, scheduleDate) {
 		if (dateTime && scheduleDate) {
 			if (dateTime.isBefore(scheduleDate, 'day')) return "(-1)";
 			if (dateTime.isAfter(scheduleDate, 'day')) return " +1";

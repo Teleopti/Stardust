@@ -283,9 +283,9 @@
 							<div class="schedule-layer-text-container">
 								<div data-bind="text:mySchedule.categoryName"></div>
 								<div class="shift-start-end-time">
-									<span data-bind="text:mySchedule.scheduleStart + $root.formatTime(mySchedule.scheduleStartTime(), date)"></span>
+									<span data-bind="text:mySchedule.scheduleStart + $root.getOvernightFlag(mySchedule.scheduleStartTime(), date)"></span>
 									<span class="spliter">-</span> 
-									<span data-bind="text:mySchedule.scheduleEnd + $root.formatTime(mySchedule.scheduleEndTime(), date)"></span>
+									<span data-bind="text:mySchedule.scheduleEnd + $root.getOvernightFlag(mySchedule.scheduleEndTime(), date)"></span>
 								</div>
 								<div class="shift-trade-contract"><span data-bind="text:mySchedule.contractTime"></span></div>
 							</div>
@@ -332,9 +332,9 @@
 							<div class="schedule-layer-text-container">
 								<div data-bind="text:targetSchedule.categoryName"></div>
 								<div class="shift-start-end-time">
-									<span data-bind="text:targetSchedule.scheduleStart + $root.formatTime(targetSchedule.scheduleStartTime(), date)"></span>
+									<span data-bind="text:targetSchedule.scheduleStart + $root.getOvernightFlag(targetSchedule.scheduleStartTime(), date)"></span>
 									<span class="spliter">-</span>
-									<span data-bind="text:targetSchedule.scheduleEnd + $root.formatTime(targetSchedule.scheduleEndTime(), date)"></span>
+									<span data-bind="text:targetSchedule.scheduleEnd + $root.getOvernightFlag(targetSchedule.scheduleEndTime(), date)"></span>
 								</div>
 								<div class="shift-trade-contract"><span data-bind="text:targetSchedule.contractTime"></span></div>
 							</div>
