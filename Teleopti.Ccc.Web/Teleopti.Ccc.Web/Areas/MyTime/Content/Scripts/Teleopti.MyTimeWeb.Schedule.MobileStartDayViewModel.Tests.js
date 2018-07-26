@@ -224,6 +224,48 @@
 		equal(viewModel.layers().length, 0);
 	});
 
+	test('should set timespan without +1 for overnight activity', function() {
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+		var rawData = {
+			Date: moment().format('YYYY-MM-DD'),
+			Schedule: {
+				FixedDate: null,
+				Summary: {
+					Color: null,
+					Title: null,
+					TimeSpan: null
+				},
+				Header: { Title: null },
+				Periods: [
+					{
+						Title: 'Phone',
+						TimeSpan: '22:00 - 04:00 +1',
+						StartTime: moment()
+							.subtract('day', 1)
+							.startOf('day')
+							.add('hour', 22)
+							.format('YYYY-MM-DDTHH:mm:ss'),
+						EndTime: moment()
+							.add('day', 1)
+							.add('hour', 4)
+							.format('YYYY-MM-DDTHH:mm:ss'),
+						Summary: '22:00 - 04:00 +1',
+						StyleClassName: 'color_80FF80',
+						Meeting: null,
+						StartPositionPercentage: 0.1896551724137931034482758621,
+						EndPositionPercentage: 1,
+						Color: '128,255,128',
+						IsOvertime: false
+					}
+				]
+			}
+		};
+		viewModel.readData(rawData);
+
+		equal(viewModel.layers().length, 1);
+		equal(viewModel.layers()[0].timeSpan(), '22:00 - 04:00');
+	});
+
 	test('should call out menu list when clicking plus icon at bottom right', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		viewModel.showMenu();

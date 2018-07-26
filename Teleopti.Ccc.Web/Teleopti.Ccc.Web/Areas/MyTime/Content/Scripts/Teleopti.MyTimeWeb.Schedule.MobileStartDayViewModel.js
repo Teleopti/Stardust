@@ -127,7 +127,16 @@
 
 		var rawPeriods = data.Schedule.Periods || [];
 		var layers = rawPeriods.map(function(item, index) {
-			var layer = new Teleopti.MyTimeWeb.Schedule.LayerViewModel(item, self, true, 0, true);
+			var layer = new Teleopti.MyTimeWeb.Schedule.LayerViewModel(
+				item,
+				self,
+				true,
+				0,
+				true,
+				null,
+				undefined,
+				true
+			);
 			layer.isLastLayer = index == rawPeriods.length - 1;
 			return layer;
 		});
