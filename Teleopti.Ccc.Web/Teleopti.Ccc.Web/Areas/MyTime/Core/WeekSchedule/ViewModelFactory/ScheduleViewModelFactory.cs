@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
 		public DayScheduleViewModel CreateDayViewModel(DateOnly date, StaffingPossiblityType staffingPossiblityType)
 		{
-			var daySchedule = _weekScheduleDomainDataProvider.GetDaySchedule(date);
+			var daySchedule = _weekScheduleDomainDataProvider.GetDaySchedule(date, true, true);
 			var hasVisualSchedule = hasAnyVisualSchedule(date, daySchedule);
 
 			if (!hasVisualSchedule)
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			var timeZone = dayDomainData.ScheduleDay?.TimeZone;
 
 			var hasVisualLayerToday = dayDomainData.Projection.Any(p => periodIsVisible(p.Period, date, timeZone));
-			var hasVisualLayerYesterday = dayDomainData.ProjectionYesterday.Any(p => periodIsVisible(p.Period, date, timeZone));
+			var hasVisualLayerYesterday = dayDomainData.ProjectionYesterday != null && dayDomainData.ProjectionYesterday.Any(p => periodIsVisible(p.Period, date, timeZone));
 
 			var hasVisibleOvertimeToday = periodIsVisible(dayDomainData.OvertimeAvailability?.Period, date, timeZone);
 			var hasVisibleOvertimeYesterday = existsVisibleOvertimeYesterday(date, dayDomainData, timeZone);

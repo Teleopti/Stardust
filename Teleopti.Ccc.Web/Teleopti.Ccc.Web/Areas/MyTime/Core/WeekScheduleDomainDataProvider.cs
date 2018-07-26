@@ -54,10 +54,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			public IVisualLayerCollection Projection { get; set; }
 		}
 
-		public DayScheduleDomainData GetDaySchedule(DateOnly date)
+		public DayScheduleDomainData GetDaySchedule(DateOnly date, bool allowCrossNight = false, bool loadSelectedDateScheduleOnly = false)
 		{
 			var period = new DateOnlyPeriod(date, date);
-			var periodSchedule = getScheduleDomainData(date, period);
+			var periodSchedule = getScheduleDomainData(date, period, allowCrossNight, loadSelectedDateScheduleOnly);
 			return new DayScheduleDomainData
 			{
 				Date = date,
@@ -86,11 +86,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			return getScheduleDomainData(date, week);
 		}
 
-		private WeekScheduleDomainData getScheduleDomainData(DateOnly date, DateOnlyPeriod period)
+		private WeekScheduleDomainData getScheduleDomainData(DateOnly date, DateOnlyPeriod period, bool allowCrossNight = false, bool loadSelectedDateScheduleOnly = false)
 		{
 			var periodStartDate = period.StartDate;
-			var periodWithPreviousDay = new DateOnlyPeriod(periodStartDate.AddDays(-1), period.EndDate);
-			var scheduleDays = _scheduleProvider.GetScheduleForPeriod(periodWithPreviousDay).ToList();
+
+			List<IScheduleDay> scheduleDays;
+			if (loadSelectedDateScheduleOnly)
+			{
+				scheduleDays = _scheduleProvider.GetScheduleForPeriod(new DateOnlyPeriod(periodStartDate, period.EndDate)).ToList();
+			}
+			else
+			{
+				var periodWithPreviousDay = new DateOnlyPeriod(periodStartDate.AddDays(-1), period.EndDate);
+				scheduleDays = _scheduleProvider.GetScheduleForPeriod(periodWithPreviousDay).ToList();
+			}
+
 			var personRequestPeriods = _personRequestProvider.RetrieveRequestPeriodsForLoggedOnUser(period);
 			var requestProbability = _absenceRequestProbabilityProvider.GetAbsenceRequestProbabilityForPeriod(period);
 			var seatBookings = _seatBookingProvider.GetSeatBookingsForScheduleDays(scheduleDays);
@@ -100,7 +110,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 					ScheduleDay = day,
 					Projection = _projectionProvider.Projection(day)
 				});
-			var minMaxTime = getMinMaxTime(scheduleDaysAndProjections, period);
+			var minMaxTime = getMinMaxTime(scheduleDaysAndProjections, period, allowCrossNight);
 
 			var list = new List<WeekScheduleDayDomainData>();
 			foreach (var day in periodStartDate.DateRange(period.DayCount()))
@@ -268,7 +278,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			return earlyStart < earlyStartOvertimeAvailability ? earlyStart : earlyStartOvertimeAvailability;
 		}
 
-		private TimeSpan maxfunction(ScheduleDaysAndProjection scheduleDayData, DateOnly periodStartDate)
+		private TimeSpan maxfunction(ScheduleDaysAndProjection scheduleDayData, DateOnly periodStartDate, bool allowCrossNight = false)
 		{
 			var scheduleDay = scheduleDayData.ScheduleDay;
 			var projection = scheduleDayData.Projection;
@@ -288,8 +298,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 				}
 				else if (scheduleDay.DateOnlyAsPeriod.DateOnly != periodStartDate.AddDays(-1)) //for the days of current week
 				{
-					//if end time cross midnight, then max. time is of course used, otherwise use the end time as it is
-					lateEnd = endTime.Days > startTime.Days ? new TimeSpan(23, 59, 59) : endTime;
+					//if end time cross midnight and not allow timeline to cross night, then max. time is used, otherwise use the end time as it is
+					lateEnd = (endTime.Days > startTime.Days && !allowCrossNight) ? new TimeSpan(23, 59, 59) : endTime;
 				}
 			}
 
@@ -327,10 +337,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 		}
 
 		private TimePeriod getMinMaxTime(Dictionary<DateOnly, ScheduleDaysAndProjection> scheduleDaysAndProjections,
-			DateOnlyPeriod period)
+			DateOnlyPeriod period, bool allowCrossNight)
 		{
 			var earliest = scheduleDaysAndProjections.Min(x => minFunction(x.Value, period));
-			var latest = scheduleDaysAndProjections.Max(x => maxfunction(x.Value, period.StartDate));
+			var latest = scheduleDaysAndProjections.Max(x => maxfunction(x.Value, period.StartDate, allowCrossNight));
 			var early = earliest;
 			var late = latest;
 			if (early > late)
@@ -341,7 +351,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 
 			var margin = TimeSpan.FromMinutes(ScheduleConsts.TimelineMarginInMinute);
 			early = early.Ticks > TimeSpan.Zero.Add(margin).Ticks ? early.Subtract(margin) : TimeSpan.Zero;
-			late = late.Ticks < new TimeSpan(23, 59, 59).Subtract(margin).Ticks ? late.Add(margin) : new TimeSpan(23, 59, 59);
+
+			if (!allowCrossNight)
+			{
+				late = late.Ticks < new TimeSpan(23, 59, 59).Subtract(margin).Ticks ? late.Add(margin) : new TimeSpan(23, 59, 59);
+			}
+			else
+			{
+				late = late.Add(margin);
+			}
 
 			var minMaxTime = new TimePeriod(early, late);
 			return minMaxTime;

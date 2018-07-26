@@ -5,7 +5,8 @@
 	offset,
 	useFixedContainerHeight,
 	timelineStart,
-	selectedDate
+	selectedDate,
+	cleanOvernightNumber
 ) {
 	var self = this;
 	var userTexts = Teleopti.MyTimeWeb.Common.GetUserTexts();
@@ -23,6 +24,11 @@
 			originalTimespan.length >= 22
 				? originalTimespan.replace(' - ', '-').replace(' +1', '+1')
 				: originalTimespan;
+
+		if (cleanOvernightNumber) {
+			realTimespan = realTimespan.replace(' -1', '').replace(' +1', '');
+			realTimespan = realTimespan.replace('-1', '').replace('+1', '');
+		}
 		return realTimespan;
 	});
 

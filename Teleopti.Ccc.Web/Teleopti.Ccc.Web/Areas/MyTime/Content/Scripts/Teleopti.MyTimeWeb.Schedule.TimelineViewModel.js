@@ -31,15 +31,17 @@ Teleopti.MyTimeWeb.Schedule.TimelineViewModel = function(
 			hour = hourMinuteSecond[0],
 			minute = hourMinuteSecond[1];
 
+		self.timeText = rawTimeline.TimeLineDisplay;
 		if (hour.toString() === FULL_DAY_HOUR_STR) {
 			self.minutes = TOTAL_MINUTES_OF_ONE_DAY;
+			self.timeText = rawTimeline.TimeLineDisplay + ' +1';
 		} else {
 			if (hour.indexOf('.') > -1) {
 				hour = 24 * parseInt(hour.split('.')[0]) + parseInt(hour.split('.')[1]);
+				self.timeText = rawTimeline.TimeLineDisplay + ' +1';
 			}
 			self.minutes = hour * 60 + parseInt(minute);
 		}
-		self.timeText = rawTimeline.TimeLineDisplay;
 	}
 
 	self.positionPercentage = ko.observable(rawTimeline.PositionPercentage);

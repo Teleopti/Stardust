@@ -1,14 +1,13 @@
 ﻿$(document).ready(function() {
-	module("Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel", {
+	module('Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel', {
 		setup: function() {
 			Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggle) {
-				if(toggle == 'MyTimeWeb_DayScheduleForStartPage_Command_44209')
-					return true;
+				if (toggle == 'MyTimeWeb_DayScheduleForStartPage_Command_44209') return true;
 			};
 		}
 	});
 
-	var resetLocale = function () {
+	var resetLocale = function() {
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
 			DateFormat: 'YYYY-MM-DD',
 			UseJalaaliCalendar: false
@@ -17,28 +16,34 @@
 
 	var constants = Teleopti.MyTimeWeb.Common.Constants;
 
-	function fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(formattedDate){
+	function fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(formattedDate) {
 		var result = [];
-		for (var i = 0; i < 24 * 60 / constants.probabilityIntervalLengthInMinute; i++) {
+		for (var i = 0; i < (24 * 60) / constants.probabilityIntervalLengthInMinute; i++) {
 			result.push({
 				Date: formattedDate,
-				StartTime: moment(formattedDate).startOf('day').add(constants.probabilityIntervalLengthInMinute * i, "minutes").format('YYYY-MM-DDTHH:mm:ss'),
-				EndTime: moment(formattedDate).startOf('day').add(constants.probabilityIntervalLengthInMinute * (i + 1), "minutes").format('YYYY-MM-DDTHH:mm:ss'),
+				StartTime: moment(formattedDate)
+					.startOf('day')
+					.add(constants.probabilityIntervalLengthInMinute * i, 'minutes')
+					.format('YYYY-MM-DDTHH:mm:ss'),
+				EndTime: moment(formattedDate)
+					.startOf('day')
+					.add(constants.probabilityIntervalLengthInMinute * (i + 1), 'minutes')
+					.format('YYYY-MM-DDTHH:mm:ss'),
 				Possibility: constants.probabilityIntervalLengthInMinute * i < 12 * 60 ? 0 : 1
 			});
 		}
 		return result;
 	}
 
-	test("should get current date", function () {
+	test('should get current date', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
 		equal(viewModel.selectedDate().format('YYYY-MM-DD'), moment().format('YYYY-MM-DD'));
 	});
 
-	test("should set display date", function () {
-		 Teleopti.MyTimeWeb.Common.SetupCalendar({
-			DateFormat: "DD/MM/YYYY",
+	test('should set display date', function() {
+		Teleopti.MyTimeWeb.Common.SetupCalendar({
+			DateFormat: 'DD/MM/YYYY',
 			UseJalaaliCalendar: false
 		});
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
@@ -52,7 +57,7 @@
 					Title: null,
 					TimeSpan: null
 				},
-				Header:{Title: null}
+				Header: { Title: null }
 			}
 		};
 		viewModel.readData(rawData);
@@ -60,9 +65,9 @@
 		equal(viewModel.displayDate(), moment().format('DD/MM/YYYY'));
 	});
 
-	test("should display date correctly when in Persian date format", function () {
+	test('should display date correctly when in Persian date format', function() {
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
-			DateFormat: "DD/MM/YYYY",
+			DateFormat: 'DD/MM/YYYY',
 			UseJalaaliCalendar: true
 		});
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
@@ -76,7 +81,7 @@
 					Title: null,
 					TimeSpan: null
 				},
-				Header:{Title: null}
+				Header: { Title: null }
 			}
 		};
 		viewModel.readData(rawData);
@@ -86,18 +91,18 @@
 		resetLocale();
 	});
 
-	test("should set summary color", function () {
+	test('should set summary color', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
 		var rawData = {
 			Schedule: {
 				FixedDate: null,
 				Summary: {
-					Color: "0, 255, 0",
+					Color: '0, 255, 0',
 					Title: null,
 					TimeSpan: null
 				},
-				Header:{Title: null}
+				Header: { Title: null }
 			}
 		};
 		viewModel.readData(rawData);
@@ -105,18 +110,18 @@
 		equal(viewModel.summaryColor(), rawData.Schedule.Summary.Color);
 	});
 
-	test("should set text color to white or black according to summary color", function () {
+	test('should set text color to white or black according to summary color', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
 		var rawData = {
 			Schedule: {
 				FixedDate: null,
 				Summary: {
-					Color: "rgb(0,128,128)",	//deep cobalt blue
+					Color: 'rgb(0,128,128)', //deep cobalt blue
 					Title: null,
 					TimeSpan: null
 				},
-				Header:{Title: null}
+				Header: { Title: null }
 			}
 		};
 		viewModel.readData(rawData);
@@ -128,11 +133,11 @@
 			Schedule: {
 				FixedDate: null,
 				Summary: {
-					Color: "rgb(159,224,35)",	//light green
+					Color: 'rgb(159,224,35)', //light green
 					Title: null,
 					TimeSpan: null
 				},
-				Header:{Title: null}
+				Header: { Title: null }
 			}
 		};
 		viewModel.readData(rawData);
@@ -141,7 +146,7 @@
 		equal(viewModel.textColor(), 'black');
 	});
 
-	test("should set summary name", function () {
+	test('should set summary name', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
 		var rawData = {
@@ -149,10 +154,10 @@
 				FixedDate: null,
 				Summary: {
 					Color: null,
-					Title: "Early",
+					Title: 'Early',
 					TimeSpan: null
 				},
-				Header:{Title: null}
+				Header: { Title: null }
 			}
 		};
 		viewModel.readData(rawData);
@@ -160,7 +165,7 @@
 		equal(viewModel.summaryName(), rawData.Schedule.Summary.Title);
 	});
 
-	test("should set summary time", function () {
+	test('should set summary time', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
 		var rawData = {
@@ -169,9 +174,9 @@
 				Summary: {
 					Color: null,
 					Title: null,
-					TimeSpan: "9:00-18:00"
+					TimeSpan: '9:00-18:00'
 				},
-				Header:{Title: null}
+				Header: { Title: null }
 			}
 		};
 		viewModel.readData(rawData);
@@ -179,7 +184,7 @@
 		equal(viewModel.summaryTime(), rawData.Schedule.Summary.TimeSpan);
 	});
 
-	test("should set whether current day is day off", function () {
+	test('should set whether current day is day off', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
 		var rawData = {
@@ -199,7 +204,7 @@
 		equal(viewModel.isDayOff(), rawData.Schedule.IsDayOff);
 	});
 
-	test("should set empty layers when there is no period", function () {
+	test('should set empty layers when there is no period', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
 			Schedule: {
@@ -219,14 +224,56 @@
 		equal(viewModel.layers().length, 0);
 	});
 
-	test("should call out menu list when clicking plus icon at bottom right", function () {
+	test('should set timespan without +1 for overnight activity', function() {
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+		var rawData = {
+			Date: moment().format('YYYY-MM-DD'),
+			Schedule: {
+				FixedDate: null,
+				Summary: {
+					Color: null,
+					Title: null,
+					TimeSpan: null
+				},
+				Header: { Title: null },
+				Periods: [
+					{
+						Title: 'Phone',
+						TimeSpan: '22:00 - 04:00 +1',
+						StartTime: moment()
+							.subtract('day', 1)
+							.startOf('day')
+							.add('hour', 22)
+							.format('YYYY-MM-DDTHH:mm:ss'),
+						EndTime: moment()
+							.add('day', 1)
+							.add('hour', 4)
+							.format('YYYY-MM-DDTHH:mm:ss'),
+						Summary: '22:00 - 04:00 +1',
+						StyleClassName: 'color_80FF80',
+						Meeting: null,
+						StartPositionPercentage: 0.1896551724137931034482758621,
+						EndPositionPercentage: 1,
+						Color: '128,255,128',
+						IsOvertime: false
+					}
+				]
+			}
+		};
+		viewModel.readData(rawData);
+
+		equal(viewModel.layers().length, 1);
+		equal(viewModel.layers()[0].timeSpan(), '22:00 - 04:00');
+	});
+
+	test('should call out menu list when clicking plus icon at bottom right', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		viewModel.showMenu();
 
 		equal(viewModel.menuIsVisible(), true);
 	});
 
-	test("should hide menu list or request form when clicking on menu item or outside", function () {
+	test('should hide menu list or request form when clicking on menu item or outside', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		viewModel.showMenu();
 		viewModel.hideMenuAndRequestForm();
@@ -235,14 +282,14 @@
 		equal(viewModel.focusingRequestForm(), false);
 	});
 
-	test("should hide plus icon after calling out menu list", function () {
+	test('should hide plus icon after calling out menu list', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		viewModel.showMenu();
 
 		equal(viewModel.menuIconIsVisible(), false);
 	});
 
-	test("should hide post shift trade menu if viewing day is out of open period", function() {
+	test('should hide post shift trade menu if viewing day is out of open period', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
 			Date: moment().format('YYYY-MM-DD'),
@@ -271,10 +318,12 @@
 		equal(viewModel.showPostShiftTradeMenu(), false);
 	});
 
-	test("should show post shift trade menu when viewing day is in open period", function () {
+	test('should show post shift trade menu when viewing day is in open period', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
-			Date: moment().add('days', 1).format('YYYY-MM-DD'),
+			Date: moment()
+				.add('days', 1)
+				.format('YYYY-MM-DD'),
 			Schedule: {
 				FixedDate: null,
 				Summary: {
@@ -300,7 +349,7 @@
 		equal(viewModel.showPostShiftTradeMenu(), true);
 	});
 
-	test("should reset form and menu status after click 'Cancel' in request forms", function () {
+	test("should reset form and menu status after click 'Cancel' in request forms", function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
 		viewModel.showAddTextRequestForm();
@@ -314,7 +363,7 @@
 		equal(viewModel.focusingRequestForm(), false);
 	});
 
-	test("should not show overtime availability command item without permission", function () {
+	test('should not show overtime availability command item without permission', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
 		var rawData = {
@@ -326,9 +375,9 @@
 					Title: null,
 					TimeSpan: null
 				},
-				Header:{Title: null}
+				Header: { Title: null }
 			},
-			RequestPermission:{
+			RequestPermission: {
 				OvertimeAvailabilityPermission: false
 			}
 		};
@@ -336,7 +385,7 @@
 		equal(viewModel.overtimeAvailabilityPermission(), false);
 	});
 
-	test("should not show absence reporting command item without permission", function () {
+	test('should not show absence reporting command item without permission', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
 		var rawData = {
@@ -348,9 +397,9 @@
 					Title: null,
 					TimeSpan: null
 				},
-				Header:{Title: null}
+				Header: { Title: null }
 			},
-			RequestPermission:{
+			RequestPermission: {
 				AbsenceReportPermission: false
 			}
 		};
@@ -358,7 +407,7 @@
 		equal(viewModel.absenceReportPermission(), false);
 	});
 
-	test("should not show absence reporting command item if selected date is neigther today nor tomorrow", function () {
+	test('should not show absence reporting command item if selected date is neigther today nor tomorrow', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
 		var rawData = {
@@ -370,9 +419,9 @@
 					Title: null,
 					TimeSpan: null
 				},
-				Header:{Title: null}
+				Header: { Title: null }
 			},
-			RequestPermission:{
+			RequestPermission: {
 				AbsenceReportPermission: true
 			}
 		};
@@ -381,14 +430,16 @@
 		equal(viewModel.absenceReportPermission(), true);
 		equal(viewModel.showAbsenceReportingCommandItem(), true);
 
-		rawData.Date = moment().add('day', 3).format('YYYY-MM-DD');
+		rawData.Date = moment()
+			.add('day', 3)
+			.format('YYYY-MM-DD');
 		viewModel.readData(rawData);
 
 		equal(viewModel.absenceReportPermission(), true);
 		equal(viewModel.showAbsenceReportingCommandItem(), false);
 	});
 
-	test("should not show text request command item without permission", function () {
+	test('should not show text request command item without permission', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
 		var rawData = {
@@ -400,9 +451,9 @@
 					Title: null,
 					TimeSpan: null
 				},
-				Header:{Title: null}
+				Header: { Title: null }
 			},
-			RequestPermission:{
+			RequestPermission: {
 				TextRequestPermission: false
 			}
 		};
@@ -410,7 +461,7 @@
 		equal(viewModel.textRequestPermission(), false);
 	});
 
-	test("should not show absence request command item without permission", function () {
+	test('should not show absence request command item without permission', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
 		var rawData = {
@@ -422,9 +473,9 @@
 					Title: null,
 					TimeSpan: null
 				},
-				Header:{Title: null}
+				Header: { Title: null }
 			},
-			RequestPermission:{
+			RequestPermission: {
 				AbsenceRequestPermission: false
 			}
 		};
@@ -432,7 +483,7 @@
 		equal(viewModel.absenceRequestPermission(), false);
 	});
 
-	test("should not show shift trade request command item without permission", function () {
+	test('should not show shift trade request command item without permission', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
 		var rawData = {
@@ -444,9 +495,9 @@
 					Title: null,
 					TimeSpan: null
 				},
-				Header:{Title: null}
+				Header: { Title: null }
 			},
-			RequestPermission:{
+			RequestPermission: {
 				ShiftTradeRequestPermission: false
 			}
 		};
@@ -454,7 +505,7 @@
 		equal(viewModel.shiftTradeRequestPermission(), false);
 	});
 
-	test("should not show post shift for trade command item without permission", function () {
+	test('should not show post shift for trade command item without permission', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
 		var rawData = {
@@ -466,9 +517,9 @@
 					Title: null,
 					TimeSpan: null
 				},
-				Header:{Title: null}
+				Header: { Title: null }
 			},
-			RequestPermission:{
+			RequestPermission: {
 				ShiftExchangePermission: false
 			}
 		};
@@ -476,7 +527,7 @@
 		equal(viewModel.showPostShiftTradeMenu(), false);
 	});
 
-	test("should not show add overtime request command item without permission", function () {
+	test('should not show add overtime request command item without permission', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
 		var rawData = {
@@ -488,17 +539,17 @@
 					Title: null,
 					TimeSpan: null
 				},
-				Header:{Title: null}
+				Header: { Title: null }
 			},
-			RequestPermission:{
+			RequestPermission: {
 				OvertimeRequestPermission: false
 			}
 		};
 		viewModel.readData(rawData);
 		equal(viewModel.showAddOvertimeRequestMenu(), false);
 	});
-	
-	test("should not show probability option icon without permission", function () {
+
+	test('should not show probability option icon without permission', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
 			Date: moment().format('YYYY-MM-DD'),
@@ -509,7 +560,7 @@
 					Title: null,
 					TimeSpan: null
 				},
-				Header:{Title: null},
+				Header: { Title: null }
 			},
 			ViewPossibilityPermission: false
 		};
@@ -517,7 +568,7 @@
 		equal(viewModel.showProbabilityOptionsToggleIcon(), false);
 	});
 
-	test('should not show menu icon when has no permission for any operation', function () {
+	test('should not show menu icon when has no permission for any operation', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
 			Date: moment().format('YYYY-MM-DD'),
@@ -528,7 +579,7 @@
 					Title: null,
 					TimeSpan: null
 				},
-				Header: { Title: null },
+				Header: { Title: null }
 			},
 			ViewPossibilityPermission: false,
 			RequestPermission: {
@@ -545,7 +596,7 @@
 		equal(viewModel.isCommandEnable(), false);
 	});
 
-	test('should show menu icon when has at least one permission for operation', function () {
+	test('should show menu icon when has at least one permission for operation', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
 			Date: moment().format('YYYY-MM-DD'),
@@ -556,7 +607,7 @@
 					Title: null,
 					TimeSpan: null
 				},
-				Header: { Title: null },
+				Header: { Title: null }
 			},
 			ViewPossibilityPermission: false,
 			RequestPermission: {
@@ -573,10 +624,13 @@
 		equal(viewModel.isCommandEnable(), true);
 	});
 
-	test("should not show absence probability option item if CheckStaffingByIntraday is not toggled on ", function () {
+	test('should not show absence probability option item if CheckStaffingByIntraday is not toggled on ', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
-			Date: moment.utc().zone(-60).format('YYYY-MM-DD'),
+			Date: moment
+				.utc()
+				.zone(-60)
+				.format('YYYY-MM-DD'),
 			Schedule: {
 				FixedDate: null,
 				Summary: {
@@ -596,13 +650,16 @@
 		equal(viewModel.absenceProbabilityEnabled(), false);
 	});
 
-	test("should not show absence probability option item if Absence Probability is toggled off in fat client ", function () {
+	test('should not show absence probability option item if Absence Probability is toggled off in fat client ', function() {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "Staffing_Info_Configuration_44687") return true;
+			if (x === 'Staffing_Info_Configuration_44687') return true;
 		};
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
-			Date: moment.utc().zone(-60).format('YYYY-MM-DD'),
+			Date: moment
+				.utc()
+				.zone(-60)
+				.format('YYYY-MM-DD'),
 			Schedule: {
 				FixedDate: null,
 				Summary: {
@@ -610,7 +667,7 @@
 					Title: null,
 					TimeSpan: null
 				},
-				Header:{Title: null},
+				Header: { Title: null }
 			},
 			ViewPossibilityPermission: true,
 			CheckStaffingByIntraday: true,
@@ -623,13 +680,16 @@
 		equal(viewModel.absenceProbabilityEnabled(), false);
 	});
 
-	test("should not consider AbsenceProbabilityEnabled when Staffing_Info_Configuration_44687 is off ", function () {
+	test('should not consider AbsenceProbabilityEnabled when Staffing_Info_Configuration_44687 is off ', function() {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "Staffing_Info_Configuration_44687") return false;
+			if (x === 'Staffing_Info_Configuration_44687') return false;
 		};
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
-			Date: moment.utc().zone(-60).format('YYYY-MM-DD'),
+			Date: moment
+				.utc()
+				.zone(-60)
+				.format('YYYY-MM-DD'),
 			Schedule: {
 				FixedDate: null,
 				Summary: {
@@ -637,7 +697,7 @@
 					Title: null,
 					TimeSpan: null
 				},
-				Header:{Title: null},
+				Header: { Title: null }
 			},
 			ViewPossibilityPermission: true,
 			CheckStaffingByIntraday: true,
@@ -649,13 +709,16 @@
 		equal(viewModel.absenceProbabilityEnabled(), true);
 	});
 
-	test("should not show overtime probability option item if Overtime Probability is toggled off in fat client ", function () {
+	test('should not show overtime probability option item if Overtime Probability is toggled off in fat client ', function() {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "Staffing_Info_Configuration_44687") return true;
+			if (x === 'Staffing_Info_Configuration_44687') return true;
 		};
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
-			Date: moment.utc().zone(-60).format('YYYY-MM-DD'),
+			Date: moment
+				.utc()
+				.zone(-60)
+				.format('YYYY-MM-DD'),
 			Schedule: {
 				FixedDate: null,
 				Summary: {
@@ -663,7 +726,7 @@
 					Title: null,
 					TimeSpan: null
 				},
-				Header:{Title: null},
+				Header: { Title: null }
 			},
 			ViewPossibilityPermission: true,
 			CheckStaffingByIntraday: true,
@@ -676,13 +739,16 @@
 		equal(viewModel.overtimeProbabilityEnabled(), false);
 	});
 
-	test("should not consider OvertimeProbabilityEnabled when Staffing_Info_Configuration_44687 is off ", function () {
+	test('should not consider OvertimeProbabilityEnabled when Staffing_Info_Configuration_44687 is off ', function() {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "Staffing_Info_Configuration_44687") return false;
+			if (x === 'Staffing_Info_Configuration_44687') return false;
 		};
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
-			Date: moment.utc().zone(-60).format('YYYY-MM-DD'),
+			Date: moment
+				.utc()
+				.zone(-60)
+				.format('YYYY-MM-DD'),
 			Schedule: {
 				FixedDate: null,
 				Summary: {
@@ -690,7 +756,7 @@
 					Title: null,
 					TimeSpan: null
 				},
-				Header:{Title: null},
+				Header: { Title: null }
 			},
 			ViewPossibilityPermission: true,
 			CheckStaffingByIntraday: true,
@@ -703,18 +769,18 @@
 		equal(viewModel.overtimeProbabilityEnabled(), true);
 	});
 
-	test("should hide probability after selecting 'Hide probability' ", function () {
+	test("should hide probability after selecting 'Hide probability' ", function() {
 		//fake ajax fn to avoid ajax call for test
-		Teleopti.MyTimeWeb.Ajax = function(){
+		Teleopti.MyTimeWeb.Ajax = function() {
 			return {
-				Ajax: function(option){
+				Ajax: function(option) {
 					//do nothing
 					console.log(option);
 				}
 			};
 		};
 		var fakeParent = {
-			ReloadSchedule:function(){}
+			ReloadSchedule: function() {}
 		};
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel(null, fakeParent, null);
 		var rawData = {
@@ -727,12 +793,20 @@
 					Title: null,
 					TimeSpan: null
 				},
-				Header:{Title: null},
-				Periods: [{
+				Header: { Title: null },
+				Periods: [
+					{
 						Title: 'Phone',
 						TimeSpan: '09:30 - 16:45',
-						StartTime: moment().startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
-						EndTime: moment().add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
+						StartTime: moment()
+							.startOf('day')
+							.add('hour', 9)
+							.add('minute', 30)
+							.format('YYYY-MM-DDTHH:mm:ss'),
+						EndTime: moment()
+							.add('hour', 16)
+							.add('minute', 45)
+							.format('YYYY-MM-DDTHH:mm:ss'),
 						Summary: '7:15',
 						StyleClassName: 'color_80FF80',
 						Meeting: null,
@@ -740,28 +814,33 @@
 						EndPositionPercentage: 1,
 						Color: '128,255,128',
 						IsOvertime: false
-					}]
+					}
+				]
 			},
-			RequestPermission:{
+			RequestPermission: {
 				ShiftExchangePermission: false
 			},
 			ViewPossibilityPermission: true,
-			TimeLine: [{
-				Time: "09:15:00",
-				TimeLineDisplay: "09:15",
-				PositionPercentage: 0,
-				TimeFixedFormat: null
-			},
-			{
-				Time: "17:00:00",
-				TimeLineDisplay: "17:00",
-				PositionPercentage: 1,
-				TimeFixedFormat: null
-			}]
+			TimeLine: [
+				{
+					Time: '09:15:00',
+					TimeLineDisplay: '09:15',
+					PositionPercentage: 0,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '17:00:00',
+					TimeLineDisplay: '17:00',
+					PositionPercentage: 1,
+					TimeFixedFormat: null
+				}
+			]
 		};
 		viewModel.readData(rawData);
 
-		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(viewModel.selectedDate().format('YYYY-MM-DD'));
+		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(
+			viewModel.selectedDate().format('YYYY-MM-DD')
+		);
 		viewModel.toggleProbabilityOptionsPanel();
 		viewModel.requestViewModel().model.onOptionSelected(constants.probabilityType.overtime);
 		viewModel.updateProbabilityData(fakeProbabilityData);
@@ -774,17 +853,17 @@
 		equal(viewModel.probabilities().length, 0);
 	});
 
-	test("should change probability option value to absence(1) after selecting 'Show absence probability' ", function () {
+	test("should change probability option value to absence(1) after selecting 'Show absence probability' ", function() {
 		//fake ajax fn to avoid ajax call for test
-		Teleopti.MyTimeWeb.Ajax = function(){
+		Teleopti.MyTimeWeb.Ajax = function() {
 			return {
-				Ajax: function(option){
+				Ajax: function(option) {
 					//do nothing
 				}
 			};
 		};
 		var fakeParent = {
-			ReloadSchedule:function(){}
+			ReloadSchedule: function() {}
 		};
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel(null, fakeParent, null);
 		var rawData = {
@@ -796,14 +875,16 @@
 					Title: null,
 					TimeSpan: null
 				},
-				Header:{Title: null},
+				Header: { Title: null }
 			},
 			ViewPossibilityPermission: true,
 			CheckStaffingByIntraday: true
 		};
 		viewModel.readData(rawData);
 
-		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(viewModel.selectedDate().format('YYYY-MM-DD'));
+		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(
+			viewModel.selectedDate().format('YYYY-MM-DD')
+		);
 		viewModel.updateProbabilityData(fakeProbabilityData);
 		viewModel.toggleProbabilityOptionsPanel();
 
@@ -813,8 +894,8 @@
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
-	test("should show overtime probability within timeline range", function () {
-		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+	test('should show overtime probability within timeline range', function() {
+		Teleopti.MyTimeWeb.Common.TimeFormat = 'HH:mm';
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
 		var rawData = {
@@ -826,12 +907,20 @@
 					Title: null,
 					TimeSpan: null
 				},
-				Header:{Title: null},
-				Periods: [{
+				Header: { Title: null },
+				Periods: [
+					{
 						Title: 'Phone',
 						TimeSpan: '09:30 - 16:45',
-						StartTime: moment().startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
-						EndTime: moment().add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
+						StartTime: moment()
+							.startOf('day')
+							.add('hour', 9)
+							.add('minute', 30)
+							.format('YYYY-MM-DDTHH:mm:ss'),
+						EndTime: moment()
+							.add('hour', 16)
+							.add('minute', 45)
+							.format('YYYY-MM-DDTHH:mm:ss'),
 						Summary: '7:15',
 						StyleClassName: 'color_80FF80',
 						Meeting: null,
@@ -839,38 +928,55 @@
 						EndPositionPercentage: 1,
 						Color: '128,255,128',
 						IsOvertime: false
-					}]
+					}
+				]
 			},
-			RequestPermission:{
+			RequestPermission: {
 				ShiftExchangePermission: false
 			},
 			ViewPossibilityPermission: true,
-			TimeLine: [{
-				Time: "09:15:00",
-				TimeLineDisplay: "09:15",
-				PositionPercentage: 0,
-				TimeFixedFormat: null
-			},
-			{
-				Time: "17:00:00",
-				TimeLineDisplay: "17:00",
-				PositionPercentage: 1,
-				TimeFixedFormat: null
-			}]
+			TimeLine: [
+				{
+					Time: '09:15:00',
+					TimeLineDisplay: '09:15',
+					PositionPercentage: 0,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '17:00:00',
+					TimeLineDisplay: '17:00',
+					PositionPercentage: 1,
+					TimeFixedFormat: null
+				}
+			]
 		};
 		viewModel.readData(rawData);
 
 		viewModel.selectedProbabilityOptionValue(constants.probabilityType.overtime);
-		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(viewModel.selectedDate().format('YYYY-MM-DD'));
+		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(
+			viewModel.selectedDate().format('YYYY-MM-DD')
+		);
 		viewModel.updateProbabilityData(fakeProbabilityData);
 		equal(viewModel.probabilities().length, 2);
-		equal(viewModel.probabilities()[0].tooltips().indexOf("09:30 - 12:00") > -1, true);
-		equal(viewModel.probabilities()[1].tooltips().indexOf("12:00 - 16:45") > -1, true);
+		equal(
+			viewModel
+				.probabilities()[0]
+				.tooltips()
+				.indexOf('09:30 - 12:00') > -1,
+			true
+		);
+		equal(
+			viewModel
+				.probabilities()[1]
+				.tooltips()
+				.indexOf('12:00 - 16:45') > -1,
+			true
+		);
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
-	test("should show correct absence possibility for cross day schedule", function () {
-		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
+	test('should show correct absence possibility for cross day schedule', function() {
+		Teleopti.MyTimeWeb.Common.TimeFormat = 'HH:mm';
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 
 		var rawData = {
@@ -882,12 +988,21 @@
 					Title: null,
 					TimeSpan: null
 				},
-				Header:{Title: null},
-				Periods: [{
+				Header: { Title: null },
+				Periods: [
+					{
 						Title: 'Phone',
 						TimeSpan: '09:30 - 16:45',
-						StartTime: moment().subtract('day', 1).startOf('day').add('hour', 22).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
-						EndTime: moment().add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
+						StartTime: moment()
+							.subtract('day', 1)
+							.startOf('day')
+							.add('hour', 22)
+							.add('minute', 30)
+							.format('YYYY-MM-DDTHH:mm:ss'),
+						EndTime: moment()
+							.add('hour', 16)
+							.add('minute', 45)
+							.format('YYYY-MM-DDTHH:mm:ss'),
 						Summary: '18:15',
 						StyleClassName: 'color_80FF80',
 						Meeting: null,
@@ -895,39 +1010,56 @@
 						EndPositionPercentage: 1,
 						Color: '128,255,128',
 						IsOvertime: false
-					}]
+					}
+				]
 			},
-			RequestPermission:{
+			RequestPermission: {
 				ShiftExchangePermission: false
 			},
 			AbsenceProbabilityEnabled: true,
 			OvertimeProbabilityEnabled: true,
 			ViewPossibilityPermission: true,
-			TimeLine: [{
-				Time: "00:00:00",
-				TimeLineDisplay: "00:00",
-				PositionPercentage: 0,
-				TimeFixedFormat: null
-			},
-			{
-				Time: "17:00:00",
-				TimeLineDisplay: "17:00",
-				PositionPercentage: 1,
-				TimeFixedFormat: null
-			}]
+			TimeLine: [
+				{
+					Time: '00:00:00',
+					TimeLineDisplay: '00:00',
+					PositionPercentage: 0,
+					TimeFixedFormat: null
+				},
+				{
+					Time: '17:00:00',
+					TimeLineDisplay: '17:00',
+					PositionPercentage: 1,
+					TimeFixedFormat: null
+				}
+			]
 		};
 		viewModel.readData(rawData);
 
 		viewModel.selectedProbabilityOptionValue(constants.probabilityType.overtime);
-		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(viewModel.selectedDate().format('YYYY-MM-DD'));
+		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(
+			viewModel.selectedDate().format('YYYY-MM-DD')
+		);
 		viewModel.updateProbabilityData(fakeProbabilityData);
 		equal(viewModel.probabilities().length, 2);
-		equal(viewModel.probabilities()[0].tooltips().indexOf("00:00 - 12:00") > -1, true);
-		equal(viewModel.probabilities()[1].tooltips().indexOf("12:00 - 16:45") > -1, true);
+		equal(
+			viewModel
+				.probabilities()[0]
+				.tooltips()
+				.indexOf('00:00 - 12:00') > -1,
+			true
+		);
+		equal(
+			viewModel
+				.probabilities()[1]
+				.tooltips()
+				.indexOf('12:00 - 16:45') > -1,
+			true
+		);
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
-	test("should show probability icon when scheduled", function() {
+	test('should show probability icon when scheduled', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
 			Date: moment().format('YYYY-MM-DD'),
@@ -951,7 +1083,7 @@
 		equal(viewModel.showProbabilityOptionsToggleIcon(), true);
 	});
 
-	test("should show probability icon on not scheduled day", function () {
+	test('should show probability icon on not scheduled day', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
 			Date: moment().format('YYYY-MM-DD'),
@@ -975,15 +1107,15 @@
 		equal(viewModel.showProbabilityOptionsToggleIcon(), true);
 	});
 
-	test("should not show probability option icon when OvertimeProbability and AbsenceProbability are disabled", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
-			if (x === "Staffing_Info_Configuration_44687") return true;
+	test('should not show probability option icon when OvertimeProbability and AbsenceProbability are disabled', function() {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			if (x === 'Staffing_Info_Configuration_44687') return true;
 		};
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
 			Date: moment().format('YYYY-MM-DD'),
-			OvertimeProbabilityEnabled:false,
-			AbsenceProbabilityEnabled:false,
+			OvertimeProbabilityEnabled: false,
+			AbsenceProbabilityEnabled: false,
 			Schedule: {
 				FixedDate: null,
 				Summary: {
@@ -999,7 +1131,7 @@
 		equal(viewModel.showProbabilityOptionsToggleIcon(), false);
 	});
 
-	test("should show message icon when asmEnabled", function () {
+	test('should show message icon when asmEnabled', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
 		var rawData = {
 			Date: moment().format('YYYY-MM-DD'),
