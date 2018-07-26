@@ -154,11 +154,13 @@
 			}));
 		};
 
-		vm.getGroupPagesAsync = function() {
+		vm.getGroupPagesAsync = function () {
+			var startDateStr = vm.period.startDate.toJSON().substr(0, 10);
+			var endDateStr = vm.period.endDate.toJSON().substr(0, 10);
 			groupPageService
 				.fetchAvailableGroupPages(
-					vm.period.startDate.toLocaleDateString(),
-					vm.period.endDate.toLocaleDateString()
+					startDateStr,
+					endDateStr
 				)
 				.then(function(data) {
 					vm.availableGroups = data;
