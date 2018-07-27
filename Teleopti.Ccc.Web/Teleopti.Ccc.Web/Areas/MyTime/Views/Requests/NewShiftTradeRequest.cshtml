@@ -271,7 +271,7 @@
 					<!--ko foreach: loadedSchedulePairs-->
 					<div class="shift-to-trade-row" data-bind="attr: {id: 'shift-row-' + date.valueOf()}">
 						<div class="shift-date" data-bind="text:$root.formatDate(date)"></div>
-						<div data-bind="css:{'mobile-dayoff':mySchedule && mySchedule.isDayOff},style:{'background-color':mySchedule && mySchedule.categoryColor ? mySchedule.categoryColor: 'none'}" class="shift-detail own-shift clear-desktop-color">
+						<div data-bind="css:{'mobile-dayoff':mySchedule && mySchedule.isDayOff && !mySchedule.isFullDayAbsence},style:{'background-color':mySchedule && mySchedule.categoryColor ? mySchedule.categoryColor: 'none'}" class="shift-detail own-shift clear-desktop-color">
 							<!--ko if:!mySchedule-->
 							<div>@Resources.NotScheduled </div>
 							<!--/ko-->
@@ -320,7 +320,7 @@
 							<!--/ko-->
 							<!--/ko-->
 						</div>
-						<div data-bind="css:{'mobile-dayoff':targetSchedule && targetSchedule.isDayOff},style:{'background-color':targetSchedule && targetSchedule.categoryColor ? targetSchedule.categoryColor: 'none'}" class="shift-detail shift-to-trade clear-desktop-color">
+						<div data-bind="css:{'mobile-dayoff':targetSchedule && targetSchedule.isDayOff && !targetSchedule.isFullDayAbsence},style:{'background-color':targetSchedule && targetSchedule.categoryColor ? targetSchedule.categoryColor: 'none'}" class="shift-detail shift-to-trade clear-desktop-color">
 							<!--ko if:!targetSchedule-->
 							<div>@Resources.NotScheduled </div>
 							<!--/ko-->
