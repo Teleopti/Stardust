@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -18,6 +19,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 		public MutableNow Now;
 		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
 		public RtaTestAttribute Context;
+		public FakeAgentStateReadModelPersister ReadModels;
 
 		[Test]
 		public void ShouldKeepPreviousStateWhenNotifiedOfActivityChange1()
@@ -35,7 +37,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 			});
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
 
-			Database.PersistedReadModel.StateName.Should().Be("phone");
+			ReadModels.Models.Single(x => x.PersonId == personId)
+				.StateName.Should().Be("phone");
 		}
 
 		[Test]
@@ -58,7 +61,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 			});
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
 
-			Database.PersistedReadModel.StateName.Should().Be("alarm");
+			ReadModels.Models.Single(x => x.PersonId == personId)
+				.StateName.Should().Be("alarm");
 		}
 
 		[Test]
@@ -83,7 +87,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				;
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			Database.PersistedReadModel.NextActivityStartTime.Should().Be("2015-09-21 12:00".Utc());
+			ReadModels.Models.Single(x => x.PersonId == personId)
+				.NextActivityStartTime.Should().Be("2015-09-21 12:00".Utc());
 		}
 	}
 }

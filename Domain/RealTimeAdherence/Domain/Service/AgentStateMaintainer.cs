@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 {
 	public class AgentStateMaintainer :
 		IRunOnHangfire,
-		IHandleEvent<PersonDeletedEvent>,
 		IHandleEvent<PersonAssociationChangedEvent>
 	{
 		private readonly IAgentStatePersister _persister;
@@ -18,12 +17,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 		}
 
 		[UnitOfWork]
-		public virtual void Handle(PersonDeletedEvent @event)
-		{
-			_persister.Delete(@event.PersonId, DeadLockVictim.Yes);
-		}
-
-		[UnitOfWork]
 		public virtual void Handle(PersonAssociationChangedEvent @event)
 		{
 			if (!@event.TeamId.HasValue)
@@ -31,6 +24,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 				_persister.Delete(@event.PersonId, DeadLockVictim.Yes);
 				return;
 			}
+
 			if (@event.ExternalLogons.IsNullOrEmpty())
 			{
 				_persister.Delete(@event.PersonId, DeadLockVictim.Yes);
@@ -45,6 +39,5 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service
 				TeamId = @event.TeamId
 			}, DeadLockVictim.Yes);
 		}
-
 	}
 }

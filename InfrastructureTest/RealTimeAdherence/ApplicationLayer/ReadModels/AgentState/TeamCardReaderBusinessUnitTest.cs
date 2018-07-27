@@ -24,13 +24,13 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		public void ShouldFilterOnCurrentBusinessUnit()
 		{
 			var site = Guid.NewGuid();
-			Persister.UpsertToActive(new AgentStateReadModelForTest
+			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				BusinessUnitId = BusinessUnit.Current().Id.Value,
 				PersonId = Guid.NewGuid(),
 				SiteId = site
 			});
-			Persister.UpsertToActive(new AgentStateReadModelForTest
+			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				BusinessUnitId = Guid.NewGuid(),
 				PersonId = Guid.NewGuid(),

@@ -32,12 +32,12 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var teamId = Guid.NewGuid();
 			WithUnitOfWork.Do(() =>
 			{
-				StatePersister.UpsertToActive(new AgentStateReadModelForTest
+				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = personId1,
 					SiteId = siteId
 				});
-				StatePersister.UpsertToActive(new AgentStateReadModelForTest
+				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = personId2,
 					TeamId = teamId
@@ -66,12 +66,12 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var teamId = Guid.NewGuid();
 			WithUnitOfWork.Do(() =>
 			{
-				StatePersister.UpsertToActive(new AgentStateReadModelForTest
+				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = personId1,
 					SiteId = siteId
 				});
-				StatePersister.UpsertToActive(new AgentStateReadModelForTest
+				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = personId2,
 					TeamId = teamId
@@ -98,12 +98,12 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var teamId = Guid.NewGuid();
 			WithUnitOfWork.Do(() =>
 			{
-				StatePersister.UpsertToActive(new AgentStateReadModelForTest
+				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = personId1,
 					SiteId = siteId
 				});
-				StatePersister.UpsertToActive(new AgentStateReadModelForTest
+				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = personId2,
 					TeamId = teamId
@@ -148,28 +148,28 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var phoneId = Database.SkillIdFor("phone");
 			WithUnitOfWork.Do(() =>
 			{
-				StatePersister.UpsertToActive(new AgentStateReadModelForTest
+				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = expectedForSite,
 					SiteId = siteId
 				});
-				StatePersister.UpsertToActive(new AgentStateReadModelForTest
+				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = expectedForTeam,
 					TeamId = teamId
 				});
-				StatePersister.UpsertToActive(new AgentStateReadModelForTest
+				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = wrongSkill,
 					SiteId = siteId,
 					TeamId = teamId
 				});
-				StatePersister.UpsertToActive(new AgentStateReadModelForTest
+				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = wrongSite,
 					SiteId = Guid.NewGuid()
 				});
-				StatePersister.UpsertToActive(new AgentStateReadModelForTest
+				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = wrongTeam,
 					TeamId = Guid.NewGuid()
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var teamId = Guid.NewGuid();
 			WithUnitOfWork.Do(() =>
 			{
-				StatePersister.UpsertToActive(new AgentStateReadModelForTest
+				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = personId1,
 					SiteId = siteId,
@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 					PersonId = personId1,
 					AlarmStartTime = "2016-11-24 08:00".Utc()
 				});
-				StatePersister.UpsertToActive(new AgentStateReadModelForTest
+				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = personId2,
 					TeamId = teamId,
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 					PersonId = personId2,
 					AlarmStartTime = "2016-11-24 08:00".Utc()
 				});
-				StatePersister.UpsertToActive(new AgentStateReadModelForTest
+				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = Guid.NewGuid(),
 					TeamId = Guid.NewGuid(),
@@ -271,38 +271,38 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var phoneId = Database.SkillIdFor("phone");
 			WithUnitOfWork.Do(() =>
 			{
-				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
+				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
 					PersonId = expectedForSite,
 					SiteId = siteId,
 					AlarmStartTime = "2016-11-24 08:00".Utc()
 				});
-				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
+				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
 					PersonId = expectedForTeam,
 					TeamId = teamId,
 					AlarmStartTime = "2016-11-24 08:00".Utc()
 				});
-				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
+				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
 					PersonId = notInAlarm,
 					SiteId = siteId,
 					TeamId = teamId
 				});
-				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
+				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
 					PersonId = wrongSkill,
 					SiteId = siteId,
 					TeamId = teamId,
 					AlarmStartTime = "2016-11-24 08:00".Utc()
 				});
-				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
+				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
 					PersonId = wrongSite,
 					SiteId = Guid.NewGuid(),
 					AlarmStartTime = "2016-11-24 08:00".Utc()
 				});
-				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
+				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
 					PersonId = wrongTeam,
 					TeamId = Guid.NewGuid(),

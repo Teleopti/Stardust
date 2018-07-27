@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 		public FakeRtaStateGroupRepository StateGroups;
 		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
 		public MutableNow Now;
+		public FakeAgentStateReadModelPersister ReadModels;
 
 		[Test]
 		public void ShouldPersistReadModel()
@@ -31,7 +32,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "phone"
 			});
 
-			Database.PersistedReadModel.StateName.Should().Be("phone");
+			ReadModels.Models.Last()
+				.StateName.Should().Be("phone");
 		}
 
 		[Test]
@@ -45,7 +47,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
 
-			Database.PersistedReadModel.Should().Not.Be.Null();
+			ReadModels.Models.Last()
+				.Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -62,7 +65,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "statecode"
 			});
 
-			Database.PersistedReadModel.ReceivedTime.Should().Be("2014-10-20 10:00".Utc());
+			ReadModels.Models.Last()
+				.ReceivedTime.Should().Be("2014-10-20 10:00".Utc());
 		}
 
 		[Test]
@@ -78,7 +82,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 			Now.Is("2016-05-30 14:01");
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			Database.PersistedReadModel.Activity.Should().Be("Phone");
+			ReadModels.Models.Last()
+				.Activity.Should().Be("Phone");
 		}
 
 		[Test]
@@ -94,7 +99,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 			Now.Is("2016-05-30 14:01");
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			Database.PersistedReadModel.NextActivity.Should().Be("Phone");
+			ReadModels.Models.Single(x => x.PersonId == person)
+				.NextActivity.Should().Be("Phone");
 		}
 
 		[Test]
@@ -114,7 +120,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 			Now.Is("2016-05-30 14:01");
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			Database.PersistedReadModel.NextActivityStartTime.Should().Be("2016-05-30 14:30".Utc());
+			ReadModels.Models.Single(x => x.PersonId == person)
+				.NextActivityStartTime.Should().Be("2016-05-30 14:30".Utc());
 		}
 
 		[Test]
@@ -136,7 +143,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "statecode"
 			});
 
-			Database.PersistedReadModel.RuleName.Should().Be("rule");
+			ReadModels.Models.Single(x => x.PersonId == personId)
+				.RuleName.Should().Be("rule");
 		}
 
 		[Test]
@@ -158,7 +166,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "statecode"
 			});
 
-			Database.PersistedReadModel.StateName.Should().Be("my state");
+			ReadModels.Models.Single(x => x.PersonId == personId)
+				.StateName.Should().Be("my state");
 		}
 
 		[Test]
@@ -178,7 +187,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "statecode"
 			});
 
-			Database.PersistedReadModel.StateStartTime.Should().Be.EqualTo("2014-10-20 10:01".Utc());
+			ReadModels.Models.Single(x => x.PersonId == personId)
+				.StateStartTime.Should().Be.EqualTo("2014-10-20 10:01".Utc());
 		}
 
 		[Test]
@@ -195,7 +205,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "phone"
 			});
 
-			Database.PersistedReadModel.StateGroupId.Should().Be(stateGroupId);
+			ReadModels.Models.Last()
+				.StateGroupId.Should().Be(stateGroupId);
 		}
 	}
 }

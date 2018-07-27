@@ -47,13 +47,6 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ReadModels.
 					var siteId = Guid.NewGuid();
 					var events = new List<IEvent>
 				{
-					new PersonNameChangedEvent
-					{
-						PersonId = personId,
-						FirstName = "Roger",
-						LastName = "Kjatz",
-						Timestamp = "2017-04-12 08:00:00".Utc()
-					},
 					new PersonAssociationChangedEvent
 					{
 						PersonId = personId,
@@ -62,13 +55,10 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ReadModels.
 						SiteId = siteId,
 						SiteName = "london",
 						Timestamp = "2017-04-12 08:00:00".Utc(),
-						ExternalLogons = new []{new ExternalLogon { DataSourceId = 1, UserCode = "roger"} }
-					},
-					new PersonEmploymentNumberChangedEvent
-					{
-						PersonId = personId,
-						EmploymentNumber = "1234",
-						Timestamp = "2017-04-12 08:00:00".Utc()
+						ExternalLogons = new []{new ExternalLogon { DataSourceId = 1, UserCode = "roger"} },
+						FirstName = "Roger",
+						LastName = "Kjatz",
+						EmploymentNumber = "1234"
 					},
 					new SiteNameChangedEvent
 					{

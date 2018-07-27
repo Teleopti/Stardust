@@ -27,6 +27,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.PersonAssociationChan
 		public void ShouldNotPublishWithoutAgents()
 		{
 			Target.Handle(new TenantHourTickEvent());
+			Events.Clear();
+
+			Target.Handle(new TenantHourTickEvent());
 
 			Events.PublishedEvents.Should().Be.Empty();
 		}
@@ -34,6 +37,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.PersonAssociationChan
 		[Test]
 		public void ShouldPublishForAnAgentAlinaHourly()
 		{
+			Target.Handle(new TenantHourTickEvent());
+			Events.Clear();
 			Database.WithAgent("alina");
 
 			Target.Handle(new TenantHourTickEvent());

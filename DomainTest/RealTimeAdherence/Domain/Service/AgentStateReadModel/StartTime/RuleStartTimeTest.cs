@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -16,6 +17,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 		public FakeDatabase Database;
 		public MutableNow Now;
 		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
+		public FakeAgentStateReadModelPersister ReadModels;
 
 		[Test]
 		public void ShouldHaveRuleStartTimeWhenHavingAdherence()
@@ -35,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "phone"
 			});
 
-			Database.PersistedReadModel
+			ReadModels.Models.Single(x => x.PersonId == personId)
 				.RuleStartTime.Should().Be("2015-12-10 8:00".Utc());
 		}
 
@@ -63,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "phone"
 			});
 
-			Database.PersistedReadModel
+			ReadModels.Models.Single(x => x.PersonId == personId)
 				.RuleStartTime.Should().Be("2015-12-10 8:00".Utc());
 		}
 
@@ -93,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "break"
 			});
 
-			Database.PersistedReadModel
+			ReadModels.Models.Single(x => x.PersonId == personId)
 				.RuleStartTime.Should().Be("2015-12-10 8:30".Utc());
 		}
 
@@ -123,9 +125,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "ACW"
 			});
 
-			Database.PersistedReadModel
+			ReadModels.Models.Single(x => x.PersonId == personId)
 				.RuleStartTime.Should().Be("2015-12-10 8:30".Utc());
 		}
-
 	}
 }

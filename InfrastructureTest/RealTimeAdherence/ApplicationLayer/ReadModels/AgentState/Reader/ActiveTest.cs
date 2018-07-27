@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		public IAgentStateReadModelPersister Persister;
 
 		[Test]
-		public void ShouldExludeAgentsNotActivatedByName()
+		public void ShouldExludeAgentsNotActivated()
 		{
 			var personId = Guid.NewGuid();
 			Persister.UpsertAssociation(new AssociationInfo
@@ -25,22 +25,24 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				PersonId = personId,
 				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value
 			});
-
+			Persister.UpsertNoAssociation(personId);
+			
 			var result = Target.Read(new AgentStateFilter());
 
 			result.Should().Be.Empty();
 		}
 
 		[Test]
-		public void ShouldIncludeAgentsActivatedByName()
+		public void ShouldIncludeAgentsActivated()
 		{
 			var personId = Guid.NewGuid();
 			Persister.UpsertAssociation(new AssociationInfo
 			{
 				PersonId = personId,
-				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value
+				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value,
+				FirstName = "roger",
+				LastName = "kjatz"
 			});
-			Persister.UpsertName(personId, "roger", "kjatz");
 
 			var result = Target.Read(new AgentStateFilter());
 

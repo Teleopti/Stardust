@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 		public FakeDatabase Database;
 		public MutableNow Now;
 		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
+		public FakeAgentStateReadModelPersister ReadModels;
 
 		[Test]
 		public void ShouldPersistMeeting()
@@ -33,7 +34,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			var shift = Database.PersistedReadModel.Shift.Single(x => x.Name == "training");
+			var shift = ReadModels.Models.Last()
+				.Shift.Single(x => x.Name == "training");
 			shift.StartTime.Should().Be("2016-12-15 13:00".Utc());
 			shift.EndTime.Should().Be("2016-12-15 15:00".Utc());
 		}

@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var siteId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
 			Now.Is("2016-08-18 08:05".Utc());
-			Persister.UpsertToActiveWithState(new AgentStateReadModelForTest
+			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
 				PersonId = Guid.NewGuid(),
 				BusinessUnitId = businessUnitId,

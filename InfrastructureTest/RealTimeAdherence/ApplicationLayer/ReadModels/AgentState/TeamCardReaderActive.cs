@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			WithUnitOfWork.Do(() =>
 			{
 				Groupings.UpdateGroupingReadModel(new[] {ashleyId, pierreId});
-				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
+				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
 					PersonId = pierreId,
 					SiteId = siteId,
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 					IsRuleAlarm = true,
 					AlarmStartTime = "2016-10-17 08:00".Utc()
 				});
-				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
+				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
 					PersonId = ashleyId,
 					SiteId = siteId,
@@ -64,21 +64,5 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				.Single().InAlarmCount.Should().Be(1);
 		}
 
-		[Test]
-		public void ShouldNotCountAgentsWithoutName()
-		{
-			var siteId = Guid.NewGuid();
-			WithUnitOfWork.Do(() =>
-				StatePersister.UpsertAssociation(new AssociationInfo
-				{
-					PersonId = Guid.Empty,
-					BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value,
-					SiteId = siteId
-				})
-			);
-
-			WithUnitOfWork.Get(() => Target.Read(siteId))
-				.Should().Be.Empty();
-		}
 	}
 }

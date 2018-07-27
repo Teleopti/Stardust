@@ -97,6 +97,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return database.WithAgent(personId, name, null, teamId, siteId, businessUnitId, null, null);
 		}
+		
+		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? personId, string name, Guid? teamId, Guid? siteId, Guid? businessUnitId, int? employmentNumber)
+		{
+			return database.WithAgent(personId, name, null, teamId, siteId, businessUnitId, null, employmentNumber);
+		}
 
 		public static FakeDatabase WithAgent(this FakeDatabase database, string name, Guid personId, Guid? businessUnitId, Guid? teamId, Guid? siteId)
 		{
@@ -561,9 +566,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		// rta stuff we want to remove
 		public AgentState StoredState => _agentStates.LockNLoad(_agentStates.FindForCheck().Select(x => x.PersonId), DeadLockVictim.Yes).AgentStates.SingleOrDefault();
 		public AgentState StoredStateFor(Guid personId) => _agentStates.ForPersonId(personId);
-		public AgentStateReadModel PersistedReadModel => _agentStateReadModels.Models.SingleOrDefault();
 		public IEnumerable<IRtaState> StateCodes => _stateGroups.LoadAll().Single().StateCollection;
-
+		
 		public string TenantName()
 		{
 			return _tenants.Tenants().Single().Name;

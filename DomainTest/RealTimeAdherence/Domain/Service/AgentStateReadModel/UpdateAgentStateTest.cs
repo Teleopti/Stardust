@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -15,6 +16,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 		public FakeDatabase Database;
 		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
 		public MutableNow Now;
+		public FakeAgentStateReadModelPersister ReadModels;
 
 		[Test]
 		public void ShouldPersist()
@@ -30,7 +32,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "statecode"
 			});
 
-			Database.PersistedReadModel.Should().Not.Be.Null();
+			ReadModels.Models.Last()
+				.Should().Not.Be.Null();
 		}
 
 		[Test]

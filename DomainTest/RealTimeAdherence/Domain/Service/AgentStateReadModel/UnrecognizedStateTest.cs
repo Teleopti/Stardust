@@ -14,12 +14,14 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 		public FakeDatabase Database;
 		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
 		public FakeRtaStateGroupRepository StateGroups;
+		public FakeAgentStateReadModelPersister ReadModels;
 
 		[Test]
 		public void ShouldUpdateReadModelWithDefaultState()
 		{
+			var personId = Guid.NewGuid();
 			Database
-				.WithAgent("usercode")
+				.WithAgent(personId, "usercode")
 				.WithStateGroup(null, "Logged Out", true)
 				.WithStateCode("loggedout")
 				;
@@ -31,7 +33,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 			});
 
 			Database.StoredState.StateGroupId.Should().Be(StateGroups.LoadAll().Single(x => x.DefaultStateGroup).Id.Value);
-			Database.PersistedReadModel.StateName.Should().Be("Logged Out");
+			ReadModels.Models.Single(x => x.PersonId == personId)
+				.StateName.Should().Be("Logged Out");
 		}
 
 	}

@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 	{
 		public FakeDatabase Database;
 		public MutableNow Now;
-		public IJsonDeserializer Deserializer;
 		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
+		public FakeAgentStateReadModelPersister ReadModels;
 
 		[Test]
 		public void ShouldPersistOutOfAdherence()
@@ -37,7 +37,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "out"
 			});
 
-			var outOfAdherence = Database.PersistedReadModel.OutOfAdherences.Single();
+			var outOfAdherence = ReadModels.Models.Single(x => x.PersonId == person)
+				.OutOfAdherences.Single();
 			outOfAdherence.StartTime.Should().Be("2016-05-30 09:00".Utc());
 			outOfAdherence.EndTime.Should().Be(null);
 		}
@@ -72,7 +73,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "out"
 			});
 
-			var outOfAdherences = Database.PersistedReadModel.OutOfAdherences;
+			var outOfAdherences = ReadModels.Models.Single(x => x.PersonId == person)
+				.OutOfAdherences;
 			outOfAdherences.First().StartTime.Should().Be("2016-05-30 10:00".Utc());
 			outOfAdherences.First().EndTime.Should().Be("2016-05-30 10:05".Utc());
 			outOfAdherences.Last().StartTime.Should().Be("2016-05-30 10:10".Utc());
@@ -99,7 +101,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 			Now.Is("2016-05-30 10:00");
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			var outOfAdherence = Database.PersistedReadModel.OutOfAdherences.Single();
+			var outOfAdherence = ReadModels.Models.Single(x => x.PersonId == person)
+				.OutOfAdherences.Single();
 			outOfAdherence.StartTime.Should().Be("2016-05-30 10:00".Utc());
 			outOfAdherence.EndTime.Should().Be(null);
 		}
@@ -128,7 +131,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "ready"
 			});
 
-			var outOfAdherence = Database.PersistedReadModel.OutOfAdherences.Single();
+			var outOfAdherence = ReadModels.Models.Single(x => x.PersonId == person)
+				.OutOfAdherences.Single();
 			outOfAdherence.StartTime.Should().Be("2016-05-30 10:00".Utc());
 			outOfAdherence.EndTime.Should().Be("2016-05-30 10:05".Utc());
 		}
@@ -158,7 +162,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "admin"
 			});
 
-			var outOfAdherence = Database.PersistedReadModel.OutOfAdherences.Single();
+			var outOfAdherence = ReadModels.Models.Single(x => x.PersonId == person)
+				.OutOfAdherences.Single();
 			outOfAdherence.StartTime.Should().Be("2016-05-30 09:00".Utc());
 			outOfAdherence.EndTime.Should().Be("2016-05-30 09:05".Utc());
 		}
@@ -195,7 +200,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "ready"
 			});
 
-			var outOfAdherence = Database.PersistedReadModel.OutOfAdherences.Single();
+			var outOfAdherence = ReadModels.Models.Single(x => x.PersonId == person)
+				.OutOfAdherences.Single();
 			outOfAdherence.StartTime.Should().Be("2016-05-30 09:00".Utc());
 			outOfAdherence.EndTime.Should().Be("2016-05-30 09:05".Utc());
 		}
@@ -232,7 +238,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "admin"
 			});
 
-			var outOfAdherence = Database.PersistedReadModel.OutOfAdherences.Single();
+			var outOfAdherence = ReadModels.Models.Single(x => x.PersonId == person)
+				.OutOfAdherences.Single();
 			outOfAdherence.StartTime.Should().Be("2016-05-30 09:00".Utc());
 			outOfAdherence.EndTime.Should().Be("2016-05-30 09:05".Utc());
 		}
@@ -268,7 +275,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "incall"
 			});
 
-			Database.PersistedReadModel.OutOfAdherences
+			ReadModels.Models.Single(x => x.PersonId == person)
+				.OutOfAdherences
 				.Should().Be.Empty();
 		}
 
@@ -301,7 +309,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "state2"
 			});
 
-			var outOfAdherence = Database.PersistedReadModel.OutOfAdherences.Single();
+			var outOfAdherence = ReadModels.Models.Single(x => x.PersonId == person)
+				.OutOfAdherences.Single();
 			outOfAdherence.StartTime.Should().Be("2016-05-30 09:00".Utc());
 			outOfAdherence.EndTime.Should().Be(null);
 		}

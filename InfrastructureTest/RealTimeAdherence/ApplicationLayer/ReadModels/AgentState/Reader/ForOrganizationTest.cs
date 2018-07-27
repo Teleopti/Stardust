@@ -29,21 +29,21 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var teamId = Guid.NewGuid();
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
-			Persister.UpsertToActiveWithState(new AgentStateReadModelForTest
+			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
 				TeamId = teamId,
 				PersonId = personId1,
 				AlarmStartTime = "2016-06-15 12:00".Utc(),
 				IsRuleAlarm = true
 			});
-			Persister.UpsertToActiveWithState(new AgentStateReadModelForTest
+			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
 				TeamId = teamId,
 				PersonId = personId2,
 				AlarmStartTime = "2016-06-15 12:01".Utc(),
 				IsRuleAlarm = true
 			});
-			Persister.UpsertToActiveWithState(new AgentStateReadModelForTest
+			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
 				TeamId = teamId,
 				PersonId = Guid.NewGuid(),
@@ -67,14 +67,14 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var teamId = Guid.NewGuid();
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
-			Persister.UpsertToActiveWithState(new AgentStateReadModelForTest
+			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
 				TeamId = teamId,
 				PersonId = personId1,
 				AlarmStartTime = "2016-06-15 11:30".Utc(),
 				IsRuleAlarm = true
 			});
-			Persister.UpsertToActiveWithState(new AgentStateReadModelForTest
+			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
 				TeamId = teamId,
 				PersonId = personId2,
@@ -99,21 +99,21 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var siteId = Guid.NewGuid();
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
-			Persister.UpsertToActiveWithState(new AgentStateReadModelForTest
+			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
 				SiteId = siteId,
 				PersonId = personId1,
 				AlarmStartTime = "2016-06-15 12:00".Utc(),
 				IsRuleAlarm = true
 			});
-			Persister.UpsertToActiveWithState(new AgentStateReadModelForTest
+			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
 				SiteId = siteId,
 				PersonId = personId2,
 				AlarmStartTime = "2016-06-15 12:01".Utc(),
 				IsRuleAlarm = true
 			});
-			Persister.UpsertToActiveWithState(new AgentStateReadModelForTest
+			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
 				SiteId = siteId,
 				PersonId = Guid.NewGuid(),
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var site = Guid.NewGuid();
 			var person = Guid.NewGuid();
 			var phoneState = Guid.NewGuid();
-			Persister.UpsertToActiveWithState(new AgentStateReadModelForTest
+			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
 				PersonId = person,
 				SiteId = site,
@@ -161,14 +161,14 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var siteId = Guid.NewGuid();
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
-			Persister.UpsertToActiveWithState(new AgentStateReadModelForTest
+			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
 				SiteId = siteId,
 				PersonId = personId1,
 				AlarmStartTime = "2016-06-15 11:30".Utc(),
 				IsRuleAlarm = true
 			});
-			Persister.UpsertToActiveWithState(new AgentStateReadModelForTest
+			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
 				SiteId = siteId,
 				PersonId = personId2,
@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		{
 			var teamId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			Persister.UpsertToActiveWithState(new AgentStateReadModelForTest
+			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
 				TeamId = teamId,
 				PersonId = personId,
@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		public void ShouldLoadOutOfAdherences()
 		{
 			var teamId = Guid.NewGuid();
-			Persister.UpsertToActiveWithState(new AgentStateReadModelForTest
+			Persister.UpsertWithState(new AgentStateReadModelForTest
 			{
 				TeamId = teamId,
 				OutOfAdherences = new[]
@@ -243,7 +243,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		{
 			var teamId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			Persister.UpsertToActive(new AgentStateReadModelForTest
+			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				TeamId = teamId,
 				PersonId = personId,

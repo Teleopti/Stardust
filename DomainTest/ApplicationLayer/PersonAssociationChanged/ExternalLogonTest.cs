@@ -27,17 +27,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		public void ShouldPublishWhenExternalLogonsChange()
 		{
 			Now.Is("2016-08-26 00:00");
+			var person = Guid.NewGuid();
 			var user1 = RandomName.Make("user");
 			var user2 = RandomName.Make("user");
 			Data
-				.WithAgent("pierre")
+				.WithAgent(person, "pierre")
 				.WithPeriod("2016-08-26")
 				.WithExternalLogon(user1)
 				.WithExternalLogon(user2);
 
 			Target.Handle(new TenantHourTickEvent());
 
-			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
+			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single(x => x.PersonId == person);
 			@event.ExternalLogons.Select(x => x.UserCode).Should().Contain(user1);
 			@event.ExternalLogons.Select(x => x.UserCode).Should().Contain(user2);
 		}
@@ -46,17 +47,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		public void ShouldPublishWithDataSourceId()
 		{
 			Now.Is("2016-08-26 00:00");
+			var person = Guid.NewGuid();
 			Data
-				.WithAgent("pierre")
+				.WithAgent(person, "pierre")
 				.WithPeriod("2016-08-26")
 				.WithDataSource(123, "source2")
 				.WithExternalLogon("usercode");
 
 			Target.Handle(new TenantHourTickEvent());
 
-			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single()
-				.ExternalLogons.Single().DataSourceId
-				.Should().Be(123);
+			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single(x => x.PersonId == person);
+			@event.ExternalLogons.Single().DataSourceId.Should().Be(123);
 		}
 
 		[Test]
@@ -114,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			Target.Handle(new PersonTeamChangedEvent
 			{
 				PersonId = person,
-				ExternalLogons = new[] { new ExternalLogon { DataSourceId = 7, UserCode = "usercode" } }
+				ExternalLogons = new[] {new ExternalLogon {DataSourceId = 7, UserCode = "usercode"}}
 			});
 
 			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
@@ -136,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			Target.Handle(new PersonPeriodChangedEvent
 			{
 				PersonId = person,
-				ExternalLogons = new[] { new ExternalLogon { DataSourceId = 7, UserCode = "usercode" } }
+				ExternalLogons = new[] {new ExternalLogon {DataSourceId = 7, UserCode = "usercode"}}
 			});
 
 			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();

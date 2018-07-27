@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		{
 			var team = Guid.NewGuid();
 			var site = Guid.NewGuid();
-			Persister.UpsertToActive(new AgentStateReadModelForTest
+			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				BusinessUnitId = BusinessUnit.Current().Id.Value,
 				PersonId = Guid.NewGuid(),
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var team1 = Guid.NewGuid();
 			var team2 = Guid.NewGuid();
 			var site = Guid.NewGuid();
-			Persister.UpsertToActive(new AgentStateReadModelForTest
+			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				BusinessUnitId = BusinessUnit.Current().Id.Value,
 				PersonId = Guid.NewGuid(),
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				SiteId = site,
 				SiteName = "Site"
 			});
-			Persister.UpsertToActive(new AgentStateReadModelForTest
+			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				BusinessUnitId = BusinessUnit.Current().Id.Value,
 				PersonId = Guid.NewGuid(),
@@ -84,7 +84,6 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				SiteId = site,
 				TeamId = team,
 			});
-			Persister.UpsertName(person, null, null);
 			Persister.UpsertNoAssociation(person);
 
 			var result = Target.Read();
@@ -92,24 +91,6 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			result.Should().Be.Empty();
 		}
 		
-		[Test]
-		public void ShouldNotReadAgentsWithoutName()
-		{
-			var team = Guid.NewGuid();
-			var site = Guid.NewGuid();
-			var person = Guid.NewGuid();
-			Persister.UpsertAssociation(new AssociationInfo
-			{
-				PersonId = person,
-				BusinessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value,
-				SiteId = site,
-				TeamId = team,
-			});
-
-			var result = Target.Read();
-
-			result.Should().Be.Empty();
-		}
 	}
 
 }

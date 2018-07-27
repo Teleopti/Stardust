@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		{
 			var teamId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			Persister.UpsertToActive(new AgentStateReadModelForTest
+			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				TeamId = teamId,
 				PersonId = personId
@@ -35,9 +35,9 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		public void ShouldLoadAgentStatesByTeamId()
 		{
 			var teamId = Guid.NewGuid();
-			Persister.UpsertToActive(new AgentStateReadModelForTest {TeamId = teamId, PersonId = Guid.NewGuid()});
-			Persister.UpsertToActive(new AgentStateReadModelForTest {TeamId = teamId, PersonId = Guid.NewGuid()});
-			Persister.UpsertToActive(new AgentStateReadModelForTest {TeamId = Guid.Empty, PersonId = Guid.NewGuid()});
+			Persister.Upsert(new AgentStateReadModelForTest {TeamId = teamId, PersonId = Guid.NewGuid()});
+			Persister.Upsert(new AgentStateReadModelForTest {TeamId = teamId, PersonId = Guid.NewGuid()});
+			Persister.Upsert(new AgentStateReadModelForTest {TeamId = Guid.Empty, PersonId = Guid.NewGuid()});
 
 			var result = Target.Read(new AgentStateFilter {TeamIds = teamId.AsArray()});
 
@@ -50,12 +50,12 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var teamId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
-			Persister.UpsertToActive(new AgentStateReadModelForTest
+			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				TeamId = teamId,
 				PersonId = personId
 			});
-			Persister.UpsertToActive(new AgentStateReadModelForTest
+			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				TeamId = teamId,
 				PersonId = personId2
@@ -72,9 +72,9 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		{
 			var teamId1 = Guid.NewGuid();
 			var teamId2 = Guid.NewGuid();
-			Persister.UpsertToActive(new AgentStateReadModelForTest {TeamId = teamId1, PersonId = Guid.NewGuid()});
-			Persister.UpsertToActive(new AgentStateReadModelForTest {TeamId = teamId2, PersonId = Guid.NewGuid()});
-			Persister.UpsertToActive(new AgentStateReadModelForTest {TeamId = Guid.Empty, PersonId = Guid.NewGuid()});
+			Persister.Upsert(new AgentStateReadModelForTest {TeamId = teamId1, PersonId = Guid.NewGuid()});
+			Persister.Upsert(new AgentStateReadModelForTest {TeamId = teamId2, PersonId = Guid.NewGuid()});
+			Persister.Upsert(new AgentStateReadModelForTest {TeamId = Guid.Empty, PersonId = Guid.NewGuid()});
 
 			var result = Target.Read(new AgentStateFilter {TeamIds = new[] {teamId1, teamId2}});
 

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ReadModels.
 		{
 			var personId = Guid.NewGuid();
 
-			Target.Handle(new PersonDeletedEvent { PersonId = personId });
+			Target.Handle(new PersonAssociationChangedEvent { PersonId = personId });
 
 			Persister.Models.Single().PersonId.Should().Be(personId);
 		}

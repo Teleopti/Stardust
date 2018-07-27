@@ -32,15 +32,17 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				Persister.UpsertAssociation(new AssociationInfo
 				{
 					PersonId = person1,
-					BusinessUnitId = BusinessUnit.Current().Id.Value
+					BusinessUnitId = BusinessUnit.Current().Id.Value,
+					FirstName = "Ashley",
+					LastName = "Baldi",
 				});
 				Persister.UpsertAssociation(new AssociationInfo
 				{
 					PersonId = person2,
-					BusinessUnitId = BusinessUnit.Current().Id.Value
+					BusinessUnitId = BusinessUnit.Current().Id.Value,
+					FirstName = "Pierre",
+					LastName = "Andeen",
 				});
-				Persister.UpsertName(person1, "Ashley", "Baldi");
-				Persister.UpsertName(person2, "Pierre", "Andeen");
 
 				var setting = Settings.FindValueByKey(CommonNameDescriptionSetting.Key, new CommonNameDescriptionSetting());
 				setting.AliasFormat = "{LastName} 	--  {unknownJunk} {FirstName}";
@@ -63,17 +65,19 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				Persister.UpsertAssociation(new AssociationInfo
 				{
 					PersonId = person1,
-					BusinessUnitId = BusinessUnit.Current().Id.Value
+					BusinessUnitId = BusinessUnit.Current().Id.Value,
+					FirstName = "Ashley",
+					LastName = "Andeen",
+					EmploymentNumber = "2"
 				});
 				Persister.UpsertAssociation(new AssociationInfo
 				{
 					PersonId = person2,
-					BusinessUnitId = BusinessUnit.Current().Id.Value
+					BusinessUnitId = BusinessUnit.Current().Id.Value,
+					FirstName = "Pierre",
+					LastName = "Baldi",
+					EmploymentNumber = "1"
 				});
-				Persister.UpsertName(person1, "Ashley", "Andeen");
-				Persister.UpsertEmploymentNumber(person1, "2");
-				Persister.UpsertName(person2, "Pierre", "Baldi");
-				Persister.UpsertEmploymentNumber(person2, "1");
 
 				var setting = Settings.FindValueByKey(CommonNameDescriptionSetting.Key, new CommonNameDescriptionSetting());
 				setting.AliasFormat = "		{EmployeeNumber}	{LastName}	{FirstName}";

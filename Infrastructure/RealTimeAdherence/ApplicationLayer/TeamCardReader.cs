@@ -85,7 +85,6 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
 					{(querySite ? siteWhere : "")}
 
 					a.HasAssociation = 1 AND
-					a.HasName = 1 AND 
 
 					a.BusinessUnitId = :businessUnitId
 

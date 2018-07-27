@@ -10,23 +10,16 @@ using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels
 {
 	public class AgentStateReadModelMaintainer :
-		IHandleEvent<PersonDeletedEvent>,
 		IHandleEvent<PersonAssociationChangedEvent>,
-		IHandleEvent<PersonNameChangedEvent>,
-		IHandleEvent<PersonEmploymentNumberChangedEvent>,
 		IHandleEvent<SiteNameChangedEvent>,
 		IHandleEvent<TeamNameChangedEvent>,
 		IRunOnHangfire
 	{
-		private static ILog Log = LogManager.GetLogger(typeof(AgentStateReadModelMaintainer));
-
 		private readonly IAgentStateReadModelPersister _persister;
-		private readonly IJsonSerializer _serializer;
 
-		public AgentStateReadModelMaintainer(IAgentStateReadModelPersister persister, IJsonSerializer serializer)
+		public AgentStateReadModelMaintainer(IAgentStateReadModelPersister persister)
 		{
 			_persister = persister;
-			_serializer = serializer;
 		}
 
 		[UnitOfWork]
@@ -37,11 +30,13 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels
 				_persister.UpsertNoAssociation(@event.PersonId);
 				return;
 			}
+
 			if (@event.ExternalLogons.IsNullOrEmpty())
 			{
 				_persister.UpsertNoAssociation(@event.PersonId);
 				return;
 			}
+
 			_persister.UpsertAssociation(new AssociationInfo
 			{
 				PersonId = @event.PersonId,
@@ -49,30 +44,11 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels
 				SiteId = @event.SiteId,
 				SiteName = @event.SiteName,
 				TeamId = @event.TeamId.Value,
-				TeamName = @event.TeamName
+				TeamName = @event.TeamName,
+				FirstName = @event.FirstName,
+				LastName = @event.LastName,
+				EmploymentNumber = @event.EmploymentNumber,
 			});
-		}
-
-		[UnitOfWork]
-		public virtual void Handle(PersonNameChangedEvent @event)
-		{
-			if (@event.PersonId == Guid.Empty)
-			{
-				Log.Error("PersonNameChangedEvent received was invalid " + _serializer.SerializeObject(@event));
-				return;
-			}
-			if (string.IsNullOrWhiteSpace(@event.FirstName) && string.IsNullOrWhiteSpace(@event.LastName))
-			{
-				Log.Error("PersonNameChangedEvent received was invalid " + _serializer.SerializeObject(@event));
-				return;
-			}
-			_persister.UpsertName(@event.PersonId, @event.FirstName, @event.LastName);
-		}
-
-		[UnitOfWork]
-		public virtual void Handle(PersonEmploymentNumberChangedEvent @event)
-		{
-			_persister.UpsertEmploymentNumber(@event.PersonId, @event.EmploymentNumber);
 		}
 
 		[UnitOfWork]
@@ -86,21 +62,5 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels
 		{
 			_persister.UpdateSiteName(@event.SiteId, @event.Name);
 		}
-
-		[UnitOfWork]
-		public virtual void Handle(PersonDeletedEvent @event)
-		{
-			_persister.UpsertNoAssociation(@event.PersonId);
-		}
-	}
-
-	public class AssociationInfo
-	{
-		public Guid PersonId { get; set; }
-		public Guid? BusinessUnitId { get; set; }
-		public Guid? SiteId { get; set; }
-		public string SiteName { get; set; }
-		public Guid TeamId { get; set; }
-		public string TeamName { get; set; }
 	}
 }

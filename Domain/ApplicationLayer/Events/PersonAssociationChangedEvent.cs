@@ -8,6 +8,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	{
 		public Guid PersonId { get; set; }
 		public Guid? BusinessUnitId { get; set; }
+		public string FirstName { get; set; }
+		public string LastName { get; set; }
+		public string EmploymentNumber { get; set; }
 		public Guid? SiteId { get; set; }
 		public string SiteName { get; set; }
 		public Guid? TeamId { get; set; }
@@ -15,6 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public DateTime Timestamp { get; set; }
 
 		public IEnumerable<ExternalLogon> ExternalLogons { get; set; }
+		
 	}
 
 	public class ExternalLogon

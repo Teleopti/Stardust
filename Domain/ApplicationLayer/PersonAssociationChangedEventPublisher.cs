@@ -6,7 +6,9 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
@@ -27,6 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		private readonly IDistributedLockAcquirer _distributedLock;
 		private readonly IKeyValueStorePersister _keyValueStore;
 		private readonly IPersonAssociationPublisherCheckSumPersister _checkSums;
+		private readonly IDisableDeletedFilter _deletedFilter;
 
 		public PersonAssociationChangedEventPublisher(
 			IPersonRepository persons,
@@ -35,7 +38,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			INow now,
 			IDistributedLockAcquirer distributedLock,
 			IKeyValueStorePersister keyValueStore,
-			IPersonAssociationPublisherCheckSumPersister checkSums)
+			IPersonAssociationPublisherCheckSumPersister checkSums,
+			IDisableDeletedFilter deletedFilter)
 		{
 			_persons = persons;
 			_personsWithAssociation = personsWithAssociation;
@@ -44,6 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_distributedLock = distributedLock;
 			_keyValueStore = keyValueStore;
 			_checkSums = checkSums;
+			_deletedFilter = deletedFilter;
 		}
 
 		[ReadModelUnitOfWork]
@@ -80,7 +85,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		}
 
 		[UnitOfWork]
-		protected virtual IEnumerable<IPerson> LoadAllPersons() => _personsWithAssociation.LoadAll();
+		protected virtual IEnumerable<IPerson> LoadAllPersons()
+		{
+			using (_deletedFilter.Disable())
+				return _personsWithAssociation.LoadAll();
+		}
 
 		[UnitOfWork]
 		protected virtual ILookup<Guid, PersonAssociationCheckSum> LoadAllCheckSums() => _checkSums.Get().ToLookup(c => c.PersonId);
@@ -109,7 +118,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		private void publishForPerson(Guid personId, IPerson person, DateTime now, int checkSum)
 		{
 			var timeZone = person?.PermissionInformation.DefaultTimeZone();
-			var agentDate = person != null ? new DateOnly(TimeZoneInfo.ConvertTimeFromUtc(now, timeZone)) : (DateOnly?) null;
+			var agentDate = person == null ? (DateOnly?) null : new DateOnly(TimeZoneInfo.ConvertTimeFromUtc(now, timeZone));
 			var currentPeriod = person?.Period(agentDate.Value);
 			var team = currentPeriod?.Team;
 			var teamId = team?.Id;
@@ -117,6 +126,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			var siteName = team?.Site.Description.Name;
 			var teamName = team?.Description.Name;
 			var businessUnitId = team?.Site.BusinessUnit.Id;
+			var externalLogons = (currentPeriod?.ExternalLogOnCollection ?? Enumerable.Empty<IExternalLogOn>())
+				.Select(x => new ExternalLogon
+				{
+					UserCode = x.AcdLogOnOriginalId,
+					DataSourceId = x.DataSourceId
+				}).ToArray();
+
+			var isDeleted = (person as IDeleteTag)?.IsDeleted ?? true;
+			if (isDeleted)
+			{
+				teamId = null;
+				siteId = null;
+				siteName = null;
+				teamName = null;
+				businessUnitId = null;
+				externalLogons = new ExternalLogon[] { };
+			}
 
 			publishIfChanged(new PersonAssociationChangedEvent
 			{
@@ -127,12 +153,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				TeamId = teamId,
 				TeamName = teamName,
 				Timestamp = now,
-				ExternalLogons = (currentPeriod?.ExternalLogOnCollection ?? Enumerable.Empty<IExternalLogOn>())
-					.Select(x => new ExternalLogon
-					{
-						UserCode = x.AcdLogOnOriginalId,
-						DataSourceId = x.DataSourceId
-					}).ToArray()
+				ExternalLogons = externalLogons,
+				FirstName = person?.Name.FirstName,
+				LastName = person?.Name.LastName,
+				EmploymentNumber = person?.EmploymentNumber
 			}, checkSum);
 		}
 
@@ -157,8 +181,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		{
 			unchecked
 			{
-				var teamId = @event.TeamId;
-				var hashCode = @event
+				var hashCode = 0;
+				var externalLogonsHashCode = @event
 					.ExternalLogons
 					.EmptyIfNull()
 					.Aggregate(0, (acc, el) =>
@@ -168,8 +192,43 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 						hc = (hc * 397) ^ el.UserCode.GetHashCode();
 						return hc;
 					});
-				hashCode = (hashCode * 397) ^ teamId.GetHashCode();
+				hashCode = (hashCode * 397) ^ externalLogonsHashCode;
+				hashCode = (hashCode * 397) ^ @event.TeamId.GetHashCode();
+				hashCode = (hashCode * 397) ^ (@event.FirstName?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (@event.LastName?.GetHashCode() ?? 0);
+				hashCode = (hashCode * 397) ^ (@event.EmploymentNumber?.GetHashCode() ?? 0);
 
+				return hashCode;
+			}
+		}
+	}
+
+	public class X
+	{
+		public int? something;
+		public int? something2;
+		public string something3;
+
+		protected bool Equals(X other)
+		{
+			return something == other.something && something2 == other.something2 && string.Equals(something3, other.something3);
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj)) return false;
+			if (ReferenceEquals(this, obj)) return true;
+			if (obj.GetType() != this.GetType()) return false;
+			return Equals((X) obj);
+		}
+
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				var hashCode = something.GetHashCode();
+				hashCode = (hashCode * 397) ^ something2.GetHashCode();
+				hashCode = (hashCode * 397) ^ (something3 != null ? something3.GetHashCode() : 0);
 				return hashCode;
 			}
 		}

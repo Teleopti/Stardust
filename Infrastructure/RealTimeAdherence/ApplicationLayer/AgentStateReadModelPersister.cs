@@ -77,40 +77,6 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
 				.ExecuteUpdate();
 		}
 
-		public virtual void UpsertNoAssociation(Guid personId)
-		{
-			_unitOfWork.Current().Session()
-				.CreateSQLQuery(@"
-MERGE INTO [ReadModel].[AgentState] AS T
-	USING (
-		VALUES
-		(
-			:PersonId
-		)
-	) AS S (
-			PersonId
-		)
-	ON 
-		T.PersonId = S.PersonId
-	WHEN NOT MATCHED THEN
-		INSERT
-		(
-			PersonId,
-			HasAssociation,
-			HasName
-		) VALUES (
-			S.PersonId,
-			0,
-			0
-		)
-	WHEN MATCHED THEN
-		UPDATE SET
-			HasAssociation = 0
-		;")
-				.SetParameter("PersonId", personId)
-				.ExecuteUpdate();
-		}
-
 		public AgentStateReadModel Load(Guid personId)
 		{
 			var builder = new AgentStateReadModelQueryBuilder(_configuration)
@@ -139,7 +105,10 @@ MERGE INTO [ReadModel].[AgentState] AS T
 			:SiteId,
 			:SiteName,
 			:TeamId,
-			:TeamName
+			:TeamName,
+			:FirstName,
+			:LastName,
+			:EmploymentNumber
 		)
 	) AS S (
 			PersonId,
@@ -147,7 +116,10 @@ MERGE INTO [ReadModel].[AgentState] AS T
 			SiteId,
 			SiteName,
 			TeamId,
-			TeamName
+			TeamName,
+			FirstName,
+			LastName,
+			EmploymentNumber
 		)
 	ON 
 		T.PersonId = S.PersonId
@@ -160,8 +132,10 @@ MERGE INTO [ReadModel].[AgentState] AS T
 			SiteName,
 			TeamId,
 			TeamName,
-			HasAssociation,
-			HasName
+			FirstName,
+			LastName,
+			EmploymentNumber,
+			HasAssociation
 		) VALUES (
 			S.PersonId,
 			S.BusinessUnitId,
@@ -169,8 +143,10 @@ MERGE INTO [ReadModel].[AgentState] AS T
 			S.SiteName,
 			S.TeamId,
 			S.TeamName,
-			1,
-			0
+			S.FirstName,
+			S.LastName,
+			S.EmploymentNumber,
+			1
 		)
 	WHEN MATCHED THEN
 		UPDATE SET
@@ -179,8 +155,10 @@ MERGE INTO [ReadModel].[AgentState] AS T
 			SiteName = S.SiteName,
 			TeamId = S.TeamId,
 			TeamName = S.TeamName,
+			FirstName = S.FirstName,
+			LastName = S.LastName,
+			EmploymentNumber = S.EmploymentNumber,
 			HasAssociation = 1
-			
 		;")
 				.SetParameter("PersonId", info.PersonId)
 				.SetParameter("BusinessUnitId", info.BusinessUnitId)
@@ -188,23 +166,24 @@ MERGE INTO [ReadModel].[AgentState] AS T
 				.SetParameter("SiteName", info.SiteName)
 				.SetParameter("TeamId", info.TeamId)
 				.SetParameter("TeamName", info.TeamName)
+				.SetParameter("FirstName", info.FirstName)
+				.SetParameter("LastName", info.LastName)
+				.SetParameter("EmploymentNumber", info.EmploymentNumber)
 				.ExecuteUpdate();
 		}
 
-		public void UpsertEmploymentNumber(Guid personId, string employmentNumber)
+		public void UpsertNoAssociation(Guid personId)
 		{
-			_unitOfWork.Current()
-				.Session().CreateSQLQuery(@"
+			_unitOfWork.Current().Session()
+				.CreateSQLQuery(@"
 MERGE INTO [ReadModel].[AgentState] AS T
 	USING (
 		VALUES
 		(
-			:PersonId,
-			:EmploymentNumber
+			:PersonId
 		)
 	) AS S (
-			PersonId,
-			EmploymentNumber
+			PersonId
 		)
 	ON 
 		T.PersonId = S.PersonId
@@ -212,69 +191,16 @@ MERGE INTO [ReadModel].[AgentState] AS T
 		INSERT
 		(
 			PersonId,
-			EmploymentNumber,
-			HasAssociation,
-			HasName
+			HasAssociation
 		) VALUES (
 			S.PersonId,
-			S.EmploymentNumber,
-			0,
 			0
 		)
 	WHEN MATCHED THEN
 		UPDATE SET
-			EmploymentNumber = S.EmploymentNumber
-			
+			HasAssociation = 0
 		;")
 				.SetParameter("PersonId", personId)
-				.SetParameter("EmploymentNumber", employmentNumber)
-				.ExecuteUpdate();
-		}
-
-		public void UpsertName(Guid personId, string firstName, string lastName)
-		{
-			_unitOfWork.Current()
-				.Session().CreateSQLQuery(@"
-MERGE INTO [ReadModel].[AgentState] AS T
-	USING (
-		VALUES
-		(
-			:PersonId,
-			:FirstName,
-			:LastName
-		)
-	) AS S (
-			PersonId,
-			FirstName,
-			LastName
-		)
-	ON 
-		T.PersonId = S.PersonId
-	WHEN NOT MATCHED THEN
-		INSERT
-		(
-			PersonId,
-			FirstName,
-			LastName,
-			HasAssociation,
-			HasName
-		) VALUES (
-			S.PersonId,
-			S.FirstName,
-			S.LastName,
-			0,
-			1
-		)
-	WHEN MATCHED THEN
-		UPDATE SET
-			FirstName = S.FirstName,
-			LastName = S.LastName,
-			HasName = 1
-			
-		;")
-				.SetParameter("PersonId", personId)
-				.SetParameter("FirstName", firstName)
-				.SetParameter("LastName", lastName)
 				.ExecuteUpdate();
 		}
 

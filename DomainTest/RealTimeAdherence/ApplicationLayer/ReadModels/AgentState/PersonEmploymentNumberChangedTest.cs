@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -23,10 +24,12 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ReadModels.
 		{
 			var personId = Guid.NewGuid();
 			Persister.Has(new AgentStateReadModel {PersonId = personId});
-			
-			Target.Handle(new PersonEmploymentNumberChangedEvent
+
+			Target.Handle(new PersonAssociationChangedEvent
 			{
 				PersonId = personId,
+				TeamId = Guid.NewGuid(),
+				ExternalLogons = new[] {new ExternalLogon()},
 				EmploymentNumber = "123"
 			});
 

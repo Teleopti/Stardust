@@ -31,14 +31,12 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				BusinessUnitId = businessUnit,
 				SiteId = site,
 			});
-			Persister.UpsertName(person1, null, null);
 			Persister.UpsertAssociation(new AssociationInfoForTest
 			{
 				PersonId = person2,
 				BusinessUnitId = Guid.NewGuid(),
 				SiteId = Guid.NewGuid(),
 			});
-			Persister.UpsertName(person2, null, null);
 
 			var result = Target.Read().Single();
 

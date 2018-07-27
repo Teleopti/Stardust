@@ -16,8 +16,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 	{
 		public FakeDatabase Database;
 		public MutableNow Now;
-		public IJsonDeserializer Deserializer;
 		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
+		public FakeAgentStateReadModelPersister ReadModels;
 
 		[Test]
 		public void ShouldPersistAbsence()
@@ -34,7 +34,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 
 			Target.CheckForActivityChanges(Database.TenantName());
 			
-			var shift = Database.PersistedReadModel.Shift.Single();
+			var shift = ReadModels.Models.Single(x => x.PersonId == person)
+				.Shift.Single();
 			shift.StartTime.Should().Be("2016-10-14 09:00".Utc());
 			shift.EndTime.Should().Be("2016-10-14 17:00".Utc());
 			shift.Name.Should().Be("vacation");
@@ -55,7 +56,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			var shift = Database.PersistedReadModel.Shift.Single();
+			var shift = ReadModels.Models.Single(x => x.PersonId == person)
+				.Shift.Single();
 			shift.StartTime.Should().Be("2016-10-14 09:00".Utc());
 			shift.EndTime.Should().Be("2016-10-14 17:00".Utc());
 		}

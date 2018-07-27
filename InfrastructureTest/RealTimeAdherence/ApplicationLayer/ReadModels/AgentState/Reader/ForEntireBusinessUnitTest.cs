@@ -34,13 +34,13 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 
 			WithUnitOfWork.Do(() =>
 			{
-				StatePersister.UpsertToActive(new AgentStateReadModelForTest
+				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = person1,
 					BusinessUnitId = BusinessUnit.Current().Id,
 					SiteId = londonId
 				});
-				StatePersister.UpsertToActive(new AgentStateReadModelForTest
+				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = person2,
 					BusinessUnitId = BusinessUnit.Current().Id,
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 
 			WithUnitOfWork.Do(() =>
 			{
-				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
+				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
 					PersonId = person1,
 					BusinessUnitId = BusinessUnit.Current().Id,
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 					IsRuleAlarm = true
 
 				});
-				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
+				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
 					PersonId = person2,
 					BusinessUnitId = BusinessUnit.Current().Id,
@@ -95,13 +95,13 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var personId = Guid.NewGuid();
 			WithUnitOfWork.Do(() =>
 			{
-				StatePersister.UpsertToActive(new AgentStateReadModelForTest
+				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = personId,
 					BusinessUnitId = BusinessUnit.Current().Id,
 
 				});
-				StatePersister.UpsertToActive(new AgentStateReadModelForTest
+				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = Guid.NewGuid(),
 					BusinessUnitId = Guid.NewGuid(),
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var personId = Guid.NewGuid();
 			WithUnitOfWork.Do(() =>
 			{
-				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
+				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
 					PersonId = personId,
 					BusinessUnitId = BusinessUnit.Current().Id,
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 					IsRuleAlarm = true
 
 				});
-				StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
+				StatePersister.UpsertWithState(new AgentStateReadModelForTest
 				{
 					PersonId = Guid.NewGuid(),
 					BusinessUnitId = Guid.NewGuid(),
@@ -149,13 +149,13 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		{
 			WithUnitOfWork.Do(() =>
 			{
-				StatePersister.UpsertToActive(new AgentStateReadModelForTest
+				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = Guid.NewGuid(),
 					BusinessUnitId = BusinessUnit.Current().Id,
 
 				});
-				StatePersister.UpsertToActive(new AgentStateReadModelForTest
+				StatePersister.Upsert(new AgentStateReadModelForTest
 				{
 					PersonId = Guid.NewGuid(),
 					BusinessUnitId = Guid.NewGuid(),
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 				Enumerable.Range(0, 51)
 					.ForEach(i =>
 					{
-						StatePersister.UpsertToActive(new AgentStateReadModelForTest
+						StatePersister.Upsert(new AgentStateReadModelForTest
 						{
 							PersonId = Guid.NewGuid(),
 							BusinessUnitId = BusinessUnit.Current().Id,
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			WithUnitOfWork.Do(() =>
 			{
 				Enumerable.Range(0, 51)
-					.ForEach(i => StatePersister.UpsertToActiveWithState(new AgentStateReadModelForTest
+					.ForEach(i => StatePersister.UpsertWithState(new AgentStateReadModelForTest
 					{
 						PersonId = Guid.NewGuid(),
 						BusinessUnitId = BusinessUnit.Current().Id,

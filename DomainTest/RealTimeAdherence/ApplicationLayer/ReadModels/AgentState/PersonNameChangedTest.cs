@@ -23,10 +23,12 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ReadModels.
 		{
 			var personId = Guid.NewGuid();
 			Persister.Has(new AgentStateReadModel {PersonId = personId});
-			
-			Target.Handle(new PersonNameChangedEvent
+
+			Target.Handle(new PersonAssociationChangedEvent
 			{
 				PersonId = personId,
+				TeamId = Guid.NewGuid(),
+				ExternalLogons = new[] {new ExternalLogon()},
 				FirstName = "bill",
 				LastName = "gates"
 			});

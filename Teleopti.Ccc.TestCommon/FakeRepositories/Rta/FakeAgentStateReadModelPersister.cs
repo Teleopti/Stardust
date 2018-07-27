@@ -68,7 +68,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					SiteId = info.SiteId,
 					SiteName = info.SiteName,
 					TeamId = info.TeamId,
-					TeamName = info.TeamName
+					TeamName = info.TeamName,
+					FirstName = info.FirstName,
+					LastName = info.LastName,
+					EmploymentNumber = info.EmploymentNumber,
 				},
 				(id, model) =>
 				{
@@ -77,40 +80,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					model.TeamId = info.TeamId;
 					model.TeamName = info.TeamName;
 					model.BusinessUnitId = info.BusinessUnitId.GetValueOrDefault();
-					return model;
-				});
-		}
-
-		public void UpsertEmploymentNumber(Guid personId, string employmentNumber)
-		{
-			_data.AddOrUpdate(
-				personId,
-				new AgentStateReadModel
-				{
-					PersonId = personId,
-					EmploymentNumber = employmentNumber
-				},
-				(id, model) =>
-				{
-					model.EmploymentNumber = employmentNumber;
-					return model;
-				});
-		}
-
-		public void UpsertName(Guid personId, string firstName, string lastName)
-		{
-			_data.AddOrUpdate(
-				personId,
-				new AgentStateReadModel
-				{
-					PersonId = personId,
-					FirstName = firstName,
-					LastName = lastName
-				},
-				(id, model) =>
-				{
-					model.FirstName = firstName;
-					model.LastName = lastName;
+					model.FirstName = info.FirstName;
+					model.LastName = info.LastName;
+					model.EmploymentNumber = info.EmploymentNumber;
 					return model;
 				});
 		}

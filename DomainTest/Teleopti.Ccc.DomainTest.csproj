@@ -176,6 +176,7 @@
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestProcessorAtLeastOneCriticalUnderStaffedSkillTest.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestStaffingCheckMethodTest.cs" />
     <Compile Include="ApplicationLayer\PersonAccount\PersonEmploymentChangedTest.cs" />
+    <Compile Include="ApplicationLayer\PersonAssociationChanged\PersonNameChangeTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleTimeMapperCacheTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\FetchAnalyticsScenariosCacheTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModelUpdaterPublishingTest.cs" />

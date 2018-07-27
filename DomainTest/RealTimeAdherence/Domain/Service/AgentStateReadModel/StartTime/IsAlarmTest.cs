@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -15,7 +16,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 		public FakeDatabase Database;
 		public MutableNow Now;
 		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
-		
+		public FakeAgentStateReadModelPersister ReadModels;
+
 		[Test]
 		public void ShouldBeInAlarmIfEnteredRuleIsAlarm()
 		{
@@ -34,7 +36,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "phone"
 			});
 
-			Database.PersistedReadModel.IsRuleAlarm.Should().Be(true);
+			ReadModels.Models.Single(x => x.PersonId == personId)
+				.IsRuleAlarm.Should().Be(true);
 		}
 
 		[Test]
@@ -54,7 +57,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "phone"
 			});
 
-			Database.PersistedReadModel.IsRuleAlarm.Should().Be(false);
+			ReadModels.Models.Single(x => x.PersonId == personId)
+				.IsRuleAlarm.Should().Be(false);
 		}
 	}
 }

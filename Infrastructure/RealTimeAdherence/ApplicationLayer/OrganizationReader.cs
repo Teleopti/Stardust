@@ -65,7 +65,6 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
 					WHERE 
 						{(querySkills ? skillWhere : "")}
 						a.HasAssociation = 1 AND
-						a.HasName = 1 AND 
 						a.BusinessUnitId = :businessUnitId
 
 					GROUP BY 

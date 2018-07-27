@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 	{
 		public FakeDatabase Database;
 		public MutableNow Now;
-		public IJsonDeserializer Deserializer;
 		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
+		public FakeAgentStateReadModelPersister ReadModels;
 
 		[Test]
 		public void ShouldPersistShift()
@@ -30,8 +30,9 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				.WithSchedule(person, Color.Green, "2016-05-30 09:00", "2016-05-30 10:00");
 
 			Target.CheckForActivityChanges(Database.TenantName());
-			
-			var shift = Database.PersistedReadModel.Shift.Single();
+
+			var shift = ReadModels.Models.Single(x => x.PersonId == person)
+				.Shift.Single();
 			shift.StartTime.Should().Be("2016-05-30 09:00".Utc());
 			shift.EndTime.Should().Be("2016-05-30 10:00".Utc());
 			shift.Color.Should().Be(Color.Green.ToArgb());
@@ -48,7 +49,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			var shift = Database.PersistedReadModel.Shift.Single();
+			var shift = ReadModels.Models.Single(x => x.PersonId == person)
+				.Shift.Single();
 			shift.Name.Should().Be("Phone");
 		}
 
@@ -64,8 +66,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			var shift = Database.PersistedReadModel.Shift;
-
+			var shift = ReadModels.Models.Single(x => x.PersonId == person)
+				.Shift;
 			shift.Count().Should().Be(2);
 			shift.First().Color.Should().Be(Color.Green.ToArgb());
 			shift.First().StartTime.Should().Be("2016-05-30 09:00".Utc());
@@ -87,7 +89,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			Database.PersistedReadModel.Shift.Single().Color.Should().Be(Color.Red.ToArgb());
+			ReadModels.Models.Single(x => x.PersonId == person)
+				.Shift.Single().Color.Should().Be(Color.Red.ToArgb());
 		}
 
 		[Test]
@@ -102,7 +105,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			Database.PersistedReadModel.Shift.Single().Color.Should().Be(Color.Green.ToArgb());
+			ReadModels.Models.Single(x => x.PersonId == person)
+				.Shift.Single().Color.Should().Be(Color.Green.ToArgb());
 		}
 
 		[Test]
@@ -119,7 +123,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 			Now.Is("2016-05-30 10:05");
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			Database.PersistedReadModel.Shift.Last().Color.Should().Be(Color.Green.ToArgb());
+			ReadModels.Models.Single(x => x.PersonId == person)
+				.Shift.Last().Color.Should().Be(Color.Green.ToArgb());
 		}
 
 		[Test]
@@ -135,7 +140,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 			Now.Is("2016-05-30 10:05");
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			Database.PersistedReadModel.Shift.Single().Color.Should().Be(Color.Green.ToArgb());
+			ReadModels.Models.Single(x => x.PersonId == person)
+				.Shift.Single().Color.Should().Be(Color.Green.ToArgb());
 		}
 
 		[Test]
@@ -151,7 +157,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 			Now.Is("2016-05-30 09:59");
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			Database.PersistedReadModel.ReceivedTime.Should().Be("2016-05-30 09:55".Utc());
+			ReadModels.Models.Single(x => x.PersonId == person)
+				.ReceivedTime.Should().Be("2016-05-30 09:55".Utc());
 		}
 
 		[Test]
@@ -167,7 +174,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 			Now.Is("2016-05-30 10:01");
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			Database.PersistedReadModel.ReceivedTime.Should().Be("2016-05-30 10:00".Utc());
+			ReadModels.Models.Single(x => x.PersonId == person)
+				.ReceivedTime.Should().Be("2016-05-30 10:00".Utc());
 		}
 
 		[Test]
@@ -190,7 +198,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				.WithSchedule(person, Color.Pink, "2016-05-30 12:00", "2016-05-30 13:00");
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			Database.PersistedReadModel.Shift.Last().Color.Should().Be(Color.Pink.ToArgb());
+			ReadModels.Models.Single(x => x.PersonId == person)
+				.Shift.Last().Color.Should().Be(Color.Pink.ToArgb());
 		}
 
 		[Test]
@@ -217,8 +226,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 			Now.Is("2016-05-30 10:02");
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			Database.PersistedReadModel.ReceivedTime.Should().Be("2016-05-30 10:01".Utc());
+			ReadModels.Models.Single(x => x.PersonId == person)
+				.ReceivedTime.Should().Be("2016-05-30 10:01".Utc());
 		}
 	}
-
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -17,6 +18,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 		public FakeDatabase Database;
 		public MutableNow Now;
 		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
+		public FakeAgentStateReadModelPersister ReadModels;
 
 		[Test]
 		public void ShouldHaveAlarmStartTimeWhenEnteringAlarm()
@@ -36,7 +38,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "phone"
 			});
 
-			Database.PersistedReadModel.AlarmStartTime.Should().Be("2015-12-10 8:05".Utc());
+			ReadModels.Models.Single(x => x.PersonId == personId)
+				.AlarmStartTime.Should().Be("2015-12-10 8:05".Utc());
 		}
 
 		[Test]
@@ -56,7 +59,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "phone"
 			});
 
-			Database.PersistedReadModel.AlarmStartTime.Should().Be(null);
+			ReadModels.Models.Single(x => x.PersonId == personId)
+				.AlarmStartTime.Should().Be(null);
 		}
 
 		[Test]
@@ -87,7 +91,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "ACW"
 			});
 
-			Database.PersistedReadModel.AlarmStartTime.Should().Be("2015-12-10 8:05".Utc());
+			ReadModels.Models.Single(x => x.PersonId == personId)
+				.AlarmStartTime.Should().Be("2015-12-10 8:05".Utc());
 		}
 	}
 }

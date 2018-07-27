@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		public void ShouldLoadAllWhenEmptyCollections()
 		{
 			var personId = Guid.NewGuid();
-			Persister.UpsertToActive(new AgentStateReadModelForTest
+			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				PersonId = personId
 			});

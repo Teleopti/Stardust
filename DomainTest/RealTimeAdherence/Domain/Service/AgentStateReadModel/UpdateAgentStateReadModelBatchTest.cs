@@ -15,14 +15,14 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 	public class UpdateAgentStateReadModelBatchTest
 	{
 		public FakeDatabase Database;
-		public FakeAgentStateReadModelPersister AgentStates;
+		public FakeAgentStateReadModelPersister ReadModels;
 		public MutableNow Now;
-		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
+		public Rta Target;
 
 		[Test]
 		public void ShouldUpdateState()
 		{
-			var users = Enumerable.Range(0, 20).Select(x => $"user{x}").ToArray();
+			var users = Enumerable.Range(0, 20).Select(x => $"the-user-{x}").ToArray();
 			users.ForEach(x => Database.WithAgent(x));
 			var state = Guid.NewGuid();
 			Database
@@ -40,8 +40,9 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				}).ToArray()
 			});
 
-			AgentStates.Models.Should().Have.Count.EqualTo(20);
-			AgentStates.Models.Select(x => x.StateGroupId).Should().Have.SameValuesAs(state);
+			var models = ReadModels.Models.Where(x => (x.FirstName ?? "").StartsWith("the-user")).ToArray();
+			models.Should().Have.Count.EqualTo(20);
+			models.Select(x => x.StateGroupId).Should().Have.SameValuesAs(state);
 		}
 	}
 }

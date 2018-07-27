@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -14,7 +15,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 		public FakeDatabase Database;
 		public MutableNow Now;
 		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
-		
+		public FakeAgentStateReadModelPersister ReadModels;
+
 		[Test]
 		public void ShouldPersistWithCurrentActivity()
 		{
@@ -32,7 +34,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "statecode"
 			});
 
-			Database.PersistedReadModel.Activity.Should().Be("Phone");
+			ReadModels.Models.Single(x => x.PersonId == personId)
+				.Activity.Should().Be("Phone");
 		}
 
 		[Test]
@@ -44,14 +47,16 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
 
-			Database.PersistedReadModel.NextActivityStartTime.Should().Be(null);
+			ReadModels.Models.Single(x => x.PersonId == personId)
+				.NextActivityStartTime.Should().Be(null);
 		}
 
 		[Test]
 		public void ShouldNotPersistWithCurrentActivityIfNoSchedule()
 		{
+			var personId = Guid.NewGuid();
 			Database
-				.WithAgent("usercode")
+				.WithAgent(personId, "usercode")
 				;
 			Now.Is("2014-10-20 10:00");
 
@@ -61,7 +66,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "statecode"
 			});
 
-			Database.PersistedReadModel.Activity.Should().Be(null);
+			ReadModels.Models.Single(x => x.PersonId == personId)
+				.Activity.Should().Be(null);
 		}
 
 		[Test]
@@ -82,7 +88,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 
 			Target.ProcessState(state);
 
-			Database.PersistedReadModel.Activity.Should().Be(null);
+			ReadModels.Models.Single(x => x.PersonId == personId)
+				.Activity.Should().Be(null);
 		}
 
 		[Test]
@@ -102,7 +109,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "statecode"
 			});
 
-			Database.PersistedReadModel.NextActivity.Should().Be("Phone");
+			ReadModels.Models.Single(x => x.PersonId == personId)
+				.NextActivity.Should().Be("Phone");
 		}
 
 		[Test]
@@ -122,7 +130,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "statecode"
 			});
 
-			Database.PersistedReadModel.NextActivity.Should().Be(null);
+			ReadModels.Models.Single(x => x.PersonId == personId)
+				.NextActivity.Should().Be(null);
 		}
 
 		[Test]
@@ -142,7 +151,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "statecode"
 			});
 
-			Database.PersistedReadModel.NextActivity.Should().Be("Phone");
+			ReadModels.Models.Single(x => x.PersonId == personId)
+				.NextActivity.Should().Be("Phone");
 		}
 
 	}

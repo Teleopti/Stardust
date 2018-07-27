@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		public void ShouldReadAgentsCount()
 		{
 			var team = Guid.NewGuid();
-			Persister.UpsertToActive(new AgentStateReadModelForTest
+			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				BusinessUnitId = BusinessUnit.Current().Id.Value,
 				PersonId = Guid.NewGuid(),
@@ -41,14 +41,14 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		{
 			var team = Guid.NewGuid();
 			var businessUnitId = BusinessUnit.Current().Id.Value;
-			Persister.UpsertToActive(new AgentStateReadModelForTest
+			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				BusinessUnitId = businessUnitId,
 				PersonId = Guid.NewGuid(),
 				TeamId = team,
 				TeamName = "team"
 			});
-			Persister.UpsertToActive(new AgentStateReadModelForTest
+			Persister.Upsert(new AgentStateReadModelForTest
 			{
 				BusinessUnitId = businessUnitId,
 				PersonId = Guid.NewGuid(),

@@ -73,7 +73,6 @@ namespace Teleopti.Ccc.Infrastructure.RealTimeAdherence.ApplicationLayer
 
 		public AgentStateReadModelQueryBuilder IsActivated()
 		{
-			_wheres.Add("HasName = 1");
 			_wheres.Add("HasAssociation = 1");
 			return this;
 		}

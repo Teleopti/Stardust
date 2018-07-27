@@ -422,10 +422,14 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			var personId = Guid.NewGuid();
 			Target.UpsertAssociation(new AssociationInfoForTest
 			{
-				PersonId = personId,
+				PersonId = personId
 			});
 
-			Target.UpsertEmploymentNumber(personId, "abc");
+			Target.UpsertAssociation(new AssociationInfoForTest
+			{
+				PersonId = personId,
+				EmploymentNumber = "abc"
+			});
 
 			Target.Load(personId).EmploymentNumber.Should().Be("abc");
 		}
@@ -435,10 +439,13 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		{
 			var personId = Guid.NewGuid();
 
-			Target.UpsertEmploymentNumber(personId, "123");
+			Target.UpsertAssociation(new AssociationInfoForTest
+			{
+				PersonId = personId,
+				EmploymentNumber = "123"
+			});
 
-			var model = Target.Load(personId);
-			model.EmploymentNumber.Should().Be("123");
+			Target.Load(personId).EmploymentNumber.Should().Be("123");
 		}
 
 		[Test]
@@ -446,7 +453,12 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		{
 			var personId = Guid.NewGuid();
 
-			Target.UpsertName(personId, "bill", "gates");
+			Target.UpsertAssociation(new AssociationInfoForTest
+			{
+				PersonId = personId,
+				FirstName = "bill",
+				LastName = "gates"
+			});
 
 			var model = Target.Load(personId);
 			model.FirstName.Should().Be("bill");
@@ -460,10 +472,16 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 			Target.UpsertAssociation(new AssociationInfoForTest
 			{
 				PersonId = personId,
+				FirstName = "ashley",
+				LastName = "andeen"
 			});
-			Target.UpsertName(personId, "ashley", "andeen");
 
-			Target.UpsertName(personId, "bill", "gates");
+			Target.UpsertAssociation(new AssociationInfoForTest
+			{
+				PersonId = personId,
+				FirstName = "bill",
+				LastName = "gates"
+			});
 
 			var model = Target.Load(personId);
 			model.FirstName.Should().Be("bill");
@@ -508,7 +526,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 		public void ShouldInsertOnNoAssociation()
 		{
 			var personId = Guid.NewGuid();
-			
+
 			Target.UpsertNoAssociation(personId);
 
 			Target.Load(personId).Should().Not.Be.Null();

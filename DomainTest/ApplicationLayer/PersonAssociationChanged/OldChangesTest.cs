@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			Target.Handle(new TenantHourTickEvent());
 
 			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>()
-				.Single()
+				.Single(x => x.PersonId == personId)
 				.TeamId
 				.Should().Be(team);
 		}
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			Target.Handle(new TenantHourTickEvent());
 			Target.Handle(new TenantHourTickEvent());
 
-			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>()
+			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Where(x => x.PersonId == personId)
 				.Should().Have.Count.EqualTo(1);
 		}
 
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			Context.SimulateRestart();
 			Target.Handle(new TenantHourTickEvent());
 
-			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>()
+			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Where(x => x.PersonId == personId)
 				.Should().Have.Count.EqualTo(1);
 		}
 
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			Now.Is("2017-03-17 08:00");
  			Target.Handle(new TenantHourTickEvent());
 
-			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>()
+			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Where(x => x.PersonId == person)
 				.Should().Have.Count.EqualTo(1);
 		}
 
@@ -107,7 +107,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			Target.Handle(new TenantHourTickEvent());
 
 			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>()
-				.Should().Have.Count.EqualTo(2);
+				.Where(x => x.PersonId == ashleyId).Should().Have.Count.EqualTo(1);
+			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>()
+				.Where(x => x.PersonId == pierreId).Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
@@ -162,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 				.WithPeriod("2017-03-10", team);
 
 			Target.Handle(new TenantHourTickEvent());
-			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
+			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single(x => x.PersonId == personId);
 			Target.Handle(new PersonTeamChangedEvent
 			{
 				PersonId = personId,
@@ -170,7 +172,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 				ExternalLogons = @event.ExternalLogons
 			});
 
-			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>()
+			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Where(x => x.PersonId == personId)
 				.Should().Have.Count.EqualTo(1);
 		}
 
@@ -201,7 +203,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 				.WithPeriod("2017-03-10", team);
 
 			Target.Handle(new TenantHourTickEvent());
-			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
+			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single(x => x.PersonId == personId);
 			Target.Handle(new PersonPeriodChangedEvent
 			{
 				PersonId = personId,
@@ -209,7 +211,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 				ExternalLogons = @event.ExternalLogons
 			});
 
-			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>()
+			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Where(x => x.PersonId == personId)
 				.Should().Have.Count.EqualTo(1);
 		}
 
@@ -229,27 +231,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 				.Last().TeamId
 				.Should().Be(team);
 		}
-
-		//[Test]
-		//public void ShouldNotPublishOldChangeOfTerminalDate()
-		//{
-		//	var team = Guid.NewGuid();
-		//	var personId = Guid.NewGuid();
-		//	Now.Is("2017-03-17 08:00");
-		//	Data.WithAgent(personId, "pierre", "2017-03-20")
-		//		.WithPeriod("2017-03-10", team);
-
-		//	Target.Handle(new TenantHourTickEvent());
-		//	Target.Handle(new PersonTerminalDateChangedEvent
-		//	{
-		//		PersonId = personId,
-		//		TerminationDate = "2017-03-20".Utc()
-		//	});
-
-		//	Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>()
-		//		.Last().TeamId
-		//		.Should().Be(team);
-		//}
 
 	}
 }
