@@ -332,7 +332,7 @@
 								<span class="hide-on-mobile" data-bind="visible:targetSchedule.isIntradayAbsence && !targetSchedule.hasOvertime">(@Resources.WithAbsence)</span>
 							</div>
 							<!--/ko-->
-							<!--ko if:!targetSchedule.isDayOff-->
+							<!--ko if:!targetSchedule.isDayOff && !targetSchedule.isFullDayAbsence-->
 							<div class="schedule-layer-text-container">
 								<div data-bind="text:targetSchedule.categoryName"></div>
 								<div class="shift-start-end-time">
