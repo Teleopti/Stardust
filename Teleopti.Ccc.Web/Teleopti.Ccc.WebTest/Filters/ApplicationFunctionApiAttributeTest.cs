@@ -2,12 +2,14 @@
 using System.Net.Http;
 using System.Security.Principal;
 using System.Threading;
+using System.Web.Http;
 using System.Web.Http.Controllers;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Filters;
 
@@ -17,66 +19,71 @@ namespace Teleopti.Ccc.WebTest.Filters
 	public class ApplicationFunctionApiAttributeTest
 	{
 		[Test]
-		public void ShouldSetErrorCodeWhenNoValidPrincipal()
+		public void ShouldDenyWhenNoValidPrincipal()
 		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			var target = new ApplicationFunctionApiAttribute("Test") { PermissionProvider = permissionProvider };
+			var authorization = new FakePermissions();
+			authorization.HasPermission("Test");
+			var target = new ApplicationFunctionApiAttribute("Test");
+			using (CurrentAuthorization.ThreadlyUse(authorization))
+			{
+				var httpActionContext = getHttpActionContext(target);
+				target.OnAuthorization(httpActionContext);
+				httpActionContext.Response.StatusCode.Should().Be.EqualTo(HttpStatusCode.Forbidden);
+			}
+		}
+		
 
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission("Test")).Return(true);
+		[Test]
+		public void ShouldDenyWhenLogonUserDoesNotHavePermission()
+		{
+			var authorization = new FakePermissions();
+			authorization.HasPermission("Test");
 
-			var httpActionContext =
-				new HttpActionContext(
-					new HttpControllerContext { ControllerDescriptor = new HttpControllerDescriptor { ControllerType = typeof(object) }, Request = new HttpRequestMessage() },
-					new CustomHttpActionDescriptorForTest(new HttpControllerDescriptor { ControllerType = typeof(object) }));
-
-			var before = Thread.CurrentPrincipal;
-			Thread.CurrentPrincipal =  null;
-			target.OnAuthorization(httpActionContext);
-
-			httpActionContext.Response.IsSuccessStatusCode.Should().Be.False();
-			Thread.CurrentPrincipal = before;
+			var target = new ApplicationFunctionApiAttribute(new[] { typeof(anonController) }, "Admin");
+			using (CurrentAuthorization.ThreadlyUse(authorization))
+			{
+				var httpActionContext = getHttpActionContext(target);
+				target.OnAuthorization(httpActionContext);
+				httpActionContext.Response.StatusCode.Should().Be.EqualTo(HttpStatusCode.Forbidden);
+			}
 		}
 
 		[Test]
-		public void ShouldSetErrorCodeWhenNoPermission()
+		public void ShouldAuthorizeRequestIfLogonUserHasPermission()
 		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			var target = new ApplicationFunctionApiAttribute("Test") {PermissionProvider = permissionProvider};
+			var authorization = new FakePermissions();
+			authorization.HasPermission("Test");
+			var target = new ApplicationFunctionApiAttribute(new[] { typeof(anonController) }, "Test");
 
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission("Test")).Return(false);
-
-			var httpActionContext =
-				new HttpActionContext(
-					new HttpControllerContext {ControllerDescriptor = new HttpControllerDescriptor {ControllerType = typeof (object)},Request = new HttpRequestMessage()},
-					new CustomHttpActionDescriptorForTest(new HttpControllerDescriptor {ControllerType = typeof (object)}));
-
-			var before = Thread.CurrentPrincipal;
-			Thread.CurrentPrincipal = TeleoptiPrincipalCacheable.Make(new TeleoptiIdentity("hej",null,null,null, null), PersonFactory.CreatePerson());
-			target.OnAuthorization(httpActionContext);
-
-			httpActionContext.Response.IsSuccessStatusCode.Should().Be.False();
-			Thread.CurrentPrincipal = before;
+			using (CurrentAuthorization.ThreadlyUse(authorization))
+			{
+				var httpActionContext =getHttpActionContext(target);
+				target.OnAuthorization(httpActionContext);
+				httpActionContext.Response.Should().Be.Null();
+			}
 		}
 
-		[Test]
-		public void ShouldDenyWhenOnlyGenericPermission()
+		private HttpActionContext getHttpActionContext(ApplicationFunctionApiAttribute target)
 		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			var target = new ApplicationFunctionApiAttribute("Test") { PermissionProvider = permissionProvider };
 
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission("Test")).Return(true);
+			var configuration = new HttpConfiguration();
+			configuration.Filters.Add(target);
+			var httpControllerDescriptor = new HttpControllerDescriptor { ControllerType = typeof(anonController) };
+			var httpRequestMessage = new HttpRequestMessage();
+			var httpControllerContext = new HttpControllerContext
+			{
+				Controller = new anonController(),
+				Configuration = configuration,
+				ControllerDescriptor = httpControllerDescriptor,
+				Request = httpRequestMessage
+			};
+			return new HttpActionContext(httpControllerContext, new CustomHttpActionDescriptorForTest(httpControllerDescriptor));
 
-			var httpActionContext =
-				new HttpActionContext(
-					new HttpControllerContext { ControllerDescriptor = new HttpControllerDescriptor { ControllerType = typeof(object) }, Request = new HttpRequestMessage() },
-					new CustomHttpActionDescriptorForTest(new HttpControllerDescriptor { ControllerType = typeof(object) }));
+		}
 
-			var before = Thread.CurrentPrincipal;
-			Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity("Authenticated"), new []{"Admin"});
-			target.OnAuthorization(httpActionContext);
+		private class anonController : ApiController
+		{
 
-			httpActionContext.Response.StatusCode.Should().Be.EqualTo(HttpStatusCode.Forbidden);
-			Thread.CurrentPrincipal = before;
 		}
 	}
 }

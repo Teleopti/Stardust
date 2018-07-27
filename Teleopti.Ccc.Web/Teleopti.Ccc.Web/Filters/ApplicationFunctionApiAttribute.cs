@@ -3,7 +3,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http.Controllers;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Web.Filters
 {
@@ -11,34 +12,28 @@ namespace Teleopti.Ccc.Web.Filters
 	{
 		private readonly string[] _applicationFunctionPaths;
 
-		public ApplicationFunctionApiAttribute() : this(new string[] { }) { }
-
-		public  ApplicationFunctionApiAttribute(params string[] applicationFunctionPaths) : base(null)
+		public ApplicationFunctionApiAttribute(params string[] applicationFunctionPaths) : base(null)
 		{
 			_applicationFunctionPaths = applicationFunctionPaths;
 		}
 
-		public IPermissionProvider PermissionProvider { get; set; }
+		public ApplicationFunctionApiAttribute(Type[] excludeTypes, params string[] applicationFunctionPaths) : base(excludeTypes)
+		{
+			_applicationFunctionPaths = applicationFunctionPaths;
+		}
 
 		protected override bool IsAuthorized(HttpActionContext actionContext)
 		{
 			var isAuthorized = base.IsAuthorized(actionContext);
-			if (!isAuthorized)
+
+			if (isAuthorized && !_applicationFunctionPaths.IsNullOrEmpty())
 			{
-				return false;
-			}
-			
-			if (_applicationFunctionPaths != null && _applicationFunctionPaths.Length > 0)
-			{
-				var havePermission =
+				var authorization = PrincipalAuthorization.Current();
+				isAuthorized =
 					_applicationFunctionPaths.Any(
-						applicationFunctionPath => PermissionProvider.HasApplicationFunctionPermission(applicationFunctionPath));
-				if (!havePermission)
-				{
-					return false;
-				}
+						applicationFunctionPath => authorization.IsPermitted(applicationFunctionPath));
 			}
-			return true;
+			return isAuthorized;
 		}
 
 		protected override void HandleUnauthorizedRequest(HttpActionContext actionContext)
