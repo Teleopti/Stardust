@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 	public class TeamScheduleViewModelFactoryToggle75989Off : ITeamScheduleViewModelFactoryToggle75989Off
 	{
 		private readonly ITeamSchedulePersonsProvider _teamSchedulePersonsProvider;
-		private readonly IAgentScheduleViewModelMapper _agentScheduleViewModelMapper;
 		private readonly ITimeLineViewModelMapperToggle75989Off _timeLineViewModelMapper;
 		private readonly IPersonScheduleDayReadModelFinder _scheduleDayReadModelFinder;
 		private readonly IPersonRepository _personRep;
@@ -28,12 +27,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 		private readonly ILoggedOnUser _logonUser;
 
 		public TeamScheduleViewModelFactoryToggle75989Off(ITeamSchedulePersonsProvider teamSchedulePersonsProvider,
-			IAgentScheduleViewModelMapper agentScheduleViewModelMapper,
 			ITimeLineViewModelMapperToggle75989Off timeLineViewModelMapper,
-			IPersonScheduleDayReadModelFinder scheduleDayReadModelFinder, IPersonRepository personRep, IScheduleProvider scheduleProvider, ITeamScheduleProjectionProvider projectionProvider, IPermissionProvider permissionProvider, ILoggedOnUser logonUser)
+			IPersonScheduleDayReadModelFinder scheduleDayReadModelFinder, IPersonRepository personRep, IScheduleProvider scheduleProvider, 
+			ITeamScheduleProjectionProvider projectionProvider, IPermissionProvider permissionProvider, ILoggedOnUser logonUser)
 		{
 			_teamSchedulePersonsProvider = teamSchedulePersonsProvider;
-			_agentScheduleViewModelMapper = agentScheduleViewModelMapper;
 			_timeLineViewModelMapper = timeLineViewModelMapper;
 			_scheduleDayReadModelFinder = scheduleDayReadModelFinder;
 			_personRep = personRep;
@@ -63,17 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			var myScheduleViewModel = _projectionProvider.MakeScheduleReadModel(currentUser, myScheduleDay, true);
 
 			int pageCount;
-			List<AgentInTeamScheduleViewModel> agentSchedules;
-			if (data.TimeFilter == null && data.TimeSortOrder.IsNullOrEmpty())
-			{
-				agentSchedules = constructAgentSchedulesWithoutReadModel(data, out pageCount);
-			}
-			else
-			{
-				agentSchedules = constructAgentSchedulesFromReadModel(data, false, out pageCount);
-				var mySchedule = agentSchedules.SingleOrDefault(x => x.PersonId == currentUser.Id.GetValueOrDefault());
-				agentSchedules.Remove(mySchedule);
-			}
+			var agentSchedules = constructAgentSchedules(data, out pageCount);
 
 			var timeLineHours = _timeLineViewModelMapper.Map(agentSchedules.Concat(Enumerable.Repeat(myScheduleViewModel, 1)), data.ScheduleDate).ToArray();
 
@@ -86,40 +74,30 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			};
 		}
 
-		private List<AgentInTeamScheduleViewModel> constructAgentSchedulesFromReadModel(TeamScheduleViewModelData data, bool isMyScheduleIncluded, out int pageCount)
+		private List<AgentInTeamScheduleViewModel> constructAgentSchedules(TeamScheduleViewModelData data, out int pageCount)
 		{
-			var personIds = _teamSchedulePersonsProvider.RetrievePersonIds(data).ToList();
 			var currentUser = _logonUser.CurrentUser();
-			if (!isMyScheduleIncluded && personIds.Contains(currentUser.Id.GetValueOrDefault()))
+			List<IPerson> people;
+			if (data.TimeFilter == null && data.TimeSortOrder.IsNullOrEmpty())
 			{
+				people = _teamSchedulePersonsProvider.RetrievePeople(data).ToList();
+				people.Remove(currentUser);
+			}
+			else
+			{
+				var personIds = _teamSchedulePersonsProvider.RetrievePersonIds(data).ToList();
 				personIds.Remove(currentUser.Id.GetValueOrDefault());
+
+				var personScheduleDays = _scheduleDayReadModelFinder.ForPersons(data.ScheduleDate, personIds, data.Paging, data.TimeFilter, data.TimeSortOrder);
+				var resultPersonId = personScheduleDays.Select(p => p.PersonId);
+				people = _personRep.FindPeople(resultPersonId).ToList();
 			}
 
-			var personScheduleDays = _scheduleDayReadModelFinder.ForPersons(data.ScheduleDate, personIds, data.Paging,
-				data.TimeFilter, data.TimeSortOrder);
-			var resultPersonId = personScheduleDays.Select(p => p.PersonId);
-			var people = _personRep.FindPeople(resultPersonId).ToLookup(p => p.Id.GetValueOrDefault());
-			var schedulesWithPersons = from s in personScheduleDays
-				select new PersonSchedule
-				{
-					Person = people[s.PersonId].FirstOrDefault(),
-					Schedule = s,
-					Date = data.ScheduleDate
-				};
-
-			var agentSchedules = _agentScheduleViewModelMapper.Map(schedulesWithPersons).ToList();
-			var scheduleCount = agentSchedules.Any() ? agentSchedules.First().Total : 0;
-			pageCount = (int)Math.Ceiling((double)scheduleCount / data.Paging.Take);
-
-			return agentSchedules;
+			return getAgentSchedules(data, people, out pageCount);
 		}
 
-		private List<AgentInTeamScheduleViewModel> constructAgentSchedulesWithoutReadModel(TeamScheduleViewModelData data, out int pageCount)
+		private List<AgentInTeamScheduleViewModel> getAgentSchedules(TeamScheduleViewModelData data, IList<IPerson> people, out int pageCount)
 		{
-			var people = _teamSchedulePersonsProvider.RetrievePeople(data).ToList();
-			var currentUser = _logonUser.CurrentUser();
-			people.Remove(currentUser);
-
 			var isPermittedToViewConfidential =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential);
 			var agentSchedules = new List<AgentInTeamScheduleViewModel>();

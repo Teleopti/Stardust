@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -15,6 +17,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
@@ -52,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public IBusinessUnitRepository BusinessUnitRepository;
 		public ITeamRepository TeamRepository;
 		public IPersonScheduleDayReadModelFinder PersonScheduleDayReadModelFinder;
-		public IPersonAssignmentRepository PersonAssignmentRepository;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakePermissionProvider PermissionProvider;
 		public FakeScheduleProvider ScheduleProvider;
 		public FakeLoggedOnUser LoggedOnUser;
@@ -284,6 +287,35 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var agentSchedule = result.AgentSchedules.Single(s => s.PersonId == person1.Id.Value);
 			agentSchedule.StartTimeUtc.Should().Be.EqualTo(new DateTime(2015, 5, 21, 6, 0, 0));
+		}
+
+		[Test]
+		public void ShouldReturnAgentScheduleWithCorrectColor()
+		{
+			SetUp();
+
+			var expactedColor = Color.Red;
+			var scheduleDate = new DateOnly(2015, 5, 21);
+			var person1 = PersonRepository.LoadAll().First(p => p.Name.LastName == "1");
+			var scheduleDay = ScheduleProvider.GetScheduleForPersons(scheduleDate, new List<IPerson> {person1});
+			scheduleDay.First().PersonAssignment().ShiftCategory.DisplayColor = expactedColor;
+
+			var result = Target.GetTeamScheduleViewModel(new TeamScheduleViewModelData
+			{
+				ScheduleDate = scheduleDate,
+				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
+				Paging = new Paging { Take = 20, Skip = 0 },
+				SearchNameText = "",
+				TimeFilter = new TimeFilterInfo
+				{
+					StartTimes = new List<DateTimePeriod> { new DateTimePeriod(2015,5,21,10, 2015,5,21,12)},
+					EndTimes = new List<DateTimePeriod> { new DateTimePeriod(2015,5,21,0, 2015,5,21,23)},
+					IsWorkingDay = true
+				}
+			});
+
+			var agentSchedule = result.AgentSchedules.Single(s => s.PersonId == person1.Id.Value);
+			agentSchedule.ShiftCategory.DisplayColor.Should().Be.EqualTo(expactedColor.ToHtml());
 		}
 
 		[Test]
