@@ -80,9 +80,8 @@ Teleopti.MyTimeWeb.BadgeCountsDropdownViewModel = function BadgeCountsDropdownVi
 
 	var fetchBadgeCounts = function () {
 		if (self.periodType === 'OnGoing') return;
-		var f = 'YYYY-MM-DD';
-		var from = self.startMoment().format(f);
-		var to = self.endMoment().format(f);
+		var from = Teleopti.MyTimeWeb.Common.FormatServiceDate(self.startMoment());
+		var to = Teleopti.MyTimeWeb.Common.FormatServiceDate(self.endMoment());
 		self.isFetchingData(true);
 		fetch(from, to);
 	};
