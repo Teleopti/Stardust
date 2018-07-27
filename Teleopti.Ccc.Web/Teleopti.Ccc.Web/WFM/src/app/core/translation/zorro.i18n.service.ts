@@ -55,7 +55,6 @@ export class Zorroi18nService {
 	};
 
 	switchLanguage(userLanguage) {
-		console.log(userLanguage);
 		let zorroLocale = en_GB;
 		if (this.availableLanguages.hasOwnProperty(userLanguage)) {
 			zorroLocale = this.availableLanguages[userLanguage];
