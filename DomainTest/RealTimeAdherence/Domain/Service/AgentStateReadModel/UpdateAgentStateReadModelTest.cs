@@ -22,8 +22,9 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 		[Test]
 		public void ShouldPersistReadModel()
 		{
+			var person = Guid.NewGuid();
 			Database
-				.WithAgent("usercode")
+				.WithAgent("usercode", person)
 				.WithStateCode("phone");
 
 			Target.ProcessState(new StateForTest
@@ -32,30 +33,31 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "phone"
 			});
 
-			ReadModels.Models.Last()
+			ReadModels.Models.Single(x => x.PersonId == person)
 				.StateName.Should().Be("phone");
 		}
 
 		[Test]
 		public void ShouldPersistWhenNotifiedOfPossibleScheduleChange()
 		{
-			var personId = Guid.NewGuid();
+			var person = Guid.NewGuid();
 			Database
-				.WithAgent("usercode", personId)
+				.WithAgent("usercode", person)
 				;
 			Now.Is("2014-10-20 10:00");
 
-			Target.CheckForActivityChanges(Database.TenantName(), personId);
+			Target.CheckForActivityChanges(Database.TenantName(), person);
 
-			ReadModels.Models.Last()
+			ReadModels.Models.Single(x => x.PersonId == person)
 				.Should().Not.Be.Null();
 		}
 
 		[Test]
 		public void ShouldPersistWithReceivedSystemTime()
 		{
+			var person = Guid.NewGuid();
 			Database
-				.WithAgent("usercode")
+				.WithAgent("usercode", person)
 				;
 			Now.Is("2014-10-20 10:00");
 
@@ -65,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "statecode"
 			});
 
-			ReadModels.Models.Last()
+			ReadModels.Models.Single(x => x.PersonId == person)
 				.ReceivedTime.Should().Be("2014-10-20 10:00".Utc());
 		}
 
@@ -74,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 		{
 			var person = Guid.NewGuid();
 			Database
-				.WithAgent("user", person);
+				.WithAgent("usercode", person);
 			Now.Is("2016-05-30 14:00");
 
 			Target.CheckForActivityChanges(Database.TenantName());
@@ -82,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 			Now.Is("2016-05-30 14:01");
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			ReadModels.Models.Last()
+			ReadModels.Models.Single(x => x.PersonId == person)
 				.Activity.Should().Be("Phone");
 		}
 
@@ -91,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 		{
 			var person = Guid.NewGuid();
 			Database
-				.WithAgent("user", person);
+				.WithAgent("usercode", person);
 			Now.Is("2016-05-30 14:00");
 
 			Target.CheckForActivityChanges(Database.TenantName());
@@ -109,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 			var person = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			Database
-				.WithAgent("user", person);
+				.WithAgent("usercode", person);
 			Now.Is("2016-05-30 14:00");
 			Database.WithSchedule(person, phone, "Phone", "2016-05-30 15:00", "2016-05-30 16:00");
 
@@ -127,13 +129,13 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 		[Test]
 		public void ShouldPersistWithAlarm()
 		{
-			var personId = Guid.NewGuid();
-			var activityId = Guid.NewGuid();
-			var alarmId = Guid.NewGuid();
+			var person = Guid.NewGuid();
+			var activity = Guid.NewGuid();
+			var alarm = Guid.NewGuid();
 			Database
-				.WithAgent("usercode", personId)
-				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00")
-				.WithMappedRule("statecode", activityId, alarmId, "rule")
+				.WithAgent("usercode", person)
+				.WithSchedule(person, activity, "2014-10-20 10:00", "2014-10-20 11:00")
+				.WithMappedRule("statecode", activity, alarm, "rule")
 				;
 			Now.Is("2014-10-20 10:00");
 
@@ -143,21 +145,21 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "statecode"
 			});
 
-			ReadModels.Models.Single(x => x.PersonId == personId)
+			ReadModels.Models.Single(x => x.PersonId == person)
 				.RuleName.Should().Be("rule");
 		}
 
 		[Test]
 		public void ShouldPersistWithState()
 		{
-			var personId = Guid.NewGuid();
-			var activityId = Guid.NewGuid();
+			var person = Guid.NewGuid();
+			var activity = Guid.NewGuid();
 			Database
-				.WithAgent("usercode", personId)
-				.WithSchedule(personId, activityId, "2014-10-20 09:00", "2014-10-20 11:00")
+				.WithAgent("usercode", person)
+				.WithSchedule(person, activity, "2014-10-20 09:00", "2014-10-20 11:00")
 				.WithStateGroup(null, "my state")
 				.WithStateCode("statecode")
-				.WithMappedRule("statecode", activityId);
+				.WithMappedRule("statecode", activity);
 			Now.Is("2014-10-20 10:00");
 
 			Target.ProcessState(new StateForTest
@@ -166,19 +168,19 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "statecode"
 			});
 
-			ReadModels.Models.Single(x => x.PersonId == personId)
+			ReadModels.Models.Single(x => x.PersonId == person)
 				.StateName.Should().Be("my state");
 		}
 
 		[Test]
 		public void ShouldPersistWithStateStartTimeFromSystemTime()
 		{
-			var personId = Guid.NewGuid();
-			var activityId = Guid.NewGuid();
+			var person = Guid.NewGuid();
+			var activity = Guid.NewGuid();
 			Database
-				.WithAgent("usercode", personId)
-				.WithMappedRule("statecode", activityId, 0)
-				.WithSchedule(personId, activityId, "2014-10-20 9:00", "2014-10-20 11:00");
+				.WithAgent("usercode", person)
+				.WithMappedRule("statecode", activity, 0)
+				.WithSchedule(person, activity, "2014-10-20 9:00", "2014-10-20 11:00");
 			Now.Is("2014-10-20 10:01");
 
 			Target.ProcessState(new StateForTest
@@ -187,15 +189,16 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "statecode"
 			});
 
-			ReadModels.Models.Single(x => x.PersonId == personId)
+			ReadModels.Models.Single(x => x.PersonId == person)
 				.StateStartTime.Should().Be.EqualTo("2014-10-20 10:01".Utc());
 		}
 
 		[Test]
 		public void ShouldPersistStateGroupId()
 		{
+			var person = Guid.NewGuid();
 			Database
-				.WithAgent("usercode")
+				.WithAgent("usercode", person)
 				.WithMappedRule("phone");
 			var stateGroupId = StateGroups.LoadAll().Single().Id;
 
@@ -205,7 +208,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "phone"
 			});
 
-			ReadModels.Models.Last()
+			ReadModels.Models.Single(x => x.PersonId == person)
 				.StateGroupId.Should().Be(stateGroupId);
 		}
 	}

@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 		[Test]
 		public void ShouldPersist()
 		{
+			var person = Guid.NewGuid();
 			Database
 				.WithAgent("usercode")
 				;
@@ -32,8 +33,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 				StateCode = "statecode"
 			});
 
-			ReadModels.Models.Last()
-				.Should().Not.Be.Null();
+			Database.StoredState.Should().Not.Be.Null();
 		}
 
 		[Test]

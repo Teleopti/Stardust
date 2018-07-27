@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			var shift = ReadModels.Models.Last()
+			var shift = ReadModels.Models.Single(x => x.PersonId == person)
 				.Shift.Single(x => x.Name == "training");
 			shift.StartTime.Should().Be("2016-12-15 13:00".Utc());
 			shift.EndTime.Should().Be("2016-12-15 15:00".Utc());
