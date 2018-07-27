@@ -900,6 +900,10 @@ input.use-default-startTime {
 	display:inline-block;
 }
 
+.clear-background-image {
+	background-image: none !important;
+}
+
 @media (max-width: 500px) {
 	.shift-start-end-time {
 		display: flex;
