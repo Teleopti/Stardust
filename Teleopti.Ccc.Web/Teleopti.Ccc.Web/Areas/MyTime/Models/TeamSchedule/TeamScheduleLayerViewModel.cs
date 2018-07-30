@@ -1,5 +1,5 @@
 using System;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 {

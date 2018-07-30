@@ -25,7 +25,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider;
@@ -105,7 +104,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			isolate.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateEnglishCulture())).For<IUserCulture>();
 			isolate.UseTestDouble<FakePushMessageDialogueRepository>().For<IPushMessageDialogueRepository>();
 			isolate.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
-			isolate.UseTestDouble<ScheduleMinMaxTimeCalculator>().For<IScheduleMinMaxTimeCalculator>();
+			isolate.UseTestDouble<ScheduleWeekMinMaxTimeCalculator>().For<IScheduleWeekMinMaxTimeCalculator>();
 			isolate.UseTestDouble<SiteOpenHourProvider>().For<ISiteOpenHourProvider>();
 			isolate.UseTestDouble<StaffingDataAvailablePeriodProvider>().For<IStaffingDataAvailablePeriodProvider>();
 			isolate.UseTestDouble<FakeSkillTypeRepository>().For<ISkillTypeRepository>(); 

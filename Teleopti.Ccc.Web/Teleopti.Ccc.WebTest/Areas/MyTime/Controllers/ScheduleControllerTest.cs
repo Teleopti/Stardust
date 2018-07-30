@@ -8,7 +8,8 @@ using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Schedule.Common;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Schedule.WeekSchedule;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 

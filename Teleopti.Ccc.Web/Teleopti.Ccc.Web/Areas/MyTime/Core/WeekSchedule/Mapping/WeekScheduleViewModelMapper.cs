@@ -16,12 +16,13 @@ using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Schedule.Common;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Schedule.WeekSchedule;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Ccc.Web.Core.Extensions;
 using Teleopti.Interfaces.Domain;
+using DayViewModel = Teleopti.Ccc.Web.Areas.MyTime.Models.Schedule.Common.DayViewModel;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 {
@@ -35,7 +36,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		private readonly INow _now;
 		private readonly CommonViewModelMapper _commonMapper;
 		private readonly OvertimeAvailabilityViewModelMapper _overtimeMapper;
-		private readonly IRequestsViewModelFactory _requestsViewModelFactory;
 		private readonly ISiteOpenHourProvider _siteOpenHourProvider;
 		private readonly IScheduledSkillOpenHourProvider _scheduledSkillOpenHourProvider;
 		private readonly ILicenseAvailability _licenseAvailability;
@@ -49,7 +49,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			ILoggedOnUser loggedOnUser, INow now,
 			CommonViewModelMapper commonMapper,
 			OvertimeAvailabilityViewModelMapper overtimeMapper,
-			IRequestsViewModelFactory requestsViewModelFactory,
 			ISiteOpenHourProvider siteOpenHourProvider,
 			IScheduledSkillOpenHourProvider scheduledSkillOpenHourProvider, ILicenseAvailability licenseAvailability,
 			IToggleManager toggleManager, 
@@ -63,7 +62,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			_now = now;
 			_commonMapper = commonMapper;
 			_overtimeMapper = overtimeMapper;
-			_requestsViewModelFactory = requestsViewModelFactory;
 			_siteOpenHourProvider = siteOpenHourProvider;
 			_scheduledSkillOpenHourProvider = scheduledSkillOpenHourProvider;
 			_licenseAvailability = licenseAvailability;
@@ -104,45 +102,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			};
 		}
 
-		public DayScheduleViewModel Map(DayScheduleDomainData s, bool loadOpenHourPeriod = false)
-		{
-			var currentUser = _loggedOnUser.CurrentUser();
-			var timeZone = currentUser.PermissionInformation.DefaultTimeZone();
-
-			var daylightSavingAdjustment = TimeZoneHelper.GetDaylightChanges(
-				timeZone, _now.ServerDateTime_DontUse().Year);
-			var daylightModel = daylightSavingAdjustment != null
-				? new DaylightSavingsTimeAdjustmentViewModel(daylightSavingAdjustment)
-				{
-					EnteringDST = s.Date.Date.Equals(TimeZoneHelper.ConvertFromUtc(daylightSavingAdjustment.Start, timeZone).Date),
-					LocalDSTStartTimeInMinutes = (int)TimeZoneHelper.ConvertFromUtc(daylightSavingAdjustment.Start, timeZone).TimeOfDay.TotalMinutes
-				}
-				: null;
-
-			var viewModel = new DayScheduleViewModel
-			{
-				Date = s.Date.ToFixedClientDateOnlyFormat(),
-				BaseUtcOffsetInMinutes = timeZone.BaseUtcOffset.TotalMinutes,
-				DaylightSavingTimeAdjustment = daylightModel,
-				TimeLine = createTimeLine(s.MinMaxTime, s.Date, daylightSavingAdjustment, timeZone),
-				RequestPermission = mapDaySchedulePermission(s),
-				ViewPossibilityPermission = s.ViewPossibilityPermission,
-				DatePickerFormat = DateTimeFormatExtensions.LocalizedDateFormat,
-				Schedule = createDayViewModel(s.ScheduleDay, loadOpenHourPeriod),
-				AsmEnabled = s.AsmEnabled,
-				IsToday = s.IsCurrentDay,
-				CheckStaffingByIntraday = isCheckStaffingByIntradayForDay(currentUser.WorkflowControlSet, s.Date),
-				AbsenceProbabilityEnabled = currentUser.WorkflowControlSet?.AbsenceProbabilityEnabled ?? false,
-				OvertimeProbabilityEnabled = isOvertimeProbabilityEnabled(s.Date, false),
-				UnReadMessageCount = s.UnReadMessageCount,
-				ShiftTradeRequestSetting = _requestsViewModelFactory.CreateShiftTradePeriodViewModel(),
-				StaffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(_toggleManager) + 1
-			};
-			viewModel.Schedule.Periods = projections(s.ScheduleDay, false);
-
-			return viewModel;
-		}
-
 		private bool isOvertimeProbabilityEnabled(DateOnly date, bool forThisWeek)
 		{
 			var currentUser = _loggedOnUser.CurrentUser();
@@ -177,16 +136,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			var days = weekPeriod.DayCollection();
 
 			return days.Any(day => workflowControlSet.IsAbsenceRequestCheckStaffingByIntraday(_now.ServerDate_DontUse(), day));
-		}
-
-		private bool isCheckStaffingByIntradayForDay(IWorkflowControlSet workflowControlSet, DateOnly showForDate)
-		{
-			if (workflowControlSet?.AbsenceRequestOpenPeriods == null || !workflowControlSet.AbsenceRequestOpenPeriods.Any())
-			{
-				return false;
-			}
-			return showForDate >= _now.ServerDate_DontUse() &&
-				   workflowControlSet.IsAbsenceRequestCheckStaffingByIntraday(_now.ServerDate_DontUse(), showForDate);
 		}
 
 		private IEnumerable<DayViewModel> days(WeekScheduleDomainData scheduleDomainData, bool loadOpenHourPeriod = false)
@@ -252,14 +201,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				TextRequestPermission = s.TextRequestPermission
 			};
 		}
-
-		private RequestPermission mapDaySchedulePermission(DayScheduleDomainData s)
-		{
-			var permission = map(s);
-			permission.ShiftTradeRequestPermission = s.ShiftTradeRequestPermission;
-			return permission;
-		}
-
 		private IEnumerable<StyleClassViewModel> map(IEnumerable<Color> colors)
 		{
 			return colors?.Select(_commonMapper.Map).ToArray();

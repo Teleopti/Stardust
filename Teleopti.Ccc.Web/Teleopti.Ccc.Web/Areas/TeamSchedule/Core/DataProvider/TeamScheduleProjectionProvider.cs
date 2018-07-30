@@ -9,13 +9,13 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Data;
 using Teleopti.Ccc.Web.Core.Extensions;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 {

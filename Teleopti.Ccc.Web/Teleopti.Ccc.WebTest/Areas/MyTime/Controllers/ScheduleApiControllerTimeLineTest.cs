@@ -12,21 +12,18 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Schedule.Common;
 using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -896,7 +893,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Ignore("Jianfeng TODO: temp ignored")]
 		public void ShouldGetCorrectPercentageForNoScheduledDayWhenYesterdayHasNextDayOvertimeAvaibilityEndsInFirstHour()
 		{
 			var period = new DateTimePeriod(new DateTime(2014, 12, 17, 9, 15, 0, DateTimeKind.Utc),

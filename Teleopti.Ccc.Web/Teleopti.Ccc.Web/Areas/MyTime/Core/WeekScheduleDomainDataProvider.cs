@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 {
 	public class WeekScheduleDomainDataProvider : IWeekScheduleDomainDataProvider
 	{
-
 		private readonly IScheduleProvider _scheduleProvider;
 		private readonly IProjectionProvider _projectionProvider;
 		private readonly IPersonRequestProvider _personRequestProvider;
@@ -54,31 +53,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			public IVisualLayerCollection Projection { get; set; }
 		}
 
-		public DayScheduleDomainData GetDaySchedule(DateOnly date, bool allowCrossNight = false, bool loadSelectedDateScheduleOnly = false)
-		{
-			var period = new DateOnlyPeriod(date, date);
-			var periodSchedule = getScheduleDomainData(date, period, allowCrossNight, loadSelectedDateScheduleOnly);
-			return new DayScheduleDomainData
-			{
-				Date = date,
-				ScheduleDay = periodSchedule.Days.Single(d => d.Date == date),
-				ColorSource = periodSchedule.ColorSource,
-				MinMaxTime = periodSchedule.MinMaxTime,
-				AsmEnabled = periodSchedule.AsmEnabled,
-				TextRequestPermission = periodSchedule.TextRequestPermission,
-				OvertimeAvailabilityPermission = periodSchedule.OvertimeAvailabilityPermission,
-				AbsenceRequestPermission = periodSchedule.AbsenceRequestPermission,
-				OvertimeRequestPermission = periodSchedule.OvertimeRequestPermission,
-				AbsenceReportPermission = periodSchedule.AbsenceReportPermission,
-				ShiftExchangePermission = periodSchedule.ShiftExchangePermission,
-				ShiftTradeBulletinBoardPermission = periodSchedule.ShiftTradeBulletinBoardPermission,
-				PersonAccountPermission = periodSchedule.PersonAccountPermission,
-				ShiftTradeRequestPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb),
-				ViewPossibilityPermission = periodSchedule.ViewPossibilityPermission,
-				IsCurrentDay = date == new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _userTimeZone.TimeZone()))
-			};
-		}
-
 		public WeekScheduleDomainData GetWeekSchedule(DateOnly date)
 		{
 			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(date, DateTimeFormatExtensions.FirstDayOfWeek);
@@ -86,20 +60,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			return getScheduleDomainData(date, week);
 		}
 
-		private WeekScheduleDomainData getScheduleDomainData(DateOnly date, DateOnlyPeriod period, bool allowCrossNight = false, bool loadSelectedDateScheduleOnly = false)
+		private WeekScheduleDomainData getScheduleDomainData(DateOnly date, DateOnlyPeriod period)
 		{
 			var periodStartDate = period.StartDate;
 
-			List<IScheduleDay> scheduleDays;
-			if (loadSelectedDateScheduleOnly)
-			{
-				scheduleDays = _scheduleProvider.GetScheduleForPeriod(new DateOnlyPeriod(periodStartDate, period.EndDate)).ToList();
-			}
-			else
-			{
-				var periodWithPreviousDay = new DateOnlyPeriod(periodStartDate.AddDays(-1), period.EndDate);
-				scheduleDays = _scheduleProvider.GetScheduleForPeriod(periodWithPreviousDay).ToList();
-			}
+			var periodWithPreviousDay = new DateOnlyPeriod(periodStartDate.AddDays(-1), period.EndDate);
+			var scheduleDays = _scheduleProvider.GetScheduleForPeriod(periodWithPreviousDay).ToList();
 
 			var personRequestPeriods = _personRequestProvider.RetrieveRequestPeriodsForLoggedOnUser(period);
 			var requestProbability = _absenceRequestProbabilityProvider.GetAbsenceRequestProbabilityForPeriod(period);
@@ -110,7 +76,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 					ScheduleDay = day,
 					Projection = _projectionProvider.Projection(day)
 				});
-			var minMaxTime = getMinMaxTime(scheduleDaysAndProjections, period, allowCrossNight);
+			var minMaxTime = getMinMaxTime(scheduleDaysAndProjections, period);
 
 			var list = new List<WeekScheduleDayDomainData>();
 			foreach (var day in periodStartDate.DateRange(period.DayCount()))
@@ -278,7 +244,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			return earlyStart < earlyStartOvertimeAvailability ? earlyStart : earlyStartOvertimeAvailability;
 		}
 
-		private TimeSpan maxfunction(ScheduleDaysAndProjection scheduleDayData, DateOnly periodStartDate, bool allowCrossNight = false)
+		private TimeSpan maxfunction(ScheduleDaysAndProjection scheduleDayData, DateOnly periodStartDate)
 		{
 			var scheduleDay = scheduleDayData.ScheduleDay;
 			var projection = scheduleDayData.Projection;
@@ -299,7 +265,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 				else if (scheduleDay.DateOnlyAsPeriod.DateOnly != periodStartDate.AddDays(-1)) //for the days of current week
 				{
 					//if end time cross midnight and not allow timeline to cross night, then max. time is used, otherwise use the end time as it is
-					lateEnd = (endTime.Days > startTime.Days && !allowCrossNight) ? new TimeSpan(23, 59, 59) : endTime;
+					lateEnd = (endTime.Days > startTime.Days) ? new TimeSpan(23, 59, 59) : endTime;
 				}
 			}
 
@@ -337,10 +303,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 		}
 
 		private TimePeriod getMinMaxTime(Dictionary<DateOnly, ScheduleDaysAndProjection> scheduleDaysAndProjections,
-			DateOnlyPeriod period, bool allowCrossNight)
+			DateOnlyPeriod period)
 		{
 			var earliest = scheduleDaysAndProjections.Min(x => minFunction(x.Value, period));
-			var latest = scheduleDaysAndProjections.Max(x => maxfunction(x.Value, period.StartDate, allowCrossNight));
+			var latest = scheduleDaysAndProjections.Max(x => maxfunction(x.Value, period.StartDate));
 			var early = earliest;
 			var late = latest;
 			if (early > late)
@@ -352,14 +318,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			var margin = TimeSpan.FromMinutes(ScheduleConsts.TimelineMarginInMinute);
 			early = early.Ticks > TimeSpan.Zero.Add(margin).Ticks ? early.Subtract(margin) : TimeSpan.Zero;
 
-			if (!allowCrossNight)
-			{
-				late = late.Ticks < new TimeSpan(23, 59, 59).Subtract(margin).Ticks ? late.Add(margin) : new TimeSpan(23, 59, 59);
-			}
-			else
-			{
-				late = late.Add(margin);
-			}
+			late = late.Ticks < new TimeSpan(23, 59, 59).Subtract(margin).Ticks ? late.Add(margin) : new TimeSpan(23, 59, 59);
 
 			var minMaxTime = new TimePeriod(early, late);
 			return minMaxTime;

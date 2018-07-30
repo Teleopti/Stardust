@@ -109,12 +109,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			return null;
 		}
 
-		private IList<MeetingViewModel> meetings(IScheduleDay s)
+		private IList<Models.Preference.MeetingViewModel> meetings(IScheduleDay s)
 		{
 			var meetings = s?.PersonMeetingCollection();
 			if (meetings?.Length > 0)
 			{
-				return meetings.Select(personMeeting => new MeetingViewModel
+				return meetings.Select(personMeeting => new Models.Preference.MeetingViewModel
 				{
 					Subject = personMeeting.BelongsToMeeting.GetSubject(new NoFormatting()),
 					TimeSpan = ScheduleDayStringVisualizer.ToLocalStartEndTimeString(personMeeting.Period,

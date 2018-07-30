@@ -11,7 +11,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Schedule.Common;
 using Teleopti.Ccc.Web.Core.Data;
 using Teleopti.Interfaces.Domain;
 

@@ -3,24 +3,20 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 {
-	public class ScheduleMinMaxTimeCalculator : IScheduleMinMaxTimeCalculator
+	public class ScheduleWeekMinMaxTimeCalculator : IScheduleWeekMinMaxTimeCalculator
 	{
-		private readonly IToggleManager _toggles;
 		private readonly INow _now;
 		private readonly ISiteOpenHourProvider _siteOpenHourProvider;
 		private readonly IScheduledSkillOpenHourProvider _scheduledSkillOpenHourProvider; 
 
-		public ScheduleMinMaxTimeCalculator(IToggleManager toggles, INow now, ISiteOpenHourProvider siteOpenHourProvider, IScheduledSkillOpenHourProvider scheduledSkillOpenHourProvider)
+		public ScheduleWeekMinMaxTimeCalculator(INow now, ISiteOpenHourProvider siteOpenHourProvider, IScheduledSkillOpenHourProvider scheduledSkillOpenHourProvider)
 		{
-			_toggles = toggles;
 			_now = now;
 			_siteOpenHourProvider = siteOpenHourProvider;
 			_scheduledSkillOpenHourProvider = scheduledSkillOpenHourProvider;
@@ -36,35 +32,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 					day.MinMaxTime = weekDomainData.MinMaxTime;
 				}
 			}
-		}
-
-		public void AdjustScheduleMinMaxTime(DayScheduleDomainData dayDomainData)
-		{
-			var minMaxTimeFixed = fixDayScheduleMinMaxTime(dayDomainData);
-
-			if (minMaxTimeFixed)
-			{
-				dayDomainData.ScheduleDay.MinMaxTime = dayDomainData.MinMaxTime;
-			}
-		}
-
-		private bool fixDayScheduleMinMaxTime(DayScheduleDomainData dayDomainData)
-		{
-			var openHourPeriod = _siteOpenHourProvider.GetSiteOpenHourPeriod(dayDomainData.Date);
-			if (!openHourPeriod.HasValue)
-			{
-				openHourPeriod = _scheduledSkillOpenHourProvider.GetSkillOpenHourPeriod(dayDomainData.ScheduleDay.ScheduleDay);
-			}
-			if (!openHourPeriod.HasValue)
-				return false;
-			var newTimelinePeriod = getTimelinePeriod(dayDomainData, openHourPeriod.Value);
-			if (dayDomainData.MinMaxTime == newTimelinePeriod)
-			{
-				return false;
-			}
-
-			dayDomainData.MinMaxTime = newTimelinePeriod;
-			return true;
 		}
 
 		private bool fixWeekScheduleMinMaxTime(WeekScheduleDomainData scheduleDomainData)
@@ -104,8 +71,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			}
 			else
 			{
-				var minStartTime = new TimeSpan[] {siteOpenHourPeriod.Value.StartTime, skillOpenHourPeriod.Value.StartTime}.Min();
-				var maxEndTime = new TimeSpan[] {siteOpenHourPeriod.Value.EndTime, skillOpenHourPeriod.Value.EndTime}.Max();
+				var minStartTime = new[] {siteOpenHourPeriod.Value.StartTime, skillOpenHourPeriod.Value.StartTime}.Min();
+				var maxEndTime = new[] {siteOpenHourPeriod.Value.EndTime, skillOpenHourPeriod.Value.EndTime}.Max();
 				openHourPeriod = new TimePeriod(minStartTime, maxEndTime);
 			}
 			return openHourPeriod;

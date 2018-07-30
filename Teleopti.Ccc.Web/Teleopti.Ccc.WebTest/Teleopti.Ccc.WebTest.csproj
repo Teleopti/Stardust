@@ -296,6 +296,7 @@
     <Compile Include="Core\BlockOtherOriginFilterTests.cs" />
     <Compile Include="Core\Common\DataProvider\AgentBadgeWithinPeriodProviderTest.cs" />
     <Compile Include="Core\Common\DataProvider\MultiplicatorDefinitionSetProviderTest.cs" />
+    <Compile Include="Core\DayScheduleDomainDataProviderDayScheduleTest.cs" />
     <Compile Include="Core\Gamification\GamificationSettingProviderTest.cs" />
     <Compile Include="Core\Gamification\GamificationSettingPersisterTest.cs" />
     <Compile Include="Core\MonthScheduleDomainDataProviderTest.cs" />
@@ -446,8 +447,7 @@
     <Compile Include="Core\TeamSchedule\ViewModelFactory\WfmTeamScheduleViewModelFactoryTest.cs" />
     <Compile Include="Core\TeamsProviderTest.cs" />
     <Compile Include="Core\TranslatedTextsTest.cs" />
-    <Compile Include="Core\WeekScheduleDomainDataProviderDayScheduleNoMockTest.cs" />
-    <Compile Include="Core\WeekScheduleDomainDataProviderWeekScheduleNoMockTest.cs" />
+    <Compile Include="Core\WeekScheduleDomainDataProviderWeekScheduleTest.cs" />
     <Compile Include="Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProviderNoMockTest.cs" />
     <Compile Include="Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProviderTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeAddPersonScheduleViewModelMapperTest.cs" />
@@ -455,7 +455,6 @@
     <Compile Include="Core\Requests\Mapping\ShiftTradeScheduleViewModelMapperTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeTimeLineHoursViewModelMapperTest.cs" />
     <Compile Include="Core\IoC\MyTimeWebTestAttribute.cs" />
-    <Compile Include="Core\WeekScheduleDomainDataProviderTest.cs" />
     <Compile Include="FakeSchedulePersonProvider.cs" />
     <Compile Include="Areas\Anywhere\GroupScheduleViewModelFactoryTest.cs" />
     <Compile Include="Areas\Anywhere\GroupScheduleViewModelMapperTest.cs" />
