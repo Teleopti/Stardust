@@ -66,10 +66,22 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 		public IntradayIncomingSummary GenerateStatisticsSummary(IEnumerable<IncomingIntervalModel> intervals, bool abandonRateSupported)
 		{
 			var summary = new IntradayIncomingSummary();
-			if (intervals.Any())
+			var intervalsWithTime = intervals.Select(x => new
 			{
-				int latestQueueStatsIntervalId = -1;
-				foreach (var interval in intervals)
+				x.CalculatedCalls,
+				x.HandleTime,
+				x.SpeedOfAnswer,
+				x.AnsweredCalls,
+				x.AnsweredCallsWithinSL,
+				x.AbandonedCalls,
+				x.ForecastedCalls,
+				x.ForecastedHandleTime,
+				IntervalDateTime = x.IntervalDate.Date.AddMinutes(x.IntervalId * _intervalLengthFetcher.IntervalLength)
+			});
+			if (intervalsWithTime.Any())
+			{
+				DateTime latestQueueStatsDateTime = new DateTime();
+				foreach (var interval in intervalsWithTime)
 				{
 					summary.CalculatedCalls += interval.CalculatedCalls ?? 0;
 					summary.HandleTime += interval.HandleTime ?? 0;
@@ -80,11 +92,11 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 
 					if (interval.CalculatedCalls.HasValue)
 					{
-						latestQueueStatsIntervalId = interval.IntervalId;
+						latestQueueStatsDateTime = interval.IntervalDateTime;
 					}
 				}
 
-				foreach (var interval in intervals.Where(interval => interval.IntervalId <= latestQueueStatsIntervalId))
+				foreach (var interval in intervalsWithTime.Where(interval => interval.IntervalDateTime <= latestQueueStatsDateTime))
 				{
 					summary.ForecastedCalls += interval.ForecastedCalls;
 					summary.ForecastedHandleTime += interval.ForecastedHandleTime;
