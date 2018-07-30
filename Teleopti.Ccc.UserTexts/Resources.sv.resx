@@ -15682,4 +15682,13 @@ Applikationen kommer nu att stängas. </value>
   <data name="PreviewTheNewForecasts" xml:space="preserve">
     <value>Ta en förhandstitt på det nya Prognos-verktyget!</value>
   </data>
+  <data name="WithAbsence" xml:space="preserve">
+    <value>med frånvaro</value>
+  </data>
+  <data name="WithOvertime" xml:space="preserve">
+    <value>med övertid</value>
+  </data>
+  <data name="ActiveSelection" xml:space="preserve">
+    <value>Valda</value>
+  </data>
 </root>
