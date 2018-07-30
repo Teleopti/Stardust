@@ -3,12 +3,14 @@ using System.Web.Http.ModelBinding;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Schedule.DaySchedule;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Schedule.WeekSchedule;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
@@ -19,18 +21,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	public class ScheduleApiController : ApiController
 	{
 		private readonly IScheduleViewModelFactory _scheduleViewModelFactory;
+		private readonly IScheduleDayViewModelFactory _scheduleDayViewModelFactory;
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
 		private readonly IIntradayScheduleEdgeTimeCalculator _intradayScheduleEdgeTimeCalculator;
 		private readonly IPushMessageProvider _pushMessageProvider;
 
-		public ScheduleApiController(IScheduleViewModelFactory scheduleViewModelFactory, INow now, IUserTimeZone timeZone, IIntradayScheduleEdgeTimeCalculator intradayScheduleEdgeTimeCalculator, IPushMessageProvider pushMessageProvider)
+		public ScheduleApiController(IScheduleViewModelFactory scheduleViewModelFactory, INow now, IUserTimeZone timeZone, IIntradayScheduleEdgeTimeCalculator intradayScheduleEdgeTimeCalculator, IPushMessageProvider pushMessageProvider, IScheduleDayViewModelFactory scheduleDayViewModelFactory)
 		{
 			_scheduleViewModelFactory = scheduleViewModelFactory;
 			_now = now;
 			_timeZone = timeZone;
 			_intradayScheduleEdgeTimeCalculator = intradayScheduleEdgeTimeCalculator;
 			_pushMessageProvider = pushMessageProvider;
+			_scheduleDayViewModelFactory = scheduleDayViewModelFactory;
 		}
 
 		[UnitOfWork, Route("api/Schedule/GetIntradayScheduleEdgeTime"), HttpGet]
@@ -50,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			var nowForUser = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
 			var showForDate = date ?? new DateOnly(nowForUser.Date);
 			
-			return _scheduleViewModelFactory.CreateDayViewModel(showForDate, staffingPossiblityType);
+			return _scheduleDayViewModelFactory.CreateDayViewModel(showForDate, staffingPossiblityType);
 		}
 
 		[UnitOfWork, Route("api/Schedule/GetUnreadMessageCount"), HttpGet]

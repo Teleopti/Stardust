@@ -9,40 +9,39 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 {
 	public class IntradayScheduleEdgeTimeCalculator : IIntradayScheduleEdgeTimeCalculator
 	{
-		private readonly IWeekScheduleDomainDataProvider _weekScheduleDomainDataProvider;
+		private readonly IDayScheduleDomainDataProvider _dayScheduleDomainDataProvider;
 		private readonly IUserTimeZone _timeZone;
 		private readonly INow _now;
 
-
-		public IntradayScheduleEdgeTimeCalculator(IWeekScheduleDomainDataProvider weekScheduleDomainDataProvider, IUserTimeZone timeZone, INow now)
+		public IntradayScheduleEdgeTimeCalculator(IDayScheduleDomainDataProvider dayScheduleDomainDataProvider, IUserTimeZone timeZone, INow now)
 		{
-			_weekScheduleDomainDataProvider = weekScheduleDomainDataProvider;
+			_dayScheduleDomainDataProvider = dayScheduleDomainDataProvider;
 			_timeZone = timeZone;
 			_now = now;
 		}
 
 		public DateTime GetStartTime(DateOnly date)
 		{
-			var daySchedule = _weekScheduleDomainDataProvider.GetDaySchedule(date);
+			var daySchedule = _dayScheduleDomainDataProvider.GetDaySchedule(date);
 
-			if (!daySchedule.ScheduleDay.Projection.HasLayers)
+			if (!daySchedule.Projection.HasLayers)
 			{
 				return TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime().AddHours(1), _timeZone.TimeZone());
 			}
 
-			return TimeZoneHelper.ConvertFromUtc(daySchedule.ScheduleDay.Projection.First().Period.StartDateTime, _timeZone.TimeZone());
+			return TimeZoneHelper.ConvertFromUtc(daySchedule.Projection.First().Period.StartDateTime, _timeZone.TimeZone());
 		}
 
 		public DateTime GetEndTime(DateOnly date)
 		{
-			var daySchedule = _weekScheduleDomainDataProvider.GetDaySchedule(date);
+			var daySchedule = _dayScheduleDomainDataProvider.GetDaySchedule(date);
 
-			if (!daySchedule.ScheduleDay.Projection.HasLayers)
+			if (!daySchedule.Projection.HasLayers)
 			{
 				return TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime().AddHours(1), _timeZone.TimeZone());
 			}
 
-			return TimeZoneHelper.ConvertFromUtc(daySchedule.ScheduleDay.Projection.Last().Period.EndDateTime, _timeZone.TimeZone());
+			return TimeZoneHelper.ConvertFromUtc(daySchedule.Projection.Last().Period.EndDateTime, _timeZone.TimeZone());
 		}
 
 		public IntradayScheduleEdgeTime GetSchedulePeriodForCurrentUser(DateOnly date)

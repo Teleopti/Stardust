@@ -21,15 +21,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		public bool AsmEnabled { get; set; }
 	}
 
-	public class DayScheduleDomainData : BaseScheduleDomainData
-	{
-		public WeekScheduleDayDomainData ScheduleDay { get; set; }
-		public bool IsCurrentDay { get; set; }
-
-		public int UnReadMessageCount { get; set; }
-		public bool ShiftTradeRequestPermission { get; set; }
-	}
-
 	public class WeekScheduleDomainData : BaseScheduleDomainData
 	{
 		public IEnumerable<WeekScheduleDayDomainData> Days { get; set; }

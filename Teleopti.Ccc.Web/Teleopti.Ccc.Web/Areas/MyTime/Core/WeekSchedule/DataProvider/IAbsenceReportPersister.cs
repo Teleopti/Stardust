@@ -1,4 +1,4 @@
-﻿using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
+﻿using Teleopti.Ccc.Web.Areas.MyTime.Models.Schedule.WeekSchedule;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 {

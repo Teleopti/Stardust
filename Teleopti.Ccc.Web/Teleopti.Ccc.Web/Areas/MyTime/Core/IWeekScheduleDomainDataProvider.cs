@@ -5,7 +5,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 {
 	public interface IWeekScheduleDomainDataProvider
 	{
-		DayScheduleDomainData GetDaySchedule(DateOnly date, bool allowCrossNight = false, bool loadSelectedDateScheduleOnly = false);
 		WeekScheduleDomainData GetWeekSchedule(DateOnly date);
 	}
 }

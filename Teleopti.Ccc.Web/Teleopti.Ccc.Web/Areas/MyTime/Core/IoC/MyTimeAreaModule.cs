@@ -52,6 +52,9 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker;
 using Teleopti.Ccc.Web.Core;
 using Module = Autofac.Module;
 using Teleopti.Ccc.Domain.Notification;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.ViewModelFactory;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 {
@@ -186,6 +189,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<PreferenceAndScheduleDayViewModelMapper>().SingleInstance();
 			builder.RegisterType<MonthScheduleViewModelMapper>().SingleInstance();
 			builder.RegisterType<WeekScheduleViewModelMapper>().SingleInstance();
+			builder.RegisterType<DayScheduleViewModelMapper>().SingleInstance();
 			builder.RegisterType<ExtendedPreferenceTemplateMapper>().SingleInstance();
 			builder.RegisterType<TextRequestFormMapper>().SingleInstance();
 			builder.RegisterType<AbsenceRequestFormMapper>().SingleInstance();
@@ -240,6 +244,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 		private void registerScheduleTypes(ContainerBuilder builder)
 		{
 			builder.RegisterType<ScheduleViewModelFactory>().As<IScheduleViewModelFactory>();
+			builder.RegisterType<ScheduleDayViewModelFactory>().As<IScheduleDayViewModelFactory>();
 			builder.RegisterType<HeaderViewModelFactory>().As<IHeaderViewModelFactory>();
 			builder.RegisterType<PeriodViewModelFactory>().As<IPeriodViewModelFactory>();
 			builder.RegisterType<PeriodSelectionViewModelFactory>().As<IPeriodSelectionViewModelFactory>();
@@ -248,9 +253,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<OvertimeAvailabilityPersister>().As<IOvertimeAvailabilityPersister>();
 			builder.RegisterType<AbsenceReportPersister>().As<IAbsenceReportPersister>();
 			builder.RegisterType<WeekScheduleDomainDataProvider>().As<IWeekScheduleDomainDataProvider>().SingleInstance();
+			builder.RegisterType<DayScheduleDomainDataProvider>().As<IDayScheduleDomainDataProvider>().SingleInstance();
 			builder.RegisterType<MonthScheduleDomainDataProvider>().As<IMonthScheduleDomainDataProvider>().SingleInstance();
 			builder.RegisterType<StaffingPossibilityViewModelFactory>().As<IStaffingPossibilityViewModelFactory>().SingleInstance();
-			builder.RegisterType<ScheduleMinMaxTimeCalculator>().As<IScheduleMinMaxTimeCalculator>().SingleInstance();
+			builder.RegisterType<ScheduleWeekMinMaxTimeCalculator>().As<IScheduleWeekMinMaxTimeCalculator>().SingleInstance();
+			builder.RegisterType<ScheduleDayMinMaxTimeCalculator>().As<IScheduleDayMinMaxTimeCalculator>().SingleInstance();
 			builder.RegisterType<SiteOpenHourProvider>().As<ISiteOpenHourProvider>().SingleInstance();
 			builder.RegisterType<ScheduledSkillOpenHourProvider>().As<IScheduledSkillOpenHourProvider>().SingleInstance();
 
