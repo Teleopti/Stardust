@@ -60,7 +60,8 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 				{
 					var intervalTime = x.IntervalDate.AddMinutes(x.IntervalId * intervalLength);
 					return (intervalTime >= fromTimeInUTC && intervalTime < toTimeInUTC);
-				});
+				})
+				.OrderBy(y => y.IntervalId);
 			return selected;
 		}
 		public IntradayIncomingSummary GenerateStatisticsSummary(IEnumerable<IncomingIntervalModel> intervals, bool abandonRateSupported)
