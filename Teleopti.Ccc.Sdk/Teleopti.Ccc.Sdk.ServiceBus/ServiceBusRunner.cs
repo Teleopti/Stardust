@@ -150,6 +150,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			var pingToManagerSeconds = _configReader.ReadValue("pingToManagerSeconds", 120);
 			// if changing this, also change in StardustServerStarter AllowedNodeDownTimeSeconds = 360
 			var sendDetailsToManagerMilliSeconds = _configReader.ReadValue("sendDetailsToManagerMilliSeconds", 2000);
+			var enableGC = _configReader.ReadValue("EnableGc", true);
 
 			var fixedNodeIp = _configReader.ReadValue("FixedNodeIp", "");
 
@@ -163,7 +164,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					port,
 					nodeName,
 					pingToManagerSeconds,
-					sendDetailsToManagerMilliSeconds
+					sendDetailsToManagerMilliSeconds, enableGC
 				);
 			}
 			else
@@ -175,7 +176,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					nodeName,
 					pingToManagerSeconds,
 					sendDetailsToManagerMilliSeconds,
-					IPAddress.Parse(fixedNodeIp)
+					IPAddress.Parse(fixedNodeIp), enableGC
 				);
 			}
 
