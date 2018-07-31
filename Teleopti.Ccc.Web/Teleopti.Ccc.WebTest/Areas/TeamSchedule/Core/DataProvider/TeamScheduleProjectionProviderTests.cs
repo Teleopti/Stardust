@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var canViewUnpublished = false;
 			var includeNote = false;
 
-			var viewModel = Target.MakeViewModel(person, date, scheduleDay, canViewConfidential, canViewUnpublished, includeNote,
+			var viewModel = Target.MakeViewModel(person, date, scheduleDay, null, canViewConfidential, canViewUnpublished, includeNote,
 				CommonAgentNameProvider.CommonAgentNameSettings);
 
 			viewModel.PersonId.Should().Be.EqualTo(person.Id.Value.ToString());
@@ -123,10 +123,10 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var canViewUnpublished = false;
 			var includeNote = false;
 
-			var viewModel = Target.MakeViewModel(person, date, scheduleDay, canViewConfidential, canViewUnpublished, includeNote,
+			var viewModel = Target.MakeViewModel(person, date, scheduleDay, null, canViewConfidential, canViewUnpublished, includeNote,
 				CommonAgentNameProvider.CommonAgentNameSettings);
 
-			var viewModelForPerson2 = Target.MakeViewModel(person2, date, scheduleDayForPerson2, canViewConfidential, canViewUnpublished, includeNote,
+			var viewModelForPerson2 = Target.MakeViewModel(person2, date, scheduleDayForPerson2, null, canViewConfidential, canViewUnpublished, includeNote,
 				CommonAgentNameProvider.CommonAgentNameSettings);
 
 			viewModel.IsProtected.Should().Be(true);
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var canViewUnpublished = false;
 			var includeNote = false;
 
-			var viewModel = Target.MakeViewModel(person, date, scheduleDay, canViewConfidential, canViewUnpublished, includeNote,
+			var viewModel = Target.MakeViewModel(person, date, scheduleDay, null, canViewConfidential, canViewUnpublished, includeNote,
 				CommonAgentNameProvider.CommonAgentNameSettings);
 
 			viewModel.PersonId.Should().Be.EqualTo(person.Id.Value.ToString());
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var canViewUnpublished = false;
 			var includeNote = false;
 
-			var viewModel = Target.MakeViewModel(person, date, scheduleDay, canViewConfidential, canViewUnpublished, includeNote,
+			var viewModel = Target.MakeViewModel(person, date, scheduleDay, null, canViewConfidential, canViewUnpublished, includeNote,
 				CommonAgentNameProvider.CommonAgentNameSettings);
 
 			viewModel.PersonId.Should().Be.EqualTo(person.Id.Value.ToString());
@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var note = new PublicNote(person, date, scenario, "Oh my God");
 			scheduleDay.Add(note);
 
-			var viewModel = Target.MakeViewModel(person, date, scheduleDay, false, false, true,
+			var viewModel = Target.MakeViewModel(person, date, scheduleDay, null, false, false, true,
 				CommonAgentNameProvider.CommonAgentNameSettings);
 
 			viewModel.PublicNotes.Should().Be.EqualTo("Oh my God");
@@ -339,9 +339,10 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 
 		}
 
-		
+
 		[Test]
-		public void ShouldGetProjectionWithTopShiftLayerIdWhenAnTopLayerIntersectAnotherSameTypePersonalActivity() {
+		public void ShouldGetProjectionWithTopShiftLayerIdWhenAnTopLayerIntersectAnotherSameTypePersonalActivity()
+		{
 
 			var date = new DateTime(2018, 07, 31, 0, 0, 0, DateTimeKind.Utc);
 			var person1 = PersonFactory.CreatePersonWithGuid("agent", "1");
@@ -987,7 +988,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			phoneActivity.InWorkTime = true;
 			assignment1Person1.AddActivity(phoneActivity, phoneActivityPeriod);
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day", Color.Green.ToString());
-			
+
 			assignment1Person1.SetShiftCategory(shiftCategory);
 
 			scheduleDay.Add(assignment1Person1);

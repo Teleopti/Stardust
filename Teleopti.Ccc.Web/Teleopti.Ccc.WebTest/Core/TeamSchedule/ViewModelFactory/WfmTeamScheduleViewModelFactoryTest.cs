@@ -170,6 +170,186 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		}
 
 		[Test, SetCulture("zh-CN")]
+		public void ShouldReturnUnderlyingScheduleSummaryForPartTimePersonalAbsencesIfItNotIntersectAnyShift()
+		{
+			var personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes").WithId();
+			var scenario = CurrentScenario.Has("Default");
+			var date = new DateOnly(2018, 04, 03);
+			var team = TeamFactory.CreateSimpleTeam().WithId();
+			PersonRepo.Has(personInUtc);
+			PersonFinderReadOnlyRepository.Has(personInUtc);
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc, scenario, new DateTimePeriod(new DateTime(2018, 04, 03, 8, 0, 0, DateTimeKind.Utc), new DateTime(2018, 04, 03, 17, 0, 0, DateTimeKind.Utc)));
+			PersonAssignmentRepository.Has(pa);
+
+			var absencePeriod = new DateTimePeriod(new DateTime(2018, 04, 03, 6, 0, 0, DateTimeKind.Utc), new DateTime(2018, 04, 03, 7, 0, 0, DateTimeKind.Utc));
+			var absence = AbsenceFactory.CreateAbsence("absence");
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario, absencePeriod, absence);
+			PersonAbsenceRepository.Has(personAbsence);
+
+			var viewModel = Target.CreateViewModel(new SearchDaySchedulesInput
+			{
+				DateInUserTimeZone = date,
+				GroupIds = new[] { team.Id.Value },
+				CurrentPageIndex = 1,
+				PageSize = 20,
+				IsOnlyAbsences = false
+
+			});
+			var personalAbsence = viewModel.Schedules.FirstOrDefault().UnderlyingScheduleSummary.PersonPartTimeAbsences.Single();
+			personalAbsence.Description.Should().Be.EqualTo("absence");
+			personalAbsence.Start.Should().Be.EqualTo("2018-04-03 06:00");
+			personalAbsence.End.Should().Be.EqualTo("2018-04-03 07:00");
+		}
+
+		[Test, SetCulture("zh-CN")]
+		public void ShouldNotReturnUnderlyingScheduleSummaryIfFullDayAbsenceOnYesterdayShiftThatIsOvernightShift()
+		{
+			var personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes").WithId();
+			var scenario = CurrentScenario.Has("Default");
+			var date = new DateOnly(2018, 7, 24);
+			var team = TeamFactory.CreateSimpleTeam().WithId();
+
+			PersonRepo.Has(personInUtc);
+			PersonFinderReadOnlyRepository.Has(personInUtc);
+
+			var period = new DateTimePeriod(new DateTime(2018, 07, 23, 20, 0, 0, DateTimeKind.Utc), new DateTime(2018, 07, 24, 2, 0, 0, DateTimeKind.Utc));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc, scenario, period);
+			PersonAssignmentRepository.Has(pa);
+
+
+			var absence = AbsenceFactory.CreateAbsence("absence");
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario, period, absence);
+			PersonAbsenceRepository.Has(personAbsence);
+
+			var periodToday = new DateTimePeriod(new DateTime(2018, 07, 24, 8, 0, 0, DateTimeKind.Utc), new DateTime(2018, 07, 24, 16, 0, 0, DateTimeKind.Utc));
+			var paToday = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc, scenario, periodToday);
+			PersonAssignmentRepository.Has(paToday);
+
+			var viewModel = Target.CreateViewModel(new SearchDaySchedulesInput
+			{
+				DateInUserTimeZone = date,
+				GroupIds = new[] { team.Id.Value },
+				CurrentPageIndex = 1,
+				PageSize = 20,
+				IsOnlyAbsences = false
+			});
+			viewModel.Schedules.FirstOrDefault().UnderlyingScheduleSummary.Should().Be.Null();
+		}
+
+
+		[Test, SetCulture("zh-CN")]
+		public void ShouldReturnUnderlyingScheduleSummaryForYesterdayWhenIntradayAbsenceOnlyIntersectWithYesterdaySchedule()
+		{
+			var personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes").WithId();
+			var scenario = CurrentScenario.Has("Default");
+			var date = new DateOnly(2018, 7, 24);
+			var team = TeamFactory.CreateSimpleTeam().WithId();
+
+			PersonRepo.Has(personInUtc);
+			PersonFinderReadOnlyRepository.Has(personInUtc);
+
+			var period = new DateTimePeriod(new DateTime(2018, 07, 23, 20, 0, 0, DateTimeKind.Utc), new DateTime(2018, 07, 24, 2, 0, 0, DateTimeKind.Utc));
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc, scenario, period);
+			PersonAssignmentRepository.Has(pa);
+
+			var absencePeriod = new DateTimePeriod(new DateTime(2018, 07, 24, 1, 0, 0, DateTimeKind.Utc), new DateTime(2018, 07, 24, 3, 0, 0, DateTimeKind.Utc));
+			var absence = AbsenceFactory.CreateAbsence("absence");
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario, absencePeriod, absence);
+			PersonAbsenceRepository.Has(personAbsence);
+
+			var periodToday = new DateTimePeriod(new DateTime(2018, 07, 24, 8, 0, 0, DateTimeKind.Utc), new DateTime(2018, 07, 24, 16, 0, 0, DateTimeKind.Utc));
+			var paToday = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc, scenario, periodToday);
+			PersonAssignmentRepository.Has(paToday);
+
+			var viewModel = Target.CreateViewModel(new SearchDaySchedulesInput
+			{
+				DateInUserTimeZone = date,
+				GroupIds = new[] { team.Id.Value },
+				CurrentPageIndex = 1,
+				PageSize = 20,
+				IsOnlyAbsences = false
+			});
+			viewModel.Schedules.FirstOrDefault().UnderlyingScheduleSummary.Should().Be.Null();
+		}
+
+		[Test, SetCulture("zh-CN")]
+		public void ShouldReturnUnderlyingScheduleSummaryIfPartTimeAbsenceBelongsToYesterdayOTFullDayAbsenceAndIntersectShiftForToday()
+		{
+			var personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes").WithId();
+			var scenario = CurrentScenario.Has("Default");
+			var date = new DateOnly(2018, 7, 24);
+			var team = TeamFactory.CreateSimpleTeam().WithId();
+
+			PersonRepo.Has(personInUtc);
+			PersonFinderReadOnlyRepository.Has(personInUtc);
+
+			var period = new DateTimePeriod(new DateTime(2018, 07, 23, 8, 0, 0, DateTimeKind.Utc), new DateTime(2018, 07, 23, 10, 0, 0, DateTimeKind.Utc));
+			var pa = PersonAssignmentFactory.CreateEmptyAssignment(personInUtc, scenario, period);
+			PersonAssignmentRepository.Has(pa);
+
+			var periodToday = new DateTimePeriod(new DateTime(2018, 07, 24, 8, 0, 0, DateTimeKind.Utc), new DateTime(2018, 07, 24, 16, 0, 0, DateTimeKind.Utc));
+			var paToday = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc, scenario, periodToday);
+			PersonAssignmentRepository.Has(paToday);
+
+			var fullDayAbsencePeriod = new DateTimePeriod(new DateTime(2018, 07, 23, 8, 0, 0, DateTimeKind.Utc), new DateTime(2018, 07, 24, 10, 0, 0, DateTimeKind.Utc));
+			var absence = AbsenceFactory.CreateAbsence("absence");
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario, fullDayAbsencePeriod, absence);
+			PersonAbsenceRepository.Has(personAbsence);
+
+			var viewModel = Target.CreateViewModel(new SearchDaySchedulesInput
+			{
+				DateInUserTimeZone = date,
+				GroupIds = new[] { team.Id.Value },
+				CurrentPageIndex = 1,
+				PageSize = 20,
+				IsOnlyAbsences = false
+
+			});
+			var partTimeAbsence = viewModel.Schedules.FirstOrDefault().UnderlyingScheduleSummary.PersonPartTimeAbsences.Single();
+			partTimeAbsence.Description.Should().Be.EqualTo("absence");
+			partTimeAbsence.Start.Should().Be.EqualTo("2018-07-23 08:00");
+			partTimeAbsence.End.Should().Be.EqualTo("2018-07-24 10:00");
+		}
+
+		[Test, SetCulture("zh-CN")]
+		public void ShouldReturnUnderlyingScheduleSummaryIfPartTimeAbsencePeriodExceedPersonAssignmentPeriod()
+		{
+			var personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes").WithId();
+			var scenario = CurrentScenario.Has("Default");
+			var date = new DateOnly(2018, 7, 24);
+			var team = TeamFactory.CreateSimpleTeam().WithId();
+
+			PersonRepo.Has(personInUtc);
+			PersonFinderReadOnlyRepository.Has(personInUtc);
+			
+
+			var periodToday = new DateTimePeriod(new DateTime(2018, 07, 24, 8, 0, 0, DateTimeKind.Utc), new DateTime(2018, 07, 24, 16, 0, 0, DateTimeKind.Utc));
+			var paToday = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc, scenario, periodToday);
+			PersonAssignmentRepository.Has(paToday);
+
+			var absencePeriod = new DateTimePeriod(new DateTime(2018, 07, 24, 15, 0, 0, DateTimeKind.Utc), new DateTime(2018, 07, 24, 17, 0, 0, DateTimeKind.Utc));
+			var absence = AbsenceFactory.CreateAbsence("absence");
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc, scenario, absencePeriod, absence);
+			PersonAbsenceRepository.Has(personAbsence);
+
+			var viewModel = Target.CreateViewModel(new SearchDaySchedulesInput
+			{
+				DateInUserTimeZone = date,
+				GroupIds = new[] { team.Id.Value },
+				CurrentPageIndex = 1,
+				PageSize = 20,
+				IsOnlyAbsences = false
+
+			});
+			var partTimeAbsence = viewModel.Schedules.FirstOrDefault().UnderlyingScheduleSummary.PersonPartTimeAbsences.Single();
+			partTimeAbsence.Description.Should().Be.EqualTo("absence");
+			partTimeAbsence.Start.Should().Be.EqualTo("2018-07-24 15:00");
+			partTimeAbsence.End.Should().Be.EqualTo("2018-07-24 17:00");
+		}
+
+
+		[Test, SetCulture("zh-CN")]
 		public void ShouldNotReturnUnderlyingScheduleSummaryForFullDayAbsence()
 		{
 			var personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes").WithId();
@@ -436,7 +616,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public void ShouldReturnPersonWhoHasShiftAndFullDayAbsenceWhenFilterOnOnlyShowPersonWithAbsencesIsOn()
 		{
 			var personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes").WithId();
-			
+
 			var scenario = CurrentScenario.Has("Default");
 			var date = new DateOnly(2018, 04, 03);
 			var site = SiteFactory.CreateSiteWithOneTeam().WithId();
@@ -470,7 +650,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public void ShouldReturnPersonWhoHasNoShiftButFullDayAbsenceWhenFilterOnOnlyShowPersonWithAbsencesIsOn()
 		{
 			var personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes").WithId();
-			
+
 			var scenario = CurrentScenario.Has("Default");
 			var date = new DateOnly(2018, 04, 03);
 			var site = SiteFactory.CreateSiteWithOneTeam().WithId();
@@ -501,7 +681,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public void ShouldReturnPersonWhoHasShiftAndIntraDayAbsenceWhenFilterOnOnlyShowPersonWithAbsencesIsOn()
 		{
 			var personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes").WithId();
-			
+
 			var scenario = CurrentScenario.Has("Default");
 			var date = new DateOnly(2018, 04, 03);
 			var site = SiteFactory.CreateSiteWithOneTeam().WithId();
@@ -1849,7 +2029,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			first.DaySchedules.Count().Should().Be(7);
 			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019, 12, 30));
 			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020, 1, 5));
-			
+
 		}
 
 		[Test, SetCulture("en-US")]

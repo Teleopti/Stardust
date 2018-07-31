@@ -40,11 +40,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			_personNameProvider = personNameProvider;
 		}
 
-		public GroupScheduleShiftViewModel MakeViewModel(IPerson person, DateOnly date, IScheduleDay scheduleDay,
-			bool canViewConfidential, bool canViewUnpublished, bool includeNote, ICommonNameDescriptionSetting agentNameSetting)
+		public GroupScheduleShiftViewModel MakeViewModel(IPerson person, DateOnly date, IScheduleDay scheduleDay, IScheduleDay previousScheduleDay,
+			bool canViewConfidential, bool canViewUnpublished, bool isScheduleDate, ICommonNameDescriptionSetting agentNameSetting)
 		{
 			var personPeriod = person.Period(date);
-
 			var vm = new GroupScheduleShiftViewModel
 			{
 				PersonId = person.Id.GetValueOrDefault().ToString(),
@@ -56,86 +55,96 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				 personPeriod.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Count > 0)
 					? personPeriod.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Select(s => s.Id.GetValueOrDefault())
 						.ToList()
-					: null
+					: null,
+				Timezone = new TimeZoneViewModel
+				{
+					IanaId = _ianaTimeZoneProvider.WindowsToIana(person.PermissionInformation.DefaultTimeZone().Id),
+					DisplayName = person.PermissionInformation.DefaultTimeZone().DisplayName
+				}
 			};
 
-			var isPublished = false;
-
-			if (scheduleDay != null)
+			var isPublished = isSchedulePublished(scheduleDay.DateOnlyAsPeriod.DateOnly, person);
+			if (isPublished || canViewUnpublished)
 			{
-				isPublished = isSchedulePublished(scheduleDay.DateOnlyAsPeriod.DateOnly, person);
-				if (isPublished || canViewUnpublished)
-				{
-					vm = Projection(scheduleDay, canViewConfidential, agentNameSetting);
+				vm = Projection(scheduleDay, canViewConfidential, agentNameSetting);
+				if (isScheduleDate) {
+					vm.UnderlyingScheduleSummary = getUnderlyingScheduleSummary(scheduleDay, previousScheduleDay, canViewConfidential);
 				}
-
-				if (includeNote)
-				{
-					var note = scheduleDay.NoteCollection().FirstOrDefault();
-					vm.InternalNotes = note != null
-						? note.GetScheduleNote(new NormalizeText())
-						: string.Empty;
-
-					var publicNotes = scheduleDay.PublicNoteCollection().FirstOrDefault();
-					vm.PublicNotes = publicNotes != null ? publicNotes.GetScheduleNote(new NormalizeText()) : String.Empty;
-
-				}
-
 			}
 
-			var pa = scheduleDay.PersonAssignment();
-			var personalActivities = pa?.PersonalActivities();
+			if (isScheduleDate)
+			{
+				var note = scheduleDay.NoteCollection().FirstOrDefault();
+				vm.InternalNotes = note?.GetScheduleNote(new NormalizeText()) ?? string.Empty;
 
+				var publicNote = scheduleDay.PublicNoteCollection().FirstOrDefault();
+				vm.PublicNotes = publicNote?.GetScheduleNote(new NormalizeText()) ?? String.Empty;
+			}
+			
+			var pa = scheduleDay.PersonAssignment();
+			vm.IsProtected = pa?.Person.PersonWriteProtection.IsWriteProtected(date) ?? false;
+			return vm;
+		}
+
+		private UnderlyingScheduleSummary getUnderlyingScheduleSummary(IScheduleDay scheduleDay, IScheduleDay previousScheduleDay, bool canViewConfidential)
+		{
+			var timezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var pa = scheduleDay.PersonAssignment();
 			var hasPartTimeAbsence = !scheduleDay.IsFullDayAbsence() && (scheduleDay.PersonAbsenceCollection()?.Any() ?? false);
-			var hasPersonalActivities = scheduleDay.PersonAssignment()?.PersonalActivities()?.Any() ?? false;
+			var hasPersonalActivities = pa?.PersonalActivities()?.Any() ?? false;
 			var hasPersonMeetings = scheduleDay.PersonMeetingCollection()?.Any() ?? false;
 
-			var hasUnderlyingSchedules = (isPublished || canViewUnpublished) &&
-				(hasPartTimeAbsence
-				|| hasPersonalActivities
-				|| hasPersonMeetings);
+			var underlyingSummary = new UnderlyingScheduleSummary();
+
+			if (hasPartTimeAbsence)
+			{
+				var parttimeAbsences = scheduleDay.PersonAbsenceCollection()
+					.Where(personAbsence =>
+					{
+						var intersectPeriodForYesterday = previousScheduleDay?.PersonAssignment()?.Period.Intersection(personAbsence.Period);
+						var intersectPeriod = pa?.Period.Intersection(personAbsence.Period);
+						var isBelongsToYesterday = intersectPeriodForYesterday != null && scheduleDay.Period.Intersect(personAbsence.Period) && intersectPeriod == null;
+						return !isBelongsToYesterday;
+					});
+				hasPartTimeAbsence = parttimeAbsences.Any();
+
+				underlyingSummary.PersonPartTimeAbsences = hasPartTimeAbsence ? parttimeAbsences
+					.Select(personAbsence => new Summary
+					{
+						Description = !canViewConfidential && (personAbsence.Layer.Payload as IAbsence).Confidential ? ConfidentialPayloadValues.Description.Name : personAbsence.Layer.Payload.Description.Name,
+						Start = TimeZoneInfo.ConvertTimeFromUtc(personAbsence.Period.StartDateTime, timezone).ToFixedDateTimeFormat(),
+						End = TimeZoneInfo.ConvertTimeFromUtc(personAbsence.Period.EndDateTime, timezone).ToFixedDateTimeFormat()
+					})
+					.ToArray() : null;
+			}
+
+			underlyingSummary.PersonalActivities = hasPersonalActivities ? pa.PersonalActivities()
+				.Select(personalActivity => new Summary
+				{
+					Description = personalActivity.Payload.Description.Name,
+					Start = TimeZoneInfo.ConvertTimeFromUtc(personalActivity.Period.StartDateTime, timezone).ToFixedDateTimeFormat(),
+					End = TimeZoneInfo.ConvertTimeFromUtc(personalActivity.Period.EndDateTime, timezone).ToFixedDateTimeFormat()
+				})
+				.ToArray() : null;
+
+			underlyingSummary.PersonMeetings = hasPersonMeetings ? scheduleDay.PersonMeetingCollection()
+				.Select(personMeeting => new Summary
+				{
+					Description = personMeeting.BelongsToMeeting.GetSubject(new NoFormatting()),
+					Start = TimeZoneInfo.ConvertTimeFromUtc(personMeeting.Period.StartDateTime, timezone).ToFixedDateTimeFormat(),
+					End = TimeZoneInfo.ConvertTimeFromUtc(personMeeting.Period.EndDateTime, timezone).ToFixedDateTimeFormat()
+				})
+				.ToArray() : null;
+
+			var hasUnderlyingSchedules = hasPartTimeAbsence
+										|| hasPersonMeetings
+										|| hasPersonalActivities;
 
 			if (hasUnderlyingSchedules)
 			{
-				var loggedOnUser = _loggedOnUser.CurrentUser();
-				var timezone = loggedOnUser.PermissionInformation.DefaultTimeZone();
-				vm.UnderlyingScheduleSummary = new UnderlyingScheduleSummary
-				{
-					PersonalActivities = hasPersonalActivities ? scheduleDay.PersonAssignment().PersonalActivities().Select(personalActivity =>
-						 new Summary
-						 {
-							 Description = personalActivity.Payload.Description.Name,
-							 Start = TimeZoneInfo.ConvertTimeFromUtc(personalActivity.Period.StartDateTime, timezone).ToFixedDateTimeFormat(),
-							 End = TimeZoneInfo.ConvertTimeFromUtc(personalActivity.Period.EndDateTime, timezone).ToFixedDateTimeFormat()
-						 }).ToArray() : null,
-					PersonMeetings = hasPersonMeetings ? scheduleDay.PersonMeetingCollection().Select(personMeeting =>
-						new Summary
-						{
-							Description = personMeeting.BelongsToMeeting.GetSubject(new NoFormatting()),
-							Start = TimeZoneInfo.ConvertTimeFromUtc(personMeeting.Period.StartDateTime, timezone).ToFixedDateTimeFormat(),
-							End = TimeZoneInfo.ConvertTimeFromUtc(personMeeting.Period.EndDateTime, timezone).ToFixedDateTimeFormat()
-						}
-					).ToArray() : null,
-					PersonPartTimeAbsences = hasPartTimeAbsence ? scheduleDay.PersonAbsenceCollection().Select(personAbsence =>
-					{
-						var isAbsenceConfidential = (personAbsence.Layer.Payload as IAbsence).Confidential;
-						return new Summary
-						{
-							Description = !canViewConfidential && isAbsenceConfidential ? ConfidentialPayloadValues.Description.Name : personAbsence.Layer.Payload.Description.Name,
-							Start = TimeZoneInfo.ConvertTimeFromUtc(personAbsence.Period.StartDateTime, timezone).ToFixedDateTimeFormat(),
-							End = TimeZoneInfo.ConvertTimeFromUtc(personAbsence.Period.EndDateTime, timezone).ToFixedDateTimeFormat()
-						};
-					}).ToArray() : null
-				};
+				return underlyingSummary;
 			}
-			vm.Timezone = new TimeZoneViewModel
-			{
-				IanaId = _ianaTimeZoneProvider.WindowsToIana(person.PermissionInformation.DefaultTimeZone().Id),
-				DisplayName = person.PermissionInformation.DefaultTimeZone().DisplayName
-			};
-
-			vm.IsProtected = pa?.Person.PersonWriteProtection.IsWriteProtected(date) ?? false;
-			return vm;
+			return null;
 		}
 
 		public GroupScheduleShiftViewModel Projection(IScheduleDay scheduleDay, bool canViewConfidential, ICommonNameDescriptionSetting agentNameSetting)
@@ -412,7 +421,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			};
 		}
 
-		private void resetTopLayerIdIfItWasSplited(IList<GroupScheduleProjectionViewModel> projections) {
+		private void resetTopLayerIdIfItWasSplited(IList<GroupScheduleProjectionViewModel> projections)
+		{
 
 			foreach (var projection in projections)
 			{

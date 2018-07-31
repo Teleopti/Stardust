@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				list.AddRange(from date in dates
 							  let scheduleDay = personScheduleRange.ScheduledDay(date)
 							  where scheduleDay != null
-							  select _teamScheduleProjectionProvider.MakeViewModel(person, date, scheduleDay, canViewConfidential,
+							  select _teamScheduleProjectionProvider.MakeViewModel(person, date, scheduleDay, personScheduleRange.ScheduledDay(date.AddDays(-1)), canViewConfidential,
 								  canSeeUnpublishedSchedules, date == scheduleDate, agentNameSetting));
 			}
 
@@ -146,6 +146,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				Total = people.Count
 			};
 		}
+
+	
 
 		private static bool isSchedulePublished(DateOnly date, IPerson person)
 		{
@@ -201,7 +203,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					var scheduleDaysForPerson =
 						_scheduleProvider.GetScheduleForPersons(input.DateInUserTimeZone, batchPermittedPersons);
 					batchPermittedPersons =
-						scheduleDaysForPerson.Where(sd => (canSeeUnpublishedSchedules || sd.IsFullyPublished)  && sd.HasAbsenceProjection()).Select(sd => sd.Person).ToList();
+						scheduleDaysForPerson.Where(sd => (canSeeUnpublishedSchedules || sd.IsFullyPublished) && sd.HasAbsenceProjection()).Select(sd => sd.Person).ToList();
 				}
 				permittedPersons.AddRange(batchPermittedPersons);
 				if (isResultTooMany(permittedPersons))
@@ -216,7 +218,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 			var peopleCanSeeConfidentialAbsencesFor = _searchProvider.GetPermittedPersonIdList(permittedPersons, input.DateInUserTimeZone,
 					DefinedRaptorApplicationFunctionPaths.ViewConfidential).ToList();
-			
+
 
 			var scheduleDays = _scheduleProvider.GetScheduleForPersons(input.DateInUserTimeZone, permittedPersons, true).ToArray();
 			var scheduleDayLookup = scheduleDays.ToLookup(s => s.Person);
@@ -257,17 +259,23 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				var person = pair.Item1;
 				var currentScheduleDay = pair.Item2;
 				var canViewConfidential = peopleCanSeeConfidentialAbsencesFor.Contains(person.Id.GetValueOrDefault());
+				var isPreviousDayScheduled = scheduleDaysForPreviousDayLookup.Contains(person);
+				var schedulePreviousDay = isPreviousDayScheduled ? scheduleDaysForPreviousDayLookup[person].FirstOrDefault() : null;
 
-				list.Add(_teamScheduleProjectionProvider.MakeViewModel(person, input.DateInUserTimeZone, currentScheduleDay, canViewConfidential, canSeeUnpublishedSchedules, true, agentNameSetting));
-				if (scheduleDaysForPreviousDayLookup.Contains(person))
+				if (currentScheduleDay != null)
 				{
-					list.AddRange(scheduleDaysForPreviousDayLookup[person]
-						.Select(sd => _teamScheduleProjectionProvider.MakeViewModel(person, previousDay, sd, canViewConfidential, canSeeUnpublishedSchedules, false, agentNameSetting)));
+					list.Add(_teamScheduleProjectionProvider.MakeViewModel(person, input.DateInUserTimeZone, currentScheduleDay, schedulePreviousDay, canViewConfidential, canSeeUnpublishedSchedules, true, agentNameSetting));
 				}
+
+				if (schedulePreviousDay != null)
+				{
+					list.Add(_teamScheduleProjectionProvider.MakeViewModel(person, previousDay, schedulePreviousDay,
+						null, canViewConfidential, canSeeUnpublishedSchedules, false, agentNameSetting));
+				}
+
 				if (scheduleDaysForNextDayLookup.Contains(person))
 				{
-					list.AddRange(scheduleDaysForNextDayLookup[person]
-						.Select(sd => _teamScheduleProjectionProvider.MakeViewModel(person, nextDay, sd, canViewConfidential, canSeeUnpublishedSchedules, false, agentNameSetting)));
+					list.Add(_teamScheduleProjectionProvider.MakeViewModel(person, nextDay, scheduleDaysForNextDayLookup[person].First(), currentScheduleDay, canViewConfidential, canSeeUnpublishedSchedules, false, agentNameSetting));
 				}
 			}
 
