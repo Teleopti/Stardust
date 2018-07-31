@@ -24,6 +24,7 @@ namespace Stardust.Node.Timers
 		public Uri CallbackTemplateUri { get; set; }
 		public event EventHandler TrySendStatusSucceded;
 		protected readonly TimerExceptionLoggerStrategyHandler _exceptionLoggerHandler;
+		private bool _enableGc;
 
 		public TrySendStatusToManagerTimer(NodeConfiguration nodeConfiguration,
 		                                   Uri callbackTemplateUri,
@@ -32,6 +33,7 @@ namespace Stardust.Node.Timers
 		{
 			_cancellationTokenSource = new CancellationTokenSource();
 			_whoAmI = nodeConfiguration.CreateWhoIAm(Environment.MachineName);
+			_enableGc = nodeConfiguration.EnableGarbageCollection;
 			_jobDetailSender = jobDetailSender;
 			_httpSender = httpSender;
 			CallbackTemplateUri = callbackTemplateUri;
@@ -97,6 +99,8 @@ namespace Stardust.Node.Timers
 
 			Stop();
 
+			if (_enableGc)
+				GC.Collect();
 			try
 			{
 				var httpResponseMessage = await TrySendStatus(new JobQueueItemEntity

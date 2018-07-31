@@ -70,14 +70,14 @@ namespace NodeConsoleHost
 			
 			AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-
+			var enableGc = bool.Parse(ConfigurationManager.AppSettings["EnableGc"]);
 			var nodeConfig = new NodeConfiguration(
 				new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
 				Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
 				int.Parse(ConfigurationManager.AppSettings["Port"]),
 				ConfigurationManager.AppSettings["NodeName"],
 				int.Parse(ConfigurationManager.AppSettings["PingToManagerSeconds"]),
-				int.Parse(ConfigurationManager.AppSettings["SendJobDetailToManagerMilliSeconds"])
+				int.Parse(ConfigurationManager.AppSettings["SendJobDetailToManagerMilliSeconds"]),enableGc
 				);
 
 			WhoAmI = "[NODE CONSOLE HOST ( " + nodeConfig.NodeName + ", " + nodeConfig.BaseAddress + " ), " + Environment.MachineName.ToUpper() + "]";

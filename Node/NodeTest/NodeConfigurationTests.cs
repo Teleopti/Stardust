@@ -22,7 +22,7 @@ namespace NodeTest
 				14100,
 				"TestNode",
 				60,
-				2000);
+				2000,true);
 
 		    FixedIp = IPAddress.Parse("127.13.3.7");
             NodeConfigurationStaticIp = new NodeConfiguration(
@@ -32,7 +32,7 @@ namespace NodeTest
                 "TestNode",
                 60,
                 2000,
-                FixedIp);
+                FixedIp,true);
 
             UriToTest = NodeConfiguration.ManagerLocation;
 

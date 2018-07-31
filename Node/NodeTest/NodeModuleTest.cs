@@ -23,7 +23,7 @@ namespace NodeTest
 				14100,
 				"TestNode",
 				60,
-				2000);
+				2000,true);
 
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new NodeModule(nodeConfiguration));

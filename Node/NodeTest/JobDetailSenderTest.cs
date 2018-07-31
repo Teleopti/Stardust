@@ -26,7 +26,7 @@ namespace NodeTest
 				14100,
 				"TestNode",
 				60,
-				100);
+				100, true);
 			_httpSenderFake = new FakeHttpSender();
 		}
 

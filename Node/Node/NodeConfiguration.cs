@@ -7,7 +7,7 @@ namespace Stardust.Node
 {
 	public class NodeConfiguration
 	{
-		public NodeConfiguration(Uri managerLocation, Assembly handlerAssembly, int port, string nodeName, int pingToManagerSeconds, int sendDetailsToManagerMilliSeconds)
+		public NodeConfiguration(Uri managerLocation, Assembly handlerAssembly, int port, string nodeName, int pingToManagerSeconds, int sendDetailsToManagerMilliSeconds, bool enableGc)
 		{
 			BaseAddress = CreateNodeAddress(port);
 			ManagerLocation = managerLocation;
@@ -15,13 +15,14 @@ namespace Stardust.Node
 			NodeName = nodeName;
 			PingToManagerSeconds = pingToManagerSeconds;
 			SendDetailsToManagerMilliSeconds = sendDetailsToManagerMilliSeconds;
+			EnableGarbageCollection = enableGc;
 
 			ValidateParameters();
 		}
 
 	    public NodeConfiguration(Uri managerLocation, Assembly handlerAssembly, int port, string nodeName,
-	        int pingToManagerSeconds, int sendDetailsToManagerMilliSeconds, IPAddress fixedNodeIp) : this(managerLocation,
-	        handlerAssembly, port, nodeName, pingToManagerSeconds, sendDetailsToManagerMilliSeconds)
+	        int pingToManagerSeconds, int sendDetailsToManagerMilliSeconds, IPAddress fixedNodeIp, bool enableGc) : this(managerLocation,
+	        handlerAssembly, port, nodeName, pingToManagerSeconds, sendDetailsToManagerMilliSeconds, enableGc)
 	    {
 	        if (fixedNodeIp == null)
 	        {
@@ -37,6 +38,7 @@ namespace Stardust.Node
 		public Assembly HandlerAssembly { get; }
 		public double PingToManagerSeconds { get; }
 		public double SendDetailsToManagerMilliSeconds { get; }
+		public bool EnableGarbageCollection { get; set; }
 
 		private void ValidateParameters()
 		{

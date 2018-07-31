@@ -70,7 +70,7 @@ namespace NodeTest
 				14100,
 				"TestNode",
 				60,
-				2000);
+				2000,true);
 		}
 
 		private NodeConfiguration _nodeConfigurationFake;
