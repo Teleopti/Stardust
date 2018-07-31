@@ -17600,4 +17600,8 @@ The application will now exit.</value>
     <value>With Overtime</value>
     <comment>With Overtime</comment>
   </data>
+  <data name="Participate" xml:space="preserve">
+    <value>Participate</value>
+    <comment>Participate button for data-protection page</comment>
+  </data>
 </root>

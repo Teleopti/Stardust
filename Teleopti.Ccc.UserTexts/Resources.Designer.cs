@@ -24021,6 +24021,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Participate.
+        /// </summary>
+        public static string Participate {
+            get {
+                return ResourceManager.GetString("Participate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Part-Time Percentage.
         /// </summary>
         public static string PartTimePercentage {
