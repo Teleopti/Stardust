@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -599,7 +599,16 @@ namespace Teleopti.Ccc.UserTexts {
                 return ResourceManager.GetString("ActiveAgentsInUseColon", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Active selection.
+        /// </summary>
+        public static string ActiveSelection {
+            get {
+                return ResourceManager.GetString("ActiveSelection", resourceCulture);
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to Activities.
         /// </summary>
@@ -5716,11 +5725,11 @@ namespace Teleopti.Ccc.UserTexts {
                 return ResourceManager.GetString("CannotApplyThisToAgentsInADifferentTimeZone", resourceCulture);
             }
         }
-
-		/// <summary>
-		///   Looks up a localized string similar to You can not approve/deny request since you have no permission to modify restricted scenarios..
-		/// </summary>
-		public static string CanNotApproveOrDenyRequestDueToNoPermissionToModifyRestrictedScenarios {
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can not change the status of a request as you don&apos;t have the permission to modify restricted scenarios..
+        /// </summary>
+        public static string CanNotApproveOrDenyRequestDueToNoPermissionToModifyRestrictedScenarios {
             get {
                 return ResourceManager.GetString("CanNotApproveOrDenyRequestDueToNoPermissionToModifyRestrictedScenarios", resourceCulture);
             }
@@ -23999,6 +24008,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Participants {
             get {
                 return ResourceManager.GetString("Participants", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Participate.
+        /// </summary>
+        public static string Participate {
+            get {
+                return ResourceManager.GetString("Participate", resourceCulture);
             }
         }
         

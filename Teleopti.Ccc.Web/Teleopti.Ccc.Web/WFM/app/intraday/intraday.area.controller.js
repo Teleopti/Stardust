@@ -338,6 +338,7 @@
 		}
 
 		function errorSaveData(data, status, headers, config) {
+			console.log(status);
 			vm.exporting = false;
 		}
 
