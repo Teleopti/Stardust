@@ -16482,6 +16482,10 @@ Do you want to participate?</value>
   <data name="ExportToExcel" xml:space="preserve">
     <value>Export to Excel</value>
   </data>
+	<data name="FailedExportToExcel" xml:space="preserve">
+    <value>Failed export to Excel, usually caused by lack of data</value>
+  </data>
+
   <data name="SkillAreaNoSkillSelected" xml:space="preserve">
     <value>You need to select at least one skill.</value>
     <comment>Error messeage shown when creating skillarea</comment>

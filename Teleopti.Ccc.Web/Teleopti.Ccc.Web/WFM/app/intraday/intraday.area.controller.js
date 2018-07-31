@@ -338,6 +338,11 @@
 		}
 
 		function errorSaveData(data, status, headers, config) {
+			NoticeService.warning(
+				"<span class='test-alert'></span>" + $translate.instant('FailedExportToExcel'),
+				null,
+				false
+			);
 			vm.exporting = false;
 		}
 
