@@ -36,7 +36,7 @@
 				</div>
 			</div>
 			
-			<md-checkbox ng-if="vm.isAddFullDayAbsenceAvailable()"
+			<md-checkbox class="fullDayAbsenceCheckBox" ng-if="vm.isAddFullDayAbsenceAvailable()"
 						 ng-model="vm.isFullDayAbsence"
 						 ng-disabled="vm.isAddFullDayAbsenceAvailable() && !vm.isAddIntradayAbsenceAvailable()"
 						 ng-change="vm.onIsAddFullDayAbsenceChanged()"

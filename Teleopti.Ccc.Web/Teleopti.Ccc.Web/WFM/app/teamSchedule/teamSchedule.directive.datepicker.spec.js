@@ -1,7 +1,8 @@
 ﻿(function () {
 
 	var $compile,
-		$rootScope;
+		$rootScope,
+		$timeout;
 
 	describe("<teamschedule-datepicker>", function () {
 		beforeEach(function () {
@@ -18,9 +19,10 @@
 			});
 		});
 
-		beforeEach(inject(function (_$rootScope_, _$compile_) {
+		beforeEach(inject(function (_$rootScope_, _$compile_, _$timeout_) {
 			$compile = _$compile_;
 			$rootScope = _$rootScope_;
+			$timeout = _$timeout_;
 		}));
 
 		it('should render datepicker correctly', function () {
@@ -43,17 +45,19 @@
 			var vm = result.commandControl;
 
 			var inputEl = result.container[0].querySelector(".teamschedule-datepicker #teamschedule-datepicker-input");
-			var dateStringInput = angular.element(inputEl);
-
 			expect(vm.selectedDate).toBe('2016-06-01');
-			expect(moment(new Date(dateStringInput.val())).format('YYYY-MM-DD')).toBe('2016-06-01');
+			expect(inputEl.value).toBe('6/1/16');
 
 			inputEl.value = '6/2/16';
-			dateStringInput.triggerHandler('change');
-			result.scope.$apply();
+			angular.element(inputEl).triggerHandler('change');
 
-			expect(vm.selectedDate).toBe('2016-06-02');
-			expect(moment(new Date(dateStringInput.val())).format('YYYY-MM-DD')).toBe('2016-06-02');
+			$timeout(function () {
+				expect(vm.selectedDate).toBe('2016-06-02');
+				expect(inputEl.value).toBe('6/2/16');
+			}, 300);
+
+			$timeout.flush();
+
 		});
 
 		it('should remember preselected the date when selected day is changed with incorrect date', function () {
@@ -64,13 +68,15 @@
 
 			vm.selectedDate = "";
 			vm.onDateInputChange();
-			expect(moment(vm.selectedDate).format("YYYY-MM-DD")).toBe('2016-06-01');
+			$timeout(function () {
+				expect(moment(vm.selectedDate).format("YYYY-MM-DD")).toBe('2016-06-01');
+			}, 300);
 		});
 
 
 	});
 
-	describe('<teams-time-picker> in ar-OM', function () {
+	describe('<teamschedule-datepicker> in ar-OM', function () {
 		beforeEach(function () { moment.locale("ar-OM"); });
 		afterEach(function () { moment.locale("en"); });
 		beforeEach(function () {
@@ -101,11 +107,10 @@
 			var firstDayOfWeekEl = currentWeekEl.querySelectorAll("td span")[0];
 			expect(firstDayOfWeekEl.innerHTML).toEqual("03");
 		});
-
 	});
 
 
-	describe('<teams-time-picker> in sv',
+	describe('<teamschedule-datepicker> in sv',
 		function () {
 			beforeEach(function () { moment.locale("zh-CN"); });
 			afterEach(function () { moment.locale("en"); });

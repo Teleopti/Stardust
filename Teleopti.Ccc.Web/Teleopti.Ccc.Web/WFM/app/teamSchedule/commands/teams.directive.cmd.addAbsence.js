@@ -33,7 +33,7 @@
 		'$scope',
 		'CommandCheckService',
 		'belongsToDateDecider',
-		'teamsToggles',
+		'Toggle',
 		'serviceDateFormatHelper'];
 
 	function addAbsenceCtrl(PersonAbsenceSvc,
@@ -44,7 +44,7 @@
 		$scope,
 		CommandCheckService,
 		belongsToDateDecider,
-		teamsToggles,
+		Toggle,
 		serviceDateFormatHelper) {
 		var vm = this;
 
@@ -79,7 +79,7 @@
 		updateDateAndTimeFormat();
 		$scope.$on('$localeChangeSuccess', updateDateAndTimeFormat);
 
-		var toggles = teamsToggles.all();
+		
 
 		PersonAbsenceSvc.loadAbsences().then(function (absences) {
 			vm.availableAbsenceTypes = absences;
@@ -161,7 +161,7 @@
 			vm.selectedAgents.forEach(function (agent) {
 				var personSchedule = vm.containerCtrl.scheduleManagementSvc.findPersonScheduleVmForPersonId(agent.PersonId);
 
-				if (!toggles.WfmTeamSchedule_AddAbsenceFromPartOfDayToXDay_46010 && !belongsToDateDecider
+				if (!Toggle.WfmTeamSchedule_AddAbsenceFromPartOfDayToXDay_46010 && !belongsToDateDecider
 					.checkTimeRangeAllowedForIntradayAbsence(timeRangeMoment,
 					belongsToDateDecider.normalizePersonScheduleVm(personSchedule, vm.getCurrentTimezone())))
 					vm.invalidAgents.push(agent);

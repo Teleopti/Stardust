@@ -18,7 +18,8 @@
 			'wfm.organizationPicker',
 			'wfm.focusInput',
 			'wfm.groupPage',
-			'wfm.skillGroup'
+			'wfm.skillGroup',
+			'wfm.throttle'
 		])
 		.config(['$mdThemingProvider', '$mdDateLocaleProvider', teamScheduleConfig])
 		.run(['$rootScope', '$state', '$location', 'FavoriteSearchDataService', 'groupPageService', teamScheduleRun]);

@@ -19,25 +19,26 @@
 		};
 	}
 
-	teamScheduleDatePickerCtrl.$inject = ['$timeout', '$locale', 'serviceDateFormatHelper', 'CurrentUserInfo'];
-	function teamScheduleDatePickerCtrl($timeout, $locale, serviceDateFormatHelper, CurrentUserInfo) {
+	teamScheduleDatePickerCtrl.$inject = ['$timeout', '$locale', 'serviceDateFormatHelper', 'CurrentUserInfo', 'throttleDebounce'];
+	function teamScheduleDatePickerCtrl($timeout, $locale, serviceDateFormatHelper, CurrentUserInfo, throttleDebounce) {
 		var vm = this;
 		vm.dateFormat = $locale.DATETIME_FORMATS.shortDate;
 		vm.step = parseInt(vm.step) || 1;
 		vm.selectedDateObj = moment(vm.selectedDate).toDate();
-		vm.dateOptions = { startingDay : CurrentUserInfo.CurrentUserInfo().FirstDayOfWeek };
+		vm.dateOptions = { startingDay: CurrentUserInfo.CurrentUserInfo().FirstDayOfWeek };
 
 		var date = vm.selectedDate;
 
-		vm.onDateInputChange = function () {
+		vm.onDateInputChange = throttleDebounce(
+			function () {
 			if (!vm.selectedDateObj || !moment(vm.selectedDateObj).isValid()) {
 				vm.selectedDate = date;
 				return;
 			}
 			date = vm.selectedDateObj;
 			vm.selectedDate = serviceDateFormatHelper.getDateOnly(vm.selectedDateObj);
-			vm.onDateChange && $timeout(function () { vm.onDateChange({ date: serviceDateFormatHelper.getDateOnly(vm.selectedDateObj) }); });
-		};
+			vm.onDateChange && vm.onDateChange({ date: serviceDateFormatHelper.getDateOnly(vm.selectedDateObj) });
+		}, 300);
 
 		vm.gotoPreviousDate = function () {
 			vm.selectedDateObj = moment(vm.selectedDateObj).add(-(vm.step), 'day').toDate();
