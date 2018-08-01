@@ -7,6 +7,9 @@ import {Component} from '@angular/core'
 
 export class RtaHistoricalOverviewComponent {
 	organizationPickerOpen: boolean;
+	organizationPickerSelectionText: string;
+	organizationPickerSearchTerm: string;
+	organizationPickerClearEnabled: string;
 	clearOrganizationSelection() {
 		console.log('hej')
 	}
