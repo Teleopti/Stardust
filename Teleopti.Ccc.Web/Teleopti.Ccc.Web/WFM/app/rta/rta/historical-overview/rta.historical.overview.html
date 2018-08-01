@@ -15,26 +15,58 @@
 	<div class="panel material-depth-1 con-padding">
 		<div class="con-row">
 			<div class="con-flex wfm-form organization-picker">
-				<div class="form-input-wrap" style="padding: 16px 0px">
+				<div class="form-input-wrap">
 					<input type="text"
-						   placeholder="Stockholm"/>
+						   placeholder="{{'SelectSitesTeams'}}"
+						   (click)="organizationPickerOpen = !organizationPickerOpen"
+						   [value]="organizationPickerSelectionText"/>
+				</div>
+
+				<div style="position: relative">
+					<div class="wfm-dropdown-panel panel material-depth-1 full-padding"
+						 style="z-index: 999; position: absolute; width: 100%"
+						 [hidden]="!organizationPickerOpen">
+
+						<div class="form-input-wrap filter">
+							<input type="text"
+								   placeholder="{{'DataFilterThreeDots'}}"
+								   [(ngModel)]="organizationPickerSearchTerm"/>
+						</div>
+
+						<div>
+							<button class="wfm-btn wfm-btn-invis-primary"
+									[ngClass]="organizationPickerClearEnabled ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'"
+									(click)="clearOrganizationSelection()">{{'ClearAll'}}
+							</button>
+							<button class="wfm-btn wfm-btn-invis-primary"
+									(click)="closePicker($event)">{{'Close'}}
+							</button>
+						</div>
+						<div *ngFor="let site of sites | search:'Name':organizationPickerSearchTerm">
+							<div style="margin: 5px 0">
+								<span (click)="site.isExpanded = !site.isExpanded">
+									<i class="mdi"
+									   [ngClass]="site?.isExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"></i>
+								</span>
+								<input type="checkbox" id="{{site.Name}}" class="rta-checkbox"/>
+								<label for="{{site.Name}}" class="picker-label">{{site.Name}}</label>
+							</div>
+							<div style="margin-left: 50px;"
+								 [hidden]="!site.isExpanded"
+								 *ngFor="let team of site.Teams">
+								<input type="checkbox" id="{{team.Name}}" class="rta-checkbox"/>
+								<label for="{{team.Name}}" class="picker-label">{{team.Name}}</label>
+							</div>
+						</div>
+
+					</div>
 				</div>
 			</div>
 
 			<div class="con-flex">
-				<mat-form-field style="width:100%">
-					<input matInput [matDatepicker]="picker" placeholder="Choose a date">
-					<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-					<mat-datepicker #picker></mat-datepicker>
-				</mat-form-field>
 			</div>
 
 			<div class="con-flex">
-				<mat-form-field style="width:100%;">
-					<input matInput [matDatepicker]="picker1" placeholder="Choose a date">
-					<mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-					<mat-datepicker #picker1></mat-datepicker>
-				</mat-form-field>
 			</div>
 		</div>
 	</div>
@@ -148,6 +180,16 @@
 		.rta-view.prototype .cell .circle-green {
 			border-color: #C2E085;
 			color: #C2E085;
+		}
+		
+		.rta-view.prototype .wfm-form .rta-checkbox{
+			width: 20px;
+			height: 20px;
+			vertical-align: middle;
+		}
+
+		.rta-view.prototype .picker-label{
+			margin-left: 8px;
 		}
 
 	</style>
