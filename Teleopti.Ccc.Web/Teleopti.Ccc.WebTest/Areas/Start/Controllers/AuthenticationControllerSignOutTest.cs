@@ -4,7 +4,10 @@ using System.Web.Routing;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.Web;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
@@ -30,8 +33,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			var authenticationModule = MockRepository.GenerateMock<IAuthenticationModule>();
 			authenticationModule.Stub(x => x.Issuer(null)).IgnoreArguments().Return(new Uri("http://issuer"));
 			authenticationModule.Stub(x => x.Realm).Return("testrealm");
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(new Person());
+			var personPersister = MockRepository.GenerateMock<IPersonPersister>();
+			personPersister.Stub(a => a.InvalidateCachedCulure(loggedOnUser.CurrentUser()));
 
-			_target = new AuthenticationController(null, _formsAuthentication, _sessionSpecificWfmCookieProvider, authenticationModule,  new FakeCurrentHttpContext(new FakeHttpContext()), null);
+			_target = new AuthenticationController(null, _formsAuthentication, _sessionSpecificWfmCookieProvider, authenticationModule,  new FakeCurrentHttpContext(new FakeHttpContext()), null, loggedOnUser, personPersister);
 			new TestControllerBuilder().InitializeController(_target);
 		}
 

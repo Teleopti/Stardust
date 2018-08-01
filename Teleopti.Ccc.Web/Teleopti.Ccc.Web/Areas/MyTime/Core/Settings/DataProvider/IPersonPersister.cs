@@ -7,5 +7,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider
 	{
 		void UpdateCulture(IPerson person, CultureInfo culture);
 		void UpdateUICulture(IPerson person, CultureInfo culture);
+		void InvalidateCachedCulure(IPerson person);
 	}
 }

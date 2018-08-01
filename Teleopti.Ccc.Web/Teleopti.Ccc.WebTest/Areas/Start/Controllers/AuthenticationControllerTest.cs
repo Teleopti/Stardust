@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		public void ShouldReturnSignInView()
 		{
 			var layoutBaseViewModelFactory = MockRepository.GenerateMock<ILayoutBaseViewModelFactory>();
-			var target = new AuthenticationController(layoutBaseViewModelFactory, null, null, null, null, null);
+			var target = new AuthenticationController(layoutBaseViewModelFactory, null, null, null, null, null,null, null);
 			var layoutBaseViewModel = new LayoutBaseViewModel();
 
 			layoutBaseViewModelFactory.Stub(x => x.CreateLayoutBaseViewModel()).Return(layoutBaseViewModel);
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void DefaultActionShouldRenderDefaultView()
 		{
-			var target = new AuthenticationController(null, null, null, null,null, new CheckTenantUserExistsFake());
+			var target = new AuthenticationController(null, null, null, null,null, new CheckTenantUserExistsFake(), null, null);
 			var result = target.Index() as RedirectToRouteResult;
 			result.RouteName.Should().Be.EqualTo(string.Empty);
 		}
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		[Test]
 		public void ShouldRedirectIfNoAdminUsers()
 		{
-			var target = new AuthenticationController(null, null, null, null, null, new CheckTenantUserExistsFake(true));
+			var target = new AuthenticationController(null, null, null, null, null, new CheckTenantUserExistsFake(true), null, null);
 			var result = target.Index() as RedirectResult;
 			result.Url.Should().Be.EqualTo("MultiTenancy/TenantAdminInfo");
 		}

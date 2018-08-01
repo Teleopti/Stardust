@@ -16,6 +16,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider
 			_makeRegionalFromPerson = makeRegionalFromPerson;
 		}
 
+		public void InvalidateCachedCulure(IPerson person)
+		{
+			_cacheFactory.Invalidate(_makeRegionalFromPerson, m => m.MakeRegionalFromPerson(person), true);
+		}
+
 		public void UpdateCulture(IPerson person, CultureInfo culture)
 		{
 			person.PermissionInformation.SetCulture(culture);

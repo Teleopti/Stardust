@@ -39,11 +39,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Settings.DataProvider
 
 			// would be simpler in moq...
 			cacheFactory.AssertWasCalled(x =>
-			                             x.Invalidate(
-			                             	Arg<IMakeRegionalFromPerson>.Is.Same(makeRegionalFromPerson),
-			                             	Arg<Expression<Func<IMakeRegionalFromPerson, object>>>.Is.NotNull,
-			                             	Arg<bool>.Is.Equal(true)
-			                             	));
+										 x.Invalidate(
+											 Arg<IMakeRegionalFromPerson>.Is.Same(makeRegionalFromPerson),
+											 Arg<Expression<Func<IMakeRegionalFromPerson, object>>>.Is.NotNull,
+											 Arg<bool>.Is.Equal(true)
+											 ));
 		}
 		[Test]
 		public void ShouldUpdateUICulture()
@@ -54,6 +54,24 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Settings.DataProvider
 			target.UpdateUICulture(person, CultureInfo.GetCultureInfo("en-GB"));
 
 			person.PermissionInformation.UICulture().Should().Be(CultureInfo.GetCultureInfo("en-GB"));
+		}
+
+		[Test]
+		public void ShouldInvalidateCacheCulture()
+		{
+			var cacheFactory = MockRepository.GenerateMock<IMbCacheFactory>();
+			var makeRegionalFromPerson = MockRepository.GenerateMock<IMakeRegionalFromPerson>();
+			var person = new Person();
+			var target = new PersonPersister(cacheFactory, makeRegionalFromPerson);
+
+			target.InvalidateCachedCulure(person);
+
+			cacheFactory.AssertWasCalled(x =>
+										 x.Invalidate(
+											 Arg<IMakeRegionalFromPerson>.Is.Same(makeRegionalFromPerson),
+											 Arg<Expression<Func<IMakeRegionalFromPerson, object>>>.Is.NotNull,
+											 Arg<bool>.Is.Equal(true)
+											 ));
 		}
 
 		[Test]

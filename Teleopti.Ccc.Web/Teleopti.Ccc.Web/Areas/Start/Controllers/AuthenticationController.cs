@@ -1,8 +1,11 @@
 ﻿using System;
 using System.IdentityModel.Services;
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.Web;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Shared;
 using Teleopti.Ccc.Web.Auth;
 using Teleopti.Ccc.Web.Core;
@@ -20,11 +23,13 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly IAuthenticationModule _authenticationModule;
 		private readonly ICurrentHttpContext _currentHttpContext;
 		private readonly ICheckTenantUserExists _checkTenantUserExists;
+		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly IPersonPersister _personPersister;
 
 		public AuthenticationController(ILayoutBaseViewModelFactory layoutBaseViewModelFactory,
 			IFormsAuthentication formsAuthentication, ISessionSpecificWfmCookieProvider sessionSpecificWfmCookieProvider,
 			IAuthenticationModule authenticationModule, ICurrentHttpContext currentHttpContext,
-			ICheckTenantUserExists checkTenantUserExists)
+			ICheckTenantUserExists checkTenantUserExists, ILoggedOnUser loggedOnUser, IPersonPersister  personPersister)
 		{
 			_layoutBaseViewModelFactory = layoutBaseViewModelFactory;
 			_formsAuthentication = formsAuthentication;
@@ -32,6 +37,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_authenticationModule = authenticationModule;
 			_currentHttpContext = currentHttpContext;
 			_checkTenantUserExists = checkTenantUserExists;
+			_loggedOnUser = loggedOnUser;
+			_personPersister = personPersister;
 
 		}
 
@@ -49,10 +56,13 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				return View();
 		}
 
-		public ActionResult SignOut()
+		[UnitOfWork]
+		public virtual ActionResult SignOut()
 		{
 			_sessionSpecificWfmCookieProvider.RemoveCookie();
 			_formsAuthentication.SignOut();
+
+			_personPersister.InvalidateCachedCulure(_loggedOnUser.CurrentUser());
 
 			var url = Request.UrlConsideringLoadBalancerHeaders();
 			var issuerUrl = _authenticationModule.Issuer(_currentHttpContext.Current());
