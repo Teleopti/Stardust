@@ -76,7 +76,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				{
 					res = 0;
 				}
-				return new InnerPeriodResourceDetail(d.Count - heads, res,
+
+				var count = d.Count - heads;
+				if (count < 0 || Math.Round(count, 5) == 0.00000d)
+				{
+					count = 0;
+				}
+				return new InnerPeriodResourceDetail(count, res,
 					subtractEffiencyResources(d.EffiencyResources, skillCombination.SkillEfficiencies), fractionPeriodResult);
 			});
 		}

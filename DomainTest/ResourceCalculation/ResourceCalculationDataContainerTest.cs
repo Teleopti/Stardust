@@ -383,7 +383,38 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				      });
 		}
 
-	    [Test]
+		[Test]
+		public void ShouldNotThrowWhenRemoveResourcesForFractionPeriods()
+		{
+			_target.AddResources(_person, _date, new ResourceLayer
+			{
+				PayloadId = _activity.Id.GetValueOrDefault(),
+				Period = _period,
+				RequiresSeat = false,
+				Resource = 0.8
+			});
+			_target.RemoveResources(_person, _date, new ResourceLayer
+			{
+				FractionPeriod = _period.ChangeEndTime(TimeSpan.FromMinutes(-8)),
+				PayloadId = _activity.Id.GetValueOrDefault(),
+				Period = _period,
+				RequiresSeat = false,
+				Resource = 0.8
+			});
+			_target.RemoveResources(_person, _date, new ResourceLayer
+			{
+				FractionPeriod = _period.ChangeStartTime(TimeSpan.FromMinutes(8)),
+				PayloadId = _activity.Id.GetValueOrDefault(),
+				Period = _period,
+				RequiresSeat = false,
+				Resource = 0.8
+			});
+			var result = _target.SkillResources(_skill, _period);
+			result.Item2.Should().Be.EqualTo(0);
+			result.Item1.Should().Be.EqualTo(0);
+		}
+
+		[Test]
 	    public void ShouldGetTheDistributedCountForHourSkill()
 	    {
 		    var period = new DateTimePeriod(2013, 08, 06, 12, 2013, 8, 06, 13);
