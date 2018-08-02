@@ -63,10 +63,7 @@
 				</div>
 			</div>
 
-			<div class="con-flex">
-			</div>
-
-			<div class="con-flex">
+			<div class="con-flex x3">
 			</div>
 		</div>
 	</div>
@@ -93,7 +90,7 @@
 		.rta-view.prototype .cell.late-for-work {
 			background-image: linear-gradient(225deg, orange, orange 5px, transparent 5px, transparent);
 		}
-		
+
 		.rta-view.prototype .cell .label-red {
 			background-color: #EE8F7D;
 		}
@@ -109,7 +106,7 @@
 		.rta-view.prototype .cell.progress-thing {
 			padding: 0;
 		}
-		
+
 		.rta-view.prototype .cell.progress-thing.late-for-work {
 			background-image: linear-gradient(225deg, orange, orange 5px, transparent 5px, transparent);
 		}
@@ -129,6 +126,21 @@
 			height: 3px;
 		}
 
+		.rta-view.prototype .cell .orange-bar {
+			background-color: #FFC285;
+			height: 10px;
+		}
+
+		.rta-view.prototype .cell .red-bar {
+			background-color: #EE8F7D;
+			height: 10px;
+		}
+
+		.rta-view.prototype .cell .green-bar {
+			background-color: #C2E085;
+			height: 10px;
+		}
+
 		.rta-view.prototype .cell.label-thing {
 			text-overflow: unset;
 			padding-left: 4px;
@@ -138,7 +150,7 @@
 		.rta-view.prototype .cell.label-thing.late-for-work {
 			background-image: linear-gradient(225deg, orange, orange 5px, transparent 5px, transparent);
 		}
-		
+
 		.rta-view.prototype .cell.smiley-thing {
 			text-overflow: unset;
 			padding-right: 3px;
@@ -165,8 +177,8 @@
 			color: #EE8F7D;
 			font-size: 75%;
 			font-weight: bold;
-		}		
-		
+		}
+
 		.rta-view.prototype .cell .circle-red {
 			border-color: #EE8F7D;
 			color: #EE8F7D;
@@ -181,763 +193,61 @@
 			border-color: #C2E085;
 			color: #C2E085;
 		}
-		
-		.rta-view.prototype .wfm-form .rta-checkbox{
+
+		.rta-view.prototype .wfm-form .rta-checkbox {
 			width: 20px;
 			height: 20px;
 			vertical-align: middle;
 		}
 
-		.rta-view.prototype .picker-label{
+		.rta-view.prototype .picker-label {
 			margin-left: 8px;
 		}
 
 	</style>
 
-	<div class="panel material-depth-1">
-		<div class="card-panel-header-wrapper pointer huge" style="border-left: 10px solid rgb(102, 194, 255)">
-			A
+	<div class="panel material-depth-1" *ngFor="let group of groupings">
+		<div class="card-panel-header-wrapper pointer" style="border-left: 10px solid rgb(102, 194, 255)"
+			 (click)="openCard = !openCard">
+			{{group.Name}}
 		</div>
-		<div class="card-panel-content-wrapper">
+		<div class="card-panel-content-wrapper" [hidden]="!openCard">
 			<table class="wfm-table">
 				<thead>
 				<tr>
 					<th>Agent</th>
-					<th class="cell-header">9/5</th>
-					<th class="cell-header">10/5</th>
-					<th class="cell-header">11/5</th>
-					<th class="cell-header">12/5</th>
-					<th class="cell-header">13/5</th>
-					<th class="cell-header">14/5</th>
-					<th class="cell-header">15/5</th>
-					<th class="cell-header">16/5</th>
-					<th class="cell-header">17/5</th>
-					<th class="cell-header">18/5</th>
-					<th class="cell-header">19/5</th>
-					<th class="cell-header">20/5</th>
-					<th class="cell-header">21/5</th>
-					<th class="cell-header">22/5</th>
-					<th class="cell-header">23/5</th>
-					<th class="cell-header">24/5</th>
-					<th class="cell-header">25/5</th>
-					<th class="cell-header">26/5</th>
-					<th class="cell-header">27/5</th>
-					<th class="cell-header">28/5</th>
-					<th class="cell-header">29/5</th>
-					<th class="cell-header">30/5</th>
-					<th class="cell-header">31/5</th>
-					<th class="cell-header">1/6</th>
-					<th class="cell-header">2/6</th>
-					<th class="cell-header">3/6</th>
-					<th class="cell-header">4/6</th>
-					<th class="cell-header">4/6</th>
-					<th class="cell-header">5/6</th>
-					<th class="cell-header">6/6</th>
-					<th class="cell-header">7/6</th>
-					<th class="cell-header">8/6</th>
-					<th class="cell-header">9/6</th>
-					<th class="cell-header">10/6</th>
-					<th class="cell-header">11/6</th>
-					<th class="cell-header">12/6</th>
-					<th class="cell-header">13/6</th>
-					<th class="cell-header">14/6</th>
-					<th class="cell-header">15/6</th>
-					<th class="cell-header">16/6</th>
-					<th class="cell-header">17/6</th>
-					<th class="cell-header">18/6</th>
-					<th>Average Adherence</th>
+					<th *ngFor="let adherence of group.agentsAdherence[0].Adherence">
+						{{adherence.Date}}
+					</th>
+					<th>Adherence</th>
 					<th>Late for work</th>
 				</tr>
 				</thead>
 				<tbody>
-				<tr>
-					<td>Andeen Ashley</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">79</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-orange" style="width:79%;">
+				<tr *ngFor="let agent of group.agentsAdherence">
+					<td>{{agent.Name}}</td>
+
+					<td *ngFor="let percentage of agent.Adherence" class="cell {{percentage?.WasLateForWork ? 'late-for-work':''}}">
+						<div style="background-color: #f1f1f1; width: 75%; float:left; margin-top:5px;">
+							<div xclass="red-bar" [ngStyle]="{'background-color': percentage.Color, 'height': '10px', 'width':percentage.AdherencePercentage+'%'}">
 							</div>
 						</div>
+						<div style="width: 10%; margin-left: 6px; float:left;">{{percentage.AdherencePercentage}}%</div>
 					</td>
-					<td class="cell progress-thing late-for-work">
-						<div style="padding: 5px 5px 2px 5px">69</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-red" style="width:69%;">
+
+					<td>
+						<div style="background-color: #f1f1f1; width: 75%; float:left; margin-top:5px">
+							<div [ngStyle]="{'background-color':agent.PeriodAdherence.Color, 'height':'10px', 'width':agent.PeriodAdherence.Value+'%'}">
 							</div>
 						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">90</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-green" style="width:90%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing late-for-work">
-						<div style="padding: 5px 5px 2px 5px">85</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-green" style="width:85%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">69</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-red" style="width:69%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">90</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-green" style="width:90%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">95</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-green" style="width:95%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing late-for-work">
-						<div style="padding: 5px 5px 2px 5px">69</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-red" style="width:69%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing late-for-work">
-						<div style="padding: 5px 5px 2px 5px">90</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-green" style="width:90%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">62</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-red" style="width:62%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing late-for-work">
-						<div style="padding: 5px 5px 2px 5px">69</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-red" style="width:69%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">90</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-green" style="width:90%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">89</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-green" style="width:89%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">69</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-red" style="width:69%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">90</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-green" style="width:90%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing late-for-work">
-						<div style="padding: 5px 5px 2px 5px">79</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-orange" style="width:79%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">69</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-red" style="width:69%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">90</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-green" style="width:90%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">79</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-orange" style="width:79%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">75</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-orange" style="width:75%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">90</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-green" style="width:90%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">79</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-orange" style="width:79%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing late-for-work">
-						<div style="padding: 5px 5px 2px 5px">69</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-red" style="width:69%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">90</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-green" style="width:90%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">79</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-orange" style="width:79%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">69</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-red" style="width:69%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">90</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-green" style="width:90%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing late-for-work">
-						<div style="padding: 5px 5px 2px 5px">79</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-orange" style="width:79%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">69</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-red" style="width:69%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">90</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-green" style="width:90%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">79</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-orange" style="width:79%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">69</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-red" style="width:69%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">90</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-green" style="width:90%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">79</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-orange" style="width:79%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">69</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-red" style="width:69%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">90</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-green" style="width:90%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">79</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-orange" style="width:79%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">69</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-red" style="width:69%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing late-for-work">
-						<div style="padding: 5px 5px 2px 5px">90</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-green" style="width:90%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">79</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-orange" style="width:79%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">69</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-red" style="width:69%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">90</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-green" style="width:90%;">
-							</div>
-						</div>
-					</td>
-					<td class="cell progress-thing">
-						<div style="padding: 5px 5px 2px 5px">82%</div>
-						<div style="background-color: #f1f1f1;">
-							<div class="progress-green" style="width:82%;">
-							</div>
-						</div>
+						<div style="width: 10%; margin-left: 6px; float:left;">{{agent.PeriodAdherence.Value}}%</div>
 					</td>
 					<td>
-						<span style="background-color: orange;" class="label pad">9</span>
-						<span>70 minutes</span>
+						<span style="background-color: orange;" class="label pad">{{agent.LateForWork.Count}}</span>
+						<span>{{agent.LateForWork.TotalMinutes}} minutes</span>
 					</td>
 				</tr>
-				<tr>
-					<td>Anderson James</td>
-					<td class="cell label-thing">
-						<div class="label label-red">65</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-green">85</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-red">68</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-red">69</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-orange">78</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-green">89</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-green">92</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-red">69</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-orange">78</div>
-					</td>
-					<td class="cell label-thing late-for-work">
-						<div class="label label-green">89</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-green">92</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-red">65</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-green">85</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-red">68</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-red">69</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-green">89</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-green">92</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-red">69</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-orange">78</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-green">89</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-red">68</div>
-					</td>
-					<td class="cell label-thing late-for-work">
-						<div class="label label-red">69</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-green">89</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-green">92</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-red">69</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-orange">78</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-red">65</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-green">85</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-red">68</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-red">69</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-orange">78</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-green">89</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-green">92</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-red">69</div>
-					</td>
-					<td class="cell label-thing late-for-work">
-						<div class="label label-orange">78</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-green">89</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-green">92</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-red">65</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-green">85</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-green">89</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-green">92</div>
-					</td>
-					<td class="cell label-thing">
-						<div class="label label-red">69</div>
-					</td>
-					<td>
-						<div style="background-color: #f1f1f1;">
-							<div style="background-color: #C2E085; height:20px; width:81%; text-align: center; color: #fff">
-								81%
-							</div>
-						</div>
-					</td>
-					<td>
-						<span style="background-color: orange;" class="label pad">3</span>
-						<span>30 minutes</span>
-					</td>
-				</tr>
-				<tr>
-					<td>Andrada Mariel</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-red">68</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-green">88</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-green">81</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-orange">72</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-red">65</div>
-					</td>
-					<td class="cell circle-thing late-for-work">
-						<div class="circle circle-red">63</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-orange">74</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-green">94</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-green">89</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-red">68</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-green">88</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-green">81</div>
-					</td>
-					<td class="cell circle-thing late-for-work">
-						<div class="circle circle-orange">72</div>
-					</td>
-					<td class="cell circle-thing late-for-work">
-						<div class="circle circle-red">65</div>
-					</td>
-					<td class="cell circle-thing late-for-work">
-						<div class="circle circle-red">63</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-orange">74</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-green">94</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-green">89</div>
-					</td>
-					<td class="cell circle-thing late-for-work">
-						<div class="circle circle-red">68</div>
-					</td>
-					<td class="cell circle-thing late-for-work">
-						<div class="circle circle-green">88</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-green">81</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-orange">72</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-red">65</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-red">63</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-orange">74</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-green">94</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-green">89</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-red">65</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-red">63</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-orange">74</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-green">94</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-green">89</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-red">68</div>
-					</td>
-					<td class="cell circle-thing late-for-work">
-						<div class="circle circle-green">88</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-green">88</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-green">81</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-orange">72</div>
-					</td>
-					<td class="cell circle-thing late-for-work">
-						<div class="circle circle-red">65</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-red">63</div>
-					</td>
-					<td class="cell circle-thing late-for-work">
-						<div class="circle circle-orange">74</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-green">94</div>
-					</td>
-					<td class="cell circle-thing">
-						<div class="circle circle-green">88</div>
-					</td>
-					<td>
-						<div style="background-color: #f1f1f1;">
-							<div style="background-color: #FFC285; height:20px; width:79%; text-align: center; color: #fff">
-								79%
-							</div>
-						</div>
-					</td>
-					<td>
-						<span style="background-color: orange;" class="label pad">9</span>
-						<span>86 minutes</span>
-					</td>
-				</tr>
-				<tr>
-					<td>Andrew Andy</td>
-					<td class="cell late-for-work">87</td>
-					<td class="cell">80</td>
-					<td class="cell">85</td>
-					<td class="cell">71</td>
-					<td class="cell">71</td>
-					<td class="cell">65</td>
-					<td class="cell">80</td>
-					<td class="cell">85</td>
-					<td class="cell">71</td>
-					<td class="cell late-for-work">87</td>
-					<td class="cell">80</td>
-					<td class="cell">85</td>
-					<td class="cell">71</td>
-					<td class="cell">71</td>
-					<td class="cell">65</td>
-					<td class="cell">85</td>
-					<td class="cell late-for-work">71</td>
-					<td class="cell">66</td>
-					<td class="cell">72</td>
-					<td class="cell">80</td>
-					<td class="cell">85</td>
-					<td class="cell late-for-work">87</td>
-					<td class="cell">80</td>
-					<td class="cell">85</td>
-					<td class="cell late-for-work">71</td>
-					<td class="cell">71</td>
-					<td class="cell">65</td>
-					<td class="cell">80</td>
-					<td class="cell late-for-work">85</td>
-					<td class="cell">71</td>
-					<td class="cell">85</td>
-					<td class="cell">71</td>
-					<td class="cell late-for-work">66</td>
-					<td class="cell">72</td>
-					<td class="cell">80</td>
-					<td class="cell">85</td>
-					<td class="cell">80</td>
-					<td class="cell">66</td>
-					<td class="cell">72</td>
-					<td class="cell">80</td>
-					<td class="cell">85</td>
-					<td class="cell">80</td>
-					<td>79%</td>
-					<td>
-						<span style="background-color: orange;" class="label pad">7</span>
-						<span>60 minutes</span>
-					</td>
-				</tr>
-				<tr>
-					<td>Aslan John</td>
-					<td class="cell smiley-thing late-for-work">🙂</td>
-					<td class="cell smiley-thing late-for-work">😟</td>
-					<td class="cell smiley-thing late-for-work">😀</td>
-					<td class="cell smiley-thing">🙂</td>
-					<td class="cell smiley-thing">😟</td>
-					<td class="cell smiley-thing">😀</td>
-					<td class="cell smiley-thing">😟</td>
-					<td class="cell smiley-thing">😀</td>
-					<td class="cell smiley-thing">😟</td>
-					<td class="cell smiley-thing">😀</td>
-					<td class="cell smiley-thing">🙂</td>
-					<td class="cell smiley-thing">😟</td>
-					<td class="cell smiley-thing">😀</td>
-					<td class="cell smiley-thing">🙂</td>
-					<td class="cell smiley-thing">🙂</td>
-					<td class="cell smiley-thing">😟</td>
-					<td class="cell smiley-thing">😀</td>
-					<td class="cell smiley-thing">🙂</td>
-					<td class="cell smiley-thing">😟</td>
-					<td class="cell smiley-thing">😀</td>
-					<td class="cell smiley-thing">😟</td>
-					<td class="cell smiley-thing late-for-work">😀</td>
-					<td class="cell smiley-thing late-for-work">😟</td>
-					<td class="cell smiley-thing">😀</td>
-					<td class="cell smiley-thing">🙂</td>
-					<td class="cell smiley-thing">😟</td>
-					<td class="cell smiley-thing">😀</td>
-					<td class="cell smiley-thing">🙂</td>
-					<td class="cell smiley-thing">🙂</td>
-					<td class="cell smiley-thing">😟</td>
-					<td class="cell smiley-thing">😀</td>
-					<td class="cell smiley-thing">🙂</td>
-					<td class="cell smiley-thing">😟</td>
-					<td class="cell smiley-thing">😀</td>
-					<td class="cell smiley-thing">😟</td>
-					<td class="cell smiley-thing">😀</td>
-					<td class="cell smiley-thing">😟</td>
-					<td class="cell smiley-thing">😀</td>
-					<td class="cell smiley-thing">🙂</td>
-					<td class="cell smiley-thing">😟</td>
-					<td class="cell smiley-thing">😀</td>
-					<td class="cell smiley-thing">🙂</td>
-					<td>🙂</td>
-					<td>
-						<span style="background-color: orange;" class="label pad">5</span>
-						<span>40 minutes</span>
-					</td>
-				</tr>
+				
 				</tbody>
 			</table>
 		</div>
