@@ -31,14 +31,14 @@
 
 		vm.onDateInputChange = throttleDebounce(
 			function () {
-			if (!vm.selectedDateObj || !moment(vm.selectedDateObj).isValid()) {
-				vm.selectedDate = date;
-				return;
-			}
-			date = vm.selectedDateObj;
-			vm.selectedDate = serviceDateFormatHelper.getDateOnly(vm.selectedDateObj);
-			vm.onDateChange && vm.onDateChange({ date: serviceDateFormatHelper.getDateOnly(vm.selectedDateObj) });
-		}, 300);
+				if (!vm.selectedDateObj || !moment(vm.selectedDateObj).isValid()) {
+					vm.selectedDate = date;
+					return;
+				}
+				date = vm.selectedDateObj;
+				vm.selectedDate = serviceDateFormatHelper.getDateOnly(vm.selectedDateObj);
+				vm.onDateChange && $timeout(function () { vm.onDateChange({ date: serviceDateFormatHelper.getDateOnly(vm.selectedDateObj) }) });
+			}, 300);
 
 		vm.gotoPreviousDate = function () {
 			vm.selectedDateObj = moment(vm.selectedDateObj).add(-(vm.step), 'day').toDate();

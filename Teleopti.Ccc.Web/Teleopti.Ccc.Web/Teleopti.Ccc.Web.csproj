@@ -1566,7 +1566,6 @@
     <Content Include="WFM\app\global\skill-group\skill-group-manager.html" />
     <Content Include="WFM\app\global\skill-group\skillGroupManagerButton.component.js" />
     <Content Include="WFM\app\global\skill-group\skillGroupManagerButton.html" />
-    <Content Include="WFM\app\global\throttle\debounce.service.spec.js" />
     <Content Include="WFM\app\global\throttle\debounce.service.js" />
     <Content Include="WFM\app\global\throttle\_modules.js" />
     <Content Include="WFM\app\global\utilities\filesize.filter.js" />
