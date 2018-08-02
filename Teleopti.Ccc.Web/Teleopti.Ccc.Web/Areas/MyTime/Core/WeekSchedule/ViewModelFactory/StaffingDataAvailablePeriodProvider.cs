@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			return getStaffingDataAvailablePeriod(date, forThisWeek);
 		}
 
-		public List<DateOnlyPeriod> GetPeriodsForOvertime(DateOnly date, bool forThisWeek)
+		public List<DateOnlyPeriod> GetPeriodsForOvertime(DateOnly date, bool forThisWeek = false)
 		{
 			var person = _user.CurrentUser();
 			var workflowControlSet = person.WorkflowControlSet;

@@ -15,8 +15,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Restriction;
-using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -32,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	[TestFixture]
 	[MyTimeWebTest]
 	[SetCulture("sv-SE")]
-	public class ScheduleApiControllerTimeLineTest:IIsolateSystem
+	public class ScheduleApiControllerWeekTimeLineTest:IIsolateSystem
 	{
 		public ScheduleApiController Target;
 		public ICurrentScenario Scenario;
@@ -40,6 +38,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public IScheduleStorage ScheduleData;
 		public MutableNow Now;
 		public IPushMessageDialogueRepository PushMessageDialogueRepository;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeUserTimeZone UserTimeZone;
 		readonly ISkillType skillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony)
 			.WithId();
@@ -87,7 +86,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new DateTime(2014, 12, 18, 17, 45, 0, DateTimeKind.Utc));
 			addAssignment(period);
 
-			var result = Target.FetchWeekData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(new DateOnly(Now.UtcDateTime()), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),7,0,18,0);
 		}
@@ -136,102 +135,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
 			addAssignment(period);
 
-			var result = Target.FetchWeekData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(new DateOnly(Now.UtcDateTime()), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),6,45,18,15);
-		}
-
-		[Test]
-		public void ShouldAdjustTimelineAccordingOpenPeriodSkillTypeOpenHourDaySchedule()
-		{
-			var skillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
-			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { skillType })
-			{
-				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
-				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13)))
-			});
-			User.CurrentUser().WorkflowControlSet = workflowControlSet;
-
-			var skill1 = addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
-			var skill2 = addSkill(TimeSpan.Zero, TimeSpan.FromDays(1));
-			skill2.SkillType = skillType;
-
-			var period1 = new DateTimePeriod(new DateTime(2014, 12, 31, 9, 15, 0, DateTimeKind.Utc),
-				new DateTime(2014, 12, 31, 9, 45, 0, DateTimeKind.Utc));
-			addAssignment(new DateOnly(2014, 12, 31), new activityDto { Activity = skill1.Activity, Period = period1 });
-
-			var result = Target.FetchDayData(new DateOnly(2014,12,31), StaffingPossiblityType.Overtime);
-
-			AssertTimeLine(result.TimeLine.ToList(), 0, 0, 23, 59);
-		}
-
-		[Test]
-		public void ShouldAdjustTimelineForDayScheduleWithMultipleSkillTypesMatched()
-		{
-			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
-			var emailSkillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
-			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { emailSkillType })
-			{
-				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
-				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13))),
-				OrderIndex = 1
-			});
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { phoneSkillType })
-			{
-				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
-				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13))),
-				OrderIndex = 2
-			});
-			User.CurrentUser().WorkflowControlSet = workflowControlSet;
-
-			var skill1 = addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
-			var skill2 = addSkill(TimeSpan.Zero, TimeSpan.FromDays(1));
-			skill1.SkillType = phoneSkillType;
-			skill2.SkillType = emailSkillType;
-
-			var period1 = new DateTimePeriod(new DateTime(2014, 12, 31, 9, 15, 0, DateTimeKind.Utc),
-				new DateTime(2014, 12, 31, 9, 45, 0, DateTimeKind.Utc));
-			addAssignment(new DateOnly(2014, 12, 31), new activityDto { Activity = skill1.Activity, Period = period1 });
-
-			var result = Target.FetchDayData(new DateOnly(2014, 12, 31), StaffingPossiblityType.Overtime);
-
-			AssertTimeLine(result.TimeLine.ToList(), 0, 0, 23, 59);
-		}
-
-		[Test]
-		public void ShouldAdjustTimelineForDayScheduleWithNotDenySkillType()
-		{
-			var phoneSkillType = new SkillTypePhone(new Description(SkillTypeIdentifier.Phone), ForecastSource.InboundTelephony).WithId();
-			var emailSkillType = new SkillTypeEmail(new Description(SkillTypeIdentifier.Email), ForecastSource.Email).WithId();
-			var workflowControlSet = new WorkflowControlSet();
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { emailSkillType })
-			{
-				AutoGrantType = OvertimeRequestAutoGrantType.Deny,
-				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13))),
-				OrderIndex = 1
-			});
-			workflowControlSet.AddOpenOvertimeRequestPeriod(new OvertimeRequestOpenDatePeriod(new[] { phoneSkillType })
-			{
-				AutoGrantType = OvertimeRequestAutoGrantType.Yes,
-				Period = new DateOnlyPeriod(new DateOnly(Now.UtcDateTime()), new DateOnly(Now.UtcDateTime().AddDays(13))),
-				OrderIndex = 2
-			});
-			User.CurrentUser().WorkflowControlSet = workflowControlSet;
-
-			var skill1 = addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
-			var skill2 = addSkill(TimeSpan.Zero, TimeSpan.FromDays(1));
-			skill1.SkillType = phoneSkillType;
-			skill2.SkillType = emailSkillType;
-
-			var period1 = new DateTimePeriod(new DateTime(2014, 12, 31, 9, 15, 0, DateTimeKind.Utc),
-				new DateTime(2014, 12, 31, 9, 45, 0, DateTimeKind.Utc));
-			addAssignment(new DateOnly(2014, 12, 31), new activityDto { Activity = skill1.Activity, Period = period1 });
-
-			var result = Target.FetchDayData(new DateOnly(2014, 12, 31), StaffingPossiblityType.Overtime);
-
-			AssertTimeLine(result.TimeLine.ToList(), 6, 45, 15, 15);
 		}
 
 		[Test]
@@ -327,7 +233,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			AssertTimeLine(result.TimeLine.ToList(), 6, 0, 17, 15);
 		}
 
-
 		[Test]
 		public void ShouldAdjustTimelineAccordingOpenPeriodSkillTypeOpenHourWeekSchedule()
 		{
@@ -385,7 +290,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
 			addAssignment(period);
 
-			var result = Target.FetchWeekData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(new DateOnly(Now.UtcDateTime()), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(), 0, 45, 23, 59);
 		}
@@ -413,7 +318,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
 			addAssignment(period);
 
-			var result = Target.FetchWeekData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(new DateOnly(Now.UtcDateTime()), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),6,45,23,59);
 		}
@@ -448,144 +353,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldAdjustTimelineForOverTimeWhenSiteOpenHourPeriodContainsSchedulePeriodOnFetchDayData()
-		{
-			addSiteOpenHour();
-			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
-				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
-			addAssignment(period);
-
-			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
-
-			AssertTimeLine(result.TimeLine.ToList(),7,45,17,15);
-		}
-
-		[Test]
-		public void ShouldNotAdjustTimelineForOverTimeWhenSchedulePeriodContainsSiteOpenHourPeriodOnFetchDayData()
-		{
-			addSiteOpenHour();
-			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 7, 15, 0, DateTimeKind.Utc),
-				new DateTime(2014, 12, 18, 17, 45, 0, DateTimeKind.Utc));
-			addAssignment(period);
-
-			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
-
-			AssertTimeLine(result.TimeLine.ToList(),7,0,18,0);
-		}
-
-		[Test]
-		public void ShouldNotAdjustTimelineBySiteOpenHourWhenAskForAbsenceOnFetchDayData()
-		{
-			addSiteOpenHour();
-			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
-			   new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
-			addAssignment(period);
-
-			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Absence);
-
-			AssertTimeLine(result.TimeLine.ToList(),9,0,10,0);
-		}
-
-		[Test]
-		public void ShouldNotAdjustTimelineForOverTimeWhenNoSiteOpenHourAvailableOnFetchDayData()
-		{
-			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
-				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
-			addAssignment(period);
-
-			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
-
-			AssertTimeLine(result.TimeLine.ToList(),9,0,10,0);
-		}
-
-		[Test]
-		public void ShouldRemoveOneHourTimelineOnEnteringDSTDay()
-		{
-			var timeZone = TimeZoneInfoFactory.CentralStandardTime();
-			UserTimeZone.Is(timeZone);
-			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(timeZone);
-			Now.Is(new DateTime(2018, 03, 11, 6, 0, 0, DateTimeKind.Utc));
-
-			addSiteOpenHour();
-			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(new DateTime(2018, 03, 11, 01, 15, 0), timeZone),
-				TimeZoneHelper.ConvertToUtc(new DateTime(2018, 03, 11, 03, 45, 0), timeZone));
-			addAssignment(period);
-
-			var result = Target.FetchDayData(null, StaffingPossiblityType.Absence);
-
-			AssertTimeLine(result.TimeLine.ToList(), 1, 0, 4, 0);
-			result.TimeLine.Count().Should().Be(3);
-			result.TimeLine.ElementAt(0).Time.Should().Be(TimeSpan.FromHours(1));
-			result.TimeLine.ElementAt(1).Time.Should().Be(TimeSpan.FromHours(3));
-			result.TimeLine.ElementAt(2).Time.Should().Be(TimeSpan.FromHours(4));
-		}
-
-		[Test]
-		public void ShouldCalculatePercentageCorrectlyOnEnteringDSTDay()
-		{
-			var timeZone = TimeZoneInfoFactory.CentralStandardTime();
-			UserTimeZone.Is(timeZone);
-			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(timeZone);
-			Now.Is(new DateTime(2018, 03, 11, 6, 0, 0, DateTimeKind.Utc));
-
-			addSiteOpenHour();
-			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(new DateTime(2018, 03, 11, 01, 15, 0), timeZone),
-				TimeZoneHelper.ConvertToUtc(new DateTime(2018, 03, 11, 03, 45, 0), timeZone));
-			addAssignment(period);
-
-			var result = Target.FetchDayData(null, StaffingPossiblityType.Absence);
-
-			AssertTimeLine(result.TimeLine.ToList(), 1, 0, 4, 0);
-			result.TimeLine.Count().Should().Be(3);
-			result.TimeLine.ElementAt(0).Time.Should().Be(TimeSpan.FromHours(1));
-			result.TimeLine.ElementAt(0).PositionPercentage.Should().Be(0);
-			result.TimeLine.ElementAt(1).Time.Should().Be(TimeSpan.FromHours(3));
-			result.TimeLine.ElementAt(1).PositionPercentage.Should().Be(1/(decimal)2);
-			result.TimeLine.ElementAt(2).Time.Should().Be(TimeSpan.FromHours(4));
-			result.TimeLine.ElementAt(2).PositionPercentage.Should().Be(1);
-		}
-
-		[Test]
-		public void ShouldCalculatePercentageCorrectlyAfterDSTStarted()
-		{
-			var timeZone = TimeZoneInfoFactory.CentralStandardTime();
-			UserTimeZone.Is(timeZone);
-			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(timeZone);
-			Now.Is(new DateTime(2018, 03, 11, 6, 0, 0, DateTimeKind.Utc));
-
-			addSiteOpenHour();
-			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(new DateTime(2018, 03, 11, 06, 00, 0), timeZone),
-				TimeZoneHelper.ConvertToUtc(new DateTime(2018, 03, 11, 08, 00, 0), timeZone));
-			addAssignment(period);
-
-			var result = Target.FetchDayData(null, StaffingPossiblityType.Absence);
-
-			result.TimeLine.Count().Should().Be(5);
-			result.TimeLine.ElementAt(0).Time.Should().Be(TimeSpan.FromHours(5).Add(TimeSpan.FromMinutes(45)));
-			result.TimeLine.ElementAt(0).PositionPercentage.Should().Be(0);
-			result.TimeLine.ElementAt(1).Time.Should().Be(TimeSpan.FromHours(6));
-			result.TimeLine.ElementAt(1).PositionPercentage.Should().Be(0.25M / 2.5M);
-			result.TimeLine.ElementAt(2).Time.Should().Be(TimeSpan.FromHours(7));
-			result.TimeLine.ElementAt(2).PositionPercentage.Should().Be(1.25M / 2.5M);
-			result.TimeLine.ElementAt(3).Time.Should().Be(TimeSpan.FromHours(8));
-			result.TimeLine.ElementAt(3).PositionPercentage.Should().Be(2.25M / 2.5M);
-			result.TimeLine.ElementAt(4).Time.Should().Be(TimeSpan.FromHours(8).Add(TimeSpan.FromMinutes(15)));
-			result.TimeLine.ElementAt(4).PositionPercentage.Should().Be(1);
-		}
-
-		[Test]
-		public void ShouldUseDefaultTimelineForDayWithoutSchedule()
-		{
-			var date = new DateOnly(2014, 12, 18);
-			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
-			ScheduleData.Add(assignment);
-
-			var result = Target.FetchDayData(date);
-
-			AssertTimeLine(result.TimeLine.ToList(), 8, 0, 17, 0);
-		}
-
-		[Test]
 		public void ShouldGetUnreadMessageCount()
 		{
 			PushMessageDialogueRepository.Add(new PushMessageDialogue(new PushMessage(), User.CurrentUser()));
@@ -595,67 +362,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldUseDefaultTimelineForDayWithoutScheduleAndOvertimeYesterdayInvisible()
-		{
-			var dateOnly = new DateOnly(2014, 12, 18);
-			var period = new DateTimePeriod(new DateTime(2014, 12, 17, 22, 0, 0, DateTimeKind.Utc),
-				new DateTime(2014, 12, 17, 23, 59, 0, DateTimeKind.Utc));
-
-			var activity = new Activity("test activity") {InWorkTime = true, DisplayColor = Color.Blue};
-			var multiplicatorDefinicationSet = new MultiplicatorDefinitionSet("aa", MultiplicatorType.Overtime);
-
-			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), dateOnly);
-			assignment.AddOvertimeActivity(activity, period, multiplicatorDefinicationSet, false);
-			ScheduleData.Add(assignment);
-
-			var result = Target.FetchDayData(dateOnly, StaffingPossiblityType.Overtime);
-
-			AssertTimeLine(result.TimeLine.ToList(), 8, 0, 17, 0);
-		}
-
-		[Test]
-		public void ShouldAdjustTimeLineBySkillOpenHourWhenSiteOpenHourIsNotAvailableDaySchedule()
-		{
-			var skill = addSkill();
-			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
-				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
-			addAssignment(period, skill.Activity);
-
-			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
-
-			AssertTimeLine(result.TimeLine.ToList(),6,45,18,15);
-		}
-
-		[Test]
-		public void ShouldAdjustTimeLineStartTimeToZeroWhenSkillOpenHourIsCrossDay()
-		{
-			var skill = addSkill();
-			skill.TimeZone = TimeZoneInfoFactory.MountainTimeZoneInfo();
-			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
-				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
-			addAssignment(period, skill.Activity);
-
-			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
-
-			AssertTimeLine(result.TimeLine.ToList(), 0, 0, 23, 59);
-		}
-
-		[Test]
-		public void ShouldNotAdjustTimeLineBySkillOpenHourWhenSchedulePeriodContainsSkillOpenHour()
-		{
-			var skill = addSkill();
-			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 6, 15, 0, DateTimeKind.Utc),
-				new DateTime(2014, 12, 18, 18, 45, 0, DateTimeKind.Utc));
-			addAssignment(period, skill.Activity);
-
-			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
-
-			AssertTimeLine(result.TimeLine.ToList(),6,0,19,0);
-		}
-
-		[Test]
-		
 		public void ShouldAdjustTimeLineBySkillOpenHourWhenSiteOpenHourIsNotAvailableWeekSchedule()
 		{
 			var skill = addSkill();
@@ -663,13 +369,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
 			addAssignment(period, skill.Activity);
 
-			var result = Target.FetchWeekData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(new DateOnly(Now.UtcDateTime()), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),6,45,18,15);
 		}
 
 		[Test]
-		
 		public void ShouldAdjustTimeLineByFullDaySkillOpenHourWhenSiteOpenHourIsNotAvailableWeekSchedule()
 		{
 
@@ -678,7 +383,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
 			addAssignment(period, skill.Activity);
 
-			var result = Target.FetchWeekData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(new DateOnly(Now.UtcDateTime()), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),0,0,23,59);
 		}
@@ -695,7 +400,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			addAssignment(null, new activityDto { Period = period1, Activity = skill1.Activity },
 				new activityDto { Period = period2, Activity = skill2.Activity });
 
-			var result = Target.FetchWeekData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(new DateOnly(Now.UtcDateTime()), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),6,45,19,15);
 		}
@@ -703,7 +408,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldNotAdjustTimeLineByNonInBoundPhoneSkillOpenHoursWhenSiteOpenHourIsNotAvailableWeekSchedule()
 		{
-			var personPeriod = (PersonPeriod)User.CurrentUser().PersonPeriods(Now.ServerDate_DontUse().ToDateOnlyPeriod()).FirstOrDefault();
+			var personPeriod = (PersonPeriod)User.CurrentUser().PersonPeriods(new DateOnly(Now.UtcDateTime()).ToDateOnlyPeriod()).FirstOrDefault();
 			personPeriod.ResetPersonSkill();
 
 			var skill = addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
@@ -712,13 +417,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
 			addAssignment(period);
 
-			var result = Target.FetchWeekData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(new DateOnly(Now.UtcDateTime()), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),9,0,10,0);
 		}
 
 		[Test]
-		
 		public void ShouldNotAdjustTimeLineBySkillOpenHoursWhenNoSkillAreScheduled()
 		{
 			addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
@@ -726,26 +430,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
 			addAssignment(period);
 
-			var result = Target.FetchWeekData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(new DateOnly(Now.UtcDateTime()), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),6,45,15,15);
 		}
 
 		[Test]
-		public void ShouldInflateMinMaxTimeAfterAdjustBySkillOpenHourDaySchedule()
-		{
-			var skill = addSkill(TimeSpan.FromHours(8), TimeSpan.FromHours(18));
-			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 11, 0, 0, DateTimeKind.Utc),
-				new DateTime(2014, 12, 18, 20, 0, 0, DateTimeKind.Utc));
-			addAssignment(period, skill.Activity);
-
-			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
-
-			AssertTimeLine(result.TimeLine.ToList(), 7, 45, 20, 15);
-		}
-
-		[Test]
-		
 		public void ShouldInflateMinMaxTimeAfterAdjustBySkillOpenHourWeekSchedule()
 		{
 			var skill = addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
@@ -758,61 +448,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				addAssignment(period, skill.Activity);
 			}
 
-			var result = Target.FetchWeekData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(new DateOnly(Now.UtcDateTime()), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),6,0,15,15);
 		}
 
 		[Test]
-		public void ShouldInflateMinMaxTimeAfterAdjustBySiteOpenHourDaySchedule()
-		{
-			addSiteOpenHour();
-			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 9, 15, 0, DateTimeKind.Utc),
-				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
-			addAssignment(period);
-
-			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
-
-			AssertTimeLine(result.TimeLine.ToList(),7,45,17,15);
-		}
-
-
-		[Test]
-		
-		public void ShouldInflateMinMaxTimeAfterAdjustBySiteOpenHourWeekSchedule()
-		{
-			addSiteOpenHour();
-			var day = DateHelper.GetFirstDateInWeek(Now.UtcDateTime().Date, CultureInfo.CurrentCulture);
-			for (var i = 0; i < 7; i++)
-			{
-				day = day.AddDays(i);
-				var period = new DateTimePeriod(day.AddHours(6).AddMinutes(15),
-					day.AddHours(9).AddMinutes(45));
-				addAssignment(period);
-			}
-
-			var result = Target.FetchWeekData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
-
-			AssertTimeLine(result.TimeLine.ToList(),6,0,17,15);
-		}
-
-		[Test]
-		
-		public void ShouldNotAdjustTimeLineBySkillOpenHoursWhenStaffingDataIsNotAvailableForTheDay()
-		{
-			addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
-			var assignmentDate = new DateOnly(2015, 1, 2);
-			var period1 = new DateTimePeriod(new DateTime(2015, 1, 2, 9, 15, 0, DateTimeKind.Utc),
-				new DateTime(2015, 1, 2, 9, 45, 0, DateTimeKind.Utc));
-			addAssignment(period1, assignmentDate);
-
-			var result = Target.FetchDayData(assignmentDate, StaffingPossiblityType.Overtime);
-
-			AssertTimeLine(result.TimeLine.ToList(),9,0,10,0);
-		}
-
-		[Test]
-		
 		public void ShouldAdjustTimelineBySiteOpenHourAndSkillOpenHourWeekSchedule()
 		{
 			var skill = addSkill(TimeSpan.FromHours(7), TimeSpan.FromHours(15));
@@ -827,7 +468,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				addAssignment(new DateOnly(day), new activityDto { Period = period, Activity = skill.Activity });
 			}
 
-			var result = Target.FetchWeekData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(new DateOnly(Now.UtcDateTime()), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(), 6, 45, 17, 15);
 		}
@@ -847,71 +488,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.FetchWeekData(new DateOnly(2014, 12, 31), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(), 0, 0, 23, 59);
-		}
-
-		[Test]
-		
-		public void ShouldAdjustTimeLineBySkillOpenHoursOnlyWithDayOff()
-		{
-			addSkill();
-			var dayOffAssignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(User.CurrentUser(), Scenario.Current(), Now.ServerDate_DontUse(), DayOffFactory.CreateDayOff(new Description("Dayoff")));
-			ScheduleData.Add(dayOffAssignment);
-
-			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
-
-			AssertTimeLine(result.TimeLine.ToList(), 6, 45, 18, 15);
-		}
-
-		[Test]
-		public void ShouldUseDefaultTimeLineForNoScheduledDayWhenYesterdayHasNoNextDayOvertimeAvaibility()
-		{
-			var period = new DateTimePeriod(new DateTime(2014, 12, 17, 9, 15, 0, DateTimeKind.Utc),
-				new DateTime(2014, 12, 17, 9, 45, 0, DateTimeKind.Utc));
-			addAssignment(new DateOnly(2014, 12, 17), new activityDto { Activity = new Activity(), Period = period });
-
-			IOvertimeAvailability overtimeAvailability =
-				new OvertimeAvailability(User.CurrentUser(), Now.ServerDate_DontUse().AddDays(-1), TimeSpan.FromHours(11), TimeSpan.FromHours(12));
-			ScheduleData.Add(overtimeAvailability);
-			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
-
-			AssertTimeLine(result.TimeLine.ToList(), 8, 0, 17, 0);
-		}
-
-		[Test]
-		public void ShouldUseDefaultTimeLineForNoScheduledDayWhenYesterdayHasNextDayOvertimeAvaibilityEndsAtZero()
-		{
-			var period = new DateTimePeriod(new DateTime(2014, 12, 17, 9, 15, 0, DateTimeKind.Utc),
-				new DateTime(2014, 12, 17, 9, 45, 0, DateTimeKind.Utc));
-			addAssignment(new DateOnly(2014, 12, 17), new activityDto { Activity = new Activity(), Period = period });
-
-			IOvertimeAvailability overtimeAvailability =
-				new OvertimeAvailability(User.CurrentUser(), Now.ServerDate_DontUse().AddDays(-1), TimeSpan.FromHours(23), TimeSpan.FromDays(1));
-			ScheduleData.Add(overtimeAvailability);
-			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
-
-			AssertTimeLine(result.TimeLine.ToList(), 8, 0, 17, 0);
-		}
-
-		[Test]
-		public void ShouldGetCorrectPercentageForNoScheduledDayWhenYesterdayHasNextDayOvertimeAvaibilityEndsInFirstHour()
-		{
-			var period = new DateTimePeriod(new DateTime(2014, 12, 17, 9, 15, 0, DateTimeKind.Utc),
-				new DateTime(2014, 12, 17, 9, 45, 0, DateTimeKind.Utc));
-			addAssignment(new DateOnly(2014, 12, 17), new activityDto { Activity = new Activity(), Period = period });
-
-			IOvertimeAvailability overtimeAvailability =
-				new OvertimeAvailability(User.CurrentUser(), Now.ServerDate_DontUse().AddDays(-1), TimeSpan.FromHours(23),
-					TimeSpan.FromDays(1).Add(TimeSpan.FromMinutes(30)));
-			ScheduleData.Add(overtimeAvailability);
-			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
-
-			var timelines = result.TimeLine.ToList();
-			AssertTimeLine(timelines, 0, 0, 1, 0);
-			timelines.Count.Should().Be(2);
-			timelines[0].PositionPercentage.Should().Be(0);
-			timelines[1].PositionPercentage.Should().Be(1);
-			result.Schedule.Periods.ElementAt(0).StartPositionPercentage.Should().Be(0);
-			result.Schedule.Periods.ElementAt(0).EndPositionPercentage.Should().Be(0.5);
 		}
 
 		private void AssertTimeLine(IList<TimeLineViewModel> timeLine, int startHour, int startMinute, int endHour, int endMinute)
@@ -1021,7 +597,5 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				team.Site.AddOpenHour(siteOpenHour);
 			}
 		}
-
-		
 	}
 }

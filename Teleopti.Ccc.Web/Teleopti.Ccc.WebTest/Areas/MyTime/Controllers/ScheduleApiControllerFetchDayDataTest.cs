@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -76,112 +75,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Schedule.State.Should().Be.EqualTo(SpecialDateState.Today);
 			result.Schedule.Availability.Should().Be.EqualTo(false);
 			result.Schedule.HasNote.Should().Be.False();
-		}
-
-		[Test]
-		public void ShouldMapTimeLineEdgesOnFetchDayData()
-		{
-			var date = new DateOnly(2015, 03, 29);
-			var timePeriod = new DateTimePeriod("2015-03-29 08:00".Utc(), "2015-03-29 17:00".Utc());
-			var personAssignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
-			var phone = new Activity("p");
-			personAssignment.AddActivity(phone, timePeriod);
-			PersonAssignmentRepository.Has(personAssignment);
-
-			var viewModel = Target.FetchDayData(date);
-			viewModel.TimeLine.First().TimeLineDisplay.Should().Be("07:45");
-			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("17:15");
-		}
-
-		[Test]
-		public void ShouldMapTimeLineCorrectlyOnDayBeforeDstOnFetchDayData()
-		{
-			TimeZone.IsSweden();
-			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
-			User.CurrentUser().PermissionInformation.SetCulture(CultureInfo.CurrentCulture);
-
-			var date = new DateOnly(2015, 03, 28);
-			var timePeriod = new DateTimePeriod("2015-03-28 07:45".Utc(), "2015-03-28 17:00".Utc());
-			var personAssignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
-			var phone = new Activity("p");
-			personAssignment.AddActivity(phone, timePeriod);
-			PersonAssignmentRepository.Has(personAssignment);
-
-			var viewModel = Target.FetchDayData(date);
-			viewModel.TimeLine.First().TimeLineDisplay.Should().Be("08:30");
-			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("18:15");
-		}
-
-		[Test]
-		public void ShouldMapTimeLineCorrectlyOnFirstDstDayOnFetchDayData()
-		{
-			TimeZone.IsSweden();
-			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
-			User.CurrentUser().PermissionInformation.SetCulture(CultureInfo.CurrentCulture);
-			Now.Is("2015-03-29 10:00");
-			var date = new DateOnly(Now.UtcDateTime());
-			var personAssignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
-			var phone = new Activity("p");
-			personAssignment.AddActivity(phone, new DateTimePeriod("2015-03-29 07:45".Utc(), "2015-03-29 17:00".Utc()));
-			PersonAssignmentRepository.Has(personAssignment);
-
-			var viewModel = Target.FetchDayData(date);
-			viewModel.TimeLine.First().TimeLineDisplay.Should().Be("09:30");
-			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("19:15");
-		}
-
-		[Test]
-		public void ShouldMapTimeLineCorrectlyOnFirstDstDayAndNightShiftOnFetchDayData()
-		{
-			TimeZone.IsSweden();
-			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
-			User.CurrentUser().PermissionInformation.SetCulture(CultureInfo.CurrentCulture);
-
-			var date = new DateOnly(2015, 03, 29);
-			var phone = new Activity("p");
-			var personAssignment1 = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2015, 3, 28));
-			personAssignment1.AddActivity(phone, new DateTimePeriod("2015-03-28 00:00".Utc(), "2015-03-28 04:00".Utc()));
-			var personAssignment2 = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2015, 3, 29));
-			personAssignment2.AddActivity(phone, new DateTimePeriod("2015-03-29 00:00".Utc(), "2015-03-29 04:00".Utc()));
-			PersonAssignmentRepository.Has(personAssignment1);
-			PersonAssignmentRepository.Has(personAssignment2);
-
-			var viewModel = Target.FetchDayData(date);
-			viewModel.TimeLine.First().TimeLineDisplay.Should().Be("00:45");
-			viewModel.TimeLine.ElementAt(1).TimeLineDisplay.Should().Be("01:00");
-			viewModel.TimeLine.ElementAt(2).TimeLineDisplay.Should().Be("02:00");
-			viewModel.TimeLine.ElementAt(3).TimeLineDisplay.Should().Be("03:00");
-			viewModel.TimeLine.ElementAt(4).TimeLineDisplay.Should().Be("04:00");
-			viewModel.TimeLine.ElementAt(5).TimeLineDisplay.Should().Be("05:00");
-			viewModel.TimeLine.ElementAt(6).TimeLineDisplay.Should().Be("06:00");
-			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("06:15");
-		}
-
-		[Test]
-		public void ShouldMapTimeLineCorrectlyOnEndDstDayAndNightShiftOnFetchDayData()
-		{
-			TimeZone.IsSweden();
-
-			Now.Is("2015-10-25 10:00");
-			var date = new DateOnly(Now.UtcDateTime());
-
-			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(TimeZone.TimeZone());
-			User.CurrentUser().PermissionInformation.SetCulture(CultureInfo.CurrentCulture);
-			var phone = new Activity("p");
-			var personAssignment1 = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2015, 10, 24));
-			personAssignment1.AddActivity(phone, new DateTimePeriod("2015-10-24 00:00".Utc(), "2015-10-24 04:00".Utc()));
-			var personAssignment2 = new PersonAssignment(User.CurrentUser(), Scenario.Current(), new DateOnly(2015, 10, 25));
-			personAssignment2.AddActivity(phone, new DateTimePeriod("2015-10-25 00:00".Utc(), "2015-10-25 04:00".Utc()));
-			PersonAssignmentRepository.Has(personAssignment1);
-			PersonAssignmentRepository.Has(personAssignment2);
-
-			var viewModel = Target.FetchDayData(date);
-			viewModel.TimeLine.First().TimeLineDisplay.Should().Be("01:45");
-			viewModel.TimeLine.ElementAt(1).TimeLineDisplay.Should().Be("02:00");
-			viewModel.TimeLine.ElementAt(2).TimeLineDisplay.Should().Be("03:00");
-			viewModel.TimeLine.ElementAt(3).TimeLineDisplay.Should().Be("04:00");
-			viewModel.TimeLine.ElementAt(4).TimeLineDisplay.Should().Be("05:00");
-			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("05:15");
 		}
 
 		[Test]
@@ -361,7 +254,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		[Ignore("Jianfeng TODO: temp ignore")]
 		public void ShouldNotShowYesterdayOvernightShiftCauseItBelongsToYesterdayOnFetchDayData()
 		{
 			var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
@@ -601,24 +493,35 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldCreateOvertimeAvailabilityPeriodViewModelForYesterdayOnFetchDayData()
+		public void ShouldNotCreateOvertimeAvailabilityPeriodViewModelForYesterdayIfNotOverlappingTodayShift()
 		{
-			var date = new DateOnly(2014, 12, 14);
+			var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
+			TimeZone.Is(timeZone);
+			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(timeZone);
+			Now.Is(new DateTime(2014, 12, 13, 6, 0, 0, DateTimeKind.Utc));
+
+			var date = new DateOnly(2014, 12, 13);
 			var start = new TimeSpan(12, 0, 0);
-			var end = new TimeSpan(25, 0, 0);
+			var end = new TimeSpan(28, 0, 0);
 			var overtimeAvailability = new OvertimeAvailability(User.CurrentUser(), date, start, end);
 			ScheduleData.Add(overtimeAvailability);
 
-			var result = Target.FetchDayData(date.AddDays(1)).Schedule.Periods.Single() as OvertimeAvailabilityPeriodViewModel;
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date.AddDays(1));
+			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(new DateTime(2014, 12, 14, 05, 0, 0), timeZone),
+				TimeZoneHelper.ConvertToUtc(new DateTime(2014, 12, 14, 13, 0, 0), timeZone));
+			var phoneActivity = new Activity("Phone")
+			{
+				InWorkTime = true,
+				InContractTime = true,
+				DisplayColor = Color.Green
+			};
+			assignment.AddActivity(phoneActivity, period);
+			assignment.SetShiftCategory(new ShiftCategory("sc"));
+			ScheduleData.Add(assignment);
 
-			result.Title.Should().Be.EqualTo(Resources.OvertimeAvailabilityWeb);
-			result.TimeSpan.Should()
-				.Equals(TimeHelper.TimeOfDayFromTimeSpan(start, CultureInfo.CurrentCulture) + " - " +
-						TimeHelper.TimeOfDayFromTimeSpan(end, CultureInfo.CurrentCulture));
-			result.StartPositionPercentage.Should().Be.EqualTo(0);
-			result.EndPositionPercentage.Should().Be.EqualTo(1M / 1.25M);
-			result.IsOvertimeAvailability.Should().Be.True();
-			result.Color.Should().Be.EqualTo(Color.Gray.ToCSV());
+			var result = Target.FetchDayData(date.AddDays(1)).Schedule.Periods;
+			result.Count().Should().Be.EqualTo(1);
+			result.Any(p => p is OvertimeAvailabilityPeriodViewModel).Should().Be.False();
 		}
 
 		[Test]
@@ -768,7 +671,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.FetchDayData(date).Schedule;
 			result.RequestsCount.Should().Be.EqualTo(2);
 		}
-
 
 		[Test]
 		public void ShouldMapOvertimeRequestCountOnFetchDayData()
@@ -933,28 +835,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.TimeLine.ElementAt(1).Time.Hours.Should().Be.EqualTo(9);
 			result.TimeLine.ElementAt(1).Time.Minutes.Should().Be.EqualTo(0);
 			result.TimeLine.ElementAt(1).PositionPercentage.Should().Be.EqualTo(0.5 / (17.5 - 8.5));
-		}
-
-		[Test]
-		public void ShouldMapOvernightTimeLineOnFetchDayData()
-		{
-			var date = new DateOnly(2014, 12, 18);
-			var period = new DateTimePeriod(new DateTime(2014, 12, 18, 18, 45, 0, DateTimeKind.Utc),
-				new DateTime(2014, 12, 19, 2, 15, 0, DateTimeKind.Utc));
-			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
-
-			assignment.AddActivity(new Activity("a") { InWorkTime = true, DisplayColor = Color.Blue }, period);
-			assignment.SetShiftCategory(new ShiftCategory("sc") { DisplayColor = Color.Red });
-			ScheduleData.Add(assignment);
-
-			var result = Target.FetchDayData(date);
-			result.TimeLine.Count().Should().Be.EqualTo(10);
-			result.TimeLine.First().Time.Hours.Should().Be.EqualTo(18);
-			result.TimeLine.First().Time.Minutes.Should().Be.EqualTo(30);
-			result.TimeLine.First().PositionPercentage.Should().Be.EqualTo(0.0);
-			result.TimeLine.ElementAt(1).Time.Hours.Should().Be.EqualTo(19);
-			result.TimeLine.ElementAt(1).Time.Minutes.Should().Be.EqualTo(0);
-			result.TimeLine.ElementAt(1).PositionPercentage.Should().Be.EqualTo(0.5 / (26.5 - 18.5));
 		}
 
 		[Test]

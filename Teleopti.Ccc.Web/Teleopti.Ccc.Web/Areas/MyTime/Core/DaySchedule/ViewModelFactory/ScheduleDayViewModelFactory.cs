@@ -39,8 +39,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.ViewModelFactory
 
 			if (!hasVisualSchedule)
 			{
-				// Set timeline to 8:00-17:00 if no schedule
-				// Refer to Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping.ShiftTradeTimeLineHoursViewModelMapper.getTimeLinePeriod()
 				var defaultTimeLinePeriod = new TimePeriod(TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultStartHour), TimeSpan.FromHours(DefaultSchedulePeriodProvider.DefaultEndHour));
 				daySchedule.MinMaxTime = defaultTimeLinePeriod;
 				daySchedule.MinMaxTime = defaultTimeLinePeriod;

@@ -46,9 +46,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping
 			OvertimeAvailabilityViewModelMapper overtimeMapper,
 			IRequestsViewModelFactory requestsViewModelFactory,
 			ISiteOpenHourProvider siteOpenHourProvider,
-			IScheduledSkillOpenHourProvider scheduledSkillOpenHourProvider, 
+			IScheduledSkillOpenHourProvider scheduledSkillOpenHourProvider,
 			ILicenseAvailability licenseAvailability,
-			IToggleManager toggleManager, 
+			IToggleManager toggleManager,
 			IStaffingDataAvailablePeriodProvider staffingDataAvailablePeriodProvider)
 		{
 			_periodViewModelFactory = periodViewModelFactory;
@@ -64,46 +64,46 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping
 			_staffingDataAvailablePeriodProvider = staffingDataAvailablePeriodProvider;
 		}
 
-		public DayScheduleViewModel Map(DayScheduleDomainData s, bool loadOpenHourPeriod = false)
+		public DayScheduleViewModel Map(DayScheduleDomainData dayScheduleDomainData, bool loadOpenHourPeriod = false)
 		{
 			var currentUser = _loggedOnUser.CurrentUser();
 			var timeZone = currentUser.PermissionInformation.DefaultTimeZone();
 
 			var daylightSavingAdjustment = TimeZoneHelper.GetDaylightChanges(
-				timeZone, _now.ServerDateTime_DontUse().Year);
+				timeZone, _now.UtcDateTime().Year);
 			var daylightModel = daylightSavingAdjustment != null
 				? new DaylightSavingsTimeAdjustmentViewModel(daylightSavingAdjustment)
 				{
-					EnteringDST = s.Date.Date.Equals(TimeZoneHelper.ConvertFromUtc(daylightSavingAdjustment.Start, timeZone).Date),
+					EnteringDST = dayScheduleDomainData.Date.Date.Equals(TimeZoneHelper.ConvertFromUtc(daylightSavingAdjustment.Start, timeZone).Date),
 					LocalDSTStartTimeInMinutes = (int)TimeZoneHelper.ConvertFromUtc(daylightSavingAdjustment.Start, timeZone).TimeOfDay.TotalMinutes
 				}
 				: null;
 
 			var viewModel = new DayScheduleViewModel
 			{
-				Date = s.Date.ToFixedClientDateOnlyFormat(),
+				Date = dayScheduleDomainData.Date.ToFixedClientDateOnlyFormat(),
 				BaseUtcOffsetInMinutes = timeZone.BaseUtcOffset.TotalMinutes,
 				DaylightSavingTimeAdjustment = daylightModel,
-				TimeLine = createTimeLine(s.MinMaxTime, s.Date, daylightSavingAdjustment, timeZone),
-				RequestPermission = mapDaySchedulePermission(s),
-				ViewPossibilityPermission = s.ViewPossibilityPermission,
+				TimeLine = createTimeLine(dayScheduleDomainData.MinMaxTime, dayScheduleDomainData.Date, daylightSavingAdjustment, timeZone),
+				RequestPermission = mapDaySchedulePermission(dayScheduleDomainData),
+				ViewPossibilityPermission = dayScheduleDomainData.ViewPossibilityPermission,
 				DatePickerFormat = DateTimeFormatExtensions.LocalizedDateFormat,
-				Schedule = createDayViewModel(s, loadOpenHourPeriod),
-				AsmEnabled = s.AsmEnabled,
-				IsToday = s.IsCurrentDay,
-				CheckStaffingByIntraday = isCheckStaffingByIntradayForDay(currentUser.WorkflowControlSet, s.Date),
+				Schedule = createDayViewModel(dayScheduleDomainData, loadOpenHourPeriod),
+				AsmEnabled = dayScheduleDomainData.AsmEnabled,
+				IsToday = dayScheduleDomainData.IsCurrentDay,
+				CheckStaffingByIntraday = isCheckStaffingByIntradayForDay(currentUser.WorkflowControlSet, dayScheduleDomainData.Date),
 				AbsenceProbabilityEnabled = currentUser.WorkflowControlSet?.AbsenceProbabilityEnabled ?? false,
-				OvertimeProbabilityEnabled = isOvertimeProbabilityEnabled(s.Date, false),
-				UnReadMessageCount = s.UnReadMessageCount,
+				OvertimeProbabilityEnabled = isOvertimeProbabilityEnabled(dayScheduleDomainData.Date),
+				UnReadMessageCount = dayScheduleDomainData.UnReadMessageCount,
 				ShiftTradeRequestSetting = _requestsViewModelFactory.CreateShiftTradePeriodViewModel(),
 				StaffingInfoAvailableDays = StaffingInfoAvailableDaysProvider.GetDays(_toggleManager) + 1
 			};
-			viewModel.Schedule.Periods = projections(s, false);
+			viewModel.Schedule.Periods = projections(dayScheduleDomainData);
 
 			return viewModel;
 		}
 
-		private bool isOvertimeProbabilityEnabled(DateOnly date, bool forThisWeek)
+		private bool isOvertimeProbabilityEnabled(DateOnly date)
 		{
 			var currentUser = _loggedOnUser.CurrentUser();
 			var overtimeProbabilityEnabled = currentUser.WorkflowControlSet?.OvertimeProbabilityEnabled != null
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping
 			if (!overtimeProbabilityEnabled)
 				return false;
 
-			var isStaffingDataAvailable = _staffingDataAvailablePeriodProvider.GetPeriodsForOvertime(date, forThisWeek).Any();
+			var isStaffingDataAvailable = _staffingDataAvailablePeriodProvider.GetPeriodsForOvertime(date).Any();
 			return isStaffingDataAvailable;
 		}
 
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping
 			return _licenseAvailability.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiCccOvertimeAvailability)
 				   || _licenseAvailability.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiWfmOvertimeRequests);
 		}
-		
+
 		private bool isCheckStaffingByIntradayForDay(IWorkflowControlSet workflowControlSet, DateOnly showForDate)
 		{
 			if (workflowControlSet?.AbsenceRequestOpenPeriods == null || !workflowControlSet.AbsenceRequestOpenPeriods.Any())
@@ -131,31 +131,31 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping
 			return showForDate >= _now.ServerDate_DontUse() &&
 				   workflowControlSet.IsAbsenceRequestCheckStaffingByIntraday(_now.ServerDate_DontUse(), showForDate);
 		}
-		
-		private DayViewModel createDayViewModel(DayScheduleDomainData s, bool loadOpenHourPeriod = false)
+
+		private DayViewModel createDayViewModel(DayScheduleDomainData dayScheduleDomainData, bool loadOpenHourPeriod = false)
 		{
-			var personAssignment = s.ScheduleDay?.PersonAssignment();
-			var significantPartForDisplay = s.ScheduleDay?.SignificantPartForDisplay();
+			var personAssignment = dayScheduleDomainData.ScheduleDay?.PersonAssignment();
+			var significantPartForDisplay = dayScheduleDomainData.ScheduleDay?.SignificantPartForDisplay();
 			var dayViewModel = new DayViewModel
 			{
-				Date = s.Date.ToShortDateString(),
-				FixedDate = s.Date.ToFixedClientDateOnlyFormat(),
-				DayOfWeekNumber = (int)s.Date.DayOfWeek,
-				RequestsCount = s.PersonRequestCount,
-				ProbabilityClass = s.ProbabilityClass,
-				ProbabilityText = s.ProbabilityText,
-				State = s.Date == new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone())) ? SpecialDateState.Today : 0,
-				Header = _headerViewModelFactory.CreateModel(s.ScheduleDay),
-				Note = s.ScheduleDay == null ? null : map(s.ScheduleDay.PublicNoteCollection()),
-				SeatBookings = s.SeatBookingInformation,
-				Summary = summary(s),
+				Date = dayScheduleDomainData.Date.ToShortDateString(),
+				FixedDate = dayScheduleDomainData.Date.ToFixedClientDateOnlyFormat(),
+				DayOfWeekNumber = (int)dayScheduleDomainData.Date.DayOfWeek,
+				RequestsCount = dayScheduleDomainData.PersonRequestCount,
+				ProbabilityClass = dayScheduleDomainData.ProbabilityClass,
+				ProbabilityText = dayScheduleDomainData.ProbabilityText,
+				State = dayScheduleDomainData.Date == new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone())) ? SpecialDateState.Today : 0,
+				Header = _headerViewModelFactory.CreateModel(dayScheduleDomainData.ScheduleDay),
+				Note = dayScheduleDomainData.ScheduleDay == null ? null : map(dayScheduleDomainData.ScheduleDay.PublicNoteCollection()),
+				SeatBookings = dayScheduleDomainData.SeatBookingInformation,
+				Summary = summary(dayScheduleDomainData),
 				HasOvertime = personAssignment != null && personAssignment.ShiftLayers.OfType<OvertimeShiftLayer>().Any(),
 				HasMainShift = personAssignment != null && personAssignment.ShiftLayers.OfType<MainShiftLayer>().Any(),
 				IsFullDayAbsence = significantPartForDisplay == SchedulePartView.FullDayAbsence,
 				IsDayOff = significantPartForDisplay == SchedulePartView.DayOff,
-				OvertimeAvailabililty = overtimeAvailability(s),
-				Availability = s.Availability,
-				OpenHourPeriod = loadOpenHourPeriod ? getOpenHourPeriod(s) : null
+				OvertimeAvailabililty = overtimeAvailability(dayScheduleDomainData),
+				Availability = dayScheduleDomainData.Availability,
+				OpenHourPeriod = loadOpenHourPeriod ? getOpenHourPeriod(dayScheduleDomainData) : null
 			};
 			dayViewModel.HasNotScheduled = dayViewModel.Summary.Title == Resources.NotScheduled;
 
@@ -171,28 +171,28 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping
 			};
 		}
 
-		private RequestPermission map(DayScheduleDomainData s)
+		private RequestPermission map(DayScheduleDomainData day)
 		{
 			return new RequestPermission
 			{
-				AbsenceReportPermission = s.AbsenceReportPermission,
-				AbsenceRequestPermission = s.AbsenceRequestPermission,
-				OvertimeRequestPermission = s.OvertimeRequestPermission,
-				OvertimeAvailabilityPermission = s.OvertimeAvailabilityPermission,
-				PersonAccountPermission = s.PersonAccountPermission,
-				ShiftTradeBulletinBoardPermission = s.ShiftTradeBulletinBoardPermission,
-				ShiftExchangePermission = s.ShiftExchangePermission,
-				TextRequestPermission = s.TextRequestPermission
+				AbsenceReportPermission = day.AbsenceReportPermission,
+				AbsenceRequestPermission = day.AbsenceRequestPermission,
+				OvertimeRequestPermission = day.OvertimeRequestPermission,
+				OvertimeAvailabilityPermission = day.OvertimeAvailabilityPermission,
+				PersonAccountPermission = day.PersonAccountPermission,
+				ShiftTradeBulletinBoardPermission = day.ShiftTradeBulletinBoardPermission,
+				ShiftExchangePermission = day.ShiftExchangePermission,
+				TextRequestPermission = day.TextRequestPermission
 			};
 		}
 
-		private RequestPermission mapDaySchedulePermission(DayScheduleDomainData s)
+		private RequestPermission mapDaySchedulePermission(DayScheduleDomainData day)
 		{
-			var permission = map(s);
-			permission.ShiftTradeRequestPermission = s.ShiftTradeRequestPermission;
+			var permission = map(day);
+			permission.ShiftTradeRequestPermission = day.ShiftTradeRequestPermission;
 			return permission;
 		}
-		
+
 		private IEnumerable<TimeLineViewModel> createTimeLine(TimePeriod timelinePeriod, DateOnly date, DaylightTime daylightTime = null, TimeZoneInfo timezone = null)
 		{
 			timelinePeriod = adjustMinEndTime(timelinePeriod);
@@ -271,35 +271,30 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping
 				   || date.Date.Add(timeSpan).CompareTo(localDayLightTimeStart) >= 0;
 		}
 
-		private IEnumerable<PeriodViewModel> projections(DayScheduleDomainData s, bool forWeek)
+		private IEnumerable<PeriodViewModel> projections(DayScheduleDomainData day)
 		{
 			var projectionList = new List<IVisualLayer>();
-			if (s.ProjectionYesterday != null)
+			if (day.ProjectionYesterday != null)
 			{
-				projectionList.AddRange(s.ProjectionYesterday);
+				projectionList.AddRange(day.ProjectionYesterday);
 			}
 
-			if (s.Projection != null)
+			if (day.Projection != null)
 			{
-				projectionList.AddRange(s.Projection);
+				projectionList.AddRange(day.Projection);
 			}
 
 			var periodViewModelFactory = _periodViewModelFactory;
-			var minMaxTime = adjustMinEndTime(s.MinMaxTime);
+			var minMaxTime = adjustMinEndTime(day.MinMaxTime);
 
-			IEnumerable<PeriodViewModel> periodsViewModels;
-			if (forWeek)
-				periodsViewModels = periodViewModelFactory.CreatePeriodViewModelsForWeek(projectionList, minMaxTime, s.Date,
-					s.ScheduleDay?.TimeZone, s.ScheduleDay.Person);
-			else
-				periodsViewModels = periodViewModelFactory.CreatePeriodViewModelsForDay(projectionList, minMaxTime, s.Date,
-					s.ScheduleDay?.TimeZone, s.ScheduleDay.Person, true);
+			var periodsViewModels = periodViewModelFactory.CreatePeriodViewModelsForDay(projectionList, minMaxTime, day.Date,
+				day.ScheduleDay?.TimeZone, day.ScheduleDay.Person, true);
 
 			periodsViewModels = periodsViewModels ?? new PeriodViewModel[0];
 
 			var overtimeAvailabilityPeriodViewModels =
-				periodViewModelFactory.CreateOvertimeAvailabilityPeriodViewModels(s.OvertimeAvailability,
-					s.OvertimeAvailabilityYesterday, minMaxTime) ?? new OvertimeAvailabilityPeriodViewModel[0];
+				periodViewModelFactory.CreateOvertimeAvailabilityPeriodViewModels(day.OvertimeAvailability,
+					day.OvertimeAvailabilityYesterday, minMaxTime) ?? new OvertimeAvailabilityPeriodViewModel[0];
 			return periodsViewModels.Concat(overtimeAvailabilityPeriodViewModels).OrderBy(p => p.StartTime);
 		}
 

@@ -49,27 +49,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.DataProvider
 		public DayScheduleDomainData GetDaySchedule(DateOnly date)
 		{
 			var period = new DateOnlyPeriod(date, date);
-			var periodStartDate = period.StartDate;
-
-			var periodWithPreviousDay = new DateOnlyPeriod(periodStartDate.AddDays(-1), period.EndDate);
-			var scheduleDays = _scheduleProvider.GetScheduleForPeriod(periodWithPreviousDay).ToList();
+			var scheduleDays = _scheduleProvider.GetScheduleForPeriod(new DateOnlyPeriod(period.StartDate.AddDays(-1), period.EndDate)).ToList();
 
 			var personRequestPeriods = _personRequestProvider.RetrieveRequestPeriodsForLoggedOnUser(period);
 			var requestProbability = _absenceRequestProbabilityProvider.GetAbsenceRequestProbabilityForPeriod(period);
 			var seatBookings = _seatBookingProvider.GetSeatBookingsForScheduleDays(scheduleDays);
+
 			var scheduleDaysAndProjections = scheduleDays.ToDictionary(day => day.DateOnlyAsPeriod.DateOnly,
 				day => new ScheduleDaysAndProjection
 				{
 					ScheduleDay = day,
-					Projection = getProjection(day)
+					Projection = _projectionProvider.Projection(day)
 				});
-			var minMaxTime = getMinMaxTime(scheduleDaysAndProjections, period);
-
+			var timezone = _userTimeZone.TimeZone();
 			var scheduleDayDomainData = new DayScheduleDomainData
 			{
 				Date = date,
-				IsCurrentDay = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _userTimeZone.TimeZone()).Date == date.Date,
-				MinMaxTime = minMaxTime,
+				IsCurrentDay = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timezone).Date == date.Date,
+				MinMaxTime = getMinMaxTime(scheduleDaysAndProjections, date, timezone),
 				ProbabilityClass = "",
 				ProbabilityText = "",
 			};
@@ -85,20 +82,25 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.DataProvider
 					: scheduleDay.OvertimeAvailablityCollection().FirstOrDefault();
 			}
 
-			if (scheduleDaysAndProjections.ContainsKey(date.AddDays(-1)))
+			var yesterdayOvertimeAvailability = scheduleDaysAndProjections[date.AddDays(-1)]?.ScheduleDay
+				.OvertimeAvailablityCollection()?.FirstOrDefault();
+			if (yesterdayOvertimeAvailability?.EndTime != null)
 			{
-				var yesterday = scheduleDaysAndProjections[date.AddDays(-1)];
-				var scheduleYesterday = yesterday.ScheduleDay;
-				scheduleDayDomainData.ProjectionYesterday = yesterday.Projection;
-				scheduleDayDomainData.OvertimeAvailabilityYesterday = scheduleYesterday.OvertimeAvailablityCollection() == null
-					? null
-					: scheduleYesterday.OvertimeAvailablityCollection().FirstOrDefault();
+				var endTimeSpan = yesterdayOvertimeAvailability.EndTime.Value;
+				var yesterdayOvertimeAvailabilityEndTime = yesterdayOvertimeAvailability?.DateOfOvertime.Date.AddDays(endTimeSpan.Days).AddHours(endTimeSpan.Hours).AddMinutes(endTimeSpan.Minutes);
+
+				var todayShiftStartTime = scheduleDaysAndProjections[date].Projection.Period()?.StartDateTime;
+
+				if (yesterdayOvertimeAvailabilityEndTime > todayShiftStartTime)
+				{
+					scheduleDayDomainData.OvertimeAvailabilityYesterday = yesterdayOvertimeAvailability;
+				}
 			}
 
 			if (personRequestPeriods != null)
 			{
 				scheduleDayDomainData.PersonRequestCount = personRequestPeriods
-					.Where(r => TimeZoneInfo.ConvertTimeFromUtc(r.StartDateTime, _userTimeZone.TimeZone())
+					.Where(r => TimeZoneInfo.ConvertTimeFromUtc(r.StartDateTime, timezone)
 									.Date == date.Date)
 					.ToArray().Length;
 			}
@@ -118,7 +120,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.DataProvider
 					.ToArray();
 			}
 
-			scheduleDayDomainData.AsmEnabled = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger) && isAsmLicenseAvailable();
+			setPermissionsInfo(scheduleDayDomainData);
+
+			return scheduleDayDomainData;
+		}
+
+		private void setPermissionsInfo(DayScheduleDomainData scheduleDayDomainData)
+		{
+			scheduleDayDomainData.AsmEnabled = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger) && _licenseAvailability.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiCccAgentScheduleMessenger);
 			scheduleDayDomainData.TextRequestPermission =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests);
 			scheduleDayDomainData.OvertimeAvailabilityPermission =
@@ -139,150 +148,121 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.DataProvider
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewPersonalAccount);
 			scheduleDayDomainData.ViewPossibilityPermission =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewStaffingInfo);
-
-			return scheduleDayDomainData;
 		}
 
-		private IVisualLayerCollection getProjection(IScheduleDay day)
+		private TimePeriod getMinMaxTime(Dictionary<DateOnly, ScheduleDaysAndProjection> scheduleDaysAndProjections, DateOnly date, TimeZoneInfo timezone)
 		{
-			return _projectionProvider.Projection(day);
-		}
+			var start = new DateTime();
+			var end = new DateTime();
 
-		private bool isAsmLicenseAvailable()
-		{
-			return _licenseAvailability.IsLicenseEnabled(DefinedLicenseOptionPaths.TeleoptiCccAgentScheduleMessenger);
-		}
-
-		private TimeSpan minFunction(ScheduleDaysAndProjection scheduleDayData, DateOnlyPeriod period)
-		{
-			var scheduleDay = scheduleDayData.ScheduleDay;
-			var projection = scheduleDayData.Projection;
-			var schedulePeriods = projection.Period();
-			var earlyStart = new TimeSpan(23, 59, 59);
-			var periodStartDate = period.StartDate;
-
-			if (schedulePeriods != null && projection.HasLayers)
+			var hasLayerToday = scheduleDaysAndProjections[date].Projection != null &&
+								scheduleDaysAndProjections[date].Projection.HasLayers;
+			if (hasLayerToday)
 			{
-				var userTimeZone = _userTimeZone.TimeZone();
-				var startTime = schedulePeriods.Value.TimePeriod(userTimeZone).StartTime;
-				var endTime = schedulePeriods.Value.TimePeriod(userTimeZone).EndTime;
-				var localEndDate = new DateOnly(schedulePeriods.Value.EndDateTimeLocal(userTimeZone).Date);
-				if (endTime.Days > startTime.Days && endTime > TimeSpan.FromDays(1) && period.Contains(localEndDate))
+				var todayShiftStart = (DateTime)scheduleDaysAndProjections[date].Projection.Period()?.StartDateTime;
+				var todayShiftEnd = (DateTime)scheduleDaysAndProjections[date].Projection.Period()?.EndDateTime;
+
+				start = TimeZoneHelper.ConvertFromUtc(todayShiftStart, timezone);
+				end = TimeZoneHelper.ConvertFromUtc(todayShiftEnd, timezone);
+			}
+
+			var hasOvertimeAvailabilityOnTodayOrYesterday =
+				scheduleDaysAndProjections.Any(s => s.Value.ScheduleDay.OvertimeAvailablityCollection().Length > 0);
+			if (hasOvertimeAvailabilityOnTodayOrYesterday)
+			{
+				var overtimeAvailabilityPeriod = getOvertimeAvailibilityPeriodInUtc(scheduleDaysAndProjections, date, timezone);
+				if (overtimeAvailabilityPeriod != null)
 				{
-					earlyStart = TimeSpan.Zero;
-				}
-				else if (scheduleDay.DateOnlyAsPeriod.DateOnly != periodStartDate.AddDays(-1))
-				{
-					earlyStart = startTime;
-				}
-			}
+					var overtimeAvailabilityStart = TimeZoneHelper.ConvertFromUtc(overtimeAvailabilityPeriod.Value.StartDateTime, timezone);
+					var overtimeAvailabilityEnd = TimeZoneHelper.ConvertFromUtc(overtimeAvailabilityPeriod.Value.EndDateTime, timezone);
 
-			var overtimeAvailabilityCollection = scheduleDay.OvertimeAvailablityCollection();
-			if (overtimeAvailabilityCollection == null)
-			{
-				return earlyStart;
-			}
+					if (!hasLayerToday)
+					{
+						start = overtimeAvailabilityStart;
+						end = overtimeAvailabilityEnd;
+					}
+					else
+					{
+						if (overtimeAvailabilityStart < start && overtimeAvailabilityStart.Date == start.Date)
+							start = overtimeAvailabilityStart;
 
-			var overtimeAvailability = overtimeAvailabilityCollection.FirstOrDefault();
-			if (overtimeAvailability == null)
-			{
-				return earlyStart;
-			}
-
-			var earlyStartOvertimeAvailability = new TimeSpan(23, 59, 59);
-			var overtimeAvailabilityStart = overtimeAvailability.StartTime.Value;
-			var overtimeAvailabilityEnd = overtimeAvailability.EndTime.Value;
-			if (overtimeAvailabilityEnd.Days > overtimeAvailabilityStart.Days &&
-				overtimeAvailabilityEnd > TimeSpan.FromDays(1) &&
-				period.Contains(scheduleDay.DateOnlyAsPeriod.DateOnly.AddDays(1)))
-			{
-				earlyStartOvertimeAvailability = TimeSpan.Zero;
-			}
-			else if (scheduleDay.DateOnlyAsPeriod.DateOnly != periodStartDate.AddDays(-1))
-			{
-				earlyStartOvertimeAvailability = overtimeAvailabilityStart;
-			}
-
-			return earlyStart < earlyStartOvertimeAvailability ? earlyStart : earlyStartOvertimeAvailability;
-		}
-
-		private TimeSpan maxfunction(ScheduleDaysAndProjection scheduleDayData, DateOnly periodStartDate)
-		{
-			var scheduleDay = scheduleDayData.ScheduleDay;
-			var projection = scheduleDayData.Projection;
-			var period = projection.Period();
-			var lateEnd = TimeSpan.Zero;
-			if (period != null && projection.HasLayers)
-			{
-				var userTimeZone = _userTimeZone.TimeZone();
-				var endTime = period.Value.TimePeriod(userTimeZone).EndTime;
-
-				//for the day before current week, only if end time crosses midnihgt, 
-				//then it is a valid end time to be carried over to first week day (endTime.Days == 1)
-				if (scheduleDay.DateOnlyAsPeriod.DateOnly == periodStartDate.AddDays(-1) && endTime.Days == 1)
-				{
-					lateEnd = endTime - TimeSpan.FromDays(1);
-				}
-				else if (scheduleDay.DateOnlyAsPeriod.DateOnly != periodStartDate.AddDays(-1)) //for the days of current week
-				{
-					//if end time cross midnight and not allow timeline to cross night, then max. time is used, otherwise use the end time as it is
-					lateEnd = endTime;
+						if (overtimeAvailabilityEnd > end)
+							end = overtimeAvailabilityEnd;
+					}
 				}
 			}
 
-			var overtimeAvailabilityCollection = scheduleDay.OvertimeAvailablityCollection();
-			if (overtimeAvailabilityCollection == null)
+			if (end > date.Date && end > start)
 			{
-				return lateEnd;
+				var adjustedStart = start > date.Date ? start : date.Date;
+
+				var startTimeSpan = adjustTimeSpan(date, adjustedStart, start.TimeOfDay);
+				var endTimeSpan = adjustTimeSpan(date, end, end.TimeOfDay);
+
+				var margin = TimeSpan.FromMinutes(ScheduleConsts.TimelineMarginInMinute);
+
+				return new TimePeriod(startTimeSpan.Subtract(margin), endTimeSpan.Add(margin));
 			}
 
-			var overtimeAvailability = overtimeAvailabilityCollection.FirstOrDefault();
-			if (overtimeAvailability == null)
-			{
-				return lateEnd;
-			}
-
-			var lateEndOvertimeAvailability = TimeSpan.Zero;
-			var overtimeAvailabilityStart = overtimeAvailability.StartTime.Value;
-			var overtimeAvailabilityEnd = overtimeAvailability.EndTime.Value;
-
-			//for the day before current week, only if end time of OT Availability crosses midnight (ie., overtimeAvailabilityEnd.Days == 1), 
-			//then it is a valid end time to be carried over to the first week day 
-			if (scheduleDay.DateOnlyAsPeriod.DateOnly == periodStartDate.AddDays(-1) && overtimeAvailabilityEnd.Days == 1)
-			{
-				lateEndOvertimeAvailability = overtimeAvailabilityEnd - TimeSpan.FromDays(1);
-			}
-			else if (scheduleDay.DateOnlyAsPeriod.DateOnly != periodStartDate.AddDays(-1)) //for the days of current week
-			{
-				//if end time of OT Availability crosses midnight, then max. time is of course used, otherwise use its end time as it is
-				lateEndOvertimeAvailability = overtimeAvailabilityEnd.Days > overtimeAvailabilityStart.Days
-					? new TimeSpan(23, 59, 59)
-					: overtimeAvailabilityEnd;
-			}
-
-			return lateEnd > lateEndOvertimeAvailability ? lateEnd : lateEndOvertimeAvailability;
+			return new TimePeriod(TimeSpan.Zero, TimeSpan.Zero);
 		}
 
-		private TimePeriod getMinMaxTime(Dictionary<DateOnly, ScheduleDaysAndProjection> scheduleDaysAndProjections,
-			DateOnlyPeriod period)
+		private static TimeSpan adjustTimeSpan(DateOnly date, DateTime end, TimeSpan timeSpan)
 		{
-			var earliest = scheduleDaysAndProjections.Min(x => minFunction(x.Value, period));
-			var latest = scheduleDaysAndProjections.Max(x => maxfunction(x.Value, period.StartDate));
-			var early = earliest;
-			var late = latest;
-			if (early > late)
+			var delta = end.Date - date.Date;
+
+			if (delta.TotalMilliseconds > 0)
 			{
-				early = latest;
-				late = earliest;
+				timeSpan = timeSpan.Add(delta);
 			}
 
-			var margin = TimeSpan.FromMinutes(ScheduleConsts.TimelineMarginInMinute);
-			early = early.Ticks > TimeSpan.Zero.Add(margin).Ticks ? early.Subtract(margin) : TimeSpan.Zero;
+			return timeSpan;
+		}
 
-			late = late.Add(margin);
+		private static DateTimePeriod? getOvertimeAvailibilityPeriodInUtc(Dictionary<DateOnly, ScheduleDaysAndProjection> scheduleDaysAndProjections, DateOnly date, TimeZoneInfo timezone)
+		{
+			var todayOvertimeAvailabilityPeriod = getOvertimeAvailabilityPeriodByDate(scheduleDaysAndProjections[date].ScheduleDay, timezone);
 
-			var minMaxTime = new TimePeriod(early, late);
-			return minMaxTime;
+			var overnightOvertimeAvailabilityPeriod = getOvertimeAvailabilityPeriodByDate(scheduleDaysAndProjections[date.AddDays(-1)].ScheduleDay, timezone);
+
+			if (todayOvertimeAvailabilityPeriod.HasValue)
+			{
+				var start = todayOvertimeAvailabilityPeriod.Value.StartDateTime;
+				var end = todayOvertimeAvailabilityPeriod.Value.EndDateTime;
+
+				if (overnightOvertimeAvailabilityPeriod.HasValue)
+				{
+					if (overnightOvertimeAvailabilityPeriod.Value.Intersect(todayOvertimeAvailabilityPeriod.Value) && overnightOvertimeAvailabilityPeriod.Value.EndDateTime > todayOvertimeAvailabilityPeriod.Value.EndDateTime)
+					{
+						end = overnightOvertimeAvailabilityPeriod.Value.EndDateTime;
+					}
+				}
+
+				return new DateTimePeriod(start, end);
+			}
+
+			if (overnightOvertimeAvailabilityPeriod.HasValue)
+			{
+				var start = overnightOvertimeAvailabilityPeriod.Value.StartDateTime;
+				var end = overnightOvertimeAvailabilityPeriod.Value.EndDateTime;
+
+				return new DateTimePeriod(start, end);
+			}
+
+			return null;
+		}
+
+		private static DateTimePeriod? getOvertimeAvailabilityPeriodByDate(IScheduleDay scheduleDay, TimeZoneInfo timezone)
+		{
+			if (scheduleDay.OvertimeAvailablityCollection()?.Count() == 0) return null;
+
+			var overtimeAvailabilityCollection = scheduleDay.OvertimeAvailablityCollection().OrderBy(o => o.StartTime);
+
+			var date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date;
+			var overtimeAvailabilityPeriodStart = date.Add(overtimeAvailabilityCollection.FirstOrDefault().StartTime.Value);
+			var overtimeAvailabilityPeriodEnd = date.Add(overtimeAvailabilityCollection.LastOrDefault().EndTime.Value);
+
+			return new DateTimePeriod(TimeZoneHelper.ConvertToUtc(overtimeAvailabilityPeriodStart, timezone), TimeZoneHelper.ConvertToUtc(overtimeAvailabilityPeriodEnd, timezone));
 		}
 
 		internal class ScheduleDaysAndProjection

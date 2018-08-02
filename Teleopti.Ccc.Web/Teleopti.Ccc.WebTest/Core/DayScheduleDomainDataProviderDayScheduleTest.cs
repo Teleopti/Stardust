@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -87,20 +88,6 @@ namespace Teleopti.Ccc.WebTest.Core
 		}
 
 		[Test]
-		public void ShouldMapProjectionIncludingTheDayBeforeCurrentWeekOnGetDaySchedule()
-		{
-			var date = new DateOnly(2012, 08, 27);
-
-			addPersonSchedule(date.AddDays(-1), TimeSpan.FromHours(2), TimeSpan.FromHours(3));
-			addPersonSchedule(date, TimeSpan.FromHours(1), TimeSpan.FromHours(2));
-
-			var result = Target.GetDaySchedule(date);
-
-			result.ProjectionYesterday.Period().Value.StartDateTime.Should().Be(date.AddDays(-1).Date.AddHours(2));
-			result.ProjectionYesterday.Period().Value.EndDateTime.Should().Be(date.AddDays(-1).Date.AddHours(3));
-		}
-
-		[Test]
 		public void ShouldMapOvertimeAvailabilityOnGetDaySchedule()
 		{
 			var date = DateOnly.Today;
@@ -112,23 +99,7 @@ namespace Teleopti.Ccc.WebTest.Core
 
 			result.OvertimeAvailability.Should().Be(overtimeAvailability);
 		}
-
-		[Test]
-		public void ShouldMapOvertimeAvailabilityForYesterdayOnGetDaySchedule()
-		{
-			var date = DateOnly.Today;
-			addPersonSchedule(date.AddDays(-1), TimeSpan.FromHours(2), TimeSpan.FromHours(3));
-			addPersonSchedule(date, TimeSpan.FromHours(1), TimeSpan.FromHours(2));
-
-			var overtimeAvailabilityYesterday = new OvertimeAvailability(LoggedOnUser.CurrentUser(), date.AddDays(-1), new TimeSpan(1, 0, 0),
-				new TimeSpan(2, 0, 0)).WithId();
-			ScheduleStorage.Add(overtimeAvailabilityYesterday);
-
-			var result = Target.GetDaySchedule(date);
-
-			result.OvertimeAvailabilityYesterday.Should().Be(overtimeAvailabilityYesterday);
-		}
-
+		
 		[Test]
 		public void ShouldMapPersonRequestsOnGetDaySchedule()
 		{
@@ -321,23 +292,6 @@ namespace Teleopti.Ccc.WebTest.Core
 		}
 
 		[Test]
-		public void ShouldMapMinMaxTimeForNightShiftFromPreviousWeekOnGetDaySchedule()
-		{
-			var date = new DateOnly(2012, 08, 28);
-			var localMidnightInUtc = safeConvertTimeToUtc(date.AddDays(-1).Date);
-			addPersonSchedule(date.AddDays(-1), localMidnightInUtc.AddHours(20), localMidnightInUtc.AddHours(28));
-
-			var result = Target.GetDaySchedule(date);
-
-			result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(0);
-			result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(00);
-
-			result.MinMaxTime.EndTime.Days.Should().Be.EqualTo(0);
-			result.MinMaxTime.EndTime.Hours.Should().Be.EqualTo(4);
-			result.MinMaxTime.EndTime.Minutes.Should().Be.EqualTo(15);
-		}
-
-		[Test]
 		public void ShouldMapMinMaxTimeForNightShiftStartingOnTheLastDayOfCurrentWeekOnGetDaySchedule()
 		{
 			var date = new DateOnly(2012, 08, 26);
@@ -369,7 +323,6 @@ namespace Teleopti.Ccc.WebTest.Core
 		}
 
 		[Test]
-		[Ignore("temp ignore")]
 		public void ShouldMapMinMaxTimeForOvertimeAvailabilityForNightShiftOnGetDaySchedule()
 		{
 			var date = new DateOnly(2013, 09, 11);
@@ -380,28 +333,29 @@ namespace Teleopti.Ccc.WebTest.Core
 			result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(19);
 			result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(45);
 
-			result.MinMaxTime.EndTime.Hours.Should().Be.EqualTo(23);
-			result.MinMaxTime.EndTime.Minutes.Should().Be.EqualTo(59);
-		}
-
-		[Test]
-		public void ShouldMapMinMaxTimeForOvertimeAvailabilityForNightShiftFromPreviousWeekOnGetDaySchedule()
-		{
-			var date = new DateOnly(2012, 08, 28);
-			ScheduleStorage.Add(new OvertimeAvailability(LoggedOnUser.CurrentUser(), date.AddDays(-1), new TimeSpan(20, 0, 0), new TimeSpan(28, 0, 0)));
-
-			var result = Target.GetDaySchedule(date);
-
-			result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(0);
-			result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(00);
-
-			result.MinMaxTime.EndTime.Days.Should().Be.EqualTo(0);
 			result.MinMaxTime.EndTime.Hours.Should().Be.EqualTo(4);
 			result.MinMaxTime.EndTime.Minutes.Should().Be.EqualTo(15);
 		}
 
 		[Test]
-		[Ignore("temp ignore")]
+		public void ShouldMapMinMaxTimeForOvernightOvertimeAvailabilityThatOverlappingTodayShift()
+		{
+			var date = new DateOnly(2012, 08, 28);
+			ScheduleStorage.Add(new OvertimeAvailability(LoggedOnUser.CurrentUser(), date.AddDays(-1), new TimeSpan(20, 0, 0), new TimeSpan(28, 0, 0)));
+
+			addPersonSchedule(date, date.Date.AddHours(2).Utc(), date.Date.AddHours(8).Utc());
+
+			var result = Target.GetDaySchedule(date);
+
+			result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(1);
+			result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(45);
+
+			result.MinMaxTime.EndTime.Days.Should().Be.EqualTo(0);
+			result.MinMaxTime.EndTime.Hours.Should().Be.EqualTo(8);
+			result.MinMaxTime.EndTime.Minutes.Should().Be.EqualTo(15);
+		}
+
+		[Test]
 		public void
 			ShouldMapMinMaxTimeForOvertimeAvailabilityForNightShiftStartingOnTheLastDayOfCurrentWeekOnGetDaySchedule()
 		{
@@ -413,8 +367,8 @@ namespace Teleopti.Ccc.WebTest.Core
 			result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(19);
 			result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(45);
 
-			result.MinMaxTime.EndTime.Hours.Should().Be.EqualTo(23);
-			result.MinMaxTime.EndTime.Minutes.Should().Be.EqualTo(59);
+			result.MinMaxTime.EndTime.Hours.Should().Be.EqualTo(4);
+			result.MinMaxTime.EndTime.Minutes.Should().Be.EqualTo(15);
 		}
 
 		[Test]

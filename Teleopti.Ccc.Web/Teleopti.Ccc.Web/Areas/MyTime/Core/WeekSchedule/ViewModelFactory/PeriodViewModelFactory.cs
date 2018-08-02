@@ -84,18 +84,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 				var meetingModel = createMeetingViewModel(visualLayer);
 				var isOvertimeLayer = visualLayer.DefinitionSet?.MultiplicatorType == MultiplicatorType.Overtime;
 
-				var timePeriod = getVisualLayerTimePeriod(visualLayer, localDate, timeZone);
+				var localTimePeriod = getVisualLayerTimePeriod(visualLayer, localDate, timezone);
 
 				PeriodPositionPercentage positionPercentage;
 				if (isOnDSTStartDay && minMaxTime.Contains(localDaylightStartTime))
 				{
 					totalLengthTicks = totalLengthTicks - daylightTime.Delta.Ticks;
-					positionPercentage = getPeriodPositionPercentage(minMaxTime, timePeriod,
+					positionPercentage = getPeriodPositionPercentage(minMaxTime, localTimePeriod,
 						true, localDaylightStartTime, daylightTime, totalLengthTicks);
 				}
 				else
 				{
-					positionPercentage = getPeriodPositionPercentage(minMaxTime, timePeriod, totalLengthTicks);
+					positionPercentage = getPeriodPositionPercentage(minMaxTime, localTimePeriod, totalLengthTicks);
 				}
 
 				newList.Add(new PeriodViewModel
@@ -118,10 +118,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			return newList;
 		}
 
-		private static TimePeriod getVisualLayerTimePeriod(VisualLayerForWebDisplay visualLayer, DateOnly localDate, TimeZoneInfo timeZone)
+		private static TimePeriod getVisualLayerTimePeriod(VisualLayerForWebDisplay visualLayer, DateOnly localDate, TimeZoneInfo timezone)
 		{
-			var timePeriodStart = TimeZoneHelper.ConvertFromUtc(visualLayer.VisualPeriod.StartDateTime, timeZone);
-			var timePeriodEnd = TimeZoneHelper.ConvertFromUtc(visualLayer.VisualPeriod.EndDateTime, timeZone);
+			var timePeriodStart = TimeZoneHelper.ConvertFromUtc(visualLayer.VisualPeriod.StartDateTime, timezone);
+			var timePeriodEnd = TimeZoneHelper.ConvertFromUtc(visualLayer.VisualPeriod.EndDateTime, timezone);
 
 			var timeSpanStart = timePeriodStart.TimeOfDay;
 			var timeSpanEnd = timePeriodEnd.TimeOfDay;
