@@ -134,6 +134,8 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 
 							lastEndDate = realSchedulePeriod.Value.EndDate.AddDays(1);
 							realSchedulePeriod = personSchedulePeriod.GetSchedulePeriod(lastEndDate);
+							if (realSchedulePeriod.Value.EndDate == person.TerminalDate)
+								break;
 						}
 					}
 				}
