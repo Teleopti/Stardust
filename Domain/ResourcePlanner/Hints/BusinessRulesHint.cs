@@ -78,13 +78,15 @@ namespace Teleopti.Ccc.Domain.ResourcePlanner.Hints
 		private static DateOnlyPeriod getAffectedSchedulePeriod(DateOnlyPeriod period,
 			KeyValuePair<IPerson, IScheduleRange> item)
 		{
-			var virtualPeriods = new HashSet<IVirtualSchedulePeriod>();
-			foreach (var dateOnly in period.DayCollection())
+			var personSchedulePeriods = item.Key.PersonSchedulePeriods(period);
+			var periods = new List<DateOnlyPeriod>();
+			foreach (var personSchedulePeriod in personSchedulePeriods)
 			{
-				virtualPeriods.Add(item.Key.VirtualSchedulePeriod(dateOnly));
+				var dateOnlyPeriod = personSchedulePeriod.GetSchedulePeriod(personSchedulePeriod.DateFrom);
+				if (dateOnlyPeriod.HasValue)
+					periods.Add(dateOnlyPeriod.Value);
 			}
-			var totalSchedulePeriod = new DateOnlyPeriod(virtualPeriods.Min(x => x.DateOnlyPeriod.StartDate),
-				virtualPeriods.Max(x => x.DateOnlyPeriod.EndDate));
+			var totalSchedulePeriod = new DateOnlyPeriod(periods.Min(x => x.StartDate), periods.Max(x => x.EndDate));
 			return totalSchedulePeriod;
 		}
 
