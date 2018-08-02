@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function () {
 	'use strict';
 
 	angular.module('wfm.requests').controller('RequestsController', RequestsController);
@@ -85,7 +85,7 @@
 
 		var loggedonUsersTeamId = $q.defer();
 
-		vm.orgPickerSelectedText = function() {
+		vm.orgPickerSelectedText = function () {
 			var text = '';
 			switch (vm.selectedGroups.groupIds.length) {
 				case 0:
@@ -105,37 +105,40 @@
 
 		var loadRequetsDelay = 300;
 
-		vm.activeAbsenceAndTextTab = function() {
+		vm.activeAbsenceAndTextTab = function () {
 			vm.paging.pageNumber = 1;
 			requestCommandParamsHolder.resetAllSelectedRequestsIds();
 			vm.period = vm.absenceAndOvertimePeriod;
 			vm.selectedTabIndex = 0;
-			$timeout(function() {
+			vm.getTeamOrGroupData();
+			$timeout(function () {
 				$state.go('requests.absenceAndText', { getParams: getParams });
 			}, loadRequetsDelay);
 		};
 
-		vm.activeShiftTradeTab = function() {
+		vm.activeShiftTradeTab = function () {
 			vm.paging.pageNumber = 1;
 			requestCommandParamsHolder.resetAllSelectedRequestsIds();
 			vm.period = vm.shiftTradePeriod;
 			vm.selectedTabIndex = 1;
-			$timeout(function() {
+			vm.getTeamOrGroupData();
+			$timeout(function () {
 				$state.go('requests.shiftTrade', { getParams: getParams });
 			}, loadRequetsDelay);
 		};
 
-		vm.activeOvertimeTab = function() {
+		vm.activeOvertimeTab = function () {
 			vm.paging.pageNumber = 1;
 			requestCommandParamsHolder.resetAllSelectedRequestsIds();
 			vm.period = vm.absenceAndOvertimePeriod;
 			vm.selectedTabIndex = 2;
-			$timeout(function() {
+			vm.getTeamOrGroupData();
+			$timeout(function () {
 				$state.go('requests.overtime', { getParams: getParams });
 			}, loadRequetsDelay);
 		};
 
-		vm.getSitesAndTeamsAsync = function() {
+		function getSitesAndTeamsAsync() {
 			var params = {};
 			if (toggleService.Wfm_HideUnusedTeamsAndSites_42690) {
 				params.startDate = moment(vm.period.startDate).format('YYYY-MM-DD');
@@ -143,8 +146,8 @@
 			} else {
 				params.date = moment().format('YYYY-MM-DD');
 			}
-			return (vm._sitesAndTeamsPromise = $q(function(resolve, reject) {
-				requestsDataService.hierarchy(params).then(function(data) {
+			return (vm._sitesAndTeamsPromise = $q(function (resolve, reject) {
+				requestsDataService.hierarchy(params).then(function (data) {
 					resolve(data);
 					vm.sitesAndTeams = data.Children;
 					loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
@@ -154,15 +157,15 @@
 			}));
 		};
 
-		vm.getGroupPagesAsync = function () {
+		function getGroupPagesAsync() {
 			var startDateStr = vm.period.startDate.toJSON().substr(0, 10);
 			var endDateStr = vm.period.endDate.toJSON().substr(0, 10);
 			groupPageService
 				.fetchAvailableGroupPages(
-					startDateStr,
-					endDateStr
+				startDateStr,
+				endDateStr
 				)
-				.then(function(data) {
+				.then(function (data) {
 					vm.availableGroups = data;
 					loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
 				});
@@ -172,18 +175,18 @@
 			{
 				key: 'max60Days',
 				message: 'DateRangeIsAMaximumOfSixtyDays',
-				validate: function(start, end) {
+				validate: function (start, end) {
 					return !vm.isShiftTradeViewActive() || moment(end).diff(moment(start), 'days') <= 60;
 				}
 			}
 		];
 
-		vm.changeSelectedTeams = function() {
+		vm.changeSelectedTeams = function () {
 			vm.agentSearchOptions.focusingSearch = true;
 			requestCommandParamsHolder.resetSelectedRequestIds(vm.isShiftTradeViewActive());
 		};
 
-		vm.applyFavorite = function(currentFavorite) {
+		vm.applyFavorite = function (currentFavorite) {
 			vm.selectedGroups = { mode: 'BusinessHierarchy', groupIds: [], groupPageId: '' };
 			replaceArrayValues(currentFavorite.TeamIds, vm.selectedGroups.groupIds);
 			vm.agentSearchOptions.keyword = currentFavorite.SearchTerm;
@@ -196,14 +199,14 @@
 			vm.agentSearchOptions.focusingSearch = false;
 		};
 
-		vm.getSearch = function() {
+		vm.getSearch = function () {
 			return {
 				TeamIds: vm.selectedGroups.groupIds,
 				SearchTerm: vm.agentSearchOptions.keyword
 			};
 		};
 
-		vm.onSearchTermChangedCallback = function() {
+		vm.onSearchTermChangedCallback = function () {
 			vm.agentSearchOptions.focusingSearch = false;
 
 			requestCommandParamsHolder.resetSelectedRequestIds(vm.isShiftTradeViewActive());
@@ -214,7 +217,7 @@
 			});
 		};
 
-		vm.initFooter = function(requestsTotalCount) {
+		vm.initFooter = function (requestsTotalCount) {
 			vm.isFooterInited = true;
 
 			var totalPages = Math.ceil(requestsTotalCount / vm.paging.pageSize);
@@ -224,19 +227,19 @@
 			vm.paging.totalRequestsCount = requestsTotalCount;
 		};
 
-		vm.hideSearchIfNoSelectedTeam = function() {
+		vm.hideSearchIfNoSelectedTeam = function () {
 			if (angular.isArray(vm.selectedGroups.groupIds) && vm.selectedGroups.groupIds.length > 0) {
 				return 'visible';
 			}
 			return 'hidden';
 		};
 
-		vm.onBeforeCommand = function() {
+		vm.onBeforeCommand = function () {
 			vm.disableInteraction = true;
 			return true;
 		};
 
-		vm.onCommandSuccess = function(commandType, changedRequestsCount, requestsCount, waitlistPeriod) {
+		vm.onCommandSuccess = function (commandType, changedRequestsCount, requestsCount, waitlistPeriod) {
 			vm.disableInteraction = false;
 			forceRequestsReloadWithoutSelection();
 			if (commandType === requestsDefinitions.REQUEST_COMMANDS.Approve) {
@@ -257,36 +260,46 @@
 		};
 
 		//Todo: submit command failure doesn't give an error info, this parameter will be undefined.
-		vm.onCommandError = function(error) {
+		vm.onCommandError = function (error) {
 			vm.disableInteraction = false;
 			forceRequestsReloadWithoutSelection();
 			requestsNotificationService.notifyCommandError(error);
 		};
 
-		vm.onProcessWaitlistFinished = function(message) {
+		vm.onProcessWaitlistFinished = function (message) {
 			var period = formatDatePeriod(message);
 			requestsNotificationService.notifyProcessWaitlistedRequestsFinished(period);
 		};
 
-		vm.onApproveBasedOnBusinessRulesFinished = function(message) {
+		vm.onApproveBasedOnBusinessRulesFinished = function (message) {
 			forceRequestsReloadWithoutSelection();
 			requestsNotificationService.notifyApproveBasedOnBusinessRulesFinished();
 		};
 
-		vm.onErrorMessages = function(errorMessages) {
+		vm.onErrorMessages = function (errorMessages) {
 			vm.disableInteraction = false;
 			forceRequestsReloadWithoutSelection();
 
-			errorMessages.forEach(function(errorMessage) {
+			errorMessages.forEach(function (errorMessage) {
 				requestsNotificationService.notifyCommandError(errorMessage);
 			});
 		};
 
-		vm.isShiftTradeViewActive = function() {
+		vm.isShiftTradeViewActive = function () {
 			return $state.current.name.indexOf('requests.shiftTrade') > -1;
 		};
 
-		vm.init = function() {
+
+		var lastPeriodForFetchingTeamOrGroupData;
+		vm.getTeamOrGroupData = function () {
+			if (JSON.stringify(lastPeriodForFetchingTeamOrGroupData) !== JSON.stringify(vm.period)) {
+				lastPeriodForFetchingTeamOrGroupData = vm.period;
+				if (vm.Wfm_GroupPages_45057) getGroupPagesAsync();
+				else getSitesAndTeamsAsync();
+			}
+		}
+
+		vm.init = function () {
 			vm.filterEnabled = true;
 			vm.forceRequestsReloadWithoutSelection = forceRequestsReloadWithoutSelection;
 			vm.dateRangeTemplateType = 'popup';
@@ -298,10 +311,9 @@
 			vm.shiftTradePeriod = defaultDateRange;
 			vm.period = defaultDateRange;
 
-			if (vm.Wfm_GroupPages_45057) vm.getGroupPagesAsync();
-			else vm.getSitesAndTeamsAsync();
+			vm.getTeamOrGroupData();
 
-			vm.onFavoriteSearchInitDefer.promise.then(function(defaultSearch) {
+			vm.onFavoriteSearchInitDefer.promise.then(function (defaultSearch) {
 				if (defaultSearch) {
 					replaceArrayValues(defaultSearch.TeamIds, vm.selectedGroups.groupIds);
 					vm.agentSearchOptions.keyword = defaultSearch.SearchTerm;
@@ -321,20 +333,20 @@
 
 		$q.all([toggleService.togglesLoaded])
 			.then(
-				FavoriteSearchSvc.hasPermission().then(function(response) {
-					vm.hasFavoriteSearchPermission = response.data;
-				})
+			FavoriteSearchSvc.hasPermission().then(function (response) {
+				vm.hasFavoriteSearchPermission = response.data;
+			})
 			)
 			.then(
-				loggedonUsersTeamId.promise.then(function(defaultTeam) {
-					if (angular.isString(defaultTeam) && defaultTeam.length > 0)
-						replaceArrayValues([defaultTeam], vm.selectedGroups.groupIds);
-				})
+			loggedonUsersTeamId.promise.then(function (defaultTeam) {
+				if (angular.isString(defaultTeam) && defaultTeam.length > 0)
+					replaceArrayValues([defaultTeam], vm.selectedGroups.groupIds);
+			})
 			)
 			.then(
-				requestsDataService.getOvertimeLicense().then(function(result) {
-					vm.overtimeRequestsLicenseAvailable = result.data;
-				})
+			requestsDataService.getOvertimeLicense().then(function (result) {
+				vm.overtimeRequestsLicenseAvailable = result.data;
+			})
 			)
 			.then(vm.init);
 
@@ -361,7 +373,7 @@
 				onInitCallBack: vm.initFooter,
 				paging: vm.paging,
 				isUsingRequestSubmitterTimeZone: vm.isUsingRequestSubmitterTimeZone,
-				getPeriod: function() {
+				getPeriod: function () {
 					return vm.period;
 				}
 			};
@@ -369,11 +381,14 @@
 
 		function setupWatches() {
 			$scope.$watch(
-				function() {
+				function () {
 					return vm.period;
 				},
-				function(newValue, oldValue) {
-					$scope.$evalAsync(function() {
+				function (newValue, oldValue) {
+					var newPeriod = newValue || {};
+					var oldPeriod = oldValue || {};
+
+					$scope.$evalAsync(function () {
 						if (vm.isShiftTradeViewActive()) {
 							vm.shiftTradePeriod = newValue;
 						} else {
@@ -381,35 +396,24 @@
 						}
 						requestCommandParamsHolder.resetSelectedRequestIds(vm.isShiftTradeViewActive());
 						vm.agentSearchOptions.focusingSearch = false;
-
-						if (newValue && angular.toJson(newValue) !== angular.toJson(oldValue)) {
-							if (
-								toggleService.Wfm_HideUnusedTeamsAndSites_42690 &&
-								!toggleService.Wfm_GroupPages_45057
-							) {
-								vm.getSitesAndTeamsAsync();
-							} else {
-								vm.getGroupPagesAsync();
-							}
-						}
 					});
 				}
 			);
 
 			$scope.$watch(
-				function() {
+				function () {
 					return vm.filterEnabled;
 				},
-				function() {
+				function () {
 					$scope.$broadcast('requests.filterEnabled.changed', vm.filterEnabled);
 				}
 			);
 
 			$scope.$watch(
-				function() {
+				function () {
 					return vm.isUsingRequestSubmitterTimeZone;
 				},
-				function(newVal, oldVal) {
+				function (newVal, oldVal) {
 					$scope.$broadcast('requests.isUsingRequestSubmitterTimeZone.changed', newVal);
 				}
 			);
@@ -417,15 +421,15 @@
 
 		function replaceArrayValues(from, to) {
 			to.splice(0);
-			from.forEach(function(x) {
+			from.forEach(function (x) {
 				to.push(x);
 			});
 		}
 
 		function extractTeamNames(sites) {
 			var teamNameMap = {};
-			sites.forEach(function(site) {
-				site.Children.forEach(function(team) {
+			sites.forEach(function (site) {
+				site.Children.forEach(function (team) {
 					teamNameMap[team.Id] = team.Name;
 				});
 			});
