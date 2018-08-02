@@ -164,8 +164,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		{
 			var viewModel = new ShiftTradeMultiSchedulesViewModel
 			{
-				MySchedules = new List<ShiftTradeAddPersonScheduleViewModel>(),
-				PersonToSchedules = new List<ShiftTradeAddPersonScheduleViewModel>()
+				MultiSchedulesForShiftTrade = new List<ShiftTradeMultiScheduleViewModel>()
 			};
 			var fixedPeriod = fixPeriodForUnpublishedSchedule(period);
 			if (fixedPeriod == null) return viewModel;
@@ -176,20 +175,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 			allSchedules.TryGetValue(_loggedOnUser.CurrentUser(), out var myScheduleRange);
 			allSchedules.TryGetValue(personTo, out var personToScheduleRange);
-			var mySchedules = new List<ShiftTradeAddPersonScheduleViewModel>();
-			var personToSchedules = new List<ShiftTradeAddPersonScheduleViewModel>();
+			var multiSchedules = new List<ShiftTradeMultiScheduleViewModel>();
 			foreach (var dateOnly in fixedPeriod.Value.DayCollection())
 			{
 				var mySchedule = mapToShiftTradeAddPersonScheduleViewModel(myScheduleRange, dateOnly, _loggedOnUser.CurrentUser());
-				if (mySchedule != null) mySchedules.Add(mySchedule);
 				var personToSchedule = mapToShiftTradeAddPersonScheduleViewModel(personToScheduleRange, dateOnly, personTo);
-				if (personToSchedule != null) personToSchedules.Add(personToSchedule);
+				multiSchedules.Add(new ShiftTradeMultiScheduleViewModel{Date = dateOnly.Date, MySchedule = mySchedule, PersonToSchedule = personToSchedule});
 			}
 
 			return new ShiftTradeMultiSchedulesViewModel
 			{
-				MySchedules = mySchedules,
-				PersonToSchedules = personToSchedules
+				MultiSchedulesForShiftTrade = multiSchedules
 			};
 		}
 

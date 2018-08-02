@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 {
@@ -15,7 +17,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 
 	public class ShiftTradeMultiSchedulesViewModel
 	{
-		public IEnumerable<ShiftTradeAddPersonScheduleViewModel> MySchedules { get; set; }
-		public IEnumerable<ShiftTradeAddPersonScheduleViewModel> PersonToSchedules { get; set; }
+		public IEnumerable<ShiftTradeMultiScheduleViewModel> MultiSchedulesForShiftTrade { get; set; }
+	}
+
+	public class ShiftTradeMultiScheduleViewModel
+	{
+		public DateTime Date { get; set; }
+		public ShiftTradeAddPersonScheduleViewModel MySchedule { get; set; }
+		public ShiftTradeAddPersonScheduleViewModel PersonToSchedule { get; set; }
 	}
 }

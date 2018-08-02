@@ -919,46 +919,22 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 					dateInRange = endDate.clone(),
 					previousFirstRowId;
 
-				if (data.MySchedules && data.MySchedules.length > 0) {
-					mySchedules = createShiftTradeSchedules(data.MySchedules);
-				}
-
-				if (data.PersonToSchedules && data.PersonToSchedules.length > 0) {
-					targetSchedules = createShiftTradeSchedules(data.PersonToSchedules);
-				}
-
-				while (dateInRange.isSame(startDate, 'day') || dateInRange.isAfter(startDate, 'day')) {
-					if (!self.loadedSchedulePairs().filter(function (m) {
-						return (dateInRange.isSame(m.date, 'day'))
-					})[0]) {
-
-						var mySche = mySchedules.filter(filterSchedules)[0];
-						if (mySche && mySche.isNotScheduled) {
-							mySche = null;
+				if (data.MultiSchedulesForShiftTrade && data.MultiSchedulesForShiftTrade.length) {
+					var loadedData = ko.utils.arrayMap(data.MultiSchedulesForShiftTrade, function (schedulePair) {
+						return {
+							date: moment(schedulePair.Date),
+							mySchedule: (schedulePair.MySchedule && schedulePair.MySchedule.IsNotScheduled) ? null : createShiftTradeSchedule(schedulePair.MySchedule),
+							targetSchedule: (schedulePair.PersonToSchedule && schedulePair.PersonToSchedule.IsNotScheduled) ? null : createShiftTradeSchedule(schedulePair.PersonToSchedule)
 						}
+					});
 
-						var tarSche = targetSchedules.filter(filterSchedules)[0];
-						if (tarSche && tarSche.isNotScheduled) {
-							tarSche = null;
-						}
-
-						schedulePairs.unshift({
-							date: dateInRange.clone(),
-							mySchedule: mySche,
-							targetSchedule: tarSche
-						});
-
+					if (prepend) {
+						previousFirstRowId = '#shift-row-' + self.loadedSchedulePairs()[0].date.valueOf();
+						self.loadedSchedulePairs.unshift.apply(self.loadedSchedulePairs, loadedData);
+						setTimeout(restoreScroll);
+					} else {
+						self.loadedSchedulePairs.push.apply(self.loadedSchedulePairs, loadedData);
 					}
-
-					dateInRange.add("days", -1);
-				}
-
-				if (prepend) {
-					previousFirstRowId = '#shift-row-' + self.loadedSchedulePairs()[0].date.valueOf();
-					self.loadedSchedulePairs.unshift.apply(self.loadedSchedulePairs, schedulePairs);
-					setTimeout(restoreScroll);
-				} else {
-					self.loadedSchedulePairs.push.apply(self.loadedSchedulePairs, schedulePairs);
 				}
 
 				if (prepend) {
@@ -1131,6 +1107,42 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 		});
 
 		return models;
+	}
+
+	function createShiftTradeSchedule (personSchedule) {
+		if (personSchedule) {
+			var mappedLayers = [];
+			var startDateTime = moment(personSchedule.MinStart);
+			if (personSchedule !== null && personSchedule.ScheduleLayers !== null && personSchedule.ScheduleLayers.length > 0) {
+				var layers = personSchedule.ScheduleLayers;
+				var startTimeInString = layers[0].TitleTime.split('-')[0].trim();
+				var endTimeInString = layers[layers.length - 1].TitleTime.split('-')[1].trim();
+				var scheduleStartTime = moment(layers[0].Start);
+				var scheduleEndTime = moment(layers[layers.length - 1].End);
+				var scheduleLength = scheduleEndTime.diff(scheduleStartTime, 'minutes');
+				var hasOvertime = personSchedule.ScheduleLayers.filter(function (l) { return l.IsOvertime; }).length > 0;
+
+				mappedLayers = ko.utils.arrayMap(personSchedule.ScheduleLayers, function (layer) {
+					var minutesSinceTimeLineStart = moment(layer.Start).diff(self.timeLineStartTime(), 'minutes');
+					var offsetFromScheduleStart = moment(layer.Start).diff(scheduleStartTime, 'minutes');
+					return new Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel(layer, minutesSinceTimeLineStart, self.pixelPerMinute(), offsetFromScheduleStart, scheduleLength);
+				});
+			}
+
+			if (personSchedule && personSchedule.ShiftCategory) {
+				var categoryName = personSchedule.ShiftCategory.Name;
+				var categoryColor = personSchedule.ShiftCategory.DisplayColor;
+			}
+
+			var model = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedLayers, scheduleStartTime, scheduleEndTime, personSchedule.Name,
+				personSchedule.PersonId, personSchedule.IsDayOff, personSchedule.DayOffName, false, personSchedule.IsFullDayAbsence, null,
+				Teleopti.MyTimeWeb.Common.FormatTimeSpan(personSchedule.ContractTimeInMinute), personSchedule.IsNotScheduled,
+				startDateTime, categoryName, categoryColor, startTimeInString, endTimeInString, hasOvertime, personSchedule.IsIntradayAbsence);
+
+			return model;
+		}
+
+		return null;
 	}
 
 	function setPossibleTradeSchedulesRaw(date, data) {

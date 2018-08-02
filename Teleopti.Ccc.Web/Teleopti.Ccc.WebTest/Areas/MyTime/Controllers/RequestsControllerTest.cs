@@ -117,8 +117,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
 
-			data.MySchedules.Count().Should().Be.EqualTo(6);
-			data.PersonToSchedules.Count().Should().Be.EqualTo(6);
+			data.MultiSchedulesForShiftTrade.Count().Should().Be.EqualTo(6);
 		}
 
 		[Test]
@@ -132,8 +131,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
 
-			data.MySchedules.Count().Should().Be.EqualTo(6);
-			data.PersonToSchedules.Count().Should().Be.EqualTo(6);
+			data.MultiSchedulesForShiftTrade.Count().Should().Be.EqualTo(6);
 		}
 
 		[Test]
@@ -147,8 +145,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
 
-			data.MySchedules.Count().Should().Be.EqualTo(10);
-			data.PersonToSchedules.Count().Should().Be.EqualTo(10);
+			data.MultiSchedulesForShiftTrade.Count().Should().Be.EqualTo(10);
 		}
 
 		[Test]
@@ -162,8 +159,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
 
-			data.MySchedules.Count().Should().Be.EqualTo(0);
-			data.PersonToSchedules.Count().Should().Be.EqualTo(0);
+			data.MultiSchedulesForShiftTrade.Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -177,8 +173,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
 
-			data.MySchedules.Count().Should().Be.EqualTo(0);
-			data.PersonToSchedules.Count().Should().Be.EqualTo(0);
+			data.MultiSchedulesForShiftTrade.Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -192,8 +187,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
 
-			data.MySchedules.Count().Should().Be.EqualTo(0);
-			data.PersonToSchedules.Count().Should().Be.EqualTo(0);
+			data.MultiSchedulesForShiftTrade.Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -208,8 +202,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
 
-			data.MySchedules.Count().Should().Be.EqualTo(10);
-			data.PersonToSchedules.Count().Should().Be.EqualTo(10);
+			data.MultiSchedulesForShiftTrade.Count().Should().Be.EqualTo(10);
 		}
 
 		[Test]
@@ -223,8 +216,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
 
-			data.MySchedules.Count().Should().Be.EqualTo(2);
-			data.PersonToSchedules.Count().Should().Be.EqualTo(2);
+			data.MultiSchedulesForShiftTrade.Count().Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -240,7 +232,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
 
-			data.MySchedules.First().ScheduleLayers.First().Color.Should().Be.EqualTo(ColorTranslator.ToHtml(Color.FromArgb(targetColor.ToArgb())));
+			data.MultiSchedulesForShiftTrade.First().MySchedule.ScheduleLayers.First().Color.Should().Be.EqualTo(ColorTranslator.ToHtml(Color.FromArgb(targetColor.ToArgb())));
 		}
 
 		[Test]
@@ -254,7 +246,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
 
-			data.MySchedules.First().ScheduleLayers.LastOrDefault().IsOvertime.Should().Be.True();
+			data.MultiSchedulesForShiftTrade.First().MySchedule.ScheduleLayers.LastOrDefault().IsOvertime.Should().Be.True();
 		}
 
 		[Test]
@@ -268,7 +260,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
 
-			data.PersonToSchedules.First().ScheduleLayers.LastOrDefault().IsOvertime.Should().Be.True();
+			data.MultiSchedulesForShiftTrade.First().PersonToSchedule.ScheduleLayers.LastOrDefault().IsOvertime.Should().Be.True();
 		}
 
 		[Test]
@@ -282,7 +274,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
 
-			data.PersonToSchedules.First().IsIntradayAbsence.Should().Be.True();
+			data.MultiSchedulesForShiftTrade.First().PersonToSchedule.IsIntradayAbsence.Should().Be.True();
 		}
 
 		[Test]
@@ -298,7 +290,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
 
-			data.MySchedules.First().MinStart.Should().Be.EqualTo(new DateTime(2018, 7, 9));
+			data.MultiSchedulesForShiftTrade.First().MySchedule.MinStart.Should().Be.EqualTo(new DateTime(2018, 7, 9));
 		}
 
 		[Test]
@@ -312,8 +304,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
 
-			data.MySchedules.ToList().First().MinStart.Should().Be.EqualTo(startDate.Date);
-			data.PersonToSchedules.ToList().First().MinStart.Should().Be.EqualTo(startDate.Date);
+			data.MultiSchedulesForShiftTrade.First().MySchedule.MinStart.Should().Be.EqualTo(startDate.Date);
+			data.MultiSchedulesForShiftTrade.First().PersonToSchedule.MinStart.Should().Be.EqualTo(startDate.Date);
 		}
 
 		[Test]
@@ -327,8 +319,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
 
-			data.MySchedules.Count().Should().Be.EqualTo(1);
-			data.PersonToSchedules.Count().Should().Be.EqualTo(1);
+			data.MultiSchedulesForShiftTrade.First().MySchedule.Should().Not.Be.Null();
+			data.MultiSchedulesForShiftTrade.First().PersonToSchedule.Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -342,8 +334,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
 
-			data.MySchedules.Count().Should().Be.EqualTo(1);
-			data.PersonToSchedules.Count().Should().Be.EqualTo(1);
+			data.MultiSchedulesForShiftTrade.First().MySchedule.Should().Not.Be.Null();
+			data.MultiSchedulesForShiftTrade.First().PersonToSchedule.Should().Not.Be.Null();
 		}
 
 		private ShiftTradeMultiSchedulesForm prepareData(DateOnly startDate, DateOnly endDate, DateTime publishedDate, TimeZoneInfo timeZone = null)

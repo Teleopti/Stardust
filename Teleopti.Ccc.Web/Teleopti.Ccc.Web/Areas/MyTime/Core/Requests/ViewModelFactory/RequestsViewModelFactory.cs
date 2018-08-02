@@ -149,17 +149,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 
 		public ShiftTradeMultiSchedulesViewModel CreateShiftTradeMultiSchedulesViewModel(ShiftTradeMultiSchedulesForm input)
 		{
-			var mySchedules = new List<ShiftTradeAddPersonScheduleViewModel>();
-			var personToSchedules = new List<ShiftTradeAddPersonScheduleViewModel>();
-
 			var fixedPeriod = fixPeriod(new DateOnlyPeriod(input.StartDate, input.EndDate));
 			if (fixedPeriod == null)
 			{
-				return new ShiftTradeMultiSchedulesViewModel
-				{
-					MySchedules = mySchedules,
-					PersonToSchedules = personToSchedules
-				};
+				return new ShiftTradeMultiSchedulesViewModel{MultiSchedulesForShiftTrade = new List<ShiftTradeMultiScheduleViewModel>() };
 			}
 
 			var allSchedules = _shiftTradeScheduleViewModelMapper.GetMeAndPersonToSchedules(fixedPeriod.Value, input.PersonToId);

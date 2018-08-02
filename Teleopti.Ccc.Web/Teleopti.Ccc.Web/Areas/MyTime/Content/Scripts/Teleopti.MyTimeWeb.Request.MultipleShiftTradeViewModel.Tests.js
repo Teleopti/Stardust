@@ -878,7 +878,13 @@
 	//New test
 	test("should load multiple days schedules after choose a agent", function () {
 		var schedules = {
-			MySchedules:[{
+			MultiSchedulesForShiftTrade: [{
+				Date: "\/Date(1531916600000)\/",
+				MySchedule: null,
+				PersonToSchedule: null
+			}, {
+				Date: "\/Date(1531978200000)\/",
+				MySchedule: {
 					"ScheduleLayers": [{
 						"Start": "\/Date(1531956600000)\/",
 						"End": "\/Date(1531964700000)\/",
@@ -903,31 +909,32 @@
 						"Name": "Early",
 						"DisplayColor": "#80FF80"
 					}
-			}],
-			"PersonToSchedules": [{
-				"ScheduleLayers": [{
-					"Start": "\/Date(1531956600000)\/",
-					"End": "\/Date(1531964700000)\/",
-					"LengthInMinutes": 135,
-					"Color": "#80FF80",
-					"TitleHeader": "Phone",
-					"IsAbsenceConfidential": false,
-					"IsOvertime": false,
-					"TitleTime": "07:30 - 09:45",
-					"Meeting": null
-				}],
-				"StartTimeUtc": "\/Date(1531978200000)\/",
-				"IsDayOff": false,
-				"IsFullDayAbsence": false,
-				"Total": 0,
-				"DayOffName": null,
-				"ContractTimeInMinute": 480,
-				"IsNotScheduled": false,
-				"ShiftCategory": {
-					"Id": null,
-					"ShortName": "AM",
-					"Name": "Early",
-					"DisplayColor": "#80FF80"
+				},
+				PersonToSchedule: {
+					"ScheduleLayers": [{
+						"Start": "\/Date(1531956600000)\/",
+						"End": "\/Date(1531964700000)\/",
+						"LengthInMinutes": 135,
+						"Color": "#80FF80",
+						"TitleHeader": "Phone",
+						"IsAbsenceConfidential": false,
+						"IsOvertime": false,
+						"TitleTime": "07:30 - 09:45",
+						"Meeting": null
+					}],
+					"StartTimeUtc": "\/Date(1531978200000)\/",
+					"IsDayOff": false,
+					"IsFullDayAbsence": false,
+					"Total": 0,
+					"DayOffName": null,
+					"ContractTimeInMinute": 480,
+					"IsNotScheduled": false,
+					"ShiftCategory": {
+						"Id": null,
+						"ShortName": "AM",
+						"Name": "Early",
+						"DisplayColor": "#80FF80"
+					}
 				}
 			}]
 		};
@@ -951,62 +958,69 @@
 
 		viewModel.chooseAgent(agent);
 
-		equal(viewModel.loadedSchedulePairs().length, 8);
+		equal(viewModel.loadedSchedulePairs().length, 2);
 		equal(viewModel.loadedSchedulePairs()[0].date.format("YYYY-MM-DD"), "2018-07-18");
 	});
 
 	test("should load schedules that within open period start and end date", function () {
 		var schedules = {
-			MySchedules: [{
-				"ScheduleLayers": [{
-					"Start": "\/Date(1531956600000)\/",
-					"End": "\/Date(1531964700000)\/",
-					"LengthInMinutes": 135,
-					"Color": "#80FF80",
-					"TitleHeader": "Phone",
-					"IsAbsenceConfidential": false,
-					"IsOvertime": false,
-					"TitleTime": "07:30 - 09:45",
-					"Meeting": null
-				}],
-				"StartTimeUtc": "\/Date(1531978200000)\/",
-				"IsDayOff": false,
-				"IsFullDayAbsence": false,
-				"Total": 0,
-				"DayOffName": null,
-				"ContractTimeInMinute": 480,
-				"IsNotScheduled": false,
-				"ShiftCategory": {
-					"Id": null,
-					"ShortName": "AM",
-					"Name": "Early",
-					"DisplayColor": "#80FF80"
-				}
-			}],
-			"PersonToSchedules": [{
-				"ScheduleLayers": [{
-					"Start": "\/Date(1531956600000)\/",
-					"End": "\/Date(1531964700000)\/",
-					"LengthInMinutes": 135,
-					"Color": "#80FF80",
-					"TitleHeader": "Phone",
-					"IsAbsenceConfidential": false,
-					"IsOvertime": false,
-					"TitleTime": "07:30 - 09:45",
-					"Meeting": null
-				}],
-				"StartTimeUtc": "\/Date(1531978200000)\/",
-				"IsDayOff": false,
-				"IsFullDayAbsence": false,
-				"Total": 0,
-				"DayOffName": null,
-				"ContractTimeInMinute": 480,
-				"IsNotScheduled": false,
-				"ShiftCategory": {
-					"Id": null,
-					"ShortName": "AM",
-					"Name": "Early",
-					"DisplayColor": "#80FF80"
+			MultiSchedulesForShiftTrade: [{
+				Date: "\/Date(1531916600000)\/",
+				MySchedule: null,
+				PersonToSchedule: null
+			}, {
+				Date: "\/Date(1531978200000)\/",
+				MySchedule: {
+					"ScheduleLayers": [{
+						"Start": "\/Date(1531956600000)\/",
+						"End": "\/Date(1531964700000)\/",
+						"LengthInMinutes": 135,
+						"Color": "#80FF80",
+						"TitleHeader": "Phone",
+						"IsAbsenceConfidential": false,
+						"IsOvertime": false,
+						"TitleTime": "07:30 - 09:45",
+						"Meeting": null
+					}],
+					"StartTimeUtc": "\/Date(1531978200000)\/",
+					"IsDayOff": false,
+					"IsFullDayAbsence": false,
+					"Total": 0,
+					"DayOffName": null,
+					"ContractTimeInMinute": 480,
+					"IsNotScheduled": false,
+					"ShiftCategory": {
+						"Id": null,
+						"ShortName": "AM",
+						"Name": "Early",
+						"DisplayColor": "#80FF80"
+					}
+				},
+				PersonToSchedule: {
+					"ScheduleLayers": [{
+						"Start": "\/Date(1531956600000)\/",
+						"End": "\/Date(1531964700000)\/",
+						"LengthInMinutes": 135,
+						"Color": "#80FF80",
+						"TitleHeader": "Phone",
+						"IsAbsenceConfidential": false,
+						"IsOvertime": false,
+						"TitleTime": "07:30 - 09:45",
+						"Meeting": null
+					}],
+					"StartTimeUtc": "\/Date(1531978200000)\/",
+					"IsDayOff": false,
+					"IsFullDayAbsence": false,
+					"Total": 0,
+					"DayOffName": null,
+					"ContractTimeInMinute": 480,
+					"IsNotScheduled": false,
+					"ShiftCategory": {
+						"Id": null,
+						"ShortName": "AM",
+						"Name": "Early",
+						"DisplayColor": "#80FF80"
+					}
 				}
 			}]
 		};
@@ -1036,58 +1050,63 @@
 
 	test("Schedule data should be null if agent is not scheduled", function () {
 		var schedules = {
-			MySchedules: [{
-				"ScheduleLayers": [{
-					"Start": "\/Date(1531956600000)\/",
-					"End": "\/Date(1531964700000)\/",
-					"LengthInMinutes": 135,
-					"Color": "#80FF80",
-					"TitleHeader": "Phone",
-					"IsAbsenceConfidential": false,
-					"IsOvertime": false,
-					"TitleTime": "07:30 - 09:45",
-					"Meeting": null
-				}],
-				"StartTimeUtc": "\/Date(1531978200000)\/",
-				"IsDayOff": false,
-				"MinStart": "\/Date(1531978200000)\/",
-				"IsFullDayAbsence": false,
-				"Total": 0,
-				"DayOffName": null,
-				"ContractTimeInMinute": 480,
-				"IsNotScheduled": false,
-				"ShiftCategory": {
-					"Id": null,
-					"ShortName": "AM",
-					"Name": "Early",
-					"DisplayColor": "#80FF80"
-				}
-			}],
-			"PersonToSchedules": [{
-				"ScheduleLayers": [{
-					"Start": "\/Date(1531956600000)\/",
-					"End": "\/Date(1531964700000)\/",
-					"LengthInMinutes": 135,
-					"Color": "#80FF80",
-					"TitleHeader": "Phone",
-					"IsAbsenceConfidential": false,
-					"IsOvertime": false,
-					"TitleTime": "07:30 - 09:45",
-					"Meeting": null
-				}],
-				"MinStart": "\/Date(1531978200000)\/",
-				"StartTimeUtc": "\/Date(1531978200000)\/",
-				"IsDayOff": false,
-				"IsFullDayAbsence": false,
-				"Total": 0,
-				"DayOffName": null,
-				"ContractTimeInMinute": 480,
-				"IsNotScheduled": false,
-				"ShiftCategory": {
-					"Id": null,
-					"ShortName": "AM",
-					"Name": "Early",
-					"DisplayColor": "#80FF80"
+			MultiSchedulesForShiftTrade: [{
+				Date: "\/Date(1531916600000)\/",
+				MySchedule: null,
+				PersonToSchedule: null
+			}, {
+				Date: "\/Date(1531978200000)\/",
+				MySchedule: {
+					"ScheduleLayers": [{
+						"Start": "\/Date(1531956600000)\/",
+						"End": "\/Date(1531964700000)\/",
+						"LengthInMinutes": 135,
+						"Color": "#80FF80",
+						"TitleHeader": "Phone",
+						"IsAbsenceConfidential": false,
+						"IsOvertime": false,
+						"TitleTime": "07:30 - 09:45",
+						"Meeting": null
+					}],
+					"StartTimeUtc": "\/Date(1531978200000)\/",
+					"IsDayOff": false,
+					"IsFullDayAbsence": false,
+					"Total": 0,
+					"DayOffName": null,
+					"ContractTimeInMinute": 480,
+					"IsNotScheduled": false,
+					"ShiftCategory": {
+						"Id": null,
+						"ShortName": "AM",
+						"Name": "Early",
+						"DisplayColor": "#80FF80"
+					}
+				},
+				PersonToSchedule: {
+					"ScheduleLayers": [{
+						"Start": "\/Date(1531956600000)\/",
+						"End": "\/Date(1531964700000)\/",
+						"LengthInMinutes": 135,
+						"Color": "#80FF80",
+						"TitleHeader": "Phone",
+						"IsAbsenceConfidential": false,
+						"IsOvertime": false,
+						"TitleTime": "07:30 - 09:45",
+						"Meeting": null
+					}],
+					"StartTimeUtc": "\/Date(1531978200000)\/",
+					"IsDayOff": false,
+					"IsFullDayAbsence": false,
+					"Total": 0,
+					"DayOffName": null,
+					"ContractTimeInMinute": 480,
+					"IsNotScheduled": false,
+					"ShiftCategory": {
+						"Id": null,
+						"ShortName": "AM",
+						"Name": "Early",
+						"DisplayColor": "#80FF80"
+					}
 				}
 			}]
 		};
@@ -1110,7 +1129,7 @@
 		viewModel.redrawLayers = function () { };
 
 		viewModel.chooseAgent(agent);
-		equal(viewModel.loadedSchedulePairs().length, 8);
+		equal(viewModel.loadedSchedulePairs().length, 2);
 		equal(viewModel.loadedSchedulePairs()[0].mySchedule, null)
 		equal(viewModel.loadedSchedulePairs()[1].mySchedule.contractTime, "8:00");
 	});
