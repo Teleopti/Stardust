@@ -157,8 +157,6 @@
 	text-align: center;
 	overflow: hidden;
 	border-left: 0;
-	border-top: 1px solid #dfdfdf;
-	border-bottom: 1px solid #dfdfdf;
 }
 .mobile-start-day .mobile-schedule-layer:first-of-type {
 	border-top-left-radius: 3px;
