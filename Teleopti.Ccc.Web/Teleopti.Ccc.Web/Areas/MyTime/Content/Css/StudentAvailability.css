@@ -82,6 +82,12 @@
 	margin: 10px 0;
 }
 
+#StudentAvailability-period,
+.student-availability-body-container {
+	max-width: 100%;
+	overflow-x: auto;
+}
+
 @media (max-width: 768px) {
 	.phone-form-availability .form-student-availability {
 		position: fixed;

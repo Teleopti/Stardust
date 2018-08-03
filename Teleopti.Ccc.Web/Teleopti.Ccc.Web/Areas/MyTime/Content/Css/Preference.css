@@ -16,6 +16,12 @@
 	margin: auto;
 }
 
+#Preference-body,
+#Preference-period-feedback-view {
+	max-width: 100%;
+	overflow-x: auto;
+}
+
 @media (max-width: 767px) {
 	.phone-form-preference {
 		margin-bottom: 0 !important;
@@ -510,7 +516,7 @@ div.qtip-content {
 	margin: auto;
 	text-align: center;
 	padding: 10px 0;
-	width:1024px;
+	width: 1024px;
 }
 
 .min-hours-per-week {
