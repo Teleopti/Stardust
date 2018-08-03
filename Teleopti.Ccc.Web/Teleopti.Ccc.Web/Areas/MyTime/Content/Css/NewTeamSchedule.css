@@ -352,6 +352,7 @@ div.teammates-schedules-column:last-of-type .agent-name {
 	border-bottom: 1px solid #dfdfdf;
 	width: 100% !important;
 	overflow: hidden;
+	z-index: 1;
 }
 
 .new-teamschedule-view .new-teamschedule-layer:first-of-type {
@@ -362,10 +363,6 @@ div.teammates-schedules-column:last-of-type .agent-name {
 .new-teamschedule-view .new-teamschedule-layer.last-layer {
 	border-bottom-left-radius: 3px;
 	border-bottom-right-radius: 3px;
-}
-
-.new-teamschedule-view .new-teamschedule-layer.overtime-layer {
-	z-index: 1;
 }
 
 .new-teamschedule-view .new-teamschedule-layer .glyphicon {
