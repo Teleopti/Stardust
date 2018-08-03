@@ -3,7 +3,7 @@
 	Layout = null;
 }
 <style>
-	html, body, section#page, article#body, #body-inner, .new-teamschedule-view {
+	html, body, section#page, article#body, #body-inner{
 		height: 100%;
 		overflow-x: hidden;
 	}
@@ -196,7 +196,7 @@
 				<!-- ko if: mySchedule -->
 				<div class="new-teamschedule-layer-container relative">
 					<!-- ko foreach: mySchedule().layers -->
-					<div class="new-teamschedule-layer cursorpointer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle(), 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle(), 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true">
+					<div class="new-teamschedule-layer cursorpointer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-layer': isOvertime, 'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle(), 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle(), 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true">
 						<div class="activity-info" data-bind="visible: showTitle() && !isOvertimeAvailability()">
 							<strong data-bind="text: title()"></strong>
 							<!-- ko if: hasMeeting -->
@@ -231,7 +231,7 @@
 				<div class="teammates-schedules-column relative">
 					<div class="new-teamschedule-layer-container relative">
 						<!-- ko foreach: layers -->
-						<div class="new-teamschedule-layer cursorpointer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle(), 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle(), 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">
+						<div class="new-teamschedule-layer cursorpointer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-layer': isOvertime, 'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle(), 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle(), 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">
 							<div class="activity-info" data-bind="visible: showTitle() && !isOvertimeAvailability()">
 								<strong data-bind="text: title()"></strong>
 								<!-- ko if: hasMeeting -->

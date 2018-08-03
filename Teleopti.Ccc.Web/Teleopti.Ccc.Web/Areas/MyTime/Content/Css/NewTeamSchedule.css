@@ -1,7 +1,6 @@
-﻿.mobile-teamschedule-view {
-	display: none;
-}
-.new-teamschedule-view {
+﻿.new-teamschedule-view {
+	height: 100%;
+	overflow-x: hidden;
 	max-height: calc(100vh - 50px - 5px);
 }
 
@@ -363,6 +362,10 @@ div.teammates-schedules-column:last-of-type .agent-name {
 .new-teamschedule-view .new-teamschedule-layer.last-layer {
 	border-bottom-left-radius: 3px;
 	border-bottom-right-radius: 3px;
+}
+
+.new-teamschedule-view .new-teamschedule-layer.overtime-layer {
+	z-index: 1;
 }
 
 .new-teamschedule-view .new-teamschedule-layer .glyphicon {

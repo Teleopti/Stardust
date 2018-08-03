@@ -334,6 +334,19 @@
 		equal($('.new-teamschedule-view .my-schedule-column .new-teamschedule-layer strong').text(), 'Phone');
 	});
 
+	test('should render overtime on day off', function() {
+		$('body').append(agentSchedulesHtml);
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+
+		equal($('.new-teamschedule-view .my-schedule-column .new-teamschedule-layer.overtime-layer').length, 1);
+		equal(
+			$('.new-teamschedule-view .my-schedule-column .new-teamschedule-layer.overtime-layer strong').text(),
+			'Phone'
+		);
+	});
+
 	test("should render teammates's schedules", function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
@@ -883,7 +896,7 @@
 						StartPositionPercentage: '',
 						EndPositionPercentage: '',
 						Color: '#80FF80',
-						IsOvertime: false,
+						IsOvertime: true,
 						IsAbsenceConfidential: false,
 						TitleTime: '05:00 - 06:45'
 					}
@@ -1062,7 +1075,7 @@
 			'				<!-- ko if: mySchedule -->',
 			'				<div class="new-teamschedule-layer-container relative">',
 			'					<!-- ko foreach: mySchedule().layers -->',
-			"					<div class=\"new-teamschedule-layer cursorpointer absolute\" data-bind=\"tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle(), 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle(), 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true\">",
+			"					<div class=\"new-teamschedule-layer cursorpointer absolute\" data-bind=\"tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-layer': isOvertime, 'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle(), 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle(), 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true\">",
 			'						<div class="activity-info" data-bind="visible: showTitle() && !isOvertimeAvailability()">',
 			'							<strong data-bind="text: title()"></strong>',
 			'							<!-- ko if: hasMeeting -->',
@@ -1085,7 +1098,7 @@
 			'					</div>',
 			'					<!--/ko-->',
 			'					<!-- ko if:mySchedule().isNotScheduled -->',
-			'					<div class="not-scheduled-text">@Resources.NotScheduled</div>',
+			'					<div class="not-scheduled-text" data-bind="tooltip: { title: \'@Resources.NotScheduled\', html: true, trigger: \'click\'}, hideTooltipAfterMouseLeave: true">@Resources.NotScheduled</div>',
 			'					<!-- /ko -->',
 			'				</div>',
 			'				<!-- /ko -->',
@@ -1096,7 +1109,7 @@
 			'				<div class="teammates-schedules-column relative">',
 			'					<div class="new-teamschedule-layer-container relative">',
 			'						<!-- ko foreach: layers -->',
-			"						<div class=\"new-teamschedule-layer cursorpointer absolute\" data-bind=\"tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle(), 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle(), 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true\">",
+			"						<div class=\"new-teamschedule-layer cursorpointer absolute\" data-bind=\"tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-layer': isOvertime, 'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle(), 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle(), 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true\">",
 			'							<div class="activity-info" data-bind="visible: showTitle() && !isOvertimeAvailability()">',
 			'								<strong data-bind="text: title()"></strong>',
 			'								<!-- ko if: hasMeeting -->',
@@ -1106,7 +1119,7 @@
 			'									</i>',
 			'								</div>',
 			'								<!-- /ko -->',
-			'								<span class="fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan"></span>',
+			'								<span class="fullwidth displayblock" data-bind="visible: showDetail() && false, text: timeSpan"></span>',
 			'							</div>',
 			'							<div data-bind="visible: showTitle() && isOvertimeAvailability()">',
 			'								<i class="glyphicon glyphicon-time"></i>',
@@ -1119,7 +1132,7 @@
 			'						</div>',
 			'						<!--/ko-->',
 			'						<!-- ko if:isNotScheduled -->',
-			'						<div class="not-scheduled-text">@Resources.NotScheduled</div>',
+			'						<div class="not-scheduled-text" data-bind="tooltip: { title: \'@Resources.NotScheduled\', html: true, trigger: \'click\'}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">@Resources.NotScheduled</div>',
 			'						<!-- /ko -->',
 			'					</div>',
 			'				</div>',
