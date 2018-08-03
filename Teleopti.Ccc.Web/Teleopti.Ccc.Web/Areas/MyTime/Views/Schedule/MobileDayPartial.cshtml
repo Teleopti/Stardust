@@ -158,7 +158,7 @@
 			<!-- /ko -->
 			<!-- ko if: !isLoading() -->
 				<!-- ko foreach: layers-->
-				<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-background-image-light': isOvertime, overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime, overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true">
+				<div class="mobile-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-availability-bar': isOvertimeAvailability, 'overtime-background-image-light': isOvertime, overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime, overTimeDarkerBackgroundStyle, 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true">
 					<div data-bind="visible: showTitle() && !isOvertimeAvailability()">
 						<strong data-bind="text: title()"></strong>
 						<!-- ko if: hasMeeting -->

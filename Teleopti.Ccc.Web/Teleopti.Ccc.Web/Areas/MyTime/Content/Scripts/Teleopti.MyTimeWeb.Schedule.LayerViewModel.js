@@ -210,7 +210,7 @@ function getWidth(isOvertimeAvailability, probabilities, layersOnMobile) {
 	} else if (probabilities && probabilities.length > 0 && layersOnMobile) {
 		width = 'calc(100% - 28px)'; //MobileDayView.css .mobile-start-day .probability-vertical-bar{width: 28px;}
 	} else {
-		width = 'calc(' + 100 + '%)';
+		width = 'calc(' + 98 + '%)';
 	}
 	return width;
 }
