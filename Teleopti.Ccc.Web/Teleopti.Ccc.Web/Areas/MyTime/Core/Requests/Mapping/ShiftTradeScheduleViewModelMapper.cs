@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -180,13 +181,43 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			{
 				var mySchedule = mapToShiftTradeAddPersonScheduleViewModel(myScheduleRange, dateOnly, _loggedOnUser.CurrentUser());
 				var personToSchedule = mapToShiftTradeAddPersonScheduleViewModel(personToScheduleRange, dateOnly, personTo);
-				multiSchedules.Add(new ShiftTradeMultiScheduleViewModel{Date = dateOnly.Date, MySchedule = mySchedule, PersonToSchedule = personToSchedule});
+				var isSelectable = checkSelectable(hasAbsence(mySchedule, personToSchedule), out var reason);
+				multiSchedules.Add(new ShiftTradeMultiScheduleViewModel
+				{
+					Date = dateOnly.Date, MySchedule = mySchedule, PersonToSchedule = personToSchedule,
+					IsSelectable = isSelectable, UnselectableReason = reason
+				});
 			}
 
 			return new ShiftTradeMultiSchedulesViewModel
 			{
 				MultiSchedulesForShiftTrade = multiSchedules
 			};
+		}
+
+		private bool checkSelectable(bool hasAbsence, out string unSelectableReason)
+		{
+			unSelectableReason = "";
+			if (hasAbsence)
+			{
+				unSelectableReason = Resources.AbsenceCannotBeTraded;
+				return false;
+			}
+
+			return true;
+		}
+
+		private bool hasAbsence(ShiftTradeAddPersonScheduleViewModel myViewModel, ShiftTradeAddPersonScheduleViewModel personToViewModle)
+		{
+			if (myViewModel == null)
+			{
+				if (personToViewModle == null) return false;
+				return personToViewModle.IsIntradayAbsence || personToViewModle.IsFullDayAbsence;
+			}
+
+			if (personToViewModle == null) return myViewModel.IsFullDayAbsence || myViewModel.IsIntradayAbsence;
+
+			return myViewModel.IsFullDayAbsence || myViewModel.IsIntradayAbsence|| personToViewModle.IsFullDayAbsence || personToViewModle.IsIntradayAbsence;
 		}
 
 		private DateOnlyPeriod? fixPeriodForUnpublishedSchedule(DateOnlyPeriod periodInput)

@@ -324,6 +324,36 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldNotSelectableWhenPersonToHasAbsence()
+		{
+			_now.Is(DateOnly.Today.Date);
+			var startDate = DateOnly.Today.AddDays(2);
+			var endDate = startDate;
+			var form = createDataWithAbsence(startDate, endDate, endDate.AddDays(10).Date, 2);
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+
+			data.MultiSchedulesForShiftTrade.First().IsSelectable.Should().Be.False();
+			data.MultiSchedulesForShiftTrade.First().UnselectableReason.Should().Be.EqualTo(Resources.AbsenceCannotBeTraded);
+		}
+
+		[Test]
+		public void ShouldNotSelectableWhenIHaveAbsence()
+		{
+			_now.Is(DateOnly.Today.Date);
+			var startDate = DateOnly.Today.AddDays(2);
+			var endDate = startDate;
+			var form = createDataWithAbsence(startDate, endDate, endDate.AddDays(10).Date, 1);
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+
+			data.MultiSchedulesForShiftTrade.First().IsSelectable.Should().Be.False();
+			data.MultiSchedulesForShiftTrade.First().UnselectableReason.Should().Be.EqualTo(Resources.AbsenceCannotBeTraded);
+		}
+
+		[Test]
 		public void ShouldLoadScheduleWhenIHaveAbsence()
 		{
 			_now.Is(DateOnly.Today.Date);
@@ -378,7 +408,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 					.WithAssignedOvertimeActivity(date.Date.AddHours(17).ToString(), date.Date.AddHours(18).ToString());
 			}
 
-			var currentUser = PersonRepository.Get(personFromId);
+			setPrincipal(personFromId, scenarioId);
+
+			return PersonRepository.Get(personToId);
+		}
+
+		private void setPrincipal(Guid personId, Guid scenarioId)
+		{
+			var currentUser = PersonRepository.Get(personId);
 			LoggedOnUser.SetFakeLoggedOnUser(currentUser);
 			var principal = new TeleoptiPrincipal(
 				new TeleoptiIdentity(
@@ -392,8 +429,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			ThreadPrincipalContext.SetCurrentPrincipal(principal);
 			setPermissions(DefinedRaptorApplicationFunctionPaths.ViewSchedules);
 			CurrentScenario.Current().SetId(scenarioId);
-
-			return PersonRepository.Get(personToId);
 		}
 
 		private ShiftTradeMultiSchedulesForm createDataWithAbsence(DateOnly startDate, DateOnly endDate,
@@ -411,6 +446,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				{
 					Database.WithMultiSchedulesForShiftTradeWorkflow(publishedDate)
 						.WithPerson(personFromId)
+						.WithPeriod(DateOnly.MinValue.ToString())
+						.WithTerminalDate(DateOnly.MaxValue.ToString())
 						.WithScenario(scenarioId)
 						.WithPersonAbsence(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString())
 						.WithPerson(personToId)
@@ -423,7 +460,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				foreach (var date in period.DayCollection())
 				{
 					Database.WithMultiSchedulesForShiftTradeWorkflow(publishedDate)
-						.WithPerson(personFromId)
+						.WithPerson(personFromId)	
+						.WithPeriod(DateOnly.MinValue.ToString())
+						.WithTerminalDate(DateOnly.MaxValue.ToString())
 						.WithScenario(scenarioId)
 						.WithSchedule(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString())
 						.WithPerson(personToId)
@@ -431,9 +470,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				}
 			}
 
-			var currentUser = PersonRepository.Get(personFromId);
-			LoggedOnUser.SetFakeLoggedOnUser(currentUser);
-			CurrentScenario.Current().SetId(scenarioId);
+			setPrincipal(personFromId, scenarioId);
 
 			return new ShiftTradeMultiSchedulesForm
 			{

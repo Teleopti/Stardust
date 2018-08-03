@@ -16482,10 +16482,9 @@ Do you want to participate?</value>
   <data name="ExportToExcel" xml:space="preserve">
     <value>Export to Excel</value>
   </data>
-	<data name="FailedExportToExcel" xml:space="preserve">
+  <data name="FailedExportToExcel" xml:space="preserve">
     <value>Failed export to Excel, usually caused by lack of data</value>
   </data>
-
   <data name="SkillAreaNoSkillSelected" xml:space="preserve">
     <value>You need to select at least one skill.</value>
     <comment>Error messeage shown when creating skillarea</comment>
@@ -17603,5 +17602,10 @@ The application will now exit.</value>
   <data name="Participate" xml:space="preserve">
     <value>Participate</value>
     <comment>Participate button for data-protection page</comment>
+  </data>
+  <data name="AbsenceCannotBeTraded" xml:space="preserve">
+    <value>Days with absences cannot be traded.</value>
+    <comment>use in My
+Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule cannot be selected.</comment>
   </data>
 </root>

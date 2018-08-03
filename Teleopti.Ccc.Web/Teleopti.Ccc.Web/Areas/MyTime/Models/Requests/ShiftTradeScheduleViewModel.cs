@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 {
@@ -25,5 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public DateTime Date { get; set; }
 		public ShiftTradeAddPersonScheduleViewModel MySchedule { get; set; }
 		public ShiftTradeAddPersonScheduleViewModel PersonToSchedule { get; set; }
+		public bool IsSelectable { get; set; }
+		public string UnselectableReason { get; set; }
 	}
 }

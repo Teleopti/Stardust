@@ -214,6 +214,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Days with absences cannot be traded..
+        /// </summary>
+        public static string AbsenceCannotBeTraded {
+            get {
+                return ResourceManager.GetString("AbsenceCannotBeTraded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Personal accounts could not be loaded. There must be at least one absence with a tracker defined in Options..
         /// </summary>
         public static string AbsenceCouldNotBeLoaded {
