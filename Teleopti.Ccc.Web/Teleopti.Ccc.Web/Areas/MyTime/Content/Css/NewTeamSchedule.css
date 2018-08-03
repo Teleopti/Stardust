@@ -345,6 +345,10 @@ div.teammates-schedules-column:last-of-type .agent-name {
 	max-height: 100%;
 }
 
+.teammates-schedules-container .new-teamschedule-layer-container strong {
+	white-space: normal;
+}
+
 .new-teamschedule-view .new-teamschedule-layer {
 	text-align: center;
 	border-left: 0;
