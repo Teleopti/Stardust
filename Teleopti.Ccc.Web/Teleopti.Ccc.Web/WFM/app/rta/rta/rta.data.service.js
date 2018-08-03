@@ -3,7 +3,7 @@
 
 	angular
 		.module('wfm.rta')
-		.service('rtaDataService', rtaDataService);
+		.factory('rtaDataService', rtaDataService);
 
 	function rtaDataService($q, $http, $translate) {
 
