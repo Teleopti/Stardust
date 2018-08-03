@@ -142,7 +142,8 @@
 <div class="container pagebody">
 
 	<div id="Requests-body-inner" class="request-body-inner relative">
-		@Html.Partial("NewShiftTradeRequest")
+		@Html.Partial("NewShiftTradeRequestWrapper")
+
 		@Html.Partial("ShiftTradeBulletinBoardView")
 		<div>
 			<div id="Request-add-data-binding-area" data-bind="with: requestViewModel">

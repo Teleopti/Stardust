@@ -1087,43 +1087,6 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 		self.noPossibleShiftTrades(mappedPersonsSchedule.length === 0 ? true : false);
 	}
 
-
-	function createShiftTradeSchedules(shiftTradeSchedules) {
-		var models = ko.utils.arrayMap(shiftTradeSchedules, function (personSchedule) {
-			var mappedLayers = [];
-			var startDateTime = moment(personSchedule.MinStart);
-			if (personSchedule !== null && personSchedule.ScheduleLayers !== null && personSchedule.ScheduleLayers.length > 0) {
-				var layers = personSchedule.ScheduleLayers;
-				var startTimeInString = layers[0].TitleTime.split('-')[0].trim();
-				var endTimeInString = layers[layers.length - 1].TitleTime.split('-')[1].trim();
-				var scheduleStartTime = moment(layers[0].Start);
-				var scheduleEndTime = moment(layers[layers.length - 1].End);
-				var scheduleLength = scheduleEndTime.diff(scheduleStartTime, 'minutes');
-				var hasOvertime = personSchedule.ScheduleLayers.filter(function (l) { return l.IsOvertime; }).length > 0;
-
-				mappedLayers = ko.utils.arrayMap(personSchedule.ScheduleLayers, function (layer) {
-					var minutesSinceTimeLineStart = moment(layer.Start).diff(self.timeLineStartTime(), 'minutes');
-					var offsetFromScheduleStart = moment(layer.Start).diff(scheduleStartTime, 'minutes');
-					return new Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel(layer, minutesSinceTimeLineStart, self.pixelPerMinute(), offsetFromScheduleStart, scheduleLength);
-				});
-			}
-
-			if (personSchedule && personSchedule.ShiftCategory) {
-				var categoryName = personSchedule.ShiftCategory.Name;
-				var categoryColor = personSchedule.ShiftCategory.DisplayColor;
-			}
-
-			var model = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedLayers, scheduleStartTime, scheduleEndTime, personSchedule.Name,
-				personSchedule.PersonId, personSchedule.IsDayOff, personSchedule.DayOffName, false, personSchedule.IsFullDayAbsence, null,
-				Teleopti.MyTimeWeb.Common.FormatTimeSpan(personSchedule.ContractTimeInMinute), personSchedule.IsNotScheduled,
-				startDateTime, categoryName, categoryColor, startTimeInString, endTimeInString, hasOvertime, personSchedule.IsIntradayAbsence);
-
-			return model;
-		});
-
-		return models;
-	}
-
 	function createShiftTradeSchedule (personSchedule) {
 		if (personSchedule) {
 			var mappedLayers = [];
