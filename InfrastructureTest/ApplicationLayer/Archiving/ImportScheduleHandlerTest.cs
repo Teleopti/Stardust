@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -282,7 +283,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 		}
 
 		[Test]
-		//[Ignore("Not implemented yet")]
 		public void ShouldUpdatePersonAccountIfNeeded()
 		{
 			var contract = new Contract("something");
@@ -344,7 +344,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 				ToScenario = TargetScenario.Id.GetValueOrDefault(),
 				JobResultId = JobResultId,
 				LogOnBusinessUnitId = BusinessUnit.Id.GetValueOrDefault(),
-				TotalMessages = 1
+				TotalMessages = 1,
+				LogOnDatasource = DataSourceHelper.TestTenantName
 			};
 		}
 

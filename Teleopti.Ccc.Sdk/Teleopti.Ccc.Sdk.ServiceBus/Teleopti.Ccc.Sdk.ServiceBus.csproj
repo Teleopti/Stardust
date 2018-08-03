@@ -168,6 +168,7 @@
     <Compile Include="NodeHandlers\FixReadModelsHandler.cs" />
     <Compile Include="NodeHandlers\ImportAgentHandler.cs" />
     <Compile Include="NodeHandlers\ImportExternalPerformanceHandler.cs" />
+    <Compile Include="NodeHandlers\ImportScheduleNodeHandler.cs" />
     <Compile Include="NodeHandlers\IndexMaintenanceHandler.cs" />
     <Compile Include="NodeHandlers\IntradayToolHandler.cs" />
     <Compile Include="NodeHandlers\ProcessWaitlistedRequestsHandler.cs" />

@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			builder.RegisterType<ScheduleDayDifferenceSaver>().As<IScheduleDayDifferenceSaver>().SingleInstance();
 			builder.RegisterType<RefreshPayrollFormatsHandler>().As<IHandle<RefreshPayrollFormatsEvent>>().SingleInstance();
 			builder.RegisterType<IntradayToolHandler>().As<IHandle<IntradayToolEvent>>().SingleInstance();
+			builder.RegisterType<ImportScheduleNodeHandler>().As<IHandle<ImportScheduleEvent>>().SingleInstance().ApplyAspects();
 		}
 	}
 }
