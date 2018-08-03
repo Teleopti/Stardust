@@ -5,7 +5,7 @@
 		.module('wfm.rta')
 		.service('rtaDataService', rtaDataService);
 
-	function rtaDataService(rtaService, $q, $http, $translate) {
+	function rtaDataService($q, $http, $translate) {
 
 		var organization = [];
 		var skills = [];
@@ -16,20 +16,20 @@
 
 		function load() {
 			return $q.all([
-				rtaService.getOrganization()
-					.then(function (data) {
-						organization = data;
+				$http.get('../api/Sites/Organization')
+					.then(function (response) {
+						organization = response.data;
 						organization.forEach(function (site) {
 							site.Teams = site.Teams || [];
 						});
 					}),
-				rtaService.getSkills()
-					.then(function (data) {
-						skills = data;
+				$http.get('../api/Skills')
+					.then(function (response) {
+						skills = response.data;
 					}),
-				rtaService.getSkillAreas()
-					.then(function (data) {
-						skillAreas = data;
+				$http.get('../api/SkillGroups')
+					.then(function (response) {
+						skillAreas = response.data;
 					}),
 				$http.get('../api/PhoneStates')
 					.then(function (response) {
