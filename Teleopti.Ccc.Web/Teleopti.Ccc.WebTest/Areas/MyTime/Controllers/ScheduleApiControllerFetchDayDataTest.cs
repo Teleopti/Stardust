@@ -493,6 +493,70 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldCreateOvernightOvertimeAvailabilityPeriodViewModelCorrectlyOnFetchDayData()
+		{
+			var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
+			TimeZone.Is(timeZone);
+			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(timeZone);
+			Now.Is(new DateTime(2014, 12, 13, 6, 0, 0, DateTimeKind.Utc));
+
+			var date = new DateOnly(2014, 12, 15);
+			var start = new TimeSpan(22, 0, 0);
+			var end = new TimeSpan(34, 0, 0);
+			var overtimeAvailability = new OvertimeAvailability(User.CurrentUser(), date.AddDays(-1), start, end);
+			ScheduleData.Add(overtimeAvailability);
+
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
+			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(date.Date.AddHours(3), timeZone),
+				TimeZoneHelper.ConvertToUtc(date.Date.AddHours(8), timeZone));
+			assignment.AddActivity(new Activity("Phone"), period);
+			assignment.SetShiftCategory(new ShiftCategory("sc"));
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchDayData(date).Schedule.Periods.First(p => p is OvertimeAvailabilityPeriodViewModel) as OvertimeAvailabilityPeriodViewModel;
+
+			result.Title.Should().Be.EqualTo(Resources.OvertimeAvailabilityWeb);
+			result.TimeSpan.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(TimeSpan.FromHours(3), CultureInfo.CurrentCulture) + " - " +
+											TimeHelper.TimeOfDayFromTimeSpan(TimeSpan.FromHours(10), CultureInfo.CurrentCulture));
+			result.StartPositionPercentage.Should().Be.EqualTo(0.25M / 7.5M);
+			result.EndPositionPercentage.Should().Be.EqualTo(7.25M / 7.5M);
+			result.IsOvertimeAvailability.Should().Be.True();
+			result.Color.Should().Be.EqualTo(Color.Gray.ToCSV());
+		}
+
+		[Test]
+		public void ShouldCreateOvernightOvertimeAvailabilityPeriodViewModelCorrectlyOnFetchDayDataIfOverlappingTodayShift()
+		{
+			var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
+			TimeZone.Is(timeZone);
+			User.CurrentUser().PermissionInformation.SetDefaultTimeZone(timeZone);
+			Now.Is(new DateTime(2014, 12, 13, 6, 0, 0, DateTimeKind.Utc));
+
+			var date = new DateOnly(2014, 12, 15);
+			var start = new TimeSpan(22, 0, 0);
+			var end = new TimeSpan(34, 0, 0);
+			var overtimeAvailability = new OvertimeAvailability(User.CurrentUser(), date.AddDays(-1), start, end);
+			ScheduleData.Add(overtimeAvailability);
+
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
+			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(date.Date.AddHours(3), timeZone),
+				TimeZoneHelper.ConvertToUtc(date.Date.AddHours(11), timeZone));
+			assignment.AddActivity(new Activity("Phone"), period);
+			assignment.SetShiftCategory(new ShiftCategory("sc"));
+			ScheduleData.Add(assignment);
+
+			var result = Target.FetchDayData(date).Schedule.Periods.First(p => p is OvertimeAvailabilityPeriodViewModel) as OvertimeAvailabilityPeriodViewModel;
+
+			result.Title.Should().Be.EqualTo(Resources.OvertimeAvailabilityWeb);
+			result.TimeSpan.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(TimeSpan.FromHours(3), CultureInfo.CurrentCulture) + " - " +
+												TimeHelper.TimeOfDayFromTimeSpan(TimeSpan.FromHours(10), CultureInfo.CurrentCulture));
+			result.StartPositionPercentage.Should().Be.EqualTo(0.25M / 8.5M);
+			result.EndPositionPercentage.Should().Be.EqualTo(7.25M / 8.5M);
+			result.IsOvertimeAvailability.Should().Be.True();
+			result.Color.Should().Be.EqualTo(Color.Gray.ToCSV());
+		}
+
+		[Test]
 		public void ShouldNotCreateOvertimeAvailabilityPeriodViewModelForYesterdayIfNotOverlappingTodayShift()
 		{
 			var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
@@ -509,13 +573,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date.AddDays(1));
 			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(new DateTime(2014, 12, 14, 05, 0, 0), timeZone),
 				TimeZoneHelper.ConvertToUtc(new DateTime(2014, 12, 14, 13, 0, 0), timeZone));
-			var phoneActivity = new Activity("Phone")
-			{
-				InWorkTime = true,
-				InContractTime = true,
-				DisplayColor = Color.Green
-			};
-			assignment.AddActivity(phoneActivity, period);
+			assignment.AddActivity(new Activity("Phone"), period);
 			assignment.SetShiftCategory(new ShiftCategory("sc"));
 			ScheduleData.Add(assignment);
 

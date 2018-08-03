@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
@@ -115,7 +116,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 					IsOvertime = isOvertimeLayer
 				});
 			}
-			return newList;
+			return newList.OrderBy(l => l.StartTime);
 		}
 
 		private static TimePeriod getVisualLayerTimePeriod(VisualLayerForWebDisplay visualLayer, DateOnly localDate, TimeZoneInfo timezone)
@@ -221,11 +222,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 		public IEnumerable<OvertimeAvailabilityPeriodViewModel> CreateOvertimeAvailabilityPeriodViewModels(IOvertimeAvailability overtimeAvailability, IOvertimeAvailability overtimeAvailabilityYesterday, TimePeriod minMaxTime)
 		{
 			var overtimeAvailabilityPeriods = new List<OvertimeAvailabilityPeriodViewModel>();
+			var diff = (minMaxTime.EndTime - minMaxTime.StartTime).Ticks;
 			if (overtimeAvailability != null)
 			{
 				var start = overtimeAvailability.StartTime.Value;
 				var end = overtimeAvailability.EndTime.Value;
-				var endPositionPercentage = (decimal)(end - minMaxTime.StartTime).Ticks / (minMaxTime.EndTime - minMaxTime.StartTime).Ticks;
+				var endPositionPercentage = (decimal)(end - minMaxTime.StartTime).Ticks / diff;
 				overtimeAvailabilityPeriods.Add(new OvertimeAvailabilityPeriodViewModel
 				{
 					Title = Resources.OvertimeAvailabilityWeb,
@@ -243,7 +245,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 				var endYesterday = overtimeAvailabilityYesterday.EndTime.Value;
 				if (endYesterday.Days >= 1)
 				{
-					var endPositionPercentageYesterday = (decimal)(endYesterday.Subtract(new TimeSpan(1, 0, 0, 0)) - minMaxTime.StartTime).Ticks / (minMaxTime.EndTime - minMaxTime.StartTime).Ticks;
+					var endPositionPercentageYesterday = (decimal)(endYesterday.Subtract(new TimeSpan(1, 0, 0, 0)) - minMaxTime.StartTime).Ticks / diff;
+
 					overtimeAvailabilityPeriods.Add(new OvertimeAvailabilityPeriodViewModel
 					{
 						Title = Resources.OvertimeAvailabilityWeb,
@@ -252,7 +255,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 						EndPositionPercentage = endPositionPercentageYesterday,
 						IsOvertimeAvailability = true,
 						OvertimeAvailabilityYesterday = _overtimeMapper.Map(overtimeAvailabilityYesterday),
-						Color = Color.Gray.ToCSV()
+						Color = Color.Gray.ToCSV(),
+						StartTime = overtimeAvailabilityYesterday.DateOfOvertime.Date.Add(overtimeAvailabilityYesterday.StartTime.Value),
+						EndTime = overtimeAvailabilityYesterday.DateOfOvertime.Date.Add(overtimeAvailabilityYesterday.EndTime.Value)
 					});
 				}
 			}

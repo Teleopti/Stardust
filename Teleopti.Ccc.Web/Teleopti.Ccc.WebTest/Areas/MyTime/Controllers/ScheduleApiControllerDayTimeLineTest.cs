@@ -602,7 +602,23 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldMapTimeLineCorrectlyWhenThereIsAnOvernightLongOvertimeAvaibilityOverlappingTodayShift()
+		public void ShouldMapTimeLineCorrectlyWhenThereIsAnOvernightOvertimeAvaibilityOverlappingTodayShiftWithSameEndTime()
+		{
+			var date = new DateOnly(Now.UtcDateTime());
+			IOvertimeAvailability overtimeAvailability =
+				new OvertimeAvailability(User.CurrentUser(), date.AddDays(-1), TimeSpan.FromHours(18), TimeSpan.FromHours(36));
+			ScheduleData.Add(overtimeAvailability);
+
+			var period = new DateTimePeriod(date.Utc().AddHours(3), date.Utc().AddHours(12));
+			addAssignment(date, new activityDto { Activity = new Activity(), Period = period });
+
+			var result = Target.FetchDayData(date, StaffingPossiblityType.Overtime);
+
+			AssertTimeLine(result.TimeLine.ToList(), 2, 45, 12, 15);
+		}
+
+		[Test]
+		public void ShouldMapTimeLineCorrectlyWhenThereIsAnLongOvernightOvertimeAvaibilityOverlappingTodayShift()
 		{
 			var date = new DateOnly(Now.UtcDateTime());
 			IOvertimeAvailability overtimeAvailability =

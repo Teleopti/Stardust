@@ -295,6 +295,28 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.Mapping
 			var overtimeAvailabilityPeriodViewModels =
 				periodViewModelFactory.CreateOvertimeAvailabilityPeriodViewModels(day.OvertimeAvailability,
 					day.OvertimeAvailabilityYesterday, minMaxTime) ?? new OvertimeAvailabilityPeriodViewModel[0];
+
+			var yesterdayOvertimeAvailability = overtimeAvailabilityPeriodViewModels
+				.Where(a => a.OvertimeAvailabilityYesterday != null).ToList().FirstOrDefault();
+
+			if (yesterdayOvertimeAvailability != null && yesterdayOvertimeAvailability.StartTime.Date.Day != yesterdayOvertimeAvailability.EndTime.Date.Day)
+			{
+				var firstLayer = periodsViewModels.FirstOrDefault();
+				if (firstLayer != null)
+				{
+					if (yesterdayOvertimeAvailability.EndTime >= firstLayer.StartTime)
+					{
+						yesterdayOvertimeAvailability.TimeSpan =
+							TimeHelper.TimeOfDayFromTimeSpan(firstLayer.StartTime.TimeOfDay,
+								CultureInfo.CurrentCulture) + " - " +
+							TimeHelper.TimeOfDayFromTimeSpan(yesterdayOvertimeAvailability.EndTime.TimeOfDay, CultureInfo.CurrentCulture);
+						var diff = (minMaxTime.EndTime - minMaxTime.StartTime).Ticks;
+						yesterdayOvertimeAvailability.StartPositionPercentage = (decimal)(firstLayer.StartTime.TimeOfDay - minMaxTime.StartTime).Ticks / diff;
+						yesterdayOvertimeAvailability.EndPositionPercentage = (decimal)(yesterdayOvertimeAvailability.EndTime - day.Date.Date.Add(minMaxTime.StartTime)).Ticks / diff;
+					}
+				}
+			}
+
 			return periodsViewModels.Concat(overtimeAvailabilityPeriodViewModels).OrderBy(p => p.StartTime);
 		}
 
