@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -58,6 +57,14 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		public void ShouldCreateRequestTabIfOnlyPermissionsToShiftTradeRequest()
 		{
 			setShiftTradeRequestsWebPermissions();
+
+			TestThatRequestTabIsCreated();
+		}
+
+		[Test]
+		public void ShouldCreateRequestTabIfOnlyPermissionsToOvertimeRequest()
+		{
+			setOvertimeRequestsWebPermissions();
 
 			TestThatRequestTabIsCreated();
 		}
@@ -110,6 +117,22 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			{
 				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
 						, "/", DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb)
+					, new AuthorizeEveryone(), Rights.PossessProperty),
+				new Claim(
+					string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace,
+						"/AvailableData"), new AuthorizeEveryone(), Rights.PossessProperty)
+			};
+
+			principal.AddClaimSet(new DefaultClaimSet(ClaimSet.System, claims));
+		}
+
+		private void setOvertimeRequestsWebPermissions()
+		{
+			var principal = Thread.CurrentPrincipal as ITeleoptiPrincipal;
+			var claims = new List<Claim>
+			{
+				new Claim(string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
+						, "/", DefinedRaptorApplicationFunctionPaths.OvertimeRequestWeb)
 					, new AuthorizeEveryone(), Rights.PossessProperty),
 				new Claim(
 					string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace,

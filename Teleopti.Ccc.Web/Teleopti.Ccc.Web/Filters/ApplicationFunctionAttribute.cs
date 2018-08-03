@@ -9,7 +9,10 @@ namespace Teleopti.Ccc.Web.Filters
 	public sealed class RequestPermissionAttribute : ApplicationFunctionAttribute
 	{
 		public RequestPermissionAttribute()
-			: base(DefinedRaptorApplicationFunctionPaths.TextRequests, DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)
+			: base(DefinedRaptorApplicationFunctionPaths.TextRequests,
+				DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb,
+				DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb,
+				DefinedRaptorApplicationFunctionPaths.OvertimeRequestWeb)
 		{
 		}
 	}
@@ -50,8 +53,8 @@ namespace Teleopti.Ccc.Web.Filters
 			: this(new[] { applicationFunctionPath}){}
 		public ApplicationFunctionAttribute(string applicationFunctionPath1, string applicationFunctionPath2)
 			: this(new[] { applicationFunctionPath1, applicationFunctionPath2 }) { }
-		public ApplicationFunctionAttribute(string applicationFunctionPath1, string applicationFunctionPath2, string applicationFunctionPath3)
-			: this(new[] { applicationFunctionPath1, applicationFunctionPath2, applicationFunctionPath3 }) { }
+		public ApplicationFunctionAttribute(string applicationFunctionPath1, string applicationFunctionPath2, string applicationFunctionPath3, string applicationFunctionPath4)
+			: this(new[] { applicationFunctionPath1, applicationFunctionPath2, applicationFunctionPath3, applicationFunctionPath4 }) { }
 
 
 		private ApplicationFunctionAttribute(params string[] applicationFunctionPathses)
