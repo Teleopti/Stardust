@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core'
-import { RTA_DATA_SERVICE } from "./rta.data.service.provider";
+import {RTA_DATA_SERVICE} from "./rta.data.service.provider";
 import {RTA_STATE_SERVICE} from "./rta.state.service.provider";
 
 @Component({
@@ -7,14 +7,15 @@ import {RTA_STATE_SERVICE} from "./rta.state.service.provider";
 	templateUrl: './rta.historical.overview.html'
 })
 
-export class RtaHistoricalOverviewComponent implements OnInit{
+export class RtaHistoricalOverviewComponent implements OnInit {
 	organizationPickerOpen: boolean;
 	organizationPickerSelectionText: string;
 	organizationPickerSearchTerm: string;
 	organizationPickerClearEnabled: string;
 	openCard: boolean;
-	sites: any [];
-	
+	sites: any [] = [];
+	siteModel: Object;
+
 	constructor(
 		@Inject(RTA_DATA_SERVICE) private rtaDataService: any, @Inject(RTA_STATE_SERVICE) private rtaStateService: any) {
 		console.log('in constructor6');
@@ -22,9 +23,58 @@ export class RtaHistoricalOverviewComponent implements OnInit{
 
 	ngOnInit(): void {
 		this.rtaDataService.load().then(data => {
-			this.sites = data.organization;
+			this.buildSites(data.organization);
+			console.log('built sites', this.sites)
 		});
-	}	
+	}
+
+
+	buildSites(organization: any): void {
+		console.log('organization', organization);
+		organization.forEach(site =>  {
+			let siteModel = {
+				Id: site.Id,
+				Name: site.Name,
+				Teams: [],
+				get isChecked() {
+					return this.rtaStateService.isSiteSelected(site.Id);
+				},
+				get isMarked() {
+					return this.rtaStateService.siteHasTeamsSelected(site.Id);
+				},
+				toggle: function () {
+					this.rtaStateService.toggleSite(site.Id);
+					this.updateOrganizationPicker();
+					// forcePoll();
+				}
+			};
+
+			site.Teams.forEach(function (team) {
+				siteModel.Teams.push({
+					Id: team.Id,
+					Name: team.Name,
+					get isChecked() {
+						return this.rtaStateService.isTeamSelected(team.Id);
+					},
+					toggle: function () {
+						this.rtaStateService.toggleTeam(team.Id);
+						this.updateOrganizationPicker();
+						// forcePoll();
+					}
+				});
+			});
+
+			this.sites.push(siteModel);
+		});
+		this.updateOrganizationPicker();
+	}
+
+	updateOrganizationPicker() : void {
+		this.organizationPickerSelectionText = this.rtaStateService.organizationSelectionText();
+		// vm.organizationPickerClearEnabled = (vm.sites || []).some(function (site) {
+		// 	return site.isChecked || site.isMarked;
+		// });
+	}
 
 	clearOrganizationSelection() {
 		console.log('hej')
@@ -33,7 +83,7 @@ export class RtaHistoricalOverviewComponent implements OnInit{
 	closePicker(event: Object) {
 		this.organizationPickerOpen = false;
 	}
-	
+
 	groupings: any [] = [
 		{
 			Name: 'Denver - Team Linda',
@@ -79,8 +129,8 @@ export class RtaHistoricalOverviewComponent implements OnInit{
 					}
 				],
 				PeriodAdherence: {
-					Color:'#EE8F7D',
-					Value:73
+					Color: '#EE8F7D',
+					Value: 73
 				},
 				LateForWork:
 					{
@@ -129,8 +179,8 @@ export class RtaHistoricalOverviewComponent implements OnInit{
 						}
 					],
 					PeriodAdherence: {
-						Color:'#FFC285',
-						Value:77
+						Color: '#FFC285',
+						Value: 77
 					},
 					LateForWork:
 						{
@@ -181,8 +231,8 @@ export class RtaHistoricalOverviewComponent implements OnInit{
 						}
 					],
 					PeriodAdherence: {
-						Color:'#C2E085',
-						Value:91
+						Color: '#C2E085',
+						Value: 91
 					},
 					LateForWork:
 						{
@@ -237,8 +287,8 @@ export class RtaHistoricalOverviewComponent implements OnInit{
 					}
 				],
 				PeriodAdherence: {
-					Color:'#FFC285',
-					Value:82
+					Color: '#FFC285',
+					Value: 82
 				},
 				LateForWork:
 					{
@@ -287,8 +337,8 @@ export class RtaHistoricalOverviewComponent implements OnInit{
 						}
 					],
 					PeriodAdherence: {
-						Color:'#FFC285',
-						Value:80
+						Color: '#FFC285',
+						Value: 80
 					},
 					LateForWork:
 						{
@@ -337,8 +387,8 @@ export class RtaHistoricalOverviewComponent implements OnInit{
 						}
 					],
 					PeriodAdherence: {
-						Color:'#C2E085',
-						Value:89
+						Color: '#C2E085',
+						Value: 89
 					},
 					LateForWork:
 						{
@@ -393,8 +443,8 @@ export class RtaHistoricalOverviewComponent implements OnInit{
 					}
 				],
 				PeriodAdherence: {
-					Color:'#C2E085',
-					Value:88
+					Color: '#C2E085',
+					Value: 88
 				},
 				LateForWork:
 					{
