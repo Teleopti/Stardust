@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.DataProvider
 			scheduleDayDomainData.ShiftExchangePermission =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard);
 			scheduleDayDomainData.ShiftTradeRequestPermission =
-				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequests);
+				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb);
 			scheduleDayDomainData.PersonAccountPermission =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewPersonalAccount);
 			scheduleDayDomainData.ViewPossibilityPermission =

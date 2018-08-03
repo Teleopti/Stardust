@@ -442,6 +442,18 @@ namespace Teleopti.Ccc.WebTest.Core
 		}
 
 		[Test]
+		public void ShouldMapShiftTradeRequestPermissionOnGetDaySchedule()
+		{
+			var date = new DateOnly(2012, 08, 26);
+			var localMidnightInUtc = safeConvertTimeToUtc(date.Date);
+			addPersonSchedule(date, localMidnightInUtc.AddHours(20), localMidnightInUtc.AddHours(28));
+
+			var result = Target.GetDaySchedule(date);
+
+			result.ShiftTradeRequestPermission.Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldMapOvertimeRequestPermissionOnGetDaySchedule()
 		{
 			var date = new DateOnly(2012, 08, 26);
