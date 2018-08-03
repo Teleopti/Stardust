@@ -3,9 +3,9 @@
 
 	angular
 		.module('wfm.rta')
-		.service('rtaStateService', rtaStateService);
+		.factory('rtaStateService', rtaStateService);
 
-	function rtaStateService($state, rtaService, $q, $sessionStorage, $translate, rtaDataService) {
+	function rtaStateService($state, $q, $sessionStorage, $translate, rtaDataService) {
 
 		var state = {
 			open: undefined,

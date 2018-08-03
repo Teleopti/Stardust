@@ -1,5 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core'
 import { RTA_DATA_SERVICE } from "./rta.data.service.provider";
+import {RTA_STATE_SERVICE} from "./rta.state.service.provider";
 
 @Component({
 	selector: 'rta-historical-overview',
@@ -15,7 +16,7 @@ export class RtaHistoricalOverviewComponent implements OnInit{
 	sites: any [];
 	
 	constructor(
-		@Inject(RTA_DATA_SERVICE) private rtaDataService: any) {
+		@Inject(RTA_DATA_SERVICE) private rtaDataService: any, @Inject(RTA_STATE_SERVICE) private rtaStateService: any) {
 		console.log('in constructor6');
 	}
 
