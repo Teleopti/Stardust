@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 
@@ -9,6 +10,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
     [Binding]
     public class ManageScheduleStepDefinition
     {
+		[BeforeScenario("RunningStardust")]
+		public void BeforePasswordPolicyScenario()
+		{
+			TestSiteConfigurationSetup.StartStardust();
+		}
+
+		[AfterScenario("RunningStardust")]
+		public void AfterPasswordPolicyScenario()
+		{
+			TestSiteConfigurationSetup.KillStardust();
+		}
+
 		[When(@"I wait (.*) seconds to allow tracking to be setup")]
 		public void WhenIWaitSeconds(int seconds)
 		{
@@ -63,7 +76,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 		[Then(@"I should get a success message")]
         public void ThenIShouldGetASuccessMessage()
         {
-            Browser.Interactions.AssertExists(".notice-success");
-        }
+			using (Browser.TimeoutScope(TimeSpan.FromSeconds(180)))
+			{
+				Browser.Interactions.AssertExists(".notice-success");
+			}
+		}
     }
 }

@@ -33,17 +33,18 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			_portsConfiguration = RandomPortsAndUrls();
 			writeWebConfigs();
 			killProcess("killAllIISExpress", "iisexpress");
-			killProcess("killStardustConsoleHost", "Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost");
 			StartIISExpress();
 			
 			if (runStardust)
 			{
-				startStardust();
+				StartStardust();
 			}
 		}
 
-		private static void startStardust()
+		public static void StartStardust()
 		{
+			KillStardust();
+			
 			WriteConfig("ServiceBusHost.config", Paths.StardustConsoleHostFolderPath(), "Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost.exe.config");
 			
 			var starDustConsoleHostPath = $"{Paths.StardustConsoleHostFolderPath()}\\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost.exe";
@@ -149,11 +150,16 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 
 			killProcess("killAllIISExpress", "iisexpress");
 			waitToBeKilled("waittobekilled", "iisexpress");
-			killProcess("killStardustConsoleHost", "Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost");
-			waitToBeKilled("waitStardustConsoleHostToBeKilled", "Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost");
+			KillStardust();
 
 			_portsConfiguration?.Dispose();
 			writeWebConfigs();
+		}
+
+		public static void KillStardust()
+		{
+			killProcess("killStardustConsoleHost", "Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost");
+			waitToBeKilled("waitStardustConsoleHostToBeKilled", "Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost");
 		}
 
 		private static void waitToBeKilled(string logName, string processName)
@@ -165,7 +171,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 					TestLog.Static.Debug($"{logName}/wait");
 					if (!p.WaitForExit(2000))
 					{
-						TestLog.Static.Debug("Couldn't kill one of iisexpress processes!!");
+						TestLog.Static.Debug($"Couldn\'t kill process {processName}!!");
 					}
 				});
 			TestLog.Static.Debug($"/{logName}");
