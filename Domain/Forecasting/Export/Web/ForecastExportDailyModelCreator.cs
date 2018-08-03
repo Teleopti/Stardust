@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
@@ -6,21 +7,22 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export.Web
 {
 	public static class ForecastExportDailyModelCreator
 	{
-		public static IList<ForecastExportDailyModel> Load(IList<ISkillDay> skillDays)
+		public static IList<ForecastExportDailyModel> Load(Guid workloadId, IList<ISkillDay> skillDays)
 		{
 			var dailyModel = new List<ForecastExportDailyModel>();
 			foreach (var skillDay in skillDays)
 			{
 				if (!skillDay.OpenForWork.IsOpen)
 					continue;
+				var workload = skillDay.WorkloadDayCollection.First(x => x.Workload.Id.Value == workloadId);
 				dailyModel.Add(new ForecastExportDailyModel()
 				{
 					ForecastDate = skillDay.CurrentDate.Date,
 					OpenHours = skillDay.OpenHours().First(),
-					Calls = skillDay.WorkloadDayCollection.First().TotalTasks,
-					AverageTalkTime = skillDay.WorkloadDayCollection.First().TotalAverageTaskTime.TotalSeconds,
-					AverageAfterCallWork = skillDay.WorkloadDayCollection.First().TotalAverageAfterTaskTime.TotalSeconds,
-					AverageHandleTime = skillDay.WorkloadDayCollection.First().TotalAverageTaskTime.TotalSeconds + skillDay.WorkloadDayCollection.First().TotalAverageAfterTaskTime.TotalSeconds,
+					Calls = workload.TotalTasks,
+					AverageTalkTime = workload.TotalAverageTaskTime.TotalSeconds,
+					AverageAfterCallWork = workload.TotalAverageAfterTaskTime.TotalSeconds,
+					AverageHandleTime = workload.TotalAverageTaskTime.TotalSeconds + workload.TotalAverageAfterTaskTime.TotalSeconds,
 					ForecastedHours = skillDay.ForecastedIncomingDemand.TotalHours,
 					ForecastedHoursShrinkage = skillDay.ForecastedIncomingDemandWithShrinkage.TotalHours
 				});

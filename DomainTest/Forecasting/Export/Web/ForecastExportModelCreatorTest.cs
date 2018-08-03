@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
@@ -237,6 +238,51 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 			model.DailyModelForecast.First().ForecastDate.Should().Be.EqualTo(theDate.Date);
 			model.IntervalModelForecast.Any(x => x.IntervalStart.Date == theDate.Date).Should().Be.True();
 			model.IntervalModelForecast.Any(x => x.IntervalStart.Date != theDate.Date).Should().Be.False();
+		}
+		
+		[Test]
+		public void ShouldOnlyExportForecastForGivenWorkload()
+		{
+			var theDate = new DateOnly(2016, 8, 26);
+			var openHour = new TimePeriod(8, 0, 8, 30);
+			var skill = createSkill(minutesPerInterval, "skill", openHour, false, 0);
+			var workloadOne = skill.WorkloadCollection.First();
+			var period = new DateOnlyPeriod(theDate, theDate.AddDays(1));
+			var scenario = IntradayStaffingApplicationServiceTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
+			var skillDay = SkillSetupHelper.CreateSkillDay(skill, scenario, theDate.Date, openHour, false);
+
+			skillDay.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = new Percent(0.2));
+			var forecastedHours = skillDay.ForecastedIncomingDemand.TotalHours;
+			var forecastedHoursWithShrinkage = skillDay.ForecastedIncomingDemandWithShrinkage.TotalHours;
+
+			IWorkload workloadTwo = new Workload(skill);
+			workloadTwo.SetId(Guid.NewGuid());
+			workloadTwo.Description = "second workload";
+			workloadTwo.Name = "second name from factory";
+			workloadTwo.TemplateWeekCollection.ForEach(x => x.Value.ChangeOpenHours(new List<TimePeriod> { new TimePeriod(8, 0, 8, 30) }));
+			var workloadDay = new WorkloadDay();
+			workloadDay.CreateFromTemplate(theDate, workloadTwo,
+				(IWorkloadDayTemplate)workloadTwo.GetTemplate(TemplateTarget.Workload, theDate.DayOfWeek));
+			skillDay.WorkloadDayCollection.Last().Tasks = 10;
+			skillDay.AddWorkloadDay(workloadDay);
+			SkillRepository.Has(skill);
+			WorkloadRepository.Add(workloadTwo);
+			WorkloadRepository.Add(workloadOne);
+			SkillDayRepository.Add(skillDay);
+
+			var model = Target.Load(scenario.Id.Value, workloadTwo.Id.Value, period);
+
+			model.DailyModelForecast.Count().Should().Be.EqualTo(1);
+			var dailyModel = model.DailyModelForecast.First();
+
+			dailyModel.ForecastDate.Should().Be.EqualTo(skillDay.CurrentDate.Date);
+			dailyModel.OpenHours.Should().Be.EqualTo(openHour);
+			dailyModel.Calls.Should().Be.EqualTo(skillDay.WorkloadDayCollection.Last().TotalTasks);
+			dailyModel.AverageTalkTime.Should().Be.EqualTo(skillDay.WorkloadDayCollection.Last().TotalAverageTaskTime.TotalSeconds);
+			dailyModel.AverageAfterCallWork.Should().Be.EqualTo(skillDay.WorkloadDayCollection.Last().TotalAverageAfterTaskTime.TotalSeconds);
+			dailyModel.AverageHandleTime.Should().Be.EqualTo(skillDay.WorkloadDayCollection.Last().AverageTaskTime.TotalSeconds + skillDay.WorkloadDayCollection.Last().AverageAfterTaskTime.TotalSeconds);
+			dailyModel.ForecastedHours.Should().Be.EqualTo(forecastedHours);
+			dailyModel.ForecastedHoursShrinkage.Should().Be.EqualTo(forecastedHoursWithShrinkage);
 		}
 
 		private void assertIntervalData(
