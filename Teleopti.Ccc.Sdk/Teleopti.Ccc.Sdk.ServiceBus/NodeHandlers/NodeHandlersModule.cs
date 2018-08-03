@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			builder.RegisterType<RefreshPayrollFormatsHandler>().As<IHandle<RefreshPayrollFormatsEvent>>().SingleInstance();
 			builder.RegisterType<IntradayToolHandler>().As<IHandle<IntradayToolEvent>>().SingleInstance();
 			builder.RegisterType<ImportScheduleNodeHandler>().As<IHandle<ImportScheduleEvent>>().SingleInstance().ApplyAspects();
+			builder.RegisterType<ArchiveScheduleNodeHandler>().As<IHandle<ArchiveScheduleEvent>>().SingleInstance().ApplyAspects();
 		}
 	}
 }

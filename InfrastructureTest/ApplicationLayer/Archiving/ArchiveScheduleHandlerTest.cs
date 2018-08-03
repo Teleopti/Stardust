@@ -6,14 +6,13 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Archiving;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
@@ -323,7 +322,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Archiving
 				ToScenario = TargetScenario.Id.GetValueOrDefault(),
 				JobResultId = JobResultId,
 				LogOnBusinessUnitId = BusinessUnit.Id.GetValueOrDefault(),
-				TotalMessages = 1
+				TotalMessages = 1,
+				LogOnDatasource = DataSourceHelper.TestTenantName
 			};
 		}
 

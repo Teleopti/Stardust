@@ -4,7 +4,6 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
@@ -18,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 {
 	public class ArchiveScheduleHandler : ScheduleManagementHandlerBase,
 		IHandleEvent<ArchiveScheduleEvent>, 
-		IRunOnHangfire
+		IRunOnStardust
 	{
 		private readonly IPersonRepository _personRepository;
 		private readonly IScenarioRepository _scenarioRepository;
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 			_jobResultRepository = jobResultRepository;
 		}
 
-		[ImpersonateSystem]
+		[AsSystem]
 		[UnitOfWork]
 		public virtual void Handle(ArchiveScheduleEvent @event)
 		{
@@ -129,7 +128,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Archiving
 						added.Add(scheduleData.Id.GetValueOrDefault());
 						_scheduleStorage.Add(changedScheduleData);
 					}
-						
 				}
 			}
 		}
