@@ -48,13 +48,13 @@
 									<i class="mdi"
 									   [ngClass]="site?.isExpanded ? 'mdi-chevron-up' : 'mdi-chevron-down'"></i>
 								</span>
-								<input type="checkbox" id="{{site.Name}}" class="rta-checkbox"/>
+								<input type="checkbox" id="{{site.Name}}" class="rta-checkbox" (click)="site.toggle()"/>
 								<label for="{{site.Name}}" class="picker-label">{{site.Name}}</label>
 							</div>
 							<div style="margin-left: 50px;"
 								 [hidden]="!site.isExpanded"
 								 *ngFor="let team of site.Teams">
-								<input type="checkbox" id="{{team.Name}}" class="rta-checkbox"/>
+								<input type="checkbox" id="{{team.Name}}" class="rta-checkbox" (click)="team.toggle()"/>
 								<label for="{{team.Name}}" class="picker-label">{{team.Name}}</label>
 							</div>
 						</div>

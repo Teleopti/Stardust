@@ -18,34 +18,34 @@ export class RtaHistoricalOverviewComponent implements OnInit {
 
 	constructor(
 		@Inject(RTA_DATA_SERVICE) private rtaDataService: any, @Inject(RTA_STATE_SERVICE) private rtaStateService: any) {
-		console.log('in constructor6');
 	}
 
 	ngOnInit(): void {
+
+		this.rtaStateService.setCurrentState([]).then();
+
 		this.rtaDataService.load().then(data => {
 			this.buildSites(data.organization);
-			console.log('built sites', this.sites)
 		});
 	}
 
 
 	buildSites(organization: any): void {
-		console.log('organization', organization);
+		let self = this;
 		organization.forEach(site =>  {
 			let siteModel = {
 				Id: site.Id,
 				Name: site.Name,
 				Teams: [],
 				get isChecked() {
-					return this.rtaStateService.isSiteSelected(site.Id);
+					return self.rtaStateService.isSiteSelected(site.Id);
 				},
 				get isMarked() {
-					return this.rtaStateService.siteHasTeamsSelected(site.Id);
+					return self.rtaStateService.siteHasTeamsSelected(site.Id);
 				},
 				toggle: function () {
-					this.rtaStateService.toggleSite(site.Id);
-					this.updateOrganizationPicker();
-					// forcePoll();
+					self.rtaStateService.toggleSite(site.Id);
+					self.updateOrganizationPicker();
 				}
 			};
 
@@ -54,12 +54,11 @@ export class RtaHistoricalOverviewComponent implements OnInit {
 					Id: team.Id,
 					Name: team.Name,
 					get isChecked() {
-						return this.rtaStateService.isTeamSelected(team.Id);
+						return self.rtaStateService.isTeamSelected(team.Id);
 					},
 					toggle: function () {
-						this.rtaStateService.toggleTeam(team.Id);
-						this.updateOrganizationPicker();
-						// forcePoll();
+						self.rtaStateService.toggleTeam(team.Id);
+						self.updateOrganizationPicker();
 					}
 				});
 			});
