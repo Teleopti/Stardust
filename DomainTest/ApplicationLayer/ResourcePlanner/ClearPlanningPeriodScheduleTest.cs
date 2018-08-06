@@ -23,9 +23,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 {
 	[TestFixture]
 	[DomainTest]
-	public class ClearPlanningPeriodScheduleCommandHandlerTest
+	public class ClearPlanningPeriodScheduleTest
 	{
-		public ClearPlanningPeriodScheduleCommandHandler Target;
+		public ClearPlanningPeriodSchedule Target;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakePlanningGroupRepository PlanningGroupRepository;
 		public FakePersonRepository PersonRepository;

@@ -19,6 +19,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public Guid JobResultId { get; set; }
 	}
 
+	public class ClearScheduleStardustEvent : WebScheduleStardustBaseEvent
+	{
+	}
+
 	public class WebScheduleStardustEvent : WebScheduleStardustBaseEvent
 	{
 	}

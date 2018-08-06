@@ -187,6 +187,7 @@
     <Compile Include="ApplicationLayer\Commands\ShiftCategorySelectorWithPrediction.cs" />
     <Compile Include="ApplicationLayer\Events\ProjectionChangedEventForShiftExchangeOffer.cs" />
     <Compile Include="ApplicationLayer\Events\RefreshPayrollFormatsEvent.cs" />
+    <Compile Include="ApplicationLayer\ResourcePlanner\ClearPlanningPeriodSchedule.cs" />
     <Compile Include="Common\DefaultSchedulePeriodProvider.cs" />
     <Compile Include="ApplicationLayer\Commands\MultipleChangeScheduleCommandHandler.cs" />
     <Compile Include="Infrastructure\DeadLockRetrier.cs" />
@@ -262,6 +263,7 @@
     <Compile Include="Repositories\IAllSkillForSkillGroupProvider.cs" />
     <Compile Include="Repositories\IForecastDayOverrideRepository.cs" />
     <Compile Include="Repositories\IExtensiveLogRepository.cs" />
+    <Compile Include="Scheduling\ClearScheduleStardustHandler.cs" />
     <Compile Include="Scheduling\IPredictShiftCategory.cs" />
     <Compile Include="Scheduling\IShiftCategoryPredictionModelLoader.cs" />
     <Compile Include="Scheduling\NonSecretWorkShiftCalculatorClassic.cs" />
