@@ -54,8 +54,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_defaultDay = new DateOnly();
 			_defaultDatePeriod = new DateOnlyPeriod();
 
-			_target = new BudgetGroupAllowanceSpecification(_scenarioRepository, _budgetDayRepository,
-																			_scheduleProjectionReadOnlyPersister);
+			var calculator = new BudgetGroupAllowanceCalculatorLimited(_scenarioRepository, _budgetDayRepository,
+				_scheduleProjectionReadOnlyPersister);
+			_target = new BudgetGroupAllowanceSpecification(calculator);
 		}
 
 		[Test]
@@ -285,14 +286,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 	public class BudgetGroupAllowanceSpecificationForTest : BudgetGroupAllowanceSpecification
 	{
-		public BudgetGroupAllowanceSpecificationForTest(ICurrentScenario scenarioRepository, IBudgetDayRepository budgetDayRepository, IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister)
-			 : base(scenarioRepository, budgetDayRepository, scheduleProjectionReadOnlyPersister)
-		{
-		}
-
+		
 		public static bool IsSkillOpenForDateOnlyForTest(DateOnly date, IEnumerable<ISkill> skills)
 		{
 			return IsSkillOpenForDateOnly(date, skills);
+		}
+
+		public BudgetGroupAllowanceSpecificationForTest(IBudgetGroupAllowanceCalculator budgetGroupAllowanceCalculator) : base(budgetGroupAllowanceCalculator)
+		{
 		}
 	}
 }
