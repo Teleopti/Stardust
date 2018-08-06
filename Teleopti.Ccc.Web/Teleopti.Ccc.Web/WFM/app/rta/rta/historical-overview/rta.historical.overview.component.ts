@@ -82,12 +82,15 @@ export class RtaHistoricalOverviewComponent implements OnInit {
 	closePicker(event: Object) {
 		this.organizationPickerOpen = false;
 	}
+	
 
 	groupings: any [] = [
 		{
-			Name: 'Denver - Team Linda',
+			Name: 'Low 0% - 80%',
+			Color: '#EE8F7D',
 			agentsAdherence: [{
 				Name: 'Andeen Ashley',
+				Team: 'Denver/Avalanche',
 				Adherence: [
 					{
 						Date: '1/5',
@@ -98,33 +101,33 @@ export class RtaHistoricalOverviewComponent implements OnInit {
 					{
 						Date: '2/5',
 						AdherencePercentage: 90,
-						Color: '#C2E085'
+						Color: '#FFC285'
 					},
 					{
 						Date: '3/5',
 						AdherencePercentage: 85,
-						Color: '#C2E085'
+						Color: '#FFC285'
 					},
 					{
 						Date: '4/5',
 						AdherencePercentage: 88,
-						Color: '#C2E085'
+						Color: '#FFC285'
 					},
 					{
 						Date: '5/5',
-						AdherencePercentage: 92,
-						Color: '#C2E085',
+						AdherencePercentage: 50,
+						Color: '#EE8F7D',
 						WasLateForWork: true
 					},
 					{
 						Date: '6/5',
-						AdherencePercentage: 95,
-						Color: '#C2E085'
+						AdherencePercentage: 70,
+						Color: '#EE8F7D'
 					},
 					{
 						Date: '7/5',
-						AdherencePercentage: 86,
-						Color: '#C2E085'
+						AdherencePercentage: 72,
+						Color: '#EE8F7D'
 					}
 				],
 				PeriodAdherence: {
@@ -139,16 +142,17 @@ export class RtaHistoricalOverviewComponent implements OnInit {
 			},
 				{
 					Name: 'Aneedn Anna',
+					Team: 'Denver/Avalanche',
 					Adherence: [
 						{
 							Date: '1/5',
-							AdherencePercentage: 92,
-							Color: '#C2E085'
+							AdherencePercentage: 70,
+							Color: '#EE8F7D'
 						},
 						{
 							Date: '2/5',
-							AdherencePercentage: 89,
-							Color: '#C2E085'
+							AdherencePercentage: 56,
+							Color: '#EE8F7D'
 						},
 						{
 							Date: '3/5',
@@ -168,8 +172,8 @@ export class RtaHistoricalOverviewComponent implements OnInit {
 						},
 						{
 							Date: '6/5',
-							AdherencePercentage: 87,
-							Color: '#C2E085'
+							AdherencePercentage: 77,
+							Color: '#EE8F7D'
 						},
 						{
 							Date: '7/5',
@@ -178,21 +182,22 @@ export class RtaHistoricalOverviewComponent implements OnInit {
 						}
 					],
 					PeriodAdherence: {
-						Color: '#FFC285',
+						Color: '#EE8F7D',
 						Value: 77
 					},
 					LateForWork:
 						{
 							Count: 1,
-							TotalMinutes: 20
+							TotalMinutes: 10
 						}
 				},
 				{
 					Name: 'Aleed Jane',
+					Team: 'Denver/Avalanche',
 					Adherence: [
 						{
 							Date: '1/5',
-							AdherencePercentage: 80,
+							AdherencePercentage: 83,
 							Color: '#FFC285'
 						},
 						{
@@ -203,13 +208,13 @@ export class RtaHistoricalOverviewComponent implements OnInit {
 						},
 						{
 							Date: '3/5',
-							AdherencePercentage: 89,
-							Color: '#C2E085'
+							AdherencePercentage: 78,
+							Color: '#EE8F7D'
 						},
 						{
 							Date: '4/5',
-							AdherencePercentage: 89,
-							Color: '#C2E085'
+							AdherencePercentage: 78,
+							Color: '#EE8F7D'
 						},
 						{
 							Date: '5/5',
@@ -219,19 +224,19 @@ export class RtaHistoricalOverviewComponent implements OnInit {
 						},
 						{
 							Date: '6/5',
-							AdherencePercentage: 92,
+							AdherencePercentage: 95,
 							Color: '#C2E085',
 							WasLateForWork: true
 						},
 						{
 							Date: '7/5',
-							AdherencePercentage: 80,
+							AdherencePercentage: 85,
 							Color: '#FFC285'
 						}
 					],
 					PeriodAdherence: {
-						Color: '#C2E085',
-						Value: 91
+						Color: '#EE8F7D',
+						Value: 75
 					},
 					LateForWork:
 						{
@@ -243,9 +248,11 @@ export class RtaHistoricalOverviewComponent implements OnInit {
 			]
 		},
 		{
-			Name: 'Denver - Team Robert',
+			Name: 'Mid 80% - 90%',
+			Color: '#FFC285',
 			agentsAdherence: [{
 				Name: 'Bndeen Ashley',
+				Team: 'Denver/Avalanche',
 				Adherence: [
 					{
 						Date: '1/5',
@@ -261,17 +268,17 @@ export class RtaHistoricalOverviewComponent implements OnInit {
 					{
 						Date: '3/5',
 						AdherencePercentage: 88,
-						Color: '#C2E085'
+						Color: '#FFC285'
 					},
 					{
 						Date: '4/5',
 						AdherencePercentage: 88,
-						Color: '#C2E085'
+						Color: '#FFC285'
 					},
 					{
 						Date: '5/5',
-						AdherencePercentage: 90,
-						Color: '#C2E085',
+						AdherencePercentage: 87,
+						Color: '#FFC285',
 						WasLateForWork: true
 					},
 					{
@@ -291,17 +298,18 @@ export class RtaHistoricalOverviewComponent implements OnInit {
 				},
 				LateForWork:
 					{
-						Count: 2,
-						TotalMinutes: 28
+						Count: 1,
+						TotalMinutes: 8
 					}
 			},
 				{
 					Name: 'Bneedn Anna',
+					Team: 'Denver/Avalanche',
 					Adherence: [
 						{
 							Date: '1/5',
 							AdherencePercentage: 88,
-							Color: '#C2E085'
+							Color: '#FFC285'
 						},
 						{
 							Date: '2/5',
@@ -331,22 +339,23 @@ export class RtaHistoricalOverviewComponent implements OnInit {
 						{
 							Date: '7/5',
 							AdherencePercentage: 88,
-							Color: '#C2E085',
+							Color: '#FFC285',
 							WasLateForWork: true
 						}
 					],
 					PeriodAdherence: {
 						Color: '#FFC285',
-						Value: 80
+						Value: 82
 					},
 					LateForWork:
 						{
 							Count: 1,
-							TotalMinutes: 20
+							TotalMinutes: 10
 						}
 				},
 				{
 					Name: 'Blanca Jane',
+					Team: 'London/Team Preferences',
 					Adherence: [
 						{
 							Date: '1/5',
@@ -355,7 +364,7 @@ export class RtaHistoricalOverviewComponent implements OnInit {
 						},
 						{
 							Date: '2/5',
-							AdherencePercentage: 75,
+							AdherencePercentage: 82,
 							Color: '#FFC285'
 						},
 						{
@@ -366,47 +375,49 @@ export class RtaHistoricalOverviewComponent implements OnInit {
 						{
 							Date: '4/5',
 							AdherencePercentage: 87,
-							Color: '#C2E085'
+							Color: '#FFC285'
 						},
 						{
 							Date: '5/5',
 							AdherencePercentage: 90,
-							Color: '#C2E085',
+							Color: '#FFC285',
 							WasLateForWork: true
 						},
 						{
 							Date: '6/5',
 							AdherencePercentage: 88,
-							Color: '#C2E085'
+							Color: '#FFC285'
 						},
 						{
 							Date: '7/5',
 							AdherencePercentage: 85,
-							Color: '#C2E085'
+							Color: '#FFC285'
 						}
 					],
 					PeriodAdherence: {
-						Color: '#C2E085',
-						Value: 89
+						Color: '#FFC285',
+						Value: 88
 					},
 					LateForWork:
 						{
 							Count: 1,
-							TotalMinutes: 25
+							TotalMinutes: 5
 						}
 				}
 
 			]
 		},
 		{
-			Name: 'London - Team Preferences',
+			Name: 'High 90% - 100%',
+			Color: '#C2E085',
 			agentsAdherence: [{
 				Name: 'Cndeen Ashley',
+				Team: 'London',
 				Adherence: [
 					{
 						Date: '1/5',
-						AdherencePercentage: 82,
-						Color: '#FFC285',
+						AdherencePercentage: 92,
+						Color: '#C2E085',
 						WasLateForWork: true
 					},
 					{
@@ -416,17 +427,17 @@ export class RtaHistoricalOverviewComponent implements OnInit {
 					},
 					{
 						Date: '3/5',
-						AdherencePercentage: 84,
-						Color: '#FFC285'
+						AdherencePercentage: 94,
+						Color: '#C2E085'
 					},
 					{
 						Date: '4/5',
-						AdherencePercentage: 88,
+						AdherencePercentage: 98,
 						Color: '#C2E085'
 					},
 					{
 						Date: '5/5',
-						AdherencePercentage: 90,
+						AdherencePercentage: 99,
 						Color: '#C2E085',
 						WasLateForWork: true
 					},
@@ -437,18 +448,18 @@ export class RtaHistoricalOverviewComponent implements OnInit {
 					},
 					{
 						Date: '7/5',
-						AdherencePercentage: 80,
-						Color: '#FFC285'
+						AdherencePercentage: 99,
+						Color: '#C2E085'
 					}
 				],
 				PeriodAdherence: {
 					Color: '#C2E085',
-					Value: 88
+					Value: 94
 				},
 				LateForWork:
 					{
-						Count: 2,
-						TotalMinutes: 40
+						Count: 1,
+						TotalMinutes: 3
 					}
 			}
 			]

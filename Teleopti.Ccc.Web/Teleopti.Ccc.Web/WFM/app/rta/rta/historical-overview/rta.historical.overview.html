@@ -207,7 +207,7 @@
 	</style>
 
 	<div class="panel material-depth-1" *ngFor="let group of groupings">
-		<div class="card-panel-header-wrapper pointer" style="border-left: 10px solid rgb(102, 194, 255)"
+		<div class="card-panel-header-wrapper pointer" [ngStyle]="{'border-left': '10px solid ' + group.Color }"
 			 (click)="openCard = !openCard">
 			{{group.Name}}
 		</div>
@@ -215,7 +215,8 @@
 			<table class="wfm-table">
 				<thead>
 				<tr>
-					<th>Agent</th>
+					<th style="width: 8.5%">Agent</th>
+					<th style="width: 10.5%">Site/Team</th>
 					<th *ngFor="let adherence of group.agentsAdherence[0].Adherence">
 						{{adherence.Date}}
 					</th>
@@ -226,7 +227,7 @@
 				<tbody>
 				<tr *ngFor="let agent of group.agentsAdherence">
 					<td>{{agent.Name}}</td>
-
+					<td>{{agent.Team}}</td>
 					<td *ngFor="let percentage of agent.Adherence" class="cell {{percentage?.WasLateForWork ? 'late-for-work':''}}">
 						<div style="background-color: #f1f1f1; width: 75%; float:left; margin-top:5px;">
 							<div xclass="red-bar" [ngStyle]="{'background-color': percentage.Color, 'height': '10px', 'width':percentage.AdherencePercentage+'%'}">
