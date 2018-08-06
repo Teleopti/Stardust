@@ -10,13 +10,13 @@ using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 {
-	public class ClearScheduleHandler : IHandle<ClearScheduleStardustEvent>
+	public class WebClearScheduleHandler : IHandle<WebClearScheduleStardustEvent>
 	{
 		private readonly IDataSourceScope _dataSourceScope;
 		private readonly IStardustJobFeedback _stardustJobFeedback;
-		private readonly IHandleEvent<ClearScheduleStardustEvent> _realEventHandler;
+		private readonly IHandleEvent<WebClearScheduleStardustEvent> _realEventHandler;
 
-		public ClearScheduleHandler(IDataSourceScope dataSourceScope, IStardustJobFeedback stardustJobFeedback, IHandleEvent<ClearScheduleStardustEvent> realEventHandler)
+		public WebClearScheduleHandler(IDataSourceScope dataSourceScope, IStardustJobFeedback stardustJobFeedback, IHandleEvent<WebClearScheduleStardustEvent> realEventHandler)
 		{
 			_dataSourceScope = dataSourceScope;
 			_stardustJobFeedback = stardustJobFeedback;
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 		}
 
 		[AsSystem]
-		public void Handle(ClearScheduleStardustEvent parameters, CancellationTokenSource cancellationTokenSource, Action<string> sendProgress,
+		public void Handle(WebClearScheduleStardustEvent parameters, CancellationTokenSource cancellationTokenSource, Action<string> sendProgress,
 			ref IEnumerable<object> returnObjects)
 		{
 			_stardustJobFeedback.SendProgress = sendProgress;

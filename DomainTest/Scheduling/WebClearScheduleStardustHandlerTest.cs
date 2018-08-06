@@ -16,9 +16,9 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling
 {
 	[DomainTest]
-	public class ClearScheduleStardustHandlerTest
+	public class WebClearScheduleStardustHandlerTest
 	{
-		public ClearScheduleStardustHandler Target;
+		public WebClearScheduleStardustHandler Target;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakePersonRepository PersonRepository;
 		public FakeScenarioRepository ScenarioRepository;
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var endDate = new DateOnly(2017, 3, 7);
 			JobResultRepository.Add(new JobResult(JobCategory.WebIntradayOptimization, new DateOnlyPeriod(startDate, endDate), PersonFactory.CreatePerson("name1"), DateTime.Now).WithId(jobResultId));
 			var planningPeriod = PlanningPeriodRepository.Has(startDate, endDate, SchedulePeriodType.Week, 1);
-			Target.Handle(new ClearScheduleStardustEvent
+			Target.Handle(new WebClearScheduleStardustEvent
 			{
 				JobResultId = jobResultId,
 				LogOnBusinessUnitId = businessUnit.Id.Value,
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			
 			Assert.That(() =>
 			{
-				Target.Handle(new ClearScheduleStardustEvent
+				Target.Handle(new WebClearScheduleStardustEvent
 				{
 					JobResultId = jobResult.Id.Value,
 					LogOnBusinessUnitId = businessUnit.Id.Value,

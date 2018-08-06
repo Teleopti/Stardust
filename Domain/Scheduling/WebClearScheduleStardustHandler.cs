@@ -11,21 +11,21 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-	public class ClearScheduleStardustHandler : IHandleEvent<ClearScheduleStardustEvent>, IRunOnStardust
+	public class WebClearScheduleStardustHandler : IHandleEvent<WebClearScheduleStardustEvent>, IRunOnStardust
 	{
 		private readonly ClearPlanningPeriodSchedule _clearPlanningPeriodSchedule;
 		private readonly IJobResultRepository _jobResultRepository;
 		
-		private static readonly ILog logger = LogManager.GetLogger(typeof(ClearScheduleStardustHandler));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(WebClearScheduleStardustHandler));
 
-		public ClearScheduleStardustHandler(ClearPlanningPeriodSchedule clearPlanningPeriodSchedule, IJobResultRepository jobResultRepository)
+		public WebClearScheduleStardustHandler(ClearPlanningPeriodSchedule clearPlanningPeriodSchedule, IJobResultRepository jobResultRepository)
 		{
 			_clearPlanningPeriodSchedule = clearPlanningPeriodSchedule;
 			_jobResultRepository = jobResultRepository;
 		}
 
 		[AsSystem]
-		public virtual void Handle(ClearScheduleStardustEvent @event)
+		public virtual void Handle(WebClearScheduleStardustEvent @event)
 		{
 			logger.Info(
 				$"Web Clear Schedule started for PlanningPeriod {@event.PlanningPeriodId} and JobResultId is {@event.JobResultId}");
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		}
 
 		[UnitOfWork]
-		protected virtual void SaveDetailToJobResult(ClearScheduleStardustEvent @event, DetailLevel level, Exception exception)
+		protected virtual void SaveDetailToJobResult(WebClearScheduleStardustEvent @event, DetailLevel level, Exception exception)
 		{
 			_jobResultRepository.AddDetailAndCheckSuccess(@event.JobResultId, new JobResultDetail(level, string.Empty, DateTime.UtcNow, exception), 1);
 		}

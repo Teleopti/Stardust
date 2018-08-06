@@ -164,7 +164,7 @@
     </Compile>
     <Compile Include="NodeHandlers\ApproveRequestsWithValidatorsEventStardustHandler.cs" />
     <Compile Include="NodeHandlers\ArchiveScheduleNodeHandler.cs" />
-    <Compile Include="NodeHandlers\ClearScheduleHandler.cs" />
+    <Compile Include="NodeHandlers\WebClearScheduleHandler.cs" />
     <Compile Include="NodeHandlers\ExportPayrollHandler.cs" />
     <Compile Include="NodeHandlers\ExportMultisiteSkillsToSkillEventHandler.cs" />
     <Compile Include="NodeHandlers\FixReadModelsHandler.cs" />
