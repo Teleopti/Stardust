@@ -145,6 +145,7 @@
 	-ms-transform: translateX(-50%);
 	-o-transform: translateX(-50%);
 	transform: translateX(-50%);
+	z-index: 1;
 }
 
 .mobile-month-view .shift {
