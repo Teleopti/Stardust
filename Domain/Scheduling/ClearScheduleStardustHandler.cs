@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly ClearPlanningPeriodSchedule _clearPlanningPeriodSchedule;
 		private readonly IJobResultRepository _jobResultRepository;
 		
-		private static readonly ILog logger = LogManager.GetLogger(typeof(WebScheduleStardustHandler));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(ClearScheduleStardustHandler));
 
 		public ClearScheduleStardustHandler(ClearPlanningPeriodSchedule clearPlanningPeriodSchedule, IJobResultRepository jobResultRepository)
 		{

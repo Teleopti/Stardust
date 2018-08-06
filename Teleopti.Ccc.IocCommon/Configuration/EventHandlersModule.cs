@@ -93,6 +93,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 						.InstancePerLifetimeScope()
 						.ApplyAspects();
 				})
+				.Except<ClearScheduleStardustHandler>(ct =>
+				{
+					ct.As<IHandleEvent<ClearScheduleStardustEvent>>()
+						.AsSelf()
+						.InstancePerLifetimeScope()
+						.ApplyAspects();
+				})
 				.Except<ShiftTradeRequestHandler>(ct =>
 				{
 					ct.As(
