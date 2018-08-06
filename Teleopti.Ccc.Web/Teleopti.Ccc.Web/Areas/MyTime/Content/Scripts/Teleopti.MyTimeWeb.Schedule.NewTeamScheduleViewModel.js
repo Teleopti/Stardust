@@ -288,6 +288,9 @@
 			myLayerViewModel.showDetail = ko.computed(function() {
 				return myLayerViewModel.height() >= PIXEL_OF_ONE_HOUR;
 			});
+			myLayerViewModel.timeSpan = ko.computed(function() {
+				return myLayerViewModel.timeSpan().replace(' - ', '-');
+			});
 
 			myLayerViewModel.isLastLayer = index === periods.length - 1;
 
