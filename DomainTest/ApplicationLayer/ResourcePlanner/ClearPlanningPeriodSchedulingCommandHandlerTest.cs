@@ -56,10 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 
 			AssignmentRepository.Has(agent, scenario, activity, shiftCategory, startDate, new TimePeriod(8, 16), ScheduleSource.WebScheduling);
 
-			Target.ClearSchedules(new ClearPlanningPeriodSchedulingCommand
-			{
-				PlanningPeriodId = planningPeriod.Id.GetValueOrDefault()
-			});
+			Target.ClearSchedules(planningPeriod.Id.GetValueOrDefault());
 
 			planningPeriod.State.Should().Be.EqualTo(PlanningPeriodState.New);
 
@@ -86,10 +83,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 
 			AssignmentRepository.Has(agent, scenario, activity, shiftCategory, endDateOutsidePlanningPeriod, new TimePeriod(8, 16), ScheduleSource.WebScheduling);
 
-			Target.ClearSchedules(new ClearPlanningPeriodSchedulingCommand
-			{
-				PlanningPeriodId = planningPeriod.Id.GetValueOrDefault()
-			});
+			Target.ClearSchedules(planningPeriod.Id.GetValueOrDefault());
 
 			planningPeriod.State.Should().Be.EqualTo(PlanningPeriodState.New);
 
@@ -116,10 +110,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 
 			AssignmentRepository.Has(agent, scenario, activity, shiftCategory, startDate, new TimePeriod(8, 16), ScheduleSource.WebScheduling);
 
-			Target.ClearSchedules(new ClearPlanningPeriodSchedulingCommand
-			{
-				PlanningPeriodId = planningPeriod.Id.GetValueOrDefault()
-			});
+			Target.ClearSchedules(planningPeriod.Id.GetValueOrDefault());
 
 			planningPeriod.State.Should().Be.EqualTo(PlanningPeriodState.New);
 
@@ -147,10 +138,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			AssignmentRepository.Has(agent, scenario, activity, shiftCategory, startDate, new TimePeriod(8, 16), ScheduleSource.WebScheduling);
 			PersonAbsenceRepository.Has(new PersonAbsence(agent, scenario, new AbsenceLayer(new Absence(), new DateTimePeriod(new DateTime(2017, 05, 01, 8, 0, 0, DateTimeKind.Utc), new DateTime(2017, 05, 01, 16, 0, 0, DateTimeKind.Utc)))));
 
-			Target.ClearSchedules(new ClearPlanningPeriodSchedulingCommand
-			{
-				PlanningPeriodId = planningPeriod.Id.GetValueOrDefault()
-			});
+			Target.ClearSchedules(planningPeriod.Id.GetValueOrDefault());
 
 			planningPeriod.State.Should().Be.EqualTo(PlanningPeriodState.New);
 
@@ -185,10 +173,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			assignment.Source = ScheduleSource.WebScheduling;
 			AssignmentRepository.Has(assignment);
 
-			Target.ClearSchedules(new ClearPlanningPeriodSchedulingCommand
-			{
-				PlanningPeriodId = planningPeriod.Id.GetValueOrDefault()
-			});
+			Target.ClearSchedules(planningPeriod.Id.GetValueOrDefault());
 
 			planningPeriod.State.Should().Be.EqualTo(PlanningPeriodState.New);
 
@@ -223,10 +208,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			assignment.Source = ScheduleSource.WebScheduling;
 			AssignmentRepository.Has(assignment);
 
-			Target.ClearSchedules(new ClearPlanningPeriodSchedulingCommand
-			{
-				PlanningPeriodId = planningPeriod.Id.GetValueOrDefault()
-			});
+			Target.ClearSchedules(planningPeriod.Id.GetValueOrDefault());
 
 			planningPeriod.State.Should().Be.EqualTo(PlanningPeriodState.New);
 
@@ -263,10 +245,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 				EndTime = TimeSpan.FromHours(10)
 			});
 
-			Target.ClearSchedules(new ClearPlanningPeriodSchedulingCommand
-			{
-				PlanningPeriodId = planningPeriod.Id.GetValueOrDefault()
-			});
+			Target.ClearSchedules(planningPeriod.Id.GetValueOrDefault());
 
 			planningPeriod.State.Should().Be.EqualTo(PlanningPeriodState.New);
 

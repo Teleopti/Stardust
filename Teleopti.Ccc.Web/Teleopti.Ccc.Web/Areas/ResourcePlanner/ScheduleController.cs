@@ -27,10 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[HttpDelete, Route("api/resourceplanner/planningperiod/{planningPeriodId}/schedule")]
 		public virtual IHttpActionResult ClearSchedulesForPlanningPeriod(Guid planningPeriodId)
 		{
-			_clearPlanningPeriodSchedulingCommandHandler.ClearSchedules(new ClearPlanningPeriodSchedulingCommand
-			{
-				PlanningPeriodId = planningPeriodId
-			});
+			_clearPlanningPeriodSchedulingCommandHandler.ClearSchedules(planningPeriodId);
 			return Ok();
 		}
 	}

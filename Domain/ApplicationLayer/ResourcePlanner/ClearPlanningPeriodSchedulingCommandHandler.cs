@@ -27,9 +27,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		}
 
 		[UnitOfWork]
-		public virtual void ClearSchedules(ClearPlanningPeriodSchedulingCommand command)
+		public virtual void ClearSchedules(Guid planningPeriodId)
 		{
-			var planningPeriod = _planningPeriodRepository.Get(command.PlanningPeriodId);
+			var planningPeriod = _planningPeriodRepository.Get(planningPeriodId);
 			if (planningPeriod == null) throw new Exception("PlanningPeriod not found");
 			if (planningPeriod.PlanningGroup == null) throw new Exception("PlanningGroup not found");
 
@@ -49,10 +49,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			}
 			planningPeriod.Reset();
 		}
-	}
-
-	public class ClearPlanningPeriodSchedulingCommand
-	{
-		public Guid PlanningPeriodId { get; set; }
 	}
 }
