@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -101,7 +102,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 			if (defaultTeam?.Id != null)
 			{
-				return new { DefaultTeam = defaultTeam.Id.Value };
+				return new {
+					DefaultTeam = defaultTeam.Id.Value,
+					DefaultTeamName = defaultTeam.SiteAndTeam
+				};
 			}
 
 			return new { Message = UserTexts.Resources.NoTeamsAvailable };

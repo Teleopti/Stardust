@@ -116,10 +116,10 @@ $(document).ready(function () {
 		Teleopti.MyTimeWeb.TeamScheduleViewModel.initCurrentDate = function () { };
 		var viewModel = Teleopti.MyTimeWeb.TeamScheduleViewModelFactory.createViewModel(endpoints, ajax);
 
+		viewModel.requestedDate(moment().add(1, 'day').startOf('day'));
 		viewModel.selectedTeam("0a1cdb27-bc01-4bb9-b0b3-9b5e015ab496");
 
-
-		viewModel.requestedDate(moment().add(1, 'day').startOf('day'));
+		viewModel.requestedDate(moment().add(2, 'day').startOf('day'));
 		equal(viewModel.selectedTeam(), "0a1cdb27-bc01-4bb9-b0b3-9b5e015ab496");
 
 	});

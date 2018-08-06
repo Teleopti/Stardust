@@ -1,3 +1,4 @@
+
 Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 	var self = this;
 
@@ -89,9 +90,24 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 		);
 	};
 
+	var isFirstLoad = true;
+	var isTeamPickerInitialized = false;
+	self.initTeamsPicker = function (data, event) {
+		if (!isTeamPickerInitialized) {
+			var deferred = $.Deferred();
+			self.loadTeams(Teleopti.MyTimeWeb.Common.FormatServiceDate(self.requestedDate()), function (allTeams) {
+				self.setTeamPicker(allTeams.teams, allTeams.allTeam);
+				deferred.resolve();
+			});
+			isTeamPickerInitialized = true;
+			return deferred;
+		}
+	}
+
 	self.setDayMixinChangeHandler(function (newDate) {
 		self.hasError(false);
 		self.errorMessage(null);
+
 		self.loadDefaultTeam(
 			newDate,
 			function (data) {
@@ -100,27 +116,33 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 					self.errorMessage(data.Message);
 					return;
 				}
-				var myTeam = data.DefaultTeam;
-				self.loadTeams(
-					newDate,
-					function (allTeams) {
-						self.suspendFilterMixinChangeHandler();
-						self.suspendPagingMixinChangeHandler();
-						self.hasError(false);
-						self.errorMessage();
-						self.setTeamPicker(allTeams.teams, myTeam, allTeams.allTeam);
+				self.suspendFilterMixinChangeHandler();
+				self.suspendPagingMixinChangeHandler();
+
+				self.defaultTeam(data.DefaultTeam);
+
+				if (isFirstLoad) {
+					isFirstLoad = false;
+					self.setTeamPicker([{ text: "", children: [{ id: data.DefaultTeam, text: data.DefaultTeamName }] }], {});
+					self.selectedPageIndex(1);
+					loadSchedule();
+				}
+				else {
+					isTeamPickerInitialized = true;
+					self.loadTeams(newDate, function (allTeams) {
+						self.setTeamPicker(allTeams.teams, allTeams.allTeam);
 						self.selectedPageIndex(1);
 						loadSchedule();
-						self.activateFilterMixinChangeHandler();
-						self.activatePagingMixinChangeHandler();
-					}
-				);
+					});
+				}
+				self.activateFilterMixinChangeHandler();
+				self.activatePagingMixinChangeHandler();
+
 			},
 			function (error) {
 				self.hasError(true);
 				self.errorMessage(error.Message);
-			}
-		);
+			});
 	});
 
 	self.setFilterMixinChangeHandler(function (callback) {

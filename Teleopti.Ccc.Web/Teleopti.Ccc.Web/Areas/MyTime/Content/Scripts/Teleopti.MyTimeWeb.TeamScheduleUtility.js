@@ -23,6 +23,7 @@ Teleopti.MyTimeWeb.DayScheduleMixin = function () {
 		changeHandlerSuspended = false;
 	};
 
+	var isFirstTimeSetDate = true;
 	self.requestedDate = ko.observable(moment().startOf('day'));
 
 	self.setDatePickerFormat = function (format) {
@@ -33,14 +34,19 @@ Teleopti.MyTimeWeb.DayScheduleMixin = function () {
 		return self.requestedDate().format(self.DatePickerFormat());
 	});
 
-	self.requestedDateInternal = ko.observable();
+	self.requestedDateInternal = ko.computed(function () {
+		return Teleopti.MyTimeWeb.Common.FormatServiceDate(self.requestedDate());
+	});
 	self.requestedDate.subscribe(function (newValue) {
-		self.requestedDateInternal(Teleopti.MyTimeWeb.Common.FormatServiceDate(newValue));
+		if (isFirstTimeSetDate) {
+			self.requestedDateInternal = self.requestedDateInternal.extend({ throttle: 300 });
+			isFirstTimeSetDate = false;
+		}
 	});
 
 	self.requestedDateInternal.subscribe(function (newValue) {
 		if (changeHandler != null && !changeHandlerSuspended) {
-			changeHandler(Teleopti.MyTimeWeb.Common.FormatServiceDate(self.requestedDateInternal()));
+			changeHandler(Teleopti.MyTimeWeb.Common.FormatServiceDate(self.requestedDate()));
 		}
 	});
 
@@ -202,7 +208,7 @@ Teleopti.MyTimeWeb.PagingMixin = function () {
 
 		self.isPreviousMore(self.selectablePages()[0].index() !== 1);
 		self.isMore(self.selectablePages()[self.maxPagesVisible - 1].index() < self.pageCount());
-		self.selectedPageIndex(self.selectablePages()[self.maxPagesVisible -1 ].index());
+		self.selectedPageIndex(self.selectablePages()[self.maxPagesVisible - 1].index());
 	};
 
 
@@ -248,7 +254,7 @@ Teleopti.MyTimeWeb.TeamScheduleDrawerMixin = function () {
 	var mapLayerViewModelForSchedule = function (personSchedule) {
 		var mappedLayers = [];
 		if (personSchedule == null) {
-			return new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedLayers, moment(), moment(), '', '', false,'', false, false, null, "0:00");
+			return new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedLayers, moment(), moment(), '', '', false, '', false, false, null, "0:00");
 		}
 		var layers = personSchedule.ScheduleLayers;
 		var model;
@@ -267,7 +273,7 @@ Teleopti.MyTimeWeb.TeamScheduleDrawerMixin = function () {
 				null,
 				Teleopti.MyTimeWeb.Common.FormatTimeSpan(personSchedule.ContractTimeInMinute),
 				personSchedule.IsNotScheduled
-				);
+			);
 		} else {
 			var scheduleStartTime = moment(layers[0].Start);
 			var scheduleEndTime = moment(layers[layers.length - 1].End);
@@ -293,7 +299,7 @@ Teleopti.MyTimeWeb.TeamScheduleDrawerMixin = function () {
 				null,
 				Teleopti.MyTimeWeb.Common.FormatTimeSpan(personSchedule.ContractTimeInMinute),
 				personSchedule.IsNotScheduled
-				);
+			);
 		}
 		return model;
 	};
@@ -329,7 +335,7 @@ Teleopti.MyTimeWeb.TeamScheduleDrawerMixin = function () {
 				newHour = new Teleopti.MyTimeWeb.Request.TimeLineHourAddShiftTradeViewModel(j, hours[j], diff, self.pixelPerMinute(), true);
 				self.hours.push(newHour);
 			}
-				
+
 		}
 		else if (hours.length < 15) {
 			for (var i = 0; i < hours.length; i++) {
@@ -380,7 +386,7 @@ Teleopti.MyTimeWeb.TeamScheduleDrawerMixin = function () {
 					layer.pixelPerMinute(self.pixelPerMinute());
 				});
 			});
-			$.each(self.mySchedule().layers, function(index, layer) {
+			$.each(self.mySchedule().layers, function (index, layer) {
 				layer.pixelPerMinute(self.pixelPerMinute());
 			});
 		}
@@ -525,7 +531,7 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 
 	});
 
-	self.setTeamPicker = function (teams, defaultTeam, allTeam) {
+	self.setTeamPicker = function (teams, allTeam) {
 		self.showTeamPicker(teams.length >= 1);
 		self.showGroupings(teams[0] && teams[0].children != null);
 
@@ -548,16 +554,12 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 			self.availableTeams().reduce(function (v, e) { return v.concat(e.children); }, []).map(function (e) { return e.id; }).indexOf(self.selectedTeam()) < 0 :
 			self.availableTeams().map(function (v) { return v.id; }).indexOf(self.selectedTeam()) < 0;
 
-		self.defaultTeam(defaultTeam);
-
 		if (!self.selectedTeam()) {
 			self.selectedTeam(self.defaultTeam());
 		} else if (isSelectedTeamAllTeam) {
 			self.selectedTeam(allTeam.id !== null ? allTeam.id : self.defaultTeam());
 		} else if (isSelectedTeamNotIncluded) {
 			self.selectedTeam(self.defaultTeam());
-		} else {
-			self.selectedTeam(self.selectedTeam());
 		}
 	};
 
@@ -652,7 +654,7 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 		}
 	};
 
-	self.submitSearchForm = function(){
+	self.submitSearchForm = function () {
 		$('#teamschedule-name-search-form').submit();
 	};
 };
