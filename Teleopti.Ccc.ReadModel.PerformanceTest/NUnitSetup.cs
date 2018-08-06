@@ -20,6 +20,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 
@@ -58,6 +59,8 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 			builder.RegisterType<Database>().SingleInstance().ApplyAspects();
 			builder.RegisterType<DataCreator>().SingleInstance().ApplyAspects();
 			builder.RegisterType<FakeMessageSender>().As<IMessageSender>();
+
+			builder.RegisterType<AutofacResolver>().As<IResolver>();
 
 			var container = builder.Build();
 			

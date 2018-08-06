@@ -55,6 +55,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="GroupingReadOnlyOptimizedTest.cs" />
     <Compile Include="SaveSchedulesOptimizedEventsTest.cs" />
     <Compile Include="SaveSchedulesTest.cs" />
     <Compile Include="DataCreator.cs" />
@@ -99,6 +100,9 @@
     <Content Include="..\LicenseFiles\Teleopti_RD.xml">
       <Link>Teleopti_RD.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PrepareNonClusteredIndexForGroupingReadOnly.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>

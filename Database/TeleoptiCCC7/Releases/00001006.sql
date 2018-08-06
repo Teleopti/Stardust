@@ -1,0 +1,1 @@
+CREATE NONCLUSTERED INDEX [IX_GroupingReadOnly_BusinessUnitId_LeavingDate_StartDate_EndDate] ON [ReadModel].[GroupingReadOnly]([StartDate],[EndDate],[BusinessUnitId],[LeavingDate]) INCLUDE (PageId, GroupName,GroupId,PersonId,FirstName,LastName,EmploymentNumber,TeamId,SiteId)
