@@ -507,11 +507,13 @@ Teleopti.MyTimeWeb.Common = (function($) {
 		IsRtl: function() {
 			return $('html').attr('dir') == 'rtl';
 		},
-		IsHostAMobile: function() {
-			return /Mobile/i.test(navigator.userAgent) && !/ipad/i.test(navigator.userAgent);
+		IsHostAMobile: function(ua) {
+			ua = ua || navigator.userAgent;
+			return /Mobile/i.test(ua) && !/ipad/i.test(ua);
 		},
-		IsHostAniPad: function() {
-			return /ipad/i.test(navigator.userAgent);
+		IsHostAniPad: function(ua) {
+			ua = ua || navigator.userAgent;
+			return /ipad/i.test(ua) || (/Android/i.test(ua) && !/Mobile/i.test(ua));
 		},
 		Constants: constants,
 		SubscribeToMessageBroker: _subscribeToMessageBroker,
