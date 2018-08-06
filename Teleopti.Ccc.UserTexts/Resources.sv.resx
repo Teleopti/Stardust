@@ -15691,4 +15691,10 @@ Applikationen kommer nu att stängas. </value>
   <data name="ActiveSelection" xml:space="preserve">
     <value>Valda</value>
   </data>
+  <data name="Participate" xml:space="preserve">
+    <value>Delta</value>
+  </data>
+  <data name="AbsenceCannotBeTraded" xml:space="preserve">
+    <value>Dagar med frånvaro kan inte bytas.</value>
+  </data>
 </root>
