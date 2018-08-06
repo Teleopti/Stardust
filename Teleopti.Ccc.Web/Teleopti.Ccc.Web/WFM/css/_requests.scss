@@ -478,10 +478,32 @@ wfm-multiple-search-input {
 	}
 
 	.requests-allowance {
-		#allowance_detail {
-			padding-top: 20px;
-			padding-bottom: 15px;
+		h1.modal-title {
+			margin: 10px 0;
+		}
+		.requests-allowance-header {
+			width: 100%;
+			padding: 0 10px 0 0;
+			min-height: 50px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
 
+			& > span {
+				display: inline-block;
+			}
+
+			.teamschedule-datepicker > button {
+				margin-left: 0;
+				margin-right: 0;
+			}
+		}
+
+		.modal-inner-content {
+			min-height: 350px;
+		}
+
+		#allowance_detail {
 			.current-date {
 				background-color: $green-100;
 			}
@@ -493,10 +515,6 @@ wfm-multiple-search-input {
 			.used-by-absence {
 				color: #009688;
 			}
-		}
-
-		team-schedule-datepicker > span {
-			bottom: 6px;
 		}
 	}
 

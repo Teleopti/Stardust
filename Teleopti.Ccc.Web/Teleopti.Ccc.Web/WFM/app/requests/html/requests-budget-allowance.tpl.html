@@ -1,4 +1,4 @@
-﻿<div ng-if="!vm.isLoading && vm.budgetGroups.length > 0">
+﻿<div ng-if="!vm.isLoading && vm.budgetGroups.length > 0" class="requests-allowance-header">
 	<span>
 		<team-schedule-datepicker class="pull-left" selected-date="vm.selectedDate" on-date-change="vm.selectedDateChanged()" />
 	</span>
@@ -9,7 +9,10 @@
 			</md-option>
 		</md-select>
 	</span>
-	<span class="pull-right"><input type="button" class="wfm-btn wfm-btn-primary" value="{{'Refresh'|translate}}" ng-click="vm.loadBudgetAllowance()" /></span>
+	<span class="pull-right">
+		<input type="button" class="wfm-btn wfm-btn-primary" value="{{'Refresh'|translate}}" ng-click="vm.loadBudgetAllowance()"
+		/>
+	</span>
 </div>
 <div id="allowance_detail" ng-if="!vm.isLoading && vm.budgetGroups.length > 0">
 	<table class="wfm-table">
@@ -44,7 +47,9 @@
 			<tr class="weekview-tr" ng-repeat="absence in vm.linkedAbsences">
 				<td class="weekview-td weekview-person-name ng-binding used-by-absence">
 					<div>
-						<span><i class="mdi mdi-chevron-right"></i></span>
+						<span>
+							<i class="mdi mdi-chevron-right"></i>
+						</span>
 						<span>{{vm.formatAbsenceName(absence)}}</span>
 					</div>
 				</td>
