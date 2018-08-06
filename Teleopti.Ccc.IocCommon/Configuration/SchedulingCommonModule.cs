@@ -404,7 +404,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<NoSchedulingProgress>().As<ISchedulingProgress>().SingleInstance();
 			builder.RegisterType<IntradayOptimizationCommandHandler>().InstancePerLifetimeScope().ApplyAspects(); //cannot be single due to gridlockmanager dep
 			builder.RegisterType<SchedulePlanningPeriodCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
-			builder.RegisterType<ClearPlanningPeriodSchedulingCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
+			builder.RegisterType<ClearPlanningPeriodScheduleCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<IntradayOptimizationFromWeb>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<CrossAgentsAndSkills>().SingleInstance();
 			builder.RegisterType<RestrictionsAbleToBeScheduled>().InstancePerLifetimeScope();

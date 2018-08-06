@@ -10,12 +10,12 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	public class ScheduleController : ApiController
 	{
 		private readonly SchedulePlanningPeriodCommandHandler _schedulePlanningPeriodCommandHandler;
-		private readonly ClearPlanningPeriodSchedulingCommandHandler _clearPlanningPeriodSchedulingCommandHandler;
+		private readonly ClearPlanningPeriodScheduleCommandHandler _clearPlanningPeriodScheduleCommandHandler;
 
-		public ScheduleController(SchedulePlanningPeriodCommandHandler schedulePlanningPeriodCommandHandler, ClearPlanningPeriodSchedulingCommandHandler clearPlanningPeriodSchedulingCommandHandler)
+		public ScheduleController(SchedulePlanningPeriodCommandHandler schedulePlanningPeriodCommandHandler, ClearPlanningPeriodScheduleCommandHandler clearPlanningPeriodScheduleCommandHandler)
 		{
 			_schedulePlanningPeriodCommandHandler = schedulePlanningPeriodCommandHandler;
-			_clearPlanningPeriodSchedulingCommandHandler = clearPlanningPeriodSchedulingCommandHandler;
+			_clearPlanningPeriodScheduleCommandHandler = clearPlanningPeriodScheduleCommandHandler;
 		}
 
 		[HttpPost, Route("api/resourceplanner/planningperiod/{planningPeriodId}/schedule")]
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[HttpDelete, Route("api/resourceplanner/planningperiod/{planningPeriodId}/schedule")]
 		public virtual IHttpActionResult ClearSchedulesForPlanningPeriod(Guid planningPeriodId)
 		{
-			_clearPlanningPeriodSchedulingCommandHandler.ClearSchedules(planningPeriodId);
+			_clearPlanningPeriodScheduleCommandHandler.ClearSchedules(planningPeriodId);
 			return Ok();
 		}
 	}

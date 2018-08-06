@@ -422,7 +422,7 @@
     <Compile Include="ApplicationLayer\PeopleSearch\PeopleSearchProvider.cs" />
     <Compile Include="ApplicationLayer\PeopleSearch\PeopleSummaryModel.cs" />
     <Compile Include="ApplicationLayer\PeopleSearch\PersonFinderSearchCriteria.cs" />
-    <Compile Include="ApplicationLayer\ResourcePlanner\ClearPlanningPeriodSchedulingCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\ResourcePlanner\ClearPlanningPeriodScheduleCommandHandler.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\CrossAgentsAndSkillsResult.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\CrossAgentsAndSkills.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\IIslandInfo.cs" />
