@@ -188,6 +188,8 @@
     <Compile Include="ApplicationLayer\Events\ProjectionChangedEventForShiftExchangeOffer.cs" />
     <Compile Include="ApplicationLayer\Events\RefreshPayrollFormatsEvent.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\ClearPlanningPeriodSchedule.cs" />
+    <Compile Include="Budgeting\BudgetGroupAllowanceCalculatorExtended.cs" />
+    <Compile Include="Budgeting\BudgetGroupAllowanceCalculatorLimited.cs" />
     <Compile Include="Common\DefaultSchedulePeriodProvider.cs" />
     <Compile Include="ApplicationLayer\Commands\MultipleChangeScheduleCommandHandler.cs" />
     <Compile Include="Infrastructure\DeadLockRetrier.cs" />

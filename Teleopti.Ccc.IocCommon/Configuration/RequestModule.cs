@@ -134,6 +134,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			registerType<IPrimaryPersonSkillFilter,
 				PrimaryPersonSkillFilter, PrimaryPersonSkillFilterToggle75573Off>(
 				builder, Toggles.OvertimeRequestUsePrimarySkillOption_75573);
+
+			registerType<IBudgetGroupAllowanceCalculator,
+				BudgetGroupAllowanceCalculatorExtended, BudgetGroupAllowanceCalculatorLimited>(
+				builder, Toggles.Wfm_Requests_NightShift_BudgetDay_Allowance_76599);
+
 		}
 
 		private void registerType<T, TToggleOn, TToggleOff>(ContainerBuilder builder, Toggles toggle)
