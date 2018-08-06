@@ -201,6 +201,7 @@ Scenario: Show default team when no access to a team on a date
 	When I click the next day button in datepicker
 	Then I should see the other site's team
 
+@ignore
 Scenario: Don't show team-picker with no team access
 	Given I have a role with
          | Field            | Value |
