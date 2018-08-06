@@ -11,40 +11,40 @@
 ko.eventAggregator = new ko.subscribable();
 
 //eventAggregatorExtensions
-ko.subscribable.fn.publishOn = function (topic) {
-	this.subscribe(function (newValue) {
+ko.subscribable.fn.publishOn = function(topic) {
+	this.subscribe(function(newValue) {
 		ko.eventAggregator(newValue, topic);
 	});
 	return this; //support chaining
 };
 
-ko.subscribable.fn.subscribeTo = function (topic) {
+ko.subscribable.fn.subscribeTo = function(topic) {
 	ko.eventAggregator.subscribe(this, null, topic);
 	return this; //support chaining
 };
 
 ko.bindingHandlers.hoverToggle = {
-	init: function (element, valueAccessor, allBindingsAccessor) {
+	init: function(element, valueAccessor, allBindingsAccessor) {
 		var css = valueAccessor();
 		var targetElements = [element];
 		if (allBindingsAccessor().hoverTarget) {
 			targetElements = $(allBindingsAccessor().hoverTarget);
 		}
 
-		ko.utils.registerEventHandler(element, 'mouseover', function () {
+		ko.utils.registerEventHandler(element, 'mouseover', function() {
 			var hoverIf = allBindingsAccessor().hoverIf;
 			if (hoverIf === undefined) {
 				hoverIf = true;
 			}
 			if (hoverIf) {
-				$.each(targetElements, function (index, value) {
+				$.each(targetElements, function(index, value) {
 					ko.utils.toggleDomNodeCssClass(value, ko.utils.unwrapObservable(css), true);
 				});
 			}
 		});
 
-		ko.utils.registerEventHandler(element, 'mouseleave', function () {
-			$.each(targetElements, function (index, value) {
+		ko.utils.registerEventHandler(element, 'mouseleave', function() {
+			$.each(targetElements, function(index, value) {
 				ko.utils.toggleDomNodeCssClass(value, ko.utils.unwrapObservable(css), false);
 			});
 		});
@@ -52,7 +52,7 @@ ko.bindingHandlers.hoverToggle = {
 };
 
 ko.bindingHandlers.fadeInIf = {
-	update: function (element, valueAccessor, allBindingsAccessor) {
+	update: function(element, valueAccessor, allBindingsAccessor) {
 		var value = valueAccessor(),
 			allBindings = allBindingsAccessor();
 
@@ -72,7 +72,7 @@ ko.bindingHandlers.fadeInIf = {
 			}
 			$(element).animate({ opacity: fadeInOpacity }, fadeInDuration);
 		} else {
-			$(element).animate({ opacity: fadeOutOpacity }, fadeOutDuration, function () {
+			$(element).animate({ opacity: fadeOutOpacity }, fadeOutDuration, function() {
 				if (hideWhenFadedOut) {
 					$(element).hide();
 				}
@@ -82,19 +82,19 @@ ko.bindingHandlers.fadeInIf = {
 };
 
 ko.bindingHandlers.timepicker = {
-	init: function (element, valueAccessor, allBindingsAccessor) {
+	init: function(element, valueAccessor, allBindingsAccessor) {
 		var options = allBindingsAccessor().timepickerOptions || {};
 		var $element = $(element);
 		$element.timepicker(options);
 
-		$element.on('change', function () {
+		$element.on('change', function() {
 			var observable = valueAccessor();
 			var value = $element.val();
 			value = value == '' ? undefined : value;
 			observable(value);
 		});
 	},
-	update: function (element, valueAccessor) {
+	update: function(element, valueAccessor) {
 		var $element = $(element);
 
 		var value = ko.utils.unwrapObservable(valueAccessor());
@@ -107,8 +107,8 @@ ko.bindingHandlers.timepicker = {
 };
 
 //Sets the tooltip (using bootstrapper) to the bound text
-var TooltipBinding = function () {
-	this.init = function (element, valueAccessor, allBindingsAccessor) {
+var TooltipBinding = function() {
+	this.init = function(element, valueAccessor, allBindingsAccessor) {
 		var local = ko.utils.unwrapObservable(valueAccessor()),
 			options = {};
 
@@ -117,7 +117,7 @@ var TooltipBinding = function () {
 
 		$(element).tooltip(options);
 
-		ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+		ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
 			$(element).tooltip('destroy');
 		});
 	};
@@ -125,22 +125,22 @@ var TooltipBinding = function () {
 ko.bindingHandlers.tooltip = new TooltipBinding();
 
 ko.bindingHandlers.select2 = {
-	init: function (element, valueAccessor) {
+	init: function(element, valueAccessor) {
 		var options = valueAccessor();
 		options['width'] = 'resolve';
 
 		var observable = options.value;
 		// kinda strange, but we have to use the original select's event because select2 doesnt provide its own events
-		$(element).on('change', function () {
+		$(element).on('change', function() {
 			observable($(element).val());
 		});
 
 		if (options['onOpening']) {
-			$(element).on('select2-opening', function (event) {
+			$(element).on('select2-opening', function(event) {
 				var promise = options['onOpening']();
 				if (promise) {
 					event.preventDefault();
-					promise.then(function () {
+					promise.then(function() {
 						$(element).select2('open');
 					});
 				}
@@ -149,18 +149,18 @@ ko.bindingHandlers.select2 = {
 
 		$(element).select2(options);
 
-		ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+		ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
 			$(element).select2('destroy');
 		});
 	},
-	update: function (element, valueAccessor) {
+	update: function(element, valueAccessor) {
 		var observable = valueAccessor().value;
 		$(element).select2('val', observable());
 	}
 };
 
 ko.bindingHandlers.clickable = {
-	update: function (element, valueAccessor) {
+	update: function(element, valueAccessor) {
 		var value = ko.utils.unwrapObservable(valueAccessor());
 
 		var clickableCursor = value ? 'pointer' : 'not-allowed';
@@ -169,7 +169,7 @@ ko.bindingHandlers.clickable = {
 };
 
 ko.bindingHandlers.nonEncodedTitle = {
-	update: function (element, valueAccessor) {
+	update: function(element, valueAccessor) {
 		var value = ko.utils.unwrapObservable(valueAccessor());
 		var d = document.createElement('div');
 		d.innerHTML = value;
@@ -178,16 +178,16 @@ ko.bindingHandlers.nonEncodedTitle = {
 };
 
 ko.bindingHandlers.selected = {
-	update: function (element, valueAccessor) {
+	update: function(element, valueAccessor) {
 		var selected = ko.utils.unwrapObservable(valueAccessor());
 		if (selected) element.select();
 	}
 };
 
 ko.bindingHandlers.hideTooltipAfterMouseLeave = {
-	init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+	init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
 		if (valueAccessor()) {
-			$(element).mouseleave(function (event) {
+			$(element).mouseleave(function(event) {
 				$(this).tooltip('hide');
 			});
 		}
@@ -195,11 +195,11 @@ ko.bindingHandlers.hideTooltipAfterMouseLeave = {
 };
 
 ko.bindingHandlers.scrollIntoViewWhenClick = {
-	init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-		$(element).click(function (event) {
+	init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+		$(element).click(function(event) {
 			var ele = this;
 			if (!navigator.userAgent.match(/iPhone/)) {
-				setTimeout(function () {
+				setTimeout(function() {
 					$(valueAccessor()).scrollTop($(ele).offset().top);
 				}, 500);
 			}
@@ -208,9 +208,9 @@ ko.bindingHandlers.scrollIntoViewWhenClick = {
 };
 
 ko.bindingHandlers.outsideClickCallback = {
-	init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
+	init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
 		$('body').unbind('click');
-		$('body').on('click', function (event) {
+		$('body').on('click', function(event) {
 			if (!$.contains(element, event.target)) {
 				valueAccessor() && valueAccessor()();
 			}
@@ -219,8 +219,8 @@ ko.bindingHandlers.outsideClickCallback = {
 };
 
 ko.bindingHandlers.adjustTooltipPositionOnMobileTeamSchedule = {
-	init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-		$(element).click(function (event) {
+	init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+		$(element).click(function(event) {
 			var tooltipEle = $(this)
 				.siblings()
 				.filter('.tooltip.in')[0];
@@ -233,7 +233,7 @@ ko.bindingHandlers.adjustTooltipPositionOnMobileTeamSchedule = {
 
 			var leftSideMarginValue =
 				offsetLeft - ($('.my-schedule-column').offset().left + $('.my-schedule-column').outerWidth());
-			var rightSideMarginValue = tooltipEle.clientWidth + offsetLeft - window.screen.width;
+			var rightSideMarginValue = tooltipEle.clientWidth + offsetLeft - $(window).width();
 
 			if (leftSideMarginValue < 0) {
 				$(tooltipEle).css({ 'margin-left': Math.abs(leftSideMarginValue) + 'px' });
