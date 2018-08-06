@@ -1232,7 +1232,7 @@ teams-time-picker.ng-invalid-dst {
 		height: 50px;
 
 		.timespan {
-			background-color: #DCDCDC;
+			background-color: $gray-300;
 			border-radius: 2px;
 			padding: 2px 5px;
 			margin: 0 5px;
@@ -1327,7 +1327,7 @@ teams-time-picker.ng-invalid-dst {
 						height: 8px;
 						display: inline-flex;
 						margin-right: 4px;
-						background-color: #000;
+						background-color: $gray100;
 					}
 
 					.tick.hour {
