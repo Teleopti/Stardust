@@ -414,6 +414,7 @@ div.teammates-schedules-column:last-of-type .agent-name {
 .new-teamschedule-view .displayblock {
 	white-space: normal;
 	opacity: 0.8;
+	font-size: 12px;
 }
 
 .new-teamschedule-view .teammates-schedules-column .new-teamschedule-layer-container .displayblock {
