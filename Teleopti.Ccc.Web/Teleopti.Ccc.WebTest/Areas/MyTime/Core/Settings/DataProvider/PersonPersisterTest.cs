@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Settings.DataProvider
 			var person = new Person();
 			var target = new PersonPersister(cacheFactory, makeRegionalFromPerson);
 
-			target.InvalidateCachedCulure(person);
+			target.InvalidateCachedCulture(person);
 
 			cacheFactory.AssertWasCalled(x =>
 										 x.Invalidate(
