@@ -14,7 +14,6 @@
 		var planningPeriod = $resource(planningPeriodBaseUrl, { id: "@id" },
 			{
 				lastJobStatus: { method: 'GET', params: { id: "@id" }, url: planningPeriodBaseUrl + '/status' },
-				lastIntradayOptimizationJobStatus: { method: 'GET', params: { id: "@id" }, url: planningPeriodBaseUrl + '/intradaystatus' },
 				lastJobResult: { method: 'GET', params: { id: "@id" }, url: planningPeriodBaseUrl + '/result' },
 				publishPeriod: { method: 'POST', params: { id: "@id" }, url: planningPeriodBaseUrl + '/publish' },
 				schedule: { method: 'POST', params: { id: "@id", runAsynchronously: function (d) { return d.runAsynchronously } }, url: planningPeriodBaseUrl + '/schedule' },
@@ -48,7 +47,6 @@
 			getValidation: planningPeriod.getValidation,
 			lastJobResult: planningPeriod.lastJobResult,
 			lastJobStatus: planningPeriod.lastJobStatus,
-			lastIntradayOptimizationJobStatus: planningPeriod.lastIntradayOptimizationJobStatus,
 			// Scheduling
 			launchScheduling: planningPeriod.schedule,
 			launchIntraOptimize: planningPeriod.intraOptimize,

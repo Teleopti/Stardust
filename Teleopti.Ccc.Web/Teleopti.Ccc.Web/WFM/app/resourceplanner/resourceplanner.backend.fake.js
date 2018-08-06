@@ -71,15 +71,10 @@
                 return this;
             };
 
-            this.withScheduleStatus = function (fakeResult) {
+            this.withStatus = function (fakeResult) {
                 LastScheduleStatus = fakeResult;
                 return this;
-            }
-
-            this.withIntradayStatus = function (fakeResult) {
-                LastIntradayStatus  = fakeResult;
-                return this;
-            }
+            };
 
         });
 })();

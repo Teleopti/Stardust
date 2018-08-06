@@ -11,7 +11,6 @@
     var vm = this;
     var selectedPpId = $stateParams.ppId ? $stateParams.ppId : null;
     var checkProgressRef;
-    var checkIntradayProcessRef;
     var preMessage = '';
     vm.planningGroup = planningGroupInfo ? planningGroupInfo : null;
     vm.selectedPp = selectedPp ? selectedPp : {};
@@ -49,7 +48,6 @@
 
     $scope.$on('$destroy', function () {
       $interval.cancel(checkProgressRef);
-      $interval.cancel(checkIntradayProcessRef);
     });
 
     checkState();
@@ -75,11 +73,6 @@
       checkProgress();
       checkProgressRef = $interval(function () {
         checkProgress();
-      }, 10000);
-
-      checkIntradayOptimizationProgress();
-      checkIntradayProcessRef = $interval(function () {
-        checkIntradayOptimizationProgress();
       }, 10000);
     }
 
@@ -126,18 +119,19 @@
       if (selectedPpId !== null) {
         planningPeriodServiceNew.lastJobStatus({ id: selectedPpId })
           .$promise.then(function (result) {
-            if (!result.HasJob) {
+          	var schedulingStatus = result.SchedulingStatus;
+            if (!schedulingStatus||!schedulingStatus.HasJob) {
               vm.schedulingPerformed = false;
             } else {
-              if (!result.Successful && !result.Failed) {
+              if (!schedulingStatus.Successful && !schedulingStatus.Failed) {
                 vm.schedulingPerformed = true;
-                return msgForScheduleRunning(result.CurrentStep);
+                return msgForScheduleRunning(schedulingStatus.CurrentStep);
               }
-              if (result.Failed) {
+              if (schedulingStatus.Failed) {
                 vm.schedulingPerformed = false;
-                return msgForScheduleFail(result.CurrentStep);
+                return msgForScheduleFail(schedulingStatus.CurrentStep);
               }
-              if (result.Successful && vm.schedulingPerformed) {
+              if (schedulingStatus.Successful && vm.schedulingPerformed) {
                 vm.schedulingPerformed = false;
                 NoticeService.success($translate.instant('SuccessfullyScheduledPlanningPeriodFromTo')
                   .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
@@ -145,6 +139,34 @@
                 return loadLastResult();
               }
             }
+            
+            var intradayOptimizationStatus = result.IntradayOptimizationStatus;
+			if (!intradayOptimizationStatus||!intradayOptimizationStatus.HasJob) {
+				vm.optimizeRunning = false;
+			} else {
+				if (!intradayOptimizationStatus.Successful && !intradayOptimizationStatus.Failed) {
+					vm.optimizeRunning = true;
+					vm.status = $translate.instant('RunningIntradayOptimization');
+					return;
+				}
+				if (intradayOptimizationStatus.Successful && vm.optimizeRunning) {
+					vm.optimizeRunning = false;
+					vm.status = '';
+					NoticeService.success(
+						$translate.instant('SuccessfullyIntradayOptimizationPlanningPeriodFromTo')
+							.replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
+							.replace('{1}', moment(vm.selectedPp.EndDate).format('L')), null, true);
+					return loadLastResult();
+				}
+				if (intradayOptimizationStatus.Failed) {
+					vm.optimizeRunning = false;
+					vm.status = '';
+					return handleScheduleOrOptimizeError(
+						$translate.instant('FailedToIntradayOptimizeForSelectedPlanningPeriodDueToTechnicalError')
+							.replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
+							.replace('{1}', moment(vm.selectedPp.EndDate).format('L')));
+				}
+			}
           });
       }
     }
@@ -190,41 +212,8 @@
       }
       vm.optimizeRunning = true;
       return planningPeriodServiceNew.launchIntraOptimize({ id: selectedPpId, runAsynchronously: true }).$promise.then(function () {
-        checkIntradayOptimizationProgress();
+        checkProgress();
       });
-    }
-
-    function checkIntradayOptimizationProgress() {
-      if (selectedPpId !== null) {
-        planningPeriodServiceNew.lastIntradayOptimizationJobStatus({ id: selectedPpId }).$promise.then(function (result) {
-          if (!result.HasJob) {
-            vm.optimizeRunning = false;
-          } else {
-            if (!result.Successful && !result.Failed) {
-              vm.optimizeRunning = true;
-              vm.status = $translate.instant('RunningIntradayOptimization');
-              return;
-            }
-            if (result.Successful && vm.optimizeRunning) {
-              vm.optimizeRunning = false;
-              vm.status = '';
-              NoticeService.success(
-                $translate.instant('SuccessfullyIntradayOptimizationPlanningPeriodFromTo')
-                  .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
-                  .replace('{1}', moment(vm.selectedPp.EndDate).format('L')), null, true);
-              return loadLastResult();
-            }
-            if (result.Failed) {
-              vm.optimizeRunning = false;
-              vm.status = '';
-              return handleScheduleOrOptimizeError(
-                $translate.instant('FailedToIntradayOptimizeForSelectedPlanningPeriodDueToTechnicalError')
-                  .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
-                  .replace('{1}', moment(vm.selectedPp.EndDate).format('L')));
-            }
-          }
-        });
-      }
     }
 
     function publishSchedule() {

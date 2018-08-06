@@ -101,36 +101,47 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			var planningPeriod = _planningPeriodRepository.Get(planningPeriodId);
 			if (planningPeriod == null)
 				return BadRequest($"Invalid {nameof(planningPeriodId)}");
-			var lastJobResult = planningPeriod.GetLastSchedulingJob();
-			if (lastJobResult != null)
-				return Ok(new
+			var lastSchedulingJobResult = planningPeriod.GetLastSchedulingJob();
+			dynamic schedulingStatus = new
+			{
+				HasJob = false
+			};
+			if (lastSchedulingJobResult != null)
+			{
+				schedulingStatus = new
 				{
 					HasJob = true,
-					CurrentStep = lastJobResult.Details.Count(),
+					CurrentStep = lastSchedulingJobResult.Details.Count(),
 					TotalSteps = 2,
-					Successful = lastJobResult.FinishedOk,
-					Failed = lastJobResult.HasError()
-				});
-			return Ok(new { HasJob = false });
-		}
-
-		[HttpGet, UnitOfWork, Route("api/resourceplanner/planningperiod/{planningPeriodId}/intradaystatus")]
-		public virtual IHttpActionResult IntradayOptimizationJobStatus(Guid planningPeriodId)
-		{
-			var planningPeriod = _planningPeriodRepository.Get(planningPeriodId);
-			if (planningPeriod == null)
-				return BadRequest($"Invalid {nameof(planningPeriodId)}");
-			var lastJobResult = planningPeriod.GetLastIntradayOptimizationJob();
-			if (lastJobResult != null)
-				return Ok(new
+					Successful = lastSchedulingJobResult.FinishedOk,
+					Failed = lastSchedulingJobResult.HasError()
+				};
+			}
+			
+			var lastIntradayOptimizationJobResult = planningPeriod.GetLastIntradayOptimizationJob();
+			dynamic intradayOptimizationStatus = new
+			{
+				HasJob = false
+			};
+			if (lastIntradayOptimizationJobResult != null)
+			{
+				intradayOptimizationStatus = new
 				{
 					HasJob = true,
-					Successful = lastJobResult.FinishedOk,
-					Failed = lastJobResult.HasError()
-				});
-			return Ok(new { HasJob = false });
-		}
+					Successful = lastIntradayOptimizationJobResult.FinishedOk,
+					Failed = lastIntradayOptimizationJobResult.HasError()
+				};
+			}
 
+			var status = new
+			{
+				SchedulingStatus = schedulingStatus,
+				IntradayOptimizationStatus = intradayOptimizationStatus
+			};
+			
+			return Ok(status);
+		}
+		
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/planninggroup/{planningGroupId}/planningperiods")]
 		public virtual IHttpActionResult GetAllPlanningPeriods(Guid planningGroupId)
 		{

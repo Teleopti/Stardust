@@ -44,7 +44,6 @@ describe('planningPeriodOverviewController', function () {
         fakeBackend.clear();
 
         spyOn(planningPeriodServiceNew, 'lastJobStatus').and.callThrough();
-        spyOn(planningPeriodServiceNew, 'lastIntradayOptimizationJobStatus').and.callThrough();
 
         $httpBackend.whenGET('../ToggleHandler/AllToggles').respond(function (method, url, data, headers) {
             return [200];
@@ -85,23 +84,22 @@ describe('planningPeriodOverviewController', function () {
     xit('should cancel the auto statue check when needed', function () {
         var result = {}
         fakeBackend.withScheduleResult(result);
-        fakeBackend.withIntradayStatus(result);
         $httpBackend.flush();
 
         expect(planningPeriodServiceNew.lastJobStatus).toHaveBeenCalledWith({ id: 'a557210b-99cc-4128-8ae0-138d812974b6' });
         expect(planningPeriodServiceNew.lastJobStatus.calls.count()).toEqual(1);
-        expect(planningPeriodServiceNew.lastIntradayOptimizationJobStatus).toHaveBeenCalledWith({ id: 'a557210b-99cc-4128-8ae0-138d812974b6' });
-        expect(planningPeriodServiceNew.lastIntradayOptimizationJobStatus.calls.count()).toEqual(1);
     });
 
     it('should launch schedule', function () {
         spyOn(planningPeriodServiceNew, 'launchScheduling').and.callThrough();
-        fakeBackend.withScheduleStatus({
-            CurrentStep: 0,
-            Failed: false,
-            HasJob: true,
-            Successful: false,
-            TotalSteps: 2
+        fakeBackend.withStatus({
+			SchedulingStatus: {
+				CurrentStep: 0,
+				Failed: false,
+				HasJob: true,
+				Successful: false,
+				TotalSteps: 2
+			}
         });
         vm.launchSchedule();
         $httpBackend.flush();
@@ -112,12 +110,14 @@ describe('planningPeriodOverviewController', function () {
 
     it('should check progress and return schedule is running on step 0', function () {
         vm.schedulingPerformed = true;
-        fakeBackend.withScheduleStatus({
-            CurrentStep: 0,
-            Failed: false,
-            HasJob: true,
-            Successful: false,
-            TotalSteps: 2
+        fakeBackend.withStatus({
+			SchedulingStatus: {
+				CurrentStep: 0,
+				Failed: false,
+				HasJob: true,
+				Successful: false,
+				TotalSteps: 2
+			}
         });
         $httpBackend.flush();
 
@@ -128,12 +128,14 @@ describe('planningPeriodOverviewController', function () {
 
     it('should check progress and return schedule is running on step 1', function () {
         vm.schedulingPerformed = true;
-        fakeBackend.withScheduleStatus({
-            CurrentStep: 1,
-            Failed: false,
-            HasJob: true,
-            Successful: false,
-            TotalSteps: 2
+        fakeBackend.withStatus({
+			SchedulingStatus: {
+				CurrentStep: 1,
+				Failed: false,
+				HasJob: true,
+				Successful: false,
+				TotalSteps: 2
+			}
         });
         $httpBackend.flush();
 
@@ -145,12 +147,14 @@ describe('planningPeriodOverviewController', function () {
     it('should check progress and return schedule is done with success (step 2)', function () {
         spyOn(NoticeService, 'success').and.callThrough();
         vm.schedulingPerformed = true;
-        fakeBackend.withScheduleStatus({
-            CurrentStep: 2,
-            Failed: false,
-            HasJob: true,
-            Successful: true,
-            TotalSteps: 2
+        fakeBackend.withStatus({
+			SchedulingStatus: {
+				CurrentStep: 2,
+				Failed: false,
+				HasJob: true,
+				Successful: true,
+				TotalSteps: 2
+			}
         });
         $httpBackend.flush();
 
@@ -163,12 +167,14 @@ describe('planningPeriodOverviewController', function () {
     it('should check progress and return schedule is failed by step 0', function () {
         spyOn(NoticeService, 'warning').and.callThrough();
         vm.schedulingPerformed = true;
-        fakeBackend.withScheduleStatus({
-            CurrentStep: 0,
-            Failed: true,
-            HasJob: true,
-            Successful: false,
-            TotalSteps: 2
+        fakeBackend.withStatus({
+			SchedulingStatus: {
+				CurrentStep: 0,
+				Failed: true,
+				HasJob: true,
+				Successful: false,
+				TotalSteps: 2
+			}
         });
         $httpBackend.flush();
 
@@ -181,12 +187,14 @@ describe('planningPeriodOverviewController', function () {
     it('should check progress and return schedule is failed by step 1', function () {
         spyOn(NoticeService, 'warning').and.callThrough();
         vm.schedulingPerformed = true;
-        fakeBackend.withScheduleStatus({
-            CurrentStep: 1,
-            Failed: true,
-            HasJob: true,
-            Successful: false,
-            TotalSteps: 2
+        fakeBackend.withStatus({
+			SchedulingStatus: {
+				CurrentStep: 1,
+				Failed: true,
+				HasJob: true,
+				Successful: false,
+				TotalSteps: 2
+			}
         });
         $httpBackend.flush();
 
@@ -198,11 +206,13 @@ describe('planningPeriodOverviewController', function () {
 
     it('should launch intraday optimization and return intraday optimization is running', function () {
         spyOn(planningPeriodServiceNew, 'launchIntraOptimize').and.callThrough();
-        fakeBackend.withIntradayStatus({
-            Failed: false,
-            HasJob: true,
-            Successful: false
-        });
+        fakeBackend.withStatus({
+			IntradayOptimizationStatus: {
+				Failed: false,
+				HasJob: true,
+				Successful: false
+			}
+        }); 
         vm.intraOptimize();
         $httpBackend.flush();
 
@@ -213,10 +223,12 @@ describe('planningPeriodOverviewController', function () {
     it('should check intraday optimization progress and return intraday optimization is done with success', function () {
         spyOn(NoticeService, 'success').and.callThrough();
         vm.optimizeRunning = true;
-        fakeBackend.withIntradayStatus({
-            Failed: false,
-            HasJob: true,
-            Successful: true
+        fakeBackend.withStatus({
+			IntradayOptimizationStatus: {
+				Failed: false,
+				HasJob: true,
+				Successful: true
+			}
         });
         $httpBackend.flush();
 
@@ -229,10 +241,12 @@ describe('planningPeriodOverviewController', function () {
     it('should check intraday optimization progress and return intraday optimization is failed', function () {
         spyOn(NoticeService, 'warning').and.callThrough();
         vm.optimizeRunning = true;
-        fakeBackend.withIntradayStatus({
-            Failed: true,
-            HasJob: true,
-            Successful: false
+        fakeBackend.withStatus({
+			IntradayOptimizationStatus: {
+				Failed: true,
+				HasJob: true,
+				Successful: false
+			}
         });
         $httpBackend.flush();
 
