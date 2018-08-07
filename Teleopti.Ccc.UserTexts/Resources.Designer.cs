@@ -29691,6 +29691,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} is in another time zone and your schedule dates do not match..
+        /// </summary>
+        public static string ScheduleDateDoNotMatch {
+            get {
+                return ResourceManager.GetString("ScheduleDateDoNotMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Schedule Date From.
         /// </summary>
         public static string ScheduleDateFrom {

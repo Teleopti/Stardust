@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
@@ -34,6 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly IPersonNameProvider _personNameProvider;
 		private readonly IShiftTradeAddScheduleLayerViewModelMapper _layerMapper;
 		private readonly IPermissionProvider _permissionProvider;
+		private readonly IShiftTradeMultiSchedulesSelectableChecker _selectableChecker;
 
 		public ShiftTradeScheduleViewModelMapper(IShiftTradeRequestProvider shiftTradeRequestProvider,
 			IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider,
@@ -41,7 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			IShiftTradeTimeLineHoursViewModelMapper shiftTradeTimeLineHoursViewModelMapper,
 			IPersonRequestRepository personRequestRepository,
 			IScheduleProvider scheduleProvider,
-			ILoggedOnUser loggedOnUser, IShiftTradeSiteOpenHourFilter shiftTradeSiteOpenHourFilter, IProjectionChangedEventBuilder builder, IPersonRepository personRepository, IPersonNameProvider personNameProvider, IShiftTradeAddScheduleLayerViewModelMapper layerMapper, IPermissionProvider permissionProvider)
+			ILoggedOnUser loggedOnUser, IShiftTradeSiteOpenHourFilter shiftTradeSiteOpenHourFilter, IProjectionChangedEventBuilder builder, IPersonRepository personRepository, IPersonNameProvider personNameProvider, IShiftTradeAddScheduleLayerViewModelMapper layerMapper, IPermissionProvider permissionProvider, IShiftTradeMultiSchedulesSelectableChecker selectableChecker)
 		{
 			_shiftTradeRequestProvider = shiftTradeRequestProvider;
 			_possibleShiftTradePersonsProvider = possibleShiftTradePersonsProvider;
@@ -56,6 +59,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			_personNameProvider = personNameProvider;
 			_layerMapper = layerMapper;
 			_permissionProvider = permissionProvider;
+			_selectableChecker = selectableChecker;
 		}
 
 		public ShiftTradeScheduleViewModel Map(ShiftTradeScheduleViewModelData data)
@@ -181,7 +185,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			{
 				var mySchedule = mapToShiftTradeAddPersonScheduleViewModel(myScheduleRange, dateOnly, _loggedOnUser.CurrentUser());
 				var personToSchedule = mapToShiftTradeAddPersonScheduleViewModel(personToScheduleRange, dateOnly, personTo);
-				var isSelectable = checkSelectable(hasAbsence(mySchedule, personToSchedule), out var reason);
+				var isSelectable = _selectableChecker.CheckSelectable(hasAbsence(mySchedule, personToSchedule), 
+					myScheduleRange?.ScheduledDay(dateOnly), personToScheduleRange?.ScheduledDay(dateOnly), dateOnly, personTo, out var reason);
 				multiSchedules.Add(new ShiftTradeMultiScheduleViewModel
 				{
 					Date = dateOnly.Date, MySchedule = mySchedule, PersonToSchedule = personToSchedule,
@@ -193,18 +198,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			{
 				MultiSchedulesForShiftTrade = multiSchedules
 			};
-		}
-
-		private bool checkSelectable(bool hasAbsence, out string unSelectableReason)
-		{
-			unSelectableReason = "";
-			if (hasAbsence)
-			{
-				unSelectableReason = Resources.AbsenceCannotBeTraded;
-				return false;
-			}
-
-			return true;
 		}
 
 		private bool hasAbsence(ShiftTradeAddPersonScheduleViewModel myViewModel, ShiftTradeAddPersonScheduleViewModel personToViewModle)

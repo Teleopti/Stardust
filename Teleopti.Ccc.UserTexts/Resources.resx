@@ -17608,4 +17608,8 @@ The application will now exit.</value>
     <comment>use in My
 Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule cannot be selected.</comment>
   </data>
+  <data name="ScheduleDateDoNotMatch" xml:space="preserve">
+    <value>{0} is in another time zone and your schedule dates do not match.</value>
+    <comment>Use in MyTime Web, Shift trade for multi schedules when other agent's shift start on a different date according to logon timezone. {0} is another person's name.</comment>
+  </data>
 </root>

@@ -250,6 +250,38 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldNotSelectableWhenOtherAgentShiftStartBeforeTradeDate()
+		{
+			_now.Is(DateOnly.Today.Date);
+			var startDate = DateOnly.Today.AddDays(1);
+			var form = createShiftInDifferentTimeZone(startDate, 3, TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(-5), "", ""));
+			var personTo = PersonRepository.Get(form.PersonToId);
+			var expactedReason = String.Format(Resources.ScheduleDateDoNotMatch, personTo.Name);
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+
+			data.MultiSchedulesForShiftTrade.First().IsSelectable.Should().Be.False();
+			data.MultiSchedulesForShiftTrade.First().UnselectableReason.Should().Be.EqualTo(expactedReason);
+		}
+
+		[Test]
+		public void ShouldNotSelectableWhenOtherAgentShiftStartAfterTradeDate()
+		{
+			_now.Is(DateOnly.Today.Date);
+			var startDate = DateOnly.Today.AddDays(1);
+			var form = createShiftInDifferentTimeZone(startDate, 20, TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(5), "", ""));
+			var personTo = PersonRepository.Get(form.PersonToId);
+			var expactedReason = String.Format(Resources.ScheduleDateDoNotMatch, personTo.Name);
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+			
+			data.MultiSchedulesForShiftTrade.First().IsSelectable.Should().Be.False();
+			data.MultiSchedulesForShiftTrade.First().UnselectableReason.Should().Be.EqualTo(expactedReason);
+		}
+
+		[Test]
 		public void ShouldSighOvertimeForPersonToSchedule()
 		{
 			_now.Is(DateOnly.Today.Date);
@@ -411,6 +443,33 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			setPrincipal(personFromId, scenarioId);
 
 			return PersonRepository.Get(personToId);
+		}
+
+		private ShiftTradeMultiSchedulesForm createShiftInDifferentTimeZone(DateOnly date, int startHour, TimeZoneInfo timeZone)
+		{
+			var scenarioId = Guid.NewGuid();
+			var personFromId = Guid.NewGuid();
+			var personToId = Guid.NewGuid();
+
+			Database.WithMultiSchedulesForShiftTradeWorkflow(DateTime.Today.AddDays(10))
+				.WithPerson(personFromId, "logOn", timeZone)
+				.WithPeriod(DateOnly.MinValue.ToString())
+				.WithTerminalDate(DateOnly.MaxValue.ToString())
+				.WithScenario(scenarioId)
+				.WithSchedule(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString())
+				.WithPerson(personToId)
+				.WithPeriod(DateOnly.MinValue.ToString())
+				.WithTerminalDate(DateOnly.MaxValue.ToString())
+				.WithSchedule(date.Date.AddHours(startHour).ToString(), date.Date.AddHours(startHour+8).ToString());
+
+			setPrincipal(personFromId, scenarioId);
+
+			return new ShiftTradeMultiSchedulesForm
+			{
+				StartDate = date,
+				EndDate = date,
+				PersonToId = personToId
+			};
 		}
 
 		private void setPrincipal(Guid personId, Guid scenarioId)
