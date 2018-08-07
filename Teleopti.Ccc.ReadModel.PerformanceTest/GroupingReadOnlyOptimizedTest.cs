@@ -29,19 +29,6 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 		[Test]
 		public void MeasurePerformance()
 		{
-			using (var connection = new SqlConnection(InfraTestConfigReader.ConnectionString))
-			{
-				connection.Open();
-				var path = AppDomain.CurrentDomain.BaseDirectory + "/../../" + "PrepareNonClusteredIndexForGroupingReadOnly.sql";
-				var script = File.ReadAllText(path);
-
-				using (var command = new SqlCommand(script, connection))
-				{
-					command.ExecuteNonQuery();
-				}
-				connection.Close();
-			}
-
 			IEnumerable<ReadOnlyGroupDetail> details;
 			Guid businessUnitId;
 			const string logOnDatasource = "TestData";
