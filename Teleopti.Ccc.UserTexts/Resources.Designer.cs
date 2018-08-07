@@ -16087,6 +16087,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Items per page.
+        /// </summary>
+        public static string ItemsPerPage {
+            get {
+                return ResourceManager.GetString("ItemsPerPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} items selected..
         /// </summary>
         public static string ItemsSelectedParameter {
@@ -20851,6 +20860,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Next page.
+        /// </summary>
+        public static string NextPage {
+            get {
+                return ResourceManager.GetString("NextPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Next
         ///Period.
         /// </summary>
@@ -22423,6 +22441,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string OfferedTasks {
             get {
                 return ResourceManager.GetString("OfferedTasks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to of.
+        /// </summary>
+        public static string OfText {
+            get {
+                return ResourceManager.GetString("OfText", resourceCulture);
             }
         }
         
@@ -26019,6 +26046,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Previous {
             get {
                 return ResourceManager.GetString("Previous", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Previous page.
+        /// </summary>
+        public static string PreviousPage {
+            get {
+                return ResourceManager.GetString("PreviousPage", resourceCulture);
             }
         }
         

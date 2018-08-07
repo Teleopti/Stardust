@@ -11,7 +11,7 @@
           <nz-form-item data-test-person>
             <nz-form-label [nzSpan]="7" data-test-person-name>{{ personGroup.get('FullName').value }}</nz-form-label>
             <nz-form-control [nzSpan]="7" nzHasFeedback>
-              <input nz-input formControlName="Logon" placeholder="Application logon" data-test-person-logon>
+              <input nz-input formControlName="Logon" [placeholder]="'ApplicationLogon' | translate" data-test-person-logon>
               <nz-form-explain *ngIf="personGroup.get('Logon').dirty && personGroup.get('Logon').errors">
                 <ng-container *ngIf="personGroup.get('Logon').hasError('duplicateNameValidator')">
                   {{'PeopleUsernameIsAlreadyInUse' | translate}}

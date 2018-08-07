@@ -17323,7 +17323,7 @@ The application will now exit.</value>
   </data>
   <data name="AccessManagement" xml:space="preserve">
     <value>Access management</value>
-    <comment>Permission name</comment>
+    <comment>Permission name and People subtitle</comment>
   </data>
   <data name="ImportBpoImportedAt" xml:space="preserve">
     <value>imported at</value>
@@ -17501,29 +17501,26 @@ The application will now exit.</value>
     <value>Duplicate username in form</value>
     <comment>User has entered duplicate usernames in same form</comment>
   </data>
-  <data name="PeopleGrantRoles" xml:space="preserve">
+  <data name="GrantRoles" xml:space="preserve">
     <value>Grant roles</value>
   </data>
-  <data name="PeopleCurrentRoles" xml:space="preserve">
+  <data name="CurrentRoles" xml:space="preserve">
     <value>Current roles</value>
   </data>
-  <data name="PeopleAvailableRoles" xml:space="preserve">
+  <data name="AvailableRoles" xml:space="preserve">
     <value>Available roles</value>
   </data>
-  <data name="PeopleIdentityLogon" xml:space="preserve">
+  <data name="IdentityLogon" xml:space="preserve">
     <value>Identity logon</value>
   </data>
-  <data name="PeopleRevokeRoles" xml:space="preserve">
+  <data name="RevokeRoles" xml:space="preserve">
     <value>Revoke roles</value>
   </data>
-  <data name="PeopleGrantRole" xml:space="preserve">
+  <data name="GrantRole" xml:space="preserve">
     <value>Grant role</value>
   </data>
-  <data name="PeopleRevokeRole" xml:space="preserve">
+  <data name="RevokeRole" xml:space="preserve">
     <value>Revoke role</value>
-  </data>
-  <data name="PeopleApplicationLogon" xml:space="preserve">
-    <value>Application logon</value>
   </data>
   <data name="PeopleSelectAllOnAllPages" xml:space="preserve">
     <value>Select all on all pages</value>

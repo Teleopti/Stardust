@@ -15601,22 +15601,22 @@ Applikationen kommer nu att stängas. </value>
   <data name="PeopleUsernameIsAlreadyInUse" xml:space="preserve">
     <value>Användarnamnet används redan</value>
   </data>
-  <data name="PeopleGrantRoles" xml:space="preserve">
+  <data name="GrantRoles" xml:space="preserve">
     <value>Bevilja roller</value>
   </data>
-  <data name="PeopleCurrentRoles" xml:space="preserve">
+  <data name="CurrentRoles" xml:space="preserve">
     <value>Nuvarande roller</value>
   </data>
-  <data name="PeopleAvailableRoles" xml:space="preserve">
+  <data name="AvailableRoles" xml:space="preserve">
     <value>Tillgängliga roller</value>
   </data>
-  <data name="PeopleRevokeRoles" xml:space="preserve">
+  <data name="RevokeRoles" xml:space="preserve">
     <value>Upphäv roller</value>
   </data>
-  <data name="PeopleGrantRole" xml:space="preserve">
+  <data name="GrantRole" xml:space="preserve">
     <value>Bevilja roll</value>
   </data>
-  <data name="PeopleRevokeRole" xml:space="preserve">
+  <data name="RevokeRole" xml:space="preserve">
     <value>Upphäv roll</value>
   </data>
   <data name="PeopleSelectAllOnAllPages" xml:space="preserve">
@@ -15624,9 +15624,6 @@ Applikationen kommer nu att stängas. </value>
   </data>
   <data name="PeopleSiteTeam" xml:space="preserve">
     <value>Enhet/team</value>
-  </data>
-  <data name="PeopleApplicationLogon" xml:space="preserve">
-    <value>Applikationsinloggning</value>
   </data>
   <data name="PeopleWorkspace" xml:space="preserve">
     <value>Arbetsyta</value>

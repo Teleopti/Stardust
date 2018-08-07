@@ -2,7 +2,7 @@
   <div class="con-flex">
     <div class="con-row">
       <div class="con-flex">
-        <h2>{{'PeopleIdentityLogon' | translate}}</h2>
+        <h2>{{'IdentityLogon' | translate}}</h2>
       </div>
     </div>
     <form [formGroup]="form">
@@ -11,7 +11,7 @@
           <nz-form-item>
             <nz-form-label [nzSpan]="7">{{ personGroup.get('FullName').value }}</nz-form-label>
             <nz-form-control [nzSpan]="7" nzHasFeedback>
-              <input nz-input formControlName="Logon" placeholder="Identity logon">
+              <input nz-input formControlName="Logon" [placeholder]="'IdentityLogon' | translate">
               <nz-form-explain *ngIf="personGroup.get('Logon').dirty && personGroup.get('Logon').errors">
                 <ng-container *ngIf="personGroup.get('Logon').hasError('duplicateNameValidator')">
                   {{'PeopleUsernameIsAlreadyInUse' | translate}}

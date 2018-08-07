@@ -19,7 +19,6 @@ import {
 	SearchService,
 	WorkspaceService
 } from './services';
-import { CustomTranslateParser } from '../core/translation';
 
 @NgModule({
 	declarations: [
@@ -39,7 +38,8 @@ import { CustomTranslateParser } from '../core/translation';
 		SearchService,
 		SearchOverridesService,
 		NavigationService,
-		LogonInfoService
+		LogonInfoService,
+		TranslateModule
 	],
 	exports: [],
 	entryComponents: [

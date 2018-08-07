@@ -4,7 +4,7 @@
       <div class="con-row">
         <div class="con-flex">
           <nz-input-group [nzSuffix]="suffixTemplate" nzPrefixIcon="anticon anticon-search">
-            <input nz-input placeholder="Search" [formControl]="searchControl" (keyup.enter)="onSearch()" data-test-searchinput>
+            <input nz-input [placeholder]="'Search' | translate" [formControl]="searchControl" (keyup.enter)="onSearch()" data-test-searchinput>
           </nz-input-group>
           <ng-template #suffixTemplate>
             <i class="anticon anticon-close-circle" (click)="searchControl.setValue('')" *ngIf="searchControl.value.length"></i>
@@ -12,13 +12,13 @@
         </div>
         <div class="con-flex x3">
           <button nz-button nzType="default" data-test-grant-button [disabled]="!workspaceService.isAnySelected()" (click)="nav.navToGrant()">
-            {{'PeopleGrantRole' | translate}}</button>
+            {{'GrantRole' | translate}}</button>
           <button nz-button nzType="default" data-test-revoke-button [disabled]="!workspaceService.isAnySelected()" (click)="nav.navToRevoke()">
-            {{'PeopleRevokeRole' | translate}}</button>
+            {{'RevokeRole' | translate}}</button>
           <button nz-button nzType="default" data-test-applicationlogon-button [disabled]="!workspaceService.isAnySelected()" (click)="nav.navToApplicationLogon()">
-            {{'PeopleApplicationLogon' | translate}}</button>
+            {{'ApplicationLogon' | translate}}</button>
           <button nz-button nzType="default" data-test-identitylogon-button [disabled]="!workspaceService.isAnySelected()" (click)="nav.navToIdentityLogon()">
-            {{'PeopleIdentityLogon' | translate}}</button>
+            {{'IdentityLogon' | translate}}</button>
         </div>
       </div>
     </div>
