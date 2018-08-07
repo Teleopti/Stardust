@@ -17612,4 +17612,8 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>{0} is in another time zone and your schedule dates do not match.</value>
     <comment>Use in MyTime Web, Shift trade for multi schedules when other agent's shift start on a different date according to logon timezone. {0} is another person's name.</comment>
   </data>
+  <data name="SkillDoNotMatch" xml:space="preserve">
+    <value>Because of differences in skill setup between you and {0}, you cannot trade shifts on this date.</value>
+    <comment>Use in MyTime shift  trade for multiple schedules. A message when the skills are not match between logged on user and person to. {0} is the name of person to.</comment>
+  </data>
 </root>

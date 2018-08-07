@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 									DateOnly date, IPerson personTo, out string unSelectableReason)
 		{
 			unSelectableReason = "";
+
 			if (hasAbsence)
 			{
 				unSelectableReason = Resources.AbsenceCannotBeTraded;
@@ -36,7 +38,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				return false;
 			}
 
+			if (!isSkillSatisfied(personTo, date))
+			{
+				unSelectableReason = String.Format(Resources.SkillDoNotMatch, personTo.Name);
+				return false;
+			}
+
 			return true;
+		}
+
+		private bool isSkillSatisfied(IPerson personTo, DateOnly date)
+		{
+			var checkItem = new ShiftTradeAvailableCheckItem(date, _loggedOnUser.CurrentUser(), personTo);
+			var skillSpecification = new ShiftTradeSkillSpecification();
+			return skillSpecification.IsSatisfiedBy(checkItem);
 		}
 
 		private bool isDateSatisfied(IScheduleDay myScheduleDay, IScheduleDay personToScheduleDay, DateOnly date, IPerson personTo)

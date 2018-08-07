@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -254,7 +255,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			_now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
-			var form = createShiftInDifferentTimeZone(startDate, 3, TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(-5), "", ""));
+			var form = createShiftWithoutAbsence(startDate, -5, TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(-5), "", ""));
 			var personTo = PersonRepository.Get(form.PersonToId);
 			var expactedReason = String.Format(Resources.ScheduleDateDoNotMatch, personTo.Name);
 
@@ -270,7 +271,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			_now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
-			var form = createShiftInDifferentTimeZone(startDate, 20, TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(5), "", ""));
+			var form = createShiftWithoutAbsence(startDate, 12, TimeZoneInfo.CreateCustomTimeZone("tzid", TimeSpan.FromHours(5), "", ""));
 			var personTo = PersonRepository.Get(form.PersonToId);
 			var expactedReason = String.Format(Resources.ScheduleDateDoNotMatch, personTo.Name);
 
@@ -371,6 +372,40 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldNotSelectableWhenSkillNotMatch()
+		{
+			_now.Is(DateOnly.Today.Date);
+			var startDate = DateOnly.Today.AddDays(1);
+			var endDate = startDate.AddDays(9);
+			var form = createShiftWithoutAbsence(startDate, 0, TimeZoneInfo.Utc);
+			var personTo = PersonRepository.Get(form.PersonToId);
+			var diffSkill = new Skill("bla");
+			personTo.WorkflowControlSet.AddSkillToMatchList(diffSkill);
+			((IPersonPeriodModifySkills)personTo.PersonPeriods(new DateOnlyPeriod(startDate ,endDate)).FirstOrDefault()).AddPersonSkill(new PersonSkill(diffSkill, new Percent(50) ));
+			var expactedReason = String.Format(Resources.SkillDoNotMatch, personTo.Name);
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+
+			data.MultiSchedulesForShiftTrade.First().IsSelectable.Should().Be.False();
+			data.MultiSchedulesForShiftTrade.First().UnselectableReason.Should().Be.EqualTo(expactedReason);
+		}
+
+		[Test]
+		public void ShouldSelectableForNormalCase()
+		{
+			_now.Is(DateOnly.Today.Date);
+			var startDate = DateOnly.Today.AddDays(1);
+			var form = createShiftWithoutAbsence(startDate, 0, TimeZoneInfo.Utc);
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+
+			data.MultiSchedulesForShiftTrade.First().IsSelectable.Should().Be.True();
+			data.MultiSchedulesForShiftTrade.First().UnselectableReason.Should().Be.EqualTo("");
+		}
+
+		[Test]
 		public void ShouldNotSelectableWhenIHaveAbsence()
 		{
 			_now.Is(DateOnly.Today.Date);
@@ -425,7 +460,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			foreach (var date in period.DayCollection())
 			{
-				Database.WithMultiSchedulesForShiftTradeWorkflow(publishedDate)
+				Database.WithMultiSchedulesForShiftTradeWorkflow(publishedDate, new Skill("must"))
 					.WithPerson(personFromId, "logOn", timeZone)
 					.WithPeriod(DateOnly.MinValue.ToString())
 					.WithTerminalDate(DateOnly.MaxValue.ToString())
@@ -445,13 +480,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			return PersonRepository.Get(personToId);
 		}
 
-		private ShiftTradeMultiSchedulesForm createShiftInDifferentTimeZone(DateOnly date, int startHour, TimeZoneInfo timeZone)
+		private ShiftTradeMultiSchedulesForm createShiftWithoutAbsence(DateOnly date, int hourDiff, TimeZoneInfo timeZone)
 		{
 			var scenarioId = Guid.NewGuid();
 			var personFromId = Guid.NewGuid();
 			var personToId = Guid.NewGuid();
 
-			Database.WithMultiSchedulesForShiftTradeWorkflow(DateTime.Today.AddDays(10))
+			Database.WithMultiSchedulesForShiftTradeWorkflow(DateTime.Today.AddDays(10), new Skill("must"))
 				.WithPerson(personFromId, "logOn", timeZone)
 				.WithPeriod(DateOnly.MinValue.ToString())
 				.WithTerminalDate(DateOnly.MaxValue.ToString())
@@ -460,7 +495,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				.WithPerson(personToId)
 				.WithPeriod(DateOnly.MinValue.ToString())
 				.WithTerminalDate(DateOnly.MaxValue.ToString())
-				.WithSchedule(date.Date.AddHours(startHour).ToString(), date.Date.AddHours(startHour+8).ToString());
+				.WithSchedule(date.Date.AddHours(8+ hourDiff).ToString(), date.Date.AddHours(17+ hourDiff).ToString());
 
 			setPrincipal(personFromId, scenarioId);
 
@@ -503,7 +538,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			{ 
 				foreach (var date in period.DayCollection())
 				{
-					Database.WithMultiSchedulesForShiftTradeWorkflow(publishedDate)
+					Database.WithMultiSchedulesForShiftTradeWorkflow(publishedDate, new Skill("must"))
 						.WithPerson(personFromId)
 						.WithPeriod(DateOnly.MinValue.ToString())
 						.WithTerminalDate(DateOnly.MaxValue.ToString())
@@ -518,7 +553,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			{
 				foreach (var date in period.DayCollection())
 				{
-					Database.WithMultiSchedulesForShiftTradeWorkflow(publishedDate)
+					Database.WithMultiSchedulesForShiftTradeWorkflow(publishedDate, new Skill("must"))
 						.WithPerson(personFromId)	
 						.WithPeriod(DateOnly.MinValue.ToString())
 						.WithTerminalDate(DateOnly.MaxValue.ToString())

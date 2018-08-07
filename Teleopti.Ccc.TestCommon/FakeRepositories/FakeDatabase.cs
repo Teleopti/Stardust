@@ -1027,11 +1027,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
-		public FakeDatabase WithMultiSchedulesForShiftTradeWorkflow(DateTime publishedDate)
+		public FakeDatabase WithMultiSchedulesForShiftTradeWorkflow(DateTime publishedDate, ISkill skill)
 		{
 			ensureExists(_workflowControlSets, null, () => WithWorkflowControlSet(null, null));
 			_workflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(1, 10);
 			_workflowControlSet.SchedulePublishedToDate = publishedDate;
+			_workflowControlSet.AddSkillToMatchList(skill);
 			return this;
 		}
 

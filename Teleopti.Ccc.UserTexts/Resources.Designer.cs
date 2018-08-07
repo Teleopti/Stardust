@@ -33464,6 +33464,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Because of differences in skill setup between you and {0}, you cannot trade shifts on this date..
+        /// </summary>
+        public static string SkillDoNotMatch {
+            get {
+                return ResourceManager.GetString("SkillDoNotMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Skill group:.
         /// </summary>
         public static string SkillGroupColon {
