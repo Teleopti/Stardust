@@ -3,7 +3,7 @@
     data-test-clear-button>
     <i class="mdi mdi-notification-clear-all"></i>
   </button>
-  <nz-table #workspaceTable [nzSize]="'small'" [nzShowPagination]="false" [nzData]="workspaceService.people$.getValue()">
+  <nz-table #workspaceTable [nzSize]="'small'" [nzShowPagination]="false" [nzData]="workspaceService.people$.getValue()" [nzNoResult]="'NothingSelected' | translate">
     <thead>
       <tr>
         <th>{{'ActiveSelection' | translate}}

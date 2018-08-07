@@ -17617,4 +17617,7 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Failed to clear schedule for planning period {0} - {1} due to technical error. Please try again.</value>
     <comment>FailedToClearScheduleForSelectedPlanningPeriodDueToTechnicalError</comment>
   </data>
+  <data name="NothingSelected" xml:space="preserve">
+    <value>Nothing selected</value>
+  </data>
 </root>
