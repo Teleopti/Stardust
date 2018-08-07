@@ -356,6 +356,26 @@ namespace Teleopti.Ccc.WebTest.Core
 		}
 
 		[Test]
+		public void ShouldMapMinMaxTimeForOvernightOvertimeAvailabilityWithTodayDayOff()
+		{
+			var date = new DateOnly(2012, 08, 28);
+			ScheduleStorage.Add(new OvertimeAvailability(LoggedOnUser.CurrentUser(), date.AddDays(-1), new TimeSpan(20, 0, 0), new TimeSpan(28, 0, 0)));
+
+			var dayOffAssignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(LoggedOnUser.CurrentUser(), CurrentScenario.Current(), date, DayOffFactory.CreateDayOff(new Description("Dayoff")));
+			ScheduleStorage.Add(dayOffAssignment);
+
+			var result = Target.GetDaySchedule(date);
+
+			result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(0);
+			result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(-15);
+
+			result.MinMaxTime.EndTime.Days.Should().Be.EqualTo(0);
+			result.MinMaxTime.EndTime.Hours.Should().Be.EqualTo(4);
+			result.MinMaxTime.EndTime.Minutes.Should().Be.EqualTo(15);
+		}
+
+
+		[Test]
 		public void
 			ShouldMapMinMaxTimeForOvertimeAvailabilityForNightShiftStartingOnTheLastDayOfCurrentWeekOnGetDaySchedule()
 		{

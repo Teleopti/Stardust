@@ -199,6 +199,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.DaySchedule.DataProvider
 				var startTimeSpan = adjustTimeSpan(date, adjustedStart, start.TimeOfDay);
 				var endTimeSpan = adjustTimeSpan(date, end, end.TimeOfDay);
 
+				if (start.Date != end.Date && end.Date == date.Date)
+				{
+					startTimeSpan = date.Date.TimeOfDay;
+				}
+
 				var margin = TimeSpan.FromMinutes(ScheduleConsts.TimelineMarginInMinute);
 
 				return new TimePeriod(startTimeSpan.Subtract(margin), endTimeSpan.Add(margin));
