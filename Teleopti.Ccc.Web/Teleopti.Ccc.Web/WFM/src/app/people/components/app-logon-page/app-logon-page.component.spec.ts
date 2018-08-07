@@ -4,7 +4,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { NzButtonModule, NzFormModule, NzGridModule, NzTableModule } from 'ng-zorro-antd';
+import { NzButtonModule, NzFormModule, NzGridModule, NzTableModule, NzToolTipModule } from 'ng-zorro-antd';
 import { WorkspaceComponent } from '..';
 import { configureTestSuite } from '../../../../configure-test-suit';
 import { MockTranslationModule } from '../../../../mocks/translation';
@@ -38,7 +38,8 @@ describe('AppLogonPageComponent', () => {
 				NzFormModule,
 				NzGridModule,
 				NzTableModule,
-				NzButtonModule
+				NzButtonModule,
+				NzToolTipModule
 			],
 			providers: [fakeBackendProvider, WorkspaceService, NavigationService, LogonInfoService, SearchService]
 		}).compileComponents();

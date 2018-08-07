@@ -3,7 +3,7 @@ import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { NzButtonModule, NzCheckboxModule, NzDividerModule, NzFormModule, NzTableModule } from 'ng-zorro-antd';
+import { NzButtonModule, NzCheckboxModule, NzDividerModule, NzFormModule, NzTableModule, NzToolTipModule } from 'ng-zorro-antd';
 import { WorkspaceComponent } from '..';
 import { configureTestSuite } from '../../../../configure-test-suit';
 import { MockTranslationModule } from '../../../../mocks/translation';
@@ -38,7 +38,8 @@ describe('GrantPageComponent', () => {
 				FormsModule,
 				NzDividerModule,
 				NzButtonModule,
-				NzTableModule
+				NzTableModule,
+				NzToolTipModule
 			],
 			providers: [
 				GrantPageService,

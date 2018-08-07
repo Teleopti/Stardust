@@ -4,7 +4,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { NzButtonModule, NzFormModule, NzInputModule, NzTableModule } from 'ng-zorro-antd';
+import { NzButtonModule, NzFormModule, NzInputModule, NzTableModule, NzToolTipModule } from 'ng-zorro-antd';
 import { of } from 'rxjs';
 import { WorkspaceComponent } from '..';
 import { configureTestSuite } from '../../../../configure-test-suit';
@@ -44,7 +44,8 @@ describe('SearchPageComponent', () => {
 				NzFormModule,
 				NzButtonModule,
 				NzTableModule,
-				NzInputModule
+				NzInputModule,
+				NzToolTipModule
 			],
 			providers: [
 				fakeBackendProvider,
