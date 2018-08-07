@@ -92,27 +92,26 @@
 				</div>
 				<!-- ko ifnot: hasError -->
 				<div>
-					<!-- ko if: showTeamPicker -->
-					<div class="col-sm-6 col-md-6 col-lg-3">
-						<!-- ko if: showGroupings -->
-						<div class="schedule-filter-component">
-							<select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam, onOpening: initTeamsPicker}">
-								<optgroup data-bind="attr: { label: text }, foreach: children">
-									<option data-bind="text: text, value: id"></option>
-								</optgroup>
-							</select>
-						</div>
-						<!-- /ko -->
-						<!-- ko ifnot: showGroupings-->
-						<div class="schedule-filter-component">
-							<select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam, onOpening: initTeamsPicker}">
-								<option data-bind="text: text, value: id"></option>
-							</select>
-						</div>
-						<!-- /ko -->
-					</div>
-					<!-- /ko -->
+					@if (Model.ViewTeamsPermission)
+					{
+						<!-- ko if: showTeamPicker -->
+						<div class="col-sm-6 col-md-6 col-lg-3 teams-select-container">
+							<div class="schedule-filter-component">
+								<select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam, onOpening: initTeamsPicker}">
+									<!-- ko if: $parent.showGroupings -->
+									<optgroup data-bind="attr: { label: $data.text }, foreach: $data.children">
+										<option data-bind="text: $data.text, value: $data.id"></option>
+									</optgroup>
+									<!-- /ko -->
+									<!-- ko ifnot: $parent.showGroupings-->
+									<option data-bind="text: $data.text, value: $data.id"></option>
+									<!-- /ko -->
+								</select>
+							</div>
 
+						</div>
+						<!-- /ko -->
+					}
 					<div class="col-sm-7 col-md-6 col-lg-4">
 						<div class="row">
 							<div class="col-xs-6 col-md-6 col-lg-6">

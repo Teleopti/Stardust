@@ -1,6 +1,7 @@
 
 Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 	var self = this;
+	var isTeamsSelectExist = !!$(".teams-select-container").length;
 
 	self.showFabButton = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826') && Teleopti.MyTimeWeb.Common.IsHostAMobile();
 
@@ -104,6 +105,7 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 		}
 	}
 
+
 	self.setDayMixinChangeHandler(function (newDate) {
 		self.hasError(false);
 		self.errorMessage(null);
@@ -120,20 +122,24 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 				self.suspendPagingMixinChangeHandler();
 
 				self.defaultTeam(data.DefaultTeam);
+				self.selectedPageIndex(1);
 
-				if (isFirstLoad) {
-					isFirstLoad = false;
-					self.setTeamPicker([{ text: "", children: [{ id: data.DefaultTeam, text: data.DefaultTeamName }] }], {});
-					self.selectedPageIndex(1);
-					loadSchedule();
-				}
-				else {
-					isTeamPickerInitialized = true;
-					self.loadTeams(newDate, function (allTeams) {
-						self.setTeamPicker(allTeams.teams, allTeams.allTeam);
-						self.selectedPageIndex(1);
+				if (isTeamsSelectExist) {
+					if (isFirstLoad) {
+						isFirstLoad = false;
+						self.setTeamPicker([{ id: data.DefaultTeam, text: data.DefaultTeamName }], {});
 						loadSchedule();
-					});
+					}
+					else {
+						isTeamPickerInitialized = true;
+						self.loadTeams(newDate, function (allTeams) {
+							self.setTeamPicker(allTeams.teams, allTeams.allTeam);
+							loadSchedule();
+						});
+					}
+				} else {
+					self.selectedTeam(self.defaultTeam());
+					loadSchedule();
 				}
 				self.activateFilterMixinChangeHandler();
 				self.activatePagingMixinChangeHandler();
@@ -144,6 +150,7 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 				self.errorMessage(error.Message);
 			});
 	});
+
 
 	self.setFilterMixinChangeHandler(function (callback) {
 		loadSchedule();
