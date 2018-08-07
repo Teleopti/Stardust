@@ -256,32 +256,75 @@ describe('planningPeriodOverviewController', function () {
         expect(vm.optimizeRunning).toEqual(false);
     });
 
-    it('should clear schedule result and history data', function () {
-        spyOn(NoticeService, 'success').and.callThrough();
-        spyOn(planningPeriodServiceNew, 'clearSchedules').and.callThrough();
-        fakeBackend.withScheduleResult({
-            OptimizationResult: {
-                BusinessRulesValidationResults: [],
-                SkillResultList: []
-            },
-            PlanningPeriod: {
-                StartDate: "2018-06-18T00:00:00",
-                EndDate: "2018-07-15T00:00:00"
-            },
-            ScheduleResult: {
-                BusinessRulesValidationResults: [],
-                ScheduledAgentsCount: 44
-            }
-        });
-        $httpBackend.flush();
+	it('should launch clear schedule and return clear schedule is running', function () {
+		spyOn(planningPeriodServiceNew, 'clearSchedules').and.callThrough();
 
-        vm.clearSchedules();
-        $httpBackend.flush();
+		fakeBackend.withScheduleResult({
+			OptimizationResult: {
+				BusinessRulesValidationResults: [],
+				SkillResultList: []
+			},
+			PlanningPeriod: {
+				StartDate: "2018-06-18T00:00:00",
+				EndDate: "2018-07-15T00:00:00"
+			},
+			ScheduleResult: {
+				BusinessRulesValidationResults: [],
+				ScheduledAgentsCount: 44
+			}
+		});
+		$httpBackend.flush();
 
-        expect(planningPeriodServiceNew.lastJobStatus).toHaveBeenCalledWith({ id: 'a557210b-99cc-4128-8ae0-138d812974b6' });
-        expect(NoticeService.success).toHaveBeenCalledWith('SuccessClearPlanningPeriodData', 20000, true);
-    });
+		fakeBackend.withStatus({
+			ClearScheduleStatus: {
+				Failed: false,
+				HasJob: true,
+				Successful: false
+			}
+		});
+		vm.clearSchedules();
+		$httpBackend.flush();
+		
+		expect(planningPeriodServiceNew.clearSchedules).toHaveBeenCalledWith({ id: 'a557210b-99cc-4128-8ae0-138d812974b6' });
+		expect(vm.clearRunning).toEqual(true);
+	});
 
+	it('should check clear schedule progress and return clear schedule is done with success', function () {
+		spyOn(NoticeService, 'success').and.callThrough();
+		vm.clearRunning = true;
+		fakeBackend.withStatus({
+			ClearScheduleStatus: {
+				Failed: false,
+				HasJob: true,
+				Successful: true
+			}
+		});
+		$httpBackend.flush();
+
+		expect(planningPeriodServiceNew.lastJobStatus).toHaveBeenCalledWith({ id: 'a557210b-99cc-4128-8ae0-138d812974b6' });
+		expect(NoticeService.success).toHaveBeenCalledWith('SuccessClearPlanningPeriodData', 20000, true);
+		expect(vm.status).toEqual('');
+		expect(vm.clearRunning).toEqual(false);
+	});
+
+	it('should check clear schedule progress and return clear schedule is failed', function () {
+		spyOn(NoticeService, 'warning').and.callThrough();
+		vm.clearRunning = true;
+		fakeBackend.withStatus({
+			ClearScheduleStatus: {
+				Failed: true,
+				HasJob: true,
+				Successful: false
+			}
+		});
+		$httpBackend.flush();
+
+		expect(planningPeriodServiceNew.lastJobStatus).toHaveBeenCalledWith({ id: 'a557210b-99cc-4128-8ae0-138d812974b6' });
+		expect(NoticeService.warning).toHaveBeenCalledWith('FailedToClearScheduleForSelectedPlanningPeriodDueToTechnicalError', null, true);
+		expect(vm.status).toEqual('');
+		expect(vm.clearRunning).toEqual(false);
+	});
+	
     it('should launch publish for planning period return done success', function () {
         spyOn(NoticeService, 'success').and.callThrough();
         spyOn(planningPeriodServiceNew, 'publishPeriod').and.callThrough();
