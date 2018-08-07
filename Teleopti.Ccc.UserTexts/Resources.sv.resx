@@ -15637,7 +15637,7 @@ Applikationen kommer nu att stängas. </value>
   <data name="SuccessfulMessageForSavingScheduleChanges" xml:space="preserve">
     <value>Schemaändringar sparade.</value>
   </data>
-  <data name="PeopleAccess" xml:space="preserve">
+  <data name="AccessManagement" xml:space="preserve">
     <value>Hantera rättigheter</value>
   </data>
   <data name="PeopleDuplicateUsernameInForm" xml:space="preserve">

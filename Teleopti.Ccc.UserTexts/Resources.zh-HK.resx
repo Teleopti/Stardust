@@ -14636,7 +14636,7 @@ Teleopti R&amp;D</value>
   <data name="DescriptionOfMaximumWorkdayRule" xml:space="preserve">
     <value>做多連續工作日</value>
   </data>
-  <data name="PeopleAccess" xml:space="preserve">
+  <data name="AccessManagement" xml:space="preserve">
     <value>訪問</value>
   </data>
   <data name="ImportBpoImportedAt" xml:space="preserve">

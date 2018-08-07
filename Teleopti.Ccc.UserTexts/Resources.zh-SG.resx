@@ -14618,7 +14618,7 @@ Teleopti R&amp;D</value>
   <data name="ValuesShouldBeInAscendingOrderFromGoldToBronze" xml:space="preserve">
     <value>数值应按从金到铜升序排列。</value>
   </data>
-  <data name="PeopleAccess" xml:space="preserve">
+  <data name="AccessManagement" xml:space="preserve">
     <value>访问</value>
   </data>
   <data name="TextIsTooLong" xml:space="preserve">

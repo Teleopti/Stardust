@@ -15039,7 +15039,7 @@ Applikaatio sulkeutuu. </value>
   <data name="UsePrimarySkill" xml:space="preserve">
     <value>Käytä taitojen priorisointia validointiin</value>
   </data>
-  <data name="PeopleAccess" xml:space="preserve">
+  <data name="AccessManagement" xml:space="preserve">
     <value>Käyttöoikeus</value>
   </data>
   <data name="ImportBpoImportedAt" xml:space="preserve">
