@@ -27,7 +27,7 @@
         <nz-table #basicTable (nzCurrentPageDataChange)="nzOnCurrentPageDataChange($event)" (nzPageSizeChange)="nzOnPageSizeChange($event)"
           (nzPageIndexChange)="nzOnPageIndexChange($event)" [nzData]="peopleDataSet" [nzFrontPagination]="false" nzShowPagination
           [nzPageSizeOptions]="[20, 50, 100, 500]" [nzSize]="'small'" nzShowSizeChanger [nzPageIndex]="searchService.pageIndex + 1"
-          [nzPageSize]="searchService.pageSize" [nzTotal]="searchService.lastQuerySize" [nzNoResult]="emptyTable">
+          [nzPageSize]="searchService.pageSize" [nzTotal]="searchService.lastQuerySize" [nzNoResult]="'noSearchResults' | translate">
           <thead>
             <tr>
               <th nzWidth="62px" nzShowCheckbox [nzChecked]="isAllSelected()" [nzIndeterminate]="isAnySelected() && !isAllSelected()" (nzCheckedChange)="selectAllOnPage()"></th>
@@ -68,8 +68,3 @@
     </div>
   </div>
 </div>
-
-<ng-template #emptyTable>
-  <!--Change this to the correct empty table string-->
-  No data
-</ng-template>
