@@ -1,5 +1,5 @@
 <div class="workspace" data-test-workspace>
-  <button class="action" nz-button nzType="default" nzShape="circle" [nzSize]="'small'" (click)="workspaceService.clear()"
+  <button class="action" nz-button nzType="default" nzShape="circle" [nzSize]="'small'" (click)="workspaceService.clear()" [nzTitle]="'ClearAll' | translate" nzPlacement="top" nz-tooltip
     data-test-clear-button>
     <i class="mdi mdi-notification-clear-all"></i>
   </button>
