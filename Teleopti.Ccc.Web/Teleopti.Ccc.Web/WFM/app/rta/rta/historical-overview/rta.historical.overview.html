@@ -206,7 +206,7 @@
 
 	</style>
 
-	<div class="panel material-depth-1" *ngFor="let group of groupings">
+	<div class="panel material-depth-1" *ngFor="let group of groupings" style="width: 1000px">
 		<div class="card-panel-header-wrapper pointer" [ngStyle]="{'border-left': '10px solid ' + group.Color }"
 			 (click)="openCard = !openCard">
 			{{group.Name}}
@@ -216,25 +216,26 @@
 				<thead>
 				<tr>
 					<th style="width: 8.5%">Agent</th>
-					<th style="width: 10.5%">Site/Team</th>
-					<th *ngFor="let adherence of group.agentsAdherence[0].Adherence">
-						{{adherence.Date}}
-					</th>
-					<th>Adherence</th>
-					<th>Late for work</th>
+					<th style="width: 12.5%">Site/Team</th>
+					<!--<th style="width: 0px" *ngFor="let adherence of group.agentsAdherence[0].Adherence">-->
+						<!--{{// adherence.Date}}-->
+					<!--</th>-->
+					<th style="width: 15%">Adherence</th>
+					<th style="width: 15%">Late for work</th>
 				</tr>
 				</thead>
 				<tbody>
 				<tr *ngFor="let agent of group.agentsAdherence">
 					<td>{{agent.Name}}</td>
 					<td>{{agent.Team}}</td>
-					<td *ngFor="let percentage of agent.Adherence" class="cell {{percentage?.WasLateForWork ? 'late-for-work':''}}">
-						<div style="background-color: #f1f1f1; width: 75%; float:left; margin-top:5px;">
-							<div xclass="red-bar" [ngStyle]="{'background-color': percentage.Color, 'height': '10px', 'width':percentage.AdherencePercentage+'%'}">
-							</div>
-						</div>
-						<div style="width: 10%; margin-left: 6px; float:left;">{{percentage.AdherencePercentage}}%</div>
-					</td>
+					<!--<td *ngFor="let percentage of agent.Adherence" class="cell label-thing {{percentage?.WasLateForWork ? 'late-for-work':''}}">-->
+						<!--&lt;!&ndash;<div style="background-color: #f1f1f1; width: 75%; float:left; margin-top:5px;">&ndash;&gt;-->
+							<!--&lt;!&ndash;<div xclass="red-bar" [ngStyle]="{'background-color': percentage.Color, 'height': '10px', 'width':percentage.AdherencePercentage+'%'}">&ndash;&gt;-->
+							<!--&lt;!&ndash;</div>&ndash;&gt;-->
+						<!--&lt;!&ndash;</div>&ndash;&gt;-->
+						<!--<div class="label" [ngStyle]="{'background-color': percentage.Color}">{{percentage.AdherencePercentage}}</div>-->
+						<!--&lt;!&ndash;<div style="width: 10%; margin-left: 6px; float:left;">{{percentage.AdherencePercentage}}%</div>&ndash;&gt;-->
+					<!--</td>-->
 
 					<td>
 						<div style="background-color: #f1f1f1; width: 75%; float:left; margin-top:5px">
