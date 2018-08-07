@@ -126,6 +126,8 @@
     <Compile Include="Bindings\Generic\Messages\MessageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\OutboundStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PhoneStateStepDefinitions.cs" />
+    <Compile Include="BusinessUnitSelectionTest.cs" />
+    <Compile Include="FullIntegrationTestAttribute.cs" />
     <Compile Include="MyTime\ShiftTradeRequestViewShowingMultipleShifts.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

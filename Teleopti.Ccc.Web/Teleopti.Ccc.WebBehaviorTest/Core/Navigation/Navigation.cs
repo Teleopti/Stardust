@@ -451,6 +451,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			GoToPage("wfm/#/rta/agents/?pollingInterval=100");
 		}
 
+		public static void GotoRealTimeAdherenceAllAgents()
+		{
+			GoToPage("wfm/#/rta/agents/?showAllAgents=true&pollingInterval=100");
+		}
+
 		public static void GotoRealTimeAdherenceSites()
 		{
 			GoToPage("wfm/#/rta");
