@@ -14,21 +14,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly IEventPopulatingPublisher _eventPopulatingPublisher;
-		private readonly ClearPlanningPeriodSchedule _clearPlanningPeriodSchedule;
 
-		public ClearPlanningPeriodScheduleCommandHandler(ClearPlanningPeriodSchedule clearPlanningPeriodSchedule, IPlanningPeriodRepository planningPeriodRepository, ILoggedOnUser loggedOnUser, IJobResultRepository jobResultRepository, IEventPopulatingPublisher eventPopulatingPublisher)
+		public ClearPlanningPeriodScheduleCommandHandler(IPlanningPeriodRepository planningPeriodRepository, ILoggedOnUser loggedOnUser, IJobResultRepository jobResultRepository, IEventPopulatingPublisher eventPopulatingPublisher)
 		{
-			_clearPlanningPeriodSchedule = clearPlanningPeriodSchedule;
 			_planningPeriodRepository = planningPeriodRepository;
 			_loggedOnUser = loggedOnUser;
 			_jobResultRepository = jobResultRepository;
 			_eventPopulatingPublisher = eventPopulatingPublisher;
-		}
-
-		[UnitOfWork]
-		public virtual void ClearSchedules(Guid planningPeriodId)
-		{
-			_clearPlanningPeriodSchedule.ClearSchedules(planningPeriodId);
 		}
 
 		[UnitOfWork]
