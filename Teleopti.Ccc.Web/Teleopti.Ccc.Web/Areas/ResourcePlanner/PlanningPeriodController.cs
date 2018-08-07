@@ -114,7 +114,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					CurrentStep = lastSchedulingJobResult.Details.Count(),
 					TotalSteps = 2,
 					Successful = lastSchedulingJobResult.FinishedOk,
-					Failed = lastSchedulingJobResult.HasError()
+					Failed = lastSchedulingJobResult.HasError(),
+					LastJobId = lastSchedulingJobResult.Id.Value
 				};
 			}
 			
@@ -129,7 +130,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				{
 					HasJob = true,
 					Successful = lastIntradayOptimizationJobResult.FinishedOk,
-					Failed = lastIntradayOptimizationJobResult.HasError()
+					Failed = lastIntradayOptimizationJobResult.HasError(),
+					LastJobId = lastIntradayOptimizationJobResult.Id.Value
 				};
 			}
 
@@ -144,7 +146,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				{
 					HasJob = true,
 					Successful = lastClearScheduleJobResult.FinishedOk,
-					Failed = lastClearScheduleJobResult.HasError()
+					Failed = lastClearScheduleJobResult.HasError(),
+					LastJobId = lastClearScheduleJobResult.Id.Value
 				};
 			}
 

@@ -11,7 +11,7 @@
     var vm = this;
     var selectedPpId = $stateParams.ppId ? $stateParams.ppId : null;
     var checkProgressRef;
-    var preMessage = '';
+    var lastJobId = '';
     vm.planningGroup = planningGroupInfo ? planningGroupInfo : null;
     vm.selectedPp = selectedPp ? selectedPp : {};
     vm.totalAgents = selectedPp ? selectedPp.TotalAgents : 0;
@@ -122,7 +122,10 @@
               }
               if (schedulingStatus.Failed) {
                 vm.schedulingPerformed = false;
-                return msgForScheduleFail(schedulingStatus.CurrentStep);
+                if (schedulingStatus.LastJobId !== lastJobId){
+                	lastJobId = schedulingStatus.LastJobId;
+					return msgForScheduleFail(schedulingStatus.CurrentStep);
+				} 
               }
               if (schedulingStatus.Successful && vm.schedulingPerformed) {
                 vm.schedulingPerformed = false;
@@ -203,13 +206,13 @@
     }
 
     function msgForScheduleFail(step) {
-      if (step === 0) {
+      if (step === 0 || step === 1) {
         handleScheduleOrOptimizeError(
           $translate.instant('FailedToScheduleForSelectedPlanningPeriodDueToTechnicalError')
             .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
             .replace('{1}', moment(vm.selectedPp.EndDate).format('L'))
         );
-      } else if (step === 1) {
+      } else if (step === 2) {
         handleScheduleOrOptimizeError(
           $translate.instant('FailedToOptimizeDayoffForSelectedPlanningPeriodDueToTechnicalError')
             .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
@@ -221,12 +224,7 @@
     function handleScheduleOrOptimizeError(message) {
       if (!message)
         message = $translate.instant('AnErrorOccurredPleaseTryAgain');
-      if (message === preMessage) {
-        return
-      } else {
-        NoticeService.warning(message, null, true);
-        preMessage = message;
-      }
+      NoticeService.warning(message, null, true);
     }
 
     function intraOptimize() {

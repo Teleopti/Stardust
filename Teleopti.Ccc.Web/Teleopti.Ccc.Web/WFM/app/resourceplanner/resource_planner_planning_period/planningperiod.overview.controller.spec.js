@@ -1,5 +1,5 @@
 'use strict';
-describe('planningPeriodOverviewController', function () {
+fdescribe('planningPeriodOverviewController', function () {
     var $httpBackend,
         $controller,
         $injector,
@@ -199,10 +199,30 @@ describe('planningPeriodOverviewController', function () {
         $httpBackend.flush();
 
         expect(planningPeriodServiceNew.lastJobStatus).toHaveBeenCalledWith({ id: 'a557210b-99cc-4128-8ae0-138d812974b6' });
-        expect(NoticeService.warning).toHaveBeenCalledWith('FailedToOptimizeDayoffForSelectedPlanningPeriodDueToTechnicalError', null, true);
+        expect(NoticeService.warning).toHaveBeenCalledWith('FailedToScheduleForSelectedPlanningPeriodDueToTechnicalError', null, true);
         expect(vm.status).toEqual('');
         expect(vm.schedulingPerformed).toEqual(false);
     });
+
+	it('should check progress and return schedule is failed by step 2', function () {
+		spyOn(NoticeService, 'warning').and.callThrough();
+		vm.schedulingPerformed = true;
+		fakeBackend.withStatus({
+			SchedulingStatus: {
+				CurrentStep: 2,
+				Failed: true,
+				HasJob: true,
+				Successful: false,
+				TotalSteps: 2
+			}
+		});
+		$httpBackend.flush();
+
+		expect(planningPeriodServiceNew.lastJobStatus).toHaveBeenCalledWith({ id: 'a557210b-99cc-4128-8ae0-138d812974b6' });
+		expect(NoticeService.warning).toHaveBeenCalledWith('FailedToOptimizeDayoffForSelectedPlanningPeriodDueToTechnicalError', null, true);
+		expect(vm.status).toEqual('');
+		expect(vm.schedulingPerformed).toEqual(false);
+	});
 
     it('should launch intraday optimization and return intraday optimization is running', function () {
         spyOn(planningPeriodServiceNew, 'launchIntraOptimize').and.callThrough();
