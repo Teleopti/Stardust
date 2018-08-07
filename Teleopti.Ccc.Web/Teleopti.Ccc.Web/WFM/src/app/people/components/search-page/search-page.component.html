@@ -4,7 +4,7 @@
       <div class="con-row">
         <div class="con-flex">
           <nz-input-group [nzSuffix]="suffixTemplate" nzPrefixIcon="anticon anticon-search">
-            <input nz-input [placeholder]="'Search' | translate" [formControl]="searchControl" (keyup.enter)="onSearch()" data-test-searchinput>
+            <input nz-input [placeholder]="'Search' | translate" [formControl]="searchControl" (keyup.enter)="onSearch()" autofocus data-test-searchinput>
           </nz-input-group>
           <ng-template #suffixTemplate>
             <i class="anticon anticon-close-circle" (click)="searchControl.setValue('')" *ngIf="searchControl.value.length"></i>
