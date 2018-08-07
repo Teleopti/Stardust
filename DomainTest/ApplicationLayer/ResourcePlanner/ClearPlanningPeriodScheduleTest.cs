@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			var endDate = new DateOnly(2017, 05, 07);
 			var team = new Team().WithId();
 			var activity = ActivityRepository.Has("_");
-			var scenario = ScenarioRepository.Has("some name");
+			ScenarioRepository.Has("some name");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var skill = SkillRepository.Has("skill", activity);
