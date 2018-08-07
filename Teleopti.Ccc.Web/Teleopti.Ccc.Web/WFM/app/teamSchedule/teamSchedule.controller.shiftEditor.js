@@ -184,7 +184,7 @@
 				for (var i = 0; i < messages.length; i++) {
 					var message = messages[i];
 					if (message.DomainReferenceId === vm.personId
-						&& serviceDateFormatHelper.getDateOnly(message.StartDate.substring(1, message.StartDate.length)) === vm.date) {
+						&& moment(vm.date).isBetween(getMomentDate(message.StartDate), getMomentDate(message.EndDate), 'day', '[]')) {
 						if (vm.trackId !== message.TrackId) {
 							vm.scheduleChanged = true;
 						}
@@ -192,6 +192,10 @@
 					}
 				}
 			}, 300);
+		}
+
+		function getMomentDate(date) {
+			return moment(serviceDateFormatHelper.getDateOnly(date.substring(1, date.length)));
 		}
 
 		function getChangedLayers() {
