@@ -111,9 +111,19 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return getLastJobResult(JobCategory.WebIntradayOptimization);
 		}
 
+		public virtual IJobResult GetLastClearScheduleJob()
+		{
+			return getLastJobResult(JobCategory.WebClearSchedule);
+		}
+
 		public virtual void Reset()
 		{
-			JobResults.Clear();
+			var clearJobs = _jobResults.Where(x => x.JobCategory == JobCategory.WebClearSchedule).ToArray();
+			_jobResults.Clear();
+			foreach (var clearJob in clearJobs)
+			{
+				_jobResults.Add(clearJob);
+			}
 			_state = PlanningPeriodState.New;
 		}
 

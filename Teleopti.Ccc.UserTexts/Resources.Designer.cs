@@ -12170,6 +12170,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to clear schedule for planning period {0} - {1} due to technical error. Please try again..
+        /// </summary>
+        public static string FailedToClearScheduleForSelectedPlanningPeriodDueToTechnicalError1 {
+            get {
+                return ResourceManager.GetString("FailedToClearScheduleForSelectedPlanningPeriodDueToTechnicalError1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to create scheduling job for selected planning period..
         /// </summary>
         public static string FailedToCreateSchedulingJobForSelectedPlanningPeriod {

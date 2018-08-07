@@ -17616,4 +17616,8 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Because of differences in skill setup between you and {0}, you cannot trade shifts on this date.</value>
     <comment>Use in MyTime shift  trade for multiple schedules. A message when the skills are not match between logged on user and person to. {0} is the name of person to.</comment>
   </data>
+  <data name="FailedToClearScheduleForSelectedPlanningPeriodDueToTechnicalError1" xml:space="preserve">
+    <value>Failed to clear schedule for planning period {0} - {1} due to technical error. Please try again.</value>
+    <comment>FailedToClearScheduleForSelectedPlanningPeriodDueToTechnicalError</comment>
+  </data>
 </root>

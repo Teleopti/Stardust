@@ -36,6 +36,31 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 		public FakePersonAbsenceRepository PersonAbsenceRepository;
 		public FakeMeetingRepository MeetingRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
+		
+		[Test]
+		public void ShouldClearJobResults()
+		{
+			var startDate = new DateOnly(2017, 05, 01);
+			var endDate = new DateOnly(2017, 05, 07);
+			var team = new Team().WithId();
+			var activity = ActivityRepository.Has("_");
+			var scenario = ScenarioRepository.Has("some name");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var skill = SkillRepository.Has("skill", activity);
+			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), team,
+				new SchedulePeriod(startDate, SchedulePeriodType.Week, 1), ruleSet, skill);
+			var planningGroup = new PlanningGroup("_").WithId().AddFilter(new TeamFilter(team));
+			PlanningGroupRepository.Has(planningGroup);
+			var planningPeriod = PlanningPeriodRepository.Has(startDate, 1, SchedulePeriodType.Week, planningGroup);
+			planningPeriod.JobResults.Add(new JobResult(JobCategory.WebSchedule, new DateOnlyPeriod(startDate, endDate), agent, DateTime.UtcNow));
+			planningPeriod.JobResults.Add(new JobResult(JobCategory.WebIntradayOptimization, new DateOnlyPeriod(startDate, endDate), agent, DateTime.UtcNow));
+			planningPeriod.JobResults.Add(new JobResult(JobCategory.WebClearSchedule, new DateOnlyPeriod(startDate, endDate), agent, DateTime.UtcNow));
+
+			Target.ClearSchedules(planningPeriod.Id.GetValueOrDefault());
+
+			planningPeriod.JobResults.Single().JobCategory.Should().Be.EqualTo(JobCategory.WebClearSchedule);
+		}
 
 		[Test]
 		public void ShouldClearAssignmentWithinRange()

@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 
 					mergeScheduleResultIntoOptimizationResult(schedulingResult, optimizationResult);
 				}
-				catch (Newtonsoft.Json.JsonSerializationException)
+				catch (JsonSerializationException)
 				{
 				}
 
@@ -133,10 +133,26 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				};
 			}
 
+			var lastClearScheduleJobResult = planningPeriod.GetLastClearScheduleJob();
+			dynamic clearScheduleStatus = new
+			{
+				HasJob = false
+			};
+			if (lastClearScheduleJobResult != null)
+			{
+				clearScheduleStatus = new
+				{
+					HasJob = true,
+					Successful = lastClearScheduleJobResult.FinishedOk,
+					Failed = lastClearScheduleJobResult.HasError()
+				};
+			}
+
 			var status = new
 			{
 				SchedulingStatus = schedulingStatus,
-				IntradayOptimizationStatus = intradayOptimizationStatus
+				IntradayOptimizationStatus = intradayOptimizationStatus,
+				ClearScheduleStatus = clearScheduleStatus
 			};
 			
 			return Ok(status);

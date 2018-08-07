@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy
 		void Publish(params IPerson[] people);
 		IJobResult GetLastSchedulingJob();
 		IJobResult GetLastIntradayOptimizationJob();
+		IJobResult GetLastClearScheduleJob();
 		void Reset();
 	}
 

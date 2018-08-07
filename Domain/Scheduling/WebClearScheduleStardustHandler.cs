@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				$"Web Clear Schedule started for PlanningPeriod {@event.PlanningPeriodId} and JobResultId is {@event.JobResultId}");
 			try
 			{
-				_clearPlanningPeriodSchedule.ClearSchedules(@event.PlanningPeriodId);
+				ClearSchedule(@event);
 				SaveDetailToJobResult(@event, DetailLevel.Info, null);
 			}
 			catch (Exception e)
@@ -39,6 +39,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				SaveDetailToJobResult(@event, DetailLevel.Error, e);
 				throw;
 			}
+		}
+
+		[UnitOfWork]
+		protected virtual void ClearSchedule(WebClearScheduleStardustEvent @event)
+		{
+			_clearPlanningPeriodSchedule.ClearSchedules(@event.PlanningPeriodId);
 		}
 
 		[UnitOfWork]

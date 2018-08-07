@@ -94,14 +94,7 @@
       vm.clearRunning = true;
       vm.status = $translate.instant('ClearScheduleResultAndHistoryData');
       return planningPeriodServiceNew.clearSchedules({ id: selectedPpId }).$promise.then(function () {
-        vm.clearRunning = false;
-        vm.isScheduled = false;
-        vm.scheduledAgents = 0;
-        vm.dayNodes = undefined;
-        vm.status = "";
-        NoticeService.success($translate.instant('SuccessClearPlanningPeriodData')
-          .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
-          .replace('{1}', moment(vm.selectedPp.EndDate).format('L')), 20000, true);
+      	checkProgress();
       });
     }
 
@@ -166,6 +159,36 @@
 							.replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
 							.replace('{1}', moment(vm.selectedPp.EndDate).format('L')));
 				}
+			}
+			
+			var clearScheduleStatus = result.ClearScheduleStatus;
+			if (!clearScheduleStatus||!clearScheduleStatus.HasJob){
+				vm.clearRunning = false;
+			} else{
+				if (!clearScheduleStatus.Successful && !clearScheduleStatus.Failed){
+					vm.clearRunning = true;
+					vm.status = $translate.instant('ClearScheduleResultAndHistoryData');
+					return;
+				} 
+				if (clearScheduleStatus.Successful && vm.clearRunning) {
+					vm.clearRunning = false;
+					vm.isScheduled = false;
+					vm.scheduledAgents = 0;
+					vm.dayNodes = undefined;
+					vm.status = "";
+					NoticeService.success($translate.instant('SuccessClearPlanningPeriodData')
+						.replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
+						.replace('{1}', moment(vm.selectedPp.EndDate).format('L')), 20000, true);
+					return;
+				}
+				if (clearScheduleStatus.Failed) {
+					vm.clearRunning = false;
+					vm.status = "";
+					return handleScheduleOrOptimizeError(
+						$translate.instant('FailedToClearScheduleForSelectedPlanningPeriodDueToTechnicalError')
+							.replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
+							.replace('{1}', moment(vm.selectedPp.EndDate).format('L')));
+				} 
 			}
           });
       }
