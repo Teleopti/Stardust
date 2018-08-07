@@ -207,6 +207,7 @@ wfm
 					}
 				})
 			);
+			preloads.push(rtaDataService.load);
 			var preloadDone = false;
 
 			$rootScope.$on('$stateChangeStart', function(event, next, toParams) {
@@ -297,7 +298,5 @@ wfm
 			}
 
 			TabShortCut.unifyFocusStyle();
-			
-			rtaDataService.load();
 		}
 	]);

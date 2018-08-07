@@ -17,8 +17,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	[FullIntegrationTest]
 	public class BusinessUnitSelectionTest
 	{
-		public RealTimeAdherenceAgentsDefinitions RealTimeAdherence;
-
 		[Test]
 		public void ShouldDisplayPermissionRolesForSelectedBusinessUnit()
 		{
@@ -49,7 +47,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Interactions.AssertAnyContains(".wfm-list li", "role 2");
 		}
 
-		[Test, Ignore("#77113")]
+		[Test]
 		public void ShouldDisplayRtaOrganizationForSelectedBusinessUnit()
 		{
 			DataMaker.Data().Apply(new RoleConfigurable {Name = "full access", AccessToEverything = true, AccessToEveryone = true});
