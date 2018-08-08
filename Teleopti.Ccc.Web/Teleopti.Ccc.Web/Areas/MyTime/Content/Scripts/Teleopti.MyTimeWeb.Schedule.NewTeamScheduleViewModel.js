@@ -21,7 +21,7 @@
 	self.isDesktopEnabled = ko.observable(
 		!self.isHostAMobile && Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_NewTeamScheduleViewDesktop_76313')
 	);
-
+	
 	self.selectedDate = ko.observable(moment());
 	self.displayDate = ko.observable(self.selectedDate().format(dateOnlyFormat));
 	self.availableTeams = ko.observableArray();
@@ -109,7 +109,7 @@
 		}
 	};
 
-	self.readTeamsData = function(data) {
+	self.readTeamsData = function (data) {
 		setAvailableTeams(data.allTeam, data.teams);
 	};
 

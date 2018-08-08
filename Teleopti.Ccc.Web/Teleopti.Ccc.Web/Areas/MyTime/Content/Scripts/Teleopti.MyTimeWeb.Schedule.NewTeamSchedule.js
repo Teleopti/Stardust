@@ -63,8 +63,14 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 		});
 	}
 
+	
 	function setupFilterClickFn() {
-		$('.new-teamschedule-filter').click(function(e) {
+		var hasLoadedGroupAndTeams = false;
+		$('.new-teamschedule-filter').click(function (e) {
+			if (!hasLoadedGroupAndTeams) {
+				loadGroupAndTeams();
+				hasLoadedGroupAndTeams = true;
+			}
 			e.preventDefault();
 			e.stopPropagation();
 
@@ -312,10 +318,18 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 		ko.applyBindings(vm, $('#page')[0]);
 	}
 
-	function fetchData(momentDate) {
-		showLoadingGif();
-		dataService.loadGroupAndTeams(function(teams) {
+	function loadGroupAndTeams() {
+		dataService.loadGroupAndTeams(function (teams) {
 			vm.readTeamsData(teams);
+			vm.selectedTeam(-1);
+			vm.readDefaultTeamData({ DefaultTeam: vm.defaultTeamId });
+		});
+
+	}
+
+	function fetchData(momentDate) {
+
+			showLoadingGif();
 
 			dataService.loadDefaultTeam(function(defaultTeam) {
 				vm.readDefaultTeamData(defaultTeam);
@@ -332,7 +346,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 					fetchDataSuccessCallback();
 				});
 			});
-		});
+		
 	}
 
 	function focusMySchedule() {
