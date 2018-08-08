@@ -245,6 +245,8 @@ wfm
 				'main',
 				'skillprio',
 				'teapot',
+				'rtatool',
+				'rtatracer',
 				'resourceplanner.importschedule',
 				'resourceplanner.archiveschedule',
 				'dataprotection'
