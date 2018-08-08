@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 				}
 
 				var remainingAllowanceMinutes = getRemainingAllowanceMinutes(personPeriod, defaultScenario, budgetDay, currentDay);
-				var requestedAbsenceMinutes = calculateRequestedMinutes(currentDay, absenceRequest.Period, scheduleRange, personPeriod).TotalMinutes;
+				var requestedAbsenceMinutes = calculateRequestedMinutes(currentDay, absenceRequest.Period, scheduleRange, personPeriod, absenceRequest.Person).TotalMinutes;
 				var addedBefore = schedulingResultStateHolder.AddedAbsenceMinutesDuringCurrentRequestHandlingCycle(budgetDay);
 				remainingAllowanceMinutes -= addedBefore;
 
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 		}
 
 		private TimeSpan calculateRequestedMinutes(DateOnly currentDay, DateTimePeriod requestedPeriod,
-			IScheduleRange scheduleRange, IPersonPeriod personPeriod)
+			IScheduleRange scheduleRange, IPersonPeriod personPeriod, IPerson person)
 		{
 			var requestedTime = TimeSpan.Zero;
 			var scheduleDay = scheduleRange.ScheduledDay(currentDay);
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 			if (scheduleDay.IsScheduled() && visualLayerCollectionPeriod.HasValue)
 			{
 				//special case
-				var intersectedPeriod = requestedPeriod.Intersection(currentDay.ToDateTimePeriod(TimeZoneInfo.Utc));
+				var intersectedPeriod = requestedPeriod.Intersection(currentDay.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone()));
 				if (intersectedPeriod.HasValue && intersectedPeriod.Value.ElapsedTime().Equals(new TimeSpan(0, 23, 59, 0)))
 				{
 					requestedPeriod = new DateTimePeriod(requestedPeriod.StartDateTime, visualLayerCollectionPeriod.Value.EndDateTime);

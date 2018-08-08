@@ -469,7 +469,68 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			result.IsValid.Should().Be.EqualTo(true);
 		}
 
+		[Test]
+		public void ShouldUseWholeShiftWhileCalculatingBudgetAndUseCorrectTimezone()
+		{
+			var absence = AbsenceFactory.CreateAbsence("holiday");
+			absence.InContractTime = true;
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			ScenarioRepository.Add(scenario);
+			var budgetGroup = getBudgetGroup();
+			BudgetGroupRepository.Add(budgetGroup);
 
+			var budgetDayOne = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 15))
+			{
+				FulltimeEquivalentHours = 8d,
+				ShrinkedAllowance = 1,
+				AbsenceOverride = 0d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			//should need this
+			var budgetDayTwo = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 16))
+			{
+				FulltimeEquivalentHours = 8d,
+				ShrinkedAllowance = 1,
+				AbsenceOverride = 0d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			BudgetDayRepository.Add(budgetDayOne);
+			BudgetDayRepository.Add(budgetDayTwo);
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2018, 08, 15));
+			personPeriod.BudgetGroup = budgetGroup;
+
+
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new BudgetGroupAllowanceValidator(),
+				Period = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+
+			var personOne = PersonFactory.CreatePerson(wfcs).WithId();
+			personOne.AddPersonPeriod(personPeriod);
+			personOne.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+
+			var absenceRequest = new AbsenceRequest(absence,
+				new DateTimePeriod(new DateTime(2018, 08, 14, 22, 0, 0, DateTimeKind.Utc),
+					new DateTime(2018, 08, 15, 21, 59, 0, DateTimeKind.Utc)));
+			var personRequest = new PersonRequest(personOne, absenceRequest).WithId();
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 15, 20, 0, 0, DateTimeKind.Utc),
+				new DateTime(2018, 08, 16, 6, 0, 0, DateTimeKind.Utc)));
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 17, 13));
+			scheduleDictionary.AddPersonAssignment(assignment);
+			SchedulingResultStateHolder.Schedules = scheduleDictionary;
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+				ResourceCalculation, BudgetGroupAllowanceSpecification);
+			var result = Target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
+			result.IsValid.Should().Be.EqualTo(false);
+		}
 
 		private static IBudgetGroup getBudgetGroup()
 		{
