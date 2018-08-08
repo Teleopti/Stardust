@@ -184,42 +184,46 @@ wfm
 		) {
 			$rootScope.isAuthenticated = false;
 
-			$rootScope.$watchGroup(['toggleLeftSide', 'toggleRightSide'], function() {
-				$timeout(function() {
+			$rootScope.$watchGroup(['toggleLeftSide', 'toggleRightSide'], function () {
+				$timeout(function () {
 					$rootScope.$broadcast('sidenav:toggle');
 				}, 500);
 			});
 
-			$rootScope.$on('$localeChangeSuccess', function() {
+			$rootScope.$on('$localeChangeSuccess', function () {
 				if ($locale.id === 'zh-cn') $locale.DATETIME_FORMATS.FIRSTDAYOFWEEK = 0;
 			});
 
 			var preloads = [];
 			preloads.push(toggleService.togglesLoaded);
-			preloads.push(initializeUserInfo().then(function () {
-				// any preloads than requires selected business unit
-				rtaDataService.load(); // dont return promise, it should be async
-			}));
-			preloads.push(initializePermissionCheck());
 			preloads.push(
-				$http.get('../api/Global/Version').then(function(response) {
+				$q.all([
+					initializeUserInfo(),
+					initializePermissionCheck()
+				]).then(function () {
+					// any preloads than requires selected business unit and/or permission check
+					if (permitted('rta'))
+						rtaDataService.load(); // dont return promise, async call
+				}));
+			preloads.push(
+				$http.get('../api/Global/Version').then(function (response) {
 					$rootScope.version = response.data;
 					$http.defaults.headers.common['X-Client-Version'] = $rootScope.version;
 				})
 			);
 			var preloadDone = false;
 
-			$rootScope.$on('$stateChangeStart', function(event, next, toParams) {
+			$rootScope.$on('$stateChangeStart', function (event, next, toParams) {
 				if (preloadDone) {
-					if (!permitted(event, next)) {
+					if (!permitted(internalNameOf(next))) {
 						event.preventDefault();
-						notPermitted(next);
+						notPermitted(internalNameOf(next));
 					}
 					return;
 				}
 				preloadDone = true;
 				event.preventDefault();
-				$q.all(preloads).then(function() {
+				$q.all(preloads).then(function () {
 					$state.go(next, toParams);
 				});
 			});
@@ -245,55 +249,49 @@ wfm
 			];
 
 			function initializePermissionCheck() {
-				return areasService.getAreasWithPermission().then(function(data) {
+				return areasService.getAreasWithPermission().then(function (data) {
 					permittedAreas = data;
-					return areasService.getAreasList().then(function(data) {
+					return areasService.getAreasList().then(function (data) {
 						areas = data;
 					});
 				});
 			}
 
-			function permitted(event, next) {
-				var name = next.name.split('.')[0];
-				var url = next.url && next.url.split('/')[1];
-
-				var permitted = alwaysPermittedAreas.some(function(a) {
-					return a === next.name.toLowerCase();
+			function permitted(name) {
+				var permitted = alwaysPermittedAreas.some(function (a) {
+					return a === name.toLowerCase();
 				});
-
 				if (!permitted)
-					permittedAreas.forEach(function(area) {
-						if (name && (area.InternalName.indexOf(name) > -1 || name.indexOf(area.InternalName) > -1)) {
-							permitted = true;
-						} else if (
-							url &&
-							(area.InternalName.indexOf(url) > -1 || url.indexOf(area.InternalName) > -1)
-						) {
-							permitted = true;
-						}
+					permitted = permittedAreas.some(function (a) {
+						return a.InternalName === name;
 					});
-
 				return permitted;
 			}
 
-			function notPermitted(next) {
-				$state.go('main');
-				var moduleName;
-				var name = next.name.split('.')[0];
-				var url = next.url && next.url.split('/')[1];
-				areas.forEach(function(area) {
-					if (name && (area.InternalName.indexOf(name) > -1 || name.indexOf(area.InternalName) > -1)) {
-						moduleName = area.Name;
-					} else if (url && (area.InternalName.indexOf(url) > -1 || url.indexOf(area.InternalName) > -1)) {
-						moduleName = area.Name;
-					}
-				});
+			function notPermitted(internalName) {
 				noticeService.error(
 					"<span class='test-alert'></span>" +
-						$translate.instant('NoPermissionToViewWFMModuleErrorMessage').replace('{0}', moduleName),
+					$translate.instant('NoPermissionToViewWFMModuleErrorMessage').replace('{0}', nameOf(internalName)),
 					null,
 					false
 				);
+				$state.go('main');
+			}
+
+			function internalNameOf(o) {
+				var name = o.name;
+				name = name.split('.')[0];
+				name = name.split('-')[0];
+				return name;
+			}
+
+			function nameOf(internalName) {
+				var name;
+				areas.forEach(function (area) {
+					if (area.InternalName == internalName)
+						name = area.Name;
+				});
+				return name;
 			}
 
 			TabShortCut.unifyFocusStyle();
