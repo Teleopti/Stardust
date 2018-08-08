@@ -196,7 +196,10 @@ wfm
 
 			var preloads = [];
 			preloads.push(toggleService.togglesLoaded);
-			preloads.push(initializeUserInfo());
+			preloads.push(initializeUserInfo().then(function () {
+				// any preloads than requires selected business unit
+				rtaDataService.load(); // dont return promise, it should be async
+			}));
 			preloads.push(initializePermissionCheck());
 			preloads.push(
 				$http.get('../api/Global/Version').then(function(response) {
@@ -207,7 +210,6 @@ wfm
 					}
 				})
 			);
-			preloads.push(rtaDataService.load);
 			var preloadDone = false;
 
 			$rootScope.$on('$stateChangeStart', function(event, next, toParams) {
