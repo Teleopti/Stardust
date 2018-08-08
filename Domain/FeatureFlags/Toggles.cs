@@ -161,7 +161,8 @@
 		Tenant_PurgeLogonAttempts_75782,
 		Tenant_PurgeNoneEmployeesData_76291,
 		Staffing_BPO_ClearStaffing_75498,
-		Staffing_BPO_ExportMultipleSkills_74968
+		Staffing_BPO_ExportMultipleSkills_74968,
+		Wfm_Staffing_RemoveDeletedHeadsFromReadmodel_77049
 		// ReSharper restore InconsistentNaming
 	}
 }

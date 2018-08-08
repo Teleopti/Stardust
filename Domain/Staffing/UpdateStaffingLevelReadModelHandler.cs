@@ -21,14 +21,16 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(UpdateStaffingLevelReadModelHandler));
+		private readonly UpdateStaffingLevelReadModelStartDate _updateStaffingLevelReadModelStartDate;
 
-		public UpdateStaffingLevelReadModelHandler(IUpdateStaffingLevelReadModel updateStaffingLevelReadModel, INow now, IJobStartTimeRepository jobStartTimeRepository, ICurrentBusinessUnit currentBusinessUnit, ICurrentUnitOfWork currentUnitOfWork)
+		public UpdateStaffingLevelReadModelHandler(IUpdateStaffingLevelReadModel updateStaffingLevelReadModel, INow now, IJobStartTimeRepository jobStartTimeRepository, ICurrentBusinessUnit currentBusinessUnit, ICurrentUnitOfWork currentUnitOfWork, UpdateStaffingLevelReadModelStartDate updateStaffingLevelReadModelStartDate)
 		{
 			_updateStaffingLevelReadModel = updateStaffingLevelReadModel;
 			_now = now;
 			_jobStartTimeRepository = jobStartTimeRepository;
 			_currentBusinessUnit = currentBusinessUnit;
 			_currentUnitOfWork = currentUnitOfWork;
+			_updateStaffingLevelReadModelStartDate = updateStaffingLevelReadModelStartDate;
 		}
 
 		[AsSystem]
@@ -48,7 +50,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 				jobLockTimer.Start();
 				_jobStartTimeRepository.UpdateLockTimestamp(@event.LogOnBusinessUnitId);
 				var now = _now.UtcDateTime();
-				var period = new DateTimePeriod(now.AddDays(-1).AddHours(-1), now.AddDays(@event.Days).AddHours(1));
+				_updateStaffingLevelReadModelStartDate.RememberStartDateTime(now.AddDays(-1).AddHours(-1));
+				var period = new DateTimePeriod(_updateStaffingLevelReadModelStartDate.StartDateTime, now.AddDays(@event.Days).AddHours(1));
 
 				_updateStaffingLevelReadModel.Update(period);
 				var current = _currentUnitOfWork.Current();
@@ -77,5 +80,17 @@ namespace Teleopti.Ccc.Domain.Staffing
 		{
 			_jobStartTimeRepository.UpdateLockTimestamp(_currentBusinessUnit.Current().Id.GetValueOrDefault());
 		}
+	}
+
+	public class UpdateStaffingLevelReadModelStartDate
+	{
+		private DateTime _startDateTime;
+
+		public void RememberStartDateTime(DateTime dateTime)
+		{
+			_startDateTime = dateTime;
+		}
+
+		public DateTime StartDateTime => _startDateTime;
 	}
 }

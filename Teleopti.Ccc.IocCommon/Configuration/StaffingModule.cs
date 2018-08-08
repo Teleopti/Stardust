@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -34,6 +35,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			
 			builder.RegisterType<ExportForecastAndStaffingFile>().SingleInstance();
 			builder.RegisterType<ExportStaffingPeriodValidationProvider>().As<ExportStaffingPeriodValidationProvider>().SingleInstance();
+
+			builder.RegisterType<UpdateStaffingLevelReadModelStartDate>().SingleInstance();
+			if (_configuration.Toggle(Toggles.Wfm_Staffing_RemoveDeletedHeadsFromReadmodel_77049))
+				builder.RegisterType<RemoveDeletedStaffingHeads>().As<IRemoveDeletedStaffingHeads>().SingleInstance();
+			else
+				builder.RegisterType<RemoveDeletedStaffingHeadsToggleOff>().As<IRemoveDeletedStaffingHeads>().SingleInstance();
+
+			
 		}
 	}
 }

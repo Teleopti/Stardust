@@ -372,6 +372,7 @@
     <Compile Include="Repositories\PersonAccessAuditRepository.cs" />
     <Compile Include="Repositories\PersonLoadAllWithAssociation.cs" />
     <Compile Include="Repositories\PurgeSettingRepository.cs" />
+    <Compile Include="Repositories\RemoveDeletedStaffingHeads.cs" />
     <Compile Include="Repositories\RequestPeriod.cs" />
     <Compile Include="Repositories\ShiftCategorySelectionRepository.cs" />
     <Compile Include="Repositories\ShiftCategoryUsageFinder.cs" />
