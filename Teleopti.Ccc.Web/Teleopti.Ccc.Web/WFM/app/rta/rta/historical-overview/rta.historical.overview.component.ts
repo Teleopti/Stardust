@@ -86,11 +86,11 @@ export class RtaHistoricalOverviewComponent implements OnInit {
 
 	groupings: any [] = [
 		{
-			Name: 'Low 0% - 80%',
+			Name: 'Denver/Avalanche',
+			AdherencePercentage: 74,
 			Color: '#EE8F7D',
 			agentsAdherence: [{
 				Name: 'Andeen Ashley',
-				Team: 'Denver/Avalanche',
 				Adherence: [
 					{
 						Date: '1/5',
@@ -142,7 +142,6 @@ export class RtaHistoricalOverviewComponent implements OnInit {
 			},
 				{
 					Name: 'Aneedn Anna',
-					Team: 'Denver/Avalanche',
 					Adherence: [
 						{
 							Date: '1/5',
@@ -193,7 +192,6 @@ export class RtaHistoricalOverviewComponent implements OnInit {
 				},
 				{
 					Name: 'Aleed Jane',
-					Team: 'Denver/Avalanche',
 					Adherence: [
 						{
 							Date: '1/5',
@@ -248,11 +246,11 @@ export class RtaHistoricalOverviewComponent implements OnInit {
 			]
 		},
 		{
-			Name: 'Mid 80% - 90%',
+			Name: 'London/Team Preferences',
+			AdherencePercentage: 84,
 			Color: '#FFC285',
 			agentsAdherence: [{
 				Name: 'Bndeen Ashley',
-				Team: 'Denver/Avalanche',
 				Adherence: [
 					{
 						Date: '1/5',
@@ -298,13 +296,12 @@ export class RtaHistoricalOverviewComponent implements OnInit {
 				},
 				LateForWork:
 					{
-						Count: 1,
+						Count: 2,
 						TotalMinutes: 8
 					}
 			},
 				{
 					Name: 'Bneedn Anna',
-					Team: 'Denver/Avalanche',
 					Adherence: [
 						{
 							Date: '1/5',
@@ -355,7 +352,6 @@ export class RtaHistoricalOverviewComponent implements OnInit {
 				},
 				{
 					Name: 'Blanca Jane',
-					Team: 'London/Team Preferences',
 					Adherence: [
 						{
 							Date: '1/5',
@@ -408,11 +404,11 @@ export class RtaHistoricalOverviewComponent implements OnInit {
 			]
 		},
 		{
-			Name: 'High 90% - 100%',
+			Name: 'Barcelona/Red',
+			AdherencePercentage: 94,
 			Color: '#C2E085',
 			agentsAdherence: [{
 				Name: 'Cndeen Ashley',
-				Team: 'London',
 				Adherence: [
 					{
 						Date: '1/5',
@@ -438,8 +434,7 @@ export class RtaHistoricalOverviewComponent implements OnInit {
 					{
 						Date: '5/5',
 						AdherencePercentage: 99,
-						Color: '#C2E085',
-						WasLateForWork: true
+						Color: '#C2E085'
 					},
 					{
 						Date: '6/5',
