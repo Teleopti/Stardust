@@ -15694,4 +15694,19 @@ Applikationen kommer nu att stängas. </value>
   <data name="AbsenceCannotBeTraded" xml:space="preserve">
     <value>Dagar med frånvaro kan inte bytas.</value>
   </data>
+  <data name="IdentityLogon" xml:space="preserve">
+    <value>Tredjepartsinloggning</value>
+  </data>
+  <data name="ScheduleDateDoNotMatch" xml:space="preserve">
+    <value>{0} är i en annan tidszon och era schemadatum matchar inte. </value>
+  </data>
+  <data name="SkillDoNotMatch" xml:space="preserve">
+    <value>På grund av att du och {0} har olika kompetenser kan ni inte byta skift detta datum.</value>
+  </data>
+  <data name="FailedToClearScheduleForSelectedPlanningPeriodDueToTechnicalError1" xml:space="preserve">
+    <value>Misslyckades med att rensa schemat för planeringsperioden {0} - {1} på grund av ett tekniskt fel. Var god försök igen. </value>
+  </data>
+  <data name="NothingSelected" xml:space="preserve">
+    <value>Inget markerat</value>
+  </data>
 </root>
