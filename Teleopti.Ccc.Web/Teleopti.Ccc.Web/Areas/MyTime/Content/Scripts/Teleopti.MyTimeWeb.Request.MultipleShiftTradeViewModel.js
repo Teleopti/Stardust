@@ -833,6 +833,9 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 	}
 
 	self.getTextColor = function (backgroundColor) {
+		if (!backgroundColor) {
+			return 'none';
+		}
 		return Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(backgroundColor);
 	}
 
