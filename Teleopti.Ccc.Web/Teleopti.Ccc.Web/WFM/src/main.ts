@@ -203,11 +203,8 @@ wfm
 			preloads.push(initializePermissionCheck());
 			preloads.push(
 				$http.get('../api/Global/Version').then(function(response) {
-					if (response.data) {
-						// remove if statement with toggle RTA_ReloadUIOnSystemVersionChanged_48196
-						$rootScope.version = response.data;
-						$http.defaults.headers.common['X-Client-Version'] = $rootScope.version;
-					}
+					$rootScope.version = response.data;
+					$http.defaults.headers.common['X-Client-Version'] = $rootScope.version;
 				})
 			);
 			var preloadDone = false;
