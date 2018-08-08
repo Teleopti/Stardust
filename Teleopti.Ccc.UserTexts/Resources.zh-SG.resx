@@ -9420,7 +9420,7 @@ Teleopti R&amp;D</value>
     <value>目标值</value>
   </data>
   <data name="Teleopti" xml:space="preserve">
-    <value>Teleopti (当使用”灵活工作时间的班次“及”灵活工作时间的休息“时勾选此项)</value>
+    <value>Teleopti</value>
   </data>
   <data name="SubmitRequest" xml:space="preserve">
     <value>提交</value>
