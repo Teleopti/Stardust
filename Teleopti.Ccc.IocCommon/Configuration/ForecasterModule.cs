@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
@@ -75,6 +76,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.SingleInstance();
 			builder.RegisterType<ForecastDayModelMapper>()
 				.SingleInstance();
+			builder.RegisterType<QueueStatisticsViewModelFactory>()
+				.SingleInstance()
+				.As<IQueueStatisticsViewModelFactory>();
 		}
 	}
 }
