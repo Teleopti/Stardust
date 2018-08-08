@@ -175,9 +175,20 @@
 	background: #eee;
 }
 
+.shift-trade-selection-container {
+	width:27px;
+	height:27px;
+	text-align:center;
+	vertical-align:central;
+}
+
 @media(min-width:993px) {
 	.clear-desktop-color {
 		background-color: transparent !important;
+	}
+
+	.shift-to-trade-row-disable .schedule-layer-text-container {
+		color: #c9c4c4
 	}
 }
 
@@ -191,6 +202,10 @@
 
 	.hide-on-mobile {
 		display: none;
+	}
+
+	.shift-to-trade-row-disable .clear-desktop-color {
+		opacity: 0.5;
 	}
 
 	.mobile-dayoff {
@@ -836,17 +851,30 @@ input.use-default-startTime {
 	justify-content: center;
 }
 
+.shift-selection input[type=checkbox][disabled] {
+	cursor:default !important;
+	pointer-events:none;
+}
+
 .shift-trade-contract {
 	clear: both;
 	font-size: .8em;
 }
 
-.schedules-side-by-side {
-	flex: 1 1 70%;
-	overflow: hidden;
-	background-color: white;
-	border: .8px solid #e3e3e3;
+.shift-to-trade-row-disable {	
+	color: #c9c4c4 !important;
 }
+
+.shift-to-trade-row-disable .shift-visual-indication-block {
+	opacity: 0.5;
+}
+
+	.schedules-side-by-side {
+		flex: 1 1 70%;
+		overflow: hidden;
+		background-color: white;
+		border: .8px solid #e3e3e3;
+	}
 
 .shift-trade-cart {
 	flex: 1 1 30%;

@@ -832,6 +832,10 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 		return date.format(self.DatePickerFormat());
 	}
 
+	self.getTextColor = function (backgroundColor) {
+		return Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(backgroundColor);
+	}
+
 	self.isStartTimeFilterActived = ko.computed(function () {
 		return (self.filteredStartTimesText().length !== 0 || self.isDayoffFiltered() === true || (timeSortOrder() === 'start asc') || (timeSortOrder() === 'start desc'));
 	});
@@ -935,7 +939,9 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 							loadedData.push({
 								date: momentDate,
 								mySchedule: (schedulePair.MySchedule && schedulePair.MySchedule.IsNotScheduled) ? null : createShiftTradeSchedule(schedulePair.MySchedule),
-								targetSchedule: (schedulePair.PersonToSchedule && schedulePair.PersonToSchedule.IsNotScheduled) ? null : createShiftTradeSchedule(schedulePair.PersonToSchedule)
+								targetSchedule: (schedulePair.PersonToSchedule && schedulePair.PersonToSchedule.IsNotScheduled) ? null : createShiftTradeSchedule(schedulePair.PersonToSchedule),
+								isEnable : schedulePair.IsSelectable,
+								reason: schedulePair.UnselectableReason
 							});
 						}
 						
