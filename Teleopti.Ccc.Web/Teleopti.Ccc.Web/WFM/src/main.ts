@@ -1,11 +1,11 @@
-import { enableProdMode, StaticProvider } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { downgradeModule, downgradeComponent } from '@angular/upgrade/static';
+import {enableProdMode, StaticProvider} from '@angular/core';
+import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+import {downgradeModule, downgradeComponent} from '@angular/upgrade/static';
 
-import { environment } from './environments/environment';
-import { IRootScopeService, IControllerConstructor } from 'angular';
+import {environment} from './environments/environment';
+import {IRootScopeService, IControllerConstructor} from 'angular';
 
-import { MainController } from './main.controller';
+import {MainController} from './main.controller';
 import {
 	SearchPageComponent,
 	GrantPageComponent,
@@ -19,13 +19,15 @@ import {
 	AddAppPageComponent,
 	ApiAccessTitleBarComponent
 } from './app/api-access/components';
-import { AppModule } from './app/app.module';
+import {AppModule} from './app/app.module';
 import {RtaHistoricalOverviewComponent} from "../app/rta/rta/historical-overview/rta.historical.overview.component";
 
 export interface IWfmRootScopeService extends IRootScopeService {
 	_: any;
 	isAuthenticated: boolean;
+
 	setTheme(theme: string): any;
+
 	version: any;
 }
 
@@ -93,17 +95,17 @@ const wfm = angular.module('wfm', [
 
 wfm.controller('MainController', MainController as IControllerConstructor);
 
-wfm.directive('ng2ApiAccessTitleBar', downgradeComponent({ component: ApiAccessTitleBarComponent }) as angular.IDirectiveFactory);
-wfm.directive('ng2ApiAccessListPage', downgradeComponent({ component: ListPageComponent }) as angular.IDirectiveFactory);
-wfm.directive('ng2ApiAccessAddAppPage', downgradeComponent({ component:	AddAppPageComponent }) as angular.IDirectiveFactory);
+wfm.directive('ng2ApiAccessTitleBar', downgradeComponent({component: ApiAccessTitleBarComponent}) as angular.IDirectiveFactory);
+wfm.directive('ng2ApiAccessListPage', downgradeComponent({component: ListPageComponent}) as angular.IDirectiveFactory);
+wfm.directive('ng2ApiAccessAddAppPage', downgradeComponent({component: AddAppPageComponent}) as angular.IDirectiveFactory);
 
-wfm.directive('ng2RtaHistoricalOverview', downgradeComponent({ component:	RtaHistoricalOverviewComponent }) as angular.IDirectiveFactory);
+wfm.directive('ng2RtaHistoricalOverview', downgradeComponent({component: RtaHistoricalOverviewComponent}) as angular.IDirectiveFactory);
 
-wfm.directive('ng2PeopleTitleBar', downgradeComponent({ component: TitleBarComponent }) as angular.IDirectiveFactory);
+wfm.directive('ng2PeopleTitleBar', downgradeComponent({component: TitleBarComponent}) as angular.IDirectiveFactory);
 wfm.directive('ng2PeopleSearchPage', downgradeComponent({
 	component: SearchPageComponent
 }) as angular.IDirectiveFactory);
-wfm.directive('ng2PeopleGrantPage', downgradeComponent({ component: GrantPageComponent }) as angular.IDirectiveFactory);
+wfm.directive('ng2PeopleGrantPage', downgradeComponent({component: GrantPageComponent}) as angular.IDirectiveFactory);
 wfm.directive('ng2PeopleRevokePage', downgradeComponent({
 	component: RevokePageComponent
 }) as angular.IDirectiveFactory);
@@ -122,7 +124,7 @@ wfm
 		'$httpProvider',
 		'$mdGestureProvider',
 		'tmhDynamicLocaleProvider',
-		function(
+		function (
 			$stateProvider,
 			$urlRouterProvider,
 			$translateProvider,
@@ -136,7 +138,7 @@ wfm
 				url: '/',
 				templateProvider: [
 					'$templateRequest',
-					function(templateRequest) {
+					function (templateRequest) {
 						return templateRequest('html/main.html');
 					}
 				]
@@ -167,7 +169,7 @@ wfm
 		'rtaDataService',
 		'$q',
 		'$http',
-		function(
+		function (
 			$rootScope: IWfmRootScopeService,
 			$state,
 			$translate,
@@ -231,7 +233,7 @@ wfm
 			$rootScope._ = (<any>window)._;
 
 			function initializeUserInfo() {
-				return currentUserInfo.initContext().then(function(data) {
+				return currentUserInfo.initContext().then(function (data) {
 					$rootScope.isAuthenticated = true;
 					return $translate.use(data.Language);
 				});
