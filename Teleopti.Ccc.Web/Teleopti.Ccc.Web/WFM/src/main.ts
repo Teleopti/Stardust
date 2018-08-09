@@ -1,11 +1,11 @@
-import {enableProdMode, StaticProvider} from '@angular/core';
-import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
-import {downgradeModule, downgradeComponent} from '@angular/upgrade/static';
+import { enableProdMode, StaticProvider } from '@angular/core';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { downgradeModule, downgradeComponent } from '@angular/upgrade/static';
 
-import {environment} from './environments/environment';
-import {IRootScopeService, IControllerConstructor} from 'angular';
+import { environment } from './environments/environment';
+import { IRootScopeService, IControllerConstructor } from 'angular';
 
-import {MainController} from './main.controller';
+import { MainController } from './main.controller';
 import {
 	SearchPageComponent,
 	GrantPageComponent,
@@ -19,15 +19,13 @@ import {
 	AddAppPageComponent,
 	ApiAccessTitleBarComponent
 } from './app/api-access/components';
-import {AppModule} from './app/app.module';
+import { AppModule } from './app/app.module';
 import {RtaHistoricalOverviewComponent} from "../app/rta/rta/historical-overview/rta.historical.overview.component";
 
 export interface IWfmRootScopeService extends IRootScopeService {
 	_: any;
 	isAuthenticated: boolean;
-
 	setTheme(theme: string): any;
-
 	version: any;
 }
 
@@ -95,17 +93,17 @@ const wfm = angular.module('wfm', [
 
 wfm.controller('MainController', MainController as IControllerConstructor);
 
-wfm.directive('ng2ApiAccessTitleBar', downgradeComponent({component: ApiAccessTitleBarComponent}) as angular.IDirectiveFactory);
-wfm.directive('ng2ApiAccessListPage', downgradeComponent({component: ListPageComponent}) as angular.IDirectiveFactory);
-wfm.directive('ng2ApiAccessAddAppPage', downgradeComponent({component: AddAppPageComponent}) as angular.IDirectiveFactory);
+wfm.directive('ng2ApiAccessTitleBar', downgradeComponent({ component: ApiAccessTitleBarComponent }) as angular.IDirectiveFactory);
+wfm.directive('ng2ApiAccessListPage', downgradeComponent({ component: ListPageComponent }) as angular.IDirectiveFactory);
+wfm.directive('ng2ApiAccessAddAppPage', downgradeComponent({ component:	AddAppPageComponent }) as angular.IDirectiveFactory);
 
-wfm.directive('ng2RtaHistoricalOverview', downgradeComponent({component: RtaHistoricalOverviewComponent}) as angular.IDirectiveFactory);
+wfm.directive('ng2RtaHistoricalOverview', downgradeComponent({ component:	RtaHistoricalOverviewComponent }) as angular.IDirectiveFactory);
 
-wfm.directive('ng2PeopleTitleBar', downgradeComponent({component: TitleBarComponent}) as angular.IDirectiveFactory);
+wfm.directive('ng2PeopleTitleBar', downgradeComponent({ component: TitleBarComponent }) as angular.IDirectiveFactory);
 wfm.directive('ng2PeopleSearchPage', downgradeComponent({
 	component: SearchPageComponent
 }) as angular.IDirectiveFactory);
-wfm.directive('ng2PeopleGrantPage', downgradeComponent({component: GrantPageComponent}) as angular.IDirectiveFactory);
+wfm.directive('ng2PeopleGrantPage', downgradeComponent({ component: GrantPageComponent }) as angular.IDirectiveFactory);
 wfm.directive('ng2PeopleRevokePage', downgradeComponent({
 	component: RevokePageComponent
 }) as angular.IDirectiveFactory);
@@ -124,7 +122,7 @@ wfm
 		'$httpProvider',
 		'$mdGestureProvider',
 		'tmhDynamicLocaleProvider',
-		function (
+		function(
 			$stateProvider,
 			$urlRouterProvider,
 			$translateProvider,
@@ -138,7 +136,7 @@ wfm
 				url: '/',
 				templateProvider: [
 					'$templateRequest',
-					function (templateRequest) {
+					function(templateRequest) {
 						return templateRequest('html/main.html');
 					}
 				]
@@ -169,7 +167,7 @@ wfm
 		'rtaDataService',
 		'$q',
 		'$http',
-		function (
+		function(
 			$rootScope: IWfmRootScopeService,
 			$state,
 			$translate,
@@ -186,46 +184,42 @@ wfm
 		) {
 			$rootScope.isAuthenticated = false;
 
-			$rootScope.$watchGroup(['toggleLeftSide', 'toggleRightSide'], function () {
-				$timeout(function () {
+			$rootScope.$watchGroup(['toggleLeftSide', 'toggleRightSide'], function() {
+				$timeout(function() {
 					$rootScope.$broadcast('sidenav:toggle');
 				}, 500);
 			});
 
-			$rootScope.$on('$localeChangeSuccess', function () {
+			$rootScope.$on('$localeChangeSuccess', function() {
 				if ($locale.id === 'zh-cn') $locale.DATETIME_FORMATS.FIRSTDAYOFWEEK = 0;
 			});
 
 			var preloads = [];
 			preloads.push(toggleService.togglesLoaded);
+			preloads.push(initializeUserInfo().then(function () {
+				// any preloads than requires selected business unit
+				rtaDataService.load(); // dont return promise, it should be async
+			}));
+			preloads.push(initializePermissionCheck());
 			preloads.push(
-				$q.all([
-					initializeUserInfo(),
-					initializePermissionCheck()
-				]).then(function () {
-					// any preloads than requires selected business unit and/or permission check
-					if (permitted('rta'))
-						rtaDataService.load(); // dont return promise, async call
-				}));
-			preloads.push(
-				$http.get('../api/Global/Version').then(function (response) {
+				$http.get('../api/Global/Version').then(function(response) {
 					$rootScope.version = response.data;
 					$http.defaults.headers.common['X-Client-Version'] = $rootScope.version;
 				})
 			);
 			var preloadDone = false;
 
-			$rootScope.$on('$stateChangeStart', function (event, next, toParams) {
+			$rootScope.$on('$stateChangeStart', function(event, next, toParams) {
 				if (preloadDone) {
-					if (!permitted(internalNameOf(next))) {
+					if (!permitted(event, next)) {
 						event.preventDefault();
-						notPermitted(internalNameOf(next));
+						notPermitted(next);
 					}
 					return;
 				}
 				preloadDone = true;
 				event.preventDefault();
-				$q.all(preloads).then(function () {
+				$q.all(preloads).then(function() {
 					$state.go(next, toParams);
 				});
 			});
@@ -233,7 +227,7 @@ wfm
 			$rootScope._ = (<any>window)._;
 
 			function initializeUserInfo() {
-				return currentUserInfo.initContext().then(function (data) {
+				return currentUserInfo.initContext().then(function(data) {
 					$rootScope.isAuthenticated = true;
 					return $translate.use(data.Language);
 				});
@@ -245,57 +239,61 @@ wfm
 				'main',
 				'skillprio',
 				'teapot',
-				'rtatool',
-				'rtatracer',
 				'resourceplanner.importschedule',
 				'resourceplanner.archiveschedule',
 				'dataprotection'
 			];
 
 			function initializePermissionCheck() {
-				return areasService.getAreasWithPermission().then(function (data) {
+				return areasService.getAreasWithPermission().then(function(data) {
 					permittedAreas = data;
-					return areasService.getAreasList().then(function (data) {
+					return areasService.getAreasList().then(function(data) {
 						areas = data;
 					});
 				});
 			}
 
-			function permitted(name) {
-				var permitted = alwaysPermittedAreas.some(function (a) {
-					return a === name.toLowerCase();
+			function permitted(event, next) {
+				var name = next.name.split('.')[0];
+				var url = next.url && next.url.split('/')[1];
+
+				var permitted = alwaysPermittedAreas.some(function(a) {
+					return a === next.name.toLowerCase();
 				});
+
 				if (!permitted)
-					permitted = permittedAreas.some(function (a) {
-						return a.InternalName === name;
+					permittedAreas.forEach(function(area) {
+						if (name && (area.InternalName.indexOf(name) > -1 || name.indexOf(area.InternalName) > -1)) {
+							permitted = true;
+						} else if (
+							url &&
+							(area.InternalName.indexOf(url) > -1 || url.indexOf(area.InternalName) > -1)
+						) {
+							permitted = true;
+						}
 					});
+
 				return permitted;
 			}
 
-			function notPermitted(internalName) {
+			function notPermitted(next) {
+				$state.go('main');
+				var moduleName;
+				var name = next.name.split('.')[0];
+				var url = next.url && next.url.split('/')[1];
+				areas.forEach(function(area) {
+					if (name && (area.InternalName.indexOf(name) > -1 || name.indexOf(area.InternalName) > -1)) {
+						moduleName = area.Name;
+					} else if (url && (area.InternalName.indexOf(url) > -1 || url.indexOf(area.InternalName) > -1)) {
+						moduleName = area.Name;
+					}
+				});
 				noticeService.error(
 					"<span class='test-alert'></span>" +
-					$translate.instant('NoPermissionToViewWFMModuleErrorMessage').replace('{0}', nameOf(internalName)),
+						$translate.instant('NoPermissionToViewWFMModuleErrorMessage').replace('{0}', moduleName),
 					null,
 					false
 				);
-				$state.go('main');
-			}
-
-			function internalNameOf(o) {
-				var name = o.name;
-				name = name.split('.')[0];
-				name = name.split('-')[0];
-				return name;
-			}
-
-			function nameOf(internalName) {
-				var name;
-				areas.forEach(function (area) {
-					if (area.InternalName == internalName)
-						name = area.Name;
-				});
-				return name;
 			}
 
 			TabShortCut.unifyFocusStyle();

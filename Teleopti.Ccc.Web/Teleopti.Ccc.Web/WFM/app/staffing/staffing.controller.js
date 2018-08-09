@@ -123,7 +123,7 @@
 		}
 
 		function goToImportView() {
-			$state.transitionTo('bpo');
+			$state.transitionTo('bpo-gatekeeper');
 		}
 
 		function selectFirstCompensation(compensations) {

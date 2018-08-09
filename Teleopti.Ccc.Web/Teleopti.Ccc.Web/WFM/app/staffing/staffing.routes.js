@@ -18,7 +18,7 @@
                 templateUrl: 'app/staffing/import_export/importexport.overview.html',
 				controller: 'ImportDataController as vm'
             })
-            .state('bpo', {
+            .state('bpo-gatekeeper', {
                 url: '/bpo',
                 templateUrl: 'app/staffing/staffing.html',
                 controllerAs: 'vm',
