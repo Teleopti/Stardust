@@ -6,8 +6,17 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 
 	$stateProvider
 		.state('rta-historical-overview', {
-			url: '/rta/historical-overview',
-			template: '<ng2-rta-historical-overview></ng2-rta-historical-overview>'
+			url: '/rta/historical-overview?siteIds&teamIds',
+			params: {
+				siteIds: {array: true},
+				teamIds: {array: true}
+			},
+			templateUrl: function () {
+				return 'app/rta/rta/historical-overview/rta.historical.overview.html';
+			},
+			controllerProvider: function () {
+				return 'RtaHistoricalOverviewController as vm';
+			}
 		})
 		.state('rta-without-slash', {
 			url: '/rta',
@@ -77,7 +86,7 @@ angular.module('wfm.rta').config(function ($stateProvider, ToggleProvider) {
 			},
 			controllerProvider: function () {
 				if (toggles.RTA_DurationOfHistoricalEvents_76470)
-					return 'RtaHistoricalController76470 as vm';	
+					return 'RtaHistoricalController76470 as vm';
 				if (toggles.RTA_EasilySpotLateForWork_75668)
 					return 'RtaHistoricalController75668 as vm';
 				if (toggles.RTA_RestrictModifyAdherenceWithPermission_74898)

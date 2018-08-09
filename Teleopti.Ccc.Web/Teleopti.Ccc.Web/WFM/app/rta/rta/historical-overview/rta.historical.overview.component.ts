@@ -4,7 +4,7 @@ import {RTA_STATE_SERVICE} from "./rta.state.service.provider";
 
 @Component({
 	selector: 'rta-historical-overview',
-	templateUrl: './rta.historical.overview.html'
+	templateUrl: './rta.historical.overview.ts.html'
 })
 
 export class RtaHistoricalOverviewComponent implements OnInit {
