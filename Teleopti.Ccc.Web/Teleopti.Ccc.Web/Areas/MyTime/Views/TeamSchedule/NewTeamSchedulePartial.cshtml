@@ -10,12 +10,6 @@
 	body {
 		overflow: hidden;
 	}
-	ul li ul li.select2-result:nth-child(odd) {
-		background: rgba(0, 0, 0, 0.1);
-	}
-	ul li ul li.select2-result.select2-highlighted {
-		background: #5ACDF9;
-	}
 	.tooltip.top {
 		margin: 0;
 		min-width: 120px;
@@ -34,103 +28,67 @@
 	.select2-results {
 		-webkit-overflow-scrolling: touch;
 	}
+	ul li ul li.select2-result:nth-child(odd) {
+		background: rgba(0, 0, 0, 0.1);
+	}
+	ul li ul li.select2-result.select2-highlighted {
+		background: #5ACDF9;
+	}
+
+	.select2-results {
+  		-webkit-overflow-scrolling: touch;
+  	}
+	.select2-container .select2-choice,
+	.select2-container .select2-choice:focus,
+	.select2-drop-active,
+	.select2-drop-active:focus {
+		margin: 0;
+		outline: none;
+		box-shadow: none;
+	}
+	.select2-container-active .select2-choice {
+		box-shadow: none;
+	}
+	.select2-container .select2-choice .select2-arrow {
+		border: none;
+		width: 37px;
+		text-align: center;
+	}
+	.select2-container .select2-choice .select2-arrow b {
+		background: none !important;
+		position: relative;
+		top: 1px;
+		display: inline-block;
+		font-family: 'Glyphicons Halflings';
+		font-style: normal;
+		font-weight: 300;
+		line-height: 1;
+		-webkit-font-smoothing: antialiased;
+		transform: scale(1);
+	}
+	.select2-container .select2-choice .select2-arrow b:focus {
+		outline-color: -webkit-focus-ring-color;
+		outline-style: auto;
+		outline-width: 5px;
+		outline: 5px auto -webkit-focus-ring-color;
+		outline-offset: -2px;
+	}
+	.select2-container .select2-choice .select2-arrow b::before {
+		content: "\e114";
+	}
+	.select2-search input {
+		border-color: rgba(0, 0, 0, 0.1);
+	}
 </style>
 <!-- ko if: isHostAniPad || isHostAMobile -->
 <style>
-	html, body, section#page, article#body, #body-inner, .new-teamschedule-view {
+	html, body, section#page, article#body, #body-inner {
 		cursor: pointer;
-	}
-	.new-teamschedule-view {
-		max-height: calc(100vh - 50px);
-	}
-	.teammates-schedules-container.relative {
-		max-width: calc(100% - 30px - 70px);
-		overflow-y: hidden;
-		overflow-x: auto;
-	}
-	.teamschedule-scroll-block-container {
-		display: none;
-	}
-	.new-teamschedule-view > .container {
-		padding: 0;
-	}
-</style>
-<!-- /ko -->
-<!-- ko if: isHostAniPad -->
-<style>
-	.new-teamschedule-agent-name.my-name.relative {
-		width: 101px;
-		min-width: 101px;
-		max-width: 101px;
-	}
-</style>
-<!-- /ko -->
-<!-- ko if: isHostAMobile -->
-<style id="mobile-teamschedule-styles">
-	.new-teamschedule-view-nav .navbar-teleopti {
-		min-width: initial;
-		justify-content: space-between;
-	}
-	.new-teamschedule-view-nav .submenu li,
-	.new-teamschedule-view-nav .submenu li:first-child {
-		margin: 0;
-	}
-	.new-teamschedule-agent-name.my-name.relative{
-		width: 71px;
-		min-width: 71px;
-		max-width: 71px;
-	}
-	.new-teamschedule-agent-name {
-		width: 50px;
-	}
-	.new-teamschedule-agent-name .text-name {
-		white-space: normal;
-	}
-	.new-teamschedule-view .my-schedule-column.relative {
-		width: 70px;
-		min-width: 70px;
-		max-width: 70px;
-	}
-	.new-teamschedule-view .new-teamschedule-layer-container strong {
-		white-space: normal;
-	}
-	.teammates-schedules-container.relative {
-		max-width: calc(100% - 30px - 70px);
-		overflow-y: hidden;
-		overflow-x: auto;
-	}
-	.new-teamschedule-view .teammates-schedules-column {
-		width: 50px;
-	}
-	.new-teamschedule-view .teammates-schedules-column .new-teamschedule-layer-container strong,
-	.new-teamschedule-view .displayblock {
-		display: none;
-	}
-	.new-teamschedule-view .teammates-schedules-column .dayoff .dayoff-text {
-		display: none;
-	}
-	.teammates-schedules-container {
-		overflow-y: hidden;
-		overflow-x: auto;
-	}
-	.new-teamschedule-panel {
-		width: 100%;
-		max-width: 100%;
-		min-height: 300px;
-		position: fixed;
-		top: initial;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		box-shadow: 0 -2px 2px 2px rgba(0, 0, 0, 0.2);
-	}
-	.teamschedule-scroll-block-container {
-		display: none;
 	}
 </style>
 <!-- /ko -->
 
-<div class="new-teamschedule-view relative" data-bind="style: {display: isMobileEnabled() || isDesktopEnabled() ? 'block': 'none'}">
+<div class="new-teamschedule-view relative" data-bind="css: {'new-teamschedule-view-mobile': isHostAMobile && isMobileEnabled(), 'new-teamschedule-view-ipad': isHostAniPad && isDesktopEnabled()}, style: {display: isMobileEnabled() || isDesktopEnabled() ? 'block': 'none'}">
 	<div class="navbar navbar-teleopti subnavbar">
 		<div class="container new-teamschedule-view-nav">
 			<ul class="nav navbar-nav navbar-teleopti row submenu">
@@ -161,7 +119,7 @@
 				</li>
 			</ul>
 		</div>
-</div>
+	</div>
 
 	<div class="container relative">
 		<div class="agent-name-row container relative">
@@ -274,9 +232,9 @@
 		<!-- ko if: isPanelVisible -->
 		<div class="new-teamschedule-panel">
 			<div class="teamschedule-filter-component">
-				<p>
-					<b>@Resources.Team: </b>
-				</p>
+				<label>
+					@Resources.Team:
+				</label>
 				<select data-bind="foreach: availableTeams, select2: { value: selectedTeam, minimumResultsForSearch: 'Infinity'}" id="team-selection">
 					<optgroup data-bind="attr: { label: text }, foreach: children">
 						<option data-bind="text: text, value: id"></option>
@@ -285,9 +243,9 @@
 			</div>
 
 			<div class="teamschedule-search-component">
-				<p>
-					<b>@Resources.AgentName: </b>
-				</p>
+				<label>
+					@Resources.AgentName:
+				</label>
 				<form data-bind="submit: submitSearchForm">
 					<input type="search" class="form-control" placeholder='@Resources.SearchHintForName' data-bind="value: searchNameText" />
 					<input type="submit" style="display: none"/>
@@ -295,7 +253,9 @@
 			</div>
 			<div class="empty-search-result">
 				<!-- ko if: emptySearchResult -->
-				<p><b>@Resources.NoResultForCurrentFilter</b></p>
+				<label>
+					@Resources.NoResultForCurrentFilter
+				</label>
 				<!--/ko-->
 			</div>
 			<div class="new-teamschedule-submit-buttons">

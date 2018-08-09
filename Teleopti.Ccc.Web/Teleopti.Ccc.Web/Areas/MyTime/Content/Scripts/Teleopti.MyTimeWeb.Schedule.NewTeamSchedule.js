@@ -63,10 +63,9 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 		});
 	}
 
-	
 	function setupFilterClickFn() {
 		var hasLoadedGroupAndTeams = false;
-		$('.new-teamschedule-filter').click(function (e) {
+		$('.new-teamschedule-filter').click(function(e) {
 			if (!hasLoadedGroupAndTeams) {
 				loadGroupAndTeams();
 				hasLoadedGroupAndTeams = true;
@@ -91,7 +90,9 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 		});
 		$('body').on('mousedown', function(event) {
 			if (
+				$(event.target)[0].className != 'new-teamschedule-panel' &&
 				$(event.target).parents('.new-teamschedule-panel').length == 0 &&
+				$(event.target)[0].className != 'new-teamschedule-filter' &&
 				$(event.target).parents('.new-teamschedule-filter').length == 0
 			) {
 				vm.isPanelVisible(false);
@@ -319,34 +320,31 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 	}
 
 	function loadGroupAndTeams() {
-		dataService.loadGroupAndTeams(function (teams) {
+		dataService.loadGroupAndTeams(function(teams) {
 			vm.readTeamsData(teams);
 			vm.selectedTeam(-1);
 			vm.readDefaultTeamData({ DefaultTeam: vm.defaultTeamId });
 		});
-
 	}
 
 	function fetchData(momentDate) {
+		showLoadingGif();
 
-			showLoadingGif();
+		dataService.loadDefaultTeam(function(defaultTeam) {
+			vm.readDefaultTeamData(defaultTeam);
 
-			dataService.loadDefaultTeam(function(defaultTeam) {
-				vm.readDefaultTeamData(defaultTeam);
+			var dateStr =
+				(momentDate && momentDate.format('YYYY/MM/DD')) ||
+				Teleopti.MyTimeWeb.Portal.ParseHash().dateHash ||
+				vm.selectedDate().format('YYYY/MM/DD');
 
-				var dateStr =
-					(momentDate && momentDate.format('YYYY/MM/DD')) ||
-					Teleopti.MyTimeWeb.Portal.ParseHash().dateHash ||
-					vm.selectedDate().format('YYYY/MM/DD');
+			dataService.loadScheduleData(dateStr, vm.paging, vm.filter, function(schedules) {
+				vm.readScheduleData(schedules, dateStr);
 
-				dataService.loadScheduleData(dateStr, vm.paging, vm.filter, function(schedules) {
-					vm.readScheduleData(schedules, dateStr);
-
-					focusMySchedule();
-					fetchDataSuccessCallback();
-				});
+				focusMySchedule();
+				fetchDataSuccessCallback();
 			});
-		
+		});
 	}
 
 	function focusMySchedule() {
