@@ -44,7 +44,7 @@
 							</button>
 							<button class="wfm-btn wfm-btn-invis-primary"
 									ng-class="wfm-btn-invis-primary"
-									ng-click="vm.apply()">{{'Apply'|translate}}
+									ng-click="vm.applyOrganizationSelection()">{{'Apply'|translate}}
 							</button>
 						</div>
 
@@ -87,107 +87,43 @@
 			table-layout: fixed;
 		}
 
-		.rta-view.prototype .cell-header {
-			overflow: hidden;
-			white-space: nowrap;
-			/*font-weight: 700;*/
-			width: 30px;
-			font-size: 10px;
-		}
-
 		.rta-view.prototype .cell {
 			overflow: hidden;
 			white-space: nowrap;
 			width: 30px;
 		}
-
-		.rta-view.prototype .cell.late-for-work {
-			background-image: linear-gradient(225deg, orange, orange 5px, transparent 5px, transparent);
-		}
-
-		.rta-view.prototype .cell .label-red {
-			background-color: #EE8F7D;
-		}
-
-		.rta-view.prototype .cell .label-orange {
-			background-color: #FFC285;
-		}
-
-		.rta-view.prototype .cell .label-green {
-			background-color: #C2E085;
-		}
-
-		.rta-view.prototype .cell.progress-thing {
-			padding: 0;
-		}
-
-		.rta-view.prototype .cell.progress-thing.late-for-work {
-			background-image: linear-gradient(225deg, orange, orange 5px, transparent 5px, transparent);
-		}
-
-	
-
-
-		.rta-view.prototype .cell.label-thing {
+		
+		.rta-view.prototype .cell.indicator {
 			text-overflow: unset;
 			padding-left: 4px;
 			padding-top: 4px;
 		}
 
-		.rta-view.prototype .cell.label-thing.late-for-work {
+		.rta-view.prototype .cell.indicator.late-for-work {
 			background-image: linear-gradient(225deg, orange, orange 5px, transparent 5px, transparent);
 		}
-
-		.rta-view.prototype .cell.smiley-thing {
-			text-overflow: unset;
-			padding-right: 3px;
-			text-align: center;
-		}
-
-		.rta-view.prototype .cell.circle-thing {
-			padding-left: 3px;
-		}
-
-		.rta-view.prototype .cell.circle-thing.late-for-work {
-			background-image: linear-gradient(225deg, orange, orange 5px, transparent 5px, transparent);
-		}
-
-		.rta-view.prototype .cell .circle {
-			font-size: 12px;
-			width: 22px;
-			height: 22px;
-			border: 2px solid;
-			border-radius: 50%;
-			text-align: center;
-			line-height: 19px;
-			text-overflow: unset;
-			color: #EE8F7D;
-			font-size: 75%;
-			font-weight: bold;
-		}
 		
-		
-		.radial-percent-chart {
+		.rta-view.prototype .radial-percent-chart {
 			display: block;
 			max-width: 30px;
 			max-height: 30px;
 			stroke: darkgrey;
 		}
 
-		.radial-percent-bg {
+		.rta-view.prototype .radial-percent-bg {
 			fill: none;
 			stroke: #eee;
 			stroke-width: 3.6;
 		}
 
-		.radial-percent {
+		.rta-view.prototype .radial-percent {
 			fill: none;
 			stroke-width: 2.6;
 			stroke-linecap: round;
 			stroke: #3c9ee5;
 		}
 
-		.radial-percent-text {
+		.rta-view.prototype .radial-percent-text {
 			fill: #666;
 			font-family: sans-serif;
 			font-size: 1em;
@@ -221,7 +157,7 @@
 				<tbody>
 				<tr  ng-repeat="agent in group.agentsAdherence" style="background-color: transparent">
 					<td>{{agent.Name}}</td>
-					<td ng-repeat="percentage in agent.Adherence" style="padding:1px;" ng-class="percentage.WasLateForWork  ? 'cell label-thing late-for-work': 'cell label-thing'">
+					<td ng-repeat="percentage in agent.Adherence" style="padding:1px;" ng-class="percentage.WasLateForWork  ? 'cell indicator late-for-work': 'cell indicator'">
 							<svg class="radial-percent-chart" viewBox="0 0 36 36">
 								<path class="radial-percent-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
 								<path class="radial-percent" stroke-dasharray="{{percentage.AdherencePercentage}} , 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>

@@ -5,31 +5,66 @@
 		.module('wfm.rta')
 		.controller('RtaHistoricalOverviewController', RtaHistoricalOverviewController);
 
-	RtaHistoricalOverviewController.$inject = ['$scope','$filter','$state','$stateParams',
-		'$sessionStorage','$translate','rtaFormatService','rtaStateService','rtaDataService'];
+	RtaHistoricalOverviewController.$inject = ['$filter', '$stateParams', '$translate', 'rtaStateService', 'rtaDataService'];
 
-	function RtaHistoricalOverviewController($scope,$filter,$state,$stateParams,
-								 $sessionStorage,$translate,rtaFormatService,rtaStateService,rtaDataService) {
+	function RtaHistoricalOverviewController($filter, $stateParams, $translate, rtaStateService, rtaDataService) {
 
 		var vm = this;
-		
-		rtaStateService.setCurrentState($stateParams)
-			.then(function () {
-					//maybe set team and site ???
-				console.log('set current state');
-			});
+		rtaStateService.setCurrentState($stateParams);
 
 		rtaDataService.load().then(function (data) {
 			buildSites(data.organization);
 		});
 
-		vm.loading = function() {
-			return !( vm.sites);
-		};
+		function buildSites(organization) {
+			vm.sites = [];
 
-		vm.goToAgents = rtaStateService.goToAgents;
-		vm.goToOverview = rtaStateService.goToOverview;
-		vm.apply = function(){
+			organization.forEach(function (site) {
+				var siteModel = {
+					Id: site.Id,
+					Name: site.Name,
+					FullPermission: site.FullPermission,
+					Teams: [],
+					get isChecked() {
+						return rtaStateService.isSiteSelected(site.Id);
+					},
+					get isMarked() {
+						return rtaStateService.siteHasTeamsSelected(site.Id);
+					},
+					toggle: function () {
+						rtaStateService.toggleSite(site.Id);
+						updateOrganizationPicker();
+					}
+				};
+
+				site.Teams.forEach(function (team) {
+					siteModel.Teams.push({
+						Id: team.Id,
+						Name: team.Name,
+						get isChecked() {
+							return rtaStateService.isTeamSelected(team.Id);
+						},
+						toggle: function () {
+							rtaStateService.toggleTeam(team.Id);
+							updateOrganizationPicker();
+						}
+					});
+				});
+
+				vm.sites.push(siteModel);
+			});
+
+			updateOrganizationPicker();
+		}
+		
+		function updateOrganizationPicker() {
+			vm.organizationPickerSelectionText = rtaStateService.organizationSelectionText();
+			vm.organizationPickerClearEnabled = (vm.sites || []).some(function (site) {
+				return site.isChecked || site.isMarked;
+			});
+		}
+		
+		vm.applyOrganizationSelection = function () {
 			vm.organizationPickerOpen = false;
 			vm.groupings = [
 				{
@@ -408,62 +443,13 @@
 				}
 			];
 		};
-		function buildSites(organization) {
-			vm.sites = [];
-
-			organization.forEach(function (site) {
-				var siteModel = {
-					Id: site.Id,
-					Name: site.Name,
-					FullPermission: site.FullPermission,
-					Teams: [],
-					get isChecked() {
-						return rtaStateService.isSiteSelected(site.Id);
-					},
-					get isMarked() {
-						return rtaStateService.siteHasTeamsSelected(site.Id);
-					},
-					toggle: function () {
-						rtaStateService.toggleSite(site.Id);
-						updateOrganizationPicker();
-					}
-				};
-
-				site.Teams.forEach(function (team) {
-					siteModel.Teams.push({
-						Id: team.Id,
-						Name: team.Name,
-						get isChecked() {
-							return rtaStateService.isTeamSelected(team.Id);
-						},
-						toggle: function () {
-							rtaStateService.toggleTeam(team.Id);
-							updateOrganizationPicker();
-						}
-					});
-				});
-
-				vm.sites.push(siteModel);
-			});
-
-			updateOrganizationPicker();
-		}
 
 		vm.clearOrganizationSelection = function () {
 			rtaStateService.deselectOrganization();
 			updateOrganizationPicker();
 		};
-
-		function updateOrganizationPicker() {
-			vm.organizationPickerSelectionText = rtaStateService.organizationSelectionText();
-			vm.organizationPickerClearEnabled = (vm.sites || []).some(function (site) {
-				return site.isChecked || site.isMarked;
-			});
-		}
-
-
 		
-		
-		
+		vm.goToAgents = rtaStateService.goToAgents;
+		vm.goToOverview = rtaStateService.goToOverview;
 	}
 })();
