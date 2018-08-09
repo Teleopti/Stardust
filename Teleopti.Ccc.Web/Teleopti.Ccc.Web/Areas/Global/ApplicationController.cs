@@ -23,14 +23,14 @@ namespace Teleopti.Ccc.Web.Areas.Global
 		public virtual IEnumerable<object> GetWfmAreasWithPermission()
 		{
 			return _areaWithPermissionPathProvider.GetWfmAreasWithPermissions()
-				.Select(a => new { Name = a.Name(), a.InternalName, _links = a.Links.ToArray() }).ToArray();
+				.Select(a => new { a.Name, a.InternalName, _links = a.Links.ToArray() }).ToArray();
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Global/Application/WfmAreasList")]
 		public virtual IEnumerable<object> GetWfmAreasList()
 		{
 			return _areaWithPermissionPathProvider.GetWfmAreasList()
-				.Select(a => new { Name = a.Name(), a.InternalName, _links = a.Links.ToArray() }).ToArray();
+				.Select(a => new { a.Name, a.InternalName, _links = a.Links.ToArray() }).ToArray();
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Settings/SupportEmail")]
