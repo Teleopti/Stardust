@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 		
 		public void CalculateForecastedAgentsForEmailSkills(IEnumerable<ISkillDay> skillDays, bool useShrinkage)
 		{
-			var skills = skillDays.Select(x => x.Skill);
+			var skills = skillDays.Select(x => x.Skill).Distinct();
 
 			var scheduledStaffingPerSkill = new List<SkillStaffingIntervalLightModel>();
 
