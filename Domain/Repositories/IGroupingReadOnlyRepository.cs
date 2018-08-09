@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IEnumerable<ReadOnlyGroupPage> AvailableGroupsBasedOnPeriod(DateOnlyPeriod period);
 		IEnumerable<ReadOnlyGroupDetail> AvailableGroups(DateOnlyPeriod period, params Guid[] groupPageIds);
 		IEnumerable<ReadOnlyGroupDetail> FindGroups(IEnumerable<Guid> groupIds, DateOnlyPeriod period);
+		IEnumerable<ReadOnlyGroup> AllAvailableGroups(DateOnlyPeriod period);
 	}
 
 	public class ReadOnlyGroupDetail : IPersonAuthorization
@@ -42,5 +43,17 @@ namespace Teleopti.Ccc.Domain.Repositories
 	{
 		public string PageName { get; set; }
 		public Guid PageId { get; set; }
+	}
+
+	public class ReadOnlyGroup: ITeamAuthorization
+	{
+		public Guid PageId { get; set; }
+		public string PageName { get; set; }
+		public string GroupName { get; set; }
+		public Guid GroupId { get; set; }
+		public Guid TeamId { get; set; }
+		public Guid SiteId { get; set; }
+		public Guid BusinessUnitId { get; set; }
+		
 	}
 }

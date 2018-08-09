@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.Global.Models;
 using Teleopti.Interfaces.Domain;
 
@@ -37,12 +38,18 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 
 		public GroupPagesViewModel CreateViewModel(DateOnlyPeriod period, string functionPath)
 		{
+			var authourization = PrincipalAuthorization.Current();
 			var stringComparer = StringComparer.Create(_uiCulture.GetUiCulture(), false);
-			var allGroupPages = _groupingReadOnlyRepository.AvailableGroupsBasedOnPeriod(period);
 			var allDynamicOptionalColumns = _optionalColumnRepository.GetOptionalColumns<Person>().Where(o => o.AvailableAsGroupPage).ToList();
-			var allAvailableGroups =
-				_groupingReadOnlyRepository.AvailableGroups(period, allGroupPages.Select(gp => gp.PageId).ToArray())
-					.ToLookup(t => t.PageId);
+		
+			var allAvailableGroups = _groupingReadOnlyRepository.AllAvailableGroups(period).ToLookup(g => g.PageId);
+
+			var allGroupPages = allAvailableGroups
+				.Select(gp => new ReadOnlyGroupPage
+				{
+					PageId = gp.Key,
+					PageName = gp.First().PageName
+				});
 
 			var actualOrgs = new List<SiteViewModelWithTeams>();
 
@@ -52,11 +59,11 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 				var permittedTeamGroups = siteLookUp
 					.GroupBy(slu => slu.TeamId)
 					.Select(slu => slu.First())
-					.Where(team => _permissionProvider.HasOrganisationDetailPermission(functionPath, period.StartDate, team));
+					.Where(team => authourization.IsPermitted(functionPath, period.StartDate, team));
 
 				if (!permittedTeamGroups.Any())
 					continue;
-				var permittedTeams = _teamRepository.FindTeams(permittedTeamGroups.Select(x => x.TeamId.Value));
+				var permittedTeams = _teamRepository.FindTeams(permittedTeamGroups.Select(x => x.TeamId));
 				if (!permittedTeams.Any())
 					continue;
 				var children = permittedTeams.Select(t => new TeamViewModel
@@ -69,7 +76,7 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 				{
 
 					Name = permittedTeams.First().Site.Description.Name,
-					Id = siteLookUp.Key.GetValueOrDefault(),
+					Id = siteLookUp.Key,
 					Children = children.ToList()
 				});
 			}
