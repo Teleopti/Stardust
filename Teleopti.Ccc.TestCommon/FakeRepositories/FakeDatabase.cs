@@ -272,6 +272,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return database.WithPeriod(startDate, null, null, null);
 		}
 
+		public static FakeDatabase WithPeriod(this FakeDatabase database, string startDate, ISiteOpenHour siteOpenHour)
+		{
+			return database.WithPeriod(startDate, null, null, null, siteOpenHour);
+		}
+
 		public static FakeDatabase WithPeriod(this FakeDatabase database, string startDate, Guid? teamId)
 		{
 			return database.WithPeriod(startDate, teamId, null, null);
@@ -763,6 +768,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_person.AddPersonPeriod(new PersonPeriod(startDate.Date(), personContract, _team));
 			_personPeriod = _person.Period(startDate.Date()) as PersonPeriod;
 
+			return this;
+		}
+
+		public FakeDatabase WithPeriod(string startDate, Guid? teamId, Guid? siteId, Guid? businessUnitId, ISiteOpenHour siteOpenHour)
+		{
+			WithPeriod(startDate, teamId, siteId, businessUnitId);
+			_site.AddOpenHour(siteOpenHour);
+			_sites.Has(_site);
 			return this;
 		}
 

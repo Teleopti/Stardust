@@ -21995,6 +21995,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Trading shifts is not allowed since one of the shifts would be outside of the site open hours..
+        /// </summary>
+        public static string NotAllowedWhenShiftOutsideOpenHours {
+            get {
+                return ResourceManager.GetString("NotAllowedWhenShiftOutsideOpenHours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not answered.
         /// </summary>
         public static string NotAnswered {

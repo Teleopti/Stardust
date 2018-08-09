@@ -17618,6 +17618,10 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <comment>FailedToClearScheduleForSelectedPlanningPeriodDueToTechnicalError</comment>
   </data>
   <data name="NothingSelected" xml:space="preserve">
-    <value>Nothing selected</value>
+	<value>Nothing selected</value>
+  </data>
+  <data name="NotAllowedWhenShiftOutsideOpenHours" xml:space="preserve">
+    <value>Trading shifts is not allowed since one of the shifts would be outside of the site open hours.</value>
+    <comment>Using in MyTime ShiftTrade for multiple shedules. A message for user when traded shift is outside the other agent's site open hours.</comment>
   </data>
 </root>

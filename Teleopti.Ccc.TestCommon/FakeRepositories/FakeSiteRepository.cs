@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Has(ISite site)
 		{
+			if (_data.Contains(site)) _data.Remove(site);
 			_data.Add(site);
 		}
 
