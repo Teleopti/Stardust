@@ -247,8 +247,7 @@ wfm
 				'teapot',
 				'rtatool',
 				'rtatracer',
-				'resourceplanner.importschedule',
-				'resourceplanner.archiveschedule',
+				'resourceplanner',
 				'dataprotection'
 			];
 
