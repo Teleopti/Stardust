@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -15,10 +20,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 	public class ShiftTradeMultiSchedulesSelectableChecker : IShiftTradeMultiSchedulesSelectableChecker
 	{
 		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
 
-		public ShiftTradeMultiSchedulesSelectableChecker(ILoggedOnUser loggedOnUser)
+		public ShiftTradeMultiSchedulesSelectableChecker(ILoggedOnUser loggedOnUser, IGlobalSettingDataRepository globalSettingDataRepository)
 		{
 			_loggedOnUser = loggedOnUser;
+			_globalSettingDataRepository = globalSettingDataRepository;
 		}
 
 		public bool CheckSelectable(bool hasAbsence, IScheduleDay myScheduleDay, IScheduleDay personToScheduleDay, 
@@ -50,7 +57,57 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				return false;
 			}
 
+			if (hasNonMainShiftActivities(myScheduleDay, personToScheduleDay))
+			{
+				unSelectableReason = Resources.NotAllowedWhenHasNonMainShiftAcitivities;
+				return false;
+			}
+
 			return true;
+		}
+
+		private bool isRuleNeedToCheck(string ruleType)
+		{
+			var allRlues = _globalSettingDataRepository.FindValueByKey(ShiftTradeSettings.SettingsKey,
+				new ShiftTradeSettings()).BusinessRuleConfigs;
+
+			var currentRule =  allRlues.First(x => x.BusinessRuleType == ruleType);
+			if (currentRule == null || !currentRule.Enabled || currentRule.HandleOptionOnFailed != RequestHandleOption.AutoDeny) return false;
+
+			return true;
+		}
+
+		private bool hasNonMainShiftActivities(IScheduleDay myScheduleDay, IScheduleDay personToScheduleDay)
+		{
+			if(!isRuleNeedToCheck(typeof(NonMainShiftActivityRule).FullName)) return false;
+
+			var myPersonAssignment = myScheduleDay?.PersonAssignment();
+			var meeting = myScheduleDay?.PersonMeetingCollection();
+			var overTime = myPersonAssignment?.OvertimeActivities();
+			var personalActivity = myPersonAssignment?.PersonalActivities();
+			if (hasMeeting(meeting) || hasNonMainShiftLayer(overTime) || hasNonMainShiftLayer(personalActivity)) return true;
+
+			var personToAssignment = personToScheduleDay?.PersonAssignment();
+			var personToMeeting = personToScheduleDay?.PersonMeetingCollection();
+			var personToOverTime = personToAssignment.OvertimeActivities();
+			var personToAcitiviy = personToAssignment.PersonalActivities();
+			if (hasMeeting(personToMeeting) || hasNonMainShiftLayer(personToOverTime) || hasNonMainShiftLayer(personToAcitiviy)) return true;
+
+			return false;
+		}
+
+		private bool hasMeeting(IPersonMeeting[] meeting)
+		{
+			if (meeting != null && meeting.Any()) return true;
+
+			return false;
+		}
+
+		private bool hasNonMainShiftLayer(IEnumerable<ShiftLayer> shiftLayers)
+		{
+			if (shiftLayers != null && shiftLayers.Any()) return true;
+
+			return false;
 		}
 
 		private bool isOutsideOpenHours(IScheduleDay myScheduleDay, IScheduleDay personToScheduleDay, IPerson personTo, DateOnly date)
@@ -75,6 +132,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 						|| myScheduleAtPersonToLocalPeriod.EndDateTime > personToOpenPeriod.EndDateTime 
 						|| personToSiteOpenHour.IsClosed) return true;
 				}
+
 			}
 
 			var mySiteOpenHours = _loggedOnUser.CurrentUser().SiteOpenHour(date);

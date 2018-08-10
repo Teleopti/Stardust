@@ -18,9 +18,11 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -69,6 +71,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public FakeActivityRepository ActivityRepository;
 		public MutableNow _now;
+		public FakeGlobalSettingDataRepository GlobalSettingDataRepository;
 
 		public void Isolate(IIsolate isolate)
 		{
@@ -397,9 +400,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldSelectableForNormalCase()
 		{
+			setGlobaleSetting(false, RequestHandleOption.AutoDeny);
 			_now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
-			var siteOpenHour = new SiteOpenHour { IsClosed = false, TimePeriod = new TimePeriod(8, 17), WeekDay = startDate.DayOfWeek };
+			var siteOpenHour = new SiteOpenHour { IsClosed = false, TimePeriod = new TimePeriod(8, 19), WeekDay = startDate.DayOfWeek };
 			var form = createShiftWithoutAbsence(startDate, 0, TimeZoneInfo.Utc, siteOpenHour);
 
 			var result = Target.ShiftTradeMultiDaysSchedule(form);
@@ -439,6 +443,37 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			data.MultiSchedulesForShiftTrade.First().IsSelectable.Should().Be.False();
 			data.MultiSchedulesForShiftTrade.First().UnselectableReason.Should().Be.EqualTo(expactedReason);
+		}
+
+		[Test]
+		public void ShouldNotSelectableWhenHasOvertimeAndRuleAutoDeny()
+		{
+			setGlobaleSetting(true, RequestHandleOption.AutoDeny);
+			_now.Is(DateOnly.Today.Date);
+			var startDate = DateOnly.Today.AddDays(1);
+			var siteOpenHour = new SiteOpenHour { IsClosed = false, TimePeriod = new TimePeriod(8, 19), WeekDay = startDate.DayOfWeek };
+			var form = createShiftWithoutAbsence(startDate, 0, TimeZoneInfo.Utc, siteOpenHour);
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+
+			data.MultiSchedulesForShiftTrade.First().IsSelectable.Should().Be.False();
+			data.MultiSchedulesForShiftTrade.First().UnselectableReason.Should().Be.EqualTo(Resources.NotAllowedWhenHasNonMainShiftAcitivities);
+		}
+
+		[Test]
+		public void ShouldSetSelectableWhenRulePending()
+		{
+			setGlobaleSetting(true, RequestHandleOption.Pending);
+			_now.Is(DateOnly.Today.Date);
+			var startDate = DateOnly.Today.AddDays(1);
+			var siteOpenHour = new SiteOpenHour { IsClosed = false, TimePeriod = new TimePeriod(8, 19), WeekDay = startDate.DayOfWeek };
+			var form = createShiftWithoutAbsence(startDate, 0, TimeZoneInfo.Utc, siteOpenHour);
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+
+			data.MultiSchedulesForShiftTrade.First().IsSelectable.Should().Be.True();
 		}
 
 		[Test]
@@ -516,6 +551,21 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			return PersonRepository.Get(personToId);
 		}
 
+		private void setGlobaleSetting(bool enabled, RequestHandleOption option)
+		{
+			var shiftTradeBusinessRuleConfig = new ShiftTradeBusinessRuleConfig
+			{
+				BusinessRuleType = typeof(NonMainShiftActivityRule).FullName,
+				Enabled = enabled,
+				HandleOptionOnFailed = option
+			};
+			var settingValue = new ShiftTradeSettings
+			{
+				BusinessRuleConfigs = new [] {shiftTradeBusinessRuleConfig}
+			}; 
+			GlobalSettingDataRepository.PersistSettingValue(ShiftTradeSettings.SettingsKey, settingValue);
+		}
+
 		private ShiftTradeMultiSchedulesForm createShiftWithoutAbsence(DateOnly date, int hourDiff, TimeZoneInfo timeZone, ISiteOpenHour siteOpenHour)
 		{
 			var scenarioId = Guid.NewGuid();
@@ -528,10 +578,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				.WithTerminalDate(DateOnly.MaxValue.ToString())
 				.WithScenario(scenarioId)
 				.WithSchedule(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString())
+				.WithAssignedOvertimeActivity(date.Date.AddHours(17).ToString(), date.Date.AddHours(18).ToString())
 				.WithPerson(personToId)
 				.WithPeriod(DateOnly.MinValue.ToString(), siteOpenHour)
 				.WithTerminalDate(DateOnly.MaxValue.ToString())
-				.WithSchedule(date.Date.AddHours(8+ hourDiff).ToString(), date.Date.AddHours(17+ hourDiff).ToString());
+				.WithSchedule(date.Date.AddHours(8 + hourDiff).ToString(), date.Date.AddHours(17 + hourDiff).ToString());
 
 			setPrincipal(personFromId, scenarioId);
 
