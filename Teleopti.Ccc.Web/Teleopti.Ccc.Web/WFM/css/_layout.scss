@@ -70,9 +70,8 @@ md-progress-circular {
 
 .landingIframe {
 	position: absolute;
-	width: 99% !important;
-	margin: 0px 3px;
-	height: 99% !important;
+	width: calc(100% - 20px);
+	height: calc(100% - 20px);
 }
 
 .c3-legend-item-hidden {
