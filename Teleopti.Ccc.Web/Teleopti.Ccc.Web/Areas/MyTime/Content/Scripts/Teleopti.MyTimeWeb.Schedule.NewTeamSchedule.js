@@ -196,6 +196,8 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 					});
 				}
 			});
+
+			$(window).on('resize', calculateTheScrollingRatio);
 		}, 0);
 	}
 

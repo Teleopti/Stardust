@@ -1448,6 +1448,72 @@ select.time-input {
 	overflow: visible !important;
 }
 
+/*Select2 styles*/
+.select2-container .select2-choice .select2-arrow {
+	border: none;
+	width: 37px;
+	text-align: center;
+}
+.select2-container .select2-choice .select2-arrow b {
+	background: none !important;
+	position: relative;
+	top: 1px;
+	display: inline-block;
+	font-family: 'Glyphicons Halflings';
+	font-style: normal;
+	font-weight: 300;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	transform: scale(1);
+}
+.select2-container .select2-choice .select2-arrow b:focus {
+	outline-color: -webkit-focus-ring-color;
+	outline-style: auto;
+	outline-width: 5px;
+	outline: 5px auto -webkit-focus-ring-color;
+	outline-offset: -2px;
+}
+.select2-container .select2-choice .select2-arrow b::before {
+	content: '\e114';
+}
+.select2-search input {
+	border-color: rgba(0, 0, 0, 0.1);
+}
+
+ul.select2-results {
+	-webkit-overflow-scrolling: touch;
+}
+
+ul.select2-results li.select2-result {
+	background: none;
+}
+ul.select2-results > li.select2-result:nth-child(odd) > div,
+ul.select2-results li ul li.select2-result:nth-child(odd) > div {
+	background: rgba(0, 0, 0, 0.1);
+}
+ul.select2-results li.select2-result.select2-highlighted > div,
+ul.select2-results li ul li.select2-result.select2-highlighted > div {
+	background: #5acdf9;
+}
+.select2-container .select2-choice,
+.select2-container .select2-choice:focus,
+.select2-drop-active,
+.select2-drop-active:focus {
+	margin: 0;
+	outline: none;
+	box-shadow: none;
+}
+.select2-container-active .select2-choice {
+	box-shadow: none;
+}
+.select2-dropdown-open.select2-drop-above .select2-choice {
+	background-image: none;
+}
+.select2-container .select2-choice {
+	outline: none;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
 .select2-drop {
 	z-index: 9999999999999 !important;
 }
