@@ -16,15 +16,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly FullScheduling _fullScheduling;
 		private readonly IEventPopulatingPublisher _eventPublisher;
 		private readonly IJobResultRepository _jobResultRepository;
-		private readonly ILowThreadPriorityScope _lowThreadPriorityScope;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(WebScheduleStardustHandler));
 
-		public WebScheduleStardustHandler(FullScheduling fullScheduling, IEventPopulatingPublisher eventPublisher, IJobResultRepository jobResultRepository, ILowThreadPriorityScope lowThreadPriorityScope)
+		public WebScheduleStardustHandler(FullScheduling fullScheduling, IEventPopulatingPublisher eventPublisher, IJobResultRepository jobResultRepository)
 		{
 			_fullScheduling = fullScheduling;
 			_eventPublisher = eventPublisher;
 			_jobResultRepository = jobResultRepository;
-			_lowThreadPriorityScope = lowThreadPriorityScope;
 		}
 
 		[AsSystem]
@@ -33,16 +31,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			logger.Info($"Web Scheduling started for PlanningPeriod {@event.PlanningPeriodId} and JobResultId is {@event.JobResultId}");
 			try
 			{
-				using (_lowThreadPriorityScope.OnThisThread())
+				var result = _fullScheduling.DoScheduling(@event.PlanningPeriodId);
+				
+				SaveDetailToJobResult(@event, DetailLevel.Info, JsonConvert.SerializeObject(result), null);
+				_eventPublisher.Publish(new WebDayoffOptimizationStardustEvent(@event)
 				{
-					var result = _fullScheduling.DoScheduling(@event.PlanningPeriodId);
-					
-					SaveDetailToJobResult(@event, DetailLevel.Info, JsonConvert.SerializeObject(result), null);
-					_eventPublisher.Publish(new WebDayoffOptimizationStardustEvent(@event)
-					{
-						JobResultId = @event.JobResultId
-					});
-				}
+					JobResultId = @event.JobResultId
+				});
 			}
 			catch (Exception e)
 			{

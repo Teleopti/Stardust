@@ -17,13 +17,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	{
 		private readonly DayOffOptimizationWeb _dayOffOptimizationWeb;
 		private readonly IJobResultRepository _jobResultRepository;
-		private readonly ILowThreadPriorityScope _lowThreadPriorityScope;
 
-		public WebDayoffOptimizationStardustHandler(DayOffOptimizationWeb dayOffOptimizationWeb, IJobResultRepository jobResultRepository, ILowThreadPriorityScope lowThreadPriorityScope)
+		public WebDayoffOptimizationStardustHandler(DayOffOptimizationWeb dayOffOptimizationWeb, IJobResultRepository jobResultRepository)
 		{
 			_dayOffOptimizationWeb = dayOffOptimizationWeb;
 			_jobResultRepository = jobResultRepository;
-			_lowThreadPriorityScope = lowThreadPriorityScope;
 		}
 
 		[AsSystem]
@@ -31,11 +29,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			try
 			{
-				using (_lowThreadPriorityScope.OnThisThread())
-				{
-					var result = _dayOffOptimizationWeb.Execute(@event.PlanningPeriodId);
-					SaveDetailToJobResult(@event, DetailLevel.Info, JsonConvert.SerializeObject(result), null);
-				}
+				var result = _dayOffOptimizationWeb.Execute(@event.PlanningPeriodId);
+				SaveDetailToJobResult(@event, DetailLevel.Info, JsonConvert.SerializeObject(result), null);
 			}
 			catch (Exception e)
 			{

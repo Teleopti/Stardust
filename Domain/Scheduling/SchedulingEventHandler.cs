@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly ISynchronizeSchedulesAfterIsland _synchronizeSchedulesAfterIsland;
 		private readonly IGridlockManager _gridlockManager;
 		private readonly ISchedulingSourceScope _schedulingSourceScope;
-		private readonly ILowThreadPriorityScope _lowThreadPriorityScope;
 		private readonly ExtendSelectedPeriodForMonthlyScheduling _extendSelectedPeriodForMonthlyScheduling;
 		private readonly IBlockPreferenceProviderForPlanningPeriod _blockPreferenceProviderForPlanningPeriod;
 
@@ -34,8 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						ICurrentSchedulingCallback currentSchedulingCallback,
 						ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland,
 						IGridlockManager gridlockManager, 
-						ISchedulingSourceScope schedulingSourceScope, 
-						ILowThreadPriorityScope lowThreadPriorityScope,
+						ISchedulingSourceScope schedulingSourceScope,
 						ExtendSelectedPeriodForMonthlyScheduling extendSelectedPeriodForMonthlyScheduling,
 						IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod)
 		{
@@ -47,7 +45,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_synchronizeSchedulesAfterIsland = synchronizeSchedulesAfterIsland;
 			_gridlockManager = gridlockManager;
 			_schedulingSourceScope = schedulingSourceScope;
-			_lowThreadPriorityScope = lowThreadPriorityScope;
 			_extendSelectedPeriodForMonthlyScheduling = extendSelectedPeriodForMonthlyScheduling;
 			_blockPreferenceProviderForPlanningPeriod = blockPreferenceProviderForPlanningPeriod;
 		}
@@ -57,7 +54,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			if (@event.FromWeb)
 			{
-				using (_lowThreadPriorityScope.OnThisThread())
 				using (_schedulingSourceScope.OnThisThreadUse(ScheduleSource.WebScheduling))
 				{
 					run(@event);
