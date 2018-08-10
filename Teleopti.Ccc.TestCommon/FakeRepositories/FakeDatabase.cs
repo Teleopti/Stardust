@@ -941,7 +941,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			ensureExists(_scenarios, null, () => WithScenario(null, true));
 			_meeting = new Meeting(
 				_person,
-				new[] {new MeetingPerson(_person, false)},
+				new[] { new MeetingPerson(_person, false) },
 				subject,
 				null,
 				null,
@@ -955,6 +955,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			};
 			_meeting.SetId(Guid.NewGuid());
 			_meetings.Has(_meeting);
+			return this;
+		}
+
+		public FakeDatabase WithAssignedPersonalActivity(Guid? id, string startTime, string endTime)
+		{
+			ensureExists(_activities, id, () => this.WithActivity(id));
+			_personAssignment.AddPersonalActivity(_activity, new DateTimePeriod(startTime.Utc(), endTime.Utc()));
 			return this;
 		}
 

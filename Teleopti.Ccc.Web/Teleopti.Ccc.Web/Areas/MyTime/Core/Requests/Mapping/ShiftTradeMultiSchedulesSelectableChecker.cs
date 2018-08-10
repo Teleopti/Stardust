@@ -63,7 +63,33 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				return false;
 			}
 
+			if (hasNonOverwriteActivities(myScheduleDay, personToScheduleDay))
+			{
+				unSelectableReason = Resources.NotAllowedWhenHasNonOverwriteActivity;
+				return false;
+			}
+
 			return true;
+		}
+
+		private bool hasNonOverwriteActivities(IScheduleDay myScheduleDay, IScheduleDay personToScheduleDay)
+		{
+			if (!isRuleNeedToCheck(typeof(NotOverwriteLayerRule).FullName)) return false;
+
+			if (hasMeetingOrPersonalActivity(myScheduleDay)) return true;
+			if (hasMeetingOrPersonalActivity(personToScheduleDay)) return true;
+
+			return false;
+		}
+
+		private bool hasMeetingOrPersonalActivity(IScheduleDay scheduleDay)
+		{
+			if (scheduleDay == null) return false;
+
+			var rule = new NotOverwriteLayerRule();
+			var overLapingLayers = rule.GetOverlappingLayerses(scheduleDay);
+
+			return overLapingLayers.Any();
 		}
 
 		private bool isRuleNeedToCheck(string ruleType)
@@ -71,7 +97,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var allRlues = _globalSettingDataRepository.FindValueByKey(ShiftTradeSettings.SettingsKey,
 				new ShiftTradeSettings()).BusinessRuleConfigs;
 
-			var currentRule =  allRlues.First(x => x.BusinessRuleType == ruleType);
+			var currentRule =  allRlues.FirstOrDefault(x => x.BusinessRuleType == ruleType);
 			if (currentRule == null || !currentRule.Enabled || currentRule.HandleOptionOnFailed != RequestHandleOption.AutoDeny) return false;
 
 			return true;
@@ -81,31 +107,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		{
 			if(!isRuleNeedToCheck(typeof(NonMainShiftActivityRule).FullName)) return false;
 
-			var myPersonAssignment = myScheduleDay?.PersonAssignment();
-			var meeting = myScheduleDay?.PersonMeetingCollection();
-			var overTime = myPersonAssignment?.OvertimeActivities();
-			var personalActivity = myPersonAssignment?.PersonalActivities();
-			if (hasMeeting(meeting) || hasNonMainShiftLayer(overTime) || hasNonMainShiftLayer(personalActivity)) return true;
+			var overTime = myScheduleDay?.PersonAssignment()?.OvertimeActivities();
+			if (hasOvertime(overTime)) return true;
 
-			var personToAssignment = personToScheduleDay?.PersonAssignment();
-			var personToMeeting = personToScheduleDay?.PersonMeetingCollection();
-			var personToOverTime = personToAssignment.OvertimeActivities();
-			var personToAcitiviy = personToAssignment.PersonalActivities();
-			if (hasMeeting(personToMeeting) || hasNonMainShiftLayer(personToOverTime) || hasNonMainShiftLayer(personToAcitiviy)) return true;
+			var personToOverTime = personToScheduleDay?.PersonAssignment().OvertimeActivities();
+			if (hasOvertime(personToOverTime)) return true;
+
+			if (hasMeetingOrPersonalActivity(myScheduleDay)) return true;
+			if (hasMeetingOrPersonalActivity(personToScheduleDay)) return true;
 
 			return false;
 		}
 
-		private bool hasMeeting(IPersonMeeting[] meeting)
+		private bool hasOvertime(IEnumerable<OvertimeShiftLayer> overtime)
 		{
-			if (meeting != null && meeting.Any()) return true;
-
-			return false;
-		}
-
-		private bool hasNonMainShiftLayer(IEnumerable<ShiftLayer> shiftLayers)
-		{
-			if (shiftLayers != null && shiftLayers.Any()) return true;
+			if (overtime != null && overtime.Any()) return true;
 
 			return false;
 		}

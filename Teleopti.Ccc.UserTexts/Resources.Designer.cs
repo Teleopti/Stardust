@@ -22002,11 +22002,20 @@ namespace Teleopti.Ccc.UserTexts {
                 return ResourceManager.GetString("NotAllowedWhenHasNonMainShiftAcitivities", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Trading shifts is not allowed since one of the shifts would be outside of the site open hours..
-        /// </summary>
-        public static string NotAllowedWhenShiftOutsideOpenHours {
+
+		/// <summary>
+		///   Looks up a localized string similar to Trading shifts is not allowed when there is a non-overwritable activity in the shift..
+		/// </summary>
+		public static string NotAllowedWhenHasNonOverwriteActivity {
+			get {
+				return ResourceManager.GetString("NotAllowedWhenHasNonOverwriteActivity", resourceCulture);
+			}
+		}
+
+		/// <summary>
+		///   Looks up a localized string similar to Trading shifts is not allowed since one of the shifts would be outside of the site open hours..
+		/// </summary>
+		public static string NotAllowedWhenShiftOutsideOpenHours {
             get {
                 return ResourceManager.GetString("NotAllowedWhenShiftOutsideOpenHours", resourceCulture);
             }

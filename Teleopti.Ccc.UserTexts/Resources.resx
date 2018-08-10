@@ -17628,4 +17628,8 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Trading shifts is not allowed when a meeting, a personal activity or overtime is scheduled.</value>
     <comment>Use in Mytime ShiftTrade, a message when one of the agent has meeting, personal activity or overtime and related Business rule set to Deny.</comment>
   </data>
+  <data name="NotAllowedWhenHasNonOverwriteActivity" xml:space="preserve">
+    <value>Trading shifts is not allowed when there is a non-overwritable activity in the shift.</value>
+    <comment>Use in MyTime ShiftTrade. A message tell agent when schedule cannot selected when has non-overwritable activity.</comment>
+  </data>
 </root>

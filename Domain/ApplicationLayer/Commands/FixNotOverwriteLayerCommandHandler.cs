@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var scheduleRange = dict[person];
 			var scheduledDay = scheduleRange.ScheduledDay(command.Date);
 			var personAss = scheduledDay.PersonAssignment();
-			var overlappingLayers = rule.GetOverlappingLayerses(dict, scheduledDay);
+			var overlappingLayers = rule.GetOverlappingLayerses(scheduledDay);
 
 			if (overlappingLayers.Count == 0)
 			{
