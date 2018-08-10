@@ -148,7 +148,7 @@
 						return;
 					}
 					vm.confirmationText = $translate.instant(vm.ArchivingOrImporting + 'ConfirmationWithParameters')
-						.replace('{0}', toScenario.Name)
+						.replace('{0}', vm.isImportSchedule? fromScenario.Name : toScenario.Name)
 						.replace('{1}', moment(period.startDate).format('L'))
 						.replace('{2}', moment(period.endDate).format('L'));
 					vm.showConfirmModal = true;
