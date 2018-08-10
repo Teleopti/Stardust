@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var allRlues = _globalSettingDataRepository.FindValueByKey(ShiftTradeSettings.SettingsKey,
 				new ShiftTradeSettings()).BusinessRuleConfigs;
 
-			var currentRule =  allRlues.FirstOrDefault(x => x.BusinessRuleType == ruleType);
+			var currentRule =  allRlues?.FirstOrDefault(x => x.BusinessRuleType == ruleType);
 			if (currentRule == null || !currentRule.Enabled || currentRule.HandleOptionOnFailed != RequestHandleOption.AutoDeny) return false;
 
 			return true;
