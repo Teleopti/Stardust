@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				if (skills.Key.Length == 0) return;
 				var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills);
 
-				resources.RemoveResource(key, skills, heads, resourceLayer.Resource, resourceLayer.FractionPeriod);
+				resources.RemoveResource(key, skills, heads, resourceLayer.Resource, resourceLayer.FractionPeriod, resourceLayer.Period);
 			}
 			catch (ArgumentOutOfRangeException ex) //just to get more info if/when #44525 occurs
 			{
