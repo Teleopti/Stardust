@@ -12,19 +12,6 @@
 	padding: 0;
 }
 
-.weekview-day li.dayoff div {
-	border-left-color: beige;
-	border-right-color: beige;
-}
-
-.calendarview-week li.dayoff .day-content {
-	border-left-color: beige;
-	border-right-color: beige;
-}
-.calendarview-week li.striped .day-content {
-	background-image: url(../Images/stripe.png);
-}
-
 .small-circle {
 	width: 10px;
 	height: 10px;
@@ -34,32 +21,8 @@
 	margin-top: 2px;
 }
 
-.teamschedule .dayoff {
-	background-color: beige;
-}
-.teamschedule .striped {
-	background-image: url(../Images/stripe.png);
-
-	/* Until IE supports gradites for real
-
-	-webkit-background-size: 6px 6px;
-	background-image: -webkit-linear-gradient(-45deg,
-		rgba(0, 0, 0, .5) 0%,
-		rgba(0, 0, 0, .5) 10%,
-		transparent 10%,
-		transparent 50%,
-		rgba(0, 0, 0, .5) 50%,
-		rgba(0, 0, 0, .5) 60%,
-		transparent 60%,
-		transparent 100%)*/
-}
-
 .request-body-inner .dayoff {
-	background-color: beige;
 	border: 1px solid rgba(0, 0, 0, 0.15);
-}
-.request-body-inner .striped {
-	background-image: url(../Images/stripe.png);
 }
 
 .date-input-style {

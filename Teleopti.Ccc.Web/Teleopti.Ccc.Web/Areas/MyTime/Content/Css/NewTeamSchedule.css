@@ -245,11 +245,6 @@
 	font-weight: normal;
 }
 
-.new-teamschedule-agent-name .shift-category-cell.dayoff {
-	background-color: beige !important;
-	background-image: url(../Images/stripe.png) !important;
-}
-
 .agent-index-num {
 	width: 50px;
 	height: 20px;

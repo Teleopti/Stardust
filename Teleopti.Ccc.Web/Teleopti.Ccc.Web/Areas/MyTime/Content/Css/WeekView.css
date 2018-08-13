@@ -93,15 +93,6 @@
 	);
 }
 
-.dayoff {
-	background-color: beige;
-	background-image: url(../Images/stripe.png);
-}
-
-.weekview-day-summary.striped {
-	background-image: url(../Images/stripe.png);
-}
-
 .weekview-day-show-request {
 	cursor: pointer;
 }

@@ -176,19 +176,19 @@
 }
 
 .shift-trade-selection-container {
-	width:27px;
-	height:27px;
-	text-align:center;
-	vertical-align:central;
+	width: 27px;
+	height: 27px;
+	text-align: center;
+	vertical-align: central;
 }
 
-@media(min-width:993px) {
+@media (min-width: 993px) {
 	.clear-desktop-color {
 		background-color: transparent !important;
 	}
 
 	.shift-to-trade-row-disable .schedule-layer-text-container {
-		color: #c9c4c4
+		color: #c9c4c4;
 	}
 }
 
@@ -206,11 +206,6 @@
 
 	.shift-to-trade-row-disable .clear-desktop-color {
 		opacity: 0.5;
-	}
-
-	.mobile-dayoff {
-		background-color: beige;
-		background-image: url(../Images/stripe.png);
 	}
 
 	.shift-trade-agent-name {
@@ -234,7 +229,7 @@
 	padding-left: 0;
 	padding-right: 0;
 	height: 22px;
-	width:200px;
+	width: 200px;
 }
 
 .shift-trade-layer-container.shift-trade-empty {
@@ -821,11 +816,11 @@ input.use-default-startTime {
 .shift-to-trade-row {
 	height: 100px;
 	display: flex;
-	border-top: .8px solid #e3e3e3;
+	border-top: 0.8px solid #e3e3e3;
 }
 
 .shift-to-trade-row + .shift-to-trade-row {
-	margin-top:1px;
+	margin-top: 1px;
 }
 
 .shift-detail {
@@ -836,32 +831,33 @@ input.use-default-startTime {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	text-align:center;
+	text-align: center;
 }
 
 .shift-date {
 	flex: 1 0 80px !important;
-	text-align:center;
+	text-align: center;
 }
 
-.shift-date, .shift-selection {
+.shift-date,
+.shift-selection {
 	flex: 1 1 10%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 }
 
-.shift-selection input[type=checkbox][disabled] {
-	cursor:default !important;
-	pointer-events:none;
+.shift-selection input[type='checkbox'][disabled] {
+	cursor: default !important;
+	pointer-events: none;
 }
 
 .shift-trade-contract {
 	clear: both;
-	font-size: .8em;
+	font-size: 0.8em;
 }
 
-.shift-to-trade-row-disable {	
+.shift-to-trade-row-disable {
 	color: #c9c4c4 !important;
 }
 
@@ -869,12 +865,12 @@ input.use-default-startTime {
 	opacity: 0.5;
 }
 
-	.schedules-side-by-side {
-		flex: 1 1 70%;
-		overflow: hidden;
-		background-color: white;
-		border: .8px solid #e3e3e3;
-	}
+.schedules-side-by-side {
+	flex: 1 1 70%;
+	overflow: hidden;
+	background-color: white;
+	border: 0.8px solid #e3e3e3;
+}
 
 .shift-trade-cart {
 	flex: 1 1 30%;
@@ -915,17 +911,17 @@ input.use-default-startTime {
 }
 
 .own-shift + .shift-to-trade {
-	margin-left:1px;
+	margin-left: 1px;
 }
 .schedule-layer-text-container {
-	display:flex;
-	align-items:center;
-	flex-direction:column;	
+	display: flex;
+	align-items: center;
+	flex-direction: column;
 }
 
 .dayoff-text {
-	line-height:60px;
-	display:inline-block;
+	line-height: 60px;
+	display: inline-block;
 }
 
 .clear-background-image {

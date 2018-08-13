@@ -179,10 +179,6 @@
 	padding: 0;
 }
 
-.mobile-month-day .dayoff-img {
-	background-image: url(../Images/stripe.png);
-}
-
 .mobile-month-view .absence-and-overtime {
 	position: absolute;
 	bottom: 0;

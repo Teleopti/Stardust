@@ -1717,3 +1717,16 @@ button.btn.absence-report-cancel {
 		width: initial;
 	}
 }
+
+/*Day off style*/
+.dayoff,
+.striped,
+.absence-.dayoff,
+.cal-month-day .dayoff,
+.calendarview-week li.striped .day-content,
+.calendarview-week li.dayoff .day-content,
+.weekview-day li.dayoff div,
+.weekview-day-summary.striped {
+	background-color: beige !important;
+	background-image: url(../Images/stripe.png) !important;
+}
