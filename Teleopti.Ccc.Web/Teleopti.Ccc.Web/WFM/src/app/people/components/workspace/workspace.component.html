@@ -1,9 +1,10 @@
 <div class="workspace" data-test-workspace>
-  <button class="action" nz-button nzType="default" nzShape="circle" [nzSize]="'small'" (click)="workspaceService.clear()" [nzTitle]="'ClearAll' | translate" nzPlacement="top" nz-tooltip
-    data-test-clear-button>
+  <button class="action" nz-button nzType="default" nzShape="circle" [nzSize]="'small'" (click)="workspaceService.clear()"
+    [nzTitle]="'ClearAll' | translate" nzPlacement="top" nz-tooltip data-test-clear-button>
     <i class="mdi mdi-notification-clear-all"></i>
   </button>
-  <nz-table #workspaceTable [nzSize]="'small'" [nzShowPagination]="false" [nzData]="workspaceService.people$.getValue()" [nzNoResult]="'NothingSelected' | translate">
+  <nz-table #workspaceTable [nzSize]="'small'" [nzShowPagination]="false" [nzFrontPagination]="false" [nzData]="workspaceService.people$.getValue()"
+    [nzNoResult]="'NothingSelected' | translate">
     <thead>
       <tr>
         <th>{{'ActiveSelection' | translate}}
