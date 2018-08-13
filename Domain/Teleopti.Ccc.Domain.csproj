@@ -190,6 +190,8 @@
     <Compile Include="ApplicationLayer\ResourcePlanner\ClearPlanningPeriodSchedule.cs" />
     <Compile Include="Budgeting\BudgetGroupAllowanceCalculatorExtended.cs" />
     <Compile Include="Budgeting\BudgetGroupAllowanceCalculatorLimited.cs" />
+    <Compile Include="Budgeting\BudgetGroupHeadCountSpecificationExtended.cs" />
+    <Compile Include="Budgeting\BudgetGroupHeadCountSpecificationLimited.cs" />
     <Compile Include="Common\DefaultSchedulePeriodProvider.cs" />
     <Compile Include="ApplicationLayer\Commands\MultipleChangeScheduleCommandHandler.cs" />
     <Compile Include="Infrastructure\DeadLockRetrier.cs" />

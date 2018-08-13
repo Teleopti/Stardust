@@ -139,6 +139,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				BudgetGroupAllowanceCalculatorExtended, BudgetGroupAllowanceCalculatorLimited>(
 				builder, Toggles.Wfm_Requests_NightShift_BudgetDay_Allowance_76599);
 
+			registerType<IBudgetGroupHeadCountCalculator,
+				BudgetGroupHeadCountSpecificationExtended, BudgetGroupHeadCountSpecificationLimited>(
+				builder, Toggles.Wfm_Requests_NightShift_BudgetDay_HeadCount_77146);
+
 		}
 
 		private void registerType<T, TToggleOn, TToggleOff>(ContainerBuilder builder, Toggles toggle)

@@ -61,6 +61,7 @@
 		Wfm_Requests_DenyRequestWhenAllSkillsClosed_46384,
 		Wfm_Requests_NightShift_BudgetDay_Allowance_76599,
 		AddOrRemoveTenantsWithoutRestart_43635,
+		Wfm_Requests_NightShift_BudgetDay_HeadCount_77146,
 
 		Wfm_People_ImportAndCreateAgentFromFile_42528,
 		Wfm_People_SetFallbackValuesForImporting_43289,

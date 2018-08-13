@@ -1,79 +1,1071 @@
-﻿using NUnit.Framework;
-using Rhino.Mocks;
+﻿using System;
+using NUnit.Framework;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.WorkflowControl;
-
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.WorkflowControl
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "HeadCount"), TestFixture]
-    public class BudgetGroupHeadCountValidatorTest
-    {
-        private IAbsenceRequestValidator _target;
-        private MockRepository _mocks;
-        
-        [SetUp]
-        public void Setup()
-        {
-            _mocks = new MockRepository();
-            _target = new BudgetGroupHeadCountValidator();    
-        }
+	[TestFixture]
+	[DomainTest]
+	[Toggle(Domain.FeatureFlags.Toggles.Wfm_Requests_NightShift_BudgetDay_HeadCount_77146)]
+	public class BudgetGroupHeadCountValidatorTest : IIsolateSystem
+	{
 
-        [Test]
-        public void ShouldHaveDisplayText()
-        {
-            Assert.AreEqual("Budget Group Head Count", _target.DisplayText);
-        }
+		private IAbsenceRequestValidator _target = new BudgetGroupHeadCountValidator();
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
+		public ISchedulingResultStateHolder SchedulingResultStateHolder;
+		public IResourceCalculation ResourceCalculation;
+		public IBudgetGroupHeadCountSpecification BudgetGroupHeadCountSpecification;
+		public IBudgetGroupAllowanceSpecification BudgetGroupAllowanceSpecification;
+		public FakeBudgetDayRepository BudgetDayRepository;
+		public FakeBudgetGroupRepository BudgetGroupRepository;
+		public FakeScenarioRepository ScenarioRepository;
 
-        [Test]
-        public void ShouldCreateNewInstance()
-        {
-            var newInstance = _target.CreateInstance();
-            Assert.AreNotSame(_target, newInstance);
-            Assert.IsTrue(typeof(BudgetGroupHeadCountValidator).IsInstanceOfType(newInstance));
-        }
+		[Test]
+		public void ShouldUseTheBudgetDayWhereTheShiftStarts()
+		{
+			var absence = AbsenceFactory.CreateAbsence("holiday");
+			absence.InContractTime = true;
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			ScenarioRepository.Add(scenario);
+			var budgetGroup = getBudgetGroup();
+			BudgetGroupRepository.Add(budgetGroup);
 
-        [Test]
-        public void ShouldAllInstancesBeEqual()
-        {
-            var otherValidatorOfSameKind = new BudgetGroupHeadCountValidator();
-            Assert.IsTrue(otherValidatorOfSameKind.Equals(_target));
-        }
+			var budgetDayOne = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 15))
+			{
+				FulltimeEquivalentHours = 8d,
+				ShrinkedAllowance = 0,
+				AbsenceOverride = 0d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			var budgetDayTwo = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 16))
+			{
+				FulltimeEquivalentHours = 8d,
+				ShrinkedAllowance = 2,
+				AbsenceOverride = 0d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			BudgetDayRepository.Add(budgetDayOne);
+			BudgetDayRepository.Add(budgetDayTwo);
 
-        [Test]
-        public void ShouldNotEqualIfTheyAreInstancesOfDifferentType()
-        {
-            var otherValidator = new AbsenceRequestNoneValidator();
-            Assert.IsFalse(_target.Equals(otherValidator));
-        }
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2018, 08, 15));
+			personPeriod.BudgetGroup = budgetGroup;
 
-        [Test]
-        public void GetHashCodeCorrectly()
-        {
-            var result = _target.GetHashCode();
-            Assert.IsNotNull(result);
-        }
 
-	    [Test]
-	    public void ShouldReturnFalseIfNotEnoughAllowanceLeft()
-	    {
-		    var specification = _mocks.StrictMock<IBudgetGroupHeadCountSpecification>();
-		    var absenceRequest = _mocks.StrictMock<IAbsenceRequest>();
-		    var validatedRequest = _mocks.StrictMock<IValidatedRequest>();
-		    using (_mocks.Record())
-		    {
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new BudgetGroupHeadCountValidator(),
+				Period = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
 
-			    Expect.Call(specification.IsSatisfied(new AbsenceRequstAndSchedules()))
-				    .IgnoreArguments()
-				    .Return(validatedRequest);
-			    Expect.Call(validatedRequest.IsValid).IgnoreArguments().Return(false);
-		    }
-		    using (_mocks.Playback())
-		    {
-			    var result = _target.Validate(absenceRequest,
-				    new RequiredForHandlingAbsenceRequest(null, null, null, null, specification));
-			    Assert.IsFalse(result.IsValid);
-		    }
-	    }
-    }
+			var personOne = PersonFactory.CreatePerson(wfcs).WithId();
+			personOne.AddPersonPeriod(personPeriod);
+
+			var absenceRequest = new AbsenceRequest(absence,
+				new DateTimePeriod(new DateTime(2018, 08, 16, 4, 0, 0, DateTimeKind.Utc),
+					new DateTime(2018, 08, 16, 5, 0, 0, DateTimeKind.Utc)));
+			new PersonRequest(personOne, absenceRequest).WithId();
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 15, 22, 0, 0, DateTimeKind.Utc),
+				new DateTime(2018, 08, 16, 8, 0, 0, DateTimeKind.Utc)));
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 17, 13));
+			scheduleDictionary.AddPersonAssignment(assignment);
+			SchedulingResultStateHolder.Schedules = scheduleDictionary;
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
+			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
+			result.IsValid.Should().Be.EqualTo(false);
+		}
+
+		[Test]
+		public void ShouldNotUseTheBudgetDayForTheNextDayWithoutAnySchedule()
+		{
+			var absence = AbsenceFactory.CreateAbsence("holiday");
+			absence.InContractTime = true;
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			ScenarioRepository.Add(scenario);
+			var budgetGroup = getBudgetGroup();
+			BudgetGroupRepository.Add(budgetGroup);
+
+			var budgetDayOne = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 15))
+			{
+				FulltimeEquivalentHours = 8d,
+				ShrinkedAllowance = 2,
+				AbsenceOverride = 0d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			var budgetDayTwo = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 16))
+			{
+				FulltimeEquivalentHours = 8d,
+				ShrinkedAllowance = 0,
+				AbsenceOverride = 0d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			BudgetDayRepository.Add(budgetDayOne);
+			BudgetDayRepository.Add(budgetDayTwo);
+
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2018, 08, 15));
+			personPeriod.BudgetGroup = budgetGroup;
+
+
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new BudgetGroupHeadCountValidator(),
+				Period = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+
+			var personOne = PersonFactory.CreatePerson(wfcs).WithId();
+			personOne.AddPersonPeriod(personPeriod);
+
+			var absenceRequest = new AbsenceRequest(absence,
+				new DateTimePeriod(new DateTime(2018, 08, 16, 4, 0, 0, DateTimeKind.Utc),
+					new DateTime(2018, 08, 16, 5, 0, 0, DateTimeKind.Utc)));
+			new PersonRequest(personOne, absenceRequest).WithId();
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 15, 22, 0, 0, DateTimeKind.Utc),
+				new DateTime(2018, 08, 16, 8, 0, 0, DateTimeKind.Utc)));
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 17, 13));
+			scheduleDictionary.AddPersonAssignment(assignment);
+			SchedulingResultStateHolder.Schedules = scheduleDictionary;
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
+			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
+			result.IsValid.Should().Be.EqualTo(true);
+		}
+
+		[Test]
+		public void ShouldNotUseTheBudgetDayForTheNextDay()
+		{
+			var absence = AbsenceFactory.CreateAbsence("holiday");
+			absence.InContractTime = true;
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			ScenarioRepository.Add(scenario);
+			var budgetGroup = getBudgetGroup();
+			BudgetGroupRepository.Add(budgetGroup);
+
+			var budgetDayOne = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 15))
+			{
+				FulltimeEquivalentHours = 8d,
+				ShrinkedAllowance = 2,
+				AbsenceOverride = 0d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			var budgetDayTwo = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 16))
+			{
+				FulltimeEquivalentHours = 8d,
+				ShrinkedAllowance = 0,
+				AbsenceOverride = 0d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			BudgetDayRepository.Add(budgetDayOne);
+			BudgetDayRepository.Add(budgetDayTwo);
+
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2018, 08, 15));
+			personPeriod.BudgetGroup = budgetGroup;
+
+
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new BudgetGroupHeadCountValidator(),
+				Period = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+
+			var personOne = PersonFactory.CreatePerson(wfcs).WithId();
+			personOne.AddPersonPeriod(personPeriod);
+
+			var absenceRequest = new AbsenceRequest(absence,
+				new DateTimePeriod(new DateTime(2018, 08, 16, 4, 0, 0, DateTimeKind.Utc),
+					new DateTime(2018, 08, 16, 5, 0, 0, DateTimeKind.Utc)));
+			new PersonRequest(personOne, absenceRequest).WithId();
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 15, 22, 0, 0, DateTimeKind.Utc),
+				new DateTime(2018, 08, 16, 8, 0, 0, DateTimeKind.Utc)));
+			var assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 16, 16, 0, 0, DateTimeKind.Utc),
+				new DateTime(2018, 08, 16, 18, 0, 0, DateTimeKind.Utc)));
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 17, 13));
+			scheduleDictionary.AddPersonAssignment(assignment);
+			scheduleDictionary.AddPersonAssignment(assignment2);
+			SchedulingResultStateHolder.Schedules = scheduleDictionary;
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
+			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
+			result.IsValid.Should().Be.EqualTo(true);
+		}
+
+		[Test]
+		public void ShouldUseTheBudgetDayWithFullDayAbsence()
+		{
+			var absence = AbsenceFactory.CreateAbsence("holiday");
+			absence.InContractTime = true;
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			ScenarioRepository.Add(scenario);
+			var budgetGroup = getBudgetGroup();
+			BudgetGroupRepository.Add(budgetGroup);
+
+			var budgetDayOne = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 15))
+			{
+				FulltimeEquivalentHours = 8d,
+				ShrinkedAllowance = 1,
+				AbsenceOverride = 0d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			var budgetDayTwo = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 16))
+			{
+				FulltimeEquivalentHours = 8d,
+				ShrinkedAllowance = 0,
+				AbsenceOverride = 0d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			BudgetDayRepository.Add(budgetDayOne);
+			BudgetDayRepository.Add(budgetDayTwo);
+
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2018, 08, 15));
+			personPeriod.BudgetGroup = budgetGroup;
+
+
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new BudgetGroupHeadCountValidator(),
+				Period = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+
+			var personOne = PersonFactory.CreatePerson(wfcs).WithId();
+			personOne.AddPersonPeriod(personPeriod);
+
+			var absenceRequest = new AbsenceRequest(absence,
+				new DateTimePeriod(new DateTime(2018, 08, 15, 0, 0, 0, DateTimeKind.Utc),
+					new DateTime(2018, 08, 15, 23, 59, 0, DateTimeKind.Utc)));
+			new PersonRequest(personOne, absenceRequest).WithId();
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 15, 22, 0, 0, DateTimeKind.Utc),
+				new DateTime(2018, 08, 16, 8, 0, 0, DateTimeKind.Utc)));
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 17, 13));
+			scheduleDictionary.AddPersonAssignment(assignment);
+			SchedulingResultStateHolder.Schedules = scheduleDictionary;
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
+			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
+			result.IsValid.Should().Be.EqualTo(true);
+		}
+
+		[Test]
+		public void ShouldUseBudgetDaysForMultipleDayAbsence()
+		{
+			var absence = AbsenceFactory.CreateAbsence("holiday");
+			absence.InContractTime = true;
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			ScenarioRepository.Add(scenario);
+			var budgetGroup = getBudgetGroup();
+			BudgetGroupRepository.Add(budgetGroup);
+
+			var budgetDayOne = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 15))
+			{
+				FulltimeEquivalentHours = 8d,
+				ShrinkedAllowance = 1,
+				AbsenceOverride = 0d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			var budgetDaytwo = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 16))
+			{
+				FulltimeEquivalentHours = 8d,
+				ShrinkedAllowance = 1,
+				AbsenceOverride = 0d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			var budgetDaythree = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 17))
+			{
+				FulltimeEquivalentHours = 8d,
+				ShrinkedAllowance = 1,
+				AbsenceOverride = 0d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			BudgetDayRepository.Add(budgetDayOne);
+			BudgetDayRepository.Add(budgetDaytwo);
+			BudgetDayRepository.Add(budgetDaythree);
+
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2018, 08, 15));
+			personPeriod.BudgetGroup = budgetGroup;
+
+
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new BudgetGroupHeadCountValidator(),
+				Period = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+
+			var personOne = PersonFactory.CreatePerson(wfcs).WithId();
+			personOne.AddPersonPeriod(personPeriod);
+
+			var absenceRequest = new AbsenceRequest(absence,
+				new DateTimePeriod(new DateTime(2018, 08, 15, 0, 0, 0, DateTimeKind.Utc),
+					new DateTime(2018, 08, 16, 23, 59, 0, DateTimeKind.Utc)));
+			new PersonRequest(personOne, absenceRequest).WithId();
+			var assignmentShort = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 15, 22, 0, 0, DateTimeKind.Utc),
+				new DateTime(2018, 08, 16, 6, 0, 0, DateTimeKind.Utc)));
+			var assignmentLong = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 16, 22, 0, 0, DateTimeKind.Utc),
+				new DateTime(2018, 08, 17, 8, 0, 0, DateTimeKind.Utc)));
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 17, 13));
+
+			scheduleDictionary.AddPersonAssignment(assignmentShort);
+			scheduleDictionary.AddPersonAssignment(assignmentLong);
+
+			SchedulingResultStateHolder.Schedules = scheduleDictionary;
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
+			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
+			result.IsValid.Should().Be.EqualTo(true);
+		}
+
+		[Test]
+		public void ShouldValidateIfNoBudgetDayOnNextDay()
+		{
+			var absence = AbsenceFactory.CreateAbsence("holiday");
+			absence.InContractTime = true;
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			ScenarioRepository.Add(scenario);
+			var budgetGroup = getBudgetGroup();
+			BudgetGroupRepository.Add(budgetGroup);
+
+			var budgetDayOne = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 15))
+			{
+				FulltimeEquivalentHours = 8d,
+				ShrinkedAllowance = 1,
+				AbsenceOverride = 0d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			BudgetDayRepository.Add(budgetDayOne);
+
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2018, 08, 15));
+			personPeriod.BudgetGroup = budgetGroup;
+
+
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new BudgetGroupHeadCountValidator(),
+				Period = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+
+			var personOne = PersonFactory.CreatePerson(wfcs).WithId();
+			personOne.AddPersonPeriod(personPeriod);
+
+			var absenceRequest = new AbsenceRequest(absence,
+				new DateTimePeriod(new DateTime(2018, 08, 15, 23, 0, 0, DateTimeKind.Utc),
+					new DateTime(2018, 08, 16, 1, 0, 0, DateTimeKind.Utc)));
+			new PersonRequest(personOne, absenceRequest).WithId();
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 15, 22, 0, 0, DateTimeKind.Utc),
+				new DateTime(2018, 08, 16, 8, 0, 0, DateTimeKind.Utc)));
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 17, 13));
+			scheduleDictionary.AddPersonAssignment(assignment);
+			SchedulingResultStateHolder.Schedules = scheduleDictionary;
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
+			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
+			result.IsValid.Should().Be.EqualTo(true);
+		}
+
+		[Test]
+		public void ShouldInvalidateIfBudgetDayIsMissing()
+		{
+			var absence = AbsenceFactory.CreateAbsence("holiday");
+			absence.InContractTime = true;
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			ScenarioRepository.Add(scenario);
+			var budgetGroup = getBudgetGroup();
+			BudgetGroupRepository.Add(budgetGroup);
+
+			var budgetDayOne = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 15))
+			{
+				FulltimeEquivalentHours = 8d,
+				ShrinkedAllowance = 1,
+				AbsenceOverride = 0d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			
+			var budgetDaythree = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 17))
+			{
+				FulltimeEquivalentHours = 8d,
+				ShrinkedAllowance = 1,
+				AbsenceOverride = 0d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			BudgetDayRepository.Add(budgetDayOne);
+			BudgetDayRepository.Add(budgetDaythree);
+
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2018, 08, 15));
+			personPeriod.BudgetGroup = budgetGroup;
+
+
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new BudgetGroupHeadCountValidator(),
+				Period = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+
+			var personOne = PersonFactory.CreatePerson(wfcs).WithId();
+			personOne.AddPersonPeriod(personPeriod);
+
+			var absenceRequest = new AbsenceRequest(absence,
+				new DateTimePeriod(new DateTime(2018, 08, 15, 0, 0, 0, DateTimeKind.Utc),
+					new DateTime(2018, 08, 16, 23, 59, 0, DateTimeKind.Utc)));
+			new PersonRequest(personOne, absenceRequest).WithId();
+			var assignmentShort = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 15, 22, 0, 0, DateTimeKind.Utc),
+				new DateTime(2018, 08, 16, 6, 0, 0, DateTimeKind.Utc)));
+			var assignmentLong = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 16, 22, 0, 0, DateTimeKind.Utc),
+				new DateTime(2018, 08, 17, 8, 0, 0, DateTimeKind.Utc)));
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 17, 13));
+
+			scheduleDictionary.AddPersonAssignment(assignmentShort);
+			scheduleDictionary.AddPersonAssignment(assignmentLong);
+
+			SchedulingResultStateHolder.Schedules = scheduleDictionary;
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
+			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
+			result.IsValid.Should().Be.EqualTo(false);
+		}
+
+		[Test]
+		public void ShouldNotConisderShiftThatIsOutsideRequestedPeriod()
+		{
+			var absence = AbsenceFactory.CreateAbsence("holiday");
+			absence.InContractTime = true;
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			ScenarioRepository.Add(scenario);
+			var budgetGroup = getBudgetGroup();
+			BudgetGroupRepository.Add(budgetGroup);
+
+			var budgetDayOne = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 15))
+			{
+				FulltimeEquivalentHours = 8d,
+				ShrinkedAllowance = 1,
+				AbsenceOverride = 0d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			var budgetDayTwo = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 16))
+			{
+				FulltimeEquivalentHours = 8d,
+				ShrinkedAllowance = 1,
+				AbsenceOverride = 0d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			
+			BudgetDayRepository.Add(budgetDayOne);
+			BudgetDayRepository.Add(budgetDayTwo);
+
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2018, 08, 15));
+			personPeriod.BudgetGroup = budgetGroup;
+
+
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new BudgetGroupHeadCountValidator(),
+				Period = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+
+			var personOne = PersonFactory.CreatePerson(wfcs).WithId();
+			personOne.AddPersonPeriod(personPeriod);
+
+			var absenceRequest = new AbsenceRequest(absence,
+				new DateTimePeriod(new DateTime(2018, 08, 15, 0, 0, 0, DateTimeKind.Utc),
+					new DateTime(2018, 08, 17, 8, 0, 0, DateTimeKind.Utc)));
+			new PersonRequest(personOne, absenceRequest).WithId();
+			var assignmentShort = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 15, 22, 0, 0, DateTimeKind.Utc),
+				new DateTime(2018, 08, 16, 6, 0, 0, DateTimeKind.Utc)));
+			var assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 16, 22, 0, 0, DateTimeKind.Utc),
+				new DateTime(2018, 08, 17, 8, 0, 0, DateTimeKind.Utc)));
+			var assignment3 = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 17, 14, 0, 0, DateTimeKind.Utc),
+				new DateTime(2018, 08, 17, 16, 0, 0, DateTimeKind.Utc)));
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 17, 13));
+
+			scheduleDictionary.AddPersonAssignment(assignmentShort);
+			scheduleDictionary.AddPersonAssignment(assignment2);
+			scheduleDictionary.AddPersonAssignment(assignment3);
+
+			SchedulingResultStateHolder.Schedules = scheduleDictionary;
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
+			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
+			result.IsValid.Should().Be.EqualTo(true);
+		}
+
+
+		[Test]
+		public void ShouldBeValidIfReuqestWithinBudget()
+		{
+			var absence = AbsenceFactory.CreateAbsence("holiday");
+			absence.InContractTime = true;
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			ScenarioRepository.Add(scenario);
+			var budgetGroup = getBudgetGroup();
+			BudgetGroupRepository.Add(budgetGroup);
+
+			var budgetDayOne = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 16))
+			{
+				FulltimeEquivalentHours = 8d,
+				ShrinkedAllowance = 1,
+				AbsenceOverride = 0d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			BudgetDayRepository.Add(budgetDayOne);
+
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2018, 08, 16));
+			personPeriod.BudgetGroup = budgetGroup;
+
+
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new BudgetGroupHeadCountValidator(),
+				Period = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+
+			var personOne = PersonFactory.CreatePerson(wfcs).WithId();
+			personOne.AddPersonPeriod(personPeriod);
+
+			var absenceRequest = new AbsenceRequest(absence,
+				new DateTimePeriod(new DateTime(2018, 08, 16, 4, 0, 0, DateTimeKind.Utc),
+					new DateTime(2018, 08, 16, 6, 0, 0, DateTimeKind.Utc)));
+			new PersonRequest(personOne, absenceRequest).WithId();
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 16, 1, 0, 0, DateTimeKind.Utc),
+				new DateTime(2018, 08, 16, 8, 0, 0, DateTimeKind.Utc)));
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 17, 13));
+			scheduleDictionary.AddPersonAssignment(assignment);
+			SchedulingResultStateHolder.Schedules = scheduleDictionary;
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
+			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
+			result.IsValid.Should().Be.EqualTo(true);
+		}
+
+		[Test]
+		public void ShouldNotAllowIfAbsenceIsOutsideScheduledHours()
+		{
+			var absence = AbsenceFactory.CreateAbsence("holiday");
+			absence.InContractTime = true;
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			ScenarioRepository.Add(scenario);
+			var budgetGroup = getBudgetGroup();
+			BudgetGroupRepository.Add(budgetGroup);
+
+			var budgetDayOne = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 15))
+			{
+				FulltimeEquivalentHours = 8d,
+				ShrinkedAllowance = 1,
+				AbsenceOverride = 0d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			var budgetDayTwo = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 16))
+			{
+				FulltimeEquivalentHours = 8d,
+				ShrinkedAllowance = 0,
+				AbsenceOverride = 0d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			BudgetDayRepository.Add(budgetDayOne);
+			BudgetDayRepository.Add(budgetDayTwo);
+
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2018, 08, 15));
+			personPeriod.BudgetGroup = budgetGroup;
+
+
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new BudgetGroupHeadCountValidator(),
+				Period = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+
+			var personOne = PersonFactory.CreatePerson(wfcs).WithId();
+			personOne.AddPersonPeriod(personPeriod);
+
+			var absenceRequest = new AbsenceRequest(absence,
+				new DateTimePeriod(new DateTime(2018, 08, 16, 4, 0, 0, DateTimeKind.Utc),
+					new DateTime(2018, 08, 16, 6, 0, 0, DateTimeKind.Utc)));
+			new PersonRequest(personOne, absenceRequest).WithId();
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 15, 1, 0, 0, DateTimeKind.Utc),
+				new DateTime(2018, 08, 15, 8, 0, 0, DateTimeKind.Utc)));
+
+			var assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 16, 22, 0, 0, DateTimeKind.Utc),
+				new DateTime(2018, 08, 17, 8, 0, 0, DateTimeKind.Utc)));
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 18, 13));
+			scheduleDictionary.AddPersonAssignment(assignment);
+			scheduleDictionary.AddPersonAssignment(assignment2);
+			SchedulingResultStateHolder.Schedules = scheduleDictionary;
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
+			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
+			result.IsValid.Should().Be.EqualTo(false);
+		}
+
+		[Test]
+		public void ShouldValidateRequestOnMidnightWithEmptyAssignmentNextDay()
+		{
+			var absence = AbsenceFactory.CreateAbsence("holiday");
+			absence.InContractTime = true;
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			ScenarioRepository.Add(scenario);
+			var budgetGroup = getBudgetGroup();
+			BudgetGroupRepository.Add(budgetGroup);
+
+			var budgetDayOne = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 15))
+			{
+				FulltimeEquivalentHours = 1,
+				ShrinkedAllowance = 2,
+				AbsenceOverride = 0d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			var budgetDayTwo = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 16))
+			{
+				FulltimeEquivalentHours = 1,
+				ShrinkedAllowance = 1,
+				AbsenceOverride = 0d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			BudgetDayRepository.Add(budgetDayOne);
+			BudgetDayRepository.Add(budgetDayTwo);
+
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2018, 08, 15));
+			personPeriod.BudgetGroup = budgetGroup;
+
+
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new BudgetGroupHeadCountValidator(),
+				Period = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+
+			var personOne = PersonFactory.CreatePerson(wfcs).WithId();
+			personOne.AddPersonPeriod(personPeriod);
+
+			var absenceRequest = new AbsenceRequest(absence,
+				new DateTimePeriod(new DateTime(2018, 08, 15, 23, 0, 0, DateTimeKind.Utc),
+					new DateTime(2018, 08, 16, 1, 0, 0, DateTimeKind.Utc)));
+			 new PersonRequest(personOne, absenceRequest).WithId();
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 15, 22, 0, 0, DateTimeKind.Utc),
+				new DateTime(2018, 08, 16, 8, 0, 0, DateTimeKind.Utc)));
+
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 18, 13));
+			scheduleDictionary.AddPersonAssignment(assignment);
+			SchedulingResultStateHolder.Schedules = scheduleDictionary;
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
+			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
+			result.IsValid.Should().Be.EqualTo(true);
+		}
+
+		[Test]
+		public void ShouldValidateRequestOnMidnightWithAssignmentNextDay()
+		{
+			var absence = AbsenceFactory.CreateAbsence("holiday");
+			absence.InContractTime = true;
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			ScenarioRepository.Add(scenario);
+			var budgetGroup = getBudgetGroup();
+			BudgetGroupRepository.Add(budgetGroup);
+
+			var budgetDayOne = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 15))
+			{
+				FulltimeEquivalentHours = 1,
+				ShrinkedAllowance = 2,
+				AbsenceOverride = 0d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			var budgetDayTwo = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 16))
+			{
+				FulltimeEquivalentHours = 1,
+				ShrinkedAllowance = 1,
+				AbsenceOverride = 0d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			BudgetDayRepository.Add(budgetDayOne);
+			BudgetDayRepository.Add(budgetDayTwo);
+
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2018, 08, 15));
+			personPeriod.BudgetGroup = budgetGroup;
+
+
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new BudgetGroupHeadCountValidator(),
+				Period = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+
+			var personOne = PersonFactory.CreatePerson(wfcs).WithId();
+			personOne.AddPersonPeriod(personPeriod);
+
+			var absenceRequest = new AbsenceRequest(absence,
+				new DateTimePeriod(new DateTime(2018, 08, 15, 23, 0, 0, DateTimeKind.Utc),
+					new DateTime(2018, 08, 16, 1, 0, 0, DateTimeKind.Utc)));
+			 new PersonRequest(personOne, absenceRequest).WithId();
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 15, 22, 0, 0, DateTimeKind.Utc),
+				new DateTime(2018, 08, 16, 8, 0, 0, DateTimeKind.Utc)));
+
+			var assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 16, 22, 0, 0, DateTimeKind.Utc),
+				new DateTime(2018, 08, 17, 8, 0, 0, DateTimeKind.Utc)));
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 18, 13));
+			scheduleDictionary.AddPersonAssignment(assignment);
+			scheduleDictionary.AddPersonAssignment(assignment2);
+			SchedulingResultStateHolder.Schedules = scheduleDictionary;
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
+			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
+			result.IsValid.Should().Be.EqualTo(true);
+		}
+
+		[Test]
+		public void ShouldUseWholeShiftWhileCalculatingBudgetAndUseCorrectTimezoneUtcPlus2()
+		{
+			var absence = AbsenceFactory.CreateAbsence("holiday");
+			absence.InContractTime = true;
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			ScenarioRepository.Add(scenario);
+			var budgetGroup = getBudgetGroup();
+			BudgetGroupRepository.Add(budgetGroup);
+
+			var budgetDayTwo = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 15))
+			{
+				FulltimeEquivalentHours = 8d,
+				ShrinkedAllowance = 0,
+				AbsenceOverride = 0d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			//should need this
+			var budgetDayThree = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 16))
+			{
+				FulltimeEquivalentHours = 8d,
+				ShrinkedAllowance = 1,
+				AbsenceOverride = 1d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			BudgetDayRepository.Add(budgetDayTwo);
+			BudgetDayRepository.Add(budgetDayThree);
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2018, 08, 15));
+			personPeriod.BudgetGroup = budgetGroup;
+
+
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new BudgetGroupHeadCountValidator(),
+				Period = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+
+			var personOne = PersonFactory.CreatePerson(wfcs).WithId();
+			personOne.AddPersonPeriod(personPeriod);
+			personOne.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+
+			var absenceRequest = new AbsenceRequest(absence,
+				new DateTimePeriod(new DateTime(2018, 08, 15, 23, 0, 0, DateTimeKind.Utc),
+					new DateTime(2018, 08, 15, 23, 30, 0, DateTimeKind.Utc)));
+			new PersonRequest(personOne, absenceRequest).WithId();
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 15, 23, 0, 0, DateTimeKind.Utc),
+				new DateTime(2018, 08, 15, 23, 30, 0, DateTimeKind.Utc)));
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 17, 13));
+			scheduleDictionary.AddPersonAssignment(assignment);
+			SchedulingResultStateHolder.Schedules = scheduleDictionary;
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
+			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
+			result.IsValid.Should().Be.EqualTo(true);
+		}
+
+		[Test]
+		public void ShouldUseWholeShiftWhileCalculatingBudgetAndUseCorrectTimezoneMinus3()
+		{
+			var absence = AbsenceFactory.CreateAbsence("holiday");
+			absence.InContractTime = true;
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			ScenarioRepository.Add(scenario);
+			var budgetGroup = getBudgetGroup();
+			BudgetGroupRepository.Add(budgetGroup);
+
+			var budgetDayTwo = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 15))
+			{
+				FulltimeEquivalentHours = 8d,
+				ShrinkedAllowance = 0,
+				AbsenceOverride = 0d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			//should need this
+			var budgetDayThree = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 16))
+			{
+				FulltimeEquivalentHours = 8d,
+				ShrinkedAllowance = 1,
+				AbsenceOverride = 1d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			BudgetDayRepository.Add(budgetDayTwo);
+			BudgetDayRepository.Add(budgetDayThree);
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2018, 08, 15));
+			personPeriod.BudgetGroup = budgetGroup;
+
+
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new BudgetGroupHeadCountValidator(),
+				Period = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+
+			var personOne = PersonFactory.CreatePerson(wfcs).WithId();
+			personOne.AddPersonPeriod(personPeriod);
+			personOne.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Greenland Standard Time"));
+
+			var absenceRequest = new AbsenceRequest(absence,
+				new DateTimePeriod(new DateTime(2018, 08, 16, 0, 0, 0, DateTimeKind.Utc),
+					new DateTime(2018, 08, 16, 3, 0, 0, DateTimeKind.Utc)));
+			new PersonRequest(personOne, absenceRequest).WithId();
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 16, 1, 0, 0, DateTimeKind.Utc),
+				new DateTime(2018, 08, 16, 2, 0, 0, DateTimeKind.Utc)));
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 17, 13));
+			scheduleDictionary.AddPersonAssignment(assignment);
+			SchedulingResultStateHolder.Schedules = scheduleDictionary;
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
+			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
+			result.IsValid.Should().Be.EqualTo(false);
+		}
+
+		[Test]
+		public void ShouldInvalidateIfNoShiftFound()
+		{
+			var absence = AbsenceFactory.CreateAbsence("holiday");
+			absence.InContractTime = true;
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			ScenarioRepository.Add(scenario);
+			var budgetGroup = getBudgetGroup();
+			BudgetGroupRepository.Add(budgetGroup);
+
+			var budgetDayOne = new BudgetDay(budgetGroup, scenario, new DateOnly(2018, 08, 15))
+			{
+				FulltimeEquivalentHours = 8d,
+				ShrinkedAllowance = 0,
+				AbsenceOverride = 0d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			BudgetDayRepository.Add(budgetDayOne);
+
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2018, 08, 15));
+			personPeriod.BudgetGroup = budgetGroup;
+
+
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new BudgetGroupHeadCountValidator(),
+				Period = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+
+			var personOne = PersonFactory.CreatePerson(wfcs).WithId();
+			personOne.AddPersonPeriod(personPeriod);
+
+			var absenceRequest = new AbsenceRequest(absence,
+				new DateTimePeriod(new DateTime(2018, 08, 15, 0, 0, 0, DateTimeKind.Utc),
+					new DateTime(2018, 08, 15, 23, 59, 0, DateTimeKind.Utc)));
+			new PersonRequest(personOne, absenceRequest).WithId();
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 17, 13));
+			SchedulingResultStateHolder.Schedules = scheduleDictionary;
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
+			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
+			result.IsValid.Should().Be.EqualTo(false);
+		}
+
+		[Test]
+		public void ShouldInvalidateIfNoBudgetDayIsConfigured()
+		{
+			var absence = AbsenceFactory.CreateAbsence("holiday");
+			absence.InContractTime = true;
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			ScenarioRepository.Add(scenario);
+			var budgetGroup = getBudgetGroup();
+			BudgetGroupRepository.Add(budgetGroup);
+
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2018, 08, 15));
+			personPeriod.BudgetGroup = budgetGroup;
+
+
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new BudgetGroupHeadCountValidator(),
+				Period = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+
+			var personOne = PersonFactory.CreatePerson(wfcs).WithId();
+			personOne.AddPersonPeriod(personPeriod);
+
+			var absenceRequest = new AbsenceRequest(absence,
+				new DateTimePeriod(new DateTime(2018, 08, 15, 0, 0, 0, DateTimeKind.Utc),
+					new DateTime(2018, 08, 15, 23, 59, 0, DateTimeKind.Utc)));
+			new PersonRequest(personOne, absenceRequest).WithId();
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 15, 16, 0, 0, DateTimeKind.Utc),
+				new DateTime(2018, 08, 15, 20, 0, 0, DateTimeKind.Utc)));
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 17, 13));
+			scheduleDictionary.AddPersonAssignment(assignment);
+			SchedulingResultStateHolder.Schedules = scheduleDictionary;
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
+			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
+			result.IsValid.Should().Be.EqualTo(false);
+		}
+
+		[Test]
+		public void ShouldInvalidateIfNoBudgetDayAndNoShift()
+		{
+			var absence = AbsenceFactory.CreateAbsence("holiday");
+			absence.InContractTime = true;
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			ScenarioRepository.Add(scenario);
+			var budgetGroup = getBudgetGroup();
+			BudgetGroupRepository.Add(budgetGroup);
+
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2018, 08, 15));
+			personPeriod.BudgetGroup = budgetGroup;
+			
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new BudgetGroupHeadCountValidator(),
+				Period = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2018, 08, 1, 2018, 08, 31),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+
+			var personOne = PersonFactory.CreatePerson(wfcs).WithId();
+			personOne.AddPersonPeriod(personPeriod);
+
+			var absenceRequest = new AbsenceRequest(absence,
+				new DateTimePeriod(new DateTime(2018, 08, 15, 0, 0, 0, DateTimeKind.Utc),
+					new DateTime(2018, 08, 15, 23, 59, 0, DateTimeKind.Utc)));
+			new PersonRequest(personOne, absenceRequest).WithId();
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 17, 13));
+			SchedulingResultStateHolder.Schedules = scheduleDictionary;
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(SchedulingResultStateHolder, null,
+				ResourceCalculation, BudgetGroupAllowanceSpecification, BudgetGroupHeadCountSpecification);
+			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
+			result.IsValid.Should().Be.EqualTo(false);
+		}
+
+		private static IBudgetGroup getBudgetGroup()
+		{
+			var budgetGroup = new BudgetGroup { Name = "BG1" };
+			budgetGroup.SetId(Guid.NewGuid());
+			return budgetGroup;
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<BudgetGroupAllowanceValidator>().For<IAbsenceRequestValidator>();
+		}
+	}
 }

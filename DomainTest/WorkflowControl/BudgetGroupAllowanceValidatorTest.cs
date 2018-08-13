@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var absenceRequest = new AbsenceRequest(absence,
 				new DateTimePeriod(new DateTime(2018, 08, 15, 0, 0, 0, DateTimeKind.Utc),
 					new DateTime(2018, 08, 16, 23, 59, 0, DateTimeKind.Utc)));
-			var personRequest = new PersonRequest(personOne, absenceRequest).WithId();
+			new PersonRequest(personOne, absenceRequest).WithId();
 			var assignmentShort = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 15, 22, 0, 0, DateTimeKind.Utc),
 				new DateTime(2018, 08, 16, 6, 0, 0, DateTimeKind.Utc)));
 			var assignmentLong = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 16, 22, 0, 0, DateTimeKind.Utc),
@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var absenceRequest = new AbsenceRequest(absence,
 				new DateTimePeriod(new DateTime(2018, 08, 16, 2, 0, 0, DateTimeKind.Utc),
 					new DateTime(2018, 08, 16, 4, 0, 0, DateTimeKind.Utc)));
-			var personRequest = new PersonRequest(personOne, absenceRequest).WithId();
+			new PersonRequest(personOne, absenceRequest).WithId();
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 15, 22, 0, 0, DateTimeKind.Utc),
 				new DateTime(2018, 08, 16, 8, 0, 0, DateTimeKind.Utc)));
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 17, 13));
@@ -263,7 +263,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var absenceRequest = new AbsenceRequest(absence,
 				new DateTimePeriod(new DateTime(2018, 08, 16, 4, 0, 0, DateTimeKind.Utc),
 					new DateTime(2018, 08, 16, 6, 0, 0, DateTimeKind.Utc)));
-			var personRequest = new PersonRequest(personOne, absenceRequest).WithId();
+			new PersonRequest(personOne, absenceRequest).WithId();
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 16, 1, 0, 0, DateTimeKind.Utc),
 				new DateTime(2018, 08, 16, 8, 0, 0, DateTimeKind.Utc)));
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 17, 13));
@@ -276,7 +276,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		}
 
 		[Test]
-		public void ShouldDenyIfAbsenceIsOutsideScheduledHours()
+		public void ShouldApproveIfAbsenceIsOutsideScheduledHours()
 		{
 			var absence = AbsenceFactory.CreateAbsence("holiday");
 			absence.InContractTime = true;
@@ -325,7 +325,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var absenceRequest = new AbsenceRequest(absence,
 				new DateTimePeriod(new DateTime(2018, 08, 16, 4, 0, 0, DateTimeKind.Utc),
 					new DateTime(2018, 08, 16, 6, 0, 0, DateTimeKind.Utc)));
-			var personRequest = new PersonRequest(personOne, absenceRequest).WithId();
+			new PersonRequest(personOne, absenceRequest).WithId();
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 15, 1, 0, 0, DateTimeKind.Utc),
 				new DateTime(2018, 08, 15, 8, 0, 0, DateTimeKind.Utc)));
 
@@ -391,7 +391,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var absenceRequest = new AbsenceRequest(absence,
 				new DateTimePeriod(new DateTime(2018, 08, 15, 23, 0, 0, DateTimeKind.Utc),
 					new DateTime(2018, 08, 16,1, 0, 0, DateTimeKind.Utc)));
-			var personRequest = new PersonRequest(personOne, absenceRequest).WithId();
+			new PersonRequest(personOne, absenceRequest).WithId();
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 15, 22, 0, 0, DateTimeKind.Utc),
 				new DateTime(2018, 08, 16, 8, 0, 0, DateTimeKind.Utc)));
 
@@ -453,7 +453,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var absenceRequest = new AbsenceRequest(absence,
 				new DateTimePeriod(new DateTime(2018, 08, 15, 23, 0, 0, DateTimeKind.Utc),
 					new DateTime(2018, 08, 16, 1, 0, 0, DateTimeKind.Utc)));
-			var personRequest = new PersonRequest(personOne, absenceRequest).WithId();
+			new PersonRequest(personOne, absenceRequest).WithId();
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 15, 22, 0, 0, DateTimeKind.Utc),
 				new DateTime(2018, 08, 16, 8, 0, 0, DateTimeKind.Utc)));
 
@@ -520,7 +520,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var absenceRequest = new AbsenceRequest(absence,
 				new DateTimePeriod(new DateTime(2018, 08, 14, 22, 0, 0, DateTimeKind.Utc),
 					new DateTime(2018, 08, 15, 21, 59, 0, DateTimeKind.Utc)));
-			var personRequest = new PersonRequest(personOne, absenceRequest).WithId();
+			new PersonRequest(personOne, absenceRequest).WithId();
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(personOne, scenario, new DateTimePeriod(new DateTime(2018, 08, 15, 20, 0, 0, DateTimeKind.Utc),
 				new DateTime(2018, 08, 16, 6, 0, 0, DateTimeKind.Utc)));
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2018, 08, 15, 12, 2018, 08, 17, 13));
