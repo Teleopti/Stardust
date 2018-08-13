@@ -1,11 +1,11 @@
 function MenuController($state) {
 	var ctrl = this;
-	ctrl.$onInit = function () {
+	ctrl.$onInit = function() {
 		ctrl.menuItem = setMenuItem();
-	}
-	ctrl.closeMenuOnPhones = function () {
+	};
+	ctrl.closeMenuOnPhones = function() {
 		ctrl.open = false;
-	}
+	};
 
 	var menuItems = [
 		{
@@ -25,7 +25,7 @@ function MenuController($state) {
 			name: 'outbound'
 		},
 		{
-			i: 'mdi mdi-account-multiple',
+			i: 'mdi mdi-account-group',
 			name: 'people'
 		},
 		{
@@ -73,20 +73,17 @@ function MenuController($state) {
 		}
 	];
 	function setMenuItem() {
-		var match = menuItems.find(function (icon) {
+		var match = menuItems.find(function(icon) {
 			return icon.name === ctrl.data.InternalName;
 		});
-		if(match){
+		if (match) {
 			match.displayName = ctrl.data.Name;
-			match.class = function () {
-				if ($state.current.name.indexOf(match.name) == 0)
-				return "main-menu-link-active nav-item-active";
+			match.class = function() {
+				if ($state.current.name.indexOf(match.name) == 0) return 'main-menu-link-active nav-item-active';
 			};
 		}
 		return match;
 	}
-
-
 }
 
 angular.module('wfm.areas').component('mainmenu', {
