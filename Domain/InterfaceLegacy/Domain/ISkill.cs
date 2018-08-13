@@ -206,7 +206,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	    void SetCascadingIndex(int index);
 	    void ClearCascadingIndex();
 		int? CascadingIndex { get; }
-	    bool IsCascading();
+		bool IsChildSkill { get; }
+		bool IsCascading();
 	    bool CanBeCascading();
     }
 }

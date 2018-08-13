@@ -49,5 +49,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created date: 2008-04-21
         /// </remarks>
         public virtual IMultisiteSkill ParentSkill => _parentSkill;
+		
+		public override bool IsChildSkill { get; } = true;
+
     }
 }
