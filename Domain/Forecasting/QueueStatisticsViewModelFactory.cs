@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
@@ -22,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		private readonly IForecastMethodProvider _forecastMethodProvider;
 
 		public QueueStatisticsViewModelFactory(
-			IWorkloadRepository workloadRepository, 
+			IWorkloadRepository workloadRepository,
 			IHistoricalPeriodProvider historicalPeriodProvider,
 			IHistoricalData historicalData,
 			IOutlierRemover outlierRemover,
@@ -34,6 +33,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			_outlierRemover = outlierRemover;
 			_forecastMethodProvider = forecastMethodProvider;
 		}
+
 		public WorkloadQueueStatisticsViewModel QueueStatistics(QueueStatisticsInput input)
 		{
 			var workload = _workloadRepository.Get(input.WorkloadId);
@@ -42,29 +42,34 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			{
 				WorkloadId = workload.Id.Value,
 				QueueStatisticsDays = availablePeriod.HasValue
-					? CreateQueueStatisticsDayViewModels(workload, input.MethodId, availablePeriod.Value)
+					? createQueueStatisticsDayViewModels(workload, input.MethodId, availablePeriod.Value)
 					: new List<QueueStatisticsModel>()
 			};
 		}
 
-		public List<QueueStatisticsModel> CreateQueueStatisticsDayViewModels(IWorkload workload, ForecastMethodType method, DateOnlyPeriod period)
+		private List<QueueStatisticsModel> createQueueStatisticsDayViewModels(IWorkload workload,
+			ForecastMethodType method, DateOnlyPeriod period)
 		{
 			var historicalData = _historicalData.Fetch(workload, period);
 			var forecastMethod = _forecastMethodProvider.Get(method);
 			var statistics = new List<QueueStatisticsModel>();
 			foreach (var taskOwner in historicalData.TaskOwnerDayCollection)
 			{
-				var dayStats = new QueueStatisticsModel();
-				dayStats.Date = taskOwner.CurrentDate;
-				dayStats.Tasks = taskOwner.TotalStatisticCalculatedTasks;
+				var dayStats = new QueueStatisticsModel
+				{
+					Date = taskOwner.CurrentDate,
+					Tasks = taskOwner.TotalStatisticCalculatedTasks
+				};
 				statistics.Add(dayStats);
 			}
 
 			var historicalDataNoOutliers = _outlierRemover.RemoveOutliers(historicalData, forecastMethod);
 			foreach (var day in historicalDataNoOutliers.TaskOwnerDayCollection)
 			{
-				statistics.Single(x => x.Date == day.CurrentDate).OutlierTasks = Math.Round(day.TotalStatisticCalculatedTasks, 1);
+				statistics.Single(x => x.Date == day.CurrentDate).OutlierTasks =
+					Math.Round(day.TotalStatisticCalculatedTasks, 1);
 			}
+
 			return statistics;
 		}
 	}
