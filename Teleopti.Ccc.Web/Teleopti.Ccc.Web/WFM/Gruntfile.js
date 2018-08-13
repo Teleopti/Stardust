@@ -4,7 +4,7 @@ module.exports = function(grunt) {
 		watch: {
 			dev: {
 				files: ['css/*.scss', 'index.tpl.html', 'app/**/*.html', 'html/**/*.html', 'app/**/*.js'],
-				tasks: ['buildAngularJsPart', 'eslint:dev'],
+				tasks: ['buildAngularJsPart', 'exec:ngbuild_dev', 'eslint:dev'],
 				options: {
 					spawn: false
 				}

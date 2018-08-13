@@ -14,12 +14,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		
 		public void AppendResource(ActivitySkillsCombination key, SkillCombination skillCombination, double heads, double resource, DateTimePeriod? fractionPeriod)
 		{
-			_resourceDictionary.AddOrUpdate(key,
-				new InnerPeriodResourceDetail(heads, resource, skillCombination.SkillEfficiencies,
-					fractionPeriod.HasValue ? new[] {fractionPeriod.Value} : new DateTimePeriod[] {}),
-				(s, d) =>
-					new InnerPeriodResourceDetail(d.Count + heads, d.Resource + resource, mergeEffiencyResources(skillCombination.SkillEfficiencies,d.EffiencyResources),
-						fractionPeriod.HasValue ? d.FractionPeriods.Append(fractionPeriod.Value).ToArray() : d.FractionPeriods.ToArray()));
+			var fractionPeriods = fractionPeriod.HasValue ? new[] {fractionPeriod.Value} : new DateTimePeriod[] {};
+			_resourceDictionary.AddOrUpdate(key, new InnerPeriodResourceDetail(heads, resource, skillCombination.SkillEfficiencies, fractionPeriods),
+				(combination, detail) =>
+					new InnerPeriodResourceDetail(
+						detail.Count + heads, detail.Resource + resource,
+						mergeEffiencyResources(skillCombination.SkillEfficiencies, detail.EffiencyResources),
+						fractionPeriod.HasValue
+							? detail.FractionPeriods.Append(fractionPeriod.Value).ToArray()
+							: detail.FractionPeriods.ToArray()
+					));
 		}
 
 		private static SkillEffiencyResource[] mergeEffiencyResources(IEnumerable<SkillEffiencyResource> effiencyResources1,
@@ -53,38 +57,50 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		}
 
 		private SkillEffiencyResource[] subtractEffiencyResources(SkillEffiencyResource[] baseCollection,
-			SkillEffiencyResource[] subtractCollection)
+			SkillEffiencyResource[] subtractCollection, double weight)
 		{
-			var subtract = subtractCollection.Select(x => new SkillEffiencyResource(x.Skill, -x.Resource));
+			var subtract = subtractCollection.Select(x => new SkillEffiencyResource(x.Skill, -x.Resource*weight));
 			var result = baseCollection.Concat(subtract);
 			return result.GroupBy(x => x.Skill).Select(y => new SkillEffiencyResource(y.Key, Math.Max(y.Sum(z => z.Resource), 0))).ToArray();
 		}
 
-		public void RemoveResource(ActivitySkillsCombination key, SkillCombination skillCombination, double heads,  double resource, DateTimePeriod? fractionPeriod)
+		public void RemoveResource(ActivitySkillsCombination key, SkillCombination skillCombination, double heads,
+			double resource, DateTimePeriod? fractionPeriod, DateTimePeriod period)
 		{
-			_resourceDictionary.AddOrUpdate(key, new InnerPeriodResourceDetail(0, 0, skillCombination.SkillEfficiencies, new DateTimePeriod[]{}), (s, d) =>
+			if (!_resourceDictionary.ContainsKey(key))
 			{
-				var fractionPeriodResult = d.FractionPeriods;
-				if (fractionPeriod.HasValue)
-				{
-					List<DateTimePeriod> dateTimePeriods = d.FractionPeriods.ToList();
-					dateTimePeriods.Remove(fractionPeriod.Value);
-					fractionPeriodResult = dateTimePeriods.ToArray();
-				}
-				var res = d.Resource - resource;
-				if (res < 0 || Math.Round(res, 5) == 0.00000d)
-				{
-					res = 0;
-				}
+				return;
+			}
+			var d = _resourceDictionary[key];
+			var fractionPeriodResult = d.FractionPeriods;
+			if (fractionPeriod.HasValue)
+			{
+				List<DateTimePeriod> dateTimePeriods = d.FractionPeriods.ToList();
+				dateTimePeriods.Remove(fractionPeriod.Value);
+				fractionPeriodResult = dateTimePeriods.ToArray();
+			}
 
-				var count = d.Count - heads;
-				if (count < 0 || Math.Round(count, 5) == 0.00000d)
-				{
-					count = 0;
-				}
-				return new InnerPeriodResourceDetail(count, res,
-					subtractEffiencyResources(d.EffiencyResources, skillCombination.SkillEfficiencies), fractionPeriodResult);
-			});
+			var weight = 1d;
+			if (fractionPeriod.HasValue)
+			{
+				weight = (double) fractionPeriod.Value.ElapsedTime().TotalMinutes / period.ElapsedTime().TotalMinutes;
+			}
+
+			var res = d.Resource - resource * weight;
+			var count = d.Count - heads * weight;
+			if (res < 0 || Math.Round(res, 5) == 0.00000d)
+			{
+				res = 0;
+			}
+
+			if (Math.Round(count, 5) == 0.00000d)
+			{
+				count = 0;
+			}
+
+			_resourceDictionary[key] = new InnerPeriodResourceDetail(count, res,
+				subtractEffiencyResources(d.EffiencyResources, skillCombination.SkillEfficiencies, weight),
+				fractionPeriodResult);
 		}
 
 		public PeriodResourceDetail GetResources(Guid skillKey, params Guid[] activityKeys)

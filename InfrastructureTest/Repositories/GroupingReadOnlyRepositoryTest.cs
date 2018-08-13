@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.UnitOfWork;
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public IContractRepository ContractRepository;
 		public IContractScheduleRepository ContractScheduleRepository;
 		public IPartTimePercentageRepository PartTimePercentageRepository;
+		public ICurrentBusinessUnit CurrentBusinessUnit;
 
 		[Test]
 		public void ShouldGroupPagesFromReadModel()
@@ -61,7 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
 
 			var personContract = PersonContractFactory.CreatePersonContract();
-			var personContract1 = PersonContractFactory.CreatePersonContract("anotherContract","contractSchedule","partTimePercentage");
+			var personContract1 = PersonContractFactory.CreatePersonContract("anotherContract", "contractSchedule", "partTimePercentage");
 			var personPeriod = new PersonPeriod(new DateOnly(2000, 1, 1),
 				personContract,
 				team);
@@ -86,9 +88,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			WithUnitOfWork.Do(() =>
 			{
-				Target.UpdateGroupingReadModel(new List<Guid> { personToTest.Id.Value,personToTest1.Id.Value });
+				Target.UpdateGroupingReadModel(new List<Guid> { personToTest.Id.Value, personToTest1.Id.Value });
 			});
-			
+
 			WithUnitOfWork.Do(() =>
 			{
 				var items = Target.FindGroups(new List<Guid>
@@ -96,7 +98,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					personContract.Contract.Id.GetValueOrDefault(),
 					personContract1.Contract.Id.GetValueOrDefault()
 				}, new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1));
-				
+
 				items.Count().Should().Be.EqualTo(2);
 			});
 		}
@@ -603,7 +605,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			WithUnitOfWork.Do(() =>
 			{
-				var period = new DateOnlyPeriod(new DateOnly(2016,11 , 28), new DateOnly(2016, 12, 28));
+				var period = new DateOnlyPeriod(new DateOnly(2016, 11, 28), new DateOnly(2016, 12, 28));
 
 				var result = Target.DetailsForGroups(new[] { personContract.Contract.Id.Value }, period);
 				result.Count().Should().Be.EqualTo(0);
@@ -616,7 +618,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				var result = Target.DetailsForGroups(new[] { personContract.Contract.Id.Value }, period);
 				result.Count().Should().Be.EqualTo(2);
 				result.Select(p => p.PersonId).Distinct().Should().Be.Equals(2);
-				
+
 				result.Select(p => p.PersonId).Contains(personToTest.Id.Value).Should().Be.EqualTo(true);
 			});
 		}
@@ -699,6 +701,79 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			});
 		}
 
-	
+		[Test]
+		public void ShouldReturnAvailableGroups()
+		{
+
+			var personToTest = PersonFactory.CreatePerson("dummyAgent1");
+			var team = TeamFactory.CreateTeam("Dummy Team 1", "Dummy Site");
+			var activity = new Activity("dummy activity");
+			var skill = SkillFactory.CreateSkill("dummy skill");
+			var personSkill = PersonSkillFactory.CreatePersonSkill(skill, 100);
+			skill.Activity = activity;
+			var personContract = PersonContractFactory.CreatePersonContract();
+
+			WithUnitOfWork.Do(() =>
+			{
+				SiteRepository.Add(team.Site);
+				TeamRepository.Add(team);
+				ActivityRepository.Add(activity);
+				SkillTypeRepository.Add(skill.SkillType);
+				SkillRepository.Add(skill);
+				ContractRepository.Add(personContract.Contract);
+				ContractScheduleRepository.Add(personContract.ContractSchedule);
+				PartTimePercentageRepository.Add(personContract.PartTimePercentage);
+			});
+
+			var personPeriod = new PersonPeriod(new DateOnly(2018, 1, 1), personContract, team);
+			personPeriod.AddPersonSkill(personSkill);
+			personToTest.AddPersonPeriod(personPeriod);
+			personToTest.TerminatePerson(new DateOnly(2018, 12, 1), new PersonAccountUpdaterDummy());
+
+			WithUnitOfWork.Do(() =>
+			{
+				PersonRepository.Add(personToTest);
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				Target.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				var period = new DateOnlyPeriod(new DateOnly(2017, 8, 8), new DateOnly(2018 , 8, 12));
+				var result = Target.AllAvailableGroups(period);
+
+				result.Count().Should().Be.EqualTo(5);
+				result.First().BusinessUnitId.Should().Be.EqualTo(CurrentBusinessUnit.CurrentId());
+
+				var teamGroup = result.Single(g => g.TeamId == team.Id && g.PageId == Group.PageMainId);
+				teamGroup.SiteId.Should().Be.EqualTo(team.Site.Id);
+				teamGroup.GroupName.Should().Be.EqualTo("Dummy Site/Dummy Team 1");
+				teamGroup.PageId.Should().Be.EqualTo(Group.PageMainId);
+
+				var skillGroup = result.Single(s => s.GroupId == skill.Id);
+				skillGroup.GroupName.Should().Be.EqualTo("dummy skill");
+				skillGroup.PageName.Should().Be.EqualTo("xxSkill");
+
+				var contractGroup = result.Single(g => g.GroupId == personContract.Contract.Id);
+				contractGroup.GroupName.Should().Be.EqualTo("dummyContract");
+				contractGroup.PageName.Should().Be.EqualTo("xxContract");
+
+				var contractScheduleGroup = result.Single(g => g.GroupId == personContract.ContractSchedule.Id);
+				contractScheduleGroup.GroupName.Should().Be.EqualTo("dummyBasicSchedule");
+				contractScheduleGroup.PageName.Should().Be.EqualTo("xxContractSchedule");
+
+				var contractParttimeGroup = result.Single(g => g.GroupId == personContract.PartTimePercentage.Id);
+				contractParttimeGroup.GroupName.Should().Be.EqualTo("dummyPartTime 75%");
+				contractParttimeGroup.PageName.Should().Be.EqualTo("xxPartTimePercentage");
+
+			});
+
+		
+		}
+
+
 	}
 }

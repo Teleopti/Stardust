@@ -142,7 +142,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<FullScheduling>().InstancePerLifetimeScope().ApplyAspects();
 
 			builder.RegisterType<ExtendSelectedPeriodForMonthlyScheduling>().SingleInstance();
-			builder.RegisterType<LowThreadPriorityScope>().As<ILowThreadPriorityScope>().SingleInstance();
 			builder.RegisterType<CorrectAlteredBetween>().SingleInstance();
 			
 			builder.RegisterType<PersonListExtractorFromScheduleParts>().As<IPersonListExtractorFromScheduleParts>().SingleInstance();

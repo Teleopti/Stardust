@@ -61,6 +61,7 @@
 		Wfm_Requests_DenyRequestWhenAllSkillsClosed_46384,
 		Wfm_Requests_NightShift_BudgetDay_Allowance_76599,
 		AddOrRemoveTenantsWithoutRestart_43635,
+		Wfm_Requests_NightShift_BudgetDay_HeadCount_77146,
 
 		Wfm_People_ImportAndCreateAgentFromFile_42528,
 		Wfm_People_SetFallbackValuesForImporting_43289,
@@ -137,7 +138,6 @@
 		Report_Remove_Realtime_Scheduled_Time_vs_Target_45559,
 		Report_Remove_Scheduled_Time_Per_Activity_From_Scheduler_45640,
 		
-		WFM_WebScheduling_LowPriority_44320,
 		WFM_Modify_Skill_Groups_43727,
 		WFM_AuditTrail_44006,
 		Report_Show_Utc_In_Report_Selection_When_In_Use_45079,
@@ -161,7 +161,8 @@
 		Tenant_PurgeLogonAttempts_75782,
 		Tenant_PurgeNoneEmployeesData_76291,
 		Staffing_BPO_ClearStaffing_75498,
-		Staffing_BPO_ExportMultipleSkills_74968
+		Staffing_BPO_ExportMultipleSkills_74968,
+		Wfm_Staffing_RemoveDeletedHeadsFromReadmodel_77049
 		// ReSharper restore InconsistentNaming
 	}
 }

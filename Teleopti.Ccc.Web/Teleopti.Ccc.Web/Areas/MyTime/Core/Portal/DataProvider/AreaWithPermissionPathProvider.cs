@@ -14,32 +14,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 {
 	public class AreaWithPermissionPathProvider : IAreaWithPermissionPathProvider
 	{
-
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IToggleManager _toggleManager;
 		private readonly ILicenseActivatorProvider _licenseActivatorProvider;
 		private readonly IApplicationFunctionsToggleFilter _applicationFunctionsToggleFilter;
 
-		private static readonly IEnumerable<AreaWithPermissionPath> wfmAreaWithPermissionPaths = new List<AreaWithPermissionPath>
-		{
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebForecasts, () => Resources.Forecasts, "forecast"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebPlans, () => Resources.OpenPlansPage, "resourceplanner", new Link {href = "api/ResourcePlanner/Filter", rel = "filters"}),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebPermissions, () => Resources.OpenPermissionPage, "permissions"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.Outbound, () => Resources.Outbound, "outbound"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.Gamification, () => Resources.Gamification, "gamification"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.PeopleAccess, () => Resources.People, "people"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebRequests, () => Resources.Requests, "requests"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.SeatPlanner, () => Resources.SeatPlan, "seatPlan"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.SeatPlanner, () => Resources.SeatMap, "seatMap"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, () => Resources.RealTimeAdherence, "rta"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebIntraday, () => Resources.Intraday, "intraday"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, () => Resources.TeamsModule, "teams"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.AccessToReports, () => Resources.Reports, "reports"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebStaffing, () => Resources.WebStaffing, "staffingModule"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.MyTimeWeb, () => Resources.MyTimeWeb, "myTime"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.BpoExchange, () => Resources.BpoExchange, "bpo-gatekeeper"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.All, () => "API access", "apiaccess")
-		};
 
 		public AreaWithPermissionPathProvider(IPermissionProvider permissionProvider, IToggleManager toggleManager, ILicenseActivatorProvider licenseActivatorProvider, IApplicationFunctionsToggleFilter applicationFunctionsToggleFilter)
 		{
@@ -52,16 +31,34 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 		public IEnumerable<AreaWithPermissionPath> GetWfmAreasWithPermissions()
 		{
 			var systemFunctions = _applicationFunctionsToggleFilter.FilteredFunctions();
-			var result = wfmAreaWithPermissionPaths
+			var result = GetWfmAreasList()
 				.Where(a => _permissionProvider.HasApplicationFunctionPermission(a.Path) && isPathEnabled(a.Path)
-				&& isPathLicensed(systemFunctions, a.Path));
+																						 && isPathLicensed(systemFunctions, a.Path));
 
 			return result;
 		}
 
 		public IEnumerable<AreaWithPermissionPath> GetWfmAreasList()
 		{
-			return wfmAreaWithPermissionPaths;
+			var rtaAreaName = _toggleManager.IsEnabled(Toggles.RTA_ReviewHistoricalAdherence_74770) ? Resources.Adherence : Resources.RealTimeAdherence;
+			
+			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebForecasts, Resources.Forecasts, "forecast");
+			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebPlans, Resources.OpenPlansPage, "resourceplanner", new Link {href = "api/ResourcePlanner/Filter", rel = "filters"});
+			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebPermissions, Resources.OpenPermissionPage, "permissions");
+			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.Outbound, Resources.Outbound, "outbound");
+			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.Gamification, Resources.Gamification, "gamification");
+			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.PeopleAccess, Resources.People, "people");
+			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebRequests, Resources.Requests, "requests");
+			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.SeatPlanner, Resources.SeatPlan, "seatPlan");
+			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.SeatPlanner, Resources.SeatMap, "seatMap");
+			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, rtaAreaName, "rta");
+			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebIntraday, Resources.Intraday, "intraday");
+			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, Resources.TeamsModule, "teams");
+			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.AccessToReports, Resources.Reports, "reports");
+			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebStaffing, Resources.WebStaffing, "staffingModule");
+			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.MyTimeWeb, Resources.MyTimeWeb, "myTime");
+			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.BpoExchange, Resources.BpoExchange, "bpo");
+			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.All, "API access", "apiaccess");
 		}
 
 		public IEnumerable<object> GetAreasWithPermissions()
@@ -81,7 +78,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 		{
 			if (functionPath.IsEmpty() || _permissionProvider.HasApplicationFunctionPermission(functionPath))
 			{
-				areas.Add(new { Name = areaName });
+				areas.Add(new {Name = areaName});
 			}
 		}
 
@@ -89,7 +86,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 		{
 			if (licensePath.IsEmpty() || _licenseActivatorProvider.Current().EnabledLicenseOptionPaths.Contains(licensePath))
 			{
-				areas.Add(new { Name = areaName });
+				areas.Add(new {Name = areaName});
 			}
 		}
 
@@ -101,7 +98,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 				areas.Add(new
 				{
 					Name = "WFM",
-					SubAreas = wfmAreas.Select(area => new { Name = area.Name() }).ToArray()
+					SubAreas = wfmAreas.Select(area => new {area.Name}).ToArray()
 				});
 			}
 		}
@@ -112,22 +109,27 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			{
 				return _toggleManager.IsEnabled(Toggles.Wfm_WebPlan_Pilot_46815);
 			}
+
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.IntradayEarlyWarning))
 			{
 				return _toggleManager.IsEnabled(Toggles.WfmIntraday_MonitorActualvsForecasted_35176);
 			}
+
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.WebForecasts))
 			{
 				return _toggleManager.IsEnabled(Toggles.WFM_Forecaster_Preview_74801);
 			}
+
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.MyTimeWeb))
 			{
 				return _toggleManager.IsEnabled(Toggles.Wfm_AddMyTimeLink_45088);
 			}
+
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.PeopleAccess))
 			{
 				return _toggleManager.IsEnabled(Toggles.Wfm_PeopleWeb_PrepareForRelease_47766);
 			}
+
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.Gamification))
 			{
 				return _toggleManager.IsEnabled(Toggles.WFM_Gamification_Permission_76546);

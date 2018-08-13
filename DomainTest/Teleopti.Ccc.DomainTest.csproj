@@ -1718,6 +1718,7 @@
     <Compile Include="WorkflowControl\BudgetGroupAllowanceValidatorMockTest.cs" />
     <Compile Include="WorkflowControl\BudgetGroupAllowanceValidatorTest.cs" />
     <Compile Include="WorkflowControl\AlreadyAbsentValidatorTest.cs" />
+    <Compile Include="WorkflowControl\BudgetGroupHeadCountValidatorMockTest.cs" />
     <Compile Include="WorkflowControl\BudgetGroupHeadCountValidatorTest.cs" />
     <Compile Include="WorkflowControl\RequestExpirationValidatorTest.cs" />
     <Compile Include="WorkflowControl\SchedulePublishedSpecificationForAbsenseTest.cs" />

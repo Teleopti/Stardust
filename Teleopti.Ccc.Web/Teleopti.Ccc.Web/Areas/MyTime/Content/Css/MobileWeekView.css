@@ -64,10 +64,6 @@
 	padding-right: 5px;
 	font-size: 85%;
 }
-.weekview-mobile .dayoff {
-	background-color: beige;
-	background-image: url(../Images/stripe.png);
-}
 .weekview-mobile .overtime-panel-body {
 	height: auto;
 	padding: 0;

@@ -272,6 +272,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return database.WithPeriod(startDate, null, null, null);
 		}
 
+		public static FakeDatabase WithPeriod(this FakeDatabase database, string startDate, ISiteOpenHour siteOpenHour)
+		{
+			return database.WithPeriod(startDate, null, null, null, siteOpenHour);
+		}
+
 		public static FakeDatabase WithPeriod(this FakeDatabase database, string startDate, Guid? teamId)
 		{
 			return database.WithPeriod(startDate, teamId, null, null);
@@ -766,6 +771,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
+		public FakeDatabase WithPeriod(string startDate, Guid? teamId, Guid? siteId, Guid? businessUnitId, ISiteOpenHour siteOpenHour)
+		{
+			WithPeriod(startDate, teamId, siteId, businessUnitId);
+			_site.AddOpenHour(siteOpenHour);
+			_sites.Has(_site);
+			return this;
+		}
+
 		public FakeDatabase WithSchedulePeriod(string startDate)
 		{
 			startDate = startDate ?? "2000-01-01";
@@ -928,7 +941,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			ensureExists(_scenarios, null, () => WithScenario(null, true));
 			_meeting = new Meeting(
 				_person,
-				new[] {new MeetingPerson(_person, false)},
+				new[] { new MeetingPerson(_person, false) },
 				subject,
 				null,
 				null,
@@ -942,6 +955,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			};
 			_meeting.SetId(Guid.NewGuid());
 			_meetings.Has(_meeting);
+			return this;
+		}
+
+		public FakeDatabase WithAssignedPersonalActivity(Guid? id, string startTime, string endTime)
+		{
+			ensureExists(_activities, id, () => this.WithActivity(id));
+			_personAssignment.AddPersonalActivity(_activity, new DateTimePeriod(startTime.Utc(), endTime.Utc()));
 			return this;
 		}
 

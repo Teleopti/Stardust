@@ -17620,4 +17620,16 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
   <data name="NothingSelected" xml:space="preserve">
     <value>Nothing selected</value>
   </data>
+  <data name="NotAllowedWhenShiftOutsideOpenHours" xml:space="preserve">
+    <value>Trading shifts is not allowed since one of the shifts would be outside of the site open hours.</value>
+    <comment>Using in MyTime ShiftTrade for multiple shedules. A message for user when traded shift is outside the other agent's site open hours.</comment>
+  </data>
+  <data name="NotAllowedWhenHasNonMainShiftAcitivities" xml:space="preserve">
+    <value>Trading shifts is not allowed when a meeting, a personal activity or overtime is scheduled.</value>
+    <comment>Use in Mytime ShiftTrade, a message when one of the agent has meeting, personal activity or overtime and related Business rule set to Deny.</comment>
+  </data>
+  <data name="NotAllowedWhenHasNonOverwriteActivity" xml:space="preserve">
+    <value>Trading shifts is not allowed when there is a non-overwritable activity in the shift.</value>
+    <comment>Use in MyTime ShiftTrade. A message tell agent when schedule cannot selected when has non-overwritable activity.</comment>
+  </data>
 </root>

@@ -211,6 +211,44 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.That(scheduleReadModels.Count, Is.EqualTo(2));			
 		}
 
+		[Test]
+		public void ShouldReturnReadModelsForPersonsWithDayOff()
+		{
+			ISite site = SiteFactory.CreateSimpleSite("site");
+			ITeam team = TeamFactory.CreateSimpleTeam();
+			team.Site = site;
+			team.SetDescription(new Description("team"));
+
+			IPerson per1 = PersonFactory.CreatePerson("roger", "kratz");
+			IPerson per2 = PersonFactory.CreatePerson("z", "balog");
+			IPerson per3 = PersonFactory.CreatePerson("a", "balog");
+
+			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
+			per2.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
+			per3.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
+
+
+			WithUnitOfWork.Do(() =>
+			{
+				Sites.Add(site);
+				Teams.Add(team);
+				Persons.Add(per1);
+				Persons.Add(per2);
+				Persons.Add(per3);
+			});
+
+			createAndSaveReadModel((Guid)per2.Id, (Guid)site.BusinessUnit.Id, new DateTime(2012, 8, 28), 8, isDayoff:true);
+			createAndSaveReadModel((Guid)per3.Id, (Guid)site.BusinessUnit.Id, new DateTime(2012, 8, 28), 10);
+
+			var timeFilterInfo = new TimeFilterInfo { IsDayOff = true };
+
+			var result = WithUnitOfWork.Get(() => Target.ForPersons(new DateOnly(2012, 8, 28),
+				new[] { (Guid)per1.Id, (Guid)per2.Id, (Guid)per3.Id }, new Paging { Skip = 0, Take = 20 }, timeFilterInfo));
+
+			var scheduleReadModels = result as IList<PersonScheduleDayReadModel> ?? result.ToList();
+			Assert.That(scheduleReadModels.Count, Is.EqualTo(1));
+			Assert.That(scheduleReadModels.ElementAt(0).IsDayOff, Is.EqualTo(true));
+		}
 
 		[Test]
 		public void ShouldSaveAndLoadReadModelForPerson()

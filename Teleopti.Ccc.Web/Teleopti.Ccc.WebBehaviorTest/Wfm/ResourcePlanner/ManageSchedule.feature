@@ -13,12 +13,7 @@ Scenario: Run archiving for one agent
 	| Extra scenario | true         |
 	And there is a site named 'Site 1'
 	And there is a team named 'Team 1' on 'Site 1'
-	And I have a role with
-	| Field                     | Value        |
-	| Name                      | Archive Role |
-	| Access to team            | Team 1       |
-	| Access to resourceplanner | true         |
-	| Archive schedules         | true         |
+	And I have a role with full access
 	And Ashley Andeen has a person period with
 	 | Field      | Value      |
 	 | Team       | Team 1     |

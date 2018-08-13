@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			var areas = Target.GetWfmAreasWithPermissions();
 
 			areas.Single().Path.Should().Be(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview);
-			areas.Single().Name.Invoke().Should().Be(Resources.RealTimeAdherence);
+			areas.Single().Name.Should().Be(Resources.RealTimeAdherence);
 			areas.Single().InternalName.Should().Be("rta");
 		}
 
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			var areas = Target.GetWfmAreasWithPermissions();
 
 			areas.Single().Path.Should().Be(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
-			areas.Single().Name.Invoke().Should().Be(Resources.Teams);
+			areas.Single().Name.Should().Be(Resources.Teams);
 			areas.Single().InternalName.Should().Be("teams");
 		}
 
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			var areas = Target.GetWfmAreasWithPermissions();
 
 			areas.Single().Path.Should().Be(DefinedRaptorApplicationFunctionPaths.WebIntraday);
-			areas.Single().Name.Invoke().Should().Be(Resources.Intraday);
+			areas.Single().Name.Should().Be(Resources.Intraday);
 			areas.Single().InternalName.Should().Be("intraday");
 		}
 
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			var areas = Target.GetWfmAreasWithPermissions();
 
 			areas.Single().Path.Should().Be(DefinedRaptorApplicationFunctionPaths.WebStaffing);
-			areas.Single().Name.Invoke().Should().Be(Resources.WebStaffing);
+			areas.Single().Name.Should().Be(Resources.WebStaffing);
 			areas.Single().InternalName.Should().Be("staffingModule");
 		}
 		
@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			var areas = Target.GetWfmAreasWithPermissions();
 
 			areas.Single().Path.Should().Be(DefinedRaptorApplicationFunctionPaths.PeopleAccess);
-			areas.Single().Name.Invoke().Should().Be(Resources.People);
+			areas.Single().Name.Should().Be(Resources.People);
 			areas.Single().InternalName.Should().Be("people");
 		}
 
@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			var areas = Target.GetWfmAreasWithPermissions();
 
 			areas.Single().Path.Should().Be(DefinedRaptorApplicationFunctionPaths.WebForecasts);
-			areas.Single().Name.Invoke().Should().Be(Resources.Forecasts);
+			areas.Single().Name.Should().Be(Resources.Forecasts);
 			areas.Single().InternalName.Should().Be("forecast");
 		}
 
@@ -302,7 +302,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			var areas = Target.GetWfmAreasWithPermissions();
 
 			areas.Single().Path.Should().Be(DefinedRaptorApplicationFunctionPaths.Gamification);
-			areas.Single().Name.Invoke().Should().Be(Resources.Gamification);
+			areas.Single().Name.Should().Be(Resources.Gamification);
 			areas.Single().InternalName.Should().Be("gamification");
 		}
 

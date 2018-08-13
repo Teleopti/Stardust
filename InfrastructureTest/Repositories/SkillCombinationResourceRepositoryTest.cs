@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public IActivityRepository ActivityRepository;
 		public IBusinessUnitRepository BusinessUnitRepository;
 		public CurrentBusinessUnit CurrentBusinessUnit;
+		public UpdateStaffingLevelReadModelStartDate UpdateStaffingLevelReadModelStartDate;
 		
 		public void Isolate(IIsolate isolate)
 		{
@@ -68,6 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldPersistSingleSkillCombinationResource()
 		{
 			Now.Is("2016-12-19 08:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			var combinationResources = new List<SkillCombinationResource>
 			{
 				new SkillCombinationResource
@@ -89,6 +91,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldPersistSkillCombinationResource()
 		{
 			Now.Is("2016-12-19 08:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			var combinationResources = new List<SkillCombinationResource>
 			{
 				new SkillCombinationResource
@@ -111,6 +114,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var skillId = persistSkill();
 			Now.Is("2017-06-01 08:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			var combinationResourcesOld = new List<SkillCombinationResource>
 			{
 				new SkillCombinationResource
@@ -131,6 +135,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResourcesOld);
 			Now.Is("2017-06-09 08:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			var combinationResources = new List<SkillCombinationResource>
 			{
 				new SkillCombinationResource
@@ -153,6 +158,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var skillId = persistSkill();
 			Now.Is("2017-06-01 08:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			var combinationResourcesOld = new List<SkillCombinationResource>
 			{
 				new SkillCombinationResource
@@ -193,6 +199,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			CurrentUnitOfWork.Current().PersistAll();
 
 			Now.Is("2017-06-09 08:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			var combinationResources = new List<SkillCombinationResource>
 			{
 				new SkillCombinationResource
@@ -229,6 +236,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldLoadSkillCombinationInHexaDecimalOrder()
 		{
 			Now.Is("2016-12-19 08:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			var skillIds = new List<Guid> {persistSkill(), persistSkill(), persistSkill()};
 			var combinationResources = new List<SkillCombinationResource>
 			{
@@ -255,6 +263,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var skill = persistSkill();
 			Now.Is("2016-12-19 08:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			var start = new DateTime(2016, 12, 20, 0, 0, 0, DateTimeKind.Utc);
 			var end = new DateTime(2016, 12, 20, 0, 15, 0, DateTimeKind.Utc);
 
@@ -293,6 +302,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var skill = persistSkill();
 			Now.Is("2016-12-19 08:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			var start = new DateTime(2016, 12, 20, 0, 0, 0, DateTimeKind.Utc);
 			var end = new DateTime(2016, 12, 20, 0, 15, 0, DateTimeKind.Utc);
 
@@ -341,6 +351,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var skill = persistSkill();
 			Now.Is("2016-12-19 08:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			var start = new DateTime(2016, 12, 20, 0, 0, 0, DateTimeKind.Utc);
 			var end = new DateTime(2016, 12, 20, 0, 15, 0, DateTimeKind.Utc);
 
@@ -379,6 +390,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var skill = persistSkill();
 			var skill2 = persistSkill();
 			Now.Is("2016-12-19 08:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			var start = new DateTime(2016, 12, 20, 0, 0, 0, DateTimeKind.Utc);
 			var end = new DateTime(2016, 12, 20, 0, 15, 0, DateTimeKind.Utc);
 
@@ -417,6 +429,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var skill = persistSkill();
 			var skill2 = persistSkill();
 			Now.Is("2016-12-19 08:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			var start = new DateTime(2016, 12, 20, 0, 0, 0, DateTimeKind.Utc);
 			var end = new DateTime(2016, 12, 20, 0, 15, 0, DateTimeKind.Utc);
 
@@ -474,6 +487,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var skillId = persistSkill();
 			Now.Is("2017-06-01 08:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			var combinationResourcesOld = new List<SkillCombinationResource>
 			{
 				new SkillCombinationResource
@@ -550,6 +564,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var skillId = persistSkill();
 			Now.Is("2017-06-01 08:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			var combinationResourcesOld = new List<SkillCombinationResource>
 			{
 				new SkillCombinationResource
@@ -604,6 +619,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var skillId1 = persistSkill();
 			var skillId2 = persistSkill();
 			Now.Is("2017-06-01 08:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			var combinationResourcesOld = new List<SkillCombinationResource>
 			{
 				new SkillCombinationResource
@@ -724,6 +740,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldNotAddBpoResourceFromAnotherBu()
 		{
 			Now.Is("2017-06-01 08:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			//for first bu
 			var bu1 = CurrentBusinessUnit.Current();
 			var skillId1 = persistSkill();
@@ -795,6 +812,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldHandleDecimalRoudingWithBpoResources()
 		{
 			Now.Is("2017-06-01 08:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			//for first bu
 			var bu1 = CurrentBusinessUnit.Current();
 			var skillId1 = persistSkill();
@@ -870,6 +888,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var skillId1 = persistSkill();
 			var skillId2 = persistSkill();
 			Now.Is("2017-06-01 08:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 
 			var combinationResourcesOld = new List<SkillCombinationResource>
 			{
@@ -1095,6 +1114,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var skill = persistSkill();
 			
 			Now.Is("2016-12-19 08:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			var start = new DateTime(2016, 12, 20, 0, 0, 0, DateTimeKind.Utc);
 			var end = new DateTime(2016, 12, 20, 0, 15, 0, DateTimeKind.Utc);
 
@@ -1216,6 +1236,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var skillId1 = persistSkill();
 			var skillId2 = persistSkill();
 			Now.Is("2017-06-01 08:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 
 			var combinationResources = new List<SkillCombinationResource>()
 			{
@@ -1253,6 +1274,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var skill = persistSkill();
 			var skill2 = persistSkill();
 			Now.Is("2016-12-19 08:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
 			var start = new DateTime(2016, 12, 20, 0, 0, 0, DateTimeKind.Utc);
 			var end = new DateTime(2016, 12, 20, 0, 15, 0, DateTimeKind.Utc);
 
@@ -1738,6 +1760,275 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			range.StartDate.Should().Be.EqualTo(new DateTime());
 			range.EndDate.Should().Be.EqualTo(new DateTime());
+		}
+
+		[Test]
+		public void ShouldRemoveOldIntervalsBeforeAddingNewOne()
+		{
+			var skillId = persistSkill();
+			Now.Is("2017-06-01 08:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
+			var combinationResourcesOld = new List<SkillCombinationResource>
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
+					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
+					Resource = 1,
+					SkillCombination = new[] {skillId}
+				}
+			};
+
+			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResourcesOld);
+
+			CurrentUnitOfWork.Current().PersistAll();
+
+			Now.Is("2017-06-01 09:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
+			var combinationResources = new List<SkillCombinationResource>
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
+					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
+					Resource = 2,
+					SkillCombination = new[] {skillId}
+				}
+			};
+
+			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResources);
+
+			CurrentUnitOfWork.Current().PersistAll();
+
+			var loadedCombinationResources = Target
+				.LoadSkillCombinationResources(new DateTimePeriod(2017, 01, 01, 2017, 12, 12)).ToList();
+			loadedCombinationResources.Count.Should().Be.EqualTo(1);
+			loadedCombinationResources.First().Resource.Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldRemoveExistingAndFutureIntervalsBeforeAddingNew()
+		{
+			var skillId = persistSkill();
+			Now.Is("2017-06-01 08:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
+			var combinationResourcesOld = new List<SkillCombinationResource>
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 02, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
+					Resource = 1,
+					SkillCombination = new[] {skillId}
+				},
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
+					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
+					Resource = 1,
+					SkillCombination = new[] {skillId}
+				}
+			};
+
+			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResourcesOld);
+
+			CurrentUnitOfWork.Current().PersistAll();
+
+			Now.Is("2017-06-01 09:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
+			var combinationResources = new List<SkillCombinationResource>
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 02, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
+					Resource = 2,
+					SkillCombination = new[] {skillId}
+				}
+			};
+
+			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResources);
+
+			CurrentUnitOfWork.Current().PersistAll();
+
+			var loadedCombinationResources = Target
+				.LoadSkillCombinationResources(new DateTimePeriod(2017, 01, 01, 2017, 12, 12)).ToList();
+			loadedCombinationResources.Count.Should().Be.EqualTo(1);
+			loadedCombinationResources.First().Resource.Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldRemoveDeletedHeadsWithZeroStaffing()
+		{
+			var skillId = persistSkill();
+			Now.Is("2017-06-01 08:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
+			var combinationResourcesOld = new List<SkillCombinationResource>
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 02, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
+					Resource = 1,
+					SkillCombination = new[] {skillId}
+				},
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
+					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
+					Resource = 1,
+					SkillCombination = new[] {skillId}
+				}
+			};
+
+			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResourcesOld);
+
+			CurrentUnitOfWork.Current().PersistAll();
+
+			Now.Is("2017-06-01 09:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
+			var combinationResources = new List<SkillCombinationResource>
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
+					EndDateTime = new DateTime(2017, 06, 02, 0, 30, 0),
+					Resource = 2,
+					SkillCombination = new[] {skillId}
+				}
+			};
+
+			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResources);
+
+			CurrentUnitOfWork.Current().PersistAll();
+
+			var loadedCombinationResources = Target
+				.LoadSkillCombinationResources(new DateTimePeriod(2017, 01, 01, 2017, 12, 12)).ToList();
+			loadedCombinationResources.Count.Should().Be.EqualTo(1);
+			loadedCombinationResources.First().Resource.Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldRemoveDeletedHeadsHandlingUtc()
+		{
+			var skillId = persistSkill();
+			Now.Is("2017-06-01 08:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
+			var combinationResourcesOld = new List<SkillCombinationResource>
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 02, 22, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 02, 23, 0, 0),
+					Resource = 1,
+					SkillCombination = new[] {skillId}
+				},new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 02, 23, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 3, 0, 0, 0),
+					Resource = 1,
+					SkillCombination = new[] {skillId}
+				},
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 3, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 3, 1, 0, 0),
+					Resource = 1,
+					SkillCombination = new[] {skillId}
+				},
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 3, 1, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 3, 2, 0, 0),
+					Resource = 1,
+					SkillCombination = new[] {skillId}
+				}
+			};
+
+			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResourcesOld);
+
+			CurrentUnitOfWork.Current().PersistAll();
+
+			Now.Is("2017-06-01 09:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
+			var combinationResources = new List<SkillCombinationResource>
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 3, 1, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 3, 2, 0, 0),
+					Resource = 2,
+					SkillCombination = new[] {skillId}
+				}
+			};
+
+			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResources);
+
+			CurrentUnitOfWork.Current().PersistAll();
+
+			var loadedCombinationResources = Target
+				.LoadSkillCombinationResources(new DateTimePeriod(2017, 01, 01, 2017, 12, 12)).ToList();
+			loadedCombinationResources.Count.Should().Be.EqualTo(1);
+			loadedCombinationResources.First().Resource.Should().Be.EqualTo(2);
+		}
+
+
+		[Test]
+		public void ShouldNotremoveIntervalsInHistoricalData()
+		{
+			var skillId = persistSkill();
+			Now.Is("2017-06-02 07:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
+			var combinationResourcesOld = new List<SkillCombinationResource>
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 01, 6, 45, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 7, 0, 0),
+					Resource = 1,
+					SkillCombination = new[] {skillId}
+				},
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 01, 7, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 7, 15, 0),
+					Resource = 2,
+					SkillCombination = new[] {skillId}
+				},
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 01, 7, 15, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 7, 30, 0),
+					Resource = 3,
+					SkillCombination = new[] {skillId}
+				}
+			};
+
+			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResourcesOld);
+
+			CurrentUnitOfWork.Current().PersistAll();
+
+			Now.Is("2017-06-02 08:00");
+			UpdateStaffingLevelReadModelStartDate.RememberStartDateTime(Now.UtcDateTime().AddDays(-1).AddHours(-1));
+			var combinationResources = new List<SkillCombinationResource>
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 01, 7, 15, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 7, 30, 0),
+					Resource = 2,
+					SkillCombination = new[] {skillId}
+				}
+			};
+
+			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResources);
+
+			CurrentUnitOfWork.Current().PersistAll();
+
+			var loadedCombinationResources = Target
+				.LoadSkillCombinationResources(new DateTimePeriod(2017, 01, 01, 2017, 12, 12)).ToList();
+			loadedCombinationResources.Count.Should().Be.EqualTo(2);
+			//loadedCombinationResources.First().Resource.Should().Be.EqualTo(2);
 		}
 	}
 }

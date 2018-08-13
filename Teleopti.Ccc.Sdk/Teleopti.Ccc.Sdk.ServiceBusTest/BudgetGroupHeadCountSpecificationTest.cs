@@ -37,9 +37,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_scenario = ScenarioFactory.CreateScenarioAggregate();
 			_person = PersonFactory.CreatePerson("billg");
 			_schedulingResultStateHolder = MockRepository.GenerateMock<ISchedulingResultStateHolder>();
-
-			_target = new BudgetGroupHeadCountSpecification(_scenarioRepository, _budgetDayRepository,
-															_scheduleProjectionReadOnlyPersister);
+			var budgetGroupHeadCountCalculator = new BudgetGroupHeadCountSpecificationLimited(_scenarioRepository, _budgetDayRepository,
+				_scheduleProjectionReadOnlyPersister);
+			_target = new BudgetGroupHeadCountSpecification(budgetGroupHeadCountCalculator);
 		}
 
 		[Test]

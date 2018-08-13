@@ -171,6 +171,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.AddScalar("MinStart", NHibernateUtil.DateTime)
 				.AddScalar("Total", NHibernateUtil.Int16)
 				.AddScalar("IsLastPage", NHibernateUtil.Boolean)
+				.AddScalar("IsDayoff",NHibernateUtil.Boolean)
 				.SetDateOnly("shiftTradeDate", shiftTradeDate)
 				.SetParameter("personIdList", idlist, NHibernateUtil.StringClob)
 				.SetParameter("filterStartTimes", filterString.startTimes, NHibernateUtil.StringClob)

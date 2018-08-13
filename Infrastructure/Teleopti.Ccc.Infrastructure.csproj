@@ -372,6 +372,7 @@
     <Compile Include="Repositories\PersonAccessAuditRepository.cs" />
     <Compile Include="Repositories\PersonLoadAllWithAssociation.cs" />
     <Compile Include="Repositories\PurgeSettingRepository.cs" />
+    <Compile Include="Repositories\RemoveDeletedStaffingHeads.cs" />
     <Compile Include="Repositories\RequestPeriod.cs" />
     <Compile Include="Repositories\ShiftCategorySelectionRepository.cs" />
     <Compile Include="Repositories\ShiftCategoryUsageFinder.cs" />
@@ -707,7 +708,6 @@
     <Compile Include="UnitOfWork\IPreCommitHook.cs" />
     <Compile Include="UnitOfWork\INHibernateConfigurationCache.cs" />
     <Compile Include="UnitOfWork\KeepScheduleEvents.cs" />
-    <Compile Include="UnitOfWork\LowThreadPriorityScope.cs" />
     <Compile Include="UnitOfWork\MessageBrokerSender.cs" />
     <Compile Include="UnitOfWork\NestedUnitOfWorkException.cs" />
     <Compile Include="UnitOfWork\NoPreCommitHooks.cs" />

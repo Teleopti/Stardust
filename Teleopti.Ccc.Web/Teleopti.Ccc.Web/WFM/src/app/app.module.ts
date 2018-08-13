@@ -8,7 +8,6 @@ import { CoreModule } from './core/core.module';
 import { UserPreferences, UserService } from './core/services';
 import { LanguageLoaderFactory, CustomTranslateParser, Zorroi18nService } from './core/translation';
 import { PeopleModule } from './people/people.module';
-import { RtaHistoricalOverviewModule } from '../../app/rta/rta/historical-overview/rta.historical.overview.module';
 
 @NgModule({
 	declarations: [],
@@ -26,8 +25,7 @@ import { RtaHistoricalOverviewModule } from '../../app/rta/rta/historical-overvi
 				deps: [HttpClient]
 			},
 			parser: { provide: TranslateParser, useClass: CustomTranslateParser }
-		}),
-		RtaHistoricalOverviewModule
+		})
 	],
 	entryComponents: [],
 	providers: [Zorroi18nService]

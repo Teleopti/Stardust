@@ -68,6 +68,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 					"~/Content/Scripts/modernizr-2.6.2.js",
 					"~/Content/bootstrap/Scripts/bootstrap.js",
 					"~/Content/jqueryui/jquery-ui-1.10.2.custom.js",
+					"~/Content/jqueryui.touch-punch/jquery.ui.touch-punch.js",
 					"~/Content/Scripts/json2.js",
 					"~/Content/Scripts/jquery.hoverIntent.js",
 					"~/Content/Scripts/jquery.qtip.js",

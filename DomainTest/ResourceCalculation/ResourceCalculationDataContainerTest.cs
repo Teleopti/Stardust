@@ -403,15 +403,56 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			});
 			_target.RemoveResources(_person, _date, new ResourceLayer
 			{
-				FractionPeriod = _period.ChangeStartTime(TimeSpan.FromMinutes(8)),
+				FractionPeriod = _period.ChangeStartTime(TimeSpan.FromMinutes(7)),
 				PayloadId = _activity.Id.GetValueOrDefault(),
 				Period = _period,
 				RequiresSeat = false,
 				Resource = 0.8
 			});
 			var result = _target.SkillResources(_skill, _period);
-			result.Item2.Should().Be.EqualTo(0);
 			result.Item1.Should().Be.EqualTo(0);
+			result.Item2.Should().Be.EqualTo(0);
+		}
+		
+		[Test]
+		public void ShouldRemoveResourcesCorrectlyForFractionPeriods()
+		{
+			_target.AddResources(_person, _date, new ResourceLayer
+			{
+				PayloadId = _activity.Id.GetValueOrDefault(),
+				Period = _period,
+				RequiresSeat = false,
+				Resource = 0.8
+			});
+			var person2 = PersonFactory.CreatePersonWithPersonPeriod(_date, new[] { _skill });
+			_target.AddResources(person2, _date, new ResourceLayer
+			{
+				PayloadId = _activity.Id.GetValueOrDefault(),
+				Period = _period,
+				RequiresSeat = false,
+				Resource = 0.8
+			});
+			
+			_target.RemoveResources(_person, _date, new ResourceLayer
+			{
+				FractionPeriod = _period.ChangeEndTime(TimeSpan.FromMinutes(-8)),
+				PayloadId = _activity.Id.GetValueOrDefault(),
+				Period = _period,
+				RequiresSeat = false,
+				Resource = 0.8
+			});
+			_target.RemoveResources(_person, _date, new ResourceLayer
+			{
+				FractionPeriod = _period.ChangeStartTime(TimeSpan.FromMinutes(7)),
+				PayloadId = _activity.Id.GetValueOrDefault(),
+				Period = _period,
+				RequiresSeat = false,
+				Resource = 0.8
+			});
+			
+			var result = _target.SkillResources(_skill, _period);
+			Math.Round(result.Item1, 1).Should().Be.EqualTo(0.8);
+			Math.Round(result.Item2, 1).Should().Be.EqualTo(1);
 		}
 
 		[Test]

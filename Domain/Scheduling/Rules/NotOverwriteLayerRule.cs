@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				oldResponses.Remove(removeRuleResponse);
 			}
 
-			var overlappingLayersList = GetOverlappingLayerses(rangeClones, scheduleDay);
+			var overlappingLayersList = GetOverlappingLayerses(scheduleDay);
 			foreach (var overlappingLayerse in overlappingLayersList)
 			{
 				var businessRuleResponse = createResponse(person, dateToCheck, overlappingLayerse);
@@ -58,8 +58,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return responsList;
 		}
 
-		public IList<OverlappingLayers> GetOverlappingLayerses(IDictionary<IPerson, IScheduleRange> rangeClones,
-			IScheduleDay scheduleDay)
+		public IList<OverlappingLayers> GetOverlappingLayerses(IScheduleDay scheduleDay)
 		{
 			if(!scheduleDay.HasProjection())
 				return new List<OverlappingLayers>();
