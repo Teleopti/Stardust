@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Outlier;
@@ -19,30 +20,37 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		private readonly IHistoricalData _historicalData;
 		private readonly IOutlierRemover _outlierRemover;
 		private readonly IForecastMethodProvider _forecastMethodProvider;
+		private readonly IForecastWorkloadEvaluator _forecastWorkloadEvaluator;
 
 		public QueueStatisticsViewModelFactory(
 			IWorkloadRepository workloadRepository,
 			IHistoricalPeriodProvider historicalPeriodProvider,
 			IHistoricalData historicalData,
 			IOutlierRemover outlierRemover,
-			IForecastMethodProvider forecastMethodProvider)
+			IForecastMethodProvider forecastMethodProvider,
+			IForecastWorkloadEvaluator forecastWorkloadEvaluator)
 		{
 			_workloadRepository = workloadRepository;
 			_historicalPeriodProvider = historicalPeriodProvider;
 			_historicalData = historicalData;
 			_outlierRemover = outlierRemover;
 			_forecastMethodProvider = forecastMethodProvider;
+			_forecastWorkloadEvaluator = forecastWorkloadEvaluator;
 		}
 
-		public WorkloadQueueStatisticsViewModel QueueStatistics(QueueStatisticsInput input)
+		public WorkloadQueueStatisticsViewModel QueueStatistics(Guid workloadId)
 		{
-			var workload = _workloadRepository.Get(input.WorkloadId);
+			var workload = _workloadRepository.Get(workloadId);
 			var availablePeriod = _historicalPeriodProvider.AvailablePeriod(workload);
+			var workloadAccuracy = _forecastWorkloadEvaluator.Evaluate(workload);
+			var forecastMethodId = (workloadAccuracy == null || workloadAccuracy.Accuracies.Length == 0)
+				? ForecastMethodType.None
+				: workloadAccuracy.Accuracies.Single(x => x.IsSelected).MethodId;
 			return new WorkloadQueueStatisticsViewModel
 			{
 				WorkloadId = workload.Id.Value,
 				QueueStatisticsDays = availablePeriod.HasValue
-					? createQueueStatisticsDayViewModels(workload, input.MethodId, availablePeriod.Value)
+					? createQueueStatisticsDayViewModels(workload, forecastMethodId, availablePeriod.Value)
 					: new List<QueueStatisticsModel>()
 			};
 		}

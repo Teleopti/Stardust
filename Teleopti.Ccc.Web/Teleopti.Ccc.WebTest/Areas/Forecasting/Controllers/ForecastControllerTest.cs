@@ -1375,13 +1375,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 					StatOfferedTasks = 20
 				}
 			});
-
-			var input = new QueueStatisticsInput
-			{
-				WorkloadId = workload.Id.Value,
-				MethodId = ForecastMethodType.TeleoptiClassicLongTerm
-			};
-			var result = (OkNegotiatedContentResult<WorkloadQueueStatisticsViewModel>)Target.QueueStatistics(input);
+			
+			var result = (OkNegotiatedContentResult<WorkloadQueueStatisticsViewModel>)Target.QueueStatistics(workload.Id.Value);
 			result.Content.WorkloadId.Should().Be.EqualTo(workload.Id.Value);
 			result.Content.QueueStatisticsDays.Count.Should().Be.EqualTo(2);
 			result.Content.QueueStatisticsDays.First().Date.Should().Be.EqualTo(statsDate);

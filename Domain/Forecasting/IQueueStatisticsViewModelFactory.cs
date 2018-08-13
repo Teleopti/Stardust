@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 {
 	public interface IQueueStatisticsViewModelFactory
 	{
-		WorkloadQueueStatisticsViewModel QueueStatistics(QueueStatisticsInput input);
+		WorkloadQueueStatisticsViewModel QueueStatistics(Guid workloadId);
 	}
 }
