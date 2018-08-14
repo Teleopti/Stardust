@@ -200,7 +200,7 @@ wfm
 					initializePermissionCheck()
 				]).then(function () {
 					// any preloads than requires selected business unit and/or permission check
-					if (permitted('rta'))
+					if (permitted('rta', undefined))
 						rtaDataService.load(); // dont return promise, async call
 				}));
 			preloads.push(
@@ -213,7 +213,7 @@ wfm
 
 			$rootScope.$on('$stateChangeStart', function (event, next, toParams) {
 				if (preloadDone) {
-					if (!permitted(internalNameOf(next))) {
+					if (!permitted(internalNameOf(next), urlOf(next))) {
 						event.preventDefault();
 						notPermitted(internalNameOf(next));
 					}
@@ -256,13 +256,17 @@ wfm
 				});
 			}
 
-			function permitted(name) {
+			function permitted(name, url) {
+				
 				var permitted = alwaysPermittedAreas.some(function (a) {
 					return a === name.toLowerCase();
 				});
 				if (!permitted)
 					permitted = permittedAreas.some(function (a) {
-						return a.InternalName === name;
+						if (url && (a.InternalName.indexOf(url) > -1 || url.indexOf(a.InternalName) > -1))
+							return true;
+						else
+							return a.InternalName === name;
 					});
 				return permitted;
 			}
@@ -283,7 +287,11 @@ wfm
 				name = name.split('-')[0];
 				return name;
 			}
-
+			
+			function urlOf(o) {
+				return o.url && o.url.split('/')[1];
+			}
+			
 			function nameOf(internalName) {
 				var name;
 				areas.forEach(function (area) {
