@@ -64,6 +64,11 @@
 			});
 		}
 		
+		vm.ToneAdherencePercentage = function (percentage){
+			var light = 40 + ((percentage / 100) * 60);
+			return 'hsl(0,0%,' + light + '%)';
+		};
+		
 		vm.applyOrganizationSelection = function () {
 			vm.organizationPickerOpen = false;
 			vm.groupings = [
@@ -75,8 +80,8 @@
 						Name: 'Andeen Ashley',
 						Adherence: [
 							{
-								Date: '1/5',
-								AdherencePercentage: 82,
+								Date: '27/12',
+								AdherencePercentage: 100,
 								Color: '#FFC285',
 								WasLateForWork: true
 							},
@@ -97,7 +102,7 @@
 							},
 							{
 								Date: '5/5',
-								AdherencePercentage: 50,
+								AdherencePercentage: 30,
 								Color: '#EE8F7D',
 								WasLateForWork: true
 							},
@@ -333,7 +338,7 @@
 								}
 						},
 						{
-							Name: 'Blanca Jane',
+							Name: 'Blanca Janedsadassdfasfdsafasdfasf',
 							Adherence: [
 								{
 									Date: '1/5',
