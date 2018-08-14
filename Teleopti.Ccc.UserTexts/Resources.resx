@@ -17463,6 +17463,14 @@ The application will now exit.</value>
     <value>Are you sure you want to exit forecaster without saving?</value>
     <comment>Text message in web forecast</comment>
   </data>
+  <data name="ConfirmExitOnForecasting" xml:space="preserve">
+    <value>Are you sure you want to exit forecaster and discard forecast in progress?</value>
+    <comment>Text message in web forecast</comment>
+  </data>
+  <data name="ForecastNotFinishedYet" xml:space="preserve">
+    <value>Forecast not finished yet</value>
+    <comment>Text message in web forecast</comment>
+  </data>
   <data name="ConfirmReforecastWithoutSaving" xml:space="preserve">
     <value>Are you sure you want to forecast again? All modification not saved will lost.</value>
     <comment>Text message in web forecast</comment>

@@ -7065,6 +7065,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to exit forecaster and discard forecast in progress?.
+        /// </summary>
+        public static string ConfirmExitOnForecasting {
+            get {
+                return ResourceManager.GetString("ConfirmExitOnForecasting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm Grouping Deletion.
         /// </summary>
         public static string ConfirmGroupingDeletion {
@@ -13355,6 +13364,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ForecastMethodIDColon {
             get {
                 return ResourceManager.GetString("ForecastMethodIDColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forecast not finished yet.
+        /// </summary>
+        public static string ForecastNotFinishedYet {
+            get {
+                return ResourceManager.GetString("ForecastNotFinishedYet", resourceCulture);
             }
         }
         
