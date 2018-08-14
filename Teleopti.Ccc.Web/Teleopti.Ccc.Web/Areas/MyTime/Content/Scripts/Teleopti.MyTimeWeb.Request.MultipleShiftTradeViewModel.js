@@ -88,6 +88,13 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 		return dates;
 	});
 
+	self.isMobile = ko.observable(Teleopti.MyTimeWeb.Common.IsHostAMobile() || Teleopti.MyTimeWeb.Common.IsHostAniPad());
+
+	self.isMobile = function () {
+		var result = Teleopti.MyTimeWeb.Common.IsHostAMobile() || Teleopti.MyTimeWeb.Common.IsHostAniPad();
+		return result;
+	}
+
 	self.getOvernightFlag = function (dateTime, scheduleDate) {
 		if (dateTime && scheduleDate) {
 			if (dateTime.isBefore(scheduleDate, 'day')) return "(-1)";

@@ -262,7 +262,7 @@
 			<!--ko foreach: loadedSchedulePairs-->
 			<div class="shift-to-trade-row" data-bind="attr: {id: 'shift-row-' + date.valueOf()}, css:{'shift-to-trade-row-disable':!isEnable}">
 				<div class="shift-date" data-bind="text:$root.formatDate(date)"></div>
-				<div data-bind="css:{'dayoff':mySchedule && mySchedule.isDayOff && !mySchedule.isFullDayAbsence},style:{'background-color':mySchedule && mySchedule.categoryColor ? mySchedule.categoryColor: 'none', 'color':mySchedule && mySchedule.categoryColor ? $root.getTextColor(mySchedule.categoryColor) : 'none'}" class="shift-detail own-shift clear-desktop-color">
+				<div data-bind="css:{'dayoff':mySchedule && mySchedule.isDayOff && !mySchedule.isFullDayAbsence && $root.isMobile() },style:{'background-color':mySchedule && mySchedule.categoryColor && $root.isMobile() ? mySchedule.categoryColor: 'none', 'color':mySchedule && mySchedule.categoryColor && $root.isMobile() ? $root.getTextColor(mySchedule.categoryColor) : 'none'}" class="shift-detail own-shift clear-desktop-color">
 					<!--ko if:!mySchedule-->
 					<div>@Resources.NotScheduled </div>
 					<!--/ko-->
@@ -270,8 +270,8 @@
 					<!--ko if:mySchedule.isDayOff && !mySchedule.isFullDayAbsence-->
 					<div class="schedule-layer-text-container dayoff-text">
 						<span data-bind="text:mySchedule.dayOffName"></span>
-						<span class="hide-on-mobile" data-bind="visible:mySchedule.hasOvertime">(@Resources.WithOvertime)</span>
-						<span class="hide-on-mobile" data-bind="visible:mySchedule.isIntradayAbsence && !mySchedule.hasOvertime">(@Resources.WithAbsence)</span>
+						<span data-bind="visible:mySchedule.hasOvertime">(@Resources.WithOvertime)</span>
+						<span data-bind="visible:mySchedule.isIntradayAbsence && !mySchedule.hasOvertime">(@Resources.WithAbsence)</span>
 					</div>
 					<!--/ko-->
 					<!--ko if:!mySchedule.isDayOff && !mySchedule.isFullDayAbsence-->
@@ -289,7 +289,7 @@
 					<div class="schedule-layer-text-container dayoff-text">
 						<span data-bind="text:mySchedule.categoryName"></span>
 					</div>
-					<div class="shift-visual-indication-wrapper hide-on-mobile">
+					<div data-bind="visible:!$root.isMobile()" class="shift-visual-indication-wrapper">
 						<div class="shift-visual-indication">
 							<!-- ko foreach: mySchedule.layers -->
 							<div class="shift-visual-indication-block clear-background-image" data-bind="style: styleJson74947, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
@@ -298,7 +298,7 @@
 					</div>
 					<!--/ko-->
 					<!--ko if: !mySchedule.isFullDayAbsence-->
-					<div class="shift-visual-indication-wrapper hide-on-mobile">
+					<div data-bind="visible:!$root.isMobile()" class="shift-visual-indication-wrapper">
 						<div class="shift-visual-indication">
 							<!-- ko foreach: mySchedule.layers -->
 							<div class="shift-visual-indication-block" data-bind="style: styleJson74947, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
@@ -311,7 +311,7 @@
 					<!--/ko-->
 					<!--/ko-->
 				</div>
-				<div data-bind="css:{'dayoff':targetSchedule && targetSchedule.isDayOff && !targetSchedule.isFullDayAbsence},style:{'background-color':targetSchedule && targetSchedule.categoryColor ? targetSchedule.categoryColor: 'none', 'color':targetSchedule && targetSchedule.categoryColor ? $root.getTextColor(targetSchedule.categoryColor) : 'none'}" class="shift-detail shift-to-trade clear-desktop-color">
+				<div data-bind="css:{'dayoff':targetSchedule && targetSchedule.isDayOff && !targetSchedule.isFullDayAbsence && $root.isMobile() },style:{'background-color':targetSchedule && targetSchedule.categoryColor && $root.isMobile()? targetSchedule.categoryColor: 'none', 'color':targetSchedule && targetSchedule.categoryColor && $root.isMobile() ? $root.getTextColor(targetSchedule.categoryColor) : 'none'}" class="shift-detail shift-to-trade clear-desktop-color">
 					<!--ko if:!targetSchedule-->
 					<div>@Resources.NotScheduled </div>
 					<!--/ko-->
@@ -319,8 +319,8 @@
 					<!--ko if:targetSchedule.isDayOff && !targetSchedule.isFullDayAbsence-->
 					<div class="schedule-layer-text-container dayoff-text">
 						<span data-bind="text:targetSchedule.dayOffName"></span>
-						<span class="hide-on-mobile" data-bind="visible:targetSchedule.hasOvertime">(@Resources.WithOvertime)</span>
-						<span class="hide-on-mobile" data-bind="visible:targetSchedule.isIntradayAbsence && !targetSchedule.hasOvertime">(@Resources.WithAbsence)</span>
+						<span  data-bind="visible:targetSchedule.hasOvertime && !$root.isMobile()">(@Resources.WithOvertime)</span>
+						<span  data-bind="visible:targetSchedule.isIntradayAbsence && !targetSchedule.hasOvertime && !$root.isMobile()">(@Resources.WithAbsence)</span>
 					</div>
 					<!--/ko-->
 					<!--ko if:!targetSchedule.isDayOff && !targetSchedule.isFullDayAbsence-->
@@ -338,7 +338,7 @@
 					<div class="schedule-layer-text-container dayoff-text">
 						<span data-bind="text:targetSchedule.categoryName"></span>
 					</div>
-					<div class="shift-visual-indication-wrapper hide-on-mobile">
+					<div data-bind="visible:!$root.isMobile()" class="shift-visual-indication-wrapper">
 						<div class="shift-visual-indication">
 							<!-- ko foreach: targetSchedule.layers -->
 							<div class="shift-visual-indication-block clear-background-image" data-bind="style: styleJson74947, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
@@ -347,7 +347,7 @@
 					</div>
 					<!--/ko-->
 					<!--ko if: !targetSchedule.isFullDayAbsence-->
-					<div class="shift-visual-indication-wrapper hide-on-mobile">
+					<div data-bind="visible:!$root.isMobile()" class="shift-visual-indication-wrapper">
 						<div class="shift-visual-indication">
 							<!-- ko foreach: targetSchedule.layers -->
 							<div class="shift-visual-indication-block" data-bind="style: styleJson74947, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
@@ -372,7 +372,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="shift-trade-cart hide-on-mobile"></div>
+	<div data-bind="visible:!$root.isMobile()" class="shift-trade-cart"></div>
 </div>
 
 <div class="shift-trade-no-possible-trades alert alert-info" data-bind="visible: noPossibleShiftTrades()">
