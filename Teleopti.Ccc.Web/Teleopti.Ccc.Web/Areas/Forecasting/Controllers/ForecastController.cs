@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		}
 
 		[UnitOfWork, HttpPost, Route("api/Forecasting/QueueStatistics")]
-		public virtual IHttpActionResult QueueStatistics(Guid workloadId)
+		public virtual IHttpActionResult QueueStatistics([FromBody] Guid workloadId)
 		{
 			return Ok(_queueStatisticsViewModelFactory.QueueStatistics(workloadId));
 		}
