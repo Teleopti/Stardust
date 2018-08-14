@@ -1876,7 +1876,7 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\OpenHoursFilter.cs" />
     <Compile Include="Scheduling\WebLegacy\LoaderForResourceCalculation.cs" />
     <Compile Include="Scheduling\WebDayoffOptimizationStardustHandler.cs" />
-    <Compile Include="Scheduling\WebScheduleStardustEvent.cs" />
+    <Compile Include="Scheduling\SchedulingAndDayOffWasOrdered.cs" />
     <Compile Include="Scheduling\WebScheduleStardustHandler.cs" />
     <Compile Include="Security\Authentication\LoggedOnUserIsPerson.cs" />
     <Compile Include="Security\AuthorizationData\ILicenseCustomerNameProvider.cs" />

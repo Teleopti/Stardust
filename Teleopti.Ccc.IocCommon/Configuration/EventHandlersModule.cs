@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				})
 				.Except<WebScheduleStardustHandler>(ct =>
 				{
-					ct.As<IHandleEvent<WebScheduleStardustEvent>>()
+					ct.As<IHandleEvent<SchedulingAndDayOffWasOrdered>>()
 						.AsSelf()
 						.InstancePerLifetimeScope()
 						.ApplyAspects();

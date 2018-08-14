@@ -18,7 +18,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.Scheduling
 {
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeSchedulingAndDO_76496)]
-	public class WebScheduleStardustHandler : IHandleEvent<WebScheduleStardustEvent>, IRunOnStardust
+	[DisabledBy(Toggles.ResourcePlanner_MergeSchedulingAndDO_76496)]
+	public class WebScheduleStardustHandler : IHandleEvent<SchedulingAndDayOffWasOrdered>, IRunOnStardust
 	{
 		private readonly FullScheduling _fullScheduling;
 		private readonly IEventPopulatingPublisher _eventPublisher;
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		}
 
 		[AsSystem]
-		public virtual void Handle(WebScheduleStardustEvent @event)
+		public virtual void Handle(SchedulingAndDayOffWasOrdered @event)
 		{
 			logger.Info($"Web Scheduling started for PlanningPeriod {@event.PlanningPeriodId} and JobResultId is {@event.JobResultId}");
 			try
@@ -76,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		}
 
 		[UnitOfWork]
-		protected virtual void SaveDetailToJobResult(WebScheduleStardustEvent @event, DetailLevel level, string message, Exception exception)
+		protected virtual void SaveDetailToJobResult(SchedulingAndDayOffWasOrdered @event, DetailLevel level, string message, Exception exception)
 		{
 			var jobResult = _jobResultRepository.Get(@event.JobResultId);
 			jobResult.AddDetail(new JobResultDetail(level, message, DateTime.UtcNow, exception));

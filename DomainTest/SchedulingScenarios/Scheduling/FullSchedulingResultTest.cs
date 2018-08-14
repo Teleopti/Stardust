@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			JobResultRepository.Add(new JobResult(JobCategory.WebSchedule, firstDay.ToDateOnlyPeriod(), person, DateTime.UtcNow).WithId(jobResultId));
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay,firstDay, SchedulePeriodType.Day,1);
 			
-			Target.Handle(new WebScheduleStardustEvent
+			Target.Handle(new SchedulingAndDayOffWasOrdered
 			{
 				LogOnDatasource = DataSourceHelper.TestTenantName,
 				PlanningPeriodId = planningPeriod.Id.Value,
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			JobResultRepository.Add(new JobResult(JobCategory.WebSchedule, firstDay.ToDateOnlyPeriod(), person, DateTime.UtcNow).WithId(jobResultId));
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay,firstDay, SchedulePeriodType.Day,1);
 			
-			Target.Handle(new WebScheduleStardustEvent
+			Target.Handle(new SchedulingAndDayOffWasOrdered
 			{
 				LogOnDatasource = DataSourceHelper.TestTenantName,
 				PlanningPeriodId = planningPeriod.Id.Value,
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			JobResultRepository.Add(new JobResult(JobCategory.WebSchedule, firstDay.ToDateOnlyPeriod(), person, DateTime.UtcNow).WithId(jobResultId));
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay,firstDay, SchedulePeriodType.Day,1);
 			
-			Target.Handle(new WebScheduleStardustEvent
+			Target.Handle(new SchedulingAndDayOffWasOrdered
 			{
 				LogOnDatasource = DataSourceHelper.TestTenantName,
 				PlanningPeriodId = planningPeriod.Id.Value,
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			JobResultRepository.Add(new JobResult(JobCategory.WebSchedule, firstDay.ToDateOnlyPeriod(), person, DateTime.UtcNow).WithId(jobResultId));
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay,firstDay, SchedulePeriodType.Day,1);
 			
-			Target.Handle(new WebScheduleStardustEvent
+			Target.Handle(new SchedulingAndDayOffWasOrdered
 			{
 				LogOnDatasource = DataSourceHelper.TestTenantName,
 				PlanningPeriodId = planningPeriod.Id.Value,
@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			JobResultRepository.Add(new JobResult(JobCategory.WebSchedule, firstDay.ToDateOnlyPeriod(), person, DateTime.UtcNow).WithId(jobResultId));
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay,firstDay, SchedulePeriodType.Day,1);
 			
-			Target.Handle(new WebScheduleStardustEvent
+			Target.Handle(new SchedulingAndDayOffWasOrdered
 			{
 				LogOnDatasource = DataSourceHelper.TestTenantName,
 				PlanningPeriodId = planningPeriod.Id.Value,
@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			JobResultRepository.Add(new JobResult(JobCategory.WebSchedule, new DateOnlyPeriod(firstDay, endDate), person, DateTime.UtcNow).WithId(jobResultId));
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, endDate, SchedulePeriodType.Day, 1);
 			
-			Target.Handle(new WebScheduleStardustEvent
+			Target.Handle(new SchedulingAndDayOffWasOrdered
 			{
 				LogOnDatasource = DataSourceHelper.TestTenantName,
 				PlanningPeriodId = planningPeriod.Id.Value,

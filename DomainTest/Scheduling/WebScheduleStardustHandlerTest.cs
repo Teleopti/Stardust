@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			JobResultRepository.Add(jobResult);
 			PlanningPeriodRepository.Add(planningPeriod);
 			
-			var reqEvent = new WebScheduleStardustEvent
+			var reqEvent = new SchedulingAndDayOffWasOrdered
 			{
 				PlanningPeriodId = planningPeriod.Id.Value,
 				LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(),
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			planningPeriod.JobResults.Add(jobResult);
 			JobResultRepository.Add(jobResult);
 			PlanningPeriodRepository.Add(planningPeriod);
-			var reqEvent = new WebScheduleStardustEvent
+			var reqEvent = new SchedulingAndDayOffWasOrdered
 			{
 				PlanningPeriodId = planningPeriod.Id.Value,
 				LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(),
