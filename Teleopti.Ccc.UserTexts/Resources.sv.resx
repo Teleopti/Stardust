@@ -15709,4 +15709,13 @@ Applikationen kommer nu att stängas. </value>
   <data name="NothingSelected" xml:space="preserve">
     <value>Inget markerat</value>
   </data>
+  <data name="NotAllowedWhenShiftOutsideOpenHours" xml:space="preserve">
+    <value>Inte tillåtet att byta skift eftersom något av skiften skulle hamna utanför enhetens öppettider. </value>
+  </data>
+  <data name="NotAllowedWhenHasNonMainShiftAcitivities" xml:space="preserve">
+    <value>Inte tillåtet att byta skift när möte, personlig aktivitet eller övertid är schemalagt.</value>
+  </data>
+  <data name="NotAllowedWhenHasNonOverwriteActivity" xml:space="preserve">
+    <value>Inte tillåtet att byta skift när det finns en icke överskrivningsbar aktivitet i skiftet. </value>
+  </data>
 </root>
