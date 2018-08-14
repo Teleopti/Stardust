@@ -1,5 +1,6 @@
 .angular-theme-dark {
-	@import '../../css/darkstyle.scss';
+	@import '~teleopti-styleguide/styleguide/sass/darkvariables';
+	@import '../../css/main';
 	$menu-background-color: #424242;
 	background-color: #303030;
 

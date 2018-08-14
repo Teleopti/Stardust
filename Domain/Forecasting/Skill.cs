@@ -467,6 +467,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         }
 
 		public virtual int? CascadingIndex { get; protected set; }
+		public virtual bool IsChildSkill { get; } = false;
+
 		public virtual bool IsCascading()
 		{
 			return CascadingIndex.HasValue && CanBeCascading();

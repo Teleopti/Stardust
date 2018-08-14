@@ -21,7 +21,7 @@ module.exports = env => {
 		inject: false
 	});
 
-	const extractSass = new MiniCssExtractPlugin({
+	const extractStyles = new MiniCssExtractPlugin({
 		filename: '[name].css'
 	});
 
@@ -226,8 +226,6 @@ module.exports = env => {
 	const config = {
 		entry: {
 			// ignore_entry: './webpack-entry.js',
-			style_classic: './css/style.scss',
-			style_dark: './css/darkstyle.scss',
 			ant_classic: './src/themes/ant_classic.less',
 			ant_dark: './src/themes/ant_dark.less'
 		},
@@ -245,21 +243,6 @@ module.exports = env => {
 							loader: 'url-loader',
 							options: {
 								limit: 8192
-							}
-						}
-					]
-				},
-				{
-					test: /\.s?[ac]ss$/,
-					use: [
-						MiniCssExtractPlugin.loader,
-						'css-loader',
-						'postcss-loader',
-						{
-							loader: 'sass-loader',
-							options: {
-								outputStyle: isProd ? 'compressed' : 'nested',
-								includePaths: ['node_modules/teleopti-styleguide/styleguide/sass']
 							}
 						}
 					]
@@ -289,7 +272,7 @@ module.exports = env => {
 			concatCssDependencies,
 			concatCss,
 			concatDarkCss,
-			extractSass,
+			extractStyles,
 			copyPlugin,
 			htmlPlugin
 			// new UglifyJsPlugin({

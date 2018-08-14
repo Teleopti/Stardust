@@ -70,7 +70,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 					}
 				}
 			}
+			//This will lead to wrong behavior if/when skill is a proxy. Haven't seen it as an issue yet though...
 			var childSkills = skills.OfType<IChildSkill>();
+			//
 			var multisiteSkills = childSkills.Select(c => c.ParentSkill).Distinct();
 			return skills.Concat(multisiteSkills);
 		}

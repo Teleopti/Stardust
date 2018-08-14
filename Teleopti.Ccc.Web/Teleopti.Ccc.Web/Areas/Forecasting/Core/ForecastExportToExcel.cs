@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 		{
 			var intervalSheet = workbook.CreateSheet("Interval");
 			sheetHeader(intervalSheet, exportModel);
-			intervalDetailHeader(intervalSheet);
+			intervalDetailHeader(intervalSheet, exportModel.Workloads);
 			intervalDetails(intervalSheet, exportModel.IntervalModelForecast);
 			autoSizeColumns(intervalSheet);
 		}
@@ -172,8 +172,16 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			}
 		}
 		
-		private void intervalDetailHeader(ISheet sheet)
+		private void intervalDetailHeader(ISheet sheet, IReadOnlyCollection<string> workloads)
 		{
+			const string splitter = "\r\n  ";
+
+			string comment = null;
+			if (workloads.Count > 1)
+			{
+				comment = "This includes hours from:" + splitter + string.Join(splitter, workloads);
+			}
+
 			addRow(sheet, new[]
 			{
 				new CellData("Date", _cellStyleTitle),
@@ -182,8 +190,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 				new CellData("Average Talk time (s)", _cellStyleTitle),
 				new CellData("Average ACW (s)", _cellStyleTitle),
 				new CellData("AHT (s)", _cellStyleTitle),
-				new CellData("Agents", _cellStyleTitle),
-				new CellData("Agents with shrinkage", _cellStyleTitle),
+				new CellData("Agents", _cellStyleTitle, comment),
+				new CellData("Agents with shrinkage", _cellStyleTitle, comment),
 			});
 		}
 

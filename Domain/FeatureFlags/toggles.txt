@@ -104,7 +104,7 @@ ResourcePlanner_UseErlangAWithInfinitePatience_45845 = true
 ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899 = true
 ResourcePlanner_UseErlangAWithFinitePatience_47738 = true
 ResourcePlanner_SpeedUpEvents_75415 = true
-ResourcePlanner_LessResourcesXXL_74915 = true
+ResourcePlanner_LessResourcesXXL_76496 = false #should not affect perf tests yet
 
 # Bugs&Roses #
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
@@ -181,8 +181,9 @@ WFM_Gamification_Recalculate_Badges_Within_Period_48403 = true
 WFM_Gamification_Create_Rolling_Periods_74866 = true
 MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889 = true
 MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947 = RC
-MyTimeWeb_ShiftTradeRequest_SetNotSelectableShifts_77052 = DEV #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947
-WFM_Gamification_Permission_76546 = RC
+MyTimeWeb_ShiftTradeRequest_SetNotSelectableShifts_77052 = RC #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947
+MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306 = DEV #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947
+WFM_Gamification_Permission_76546 = true
 
 # Tech #
 Tech_Moving_ResilientConnectionLogic_76181 = true

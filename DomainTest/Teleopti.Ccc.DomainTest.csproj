@@ -402,6 +402,8 @@
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingPreferenceHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\BlockSchedulingPreviousShiftNotMatchingEachOtherHintTest.cs" />
     <Compile Include="ResourcePlanner\Hints\ScheduleStartOnWrongDateHintTest.cs" />
+    <Compile Include="SchedulingQuality\DayOffOptimizationDesktopQualityTest.cs" />
+    <Compile Include="SchedulingQuality\IntradayDesktopQualityTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationCallbackDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationMinimumAgentsDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationMinimumAgentsTest.cs" />
@@ -646,7 +648,6 @@
     <Compile Include="ResourcePlanner\Hints\PersonSkillHintTest.cs" />
     <Compile Include="SchedulingScenarios\BusinessRules\MinWeeklyRestRuleTest.cs" />
     <Compile Include="SchedulingScenarios\CancelSchedulingCallback.cs" />
-    <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationDesktopQualityTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationPlanningGroupTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationCascadingTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationFakeDecisionMakerDesktopTest.cs" />
@@ -655,7 +656,6 @@
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationResultTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationSameBitArrayTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationTeamBlockTest.cs" />
-    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayDesktopQualityTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationPlanningGroupTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationReduceUnnecessaryCallsTest.cs" />
     <Compile Include="Optimization\PlanningGroupModelPersisterTest.cs" />

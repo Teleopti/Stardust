@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 		public IPersonAssignmentRepository PersonAssignmentRepository;
 		public ISkillDayRepository SkillDayRepository;
 
-		[Test, Ignore("Failing test for #77197")]
+		[Test]
 		public void ShouldDoDayOffOptimizationForPlanningPeriodWithOneOfMultipleChildSkills()
 		{
 			var planningPeriod = fillDatabaseWithEnoughDataToRunScheduling();

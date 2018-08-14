@@ -806,6 +806,7 @@ input.use-default-startTime {
 
 .shift-trade-request-74947 {
 	display: flex;
+	flex-direction: row;
 }
 
 .side-by-side-header {
@@ -864,17 +865,19 @@ input.use-default-startTime {
 .shift-to-trade-row-disable .shift-visual-indication-block {
 	opacity: 0.5;
 }
-
 .schedules-side-by-side {
-	flex: 1 1 70%;
-	overflow: hidden;
-	background-color: white;
-	border: 0.8px solid #e3e3e3;
+		flex: 1 1 70%;
+		overflow: hidden;
+		background-color: white;
+		border: .8px solid #e3e3e3;
 }
 
 .shift-trade-cart {
 	flex: 1 1 30%;
 	padding: 0 10px;
+	display:flex;
+	flex-direction:column;
+	background-color:white;
 }
 
 .shift-visual-indication-wrapper {
@@ -938,4 +941,82 @@ input.use-default-startTime {
 	.spliter {
 		line-height: 2px;
 	}
+}
+
+.shift-cart-border {
+	border: #007fff 1px dashed;
+}
+
+.shift-cart-row {
+	display: flex;
+	justify-content: space-between;
+	border-bottom: 0.8px solid #C0C0C0;
+}
+
+.shift-cart-row  + .shift-cart-row {
+	margin-top:3px;
+}
+
+.shift-cart-detail {
+	flex: 1 0 90%;
+	display: flex;
+	flex-direction: column;
+}
+
+.shift-cart-date {
+	display: flex;
+	flex: 1 0 20%;
+	justify-content: center;
+	height:30px;
+}
+
+.shift-cart-detail-info {
+	flex:1 0 80%;
+	display:flex;
+}
+
+.cart-schedule {
+	flex: 1 0 50%;
+	display:flex;
+	flex-direction:column;
+	justify-content:center;
+	align-items:center;
+}
+
+.cart-schedule + .cart-schedule {
+	margin-left: 8px;
+}
+
+.cart-schedule-category1 {
+	width:75%;
+	background-color:aquamarine;
+	text-align:center;
+}
+
+.cart-schedule-category2 {
+	width: 75%;
+	background-color: burlywood;
+	text-align: center;
+}
+
+.shift-cart-selection {
+	display: flex;
+	flex: 1 0 20px;
+	justify-content: center;
+	align-items: flex-end;
+}
+
+.shift-trade-request-container {
+	flex: 0 0 auto;
+}
+
+.shift-trade-cart-container {
+	display: flex;
+	flex-direction: column;
+	flex: 1 0 20%;
+}
+
+.btn-remove {
+	background-color:white;
+	border:none;
 }

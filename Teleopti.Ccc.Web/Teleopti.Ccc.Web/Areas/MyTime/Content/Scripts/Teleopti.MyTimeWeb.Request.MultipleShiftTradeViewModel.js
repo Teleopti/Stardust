@@ -88,6 +88,15 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 		return dates;
 	});
 
+	self.isMobile = function () {
+		return Teleopti.MyTimeWeb.Common.IsHostAMobile() || Teleopti.MyTimeWeb.Common.IsHostAniPad();
+	
+	}
+	
+	self.showCart = function () {
+		return !self.isMobile() && Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306');
+	}
+
 	self.getOvernightFlag = function (dateTime, scheduleDate) {
 		if (dateTime && scheduleDate) {
 			if (dateTime.isBefore(scheduleDate, 'day')) return "(-1)";

@@ -85,7 +85,7 @@
 		ResourcePlanner_SpeedUpEvents_75415,
 		ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899,
 		ResourcePlanner_UseErlangAWithFinitePatience_47738,
-		ResourcePlanner_LessResourcesXXL_74915,
+		ResourcePlanner_LessResourcesXXL_76496,
 
 		Wfm_DisplayOnlineHelp_39402,
 
@@ -154,6 +154,7 @@
 		MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889,
 		MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947,
 		MyTimeWeb_ShiftTradeRequest_SetNotSelectableShifts_77052,
+		MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306,
 
 		WFM_Intraday_Refactoring_74652,
 
