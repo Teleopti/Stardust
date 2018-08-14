@@ -1,4 +1,4 @@
-<div class="rta-view prototype">
+<div class="rta-view historical-overview">
 	<div class="view-header with-fab with-desc">
 		<div class="view-title">
 			<div class="pull-left">
@@ -9,7 +9,8 @@
 			<div class="rta-top-buttons-wrapper pull-left">
 				<span>
 					<button class="wfm-btn wfm-btn-default" ng-click="vm.goToOverview()">{{'MonitorOrganization'|translate}}</button>
-					<button class="wfm-btn wfm-btn-default" ng-click="vm.goToAgents()">{{'MonitorAgents'|translate}}</button>
+					<button class="wfm-btn wfm-btn-default"
+							ng-click="vm.goToAgents()">{{'MonitorAgents'|translate}}</button>
 					<button class="wfm-btn wfm-btn-primary non-pointer">{{'HistoricalAdherence'|translate}}</button>
 				</span>
 			</div>
@@ -81,64 +82,38 @@
 		</div>
 	</div>
 
-	<style>
-		.rta-view.prototype .cell {
-			width: 35px;
-			padding: 0;
-			position: relative;
-		}
-		
-		.rta-view.prototype .cell .late-for-work-flag {
-			background-image: linear-gradient(225deg, orange, orange 5px, transparent 5px, transparent);
-			position: absolute;
-			z-index: 1;
-			height: 7px;
-			width: 100%;
-		}
-		
-		.rta-view.prototype .cell .square {
-			height: 28px;
-			margin: 2px;
-			border-radius: .25em;
-			padding-top: 4px;
-			text-align: center;
-		}
-
-		.rta-view.prototype .label.pad.late-for-work{
-			background-color: orange;
-		}
-		
-	</style>
-
-	
-	<div class="panel material-depth-1" ng-repeat="group in vm.groupings"  style="width: 900px;">
-		<div class="card-panel-header-wrapper pointer" ng-click="vm.openCard = !vm.openCard"  style="border-left: 10px solid #66c2ff;background-color: {{vm.ToneAdherencePercentage(group.AdherencePercentage)}}">
-			{{group.Name}}&nbsp;&nbsp;<strong>{{group.AdherencePercentage}}%</strong>
+	<div class="panel material-depth-1 card-panel" ng-repeat="card in vm.cards">
+		<div class="card-panel-header-wrapper pointer left-border" ng-click="vm.openCard = !vm.openCard"
+			 style="background-color: {{vm.toneAdherence(card.TeamAdherence)}}">
+			{{card.Name}}&nbsp;&nbsp;<strong>{{card.TeamAdherence}}%</strong>
 		</div>
 		<div class="card-panel-content-wrapper" ng-show="vm.openCard">
 			<table class="wfm-table">
 				<thead>
 				<tr>
-					<th style="width: 200px; height: 32px">{{'Agent'|translate}}</th>
-					<th style="width: 45px; text-align: center" ng-repeat="adherence in group.agentsAdherence[0].Adherence">
-						{{adherence.Date}}
+					<th style="width: 25%; height: 32px">{{'Agent'|translate}}</th>
+					<th style="width: 45px; text-align: center"
+						ng-repeat="day in card.Agents[0].Days">
+						{{day.Date}}
 					</th>
-					<th style="width: 18%">{{'Adherence'|translate}}</th>
+					<th style="width: 20%">{{'Adherence'|translate}}</th>
 					<th>{{'LateForWork'|translate}}</th>
 				</tr>
 				</thead>
 				<tbody>
-				<tr  ng-repeat="agent in group.agentsAdherence" style="background-color: transparent">
-					<td>{{agent.Name}}</td>
-					<td ng-repeat="percentage in agent.Adherence" class="cell">
-						<div ng-class="percentage.WasLateForWork ? 'late-for-work-flag': ''"></div>	
-					    <div class="square" style="background-color: {{vm.ToneAdherencePercentage(percentage.AdherencePercentage)}}">{{percentage.AdherencePercentage}}</div>
+				<tr ng-repeat="agent in card.Agents" style="background-color: transparent">
+					<td style="max-width:200px; overflow: hidden; text-overflow: ellipsis">{{agent.Name}}</td>
+					<td ng-repeat="day in agent.Days" class="cell">
+						<div ng-class="day.WasLateForWork ? 'late-for-work-flag': ''"></div>
+						<div class="square" style="background-color: {{vm.toneAdherence(day.Adherence)}}">
+							{{day.Adherence}}
+						</div>
 					</td>
 					<td>
-						<div style="background-color: #f1f1f1; width: 75%; float:left; margin-top:5px">
-							<div style="background-color:#3c9ee5; height:10px; width:{{agent.PeriodAdherence.Value}}%"></div>
+						<div class="adherence-bar-container">
+							<div class="adherence-bar" style="width:{{agent.IntervalAdherence}}%"></div>
 						</div>
-						<div style="width: 10%; margin-left: 6px; float:left;">{{agent.PeriodAdherence.Value}}%</div>
+						<div class="adherence-value">{{agent.IntervalAdherence}}%</div>
 					</td>
 					<td>
 						<span class="label pad late-for-work">{{agent.LateForWork.Count}}</span>

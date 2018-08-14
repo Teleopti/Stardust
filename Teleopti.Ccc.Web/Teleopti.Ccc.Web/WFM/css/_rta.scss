@@ -335,4 +335,66 @@
 	  margin: 0 8px;
 	}
   }
+  
+  &.historical-overview {
+	.cell {
+	  width: 35px;
+	  padding: 0;
+	  position: relative;
+
+	  .late-for-work-flag {
+		background-image: linear-gradient(225deg, orange, orange 5px, transparent 5px, transparent);
+		position: absolute;
+		z-index: 1;
+		height: 7px;
+		width: 100%;
+	  }
+
+	  .square {
+		height: 28px;
+		margin: 2px;
+		border-radius: .25em;
+		padding-top: 4px;
+		text-align: center;
+	  }
+	}
+
+	.label.pad.late-for-work{
+	  background-color: orange;
+	}
+
+	.panel.material-depth-1.card-panel{
+	  width: 900px;
+	}
+
+	@media screen and (max-width: 960px) {
+	  .panel.material-depth-1.card-panel {
+		width: 100%;
+	  }
+	}
+
+	.card-panel-header-wrapper{
+	  &.left-border {
+		border-left: 10px solid #66c2ff;
+	  }
+	}
+
+	.adherence-bar-container{
+	  background-color: #f1f1f1;
+	  float:left;
+	  margin-top:5px;
+	  width: 75%;
+
+	  .adherence-bar{
+		background-color:#3c9ee5;
+		height:10px;
+	  }
+	}
+
+	.adherence-value{
+	  float:left;
+	  margin-left: 6px;
+	  width: 10%;
+	}
+  }
 }
