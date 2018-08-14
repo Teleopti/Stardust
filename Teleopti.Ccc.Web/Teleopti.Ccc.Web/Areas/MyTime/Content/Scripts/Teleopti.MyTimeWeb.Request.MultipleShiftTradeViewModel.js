@@ -88,11 +88,13 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 		return dates;
 	});
 
-	self.isMobile = ko.observable(Teleopti.MyTimeWeb.Common.IsHostAMobile() || Teleopti.MyTimeWeb.Common.IsHostAniPad());
-
 	self.isMobile = function () {
-		var result = Teleopti.MyTimeWeb.Common.IsHostAMobile() || Teleopti.MyTimeWeb.Common.IsHostAniPad();
-		return result;
+		return Teleopti.MyTimeWeb.Common.IsHostAMobile() || Teleopti.MyTimeWeb.Common.IsHostAniPad();
+	
+	}
+	
+	self.showCart = function () {
+		return !self.isMobile() && Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306');
 	}
 
 	self.getOvernightFlag = function (dateTime, scheduleDate) {
