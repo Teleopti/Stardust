@@ -105,6 +105,7 @@
     <Compile Include="FakeTokenVerifier.cs" />
     <Compile Include="IApiHttpClient.cs" />
     <Compile Include="QueryListingTest.cs" />
+    <Compile Include="Query\GetAllActivitiesTest.cs" />
     <Compile Include="Query\ScheduleByPersonIdTest.cs" />
     <Compile Include="Query\ScheduleChangesListenersTest.cs" />
     <Compile Include="Query\UserByEmailTest.cs" />
