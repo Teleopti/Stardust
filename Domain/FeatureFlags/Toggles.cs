@@ -154,6 +154,7 @@
 		MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889,
 		MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947,
 		MyTimeWeb_ShiftTradeRequest_SetNotSelectableShifts_77052,
+		MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306,
 
 		WFM_Intraday_Refactoring_74652,
 
