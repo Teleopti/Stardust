@@ -319,8 +319,8 @@
 					<!--ko if:targetSchedule.isDayOff && !targetSchedule.isFullDayAbsence-->
 					<div class="schedule-layer-text-container dayoff-text">
 						<span data-bind="text:targetSchedule.dayOffName"></span>
-						<span  data-bind="visible:targetSchedule.hasOvertime && !$root.isMobile()">(@Resources.WithOvertime)</span>
-						<span  data-bind="visible:targetSchedule.isIntradayAbsence && !targetSchedule.hasOvertime && !$root.isMobile()">(@Resources.WithAbsence)</span>
+						<span data-bind="visible:targetSchedule.hasOvertime && !$root.isMobile()">(@Resources.WithOvertime)</span>
+						<span data-bind="visible:targetSchedule.isIntradayAbsence && !targetSchedule.hasOvertime && !$root.isMobile()">(@Resources.WithAbsence)</span>
 					</div>
 					<!--/ko-->
 					<!--ko if:!targetSchedule.isDayOff && !targetSchedule.isFullDayAbsence-->
@@ -360,10 +360,10 @@
 					<!--/ko-->
 					<!--/ko-->
 				</div>
-				<div class="shift-selection">					
+				<div class="shift-selection">
 					<span class="shift-trade-selection-container" data-bind="tooltip:{title:reason, placement: 'left'}">
 						<input data-bind="enable:isEnable" type="checkbox" />
-					</span>							
+					</span>
 				</div>
 			</div>
 			<!--/ko-->
@@ -372,7 +372,113 @@
 			</div>
 		</div>
 	</div>
-	<div data-bind="visible:!$root.isMobile()" class="shift-trade-cart"></div>
+
+	<div data-bind="visible:!$root.isMobile()" class="shift-trade-cart">
+		<div class="shift-trade-cart-container">
+			<div class="shift-cart-row">
+				<div class="shift-cart-detail">
+					<div class="shift-cart-date">2018-08-15</div>
+					<div class="shift-cart-detail-info">
+						<div class="cart-schedule my-cart">
+							<span class="cart-schedule-category1">Early</span>
+							<span>7:00-16:00</span>
+							<span>8:00</span>
+						</div>
+						<div class="cart-schedule tartget-cart">
+							<span class="cart-schedule-category2">Late</span>
+							<span>7:00-16:00</span>
+							<span>8:00</span>
+						</div>
+					</div>
+				</div>
+				<div class="shift-cart-selection">
+					<button type="button" class="btn-remove">
+						<i class="glyphicon glyphicon-remove"></i>
+					</button>
+				</div>
+			</div>
+			<div class="shift-cart-row">
+				<div class="shift-cart-detail">
+					<div class="shift-cart-date">2018-08-15</div>
+					<div class="shift-cart-detail-info">
+						<div class="cart-schedule my-cart">
+							<span class="cart-schedule-category1">Early</span>
+							<span>7:00-16:00</span>
+							<span>8:00</span>
+						</div>
+						<div class="cart-schedule tartget-cart">
+							<span class="cart-schedule-category2">Late</span>
+							<span>7:00-16:00</span>
+							<span>8:00</span>
+						</div>
+					</div>
+				</div>
+				<div class="shift-cart-selection">
+					<button type="button" class="btn-remove">
+						<i class="glyphicon glyphicon-remove"></i>
+					</button>
+				</div>
+			</div>
+			<div class="shift-cart-row">
+				<div class="shift-cart-detail">
+					<div class="shift-cart-date">2018-08-15</div>
+					<div class="shift-cart-detail-info">
+						<div class="cart-schedule">
+							<span class="cart-schedule-category1">Early</span>
+							<span>7:00-16:00</span>
+							<span>8:00</span>
+						</div>
+						<div class="cart-schedule">
+							<span class="cart-schedule-category2">Late</span>
+							<span>7:00-16:00</span>
+							<span>8:00</span>
+						</div>
+					</div>
+				</div>
+				<div class="shift-cart-selection">
+					<button type="button" class="btn-remove">
+						<i class="glyphicon glyphicon-remove"></i>
+					</button>
+				</div>
+			</div>
+			<div class="shift-cart-row">
+				<div class="shift-cart-detail">
+					<div class="shift-cart-date">2018-08-15</div>
+					<div class="shift-cart-detail-info">
+						<div class="cart-schedule my-cart">
+							<span class="cart-schedule-category1">Early</span>
+							<span>7:00-16:00</span>
+							<span>8:00</span>
+						</div>
+						<div class="cart-schedule tartget-cart">
+							<span class="cart-schedule-category2">Late</span>
+							<span>7:00-16:00</span>
+							<span>8:00</span>
+						</div>
+					</div>
+				</div>
+				<div class="shift-cart-selection">
+					<button type="button" class="btn-remove">
+						<i class="glyphicon glyphicon-remove"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+		<div class="shift-trade-request-container">
+			<div class="form-group">
+				<input id="Request-add-shift-trade-subject-input" class="form-control input-block-level" type="text" data-bind="value: subject" placeholder="@Resources.Subject" maxlength="80" />
+			</div>
+			<div class="form-group">
+				<textarea id="Request-add-shift-trade-message-input" class="form-control input-block-level" data-bind="value: message, valueUpdate: 'afterkeydown', event:{change : checkMessageLength}" rows="4" placeholder="@Resources.Message" />
+			</div>
+			<div class="pull-right">
+				<button class="btn cancel-button" data-bind="click: cancelRequest">@Resources.Cancel</button>
+				<button class="btn btn-primary send-button" data-bind="enable: isSendEnabled, click: sendRequest">@Resources.Send</button>
+			</div>
+			<div class="error" data-bind="html: errorMessage"></div>
+
+		</div>
+	</div>
 </div>
 
 <div class="shift-trade-no-possible-trades alert alert-info" data-bind="visible: noPossibleShiftTrades()">
