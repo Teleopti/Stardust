@@ -51,3 +51,26 @@ Scenario: Creating next planning period should generate a period with the same t
 	And I click create next planning period
 	Then I should see a planning period between '2016-07-01' and '2016-07-31'
 
+@RunningStardust 
+Scenario: schedule a planning period
+	Given the time is '2016-06-07'
+	And there is a dayoff named 'Day off'
+	And I have a role with
+	  | Field                      | Value            |
+	  | Name                       | Resource Planner |
+	  | Access to resource planner | True             |
+	And there is a site named 'Site 1'
+	And there is a team named 'Team 1' on 'Site 1'
+	And there is an planning group with
+		| Field               | Value           |
+		| Planning group name | PlanningGroup 1 |
+		| Team                | Team 1          |
+	And there is a planning period with
+		| Field               | Value           |
+		| Date                | 2016-06-01      |
+		| Planning group name | PlanningGroup 1 |
+	When I view planning periods for planning group 'PlanningGroup 1'
+	And I open planning period
+	And I click schedule
+	Then Planning period should have been scheduled
+
