@@ -4,12 +4,14 @@ using System.Threading;
 using Autofac;
 using Stardust.Node.Interfaces;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeSchedulingAndDO_76496)]
 	public class WebDayOffOptimizationHandler : IHandle<WebDayoffOptimizationStardustEvent>
 	{
 		private readonly IComponentContext _componentContext;

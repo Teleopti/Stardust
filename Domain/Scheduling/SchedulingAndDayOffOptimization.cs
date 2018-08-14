@@ -1,9 +1,14 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-	public class SchedulingAndDayOffOptimization
+	public class SchedulingAndDayOffOptimization :
+		IHandleEvent<SchedulingAndDayOffWasOrdered>,
+		IRunOnStardust
 	{
 		private readonly FullScheduling _fullScheduling;
 		private readonly DayOffOptimizationWeb _dayOffOptimizationWeb;
@@ -14,10 +19,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_dayOffOptimizationWeb = dayOffOptimizationWeb;
 		}
 
-		public void Execute(Guid planningPeriodId)
+		public void Handle(SchedulingAndDayOffWasOrdered @event)
 		{
-			_fullScheduling.DoScheduling(planningPeriodId);
-			_dayOffOptimizationWeb.Execute(planningPeriodId);
+			_fullScheduling.DoScheduling(@event.PlanningPeriodId);
+			_dayOffOptimizationWeb.Execute(@event.PlanningPeriodId);
 		}
+	}
+	
+	public class SchedulingAndDayOffWasOrdered : IEvent
+	{
+		public Guid PlanningPeriodId { get; set; }
 	}
 }

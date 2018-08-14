@@ -1,5 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
@@ -23,10 +24,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	{
 	}
 
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeSchedulingAndDO_76496)]
 	public class WebScheduleStardustEvent : WebScheduleStardustBaseEvent
 	{
 	}
 
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeSchedulingAndDO_76496)]
 	public class WebDayoffOptimizationStardustEvent : WebScheduleStardustBaseEvent
 	{
 		public WebDayoffOptimizationStardustEvent()
