@@ -103,7 +103,7 @@
         return;
       }
       vm.schedulingPerformed = true;
-      return planningPeriodServiceNew.launchScheduling({ id: selectedPpId, runAsynchronously: true }).$promise.then(function () {
+      return planningPeriodServiceNew.launchScheduling({ id: selectedPpId }).$promise.then(function () {
         checkProgress();
       });
     }
@@ -232,7 +232,7 @@
         return;
       }
       vm.optimizeRunning = true;
-      return planningPeriodServiceNew.launchIntraOptimize({ id: selectedPpId, runAsynchronously: true }).$promise.then(function () {
+      return planningPeriodServiceNew.launchIntraOptimize({ id: selectedPpId }).$promise.then(function () {
         checkProgress();
       });
     }
