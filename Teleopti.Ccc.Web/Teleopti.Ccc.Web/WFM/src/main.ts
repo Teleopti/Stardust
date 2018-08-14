@@ -90,29 +90,20 @@ const wfm = angular.module('wfm', [
 
 wfm.controller('MainController', MainController as IControllerConstructor);
 
-wfm.directive('ng2ApiAccessTitleBar', downgradeComponent({
-	component: ApiAccessTitleBarComponent
-}) as angular.IDirectiveFactory);
-wfm.directive('ng2ApiAccessListPage', downgradeComponent({
-	component: ListPageComponent
-}) as angular.IDirectiveFactory);
-wfm.directive('ng2ApiAccessAddAppPage', downgradeComponent({
-	component: AddAppPageComponent
-}) as angular.IDirectiveFactory);
-wfm.directive('ng2PeopleTitleBar', downgradeComponent({ component: TitleBarComponent }) as angular.IDirectiveFactory);
-wfm.directive('ng2PeopleSearchPage', downgradeComponent({
-	component: SearchPageComponent
-}) as angular.IDirectiveFactory);
-wfm.directive('ng2PeopleGrantPage', downgradeComponent({ component: GrantPageComponent }) as angular.IDirectiveFactory);
-wfm.directive('ng2PeopleRevokePage', downgradeComponent({
-	component: RevokePageComponent
-}) as angular.IDirectiveFactory);
-wfm.directive('ng2PeopleAppLogonPage', downgradeComponent({
-	component: AppLogonPageComponent
-}) as angular.IDirectiveFactory);
-wfm.directive('ng2PeopleIdentityLogonPage', downgradeComponent({
-	component: IdentityLogonPageComponent
-}) as angular.IDirectiveFactory);
+const downgradeHelper = (downgradeName: string, component) => {
+	const downgradedComponent = downgradeComponent({ component }) as angular.IDirectiveFactory;
+	wfm.directive(downgradeName, downgradedComponent);
+};
+
+downgradeHelper('ng2ApiAccessTitleBar', ApiAccessTitleBarComponent);
+downgradeHelper('ng2ApiAccessListPage', ListPageComponent);
+downgradeHelper('ng2ApiAccessAddAppPage', AddAppPageComponent);
+downgradeHelper('ng2PeopleTitleBar', TitleBarComponent);
+downgradeHelper('ng2PeopleSearchPage', SearchPageComponent);
+downgradeHelper('ng2PeopleGrantPage', GrantPageComponent);
+downgradeHelper('ng2PeopleRevokePage', RevokePageComponent);
+downgradeHelper('ng2PeopleAppLogonPage', AppLogonPageComponent);
+downgradeHelper('ng2PeopleIdentityLogonPage', IdentityLogonPageComponent);
 
 wfm.config([
 	'$stateProvider',
