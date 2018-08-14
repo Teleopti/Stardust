@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 				logger.InfoFormat("Loading plugins in folder {0}", folder);
 				var allPayrollFormats = _plugInLoader.LoadDtos();
 
-				var formatsToAllDbs = allPayrollFormats.Where(f => f.DataSource.Equals("")).ToList();
+				var baseTenantFormatsToAllDbs = allPayrollFormats.Where(f => f.DataSource.Equals("")).ToList();
 				logger.InfoFormat(CultureInfo.CurrentCulture, "Sending formats to DB");
 				_dataSourceForTenant.DoOnAllTenants_AvoidUsingThis(tenant =>
 				{
@@ -47,17 +47,22 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 						{
 							payrollFormatRepository.Remove(payrollFormat);
 						}
-						formatsToAllDbs.AddRange(allPayrollFormats.Where(f => f.DataSource.Equals(tenant.DataSourceName)));
+						
+						foreach (var payrollFormatDto in baseTenantFormatsToAllDbs)
+						{
+							var format = new PayrollFormat { Name = payrollFormatDto.Name, FormatId = payrollFormatDto.FormatId };
+							payrollFormatRepository.Add(format);
+						}
+						var tenantSpecificFormats = new List<PayrollFormatDto>();
+						tenantSpecificFormats.AddRange(allPayrollFormats.Where(f => f.DataSource.Equals(tenant.DataSourceName)));
 
-						foreach (var payrollFormatDto in formatsToAllDbs)
+						foreach (var payrollFormatDto in tenantSpecificFormats)
 						{
 							var format = new PayrollFormat { Name = payrollFormatDto.Name, FormatId = payrollFormatDto.FormatId };
 							payrollFormatRepository.Add(format);
 						}
 						unitOfWork.PersistAll();
 					}
-
-
 				});
 			}
 			catch (CommunicationException exception)
