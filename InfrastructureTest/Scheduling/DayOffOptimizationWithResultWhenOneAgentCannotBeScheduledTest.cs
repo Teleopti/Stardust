@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 				.InTimeZone(TimeZoneInfo.Utc);
 			var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCategory);
 			var ass2 = new PersonAssignment(agentWithNoSchedulePeriod, scenario, date).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCategory);
-			var planningPeriod = new PlanningPeriod(date.ToDateOnlyPeriod(), SchedulePeriodType.Day, 1);
+			var planningPeriod = new PlanningPeriod(date.ToDateOnlyPeriod(), SchedulePeriodType.Day, 1, new PlanningGroup());
 
 			using (var uow = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
