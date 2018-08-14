@@ -104,7 +104,7 @@ ResourcePlanner_UseErlangAWithInfinitePatience_45845 = true
 ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899 = true
 ResourcePlanner_UseErlangAWithFinitePatience_47738 = true
 ResourcePlanner_SpeedUpEvents_75415 = true
-ResourcePlanner_LessResourcesXXL_76496 = false #should not affect perf tests yet
+ResourcePlanner_MergeSchedulingAndDO_76496 = false #should not affect perf tests yet
 
 # Bugs&Roses #
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production

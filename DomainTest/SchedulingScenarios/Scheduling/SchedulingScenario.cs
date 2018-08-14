@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public void Configure(FakeToggleManager toggleManager)
 		{
 			if(_resourcePlannerLessResourcesXxl74915)
-				toggleManager.Enable(Toggles.ResourcePlanner_LessResourcesXXL_76496);
+				toggleManager.Enable(Toggles.ResourcePlanner_MergeSchedulingAndDO_76496);
 		}
 	}
 }
