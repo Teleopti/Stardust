@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
 	[UseIocForFatClient]
-	public class ShiftCategoryLimitationTest : SchedulingScenario
+	public class SchedulingShiftCategoryLimitationDesktopTest : SchedulingScenario
 	{
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
@@ -579,7 +579,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			};
 		}
 
-		public ShiftCategoryLimitationTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerLessResourcesXXL74915) : base(seperateWebRequest, resourcePlannerLessResourcesXXL74915)
+		public SchedulingShiftCategoryLimitationDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerLessResourcesXXL74915) : base(seperateWebRequest, resourcePlannerLessResourcesXXL74915)
 		{
 		}
 	}

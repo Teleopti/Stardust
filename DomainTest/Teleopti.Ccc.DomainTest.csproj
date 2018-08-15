@@ -713,7 +713,7 @@
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingPlanningPeriodTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingRestrictionsDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingScenario.cs" />
-    <Compile Include="SchedulingScenarios\Scheduling\SchedulingTimeZoneTest.cs" />
+    <Compile Include="SchedulingScenarios\Scheduling\SchedulingTimeZoneDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\TeamBlockPeriodSchedulingTest.cs" />
     <Compile Include="SchedulingScenarios\TakeShiftWithLatestShiftStartIfSameShiftValue.cs" />
     <Compile Include="SchedulingScenarios\TeamBlockType.cs" />
@@ -766,7 +766,7 @@
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingCascadingDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingCascadingTest.cs" />
-    <Compile Include="SchedulingScenarios\Scheduling\ShiftCategoryLimitationTest.cs" />
+    <Compile Include="SchedulingScenarios\Scheduling\SchedulingShiftCategoryLimitationDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\TeamBlockSchedulingTest.cs" />
     <Compile Include="SchedulingScenarios\TrackOptimizationCallback.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffSameDaysOffLockSyncronizerTest.cs" />
