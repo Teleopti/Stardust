@@ -21,11 +21,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 	{
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
+		private readonly INow _now;
 
-		public ShiftTradeMultiSchedulesSelectableChecker(ILoggedOnUser loggedOnUser, IGlobalSettingDataRepository globalSettingDataRepository)
+		public ShiftTradeMultiSchedulesSelectableChecker(ILoggedOnUser loggedOnUser, IGlobalSettingDataRepository globalSettingDataRepository, INow now)
 		{
 			_loggedOnUser = loggedOnUser;
 			_globalSettingDataRepository = globalSettingDataRepository;
+			_now = now;
 		}
 
 		public bool CheckSelectable(bool hasAbsence, IScheduleDay myScheduleDay, IScheduleDay personToScheduleDay, 
@@ -36,6 +38,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			if (hasAbsence)
 			{
 				unSelectableReason = Resources.AbsenceCannotBeTraded;
+				return false;
+			}
+
+			if (isOutOpenPeriod(personTo, date, out var agentName))
+			{
+				unSelectableReason = String.Format(Resources.DateOutOfShiftTradeOpenPeriod, agentName);
 				return false;
 			}
 
@@ -70,6 +78,32 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			}
 
 			return true;
+		}
+
+		private bool isOutOpenPeriod(IPerson personTo, DateOnly date, out Name agentName)
+		{
+			agentName = new Name();
+			var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var myToday = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timeZone));
+			var myOpenPeriodStart = myToday.AddDays(_loggedOnUser.CurrentUser().WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum);
+			var myOpenPeriodEnd = myToday.AddDays(_loggedOnUser.CurrentUser().WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Maximum);
+			if (date < myOpenPeriodStart || date > myOpenPeriodEnd)
+			{
+				agentName = _loggedOnUser.CurrentUser().Name;
+				return true;
+			}
+
+			var personToTimeZone = personTo.PermissionInformation.DefaultTimeZone();
+			var personToToday = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), personToTimeZone));
+			var personToStart = personToToday.AddDays(personTo.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum);
+			var personToEnd = personToToday.AddDays(personTo.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Maximum);
+			if (date < personToStart || date > personToEnd)
+			{
+				agentName = personTo.Name;
+				return true;
+			}
+
+			return false;
 		}
 
 		private bool hasNonOverwriteActivities(IScheduleDay myScheduleDay, IScheduleDay personToScheduleDay)

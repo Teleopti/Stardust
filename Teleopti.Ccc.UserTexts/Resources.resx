@@ -17640,4 +17640,8 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Trading shifts is not allowed when there is a non-overwritable activity in the shift.</value>
     <comment>Use in MyTime ShiftTrade. A message tell agent when schedule cannot selected when has non-overwritable activity.</comment>
   </data>
+  <data name="DateOutOfShiftTradeOpenPeriod" xml:space="preserve">
+    <value>This date is not open for shift trades for {0}.</value>
+    <comment>Use in Mytime ShiftTrade. A message to tell agent one of the traded agent out of shift trade open period. 0 is the out period agent name.</comment>
+  </data>
 </root>

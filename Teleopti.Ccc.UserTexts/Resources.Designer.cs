@@ -8543,6 +8543,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This date is not open for shift trades for {0}..
+        /// </summary>
+        public static string DateOutOfShiftTradeOpenPeriod {
+            get {
+                return ResourceManager.GetString("DateOutOfShiftTradeOpenPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Date Range.
         /// </summary>
         public static string DateRange {
