@@ -69,7 +69,10 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 	self.targetScheduleList = ko.observableArray();
 
 	self.loadedSchedulePairs = ko.observableArray();
+
 	self.loadedSchedulePairsRaw = [];
+
+	self.selectedSchedulePairs = ko.observableArray();
 
 	self.chooseHistorys = ko.observableArray();
 	self.isDetailVisible = ko.computed(function () {
@@ -95,6 +98,43 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 	
 	self.showCart = function () {
 		return !self.isMobile() && Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306');
+	}
+
+	self.select = function (data) {
+		if (data) {
+			if (data.isSelected()) {
+				self.selectedSchedulePairs.push(data)
+			} else {
+				self.selectedSchedulePairs.remove(function (d) {
+					return d.date.isSame(data.date, 'day');
+				});
+			}
+
+			self.selectedSchedulePairs.sort(function (a, b) {
+				if (a.date.isSame(b, 'day')) {
+					return 0;
+				}
+
+				if (a.date.isBefore(b.date, 'day')) {
+					return -1;
+				}
+
+				if (a.date.isAfter(b.date, 'day')) {
+					return 1;
+				}
+			});
+		}
+
+		return true;
+	}
+
+	self.removeSelect = function (data) {
+		if (data) {
+			data.isSelected(false);
+			self.selectedSchedulePairs.remove(function (d) {
+				return d.date.isSame(data.date, 'day');
+			});
+		}
 	}
 
 	self.getOvernightFlag = function (dateTime, scheduleDate) {
@@ -953,7 +993,8 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function (ajax) {
 								mySchedule: (schedulePair.MySchedule && schedulePair.MySchedule.IsNotScheduled) ? null : createShiftTradeSchedule(schedulePair.MySchedule),
 								targetSchedule: (schedulePair.PersonToSchedule && schedulePair.PersonToSchedule.IsNotScheduled) ? null : createShiftTradeSchedule(schedulePair.PersonToSchedule),
 								isEnable : schedulePair.IsSelectable,
-								reason: schedulePair.UnselectableReason
+								reason: schedulePair.UnselectableReason,
+								isSelected: ko.observable(false)
 							});
 						}
 						
