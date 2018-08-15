@@ -101,11 +101,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_scheduleExecutor.Execute(schedulingCallback,
 				schedulingOptions, schedulingProgress, agents,
 				selectedPeriod, @event.RunWeeklyRestSolver, blockPreferenceProvider);
-			DoDayOffOptimization(@event, agents);
-		}
-
-		protected virtual void DoDayOffOptimization(SchedulingWasOrdered @event, IEnumerable<IPerson> agents)
-		{
 			_dayOffOptimization.Execute(new DateOnlyPeriod(@event.StartDate, @event.EndDate),
 				agents,
 				@event.RunWeeklyRestSolver,
