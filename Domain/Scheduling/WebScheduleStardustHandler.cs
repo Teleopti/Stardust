@@ -14,14 +14,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	public class WebScheduleStardustHandler : IHandleEvent<WebScheduleStardustEvent>, IRunOnStardust
 	{
 		private readonly FullScheduling _fullScheduling;
-		private readonly IEventPopulatingPublisher _eventPublisher;
 		private readonly IJobResultRepository _jobResultRepository;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(WebScheduleStardustHandler));
 
-		public WebScheduleStardustHandler(FullScheduling fullScheduling, IEventPopulatingPublisher eventPublisher, IJobResultRepository jobResultRepository)
+		public WebScheduleStardustHandler(FullScheduling fullScheduling, IJobResultRepository jobResultRepository)
 		{
 			_fullScheduling = fullScheduling;
-			_eventPublisher = eventPublisher;
 			_jobResultRepository = jobResultRepository;
 		}
 
@@ -34,10 +32,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				var result = _fullScheduling.DoScheduling(@event.PlanningPeriodId);
 				
 				SaveDetailToJobResult(@event, DetailLevel.Info, JsonConvert.SerializeObject(result), null);
-				_eventPublisher.Publish(new WebDayoffOptimizationStardustEvent(@event)
-				{
-					JobResultId = @event.JobResultId
-				});
 			}
 			catch (Exception e)
 			{
@@ -51,6 +45,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var jobResult = _jobResultRepository.Get(@event.JobResultId);
 			jobResult.AddDetail(new JobResultDetail(level, message, DateTime.UtcNow, exception));
+			if (exception == null)
+				jobResult.FinishedOk = true;
 		}
 	}
 }

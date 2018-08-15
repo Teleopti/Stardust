@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	{
 	}
 
+	//TODO - REMOVE!!!
 	public class WebDayoffOptimizationStardustEvent : WebScheduleStardustBaseEvent
 	{
 		public WebDayoffOptimizationStardustEvent()

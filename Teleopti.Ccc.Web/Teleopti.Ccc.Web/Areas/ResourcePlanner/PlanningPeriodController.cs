@@ -106,6 +106,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			{
 				HasJob = false
 			};
+			
+			//TODO: remove TotalSteps
 			if (lastSchedulingJobResult != null)
 			{
 				schedulingStatus = new
