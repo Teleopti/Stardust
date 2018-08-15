@@ -866,16 +866,16 @@ input.use-default-startTime {
 	opacity: 0.5;
 }
 .schedules-side-by-side {
-		flex: 1 1 70%;
-		overflow: hidden;
-		background-color: white;
-		border: .8px solid #e3e3e3;
+	flex: 1 1 70%;
+	overflow: hidden;
+	background-color: white;
+	border: 0.8px solid #e3e3e3;
 }
 
 .shift-trade-cart {
 	flex: 1 1 30%;
-	padding: 0 10px;	
-	background-color:white;
+	padding: 0 10px;
+	background-color: white;
 }
 
 .shift-visual-indication-wrapper {
@@ -941,22 +941,22 @@ input.use-default-startTime {
 	}
 }
 
-.shift-trade-cart-wrapper {	
+.shift-trade-cart-wrapper {
 	display: flex;
 	flex-direction: column;
 	background-color: white;
-	height:100%;
+	height: 100%;
 }
 
 .shift-cart-row {
 	height: 94px;
 	display: flex;
 	justify-content: center;
-	border-bottom: 0.8px solid #C0C0C0;
+	border-bottom: 0.8px solid #c0c0c0;
 }
 
-.shift-cart-row  + .shift-cart-row {
-	margin-top:3px;	
+.shift-cart-row + .shift-cart-row {
+	margin-top: 3px;
 }
 
 .shift-cart-detail {
@@ -969,35 +969,28 @@ input.use-default-startTime {
 	display: flex;
 	flex: 1 0 20%;
 	justify-content: center;
-	height:30px;
+	height: 30px;
 }
 
 .shift-cart-detail-info {
-	flex:1 0 80%;
-	display:flex;
+	flex: 1 0 80%;
+	display: flex;
 }
 
 .cart-schedule {
 	flex: 1 0 50%;
-	display:flex;
-	flex-direction:column;
-	justify-content:center;
-	align-items:center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 .cart-schedule + .cart-schedule {
 	margin-left: 8px;
 }
 
-.cart-schedule-category1 {
-	width:75%;
-	background-color:aquamarine;
-	text-align:center;
-}
-
-.cart-schedule-category2 {
-	width: 75%;
-	background-color: burlywood;
+.cart-schedule-category {
+	width: 80%;
 	text-align: center;
 }
 
@@ -1009,16 +1002,16 @@ input.use-default-startTime {
 }
 
 .shift-trade-request-container {
-	margin-bottom:2px;
+	margin-bottom: 2px;
 	margin-top: 2px;
 }
 
 .shift-trade-cart-container {
-	overflow : auto;
+	overflow: auto;
 	height: 420px;
 }
 
 .btn-remove {
-	background-color:white;
-	border:none;
+	background-color: white;
+	border: none;
 }

@@ -382,14 +382,30 @@
 						<div class="shift-cart-date" data-bind="text:$root.formatDate(date)"></div>
 						<div class="shift-cart-detail-info">
 							<div class="cart-schedule my-cart">
-								<span class="cart-schedule-category1">Early</span>
-								<span>7:00-16:00</span>
-								<span>8:00</span>
+								<!--ko if:!mySchedule-->
+								<span>@Resources.NotScheduled</span>
+								<!--/ko-->
+								<!--ko if:mySchedule && mySchedule.isDayOff-->
+								<span class="dayoff cart-schedule-category" data-bind="text:mySchedule.dayOffName"></span>
+								<!--/ko-->
+								<!--ko if:mySchedule && !mySchedule.isDayOff-->
+								<span class="cart-schedule-category" data-bind="text:mySchedule.categoryName,style:{'background-color': mySchedule.categoryColor ? mySchedule.categoryColor: 'none', 'color': mySchedule.categoryColor ? $root.getTextColor(mySchedule.categoryColor) : 'none'}"></span>
+								<span data-bind="text:mySchedule.scheduleStart + $root.getOvernightFlag(mySchedule.scheduleStartTime(), date) + '-' + mySchedule.scheduleEnd + $root.getOvernightFlag(mySchedule.scheduleEndTime(), date)"></span>
+								<span class="shift-trade-contract" data-bind="text:mySchedule.contractTime"></span>
+								<!--/ko-->
 							</div>
 							<div class="cart-schedule tartget-cart">
-								<span class="cart-schedule-category2">Late</span>
-								<span>7:00-16:00</span>
-								<span>8:00</span>
+								<!--ko if:!targetSchedule-->
+								<span>@Resources.NotScheduled</span>
+								<!--/ko-->
+								<!--ko if:targetSchedule && targetSchedule.isDayOff-->
+								<span class="cart-schedule-category dayoff" data-bind="text:mySchedule.dayOffName"></span>
+								<!--/ko-->
+								<!--ko if:targetSchedule && !targetSchedule.isDayOff-->
+								<span class="cart-schedule-category" data-bind="text:targetSchedule.categoryName,style:{'background-color': targetSchedule.categoryColor ? targetSchedule.categoryColor: 'none', 'color': targetSchedule.categoryColor ? $root.getTextColor(targetSchedule.categoryColor) : 'none'}"></span>
+								<span data-bind="text:targetSchedule.scheduleStart + $root.getOvernightFlag(targetSchedule.scheduleStartTime(), date) + '-' + targetSchedule.scheduleEnd + $root.getOvernightFlag(targetSchedule.scheduleEndTime(), date)"></span>
+								<span class="shift-trade-contract" data-bind="text:targetSchedule.contractTime"></span>
+								<!--/ko-->
 							</div>
 						</div>
 					</div>
