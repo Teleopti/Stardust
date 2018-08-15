@@ -784,7 +784,6 @@
     <Compile Include="Scheduling\FindSchedulesForPersonsTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\ShiftsFromMasterActivityBaseActivityServiceTest.cs" />
     <Compile Include="Scheduling\TeamBlock\DayOff\MissingDayOffBestSpotDeciderTest.cs" />
-    <Compile Include="Scheduling\WebDayOffOptimizationStardustHandlerTest.cs" />
     <Compile Include="Scheduling\WebScheduleStardustHandlerTest.cs" />
     <Compile Include="SeatPlanning\CommonSeatAllocatorTests.cs" />
     <Compile Include="SeatPlanning\SeatMapPersisterTests.cs" />

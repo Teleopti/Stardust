@@ -183,7 +183,6 @@
     <Compile Include="NodeHandlers\NodeHandlersModule.cs" />
     <Compile Include="NodeHandlers\StardustHealthCheckHandler.cs" />
     <Compile Include="NodeHandlers\ValidateReadModelsHandler.cs" />
-    <Compile Include="NodeHandlers\WebDayOffOptimizationHandler.cs" />
     <Compile Include="NodeHandlers\WebIntradayOptimizationHandler.cs" />
     <Compile Include="NodeHandlers\WebScheduleHandler.cs" />
     <Compile Include="Payroll\InitializePayrollFormatsToDb.cs" />

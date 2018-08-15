@@ -25,7 +25,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 {
 	[DomainTest]
-	[ExtendScope(typeof(WebDayoffOptimizationStardustHandler))]
 	[ExtendScope(typeof(DayOffOptimizationEventHandler))]
 	[ExtendScope(typeof(WebScheduleStardustHandler))]
 	[ExtendScope(typeof(SchedulingEventHandler))]

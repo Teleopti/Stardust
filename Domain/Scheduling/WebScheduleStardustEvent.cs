@@ -11,10 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			Policy = HalfNodesAffinity;
 		}
-		protected WebScheduleStardustBaseEvent(WebScheduleStardustBaseEvent @event):this()
-		{
-			PlanningPeriodId = @event.PlanningPeriodId;
-		}
+		
 		public Guid PlanningPeriodId { get; set; }
 		public Guid JobResultId { get; set; }
 	}
@@ -25,17 +22,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 	public class WebScheduleStardustEvent : WebScheduleStardustBaseEvent
 	{
-	}
-
-	//TODO - REMOVE!!!
-	public class WebDayoffOptimizationStardustEvent : WebScheduleStardustBaseEvent
-	{
-		public WebDayoffOptimizationStardustEvent()
-		{
-		}
-		public WebDayoffOptimizationStardustEvent(WebScheduleStardustBaseEvent @event) : base(@event)
-		{
-		}
 	}
 
 	public class IntradayOptimizationOnStardustWasOrdered : WebScheduleStardustBaseEvent

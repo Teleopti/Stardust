@@ -21,7 +21,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
 	[DomainTest]
-	[ExtendScope(typeof(WebDayoffOptimizationStardustHandler))]
 	[ExtendScope(typeof(WebScheduleStardustHandler))]
 	[Ignore("This should be green when we fix heatmap for real")]
 	public class SchedulingAndDayOffOptimizationStardustResultTest : DayOffOptimizationScenario
