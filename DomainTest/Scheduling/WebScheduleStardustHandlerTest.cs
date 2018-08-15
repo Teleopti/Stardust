@@ -113,9 +113,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			
 			Target.Handle(reqEvent);
 
-			var jobResultFromDb = planningPeriod.JobResults.Single(x => x.JobCategory == JobCategory.WebSchedule);
-			jobResultFromDb.FinishedOk.Should().Be.True();
-			var jobResultDetail = jobResultFromDb.Details.Single();
+			var jobResultDetail = planningPeriod.JobResults.Single(x => x.JobCategory == JobCategory.WebSchedule).Details.Single();
 			jobResultDetail.DetailLevel.Should().Be.EqualTo(DetailLevel.Info);
 			jobResultDetail.ExceptionMessage.Should().Be.Null();
 			jobResultDetail.Message.Should().Not.Be.Null();
@@ -144,9 +142,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			Assert.Throws<NoDefaultScenarioException>(() => Target.Handle(reqEvent));
 
-			var jobResultFromDb = planningPeriod.JobResults.Single(x => x.JobCategory == JobCategory.WebSchedule);
-			jobResultFromDb.FinishedOk.Should().Be.False();
-			var jobResultDetail = jobResultFromDb.Details.Single();
+			var jobResultDetail = planningPeriod.JobResults.Single(x => x.JobCategory == JobCategory.WebSchedule).Details.Single();
 			jobResultDetail.DetailLevel.Should().Be.EqualTo(DetailLevel.Error);
 			jobResultDetail.ExceptionMessage.Should().Not.Be.Null();
 			jobResultDetail.Message.Should().Be.Empty();

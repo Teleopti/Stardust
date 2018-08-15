@@ -106,13 +106,13 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			{
 				HasJob = false
 			};
-			
 			if (lastSchedulingJobResult != null)
 			{
 				schedulingStatus = new
 				{
 					HasJob = true,
 					CurrentStep = lastSchedulingJobResult.Details.Count(),
+					TotalSteps = 2,
 					Successful = lastSchedulingJobResult.FinishedOk,
 					Failed = lastSchedulingJobResult.HasError(),
 					LastJobId = lastSchedulingJobResult.Id.Value

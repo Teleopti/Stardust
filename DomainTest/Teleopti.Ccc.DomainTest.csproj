@@ -421,7 +421,6 @@
     <Compile Include="SchedulingScenarios\Islands\CommandHandler\SUT.cs" />
     <Compile Include="SchedulingScenarios\Islands\IslandModelCompleteTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\ConcurrencyDesktopTest.cs" />
-    <Compile Include="SchedulingScenarios\Scheduling\SchedulingAndDoTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingCommandHandlerExternalStaffDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\SyncInFatClientProcessEventPublisher_SimulateNoNewThreads.cs" />
     <Compile Include="SchedulingScenarios\IntraIntervalOptimization\IntraIntervalOptimizationScenarioTest.cs" />
