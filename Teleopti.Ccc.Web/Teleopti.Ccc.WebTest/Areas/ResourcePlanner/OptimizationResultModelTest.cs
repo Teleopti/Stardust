@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 	[TestFixture]
 	public class OptimizationResultModelTest
 	{
-		private OptimizationResultModel _target;
+		private FullSchedulingResultModel _target;
 		private ISkill _skill1;
 		private ISkill _skill2;
 		private ISkillDay _skillDay1;
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		[SetUp]
 		public void Setup()
 		{
-			_target = new OptimizationResultModel();
+			_target = new FullSchedulingResultModel();
 			_skill1 = SkillFactory.CreateSkill("Skill1",new SkillTypePhone(new Description(), ForecastSource.InboundTelephony), 15);
 			_skill2 = SkillFactory.CreateSkill("Skill2");
 			_skillDay1 = SkillDayFactory.CreateSkillDay(_skill1, new DateOnly(2015, 9, 4));

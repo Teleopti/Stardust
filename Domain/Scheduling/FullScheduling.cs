@@ -18,25 +18,25 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly SchedulingInformationProvider _schedulingInformationProvider;
 		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
-		private readonly OptimizationResult _optimizationResult;
+		private readonly FullSchedulingResult _fullSchedulingResult;
 
 		public FullScheduling(SchedulingCommandHandler schedulingCommandHandler, 
 			FillSchedulerStateHolder fillSchedulerStateHolder,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			SchedulingInformationProvider schedulingInformationProvider,
 			ISchedulingOptionsProvider schedulingOptionsProvider, 
-			OptimizationResult optimizationResult)
+			FullSchedulingResult fullSchedulingResult)
 		{
 			_schedulingCommandHandler = schedulingCommandHandler;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_schedulerStateHolder = schedulerStateHolder;
 			_schedulingInformationProvider = schedulingInformationProvider;
 			_schedulingOptionsProvider = schedulingOptionsProvider;
-			_optimizationResult = optimizationResult;
+			_fullSchedulingResult = fullSchedulingResult;
 		}
 
 		//runDayOffOptimization here for test purposes
-		public OptimizationResultModel DoScheduling(Guid planningPeriodId, bool runDayOffOptimization = true)
+		public FullSchedulingResultModel DoScheduling(Guid planningPeriodId, bool runDayOffOptimization = true)
 		{			
 			var schedulingInformation = _schedulingInformationProvider.GetInfoFromPlanningPeriod(planningPeriodId);
 			var stateHolder = _schedulerStateHolder();
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				PlanningPeriodId = planningPeriodId,
 				RunDayOffOptimization = runDayOffOptimization
 			});
-			return _optimizationResult.Create(schedulingInformation.Period, stateHolder.SchedulingResultState.LoadedAgents, schedulingInformation.PlanningGroup, schedulingOptions.UsePreferences);
+			return _fullSchedulingResult.Create(schedulingInformation.Period, stateHolder.SchedulingResultState.LoadedAgents, schedulingInformation.PlanningGroup, schedulingOptions.UsePreferences);
 			
 		}
 

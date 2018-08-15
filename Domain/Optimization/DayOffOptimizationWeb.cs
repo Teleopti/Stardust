@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IScheduleDictionaryPersister _persister;
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly IOptimizationPreferencesProvider _optimizationPreferencesProvider;
-		private readonly OptimizationResult _optimizationResult;
+		private readonly FullSchedulingResult _fullSchedulingResult;
 		private readonly IPersonRepository _personRepository;
 
 		public DayOffOptimizationWeb(IDayOffOptimizationCommandHandler dayOffOptimizationCommandHandler,
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IScheduleDictionaryPersister persister, 
 			IPlanningPeriodRepository planningPeriodRepository,
 			IOptimizationPreferencesProvider optimizationPreferencesProvider,
-			OptimizationResult optimizationResult,
+			FullSchedulingResult fullSchedulingResult,
 			IPersonRepository personRepository)
 		{
 			_dayOffOptimizationCommandHandler = dayOffOptimizationCommandHandler;
@@ -42,12 +42,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_persister = persister;
 			_planningPeriodRepository = planningPeriodRepository;
 			_optimizationPreferencesProvider = optimizationPreferencesProvider;
-			_optimizationResult = optimizationResult;
+			_fullSchedulingResult = fullSchedulingResult;
 			_personRepository = personRepository;
 		}
 		
 		[TestLog]
-		public virtual OptimizationResultModel Execute(Guid planningPeriodId)
+		public virtual FullSchedulingResultModel Execute(Guid planningPeriodId)
 		{
 			var optiData = Setup(planningPeriodId);
 			_dayOffOptimizationCommandHandler.Execute(new DayOffOptimizationCommand
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				}, 
 				null);
 			optiData.PlanningPeriod.Scheduled();
-			return _optimizationResult.Create(optiData.Period, optiData.Agents, 
+			return _fullSchedulingResult.Create(optiData.Period, optiData.Agents, 
 				optiData.PlanningPeriod.PlanningGroup, _optimizationPreferencesProvider.Fetch().General.UsePreferences);
 		}
 
@@ -94,17 +94,17 @@ namespace Teleopti.Ccc.Domain.Optimization
 		[RemoveMeWithToggle(Toggles.ResourcePlanner_DayOffOptimizationIslands_47208)]
 		public class DayOffOptimizationWebToggleOff : DayOffOptimizationWeb
 		{
-			public DayOffOptimizationWebToggleOff(IDayOffOptimizationCommandHandler dayOffOptimizationCommandHandler, FillSchedulerStateHolder fillSchedulerStateHolder, Func<ISchedulerStateHolder> schedulerStateHolder, IScheduleDictionaryPersister persister, IPlanningPeriodRepository planningPeriodRepository, IOptimizationPreferencesProvider optimizationPreferencesProvider, OptimizationResult optimizationResult, IPersonRepository personRepository) : base(dayOffOptimizationCommandHandler, fillSchedulerStateHolder, schedulerStateHolder, persister, planningPeriodRepository, optimizationPreferencesProvider, optimizationResult, personRepository)
+			public DayOffOptimizationWebToggleOff(IDayOffOptimizationCommandHandler dayOffOptimizationCommandHandler, FillSchedulerStateHolder fillSchedulerStateHolder, Func<ISchedulerStateHolder> schedulerStateHolder, IScheduleDictionaryPersister persister, IPlanningPeriodRepository planningPeriodRepository, IOptimizationPreferencesProvider optimizationPreferencesProvider, FullSchedulingResult fullSchedulingResult, IPersonRepository personRepository) : base(dayOffOptimizationCommandHandler, fillSchedulerStateHolder, schedulerStateHolder, persister, planningPeriodRepository, optimizationPreferencesProvider, fullSchedulingResult, personRepository)
 			{
 			}
 			
 			[TestLog]
-			public override OptimizationResultModel Execute(Guid planningPeriodId)
+			public override FullSchedulingResultModel Execute(Guid planningPeriodId)
 			{
 				var optiData = SetupAndRun(planningPeriodId);
 				optiData.PlanningPeriod.Scheduled();
 				_persister.Persist(_schedulerStateHolder().Schedules);
-				return _optimizationResult.Create(optiData.Period, optiData.Agents, 
+				return _fullSchedulingResult.Create(optiData.Period, optiData.Agents, 
 					optiData.PlanningPeriod.PlanningGroup, _optimizationPreferencesProvider.Fetch().General.UsePreferences);
 			}
 

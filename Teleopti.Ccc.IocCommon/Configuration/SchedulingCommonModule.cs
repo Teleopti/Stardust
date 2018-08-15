@@ -388,7 +388,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SuccessfulScheduledAgents>().SingleInstance();
 			builder.RegisterType<SchedulingInformationProvider>().SingleInstance().ApplyAspects();
 			builder.RegisterType<IntradayOptimization>().InstancePerLifetimeScope();
-			builder.RegisterType<OptimizationResult>().InstancePerLifetimeScope().ApplyAspects();
+			builder.RegisterType<FullSchedulingResult>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<FixedStaffLoader>().As<IFixedStaffLoader>().SingleInstance();
 			builder.RegisterType<PlanningGroupStaffLoader>().As<IPlanningGroupStaffLoader>().SingleInstance();
 			builder.RegisterType<FetchPlanningGroupSettingsModel>().As<IFetchPlanningGroupSettingsModel>().SingleInstance();

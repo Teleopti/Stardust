@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 			Target.Execute(planningPeriod.Id.Value);
 
-			var result = JsonConvert.DeserializeObject<OptimizationResultModel>(
+			var result = JsonConvert.DeserializeObject<FullSchedulingResultModel>(
 					JobResultRepository.LoadAllWithNoLock().Single().Details.Last().Message); 
 			var skillResult = result.SkillResultList.ToList();
 			var endUserDate = skillResult.First().SkillDetails.First();

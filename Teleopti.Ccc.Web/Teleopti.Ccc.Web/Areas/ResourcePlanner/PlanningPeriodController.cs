@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			if (lastJobResult != null && lastJobResult.FinishedOk)
 			{
 				var schedulingResult = new SchedulingResultModel();
-				var optimizationResult = new OptimizationResultModel
+				var optimizationResult = new FullSchedulingResultModel
 				{
 					BusinessRulesValidationResults = new List<SchedulingHintError>()
 				};
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				try
 				{
 					schedulingResult = JsonConvert.DeserializeObject<SchedulingResultModel>(lastJobResult.Details.First().Message);
-					optimizationResult = JsonConvert.DeserializeObject<OptimizationResultModel>(lastJobResult.Details.Last().Message);
+					optimizationResult = JsonConvert.DeserializeObject<FullSchedulingResultModel>(lastJobResult.Details.Last().Message);
 
 					foreach (var schedulingHintError in schedulingResult.BusinessRulesValidationResults)
 					{
@@ -398,12 +398,12 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return allPlanningPeriods.Any(p => p.Range.StartDate >= dateOnly);
 		}
 
-		private static void mergeScheduleResultIntoOptimizationResult(SchedulingResultModel schedulingResult, OptimizationResultModel optimizationResult)
+		private static void mergeScheduleResultIntoOptimizationResult(SchedulingResultModel schedulingResult, FullSchedulingResultModel fullSchedulingResult)
 		{
 			foreach (var schedulingBusinessRulesValidationResult in schedulingResult.BusinessRulesValidationResults)
 			{
 				var found = false;
-				foreach (var optimizationResultBusinessRulesValidationResult in optimizationResult.BusinessRulesValidationResults)
+				foreach (var optimizationResultBusinessRulesValidationResult in fullSchedulingResult.BusinessRulesValidationResults)
 				{
 					if (optimizationResultBusinessRulesValidationResult.ResourceId == schedulingBusinessRulesValidationResult.ResourceId)
 					{
@@ -421,8 +421,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 
 				if (!found)
 				{
-					optimizationResult.BusinessRulesValidationResults =
-						optimizationResult.BusinessRulesValidationResults.Append(schedulingBusinessRulesValidationResult);
+					fullSchedulingResult.BusinessRulesValidationResults =
+						fullSchedulingResult.BusinessRulesValidationResults.Append(schedulingBusinessRulesValidationResult);
 				}
 			}
 		}

@@ -2366,11 +2366,11 @@
     <Compile Include="Optimization\OptimizationPreferencesDefaultValueProvider.cs" />
     <Compile Include="Optimization\GroupPersonBuilderForOptimizationAndSingleAgentTeam.cs" />
     <Compile Include="Optimization\IPlanningGroupSettingsRepository.cs" />
-    <Compile Include="Optimization\OptimizationResult.cs" />
+    <Compile Include="Optimization\FullSchedulingResult.cs" />
     <Compile Include="Optimization\OptimizeIntradayDesktop.cs" />
     <Compile Include="Optimization\PersistSchedulesAfterIsland.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDayOffsInPeriodValidator.cs" />
-    <Compile Include="Optimization\OptimizationResultModel.cs" />
+    <Compile Include="Optimization\FullSchedulingResultModel.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\WeeklyRestSolverExecuter.cs" />
     <Compile Include="Optimization\PlanningGroupSettings.cs" />
     <Compile Include="Outbound\CreateOrUpdateSkillDays.cs" />
