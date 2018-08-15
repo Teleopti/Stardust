@@ -14,6 +14,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
+	[Obsolete("Not in use. Only kept here for old DO tests. If you want to test new DO functionality, use DayOffOptimizationDesktop instead")]
 	public class DayOffOptimizationWeb
 	{
 		private readonly IDayOffOptimizationCommandHandler _dayOffOptimizationCommandHandler;
@@ -89,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 
 
-
+		[Obsolete("Not in use. Only kept here for old DO tests. If you want to test new DO functionality, use DayOffOptimizationDesktop instead")]
 		[RemoveMeWithToggle(Toggles.ResourcePlanner_DayOffOptimizationIslands_47208)]
 		public class DayOffOptimizationWebToggleOff : DayOffOptimizationWeb
 		{
