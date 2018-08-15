@@ -8,7 +8,7 @@
 						<span ng-if="!vm.selectedWorkload.SkillType.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
 					</md-tooltip>
 				</i>
-				<span>{{vm.selectedWorkload.Workload.Name}}</span>
+				<span>Historical data for {{vm.selectedWorkload.Workload.Name}}</span>
 			</h1>
 		</div>
 	</div>
@@ -36,7 +36,7 @@
 					</div>
 				</div>
 				<div class="con-footer">
-					<button class="wfm-btn wfm-btn-invis-primary" ng-if="vm.selectedWorkload.SkillType.DoDisplayData" ng-click="return;">
+					<button class="wfm-btn wfm-btn-invis-primary" ng-click="return;">
 						{{'Ok' | translate}}
 					</button>
 				</div>

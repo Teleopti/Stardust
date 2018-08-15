@@ -3,9 +3,16 @@
 
 	angular.module('wfm.forecasting').controller('r2ForecastRefactController', r2ForecastCtrl);
 
-	r2ForecastCtrl.$inject = ['forecastingService', '$state', '$translate', 'NoticeService', 'skillIconService'];
+	r2ForecastCtrl.$inject = [
+		'forecastingService',
+		'$state',
+		'$translate',
+		'NoticeService',
+		'skillIconService',
+		'Toggle'
+	];
 
-	function r2ForecastCtrl(forecastingService, $state, $translate, noticeSvc, skillIconService) {
+	function r2ForecastCtrl(forecastingService, $state, $translate, noticeSvc, skillIconService, toggleSvc) {
 		var vm = this;
 
 		vm.skills = [];
@@ -15,6 +22,7 @@
 		vm.getSkillIcon = skillIconService.get;
 
 		function init() {
+			vm.showHistory = toggleSvc.WFM_Forecast_Show_History_Data_76432;
 			setReleaseNotification();
 			getAllSkills();
 		}

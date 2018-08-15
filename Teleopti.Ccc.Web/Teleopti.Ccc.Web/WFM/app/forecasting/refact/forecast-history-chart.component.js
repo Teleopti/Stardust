@@ -38,8 +38,6 @@ function ForecastHistoryChartCtrl($translate, $filter, $timeout) {
 			preparedData.outlierTasks.push(days[i].OutlierTasks);
 		}
 
-		console.log(preparedData);
-
 		chart = c3.generate({
 			bindto: '#' + chartId,
 			data: {
