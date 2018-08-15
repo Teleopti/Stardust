@@ -112,10 +112,7 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 	};
 
 	self.showCart = function() {
-		return (
-			!self.isMobile() &&
-			Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306')
-		);
+		return Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306');
 	};
 
 	self.select = function(data) {
@@ -422,6 +419,8 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 	};
 
 	self.chooseAgent = function(agent) {
+		self.selectedSchedulePairs([]);
+
 		//hide or show all agents
 		var showAllAgent = agent === null;
 		//$.each(self.possibleTradeSchedules(), function (index, value) {
@@ -492,6 +491,7 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 				PersonToId: self.agentChoosed().personId
 			}),
 			success: function(data) {
+				self.selectedSchedulePairs([]);
 				self.agentChoosed(null);
 				self.hideShiftTradeWindow();
 				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);

@@ -200,10 +200,6 @@
 		left: 114px;
 	}
 
-	.hide-on-mobile {
-		display: none;
-	}
-
 	.shift-to-trade-row-disable .clear-desktop-color {
 		opacity: 0.5;
 	}
@@ -1014,4 +1010,8 @@ input.use-default-startTime {
 .btn-remove {
 	background-color: white;
 	border: none;
+}
+
+.hiden {
+	display: none;
 }

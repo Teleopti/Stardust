@@ -373,7 +373,7 @@
 		</div>
 	</div>
 
-	<div class="shift-trade-cart">
+	<div data-bind="css:{'hiden': $root.isMobile()}" class="shift-trade-cart">
 		<div class="shift-trade-cart-wrapper" data-bind="visible:$root.showCart()" >
 			<div class="shift-trade-cart-container">
 				<!--ko foreach: selectedSchedulePairs-->
