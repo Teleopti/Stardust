@@ -22,7 +22,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 	[Toggle(Toggles.ResourcePlanner_DayOffOptimizationIslands_47208)]
 	public class DayOffOptimizationWithResultWhenOneAgentCannotBeScheduledTest
 	{
+#pragma warning disable 618
 		public DayOffOptimizationWeb Target;
+#pragma warning restore 618
 
 		public IScenarioRepository ScenarioRepository;
 		public IDayOffTemplateRepository DayOffTemplateRepository;

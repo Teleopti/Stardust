@@ -12,12 +12,9 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.TestCommon.TestData.Analytics.Tables;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Scheduling
@@ -31,7 +28,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 	[DatabaseTest]
 	public class DayOffOptimizationChildSkillTest
 	{
+#pragma warning disable 618
 		public DayOffOptimizationWeb Target;
+#pragma warning restore 618
 
 		public IScenarioRepository ScenarioRepository;
 		public IDayOffTemplateRepository DayOffTemplateRepository;
