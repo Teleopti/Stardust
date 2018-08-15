@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -21,11 +22,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 	{
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
+		private readonly INow _now;
+		private readonly ISiteOpenHoursSpecification _siteOpenHoursSpecification;
 
-		public ShiftTradeMultiSchedulesSelectableChecker(ILoggedOnUser loggedOnUser, IGlobalSettingDataRepository globalSettingDataRepository)
+		public ShiftTradeMultiSchedulesSelectableChecker(ILoggedOnUser loggedOnUser, IGlobalSettingDataRepository globalSettingDataRepository, INow now, ISiteOpenHoursSpecification siteOpenHoursSpecification)
 		{
 			_loggedOnUser = loggedOnUser;
 			_globalSettingDataRepository = globalSettingDataRepository;
+			_now = now;
+			_siteOpenHoursSpecification = siteOpenHoursSpecification;
 		}
 
 		public bool CheckSelectable(bool hasAbsence, IScheduleDay myScheduleDay, IScheduleDay personToScheduleDay, 
@@ -36,6 +41,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			if (hasAbsence)
 			{
 				unSelectableReason = Resources.AbsenceCannotBeTraded;
+				return false;
+			}
+
+			if (isOutOpenPeriod(personTo, date, out var agentName))
+			{
+				unSelectableReason = String.Format(Resources.DateOutOfShiftTradeOpenPeriod, agentName);
 				return false;
 			}
 
@@ -51,7 +62,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				return false;
 			}
 
-			if (isOutsideOpenHours(myScheduleDay, personToScheduleDay, personTo, date))
+			if (isOutsideOpenHours(myScheduleDay, personToScheduleDay, personTo))
 			{
 				unSelectableReason = Resources.NotAllowedWhenShiftOutsideOpenHours;
 				return false;
@@ -70,6 +81,32 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			}
 
 			return true;
+		}
+
+		private bool isOutOpenPeriod(IPerson personTo, DateOnly date, out Name agentName)
+		{
+			agentName = new Name();
+			var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var myToday = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timeZone));
+			var myOpenPeriodStart = myToday.AddDays(_loggedOnUser.CurrentUser().WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum);
+			var myOpenPeriodEnd = myToday.AddDays(_loggedOnUser.CurrentUser().WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Maximum);
+			if (date < myOpenPeriodStart || date > myOpenPeriodEnd)
+			{
+				agentName = _loggedOnUser.CurrentUser().Name;
+				return true;
+			}
+
+			var personToTimeZone = personTo.PermissionInformation.DefaultTimeZone();
+			var personToToday = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), personToTimeZone));
+			var personToStart = personToToday.AddDays(personTo.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum);
+			var personToEnd = personToToday.AddDays(personTo.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Maximum);
+			if (date < personToStart || date > personToEnd)
+			{
+				agentName = personTo.Name;
+				return true;
+			}
+
+			return false;
 		}
 
 		private bool hasNonOverwriteActivities(IScheduleDay myScheduleDay, IScheduleDay personToScheduleDay)
@@ -126,51 +163,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			return false;
 		}
 
-		private bool isOutsideOpenHours(IScheduleDay myScheduleDay, IScheduleDay personToScheduleDay, IPerson personTo, DateOnly date)
+		private bool isOutsideOpenHours(IScheduleDay myScheduleDay, IScheduleDay personToScheduleDay, IPerson personTo)
 		{
-			var personToSiteOpenHour = personTo.SiteOpenHour(date);
-			if (personToSiteOpenHour != null)
+			var layerCollection = myScheduleDay?.ProjectionService().CreateProjection();
+			if (layerCollection != null && layerCollection.HasLayers)
 			{
-				var personToOpenStart = personToSiteOpenHour.TimePeriod.StartTime;
-				var personToOpenEnd = personToSiteOpenHour.TimePeriod.EndTime;
-				var myShiftLayers = myScheduleDay?.PersonAssignment()?.ShiftLayers;
-				if (myShiftLayers != null || myShiftLayers.Any())
-				{
-					var myScheduleStart = myShiftLayers.First().Period.StartDateTime;
-					var myScheduleEnd = myShiftLayers.Last().Period.EndDateTime;
-					var personToTimezone = personTo.PermissionInformation.DefaultTimeZone();
-					var myScheduleAtPersonToLocalPeriod = new DateTimePeriod(TimeZoneHelper.ConvertFromUtc(myScheduleStart, personToTimezone),
-																			TimeZoneHelper.ConvertFromUtc(myScheduleEnd, personToTimezone));
-					var personToOpenPeriod = new DateTimePeriod(
-						new DateTime(date.Year, date.Month, date.Day, personToOpenStart.Hours, personToOpenStart.Minutes, personToOpenStart.Seconds, DateTimeKind.Utc),
-						new DateTime(date.Year, date.Month, date.Day, personToOpenEnd.Hours, personToOpenEnd.Minutes, personToOpenEnd.Seconds, DateTimeKind.Utc));
-					if (myScheduleAtPersonToLocalPeriod.StartDateTime < personToOpenPeriod.StartDateTime
-						|| myScheduleAtPersonToLocalPeriod.EndDateTime > personToOpenPeriod.EndDateTime 
-						|| personToSiteOpenHour.IsClosed) return true;
-				}
-
+				var period = layerCollection.Period().Value;
+				var checkItem = new SiteOpenHoursCheckItem { Period = period, Person = personTo };
+				if (!_siteOpenHoursSpecification.IsSatisfiedBy(checkItem)) return true;
 			}
 
-			var mySiteOpenHours = _loggedOnUser.CurrentUser().SiteOpenHour(date);
-			if (mySiteOpenHours !=  null)
+			var personToLayers = personToScheduleDay?.ProjectionService().CreateProjection();
+			if (personToLayers != null && personToLayers.HasLayers)
 			{
-				var myOpenStart = mySiteOpenHours.TimePeriod.StartTime;
-				var myOpenEnd = mySiteOpenHours.TimePeriod.EndTime;
-				var personToShiftLayers = personToScheduleDay?.PersonAssignment().ShiftLayers;
-				if (personToShiftLayers != null || personToShiftLayers.Any())
-				{
-					var personToScheduleStart = personToShiftLayers.First().Period.StartDateTime;
-					var personToScheduleEnd = personToShiftLayers.Last().Period.EndDateTime;
-					var myTimezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
-					var personToScheduleAtMyLocalPeriod = new DateTimePeriod(TimeZoneHelper.ConvertFromUtc(personToScheduleStart, myTimezone),
-																			TimeZoneHelper.ConvertFromUtc(personToScheduleEnd, myTimezone));
-					var myOpenPeriod = new DateTimePeriod(
-						new DateTime(date.Year, date.Month, date.Day, myOpenStart.Hours, myOpenStart.Minutes, myOpenStart.Seconds, DateTimeKind.Utc),
-						new DateTime(date.Year, date.Month, date.Day, myOpenEnd.Hours, myOpenEnd.Minutes, myOpenEnd.Seconds, DateTimeKind.Utc));
-					if (personToScheduleAtMyLocalPeriod.StartDateTime < myOpenPeriod.StartDateTime
-						|| personToScheduleAtMyLocalPeriod.EndDateTime > myOpenPeriod.EndDateTime
-						|| mySiteOpenHours.IsClosed) return true;
-				}
+				var period = personToLayers.Period().Value;
+				var checkItem = new SiteOpenHoursCheckItem { Period = period, Person = _loggedOnUser.CurrentUser() };
+				if (!_siteOpenHoursSpecification.IsSatisfiedBy(checkItem)) return true;
 			}
 
 			return false;

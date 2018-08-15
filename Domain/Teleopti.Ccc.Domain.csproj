@@ -271,6 +271,7 @@
     <Compile Include="Repositories\IAllSkillForSkillGroupProvider.cs" />
     <Compile Include="Repositories\IForecastDayOverrideRepository.cs" />
     <Compile Include="Repositories\IExtensiveLogRepository.cs" />
+    <Compile Include="Scheduling\SchedulingAndDayOffOptimization.cs" />
     <Compile Include="Scheduling\WebClearScheduleStardustHandler.cs" />
     <Compile Include="Scheduling\IPredictShiftCategory.cs" />
     <Compile Include="Scheduling\IShiftCategoryPredictionModelLoader.cs" />
@@ -1879,7 +1880,7 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\OpenHoursFilter.cs" />
     <Compile Include="Scheduling\WebLegacy\LoaderForResourceCalculation.cs" />
     <Compile Include="Scheduling\WebDayoffOptimizationStardustHandler.cs" />
-    <Compile Include="Scheduling\WebScheduleStardustEvent.cs" />
+    <Compile Include="Scheduling\SchedulingAndDayOffWasOrdered.cs" />
     <Compile Include="Scheduling\WebScheduleStardustHandler.cs" />
     <Compile Include="Security\Authentication\LoggedOnUserIsPerson.cs" />
     <Compile Include="Security\AuthorizationData\ILicenseCustomerNameProvider.cs" />

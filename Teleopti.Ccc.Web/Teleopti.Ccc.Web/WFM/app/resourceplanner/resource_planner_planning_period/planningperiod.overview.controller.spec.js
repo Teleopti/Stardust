@@ -55,11 +55,11 @@ describe('planningPeriodOverviewController', function () {
             }];
         });
 
-        $httpBackend.whenPOST('../api/resourceplanner/planningperiod/a557210b-99cc-4128-8ae0-138d812974b6/schedule?runAsynchronously=true').respond(function (method, url, data, headers) {
+        $httpBackend.whenPOST('../api/resourceplanner/planningperiod/a557210b-99cc-4128-8ae0-138d812974b6/schedule').respond(function (method, url, data, headers) {
             return [200, true];
         });
 
-        $httpBackend.whenPOST('../api/resourceplanner/planningperiod/a557210b-99cc-4128-8ae0-138d812974b6/optimizeintraday?runAsynchronously=true').respond(function (method, url, data, headers) {
+        $httpBackend.whenPOST('../api/resourceplanner/planningperiod/a557210b-99cc-4128-8ae0-138d812974b6/optimizeintraday').respond(function (method, url, data, headers) {
             return [200, true];
         });
 
@@ -104,7 +104,7 @@ describe('planningPeriodOverviewController', function () {
         vm.launchSchedule();
         $httpBackend.flush();
 
-        expect(planningPeriodServiceNew.launchScheduling).toHaveBeenCalledWith({ id: 'a557210b-99cc-4128-8ae0-138d812974b6', runAsynchronously: true });
+        expect(planningPeriodServiceNew.launchScheduling).toHaveBeenCalledWith({ id: 'a557210b-99cc-4128-8ae0-138d812974b6' });
         expect(vm.schedulingPerformed).toEqual(true); 
     });
 
@@ -236,7 +236,7 @@ describe('planningPeriodOverviewController', function () {
         vm.intraOptimize();
         $httpBackend.flush();
 
-        expect(planningPeriodServiceNew.launchIntraOptimize).toHaveBeenCalledWith({ id: 'a557210b-99cc-4128-8ae0-138d812974b6', runAsynchronously: true });
+        expect(planningPeriodServiceNew.launchIntraOptimize).toHaveBeenCalledWith({ id: 'a557210b-99cc-4128-8ae0-138d812974b6' });
         expect(vm.optimizeRunning).toEqual(true);
     });
 

@@ -30,7 +30,6 @@
 					<div class="wfm-dropdown-panel panel material-depth-1 full-padding"
 						 style="z-index: 999; position: absolute; width: 100%"
 						 ng-show="vm.organizationPickerOpen">
-
 						<div class="form-input-wrap filter">
 							<input type="text"
 								   placeholder="{{'DataFilterThreeDots'|translate}}"
@@ -83,101 +82,69 @@
 	</div>
 
 	<style>
-		.rta-view.prototype .wfm-table {
-			table-layout: fixed;
-		}
-
 		.rta-view.prototype .cell {
-			overflow: hidden;
-			white-space: nowrap;
-			width: 30px;
+			width: 35px;
+			padding: 0;
+			position: relative;
 		}
 		
-		.rta-view.prototype .cell.indicator {
-			text-overflow: unset;
-			padding-left: 4px;
-			padding-top: 4px;
-		}
-
-		.rta-view.prototype .cell.indicator.late-for-work {
+		.rta-view.prototype .cell .late-for-work-flag {
 			background-image: linear-gradient(225deg, orange, orange 5px, transparent 5px, transparent);
+			position: absolute;
+			z-index: 1;
+			height: 7px;
+			width: 100%;
 		}
 		
-		.rta-view.prototype .radial-percent-chart {
-			display: block;
-			max-width: 30px;
-			max-height: 30px;
-			stroke: darkgrey;
+		.rta-view.prototype .cell .square {
+			height: 28px;
+			margin: 2px;
+			border-radius: .25em;
+			padding-top: 4px;
+			text-align: center;
 		}
 
-		.rta-view.prototype .radial-percent-bg {
-			fill: none;
-			stroke: #eee;
-			stroke-width: 3.6;
+		.rta-view.prototype .label.pad.late-for-work{
+			background-color: orange;
 		}
-
-		.rta-view.prototype .radial-percent {
-			fill: none;
-			stroke-width: 2.6;
-			stroke-linecap: round;
-			stroke: #3c9ee5;
-		}
-
-		.rta-view.prototype .radial-percent-text {
-			fill: #666;
-			font-family: sans-serif;
-			font-size: 1em;
-			text-anchor: middle;
-		}		
-
+		
 	</style>
 
 	
-	<div class="panel material-depth-1"  ng-repeat="group in vm.groupings" style="width: 1200px;">
-		<div class="card-panel-header-wrapper pointer" style="border-left: 10px solid #66c2ff"
-			 ng-click="vm.openCard = !vm.openCard">
-			{{group.Name}}&nbsp;&nbsp;<strong>{{group.AdherencePercentage}}%</strong>				
-				<div style="background-color: #f1f1f1; width: 100%;  margin-top:3px; margin-left: -5px">
-					<div style="background-color: #3c9ee5; height: 6px; width: {{group.AdherencePercentage}}%"></div>
-				</div>
-			
+	<div class="panel material-depth-1" ng-repeat="group in vm.groupings"  style="width: 900px;">
+		<div class="card-panel-header-wrapper pointer" ng-click="vm.openCard = !vm.openCard"  style="border-left: 10px solid #66c2ff;background-color: {{vm.ToneAdherencePercentage(group.AdherencePercentage)}}">
+			{{group.Name}}&nbsp;&nbsp;<strong>{{group.AdherencePercentage}}%</strong>
 		</div>
 		<div class="card-panel-content-wrapper" ng-show="vm.openCard">
 			<table class="wfm-table">
 				<thead>
 				<tr>
-					<th style="width: 25%">Agent</th>
-					<th style="width: 30px; height: 30px" ng-repeat="adherence in group.agentsAdherence[0].Adherence">
+					<th style="width: 200px; height: 32px">{{'Agent'|translate}}</th>
+					<th style="width: 45px; text-align: center" ng-repeat="adherence in group.agentsAdherence[0].Adherence">
 						{{adherence.Date}}
 					</th>
-					<th style="width: 25%">Adherence</th>
-					<th>Late for work</th>
+					<th style="width: 18%">{{'Adherence'|translate}}</th>
+					<th>{{'LateForWork'|translate}}</th>
 				</tr>
 				</thead>
 				<tbody>
 				<tr  ng-repeat="agent in group.agentsAdherence" style="background-color: transparent">
 					<td>{{agent.Name}}</td>
-					<td ng-repeat="percentage in agent.Adherence" style="padding:1px;" ng-class="percentage.WasLateForWork  ? 'cell indicator late-for-work': 'cell indicator'">
-							<svg class="radial-percent-chart" viewBox="0 0 36 36">
-								<path class="radial-percent-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-								<path class="radial-percent" stroke-dasharray="{{percentage.AdherencePercentage}} , 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-								<text x="18" y="22.35" class="radial-percent-text">{{percentage.AdherencePercentage}}</text>
-							</svg>
-					</td>					
-
+					<td ng-repeat="percentage in agent.Adherence" class="cell">
+						<div ng-class="percentage.WasLateForWork ? 'late-for-work-flag': ''"></div>	
+					    <div class="square" style="background-color: {{vm.ToneAdherencePercentage(percentage.AdherencePercentage)}}">{{percentage.AdherencePercentage}}</div>
+					</td>
 					<td>
 						<div style="background-color: #f1f1f1; width: 75%; float:left; margin-top:5px">
-							<div style="background-color:#3c9ee5; height:10px; width:{{agent.PeriodAdherence.Value}}%">
-							</div>
+							<div style="background-color:#3c9ee5; height:10px; width:{{agent.PeriodAdherence.Value}}%"></div>
 						</div>
 						<div style="width: 10%; margin-left: 6px; float:left;">{{agent.PeriodAdherence.Value}}%</div>
 					</td>
 					<td>
-						<span style="background-color: orange;" class="label pad">{{agent.LateForWork.Count}}</span>
-						<span>{{agent.LateForWork.TotalMinutes}} minutes</span>
+						<span class="label pad late-for-work">{{agent.LateForWork.Count}}</span>
+						<span>{{agent.LateForWork.TotalMinutes}}&nbsp;{{'Minutes'|translate}}</span>
 					</td>
 				</tr>
-
 				</tbody>
 			</table>
 		</div>

@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 		public IActivityRepository ActivityRepository;
 		public IShiftCategoryRepository ShiftCategoryRepository;
 		public IPlanningPeriodRepository PlanningPeriodRepository;
+		public IPlanningGroupRepository PlanningGroupRepository;
 		public ISkillRepository SkillRepository;
 		public ISkillTypeRepository SkillTypeRepository;
 		public ISkillDayRepository SkillDayRepository;
@@ -78,7 +79,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 				.InTimeZone(TimeZoneInfo.Utc);
 			var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCategory);
 			var ass2 = new PersonAssignment(agentWithNoSchedulePeriod, scenario, date).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCategory);
-			var planningPeriod = new PlanningPeriod(date.ToDateOnlyPeriod(), SchedulePeriodType.Day, 1);
+			var planningGroup = new PlanningGroup();
+			var planningPeriod = new PlanningPeriod(date.ToDateOnlyPeriod(), SchedulePeriodType.Day, 1, planningGroup);
 
 			using (var uow = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
@@ -104,6 +106,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 				PersonRepository.Add(agentWithNoSchedulePeriod);
 				PersonAssignmentRepository.Add(ass);
 				PersonAssignmentRepository.Add(ass2);
+				PlanningGroupRepository.Add(planningGroup);
 				PlanningPeriodRepository.Add(planningPeriod);
 				uow.PersistAll();
 			}

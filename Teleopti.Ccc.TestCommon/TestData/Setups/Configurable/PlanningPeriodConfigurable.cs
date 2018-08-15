@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var planningPeriodSuggestions = new PlanningPeriodSuggestions (new MutableNow (Date),new[] {period});
 			
 			Period = new PlanningPeriod (planningPeriodSuggestions, planningGroup);
-			
 
 			new PlanningPeriodRepository(currentUnitOfWork).Add(Period);
 		}

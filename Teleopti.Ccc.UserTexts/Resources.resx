@@ -17463,6 +17463,14 @@ The application will now exit.</value>
     <value>Are you sure you want to exit forecaster without saving?</value>
     <comment>Text message in web forecast</comment>
   </data>
+  <data name="ConfirmExitOnForecasting" xml:space="preserve">
+    <value>Are you sure you want to exit forecaster and discard forecast in progress?</value>
+    <comment>Text message in web forecast</comment>
+  </data>
+  <data name="ForecastNotFinishedYet" xml:space="preserve">
+    <value>Forecast not finished yet</value>
+    <comment>Text message in web forecast</comment>
+  </data>
   <data name="ConfirmReforecastWithoutSaving" xml:space="preserve">
     <value>Are you sure you want to forecast again? All modification not saved will lost.</value>
     <comment>Text message in web forecast</comment>
@@ -17631,5 +17639,9 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
   <data name="NotAllowedWhenHasNonOverwriteActivity" xml:space="preserve">
     <value>Trading shifts is not allowed when there is a non-overwritable activity in the shift.</value>
     <comment>Use in MyTime ShiftTrade. A message tell agent when schedule cannot selected when has non-overwritable activity.</comment>
+  </data>
+  <data name="DateOutOfShiftTradeOpenPeriod" xml:space="preserve">
+    <value>This date is not open for shift trades for {0}.</value>
+    <comment>Use in Mytime ShiftTrade. A message to tell agent one of the traded agent out of shift trade open period. 0 is the out period agent name.</comment>
   </data>
 </root>

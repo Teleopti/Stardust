@@ -80,7 +80,11 @@
 		equal($('.new-teamschedule-view .mobile-datepicker a.formatted-date-text').text(), expectDateStr);
 	});
 
-	test('should render sites and teams', function() {
+	test('should render sites and teams on mobile', function() {
+		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
+			return true;
+		};
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
@@ -88,7 +92,7 @@
 
 		$('.new-teamschedule-filter').click();
 
-		var selector = '.new-teamschedule-view .teamschedule-filter-component select';
+		var selector = '.new-teamschedule-panel .new-teamschedule-filter-component select';
 		equal($(selector)[0].length, 11);
 
 		equal($($(selector)[0][0]).text(), 'All Teams');
@@ -98,9 +102,14 @@
 		equal($($(selector)[0][4]).text(), 'London/Team Preferences');
 		equal($($(selector)[0][5]).text(), 'London/Team Rotations');
 		equal($($(selector)[0][10]).text(), 'Contract Group/Team Rotations');
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
-	test('should select default team', function() {
+	test('should select default team on mobile', function() {
+		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
+			return true;
+		};
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
@@ -109,7 +118,182 @@
 		$('.new-teamschedule-filter').click();
 
 		equal(completeLoadedCount, 1);
-		equal($('.new-teamschedule-view .teamschedule-filter-component select').val(), fakeDefaultTeamData.DefaultTeam);
+		equal(
+			$('.new-teamschedule-panel .new-teamschedule-filter-component select').val(),
+			fakeDefaultTeamData.DefaultTeam
+		);
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
+	});
+
+	test('should not load sites and teams until user toggle the selection list on iPad', function() {
+		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAniPad;
+		Teleopti.MyTimeWeb.Common.IsHostAniPad = function() {
+			return true;
+		};
+		$('body').append(agentSchedulesHtml);
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+
+		var selector = '.new-teamschedule-filter-component select';
+		equal($(selector)[0].length, 1);
+
+		equal(
+			$($(selector)[0])
+				.text()
+				.replace(/\s/g, ''),
+			'London/Students'
+		);
+		equal(vm.isTeamsAndGroupsLoaded(), false);
+
+		Teleopti.MyTimeWeb.Common.IsHostAniPad = tempFn;
+	});
+
+	test('should not load sites and teams until user toggle the selection list on desktop', function() {
+		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
+		var tempFn2 = Teleopti.MyTimeWeb.Common.IsHostAniPad;
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
+			return false;
+		};
+		Teleopti.MyTimeWeb.Common.IsHostAniPad = function() {
+			return false;
+		};
+		$('body').append(agentSchedulesHtml);
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+
+		var selector = '.new-teamschedule-filter-component select';
+		equal($(selector)[0].length, 1);
+
+		equal(
+			$($(selector)[0])
+				.text()
+				.replace(/\s/g, ''),
+			'London/Students'
+		);
+		equal(vm.isTeamsAndGroupsLoaded(), false);
+
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
+		Teleopti.MyTimeWeb.Common.IsHostAniPad = tempFn2;
+	});
+
+	test('should select default team on iPad', function() {
+		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAniPad;
+		Teleopti.MyTimeWeb.Common.IsHostAniPad = function() {
+			return true;
+		};
+		$('body').append(agentSchedulesHtml);
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+
+		equal(completeLoadedCount, 1);
+		equal($('.new-teamschedule-filter-component select').val(), fakeDefaultTeamData.DefaultTeam);
+		Teleopti.MyTimeWeb.Common.IsHostAniPad = tempFn;
+	});
+
+	test('should select default team on desktop', function() {
+		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
+		var tempFn2 = Teleopti.MyTimeWeb.Common.IsHostAniPad;
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
+			return false;
+		};
+		Teleopti.MyTimeWeb.Common.IsHostAniPad = function() {
+			return false;
+		};
+		$('body').append(agentSchedulesHtml);
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+
+		equal(completeLoadedCount, 1);
+		equal($('.new-teamschedule-filter-component select').val(), fakeDefaultTeamData.DefaultTeam);
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
+		Teleopti.MyTimeWeb.Common.IsHostAniPad = tempFn2;
+	});
+
+	test('should not trigger schedule reload when changing selected team without clicking search button on mobile', function() {
+		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
+			return true;
+		};
+		$('body').append(agentSchedulesHtml);
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+		equal(completeLoadedCount, 1);
+
+		$('.new-teamschedule-filter').click();
+		equal($('.new-teamschedule-filter-component select').val(), fakeDefaultTeamData.DefaultTeam);
+
+		var selectedTeam = fakeAvailableTeamsData.teams[1].children[1];
+		$('#teams-and-groups-selector')
+			.select2('data', { id: selectedTeam.id, text: selectedTeam.text })
+			.trigger('change');
+
+		equal(completeLoadedCount, 1);
+
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
+	});
+
+	test('should trigger schedule reload when changing selected team on desktop', function() {
+		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
+		var tempFn2 = Teleopti.MyTimeWeb.Common.IsHostAniPad;
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
+			return false;
+		};
+		Teleopti.MyTimeWeb.Common.IsHostAniPad = function() {
+			return false;
+		};
+		$('body').append(agentSchedulesHtml);
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+
+		equal(completeLoadedCount, 1);
+		equal($('.new-teamschedule-filter-component select').val(), fakeDefaultTeamData.DefaultTeam);
+
+		vm.loadGroupAndTeams(function() {
+			vm.isTeamsAndGroupsLoaded(true);
+		});
+
+		var selectedTeam = fakeAvailableTeamsData.teams[1].children[1];
+		$('#teams-and-groups-selector')
+			.select2('data', { id: selectedTeam.id, text: selectedTeam.text })
+			.trigger('change');
+
+		equal(completeLoadedCount, 2);
+
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
+		Teleopti.MyTimeWeb.Common.IsHostAniPad = tempFn2;
+	});
+
+	test('should trigger schedule reload when changing selected team on iPad', function() {
+		var tempFn2 = Teleopti.MyTimeWeb.Common.IsHostAniPad;
+		Teleopti.MyTimeWeb.Common.IsHostAniPad = function() {
+			return false;
+		};
+		$('body').append(agentSchedulesHtml);
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+
+		equal(completeLoadedCount, 1);
+		equal($('.new-teamschedule-filter-component select').val(), fakeDefaultTeamData.DefaultTeam);
+
+		vm.loadGroupAndTeams(function() {
+			vm.isTeamsAndGroupsLoaded(true);
+		});
+
+		var selectedTeam = fakeAvailableTeamsData.teams[1].children[1];
+		$('#teams-and-groups-selector')
+			.select2('data', { id: selectedTeam.id, text: selectedTeam.text })
+			.trigger('change');
+
+		equal(completeLoadedCount, 2);
+
+		Teleopti.MyTimeWeb.Common.IsHostAniPad = tempFn2;
 	});
 
 	test('should render timeline', function() {
@@ -437,7 +621,11 @@
 		equal(vm.paging.skip, 0);
 	});
 
-	test('should filter agent schedules', function() {
+	test('should filter agent schedules on mobile', function() {
+		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
+			return true;
+		};
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
@@ -454,6 +642,7 @@
 			$('.teammates-agent-name-row .new-teamschedule-agent-name:nth-child(1) .text-name').text(),
 			'Jon Kleinsmith5'
 		);
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
 	test('should update agent names after loaded schedules', function() {
@@ -515,21 +704,31 @@
 	});
 
 	test('should reset search name to empty after click cancel button in panel', function() {
+		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
+			return true;
+		};
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
 		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
 
-		vm.toggleFilterPanel();
+		$('.new-teamschedule-filter').click();
 
-		vm.searchNameText('test search name text');
+		$('.new-teamschedule-view input.form-control').val('test search name text');
+		$('.new-teamschedule-view input.form-control').change();
 
-		$('.new-teamschedule-submit-buttons button:first-child').click();
+		$('.new-teamschedule-submit-buttons .btn-default').click();
 
 		equal(vm.searchNameText(), '');
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
 	test('should reset search name text to last submitted value after click cancel button in panel', function() {
+		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
+			return true;
+		};
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
@@ -537,31 +736,41 @@
 		vm.searchNameText('10');
 		vm.submitSearchForm();
 
-		vm.toggleFilterPanel();
+		$('.new-teamschedule-filter').click();
 
 		vm.searchNameText('test search name text');
 
 		$('.new-teamschedule-submit-buttons button:first-child').click();
 
 		equal(vm.searchNameText(), '10');
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
 	test('should reset to selected team default team after click cancel button in panel', function() {
+		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
+			return true;
+		};
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
 		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
 
-		vm.toggleFilterPanel();
+		$('.new-teamschedule-filter').click();
 
 		vm.selectedTeam('d7a9c243-8cd8-406e-9889-9b5e015ab495');
 
 		$('.new-teamschedule-submit-buttons button:first-child').click();
 
 		equal(vm.selectedTeam(), fakeDefaultTeamData.DefaultTeam);
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
 	test('should reset selected team to last submitted team after click cancel button in panel', function() {
+		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
+			return true;
+		};
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
@@ -570,13 +779,14 @@
 		vm.selectedTeam('allTeams');
 		vm.submitSearchForm();
 
-		vm.toggleFilterPanel();
+		$('.new-teamschedule-filter').click();
 
 		vm.selectedTeam('a74e1f94-7662-4a7f-9746-a56e00a66f17');
 
 		$('.new-teamschedule-submit-buttons button:first-child').click();
 
 		equal(vm.selectedTeam(), 'allTeams');
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
 	test('should map dayOff of MySchedule', function() {
@@ -607,17 +817,23 @@
 	});
 
 	test("should map dayOff of agents' schedule", function() {
+		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
+			return true;
+		};
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
 		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
-
 		vm.paging.take = 100;
-		vm.toggleFilterPanel();
+
+		$('.new-teamschedule-filter').click();
+
 		vm.searchNameText('dayoffAgent');
 		$('.new-teamschedule-submit-buttons button.btn-primary').click();
 
 		equal($('.teammates-schedules-container .dayoff').length > 0, true);
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
 	test("should map notScheduled of agents' schedule", function() {
@@ -667,7 +883,10 @@
 				}
 			]
 		};
-		fakeDefaultTeamData = { DefaultTeam: fakeAvailableTeamsData.teams[0].children[0].id };
+		fakeDefaultTeamData = {
+			DefaultTeam: fakeAvailableTeamsData.teams[0].children[0].id,
+			DefaultTeamName: fakeAvailableTeamsData.teams[0].children[0].text
+		};
 
 		fakeTeamScheduleData = {
 			AgentSchedules: [],
@@ -1013,7 +1232,7 @@
 
 	function setUpHtml() {
 		agentSchedulesHtml = [
-			'<div class="new-teamschedule-view relative" data-bind="style: {display: isMobileEnabled() || isDesktopEnabled() ? \'block\': \'none\'}">',
+			"<div class=\"new-teamschedule-view relative\" data-bind=\"css: {'new-teamschedule-view-mobile': isHostAMobile && isMobileEnabled, 'new-teamschedule-view-ipad': isHostAniPad && isDesktopEnabled}, style: {display: isMobileEnabled || isDesktopEnabled ? 'block': 'none'}\">",
 			'	<div class="navbar navbar-teleopti subnavbar">',
 			'		<div class="container new-teamschedule-view-nav">',
 			'			<ul class="nav navbar-nav navbar-teleopti row submenu">',
@@ -1037,11 +1256,31 @@
 			'						<i class="glyphicon glyphicon-home"></i>',
 			'					</a>',
 			'				</li>',
-			'				<li class="new-teamschedule-filter" data-bind="click: toggleFilterPanel">',
+			'				<!-- ko if: isHostAMobile -->',
+			'				<li class="new-teamschedule-filter">',
 			'					<a>',
 			'						<i class="glyphicon glyphicon-filter" data-bind="style: {color: hasFiltered() ? \'yellow\' : \'white\'}"></i>',
 			'					</a>',
 			'				</li>',
+			'				<!-- /ko -->',
+			'				<!-- ko ifnot: isHostAMobile -->',
+			'				<li class="new-teamschedule-filter-component relative">',
+			'					<div data-bind="click: openTeamSelectorPanel"></div>',
+			'					<select id="teams-and-groups-selector" data-bind="foreach: availableTeams, select2: {value: selectedTeam}">',
+			'						<optgroup data-bind="attr: { label: text }, foreach: children">',
+			'							<option data-bind="text: text, value: id"></option>',
+			'						</optgroup>',
+			'					</select>',
+			'				</li>',
+			'				<li class="new-teamschedule-search-container">',
+			'					<form class="new-teamschedule-search-component" data-bind="submit: submitSearchForm">',
+			'						<input type="search" class="form-control" placeholder=\'@Resources.SearchHintForName\' data-bind="value: searchNameText" />',
+			'						<button type="submit">',
+			'							<i class="glyphicon glyphicon-search"></i>',
+			'						</button>',
+			'					</form>',
+			'				</li>',
+			'				<!-- /ko -->',
 			'			</ul>',
 			'		</div>',
 			'	</div>',
@@ -1149,28 +1388,28 @@
 			'		</div>',
 			'		<!-- ko if: isPanelVisible -->',
 			'		<div class="new-teamschedule-panel">',
-			'			<div class="teamschedule-filter-component">',
-			'				<p>',
-			'					<b>@Resources.Team: </b>',
-			'				</p>',
-			'				<select data-bind="foreach: availableTeams, select2: { value: selectedTeam, minimumResultsForSearch: \'Infinity\'}" id="team-selection">',
+			'			<div class="new-teamschedule-filter-component">',
+			'				<label>',
+			'					@Resources.Team:',
+			'				</label>',
+			'				<select data-bind="foreach: availableTeams, select2: { value: selectedTeam}" id="team-selection">',
 			'					<optgroup data-bind="attr: { label: text }, foreach: children">',
 			'						<option data-bind="text: text, value: id"></option>',
 			'					</optgroup>',
 			'				</select>',
 			'			</div>',
-			'			<div class="teamschedule-search-component">',
-			'				<p>',
-			'					<b>@Resources.AgentName: </b>',
-			'				</p>',
-			'				<form data-bind="submit: submitSearchForm">',
-			'					<input type="search" class="form-control" placeholder=\'@Resources.SearchHintForName\' data-bind="value: searchNameText" />',
-			'					<input type="submit" style="display: none"/>',
-			'				</form>',
-			'			</div>',
+			'			<form class="new-teamschedule-search-component" data-bind="submit: submitSearchForm">',
+			'				<label>',
+			'					@Resources.AgentName:',
+			'				</label>',
+			'				<input type="search" class="form-control" placeholder=\'@Resources.SearchHintForName\' data-bind="value: searchNameText" />',
+			'				<input type="submit" style="display: none"/>',
+			'			</form>',
 			'			<div class="empty-search-result">',
 			'				<!-- ko if: emptySearchResult -->',
-			'				<p><b>@Resources.NoResultForCurrentFilter</b></p>',
+			'				<label>',
+			'					@Resources.NoResultForCurrentFilter',
+			'				</label>',
 			'				<!--/ko-->',
 			'			</div>',
 			'			<div class="new-teamschedule-submit-buttons">',
@@ -1215,8 +1454,7 @@
 		Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule.PartialInit(
 			fakeReadyForInteractionCallback,
 			fakeCompletelyLoadedCallback,
-			ajax,
-			fakeWindow
+			ajax
 		);
 		vm = Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule.Vm();
 	}

@@ -282,6 +282,7 @@
 				},
 				function (data, status, headers, config) {
 					vm.isForecastRunning = false;
+					vm.closeConfirmationOnForecasting = false;
 					if (data.WarningMessage && data.WarningMessage !== "") {
 						noticeSvc.warning(data.WarningMessage, 15000, true);
 					} else {
@@ -292,7 +293,7 @@
 						vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
 					}
 				},
-				function(data, status, headers, config) {
+				function (data, status, headers, config) {
 					vm.isForecastRunning = false;
 					vm.forecastModal = false;
 					vm.scenarioNotForecasted = vm.selectedWorkload.Days.length === 0;
@@ -380,20 +381,28 @@
 			);
 		}
 
-		vm.exitConfigMode = function() {
+		vm.exitConfigMode = function () {
 			if (vm.stateName.length > 0) {
 				$state.go(vm.stateName);
 			} else {
 				$state.go($state.params.returnState);
 			}
 		};
-		$scope.$on('$stateChangeStart', function(event, next, current) {
+
+		$scope.$on('$stateChangeStart', function (event, next, current) {
 			if (vm.changesMade) {
 				event.preventDefault();
 				vm.stateName = next.name;
 				vm.closeConfirmation = true;
+				return;
+			}
+
+			if (vm.isForecastRunning) {
+				event.preventDefault();
+				vm.stateName = next.name;
+				vm.closeConfirmationOnForecasting = true;
+				return;
 			}
 		});
-
 	}
 })();

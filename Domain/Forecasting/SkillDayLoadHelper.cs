@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             if (skills == null || scenario==null) return new Dictionary<ISkill, IEnumerable<ISkillDay>>();
             
-		    var skillsToLoad = skills.Where(skill => !(skill is IChildSkill)).ToArray();
+			var skillsToLoad = skills.Where(skill => !skill.IsChildSkill).ToArray();
 		    return calculateSkillSkillDayDictionary(period, scenario, skillsToLoad);
         }
 

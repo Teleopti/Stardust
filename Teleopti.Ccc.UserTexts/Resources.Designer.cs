@@ -538,6 +538,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Access management.
+        /// </summary>
+        public static string AccessManagement {
+            get {
+                return ResourceManager.GetString("AccessManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Account.
         /// </summary>
         public static string Account {
@@ -3900,6 +3909,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Available roles.
+        /// </summary>
+        public static string AvailableRoles {
+            get {
+                return ResourceManager.GetString("AvailableRoles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Available Scorecards.
         /// </summary>
         public static string AvailableScorecards {
@@ -7047,6 +7065,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to exit forecaster and discard forecast in progress?.
+        /// </summary>
+        public static string ConfirmExitOnForecasting {
+            get {
+                return ResourceManager.GetString("ConfirmExitOnForecasting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm Grouping Deletion.
         /// </summary>
         public static string ConfirmGroupingDeletion {
@@ -8093,6 +8120,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current roles.
+        /// </summary>
+        public static string CurrentRoles {
+            get {
+                return ResourceManager.GetString("CurrentRoles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Custom.
         /// </summary>
         public static string Custom {
@@ -8503,6 +8539,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string DateNavigation {
             get {
                 return ResourceManager.GetString("DateNavigation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This date is not open for shift trades for {0}..
+        /// </summary>
+        public static string DateOutOfShiftTradeOpenPeriod {
+            get {
+                return ResourceManager.GetString("DateOutOfShiftTradeOpenPeriod", resourceCulture);
             }
         }
         
@@ -13332,6 +13377,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Forecast not finished yet.
+        /// </summary>
+        public static string ForecastNotFinishedYet {
+            get {
+                return ResourceManager.GetString("ForecastNotFinishedYet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Override the forecasted values..
         /// </summary>
         public static string ForecastOverrideMsg {
@@ -13931,6 +13985,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string GrantedBySupervisor {
             get {
                 return ResourceManager.GetString("GrantedBySupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Grant role.
+        /// </summary>
+        public static string GrantRole {
+            get {
+                return ResourceManager.GetString("GrantRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Grant roles.
+        /// </summary>
+        public static string GrantRoles {
+            get {
+                return ResourceManager.GetString("GrantRoles", resourceCulture);
             }
         }
         
@@ -14561,6 +14633,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Id {
             get {
                 return ResourceManager.GetString("Id", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Identity logon.
+        /// </summary>
+        public static string IdentityLogon {
+            get {
+                return ResourceManager.GetString("IdentityLogon", resourceCulture);
             }
         }
         
@@ -16085,20 +16166,11 @@ namespace Teleopti.Ccc.UserTexts {
                 return ResourceManager.GetString("IsWorkTime", resourceCulture);
             }
         }
-
-		/// <summary>
-		///   Looks up a localized string similar to Items per page.
-		/// </summary>
-		public static string ItemsPerPage {
-			get {
-				return ResourceManager.GetString("ItemsPerPage", resourceCulture);
-			}
-		}
-
-		/// <summary>
-		///   Looks up a localized string similar to {0} items selected..
-		/// </summary>
-		public static string ItemsSelectedParameter {
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} items selected..
+        /// </summary>
+        public static string ItemsSelectedParameter {
             get {
                 return ResourceManager.GetString("ItemsSelectedParameter", resourceCulture);
             }
@@ -20858,21 +20930,12 @@ namespace Teleopti.Ccc.UserTexts {
                 return ResourceManager.GetString("NextDayColon", resourceCulture);
             }
         }
-
-		/// <summary>
-		///   Looks up a localized string similar to Next page.
-		/// </summary>
-		public static string NextPage {
-			get {
-				return ResourceManager.GetString("NextPage", resourceCulture);
-			}
-		}
-
-		/// <summary>
-		///   Looks up a localized string similar to Next
-		///Period.
-		/// </summary>
-		public static string NextPeriod {
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next
+        ///Period.
+        /// </summary>
+        public static string NextPeriod {
             get {
                 return ResourceManager.GetString("NextPeriod", resourceCulture);
             }
@@ -22002,20 +22065,20 @@ namespace Teleopti.Ccc.UserTexts {
                 return ResourceManager.GetString("NotAllowedWhenHasNonMainShiftAcitivities", resourceCulture);
             }
         }
-
-		/// <summary>
-		///   Looks up a localized string similar to Trading shifts is not allowed when there is a non-overwritable activity in the shift..
-		/// </summary>
-		public static string NotAllowedWhenHasNonOverwriteActivity {
-			get {
-				return ResourceManager.GetString("NotAllowedWhenHasNonOverwriteActivity", resourceCulture);
-			}
-		}
-
-		/// <summary>
-		///   Looks up a localized string similar to Trading shifts is not allowed since one of the shifts would be outside of the site open hours..
-		/// </summary>
-		public static string NotAllowedWhenShiftOutsideOpenHours {
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trading shifts is not allowed when there is a non-overwritable activity in the shift..
+        /// </summary>
+        public static string NotAllowedWhenHasNonOverwriteActivity {
+            get {
+                return ResourceManager.GetString("NotAllowedWhenHasNonOverwriteActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trading shifts is not allowed since one of the shifts would be outside of the site open hours..
+        /// </summary>
+        public static string NotAllowedWhenShiftOutsideOpenHours {
             get {
                 return ResourceManager.GetString("NotAllowedWhenShiftOutsideOpenHours", resourceCulture);
             }
@@ -22090,6 +22153,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoThanks {
             get {
                 return ResourceManager.GetString("NoThanks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nothing selected.
+        /// </summary>
+        public static string NothingSelected {
+            get {
+                return ResourceManager.GetString("NothingSelected", resourceCulture);
             }
         }
         
@@ -22470,20 +22542,11 @@ namespace Teleopti.Ccc.UserTexts {
                 return ResourceManager.GetString("OfferedTasks", resourceCulture);
             }
         }
-
-		/// <summary>
-		///   Looks up a localized string similar to of.
-		/// </summary>
-		public static string OfText {
-			get {
-				return ResourceManager.GetString("OfText", resourceCulture);
-			}
-		}
-
-		/// <summary>
-		///   Looks up a localized string similar to OK.
-		/// </summary>
-		public static string Ok {
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        public static string Ok {
             get {
                 return ResourceManager.GetString("Ok", resourceCulture);
             }
@@ -24496,110 +24559,47 @@ namespace Teleopti.Ccc.UserTexts {
                 return ResourceManager.GetString("People", resourceCulture);
             }
         }
-
-		/// <summary>
-		///   Looks up a localized string similar to Access management.
-		/// </summary>
-		public static string PeopleAccess {
-			get {
-				return ResourceManager.GetString("PeopleAccess", resourceCulture);
-			}
-		}
-
-		/// <summary>
-		///   Looks up a localized string similar to People.
-		/// </summary>
-		public static string PeopleAdminScreen {
+        
+        /// <summary>
+        ///   Looks up a localized string similar to People.
+        /// </summary>
+        public static string PeopleAdminScreen {
             get {
                 return ResourceManager.GetString("PeopleAdminScreen", resourceCulture);
             }
         }
-
-		/// <summary>
-		///   Looks up a localized string similar to Application logon.
-		/// </summary>
-		public static string PeopleApplicationLogon {
-			get {
-				return ResourceManager.GetString("PeopleApplicationLogon", resourceCulture);
-			}
-		}
-
-		/// <summary>
-		///   Looks up a localized string similar to People available.
-		/// </summary>
-		public static string PeopleAvailable {
+        
+        /// <summary>
+        ///   Looks up a localized string similar to People available.
+        /// </summary>
+        public static string PeopleAvailable {
             get {
                 return ResourceManager.GetString("PeopleAvailable", resourceCulture);
             }
         }
-
-		/// <summary>
-		///   Looks up a localized string similar to Available roles.
-		/// </summary>
-		public static string PeopleAvailableRoles {
-			get {
-				return ResourceManager.GetString("PeopleAvailableRoles", resourceCulture);
-			}
-		}
-
-		/// <summary>
-		///   Looks up a localized string similar to People.
-		/// </summary>
-		public static string PeopleCap {
+        
+        /// <summary>
+        ///   Looks up a localized string similar to People.
+        /// </summary>
+        public static string PeopleCap {
             get {
                 return ResourceManager.GetString("PeopleCap", resourceCulture);
             }
         }
-
-		/// <summary>
-		///   Looks up a localized string similar to Current roles.
-		/// </summary>
-		public static string PeopleCurrentRoles {
-			get {
-				return ResourceManager.GetString("PeopleCurrentRoles", resourceCulture);
-			}
-		}
-
-		/// <summary>
-		///   Looks up a localized string similar to Duplicate username in form.
-		/// </summary>
-		public static string PeopleDuplicateUsernameInForm {
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate username in form.
+        /// </summary>
+        public static string PeopleDuplicateUsernameInForm {
             get {
                 return ResourceManager.GetString("PeopleDuplicateUsernameInForm", resourceCulture);
             }
         }
-
-		/// <summary>
-		///   Looks up a localized string similar to Grant role.
-		/// </summary>
-		public static string PeopleGrantRole {
-			get {
-				return ResourceManager.GetString("PeopleGrantRole", resourceCulture);
-			}
-		}
-
-		/// <summary>
-		///   Looks up a localized string similar to Grant roles.
-		/// </summary>
-		public static string PeopleGrantRoles {
-			get {
-				return ResourceManager.GetString("PeopleGrantRoles", resourceCulture);
-			}
-		}
-
-		/// <summary>
-		///   Looks up a localized string similar to Identity logon.
-		/// </summary>
-		public static string PeopleIdentityLogon {
-			get {
-				return ResourceManager.GetString("PeopleIdentityLogon", resourceCulture);
-			}
-		}
-
-		/// <summary>
-		///   Looks up a localized string similar to People Insert Screen.
-		/// </summary>
-		public static string PeopleInsertScreen {
+        
+        /// <summary>
+        ///   Looks up a localized string similar to People Insert Screen.
+        /// </summary>
+        public static string PeopleInsertScreen {
             get {
                 return ResourceManager.GetString("PeopleInsertScreen", resourceCulture);
             }
@@ -24632,29 +24632,11 @@ namespace Teleopti.Ccc.UserTexts {
                 return ResourceManager.GetString("PeoplePeriodView", resourceCulture);
             }
         }
-
-		/// <summary>
-		///   Looks up a localized string similar to Revoke role.
-		/// </summary>
-		public static string PeopleRevokeRole {
-			get {
-				return ResourceManager.GetString("PeopleRevokeRole", resourceCulture);
-			}
-		}
-
-		/// <summary>
-		///   Looks up a localized string similar to Revoke roles.
-		/// </summary>
-		public static string PeopleRevokeRoles {
-			get {
-				return ResourceManager.GetString("PeopleRevokeRoles", resourceCulture);
-			}
-		}
-
-		/// <summary>
-		///   Looks up a localized string similar to Select all on all pages.
-		/// </summary>
-		public static string PeopleSelectAllOnAllPages {
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select all on all pages.
+        /// </summary>
+        public static string PeopleSelectAllOnAllPages {
             get {
                 return ResourceManager.GetString("PeopleSelectAllOnAllPages", resourceCulture);
             }
@@ -26075,21 +26057,12 @@ namespace Teleopti.Ccc.UserTexts {
                 return ResourceManager.GetString("Previous", resourceCulture);
             }
         }
-
-		/// <summary>
-		///   Looks up a localized string similar to Previous page.
-		/// </summary>
-		public static string PreviousPage {
-			get {
-				return ResourceManager.GetString("PreviousPage", resourceCulture);
-			}
-		}
-
-		/// <summary>
-		///   Looks up a localized string similar to Previous
-		///Period.
-		/// </summary>
-		public static string PreviousPeriod {
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Previous
+        ///Period.
+        /// </summary>
+        public static string PreviousPeriod {
             get {
                 return ResourceManager.GetString("PreviousPeriod", resourceCulture);
             }
@@ -28913,6 +28886,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Revoke {
             get {
                 return ResourceManager.GetString("Revoke", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Revoke role.
+        /// </summary>
+        public static string RevokeRole {
+            get {
+                return ResourceManager.GetString("RevokeRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Revoke roles.
+        /// </summary>
+        public static string RevokeRoles {
+            get {
+                return ResourceManager.GetString("RevokeRoles", resourceCulture);
             }
         }
         

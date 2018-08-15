@@ -523,6 +523,23 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldNotSelectableWhenOutOpenPeriod()
+		{
+			setGlobaleSetting(typeof(NotOverwriteLayerRule).FullName, true, RequestHandleOption.AutoDeny);
+			_now.Is(DateOnly.Today.Date);
+			var startDate = DateOnly.Today.AddDays(4);
+			var form = createShiftWithDifferentWFC(startDate);
+			var personTo = PersonRepository.Get(form.PersonToId);
+			var expactedReason = String.Format(Resources.DateOutOfShiftTradeOpenPeriod, personTo.Name);
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+
+			data.MultiSchedulesForShiftTrade.First().IsSelectable.Should().Be.False();
+			data.MultiSchedulesForShiftTrade.First().UnselectableReason.Should().Be.EqualTo(expactedReason);
+		}
+
+		[Test]
 		public void ShouldLoadScheduleWhenIHaveAbsence()
 		{
 			_now.Is(DateOnly.Today.Date);
@@ -617,6 +634,41 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				.WithSchedule(date.Date.AddHours(8 + hourDiff).ToString(), date.Date.AddHours(17 + hourDiff).ToString());
 
 			setPrincipal(personFromId, scenarioId);
+
+			return new ShiftTradeMultiSchedulesForm
+			{
+				StartDate = date,
+				EndDate = date,
+				PersonToId = personToId
+			};
+		}
+
+		private ShiftTradeMultiSchedulesForm createShiftWithDifferentWFC(DateOnly date)
+		{
+			var scenarioId = Guid.NewGuid();
+			var personFromId = Guid.NewGuid();
+			var personToId = Guid.NewGuid();
+			var siteOpenHour = new SiteOpenHour { IsClosed = false, TimePeriod = new TimePeriod(8, 19), WeekDay = date.DayOfWeek };
+			var skill = new Skill("must");
+			Database.WithMultiSchedulesForShiftTradeWorkflow(DateTime.Today.AddDays(10), skill)
+				.WithPerson(personFromId, "logOn", TimeZoneInfo.Utc)
+				.WithPeriod(DateOnly.MinValue.ToString(), siteOpenHour)
+				.WithTerminalDate(DateOnly.MaxValue.ToString())
+				.WithScenario(scenarioId)
+				.WithSchedule(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString())
+				.WithPerson(personToId)
+				.WithPeriod(DateOnly.MinValue.ToString(), siteOpenHour)
+				.WithTerminalDate(DateOnly.MaxValue.ToString())
+				.WithSchedule(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString());
+
+			setPrincipal(personFromId, scenarioId);
+
+			var workflowControl = new WorkflowControlSet("personToWFC");
+			workflowControl.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(1, 2);
+			workflowControl.SchedulePublishedToDate = DateTime.Today.AddDays(10);
+			workflowControl.AddSkillToMatchList(skill);
+			var personTo = PersonRepository.Get(personToId);
+			personTo.WorkflowControlSet = workflowControl; 
 
 			return new ShiftTradeMultiSchedulesForm
 			{

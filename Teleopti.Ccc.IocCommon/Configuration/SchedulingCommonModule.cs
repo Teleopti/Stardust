@@ -140,6 +140,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkShiftMinMaxCalculator>().As<IWorkShiftMinMaxCalculator>().InstancePerDependency();
 			builder.RegisterType<SchedulingCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<FullScheduling>().InstancePerLifetimeScope().ApplyAspects();
+			builder.RegisterType<SchedulingAndDayOffOptimization>().InstancePerLifetimeScope().ApplyAspects();
 
 			builder.RegisterType<ExtendSelectedPeriodForMonthlyScheduling>().SingleInstance();
 			builder.RegisterType<CorrectAlteredBetween>().SingleInstance();

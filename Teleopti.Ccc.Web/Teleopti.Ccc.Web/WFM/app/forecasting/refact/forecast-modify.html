@@ -1,5 +1,4 @@
 <div ng-if="!vm.noWorkloadFound">
-
 <div class="view-header with-desc">
 	<div class="view-title">
 		<h1>
@@ -67,7 +66,7 @@
 					<div class="con-flex">
 						<label for="campaignPercentageId" class="input-icon">
 							<i class="mdi mdi-percent">
-								<input id="campaignPercentageId" type="number" ng-change="vm.updateCampaignPreview()" min="-100" required autofocus autocomplete="off" ng-model="vm.campaignPercentage" placeholder="{{'CampaignCallsPercentSign'|translate}}" >
+								<input id="campaignPercentageId" type="number" ng-change="vm.updateCampaignPreview()" min="-100" required autofocus autocomplete="off" ng-model="vm.campaignPercentage" placeholder="{{'CampaignCallsPercentSign'|translate}}">
 							</i>
 						</label>
 					</div>
@@ -175,7 +174,7 @@
 			<div class="sub-header">
 				<h2 ng-if="vm.selectedWorkload.SkillType.DoDisplayData">{{'SelectToModify'|translate}}</h2>
 				<h2 ng-if="!vm.selectedWorkload.SkillType.DoDisplayData">{{'SkillNotSupported'|translate}}</h2>
-				<div class="head-actions panel-menu" >
+				<div class="head-actions panel-menu">
 					<div tabindex=0 ng-show="vm.selectedDayCount.length > 0" class="grow-out context-menu card-context">
 						<i class="mdi mdi-dots-vertical"></i>
 						<wfm-badge badge-model="vm.selectedDayCount.length" pulse="true" status="'notice-success'"> </wfm-badge>
@@ -193,7 +192,7 @@
 				</div>
 			</div>
 			<div class="con-row">
-				<div class="con-flex" >
+				<div class="con-flex">
 					<forecast-chart chart-id="vm.selectedWorkload.ChartId" selectable="vm.selectedWorkload.SkillType.DoDisplayData" refresh="vm.loadChart" on-click="vm.pointClick" days="vm.selectedWorkload.Days"> </forecast-chart>
 				</div>
 			</div>
@@ -319,11 +318,15 @@
 								focus-me="vm.closeConfirmation"
 								id="confirmDiscardButton"
 								ng-click="vm.changesMade=false; vm.confirmDiscardDialog = false; vm.getWorkloadForecastData(); $event.stopPropagation();"
-								class="wfm-btn wfm-btn-invis-default">{{'Yes'|translate}}</button>
+								class="wfm-btn wfm-btn-invis-default">
+							{{'Yes'|translate}}
+						</button>
 						<button type="button"
 								id="cancelDiscardButton"
 								ng-click="vm.confirmDiscardDialog=false; $event.stopPropagation();"
-								class="wfm-btn wfm-btn-invis-primary">{{'No'|translate}}</button>
+								class="wfm-btn wfm-btn-invis-primary">
+							{{'No'|translate}}
+						</button>
 					</aside>
 				</div>
 			</div>
@@ -331,10 +334,8 @@
 	</div>
 </div>
 
-<div ng-cloak
-	 class="modal-box">
-	<div ng-cloak
-		 ng-show="vm.closeConfirmation">
+<div ng-cloak class="modal-box">
+	<div ng-cloak ng-show="vm.closeConfirmation">
 		<div class="modalbg">
 			<div class="dialog-mini material-depth-1">
 				<div class="modal-inner-content">
@@ -347,17 +348,51 @@
 								focus-me="vm.closeConfirmation"
 								id="confirmExitButton"
 								ng-click="vm.changesMade=false; vm.exitConfigMode(); $event.stopPropagation();"
-								class="wfm-btn wfm-btn-invis-default">{{'Yes'|translate}}</button>
+								class="wfm-btn wfm-btn-invis-default">
+							{{'Yes'|translate}}
+						</button>
 						<button type="button"
 								id="cancelExitButton"
 								ng-click="vm.stateName=''; vm.closeConfirmation=false; $event.stopPropagation();"
-								class="wfm-btn wfm-btn-invis-primary">{{'No'|translate}}</button>
+								class="wfm-btn wfm-btn-invis-primary">
+							{{'No'|translate}}
+						</button>
 					</aside>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
+<div ng-cloak class="modal-box">
+	<div ng-cloak ng-show="vm.closeConfirmationOnForecasting">
+		<div class="modalbg">
+			<div class="dialog-mini material-depth-1">
+				<div class="modal-inner-content">
+					<h3>{{'ForecastNotFinishedYet' | translate}}</h3>
+					{{'ConfirmExitOnForecasting' | translate}}
+				</div>
+				<div class="modal-actions">
+					<aside>
+						<button type="button"
+								id="confirmExitOnForecastingButton"
+								ng-click="vm.isForecastRunning=false; vm.closeConfirmationOnForecasting=false; vm.exitConfigMode(); $event.stopPropagation();"
+								class="wfm-btn wfm-btn-invis-primary">
+							{{'Yes'|translate}}
+						</button>
+						<button type="button"
+								id="cancelExitOnForecastingButton"
+								ng-click="vm.stateName=''; vm.closeConfirmationOnForecasting=false; $event.stopPropagation();"
+								class="wfm-btn wfm-btn-invis-default">
+							{{'No'|translate}}
+						</button>
+					</aside>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div ng-cloak class="modal-box">
 	<div ng-cloak ng-show="vm.reforecastConfirmation">
 		<div class="modalbg">

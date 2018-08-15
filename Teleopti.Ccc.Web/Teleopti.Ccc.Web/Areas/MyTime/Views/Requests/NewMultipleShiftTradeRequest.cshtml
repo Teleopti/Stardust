@@ -262,7 +262,7 @@
 			<!--ko foreach: loadedSchedulePairs-->
 			<div class="shift-to-trade-row" data-bind="attr: {id: 'shift-row-' + date.valueOf()}, css:{'shift-to-trade-row-disable':!isEnable}">
 				<div class="shift-date" data-bind="text:$root.formatDate(date)"></div>
-				<div data-bind="css:{'dayoff':mySchedule && mySchedule.isDayOff && !mySchedule.isFullDayAbsence},style:{'background-color':mySchedule && mySchedule.categoryColor ? mySchedule.categoryColor: 'none', 'color':mySchedule && mySchedule.categoryColor ? $root.getTextColor(mySchedule.categoryColor) : 'none'}" class="shift-detail own-shift clear-desktop-color">
+				<div data-bind="css:{'dayoff':mySchedule && mySchedule.isDayOff && !mySchedule.isFullDayAbsence && $root.isMobile() },style:{'background-color':mySchedule && mySchedule.categoryColor && $root.isMobile() ? mySchedule.categoryColor: 'none', 'color':mySchedule && mySchedule.categoryColor && $root.isMobile() ? $root.getTextColor(mySchedule.categoryColor) : 'none'}" class="shift-detail own-shift clear-desktop-color">
 					<!--ko if:!mySchedule-->
 					<div>@Resources.NotScheduled </div>
 					<!--/ko-->
@@ -270,8 +270,8 @@
 					<!--ko if:mySchedule.isDayOff && !mySchedule.isFullDayAbsence-->
 					<div class="schedule-layer-text-container dayoff-text">
 						<span data-bind="text:mySchedule.dayOffName"></span>
-						<span class="hide-on-mobile" data-bind="visible:mySchedule.hasOvertime">(@Resources.WithOvertime)</span>
-						<span class="hide-on-mobile" data-bind="visible:mySchedule.isIntradayAbsence && !mySchedule.hasOvertime">(@Resources.WithAbsence)</span>
+						<span data-bind="visible:mySchedule.hasOvertime">(@Resources.WithOvertime)</span>
+						<span data-bind="visible:mySchedule.isIntradayAbsence && !mySchedule.hasOvertime">(@Resources.WithAbsence)</span>
 					</div>
 					<!--/ko-->
 					<!--ko if:!mySchedule.isDayOff && !mySchedule.isFullDayAbsence-->
@@ -289,7 +289,7 @@
 					<div class="schedule-layer-text-container dayoff-text">
 						<span data-bind="text:mySchedule.categoryName"></span>
 					</div>
-					<div class="shift-visual-indication-wrapper hide-on-mobile">
+					<div data-bind="visible:!$root.isMobile()" class="shift-visual-indication-wrapper">
 						<div class="shift-visual-indication">
 							<!-- ko foreach: mySchedule.layers -->
 							<div class="shift-visual-indication-block clear-background-image" data-bind="style: styleJson74947, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
@@ -298,7 +298,7 @@
 					</div>
 					<!--/ko-->
 					<!--ko if: !mySchedule.isFullDayAbsence-->
-					<div class="shift-visual-indication-wrapper hide-on-mobile">
+					<div data-bind="visible:!$root.isMobile()" class="shift-visual-indication-wrapper">
 						<div class="shift-visual-indication">
 							<!-- ko foreach: mySchedule.layers -->
 							<div class="shift-visual-indication-block" data-bind="style: styleJson74947, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
@@ -311,7 +311,7 @@
 					<!--/ko-->
 					<!--/ko-->
 				</div>
-				<div data-bind="css:{'dayoff':targetSchedule && targetSchedule.isDayOff && !targetSchedule.isFullDayAbsence},style:{'background-color':targetSchedule && targetSchedule.categoryColor ? targetSchedule.categoryColor: 'none', 'color':targetSchedule && targetSchedule.categoryColor ? $root.getTextColor(targetSchedule.categoryColor) : 'none'}" class="shift-detail shift-to-trade clear-desktop-color">
+				<div data-bind="css:{'dayoff':targetSchedule && targetSchedule.isDayOff && !targetSchedule.isFullDayAbsence && $root.isMobile() },style:{'background-color':targetSchedule && targetSchedule.categoryColor && $root.isMobile()? targetSchedule.categoryColor: 'none', 'color':targetSchedule && targetSchedule.categoryColor && $root.isMobile() ? $root.getTextColor(targetSchedule.categoryColor) : 'none'}" class="shift-detail shift-to-trade clear-desktop-color">
 					<!--ko if:!targetSchedule-->
 					<div>@Resources.NotScheduled </div>
 					<!--/ko-->
@@ -319,8 +319,8 @@
 					<!--ko if:targetSchedule.isDayOff && !targetSchedule.isFullDayAbsence-->
 					<div class="schedule-layer-text-container dayoff-text">
 						<span data-bind="text:targetSchedule.dayOffName"></span>
-						<span class="hide-on-mobile" data-bind="visible:targetSchedule.hasOvertime">(@Resources.WithOvertime)</span>
-						<span class="hide-on-mobile" data-bind="visible:targetSchedule.isIntradayAbsence && !targetSchedule.hasOvertime">(@Resources.WithAbsence)</span>
+						<span data-bind="visible:targetSchedule.hasOvertime && !$root.isMobile()">(@Resources.WithOvertime)</span>
+						<span data-bind="visible:targetSchedule.isIntradayAbsence && !targetSchedule.hasOvertime && !$root.isMobile()">(@Resources.WithAbsence)</span>
 					</div>
 					<!--/ko-->
 					<!--ko if:!targetSchedule.isDayOff && !targetSchedule.isFullDayAbsence-->
@@ -338,7 +338,7 @@
 					<div class="schedule-layer-text-container dayoff-text">
 						<span data-bind="text:targetSchedule.categoryName"></span>
 					</div>
-					<div class="shift-visual-indication-wrapper hide-on-mobile">
+					<div data-bind="visible:!$root.isMobile()" class="shift-visual-indication-wrapper">
 						<div class="shift-visual-indication">
 							<!-- ko foreach: targetSchedule.layers -->
 							<div class="shift-visual-indication-block clear-background-image" data-bind="style: styleJson74947, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
@@ -347,7 +347,7 @@
 					</div>
 					<!--/ko-->
 					<!--ko if: !targetSchedule.isFullDayAbsence-->
-					<div class="shift-visual-indication-wrapper hide-on-mobile">
+					<div data-bind="visible:!$root.isMobile()" class="shift-visual-indication-wrapper">
 						<div class="shift-visual-indication">
 							<!-- ko foreach: targetSchedule.layers -->
 							<div class="shift-visual-indication-block" data-bind="style: styleJson74947, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
@@ -360,10 +360,10 @@
 					<!--/ko-->
 					<!--/ko-->
 				</div>
-				<div class="shift-selection">					
+				<div class="shift-selection">
 					<span class="shift-trade-selection-container" data-bind="tooltip:{title:reason, placement: 'left'}">
-						<input data-bind="enable:isEnable" type="checkbox" />
-					</span>							
+						<input data-bind="enable:isEnable, checked: isSelected, click:$root.select" type="checkbox" />
+					</span>
 				</div>
 			</div>
 			<!--/ko-->
@@ -372,7 +372,68 @@
 			</div>
 		</div>
 	</div>
-	<div class="shift-trade-cart hide-on-mobile"></div>
+
+	<div data-bind="css:{'hiden': $root.isMobile()}" class="shift-trade-cart">
+		<div class="shift-trade-cart-wrapper" data-bind="visible:$root.showCart()" >
+			<div class="shift-trade-cart-container">
+				<!--ko foreach: selectedSchedulePairs-->
+				<div class="shift-cart-row">
+					<div class="shift-cart-detail">
+						<div class="shift-cart-date" data-bind="text:$root.formatDate(date)"></div>
+						<div class="shift-cart-detail-info">
+							<div class="cart-schedule my-cart">
+								<!--ko if:!mySchedule-->
+								<span>@Resources.NotScheduled</span>
+								<!--/ko-->
+								<!--ko if:mySchedule && mySchedule.isDayOff-->
+								<span class="dayoff cart-schedule-category" data-bind="text:mySchedule.dayOffName"></span>
+								<!--/ko-->
+								<!--ko if:mySchedule && !mySchedule.isDayOff-->
+								<span class="cart-schedule-category" data-bind="text:mySchedule.categoryName,style:{'background-color': mySchedule.categoryColor ? mySchedule.categoryColor: 'none', 'color': mySchedule.categoryColor ? $root.getTextColor(mySchedule.categoryColor) : 'none'}"></span>
+								<span data-bind="text:mySchedule.scheduleStart + $root.getOvernightFlag(mySchedule.scheduleStartTime(), date) + '-' + mySchedule.scheduleEnd + $root.getOvernightFlag(mySchedule.scheduleEndTime(), date)"></span>
+								<span class="shift-trade-contract" data-bind="text:mySchedule.contractTime"></span>
+								<!--/ko-->
+							</div>
+							<div class="cart-schedule tartget-cart">
+								<!--ko if:!targetSchedule-->
+								<span>@Resources.NotScheduled</span>
+								<!--/ko-->
+								<!--ko if:targetSchedule && targetSchedule.isDayOff-->
+								<span class="cart-schedule-category dayoff" data-bind="text:mySchedule.dayOffName"></span>
+								<!--/ko-->
+								<!--ko if:targetSchedule && !targetSchedule.isDayOff-->
+								<span class="cart-schedule-category" data-bind="text:targetSchedule.categoryName,style:{'background-color': targetSchedule.categoryColor ? targetSchedule.categoryColor: 'none', 'color': targetSchedule.categoryColor ? $root.getTextColor(targetSchedule.categoryColor) : 'none'}"></span>
+								<span data-bind="text:targetSchedule.scheduleStart + $root.getOvernightFlag(targetSchedule.scheduleStartTime(), date) + '-' + targetSchedule.scheduleEnd + $root.getOvernightFlag(targetSchedule.scheduleEndTime(), date)"></span>
+								<span class="shift-trade-contract" data-bind="text:targetSchedule.contractTime"></span>
+								<!--/ko-->
+							</div>
+						</div>
+					</div>
+					<div class="shift-cart-selection">
+						<button data-bind="click:$root.removeSelect" type="button" class="btn-remove">
+							<i class="glyphicon glyphicon-remove"></i>
+						</button>
+					</div>
+				</div>
+				<!--/ko-->
+			</div>
+			<div class="shift-trade-request-container">
+				<div class="form-group">
+					<input id="Request-add-shift-trade-subject-input" class="form-control input-block-level" type="text" data-bind="value: subject" placeholder="@Resources.Subject" maxlength="80" />
+				</div>
+				<div class="form-group">
+					<textarea id="Request-add-shift-trade-message-input" class="form-control input-block-level" data-bind="value: message, valueUpdate: 'afterkeydown', event:{change : checkMessageLength}" rows="4" placeholder="@Resources.Message" />
+				</div>
+				<div class="pull-right">
+					<button class="btn cancel-button" data-bind="click: cancelRequest">@Resources.Cancel</button>
+					<button class="btn btn-primary send-button" data-bind="enable: isSendEnabled, click: sendRequest">@Resources.Send</button>
+				</div>
+				<div class="error" data-bind="html: errorMessage"></div>
+
+			</div>
+		</div>
+	</div>
+	
 </div>
 
 <div class="shift-trade-no-possible-trades alert alert-info" data-bind="visible: noPossibleShiftTrades()">

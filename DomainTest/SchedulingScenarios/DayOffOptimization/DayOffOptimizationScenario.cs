@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			if(_resourcePlannerDayOffOptimizationIslands47208)
 				toggleManager.Enable(Toggles.ResourcePlanner_DayOffOptimizationIslands_47208);
 			if(_resourcePlannerLessResourcesXxl74915)
-				toggleManager.Enable(Toggles.ResourcePlanner_LessResourcesXXL_74915);
+				toggleManager.Enable(Toggles.ResourcePlanner_MergeSchedulingAndDO_76496);
 		}
 
 		public void OnBefore()

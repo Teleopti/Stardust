@@ -26,6 +26,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_appLogonNames = new Dictionary<Guid, string>();
 		}
 
+		public IPerson Has(Guid personId)
+		{
+			var person = new Person().WithId(personId);
+			_storage.Add(person);
+			return person;
+		}
+
 		public void Has(IPerson person)
 		{
 			_storage.Add(person);

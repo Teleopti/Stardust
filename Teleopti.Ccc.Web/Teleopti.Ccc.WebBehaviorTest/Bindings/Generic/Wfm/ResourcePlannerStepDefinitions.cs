@@ -1,6 +1,7 @@
 using System;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse;
@@ -27,13 +28,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Then(@"Planning period should have been scheduled")]
 		public void ThenPlanningPeriodShouldHaveBeenScheduled()
 		{
-			Browser.Interactions.AssertAnyContains("p", UserTexts.Resources.AgentsSuccessfullyScheduled);
+			Browser.Interactions.AssertExists(".notice-success");
+			Browser.Interactions.AssertVisibleUsingJQuery(".heatmap");
 		}
 		
 		[When(@"I click schedule")]
 		public void WhenIClickSchedule()
 		{
-			Browser.Interactions.Click(".test-schedule-button:enabled");
+			Browser.Interactions.Click(".schedule-button:enabled");
 		}
 		[Then(@"I should see updated period label from '(.*)'to '(.*)'")]
 		public void ThenIShouldSeeUpdatedPeriodLabelFromTo(DateTime fromDate, DateTime toDate)
@@ -54,7 +56,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I open planning period")]
 		public void WhenIOpenPlanningPeriod()
 		{
-			Browser.Interactions.Click(".planingperiod-container");
+			Browser.Interactions.Click(".planingperiod-container .wfm-btn");
 		}
 
 

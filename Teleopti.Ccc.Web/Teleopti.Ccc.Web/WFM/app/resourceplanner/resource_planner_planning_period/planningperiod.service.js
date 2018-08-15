@@ -16,8 +16,8 @@
 				lastJobStatus: { method: 'GET', params: { id: "@id" }, url: planningPeriodBaseUrl + '/status' },
 				lastJobResult: { method: 'GET', params: { id: "@id" }, url: planningPeriodBaseUrl + '/result' },
 				publishPeriod: { method: 'POST', params: { id: "@id" }, url: planningPeriodBaseUrl + '/publish' },
-				schedule: { method: 'POST', params: { id: "@id", runAsynchronously: function (d) { return d.runAsynchronously } }, url: planningPeriodBaseUrl + '/schedule' },
-				intraOptimize: { method: 'POST', params: { id: '@id', runAsynchronously: function (d) { return d.runAsynchronously } }, url: planningPeriodBaseUrl + '/optimizeintraday' },
+				schedule: { method: 'POST', params: { id: "@id" }, url: planningPeriodBaseUrl + '/schedule' },
+				intraOptimize: { method: 'POST', params: { id: '@id' }, url: planningPeriodBaseUrl + '/optimizeintraday' },
 				getValidation: { method: 'GET', params: { id: "@id" }, url: planningPeriodBaseUrl + '/validation' },
 				clear: { method: 'DELETE', params: { id: "@id" }, url: planningPeriodBaseUrl + '/schedule' },
 

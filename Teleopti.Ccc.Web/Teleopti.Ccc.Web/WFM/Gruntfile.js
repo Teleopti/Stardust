@@ -70,32 +70,6 @@ module.exports = function(grunt) {
 				}
 			}
 		},
-		sass: {
-			dev: {
-				options: {
-					includePaths: ['node_modules/teleopti-styleguide/styleguide/sass'],
-					outputStyle: 'nested'
-				},
-				dist: {
-					files: {
-						'css/style_classic.css': ['css/style.scss'],
-						'css/style_dark.css': ['css/darkstyle.scss']
-					}
-				}
-			},
-			prod: {
-				options: {
-					includePaths: ['node_modules/teleopti-styleguide/styleguide/sass'],
-					outputStyle: 'compressed'
-				},
-				dist: {
-					files: {
-						'css/style_classic.css': ['css/style.scss'],
-						'css/style_dark.css': ['css/darkstyle.scss']
-					}
-				}
-			}
-		},
 		less: {
 			development: {
 				options: {
@@ -470,7 +444,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-less');
-	grunt.loadNpmTasks('grunt-sass');
 	grunt.loadNpmTasks('grunt-karma');
 	grunt.loadNpmTasks('grunt-iisexpress');
 	grunt.loadNpmTasks('grunt-msbuild');
@@ -491,7 +464,6 @@ module.exports = function(grunt) {
 	grunt.registerTask('devDistWebpack', ['ngtemplates', 'exec:webpackDevDist', 'exec:ngbuild_dev']);
 	grunt.registerTask('buildAngularJsPart', [
 		'ngtemplates',
-		'sass:dev',
 		'less:development',
 		'imageEmbed',
 		'concat:distCssDependencies',
@@ -526,7 +498,6 @@ module.exports = function(grunt) {
 	grunt.registerTask('devDistWatch', ['devDist', 'watch:dev']);
 	grunt.registerTask('dist', [
 		'ngtemplates',
-		'sass:prod',
 		'less:production',
 		'imageEmbed',
 		'concat:distCssDependencies',
