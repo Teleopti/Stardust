@@ -420,7 +420,6 @@
     <Compile Include="SchedulingScenarios\Islands\CommandHandler\ResourcePlannerCommandHandlerTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\CommandHandler\SUT.cs" />
     <Compile Include="SchedulingScenarios\Islands\IslandModelCompleteTest.cs" />
-    <Compile Include="SchedulingScenarios\SchedulingAndDO\SchedulingAndDayOffTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\ConcurrencyDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingCommandHandlerExternalStaffDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\SyncInFatClientProcessEventPublisher_SimulateNoNewThreads.cs" />

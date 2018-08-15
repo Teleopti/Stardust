@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			var jobResult = new JobResult(JobCategory.WebSchedule, planningPeriod.Range, _loggedOnUser.CurrentUser(), DateTime.UtcNow);
 			_jobResultRepository.Add(jobResult);
 			planningPeriod.JobResults.Add(jobResult);
-			_eventPopulatingPublisher.Publish(new SchedulingAndDayOffWasOrdered
+			_eventPopulatingPublisher.Publish(new WebScheduleStardustEvent
 			{
 				PlanningPeriodId = planningPeriodId,
 				JobResultId = jobResult.Id.Value

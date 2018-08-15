@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			JobResultRepository.Add(jobResult);
 			PlanningPeriodRepository.Add(planningPeriod);
 
-			var reqEvent = new SchedulingAndDayOffWasOrdered
+			var reqEvent = new WebScheduleStardustEvent
 			{
 				PlanningPeriodId = planningPeriod.Id.Value,
 				LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(),
