@@ -1451,7 +1451,7 @@ select.time-input {
 /*Select2 styles*/
 .select2-container .select2-choice .select2-arrow {
 	border: none;
-	width: 37px;
+	width: 35px;
 	text-align: center;
 }
 .select2-container .select2-choice .select2-arrow b {
@@ -1462,7 +1462,6 @@ select.time-input {
 	font-family: 'Glyphicons Halflings';
 	font-style: normal;
 	font-weight: 300;
-	line-height: 1;
 	-webkit-font-smoothing: antialiased;
 	transform: scale(1);
 }
@@ -1475,6 +1474,10 @@ select.time-input {
 }
 .select2-container .select2-choice .select2-arrow b::before {
 	content: '\e114';
+}
+
+.select2-container .select2-choice > .select2-chosen {
+	margin-right: 35px;
 }
 .select2-search input {
 	border-color: rgba(0, 0, 0, 0.1);

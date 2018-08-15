@@ -1,5 +1,6 @@
 ﻿Teleopti.MyTimeWeb.Schedule.NewTeamScheduleViewModel = function(
 	filterChangedCallback,
+	loadGroupAndTeams,
 	setDraggableScrollBlockOnDesktop
 ) {
 	var self = this,
@@ -15,17 +16,18 @@
 	self.isHostAMobile = Teleopti.MyTimeWeb.Common.IsHostAMobile();
 	self.isHostAniPad = Teleopti.MyTimeWeb.Common.IsHostAniPad();
 
-	self.isMobileEnabled = ko.observable(
-		self.isHostAMobile && Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_NewTeamScheduleView_75989')
-	);
-	self.isDesktopEnabled = ko.observable(
-		!self.isHostAMobile && Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_NewTeamScheduleViewDesktop_76313')
-	);
-	
+	self.isMobileEnabled =
+		self.isHostAMobile && Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_NewTeamScheduleView_75989');
+	self.isDesktopEnabled =
+		!self.isHostAMobile && Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_NewTeamScheduleViewDesktop_76313');
+
 	self.selectedDate = ko.observable(moment());
 	self.displayDate = ko.observable(self.selectedDate().format(dateOnlyFormat));
 	self.availableTeams = ko.observableArray();
 	self.selectedTeam = ko.observable();
+	self.selectedTeamName = ko.observable();
+	self.loadGroupAndTeams = loadGroupAndTeams;
+	self.isTeamsAndGroupsLoaded = ko.observable(false);
 	self.selectedTeamIds = [];
 	self.defaultTeamId = '';
 	self.scheduleContainerHeight = ko.observable(0);
@@ -76,14 +78,26 @@
 		self.filterChangedCallback(nextDate);
 	};
 
-	self.toggleFilterPanel = function() {
-		self.isPanelVisible(!self.isPanelVisible());
+	self.openTeamSelectorPanel = function(data, event) {
+		var sibling = $($(event.target).siblings()[0]);
+		if (self.isTeamsAndGroupsLoaded()) {
+			sibling.find('a.select2-choice').trigger('mousedown');
+		} else {
+			sibling.find('a.select2-choice span.select2-arrow b').addClass('loading-teams-and-groups');
+
+			self.loadGroupAndTeams(function() {
+				sibling.find('a.select2-choice').trigger('mousedown');
+				sibling.find('a.select2-choice span.select2-arrow b').removeClass('loading-teams-and-groups');
+
+				self.isTeamsAndGroupsLoaded(true);
+			});
+		}
 	};
 
 	self.cancelClick = function() {
 		self.searchNameText(self.filter.searchNameText);
 		self.selectedTeam(self.filter.selectedTeamIds[0]);
-		self.toggleFilterPanel();
+		self.isPanelVisible(false);
 	};
 
 	self.submitSearchForm = function() {
@@ -109,17 +123,31 @@
 		}
 	};
 
-	self.readTeamsData = function (data) {
+	self.readTeamsData = function(data) {
 		setAvailableTeams(data.allTeam, data.teams);
 	};
 
 	self.readDefaultTeamData = function(data) {
 		disposeSelectedTeamSubscription();
 		self.defaultTeamId = data.DefaultTeam;
-		self.selectedTeam(data.DefaultTeam);
 		self.selectedTeamIds = [];
 		self.selectedTeamIds.push(data.DefaultTeam);
 		self.filter.selectedTeamIds = self.selectedTeamIds.concat();
+
+		setAvailableTeams(null, [
+			{
+				PageId: '',
+				children: [
+					{
+						id: data.DefaultTeam,
+						text: data.DefaultTeamName
+					}
+				],
+				text: ''
+			}
+		]);
+		self.selectedTeam(data.DefaultTeam);
+		self.selectedTeamName(data.DefaultTeamName);
 		setSelectedTeamSubscription();
 	};
 
@@ -150,7 +178,7 @@
 		self.emptySearchResult(data.AgentSchedules.length == 0);
 
 		if (!self.emptySearchResult() && self.isPanelVisible()) {
-			self.toggleFilterPanel();
+			self.isPanelVisible(false);
 		}
 
 		setDraggableScrollBlockOnDesktop && setDraggableScrollBlockOnDesktop();
@@ -234,34 +262,22 @@
 
 	function setSelectedTeamSubscription() {
 		self.selectedTeamSubscription = self.selectedTeam.subscribe(function(value) {
-			if (value === '-1') {
+			if (value === '00000000-0000-0000-0000-000000000000') {
 				setAllTeams();
 			} else {
 				self.selectedTeamIds = [];
 				self.selectedTeamIds.push(value);
 			}
+			if (self.isTeamsAndGroupsLoaded() && self.isDesktopEnabled) {
+				self.submitSearchForm();
+			}
 		});
 	}
 
 	function setAllTeams() {
-		var businessHierarchyGroup = undefined;
-		var selectedTeams = [];
-		var allGroups = self.availableTeams();
-		for (var i = 0; i < allGroups.length; i++) {
-			var group = allGroups[i];
-			// Only get teams from business hierarchy
-			if (group.PageId === '6ce00b41-0722-4b36-91dd-0a3b63c545cf') {
-				businessHierarchyGroup = group;
-				break;
-			}
-		}
-
-		if (businessHierarchyGroup != undefined) {
-			selectedTeams = businessHierarchyGroup.children.map(function(e) {
-				return e.id;
-			});
-		}
-		self.selectedTeamIds = selectedTeams;
+		self.selectedTeamIds = self.availableTeams()[1].children.map(function(c) {
+			return c.id;
+		});
 	}
 
 	function disposeSelectedTeamSubscription() {
@@ -380,7 +396,7 @@
 
 	function setAvailableTeams(allTeam, teams) {
 		if (allTeam !== null) {
-			allTeam.id = -1;
+			allTeam.id = '00000000-0000-0000-0000-000000000000';
 
 			if (teams.length > 1) {
 				if (teams[0] && teams[0].children != null) {
