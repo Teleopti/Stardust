@@ -9,7 +9,7 @@
 			}
 		});
 	};
-	
+
 	self.loadDefaultTeam = function(callback) {
 		ajax.Ajax({
 			url: '../api/TeamSchedule/DefaultTeam',
@@ -19,17 +19,18 @@
 		});
 	};
 
-	self.loadScheduleData = function (date, paging, filter, callback) {
+	self.loadScheduleData = function(date, paging, filter, callback) {
 		ajax.Ajax({
 			url: '../api/TeamSchedule/TeamSchedule',
-			dataType: "json",
+			dataType: 'json',
 			type: 'POST',
 			contentType: 'application/json; charset=utf-8',
 			data: JSON.stringify({
 				SelectedDate: date,
 				ScheduleFilter: {
 					teamIds: filter.selectedTeamIds.join(','),
-					searchNameText: filter.searchNameText
+					searchNameText: filter.searchNameText,
+					isDayOff: filter.isDayOff
 				},
 				Paging: {
 					Take: paging == null ? 20 : paging.take,

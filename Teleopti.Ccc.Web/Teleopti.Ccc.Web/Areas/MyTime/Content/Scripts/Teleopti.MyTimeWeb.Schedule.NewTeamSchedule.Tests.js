@@ -855,6 +855,21 @@
 		);
 	});
 
+	test("should filter agents' day off after turn on show only day off toggle on desktop", function() {
+		$('body').append(agentSchedulesHtml);
+
+		if (fakeOriginalAgentSchedulesData.length > 0) {
+			fakeOriginalAgentSchedulesData[0].IsDayOff = true;
+		}
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+		$('.new-teamschedule-day-off-toggle input').click();
+
+		equal(completeLoadedCount, 2);
+		equal($('.teammates-schedules-container .dayoff').length == 1, true);
+	});
+
 	function setUpFakeData() {
 		fakeAvailableTeamsData = {
 			allTeam: { id: 'allTeams', text: 'All Teams' },
@@ -1264,6 +1279,10 @@
 			'				</li>',
 			'				<!-- /ko -->',
 			'				<!-- ko ifnot: isHostAMobile -->',
+			'				<li class="new-teamschedule-day-off-toggle">',
+			'					<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff"/>',
+			'					<label for="show-only-day-off-switch">Day off switch</label>',
+			'				</li>',
 			'				<li class="new-teamschedule-filter-component relative">',
 			'					<div data-bind="click: openTeamSelectorPanel"></div>',
 			'					<select id="teams-and-groups-selector" data-bind="foreach: availableTeams, select2: {value: selectedTeam}">',
@@ -1392,7 +1411,7 @@
 			'				<label>',
 			'					@Resources.Team:',
 			'				</label>',
-			'				<select data-bind="foreach: availableTeams, select2: { value: selectedTeam}" id="team-selection">',
+			'				<select data-bind="foreach: availableTeams, select2: { value: selectedTeam}">',
 			'					<optgroup data-bind="attr: { label: text }, foreach: children">',
 			'						<option data-bind="text: text, value: id"></option>',
 			'					</optgroup>',

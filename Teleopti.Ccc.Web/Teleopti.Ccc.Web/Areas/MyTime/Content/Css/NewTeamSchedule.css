@@ -3,11 +3,9 @@
 	overflow-x: hidden;
 	max-height: calc(100vh - 50px - 5px);
 }
-
 .new-teamschedule-view-nav {
 	padding: 0;
 }
-
 .new-teamschedule-view-nav .navbar-teleopti {
 	min-width: 600px;
 	justify-content: space-between;
@@ -17,11 +15,9 @@
 	align-items: center;
 	height: 50px;
 }
-
 .new-teamschedule-view-nav .navbar-teleopti > li > * {
 	cursor: pointer;
 }
-
 .new-teamschedule-view-nav input.form-control {
 	background: transparent !important;
 	border-color: white;
@@ -30,11 +26,9 @@
 	font-size: 1.1em;
 	font-weight: bold;
 }
-
 .new-teamschedule-view-nav span.input-group-btn .btn.btn-default {
 	padding: 9px 10px;
 }
-
 .new-teamschedule-view-nav .input-group {
 	width: 192px;
 }
@@ -53,12 +47,10 @@
 		padding-right: 15px;
 	}
 }
-
 .new-teamschedule-view i,
 .select2-container .select2-choice .select2-arrow {
 	transform: scale(1.3);
 }
-
 .new-teamschedule-view-nav .submenu li {
 	display: flex;
 	flex-direction: column;
@@ -66,6 +58,43 @@
 	white-space: nowrap;
 	min-width: 35px;
 	margin: 0 10px;
+}
+.new-teamschedule-day-off-toggle input[type='checkbox'] {
+	height: 0;
+	width: 0;
+	visibility: hidden;
+}
+.new-teamschedule-day-off-toggle label {
+	cursor: pointer;
+	text-indent: -9999px;
+	width: 40px;
+	height: 20px;
+	background: grey;
+	display: block;
+	border-radius: 100px;
+	position: relative;
+}
+.new-teamschedule-day-off-toggle label:after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 20px;
+	height: 20px;
+	background: #fff;
+	border-radius: 20px;
+	transition: 0.3s;
+}
+.new-teamschedule-day-off-toggle input:checked + label {
+	background: #bada55;
+	transition: 0.4s;
+}
+.new-teamschedule-day-off-toggle input:checked + label:after {
+	left: calc(100%);
+	transform: translateX(-100%);
+}
+.new-teamschedule-day-off-toggle label:active:after {
+	width: 20px;
 }
 .new-teamschedule-view-nav .submenu li.new-teamschedule-filter-component {
 	min-width: 220px;
@@ -105,12 +134,10 @@
 	border-radius: 100%;
 	animation: loadingTeamsAndGroups 1.5s infinite ease;
 }
-
 @keyframes loadingTeamsAndGroups {
 	0% {
 		transform: rotate(-0deg);
 	}
-
 	100% {
 		transform: rotate(-360deg);
 	}
@@ -141,27 +168,22 @@
 .new-teamschedule-view-nav .submenu li:first-child {
 	margin-left: 15px;
 }
-
 .new-teamschedule-view-nav .submenu li.mobile-datepicker {
 	padding: 0 5px 0 0;
 	max-width: 329px;
 	width: 192px;
 }
-
 .new-teamschedule-view-nav .submenu li.mobile-datepicker .moment-datepicker {
 	border: none;
 	text-decoration: none !important;
 	color: white !important;
 }
-
 .new-teamschedule-view-nav .submenu li.mobile-datepicker > .input-group {
 	padding: 0;
 }
-
 .new-teamschedule-view-nav .submenu li.mobile-datepicker .date-input-style {
 	min-width: 80px;
 }
-
 .new-teamschedule-view-nav .teamschedule-filter .select2-container {
 	margin: 0 !important;
 	border-radius: 0;
@@ -169,7 +191,6 @@
 	box-shadow: none !important;
 	width: 100% !important;
 }
-
 .formatted-date-text {
 	font-weight: bold;
 	color: white;
@@ -178,18 +199,15 @@
 	width: 120px;
 	padding: 10px 5px !important;
 }
-
 .new-teamschedule-view > .container {
 	height: calc(100% - 50px);
 	overflow: hidden;
 	padding: 10px 0 20px 0;
 }
-
 .new-teamschedule-view .tooltip.top {
 	margin: 0;
 	min-width: 120px;
 }
-
 .new-teamschedule-view .mobile-timeline {
 	width: 30px;
 	min-width: 30px;
@@ -199,7 +217,6 @@
 	z-index: 10;
 	text-align: right;
 }
-
 .new-teamschedule-view .mobile-timeline-label {
 	font-size: 10px;
 	width: 100%;
@@ -209,7 +226,6 @@
 	line-height: 1;
 	padding-right: 1px;
 }
-
 .new-teamschedule-view .timeline-margin-block {
 	position: relative;
 	z-index: 10;
@@ -219,7 +235,6 @@
 	border-right: 1px solid #dfdfdf;
 	background: white;
 }
-
 .new-teamschedule-agent-name.my-name.relative {
 	width: 100px;
 	min-width: 100px;
@@ -236,7 +251,6 @@
 	top: 0;
 	cursor: default;
 }
-
 .agent-name-row.container.relative {
 	height: 50px;
 	width: 100%;
@@ -247,17 +261,14 @@
 	overflow: visible;
 	z-index: 10;
 }
-
 .agent-name-row.container.relative > div {
 	display: inline-block;
 	font-size: 0;
 }
-
 .agent-name-row.container.relative::before,
 .agent-name-row.container.relative::after {
 	display: none;
 }
-
 .new-teamschedule-view .teammates-agent-name-row.relative {
 	white-space: nowrap;
 	font-size: 0;
@@ -266,7 +277,6 @@
 	top: 0;
 	overflow: visible;
 }
-
 .new-teamschedule-agent-name {
 	height: 50px;
 	width: 80px;
@@ -280,15 +290,12 @@
 	overflow: visible;
 	cursor: pointer;
 }
-
 .teammates-agent-name-row .new-teamschedule-agent-name:first-child {
 	border-left: 1px solid rgba(0, 0, 0, 0.1);
 }
-
 .teammates-agent-name-row .new-teamschedule-agent-name:last-child {
 	border-right: 1px solid rgba(0, 0, 0, 0.1);
 }
-
 .new-teamschedule-agent-name .text-name {
 	width: 100%;
 	height: calc(100% - 18px);
@@ -303,7 +310,6 @@
 	padding: 3px 2px 2px;
 	line-height: 1;
 }
-
 .new-teamschedule-agent-name .shift-category-cell {
 	width: calc(100% - 2px);
 	position: absolute;
@@ -315,7 +321,6 @@
 	display: inline-block;
 	font-weight: normal;
 }
-
 .agent-index-num {
 	width: 50px;
 	height: 20px;
@@ -326,7 +331,6 @@
 	width: 10px;
 	height: 10px;
 }
-
 .new-teamschedule-table.relative {
 	-webkit-overflow-scrolling: touch;
 	overflow-y: auto;
@@ -338,11 +342,9 @@
 	display: flex;
 	z-index: 9;
 }
-
 .new-teamschedule-table::-webkit-scrollbar {
 	width: 5px;
 }
-
 .new-teamschedule-table::-webkit-scrollbar-thumb {
 	border-radius: 10px;
 	background: rgba(0, 0, 0, 0.3);
@@ -350,7 +352,6 @@
 	-webkit-box-shadow: none;
 	-moz-box-shadow: none;
 }
-
 .new-teamschedule-view .my-schedule-column.relative {
 	left: 0;
 	width: 100px;
@@ -362,7 +363,6 @@
 	z-index: 15;
 	background: #f9f9f9;
 }
-
 .teammates-schedules-container.relative {
 	width: 1000px;
 	left: 0;
@@ -373,11 +373,9 @@
 	font-size: 0;
 	z-index: 9;
 }
-
 .teammates-schedules-container.relative > div {
 	overflow: visible;
 }
-
 .new-teamschedule-view .teammates-schedules-column {
 	height: 100%;
 	width: 80px;
@@ -386,7 +384,6 @@
 	font-size: 14px;
 	display: inline-block;
 }
-
 .teammates-agent-name-row > span:nth-of-type(2n),
 .new-teamschedule-view .teammates-schedules-column:nth-child(2n) {
 	background: rgba(200, 200, 200, 0.05);
@@ -399,13 +396,11 @@ div.teammates-schedules-column:last-child {
 div.teammates-schedules-column:last-of-type .agent-name {
 	border-right: 1px solid rgba(0, 0, 0, 0.1);
 }
-
 .new-teamschedule-view .new-teamschedule-layer-container {
 	display: inline-block;
 	width: 100%;
 	height: 100%;
 }
-
 .new-teamschedule-view .new-teamschedule-layer-container strong {
 	display: inline-block;
 	width: 100%;
@@ -416,11 +411,9 @@ div.teammates-schedules-column:last-of-type .agent-name {
 	white-space: nowrap;
 	max-height: 100%;
 }
-
 .teammates-schedules-container .new-teamschedule-layer-container strong {
 	white-space: normal;
 }
-
 .new-teamschedule-view .new-teamschedule-layer {
 	text-align: center;
 	border-left: 0;
@@ -430,21 +423,17 @@ div.teammates-schedules-column:last-of-type .agent-name {
 	overflow: hidden;
 	z-index: 1;
 }
-
 .new-teamschedule-view .new-teamschedule-layer:first-of-type {
 	border-top-left-radius: 3px;
 	border-top-right-radius: 3px;
 }
-
 .new-teamschedule-view .new-teamschedule-layer.last-layer {
 	border-bottom-left-radius: 3px;
 	border-bottom-right-radius: 3px;
 }
-
 .new-teamschedule-view .new-teamschedule-layer .glyphicon {
 	transform: scale(1);
 }
-
 .new-teamschedule-view .not-scheduled-text {
 	position: absolute;
 	top: 50%;
@@ -458,14 +447,12 @@ div.teammates-schedules-column:last-of-type .agent-name {
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
-
 .new-teamschedule-layer-container .dayoff {
 	margin-top: 50px;
 	height: calc(100% - 50px - 50px - 10px);
 	width: calc(100%);
 	border-radius: 4px;
 }
-
 .new-teamschedule-view .dayoff .dayoff-text {
 	position: absolute;
 	top: 50%;
@@ -475,28 +462,23 @@ div.teammates-schedules-column:last-of-type .agent-name {
 	font-weight: bold;
 	text-align: center;
 }
-
 .new-teamschedule-view .new-teamschedule-layer .activity-info {
 	line-height: 1;
 	white-space: normal;
 	font-size: 14px;
 	max-height: 100%;
 }
-
 .new-teamschedule-view .displayblock {
 	white-space: nowrap;
 	opacity: 0.8;
 	font-size: 11.5px;
 }
-
 .new-teamschedule-view .teammates-schedules-column .new-teamschedule-layer-container .displayblock {
 	display: none;
 }
-
 .new-teamschedule-view .form-control[disabled] {
 	background-color: #f1f1f1;
 }
-
 .teamschedule-scroll-block-container {
 	width: calc(100% - 30px - 100px);
 	height: 20px;
@@ -506,7 +488,6 @@ div.teammates-schedules-column:last-of-type .agent-name {
 	border-radius: 9px;
 	overflow: visible;
 }
-
 .teamschedule-scroll-block {
 	width: 100px;
 	height: 100%;
@@ -523,11 +504,9 @@ div.teammates-schedules-column:last-of-type .agent-name {
 	align-items: center;
 	color: white;
 }
-
 .teamschedule-scroll-block i {
 	transform: scale(1.2);
 }
-
 .new-teamschedule-panel {
 	position: absolute;
 	top: 1px;
@@ -544,41 +523,33 @@ div.teammates-schedules-column:last-of-type .agent-name {
 	padding: 10px 15px;
 	z-index: 100;
 }
-
 .new-teamschedule-panel > * {
 	margin: 0 0 5px 0;
 	width: 100%;
 }
-
 .new-teamschedule-filter-component .select2-container {
 	width: 100% !important;
 }
-
 .new-teamschedule-panel .form-control:focus {
 	outline: none;
 	box-shadow: none;
 	border-color: #5897fb;
 }
-
 .new-teamschedule-view .empty-search-result label {
 	margin: 0;
 	color: orange;
 }
-
 .new-teamschedule-submit-buttons {
 	display: flex;
 	justify-content: space-between;
 }
-
 .new-teamschedule-submit-buttons button {
 	width: 45%;
 }
-
 .new-teamschedule-submit-buttons button.btn-default {
 	border-color: #ccc;
 	background: #ccc;
 }
-
 /*On mobile*/
 .new-teamschedule-view.new-teamschedule-view-mobile,
 .new-teamschedule-view.new-teamschedule-view-ipad {
@@ -598,7 +569,6 @@ div.teammates-schedules-column:last-of-type .agent-name {
 .new-teamschedule-view.new-teamschedule-view-ipad > .container {
 	padding: 10px 0 0 0;
 }
-
 .new-teamschedule-view-mobile .new-teamschedule-view-nav .navbar-teleopti {
 	min-width: initial;
 	justify-content: space-between;
@@ -664,23 +634,19 @@ div.teammates-schedules-column:last-of-type .agent-name {
 	right: 0;
 	box-shadow: 0 -2px 2px 2px rgba(0, 0, 0, 0.2);
 }
-
 .new-teamschedule-view-mobile .new-teamschedule-panel,
 .new-teamschedule-view-ipad .new-teamschedule-panel {
 	cursor: pointer;
 }
-
 .new-teamschedule-submit-buttons {
 	display: flex;
 	justify-content: space-between;
 	margin-bottom: 0;
 }
-
 .new-teamschedule-view-mobile .teamschedule-scroll-block-container,
 .new-teamschedule-view-ipad .teamschedule-scroll-block-container {
 	display: none;
 }
-
 /*On iPad*/
 /* .new-teamschedule-agent-name.my-name.relative {
 		width: 101px;

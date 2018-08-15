@@ -340,6 +340,17 @@ Teleopti.MyTimeWeb.Common = (function($) {
 		return rgb;
 	}
 
+	function _rgbToHex(rgb) {
+		if (rgb.charAt(0) === '#') return rgb;
+		var ds = rgb.split(/\D+/);
+		var decimal = Number(ds[1]) * 65536 + Number(ds[2]) * 256 + Number(ds[3]);
+		var digits = 6;
+		var hexString = decimal.toString(16);
+		while (hexString.length < digits) hexString += '0';
+
+		return '#' + hexString;
+	}
+
 	function _rightPadNumber(number, padding) {
 		var formattedNumber = padding + number;
 		var start = formattedNumber.length - padding.length;
@@ -404,7 +415,7 @@ Teleopti.MyTimeWeb.Common = (function($) {
 
 	function _convertColorToRGB(color) {
 		if (!color) {
-			return color;
+			return '';
 		}
 		if (color.indexOf('#') > -1) {
 			return color;
@@ -504,6 +515,7 @@ Teleopti.MyTimeWeb.Common = (function($) {
 		GetTextColorBasedOnBackgroundColor: function(backgroundColor) {
 			return _getTextColorBasedOnBackgroundColor(backgroundColor);
 		},
+		RGBTohex: _rgbToHex,
 		IsRtl: function() {
 			return $('html').attr('dir') == 'rtl';
 		},

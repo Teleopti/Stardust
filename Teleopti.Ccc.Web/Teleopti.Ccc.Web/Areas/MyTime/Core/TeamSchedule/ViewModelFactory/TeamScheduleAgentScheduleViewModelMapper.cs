@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Interfaces.Domain;
 
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			{
 				var periods = new List<TeamScheduleAgentScheduleLayerViewModel>();
 				var layers = agentInTeamScheduleViewModel.ScheduleLayers;
-				if (layers != null)
+				if (layers != null && layers.Any() && !agentInTeamScheduleViewModel.IsDayOff)
 				{
 					var diff = (decimal)(endTime - startTime).Ticks;
 					foreach (var layer in layers)
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 						periods.Add(scheduleLayerViewModel);
 					}
 				}
-				var model = new TeamScheduleAgentScheduleViewModel
+				result.Add(new TeamScheduleAgentScheduleViewModel
 				{
 					Periods = periods,
 					Name = agentInTeamScheduleViewModel.Name,
@@ -45,8 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 					DayOffName = agentInTeamScheduleViewModel.DayOffName,
 					IsNotScheduled = agentInTeamScheduleViewModel.IsNotScheduled,
 					ShiftCategory = agentInTeamScheduleViewModel.ShiftCategory
-				};
-				result.Add(model);
+				});
 			}
 			return result;
 		}

@@ -9,8 +9,9 @@
 	cleanOvernightNumber
 ) {
 	var self = this;
-	var userTexts = Teleopti.MyTimeWeb.Common.GetUserTexts();
-	var constants = Teleopti.MyTimeWeb.Common.Constants;
+	var common = Teleopti.MyTimeWeb.Common;
+	var userTexts = common.GetUserTexts();
+	var constants = common.Constants;
 
 	self.title = ko.observable(layer.Title);
 	self.hasMeeting = ko.computed(function() {
@@ -147,17 +148,6 @@
 		return self.height() + 'px';
 	});
 	self.overTimeLighterBackgroundStyle = ko.computed(function() {
-		var rgbTohex = function(rgb) {
-			if (rgb.charAt(0) === '#') return rgb;
-			var ds = rgb.split(/\D+/);
-			var decimal = Number(ds[1]) * 65536 + Number(ds[2]) * 256 + Number(ds[3]);
-			var digits = 6;
-			var hexString = decimal.toString(16);
-			while (hexString.length < digits) hexString += '0';
-
-			return '#' + hexString;
-		};
-
 		var getLumi = function(cstring) {
 			var matched = /#([\w\d]{2})([\w\d]{2})([\w\d]{2})/.exec(cstring);
 			if (!matched) return null;
@@ -169,7 +159,7 @@
 
 		var lightColor = '#00ffff';
 		var darkColor = '#795548';
-		var backgroundColor = rgbTohex(self.backgroundColor());
+		var backgroundColor = common.RGBTohex(self.backgroundColor());
 		var useLighterStyle =
 			Math.abs(getLumi(backgroundColor) - getLumi(lightColor)) >
 			Math.abs(getLumi(backgroundColor) - getLumi(darkColor));

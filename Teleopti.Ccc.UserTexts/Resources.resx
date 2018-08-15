@@ -17644,4 +17644,8 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>This date is not open for shift trades for {0}.</value>
     <comment>Use in Mytime ShiftTrade. A message to tell agent one of the traded agent out of shift trade open period. 0 is the out period agent name.</comment>
   </data>
+  <data name="ShowOnlyDayOff" xml:space="preserve">
+    <value>Show only day off.</value>
+    <comment>Tooltip text for show only day off toggle in TeamSchedule in MyTime</comment>
+  </data>
 </root>

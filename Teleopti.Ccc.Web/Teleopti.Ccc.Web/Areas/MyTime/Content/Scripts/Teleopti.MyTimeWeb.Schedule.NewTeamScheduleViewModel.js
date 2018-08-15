@@ -41,14 +41,16 @@
 	self.currentPageNum = ko.observable(1);
 	self.totalPageNum = ko.observable(0);
 	self.totalAgentCount = ko.observable(0);
-	self.isScrollbarVisible = ko.observable(false);
 	self.isPanelVisible = ko.observable(false);
+	self.isScrollbarVisible = ko.observable(false);
+	self.showOnlyDayOff = ko.observable(false);
 	self.searchNameText = ko.observable('');
 	self.hasFiltered = ko.observable(false);
 	self.emptySearchResult = ko.observable(false);
 	self.filter = {
 		searchNameText: '',
-		selectedTeamIds: []
+		selectedTeamIds: [],
+		isDayOff: false
 	};
 
 	self.paging = {
@@ -77,6 +79,11 @@
 		self.paging.skip = 0;
 		self.filterChangedCallback(nextDate);
 	};
+
+	self.showOnlyDayOff.subscribe(function(value) {
+		self.filter.isDayOff = value;
+		self.filterChangedCallback(self.selectedDate().format(requestDateOnlyFormat));
+	});
 
 	self.openTeamSelectorPanel = function(data, event) {
 		var sibling = $($(event.target).siblings()[0]);
