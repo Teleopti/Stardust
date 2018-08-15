@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		}
 
 		//runDayOffOptimization here for test purposes
-		public FullSchedulingResultModel DoScheduling(Guid planningPeriodId, bool runDayOffOptimization = true)
+		public FullSchedulingResultModel DoSchedulingAndDO(Guid planningPeriodId, bool runDayOffOptimization = true)
 		{			
 			var schedulingInformation = _schedulingInformationProvider.GetInfoFromPlanningPeriod(planningPeriodId);
 			var stateHolder = _schedulerStateHolder();

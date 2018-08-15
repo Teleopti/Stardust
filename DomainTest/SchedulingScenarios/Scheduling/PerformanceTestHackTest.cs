@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Day, 8);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			foreach (var schedulesOnDate in AssignmentRepository.Find(new[] { agent1, agent2 }, period, scenario).GroupBy(x => x.Date))
 			{

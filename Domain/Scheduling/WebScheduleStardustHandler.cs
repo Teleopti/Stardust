@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			logger.Info($"Web Scheduling started for PlanningPeriod {@event.PlanningPeriodId} and JobResultId is {@event.JobResultId}");
 			try
 			{
-				var result = _fullScheduling.DoScheduling(@event.PlanningPeriodId);
+				var result = _fullScheduling.DoSchedulingAndDO(@event.PlanningPeriodId);
 				
 				SaveDetailToJobResult(@event, DetailLevel.Info, JsonConvert.SerializeObject(result), null);
 			}

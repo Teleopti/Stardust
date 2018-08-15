@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			}
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 			
 			Console.WriteLine("antal schemalagda shift: " + PersonAssignmentRepository.LoadAll().Count());
 		
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				skillC.CreateSkillDayWithDemand(scenario, date, 10));
 			var planningPeriod = PlanningPeriodRepository.Has(date,date,SchedulePeriodType.Day, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			PersonAssignmentRepository.GetSingle(date, agentABC).ShiftLayers.Single().Payload
 				.Should().Be.EqualTo(activityC);

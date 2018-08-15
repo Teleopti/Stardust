@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay.AddDays(3), firstDay.AddDays(4),SchedulePeriodType.Day, 2);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.LoadAll().Count(x => x.MainActivities().Any())
 				.Should().Be.EqualTo(3); //schedule all selected days except one that has DO
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay.AddDays(3), firstDay.AddDays(4),SchedulePeriodType.Day, 2);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.LoadAll().Count(x => shiftCategory.Equals(x.ShiftCategory))
 				.Should().Be.EqualTo(3);
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, firstDay.AddDays(4),SchedulePeriodType.Day, 5);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.LoadAll().Count(x => shiftCategory.Equals(x.ShiftCategory))
 				.Should().Be.EqualTo(6);
@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay.AddDays(3), firstDay.AddDays(4),SchedulePeriodType.Day, 2);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.LoadAll().Count(x => shiftCategory.Equals(x.ShiftCategory))
 				.Should().Be.EqualTo(3);
@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			Assert.DoesNotThrow(() =>
 			{
-				Target.DoScheduling(planningPeriod.Id.Value);
+				Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 			});
 		}
 

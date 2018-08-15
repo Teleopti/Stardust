@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 
 			var planningPeriod = fillDatabaseWithEnoughDataToRunScheduling();
 
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 		}
 
 		[TestCase(true)]
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 
 			var planningPeriod = fillDatabaseWithEnoughDataToRunSchedulingAndPersonPeriodStartingLaterThanThePlanningPeriod();
 
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 		}
 
 		private PlanningPeriod fillDatabaseWithEnoughDataToRunSchedulingAndPersonPeriodStartingLaterThanThePlanningPeriod()

@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				);
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Day, 8);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.Find(new[] {agent}, period, scenario).Should().Not.Be.Empty();
 			AgentDayScheduleTagRepository.LoadAll().Should().Be.Empty();
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				);
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Day, 8);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.Find(new[] { agent }, period, scenario).Should().Not.Be.Empty();
 			AgentDayScheduleTagRepository.LoadAll().Should().Be.Empty();
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				skill.CreateSkillDayWithDemandOnInterval(scenario, firstDay.AddDays(6), 1, new Tuple<TimePeriod, double>(earlyInterval, 1000)));
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.Find(new[] { agent }, period, scenario)
 				.Count.Should().Be.EqualTo(7);
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			MultisiteDayRepository.Has(multisiteSkill.CreateMultisiteDays(scenario,firstDay,7));
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay,firstDay.AddDays(6),SchedulePeriodType.Week, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.LoadAll().Count(x => x.MainActivities().Any())
 				.Should().Be.GreaterThanOrEqualTo(5);
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			}
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.Find(new[] { agent }, period, scenario).Any(x => x.MainActivities().Any())
 				.Should().Be.False();
@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemandOnInterval(scenario, monday, 1, new Tuple<TimePeriod, double>(new TimePeriod(8, 9), 2)));
 			var planningPeriod = PlanningPeriodRepository.Has(monday,monday,SchedulePeriodType.Day, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.GetSingle(monday, agent).Period.StartDateTime.Hour
 				.Should().Be.EqualTo(blockedByAccessibility ? 10 : 8);
@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SkillDayRepository.Has(skillDay);
 			var planningPeriod = PlanningPeriodRepository.Has(date,date,SchedulePeriodType.Day, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.GetSingle(date, agent).Period.StartDateTime.Hour
 				.Should().Be.EqualTo(8);
@@ -275,7 +275,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			}
 			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions {UseStudentAvailability = true});
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			for (var i = 0; i < 7; i++)
 			{
@@ -309,7 +309,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SkillCombinationResourceReader.Has(externalResources, new DateTimePeriod(new DateTime(date.Date.AddHours(8).Ticks, DateTimeKind.Utc), new DateTime(date.Date.AddHours(9).Ticks, DateTimeKind.Utc)), skill);
 			var planningPeriod = PlanningPeriodRepository.Has(date,date,SchedulePeriodType.Day, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			return AssignmentRepository.GetSingle(date, agentToSchedule).Period.StartDateTime.Hour;
 		}

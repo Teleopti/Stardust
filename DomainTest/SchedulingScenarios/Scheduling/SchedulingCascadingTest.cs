@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				ResourceCalculation.ResourceCalculateAllDays(new NoSchedulingProgress(), false);
 			var planningPeriod = PlanningPeriodRepository.Has(date,date,SchedulePeriodType.Day, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			var allAssignmentsStartTime = AssignmentRepository.LoadAll().Select(x => x.Period.StartDateTime.TimeOfDay);
 			allAssignmentsStartTime.Count(x => x == new TimeSpan(7, 45, 0))

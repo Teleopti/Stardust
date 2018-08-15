@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var agentNotToSchedule = PersonRepository.Has(schedulePeriod, ruleSet, skill);
 			PersonAssignmentRepository.Has(agentNotToSchedule, scenario, activity, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 16));
 
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 			
 			var scheduledAgentsAsses = PersonAssignmentRepository.LoadAll().Where(x => x.Person.Equals(agentToSchedule));
 			scheduledAgentsAsses.Count().Should().Be.EqualTo(7);

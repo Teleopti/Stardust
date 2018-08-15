@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var planningPeriod = new PlanningPeriod(period,SchedulePeriodType.Day, 8, new PlanningGroup().WithId().AddFilter(new TeamFilter(team)));
 			PlanningPeriodRepository.Add(planningPeriod);
 
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.Find(new[] { agent }, period, scenario).Should().Not.Be.Empty();
 			AssignmentRepository.Find(new[] { agent2 }, period, scenario).Should().Be.Empty();
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var planningPeriod = new PlanningPeriod(period,SchedulePeriodType.Month,1);
 			PlanningPeriodRepository.Add(planningPeriod);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.Find(new[] { agent }, period, scenario)
 				.Count.Should().Be.EqualTo(31);

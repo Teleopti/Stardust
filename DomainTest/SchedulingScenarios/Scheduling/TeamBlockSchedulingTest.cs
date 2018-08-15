@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, firstDay.AddDays(4),SchedulePeriodType.Day, 5);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.LoadAll()
 				.Count(x => otherShiftCategory.Equals(x.ShiftCategory))
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			var assignments = AssignmentRepository.Find(new[] { agent1, agent2 }, period, scenario);
 			assignments.Count.Should().Be.EqualTo(14);
@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			var assignments = AssignmentRepository.Find(new[] { agent1, agent2 }, period, scenario);
 			assignments.Count.Should().Be.EqualTo(14);
@@ -238,7 +238,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 			var planningPeriod = PlanningPeriodRepository.Has(date,date,SchedulePeriodType.Day, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.Find(date.ToDateOnlyPeriod(), scenario)
 				.Should().Be.Empty();
@@ -290,7 +290,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value, false);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value, false);
 
 			var assignments = AssignmentRepository.Find(new[] { agent1, agent2 }, period, scenario);
 			assignments.Count.Should().Be.EqualTo(14);
@@ -336,7 +336,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.GetSingle(currentDay, agent)
 				.Should().Not.Be.Null();
@@ -388,7 +388,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			var assignments = AssignmentRepository.Find(new[] { agent }, period, scenario);
 			foreach (var personAssignment in assignments)
@@ -424,7 +424,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.Find(new[] { agent }, period, scenario).Count(personAssignment => personAssignment.MainActivities().Any()).Should().Be.EqualTo(5);
 		}
@@ -459,7 +459,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.Find(new[] { agent }, period, scenario)
 				.Where(personAssignment => !personAssignment.AssignedWithDayOff(dayOffTemplate))
@@ -501,7 +501,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.Find(new[] { agent }, period, scenario)
 				.Where(personAssignment => !personAssignment.AssignedWithDayOff(dayOffTemplate))
@@ -539,7 +539,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.Find(new[] { agent }, period, scenario).Any(personAssignment => personAssignment.MainActivities().Any())
 				.Should().Be.False();
@@ -575,7 +575,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.Find(new[] { agent }, period, scenario).Count(personAssignment => personAssignment.MainActivities().Any()).Should().Be.EqualTo(5);
 		}
@@ -610,7 +610,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.Find(new[] { agent }, period, scenario).Any(personAssignment => personAssignment.MainActivities().Any())
 				.Should().Be.False();
@@ -646,7 +646,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 			
 			foreach (var personAssignment in AssignmentRepository.Find(new[] {agent}, period, scenario))
 			{
@@ -686,7 +686,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.Find(new[] { agent }, period, scenario).Count(personAssignment => personAssignment.MainActivities().Any()).Should().Be.EqualTo(5);
 		}
@@ -718,7 +718,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.Find(new[] { agent }, period, scenario).Count(personAssignment => personAssignment.MainActivities().Any()).Should().Be.EqualTo(5);
 		}
@@ -750,7 +750,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.Find(new[] { agentOnlyKnowingClosedSkill }, period, scenario).Any(x => x.ShiftLayers.Any()).Should().Be.False();
 		}
@@ -788,7 +788,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var planningPeriod = new PlanningPeriod(date.ToDateOnlyPeriod(),SchedulePeriodType.Day, 1, planningGroup);
 			PlanningPeriodRepository.Add(planningPeriod);
 
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.GetSingle(date, agentBC).ShiftLayers.Single().Period.StartDateTime.Hour
 				.Should().Be.EqualTo(9);
@@ -815,7 +815,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});				
 			var planningPeriod = PlanningPeriodRepository.Has(date,date,SchedulePeriodType.Day, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.Find(new[] { agent}, date.ToDateOnlyPeriod(), scenario).Any(x => x.ShiftLayers.Any()).Should().Be.True();
 		}
@@ -859,7 +859,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value, false);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value, false);
 			
 			AssignmentRepository.Find(new[] { agent}, firstDay.ToDateOnlyPeriod(), scenario).Single().AssignedWithDayOff(dayOffTemplate).Should().Be.True();
 			AssignmentRepository.Find(new[] {agent}, firstDay.AddDays(1).ToDateOnlyPeriod(), scenario).Single().ShiftCategory.Should().Be.EqualTo(shiftCategory7H);
@@ -902,7 +902,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
 
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			AssignmentRepository.Find(new[] { agent }, period, scenario).Count(personAssignment => personAssignment.MainActivities().Any()).Should().Be.EqualTo(5);
 		}
@@ -946,7 +946,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
 
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 
 			var assignments = AssignmentRepository.Find(new[] { agent }, period, scenario);
@@ -992,7 +992,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
 
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			var assignments = AssignmentRepository.Find(new[] { agent }, period, scenario);
 			assignments.Count.Should().Be.EqualTo(6);
