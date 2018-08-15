@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourcePlanner;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -25,6 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly ISchedulingSourceScope _schedulingSourceScope;
 		private readonly ExtendSelectedPeriodForMonthlyScheduling _extendSelectedPeriodForMonthlyScheduling;
 		private readonly IBlockPreferenceProviderForPlanningPeriod _blockPreferenceProviderForPlanningPeriod;
+		private readonly DayOffOptimization _dayOffOptimization;
 
 		public SchedulingEventHandler(Func<ISchedulerStateHolder> schedulerStateHolder,
 						FillSchedulerStateHolder fillSchedulerStateHolder,
@@ -35,7 +39,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						IGridlockManager gridlockManager, 
 						ISchedulingSourceScope schedulingSourceScope,
 						ExtendSelectedPeriodForMonthlyScheduling extendSelectedPeriodForMonthlyScheduling,
-						IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod)
+						IBlockPreferenceProviderForPlanningPeriod blockPreferenceProviderForPlanningPeriod,
+						DayOffOptimization dayOffOptimization)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
@@ -47,6 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_schedulingSourceScope = schedulingSourceScope;
 			_extendSelectedPeriodForMonthlyScheduling = extendSelectedPeriodForMonthlyScheduling;
 			_blockPreferenceProviderForPlanningPeriod = blockPreferenceProviderForPlanningPeriod;
+			_dayOffOptimization = dayOffOptimization;
 		}
 
 		[TestLog]
@@ -72,6 +78,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			using (CommandScope.Create(@event))
 			{
 				DoScheduling(@event, schedulerStateHolder, selectedPeriod);
+				
 				_synchronizeSchedulesAfterIsland.Synchronize(schedulerStateHolder.Schedules, selectedPeriod);
 			}
 		}
@@ -89,11 +96,19 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				_blockPreferenceProviderForPlanningPeriod.Fetch(@event.PlanningPeriodId) : 
 				new FixedBlockPreferenceProvider(schedulingOptions);
 			selectedPeriod = _extendSelectedPeriodForMonthlyScheduling.Execute(@event, schedulerStateHolder, selectedPeriod);
+			var agents = schedulerStateHolder.SchedulingResultState.LoadedAgents.Where(x => @event.Agents.Contains(x.Id.Value)).ToArray();
 
 			_scheduleExecutor.Execute(schedulingCallback,
-				schedulingOptions, schedulingProgress,
-				schedulerStateHolder.SchedulingResultState.LoadedAgents.Where(x => @event.Agents.Contains(x.Id.Value)).ToArray(),
+				schedulingOptions, schedulingProgress, agents,
 				selectedPeriod, @event.RunWeeklyRestSolver, blockPreferenceProvider);
+			if(@event.RunDayOffOptimization)
+			{
+				_dayOffOptimization.Execute(new DateOnlyPeriod(@event.StartDate, @event.EndDate),
+					agents,
+					@event.RunWeeklyRestSolver,
+					@event.PlanningPeriodId,
+					null);
+			}
 		}
 	}
 }

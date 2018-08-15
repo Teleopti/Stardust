@@ -59,7 +59,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 					UserLocks = userLocks,
 					FromWeb= command.FromWeb,
 					PlanningPeriodId = command.PlanningPeriodId,
-					Skills = agentsAndSkills.Skills
+					Skills = agentsAndSkills.Skills,
+					RunDayOffOptimization = command.RunDayOffOptimization
 				});
 			}
 			else
@@ -82,7 +83,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 							UserLocks = userLocks,
 							Skills = island.SkillIds(),
 							FromWeb = command.FromWeb,
-							PlanningPeriodId = command.PlanningPeriodId
+							PlanningPeriodId = command.PlanningPeriodId,
+							RunDayOffOptimization = command.RunDayOffOptimization
 						};
 						events.Add(@event);
 					}

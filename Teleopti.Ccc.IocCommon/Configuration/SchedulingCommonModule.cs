@@ -381,7 +381,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkShiftBackToLegalStateServiceProFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleBlankSpots>().InstancePerLifetimeScope();
 			builder.RegisterType<DaysOffBackToLegalState>().InstancePerLifetimeScope();
-			builder.RegisterType<FullSchedulingResult>().SingleInstance();
 			builder.RegisterType<SuccessfulScheduledAgents>().SingleInstance();
 			builder.RegisterType<SchedulingInformationProvider>().SingleInstance().ApplyAspects();
 			builder.RegisterType<IntradayOptimization>().InstancePerLifetimeScope();

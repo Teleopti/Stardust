@@ -46,7 +46,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				{
 					AgentsToSchedule = selectedAgents.FixedStaffPeople(selectedPeriod),
 					Period = selectedPeriod,
-					RunWeeklyRestSolver = true
+					RunWeeklyRestSolver = true,
+					RunDayOffOptimization = false
 				};
 				using (_desktopSchedulingContext.Set(command, _schedulerStateHolder(), schedulingOptions, schedulingCallback))
 				{

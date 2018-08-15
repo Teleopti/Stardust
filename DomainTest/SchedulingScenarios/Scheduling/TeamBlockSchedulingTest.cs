@@ -54,8 +54,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var otherShiftCategory = new ShiftCategory("other").WithId();
 			var ruleSetBag = new RuleSetBag(new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory))) { Description = new Description("_") }.WithId();
 			RuleSetBagRepository.Add(ruleSetBag);
-			var agent1 = PersonRepository.Has(new ContractWithMaximumTolerance(), new ContractSchedule("_"), new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSetBag, skill);
-			var agent2 = PersonRepository.Has(new ContractWithMaximumTolerance(), new ContractSchedule("_"), new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSetBag, skill);
+			var contract = new ContractWithMaximumTolerance().WithNoDayOffTolerance();
+			var agent1 = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSetBag, skill);
+			var agent2 = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSetBag, skill);
 			if (reversedAgentOrder)
 				PersonRepository.ReversedOrder();
 			DayOffTemplateRepository.Add(new DayOffTemplate());
@@ -289,7 +290,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate,period.EndDate,SchedulePeriodType.Week, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoScheduling(planningPeriod.Id.Value, false);
 
 			var assignments = AssignmentRepository.Find(new[] { agent1, agent2 }, period, scenario);
 			assignments.Count.Should().Be.EqualTo(14);
@@ -821,7 +822,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		
 		
 		[Test]
-		public void ShouldHandleBlockSamerStartTimeInCombinationWithRotationWithSpecifyedShiftCategoryOnBlockStartingDateBug41378()
+		public void ShouldHandleBlockSameStartTimeInCombinationWithRotationWithSpecifiedShiftCategoryOnBlockStartingDateBug41378()
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
@@ -835,16 +836,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var shiftCategory7H = new ShiftCategory("S").WithId();
 			var ruleSet7H = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(12, 0, 12, 0, 15), new TimePeriodWithSegment(19, 0, 19, 0, 15), shiftCategory7H));
 			ruleSetBag.AddRuleSet(ruleSet7H);
-			var agent1 = PersonRepository.Has(new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1),ruleSetBag, skill);
-			var schedulePeriod = agent1.SchedulePeriod(firstDay);
+			var agent = PersonRepository.Has(new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1),ruleSetBag, skill);
+			var schedulePeriod = agent.SchedulePeriod(firstDay);
 			schedulePeriod.SetDaysOff(2);
 			var dayOffTemplate = new DayOffTemplate(new Description("DO", "DO"));
 			DayOffTemplateRepository.Add(dayOffTemplate);
-			AssignmentRepository.Has(agent1, scenario, dayOffTemplate, firstDay);
-			AssignmentRepository.Has(agent1, scenario, dayOffTemplate, firstDay.AddDays(6));
+			AssignmentRepository.Has(agent, scenario, dayOffTemplate, firstDay);
+			AssignmentRepository.Has(agent, scenario, dayOffTemplate, firstDay.AddDays(6));
 			var rotation = new Rotation("_", 7);
 			rotation.RotationDays[1].RestrictionCollection[0].ShiftCategory = shiftCategory7H;
-			var personRotation = new PersonRotation(agent1, rotation, firstDay, 0).WithId();
+			var personRotation = new PersonRotation(agent, rotation, firstDay, 0).WithId();
 			PersonRotationRepository.Add(personRotation);
 			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
 			{
@@ -858,15 +859,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			
 			var planningPeriod = PlanningPeriodRepository.Has(period.StartDate, period.EndDate, SchedulePeriodType.Week, 1);
 			
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoScheduling(planningPeriod.Id.Value, false);
 			
-			AssignmentRepository.Find(new[] { agent1}, firstDay.ToDateOnlyPeriod(), scenario).Single().AssignedWithDayOff(dayOffTemplate).Should().Be.True();
-			AssignmentRepository.Find(new[] {agent1}, firstDay.AddDays(1).ToDateOnlyPeriod(), scenario).Single().ShiftCategory.Should().Be.EqualTo(shiftCategory7H);
-			AssignmentRepository.Find(new[] { agent1}, firstDay.AddDays(2).ToDateOnlyPeriod(), scenario).Single().ShiftCategory.Should().Be.EqualTo(shiftCategory8H15M);
-			AssignmentRepository.Find(new[] { agent1}, firstDay.AddDays(3).ToDateOnlyPeriod(), scenario).Single().ShiftCategory.Should().Be.EqualTo(shiftCategory8H15M);
-			AssignmentRepository.Find(new[] { agent1}, firstDay.AddDays(4).ToDateOnlyPeriod(), scenario).Single().ShiftCategory.Should().Be.EqualTo(shiftCategory8H15M);
-			AssignmentRepository.Find(new[] { agent1}, firstDay.AddDays(5).ToDateOnlyPeriod(), scenario).Single().ShiftCategory.Should().Be.EqualTo(shiftCategory8H15M);
-			AssignmentRepository.Find(new[] { agent1}, firstDay.AddDays(6).ToDateOnlyPeriod(), scenario).Single().AssignedWithDayOff(dayOffTemplate).Should().Be.True();
+			AssignmentRepository.Find(new[] { agent}, firstDay.ToDateOnlyPeriod(), scenario).Single().AssignedWithDayOff(dayOffTemplate).Should().Be.True();
+			AssignmentRepository.Find(new[] {agent}, firstDay.AddDays(1).ToDateOnlyPeriod(), scenario).Single().ShiftCategory.Should().Be.EqualTo(shiftCategory7H);
+			AssignmentRepository.Find(new[] { agent}, firstDay.AddDays(2).ToDateOnlyPeriod(), scenario).Single().ShiftCategory.Should().Be.EqualTo(shiftCategory8H15M);
+			AssignmentRepository.Find(new[] { agent}, firstDay.AddDays(3).ToDateOnlyPeriod(), scenario).Single().ShiftCategory.Should().Be.EqualTo(shiftCategory8H15M);
+			AssignmentRepository.Find(new[] { agent}, firstDay.AddDays(4).ToDateOnlyPeriod(), scenario).Single().ShiftCategory.Should().Be.EqualTo(shiftCategory8H15M);
+			AssignmentRepository.Find(new[] { agent}, firstDay.AddDays(5).ToDateOnlyPeriod(), scenario).Single().ShiftCategory.Should().Be.EqualTo(shiftCategory8H15M);
+			AssignmentRepository.Find(new[] { agent}, firstDay.AddDays(6).ToDateOnlyPeriod(), scenario).Single().AssignedWithDayOff(dayOffTemplate).Should().Be.True();
 		}
 
 		[TestCase(true)]

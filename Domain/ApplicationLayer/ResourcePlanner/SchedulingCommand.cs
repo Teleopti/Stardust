@@ -18,5 +18,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		public bool RunWeeklyRestSolver { get; set; }
 		public bool FromWeb { get; set; }
 		public Guid PlanningPeriodId { get; set; }
+		public bool RunDayOffOptimization { get; set; }
 	}
 }

@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
@@ -16,30 +16,28 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly SchedulingCommandHandler _schedulingCommandHandler;
 		private readonly FillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private readonly FullSchedulingResult _fullSchedulingResult;
 		private readonly SchedulingInformationProvider _schedulingInformationProvider;
-		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
+		private readonly OptimizationResult _optimizationResult;
 
 		public FullScheduling(SchedulingCommandHandler schedulingCommandHandler, 
 			FillSchedulerStateHolder fillSchedulerStateHolder,
-			Func<ISchedulerStateHolder> schedulerStateHolder, 
-			FullSchedulingResult fullSchedulingResult,
+			Func<ISchedulerStateHolder> schedulerStateHolder,
 			SchedulingInformationProvider schedulingInformationProvider,
-			ICurrentUnitOfWork currentUnitOfWork,
-			ISchedulingOptionsProvider schedulingOptionsProvider)
+			ISchedulingOptionsProvider schedulingOptionsProvider, 
+			OptimizationResult optimizationResult)
 		{
 			_schedulingCommandHandler = schedulingCommandHandler;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_schedulerStateHolder = schedulerStateHolder;
-			_fullSchedulingResult = fullSchedulingResult;
 			_schedulingInformationProvider = schedulingInformationProvider;
-			_currentUnitOfWork = currentUnitOfWork;
 			_schedulingOptionsProvider = schedulingOptionsProvider;
+			_optimizationResult = optimizationResult;
 		}
 
-		public virtual SchedulingResultModel DoScheduling(Guid planningPeriodId)
-		{
+		//runDayOffOptimization here for test purposes
+		public OptimizationResultModel DoScheduling(Guid planningPeriodId, bool runDayOffOptimization = true)
+		{			
 			var schedulingInformation = _schedulingInformationProvider.GetInfoFromPlanningPeriod(planningPeriodId);
 			var stateHolder = _schedulerStateHolder();
 			var schedulingOptions = _schedulingOptionsProvider.Fetch(null);
@@ -50,17 +48,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				RunWeeklyRestSolver = false,
 				FromWeb = true,
 				AgentsToSchedule = stateHolder.SchedulingResultState.LoadedAgents,
-				PlanningPeriodId = planningPeriodId
+				PlanningPeriodId = planningPeriodId,
+				RunDayOffOptimization = runDayOffOptimization
 			});
-			return CreateResult(stateHolder.SchedulingResultState.LoadedAgents, schedulingInformation.Period, schedulingInformation.PlanningGroup, schedulingOptions.UsePreferences);
-		}
-
-		[TestLog]
-		[UnitOfWork]
-		protected virtual SchedulingResultModel CreateResult(IEnumerable<IPerson> fixedStaffPeople, DateOnlyPeriod period, IPlanningGroup planningGroup, bool usePreferences)
-		{
-			_currentUnitOfWork.Current().Reassociate(fixedStaffPeople);
-			return _fullSchedulingResult.Execute(period, fixedStaffPeople, planningGroup, usePreferences);
+			return _optimizationResult.Create(schedulingInformation.Period, stateHolder.SchedulingResultState.LoadedAgents, schedulingInformation.PlanningGroup, schedulingOptions.UsePreferences);
+			
 		}
 
 		[TestLog]

@@ -191,6 +191,7 @@
     <Compile Include="FakeCurrentTenantCredentials.cs" />
     <Compile Include="FakeData\AnalyticsScenarioFactory.cs" />
     <Compile Include="FakeData\AnalyticsWorkloadFactory.cs" />
+    <Compile Include="FakeData\ContractExtensions.cs" />
     <Compile Include="FakeData\ContractScheduleWorkingMondayToFriday.cs" />
     <Compile Include="FakeData\ContractWithMaximumTolerance.cs" />
     <Compile Include="FakeData\FakeAnalyticsUnitOfWorkFactory.cs" />
