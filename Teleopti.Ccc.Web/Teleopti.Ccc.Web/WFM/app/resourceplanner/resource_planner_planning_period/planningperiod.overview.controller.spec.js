@@ -97,8 +97,7 @@ describe('planningPeriodOverviewController', function () {
 				CurrentStep: 0,
 				Failed: false,
 				HasJob: true,
-				Successful: false,
-				TotalSteps: 2
+				Successful: false
 			}
         });
         vm.launchSchedule();
@@ -115,8 +114,7 @@ describe('planningPeriodOverviewController', function () {
 				CurrentStep: 0,
 				Failed: false,
 				HasJob: true,
-				Successful: false,
-				TotalSteps: 2
+				Successful: false
 			}
         });
         $httpBackend.flush();
@@ -133,8 +131,7 @@ describe('planningPeriodOverviewController', function () {
 				CurrentStep: 1,
 				Failed: false,
 				HasJob: true,
-				Successful: false,
-				TotalSteps: 2
+				Successful: false
 			}
         });
         $httpBackend.flush();
@@ -152,8 +149,7 @@ describe('planningPeriodOverviewController', function () {
 				CurrentStep: 2,
 				Failed: false,
 				HasJob: true,
-				Successful: true,
-				TotalSteps: 2
+				Successful: true
 			}
         });
         $httpBackend.flush();
@@ -172,8 +168,7 @@ describe('planningPeriodOverviewController', function () {
 				CurrentStep: 0,
 				Failed: true,
 				HasJob: true,
-				Successful: false,
-				TotalSteps: 2
+				Successful: false
 			}
         });
         $httpBackend.flush();
@@ -192,8 +187,7 @@ describe('planningPeriodOverviewController', function () {
 				CurrentStep: 1,
 				Failed: true,
 				HasJob: true,
-				Successful: false,
-				TotalSteps: 2
+				Successful: false
 			}
         });
         $httpBackend.flush();
@@ -212,8 +206,7 @@ describe('planningPeriodOverviewController', function () {
 				CurrentStep: 2,
 				Failed: true,
 				HasJob: true,
-				Successful: false,
-				TotalSteps: 2
+				Successful: false
 			}
 		});
 		$httpBackend.flush();
