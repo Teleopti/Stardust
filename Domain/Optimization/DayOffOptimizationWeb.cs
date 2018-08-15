@@ -20,8 +20,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IDayOffOptimizationCommandHandler _dayOffOptimizationCommandHandler;
 		private readonly FillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_DayOffOptimizationIslands_47208)]
-		private readonly IScheduleDictionaryPersister _persister;
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly IOptimizationPreferencesProvider _optimizationPreferencesProvider;
 		private readonly FullSchedulingResult _fullSchedulingResult;
@@ -30,7 +28,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public DayOffOptimizationWeb(IDayOffOptimizationCommandHandler dayOffOptimizationCommandHandler,
 			FillSchedulerStateHolder fillSchedulerStateHolder, 
 			Func<ISchedulerStateHolder> schedulerStateHolder,
-			IScheduleDictionaryPersister persister, 
 			IPlanningPeriodRepository planningPeriodRepository,
 			IOptimizationPreferencesProvider optimizationPreferencesProvider,
 			FullSchedulingResult fullSchedulingResult,
@@ -39,7 +36,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_dayOffOptimizationCommandHandler = dayOffOptimizationCommandHandler;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_schedulerStateHolder = schedulerStateHolder;
-			_persister = persister;
 			_planningPeriodRepository = planningPeriodRepository;
 			_optimizationPreferencesProvider = optimizationPreferencesProvider;
 			_fullSchedulingResult = fullSchedulingResult;
@@ -94,8 +90,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 		[RemoveMeWithToggle(Toggles.ResourcePlanner_DayOffOptimizationIslands_47208)]
 		public class DayOffOptimizationWebToggleOff : DayOffOptimizationWeb
 		{
-			public DayOffOptimizationWebToggleOff(IDayOffOptimizationCommandHandler dayOffOptimizationCommandHandler, FillSchedulerStateHolder fillSchedulerStateHolder, Func<ISchedulerStateHolder> schedulerStateHolder, IScheduleDictionaryPersister persister, IPlanningPeriodRepository planningPeriodRepository, IOptimizationPreferencesProvider optimizationPreferencesProvider, FullSchedulingResult fullSchedulingResult, IPersonRepository personRepository) : base(dayOffOptimizationCommandHandler, fillSchedulerStateHolder, schedulerStateHolder, persister, planningPeriodRepository, optimizationPreferencesProvider, fullSchedulingResult, personRepository)
+			private readonly IScheduleDictionaryPersister _persister;
+
+			public DayOffOptimizationWebToggleOff(IDayOffOptimizationCommandHandler dayOffOptimizationCommandHandler, FillSchedulerStateHolder fillSchedulerStateHolder, Func<ISchedulerStateHolder> schedulerStateHolder, IScheduleDictionaryPersister persister, IPlanningPeriodRepository planningPeriodRepository, IOptimizationPreferencesProvider optimizationPreferencesProvider, FullSchedulingResult fullSchedulingResult, IPersonRepository personRepository) : base(dayOffOptimizationCommandHandler, fillSchedulerStateHolder, schedulerStateHolder, planningPeriodRepository, optimizationPreferencesProvider, fullSchedulingResult, personRepository)
 			{
+				_persister = persister;
 			}
 			
 			[TestLog]
