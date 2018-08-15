@@ -47,28 +47,15 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			_tenantUnitOfWorkManager.CurrentSession().CreateSQLQuery("TRUNCATE TABLE tenant.audit").ExecuteUpdate();
 			_tenantUnitOfWorkManager.Dispose();
 		}
-
+		
 		[Test]
-		public void ShouldInsertPersonInfo()
-		{
-			var session = _tenantUnitOfWorkManager.CurrentSession(); 
-			
-			var personInfo = new PersonInfo(tenant, Guid.NewGuid());
-			target.Persist(personInfo);
-
-			session.Flush();
-			session.Clear();
-
-			session.Get<PersonInfo>(personInfo.Id).Should().Not.Be.Null();
-		}
-
-		[Test]
-		public void ShouldInsertNonExistingWithId()
+		public void ShouldInsertNonExistingPersonInfoWithId()
 		{
 			var id = Guid.NewGuid();
 			var session = _tenantUnitOfWorkManager.CurrentSession();
 
 			var personInfo = new PersonInfo(tenant, id);
+			personInfo.SetIdentity("DOMAIN/User1");
 			target.Persist(personInfo);
 
 			session.Flush();
@@ -147,7 +134,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 		}
 
 		[Test]
-		public void MultipleNullIdentityShouldNotThrow()
+		public void MultipleNullIdentityShouldNotThrowOrSave()
 		{
 			var personInfo1 = new PersonInfo(tenant, Guid.NewGuid());
 			personInfo1.SetIdentity(null);
@@ -157,7 +144,46 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			target.Persist(personInfo1);
 			target.Persist(personInfo2);
 
+			var result = _tenantUnitOfWorkManager.CurrentSession().Query<PersonInfo>().ToList();
+			result.Count.Should().Be(0);
+
 			Assert.DoesNotThrow(_tenantUnitOfWorkManager.CurrentSession().Flush);
+		}
+
+		[Test]
+		public void ShouldNotPersistEmptyIdentityPersonInfoRecords()
+		{
+			var session = _tenantUnitOfWorkManager.CurrentSession();
+
+			var personInfo1 = new PersonInfo(tenant, Guid.NewGuid());
+			personInfo1.ApplicationLogonInfo.SetLogonName(string.Empty);
+			target.PersistIdentity(personInfo1);
+			Assert.DoesNotThrow(session.Flush);
+			
+			var personInfo2 = new PersonInfo(tenant, Guid.NewGuid());
+			personInfo2.ApplicationLogonInfo.SetLogonName(string.Empty);
+			target.PersistIdentity(personInfo2);
+			Assert.DoesNotThrow(session.Flush);
+
+			var result = session.Query<PersonInfo>().ToList();
+			result.Count.Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldNotPersistEmptyApplicationLogonPersonInfoRecords()
+		{
+			var session = _tenantUnitOfWorkManager.CurrentSession();
+
+			var personInfo1 = new PersonInfo(tenant, Guid.NewGuid());
+			target.PersistApplicationLogonName(personInfo1);
+			Assert.DoesNotThrow(session.Flush);
+
+			var personInfo2 = new PersonInfo(tenant, Guid.NewGuid());
+			target.PersistApplicationLogonName(personInfo2);
+			Assert.DoesNotThrow(session.Flush);
+
+			var result = session.Query<PersonInfo>().ToList();
+			result.Count.Should().Be(0);
 		}
 
 		[Test]
@@ -167,11 +193,13 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			var id = Guid.NewGuid();
 
 			var personInfo = new PersonInfo(tenant, id);
+			personInfo.SetIdentity("DOMAIN/User1");
 			var oldTenantPassword = personInfo.TenantPassword; 
 			
 			target.Persist(personInfo);
 
 			var personInfoNew = new PersonInfo(tenant, id);
+			personInfoNew.SetIdentity("DOMAIN/User1");
 			target.Persist(personInfoNew);
 			
 			var loaded = session.Get<PersonInfo>(id);
