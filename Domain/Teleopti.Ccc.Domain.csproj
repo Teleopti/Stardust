@@ -194,6 +194,10 @@
     <Compile Include="Budgeting\BudgetGroupHeadCountSpecificationLimited.cs" />
     <Compile Include="Common\DefaultSchedulePeriodProvider.cs" />
     <Compile Include="ApplicationLayer\Commands\MultipleChangeScheduleCommandHandler.cs" />
+    <Compile Include="Forecasting\QueueStatisticsViewModelFactory.cs" />
+    <Compile Include="Forecasting\IQueueStatisticsViewModelFactory.cs" />
+    <Compile Include="Forecasting\Models\QueueStatisticsModel.cs" />
+    <Compile Include="Forecasting\Models\WorkloadQueueStatisticsViewModel.cs" />
     <Compile Include="Infrastructure\DeadLockRetrier.cs" />
     <Compile Include="InterfaceLegacy\Domain\PersonInfoForShiftTradeFilter.cs" />
     <Compile Include="Intraday\ApplicationLayer\DTOs\IntradayForcastedStaffingIntervalDTO.cs" />

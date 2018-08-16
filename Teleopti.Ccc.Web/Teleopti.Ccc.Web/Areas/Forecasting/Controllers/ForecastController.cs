@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly IHistoricalPeriodProvider _historicalPeriodProvider;
 		private readonly IIntradayForecaster _intradayForecaster;
 		private readonly IForecastDayOverrideRepository _forecastDayOverrideRepository;
+		private readonly IQueueStatisticsViewModelFactory _queueStatisticsViewModelFactory;
 
 		public ForecastController(
 			IForecastCreator forecastCreator,
@@ -43,7 +44,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			IFetchAndFillSkillDays fetchAndFillSkillDays,
 			IHistoricalPeriodProvider historicalPeriodProvider,
 			IIntradayForecaster intradayForecaster,
-			IForecastDayOverrideRepository forecastDayOverrideRepository)
+			IForecastDayOverrideRepository forecastDayOverrideRepository,
+			IQueueStatisticsViewModelFactory queueStatisticsViewModelFactory)
 		{
 			_forecastCreator = forecastCreator;
 			_skillRepository = skillRepository;
@@ -55,6 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_historicalPeriodProvider = historicalPeriodProvider;
 			_intradayForecaster = intradayForecaster;
 			_forecastDayOverrideRepository = forecastDayOverrideRepository;
+			_queueStatisticsViewModelFactory = queueStatisticsViewModelFactory;
 		}
 
 		[UnitOfWork, Route("api/Forecasting/Skills"), HttpGet]
@@ -93,6 +96,12 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			var scenario = _scenarioRepository.Get(input.ScenarioId);
 			var forecast = _forecastCreator.CreateForecastForWorkload(futurePeriod, input.Workload, scenario);
 			return Ok(forecast);
+		}
+
+		[UnitOfWork, HttpPost, Route("api/Forecasting/QueueStatistics")]
+		public virtual IHttpActionResult QueueStatistics([FromBody] Guid workloadId)
+		{
+			return Ok(_queueStatisticsViewModelFactory.QueueStatistics(workloadId));
 		}
 
 		[UnitOfWork, HttpPost, Route("api/Forecasting/Campaign")]
@@ -260,7 +269,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 						_forecastDayOverrideRepository.Remove(forecastDayOverride);
 					}
 				}
-				
+
 				var period = _historicalPeriodProvider.AvailablePeriod(workload);
 				if (period.HasValue)
 				{

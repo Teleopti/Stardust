@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var scenario = new Scenario("test1").WithId(scenarioId);
 			var scenarioRepository = new FakeScenarioRepository(scenario);
 			var target = new ForecastController(forecastCreator, null, null, scenarioRepository, null, null, null,
-				null, null, null);
+				null, null, null, null);
 			var forecast = new ForecastModel
 			{
 				ForecastDays = new List<ForecastDayModel>

@@ -1354,6 +1354,40 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		}
 
 		[Test]
+		public void ShouldLoadQueueStatistics()
+		{
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
+			var workload = skill.WorkloadCollection.Single();
+			var statsDate = new DateOnly(2018, 05, 04);
+
+			WorkloadRepository.Add(workload);
+
+			StatisticRepository.Has(workload.QueueSourceCollection.First(), new List<IStatisticTask>
+			{
+				new StatisticTask
+				{
+					Interval = statsDate.Date.AddHours(10),
+					StatOfferedTasks = 10
+				},
+				new StatisticTask
+				{
+					Interval = statsDate.AddDays(1).Date.AddHours(10).AddMinutes(15),
+					StatOfferedTasks = 20
+				}
+			});
+			
+			var result = (OkNegotiatedContentResult<WorkloadQueueStatisticsViewModel>)Target.QueueStatistics(workload.Id.Value);
+			result.Content.WorkloadId.Should().Be.EqualTo(workload.Id.Value);
+			result.Content.QueueStatisticsDays.Count.Should().Be.EqualTo(2);
+			result.Content.QueueStatisticsDays.First().Date.Should().Be.EqualTo(statsDate);
+			result.Content.QueueStatisticsDays.First().OriginalTasks.Should().Be.EqualTo(10);
+			result.Content.QueueStatisticsDays.First().ValidatedTasks.Should().Be.EqualTo(10);
+			result.Content.QueueStatisticsDays.Last().Date.Should().Be.EqualTo(statsDate.AddDays(1));
+			result.Content.QueueStatisticsDays.Last().OriginalTasks.Should().Be.EqualTo(20);
+			result.Content.QueueStatisticsDays.Last().ValidatedTasks.Should().Be.EqualTo(20);
+		}
+
+		[Test]
 		public void ShouldLoadForecastWithCampaign()
 		{
 			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
@@ -1546,7 +1580,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			SkillRepository.Has(skill);
 
 			var target = new ForecastController(null, SkillRepository, null, null, null, FullPermission,
-				null, null, null, null);
+				null, null, null, null, null);
 
 			var result = target.Skills();
 			result.Skills.Single().Id.Should().Be.EqualTo(skill.Id.Value);
@@ -1559,10 +1593,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		public void ShouldHavePermissionForModifySkill()
 		{
 			var target = new ForecastController(null, SkillRepository, null, null, null, FullPermission,
-				null, null, null, null);
+				null, null, null, null, null);
 
 			var result = target.Skills();
 			result.IsPermittedToModifySkill.Should().Be.EqualTo(true);
 		}
 	}
+
 }

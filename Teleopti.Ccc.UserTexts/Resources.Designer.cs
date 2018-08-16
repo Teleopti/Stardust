@@ -14511,6 +14511,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Historical Data.
+        /// </summary>
+        public static string HistoryData {
+            get {
+                return ResourceManager.GetString("HistoryData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Holiday.
         /// </summary>
         public static string Holiday {
@@ -23405,6 +23414,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string OriginalOfferedTasks {
             get {
                 return ResourceManager.GetString("OriginalOfferedTasks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original Calls.
+        /// </summary>
+        public static string OriginalPhoneCalls {
+            get {
+                return ResourceManager.GetString("OriginalPhoneCalls", resourceCulture);
             }
         }
         
@@ -33041,15 +33059,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show only day off..
-        /// </summary>
-        public static string ShowOnlyDayOff {
-            get {
-                return ResourceManager.GetString("ShowOnlyDayOff", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Options &gt;&gt;.
         /// </summary>
         public static string ShowOptions {
@@ -38151,6 +38160,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ValidatedHandlingTime {
             get {
                 return ResourceManager.GetString("ValidatedHandlingTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validated Calls.
+        /// </summary>
+        public static string ValidatedPhoneCalls {
+            get {
+                return ResourceManager.GetString("ValidatedPhoneCalls", resourceCulture);
             }
         }
         

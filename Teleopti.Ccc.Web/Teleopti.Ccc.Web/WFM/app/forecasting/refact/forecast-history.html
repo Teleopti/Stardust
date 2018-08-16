@@ -1,0 +1,49 @@
+<div ng-if="vm.workloadFound">
+	<div class="view-header with-desc">
+		<div class="view-title">
+			<h1>
+				<i ng-class="vm.getSkillIcon(vm.selectedWorkload.SkillType)">
+					<md-tooltip>
+						<span ng-if="vm.selectedWorkload.SkillType.DoDisplayData">{{vm.selectedWorkload.SkillType.SkillType | translate}}</span>
+						<span ng-if="!vm.selectedWorkload.SkillType.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
+					</md-tooltip>
+				</i>
+				<span>{{'HistoryData' | translate}} - {{vm.selectedWorkload.Workload.Name}}</span>
+			</h1>
+		</div>
+	</div>
+
+	<!-- Chart -->
+	<div class="con-row" ng-if="vm.isLoadingHistoryData">
+		<div class="con-flex">
+			<div class="panel material-depth-1 full-padding">
+				<div>
+					<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="con-row" ng-if="vm.historyData.length > 0">
+		<div class="con-flex">
+			<div class="panel material-depth-1">
+				<div class="con-row">
+					<div class="con-flex">
+						<forecast-history-chart chart-id="vm.selectedWorkload.ChartId"
+												selectable="vm.selectedWorkload.SkillType.DoDisplayData"
+												days="vm.historyData">
+						</forecast-history-chart>
+					</div>
+				</div>
+				<div class="con-footer">
+					<button class="wfm-btn wfm-btn-invis-primary" ui-sref="forecast">
+						{{'Ok' | translate}}
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div ng-cloak ng-if="!vm.workloadFound">
+	{{'YouHaveToSelectAtLeastOneWorkload'|translate}}
+</div>

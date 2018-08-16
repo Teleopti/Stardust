@@ -45,7 +45,7 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 		};
 
 		for (var i = 0; i < days.length; i++) {
-			preparedData.dateSeries.push(moment(days[i].Date).format('DD/MM/YYYY'));
+			preparedData.dateSeries.push(moment(days[i].Date).format('L'));
 			preparedData.averageAfterTaskTimeSeries.push(days[i].AverageAfterTaskTime);
 			preparedData.tasksSeries.push(days[i].Tasks);
 			preparedData.totalAverageAfterTaskTimeSeries.push(days[i].TotalAverageAfterTaskTime);
@@ -92,15 +92,15 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 					preparedData.campaignAndOverrideSeries
 				],
 				names: {
-					TotalTasks: $translate.instant('TotalCalls' + ' ←'),
+					TotalTasks: $translate.instant('TotalCalls') + ' ←',
 					Campaign: $translate.instant('AppliedACampaign'),
 					Override: $translate.instant('AppliedAOverride'),
 					CampaignAndOverride: $translate.instant('BothOverrideAndCampaignAdded'),
-					Tasks: $translate.instant('Calls' + ' ←'),
-					TotalAverageTaskTime: $translate.instant('TotalTalkTime' + ' ←'),
-					AverageTaskTime: $translate.instant('TalkTime' + ' ←'),
-					TotalAverageAfterTaskTime: $translate.instant('TotalACW' + ' ←'),
-					AverageAfterTaskTime: $translate.instant('ACW' + ' ←')
+					Tasks: $translate.instant('Calls') + ' ←',
+					TotalAverageTaskTime: $translate.instant('TotalTalkTime') + ' ←',
+					AverageTaskTime: $translate.instant('TalkTime') + ' ←',
+					TotalAverageAfterTaskTime: $translate.instant('TotalACW') + ' ←',
+					AverageAfterTaskTime: $translate.instant('ACW') + ' ←'
 				},
 				colors: {
 					TotalTasks: '#0099FF',
@@ -120,19 +120,15 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 					grouped: true
 				},
 				onselected: function(d) {
-					var temp = moment(this.internal.config.axis_x_categories[d.x], 'DD/MM/YYYY').format(
-						'YYYY-MM-DDT00:00:00'
-					);
+					var temp = moment(this.internal.config.axis_x_categories[d.x]).format('YYYY-MM-DDT00:00:00');
 
-					if (selectedItems.indexOf(temp) == -1) {
+					if (selectedItems.indexOf(temp) === -1) {
 						selectedItems.push(temp);
 						ctrl.onClick(selectedItems);
 					}
 				},
 				onunselected: function(d) {
-					var temp = moment(this.internal.config.axis_x_categories[d.x], 'DD/MM/YYYY').format(
-						'YYYY-MM-DDT00:00:00'
-					);
+					var temp = moment(this.internal.config.axis_x_categories[d.x]).format('YYYY-MM-DDT00:00:00');
 					if (selectedItems.indexOf(temp) !== -1) {
 						selectedItems.splice(selectedItems.indexOf(temp), 1);
 						ctrl.onClick(selectedItems);
@@ -166,7 +162,7 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 					type: 'category',
 					tick: {
 						culling: {
-							max: preparedData.dateSeries.length / 28
+							max: 10
 						},
 						multiline: false
 					}

@@ -1522,6 +1522,10 @@
     <Content Include="WFM\app\api-access\_modules.js" />
     <Content Include="WFM\app\forecasting\forecasting.default.controller.js" />
     <Content Include="WFM\app\forecasting\html\forecasting.html" />
+    <Content Include="WFM\app\forecasting\refact\forecast-history-chart.component.js" />
+    <Content Include="WFM\app\forecasting\refact\forecast-history-chart.html" />
+    <Content Include="WFM\app\forecasting\refact\forecast-history.html" />
+    <Content Include="WFM\app\forecasting\refact\forecast.history.controller.js" />
     <Content Include="WFM\app\forecasting\refact\r2forecast.controller.js" />
     <Content Include="WFM\app\forecasting\refact\r2forecast.html" />
     <Content Include="WFM\app\gamification\gamification.component.badgeCalculation.js" />
