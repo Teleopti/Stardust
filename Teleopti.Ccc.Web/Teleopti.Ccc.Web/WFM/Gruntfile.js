@@ -1,8 +1,6 @@
 module.exports = function(grunt) {
-	grunt.option.init({ development: true });
-
-	const isDev = grunt.option('development');
-	const isProd = grunt.option('no-development');
+	const isDev = grunt.option('development') || false;
+	const isProd = !isDev;
 
 	const watch = {
 		indexTemplates: {
