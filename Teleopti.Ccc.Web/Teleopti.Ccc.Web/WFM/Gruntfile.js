@@ -18,7 +18,7 @@ module.exports = function(grunt) {
 			tasks: ['concat:concatJsWfm']
 		},
 		antThemes: {
-			files: ['src/thmes/*.less'],
+			files: ['src/themes/*.less'],
 			tasks: ['less']
 		}
 	};
