@@ -12,7 +12,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
-#pragma warning disable 618
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
@@ -20,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	public class DayOffOptimizationSameBitArrayTest : DayOffOptimizationScenario
 	{
-		public Domain.Optimization.DayOffOptimizationWeb Target;
+		public FullScheduling Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeSkillRepository SkillRepository;
@@ -58,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate) //saturday
 				.SetDayOff(new DayOffTemplate());
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 		}
 
 		public override void Isolate(IIsolate isolate)

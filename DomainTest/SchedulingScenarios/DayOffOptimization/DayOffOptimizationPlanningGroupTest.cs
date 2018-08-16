@@ -14,7 +14,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
-#pragma warning disable 618
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
@@ -22,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	public class DayOffOptimizationPlanningGroupTest : DayOffOptimizationScenario
 	{
-		public DayOffOptimizationWeb Target;
+		public FullScheduling Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeSkillRepository SkillRepository;
@@ -53,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.Has(nonValidAgent, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay, firstDay.AddDays(7)), new TimePeriod(8, 0, 16, 0));
 			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate, nonValidAgent).SetDayOff(new DayOffTemplate());
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate, nonValidAgent)
 				.DayOff().Should().Not.Be.Null();

@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 		public void ShouldNotThrowOnSkillTypeLazyLoading()
 		{
 			var planningPeriod = fillDatabaseWithEnoughDataToRunScheduling();
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 		}
 
 		private PlanningPeriod fillDatabaseWithEnoughDataToRunScheduling()

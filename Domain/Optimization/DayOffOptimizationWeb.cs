@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 		
 		[TestLog]
-		public virtual FullSchedulingResultModel Execute(Guid planningPeriodId)
+		public virtual FullSchedulingResultModel DoSchedulingAndDO(Guid planningPeriodId)
 		{
 			var optiData = Setup(planningPeriodId);
 			_dayOffOptimizationCommandHandler.Execute(new DayOffOptimizationCommand
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 			
 			[TestLog]
-			public override FullSchedulingResultModel Execute(Guid planningPeriodId)
+			public override FullSchedulingResultModel DoSchedulingAndDO(Guid planningPeriodId)
 			{
 				var optiData = SetupAndRun(planningPeriodId);
 				optiData.PlanningPeriod.Scheduled();

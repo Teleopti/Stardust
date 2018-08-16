@@ -12,7 +12,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
-#pragma warning disable 618
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
@@ -20,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	public class DayOffOptimizationMinimumAgentsTest : DayOffOptimizationScenario
 	{
-		public DayOffOptimizationWeb Target;
+		public FullScheduling Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeSkillRepository SkillRepository;
@@ -56,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate).WithDayOff();
 			PersonAssignmentRepository.Has(alreadyScheduledAgent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			PersonAssignmentRepository.LoadAll().Single(x => x.DayOff() != null).Date
 				.Should().Be.EqualTo(skillDays[1].CurrentDate); //only DO is on tuesday
@@ -91,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.Has(alreadyScheduledAgent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
 			PersonAssignmentRepository.Has(partlyScheduledAgent, scenario, activity, shiftCategory, date.AddDays(0), new TimePeriod(8, 0, 8, 30)); //is not enough, only half interval
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			PersonAssignmentRepository.LoadAll().Single(x => x.DayOff() != null).Date
 				.Should().Be.EqualTo(date.AddDays(1)); 
@@ -126,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate).WithDayOff();
 			PersonAssignmentRepository.Has(alreadyScheduledAgent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			PersonAssignmentRepository.LoadAll().Where(x => x.DayOff() != null).Select(x => x.Date)
 				.Should().Have.SameValuesAs(skillDays[2].CurrentDate, skillDays[3].CurrentDate);
@@ -154,7 +153,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate, agent2).WithDayOff();
 			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate, agent2).WithDayOff();
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			//max one DO per day
 			var doDates = PersonAssignmentRepository.LoadAll().Where(x => x.DayOff() != null).Select(x => x.Date);
@@ -191,7 +190,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.Has(agentToOptimize, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
 			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate, agentToOptimize).WithDayOff();
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			PersonAssignmentRepository.LoadAll().Single(x => x.DayOff() != null).Date
 				.Should().Be.EqualTo(skillDays[0].CurrentDate); //only DO is on Monday
@@ -223,7 +222,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
 			PersonAssignmentRepository.GetSingle(skillDays[3].CurrentDate).WithDayOff();
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			PersonAssignmentRepository.LoadAll().Single(x => x.DayOff() != null).Date
 				.Should().Be.EqualTo(skillDays[4].CurrentDate);
@@ -257,7 +256,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.Has(agentToOptimize, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
 			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate).WithDayOff();
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			PersonAssignmentRepository.LoadAll().Single(x => x.DayOff() != null).Date
 				.Should().Be.EqualTo(skillDays[0].CurrentDate); //only DO is on Monday
@@ -288,7 +287,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
 			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate).WithDayOff();
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 			
 			PersonAssignmentRepository.LoadAll().Single(x => x.DayOff() != null).Date
 				.Should().Not.Be.EqualTo(skillDays[6].CurrentDate); //should have been moved
@@ -315,7 +314,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.Has(alreadyScheduledAgent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
 			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate, agent).WithDayOff();
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 			
 			PersonAssignmentRepository.LoadAll().Single(x => x.DayOff() != null).Date
 				.Should().Not.Be.EqualTo(skillDays[6].CurrentDate); //should have been moved
@@ -340,7 +339,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
 			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate).WithDayOff();
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 		}
 		
 		[Test]
@@ -371,7 +370,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate).WithDayOff();
 			PersonAssignmentRepository.Has(alreadyScheduledAgent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 			
 			PersonAssignmentRepository.LoadAll().Single(x => x.DayOff() != null).Date
 				.Should().Be.EqualTo(skillDays[1].CurrentDate);
@@ -407,7 +406,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, date.AddDays(7), new TimePeriod(1, 2)); //prevents replacing last DO
 			PersonAssignmentRepository.Has(alreadyScheduledAgent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(23, 0, 31, 0));
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 			
 			var doDates = PersonAssignmentRepository.LoadAll().Where(x => x.DayOff() != null).Select(x => x.Date);
 			doDates.Count().Should().Be.EqualTo(2);
@@ -447,7 +446,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, date.AddDays(7), new TimePeriod(1, 2)); //prevents replacing last DO
 			PersonAssignmentRepository.Has(alreadyScheduledAgent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(23, 0, 31, 0));
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 			
 			PersonAssignmentRepository.LoadAll().Where(x => x.DayOff() != null).Select(x => x.Date)
 				.Should().Have.SameValuesAs(date.AddDays(0), date.AddDays(6));
@@ -474,7 +473,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate, agent).WithDayOff();
 			PersonAssignmentRepository.Has(alreadyScheduledAgent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 			
 			PersonAssignmentRepository.LoadAll().Single(x => x.DayOff() != null).Date
 				.Should().Not.Be.EqualTo(skillDays[6].CurrentDate); //should have been moved
@@ -500,7 +499,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(8, 0, 16, 0));
 			PersonAssignmentRepository.GetSingle(date.AddDays(6), agent).WithDayOff();
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 			
 			PersonAssignmentRepository.LoadAll().Single(x => x.DayOff() != null).Date
 				.Should().Not.Be.EqualTo(date.AddDays(0))

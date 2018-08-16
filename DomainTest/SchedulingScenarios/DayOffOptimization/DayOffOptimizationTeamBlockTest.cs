@@ -15,7 +15,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
-#pragma warning disable 618
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
@@ -23,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	public class DayOffOptimizationTeamBlockTest : DayOffOptimizationScenario
 	{
-		public DayOffOptimizationWeb Target;
+		public FullScheduling Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeSkillRepository SkillRepository;
@@ -71,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				PersonAssignmentRepository.GetSingle(firstDay.AddWeeks(0).AddDays(6), agent2).SetDayOff(dayOffTemplate);
 				PersonAssignmentRepository.GetSingle(firstDay.AddWeeks(1).AddDays(6), agent2).SetDayOff(dayOffTemplate);
 
-				Target.Execute(planningPeriod.Id.Value);
+				Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 				var allDOs = PersonAssignmentRepository.LoadAll().Where(x => x.DayOff() != null);
 				var movedD01 = allDOs.Single(x => x.Date == firstDay);
@@ -115,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			optPrefs.Extra.UseTeamBlockOption = true;
 			OptimizationPreferencesProvider.SetFromTestsOnly(optPrefs);
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate, agentToSchedule).DayOff()
 				.Should().Not.Be.Null();

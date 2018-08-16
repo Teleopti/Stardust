@@ -18,7 +18,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
-#pragma warning disable 618
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
@@ -26,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	public class DayOffOptimizationTest : DayOffOptimizationScenario
 	{
-		public DayOffOptimizationWeb Target;
+		public FullScheduling Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeSkillRepository SkillRepository;
@@ -66,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate) //saturday
 				.SetDayOff(new DayOffTemplate());
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate) //saturday
 				.DayOff().Should().Be.Null();
@@ -123,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 						new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(16)));
 				}
 			}
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			var assignments =
 				PersonAssignmentRepository.Find(new[] {agent1}, DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 2), scenario)
@@ -187,7 +186,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			}
 			agent1.Period(firstDay).PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40),
 				TimeSpan.FromHours(48), TimeSpan.Zero, TimeSpan.Zero); //Min 40 hours per week
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			var assignments =
 				PersonAssignmentRepository.Find(new[] {agent1}, DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 2), scenario)
@@ -198,58 +197,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			assignments[6].DayOff().Should().Not.Be.Null();
 			assignments[7].DayOff().Should().Not.Be.Null();
 			assignments[12].DayOff().Should().Not.Be.Null();
-		}
-
-		[Test]
-		public void ShouldFixWeeklyRest()
-		{
-			var weeklyRest = TimeSpan.FromHours(38);
-			var firstDay = new DateOnly(2015, 10, 12); //mon
-			var weekPeriod = new DateOnlyPeriod(firstDay, firstDay.AddDays(7));
-			var activity = ActivityRepository.Has("_");
-			var skill = SkillRepository.Has("skill", activity);
-			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1);
-
-			var scenario = ScenarioRepository.Has("some name");
-			var contract = new Contract("_")
-			{
-				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(1), TimeSpan.FromHours(48), TimeSpan.FromHours(1),
-					weeklyRest)
-			};
-			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
-			schedulePeriod.SetDaysOff(1);
-			var shiftCategory = new ShiftCategory("_").WithId();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
-				new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
-			var agent = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"),
-				new Team {Site = new Site("site")}, schedulePeriod, ruleSet, skill);
-
-			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				5,
-				1,
-				5,
-				5,
-				5,
-				25,
-				5)
-			);
-
-			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory,
-				new DateOnlyPeriod(firstDay, firstDay.AddDays(7)), new TimePeriod(8, 0, 16, 0));
-			var mondayAss = PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate); //monday
-			mondayAss.Clear();
-			mondayAss.AddActivity(activity, new TimePeriod(12, 0, 20, 0));
-			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate) //saturday
-				.SetDayOff(new DayOffTemplate());
-
-			Target.Execute(planningPeriod.Id.Value);
-
-			var agentRange = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(agent,
-				new ScheduleDictionaryLoadOptions(false, false, false), weekPeriod, scenario)[agent];
-
-			CheckWeeklyRestRule.IsSatisfyBy(agentRange, weekPeriod, weeklyRest)
-				.Should()
-				.Be.True();
 		}
 
 		[Test, Timeout(10000)]
@@ -294,7 +241,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.GetSingle(tuesday).SetDayOff(new DayOffTemplate());
 			PersonAssignmentRepository.GetSingle(lastSunday).SetDayOff(new DayOffTemplate());
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 			var agentRange = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(agent,
 				new ScheduleDictionaryLoadOptions(false, false, false), weekPeriod, scenario)[agent];
 			CheckWeeklyRestRule.IsSatisfyBy(agentRange, weekPeriod, weeklyRest).Should().Be.True();
@@ -343,7 +290,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			monday.AddActivity(activity, new TimePeriod(0, 0, 21, 0));
 			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate).SetDayOff(new DayOffTemplate());
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 			var agentRange = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(agent,
 				new ScheduleDictionaryLoadOptions(false, false, false), weekPeriod, scenario)[agent];
 			CheckWeeklyRestRule.IsSatisfyBy(agentRange, weekPeriod, weeklyRest).Should().Be.True();
@@ -382,7 +329,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			assignment.AddActivity(phoneActivity, new DateTimePeriod(dateTime.AddHours(8), dateTime.AddHours(8).AddMinutes(10)));
 			PersonAssignmentRepository.Add(assignment);
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			var skillDays = SkillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(dateOnly, dateOnly),
 				new List<ISkill> {skill}, scenario);
@@ -426,7 +373,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			optPrefs.General.UseShiftCategoryLimitations = true;
 			OptimizationPreferencesProvider.SetFromTestsOnly(optPrefs);
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			PersonAssignmentRepository.GetSingle(skillDays[1].CurrentDate).DayOff()
 				.Should().Not.Be.Null();
@@ -463,7 +410,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate) //saturday
 				.SetDayOff(new DayOffTemplate());
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			PersonAssignmentRepository.GetSingle(skillDays[5].CurrentDate) //saturday
 				.DayOff().Should().Be.Null();
@@ -503,7 +450,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate, agent) 
 				.SetDayOff(new DayOffTemplate());
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate, agent)
 				.DayOff().Should().Not.Be.Null();
@@ -528,7 +475,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1), new TimePeriod(0, 0, 12, 0));
 			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate).WithDayOff();
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 		}
 
 		public DayOffOptimizationTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerLessResourcesXXL74915) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerLessResourcesXXL74915)

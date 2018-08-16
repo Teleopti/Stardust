@@ -14,7 +14,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
-#pragma warning disable 618
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
@@ -22,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	public class DayOffOptimizationDayOffRulesTest : DayOffOptimizationScenario
 	{
-		public DayOffOptimizationWeb Target;
+		public FullScheduling Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeSkillRepository SkillRepository;
@@ -68,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.GetSingle(skillDays[2].CurrentDate).SetDayOff(new DayOffTemplate());
 			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate).SetDayOff(new DayOffTemplate());
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate).DayOff().Should().Not.Be.Null();
 			PersonAssignmentRepository.GetSingle(skillDays[1].CurrentDate).DayOff().Should().Not.Be.Null();
@@ -107,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate.AddDays(-1)) //sunday in week before
 				.SetDayOff(new DayOffTemplate());
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 			
 			PersonAssignmentRepository.GetSingle(skillDays[1].CurrentDate) //tuesday
 				.DayOff().Should().Not.Be.Null();	
@@ -150,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate).SetDayOff(new DayOffTemplate());
 			PersonAssignmentRepository.GetSingle(skillDays[1].CurrentDate).SetDayOff(new DayOffTemplate());
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate).DayOff().Should().Not.Be.Null();
 			PersonAssignmentRepository.GetSingle(skillDays[1].CurrentDate).DayOff().Should().Not.Be.Null();
@@ -194,7 +193,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate).SetDayOff(new DayOffTemplate());
 			PersonAssignmentRepository.GetSingle(skillDays[1].CurrentDate).SetDayOff(new DayOffTemplate());
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			PersonAssignmentRepository.GetSingle(skillDays[2].CurrentDate).DayOff().Should().Not.Be.Null();
 			PersonAssignmentRepository.GetSingle(skillDays[9].CurrentDate).DayOff().Should().Not.Be.Null();
@@ -253,7 +252,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate).SetDayOff(new DayOffTemplate());
 			PersonAssignmentRepository.GetSingle(skillDays[1].CurrentDate).SetDayOff(new DayOffTemplate());
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			var dayOff1 = PersonAssignmentRepository.GetSingle(skillDays[2].CurrentDate).DayOff();
 			var dayOff2 = PersonAssignmentRepository.GetSingle(skillDays[9].CurrentDate).DayOff();
@@ -294,7 +293,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate, agentWithValidDefaultFilter).SetDayOff(new DayOffTemplate());
 			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate, agentWithExplicitFilter).SetDayOff(new DayOffTemplate());
 
-			Target.Execute(planningPeriod.Id.Value);
+			Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 
 			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate, agentWithValidDefaultFilter).DayOff().Should().Be.Null();
 			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate, agentWithExplicitFilter).DayOff().Should().Not.Be.Null();
