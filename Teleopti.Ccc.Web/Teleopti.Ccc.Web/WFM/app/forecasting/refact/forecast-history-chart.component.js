@@ -43,20 +43,16 @@ function ForecastHistoryChartController($translate, $filter, $timeout) {
 			preparedData.validatedSeries.push(days[i].ValidatedTasks);
 		}
 
+		var lineColors = {};
+		lineColors[labelOriginalTask] = '#EE8F7D';
+		lineColors[labelValidatedTask] = '#0099FF';
+
 		chart = c3.generate({
 			bindto: '#' + chartId,
 			data: {
 				x: labelDate,
 				columns: [preparedData.dateSeries, preparedData.originalSeries, preparedData.validatedSeries],
-				names: {
-					Date: labelDate,
-					OriginalTasks: labelOriginalTask,
-					ValidatedTasks: labelValidatedTask
-				},
-				colors: {
-					ValidatedTasks: '#66c2ff',
-					OriginalTasks: '#ee8f7d'
-				}
+				colors: lineColors
 			},
 			subchart: {
 				show: true
