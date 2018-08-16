@@ -29,9 +29,10 @@ namespace Teleopti.Ccc.Domain.Budgeting
 			var person = absenceRequestSchedules.AbsenceRequest.Person;
 			var culture = person.PermissionInformation.Culture();
 			var language = person.PermissionInformation.UICulture();
-			var requestedPeriod = absenceRequestSchedules.AbsenceRequest.Period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
+			var timezone = person.PermissionInformation.DefaultTimeZone();
+			var requestedPeriod = absenceRequestSchedules.AbsenceRequest.Period.ToDateOnlyPeriod(timezone);
 			var personPeriod = person.Period(requestedPeriod.StartDate);
-
+			var absenceReqPeriodInUserTimezone = convertToDateTimePeriod(absenceRequestSchedules.AbsenceRequest.Period, timezone);
 			if (personPeriod?.BudgetGroup == null)
 			{
 				return AbsenceRequestBudgetGroupValidationHelper.PersonPeriodOrBudgetGroupIsNull(culture, person.Id);
@@ -42,18 +43,21 @@ namespace Teleopti.Ccc.Domain.Budgeting
 			var scheduleRange = absenceRequestSchedules.SchedulingResultStateHolder.Schedules[person];
 			var periodToConsider = requestedPeriod;
 
-			var scheduleDay = scheduleRange.ScheduledDay(periodToConsider.StartDate.AddDays(-1));
-			var visualLayerCollection = scheduleDay.ProjectionService().CreateProjection();
-			if (visualLayerCollection.HasLayers)
+			if (!requestIsFullDayOrMultiDay(absenceRequestSchedules.AbsenceRequest.Period))
 			{
-				var visualLayerCollectionPeriod = visualLayerCollection.Period();
-				var absenceTimeWithinSchedule =
-					absenceRequestSchedules.AbsenceRequest.Period.Intersection(visualLayerCollectionPeriod.Value);
-				if (absenceTimeWithinSchedule.HasValue)
+				var scheduleDay = scheduleRange.ScheduledDay(periodToConsider.StartDate.AddDays(-1));
+				var visualLayerCollection = scheduleDay.ProjectionService().CreateProjection();
+				if (visualLayerCollection.HasLayers)
 				{
-					periodToConsider = new DateOnlyPeriod(periodToConsider.StartDate.AddDays(-1), periodToConsider.EndDate);
+					var visualLayerCollectionPeriodInUserTimeZone = convertToDateTimePeriod(visualLayerCollection.Period().Value, timezone);
+					var absenceTimeWithinSchedule = absenceReqPeriodInUserTimezone.Intersection(visualLayerCollectionPeriodInUserTimeZone);
+					if (absenceTimeWithinSchedule.HasValue)
+					{
+						periodToConsider = new DateOnlyPeriod(periodToConsider.StartDate.AddDays(-1), periodToConsider.EndDate);
+					}
 				}
 			}
+			
 
 			var budgetDays = _budgetDayRepository.Find(defaultScenario, personPeriod.BudgetGroup, periodToConsider);
 			if (budgetDays == null || budgetDays.Count == 0)
@@ -61,74 +65,53 @@ namespace Teleopti.Ccc.Domain.Budgeting
 				return AbsenceRequestBudgetGroupValidationHelper.BudgetDaysAreNull(language, culture, requestedPeriod);
 			}
 
-			//filtered budget days
 			var budgetDaysToProcess = new List<IBudgetDay>();
-			var periodHavingIntersectedShifts = new List<DateTimePeriod>();
-			var daysNotHavingIntersectedShifts = new List<IBudgetDay>();
-			
-			foreach (var singleBudgetDay in budgetDays)
+			var dayToProcess = new List<DateOnly>();
+			var stayAwayFromTheseDays = new List<DateOnly>();
+			foreach (var day in periodToConsider.DayCollection())
 			{
-				scheduleDay = scheduleRange.ScheduledDay(singleBudgetDay.Day);
-				visualLayerCollection = scheduleDay.ProjectionService().CreateProjection();
+				var scheduleDay = scheduleRange.ScheduledDay(day);
+				var visualLayerCollection = scheduleDay.ProjectionService().CreateProjection();
 				if (visualLayerCollection.HasLayers)
 				{
-					var visualLayerCollectionPeriod = visualLayerCollection.Period();
-					var absenceTimeWithinSchedule = absenceRequestSchedules.AbsenceRequest.Period.Intersection(visualLayerCollectionPeriod.Value);
+					var visualLayerCollectionPeriodInUserTimeZone = convertToDateTimePeriod(visualLayerCollection.Period().Value ,timezone);
+					var absenceTimeWithinSchedule = absenceReqPeriodInUserTimezone.Intersection(visualLayerCollectionPeriodInUserTimeZone);
 					if (absenceTimeWithinSchedule.HasValue)
 					{
-						periodHavingIntersectedShifts.Add(visualLayerCollectionPeriod.Value);
-						budgetDaysToProcess.Add(singleBudgetDay);
+						if (!budgetDays.Any(x => x.Day == day))
+						{
+							return AbsenceRequestBudgetGroupValidationHelper.BudgetDaysAreNotEqualToRequestedPeriodDays(language, culture,
+								requestedPeriod);
+						}
+						dayToProcess.Add(visualLayerCollectionPeriodInUserTimeZone.StartDateTime.ToDateOnly());
+						foreach (var stayAwayFromThisDay in visualLayerCollectionPeriodInUserTimeZone.ToDateOnlyPeriod(timezone).DayCollection())
+						{
+							stayAwayFromTheseDays.Add(stayAwayFromThisDay);
+						}
+						
 					}
-					else
+					else if(requestedPeriod.DayCollection().Any(x => x == day) && !stayAwayFromTheseDays.Contains(day))
 					{
-						daysNotHavingIntersectedShifts.Add(singleBudgetDay);
+						dayToProcess.Add(day);
 					}
+					
 				}
 				else
 				{
-					daysNotHavingIntersectedShifts.Add(singleBudgetDay);
-				}
-
-			}
-
-			foreach (var culpritDay in daysNotHavingIntersectedShifts)
-			{
-				var culpritDayPeriod = culpritDay.Day.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-				var periodFound = false;
-				foreach (var coveredPeriod in periodHavingIntersectedShifts)
-				{
-					var intersectedPeriod = coveredPeriod.Intersection(culpritDayPeriod);
-					if (intersectedPeriod.HasValue)
+					if (requestedPeriod.DayCollection().Any(x => x == day) && !stayAwayFromTheseDays.Contains(day))
 					{
-						periodFound = true;
-						break;
-					}
-				}
-
-				if (!periodFound)
-				{
-					budgetDaysToProcess.Add(culpritDay);
-				}
-
-			}
-
-			foreach (var day in periodToConsider.DayCollection())
-			{
-				scheduleDay = scheduleRange.ScheduledDay(day);
-				visualLayerCollection = scheduleDay.ProjectionService().CreateProjection();
-				if (visualLayerCollection.HasLayers)
-				{
-					var visualLayerCollectionPeriod = visualLayerCollection.Period();
-					var absenceTimeWithinSchedule =
-						absenceRequestSchedules.AbsenceRequest.Period.Intersection(visualLayerCollectionPeriod.Value);
-					if (absenceTimeWithinSchedule.HasValue && !budgetDaysToProcess.Any(x => x.Day == day))
-					{
-						return AbsenceRequestBudgetGroupValidationHelper.BudgetDaysAreNotEqualToRequestedPeriodDays(language, culture,
-							requestedPeriod);
+						dayToProcess.Add(day);
 					}
 				}
 			}
 
+			foreach (var dateOnly in dayToProcess)
+			{
+				var thatDay = budgetDays.FirstOrDefault(x => x.Day == dateOnly);
+				if(thatDay!=null)
+					budgetDaysToProcess.Add(thatDay);
+			}
+			
 			var invalidDays = getInvalidDaysIfExist(budgetDaysToProcess, personPeriod.BudgetGroup, culture, absenceRequestSchedules.SchedulingResultStateHolder);
 			if (!string.IsNullOrEmpty(invalidDays))
 			{
@@ -137,6 +120,19 @@ namespace Teleopti.Ccc.Domain.Budgeting
 			}
 
 			return new ValidatedRequest { IsValid = true, ValidationErrors = string.Empty };
+		}
+
+		private bool requestIsFullDayOrMultiDay(DateTimePeriod absenceRequestPeriod)
+		{
+			return absenceRequestPeriod.ElapsedTime().Ticks >= (new TimeSpan(0, 23, 59, 0)).Ticks;
+		}
+
+
+		private DateTimePeriod convertToDateTimePeriod(DateTimePeriod dateTimePeriod, TimeZoneInfo timezone)
+		{
+			var startDateTime = TimeZoneHelper.ConvertFromUtc(dateTimePeriod.StartDateTime, timezone);
+			var endDateTime = TimeZoneHelper.ConvertFromUtc(dateTimePeriod.EndDateTime, timezone);
+			return new DateTimePeriod(new DateTime(startDateTime.Ticks, DateTimeKind.Utc), new DateTime(endDateTime.Ticks, DateTimeKind.Utc));
 		}
 
 		private string getInvalidDaysIfExist(IEnumerable<IBudgetDay> budgetDays, IBudgetGroup budgetGroup, CultureInfo culture, ISchedulingResultStateHolder schedulingResultStateHolder)
