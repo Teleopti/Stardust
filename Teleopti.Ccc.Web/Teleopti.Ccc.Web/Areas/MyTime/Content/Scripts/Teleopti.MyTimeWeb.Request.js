@@ -1,20 +1,22 @@
-﻿if (typeof (Teleopti) === 'undefined') {
+﻿if (typeof Teleopti === 'undefined') {
 	Teleopti = {};
-	if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
+	if (typeof Teleopti.MyTimeWeb === 'undefined') {
 		Teleopti.MyTimeWeb = {};
 	}
 }
 
-Teleopti.MyTimeWeb.Request = (function ($) {
-	var readyForInteraction = function () { };
-	var completelyLoaded = function () { };
+Teleopti.MyTimeWeb.Request = (function($) {
+	var readyForInteraction = function() {};
+	var completelyLoaded = function() {};
 
 	var requestNavigationViewModel = null;
 
 	function RequestNavigationViewModel() {
 		var self = this;
 
-		self.showFabButton = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826') && Teleopti.MyTimeWeb.Common.IsHostAMobile();
+		self.showFabButton =
+			Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826') &&
+			Teleopti.MyTimeWeb.Common.IsHostAMobile();
 
 		self.hideFab = ko.observable(false);
 
@@ -26,15 +28,15 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 		self.addOvertimeRequestActive = ko.observable(false);
 		self.menuIsVisible = ko.observable(false);
 
-		self.enableMenu = function (blah, e) {
+		self.enableMenu = function(blah, e) {
 			self.menuIsVisible(true);
 		};
 
-		self.disableMenu = function () {
+		self.disableMenu = function() {
 			self.menuIsVisible(false);
 		};
 
-		self.addTextRequest = function () {
+		self.addTextRequest = function() {
 			self.hideFab(true);
 			self.resetToolbarActiveButtons();
 			self.addTextRequestActive(true);
@@ -42,7 +44,7 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
 		};
 
-		self.addAbsenceRequest = function () {
+		self.addAbsenceRequest = function() {
 			self.hideFab(true);
 			self.resetToolbarActiveButtons();
 			self.addAbsenceRequestActive(true);
@@ -50,19 +52,21 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
 		};
 
-		self.addShiftTradeRequest = function (date, e) {
+		self.addShiftTradeRequest = function(date, e) {
 			if (e) {
 				e.stopPropagation();
 			}
+
+			self.hideFab(true);
 			self.closeDatePickers();
 			self.resetToolbarActiveButtons();
 			self.addShiftTradeRequestActive(true);
 			Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.OpenAddShiftTradeWindow(date);
 			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
-			self.disableMenu()
+			self.disableMenu();
 		};
 
-		self.addShiftTradeBulletinBoardRequest = function (date, e) {
+		self.addShiftTradeBulletinBoardRequest = function(date, e) {
 			if (e) {
 				e.stopPropagation();
 			}
@@ -74,7 +78,7 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
 		};
 
-		self.addPostShiftForTradeRequest = function (date) {
+		self.addPostShiftForTradeRequest = function(date) {
 			self.hideFab(true);
 			self.resetToolbarActiveButtons();
 			self.addPostShiftForTradeActive(true);
@@ -82,7 +86,7 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
 		};
 
-		self.addOvertimeRequest = function () {
+		self.addOvertimeRequest = function() {
 			self.hideFab(true);
 			self.resetToolbarActiveButtons();
 			self.addOvertimeRequestActive(true);
@@ -90,7 +94,7 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
 		};
 
-		self.resetToolbarActiveButtons = function () {
+		self.resetToolbarActiveButtons = function() {
 			self.addTextRequestActive(false);
 			self.addAbsenceRequestActive(false);
 			self.addShiftTradeRequestActive(false);
@@ -99,7 +103,7 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			self.addOvertimeRequestActive(false);
 		};
 
-		self.closeDatePickers = function () {
+		self.closeDatePickers = function() {
 			$('.datepicker').hide();
 		};
 	}
@@ -114,12 +118,14 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 	}
 
 	return {
-		Init: function () {
-			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Requests/Index',
+		Init: function() {
+			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack(
+				'Requests/Index',
 				Teleopti.MyTimeWeb.Request.RequestPartialInit,
-				Teleopti.MyTimeWeb.Request.RequestPartialDispose);
+				Teleopti.MyTimeWeb.Request.RequestPartialDispose
+			);
 		},
-		RequestPartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
+		RequestPartialInit: function(readyForInteractionCallback, completelyLoadedCallback) {
 			readyForInteraction = readyForInteractionCallback;
 			completelyLoaded = completelyLoadedCallback;
 
@@ -135,29 +141,29 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			_initNavigationViewModel();
 			Teleopti.MyTimeWeb.Request.RequestDetail.Init();
 		},
-		RequestPartialDispose: function () {
+		RequestPartialDispose: function() {
 			Teleopti.MyTimeWeb.Request.List.Dispose();
 			Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.Dispose();
 		},
-		ResetToolbarActiveButtons: function () {
+		ResetToolbarActiveButtons: function() {
 			requestNavigationViewModel.resetToolbarActiveButtons();
 		},
-		ShiftTradeRequest: function (date) {
+		ShiftTradeRequest: function(date) {
 			requestNavigationViewModel.addShiftTradeRequest(date);
 		},
-		ShiftTradeBulletinBoardRequest: function (date) {
+		ShiftTradeBulletinBoardRequest: function(date) {
 			requestNavigationViewModel.addShiftTradeBulletinBoardRequest(date);
 		},
-		PostShiftForTradeRequest: function (date) {
+		PostShiftForTradeRequest: function(date) {
 			requestNavigationViewModel.addPostShiftForTradeRequest(date);
 		},
-		HideFab: function (show) {
+		HideFab: function(show) {
 			if (requestNavigationViewModel !== null) {
 				requestNavigationViewModel.hideFab(show);
 				requestNavigationViewModel.menuIsVisible(show);
 			}
 		},
-		MenuIsOpen: function () {
+		MenuIsOpen: function() {
 			if (requestNavigationViewModel !== null) {
 				return requestNavigationViewModel.menuIsVisible();
 			}
@@ -166,5 +172,4 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			return requestNavigationViewModel;
 		}
 	};
-
 })(jQuery);

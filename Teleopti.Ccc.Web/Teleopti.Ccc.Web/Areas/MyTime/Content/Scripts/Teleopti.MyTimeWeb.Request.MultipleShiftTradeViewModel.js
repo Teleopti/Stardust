@@ -86,6 +86,10 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 
 	self.selectedSchedulePairs = ko.observableArray();
 
+	self.selectedCount = ko.computed(function() {
+		return self.selectedSchedulePairs().length;
+	});
+
 	self.isSendEnabled = ko.computed(function() {
 		return self.selectedSchedulePairs().length > 0;
 	});
@@ -111,8 +115,22 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 		return Teleopti.MyTimeWeb.Common.IsHostAMobile() || Teleopti.MyTimeWeb.Common.IsHostAniPad();
 	};
 
+	self.listCartToggle = ko.observable(true);
+
+	self.showMobileCart = ko.computed(function() {
+		return self.listCartToggle() && self.isMobile();
+	});
+	self.hideMobileCart = ko.computed(function() {
+		return !self.showMobileCart() && self.isMobile();
+	});
+
 	self.showCart = function() {
 		return Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306');
+	};
+
+	self.resetStatus = function() {
+		self.listCartToggle(true);
+		self.selectedSchedulePairs([]);
 	};
 
 	self.select = function(data) {
@@ -141,6 +159,10 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 		}
 
 		return true;
+	};
+
+	self.cartMeunClick = function() {
+		self.listCartToggle(!self.listCartToggle());
 	};
 
 	self.removeSelect = function(data) {
@@ -491,7 +513,7 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 				PersonToId: self.agentChoosed().personId
 			}),
 			success: function(data) {
-				self.selectedSchedulePairs([]);
+				self.resetStatus();
 				self.agentChoosed(null);
 				self.hideShiftTradeWindow();
 				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);
@@ -516,6 +538,7 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 	};
 
 	self.cancelRequest = function() {
+		self.resetStatus();
 		self.chooseAgent(null);
 		self.chooseHistorys.removeAll();
 		self.selectedInternal(false);
