@@ -14660,4 +14660,148 @@ Teleopti R&amp;D</value>
   <data name="ImportBpoFileImportInfoHeader" xml:space="preserve">
     <value>BPO文件导入信息</value>
   </data>
+  <data name="BusinessRuleMaximumWorkdayFriendlyName" xml:space="preserve">
+    <value>连续工作天数太多。</value>
+  </data>
+  <data name="ModifyAdherence" xml:space="preserve">
+    <value>修改遵时率</value>
+  </data>
+  <data name="LateXMinutes" xml:space="preserve">
+    <value>最后 {0} 分钟</value>
+  </data>
+  <data name="NoResultForCurrentFilter" xml:space="preserve">
+    <value>应用当前过滤器后没有结果</value>
+  </data>
+  <data name="AppliedACampaign" xml:space="preserve">
+    <value>活动已应用</value>
+  </data>
+  <data name="AppliedAOverride" xml:space="preserve">
+    <value>覆写值已应用</value>
+  </data>
+  <data name="NewForecastIntro" xml:space="preserve">
+    <value>这是该技能当前的预测</value>
+  </data>
+  <data name="NoForecast" xml:space="preserve">
+    <value>未找到预测数据，尝试为当前情景执行预测。</value>
+  </data>
+  <data name="Saving" xml:space="preserve">
+    <value>正在保存，可能需要一段时间……</value>
+  </data>
+  <data name="ThisScenarioHasChanges" xml:space="preserve">
+    <value>当前情景有未保存数据</value>
+  </data>
+  <data name="Discard" xml:space="preserve">
+    <value>放弃</value>
+  </data>
+  <data name="CreateOverride" xml:space="preserve">
+    <value>创建覆写值</value>
+  </data>
+  <data name="ConfirmDiscardAllModifications" xml:space="preserve">
+    <value>确定要放弃所有修改吗？</value>
+  </data>
+  <data name="ConfirmExitForecastWithoutSaving" xml:space="preserve">
+    <value>确定要不保存数据并退出预测模块吗？</value>
+  </data>
+  <data name="ConfirmExitOnForecasting" xml:space="preserve">
+    <value>确定要放弃当前正在执行的预测并退出预测模块吗？</value>
+  </data>
+  <data name="ForecastNotFinishedYet" xml:space="preserve">
+    <value>预测尚未结束</value>
+  </data>
+  <data name="ConfirmReforecastWithoutSaving" xml:space="preserve">
+    <value>确定要重新预测吗？所有未保存的修改都将丢失。</value>
+  </data>
+  <data name="NoForecastDateForCurrentScenario" xml:space="preserve">
+    <value>当前情景没有预测数据，请执行预测操作，或从其他情景保存预测数据到此情景。</value>
+  </data>
+  <data name="PleaseSaveOrDiscardChangesBeforeChangingScenario" xml:space="preserve">
+    <value>切换情景之前请保存或放弃改动。</value>
+  </data>
+  <data name="SaveToOtherScenario" xml:space="preserve">
+    <value>保存到其他情景</value>
+  </data>
+  <data name="SelectTargetScenarioWithColon" xml:space="preserve">
+    <value>选择目标情景：</value>
+  </data>
+  <data name="SkillNotSupported" xml:space="preserve">
+    <value>请在 Windows 客户端对此技能进行预测。</value>
+  </data>
+  <data name="SkillTypeFilter" xml:space="preserve">
+    <value>技能类型过滤</value>
+  </data>
+  <data name="PeopleManageUsers" xml:space="preserve">
+    <value>管理用户</value>
+  </data>
+  <data name="PeopleUsernameIsAlreadyInUse" xml:space="preserve">
+    <value>用户名已经被使用了</value>
+  </data>
+  <data name="PeopleDuplicateUsernameInForm" xml:space="preserve">
+    <value>表单中有重复用户名</value>
+  </data>
+  <data name="GrantRoles" xml:space="preserve">
+    <value>授予角色</value>
+  </data>
+  <data name="CurrentRoles" xml:space="preserve">
+    <value>当前角色</value>
+  </data>
+  <data name="AvailableRoles" xml:space="preserve">
+    <value>可用角色</value>
+  </data>
+  <data name="RevokeRoles" xml:space="preserve">
+    <value>移除角色</value>
+  </data>
+  <data name="GrantRole" xml:space="preserve">
+    <value>授予角色</value>
+  </data>
+  <data name="RevokeRole" xml:space="preserve">
+    <value>移除角色</value>
+  </data>
+  <data name="PeopleSelectAllOnAllPages" xml:space="preserve">
+    <value>选中所有页面中全部人员</value>
+  </data>
+  <data name="PeopleSiteTeam" xml:space="preserve">
+    <value>站点/小组</value>
+  </data>
+  <data name="SaveFailedForInvalidInput" xml:space="preserve">
+    <value>保存失败，输入无效。</value>
+  </data>
+  <data name="SaveFailedForModifyWriteProtectedSchedule" xml:space="preserve">
+    <value>保存失败，没有权限修改写保护的班表。</value>
+  </data>
+  <data name="SaveFailedForNoPermissionToEditUnpublishedSchedule" xml:space="preserve">
+    <value>保存失败，没有权限修改未发布班表。</value>
+  </data>
+  <data name="PleaseSaveOrDiscardChangesBeforeChangingPeriod" xml:space="preserve">
+    <value>更改时间段之前请保存或放弃修改。</value>
+  </data>
+  <data name="WithAbsence" xml:space="preserve">
+    <value>有缺勤</value>
+  </data>
+  <data name="WithOvertime" xml:space="preserve">
+    <value>有加班</value>
+  </data>
+  <data name="HistoryData" xml:space="preserve">
+    <value>历史数据</value>
+  </data>
+  <data name="OriginalPhoneCalls" xml:space="preserve">
+    <value>原始通话数</value>
+  </data>
+  <data name="ValidatedPhoneCalls" xml:space="preserve">
+    <value>已校验通话数</value>
+  </data>
+  <data name="NoQueueStatisticsAvailable" xml:space="preserve">
+    <value>无法生成预测，请确认已经导入了队列统计数据。</value>
+  </data>
+  <data name="AffectingXAgents" xml:space="preserve">
+    <value>影响了 {0} 个坐席</value>
+  </data>
+  <data name="PreviewTheNewForecasts" xml:space="preserve">
+    <value>查看新的预测模块！</value>
+  </data>
+  <data name="HistoricalData" xml:space="preserve">
+    <value>历史数据</value>
+  </data>
+  <data name="OpenHistoricalData" xml:space="preserve">
+    <value>历史数据</value>
+  </data>
 </root>
