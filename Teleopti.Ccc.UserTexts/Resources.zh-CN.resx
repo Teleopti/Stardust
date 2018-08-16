@@ -14804,6 +14804,9 @@ Teleopti R&amp;D</value>
   <data name="OpenHistoricalData" xml:space="preserve">
     <value>历史数据</value>
   </data>
+  <data name="PleaseSelectASkillFirst" xml:space="preserve">
+    <value>使用此功能之前请先选择一项技能。</value>
+  </data>
   <data name="TimeInSecond" xml:space="preserve">
     <value>时间 (秒)</value>
   </data>

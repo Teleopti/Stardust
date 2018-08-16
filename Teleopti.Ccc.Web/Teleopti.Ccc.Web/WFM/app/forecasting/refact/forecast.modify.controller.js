@@ -51,6 +51,10 @@
 
 		(function init() {
 			manageLocalStorage();
+			if (vm.noWorkloadFound) {
+				return;
+			}
+
 			getScenarios();
 		})();
 

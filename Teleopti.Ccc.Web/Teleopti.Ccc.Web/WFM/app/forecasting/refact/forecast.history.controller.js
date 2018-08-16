@@ -19,6 +19,10 @@
 
 		(function init() {
 			loadWorkload();
+			if (!vm.workloadFound) {
+				return;
+			}
+
 			vm.isLoadingHistoryData = true;
 			forecastingService.history(
 				angular.toJson(vm.selectedWorkload.Workload.Id),

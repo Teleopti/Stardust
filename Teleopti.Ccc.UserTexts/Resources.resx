@@ -17660,6 +17660,10 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Validated Calls</value>
     <comment>Text to display in forecaster</comment>
   </data>
+  <data name="PleaseSelectASkillFirst" xml:space="preserve">
+    <value>Please select a skill first before using this function.</value>
+    <comment>Error message in web forecaster</comment>
+  </data>
   <data name="TimeInSecond" xml:space="preserve">
     <value>Time (Second)</value>
     <comment>Label for Y axis in web forecast</comment>

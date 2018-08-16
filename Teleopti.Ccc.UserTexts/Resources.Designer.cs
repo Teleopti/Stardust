@@ -25824,6 +25824,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please select a skill first before using this function..
+        /// </summary>
+        public static string PleaseSelectASkillFirst {
+            get {
+                return ResourceManager.GetString("PleaseSelectASkillFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please try again later.
         /// </summary>
         public static string PleaseTryAgainLater {

@@ -45,5 +45,23 @@
 	</div>
 </div>
 <div ng-cloak ng-if="!vm.workloadFound">
-	{{'YouHaveToSelectAtLeastOneWorkload'|translate}}
+	<div class="view-header with-desc">
+		<h1>
+			<span>{{'HistoricalData' | translate}}</span>
+		</h1>
+	</div>
+	<div class="con-flex">
+		<div class="panel material-depth-1">
+			<div class="con-row">
+				<div class="con-flex">
+					<h2>{{'PleaseSelectASkillFirst'|translate}}</h2>
+				</div>
+				<div class="con-footer">
+					<button class="wfm-btn wfm-btn-invis-primary" ui-sref="forecast">
+						{{'Ok' | translate}}
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
