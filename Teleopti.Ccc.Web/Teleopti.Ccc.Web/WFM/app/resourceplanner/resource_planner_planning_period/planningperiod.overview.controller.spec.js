@@ -276,10 +276,6 @@ describe('planningPeriodOverviewController', function() {
 			PlanningPeriod: {
 				StartDate: '2018-06-18T00:00:00',
 				EndDate: '2018-07-15T00:00:00'
-			},
-			ScheduleResult: {
-				BusinessRulesValidationResults: [],
-				ScheduledAgentsCount: 44
 			}
 		});
 		$httpBackend.flush();
