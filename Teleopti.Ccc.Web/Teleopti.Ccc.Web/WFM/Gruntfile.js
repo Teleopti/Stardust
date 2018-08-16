@@ -24,14 +24,16 @@ module.exports = function(grunt) {
 	};
 
 	const less = {
-		options: {
-			compress: isProd,
-			javascriptEnabled: true,
-			relativeUrls: false
-		},
-		files: {
-			'dist/ant_classic.css': 'src/themes/ant_classic.less',
-			'dist/ant_dark.css': 'src/themes/ant_dark.less'
+		themes: {
+			options: {
+				compress: isProd,
+				javascriptEnabled: true,
+				relativeUrls: false
+			},
+			files: {
+				'dist/ant_classic.css': 'src/themes/ant_classic.less',
+				'dist/ant_dark.css': 'src/themes/ant_dark.less'
+			}
 		}
 	};
 
