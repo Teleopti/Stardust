@@ -10,6 +10,7 @@
 	function RtaHistoricalOverviewController($filter, $stateParams, $translate, rtaStateService, rtaDataService) {
 
 		var vm = this;
+		vm.clearEnabled = false;
 		rtaStateService.setCurrentState($stateParams);
 
 		rtaDataService.load().then(function (data) {
@@ -59,9 +60,9 @@
 		
 		function updateOrganizationPicker() {
 			vm.organizationPickerSelectionText = rtaStateService.organizationSelectionText();
-			vm.organizationPickerClearEnabled = (vm.sites || []).some(function (site) {
-				return site.isChecked || site.isMarked;
-			});
+			 vm.clearEnabled = (vm.sites || []).some(function (site) {
+			 	return site.isChecked || site.isMarked;
+			 });
 		}
 		
 		vm.toneAdherence = function (percentage){
