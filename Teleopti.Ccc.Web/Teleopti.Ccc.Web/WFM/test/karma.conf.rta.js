@@ -7,11 +7,13 @@ module.exports = function(config) {
 	config.set({
 		files: [
 			{ pattern: 'dist/resources/modules.js', watched: false },
-			{ pattern: '+(app|html)/**/*.html' },
+			{ pattern: 'dist/resources/*.js.map', included: false },
+			{ pattern: 'dist/templates.js', watched: false, nocache: true },
+			{ pattern: 'dist/templates.min.js', watched: false, nocache: true },
 			{ pattern: 'node_modules/angular-material/angular-material-mocks.js', watched: false },
 			{ pattern: 'node_modules/angular-mocks/angular-mocks.js', watched: false },
-			{ pattern: 'app/**/!(*.spec|app_desktop_client).js' },
-			{ pattern: 'app/rta/**/*.spec.js' }
+			{ pattern: 'app/**/!(*.spec|app_desktop_client).js', watched: false, nocache: true },
+			{ pattern: 'app/rta/**/*.spec.js', watched: true, nocache: true }
 		],
 		frameworks: ['jasmine']
 	});

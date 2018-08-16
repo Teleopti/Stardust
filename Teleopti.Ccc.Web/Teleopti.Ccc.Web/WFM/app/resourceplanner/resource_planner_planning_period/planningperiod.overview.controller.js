@@ -289,13 +289,13 @@
 		function loadLastResult() {
 			if (selectedPpId == null) return;
 			return planningPeriodServiceNew.lastJobResult({ id: selectedPpId }).$promise.then(function(data) {
-				if (data.FullSchedulingResult) {
+				if (data.OptimizationResult) {
 					vm.isScheduled = true;
-					vm.scheduledAgents = data.FullSchedulingResult.ScheduledAgentsCount;
-					vm.valData.scheduleIssues = data.FullSchedulingResult.BusinessRulesValidationResults;
+					vm.scheduledAgents = data.OptimizationResult.ScheduledAgentsCount;
+					vm.valData.scheduleIssues = data.OptimizationResult.BusinessRulesValidationResults;
 					vm.valData.scheduleIssues.sort(localeLanguageSortingService.localeSort('+ResourceName'));
 					getTotalValidationErrorsNumber();
-					initResult(data.FullSchedulingResult);
+					initResult(data.OptimizationResult);
 					return data;
 				} else {
 					return (vm.isScheduled = false);

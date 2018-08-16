@@ -6,7 +6,7 @@ call ..\..\..\packages\NodeEnv.1.0.9\nodevars.bat
 
 SET /A ERRORLEV=0
 :: Runs from [repo]\Teleopti.Ccc.Web\Teleopti.Ccc.Web\WFM
-call npm run test:teamcity
+call npm test
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 :: Clear all dev dependencies and only install what we need for production
 call npm install rimraf
