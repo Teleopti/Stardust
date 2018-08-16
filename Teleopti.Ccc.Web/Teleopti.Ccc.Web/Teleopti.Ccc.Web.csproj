@@ -1488,8 +1488,6 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewNew.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.PollScheduleUpdates.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.BadgeCountsDropdown.js" />
-    <Content Include=".node\package.json" />
-    <Content Include=".node\node.targets" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel.js" />
     <Content Include="Areas\SSO\Content\Css\newLogin.css" />
     <Content Include="Areas\SSO\Content\Css\main.min.css" />
@@ -1512,6 +1510,10 @@
     <Content Include="Areas\MyTime\Views\StudentAvailability\StudentAvailabilityPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\NewMultipleShiftTradeRequest.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\NewShiftTradeRequestWrapper.cshtml" />
+    <Content Include=".node\package.json" />
+    <Content Include=".node\npm.cmd" />
+    <Content Include=".node\node.targets" />
+    <Content Include=".node\node.cmd" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -2789,8 +2791,6 @@
     <Content Include="Areas\MyTime\Views\Schedule\AddAbsenceReportPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Schedule\AddShiftExchangeOfferPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\ShiftTradeBulletinBoardView.cshtml" />
-    <Content Include=".node\npm.cmd" />
-    <Content Include=".node\node.cmd" />
     <Content Include=".node\grunt.cmd" />
     <Content Include="Areas\Reporting\Views\web.config" />
     <Content Include="Areas\Reporting\Views\Report\Index.cshtml" />
