@@ -36193,6 +36193,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Time (Second).
+        /// </summary>
+        public static string TimeInSecond {
+            get {
+                return ResourceManager.GetString("TimeInSecond", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Time in State.
         /// </summary>
         public static string TimeInState {

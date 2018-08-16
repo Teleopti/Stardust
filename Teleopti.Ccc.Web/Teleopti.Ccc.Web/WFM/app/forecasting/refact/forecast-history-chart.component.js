@@ -71,6 +71,12 @@ function ForecastHistoryChartController($translate, $filter, $timeout) {
 						},
 						multiline: false
 					}
+				},
+				y: {
+					label: {
+						text: $translate.instant('Count'),
+						position: 'outer-middle'
+					}
 				}
 			}
 		});

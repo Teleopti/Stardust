@@ -97,10 +97,10 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 					Override: $translate.instant('AppliedAOverride'),
 					CampaignAndOverride: $translate.instant('BothOverrideAndCampaignAdded'),
 					Tasks: $translate.instant('Calls') + ' ←',
-					TotalAverageTaskTime: $translate.instant('TotalTalkTime') + ' ←',
-					AverageTaskTime: $translate.instant('TalkTime') + ' ←',
-					TotalAverageAfterTaskTime: $translate.instant('TotalACW') + ' ←',
-					AverageAfterTaskTime: $translate.instant('ACW') + ' ←'
+					TotalAverageTaskTime: $translate.instant('TotalTalkTime') + ' →',
+					AverageTaskTime: $translate.instant('TalkTime') + ' →',
+					TotalAverageAfterTaskTime: $translate.instant('TotalACW') + ' →',
+					AverageAfterTaskTime: $translate.instant('ACW') + ' →'
 				},
 				colors: {
 					TotalTasks: '#0099FF',
@@ -112,6 +112,12 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 					Override: '#9C27B0',
 					Campaign: '#EF5350',
 					CampaignAndOverride: '#888'
+				},
+				axes: {
+					TotalAverageTaskTime: 'y2',
+					AverageTaskTime: 'y2',
+					TotalAverageAfterTaskTime: 'y2',
+					AverageAfterTaskTime: 'y2'
 				},
 				hide: ['Tasks', 'AverageTaskTime', 'AverageAfterTaskTime'],
 				selection: {
@@ -151,13 +157,6 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 				}
 			},
 			axis: {
-				y2: {
-					show: true
-				},
-				TotalAverageTaskTime: 'y2',
-				AverageTaskTime: 'y2',
-				TotalAverageAfterTaskTime: 'y2',
-				AverageAfterTaskTime: 'y2',
 				x: {
 					type: 'category',
 					tick: {
@@ -165,6 +164,19 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 							max: 10
 						},
 						multiline: false
+					}
+				},
+				y: {
+					label: {
+						text: $translate.instant('Count'),
+						position: 'outer-middle'
+					}
+				},
+				y2: {
+					show: true,
+					label: {
+						text: $translate.instant('TimeInSecond'),
+						position: 'outer-middle'
 					}
 				}
 			}
