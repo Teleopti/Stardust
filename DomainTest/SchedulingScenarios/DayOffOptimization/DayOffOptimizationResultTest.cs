@@ -67,35 +67,37 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			dayCount.First().RelativeDifference.Should().Be.EqualTo(0);
 		}
 
-		[Test, Ignore("have a look at this one")]
+		[Test]
 		public void ShouldShowAgentWithMissingShiftAsNotScheduled()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
-			var activity = ActivityRepository.Has("_");
-			var skill = SkillRepository.Has("relevant skill", activity, new TimePeriod(8, 16));
+			var activityConectedToSkill = ActivityRepository.Has("_");
+			var activityConnectedToRuleSet = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("_", activityConectedToSkill, new TimePeriod(8, 16));
 
-			var scenario = ScenarioRepository.Has("some name");
+			var scenario = ScenarioRepository.Has("_");
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 			var shiftCategory = new ShiftCategory("_").WithId();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activityConnectedToRuleSet,
 				new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
-			var filterContract = new Contract("_")
+			var contract = new Contract("_")
 			{
-				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(0), TimeSpan.FromHours(90), TimeSpan.FromHours(8), TimeSpan.FromHours(0))
+				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(0), TimeSpan.FromHours(90), TimeSpan.FromHours(8),TimeSpan.FromHours(0)),
+				WorkTime = new WorkTime(new TimeSpan(0, 0, 0, 0))
 			};
-			var agent = PersonRepository.Has(filterContract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, skill);
-			
-			var planningGroup = new PlanningGroup("_").AddFilter(new ContractFilter(filterContract));
-			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2, SchedulePeriodType.Week, planningGroup);
-			PlanningGroupRepository.Has(planningGroup);
+			var contractSchedule = new ContractSchedule("_");
+			var contractScheduleWeek = new ContractScheduleWeek();
+			contractScheduleWeek.SetWorkdaysExcept();
+			contractSchedule.AddContractScheduleWeek(contractScheduleWeek);
+			PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, skill);
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1);
 
-			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0));
-			
-			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay, firstDay), new TimePeriod(8, 0, 16, 0));
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
 			
 			var result = Target.DoSchedulingAndDO(planningPeriod.Id.Value);
 			result.ScheduledAgentsCount.Should().Be.EqualTo(0);
 			result.BusinessRulesValidationResults.Count().Should().Be.EqualTo(1);
+			result.BusinessRulesValidationResults.First().ValidationErrors.First().ErrorResource.Should().Be.EqualTo("AgentHasDaysWithoutAnySchedule");
 		}
 
 		[Test]
