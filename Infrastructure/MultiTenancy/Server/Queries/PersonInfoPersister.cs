@@ -27,7 +27,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 
 			if (oldPersonInfo == null)
 			{
-				session.Save(personInfo);
+				if (!(string.IsNullOrWhiteSpace(personInfo.ApplicationLogonInfo.LogonName) && string.IsNullOrWhiteSpace(personInfo.Identity)))
+				{
+					session.Save(personInfo);
+				}
 			}
 			else
 			{
@@ -46,7 +49,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 
 			if (currentPersonInfo == null)
 			{
-				session.Save(personInfo);
+				if (!string.IsNullOrEmpty(personInfo.Identity))
+				{
+					session.Save(personInfo);
+				}
 			}
 			else
 			{
@@ -78,7 +84,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 
 			if (currentPersonInfo == null)
 			{
-				session.Save(personInfo);
+				if (!string.IsNullOrEmpty(personInfo.ApplicationLogonInfo.LogonName))
+				{
+					session.Save(personInfo);
+				}
 			}
 			else
 			{
