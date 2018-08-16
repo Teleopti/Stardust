@@ -51,7 +51,8 @@ Scenario: Creating next planning period should generate a period with the same t
 	And I click create next planning period
 	Then I should see a planning period between '2016-07-01' and '2016-07-31'
 
-@RunningStardust 
+@RunningStardust
+@ignore
 Scenario: schedule a planning period
 	Given the time is '2016-06-07'
 	And there is a dayoff named 'Day off'
