@@ -14511,6 +14511,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Historical Data.
+        /// </summary>
+        public static string HistoryData {
+            get {
+                return ResourceManager.GetString("HistoryData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Holiday.
         /// </summary>
         public static string Holiday {
