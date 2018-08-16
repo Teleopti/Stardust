@@ -10,7 +10,8 @@ function applyBaseConfig(config) {
 			require('karma-teamcity-reporter'),
 			require('karma-mocha-reporter'),
 			require('karma-jasmine'),
-			require('karma-chrome-launcher')
+			require('karma-chrome-launcher'),
+			require('karma-ng-html2js-preprocessor')
 		],
 
 		captureTimeout: 210000,
@@ -37,11 +38,17 @@ function applyBaseConfig(config) {
 				flags: ['--window-size=400,400', '--window-position=-400,0']
 			}
 		},
-		singleRun: false // Continuous Integration mode
+		singleRun: false, // Continuous Integration mode
 		// to use this attribute, run "npm run devTest -- keyWordFromSpecFileDescribe". example: npm run devTest -- Rta
 		// client: {
 		// 	args: parseTestPattern(process.argv)
 		// }
+		preprocessors: {
+			'+(app|html)/**/*.html': ['ng-html2js']
+		},
+		ngHtml2JsPreprocessor: {
+			moduleName: 'wfm.templates'
+		}
 	});
 }
 
