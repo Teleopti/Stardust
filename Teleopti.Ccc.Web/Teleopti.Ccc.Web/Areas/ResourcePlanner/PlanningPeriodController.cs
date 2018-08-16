@@ -55,27 +55,21 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			var lastJobResult = planningPeriod.GetLastSchedulingJob();
 			if (lastJobResult != null && lastJobResult.FinishedOk)
 			{
-				try
-				{
-					var fullSchedulingResultModel = JsonConvert.DeserializeObject<FullSchedulingResultModel>(lastJobResult.Details.Last().Message);
+				var fullSchedulingResultModel = JsonConvert.DeserializeObject<FullSchedulingResultModel>(lastJobResult.Details.Last().Message);
 
-					foreach (var schedulingHintError in fullSchedulingResultModel.BusinessRulesValidationResults)
-					{
-						HintsHelper.BuildErrorMessages(schedulingHintError.ValidationErrors);
-					}
-					return Ok(new
-					{
-						PlanningPeriod = new
-						{
-							StartDate = range.StartDate.Date,
-							EndDate = range.EndDate.Date
-						},
-						OptimizationResult = fullSchedulingResultModel,
-					});
-				}
-				catch (JsonSerializationException)
+				foreach (var schedulingHintError in fullSchedulingResultModel.BusinessRulesValidationResults)
 				{
+					HintsHelper.BuildErrorMessages(schedulingHintError.ValidationErrors);
 				}
+				return Ok(new
+				{
+					PlanningPeriod = new
+					{
+						StartDate = range.StartDate.Date,
+						EndDate = range.EndDate.Date
+					},
+					OptimizationResult = fullSchedulingResultModel
+				});
 			}
 			return Ok(new {});
 		}
