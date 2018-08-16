@@ -1,6 +1,6 @@
 angular.module('wfm.forecasting').component('forecastHistoryChart', {
 	templateUrl: 'app/forecasting/refact/forecast-history-chart.html',
-	controller: ForecastHistoryChartCtrl,
+	controller: ForecastHistoryChartController,
 	bindings: {
 		chartId: '=',
 		selectable: '=',
@@ -8,7 +8,7 @@ angular.module('wfm.forecasting').component('forecastHistoryChart', {
 	}
 });
 
-function ForecastHistoryChartCtrl($translate, $filter, $timeout) {
+function ForecastHistoryChartController($translate, $filter, $timeout) {
 	var ctrl = this;
 	var chart;
 	ctrl.refresh = drawForecastHistoryChart;
@@ -26,14 +26,19 @@ function ForecastHistoryChartCtrl($translate, $filter, $timeout) {
 			return;
 		}
 
+		var labelDate = $translate.instant('Date');
+		var labelOriginalTask = $translate.instant('Tasks');
+		var labelValidatedTask = $translate.instant('OutlierTasks');
+
 		var preparedData = {
-			dateSeries: ['Date'],
-			tasksSeries: ['Tasks'],
-			outlierTasks: ['OutlierTasks']
+			dateSeries: [labelDate],
+			tasksSeries: [labelOriginalTask],
+			outlierTasks: [labelValidatedTask]
 		};
 
 		for (var i = 0; i < days.length; i++) {
-			preparedData.dateSeries.push(moment(days[i].Date).format('DD/MM/YYYY'));
+			var date = moment(days[i].Date);
+			preparedData.dateSeries.push(date.format('L'));
 			preparedData.tasksSeries.push(days[i].Tasks);
 			preparedData.outlierTasks.push(days[i].OutlierTasks);
 		}
@@ -41,15 +46,16 @@ function ForecastHistoryChartCtrl($translate, $filter, $timeout) {
 		chart = c3.generate({
 			bindto: '#' + chartId,
 			data: {
-				x: 'Date',
+				x: labelDate,
 				columns: [preparedData.dateSeries, preparedData.tasksSeries, preparedData.outlierTasks],
 				names: {
-					Tasks: $translate.instant('Tasks'),
-					OutlierTasks: $translate.instant('OutlierTasks')
+					Date: labelDate,
+					OriginalTasks: labelOriginalTask,
+					ValidatedTasks: labelValidatedTask
 				},
 				colors: {
-					Tasks1: '#99D6FF',
-					OutlierTasks: '#77ac39'
+					OriginalTasks: '#99D6FF',
+					ValidatedTasks: '#77ac39'
 				}
 			},
 			subchart: {
