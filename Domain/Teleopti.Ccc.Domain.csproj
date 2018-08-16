@@ -1893,7 +1893,6 @@
     <Compile Include="Optimization\OptimizationCallback.cs" />
     <Compile Include="Optimization\IOptimizationPreferencesProvider.cs" />
     <Compile Include="ApplicationLayer\Events\GroupPageCollectionChangedEvent.cs" />
-    <Compile Include="Optimization\DayOffOptimizationWeb.cs" />
     <Compile Include="Repositories\IAnalyticsDayOffRepository.cs" />
     <Compile Include="Repositories\IAnalyticsPreferenceRepository.cs" />
     <Compile Include="Repositories\IAnalyticsDateRepository.cs" />

@@ -26,9 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 	[DatabaseTest]
 	public class DayOffOptimizationWebUowTest
 	{
-#pragma warning disable 618
-		public DayOffOptimizationWeb Target;
-#pragma warning restore 618
+		public FullScheduling Target;
 
 		public IScenarioRepository ScenarioRepository;
 		public IDayOffTemplateRepository DayOffTemplateRepository;

@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytic
 using Teleopti.Ccc.Domain.Backlog;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Cascading;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
@@ -62,9 +61,7 @@ using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Ccc.Secrets.WorkShiftPeriodValueCalculator;
-using Teleopti.Interfaces.Domain;
 using IWorkShiftCalculator = Teleopti.Ccc.Domain.Scheduling.IWorkShiftCalculator;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
@@ -292,15 +289,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_configuration.Toggle(Toggles.ResourcePlanner_DayOffOptimizationIslands_47208))
 			{
 				builder.RegisterType<DayOffOptimizationCommandHandler>().As<IDayOffOptimizationCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
-#pragma warning disable 618
-				builder.RegisterType<DayOffOptimizationWeb>().InstancePerLifetimeScope().ApplyAspects();
-#pragma warning restore 618
 			}
 			else
 			{
-#pragma warning disable 618
-				builder.RegisterType<DayOffOptimizationWeb.DayOffOptimizationWebToggleOff>().As<DayOffOptimizationWeb>().InstancePerLifetimeScope().ApplyAspects();
-#pragma warning restore 618
 				builder.RegisterType<DayOffOptimizationDirectCallCommandHandler>().As<IDayOffOptimizationCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
 			}
 
