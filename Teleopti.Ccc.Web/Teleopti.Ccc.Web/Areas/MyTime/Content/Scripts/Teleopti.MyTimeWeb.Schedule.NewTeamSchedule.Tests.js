@@ -5,7 +5,7 @@
 		fakeOriginalAgentSchedulesData,
 		fakeDefaultTeamData,
 		fakeAvailableTeamsData,
-		fakeWindow,
+		agentCount = 50,
 		ajax,
 		fetchTeamScheduleDataRequestCount,
 		constants = Teleopti.MyTimeWeb.Common.Constants,
@@ -22,7 +22,12 @@
 		},
 		teardown: function() {
 			$('.new-teamschedule-view').remove();
-			Teleopti.MyTimeWeb.Common.DateFormat = null;
+
+			fakeTeamScheduleData = undefined;
+			fakeOriginalAgentSchedulesData = undefined;
+			fakeDefaultTeamData = undefined;
+			fakeAvailableTeamsData = undefined;
+			fetchTeamScheduleDataRequestCount = 0;
 		}
 	});
 
@@ -816,26 +821,6 @@
 		equal($('.my-schedule-column .not-scheduled-text').text(), '@Resources.NotScheduled');
 	});
 
-	test("should map dayOff of agents' schedule", function() {
-		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
-		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
-			return true;
-		};
-		$('body').append(agentSchedulesHtml);
-		initVm();
-
-		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
-		vm.paging.take = 100;
-
-		$('.new-teamschedule-filter').click();
-
-		vm.searchNameText('dayoffAgent');
-		$('.new-teamschedule-submit-buttons button.btn-primary').click();
-
-		equal($('.teammates-schedules-container .dayoff').length > 0, true);
-		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
-	});
-
 	test("should map notScheduled of agents' schedule", function() {
 		$('body').append(agentSchedulesHtml);
 		if (fakeOriginalAgentSchedulesData.length > 0) {
@@ -869,6 +854,62 @@
 		equal(completeLoadedCount, 2);
 		equal($('.teammates-schedules-container .dayoff').length == 1, true);
 	});
+
+	test("should not filter agents' day off immediately after turn on show only day off toggle but widthout clicking search on mobile", function() {
+		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
+			return true;
+		};
+		$('body').append(agentSchedulesHtml);
+
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+		$('.new-teamschedule-filter').click();
+		$('.new-teamschedule-day-off-toggle input').click();
+
+		equal(completeLoadedCount, 1);
+		equal($('.teammates-schedules-container .dayoff').length == 0, true);
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
+	});
+
+	test("should filter agents' day off after turn on show only day off toggle and click search on mobile", function() {
+		$('body').append(agentSchedulesHtml);
+
+		if (fakeOriginalAgentSchedulesData.length > 0) {
+			fakeOriginalAgentSchedulesData[agentCount - 1].IsDayOff = true;
+			fakeOriginalAgentSchedulesData[agentCount - 1].Periods = [];
+		}
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+		$('.new-teamschedule-filter').click();
+		$('.new-teamschedule-day-off-toggle input').click();
+		$('.new-teamschedule-submit-buttons .btn-primary').click();
+
+		equal(completeLoadedCount, 2);
+		equal($('.teammates-schedules-container .dayoff').length == 1, true);
+		equal(
+			$('.teammates-agent-name-row .new-teamschedule-agent-name:nth-child(1) .text-name').text(),
+			'Jon Kleinsmith50'
+		);
+	});
+
+	function setup() {
+		fetchTeamScheduleDataRequestCount = 0;
+		completeLoadedCount = 0;
+		setUpHtml();
+		setUpFakeData();
+		setupAjax();
+
+		$('body').append('<div class="new-teamschedule-view"></div>');
+		Teleopti.MyTimeWeb.UserInfo = {
+			WhenLoaded: function(whenLoadedCallBack) {
+				var data = { WeekStart: 1 };
+				whenLoadedCallBack(data);
+			}
+		};
+	}
 
 	function setUpFakeData() {
 		fakeAvailableTeamsData = {
@@ -1146,62 +1187,53 @@
 			}
 		};
 
-		if (fakeOriginalAgentSchedulesData == undefined || fakeOriginalAgentSchedulesData == null) {
-			fakeOriginalAgentSchedulesData = [];
-			for (var i = 0; i < 20; i++) {
-				var agentSchedule = {
-					Name: 'Jon Kleinsmith' + (i + 1),
-					StartTimeUtc: '2018-05-24T05:00:00',
-					PersonId: 'a74e1f94-6331-4a7f-9746-9b5e015b257c',
-					MinStart: null,
-					Total: 1,
-					DayOffName: null,
-					ContractTimeInMinute: 480.0,
-					Date: '',
-					FixedDate: '',
-					Header: '',
-					HasMainShift: '',
-					HasOvertime: '',
-					IsFullDayAbsence: false,
-					IsDayOff: false,
-					IsNotScheduled: false,
-					Summary: '',
-					Periods: [
-						{
-							Title: 'Email',
-							TimeSpan: '05:00 - 06:45',
-							StartTime: '2018-05-24T05:00:00',
-							EndTime: '2018-05-24T06:45:00',
-							Summary: '',
-							StyleClassName: '',
-							Meeting: '',
-							StartPositionPercentage: '',
-							EndPositionPercentage: '',
-							Color: '#80FF80',
-							IsOvertime: false,
-							IsAbsenceConfidential: false,
-							TitleTime: '05:00 - 06:45'
-						}
-					],
-					DayOfWeekNumber: '',
-					HasNotScheduled: '',
-					ShiftCategory: {
-						DisplayColor: '#80FF80',
-						Id: null,
-						Name: 'Early',
-						ShortName: 'AM'
+		fakeOriginalAgentSchedulesData = [];
+		for (var i = 0; i < agentCount; i++) {
+			var agentSchedule = {
+				Name: 'Jon Kleinsmith' + (i + 1),
+				StartTimeUtc: '2018-05-24T05:00:00',
+				PersonId: 'a74e1f94-6331-4a7f-9746-9b5e015b257c',
+				MinStart: null,
+				Total: 1,
+				DayOffName: null,
+				ContractTimeInMinute: 480.0,
+				Date: '',
+				FixedDate: '',
+				Header: '',
+				HasMainShift: '',
+				HasOvertime: '',
+				IsFullDayAbsence: false,
+				IsDayOff: false,
+				IsNotScheduled: false,
+				Summary: '',
+				Periods: [
+					{
+						Title: 'Email',
+						TimeSpan: '05:00 - 06:45',
+						StartTime: '2018-05-24T05:00:00',
+						EndTime: '2018-05-24T06:45:00',
+						Summary: '',
+						StyleClassName: '',
+						Meeting: '',
+						StartPositionPercentage: '',
+						EndPositionPercentage: '',
+						Color: '#80FF80',
+						IsOvertime: false,
+						IsAbsenceConfidential: false,
+						TitleTime: '05:00 - 06:45'
 					}
-				};
+				],
+				DayOfWeekNumber: '',
+				HasNotScheduled: '',
+				ShiftCategory: {
+					DisplayColor: '#80FF80',
+					Id: null,
+					Name: 'Early',
+					ShortName: 'AM'
+				}
+			};
 
-				fakeOriginalAgentSchedulesData.push(agentSchedule);
-			}
-
-			fakeOriginalAgentSchedulesData.push({
-				Name: 'dayoffAgent',
-				IsDayOff: true,
-				DayOffName: 'Day off',
-				Periods: []
-			});
+			fakeOriginalAgentSchedulesData.push(agentSchedule);
 		}
 	}
 
@@ -1222,21 +1254,31 @@
 					var data = JSON.parse(option.data);
 					var skip = data.Paging.Skip;
 					var take = data.Paging.Take;
+
+					var filteredAgentSchedulesData = [];
+					if (data.ScheduleFilter.isDayOff) {
+						filteredAgentSchedulesData = fakeOriginalAgentSchedulesData.filter(function(s) {
+							return s.IsDayOff;
+						});
+					} else {
+						filteredAgentSchedulesData = fakeOriginalAgentSchedulesData;
+					}
+
 					var pagedAgentSchedules = [];
 					for (var i = skip; i < skip + take; i++) {
-						if (fakeOriginalAgentSchedulesData[i]) {
+						if (filteredAgentSchedulesData[i]) {
 							if (data.ScheduleFilter.searchNameText) {
 								if (
-									fakeOriginalAgentSchedulesData[i].Name.indexOf(data.ScheduleFilter.searchNameText) >
-									-1
+									filteredAgentSchedulesData[i].Name.indexOf(data.ScheduleFilter.searchNameText) > -1
 								) {
-									pagedAgentSchedules.push(fakeOriginalAgentSchedulesData[i]);
+									pagedAgentSchedules.push(filteredAgentSchedulesData[i]);
 								}
 							} else {
-								pagedAgentSchedules.push(fakeOriginalAgentSchedulesData[i]);
+								pagedAgentSchedules.push(filteredAgentSchedulesData[i]);
 							}
 						}
 					}
+
 					fakeTeamScheduleData.AgentSchedules = [];
 					fakeTeamScheduleData.AgentSchedules = pagedAgentSchedules;
 					option.success(fakeTeamScheduleData);
@@ -1279,7 +1321,7 @@
 			'				</li>',
 			'				<!-- /ko -->',
 			'				<!-- ko ifnot: isHostAMobile -->',
-			'				<li class="new-teamschedule-day-off-toggle">',
+			"				<li class=\"new-teamschedule-day-off-toggle\" data-bind=\"tooltip: { title: '@Resources.ShowOnlyDayOff', html: true, trigger: 'hover', placement: 'bottom'}\">",
 			'					<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff"/>',
 			'					<label for="show-only-day-off-switch">Day off switch</label>',
 			'				</li>',
@@ -1424,6 +1466,11 @@
 			'				<input type="search" class="form-control" placeholder=\'@Resources.SearchHintForName\' data-bind="value: searchNameText" />',
 			'				<input type="submit" style="display: none"/>',
 			'			</form>',
+			'			<div class="new-teamschedule-day-off-toggle">',
+			'				<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff"/>',
+			'				<label for="show-only-day-off-switch">Day off switch</label>',
+			'				<span>@Resources.ShowOnlyDayOff</span>',
+			'			</div>',
 			'			<div class="empty-search-result">',
 			'				<!-- ko if: emptySearchResult -->',
 			'				<label>',
@@ -1440,33 +1487,6 @@
 			'	</div>',
 			'</div>'
 		].join('');
-	}
-
-	function setup() {
-		fetchTeamScheduleDataRequestCount = 0;
-		completeLoadedCount = 0;
-		setUpHtml();
-		setUpFakeData();
-		setupAjax();
-
-		Teleopti.MyTimeWeb.Common.DateFormat = dateFormat;
-
-		$('body').append('<div class="new-teamschedule-view"></div>');
-		Teleopti.MyTimeWeb.UserInfo = {
-			WhenLoaded: function(whenLoadedCallBack) {
-				var data = { WeekStart: 1 };
-				whenLoadedCallBack(data);
-			}
-		};
-
-		fakeWindow = {
-			navigator: {
-				appVersion:
-					'5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1',
-				userAgent:
-					'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1'
-			}
-		};
 	}
 
 	function initVm() {

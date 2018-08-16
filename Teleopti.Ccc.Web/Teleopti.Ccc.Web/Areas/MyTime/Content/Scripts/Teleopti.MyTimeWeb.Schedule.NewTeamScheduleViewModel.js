@@ -82,7 +82,7 @@
 
 	self.showOnlyDayOff.subscribe(function(value) {
 		self.filter.isDayOff = value;
-		self.filterChangedCallback(self.selectedDate().format(requestDateOnlyFormat));
+		if (!self.isMobileEnabled) self.filterChangedCallback(self.selectedDate().format(requestDateOnlyFormat));
 	});
 
 	self.openTeamSelectorPanel = function(data, event) {
@@ -180,7 +180,9 @@
 		self.totalAgentCount(data.TotalAgentCount);
 
 		self.hasFiltered(
-			!!self.filter.searchNameText || (self.selectedTeamIds[0] && self.selectedTeamIds[0] != self.defaultTeamId)
+			!!self.filter.searchNameText ||
+				((self.selectedTeamIds[0] && self.selectedTeamIds[0] != self.defaultTeamId) ||
+					(self.isMobileEnabled && self.showOnlyDayOff()))
 		);
 		self.emptySearchResult(data.AgentSchedules.length == 0);
 

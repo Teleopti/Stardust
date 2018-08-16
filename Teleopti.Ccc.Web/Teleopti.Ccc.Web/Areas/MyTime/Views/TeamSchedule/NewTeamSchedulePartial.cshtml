@@ -215,6 +215,11 @@
 				<input type="search" class="form-control" placeholder='@Resources.SearchHintForName' data-bind="value: searchNameText" />
 				<input type="submit" style="display: none"/>
 			</form>
+			<div class="new-teamschedule-day-off-toggle">
+				<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff"/>
+				<label for="show-only-day-off-switch">Day off switch</label>
+				<span>@Resources.ShowOnlyDayOff</span>
+			</div>
 			<div class="empty-search-result">
 				<!-- ko if: emptySearchResult -->
 				<label>

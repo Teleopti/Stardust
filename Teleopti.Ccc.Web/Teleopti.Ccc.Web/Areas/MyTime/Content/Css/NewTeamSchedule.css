@@ -8,7 +8,6 @@
 }
 .new-teamschedule-view-nav .navbar-teleopti {
 	min-width: 600px;
-	justify-content: space-between;
 	margin: 0;
 	display: flex;
 	justify-content: flex-start;
@@ -73,6 +72,7 @@
 	display: block;
 	border-radius: 100px;
 	position: relative;
+	display: inline-block;
 }
 .new-teamschedule-day-off-toggle label:after {
 	content: '';
@@ -88,6 +88,7 @@
 .new-teamschedule-day-off-toggle input:checked + label {
 	background: #bada55;
 	transition: 0.4s;
+	display: inline-block;
 }
 .new-teamschedule-day-off-toggle input:checked + label:after {
 	left: calc(100%);
@@ -97,9 +98,9 @@
 	width: 20px;
 }
 .new-teamschedule-view-nav .submenu li.new-teamschedule-filter-component {
-	min-width: 220px;
-	max-width: 220px;
+	width: 220px;
 	height: 43px;
+	flex: 1 1;
 }
 .new-teamschedule-view-nav .submenu li.new-teamschedule-filter-component > div:first-child {
 	position: absolute;
@@ -143,9 +144,9 @@
 	}
 }
 .new-teamschedule-view-nav .submenu li.new-teamschedule-search-container {
-	min-width: 180px;
-	max-width: 180px;
+	width: 180px;
 	height: 43px;
+	flex: 1 1;
 }
 .new-teamschedule-view-nav .submenu li.new-teamschedule-search-container button[type='submit'] {
 	background: transparent;
