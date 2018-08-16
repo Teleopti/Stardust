@@ -1,29 +1,34 @@
-$files = '.angular-cli.json',`
-         '.browserlistrc',`
-         '.eslintrc',`
-         '.prettierrc.json',`
-         'gruntfile.js',`
-         'index.tpl.html',`
-         'index.webpack.tpl.html',`
-         'index_desktop_client.tpl.html',`
-         'karma.conf.js',`
-         'manifest.webmanifest.json',`
-         'protractor.conf.js',`
-         'readme.md',`
-         'tsconfig.json',`
-         'tslint.json',`
-         'webpack.config.js',`
-         'yarn.lock',`
-         'package.json',`
-         'package-lock.json'
+Set-Location $PSScriptRoot\..\WFM
 
-$relpath = "\Teleopti.Ccc.Web\Teleopti.Ccc.Web\WFM"
-$delpath = $env:WorkingDirectory + $relpath
+Write-Output "Removing non-dist files"
+Remove-Item @(
+    ".browserlistrc",
+    ".eslintrc",
+    ".postcssrc",
+    ".prettierignore",
+    ".prettierrc.json",
+    "angular.json",
+    "Gruntfile.js",
+    "index.tpl.html",
+    "index_desktop_client.tpl.html",
+    "package.json",
+    "package-lock.json",
+    "README.md",
+    "styleguide_translation_keys.html",
+    "tsconfig.json",
+    "tslint.json",
+    "app",
+    "css",
+    "e2e",
+    "html",
+    "src",
+    "test"
+) -Recurse -Force -Verbose
 
-gci -Path "$delpath" | Remove-Item -Include $files -recurse -Force -Verbose
+Write-Output "Removing .map files from dist"
+Remove-Item .\dist\ -Recurse -Include *.map
 
+Write-Output "Removing node_modules"
+Remove-Item "node_modules" -Recurse -Force
 
-$delFolder1 = $delpath + "\app"
-$delFolder2 = $delpath + "\src"
-Remove-Item $delFolder1 -Recurse -Force -verbose
-Remove-Item $delFolder2 -Recurse -Force -verbose
+Set-Location $PSScriptRoot
