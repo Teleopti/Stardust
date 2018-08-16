@@ -37,7 +37,7 @@
 <div class="con-row activity-info">
 	<div class="con-flex">
 		<div ng-if="vm.selectedShiftLayer">
-			<span class="timespan">{{vm.selectedShiftLayer.TimeSpan}}</span>
+			<span class="timespan">{{ vm.getTimeSpan()  }}</span>
 			<span>
 				<md-select class="activity-selector" ng-model="vm.selectedActivitiyId" ng-change="vm.changeActivityType()" required placeholder="{{'SelectAnActivity'|translate}}">
 					<md-option ng-repeat="activity in vm.availableActivities" ng-value="activity.Id">
@@ -79,10 +79,11 @@
 					 'border-light': shiftLayer.UseLighterBorder(),
 					 'divide-line': shiftLayer.SameTypeAsLast,
 					 'disabled': vm.isNotAllowedToChange(shiftLayer)}"
-					 ng-style="{'width':vm.getShiftLayerWidth(shiftLayer) +'px', 'background-color': shiftLayer.Color, 'left': vm.getShiftLayerLeft(shiftLayer) + 'px'}"
-					 ng-click="vm.toggleSelection(shiftLayer)"
+					 ng-style="{'width': shiftLayer.Width +'px', 'background-color': shiftLayer.Color, 'left': shiftLayer.Left + 'px'}"
+					 ng-click="vm.toggleSelection(shiftLayer, $event)"
 					 ng-repeat="shiftLayer in vm.scheduleVm.ShiftLayers"></div>
 			</div>
+
 		</div>
 
 	</div>

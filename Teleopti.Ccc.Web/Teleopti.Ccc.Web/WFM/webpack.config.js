@@ -71,6 +71,7 @@ module.exports = env => {
 		// outputPath: 'dist',
 		fileName: 'resources/modules.js',
 		filesToConcat: [
+			'./node_modules/interactjs/dist/interact.js',
 			'./node_modules/angular/angular.js',
 			'./node_modules/angular-ui-router/release/angular-ui-router.js',
 			'./node_modules/angular-resizable/src/angular-resizable.js',

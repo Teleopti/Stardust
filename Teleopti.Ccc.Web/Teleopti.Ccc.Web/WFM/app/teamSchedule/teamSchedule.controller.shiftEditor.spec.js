@@ -730,7 +730,182 @@
 		var saveButton = panel[0].querySelector(".btn-save");
 		expect(saveButton.disabled).toBeFalsy();
 	});
-	
+
+	it('should able to extend start time with a proper value after resizing an selected activity', function () {		
+		fakeTeamSchedule.has({
+			"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+			"Name": "Annika Andersson",
+			"Date": "2018-08-13",
+			"WorkTimeMinutes": 60,
+			"ContractTimeMinutes": 60,
+			"Projection": [{
+				"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+				"Color": "#ffffff",
+				"Description": "Phone",
+				"Start": "2018-08-13 08:00",
+				"End": "2018-08-13 09:00",
+				"Minutes": 60,
+				"IsOvertime": false,
+				"ActivityId": '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+			}],
+			"Timezone": { "IanaId": "Europe/Berlin" }
+		});
+
+		var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", "2018-08-13", "Europe/Berlin");
+		var vm = panel.isolateScope().vm;
+
+		var shiftLayer = panel[0].querySelector(".shift-layer");
+		shiftLayer.click();
+
+		var interact = vm.scheduleVm.ShiftLayers[0].interact;
+
+		interact.fire({
+			type: 'resizemove',
+			target: shiftLayer,
+			rect: {
+				width: 120
+			},
+			deltaRect: { left: -60 }
+		});
+		interact.fire({
+			type: 'resizeend',
+			target: shiftLayer
+		});
+		
+		expect(vm.scheduleVm.ShiftLayers[0].Current.TimeSpan).toEqual("2018-08-13 07:00 - 2018-08-13 09:00");
+	});
+
+	it('should able to shorten start time with a proper value after resizing an selected activity', function () {
+		fakeTeamSchedule.has({
+			"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+			"Name": "Annika Andersson",
+			"Date": "2018-08-16",
+			"WorkTimeMinutes": 60,
+			"ContractTimeMinutes": 60,
+			"Projection": [{
+				"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+				"Color": "#ffffff",
+				"Description": "Phone",
+				"Start": "2018-08-16 08:00",
+				"End": "2018-08-16 09:00",
+				"Minutes": 60,
+				"IsOvertime": false,
+				"ActivityId": '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+			}],
+			"Timezone": { "IanaId": "Europe/Berlin" }
+		});
+
+		var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", "2018-08-16", "Europe/Berlin");
+		var vm = panel.isolateScope().vm;
+		
+		var shiftLayer = panel[0].querySelector(".shift-layer");
+		shiftLayer.click();
+
+		var interact = vm.scheduleVm.ShiftLayers[0].interact;
+		interact.fire({
+			type: 'resizemove',
+			target: shiftLayer,
+			rect: {
+				width: 27
+			},
+			deltaRect: { left: 33 }
+		});
+
+		interact.fire({
+			type: 'resizeend',
+			target: shiftLayer
+		});
+
+		expect(vm.scheduleVm.ShiftLayers[0].Current.TimeSpan).toEqual("2018-08-16 08:35 - 2018-08-16 09:00");
+	});
+
+	it('should able to extend end time with a proper value after resizing an selected activity', function () {
+		fakeTeamSchedule.has({
+			"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+			"Name": "Annika Andersson",
+			"Date": "2018-08-13",
+			"WorkTimeMinutes": 60,
+			"ContractTimeMinutes": 60,
+			"Projection": [{
+				"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+				"Color": "#ffffff",
+				"Description": "Phone",
+				"Start": "2018-08-13 08:00",
+				"End": "2018-08-13 09:00",
+				"Minutes": 60,
+				"IsOvertime": false,
+				"ActivityId": '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+			}],
+			"Timezone": { "IanaId": "Europe/Berlin" }
+		});
+
+		var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", "2018-08-13", "Europe/Berlin");
+		var vm = panel.isolateScope().vm;
+
+		var shiftLayer = panel[0].querySelector(".shift-layer");
+		shiftLayer.click();
+
+		var interact = vm.scheduleVm.ShiftLayers[0].interact;
+		interact.fire({
+			type: 'resizemove',
+			target: shiftLayer,
+			rect: {
+				width: 122.5
+			},
+			deltaRect: { left: 0 }
+		});
+
+		interact.fire({
+			type: 'resizeend',
+			target: shiftLayer
+		});
+
+		expect(vm.scheduleVm.ShiftLayers[0].Current.TimeSpan).toEqual("2018-08-13 08:00 - 2018-08-13 10:00");
+	});
+
+	it('should able to shorten end time with a proper value after resizing an selected activity', function () {
+		fakeTeamSchedule.has({
+			"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+			"Name": "Annika Andersson",
+			"Date": "2018-08-13",
+			"WorkTimeMinutes": 60,
+			"ContractTimeMinutes": 60,
+			"Projection": [{
+				"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+				"Color": "#ffffff",
+				"Description": "Phone",
+				"Start": "2018-08-13 08:00",
+				"End": "2018-08-13 09:00",
+				"Minutes": 60,
+				"IsOvertime": false,
+				"ActivityId": '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+			}],
+			"Timezone": { "IanaId": "Europe/Berlin" }
+		});
+
+		var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", "2018-08-13", "Europe/Berlin");
+		var vm = panel.isolateScope().vm;
+
+		var shiftLayer = panel[0].querySelector(".shift-layer");
+		shiftLayer.click();
+
+		var interact = vm.scheduleVm.ShiftLayers[0].interact;
+		interact.fire({
+			type: 'resizemove',
+			target: shiftLayer,
+			rect: {
+				width: 29
+			},
+			deltaRect: { left: 0 }
+		});
+
+		interact.fire({
+			type: 'resizeend',
+			target: shiftLayer
+		});
+
+		expect(vm.scheduleVm.ShiftLayers[0].Current.TimeSpan).toEqual("2018-08-13 08:00 - 2018-08-13 08:30");
+	});
 
 	it('should save changes with correct data', function () {
 		var date = "2018-06-15";
@@ -1481,7 +1656,7 @@
 
 		var saveButton = panel[0].querySelector('.btn-save');
 		saveButton.click();
-		
+
 		expect(fakeNoticeService.successMessage).toEqual('SuccessfulMessageForSavingScheduleChanges');
 	});
 
@@ -1528,8 +1703,6 @@
 		expect(fakeNoticeService.errorMessage).toEqual('Error happens');
 	});
 
-
-
 	describe("in locale en-UK", function () {
 		beforeEach(function () { moment.locale('en-UK'); });
 		afterEach(function () { moment.locale('en'); });
@@ -1568,6 +1741,53 @@
 
 			expect(element.querySelector('.date').innerText.trim()).toEqual('06/12/2018');
 		});
+
+		it('should show time span correctly after resizing a selected activity', function () {
+			fakeTeamSchedule.has({
+				"PersonId": "e0e171ad-8f81-44ac-b82e-9c0f00aa6f22",
+				"Name": "Annika Andersson",
+				"Date": "2018-08-13",
+				"WorkTimeMinutes": 60,
+				"ContractTimeMinutes": 60,
+				"Projection": [{
+					"ShiftLayerIds": ["61678e5a-ac3f-4daa-9577-a83800e49622"],
+					"Color": "#ffffff",
+					"Description": "Phone",
+					"Start": "2018-08-13 08:00",
+					"End": "2018-08-13 09:00",
+					"Minutes": 60,
+					"IsOvertime": false,
+					"ActivityId": '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+				}],
+				"Timezone": { "IanaId": "Europe/Berlin" }
+			});
+
+			var scope = $rootScope.$new();
+			var panel = setUp("e0e171ad-8f81-44ac-b82e-9c0f00aa6f22", "2018-08-13", "Europe/Berlin", scope);
+			var vm = panel.isolateScope().vm;
+
+			var shiftLayer = panel[0].querySelector(".shift-layer");
+			shiftLayer.click();
+
+			var interact = vm.scheduleVm.ShiftLayers[0].interact;
+
+			interact.fire({
+				type: 'resizemove',
+				target: shiftLayer,
+				rect: {
+					width: 120
+				},
+				deltaRect: { left: -60 }
+			});
+			interact.fire({
+				type: 'resizeend',
+				target: shiftLayer
+			});
+			scope.$apply();
+
+			var timespanEl = panel[0].querySelector(".timespan");
+			expect(timespanEl.innerText.trim()).toEqual("08/13/2018 7:00 AM - 08/13/2018 9:00 AM");
+		});
 	});
 
 	describe("in locale fa", function () {
@@ -1583,7 +1803,7 @@
 	});
 
 	function setUp(personId, date, timezone, scope) {
-		scope = scope || $rootScope.$new();
+		scope = $rootScope.$new();
 		scope.personId = personId;
 		scope.date = date;
 		scope.timezone = timezone;

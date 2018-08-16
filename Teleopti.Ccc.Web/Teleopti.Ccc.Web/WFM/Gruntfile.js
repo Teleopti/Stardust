@@ -96,6 +96,7 @@ module.exports = function(grunt) {
 		concat: {
 			distModules: {
 				src: [
+					'node_modules/interactjs/dist/interact.js',
 					'node_modules/angular/angular.min.js',
 					'node_modules/angular-ui-router/release/angular-ui-router.min.js',
 					'node_modules/angular-resizable/angular-resizable.min.js',
@@ -161,6 +162,7 @@ module.exports = function(grunt) {
 			},
 			distJsForDesktop: {
 				src: [
+					'node_modules/interactjs/dist/interact.js',
 					'node_modules/angular/angular.min.js',
 					'node_modules/angular-ui-router/release/angular-ui-router.min.js',
 					'node_modules/angular-resizable/angular-resizable.min.js',

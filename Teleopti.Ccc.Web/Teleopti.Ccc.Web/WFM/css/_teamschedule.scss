@@ -1355,8 +1355,7 @@ teams-time-picker.ng-invalid-dst {
 				display: inline-block;
 				height: 25px;
 				background-color: gainsboro;
-				cursor: pointer;
-
+			//	cursor: pointer;
 
 				&:first-of-type {
 					border-radius: 4px 0 0 4px;
@@ -1390,18 +1389,18 @@ teams-time-picker.ng-invalid-dst {
 				&.disabled {
 					cursor: not-allowed;
 				}
-			}
 
-			.shift-layer.selected {
-				opacity: 1;
-				border: 1px dashed;
+				&.selected {
+					opacity: 1;
+					border: 1px dashed;
 
-				&.border-light {
-					border-color: #00ffff;
-				}
+					&.border-light {
+						border-color: #00ffff;
+					}
 
-				&.border-dark {
-					border-color: #795548;
+					&.border-dark {
+						border-color: #795548;
+					}
 				}
 			}
 		}

@@ -63,7 +63,7 @@
 				result = items.map(function (item) {
 					var startInToTimezone = moment.tz(item.Start, currentTimezone).clone().tz(timezone);
 					var endInToTimezone = moment.tz(item.End, currentTimezone).clone().tz(timezone);
-					var timeSpan = getTimeSpan(date, startInToTimezone, endInToTimezone);
+					var timeSpan = getTimeSpan(startInToTimezone, endInToTimezone);
 					return {
 						TimeSpan: timeSpan,
 						Description: item.Description
@@ -97,7 +97,7 @@
 			this.Minutes = layer.Minutes;
 			this.ShiftLayerIds = layer.ShiftLayerIds;
 			this.TopShiftLayerId = layer.TopShiftLayerId;
-			this.TimeSpan = getTimeSpan(date, startInTimezone, endInTimezone);
+			this.TimeSpan = getTimeSpan(startInTimezone, endInTimezone);
 			this.IsOvertime = layer.IsOvertime;
 			this.SameTypeAsLast = false;
 		}
@@ -130,7 +130,7 @@
 			};
 		}
 
-		function getTimeSpan(date, start, end) {
+		function getTimeSpan(start, end) {
 			return start.format('L LT') + ' - ' + end.format('L LT');
 		}
 
