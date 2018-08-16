@@ -2,7 +2,7 @@
 	display: inline-block;
 }
 
-@media screen and (-ms-high-contrast:active), (-ms-high-contrast:none), (-ms-accelerator:true) {
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none), (-ms-accelerator: true) {
 	.wfm-date-range-picker-wrap .popup-control {
 		height: inherit;
 		width: inherit;
@@ -54,7 +54,8 @@
 		margin: 0;
 	}
 
-	.start-ellipsis, .end-ellipsis {
+	.start-ellipsis,
+	.end-ellipsis {
 		position: absolute;
 		top: 2px;
 		color: $gray054;
@@ -113,7 +114,8 @@
 			border-collapse: separate;
 		}
 
-		.validate-warning, .schedule-note {
+		.validate-warning,
+		.schedule-note {
 			float: right;
 		}
 
@@ -175,18 +177,32 @@
 
 	.overtimeLight {
 		background-size: 11px 11px;
-		background-image: linear-gradient(45deg, transparent, transparent 4px, rgba(255, 255, 255, .8) 6px, transparent 10px, transparent);
+		background-image: linear-gradient(
+			45deg,
+			transparent,
+			transparent 4px,
+			rgba(255, 255, 255, 0.8) 6px,
+			transparent 10px,
+			transparent
+		);
 	}
 
 	.overtimeDark {
 		background-size: 11px 11px;
-		background-image: linear-gradient(45deg, transparent, transparent 4px, rgba(0, 0, 0, .5) 6px, transparent 10px, transparent);
+		background-image: linear-gradient(
+			45deg,
+			transparent,
+			transparent 4px,
+			rgba(0, 0, 0, 0.5) 6px,
+			transparent 10px,
+			transparent
+		);
 	}
 
 	.uib-timepicker {
 		height: 48px;
 
-		input[type=text] {
+		input[type='text'] {
 			width: 22px;
 			padding-bottom: 2px;
 			text-align: center;
@@ -198,7 +214,7 @@
 	}
 
 	ul li.item[disabled] {
-		opacity: .4;
+		opacity: 0.4;
 		cursor: not-allowed;
 	}
 
@@ -224,7 +240,7 @@
 		position: relative;
 
 		.select-all {
-			padding: 0 .5em;
+			padding: 0 0.5em;
 		}
 
 		.pagination-navigator {
@@ -237,9 +253,10 @@
 		justify-content: flex-end;
 	}
 	// For fixing align-items:center not working in IE10/11
-	@media screen and (-ms-high-contrast:active), (-ms-high-contrast:none), (-ms-accelerator:true) {
+	@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none), (-ms-accelerator: true) {
 		.teamschedule-footer {
-			.select-all, .pagination-navigator {
+			.select-all,
+			.pagination-navigator {
 				margin-top: 15px;
 			}
 		}
@@ -282,7 +299,6 @@
 		}
 	}
 
-
 	.teamschedule-body .mdi-alert {
 		color: $orange-500;
 	}
@@ -294,7 +310,14 @@
 	height: 22px;
 	color: inherit !important;
 	background-size: 11px 11px;
-	background-image: linear-gradient(135deg, transparent, transparent 7px, rgba(0, 0, 0, .5) 8px, transparent 8px, transparent);
+	background-image: linear-gradient(
+		135deg,
+		transparent,
+		transparent 7px,
+		rgba(0, 0, 0, 0.5) 8px,
+		transparent 8px,
+		transparent
+	);
 	background-color: beige;
 	border-radius: 4px;
 	border-left: 1px solid $white;
@@ -302,7 +325,7 @@
 
 //Header
 .teamschedule-header {
-	padding: .8em .5em .2em .5em;
+	padding: 0.8em 0.5em 0.2em 0.5em;
 	min-height: 60px;
 	border-bottom: 1px solid $gray026;
 	display: -ms-flexbox;
@@ -387,7 +410,7 @@
 	}
 
 	.context-menu.active-menu {
-		background: rgba(0,0,0,.06) !important;
+		background: rgba(0, 0, 0, 0.06) !important;
 	}
 
 	.view-navigator-container .wfm-btn {
@@ -396,7 +419,7 @@
 }
 
 .fav-search-panel {
-	$fav-search-padding-unit: .8em;
+	$fav-search-padding-unit: 0.8em;
 	$list-item-height: 2em;
 	$panel-width: 30em;
 	background: $white;
@@ -448,7 +471,9 @@
 		min-height: 100%;
 		width: 100%;
 
-		.md-button, .md-list-item-inner, .md-secondary-container {
+		.md-button,
+		.md-list-item-inner,
+		.md-secondary-container {
 			height: $list-item-height;
 			min-height: 100%;
 			line-height: 100%;
@@ -456,7 +481,7 @@
 
 		div.md-button {
 			// double right padding for IE and Edge's scrollbar
-			padding: 0 2*$fav-search-padding-unit 0 $fav-search-padding-unit !important;
+			padding: 0 2 * $fav-search-padding-unit 0 $fav-search-padding-unit !important;
 		}
 
 		.md-secondary {
@@ -474,7 +499,7 @@
 			overflow: hidden;
 			white-space: nowrap;
 			text-overflow: ellipsis;
-			max-width: .74 * $panel-width;
+			max-width: 0.74 * $panel-width;
 			// to clip very long names
 		}
 
@@ -493,8 +518,9 @@
 	}
 }
 
-.organization-picker-container, .group-picker-container {
-	margin-right: .5em;
+.organization-picker-container,
+.group-picker-container {
+	margin-right: 0.5em;
 
 	md-input-container {
 		margin: 0;
@@ -511,7 +537,6 @@
 		align-items: flex-end;
 	}
 }
-
 
 team-schedule-datepicker {
 	vertical-align: top;
@@ -561,7 +586,7 @@ team-schedule-datepicker {
 }
 
 .view-changer-wrapper {
-	padding: .6em 0;
+	padding: 0.6em 0;
 	margin: 0 1em;
 
 	.view-changer {
@@ -610,7 +635,7 @@ team-schedule-datepicker {
 				text-transform: uppercase;
 				-webkit-user-select: none;
 				user-select: none;
-				padding: 0 .2em;
+				padding: 0 0.2em;
 				-ms-flex: 1 1 100%;
 				flex: 1 1 100%;
 				-ms-flex-item-align: stretch;
@@ -625,8 +650,8 @@ team-schedule-datepicker {
 			}
 
 			.view-option-radio:checked + .view-name {
-				background-color: rgba(0, 0, 0, .12);
-				box-shadow: inset 0 2px 5px 0 rgba(0, 0, 0, .26);
+				background-color: rgba(0, 0, 0, 0.12);
+				box-shadow: inset 0 2px 5px 0 rgba(0, 0, 0, 0.26);
 			}
 
 			.view-option-radio:focus + .view-name {
@@ -662,7 +687,8 @@ team-schedule-datepicker {
 			border-top: 1px solid $gray012;
 		}
 
-		thead, tbody tr {
+		thead,
+		tbody tr {
 			display: table;
 			width: 100%;
 			table-layout: fixed;
@@ -673,14 +699,15 @@ team-schedule-datepicker {
 		}
 
 		tbody tr:last-child {
-			border-bottom: 1px solid #DDDDDD;
+			border-bottom: 1px solid #dddddd;
 		}
 
 		tbody tr:hover {
 			background: $gray012;
 		}
 
-		th, td {
+		th,
+		td {
 			padding: 5px 0 5px 0;
 			border-bottom: none;
 		}
@@ -708,7 +735,8 @@ team-schedule-datepicker {
 			}
 		}
 
-		th.schedule-tool-column, td.schedule-tool-column {
+		th.schedule-tool-column,
+		td.schedule-tool-column {
 			width: 2%;
 			text-align: center;
 
@@ -721,7 +749,8 @@ team-schedule-datepicker {
 			}
 		}
 
-		th.contract-time-header, td.contract-time-column {
+		th.contract-time-header,
+		td.contract-time-column {
 			width: 10%;
 			padding: 5px;
 			min-width: 150px;
@@ -734,15 +763,14 @@ team-schedule-datepicker {
 			border-left: 1px solid $gray012;
 		}
 
-
 		td.schedule-tool-column.schedule-note-column {
-
 			.noComment {
 				color: $gray-500;
 			}
 		}
 
-		th.shift-category-cell-header, td.shift-category-cell {
+		th.shift-category-cell-header,
+		td.shift-category-cell {
 			width: 30px;
 		}
 
@@ -757,7 +785,7 @@ team-schedule-datepicker {
 				position: absolute;
 				top: -7px;
 				right: -2px;
-				transform: scale(0.6)
+				transform: scale(0.6);
 			}
 
 			& > span {
@@ -781,7 +809,7 @@ team-schedule-datepicker {
 			}
 		}
 
-		@media(max-width:768px) {
+		@media (max-width: 768px) {
 			thead tr.weekview-thead th {
 				padding: 0;
 				text-align: center;
@@ -794,7 +822,7 @@ team-schedule-datepicker {
 
 		tr.weekview-tr {
 			height: 60px;
-			border-bottom: 1px solid #DDDDDD;
+			border-bottom: 1px solid #dddddd;
 		}
 
 		td.weekview-td {
@@ -859,7 +887,14 @@ teamschedule-command-container {
 	width: auto;
 }
 
-.command-panel, .add-absence, .add-activity, .move-activity, .edit-shift-category, .command-check, .settings-panel, .move-shift {
+.command-panel,
+.add-absence,
+.add-activity,
+.move-activity,
+.edit-shift-category,
+.command-check,
+.settings-panel,
+.move-shift {
 	height: 100%;
 	display: -ms-flexbox;
 	display: flex;
@@ -897,12 +932,13 @@ teamschedule-command-container {
 		min-height: 40px;
 
 		&:focus {
-			background-color: #007ACC;
+			background-color: #007acc;
 		}
 	}
 }
 
-.shiftcat-shortname, .shiftcat-fullname {
+.shiftcat-shortname,
+.shiftcat-fullname {
 	display: table-cell;
 }
 
@@ -976,7 +1012,8 @@ teamschedule-command-container {
 			list-style-type: disc;
 		}
 
-		ul li, .wfm-checkbox-label {
+		ul li,
+		.wfm-checkbox-label {
 			white-space: normal;
 		}
 
@@ -1001,7 +1038,7 @@ teamschedule-command-container {
 .multiline-tooltip {
 	height: auto;
 
-	@media(max-width:1200px) {
+	@media (max-width: 1200px) {
 		span {
 			display: inline-block;
 			line-height: 25px;
@@ -1078,7 +1115,8 @@ md-select-menu md-option:first-child:not([disabled]):hover {
 	}
 }
 
-.context-menu.card-context.sort-menu:hover, .context-menu.card-context.sort-menu:focus {
+.context-menu.card-context.sort-menu:hover,
+.context-menu.card-context.sort-menu:focus {
 	background: none;
 	box-shadow: none !important;
 }
@@ -1141,7 +1179,7 @@ note-editor {
 
 			.wfm-chip-wrap {
 				.chip-handle {
-					background: rgba(0,0,0,.06) !important;
+					background: rgba(0, 0, 0, 0.06) !important;
 				}
 			}
 		}
@@ -1212,7 +1250,9 @@ teams-time-picker.ng-invalid-dst {
 		font-size: 14px !important;
 	}
 
-	.underlying-info, .timezone, .date {
+	.underlying-info,
+	.timezone,
+	.date {
 		margin-left: 20px;
 	}
 
@@ -1280,7 +1320,8 @@ teams-time-picker.ng-invalid-dst {
 					right: -8px;
 				}
 
-				.left-scroll, .right-scroll {
+				.left-scroll,
+				.right-scroll {
 					border-radius: 50%;
 					background-color: #5bc0de;
 					opacity: 0.7;
@@ -1355,7 +1396,7 @@ teams-time-picker.ng-invalid-dst {
 				display: inline-block;
 				height: 25px;
 				background-color: gainsboro;
-			//	cursor: pointer;
+				//	cursor: pointer;
 
 				&:first-of-type {
 					border-radius: 4px 0 0 4px;
@@ -1378,11 +1419,25 @@ teams-time-picker.ng-invalid-dst {
 					background-size: 11px 11px;
 
 					&.overtime-dark {
-						background-image: linear-gradient(45deg, transparent, transparent 4px, rgba(0, 0, 0, 0.5) 6px, transparent 10px, transparent);
+						background-image: linear-gradient(
+							45deg,
+							transparent,
+							transparent 4px,
+							rgba(0, 0, 0, 0.5) 6px,
+							transparent 10px,
+							transparent
+						);
 					}
 
 					&.overtime-light {
-						background-image: linear-gradient(45deg, transparent, transparent 4px, rgba(255, 255, 255, 0.8) 6px, transparent 10px, transparent);
+						background-image: linear-gradient(
+							45deg,
+							transparent,
+							transparent 4px,
+							rgba(255, 255, 255, 0.8) 6px,
+							transparent 10px,
+							transparent
+						);
 					}
 				}
 
