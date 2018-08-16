@@ -322,13 +322,6 @@ module.exports = function(grunt) {
 		// 		]
 		// 	}
 		// },
-		// clean: [
-		// 	'dist/*.map',
-		// 	'dist/resources/*.map',
-		// 	'dist/resources/modulesForDesktop.js',
-		// 	'dist/templates.js',
-		// 	'!dist/*.min.js'
-		// ]
 	);
 
 	grunt.loadNpmTasks('grunt-contrib-watch');
@@ -340,7 +333,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-angular-templates');
 	grunt.loadNpmTasks('grunt-processhtml');
 	grunt.loadNpmTasks('grunt-eslint');
-	grunt.loadNpmTasks('grunt-contrib-clean');
 
 	grunt.registerTask('devBuild', ['concat', 'copy', 'ngtemplates', 'less', 'processhtml']);
 	grunt.registerTask('devWatch', ['devBuild', 'watch']);
