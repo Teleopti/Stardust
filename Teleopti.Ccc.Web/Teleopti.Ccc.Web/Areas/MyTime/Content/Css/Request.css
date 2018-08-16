@@ -907,6 +907,10 @@ input.use-default-startTime {
 	overflow: auto;
 }
 
+.point-cursor {
+	cursor: pointer;
+}
+
 .own-shift + .shift-to-trade {
 	margin-left: 1px;
 }

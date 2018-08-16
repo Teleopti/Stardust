@@ -255,7 +255,7 @@
 			<div class="shift-detail shift-to-trade" data-bind="text:agentChoosed() ? agentChoosed().agentName : ''"></div>
 			<div class="shift-selection"></div>
 		</div>
-		<div class="shift-trade-list-panel" data-bind="event:{scroll: scrolled}">
+		<div class="shift-trade-list-panel" data-bind="event:{scroll: scrolled},css:{'point-cursor':isMobile()}">
 			<div class="loading-gradient" data-bind="if: isLoadingSchedulesOnTop()">
 				<div class="loading"></div>
 			</div>
