@@ -43,10 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		[UnitOfWork]
 		protected virtual void SaveDetailToJobResult(WebScheduleStardustEvent @event, DetailLevel level, string message, Exception exception)
 		{
-			var jobResult = _jobResultRepository.Get(@event.JobResultId);
-			jobResult.AddDetail(new JobResultDetail(level, message, DateTime.UtcNow, exception));
-			if (exception == null)
-				jobResult.FinishedOk = true;
+			_jobResultRepository.AddDetailAndCheckSuccess(@event.JobResultId, new JobResultDetail(level, message, DateTime.UtcNow, exception), 1);
 		}
 	}
 }
