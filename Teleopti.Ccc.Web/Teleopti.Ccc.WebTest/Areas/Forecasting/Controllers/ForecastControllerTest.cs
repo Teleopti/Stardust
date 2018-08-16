@@ -1380,11 +1380,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			result.Content.WorkloadId.Should().Be.EqualTo(workload.Id.Value);
 			result.Content.QueueStatisticsDays.Count.Should().Be.EqualTo(2);
 			result.Content.QueueStatisticsDays.First().Date.Should().Be.EqualTo(statsDate);
-			result.Content.QueueStatisticsDays.First().Tasks.Should().Be.EqualTo(10);
-			result.Content.QueueStatisticsDays.First().OutlierTasks.Should().Be.EqualTo(10);
+			result.Content.QueueStatisticsDays.First().OriginalTasks.Should().Be.EqualTo(10);
+			result.Content.QueueStatisticsDays.First().ValidatedTasks.Should().Be.EqualTo(10);
 			result.Content.QueueStatisticsDays.Last().Date.Should().Be.EqualTo(statsDate.AddDays(1));
-			result.Content.QueueStatisticsDays.Last().Tasks.Should().Be.EqualTo(20);
-			result.Content.QueueStatisticsDays.Last().OutlierTasks.Should().Be.EqualTo(20);
+			result.Content.QueueStatisticsDays.Last().OriginalTasks.Should().Be.EqualTo(20);
+			result.Content.QueueStatisticsDays.Last().ValidatedTasks.Should().Be.EqualTo(20);
 		}
 
 		[Test]

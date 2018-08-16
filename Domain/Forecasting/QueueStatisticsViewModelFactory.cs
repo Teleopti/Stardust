@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				var dayStats = new QueueStatisticsModel
 				{
 					Date = taskOwner.CurrentDate,
-					Tasks = taskOwner.TotalStatisticCalculatedTasks
+					OriginalTasks = taskOwner.TotalStatisticCalculatedTasks
 				};
 				statistics.Add(dayStats);
 			}
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			var historicalDataNoOutliers = _outlierRemover.RemoveOutliers(historicalData, forecastMethod);
 			foreach (var day in historicalDataNoOutliers.TaskOwnerDayCollection)
 			{
-				statistics.Single(x => x.Date == day.CurrentDate).OutlierTasks =
+				statistics.Single(x => x.Date == day.CurrentDate).ValidatedTasks =
 					Math.Round(day.TotalStatisticCalculatedTasks, 1);
 			}
 

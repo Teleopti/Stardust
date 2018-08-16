@@ -23409,6 +23409,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Original Calls.
+        /// </summary>
+        public static string OriginalPhoneCalls {
+            get {
+                return ResourceManager.GetString("OriginalPhoneCalls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Original sum.
         /// </summary>
         public static string OriginalSum {
@@ -38142,6 +38151,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ValidatedHandlingTime {
             get {
                 return ResourceManager.GetString("ValidatedHandlingTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validated Calls.
+        /// </summary>
+        public static string ValidatedPhoneCalls {
+            get {
+                return ResourceManager.GetString("ValidatedPhoneCalls", resourceCulture);
             }
         }
         

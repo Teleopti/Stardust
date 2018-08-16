@@ -27,35 +27,35 @@ function ForecastHistoryChartController($translate, $filter, $timeout) {
 		}
 
 		var labelDate = $translate.instant('Date');
-		var labelOriginalTask = $translate.instant('Tasks');
-		var labelValidatedTask = $translate.instant('OutlierTasks');
+		var labelOriginalTask = $translate.instant('OriginalPhoneCalls');
+		var labelValidatedTask = $translate.instant('ValidatedPhoneCalls');
 
 		var preparedData = {
 			dateSeries: [labelDate],
-			tasksSeries: [labelOriginalTask],
-			outlierTasks: [labelValidatedTask]
+			originalSeries: [labelOriginalTask],
+			validatedSeries: [labelValidatedTask]
 		};
 
 		for (var i = 0; i < days.length; i++) {
 			var date = moment(days[i].Date);
 			preparedData.dateSeries.push(date.format('L'));
-			preparedData.tasksSeries.push(days[i].Tasks);
-			preparedData.outlierTasks.push(days[i].OutlierTasks);
+			preparedData.originalSeries.push(days[i].OriginalTasks);
+			preparedData.validatedSeries.push(days[i].ValidatedTasks);
 		}
 
 		chart = c3.generate({
 			bindto: '#' + chartId,
 			data: {
 				x: labelDate,
-				columns: [preparedData.dateSeries, preparedData.tasksSeries, preparedData.outlierTasks],
+				columns: [preparedData.dateSeries, preparedData.originalSeries, preparedData.validatedSeries],
 				names: {
 					Date: labelDate,
 					OriginalTasks: labelOriginalTask,
 					ValidatedTasks: labelValidatedTask
 				},
 				colors: {
-					OriginalTasks: '#99D6FF',
-					ValidatedTasks: '#77ac39'
+					ValidatedTasks: '#66c2ff',
+					OriginalTasks: '#ee8f7d'
 				}
 			},
 			subchart: {
@@ -71,7 +71,7 @@ function ForecastHistoryChartController($translate, $filter, $timeout) {
 					type: 'category',
 					tick: {
 						culling: {
-							max: preparedData.dateSeries.length / 28
+							max: 10
 						},
 						multiline: false
 					}
