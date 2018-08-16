@@ -118,13 +118,19 @@
             } else {
               if (!schedulingStatus.Successful && !schedulingStatus.Failed) {
                 vm.schedulingPerformed = true;
-                return msgForScheduleRunning(schedulingStatus.CurrentStep);
+                vm.status = $translate.instant('PresentTenseSchedule');
+				return;
               }
               if (schedulingStatus.Failed) {
                 vm.schedulingPerformed = false;
                 if (schedulingStatus.LastJobId !== lastJobId){
                 	lastJobId = schedulingStatus.LastJobId;
-					return msgForScheduleFail(schedulingStatus.CurrentStep);
+					handleScheduleOrOptimizeError(
+						$translate.instant('FailedToScheduleForSelectedPlanningPeriodDueToTechnicalError')
+							.replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
+							.replace('{1}', moment(vm.selectedPp.EndDate).format('L'))
+					);
+					return;
 				} 
               }
               if (schedulingStatus.Successful && vm.schedulingPerformed) {
@@ -194,30 +200,6 @@
 				} 
 			}
           });
-      }
-    }
-
-    function msgForScheduleRunning(step) {
-      if (step === 0) {
-        vm.status = $translate.instant('PresentTenseSchedule');
-      } else if (step === 1) {
-        vm.status = $translate.instant('OptimizingDaysOff');
-      }
-    }
-
-    function msgForScheduleFail(step) {
-      if (step === 0 || step === 1) {
-        handleScheduleOrOptimizeError(
-          $translate.instant('FailedToScheduleForSelectedPlanningPeriodDueToTechnicalError')
-            .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
-            .replace('{1}', moment(vm.selectedPp.EndDate).format('L'))
-        );
-      } else if (step === 2) {
-        handleScheduleOrOptimizeError(
-          $translate.instant('FailedToOptimizeDayoffForSelectedPlanningPeriodDueToTechnicalError')
-            .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
-            .replace('{1}', moment(vm.selectedPp.EndDate).format('L'))
-        );
       }
     }
 
