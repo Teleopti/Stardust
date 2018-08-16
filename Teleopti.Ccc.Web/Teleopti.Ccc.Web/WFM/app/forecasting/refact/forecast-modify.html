@@ -33,7 +33,7 @@
 								<md-tooltip>{{'SelectForecastPeriodIntro'|translate}}</md-tooltip>
 							</button>
 							<md-tooltip ng-if="vm.changesMade">{{'PleaseSaveOrDiscardChangesBeforeChangingPeriod' | translate}}</md-tooltip>
-							{{'DateFrom' | translate}}: {{vm.forecastPeriod.startDate | date: L}} {{'DateTo' | translate}}: {{vm.forecastPeriod.endDate  | date: L}}
+							{{'DateFrom' | translate}}: {{vm.forecastPeriod.startDate | date: 'shortDate'}} {{'DateTo' | translate}}: {{vm.forecastPeriod.endDate  | date: 'shortDate'}}
 						</div>
 
 						<div>
@@ -215,8 +215,8 @@
 	<div>
 		<div class="con-row">
 			<div class="con-flex">
-				<p>{{'TemplateTargetWorkload' | translate}}: <b>{{vm.selectedWorkload.Workload.Name}}</b></p>
-				<p class="subtext">{{'Scenario'|translate}}: <b>{{vm.selectedScenario.Name}}</b></p>
+				<p>{{'SkillColon' | translate}}<b>{{vm.selectedWorkload.Workload.Name}}</b></p>
+				<p class="subtext">{{'ScenarioColon'|translate}}<b>{{vm.selectedScenario.Name}}</b></p>
 			</div>
 		</div>
 
@@ -239,8 +239,8 @@
 	<div>
 		<div class="con-row">
 			<div class="con-flex">
-				<p>{{'TemplateTargetWorkload' | translate}}: <b>{{vm.selectedWorkload.Workload.Name}}</b></p>
-				<p class="subtext">{{'Scenario'|translate}}: <b>{{vm.selectedScenario.Name}}</b></p>
+				<p>{{'SkillColon' | translate}}<b>{{vm.selectedWorkload.Workload.Name}}</b></p>
+				<p class="subtext">{{'ScenarioColon' | translate}}<b>{{vm.selectedScenario.Name}}</b></p>
 			</div>
 		</div>
 

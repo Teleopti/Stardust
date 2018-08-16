@@ -14484,6 +14484,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Historical Data.
+        /// </summary>
+        public static string HistoricalData {
+            get {
+                return ResourceManager.GetString("HistoricalData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Historical depth.
         /// </summary>
         public static string HistoricalDepth {
@@ -14507,15 +14516,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string HistoricalReports {
             get {
                 return ResourceManager.GetString("HistoricalReports", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Historical Data.
-        /// </summary>
-        public static string HistoryData {
-            get {
-                return ResourceManager.GetString("HistoryData", resourceCulture);
             }
         }
         
@@ -22810,6 +22810,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string OpenForShiftTradeRequests {
             get {
                 return ResourceManager.GetString("OpenForShiftTradeRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to History.
+        /// </summary>
+        public static string OpenHistoricalData {
+            get {
+                return ResourceManager.GetString("OpenHistoricalData", resourceCulture);
             }
         }
         
