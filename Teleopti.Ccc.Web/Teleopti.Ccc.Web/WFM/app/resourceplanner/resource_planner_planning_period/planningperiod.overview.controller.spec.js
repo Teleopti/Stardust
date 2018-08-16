@@ -1,5 +1,5 @@
 'use strict';
-describe('planningPeriodOverviewController', function() {
+fdescribe('planningPeriodOverviewController', function() {
 	var $httpBackend,
 		$controller,
 		$injector,
@@ -268,17 +268,14 @@ describe('planningPeriodOverviewController', function() {
 		spyOn(planningPeriodServiceNew, 'clearSchedules').and.callThrough();
 
 		fakeBackend.withScheduleResult({
-			OptimizationResult: {
+			FullSchedulingResult: {
 				BusinessRulesValidationResults: [],
-				SkillResultList: []
+				SkillResultList: [],
+				ScheduledAgentsCount: 44
 			},
 			PlanningPeriod: {
 				StartDate: '2018-06-18T00:00:00',
 				EndDate: '2018-07-15T00:00:00'
-			},
-			ScheduleResult: {
-				BusinessRulesValidationResults: [],
-				ScheduledAgentsCount: 44
 			}
 		});
 		$httpBackend.flush();

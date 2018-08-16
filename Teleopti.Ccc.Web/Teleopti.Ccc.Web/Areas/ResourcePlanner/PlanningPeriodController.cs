@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 						StartDate = range.StartDate.Date,
 						EndDate = range.EndDate.Date
 					},
-					OptimizationResult = fullSchedulingResultModel
+					FullSchedulingResult = fullSchedulingResultModel
 				});
 			}
 			return Ok(new {});
