@@ -55,41 +55,27 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			var lastJobResult = planningPeriod.GetLastSchedulingJob();
 			if (lastJobResult != null && lastJobResult.FinishedOk)
 			{
-				var schedulingResult = new SchedulingResultModel();
-				var optimizationResult = new FullSchedulingResultModel
-				{
-					BusinessRulesValidationResults = new List<SchedulingHintError>()
-				};
-
 				try
 				{
-					schedulingResult = JsonConvert.DeserializeObject<SchedulingResultModel>(lastJobResult.Details.First().Message);
-					optimizationResult = JsonConvert.DeserializeObject<FullSchedulingResultModel>(lastJobResult.Details.Last().Message);
+					var fullSchedulingResultModel = JsonConvert.DeserializeObject<FullSchedulingResultModel>(lastJobResult.Details.Last().Message);
 
-					foreach (var schedulingHintError in schedulingResult.BusinessRulesValidationResults)
+					foreach (var schedulingHintError in fullSchedulingResultModel.BusinessRulesValidationResults)
 					{
 						HintsHelper.BuildErrorMessages(schedulingHintError.ValidationErrors);
 					}
-					foreach (var schedulingHintError in optimizationResult.BusinessRulesValidationResults)
+					return Ok(new
 					{
-						HintsHelper.BuildErrorMessages(schedulingHintError.ValidationErrors);
-					}
-
-					mergeScheduleResultIntoOptimizationResult(schedulingResult, optimizationResult);
+						PlanningPeriod = new
+						{
+							StartDate = range.StartDate.Date,
+							EndDate = range.EndDate.Date
+						},
+						OptimizationResult = fullSchedulingResultModel,
+					});
 				}
 				catch (JsonSerializationException)
 				{
 				}
-
-				return Ok(new
-				{
-					PlanningPeriod = new
-					{
-						StartDate = range.StartDate.Date,
-						EndDate = range.EndDate.Date
-					},
-					OptimizationResult = optimizationResult,
-				});
 			}
 			return Ok(new {});
 		}
@@ -395,35 +381,6 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		{
 			var allPlanningPeriods = _planningPeriodRepository.LoadAll();
 			return allPlanningPeriods.Any(p => p.Range.StartDate >= dateOnly);
-		}
-
-		private static void mergeScheduleResultIntoOptimizationResult(SchedulingResultModel schedulingResult, FullSchedulingResultModel fullSchedulingResult)
-		{
-			foreach (var schedulingBusinessRulesValidationResult in schedulingResult.BusinessRulesValidationResults)
-			{
-				var found = false;
-				foreach (var optimizationResultBusinessRulesValidationResult in fullSchedulingResult.BusinessRulesValidationResults)
-				{
-					if (optimizationResultBusinessRulesValidationResult.ResourceId == schedulingBusinessRulesValidationResult.ResourceId)
-					{
-						foreach (var error in schedulingBusinessRulesValidationResult.ValidationErrors)
-						{
-							if (optimizationResultBusinessRulesValidationResult.ValidationErrors.Any(x => x.ErrorMessageLocalized == error.ErrorMessageLocalized) == false)
-							{
-								optimizationResultBusinessRulesValidationResult.ValidationErrors.Add(error);
-							}
-						}
-						found = true;
-						break;
-					}
-				}
-
-				if (!found)
-				{
-					fullSchedulingResult.BusinessRulesValidationResults =
-						fullSchedulingResult.BusinessRulesValidationResults.Append(schedulingBusinessRulesValidationResult);
-				}
-			}
 		}
 	}
 
