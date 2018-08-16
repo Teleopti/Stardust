@@ -127,6 +127,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		}
 
 		[Test]
+		[Ignore("Not used right now. WIP Container")]
 		public void CopyDllsFromAzureStorage()
 		{
 			var fakeSettingValues = new Dictionary<string, string>
