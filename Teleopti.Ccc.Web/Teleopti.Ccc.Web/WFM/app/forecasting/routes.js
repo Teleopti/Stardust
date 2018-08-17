@@ -7,7 +7,8 @@
 		$stateProvider
 			.state('forecasting', {
 				url: '/forecasting',
-				templateUrl: 'app/forecasting/html/forecasting.html',
+				template: '<div><section ui-view></section></div>',
+				controllerAs: 'vm',
 				controller: function($state) {
 					// toggles.WFM_Forecaster_Refact_44480
 					$state.go('forecast');
@@ -43,7 +44,8 @@
 			.state('forecast-create-skill', {
 				url: '/forecast/create',
 				templateUrl: 'app/forecasting/html/skill.create.html',
-				controller: 'ForecastingSkillCreateController'
+				controller: 'ForecastingSkillCreateController',
+				controllerAs: 'vm'
 			});
 	}
 })();

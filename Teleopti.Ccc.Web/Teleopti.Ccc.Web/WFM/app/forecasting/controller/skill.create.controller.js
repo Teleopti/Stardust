@@ -3,16 +3,12 @@
 	angular.module('wfm.forecasting')
 		.controller('ForecastingSkillCreateController',
 			[
-				'SkillService', '$scope', '$filter', '$state', 'NoticeService', 'workingHoursService', '$translate', forecastingSkillCreateController
+				'$scope', '$filter', '$state', '$translate', 'NoticeService', 'SkillService', 'workingHoursService', forecastingSkillCreateController
 			]);
 
-	function forecastingSkillCreateController(skillService,
-		$scope,
-		$filter,
-		$state,
-		noticeService,
-		workingHoursService,
-		$translate) {
+	function forecastingSkillCreateController($scope, $filter, $state, $translate, noticeService, skillService, workingHoursService) {
+		var vm = this;
+
 		var open24Hours =
 			workingHoursService.createEmptyWorkingPeriod(new Date(2000, 1, 1, 0, 0, 0, 0),
 				new Date(2000, 1, 2, 0, 0, 0, 0));
@@ -21,30 +17,30 @@
 				weekDay.Checked = true;
 			});
 
-		$scope.model = {
+		vm.model = {
 			serviceLevelPercent: 80,
 			serviceLevelSeconds: 20,
 			shrinkage: 0,
 			workingHours: [open24Hours]
 		};
 
-		$scope.activities = [];
+		vm.activities = [];
 		skillService.activities.get().$promise.then(function(result) {
 			var activities = $filter('orderBy')(result, 'Name');
-			$scope.activities = activities;
-			if ($scope.activities[0])
-				$scope.model.selectedActivity = $scope.activities[0];
+			vm.activities = activities;
+			if (vm.activities[0])
+				vm.model.selectedActivity = vm.activities[0];
 		});
-		$scope.timezones = [];
+		vm.timezones = [];
 		skillService.timezones.get().$promise.then(function(result) {
-			$scope.timezones = result.Timezones;
-			$scope.model.selectedTimezone =
+			vm.timezones = result.Timezones;
+			vm.model.selectedTimezone =
 				$filter('filter')(result.Timezones, function(x) { return x.Id === result.DefaultTimezone; })[0];
 		});
 
-		$scope.queueSelected = true;
-		$scope.hideQueueInvalidMessage = true;
-		$scope.gridOptions = {
+		vm.queueSelected = true;
+		vm.hideQueueInvalidMessage = true;
+		vm.gridOptions = {
 			enableGridMenu: false,
 			enableSelectAll: true,
 			enableFullRowSelection: true,
@@ -64,21 +60,21 @@
 				}
 			],
 			onRegisterApi: function(gridApi) {
-				$scope.gridApi = gridApi;
+				vm.gridApi = gridApi;
 				gridApi.selection.on.rowSelectionChanged($scope,
 					function(row) {
-						$scope.queueSelected = row.grid.selection.selectedCount > 0;
-						$scope.hideQueueInvalidMessage = false;
+						vm.queueSelected = row.grid.selection.selectedCount > 0;
+						vm.hideQueueInvalidMessage = false;
 					});
 				gridApi.selection.on.rowSelectionChangedBatch($scope,
 					function(rows) {
-						$scope.queueSelected = rows[0].grid.selection.selectedCount > 0;
-						$scope.hideQueueInvalidMessage = false;
+						vm.queueSelected = rows[0].grid.selection.selectedCount > 0;
+						vm.hideQueueInvalidMessage = false;
 					});
 			}
 		};
 		skillService.queues.get().$promise.then(function(result) {
-			$scope.gridOptions.data = result;
+			vm.gridOptions.data = result;
 		});
 
 		function formatTimespanObj(timespan) {
@@ -98,21 +94,21 @@
 			}
 		}
 
-		$scope.createSkill = function(isFormValid) {
-			if (!isFormValid || !$scope.queueSelected || $scope.hideQueueInvalidMessage) {
-				if ($scope.hideQueueInvalidMessage)
-					$scope.queueSelected = false;
+		vm.createSkill = function(isFormValid) {
+			if (!isFormValid || !vm.queueSelected || vm.hideQueueInvalidMessage) {
+				if (vm.hideQueueInvalidMessage)
+					vm.queueSelected = false;
 				noticeService.warning($translate.instant('CouldNotApply'), 5000, true);
 				return;
 			}
-			var selectedRows = $scope.gridApi.selection.getSelectedRows();
+			var selectedRows = vm.gridApi.selection.getSelectedRows();
 			var queues = [];
 			angular.forEach(selectedRows,
 				function(row) {
 					queues.push(row.Id);
 				});
 			var workingHours = [];
-			angular.forEach($scope.model.workingHours,
+			angular.forEach(vm.model.workingHours,
 				function(workingHour) {
 					var period = formatTimespanObj(workingHour);
 					workingHours.push({
@@ -123,13 +119,13 @@
 				});
 			skillService.skill.create(
 				{
-					Name: $scope.model.name,
-					ActivityId: $scope.model.selectedActivity.Id,
-					TimezoneId: $scope.model.selectedTimezone.Id,
+					Name: vm.model.name,
+					ActivityId: vm.model.selectedActivity.Id,
+					TimezoneId: vm.model.selectedTimezone.Id,
 					Queues: queues,
-					ServiceLevelPercent: $scope.model.serviceLevelPercent,
-					ServiceLevelSeconds: $scope.model.serviceLevelSeconds,
-					Shrinkage: $scope.model.shrinkage,
+					ServiceLevelPercent: vm.model.serviceLevelPercent,
+					ServiceLevelSeconds: vm.model.serviceLevelSeconds,
+					Shrinkage: vm.model.shrinkage,
 					OpenHours: workingHours
 				}).$promise.then(
 				function(result) {
@@ -138,9 +134,9 @@
 			);
 		};
 
-		$scope.noOpenHoursWarning = function() {
-			for (var i = 0, len = $scope.model.workingHours.length; i < len; i++) {
-				var workingHour = $scope.model.workingHours[i];
+		vm.noOpenHoursWarning = function() {
+			for (var i = 0, len = vm.model.workingHours.length; i < len; i++) {
+				var workingHour = vm.model.workingHours[i];
 				if ($filter('filter')(workingHour.WeekDaySelections, function(x) { return x.Checked; }).length !== 0)
 					return false;
 			}

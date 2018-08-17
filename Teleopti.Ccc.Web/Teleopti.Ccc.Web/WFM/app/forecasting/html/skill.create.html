@@ -7,14 +7,14 @@
 <div class="con-row">
 	<div class="con-flex">
 		<div class="panel form-panel material-depth-1">
-			<form name="form" class="wfm-form" novalidate ng-submit="createSkill(form.$valid)">
+			<form name="form" class="wfm-form" novalidate ng-submit="vm.createSkill(form.$valid)">
 				<div class="con-row">
 					<div class="con-flex">
 						<div class="con-row">
 							<div class="con-flex">
 								<div class="form-input-wrap skill-name">
 									<label for="nameId">{{'Name'|translate}}:</label>
-									<input type="text" ng-maxlength="50" autofocus autocomplete="off" ng-model="model.name" name="Name" required="" id="nameId" />
+									<input type="text" ng-maxlength="50" autofocus autocomplete="off" ng-model="vm.model.name" name="Name" required="" id="nameId" />
 									<div ng-cloak class="animate-show" ng-show="form.$submitted || form.Name.$touched">
 										<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">{{ 'YouCannotHaveABlankName' | translate }}</div>
 										<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.maxlength}">{{'NameCantBeMoreThan'|translate}}</div>
@@ -22,8 +22,8 @@
 								</div>
 								<div class="form-input-wrap skill-activity">
 									<label for="activityId">{{'SkillActivity'|translate}}:</label>
-									<md-select id="activityId" aria-label="Activity" ng-model="model.selectedActivity" required="">
-										<md-option ng-repeat="activity in activities" name="Activity" ng-value="activity">{{activity.Name}}</md-option>
+									<md-select id="activityId" aria-label="Activity" ng-model="vm.model.selectedActivity" required="">
+										<md-option ng-repeat="activity in vm.activities" name="Activity" ng-value="activity">{{activity.Name}}</md-option>
 									</md-select>
 									<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Activity.$touched">
 										<div class="form-input-message" ng-class="{formInvalidInput:form.Activity.$error.required}">{{ 'Required' | translate }}</div>
@@ -31,8 +31,8 @@
 								</div>
 								<div class="form-input-wrap skill-timezone">
 									<label for="timezoneId">{{'TimeZone'|translate}}:</label>
-									<md-select id="timezoneId" aria-label="Timezone" ng-model="model.selectedTimezone" required="">
-										<md-option ng-repeat="timezone in timezones" ng-value="timezone">
+									<md-select id="timezoneId" aria-label="Timezone" ng-model="vm.model.selectedTimezone" required="">
+										<md-option ng-repeat="timezone in vm.timezones" ng-value="timezone">
 											{{timezone.Name}}
 										</md-option>
 									</md-select>
@@ -42,7 +42,7 @@
 								</div>
 								<div class="form-input-wrap skill-service-level-percent">
 									<label for="serviceLevelPercentId">{{'ServiceLevelParenthesisPercentSign'|translate}}:</label>
-									<input type="number" ng-model="model.serviceLevelPercent" name="skillServiceLevelPercent" required="" id="serviceLevelPercentId" min="1" max="100" />
+									<input type="number" ng-model="vm.model.serviceLevelPercent" name="skillServiceLevelPercent" required="" id="serviceLevelPercentId" min="1" max="100" />
 									<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.skillServiceLevelPercent.$touched">
 										<div class="form-input-message" ng-class="{formInvalidInput:form.skillServiceLevelPercent.$error.required}">{{ 'Required' | translate }}</div>
 										<div class="form-input-message" ng-class="{formInvalidInput:form.skillServiceLevelPercent.$error.min || form.skillServiceLevelPercent.$error.max}">{{'PercentageError'|translate}}</div>
@@ -50,7 +50,7 @@
 								</div>
 								<div class="form-input-wrap skill-service-level-seconds">
 									<label for="skillServiceLevelSecondsId">{{'ServiceLevelSeconds'|translate}}:</label>
-									<input type="number" ng-model="model.serviceLevelSeconds" name="skillServiceLevelSeconds" required="" id="skillServiceLevelSecondsId" min="1" max="86400" />
+									<input type="number" ng-model="vm.model.serviceLevelSeconds" name="skillServiceLevelSeconds" required="" id="skillServiceLevelSecondsId" min="1" max="86400" />
 									<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.skillServiceLevelSeconds.$touched">
 										<div class="form-input-message" ng-class="{formInvalidInput:form.skillServiceLevelSeconds.$error.required}">{{ 'Required' | translate }}</div>
 										<div class="form-input-message" ng-class="{formInvalidInput:form.skillServiceLevelSeconds.$error.min || form.skillServiceLevelSeconds.$error.max}">{{'SecondsSpan'|translate}}</div>
@@ -58,7 +58,7 @@
 								</div>
 								<div class="form-input-wrap skill-shrinkage">
 									<label for="shrinkageId">{{'ShrinkageParenthesisPercentSign'|translate}}:</label>
-									<input type="number" ng-model="model.shrinkage" name="shrinkage" required="" id="shrinkageId" min="0" max="99" />
+									<input type="number" ng-model="vm.model.shrinkage" name="shrinkage" required="" id="vm.shrinkageId" min="0" max="99" />
 									<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.shrinkage.$touched">
 										<div class="form-input-message" ng-class="{formInvalidInput:form.shrinkage.$error.required}">{{ 'Required' | translate }}</div>
 										<div class="form-input-message" ng-class="{formInvalidInput:form.shrinkage.$error.min || form.shrinkage.$error.max}">{{'ShrinkageSpan'|translate}}</div>
@@ -70,8 +70,8 @@
 					<div class="con-flex split-3-1">
 						<div class="form-input-wrap">
 							<label>{{'OpenHours'|translate}}:</label>
-							<working-hours-picker class="skill-create-form-picker" disable-next-day="true" working-hours="model.workingHours"></working-hours-picker>
-							<div ng-cloak class="animate-input-message" ng-show="noOpenHoursWarning()">
+							<working-hours-picker class="skill-create-form-picker" disable-next-day="true" working-hours="vm.model.workingHours"></working-hours-picker>
+							<div ng-cloak class="animate-input-message" ng-show="vm.noOpenHoursWarning()">
 								<div class="form-input-message form-warning-input">{{'AllDaysAreClosed'|translate}}</div>
 							</div>
 						</div>
@@ -79,9 +79,9 @@
 							<label>{{'Queues'|translate}}:</label>
 							<div class="skill-queues">
 								<div class="big-table-wrapper material-depth-1 queue-list">
-									<div ui-grid="gridOptions" ui-grid-auto-resize ui-grid-resize-columns ui-grid-selection class="grid"></div>
+									<div ui-grid="vm.gridOptions" ui-grid-auto-resize ui-grid-resize-columns ui-grid-selection class="grid"></div>
 								</div>
-								<div ng-cloak class="animate-input-message" ng-show="!queueSelected">
+								<div ng-cloak class="animate-input-message" ng-show="!vm.queueSelected">
 									<div class="form-input-message formInvalidInput">{{'Required' | translate }}</div>
 								</div>
 							</div>
