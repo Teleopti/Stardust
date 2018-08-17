@@ -17668,4 +17668,8 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Time (Second)</value>
     <comment>Label for Y axis in web forecast</comment>
   </data>
+  <data name="ShowOnlyDayOff" xml:space="preserve">
+    <value>Show only day off</value>
+    <comment>Show only day off tooltip on new TeamSchedule view in MyTime</comment>
+  </data>
 </root>
