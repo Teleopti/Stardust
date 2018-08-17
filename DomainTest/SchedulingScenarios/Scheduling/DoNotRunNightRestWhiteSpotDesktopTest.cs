@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
 	[UseIocForFatClient]
-	public class DoNotRunNightRestWhiteSpotDesktopTest : SchedulingScenario
+	public class DoNotRunNightRestWhiteSpotDesktopTest : SchedulingScenario, IIsolateSystem
 	{
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
@@ -49,10 +49,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.EqualTo(0);
 		}
 
-
-		public override void Isolate(IIsolate isolate)
+		public void Isolate(IIsolate isolate)
 		{
-			base.Isolate(isolate);
 			isolate.UseTestDouble<CountCallsToNightRestWhiteSpotSolverServiceFactory>().For<INightRestWhiteSpotSolverServiceFactory>();
 		}
 
