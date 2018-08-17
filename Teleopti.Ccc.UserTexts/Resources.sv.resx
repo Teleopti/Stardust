@@ -15718,4 +15718,22 @@ Applikationen kommer nu att stängas. </value>
   <data name="NotAllowedWhenHasNonOverwriteActivity" xml:space="preserve">
     <value>Inte tillåtet att byta skift när det finns en icke överskrivningsbar aktivitet i skiftet. </value>
   </data>
+  <data name="DateOutOfShiftTradeOpenPeriod" xml:space="preserve">
+    <value>Det här datumet är inte öppet för skiftbyten för {0}.</value>
+  </data>
+  <data name="HistoricalData" xml:space="preserve">
+    <value>Historisk data</value>
+  </data>
+  <data name="OpenHistoricalData" xml:space="preserve">
+    <value>Historik</value>
+  </data>
+  <data name="OriginalPhoneCalls" xml:space="preserve">
+    <value>Ursprungligt antal samtal</value>
+  </data>
+  <data name="ValidatedPhoneCalls" xml:space="preserve">
+    <value>Validerade samtal</value>
+  </data>
+  <data name="PleaseSelectASkillFirst" xml:space="preserve">
+    <value>Var god välj en kompetens innan du använder denna funktion.</value>
+  </data>
 </root>

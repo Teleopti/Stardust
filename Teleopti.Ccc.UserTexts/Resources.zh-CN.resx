@@ -14780,9 +14780,6 @@ Teleopti R&amp;D</value>
   <data name="WithOvertime" xml:space="preserve">
     <value>有加班</value>
   </data>
-  <data name="HistoryData" xml:space="preserve">
-    <value>历史数据</value>
-  </data>
   <data name="OriginalPhoneCalls" xml:space="preserve">
     <value>原始通话数</value>
   </data>
