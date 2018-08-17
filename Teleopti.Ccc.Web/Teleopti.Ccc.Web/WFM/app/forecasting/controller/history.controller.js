@@ -1,18 +1,18 @@
 (function() {
 	'use strict';
 
-	angular.module('wfm.forecasting').controller('ForecastHistoryController', ForecastHistoryCtrl);
+	angular.module('wfm.forecasting').controller('ForecastHistoryController', forecastHistoryController);
 
-	ForecastHistoryCtrl.$inject = [
-		'ForecastingService',
-		'NoticeService',
+	forecastHistoryController.$inject = [
 		'$translate',
 		'$state',
 		'$scope',
+		'ForecastingService',
+		'NoticeService',
 		'skillIconService'
 	];
 
-	function ForecastHistoryCtrl(forecastingService, noticeSvc, $translate, $state, $scope, skillIconService) {
+	function forecastHistoryController($translate, $state, $scope, forecastingService, noticeSvc, skillIconService) {
 		var vm = this;
 
 		vm.getSkillIcon = skillIconService.get;

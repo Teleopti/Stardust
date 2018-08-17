@@ -237,7 +237,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			result[2].Period.Should().Be.EqualTo(new DateOnlyPeriod(new DateOnly(2018, 4, 23), new DateOnly(2018, 4, 23).AddDays(6)));
 		}
 
-		public RestrictionNotAbleToBeScheduledReportTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerLessResourcesXXL74915) : base(seperateWebRequest, resourcePlannerLessResourcesXXL74915)
+		public RestrictionNotAbleToBeScheduledReportTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
 		{
 		}
 	}

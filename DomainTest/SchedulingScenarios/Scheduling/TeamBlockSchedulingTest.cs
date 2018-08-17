@@ -998,9 +998,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			assignments.Count.Should().Be.EqualTo(6);
 		}
 
-
-
-		public TeamBlockSchedulingTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerLessResourcesXXL74915) : base(seperateWebRequest, resourcePlannerLessResourcesXXL74915)
+		public TeamBlockSchedulingTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
 		{
 		}
 	}

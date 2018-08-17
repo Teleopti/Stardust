@@ -92,6 +92,7 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 					preparedData.campaignAndOverrideSeries
 				],
 				names: {
+					// Arrow here means which Y axis refered by this curve
 					TotalTasks: $translate.instant('TotalCalls') + ' ←',
 					Campaign: $translate.instant('AppliedACampaign'),
 					Override: $translate.instant('AppliedAOverride'),
@@ -126,7 +127,7 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 					grouped: true
 				},
 				onselected: function(d) {
-					var temp = moment(this.internal.config.axis_x_categories[d.x]).format('YYYY-MM-DDT00:00:00');
+					var temp = moment(this.internal.config.axis_x_categories[d.x], 'L').format('YYYY-MM-DDT00:00:00');
 
 					if (selectedItems.indexOf(temp) === -1) {
 						selectedItems.push(temp);
@@ -134,7 +135,7 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 					}
 				},
 				onunselected: function(d) {
-					var temp = moment(this.internal.config.axis_x_categories[d.x]).format('YYYY-MM-DDT00:00:00');
+					var temp = moment(this.internal.config.axis_x_categories[d.x], 'L').format('YYYY-MM-DDT00:00:00');
 					if (selectedItems.indexOf(temp) !== -1) {
 						selectedItems.splice(selectedItems.indexOf(temp), 1);
 						ctrl.onClick(selectedItems);
