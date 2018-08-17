@@ -30,7 +30,7 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		expect(vm.clearEnabled).toBe(true);
 	});
 
-	it('should disable clear if all organization is deselected', function (t) {
+	it('should disable clear when all organization is deselected', function (t) {
 		t.backend.withOrganization({
 			Id: 'LondonId'
 		});
@@ -46,7 +46,7 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		expect(vm.clearEnabled).toBe(false);
 	});
 
-	it('should enable clear if multiple sites selections', function (t) {
+	it('should enable clear when multiple sites are selected', function (t) {
 		t.backend.withOrganization({
 			Id: 'LondonId'
 		})
@@ -86,7 +86,7 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		expect(vm.clearEnabled).toBe(true);
 	});
 
-	it('should clear all', function (t) {
+	it('should deselect all organization when clear all', function (t) {
 		t.backend.withOrganization({
 			Id: 'LondonId'
 		});
@@ -102,7 +102,7 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		expect(vm.sites[0].isChecked).toBe(false);
 	});
 
-	it('should display empty string when clear all', function (t) {
+	it('should display empty selection text when clear all', function (t) {
 		t.backend.withOrganization({
 			Id: 'LondonId',
 			Name: 'London'
