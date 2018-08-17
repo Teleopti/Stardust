@@ -59,7 +59,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 
 			initViewModel();
 			loadDefaultTeam(function() {
-				filterChangedCallback(getDateStr(initialMomentDate));
+				filterChangedCallback(initialMomentDate || moment());
 			});
 		});
 	}
@@ -326,10 +326,11 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 		});
 	}
 
-	function filterChangedCallback(dateStr) {
+	function filterChangedCallback(momentDate) {
 		showLoadingGif();
-
 		vm.isAgentScheduleLoaded(false);
+
+		var dateStr = getDateStr(momentDate);
 		dataService.loadScheduleData(dateStr, vm.paging, vm.filter, function(schedules) {
 			vm.readScheduleData(schedules, dateStr);
 
@@ -404,7 +405,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 				var messageEndDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate);
 				var selectedDate = vm.selectedDate().toDate();
 				if (messageStartDate <= selectedDate && messageEndDate >= selectedDate) {
-					filterChangedCallback(getDateStr(vm.selectedDate()));
+					filterChangedCallback(vm.selectedDate());
 					return;
 				}
 			}
