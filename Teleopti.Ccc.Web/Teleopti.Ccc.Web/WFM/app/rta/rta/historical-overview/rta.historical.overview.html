@@ -19,7 +19,7 @@
 
 	<div class="panel material-depth-1 con-padding">
 		<div class="con-row">
-			<div class="con-flex wfm-form organization-picker" outside-click="vm.organizationPickerOpen = false">
+			<div class="con-flex wfm-form organization-picker" outside-click="vm.applyOrganizationSelection()">
 				<div class="form-input-wrap">
 					<input type="text"
 						   placeholder="{{'SelectSitesTeams'|translate}}"
@@ -43,8 +43,7 @@
 									ng-click="vm.clearOrganizationSelection()">{{'ClearAll'|translate}}
 							</button>
 							<button class="wfm-btn wfm-btn-invis-primary"
-									ng-class="wfm-btn-invis-primary"
-									ng-click="vm.applyOrganizationSelection()">{{'Apply'|translate}}
+									ng-click="vm.applyOrganizationSelection()">{{'Close'|translate}}
 							</button>
 						</div>
 
