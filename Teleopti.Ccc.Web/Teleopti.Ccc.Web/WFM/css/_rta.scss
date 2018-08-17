@@ -108,6 +108,10 @@
 	background-color: $green-100;
   }
 
+  md-checkbox.marked .md-icon {
+	background-color: #66c2ff;
+  }
+
   &.agents {
 
 	.organization-picker {
@@ -115,10 +119,6 @@
 		padding-left: $full-padding;
 		padding-right: $full-padding;
 	  }
-	}
-
-	md-checkbox.marked .md-icon {
-	  background-color: #66c2ff;
 	}
 
 	.timeline {
