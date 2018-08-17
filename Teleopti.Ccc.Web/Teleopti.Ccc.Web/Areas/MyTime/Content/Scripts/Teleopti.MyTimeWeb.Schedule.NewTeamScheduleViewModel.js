@@ -10,7 +10,6 @@
 		getTextColoFn = Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor,
 		timeLineOffset = 50,
 		minPixelsToDisplayTitle = 30,
-		requestDateOnlyFormat = 'YYYY/MM/DD',
 		rawTimeline = [];
 
 	self.isHostAMobile = Teleopti.MyTimeWeb.Common.IsHostAMobile();
@@ -47,6 +46,8 @@
 	self.searchNameText = ko.observable('');
 	self.hasFiltered = ko.observable(false);
 	self.emptySearchResult = ko.observable(false);
+	self.isAgentScheduleLoaded = ko.observable(false);
+	self.isLoadingMoreAgentSchedules = false;
 	self.filter = {
 		searchNameText: '',
 		selectedTeamIds: [],
@@ -59,30 +60,30 @@
 	};
 
 	self.today = function() {
-		var today = moment().format(requestDateOnlyFormat);
 		self.paging.skip = 0;
-		self.filterChangedCallback(today);
+		self.filterChangedCallback(moment());
+		self.isLoadingMoreAgentSchedules = false;
 	};
 
 	self.previousDay = function() {
-		var previousDate = moment(self.selectedDate())
-			.add(-1, 'days')
-			.format(requestDateOnlyFormat);
 		self.paging.skip = 0;
-		self.filterChangedCallback(previousDate);
+		self.filterChangedCallback(moment(self.selectedDate()).add(-1, 'days'));
+		self.isLoadingMoreAgentSchedules = false;
 	};
 
 	self.nextDay = function() {
-		var nextDate = moment(self.selectedDate())
-			.add(1, 'days')
-			.format(requestDateOnlyFormat);
 		self.paging.skip = 0;
-		self.filterChangedCallback(nextDate);
+		self.filterChangedCallback(moment(self.selectedDate()).add(1, 'days'));
+		self.isLoadingMoreAgentSchedules = false;
+	};
+
+	self.toggleFilterPanel = function() {
+		self.isPanelVisible(!self.isPanelVisible());
 	};
 
 	self.showOnlyDayOff.subscribe(function(value) {
 		self.filter.isDayOff = value;
-		if (!self.isMobileEnabled) self.filterChangedCallback(self.selectedDate().format(requestDateOnlyFormat));
+		if (!self.isMobileEnabled) self.filterChangedCallback(self.selectedDate());
 	});
 
 	self.openTeamSelectorPanel = function(data, event) {
@@ -111,7 +112,7 @@
 		self.paging.skip = 0;
 		self.filter.searchNameText = self.searchNameText();
 		self.filter.selectedTeamIds = self.selectedTeamIds.concat();
-		self.filterChangedCallback(self.selectedDate().format(requestDateOnlyFormat));
+		self.filterChangedCallback(self.selectedDate());
 	};
 
 	self.goToPreviousPage = function() {
@@ -120,13 +121,13 @@
 		self.paging.skip -= self.paging.take;
 		if (self.paging.skip < 0) self.paging.skip = 0;
 
-		self.filterChangedCallback(self.selectedDate().format('YYYY/MM/DD'));
+		self.filterChangedCallback(self.selectedDate());
 	};
 
 	self.goToNextPage = function() {
 		if (self.paging.skip + self.paging.take < self.paging.take * self.totalPageNum()) {
 			self.paging.skip += self.paging.take;
-			self.filterChangedCallback(self.selectedDate().format('YYYY/MM/DD'));
+			self.filterChangedCallback(self.selectedDate());
 		}
 	};
 
@@ -191,6 +192,7 @@
 		}
 
 		setDraggableScrollBlockOnDesktop && setDraggableScrollBlockOnDesktop();
+		self.isAgentScheduleLoaded(true);
 	};
 
 	self.readMoreTeamScheduleData = function(data, callback) {
@@ -260,7 +262,7 @@
 			self.displayDate(value.format(dateOnlyFormat));
 			if (self.filterChangedCallback) {
 				self.paging.skip = 0;
-				self.filterChangedCallback(value.format(requestDateOnlyFormat));
+				self.filterChangedCallback(moment(value));
 			}
 		});
 	}

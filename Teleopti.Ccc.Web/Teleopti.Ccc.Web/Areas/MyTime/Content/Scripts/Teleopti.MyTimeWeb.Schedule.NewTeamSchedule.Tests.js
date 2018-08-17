@@ -95,7 +95,7 @@
 
 		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
 
-		$('.new-teamschedule-filter').click();
+		$('.new-teamschedule-team-filter').click();
 
 		var selector = '.new-teamschedule-panel .new-teamschedule-filter-component select';
 		equal($(selector)[0].length, 11);
@@ -120,7 +120,7 @@
 
 		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
 
-		$('.new-teamschedule-filter').click();
+		$('.new-teamschedule-team-filter').click();
 
 		equal(completeLoadedCount, 1);
 		equal(
@@ -229,7 +229,7 @@
 		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
 		equal(completeLoadedCount, 1);
 
-		$('.new-teamschedule-filter').click();
+		$('.new-teamschedule-team-filter').click();
 		equal($('.new-teamschedule-filter-component select').val(), fakeDefaultTeamData.DefaultTeam);
 
 		var selectedTeam = fakeAvailableTeamsData.teams[1].children[1];
@@ -636,7 +636,7 @@
 
 		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
 
-		$('.new-teamschedule-filter').click();
+		$('.new-teamschedule-team-filter').click();
 
 		$('.new-teamschedule-view input.form-control').val('Kleinsmith5');
 		$('.new-teamschedule-view input.form-control').change();
@@ -718,7 +718,7 @@
 
 		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
 
-		$('.new-teamschedule-filter').click();
+		$('.new-teamschedule-team-filter').click();
 
 		$('.new-teamschedule-view input.form-control').val('test search name text');
 		$('.new-teamschedule-view input.form-control').change();
@@ -741,7 +741,7 @@
 		vm.searchNameText('10');
 		vm.submitSearchForm();
 
-		$('.new-teamschedule-filter').click();
+		$('.new-teamschedule-team-filter').click();
 
 		vm.searchNameText('test search name text');
 
@@ -761,7 +761,7 @@
 
 		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
 
-		$('.new-teamschedule-filter').click();
+		$('.new-teamschedule-team-filter').click();
 
 		vm.selectedTeam('d7a9c243-8cd8-406e-9889-9b5e015ab495');
 
@@ -784,7 +784,7 @@
 		vm.selectedTeam('allTeams');
 		vm.submitSearchForm();
 
-		$('.new-teamschedule-filter').click();
+		$('.new-teamschedule-team-filter').click();
 
 		vm.selectedTeam('a74e1f94-7662-4a7f-9746-a56e00a66f17');
 
@@ -865,7 +865,7 @@
 		initVm();
 
 		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
-		$('.new-teamschedule-filter').click();
+		$('.new-teamschedule-team-filter').click();
 		$('.new-teamschedule-day-off-toggle input').click();
 
 		equal(completeLoadedCount, 1);
@@ -883,7 +883,7 @@
 		initVm();
 
 		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
-		$('.new-teamschedule-filter').click();
+		$('.new-teamschedule-team-filter').click();
 		$('.new-teamschedule-day-off-toggle input').click();
 		$('.new-teamschedule-submit-buttons .btn-primary').click();
 
@@ -1314,13 +1314,18 @@
 			'					</a>',
 			'				</li>',
 			'				<!-- ko if: isHostAMobile -->',
-			'				<li class="new-teamschedule-filter">',
+			'				<li class="new-teamschedule-team-filter">',
 			'					<a>',
 			'						<i class="glyphicon glyphicon-filter" data-bind="style: {color: hasFiltered() ? \'yellow\' : \'white\'}"></i>',
 			'					</a>',
 			'				</li>',
 			'				<!-- /ko -->',
 			'				<!-- ko ifnot: isHostAMobile -->',
+			'				<li class="new-teamschedule-time-filter" data-bind="click: toggleFilterPanel">',
+			'					<a>',
+			'						<i class="glyphicon glyphicon-time"></i>',
+			'					</a>',
+			'				</li>',
 			"				<li class=\"new-teamschedule-day-off-toggle\" data-bind=\"tooltip: { title: '@Resources.ShowOnlyDayOff', html: true, trigger: 'hover', placement: 'bottom'}\">",
 			'					<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff"/>',
 			'					<label for="show-only-day-off-switch">Day off switch</label>',
@@ -1438,6 +1443,9 @@
 			'				</div>',
 			'				<!-- /ko -->',
 			'			</div>',
+			'			<!-- ko if: isAgentScheduleLoaded() && teamSchedules().length == 0 -->',
+			'			<div class="new-teamschedule-no-result-indicator">@Resources.NoResultForCurrentFilter</div>',
+			'			<!-- /ko -->',
 			'			<!-- /ko -->',
 			'		</div>',
 			'		<div class="teamschedule-scroll-block-container" data-bind="style: {border: isScrollbarVisible() ? \'1px dashed rgba(0, 0, 0, 0.1)\' : \'none\'}">',
@@ -1449,6 +1457,7 @@
 			'		</div>',
 			'		<!-- ko if: isPanelVisible -->',
 			'		<div class="new-teamschedule-panel">',
+			'			<!-- ko if: isHostAMobile-->',
 			'			<div class="new-teamschedule-filter-component">',
 			'				<label>',
 			'					@Resources.Team:',
@@ -1466,11 +1475,14 @@
 			'				<input type="search" class="form-control" placeholder=\'@Resources.SearchHintForName\' data-bind="value: searchNameText" />',
 			'				<input type="submit" style="display: none"/>',
 			'			</form>',
+			'			<!--/ko-->',
+			'			<!-- ko if: isHostAMobile-->',
 			'			<div class="new-teamschedule-day-off-toggle">',
 			'				<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff"/>',
 			'				<label for="show-only-day-off-switch">Day off switch</label>',
 			'				<span>@Resources.ShowOnlyDayOff</span>',
 			'			</div>',
+			'			<!--/ko-->',
 			'			<div class="empty-search-result">',
 			'				<!-- ko if: emptySearchResult -->',
 			'				<label>',

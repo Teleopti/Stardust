@@ -16,7 +16,6 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 		dataService,
 		timeLineOffset = 50,
 		ajax,
-		isLoading = false,
 		onMobile = Teleopti.MyTimeWeb.Common.IsHostAMobile(),
 		oniPad = Teleopti.MyTimeWeb.Common.IsHostAniPad(),
 		agentScheduleColumnWidth = onMobile ? 50 : 80,
@@ -60,13 +59,13 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 
 			initViewModel();
 			loadDefaultTeam(function() {
-				fetchData(initialMomentDate);
+				filterChangedCallback(getDateStr(initialMomentDate));
 			});
 		});
 	}
 
 	function setupFilterClickFn() {
-		$('.new-teamschedule-filter').click(function(e) {
+		$('.new-teamschedule-team-filter').click(function(e) {
 			if (!vm.isTeamsAndGroupsLoaded()) {
 				loadGroupAndTeams(function() {
 					vm.isTeamsAndGroupsLoaded(true);
@@ -90,7 +89,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 				$(event.target)[0].className != 'new-teamschedule-panel' &&
 				$(event.target).parents('.new-teamschedule-panel').length == 0 &&
 				$(event.target)[0].className != 'new-teamschedule-filter' &&
-				$(event.target).parents('.new-teamschedule-filter').length == 0
+				$(event.target).parents('.new-teamschedule-team-filter').length == 0
 			) {
 				vm.isPanelVisible(false);
 			}
@@ -186,7 +185,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 				},
 				stop: function(event, ui) {
 					var interval = setInterval(function() {
-						if (!isLoading) {
+						if (!vm.isLoadingMoreAgentSchedules) {
 							loadSchedulesBasedOnPageDiffAndUpdateCurrentPageNum(ui.position.left);
 							clearInterval(interval);
 						}
@@ -202,9 +201,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 		var currentScrollPage = Math.ceil(left / scrollIntervalsInPixelsRepresentingAPageOfAgents) + 1;
 		var pageDiff = currentScrollPage - vm.currentPageNum();
 
-		if (!isLoading && pageDiff > 0) {
-			isLoading = true;
-
+		if (!vm.isLoadingMoreAgentSchedules && pageDiff > 0) {
 			loadMoreSchedules(
 				{
 					skip: vm.paging.take * vm.currentPageNum(),
@@ -212,7 +209,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 				},
 				function() {
 					vm.currentPageNum(currentScrollPage);
-					isLoading = false;
+					vm.isLoadingMoreAgentSchedules = false;
 				}
 			);
 		}
@@ -280,6 +277,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 			vm.paging.skip += vm.paging.take;
 
 			showLoadingGif();
+			vm.isLoadingMoreAgentSchedules = true;
 
 			dataService.loadScheduleData(
 				vm.selectedDate().format('YYYY/MM/DD'),
@@ -305,16 +303,6 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 		applyBindings();
 	}
 
-	function filterChangedCallback(dateStr) {
-		showLoadingGif();
-		dataService.loadScheduleData(dateStr, vm.paging, vm.filter, function(schedules) {
-			vm.readScheduleData(schedules, moment(dateStr));
-
-			focusMySchedule();
-			fetchDataSuccessCallback();
-		});
-	}
-
 	function applyBindings() {
 		ko.applyBindings(vm, $('#page')[0]);
 	}
@@ -338,14 +326,10 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 		});
 	}
 
-	function fetchData(momentDate) {
+	function filterChangedCallback(dateStr) {
 		showLoadingGif();
 
-		var dateStr =
-			(momentDate && momentDate.format('YYYY/MM/DD')) ||
-			Teleopti.MyTimeWeb.Portal.ParseHash().dateHash ||
-			vm.selectedDate().format('YYYY/MM/DD');
-
+		vm.isAgentScheduleLoaded(false);
 		dataService.loadScheduleData(dateStr, vm.paging, vm.filter, function(schedules) {
 			vm.readScheduleData(schedules, dateStr);
 
@@ -375,6 +359,15 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 		hideLoadingGif();
 		completelyLoaded();
 		if (!subscribed) subscribeForChanges();
+	}
+
+	function getDateStr(momentDate) {
+		var dateStr =
+			(momentDate && momentDate.format('YYYY/MM/DD')) ||
+			Teleopti.MyTimeWeb.Portal.ParseHash().dateHash ||
+			vm.selectedDate().format('YYYY/MM/DD');
+
+		return dateStr;
 	}
 
 	return {
@@ -411,7 +404,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 				var messageEndDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate);
 				var selectedDate = vm.selectedDate().toDate();
 				if (messageStartDate <= selectedDate && messageEndDate >= selectedDate) {
-					fetchData(vm.selectedDate());
+					filterChangedCallback(getDateStr(vm.selectedDate()));
 					return;
 				}
 			}

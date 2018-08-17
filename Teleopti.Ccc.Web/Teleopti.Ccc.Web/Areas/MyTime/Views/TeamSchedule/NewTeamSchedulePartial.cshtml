@@ -7,7 +7,7 @@
 		height: 100%;
 		overflow-x: hidden;
 	}
-	body {
+	html, body {
 		overflow: hidden;
 	}
 	#loading {
@@ -56,13 +56,18 @@
 				</li>
 
 				<!-- ko if: isHostAMobile -->
-				<li class="new-teamschedule-filter">
+				<li class="new-teamschedule-team-filter">
 					<a>
 						<i class="glyphicon glyphicon-filter" data-bind="style: {color: hasFiltered() ? 'yellow' : 'white'}"></i>
 					</a>
 				</li>
 				<!-- /ko -->
 				<!-- ko ifnot: isHostAMobile -->
+				<li class="new-teamschedule-time-filter" data-bind="click: toggleFilterPanel">
+					<a>
+						<i class="glyphicon glyphicon-time"></i>
+					</a>
+				</li>
 				<li class="new-teamschedule-day-off-toggle" data-bind="tooltip: { title: '@Resources.ShowOnlyDayOff', html: true, trigger: 'hover', placement: 'bottom'}">
 					<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff"/>
 					<label for="show-only-day-off-switch">Day off switch</label>
@@ -76,7 +81,7 @@
 					</select>
 				</li>
 				<li class="new-teamschedule-search-container">
-					<form class="new-teamschedule-search-component" data-bind="submit: submitSearchForm">
+					<form class="new-teamschedule-search-component relative" data-bind="submit: submitSearchForm">
 						<input type="search" class="form-control" placeholder='@Resources.SearchHintForName' data-bind="value: searchNameText" />
 						<button type="submit">
 							<i class="glyphicon glyphicon-search"></i>
@@ -185,6 +190,9 @@
 				</div>
 				<!-- /ko -->
 			</div>
+			<!-- ko if: isAgentScheduleLoaded() && teamSchedules().length == 0 -->
+			<div class="new-teamschedule-no-result-indicator">@Resources.NoResultForCurrentFilter</div>
+			<!-- /ko -->
 			<!-- /ko -->
 		</div>
 
@@ -198,6 +206,7 @@
 
 		<!-- ko if: isPanelVisible -->
 		<div class="new-teamschedule-panel">
+			<!-- ko if: isHostAMobile-->
 			<div class="new-teamschedule-filter-component">
 				<label>
 					@Resources.Team:
@@ -215,6 +224,25 @@
 				<input type="search" class="form-control" placeholder='@Resources.SearchHintForName' data-bind="value: searchNameText" />
 				<input type="submit" style="display: none"/>
 			</form>
+			<!--/ko-->
+			<div class="new-teamschedule-time-slider-container">
+				<label>@Resources.StartTime</label>
+				<div class="new-teamschedule-time-slider-line relative">
+					<span class="start-time-start-slider"></span>
+					<span class="start-time-interval-line"></span>
+					<span class="start-time-end-slider"></span>
+				</div>
+			</div>
+
+			<div class="new-teamschedule-time-slider-container">
+				<label>@Resources.EndTime</label>
+				<div class="new-teamschedule-time-slider-line relative">
+					<span class="end-time-start-slider"></span>
+					<span class="end-time-interval-line"></span>
+					<span class="end-time-end-slider"></span>
+				</div>
+			</div>
+			<!-- ko if: isHostAMobile-->
 			<div class="new-teamschedule-day-off-toggle">
 				<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff"/>
 				<label for="show-only-day-off-switch">Day off switch</label>
@@ -227,6 +255,7 @@
 				</label>
 				<!--/ko-->
 			</div>
+			<!--/ko-->
 
 			<div class="new-teamschedule-submit-buttons">
 				<button class="btn btn-default" data-bind="click: cancelClick">@Resources.Cancel</button>
