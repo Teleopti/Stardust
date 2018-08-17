@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Domain
 
 				browserInteractions.GoTo(
 					$"{TestSiteConfigurationSetup.URL}wfm/#/resourceplanner/planninggroup/{AppConfigs.PlanningGroupId}/detail/{AppConfigs.PlanningPeriodId}");
-				using (new TimeoutScope(browserActivator, TimeSpan.FromMinutes(10)))
+				using (new TimeoutScope(browserActivator, TimeSpan.FromMinutes(30)))
 				{
 					browserInteractions.Click(".intraday-optimization-button:enabled");
 				}
