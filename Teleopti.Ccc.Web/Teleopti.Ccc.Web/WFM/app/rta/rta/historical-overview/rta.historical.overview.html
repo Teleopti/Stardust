@@ -82,11 +82,11 @@
 	</div>
 
 	<div class="panel material-depth-1 card-panel" ng-repeat="card in vm.cards">
-		<div class="card-panel-header-wrapper pointer left-border" ng-click="vm.openCard = !vm.openCard"
+		<div class="card-panel-header-wrapper pointer left-border" ng-click="card.toggle()"
 			 style="background-color: {{vm.toneAdherence(card.TeamAdherence)}}">
 			{{card.Name}}&nbsp;&nbsp;<strong>{{card.TeamAdherence}}%</strong>
 		</div>
-		<div class="card-panel-content-wrapper" ng-show="vm.openCard">
+		<div class="card-panel-content-wrapper" ng-show="card.isOpen">
 			<table class="wfm-table">
 				<thead>
 				<tr>

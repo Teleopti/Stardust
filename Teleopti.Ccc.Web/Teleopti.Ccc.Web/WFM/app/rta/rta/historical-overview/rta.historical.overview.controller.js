@@ -57,27 +57,38 @@
 
 			updateOrganizationPicker();
 		}
-		
+
 		function updateOrganizationPicker() {
 			vm.organizationPickerSelectionText = rtaStateService.organizationSelectionText();
 			vm.clearEnabled = (vm.sites || []).some(function (site) {
-			 	return site.isChecked || site.isMarked;
-			 });
+				return site.isChecked || site.isMarked;
+			});
 		}
-		
-		// vm.toneAdherence = function (percentage){
-		// 	var light = 40 + ((percentage / 100) * 60);
-		// 	return 'hsl(0,0%,' + light + '%)';
-		// };
-		//
-		 vm.applyOrganizationSelection = function () {
-			 vm.organizationPickerOpen = false;
-			 $http.get('../api/HistoricalOverview', {
-				 params: rtaStateService.historicalOverviewParams()
-			 }).then(function (response) {
-				 vm.cards = response.data;
-			 });
-			 
+
+		vm.toneAdherence = function (percentage) {
+			var light = 40 + ((percentage / 100) * 60);
+			return 'hsl(0,0%,' + light + '%)';
+		};
+
+		vm.applyOrganizationSelection = function () {
+			vm.organizationPickerOpen = false;
+			var params = rtaStateService.historicalOverviewParams();
+			var noParams = !(params.siteIds.length || params.teamIds.length);
+			if (noParams) {
+				vm.cards = [];
+				return;
+			}
+			$http.get('../api/HistoricalOverview', {
+				params: params
+			}).then(function (response) {
+				vm.cards = response.data;
+				vm.cards.forEach(function (card) {
+					card.toggle = function () {
+						card.isOpen = !card.isOpen;
+					}
+				});
+			});
+
 			// vm.cards = [
 			// 	{
 			// 		Name: 'Denver/Avalanche',
@@ -205,7 +216,7 @@
 			// 						TotalMinutes: 42
 			// 					}
 			// 			}
-            //
+			//
 			// 		]
 			// 	},
 			// 	{
@@ -254,13 +265,13 @@
 			// 		]
 			// 	}
 			// ];
-		 };
+		};
 
-		 vm.clearOrganizationSelection = function () {
+		vm.clearOrganizationSelection = function () {
 			rtaStateService.deselectOrganization();
 			updateOrganizationPicker();
-		 };
-		
+		};
+
 		vm.goToAgents = rtaStateService.goToAgents;
 		vm.goToOverview = rtaStateService.goToOverview;
 	}
