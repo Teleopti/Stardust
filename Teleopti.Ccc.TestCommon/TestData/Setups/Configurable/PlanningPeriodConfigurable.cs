@@ -14,10 +14,9 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 	public class PlanningPeriodConfigurable : IDataSetup
 	{
 		public PlanningPeriod Period;
-		
 		public DateTime Date { get; set; }
-
 		public string PlanningGroupName { get; set; }
+		public SchedulePeriodType? Type { get; set; }
 		
 		public void Apply (ICurrentUnitOfWork currentUnitOfWork)
 		{
@@ -26,7 +25,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			{
 				DateFrom = Date,
 				Culture = CultureInfo.CurrentCulture.LCID,
-				PeriodType = SchedulePeriodType.Month,
+				PeriodType = Type ?? SchedulePeriodType.Month,
 				Number = 1,
 				Priority = 1
 			};

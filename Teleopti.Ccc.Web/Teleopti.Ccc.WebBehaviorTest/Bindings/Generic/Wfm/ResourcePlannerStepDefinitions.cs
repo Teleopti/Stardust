@@ -28,8 +28,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Then(@"Planning period should have been scheduled")]
 		public void ThenPlanningPeriodShouldHaveBeenScheduled()
 		{
-			Browser.Interactions.AssertExists(".notice-success");
-			Browser.Interactions.AssertVisibleUsingJQuery(".heatmap");
+			using (Browser.TimeoutScope(TimeSpan.FromMinutes(2)))
+			{
+				Browser.Interactions.AssertExists(".notice-success");
+				Browser.Interactions.AssertExists(".scheduled-agents");
+				Browser.Interactions.AssertVisibleUsingJQuery(".heatmap");
+			}
+		}
+		
+		[Then(@"Planning period should have been intraday optimized")]
+		public void ThenPlanningPeriodShouldHaveBeenIntradayOptimized()
+		{
+			using (Browser.TimeoutScope(TimeSpan.FromMinutes(2)))
+			{
+				Browser.Interactions.AssertAnyContains(".notice-success", "intraday");
+				Browser.Interactions.AssertExists(".scheduled-agents");
+				Browser.Interactions.AssertVisibleUsingJQuery(".heatmap");
+			}
 		}
 		
 		[When(@"I click schedule")]
@@ -37,6 +52,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		{
 			Browser.Interactions.Click(".schedule-button:enabled");
 		}
+		
+		
+		[When(@"I click optimize intraday")]
+		public void WhenIClickOptimizeIntraday()
+		{
+			Browser.Interactions.Click(".intraday-optimization-button:enabled");
+		}
+		
 		[Then(@"I should see updated period label from '(.*)'to '(.*)'")]
 		public void ThenIShouldSeeUpdatedPeriodLabelFromTo(DateTime fromDate, DateTime toDate)
 		{
