@@ -1024,6 +1024,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public virtual FakeDatabase WithAssignedActivity(Guid? id, string startTime, string endTime)
 		{
 			ensureExists(_activities, id, () => this.WithActivity(id));
+			_activity.InWorkTime = true;
 			_personAssignment.AddActivity(_activity, new DateTimePeriod(startTime.Utc(), endTime.Utc()));
 			return this;
 		}
