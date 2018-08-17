@@ -23,14 +23,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly UnitOfWorkFactoryFactory _unitOfWorkFactoryFactory;
 		private readonly IToggleManager _toggles;
 		private readonly IDataSourceConfigurationSetter _dataSourceConfigurationSetter;
-		private readonly INHibernateConfigurationCache _nhibernateConfigurationCache;
+		private readonly MemoryNHibernateConfigurationCache _nhibernateConfigurationCache;
 
 		public const string AnalyticsDataSourceName = "AnalyticsDatasource";
 
 		public DataSourcesFactory(
 			IEnversConfiguration enversConfiguration,
 			IDataSourceConfigurationSetter dataSourceConfigurationSetter,
-			INHibernateConfigurationCache nhibernateConfigurationCache,
+			MemoryNHibernateConfigurationCache nhibernateConfigurationCache,
 			UnitOfWorkFactoryFactory unitOfWorkFactoryFactory,
 			IToggleManager toggles)
 		{

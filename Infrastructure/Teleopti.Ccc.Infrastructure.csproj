@@ -706,7 +706,7 @@
     <Compile Include="UnitOfWork\ICurrentPreCommitHooks.cs" />
     <Compile Include="UnitOfWork\INestedUnitOfWorkStrategy.cs" />
     <Compile Include="UnitOfWork\IPreCommitHook.cs" />
-    <Compile Include="UnitOfWork\INHibernateConfigurationCache.cs" />
+    <Compile Include="UnitOfWork\MemoryNHibernateConfigurationCache.cs" />
     <Compile Include="UnitOfWork\KeepScheduleEvents.cs" />
     <Compile Include="UnitOfWork\MessageBrokerSender.cs" />
     <Compile Include="UnitOfWork\NestedUnitOfWorkException.cs" />

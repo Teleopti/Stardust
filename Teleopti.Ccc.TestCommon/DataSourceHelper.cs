@@ -30,18 +30,16 @@ namespace Teleopti.Ccc.TestCommon
 		public static DataSourceFactoryFactory MakeLegacyWay(
 			ICurrentTransactionHooks hooks = null,
 			IEnversConfiguration enversConfiguration = null,
-			IDataSourceConfigurationSetter configurationSetter = null,
-			INHibernateConfigurationCache nHibernateConfigurationCache = null)
+			IDataSourceConfigurationSetter configurationSetter = null)
 		{
 			return new DataSourceFactoryFactory(() =>
 			{
 				enversConfiguration = enversConfiguration ?? new EnversConfiguration();
 				configurationSetter = configurationSetter ?? DataSourceConfigurationSetter.ForTest();
-				nHibernateConfigurationCache = nHibernateConfigurationCache ?? new MemoryNHibernateConfigurationCache();
 				return new DataSourcesFactory(
 					enversConfiguration,
 					configurationSetter,
-					nHibernateConfigurationCache,
+					new MemoryNHibernateConfigurationCache(),
 					new UnitOfWorkFactoryFactory(
 						new NoPreCommitHooks(),
 						enversConfiguration,
