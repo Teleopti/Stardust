@@ -270,8 +270,8 @@
 					<!--ko if:mySchedule.isDayOff && !mySchedule.isFullDayAbsence-->
 					<div class="schedule-layer-text-container dayoff-text">
 						<span data-bind="text:mySchedule.dayOffName"></span>
-						<span data-bind="visible:mySchedule.hasOvertime">(@Resources.WithOvertime)</span>
-						<span data-bind="visible:mySchedule.isIntradayAbsence && !mySchedule.hasOvertime">(@Resources.WithAbsence)</span>
+						<span data-bind="css:{'hiden':!(mySchedule.hasOvertime && !$root.isMobile())}">(@Resources.WithOvertime)</span>
+						<span data-bind="css:{'hiden':!(mySchedule.isIntradayAbsence && !mySchedule.hasOvertime && !$root.isMobile())}">(@Resources.WithAbsence)</span>
 					</div>
 					<!--/ko-->
 					<!--ko if:!mySchedule.isDayOff && !mySchedule.isFullDayAbsence-->
@@ -321,8 +321,8 @@
 					<!--ko if:targetSchedule.isDayOff && !targetSchedule.isFullDayAbsence-->
 					<div class="schedule-layer-text-container dayoff-text">
 						<span data-bind="text:targetSchedule.dayOffName"></span>
-						<span data-bind="visible:targetSchedule.hasOvertime && !$root.isMobile()">(@Resources.WithOvertime)</span>
-						<span data-bind="visible:targetSchedule.isIntradayAbsence && !targetSchedule.hasOvertime && !$root.isMobile()">(@Resources.WithAbsence)</span>
+						<span data-bind="css:{'hiden':!(targetSchedule.hasOvertime && !$root.isMobile())}">(@Resources.WithOvertime)</span>
+						<span data-bind="css:{'hiden':!(targetSchedule.isIntradayAbsence && !targetSchedule.hasOvertime && !$root.isMobile())}">(@Resources.WithAbsence)</span>
 					</div>
 					<!--/ko-->
 					<!--ko if:!targetSchedule.isDayOff && !targetSchedule.isFullDayAbsence-->
