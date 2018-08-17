@@ -1522,7 +1522,6 @@
     <Content Include="WFM\app\api-access\api-access.routes.js" />
     <Content Include="WFM\app\api-access\api-access.start.controller.js" />
     <Content Include="WFM\app\api-access\_modules.js" />
-    <Content Include="WFM\app\forecasting\controller\default.controller.js" />
     <Content Include="WFM\app\forecasting\html\forecasting.html" />
     <Content Include="WFM\app\forecasting\component\history.chart.component.js" />
     <Content Include="WFM\app\forecasting\html\history.chart.html" />

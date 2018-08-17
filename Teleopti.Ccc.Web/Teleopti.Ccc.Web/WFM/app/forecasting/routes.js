@@ -19,7 +19,8 @@
 			.state('forecast', {
 				url: '/forecast',
 				templateUrl: 'app/forecasting/html/r2forecast.html',
-				controller: 'r2ForecastRefactController as vm'
+				controller: 'r2ForecastRefactController',
+				controllerAs: 'vm'
 			})
 			.state('forecast-modify', {
 				url: '/forecast/modify/:workloadId',
@@ -41,8 +42,8 @@
 			})
 			.state('forecast-create-skill', {
 				url: '/forecast/create',
-				templateUrl: 'app/forecasting/html/skill-create.html',
-				controller: 'ForecastingSkillCreateCtrl'
+				templateUrl: 'app/forecasting/html/skill.create.html',
+				controller: 'ForecastingSkillCreateController'
 			});
 	}
 })();
