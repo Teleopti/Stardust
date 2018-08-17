@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		[RemoveMeWithToggle("remove resourceOptimizerPersonOptimized param", Toggles.ResourcePlanner_DayOffOptimizationIslands_47208)]
 		public void Execute(DateOnlyPeriod selectedPeriod,
 			IEnumerable<IPerson> selectedAgents,
-			bool runWeeklyRestSolver,
+			bool runWeeklyRestSolver, // desktop client runs this explicitly afterwards so sending in false here
 			Guid planningPeriodId,
 			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
 		{

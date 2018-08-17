@@ -40,7 +40,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_schedulingCommandHandler.Execute(new SchedulingCommand
 			{
 				Period = schedulingInformation.Period,
-				RunWeeklyRestSolver = false,
 				FromWeb = true,
 				AgentsToSchedule = agents,
 				PlanningPeriodId = planningPeriodId,

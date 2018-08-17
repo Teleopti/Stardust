@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				_dayOffOptimization.Execute(command.Period, 
 					command.AgentsToOptimize, 
-					command.RunWeeklyRestSolver, 
+					false, 
 					command.PlanningPeriodId,
 					resourceOptimizerPersonOptimized);
 			}			

@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			{
 				_dayOffOptimization.Execute(new DateOnlyPeriod(@event.StartDate, @event.EndDate),
 					agents,
-					@event.RunWeeklyRestSolver,
+					true,
 					@event.PlanningPeriodId,
 					null);
 			}

@@ -35,8 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var command = new DayOffOptimizationCommand
 			{
 				Period = selectedPeriod,
-				AgentsToOptimize = selectedAgents,
-				RunWeeklyRestSolver = false
+				AgentsToOptimize = selectedAgents
 			};
 			using (_desktopOptimizationContext.Set(command, stateHolder, optimizationPreferences, dayOffOptimizationPreferenceProvider, optimizationCallback))
 			{
