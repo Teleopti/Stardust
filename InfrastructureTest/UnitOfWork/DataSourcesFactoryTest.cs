@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public void Setup()
 		{
 			enversConfiguration = MockRepository.GenerateMock<IEnversConfiguration>();
-			target = DataSourceHelper.MakeLegacyWay(null, enversConfiguration).Make();
+			target = DataSourceHelper.MakeLegacyWay(enversConfiguration).Make();
 		}
 
 		[Test]
