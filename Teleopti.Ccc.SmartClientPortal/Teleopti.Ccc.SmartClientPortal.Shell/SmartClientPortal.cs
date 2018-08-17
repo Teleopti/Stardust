@@ -436,7 +436,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 							PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebForecasts))
 						{
 							outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewForecasts;
-							outlookBarSmartPartInfo.PreviewUrl = buildWfmUri("WFM/#/forecasting");
+							outlookBarSmartPartInfo.PreviewUrl = buildWfmUri("WFM/#/forecast");
 						}
 						break;
 					case DefinedRaptorApplicationFunctionPaths.OpenSchedulePage:
