@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Should().Be.EqualTo(15);
 		}
 
-		public BackToLegalShiftCommandTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerLessResourcesXXL74915) : base(seperateWebRequest, resourcePlannerLessResourcesXXL74915)
+		public BackToLegalShiftCommandTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
 		{
 		}
 	}
