@@ -5484,7 +5484,7 @@ Periods</comment>
     <value>百分比值必须在1到100之间</value>
   </data>
   <data name="YouCannotHaveABlankName" xml:space="preserve">
-    <value>您不能有空白名称</value>
+    <value>名称不能为空</value>
   </data>
   <data name="ManageAlarmSituations" xml:space="preserve">
     <value>管理告警状况</value>

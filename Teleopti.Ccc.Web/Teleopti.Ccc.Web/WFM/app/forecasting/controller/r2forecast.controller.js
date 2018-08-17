@@ -30,7 +30,7 @@
 		function setReleaseNotification() {
 			var message = $translate
 				.instant('WFMReleaseNotificationWithoutOldModuleLink')
-				.replace('{0}', $translate.instant('Forecast'))
+				.replace('{0}', $translate.instant('Forecasts'))
 				.replace('{1}', '<a href="http://www.teleopti.com/wfm/customer-feedback.aspx" target="_blank">')
 				.replace('{2}', '</a>');
 			noticeSvc.info(message, null, true);
