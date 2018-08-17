@@ -16,6 +16,7 @@ import {
 } from './app/people/components';
 import { ListPageComponent, AddAppPageComponent, ApiAccessTitleBarComponent } from './app/api-access/components';
 import { AppModule } from './app/app.module';
+import { ChangePasswordComponent } from './app/authentication/components/change-password/change-password.component';
 
 export interface IWfmRootScopeService extends IRootScopeService {
 	_: any;
@@ -104,6 +105,7 @@ downgradeHelper('ng2PeopleGrantPage', GrantPageComponent);
 downgradeHelper('ng2PeopleRevokePage', RevokePageComponent);
 downgradeHelper('ng2PeopleAppLogonPage', AppLogonPageComponent);
 downgradeHelper('ng2PeopleIdentityLogonPage', IdentityLogonPageComponent);
+downgradeHelper('ng2ChangePassword', ChangePasswordComponent);
 
 wfm.config([
 	'$stateProvider',
