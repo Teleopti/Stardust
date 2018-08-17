@@ -1,7 +1,7 @@
-﻿$(document).ready(function () {
-	module("Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel");
+﻿$(document).ready(function() {
+	module('Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel');
 
-	test("should show add button", function () {
+	test('should show add button', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
 		viewModel.agentChoosed({});
 		viewModel.selectedInternal(false);
@@ -10,7 +10,7 @@
 		equal(viewModel.isAddVisible(), true);
 	});
 
-	test("should not show add button when no detail", function () {
+	test('should not show add button when no detail', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
 		viewModel.agentChoosed(null);
 		viewModel.selectedInternal(false);
@@ -19,7 +19,7 @@
 		equal(viewModel.isAddVisible(), false);
 	});
 
-	test("should not show add button when it has been selected", function () {
+	test('should not show add button when it has been selected', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
 		viewModel.agentChoosed({});
 		viewModel.selectedInternal(true);
@@ -28,8 +28,10 @@
 		equal(viewModel.isAddVisible(), false);
 	});
 
-	test("should not show add button when loading", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggleName) { return true; }
+	test('should not show add button when loading', function() {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggleName) {
+			return true;
+		};
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
 		viewModel.agentChoosed({});
 		viewModel.selectedInternal(false);
@@ -38,59 +40,63 @@
 		equal(viewModel.isAddVisible(), false);
 	});
 
-	test("should get contract time correctly", function () {
+	test('should get contract time correctly', function() {
 		var schedules = {
-			"MySchedule":
+			MySchedule: {
+				ScheduleLayers: [{}],
+				ContractTimeInMinute: 480
+			},
+			PossibleTradeSchedules: [
 				{
-					"ScheduleLayers": [{}],
-					"ContractTimeInMinute": 480
-				},
-			"PossibleTradeSchedules": [
-				{
-					"ScheduleLayers": [{}],
-					"ContractTimeInMinute": 425
+					ScheduleLayers: [{}],
+					ContractTimeInMinute: 425
 				}
 			],
-			"TimeLineHours": [
+			TimeLineHours: [
 				{
-					"HourText": "",
-					"StartTime": "2017-01-01 00:00:00"
+					HourText: '',
+					StartTime: '2017-01-01 00:00:00'
 				},
 				{
-					"HourText": "07:00",
-					"StartTime": "2017-01-01 07:00:00"
+					HourText: '07:00',
+					StartTime: '2017-01-01 07:00:00'
 				}
 			]
 		};
 
 		var ajax = {
-			Ajax: function (options) {
-				if (options.url === "Requests/ShiftTradeRequestSchedule") {
+			Ajax: function(options) {
+				if (options.url === 'Requests/ShiftTradeRequestSchedule') {
 					options.success(schedules);
 				}
 			}
 		};
 
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggleName) { return true; }
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggleName) {
+			return true;
+		};
 
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
-		viewModel.requestedDate(moment("2017-01-01"));
-		viewModel.selectedTeam("TeamId");
+		viewModel.requestedDate(moment('2017-01-01'));
+		viewModel.selectedTeam('TeamId');
 
-		equal(viewModel.mySchedule().contractTime, "8:00");
-		equal(viewModel.possibleTradeSchedules()[0].contractTime, "7:05");
+		equal(viewModel.mySchedule().contractTime, '08:00');
+		equal(viewModel.possibleTradeSchedules()[0].contractTime, '07:05');
 	});
 
-	test("should unselect current date when remove from view model list", function () {
+	test('should unselect current date when remove from view model list', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
-		viewModel.requestedDateInternal(moment("Dec 25, 1995"));
+		viewModel.requestedDateInternal(moment('Dec 25, 1995'));
 		var currentTrade = {
-			date: moment("Dec 25, 1995"),
+			date: moment('Dec 25, 1995'),
 			hours: self.hours,
 			mySchedule: undefined,
-			tradedSchedule: { agentName: "aa", layers: [] }
+			tradedSchedule: { agentName: 'aa', layers: [] }
 		};
-		var chooseHistoryViewModel = new Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel(currentTrade, self.layerCanvasPixelWidth);
+		var chooseHistoryViewModel = new Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel(
+			currentTrade,
+			self.layerCanvasPixelWidth
+		);
 		viewModel.chooseHistorys.push(chooseHistoryViewModel);
 		viewModel.selectedInternal(true);
 
@@ -99,14 +105,25 @@
 		equal(viewModel.selectedInternal(), false);
 	});
 
-	test("should clean filter when choose agent", function () {
+	test('should clean filter when choose agent', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
-		viewModel.filteredStartTimesText.push("6:00-8:00");
-		viewModel.filteredEndTimesText.push("16:00-18:00");
-		viewModel.filterStartTimeList.push(new Teleopti.MyTimeWeb.Request.FilterStartTimeView("6:00-8:00", 6, 8, true, false));
-		viewModel.filterEndTimeList.push(new Teleopti.MyTimeWeb.Request.FilterStartTimeView("16:00-18:00", 16, 18, true, false));
-		var agent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(null, null, null, "Ashley", null, false);
-		viewModel.redrawLayers = function () { };
+		viewModel.filteredStartTimesText.push('6:00-8:00');
+		viewModel.filteredEndTimesText.push('16:00-18:00');
+		viewModel.filterStartTimeList.push(
+			new Teleopti.MyTimeWeb.Request.FilterStartTimeView('6:00-8:00', 6, 8, true, false)
+		);
+		viewModel.filterEndTimeList.push(
+			new Teleopti.MyTimeWeb.Request.FilterStartTimeView('16:00-18:00', 16, 18, true, false)
+		);
+		var agent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(
+			null,
+			null,
+			null,
+			'Ashley',
+			null,
+			false
+		);
+		viewModel.redrawLayers = function() {};
 
 		viewModel.chooseAgent(agent);
 
@@ -120,19 +137,21 @@
 		}
 	});
 
-	test("should set date picker range", function () {
+	test('should set date picker range', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
-		var now = moment("Dec 25, 1995");
+		var now = moment('Dec 25, 1995');
 
 		viewModel.openPeriodStartDate(moment(now).add('days', 1));
 		viewModel.openPeriodEndDate(moment(now).add('days', 2));
 
-		equal(viewModel.openPeriodStartDate().format("YYYY-MM-DD"), "1995-12-26");
-		equal(viewModel.openPeriodEndDate().format("YYYY-MM-DD"), "1995-12-27");
+		equal(viewModel.openPeriodStartDate().format('YYYY-MM-DD'), '1995-12-26');
+		equal(viewModel.openPeriodEndDate().format('YYYY-MM-DD'), '1995-12-27');
 	});
 
-	test("should get date with format", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { return true; };
+	test('should get date with format', function() {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			return true;
+		};
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'YYYY-MM-DD',
@@ -142,89 +161,85 @@
 		});
 
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
-		viewModel.requestedDateInternal(moment("Dec 25, 1995"));
+		viewModel.requestedDateInternal(moment('Dec 25, 1995'));
 
 		var result = viewModel.requestedDateInternal().format(viewModel.DatePickerFormat());
 
-		equal(result, "1995-12-25");
+		equal(result, '1995-12-25');
 	});
 
-	test("shift trade date should be invalid when it is not in an open period", function () {
+	test('shift trade date should be invalid when it is not in an open period', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
-		var periodStart = moment("2014-08-01", "YYYY-MM-DD");
-		var periodEnd = moment("2014-08-31", "YYYY-MM-DD");
+		var periodStart = moment('2014-08-01', 'YYYY-MM-DD');
+		var periodEnd = moment('2014-08-31', 'YYYY-MM-DD');
 		viewModel.openPeriodStartDate(periodStart);
 		viewModel.openPeriodEndDate(periodEnd);
 
-		var startRangeResult = viewModel.isRequestedDateValid(moment("2014-07-31", "YYYY-MM-DD"));
-		var endRangeResult = viewModel.isRequestedDateValid(moment("2014-09-01", "YYYY-MM-DD"));
+		var startRangeResult = viewModel.isRequestedDateValid(moment('2014-07-31', 'YYYY-MM-DD'));
+		var endRangeResult = viewModel.isRequestedDateValid(moment('2014-09-01', 'YYYY-MM-DD'));
 
 		equal(startRangeResult, false);
 		equal(endRangeResult, false);
 	});
 
-	test("shift trade date should be valid when it is in open period", function () {
+	test('shift trade date should be valid when it is in open period', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
-		var periodStart = moment("2014-08-01", "YYYY-MM-DD");
-		var periodEnd = moment("2014-08-31", "YYYY-MM-DD");
+		var periodStart = moment('2014-08-01', 'YYYY-MM-DD');
+		var periodEnd = moment('2014-08-31', 'YYYY-MM-DD');
 		viewModel.openPeriodStartDate(periodStart);
 		viewModel.openPeriodEndDate(periodEnd);
 
-		var result = viewModel.isRequestedDateValid(moment("2014-08-15", "YYYY-MM-DD"));
+		var result = viewModel.isRequestedDateValid(moment('2014-08-15', 'YYYY-MM-DD'));
 
 		equal(result, true);
 	});
 
-	test("should go to next date", function () {
+	test('should go to next date', function() {
 		var ajax = {
-			Ajax: function (options) {
-				if (options.url === "Requests/ShiftTradeRequestMyTeam") {
-					options.success(
-						""
-					);
+			Ajax: function(options) {
+				if (options.url === 'Requests/ShiftTradeRequestMyTeam') {
+					options.success('');
 				}
 			}
 		};
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
-		var date = moment("12-25-1995", "MM-DD-YYYY");
+		var date = moment('12-25-1995', 'MM-DD-YYYY');
 		viewModel.requestedDate(date);
-		viewModel.isRequestedDateValid = function (date) {
+		viewModel.isRequestedDateValid = function(date) {
 			return true;
 		};
 
 		viewModel.nextDate();
 
-		equal(viewModel.requestedDateInternal().format("MM-DD-YYYY"), "12-26-1995");
+		equal(viewModel.requestedDateInternal().format('MM-DD-YYYY'), '12-26-1995');
 	});
 
-	test("should go to previous date", function () {
+	test('should go to previous date', function() {
 		var ajax = {
-			Ajax: function (options) {
-				if (options.url === "Requests/ShiftTradeRequestMyTeam") {
-					options.success(
-						""
-					);
+			Ajax: function(options) {
+				if (options.url === 'Requests/ShiftTradeRequestMyTeam') {
+					options.success('');
 				}
 			}
 		};
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
-		var date = moment("12-25-1995", "MM-DD-YYYY");
+		var date = moment('12-25-1995', 'MM-DD-YYYY');
 		viewModel.requestedDate(date);
-		viewModel.isRequestedDateValid = function (date) {
+		viewModel.isRequestedDateValid = function(date) {
 			return true;
 		};
 
 		viewModel.previousDate();
 
-		equal(viewModel.requestedDateInternal().format("MM-DD-YYYY"), "12-24-1995");
+		equal(viewModel.requestedDateInternal().format('MM-DD-YYYY'), '12-24-1995');
 	});
 
-	test("should clean data when prepare load without Multi shifts trade Enabled", function () {
+	test('should clean data when prepare load without Multi shifts trade Enabled', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
 
-		viewModel.isDetailVisible = function () {
+		viewModel.isDetailVisible = function() {
 			return false;
-		}
+		};
 
 		viewModel.prepareLoad();
 
@@ -237,68 +252,78 @@
 		equal(viewModel.IsLoading(), false);
 	});
 
-	test("should get all team ids except 'Team All'", function () {
+	test("should get all team ids except 'Team All'", function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
-		viewModel.availableTeams.push({ id: "A", text: "Team A" });
-		viewModel.availableTeams.push({ id: "B", text: "Team B" });
-		viewModel.availableTeams.push({ id: "allTeams", text: "Team All" });
+		viewModel.availableTeams.push({ id: 'A', text: 'Team A' });
+		viewModel.availableTeams.push({ id: 'B', text: 'Team B' });
+		viewModel.availableTeams.push({ id: 'allTeams', text: 'Team All' });
 
-		var target = viewModel.availableTeams().filter(function (team) { return team.id !== viewModel.allTeamsId; }).map(function (team) { return team.id; });
+		var target = viewModel
+			.availableTeams()
+			.filter(function(team) {
+				return team.id !== viewModel.allTeamsId;
+			})
+			.map(function(team) {
+				return team.id;
+			});
 
 		equal(target.length, 2);
-		equal(target[0], "A");
-		equal(target[1], "B");
+		equal(target[0], 'A');
+		equal(target[1], 'B');
 	});
 
-	test("should get all site ids except 'All Sites'", function () {
+	test("should get all site ids except 'All Sites'", function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
-		viewModel.availableSites.push({ id: "A", text: "Site A" });
-		viewModel.availableSites.push({ id: "B", text: "Site B" });
-		viewModel.availableSites.push({ id: "allSites", text: "All Sites" });
+		viewModel.availableSites.push({ id: 'A', text: 'Site A' });
+		viewModel.availableSites.push({ id: 'B', text: 'Site B' });
+		viewModel.availableSites.push({ id: 'allSites', text: 'All Sites' });
 
-		var target = viewModel.availableSites().filter(function (site) { return site.id !== viewModel.allSitesId; }).map(function (site) { return site.id; });
+		var target = viewModel
+			.availableSites()
+			.filter(function(site) {
+				return site.id !== viewModel.allSitesId;
+			})
+			.map(function(site) {
+				return site.id;
+			});
 
 		equal(target.length, 2);
-		equal(target[0], "A");
-		equal(target[1], "B");
+		equal(target[0], 'A');
+		equal(target[1], 'B');
 	});
 
-	test("should load teams under site", function () {
+	test('should load teams under site', function() {
 		var ajax = {
-			Ajax: function (options) {
-				if (options.url === "Team/TeamsUnderSiteForShiftTrade") {
-					options.success(
-						[
-							{ id: "A", text: "Team A" },
-							{ id: "B", text: "Team B" },
-							{ id: "C", text: "Team C" }
-						]
-					);
+			Ajax: function(options) {
+				if (options.url === 'Team/TeamsUnderSiteForShiftTrade') {
+					options.success([
+						{ id: 'A', text: 'Team A' },
+						{ id: 'B', text: 'Team B' },
+						{ id: 'C', text: 'Team C' }
+					]);
 				}
 			}
 		};
 
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
 
-		viewModel.loadTeamsUnderSite("site1");
+		viewModel.loadTeamsUnderSite('site1');
 
 		equal(viewModel.availableTeams().length, 4);
 		var teamAll = viewModel.availableTeams()[0];
-		equal(teamAll.id, "allTeams");
-		equal(teamAll.text, "Team All");
+		equal(teamAll.id, 'allTeams');
+		equal(teamAll.text, 'Team All');
 	});
 
-	test("should load Team All", function () {
+	test('should load Team All', function() {
 		var ajax = {
-			Ajax: function (options) {
-				if (options.url === "Team/TeamsForShiftTrade") {
-					options.success(
-						[
-							{ id: "A", text: "Team A" },
-							{ id: "B", text: "Team B" },
-							{ id: "C", text: "Team C" }
-						]
-					);
+			Ajax: function(options) {
+				if (options.url === 'Team/TeamsForShiftTrade') {
+					options.success([
+						{ id: 'A', text: 'Team A' },
+						{ id: 'B', text: 'Team B' },
+						{ id: 'C', text: 'Team C' }
+					]);
 				}
 			}
 		};
@@ -309,14 +334,14 @@
 
 		equal(viewModel.availableTeams().length, 4);
 		var teamAll = viewModel.availableTeams()[0];
-		equal(teamAll.id, "allTeams");
-		equal(teamAll.text, "Team All");
+		equal(teamAll.id, 'allTeams');
+		equal(teamAll.text, 'Team All');
 	});
 
-	test("should load no teams when no teams returned from server", function () {
+	test('should load no teams when no teams returned from server', function() {
 		var ajax = {
-			Ajax: function (options) {
-				if (options.url === "Team/TeamsForShiftTrade") {
+			Ajax: function(options) {
+				if (options.url === 'Team/TeamsForShiftTrade') {
 					options.success([]);
 				}
 			}
@@ -327,68 +352,62 @@
 		equal(viewModel.availableTeams().length, 0);
 	});
 
-	test("should load teams", function () {
+	test('should load teams', function() {
 		var ajax = {
-			Ajax: function (options) {
-				if (options.url === "Team/TeamsForShiftTrade") {
-					options.success(
-						[
-							{ id: "A", text: "Team A" },
-							{ id: "B", text: "Team B" },
-							{ id: "C", text: "Team C" }
-						]
-					);
+			Ajax: function(options) {
+				if (options.url === 'Team/TeamsForShiftTrade') {
+					options.success([
+						{ id: 'A', text: 'Team A' },
+						{ id: 'B', text: 'Team B' },
+						{ id: 'C', text: 'Team C' }
+					]);
 				}
 			}
 		};
 
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
-		viewModel.myTeamId("A");
+		viewModel.myTeamId('A');
 
 		viewModel.loadTeams();
 
-		equal(viewModel.selectedTeam(), "A");
+		equal(viewModel.selectedTeam(), 'A');
 		equal(viewModel.availableTeams().length, 4);
 		var teamTwo = viewModel.availableTeams()[2];
-		equal(teamTwo.id, "B");
-		equal(teamTwo.text, "Team B");
+		equal(teamTwo.id, 'B');
+		equal(teamTwo.text, 'Team B');
 	});
 
-	test("should load sites", function () {
+	test('should load sites', function() {
 		var ajax = {
-			Ajax: function (options) {
-				if (options.url === "Team/SitesForShiftTrade") {
-					options.success(
-						[
-							{ id: "A", text: "Site A" },
-							{ id: "B", text: "Site B" },
-							{ id: "C", text: "Site C" }
-						]
-					);
+			Ajax: function(options) {
+				if (options.url === 'Team/SitesForShiftTrade') {
+					options.success([
+						{ id: 'A', text: 'Site A' },
+						{ id: 'B', text: 'Site B' },
+						{ id: 'C', text: 'Site C' }
+					]);
 				}
 			}
 		};
 
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
-		viewModel.mySiteId("A");
+		viewModel.mySiteId('A');
 
 		viewModel.loadSites();
 
-		equal(viewModel.selectedSite(), "A");
+		equal(viewModel.selectedSite(), 'A');
 		equal(viewModel.availableSites().length, 4);
 		var siteTwo = viewModel.availableSites()[2];
-		equal(siteTwo.id, "B");
-		equal(siteTwo.text, "Site B");
+		equal(siteTwo.id, 'B');
+		equal(siteTwo.text, 'Site B');
 	});
 
-	test("should set default team ID when get nothing", function () {
-		var myTeamId = "";
+	test('should set default team ID when get nothing', function() {
+		var myTeamId = '';
 		var ajax = {
-			Ajax: function (options) {
-				if (options.url === "Requests/ShiftTradeRequestMyTeam") {
-					options.success(
-						myTeamId
-					);
+			Ajax: function(options) {
+				if (options.url === 'Requests/ShiftTradeRequestMyTeam') {
+					options.success(myTeamId);
 				}
 			}
 		};
@@ -400,14 +419,12 @@
 		equal(viewModel.noAnyTeamToShow(), false);
 	});
 
-	test("should set true when get no any team", function () {
+	test('should set true when get no any team', function() {
 		var noTeam = [];
 		var ajax = {
-			Ajax: function (options) {
-				if (options.url === "Team/TeamsForShiftTrade") {
-					options.success(
-						noTeam
-					);
+			Ajax: function(options) {
+				if (options.url === 'Team/TeamsForShiftTrade') {
+					options.success(noTeam);
 				}
 			}
 		};
@@ -420,14 +437,12 @@
 		equal(viewModel.noAnyTeamToShow(), true);
 	});
 
-	test("should load my team ID", function () {
-		var myTeamId = "myTeam";
+	test('should load my team ID', function() {
+		var myTeamId = 'myTeam';
 		var ajax = {
-			Ajax: function (options) {
-				if (options.url === "Requests/ShiftTradeRequestMyTeam") {
-					options.success(
-						myTeamId
-					);
+			Ajax: function(options) {
+				if (options.url === 'Requests/ShiftTradeRequestMyTeam') {
+					options.success(myTeamId);
 				}
 			}
 		};
@@ -439,14 +454,12 @@
 		equal(viewModel.noAnyTeamToShow(), false);
 	});
 
-	test("should load my site ID", function () {
-		var mySiteId = "mySite";
+	test('should load my site ID', function() {
+		var mySiteId = 'mySite';
 		var ajax = {
-			Ajax: function (options) {
-				if (options.url === "Requests/ShiftTradeRequestMySite") {
-					options.success(
-						mySiteId
-					);
+			Ajax: function(options) {
+				if (options.url === 'Requests/ShiftTradeRequestMySite') {
+					options.success(mySiteId);
 				}
 			}
 		};
@@ -458,7 +471,7 @@
 		equal(viewModel.noAnySiteToShow(), false);
 	});
 
-	test("should hide page view when no data", function () {
+	test('should hide page view when no data', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
 
 		viewModel.pageCount(0);
@@ -467,7 +480,7 @@
 		equal(viewModel.isPageVisible(), false);
 	});
 
-	test("should show page view when there is data", function () {
+	test('should show page view when there is data', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
 
 		viewModel.pageCount(1);
@@ -476,7 +489,7 @@
 		equal(viewModel.isPageVisible(), true);
 	});
 
-	test("should update selectable pages when page count changes", function () {
+	test('should update selectable pages when page count changes', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
 		viewModel.selectablePages.push(new Teleopti.MyTimeWeb.Request.PageView(1));
 
@@ -486,7 +499,7 @@
 		equal(viewModel.selectablePages().length, 2);
 	});
 
-	test("should set page count when set paging infos", function () {
+	test('should set page count when set paging infos', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
 
 		viewModel.pageCount(2);
@@ -495,7 +508,7 @@
 		equal(viewModel.pageCount(), 2);
 	});
 
-	test("should set paging info", function () {
+	test('should set paging info', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
 		viewModel.selectedPageIndex(1);
 
@@ -507,7 +520,7 @@
 		equal(viewModel.selectablePages().length, 2);
 	});
 
-	test("should can select page", function () {
+	test('should can select page', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
 		viewModel.selectedPageIndex(1);
 		var page = new Teleopti.MyTimeWeb.Request.PageView(2);
@@ -517,7 +530,7 @@
 		equal(viewModel.selectedPageIndex(), 2);
 	});
 
-	test("should set select page", function () {
+	test('should set select page', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
 		viewModel.selectedPageIndex(1);
 
@@ -526,7 +539,7 @@
 		equal(viewModel.selectedPageIndex(), 2);
 	});
 
-	test("should go to next pages", function () {
+	test('should go to next pages', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
 		var pageCount = 8;
 		viewModel.pageCount(pageCount);
@@ -540,7 +553,7 @@
 		equal(viewModel.selectablePages().length, pageCount - 5);
 	});
 
-	test("should go to previous pages", function () {
+	test('should go to previous pages', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
 		var pageCount = 8;
 		viewModel.pageCount(pageCount);
@@ -555,7 +568,7 @@
 		equal(viewModel.selectablePages().length, 5);
 	});
 
-	test("should go to last page without previous more", function () {
+	test('should go to last page without previous more', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
 		viewModel.pageCount(3);
 
@@ -566,7 +579,7 @@
 		equal(viewModel.isMore(), false);
 	});
 
-	test("should go to last page with previous more", function () {
+	test('should go to last page with previous more', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
 		viewModel.pageCount(6);
 		viewModel.goToLastPage();
@@ -577,7 +590,7 @@
 		equal(viewModel.selectablePages().length, 1);
 	});
 
-	test("should go to first page without more", function () {
+	test('should go to first page without more', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
 		viewModel.pageCount(3);
 		viewModel.isPageVisible(3 > 0);
@@ -591,7 +604,7 @@
 		equal(viewModel.isMore(), false);
 	});
 
-	test("should go to first page with more", function () {
+	test('should go to first page with more', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
 		viewModel.pageCount(6);
 		viewModel.goToFirstPage();
@@ -602,25 +615,25 @@
 		equal(viewModel.selectablePages().length, 5);
 	});
 
-	test("should recognize time filter with start time", function () {
+	test('should recognize time filter with start time', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
-		viewModel.filteredStartTimesText.push("6:00 - 8:00");
+		viewModel.filteredStartTimesText.push('6:00 - 8:00');
 
 		var result = viewModel.isFiltered();
 
 		equal(result, true);
 	});
 
-	test("should recognize time filter with end time", function () {
+	test('should recognize time filter with end time', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
-		viewModel.filteredEndTimesText.push("6:00 - 8:00");
+		viewModel.filteredEndTimesText.push('6:00 - 8:00');
 
 		var result = viewModel.isFiltered();
 
 		equal(result, true);
 	});
 
-	test("should recognize time filter with dayoff", function () {
+	test('should recognize time filter with dayoff', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
 		viewModel.isDayoffFiltered(true);
 
@@ -629,7 +642,7 @@
 		equal(result, true);
 	});
 
-	test("should recognize is not filtered by time filter", function () {
+	test('should recognize is not filtered by time filter', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
 
 		var result = viewModel.isFiltered();
@@ -637,10 +650,12 @@
 		equal(result, false);
 	});
 
-	test("should filter checked start time", function () {
+	test('should filter checked start time', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
 		var isChecked = true;
-		viewModel.filterStartTimeList.push(new Teleopti.MyTimeWeb.Request.FilterStartTimeView('8:00-10:00', 8, 10, isChecked, false));
+		viewModel.filterStartTimeList.push(
+			new Teleopti.MyTimeWeb.Request.FilterStartTimeView('8:00-10:00', 8, 10, isChecked, false)
+		);
 
 		viewModel.filterTime();
 
@@ -648,32 +663,32 @@
 		equal(viewModel.filteredStartTimesText().length, 1);
 	});
 
-	test("should filter checked end time", function () {
+	test('should filter checked end time', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
 		var isChecked = true;
-		viewModel.filterEndTimeList.push(new Teleopti.MyTimeWeb.Request.FilterEndTimeView('8:00-10:00', 8, 10, isChecked, false));
+		viewModel.filterEndTimeList.push(
+			new Teleopti.MyTimeWeb.Request.FilterEndTimeView('8:00-10:00', 8, 10, isChecked, false)
+		);
 
 		viewModel.filterTime();
 
 		equal(viewModel.filteredEndTimesText().length, 1);
 	});
 
-	test("should load filter hours text and dayoff names", function () {
+	test('should load filter hours text and dayoff names', function() {
 		var ajax = {
-			Ajax: function (options) {
-				if (options.url === "RequestsShiftTradeScheduleFilter/Get") {
+			Ajax: function(options) {
+				if (options.url === 'RequestsShiftTradeScheduleFilter/Get') {
 					var hourTexts = [];
-					var dayOffNames = ["DO"];
+					var dayOffNames = ['DO'];
 					for (var i = 0; i <= 24; ++i) {
-						hourTexts[i] = i + ":00";
+						hourTexts[i] = i + ':00';
 					}
 
-					options.success(
-						{
-							HourTexts: hourTexts,
-							DayOffShortNames: dayOffNames
-						}
-					);
+					options.success({
+						HourTexts: hourTexts,
+						DayOffShortNames: dayOffNames
+					});
 				}
 			}
 		};
@@ -682,65 +697,67 @@
 		viewModel.loadFilterTimes();
 
 		equal(viewModel.filterStartTimeList().length, 13);
-		equal(viewModel.filterStartTimeList()[0].text, "0:00 - 2:00");
-		equal(viewModel.filterStartTimeList()[12].text, "DO");
+		equal(viewModel.filterStartTimeList()[0].text, '0:00 - 2:00');
+		equal(viewModel.filterStartTimeList()[12].text, 'DO');
 	});
 
-	test("should not load team when there is no selected team", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { return true; };
+	test('should not load team when there is no selected team', function() {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			return true;
+		};
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
 		viewModel.dateChanged(false);
 
-		viewModel.selectedSite("site1");
+		viewModel.selectedSite('site1');
 
-		equal(viewModel.selectedSiteInternal(), "site1");
+		equal(viewModel.selectedSiteInternal(), 'site1');
 		equal(viewModel.selectedTeamInternal(), null);
 	});
 
-	test("should not reload team when date changed", function () {
+	test('should not reload team when date changed', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
 		viewModel.dateChanged(true);
-		viewModel.selectedTeamInternal("myTeam");
+		viewModel.selectedTeamInternal('myTeam');
 
-		viewModel.selectedSite("site1");
+		viewModel.selectedSite('site1');
 
-		equal(viewModel.selectedSiteInternal(), "site1");
-		equal(viewModel.selectedTeamInternal(), "myTeam");
+		equal(viewModel.selectedSiteInternal(), 'site1');
+		equal(viewModel.selectedTeamInternal(), 'myTeam');
 	});
 
-	test("should load team when there is a selected team", function () {
+	test('should load team when there is a selected team', function() {
 		var ajax = {
-			Ajax: function (options) {
-				if (options.url === "Team/TeamsUnderSiteForShiftTrade") {
-					options.success(
-						[
-							{ id: "A", text: "Team A" },
-							{ id: "B", text: "Team B" },
-							{ id: "C", text: "Team C" }
-						]
-					);
+			Ajax: function(options) {
+				if (options.url === 'Team/TeamsUnderSiteForShiftTrade') {
+					options.success([
+						{ id: 'A', text: 'Team A' },
+						{ id: 'B', text: 'Team B' },
+						{ id: 'C', text: 'Team C' }
+					]);
 				}
 			}
 		};
 
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
-		viewModel.selectedTeamInternal("myTeam");
-		viewModel.selectedSiteInternal("site1");
+		viewModel.selectedTeamInternal('myTeam');
+		viewModel.selectedSiteInternal('site1');
 
-		viewModel.selectedSite("site2");
+		viewModel.selectedSite('site2');
 
-		equal(viewModel.selectedSiteInternal(), "site2");
-		equal(viewModel.selectedTeamInternal(), "allTeams");
+		equal(viewModel.selectedSiteInternal(), 'site2');
+		equal(viewModel.selectedTeamInternal(), 'allTeams');
 		equal(viewModel.availableTeams().length, 4);
 	});
 
-	test("should update time sort order correctly", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { return true; };
+	test('should update time sort order correctly', function() {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			return true;
+		};
 
 		var optionsData = {};
 		var ajax = {
-			Ajax: function (options) {
-				if (options.url === "Requests/ShiftTradeRequestSchedule") {
+			Ajax: function(options) {
+				if (options.url === 'Requests/ShiftTradeRequestSchedule') {
 					optionsData = options;
 				}
 			}
@@ -752,114 +769,111 @@
 		equal(JSON.parse(optionsData.data).TimeSortOrder, 'start asc');
 	});
 
-	test("should set search name after choosing an agent", function () {
+	test('should set search name after choosing an agent', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
-		viewModel.chooseAgent({ agentName: "test", isVisible: function () { } });
+		viewModel.chooseAgent({ agentName: 'test', isVisible: function() {} });
 		equal(viewModel.searchNameText(), 'test');
 	});
 
-	test("should keep search name after changing team", function () {
+	test('should keep search name after changing team', function() {
 		var schedules = {
-			"MySchedule":
+			MySchedule: {
+				ScheduleLayers: [{}],
+				ContractTimeInMinute: 480
+			},
+			PossibleTradeSchedules: [
 				{
-					"ScheduleLayers": [{}],
-					"ContractTimeInMinute": 480
-				},
-			"PossibleTradeSchedules": [
-				{
-					"ScheduleLayers": [{}],
-					"ContractTimeInMinute": 425
+					ScheduleLayers: [{}],
+					ContractTimeInMinute: 425
 				}
 			],
-			"TimeLineHours": [
+			TimeLineHours: [
 				{
-					"HourText": "",
-					"StartTime": "2017-01-01 00:00:00"
+					HourText: '',
+					StartTime: '2017-01-01 00:00:00'
 				},
 				{
-					"HourText": "07:00",
-					"StartTime": "2017-01-01 07:00:00"
+					HourText: '07:00',
+					StartTime: '2017-01-01 07:00:00'
 				}
 			]
 		};
 		var ajax = {
-			Ajax: function (options) {
-				if (options.url === "Requests/ShiftTradeRequestSchedule") {
+			Ajax: function(options) {
+				if (options.url === 'Requests/ShiftTradeRequestSchedule') {
 					options.success(schedules);
 				}
 			}
 		};
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
-		viewModel.chooseAgent({ agentName: "test agent", isVisible: function () { } });
+		viewModel.chooseAgent({ agentName: 'test agent', isVisible: function() {} });
 		viewModel.selectedTeam('other team');
 		equal(viewModel.searchNameText(), 'test agent');
 	});
 
-	test("should keep search name after changing site", function () {
+	test('should keep search name after changing site', function() {
 		var schedules = {
-			"MySchedule":
+			MySchedule: {
+				ScheduleLayers: [{}],
+				ContractTimeInMinute: 480
+			},
+			PossibleTradeSchedules: [
 				{
-					"ScheduleLayers": [{}],
-					"ContractTimeInMinute": 480
-				},
-			"PossibleTradeSchedules": [
-				{
-					"ScheduleLayers": [{}],
-					"ContractTimeInMinute": 425
+					ScheduleLayers: [{}],
+					ContractTimeInMinute: 425
 				}
 			],
-			"TimeLineHours": [
+			TimeLineHours: [
 				{
-					"HourText": "",
-					"StartTime": "2017-01-01 00:00:00"
+					HourText: '',
+					StartTime: '2017-01-01 00:00:00'
 				},
 				{
-					"HourText": "07:00",
-					"StartTime": "2017-01-01 07:00:00"
+					HourText: '07:00',
+					StartTime: '2017-01-01 07:00:00'
 				}
 			]
 		};
 		var ajax = {
-			Ajax: function (options) {
-				if (options.url === "Requests/ShiftTradeRequestSchedule") {
+			Ajax: function(options) {
+				if (options.url === 'Requests/ShiftTradeRequestSchedule') {
 					options.success(schedules);
 				}
 			}
 		};
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
-		viewModel.chooseAgent({ agentName: "test agent", isVisible: function () { } });
+		viewModel.chooseAgent({ agentName: 'test agent', isVisible: function() {} });
 		viewModel.selectedSite('other site');
 		equal(viewModel.searchNameText(), 'test agent');
 	});
 
-	test("should clear search name and reload schedule after cancelling a request", function () {
+	test('should clear search name and reload schedule after cancelling a request', function() {
 		var methodCalled = false;
 		var schedules = {
-			"MySchedule":
+			MySchedule: {
+				ScheduleLayers: [{}],
+				ContractTimeInMinute: 480
+			},
+			PossibleTradeSchedules: [
 				{
-					"ScheduleLayers": [{}],
-					"ContractTimeInMinute": 480
-				},
-			"PossibleTradeSchedules": [
-				{
-					"ScheduleLayers": [{}],
-					"ContractTimeInMinute": 425
+					ScheduleLayers: [{}],
+					ContractTimeInMinute: 425
 				}
 			],
-			"TimeLineHours": [
+			TimeLineHours: [
 				{
-					"HourText": "",
-					"StartTime": "2017-01-01 00:00:00"
+					HourText: '',
+					StartTime: '2017-01-01 00:00:00'
 				},
 				{
-					"HourText": "07:00",
-					"StartTime": "2017-01-01 07:00:00"
+					HourText: '07:00',
+					StartTime: '2017-01-01 07:00:00'
 				}
 			]
 		};
 		var ajax = {
-			Ajax: function (options) {
-				if (options.url === "Requests/ShiftTradeRequestSchedule") {
+			Ajax: function(options) {
+				if (options.url === 'Requests/ShiftTradeRequestSchedule') {
 					methodCalled = true;
 					options.success(schedules);
 				}
@@ -867,8 +881,8 @@
 		};
 
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
-		viewModel.selectedTeamInternal("myTeam");
-		viewModel.chooseAgent({ agentName: "test", isVisible: function () { } });
+		viewModel.selectedTeamInternal('myTeam');
+		viewModel.chooseAgent({ agentName: 'test', isVisible: function() {} });
 		viewModel.cancelRequest();
 
 		equal(viewModel.searchNameText(), '');
@@ -876,265 +890,313 @@
 	});
 
 	//New test
-	test("should load multiple days schedules after choose a agent", function () {
+	test('should load multiple days schedules after choose a agent', function() {
 		var schedules = {
-			MultiSchedulesForShiftTrade: [{
-				Date: "\/Date(1531916600000)\/",
-				MySchedule: null,
-				PersonToSchedule: null
-			}, {
-				Date: "\/Date(1531978200000)\/",
-				MySchedule: {
-					"ScheduleLayers": [{
-						"Start": "\/Date(1531956600000)\/",
-						"End": "\/Date(1531964700000)\/",
-						"LengthInMinutes": 135,
-						"Color": "#80FF80",
-						"TitleHeader": "Phone",
-						"IsAbsenceConfidential": false,
-						"IsOvertime": false,
-						"TitleTime": "07:30 - 09:45",
-						"Meeting": null
-					}],
-					"StartTimeUtc": "\/Date(1531978200000)\/",
-					"IsDayOff": false,
-					"IsFullDayAbsence": false,
-					"Total": 0,
-					"DayOffName": null,
-					"ContractTimeInMinute": 480,
-					"IsNotScheduled": false,
-					"ShiftCategory": {
-						"Id": null,
-						"ShortName": "AM",
-						"Name": "Early",
-						"DisplayColor": "#80FF80"
-					}
+			MultiSchedulesForShiftTrade: [
+				{
+					Date: '/Date(1531916600000)/',
+					MySchedule: null,
+					PersonToSchedule: null
 				},
-				PersonToSchedule: {
-					"ScheduleLayers": [{
-						"Start": "\/Date(1531956600000)\/",
-						"End": "\/Date(1531964700000)\/",
-						"LengthInMinutes": 135,
-						"Color": "#80FF80",
-						"TitleHeader": "Phone",
-						"IsAbsenceConfidential": false,
-						"IsOvertime": false,
-						"TitleTime": "07:30 - 09:45",
-						"Meeting": null
-					}],
-					"StartTimeUtc": "\/Date(1531978200000)\/",
-					"IsDayOff": false,
-					"IsFullDayAbsence": false,
-					"Total": 0,
-					"DayOffName": null,
-					"ContractTimeInMinute": 480,
-					"IsNotScheduled": false,
-					"ShiftCategory": {
-						"Id": null,
-						"ShortName": "AM",
-						"Name": "Early",
-						"DisplayColor": "#80FF80"
+				{
+					Date: '/Date(1531978200000)/',
+					MySchedule: {
+						ScheduleLayers: [
+							{
+								Start: '/Date(1531956600000)/',
+								End: '/Date(1531964700000)/',
+								LengthInMinutes: 135,
+								Color: '#80FF80',
+								TitleHeader: 'Phone',
+								IsAbsenceConfidential: false,
+								IsOvertime: false,
+								TitleTime: '07:30 - 09:45',
+								Meeting: null
+							}
+						],
+						StartTimeUtc: '/Date(1531978200000)/',
+						IsDayOff: false,
+						IsFullDayAbsence: false,
+						Total: 0,
+						DayOffName: null,
+						ContractTimeInMinute: 480,
+						IsNotScheduled: false,
+						ShiftCategory: {
+							Id: null,
+							ShortName: 'AM',
+							Name: 'Early',
+							DisplayColor: '#80FF80'
+						}
+					},
+					PersonToSchedule: {
+						ScheduleLayers: [
+							{
+								Start: '/Date(1531956600000)/',
+								End: '/Date(1531964700000)/',
+								LengthInMinutes: 135,
+								Color: '#80FF80',
+								TitleHeader: 'Phone',
+								IsAbsenceConfidential: false,
+								IsOvertime: false,
+								TitleTime: '07:30 - 09:45',
+								Meeting: null
+							}
+						],
+						StartTimeUtc: '/Date(1531978200000)/',
+						IsDayOff: false,
+						IsFullDayAbsence: false,
+						Total: 0,
+						DayOffName: null,
+						ContractTimeInMinute: 480,
+						IsNotScheduled: false,
+						ShiftCategory: {
+							Id: null,
+							ShortName: 'AM',
+							Name: 'Early',
+							DisplayColor: '#80FF80'
+						}
 					}
 				}
-			}]
+			]
 		};
 
 		var ajax = {
-			Ajax: function (options) {
-				if (options.url === "Requests/ShiftTradeMultiDaysSchedule") {
+			Ajax: function(options) {
+				if (options.url === 'Requests/ShiftTradeMultiDaysSchedule') {
 					options.success(schedules);
 				}
 			}
 		};
 
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggleName) { return true; }
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggleName) {
+			return true;
+		};
 
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
-		viewModel.requestedDateInternal(moment("2018-07-18"));
-		viewModel.openPeriodEndDate(moment("2018-10-18"))
+		viewModel.requestedDateInternal(moment('2018-07-18'));
+		viewModel.openPeriodEndDate(moment('2018-10-18'));
 
-		var agent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(null, null, null, "Ashley", "id", false);
-		viewModel.redrawLayers = function () { };
+		var agent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(
+			null,
+			null,
+			null,
+			'Ashley',
+			'id',
+			false
+		);
+		viewModel.redrawLayers = function() {};
 
 		viewModel.chooseAgent(agent);
 
 		equal(viewModel.loadedSchedulePairs().length, 2);
-		equal(viewModel.loadedSchedulePairs()[0].date.format("YYYY-MM-DD"), "2018-07-18");
+		equal(viewModel.loadedSchedulePairs()[0].date.format('YYYY-MM-DD'), '2018-07-18');
 	});
 
-	test("should load schedules that within open period start and end date", function () {
+	test('should load schedules that within open period start and end date', function() {
 		var schedules = {
-			MultiSchedulesForShiftTrade: [{
-				Date: "\/Date(1531916600000)\/",
-				MySchedule: null,
-				PersonToSchedule: null
-			}, {
-				Date: "\/Date(1531978200000)\/",
-				MySchedule: {
-					"ScheduleLayers": [{
-						"Start": "\/Date(1531956600000)\/",
-						"End": "\/Date(1531964700000)\/",
-						"LengthInMinutes": 135,
-						"Color": "#80FF80",
-						"TitleHeader": "Phone",
-						"IsAbsenceConfidential": false,
-						"IsOvertime": false,
-						"TitleTime": "07:30 - 09:45",
-						"Meeting": null
-					}],
-					"StartTimeUtc": "\/Date(1531978200000)\/",
-					"IsDayOff": false,
-					"IsFullDayAbsence": false,
-					"Total": 0,
-					"DayOffName": null,
-					"ContractTimeInMinute": 480,
-					"IsNotScheduled": false,
-					"ShiftCategory": {
-						"Id": null,
-						"ShortName": "AM",
-						"Name": "Early",
-						"DisplayColor": "#80FF80"
-					}
+			MultiSchedulesForShiftTrade: [
+				{
+					Date: '/Date(1531916600000)/',
+					MySchedule: null,
+					PersonToSchedule: null
 				},
-				PersonToSchedule: {
-					"ScheduleLayers": [{
-						"Start": "\/Date(1531956600000)\/",
-						"End": "\/Date(1531964700000)\/",
-						"LengthInMinutes": 135,
-						"Color": "#80FF80",
-						"TitleHeader": "Phone",
-						"IsAbsenceConfidential": false,
-						"IsOvertime": false,
-						"TitleTime": "07:30 - 09:45",
-						"Meeting": null
-					}],
-					"StartTimeUtc": "\/Date(1531978200000)\/",
-					"IsDayOff": false,
-					"IsFullDayAbsence": false,
-					"Total": 0,
-					"DayOffName": null,
-					"ContractTimeInMinute": 480,
-					"IsNotScheduled": false,
-					"ShiftCategory": {
-						"Id": null,
-						"ShortName": "AM",
-						"Name": "Early",
-						"DisplayColor": "#80FF80"
+				{
+					Date: '/Date(1531978200000)/',
+					MySchedule: {
+						ScheduleLayers: [
+							{
+								Start: '/Date(1531956600000)/',
+								End: '/Date(1531964700000)/',
+								LengthInMinutes: 135,
+								Color: '#80FF80',
+								TitleHeader: 'Phone',
+								IsAbsenceConfidential: false,
+								IsOvertime: false,
+								TitleTime: '07:30 - 09:45',
+								Meeting: null
+							}
+						],
+						StartTimeUtc: '/Date(1531978200000)/',
+						IsDayOff: false,
+						IsFullDayAbsence: false,
+						Total: 0,
+						DayOffName: null,
+						ContractTimeInMinute: 480,
+						IsNotScheduled: false,
+						ShiftCategory: {
+							Id: null,
+							ShortName: 'AM',
+							Name: 'Early',
+							DisplayColor: '#80FF80'
+						}
+					},
+					PersonToSchedule: {
+						ScheduleLayers: [
+							{
+								Start: '/Date(1531956600000)/',
+								End: '/Date(1531964700000)/',
+								LengthInMinutes: 135,
+								Color: '#80FF80',
+								TitleHeader: 'Phone',
+								IsAbsenceConfidential: false,
+								IsOvertime: false,
+								TitleTime: '07:30 - 09:45',
+								Meeting: null
+							}
+						],
+						StartTimeUtc: '/Date(1531978200000)/',
+						IsDayOff: false,
+						IsFullDayAbsence: false,
+						Total: 0,
+						DayOffName: null,
+						ContractTimeInMinute: 480,
+						IsNotScheduled: false,
+						ShiftCategory: {
+							Id: null,
+							ShortName: 'AM',
+							Name: 'Early',
+							DisplayColor: '#80FF80'
+						}
 					}
 				}
-			}]
+			]
 		};
 
 		var ajax = {
-			Ajax: function (options) {
-				if (options.url === "Requests/ShiftTradeMultiDaysSchedule") {
+			Ajax: function(options) {
+				if (options.url === 'Requests/ShiftTradeMultiDaysSchedule') {
 					options.success(schedules);
 				}
 			}
 		};
 
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggleName) { return true; }
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggleName) {
+			return true;
+		};
 
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
-		viewModel.requestedDateInternal(moment("2018-07-18"));
-		viewModel.openPeriodEndDate(moment("2018-07-19"))
+		viewModel.requestedDateInternal(moment('2018-07-18'));
+		viewModel.openPeriodEndDate(moment('2018-07-19'));
 
-		var agent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(null, null, null, "Ashley", "id", false);
-		viewModel.redrawLayers = function () { };
+		var agent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(
+			null,
+			null,
+			null,
+			'Ashley',
+			'id',
+			false
+		);
+		viewModel.redrawLayers = function() {};
 
 		viewModel.chooseAgent(agent);
 
 		equal(viewModel.loadedSchedulePairs().length, 2);
-		equal(viewModel.loadedSchedulePairs()[1].date.format("YYYY-MM-DD"), "2018-07-19");
+		equal(viewModel.loadedSchedulePairs()[1].date.format('YYYY-MM-DD'), '2018-07-19');
 	});
 
-	test("Schedule data should be null if agent is not scheduled", function () {
+	test('Schedule data should be null if agent is not scheduled', function() {
 		var schedules = {
-			MultiSchedulesForShiftTrade: [{
-				Date: "\/Date(1531916600000)\/",
-				MySchedule: null,
-				PersonToSchedule: null
-			}, {
-				Date: "\/Date(1531978200000)\/",
-				MySchedule: {
-					"ScheduleLayers": [{
-						"Start": "\/Date(1531956600000)\/",
-						"End": "\/Date(1531964700000)\/",
-						"LengthInMinutes": 135,
-						"Color": "#80FF80",
-						"TitleHeader": "Phone",
-						"IsAbsenceConfidential": false,
-						"IsOvertime": false,
-						"TitleTime": "07:30 - 09:45",
-						"Meeting": null
-					}],
-					"StartTimeUtc": "\/Date(1531978200000)\/",
-					"IsDayOff": false,
-					"IsFullDayAbsence": false,
-					"Total": 0,
-					"DayOffName": null,
-					"ContractTimeInMinute": 480,
-					"IsNotScheduled": false,
-					"ShiftCategory": {
-						"Id": null,
-						"ShortName": "AM",
-						"Name": "Early",
-						"DisplayColor": "#80FF80"
-					}
+			MultiSchedulesForShiftTrade: [
+				{
+					Date: '/Date(1531916600000)/',
+					MySchedule: null,
+					PersonToSchedule: null
 				},
-				PersonToSchedule: {
-					"ScheduleLayers": [{
-						"Start": "\/Date(1531956600000)\/",
-						"End": "\/Date(1531964700000)\/",
-						"LengthInMinutes": 135,
-						"Color": "#80FF80",
-						"TitleHeader": "Phone",
-						"IsAbsenceConfidential": false,
-						"IsOvertime": false,
-						"TitleTime": "07:30 - 09:45",
-						"Meeting": null
-					}],
-					"StartTimeUtc": "\/Date(1531978200000)\/",
-					"IsDayOff": false,
-					"IsFullDayAbsence": false,
-					"Total": 0,
-					"DayOffName": null,
-					"ContractTimeInMinute": 480,
-					"IsNotScheduled": false,
-					"ShiftCategory": {
-						"Id": null,
-						"ShortName": "AM",
-						"Name": "Early",
-						"DisplayColor": "#80FF80"
+				{
+					Date: '/Date(1531978200000)/',
+					MySchedule: {
+						ScheduleLayers: [
+							{
+								Start: '/Date(1531956600000)/',
+								End: '/Date(1531964700000)/',
+								LengthInMinutes: 135,
+								Color: '#80FF80',
+								TitleHeader: 'Phone',
+								IsAbsenceConfidential: false,
+								IsOvertime: false,
+								TitleTime: '07:30 - 09:45',
+								Meeting: null
+							}
+						],
+						StartTimeUtc: '/Date(1531978200000)/',
+						IsDayOff: false,
+						IsFullDayAbsence: false,
+						Total: 0,
+						DayOffName: null,
+						ContractTimeInMinute: 480,
+						IsNotScheduled: false,
+						ShiftCategory: {
+							Id: null,
+							ShortName: 'AM',
+							Name: 'Early',
+							DisplayColor: '#80FF80'
+						}
+					},
+					PersonToSchedule: {
+						ScheduleLayers: [
+							{
+								Start: '/Date(1531956600000)/',
+								End: '/Date(1531964700000)/',
+								LengthInMinutes: 135,
+								Color: '#80FF80',
+								TitleHeader: 'Phone',
+								IsAbsenceConfidential: false,
+								IsOvertime: false,
+								TitleTime: '07:30 - 09:45',
+								Meeting: null
+							}
+						],
+						StartTimeUtc: '/Date(1531978200000)/',
+						IsDayOff: false,
+						IsFullDayAbsence: false,
+						Total: 0,
+						DayOffName: null,
+						ContractTimeInMinute: 480,
+						IsNotScheduled: false,
+						ShiftCategory: {
+							Id: null,
+							ShortName: 'AM',
+							Name: 'Early',
+							DisplayColor: '#80FF80'
+						}
 					}
 				}
-			}]
+			]
 		};
 
 		var ajax = {
-			Ajax: function (options) {
-				if (options.url === "Requests/ShiftTradeMultiDaysSchedule") {
+			Ajax: function(options) {
+				if (options.url === 'Requests/ShiftTradeMultiDaysSchedule') {
 					options.success(schedules);
 				}
 			}
 		};
 
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggleName) { return true; }
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(toggleName) {
+			return true;
+		};
 
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
-		viewModel.requestedDateInternal(moment("2018-07-18"));
-		viewModel.openPeriodEndDate(moment("2018-10-19"))
+		viewModel.requestedDateInternal(moment('2018-07-18'));
+		viewModel.openPeriodEndDate(moment('2018-10-19'));
 
-		var agent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(null, null, null, "Ashley", "id", false);
-		viewModel.redrawLayers = function () { };
+		var agent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(
+			null,
+			null,
+			null,
+			'Ashley',
+			'id',
+			false
+		);
+		viewModel.redrawLayers = function() {};
 
 		viewModel.chooseAgent(agent);
 		equal(viewModel.loadedSchedulePairs().length, 2);
-		equal(viewModel.loadedSchedulePairs()[0].mySchedule, null)
-		equal(viewModel.loadedSchedulePairs()[1].mySchedule.contractTime, "8:00");
+		equal(viewModel.loadedSchedulePairs()[0].mySchedule, null);
+		equal(viewModel.loadedSchedulePairs()[1].mySchedule.contractTime, '08:00');
 	});
 
-	test("should add plus one day when end time at day after", function () {
+	test('should add plus one day when end time at day after', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel({});
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
 			UseJalaaliCalendar: false,
@@ -1142,11 +1204,11 @@
 			TimeFormat: 'HH:mm'
 		});
 
-		var ret = viewModel.getOvernightFlag(moment("2018-07-19 02:00:00"), moment("2018-07-18"));
-		equal(ret, " +1");
+		var ret = viewModel.getOvernightFlag(moment('2018-07-19 02:00:00'), moment('2018-07-18'));
+		equal(ret, ' +1');
 	});
 
-	test("should add minus one day when start time at day before", function () {
+	test('should add minus one day when start time at day before', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel({});
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
 			UseJalaaliCalendar: false,
@@ -1154,7 +1216,7 @@
 			TimeFormat: 'HH:mm'
 		});
 
-		var ret = viewModel.getOvernightFlag(moment("2018-07-19 23:00:00"), moment("2018-07-20"));
-		equal(ret, "(-1)");
+		var ret = viewModel.getOvernightFlag(moment('2018-07-19 23:00:00'), moment('2018-07-20'));
+		equal(ret, '(-1)');
 	});
 });

@@ -351,11 +351,15 @@ Teleopti.MyTimeWeb.Common = (function($) {
 		return '#' + hexString;
 	}
 
-	function _rightPadNumber(number, padding) {
-		var formattedNumber = padding + number;
-		var start = formattedNumber.length - padding.length;
-		formattedNumber = formattedNumber.substring(start);
-		return formattedNumber;
+	function formatTimeSpan(totalMinutes) {
+		if (!totalMinutes || isNaN(totalMinutes)) return '00:00';
+
+		var hours = Math.floor(totalMinutes / 60);
+		hours = hours < 10 ? '0' + hours : hours;
+		var minutes = totalMinutes % 60;
+		minutes = minutes < 10 ? '0' + minutes : minutes;
+
+		return hours + ':' + minutes;
 	}
 
 	function stripTeleoptiTimeToUTCForScenarioTest() {
@@ -494,14 +498,7 @@ Teleopti.MyTimeWeb.Common = (function($) {
 			return _parseFixedDateStringToDate(dateString);
 		},
 
-		FormatTimeSpan: function(totalMinutes) {
-			if (!totalMinutes) return '0:00';
-			var minutes = totalMinutes % 60;
-			var hours = Math.floor(totalMinutes / 60);
-			var roundedMinutes = Math.round(minutes);
-
-			return hours + ':' + _rightPadNumber(roundedMinutes, '00');
-		},
+		FormatTimeSpan: formatTimeSpan,
 
 		FixedDateToPartsUrl: function(fixedDate) {
 			return _fixedDateToPartsUrl(fixedDate);
