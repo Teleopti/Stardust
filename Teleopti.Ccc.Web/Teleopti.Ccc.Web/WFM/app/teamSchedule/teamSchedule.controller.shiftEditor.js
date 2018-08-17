@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function () {
 	'use strict';
 
 	angular.module('wfm.teamSchedule').controller('ShiftEditorViewController', [
@@ -8,7 +8,7 @@
 		'signalRSVC',
 		'serviceDateFormatHelper',
 		'guidgenerator',
-		function($stateParams) {
+		function ($stateParams) {
 			var vm = this;
 			vm.personId = $stateParams.personId;
 			vm.timezone = decodeURIComponent($stateParams.timezone);
@@ -88,41 +88,41 @@
 		vm.trackId = guidgenerator.newGuid();
 		vm.isSaving = false;
 
-		vm.$onInit = function() {
+		vm.$onInit = function () {
 			getSchedule();
 
-			ActivityService.fetchAvailableActivities().then(function(data) {
+			ActivityService.fetchAvailableActivities().then(function (data) {
 				vm.availableActivities = data;
 			});
 
 			vm.timelineVm = ShiftEditorViewModelFactory.CreateTimeline(vm.date, vm.timezone, timeLineTimeRange);
 
-			TimezoneListFactory.Create().then(function(timezoneList) {
+			TimezoneListFactory.Create().then(function (timezoneList) {
 				vm.timezoneName = timezoneList.GetShortName(vm.timezone);
 			});
 
 			subscribeToScheduleChange();
 		};
 
-		vm.gotoDayView = function() {
+		vm.gotoDayView = function () {
 			$state.go('teams.dayView');
 		};
 
-		vm.isSameDate = function(interval) {
+		vm.isSameDate = function (interval) {
 			return moment.tz(vm.date, vm.timezone).isSame(interval.Time, 'days');
 		};
 
-		vm.scroll = function(step) {
+		vm.scroll = function (step) {
 			var viewportEl = $element[0].querySelector('.viewport');
 			viewportEl.scrollLeft += step;
 			displayScrollButton();
 		};
 
-		vm.isNotAllowedToChange = function(shiftLayer) {
+		vm.isNotAllowedToChange = function (shiftLayer) {
 			return !shiftLayer.ShiftLayerIds || !shiftLayer.ShiftLayerIds.length;
 		};
 
-		vm.toggleSelection = function(shiftLayer, $event) {
+		vm.toggleSelection = function (shiftLayer, $event) {
 			if (vm.isNotAllowedToChange(shiftLayer)) return;
 			if (doNotToggleSelection) {
 				doNotToggleSelection = false;
@@ -134,8 +134,8 @@
 			bindResizeEvent(shiftLayer, $event.target);
 		};
 
-		vm.changeActivityType = function() {
-			var selectActivity = vm.availableActivities.filter(function(activity) {
+		vm.changeActivityType = function () {
+			var selectActivity = vm.availableActivities.filter(function (activity) {
 				return vm.selectedActivitiyId == activity.Id;
 			})[0];
 
@@ -144,7 +144,7 @@
 			vm.selectedShiftLayer.CurrentActivityId = selectActivity.Id;
 		};
 
-		vm.saveChanges = function() {
+		vm.saveChanges = function () {
 			if (vm.scheduleChanged) {
 				vm.showError = true;
 				return;
@@ -153,7 +153,7 @@
 			ShiftEditorService.changeActivityType(vm.date, vm.personId, getChangedLayers(), {
 				TrackId: vm.trackId
 			}).then(
-				function(response) {
+				function (response) {
 					vm.isSaving = false;
 					var errorMessages = getErrorMessagesFromActionResults(response.data);
 					if (!!errorMessages.length) {
@@ -163,23 +163,23 @@
 					getSchedule();
 					showSuccessNotice();
 				},
-				function() {
+				function () {
 					vm.isSaving = false;
 				}
-			);
+				);
 		};
 
-		vm.isSaveButtonDisabled = function() {
+		vm.isSaveButtonDisabled = function () {
 			return !hasChanges() || vm.isSaving || vm.showError;
 		};
 
-		vm.refreshData = function() {
+		vm.refreshData = function () {
 			if (vm.scheduleChanged) {
 				getSchedule();
 			}
 		};
 
-		vm.getTimeSpan = function() {
+		vm.getTimeSpan = function () {
 			var layer = vm.selectedShiftLayer;
 			return (layer.Current || {}).TimeSpan || layer.TimeSpan;
 		};
@@ -194,42 +194,73 @@
 							min: { width: 5 }
 						}
 					})
-					.on('resizemove', function(event) {
+					.on('resizemove', function (event) {
 						var left = event.deltaRect.left;
 						var width = event.rect.width;
+
+						shiftLayer.isChangingStart = left != 0;
+
 						resizeLayer(
 							event.target,
-							function(x) {
+							function (x) {
 								return x + left;
 							},
-							function() {
+							function () {
 								return width;
 							}
 						);
 					})
-					.on('resizeend', function(event) {
+					.on('resizeend', function (event) {
 						var target = event.target;
 						var width = parseInt(target.style.width);
 
 						resizeLayer(
 							target,
-							function(x) {
+							function (x) {
 								return round5(x);
 							},
-							function() {
+							function () {
 								return round5(width);
 							},
-							function(x, w, left) {
+							function (x, w, left) {
 								var startMinutes = left + x;
 								var endMinutes = startMinutes + w;
 
 								var startTime = timeLineTimeRange.Start.clone().add(startMinutes, 'minutes');
 								var endTime = timeLineTimeRange.Start.clone().add(endMinutes, 'minutes');
+								updateLayerTimePeriod(shiftLayer, serviceDateFormatHelper.getDateTime(startTime), serviceDateFormatHelper.getDateTime(endTime));
 
-								shiftLayer.Current = shiftLayer.Current || {};
-								shiftLayer.Current.Start = serviceDateFormatHelper.getDateTime(startTime);
-								shiftLayer.Current.End = serviceDateFormatHelper.getDateTime(endTime);
-								shiftLayer.Current.TimeSpan = startTime.format('L LT') + ' - ' + endTime.format('L LT');
+								var curIndex = vm.scheduleVm.ShiftLayers.indexOf(shiftLayer);
+								var allShiftLayerEls = angular.element(target).parent('.shift').children();
+
+								if (shiftLayer.isChangingStart) {
+									var previousIndex = curIndex - 1;
+									var previousShiftLayer = vm.scheduleVm.ShiftLayers[previousIndex];
+									if (previousShiftLayer) {
+										var startTime = (previousShiftLayer.Current || {}).Start || previousShiftLayer.Start;
+										updateLayerTimePeriod(previousShiftLayer, startTime, shiftLayer.Current.Start);
+
+										var previousShiftLayerEl = allShiftLayerEls[previousIndex];
+										previousShiftLayerEl.style.width = getShiftLayerWidth(previousShiftLayer) + 'px';
+									}
+								} else {
+									var nextIndex = curIndex + 1;
+									var nextShiftLayer =
+										vm.scheduleVm.ShiftLayers[nextIndex];
+
+									if (nextShiftLayer) {
+
+										var endTime = (nextShiftLayer.Current || {}).End || nextShiftLayer.End;
+										updateLayerTimePeriod(nextShiftLayer, shiftLayer.Current.End, endTime);
+
+										var translateX = getDiffMinutes(nextShiftLayer.Current.Start, moment.tz(nextShiftLayer.Start, vm.timezone));
+
+										var nextShiftLayerEl = allShiftLayerEls[nextIndex];
+										var width = getShiftLayerWidth(nextShiftLayer);
+
+										resizeLayer(nextShiftLayerEl, function () { return translateX; }, function () { return width; });
+									}
+								}
 							}
 						);
 
@@ -250,6 +281,16 @@
 			afterResize && afterResize(x, width, parseInt(target.style.left));
 		}
 
+		function updateLayerTimePeriod(shiftLayer, start, end) {
+			shiftLayer.Current = shiftLayer.Current || {};
+			shiftLayer.Current.Start = start;
+			shiftLayer.Current.End = end;
+			shiftLayer.Current.TimeSpan =
+				moment.tz(shiftLayer.Current.Start, vm.timezone).format('L LT') +
+				' - ' +
+				moment.tz(shiftLayer.Current.End, vm.timezone).format('L LT');
+		}
+
 		function round5(number) {
 			var a = number % 5;
 			var b = number - a;
@@ -258,7 +299,7 @@
 		}
 
 		function showErrorNotice(errorMessages) {
-			angular.forEach(errorMessages, function(message) {
+			angular.forEach(errorMessages, function (message) {
 				NoticeService.error(message, null, true);
 			});
 		}
@@ -270,9 +311,9 @@
 
 		function getErrorMessagesFromActionResults(actionResults) {
 			var errorMessages = [];
-			actionResults.forEach(function(x) {
+			actionResults.forEach(function (x) {
 				if (x.ErrorMessages && x.ErrorMessages.length > 0) {
-					x.ErrorMessages.forEach(function(message) {
+					x.ErrorMessages.forEach(function (message) {
 						errorMessages.push(message);
 					});
 				}
@@ -284,10 +325,10 @@
 			initScheduleState();
 
 			vm.isLoading = true;
-			TeamSchedule.getSchedules(vm.date, [vm.personId]).then(function(data) {
+			TeamSchedule.getSchedules(vm.date, [vm.personId]).then(function (data) {
 				vm.scheduleVm = ShiftEditorViewModelFactory.CreateSchedule(vm.date, vm.timezone, data.Schedules[0]);
 				vm.scheduleVm.ShiftLayers &&
-					vm.scheduleVm.ShiftLayers.forEach(function(layer) {
+					vm.scheduleVm.ShiftLayers.forEach(function (layer) {
 						layer.Width = getShiftLayerWidth(layer);
 						layer.Left = getShiftLayerLeft(layer);
 					});
@@ -299,9 +340,11 @@
 
 		function getShiftLayerWidth(layer) {
 			var start = (layer.Current || {}).Start || layer.Start;
+			var end = (layer.Current || {}).End || layer.End;
 			var startInTimezone = moment.tz(start, vm.timezone);
-			return getDiffMinutes(layer.End, startInTimezone);
+			return getDiffMinutes(end, startInTimezone);
 		}
+
 		function getShiftLayerLeft(layer) {
 			var start = (layer.Current || {}).Start || layer.Start;
 			return getDiffMinutes(start, timeLineTimeRange.Start);
@@ -317,7 +360,7 @@
 		function subscribeToScheduleChange() {
 			signalRSVC.subscribeBatchMessage(
 				{ DomainType: 'IScheduleChangedInDefaultScenario' },
-				function(messages) {
+				function (messages) {
 					for (var i = 0; i < messages.length; i++) {
 						var message = messages[i];
 						if (
@@ -346,21 +389,21 @@
 
 		function getChangedLayers() {
 			var currentUserTimezone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
-			var changedShiftLayers = vm.scheduleVm.ShiftLayers.filter(function(sl) {
+			var changedShiftLayers = vm.scheduleVm.ShiftLayers.filter(function (sl) {
 				return !!sl.CurrentActivityId && sl.ActivityId !== sl.CurrentActivityId;
 			});
 
-			var sameShiftLayers = changedShiftLayers.filter(function(sl) {
-				return !!sl.ShiftLayerIds.filter(function(id) {
+			var sameShiftLayers = changedShiftLayers.filter(function (sl) {
+				return !!sl.ShiftLayerIds.filter(function (id) {
 					return (
-						vm.scheduleVm.ShiftLayers.filter(function(isl) {
+						vm.scheduleVm.ShiftLayers.filter(function (isl) {
 							return isl.ShiftLayerIds && isl.ShiftLayerIds.indexOf(id) >= 0;
 						}).length > 1
 					);
 				}).length;
 			});
 
-			return changedShiftLayers.map(function(sl) {
+			return changedShiftLayers.map(function (sl) {
 				if (!sl.TopShiftLayerId && sameShiftLayers.indexOf(sl) >= 0) {
 					var startTime = moment
 						.tz(sl.Start, vm.timezone)
@@ -389,14 +432,14 @@
 		function hasChanges() {
 			return (
 				hasShift() &&
-				!!vm.scheduleVm.ShiftLayers.filter(function(layer) {
+				!!vm.scheduleVm.ShiftLayers.filter(function (layer) {
 					return layer.CurrentActivityId && layer.CurrentActivityId !== layer.ActivityId;
 				}).length
 			);
 		}
 
 		function getSelectActivity(layer) {
-			return vm.availableActivities.filter(function(activity) {
+			return vm.availableActivities.filter(function (activity) {
 				return layer.Description == activity.Name;
 			})[0];
 		}
@@ -424,9 +467,9 @@
 		function bindScrollMouseEvent(el, step) {
 			el.addEventListener(
 				'mousedown',
-				function() {
+				function () {
 					cancelScrollIntervalPromise();
-					scrollIntervalPromise = $interval(function() {
+					scrollIntervalPromise = $interval(function () {
 						vm.scroll(step);
 					}, 150);
 				},
@@ -434,21 +477,21 @@
 			);
 			el.addEventListener(
 				'mouseup',
-				function() {
+				function () {
 					cancelScrollIntervalPromise();
 				},
 				false
 			);
 			el.addEventListener(
 				'mouseleave',
-				function() {
+				function () {
 					cancelScrollIntervalPromise();
 				},
 				false
 			);
 		}
 		function initScrollState() {
-			$timeout(function() {
+			$timeout(function () {
 				var viewportEl = $element[0].querySelector('.viewport');
 				var shiftProjectionTimeRange = vm.scheduleVm.ProjectionTimeRange;
 				var shiftStart = getDiffMinutes(shiftProjectionTimeRange.Start, timeLineTimeRange.Start);
