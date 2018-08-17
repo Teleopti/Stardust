@@ -300,11 +300,13 @@
 					<!--ko if: !mySchedule.isFullDayAbsence-->
 					<div data-bind="visible:!$root.isMobile()" class="shift-visual-indication-wrapper">
 						<div class="shift-visual-indication">
-							<!-- ko foreach: mySchedule.layers -->
-							<div class="shift-visual-indication-block" data-bind="style: styleJson74947, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
-							<!-- /ko -->
 							<!--ko if: mySchedule.isDayOff -->
-							<div class="shift-visual-indication-block dayoff"></div>
+								<div class="shift-visual-indication-block dayoff"></div>
+							<!--/ko-->
+							<!--ko if: !mySchedule.isDayOff -->
+								<!-- ko foreach: mySchedule.layers -->
+									<div class="shift-visual-indication-block" data-bind="style: styleJson74947, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
+								<!-- /ko -->
 							<!--/ko-->
 						</div>
 					</div>
