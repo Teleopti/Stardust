@@ -38,8 +38,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public virtual void Execute(ISchedulingCallback schedulingCallback, 
 			SchedulingOptions schedulingOptions,
 			ISchedulingProgress backgroundWorker,
-			IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
-			bool runWeeklyRestSolver, IBlockPreferenceProvider blockPreferenceProvider)
+			IEnumerable<IPerson> selectedAgents, 
+			DateOnlyPeriod selectedPeriod,
+			IBlockPreferenceProvider blockPreferenceProvider)
 		{
 			
 			var schedulerStateHolder = _schedulerStateHolder();

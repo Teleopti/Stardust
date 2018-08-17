@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			_scheduleExecutor.Execute(schedulingCallback,
 				schedulingOptions, schedulingProgress, agents,
-				selectedPeriod, @event.RunWeeklyRestSolver, blockPreferenceProvider);
+				selectedPeriod, blockPreferenceProvider);
 			if(@event.RunDayOffOptimization)
 			{
 				_dayOffOptimization.Execute(new DateOnlyPeriod(@event.StartDate, @event.EndDate),
