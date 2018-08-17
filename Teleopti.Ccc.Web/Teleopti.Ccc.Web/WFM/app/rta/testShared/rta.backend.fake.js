@@ -17,6 +17,7 @@
 		var skills = [];
 		var skillGroups = [];
 		var phoneStates = [];
+		var historicalTeamAdherences = [];
 
 		service.withTime = withTime;
 
@@ -36,6 +37,7 @@
 		service.withOrganization = withOrganization;
 		service.withOrganizationOnSkills = withOrganizationOnSkills;
 		service.clearOrganization = clearOrganization;
+		service.withHistoricalTeamAdherence = withHistoricalTeamAdherence;
 
 		Object.defineProperty(service, 'skills', {
 			get: function () {
@@ -56,6 +58,7 @@
 			teamAdherences = [];
 			skillGroups = [];
 			phoneStates = [];
+			historicalTeamAdherences = [];
 
 			service.traceCalledForUserCode = null;
 			service.stopCalled = false;
@@ -249,6 +252,12 @@
 				return [200, result];
 			});
 
+		service.fake(/\.\.\/api\/HistoricalOverview(.*)/,
+			function (params) {
+				service.lastHistoricalOverviewRequestParams = params;
+				return [200, historicalTeamAdherences];
+		});
+
 
 		function withTime(time) {
 			serverTime = time;
@@ -343,6 +352,11 @@
 				else
 					sitesWithTeamsOnSkills[skillIdAsAKey] = [siteWithTeams];
 			});
+			return this;
+		}
+
+		function withHistoricalTeamAdherence(historicalTeamAdherence) {
+			historicalTeamAdherences.push(historicalTeamAdherence);
 			return this;
 		}
 

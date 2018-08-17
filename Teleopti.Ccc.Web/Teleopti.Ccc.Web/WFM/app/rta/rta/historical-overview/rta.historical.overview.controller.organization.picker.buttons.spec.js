@@ -118,4 +118,53 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 
 		expect(vm.organizationPickerSelectionText).toEqual("");
 	});
+	
+	it('should close organization picker', function (t) {
+		var vm = t.createController();
+		t.apply(function () {
+			vm.applyOrganizationSelection();
+		});
+
+		expect(vm.organizationPickerOpen).toBe(false);
+	});
+
+	it('should send request with siteIds', function (t) {
+		t.backend.withOrganization({
+			Id: 'LondonId'
+		});
+		
+		var vm = t.createController();
+		t.apply(function () {
+			vm.sites[0].toggle();
+		});
+		t.apply(function () {
+			vm.applyOrganizationSelection();
+		});
+
+		expect(t.backend.lastHistoricalOverviewRequestParams.siteIds).toContain('LondonId');
+	});
+
+	it('should send request with teamIds', function (t) {
+		t.backend.withOrganization({
+			Id: 'LondonId',
+			Teams: [
+				{
+					Id: 'RedTeamId'
+				},
+				{
+					Id: 'GreenTeamId'
+				}
+			]
+		});
+
+		var vm = t.createController();
+		t.apply(function () {
+			vm.sites[0].Teams[0].toggle();
+		});
+		t.apply(function () {
+			vm.applyOrganizationSelection();
+		});
+
+		expect(t.backend.lastHistoricalOverviewRequestParams.teamIds).toContain('RedTeamId');
+	});
 });

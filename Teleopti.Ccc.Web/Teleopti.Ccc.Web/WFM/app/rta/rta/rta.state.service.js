@@ -130,6 +130,15 @@
 				return r
 			},
 
+			historicalOverviewParams: function () {
+				var params = {};
+				if (state.siteIds)
+					params.siteIds = state.siteIds;
+				if (state.teamIds)
+					params.teamIds = state.teamIds;
+				return params;
+			},
+
 			goToAgents: function () {
 				$state.go('rta-agents', buildState());
 			},

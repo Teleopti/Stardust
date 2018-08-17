@@ -5,9 +5,9 @@
 		.module('wfm.rta')
 		.controller('RtaHistoricalOverviewController', RtaHistoricalOverviewController);
 
-	RtaHistoricalOverviewController.$inject = ['$filter', '$stateParams', '$translate', 'rtaStateService', 'rtaDataService'];
+	RtaHistoricalOverviewController.$inject = ['$filter', '$stateParams', '$http', '$translate', 'rtaStateService', 'rtaDataService'];
 
-	function RtaHistoricalOverviewController($filter, $stateParams, $translate, rtaStateService, rtaDataService) {
+	function RtaHistoricalOverviewController($filter, $stateParams, $http, $translate, rtaStateService, rtaDataService) {
 
 		var vm = this;
 		vm.clearEnabled = false;
@@ -70,8 +70,14 @@
 		// 	return 'hsl(0,0%,' + light + '%)';
 		// };
 		//
-		// vm.applyOrganizationSelection = function () {
-			// vm.organizationPickerOpen = false;
+		 vm.applyOrganizationSelection = function () {
+			 vm.organizationPickerOpen = false;
+			 $http.get('../api/HistoricalOverview', {
+				 params: rtaStateService.historicalOverviewParams()
+			 }).then(function (response) {
+				 vm.cards = response.data;
+			 });
+			 
 			// vm.cards = [
 			// 	{
 			// 		Name: 'Denver/Avalanche',
@@ -248,7 +254,7 @@
 			// 		]
 			// 	}
 			// ];
-		// };
+		 };
 
 		 vm.clearOrganizationSelection = function () {
 			rtaStateService.deselectOrganization();

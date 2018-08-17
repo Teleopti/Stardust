@@ -1729,6 +1729,7 @@
     <Content Include="WFM\app\rta\rta\historical-overview\rta.historical.overview.controller.js" />
     <Content Include="WFM\app\rta\rta\historical-overview\rta.historical.overview.controller.organization.selection.spec.js" />
     <Content Include="WFM\app\rta\rta\historical-overview\rta.historical.overview.controller.organization.picker.buttons.spec.js" />
+    <Content Include="WFM\app\rta\rta\historical-overview\rta.historical.overview.controller.spec.js" />
     <Content Include="WFM\app\rta\rta\historical-overview\rta.historical.overview.html" />
     <Content Include="WFM\app\rta\rta\historical\rta-historical.durationOfHistoricalEvents_76470.html" />
     <Content Include="WFM\app\rta\rta\historical\rta-historical.easilySpotLateForWork_75668.html" />
