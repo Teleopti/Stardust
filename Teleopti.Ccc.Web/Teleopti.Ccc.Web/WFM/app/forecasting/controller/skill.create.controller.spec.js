@@ -9,10 +9,10 @@ describe('ForecastingSkillCreateController', function () {
       get: function() {
         var queryDeferred = $q.defer();
         queryDeferred.resolve([{
-            Id: "6fbf235d-59f6-4f00-855d-9b5e015ab3c6",
+            Id: "ActivityId-1",
             Name: "Chat"
           }, {
-            Id: "472e02c8-1a84-4064-9a3b-9b5e015ab3c6",
+            Id: "ActivityId-2",
             Name: "E-mail"
           }]);
         return { $promise: queryDeferred.promise };
@@ -35,8 +35,10 @@ describe('ForecastingSkillCreateController', function () {
       get: function () {
         var queryDeferred = $q.defer();
         queryDeferred.resolve([{
-          Id: "073aea7a-d071-4585-99ce-9f0800da823d",
-          Name: "Queue 1", LogObjectName: "ACD", Description: "Queue 1"
+          Id: "QueueId-1",
+          Name: "Queue 1",
+          LogObjectName: "ACD",
+          Description: "Queue 1"
         }]);
         return { $promise: queryDeferred.promise };
       }
@@ -58,29 +60,35 @@ describe('ForecastingSkillCreateController', function () {
 
   it("should have correct default values", inject(function ($controller) {
     var scope = $rootScope.$new();
-
-    $controller('ForecastingSkillCreateController', { $scope: scope, NoticeService: mockNoticeService, SkillService: mockSkillService });
-
+    var vm = $controller('ForecastingSkillCreateController', {
+      $scope: scope,
+      NoticeService: mockNoticeService,
+      SkillService: mockSkillService
+    });
     scope.$digest();
-    expect(scope.model.serviceLevelPercent).toBe(80);
-    expect(scope.model.serviceLevelSeconds).toBe(20);
-    expect(scope.model.shrinkage).toBe(0);
-    expect(scope.model.selectedTimezone.Id).toBe("W. Europe Standard Time");
-    expect(scope.model.workingHours[0].WeekDaySelections.length).toBe(7);
-    expect(scope.model.workingHours[0].StartTime.getTime()).toBe(new Date(2000, 1, 1, 0, 0, 0, 0).getTime());
-    expect(scope.model.workingHours[0].EndTime.getTime()).toBe(new Date(2000, 1, 2, 0, 0, 0, 0).getTime());
+
+    expect(vm.model.serviceLevelPercent).toBe(80);
+    expect(vm.model.serviceLevelSeconds).toBe(20);
+    expect(vm.model.shrinkage).toBe(0);
+    expect(vm.model.selectedTimezone.Id).toBe("W. Europe Standard Time");
+    expect(vm.model.workingHours[0].WeekDaySelections.length).toBe(7);
+    expect(vm.model.workingHours[0].StartTime.getTime()).toBe(new Date(2000, 1, 1, 0, 0, 0, 0).getTime());
+    expect(vm.model.workingHours[0].EndTime.getTime()).toBe(new Date(2000, 1, 2, 0, 0, 0, 0).getTime());
   }));
 
   it("should display queues", inject(function ($controller) {
     var scope = $rootScope.$new();
-
-    $controller('ForecastingSkillCreateController', { $scope: scope, NoticeService: mockNoticeService, SkillService: mockSkillService });
-
+    var vm = $controller('ForecastingSkillCreateController', {
+      $scope: scope,
+      NoticeService: mockNoticeService,
+      SkillService: mockSkillService
+    });
     scope.$digest();
-    expect(scope.gridOptions.data.length).toBe(1);
-    expect(scope.gridOptions.data[0].Id).toBe("073aea7a-d071-4585-99ce-9f0800da823d");
-    expect(scope.gridOptions.data[0].Name).toBe("Queue 1");
-    expect(scope.gridOptions.data[0].LogObjectName).toBe("ACD");
-    expect(scope.gridOptions.data[0].Description).toBe("Queue 1");
+
+    expect(vm.gridOptions.data.length).toBe(1);
+    expect(vm.gridOptions.data[0].Id).toBe("QueueId-1");
+    expect(vm.gridOptions.data[0].Name).toBe("Queue 1");
+    expect(vm.gridOptions.data[0].LogObjectName).toBe("ACD");
+    expect(vm.gridOptions.data[0].Description).toBe("Queue 1");
   }));
 });
