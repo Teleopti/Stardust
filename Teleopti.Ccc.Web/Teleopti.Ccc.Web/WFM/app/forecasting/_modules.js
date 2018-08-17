@@ -1,28 +1,28 @@
-﻿(function () {
+﻿(function() {
 	'use strict';
-	var forecaster = angular.module('wfm.forecasting', [
-		'gridshore.c3js.chart',
-		'ngResource',
-		'toggleService',
-		'ui.router',
-		'wfm.daterangepicker',
-		'wfm.workinghourspicker',
-		'pascalprecht.translate',
-		'wfm.modal',
-		'wfm.autofocus',
-		'wfm.notice',
-		'wfm.utilities']);
+	angular
+		.module('wfm.forecasting',
+			[
+				'gridshore.c3js.chart',
+				'ngResource',
+				'toggleService',
+				'ui.router',
+				'wfm.daterangepicker',
+				'wfm.workinghourspicker',
+				'pascalprecht.translate',
+				'wfm.modal',
+				'wfm.autofocus',
+				'wfm.notice',
+				'wfm.utilities'
+			])
+		.run(['$rootScope', '$state', '$location', onStateChangeSuccess]);
 
-
-	forecaster.run([
-		'$rootScope', '$state', '$location', function ($rootScope, $state, $location) {
-
-			$rootScope.$on('$stateChangeSuccess',
-				function (event, toState) {
-					if ($location.url() == $state.current.url && toState.name == 'forecasting') $state.go('forecasting.start');
-				});
-
-		}
-	]);
-
+	function onStateChangeSuccess($rootScope, $state, $location) {
+		$rootScope.$on('$stateChangeSuccess',
+			function(event, toState) {
+				if ($location.url() === $state.current.url && toState.name === 'forecasting')
+					$state.go('forecasting.start');
+			}
+		);
+	}
 })();

@@ -4,7 +4,7 @@
 	angular.module('wfm.forecasting').controller('r2ForecastRefactController', r2ForecastCtrl);
 
 	r2ForecastCtrl.$inject = [
-		'forecastingService',
+		'ForecastingService',
 		'$state',
 		'$translate',
 		'NoticeService',

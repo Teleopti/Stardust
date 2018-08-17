@@ -1,11 +1,11 @@
 (function() {
 	'use strict';
 
-	angular.module('wfm.forecasting').controller('ForecastModController', ForecastModCtrl);
+	angular.module('wfm.forecasting').controller('ForecastModifyController', forecastModifyController);
 
-	ForecastModCtrl.$inject = ['forecastingService', 'NoticeService', '$translate', '$state', '$scope', 'skillIconService'];
+	forecastModifyController.$inject = ['ForecastingService', 'NoticeService', '$translate', '$state', '$scope', 'skillIconService'];
 
-	function ForecastModCtrl(forecastingService, noticeSvc, $translate, $state, $scope, skillIconService) {
+	function forecastModifyController(forecastingService, noticeSvc, $translate, $state, $scope, skillIconService) {
 		var vm = this;
 
 		vm.loadChart = loadChart;

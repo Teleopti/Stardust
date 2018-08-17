@@ -1,5 +1,4 @@
-describe('ForecastCtrl', function() {
-
+describe('ForecastModifyController', function() {
   var vm,
   $controller,
   $httpBackend,
@@ -8,7 +7,18 @@ describe('ForecastCtrl', function() {
   scenario,
   scenario2;
 
-  sessionStorage.currentForecastWorkload = '{"ChartId":"123","SkillId":"xyz","Workload":{"Id":"abc","Name":"workloadName","Accuracies":null},"Accuracies":null,"Id":"dfg","Name":"skillName"}';
+  sessionStorage.currentForecastWorkload = angular.toJson({
+    "ChartId": "123",
+    "SkillId": "xyz",
+    "Workload": {
+      "Id": "abc",
+      "Name": "workloadName",
+      "Accuracies": null
+    },
+    "Accuracies": null,
+    "Id": "dfg",
+    "Name": "skillName"
+  });
 
   beforeEach(function(){
 
@@ -20,7 +30,7 @@ describe('ForecastCtrl', function() {
       $httpBackend = _$httpBackend_;
       fakeBackend = _fakeForecastingBackend_;
 
-      vm = $controller('ForecastModController', {$scope: scope});
+      vm = $controller('ForecastModifyController', {$scope: scope});
 
       skill = {
         IsPermittedToModifySkill: true,

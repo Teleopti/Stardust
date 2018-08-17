@@ -1,5 +1,5 @@
 angular.module('wfm.forecasting').component('forecastChart', {
-	templateUrl: 'app/forecasting/refact/forecast-chart.html',
+	templateUrl: 'app/forecasting/html/forecast.chart.html',
 	controller: ForecastChartCtrl,
 	bindings: {
 		chartId: '=',

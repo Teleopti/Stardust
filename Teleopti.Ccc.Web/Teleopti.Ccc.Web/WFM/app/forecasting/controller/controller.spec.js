@@ -1,20 +1,18 @@
 'use strict';
-describe('ForecastCtrl', function () {
-  var $q,
-  $httpBackend,
-  $controller,
-  forecastingService,
-  $interval,
-  fakeBackend,
-  vm,
-  skill,
-  scenario;
+describe('ForecastRefactController', function () {
+  var $httpBackend,
+    $controller,
+    $interval,
+    fakeBackend,
+    vm,
+    skill,
+    scenario;
 
   beforeEach(function() {
     module('wfm.forecasting');
   });
 
-  beforeEach(inject(function(_$httpBackend_, _$controller_, _$interval_, _forecastingService_, _fakeForecastingBackend_) {
+  beforeEach(inject(function(_$httpBackend_, _$controller_, _$interval_, _fakeForecastingBackend_) {
     $httpBackend = _$httpBackend_;
     $controller = _$controller_;
     $interval = _$interval_;
@@ -54,7 +52,6 @@ describe('ForecastCtrl', function () {
     }
 
   }));
-
 
   it("should get skills, status and scenario", inject(function ($controller) {
     fakeBackend.withSkill(skill);
@@ -100,5 +97,4 @@ describe('ForecastCtrl', function () {
 
     expect(vm.disableMoreThanOneYear()).toEqual(true);
   }));
-
 });

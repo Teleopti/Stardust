@@ -4,7 +4,7 @@
 	angular.module('wfm.forecasting').controller('ForecastHistoryController', ForecastHistoryCtrl);
 
 	ForecastHistoryCtrl.$inject = [
-		'forecastingService',
+		'ForecastingService',
 		'NoticeService',
 		'$translate',
 		'$state',
