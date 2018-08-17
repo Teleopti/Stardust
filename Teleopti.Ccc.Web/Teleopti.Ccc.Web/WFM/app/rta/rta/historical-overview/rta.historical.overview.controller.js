@@ -60,200 +60,200 @@
 		
 		function updateOrganizationPicker() {
 			vm.organizationPickerSelectionText = rtaStateService.organizationSelectionText();
-			 vm.clearEnabled = (vm.sites || []).some(function (site) {
+			vm.clearEnabled = (vm.sites || []).some(function (site) {
 			 	return site.isChecked || site.isMarked;
 			 });
 		}
 		
-		vm.toneAdherence = function (percentage){
-			var light = 40 + ((percentage / 100) * 60);
-			return 'hsl(0,0%,' + light + '%)';
-		};
-		
-		vm.applyOrganizationSelection = function () {
-			vm.organizationPickerOpen = false;
-			vm.cards = [
-				{
-					Name: 'Denver/Avalanche',
-					TeamAdherence: 74,
-					Agents: [{
-						Name: 'Andeen Ashley',
-						IntervalAdherence: 73,
-						Days: [
-							{
-								Date: '27/12',
-								Adherence: 100,
-								WasLateForWork: true
-							},
-							{
-								Date: '2/5',
-								Adherence: 90
-							},
-							{
-								Date: '3/5',
-								Adherence: 85
-							},
-							{
-								Date: '4/5',
-								Adherence: 88
-							},
-							{
-								Date: '5/5',
-								Adherence: 30,
-								WasLateForWork: true
-							},
-							{
-								Date: '6/5',
-								Adherence: 70
-							},
-							{
-								Date: '7/5',
-								Adherence: 72
-							}
-						],
-						LateForWork:
-							{
-								Count: 2,
-								TotalMinutes: 24
-							}
-					},
-						{
-							Name: 'Aneedn Anna',
-							IntervalAdherence: 77,
-							Days: [
-								{
-									Date: '1/5',
-									Adherence: 70,
-								},
-								{
-									Date: '2/5',
-									Adherence: 56,
-									WasLateForWork: true
-								},
-								{
-									Date: '3/5',
-									Adherence: 83
-								},
-								{
-									Date: '4/5',
-									Adherence: 71
-								},
-								{
-									Date: '5/5',
-									Adherence: 95
-								},
-								{
-									Date: '6/5',
-									Adherence: 77
-								},
-								{
-									Date: '7/5',
-									Adherence: 84
-								}
-							],
-							LateForWork:
-								{
-									Count: 1,
-									TotalMinutes: 10
-								}
-						},
-						{
-							Name: 'Aleed Jane',
-							IntervalAdherence: 75,
-							Days: [
-								{
-									Date: '1/5',
-									Adherence: 83,
-								},
-								{
-									Date: '2/5',
-									Adherence: 95,
-									WasLateForWork: true
-								},
-								{
-									Date: '3/5',
-									Adherence: 78,
-								},
-								{
-									Date: '4/5',
-									Adherence: 78,
-								},
-								{
-									Date: '5/5',
-									Adherence: 98,
-									WasLateForWork: true
-								},
-								{
-									Date: '6/5',
-									Adherence: 95,
-									WasLateForWork: true
-								},
-								{
-									Date: '7/5',
-									Adherence: 85,
-								}
-							],
-							LateForWork:
-								{
-									Count: 3,
-									TotalMinutes: 42
-								}
-						}
+		// vm.toneAdherence = function (percentage){
+		// 	var light = 40 + ((percentage / 100) * 60);
+		// 	return 'hsl(0,0%,' + light + '%)';
+		// };
+		//
+		// vm.applyOrganizationSelection = function () {
+			// vm.organizationPickerOpen = false;
+			// vm.cards = [
+			// 	{
+			// 		Name: 'Denver/Avalanche',
+			// 		TeamAdherence: 74,
+			// 		Agents: [{
+			// 			Name: 'Andeen Ashley',
+			// 			IntervalAdherence: 73,
+			// 			Days: [
+			// 				{
+			// 					Date: '27/12',
+			// 					Adherence: 100,
+			// 					WasLateForWork: true
+			// 				},
+			// 				{
+			// 					Date: '2/5',
+			// 					Adherence: 90
+			// 				},
+			// 				{
+			// 					Date: '3/5',
+			// 					Adherence: 85
+			// 				},
+			// 				{
+			// 					Date: '4/5',
+			// 					Adherence: 88
+			// 				},
+			// 				{
+			// 					Date: '5/5',
+			// 					Adherence: 30,
+			// 					WasLateForWork: true
+			// 				},
+			// 				{
+			// 					Date: '6/5',
+			// 					Adherence: 70
+			// 				},
+			// 				{
+			// 					Date: '7/5',
+			// 					Adherence: 72
+			// 				}
+			// 			],
+			// 			LateForWork:
+			// 				{
+			// 					Count: 2,
+			// 					TotalMinutes: 24
+			// 				}
+			// 		},
+			// 			{
+			// 				Name: 'Aneedn Anna',
+			// 				IntervalAdherence: 77,
+			// 				Days: [
+			// 					{
+			// 						Date: '1/5',
+			// 						Adherence: 70,
+			// 					},
+			// 					{
+			// 						Date: '2/5',
+			// 						Adherence: 56,
+			// 						WasLateForWork: true
+			// 					},
+			// 					{
+			// 						Date: '3/5',
+			// 						Adherence: 83
+			// 					},
+			// 					{
+			// 						Date: '4/5',
+			// 						Adherence: 71
+			// 					},
+			// 					{
+			// 						Date: '5/5',
+			// 						Adherence: 95
+			// 					},
+			// 					{
+			// 						Date: '6/5',
+			// 						Adherence: 77
+			// 					},
+			// 					{
+			// 						Date: '7/5',
+			// 						Adherence: 84
+			// 					}
+			// 				],
+			// 				LateForWork:
+			// 					{
+			// 						Count: 1,
+			// 						TotalMinutes: 10
+			// 					}
+			// 			},
+			// 			{
+			// 				Name: 'Aleed Jane',
+			// 				IntervalAdherence: 75,
+			// 				Days: [
+			// 					{
+			// 						Date: '1/5',
+			// 						Adherence: 83,
+			// 					},
+			// 					{
+			// 						Date: '2/5',
+			// 						Adherence: 95,
+			// 						WasLateForWork: true
+			// 					},
+			// 					{
+			// 						Date: '3/5',
+			// 						Adherence: 78,
+			// 					},
+			// 					{
+			// 						Date: '4/5',
+			// 						Adherence: 78,
+			// 					},
+			// 					{
+			// 						Date: '5/5',
+			// 						Adherence: 98,
+			// 						WasLateForWork: true
+			// 					},
+			// 					{
+			// 						Date: '6/5',
+			// 						Adherence: 95,
+			// 						WasLateForWork: true
+			// 					},
+			// 					{
+			// 						Date: '7/5',
+			// 						Adherence: 85,
+			// 					}
+			// 				],
+			// 				LateForWork:
+			// 					{
+			// 						Count: 3,
+			// 						TotalMinutes: 42
+			// 					}
+			// 			}
+            //
+			// 		]
+			// 	},
+			// 	{
+			// 		Name: 'Barcelona/Red',
+			// 		TeamAdherence: 94,
+			// 		Agents: [{
+			// 			Name: 'Cndeen Ashley',
+			// 			IntervalAdherence: 94,
+			// 			Days: [
+			// 				{
+			// 					Date: '1/5',
+			// 					Adherence: 92,
+			// 					WasLateForWork: true
+			// 				},
+			// 				{
+			// 					Date: '2/5',
+			// 					Adherence: 97,
+			// 				},
+			// 				{
+			// 					Date: '3/5',
+			// 					Adherence: 94,
+			// 				},
+			// 				{
+			// 					Date: '4/5',
+			// 					Adherence: 98,
+			// 				},
+			// 				{
+			// 					Date: '5/5',
+			// 					Adherence: 99,
+			// 				},
+			// 				{
+			// 					Date: '6/5',
+			// 					Adherence: 94,
+			// 				},
+			// 				{
+			// 					Date: '7/5',
+			// 					Adherence: 99,
+			// 				}
+			// 			],
+			// 			LateForWork:
+			// 				{
+			// 					Count: 1,
+			// 					TotalMinutes: 3
+			// 				}
+			// 		}
+			// 		]
+			// 	}
+			// ];
+		// };
 
-					]
-				},
-				{
-					Name: 'Barcelona/Red',
-					TeamAdherence: 94,
-					Agents: [{
-						Name: 'Cndeen Ashley',
-						IntervalAdherence: 94,
-						Days: [
-							{
-								Date: '1/5',
-								Adherence: 92,
-								WasLateForWork: true
-							},
-							{
-								Date: '2/5',
-								Adherence: 97,
-							},
-							{
-								Date: '3/5',
-								Adherence: 94,
-							},
-							{
-								Date: '4/5',
-								Adherence: 98,
-							},
-							{
-								Date: '5/5',
-								Adherence: 99,
-							},
-							{
-								Date: '6/5',
-								Adherence: 94,
-							},
-							{
-								Date: '7/5',
-								Adherence: 99,
-							}
-						],
-						LateForWork:
-							{
-								Count: 1,
-								TotalMinutes: 3
-							}
-					}
-					]
-				}
-			];
-		};
-
-		vm.clearOrganizationSelection = function () {
+		 vm.clearOrganizationSelection = function () {
 			rtaStateService.deselectOrganization();
 			updateOrganizationPicker();
-		};
+		 };
 		
 		vm.goToAgents = rtaStateService.goToAgents;
 		vm.goToOverview = rtaStateService.goToOverview;
