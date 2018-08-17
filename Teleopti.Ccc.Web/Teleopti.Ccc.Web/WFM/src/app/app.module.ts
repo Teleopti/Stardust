@@ -8,6 +8,7 @@ import { CoreModule } from './core/core.module';
 import { UserPreferences, UserService } from './core/services';
 import { LanguageLoaderFactory, CustomTranslateParser, Zorroi18nService } from './core/translation';
 import { PeopleModule } from './people/people.module';
+import { AuthenticationModule } from './authentication/authentication.module';
 
 @NgModule({
 	declarations: [],
@@ -16,6 +17,7 @@ import { PeopleModule } from './people/people.module';
 		BrowserModule,
 		UpgradeModule,
 		PeopleModule,
+		AuthenticationModule,
 		ApiAccessModule,
 		HttpClientModule,
 		TranslateModule.forRoot({
