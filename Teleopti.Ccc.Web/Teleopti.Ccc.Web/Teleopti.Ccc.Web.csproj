@@ -1525,7 +1525,6 @@
     <Content Include="WFM\app\forecasting\controller\default.controller.js" />
     <Content Include="WFM\app\forecasting\html\forecasting.html" />
     <Content Include="WFM\app\forecasting\component\history.chart.component.js" />
-    <Content Include="WFM\app\forecasting\html\history.chart.html" />
     <Content Include="WFM\app\forecasting\html\history.html" />
     <Content Include="WFM\app\forecasting\controller\history.controller.js" />
     <Content Include="WFM\app\forecasting\controller\r2forecast.controller.js" />
@@ -1603,7 +1602,6 @@
     <Content Include="WFM\app\permissions\functionsrefact\permissions.function.component.js" />
     <Content Include="WFM\app\reports\audit.controller.spec.js" />
     <Content Include="WFM\app\forecasting\component\forecast.chart.component.js" />
-    <Content Include="WFM\app\forecasting\html\forecast.chart.html" />
     <Content Include="WFM\app\forecasting\html\modify.html" />
     <Content Include="WFM\app\forecasting\service\forecast.backend.fake.js" />
     <Content Include="WFM\app\forecasting\controller\controller.js" />

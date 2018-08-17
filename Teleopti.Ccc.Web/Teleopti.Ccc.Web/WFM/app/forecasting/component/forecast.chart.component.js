@@ -1,5 +1,5 @@
 angular.module('wfm.forecasting').component('forecastChart', {
-	templateUrl: 'app/forecasting/html/forecast.chart.html',
+	template: '<div id="{{$ctrl.chartId}}" class="wfm-chart forecast-chart" ng-click=""></div>',
 	controller: ForecastChartCtrl,
 	bindings: {
 		chartId: '=',
