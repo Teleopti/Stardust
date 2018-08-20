@@ -70,7 +70,7 @@
 			return 'hsl(0,0%,' + light + '%)';
 		};
 
-		vm.applyOrganizationSelection = function () {
+		vm.loadOrganizationSelection = function () {
 			vm.organizationPickerOpen = false;
 			var params = rtaStateService.historicalOverviewParams();
 			var noParams = !(params.siteIds.length || params.teamIds.length);

@@ -28,7 +28,7 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 
 		var vm = t.createController();
 		t.apply(function () {
-			vm.applyOrganizationSelection();
+			vm.loadOrganizationSelection();
 		});
 		
 		expect(vm.cards[0].Name).toBe('Denver/Avalanche');
@@ -69,7 +69,7 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 
 		var vm = t.createController();
 		t.apply(function () {
-			vm.applyOrganizationSelection();
+			vm.loadOrganizationSelection();
 		});
 
 		expect(vm.cards.length).toBe(0);
@@ -96,7 +96,7 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 
 		var vm = t.createController();
 		t.apply(function () {
-			vm.applyOrganizationSelection();
+			vm.loadOrganizationSelection();
 		});
 		t.apply(function () {
 			vm.cards[0].toggle();
@@ -115,7 +115,7 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 
 		var vm = t.createController();
 		t.apply(function () {
-			vm.applyOrganizationSelection();
+			vm.loadOrganizationSelection();
 		});
 		t.apply(function () {
 			vm.cards[0].toggle();

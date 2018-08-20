@@ -122,7 +122,7 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 	it('should close organization picker', function (t) {
 		var vm = t.createController();
 		t.apply(function () {
-			vm.applyOrganizationSelection();
+			vm.loadOrganizationSelection();
 		});
 
 		expect(vm.organizationPickerOpen).toBe(false);
@@ -138,7 +138,7 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 			vm.sites[0].toggle();
 		});
 		t.apply(function () {
-			vm.applyOrganizationSelection();
+			vm.loadOrganizationSelection();
 		});
 		
 		expect(t.backend.lastParams.historicalOverview().siteIds).toContain('LondonId');
@@ -162,7 +162,7 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 			vm.sites[0].Teams[0].toggle();
 		});
 		t.apply(function () {
-			vm.applyOrganizationSelection();
+			vm.loadOrganizationSelection();
 		});
 
 		expect(t.backend.lastParams.historicalOverview().teamIds).toContain('RedTeamId');
