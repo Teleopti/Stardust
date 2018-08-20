@@ -126,10 +126,10 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 
 		expect(vm.cards[0].isOpen).toBe(false);
 	});
-	
-	xit('should send request with siteIds', function (t) {
-		t.stateParams.siteIds = ['LondonId'];
-		expect(t.backend.lastHistoricalOverviewRequestParams.siteIds).toContain('LondonId');
-	});
 
+	it('should send request with siteIds', function (t) {
+		t.stateParams.siteIds = ['LondonId'];
+		t.createController();
+		expect(t.backend.lastParams.historicalOverview().siteIds).toContain('LondonId');
+	});
 });

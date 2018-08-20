@@ -11,10 +11,13 @@
 
 		var vm = this;
 		vm.clearEnabled = false;
+	
 		rtaStateService.setCurrentState($stateParams);
-
+		
+		
 		rtaDataService.load().then(function (data) {
 			buildSites(data.organization);
+			vm.loadOrganizationSelection();
 		});
 
 		function buildSites(organization) {
@@ -69,7 +72,7 @@
 			var light = 40 + ((percentage / 100) * 60);
 			return 'hsl(0,0%,' + light + '%)';
 		};
-
+		
 		vm.loadOrganizationSelection = function () {
 			vm.organizationPickerOpen = false;
 			var params = rtaStateService.historicalOverviewParams();
