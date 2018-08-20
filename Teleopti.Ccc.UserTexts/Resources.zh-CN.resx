@@ -14807,4 +14807,7 @@ Teleopti R&amp;D</value>
   <data name="TimeInSecond" xml:space="preserve">
     <value>时间 (秒)</value>
   </data>
+  <data name="NoHistoricalDataFoundForThisSkill" xml:space="preserve">
+    <value>当前技能没有历史数据。</value>
+  </data>
 </root>

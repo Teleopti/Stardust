@@ -21347,6 +21347,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No historical data found for this skill..
+        /// </summary>
+        public static string NoHistoricalDataFoundForThisSkill {
+            get {
+                return ResourceManager.GetString("NoHistoricalDataFoundForThisSkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No input.
         /// </summary>
         public static string NoInput {

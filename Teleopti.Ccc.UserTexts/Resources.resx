@@ -17672,4 +17672,8 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Show only day off</value>
     <comment>Show only day off tooltip on new TeamSchedule view in MyTime</comment>
   </data>
+  <data name="NoHistoricalDataFoundForThisSkill" xml:space="preserve">
+    <value>No historical data found for this skill.</value>
+    <comment>Message in web forecast</comment>
+  </data>
 </root>

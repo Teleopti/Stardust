@@ -24,15 +24,20 @@
 		</div>
 	</div>
 
-	<div class="con-row" ng-if="vm.historyData.length > 0">
+	<div class="con-row">
 		<div class="con-flex">
 			<div class="panel material-depth-1">
-				<div class="con-row">
+				<div class="con-row" ng-if="vm.historyData.length > 0">
 					<div class="con-flex">
 						<forecast-history-chart chart-id="vm.selectedWorkload.ChartId"
 												selectable="vm.selectedWorkload.SkillType.DoDisplayData"
 												days="vm.historyData">
 						</forecast-history-chart>
+					</div>
+				</div>
+				<div class="con-row" ng-if="vm.historyData.length === 0">
+					<div class="con-flex">
+						<h2>{{'NoHistoricalDataFoundForThisSkill'|translate}}</h2>
 					</div>
 				</div>
 				<div class="con-footer">
