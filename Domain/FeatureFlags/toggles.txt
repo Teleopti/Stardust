@@ -104,8 +104,6 @@ ResourcePlanner_UseErlangAWithInfinitePatience_45845 = true
 ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899 = true
 ResourcePlanner_UseErlangAWithFinitePatience_47738 = true
 ResourcePlanner_SpeedUpEvents_75415 = true
-
-# Bugs&Roses #
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
 ResourcePlanner_DayOffOptimizationIslands_47208 = true
 ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
@@ -136,7 +134,6 @@ ETL_RemoveTimeZoneAndDateNightly_40870 = true
 ETL_EventBasedAgentNameDescription_41432 = true
 ETL_FixScheduleForPersonPeriod_41393 = true
 ETL_SpeedUpNightlyDayOff_38213 = true
-ETL_Show_Web_Based_ETL_Tool_74837 = true
 
 # DeBockers #
 WfmIntraday_MonitorActualvsForecasted_35176 = true
@@ -173,6 +170,7 @@ WFM_Clear_Data_After_Leaving_Date_47768 = true
 WFM_Forecaster_Preview_74801 = RC
 ETL_Optimize_Memory_Usage_76761 = true
 WFM_Forecast_Show_History_Data_76432 = RC
+ETL_Show_Web_Based_ETL_Tool_74837 = true
 
 # Dragonfly #
 WFM_Gamification_Setting_With_External_Quality_Values_45003 = true
