@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			InParameter.NotNull(nameof(category), category);
 			ShiftCategory = category;
-			Activities = new Guid[0];
         }
 		
 		public virtual ILayerCollection<IActivity> LayerCollection => new LayerCollection<IActivity>(this, _layerCollection);
@@ -59,8 +58,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	    public static DateTime BaseDate { get; } = DateTime.SpecifyKind(new DateTime(1800, 1, 1), DateTimeKind.Utc);
 		public static DateOnly BaseDateOnly { get; } = new DateOnly(BaseDate);
 
-		public Guid[] Activities { get; private set; }
-
 		public IShiftCategory ShiftCategory { get; }
 
 		public TimePeriod? ToTimePeriod()
@@ -80,15 +77,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
             if (!(layer is WorkShiftActivityLayer))
                 throw new ArgumentException("Only WorkShiftActivityLayers can be added to a WorkShift");
 	        _visualLayerCollection = null;
-
-	        if (layer.Payload.RequiresSkill)
-	        {
-		        var activityId = layer.Payload.Id.GetValueOrDefault();
-		        if (Array.IndexOf(Activities,activityId) == -1)
-		        {
-			        Activities = Activities.Append(activityId).ToArray();
-		        }
-	        }
         }
 
 		public IVisualLayerCollection Projection => _visualLayerCollection ?? (_visualLayerCollection = ProjectionService().CreateProjection());
