@@ -78,7 +78,7 @@
 				vm.cards = [];
 				return;
 			}
-			$http.get('../api/HistoricalOverview', {
+			$http.get('../api/HistoricalOverview/Load', {
 				params: params
 			}).then(function (response) {
 				vm.cards = response.data;

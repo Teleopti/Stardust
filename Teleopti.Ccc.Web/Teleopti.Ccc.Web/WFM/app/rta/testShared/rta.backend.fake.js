@@ -17,7 +17,6 @@
 		var skills = [];
 		var skillGroups = [];
 		var phoneStates = [];
-		var historicalTeamAdherences = [];
 
 		service.withTime = withTime;
 
@@ -37,7 +36,6 @@
 		service.withOrganization = withOrganization;
 		service.withOrganizationOnSkills = withOrganizationOnSkills;
 		service.clearOrganization = clearOrganization;
-		service.withHistoricalTeamAdherence = withHistoricalTeamAdherence;
 
 		Object.defineProperty(service, 'skills', {
 			get: function () {
@@ -58,7 +56,6 @@
 			teamAdherences = [];
 			skillGroups = [];
 			phoneStates = [];
-			historicalTeamAdherences = [];
 
 			service.traceCalledForUserCode = null;
 			service.stopCalled = false;
@@ -93,6 +90,11 @@
 			add: function (data, item) {
 				return item;
 			}
+		});
+
+		service.fake({
+			name: 'historicalOverview',
+			url: /\.\.\/api\/HistoricalOverview\/Load(.*)/
 		});
 
 		service.fake({
@@ -251,13 +253,7 @@
 					});
 				return [200, result];
 			});
-
-		service.fake(/\.\.\/api\/HistoricalOverview(.*)/,
-			function (params) {
-				service.lastHistoricalOverviewRequestParams = params;
-				return [200, historicalTeamAdherences];
-		});
-
+		
 
 		function withTime(time) {
 			serverTime = time;
@@ -354,13 +350,7 @@
 			});
 			return this;
 		}
-
-		function withHistoricalTeamAdherence(historicalTeamAdherence) {
-			historicalTeamAdherences.push(historicalTeamAdherence);
-			return this;
-		}
-
-
+		
 		service.withTracer = withTracer;
 		service.withTracedUser = withTracedUser;
 

@@ -140,8 +140,8 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		t.apply(function () {
 			vm.applyOrganizationSelection();
 		});
-
-		expect(t.backend.lastHistoricalOverviewRequestParams.siteIds).toContain('LondonId');
+		
+		expect(t.backend.lastParams.historicalOverview().siteIds).toContain('LondonId');
 	});
 
 	it('should send request with teamIds', function (t) {
@@ -165,6 +165,6 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 			vm.applyOrganizationSelection();
 		});
 
-		expect(t.backend.lastHistoricalOverviewRequestParams.teamIds).toContain('RedTeamId');
+		expect(t.backend.lastParams.historicalOverview().teamIds).toContain('RedTeamId');
 	});
 });

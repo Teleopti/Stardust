@@ -1,10 +1,9 @@
 'use strict';
 
-rtaTester.fdescribe('RtaHistoricalOverviewController', function (it, fit, xit) {
+rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 	it('should build cards', function (t) {
 		t.stateParams.teamIds = ['teamAvalancheId'];
-		t.backend
-			.withHistoricalTeamAdherence(
+		t.backend.with.historicalOverview(
 				{
 					Name: 'Denver/Avalanche',
 					TeamAdherence: 74,
@@ -45,7 +44,7 @@ rtaTester.fdescribe('RtaHistoricalOverviewController', function (it, fit, xit) {
 
 	it('should empty cards when no selection', function (t) {
 		t.backend
-			.withHistoricalTeamAdherence(
+			.with.historicalOverview(
 				{
 					Name: 'Denver/Avalanche',
 					TeamAdherence: 74,
@@ -78,6 +77,7 @@ rtaTester.fdescribe('RtaHistoricalOverviewController', function (it, fit, xit) {
 
 	it('should set background color', function (t) {
 		var vm = t.createController();
+		//maybe refactor implentation set toone on actual object
 		var color;
 		t.apply(function () {
 			color = vm.toneAdherence(50);
@@ -89,7 +89,7 @@ rtaTester.fdescribe('RtaHistoricalOverviewController', function (it, fit, xit) {
 	it('should open card', function (t) {
 		t.stateParams.teamIds = ['teamAvalancheId'];
 		t.backend
-			.withHistoricalTeamAdherence(
+			.with.historicalOverview(
 				{
 					Name: 'Denver/Avalanche'
 				});
@@ -108,7 +108,7 @@ rtaTester.fdescribe('RtaHistoricalOverviewController', function (it, fit, xit) {
 	it('should close card', function (t) {
 		t.stateParams.teamIds = ['teamAvalancheId'];
 		t.backend
-			.withHistoricalTeamAdherence(
+			.with.historicalOverview(
 				{
 					Name: 'Denver/Avalanche'
 				});
