@@ -256,6 +256,16 @@ module.exports = function(grunt) {
 			},
 
 			copy: {
+				locales: {
+					files: [
+						{
+							expand: true,
+							cwd: './node_modules/angular-i18n/',
+							src: ['angular-locale_*.js'],
+							dest: 'dist/angular-i18n/'
+						}
+					]
+				},
 				sourceMaps: {
 					files: [
 						// includes files within path
