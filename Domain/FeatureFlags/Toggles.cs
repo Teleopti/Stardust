@@ -66,7 +66,10 @@
 		Wfm_People_ImportAndCreateAgentFromFile_42528,
 		Wfm_People_SetFallbackValuesForImporting_43289,
 		Wfm_People_MoveImportJobToBackgroundService_43582,
+
+		//Bockemon
 		Wfm_PeopleWeb_PrepareForRelease_47766,
+		Wfm_Authentication_ChangePasswordMenu_76666,
 
 		Scheduler_RestrictionReport_47013,
 		Scheduler_RestrictionReportToggleAll_76224,
