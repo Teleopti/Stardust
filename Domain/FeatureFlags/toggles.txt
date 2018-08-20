@@ -152,9 +152,9 @@ Tenant_PurgeNoneEmployeesData_76291 = true
 ETL_UseBpoResources_75855 = true
 Staffing_BPO_ClearStaffing_75498 = true
 Staffing_BPO_ExportMultipleSkills_74968 = true
-Wfm_Requests_NightShift_BudgetDay_Allowance_76599 = RC
-Wfm_Staffing_RemoveDeletedHeadsFromReadmodel_77049 = RC
-Wfm_Requests_NightShift_BudgetDay_HeadCount_77146 = RC
+Wfm_Requests_NightShift_BudgetDay_Allowance_76599 = true
+Wfm_Staffing_RemoveDeletedHeadsFromReadmodel_77049 = true
+Wfm_Requests_NightShift_BudgetDay_HeadCount_77146 = true
 
 # Squids #
 WFM_Forecaster_Refact_44480 = true
