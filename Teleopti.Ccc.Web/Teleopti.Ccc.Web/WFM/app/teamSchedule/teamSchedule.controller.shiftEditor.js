@@ -3,11 +3,6 @@
 
 	angular.module('wfm.teamSchedule').controller('ShiftEditorViewController', [
 		'$stateParams',
-		'TeamSchedule',
-		'ShiftEditorViewModelFactory',
-		'signalRSVC',
-		'serviceDateFormatHelper',
-		'guidgenerator',
 		function ($stateParams) {
 			var vm = this;
 			vm.personId = $stateParams.personId;
@@ -68,7 +63,7 @@
 		signalRSVC,
 		NoticeService
 	) {
-		var doNotToggleSelection;
+		var doNotToggleSelectionAfterResizeEnd;
 
 		var vm = this;
 		var timeLineTimeRange = {
@@ -126,24 +121,29 @@
 
 		vm.toggleSelection = function (shiftLayer, $event) {
 			if (vm.isNotAllowedToChange(shiftLayer)) return;
-			if (doNotToggleSelection) {
-				doNotToggleSelection = false;
+			if (doNotToggleSelectionAfterResizeEnd) {
+				doNotToggleSelectionAfterResizeEnd = false;
 				return;
 			}
 			vm.selectedShiftLayer = shiftLayer !== vm.selectedShiftLayer ? shiftLayer : null;
-			vm.selectedActivitiyId = shiftLayer.CurrentActivityId || shiftLayer.ActivityId;
+			vm.selectedActivitiyId = vm.getMergedShiftLayer(shiftLayer).ActivityId;
 
 			bindResizeEvent(shiftLayer, $event.target);
 		};
+
+		vm.useLighterBorder = function (shiftLayer) {
+			var sl = vm.getMergedShiftLayer(shiftLayer);
+			return shiftLayer.UseLighterBorder(sl.Color);
+		}
 
 		vm.changeActivityType = function () {
 			var selectActivity = vm.availableActivities.filter(function (activity) {
 				return vm.selectedActivitiyId == activity.Id;
 			})[0];
-
-			vm.selectedShiftLayer.Color = selectActivity.Color;
-			vm.selectedShiftLayer.Description = selectActivity.Name;
-			vm.selectedShiftLayer.CurrentActivityId = selectActivity.Id;
+			vm.selectedShiftLayer.Current = vm.selectedShiftLayer.Current || {};
+			vm.selectedShiftLayer.Current.Color = selectActivity.Color;
+			vm.selectedShiftLayer.Current.Description = selectActivity.Name;
+			vm.selectedShiftLayer.Current.ActivityId = selectActivity.Id;
 		};
 
 		vm.saveChanges = function () {
@@ -182,8 +182,12 @@
 		};
 
 		vm.getTimeSpan = function() {
-			return getMergedShiftLayer(vm.selectedShiftLayer).TimeSpan;
+			return vm.getMergedShiftLayer(vm.selectedShiftLayer).TimeSpan;
 		};
+
+		vm.getMergedShiftLayer = function(layer) {
+			return angular.extend({}, layer, layer.Current);
+		}
 
 		function bindResizeEvent(shiftLayer, shiftLayerEl) {
 			!shiftLayer.interact &&
@@ -249,7 +253,7 @@
 									var previousIndex = curIndex - 1;
 									var previousShiftLayer = vm.scheduleVm.ShiftLayers[previousIndex];
 									if (previousShiftLayer) {
-										var startTime = getMergedShiftLayer(previousShiftLayer).Start;
+										var startTime = vm.getMergedShiftLayer(previousShiftLayer).Start;
 										updateLayerTimePeriod(previousShiftLayer, startTime, shiftLayer.Current.Start);
 
 										var previousShiftLayerEl = allShiftLayerEls[previousIndex];
@@ -261,7 +265,7 @@
 									var nextShiftLayer = vm.scheduleVm.ShiftLayers[nextIndex];
 
 									if (nextShiftLayer) {
-										var endTime = getMergedShiftLayer(nextShiftLayer).End;
+										var endTime = vm.getMergedShiftLayer(nextShiftLayer).End;
 
 										updateLayerTimePeriod(nextShiftLayer, shiftLayer.Current.End, endTime);
 
@@ -287,7 +291,7 @@
 							}
 						);
 
-						doNotToggleSelection = true;
+						doNotToggleSelectionAfterResizeEnd = true;
 					});
 		}
 
@@ -321,8 +325,8 @@
 			vm.scheduleVm.ShiftLayers.forEach(function(layer, i) {
 				if (
 					shiftLayer !== layer &&
-					moment(end).isSameOrAfter(moment(getMergedShiftLayer(layer).End)) &&
-					moment(start).isSameOrBefore(moment(getMergedShiftLayer(layer).Start))
+					moment(end).isSameOrAfter(moment(vm.getMergedShiftLayer(layer).End)) &&
+					moment(start).isSameOrBefore(moment(vm.getMergedShiftLayer(layer).Start))
 				) {
 					indexs.push(i);
 				}
@@ -336,10 +340,6 @@
 			var b = number - a;
 			var isMinus = number < 0;
 			return a === 0 ? number : Math.abs(a) >= 3 ? (isMinus ? b - 5 : b + 5) : b;
-		}
-
-		function getMergedShiftLayer(layer) {
-			return angular.extend({}, layer, layer.Current);
 		}
 
 		function showErrorNotice(errorMessages) {
@@ -383,13 +383,13 @@
 		}
 
 		function getShiftLayerWidth(layer) {
-			var mergedLayer = getMergedShiftLayer(layer);
+			var mergedLayer = vm.getMergedShiftLayer(layer);
 			var startInTimezone = moment.tz(mergedLayer.Start, vm.timezone);
 			return getDiffMinutes(mergedLayer.End, startInTimezone);
 		}
 
 		function getShiftLayerLeft(layer) {
-			return getDiffMinutes(getMergedShiftLayer(layer).Start, timeLineTimeRange.Start);
+			return getDiffMinutes(vm.getMergedShiftLayer(layer).Start, timeLineTimeRange.Start);
 		}
 
 		function initScheduleState() {
@@ -432,7 +432,7 @@
 		function getChangedLayers() {
 			var currentUserTimezone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
 			var changedShiftLayers = vm.scheduleVm.ShiftLayers.filter(function (sl) {
-				return !!sl.CurrentActivityId && sl.ActivityId !== sl.CurrentActivityId;
+				return !!sl.Current && !!sl.Current.ActivityId && sl.ActivityId !== sl.Current.ActivityId;
 			});
 
 			var sameShiftLayers = changedShiftLayers.filter(function (sl) {
@@ -456,7 +456,7 @@
 						.clone()
 						.tz(currentUserTimezone);
 					return {
-						ActivityId: sl.CurrentActivityId,
+						ActivityId: sl.Current.ActivityId,
 						ShiftLayerIds: [sl.ShiftLayerIds[0]],
 						StartTime: serviceDateFormatHelper.getDateTime(startTime),
 						EndTime: serviceDateFormatHelper.getDateTime(endTime),
@@ -464,7 +464,7 @@
 					};
 				} else {
 					return {
-						ActivityId: sl.CurrentActivityId,
+						ActivityId: sl.Current.ActivityId,
 						ShiftLayerIds: !!sl.TopShiftLayerId ? [sl.TopShiftLayerId] : sl.ShiftLayerIds
 					};
 				}
@@ -475,15 +475,9 @@
 			return (
 				hasShift() &&
 				!!vm.scheduleVm.ShiftLayers.filter(function (layer) {
-					return layer.CurrentActivityId && layer.CurrentActivityId !== layer.ActivityId;
+					return !!layer.Current && !!layer.Current.ActivityId && layer.Current.ActivityId !== layer.ActivityId;
 				}).length
 			);
-		}
-
-		function getSelectActivity(layer) {
-			return vm.availableActivities.filter(function (activity) {
-				return layer.Description == activity.Name;
-			})[0];
 		}
 
 		function initAndBindScrollEvent() {

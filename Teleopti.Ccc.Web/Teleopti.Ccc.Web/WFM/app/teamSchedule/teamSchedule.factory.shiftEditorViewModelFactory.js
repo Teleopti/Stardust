@@ -133,8 +133,8 @@
 			this.SameTypeAsLast = false;
 		}
 
-		ShiftLayerViewModel.prototype.UseLighterBorder = function() {
-			return useLighterColor(this.Color);
+		ShiftLayerViewModel.prototype.UseLighterBorder = function(color) {
+			return useLighterColor(color || this.Color);
 		};
 
 		function TimelineViewModel(date, timezone, timeRange) {

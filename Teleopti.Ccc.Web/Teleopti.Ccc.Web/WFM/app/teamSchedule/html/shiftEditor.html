@@ -72,14 +72,15 @@
 				<div class="shift-layer"
 					 ng-class="{
 					 'overtime': shiftLayer.IsOvertime,
-					 'overtime-light': shiftLayer.UseLighterBorder(),
-					 'overtime-dark': !shiftLayer.UseLighterBorder(),
+					 'overtime-light': vm.useLighterBorder(shiftLayer),
+					 'overtime-dark': !vm.useLighterBorder(shiftLayer),
 					 'selected': shiftLayer === vm.selectedShiftLayer,
-					 'border-dark': !shiftLayer.UseLighterBorder(),
-					 'border-light': shiftLayer.UseLighterBorder(),
-					 'divide-line': shiftLayer.SameTypeAsLast,
+					 'border-dark': !vm.useLighterBorder(shiftLayer),
+					 'border-light': vm.useLighterBorder(shiftLayer),
+					 'divide-line':  shiftLayer.SameTypeAsLast,
 					 'disabled': vm.isNotAllowedToChange(shiftLayer)}"
-					 ng-style="{'width': shiftLayer.Width +'px', 'background-color': shiftLayer.Color, 'left': shiftLayer.Left + 'px'}"
+					 ng-style="{'width': vm.getMergedShiftLayer(shiftLayer).Width +'px', 'background-color': vm.getMergedShiftLayer(shiftLayer).Color, 
+					 'left': vm.getMergedShiftLayer(shiftLayer).Left + 'px'}"
 					 ng-click="vm.toggleSelection(shiftLayer, $event)"
 					 ng-repeat="shiftLayer in vm.scheduleVm.ShiftLayers"></div>
 			</div>
