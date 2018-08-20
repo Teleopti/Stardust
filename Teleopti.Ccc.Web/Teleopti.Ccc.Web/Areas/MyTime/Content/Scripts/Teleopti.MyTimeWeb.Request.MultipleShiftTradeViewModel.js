@@ -117,6 +117,10 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 		return Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306');
 	};
 
+	self.showCartToggle = function () {
+		return self.isMobile() && self.showCart();
+	}
+
 	self.resetStatus = function() {
 		self.listCartToggle(true);
 		self.selectedSchedulePairs([]);
