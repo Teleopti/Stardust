@@ -215,11 +215,6 @@
 					</td>
 
 					<td class="shift-trade-button-cell">
-						<!-- ko if: $root.isAddVisible-->
-						<button id="shift-trade-add" type="button" class="btn btn-primary btn-xs" data-bind="click: $root.add">
-							<i class="glyphicon glyphicon-plus"></i>
-						</button>
-						<!-- /ko -->
 					</td>
 				</tr>
 			</tbody>
@@ -386,28 +381,28 @@
 						<div class="shift-cart-detail-info">
 							<div class="cart-schedule my-cart">
 								<!--ko if:!mySchedule-->
-								<span>@Resources.NotScheduled</span>
+								<span class="cart-text">@Resources.NotScheduled</span>
 								<!--/ko-->
 								<!--ko if:mySchedule && mySchedule.isDayOff-->
-								<span class="dayoff cart-schedule-category" data-bind="text:mySchedule.dayOffName"></span>
+								<span class="dayoff cart-schedule-category cart-text" data-bind="text:mySchedule.dayOffName"></span>
 								<!--/ko-->
 								<!--ko if:mySchedule && !mySchedule.isDayOff-->
-								<span class="cart-schedule-category" data-bind="text:mySchedule.categoryName,style:{'background-color': mySchedule.categoryColor ? mySchedule.categoryColor: 'none', 'color': mySchedule.categoryColor ? $root.getTextColor(mySchedule.categoryColor) : 'none'}"></span>
-								<span data-bind="text:mySchedule.scheduleStart + $root.getOvernightFlag(mySchedule.scheduleStartTime(), date) + '-' + mySchedule.scheduleEnd + $root.getOvernightFlag(mySchedule.scheduleEndTime(), date)"></span>
-								<span class="shift-trade-contract" data-bind="text:mySchedule.contractTime"></span>
+								<span class="cart-schedule-category cart-text" data-bind="text:mySchedule.categoryName,style:{'background-color': mySchedule.categoryColor ? mySchedule.categoryColor: 'none', 'color': mySchedule.categoryColor ? $root.getTextColor(mySchedule.categoryColor) : 'none'}"></span>
+								<span class="cart-text" data-bind="text:mySchedule.scheduleStart + $root.getOvernightFlag(mySchedule.scheduleStartTime(), date) + '-' + mySchedule.scheduleEnd + $root.getOvernightFlag(mySchedule.scheduleEndTime(), date)"></span>
+								<span class="shift-trade-contract cart-text" data-bind="text:mySchedule.contractTime"></span>
 								<!--/ko-->
 							</div>
 							<div class="cart-schedule tartget-cart">
 								<!--ko if:!targetSchedule-->
-								<span>@Resources.NotScheduled</span>
+								<span class="cart-text" >@Resources.NotScheduled</span>
 								<!--/ko-->
 								<!--ko if:targetSchedule && targetSchedule.isDayOff-->
-								<span class="cart-schedule-category dayoff" data-bind="text:mySchedule.dayOffName"></span>
+								<span class="cart-schedule-category dayoff cart-text" data-bind="text:targetSchedule.dayOffName"></span>
 								<!--/ko-->
 								<!--ko if:targetSchedule && !targetSchedule.isDayOff-->
-								<span class="cart-schedule-category" data-bind="text:targetSchedule.categoryName,style:{'background-color': targetSchedule.categoryColor ? targetSchedule.categoryColor: 'none', 'color': targetSchedule.categoryColor ? $root.getTextColor(targetSchedule.categoryColor) : 'none'}"></span>
-								<span data-bind="text:targetSchedule.scheduleStart + $root.getOvernightFlag(targetSchedule.scheduleStartTime(), date) + '-' + targetSchedule.scheduleEnd + $root.getOvernightFlag(targetSchedule.scheduleEndTime(), date)"></span>
-								<span class="shift-trade-contract" data-bind="text:targetSchedule.contractTime"></span>
+								<span class="cart-schedule-category cart-text" data-bind="text:targetSchedule.categoryName,style:{'background-color': targetSchedule.categoryColor ? targetSchedule.categoryColor: 'none', 'color': targetSchedule.categoryColor ? $root.getTextColor(targetSchedule.categoryColor) : 'none'}"></span>
+								<span class="cart-text" data-bind="text:targetSchedule.scheduleStart + $root.getOvernightFlag(targetSchedule.scheduleStartTime(), date) + '-' + targetSchedule.scheduleEnd + $root.getOvernightFlag(targetSchedule.scheduleEndTime(), date)"></span>
+								<span class="shift-trade-contract cart-text" data-bind="text:targetSchedule.contractTime"></span>
 								<!--/ko-->
 							</div>
 						</div>

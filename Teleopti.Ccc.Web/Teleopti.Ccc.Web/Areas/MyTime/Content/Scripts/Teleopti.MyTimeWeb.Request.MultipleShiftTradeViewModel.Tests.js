@@ -1,43 +1,6 @@
 ﻿$(document).ready(function () {
 	module("Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel");
 
-	test("should show add button", function () {
-		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
-		viewModel.agentChoosed({});
-		viewModel.selectedInternal(false);
-		viewModel.IsLoading(false);
-
-		equal(viewModel.isAddVisible(), true);
-	});
-
-	test("should not show add button when no detail", function () {
-		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
-		viewModel.agentChoosed(null);
-		viewModel.selectedInternal(false);
-		viewModel.IsLoading(false);
-
-		equal(viewModel.isAddVisible(), false);
-	});
-
-	test("should not show add button when it has been selected", function () {
-		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
-		viewModel.agentChoosed({});
-		viewModel.selectedInternal(true);
-		viewModel.IsLoading(false);
-
-		equal(viewModel.isAddVisible(), false);
-	});
-
-	test("should not show add button when loading", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggleName) { return true; }
-		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
-		viewModel.agentChoosed({});
-		viewModel.selectedInternal(false);
-		viewModel.IsLoading(true);
-
-		equal(viewModel.isAddVisible(), false);
-	});
-
 	test("should get contract time correctly", function () {
 		var schedules = {
 			"MySchedule":
@@ -79,24 +42,6 @@
 
 		equal(viewModel.mySchedule().contractTime, "8:00");
 		equal(viewModel.possibleTradeSchedules()[0].contractTime, "7:05");
-	});
-
-	test("should unselect current date when remove from view model list", function () {
-		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
-		viewModel.requestedDateInternal(moment("Dec 25, 1995"));
-		var currentTrade = {
-			date: moment("Dec 25, 1995"),
-			hours: self.hours,
-			mySchedule: undefined,
-			tradedSchedule: { agentName: "aa", layers: [] }
-		};
-		var chooseHistoryViewModel = new Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel(currentTrade, self.layerCanvasPixelWidth);
-		viewModel.chooseHistorys.push(chooseHistoryViewModel);
-		viewModel.selectedInternal(true);
-
-		viewModel.remove(chooseHistoryViewModel);
-
-		equal(viewModel.selectedInternal(), false);
 	});
 
 	test("should clean filter when choose agent", function () {
@@ -752,12 +697,6 @@
 		equal(JSON.parse(optionsData.data).TimeSortOrder, 'start asc');
 	});
 
-	test("should set search name after choosing an agent", function () {
-		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel();
-		viewModel.chooseAgent({ agentName: "test", isVisible: function () { } });
-		equal(viewModel.searchNameText(), 'test');
-	});
-
 	test("should keep search name after changing team", function () {
 		var schedules = {
 			"MySchedule":
@@ -791,6 +730,7 @@
 		};
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
 		viewModel.chooseAgent({ agentName: "test agent", isVisible: function () { } });
+		viewModel.searchNameText('test agent'); 
 		viewModel.selectedTeam('other team');
 		equal(viewModel.searchNameText(), 'test agent');
 	});
@@ -828,6 +768,7 @@
 		};
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
 		viewModel.chooseAgent({ agentName: "test agent", isVisible: function () { } });
+		viewModel.searchNameText('test agent');
 		viewModel.selectedSite('other site');
 		equal(viewModel.searchNameText(), 'test agent');
 	});
@@ -869,6 +810,7 @@
 		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
 		viewModel.selectedTeamInternal("myTeam");
 		viewModel.chooseAgent({ agentName: "test", isVisible: function () { } });
+		viewModel.searchNameText('test')
 		viewModel.cancelRequest();
 
 		equal(viewModel.searchNameText(), '');

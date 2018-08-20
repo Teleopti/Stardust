@@ -981,8 +981,9 @@ input.use-default-startTime {
 	flex: 1 0 50%;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
+	justify-content:  flex-start;
 	align-items: center;
+	padding-top:4px;
 }
 
 .cart-schedule + .cart-schedule {
@@ -1033,6 +1034,10 @@ input.use-default-startTime {
 
 .not-visible {
 	visibility: hidden;
+}
+
+.cart-text {
+	margin-bottom: 3px;
 }
 
 .cart-menu {
