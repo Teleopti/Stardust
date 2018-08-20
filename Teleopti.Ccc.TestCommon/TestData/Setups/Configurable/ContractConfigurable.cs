@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				WorkTime = new WorkTime(TimeSpan.Parse(AverageWorkTimePerDay)),
 				PositiveDayOffTolerance = PositiveDayOffTolerance,
 				NegativeDayOffTolerance = NegativeDayOffTolerance,
-				WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.FromHours(60), TimeSpan.Zero, TimeSpan.Zero)
+				WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.FromHours(60), TimeSpan.FromHours(11), TimeSpan.Zero)
 			};
 			if (PositiveTargetTolerance != null)
 				Contract.PositivePeriodWorkTimeTolerance = TimeSpan.Parse(PositiveTargetTolerance);

@@ -57,7 +57,6 @@ Scenario: Should see no warnings if the validation rule type is not set to be vi
 	And I choose not to view 'NewNightlyRestRuleName' validation result
 	Then I should not see business rule warning
 
-@ignore
 Scenario: Should see the warnings if the validation rule type is set to be viewable
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
