@@ -1,7 +1,7 @@
 ﻿Teleopti.MyTimeWeb.Schedule.NewTeamScheduleViewModel = function(
 	filterChangedCallback,
 	loadGroupAndTeams,
-	setDraggableScrollBlockOnDesktop
+	readScheduleDataCallback
 ) {
 	var self = this,
 		constants = Teleopti.MyTimeWeb.Common.Constants,
@@ -40,14 +40,16 @@
 	self.currentPageNum = ko.observable(1);
 	self.totalPageNum = ko.observable(0);
 	self.totalAgentCount = ko.observable(0);
+	self.showOnlyDayOff = ko.observable(false);
 	self.isPanelVisible = ko.observable(false);
 	self.isScrollbarVisible = ko.observable(false);
-	self.showOnlyDayOff = ko.observable(false);
 	self.searchNameText = ko.observable('');
 	self.hasFiltered = ko.observable(false);
 	self.emptySearchResult = ko.observable(false);
 	self.isAgentScheduleLoaded = ko.observable(false);
 	self.isLoadingMoreAgentSchedules = false;
+	self.startTimeStart = ko.observable('');
+	self.startTimeEnd = ko.observable(0);
 	self.filter = {
 		searchNameText: '',
 		selectedTeamIds: [],
@@ -75,10 +77,6 @@
 		self.paging.skip = 0;
 		self.filterChangedCallback(moment(self.selectedDate()).add(1, 'days'));
 		self.isLoadingMoreAgentSchedules = false;
-	};
-
-	self.toggleFilterPanel = function() {
-		self.isPanelVisible(!self.isPanelVisible());
 	};
 
 	self.showOnlyDayOff.subscribe(function(value) {
@@ -164,7 +162,7 @@
 
 		self.agentNames(buildAgentNames(data.AgentSchedules));
 		self.selectedDate(moment(date));
-		self.displayDate(moment(date).format(Teleopti.MyTimeWeb.Common.DateFormat));
+		self.displayDate(moment(date).format(dateOnlyFormat));
 
 		rawTimeline = data.TimeLine;
 		self.timeLines(createTimeLineViewModel(rawTimeline));
@@ -191,7 +189,7 @@
 			self.isPanelVisible(false);
 		}
 
-		setDraggableScrollBlockOnDesktop && setDraggableScrollBlockOnDesktop();
+		readScheduleDataCallback && readScheduleDataCallback();
 		self.isAgentScheduleLoaded(true);
 	};
 

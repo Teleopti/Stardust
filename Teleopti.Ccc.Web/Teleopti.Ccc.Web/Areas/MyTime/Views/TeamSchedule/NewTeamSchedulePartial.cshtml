@@ -63,7 +63,7 @@
 				</li>
 				<!-- /ko -->
 				<!-- ko ifnot: isHostAMobile -->
-				<li class="new-teamschedule-time-filter" data-bind="click: toggleFilterPanel">
+				<li class="new-teamschedule-time-filter">
 					<a>
 						<i class="glyphicon glyphicon-time"></i>
 					</a>
@@ -228,18 +228,23 @@
 			<div class="new-teamschedule-time-slider-container">
 				<label>@Resources.StartTime</label>
 				<div class="new-teamschedule-time-slider-line relative">
-					<span class="start-time-start-slider"></span>
-					<span class="start-time-interval-line"></span>
-					<span class="start-time-end-slider"></span>
+					<div class="start-time-interval-line"></div>
+					<div class="start-time-start-slider cursorpointer">
+						<span data-bind="text: startTimeStart"></span>
+					</div>
+					<div class="start-time-end-slider cursorpointer">
+						<span data-bind="text: startTimeEnd"></span>
+					</div>
 				</div>
 			</div>
 
 			<div class="new-teamschedule-time-slider-container">
 				<label>@Resources.EndTime</label>
 				<div class="new-teamschedule-time-slider-line relative">
-					<span class="end-time-start-slider"></span>
-					<span class="end-time-interval-line"></span>
-					<span class="end-time-end-slider"></span>
+					<div class="end-time-interval-line"></div>
+					<div class="end-time-start-slider cursorpointer">
+					</div>
+					<div class="end-time-end-slider cursorpointer"></div>
 				</div>
 			</div>
 			<!-- ko if: isHostAMobile-->
@@ -262,6 +267,6 @@
 				<button class="btn btn-primary" data-bind="click: submitSearchForm">@Resources.Search</button>
 			</div>
 		</div>
-		<!--/ko-->
+		<!-- /ko -->
 	</div>
 </div>

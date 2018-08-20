@@ -566,38 +566,63 @@ div.teammates-schedules-column:last-of-type .agent-name {
 	background: rgba(0, 0, 0, 0.2);
 	height: 1px;
 	flex: 1 1 100%;
+	margin: 0 10px;
 }
 .start-time-start-slider,
 .start-time-end-slider,
 .end-time-start-slider,
 .end-time-end-slider {
+	width: 0;
+	height: 0;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	z-index: 2;
+	display: inline-block;
+	font-size: 13px;
+}
+.start-time-start-slider:before,
+.start-time-end-slider:before,
+.end-time-start-slider:before,
+.end-time-end-slider:before {
+	content: '';
 	width: 20px;
 	height: 20px;
 	border-radius: 10px;
+	display: inline-block;
 	position: absolute;
-	left: 0;
+	left: -10px;
 	bottom: -10px;
-	z-index: 2;
 }
-.end-time-start-slider,
-.end-time-end-slider,
+.end-time-start-slider:before,
+.end-time-end-slider:before,
 .end-time-interval-line {
 	background: orange;
 }
-.start-time-start-slider,
-.start-time-end-slider,
+.start-time-start-slider:before,
+.start-time-end-slider:before,
 .start-time-interval-line {
 	background: #5acdf9;
 }
 .start-time-interval-line,
 .end-time-interval-line {
-	width: 110px;
+	width: 0;
 	height: 1px;
 	position: absolute;
 	left: 0;
 	bottom: 0;
+	display: inline-block;
 }
-
+.start-time-start-slider span,
+.start-time-end-slider span,
+.end-time-start-slider span,
+.end-time-end-slider span {
+	position: absolute;
+	width: 30px;
+	bottom: 10px;
+	left: -15px;
+	text-align: center;
+}
 .new-teamschedule-view .empty-search-result label {
 	margin: 0;
 	color: orange;
@@ -630,7 +655,7 @@ div.teammates-schedules-column:last-of-type .agent-name {
 }
 .new-teamschedule-view.new-teamschedule-view-mobile > .container,
 .new-teamschedule-view.new-teamschedule-view-ipad > .container {
-	padding: 0;
+	padding: 1px 0 0;
 	width: 100%;
 }
 .new-teamschedule-view.new-teamschedule-view-ipad > .container {
