@@ -14655,7 +14655,7 @@ Teleopti R&amp;D</value>
     <value>周期小时数不能超过 {0} 个小时。</value>
   </data>
   <data name="DescriptionOfMaximumWorkdayRule" xml:space="preserve">
-    <value>做多连续工作日</value>
+    <value>最多连续工作日</value>
   </data>
   <data name="OvertimeStaffingCheckMethodSetting" xml:space="preserve">
     <value>加班人力检查方法：</value>

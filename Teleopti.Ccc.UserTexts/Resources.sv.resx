@@ -15736,4 +15736,7 @@ Applikationen kommer nu att stängas. </value>
   <data name="PleaseSelectASkillFirst" xml:space="preserve">
     <value>Var god välj en kompetens innan du använder denna funktion.</value>
   </data>
+  <data name="ShowOnlyDayOff" xml:space="preserve">
+    <value>Visa endast fridagar</value>
+  </data>
 </root>

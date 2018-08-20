@@ -14634,7 +14634,7 @@ Teleopti R&amp;D</value>
     <value>使用技能優先順序驗證</value>
   </data>
   <data name="DescriptionOfMaximumWorkdayRule" xml:space="preserve">
-    <value>做多連續工作日</value>
+    <value>最多連續工作日</value>
   </data>
   <data name="AccessManagement" xml:space="preserve">
     <value>訪問</value>
