@@ -125,7 +125,7 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 		self.listCartToggle(true);
 		self.selectedSchedulePairs([]);
 	};
-
+	
 	self.select = function (data) {
 		if (data) {
 			if (data.isSelected()) {
@@ -326,10 +326,20 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 		}
 		var agentId = agent.personId;
 		clearSchedulePairs();
-		loadPeriodSchedule(startDate, endDate, agentId, false, function() {
+		loadPeriodSchedule(startDate, endDate, agentId, false, function () {
 			var element = document.querySelector('.shift-trade-list-panel');
 			if (element) {
 				element.scrollTo(0, 10);
+			}
+
+			// select the date when choose an agent
+			var item = self.loadedSchedulePairs().filter(function (pair) {
+				return pair.date.isSame(self.requestedDateInternal(), 'day');
+			})[0]; 
+
+			if (item && item.isEnable) {
+				item.isSelected(true);
+				self.select(item);
 			}
 		});
 		self.isLoadingSchedulesOnBottom(true);
