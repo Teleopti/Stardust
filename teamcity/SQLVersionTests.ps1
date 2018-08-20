@@ -423,7 +423,7 @@ function global:CheckPKAndIndex
 		$PkResults = $PkResults.resultline
 		Log "The following issue where found on [$DatabaseName]:"
 		Log "$pkresults"
-		#exit 1
+		exit 1
 	}
 
 	$query = Get-Content "$WorkingDirectory\..\Database\Tools\PKExistsCheck.sql" | Out-String
@@ -434,7 +434,7 @@ function global:CheckPKAndIndex
 		$PkResults = $PkResults.resultline
 		Log "The following issue where found on [$DatabaseName]:"
 		Log "$pkresults"
-		#exit 1
+		exit 1
 	}
 
 	$query = Get-Content "$WorkingDirectory\..\Database\Tools\NoHeapsCheck.sql" | Out-String
@@ -445,7 +445,7 @@ function global:CheckPKAndIndex
 		$PkResults = $PkResults.resultline
 		Log "The following issue where found on [$DatabaseName]:"
 		Log "$pkresults"
-		#exit 1
+		exit 1
 	}
 }
 
