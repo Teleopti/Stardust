@@ -28,6 +28,7 @@
 	});
 
 	ShiftEditorController.$inject = [
+		'$scope',
 		'$element',
 		'$timeout',
 		'$window',
@@ -48,6 +49,7 @@
 	];
 
 	function ShiftEditorController(
+		$scope,
 		$element,
 		$timeout,
 		$window,
@@ -179,9 +181,8 @@
 			}
 		};
 
-		vm.getTimeSpan = function () {
-			var layer = vm.selectedShiftLayer;
-			return (layer.Current || {}).TimeSpan || layer.TimeSpan;
+		vm.getTimeSpan = function() {
+			return getMergedShiftLayer(vm.selectedShiftLayer).TimeSpan;
 		};
 
 		function bindResizeEvent(shiftLayer, shiftLayerEl) {
@@ -228,37 +229,59 @@
 
 								var startTime = timeLineTimeRange.Start.clone().add(startMinutes, 'minutes');
 								var endTime = timeLineTimeRange.Start.clone().add(endMinutes, 'minutes');
-								updateLayerTimePeriod(shiftLayer, serviceDateFormatHelper.getDateTime(startTime), serviceDateFormatHelper.getDateTime(endTime));
+								updateLayerTimePeriod(
+									shiftLayer,
+									serviceDateFormatHelper.getDateTime(startTime),
+									serviceDateFormatHelper.getDateTime(endTime)
+								);
+
+								removeCoveredLayers(shiftLayer);
+								$scope.$apply();
 
 								var curIndex = vm.scheduleVm.ShiftLayers.indexOf(shiftLayer);
-								var allShiftLayerEls = angular.element(target).parent('.shift').children();
+
+								var allShiftLayerEls = angular
+									.element(target)
+									.parent('.shift')
+									.children();
 
 								if (shiftLayer.isChangingStart) {
 									var previousIndex = curIndex - 1;
 									var previousShiftLayer = vm.scheduleVm.ShiftLayers[previousIndex];
 									if (previousShiftLayer) {
-										var startTime = (previousShiftLayer.Current || {}).Start || previousShiftLayer.Start;
+										var startTime = getMergedShiftLayer(previousShiftLayer).Start;
 										updateLayerTimePeriod(previousShiftLayer, startTime, shiftLayer.Current.Start);
 
 										var previousShiftLayerEl = allShiftLayerEls[previousIndex];
-										previousShiftLayerEl.style.width = getShiftLayerWidth(previousShiftLayer) + 'px';
+										previousShiftLayerEl.style.width =
+											getShiftLayerWidth(previousShiftLayer) + 'px';
 									}
 								} else {
 									var nextIndex = curIndex + 1;
-									var nextShiftLayer =
-										vm.scheduleVm.ShiftLayers[nextIndex];
+									var nextShiftLayer = vm.scheduleVm.ShiftLayers[nextIndex];
 
 									if (nextShiftLayer) {
+										var endTime = getMergedShiftLayer(nextShiftLayer).End;
 
-										var endTime = (nextShiftLayer.Current || {}).End || nextShiftLayer.End;
 										updateLayerTimePeriod(nextShiftLayer, shiftLayer.Current.End, endTime);
 
-										var translateX = getDiffMinutes(nextShiftLayer.Current.Start, moment.tz(nextShiftLayer.Start, vm.timezone));
+										var translateX = getDiffMinutes(
+											nextShiftLayer.Current.Start,
+											moment.tz(nextShiftLayer.Start, vm.timezone)
+										);
 
 										var nextShiftLayerEl = allShiftLayerEls[nextIndex];
 										var width = getShiftLayerWidth(nextShiftLayer);
 
-										resizeLayer(nextShiftLayerEl, function () { return translateX; }, function () { return width; });
+										resizeLayer(
+											nextShiftLayerEl,
+											function() {
+												return translateX;
+											},
+											function() {
+												return width;
+											}
+										);
 									}
 								}
 							}
@@ -291,11 +314,32 @@
 				moment.tz(shiftLayer.Current.End, vm.timezone).format('L LT');
 		}
 
+		function removeCoveredLayers(shiftLayer) {
+			var start = shiftLayer.Current.Start;
+			var end = shiftLayer.Current.End;
+			var indexs = [];
+			vm.scheduleVm.ShiftLayers.forEach(function(layer, i) {
+				if (
+					shiftLayer !== layer &&
+					moment(end).isSameOrAfter(moment(getMergedShiftLayer(layer).End)) &&
+					moment(start).isSameOrBefore(moment(getMergedShiftLayer(layer).Start))
+				) {
+					indexs.push(i);
+				}
+			});
+
+			if (indexs.length) vm.scheduleVm.ShiftLayers.splice(indexs[0], indexs.length);
+		}
+
 		function round5(number) {
 			var a = number % 5;
 			var b = number - a;
 			var isMinus = number < 0;
 			return a === 0 ? number : Math.abs(a) >= 3 ? (isMinus ? b - 5 : b + 5) : b;
+		}
+
+		function getMergedShiftLayer(layer) {
+			return angular.extend({}, layer, layer.Current);
 		}
 
 		function showErrorNotice(errorMessages) {
@@ -339,15 +383,13 @@
 		}
 
 		function getShiftLayerWidth(layer) {
-			var start = (layer.Current || {}).Start || layer.Start;
-			var end = (layer.Current || {}).End || layer.End;
-			var startInTimezone = moment.tz(start, vm.timezone);
-			return getDiffMinutes(end, startInTimezone);
+			var mergedLayer = getMergedShiftLayer(layer);
+			var startInTimezone = moment.tz(mergedLayer.Start, vm.timezone);
+			return getDiffMinutes(mergedLayer.End, startInTimezone);
 		}
 
 		function getShiftLayerLeft(layer) {
-			var start = (layer.Current || {}).Start || layer.Start;
-			return getDiffMinutes(start, timeLineTimeRange.Start);
+			return getDiffMinutes(getMergedShiftLayer(layer).Start, timeLineTimeRange.Start);
 		}
 
 		function initScheduleState() {
