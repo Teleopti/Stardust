@@ -12,12 +12,18 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest.Infrastructure
 		{
 			while (true)
 			{
-				testLog.Debug($"Hangfire is processing {hangfireUtilities.NumberOfProcessingJobs()} jobs, {hangfireUtilities.NumberOfScheduledJobs()} are scheduled and {hangfireUtilities.NumberOfFailedJobs()} jobs has failed, {hangfireUtilities.SucceededFromStatistics()} jobs has succeeded.");
-				foreach (var queueName in Queues.OrderOfPriority())
-				{
-					testLog.Debug($"{hangfireUtilities.NumberOfJobsInQueue(queueName)} jobs in queue '{queueName}'");
-				}
+				LogHangfireQueuesOnce(testLog, hangfireUtilities);
 				Thread.Sleep(TimeSpan.FromSeconds(60));
+			}
+		}
+
+		public static void LogHangfireQueuesOnce(TestLog testLog, HangfireUtilities hangfireUtilities)
+		{
+			testLog.Debug(
+				$"Hangfire is processing {hangfireUtilities.NumberOfProcessingJobs()} jobs, {hangfireUtilities.NumberOfScheduledJobs()} are scheduled and {hangfireUtilities.NumberOfFailedJobs()} jobs has failed, {hangfireUtilities.SucceededFromStatistics()} jobs has succeeded.");
+			foreach (var queueName in Queues.OrderOfPriority())
+			{
+				testLog.Debug($"{hangfireUtilities.NumberOfJobsInQueue(queueName)} jobs in queue '{queueName}'");
 			}
 		}
 	}
