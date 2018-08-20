@@ -404,7 +404,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 			this.percentTextBoxAbandonRate.DoubleValue = 0D;
 			this.percentTextBoxAbandonRate.ForeColor = System.Drawing.Color.Black;
 			this.percentTextBoxAbandonRate.Location = new System.Drawing.Point(161, 322);
-			this.percentTextBoxAbandonRate.Maximum = 15D;
+			this.percentTextBoxAbandonRate.Maximum = 30D;
 			this.percentTextBoxAbandonRate.Minimum = 0D;
 			this.percentTextBoxAbandonRate.Name = "percentTextBoxAbandonRate";
 			this.percentTextBoxAbandonRate.Size = new System.Drawing.Size(57, 23);
@@ -419,7 +419,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 			this.percentIntervalAbandonRate.Name = "percentIntervalAbandonRate";
 			this.percentIntervalAbandonRate.Size = new System.Drawing.Size(40, 15);
 			this.percentIntervalAbandonRate.TabIndex = 21;
-			this.percentIntervalAbandonRate.Text = "0-15%";
+			this.percentIntervalAbandonRate.Text = "0-30%";
 			// 
 			// errorProvider1
 			// 
