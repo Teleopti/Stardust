@@ -123,7 +123,7 @@ AND b.time_zone_id = @time_zone_id
 AND (p.team_id IN (select right_id from #rights_teams)OR p.team_id=-1)
 --AND (p.person_id in (SELECT right_id FROM #rights_agents) OR p.person_id=-1) 
 AND (p.person_id in (SELECT right_id FROM #rights_agents)) 
-AND (@date_from	between p.valid_from_date AND p.valid_to_date OR  @date_to	between p.valid_from_date AND p.valid_to_date)
+AND (@date_from	between p.valid_from_date_local AND p.valid_to_date_local OR  @date_to	between p.valid_from_date_local AND p.valid_to_date_local)
 ORDER BY d.date_date,i.interval_name,isnull(l.term_language,p.person_name),p.person_code,da.acd_login_name,da.acd_login_id
 
 
