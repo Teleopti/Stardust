@@ -17,14 +17,13 @@
 		</div>
 	</div>
 
-	<md-progress-linear md-mode="indeterminate" ng-if="vm.loading"></md-progress-linear>
 	<div class="panel material-depth-1 con-padding">
 		<div class="con-row">
-			<div class="con-flex wfm-form organization-picker" outside-click="vm.organizationPickerOpen ? vm.loadOrganizationSelection() : ''; ">
+			<div class="con-flex wfm-form organization-picker" outside-click="vm.closeOrganizationPicker()">
 				<div class="form-input-wrap">
 					<input type="text"
 						   placeholder="{{'SelectSitesTeams'|translate}}"
-						   ng-click="vm.organizationPickerOpen = !vm.organizationPickerOpen"
+						   ng-click="vm.toggleOrganizationPicker()"
 						   ng-value="vm.organizationPickerSelectionText"/>
 				</div>
 
@@ -44,7 +43,7 @@
 									ng-click="vm.clearOrganizationSelection()">{{'ClearAll'|translate}}
 							</button>
 							<button class="wfm-btn wfm-btn-invis-primary"
-									ng-click="vm.loadOrganizationSelection()">{{'Close'|translate}}
+									ng-click="vm.closeOrganizationPicker()">{{'Close'|translate}}
 							</button>
 						</div>
 
@@ -81,22 +80,10 @@
 			</div>
 		</div>
 	</div>
-
-	<div class="con-row" ng-if="vm.displayNoHistoricalOverviewResultMessage()">
-		<div class="con-flex">
-			<div class="panel material-depth-1 con-padding">
-				<div class="con-row">
-					<div class="con-flex">
-						{{'NoHistoricalOverviewResultMessage'|translate}}
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
 	
 	<div class="panel material-depth-1 card-panel" ng-repeat="card in vm.cards">
 		<div class="card-panel-header-wrapper pointer left-border" ng-click="card.toggle()">
-			{{card.Name}}
+			<strong>{{card.Name}}</strong>
 		</div>
 		<div class="card-panel-content-wrapper" ng-show="card.isOpen">
 			<table class="wfm-table">

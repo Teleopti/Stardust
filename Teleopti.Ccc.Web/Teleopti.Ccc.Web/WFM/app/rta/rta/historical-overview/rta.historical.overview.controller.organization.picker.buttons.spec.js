@@ -38,8 +38,6 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		var vm = t.createController();
 		t.apply(function () {
 			vm.sites[0].toggle();
-		});
-		t.apply(function () {
 			vm.sites[0].toggle();
 		});
 
@@ -57,8 +55,6 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		var vm = t.createController();
 		t.apply(function () {
 			vm.sites[0].toggle();
-		});
-		t.apply(function () {
 			vm.sites[1].toggle();
 		});
 
@@ -94,8 +90,6 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		var vm = t.createController();
 		t.apply(function () {
 			vm.sites[0].toggle();
-		});
-		t.apply(function () {
 			vm.clearOrganizationSelection();
 		});
 
@@ -111,8 +105,6 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		var vm = t.createController();
 		t.apply(function () {
 			vm.sites[0].toggle();
-		});
-		t.apply(function () {
 			vm.clearOrganizationSelection();
 		});
 
@@ -122,10 +114,10 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 	it('should close organization picker', function (t) {
 		var vm = t.createController();
 		t.apply(function () {
-			vm.loadOrganizationSelection();
+			vm.closeOrganizationPicker();
 		});
 
-		expect(vm.organizationPickerOpen).toBe(false);
+		expect(vm.organizationPickerOpen).toBeFalsy();
 	});
 
 	it('should send request with siteIds', function (t) {
@@ -135,10 +127,9 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		
 		var vm = t.createController();
 		t.apply(function () {
+			vm.toggleOrganizationPicker();
 			vm.sites[0].toggle();
-		});
-		t.apply(function () {
-			vm.loadOrganizationSelection();
+			vm.closeOrganizationPicker();
 		});
 		
 		expect(t.backend.lastParams.historicalOverview().siteIds).toContain('LondonId');
@@ -159,10 +150,9 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 
 		var vm = t.createController();
 		t.apply(function () {
+			vm.toggleOrganizationPicker();
 			vm.sites[0].Teams[0].toggle();
-		});
-		t.apply(function () {
-			vm.loadOrganizationSelection();
+			vm.closeOrganizationPicker();
 		});
 
 		expect(t.backend.lastParams.historicalOverview().teamIds).toContain('RedTeamId');

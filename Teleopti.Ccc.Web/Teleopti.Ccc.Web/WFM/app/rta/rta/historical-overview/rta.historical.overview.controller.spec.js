@@ -6,14 +6,15 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		t.backend.with.historicalOverview(
 				{
 					Name: 'Denver/Avalanche',
-					TeamAdherence: 74,
 					Agents: [{
+						Id: '625295cf-9b4c-4915-ba66-9b5e015b257c',
 						Name: 'Andeen Ashley',
 						IntervalAdherence: 73,
 						Days: [
 							{
-								Date: '17/08',
-								Adherence: 100,
+								Date: '20180820',
+								DisplayDate: '20/8',
+								Adherence: 50,
 								WasLateForWork: true
 							}
 						],
@@ -28,16 +29,17 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 
 		var vm = t.createController();
 		t.apply(function () {
-			vm.loadOrganizationSelection();
+			vm.closeOrganizationPicker();
 		});
 		
 		expect(vm.cards[0].Name).toBe('Denver/Avalanche');
-		expect(vm.cards[0].TeamAdherence).toBe(74);
 		expect(vm.cards[0].Agents[0].Name).toBe('Andeen Ashley');
 		expect(vm.cards[0].Agents[0].IntervalAdherence).toBe(73);
-		expect(vm.cards[0].Agents[0].Days[0].Date).toBe('17/08');
-		expect(vm.cards[0].Agents[0].Days[0].Adherence).toBe(100);
+		expect(vm.cards[0].Agents[0].Days[0].DisplayDate).toBe('20/8');
+		expect(vm.cards[0].Agents[0].Days[0].Adherence).toBe(50);
 		expect(vm.cards[0].Agents[0].Days[0].WasLateForWork).toBe(true);
+		expect(vm.cards[0].Agents[0].Days[0].Color).toBe('hsl(0,0%,70%)');
+		expect(vm.cards[0].Agents[0].Days[0].HistoricalAdherenceUrl).toBe(t.href('rta-historical', {personId: '625295cf-9b4c-4915-ba66-9b5e015b257c', date: '20180820'}));
 		expect(vm.cards[0].Agents[0].LateForWork.Count).toBe(2);
 		expect(vm.cards[0].Agents[0].LateForWork.TotalMinutes).toBe(24);
 	});
@@ -69,21 +71,10 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 
 		var vm = t.createController();
 		t.apply(function () {
-			vm.loadOrganizationSelection();
+			vm.closeOrganizationPicker();
 		});
 
 		expect(vm.cards.length).toBe(0);
-	});
-
-	it('should set background color', function (t) {
-		var vm = t.createController();
-		//maybe refactor implentation set toone on actual object
-		var color;
-		t.apply(function () {
-			color = vm.toneAdherence(50);
-		});
-
-		expect(color).toBe('hsl(0,0%,70%)');
 	});
 	
 	it('should open card', function (t) {
@@ -96,9 +87,7 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 
 		var vm = t.createController();
 		t.apply(function () {
-			vm.loadOrganizationSelection();
-		});
-		t.apply(function () {
+			vm.closeOrganizationPicker();
 			vm.cards[0].toggle();
 		});
 
@@ -115,16 +104,33 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 
 		var vm = t.createController();
 		t.apply(function () {
-			vm.loadOrganizationSelection();
-		});
-		t.apply(function () {
+			vm.closeOrganizationPicker();
 			vm.cards[0].toggle();
-		});
-		t.apply(function () {
 			vm.cards[0].toggle();
 		});
 
 		expect(vm.cards[0].isOpen).toBe(false);
+	});
+
+	it('should open organization picker', function (t) {
+
+		var vm = t.createController();
+		t.apply(function () {
+			vm.toggleOrganizationPicker();
+		});
+
+		expect(vm.organizationPickerOpen).toBe(true);
+	});
+
+	it('should close organization picker', function (t) {
+
+		var vm = t.createController();
+		t.apply(function () {
+			vm.toggleOrganizationPicker();
+			vm.toggleOrganizationPicker();
+		});
+
+		expect(vm.organizationPickerOpen).toBe(false);
 	});
 
 	it('should send request with siteIds', function (t) {
@@ -132,4 +138,5 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		t.createController();
 		expect(t.backend.lastParams.historicalOverview().siteIds).toContain('LondonId');
 	});
+
 });
