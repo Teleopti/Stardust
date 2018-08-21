@@ -63,7 +63,8 @@
 			</div>
 		</a>
 
-		<div tabindex="0" class="context-menu card-context even-icon" ng-click="showOptions = !showOptions" ng-class="{'nav-item-inactive':!showOptions, 'nav-item-active':showOptions}">
+		<div tabindex="0" class="context-menu card-context even-icon" ng-click="showOptions = !showOptions" ng-class="{'nav-item-inactive':!showOptions, 'nav-item-active':showOptions}"
+		 data-test-nav-item-settings>
 			<i class="mdi mdi-account-settings-variant text-color-white" ng-class="{'mdi-account-outline':toggle}"></i>
 			<md-tooltip>{{'UserSettings'|translate}}</md-tooltip>
 		</div>
