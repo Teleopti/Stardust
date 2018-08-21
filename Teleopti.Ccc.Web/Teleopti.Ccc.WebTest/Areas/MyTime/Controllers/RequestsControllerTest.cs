@@ -507,6 +507,20 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldSelectableWhenPersonalActivityHasNotIntersectWithSchedule()
+		{
+			setGlobaleSetting(typeof(NotOverwriteLayerRule).FullName, true, RequestHandleOption.AutoDeny);
+			_now.Is(DateOnly.Today.Date);
+			var startDate = DateOnly.Today.AddDays(1);
+			var form = createScheduleWithPersonalActivity(startDate, startDate.Date.AddHours(18).ToString(), startDate.Date.AddHours(19).ToString());
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+
+			data.MultiSchedulesForShiftTrade.First().IsSelectable.Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldSelectableWhanHasNotOverSchedulePersonalAcitvity()
 		{
 			setGlobaleSetting(typeof(NonMainShiftActivityRule).FullName, true, RequestHandleOption.Pending);

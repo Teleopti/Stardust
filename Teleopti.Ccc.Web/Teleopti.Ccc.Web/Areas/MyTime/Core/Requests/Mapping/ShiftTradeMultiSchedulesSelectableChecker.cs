@@ -113,18 +113,26 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		{
 			if (!isRuleNeedToCheck(typeof(NotOverwriteLayerRule).FullName)) return false;
 
-			if (hasMeetingOrPersonalActivity(myScheduleDay)) return true;
-			if (hasMeetingOrPersonalActivity(personToScheduleDay)) return true;
+			var myMeeting = myScheduleDay?.PersonMeetingCollection().ToArray();
+			var myPersonActivity = myScheduleDay?.PersonAssignment()?.PersonalActivities().ToArray();
+			var personToLayers = personToScheduleDay?.PersonAssignment()?.MainActivities().ToArray();
+			if (hasMeetingOrPersonalActivity(personToLayers, myMeeting, myPersonActivity)) return true;
+
+			var personToMeeting = personToScheduleDay?.PersonMeetingCollection().ToArray();
+			var personToPersonalActivity = personToScheduleDay?.PersonAssignment()?.PersonalActivities().ToArray();
+			var myLayers = myScheduleDay?.PersonAssignment()?.MainActivities().ToArray();
+			if (hasMeetingOrPersonalActivity(myLayers, personToMeeting, personToPersonalActivity)) return true;
 
 			return false;
 		}
 
-		private bool hasMeetingOrPersonalActivity(IScheduleDay scheduleDay)
+		private bool hasMeetingOrPersonalActivity(MainShiftLayer[] layers, IPersonMeeting[] meetings, PersonalShiftLayer[] personalShiftLayers)
 		{
-			if (scheduleDay == null) return false;
+			layers = (layers?? Enumerable.Empty<MainShiftLayer>()).ToArray();
+			personalShiftLayers = (personalShiftLayers ?? Enumerable.Empty<PersonalShiftLayer>()).ToArray();
 
 			var rule = new NotOverwriteLayerRule();
-			var overLapingLayers = rule.GetOverlappingLayerses(scheduleDay);
+			var overLapingLayers = rule.GetOverlappingLayerses(layers, meetings, personalShiftLayers);
 
 			return overLapingLayers.Any();
 		}
