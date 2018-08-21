@@ -3,7 +3,14 @@ using Teleopti.Ccc.Domain.SystemSetting;
 
 namespace Teleopti.Ccc.WinCode.PeopleAdmin
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue"), Serializable]
+	// Used for translation auto search, DO NOT REMOVE!
+	// UserTexts.Resources.RowsPerPageTen
+	// UserTexts.Resources.RowsPerPageTwenty
+	// UserTexts.Resources.RowsPerPageThirty
+	// UserTexts.Resources.RowsPerPageForty
+	// UserTexts.Resources.RowsPerPageFifty
+
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue"), Serializable]
     public enum RowsPerPage
     {
         Ten = 10,
