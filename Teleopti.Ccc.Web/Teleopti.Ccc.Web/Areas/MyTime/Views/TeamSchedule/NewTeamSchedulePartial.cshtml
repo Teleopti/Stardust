@@ -65,7 +65,7 @@
 				<!-- ko ifnot: isHostAMobile -->
 				<li class="new-teamschedule-time-filter">
 					<a>
-						<i class="glyphicon glyphicon-time"></i>
+						<i class="glyphicon glyphicon-time" data-bind="style: {color: hasTimeFiltered() ? 'yellow': 'white'}"></i>
 					</a>
 				</li>
 				<li class="new-teamschedule-day-off-toggle" data-bind="tooltip: { title: '@Resources.ShowOnlyDayOff', html: true, trigger: 'hover', placement: 'bottom'}">
@@ -228,24 +228,14 @@
 			<div class="new-teamschedule-time-slider-container">
 				<label>@Resources.StartTime</label>
 				<div class="new-teamschedule-time-slider-line relative">
-					<div class="start-time-interval-line"></div>
-					<div class="start-time-start-slider cursorpointer">
-						<span data-bind="text: startTimeStart"></span>
-					</div>
-					<div class="start-time-end-slider cursorpointer">
-						<span data-bind="text: startTimeEnd"></span>
-					</div>
+					<span class="start-time-slider-start-label" data-bind="text: startTimeStart, visible: showStartTimeStart"></span>
+					<span class="start-time-slider-end-label" data-bind="text: startTimeEnd"></span>
+					<div class="start-time-slider"></div>
 				</div>
 			</div>
 
 			<div class="new-teamschedule-time-slider-container">
 				<label>@Resources.EndTime</label>
-				<div class="new-teamschedule-time-slider-line relative">
-					<div class="end-time-interval-line"></div>
-					<div class="end-time-start-slider cursorpointer">
-					</div>
-					<div class="end-time-end-slider cursorpointer"></div>
-				</div>
 			</div>
 			<!-- ko if: isHostAMobile-->
 			<div class="new-teamschedule-day-off-toggle">

@@ -18,9 +18,10 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 		ajax,
 		onMobile = Teleopti.MyTimeWeb.Common.IsHostAMobile(),
 		oniPad = Teleopti.MyTimeWeb.Common.IsHostAniPad(),
-		getFormattedTimeSpan = Teleopti.MyTimeWeb.Common.FormatTimeSpan,
 		agentScheduleColumnWidth = onMobile ? 50 : 80,
-		minScrollBlockWidth = 60;
+		minScrollBlockWidth = 60,
+		startTimeStartInMinute = 0,
+		startTimeEndInMinute = 0;
 
 	function cleanBinding() {
 		ko.cleanNode($('#page')[0]);
@@ -68,7 +69,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 	function setupFilterClickFn() {
 		$('.new-teamschedule-time-filter').click(function(e) {
 			vm.isPanelVisible(!vm.isPanelVisible());
-			setDraggableTimeSlider();
+			if (vm.isPanelVisible()) setDraggableTimeSlider();
 		});
 		$('.new-teamschedule-team-filter').click(function(e) {
 			if (!vm.isTeamsAndGroupsLoaded()) {
@@ -215,75 +216,66 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 		var timelineEndInMinute = 24 * 60;
 		var containerWidth = $('.new-teamschedule-time-slider-line').width();
 		var minutesOfOnePixel = (timelineEndInMinute - timelineStartInMinute) / containerWidth;
-
-		var startTimeStartInMinute = 0;
-		var startTimeEndInMinute = 0;
 		var marginInterval = 1 * 60;
-		$('.start-time-start-slider').draggable({
-			axis: 'x',
-			containment: 'parent',
-			drag: function(event, ui) {
-				var left = ui.position.left;
-				if (left < 0 || left > containerWidth) return false;
 
-				startTimeStartInMinute = parseInt(left * minutesOfOnePixel);
-				setStartTimeInterval(startTimeStartInMinute, startTimeEndInMinute, minutesOfOnePixel);
-				vm.startTimeStart(getFormattedTimeSpan(startTimeStartInMinute));
+		var filteredStartTime = vm.filter.filteredStartTimes.split('-');
+		var startTimeStartValue =
+			Math.floor(moment.duration(filteredStartTime[0]).asHours()) * 60 +
+			moment.duration(filteredStartTime[0]).minutes();
+		var startTimeEndValue =
+			Math.floor(moment.duration(filteredStartTime[1]).asHours()) * 60 +
+			moment.duration(filteredStartTime[1]).minutes();
 
-				if (startTimeStartInMinute > startTimeEndInMinute - marginInterval) {
-					startTimeStartInMinute = startTimeEndInMinute - marginInterval;
-					setStartTimeStartPosition(this, startTimeStartInMinute, startTimeEndInMinute, minutesOfOnePixel);
-					return false;
-				}
-			},
-			stop: function(event, ui) {
-				setStartTimeStartPosition(this, startTimeStartInMinute, startTimeEndInMinute, minutesOfOnePixel);
+		$('.start-time-slider').slider({
+			range: true,
+			min: 0,
+			max: 1440,
+			step: 15,
+			values: [startTimeStartValue, startTimeEndValue],
+			slide: function(event, ui) {
+				return setSliderTime(ui);
 			}
 		});
-		$('.start-time-end-slider').draggable({
-			axis: 'x',
-			containment: 'parent',
-			start: function() {
-				if (vm.startTimeStart() == '') vm.startTimeStart(0);
-			},
-			drag: function(event, ui) {
-				var left = ui.position.left;
-				if (left < 0 || left > containerWidth) return false;
-				startTimeEndInMinute = parseInt(left * minutesOfOnePixel);
 
-				setStartTimeInterval(startTimeStartInMinute, startTimeEndInMinute, minutesOfOnePixel);
-				vm.startTimeEnd(getFormattedTimeSpan(startTimeEndInMinute));
+		setSliderTime();
 
-				if (startTimeStartInMinute > 0 && startTimeEndInMinute < startTimeStartInMinute + marginInterval) {
-					startTimeEndInMinute = startTimeStartInMinute + marginInterval;
-					setStartTimeEndPosition(this, startTimeStartInMinute, startTimeEndInMinute, minutesOfOnePixel);
-
-					return false;
-				}
-			},
-			stop: function(event, ui) {
-				setStartTimeEndPosition(this, startTimeStartInMinute, startTimeEndInMinute, minutesOfOnePixel);
+		function setSliderTime(ui) {
+			if (ui && ui.values) {
+				startTimeStartInMinute = ui.values[0];
+				startTimeEndInMinute = ui.values[1];
+			} else {
+				startTimeStartInMinute = $('.start-time-slider').slider('values', 0);
+				startTimeEndInMinute = $('.start-time-slider').slider('values', 1);
 			}
-		});
-	}
 
-	function setStartTimeStartPosition(slider, startTimeStartInMinute, startTimeEndInMinute, minutesOfOnePixel) {
-		$(slider).css({ left: startTimeStartInMinute / minutesOfOnePixel });
-		setStartTimeInterval(startTimeStartInMinute, startTimeEndInMinute, minutesOfOnePixel);
+			if (startTimeStartInMinute != 0 && startTimeEndInMinute - startTimeStartInMinute < marginInterval)
+				return false;
 
-		vm.startTimeStart(getFormattedTimeSpan(startTimeStartInMinute));
-	}
-	function setStartTimeEndPosition(slider, startTimeStartInMinute, startTimeEndInMinute, minutesOfOnePixel) {
-		$(slider).css({ left: startTimeEndInMinute / minutesOfOnePixel });
-		setStartTimeInterval(startTimeStartInMinute, startTimeEndInMinute, minutesOfOnePixel);
-		vm.startTimeEnd(getFormattedTimeSpan(startTimeEndInMinute));
-	}
+			var hours0 = Math.floor(startTimeStartInMinute / 60),
+				minutes0 = parseInt(startTimeStartInMinute % 60),
+				hours1 = Math.floor(startTimeEndInMinute / 60),
+				minutes1 = parseInt(startTimeEndInMinute % 60);
 
-	function setStartTimeInterval(startTimeStartInMinute, startTimeEndInMinute, minutesOfOnePixel) {
-		$('.start-time-interval-line').css({
-			left: parseInt(startTimeStartInMinute / minutesOfOnePixel),
-			width: parseInt((startTimeEndInMinute - startTimeStartInMinute) / minutesOfOnePixel)
-		});
+			setStartInterval(hours0, minutes0, hours1, minutes1, startTimeStartInMinute, startTimeEndInMinute);
+
+			if (startTimeStartInMinute == 0 && startTimeEndInMinute - startTimeStartInMinute < marginInterval) {
+				vm.showStartTimeStart(false);
+			}
+			return true;
+		}
+
+		function setStartInterval(hours0, minutes0, hours1, minutes1, value0, value1) {
+			var startTimeStart =
+				(hours0 < 10 ? '0' + hours0 : hours0) + ':' + (minutes0 < 10 ? '0' + minutes0 : minutes0);
+			var startTimeEnd =
+				(hours1 < 10 ? '0' + hours1 : hours1) + ':' + (minutes1 < 10 ? '0' + minutes1 : minutes1);
+
+			vm.startTimeStart(startTimeStart);
+			vm.showStartTimeStart(true);
+			vm.startTimeEnd(startTimeEnd);
+			$('.start-time-slider-start-label').css({ left: value0 / minutesOfOnePixel });
+			$('.start-time-slider-end-label').css({ left: value1 / minutesOfOnePixel });
+		}
 	}
 
 	function loadSchedulesBasedOnPageDiffAndUpdateCurrentPageNum(left) {

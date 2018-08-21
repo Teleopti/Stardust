@@ -45,12 +45,15 @@
 	self.isScrollbarVisible = ko.observable(false);
 	self.searchNameText = ko.observable('');
 	self.hasFiltered = ko.observable(false);
+	self.hasTimeFiltered = ko.observable(false);
 	self.emptySearchResult = ko.observable(false);
 	self.isAgentScheduleLoaded = ko.observable(false);
 	self.isLoadingMoreAgentSchedules = false;
-	self.startTimeStart = ko.observable('');
-	self.startTimeEnd = ko.observable(0);
+	self.showStartTimeStart = ko.observable(true);
+	self.startTimeStart = ko.observable('00:00');
+	self.startTimeEnd = ko.observable('00:00');
 	self.filter = {
+		filteredStartTimes: '',
 		searchNameText: '',
 		selectedTeamIds: [],
 		isDayOff: false
@@ -110,6 +113,17 @@
 		self.paging.skip = 0;
 		self.filter.searchNameText = self.searchNameText();
 		self.filter.selectedTeamIds = self.selectedTeamIds.concat();
+
+		if(self.startTimeStart() === '00:00' && self.startTimeEnd() === '00:00' ) {
+			self.filter.filteredStartTimes = '';
+		} else {
+			self.filter.filteredStartTimes =
+			(self.startTimeStart() ? self.startTimeStart() : '') +
+			'-' +
+			(self.startTimeEnd() ? self.startTimeEnd() : '');
+		}
+
+		self.hasTimeFiltered(self.startTimeStart() != '00:00' || self.startTimeEnd() != '00:00');
 		self.filterChangedCallback(self.selectedDate());
 	};
 
