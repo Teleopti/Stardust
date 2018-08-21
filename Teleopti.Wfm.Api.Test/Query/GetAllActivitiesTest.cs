@@ -22,7 +22,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 			ActivityRepository.Add(new Activity("Activity1"));
 			ActivityRepository.Add(new Activity("Activity2"));
 
-			var result = Client.PostAsync("/query/Activity/GetAllActivities", new StringContent("{}"));
+			var result = Client.PostAsync("/query/Activity/AllActivities", new StringContent("{}"));
 			var activitesObj = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result)["Result"];
 			activitesObj.Count().Should().Be.EqualTo(2);
 		}
