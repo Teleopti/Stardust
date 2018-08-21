@@ -19,11 +19,11 @@
 
 	<div class="panel material-depth-1 con-padding">
 		<div class="con-row">
-			<div class="con-flex wfm-form organization-picker" outside-click="vm.applyOrganizationSelection()">
+			<div class="con-flex wfm-form organization-picker" outside-click="vm.closeOrganizationPicker()">
 				<div class="form-input-wrap">
 					<input type="text"
 						   placeholder="{{'SelectSitesTeams'|translate}}"
-						   ng-click="vm.organizationPickerOpen = !vm.organizationPickerOpen"
+						   ng-click="vm.toggleOrganizationPicker()"
 						   ng-value="vm.organizationPickerSelectionText"/>
 				</div>
 
@@ -43,7 +43,7 @@
 									ng-click="vm.clearOrganizationSelection()">{{'ClearAll'|translate}}
 							</button>
 							<button class="wfm-btn wfm-btn-invis-primary"
-									ng-click="vm.applyOrganizationSelection()">{{'Close'|translate}}
+									ng-click="vm.closeOrganizationPicker()">{{'Close'|translate}}
 							</button>
 						</div>
 
@@ -80,20 +80,19 @@
 			</div>
 		</div>
 	</div>
-
+	
 	<div class="panel material-depth-1 card-panel" ng-repeat="card in vm.cards">
-		<div class="card-panel-header-wrapper pointer left-border" ng-click="vm.openCard = !vm.openCard"
-			 style="background-color: {{vm.toneAdherence(card.TeamAdherence)}}">
-			{{card.Name}}&nbsp;&nbsp;<strong>{{card.TeamAdherence}}%</strong>
+		<div class="card-panel-header-wrapper pointer left-border" ng-click="card.toggle()">
+			<strong>{{card.Name}}</strong>
 		</div>
-		<div class="card-panel-content-wrapper" ng-show="vm.openCard">
+		<div class="card-panel-content-wrapper" ng-show="card.isOpen">
 			<table class="wfm-table">
 				<thead>
 				<tr>
 					<th style="width: 25%; height: 32px">{{'Agent'|translate}}</th>
 					<th style="width: 45px; text-align: center"
 						ng-repeat="day in card.Agents[0].Days">
-						{{day.Date}}
+						{{day.DisplayDate}}
 					</th>
 					<th style="width: 20%">{{'Adherence'|translate}}</th>
 					<th>{{'LateForWork'|translate}}</th>
@@ -103,10 +102,12 @@
 				<tr ng-repeat="agent in card.Agents" style="background-color: transparent">
 					<td style="max-width:200px; overflow: hidden; text-overflow: ellipsis">{{agent.Name}}</td>
 					<td ng-repeat="day in agent.Days" class="cell">
-						<div ng-class="day.WasLateForWork ? 'late-for-work-flag': ''"></div>
-						<div class="square" style="background-color: {{vm.toneAdherence(day.Adherence)}}">
-							{{day.Adherence}}
-						</div>
+						<a ng-href="{{day.HistoricalAdherenceUrl}}">
+							<div ng-class="day.WasLateForWork ? 'late-for-work-flag': ''"></div>
+							<div class="square" style="background-color: {{day.Color}}">
+								{{day.Adherence}}
+							</div>
+						</a>
 					</td>
 					<td>
 						<div class="adherence-bar-container">

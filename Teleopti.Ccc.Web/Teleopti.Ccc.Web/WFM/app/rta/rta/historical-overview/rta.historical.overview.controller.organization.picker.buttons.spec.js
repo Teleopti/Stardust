@@ -30,7 +30,7 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		expect(vm.clearEnabled).toBe(true);
 	});
 
-	it('should disable clear if all organization is deselected', function (t) {
+	it('should disable clear when all organization is deselected', function (t) {
 		t.backend.withOrganization({
 			Id: 'LondonId'
 		});
@@ -38,15 +38,13 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		var vm = t.createController();
 		t.apply(function () {
 			vm.sites[0].toggle();
-		});
-		t.apply(function () {
 			vm.sites[0].toggle();
 		});
 
 		expect(vm.clearEnabled).toBe(false);
 	});
 
-	it('should enable clear if multiple sites selections', function (t) {
+	it('should enable clear when multiple sites are selected', function (t) {
 		t.backend.withOrganization({
 			Id: 'LondonId'
 		})
@@ -57,8 +55,6 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		var vm = t.createController();
 		t.apply(function () {
 			vm.sites[0].toggle();
-		});
-		t.apply(function () {
 			vm.sites[1].toggle();
 		});
 
@@ -86,7 +82,7 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		expect(vm.clearEnabled).toBe(true);
 	});
 
-	it('should clear all', function (t) {
+	it('should deselect all organization when clear all', function (t) {
 		t.backend.withOrganization({
 			Id: 'LondonId'
 		});
@@ -94,15 +90,13 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		var vm = t.createController();
 		t.apply(function () {
 			vm.sites[0].toggle();
-		});
-		t.apply(function () {
 			vm.clearOrganizationSelection();
 		});
 
 		expect(vm.sites[0].isChecked).toBe(false);
 	});
 
-	it('should display empty string when clear all', function (t) {
+	it('should display empty selection text when clear all', function (t) {
 		t.backend.withOrganization({
 			Id: 'LondonId',
 			Name: 'London'
@@ -111,8 +105,6 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		var vm = t.createController();
 		t.apply(function () {
 			vm.sites[0].toggle();
-		});
-		t.apply(function () {
 			vm.clearOrganizationSelection();
 		});
 
@@ -122,10 +114,10 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 	it('should close organization picker', function (t) {
 		var vm = t.createController();
 		t.apply(function () {
-			vm.applyOrganizationSelection();
+			vm.closeOrganizationPicker();
 		});
 
-		expect(vm.organizationPickerOpen).toBe(false);
+		expect(vm.organizationPickerOpen).toBeFalsy();
 	});
 
 	it('should send request with siteIds', function (t) {
@@ -135,13 +127,12 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 		
 		var vm = t.createController();
 		t.apply(function () {
+			vm.toggleOrganizationPicker();
 			vm.sites[0].toggle();
+			vm.closeOrganizationPicker();
 		});
-		t.apply(function () {
-			vm.applyOrganizationSelection();
-		});
-
-		expect(t.backend.lastHistoricalOverviewRequestParams.siteIds).toContain('LondonId');
+		
+		expect(t.backend.lastParams.historicalOverview().siteIds).toContain('LondonId');
 	});
 
 	it('should send request with teamIds', function (t) {
@@ -159,12 +150,11 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 
 		var vm = t.createController();
 		t.apply(function () {
+			vm.toggleOrganizationPicker();
 			vm.sites[0].Teams[0].toggle();
-		});
-		t.apply(function () {
-			vm.applyOrganizationSelection();
+			vm.closeOrganizationPicker();
 		});
 
-		expect(t.backend.lastHistoricalOverviewRequestParams.teamIds).toContain('RedTeamId');
+		expect(t.backend.lastParams.historicalOverview().teamIds).toContain('RedTeamId');
 	});
 });

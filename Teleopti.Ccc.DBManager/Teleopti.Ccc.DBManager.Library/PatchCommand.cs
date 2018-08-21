@@ -112,11 +112,16 @@ namespace Teleopti.Ccc.DBManager.Library
 		public bool UseIntegratedSecurity { get; set; }
 		public DatabaseType DatabaseType { get; set; }
 		public string DatabaseTypeName => DatabaseType.GetName();
-		public bool CreateDatabase { get; set; }
 		public bool CreatePermissions { get; set; }
 		public bool UpgradeDatabase { get; set; }
-		public string RestoreBackup { get; private set; }
-		public string RestoreBackupIfNotExistsOrNewer { get; set; }
 		public string DataFolder { get; set; }
+		
+		public bool DropDatabase { get; set; }
+		public bool CreateDatabase { get; set; }
+		public bool RecreateDatabaseIfNotExistsOrNewer { get; set; }
+		
+		public string RestoreBackup { get; set; }
+		public string RestoreBackupIfNotExistsOrNewer { get; set; }
+		
 	}
 }

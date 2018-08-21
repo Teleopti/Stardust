@@ -74,30 +74,32 @@ namespace Teleopti.Ccc.DBManager.Library
 					return 0;
 				}
 
+				if (command.DropDatabase)
+					dropDatabase(command, context);
+
 				if (command.CreateDatabase)
-				{
-					_log.Write("Creating database " + command.DatabaseName + "...");
-					var creator = new DatabaseCreator(context.DatabaseFolder(), context.MasterExecuteSql());
-					if (command.IsAzure)
-						creator.CreateAzureDatabase(command.DatabaseType, command.DatabaseName);
-					else
-						creator.CreateDatabase(command.DatabaseType, command.DatabaseName);
-				}
+					createDatabase(command, context);
+
+				if (command.RecreateDatabaseIfNotExistsOrNewer)
+					ifNotExistOrNewer(command, context, () =>
+					{
+						_log.Write("Recreating database " + command.DatabaseName + "...");
+						dropDatabase(command, context);
+						createDatabase(command, context);
+					});
 
 				if (!string.IsNullOrEmpty(command.RestoreBackup))
+				{
+					_log.Write("Restoring database " + command.DatabaseName + "...");
 					context.Restorer().Restore(command);
+				}
 
 				if (!string.IsNullOrEmpty(command.RestoreBackupIfNotExistsOrNewer))
-				{
-					if (!context.DatabaseExists())
-						context.Restorer().Restore(command);
-					else
+					ifNotExistOrNewer(command, context, () =>
 					{
-						var existingDatabaseIsNewer = context.DatabaseVersionInformation().GetDatabaseVersion() > context.SchemaVersionInformation().GetSchemaVersion(command.DatabaseType);
-						if (existingDatabaseIsNewer)
-							context.Restorer().Restore(command);
-					}
-				}
+						_log.Write("Restoring database " + command.DatabaseName + "...");
+						context.Restorer().Restore(command);
+					});
 
 				if (!context.DatabaseExists())
 				{
@@ -163,6 +165,35 @@ namespace Teleopti.Ccc.DBManager.Library
 			{
 				_log.Dispose();
 			}
+		}
+
+		private static void ifNotExistOrNewer(PatchCommand command, PatchContext context, Action action)
+		{
+			if (!context.DatabaseExists())
+				action.Invoke();
+			else
+			{
+				var existingDatabaseIsNewer = context.DatabaseVersionInformation().GetDatabaseVersion() > context.SchemaVersionInformation().GetSchemaVersion(command.DatabaseType);
+				if (existingDatabaseIsNewer)
+					action.Invoke();
+			}
+		}
+
+		private void dropDatabase(PatchCommand command, PatchContext context)
+		{
+			_log.Write("Dropping database " + command.DatabaseName + "...");
+			new DatabaseDropper(context.MasterExecuteSql())
+				.DropDatabase(command.DatabaseName);
+		}
+
+		private void createDatabase(PatchCommand command, PatchContext context)
+		{
+			_log.Write("Creating database " + command.DatabaseName + "...");
+			var creator = new DatabaseCreator(context.DatabaseFolder(), context.MasterExecuteSql());
+			if (command.IsAzure)
+				creator.CreateAzureDatabase(command.DatabaseType, command.DatabaseName);
+			else
+				creator.CreateDatabase(command.DatabaseType, command.DatabaseName);
 		}
 
 		public void SetLogger(IUpgradeLog logger)
