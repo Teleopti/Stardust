@@ -1040,6 +1040,10 @@ input.use-default-startTime {
 	margin-bottom: 3px;
 }
 
+.cart-text-time {
+	font-size:12px;
+}
+
 .cart-menu {
 	position: fixed;
 	bottom: 3%;

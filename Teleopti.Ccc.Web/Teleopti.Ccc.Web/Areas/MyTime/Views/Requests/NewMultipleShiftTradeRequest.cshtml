@@ -388,7 +388,7 @@
 								<!--/ko-->
 								<!--ko if:mySchedule && !mySchedule.isDayOff-->
 								<span class="cart-schedule-category cart-text" data-bind="text:mySchedule.categoryName,style:{'background-color': mySchedule.categoryColor ? mySchedule.categoryColor: 'none', 'color': mySchedule.categoryColor ? $root.getTextColor(mySchedule.categoryColor) : 'none'}"></span>
-								<span class="cart-text" data-bind="text:mySchedule.scheduleStart + $root.getOvernightFlag(mySchedule.scheduleStartTime(), date) + '-' + mySchedule.scheduleEnd + $root.getOvernightFlag(mySchedule.scheduleEndTime(), date)"></span>
+								<span class="cart-text cart-text-time" data-bind="text:mySchedule.scheduleStart + $root.getOvernightFlag(mySchedule.scheduleStartTime(), date) + '-' + mySchedule.scheduleEnd + $root.getOvernightFlag(mySchedule.scheduleEndTime(), date)"></span>
 								<span class="shift-trade-contract cart-text" data-bind="text:mySchedule.contractTime"></span>
 								<!--/ko-->
 							</div>
@@ -401,7 +401,7 @@
 								<!--/ko-->
 								<!--ko if:targetSchedule && !targetSchedule.isDayOff-->
 								<span class="cart-schedule-category cart-text" data-bind="text:targetSchedule.categoryName,style:{'background-color': targetSchedule.categoryColor ? targetSchedule.categoryColor: 'none', 'color': targetSchedule.categoryColor ? $root.getTextColor(targetSchedule.categoryColor) : 'none'}"></span>
-								<span class="cart-text" data-bind="text:targetSchedule.scheduleStart + $root.getOvernightFlag(targetSchedule.scheduleStartTime(), date) + '-' + targetSchedule.scheduleEnd + $root.getOvernightFlag(targetSchedule.scheduleEndTime(), date)"></span>
+								<span class="cart-text cart-text-time" data-bind="text:targetSchedule.scheduleStart + $root.getOvernightFlag(targetSchedule.scheduleStartTime(), date) + '-' + targetSchedule.scheduleEnd + $root.getOvernightFlag(targetSchedule.scheduleEndTime(), date)"></span>
 								<span class="shift-trade-contract cart-text" data-bind="text:targetSchedule.contractTime"></span>
 								<!--/ko-->
 							</div>
@@ -432,7 +432,10 @@
 		</div>
 	</div>
 
-	<button data-bind="click:$root.cartMeunClick, text:selectedCount, css:{'hiden': !showCartToggle()}" class="cart-menu"></button>
+	<button data-bind="click:$root.cartMeunClick, css:{'hiden': !showCartToggle()}" class="cart-menu">
+		<span data-bind="text:selectedCount, css:{'hiden': hideMobileCart}"></span>
+		<i data-bind="css:{'hiden':showMobileCart}" class="glyphicon glyphicon-arrow-left"></i>
+	</button>
 
 </div>
 
