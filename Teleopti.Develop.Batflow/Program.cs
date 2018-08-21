@@ -18,116 +18,102 @@ namespace Teleopti.Develop.Batflow
 		public static int Main(string[] args)
 		{
 			var log = new ConsoleLogger();
+			var fixer = new DatabaseFixer(log);
+
 			return Parser
 				.Default
 				.ParseArguments<FlowArguments, TestArguments>(args)
 				.MapResult(
 					(FlowArguments arguments) =>
 					{
-						var databaseBuilder = new DatabaseBuilder(log);
-
-						var develop = new BuildDatabasesCommand(arguments.DevelopBaseline, arguments.DevelopServer, null);
-						develop.ConsoleWrite();
-						if (buildDatabases(arguments.DevelopBaseline, arguments.DevelopBuildDatabases))
-							databaseBuilder.Build(develop);
+						var develop = new FixDatabasesCommand(arguments.DevelopBaseline, arguments.DevelopServer, null, DatabaseOperation.Ensure);
+						fixer.Fix(develop);
 						new FixMyConfigFixer().Fix(new FixMyConfigCommand
 						{
 							ApplicationDatabase = develop.ApplicationDatabase(),
 							AnalyticsDatabase = develop.AnalyticsDatabase()
 						});
 
-						var test = new BuildDatabasesCommand(arguments.TestBaseline, arguments.TestServer, "InfraTest");
-						test.ConsoleWrite();
-						if (buildDatabases(arguments.TestBaseline, arguments.TestBuildDatabases))
-							databaseBuilder.Build(test);
+						var test = new FixDatabasesCommand(arguments.TestBaseline, arguments.TestServer, "InfraTest", DatabaseOperation.Skip);
+						fixer.Fix(test);
 						new InfraTestConfigurator().Configure(new InfraTestConfigCommand
 						{
 							ApplicationDatabase = test.ApplicationDatabase(),
 							AnalyticsDatabase = test.AnalyticsDatabase()
 						});
-
-						Console.WriteLine();
-						Console.WriteLine("Did that flow well?");
 
 						return 0;
 					},
 					(TestArguments arguments) =>
 					{
-						var databaseBuilder = new DatabaseBuilder(log);
-
-						var test = new BuildDatabasesCommand(arguments.Baseline, arguments.Server, "InfraTest");
-						test.ConsoleWrite();
-						if (buildDatabases(arguments.Baseline, arguments.BuildDatabases))
-							databaseBuilder.Build(test);
+						var test = new FixDatabasesCommand(arguments.Baseline, arguments.Server, "InfraTest", DatabaseOperation.Init);
+						fixer.Fix(test);
 						new InfraTestConfigurator().Configure(new InfraTestConfigCommand
 						{
 							ApplicationDatabase = test.ApplicationDatabase(),
 							AnalyticsDatabase = test.AnalyticsDatabase()
 						});
-
-						Console.WriteLine();
-						Console.WriteLine("Did that flow well?");
 
 						return 0;
 					},
 					errs => 1);
 		}
 
-		public static bool buildDatabases(string baseline, bool buildDatabases) =>
-			!string.IsNullOrEmpty(baseline) || buildDatabases;
+		[Verb("flow", HelpText = "Restores baseline for applications and configures test projects. Dont worry about it.")]
+		public class FlowArguments
+		{
+			[Option("develop.baseline",
+				Default = "DemoSales2017",
+				HelpText = "Development database baseline to restore.")]
+			public string DevelopBaseline { get; set; }
 
-		[Verb("test", HelpText = "Set up test projects according to convention.")]
+			[Option("develop.server",
+				Default = ".",
+				HelpText = "Development database server.")]
+			public string DevelopServer { get; set; }
+
+			[Option("test.baseline",
+				Default = null,
+				HelpText = "Test database baseline to restore. Builds databases if specified.")]
+			public string TestBaseline { get; set; }
+
+			[Option("test.server",
+				Default = ".",
+				HelpText = "Test database server.")]
+			public string TestServer { get; set; }
+		}
+
+		[Verb("test.init", HelpText = "Initializes databases for test projects.")]
 		public class TestArguments
 		{
-			[Option("buildDatabases", Default = false, HelpText = "Build databases.")]
-			public bool BuildDatabases { get; set; }
-
-			[Option("server", Default = ".", HelpText = "Database server.")]
+			[Option("server",
+				Default = ".",
+				HelpText = "Database server.")]
 			public string Server { get; set; }
 
-			[Option("baseline", Default = null, HelpText = "Database baseline to restore. Builds databases if specified.")]
+			[Option("baseline",
+				Default = null,
+				HelpText = "Database baseline to restore. Builds databases if specified.")]
 			public string Baseline { get; set; }
 		}
 
-		[Verb("flow", HelpText = "Set up everything according to convention. Dont worry about it.")]
-		public class FlowArguments
-		{
-			[Option("develop.buildDatabases", Default = false, HelpText = "Build development databases.")]
-			public bool DevelopBuildDatabases { get; set; }
-
-			[Option("develop.server", Default = ".", HelpText = "Development database server.")]
-			public string DevelopServer { get; set; }
-
-			[Option("develop.baseline", Default = "DemoSales2017",
-				HelpText = "Development database baseline to restore. Builds databases if specified.")]
-			public string DevelopBaseline { get; set; }
-
-			[Option("test.buildDatabases", Default = false, HelpText = "Build test databases.")]
-			public bool TestBuildDatabases { get; set; }
-
-			[Option("test.server", Default = ".", HelpText = "Test database server.")]
-			public string TestServer { get; set; }
-
-			[Option("test.baseline", Default = null,
-				HelpText = "Test database baseline to restore. Builds databases if specified.")]
-			public string TestBaseline { get; set; }
-		}
-
-		public class BuildDatabasesCommand
+		public class FixDatabasesCommand
 		{
 			private readonly string _baseline;
 			private readonly string _server;
 			private readonly string _databasePrefix;
+			private readonly DatabaseOperation _databaseOperation;
 
-			public BuildDatabasesCommand(string baseline, string server, string databasePrefix)
+			public FixDatabasesCommand(string baseline, string server, string databasePrefix, DatabaseOperation databaseOperation)
 			{
 				_baseline = baseline;
 				_server = server;
 				_databasePrefix = databasePrefix;
+				_databaseOperation = databaseOperation;
 			}
 
+			public DatabaseOperation Operation() => _databaseOperation;
 			public string Server() => _server;
-
 			public string RepositoryPath() => new RepositoryRootFolder().Path();
 
 			public string RepositoryName() =>
@@ -179,9 +165,33 @@ namespace Teleopti.Develop.Batflow
 				return files;
 			}
 
-			public void ConsoleWrite()
+			public void ConsoleStart()
 			{
-				Console.WriteLine();
+				Console.WriteLine("Will try to fix databases like this:");
+				consoleWrite();
+			}
+
+			public void ConsoleEnd()
+			{
+				Console.WriteLine($@"
+              _,     _   _    ,_  
+           o888P     Y8o8Y     Y888o.
+         d88888      88888      88888b
+       ,8888888b_  _d88888b_  _d8888888,
+       888888888888888888888888888888888
+       888888888888888888888888888888888
+        Y8888P'Y888P'Y888P-Y888P'Y88888'
+         Y888   '8'   Y8P   '8'   888Y
+          '8o          V          o8'
+             `                   `
+");
+				Console.WriteLine("Did that flow well?");
+				consoleWrite();
+			}
+
+			private void consoleWrite()
+			{
+				Console.WriteLine($@"Operation: {Operation()}");
 				Console.WriteLine($@"Repository: {RepositoryPath()}  ({RepositoryName()})");
 				Console.WriteLine($@"Database source: {DatabaseSourcePath()}");
 				Console.WriteLine($@"Server: {Server()}");
@@ -193,56 +203,35 @@ namespace Teleopti.Develop.Batflow
 				Console.WriteLine($@"{ApplicationDatabaseBackup()}");
 				Console.WriteLine($@"{AnalyticsDatabaseBackup()}");
 				Console.WriteLine($@"{AggDatabaseBackup()}");
-				Console.WriteLine();
 			}
 		}
 
-		public class DatabaseBuilder
+		public enum DatabaseOperation
+		{
+			Skip,
+			Ensure,
+			Init
+		}
+
+		public class DatabaseFixer
 		{
 			private readonly IUpgradeLog _log;
 
-			public DatabaseBuilder(IUpgradeLog log)
+			public DatabaseFixer(IUpgradeLog log)
 			{
 				_log = log;
 			}
 
-			public void Build(BuildDatabasesCommand command)
+			public void Fix(FixDatabasesCommand command)
 			{
-				new DatabasePatcher(_log).Run(new PatchCommand
-				{
-					ServerName = command.Server(),
-					DatabaseName = command.ApplicationDatabase(),
-					UseIntegratedSecurity = true,
-					DatabaseType = DatabaseType.TeleoptiCCC7,
-					UpgradeDatabase = true,
-					DbManagerFolderPath = command.DatabaseSourcePath(),
-					CreateDatabase = command.ApplicationDatabaseBackup() == null,
-					RestoreBackupIfNotExistsOrNewer = command.ApplicationDatabaseBackup()
-				});
+				if (command.Operation() == DatabaseOperation.Skip)
+					return;
 
-				new DatabasePatcher(_log).Run(new PatchCommand
-				{
-					ServerName = command.Server(),
-					DatabaseName = command.AnalyticsDatabase(),
-					UseIntegratedSecurity = true,
-					DatabaseType = DatabaseType.TeleoptiAnalytics,
-					UpgradeDatabase = true,
-					DbManagerFolderPath = command.DatabaseSourcePath(),
-					CreateDatabase = command.AnalyticsDatabaseBackup() == null,
-					RestoreBackupIfNotExistsOrNewer = command.AnalyticsDatabaseBackup()
-				});
+				command.ConsoleStart();
 
-				new DatabasePatcher(_log).Run(new PatchCommand
-				{
-					ServerName = command.Server(),
-					DatabaseName = command.AggDatabase(),
-					UseIntegratedSecurity = true,
-					DatabaseType = DatabaseType.TeleoptiCCCAgg,
-					UpgradeDatabase = true,
-					DbManagerFolderPath = command.DatabaseSourcePath(),
-					CreateDatabase = command.AggDatabaseBackup() == null,
-					RestoreBackupIfNotExistsOrNewer = command.AggDatabaseBackup()
-				});
+				patch(command, command.ApplicationDatabase(), command.ApplicationDatabaseBackup(), DatabaseType.TeleoptiCCC7);
+				patch(command, command.AnalyticsDatabase(), command.AnalyticsDatabaseBackup(), DatabaseType.TeleoptiAnalytics);
+				patch(command, command.AggDatabase(), command.AggDatabaseBackup(), DatabaseType.TeleoptiCCCAgg);
 
 				new UpgradeRunner(_log).Upgrade(new UpgradeCommand
 				{
@@ -252,6 +241,42 @@ namespace Teleopti.Develop.Batflow
 					AggDatabase = command.AggDatabase(),
 					UseIntegratedSecurity = true
 				});
+
+				command.ConsoleEnd();
+			}
+
+			private void patch(FixDatabasesCommand command, string database, string backup, DatabaseType type)
+			{
+				var patchCommand = new PatchCommand
+				{
+					ServerName = command.Server(),
+					DatabaseName = database,
+					UseIntegratedSecurity = true,
+					DatabaseType = type,
+					UpgradeDatabase = true,
+					DbManagerFolderPath = command.DatabaseSourcePath()
+				};
+
+				if (command.Operation() == DatabaseOperation.Ensure)
+				{
+					if (backup != null)
+						patchCommand.RestoreBackupIfNotExistsOrNewer = backup;
+					else
+						patchCommand.RecreateDatabaseIfNotExistsOrNewer = true;
+				}
+
+				if (command.Operation() == DatabaseOperation.Init)
+				{
+					if (backup != null)
+						patchCommand.RestoreBackup = backup;
+					else
+					{
+						patchCommand.DropDatabase = true;
+						patchCommand.CreateDatabase = true;
+					}
+				}
+
+				new DatabasePatcher(_log).Run(patchCommand);
 			}
 		}
 	}
