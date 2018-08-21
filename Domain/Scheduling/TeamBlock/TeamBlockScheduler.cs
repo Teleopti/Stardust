@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					}
 
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
-					schedulingOptions.NotAllowedShiftCategories.Add(roleModelShift.TheMainShift.ShiftCategory);
+					schedulingOptions.NotAllowedShiftCategories.Add(roleModelShift.TheWorkShift.ShiftCategory);
 					roleModelShift = _roleModelSelector.Select(schedules, allSkillDays, workShiftSelector, teamBlockInfo, datePointer, selectedTeamMembers.First(),
 						schedulingOptions, shiftNudgeDirective.EffectiveRestriction, _groupPersonSkillAggregator);
 					success = tryScheduleBlock(orginalPersonAssignments, schedulingCallback, workShiftSelector, teamBlockInfo, schedulingOptions, selectedBlockDays, resourceCalculationData,
