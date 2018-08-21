@@ -1,4 +1,6 @@
 ﻿(function() {
 	'use strict';
-	angular.module('wfm.utilities', []);
+	angular.module('wfm.utilities', [
+		'pascalprecht.translate'
+	]);
 })();

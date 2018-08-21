@@ -1576,8 +1576,10 @@
     <Content Include="WFM\app\global\throttle\_modules.js" />
     <Content Include="WFM\app\global\utilities\filesize.filter.js" />
     <Content Include="WFM\app\global\utilities\indexOf.polyfill.util.js" />
+    <Content Include="WFM\app\global\utilities\skill.type.service.spec.js" />
     <Content Include="WFM\app\global\utilities\serviceDateFormatHelper.service.spec.js" />
     <Content Include="WFM\app\global\utilities\serviceDateFormatHelper.service.js" />
+    <Content Include="WFM\app\global\utilities\skill.type.service.js" />
     <Content Include="WFM\app\global\utilities\skillIcon.service.js" />
     <Content Include="WFM\app\global\work-hour-picker\work-hour-picker.component.js" />
     <Content Include="WFM\app\global\work-hour-picker\work-hour-picker.component.spec.js" />
