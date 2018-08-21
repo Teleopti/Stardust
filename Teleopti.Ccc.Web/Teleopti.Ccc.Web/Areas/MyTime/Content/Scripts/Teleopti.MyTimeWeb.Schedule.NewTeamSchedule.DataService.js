@@ -29,6 +29,7 @@
 				SelectedDate: date,
 				ScheduleFilter: {
 					filteredStartTimes: filter.filteredStartTimes,
+					filteredEndTimes: filter.filteredEndTimes,
 					isDayOff: filter.isDayOff,
 					searchNameText: filter.searchNameText,
 					teamIds: filter.selectedTeamIds.join(',')

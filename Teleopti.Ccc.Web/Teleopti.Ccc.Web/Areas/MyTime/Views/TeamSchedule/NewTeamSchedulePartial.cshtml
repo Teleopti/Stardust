@@ -236,6 +236,11 @@
 
 			<div class="new-teamschedule-time-slider-container">
 				<label>@Resources.EndTime</label>
+				<div class="new-teamschedule-time-slider-line relative">
+					<span class="end-time-slider-start-label" data-bind="text: endTimeStart, visible: showEndTimeStart"></span>
+					<span class="end-time-slider-end-label" data-bind="text: endTimeEnd"></span>
+					<div class="end-time-slider"></div>
+				</div>
 			</div>
 			<!-- ko if: isHostAMobile-->
 			<div class="new-teamschedule-day-off-toggle">

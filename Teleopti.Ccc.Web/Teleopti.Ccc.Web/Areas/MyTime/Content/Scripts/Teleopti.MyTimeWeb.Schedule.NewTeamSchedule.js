@@ -21,7 +21,9 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 		agentScheduleColumnWidth = onMobile ? 50 : 80,
 		minScrollBlockWidth = 60,
 		startTimeStartInMinute = 0,
-		startTimeEndInMinute = 0;
+		startTimeEndInMinute = 0,
+		endTimeStartInMinute = 0,
+		endTimeEndInMinute = 0;
 
 	function cleanBinding() {
 		ko.cleanNode($('#page')[0]);
@@ -216,30 +218,41 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 		var timelineEndInMinute = 24 * 60;
 		var containerWidth = $('.new-teamschedule-time-slider-line').width();
 		var minutesOfOnePixel = (timelineEndInMinute - timelineStartInMinute) / containerWidth;
-		var marginInterval = 1 * 60;
+		var marginInterval = 2 * 60;
+		var moveStep = 15;
 
-		var filteredStartTime = vm.filter.filteredStartTimes.split('-');
-		var startTimeStartValue =
-			Math.floor(moment.duration(filteredStartTime[0]).asHours()) * 60 +
-			moment.duration(filteredStartTime[0]).minutes();
-		var startTimeEndValue =
-			Math.floor(moment.duration(filteredStartTime[1]).asHours()) * 60 +
-			moment.duration(filteredStartTime[1]).minutes();
+		var filteredStartTime = getFilteredTime(vm.filter.filteredStartTimes);
+		var filteredEndTime = getFilteredTime(vm.filter.filteredEndTimes);
 
 		$('.start-time-slider').slider({
+			animate: 'fast',
+			min: timelineStartInMinute,
+			max: timelineEndInMinute,
+			step: moveStep,
 			range: true,
-			min: 0,
-			max: 1440,
-			step: 15,
-			values: [startTimeStartValue, startTimeEndValue],
+			values: [filteredStartTime.start, filteredStartTime.end],
 			slide: function(event, ui) {
-				return setSliderTime(ui);
+				return setStartSliderTime(ui);
 			}
 		});
 
-		setSliderTime();
+		setStartSliderTime();
 
-		function setSliderTime(ui) {
+		$('.end-time-slider').slider({
+			animate: 'fast',
+			min: timelineStartInMinute,
+			max: timelineEndInMinute,
+			step: moveStep,
+			range: true,
+			values: [filteredEndTime.start, filteredEndTime.end],
+			slide: function(event, ui) {
+				return setEndSliderTime(ui);
+			}
+		});
+
+		setEndSliderTime();
+
+		function setStartSliderTime(ui) {
 			if (ui && ui.values) {
 				startTimeStartInMinute = ui.values[0];
 				startTimeEndInMinute = ui.values[1];
@@ -275,6 +288,57 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 			vm.startTimeEnd(startTimeEnd);
 			$('.start-time-slider-start-label').css({ left: value0 / minutesOfOnePixel });
 			$('.start-time-slider-end-label').css({ left: value1 / minutesOfOnePixel });
+		}
+
+		function setEndSliderTime(ui) {
+			if (ui && ui.values) {
+				endTimeStartInMinute = ui.values[0];
+				endTimeEndInMinute = ui.values[1];
+			} else {
+				endTimeStartInMinute = $('.end-time-slider').slider('values', 0);
+				endTimeEndInMinute = $('.end-time-slider').slider('values', 1);
+			}
+
+			if (endTimeStartInMinute != 0 && endTimeEndInMinute - endTimeStartInMinute < marginInterval) return false;
+
+			var hours0 = Math.floor(endTimeStartInMinute / 60),
+				minutes0 = parseInt(endTimeStartInMinute % 60),
+				hours1 = Math.floor(endTimeEndInMinute / 60),
+				minutes1 = parseInt(endTimeEndInMinute % 60);
+
+			setEndInterval(hours0, minutes0, hours1, minutes1, endTimeStartInMinute, endTimeEndInMinute);
+
+			if (endTimeStartInMinute == 0 && endTimeEndInMinute - endTimeStartInMinute < marginInterval) {
+				vm.showEndTimeStart(false);
+			}
+			return true;
+		}
+
+		function setEndInterval(hours0, minutes0, hours1, minutes1, value0, value1) {
+			var endTimeStart =
+				(hours0 < 10 ? '0' + hours0 : hours0) + ':' + (minutes0 < 10 ? '0' + minutes0 : minutes0);
+			var endTimeEnd = (hours1 < 10 ? '0' + hours1 : hours1) + ':' + (minutes1 < 10 ? '0' + minutes1 : minutes1);
+
+			vm.endTimeStart(endTimeStart);
+			vm.showEndTimeStart(true);
+			vm.endTimeEnd(endTimeEnd);
+			$('.end-time-slider-start-label').css({ left: value0 / minutesOfOnePixel });
+			$('.end-time-slider-end-label').css({ left: value1 / minutesOfOnePixel });
+		}
+
+		function getFilteredTime(filteredTimeString) {
+			var filteredTimeArr = filteredTimeString.split('-');
+			var startValue =
+				Math.floor(moment.duration(filteredTimeArr[0]).asHours()) * 60 +
+				moment.duration(filteredTimeArr[0]).minutes();
+			var endValue =
+				Math.floor(moment.duration(filteredTimeArr[1]).asHours()) * 60 +
+				moment.duration(filteredTimeArr[1]).minutes();
+
+			return {
+				start: startValue,
+				end: endValue
+			};
 		}
 	}
 

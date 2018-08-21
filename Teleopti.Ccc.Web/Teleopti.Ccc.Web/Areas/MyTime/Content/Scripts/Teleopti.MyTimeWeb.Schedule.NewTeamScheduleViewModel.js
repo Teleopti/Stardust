@@ -10,6 +10,7 @@
 		getTextColoFn = Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor,
 		timeLineOffset = 50,
 		minPixelsToDisplayTitle = 30,
+		defaultFilterTime = '00:00',
 		rawTimeline = [];
 
 	self.isHostAMobile = Teleopti.MyTimeWeb.Common.IsHostAMobile();
@@ -23,17 +24,18 @@
 	self.selectedDate = ko.observable(moment());
 	self.displayDate = ko.observable(self.selectedDate().format(dateOnlyFormat));
 	self.availableTeams = ko.observableArray();
+	self.selectedTeamIds = [];
+	self.defaultTeamId = '';
 	self.selectedTeam = ko.observable();
 	self.selectedTeamName = ko.observable();
 	self.loadGroupAndTeams = loadGroupAndTeams;
 	self.isTeamsAndGroupsLoaded = ko.observable(false);
-	self.selectedTeamIds = [];
-	self.defaultTeamId = '';
 	self.scheduleContainerHeight = ko.observable(0);
 	self.timeLines = ko.observableArray();
 	self.mySchedule = ko.observable();
 	self.teamSchedules = ko.observableArray();
 	self.agentNames = ko.observableArray();
+
 	self.filterChangedCallback = filterChangedCallback;
 	self.selectedDateSubscription = null;
 	self.selectedTeamSubscription = null;
@@ -49,11 +51,17 @@
 	self.emptySearchResult = ko.observable(false);
 	self.isAgentScheduleLoaded = ko.observable(false);
 	self.isLoadingMoreAgentSchedules = false;
+
 	self.showStartTimeStart = ko.observable(true);
-	self.startTimeStart = ko.observable('00:00');
-	self.startTimeEnd = ko.observable('00:00');
+	self.startTimeStart = ko.observable(defaultFilterTime);
+	self.startTimeEnd = ko.observable(defaultFilterTime);
+	self.showEndTimeStart = ko.observable(true);
+	self.endTimeStart = ko.observable(defaultFilterTime);
+	self.endTimeEnd = ko.observable(defaultFilterTime);
+
 	self.filter = {
 		filteredStartTimes: '',
+		filteredEndTimes: '',
 		searchNameText: '',
 		selectedTeamIds: [],
 		isDayOff: false
@@ -114,16 +122,28 @@
 		self.filter.searchNameText = self.searchNameText();
 		self.filter.selectedTeamIds = self.selectedTeamIds.concat();
 
-		if(self.startTimeStart() === '00:00' && self.startTimeEnd() === '00:00' ) {
+		if (self.startTimeStart() === defaultFilterTime && self.startTimeEnd() === defaultFilterTime) {
 			self.filter.filteredStartTimes = '';
 		} else {
 			self.filter.filteredStartTimes =
-			(self.startTimeStart() ? self.startTimeStart() : '') +
-			'-' +
-			(self.startTimeEnd() ? self.startTimeEnd() : '');
+				(self.startTimeStart() ? self.startTimeStart() : '') +
+				'-' +
+				(self.startTimeEnd() ? self.startTimeEnd() : '');
 		}
 
-		self.hasTimeFiltered(self.startTimeStart() != '00:00' || self.startTimeEnd() != '00:00');
+		if (self.endTimeStart() === defaultFilterTime && self.endTimeEnd() === defaultFilterTime) {
+			self.filter.filteredEndTimes = '';
+		} else {
+			self.filter.filteredEndTimes =
+				(self.endTimeStart() ? self.endTimeStart() : '') + '-' + (self.endTimeEnd() ? self.endTimeEnd() : '');
+		}
+
+		self.hasTimeFiltered(
+			self.startTimeStart() != defaultFilterTime ||
+				self.startTimeEnd() != defaultFilterTime ||
+				self.endTimeStart() != defaultFilterTime ||
+				self.endTimeEnd() != defaultFilterTime
+		);
 		self.filterChangedCallback(self.selectedDate());
 	};
 
@@ -193,7 +213,8 @@
 		self.totalAgentCount(data.TotalAgentCount);
 
 		self.hasFiltered(
-			!!self.filter.searchNameText ||
+			self.hasTimeFiltered() ||
+				!!self.filter.searchNameText ||
 				((self.selectedTeamIds[0] && self.selectedTeamIds[0] != self.defaultTeamId) ||
 					(self.isMobileEnabled && self.showOnlyDayOff()))
 		);

@@ -997,6 +997,68 @@
 		equal(ajaxOption.ScheduleFilter.filteredStartTimes === '', true);
 	});
 
+	test('should filter agents using end time slider', function() {
+		$('body').append(agentSchedulesHtml);
+
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+		$('.new-teamschedule-time-filter').click();
+
+		vm.endTimeStart('06:00');
+		vm.endTimeEnd('10:00');
+
+		$('.new-teamschedule-submit-buttons button.btn-primary').click();
+
+		equal(completeLoadedCount, 2);
+		equal($('.teammates-agent-name-row .new-teamschedule-agent-name:nth-child(1) .text-name').length, 1);
+		equal(
+			$('.teammates-agent-name-row .new-teamschedule-agent-name:nth-child(1) .text-name').text(),
+			'Jon Kleinsmith1'
+		);
+	});
+
+	test('should not filter agents using end time slider if both end time start and end time end are zero', function() {
+		$('body').append(agentSchedulesHtml);
+
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+		$('.new-teamschedule-time-filter').click();
+
+		vm.endTimeStart('00:00');
+		vm.endTimeEnd('00:00');
+
+		$('.new-teamschedule-submit-buttons button.btn-primary').click();
+
+		equal(completeLoadedCount, 2);
+		equal(ajaxOption.ScheduleFilter.filteredStartTimes === '', true);
+	});
+
+	test('should filter agents using both start and end time slider', function() {
+		$('body').append(agentSchedulesHtml);
+
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+		$('.new-teamschedule-time-filter').click();
+
+		vm.startTimeStart('04:00');
+		vm.startTimeEnd('07:00');
+
+		vm.endTimeStart('05:00');
+		vm.endTimeEnd('10:00');
+
+		$('.new-teamschedule-submit-buttons button.btn-primary').click();
+
+		equal(completeLoadedCount, 2);
+		equal($('.teammates-agent-name-row .new-teamschedule-agent-name .text-name').length, 20);
+		equal(
+			$('.teammates-agent-name-row .new-teamschedule-agent-name:nth-child(1) .text-name').text(),
+			'Jon Kleinsmith1'
+		);
+	});
+
 	function setup() {
 		fetchTeamScheduleDataRequestCount = 0;
 		completeLoadedCount = 0;
@@ -1403,25 +1465,52 @@
 					var take = ajaxOption.Paging.Take;
 
 					var filteredAgentSchedulesData = [];
+					filteredAgentSchedulesData = fakeOriginalAgentSchedulesData;
+
 					if (ajaxOption.ScheduleFilter.isDayOff) {
-						filteredAgentSchedulesData = fakeOriginalAgentSchedulesData.filter(function(s) {
+						filteredAgentSchedulesData = filteredAgentSchedulesData.filter(function(s) {
 							return s.IsDayOff;
 						});
-					} else if (ajaxOption.ScheduleFilter.filteredStartTimes) {
-						var start = ajaxOption.ScheduleFilter.filteredStartTimes.split('-')[0];
+					}
 
+					if (ajaxOption.ScheduleFilter.filteredStartTimes) {
+						var start = ajaxOption.ScheduleFilter.filteredStartTimes.split('-')[0];
 						var startHour = parseInt(start.split(':')[0]);
 						var startMinute = parseInt(start.split(':')[1]);
 
-						filteredAgentSchedulesData = fakeOriginalAgentSchedulesData.filter(function(s) {
-							var starTime = moment(s.Periods[0].StartTime);
+						var end = ajaxOption.ScheduleFilter.filteredStartTimes.split('-')[1];
+						var endHour = parseInt(end.split(':')[0]);
+						var endMinute = parseInt(end.split(':')[1]);
+
+						filteredAgentSchedulesData = filteredAgentSchedulesData.filter(function(s) {
+							var startTime = moment(s.Periods[0].StartTime);
 							return (
-								starTime.hours() > startHour ||
-								(starTime.hours() == startHour && starTime.minutes() > startMinute)
+								(startTime.hours() > startHour ||
+									(startTime.hours() == startHour && startTime.minutes() > startMinute)) &&
+								(startTime.hours() < endHour ||
+									(startTime.hours() == endHour && startTime.minutes() < endMinute))
 							);
 						});
-					} else {
-						filteredAgentSchedulesData = fakeOriginalAgentSchedulesData;
+					}
+
+					if (ajaxOption.ScheduleFilter.filteredEndTimes) {
+						var start = ajaxOption.ScheduleFilter.filteredEndTimes.split('-')[0];
+						var startHour = parseInt(start.split(':')[0]);
+						var startMinute = parseInt(start.split(':')[1]);
+
+						var end = ajaxOption.ScheduleFilter.filteredEndTimes.split('-')[1];
+						var endHour = parseInt(end.split(':')[0]);
+						var endMinute = parseInt(end.split(':')[1]);
+
+						filteredAgentSchedulesData = filteredAgentSchedulesData.filter(function(s) {
+							var endTime = moment(s.Periods[0].EndTime);
+							return (
+								(endTime.hours() > startHour ||
+									(endTime.hours() == startHour && endTime.minutes() > startMinute)) &&
+								(endTime.hours() < endHour ||
+									(endTime.hours() == endHour && endTime.minutes() < endMinute))
+							);
+						});
 					}
 
 					var pagedAgentSchedules = [];
@@ -1485,7 +1574,7 @@
 			'				<!-- ko ifnot: isHostAMobile -->',
 			'				<li class="new-teamschedule-time-filter">',
 			'					<a>',
-			'						<i class="glyphicon glyphicon-time"></i>',
+			'						<i class="glyphicon glyphicon-time" data-bind="style: {color: hasTimeFiltered() ? \'yellow\': \'white\'}"></i>',
 			'					</a>',
 			'				</li>',
 			"				<li class=\"new-teamschedule-day-off-toggle\" data-bind=\"tooltip: { title: '@Resources.ShowOnlyDayOff', html: true, trigger: 'hover', placement: 'bottom'}\">",
@@ -1641,13 +1730,18 @@
 			'			<div class="new-teamschedule-time-slider-container">',
 			'				<label>@Resources.StartTime</label>',
 			'				<div class="new-teamschedule-time-slider-line relative">',
-			'					<span class="start-time-slider-start-label" data-bind="text: startTimeStart"></span>',
+			'					<span class="start-time-slider-start-label" data-bind="text: startTimeStart, visible: showStartTimeStart"></span>',
 			'					<span class="start-time-slider-end-label" data-bind="text: startTimeEnd"></span>',
 			'					<div class="start-time-slider"></div>',
 			'				</div>',
 			'			</div>',
 			'			<div class="new-teamschedule-time-slider-container">',
 			'				<label>@Resources.EndTime</label>',
+			'				<div class="new-teamschedule-time-slider-line relative">',
+			'					<span class="end-time-slider-start-label" data-bind="text: endTimeStart, visible: showEndTimeStart"></span>',
+			'					<span class="end-time-slider-end-label" data-bind="text: endTimeEnd"></span>',
+			'					<div class="end-time-slider"></div>',
+			'				</div>',
 			'			</div>',
 			'			<!-- ko if: isHostAMobile-->',
 			'			<div class="new-teamschedule-day-off-toggle">',

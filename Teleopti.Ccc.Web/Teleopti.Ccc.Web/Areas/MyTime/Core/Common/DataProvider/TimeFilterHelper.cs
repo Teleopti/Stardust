@@ -32,9 +32,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			var periods = from ps in periodsAsString
 							  let start = int.Parse(ps.Start.Split(':')[0])
 							  let end = int.Parse(ps.End.Split(':')[0])
+							  let startMinutes = int.Parse(ps.Start.Split(':')[1])
+							  let endMinutes = int.Parse(ps.End.Split(':')[1])
 							  select new MinMax<DateTime>(
-								  selectedDate.Date.Add(TimeSpan.FromHours(start)),
-								  selectedDate.Date.Add(TimeSpan.FromHours(end)));
+								  selectedDate.Date.Add(TimeSpan.FromHours(start)).AddMinutes(startMinutes),
+								  selectedDate.Date.Add(TimeSpan.FromHours(end)).AddMinutes(endMinutes));
 			var periodsList = periods.ToList();
 
 			if (!periodsList.Any())

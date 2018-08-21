@@ -65,6 +65,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		}
 
 		[Test]
+		public void ShouldGetFilterWithStartTimeAsUtcIncludingMinute()
+		{
+			const string startTime = "8:30-10:30";
+			var result = _filterHelper.GetFilter(_testDate, startTime, null, false, false);
+
+			var utcTime = new DateTime(2015, 3, 2, 7, 30, 0, DateTimeKind.Utc);
+
+			result.StartTimes.First().StartDateTime.Should().Be.EqualTo(utcTime);
+			result.StartTimes.First().EndDateTime.Should().Be.EqualTo(utcTime.AddHours(2));
+		}
+
+		[Test]
 		public void ShouldGetFilterWithEndTimeAsUtc()
 		{
 			const string endTime = "8:00-10:00";
@@ -76,6 +88,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			result.EndTimes.First().EndDateTime.Should().Be.EqualTo(utcTime.AddHours(2));
 			result.IsDayOff.Should().Be.False();
 			result.IsEmptyDay.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldGetFilterWithEndTimeAsUtcIncludingMinute()
+		{
+			const string endTime = "8:30-10:30";
+			var result = _filterHelper.GetFilter(_testDate, null, endTime, false, false);
+
+			var utcTime = new DateTime(2015, 3, 2, 7, 30, 0, DateTimeKind.Utc);
+
+			result.EndTimes.First().StartDateTime.Should().Be.EqualTo(utcTime);
+			result.EndTimes.First().EndDateTime.Should().Be.EqualTo(utcTime.AddHours(2));
 		}
 
 		[Test]
