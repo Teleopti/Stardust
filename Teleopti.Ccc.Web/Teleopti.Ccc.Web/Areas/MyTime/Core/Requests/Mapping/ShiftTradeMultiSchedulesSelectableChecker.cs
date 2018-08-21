@@ -148,45 +148,38 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			return true;
 		}
 
-		private bool isMeetingOverSchedule(IPersonMeeting[] meetings, IScheduleDay scheduleDay)
-		{
-			var nonMainShiftRule = new NonMainShiftActivityRule();
-			var layers = scheduleDay?.PersonAssignment()?.ShiftLayers.ToList();
-			return meetings != null && meetings.Any(personMeeting => nonMainShiftRule.IsOverSchedule(personMeeting.Period, layers));
-		}
-
-		private bool isPersonalActivityOverSchedule(IEnumerable<PersonalShiftLayer> activities, IScheduleDay scheduleDay)
-		{
-			var nonMainShiftRule = new NonMainShiftActivityRule();
-			var shiftLayers = scheduleDay?.PersonAssignment()?.ShiftLayers.ToList();
-			return activities != null && activities.Any(activity => nonMainShiftRule.IsOverSchedule(activity.Period, shiftLayers));
-		}
-
 		private bool hasNonMainShiftActivities(IScheduleDay myScheduleDay, IScheduleDay personToScheduleDay)
 		{
 			if(!isRuleNeedToCheck(typeof(NonMainShiftActivityRule).FullName)) return false;
 
 			var overTime = myScheduleDay?.PersonAssignment()?.OvertimeActivities();
-			if (hasOvertime(overTime)) return true;
+			if (hasNonMainActivity(overTime)) return true;
 			var personToOverTime = personToScheduleDay?.PersonAssignment().OvertimeActivities();
-			if (hasOvertime(personToOverTime)) return true;
+			if (hasNonMainActivity(personToOverTime)) return true;
 
 			var myMeetings = myScheduleDay?.PersonMeetingCollection();
-			if (isMeetingOverSchedule(myMeetings, personToScheduleDay)) return true;
+			if (hasMeeting(myMeetings)) return true;
 			var personToMeetings = personToScheduleDay?.PersonMeetingCollection();
-			if (isMeetingOverSchedule(personToMeetings, myScheduleDay)) return true;
+			if (hasMeeting(personToMeetings)) return true;
 
 			var myPersonalActivities = myScheduleDay?.PersonAssignment()?.PersonalActivities();
-			if (isPersonalActivityOverSchedule(myPersonalActivities, personToScheduleDay)) return true;
+			if (hasNonMainActivity(myPersonalActivities)) return true;
 			var personToActivities = personToScheduleDay?.PersonAssignment()?.PersonalActivities();
-			if (isPersonalActivityOverSchedule(personToActivities, myScheduleDay)) return true;
+			if (hasNonMainActivity(personToActivities)) return true;
 
 			return false;
 		}
 
-		private bool hasOvertime(IEnumerable<OvertimeShiftLayer> overtime)
+		private bool hasNonMainActivity(IEnumerable<ShiftLayer> nonMainActivities)
 		{
-			if (overtime != null && overtime.Any()) return true;
+			if (nonMainActivities != null && nonMainActivities.Any()) return true;
+
+			return false;
+		}
+
+		private bool hasMeeting(IPersonMeeting[] meetings)
+		{
+			if (meetings != null && meetings.Any()) return true;
 
 			return false;
 		}

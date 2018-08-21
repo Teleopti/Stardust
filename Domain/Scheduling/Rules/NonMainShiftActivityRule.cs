@@ -59,40 +59,41 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		private bool isPersonalActivityOverSchedule(IPersonAssignment personAssignment)
 		{
-			var shiftLayers = personAssignment.ShiftLayers.ToList();
 			var activities = personAssignment.PersonalActivities();
-			return activities != null && activities.Any(activity => IsOverSchedule(activity.Period, shiftLayers));
+			return activities != null && activities.Any();
 		}
 
 		private bool isMeetingOverSchedule(IScheduleDay currentSchedule)
 		{
-			var shiftLayers = currentSchedule.PersonAssignment().ShiftLayers.ToList();
 			var meetings = currentSchedule.PersonMeetingCollection();
-			return meetings != null && meetings.Any(personMeeting => IsOverSchedule(personMeeting.Period, shiftLayers));
+			return meetings != null && meetings.Any();
 		}
 
-		public bool IsOverSchedule(DateTimePeriod period, IList<ShiftLayer> layers)
-		{
-			if (layers == null || !layers.Any()) return true;
+		//bug 77297: It will check meeting or personal activity only according to Business Rule setting,
+		//bug 77297: regardless of if it would end up within or outside of the shift after the trade. 
+		//But I think the original design is better, maybe we want get it back in future, so keep it here.
+		//public bool IsOverSchedule(DateTimePeriod period, IList<ShiftLayer> layers)
+		//{
+		//	if (layers == null || !layers.Any()) return true;
 
-			var maxPeriod = new DateTimePeriod( layers.Min(p => p.Period.StartDateTime) , layers.Max(p=>p.Period.EndDateTime));
-			if (period.EndDateTime <= maxPeriod.StartDateTime || period.StartDateTime >= maxPeriod.EndDateTime) return true;
+		//	var maxPeriod = new DateTimePeriod( layers.Min(p => p.Period.StartDateTime) , layers.Max(p=>p.Period.EndDateTime));
+		//	if (period.EndDateTime <= maxPeriod.StartDateTime || period.StartDateTime >= maxPeriod.EndDateTime) return true;
 
-			foreach (var shiftLayer in layers)
-			{
-				if (shiftLayer.Payload.InWorkTime) continue;
+		//	foreach (var shiftLayer in layers)
+		//	{
+		//		if (shiftLayer.Payload.InWorkTime) continue;
 
-				var layerStartTime = shiftLayer.Period.StartDateTime;
-				var layerEndTime = shiftLayer.Period.EndDateTime;
-				if ((layerStartTime < period.EndDateTime && layerEndTime > period.StartDateTime)
-					|| (layerEndTime > period.StartDateTime && layerStartTime < period.EndDateTime))
-				{
-					return true;
-				}
-			}
+		//		var layerStartTime = shiftLayer.Period.StartDateTime;
+		//		var layerEndTime = shiftLayer.Period.EndDateTime;
+		//		if ((layerStartTime < period.EndDateTime && layerEndTime > period.StartDateTime)
+		//			|| (layerEndTime > period.StartDateTime && layerStartTime < period.EndDateTime))
+		//		{
+		//			return true;
+		//		}
+		//	}
 
-			return false;
-		}
+		//	return false;
+		//}
 
 		private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, string message, Type type)
 		{

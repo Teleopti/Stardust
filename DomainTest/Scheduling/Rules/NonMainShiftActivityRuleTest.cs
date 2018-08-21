@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			}
 		}
 
-		[Test]
+		[Test, Ignore("design changed by bug #77297")]
 		public void ShouldResultNothingWhenMeetingInWorkSchedule()
 		{
 			var personMeeting = MockRepository.GenerateMock<IPersonMeeting>();
@@ -291,7 +291,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			targetRel.Should().Have.SameValuesAs(expected);
 		}
 
-		[Test]
+		[Test, Ignore("design changed by bug #77297")]
 		public void ShouldResultNothingWhenPersonalActivityInWorkSchedule()
 		{
 			var start = new DateTime(2001, 1, 1, 11, 0, 0, DateTimeKind.Utc);
