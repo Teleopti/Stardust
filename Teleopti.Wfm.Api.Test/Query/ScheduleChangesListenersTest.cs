@@ -34,7 +34,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 				}))).Result.EnsureSuccessStatusCode();
 
 			var result =
-				Client.PostAsync("/query/ScheduleChangesListenerSubscription/GetScheduleChangesListenerSubscription",
+				Client.PostAsync("/query/ScheduleChangesListenerSubscription/AllScheduleChangesListenerSubscription",
 					new StringContent("{}"));
 
 			var obj =
@@ -52,7 +52,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 		{
 			Client.Authorize();
 			var result =
-				Client.PostAsync("/query/ScheduleChangesListenerSubscription/GetScheduleChangesListenerSubscription",
+				Client.PostAsync("/query/ScheduleChangesListenerSubscription/AllScheduleChangesListenerSubscription",
 					new StringContent("{}"));
 
 			var obj =
@@ -69,7 +69,7 @@ namespace Teleopti.Wfm.Api.Test.Query
 			Client.Authorize();
 
 			var result =
-				Client.PostAsync("/query/ScheduleChangesListenerSubscription/GetScheduleChangesListenerSubscription",
+				Client.PostAsync("/query/ScheduleChangesListenerSubscription/AllScheduleChangesListenerSubscription",
 					new StringContent("{}"));
 
 			var obj = JObject.Parse(result.Result.EnsureSuccessStatusCode().Content.ReadAsStringAsync().Result);

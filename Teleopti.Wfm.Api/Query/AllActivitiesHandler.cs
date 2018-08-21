@@ -4,17 +4,17 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Wfm.Api.Query
 {
-	public class GetAllActivitiesHandler : IQueryHandler<GetAllActivitiesDto,ActivityDto>
+	public class AllActivitiesHandler : IQueryHandler<AllActivitiesDto,ActivityDto>
 	{
 		private readonly IActivityRepository _activityRepository;
 
-		public GetAllActivitiesHandler(IActivityRepository activityRepository)
+		public AllActivitiesHandler(IActivityRepository activityRepository)
 		{
 			_activityRepository = activityRepository;
 		}
 
 		[UnitOfWork]
-		public virtual QueryResultDto<ActivityDto> Handle(GetAllActivitiesDto command)
+		public virtual QueryResultDto<ActivityDto> Handle(AllActivitiesDto query)
 		{
 			var activites = _activityRepository.LoadAll();
 			return new QueryResultDto<ActivityDto>

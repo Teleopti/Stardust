@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Wfm.Api.Query
 {
-	public class ScheduleChangesListenersHandler : IQueryHandler<GetScheduleChangesListenerSubscriptionDto,
+	public class ScheduleChangesListenersHandler : IQueryHandler<AllScheduleChangesListenerSubscriptionDto,
 		ScheduleChangesListenerSubscriptionDto>
 	{
 		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
@@ -18,7 +18,7 @@ namespace Teleopti.Wfm.Api.Query
 		}
 
 		[UnitOfWork]
-		public virtual QueryResultDto<ScheduleChangesListenerSubscriptionDto> Handle(GetScheduleChangesListenerSubscriptionDto command)
+		public virtual QueryResultDto<ScheduleChangesListenerSubscriptionDto> Handle(AllScheduleChangesListenerSubscriptionDto query)
 		{
 			if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebPermissions))
 				return new QueryResultDto<ScheduleChangesListenerSubscriptionDto>

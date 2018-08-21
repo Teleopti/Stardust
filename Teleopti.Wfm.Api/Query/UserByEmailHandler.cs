@@ -17,9 +17,9 @@ namespace Teleopti.Wfm.Api.Query
 		}
 
 		[UnitOfWork]
-		public virtual QueryResultDto<UserDto> Handle(UserByEmailDto command)
+		public virtual QueryResultDto<UserDto> Handle(UserByEmailDto query)
 		{
-			var people = _personRepository.FindPeopleByEmail(command.Email);
+			var people = _personRepository.FindPeopleByEmail(query.Email);
 			return new QueryResultDto<UserDto>
 			{
 				Successful = true,
@@ -48,10 +48,10 @@ namespace Teleopti.Wfm.Api.Query
 		}
 
 		[UnitOfWork]
-		public virtual QueryResultDto<ScheduleDto> Handle(ScheduleByPersonIdDto command)
+		public virtual QueryResultDto<ScheduleDto> Handle(ScheduleByPersonIdDto query)
 		{
-			var person = _personRepository.Get(command.PersonId);
-			var period = new DateOnlyPeriod(new DateOnly(command.StartDate), new DateOnly(command.EndDate));
+			var person = _personRepository.Get(query.PersonId);
+			var period = new DateOnlyPeriod(new DateOnly(query.StartDate), new DateOnly(query.EndDate));
 			var schedule = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 				new ScheduleDictionaryLoadOptions(false, false), period, _scenarioRepository.LoadDefaultScenario());
 			var scheduleDays = schedule[person].ScheduledDayCollection(period);
