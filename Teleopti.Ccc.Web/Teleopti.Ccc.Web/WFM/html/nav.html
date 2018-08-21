@@ -41,7 +41,7 @@
 
 	</div>
 
-	<div class="nav-tools inline-flex" ng-controller="ThemesPickerController as vm">
+	<ng-container class="nav-tools inline-flex" ng-controller="ThemesPickerController as vm">
 		<a href="https://www.teleopti.com/wfm/customer-feedback.aspx" target="_blank" rel="noopener">
 			<div tabindex=0 class="context-menu card-context even-icon feedback-wrap">
 				<svg class="feedback" viewBox="0 0 44 44">
@@ -91,13 +91,15 @@
 						</a>
 					</li>
 				</div>
-				<li>
-					<ng2-change-password ng-if=""></ng2-change-password>
-				</li>
+				<ng-container ng-controller="AuthenticationController as vm">
+					<li ng-if="vm.isToggleActive()">
+						<ng2-change-password></ng2-change-password>
+					</li>
+				</ng-container>
 			</ul>
 
 		</wfm-popup>
 		<span ng-show="vm.showOverlay" class="animate-show warm-overlay"></span>
-	</div>
+</div>
 
 </div>

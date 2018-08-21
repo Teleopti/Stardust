@@ -1,22 +1,15 @@
 import { enableProdMode, StaticProvider } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { downgradeModule, downgradeComponent } from '@angular/upgrade/static';
-
-import { environment } from './environments/environment';
-import { IRootScopeService, IControllerConstructor } from 'angular';
-
-import { MainController } from './main.controller';
-import {
-	SearchPageComponent,
-	GrantPageComponent,
-	RevokePageComponent,
-	AppLogonPageComponent,
-	TitleBarComponent,
-	IdentityLogonPageComponent
-} from './app/people/components';
-import { ListPageComponent, AddAppPageComponent, ApiAccessTitleBarComponent } from './app/api-access/components';
+import { downgradeComponent, downgradeModule } from '@angular/upgrade/static';
+import { IControllerConstructor, IRootScopeService } from 'angular';
+import { AddAppPageComponent, ApiAccessTitleBarComponent, ListPageComponent } from './app/api-access/components';
 import { AppModule } from './app/app.module';
 import { ChangePasswordComponent } from './app/authentication/components/change-password/change-password.component';
+import { AppLogonPageComponent, GrantPageComponent, IdentityLogonPageComponent, RevokePageComponent, SearchPageComponent, TitleBarComponent } from './app/people/components';
+import { environment } from './environments/environment';
+import { MainController } from './main.controller';
+
+
 
 export interface IWfmRootScopeService extends IRootScopeService {
 	_: any;
@@ -86,7 +79,8 @@ const wfm = angular.module('wfm', [
 	'wfm.popup',
 	'wfm.gamification',
 	'wfm.btnGroup',
-	'wfm.ai'
+	'wfm.ai',
+	'wfm.authentication'
 ]);
 
 wfm.controller('MainController', MainController as IControllerConstructor);
