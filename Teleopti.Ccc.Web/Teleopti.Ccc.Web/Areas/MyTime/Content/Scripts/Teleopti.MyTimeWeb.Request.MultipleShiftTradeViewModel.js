@@ -371,6 +371,7 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 				self.agentChoosed(null);
 				self.hideShiftTradeWindow();
 				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);
+				Teleopti.MyTimeWeb.Request.HideFab(false);
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status === 400) {

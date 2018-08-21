@@ -870,7 +870,7 @@ input.use-default-startTime {
 
 .shift-trade-cart {
 	flex: 1 1 30%;
-	padding: 0 10px;
+	padding: 0 5px;
 	background-color: white;
 }
 
@@ -987,7 +987,7 @@ input.use-default-startTime {
 }
 
 .cart-schedule + .cart-schedule {
-	margin-left: 8px;
+	margin-left: 4px;
 }
 
 .cart-schedule-category {
@@ -1019,6 +1019,11 @@ input.use-default-startTime {
 
 .hiden {
 	display: none;
+}
+
+.cart-cancel-button {
+	background-color: buttonface;
+	border: 1px solid #cccccc;
 }
 
 .hiden-on-mobile {
