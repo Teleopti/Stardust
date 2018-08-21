@@ -42,8 +42,41 @@ namespace Teleopti.Ccc.DomainTest.Intraday.Domain
 //			Assert.AreEqual(0.826045978152116, Math.Round(averageDeviation, 3));
 			Assert.AreEqual(0.826, Math.Round(averageDeviation, 3));
 		}
-				internal class ListOfDoubleComparer : IEqualityComparer<IList<double?>>
+
+		[Test]
+		public void CalculateAverageDevation_NoDeviations_ReturnsZero()
 		{
+			Guid skillId = new Guid("49f23006-abc3-4ae3-a2e0-a7fa01455daa");
+
+			double[] actualVolume = { 42, 84, 123, 163, 192, 196, 239, 241, 230, 242, 200, 207 };
+
+			var opensAt = new DateTime(2018, 3, 28, 8, 0, 0);
+			var closeAt = new DateTime(2018, 3, 28, 22, 30, 0);
+			var intervalLength = 30;
+
+			var timesSeries = Enumerable
+				.Range(0, (int)Math.Ceiling((decimal)(closeAt - opensAt).TotalMinutes / intervalLength))
+				.Select(offset => opensAt.AddMinutes(offset * intervalLength))
+				.ToList();
+
+			var forcastedVolmeList = new List<SkillIntervalStatistics>();
+			var actualVolumeList = new List<SkillIntervalStatistics>();
+			for (int i = 0; i < timesSeries.Count; i++)
+			{
+				if (i < actualVolume.Length)
+				{
+					actualVolumeList.Add(new SkillIntervalStatistics { Calls = actualVolume[i], SkillId = skillId, StartTime = timesSeries[i] });
+				}
+			}
+			var provider = new IntradayReforecastingService();
+			var averageDeviation = provider.CalculateAverageDeviation(forcastedVolmeList, actualVolumeList);
+
+			Assert.AreEqual(0.0, averageDeviation);
+		}
+				
+		internal class ListOfDoubleComparer : IEqualityComparer<IList<double?>>
+		{
+
 			public bool Equals(IList<double?> x, IList<double?> y)
 			{
 				return !x.Except(y).Any() && !y.Except(x).Any();
