@@ -890,6 +890,7 @@ input.use-default-startTime {
 	width: 140%;
 	width: -webkit-max-content;
 	width: -moz-max-content;
+	margin-left:12px;
 }
 
 .shift-visual-indication-block {
