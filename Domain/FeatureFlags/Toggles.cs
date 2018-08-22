@@ -79,7 +79,6 @@
 		ResourcePlanner_HideSkillPrioSliders_41312,
 		ResourcePlanner_RunPerfTestAsTeam_43537,
 		ResourcePlanner_UseErlangAWithInfinitePatience_45845,
-		ResourcePlanner_DayOffOptimizationIslands_47208,
 		ResourcePlanner_PrepareToRemoveExportSchedule_46576,
 		ResourcePlanner_SpeedUpEvents_75415,
 		ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899,

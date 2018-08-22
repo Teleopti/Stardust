@@ -60,13 +60,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				Advanced = {UseMinimumStaffing = useMinimumStaffing}
 			};
 
-			Target.Execute(period, new[] { agent }, optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => {}, new NoOptimizationCallback());
+			Target.Execute(period, new[] { agent }, optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new NoOptimizationCallback());
 
 			stateHolder.Schedules[agent].ScheduledDayCollection(period).Single(x => x.PersonAssignment().DayOff() != null).PersonAssignment().Date
 				.Should().Be.EqualTo(skillDays[expectedDayWithDO].CurrentDate); 
 		}
 
-		public DayOffOptimizationMinimumAgentsDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerXxl76496) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerXxl76496)
+		public DayOffOptimizationMinimumAgentsDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerXxl76496) : base(seperateWebRequest, resourcePlannerXxl76496)
 		{
 		}
 	}

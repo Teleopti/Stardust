@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.ClassicLegacy;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
@@ -70,12 +69,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_matrixListFactory = matrixListFactory;
 		}
 		
-		[RemoveMeWithToggle("remove resourceOptimizerPersonOptimized param", Toggles.ResourcePlanner_DayOffOptimizationIslands_47208)]
 		public void Execute(DateOnlyPeriod selectedPeriod,
 			IEnumerable<IPerson> selectedAgents,
 			bool runWeeklyRestSolver, // desktop client runs this explicitly afterwards so sending in false here
-			Guid planningPeriodId,
-			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
+			Guid planningPeriodId)
 		{
 			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();
 			var blockPreferenceProvider = _blockPreferenceProviderForPlanningPeriod.Fetch(planningPeriodId);
@@ -99,8 +96,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					_daysOffBackToLegalState.Execute(matrixListOriginalStateContainer,
 						schedulingOptions,
 						dayOffOptimizationPreferenceProvider,
-						optimizationPreferences,
-						resourceOptimizerPersonOptimized);
+						optimizationPreferences);
 					var workShiftBackToLegalStateService = _workShiftBackToLegalStateServiceProFactory.Create();
 					foreach (var matrixOriginalStateContainer in matrixListOriginalStateContainer)
 					{
