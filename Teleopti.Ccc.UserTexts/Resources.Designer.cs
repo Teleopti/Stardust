@@ -4260,15 +4260,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Badge threshold.
-        /// </summary>
-        public static string BadgeThreshold {
-            get {
-                return ResourceManager.GetString("BadgeThreshold", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to You got a new bronze badge! Your adherence in {1:yyyy-MM-dd} is above {0}..
         /// </summary>
         public static string BadgeWithRank_YouGotANewBronzeBadgeForAdherence {
@@ -4670,15 +4661,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string BrokenRules {
             get {
                 return ResourceManager.GetString("BrokenRules", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Bronze badge threshold.
-        /// </summary>
-        public static string BronzeBadgeThreshold {
-            get {
-                return ResourceManager.GetString("BronzeBadgeThreshold", resourceCulture);
             }
         }
         
@@ -5475,6 +5457,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Campaign emails %.
+        /// </summary>
+        public static string CampaignEmailsPercentSign {
+            get {
+                return ResourceManager.GetString("CampaignEmailsPercentSign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Campaign facsimiles handling time %.
         /// </summary>
         public static string CampaignFacsimilesHandlingtime {
@@ -5606,6 +5597,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string CampaignTasksHandlingtime {
             get {
                 return ResourceManager.GetString("CampaignTasksHandlingtime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Campaign tasks %.
+        /// </summary>
+        public static string CampaignTasksPercentSign {
+            get {
+                return ResourceManager.GetString("CampaignTasksPercentSign", resourceCulture);
             }
         }
         
@@ -13985,15 +13985,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Go {
             get {
                 return ResourceManager.GetString("Go", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Gold badge threshold.
-        /// </summary>
-        public static string GoldBadgeThreshold {
-            get {
-                return ResourceManager.GetString("GoldBadgeThreshold", resourceCulture);
             }
         }
         
@@ -23409,11 +23400,29 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Original chats.
+        /// </summary>
+        public static string OriginalChats {
+            get {
+                return ResourceManager.GetString("OriginalChats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Original customers.
         /// </summary>
         public static string OriginalCustomers {
             get {
                 return ResourceManager.GetString("OriginalCustomers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original emails.
+        /// </summary>
+        public static string OriginalEmails {
+            get {
+                return ResourceManager.GetString("OriginalEmails", resourceCulture);
             }
         }
         
@@ -23481,7 +23490,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Original Calls.
+        ///   Looks up a localized string similar to Original calls.
         /// </summary>
         public static string OriginalPhoneCalls {
             get {
@@ -33410,15 +33419,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Silver badge threshold.
-        /// </summary>
-        public static string SilverBadgeThreshold {
-            get {
-                return ResourceManager.GetString("SilverBadgeThreshold", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Value of silver threshold for answered calls should be larger than bronze threshold for answered calls..
         /// </summary>
         public static string SilverThresholdForAnsweredCallsValue {
@@ -38263,7 +38263,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validated Calls.
+        ///   Looks up a localized string similar to Validated calls.
         /// </summary>
         public static string ValidatedPhoneCalls {
             get {

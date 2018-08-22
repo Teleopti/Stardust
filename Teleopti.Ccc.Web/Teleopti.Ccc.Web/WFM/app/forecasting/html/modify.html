@@ -12,7 +12,6 @@
 		</h1>
 	</div>
 </div>
-
 <div class="con-row">
 	<div class="con-flex">
 		<div class="panel material-depth-1">
@@ -26,7 +25,6 @@
 							</md-select>
 							<md-tooltip ng-if="vm.changesMade">{{'PleaseSaveOrDiscardChangesBeforeChangingScenario' | translate}}</md-tooltip>
 						</label>
-
 						<div>
 							<button tabindex=0 class="context-menu card-context" ng-click="vm.periodModal = true" ng-disabled="vm.savingToScenario || vm.isForecastRunning || vm.changesMade">
 								<i class="mdi mdi-calendar"></i>
@@ -35,7 +33,6 @@
 							<md-tooltip ng-if="vm.changesMade">{{'PleaseSaveOrDiscardChangesBeforeChangingPeriod' | translate}}</md-tooltip>
 							{{'FromDate' | translate}}: {{vm.forecastPeriod.startDate | date: 'shortDate'}} {{'DateTo' | translate}}: {{vm.forecastPeriod.endDate  | date: 'shortDate'}}
 						</div>
-
 						<div>
 							<button ng-if="vm.selectedWorkload.SkillType.DoDisplayData" tabindex=0 class="context-menu card-context" ng-click="vm.scenarioExportModal = true" ng-disabled="vm.savingToScenario || vm.isForecastRunning">
 								<i class="mdi mdi-share"></i>
@@ -53,7 +50,6 @@
 		</div>
 	</div>
 </div>
-
 <!--Override/Campaign-->
 <form ng-submit="vm.applyCampaign()">
 	<div class="con-row animate-show" ng-show="vm.campaignPanel" ng-cloak>
@@ -66,7 +62,7 @@
 					<div class="con-flex">
 						<label for="campaignPercentageId" class="input-icon">
 							<i class="mdi mdi-percent">
-								<input id="campaignPercentageId" type="number" ng-change="vm.updateCampaignPreview()" min="-100" required autofocus autocomplete="off" ng-model="vm.campaignPercentage" placeholder="{{'CampaignCallsPercentSign'|translate}}">
+								<input id="campaignPercentageId" type="number" ng-change="vm.updateCampaignPreview()" min="-100" required autofocus autocomplete="off" ng-model="vm.campaignPercentage" placeholder="{{vm.dataName.CampaignTasksPercentSign}}">
 							</i>
 						</label>
 					</div>
@@ -79,7 +75,6 @@
 		</div>
 	</div>
 </form>
-
 <div class="con-row" ng-show="vm.changesMade && !vm.savingToScenario">
 	<div class="con-flex">
 		<div class="con-row">
@@ -89,7 +84,6 @@
 		</div>
 	</div>
 </div>
-
 <form ng-submit="vm.applyOverride(form)" class="wfm-form">
 	<div class="con-row animate-show" ng-show="vm.overridePanel" ng-cloak>
 		<div class="con-flex">
@@ -100,17 +94,18 @@
 				<div class="con-row">
 					<div class="con-flex">
 						<div class="form-input-wrap">
-							<label for="overrideTasksValueId">{{'Calls'|translate}}:</label>
+						 
+							<label for="overrideTasksValueId">{{vm.dataName.Tasks}}:</label>
 							<input id="overrideTasksValueId" type="number" ng-model="form.overrideTasksValue" name="" min="1" value="" autocomplete="off">
 						</div>
 
 						<div class="form-input-wrap">
-							<label for="overrideTalkTimeValueId">{{'TalkTime'|translate}}:</label>
+							<label for="overrideTalkTimeValueId">{{vm.dataName.TaskTime}}:</label>
 							<input id="overrideTalkTimeValueId" type="number" ng-model="form.overrideTalkTimeValue" name="" min="1" value="" autocomplete="off">
 						</div>
 
 						<div class="form-input-wrap">
-							<label for="overrideAfterCallWorkValueId">{{'ACW'|translate}}:</label>
+							<label for="overrideAfterCallWorkValueId">{{vm.dataName.ATW}}:</label>
 							<input id="overrideAfterCallWorkValueId" type="number" ng-model="form.overrideAfterCallWorkValue" name="" min="1" value="" autocomplete="off">
 						</div>
 					</div>
@@ -123,7 +118,6 @@
 		</div>
 	</div>
 </form>
-
 <div ng-if="vm.scenarioNotForecasted && !vm.selectedWorkload.SkillType.DoDisplayData">
 	<div class="con-row">
 		<div class="con-flex">
@@ -137,7 +131,6 @@
 		</div>
 	</div>
 </div>
-
 <div ng-if="vm.scenarioNotForecasted && vm.selectedWorkload.SkillType.DoDisplayData">
 	<div class="con-row">
 		<div class="con-flex">
@@ -156,7 +149,6 @@
 		</div>
 	</div>
 </div>
-
 <!-- Chart -->
 <div class="con-row" ng-if="vm.isForecastRunning || vm.savingToScenario">
 	<div class="con-flex">
@@ -167,7 +159,6 @@
 		</div>
 	</div>
 </div>
-
 <div class="con-row" ng-if="vm.selectedWorkload.Days.length > 0 && !vm.savingToScenario">
 	<div class="con-flex">
 		<div class="panel material-depth-1">
@@ -210,7 +201,6 @@
 		</div>
 	</div>
 </div>
-
 <modal-dialog show='vm.forecastModal' ng-cloak>
 	<div>
 		<div class="con-row">
@@ -234,7 +224,6 @@
 		</div>
 	</div>
 </modal-dialog>
-
 <modal-dialog show='vm.periodModal' ng-cloak>
 	<div>
 		<div class="con-row">
@@ -257,7 +246,6 @@
 		</div>
 	</div>
 </modal-dialog>
-
 <modal-dialog show='vm.exportModal' ng-cloak>
 	<div>
 		<div class="con-row">
@@ -278,7 +266,6 @@
 		</div>
 	</div>
 </modal-dialog>
-
 <modal-dialog show='vm.scenarioExportModal' ng-cloak>
 	<div>
 		<div class="con-row">
@@ -301,7 +288,6 @@
 		</div>
 	</div>
 </modal-dialog>
-
 <div ng-cloak
 	 class="modal-box">
 	<div ng-cloak
@@ -333,7 +319,6 @@
 		</div>
 	</div>
 </div>
-
 <div ng-cloak class="modal-box">
 	<div ng-cloak ng-show="vm.closeConfirmation">
 		<div class="modalbg">
@@ -363,7 +348,6 @@
 		</div>
 	</div>
 </div>
-
 <div ng-cloak class="modal-box">
 	<div ng-cloak ng-show="vm.closeConfirmationOnForecasting">
 		<div class="modalbg">
@@ -392,7 +376,6 @@
 		</div>
 	</div>
 </div>
-
 <div ng-cloak class="modal-box">
 	<div ng-cloak ng-show="vm.reforecastConfirmation">
 		<div class="modalbg">
