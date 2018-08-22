@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.Should().Be.EqualTo(0);
 		}
 		
-		[Test, Ignore("#77273 To be fixed")]
+		[Test]
 		public void ShouldHandleCaseWhenAgentsHaveSameCascadingSkillsButDifferentNonCascadingSkill()
 		{
 			var scenario = new Scenario("_");
