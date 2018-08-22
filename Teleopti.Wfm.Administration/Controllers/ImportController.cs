@@ -139,7 +139,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var canCreate = _databaseHelperWrapper.LoginCanBeCreated(connectionToNewDb, model.UserName, model.Password, version, out message);
 			if(!canCreate)
 				return Json(new TenantResultModel { Success = false, Message = message });
-			_databaseHelperWrapper.CreateLogin(connectionToNewDb, model.UserName, model.Password,version.IsAzure);
+			_databaseHelperWrapper.CreateLogin(connectionToNewDb, model.UserName, model.Password,version);
 			return Json(new TenantResultModel {Success = true, Message = "Created new login."});
 		}
 

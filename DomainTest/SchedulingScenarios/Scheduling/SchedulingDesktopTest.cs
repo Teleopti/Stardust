@@ -282,7 +282,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Count(x => x.HasDayOff()).Should().Be.EqualTo(2);
 		}
 
-		public SchedulingDesktopTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
+		public SchedulingDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerXxl76496) : base(seperateWebRequest, resourcePlannerXxl76496)
 		{
 		}
 	}

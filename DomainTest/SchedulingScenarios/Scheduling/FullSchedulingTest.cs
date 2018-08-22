@@ -314,7 +314,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			return AssignmentRepository.GetSingle(date, agentToSchedule).Period.StartDateTime.Hour;
 		}
 
-		public FullSchedulingTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
+		public FullSchedulingTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerXxl76496) : base(seperateWebRequest, resourcePlannerXxl76496)
 		{
 		}
 	}

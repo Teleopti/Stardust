@@ -42,7 +42,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 
 			var sqlVersion = new SqlVersion(12, false);
-			_databaseHelperWrapper.CreateLogin(connStringBuilder.ConnectionString, "dbcreatorperson", "password", sqlVersion.IsAzure);
+			_databaseHelperWrapper.CreateLogin(connStringBuilder.ConnectionString, "dbcreatorperson", "password", sqlVersion);
 			connStringBuilder.InitialCatalog = DatabaseHelper.MasterDatabaseName;
 
 			var executor = new ExecuteSql(() =>

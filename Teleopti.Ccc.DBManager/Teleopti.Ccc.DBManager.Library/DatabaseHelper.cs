@@ -11,9 +11,10 @@ namespace Teleopti.Ccc.DBManager.Library
 	public class DatabaseHelper
 	{
 		public const string MasterDatabaseName = "master";
-		
+
 		private readonly ExecuteSql _usingMaster;
 		private readonly ExecuteSql _usingDatabase;
+		private readonly Lazy<SqlVersion> _sqlVersion;
 
 		public DatabaseHelper(string connectionString, DatabaseType databaseType, IUpgradeLog log, bool forceMasterInAzure = false)
 		{
@@ -22,15 +23,18 @@ namespace Teleopti.Ccc.DBManager.Library
 			DatabaseType = databaseType;
 			Logger = log;
 			var dataSource = new SqlConnectionStringBuilder(connectionString).DataSource;
-			IsAzure = ConfigurationManager.AppSettings["AzurePattern"] != null && ConfigurationManager.AppSettings["AzurePattern"].Split(';').Any(d => dataSource.Contains(d.Trim()));
 
-			if (IsAzure)  //in Azure
-				_usingMaster = new ExecuteSql(() => openConnection(forceMasterInAzure), Logger);
-			else
-				_usingMaster = new ExecuteSql(() => openConnection(true), Logger);
+			_usingMaster = new ExecuteSql(() =>
+			{
+				var isAzure = ConfigurationManager.AppSettings["AzurePattern"] != null && ConfigurationManager.AppSettings["AzurePattern"].Split(';').Any(d => dataSource.Contains(d.Trim()));
+				if (isAzure)
+					openConnection(forceMasterInAzure);
+				return openConnection(true);
+			}, Logger);
 
 			_usingDatabase = new ExecuteSql(() => openConnection(), Logger);
-
+			
+			_sqlVersion = new Lazy<SqlVersion>(() => new ServerVersionHelper(_usingMaster).Version());
 		}
 
 		public DatabaseHelper(string connectionString, DatabaseType databaseType, bool forceMasterInAzure = false)
@@ -42,7 +46,6 @@ namespace Teleopti.Ccc.DBManager.Library
 		public string ConnectionString { get; private set; }
 		public DatabaseType DatabaseType { get; private set; }
 		public string DatabaseName { get; private set; }
-		public bool IsAzure { get; private set; }
 
 		public string DbManagerFolderPath { get; set; }
 
@@ -86,13 +89,13 @@ namespace Teleopti.Ccc.DBManager.Library
 			var azureStart = new AzureStartDDL(databaseFolder, _usingDatabase);
 			azureStart.Apply(DatabaseType);
 		}
-		
+
 		public bool LoginCanBeCreated(string login, string password, bool isAzure, out string message)
 		{
 			try
 			{
 				var loginHandler = LoginTasks();
-				loginHandler.CreateLogin(login, password, false, IsAzure);
+				loginHandler.CreateLogin(login, password, false, _sqlVersion.Value);
 				loginHandler.DropLogin(login, isAzure);
 				message = "";
 				return true;
@@ -116,7 +119,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
 			var permissionsHandler = new PermissionsHelper(Logger, databaseFolder, _usingDatabase);
-			permissionsHandler.CreatePermissions(login, pwd, IsAzure);
+			permissionsHandler.CreatePermissions(login, pwd, sqlVersion);
 		}
 
 		public bool HasCreateDbPermission(SqlVersion sqlVersion)
@@ -128,7 +131,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public bool HasCreateViewAndLoginPermission()
 		{
-			if (IsAzure)
+			if (_sqlVersion.Value.IsAzure)
 			{
 				const string pwd = "tT12@andSomeMore";
 				var login = Guid.NewGuid().ToString().Replace("-", "#");
@@ -146,6 +149,7 @@ namespace Teleopti.Ccc.DBManager.Library
 					return false;
 				}
 			}
+
 			return Convert.ToBoolean(_usingDatabase.ExecuteScalar("SELECT IS_SRVROLEMEMBER( 'securityadmin')"));
 		}
 
@@ -161,7 +165,7 @@ namespace Teleopti.Ccc.DBManager.Library
 				_usingDatabase,
 				databaseFolder,
 				Logger);
-			schemaCreator.Create(DatabaseType, IsAzure);
+			schemaCreator.Create(DatabaseType, _sqlVersion.Value);
 		}
 
 		public int DatabaseVersion()
@@ -236,7 +240,7 @@ namespace Teleopti.Ccc.DBManager.Library
   ApplicationConnectionString = '{0}', 
   AnalyticsConnectionString  = '{1}', 
   AggregationConnectionString = '{2}'";
-			_usingDatabase.ExecuteTransactionlessNonQuery(string.Format(activateTenant,appConnection,analytConnection, aggConnection), 300);
+			_usingDatabase.ExecuteTransactionlessNonQuery(string.Format(activateTenant, appConnection, analytConnection, aggConnection), 300);
 		}
 
 		public void RemoveOldPersonInfos()

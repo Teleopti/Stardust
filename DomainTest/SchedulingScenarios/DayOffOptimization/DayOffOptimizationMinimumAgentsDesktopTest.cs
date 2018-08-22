@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				.Should().Be.EqualTo(skillDays[expectedDayWithDO].CurrentDate); 
 		}
 
-		public DayOffOptimizationMinimumAgentsDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208)
+		public DayOffOptimizationMinimumAgentsDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerXxl76496) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerXxl76496)
 		{
 		}
 	}

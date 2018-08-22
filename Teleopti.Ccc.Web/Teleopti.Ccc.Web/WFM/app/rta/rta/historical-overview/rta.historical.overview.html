@@ -80,7 +80,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<div class="panel material-depth-1 card-panel" ng-repeat="card in vm.cards">
 		<div class="card-panel-header-wrapper pointer left-border" ng-click="card.toggle()">
 			<strong>{{card.Name}}</strong>
@@ -89,8 +89,8 @@
 			<table class="wfm-table">
 				<thead>
 				<tr>
-					<th style="width: 25%; height: 32px">{{'Agent'|translate}}</th>
-					<th style="width: 45px; text-align: center"
+					<th style="width: 25%;">{{'Agent'|translate}}</th>
+					<th class="cell-header"
 						ng-repeat="day in card.Agents[0].Days">
 						{{day.DisplayDate}}
 					</th>
@@ -102,12 +102,12 @@
 				<tr ng-repeat="agent in card.Agents" style="background-color: transparent">
 					<td style="max-width:200px; overflow: hidden; text-overflow: ellipsis">{{agent.Name}}</td>
 					<td ng-repeat="day in agent.Days" class="cell">
-						<a ng-href="{{day.HistoricalAdherenceUrl}}">
-							<div ng-class="day.WasLateForWork ? 'late-for-work-flag': ''"></div>
-							<div class="square" style="background-color: {{day.Color}}">
+						<div ng-class="day.WasLateForWork ? 'late-for-work-flag': ''"></div>
+						<div class="square" style="background-color: {{day.Color}}">
+							<a ng-href="{{day.HistoricalAdherenceUrl}}">
 								{{day.Adherence}}
-							</div>
-						</a>
+							</a>
+						</div>
 					</td>
 					<td>
 						<div class="adherence-bar-container">
@@ -116,7 +116,7 @@
 						<div class="adherence-value">{{agent.IntervalAdherence}}%</div>
 					</td>
 					<td>
-						<span class="label pad late-for-work">{{agent.LateForWork.Count}}</span>
+						<span class="label late-for-work">{{agent.LateForWork.Count}}</span>
 						<span>{{agent.LateForWork.TotalMinutes}}&nbsp;{{'Minutes'|translate}}</span>
 					</td>
 				</tr>

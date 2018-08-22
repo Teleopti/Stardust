@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 		}
 
-		public SchedulingCascadingDesktopTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
+		public SchedulingCascadingDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerXxl76496) : base(seperateWebRequest, resourcePlannerXxl76496)
 		{
 		}
 	}

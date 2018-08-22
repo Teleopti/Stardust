@@ -29,14 +29,14 @@ namespace Teleopti.Ccc.DBManager.Library
 			_logger = logger;
 		}
 
-		public void Create(DatabaseType databaseType, bool isAzure)
+		public void Create(DatabaseType databaseType, SqlVersion isAzure)
 		{
 			applyReleases(databaseType);
 			applyProgrammability(databaseType);
 			if (databaseType == DatabaseType.TeleoptiAnalytics)
 			{
 				_executeSql.Execute(c => new HangfireSchemaCreator().ApplyHangfire(c));
-				if(!isAzure)
+				if(!isAzure.IsAzure)
 					_executeSql.Execute(c => new SignalRSqlBackplaneSchemaCreator().ApplySignalRSqlBackplane(c));
 			}
 			addInstallLogRow();

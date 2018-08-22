@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			isolate.UseTestDouble<CountCallsToNightRestWhiteSpotSolverServiceFactory>().For<INightRestWhiteSpotSolverServiceFactory>();
 		}
 
-		public DoNotRunNightRestWhiteSpotDesktopTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
+		public DoNotRunNightRestWhiteSpotDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerXxl76496) : base(seperateWebRequest, resourcePlannerXxl76496)
 		{
 		}
 	}

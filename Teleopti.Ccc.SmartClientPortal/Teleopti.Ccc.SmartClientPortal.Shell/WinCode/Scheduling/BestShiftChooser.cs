@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 		public IEditableShift PrepareAndChooseBestShift(IScheduleDay schedulePart,
 			SchedulingOptions schedulingOptions,
-			WorkShiftFinderService finderService)
+			IWorkShiftFinderService finderService)
 		{
 			if (schedulePart == null)
 				throw new ArgumentNullException(nameof(schedulePart));

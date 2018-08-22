@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 		
 		
-		public SchedulingPlanningPeriodTest(SeperateWebRequest seperateWebRequest) : base(seperateWebRequest)
+		public SchedulingPlanningPeriodTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerXxl76496) : base(seperateWebRequest, resourcePlannerXxl76496)
 		{
 		}
 	}
