@@ -26,14 +26,10 @@ function ForecastHistoryChartController($translate, $filter, $timeout) {
 			return;
 		}
 
-		var labelDate = $translate.instant('Date');
-		var labelOriginalTask = $translate.instant('OriginalPhoneCalls');
-		var labelValidatedTask = $translate.instant('ValidatedPhoneCalls');
-
 		var preparedData = {
-			dateSeries: [labelDate],
-			originalSeries: [labelOriginalTask],
-			validatedSeries: [labelValidatedTask]
+			dateSeries: ['Date'],
+			originalSeries: ['OriginalTasks'],
+			validatedSeries: ['ValidatedTasks']
 		};
 
 		for (var i = 0; i < days.length; i++) {
@@ -43,16 +39,20 @@ function ForecastHistoryChartController($translate, $filter, $timeout) {
 			preparedData.validatedSeries.push(days[i].ValidatedTasks);
 		}
 
-		var lineColors = {};
-		lineColors[labelOriginalTask] = '#EE8F7D';
-		lineColors[labelValidatedTask] = '#0099FF';
-
 		chart = c3.generate({
 			bindto: '#' + chartId,
 			data: {
-				x: labelDate,
+				x: 'Date',
 				columns: [preparedData.dateSeries, preparedData.originalSeries, preparedData.validatedSeries],
-				colors: lineColors
+				names: {
+					Date: $translate.instant('Date'),
+					OriginalTasks: $translate.instant('OriginalPhoneCalls'),
+					ValidatedTasks: $translate.instant('ValidatedPhoneCalls')
+				},
+				colors: {
+					OriginalTasks: '#EE8F7D',
+					ValidatedTasks: '#0099FF'
+				}
 			},
 			subchart: {
 				show: true
