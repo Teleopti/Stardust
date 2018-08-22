@@ -7,7 +7,8 @@
 	padding: 0;
 }
 .new-teamschedule-view-nav .navbar-teleopti {
-	min-width: 600px;
+	min-width: 500px;
+	max-width: 100%;
 	margin: 0;
 	display: flex;
 	justify-content: flex-start;
@@ -52,8 +53,8 @@
 }
 .new-teamschedule-view-nav .submenu li {
 	display: flex;
-	flex-direction: column;
 	justify-content: center;
+	align-items: center;
 	white-space: nowrap;
 	min-width: 35px;
 	margin: 0 10px;
