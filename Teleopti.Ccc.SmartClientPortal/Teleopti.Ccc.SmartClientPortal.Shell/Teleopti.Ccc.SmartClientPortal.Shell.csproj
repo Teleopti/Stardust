@@ -3061,12 +3061,6 @@
     <Compile Include="Win\Scheduling\AgentPreferenceView.Designer.cs">
       <DependentUpon>AgentPreferenceView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Win\Scheduling\AgentRestrictions\AgentRestrictionGrid.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Win\Scheduling\AgentRestrictions\AgentRestrictionGrid.Designer.cs">
-      <DependentUpon>AgentRestrictionGrid.cs</DependentUpon>
-    </Compile>
     <Compile Include="Win\Scheduling\AgentRestrictions\AgentRestrictionsAvailableDrawer.cs" />
     <Compile Include="Win\Scheduling\AgentRestrictions\AgentRestrictionsDetailView.cs" />
     <Compile Include="Win\Scheduling\AgentRestrictions\AgentRestrictionsDetailViewCellModel.cs" />

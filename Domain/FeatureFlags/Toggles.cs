@@ -68,8 +68,6 @@
 		Wfm_People_MoveImportJobToBackgroundService_43582,
 		Wfm_PeopleWeb_PrepareForRelease_74903,
 
-		Scheduler_RestrictionReport_47013,
-
 		People_SpeedUpOpening_76365,
 
 		WfmGlobalLayout_personalOptions_37114,
