@@ -923,6 +923,26 @@
 		equal($('.teammates-schedules-container .dayoff').length == 1, true);
 	});
 
+	test('should reset paging after turn on show only day off toggle', function() {
+		$('body').append(agentSchedulesHtml);
+
+		if (fakeOriginalAgentSchedulesData.length > 0) {
+			fakeOriginalAgentSchedulesData[0].IsDayOff = true;
+		}
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+		vm.paging.take = 20;
+		vm.paging.skip = 20;
+
+		$('.new-teamschedule-day-off-toggle input').click();
+
+		equal(completeLoadedCount, 2);
+		equal(vm.paging.take, 20);
+		equal(vm.paging.skip, 0);
+		equal($('.teammates-schedules-container .dayoff').length == 1, true);
+	});
+
 	test("should not filter agents' day off immediately after turn on show only day off toggle but widthout clicking search on mobile", function() {
 		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {

@@ -213,6 +213,63 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 		}, 0);
 	}
 
+	function loadSchedulesBasedOnPageDiffAndUpdateCurrentPageNum(left) {
+		var currentScrollPage = Math.ceil(left / scrollIntervalsInPixelsRepresentingAPageOfAgents) + 1;
+		var pageDiff = currentScrollPage - vm.currentPageNum();
+
+		if (!vm.isLoadingMoreAgentSchedules && pageDiff > 0) {
+			loadMoreSchedules(
+				{
+					skip: vm.paging.take * vm.currentPageNum(),
+					take: vm.paging.take * pageDiff
+				},
+				function() {
+					vm.currentPageNum(currentScrollPage);
+					vm.isLoadingMoreAgentSchedules = false;
+				}
+			);
+		}
+	}
+
+	function calculateTheScrollingRatio() {
+		if (vm.totalPageNum() == 0) return;
+
+		var agentListTotalWidth = vm.totalAgentCount() * agentScheduleColumnWidth;
+		var scrollContainerWidth = $('.teamschedule-scroll-block-container').width();
+		var scrollBlockWidth = 0;
+
+		vm.isScrollbarVisible(agentListTotalWidth > scrollContainerWidth);
+
+		$('.teammates-schedules-container.relative').width(agentListTotalWidth);
+		setScrollPositionForNameAndSchedule(0);
+
+		if (vm.totalPageNum() > 1 || agentListTotalWidth >= scrollContainerWidth) {
+			scrollBlockWidth = scrollContainerWidth * (scrollContainerWidth / agentListTotalWidth);
+
+			if (scrollBlockWidth < minScrollBlockWidth) {
+				scrollBlockWidth = minScrollBlockWidth;
+			}
+
+			var scrollRangeWidthInPixels = scrollContainerWidth - scrollBlockWidth;
+			var toBeScrolledAgentsWidth = agentListTotalWidth + agentScheduleColumnWidth * 2 - scrollContainerWidth;
+
+			scrollIntervalsInPixelsRepresentingAPageOfAgents = scrollContainerWidth / vm.totalPageNum();
+			pixelsRatioOfHorizontalScrolling = toBeScrolledAgentsWidth / scrollRangeWidthInPixels;
+		} else {
+			scrollIntervalsInPixelsRepresentingAPageOfAgents = pixelsRatioOfHorizontalScrolling = 0;
+			scrollBlockWidth = scrollContainerWidth;
+		}
+
+		$('.teamschedule-scroll-block')
+			.width(scrollBlockWidth)
+			.css({ color: 'white', left: 0 });
+	}
+
+	function setScrollPositionForNameAndSchedule(leftDistance) {
+		$('.teammates-agent-name-row').css({ left: leftDistance });
+		$('.teammates-schedules-container.relative').css({ left: leftDistance });
+	}
+
 	function setDraggableTimeSlider() {
 		var timelineStartInMinute = 0;
 		var timelineEndInMinute = 24 * 60;
@@ -340,63 +397,6 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 				end: endValue
 			};
 		}
-	}
-
-	function loadSchedulesBasedOnPageDiffAndUpdateCurrentPageNum(left) {
-		var currentScrollPage = Math.ceil(left / scrollIntervalsInPixelsRepresentingAPageOfAgents) + 1;
-		var pageDiff = currentScrollPage - vm.currentPageNum();
-
-		if (!vm.isLoadingMoreAgentSchedules && pageDiff > 0) {
-			loadMoreSchedules(
-				{
-					skip: vm.paging.take * vm.currentPageNum(),
-					take: vm.paging.take * pageDiff
-				},
-				function() {
-					vm.currentPageNum(currentScrollPage);
-					vm.isLoadingMoreAgentSchedules = false;
-				}
-			);
-		}
-	}
-
-	function calculateTheScrollingRatio() {
-		if (vm.totalPageNum() == 0) return;
-
-		var agentListTotalWidth = vm.totalAgentCount() * agentScheduleColumnWidth;
-		var scrollContainerWidth = $('.teamschedule-scroll-block-container').width();
-		var scrollBlockWidth = 0;
-
-		vm.isScrollbarVisible(agentListTotalWidth > scrollContainerWidth);
-
-		$('.teammates-schedules-container.relative').width(agentListTotalWidth);
-		setScrollPositionForNameAndSchedule(0);
-
-		if (vm.totalPageNum() > 1 || agentListTotalWidth >= scrollContainerWidth) {
-			scrollBlockWidth = scrollContainerWidth * (scrollContainerWidth / agentListTotalWidth);
-
-			if (scrollBlockWidth < minScrollBlockWidth) {
-				scrollBlockWidth = minScrollBlockWidth;
-			}
-
-			var scrollRangeWidthInPixels = scrollContainerWidth - scrollBlockWidth;
-			var toBeScrolledAgentsWidth = agentListTotalWidth + agentScheduleColumnWidth * 2 - scrollContainerWidth;
-
-			scrollIntervalsInPixelsRepresentingAPageOfAgents = scrollContainerWidth / vm.totalPageNum();
-			pixelsRatioOfHorizontalScrolling = toBeScrolledAgentsWidth / scrollRangeWidthInPixels;
-		} else {
-			scrollIntervalsInPixelsRepresentingAPageOfAgents = pixelsRatioOfHorizontalScrolling = 0;
-			scrollBlockWidth = scrollContainerWidth;
-		}
-
-		$('.teamschedule-scroll-block')
-			.width(scrollBlockWidth)
-			.css({ color: 'white', left: 0 });
-	}
-
-	function setScrollPositionForNameAndSchedule(leftDistance) {
-		$('.teammates-agent-name-row').css({ left: leftDistance });
-		$('.teammates-schedules-container.relative').css({ left: leftDistance });
 	}
 
 	function showLoadingGif() {

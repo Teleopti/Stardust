@@ -92,7 +92,13 @@
 
 	self.showOnlyDayOff.subscribe(function(value) {
 		self.filter.isDayOff = value;
-		if (!self.isMobileEnabled) self.filterChangedCallback(self.selectedDate());
+
+		if (!self.isMobileEnabled) {
+			if (value) {
+				self.paging.skip = 0;
+			}
+			self.filterChangedCallback(self.selectedDate());
+		}
 	});
 
 	self.openTeamSelectorPanel = function(data, event) {
