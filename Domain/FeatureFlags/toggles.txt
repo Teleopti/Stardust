@@ -96,20 +96,21 @@ Staffing_Info_Configuration_44687 = true
 
 # Kittens, Bugs&Roses and Micke #
 People_SpeedUpOpening_76365 = RC
-Scheduler_RestrictionReport_47013 = true
-Scheduler_RestrictionReportToggleAll_76224 = true
+Scheduler_RestrictionReport_47013 = true #AF: Can be removed
+Scheduler_RestrictionReportToggleAll_76224 = true #AF: Can be removed
 Wfm_SkillPriorityRoutingGUI_39885 = RC #Skill priorities, aka Cascading, is not ready for release yet
 Wfm_WebPlan_Pilot_46815 = RC #Switch this on to try out the new web based scheduling in Plans#
 ResourcePlanner_HideSkillPrioSliders_41312 = RC #Skill priorities, aka Cascading, is not ready for release yet
 ResourcePlanner_UseErlangAWithInfinitePatience_45845 = true
 ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899 = true
 ResourcePlanner_UseErlangAWithFinitePatience_47738 = true
-ResourcePlanner_SpeedUpEvents_75415 = true
+ResourcePlanner_SpeedUpEvents_75415 = true #AF: Can be removed
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
-ResourcePlanner_DayOffOptimizationIslands_47208 = true
-ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
+ResourcePlanner_DayOffOptimizationIslands_47208 = true #AF: Can be removed
+ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true #AF: Can be removed
 
 # From old Kittens team... #
+# AF 2018-08-22: All of these can be removed now, but very carefully as we do not want any new bugs or issues...#
 ETL_SpeedUpPersonPeriodNightly_38097 = true
 ETL_SpeedUpNightlyReloadDatamart_38131 = true
 ETL_SpeedUpFactScheduleNightly_38019 = true # not to be released until pbi 38304 and 41393 is done 
