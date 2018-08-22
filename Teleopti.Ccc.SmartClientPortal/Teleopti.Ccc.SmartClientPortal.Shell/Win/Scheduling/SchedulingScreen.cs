@@ -4410,8 +4410,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			schedulerSplitters1.InsertShiftCategoryDistributionModel(_shiftCategoryDistributionModel);
 			schedulerSplitters1.InsertRestrictionNotAbleToBeScheduledReportModel(
 				_container.Resolve<RestrictionNotAbleToBeScheduledReport>(),
-				_container.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_RestrictionReport_47013),
-				_container.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_RestrictionReportToggleAll_76224));
+				_container.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_RestrictionReport_47013));
 			schedulerSplitters1.InsertValidationAlertsModel(new ValidationAlertsModel(_schedulerState.Schedules, NameOrderOption.LastNameFirstName, _schedulerState.RequestedPeriod.DateOnlyPeriod));
 			schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
 		}

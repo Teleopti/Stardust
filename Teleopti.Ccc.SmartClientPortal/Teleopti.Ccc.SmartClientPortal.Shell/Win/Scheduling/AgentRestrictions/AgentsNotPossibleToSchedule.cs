@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 				_translatedEnums.Add(keyValuePair);
 			}
 
-			toolStripButtonShowNonIssued.Visible = _parent.SchedulerRestrictionReportToggleAll76224;
+			toolStripButtonShowNonIssued.Visible = true;
 		}
 
 		private void toolStripButtonRefreshClick(object sender, EventArgs e)
