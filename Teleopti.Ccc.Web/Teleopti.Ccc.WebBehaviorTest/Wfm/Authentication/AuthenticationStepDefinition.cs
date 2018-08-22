@@ -4,31 +4,38 @@ using System.Linq;
 using System.Text;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Infrastructure.Config;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.WebBehaviorTest.Bindings.DoNotUse;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Authentication
 {
 	[Binding]
 	public sealed class AuthenticationStepDefinition
 	{
-
-		[Given("I am an agent with password '(.*)'")]
-		public void IAmAnAgentWithPassword(string password)
+		private void SignInApplication(string username, string password)
 		{
-			DataMaker.Data().RemoveLastPerson();
-			DataMaker.Data().Person("agent")
-				.Apply(new PersonUserConfigurable
-				{
-					UserName = "temp",
-					Password = password
-				});
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Username-input", username);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Password-input", password);
+			Browser.Interactions.Click("#Signin-button");
+		}
+
+		[Given("I am an agent with default password")]
+		public void IAmAnAgentWithDefaultPassword()
+		{
+			var me = DataMaker.Me();
 		}
 
 		[Given("I navigate to change your password")]
@@ -41,10 +48,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Authentication
 		}
 
 		[Given("I enter '(.*)' in '(.*)'")]
-		public void IEnterXInInputY(string password, string selector)
+		public void IEnterXInInputY(string text, string selector)
 		{
+			if (text.ToLower() == "defaultpassword")
+			{
+				text = DefaultPassword.ThePassword;
+			} 
 			Browser.Interactions.AssertExists("[" +  selector + "]");
-			Browser.Interactions.FillWith("[" +  selector + "]", password);
+			Browser.Interactions.FillWith("[" +  selector + "]", text);
 		}
 
 		[When("I click Ok")]
@@ -58,8 +69,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Authentication
 		public void ThePasswordModalShouldClose()
 		{
 			Browser.Interactions.AssertJavascriptResultContains(@"
-				return Array.from(
-					document.querySelector('[data-test-change-password-modal]')
+				return document.querySelector('[data-test-change-password-modal]')
 					.getAttribute('ng-reflect-nz-visible')
 				", "false");
 		}
