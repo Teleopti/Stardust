@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-    public class WorkShiftFinderService
+    public class WorkShiftFinderService : IWorkShiftFinderService
     {
         private readonly ShiftProjectionCacheFilter _shiftProjectionCacheFilter;
         private readonly Func<IPersonSkillPeriodsDataHolderManager> _personSkillPeriodsDataHolderManager;
@@ -220,10 +220,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return result;
         }
     }
-	
+
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_XXL_76496)]
+	public interface IWorkShiftFinderService
+	{
+		IWorkShiftCalculationResultHolder FindBestShift(IScheduleDay schedulePart, SchedulingOptions schedulingOptions,
+			IScheduleMatrixPro matrix, IEffectiveRestriction effectiveRestriction);
+	}
 	
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_XXL_76496)]
-	public class WorkShiftFinderServiceOLD
+	public class WorkShiftFinderServiceOLD : IWorkShiftFinderService
     {
         private readonly ShiftProjectionCacheFilter _shiftProjectionCacheFilter;
         private readonly Func<IPersonSkillPeriodsDataHolderManager> _personSkillPeriodsDataHolderManager;

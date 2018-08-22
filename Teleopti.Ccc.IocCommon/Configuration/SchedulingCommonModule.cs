@@ -221,11 +221,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			if (_configuration.Toggle(Toggles.ResourcePlanner_XXL_76496))
 			{
-				builder.RegisterType<WorkShiftFinderService>().InstancePerLifetimeScope();				
+				builder.RegisterType<WorkShiftFinderService>().As<IWorkShiftFinderService>().InstancePerLifetimeScope();				
 			}
 			else
 			{
-				builder.RegisterType<WorkShiftFinderServiceOLD>().InstancePerLifetimeScope();
+				builder.RegisterType<WorkShiftFinderServiceOLD>().As<IWorkShiftFinderService>().InstancePerLifetimeScope();
 			}
 			builder.RegisterType<OccupiedSeatCalculator>().As<IOccupiedSeatCalculator>().SingleInstance();
 			builder.RegisterType<PersonSkillProvider>().As<IPersonSkillProvider>().SingleInstance();
