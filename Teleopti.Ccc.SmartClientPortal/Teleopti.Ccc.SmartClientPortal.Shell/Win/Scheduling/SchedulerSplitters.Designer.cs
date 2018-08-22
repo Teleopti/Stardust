@@ -248,7 +248,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.PinnedToolStripMenuItem.Name = "PinnedToolStripMenuItem";
 			this.PinnedToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
 			this.PinnedToolStripMenuItem.Text = "xxTogglePinStatus";
-			this.PinnedToolStripMenuItem.Click += new System.EventHandler(this.PinnedToolStripMenuItemClick);
+			this.PinnedToolStripMenuItem.Click += new System.EventHandler(this.pinnedToolStripMenuItemClick);
 			// 
 			// tabPageAdv1
 			// 

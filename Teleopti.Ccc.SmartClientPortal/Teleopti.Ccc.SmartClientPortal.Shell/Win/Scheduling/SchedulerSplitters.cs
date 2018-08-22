@@ -6,7 +6,6 @@ using System.Windows.Forms.Integration;
 using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
@@ -25,8 +24,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
     public partial class SchedulerSplitters : BaseUserControl
     {
         private bool _useAvailability = true;
-        private bool _useStudentAvailability;
-        private bool _useRotation;
         private bool _usePreference = true;
         private bool _useSchedules = true;
         private readonly PinnedSkillHelper _pinnedSkillHelper;
@@ -40,13 +37,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             _pinnedSkillHelper = new PinnedSkillHelper();
 				tabSkillData.TabStyle = typeof(SkillTabRenderer);
 				tabSkillData.TabPanelBackColor = Color.FromArgb(199, 216, 237);
-			validationAlertsView1.AgentDoubleClick += ValidationAlertsView1AgentDoubleClick;
+			validationAlertsView1.AgentDoubleClick += validationAlertsView1AgentDoubleClick;
         }
 
 		public event EventHandler<System.ComponentModel.ProgressChangedEventArgs> RestrictionsNotAbleToBeScheduledProgress;
 		public event EventHandler<ValidationViewAgentDoubleClickEvenArgs> ValidationAlertsAgentDoubleClick;
 
-		private void ValidationAlertsView1AgentDoubleClick(object sender, ValidationViewAgentDoubleClickEvenArgs e)
+		private void validationAlertsView1AgentDoubleClick(object sender, ValidationViewAgentDoubleClickEvenArgs e)
 		{
 			OnValidationAlertsAgentDoubleClick(e);
 		}
@@ -120,15 +117,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				{
 					UseAvailability = _useAvailability,
 					UsePreferences = _usePreference,
-					UseStudentAvailability = _useStudentAvailability,
-					UseRotations = _useRotation,
 					UseScheduling = _useSchedules
 				};
 				return options;
 			}
 		}
 
-        private void PinnedToolStripMenuItemClick(object sender, EventArgs e)
+        private void pinnedToolStripMenuItemClick(object sender, EventArgs e)
         {
             var tab = tabSkillData.SelectedTab;
             
