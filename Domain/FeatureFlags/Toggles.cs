@@ -110,7 +110,6 @@
 		ETL_SpeedUpNightlyBusinessUnit_38932,
 
 		ETL_EventbasedDate_39562,
-		NewPasswordHash_40460,
 		Wfm_SkillPriorityRoutingGUI_39885,
 		ETL_EventbasedTimeZone_40870,
 		ETL_RemoveTimeZoneAndDateNightly_40870,

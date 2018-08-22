@@ -171,36 +171,5 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			CurrentTenant.Current().SetApplicationConfig(TenantApplicationConfigKey.MobileQRCodeUrl.ToString(), "http://qrcode");
 			Target.MobileQRCodeUrl().Data.Should().Be.EqualTo("http://qrcode");
 		}
-
-	
-	}
-
-	[RemoveMeWithToggle(Toggles.NewPasswordHash_40460)]
-	[Toggle(Toggles.NewPasswordHash_40460)]
-	[MyTimeWebTest]
-	public class SettingsControllerWithBCryptHashingEnabled
-	{
-		public FakeLoggedOnUser User;
-		public SettingsController Target;
-		public FindPersonInfoFake FindPerson;
-		public IHashFunction Hash;
-		public CurrentHttpContext HttpContext;
-
-		[Test]
-		public void ShouldHandleEmptyOldPassword()
-		{
-			var currentContext = new FakeHttpContext("/calendarlink");
-			currentContext.SetRequest(new FakeHttpRequest("/calendarlink", new Uri("http://localhost/Settings/CalendarLinkStatus"), new Uri("http://localhost/schedule/")));
-			using (HttpContext.OnThisThreadUse(currentContext))
-			{
-				var personInfo = new PersonInfo(new Tenant("Test"), User.CurrentUser().Id.Value);
-				personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), "test", "old", Hash);
-				FindPerson.Add(personInfo);
-				var result =
-					Target.ChangePassword(new ChangePasswordViewModel { NewPassword = "new" })
-						.Data as ChangePasswordResultInfo;
-				result.IsSuccessful.Should().Be.False();
-			}
-		}
 	}
 }
