@@ -69,7 +69,6 @@
 		Wfm_PeopleWeb_PrepareForRelease_74903,
 
 		Scheduler_RestrictionReport_47013,
-		Scheduler_RestrictionReportToggleAll_76224,
 
 		People_SpeedUpOpening_76365,
 
