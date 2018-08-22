@@ -16,7 +16,8 @@ export interface ChangePasswordResultInfo {
 @Injectable()
 export class PasswordService {
 	constructor(private http: HttpClient) {}
-	setPassword(passwordRequest: ChangePasswordRequest): Observable<ChangePasswordResultInfo> {
+
+	public setPassword(passwordRequest: ChangePasswordRequest): Observable<ChangePasswordResultInfo> {
 		return this.http.post('../Settings/ChangePassword', passwordRequest).pipe(
 			map(response => {
 				return response;
