@@ -7528,7 +7528,7 @@ Updated on: {1}</value>
     <comment>The schedule has changed. This request must be accepted again.</comment>
   </data>
   <data name="ShiftTradeResendMessage" xml:space="preserve">
-    <value>Request was resent for schedule changes.</value>
+    <value>Request was resent because of schedule changes.</value>
     <comment>Default message after resending shift trade request</comment>
   </data>
   <data name="SelectMultipleDates" xml:space="preserve">
@@ -17386,7 +17386,7 @@ The application will now exit.</value>
     <comment>No issues in period</comment>
   </data>
   <data name="ForecastDayIsOverrided" xml:space="preserve">
-    <value>Day has been overrided on web</value>
+    <value>Day has been overridden on web</value>
     <comment>Note to append to forecasted day with override to show in admin client</comment>
   </data>
   <data name="AbandonRateParenthesisPercentSign" xml:space="preserve">
