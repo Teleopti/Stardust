@@ -12927,6 +12927,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Finished.
+        /// </summary>
+        public static string Finished {
+            get {
+                return ResourceManager.GetString("Finished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Absence removed successfully..
         /// </summary>
         public static string FinishedRemoveAbsence {
@@ -13053,7 +13062,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Day has been overrided on web.
+        ///   Looks up a localized string similar to Day has been overridden on web.
         /// </summary>
         public static string ForecastDayIsOverrided {
             get {
@@ -16182,6 +16191,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ItemsSelectedParameter {
             get {
                 return ResourceManager.GetString("ItemsSelectedParameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Job.
+        /// </summary>
+        public static string Job {
+            get {
+                return ResourceManager.GetString("Job", resourceCulture);
             }
         }
         
@@ -32753,7 +32771,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Request was resent for schedule changes..
+        ///   Looks up a localized string similar to Request was resent because of schedule changes..
         /// </summary>
         public static string ShiftTradeResendMessage {
             get {

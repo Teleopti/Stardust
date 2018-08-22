@@ -17676,4 +17676,12 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>No historical data found for this skill.</value>
     <comment>Message in web forecast</comment>
   </data>
+  <data name="Finished" xml:space="preserve">
+    <value>Finished</value>
+    <comment>Gamification badge calculation finished status.</comment>
+  </data>
+  <data name="Job" xml:space="preserve">
+    <value>Job</value>
+    <comment>Gamification import external data job name.</comment>
+  </data>
 </root>
