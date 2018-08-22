@@ -3,9 +3,9 @@
 
 	angular.module('wfm.forecasting').controller('ForecastModifyController', forecastModifyController);
 
-	forecastModifyController.$inject = ['ForecastingService', 'NoticeService', '$translate', '$state', '$scope', 'skillIconService'];
+	forecastModifyController.$inject = ['ForecastingService', 'NoticeService', '$translate', '$state', '$scope', 'skillIconService', 'SkillTypeService'];
 
-	function forecastModifyController(forecastingService, noticeSvc, $translate, $state, $scope, skillIconService) {
+	function forecastModifyController(forecastingService, noticeSvc, $translate, $state, $scope, skillIconService, skillTypeService) {
 		var vm = this;
 
 		vm.loadChart = loadChart;
@@ -55,6 +55,7 @@
 				return;
 			}
 
+			vm.dataName = skillTypeService.getSkillLabels(vm.selectedWorkload.SkillType); 
 			getScenarios();
 		})();
 

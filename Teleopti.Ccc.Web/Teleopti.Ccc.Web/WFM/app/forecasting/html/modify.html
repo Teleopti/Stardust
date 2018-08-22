@@ -66,7 +66,7 @@
 					<div class="con-flex">
 						<label for="campaignPercentageId" class="input-icon">
 							<i class="mdi mdi-percent">
-								<input id="campaignPercentageId" type="number" ng-change="vm.updateCampaignPreview()" min="-100" required autofocus autocomplete="off" ng-model="vm.campaignPercentage" placeholder="{{'CampaignCallsPercentSign'|translate}}">
+								<input id="campaignPercentageId" type="number" ng-change="vm.updateCampaignPreview()" min="-100" required autofocus autocomplete="off" ng-model="vm.campaignPercentage" placeholder="{{'Campaign'| translate }} {{vm.dataName.Tasks}}%:">
 							</i>
 						</label>
 					</div>
@@ -100,17 +100,18 @@
 				<div class="con-row">
 					<div class="con-flex">
 						<div class="form-input-wrap">
-							<label for="overrideTasksValueId">{{'Calls'|translate}}:</label>
+						 
+							<label for="overrideTasksValueId">{{vm.dataName.Tasks}}:</label>
 							<input id="overrideTasksValueId" type="number" ng-model="form.overrideTasksValue" name="" min="1" value="" autocomplete="off">
 						</div>
 
 						<div class="form-input-wrap">
-							<label for="overrideTalkTimeValueId">{{'TalkTime'|translate}}:</label>
+							<label for="overrideTalkTimeValueId">{{vm.dataName.TaskTime}}:</label>
 							<input id="overrideTalkTimeValueId" type="number" ng-model="form.overrideTalkTimeValue" name="" min="1" value="" autocomplete="off">
 						</div>
 
 						<div class="form-input-wrap">
-							<label for="overrideAfterCallWorkValueId">{{'ACW'|translate}}:</label>
+							<label for="overrideAfterCallWorkValueId">{{vm.dataName.ATW}}:</label>
 							<input id="overrideAfterCallWorkValueId" type="number" ng-model="form.overrideAfterCallWorkValue" name="" min="1" value="" autocomplete="off">
 						</div>
 					</div>

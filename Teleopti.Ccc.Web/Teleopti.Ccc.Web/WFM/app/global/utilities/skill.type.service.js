@@ -16,7 +16,6 @@
 					ATW: $translate.instant('ACW'),
 					TotalTaskTime: $translate.instant('TotalTalkTime'),
 					TaskTime: $translate.instant('TalkTime'),
-					//
 					OriginalTasks: $translate.instant('OriginalPhoneCalls'),
 					ValidatedTasks: $translate.instant('ValidatedPhoneCalls')
 				};
@@ -28,7 +27,6 @@
 					ATW: $translate.instant('ACW'),
 					TotalTaskTime: $translate.instant('TotalChatTime'),
 					TaskTime: $translate.instant('ChatTime'),
-					//
 					OriginalTasks: $translate.instant('OriginalChats'),
 					ValidatedTasks: $translate.instant('ValidatedChats')
 
@@ -42,7 +40,6 @@
 					ATW: $translate.instant('AEW'),
 					TotalTaskTime: $translate.instant('TotalTaskTime'),
 					TaskTime: $translate.instant('TaskTime'),
-					//
 					OriginalTasks: $translate.instant('OriginalEmails'),
 					ValidatedTasks: $translate.instant('ValidatedEmails')
 
@@ -56,7 +53,6 @@
 					ATW: $translate.instant('ATW'),
 					TotalTaskTime: $translate.instant('TotalTaskTime'),
 					TaskTime: $translate.instant('TaskTime'),
-					//
 					OriginalTasks: $translate.instant('OriginalTasks'),
 					ValidatedTasks: $translate.instant('ValidatedTasks')
 

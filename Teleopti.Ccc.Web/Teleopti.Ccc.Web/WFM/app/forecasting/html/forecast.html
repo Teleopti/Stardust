@@ -2,17 +2,7 @@
 	<div class="view-title">
 		<h1><i class="mdi mdi-chart-line"></i> {{'Forecasts' | translate}}</h1>
 	</div>
-	<!--<div class="fab-wrapper">
-	  <a ui-sref="forecast-create-skill" ng-cloak ng-if="vm.skillMaster.IsPermittedToModify">
-		<button class="wfm-fab grow-out material-depth-1">
-		  <i class="mdi mdi-plus"></i>
-		  <md-tooltip>
-			{{'NewSkill' | translate}}
-		  </md-tooltip>
-		</button>
-	  </a>
-	</div>-->
-
+ 
 	<div class="con-flex x3">
 		<a ui-sref="forecast-create-skill" ng-cloak ng-if="vm.skillMaster.IsPermittedToModify">
 			<button class="wfm-btn wfm-btn-invis-default" <!--ng-click="vm.goForm()"-->>
@@ -24,11 +14,6 @@
 	</div>
 	</a>
 </div>
-
-
- 
-
-
 
 <div class="con-row" ng-if="vm.skillMaster.Skills.length < 1" ng-cloak>
 	<div class="con-flex">
