@@ -1,8 +1,8 @@
 namespace Teleopti.Ccc.DBManager.Library
 {
-	public struct SqlVersion
+	public class SqlVersion
 	{
-		public SqlVersion(int productVersion, bool isAzure) : this()
+		public SqlVersion(int productVersion, bool isAzure)
 		{
 			IsAzure = isAzure;
 			ProductVersion = productVersion;

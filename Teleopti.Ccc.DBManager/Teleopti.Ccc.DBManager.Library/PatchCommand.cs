@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 
 		public string DbManagerFolderPath { get; set; }
-		public bool IsAzure => ConfigurationManager.AppSettings["AzurePattern"] != null && ConfigurationManager.AppSettings["AzurePattern"].Split(';').Any(d => ServerName.Contains(d.Trim()));
+//		public bool IsAzure => ConfigurationManager.AppSettings["AzurePattern"] != null && ConfigurationManager.AppSettings["AzurePattern"].Split(';').Any(d => ServerName.Contains(d.Trim()));
 
 		public string ServerName { get; set; } = ".";
 		public string DatabaseName { get; set; }
