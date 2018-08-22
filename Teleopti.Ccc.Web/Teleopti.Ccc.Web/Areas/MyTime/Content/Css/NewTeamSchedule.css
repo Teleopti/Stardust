@@ -241,9 +241,9 @@
 	background: white;
 }
 .new-teamschedule-agent-name.my-name.relative {
-	width: 100px;
-	min-width: 100px;
-	max-width: 100px;
+	width: 110px;
+	min-width: 110px;
+	max-width: 110px;
 	height: 50px;
 	text-align: center;
 	border-left: 1px solid rgba(0, 0, 0, 0.1);
@@ -359,9 +359,9 @@
 }
 .new-teamschedule-view .my-schedule-column.relative {
 	left: 0;
-	width: 100px;
-	min-width: 100px;
-	max-width: 100px;
+	width: 110px;
+	min-width: 110px;
+	max-width: 110px;
 	display: inline-block;
 	padding: 0 2px;
 	border-right: 1px solid rgba(0, 0, 0, 0.1);
