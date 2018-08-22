@@ -821,7 +821,7 @@ input.use-default-startTime {
 }
 
 .shift-detail {
-	overflow: hidden;
+	overflow: visible;
 	padding: 10px 4px;
 	flex: 4 4 40%;
 	display: flex;
@@ -890,7 +890,6 @@ input.use-default-startTime {
 	width: 140%;
 	width: -webkit-max-content;
 	width: -moz-max-content;
-	margin-left:12px;
 }
 
 .shift-visual-indication-block {
