@@ -93,22 +93,29 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 			e.stopPropagation();
 		});
 
-		$('body').on('mousedown', function(event) {
-			var excludedClassList = [
-				'new-teamschedule-time-filter',
-				'new-teamschedule-team-filter',
-				'new-teamschedule-panel'
-			];
+		$('body')
+			.on('mousedown', function(event) {
+				var excludedClassList = [
+					'new-teamschedule-time-filter',
+					'new-teamschedule-team-filter',
+					'new-teamschedule-panel'
+				];
 
-			if (
-				excludedClassList.indexOf($(event.target)[0].className) == -1 &&
-				excludedClassList.every(function(c) {
-					return $(event.target).parents('.' + c).length == 0;
-				})
-			) {
-				vm.isPanelVisible(false);
-			}
-		});
+				if (
+					excludedClassList.indexOf($(event.target)[0].className) == -1 &&
+					excludedClassList.every(function(c) {
+						return $(event.target).parents('.' + c).length == 0;
+					})
+				) {
+					vm.isPanelVisible(false);
+				}
+			})
+			.on('touchmove', function(event) {
+				var tooltip = $('.tooltip');
+				if (tooltip.length > 0) {
+					tooltip.hide();
+				}
+			});
 	}
 
 	function registerSwipeEventOnMobileAndiPad() {
