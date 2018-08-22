@@ -30,6 +30,8 @@ describe('SkillTypeService Tests ',
 				expect(skillTexts.TaskTime).toEqual('TalkTime');
 				expect(skillTexts.OriginalTasks).toEqual('OriginalPhoneCalls');
 				expect(skillTexts.ValidatedTasks).toEqual('ValidatedPhoneCalls');
+				expect(skillTexts.CampaignTasksPercentSign).toEqual('CampaignCallsPercentSign');
+
 			});
 
 		it('Should get correct terms for chat type skill',
@@ -47,6 +49,7 @@ describe('SkillTypeService Tests ',
 				expect(skillTexts.TaskTime).toEqual('ChatTime');
 				expect(skillTexts.OriginalTasks).toEqual('OriginalChats');
 				expect(skillTexts.ValidatedTasks).toEqual('ValidatedChats');
+				expect(skillTexts.CampaignTasksPercentSign).toEqual('CampaignChatsPercentSign');
 
 			});
 
@@ -65,6 +68,7 @@ describe('SkillTypeService Tests ',
 				expect(skillTexts.TaskTime).toEqual('TaskTime');
 				expect(skillTexts.OriginalTasks).toEqual('OriginalEmails');
 				expect(skillTexts.ValidatedTasks).toEqual('ValidatedEmails');
+				expect(skillTexts.CampaignTasksPercentSign).toEqual('CampaignEmailsPercentSign');
 
 			});
 
@@ -92,6 +96,7 @@ describe('SkillTypeService Tests ',
 						expect(skillTexts.TaskTime).toEqual('TaskTime');
 						expect(skillTexts.OriginalTasks).toEqual('OriginalTasks');
 						expect(skillTexts.ValidatedTasks).toEqual('ValidatedTasks');
+						expect(skillTexts.CampaignTasksPercentSign).toEqual('CampaignTasksPercentSign');
 
 					});
 			});

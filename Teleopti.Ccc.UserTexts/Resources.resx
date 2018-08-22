@@ -17692,4 +17692,12 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Original emails</value>
     <comment>Original emails</comment>
   </data>
+  <data name="CampaignEmailsPercentSign" xml:space="preserve">
+    <value>Campaign emails %</value>
+    <comment>message in web forecast</comment>
+  </data>
+  <data name="CampaignTasksPercentSign" xml:space="preserve">
+    <value>Campaign tasks %</value>
+    <comment>message in web forecast</comment>
+  </data>
 </root>

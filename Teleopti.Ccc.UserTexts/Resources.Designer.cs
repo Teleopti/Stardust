@@ -5457,6 +5457,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Campaign emails %.
+        /// </summary>
+        public static string CampaignEmailsPercentSign {
+            get {
+                return ResourceManager.GetString("CampaignEmailsPercentSign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Campaign facsimiles handling time %.
         /// </summary>
         public static string CampaignFacsimilesHandlingtime {
@@ -5588,6 +5597,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string CampaignTasksHandlingtime {
             get {
                 return ResourceManager.GetString("CampaignTasksHandlingtime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Campaign tasks %.
+        /// </summary>
+        public static string CampaignTasksPercentSign {
+            get {
+                return ResourceManager.GetString("CampaignTasksPercentSign", resourceCulture);
             }
         }
         

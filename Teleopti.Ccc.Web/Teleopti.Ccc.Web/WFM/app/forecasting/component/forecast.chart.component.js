@@ -39,8 +39,6 @@ function ForecastChartCtrl($translate, $filter, $timeout, SkillTypeService) {
 		}
 		var dataName = SkillTypeService.getSkillLabels(selectedWorkload.SkillType);
 
-		console.log(dataName);
-
 		var preparedData = {
 			dateSeries: ['Date'],
 			averageAfterTaskTimeSeries: ['AverageAfterTaskTime'],
@@ -81,8 +79,6 @@ function ForecastChartCtrl($translate, $filter, $timeout, SkillTypeService) {
 				preparedData.campaignAndOverrideSeries.push(null);
 			}
 		}
-
-		console.log(preparedData);
 
 		chart = c3.generate({
 			bindto: '#' + chartId,

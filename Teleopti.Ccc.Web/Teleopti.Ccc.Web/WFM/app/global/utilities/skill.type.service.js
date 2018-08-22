@@ -8,6 +8,11 @@
 
 	function skillTypeService($translate) {
 		var getSkillLabels = function (skill) {
+
+			if (!skill || !skill.SkillType) {
+				return {};
+			}
+
 			if (skill.SkillType === 'SkillTypeInboundTelephony') {
 				return {
 					TotalTasks: $translate.instant('TotalCalls'),
@@ -17,7 +22,8 @@
 					TotalTaskTime: $translate.instant('TotalTalkTime'),
 					TaskTime: $translate.instant('TalkTime'),
 					OriginalTasks: $translate.instant('OriginalPhoneCalls'),
-					ValidatedTasks: $translate.instant('ValidatedPhoneCalls')
+					ValidatedTasks: $translate.instant('ValidatedPhoneCalls'),
+					CampaignTasksPercentSign: $translate.instant('CampaignCallsPercentSign')
 				};
 			} else if (skill.SkillType === 'SkillTypeChat') {
 				return {
@@ -28,9 +34,8 @@
 					TotalTaskTime: $translate.instant('TotalChatTime'),
 					TaskTime: $translate.instant('ChatTime'),
 					OriginalTasks: $translate.instant('OriginalChats'),
-					ValidatedTasks: $translate.instant('ValidatedChats')
-
-
+					ValidatedTasks: $translate.instant('ValidatedChats'),
+					CampaignTasksPercentSign: $translate.instant('CampaignChatsPercentSign')
 				};
 			} else if (skill.SkillType === 'SkillTypeEmail') {
 				return {
@@ -41,9 +46,8 @@
 					TotalTaskTime: $translate.instant('TotalTaskTime'),
 					TaskTime: $translate.instant('TaskTime'),
 					OriginalTasks: $translate.instant('OriginalEmails'),
-					ValidatedTasks: $translate.instant('ValidatedEmails')
-
-
+					ValidatedTasks: $translate.instant('ValidatedEmails'),
+					CampaignTasksPercentSign: $translate.instant('CampaignEmailsPercentSign')
 				};
 			} else {
 				return {
@@ -54,9 +58,8 @@
 					TotalTaskTime: $translate.instant('TotalTaskTime'),
 					TaskTime: $translate.instant('TaskTime'),
 					OriginalTasks: $translate.instant('OriginalTasks'),
-					ValidatedTasks: $translate.instant('ValidatedTasks')
-
-
+					ValidatedTasks: $translate.instant('ValidatedTasks'),
+					CampaignTasksPercentSign: $translate.instant('CampaignTasksPercentSign')
 				};
 			}
 		};
