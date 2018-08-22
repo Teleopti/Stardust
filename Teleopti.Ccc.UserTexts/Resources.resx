@@ -17732,4 +17732,20 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Campaign tasks %</value>
     <comment>message in web forecast</comment>
   </data>
+  <data name="BadgeThreshold" xml:space="preserve">
+    <value>Badge threshold</value>
+    <comment>Badge threshold</comment>
+  </data>
+  <data name="BronzeBadgeThreshold" xml:space="preserve">
+    <value>Bronze badge threshold</value>
+    <comment>Bronze badge threshold</comment>
+  </data>
+  <data name="GoldBadgeThreshold" xml:space="preserve">
+    <value>Gold badge threshold</value>
+    <comment>Gold badge threshold</comment>
+  </data>
+  <data name="SilverBadgeThreshold" xml:space="preserve">
+    <value>Silver badge threshold</value>
+    <comment>Silver badge threshold</comment>
+  </data>
 </root>

@@ -4260,6 +4260,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Badge threshold.
+        /// </summary>
+        public static string BadgeThreshold {
+            get {
+                return ResourceManager.GetString("BadgeThreshold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You got a new bronze badge! Your adherence in {1:yyyy-MM-dd} is above {0}..
         /// </summary>
         public static string BadgeWithRank_YouGotANewBronzeBadgeForAdherence {
@@ -4661,6 +4670,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string BrokenRules {
             get {
                 return ResourceManager.GetString("BrokenRules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bronze badge threshold.
+        /// </summary>
+        public static string BronzeBadgeThreshold {
+            get {
+                return ResourceManager.GetString("BronzeBadgeThreshold", resourceCulture);
             }
         }
         
@@ -13985,6 +14003,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Go {
             get {
                 return ResourceManager.GetString("Go", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gold badge threshold.
+        /// </summary>
+        public static string GoldBadgeThreshold {
+            get {
+                return ResourceManager.GetString("GoldBadgeThreshold", resourceCulture);
             }
         }
         
@@ -33415,6 +33442,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SignOut {
             get {
                 return ResourceManager.GetString("SignOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Silver badge threshold.
+        /// </summary>
+        public static string SilverBadgeThreshold {
+            get {
+                return ResourceManager.GetString("SilverBadgeThreshold", resourceCulture);
             }
         }
         
