@@ -252,5 +252,31 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			nonCascadingSkillDay.SkillStaffPeriodCollection.Last().AbsoluteDifference
 				.Should().Be.EqualTo(0);
 		}
+		
+		[Test, Ignore("#77273 To be fixed")]
+		public void ShouldHandleCaseWhenAgentsHaveSameCascadingSkillsButDifferentNonCascadingSkill()
+		{
+			var scenario = new Scenario("_");
+			var activity = new Activity("_"){RequiresSeat = true};
+			var dateOnly = DateOnly.Today;
+			var prioritizedSkill1 = new Skill("skill1").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(1).IsOpenBetween(8, 9);
+			var prioritizedSkillDay1 = prioritizedSkill1.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var prioritizedSkill2 = new Skill("skill2").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(2).IsOpenBetween(8, 9);
+			var prioritizedSkillDay2 = prioritizedSkill2.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var prioritizedSkill3 = new Skill("skill3").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().CascadingIndex(3).IsOpenBetween(8, 9);
+			var prioritizedSkillDay3 = prioritizedSkill3.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var nonCascadingSkill1 = new Skill().For(activity).WithId();
+			var nonCascadingSkill2 = new Skill().For(activity).WithId();
+			var agent1 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(prioritizedSkill1, prioritizedSkill2, prioritizedSkill3, nonCascadingSkill1);
+			var agent2 = new Person().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(prioritizedSkill1, prioritizedSkill2, prioritizedSkill3, nonCascadingSkill2);
+			var ass1 = new PersonAssignment(agent1, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9));
+			var ass2 = new PersonAssignment(agent2, scenario, dateOnly).WithLayer(activity, new TimePeriod(8, 9));
+			
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass1, ass2 }, new[] { prioritizedSkillDay1, prioritizedSkillDay2, prioritizedSkillDay3 }, false, false));
+
+			prioritizedSkillDay1.SkillStaffPeriodCollection.First().CalculatedResource.Should().Be.EqualTo(1);
+			prioritizedSkillDay2.SkillStaffPeriodCollection.First().CalculatedResource.Should().Be.EqualTo(1);
+			prioritizedSkillDay3.SkillStaffPeriodCollection.First().CalculatedResource.Should().Be.EqualTo(0);
+		}
 	}
 }
