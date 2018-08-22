@@ -28,6 +28,8 @@ describe('SkillTypeService Tests ',
 				expect(skillTexts.ATW).toEqual('ACW');
 				expect(skillTexts.TotalTaskTime).toEqual('TotalTalkTime');
 				expect(skillTexts.TaskTime).toEqual('TalkTime');
+				expect(skillTexts.OriginalTasks).toEqual('OriginalPhoneCalls');
+				expect(skillTexts.ValidatedTasks).toEqual('ValidatedPhoneCalls');
 			});
 
 		it('Should get correct terms for chat type skill',
@@ -43,6 +45,9 @@ describe('SkillTypeService Tests ',
 				expect(skillTexts.ATW).toEqual('ACW');
 				expect(skillTexts.TotalTaskTime).toEqual('TotalChatTime');
 				expect(skillTexts.TaskTime).toEqual('ChatTime');
+				expect(skillTexts.OriginalTasks).toEqual('OriginalChats');
+				expect(skillTexts.ValidatedTasks).toEqual('ValidatedChats');
+
 			});
 
 		it('Should get correct terms for chat type skill',
@@ -58,6 +63,9 @@ describe('SkillTypeService Tests ',
 				expect(skillTexts.ATW).toEqual('AEW');
 				expect(skillTexts.TotalTaskTime).toEqual('TotalTaskTime');
 				expect(skillTexts.TaskTime).toEqual('TaskTime');
+				expect(skillTexts.OriginalTasks).toEqual('OriginalEmails');
+				expect(skillTexts.ValidatedTasks).toEqual('ValidatedEmails');
+
 			});
 
 		var otherSkillTypes = [
@@ -82,6 +90,9 @@ describe('SkillTypeService Tests ',
 						expect(skillTexts.ATW).toEqual('ATW');
 						expect(skillTexts.TotalTaskTime).toEqual('TotalTaskTime');
 						expect(skillTexts.TaskTime).toEqual('TaskTime');
+						expect(skillTexts.OriginalTasks).toEqual('OriginalTasks');
+						expect(skillTexts.ValidatedTasks).toEqual('ValidatedTasks');
+
 					});
 			});
 	});

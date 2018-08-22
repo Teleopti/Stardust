@@ -15,7 +15,10 @@
 					TotalATW: $translate.instant('TotalACW'),
 					ATW: $translate.instant('ACW'),
 					TotalTaskTime: $translate.instant('TotalTalkTime'),
-					TaskTime: $translate.instant('TalkTime')
+					TaskTime: $translate.instant('TalkTime'),
+					//
+					OriginalTasks: $translate.instant('OriginalPhoneCalls'),
+					ValidatedTasks: $translate.instant('ValidatedPhoneCalls')
 				};
 			} else if (skill.SkillType === 'SkillTypeChat') {
 				return {
@@ -24,7 +27,12 @@
 					TotalATW: $translate.instant('TotalACW'),
 					ATW: $translate.instant('ACW'),
 					TotalTaskTime: $translate.instant('TotalChatTime'),
-					TaskTime: $translate.instant('ChatTime')
+					TaskTime: $translate.instant('ChatTime'),
+					//
+					OriginalTasks: $translate.instant('OriginalChats'),
+					ValidatedTasks: $translate.instant('ValidatedChats')
+
+
 				};
 			} else if (skill.SkillType === 'SkillTypeEmail') {
 				return {
@@ -33,7 +41,12 @@
 					TotalATW: $translate.instant('TotalAEW'),
 					ATW: $translate.instant('AEW'),
 					TotalTaskTime: $translate.instant('TotalTaskTime'),
-					TaskTime: $translate.instant('TaskTime')
+					TaskTime: $translate.instant('TaskTime'),
+					//
+					OriginalTasks: $translate.instant('OriginalEmails'),
+					ValidatedTasks: $translate.instant('ValidatedEmails')
+
+
 				};
 			} else {
 				return {
@@ -42,7 +55,12 @@
 					TotalATW: $translate.instant('TotalATW'),
 					ATW: $translate.instant('ATW'),
 					TotalTaskTime: $translate.instant('TotalTaskTime'),
-					TaskTime: $translate.instant('TaskTime')
+					TaskTime: $translate.instant('TaskTime'),
+					//
+					OriginalTasks: $translate.instant('OriginalTasks'),
+					ValidatedTasks: $translate.instant('ValidatedTasks')
+
+
 				};
 			}
 		};

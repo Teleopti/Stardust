@@ -8,7 +8,7 @@ angular.module('wfm.forecasting').component('forecastHistoryChart', {
 	}
 });
 
-function ForecastHistoryChartController($translate, $filter, $timeout) {
+function ForecastHistoryChartController($translate, $filter, $timeout, SkillTypeService) {
 	var ctrl = this;
 	var chart;
 	ctrl.refresh = drawForecastHistoryChart;
@@ -32,6 +32,18 @@ function ForecastHistoryChartController($translate, $filter, $timeout) {
 			validatedSeries: ['ValidatedTasks']
 		};
 
+
+		var selectItems = [];
+		//ctrl.onClick(ctrl.selectedDays);
+		var selectedWorkload;
+		if (sessionStorage.currentForecastWorkload) {
+			selectedWorkload = angular.fromJson(sessionStorage.currentForecastWorkload);
+		} else {
+			return;
+		}
+		var dataName = SkillTypeService.getSkillLabels(selectedWorkload.SkillType);
+
+
 		for (var i = 0; i < days.length; i++) {
 			var date = moment(days[i].Date);
 			preparedData.dateSeries.push(date.format('L'));
@@ -44,10 +56,12 @@ function ForecastHistoryChartController($translate, $filter, $timeout) {
 			data: {
 				x: 'Date',
 				columns: [preparedData.dateSeries, preparedData.originalSeries, preparedData.validatedSeries],
+
 				names: {
 					Date: $translate.instant('Date'),
-					OriginalTasks: $translate.instant('OriginalPhoneCalls'),
-					ValidatedTasks: $translate.instant('ValidatedPhoneCalls')
+					OriginalTasks: dataName.OriginalTasks,
+					ValidatedTasks: dataName.ValidatedTasks
+					
 				},
 				colors: {
 					OriginalTasks: '#EE8F7D',

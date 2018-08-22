@@ -17653,11 +17653,11 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <comment>Link to open historical data in forecaster</comment>
   </data>
   <data name="OriginalPhoneCalls" xml:space="preserve">
-    <value>Original Calls</value>
+    <value>Original calls</value>
     <comment>Text to display in forecaster</comment>
   </data>
   <data name="ValidatedPhoneCalls" xml:space="preserve">
-    <value>Validated Calls</value>
+    <value>Validated calls</value>
     <comment>Text to display in forecaster</comment>
   </data>
   <data name="PleaseSelectASkillFirst" xml:space="preserve">
@@ -17683,5 +17683,13 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
   <data name="Job" xml:space="preserve">
     <value>Job</value>
     <comment>Gamification import external data job name.</comment>
+  </data>
+  <data name="OriginalChats" xml:space="preserve">
+    <value>Original chats</value>
+    <comment>Original chats</comment>
+  </data>
+  <data name="OriginalEmails" xml:space="preserve">
+    <value>Original emails</value>
+    <comment>Original emails</comment>
   </data>
 </root>

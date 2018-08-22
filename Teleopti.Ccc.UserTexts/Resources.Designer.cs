@@ -23382,11 +23382,29 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Original chats.
+        /// </summary>
+        public static string OriginalChats {
+            get {
+                return ResourceManager.GetString("OriginalChats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Original customers.
         /// </summary>
         public static string OriginalCustomers {
             get {
                 return ResourceManager.GetString("OriginalCustomers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original emails.
+        /// </summary>
+        public static string OriginalEmails {
+            get {
+                return ResourceManager.GetString("OriginalEmails", resourceCulture);
             }
         }
         
@@ -23454,7 +23472,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Original Calls.
+        ///   Looks up a localized string similar to Original calls.
         /// </summary>
         public static string OriginalPhoneCalls {
             get {
@@ -38227,7 +38245,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validated Calls.
+        ///   Looks up a localized string similar to Validated calls.
         /// </summary>
         public static string ValidatedPhoneCalls {
             get {
