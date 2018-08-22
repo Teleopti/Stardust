@@ -1,230 +1,118 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web.Http;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Web.Filters;
+using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {
-	//[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview)]
 	public class HistoricalOverviewController : ApiController
 	{
-		[HttpGet, Route("api/HistoricalOverview/Load")]
+		private readonly IAgentStateReadModelReader _reader;
+		private readonly IAgentAdherenceDayLoader _agentAdherenceDayLoader;
+
+		public HistoricalOverviewController(IAgentStateReadModelReader reader,
+			IAgentAdherenceDayLoader agentAdherenceDayLoader)
+		{
+			_reader = reader;
+			_agentAdherenceDayLoader = agentAdherenceDayLoader;
+		}
+
+		[UnitOfWork, ReadModelUnitOfWork, HttpGet, Route("api/HistoricalOverview/Load")]
 		public virtual IHttpActionResult Load([FromUri] IEnumerable<Guid> siteIds = null, [FromUri] IEnumerable<Guid> teamIds = null)
 		{
-			var stuff =  @"[
+			var filter = new AgentStateFilter() {TeamIds = teamIds, SiteIds = siteIds};
+			var persons = from p in _reader.Read(filter)
+				select new
 				{
-					Name: 'Denver/Avalanche',
-					Agents: [{
-						Id: '1234',
-						Name: 'Andeen Ashley',
-						IntervalAdherence: 73,
+					p.PersonId,
+					p.TeamId,
+					p.TeamName,
+					p.SiteName,
+					p.FirstName,
+					p.LastName
+				};
+			var days = DateOnly.Today.AddDays(-8).DateRange(7);
 
-						Days: [
-							{
-								Date: '20180801',
-								DisplayDate: '23/12',
-								Adherence: 100,
-								WasLateForWork: true
-							},
-							{
-								Date: '20180802',
-								DisplayDate: '24/12',
-								Adherence: 90
-							},
-							{
-								Date: '20180803',
-								DisplayDate: '25/12',
-								Adherence: 85
-							},
-							{
-								Date: '20180804',
-								DisplayDate: '26/12',
-								Adherence: 88
-							},
-							{
-								Date: '20180805',
-								DisplayDate: '27/12',
-								Adherence: 30,
-								WasLateForWork: true
-							},
-							{
-								Date: '20180806',
-								DisplayDate: '28/12',
-								Adherence: 70
-							},
-							{
-								Date: '20180807',
-								DisplayDate: '29/12',
-								Adherence: 72
-							}
-						],
-						LateForWork:
-							{
-								Count: 2,
-								TotalMinutes: 24
-							}
-					},
-						{
-							Id: '1234',
-							Name: 'Aneedn Anna',
-							IntervalAdherence: 77,
-							Days: [
-								{
-									Date: '20180801',
-									DisplayDate: '1/8',
-									Adherence: 70,
-								},
-								{
-									Date: '20180802',
-									DisplayDate: '1/8',
-									Adherence: 56,
-									WasLateForWork: true
-								},
-								{
-									Date: '20180803',
-									DisplayDate: '1/8',
-									Adherence: 83
-								},
-								{
-									Date: '20180804',
-									DisplayDate: '1/8',
-									Adherence: 71
-								},
-								{
-									Date: '20180805',
-									DisplayDate: '1/8',
-									Adherence: 95
-								},
-								{
-									Date: '20180806',
-									DisplayDate: '1/8',
-									Adherence: 77
-								},
-								{
-									Date: '20180807',
-									DisplayDate: '1/8',
-									Adherence: 84
-								}
-							],
-							LateForWork:
-								{
-									Count: 1,
-									TotalMinutes: 10
-								}
-						},
-						{
-							Id: '1234',
-							Name: 'Aleed Jane',
-							IntervalAdherence: 75,
-							Days: [
-								{
-									Date: '20180801',
-									DisplayDate: '1/8',
-									Adherence: 83,
-								},
-								{
-									Date: '20180802',
-									DisplayDate: '1/8',
-									Adherence: 95,
-									WasLateForWork: true
-								},
-								{
-									Date: '20180803',
-									DisplayDate: '1/8',
-									Adherence: 78,
-								},
-								{
-									Date: '20180804',
-									DisplayDate: '1/8',
-									Adherence: 78,
-								},
-								{
-									Date: '20180805',
-									DisplayDate: '1/8',
-									Adherence: 98,
-									WasLateForWork: true
-								},
-								{
-									Date: '20180806',
-									DisplayDate: '1/8',
-									Adherence: 95,
-									WasLateForWork: true
-								},
-								{
-									Date: '20180807',
-									DisplayDate: '1/8',
-									Adherence: 85,
-								}
-							],
-							LateForWork:
-								{
-									Count: 3,
-									TotalMinutes: 42
-								}
-						}
 
-					]
-				},
+			var things =
+				from p in persons
+				group p by p.TeamId
+				into t
+				select new HistoricalOverviewTeamViewModel
 				{
-					Id: '1234',
-					Name: 'Barcelona/Red',
-					Agents: [{
-						Name: 'Cndeen Ashley',
-						IntervalAdherence: 94,
-						Days: [
+					Name = t.First().SiteName + "/" + t.First().TeamName,
+					Agents = (from p2 in t
+						let ds = from d in days
+							let x = _agentAdherenceDayLoader.Load(p2.PersonId, d)
+							let change = x.Changes().FirstOrDefault(change => change.LateForWork != null)
+							let lateForWorkText = change != null ? change.LateForWork : "0"
+							let lateForWorkInMin = Int32.Parse(Regex.Replace(lateForWorkText, "[^0-9.]", ""))
+							select new
 							{
-								Date: '20180801',
-								DisplayDate: '1/8',
-								Adherence: 92,
-								WasLateForWork: true
-							},
-							{
-								Date: '20180802',
-								DisplayDate: '1/8',
-								Adherence: 97,
-							},
-							{
-								Date: '20180803',
-								DisplayDate: '1/8',
-								Adherence: 94,
-							},
-							{
-								Date: '20180804',
-								DisplayDate: '1/8',
-								Adherence: 98,
-							},
-							{
-								Date: '20180806',
-								DisplayDate: '1/8',
-								Adherence: 99,
-							},
-							{
-								Date: '20180807',
-								DisplayDate: '1/8',
-								Adherence: 94,
-							},
-							{
-								Date: '20180808',
-								DisplayDate: '1/8',
-								Adherence: 99,
+								d = d,
+								Date = d.Date,
+								percent = x.Percentage().GetValueOrDefault(),
+								LateForWork = x.Changes().Where(xx => xx.LateForWork != null),
+								LateForWorkInMin = lateForWorkInMin
 							}
-						],
-						LateForWork:
+						select new HistoricalOverviewAgentViewModel
+						{
+							Id = p2.PersonId,
+							Name = p2.LastName + " " + p2.FirstName,
+							IntervalAdherence = 0,
+							Days = (from d in ds
+								select new HistoricalOverviewDayViewModel
+								{
+									Date = d.Date.ToString("yyyyMMdd"),
+									DisplayDate = d.Date.ToString("MM/dd"),
+									Adherence = _agentAdherenceDayLoader.Load(p2.PersonId, d.d).Percentage().GetValueOrDefault(),
+									WasLateForWork = d.LateForWork.Any()
+								}).ToArray(),
+							LateForWork = new HistoricalOverviewLateForWorkViewModel
 							{
-								Count: 1,
-								TotalMinutes: 3
+								Count = ds.Count(x => x.LateForWork.Any()),
+								TotalMinutes = ds.Sum(x => x.LateForWorkInMin)
 							}
-					}
-					]
-				}
-			]";
-			
-			return Ok(JsonConvert.DeserializeObject<dynamic>(stuff));
+						}).ToArray()
+				};
+
+			return Ok(things.ToArray());
 		}
-		
+	}
+
+	public class HistoricalOverviewTeamViewModel
+	{
+		public string Name { get; set; }
+		public IEnumerable<HistoricalOverviewAgentViewModel> Agents { get; set; }
+	}
+
+	public class HistoricalOverviewAgentViewModel
+	{
+		public Guid Id { get; set; }
+		public string Name { get; set; }
+		public int IntervalAdherence { get; set; }
+		public HistoricalOverviewLateForWorkViewModel LateForWork { get; set; }
+		public IEnumerable<HistoricalOverviewDayViewModel> Days { get; set; }
+	}
+
+	public class HistoricalOverviewDayViewModel
+	{
+		public string Date { get; set; }
+		public string DisplayDate { get; set; }
+		public int Adherence { get; set; }
+		public bool WasLateForWork { get; set; }
+	}
+
+	public class HistoricalOverviewLateForWorkViewModel
+	{
+		public int Count { get; set; }
+		public int TotalMinutes { get; set; }
 	}
 }
