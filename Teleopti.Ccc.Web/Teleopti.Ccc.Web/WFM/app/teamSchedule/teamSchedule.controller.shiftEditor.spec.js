@@ -588,7 +588,7 @@
 		shiftLayers[0].click();
 
 		var typeOptions = panel[0].querySelectorAll('.activity-selector md-option');
-		expect(typeOptions.length).toBe(5);
+		expect(typeOptions.length).toBe(6);
 	});
 
 	it('should set correct activity type when select an activity', function() {
@@ -1007,7 +1007,8 @@
 			Timezone: { IanaId: 'Europe/Berlin' }
 		});
 
-		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-16', 'Europe/Berlin');
+		var scope = $rootScope.$new();
+		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-16', 'Europe/Berlin', scope);
 		var vm = panel.isolateScope().vm;
 
 		var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
@@ -1027,6 +1028,8 @@
 			type: 'resizeend',
 			target: shiftLayer
 		});
+
+		scope.$apply();
 
 		shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 		var nextShiftLayer = panel[0].querySelectorAll('.shift-layer')[1];
@@ -1070,7 +1073,8 @@
 			Timezone: { IanaId: 'Europe/Berlin' }
 		});
 
-		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-17', 'Europe/Berlin');
+		var scope = $rootScope.$new();
+		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-17', 'Europe/Berlin', scope);
 		var vm = panel.isolateScope().vm;
 
 		var shiftLayer = panel[0].querySelectorAll('.shift-layer')[1];
@@ -1090,6 +1094,7 @@
 			type: 'resizeend',
 			target: shiftLayer
 		});
+		scope.$apply();
 
 		var previousShiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 		shiftLayer = panel[0].querySelectorAll('.shift-layer')[1];
@@ -1133,7 +1138,8 @@
 			Timezone: { IanaId: 'Europe/Berlin' }
 		});
 
-		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-17', 'Europe/Berlin');
+		var scope = $rootScope.$new();
+		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-17', 'Europe/Berlin', scope);
 		var vm = panel.isolateScope().vm;
 
 		var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
@@ -1153,6 +1159,7 @@
 			type: 'resizeend',
 			target: shiftLayer
 		});
+		scope.$apply();
 
 		var nextShiftLayer = panel[0].querySelectorAll('.shift-layer')[1];
 		shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
@@ -1196,7 +1203,8 @@
 			Timezone: { IanaId: 'Europe/Berlin' }
 		});
 
-		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-17', 'Europe/Berlin');
+		var scope = $rootScope.$new();
+		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-17', 'Europe/Berlin', scope);
 		var vm = panel.isolateScope().vm;
 
 		var shiftLayer = panel[0].querySelectorAll('.shift-layer')[1];
@@ -1216,6 +1224,7 @@
 			type: 'resizeend',
 			target: shiftLayer
 		});
+		scope.$apply();
 
 		var previousShiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 		shiftLayer = panel[0].querySelectorAll('.shift-layer')[1];
@@ -1349,7 +1358,8 @@
 			Timezone: { IanaId: 'Europe/Berlin' }
 		});
 
-		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-16', 'Europe/Berlin');
+		var scope = $rootScope.$new();
+		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-16', 'Europe/Berlin', scope);
 		var vm = panel.isolateScope().vm;
 
 		var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
@@ -1369,6 +1379,7 @@
 			type: 'resizeend',
 			target: shiftLayer
 		});
+		scope.$apply();
 
 		shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 		var nextShiftLayer = panel[0].querySelectorAll('.shift-layer')[1];
@@ -1412,7 +1423,8 @@
 			Timezone: { IanaId: 'Europe/Berlin' }
 		});
 
-		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-17', 'Europe/Berlin');
+		var scope = $rootScope.$new();
+		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-17', 'Europe/Berlin', scope);
 		var vm = panel.isolateScope().vm;
 
 		var shiftLayer = panel[0].querySelectorAll('.shift-layer')[1];
@@ -1432,6 +1444,7 @@
 			type: 'resizeend',
 			target: shiftLayer
 		});
+		scope.$apply();
 
 		var previousShiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 		shiftLayer = panel[0].querySelectorAll('.shift-layer')[1];
@@ -1475,7 +1488,8 @@
 			Timezone: { IanaId: 'Europe/Berlin' }
 		});
 
-		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-17', 'Europe/Berlin');
+		var scope = $rootScope.$new();
+		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-17', 'Europe/Berlin', scope);
 		var vm = panel.isolateScope().vm;
 
 		var shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
@@ -1495,6 +1509,7 @@
 			type: 'resizeend',
 			target: shiftLayer
 		});
+		scope.$apply();
 
 		var nextShiftLayer = panel[0].querySelectorAll('.shift-layer')[1];
 		shiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
@@ -1538,7 +1553,8 @@
 			Timezone: { IanaId: 'Europe/Berlin' }
 		});
 
-		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-17', 'Europe/Berlin');
+		var scope = $rootScope.$new();
+		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-17', 'Europe/Berlin', scope);
 		var vm = panel.isolateScope().vm;
 
 		var shiftLayer = panel[0].querySelectorAll('.shift-layer')[1];
@@ -1558,6 +1574,7 @@
 			type: 'resizeend',
 			target: shiftLayer
 		});
+		scope.$apply();
 		shiftLayer.click();
 
 		var previousShiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
@@ -1577,9 +1594,11 @@
 			type: 'resizeend',
 			target: previousShiftLayer
 		});
+		scope.$apply();
 
 		previousShiftLayer.click();
 		previousShiftLayer.click();
+		
 
 		previousInteract.fire({
 			type: 'resizemove',
@@ -1594,6 +1613,7 @@
 			type: 'resizeend',
 			target: previousShiftLayer
 		});
+		scope.$apply();
 
 		previousShiftLayer = panel[0].querySelectorAll('.shift-layer')[0];
 		shiftLayer = panel[0].querySelectorAll('.shift-layer')[1];
@@ -1626,14 +1646,14 @@
 					ActivityId: '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
 				},
 				{
-					ShiftLayerIds: ['71678e5a-ac3f-4daa-9577-a83800e49622'],
+					ShiftLayerIds: ['ccc78e5a-ac3f-4daa-9577-a83800e49622'],
 					Color: '#ffffff',
-					Description: 'Email',
+					Description: 'Sales',
 					Start: '2018-08-17 09:00',
 					End: '2018-08-17 10:00',
 					Minutes: 60,
 					IsOvertime: false,
-					ActivityId: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
+					ActivityId: '84db44f4-22a8-44c7-b376-a0a200da613e'
 				},
 				{
 					ShiftLayerIds: ['71678e5a-ac3f-4daa-9577-a83800e49622'],
@@ -1733,7 +1753,7 @@
 			type: 'resizemove',
 			target: shiftLayer,
 			rect: {
-				width: 120
+				width: 150
 			},
 			deltaRect: { left: -90 }
 		});
@@ -1750,77 +1770,324 @@
 		expect(shiftLayers[0].style.width).toEqual('30px');
 	});
 
-	xit('should not remove lunch activity when it covered completely after extending the selected activity by start time', function () {
-		fakeTeamSchedule.has({
-			PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
-			Name: 'Annika Andersson',
-			Date: '2018-08-17',
-			WorkTimeMinutes: 60,
-			ContractTimeMinutes: 60,
-			Projection: [
-				{
-					ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
-					Color: '#ffffff',
-					Description: 'Phone',
-					Start: '2018-08-17 07:00',
-					End: '2018-08-17 08:00',
-					Minutes: 60,
-					IsOvertime: false,
-					ActivityId: '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+	xdescribe('# keep the lunch/short break on the top #', function () {
+		it('should keep lunch activity when it covered completely after extending the selected activity by start time', function () {
+			fakeTeamSchedule.has({
+				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
+				Name: 'Annika Andersson',
+				Date: '2018-08-17',
+				WorkTimeMinutes: 60,
+				ContractTimeMinutes: 60,
+				Projection: [
+					{
+						ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
+						Color: '#ffffff',
+						Description: 'Phone',
+						Start: '2018-08-17 07:00',
+						End: '2018-08-17 08:00',
+						Minutes: 60,
+						IsOvertime: false,
+						ActivityId: '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+					},
+					{
+						ShiftLayerIds: ['81678e5a-ac3f-4daa-9577-a83800e49622'],
+						Color: '#ffff00',
+						Description: 'Lunch',
+						Start: '2018-08-17 08:00',
+						End: '2018-08-17 09:00',
+						Minutes: 60,
+						IsOvertime: false,
+						ActivityId: '1ffeb898-11bf-43fc-8104-9b5e015ab3c2',
+						FloatOnTop: true
+					},
+					{
+						ShiftLayerIds: ['71678e5a-ac3f-4daa-9577-a83800e49622'],
+						Color: '#ffa2a2',
+						Description: 'Email',
+						Start: '2018-08-17 09:00',
+						End: '2018-08-17 10:00',
+						Minutes: 60,
+						IsOvertime: false,
+						ActivityId: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
+					}
+				],
+				Timezone: { IanaId: 'Europe/Berlin' }
+			});
+
+			var scope = $rootScope.$new();
+			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-17', 'Europe/Berlin', scope);
+			var vm = panel.isolateScope().vm;
+
+			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[2];
+			shiftLayer.click();
+
+			var interact = vm.scheduleVm.ShiftLayers[2].interact;
+			interact.fire({
+				type: 'resizemove',
+				target: shiftLayer,
+				rect: {
+					width: 120
 				},
-				{
-					ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
-					Color: '#ffffff',
-					Description: 'Lunch',
-					Start: '2018-08-17 08:00',
-					End: '2018-08-17 09:00',
-					Minutes: 60,
-					IsOvertime: false,
-					ActivityId: '1ffeb898-11bf-43fc-8104-9b5e015ab3c2',
-					NonOverWritable: true
+				deltaRect: { left: -60 }
+			});
+
+			interact.fire({
+				type: 'resizeend',
+				target: shiftLayer
+			});
+
+			scope.$apply();
+
+			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
+			expect(shiftLayers.length).toEqual(3);
+			expect(shiftLayers[0].style.width).toEqual('60px');
+			expect(shiftLayers[0].style.backgroundColor).toEqual('rgb(255, 255, 255)');
+			expect(shiftLayers[1].style.width).toEqual('60px');
+			expect(shiftLayers[1].style.backgroundColor).toEqual('rgb(255, 255, 0)');
+			expect(shiftLayers[2].style.width).toEqual('60px');
+			expect(shiftLayers[2].style.backgroundColor).toEqual('rgb(255, 162, 162)');
+			expect(shiftLayers[2].style.transform).toEqual('translate(0px, 0px)');
+		});
+
+		it('should not change the activity time after extending the selected activity go pass the lunch but the type of previous activity of lunch is same with the selected activity', function () {
+			fakeTeamSchedule.has({
+				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
+				Name: 'Annika Andersson',
+				Date: '2018-08-21',
+				WorkTimeMinutes: 60,
+				ContractTimeMinutes: 60,
+				Projection: [
+					{
+						ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
+						Color: '#ffffff',
+						Description: 'Phone',
+						Start: '2018-08-21 07:00',
+						End: '2018-08-21 08:00',
+						Minutes: 60,
+						IsOvertime: false,
+						ActivityId: '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+					},
+					{
+						ShiftLayerIds: ['81678e5a-ac3f-4daa-9577-a83800e49622'],
+						Color: '#ffff00',
+						Description: 'Lunch',
+						Start: '2018-08-21 08:00',
+						End: '2018-08-21 09:00',
+						Minutes: 60,
+						IsOvertime: false,
+						ActivityId: '1ffeb898-11bf-43fc-8104-9b5e015ab3c2',
+						FloatOnTop: true
+					},
+					{
+						ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
+						Color: '#ffffff',
+						Description: 'Phone',
+						Start: '2018-08-21 09:00',
+						End: '2018-08-21 10:00',
+						Minutes: 60,
+						IsOvertime: false,
+						ActivityId: '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+					}
+				],
+				Timezone: { IanaId: 'Europe/Berlin' }
+			});
+
+			var scope = $rootScope.$new();
+			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-21', 'Europe/Berlin', scope);
+			var vm = panel.isolateScope().vm;
+
+			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[2];
+			shiftLayer.click();
+
+			var interact = vm.scheduleVm.ShiftLayers[2].interact;
+			interact.fire({
+				type: 'resizemove',
+				target: shiftLayer,
+				rect: {
+					width: 150
 				},
-				{
-					ShiftLayerIds: ['71678e5a-ac3f-4daa-9577-a83800e49622'],
-					Color: '#ffffff',
-					Description: 'Email',
-					Start: '2018-08-17 09:00',
-					End: '2018-08-17 10:00',
-					Minutes: 60,
-					IsOvertime: false,
-					ActivityId: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
-				}
-			],
-			Timezone: { IanaId: 'Europe/Berlin' }
+				deltaRect: { left: -90 }
+			});
+
+			interact.fire({
+				type: 'resizeend',
+				target: shiftLayer
+			});
+
+			scope.$apply();
+
+			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
+			expect(shiftLayers.length).toEqual(3);
+			expect(shiftLayers[0].style.width).toEqual('60px');
+			expect(shiftLayers[0].style.backgroundColor).toEqual('rgb(255, 255, 255)');
+			expect(shiftLayers[1].style.width).toEqual('60px');
+			expect(shiftLayers[1].style.backgroundColor).toEqual('rgb(255, 255, 0)');
+			expect(shiftLayers[2].style.width).toEqual('60px');
+			expect(shiftLayers[2].style.backgroundColor).toEqual('rgb(255, 255, 255)');
+			expect(shiftLayers[2].style.transform).toEqual('translate(0px, 0px)');
 		});
 
-		var scope = $rootScope.$new();
-		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-17', 'Europe/Berlin', scope);
-		var vm = panel.isolateScope().vm;
+		it('should add an activity after extending the selected activity go pass the lunch but the type of previous activity of lunch is different with the selected activity', function () {
+			fakeTeamSchedule.has({
+				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
+				Name: 'Annika Andersson',
+				Date: '2018-08-21',
+				WorkTimeMinutes: 60,
+				ContractTimeMinutes: 60,
+				Projection: [
+					{
+						ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
+						Color: '#ffffff',
+						Description: 'Phone',
+						Start: '2018-08-21 07:00',
+						End: '2018-08-21 08:00',
+						Minutes: 60,
+						IsOvertime: false,
+						ActivityId: '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+					},
+					{
+						ShiftLayerIds: ['81678e5a-ac3f-4daa-9577-a83800e49622'],
+						Color: '#ffff00',
+						Description: 'Lunch',
+						Start: '2018-08-21 08:00',
+						End: '2018-08-21 09:00',
+						Minutes: 60,
+						IsOvertime: false,
+						ActivityId: '1ffeb898-11bf-43fc-8104-9b5e015ab3c2',
+						FloatOnTop: true
+					},
+					{
+						ShiftLayerIds: ['91678e5a-ac3f-4daa-9577-a83800e49622'],
+						Color: '#000000',
+						Description: 'Email',
+						Start: '2018-08-21 09:00',
+						End: '2018-08-21 10:00',
+						Minutes: 60,
+						IsOvertime: false,
+						ActivityId: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
+					}
+				],
+				Timezone: { IanaId: 'Europe/Berlin' }
+			});
 
-		var shiftLayer = panel[0].querySelectorAll('.shift-layer')[2];
-		shiftLayer.click();
+			var scope = $rootScope.$new();
+			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-21', 'Europe/Berlin', scope);
+			var vm = panel.isolateScope().vm;
 
-		var interact = vm.scheduleVm.ShiftLayers[2].interact;
-		interact.fire({
-			type: 'resizemove',
-			target: shiftLayer,
-			rect: {
-				width: 120
-			},
-			deltaRect: { left: -90 }
+			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[2];
+			shiftLayer.click();
+
+			var interact = vm.scheduleVm.ShiftLayers[2].interact;
+			interact.fire({
+				type: 'resizemove',
+				target: shiftLayer,
+				rect: {
+					width: 150
+				},
+				deltaRect: { left: -90 }
+			});
+
+			interact.fire({
+				type: 'resizeend',
+				target: shiftLayer
+			});
+
+			scope.$apply();
+
+			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
+			expect(shiftLayers.length).toEqual(4);
+			expect(shiftLayers[0].style.width).toEqual('30px');
+			expect(shiftLayers[0].style.backgroundColor).toEqual('rgb(255, 255, 255)');
+			expect(shiftLayers[1].style.width).toEqual('30px');
+			expect(shiftLayers[1].style.backgroundColor).toEqual('rgb(0, 0, 0)');
+			expect(shiftLayers[2].style.width).toEqual('60px');
+			expect(shiftLayers[2].style.backgroundColor).toEqual('rgb(255, 255, 0)');
+			expect(shiftLayers[3].style.width).toEqual('60px');
+			expect(shiftLayers[3].style.backgroundColor).toEqual('rgb(0, 0, 0)');
+			expect(shiftLayers[3].style.transform).toEqual('translate(0px, 0px)');
 		});
 
-		interact.fire({
-			type: 'resizeend',
-			target: shiftLayer
+		it('should replace with the selected activity after extending the selected activity go pass the lunch but the type of previous activity of lunch is different with the selected activity', function () {
+			fakeTeamSchedule.has({
+				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
+				Name: 'Annika Andersson',
+				Date: '2018-08-21',
+				WorkTimeMinutes: 60,
+				ContractTimeMinutes: 60,
+				Projection: [
+					{
+						ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
+						Color: '#ffffff',
+						Description: 'Phone',
+						Start: '2018-08-21 07:00',
+						End: '2018-08-21 08:00',
+						Minutes: 60,
+						IsOvertime: false,
+						ActivityId: '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+					},
+					{
+						ShiftLayerIds: ['81678e5a-ac3f-4daa-9577-a83800e49622'],
+						Color: '#ffff00',
+						Description: 'Lunch',
+						Start: '2018-08-21 08:00',
+						End: '2018-08-21 09:00',
+						Minutes: 60,
+						IsOvertime: false,
+						ActivityId: '1ffeb898-11bf-43fc-8104-9b5e015ab3c2',
+						FloatOnTop: true
+					},
+					{
+						ShiftLayerIds: ['91678e5a-ac3f-4daa-9577-a83800e49622'],
+						Color: '#000000',
+						Description: 'Email',
+						Start: '2018-08-21 09:00',
+						End: '2018-08-21 10:00',
+						Minutes: 60,
+						IsOvertime: false,
+						ActivityId: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
+					}
+				],
+				Timezone: { IanaId: 'Europe/Berlin' }
+			});
+
+			var scope = $rootScope.$new();
+			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-21', 'Europe/Berlin', scope);
+			var vm = panel.isolateScope().vm;
+
+			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[2];
+			shiftLayer.click();
+
+			var interact = vm.scheduleVm.ShiftLayers[2].interact;
+			interact.fire({
+				type: 'resizemove',
+				target: shiftLayer,
+				rect: {
+					width: 180
+				},
+				deltaRect: { left: -120 }
+			});
+
+			interact.fire({
+				type: 'resizeend',
+				target: shiftLayer
+			});
+
+			scope.$apply();
+
+			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
+			expect(shiftLayers.length).toEqual(3);
+			expect(shiftLayers[0].style.width).toEqual('60px');
+			expect(shiftLayers[0].style.backgroundColor).toEqual('rgb(0, 0, 0)');
+			expect(shiftLayers[1].style.width).toEqual('60px');
+			expect(shiftLayers[1].style.backgroundColor).toEqual('rgb(255, 255, 0)');
+			expect(shiftLayers[2].style.width).toEqual('60px');
+			expect(shiftLayers[2].style.backgroundColor).toEqual('rgb(0, 0, 0)');
+			expect(shiftLayers[2].style.transform).toEqual('translate(0px, 0px)');
 		});
 
-		scope.$apply();
-
-		var shiftLayers = panel[0].querySelectorAll('.shift-layer');
-		expect(shiftLayers.length).toEqual(2);
-		expect(shiftLayers[0].style.width).toEqual('30px');
 	});
+
+	
 
 	it('should save changes with correct data', function() {
 		var date = '2018-06-15';
@@ -2827,6 +3094,11 @@
 				Id: '35e33821-862f-461c-92db-9f0800a8d095',
 				Name: 'Social Media',
 				Color: '#FFA2CC'
+			},
+			{
+				Id: '12e33821-862f-461c-92db-9f0800a8d056',
+				Name: 'Lunch',
+				Color: '#ffff00'
 			}
 		];
 		this.fetchAvailableActivities = function() {

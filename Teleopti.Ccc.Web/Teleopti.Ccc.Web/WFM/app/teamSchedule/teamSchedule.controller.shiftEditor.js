@@ -1,4 +1,5 @@
-﻿(function () {
+﻿
+(function () {
 	'use strict';
 
 	angular.module('wfm.teamSchedule').controller('ShiftEditorViewController', [
@@ -181,11 +182,11 @@
 			}
 		};
 
-		vm.getTimeSpan = function() {
+		vm.getTimeSpan = function () {
 			return vm.getMergedShiftLayer(vm.selectedShiftLayer).TimeSpan;
 		};
 
-		vm.getMergedShiftLayer = function(layer) {
+		vm.getMergedShiftLayer = function (layer) {
 			return angular.extend({}, layer, layer.Current);
 		}
 
@@ -205,87 +206,56 @@
 
 						shiftLayer.isChangingStart = left != 0;
 
-						resizeLayer(
-							event.target,
-							function (x) {
-								return x + left;
-							},
-							function () {
-								return width;
-							}
-						);
+						resizeLayer(shiftLayer, (vm.getMergedShiftLayer(shiftLayer).TranslateX || 0) + left, width);
+
+						$scope.$apply();
 					})
 					.on('resizeend', function (event) {
-						var target = event.target;
-						var width = parseInt(target.style.width);
-
+						var mergedShiftLayer = vm.getMergedShiftLayer(shiftLayer);
 						resizeLayer(
-							target,
-							function (x) {
-								return round5(x);
-							},
-							function () {
-								return round5(width);
-							},
+							shiftLayer,
+							round5(mergedShiftLayer.TranslateX),
+							round5(mergedShiftLayer.Width),
 							function (x, w, left) {
 								var startMinutes = left + x;
 								var endMinutes = startMinutes + w;
 
 								var startTime = timeLineTimeRange.Start.clone().add(startMinutes, 'minutes');
 								var endTime = timeLineTimeRange.Start.clone().add(endMinutes, 'minutes');
-								updateLayerTimePeriod(
+
+								removeCoveredLayers(shiftLayer, startTime, endTime);
+
+								var curIndex = vm.scheduleVm.ShiftLayers.indexOf(shiftLayer);
+
+								updateLayer(
 									shiftLayer,
 									serviceDateFormatHelper.getDateTime(startTime),
 									serviceDateFormatHelper.getDateTime(endTime)
 								);
 
-								removeCoveredLayers(shiftLayer);
-								$scope.$apply();
-
-								var curIndex = vm.scheduleVm.ShiftLayers.indexOf(shiftLayer);
-
-								var allShiftLayerEls = angular
-									.element(target)
-									.parent('.shift')
-									.children();
-
 								if (shiftLayer.isChangingStart) {
 									var previousIndex = curIndex - 1;
+
 									var previousShiftLayer = vm.scheduleVm.ShiftLayers[previousIndex];
 									if (previousShiftLayer) {
-										var startTime = vm.getMergedShiftLayer(previousShiftLayer).Start;
-										updateLayerTimePeriod(previousShiftLayer, startTime, shiftLayer.Current.Start);
+										updateLayer(previousShiftLayer, vm.getMergedShiftLayer(previousShiftLayer).Start, shiftLayer.Current.Start);
 
-										var previousShiftLayerEl = allShiftLayerEls[previousIndex];
-										previousShiftLayerEl.style.width =
-											getShiftLayerWidth(previousShiftLayer) + 'px';
+										resizeLayer(previousShiftLayer, previousShiftLayer.Current.TranslateX || 0, getShiftLayerWidth(previousShiftLayer));
+										
 									}
 								} else {
 									var nextIndex = curIndex + 1;
 									var nextShiftLayer = vm.scheduleVm.ShiftLayers[nextIndex];
 
 									if (nextShiftLayer) {
-										var endTime = vm.getMergedShiftLayer(nextShiftLayer).End;
-
-										updateLayerTimePeriod(nextShiftLayer, shiftLayer.Current.End, endTime);
+										updateLayer(nextShiftLayer, shiftLayer.Current.End, vm.getMergedShiftLayer(nextShiftLayer).End);
 
 										var translateX = getDiffMinutes(
 											nextShiftLayer.Current.Start,
 											moment.tz(nextShiftLayer.Start, vm.timezone)
 										);
-
-										var nextShiftLayerEl = allShiftLayerEls[nextIndex];
-										var width = getShiftLayerWidth(nextShiftLayer);
-
-										resizeLayer(
-											nextShiftLayerEl,
-											function() {
-												return translateX;
-											},
-											function() {
-												return width;
-											}
-										);
+										var nextLayerWidth = getShiftLayerWidth(nextShiftLayer);
+										resizeLayer(nextShiftLayer, translateX, nextLayerWidth)
 									}
 								}
 							}
@@ -295,38 +265,50 @@
 					});
 		}
 
-		function resizeLayer(target, getX, getW, afterResize) {
-			var dataX = parseFloat(target.getAttribute('data-x')) || 0;
-
-			var width = getW();
-			var x = getX(dataX);
-
-			target.style.width = width + 'px';
-			target.style.webkitTransform = target.style.transform = 'translate(' + x + 'px, 0px)';
-			target.setAttribute('data-x', x);
-
-			afterResize && afterResize(x, width, parseInt(target.style.left));
-		}
-
-		function updateLayerTimePeriod(shiftLayer, start, end) {
+		function updateLayer(shiftLayer, startTime, endTime) {
 			shiftLayer.Current = shiftLayer.Current || {};
-			shiftLayer.Current.Start = start;
-			shiftLayer.Current.End = end;
+			shiftLayer.Current.Start = startTime;
+			shiftLayer.Current.End = endTime;
 			shiftLayer.Current.TimeSpan =
-				moment.tz(shiftLayer.Current.Start, vm.timezone).format('L LT') +
+				moment.tz(startTime, vm.timezone).format('L LT') +
 				' - ' +
-				moment.tz(shiftLayer.Current.End, vm.timezone).format('L LT');
+				moment.tz(endTime, vm.timezone).format('L LT');
 		}
 
-		function removeCoveredLayers(shiftLayer) {
-			var start = shiftLayer.Current.Start;
-			var end = shiftLayer.Current.End;
+		function redrawPreviousLayers(shiftLayer, startTime, endTime) {
+			var index = vm.scheduleVm.ShiftLayers.indexOf(shiftLayer);
+			if (index === 0) return false;
+
+			for (var i = index - 1; i >= 0; i--) {
+				var layer = vm.scheduleVm.ShiftLayers[i];
+				if (layer.FloatOnTop && moment.tz(layer.Start, vm.timezone).isSameOrBefore(startTime)) {
+					return true;
+				}
+				else if (layer.ActivityId === shiftLayer.ActivityId && moment.tz(layer.Start, vm.timezone).isSameOrBefore(startTime)) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+
+		function resizeLayer(shiftLayer, x, width, afterResize) {
+			shiftLayer.Current = shiftLayer.Current || {};
+
+			shiftLayer.Current.Width = width;
+			shiftLayer.Current.TranslateX = x || 0;
+
+			afterResize && afterResize(x, width, shiftLayer.Left);
+		}
+
+		function removeCoveredLayers(shiftLayer, startTime, endTime) {
 			var indexs = [];
-			vm.scheduleVm.ShiftLayers.forEach(function(layer, i) {
+			vm.scheduleVm.ShiftLayers.forEach(function (layer, i) {
 				if (
 					shiftLayer !== layer &&
-					moment(end).isSameOrAfter(moment(vm.getMergedShiftLayer(layer).End)) &&
-					moment(start).isSameOrBefore(moment(vm.getMergedShiftLayer(layer).Start))
+					!layer.FloatOnTop &&
+					endTime.isSameOrAfter(moment.tz(vm.getMergedShiftLayer(layer).End, vm.timezone)) &&
+					startTime.isSameOrBefore(moment.tz(vm.getMergedShiftLayer(layer).Start, vm.timezone))
 				) {
 					indexs.push(i);
 				}
