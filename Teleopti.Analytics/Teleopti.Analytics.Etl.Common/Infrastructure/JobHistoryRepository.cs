@@ -29,7 +29,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			if (ds.Tables.Count == 0 || ds.Tables[0] == null)
 				return null;
 
-			int previousJobExecutionId = -99;
+			var previousJobExecutionId = -99;
 			JobHistoryViewModel jobModel = null;
 
 			var returnList = new List<JobHistoryViewModel>();
@@ -54,11 +54,9 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 								: row["schedule_name"] == DBNull.Value
 									? string.Empty
 									: (string) row["schedule_name"],
-						TenantName = (int) row["schedule_id"] == -1
-							? "Manual Etl"
-							: row["tenant_name"] == DBNull.Value
-								? string.Empty
-								: (string) row["tenant_name"],
+						TenantName = row["tenant_name"] == DBNull.Value
+							? "<Not Available>"
+							: (string) row["tenant_name"],
 						Success = true
 					};
 				}

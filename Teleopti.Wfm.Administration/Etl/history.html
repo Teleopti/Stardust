@@ -114,6 +114,11 @@
 										<span ng-show="sortType == 'ScheduleName' && !sortReverse">▾</span>
 										<span ng-show="sortType == 'ScheduleName' && sortReverse">▴</span>
 									</th>
+									<th scope="col" ng-click="sortType = 'TenantName'; sortReverse = !sortReverse">
+										Tenant Name
+										<span ng-show="sortType == 'TenantName' && !sortReverse">▾</span>
+										<span ng-show="sortType == 'TenantName' && sortReverse">▴</span>
+									</th>
 									<th scope="col" ng-click="sortType = 'ErrorMessage'; sortReverse = !sortReverse">
 										Errors
 										<span ng-show="sortType == 'ErrorMessage' && !sortReverse">▾</span>
@@ -122,20 +127,18 @@
 								</tr>
 							</thead>
 
-
 							<tbody ng-repeat="job in vm.history | filter: historyFilter | orderBy:sortType:sortReverse ">
 								<tr ng-click="job.Open = !job.Open">
-
 									<td class="center-row">
 										<span ng-click="job.Open = !job.Open; $event.stopPropagation()" style="outline: none;">
 											<span ng-if="job.Open">
 												<svg style="width: 18px; height: 18px; margin: 5px;" viewBox="0 0 24 24">
-													<path fill="#000000" d="M19,19V5H5V19H19M19,3A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5C3,3.89 3.9,3 5,3H19M17,11V13H7V11H17Z"/>
+													<path fill="#000000" d="M19,19V5H5V19H19M19,3A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5C3,3.89 3.9,3 5,3H19M17,11V13H7V11H17Z" />
 												</svg>
 											</span>
 											<span ng-if="!job.Open">
 												<svg style="width: 18px; height: 18px; margin: 5px;" viewBox="0 0 24 24">
-													<path fill="#000000" d="M19,19V5H5V19H19M19,3A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5C3,3.89 3.9,3 5,3H19M11,7H13V11H17V13H13V17H11V13H7V11H11V7Z"/>
+													<path fill="#000000" d="M19,19V5H5V19H19M19,3A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5C3,3.89 3.9,3 5,3H19M11,7H13V11H17V13H13V17H11V13H7V11H11V7Z" />
 												</svg>
 											</span>
 										</span>
@@ -159,9 +162,11 @@
 									<td>
 										{{job.ScheduleName}}
 									</td>
-									<td style="color:tomato;" class="cop" ng-click="$event.stopPropagation()" >
-
-										<div class="cop" ng-init="vm.buildError(job);" ngclipboard data-clipboard-text="{{job.ConstructedError}}"  ng-if="job.ErrorMessage" ng-click="vm.copy(job);">
+									<td>
+										{{job.TenantName}}
+									</td>
+									<td style="color:tomato;" class="cop" ng-click="$event.stopPropagation()">
+										<div class="cop" ng-init="vm.buildError(job);" ngclipboard data-clipboard-text="{{job.ConstructedError}}" ng-if="job.ErrorMessage" ng-click="vm.copy(job);">
 											<svg style="width:24px;height:24px" viewBox="0 0 24 24" ng-if="!job.Copied">
 												<path fill="#000000" d="M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3M7,7H17V5H19V19H5V5H7V7Z" />
 											</svg>
@@ -172,7 +177,6 @@
 										</div>
 										&nbsp;
 										{{job.ErrorMessage}}
-
 									</td>
 								</tr>
 								<tr ng-if="job.Open" ng-repeat="step in job.JobStepsHistory track by $index">
@@ -186,29 +190,29 @@
 									<td>{{step.Duration}}</td>
 									<td>{{step.RowsAffected}}</td>
 									<td></td>
+									<td></td>
 									<td style="color:tomato;" class="cop" ng-click="$event.stopPropagation()">
 										<div class="cop" ng-init="vm.buildError(step);" ngclipboard data-clipboard-text="{{step.ConstructedError}}" ng-if="step.ErrorMessage" ng-click="vm.copy(step);">
-										<svg style="width:24px;height:24px" viewBox="0 0 24 24" ng-if="!step.Copied">
-											<path fill="#000000" d="M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3M7,7H17V5H19V19H5V5H7V7Z" />
-										</svg>
-										<svg style="width:24px;height:24px" viewBox="0 0 24 24" ng-if="step.Copied">
-											<path fill="green" d="M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3M7,7H17V5H19V19H5V5H7V7M7.5,13.5L9,12L11,14L15.5,9.5L17,11L11,17L7.5,13.5Z" />
-										</svg>
-										<span ng-if="step.Copied" style="color:green">Copied</span>
-									</div>
-									&nbsp;
-									{{step.ErrorMessage}}
-								</td>
-							</tr>
-						</tbody>
-
-					</table>
-					<div ng-if="vm.error" class="alert alert-warning pointer" role="alert">	<!-- if unconfigured tenants  -->
-						{{vm.error}}
+											<svg style="width:24px;height:24px" viewBox="0 0 24 24" ng-if="!step.Copied">
+												<path fill="#000000" d="M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3M7,7H17V5H19V19H5V5H7V7Z" />
+											</svg>
+											<svg style="width:24px;height:24px" viewBox="0 0 24 24" ng-if="step.Copied">
+												<path fill="green" d="M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3M7,7H17V5H19V19H5V5H7V7M7.5,13.5L9,12L11,14L15.5,9.5L17,11L11,17L7.5,13.5Z" />
+											</svg>
+											<span ng-if="step.Copied" style="color:green">Copied</span>
+										</div>
+										&nbsp;
+										{{step.ErrorMessage}}
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<div ng-if="vm.error" class="alert alert-warning pointer" role="alert">	<!-- if unconfigured tenants  -->
+							{{vm.error}}
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
 </div>
