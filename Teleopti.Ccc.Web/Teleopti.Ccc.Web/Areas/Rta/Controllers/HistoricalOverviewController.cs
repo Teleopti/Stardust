@@ -27,63 +27,115 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		[UnitOfWork, ReadModelUnitOfWork, HttpGet, Route("api/HistoricalOverview/Load")]
 		public virtual IHttpActionResult Load([FromUri] IEnumerable<Guid> siteIds = null, [FromUri] IEnumerable<Guid> teamIds = null)
 		{
-			var filter = new AgentStateFilter() {TeamIds = teamIds, SiteIds = siteIds};
+			var vm = BuildViewModelQuickAndDirty(siteIds, teamIds);
+
+			return Ok(vm);
+		}
+
+		private IEnumerable<HistoricalOverviewTeamViewModel> BuildViewModelQuickAndDirty(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds)
+		{
+			var agents = LoadAgents(siteIds, teamIds);
+			var teams = BuildTeams(agents);
+			return teams;
+		}
+
+		private IEnumerable<HistoricalOverviewAgent> LoadAgents(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds)
+		{
+			var filter = new AgentStateFilter() { TeamIds = teamIds, SiteIds = siteIds };
+
 			var persons = from p in _reader.Read(filter)
-				select new
+				select new HistoricalOverviewAgent
 				{
-					p.PersonId,
-					p.TeamId,
-					p.TeamName,
-					p.SiteName,
-					p.FirstName,
-					p.LastName
+					Id = p.PersonId,
+					SiteAndTeam = p.SiteName + "/" + p.TeamName,
+					Name = p.LastName + " " + p.FirstName
 				};
-			var days = DateOnly.Today.AddDays(-8).DateRange(7);
+			return persons;
+		}
 
-
-			var things =
-				from p in persons
-				group p by p.TeamId
-				into t
+		private IEnumerable<HistoricalOverviewTeamViewModel> BuildTeams(IEnumerable<HistoricalOverviewAgent> agents)
+		{
+			var teams =
+				from agent in agents
+				group agent by agent.SiteAndTeam
+				into agentsWithTeamGrouping
 				select new HistoricalOverviewTeamViewModel
 				{
-					Name = t.First().SiteName + "/" + t.First().TeamName,
-					Agents = (from p2 in t
-						let ds = from d in days
-							let x = _agentAdherenceDayLoader.Load(p2.PersonId, d)
-							let change = x.Changes().FirstOrDefault(change => change.LateForWork != null)
-							let lateForWorkText = change != null ? change.LateForWork : "0"
-							let lateForWorkInMin = Int32.Parse(Regex.Replace(lateForWorkText, "[^0-9.]", ""))
-							select new
-							{
-								d = d,
-								Date = d.Date,
-								percent = x.Percentage().GetValueOrDefault(),
-								LateForWork = x.Changes().Where(xx => xx.LateForWork != null),
-								LateForWorkInMin = lateForWorkInMin
-							}
-						select new HistoricalOverviewAgentViewModel
-						{
-							Id = p2.PersonId,
-							Name = p2.LastName + " " + p2.FirstName,
-							IntervalAdherence = 0,
-							Days = (from d in ds
-								select new HistoricalOverviewDayViewModel
-								{
-									Date = d.Date.ToString("yyyyMMdd"),
-									DisplayDate = d.Date.ToString("MM/dd"),
-									Adherence = _agentAdherenceDayLoader.Load(p2.PersonId, d.d).Percentage().GetValueOrDefault(),
-									WasLateForWork = d.LateForWork.Any()
-								}).ToArray(),
-							LateForWork = new HistoricalOverviewLateForWorkViewModel
-							{
-								Count = ds.Count(x => x.LateForWork.Any()),
-								TotalMinutes = ds.Sum(x => x.LateForWorkInMin)
-							}
-						}).ToArray()
+					Name = agentsWithTeamGrouping.First().SiteAndTeam,
+					Agents = BuildAgents(agentsWithTeamGrouping)
 				};
 
-			return Ok(things.ToArray());
+			return teams.ToArray();
+		}
+
+		private IEnumerable<HistoricalOverviewAgentViewModel> BuildAgents(IGrouping<string, HistoricalOverviewAgent> agentsWithTeamGrouping)
+		{
+			var agents = from agent in agentsWithTeamGrouping
+				let daySpan = BuildDaySpanAndDayAdherence(agent)
+				select new HistoricalOverviewAgentViewModel
+				{
+					Id = agent.Id,
+					Name = agent.Name,
+					IntervalAdherence = 0,
+					Days = BuildDays(daySpan, agent),
+					LateForWork = BuildLateForWork(daySpan)
+				};
+
+			return agents.ToArray();
+		}
+
+		private IEnumerable<HistoricalOverviewDay> BuildDaySpanAndDayAdherence( HistoricalOverviewAgent agent)
+		{
+			var daySpan = DateOnly.Today.AddDays(-8).DateRange(7);
+
+			var days = from day in daySpan
+				let adherenceDay = _agentAdherenceDayLoader.Load(agent.Id, day)
+				let change = adherenceDay.Changes().FirstOrDefault(change => change.LateForWork != null)
+				let lateForWorkText = change != null ? change.LateForWork : "0"
+				let minutesLateForWork = Int32.Parse(Regex.Replace(lateForWorkText, "[^0-9.]", ""))
+				select new HistoricalOverviewDay
+				{
+					Date = day.Date,
+					AdherencePercent = adherenceDay.Percentage().GetValueOrDefault(),
+					MinutesLateForWork = minutesLateForWork
+				};
+
+			return days.ToArray();
+		}
+
+		private IEnumerable<HistoricalOverviewDayViewModel> BuildDays(IEnumerable<HistoricalOverviewDay> days, HistoricalOverviewAgent agent)
+		{
+			return (from day in days
+				select new HistoricalOverviewDayViewModel
+				{
+					Date = day.Date.ToString("yyyyMMdd"),
+					DisplayDate = day.Date.ToString("MM/dd"),
+					Adherence = day.AdherencePercent, 
+					WasLateForWork = day.MinutesLateForWork > 0
+				}).ToArray();
+		}
+
+		private static HistoricalOverviewLateForWorkViewModel BuildLateForWork(IEnumerable<HistoricalOverviewDay> days)
+		{
+			return new HistoricalOverviewLateForWorkViewModel
+			{
+				Count = days.Count(day => day.MinutesLateForWork > 0),
+				TotalMinutes = days.Sum(day => day.MinutesLateForWork)
+			};
+		}
+
+		class HistoricalOverviewAgent
+		{
+			public Guid Id { get; set; }
+			public string SiteAndTeam { get; set; }
+			public string Name { get; set; }
+		}
+
+		class HistoricalOverviewDay
+		{
+			public DateTime Date { get; set; }
+			public int AdherencePercent { get; set; }
+			public int MinutesLateForWork { get; set; }
 		}
 	}
 
