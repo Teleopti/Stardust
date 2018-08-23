@@ -6,6 +6,7 @@ using IISExpressAutomation;
 using log4net;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Support.Library.Config;
 
 namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
@@ -237,6 +238,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			Thread.Sleep(TimeSpan.FromSeconds(5));
 		}
 
+		[RemoveMeWithToggle("AllowedNodeDownTimeSeconds should not be here, just for testing purposes during PBI", Toggles.ResourcePlanner_XXL_76496)]
 		private static SearchReplaceCollection searchReplaces()
 		{
 			// infra test config
