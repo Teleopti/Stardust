@@ -111,7 +111,6 @@ ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
 ETL_SpeedUpPersonPeriodNightly_38097 = true
 ETL_SpeedUpNightlyReloadDatamart_38131 = true
 ETL_SpeedUpFactScheduleNightly_38019 = true # not to be released until pbi 38304 and 41393 is done 
-ETL_SpeedUpScenarioNightly_38300 = true
 ETL_SpeedUpNightlyActivity_38303 = true
 ETL_SpeedUpNightlySkill_37543 = true
 ETL_SpeedUpNightlyOvertime_38304 = true
