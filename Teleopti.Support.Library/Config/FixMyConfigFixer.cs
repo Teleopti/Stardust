@@ -5,6 +5,7 @@ namespace Teleopti.Support.Library.Config
 {
 	public class FixMyConfigCommand
 	{
+		public string Server;
 		public string ApplicationDatabase;
 		public string AnalyticsDatabase;
 		public string ToggleMode = "ALL";
@@ -14,42 +15,17 @@ namespace Teleopti.Support.Library.Config
 	{
 		public void Fix(FixMyConfigCommand command)
 		{
-			new SettingsLoader().LoadSettingsFile(new LoadSettingsCommand
-			{
-				File = Path.Combine(new RepositoryRootFolder().Path(), @".debug-Setup\config\", "settings.txt")
-			});
-			new SettingsSetter().UpdateSettingsFile(
-				new SetSettingCommand
+			new SettingsPreparer()
+				.Prepare(new SettingPrepareCommand
 				{
-					SearchFor = "$(machineKey.validationKey)",
-					ReplaceWith = "754534E815EF6164CE788E521F845BA4953509FA45E321715FDF5B92C5BD30759C1669B4F0DABA17AC7BBF729749CE3E3203606AB49F20C19D342A078A3903D1"
-				},
-				new SetSettingCommand
-				{
-					SearchFor = "$(machineKey.decryptionKey)",
-					ReplaceWith = "3E1AD56713339011EB29E98D1DF3DBE1BADCF353938C3429"
-				},
-				new SetSettingCommand
-				{
-					SearchFor = "$(DB_CCC7)",
-					ReplaceWith = command.ApplicationDatabase
-				},
-				new SetSettingCommand
-				{
-					SearchFor = "$(DB_ANALYTICS)",
-					ReplaceWith = command.AnalyticsDatabase
-				},
-				new SetSettingCommand
-				{
-					SearchFor = "$(AS_DATABASE)",
-					ReplaceWith = command.AnalyticsDatabase
-				},
-				new SetSettingCommand
-				{
-					SearchFor = "$(ToggleMode)",
-					ReplaceWith = command.ToggleMode
-				}
-			);
+					Server = command.Server,
+					ApplicationDatabase = command.ApplicationDatabase,
+					AnalyticsDatabase = command.AnalyticsDatabase,
+					ToggleMode = command.ToggleMode,
+					MachineKeyValidationKey = "754534E815EF6164CE788E521F845BA4953509FA45E321715FDF5B92C5BD30759C1669B4F0DABA17AC7BBF729749CE3E3203606AB49F20C19D342A078A3903D1",
+					MachineKeyDecryptionKey = "3E1AD56713339011EB29E98D1DF3DBE1BADCF353938C3429"
+				});
+
 			new ModeDebugRunner()
 				.Run(new ModeDebugCommand());
 		}
