@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -21,10 +20,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     {
         private IPerson _person;
         private DateOnly _dateOnly;
+		private static int callingCount;
 
         protected override void ConcreteSetup()
         {
-            _person = PersonFactory.CreatePerson();
+			callingCount = 0;
+			_person = PersonFactory.CreatePerson();
             _dateOnly = new DateOnly(2009, 2, 2);
 
             PersistAndRemoveFromUnitOfWork(_person);
@@ -109,7 +110,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void CanFindStudentDaysOnDayAndPerson()
         {
-            DateOnly date = new DateOnly(2009, 2, 1);
+            DateOnly date = new DateOnly(2009, 3, 1);
             IPerson person2 = PersonFactory.CreatePerson();
             PersistAndRemoveFromUnitOfWork(person2);
             PersistAndRemoveFromUnitOfWork(CreateAggregateWithCorrectBusinessUnit());
@@ -123,28 +124,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsTrue(days[0].NotAvailable);
         }
 
-		[Test]
-		public void CanFindStudentDaysOnDayAndPersonOrderByUpdatedOn()
-		{
-			DateOnly date = new DateOnly(2009, 2, 1);
-			PersistAndRemoveFromUnitOfWork(CreateAggregateWithCorrectBusinessUnit());
-			var firstStudentAvailability = CreateStudentAvailabilityDay(date, _person, true);
-			var lastStudentAvailability = CreateStudentAvailabilityDay(date, _person, true);
-			PersistAndRemoveFromUnitOfWork(firstStudentAvailability);
-			Thread.Sleep(1000);
-			PersistAndRemoveFromUnitOfWork(lastStudentAvailability);
-
-			IList<IStudentAvailabilityDay> days = new StudentAvailabilityDayRepository(UnitOfWork).Find(date, _person);
-			Assert.AreEqual(2, days.Count);
-
-			Assert.That(days.FirstOrDefault(), Is.EqualTo(lastStudentAvailability));
-		}
-
         protected override IStudentAvailabilityDay CreateAggregateWithCorrectBusinessUnit()
-        {
-            IStudentAvailabilityDay availDay = CreateStudentAvailabilityDay(_dateOnly, _person, false);
+		{
+			var date = _dateOnly.AddDays(-callingCount);
 
-            return availDay;
+            IStudentAvailabilityDay availDay = CreateStudentAvailabilityDay(date, _person, false);
+			callingCount++;
+
+			return availDay;
         }
 
         private static IStudentAvailabilityDay CreateStudentAvailabilityDay(DateOnly date, IPerson person, bool notAvailable)
@@ -158,7 +145,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
         protected override void VerifyAggregateGraphProperties(IStudentAvailabilityDay loadedAggregateFromDatabase)
-        {
+		{
+			callingCount = 0;
             IStudentAvailabilityDay org = CreateAggregateWithCorrectBusinessUnit();
             Assert.AreEqual(org.Person, loadedAggregateFromDatabase.Person);
             Assert.AreEqual(org.RestrictionDate, loadedAggregateFromDatabase.RestrictionDate);
