@@ -1,13 +1,11 @@
 ﻿using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.GlobalSettingData
 {
-	[EnabledBy(Toggles.ETL_EventBasedAgentNameDescription_41432)]
 	public class AnalyticsPersonNameUpdater : 
 		IHandleEvent<CommonNameDescriptionChangedEvent>,
 		IRunOnHangfire

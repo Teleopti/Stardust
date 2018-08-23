@@ -127,7 +127,6 @@ ETL_SpeedUpNightlyBusinessUnit_38932 = true
 ETL_EventbasedDate_39562 = true
 ETL_EventbasedTimeZone_40870 = true
 ETL_RemoveTimeZoneAndDateNightly_40870 = true
-ETL_EventBasedAgentNameDescription_41432 = true
 ETL_FixScheduleForPersonPeriod_41393 = true
 ETL_SpeedUpNightlyDayOff_38213 = true
 

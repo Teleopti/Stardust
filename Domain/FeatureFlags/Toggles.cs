@@ -107,7 +107,6 @@
 		Wfm_SkillPriorityRoutingGUI_39885,
 		ETL_EventbasedTimeZone_40870,
 		ETL_RemoveTimeZoneAndDateNightly_40870,
-		ETL_EventBasedAgentNameDescription_41432,
 		ETL_FixScheduleForPersonPeriod_41393,
 		ETL_Optimize_Memory_Usage_76761,
 
