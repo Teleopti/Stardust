@@ -103,9 +103,7 @@
 		ETL_SpeedUpNightlyForecastWorkload_38929,
 		ETL_UseBpoResources_75855,
 
-		ETL_SpeedUpIntradayBusinessUnit_38932,
 		ETL_SpeedUpNightlyBusinessUnit_38932,
-
 		ETL_EventbasedDate_39562,
 		Wfm_SkillPriorityRoutingGUI_39885,
 		ETL_EventbasedTimeZone_40870,

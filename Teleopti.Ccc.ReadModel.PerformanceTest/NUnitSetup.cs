@@ -113,7 +113,6 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 		private readonly List<Toggles> enabledTogglesOnStartup = new List<Toggles>
 		{
 			// Analytics stuff based on events
-			Toggles.ETL_SpeedUpIntradayBusinessUnit_38932,
 			Toggles.ETL_EventbasedDate_39562,
 		};
 
