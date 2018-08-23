@@ -184,11 +184,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			});
 		}
 
-		public IEnumerable<PersonScheduleDayReadModel> ForPeople(DateTimePeriod period, IEnumerable<PersonInfoForShiftTradeFilter> personInfos)
+		public IEnumerable<PersonScheduleDayReadModel> ForTeamSchedules(DateOnly date, IEnumerable<Guid> personIdList, Paging paging, TimeFilterInfo filterInfo)
 		{
 			throw new NotImplementedException();
 		}
 
+		public IEnumerable<PersonScheduleDayReadModel> ForPeople(DateTimePeriod period, IEnumerable<PersonInfoForShiftTradeFilter> personInfos)
+		{
+			throw new NotImplementedException();
+		}
 
 		private bool timeFilterHasValue(TimeFilterInfo filter)
 		{

@@ -18,7 +18,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 		private IList<DateTimePeriod> convertStringToUtcTimes(DateOnly selectedDate, string timesString, bool isFullDay, bool isEndFilter = false)
 		{
-			var startTimesx = string.IsNullOrEmpty(timesString) ? new string[] { } : timesString.Split(',');
+			if (string.IsNullOrEmpty(timesString))
+			{
+				return null;
+			}
+
+			var startTimesx = timesString.Split(',');
 			var periodsAsString = from t in startTimesx
 										 let parts = t.Split('-')
 										 let start = parts[0]
