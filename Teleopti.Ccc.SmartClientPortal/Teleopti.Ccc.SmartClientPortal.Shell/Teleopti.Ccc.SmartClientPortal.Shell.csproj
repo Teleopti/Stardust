@@ -971,10 +971,6 @@
     <Compile Include="WinCode\Scheduling\AgentRestrictions\AgentRestrictionsDetailEffectiveRestrictionExtractor.cs" />
     <Compile Include="WinCode\Scheduling\AgentRestrictions\AgentRestrictionsDetailModel.cs" />
     <Compile Include="WinCode\Scheduling\AgentRestrictions\AgentRestrictionsDetailPresenter.cs" />
-    <Compile Include="WinCode\Scheduling\AgentRestrictions\AgentRestrictionsDisplayDataExtractor.cs" />
-    <Compile Include="WinCode\Scheduling\AgentRestrictions\AgentRestrictionsDisplayRow.cs" />
-    <Compile Include="WinCode\Scheduling\AgentRestrictions\AgentRestrictionsDisplayRowCreator.cs" />
-    <Compile Include="WinCode\Scheduling\AgentRestrictions\AgentRestrictionsModel.cs" />
     <Compile Include="WinCode\Scheduling\AgentRestrictions\AgentRestrictionsPreferencePainterDecider.cs" />
     <Compile Include="WinCode\Scheduling\AgentRestrictions\AgentRestrictionsSchedulePainterDecider.cs" />
     <Compile Include="WinCode\Scheduling\AgentRestrictions\IAgentRestrictionsDetailView.cs" />
