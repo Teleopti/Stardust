@@ -108,6 +108,7 @@
 		ETL_RemoveTimeZoneAndDateNightly_40870,
 		ETL_FixScheduleForPersonPeriod_41393,
 		ETL_Optimize_Memory_Usage_76761,
+		Web_ETL_Show_Tenant_In_History_75767,
 
 		Staffing_Info_Configuration_44687,
 		WfmStaffing_AddOvertime_42524,
