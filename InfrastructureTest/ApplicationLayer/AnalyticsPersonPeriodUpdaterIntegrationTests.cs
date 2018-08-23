@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 			var quarterOfAnHourInterval = new QuarterOfAnHourInterval();
 			var dates = new DatesFromPeriod(new DateTime(2009, 12, 01), new DateTime(2009, 12, 31));
 
+			analyticsDataFactory.Setup(new SysConfiguration("TimeZoneCode", "UTC"));
 			analyticsDataFactory.Setup(businessUnit);
 			analyticsDataFactory.Setup(timeZones);
 			analyticsDataFactory.Setup(datasource);
