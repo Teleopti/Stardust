@@ -124,7 +124,6 @@ ETL_SpeedUpGroupPagePersonNightly_37623 = true
 ETL_SpeedUpNightlyWorkload_38928 = true
 ETL_SpeedUpNightlyForecastWorkload_38929 = true
 ETL_SpeedUpNightlyBusinessUnit_38932 = true
-ETL_EventbasedTimeZone_40870 = true
 ETL_RemoveTimeZoneAndDateNightly_40870 = true
 ETL_FixScheduleForPersonPeriod_41393 = true
 ETL_SpeedUpNightlyDayOff_38213 = true

@@ -6,13 +6,6 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
-	public class AnalyticsTimeZoneRepository : AnalyticsTimeZoneRepositoryBase, IAnalyticsTimeZoneRepository
-	{
-		public AnalyticsTimeZoneRepository(ICurrentAnalyticsUnitOfWork analyticsUnitOfWork) : base(analyticsUnitOfWork)
-		{
-		}
-	}
-
 	public abstract class AnalyticsTimeZoneRepositoryBase
 	{
 		protected readonly ICurrentAnalyticsUnitOfWork AnalyticsUnitOfWork;
