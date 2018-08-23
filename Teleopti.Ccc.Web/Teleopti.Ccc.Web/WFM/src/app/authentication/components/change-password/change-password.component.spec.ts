@@ -1,12 +1,13 @@
+import { HttpClient } from '@angular/common/http';
 import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NzButtonModule, NzFormModule, NzInputModule, NzMessageModule, NzModalModule } from 'ng-zorro-antd';
 import { of } from 'rxjs';
 import { configureTestSuite } from '../../../../configure-test-suit';
 import { MockTranslationModule } from '../../../../mocks/translation';
-import { Spied } from '../../../shared/utils/jasmine-spy';
 import { PasswordService } from '../../services/password.service';
 import { ChangePasswordComponent } from './change-password.component';
 
@@ -15,13 +16,11 @@ describe('ChangePasswordComponent', () => {
 	let fixture: ComponentFixture<ChangePasswordComponent>;
 
 	let page: Page;
-	let passwordService: Spied<PasswordService>;
+	let passwordService: PasswordService;
 
 	configureTestSuite();
 
 	beforeEach(async(() => {
-		passwordService = jasmine.createSpyObj('PasswordService', ['setPassword']);
-
 		TestBed.configureTestingModule({
 			declarations: [ChangePasswordComponent],
 			imports: [
@@ -31,15 +30,18 @@ describe('ChangePasswordComponent', () => {
 				ReactiveFormsModule,
 				NzButtonModule,
 				NzInputModule,
-				NzMessageModule
+				NzMessageModule,
+				NoopAnimationsModule
 			],
 			providers: [
+				PasswordService,
 				{
-					provide: PasswordService,
-					useValue: passwordService
+					provide: HttpClient,
+					useValue: {}
 				}
 			]
 		}).compileComponents();
+		passwordService = TestBed.get(PasswordService);
 	}));
 
 	beforeEach(() => {
@@ -51,6 +53,50 @@ describe('ChangePasswordComponent', () => {
 
 	it('should create', () => {
 		expect(component).toBeTruthy();
+	});
+
+	it('should pass if no errors', () => {
+		const authSuccessResponse = {
+			IsSuccessful: true,
+			IsAuthenticationSuccessful: true
+		};
+		spyOn(passwordService, 'setPassword').and.returnValue(of(authSuccessResponse));
+
+		const component = fixture.componentInstance;
+
+		component.currentPasswordControl.setValue('old');
+		component.newPasswordControl.setValue('new');
+		component.confirmPasswordControl.setValue('new');
+
+		expect(component.newPasswordControl.hasError(component.ENSURE_PASSWORD_NEW_ERROR)).toEqual(false);
+		expect(component.confirmPasswordControl.hasError(component.MATCHING_PASSWORDS)).toEqual(false);
+
+		page.okButton.nativeElement.click();
+
+		fixture.detectChanges();
+
+		expect(component.currentPasswordControl.hasError(component.INVALID_PASSWORD_ERROR)).toEqual(false);
+		expect(component.newPasswordControl.hasError(component.POLICY_ERROR)).toEqual(false);
+	});
+
+	it('should check for wrong password', () => {
+		const authFailedResponse = {
+			IsSuccessful: true,
+			IsAuthenticationSuccessful: false
+		};
+		spyOn(passwordService, 'setPassword').and.returnValue(of(authFailedResponse));
+
+		const component = fixture.componentInstance;
+
+		component.currentPasswordControl.setValue('wrong');
+		component.newPasswordControl.setValue('new');
+		component.confirmPasswordControl.setValue('new');
+
+		page.okButton.nativeElement.click();
+
+		fixture.detectChanges();
+
+		expect(component.currentPasswordControl.hasError(component.INVALID_PASSWORD_ERROR)).toEqual(true);
 	});
 
 	it('should ensure not same password', () => {
@@ -66,23 +112,17 @@ describe('ChangePasswordComponent', () => {
 		expect(component.newPasswordControl.hasError(component.ENSURE_PASSWORD_NEW_ERROR)).toEqual(false);
 	});
 
-	fit('should check for wrong password', () => {
-		const authFailedResponse = {
-			IsSuccessful: true,
-			IsAuthenticationSuccessful: false
-		};
-		const getTestSpy = passwordService.setPassword.and.returnValue(of(authFailedResponse));
+	it('should ensure not same password', () => {
 		const component = fixture.componentInstance;
 
-		component.currentPasswordControl.setValue('old');
-		component.newPasswordControl.setValue('new');
-		component.confirmPasswordControl.setValue('new');
+		component.currentPasswordControl.setValue('same');
+		component.newPasswordControl.setValue('same');
 
-		page.okButton.nativeElement.click();
+		expect(component.newPasswordControl.hasError(component.ENSURE_PASSWORD_NEW_ERROR)).toEqual(true);
 
-		fixture.detectChanges();
+		component.newPasswordControl.setValue('not-the-same');
 
-		expect(component.currentPasswordControl.hasError(component.INVALID_PASSWORD_ERROR)).toEqual(true);
+		expect(component.newPasswordControl.hasError(component.ENSURE_PASSWORD_NEW_ERROR)).toEqual(false);
 	});
 });
 
@@ -97,22 +137,6 @@ class Page {
 
 	get confirmPasswordField() {
 		return this.queryAll('[data-test-change-password-modal] [data-test-item-confirm-password]')[0];
-	}
-
-	get invalidMessageField() {
-		return this.queryAll('[data-test-change-password-modal] [data-test-invalid-error]')[0];
-	}
-
-	get notNewMessageField() {
-		return this.queryAll('[data-test-change-password-modal] [data-test-input-new-password]')[0];
-	}
-
-	get requiredMessageField() {
-		return this.queryAll('[data-test-change-password-modal] [data-test-required-error]')[0];
-	}
-
-	get notMatchingMessageField() {
-		return this.queryAll('[data-test-change-password-modal] [data-test-not-matching-error]')[0];
 	}
 
 	get okButton() {
