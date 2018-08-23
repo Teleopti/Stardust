@@ -16,73 +16,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			_userTimeZone = userTimeZone;
 		}
 
-		private IList<DateTimePeriod> convertStringToUtcTimes(DateOnly selectedDate, string timesString, bool isFullDay, bool isEndFilter = false)
-		{
-			if (string.IsNullOrEmpty(timesString))
-			{
-				return null;
-			}
-
-			var startTimesx = timesString.Split(',');
-			var periodsAsString = from t in startTimesx
-										 let parts = t.Split('-')
-										 let start = parts[0]
-										 let end = parts[1]
-										 select new
-										 {
-											 Start = start,
-											 End = end
-										 };
-
-			var periods = from ps in periodsAsString
-							  let start = int.Parse(ps.Start.Split(':')[0])
-							  let end = int.Parse(ps.End.Split(':')[0])
-							  let startMinutes = int.Parse(ps.Start.Split(':')[1])
-							  let endMinutes = int.Parse(ps.End.Split(':')[1])
-							  select new MinMax<DateTime>(
-								  selectedDate.Date.Add(TimeSpan.FromHours(start)).AddMinutes(startMinutes),
-								  selectedDate.Date.Add(TimeSpan.FromHours(end)).AddMinutes(endMinutes));
-			var periodsList = periods.ToList();
-
-			if (!periodsList.Any())
-			{
-				if (isFullDay)
-				{
-					periodsList.Add(new MinMax<DateTime>(
-						selectedDate.Date.Add(TimeSpan.FromHours(0)),
-						selectedDate.Date.Add(TimeSpan.FromHours(48))
-						));
-				}
-				else
-				{
-					periodsList.Add(new MinMax<DateTime>(
-						selectedDate.Date.Add(TimeSpan.FromHours(0)),
-						selectedDate.Date.Add(TimeSpan.FromHours(0))
-						));
-				}
-			}
-			else if (isEndFilter)
-			{
-				//only do it for end time filter
-				var oldCopy = new List<MinMax<DateTime>>(periodsList);
-				foreach (var t in oldCopy)
-				{
-					// plus 24 hours to get night shifts which may end with tomorrow
-					var plus = new MinMax<DateTime>(t.Minimum.Add(TimeSpan.FromHours(24)), t.Maximum.Add(TimeSpan.FromHours(24)));
-					periodsList.Add(plus);
-				}
-			}
-
-			var periodsDateUtc = from p in periodsList
-										let start = TimeZoneHelper.ConvertToUtc(p.Minimum, _userTimeZone.TimeZone())
-										let end = TimeZoneHelper.ConvertToUtc(p.Maximum, _userTimeZone.TimeZone())
-										let period = new DateTimePeriod(start, end)
-										select period;
-
-			var utcTimes = periodsDateUtc.ToList();
-			return utcTimes;
-		}
-
 		public TimeFilterInfo GetFilter(DateOnly selectedDate, string filterStartTimes, string filterEndTimes, bool isDayOff, bool isEmptyDay)
 		{
 			TimeFilterInfo filter;
@@ -116,6 +49,105 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				};
 			}
 			return filter;
+		}
+
+		public TimeFilterInfo GetTeamSchedulesFilter(DateOnly selectedDate, string filterStartTimes, string filterEndTimes,
+			bool isDayOff)
+		{
+			TimeFilterInfo filter;
+			if (string.IsNullOrEmpty(filterStartTimes) && string.IsNullOrEmpty(filterEndTimes))
+			{
+				if (isDayOff)
+				{
+					filter = new TimeFilterInfo
+					{
+						StartTimes = convertStringToUtcTimesForTeamSchedules(selectedDate, filterStartTimes, false),
+						EndTimes = convertStringToUtcTimesForTeamSchedules(selectedDate, filterEndTimes, false),
+						IsDayOff = true
+					};
+				}
+				else
+				{
+					filter = null;
+				}
+			}
+			else
+			{
+				filter = new TimeFilterInfo
+				{
+					StartTimes = convertStringToUtcTimesForTeamSchedules(selectedDate, filterStartTimes, true),
+					EndTimes = convertStringToUtcTimesForTeamSchedules(selectedDate, filterEndTimes, true, true),
+					IsDayOff = isDayOff
+				};
+			}
+			return filter;
+		}
+
+		private IList<DateTimePeriod> convertStringToUtcTimesForTeamSchedules(DateOnly selectedDate, string timesString, bool isFullDay, bool isEndFilter = false)
+		{
+			return string.IsNullOrEmpty(timesString) ? null : convertStringToUtcTimes(selectedDate, timesString, isFullDay, isEndFilter);
+		}
+
+		private IList<DateTimePeriod> convertStringToUtcTimes(DateOnly selectedDate, string timesString, bool isFullDay, bool isEndFilter = false)
+		{
+			var startTimesx = string.IsNullOrEmpty(timesString) ? new string[] { } : timesString.Split(',');
+			var periodsAsString = from t in startTimesx
+								  let parts = t.Split('-')
+								  let start = parts[0]
+								  let end = parts[1]
+								  select new
+								  {
+									  Start = start,
+									  End = end
+								  };
+
+			var periods = from ps in periodsAsString
+						  let start = int.Parse(ps.Start.Split(':')[0])
+						  let end = int.Parse(ps.End.Split(':')[0])
+						  let startMinutes = int.Parse(ps.Start.Split(':')[1])
+						  let endMinutes = int.Parse(ps.End.Split(':')[1])
+						  select new MinMax<DateTime>(
+							  selectedDate.Date.Add(TimeSpan.FromHours(start)).AddMinutes(startMinutes),
+							  selectedDate.Date.Add(TimeSpan.FromHours(end)).AddMinutes(endMinutes));
+			var periodsList = periods.ToList();
+
+			if (!periodsList.Any())
+			{
+				if (isFullDay)
+				{
+					periodsList.Add(new MinMax<DateTime>(
+						selectedDate.Date.Add(TimeSpan.FromHours(0)),
+						selectedDate.Date.Add(TimeSpan.FromHours(48))
+						));
+				}
+				else
+				{
+					periodsList.Add(new MinMax<DateTime>(
+						selectedDate.Date.Add(TimeSpan.FromHours(0)),
+						selectedDate.Date.Add(TimeSpan.FromHours(0))
+						));
+				}
+			}
+			else if (isEndFilter)
+			{
+				//only do it for end time filter
+				var oldCopy = new List<MinMax<DateTime>>(periodsList);
+				foreach (var t in oldCopy)
+				{
+					// plus 24 hours to get night shifts which may end with tomorrow
+					var plus = new MinMax<DateTime>(t.Minimum.Add(TimeSpan.FromHours(24)), t.Maximum.Add(TimeSpan.FromHours(24)));
+					periodsList.Add(plus);
+				}
+			}
+
+			var periodsDateUtc = from p in periodsList
+								 let start = TimeZoneHelper.ConvertToUtc(p.Minimum, _userTimeZone.TimeZone())
+								 let end = TimeZoneHelper.ConvertToUtc(p.Maximum, _userTimeZone.TimeZone())
+								 let period = new DateTimePeriod(start, end)
+								 select period;
+
+			var utcTimes = periodsDateUtc.ToList();
+			return utcTimes;
 		}
 	}
 }
