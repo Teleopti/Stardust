@@ -43,7 +43,10 @@
 
 <div class="container pagebody student-availability-container">
 	<div id="Student-availability-edit-form" data-bind="visible: AddAvailabilityFormVisible,css:{'phone-form-availability': IsHostAMobile}">
-		<div  class="well well-sm clearfix form-student-availability" >
+		<div class="availability-add-container well well-sm clearfix form-student-availability">
+			<div class="posting-mask" data-bind="visible: IsPostingData()">
+				<img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader.gif")" alt="Applying..." />
+			</div>
 			@Html.Partial("AddStudentAvailabilityPartial")
 		</div>
 		<div class="phone-background"></div>
