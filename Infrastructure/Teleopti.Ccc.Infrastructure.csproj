@@ -538,7 +538,6 @@
     <Compile Include="Repositories\Analytics\AnalyticsShiftCategoryRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsSkillRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsTeamRepository.cs" />
-    <Compile Include="Repositories\Analytics\AnalyticsTimeZoneRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsTimeZoneRepositoryWithCreation.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsWorkloadRepository.cs" />
     <Compile Include="Repositories\Analytics\IntradayMonitorDataLoader.cs" />
