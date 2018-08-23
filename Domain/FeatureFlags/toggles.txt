@@ -116,7 +116,6 @@ ETL_SpeedUpNightlyActivity_38303 = true
 ETL_SpeedUpNightlySkill_37543 = true
 ETL_SpeedUpNightlyOvertime_38304 = true
 ETL_SpeedUpNightlyAbsence_38301 = true
-ETL_MoveBadgeCalculationToETL_38421 = true
 ETL_SpeedUpNightlyShiftCategory_38718 = true
 ETL_SpeedUpNightlyPreference_38283 = true #Depending on ETL_SpeedUpFactScheduleNightly_38019
 ETL_SpeedUpNightlyAvailability_38926 = true

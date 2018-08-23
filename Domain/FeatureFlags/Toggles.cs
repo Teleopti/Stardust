@@ -93,7 +93,6 @@
 		ETL_SpeedUpNightlyActivity_38303,
 		ETL_SpeedUpNightlyOvertime_38304,
 		ETL_SpeedUpNightlyAbsence_38301,
-		ETL_MoveBadgeCalculationToETL_38421,
 		ETL_SpeedUpNightlyShiftCategory_38718,
 		ETL_SpeedUpNightlyPreference_38283,
 		ETL_SpeedUpNightlyAvailability_38926,
