@@ -15,14 +15,4 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			throw new ArgumentException($"Error when mapping skills: {error}");
 		}
 	}
-
-	public class ReturnNotDefined : IAnalyticsPersonPeriodMapNotDefined
-	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof(ReturnNotDefined));
-		public int MaybeThrowErrorOrNotDefined(string error)
-		{
-			logger.Warn($"Potential error when mapping skills: {error}");
-			return -1;
-		}
-	}
 }

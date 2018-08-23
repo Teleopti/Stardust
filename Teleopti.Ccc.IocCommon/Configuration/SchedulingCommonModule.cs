@@ -472,19 +472,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<AnalyticsScheduleChangeForDefaultScenarioFilter>().As<IAnalyticsScheduleChangeUpdaterFilter>().SingleInstance();
 			}
-
-			// Analytics skill updater on person when skills not exists in analytics failure
-			if (_configuration.Toggle(Toggles.ETL_SpeedUpNightlySkill_37543))
-			{
-				builder.RegisterType<ThrowExceptionOnSkillMapError>().As<IAnalyticsPersonPeriodMapNotDefined>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<ReturnNotDefined>().As<IAnalyticsPersonPeriodMapNotDefined>().SingleInstance();
-			}
-
+			builder.RegisterType<ThrowExceptionOnSkillMapError>().As<IAnalyticsPersonPeriodMapNotDefined>().SingleInstance();
 			builder.RegisterType<AssignScheduledLayers>().SingleInstance();
-
 			builder.RegisterType<ShiftProjectionCacheManager>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamScheduling>().As<TeamScheduling>().SingleInstance();
 			

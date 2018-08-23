@@ -40,7 +40,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 
 			AddWhenAnyDisabled(new StageSchedulePreferenceJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyPreference_38283, Toggles.ETL_SpeedUpFactScheduleNightly_38019);
 			AddWhenAllDisabled(new StageAvailabilityJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyAvailability_38926);
-			AddWhenAllDisabled(new StageSkillJobStep(jobParameters), Toggles.ETL_SpeedUpNightlySkill_37543);
 			AddWhenAllDisabled(new StageWorkloadJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyWorkload_38928);
 
 			AddWhenAllDisabled(new StageForecastWorkloadJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyForecastWorkload_38929);
@@ -63,8 +62,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 
 			AddWhenAllDisabled(new DimSiteJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
 			AddWhenAllDisabled(new DimTeamJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
-
-			AddWhenAllDisabled(new DimSkillJobStep(jobParameters), Toggles.ETL_SpeedUpNightlySkill_37543);
 
 			AddWhenAllDisabled(new DimSkillSetJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
 			AddWhenAllDisabled(new DimPersonJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
