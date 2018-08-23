@@ -1527,6 +1527,7 @@
     <Content Include="WFM\app\forecasting\html\history.html" />
     <Content Include="WFM\app\forecasting\controller\history.controller.js" />
     <Content Include="WFM\app\forecasting\controller\r2forecast.controller.js" />
+    <Content Include="WFM\app\forecasting\html\noSkills.html" />
     <Content Include="WFM\app\forecasting\html\r2forecast.html" />
     <Content Include="WFM\app\gamification\gamification.component.badgeCalculation.js" />
     <Content Include="WFM\app\gamification\gamification.component.badgeCalculation.spec.js" />
@@ -1973,7 +1974,7 @@
     <Content Include="WFM\index.tpl.html" />
     <Content Include="WFM\app\app_desktop_client.js" />
     <Content Include="WFM\app\forecasting\routes.js" />
-    <Content Include="WFM\app\forecasting\html\skill.create.html" />
+    <Content Include="WFM\app\forecasting\html\skillCreate.html" />
     <Content Include="WFM\app\forecasting\controller\skill.create.controller.spec.js" />
     <Content Include="WFM\app\global\areas\areas.controller.spec.js" />
     <Content Include="WFM\app\global\businessunits\businessunits.service.js" />

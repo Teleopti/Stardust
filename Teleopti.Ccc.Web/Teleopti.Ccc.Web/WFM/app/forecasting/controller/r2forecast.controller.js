@@ -22,7 +22,6 @@
 		vm.getSkillIcon = skillIconService.get;
 
 		function init() {
-			vm.hasSkills = false;
 			vm.showHistory = toggleSvc.WFM_Forecast_Show_History_Data_76432;
 			setReleaseNotification();
 			getAllSkills();
@@ -57,8 +56,12 @@
 							vm.skilltypes.push(skillModel.SkillType.SkillType);
 						}
 					});
-					vm.hasSkills = vm.skills.length > 0;
 				});
+				//console.log(vm.skills);
+				if (vm.skills.length < 1) {
+					console.log('skills count: ' + vm.skills.length);
+					$state.go('forecast-no-skills');
+				}
 			});
 		}
 

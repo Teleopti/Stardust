@@ -17700,38 +17700,6 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Campaign tasks %</value>
     <comment>message in web forecast</comment>
   </data>
-  <data name="OriginalChats" xml:space="preserve">
-    <value>Original chats</value>
-    <comment>Original chats</comment>
-  </data>
-  <data name="OriginalEmails" xml:space="preserve">
-    <value>Original emails</value>
-    <comment>Original emails</comment>
-  </data>
-  <data name="CampaignEmailsPercentSign" xml:space="preserve">
-    <value>Campaign emails %</value>
-    <comment>message in web forecast</comment>
-  </data>
-  <data name="CampaignTasksPercentSign" xml:space="preserve">
-    <value>Campaign tasks %</value>
-    <comment>message in web forecast</comment>
-  </data>
-  <data name="OriginalChats" xml:space="preserve">
-    <value>Original chats</value>
-    <comment>Original chats</comment>
-  </data>
-  <data name="OriginalEmails" xml:space="preserve">
-    <value>Original emails</value>
-    <comment>Original emails</comment>
-  </data>
-  <data name="CampaignEmailsPercentSign" xml:space="preserve">
-    <value>Campaign emails %</value>
-    <comment>message in web forecast</comment>
-  </data>
-  <data name="CampaignTasksPercentSign" xml:space="preserve">
-    <value>Campaign tasks %</value>
-    <comment>message in web forecast</comment>
-  </data>
   <data name="BadgeThreshold" xml:space="preserve">
     <value>Badge threshold</value>
     <comment>Badge threshold</comment>
@@ -17747,5 +17715,9 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
   <data name="SilverBadgeThreshold" xml:space="preserve">
     <value>Silver badge threshold</value>
     <comment>Silver badge threshold</comment>
+  </data>
+  <data name="BeforeRunningAForecastYouNeedToCreateASkillDot" xml:space="preserve">
+    <value>Before running a forecast you need to create a skill.</value>
+    <comment>Before running a forecast you need to create a skill.</comment>
   </data>
 </root>

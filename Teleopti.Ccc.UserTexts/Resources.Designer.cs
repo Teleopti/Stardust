@@ -4431,6 +4431,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Before running a forecast you need to create a skill..
+        /// </summary>
+        public static string BeforeRunningAForecastYouNeedToCreateASkillDot {
+            get {
+                return ResourceManager.GetString("BeforeRunningAForecastYouNeedToCreateASkillDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Before shift start.
         /// </summary>
         public static string BeforeShiftStart {
