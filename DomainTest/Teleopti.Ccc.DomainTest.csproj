@@ -315,6 +315,7 @@
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\ScheduleTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\TimelineTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\UserTimeZoneTest.cs" />
+    <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalOverviewViewModelBuilder\BuildTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\OrganizationViewModelBuilderPermissionTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\OrganizationViewModelBuilderTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\PhoneStateViewModelBuilderTest.cs" />
