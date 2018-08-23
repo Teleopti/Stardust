@@ -9,27 +9,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandlers.Analytics
 {
-	[ToggleOff(Toggles.ETL_EventbasedDate_39562)]
-	[TestFixture]
-	[DomainTest]
-	public class AnalyticsPersonPeriodDateFixerWithoutDateCreationTests
-	{
-		public IAnalyticsPersonPeriodDateFixer Target;
-		public FakeAnalyticsDateRepository AnalyticsDateRepository;
-
-		[Test]
-		public void PersonPeriodEndDate_Transform_EternityOld()
-		{
-			AnalyticsDateRepository.HasDatesBetween(new DateTime(2000, 1, 1), new DateTime(2020, 01, 01));
-			var validToDate = Target.ValidToDate(
-				new DateTime(2021, 03, 06),
-				TimeZoneInfo.Utc);
-
-			Assert.AreEqual(AnalyticsDate.Eternity.DateDate, validToDate);
-		}
-	}
-
-	[Toggle(Toggles.ETL_EventbasedDate_39562)]
 	[TestFixture]
 	[DomainTest]
 	public class AnalyticsPersonPeriodDateFixerTests

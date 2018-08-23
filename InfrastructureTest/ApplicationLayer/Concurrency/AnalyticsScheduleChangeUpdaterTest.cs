@@ -6,7 +6,6 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
@@ -27,7 +26,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 {
 	[Category("BucketB")]
 	[MultiDatabaseTest]
-	[Toggle(Toggles.ETL_EventbasedDate_39562)]
 	public class AnalyticsScheduleChangeUpdaterTest : IIsolateSystem
 	{
 		public AnalyticsScheduleChangeUpdater Target;

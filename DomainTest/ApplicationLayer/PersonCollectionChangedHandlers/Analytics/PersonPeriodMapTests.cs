@@ -12,7 +12,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandlers.Analytics
 {
-	[Toggle(Toggles.ETL_EventbasedDate_39562)]
 	[TestFixture]
 	[DomainTest]
 	public class PersonPeriodMapTests : IExtendSystem

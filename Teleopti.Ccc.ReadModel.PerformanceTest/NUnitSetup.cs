@@ -47,8 +47,6 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 				AllEventPublishingsAsSync = true,
 			};
 			var fakeToggleManager = new FakeToggleManager();
-			enabledTogglesOnStartup
-				.ForEach(fakeToggleManager.Enable);
 			var configuration = new IocConfiguration(args, fakeToggleManager);
 			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterType<MutableNow>().AsSelf().As<INow>().SingleInstance();
@@ -109,13 +107,7 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 		{
 			TestSiteConfigurationSetup.TearDown();
 		}
-
-		private readonly List<Toggles> enabledTogglesOnStartup = new List<Toggles>
-		{
-			// Analytics stuff based on events
-			Toggles.ETL_EventbasedDate_39562,
-		};
-
+		
 		public static void LogHangfireQueues(TestLog testLog, HangfireUtilities hangfireUtilities)
 		{
 			while (true)

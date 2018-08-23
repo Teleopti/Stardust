@@ -384,7 +384,6 @@
     <Compile Include="Analytics\AnalyticTeam.cs" />
     <Compile Include="Analytics\Transformer\AnalyticsPersonPeriodDateFixer.cs" />
     <Compile Include="Analytics\Transformer\AnalyticsPersonPeriodDateFixerBase.cs" />
-    <Compile Include="Analytics\Transformer\AnalyticsPersonPeriodDateFixerWithoutDateCreation.cs" />
     <Compile Include="Analytics\Transformer\IAnalyticsPersonPeriodDateFixer.cs" />
     <Compile Include="Analytics\Transformer\IPersonPeriodFilter.cs" />
     <Compile Include="Analytics\Transformer\IPersonPeriodTransformer.cs" />
@@ -2016,7 +2015,6 @@
     <Compile Include="Analytics\AnalyticsSkill.cs" />
     <Compile Include="Analytics\Transformer\AcdLoginPersonTransformer.cs" />
     <Compile Include="Analytics\Transformer\IntervalBase.cs" />
-    <Compile Include="Analytics\Transformer\PersonPeriodFilter.cs" />
     <Compile Include="Analytics\Transformer\PersonPeriodTransformer.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\PersonFinderReadOnlyUpdater.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsPersonPeriodUpdater.cs" />
