@@ -98,7 +98,7 @@ namespace Teleopti.Analytics.Etl.CommonTest
 			repository.Expect(x => x.SaveLogPost(Arg<EtlJobLog>.Is.Anything, Arg<JobResult>.Matches(arg=> arg == jobResult)));
 			
 			_target = new JobRunner();
-			_target.SaveResult(jobResultCollection, repository, -1);
+			_target.SaveResult(jobResultCollection, repository, -1, "WFM Tenant");
 
 			repository.VerifyAllExpectations();
 		}
@@ -106,7 +106,7 @@ namespace Teleopti.Analytics.Etl.CommonTest
 		[Test]
 		public void ShouldNotSaveJobResultIfInvalidScheduleId()
 		{
-			var scheduleId = 3;
+			const int scheduleId = 3;
 			var repository = MockRepository.GenerateMock<IJobLogRepository>();
 			IBusinessUnit businessUnit1 = new BusinessUnit("myBU 1");
 			IList<IJobResult> jobResultCollection = new List<IJobResult>();
@@ -119,7 +119,7 @@ namespace Teleopti.Analytics.Etl.CommonTest
 			repository.Stub(x => x.SaveLogPre(scheduleId)).Return(-99);
 			
 			_target = new JobRunner();
-			_target.SaveResult(jobResultCollection, repository, scheduleId);
+			_target.SaveResult(jobResultCollection, repository, scheduleId, "WFM Tenant");
 
 			repository.AssertWasNotCalled(x => x.SaveLogStepPost(Arg<EtlJobLog>.Is.Anything, Arg<JobStepResult>.Is.Anything));
 			repository.AssertWasNotCalled(x => x.SaveLogPost(Arg<EtlJobLog>.Is.Anything, Arg<JobResult>.Is.Anything));
@@ -150,7 +150,7 @@ namespace Teleopti.Analytics.Etl.CommonTest
 			repository.Expect(x => x.SaveLogPost(Arg<EtlJobLog>.Is.Anything, Arg<JobResult>.Matches(arg => arg == jobResult2))).Repeat.Once();
 
 			_target = new JobRunner();
-			_target.SaveResult(jobResultCollection, repository, -1);
+			_target.SaveResult(jobResultCollection, repository, -1, "WFM Tenant");
 
 			repository.VerifyAllExpectations();
 		}

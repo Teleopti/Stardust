@@ -62,12 +62,12 @@ namespace Teleopti.Analytics.Etl.Common
 			}
 		}
 
-		public void SaveResult(IList<IJobResult> jobResultCollection, IJobLogRepository jobLogRepository, int jobScheduleId)
+		public void SaveResult(IList<IJobResult> jobResultCollection, IJobLogRepository jobLogRepository, int jobScheduleId, string tenantName)
 		{
 			foreach (var jobResult in jobResultCollection)
 			{
 				IEtlJobLog etlJobLogItem = new EtlJobLog(jobLogRepository);
-				if (!etlJobLogItem.Init(jobScheduleId, jobResult.StartTime, jobResult.EndTime))
+				if (!etlJobLogItem.Init(jobScheduleId, tenantName, jobResult.StartTime, jobResult.EndTime))
 				{
 					// ScheduleId is not avaliable due to deletion
 					continue;
