@@ -5,6 +5,7 @@ describe('Requests controller tests', function() {
 		$q,
 		$httpBackend,
 		requestsDataService,
+		groupPageService,
 		requestCommandParamsHolder,
 		getParamsFn,
 		fakeState = {
@@ -15,12 +16,17 @@ describe('Requests controller tests', function() {
 				this.current.name = name;
 				getParamsFn = getParams.getParams;
 			}
+		},
+		fakeAvailableGroupsPeriod = {
+			start: '',
+			end: ''
 		};
 
 	beforeEach(function() {
 		module('wfm.requests');
 
-		requestsDataService = new fakeRequestsDataService();
+		requestsDataService = new FakeRequestsDataService();
+		groupPageService = new FakeGroupPageService();
 
 		module(function($provide) {
 			$provide.service('$state', function() {
@@ -29,6 +35,7 @@ describe('Requests controller tests', function() {
 			$provide.service('Toggle', function() {
 				return {
 					Wfm_Requests_People_Search_36294: true,
+					Wfm_GroupPages_45057: true,
 					togglesLoaded: $q(function(resolve, reject) {
 						resolve();
 					})
@@ -36,6 +43,9 @@ describe('Requests controller tests', function() {
 			});
 			$provide.service('requestsDataService', function() {
 				return requestsDataService;
+			});
+			$provide.service('groupPageService', function() {
+				return groupPageService;
 			});
 			$provide.service('$timeout', function() {
 				return function(callback) {
@@ -95,6 +105,20 @@ describe('Requests controller tests', function() {
 		controller.changeSelectedTeams(['fakeTeamId']);
 
 		expect(controller.agentSearchOptions.focusingSearch).toEqual(true);
+	});
+
+	it('should pass correct period when loading group pages', function() {
+		var controller = setUpTarget().controller;
+
+		controller.period = {
+			startDate: moment('2018-08-19'),
+			endDate: moment('2018-08-25')
+		};
+
+		controller.getTeamOrGroupData();
+
+		expect(fakeAvailableGroupsPeriod.start).toEqual('2018-08-19');
+		expect(fakeAvailableGroupsPeriod.end).toEqual('2018-08-25');
 	});
 
 	it('should deactive search status after applying favorite', function() {
@@ -177,7 +201,7 @@ describe('Requests controller tests', function() {
 		expect(requestCommandParamsHolder.getSelectedRequestsIds().length).toEqual(0);
 	});
 
-	it('should keep search tearms in params after selected period changed', function() {
+	it('should keep search terms in params after selected period changed', function() {
 		var target = setUpTarget();
 		var controller = target.controller;
 
@@ -444,7 +468,7 @@ describe('Requests controller tests', function() {
 		return { controller: controller, scope: scope };
 	}
 
-	function fakeRequestsDataService() {
+	function FakeRequestsDataService() {
 		this.hierarchy = function() {
 			return $q(function(resolve) {
 				resolve({ Children: [] });
@@ -454,6 +478,77 @@ describe('Requests controller tests', function() {
 			return {
 				then: function() {
 					successCallback && successCallback();
+				}
+			};
+		};
+	}
+
+	function FakeGroupPageService() {
+		var fakeGroupsData = {
+			BusinessHierarchy: [
+				{
+					Children: [
+						{
+							Name: 'BTS',
+							Id: '9d013613-7c79-4621-b166-a39a00b9d634'
+						}
+					],
+					Id: '7a6c0754-4de8-48fb-8aee-a39a00b9d1c3',
+					Name: 'BTS'
+				}
+			],
+			GroupPages: [
+				{
+					Id: 'c6f1689e-e793-4ef3-80be-a47400f162e0',
+					Name: 'Agent Rank',
+					Children: [
+						{
+							Id: '5e19669e-b57b-4629-b5a5-a47400f162e0',
+							Name: 'Tier 1'
+						},
+						{
+							Id: '2f60b29e-6805-43b6-a602-a47400f162e0',
+							Name: 'Tier 2'
+						},
+						{
+							Id: '3f9822ab-7ce9-4b9b-a0c5-a47400f162e0',
+							Name: 'Tier 3'
+						},
+						{
+							Id: '4b469746-378a-4b5d-b449-a47400f162e0',
+							Name: 'Tier 4'
+						},
+						{
+							Id: '009cd246-4ed7-44d4-b604-a47400f162e0',
+							Name: 'Tier 5'
+						},
+						{
+							Id: '66761d6e-e3f9-443f-8070-a47400f162e0',
+							Name: 'Tier 6'
+						},
+						{
+							Id: 'a84f58bc-2090-40b1-866a-a47400f162e0',
+							Name: 'Tier 7'
+						},
+						{
+							Id: 'e64d1dd3-d2b4-4b15-99e2-a47400f162e0',
+							Name: 'Tier 8'
+						},
+						{
+							Id: '312c3fd1-5ecc-420f-8375-a47400f162e0',
+							Name: 'Tier 9'
+						}
+					]
+				}
+			],
+			LogonUserTeamId: null
+		};
+		this.fetchAvailableGroupPages = function(startDateStr, endDateStr) {
+			fakeAvailableGroupsPeriod.start = startDateStr;
+			fakeAvailableGroupsPeriod.end = endDateStr;
+			return {
+				then: function(callback) {
+					callback && callback(fakeGroupsData);
 				}
 			};
 		};
