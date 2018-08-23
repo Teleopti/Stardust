@@ -125,7 +125,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			// MORE CLEAN UP!
 			Add(new PurgeJobStep(jobParameters));     // BU independent
 			
-			AddWhenAllEnabled(new CalculateBadgesJobStep(jobParameters), Toggles.ETL_MoveBadgeCalculationToETL_38421);
+			Add(new CalculateBadgesJobStep(jobParameters));
 		}
 	}
 }

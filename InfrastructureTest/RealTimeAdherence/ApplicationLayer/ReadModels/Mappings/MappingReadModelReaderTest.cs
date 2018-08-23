@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.ApplicationLayer.Rea
 {
 	[TestFixture]
 	[DatabaseTest]
-	[Toggle(Toggles.ETL_SpeedUpIntradayBusinessUnit_38932)]
 	public class MappingReadModelReaderTest : IExtendSystem
 	{
 		public IRtaMapRepository Maps;

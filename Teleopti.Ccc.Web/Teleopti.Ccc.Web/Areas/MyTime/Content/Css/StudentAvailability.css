@@ -123,3 +123,7 @@
 		float: right;
 	}
 }
+
+.availability-add-container {
+	position: relative;
+}

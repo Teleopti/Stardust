@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var optPrefs = new OptimizationPreferences {General = {ScheduleTag = new ScheduleTag()}};
 
 			var callbackTracker = new TrackOptimizationCallback();
-			Target.Execute(period, new[] { agent }, optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => {}, callbackTracker);
+			Target.Execute(period, new[] { agent }, optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), callbackTracker);
 			callbackTracker.SuccessfulOptimizations()
 				.Should().Be.EqualTo(1);
 		}
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 			var callbackTracker = new TrackOptimizationCallback();
 			callbackTracker.SetCancelled();
-			Target.Execute(period, new[] { agent }, optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => {}, callbackTracker);
+			Target.Execute(period, new[] { agent }, optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), callbackTracker);
 			callbackTracker.SuccessfulOptimizations()
 				.Should().Be.EqualTo(0);
 			callbackTracker.UnSuccessfulOptimizations()
@@ -97,12 +97,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var optPrefs = new OptimizationPreferences {General = {ScheduleTag = new ScheduleTag()}};
 
 			var callbackTracker = new TrackOptimizationCallback();
-			Target.Execute(period, new[] { agent }, optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => {}, callbackTracker);
+			Target.Execute(period, new[] { agent }, optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), callbackTracker);
 			callbackTracker.UnSuccessfulOptimizations()
 				.Should().Be.EqualTo(1);
 		}
 
-		public DayOffOptimizationCallbackDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerXxl76496) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerXxl76496)
+		public DayOffOptimizationCallbackDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerXxl76496) : base(seperateWebRequest, resourcePlannerXxl76496)
 		{
 		}
 	}

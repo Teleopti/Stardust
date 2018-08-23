@@ -35,13 +35,27 @@ namespace Teleopti.Ccc.Domain.Cascading
 					{
 						last.AddSubSkill(skillInSameChainAsPrimarySkill);
 					}
-				}
-				cascadingSkillSets.Add(new CascadingSkillSet(primarySkills, cascadingSubSkills, skillSet.Resource));
+				}				
+				addOrAppendSkillSet(cascadingSkillSets, primarySkills, cascadingSubSkills, skillSet.Resource);
 			}
 			cascadingSkillSets.Sort(new CascadingSkillSetSorter());
 			return mergeSkillSetsWithSameIndex(cascadingSkillSets);
 		}
 
+		private static void addOrAppendSkillSet(ICollection<CascadingSkillSet> cascadingSkillSets, IEnumerable<ISkill> primarySkills, IEnumerable<SubSkillsWithSameIndex> cascadingSubSkills, double skillSetResource)
+		{
+			var presentSkillSet = cascadingSkillSets.SingleOrDefault(x => x.ContainsSameSkills(primarySkills, cascadingSubSkills));
+			if (presentSkillSet == null)
+			{
+				cascadingSkillSets.Add(new CascadingSkillSet(primarySkills, cascadingSubSkills, skillSetResource));
+			}
+			else
+			{
+				//we have duplicate cascading skillsets if there were non cascading skills in the set
+				presentSkillSet.RemainingResources += skillSetResource;
+			}
+		}
+		
 		private static OrderedSkillSets mergeSkillSetsWithSameIndex(IEnumerable<CascadingSkillSet> cascadingSkillSets)
 		{
 			var ret = new List<List<CascadingSkillSet>>();

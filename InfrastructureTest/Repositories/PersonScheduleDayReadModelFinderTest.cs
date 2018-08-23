@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
@@ -11,6 +12,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Messaging.Client.Composite;
@@ -428,6 +430,175 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				clearReadModel(personId2, businessUnitId, date);
 				uow.PersistAll();
 			}
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleViewDesktop_76313)]
+		public void ShouldLoadOnlyDayOffWhenHavingBothDayOffAndTimeFilter()
+		{
+			var site = SiteFactory.CreateSimpleSite("site");
+			var team = TeamFactory.CreateSimpleTeam();
+			team.Site = site;
+			team.SetDescription(new Description("team"));
+
+			var per1 = PersonFactory.CreatePerson("roger", "kratz");
+			var per2 = PersonFactory.CreatePerson("z", "balog");
+			var per3 = PersonFactory.CreatePerson("a", "balog");
+
+			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
+			per2.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
+			per3.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
+
+			WithUnitOfWork.Do(() =>
+			{
+				Sites.Add(site);
+				Teams.Add(team);
+				Persons.Add(per1);
+				Persons.Add(per2);
+				Persons.Add(per3);
+			});
+
+			createAndSaveReadModel(per2.Id.Value, site.BusinessUnit.Id.Value, new DateTime(2012, 8, 28), 8, isDayoff: true);
+			createAndSaveReadModel(per3.Id.Value, site.BusinessUnit.Id.Value, new DateTime(2012, 8, 28), 10,18);
+			createAndSaveReadModel(per1.Id.Value, site.BusinessUnit.Id.Value, new DateTime(2012, 8, 28), 9,17);
+
+			var timeFilterInfo = new TimeFilterInfo {
+				IsDayOff = true,
+				StartTimes = new []{new DateTimePeriod(2012,8,28,7, 2012, 8, 28, 11) },
+				EndTimes = new[] { new DateTimePeriod(2012, 8, 28, 16, 2012, 8, 28, 19) }
+			};
+
+			var result = WithUnitOfWork.Get(() => Target.ForTeamSchedules(new DateOnly(2012, 8, 28),
+				new[] { (Guid)per1.Id, (Guid)per2.Id, (Guid)per3.Id }, new Paging { Skip = 0, Take = 20 }, timeFilterInfo));
+
+			var scheduleReadModels = result as IList<PersonScheduleDayReadModel> ?? result.ToList();
+			Assert.That(scheduleReadModels.Count, Is.EqualTo(1));
+			Assert.That(scheduleReadModels.ElementAt(0).IsDayOff, Is.EqualTo(true));
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleViewDesktop_76313)]
+		public void ShouldLoadOnlyDayOffWhenHavingOnlyDayOffFilter()
+		{
+			var site = SiteFactory.CreateSimpleSite("site");
+			var team = TeamFactory.CreateSimpleTeam();
+			team.Site = site;
+			team.SetDescription(new Description("team"));
+
+			var per1 = PersonFactory.CreatePerson("roger", "kratz");
+			var per2 = PersonFactory.CreatePerson("z", "balog");
+			var per3 = PersonFactory.CreatePerson("a", "balog");
+
+			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
+			per2.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
+			per3.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
+
+			WithUnitOfWork.Do(() =>
+			{
+				Sites.Add(site);
+				Teams.Add(team);
+				Persons.Add(per1);
+				Persons.Add(per2);
+				Persons.Add(per3);
+			});
+
+			createAndSaveReadModel(per2.Id.Value, site.BusinessUnit.Id.Value, new DateTime(2012, 8, 28), 8, isDayoff: true);
+			createAndSaveReadModel(per3.Id.Value, site.BusinessUnit.Id.Value, new DateTime(2012, 8, 28), 10, 18);
+			createAndSaveReadModel(per1.Id.Value, site.BusinessUnit.Id.Value, new DateTime(2012, 8, 28), 9, 17);
+
+			var timeFilterInfo = new TimeFilterInfo
+			{
+				IsDayOff = true
+			};
+
+			var result = WithUnitOfWork.Get(() => Target.ForTeamSchedules(new DateOnly(2012, 8, 28),
+				new[] { (Guid)per1.Id, (Guid)per2.Id, (Guid)per3.Id }, new Paging { Skip = 0, Take = 20 }, timeFilterInfo));
+
+			var scheduleReadModels = result as IList<PersonScheduleDayReadModel> ?? result.ToList();
+			Assert.That(scheduleReadModels.Count, Is.EqualTo(1));
+			Assert.That(scheduleReadModels.ElementAt(0).IsDayOff, Is.EqualTo(true));
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleViewDesktop_76313)]
+		public void ShouldLoadWhenHavingOnlyTimeFilter()
+		{
+			var site = SiteFactory.CreateSimpleSite("site");
+			var team = TeamFactory.CreateSimpleTeam();
+			team.Site = site;
+			team.SetDescription(new Description("team"));
+
+			var per1 = PersonFactory.CreatePerson("roger", "kratz");
+			var per2 = PersonFactory.CreatePerson("z", "balog");
+			var per3 = PersonFactory.CreatePerson("a", "balog");
+
+			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
+			per2.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
+			per3.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
+
+			WithUnitOfWork.Do(() =>
+			{
+				Sites.Add(site);
+				Teams.Add(team);
+				Persons.Add(per1);
+				Persons.Add(per2);
+				Persons.Add(per3);
+			});
+
+			createAndSaveReadModel(per2.Id.Value, site.BusinessUnit.Id.Value, new DateTime(2012, 8, 28), 8, isDayoff: true);
+			createAndSaveReadModel(per3.Id.Value, site.BusinessUnit.Id.Value, new DateTime(2012, 8, 28), 10, 18);
+			createAndSaveReadModel(per1.Id.Value, site.BusinessUnit.Id.Value, new DateTime(2012, 8, 28), 9, 17);
+
+			var timeFilterInfo = new TimeFilterInfo
+			{
+				StartTimes = new[] { new DateTimePeriod(2012, 8, 28, 7, 2012, 8, 28, 11) },
+				EndTimes = new[] { new DateTimePeriod(2012, 8, 28, 16, 2012, 8, 28, 19) }
+			};
+
+			var result = WithUnitOfWork.Get(() => Target.ForTeamSchedules(new DateOnly(2012, 8, 28),
+				new[] { (Guid)per1.Id, (Guid)per2.Id, (Guid)per3.Id }, new Paging { Skip = 0, Take = 20 }, timeFilterInfo));
+
+			var scheduleReadModels = result as IList<PersonScheduleDayReadModel> ?? result.ToList();
+			Assert.That(scheduleReadModels.Count, Is.EqualTo(2));
+			Assert.That(scheduleReadModels.ElementAt(0).IsDayOff, Is.EqualTo(false));
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleViewDesktop_76313)]
+		public void ShouldLoadAllWhenHavingNoFilter()
+		{
+			var site = SiteFactory.CreateSimpleSite("site");
+			var team = TeamFactory.CreateSimpleTeam();
+			team.Site = site;
+			team.SetDescription(new Description("team"));
+
+			var per1 = PersonFactory.CreatePerson("roger", "kratz");
+			var per2 = PersonFactory.CreatePerson("z", "balog");
+			var per3 = PersonFactory.CreatePerson("a", "balog");
+
+			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
+			per2.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
+			per3.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
+
+			WithUnitOfWork.Do(() =>
+			{
+				Sites.Add(site);
+				Teams.Add(team);
+				Persons.Add(per1);
+				Persons.Add(per2);
+				Persons.Add(per3);
+			});
+
+			createAndSaveReadModel(per2.Id.Value, site.BusinessUnit.Id.Value, new DateTime(2012, 8, 28), 8, isDayoff: true);
+			createAndSaveReadModel(per3.Id.Value, site.BusinessUnit.Id.Value, new DateTime(2012, 8, 28), 10, 18);
+			createAndSaveReadModel(per1.Id.Value, site.BusinessUnit.Id.Value, new DateTime(2012, 8, 28), 9, 17);
+			
+
+			var result = WithUnitOfWork.Get(() => Target.ForTeamSchedules(new DateOnly(2012, 8, 28),
+				new[] { (Guid)per1.Id, (Guid)per2.Id, (Guid)per3.Id }, new Paging { Skip = 0, Take = 20 }, null));
+
+			var scheduleReadModels = result as IList<PersonScheduleDayReadModel> ?? result.ToList();
+			Assert.That(scheduleReadModels.Count, Is.EqualTo(3));
 		}
 
 		private void clearReadModel(Guid personId, Guid businessUnitId, DateTime date)

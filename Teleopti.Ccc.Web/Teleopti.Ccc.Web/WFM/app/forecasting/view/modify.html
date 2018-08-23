@@ -1,0 +1,446 @@
+<div ng-if="!vm.noWorkloadFound">
+<div class="view-header with-desc">
+	<div class="view-title">
+		<h1>
+			<i ng-class="vm.getSkillIcon(vm.selectedWorkload.SkillType)">
+				<md-tooltip>
+					<span ng-if="vm.selectedWorkload.SkillType.DoDisplayData">{{vm.selectedWorkload.SkillType.SkillType | translate}}</span>
+					<span ng-if="!vm.selectedWorkload.SkillType.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
+				</md-tooltip>
+			</i>
+			<span>{{vm.selectedWorkload.Workload.Name}}</span>
+		</h1>
+	</div>
+</div>
+
+<div class="con-row">
+	<div class="con-flex">
+		<div class="panel material-depth-1">
+			<div class="con-row">
+				<div class="con-flex">
+					<div style="display: flex; align-items: center; justify-content:space-between;">
+						<label class="inline-flex" style="align-items: center;">
+							{{'ScenarioColon'|translate}} &nbsp;
+							<md-select ng-model="vm.selectedScenario" ng-change="vm.changeScenario(vm.selectedScenario)" placeholder="{{'Scenario' | translate}}" ng-disabled="vm.savingToScenario || vm.isForecastRunning || vm.changesMade">
+								<md-option ng-repeat="scenario in vm.scenarios" ng-value="scenario">{{scenario.Name}}</md-option>
+							</md-select>
+							<md-tooltip ng-if="vm.changesMade">{{'PleaseSaveOrDiscardChangesBeforeChangingScenario' | translate}}</md-tooltip>
+						</label>
+
+						<div>
+							<button tabindex=0 class="context-menu card-context" ng-click="vm.periodModal = true" ng-disabled="vm.savingToScenario || vm.isForecastRunning || vm.changesMade">
+								<i class="mdi mdi-calendar"></i>
+								<md-tooltip>{{'SelectForecastPeriodIntro'|translate}}</md-tooltip>
+							</button>
+							<md-tooltip ng-if="vm.changesMade">{{'PleaseSaveOrDiscardChangesBeforeChangingPeriod' | translate}}</md-tooltip>
+							{{'FromDate' | translate}}: {{vm.forecastPeriod.startDate | date: 'shortDate'}} {{'DateTo' | translate}}: {{vm.forecastPeriod.endDate  | date: 'shortDate'}}
+						</div>
+
+						<div>
+							<button ng-if="vm.selectedWorkload.SkillType.DoDisplayData" tabindex=0 class="context-menu card-context" ng-click="vm.scenarioExportModal = true" ng-disabled="vm.savingToScenario || vm.isForecastRunning">
+								<i class="mdi mdi-share"></i>
+								<md-tooltip>{{'SaveToOtherScenario' | translate}}</md-tooltip>
+							</button>
+
+							<button tabindex=0 class="context-menu card-context" ng-click="vm.exportModal = true" ng-disabled="vm.savingToScenario || vm.isForecastRunning">
+								<i class="mdi mdi-file-excel"></i>
+								<md-tooltip>{{'ExportToFile'|translate}}</md-tooltip>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--Override/Campaign-->
+<form ng-submit="vm.applyCampaign()">
+	<div class="con-row animate-show" ng-show="vm.campaignPanel" ng-cloak>
+		<div class="con-flex">
+			<div class="panel material-depth-1">
+				<div class="sub-header">
+					<h2>{{'Campaign' | translate}}</h2>
+				</div>
+				<div class="con-row">
+					<div class="con-flex">
+						<label for="campaignPercentageId" class="input-icon">
+							<i class="mdi mdi-percent">
+								<input id="campaignPercentageId" type="number" ng-change="vm.updateCampaignPreview()" min="-100" required autofocus autocomplete="off" ng-model="vm.campaignPercentage" placeholder="{{'CampaignCallsPercentSign'|translate}}">
+							</i>
+						</label>
+					</div>
+				</div>
+				<div class="con-footer">
+					<button type="button" class="wfm-btn wfm-btn-invis-default" ng-click="vm.modifyPanelHelper()">{{'Cancel'|translate}}</button>
+					<button type="submit" class="wfm-btn wfm-btn-invis-primary">{{'Apply'|translate}}</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+
+<div class="con-row" ng-show="vm.changesMade && !vm.savingToScenario">
+	<div class="con-flex">
+		<div class="con-row">
+			<div class="con-flex notice-warning">
+				<i class="mdi mdi-alert"></i> {{'ThisScenarioHasChanges' | translate}}
+			</div>
+		</div>
+	</div>
+</div>
+
+<form ng-submit="vm.applyOverride(form)" class="wfm-form">
+	<div class="con-row animate-show" ng-show="vm.overridePanel" ng-cloak>
+		<div class="con-flex">
+			<div class="panel material-depth-1">
+				<div class="sub-header">
+					<h2>{{'CreateOverride'|translate}}</h2>
+				</div>
+				<div class="con-row">
+					<div class="con-flex">
+						<div class="form-input-wrap">
+							<label for="overrideTasksValueId">{{'Calls'|translate}}:</label>
+							<input id="overrideTasksValueId" type="number" ng-model="form.overrideTasksValue" name="" min="1" value="" autocomplete="off">
+						</div>
+
+						<div class="form-input-wrap">
+							<label for="overrideTalkTimeValueId">{{'TalkTime'|translate}}:</label>
+							<input id="overrideTalkTimeValueId" type="number" ng-model="form.overrideTalkTimeValue" name="" min="1" value="" autocomplete="off">
+						</div>
+
+						<div class="form-input-wrap">
+							<label for="overrideAfterCallWorkValueId">{{'ACW'|translate}}:</label>
+							<input id="overrideAfterCallWorkValueId" type="number" ng-model="form.overrideAfterCallWorkValue" name="" min="1" value="" autocomplete="off">
+						</div>
+					</div>
+				</div>
+				<div class="con-footer">
+					<button type="button" class="wfm-btn wfm-btn-invis-default" ng-click="vm.modifyPanelHelper()">{{'Cancel'|translate}}</button>
+					<button type="submit" class="wfm-btn wfm-btn-invis-primary">{{'Apply'|translate}}</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+
+<div ng-if="vm.scenarioNotForecasted && !vm.selectedWorkload.SkillType.DoDisplayData">
+	<div class="con-row">
+		<div class="con-flex">
+			<div class="panel material-depth-1">
+				<div class="con-row">
+					<div class="con-flex">
+						{{'SkillNotSupported'|translate}}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div ng-if="vm.scenarioNotForecasted && vm.selectedWorkload.SkillType.DoDisplayData">
+	<div class="con-row">
+		<div class="con-flex">
+			<div class="panel material-depth-1">
+				<div class="con-row">
+					<div class="con-flex">
+						{{'NoForecastDateForCurrentScenario'|translate}}
+					</div>
+				</div>
+				<div class="con-footer">
+					<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.forecastModal = true" ng-if="vm.selectedWorkload.SkillType.DoDisplayData">
+						{{'ForecastDo'|translate}}
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Chart -->
+<div class="con-row" ng-if="vm.isForecastRunning || vm.savingToScenario">
+	<div class="con-flex">
+		<div class="panel material-depth-1 full-padding">
+			<div>
+				<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="con-row" ng-if="vm.selectedWorkload.Days.length > 0 && !vm.savingToScenario">
+	<div class="con-flex">
+		<div class="panel material-depth-1">
+			<div class="sub-header">
+				<h2 ng-if="vm.selectedWorkload.SkillType.DoDisplayData">{{'SelectToModify'|translate}}</h2>
+				<h2 ng-if="!vm.selectedWorkload.SkillType.DoDisplayData">{{'SkillNotSupported'|translate}}</h2>
+				<div class="head-actions panel-menu">
+					<div tabindex=0 ng-show="vm.selectedDayCount.length > 0" class="grow-out context-menu card-context">
+						<i class="mdi mdi-dots-vertical"></i>
+						<wfm-badge badge-model="vm.selectedDayCount.length" pulse="true" status="'notice-success'"> </wfm-badge>
+						<span class="context-menu-left">
+							<ul class="wfm-list">
+								<li ng-if="vm.selectedWorkload.SkillType.DoDisplayData" ng-click="vm.modifyPanelHelper(true)">{{'CreateOverride'|translate}}</li>
+								<li ng-if="vm.selectedWorkload.SkillType.DoDisplayData" ng-click="vm.modifyPanelHelper(false)">{{'CreateCampaign'|translate}}</li>
+								<li ng-if="vm.selectedWorkload.SkillType.DoDisplayData" ng-click="vm.clearOverride()">{{'ClearOverride'|translate}}</li>
+								<li ng-if="vm.selectedWorkload.SkillType.DoDisplayData" ng-click="vm.clearCampaign()">{{'ClearCampaign'|translate}}</li>
+								<li ng-click="vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days)">{{'ClearForecastChart'|translate}}</li>
+							</ul>
+						</span>
+						<md-tooltip>{{ 'Modify' | translate }}</md-tooltip>
+					</div>
+				</div>
+			</div>
+			<div class="con-row">
+				<div class="con-flex">
+					<forecast-chart chart-id="vm.selectedWorkload.ChartId" selectable="vm.selectedWorkload.SkillType.DoDisplayData" refresh="vm.loadChart" on-click="vm.pointClick" days="vm.selectedWorkload.Days"> </forecast-chart>
+				</div>
+			</div>
+			<div class="con-footer">
+				<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.reforecastConfirmation = vm.changesMade; vm.forecastModal = !vm.changesMade;" ng-if="vm.selectedWorkload.SkillType.DoDisplayData">
+					{{'ForecastDo'|translate}}
+				</button>
+				<button class="wfm-btn wfm-btn-invis-default" ng-if="vm.changesMade && vm.selectedWorkload.SkillType.DoDisplayData" ng-click="vm.confirmDiscardDialog = true;">
+					{{'Discard' | translate}}
+				</button>
+				<button class="wfm-btn wfm-btn-invis-primary" ng-if="vm.changesMade && vm.selectedWorkload.SkillType.DoDisplayData" ng-click="vm.applyWipToScenario()">
+					{{'Save' | translate}}
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<modal-dialog show='vm.forecastModal' ng-cloak>
+	<div>
+		<div class="con-row">
+			<div class="con-flex">
+				<p>{{'SkillColon' | translate}}<b>{{vm.selectedWorkload.Workload.Name}}</b></p>
+				<p class="subtext">{{'ScenarioColon'|translate}}<b>{{vm.selectedScenario.Name}}</b></p>
+			</div>
+		</div>
+
+		<div class="modal-inner-content" style="text-align:center;">
+			<!-- <label>{{'ForecastPeriod' | translate}}:</label><br/> -->
+			<wfm-calendar-picker ng-model="vm.forecastPeriod"></wfm-calendar-picker>
+		</div>
+		<div class="modal-actions">
+			<aside>
+				<button class="wfm-btn wfm-btn-invis-primary" ng-disabled="!vm.forecastPeriod.startDate || !vm.forecastPeriod.endDate" ng-click="vm.changesMade=false; vm.forecastWorkload()">{{'Apply'|translate}}</button>
+			</aside>
+		</div>
+		<div ng-if="vm.isForecastRunning">
+			<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+		</div>
+	</div>
+</modal-dialog>
+
+<modal-dialog show='vm.periodModal' ng-cloak>
+	<div>
+		<div class="con-row">
+			<div class="con-flex">
+				<p>{{'SkillColon' | translate}}<b>{{vm.selectedWorkload.Workload.Name}}</b></p>
+				<p class="subtext">{{'ScenarioColon' | translate}}<b>{{vm.selectedScenario.Name}}</b></p>
+			</div>
+		</div>
+
+		<div class="modal-inner-content" style="text-align:center;">
+			<wfm-calendar-picker ng-model="vm.forecastPeriod"></wfm-calendar-picker>
+		</div>
+		<div class="modal-actions">
+			<aside>
+				<button class="wfm-btn wfm-btn-invis-primary" ng-disabled="!vm.forecastPeriod.startDate || !vm.forecastPeriod.endDate" ng-click="vm.getWorkloadForecastData()">{{'Apply'|translate}}</button>
+			</aside>
+		</div>
+		<div ng-if="vm.isForecastRunning">
+			<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+		</div>
+	</div>
+</modal-dialog>
+
+<modal-dialog show='vm.exportModal' ng-cloak>
+	<div>
+		<div class="con-row">
+			<div class="con-flex">
+				<b>{{'ExportToFile'|translate}}</b>
+			</div>
+		</div>
+		<div class="modal-inner-content" style="text-align:center;">
+			<wfm-calendar-picker ng-model="vm.forecastPeriod"></wfm-calendar-picker>
+		</div>
+		<div class="modal-actions">
+			<aside>
+				<button class="wfm-btn wfm-btn-invis-primary" ng-disabled="!vm.forecastPeriod.startDate || !vm.forecastPeriod.endDate" ng-click="vm.exportToFile()">{{'Export'|translate}}</button>
+			</aside>
+		</div>
+		<div ng-if="vm.isForecastRunning">
+			<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+		</div>
+	</div>
+</modal-dialog>
+
+<modal-dialog show='vm.scenarioExportModal' ng-cloak>
+	<div>
+		<div class="con-row">
+			<div class="con-flex">
+				<b>{{'SaveToOtherScenario'|translate}}</b>
+			</div>
+		</div>
+		<div class="modal-inner-content">
+			<md-select ng-model="vm.targetScenario" placeholder="{{'SelectTargetScenarioWithColon' | translate}}" ng-disabled="vm.savingToScenario || vm.isForecastRunning">
+				<md-option ng-repeat="scenario in vm.scenarios" ng-value="scenario">{{scenario.Name}}</md-option>
+			</md-select>
+		</div>
+		<div class="modal-actions">
+			<aside>
+				<button class="wfm-btn wfm-btn-invis-primary" ng-disabled="!vm.targetScenario" ng-click="vm.exportToScenario()">{{'Save'|translate}}</button>
+			</aside>
+		</div>
+		<div ng-if="vm.savingToScenario || vm.isForecastRunning">
+			<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+		</div>
+	</div>
+</modal-dialog>
+
+<div ng-cloak
+	 class="modal-box">
+	<div ng-cloak
+		 ng-show="vm.confirmDiscardDialog">
+		<div class="modalbg">
+			<div class="dialog-mini material-depth-1">
+				<div class="modal-inner-content">
+					<h3>{{'ThisScenarioHasChanges' | translate}}</h3>
+					{{'ConfirmDiscardAllModifications' | translate}}
+				</div>
+				<div class="modal-actions">
+					<aside>
+						<button type="button"
+								focus-me="vm.closeConfirmation"
+								id="confirmDiscardButton"
+								ng-click="vm.changesMade=false; vm.confirmDiscardDialog = false; vm.getWorkloadForecastData(); $event.stopPropagation();"
+								class="wfm-btn wfm-btn-invis-default">
+							{{'Yes'|translate}}
+						</button>
+						<button type="button"
+								id="cancelDiscardButton"
+								ng-click="vm.confirmDiscardDialog=false; $event.stopPropagation();"
+								class="wfm-btn wfm-btn-invis-primary">
+							{{'No'|translate}}
+						</button>
+					</aside>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div ng-cloak class="modal-box">
+	<div ng-cloak ng-show="vm.closeConfirmation">
+		<div class="modalbg">
+			<div class="dialog-mini material-depth-1">
+				<div class="modal-inner-content">
+					<h3>{{'ThisScenarioHasChanges' | translate}}</h3>
+					{{'ConfirmExitForecastWithoutSaving' | translate}}
+				</div>
+				<div class="modal-actions">
+					<aside>
+						<button type="button"
+								focus-me="vm.closeConfirmation"
+								id="confirmExitButton"
+								ng-click="vm.changesMade=false; vm.exitConfigMode(); $event.stopPropagation();"
+								class="wfm-btn wfm-btn-invis-default">
+							{{'Yes'|translate}}
+						</button>
+						<button type="button"
+								id="cancelExitButton"
+								ng-click="vm.stateName=''; vm.closeConfirmation=false; $event.stopPropagation();"
+								class="wfm-btn wfm-btn-invis-primary">
+							{{'No'|translate}}
+						</button>
+					</aside>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div ng-cloak class="modal-box">
+	<div ng-cloak ng-show="vm.closeConfirmationOnForecasting">
+		<div class="modalbg">
+			<div class="dialog-mini material-depth-1">
+				<div class="modal-inner-content">
+					<h3>{{'ForecastNotFinishedYet' | translate}}</h3>
+					{{'ConfirmExitOnForecasting' | translate}}
+				</div>
+				<div class="modal-actions">
+					<aside>
+						<button type="button"
+								id="confirmExitOnForecastingButton"
+								ng-click="vm.isForecastRunning=false; vm.closeConfirmationOnForecasting=false; vm.exitConfigMode(); $event.stopPropagation();"
+								class="wfm-btn wfm-btn-invis-primary">
+							{{'Yes'|translate}}
+						</button>
+						<button type="button"
+								id="cancelExitOnForecastingButton"
+								ng-click="vm.stateName=''; vm.closeConfirmationOnForecasting=false; $event.stopPropagation();"
+								class="wfm-btn wfm-btn-invis-default">
+							{{'No'|translate}}
+						</button>
+					</aside>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div ng-cloak class="modal-box">
+	<div ng-cloak ng-show="vm.reforecastConfirmation">
+		<div class="modalbg">
+			<div class="dialog-mini material-depth-1">
+				<div class="modal-inner-content">
+					<h3>{{'ThisScenarioHasChanges' | translate}}</h3>
+					{{'ConfirmReforecastWithoutSaving' | translate}}
+				</div>
+				<div class="modal-actions">
+					<aside>
+						<button type="button"
+								focus-me="vm.closeConfirmation"
+								id="confirmReforecastButton"
+								ng-click="vm.reforecastConfirmation=false; vm.forecastModal=true; $event.stopPropagation();"
+								class="wfm-btn wfm-btn-invis-default">
+							{{'Yes'|translate}}
+						</button>
+						<button type="button"
+								id="cancelReforecastButton"
+								ng-click="vm.stateName=''; vm.reforecastConfirmation=false; $event.stopPropagation();"
+								class="wfm-btn wfm-btn-invis-primary">
+							{{'No'|translate}}
+						</button>
+					</aside>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<div ng-cloak ng-if="vm.noWorkloadFound">
+	<div class="view-header with-desc">
+		<h1>
+			<span>{{'Forecasts' | translate}}</span>
+		</h1>
+	</div>
+	<div class="con-flex">
+		<div class="panel material-depth-1">
+			<div class="con-row">
+				<div class="con-flex">
+					<h2>{{'PleaseSelectASkillFirst'|translate}}</h2>
+				</div>
+				<div class="con-footer">
+					<button class="wfm-btn wfm-btn-invis-primary" ui-sref="forecast">
+						{{'Ok' | translate}}
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

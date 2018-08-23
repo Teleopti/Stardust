@@ -12,15 +12,11 @@ using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Analytics.Transformer;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
-using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Web;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -32,7 +28,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Analytics.Etl.IntegrationTest
 {
 	[InfrastructureTest]
-	[Toggle(Toggles.ETL_EventbasedDate_39562)]
 	public class DimPersonUpdateMaxDateJobStepTests : IIsolateSystem
 	{
 		public IAnalyticsPersonPeriodDateFixer AnalyticsPersonPeriodDateFixer;

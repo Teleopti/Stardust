@@ -19,10 +19,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 
 		protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
 		{
-			if (_jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayBusinessUnit_38932))
-			{
-				_jobParameters.Helper.Repository.FillJobIntradaySettingsMart();
-			};
+			_jobParameters.Helper.Repository.FillJobIntradaySettingsMart();
 
 			int affectedRows = 0;
 			const int chunkTimeSpan = 30;

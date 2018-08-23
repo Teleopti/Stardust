@@ -10,13 +10,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class DayOffOptimizationDesktop
 	{
-		private readonly IDayOffOptimizationCommandHandler _dayOffOptimizationCommandHandler;
+		private readonly DayOffOptimizationCommandHandler _dayOffOptimizationCommandHandler;
 		private readonly DesktopOptimizationContext _desktopOptimizationContext;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IResourceCalculation _resourceCalculation;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 
-		public DayOffOptimizationDesktop(IDayOffOptimizationCommandHandler dayOffOptimizationCommandHandler,
+		public DayOffOptimizationDesktop(DayOffOptimizationCommandHandler dayOffOptimizationCommandHandler,
 			DesktopOptimizationContext desktopOptimizationContext,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IResourceCalculation resourceCalculation,
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 		}
 
-		public void Execute(DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedAgents, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized, IOptimizationCallback optimizationCallback)
+		public void Execute(DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedAgents, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, IOptimizationCallback optimizationCallback)
 		{
 			var stateHolder = _schedulerStateHolder();
 			var command = new DayOffOptimizationCommand
@@ -39,8 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			};
 			using (_desktopOptimizationContext.Set(command, stateHolder, optimizationPreferences, dayOffOptimizationPreferenceProvider, optimizationCallback))
 			{
-				_dayOffOptimizationCommandHandler.Execute(command,
-					resourceOptimizerPersonOptimized);
+				_dayOffOptimizationCommandHandler.Execute(command);
 			}
 			using (_resourceCalculationContextFactory.Create(stateHolder.SchedulingResultState, false, selectedPeriod))
 			{

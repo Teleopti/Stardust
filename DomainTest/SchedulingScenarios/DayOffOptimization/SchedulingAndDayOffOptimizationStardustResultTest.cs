@@ -39,10 +39,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 		public SchedulePlanningPeriodCommandHandler Target;
 
-		public SchedulingAndDayOffOptimizationStardustResultTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerXxl76496) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerXxl76496)
-		{
-		}
-
 		[TestCase("Mountain Standard Time", "Mountain Standard Time")]
 		[TestCase("Mountain Standard Time", "UTC")]
 		public void ShouldHandleTimeZoneIssues(string skillTimeZoneStr, string assignedShiftsTimeZone)
@@ -76,6 +72,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var skillResult = result.SkillResultList.ToList();
 			var endUserDate = skillResult.First().SkillDetails.First();
 			endUserDate.RelativeDifference.Should().Be(0);
+		}
+		
+		public SchedulingAndDayOffOptimizationStardustResultTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerXxl76496) : base(seperateWebRequest, resourcePlannerXxl76496)
+		{
 		}
 	}
 }

@@ -21,23 +21,10 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
             containerBuilder = new ContainerBuilder();
         }
 
-        [Test]
-        public void ShouldResolveDefaultHashFunctionWhenUsingOldToggle()
-        {
-            containerBuilder.RegisterModule(new EncryptionModule(new IocConfiguration(new IocArgs(new FakeConfigReader()), new FalseToggleManager())));
-            using(var container = containerBuilder.Build())
-            {
-                var hashFunction = container.Resolve<IHashFunction>();
-
-                Assert.IsNotNull(hashFunction);
-				Assert.True(hashFunction is OneWayEncryption);
-            }            
-        }
-
 		[Test]
-		public void ShouldResolveDefaultHashFunctionWhenUsingNewToggle()
+		public void DefaultHashFunctionShouldBeBCryptHashFunction()
 		{
-			containerBuilder.RegisterModule(new EncryptionModule(new IocConfiguration(new IocArgs(new FakeConfigReader()), new TrueToggleManager())));
+			containerBuilder.RegisterModule(new EncryptionModule(new IocConfiguration(new IocArgs(new FakeConfigReader()), new FakeToggleManager())));
 			using (var container = containerBuilder.Build())
 			{
 				var hashFunction = container.Resolve<IHashFunction>();

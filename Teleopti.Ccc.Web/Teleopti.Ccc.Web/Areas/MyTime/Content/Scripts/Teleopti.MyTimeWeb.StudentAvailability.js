@@ -220,6 +220,9 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 			return false;
 		}
 
+		if (editFormViewModel.IsPostingData()) return false;
+		editFormViewModel.IsPostingData(true);
+
 		$('#StudentAvailability-body-inner .ui-selected')
 			.each(function (index, cell) {
 				var date = $(cell).data('mytime-date');
@@ -227,12 +230,11 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 				var promise = dayViewModels[date].SetStudentAvailability(studentAvailability, editFormViewModel);
 				promises.push(promise);
 			});
-		if (promises.length != 0) {
-			$.when.apply(null, promises)
-				.done(function () {
-					if (!editFormViewModel.ShowError() && studentAvailability.IsHostAMobile) studentAvailability.ToggleAddAvailabilityFormVisible();
-				});
-		}
+		$.when.apply(null, promises)
+			.done(function () {
+				if (!editFormViewModel.ShowError() && studentAvailability.IsHostAMobile) studentAvailability.ToggleAddAvailabilityFormVisible();
+				editFormViewModel.IsPostingData(false);
+			});
 	}
 
 	function _isDateSelected() {

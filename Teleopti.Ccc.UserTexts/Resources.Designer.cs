@@ -5475,6 +5475,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Campaign emails %.
+        /// </summary>
+        public static string CampaignEmailsPercentSign {
+            get {
+                return ResourceManager.GetString("CampaignEmailsPercentSign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Campaign facsimiles handling time %.
         /// </summary>
         public static string CampaignFacsimilesHandlingtime {
@@ -5606,6 +5615,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string CampaignTasksHandlingtime {
             get {
                 return ResourceManager.GetString("CampaignTasksHandlingtime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Campaign tasks %.
+        /// </summary>
+        public static string CampaignTasksPercentSign {
+            get {
+                return ResourceManager.GetString("CampaignTasksPercentSign", resourceCulture);
             }
         }
         
@@ -23409,11 +23427,29 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Original chats.
+        /// </summary>
+        public static string OriginalChats {
+            get {
+                return ResourceManager.GetString("OriginalChats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Original customers.
         /// </summary>
         public static string OriginalCustomers {
             get {
                 return ResourceManager.GetString("OriginalCustomers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original emails.
+        /// </summary>
+        public static string OriginalEmails {
+            get {
+                return ResourceManager.GetString("OriginalEmails", resourceCulture);
             }
         }
         
@@ -23481,7 +23517,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Original Calls.
+        ///   Looks up a localized string similar to Original calls.
         /// </summary>
         public static string OriginalPhoneCalls {
             get {
@@ -38263,7 +38299,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validated Calls.
+        ///   Looks up a localized string similar to Validated calls.
         /// </summary>
         public static string ValidatedPhoneCalls {
             get {

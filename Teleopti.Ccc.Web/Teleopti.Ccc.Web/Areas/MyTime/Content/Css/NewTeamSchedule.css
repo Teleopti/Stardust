@@ -100,9 +100,17 @@
 }
 .new-teamschedule-view-nav .submenu li.new-teamschedule-filter-component {
 	width: 220px;
-	height: 43px;
 	flex: 1 1 auto;
 }
+.new-teamschedule-view-nav .submenu li.new-teamschedule-filter-component,
+.new-teamschedule-view-nav .new-teamschedule-filter-component .select2-container,
+.new-teamschedule-view-nav .new-teamschedule-filter-component .select2-container .select2-choice,
+.new-teamschedule-view-nav .new-teamschedule-filter-component .select2-container .select2-choice span {
+	height: 36px;
+	line-height: 36px;
+	border: none;
+}
+
 .new-teamschedule-view-nav .submenu li.new-teamschedule-filter-component > div:first-child {
 	position: absolute;
 	top: 0;
@@ -146,7 +154,7 @@
 }
 .new-teamschedule-view-nav .submenu li.new-teamschedule-search-container {
 	width: 180px;
-	height: 43px;
+	height: 36px;
 	flex: 1 1 auto;
 }
 .new-teamschedule-view-nav .submenu li.new-teamschedule-search-container button[type='submit'] {
@@ -166,8 +174,10 @@
 	font-weight: normal;
 	padding: 5px 8px;
 	border: none;
+	height: 36px;
 }
 .new-teamschedule-view-nav .submenu li .new-teamschedule-search-component {
+	height: 36px;
 	display: block;
 	background: white;
 }
@@ -212,7 +222,7 @@
 }
 .new-teamschedule-view .tooltip.top {
 	margin: 0;
-	min-width: 120px;
+	min-width: 140px;
 }
 .new-teamschedule-view .mobile-timeline {
 	width: 30px;

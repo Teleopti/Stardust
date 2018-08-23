@@ -1011,7 +1011,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			backStageButtonMainMenuArchive.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ArchiveSchedule);
 
 			setPermissionOnControls();
-			schedulerSplitters1.AgentRestrictionGrid.SelectedAgentIsReady += agentRestrictionGridSelectedAgentIsReady;
 			schedulerSplitters1.MultipleHostControl3.GotFocus += multipleHostControl3OnGotFocus;
 
 			//releaseEvents(this);
@@ -2211,11 +2210,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					_requestView.NeedUpdate = true;
 				reloadRequestView();
 				if (_currentZoomLevel == ZoomLevel.RestrictionView)
-				{
-					schedulerSplitters1.AgentRestrictionGrid.LoadData(schedulerSplitters1.SchedulingOptions,
-						_restrictionPersonsToReload);
 					_restrictionPersonsToReload.Clear();
-				}
 
 				drawSkillGrid();
 			}
@@ -2808,8 +2803,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (_scheduleView != null)
 			{
 				_scheduleView.Presenter.UpdateFromEditor();
-				if (_currentZoomLevel == ZoomLevel.RestrictionView)
-					schedulerSplitters1.AgentRestrictionGrid.LoadData(schedulerSplitters1.SchedulingOptions);
 
 				if (_currentZoomLevel == ZoomLevel.DayView && !(_scheduleView.Presenter.SortCommand is NoSortCommand))
 					_scheduleView.SetSelectionFromParts(new List<IScheduleDay> { e.SchedulePart });
@@ -3821,10 +3814,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					return;
 
 				if (_scheduleView is AgentRestrictionsDetailView)
-				{
-					if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_RestrictionReport_47013))
-						return;
-				}
+					return;
 
 				if (_selectedPeriod.Contains(e.ModifiedPeriod))
 					_totalScheduled++;
@@ -4409,9 +4399,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_shiftCategoryDistributionModel.SetFilteredPersons(_schedulerState.FilteredCombinedAgentsDictionary.Values);
 			schedulerSplitters1.InsertShiftCategoryDistributionModel(_shiftCategoryDistributionModel);
 			schedulerSplitters1.InsertRestrictionNotAbleToBeScheduledReportModel(
-				_container.Resolve<RestrictionNotAbleToBeScheduledReport>(),
-				_container.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_RestrictionReport_47013),
-				_container.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_RestrictionReportToggleAll_76224));
+				_container.Resolve<RestrictionNotAbleToBeScheduledReport>());
 			schedulerSplitters1.InsertValidationAlertsModel(new ValidationAlertsModel(_schedulerState.Schedules, NameOrderOption.LastNameFirstName, _schedulerState.RequestedPeriod.DateOnlyPeriod));
 			schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
 		}
@@ -4474,26 +4462,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 		}
 
-		private void prepareAgentRestrictionView(IScheduleDay schedulePart, ScheduleViewBase detailView,
+		private void prepareAgentRestrictionView(ScheduleViewBase detailView,
 			IList<IPerson> persons, DateOnlyPeriod selectedPeriod)
 		{
 			if (persons.Count == 0) return;
-			var selectedPerson = persons.FirstOrDefault();
-			if (schedulePart != null) selectedPerson = schedulePart.Person;
-			var selectedDate = schedulePart != null
-				? schedulePart.DateOnlyAsPeriod.DateOnly
-				: _schedulerState.RequestedPeriod.DateOnlyPeriod.StartDate;
-
-			var schedulingOptions = schedulerSplitters1.SchedulingOptions;
 			var view = (AgentRestrictionsDetailView)detailView;
 			_splitContainerLessIntellegentRestriction.SplitterDistance = 300;
-			view.Toggle47013 = true;
-			if (!_container.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_RestrictionReport_47013))
-			{
-				view.Toggle47013 = false;
-				schedulerSplitters1.AgentRestrictionGrid.MergeHeaders();
-				schedulerSplitters1.AgentRestrictionGrid.LoadData(SchedulerState, persons, schedulingOptions, selectedPerson, view, schedulePart, _container);
-			}
 			schedulerSplitters1.SetSelectedAgentsOnAgentsNotPossibleToSchedule(persons, selectedPeriod, view);
 		}
 
@@ -4586,11 +4560,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					//restriction view
 					Cursor = Cursors.WaitCursor;
 					_grid.BringToFront();
-					_scheduleView = new AgentRestrictionsDetailView(schedulerSplitters1.AgentRestrictionGrid, _grid, SchedulerState,
+					_scheduleView = new AgentRestrictionsDetailView(_grid, SchedulerState,
 						_gridLockManager, SchedulePartFilter, _clipHandlerSchedule, _overriddenBusinessRulesHolder, callback,
 						_defaultScheduleTag, _workShiftWorkTime);
 					_scheduleView.TheGrid.ContextMenuStrip = contextMenuStripRestrictionView;
-					prepareAgentRestrictionView(selectedPart, _scheduleView, selectedPersons, selectedPeriod);
+					prepareAgentRestrictionView(_scheduleView, selectedPersons, selectedPeriod);
 
 					if (scheduleParts != null)
 					{
@@ -4646,27 +4620,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					GridRangeInfo.Cell(_grid.CurrentCell.RowIndex, _grid.CurrentCell.ColIndex), true);
 
 				_scheduleView?.SetSelectionFromParts(scheduleParts);
-			}
-		}
-
-		private void agentRestrictionGridSelectedAgentIsReady(object sender, EventArgs e)
-		{
-			AgentRestrictionsDetailView view = _scheduleView as AgentRestrictionsDetailView;
-			if (view == null)
-				return;
-
-			if (view.TheGrid.InvokeRequired)
-			{
-				BeginInvoke(new EventHandler<EventArgs>(agentRestrictionGridSelectedAgentIsReady), sender, e);
-			}
-			else
-			{
-				_scheduleView.TheGrid.Refresh();
-				view.InitializeGrid();
-				var args = e as AgentDisplayRowEventArgs;
-				if (args == null) return;
-				if (args.MoveToDate) view.SelectDateIfExists(_dateNavigateControl.SelectedDate);
-				if (args.UpdateShiftEditor) updateShiftEditor();
 			}
 		}
 
@@ -6783,11 +6736,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			if (_scheduleView == null || scheduleDay == null) return;
 			if (_scheduleView is AgentRestrictionsDetailView)
-			{
-				schedulerSplitters1.RecalculateRestrictions();
-				schedulerSplitters1.AgentRestrictionGrid.LoadData(schedulerSplitters1.SchedulingOptions);
 				schedulerSplitters1.ReselectSelectedAgentNotPossibleToSchedule();
-			}
+
 			updateSelectionInfo(new List<IScheduleDay> { scheduleDay });
 			enableSave();
 		}
@@ -6899,7 +6849,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			if (_scheduleView != null && _scheduleView.HelpId == "AgentRestrictionsDetailView")
 			{
 				IEnumerable<DateOnly> selectedDates = _scheduleView.AllSelectedDates(selectedSchedules);
-				prepareAgentRestrictionView(null, _scheduleView, new List<IPerson>(_scheduleView.AllSelectedPersons(selectedSchedules)), new DateOnlyPeriod(selectedDates.Min(), selectedDates.Max()));
+				prepareAgentRestrictionView(_scheduleView, new List<IPerson>(_scheduleView.AllSelectedPersons(selectedSchedules)), new DateOnlyPeriod(selectedDates.Min(), selectedDates.Max()));
 			}
 			displayTimeZoneInfo();
 			_scheduleView.SetSelectedDateLocal(_dateNavigateControl.SelectedDate);

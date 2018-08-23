@@ -1,4 +1,4 @@
-angular.module('wfm.forecasting').component('forecastChart', {
+﻿angular.module('wfm.forecasting').component('forecastChart', {
 	template: '<div id="{{$ctrl.chartId}}" class="wfm-chart forecast-chart" ng-click=""></div>',
 	controller: ForecastChartCtrl,
 	bindings: {
@@ -10,7 +10,7 @@ angular.module('wfm.forecasting').component('forecastChart', {
 	}
 });
 
-function ForecastChartCtrl($translate, $filter, $timeout) {
+function ForecastChartCtrl($translate, $filter, $timeout, SkillTypeService) {
 	var ctrl = this;
 	var chart;
 	ctrl.refresh = generateForecastChart;
@@ -30,6 +30,14 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 
 		var selectedItems = [];
 		ctrl.onClick(ctrl.selectedDays);
+
+		var selectedWorkload;
+		if (sessionStorage.currentForecastWorkload) {
+			selectedWorkload = angular.fromJson(sessionStorage.currentForecastWorkload);
+		} else {
+			return;
+		}
+		var dataName = SkillTypeService.getSkillLabels(selectedWorkload.SkillType);
 
 		var preparedData = {
 			dateSeries: ['Date'],
@@ -91,18 +99,6 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 					preparedData.overrideSeries,
 					preparedData.campaignAndOverrideSeries
 				],
-				names: {
-					// Arrow here means which Y axis refered by this curve
-					TotalTasks: $translate.instant('TotalCalls') + ' ←',
-					Campaign: $translate.instant('AppliedACampaign'),
-					Override: $translate.instant('AppliedAOverride'),
-					CampaignAndOverride: $translate.instant('BothOverrideAndCampaignAdded'),
-					Tasks: $translate.instant('Calls') + ' ←',
-					TotalAverageTaskTime: $translate.instant('TotalTalkTime') + ' →',
-					AverageTaskTime: $translate.instant('TalkTime') + ' →',
-					TotalAverageAfterTaskTime: $translate.instant('TotalACW') + ' →',
-					AverageAfterTaskTime: $translate.instant('ACW') + ' →'
-				},
 				colors: {
 					TotalTasks: '#0099FF',
 					Tasks: '#99D6FF',
@@ -120,13 +116,21 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 					TotalAverageAfterTaskTime: 'y2',
 					AverageAfterTaskTime: 'y2'
 				},
+				names: {
+					TotalTasks: dataName.TotalTasks + '←',
+					Tasks: dataName.Tasks + '←',
+					TotalAverageTaskTime: dataName.TotalATW + '→',
+					AverageAfterTaskTime: dataName.ATW + '→',
+					AverageTaskTime: 'AverageTaskTime' + '→',
+					TotalAverageAfterTaskTime: dataName.TaskTime + '→',
+				},
 				hide: ['Tasks', 'AverageTaskTime', 'AverageAfterTaskTime'],
 				selection: {
 					enabled: ctrl.selectable,
 					draggable: true,
 					grouped: true
 				},
-				onselected: function(d) {
+				onselected: function (d) {
 					var temp = moment(this.internal.config.axis_x_categories[d.x], 'L').format('YYYY-MM-DDT00:00:00');
 
 					if (selectedItems.indexOf(temp) === -1) {
@@ -134,14 +138,17 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 						ctrl.onClick(selectedItems);
 					}
 				},
-				onunselected: function(d) {
+				onunselected: function (d) {
 					var temp = moment(this.internal.config.axis_x_categories[d.x], 'L').format('YYYY-MM-DDT00:00:00');
 					if (selectedItems.indexOf(temp) !== -1) {
 						selectedItems.splice(selectedItems.indexOf(temp), 1);
 						ctrl.onClick(selectedItems);
 					}
 				}
-			}, //end of data
+
+
+			},
+
 			point: {
 				focus: {
 					expand: {

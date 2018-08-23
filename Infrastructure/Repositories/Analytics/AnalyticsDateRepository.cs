@@ -9,13 +9,6 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
-	public class AnalyticsDateRepository : AnalyticsDateRepositoryBase, IAnalyticsDateRepository
-	{
-		public AnalyticsDateRepository(ICurrentAnalyticsUnitOfWork analyticsUnitOfWork) : base(analyticsUnitOfWork)
-		{
-		}
-	}
-
 	public abstract class AnalyticsDateRepositoryBase
 	{
 		protected readonly ICurrentAnalyticsUnitOfWork AnalyticsUnitOfWork;

@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		IEnumerable<PersonScheduleDayReadModel> ForPeople(DateTimePeriod period, IEnumerable<Guid> personIds);		
 		IEnumerable<PersonScheduleDayReadModel> ForBulletinPersons(IEnumerable<string> shiftExchangeOfferIdList, Paging paging);
 		IEnumerable<PersonScheduleDayReadModel> ForPersons(DateOnly date, IEnumerable<Guid> personIdList, Paging paging, TimeFilterInfo filterInfo = null, string timeSortOrder = "");
+		IEnumerable<PersonScheduleDayReadModel> ForTeamSchedules(DateOnly date, IEnumerable<Guid> personIdList, Paging paging, TimeFilterInfo filterInfo);
 		IEnumerable<PersonScheduleDayReadModel> ForPeople(DateTimePeriod period, IEnumerable<PersonInfoForShiftTradeFilter> personInfos);
 	}
 }

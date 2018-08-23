@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
@@ -6,7 +5,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.DayOffPlanning;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -14,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class DayOffOptimizationCommandHandler : IDayOffOptimizationCommandHandler
+	public class DayOffOptimizationCommandHandler
 	{
 		private readonly IEventPublisher _eventPublisher;
 		private readonly CreateIslands _createIslands;
@@ -38,9 +36,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_gridLockManager = gridLockManager;
 		}
 		
-		[RemoveMeWithToggle("Remove resourceOptimizerPersonOptimized param", Toggles.ResourcePlanner_DayOffOptimizationIslands_47208)]
 		[TestLog]
-		public virtual void Execute(DayOffOptimizationCommand command, Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
+		public virtual void Execute(DayOffOptimizationCommand command)
 		{
 			var islands = CreateIslands(command.Period, command);
 			var evts = new List<DayOffOptimizationWasOrdered>();

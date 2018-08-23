@@ -976,7 +976,6 @@
     <Compile Include="WinCode\Scheduling\AgentRestrictions\AgentRestrictionsDisplayRowCreator.cs" />
     <Compile Include="WinCode\Scheduling\AgentRestrictions\AgentRestrictionsModel.cs" />
     <Compile Include="WinCode\Scheduling\AgentRestrictions\AgentRestrictionsPreferencePainterDecider.cs" />
-    <Compile Include="WinCode\Scheduling\AgentRestrictions\AgentRestrictionsPresenter.cs" />
     <Compile Include="WinCode\Scheduling\AgentRestrictions\AgentRestrictionsSchedulePainterDecider.cs" />
     <Compile Include="WinCode\Scheduling\AgentRestrictions\IAgentRestrictionsDetailView.cs" />
     <Compile Include="WinCode\Scheduling\AgentRestrictions\IAgentRestrictionsDetailViewCellModel.cs" />
@@ -3061,20 +3060,10 @@
     <Compile Include="Win\Scheduling\AgentPreferenceView.Designer.cs">
       <DependentUpon>AgentPreferenceView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Win\Scheduling\AgentRestrictions\AgentRestrictionGrid.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Win\Scheduling\AgentRestrictions\AgentRestrictionGrid.Designer.cs">
-      <DependentUpon>AgentRestrictionGrid.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Win\Scheduling\AgentRestrictions\AgentRestrictionsAvailableDrawer.cs" />
     <Compile Include="Win\Scheduling\AgentRestrictions\AgentRestrictionsDetailView.cs" />
     <Compile Include="Win\Scheduling\AgentRestrictions\AgentRestrictionsDetailViewCellModel.cs" />
-    <Compile Include="Win\Scheduling\AgentRestrictions\AgentRestrictionsLoadingDrawer.cs" />
-    <Compile Include="Win\Scheduling\AgentRestrictions\AgentRestrictionsNotAvailableDrawer.cs" />
     <Compile Include="Win\Scheduling\AgentRestrictions\AgentRestrictionsPreferencePainter.cs" />
     <Compile Include="Win\Scheduling\AgentRestrictions\AgentRestrictionsSchedulePainter.cs" />
-    <Compile Include="Win\Scheduling\AgentRestrictions\AgentRestrictionsWarningDrawer.cs" />
     <Compile Include="Win\Scheduling\AgentRestrictions\AgentsNotPossibleToSchedule.cs">
       <SubType>UserControl</SubType>
     </Compile>

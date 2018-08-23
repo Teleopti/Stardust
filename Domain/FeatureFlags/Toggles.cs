@@ -68,9 +68,6 @@
 		Wfm_People_MoveImportJobToBackgroundService_43582,
 		Wfm_PeopleWeb_PrepareForRelease_74903,
 
-		Scheduler_RestrictionReport_47013,
-		Scheduler_RestrictionReportToggleAll_76224,
-
 		People_SpeedUpOpening_76365,
 
 		WfmGlobalLayout_personalOptions_37114,
@@ -80,7 +77,6 @@
 		ResourcePlanner_HideSkillPrioSliders_41312,
 		ResourcePlanner_RunPerfTestAsTeam_43537,
 		ResourcePlanner_UseErlangAWithInfinitePatience_45845,
-		ResourcePlanner_DayOffOptimizationIslands_47208,
 		ResourcePlanner_PrepareToRemoveExportSchedule_46576,
 		ResourcePlanner_SpeedUpEvents_75415,
 		ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899,
@@ -97,7 +93,6 @@
 		ETL_SpeedUpNightlyActivity_38303,
 		ETL_SpeedUpNightlyOvertime_38304,
 		ETL_SpeedUpNightlyAbsence_38301,
-		ETL_MoveBadgeCalculationToETL_38421,
 		ETL_SpeedUpNightlyShiftCategory_38718,
 		ETL_SpeedUpNightlyPreference_38283,
 		ETL_SpeedUpNightlyAvailability_38926,
@@ -107,15 +102,10 @@
 		ETL_SpeedUpNightlyForecastWorkload_38929,
 		ETL_UseBpoResources_75855,
 
-		ETL_SpeedUpIntradayBusinessUnit_38932,
 		ETL_SpeedUpNightlyBusinessUnit_38932,
-
-		ETL_EventbasedDate_39562,
-		NewPasswordHash_40460,
 		Wfm_SkillPriorityRoutingGUI_39885,
 		ETL_EventbasedTimeZone_40870,
 		ETL_RemoveTimeZoneAndDateNightly_40870,
-		ETL_EventBasedAgentNameDescription_41432,
 		ETL_FixScheduleForPersonPeriod_41393,
 		ETL_Optimize_Memory_Usage_76761,
 

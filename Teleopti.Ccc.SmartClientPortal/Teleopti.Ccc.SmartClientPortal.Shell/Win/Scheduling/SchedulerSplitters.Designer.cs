@@ -21,18 +21,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         {
             if (disposing)
             {
-				//if (restrictionSummaryGrid1 != null)
-				//{
-				//    restrictionSummaryGrid1.Dispose();
-				//    restrictionSummaryGrid1 = null;
-				//}
-
-				if(agentRestrictionGrid1 != null)
-				{
-					agentRestrictionGrid1.Dispose();
-					agentRestrictionGrid1 = null;
-				}
-
                 if (components != null)
                     components.Dispose();
             }
@@ -56,11 +44,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle3 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle4 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle1 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle5 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle6 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle7 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle8 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle2 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
 			this.lessIntellegentSplitContainerAdvMain = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer();
 			this.lessIntellegentSplitContainerAdvResultGraph = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer();
 			this.chartControlSkillData = new Syncfusion.Windows.Forms.Chart.ChartControl();
@@ -70,14 +53,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.tabPageAdv1 = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.teleoptiLessIntelligentSplitContainerLessIntelligent1 = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer();
 			this.teleoptiLessIntellegentSplitContainerView = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer();
-			this.tableLayoutPanelRestrictionSummery = new System.Windows.Forms.TableLayoutPanel();
-			this.tableLayoutPanelRestrictionButtons = new System.Windows.Forms.TableLayoutPanel();
-			this.chbAvailability = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
-			this.chbRotations = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
-			this.chbPreferences = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
-			this.chbStudenAvailability = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
-			this.chbSchedules = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
-			this.agentRestrictionGrid1 = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions.AgentRestrictionGrid(this.components);
+			this.agentsNotPossibleToSchedule1 = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions.AgentsNotPossibleToSchedule();
 			this.grid = new Syncfusion.Windows.Forms.Grid.GridControl();
 			this.elementHostRequests = new System.Windows.Forms.Integration.ElementHost();
 			this.handlePersonRequestView1 = new Teleopti.Ccc.SmartClientPortal.Shell.Win.WpfControls.Controls.Requests.Views.HandlePersonRequestView();
@@ -90,7 +66,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.tabPageAdvValidationAlerts = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.validationAlertsView1 = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.ValidationAlertsView();
 			this.lessIntellegentSplitContainerAdvMainContainer = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer();
-			this.agentsNotPossibleToSchedule1 = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions.AgentsNotPossibleToSchedule();
 			((System.ComponentModel.ISupportInitialize)(this.lessIntellegentSplitContainerAdvMain)).BeginInit();
 			this.lessIntellegentSplitContainerAdvMain.Panel1.SuspendLayout();
 			this.lessIntellegentSplitContainerAdvMain.Panel2.SuspendLayout();
@@ -110,14 +85,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.teleoptiLessIntellegentSplitContainerView.Panel1.SuspendLayout();
 			this.teleoptiLessIntellegentSplitContainerView.Panel2.SuspendLayout();
 			this.teleoptiLessIntellegentSplitContainerView.SuspendLayout();
-			this.tableLayoutPanelRestrictionSummery.SuspendLayout();
-			this.tableLayoutPanelRestrictionButtons.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.chbAvailability)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.chbRotations)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.chbPreferences)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.chbStudenAvailability)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.chbSchedules)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.agentRestrictionGrid1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.tabInfoPanels)).BeginInit();
 			this.tabInfoPanels.SuspendLayout();
@@ -281,7 +248,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.PinnedToolStripMenuItem.Name = "PinnedToolStripMenuItem";
 			this.PinnedToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
 			this.PinnedToolStripMenuItem.Text = "xxTogglePinStatus";
-			this.PinnedToolStripMenuItem.Click += new System.EventHandler(this.PinnedToolStripMenuItemClick);
+			this.PinnedToolStripMenuItem.Click += new System.EventHandler(this.pinnedToolStripMenuItemClick);
 			// 
 			// tabPageAdv1
 			// 
@@ -341,7 +308,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.teleoptiLessIntellegentSplitContainerView.Panel1.BackColor = System.Drawing.SystemColors.Control;
 			this.teleoptiLessIntellegentSplitContainerView.Panel1.BackgroundColor = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128))))));
 			this.teleoptiLessIntellegentSplitContainerView.Panel1.Controls.Add(this.agentsNotPossibleToSchedule1);
-			this.teleoptiLessIntellegentSplitContainerView.Panel1.Controls.Add(this.tableLayoutPanelRestrictionSummery);
 			this.teleoptiLessIntellegentSplitContainerView.Panel1MinSize = 140;
 			// 
 			// teleoptiLessIntellegentSplitContainerView.Panel2
@@ -359,130 +325,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.teleoptiLessIntellegentSplitContainerView.TabIndex = 0;
 			this.teleoptiLessIntellegentSplitContainerView.Text = "teleoptiLessIntellegentSplitContainer1";
 			// 
-			// tableLayoutPanelRestrictionSummery
+			// agentsNotPossibleToSchedule1
 			// 
-			this.tableLayoutPanelRestrictionSummery.BackColor = System.Drawing.Color.White;
-			this.tableLayoutPanelRestrictionSummery.ColumnCount = 2;
-			this.tableLayoutPanelRestrictionSummery.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanelRestrictionSummery.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanelRestrictionSummery.Controls.Add(this.tableLayoutPanelRestrictionButtons, 0, 0);
-			this.tableLayoutPanelRestrictionSummery.Controls.Add(this.agentRestrictionGrid1, 1, 0);
-			this.tableLayoutPanelRestrictionSummery.Location = new System.Drawing.Point(0, 0);
-			this.tableLayoutPanelRestrictionSummery.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
-			this.tableLayoutPanelRestrictionSummery.Name = "tableLayoutPanelRestrictionSummery";
-			this.tableLayoutPanelRestrictionSummery.RowCount = 1;
-			this.tableLayoutPanelRestrictionSummery.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanelRestrictionSummery.Size = new System.Drawing.Size(214, 62);
-			this.tableLayoutPanelRestrictionSummery.TabIndex = 1;
+			this.agentsNotPossibleToSchedule1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.agentsNotPossibleToSchedule1.Location = new System.Drawing.Point(0, 0);
+			this.agentsNotPossibleToSchedule1.Name = "agentsNotPossibleToSchedule1";
+			this.agentsNotPossibleToSchedule1.Size = new System.Drawing.Size(330, 140);
+			this.agentsNotPossibleToSchedule1.TabIndex = 2;
 			// 
-			// tableLayoutPanelRestrictionButtons
+			// grid
 			// 
-			this.tableLayoutPanelRestrictionButtons.AutoSize = true;
-			this.tableLayoutPanelRestrictionButtons.BackColor = System.Drawing.Color.White;
-			this.tableLayoutPanelRestrictionButtons.ColumnCount = 1;
-			this.tableLayoutPanelRestrictionButtons.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanelRestrictionButtons.Controls.Add(this.chbAvailability, 0, 0);
-			this.tableLayoutPanelRestrictionButtons.Controls.Add(this.chbRotations, 0, 1);
-			this.tableLayoutPanelRestrictionButtons.Controls.Add(this.chbPreferences, 0, 2);
-			this.tableLayoutPanelRestrictionButtons.Controls.Add(this.chbStudenAvailability, 0, 3);
-			this.tableLayoutPanelRestrictionButtons.Controls.Add(this.chbSchedules, 0, 4);
-			this.tableLayoutPanelRestrictionButtons.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanelRestrictionButtons.Location = new System.Drawing.Point(3, 3);
-			this.tableLayoutPanelRestrictionButtons.Name = "tableLayoutPanelRestrictionButtons";
-			this.tableLayoutPanelRestrictionButtons.RowCount = 6;
-			this.tableLayoutPanelRestrictionButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-			this.tableLayoutPanelRestrictionButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-			this.tableLayoutPanelRestrictionButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-			this.tableLayoutPanelRestrictionButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-			this.tableLayoutPanelRestrictionButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-			this.tableLayoutPanelRestrictionButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanelRestrictionButtons.Size = new System.Drawing.Size(156, 135);
-			this.tableLayoutPanelRestrictionButtons.TabIndex = 1;
-			// 
-			// chbAvailability
-			// 
-			this.chbAvailability.BeforeTouchSize = new System.Drawing.Size(150, 18);
-			this.chbAvailability.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chbAvailability.DrawFocusRectangle = false;
-			this.chbAvailability.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.chbAvailability.Location = new System.Drawing.Point(3, 3);
-			this.chbAvailability.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
-			this.chbAvailability.Name = "chbAvailability";
-			this.chbAvailability.Size = new System.Drawing.Size(150, 18);
-			this.chbAvailability.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
-			this.chbAvailability.TabIndex = 0;
-			this.chbAvailability.Text = "xxAvailability";
-			this.chbAvailability.ThemesEnabled = false;
-			this.chbAvailability.CheckedChanged += new System.EventHandler(this.chbAvailability_CheckedChanged);
-			// 
-			// chbRotations
-			// 
-			this.chbRotations.BeforeTouchSize = new System.Drawing.Size(150, 18);
-			this.chbRotations.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chbRotations.DrawFocusRectangle = false;
-			this.chbRotations.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.chbRotations.Location = new System.Drawing.Point(3, 27);
-			this.chbRotations.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
-			this.chbRotations.Name = "chbRotations";
-			this.chbRotations.Size = new System.Drawing.Size(150, 18);
-			this.chbRotations.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
-			this.chbRotations.TabIndex = 2;
-			this.chbRotations.Text = "xxRotation";
-			this.chbRotations.ThemesEnabled = false;
-			this.chbRotations.CheckedChanged += new System.EventHandler(this.chbRotations_CheckedChanged);
-			// 
-			// chbPreferences
-			// 
-			this.chbPreferences.BeforeTouchSize = new System.Drawing.Size(150, 18);
-			this.chbPreferences.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chbPreferences.DrawFocusRectangle = false;
-			this.chbPreferences.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.chbPreferences.Location = new System.Drawing.Point(3, 51);
-			this.chbPreferences.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
-			this.chbPreferences.Name = "chbPreferences";
-			this.chbPreferences.Size = new System.Drawing.Size(150, 18);
-			this.chbPreferences.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
-			this.chbPreferences.TabIndex = 2;
-			this.chbPreferences.Text = "xxPreference";
-			this.chbPreferences.ThemesEnabled = false;
-			this.chbPreferences.CheckedChanged += new System.EventHandler(this.chbPreferences_CheckedChanged);
-			// 
-			// chbStudenAvailability
-			// 
-			this.chbStudenAvailability.BeforeTouchSize = new System.Drawing.Size(150, 18);
-			this.chbStudenAvailability.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chbStudenAvailability.DrawFocusRectangle = false;
-			this.chbStudenAvailability.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.chbStudenAvailability.Location = new System.Drawing.Point(3, 75);
-			this.chbStudenAvailability.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
-			this.chbStudenAvailability.Name = "chbStudenAvailability";
-			this.chbStudenAvailability.Size = new System.Drawing.Size(150, 18);
-			this.chbStudenAvailability.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
-			this.chbStudenAvailability.TabIndex = 2;
-			this.chbStudenAvailability.Text = "xxStudentAvailability";
-			this.chbStudenAvailability.ThemesEnabled = false;
-			this.chbStudenAvailability.CheckedChanged += new System.EventHandler(this.chbStudenAvailability_CheckedChanged);
-			// 
-			// chbSchedules
-			// 
-			this.chbSchedules.BeforeTouchSize = new System.Drawing.Size(150, 18);
-			this.chbSchedules.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.chbSchedules.DrawFocusRectangle = false;
-			this.chbSchedules.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.chbSchedules.Location = new System.Drawing.Point(3, 99);
-			this.chbSchedules.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
-			this.chbSchedules.Name = "chbSchedules";
-			this.chbSchedules.Size = new System.Drawing.Size(150, 18);
-			this.chbSchedules.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
-			this.chbSchedules.TabIndex = 3;
-			this.chbSchedules.Text = "xxSchedule";
-			this.chbSchedules.ThemesEnabled = false;
-			this.chbSchedules.CheckedChanged += new System.EventHandler(this.chbSchedules_CheckedChanged);
-			// 
-			// agentRestrictionGrid1
-			// 
-			this.agentRestrictionGrid1.ActivateCurrentCellBehavior = Syncfusion.Windows.Forms.Grid.GridCellActivateAction.DblClickOnCell;
-			this.agentRestrictionGrid1.AllowSelection = Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Cell;
 			gridBaseStyle1.Name = "Header";
 			gridBaseStyle1.StyleInfo.Borders.Bottom = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
 			gridBaseStyle1.StyleInfo.Borders.Left = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
@@ -490,106 +342,25 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			gridBaseStyle1.StyleInfo.Borders.Top = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
 			gridBaseStyle1.StyleInfo.CellType = "Header";
 			gridBaseStyle1.StyleInfo.Font.Bold = true;
-			gridBaseStyle1.StyleInfo.Font.Facename = "Segoe UI";
-			gridBaseStyle1.StyleInfo.Font.Italic = false;
-			gridBaseStyle1.StyleInfo.Font.Size = 8F;
-			gridBaseStyle1.StyleInfo.Font.Strikeout = false;
-			gridBaseStyle1.StyleInfo.Font.Underline = false;
-			gridBaseStyle1.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
 			gridBaseStyle1.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
 			gridBaseStyle1.StyleInfo.VerticalAlignment = Syncfusion.Windows.Forms.Grid.GridVerticalAlignment.Middle;
 			gridBaseStyle2.Name = "Standard";
-			gridBaseStyle2.StyleInfo.Font.Bold = false;
-			gridBaseStyle2.StyleInfo.Font.Facename = "Segoe UI";
-			gridBaseStyle2.StyleInfo.Font.Italic = false;
-			gridBaseStyle2.StyleInfo.Font.Size = 8F;
-			gridBaseStyle2.StyleInfo.Font.Strikeout = false;
-			gridBaseStyle2.StyleInfo.Font.Underline = false;
-			gridBaseStyle2.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
+			gridBaseStyle2.StyleInfo.Font.Facename = "Tahoma";
 			gridBaseStyle2.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
+			gridBaseStyle2.StyleInfo.TextAlign = Syncfusion.Windows.Forms.Grid.GridTextAlign.Default;
 			gridBaseStyle3.Name = "Column Header";
 			gridBaseStyle3.StyleInfo.BaseStyle = "Header";
 			gridBaseStyle3.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
+			gridBaseStyle3.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
 			gridBaseStyle4.Name = "Row Header";
 			gridBaseStyle4.StyleInfo.BaseStyle = "Header";
 			gridBaseStyle4.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
 			gridBaseStyle4.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
-			this.agentRestrictionGrid1.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
+			this.grid.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
             gridBaseStyle1,
             gridBaseStyle2,
             gridBaseStyle3,
             gridBaseStyle4});
-			this.agentRestrictionGrid1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.agentRestrictionGrid1.ColCount = 12;
-			this.agentRestrictionGrid1.DefaultGridBorderStyle = Syncfusion.Windows.Forms.Grid.GridBorderStyle.Solid;
-			this.agentRestrictionGrid1.DefaultRowHeight = 20;
-			this.agentRestrictionGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.agentRestrictionGrid1.ExcelLikeCurrentCell = true;
-			this.agentRestrictionGrid1.ExcelLikeSelectionFrame = true;
-			this.agentRestrictionGrid1.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Metro;
-			this.agentRestrictionGrid1.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Metro;
-			this.agentRestrictionGrid1.HorizontalThumbTrack = true;
-			this.agentRestrictionGrid1.Location = new System.Drawing.Point(165, 0);
-			this.agentRestrictionGrid1.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
-			this.agentRestrictionGrid1.MetroScrollBars = true;
-			this.agentRestrictionGrid1.Name = "agentRestrictionGrid1";
-			this.agentRestrictionGrid1.NumberedColHeaders = false;
-			this.agentRestrictionGrid1.Properties.ForceImmediateRepaint = false;
-			this.agentRestrictionGrid1.Properties.GridLineColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(212)))), ((int)(((byte)(212)))));
-			this.agentRestrictionGrid1.Properties.MarkColHeader = false;
-			this.agentRestrictionGrid1.Properties.MarkRowHeader = false;
-			gridRangeStyle1.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Table();
-			gridRangeStyle1.StyleInfo.Font.Bold = false;
-			gridRangeStyle1.StyleInfo.Font.Facename = "Segoe UI";
-			gridRangeStyle1.StyleInfo.Font.Italic = false;
-			gridRangeStyle1.StyleInfo.Font.Size = 8.25F;
-			gridRangeStyle1.StyleInfo.Font.Strikeout = false;
-			gridRangeStyle1.StyleInfo.Font.Underline = false;
-			gridRangeStyle1.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
-			this.agentRestrictionGrid1.RangeStyles.AddRange(new Syncfusion.Windows.Forms.Grid.GridRangeStyle[] {
-            gridRangeStyle1});
-			this.agentRestrictionGrid1.ResizeRowsBehavior = Syncfusion.Windows.Forms.Grid.GridResizeCellsBehavior.None;
-			this.agentRestrictionGrid1.RowCount = 1;
-			this.agentRestrictionGrid1.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
-            new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 29)});
-			this.agentRestrictionGrid1.SelectCellsMouseButtonsMask = System.Windows.Forms.MouseButtons.Left;
-			this.agentRestrictionGrid1.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
-			this.agentRestrictionGrid1.Size = new System.Drawing.Size(49, 141);
-			this.agentRestrictionGrid1.SmartSizeBox = false;
-			this.agentRestrictionGrid1.TabIndex = 2;
-			this.agentRestrictionGrid1.Text = "agentRestrictionGrid1";
-			this.agentRestrictionGrid1.ThemesEnabled = true;
-			this.agentRestrictionGrid1.UseRightToLeftCompatibleTextBox = true;
-			this.agentRestrictionGrid1.VerticalThumbTrack = true;
-			// 
-			// grid
-			// 
-			gridBaseStyle5.Name = "Header";
-			gridBaseStyle5.StyleInfo.Borders.Bottom = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle5.StyleInfo.Borders.Left = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle5.StyleInfo.Borders.Right = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle5.StyleInfo.Borders.Top = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle5.StyleInfo.CellType = "Header";
-			gridBaseStyle5.StyleInfo.Font.Bold = true;
-			gridBaseStyle5.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
-			gridBaseStyle5.StyleInfo.VerticalAlignment = Syncfusion.Windows.Forms.Grid.GridVerticalAlignment.Middle;
-			gridBaseStyle6.Name = "Standard";
-			gridBaseStyle6.StyleInfo.Font.Facename = "Tahoma";
-			gridBaseStyle6.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
-			gridBaseStyle6.StyleInfo.TextAlign = Syncfusion.Windows.Forms.Grid.GridTextAlign.Default;
-			gridBaseStyle7.Name = "Column Header";
-			gridBaseStyle7.StyleInfo.BaseStyle = "Header";
-			gridBaseStyle7.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
-			gridBaseStyle7.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
-			gridBaseStyle8.Name = "Row Header";
-			gridBaseStyle8.StyleInfo.BaseStyle = "Header";
-			gridBaseStyle8.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
-			gridBaseStyle8.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
-			this.grid.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
-            gridBaseStyle5,
-            gridBaseStyle6,
-            gridBaseStyle7,
-            gridBaseStyle8});
 			this.grid.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
             new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
 			this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -602,10 +373,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.grid.Name = "grid";
 			this.grid.NumberedColHeaders = false;
 			this.grid.NumberedRowHeaders = false;
-			gridRangeStyle2.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Cells(1, 1, 10, 2);
-			gridRangeStyle2.StyleInfo.BaseStyle = "Standard";
+			gridRangeStyle1.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Cells(1, 1, 10, 2);
+			gridRangeStyle1.StyleInfo.BaseStyle = "Standard";
 			this.grid.RangeStyles.AddRange(new Syncfusion.Windows.Forms.Grid.GridRangeStyle[] {
-            gridRangeStyle2});
+            gridRangeStyle1});
 			this.grid.ReadOnly = true;
 			this.grid.RightToLeft = System.Windows.Forms.RightToLeft.No;
 			this.grid.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
@@ -752,13 +523,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.lessIntellegentSplitContainerAdvMainContainer.Text = "lessIntellegentSplitContainerAdvMainContainer";
 			this.lessIntellegentSplitContainerAdvMainContainer.Visible = false;
 			// 
-			// agentsNotPossibleToSchedule1
-			// 
-			this.agentsNotPossibleToSchedule1.Location = new System.Drawing.Point(89, 8);
-			this.agentsNotPossibleToSchedule1.Name = "agentsNotPossibleToSchedule1";
-			this.agentsNotPossibleToSchedule1.Size = new System.Drawing.Size(227, 129);
-			this.agentsNotPossibleToSchedule1.TabIndex = 2;
-			// 
 			// SchedulerSplitters
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -788,15 +552,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.teleoptiLessIntellegentSplitContainerView.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.teleoptiLessIntellegentSplitContainerView)).EndInit();
 			this.teleoptiLessIntellegentSplitContainerView.ResumeLayout(false);
-			this.tableLayoutPanelRestrictionSummery.ResumeLayout(false);
-			this.tableLayoutPanelRestrictionSummery.PerformLayout();
-			this.tableLayoutPanelRestrictionButtons.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.chbAvailability)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.chbRotations)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.chbPreferences)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.chbStudenAvailability)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.chbSchedules)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.agentRestrictionGrid1)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.tabInfoPanels)).EndInit();
 			this.tabInfoPanels.ResumeLayout(false);
@@ -827,16 +582,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         private HandlePersonRequestView handlePersonRequestView1;
         private System.Windows.Forms.Integration.ElementHost elementHost1;
         private MultipleHostControl multipleHostControl1;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelRestrictionSummery;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelRestrictionButtons;
-        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv chbAvailability;
-        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv chbRotations;
-        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv chbPreferences;
-        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv chbStudenAvailability;
-		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv chbSchedules;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem PinnedToolStripMenuItem;
-		private AgentRestrictions.AgentRestrictionGrid agentRestrictionGrid1;
 		private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdvShiftCategoryDistribution;
 		private PropertyPanel.ShiftCategoryDistributionControl shiftCategoryDistributionControl1;
 		private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdvValidationAlerts;

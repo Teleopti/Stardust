@@ -60,8 +60,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_dayOffOptimization.Execute(new DateOnlyPeriod(@event.StartDate, @event.EndDate),
 				schedulerStateHolder.SchedulingResultState.LoadedAgents.Where(x => @event.Agents.Contains(x.Id.Value)).ToArray(),
 				false,
-				@event.PlanningPeriodId,
-				null);
+				@event.PlanningPeriodId);
 		}
 	}
 }

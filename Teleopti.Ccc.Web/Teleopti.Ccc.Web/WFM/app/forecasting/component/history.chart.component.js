@@ -8,7 +8,7 @@ angular.module('wfm.forecasting').component('forecastHistoryChart', {
 	}
 });
 
-function ForecastHistoryChartController($translate, $filter, $timeout) {
+function ForecastHistoryChartController($translate, $filter, $timeout, SkillTypeService) {
 	var ctrl = this;
 	var chart;
 	ctrl.refresh = drawForecastHistoryChart;
@@ -26,15 +26,23 @@ function ForecastHistoryChartController($translate, $filter, $timeout) {
 			return;
 		}
 
-		var labelDate = $translate.instant('Date');
-		var labelOriginalTask = $translate.instant('OriginalPhoneCalls');
-		var labelValidatedTask = $translate.instant('ValidatedPhoneCalls');
-
 		var preparedData = {
-			dateSeries: [labelDate],
-			originalSeries: [labelOriginalTask],
-			validatedSeries: [labelValidatedTask]
+			dateSeries: ['Date'],
+			originalSeries: ['OriginalTasks'],
+			validatedSeries: ['ValidatedTasks']
 		};
+
+
+		var selectItems = [];
+		//ctrl.onClick(ctrl.selectedDays);
+		var selectedWorkload;
+		if (sessionStorage.currentForecastWorkload) {
+			selectedWorkload = angular.fromJson(sessionStorage.currentForecastWorkload);
+		} else {
+			return;
+		}
+		var dataName = SkillTypeService.getSkillLabels(selectedWorkload.SkillType);
+
 
 		for (var i = 0; i < days.length; i++) {
 			var date = moment(days[i].Date);
@@ -43,16 +51,22 @@ function ForecastHistoryChartController($translate, $filter, $timeout) {
 			preparedData.validatedSeries.push(days[i].ValidatedTasks);
 		}
 
-		var lineColors = {};
-		lineColors[labelOriginalTask] = '#EE8F7D';
-		lineColors[labelValidatedTask] = '#0099FF';
-
 		chart = c3.generate({
 			bindto: '#' + chartId,
 			data: {
-				x: labelDate,
+				x: 'Date',
 				columns: [preparedData.dateSeries, preparedData.originalSeries, preparedData.validatedSeries],
-				colors: lineColors
+
+				names: {
+					Date: $translate.instant('Date'),
+					OriginalTasks: dataName.OriginalTasks,
+					ValidatedTasks: dataName.ValidatedTasks
+					
+				},
+				colors: {
+					OriginalTasks: '#EE8F7D',
+					ValidatedTasks: '#0099FF'
+				}
 			},
 			subchart: {
 				show: true

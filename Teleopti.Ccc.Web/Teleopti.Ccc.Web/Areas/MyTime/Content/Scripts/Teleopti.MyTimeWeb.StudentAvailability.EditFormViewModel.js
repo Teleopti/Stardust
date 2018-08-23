@@ -10,6 +10,7 @@
 	this.IsAvailabilityInputVisible = ko.observable(true);
 	this.IsTimeInputVisible = ko.observable(true);
 	this.ShowMeridian = ko.observable(showMeridian);
+	this.IsPostingData = ko.observable(false);
 
 	this.ValidationError = ko.observable();
 
