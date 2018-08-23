@@ -111,19 +111,6 @@ describe('ChangePasswordComponent', () => {
 
 		expect(component.newPasswordControl.hasError(component.ENSURE_PASSWORD_NEW_ERROR)).toEqual(false);
 	});
-
-	it('should ensure not same password', () => {
-		const component = fixture.componentInstance;
-
-		component.currentPasswordControl.setValue('same');
-		component.newPasswordControl.setValue('same');
-
-		expect(component.newPasswordControl.hasError(component.ENSURE_PASSWORD_NEW_ERROR)).toEqual(true);
-
-		component.newPasswordControl.setValue('not-the-same');
-
-		expect(component.newPasswordControl.hasError(component.ENSURE_PASSWORD_NEW_ERROR)).toEqual(false);
-	});
 });
 
 class Page {
