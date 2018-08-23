@@ -22,6 +22,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			AddWhenAllDisabled(new StageTimeZoneJobStep(jobParameters), Toggles.ETL_RemoveTimeZoneAndDateNightly_40870);               // BU independent
 			AddWhenAllDisabled(new DimTimeZoneJobStep(jobParameters), Toggles.ETL_RemoveTimeZoneAndDateNightly_40870);                 // BU independent
 			AddWhenAllDisabled(new StageTimeZoneBridgeJobStep(jobParameters), Toggles.ETL_RemoveTimeZoneAndDateNightly_40870);         // BU independent
+			AddWhenAllDisabled(new StageBusinessUnitJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyBusinessUnit_38932);            // BU independent
 			Add(new DimQueueJobStep(jobParameters));                    // BU independent
 			Add(new DimAcdLogOnJobStep(jobParameters));                 // BU independent
 			Add(new DimQualityQuestLoadJobStep(jobParameters));         // BU independent
@@ -59,6 +60,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 
 			// DIM AND BRIDGE TABLES AND QUEUE/AGENT SYNC
 			AddWhenAllDisabled(new BridgeTimeZoneJobStep(jobParameters), Toggles.ETL_RemoveTimeZoneAndDateNightly_40870);              // BU independent
+			AddWhenAllDisabled(new DimBusinessUnitJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyBusinessUnit_38932);
 
 			AddWhenAllDisabled(new DimDayOffJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyDayOff_38213);
 

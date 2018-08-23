@@ -102,6 +102,7 @@
 		ETL_SpeedUpNightlyForecastWorkload_38929,
 		ETL_UseBpoResources_75855,
 
+		ETL_SpeedUpNightlyBusinessUnit_38932,
 		Wfm_SkillPriorityRoutingGUI_39885,
 		ETL_RemoveTimeZoneAndDateNightly_40870,
 		ETL_FixScheduleForPersonPeriod_41393,
