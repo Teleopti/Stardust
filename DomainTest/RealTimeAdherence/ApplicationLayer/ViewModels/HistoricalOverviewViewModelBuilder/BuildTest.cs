@@ -18,16 +18,11 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 	[TestFixture]
 	[ExtendScope(typeof(PersonAssociationChangedEventPublisher))]
 	[ExtendScope(typeof(AgentStateReadModelMaintainer))]
-	public class BuildTest : IIsolateSystem
+	public class BuildTest
 	{
 		public Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels.HistoricalOverviewViewModelBuilder Target;
 		public FakeDatabase Database;
 		public MutableNow Now;
-
-		public void Isolate(IIsolate isolate)
-		{
-			isolate.UseTestDouble<FakeDataSourcesFactoryWithEvents>().For<IDataSourcesFactory>();
-		}
 
 		[Test]
 		public void ShouldGetEmptyModel()
@@ -35,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 			Target.Build(null, null)
 				.Should().Have.SameValuesAs(Enumerable.Empty<HistoricalOverviewTeamViewModel>());
 		}
-		
+
 		[Test]
 		public void ShouldGetEmptyModelForNoAgentsInTeam()
 		{
