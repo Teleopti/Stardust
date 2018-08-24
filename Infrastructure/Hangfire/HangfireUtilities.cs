@@ -70,21 +70,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 				jobs = ids.Invoke();
 			}
 		}
-
-		public void CancelQueue()
-		{
-			foreach (var queueName in Queues.OrderOfPriority())
-			{
-				monitoring
-					.EnqueuedJobs(queueName, 0, 1000)
-					.ForEach(j => backgroundJobs.Delete(j.Key));
-			}
-
-			monitoring
-				.ScheduledJobs(0, 1000)
-				.ForEach(j => backgroundJobs.Delete(j.Key));
-		}
-
+		
 		public long NumberOfEnqueuedJobs() => Queues.OrderOfPriority().Select(x => monitoring.EnqueuedCount(x)).Sum();
 		public long NumberOfJobsInQueue(string name) => monitoring.EnqueuedCount(name);
 		public long NumberOfFailedJobs() => monitoring.FailedCount();
