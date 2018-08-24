@@ -1068,7 +1068,6 @@
     <Compile Include="InterfaceLegacy\Domain\IMeetingRestrictionCombiner.cs" />
     <Compile Include="InterfaceLegacy\Domain\IMemento.cs" />
     <Compile Include="InterfaceLegacy\Domain\IMoveDataBetweenSchedules.cs" />
-    <Compile Include="InterfaceLegacy\Domain\IMoveTimeDecisionMaker.cs" />
     <Compile Include="InterfaceLegacy\Domain\IMoveTimeOptimizer.cs" />
     <Compile Include="InterfaceLegacy\Domain\IMultiplicator.cs" />
     <Compile Include="InterfaceLegacy\Domain\IMultiplicatorDefinition.cs" />
