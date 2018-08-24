@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Interfaces.Domain;
 
@@ -14,15 +15,19 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 		private readonly IAgentStateReadModelReader _reader;
 		private readonly ICommonAgentNameProvider _nameDisplaySetting;
 		private readonly INow _now;
+		private readonly IAgentAdherenceDayLoader _agentAdherenceDayLoader;
+
 
 		public HistoricalOverviewViewModelBuilder(
 			IAgentStateReadModelReader reader,
 			ICommonAgentNameProvider nameDisplaySetting,
-			INow now)
+			INow now, 
+			IAgentAdherenceDayLoader agentAdherenceDayLoader)
 		{
 			_reader = reader;
 			_nameDisplaySetting = nameDisplaySetting;
 			_now = now;
+			_agentAdherenceDayLoader = agentAdherenceDayLoader;
 		}
 
 		public IEnumerable<HistoricalOverviewTeamViewModel> Build(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds) => buildViewModelQuickAndDirty(siteIds, teamIds);
@@ -34,6 +39,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 			var agents = from a in _reader.Read(filter)
 				select new
 				{
+					Id = a.PersonId,
 					SiteAndTeam = a.SiteName + "/" + a.TeamName,
 					Name = _nameDisplaySetting.CommonAgentNameSettings.BuildFor(a.FirstName, a.LastName, null)
 				};
@@ -54,7 +60,8 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 							Days = sevenDays.Select(d => new HistoricalOverviewDayViewModel()
 							{
 								Date = d.Date.ToString("yyyyMMdd"),
-								DisplayDate = d.Date.ToString("MM") + "/"  + d.Date.ToString("dd")
+								DisplayDate = d.Date.ToString("MM") + "/"  + d.Date.ToString("dd"),
+								Adherence =  _agentAdherenceDayLoader.Load(agent.Id, d.ToDateOnly()).Percentage()								
 							})
 						},
 				};
@@ -79,5 +86,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 	{
 		public string Date { get; set; }
 		public string DisplayDate { get; set; }
+		public int? Adherence { get; set; }
 	}
 }
