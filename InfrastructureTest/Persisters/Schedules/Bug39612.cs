@@ -10,7 +10,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
-	[Ignore("temp ignore to make success build")]
 	public class Bug39612 : ScheduleRangeConflictTest
 	{
 		private readonly DateOnly date = new DateOnly(2001, 1, 2);
@@ -30,16 +29,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		protected override void WhenImChanging(IScheduleRange myScheduleRange)
 		{
 			var day = myScheduleRange.ScheduledDay(date);
-			day.Remove((IStudentAvailabilityDay)day.PersonRestrictionCollection().Single());
-
-			var restriction = new StudentAvailabilityRestriction
-			{
-				StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(1), TimeSpan.FromHours(2)),
-				EndTimeLimitation = new EndTimeLimitation(TimeSpan.FromHours(1), TimeSpan.FromHours(2)),
-				WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(1), TimeSpan.FromHours(2))
-			};
-			var studAvail = new StudentAvailabilityDay(Person, date, new[] { restriction });
-			day.Add(studAvail);
+			var studentAvailabilityDay = (IStudentAvailabilityDay)day.PersonRestrictionCollection().Single();
+			studentAvailabilityDay.Change(new TimePeriod(TimeSpan.FromHours(1), TimeSpan.FromHours(2)));
 			DoModify(day);
 		}
 
