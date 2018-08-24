@@ -41,9 +41,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 		public IEnumerable<AreaWithPermissionPath> GetWfmAreasList()
 		{
 			var rtaAreaName = _toggleManager.IsEnabled(Toggles.RTA_ReviewHistoricalAdherence_74770) ? Resources.Adherence : Resources.RealTimeAdherence;
-			
+
 			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebForecasts, Resources.Forecasts, "forecast");
-			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebPlans, Resources.OpenPlansPage, "resourceplanner", new Link {href = "api/ResourcePlanner/Filter", rel = "filters"});
+			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebPlans, Resources.OpenPlansPage, "resourceplanner", new Link { href = "api/ResourcePlanner/Filter", rel = "filters" });
 			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebPermissions, Resources.OpenPermissionPage, "permissions");
 			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.Outbound, Resources.Outbound, "outbound");
 			yield return new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.Gamification, Resources.Gamification, "gamification");
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 		{
 			if (functionPath.IsEmpty() || _permissionProvider.HasApplicationFunctionPermission(functionPath))
 			{
-				areas.Add(new {Name = areaName});
+				areas.Add(new { Name = areaName });
 			}
 		}
 
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 		{
 			if (licensePath.IsEmpty() || _licenseActivatorProvider.Current().EnabledLicenseOptionPaths.Contains(licensePath))
 			{
-				areas.Add(new {Name = areaName});
+				areas.Add(new { Name = areaName });
 			}
 		}
 
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 				areas.Add(new
 				{
 					Name = "WFM",
-					SubAreas = wfmAreas.Select(area => new {area.Name}).ToArray()
+					SubAreas = wfmAreas.Select(area => new { area.Name }).ToArray()
 				});
 			}
 		}
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.PeopleAccess))
 			{
-				return _toggleManager.IsEnabled(Toggles.Wfm_PeopleWeb_PrepareForRelease_74903);
+				return _toggleManager.IsEnabled(Toggles.Wfm_PeopleWeb_PrepareForRelease_47766);
 			}
 
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.Gamification))

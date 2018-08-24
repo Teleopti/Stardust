@@ -65,10 +65,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 	public partial class SmartClientShellForm : BaseRibbonForm, IDummyInterface
 	{
-		private readonly ILog _logger = LogManager.GetLogger(typeof (SmartClientShellForm));
+		private readonly ILog _logger = LogManager.GetLogger(typeof(SmartClientShellForm));
 		private readonly ILog _customLogger = LogManager.GetLogger("CustomEOLogger");
 		private readonly IComponentContext _container;
-		
+
 		private readonly SystemCheckerValidator _systemChecker;
 		//private bool _lastSystemCheck = true;
 		private readonly OutlookPanelContentWorker _outlookPanelContentWorker;
@@ -81,10 +81,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		protected SmartClientShellForm()
 		{
-			using(PerformanceOutput.ForOperation("SmartClientPortal ctor"))
+			using (PerformanceOutput.ForOperation("SmartClientPortal ctor"))
 			{
 				InitializeComponent();
-				
+
 				if (!DesignMode)
 				{
 					SetTexts();
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		}
 
 		private void setBusinessUnitInDataProtectionWebView()
-		{		
+		{
 			var bu = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id;
 			var request = new Request(webServer + "Start/AuthenticationApi/Logon");
 			request.PostData.AddValue("businessUnitId", bu.GetValueOrDefault().ToString());
@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		void toolStripButtonHelpClick(object sender, EventArgs e)
 		{
-			ViewBase.ShowHelp(this,false);
+			ViewBase.ShowHelp(this, false);
 		}
 
 		private void toolStripButtonAboutClick(object sender, EventArgs e)
@@ -228,8 +228,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			Close();
 		}
 
-		public StatusStrip MainStatusStrip
-		{
+		public StatusStrip MainStatusStrip {
 			get { return _mainStatusStrip; }
 		}
 
@@ -290,7 +289,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			var identity = (ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity;
 			var loggedOnBu = identity.BusinessUnit;
 			Text = UserTexts.Resources.TeleoptiRaptorColonMainNavigation + @" " + loggedOnBu.Name;
-			
+
 			toolStripStatusLabelLicense.Text = toolStripStatusLabelLicense.Text + ApplicationTextHelper.LicensedToCustomerText;
 			toolStripStatusLabelLoggedOnUser.Text = toolStripStatusLabelLoggedOnUser.Text +
 													ApplicationTextHelper.LoggedOnUserText;
@@ -320,12 +319,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			_container.Resolve<HangfireClientStarter>().Start();
 		}
 
-		
 
-		private string webServer
-		{
-			get
-			{
+
+		private string webServer {
+			get {
 				return _webUrlHolder.WebUrl;
 			}
 		}
@@ -336,7 +333,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			var t = new Timer { Interval = 1000, Enabled = true };
 			t.Tick += updateMem;
 		}
-		
+
 		private void updateMem(object sender, EventArgs e)
 		{
 			roger65(MemoryCounter.DefaultInstance().CurrentMemoryConsumptionString());
@@ -356,9 +353,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 			catch (DataSourceException dataSourceException)
 			{
-				_logger.Error("An error occurred when trying to save settings on exit.",dataSourceException);
+				_logger.Error("An error occurred when trying to save settings on exit.", dataSourceException);
 			}
-			
+
 			StateHolder.Instance.Terminate();
 		}
 
@@ -384,7 +381,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			toolStripStatusLabelRoger65.Text = message;
 			toolStripStatusLabelRoger65.ForeColor = Color.Red;
 		}
-		
+
 		private void setPermissionOnToolStripButtonControls()
 		{
 			var authorization = PrincipalAuthorization.Current();
@@ -423,7 +420,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				{
 					case DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage:
 						outlookBarSmartPartInfo.Icon = Resources.People_filled_space_32x32;
-						if (_toggleManager.IsEnabled(Toggles.Wfm_PeopleWeb_PrepareForRelease_74903) && PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebPeople))
+						if (_toggleManager.IsEnabled(Toggles.Wfm_PeopleWeb_PrepareForRelease_47766) && PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebPeople))
 						{
 							outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewPeopleModule;
 							outlookBarSmartPartInfo.PreviewUrl = buildWfmUri("WFM/#/people");
@@ -492,7 +489,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			SmartPartEnvironment.MessageBroker = MessageBrokerInStateHolder.Instance;
 			SmartPartEnvironment.SmartPartWorkspace = gridWorkspace;
 		}
-		
+
 		private void showBalloon()
 		{
 			notifyIcon.ShowBalloonTip(100);
@@ -502,7 +499,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			if (isOk)
 			{
-				notifyIcon.Icon =  Resources.NotifyOK;
+				notifyIcon.Icon = Resources.NotifyOK;
 				notifyIcon.Text = UserTexts.Resources.CheckSystemOk;
 				notifyIcon.BalloonTipIcon = ToolTipIcon.Info;
 				notifyIcon.BalloonTipTitle = UserTexts.Resources.CheckSystemOk;
@@ -565,7 +562,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				return;
 
 			outlookBarWorkSpace1.SetNavigatorControl(uc, modulePanelItem.PreviewText, modulePanelItem.PreviewUrl);
-			
+
 			var navigator = uc as AbstractNavigator;
 			if (navigator != null)
 			{
@@ -595,7 +592,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				webControlDataProtection.Visible = false;
 				webControl1.Visible = true;
 			}
-				
+
 
 			if (uc is SchedulerNavigator || uc is PeopleNavigator)
 				((INavigationPanel)uc).SetMainOwner(this);
@@ -618,14 +615,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				e.Menu.Items.Clear();
 				return;
 			}
-				
+
 			foreach (var item in e.Menu.Items.Where(item => item.CommandId == CommandIds.ViewSource))
 			{
 				e.Menu.Items.Remove(item);
 				break;
 			}
-			var menuItem = new EO.WebBrowser.MenuItem(UserTexts.Resources.StartPage,homeCommand);
-			
+			var menuItem = new EO.WebBrowser.MenuItem(UserTexts.Resources.StartPage, homeCommand);
+
 			e.Menu.Items.Add(menuItem);
 		}
 
@@ -678,7 +675,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				startFirstEnabledModule();
 			}
-			
+
 			toolStripStatusLabelSpring.Text = LanguageResourceHelper.Translate("XXReady");
 
 			TopMost = true;
@@ -698,7 +695,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			webControl1.Visible = true;
 			var executingAssembly = Assembly.GetExecutingAssembly();
 			var pageName = executingAssembly.GetManifestResourceNames().First(n => n.Contains("EmptyStatic"));
-			
+
 			webView1.LoadHtml(GetFromResources(pageName));
 		}
 
@@ -804,7 +801,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				webView1.Url = "https://www.teleopti.com/wfm/landing-pages/wfm_landing-pages_aspx.aspx";
 				showCustomerWebMenu = true;
 			});
-			
+
 		}
 
 		private DataProtectionEnum dataProtectionSetting()
@@ -817,10 +814,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 		}
 
-		private IPerson LoggedOnPerson
-		{
-			get
-			{
+		private IPerson LoggedOnPerson {
+			get {
 				using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
 					return TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(new ThisUnitOfWork(unitOfWork)));
@@ -878,7 +873,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			_logger.Error("Error in the EO browser", e.ErrorException);
 		}
-		
+
 		private void handlingLoadFailedError(object sender, LoadFailedEventArgs e)
 		{
 			_logger.Error(e.ErrorMessage + "Url: " + e.Url);
@@ -890,6 +885,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			var wfmPath = _container.Resolve<IConfigReader>().AppConfig("FeatureToggle");
 			return new Uri($"{wfmPath}{relativePath}");
 		}
-	
+
 	}
 }
