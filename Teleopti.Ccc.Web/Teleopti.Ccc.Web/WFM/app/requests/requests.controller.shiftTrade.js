@@ -58,7 +58,8 @@
 		vm.shiftTradeView = true;
 
 		var onInitCallBack = undefined,
-			columnsWithFilterEnabled = ['Subject', 'Message', 'Type', 'Status'];
+			columnsWithFilterEnabled = ['Subject', 'Message', 'Type', 'Status'],
+			shiftTradeMaximumRangeDays = 60;
 
 		vm.setDefaultStatuses = function() {
 			if (vm.defaultStatusesLoaded) {
@@ -250,7 +251,13 @@
 		}
 
 		function validateDateParameters(startDate, endDate) {
-			if (endDate === null || startDate === null) return false;
+			if (
+				endDate === null ||
+				startDate === null ||
+				moment(endDate).diff(moment(startDate), 'days') > shiftTradeMaximumRangeDays
+			)
+				return false;
+
 			return (
 				!moment(endDate).isBefore(startDate, 'day') &&
 				moment(startDate).year() > 1969 &&
