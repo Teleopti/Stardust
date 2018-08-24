@@ -22,11 +22,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			LogOnBusinessUnitId = DomainTestAttribute.DefaultBusinessUnitId;
 		}
 	}
-	
-	[TestFixture]
+
 	[DomainTest]
 	[DefaultData]
-	public class ProjectionChangedEventPublisherTest : ProjectionChangedEventBase
+	public class ProjectionChangedEventPublisherTest
 	{
 		public ProjectionChangedEventPublisher Target;
 		public FakeDatabase Database;
