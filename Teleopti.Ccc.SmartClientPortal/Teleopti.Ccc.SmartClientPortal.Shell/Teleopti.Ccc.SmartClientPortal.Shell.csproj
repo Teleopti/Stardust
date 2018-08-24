@@ -1430,7 +1430,6 @@
     <Compile Include="Win\Common\Configuration\Columns\SFGridEditableTextColumn.cs" />
     <Compile Include="Win\Common\Configuration\Columns\SFGridHourMinutesColumn.cs" />
     <Compile Include="Win\Common\Configuration\Columns\SFGridHourMinutesOrEmptyColumn.cs" />
-    <Compile Include="Win\Common\Configuration\Columns\SFGridIntegerCellColumn.cs" />
     <Compile Include="Win\Common\Configuration\Columns\SFGridIntegerCellWithIgnoreColumn.cs" />
     <Compile Include="Win\Common\Configuration\Columns\SFGridMultiSelectDropDownColumn.cs" />
     <Compile Include="Win\Common\Configuration\Columns\SFGridNullableIntegerCellColumn.cs" />
