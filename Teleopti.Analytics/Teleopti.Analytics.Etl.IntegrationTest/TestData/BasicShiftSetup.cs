@@ -55,6 +55,10 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 			step = new DimScenarioJobStep(jobParameters);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			step = new StageOvertimeJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			step = new DimOvertimeJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 		}
 
 		public static void AddPerson(out IPerson person, string name, string externalLogon, DateTime testDate)

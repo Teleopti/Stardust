@@ -50,7 +50,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new StageKpiTargetTeamJobStep(jobParameters));
 
 			AddWhenAllDisabled(new StageGroupPagePersonJobStep(jobParameters), Toggles.ETL_SpeedUpGroupPagePersonNightly_37623);
-			AddWhenAllDisabled(new StageOvertimeJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyOvertime_38304);
 			AddWhenAllDisabled(new StageRequestJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyRequest_38914);
 
 			Add(new SqlServerUpdateStatistics(jobParameters));
@@ -86,8 +85,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			
 			AddWhenAllDisabled(new DimGroupPageJobStep(jobParameters), Toggles.ETL_SpeedUpGroupPagePersonNightly_37623);
 			AddWhenAllDisabled(new BridgeGroupPagePersonJobStep(jobParameters), Toggles.ETL_SpeedUpGroupPagePersonNightly_37623);
-
-			AddWhenAllDisabled(new DimOvertimeJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyOvertime_38304);
 
 			// FACT TABLES
 			AddWhenAllDisabled(new FactScheduleJobStep(jobParameters), Toggles.ETL_SpeedUpFactScheduleNightly_38019);

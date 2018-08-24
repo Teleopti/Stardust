@@ -114,7 +114,6 @@ ETL_SpeedUpPersonPeriodNightly_38097 = true
 ETL_SpeedUpNightlyReloadDatamart_38131 = true
 ETL_SpeedUpFactScheduleNightly_38019 = true # not to be released until pbi 38304 and 41393 is done 
 ETL_SpeedUpNightlySkill_37543 = true
-ETL_SpeedUpNightlyOvertime_38304 = true
 ETL_SpeedUpNightlyAbsence_38301 = true
 ETL_SpeedUpNightlyShiftCategory_38718 = true
 ETL_SpeedUpNightlyPreference_38283 = true #Depending on ETL_SpeedUpFactScheduleNightly_38019
