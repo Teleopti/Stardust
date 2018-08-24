@@ -31,13 +31,13 @@
           <thead>
             <tr>
               <th nzWidth="62px" nzShowCheckbox [nzChecked]="isAllSelected()" [nzIndeterminate]="isAnySelected() && !isAllSelected()" (nzCheckedChange)="selectAllOnPage()"></th>
-              <th (click)="sort('FirstName')" data-test-sort-fn>{{'FirstName' | translate}}
+              <th (click)="sort('FirstName')" class="first-name" data-test-sort-fn>{{'FirstName' | translate}}
                 <ng-container *ngIf="isSortingBy('FirstName')">
                   <i *ngIf="isSortingAsc()" class="anticon anticon-arrow-up"></i>
                   <i *ngIf="isSortingDesc()" class="anticon anticon-arrow-down"></i>
                 </ng-container>
               </th>
-              <th (click)="sort('LastName')">{{'LastName' | translate}}
+              <th (click)="sort('LastName')" class="last-name">{{'LastName' | translate}}
                 <ng-container *ngIf="isSortingBy('LastName')">
                   <i *ngIf="isSortingAsc()" class="anticon anticon-arrow-up"></i>
                   <i *ngIf="isSortingDesc()" class="anticon anticon-arrow-down"></i>
