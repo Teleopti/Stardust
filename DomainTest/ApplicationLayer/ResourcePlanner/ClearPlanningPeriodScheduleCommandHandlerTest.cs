@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 				.Period.Should()
 				.Be.EqualTo(planningPeriod.Range);
 			planningPeriod.JobResults.Count.Should().Be.EqualTo(1);
-			var webClearScheduleStardustEvent = (EventPublisher.PublishedEvents.Single() as WebClearScheduleStardustEvent);
+			var webClearScheduleStardustEvent = EventPublisher.PublishedEvents.OfType<WebClearScheduleStardustEvent>().Single();
 			webClearScheduleStardustEvent.PlanningPeriodId.Should().Be.EqualTo(planningPeriod.Id.GetValueOrDefault());
 		}
 	}

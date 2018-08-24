@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 			base.Isolate(isolate);
 
 			isolate.UseTestDouble<MutableNow_ExperimentalEventPublishing>().For<MutableNow, INow>();
-			isolate.UseTestDouble<FakeDataSourcesFactoryWithEvents>().For<IDataSourcesFactory>();
 
 			// disable activity change checker triggered by minute tick which is triggered by Now.Is(...)
 			isolate.UseTestDouble<DontCheckForActivityChangesFromScheduleChangeProcessor>().For<IActivityChangeCheckerFromScheduleChangeProcessor>();
