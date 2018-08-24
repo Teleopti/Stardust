@@ -1,7 +1,5 @@
-﻿
-$(document).ready(function () {
+﻿$(document).ready(function() {
+	module('Teleopti.MyTimeWeb.Preference selection view model');
 
-	module("Teleopti.MyTimeWeb.Preference selection view model");
-
-	// Test "should summarize must have" is removed because now the must-have is fetching from backend directly. 	
+	// Test "should summarize must have" is removed because now the must-have is fetching from backend directly.
 });

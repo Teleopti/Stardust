@@ -1,21 +1,21 @@
-﻿if (typeof (Teleopti) === 'undefined') {
+﻿if (typeof Teleopti === 'undefined') {
 	Teleopti = {};
-	if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
+	if (typeof Teleopti.MyTimeWeb === 'undefined') {
 		Teleopti.MyTimeWeb = {};
-		if(typeof (Teleopti.MyTimeWeb.Preference) ==='undefined') {
+		if (typeof Teleopti.MyTimeWeb.Preference === 'undefined') {
 			Teleopti.MyTimeWeb.Preference = {};
 		}
 	}
 }
 
-Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate, feedBackData) {
+Teleopti.MyTimeWeb.Preference.DayViewModel = function(ajaxForDate, feedBackData) {
 	var self = this;
 
-	var hasStringValue = function (value) {
-		return typeof (value) == 'string' && value.length > 0;
+	var hasStringValue = function(value) {
+		return typeof value == 'string' && value.length > 0;
 	};
 
-	self.Date = "";
+	self.Date = '';
 
 	self.DayString = ko.observable();
 	self.MonthString = ko.observable();
@@ -34,7 +34,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate, feedBackData
 	self.ActivityEndTimeLimitation = ko.observable();
 	self.ActivityTimeLimitation = ko.observable();
 	self.Color = ko.observable();
-	self.TextColor = ko.computed(function () {
+	self.TextColor = ko.computed(function() {
 		var backgroundColor = self.Color();
 		if (backgroundColor) {
 			return Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(backgroundColor);
@@ -52,77 +52,93 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate, feedBackData
 	self.PersonAssignmentContractTime = ko.observable('');
 	self.ContractTimeMinutes = ko.observable(0);
 	self.InitialFeedbackData = feedBackData;
-	
 
 	self.HasPreferenceCategory = ko.computed(function() {
 		return self.Preference() != undefined && self.Preference() != '';
 	});
 
 	self.tooltipText = ko.computed(function() {
-		if (!self.Extended())
-			return undefined;
+		if (!self.Extended()) return undefined;
 
-		var text = ('<div class="time-limitation"><span class="glyphicon glyphicon-step-backward"></span>{0}</div>' +
+		var text = (
+			'<div class="time-limitation"><span class="glyphicon glyphicon-step-backward"></span>{0}</div>' +
 			'<div class="time-limitation"><span class="glyphicon glyphicon-step-forward"></span>{1}</div>' +
 			'<div class="time-limitation"><span class="glyphicon glyphicon-resize-horizontal"></span>{2}</div>' +
 			'<div class="extended-part-title">{3}</div>' +
 			'<div class="time-limitation"><span class="glyphicon glyphicon-step-backward"></span>{4}</div>' +
 			'<div class="time-limitation"><span class="glyphicon glyphicon-step-forward"></span>{5}</div>' +
-			'<div class="time-limitation"><span class="glyphicon glyphicon-resize-horizontal"></span>{6}</div>')
-			.format($('<div/>').text(self.StartTimeLimitation()).html(),
-				$('<div/>').text(self.EndTimeLimitation()).html(),
-				$('<div/>').text(self.WorkTimeLimitation()).html(),
-				$('<div/>').text(self.Activity()).html(),
-				$('<div/>').text(self.ActivityStartTimeLimitation() ? self.ActivityStartTimeLimitation() : '-').html(),
-				$('<div/>').text(self.ActivityEndTimeLimitation() ? self.ActivityEndTimeLimitation() : '-').html(),
-				$('<div/>').text(self.ActivityTimeLimitation() ? self.ActivityTimeLimitation() : '-').html());
+			'<div class="time-limitation"><span class="glyphicon glyphicon-resize-horizontal"></span>{6}</div>'
+		).format(
+			$('<div/>')
+				.text(self.StartTimeLimitation())
+				.html(),
+			$('<div/>')
+				.text(self.EndTimeLimitation())
+				.html(),
+			$('<div/>')
+				.text(self.WorkTimeLimitation())
+				.html(),
+			$('<div/>')
+				.text(self.Activity())
+				.html(),
+			$('<div/>')
+				.text(self.ActivityStartTimeLimitation() ? self.ActivityStartTimeLimitation() : '-')
+				.html(),
+			$('<div/>')
+				.text(self.ActivityEndTimeLimitation() ? self.ActivityEndTimeLimitation() : '-')
+				.html(),
+			$('<div/>')
+				.text(self.ActivityTimeLimitation() ? self.ActivityTimeLimitation() : '-')
+				.html()
+		);
 
 		return '<div class="extended-tooltip"><div class="extended-part-title">{0}</div>{1}</div>'.format(
-			$('<div/>').text(self.ExtendedTitle()).html(), text);
+			$('<div/>')
+				.text(self.ExtendedTitle())
+				.html(),
+			text
+		);
 	});
 
 	self.HasDayOff = ko.computed(function() {
 		return self.DayOff() != '';
 	});
 
-	self.HasAjaxError = ko.computed(function () {
+	self.HasAjaxError = ko.computed(function() {
 		return self.AjaxError() != '';
 	});
 
-	self.HasAbsence = ko.computed(function () {
+	self.HasAbsence = ko.computed(function() {
 		return self.Absence() != '';
 	});
 
-	self.HasPersonAssignmentShiftCategory = ko.computed(function () {
+	self.HasPersonAssignmentShiftCategory = ko.computed(function() {
 		return self.PersonAssignmentShiftCategory() != '';
 	});
 
 	self.Meetings = ko.observableArray();
 	self.PersonalShifts = ko.observableArray();
 
-	self.HasMeetings = ko.computed(function () {
-		return self.Meetings().length>0;
+	self.HasMeetings = ko.computed(function() {
+		return self.Meetings().length > 0;
 	});
 
-	self.HasPersonalShifts = ko.computed(function () {
+	self.HasPersonalShifts = ko.computed(function() {
 		return self.PersonalShifts().length > 0;
 	});
 
-	self.HasPersonalShiftsOrMeetings = ko.computed(function () {
+	self.HasPersonalShiftsOrMeetings = ko.computed(function() {
 		return self.HasPersonalShifts() || self.HasMeetings();
 	});
 
 	self.EditableIsInOpenPeriod = ko.observable(false);
-	self.EditableHasNoSchedule = ko.computed(function () {
-		if (hasStringValue(self.DayOff()))
-			return false;
-		if (hasStringValue(self.Absence()))
-			return false;
-		if (hasStringValue(self.PersonAssignmentShiftCategory()))
-			return false;
+	self.EditableHasNoSchedule = ko.computed(function() {
+		if (hasStringValue(self.DayOff())) return false;
+		if (hasStringValue(self.Absence())) return false;
+		if (hasStringValue(self.PersonAssignmentShiftCategory())) return false;
 		return true;
 	});
-	self.Editable = ko.computed(function () {
+	self.Editable = ko.computed(function() {
 		return self.EditableIsInOpenPeriod() && self.EditableHasNoSchedule();
 	});
 
@@ -130,7 +146,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate, feedBackData
 
 	self.StyleClassName = ko.observable('');
 
-	self.ReadElement = function (element) {
+	self.ReadElement = function(element) {
 		var item = $(element);
 		self.Date = item.attr('data-mytime-date');
 		var periodStartDate = item.attr('data-period-start-date');
@@ -141,25 +157,21 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate, feedBackData
 			self.MonthString(Teleopti.MyTimeWeb.Common.FormatMonthOnly(self.Date));
 		}
 
-	
-		self.EditableIsInOpenPeriod(item.attr('data-mytime-editable') == "True");
-		self.HasPreference = item.hasClass("preference") || $(".preference", item).length > 0;
+		self.EditableIsInOpenPeriod(item.attr('data-mytime-editable') == 'True');
+		self.HasPreference = item.hasClass('preference') || $('.preference', item).length > 0;
 	};
 
-
-	self.ClearPreference = function (decrementMustHave) {
+	self.ClearPreference = function(decrementMustHave) {
 		var originalMustHave = self.MustHave();
 		if (originalMustHave && decrementMustHave) decrementMustHave(false, originalMustHave);
 		self.ReadPreference({});
 	};
 
-	self.ReadPreference = function (data) {
+	self.ReadPreference = function(data) {
 		if (!data) return;
 
-		if (data.Color)
-			self.Color('rgb(' + data.Color + ')');
-		else
-			self.Color('');
+		if (data.Color) self.Color('rgb(' + data.Color + ')');
+		else self.Color('');
 		self.Preference(data.Preference);
 		self.MustHave(data.MustHave);
 		self.ExtendedTitle(data.ExtendedTitle);
@@ -173,36 +185,36 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate, feedBackData
 		self.Extended(data.Extended);
 	};
 
-	self.ReadDayOff = function (data) {
+	self.ReadDayOff = function(data) {
 		self.DayOff(data.DayOff);
 	};
 
-	self.ReadAbsence = function (data) {
+	self.ReadAbsence = function(data) {
 		self.Absence(data.Absence);
 		self.AbsenceContractTimeMinutes(data.AbsenceContractTimeMinutes);
 		self.AbsenceContractTime(data.AbsenceContractTimeMinutes > 0 ? data.AbsenceContractTime : '');
 	};
 
-	self.ReadPersonAssignment = function (data) {
+	self.ReadPersonAssignment = function(data) {
 		self.PersonAssignmentShiftCategory(data.ShiftCategory);
 		self.PersonAssignmentTimeSpan(data.TimeSpan);
 		self.PersonAssignmentContractTime(data.ContractTime);
 		self.ContractTimeMinutes(data.ContractTimeMinutes);
 	};
 
-	self.LoadPreference = function (complete) {
+	self.LoadPreference = function(complete) {
 		if (!self.HasPreference) {
 			complete();
 			return null;
 		}
 		return ajaxForDate(self, {
-			url: "Preference/Preference",
+			url: 'Preference/Preference',
 			type: 'GET',
 			data: { Date: self.Date },
 			date: self.Date,
 			success: self.ReadPreference,
 			complete: complete,
-			statusCode404: function () { }
+			statusCode404: function() {}
 		});
 	};
 
@@ -213,11 +225,11 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate, feedBackData
 	self.RestTimeToNextDay = ko.observable();
 	self.RestTimeToPreviousDay = ko.observable();
 	self.ExpectedNightRest = ko.observable();
-	self.NightRestViolationSwitch = ko.computed(function () {
+	self.NightRestViolationSwitch = ko.computed(function() {
 		return self.HasNightRestViolationToPreviousDay() || self.HasNightRestViolationToNextDay();
 	});
-	
-	self.MakeNightRestViolationObjs = function () {
+
+	self.MakeNightRestViolationObjs = function() {
 		var nightRestViolationObjs = [];
 		if (self.NightRestViolationSwitch()) {
 			if (self.HasNightRestViolationToPreviousDay()) {
@@ -225,7 +237,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate, feedBackData
 				var nightRestViolationObj = {};
 				nightRestViolationObj.nightRestTimes = self.ExpectedNightRest();
 				nightRestViolationObj.sencondDay = Teleopti.MyTimeWeb.Common.FormatDate(dateMoment);
-				nightRestViolationObj.firstDay = Teleopti.MyTimeWeb.Common.FormatDate(dateMoment.subtract(1, "days"));
+				nightRestViolationObj.firstDay = Teleopti.MyTimeWeb.Common.FormatDate(dateMoment.subtract(1, 'days'));
 
 				nightRestViolationObj.hoursBetweenTwoDays = self.RestTimeToPreviousDay();
 				nightRestViolationObjs.push(nightRestViolationObj);
@@ -236,7 +248,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate, feedBackData
 				var nightRestViolationObj = {};
 				nightRestViolationObj.nightRestTimes = self.ExpectedNightRest();
 				nightRestViolationObj.firstDay = Teleopti.MyTimeWeb.Common.FormatDate(dateMoment);
-				nightRestViolationObj.sencondDay = Teleopti.MyTimeWeb.Common.FormatDate(dateMoment.add(1, "days"));
+				nightRestViolationObj.sencondDay = Teleopti.MyTimeWeb.Common.FormatDate(dateMoment.add(1, 'days'));
 				nightRestViolationObj.hoursBetweenTwoDays = self.RestTimeToNextDay();
 				nightRestViolationObjs.push(nightRestViolationObj);
 			}
@@ -245,8 +257,8 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate, feedBackData
 		return nightRestViolationObjs;
 	};
 
-	self.SetPreference = function (value, validationErrorCallback) {
-		if (typeof (value) == 'string') {
+	self.SetPreference = function(value, validationErrorCallback) {
+		if (typeof value == 'string') {
 			value = {
 				Date: self.Date,
 				PreferenceId: value
@@ -256,16 +268,16 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate, feedBackData
 		}
 
 		var deferred = $.Deferred();
-		ajaxForDate(self,{
+		ajaxForDate(self, {
 			type: 'POST',
 			data: JSON.stringify(value),
 			date: self.Date,
-			statusCode400: function (jqXHR, textStatus, errorThrown) {
+			statusCode400: function(jqXHR, textStatus, errorThrown) {
 				var errorMessage = $.parseJSON(jqXHR.responseText);
 				validationErrorCallback(errorMessage);
 			},
 			success: self.ReadPreference,
-			complete: function () {
+			complete: function() {
 				deferred.resolve();
 				if (!self.HasAjaxError()) {
 					self.LoadFeedback();
@@ -275,7 +287,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate, feedBackData
 		return deferred.promise();
 	};
 
-	self.SetMustHave = function (value, successCb) {
+	self.SetMustHave = function(value, successCb) {
 		value = {
 			Date: self.Date,
 			MustHave: value
@@ -289,35 +301,35 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate, feedBackData
 			type: 'POST',
 			data: JSON.stringify(value),
 			date: self.Date,
-			success: function (newMustHave) {
+			success: function(newMustHave) {
 				self.MustHave(newMustHave);
 				if (successCb) successCb(newMustHave, originalMustHave);
 			},
-			complete: function () {
+			complete: function() {
 				deferred.resolve();
 			}
 		});
 		return deferred.promise();
 	};
 
-	self.DeletePreference = function () {
+	self.DeletePreference = function() {
 		var deferred = $.Deferred();
 		ajaxForDate(self, {
 			type: 'DELETE',
 			data: JSON.stringify({ Date: self.Date }),
 			date: self.Date,
-			statusCode404: function () { },
+			statusCode404: function() {},
 			success: self.ReadPreference,
-			complete: function () {
+			complete: function() {
 				deferred.resolve();
-				self.LoadFeedback();			
+				self.LoadFeedback();
 			}
 		});
 		return deferred.promise();
 	};
 
 	self.FeedbackError = ko.observable();
-	self.DisplayFeedbackError = ko.computed(function () {
+	self.DisplayFeedbackError = ko.computed(function() {
 		return hasStringValue(self.FeedbackError());
 	});
 
@@ -327,46 +339,38 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate, feedBackData
 	self.PossibleContractTimeMinutesLower = ko.observable();
 	self.PossibleContractTimeMinutesUpper = ko.observable();
 
-	self.PossibleContractTimeLower = ko.computed(function () {
+	self.PossibleContractTimeLower = ko.computed(function() {
 		var value = self.PossibleContractTimeMinutesLower();
-		if (!value)
-			return "";
+		if (!value) return '';
 		return Teleopti.MyTimeWeb.Common.FormatTimeSpan(value);
 	});
 
-	self.PossibleContractTimeUpper = ko.computed(function () {
+	self.PossibleContractTimeUpper = ko.computed(function() {
 		var value = self.PossibleContractTimeMinutesUpper();
-		if (!value)
-			return "";
+		if (!value) return '';
 		return Teleopti.MyTimeWeb.Common.FormatTimeSpan(value);
 	});
 
-	self.PossibleContractTimes = ko.computed(function () {
+	self.PossibleContractTimes = ko.computed(function() {
 		var lower = self.PossibleContractTimeLower();
 		var upper = self.PossibleContractTimeUpper();
-		if (lower != "")
-			return lower + "-" + upper;
-		return "";
+		if (lower != '') return lower + '-' + upper;
+		return '';
 	});
 
-	self.DisplayFeedback = ko.computed(function () {
-		if (self.DisplayFeedbackError())
-			return false;
-		if (hasStringValue(self.PossibleStartTimes()))
-			return true;
-		if (hasStringValue(self.PossibleEndTimes()))
-			return true;
-		if (hasStringValue(self.PossibleContractTimeMinutesLower()))
-			return true;
-		if (hasStringValue(self.PossibleContractTimeMinutesUpper()))
-			return true;
+	self.DisplayFeedback = ko.computed(function() {
+		if (self.DisplayFeedbackError()) return false;
+		if (hasStringValue(self.PossibleStartTimes())) return true;
+		if (hasStringValue(self.PossibleEndTimes())) return true;
+		if (hasStringValue(self.PossibleContractTimeMinutesLower())) return true;
+		if (hasStringValue(self.PossibleContractTimeMinutesUpper())) return true;
 		return false;
 	});
 
 	self.AssignFeedbackData = function(data) {
-		if (!self.Feedback()){
+		if (!self.Feedback()) {
 			return;
-		}else if(data){
+		} else if (data) {
 			self.FeedbackError(data.FeedbackError);
 			self.PossibleStartTimes(data.PossibleStartTimes);
 			self.PossibleEndTimes(data.PossibleEndTimes);
@@ -383,12 +387,12 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate, feedBackData
 	};
 
 	self.LoadFeedback = function() {
-		if (!self.Feedback()){
+		if (!self.Feedback()) {
 			self.IsLoading(false);
 			return;
 		}
 
-		if(self.InitialFeedbackData){
+		if (self.InitialFeedbackData) {
 			self.AssignFeedbackData(self.InitialFeedbackData);
 			self.IsLoading(false);
 			return;
@@ -397,7 +401,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate, feedBackData
 		self.IsLoading(true);
 
 		return ajaxForDate(self, {
-			url: "PreferenceFeedback/Feedback",
+			url: 'PreferenceFeedback/Feedback',
 			type: 'GET',
 			data: {
 				Date: self.Date
