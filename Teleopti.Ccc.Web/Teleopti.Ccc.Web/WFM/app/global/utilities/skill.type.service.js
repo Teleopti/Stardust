@@ -47,7 +47,7 @@
 					TaskTime: $translate.instant('TaskTime'),
 					OriginalTasks: $translate.instant('OriginalEmails'),
 					ValidatedTasks: $translate.instant('ValidatedEmails'),
-					CampaignTasksPercentSign: $translate.instant('CampaignEmailsPercentSign')
+					CampaignTasksPercentSign: $translate.instant('CampaignEmailsPercent')
 				};
 			} else {
 				return {
@@ -59,7 +59,7 @@
 					TaskTime: $translate.instant('TaskTime'),
 					OriginalTasks: $translate.instant('OriginalTasks'),
 					ValidatedTasks: $translate.instant('ValidatedTasks'),
-					CampaignTasksPercentSign: $translate.instant('CampaignTasksPercentSign')
+					CampaignTasksPercentSign: $translate.instant('CampaignTasksPercent')
 				};
 			}
 		};
