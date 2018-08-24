@@ -16,16 +16,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
         {
 	       
-			if (_configuration.Toggle(Toggles.NewPasswordHash_40460))
-			{
-				registerAsDefault<BCryptHashFunction>(builder);
-				registerAsExisting<OneWayEncryption>(builder);
-			}
-			else
-			{
-				registerAsDefault<OneWayEncryption>(builder);
-				registerAsExisting<BCryptHashFunction>(builder);
-			}
+			registerAsDefault<BCryptHashFunction>(builder);
+			registerAsExisting<OneWayEncryption>(builder);
 		}
 
 	    private static void registerAsDefault<T>(ContainerBuilder builder)

@@ -15,20 +15,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IPersonForScheduleFinder _personForScheduleFinder;
 		private readonly IPersonRepository _personRepository;
-        private readonly ISettingsPersisterAndProvider<NameFormatSettings> _nameFormatSettings;
+		private readonly ISettingsPersisterAndProvider<NameFormatSettings> _nameFormatSettings;
 
-        public TeamSchedulePersonsProvider(IPermissionProvider permissionProvider,
+		public TeamSchedulePersonsProvider(IPermissionProvider permissionProvider,
 			IPersonForScheduleFinder personForScheduleFinder, IPersonRepository personRepository, ISettingsPersisterAndProvider<NameFormatSettings> nameFormatSettings)
 		{
 			_permissionProvider = permissionProvider;
 			_personForScheduleFinder = personForScheduleFinder;
 			_personRepository = personRepository;
-            _nameFormatSettings = nameFormatSettings;
+			_nameFormatSettings = nameFormatSettings;
 		}
 
 		public IEnumerable<Guid> RetrievePersonIds(TeamScheduleViewModelData data)
 		{
-		    var nameFormatSetting = _nameFormatSettings.Get().ToNameFormatSetting();
+			var nameFormatSetting = _nameFormatSettings.Get().ToNameFormatSetting();
 
 			// The following function name should be modified to be more reuse-friendly ......
 			var fetchedPersonList = _personForScheduleFinder.GetPersonFor(data.ScheduleDate, data.TeamIdList,

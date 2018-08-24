@@ -1,9 +1,9 @@
 <form autocomplete="off" name="form2" class="wfm-form">
-	<div class="text-danger validation">{{$ctrl.errorMsg|translate}}</div>
+	<div class="text-danger validation">{{$ctrl.errorMsg}}</div>
 	<div class="con-row">
 		<div class="con-flex">
 			<label ng-class="{locked: $ctrl.disabled}">
-				Gold badge threshold
+				{{'GoldBadgeThreshold'|translate}}
 				<input name="goldBadgeThreshold" ng-model-options="{allowInvalid:true}" ng-disabled="$ctrl.disabled" type="text" ng-model="$ctrl._goldBadgeThreshold"
 				 ng-blur="$ctrl.updateGoldThreshold(form2.goldBadgeThreshold.$invalid)" ng-keyup="$ctrl.keyUp($event, form2.goldBadgeThreshold.$invalid)"
 				 threshold-validator="{{::$ctrl.valueFormat}};{{$ctrl.max}};{{$ctrl.valueDataType}}" ng-model-options="{allowInvalid:true}"
@@ -15,7 +15,7 @@
 		</div>
 		<div class="con-flex">
 			<label ng-class="{locked: $ctrl.disabled}">
-				Silver badge threshold
+				{{'SilverBadgeThreshold'|translate}}
 				<input name="silverBadgeThreshold" ng-model-options="{allowInvalid:true}" ng-disabled="$ctrl.disabled" type="text" ng-model="$ctrl._silverBadgeThreshold"
 				 ng-blur="$ctrl.updateSilverThreshold(form2.silverBadgeThreshold.$invalid)" ng-keyup="$ctrl.keyUp($event, form2.silverBadgeThreshold.$invalid)"
 				 threshold-validator="{{::$ctrl.valueFormat}};{{$ctrl.max}};{{$ctrl.valueDataType}}" ng-model-options="{allowInvalid:true}"
@@ -27,7 +27,7 @@
 		</div>
 		<div class="con-flex">
 			<label ng-class="{locked: $ctrl.disabled}">
-				Bronze badge threshold
+				{{'BronzeBadgeThreshold'|translate}}
 				<input type="text" ng-model-options="{allowInvalid:true}" name="bronzeBadgeThreshold" ng-disabled="$ctrl.disabled" ng-model="$ctrl._bronzeBadgeThreshold"
 				 ng-blur="$ctrl.updateBronzeThreshold(form2.bronzeBadgeThreshold.$invalid)" ng-model-options="{allowInvalid:true}" ng-keyup="$ctrl.keyUp($event, form2.bronzeBadgeThreshold.$invalid)"
 				 threshold-validator="{{::$ctrl.valueFormat}};{{$ctrl.max}};{{$ctrl.valueDataType}}" ng-model-options="{allowInvalid:true}"

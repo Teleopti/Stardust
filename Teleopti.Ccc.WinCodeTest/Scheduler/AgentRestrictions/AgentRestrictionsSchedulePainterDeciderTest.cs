@@ -24,22 +24,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_restrictionSchedulingOptions = new RestrictionSchedulingOptions();
 		}
 
-		//[Test]
-		//public void ShouldNotPaintWhenNotEnabled()
-		//{
-		//    _restrictionSchedulingOptions.UseScheduling = false;
-
-		//    using (_mocks.Record())
-		//    {
-		//        Expect.Call(_preferenceCellData.Enabled).Return(false);
-		//    }
-
-		//    using (_mocks.Playback())
-		//    {
-		//        Assert.IsFalse(_decider.ShouldPaint(_preferenceCellData));
-		//    }
-		//}
-
 		[Test]
 		public void ShouldNotPaintWhenNotUseScheduling()
 		{
@@ -47,7 +31,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 
 			using (_mocks.Record())
 			{
-				//Expect.Call(_preferenceCellData.Enabled).Return(true);
 				Expect.Call(_preferenceCellData.SchedulingOption).Return(_restrictionSchedulingOptions);
 			}
 
@@ -119,7 +102,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			using (_mocks.Record())
 			{
 				Expect.Call(_preferenceCellData.SchedulingOption).Return(_restrictionSchedulingOptions);
-				//Expect.Call(_preferenceCellData.HasDayOff).Return(false);
 				Expect.Call(_preferenceCellData.HasFullDayAbsence).Return(true);
 			}
 
@@ -137,8 +119,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			using (_mocks.Record())
 			{
 				Expect.Call(_preferenceCellData.SchedulingOption).Return(_restrictionSchedulingOptions);
-				//Expect.Call(_preferenceCellData.HasDayOff).Return(false);
-				//Expect.Call(_preferenceCellData.HasFullDayAbsence).Return(true);
 				Expect.Call(_preferenceCellData.HasAbsenceOnContractDayOff).Return(true);
 			}
 

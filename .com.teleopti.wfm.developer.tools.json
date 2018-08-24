@@ -1,11 +1,44 @@
 {
-	RestoreToLocalFlow: true,
-	EtlEnsureRecurringJobs: true,
-	EtlEnsureRecurringJobsWithRetries: true,
-	NpmRunRtaTest: true,
-	ToolsFlowWithoutSQLCMD: true,
-	ToolsFlowWithFixMyConfig: true,
-	ToolsFlowWithInfraTestConfigWithOptionalToggleMode: true,
-	BatflowThatWorks: true,
-	NpmRunStartAlpha: true
+	TeleoptiMenu: [
+		{Id: "RestoreToLocal", Icon: "RestoreToLocal.png", Text: "Restore to local", Directory: ".debug-Setup", Run: [".debug-Setup\\Restore to Local.bat", "/flow"]},
+		{Id: "FixMyConfigFlow", Icon: "FixMyConfigFlow.png", Text: "FixMyConfigFlow", Directory: ".debug-Setup", Run: [".debug-Setup\\FixMyConfigFlow.bat"]},
+		{Id: "InfraTestConfig", Icon: "InfraTestConfig.png", Text: "InfraTestConfig", Directory: ".debug-Setup", Run: [".debug-Setup\\InfraTestConfig.bat"]},
+		{Id: "NpmInstall", Icon: "CommandLine.png", Text: "npm install", Directory: "Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\WFM", Run: ["Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\.node\\npm", "install"]},
+		{Id: "NpmStart", Icon: "CommandLine.png", Text: "npm start", Directory: "Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\WFM", Run: ["Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\.node\\npm", "start"]},
+		{Id: "NpmTest", Icon: "CommandLine.png", Text: "npm test", Directory: "Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\WFM", Run: ["Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\.node\\npm", "test"]},
+		{Id: "NpmTestRta", Icon: "CommandLine.png", Text: "npm run test:rta", Directory: "Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\WFM", Run: ["Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\.node\\npm", "run", "test:rta"]},
+		{Id: "Etl", Text: "Etl", Directory: "Teleopti.Analytics.Etl.ServiceConsoleHost\\bin\\Debug\\", Run: ["Teleopti.Analytics.Etl.ServiceConsoleHost\\bin\\Debug\\Teleopti.Analytics.Etl.ServiceConsoleHost.exe"]},
+		{Id: "EnsureRecurringJobs", Text: "EnsureRecurringJobs", Directory: "Teleopti.Analytics.Etl.ServiceConsoleHost\\bin\\Debug\\", Run: ["Teleopti.Analytics.Etl.ServiceConsoleHost\\bin\\Debug\\Teleopti.Analytics.Etl.ServiceConsoleHost.exe", "/EnsureRecurringJobs"]}
+	],
+	NavigationToolBar: [
+		{Id: "SuperFlow", Icon: "SuperFlow.png", Sound: "SuperFlow.wav", Text: "Super Flow", Description: "Stuff and cats!", 
+			Script: [
+				"@ECHO OFF",
+				"COLOR EC",
+				"net use \"\\\\gigantes\\Customer Databases\\CCC\\RestoreToLocal\\Baselines\" /USER:toptinet\\tfsintegration m8kemew0rk /PERSISTENT:NO",
+				"ROBOCOPY \"\\\\gigantes\\Customer Databases\\CCC\\RestoreToLocal\\Baselines\\7zip\" \"%PluginTemp%\\7Zip\" /xo /njh /njs",
+				"ROBOCOPY \"\\\\gigantes\\Customer Databases\\CCC\\RestoreToLocal\\Baselines\" \"%PluginTemp%\" \"DemoSales2017*.rar\" /xo /njh /njs",
+				"\"%PluginTemp%\\7Zip\\7z.exe\" x -y -o\"%Repo%\" \"%PluginTemp%\\DemoSales2017*.rar\"",
+				"\"Teleopti.Develop.Batflow\\bin\\Debug\\Teleopti.Develop.Batflow.exe\" flow",
+				"CD \"Teleopti.Ccc.Web\\Teleopti.Ccc.Web\\WFM\"",
+				"START ..\\.node\\npm start",
+				"START ..\\.node\\npm run test:rta",
+				"CD ..\\..\\..",
+				"START \"\" \"Teleopti.Analytics.Etl.ServiceConsoleHost\\bin\\Debug\\Teleopti.Analytics.Etl.ServiceConsoleHost.exe\" /EnsureRecurringJobs",
+				"EXIT"
+			]
+		},
+		{Id: "BatFlow", Icon: "BatFlow.png", Text: "Bat Flow", Description: "Holy stuff batman!", 
+			Script: [
+				"@ECHO OFF",
+				"COLOR 0E",
+				"net use \"\\\\gigantes\\Customer Databases\\CCC\\RestoreToLocal\\Baselines\" /USER:toptinet\\tfsintegration m8kemew0rk /PERSISTENT:NO",
+				"ROBOCOPY \"\\\\gigantes\\Customer Databases\\CCC\\RestoreToLocal\\Baselines\\7zip\" \"%PluginTemp%\\7Zip\" /xo /njh /njs",
+				"ROBOCOPY \"\\\\gigantes\\Customer Databases\\CCC\\RestoreToLocal\\Baselines\" \"%PluginTemp%\" \"DemoSales2017*.rar\" /xo /njh /njs",
+				"\"%PluginTemp%\\7Zip\\7z.exe\" x -y -o\"%Repo%\" \"%PluginTemp%\\DemoSales2017*.rar\"",
+				"\"Teleopti.Develop.Batflow\\bin\\Debug\\Teleopti.Develop.Batflow.exe\" flow",
+				"EXIT"
+			]
+		}
+	]
 }

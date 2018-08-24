@@ -94,7 +94,8 @@ namespace Teleopti.Ccc.Domain.Intraday.Domain
 					var corespondingActual = actualVolume.Where(a => a.StartTime == f.StartTime);
 					return (corespondingActual.Sum(x => x.Calls) / f.Calls);
 				});
-			var result = deviations.Aggregate((current, next) => alpha * next + (1 - alpha) * current);
+
+			var result = (deviations.Any() ? deviations.Aggregate((current, next) => alpha * next + (1 - alpha) * current) : 0.0);
 			return result;
 		}
 	}

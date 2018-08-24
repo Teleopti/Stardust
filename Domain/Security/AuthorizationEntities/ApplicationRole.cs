@@ -6,7 +6,10 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 {
-    public class ApplicationRole : SystemRole, IApplicationRole
+	// Used for translation auto search, DO NOT REMOVE!
+	// UserTexts.Resources.SuperRole
+
+	public class ApplicationRole : SystemRole, IApplicationRole
     {
 	    private IList<IApplicationFunction> _applicationFunctionCollection = new List<IApplicationFunction>();
         private IAvailableData _availableData;

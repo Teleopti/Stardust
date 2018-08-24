@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingQuality
 						UseDaysOffPerWeek = false,
 						UseConsecutiveWorkdays = false,
 						UseFullWeekendsOff = false,
-					}), (o, args) => { }, new NoOptimizationCallback());
+					}), new NoOptimizationCallback());
 
 				standardDeviation = getResultingStandardDeviation(period, stateHolder);
 				if (standardDeviation <= targetStandardDeviation)
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingQuality
 						ConsecutiveWorkdaysValue = new MinMax<int>(1, 6),
 						UseFullWeekendsOff = true,
 						FullWeekendsOffValue = new MinMax<int>(1, 2)
-					}), (o, args) => { }, new NoOptimizationCallback());
+					}), new NoOptimizationCallback());
 
 				standardDeviation = getResultingStandardDeviation(period, stateHolder);
 				if (standardDeviation <= targetStandardDeviation)
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingQuality
 			return standardDeviation;
 		}
 
-		public DayOffOptimizationDesktopQualityTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerLessResourcesXXL74915) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerLessResourcesXXL74915)
+		public DayOffOptimizationDesktopQualityTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerXxl76496) : base(seperateWebRequest, resourcePlannerXxl76496)
 		{
 		}
 	}

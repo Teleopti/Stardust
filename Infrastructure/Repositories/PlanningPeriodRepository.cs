@@ -52,6 +52,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						}
 					});
 			}
+
+			result.RemoveWhere(x => x.PeriodType == SchedulePeriodType.Day);
 			var top10 = result.OrderByDescending(x => x.Priority).Take(10);
 			return new PlanningPeriodSuggestions(now, top10.ToList());
 		}

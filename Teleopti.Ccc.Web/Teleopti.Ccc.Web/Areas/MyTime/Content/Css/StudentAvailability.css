@@ -15,6 +15,11 @@
 	margin-bottom: 5px;
 }
 
+#StudentAvailability-body-inner .calendarview-week li.date-is-selected .day-header,
+#StudentAvailability-body-inner .calendarview-week li.date-is-selected .day-content {
+	background: rgba(90, 205, 249, 0.3);
+}
+
 .student-availability-time-input > div {
 	margin: 5px;
 	max-width: 276px;
@@ -87,6 +92,9 @@
 	max-width: 100%;
 	overflow-x: auto;
 }
+.student-availability-body-container {
+	margin-bottom: 50px;
+}
 
 @media (max-width: 768px) {
 	.phone-form-availability .form-student-availability {
@@ -122,4 +130,8 @@
 	.overtime-availability-next-day-container .input-group {
 		float: right;
 	}
+}
+
+.availability-add-container {
+	position: relative;
 }

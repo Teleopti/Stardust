@@ -62,11 +62,11 @@ namespace Teleopti.Ccc.DBManager.Library
 			}
 		}
 
-		public void CreateLogin(string user, string pwd, bool iswingroup, bool isAzure)
+		public void CreateLogin(string user, string pwd, bool iswingroup, SqlVersion isAzure)
 		{
 			//TODO: check if windows group and run win logon script instead of "SQL Logins - Create.sql"
 			string sql;
-			if (isAzure)
+			if (isAzure.IsAzure)
 			{
 				if (iswingroup)
 					_masterExecuteSql.ExecuteNonQuery("PRINT 'Windows Logins cannot be added to Windows Azure for the momement'");

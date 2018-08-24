@@ -13,7 +13,7 @@ namespace Teleopti.Analytics.Portal.AnalyzerProxy
 {
 	public class ClientProxy : IClientProxy, IDisposable
 	{
-		private string _analyzerServer;
+		private Uri _analyzerServer;
 		private string _analyzerVirtualDirectory;
 		private readonly string _olapServer;
 		private readonly string _olapDatabase;
@@ -59,8 +59,8 @@ namespace Teleopti.Analytics.Portal.AnalyzerProxy
 			{
 				customSessionId = HttpContext.Current.Session.SessionID;
 			}
-			var builder = new UriBuilder(_analyzerServer);
-			cookies.Add(new Cookie("ASP.NET_SessionId", customSessionId, "/", builder.Uri.Host));
+
+			cookies.Add(new Cookie("ASP.NET_SessionId", customSessionId, "/", _analyzerServer.Host));
 			_az.CookieContainer = cookies;
 
 			_olapServer = olapServer;
@@ -137,7 +137,7 @@ namespace Teleopti.Analytics.Portal.AnalyzerProxy
 		{
 			// Example of url: http://servername/analyzer/services/analyzer2005.asmx
 			string[] urlSplit = _az.Url.Split("/".ToCharArray());
-			_analyzerServer = urlSplit[2];
+			_analyzerServer = new Uri(_az.Url);
 			_analyzerVirtualDirectory = urlSplit[3];
 		}
 
@@ -532,12 +532,12 @@ namespace Teleopti.Analytics.Portal.AnalyzerProxy
 				if (serviceUrl.Scheme == "https")
 					url = _az.GetSecureReportInstanceUrl(currentContext, reportInstance,
 																													 string.Format(CultureInfo.InvariantCulture, "{0}/{1}",
-																																				 new object[] { _analyzerServer, _analyzerVirtualDirectory }));
+																																				 new object[] { _analyzerServer.Authority, _analyzerVirtualDirectory }));
 				else
 				{
 					url = _az.GetReportInstanceUrl(currentContext, reportInstance,
 																					 string.Format(CultureInfo.InvariantCulture, "{0}/{1}",
-																												 new object[] { _analyzerServer, _analyzerVirtualDirectory }));
+																												 new object[] { _analyzerServer.Authority, _analyzerVirtualDirectory }));
 				}
 				Uri reportUri;
 				string logText;

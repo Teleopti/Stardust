@@ -438,7 +438,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 
 		public static void GoToForecasting()
 		{
-			GoToPage("wfm/#/forecasting");
+			GoToPage("wfm/#/forecast");
 		}
 
 		public static void GoToIntraday()

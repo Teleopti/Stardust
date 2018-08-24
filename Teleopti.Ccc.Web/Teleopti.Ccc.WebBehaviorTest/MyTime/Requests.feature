@@ -82,6 +82,7 @@ Scenario: No access to requests tab
          | Access To Text Requests        | False |
          | Access To Absence Requests     | False |
          | Access To Shift Trade Requests | False |
+         | Access To Overtime Requests    | False |
 	When I am viewing an application page
 	Then I should not be able to see requests link
 
@@ -92,6 +93,7 @@ Scenario: No access to requests page
          | Access To Text Requests        | False |
          | Access To Absence Requests     | False |
          | Access To Shift Trade Requests | False |
+		 | Access To Overtime Requests    | False |
 	And I am signed in
 	When I navigate to the requests page
 	Then I should see an error message

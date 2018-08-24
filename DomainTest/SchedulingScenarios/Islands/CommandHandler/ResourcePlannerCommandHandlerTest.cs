@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -17,14 +16,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 	[TestFixture(SUT.Scheduling)]
 	[TestFixture(SUT.DayOffOptimization)]
 	[DomainTest]
-	[Toggle(Toggles.ResourcePlanner_DayOffOptimizationIslands_47208)]
 	public abstract class ResourcePlannerCommandHandlerTest
 	{
 		private readonly SUT _sut;
 
 		public IntradayOptimizationCommandHandler IntradayOptimizationCommandHandler;
 		public SchedulingCommandHandler SchedulingCommandHandler;
-		public IDayOffOptimizationCommandHandler DayOffOptimizationCommandHandler;
+		public DayOffOptimizationCommandHandler DayOffOptimizationCommandHandler;
 		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
 		public SchedulingOptionsProvider SchedulingOptionsProvider;
 
@@ -88,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands.CommandHandler
 						});
 					}
 					var doCmd = new DayOffOptimizationCommand {Period = period, AgentsToOptimize = agents};
-					DayOffOptimizationCommandHandler.Execute(doCmd, null);
+					DayOffOptimizationCommandHandler.Execute(doCmd);
 					return doCmd;
 				default:
 					throw new NotSupportedException();

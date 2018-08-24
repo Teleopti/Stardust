@@ -5484,7 +5484,7 @@ Periods</comment>
     <value>百分比值必须在1到100之间</value>
   </data>
   <data name="YouCannotHaveABlankName" xml:space="preserve">
-    <value>您不能有空白名称</value>
+    <value>名称不能为空</value>
   </data>
   <data name="ManageAlarmSituations" xml:space="preserve">
     <value>管理告警状况</value>
@@ -14634,7 +14634,7 @@ Teleopti R&amp;D</value>
     <value>使用技能优先级验证</value>
   </data>
   <data name="DescriptionOfMaximumWorkdayRule" xml:space="preserve">
-    <value>做多连续工作日</value>
+    <value>最多连续工作日</value>
   </data>
   <data name="AccessManagement" xml:space="preserve">
     <value>访问</value>
@@ -14806,5 +14806,8 @@ Teleopti R&amp;D</value>
   </data>
   <data name="TimeInSecond" xml:space="preserve">
     <value>时间 (秒)</value>
+  </data>
+  <data name="NoHistoricalDataFoundForThisSkill" xml:space="preserve">
+    <value>当前技能没有历史数据。</value>
   </data>
 </root>

@@ -377,6 +377,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				return;
 			}
 
+			addRequestModel.model = createRequestViewModel();
 			addRequestModel.type = function () { return self.requestViewModelTypes.textRequest; };
 			self.requestViewModel(addRequestModel);
 			self.requestViewModel().model.IsPostingData(false);
@@ -389,6 +390,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			if (self.absenceRequestPermission() !== true) {
 				return;
 			}
+
+			addRequestModel.model = createRequestViewModel();
 			addRequestModel.type = function () { return self.requestViewModelTypes.absenceRequest; };
 
 			self.requestViewModel(addRequestModel);

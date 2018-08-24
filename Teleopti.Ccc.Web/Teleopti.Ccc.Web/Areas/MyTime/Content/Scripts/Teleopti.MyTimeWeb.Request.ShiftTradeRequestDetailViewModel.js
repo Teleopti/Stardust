@@ -468,13 +468,13 @@ function ShiftTradeRequestDetailedDayViewModel (data) {
 
 	var fromScheuduleLayers = data.From.ScheduleLayers;
 	var fromScheuduleLengthInMinutes = 0;
-	if(fromScheuduleLayers) {
+	if (fromScheuduleLayers && fromScheuduleLayers.length > 0) {
 		fromScheuduleLengthInMinutes = fromScheuduleLayers[fromScheuduleLayers.length - 1].ElapsedMinutesSinceShiftStart + fromScheuduleLayers[fromScheuduleLayers.length - 1].LengthInMinutes;
 	}
 
 	var toScheuduleLayers = data.To.ScheduleLayers;
 	var toScheuduleLengthInMinutes = 0;
-	if(toScheuduleLayers) {
+	if (toScheuduleLayers && toScheuduleLayers.length > 0) {
 		toScheuduleLengthInMinutes = toScheuduleLayers[toScheuduleLayers.length - 1].ElapsedMinutesSinceShiftStart + toScheuduleLayers[toScheuduleLayers.length - 1].LengthInMinutes;
 	}
 

@@ -6,7 +6,6 @@ using System.Windows.Forms.Integration;
 using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
@@ -25,36 +24,26 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
     public partial class SchedulerSplitters : BaseUserControl
     {
         private bool _useAvailability = true;
-        private bool _useStudentAvailability;
-        private bool _useRotation;
         private bool _usePreference = true;
         private bool _useSchedules = true;
         private readonly PinnedSkillHelper _pinnedSkillHelper;
 		IEnumerable<IPerson> _filteredPersons = new List<IPerson>();
-		private bool _schedulerRestrictionReport47013;
-		private bool _schedulerRestrictionReportToggleAll76224;
-
 
 		public SchedulerSplitters()
         {
             InitializeComponent();
             if (!DesignMode)
                 SetTexts();
-            chbStudenAvailability.Checked = false;
-            chbAvailability.Checked = true;
-            chbRotations.Checked = false;
-            chbPreferences.Checked = true;
-            chbSchedules.Checked = true;
             _pinnedSkillHelper = new PinnedSkillHelper();
 				tabSkillData.TabStyle = typeof(SkillTabRenderer);
 				tabSkillData.TabPanelBackColor = Color.FromArgb(199, 216, 237);
-			validationAlertsView1.AgentDoubleClick += ValidationAlertsView1AgentDoubleClick;
+			validationAlertsView1.AgentDoubleClick += validationAlertsView1AgentDoubleClick;
         }
 
 		public event EventHandler<System.ComponentModel.ProgressChangedEventArgs> RestrictionsNotAbleToBeScheduledProgress;
 		public event EventHandler<ValidationViewAgentDoubleClickEvenArgs> ValidationAlertsAgentDoubleClick;
 
-		private void ValidationAlertsView1AgentDoubleClick(object sender, ValidationViewAgentDoubleClickEvenArgs e)
+		private void validationAlertsView1AgentDoubleClick(object sender, ValidationViewAgentDoubleClickEvenArgs e)
 		{
 			OnValidationAlertsAgentDoubleClick(e);
 		}
@@ -120,11 +109,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			get { return _pinnedSkillHelper.PinnedPage(); }
 		}
 
-    	public AgentRestrictionGrid AgentRestrictionGrid
-    	{
-			get { return agentRestrictionGrid1; }
-    	}
-
 		public RestrictionSchedulingOptions SchedulingOptions
 		{
 			get
@@ -133,53 +117,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				{
 					UseAvailability = _useAvailability,
 					UsePreferences = _usePreference,
-					UseStudentAvailability = _useStudentAvailability,
-					UseRotations = _useRotation,
 					UseScheduling = _useSchedules
 				};
 				return options;
 			}
 		}
 
-		[RemoveMeWithToggle(Toggles.Scheduler_RestrictionReportToggleAll_76224)]
-		public bool SchedulerRestrictionReportToggleAll76224 => _schedulerRestrictionReportToggleAll76224;
-
-		private void chbAvailability_CheckedChanged(object sender, EventArgs e)
-        {
-            _useAvailability = chbAvailability.Checked;
-            RecalculateRestrictions();
-        }
-
-        private void chbRotations_CheckedChanged(object sender, EventArgs e)
-        {
-            _useRotation = chbRotations.Checked;
-            RecalculateRestrictions();
-        }
-
-        private void chbPreferences_CheckedChanged(object sender, EventArgs e)
-        {
-            _usePreference = chbPreferences.Checked;
-            RecalculateRestrictions();
-        }
-
-        private void chbStudenAvailability_CheckedChanged(object sender, EventArgs e)
-        {
-            _useStudentAvailability = chbStudenAvailability.Checked;
-            RecalculateRestrictions();
-        }
-
-        private void chbSchedules_CheckedChanged(object sender, EventArgs e)
-        {
-            _useSchedules = chbSchedules.Checked;
-            RecalculateRestrictions();
-        }
-
-        public void RecalculateRestrictions()
-        {
-			agentRestrictionGrid1.LoadData(SchedulingOptions);
-        }
-
-        private void PinnedToolStripMenuItemClick(object sender, EventArgs e)
+        private void pinnedToolStripMenuItemClick(object sender, EventArgs e)
         {
             var tab = tabSkillData.SelectedTab;
             
@@ -247,42 +191,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		public void ReselectSelectedAgentNotPossibleToSchedule()
 		{
-			if (_schedulerRestrictionReport47013)
-			{
-				var newPanel = (AgentsNotPossibleToSchedule)teleoptiLessIntellegentSplitContainerView.Panel1.Controls[0];
-				newPanel.ReselectSelected();
-			}
+			agentsNotPossibleToSchedule1.ReselectSelected();
 		}
 		public void SetSelectedAgentsOnAgentsNotPossibleToSchedule(IEnumerable<IPerson> selectedPersons, DateOnlyPeriod selectedDates, AgentRestrictionsDetailView detailView)
 		{
-			if (_schedulerRestrictionReport47013)
-			{
-				var newPanel = (AgentsNotPossibleToSchedule)teleoptiLessIntellegentSplitContainerView.Panel1.Controls[0];
-				newPanel.SetSelected(selectedPersons, selectedDates, detailView);
-			}
+			agentsNotPossibleToSchedule1.SetSelected(selectedPersons, selectedDates, detailView);
 		}
-		[RemoveMeWithToggle(Toggles.Scheduler_RestrictionReport_47013)]
-		public void InsertRestrictionNotAbleToBeScheduledReportModel(RestrictionNotAbleToBeScheduledReport reportModel, bool schedulerRestrictionReport47013, bool schedulerRestrictionReportToggleAll76224)
+
+		public void InsertRestrictionNotAbleToBeScheduledReportModel(RestrictionNotAbleToBeScheduledReport reportModel)
 		{
-			_schedulerRestrictionReport47013 = schedulerRestrictionReport47013;
-			_schedulerRestrictionReportToggleAll76224 = schedulerRestrictionReportToggleAll76224;
-			var oldPanel = (TableLayoutPanel)teleoptiLessIntellegentSplitContainerView.Panel1.Controls[1];
-			var newPanel = (AgentsNotPossibleToSchedule)teleoptiLessIntellegentSplitContainerView.Panel1.Controls[0];
-			if (schedulerRestrictionReport47013)
-			{	
-				oldPanel.Dock = DockStyle.None;
-				oldPanel.Visible = false;
-				newPanel.Dock = DockStyle.Fill;
-				newPanel.Visible = true;
-				newPanel.InitAgentsNotPossibleToSchedule(reportModel, this);
-			}
-			else
-			{
-				newPanel.Dock = DockStyle.None;
-				newPanel.Visible = false;
-				oldPanel.Dock = DockStyle.Fill;
-				oldPanel.Visible = true;
-			}
+			agentsNotPossibleToSchedule1.InitAgentsNotPossibleToSchedule(reportModel, this);
 		}
 
 		public void DisableViewShiftCategoryDistribution()

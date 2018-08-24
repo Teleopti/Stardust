@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new []{agent}, assesAndRestrictions, skillDays);
 			var optPrefs = new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag(), UseAvailabilities = true, AvailabilitiesValue = 1} };
 
-			Target.Execute(period, new[] { agent }, optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { }, new NoOptimizationCallback());
+			Target.Execute(period, new[] { agent }, optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new NoOptimizationCallback());
 
 			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff()
 				.Should().Be.False();//saturday
@@ -113,13 +113,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 			Target.Execute(period, new[] {agent}, optPrefs,
 				new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()),
-				(o, args) => { }, new NoOptimizationCallback());
+				new NoOptimizationCallback());
 
 			stateHolder.Schedules[agent].ScheduledDay(date.AddDays(6)).HasDayOff()
 				.Should().Be.EqualTo(agentShouldHaveDayOff);
 		}
 
-		public DayOffOptimizationRestrictionDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerLessResourcesXXL74915) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerLessResourcesXXL74915)
+		public DayOffOptimizationRestrictionDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerXxl76496) : base(seperateWebRequest, resourcePlannerXxl76496)
 		{
 		}
 	}

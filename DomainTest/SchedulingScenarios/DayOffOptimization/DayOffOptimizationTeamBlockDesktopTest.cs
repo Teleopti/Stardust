@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				Extra = {UseTeamSameDaysOff = true, UseTeams = true, TeamGroupPage = new GroupPageLight("_", GroupPageType.RuleSetBag)}
 			};
 
-			Target.Execute(period, agents, optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { }, new NoOptimizationCallback());
+			Target.Execute(period, agents, optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new NoOptimizationCallback());
 
 			var dayOffs = stateHolder.Schedules.SchedulesForPeriod(period, agents.ToArray()).Where(x => x.HasDayOff()).Select(x => x.PersonAssignment());
 			var dayOffsAgent1 = dayOffs.Where(x => x.Person.Equals(agents.First())).Select(x => x.Date);
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				Extra = { UseTeamSameDaysOff = true, UseTeams = true, TeamGroupPage = new GroupPageLight("Contract", GroupPageType.Contract, "Contract")}
 			};
 
-			Target.Execute(period, agents, optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { }, new NoOptimizationCallback());
+			Target.Execute(period, agents, optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new NoOptimizationCallback());
 		}
 
 		[Test]
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				Extra = { UseBlockSameShift = true, UseTeamBlockOption = true, BlockTypeValue = BlockFinderType.BetweenDayOff}
 			};
 
-			Target.Execute(period, new[] { agent }, optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { }, new NoOptimizationCallback());
+			Target.Execute(period, new[] { agent }, optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new NoOptimizationCallback());
 
 			stateHolder.Schedules[agent].ScheduledDay(skillDays1[5].CurrentDate).PersonAssignment().AssignedWithDayOff(dayOffTemplate).Should().Be.True();
 			stateHolder.Schedules[agent].ScheduledDay(skillDays1[6].CurrentDate).PersonAssignment().AssignedWithDayOff(dayOffTemplate).Should().Be.True();
@@ -269,7 +269,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				ConsecutiveWorkdaysValue = new MinMax<int>(2, 6)
 			};
 
-			Target.Execute(period, new[] { agents[0] }, optPrefs, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences), (o, args) => { }, new NoOptimizationCallback());
+			Target.Execute(period, new[] { agents[0] }, optPrefs, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences), new NoOptimizationCallback());
 
 			var consecutiveDaysOff = 0;
 			for (var day = 0; day < 21; day ++)
@@ -288,7 +288,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			}
 		}
 
-		public DayOffOptimizationTeamBlockDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerLessResourcesXXL74915) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerLessResourcesXXL74915)
+		public DayOffOptimizationTeamBlockDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerXxl76496) : base(seperateWebRequest, resourcePlannerXxl76496)
 		{
 		}
 	}

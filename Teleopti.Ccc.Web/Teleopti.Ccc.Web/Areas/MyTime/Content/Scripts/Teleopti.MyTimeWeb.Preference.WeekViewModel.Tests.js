@@ -1,12 +1,7 @@
-﻿
+﻿$(document).ready(function() {
+	module('Teleopti.MyTimeWeb.Preference.WeekViewModel');
 
-$(document).ready(function () {
-
-	 module("Teleopti.MyTimeWeb.Preference.WeekViewModel");
-
-	 test("should summarize possible weekly contract time", function () {
-	
-
+	test('should summarize possible weekly contract time', function() {
 		var viewModelDay1 = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 		var viewModelDay2 = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 		var weekViewModel = new Teleopti.MyTimeWeb.Preference.WeekViewModel();
@@ -26,9 +21,7 @@ $(document).ready(function () {
 		equal(weekViewModel.PossibleResultWeeklyContractTimeMinutesUpper(), 20 * 60);
 	});
 
-	 test("should format possible weekly contract time", function () {
-	
-
+	test('should format possible weekly contract time', function() {
 		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 		var weekViewModel = new Teleopti.MyTimeWeb.Preference.WeekViewModel();
 		viewModelDay.PossibleContractTimeMinutesLower(100 * 60 + 30);
@@ -37,25 +30,22 @@ $(document).ready(function () {
 		weekViewModel.DayViewModels.push(viewModelDay);
 
 		expect(2);
-		equal(weekViewModel.PossibleResultWeeklyContractTimeLower(), "100:30");
-		equal(weekViewModel.PossibleResultWeeklyContractTimeUpper(), "160:05");
+		equal(weekViewModel.PossibleResultWeeklyContractTimeLower(), '100:30');
+		equal(weekViewModel.PossibleResultWeeklyContractTimeUpper(), '160:05');
 	});
 
-	 test("should read weekly work time setting", function () {
-	
-
+	test('should read weekly work time setting', function() {
 		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel();
 		var weekViewModel = new Teleopti.MyTimeWeb.Preference.WeekViewModel();
-		viewModelDay.Date = "2014-05-28";
+		viewModelDay.Date = '2014-05-28';
 		weekViewModel.DayViewModels.push(viewModelDay);
 		weekViewModel.readWeeklyWorkTimeSettings({
-			 MaxWorkTimePerWeekMinutes: 360,
-			 MinWorkTimePerWeekMinutes:120,
+			MaxWorkTimePerWeekMinutes: 360,
+			MinWorkTimePerWeekMinutes: 120
 		});
 
 		expect(2);
 		equal(weekViewModel.MaxTimePerWeekMinutesSetting(), 360);
 		equal(weekViewModel.MinTimePerWeekMinutesSetting(), 120);
 	});
-
 });

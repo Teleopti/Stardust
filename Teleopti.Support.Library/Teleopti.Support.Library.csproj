@@ -68,6 +68,7 @@
     <Compile Include="Config\SearchReplaceCollection.cs" />
     <Compile Include="Config\Parser.cs" />
     <Compile Include="Config\RefreshConfigFile.cs" />
+    <Compile Include="Config\SettingsPreparer.cs" />
     <Compile Include="Config\SetToggleModeCommand.cs" />
     <Compile Include="DatabaseType.cs" />
     <Compile Include="Extensions.cs" />

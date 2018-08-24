@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		}
 
 		[Test]
-		public void NewPersonPeriodWithLaterStart_HandlePersonPeriodChanged_NoNewPersonPeriodAddedInAnalytics()
+		public void NewPersonPeriodWithLaterStart_HandlePersonPeriodChanged_NewPersonPeriodAddedInAnalytics()
 		{
 			basicSetup();
 
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			});
 
 			// Then
-			Assert.AreEqual(0, PersonPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			Assert.AreEqual(1, PersonPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
 		}
 
 		[Test]
@@ -337,7 +337,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		}
 
 		[Test]
-		public void NewPersonPeriodOnDayAfterEndAnalyticsDate_HandlePersonPeriodChanged_NoNewPersonPeriodAddedInAnalytics()
+		public void NewPersonPeriodOnDayAfterEndAnalyticsDate_HandlePersonPeriodChanged_NewPersonPeriodAddedInAnalytics()
 		{
 			basicSetup();
 
@@ -353,8 +353,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			});
 
 			// Then
-			Assert.AreEqual(0, PersonPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
-			EventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonCollectionChangedEvent)).Should().Be.EqualTo(0);
+			Assert.AreEqual(1, PersonPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			EventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonCollectionChangedEvent)).Should().Be.EqualTo(1);
 			EventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodSkillsChangedEvent)).Should().Be.EqualTo(0);
 		}
 

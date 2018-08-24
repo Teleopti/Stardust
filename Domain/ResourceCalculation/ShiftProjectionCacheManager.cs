@@ -30,10 +30,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    public ShiftProjectionCache ShiftProjectionCacheFromShift(IEditableShift shift, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
 	    {
 		    var workShift = _workShiftFromEditableShift.Convert(shift, dateOnlyAsDateTimePeriod.DateOnly,dateOnlyAsDateTimePeriod.TimeZone());
-		    var ret = new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker);
-			ret.SetDate(dateOnlyAsDateTimePeriod);
-
-		    return ret;
+		    return new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
 	    }
 
 	    public IList<ShiftProjectionCache> ShiftProjectionCachesFromRuleSets(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod, IEnumerable<IWorkShiftRuleSet> ruleSets, bool checkExcluded)

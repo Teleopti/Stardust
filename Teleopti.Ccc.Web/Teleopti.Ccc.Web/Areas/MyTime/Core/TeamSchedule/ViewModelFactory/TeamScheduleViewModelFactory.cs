@@ -121,8 +121,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 				personIds.Remove(currentUser.Id.GetValueOrDefault());
 			}
 
-			var personScheduleDays = _scheduleDayReadModelFinder.ForPersons(data.ScheduleDate, personIds, data.Paging,
-				data.TimeFilter, data.TimeSortOrder);
+			var personScheduleDays = _scheduleDayReadModelFinder.ForTeamSchedules(data.ScheduleDate, personIds, data.Paging,
+				data.TimeFilter);
 			var resultPersonId = personScheduleDays.Select(p => p.PersonId);
 			var people = _personRep.FindPeople(resultPersonId).ToLookup(p => p.Id.GetValueOrDefault());
 			var schedulesWithPersons = from s in personScheduleDays

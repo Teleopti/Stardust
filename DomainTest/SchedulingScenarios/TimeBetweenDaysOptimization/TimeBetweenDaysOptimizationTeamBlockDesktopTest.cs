@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TimeBetweenDaysOptimizatio
 {
 	[DomainTest]
 	[UseIocForFatClient]
-	public class TimeBetweenDaysOptimizationTeamBlockDesktopTest
+	public class TimeBetweenDaysOptimizationTeamBlockDesktopTest : TimeBetweenDaysOptimizationScenario
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public OptimizationDesktopExecuter Target;
@@ -265,6 +265,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TimeBetweenDaysOptimizatio
 			{
 				Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent1, agent2 }, period, optPreferences, null);
 			});
+		}
+
+		public TimeBetweenDaysOptimizationTeamBlockDesktopTest(bool resourcePlannerXXL76496) : base(resourcePlannerXXL76496)
+		{
 		}
 	}
 }

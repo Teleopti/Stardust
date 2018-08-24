@@ -28,6 +28,13 @@ namespace Teleopti.Ccc.Domain.Cascading
 			return subskillHash() == otherSkillSet.subskillHash();
 		}
 
+		public bool ContainsSameSkills(IEnumerable<ISkill> primarySkills, IEnumerable<SubSkillsWithSameIndex> cascadingSubSkills)
+		{
+			return new HashSet<ISkill>(PrimarySkills).SetEquals(new HashSet<ISkill>(primarySkills)) &&
+				   new HashSet<ISkill>(SubSkillsWithSameIndex.SelectMany(x => x)).SetEquals(
+					   new HashSet<ISkill>(cascadingSubSkills.SelectMany(x => x)));
+		}
+
 		private string subskillHash()
 		{
 			var subHash = new StringBuilder();

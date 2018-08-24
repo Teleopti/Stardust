@@ -32,8 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
 		public void Execute(IEnumerable<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
 			SchedulingOptions schedulingOptions,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
-			IOptimizationPreferences optimizationPreferences,
-			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
+			IOptimizationPreferences optimizationPreferences)
 		{
 			var solverContainers =
 				_optimizerHelper.CreateSmartDayOffSolverContainers(matrixOriginalStateContainers,
@@ -95,17 +94,16 @@ namespace Teleopti.Ccc.Domain.Optimization.ClassicLegacy
 							var rollbackService = new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState, _scheduleDayChangeCallback,
 								new ScheduleTagSetter(
 									KeepOriginalScheduleTag.Instance));
-							rollbackMatrixChanges(originalStateContainer, rollbackService, resourceOptimizerPersonOptimized, optimizationPreferences.Advanced.RefreshScreenInterval);
+							rollbackMatrixChanges(originalStateContainer, rollbackService, optimizationPreferences.Advanced.RefreshScreenInterval);
 						}
 					}
 				}
 			}
 		}
 
-		private void rollbackMatrixChanges(IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, ISchedulePartModifyAndRollbackService rollbackService, Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized, int screenRefreshRate)
+		private static void rollbackMatrixChanges(IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, ISchedulePartModifyAndRollbackService rollbackService, int screenRefreshRate)
 		{
 			var e = new ResourceOptimizerProgressEventArgs(0, 0, Resources.RollingBackSchedulesFor + " " + matrixOriginalStateContainer.ScheduleMatrix.Person.Name, screenRefreshRate);
-			resourceOptimizerPersonOptimized?.Invoke(this, e);
 			if (e.Cancel) return;
 
 			rollbackService.ClearModificationCollection();

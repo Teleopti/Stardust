@@ -182,6 +182,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			suggestedPeriod.PeriodType.Should().Be.EqualTo(SchedulePeriodType.Week);
 		}
 
+		[Test]
+		public void ShouldNotShowDaySuggestions()
+		{
+			var addedPeople = SetupPersonsInOrganizationWithContract(new Func<SchedulePeriod>[]
+			{
+				() => new SchedulePeriod(new DateOnly(2017,06,12), SchedulePeriodType.Day, 1),
+			});
+			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
+			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<Guid> { addedPeople.First().Id.GetValueOrDefault() });
+
+			var suggestedPeriod = planningPeriodSuggestions.Default();
+			suggestedPeriod.PeriodType.Should().Not.Be.EqualTo(SchedulePeriodType.Day);
+		}
+
 
 		private IList<IPerson> SetupPersonsInOrganizationWithContract(IEnumerable<Func<SchedulePeriod>> schedulePeriodTypes)
 		{

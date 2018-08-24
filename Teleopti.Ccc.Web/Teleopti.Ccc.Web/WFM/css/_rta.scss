@@ -108,6 +108,10 @@
 	background-color: $green-100;
   }
 
+  md-checkbox.marked .md-icon {
+	background-color: #66c2ff;
+  }
+
   &.agents {
 
 	.organization-picker {
@@ -115,10 +119,6 @@
 		padding-left: $full-padding;
 		padding-right: $full-padding;
 	  }
-	}
-
-	md-checkbox.marked .md-icon {
-	  background-color: #66c2ff;
 	}
 
 	.timeline {
@@ -333,6 +333,82 @@
 	.remove-approved-period {
 	  cursor: pointer;
 	  margin: 0 8px;
+	}
+  }
+  
+  &.historical-overview {
+	.cell-header {
+	  text-align: center; 
+	  font-size: 9px; 
+	  max-width: 30px; 
+	  width: 30px; 
+	  //overflow: hidden; 
+	  padding-left:0; 
+	  padding-right:0;
+	}
+	
+	.cell {
+	  padding: 0;
+	  position: relative;
+	  max-width: 30px;
+	  width: 30px;
+	  overflow: hidden;
+
+	  .late-for-work-flag {
+		background-image: linear-gradient(225deg, orange, orange 5px, transparent 5px, transparent);
+		position: absolute;
+		z-index: 1;
+		height: 7px;
+		width: 100%;
+	  }
+
+	  .square {
+		margin: 2px;
+		border-radius: .25em;
+		text-align: center;
+		padding: 3px 0px;
+		a {
+		  color: inherit;
+		}
+	  }
+	}
+
+	.label.late-for-work{
+	  background-color: orange;
+	}
+
+	.panel.material-depth-1.card-panel{
+	  width: 900px;
+	}
+
+	@media screen and (max-width: 960px) {
+	  .panel.material-depth-1.card-panel {
+		width: 100%;
+	  }
+	}
+
+	.card-panel-header-wrapper{
+	  &.left-border {
+		border-left: 10px solid #66c2ff;
+	  }
+	}
+
+	.adherence-bar-container{
+	  background-color: #f1f1f1;
+	  float:left;
+	  margin-top:5px;
+	  width: 75%;
+
+	  .adherence-bar{
+		background-color:#3c9ee5;
+		height:10px;
+	  }
+	}
+
+	.adherence-value{
+	  float:left;
+	  margin-left: 6px;
+	  width: 10%;
 	}
   }
 }

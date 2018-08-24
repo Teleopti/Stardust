@@ -5,21 +5,21 @@
 		.module('wfm.rta')
 		.controller('RtaHistoricalOverviewController', RtaHistoricalOverviewController);
 
-	RtaHistoricalOverviewController.$inject = ['$filter', '$stateParams', '$translate', 'rtaStateService', 'rtaDataService'];
+	RtaHistoricalOverviewController.$inject = ['$filter', '$stateParams', '$state', '$http', '$translate', 'rtaStateService', 'rtaDataService'];
 
-	function RtaHistoricalOverviewController($filter, $stateParams, $translate, rtaStateService, rtaDataService) {
+	function RtaHistoricalOverviewController($filter, $stateParams, $state, $http, $translate, rtaStateService, rtaDataService) {
 
 		var vm = this;
+
 		rtaStateService.setCurrentState($stateParams);
 
 		rtaDataService.load().then(function (data) {
 			buildSites(data.organization);
+			loadCards();
 		});
 
 		function buildSites(organization) {
-			vm.sites = [];
-
-			organization.forEach(function (site) {
+			vm.sites = organization.map(function (site) {
 				var siteModel = {
 					Id: site.Id,
 					Name: site.Name,
@@ -51,410 +51,95 @@
 					});
 				});
 
-				vm.sites.push(siteModel);
+				return siteModel;
 			});
 
 			updateOrganizationPicker();
 		}
-		
+
 		function updateOrganizationPicker() {
 			vm.organizationPickerSelectionText = rtaStateService.organizationSelectionText();
-			vm.organizationPickerClearEnabled = (vm.sites || []).some(function (site) {
+			vm.clearEnabled = (vm.sites || []).some(function (site) {
 				return site.isChecked || site.isMarked;
 			});
 		}
-		
-		vm.ToneAdherencePercentage = function (percentage){
+
+		vm.closeOrganizationPicker = function () {
+			if (!vm.organizationPickerOpen)
+				return;
+			vm.organizationPickerOpen = false;
+			loadCards();
+		};
+
+		function loadCards() {
+
+			var params = rtaStateService.historicalOverviewParams();
+			var noParams = !(params.siteIds.length || params.teamIds.length);
+			if (noParams) {
+				vm.cards = [];
+				return;
+			}
+			
+			$http.get('../api/HistoricalOverview/Load', {
+				params: params
+			}).then(function (response) {
+				buildCards(response.data);
+			});
+		}
+
+		function buildCards(data) {
+			vm.cards = data.map(function (card) {
+				return {
+					Name: card.Name,
+					toggle: function () {
+						this.isOpen = !this.isOpen;
+					},
+					Agents: buildAgents(card.Agents || [])
+				};
+			});
+		}
+
+		function buildAgents(agents) {
+			return agents.map(function (agent) {
+				return {
+					Name: agent.Name,
+					IntervalAdherence: agent.IntervalAdherence,
+					Days: buildDays(agent.Days, agent.Id),
+					LateForWork: {
+						Count: agent.LateForWork.Count,
+						TotalMinutes: agent.LateForWork.TotalMinutes
+					}
+				};
+			});
+		}
+
+		function buildDays(days, personId) {
+			return days.map(function (day) {
+				return {
+					DisplayDate: day.DisplayDate,
+					Adherence: day.Adherence,
+					Color: colorAdherence(day.Adherence),
+					HistoricalAdherenceUrl: $state.href('rta-historical', {personId: personId, date: day.Date}),
+					WasLateForWork: day.WasLateForWork
+				};
+			});
+		}
+
+		function colorAdherence(percentage) {
 			var light = 40 + ((percentage / 100) * 60);
 			return 'hsl(0,0%,' + light + '%)';
-		};
-		
-		vm.applyOrganizationSelection = function () {
-			vm.organizationPickerOpen = false;
-			vm.groupings = [
-				{
-					Name: 'Denver/Avalanche',
-					AdherencePercentage: 74,
-					Color: '#EE8F7D',
-					agentsAdherence: [{
-						Name: 'Andeen Ashley',
-						Adherence: [
-							{
-								Date: '27/12',
-								AdherencePercentage: 100,
-								Color: '#FFC285',
-								WasLateForWork: true
-							},
-							{
-								Date: '2/5',
-								AdherencePercentage: 90,
-								Color: '#FFC285'
-							},
-							{
-								Date: '3/5',
-								AdherencePercentage: 85,
-								Color: '#FFC285'
-							},
-							{
-								Date: '4/5',
-								AdherencePercentage: 88,
-								Color: '#FFC285'
-							},
-							{
-								Date: '5/5',
-								AdherencePercentage: 30,
-								Color: '#EE8F7D',
-								WasLateForWork: true
-							},
-							{
-								Date: '6/5',
-								AdherencePercentage: 70,
-								Color: '#EE8F7D'
-							},
-							{
-								Date: '7/5',
-								AdherencePercentage: 72,
-								Color: '#EE8F7D'
-							}
-						],
-						PeriodAdherence: {
-							Color: '#EE8F7D',
-							Value: 73
-						},
-						LateForWork:
-							{
-								Count: 2,
-								TotalMinutes: 24
-							}
-					},
-						{
-							Name: 'Aneedn Anna',
-							Adherence: [
-								{
-									Date: '1/5',
-									AdherencePercentage: 70,
-									Color: '#EE8F7D'
-								},
-								{
-									Date: '2/5',
-									AdherencePercentage: 56,
-									Color: '#EE8F7D'
-								},
-								{
-									Date: '3/5',
-									AdherencePercentage: 83,
-									Color: '#FFC285',
-									WasLateForWork: true
-								},
-								{
-									Date: '4/5',
-									AdherencePercentage: 71,
-									Color: '#EE8F7D'
-								},
-								{
-									Date: '5/5',
-									AdherencePercentage: 95,
-									Color: '#C2E085'
-								},
-								{
-									Date: '6/5',
-									AdherencePercentage: 77,
-									Color: '#EE8F7D'
-								},
-								{
-									Date: '7/5',
-									AdherencePercentage: 84,
-									Color: '#FFC285'
-								}
-							],
-							PeriodAdherence: {
-								Color: '#EE8F7D',
-								Value: 77
-							},
-							LateForWork:
-								{
-									Count: 1,
-									TotalMinutes: 10
-								}
-						},
-						{
-							Name: 'Aleed Jane',
-							Adherence: [
-								{
-									Date: '1/5',
-									AdherencePercentage: 83,
-									Color: '#FFC285'
-								},
-								{
-									Date: '2/5',
-									AdherencePercentage: 95,
-									Color: '#C2E085',
-									WasLateForWork: true
-								},
-								{
-									Date: '3/5',
-									AdherencePercentage: 78,
-									Color: '#EE8F7D'
-								},
-								{
-									Date: '4/5',
-									AdherencePercentage: 78,
-									Color: '#EE8F7D'
-								},
-								{
-									Date: '5/5',
-									AdherencePercentage: 98,
-									Color: '#C2E085',
-									WasLateForWork: true
-								},
-								{
-									Date: '6/5',
-									AdherencePercentage: 95,
-									Color: '#C2E085',
-									WasLateForWork: true
-								},
-								{
-									Date: '7/5',
-									AdherencePercentage: 85,
-									Color: '#FFC285'
-								}
-							],
-							PeriodAdherence: {
-								Color: '#EE8F7D',
-								Value: 75
-							},
-							LateForWork:
-								{
-									Count: 3,
-									TotalMinutes: 42
-								}
-						}
+		}
 
-					]
-				},
-				{
-					Name: 'London/Team Preferences',
-					AdherencePercentage: 84,
-					Color: '#FFC285',
-					agentsAdherence: [{
-						Name: 'Bndeen Ashley',
-						Adherence: [
-							{
-								Date: '1/5',
-								AdherencePercentage: 84,
-								Color: '#FFC285',
-								WasLateForWork: true
-							},
-							{
-								Date: '2/5',
-								AdherencePercentage: 95,
-								Color: '#C2E085'
-							},
-							{
-								Date: '3/5',
-								AdherencePercentage: 88,
-								Color: '#FFC285'
-							},
-							{
-								Date: '4/5',
-								AdherencePercentage: 88,
-								Color: '#FFC285'
-							},
-							{
-								Date: '5/5',
-								AdherencePercentage: 87,
-								Color: '#FFC285',
-								WasLateForWork: true
-							},
-							{
-								Date: '6/5',
-								AdherencePercentage: 72,
-								Color: '#EE8F7D'
-							},
-							{
-								Date: '7/5',
-								AdherencePercentage: 79,
-								Color: '#EE8F7D'
-							}
-						],
-						PeriodAdherence: {
-							Color: '#FFC285',
-							Value: 82
-						},
-						LateForWork:
-							{
-								Count: 2,
-								TotalMinutes: 8
-							}
-					},
-						{
-							Name: 'Bneedn Anna',
-							Adherence: [
-								{
-									Date: '1/5',
-									AdherencePercentage: 88,
-									Color: '#FFC285'
-								},
-								{
-									Date: '2/5',
-									AdherencePercentage: 99,
-									Color: '#C2E085'
-								},
-								{
-									Date: '3/5',
-									AdherencePercentage: 82,
-									Color: '#FFC285'
-								},
-								{
-									Date: '4/5',
-									AdherencePercentage: 81,
-									Color: '#FFC285'
-								},
-								{
-									Date: '5/5',
-									AdherencePercentage: 72,
-									Color: '#EE8F7D'
-								},
-								{
-									Date: '6/5',
-									AdherencePercentage: 94,
-									Color: '#C2E085'
-								},
-								{
-									Date: '7/5',
-									AdherencePercentage: 88,
-									Color: '#FFC285',
-									WasLateForWork: true
-								}
-							],
-							PeriodAdherence: {
-								Color: '#FFC285',
-								Value: 82
-							},
-							LateForWork:
-								{
-									Count: 1,
-									TotalMinutes: 10
-								}
-						},
-						{
-							Name: 'Blanca Janedsadassdfasfdsafasdfasf',
-							Adherence: [
-								{
-									Date: '1/5',
-									AdherencePercentage: 82,
-									Color: '#FFC285'
-								},
-								{
-									Date: '2/5',
-									AdherencePercentage: 82,
-									Color: '#FFC285'
-								},
-								{
-									Date: '3/5',
-									AdherencePercentage: 70,
-									Color: '#EE8F7D'
-								},
-								{
-									Date: '4/5',
-									AdherencePercentage: 87,
-									Color: '#FFC285'
-								},
-								{
-									Date: '5/5',
-									AdherencePercentage: 90,
-									Color: '#FFC285',
-									WasLateForWork: true
-								},
-								{
-									Date: '6/5',
-									AdherencePercentage: 88,
-									Color: '#FFC285'
-								},
-								{
-									Date: '7/5',
-									AdherencePercentage: 85,
-									Color: '#FFC285'
-								}
-							],
-							PeriodAdherence: {
-								Color: '#FFC285',
-								Value: 88
-							},
-							LateForWork:
-								{
-									Count: 1,
-									TotalMinutes: 5
-								}
-						}
-
-					]
-				},
-				{
-					Name: 'Barcelona/Red',
-					AdherencePercentage: 94,
-					Color: '#C2E085',
-					agentsAdherence: [{
-						Name: 'Cndeen Ashley',
-						Adherence: [
-							{
-								Date: '1/5',
-								AdherencePercentage: 92,
-								Color: '#C2E085',
-								WasLateForWork: true
-							},
-							{
-								Date: '2/5',
-								AdherencePercentage: 97,
-								Color: '#C2E085'
-							},
-							{
-								Date: '3/5',
-								AdherencePercentage: 94,
-								Color: '#C2E085'
-							},
-							{
-								Date: '4/5',
-								AdherencePercentage: 98,
-								Color: '#C2E085'
-							},
-							{
-								Date: '5/5',
-								AdherencePercentage: 99,
-								Color: '#C2E085'
-							},
-							{
-								Date: '6/5',
-								AdherencePercentage: 94,
-								Color: '#C2E085'
-							},
-							{
-								Date: '7/5',
-								AdherencePercentage: 99,
-								Color: '#C2E085'
-							}
-						],
-						PeriodAdherence: {
-							Color: '#C2E085',
-							Value: 94
-						},
-						LateForWork:
-							{
-								Count: 1,
-								TotalMinutes: 3
-							}
-					}
-					]
-				}
-			];
+		vm.toggleOrganizationPicker = function () {
+			vm.organizationPickerOpen = !vm.organizationPickerOpen;
 		};
 
 		vm.clearOrganizationSelection = function () {
 			rtaStateService.deselectOrganization();
 			updateOrganizationPicker();
 		};
-		
+
 		vm.goToAgents = rtaStateService.goToAgents;
 		vm.goToOverview = rtaStateService.goToOverview;
-	}
+		}
 })();

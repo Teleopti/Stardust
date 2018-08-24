@@ -1,7 +1,7 @@
 ﻿Teleopti.MyTimeWeb.Schedule.NewTeamScheduleViewModel = function(
 	filterChangedCallback,
 	loadGroupAndTeams,
-	setDraggableScrollBlockOnDesktop
+	readScheduleDataCallback
 ) {
 	var self = this,
 		constants = Teleopti.MyTimeWeb.Common.Constants,
@@ -10,6 +10,7 @@
 		getTextColoFn = Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor,
 		timeLineOffset = 50,
 		minPixelsToDisplayTitle = 30,
+		defaultFilterTime = '00:00',
 		rawTimeline = [];
 
 	self.isHostAMobile = Teleopti.MyTimeWeb.Common.IsHostAMobile();
@@ -23,32 +24,44 @@
 	self.selectedDate = ko.observable(moment());
 	self.displayDate = ko.observable(self.selectedDate().format(dateOnlyFormat));
 	self.availableTeams = ko.observableArray();
+	self.selectedTeamIds = [];
+	self.defaultTeamId = '';
 	self.selectedTeam = ko.observable();
 	self.selectedTeamName = ko.observable();
 	self.loadGroupAndTeams = loadGroupAndTeams;
 	self.isTeamsAndGroupsLoaded = ko.observable(false);
-	self.selectedTeamIds = [];
-	self.defaultTeamId = '';
 	self.scheduleContainerHeight = ko.observable(0);
 	self.timeLines = ko.observableArray();
 	self.mySchedule = ko.observable();
 	self.teamSchedules = ko.observableArray();
 	self.agentNames = ko.observableArray();
+
 	self.filterChangedCallback = filterChangedCallback;
 	self.selectedDateSubscription = null;
 	self.selectedTeamSubscription = null;
 	self.currentPageNum = ko.observable(1);
 	self.totalPageNum = ko.observable(0);
 	self.totalAgentCount = ko.observable(0);
+	self.showOnlyDayOff = ko.observable(false);
 	self.isPanelVisible = ko.observable(false);
 	self.isScrollbarVisible = ko.observable(false);
-	self.showOnlyDayOff = ko.observable(false);
 	self.searchNameText = ko.observable('');
 	self.hasFiltered = ko.observable(false);
+	self.hasTimeFiltered = ko.observable(false);
 	self.emptySearchResult = ko.observable(false);
 	self.isAgentScheduleLoaded = ko.observable(false);
 	self.isLoadingMoreAgentSchedules = false;
+
+	self.showStartTimeStart = ko.observable(true);
+	self.startTimeStart = ko.observable(defaultFilterTime);
+	self.startTimeEnd = ko.observable(defaultFilterTime);
+	self.showEndTimeStart = ko.observable(true);
+	self.endTimeStart = ko.observable(defaultFilterTime);
+	self.endTimeEnd = ko.observable(defaultFilterTime);
+
 	self.filter = {
+		filteredStartTimes: '',
+		filteredEndTimes: '',
 		searchNameText: '',
 		selectedTeamIds: [],
 		isDayOff: false
@@ -77,13 +90,15 @@
 		self.isLoadingMoreAgentSchedules = false;
 	};
 
-	self.toggleFilterPanel = function() {
-		self.isPanelVisible(!self.isPanelVisible());
-	};
-
 	self.showOnlyDayOff.subscribe(function(value) {
 		self.filter.isDayOff = value;
-		if (!self.isMobileEnabled) self.filterChangedCallback(self.selectedDate());
+
+		if (!self.isMobileEnabled) {
+			if (value) {
+				self.paging.skip = 0;
+			}
+			self.filterChangedCallback(self.selectedDate());
+		}
 	});
 
 	self.openTeamSelectorPanel = function(data, event) {
@@ -112,6 +127,29 @@
 		self.paging.skip = 0;
 		self.filter.searchNameText = self.searchNameText();
 		self.filter.selectedTeamIds = self.selectedTeamIds.concat();
+
+		if (self.startTimeStart() === defaultFilterTime && self.startTimeEnd() === defaultFilterTime) {
+			self.filter.filteredStartTimes = '';
+		} else {
+			self.filter.filteredStartTimes =
+				(self.startTimeStart() ? self.startTimeStart() : '') +
+				'-' +
+				(self.startTimeEnd() ? self.startTimeEnd() : '');
+		}
+
+		if (self.endTimeStart() === defaultFilterTime && self.endTimeEnd() === defaultFilterTime) {
+			self.filter.filteredEndTimes = '';
+		} else {
+			self.filter.filteredEndTimes =
+				(self.endTimeStart() ? self.endTimeStart() : '') + '-' + (self.endTimeEnd() ? self.endTimeEnd() : '');
+		}
+
+		self.hasTimeFiltered(
+			self.startTimeStart() != defaultFilterTime ||
+				self.startTimeEnd() != defaultFilterTime ||
+				self.endTimeStart() != defaultFilterTime ||
+				self.endTimeEnd() != defaultFilterTime
+		);
 		self.filterChangedCallback(self.selectedDate());
 	};
 
@@ -164,7 +202,7 @@
 
 		self.agentNames(buildAgentNames(data.AgentSchedules));
 		self.selectedDate(moment(date));
-		self.displayDate(moment(date).format(Teleopti.MyTimeWeb.Common.DateFormat));
+		self.displayDate(moment(date).format(dateOnlyFormat));
 
 		rawTimeline = data.TimeLine;
 		self.timeLines(createTimeLineViewModel(rawTimeline));
@@ -181,7 +219,8 @@
 		self.totalAgentCount(data.TotalAgentCount);
 
 		self.hasFiltered(
-			!!self.filter.searchNameText ||
+			self.hasTimeFiltered() ||
+				!!self.filter.searchNameText ||
 				((self.selectedTeamIds[0] && self.selectedTeamIds[0] != self.defaultTeamId) ||
 					(self.isMobileEnabled && self.showOnlyDayOff()))
 		);
@@ -191,7 +230,7 @@
 			self.isPanelVisible(false);
 		}
 
-		setDraggableScrollBlockOnDesktop && setDraggableScrollBlockOnDesktop();
+		readScheduleDataCallback && readScheduleDataCallback();
 		self.isAgentScheduleLoaded(true);
 	};
 

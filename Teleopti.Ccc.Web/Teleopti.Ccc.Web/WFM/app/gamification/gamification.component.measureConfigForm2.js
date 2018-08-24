@@ -16,7 +16,7 @@
 				valueDataType: '<',
 				valueOrder: '<'
 			},
-			controller: [function measureConfigForm2Ctrl() {
+			controller: ['$translate', function measureConfigForm2Ctrl($translate) {
 				var ctrl = this;
 
 				ctrl.updateGoldThreshold = function (invalid) {
@@ -99,16 +99,14 @@
 					switch (ctrl.valueOrder) {
 						case 'asc':
 							if (!valuesAreInAscendingOrder(gold, silver, bronze))
-								ctrl.errorMsg = 'ValuesShouldBeInAscendingOrderFromGoldToBronze';
+								ctrl.errorMsg =  $translate.instant('ValuesShouldBeInAscendingOrderFromGoldToBronze');
 							break;
 
 						case 'desc':
 							if (!valuesAreInDescendingOrder(gold, silver, bronze))
-								ctrl.errorMsg = 'ValuesShouldBeInDescendingOrderFromGoldToBronze';
+								ctrl.errorMsg = $translate.instant('ValuesShouldBeInDescendingOrderFromGoldToBronze');
 							break;
 					}
-
-
 
 					function valuesAreInAscendingOrder(gold, silver, bronze) {
 						return gold < silver && gold < bronze && silver < bronze;

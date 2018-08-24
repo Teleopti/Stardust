@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		private ExecuteSql _masterExecuteSql;
 		private ExecuteSql _executeSql;
+		private SqlVersion _sqlVersion;
 		private DatabaseFolder _databaseFolder;
 		private DatabaseVersionInformation _databaseVersionInformation;
 		private SchemaVersionInformation _schemaVersionInformation;
@@ -32,6 +33,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public ExecuteSql MasterExecuteSql() => _masterExecuteSql ?? (_masterExecuteSql = new ExecuteSql(() => connectAndOpen(connectionStringToMaster()), _log));
 		public ExecuteSql ExecuteSql() => _executeSql ?? (_executeSql = new ExecuteSql(() => connectAndOpen(connectionString()), _log));
+		public SqlVersion SqlVersion() => _sqlVersion ?? (_sqlVersion = new ServerVersionHelper(MasterExecuteSql()).Version());
 		public DatabaseFolder DatabaseFolder() => _databaseFolder ?? (_databaseFolder = new DatabaseFolder(new DbManagerFolder(_command.DbManagerFolderPath)));
 		public DatabaseVersionInformation DatabaseVersionInformation() => _databaseVersionInformation ?? (_databaseVersionInformation = new DatabaseVersionInformation(DatabaseFolder(), ExecuteSql()));
 		public SchemaVersionInformation SchemaVersionInformation() => _schemaVersionInformation ?? (_schemaVersionInformation = new SchemaVersionInformation(DatabaseFolder()));
@@ -57,7 +59,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			{
 				try
 				{
-					using (connectAndOpen(connectionStringAppLogOn(_command.IsAzure ? _command.DatabaseName : DatabaseHelper.MasterDatabaseName)))
+					using (connectAndOpen(connectionStringAppLogOn(SqlVersion().IsAzure ? _command.DatabaseName : DatabaseHelper.MasterDatabaseName)))
 					{
 					}
 
@@ -69,7 +71,7 @@ namespace Teleopti.Ccc.DBManager.Library
 				}
 			}
 
-			if (!_command.IsAzure)
+			if (!SqlVersion().IsAzure)
 			{
 				return verifyWinGroup(_command.AppUserName);
 			}

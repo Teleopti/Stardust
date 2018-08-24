@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		
 		public DateOnlyPeriod Period { get; set; }
 		public IEnumerable<IPerson> AgentsToOptimize { get; set; }
-		public bool RunWeeklyRestSolver { get; set; }
 		public Guid CommandId { get; set; }
 		public Guid PlanningPeriodId { get; set; }
 	}

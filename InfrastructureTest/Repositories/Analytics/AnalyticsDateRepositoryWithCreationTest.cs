@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 	[TestFixture]
 	[Category("BucketB")]
 	[AnalyticsDatabaseTest]
-	[Toggle(Toggles.ETL_EventbasedDate_39562)]
 	public class AnalyticsDateRepositoryWithCreationTest : IIsolateSystem
 	{
 		public IAnalyticsDateRepository Target;

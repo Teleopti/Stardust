@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.BusinessUnit
 {
-	[EnabledBy(Toggles.ETL_SpeedUpIntradayBusinessUnit_38932)]
 	public class AnalyticsBusinessUnitUpdater : 
 		IHandleEvent<BusinessUnitChangedEvent>, 
 		IRunOnHangfire

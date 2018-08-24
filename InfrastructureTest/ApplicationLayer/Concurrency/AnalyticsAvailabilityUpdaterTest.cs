@@ -4,17 +4,14 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer.Availability;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Concurrency
 {
 	[Category("BucketB")]
 	[MultiDatabaseTestAttribute]
-	[Toggle(Toggles.ETL_EventbasedDate_39562)]
 	public class AnalyticsAvailabilityUpdaterTest
 	{
 		public AnalyticsAvailabilityUpdater Target;

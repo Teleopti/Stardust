@@ -17,7 +17,7 @@ class DuplicateFormNameValidator {
 
 	validate = (control: FormControlWithInitial): ValidationErrors => {
 		const filterByExists = (logon: string) => logon && logon.length > 0;
-		const filterBySameLogon = logon => logon === control.value;
+		const filterBySameLogon = logon => logon.toLowerCase() === (control.value as string).toLowerCase();
 		const countSameLogon = this.identityLogonPageComponent.logons
 			.map(control => control.value)
 			.filter(filterByExists)

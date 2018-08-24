@@ -433,6 +433,7 @@
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingDesktopBlockTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingDesktopPermissionTest.cs" />
     <Compile Include="SchedulingScenarios\SeperateWebRequest.cs" />
+    <Compile Include="SchedulingScenarios\TimeBetweenDaysOptimization\TimeBetweenDaysOptimizationScenario.cs" />
     <Compile Include="Scheduling\AdvancedAgentsFilterTest.cs" />
     <Compile Include="Scheduling\Assignment\ReplaceActivityServiceTest.cs" />
     <Compile Include="Scheduling\WebClearScheduleStardustHandlerTest.cs" />
@@ -1736,8 +1737,6 @@
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeAvailableCheckItemTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeDateSpecificationTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeLightValidatorTest.cs" />
-    <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeMeetingSpecificationTest.cs" />
-    <Compile Include="WorkflowControl\ShiftTrades\ShiftTradePersonalActivitySpecificationTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeRequestValidationResultTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeSkillSpecificationTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeSpecificationTest.cs" />

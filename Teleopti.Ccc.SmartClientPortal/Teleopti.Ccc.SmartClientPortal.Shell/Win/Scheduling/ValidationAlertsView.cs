@@ -44,6 +44,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			addToolStripMenuItems(uniqueAlertTypes);
 			removeToolStripMenuItems(uniqueAlertTypes);
 			fillFiltereListView();
+			if (_sortColumn == -1)
+			{
+				doSort(0);
+			}
 		}
 
 		private void addToolStripMenuItems(IEnumerable<string> uniqueAlertTypes)
@@ -172,9 +176,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void listView1ColumnClick(object sender, ColumnClickEventArgs e)
 		{
-			if (e.Column != _sortColumn)
+			var column = e.Column;
+			doSort(column);
+		}
+
+		private void doSort(int column)
+		{
+			if (column != _sortColumn)
 			{
-				_sortColumn = e.Column;
+				_sortColumn = column;
 				listView1.Sorting = SortOrder.Ascending;
 			}
 			else
@@ -186,8 +196,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 
 			listView1.Sort();
-			listView1.ListViewItemSorter = new ListViewItemComparer(e.Column,
-															  listView1.Sorting);
+			listView1.ListViewItemSorter = new ListViewItemComparer(column,
+				listView1.Sorting);
 		}
 	}
 

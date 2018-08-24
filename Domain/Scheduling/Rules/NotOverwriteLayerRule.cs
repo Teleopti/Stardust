@@ -67,13 +67,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			var layers = (personAssignment?.MainActivities() ?? Enumerable.Empty<MainShiftLayer>()).ToArray();
 			var meetings = scheduleDay.PersonMeetingCollection().ToArray();
 			var personalActivities = (personAssignment?.PersonalActivities() ?? Enumerable.Empty<PersonalShiftLayer>()).ToArray();
-			return getOverlappingLayerses(layers,meetings,personalActivities);
+			return GetOverlappingLayerses(layers,meetings,personalActivities);
 		}
 
-		private IList<OverlappingLayers> getOverlappingLayerses(MainShiftLayer[] layers, IPersonMeeting[] meetings, PersonalShiftLayer[] personalShiftLayers )
+		public IList<OverlappingLayers> GetOverlappingLayerses(MainShiftLayer[] layers, IPersonMeeting[] meetings, PersonalShiftLayer[] personalShiftLayers )
 		{
 			var result = new List<OverlappingLayers>();
-			if (layers.Length == 0) return result;
+			if (layers == null || layers.Length == 0) return result;
 
 			for(var i = 0;i < layers.Length;i++)
 			{

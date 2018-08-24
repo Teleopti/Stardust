@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			if(beInResourceCalculatedStateAtStartup)
 				ResourceCalculation.ResourceCalculate(period, new ResourceCalculationData(stateHolder.SchedulingResultState, false, false));
 
-			Target.Execute(period, agents, optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { }, new NoOptimizationCallback());
+			Target.Execute(period, agents, optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new NoOptimizationCallback());
 
 			agents.Count(agent => stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(3)).HasDayOff()).Should().Be.EqualTo(1);
 			agents.Count(agent => stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(4)).HasDayOff()).Should().Be.EqualTo(1);
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			if (beInResourceCalculatedStateAtStartup)
 				ResourceCalculation.ResourceCalculate(period, new ResourceCalculationData(stateHolder.SchedulingResultState, false, false));
 
-			Target.Execute(period, agents, optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { }, new NoOptimizationCallback());
+			Target.Execute(period, agents, optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new NoOptimizationCallback());
 
 			agents.Count(agent => stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(0)).HasDayOff()).Should().Be.EqualTo(1); 
 			agents.Count(agent => stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(1)).HasDayOff()).Should().Be.EqualTo(1);
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var skillDayB = skillB.CreateSkillDayWithDemand(scenario, date, 1);
 			SchedulerStateHolder.Fill(scenario, period, new[]{agent1, agent2}, new []{ass1, ass2}, new[]{skillDayA, skillDayB});
 
-			Target.Execute(period, new[]{agent1, agent2}, new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag() } }, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), (o, args) => { }, new NoOptimizationCallback());
+			Target.Execute(period, new[]{agent1, agent2}, new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag() } }, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new NoOptimizationCallback());
 			
 			skillDayA.SkillStaffPeriodCollection.First().CalculatedResource
 				.Should().Be.EqualTo(1); 
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				.Should().Be.EqualTo(1); 
 		}
 
-		public DayOffOptimizationCascadingDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerDayOffOptimizationIslands47208, bool resourcePlannerLessResourcesXXL74915) : base(seperateWebRequest, resourcePlannerDayOffOptimizationIslands47208, resourcePlannerLessResourcesXXL74915)
+		public DayOffOptimizationCascadingDesktopTest(SeperateWebRequest seperateWebRequest, bool resourcePlannerXxl76496) : base(seperateWebRequest, resourcePlannerXxl76496)
 		{
 		}
 	}

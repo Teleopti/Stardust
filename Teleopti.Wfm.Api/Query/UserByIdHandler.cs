@@ -14,9 +14,9 @@ namespace Teleopti.Wfm.Api.Query
 		}
 
 		[UnitOfWork]
-		public virtual QueryResultDto<UserDto> Handle(UserByIdDto command)
+		public virtual QueryResultDto<UserDto> Handle(UserByIdDto query)
 		{
-			var person = _personRepository.Get(command.PersonId);
+			var person = _personRepository.Get(query.PersonId);
 			return new QueryResultDto<UserDto>
 			{
 				Successful = true,

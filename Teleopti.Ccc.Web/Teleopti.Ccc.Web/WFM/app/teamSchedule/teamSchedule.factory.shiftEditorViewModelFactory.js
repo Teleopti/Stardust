@@ -1,14 +1,14 @@
-﻿(function() {
+﻿(function () {
 	'use strict';
 
 	angular.module('wfm.teamSchedule').factory('ShiftEditorViewModelFactory', ShiftEditorViewModelFactory);
 	ShiftEditorViewModelFactory.$inject = ['serviceDateFormatHelper', 'Toggle', 'CurrentUserInfo'];
 	function ShiftEditorViewModelFactory(serviceDateFormatHelper, toggleSvc, CurrentUserInfo) {
 		var factory = {
-			CreateTimeline: function(date, timezone, timeRange) {
+			CreateTimeline: function (date, timezone, timeRange) {
 				return new TimelineViewModel(date, timezone, timeRange);
 			},
-			CreateSchedule: function(date, timezone, schedule) {
+			CreateSchedule: function (date, timezone, schedule) {
 				return new ScheduleViewModel(date, timezone, schedule);
 			}
 		};
@@ -34,20 +34,34 @@
 			this.UnderlyingScheduleSummary = underlyingScheduleSummary;
 		}
 
-		ScheduleViewModel.prototype.GetSummaryTimeSpan = function(info) {
+		ScheduleViewModel.prototype.SpliceLayer = function (activity, startTime, endTime, index, deleteCount) {
+			this.ShiftLayers = this.ShiftLayers || [];
+			var layer = angular.extend({}, activity, {
+				Start: startTime,
+				End: endTime
+			});
+			var newLayer = new ShiftLayerViewModel(layer, this.Date, this.Timezone, this.Timezone);
+
+			this.ShiftLayers.splice(index, deleteCount, newLayer);
+
+			return newLayer;
+		}
+
+		ScheduleViewModel.prototype.GetSummaryTimeSpan = function (info) {
 			return info.TimeSpan;
 		};
+
 		function createShiftLayers(projections, date, timezone, currentTimezone) {
 			var layers = [];
 			projections &&
-				projections.forEach(function(projection) {
+				projections.forEach(function (projection) {
 					var layer = new ShiftLayerViewModel(projection, date, timezone, currentTimezone);
 					layers.push(layer);
 				});
 
 			for (var i = 0; i < layers.length; i++) {
 				if (i == 0) continue;
-				layers[i].SameTypeAsLast = layers[i].ActivityId === layers[i - 1].ActivityId;
+				layers[i].ShowDividedLine = layers[i].ActivityId === layers[i - 1].ActivityId;
 			}
 
 			return layers;
@@ -79,7 +93,7 @@
 		function getUnderlyingSummaryViewModel(items, date, timezone, currentTimezone) {
 			var result = [];
 			if (items && items.length) {
-				result = items.map(function(item) {
+				result = items.map(function (item) {
 					var startInToTimezone = moment
 						.tz(item.Start, currentTimezone)
 						.clone()
@@ -113,9 +127,9 @@
 			var startInTimezone = isSameTimezone
 				? moment.tz(layer.Start, timezone)
 				: moment
-						.tz(layer.Start, fromTimezone)
-						.clone()
-						.tz(timezone);
+					.tz(layer.Start, fromTimezone)
+					.clone()
+					.tz(timezone);
 			var endInTimezone = isSameTimezone
 				? moment.tz(layer.End, timezone)
 				: startInTimezone.clone().add(layer.Minutes, 'minutes');
@@ -130,11 +144,12 @@
 			this.TopShiftLayerId = layer.TopShiftLayerId;
 			this.TimeSpan = getTimeSpan(startInTimezone, endInTimezone);
 			this.IsOvertime = layer.IsOvertime;
-			this.SameTypeAsLast = false;
+			this.ShowDividedLine = false;
+			this.FloatOnTop = !!layer.FloatOnTop;
 		}
 
-		ShiftLayerViewModel.prototype.UseLighterBorder = function() {
-			return useLighterColor(this.Color);
+		ShiftLayerViewModel.prototype.UseLighterBorder = function (color) {
+			return useLighterColor(color || this.Color);
 		};
 
 		function TimelineViewModel(date, timezone, timeRange) {
@@ -165,7 +180,7 @@
 		}
 
 		function useLighterColor(color) {
-			var getLumi = function(cstring) {
+			var getLumi = function (cstring) {
 				var matched = /#([\w\d]{2})([\w\d]{2})([\w\d]{2})/.exec(cstring);
 				if (!matched) return null;
 				return (

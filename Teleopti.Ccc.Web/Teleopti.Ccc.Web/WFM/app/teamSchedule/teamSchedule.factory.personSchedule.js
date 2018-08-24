@@ -78,7 +78,7 @@
 			});
 
 			for (var i = 0; i < projectionVms.length; i++) {
-				projectionVms[i].SameTypeAsLast = i === 0 ? false : projectionVms[i].Description === projectionVms[i - 1].Description;
+				projectionVms[i].ShowDividedLine = i === 0 ? false : projectionVms[i].Description === projectionVms[i - 1].Description;
 			}
 
 			return projectionVms;
@@ -343,7 +343,7 @@
 			this.UseLighterBorder = useLightColor(projection.Color);
 		}
 
-		ProjectionViewModel.prototype.SameTypeAsLast = false;
+		ProjectionViewModel.prototype.ShowDividedLine = false;
 
 		ProjectionViewModel.prototype.Selected = false;
 

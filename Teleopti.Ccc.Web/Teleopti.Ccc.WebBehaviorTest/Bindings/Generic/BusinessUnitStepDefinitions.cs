@@ -22,13 +22,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			var businessUnitApp = new BusinessUnitConfigurable { Name = name };
 			DataMaker.Data().Apply(businessUnitApp);
-
-			var toggleQuerier = new ToggleQuerier(TestSiteConfigurationSetup.URL.ToString());
-			if (!toggleQuerier.IsEnabled(Toggles.ETL_SpeedUpIntradayBusinessUnit_38932))
-			{
-				var businessUnitAnalytics = new BusinessUnit(businessUnitApp.BusinessUnit, DefaultAnalyticsDataCreator.GetDataSources(), ++BusinessUnit.IdCounter);
-				DataMaker.Data().Analytics().Apply(businessUnitAnalytics);
-			}
 		}
 
 		[Given(@"there is a business unit with")]
@@ -36,13 +29,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			var businessUnitApp = table.CreateInstance<BusinessUnitConfigurable>();
 			DataMaker.Data().Apply(businessUnitApp);
-
-			var toggleQuerier = new ToggleQuerier(TestSiteConfigurationSetup.URL.ToString());
-			if (!toggleQuerier.IsEnabled(Toggles.ETL_SpeedUpIntradayBusinessUnit_38932))
-			{
-				var businessUnitAnalytics = new BusinessUnit(businessUnitApp.BusinessUnit, DefaultAnalyticsDataCreator.GetDataSources(), ++BusinessUnit.IdCounter);
-				DataMaker.Data().Analytics().Apply(businessUnitAnalytics);
-			}
 		}
 
 		[Given(@"the business unit scope is using '(.*)'")]

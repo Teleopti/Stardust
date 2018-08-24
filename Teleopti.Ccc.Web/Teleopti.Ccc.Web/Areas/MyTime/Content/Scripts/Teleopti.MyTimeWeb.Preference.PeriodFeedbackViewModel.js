@@ -1,14 +1,14 @@
-﻿if (typeof (Teleopti) === 'undefined') {
+﻿if (typeof Teleopti === 'undefined') {
 	Teleopti = {};
-	if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
+	if (typeof Teleopti.MyTimeWeb === 'undefined') {
 		Teleopti.MyTimeWeb = {};
-		if (typeof (Teleopti.MyTimeWeb.Preference) === 'undefined') {
+		if (typeof Teleopti.MyTimeWeb.Preference === 'undefined') {
 			Teleopti.MyTimeWeb.Preference = {};
 		}
 	}
 }
 
-Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewModels, date, weekViewModels) {
+Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function(ajax, dayViewModels, date, weekViewModels) {
 	var self = this;
 
 	this.FeedbackLoaded = ko.observable(false);
@@ -18,13 +18,13 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 	this.PreferencePeriod = ko.observable();
 	this.PreferenceOpenPeriod = ko.observable();
 
-	this.LoadFeedback = function () {
+	this.LoadFeedback = function() {
 		ajax.Ajax({
-			url: "PreferenceFeedback/PeriodFeedback",
-			dataType: "json",
+			url: 'PreferenceFeedback/PeriodFeedback',
+			dataType: 'json',
 			data: { Date: date },
 			type: 'GET',
-			beforeSend:function(){
+			beforeSend: function() {
 				//self.FeedbackLoaded(false);
 			},
 			success: function(data, textStatus, jqXHR) {
@@ -34,13 +34,19 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 				self.TargetContractTimeLowerMinutes(data.TargetContractTime.LowerMinutes);
 				self.TargetContractTimeUpperMinutes(data.TargetContractTime.UpperMinutes);
 
-				self.PreferencePeriod(Teleopti.MyTimeWeb.Common.FormatDatePeriod(
-					moment(data.PreferencePeriodStart),
-					moment(data.PreferencePeriodEnd)));
+				self.PreferencePeriod(
+					Teleopti.MyTimeWeb.Common.FormatDatePeriod(
+						moment(data.PreferencePeriodStart),
+						moment(data.PreferencePeriodEnd)
+					)
+				);
 
-				self.PreferenceOpenPeriod(Teleopti.MyTimeWeb.Common.FormatDatePeriod(
-					moment(data.PreferenceOpenPeriodStart),
-					moment(data.PreferenceOpenPeriodEnd)));
+				self.PreferenceOpenPeriod(
+					Teleopti.MyTimeWeb.Common.FormatDatePeriod(
+						moment(data.PreferenceOpenPeriodStart),
+						moment(data.PreferenceOpenPeriodEnd)
+					)
+				);
 
 				self.FeedbackLoaded(true);
 			}
@@ -58,14 +64,14 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 
 	this.TargetContractTimeLowerMinutes = ko.observable();
 	this.TargetContractTimeUpperMinutes = ko.observable();
-	this.TargetContractTimeLower = ko.computed(function () {
+	this.TargetContractTimeLower = ko.computed(function() {
 		return Teleopti.MyTimeWeb.Common.FormatTimeSpan(self.TargetContractTimeLowerMinutes());
 	});
-	this.TargetContractTimeUpper = ko.computed(function () {
+	this.TargetContractTimeUpper = ko.computed(function() {
 		return Teleopti.MyTimeWeb.Common.FormatTimeSpan(self.TargetContractTimeUpperMinutes());
 	});
 
-	this.IsWeeklyWorkTimeBroken = ko.computed(function () {
+	this.IsWeeklyWorkTimeBroken = ko.computed(function() {
 		var broken = false;
 		$.each(self.WeekViewModels, function(index, week) {
 			if ((week.IsMinHoursBroken() || week.IsMaxHoursBroken()) && week.IsInCurrentPeriod()) {
@@ -76,15 +82,13 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 		return broken;
 	});
 
-	this.PossibleResultContractTimeMinutesLower = ko.computed(function () {
+	this.PossibleResultContractTimeMinutesLower = ko.computed(function() {
 		var sum = 0;
-		$.each(self.DayViewModels, function (index, day) {
+		$.each(self.DayViewModels, function(index, day) {
 			var value = day.PossibleContractTimeMinutesLower();
-			if (value)
-			    sum += parseInt(value);
-		    var absenceValue = day.AbsenceContractTimeMinutes();
-		    if (absenceValue)
-		        sum += parseInt(absenceValue);
+			if (value) sum += parseInt(value);
+			var absenceValue = day.AbsenceContractTimeMinutes();
+			if (absenceValue) sum += parseInt(absenceValue);
 			sum += day.ContractTimeMinutes();
 		});
 		return sum;
@@ -92,17 +96,19 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 	var possibleNightRestViolationsArray = ko.observableArray();
 
 	function sameNightRestViolation(obj1, obj2) {
-		return obj1.nightRestTimes === obj2.nightRestTimes
-			&& obj1.firstDay === obj2.firstDay
-			&& obj1.secondDay === obj2.secondDay;
+		return (
+			obj1.nightRestTimes === obj2.nightRestTimes &&
+			obj1.firstDay === obj2.firstDay &&
+			obj1.secondDay === obj2.secondDay
+		);
 	}
 
-	this.PossibleNightRestViolations = function () {
+	this.PossibleNightRestViolations = function() {
 		possibleNightRestViolationsArray.removeAll();
-		$.each(self.DayViewModels, function (index, day) {
+		$.each(self.DayViewModels, function(index, day) {
 			if (day.MakeNightRestViolationObjs().length > 0) {
 				var newViolations = day.MakeNightRestViolationObjs();
-				newViolations.forEach(function (newViolation) {
+				newViolations.forEach(function(newViolation) {
 					var sameNightRestViolations = possibleNightRestViolationsArray().filter(function(item) {
 						return sameNightRestViolation(item, newViolation);
 					});
@@ -115,49 +121,59 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 		return possibleNightRestViolationsArray;
 	};
 
-	this.PossibleResultContractTimeMinutesUpper = ko.computed(function () {
+	this.PossibleResultContractTimeMinutesUpper = ko.computed(function() {
 		var sum = 0;
-		$.each(self.DayViewModels, function (index, day) {
+		$.each(self.DayViewModels, function(index, day) {
 			var value = day.PossibleContractTimeMinutesUpper();
-			if (value)
-			    sum += parseInt(value);
+			if (value) sum += parseInt(value);
 			var absenceValue = day.AbsenceContractTimeMinutes();
-		    if (absenceValue)
-		        sum += parseInt(absenceValue);
+			if (absenceValue) sum += parseInt(absenceValue);
 			sum += day.ContractTimeMinutes();
 		});
 		return sum;
 	});
 
-	this.PossibleResultContractTimeLower = ko.computed(function () {
+	this.PossibleResultContractTimeLower = ko.computed(function() {
 		return Teleopti.MyTimeWeb.Common.FormatTimeSpan(self.PossibleResultContractTimeMinutesLower());
 	});
 
-	this.PossibleResultContractTimeUpper = ko.computed(function () {
+	this.PossibleResultContractTimeUpper = ko.computed(function() {
 		return Teleopti.MyTimeWeb.Common.FormatTimeSpan(self.PossibleResultContractTimeMinutesUpper());
 	});
 
-	this.PreferenceTimeIsOutOfRange = ko.computed(function () {
-		return self.PossibleResultContractTimeMinutesUpper() < self.TargetContractTimeLowerMinutes()
-			|| self.TargetContractTimeUpperMinutes() < self.PossibleResultContractTimeMinutesLower();
+	this.PreferenceTimeIsOutOfRange = ko.computed(function() {
+		return (
+			self.PossibleResultContractTimeMinutesUpper() < self.TargetContractTimeLowerMinutes() ||
+			self.TargetContractTimeUpperMinutes() < self.PossibleResultContractTimeMinutesLower()
+		);
 	});
 
-	this.PreferenceDaysOffIsOutOfRange = ko.computed(function () {
-	    return self.PossibleResultDaysOff() > self.TargetDaysOffUpper() || self.PossibleResultDaysOff() < self.TargetDaysOffLower();
+	this.PreferenceDaysOffIsOutOfRange = ko.computed(function() {
+		return (
+			self.PossibleResultDaysOff() > self.TargetDaysOffUpper() ||
+			self.PossibleResultDaysOff() < self.TargetDaysOffLower()
+		);
 	});
 
-	this.PreferenceFeedbackClass = ko.computed(function () {
-		return self.PreferenceDaysOffIsOutOfRange() || self.PreferenceTimeIsOutOfRange()
-			|| self.IsWeeklyWorkTimeBroken() || possibleNightRestViolationsArray().length > 0
-			? 'alert-danger' : 'alert-info';
-	}).extend({ throttle: 1 });
+	this.PreferenceFeedbackClass = ko
+		.computed(function() {
+			return self.PreferenceDaysOffIsOutOfRange() ||
+				self.PreferenceTimeIsOutOfRange() ||
+				self.IsWeeklyWorkTimeBroken() ||
+				possibleNightRestViolationsArray().length > 0
+				? 'alert-danger'
+				: 'alert-info';
+		})
+		.extend({ throttle: 1 });
 
-	this.WarningCount = ko.computed(function () {
+	this.WarningCount = ko.computed(function() {
 		var count = 2 + possibleNightRestViolationsArray.length;
-		if ((self.TargetContractTimeLower() === self.TargetContractTimeUpper()) ||
-			(self.TargetContractTimeLower() !== self.TargetContractTimeUpper()) &&
-			(self.PossibleResultContractTimeLower() === self.PossibleResultContractTimeUpper()) ||
-			(self.PossibleResultContractTimeLower() !== self.PossibleResultContractTimeUpper())) {
+		if (
+			self.TargetContractTimeLower() === self.TargetContractTimeUpper() ||
+			(self.TargetContractTimeLower() !== self.TargetContractTimeUpper() &&
+				self.PossibleResultContractTimeLower() === self.PossibleResultContractTimeUpper()) ||
+			self.PossibleResultContractTimeLower() !== self.PossibleResultContractTimeUpper()
+		) {
 			count++;
 		}
 		if (self.IsWeeklyWorkTimeBroken()) {

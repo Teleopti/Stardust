@@ -27,7 +27,7 @@ namespace Teleopti.Wfm.Administration.IntegrationTest
 			return false;
 		}
 
-		public void CreateLogin(string connectionToNewDb, string login, string password, bool isAzure)
+		public void CreateLogin(string connectionToNewDb, string login, string password, SqlVersion isAzure)
 		{
 		}
 

@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.LoadedAgents, selectedPeriod);
 			if (optimizationPreferences.General.OptimizationStepDaysOff)
 			{
-				_dayOffOptimizationDesktop.Execute(selectedPeriod, selectedPersons, optimizationPreferences, dayOffOptimizationPreferenceProvider, null, new OptimizationCallback(_backgroundWorker, OptimizationCallback.DayOffPreText));
+				_dayOffOptimizationDesktop.Execute(selectedPeriod, selectedPersons, optimizationPreferences, dayOffOptimizationPreferenceProvider, new OptimizationCallback(_backgroundWorker, OptimizationCallback.DayOffPreText));
 			}
 
 			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder().SchedulingResultState, false,

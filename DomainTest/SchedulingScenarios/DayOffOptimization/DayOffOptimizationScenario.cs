@@ -9,30 +9,23 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
-	[TestFixture(SeperateWebRequest.SimulateFirstRequest, true, true)]
-	[TestFixture(SeperateWebRequest.SimulateFirstRequest, false, true)]
-	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, true, true)]
-	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, false, true)]
-	[TestFixture(SeperateWebRequest.SimulateFirstRequest, true, false)]
-	[TestFixture(SeperateWebRequest.SimulateFirstRequest, false, false)]
-	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, true, false)]
-	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, false, false)]
+	[TestFixture(SeperateWebRequest.SimulateFirstRequest, true)]
+	[TestFixture(SeperateWebRequest.SimulateFirstRequest, false)]
+	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, true)]
+	[TestFixture(SeperateWebRequest.SimulateSecondRequestOrScheduler, false)]
 	[LoggedOnAppDomain]
 	public abstract class DayOffOptimizationScenario : IIsolateSystem, IExtendSystem, IConfigureToggleManager, ITestInterceptor
 	{
 		private readonly SeperateWebRequest _seperateWebRequest;
-		protected readonly bool _resourcePlannerDayOffOptimizationIslands47208;
-		private readonly bool _resourcePlannerLessResourcesXxl74915;
+		private readonly bool _resourcePlannerXxl76496;
 
 		public IIoCTestContext IoCTestContext;
 
-		protected DayOffOptimizationScenario(SeperateWebRequest seperateWebRequest,
-			bool resourcePlannerDayOffOptimizationIslands47208, 
-			bool resourcePlannerLessResourcesXXL74915)
+		protected DayOffOptimizationScenario(SeperateWebRequest seperateWebRequest, 
+			bool resourcePlannerXXL76496)
 		{
 			_seperateWebRequest = seperateWebRequest;
-			_resourcePlannerDayOffOptimizationIslands47208 = resourcePlannerDayOffOptimizationIslands47208;
-			_resourcePlannerLessResourcesXxl74915 = resourcePlannerLessResourcesXXL74915;
+			_resourcePlannerXxl76496 = resourcePlannerXXL76496;
 		}
 				
 		public virtual void Extend(IExtend extend, IIocConfiguration configuration)
@@ -49,10 +42,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 		public void Configure(FakeToggleManager toggleManager)
 		{
-			if(_resourcePlannerDayOffOptimizationIslands47208)
-				toggleManager.Enable(Toggles.ResourcePlanner_DayOffOptimizationIslands_47208);
-			if(_resourcePlannerLessResourcesXxl74915)
-				toggleManager.Enable(Toggles.ResourcePlanner_MergeSchedulingAndDO_76496);
+			if(_resourcePlannerXxl76496)
+				toggleManager.Enable(Toggles.ResourcePlanner_XXL_76496);
 		}
 
 		public void OnBefore()

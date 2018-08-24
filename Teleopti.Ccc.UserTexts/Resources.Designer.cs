@@ -4260,6 +4260,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Badge threshold.
+        /// </summary>
+        public static string BadgeThreshold {
+            get {
+                return ResourceManager.GetString("BadgeThreshold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You got a new bronze badge! Your adherence in {1:yyyy-MM-dd} is above {0}..
         /// </summary>
         public static string BadgeWithRank_YouGotANewBronzeBadgeForAdherence {
@@ -4661,6 +4670,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string BrokenRules {
             get {
                 return ResourceManager.GetString("BrokenRules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bronze badge threshold.
+        /// </summary>
+        public static string BronzeBadgeThreshold {
+            get {
+                return ResourceManager.GetString("BronzeBadgeThreshold", resourceCulture);
             }
         }
         
@@ -5457,6 +5475,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Campaign emails %.
+        /// </summary>
+        public static string CampaignEmailsPercentSign {
+            get {
+                return ResourceManager.GetString("CampaignEmailsPercentSign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Campaign facsimiles handling time %.
         /// </summary>
         public static string CampaignFacsimilesHandlingtime {
@@ -5588,6 +5615,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string CampaignTasksHandlingtime {
             get {
                 return ResourceManager.GetString("CampaignTasksHandlingtime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Campaign tasks %.
+        /// </summary>
+        public static string CampaignTasksPercentSign {
+            get {
+                return ResourceManager.GetString("CampaignTasksPercentSign", resourceCulture);
             }
         }
         
@@ -12927,6 +12963,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Finished.
+        /// </summary>
+        public static string Finished {
+            get {
+                return ResourceManager.GetString("Finished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Absence removed successfully..
         /// </summary>
         public static string FinishedRemoveAbsence {
@@ -13053,7 +13098,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Day has been overrided on web.
+        ///   Looks up a localized string similar to Day has been overridden on web.
         /// </summary>
         public static string ForecastDayIsOverrided {
             get {
@@ -13958,6 +14003,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Go {
             get {
                 return ResourceManager.GetString("Go", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gold badge threshold.
+        /// </summary>
+        public static string GoldBadgeThreshold {
+            get {
+                return ResourceManager.GetString("GoldBadgeThreshold", resourceCulture);
             }
         }
         
@@ -16182,6 +16236,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ItemsSelectedParameter {
             get {
                 return ResourceManager.GetString("ItemsSelectedParameter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Job.
+        /// </summary>
+        public static string Job {
+            get {
+                return ResourceManager.GetString("Job", resourceCulture);
             }
         }
         
@@ -21347,6 +21410,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No historical data found for this skill..
+        /// </summary>
+        public static string NoHistoricalDataFoundForThisSkill {
+            get {
+                return ResourceManager.GetString("NoHistoricalDataFoundForThisSkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No input.
         /// </summary>
         public static string NoInput {
@@ -23355,11 +23427,29 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Original chats.
+        /// </summary>
+        public static string OriginalChats {
+            get {
+                return ResourceManager.GetString("OriginalChats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Original customers.
         /// </summary>
         public static string OriginalCustomers {
             get {
                 return ResourceManager.GetString("OriginalCustomers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original emails.
+        /// </summary>
+        public static string OriginalEmails {
+            get {
+                return ResourceManager.GetString("OriginalEmails", resourceCulture);
             }
         }
         
@@ -23427,7 +23517,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Original Calls.
+        ///   Looks up a localized string similar to Original calls.
         /// </summary>
         public static string OriginalPhoneCalls {
             get {
@@ -32753,7 +32843,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Request was resent for schedule changes..
+        ///   Looks up a localized string similar to Request was resent because of schedule changes..
         /// </summary>
         public static string ShiftTradeResendMessage {
             get {
@@ -33086,6 +33176,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show only day off.
+        /// </summary>
+        public static string ShowOnlyDayOff {
+            get {
+                return ResourceManager.GetString("ShowOnlyDayOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Options &gt;&gt;.
         /// </summary>
         public static string ShowOptions {
@@ -33352,6 +33451,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SignOut {
             get {
                 return ResourceManager.GetString("SignOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Silver badge threshold.
+        /// </summary>
+        public static string SilverBadgeThreshold {
+            get {
+                return ResourceManager.GetString("SilverBadgeThreshold", resourceCulture);
             }
         }
         
@@ -38200,7 +38308,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validated Calls.
+        ///   Looks up a localized string similar to Validated calls.
         /// </summary>
         public static string ValidatedPhoneCalls {
             get {

@@ -192,7 +192,7 @@ describe("teamschedule person selection tests", function () {
 						'Projections': [
 							{
 								'Selected': false,
-								'SameTypeAsLast': false,
+								'ShowDividedLine': false,
 								'Color': '#8080FF',
 								'Description': 'E-mail',
 								'IsOvertime': false,
@@ -205,7 +205,7 @@ describe("teamschedule person selection tests", function () {
 								'Start': '2018-02-03 08:00',
 								'StartPosition': 4.545454545454546,
 								'UseLighterBorder': false,
-								'SameTypeAsLast': false,
+								'ShowDividedLine': false,
 								'Selectable': function () { return true },
 								'ToggleSelection': function () { }
 							}

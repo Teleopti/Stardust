@@ -13,16 +13,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 	[TestFixture(SeperateWebRequest.SimulateFirstRequest, true)]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
-	public abstract class SchedulingScenario : ITestInterceptor, IIsolateSystem, IExtendSystem, IConfigureToggleManager
+	public abstract class SchedulingScenario : ITestInterceptor, IExtendSystem, IConfigureToggleManager
 	{
 		private readonly SeperateWebRequest _seperateWebRequest;
-		private readonly bool _resourcePlannerLessResourcesXxl74915;
+		private readonly bool _resourcePlannerXxl76496;
 		public IIoCTestContext IoCTestContext;
 
-		protected SchedulingScenario(SeperateWebRequest seperateWebRequest, bool resourcePlannerLessResourcesXXL74915)
+		protected SchedulingScenario(SeperateWebRequest seperateWebRequest, bool resourcePlannerXXL76496)
 		{
 			_seperateWebRequest = seperateWebRequest;
-			_resourcePlannerLessResourcesXxl74915 = resourcePlannerLessResourcesXXL74915;
+			_resourcePlannerXxl76496 = resourcePlannerXXL76496;
 		}
 
 		public virtual void OnBefore()
@@ -36,14 +36,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			extend.AddService<ResourceCalculateWithNewContext>();
 		}
 
-		public virtual void Isolate(IIsolate isolate)
-		{
-		}
-
 		public void Configure(FakeToggleManager toggleManager)
 		{
-			if(_resourcePlannerLessResourcesXxl74915)
-				toggleManager.Enable(Toggles.ResourcePlanner_MergeSchedulingAndDO_76496);
+			if(_resourcePlannerXxl76496)
+				toggleManager.Enable(Toggles.ResourcePlanner_XXL_76496);
 		}
 	}
 }

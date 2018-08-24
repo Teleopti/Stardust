@@ -513,12 +513,8 @@
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsDetailEffectiveRestrictionExtractorTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsDetailModelTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsDetailPresenterTest.cs" />
-    <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsDisplayDataExtractorTest.cs" />
-    <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsDisplayRowTest.cs" />
-    <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsModelTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsNoWorkShiftfFinderTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsPreferencePainterDeciderTest.cs" />
-    <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsPresenterTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsSchedulePainterDeciderTest.cs" />
     <Compile Include="Scheduler\AgentStudentAvailabilityAddCommandTest.cs" />
     <Compile Include="Scheduler\AgentStudentAvailabilityDayCreatorTest.cs" />

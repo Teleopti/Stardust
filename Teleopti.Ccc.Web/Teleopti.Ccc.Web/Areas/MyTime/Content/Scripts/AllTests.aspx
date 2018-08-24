@@ -13,6 +13,7 @@
 		</style>
 		<script type="text/javascript" src="../../../../Content/jquery/jquery-1.12.4.js"></script>
 		<script type="text/javascript" src="../../../../Content/jqueryui/jquery-ui-1.10.2.custom.js"></script>
+		<script type="text/javascript" src="../../../../Content/jqueryui/jquery-ui-1.10.2.slider.js"></script>
 		<script type="text/javascript" src="../../../../Content/Scripts/qunit.js"></script>
 		<script type="text/javascript" src="../../../../Content/Scripts/knockout-2.2.1.js"></script>
 		<script type="text/javascript" src="../../../../Content/bootstrap/Scripts/bootstrap.js"></script>

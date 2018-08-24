@@ -93,6 +93,11 @@
 		});
 
 		service.fake({
+			name: 'historicalOverview',
+			url: /\.\.\/api\/HistoricalOverview\/Load(.*)/
+		});
+
+		service.fake({
 			name: 'modifyAdherencePermission',
 			url: /\.\.\/api\/HistoricalAdherence\/HasModifyAdherencePermission/,
 			clear: function () {
@@ -248,7 +253,7 @@
 					});
 				return [200, result];
 			});
-
+		
 
 		function withTime(time) {
 			serverTime = time;
@@ -345,8 +350,7 @@
 			});
 			return this;
 		}
-
-
+		
 		service.withTracer = withTracer;
 		service.withTracedUser = withTracedUser;
 

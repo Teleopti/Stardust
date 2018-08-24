@@ -68,9 +68,9 @@
     <Compile Include="QueryHandlerProvider.cs" />
     <Compile Include="QueryResultDto.cs" />
     <Compile Include="Query\ActivityDto.cs" />
-    <Compile Include="Query\GetAllActivitiesDto.cs" />
-    <Compile Include="Query\GetAllActivitiesHandler.cs" />
-    <Compile Include="Query\GetScheduleChangesListenerSubscriptionDto.cs" />
+    <Compile Include="Query\AllActivitiesDto.cs" />
+    <Compile Include="Query\AllActivitiesHandler.cs" />
+    <Compile Include="Query\AllScheduleChangesListenerSubscriptionDto.cs" />
     <Compile Include="Query\UserByIdDto.cs" />
     <Compile Include="Query\ScheduleChangesListenerDto.cs" />
     <Compile Include="Query\ScheduleByPersonIdDto.cs" />

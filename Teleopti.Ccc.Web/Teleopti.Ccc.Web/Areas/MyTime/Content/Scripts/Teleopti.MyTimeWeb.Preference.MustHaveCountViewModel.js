@@ -1,43 +1,45 @@
-﻿if (typeof (Teleopti) === 'undefined') {
+﻿if (typeof Teleopti === 'undefined') {
 	Teleopti = {};
-	if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
+	if (typeof Teleopti.MyTimeWeb === 'undefined') {
 		Teleopti.MyTimeWeb = {};
-		if (typeof (Teleopti.MyTimeWeb.Preference) === 'undefined') {
+		if (typeof Teleopti.MyTimeWeb.Preference === 'undefined') {
 			Teleopti.MyTimeWeb.Preference = {};
 		}
 	}
 }
 
 Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel = function() {
-    var self = this;
-    this.MaxMustHaves = ko.observable(0);
-    this.DayViewModels = ko.observableArray();
-    
-    this.CurrentMustHaves = ko.computed(function() {
-        var total = 0;
-        $.each(self.DayViewModels(), function(index, day) {
-            if (day.MustHave())
-                total += 1;
-        });
-        return total;
-    });
-    
-    this.MustHaveText = ko.computed(function () {
-        return self.CurrentMustHaves() + "(" + self.MaxMustHaves() + ")";
-    });
+	var self = this;
+	this.MaxMustHaves = ko.observable(0);
+	this.DayViewModels = ko.observableArray();
 
-    this.MustHaveClass = ko.computed(function() {
-        if (self.CurrentMustHaves() == self.MaxMustHaves())
-            return "grey-out";
+	this.CurrentMustHaves = ko.computed(function() {
+		var total = 0;
+		$.each(self.DayViewModels(), function(index, day) {
+			if (day.MustHave()) total += 1;
+		});
+		return total;
+	});
 
-        return undefined;
-    });
-    
-    this.SetData = function (inDayViewModels, inMaxMustHave) {
+	this.MustHaveText = ko.computed(function() {
+		return self.CurrentMustHaves() + '(' + self.MaxMustHaves() + ')';
+	});
 
-        self.DayViewModels([]);
-        self.DayViewModels.push.apply(self.DayViewModels, $.map(inDayViewModels, function (value, key) { return value; }));
+	this.MustHaveClass = ko.computed(function() {
+		if (self.CurrentMustHaves() == self.MaxMustHaves()) return 'grey-out';
 
-        self.MaxMustHaves(inMaxMustHave);
-    };
+		return undefined;
+	});
+
+	this.SetData = function(inDayViewModels, inMaxMustHave) {
+		self.DayViewModels([]);
+		self.DayViewModels.push.apply(
+			self.DayViewModels,
+			$.map(inDayViewModels, function(value, key) {
+				return value;
+			})
+		);
+
+		self.MaxMustHaves(inMaxMustHave);
+	};
 };

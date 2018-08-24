@@ -185,7 +185,45 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetResultTransformer(Transformers.AliasToBean(typeof (PersonScheduleDayReadModel)))
 				.SetReadOnly(true)
 				.List<PersonScheduleDayReadModel>();
-		}	
+		}
+
+		public IEnumerable<PersonScheduleDayReadModel> ForTeamSchedules(DateOnly scheduleDate, IEnumerable<Guid> personIdList, Paging paging, TimeFilterInfo filter)
+		{
+			const string sql
+				= @"EXEC [ReadModel].[LoadTeamSchedulesWithFilters]
+					@scheduleDate=:scheduleDate,
+					@personList=:personIdList,
+					@filterStartTimes=:filterStartTimes,
+					@filterEndTimes=:filterEndTimes,
+					@isDayOff=:isDayOff,
+					@skip=:skip, @take=:take,
+					@hasFilter=:hasFilter";
+			var idlist = string.Join(",", personIdList);
+			var filterString = getTimeFilterString(filter);
+			return _unitOfWork.Session().CreateSQLQuery(sql)
+				.AddScalar("PersonId", NHibernateUtil.Guid)
+				.AddScalar("FirstName", NHibernateUtil.String)
+				.AddScalar("LastName", NHibernateUtil.String)
+				.AddScalar("Date", NHibernateUtil.DateTime)
+				.AddScalar("Start", NHibernateUtil.DateTime)
+				.AddScalar("End", NHibernateUtil.DateTime)
+				.AddScalar("Model", NHibernateUtil.Custom(typeof(CompressedString)))
+				.AddScalar("MinStart", NHibernateUtil.DateTime)
+				.AddScalar("Total", NHibernateUtil.Int16)
+				.AddScalar("IsLastPage", NHibernateUtil.Boolean)
+				.AddScalar("IsDayoff", NHibernateUtil.Boolean)
+				.SetDateOnly("scheduleDate", scheduleDate)
+				.SetParameter("personIdList", idlist, NHibernateUtil.StringClob)
+				.SetParameter("filterStartTimes", filterString.startTimes, NHibernateUtil.StringClob)
+				.SetParameter("filterEndTimes", filterString.endTimes, NHibernateUtil.StringClob)
+				.SetParameter("isDayOff", filter == null || filter.IsDayOff, NHibernateUtil.Boolean)
+				.SetParameter("hasFilter", filter != null)
+				.SetParameter("skip", paging.Skip)
+				.SetParameter("take", paging.Take)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(PersonScheduleDayReadModel)))
+				.SetReadOnly(true)
+				.List<PersonScheduleDayReadModel>();
+		}
 
 		private class TimeFilterString
 		{

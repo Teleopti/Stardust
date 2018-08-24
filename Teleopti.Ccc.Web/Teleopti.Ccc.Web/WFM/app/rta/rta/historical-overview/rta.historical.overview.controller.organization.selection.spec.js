@@ -705,5 +705,4 @@ rtaTester.describe('RtaHistoricalOverviewController', function (it, fit, xit) {
 
 		expect(vm.organizationPickerSelectionText).toEqual("");
 	});
-
 });

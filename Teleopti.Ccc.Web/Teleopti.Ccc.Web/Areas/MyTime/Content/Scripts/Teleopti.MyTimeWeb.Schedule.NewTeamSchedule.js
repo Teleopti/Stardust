@@ -19,7 +19,11 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 		onMobile = Teleopti.MyTimeWeb.Common.IsHostAMobile(),
 		oniPad = Teleopti.MyTimeWeb.Common.IsHostAniPad(),
 		agentScheduleColumnWidth = onMobile ? 50 : 80,
-		minScrollBlockWidth = 60;
+		minScrollBlockWidth = 60,
+		startTimeStartInMinute = 0,
+		startTimeEndInMinute = 0,
+		endTimeStartInMinute = 0,
+		endTimeEndInMinute = 0;
 
 	function cleanBinding() {
 		ko.cleanNode($('#page')[0]);
@@ -59,21 +63,26 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 
 			initViewModel();
 			loadDefaultTeam(function() {
-				filterChangedCallback(getDateStr(initialMomentDate));
+				filterChangedCallback(initialMomentDate || moment());
 			});
 		});
 	}
 
 	function setupFilterClickFn() {
+		$('.new-teamschedule-time-filter').click(function(e) {
+			vm.isPanelVisible(!vm.isPanelVisible());
+			if (vm.isPanelVisible()) setDraggableTimeSlider();
+		});
 		$('.new-teamschedule-team-filter').click(function(e) {
 			if (!vm.isTeamsAndGroupsLoaded()) {
 				loadGroupAndTeams(function() {
 					vm.isTeamsAndGroupsLoaded(true);
-
 					vm.isPanelVisible(!vm.isPanelVisible());
+					setDraggableTimeSlider();
 				});
 			} else {
 				vm.isPanelVisible(!vm.isPanelVisible());
+				setDraggableTimeSlider();
 			}
 			e.preventDefault();
 			e.stopPropagation();
@@ -84,16 +93,29 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 			e.stopPropagation();
 		});
 
-		$('body').on('mousedown', function(event) {
-			if (
-				$(event.target)[0].className != 'new-teamschedule-panel' &&
-				$(event.target).parents('.new-teamschedule-panel').length == 0 &&
-				$(event.target)[0].className != 'new-teamschedule-filter' &&
-				$(event.target).parents('.new-teamschedule-team-filter').length == 0
-			) {
-				vm.isPanelVisible(false);
-			}
-		});
+		$('body')
+			.on('mousedown', function(event) {
+				var excludedClassList = [
+					'new-teamschedule-time-filter',
+					'new-teamschedule-team-filter',
+					'new-teamschedule-panel'
+				];
+
+				if (
+					excludedClassList.indexOf($(event.target)[0].className) == -1 &&
+					excludedClassList.every(function(c) {
+						return $(event.target).parents('.' + c).length == 0;
+					})
+				) {
+					vm.isPanelVisible(false);
+				}
+			})
+			.on('touchmove', function(event) {
+				var tooltip = $('.tooltip');
+				if (tooltip.length > 0) {
+					tooltip.hide();
+				}
+			});
 	}
 
 	function registerSwipeEventOnMobileAndiPad() {
@@ -192,8 +214,9 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 					});
 				}
 			});
-
-			$(window).on('resize', calculateTheScrollingRatio);
+			$(window).on('resize', function() {
+				calculateTheScrollingRatio();
+			});
 		}, 0);
 	}
 
@@ -254,6 +277,135 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 		$('.teammates-schedules-container.relative').css({ left: leftDistance });
 	}
 
+	function setDraggableTimeSlider() {
+		var timelineStartInMinute = 0;
+		var timelineEndInMinute = 24 * 60;
+		var containerWidth = $('.new-teamschedule-time-slider-line').width();
+		var minutesOfOnePixel = (timelineEndInMinute - timelineStartInMinute) / containerWidth;
+		var marginInterval = 2 * 60;
+		var moveStep = 15;
+
+		var filteredStartTime = getFilteredTime(vm.filter.filteredStartTimes);
+		var filteredEndTime = getFilteredTime(vm.filter.filteredEndTimes);
+
+		$('.start-time-slider').slider({
+			animate: 'fast',
+			min: timelineStartInMinute,
+			max: timelineEndInMinute,
+			step: moveStep,
+			range: true,
+			values: [filteredStartTime.start, filteredStartTime.end],
+			slide: function(event, ui) {
+				return setStartSliderTime(ui);
+			}
+		});
+
+		setStartSliderTime();
+
+		$('.end-time-slider').slider({
+			animate: 'fast',
+			min: timelineStartInMinute,
+			max: timelineEndInMinute,
+			step: moveStep,
+			range: true,
+			values: [filteredEndTime.start, filteredEndTime.end],
+			slide: function(event, ui) {
+				return setEndSliderTime(ui);
+			}
+		});
+
+		setEndSliderTime();
+
+		function setStartSliderTime(ui) {
+			if (ui && ui.values) {
+				startTimeStartInMinute = ui.values[0];
+				startTimeEndInMinute = ui.values[1];
+			} else {
+				startTimeStartInMinute = $('.start-time-slider').slider('values', 0);
+				startTimeEndInMinute = $('.start-time-slider').slider('values', 1);
+			}
+
+			if (startTimeStartInMinute != 0 && startTimeEndInMinute - startTimeStartInMinute < marginInterval)
+				return false;
+
+			var hours0 = Math.floor(startTimeStartInMinute / 60),
+				minutes0 = parseInt(startTimeStartInMinute % 60),
+				hours1 = Math.floor(startTimeEndInMinute / 60),
+				minutes1 = parseInt(startTimeEndInMinute % 60);
+
+			setStartInterval(hours0, minutes0, hours1, minutes1, startTimeStartInMinute, startTimeEndInMinute);
+
+			if (startTimeStartInMinute == 0 && startTimeEndInMinute - startTimeStartInMinute < marginInterval) {
+				vm.showStartTimeStart(false);
+			}
+			return true;
+		}
+
+		function setStartInterval(hours0, minutes0, hours1, minutes1, value0, value1) {
+			var startTimeStart =
+				(hours0 < 10 ? '0' + hours0 : hours0) + ':' + (minutes0 < 10 ? '0' + minutes0 : minutes0);
+			var startTimeEnd =
+				(hours1 < 10 ? '0' + hours1 : hours1) + ':' + (minutes1 < 10 ? '0' + minutes1 : minutes1);
+
+			vm.startTimeStart(startTimeStart);
+			vm.showStartTimeStart(true);
+			vm.startTimeEnd(startTimeEnd);
+			$('.start-time-slider-start-label').css({ left: value0 / minutesOfOnePixel });
+			$('.start-time-slider-end-label').css({ left: value1 / minutesOfOnePixel });
+		}
+
+		function setEndSliderTime(ui) {
+			if (ui && ui.values) {
+				endTimeStartInMinute = ui.values[0];
+				endTimeEndInMinute = ui.values[1];
+			} else {
+				endTimeStartInMinute = $('.end-time-slider').slider('values', 0);
+				endTimeEndInMinute = $('.end-time-slider').slider('values', 1);
+			}
+
+			if (endTimeStartInMinute != 0 && endTimeEndInMinute - endTimeStartInMinute < marginInterval) return false;
+
+			var hours0 = Math.floor(endTimeStartInMinute / 60),
+				minutes0 = parseInt(endTimeStartInMinute % 60),
+				hours1 = Math.floor(endTimeEndInMinute / 60),
+				minutes1 = parseInt(endTimeEndInMinute % 60);
+
+			setEndInterval(hours0, minutes0, hours1, minutes1, endTimeStartInMinute, endTimeEndInMinute);
+
+			if (endTimeStartInMinute == 0 && endTimeEndInMinute - endTimeStartInMinute < marginInterval) {
+				vm.showEndTimeStart(false);
+			}
+			return true;
+		}
+
+		function setEndInterval(hours0, minutes0, hours1, minutes1, value0, value1) {
+			var endTimeStart =
+				(hours0 < 10 ? '0' + hours0 : hours0) + ':' + (minutes0 < 10 ? '0' + minutes0 : minutes0);
+			var endTimeEnd = (hours1 < 10 ? '0' + hours1 : hours1) + ':' + (minutes1 < 10 ? '0' + minutes1 : minutes1);
+
+			vm.endTimeStart(endTimeStart);
+			vm.showEndTimeStart(true);
+			vm.endTimeEnd(endTimeEnd);
+			$('.end-time-slider-start-label').css({ left: value0 / minutesOfOnePixel });
+			$('.end-time-slider-end-label').css({ left: value1 / minutesOfOnePixel });
+		}
+
+		function getFilteredTime(filteredTimeString) {
+			var filteredTimeArr = filteredTimeString.split('-');
+			var startValue =
+				Math.floor(moment.duration(filteredTimeArr[0]).asHours()) * 60 +
+				moment.duration(filteredTimeArr[0]).minutes();
+			var endValue =
+				Math.floor(moment.duration(filteredTimeArr[1]).asHours()) * 60 +
+				moment.duration(filteredTimeArr[1]).minutes();
+
+			return {
+				start: startValue,
+				end: endValue
+			};
+		}
+	}
+
 	function showLoadingGif() {
 		$('#loading').show();
 	}
@@ -298,7 +450,9 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 		vm = new Teleopti.MyTimeWeb.Schedule.NewTeamScheduleViewModel(
 			filterChangedCallback,
 			loadGroupAndTeams,
-			setDraggableScrollBlockOnDesktop
+			function() {
+				setDraggableScrollBlockOnDesktop();
+			}
 		);
 		applyBindings();
 	}
@@ -326,10 +480,11 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 		});
 	}
 
-	function filterChangedCallback(dateStr) {
+	function filterChangedCallback(momentDate) {
 		showLoadingGif();
-
 		vm.isAgentScheduleLoaded(false);
+
+		var dateStr = getDateStr(momentDate);
 		dataService.loadScheduleData(dateStr, vm.paging, vm.filter, function(schedules) {
 			vm.readScheduleData(schedules, dateStr);
 
@@ -404,7 +559,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 				var messageEndDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate);
 				var selectedDate = vm.selectedDate().toDate();
 				if (messageStartDate <= selectedDate && messageEndDate >= selectedDate) {
-					filterChangedCallback(getDateStr(vm.selectedDate()));
+					filterChangedCallback(vm.selectedDate());
 					return;
 				}
 			}

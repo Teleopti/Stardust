@@ -68,6 +68,8 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 					"~/Content/Scripts/modernizr-2.6.2.js",
 					"~/Content/bootstrap/Scripts/bootstrap.js",
 					"~/Content/jqueryui/jquery-ui-1.10.2.custom.js",
+					"~/Content/jqueryui/jquery-ui-1.10.2.slider.js",
+					"~/Content/jqueryui/jquery-ui-1.10.2.dialog.js",
 					"~/Content/jqueryui.touch-punch/jquery.ui.touch-punch.js",
 					"~/Content/Scripts/json2.js",
 					"~/Content/Scripts/jquery.hoverIntent.js",
@@ -80,7 +82,6 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 					"~/Content/bootstrap-timepicker/js/bootstrap-timepicker-ext.js",
 					"~/Content/scripts/pinify/scripts/jquery.pinify.min.js",
 					"~/Content/jasny-bootstrap/js/jasny-bootstrap.min.js",
-					"~/Content/jqueryui/jquery.ui.dialog.js",
 					"~/Content/jquery-plugin/jquery.touchSwipe.min.js"
 				)
 				.IncludeDirectory("~/Areas/MyTime/Content/Scripts", "*.js", true);

@@ -10,6 +10,8 @@
 		fetchTeamScheduleDataRequestCount,
 		constants = Teleopti.MyTimeWeb.Common.Constants,
 		dateFormat = constants.serviceDateTimeFormat.dateOnly,
+		selectedDate = moment().format(dateFormat),
+		ajaxOption = {},
 		vm;
 
 	module('Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule', {
@@ -304,7 +306,7 @@
 	test('should render timeline', function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
-		vm.selectedDate(moment('2018-07-23'));
+		vm.selectedDate(moment(selectedDate));
 
 		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
 
@@ -321,7 +323,7 @@
 	test('should update timeline after load more schedules', function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
-		vm.selectedDate(moment('2018-07-23'));
+		vm.selectedDate(moment(selectedDate));
 
 		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
 
@@ -329,152 +331,206 @@
 			AgentSchedules: [],
 			TimeLine: [
 				{
-					Time: '2018-07-23T08:00:00',
-					TimeLineDisplay: '23/07/2018T08:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T08:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T08:00',
 					PositionPercentage: 0.0,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T09:00:00',
-					TimeLineDisplay: '23/07/2018T09:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T09:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T09:00',
 					PositionPercentage: 0.0412,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T10:00:00',
-					TimeLineDisplay: '23/07/2018T10:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T10:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T10:00',
 					PositionPercentage: 0.0825,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T11:00:00',
-					TimeLineDisplay: '23/07/2018T11:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T11:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T11:00',
 					PositionPercentage: 0.1237,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T12:00:00',
-					TimeLineDisplay: '23/07/2018T12:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T12:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T12:00',
 					PositionPercentage: 0.1649,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T13:00:00',
-					TimeLineDisplay: '23/07/2018T13:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T13:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T13:00',
 					PositionPercentage: 0.2062,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T14:00:00',
-					TimeLineDisplay: '23/07/2018T14:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T14:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T14:00',
 					PositionPercentage: 0.2474,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T15:00:00',
-					TimeLineDisplay: '23/07/2018T15:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T15:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T15:00',
 					PositionPercentage: 0.2887,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T16:00:00',
-					TimeLineDisplay: '23/07/2018T16:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T16:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T16:00',
 					PositionPercentage: 0.3299,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T17:00:00',
-					TimeLineDisplay: '23/07/2018T17:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T17:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T17:00',
 					PositionPercentage: 0.3711,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T18:00:00',
-					TimeLineDisplay: '23/07/2018T18:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T18:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T18:00',
 					PositionPercentage: 0.4124,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T19:00:00',
-					TimeLineDisplay: '23/07/2018T19:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T19:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T19:00',
 					PositionPercentage: 0.4536,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T20:00:00',
-					TimeLineDisplay: '23/07/2018T20:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T20:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T20:00',
 					PositionPercentage: 0.4948,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T21:00:00',
-					TimeLineDisplay: '23/07/2018T21:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T21:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T21:00',
 					PositionPercentage: 0.5361,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T22:00:00',
-					TimeLineDisplay: '23/07/2018T22:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T22:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T22:00',
 					PositionPercentage: 0.5773,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T23:00:00',
-					TimeLineDisplay: '23/07/2018T23:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T23:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T23:00',
 					PositionPercentage: 0.6186,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-24T00:00:00',
-					TimeLineDisplay: '24/07/2018T00:00',
+					Time:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T00:00:00',
+					TimeLineDisplay:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T00:00',
 					PositionPercentage: 0.6598,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-24T01:00:00',
-					TimeLineDisplay: '24/07/2018T01:00',
+					Time:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T01:00:00',
+					TimeLineDisplay:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T01:00',
 					PositionPercentage: 0.701,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-24T02:00:00',
-					TimeLineDisplay: '24/07/2018T02:00',
+					Time:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T02:00:00',
+					TimeLineDisplay:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T02:00',
 					PositionPercentage: 0.7423,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-24T03:00:00',
-					TimeLineDisplay: '24/07/2018T03:00',
+					Time:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T03:00:00',
+					TimeLineDisplay:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T03:00',
 					PositionPercentage: 0.7835,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-24T04:00:00',
-					TimeLineDisplay: '24/07/2018T04:00',
+					Time:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T04:00:00',
+					TimeLineDisplay:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T04:00',
 					PositionPercentage: 0.8247,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-24T05:00:00',
-					TimeLineDisplay: '24/07/2018T05:00',
+					Time:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T05:00:00',
+					TimeLineDisplay:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T05:00',
 					PositionPercentage: 0.866,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-24T06:00:00',
-					TimeLineDisplay: '24/07/2018T06:00',
+					Time:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T06:00:00',
+					TimeLineDisplay:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T06:00',
 					PositionPercentage: 0.9072,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-24T07:00:00',
-					TimeLineDisplay: '24/07/2018T07:00',
+					Time:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T07:00:00',
+					TimeLineDisplay:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T07:00',
 					PositionPercentage: 0.9485,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-24T08:00:00',
-					TimeLineDisplay: '24/07/2018T08:00',
+					Time:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T08:00:00',
+					TimeLineDisplay:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T08:00',
 					PositionPercentage: 0.9897,
 					TimeFixedFormat: null
 				}
@@ -493,7 +549,7 @@
 	test('should render overnight timeline', function() {
 		$('body').append(agentSchedulesHtml);
 		initVm();
-		vm.selectedDate(moment('2018-07-23'));
+		vm.selectedDate(moment(selectedDate));
 
 		vm = Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule.Vm();
 
@@ -676,14 +732,26 @@
 			AgentSchedules: fakeOriginalAgentSchedulesData.slice(10),
 			TimeLine: [
 				{
-					Time: '2018-07-24T07:00:00',
-					TimeLineDisplay: '24/07/2018T07:00',
+					Time:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T07:00:00',
+					TimeLineDisplay:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T07:00',
 					PositionPercentage: 0.9485,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-24T08:00:00',
-					TimeLineDisplay: '24/07/2018T08:00',
+					Time:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T08:00:00',
+					TimeLineDisplay:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T08:00',
 					PositionPercentage: 0.9897,
 					TimeFixedFormat: null
 				}
@@ -855,6 +923,26 @@
 		equal($('.teammates-schedules-container .dayoff').length == 1, true);
 	});
 
+	test('should reset paging after turn on show only day off toggle', function() {
+		$('body').append(agentSchedulesHtml);
+
+		if (fakeOriginalAgentSchedulesData.length > 0) {
+			fakeOriginalAgentSchedulesData[0].IsDayOff = true;
+		}
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+		vm.paging.take = 20;
+		vm.paging.skip = 20;
+
+		$('.new-teamschedule-day-off-toggle input').click();
+
+		equal(completeLoadedCount, 2);
+		equal(vm.paging.take, 20);
+		equal(vm.paging.skip, 0);
+		equal($('.teammates-schedules-container .dayoff').length == 1, true);
+	});
+
 	test("should not filter agents' day off immediately after turn on show only day off toggle but widthout clicking search on mobile", function() {
 		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
@@ -892,6 +980,102 @@
 		equal(
 			$('.teammates-agent-name-row .new-teamschedule-agent-name:nth-child(1) .text-name').text(),
 			'Jon Kleinsmith50'
+		);
+	});
+
+	test('should filter agents using start time slider', function() {
+		$('body').append(agentSchedulesHtml);
+
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+		$('.new-teamschedule-time-filter').click();
+
+		vm.startTimeStart('06:00');
+		vm.startTimeEnd('10:00');
+
+		$('.new-teamschedule-submit-buttons button.btn-primary').click();
+
+		equal(completeLoadedCount, 2);
+		equal($('.teammates-agent-name-row .new-teamschedule-agent-name:nth-child(1) .text-name').length, 0);
+	});
+
+	test('should not filter agents using start time slider if both start time start and start time end are zero', function() {
+		$('body').append(agentSchedulesHtml);
+
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+		$('.new-teamschedule-time-filter').click();
+
+		vm.startTimeStart('00:00');
+		vm.startTimeEnd('00:00');
+
+		$('.new-teamschedule-submit-buttons button.btn-primary').click();
+
+		equal(completeLoadedCount, 2);
+		equal(ajaxOption.ScheduleFilter.filteredStartTimes === '', true);
+	});
+
+	test('should filter agents using end time slider', function() {
+		$('body').append(agentSchedulesHtml);
+
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+		$('.new-teamschedule-time-filter').click();
+
+		vm.endTimeStart('06:00');
+		vm.endTimeEnd('10:00');
+
+		$('.new-teamschedule-submit-buttons button.btn-primary').click();
+
+		equal(completeLoadedCount, 2);
+		equal($('.teammates-agent-name-row .new-teamschedule-agent-name:nth-child(1) .text-name').length, 1);
+		equal(
+			$('.teammates-agent-name-row .new-teamschedule-agent-name:nth-child(1) .text-name').text(),
+			'Jon Kleinsmith1'
+		);
+	});
+
+	test('should not filter agents using end time slider if both end time start and end time end are zero', function() {
+		$('body').append(agentSchedulesHtml);
+
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+		$('.new-teamschedule-time-filter').click();
+
+		vm.endTimeStart('00:00');
+		vm.endTimeEnd('00:00');
+
+		$('.new-teamschedule-submit-buttons button.btn-primary').click();
+
+		equal(completeLoadedCount, 2);
+		equal(ajaxOption.ScheduleFilter.filteredStartTimes === '', true);
+	});
+
+	test('should filter agents using both start and end time slider', function() {
+		$('body').append(agentSchedulesHtml);
+
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+		$('.new-teamschedule-time-filter').click();
+
+		vm.startTimeStart('04:00');
+		vm.startTimeEnd('07:00');
+
+		vm.endTimeStart('05:00');
+		vm.endTimeEnd('10:00');
+
+		$('.new-teamschedule-submit-buttons button.btn-primary').click();
+
+		equal(completeLoadedCount, 2);
+		equal($('.teammates-agent-name-row .new-teamschedule-agent-name .text-name').length, 20);
+		equal(
+			$('.teammates-agent-name-row .new-teamschedule-agent-name:nth-child(1) .text-name').text(),
+			'Jon Kleinsmith1'
 		);
 	});
 
@@ -948,194 +1132,239 @@
 			AgentSchedules: [],
 			TimeLine: [
 				{
-					Time: '2018-07-22T23:00:00',
+					Time:
+						moment(selectedDate)
+							.add(-1, 'day')
+							.format(dateFormat) + 'T23:00:00',
 					TimeLineDisplay: '22/07/2018T23:00',
 					PositionPercentage: 0.0,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T00:00:00',
-					TimeLineDisplay: '23/07/2018T00:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T00:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T00:00',
 					PositionPercentage: 0.032,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T01:00:00',
-					TimeLineDisplay: '23/07/2018T01:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T01:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T01:00',
 					PositionPercentage: 0.064,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T02:00:00',
-					TimeLineDisplay: '23/07/2018T02:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T02:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T02:00',
 					PositionPercentage: 0.096,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T03:00:00',
-					TimeLineDisplay: '23/07/2018T03:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T03:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T03:00',
 					PositionPercentage: 0.128,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T04:00:00',
-					TimeLineDisplay: '23/07/2018T04:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T04:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T04:00',
 					PositionPercentage: 0.16,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T05:00:00',
-					TimeLineDisplay: '23/07/2018T05:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T05:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T05:00',
 					PositionPercentage: 0.192,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T06:00:00',
-					TimeLineDisplay: '23/07/2018T06:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T06:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T06:00',
 					PositionPercentage: 0.224,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T07:00:00',
-					TimeLineDisplay: '23/07/2018T07:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T07:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T07:00',
 					PositionPercentage: 0.256,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T08:00:00',
-					TimeLineDisplay: '23/07/2018T08:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T08:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T08:00',
 					PositionPercentage: 0.288,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T09:00:00',
-					TimeLineDisplay: '23/07/2018T09:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T09:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T09:00',
 					PositionPercentage: 0.32,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T10:00:00',
-					TimeLineDisplay: '23/07/2018T10:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T10:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T10:00',
 					PositionPercentage: 0.352,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T11:00:00',
-					TimeLineDisplay: '23/07/2018T11:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T11:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T11:00',
 					PositionPercentage: 0.384,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T12:00:00',
-					TimeLineDisplay: '23/07/2018T12:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T12:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T12:00',
 					PositionPercentage: 0.416,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T13:00:00',
-					TimeLineDisplay: '23/07/2018T13:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T13:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T13:00',
 					PositionPercentage: 0.448,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T14:00:00',
-					TimeLineDisplay: '23/07/2018T14:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T14:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T14:00',
 					PositionPercentage: 0.48,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T15:00:00',
-					TimeLineDisplay: '23/07/2018T15:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T15:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T15:00',
 					PositionPercentage: 0.512,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T16:00:00',
-					TimeLineDisplay: '23/07/2018T16:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T16:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T16:00',
 					PositionPercentage: 0.544,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T17:00:00',
-					TimeLineDisplay: '23/07/2018T17:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T17:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T17:00',
 					PositionPercentage: 0.576,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T18:00:00',
-					TimeLineDisplay: '23/07/2018T18:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T18:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T18:00',
 					PositionPercentage: 0.608,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T19:00:00',
-					TimeLineDisplay: '23/07/2018T19:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T19:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T19:00',
 					PositionPercentage: 0.64,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T20:00:00',
-					TimeLineDisplay: '23/07/2018T20:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T20:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T20:00',
 					PositionPercentage: 0.672,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T21:00:00',
-					TimeLineDisplay: '23/07/2018T21:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T21:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T21:00',
 					PositionPercentage: 0.704,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T22:00:00',
-					TimeLineDisplay: '23/07/2018T22:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T22:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T22:00',
 					PositionPercentage: 0.736,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-23T23:00:00',
-					TimeLineDisplay: '23/07/2018T23:00',
+					Time: moment(selectedDate).format(dateFormat) + 'T23:00:00',
+					TimeLineDisplay: moment(selectedDate).format(dateFormat) + 'T23:00',
 					PositionPercentage: 0.768,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-24T00:00:00',
-					TimeLineDisplay: '24/07/2018T00:00',
+					Time:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T00:00:00',
+					TimeLineDisplay:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T00:00',
 					PositionPercentage: 0.8,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-24T01:00:00',
-					TimeLineDisplay: '24/07/2018T01:00',
+					Time:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T01:00:00',
+					TimeLineDisplay:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T01:00',
 					PositionPercentage: 0.832,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-24T02:00:00',
-					TimeLineDisplay: '24/07/2018T02:00',
+					Time:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T02:00:00',
+					TimeLineDisplay:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T02:00',
 					PositionPercentage: 0.864,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-24T03:00:00',
-					TimeLineDisplay: '24/07/2018T03:00',
+					Time:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T03:00:00',
+					TimeLineDisplay:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T03:00',
 					PositionPercentage: 0.896,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-24T04:00:00',
-					TimeLineDisplay: '24/07/2018T04:00',
+					Time:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T04:00:00',
+					TimeLineDisplay:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T04:00',
 					PositionPercentage: 0.928,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-24T05:00:00',
-					TimeLineDisplay: '24/07/2018T05:00',
+					Time:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T05:00:00',
+					TimeLineDisplay:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T05:00',
 					PositionPercentage: 0.96,
 					TimeFixedFormat: null
 				},
 				{
-					Time: '2018-07-24T06:00:00',
-					TimeLineDisplay: '24/07/2018T06:00',
+					Time:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T06:00:00',
+					TimeLineDisplay:
+						moment(selectedDate)
+							.add(1, 'day')
+							.format(dateFormat) + 'T06:00',
 					PositionPercentage: 0.992,
 					TimeFixedFormat: null
 				}
@@ -1163,8 +1392,8 @@
 					{
 						Title: 'Phone',
 						TimeSpan: '05:00 - 06:45',
-						StartTime: '2018-05-24T05:00:00',
-						EndTime: '2018-05-24T06:45:00',
+						StartTime: selectedDate + 'T05:00:00',
+						EndTime: selectedDate + 'T06:45:00',
 						Summary: '',
 						StyleClassName: '',
 						Meeting: '',
@@ -1191,7 +1420,7 @@
 		for (var i = 0; i < agentCount; i++) {
 			var agentSchedule = {
 				Name: 'Jon Kleinsmith' + (i + 1),
-				StartTimeUtc: '2018-05-24T05:00:00',
+				StartTimeUtc: selectedDate + 'T05:00:00',
 				PersonId: 'a74e1f94-6331-4a7f-9746-9b5e015b257c',
 				MinStart: null,
 				Total: 1,
@@ -1210,8 +1439,8 @@
 					{
 						Title: 'Email',
 						TimeSpan: '05:00 - 06:45',
-						StartTime: '2018-05-24T05:00:00',
-						EndTime: '2018-05-24T06:45:00',
+						StartTime: selectedDate + 'T05:00:00',
+						EndTime: selectedDate + 'T06:45:00',
 						Summary: '',
 						StyleClassName: '',
 						Meeting: '',
@@ -1251,25 +1480,67 @@
 				if (option.url === '../api/TeamSchedule/TeamSchedule') {
 					fetchTeamScheduleDataRequestCount++;
 
-					var data = JSON.parse(option.data);
-					var skip = data.Paging.Skip;
-					var take = data.Paging.Take;
+					ajaxOption = JSON.parse(option.data);
+					var skip = ajaxOption.Paging.Skip;
+					var take = ajaxOption.Paging.Take;
 
 					var filteredAgentSchedulesData = [];
-					if (data.ScheduleFilter.isDayOff) {
-						filteredAgentSchedulesData = fakeOriginalAgentSchedulesData.filter(function(s) {
+					filteredAgentSchedulesData = fakeOriginalAgentSchedulesData;
+
+					if (ajaxOption.ScheduleFilter.isDayOff) {
+						filteredAgentSchedulesData = filteredAgentSchedulesData.filter(function(s) {
 							return s.IsDayOff;
 						});
-					} else {
-						filteredAgentSchedulesData = fakeOriginalAgentSchedulesData;
+					}
+
+					if (ajaxOption.ScheduleFilter.filteredStartTimes) {
+						var start = ajaxOption.ScheduleFilter.filteredStartTimes.split('-')[0];
+						var startHour = parseInt(start.split(':')[0]);
+						var startMinute = parseInt(start.split(':')[1]);
+
+						var end = ajaxOption.ScheduleFilter.filteredStartTimes.split('-')[1];
+						var endHour = parseInt(end.split(':')[0]);
+						var endMinute = parseInt(end.split(':')[1]);
+
+						filteredAgentSchedulesData = filteredAgentSchedulesData.filter(function(s) {
+							var startTime = moment(s.Periods[0].StartTime);
+							return (
+								(startTime.hours() > startHour ||
+									(startTime.hours() == startHour && startTime.minutes() > startMinute)) &&
+								(startTime.hours() < endHour ||
+									(startTime.hours() == endHour && startTime.minutes() < endMinute))
+							);
+						});
+					}
+
+					if (ajaxOption.ScheduleFilter.filteredEndTimes) {
+						var start = ajaxOption.ScheduleFilter.filteredEndTimes.split('-')[0];
+						var startHour = parseInt(start.split(':')[0]);
+						var startMinute = parseInt(start.split(':')[1]);
+
+						var end = ajaxOption.ScheduleFilter.filteredEndTimes.split('-')[1];
+						var endHour = parseInt(end.split(':')[0]);
+						var endMinute = parseInt(end.split(':')[1]);
+
+						filteredAgentSchedulesData = filteredAgentSchedulesData.filter(function(s) {
+							var endTime = moment(s.Periods[0].EndTime);
+							return (
+								(endTime.hours() > startHour ||
+									(endTime.hours() == startHour && endTime.minutes() > startMinute)) &&
+								(endTime.hours() < endHour ||
+									(endTime.hours() == endHour && endTime.minutes() < endMinute))
+							);
+						});
 					}
 
 					var pagedAgentSchedules = [];
 					for (var i = skip; i < skip + take; i++) {
 						if (filteredAgentSchedulesData[i]) {
-							if (data.ScheduleFilter.searchNameText) {
+							if (ajaxOption.ScheduleFilter.searchNameText) {
 								if (
-									filteredAgentSchedulesData[i].Name.indexOf(data.ScheduleFilter.searchNameText) > -1
+									filteredAgentSchedulesData[i].Name.indexOf(
+										ajaxOption.ScheduleFilter.searchNameText
+									) > -1
 								) {
 									pagedAgentSchedules.push(filteredAgentSchedulesData[i]);
 								}
@@ -1321,9 +1592,9 @@
 			'				</li>',
 			'				<!-- /ko -->',
 			'				<!-- ko ifnot: isHostAMobile -->',
-			'				<li class="new-teamschedule-time-filter" data-bind="click: toggleFilterPanel">',
+			'				<li class="new-teamschedule-time-filter">',
 			'					<a>',
-			'						<i class="glyphicon glyphicon-time"></i>',
+			'						<i class="glyphicon glyphicon-time" data-bind="style: {color: hasTimeFiltered() ? \'yellow\': \'white\'}"></i>',
 			'					</a>',
 			'				</li>',
 			"				<li class=\"new-teamschedule-day-off-toggle\" data-bind=\"tooltip: { title: '@Resources.ShowOnlyDayOff', html: true, trigger: 'hover', placement: 'bottom'}\">",
@@ -1339,7 +1610,7 @@
 			'					</select>',
 			'				</li>',
 			'				<li class="new-teamschedule-search-container">',
-			'					<form class="new-teamschedule-search-component" data-bind="submit: submitSearchForm">',
+			'					<form class="new-teamschedule-search-component relative" data-bind="submit: submitSearchForm">',
 			'						<input type="search" class="form-control" placeholder=\'@Resources.SearchHintForName\' data-bind="value: searchNameText" />',
 			'						<button type="submit">',
 			'							<i class="glyphicon glyphicon-search"></i>',
@@ -1476,13 +1747,28 @@
 			'				<input type="submit" style="display: none"/>',
 			'			</form>',
 			'			<!--/ko-->',
+			'			<div class="new-teamschedule-time-slider-container">',
+			'				<label>@Resources.StartTime</label>',
+			'				<div class="new-teamschedule-time-slider-line relative">',
+			'					<span class="start-time-slider-start-label" data-bind="text: startTimeStart, visible: showStartTimeStart"></span>',
+			'					<span class="start-time-slider-end-label" data-bind="text: startTimeEnd"></span>',
+			'					<div class="start-time-slider"></div>',
+			'				</div>',
+			'			</div>',
+			'			<div class="new-teamschedule-time-slider-container">',
+			'				<label>@Resources.EndTime</label>',
+			'				<div class="new-teamschedule-time-slider-line relative">',
+			'					<span class="end-time-slider-start-label" data-bind="text: endTimeStart, visible: showEndTimeStart"></span>',
+			'					<span class="end-time-slider-end-label" data-bind="text: endTimeEnd"></span>',
+			'					<div class="end-time-slider"></div>',
+			'				</div>',
+			'			</div>',
 			'			<!-- ko if: isHostAMobile-->',
 			'			<div class="new-teamschedule-day-off-toggle">',
 			'				<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff"/>',
 			'				<label for="show-only-day-off-switch">Day off switch</label>',
 			'				<span>@Resources.ShowOnlyDayOff</span>',
 			'			</div>',
-			'			<!--/ko-->',
 			'			<div class="empty-search-result">',
 			'				<!-- ko if: emptySearchResult -->',
 			'				<label>',
@@ -1490,12 +1776,13 @@
 			'				</label>',
 			'				<!--/ko-->',
 			'			</div>',
+			'			<!--/ko-->',
 			'			<div class="new-teamschedule-submit-buttons">',
 			'				<button class="btn btn-default" data-bind="click: cancelClick">@Resources.Cancel</button>',
 			'				<button class="btn btn-primary" data-bind="click: submitSearchForm">@Resources.Search</button>',
 			'			</div>',
 			'		</div>',
-			'		<!--/ko-->',
+			'		<!-- /ko -->',
 			'	</div>',
 			'</div>'
 		].join('');

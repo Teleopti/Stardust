@@ -15736,4 +15736,55 @@ Applikationen kommer nu att stängas. </value>
   <data name="PleaseSelectASkillFirst" xml:space="preserve">
     <value>Var god välj en kompetens innan du använder denna funktion.</value>
   </data>
+  <data name="ShowOnlyDayOff" xml:space="preserve">
+    <value>Visa endast fridagar</value>
+  </data>
+  <data name="CanNotApproveOrDenyRequestDueToNoPermissionToModifyRestrictedScenarios" xml:space="preserve">
+    <value>Du kan inte ändra status för en förfrågan eftersom du inte har rättigheter att göra ändringar i ett begränsat scenario. </value>
+  </data>
+  <data name="ShiftTradeResendMessage" xml:space="preserve">
+    <value>Förfrågan skickades igen eftersom schemat ändrats.</value>
+  </data>
+  <data name="ConfirmExitOnForecasting" xml:space="preserve">
+    <value>Är du säker på att du vill lämna prognostiseringen och slänga den pågående prognosen?</value>
+  </data>
+  <data name="ForecastNotFinishedYet" xml:space="preserve">
+    <value>Prognosen är inte klar än</value>
+  </data>
+  <data name="NoHistoricalDataFoundForThisSkill" xml:space="preserve">
+    <value>Ingen historisk data hittades för den här kompetensen.</value>
+  </data>
+  <data name="FailedExportToExcel" xml:space="preserve">
+    <value>Misslyckades att exportera till Excel, vanligtvis orsakat av att data saknas</value>
+  </data>
+  <data name="Finished" xml:space="preserve">
+    <value>Klar</value>
+  </data>
+  <data name="Job" xml:space="preserve">
+    <value>Jobb</value>
+  </data>
+  <data name="OriginalChats" xml:space="preserve">
+    <value>Ursprungligt antal chattar</value>
+  </data>
+  <data name="OriginalEmails" xml:space="preserve">
+    <value>Ursprunglig e-post</value>
+  </data>
+  <data name="CampaignEmailsPercentSign" xml:space="preserve">
+    <value>E-postkampanj %</value>
+  </data>
+  <data name="CampaignTasksPercentSign" xml:space="preserve">
+    <value>Uppgiftskampanj %</value>
+  </data>
+  <data name="BadgeThreshold" xml:space="preserve">
+    <value>Tröskelvärde för medaljer</value>
+  </data>
+  <data name="BronzeBadgeThreshold" xml:space="preserve">
+    <value>Tröskelvärde för brons</value>
+  </data>
+  <data name="GoldBadgeThreshold" xml:space="preserve">
+    <value>Tröskelvärde för guld</value>
+  </data>
+  <data name="SilverBadgeThreshold" xml:space="preserve">
+    <value>Tröskelvärde för silver</value>
+  </data>
 </root>

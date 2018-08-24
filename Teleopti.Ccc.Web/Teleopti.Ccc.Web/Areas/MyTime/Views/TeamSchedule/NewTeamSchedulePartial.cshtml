@@ -16,6 +16,10 @@
 		top: 40vh;
 		background: transparent;
 	}
+	.select2-drop-active {
+		border: none;
+		box-shadow: 0 2px 2px 1px rgba(0, 0, 0, 0.1);
+	}
 </style>
 <!-- ko if: isHostAniPad || isHostAMobile -->
 <style>
@@ -63,9 +67,9 @@
 				</li>
 				<!-- /ko -->
 				<!-- ko ifnot: isHostAMobile -->
-				<li class="new-teamschedule-time-filter" data-bind="click: toggleFilterPanel">
+				<li class="new-teamschedule-time-filter">
 					<a>
-						<i class="glyphicon glyphicon-time"></i>
+						<i class="glyphicon glyphicon-time" data-bind="style: {color: hasTimeFiltered() ? 'yellow': 'white'}"></i>
 					</a>
 				</li>
 				<li class="new-teamschedule-day-off-toggle" data-bind="tooltip: { title: '@Resources.ShowOnlyDayOff', html: true, trigger: 'hover', placement: 'bottom'}">
@@ -228,18 +232,18 @@
 			<div class="new-teamschedule-time-slider-container">
 				<label>@Resources.StartTime</label>
 				<div class="new-teamschedule-time-slider-line relative">
-					<span class="start-time-start-slider"></span>
-					<span class="start-time-interval-line"></span>
-					<span class="start-time-end-slider"></span>
+					<span class="start-time-slider-start-label" data-bind="text: startTimeStart, visible: showStartTimeStart"></span>
+					<span class="start-time-slider-end-label" data-bind="text: startTimeEnd"></span>
+					<div class="start-time-slider"></div>
 				</div>
 			</div>
 
 			<div class="new-teamschedule-time-slider-container">
 				<label>@Resources.EndTime</label>
 				<div class="new-teamschedule-time-slider-line relative">
-					<span class="end-time-start-slider"></span>
-					<span class="end-time-interval-line"></span>
-					<span class="end-time-end-slider"></span>
+					<span class="end-time-slider-start-label" data-bind="text: endTimeStart, visible: showEndTimeStart"></span>
+					<span class="end-time-slider-end-label" data-bind="text: endTimeEnd"></span>
+					<div class="end-time-slider"></div>
 				</div>
 			</div>
 			<!-- ko if: isHostAMobile-->
@@ -262,6 +266,6 @@
 				<button class="btn btn-primary" data-bind="click: submitSearchForm">@Resources.Search</button>
 			</div>
 		</div>
-		<!--/ko-->
+		<!-- /ko -->
 	</div>
 </div>
