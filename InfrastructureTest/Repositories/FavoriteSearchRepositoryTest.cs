@@ -74,27 +74,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void CanFindFavoritesByPersonAndNameInGivenArea()
-		{
-			var name1 = "myfav";
-			var name2 = "search1";
-			var person = PersonFactory.CreatePerson("test");
-			PersistAndRemoveFromUnitOfWork(person);
-			var fav1 = new FavoriteSearch(name1);
-			var fav2 = new FavoriteSearch(name2);
-			fav1.Creator = person;
-			fav1.WfmArea = WfmArea.Teams;
-			fav2.Creator = person;
-			fav2.WfmArea = WfmArea.Requests;
-			PersistAndRemoveFromUnitOfWork(fav1);
-			PersistAndRemoveFromUnitOfWork(fav2);
-
-			var results = new FavoriteSearchRepository(UnitOfWork).FindByPersonAndName(person.Id.Value, name1, WfmArea.Teams);
-
-			Assert.AreEqual(1, results.Count());
-		}
-
-		[Test]
 		public void ShouldThrowExceptionWhenAddingFavoriteSearchWithSameNameForSamePersonInSameArea()
 		{
 			var name = "myfav";

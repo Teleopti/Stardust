@@ -56,15 +56,15 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 		private void etlControlJobRun(object sender, AlarmEventArgs e)
 		{
 			var tenant = App.Container.Resolve<ITenants>().Tenant(myControl.TenantName);
-			if (tenant == null || tenant.EtlConfiguration == null)
-				return;
+			if (tenant?.EtlConfiguration == null) return;
+
 			e.Job.StepList[0].JobParameters.SetTenantBaseConfigValues(tenant.EtlConfiguration);
 			e.Job.StepList[0].JobParameters.DataSource = myControl.LogDataSource;
 			_baseConfiguration.JobHelper.SelectDataSourceContainer(myControl.TenantName);
 			//Clear job periods before adding them again
 			e.Job.StepList[0].JobParameters.JobCategoryDates.Clear();
 
-			foreach (JobCategoryType jobCategoryType in myControl.JobMultipleDatePeriods.JobCategoryCollection)
+			foreach (var jobCategoryType in myControl.JobMultipleDatePeriods.JobCategoryCollection)
 			{
 				e.Job.StepList[0].JobParameters.JobCategoryDates.Add(
 					myControl.JobMultipleDatePeriods.GetJobMultipleDateItem(jobCategoryType), jobCategoryType);
@@ -76,23 +76,22 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 
 		private bool isDatesValid(IJobMultipleDate jobMultipleDate)
 		{
-			foreach (IJobMultipleDateItem jobMultipleDateItem in jobMultipleDate.AllDatePeriodCollection)
+			foreach (var jobMultipleDateItem in jobMultipleDate.AllDatePeriodCollection)
 			{
-				if (jobMultipleDateItem.StartDateLocal >= jobMultipleDateItem.EndDateLocal)
-				{
-					const string message = "'Date from' cannot be set to a later date than 'Date to'. Change date selection and try again.";
-					const string caption = "Invalid date selection";
-					MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, 0);
-					myTree.SetExecuteEnabledState(true);
-					return false;
-				}
+				if (jobMultipleDateItem.StartDateLocal < jobMultipleDateItem.EndDateLocal) continue;
+
+				const string message = "'Date from' cannot be set to a later date than 'Date to'. Change date selection and try again.";
+				const string caption = "Invalid date selection";
+				MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, 0);
+				myTree.SetExecuteEnabledState(true);
+				return false;
 			}
 			return true;
 		}
 
 		internal void RunJob(IJob job)
 		{
-			_backGroundJob.Run(job);
+			_backGroundJob.Run(job, myControl.TenantName);
 		}
 
 		internal void ReloadDataSources()
@@ -120,9 +119,6 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 			myTree.LoadJobTree(baseConfiguration);
 		}
 
-		public ManualControl ManualControl
-		{ get { return myControl; } }
-
-		
+		public ManualControl ManualControl => myControl;
 	}
 }

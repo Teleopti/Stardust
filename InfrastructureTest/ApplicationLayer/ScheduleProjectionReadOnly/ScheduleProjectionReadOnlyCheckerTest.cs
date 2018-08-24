@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionRea
 			var person = Guid.NewGuid();
 			WithUnitOfWork.Do(() =>
 			{
-				Target.Execute(new ProjectionChangedEvent
+				Target.Execute(new ProjectionChangedEventNew
 				{
 					PersonId = person,
 					ScheduleDays = new[]
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionRea
 					}
 				});
 
-				Target.Execute(new ProjectionChangedEvent
+				Target.Execute(new ProjectionChangedEventNew
 				{
 					PersonId = person,
 					ScheduleDays = new[]

@@ -612,8 +612,6 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 				.Should().Not.Be.Null();
 			requestContainer.Resolve<IEnumerable<IHandleEvent<ScheduleChangedEvent>>>()
 				.Should().Not.Be.Null();
-			requestContainer.Resolve<IEnumerable<IHandleEvent<ProjectionChangedEvent>>>()
-				.Should().Not.Be.Null();
 		}
 
 		[Test]

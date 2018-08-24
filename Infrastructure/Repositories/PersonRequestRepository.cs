@@ -552,26 +552,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return requestsForAgent;
 		}
 
-		private ICriteria getAllRequests(IPerson person)
-		{
-			var personRequests = Session.CreateCriteria<PersonRequest>()
-				.SetFetchMode("requests", FetchMode.Join)
-				.SetResultTransformer(Transformers.DistinctRootEntity)
-				.AddOrder(Order.Desc("UpdatedOn"));
-			var requestsForAgent = getShiftTradeRequestsForAgent(person);
-
-			personRequests.Add(requestsForAgent);
-			return personRequests;
-		}
-
-		private static void applyPagingToResults(Paging paging, ICriteria personRequests)
-		{
-			if (paging.Equals(Paging.Empty)) return;
-
-			personRequests.SetMaxResults(paging.Take);
-			personRequests.SetFirstResult(paging.Skip);
-		}
-
 		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person)
 		{
 			return findAllRequestsForAgent(person, null);

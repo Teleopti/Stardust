@@ -81,7 +81,6 @@
 		ResourcePlanner_RunPerfTestAsTeam_43537,
 		ResourcePlanner_UseErlangAWithInfinitePatience_45845,
 		ResourcePlanner_PrepareToRemoveExportSchedule_46576,
-		ResourcePlanner_SpeedUpEvents_75415,
 		ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899,
 		ResourcePlanner_UseErlangAWithFinitePatience_47738,
 		ResourcePlanner_XXL_76496,
@@ -110,6 +109,7 @@
 		ETL_RemoveTimeZoneAndDateNightly_40870,
 		ETL_FixScheduleForPersonPeriod_41393,
 		ETL_Optimize_Memory_Usage_76761,
+		ETL_Show_Tenant_Name_In_History_75767,
 
 		Staffing_Info_Configuration_44687,
 		WfmStaffing_AddOvertime_42524,

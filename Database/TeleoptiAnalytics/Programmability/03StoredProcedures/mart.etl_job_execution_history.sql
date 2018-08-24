@@ -3,26 +3,25 @@ DROP PROCEDURE [mart].[etl_job_execution_history]
 GO
 
 -- =============================================
--- Author:		Jonas N
+-- Author:      Jonas N
 -- Create date: 2012-03-29
--- Description:	Return ETL Job history for the given period
+-- Description: Return ETL Job history for the given period
 -- =============================================
 CREATE PROCEDURE [mart].[etl_job_execution_history]
-	@start_date smalldatetime, 
+	@start_date smalldatetime,
 	@end_date smalldatetime,
 	@business_unit_id nvarchar(max),
 	@show_only_errors bit
 AS
 BEGIN
 	SET NOCOUNT ON;
-	
+
 	SET @start_date = CONVERT(smalldatetime,CONVERT(nvarchar(30), @start_date, 112)) --ISO yyyymmdd
 	SET @end_date	= CONVERT(smalldatetime,CONVERT(nvarchar(30), @end_date, 112))
 	SET @end_date	= DATEADD(d, 1, @end_date)
 
     IF @show_only_errors = 1
     BEGIN
-
 		SELECT
 			je.job_execution_id,
 			j.job_name,
@@ -33,6 +32,7 @@ BEGIN
 			je.affected_rows AS job_affected_rows,
 			je.schedule_id,
 			sch.schedule_name,
+			je.tenant_name,
 			jse.jobstep_execution_id,
 			isnull (js.jobstep_name,'Logon') as jobstep_name,
 			jse.duration_s AS jobstep_duration_s,
@@ -41,7 +41,7 @@ BEGIN
 			er.error_exception_stacktrace AS exception_trace,
 			er.inner_error_exception_message AS inner_exception_msg,
 			er.inner_error_exception_stacktrace AS inner_exception_trace
-		FROM 
+		FROM
 			mart.etl_job_execution je
 		INNER JOIN
 			mart.etl_job_schedule sch
@@ -62,19 +62,19 @@ BEGIN
 		LEFT OUTER JOIN
 			mart.etl_jobstep_error er
 		ON
-			jse.jobstep_error_id = er.jobstep_error_id	
+			jse.jobstep_error_id = er.jobstep_error_id
 		WHERE
 			je.job_execution_id IN	(SELECT je.job_execution_id
 									FROM
 										mart.etl_job_execution je
-									INNER JOIN 
+									INNER JOIN
 										mart.etl_jobstep_execution jse
 									ON
 										je.job_execution_id = jse.job_execution_id
 									LEFT OUTER JOIN
 										mart.etl_jobstep_error er
 									ON
-										jse.jobstep_error_id = er.jobstep_error_id	
+										jse.jobstep_error_id = er.jobstep_error_id
 									WHERE
 										(je.job_start_time >= @start_date)
 										AND
@@ -83,16 +83,15 @@ BEGIN
 										(je.business_unit_code in (SELECT * FROM mart.SplitStringGuid(@business_unit_id))
 										Or
 										@business_unit_id = '00000000-0000-0000-0000-000000000002')
-										AND 
+										AND
 										jse.jobstep_error_id IS NOT NULL)
-		ORDER BY 
+		ORDER BY
 		job_execution_id desc,
 		jobstep_execution_id
     END
     ELSE
     BEGIN
-
-		SELECT 
+		SELECT
 			je.job_execution_id,
 			j.job_name,
 			je.business_unit_name,
@@ -102,6 +101,7 @@ BEGIN
 			je.affected_rows AS job_affected_rows,
 			je.schedule_id,
 			sch.schedule_name,
+			je.tenant_name,
 			jse.jobstep_execution_id,
 			isnull (js.jobstep_name,'Logon') as jobstep_name,
 			jse.duration_s AS jobstep_duration_s,
@@ -110,7 +110,7 @@ BEGIN
 			er.error_exception_stacktrace AS exception_trace,
 			er.inner_error_exception_message AS inner_exception_msg,
 			er.inner_error_exception_stacktrace AS inner_exception_trace
-		FROM 
+		FROM
 			mart.etl_job_execution je
 		INNER JOIN
 			mart.etl_job_schedule sch
@@ -131,7 +131,7 @@ BEGIN
 		LEFT OUTER JOIN
 			mart.etl_jobstep_error er
 		ON
-			jse.jobstep_error_id = er.jobstep_error_id	
+			jse.jobstep_error_id = er.jobstep_error_id
 		WHERE
 			(je.job_start_time >= @start_date)
 			AND
@@ -140,7 +140,7 @@ BEGIN
 			(je.business_unit_code in (SELECT * FROM mart.SplitStringGuid(@business_unit_id))
 			Or
 			@business_unit_id = '00000000-0000-0000-0000-000000000002')
-		ORDER BY 
+		ORDER BY
 			je.job_execution_id desc,
 			jse.jobstep_execution_id
     END

@@ -76,6 +76,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Json(_toggleManager.IsEnabled(Toggles.ETL_Show_Web_Based_ETL_Tool_74837));
 		}
 
+		[HttpGet, Route("Etl/ShouldTenantNameBeVisible")]
+		public IHttpActionResult ShouldTenantNameBeVisible()
+		{
+			return Json(_toggleManager.IsEnabled(Toggles.ETL_Show_Tenant_Name_In_History_75767));
+		}
+
 		[TenantUnitOfWork]
 		[HttpPost, Route("Etl/Jobs")]
 		public virtual IHttpActionResult Jobs([FromBody] string tenantName)

@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			PersonRepository.Add(person);
 			PreferenceDayRepository.Add(new PreferenceDay(person, DateOnly.Today, new PreferenceRestriction()));
 
-			EventPublisher.PublishedEvents.Count().Should().Be.EqualTo(0);
+			EventPublisher.PublishedEvents.OfType<PreferenceChangedEvent>().Count().Should().Be.EqualTo(0);
 			Target.Handle(new ScheduleChangedEvent
 			{
 				PersonId = person.Id.GetValueOrDefault(),
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 				LogOnBusinessUnitId = businessUnitId
 			});
 
-			EventPublisher.PublishedEvents.Count().Should().Be.EqualTo(1);
+			EventPublisher.PublishedEvents.OfType<PreferenceChangedEvent>().Count().Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			PreferenceDayRepository.Add(new PreferenceDay(person, DateOnly.Today, new PreferenceRestriction()));
 			PreferenceDayRepository.Add(new PreferenceDay(person, DateOnly.Today.AddDays(1), new PreferenceRestriction()));
 
-			EventPublisher.PublishedEvents.Count().Should().Be.EqualTo(0);
+			EventPublisher.PublishedEvents.OfType<PreferenceChangedEvent>().Count().Should().Be.EqualTo(0);
 			Target.Handle(new ScheduleChangedEvent
 			{
 				PersonId = person.Id.GetValueOrDefault(),
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 				LogOnBusinessUnitId = businessUnitId
 			});
 
-			EventPublisher.PublishedEvents.Count().Should().Be.EqualTo(2);
+			EventPublisher.PublishedEvents.OfType<PreferenceChangedEvent>().Count().Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			PreferenceDayRepository.Add(new PreferenceDay(person, DateOnly.Today, new PreferenceRestriction()));
 			PreferenceDayRepository.Add(new PreferenceDay(person, DateOnly.Today.AddDays(1), new PreferenceRestriction()));
 
-			EventPublisher.PublishedEvents.Count().Should().Be.EqualTo(0);
+			EventPublisher.PublishedEvents.OfType<PreferenceChangedEvent>().Count().Should().Be.EqualTo(0);
 			Target.Handle(new ScheduleChangedEvent
 			{
 				PersonId = person.Id.GetValueOrDefault(),
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 				LogOnBusinessUnitId = businessUnitId
 			});
 
-			EventPublisher.PublishedEvents.Count().Should().Be.EqualTo(1);
+			EventPublisher.PublishedEvents.OfType<PreferenceChangedEvent>().Count().Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			var person = PersonFactory.CreatePerson(timeZone).WithId();
 			PersonRepository.Add(person);
 
-			EventPublisher.PublishedEvents.Count().Should().Be.EqualTo(0);
+			EventPublisher.PublishedEvents.OfType<PreferenceChangedEvent>().Count().Should().Be.EqualTo(0);
 			Target.Handle(new ScheduleChangedEvent
 			{
 				PersonId = person.Id.GetValueOrDefault(),
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 				EndDateTime = timeZone.SafeConvertTimeToUtc(DateTime.Today),
 				LogOnBusinessUnitId = businessUnitId
 			});
-			EventPublisher.PublishedEvents.Count().Should().Be.EqualTo(0);
+			EventPublisher.PublishedEvents.OfType<PreferenceChangedEvent>().Count().Should().Be.EqualTo(0);
 		}
 	}
 }
