@@ -4,16 +4,12 @@ import { downgradeComponent, downgradeModule } from '@angular/upgrade/static';
 import { IControllerConstructor, IRootScopeService } from 'angular';
 import { AddAppPageComponent, ApiAccessTitleBarComponent, ListPageComponent } from './app/api-access/components';
 import { AppModule } from './app/app.module';
-import {
-	AppLogonPageComponent,
-	GrantPageComponent,
-	IdentityLogonPageComponent,
-	RevokePageComponent,
-	SearchPageComponent,
-	TitleBarComponent
-} from './app/people/components';
+import { ChangePasswordComponent } from './app/authentication/components/change-password/change-password.component';
+import { AppLogonPageComponent, GrantPageComponent, IdentityLogonPageComponent, RevokePageComponent, SearchPageComponent, TitleBarComponent } from './app/people/components';
 import { environment } from './environments/environment';
 import { MainController } from './main.controller';
+
+
 
 export interface IWfmRootScopeService extends IRootScopeService {
 	_: any;
@@ -83,7 +79,8 @@ const wfm = angular.module('wfm', [
 	'wfm.popup',
 	'wfm.gamification',
 	'wfm.btnGroup',
-	'wfm.ai'
+	'wfm.ai',
+	'wfm.authentication'
 ]);
 
 wfm.controller('MainController', MainController as IControllerConstructor);
@@ -102,6 +99,7 @@ downgradeHelper('ng2PeopleGrantPage', GrantPageComponent);
 downgradeHelper('ng2PeopleRevokePage', RevokePageComponent);
 downgradeHelper('ng2PeopleAppLogonPage', AppLogonPageComponent);
 downgradeHelper('ng2PeopleIdentityLogonPage', IdentityLogonPageComponent);
+downgradeHelper('ng2ChangePassword', ChangePasswordComponent);
 
 wfm.config([
 	'$stateProvider',

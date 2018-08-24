@@ -17748,4 +17748,8 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Silver badge threshold</value>
     <comment>Silver badge threshold</comment>
   </data>
+  <data name="PasswordChangedSuccessfully" xml:space="preserve">
+    <value>Your password was changed</value>
+    <comment>When password is successfully changed</comment>
+  </data>
 </root>
