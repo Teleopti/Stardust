@@ -285,8 +285,11 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function(ajax, portal) {
 	function _setMustHave(mustHave, successCb) {
 		$(selectedDateSelectorStr).each(function(index, cell) {
 			var date = $(cell).data('mytime-date');
-			preferencesAndScheduleViewModel.DayViewModels[date].SetMustHave(mustHave, function() {
-				successCb && successCb();
+			preferencesAndScheduleViewModel.DayViewModels[date].SetMustHave(mustHave, function(
+				newMustHave,
+				originalMustHave
+			) {
+				successCb && successCb(newMustHave, originalMustHave);
 				_clearSelectedDates();
 			});
 		});
