@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		}
 
 		const string raptorDefaultDatasourceName = "TeleoptiCCC";
-		const int raptorDefaultDatasourceId = 1;
+		public static int raptorDefaultDatasourceId = 1;
 
 		private void LoadDatasourcesFromDatabase(SqlConnection connection)
 		{
