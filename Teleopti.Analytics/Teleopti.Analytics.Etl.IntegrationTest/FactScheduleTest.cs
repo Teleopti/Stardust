@@ -84,6 +84,12 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 
+			var result = new List<IJobResult>();
+			JobStepBase step = new StageBusinessUnitJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			step = new DimBusinessUnitJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+
 			jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, person.PermissionInformation.DefaultTimeZone().Id);
 			StepRunner.RunNightly(jobParameters);
 

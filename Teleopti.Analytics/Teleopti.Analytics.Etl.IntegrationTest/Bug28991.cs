@@ -10,6 +10,7 @@ using Teleopti.Analytics.Etl.IntegrationTest.TestData;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
@@ -37,7 +38,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		{
 			DateTime testDate = DateTime.Today.AddDays(-30);
 
-			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(), testDate);
+			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(){new BusinessUnit(TestState.BusinessUnit, 1)}, testDate);
 
 			IPerson person;
 			BasicShiftSetup.SetupBasicForShifts();
@@ -106,7 +107,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		{
 			DateTime testDate = DateTime.Today.AddDays(-30);
 
-			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(), testDate);
+			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(){new BusinessUnit(TestState.BusinessUnit, 1)}, testDate);
 
 			IPerson person;
 			BasicShiftSetup.SetupBasicForShifts();
