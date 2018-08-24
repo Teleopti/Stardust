@@ -1,7 +1,8 @@
 <div class="view-header with-fab">
   <div class="view-title">
-    <h1><i class="mdi mdi-chart-line"></i> {{'Forecasts' | translate}}</h1>
-	  <p translate>Skills</p>
+    <h1>
+      <i class="mdi mdi-chart-line"></i> {{'Forecasts' | translate}}</h1>
+    <p translate>Skills</p>
   </div>
   <div class="fab-wrapper">
     <a ui-sref="forecast-create-skill" ng-cloak>
@@ -15,10 +16,6 @@
   </div>
 </div>
 
-
- 
-
-
 <div ng-if="vm.skills">
   <div class="con-row">
     <div class="con-flex">
@@ -26,14 +23,14 @@
         <label for="filter" class="input-icon">
           <i class="mdi mdi-filter-outline">
             <input type="text" id="filter" ng-model="filter.Workload.Name" placeholder="{{'FilterThreeDots' | translate}}">
-			<md-tooltip>{{'Filter' | translate}}</md-tooltip>
+            <md-tooltip>{{'Filter' | translate}}</md-tooltip>
           </i>
         </label>
         <div>
           <md-select id="SkilltypeFilter" ng-model="filter.SkillType.SkillType" placeholder="{{'SkillTypeFilter' | translate }}">
             <md-option ng-value="">{{'AllSelection' | translate}}</md-option>
             <md-option ng-repeat="item in vm.skilltypes" ng-value="item">{{item | translate}}</md-option>
-          </md-select>          
+          </md-select>
           <md-tooltip>{{'SkillTypeFilter' | translate }}</md-tooltip>
         </div>
 
@@ -59,8 +56,8 @@
             </div>
             <div class="card-footer con-row">
               <span class="con-flex line-right card-footer-section">
-				  <button ng-if="vm.showHistory" class="wfm-btn wfm-btn-invis-primary" ng-click="vm.goToHistory(skill)">{{'OpenHistoricalData' | translate}}</button>
-				  <button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.goToModify(skill)">{{'Open' | translate}}</button>
+                <button ng-if="vm.showHistory" class="wfm-btn wfm-btn-invis-primary" ng-click="vm.goToHistory(skill)">{{'OpenHistoricalData' | translate}}</button>
+                <button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.goToModify(skill)">{{'Open' | translate}}</button>
               </span>
             </div>
           </div>

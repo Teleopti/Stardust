@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TitleBarComponent } from './title-bar.component';
 import { MockTranslationModule } from '../../../../mocks/translation';
-import { FeedbackMessageComponent } from '../feedback-message';
+import { FeedbackMessageComponent } from '../../../shared/components/feedback-message';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { configureTestSuite } from '../../../../configure-test-suit';
 import { HttpClientModule } from '@angular/common/http';
