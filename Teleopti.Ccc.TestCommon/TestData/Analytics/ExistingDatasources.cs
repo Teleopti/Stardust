@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		}
 
 		const string raptorDefaultDatasourceName = "TeleoptiCCC";
-		public static int raptorDefaultDatasourceId = 1;
+		public static int DefaultRaptorDefaultDatasourceId = 1;
 
 		private void LoadDatasourcesFromDatabase(SqlConnection connection)
 		{
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
 		private void UpdateRaptorDefaultDatasourceWithTimeZoneId(SqlConnection connection)
 		{
-			var sql = string.Format("update mart.sys_datasource set time_zone_id = {0} where datasource_id = {1}", _timeZones.CetTimeZoneId, raptorDefaultDatasourceId);
+			var sql = string.Format("update mart.sys_datasource set time_zone_id = {0} where datasource_id = {1}", _timeZones.CetTimeZoneId, DefaultRaptorDefaultDatasourceId);
 			using (var updateTimeZone = new SqlCommand(sql, connection))
 			{
 				if (updateTimeZone.ExecuteNonQuery() != 1)

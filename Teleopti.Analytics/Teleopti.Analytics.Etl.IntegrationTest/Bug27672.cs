@@ -42,7 +42,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Data.Apply(etlUpdateDate);
 
 
-			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(){new BusinessUnit(TestState.BusinessUnit, ExistingDatasources.raptorDefaultDatasourceId)}, testDate);
+			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(){new BusinessUnit(TestState.BusinessUnit, ExistingDatasources.DefaultRaptorDefaultDatasourceId)}, testDate);
 
 			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
 			var activityPhone = new ActivitySpec { Name = "Phone", Color = "LightGreen", InReadyTime = true };
@@ -52,8 +52,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Data.Apply(activityPhone);
 			Data.Apply(activityLunch);
 			var analyticsDataFactory = new AnalyticsDataFactory();
-			analyticsDataFactory.Setup(new Activity(1, activityPhone.Activity.Id.Value, activityPhone.Name, activityPhone.Activity.DisplayColor, ExistingDatasources.raptorDefaultDatasourceId, 1));
-			analyticsDataFactory.Setup(new Activity(2, activityLunch.Activity.Id.Value, activityLunch.Name, activityLunch.Activity.DisplayColor, ExistingDatasources.raptorDefaultDatasourceId, 1));
+			analyticsDataFactory.Setup(new Activity(1, activityPhone.Activity.Id.Value, activityPhone.Name, activityPhone.Activity.DisplayColor, ExistingDatasources.DefaultRaptorDefaultDatasourceId, 1));
+			analyticsDataFactory.Setup(new Activity(2, activityLunch.Activity.Id.Value, activityLunch.Name, activityLunch.Activity.DisplayColor, ExistingDatasources.DefaultRaptorDefaultDatasourceId, 1));
 			analyticsDataFactory.Persist();
 
 			IPerson person;
@@ -110,7 +110,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Data.Apply(etlUpdateDate);
 
 
-			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(){new BusinessUnit(TestState.BusinessUnit, ExistingDatasources.raptorDefaultDatasourceId)}, testDate);
+			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(){new BusinessUnit(TestState.BusinessUnit, ExistingDatasources.DefaultRaptorDefaultDatasourceId)}, testDate);
 
 			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
 			var activityPhone = new ActivitySpec { Name = "Phone", Color = "LightGreen", InReadyTime = true };
@@ -120,8 +120,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Data.Apply(activityPhone);
 			Data.Apply(activityLunch);
 			var analyticsDataFactory = new AnalyticsDataFactory();
-			analyticsDataFactory.Setup(new Activity(1, activityPhone.Activity.Id.Value, activityPhone.Name, activityPhone.Activity.DisplayColor, ExistingDatasources.raptorDefaultDatasourceId, 1));
-			analyticsDataFactory.Setup(new Activity(2, activityLunch.Activity.Id.Value, activityLunch.Name, activityLunch.Activity.DisplayColor, ExistingDatasources.raptorDefaultDatasourceId, 1));
+			analyticsDataFactory.Setup(new Activity(1, activityPhone.Activity.Id.Value, activityPhone.Name, activityPhone.Activity.DisplayColor, ExistingDatasources.DefaultRaptorDefaultDatasourceId, 1));
+			analyticsDataFactory.Setup(new Activity(2, activityLunch.Activity.Id.Value, activityLunch.Name, activityLunch.Activity.DisplayColor, ExistingDatasources.DefaultRaptorDefaultDatasourceId, 1));
 			analyticsDataFactory.Persist();
 
 			IPerson person;
