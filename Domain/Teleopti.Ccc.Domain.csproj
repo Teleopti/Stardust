@@ -1236,7 +1236,6 @@
     <Compile Include="InterfaceLegacy\Domain\IScheduleMatrixValueCalculatorProFactory.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleOptimizationService.cs" />
     <Compile Include="InterfaceLegacy\Domain\IScheduleParameters.cs" />
-    <Compile Include="InterfaceLegacy\Domain\ISchedulePartExtractor.cs" />
     <Compile Include="InterfaceLegacy\Domain\ISchedulePartModifyAndRollbackService.cs" />
     <Compile Include="InterfaceLegacy\Domain\ISchedulePeriod.cs" />
     <Compile Include="InterfaceLegacy\Domain\ISchedulePeriodTargetCalculator.cs" />
@@ -3090,7 +3089,6 @@
     <Compile Include="Repositories\IWorkflowControlSetRepository.cs" />
     <Compile Include="Repositories\IWorkShiftRuleSetRepository.cs" />
     <Compile Include="Optimization\FullWeekOuterWeekPeriodCreator.cs" />
-    <Compile Include="Optimization\SchedulePartExtractor.cs" />
     <Compile Include="Optimization\ScheduleDayPro.cs" />
     <Compile Include="ResourceCalculation\AffectedPersonSkillService.cs" />
     <Compile Include="ResourceCalculation\DeviationStatisticsCalculator.cs" />
