@@ -400,50 +400,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			r.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
 			person.AddPersonPeriod(r);
 
-			// When handling event
-			Target.Handle(new PersonCollectionChangedEvent
+			Assert.Throws<ArgumentException>(() =>
 			{
-				PersonIdCollection = { testPerson1Id },
-				LogOnBusinessUnitId = _businessUnitId
+				Target.Handle(new PersonCollectionChangedEvent
+				{
+					PersonIdCollection = { testPerson1Id },
+					LogOnBusinessUnitId = _businessUnitId
+				});
 			});
-
-			// Then
-			Assert.AreEqual(1, PersonPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
-		}
-
-		[Test]
-		public void NewPersonPeriodWithSkillNotYetInAnalytics_HandleEvent_ShouldWorkAndPublishEventsWithSkillsWhichExistsInAnalytics()
-		{
-			basicSetup();
-
-			// Given when adding person period
-			var person = PersonRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
-			var r = newTestPersonPeriod(new DateTime(2015, 1, 1).AddDays(-1));
-
-			IActivity act = new Activity("for test");
-			ISkillType skType = SkillTypeFactory.CreateSkillType();
-			ISkill skill = new Domain.Forecasting.Skill("for test", "sdf", Color.Blue, 3, skType);
-			skill.SetId(fakeSkill3.SkillCode);
-			skill.Activity = act;
-			skill.TimeZone = TimeZoneInfo.Local;
-
-			ISkill skill2 = new Domain.Forecasting.Skill("for test2", "sdf2", Color.Blue, 3, skType);
-			skill.Activity = act;
-			skill.TimeZone = TimeZoneInfo.Local;
-
-			r.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
-			r.AddPersonSkill(new PersonSkill(skill2, new Percent(2)));
-			person.AddPersonPeriod(r);
-
-			// When handling event
-			Target.Handle(new PersonCollectionChangedEvent
-			{
-				PersonIdCollection = { testPerson1Id },
-				LogOnBusinessUnitId = _businessUnitId
-			});
-
-			// Then
-			Assert.AreEqual(1, PersonPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
 		}
 		
 		[Test]
