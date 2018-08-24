@@ -1,14 +1,8 @@
 using System;
-using System.Linq;
-using Autofac;
-using Autofac.Core.Registration;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -16,10 +10,8 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 {
-	[RemoveMeWithToggle("rename", Toggles.ResourcePlanner_SpeedUpEvents_75415)]
 	[DomainTest]
 	[DefaultData]
-	[Toggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
 	public class ScheduleChangedInDefaultScenarioNotificationNewTest
 	{
 		public ScheduleChangedInDefaultScenarioNotificationNew Target;

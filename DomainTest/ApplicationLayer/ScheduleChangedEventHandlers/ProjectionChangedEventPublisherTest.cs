@@ -23,19 +23,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		}
 	}
 	
-	[Toggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
-	public class ProjectionChangedEventPublisherNewTest : ProjectionChangedEventPublisherTest<ProjectionChangedEventNew>
-	{
-	}
-
-	public class ProjectionChangedEventPublisherOldTest : ProjectionChangedEventPublisherTest<ProjectionChangedEvent>
-	{
-	}
-
 	[TestFixture]
 	[DomainTest]
 	[DefaultData]
-	public abstract class ProjectionChangedEventPublisherTest<T> where T : ProjectionChangedEventBase
+	public class ProjectionChangedEventPublisherTest : ProjectionChangedEventBase
 	{
 		public ProjectionChangedEventPublisher Target;
 		public FakeDatabase Database;
@@ -65,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				ScenarioId = scenario
 			});
 
-			var scheduleDay28 = Publisher.PublishedEvents.OfType<T>().Single().ScheduleDays.Single(x => x.Date == "2016-06-28".Utc());
+			var scheduleDay28 = Publisher.PublishedEvents.OfType<ProjectionChangedEventNew>().Single().ScheduleDays.Single(x => x.Date == "2016-06-28".Utc());
 			scheduleDay28.Shift.Should().Not.Be.Null();
 		}
 
@@ -92,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				ScenarioId = scenario
 			});
 
-			var scheduleDay29 = Publisher.PublishedEvents.OfType<T>().Single().ScheduleDays.Single(x => x.Date == "2016-06-29".Utc());
+			var scheduleDay29 = Publisher.PublishedEvents.OfType<ProjectionChangedEventNew>().Single().ScheduleDays.Single(x => x.Date == "2016-06-29".Utc());
 			scheduleDay29.Shift.Should().Be.Null();
 			scheduleDay29.SiteId.Should().Be(Guid.Empty);
 			scheduleDay29.TeamId.Should().Be(Guid.Empty);
@@ -121,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				ScenarioId = scenario
 			});
 
-			var scheduleDay = Publisher.PublishedEvents.OfType<T>().Single()
+			var scheduleDay = Publisher.PublishedEvents.OfType<ProjectionChangedEventNew>().Single()
 				.ScheduleDays.Single(x => x.Date == "2016-06-30".Utc());
 			scheduleDay.Shift.Layers.Single().StartDateTime.Should().Be("2016-06-30 08:00".Utc());
 			scheduleDay.Shift.Layers.Single().EndDateTime.Should().Be("2016-06-30 17:00".Utc());
@@ -150,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				ScenarioId = scenario
 			});
 
-			var scheduleDay = Publisher.PublishedEvents.OfType<T>().Single()
+			var scheduleDay = Publisher.PublishedEvents.OfType<ProjectionChangedEventNew>().Single()
 				.ScheduleDays.Single(x => x.Date == "2016-06-30".Utc());
 			scheduleDay.Shift.Layers.Single().PayloadId.Should().Be(phone);
 		}
@@ -176,7 +167,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				ScenarioId = scenario
 			});
 
-			var scheduleDay = Publisher.PublishedEvents.OfType<T>().Single()
+			var scheduleDay = Publisher.PublishedEvents.OfType<ProjectionChangedEventNew>().Single()
 				.ScheduleDays.Single(x => x.Date == "2016-10-02".Utc());
 			scheduleDay.DayOff.Should().Not.Be.Null();
 			scheduleDay.IsFullDayAbsence.Should().Be.False();
@@ -205,7 +196,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				ScenarioId = scenario
 			});
 
-			var scheduleDay = Publisher.PublishedEvents.OfType<T>().Single()
+			var scheduleDay = Publisher.PublishedEvents.OfType<ProjectionChangedEventNew>().Single()
 				.ScheduleDays.Single(x => x.Date == "2016-10-08".Utc());
 			scheduleDay.DayOff.StartDateTime.Should().Be.EqualTo("2016-10-07 22:00".Utc());
 			scheduleDay.DayOff.EndDateTime.Should().Be.EqualTo("2016-10-08 22:00".Utc());
@@ -230,7 +221,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				ScenarioId = scenario
 			});
 
-			var scheduleDay = Publisher.PublishedEvents.OfType<T>().Single()
+			var scheduleDay = Publisher.PublishedEvents.OfType<ProjectionChangedEventNew>().Single()
 				.ScheduleDays.Single(x => x.Date == "2016-10-08".Utc());
 			scheduleDay.IsFullDayAbsence.Should().Be.True();
 		}
@@ -255,7 +246,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				ScenarioId = scenario
 			});
 
-			var scheduleDay = Publisher.PublishedEvents.OfType<T>().Single()
+			var scheduleDay = Publisher.PublishedEvents.OfType<ProjectionChangedEventNew>().Single()
 				.ScheduleDays.Single(x => x.Date == "2016-10-08".Utc());
 			scheduleDay.IsFullDayAbsence.Should().Be.True();
 		}
@@ -281,7 +272,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				ScenarioId = scenario
 			});
 
-			var scheduleDay = Publisher.PublishedEvents.OfType<T>().Single()
+			var scheduleDay = Publisher.PublishedEvents.OfType<ProjectionChangedEventNew>().Single()
 				.ScheduleDays.Single(x => x.Date == "2016-10-08".Utc());
 			scheduleDay.IsFullDayAbsence.Should().Be.True();
 		}
@@ -308,7 +299,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				ScenarioId = scenario
 			});
 
-			var scheduleDay = Publisher.PublishedEvents.OfType<T>().Single()
+			var scheduleDay = Publisher.PublishedEvents.OfType<ProjectionChangedEventNew>().Single()
 				.ScheduleDays.Single(x => x.Date == "2016-10-08".Utc());
 			scheduleDay.IsFullDayAbsence.Should().Be.False();
 		}
@@ -335,9 +326,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				ScenarioId = scenario
 			});
 
-			var day1 = Publisher.PublishedEvents.OfType<T>().Single()
+			var day1 = Publisher.PublishedEvents.OfType<ProjectionChangedEventNew>().Single()
 				.ScheduleDays.Single(x => x.Date == "2016-10-07".Utc());
-			var day2 = Publisher.PublishedEvents.OfType<T>().Single()
+			var day2 = Publisher.PublishedEvents.OfType<ProjectionChangedEventNew>().Single()
 				.ScheduleDays.Single(x => x.Date == "2016-10-08".Utc());
 			day1.Shift.Layers.Should().Have.Count.EqualTo(1);
 			day2.DayOff.Should().Not.Be.Null();
@@ -363,7 +354,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				ScenarioId = scenario
 			});
 
-			 Publisher.PublishedEvents.OfType<T>().Single()
+			 Publisher.PublishedEvents.OfType<ProjectionChangedEventNew>().Single()
 				.ScheduleDays.Single(x => x.Date == "2016-10-07".Utc())
 				.Version.Should().Be(1);
 		}
@@ -395,7 +386,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				ScenarioId = scenario
 			});
 
-			Publisher.PublishedEvents.OfType<T>().Last()
+			Publisher.PublishedEvents.OfType<ProjectionChangedEventNew>().Last()
 			   .ScheduleDays.Single(x => x.Date == "2016-10-07".Utc())
 			   .Version.Should().Be(2);
 		}
@@ -437,11 +428,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				ScenarioId = scenario
 			});
 
-			Publisher.PublishedEvents.OfType<T>()
+			Publisher.PublishedEvents.OfType<ProjectionChangedEventNew>()
 				.Single(x => x.PersonId == person1)
 				.ScheduleDays.Single(x => x.Date == "2016-10-07".Utc())
 				.Version.Should().Be(1);
-			Publisher.PublishedEvents.OfType<T>()
+			Publisher.PublishedEvents.OfType<ProjectionChangedEventNew>()
 				.Last(x => x.PersonId == person2)
 				.ScheduleDays.Single(x => x.Date == "2016-10-07".Utc())
 				.Version.Should().Be(2);

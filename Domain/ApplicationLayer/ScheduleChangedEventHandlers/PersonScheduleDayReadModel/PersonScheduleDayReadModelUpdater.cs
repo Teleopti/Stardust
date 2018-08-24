@@ -1,12 +1,9 @@
 ﻿using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel
 {
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
 	public class PersonScheduleDayReadModelUpdaterHangfire :
-		IHandleEvent<ProjectionChangedEvent>,
 		IHandleEvent<ProjectionChangedEventForPersonScheduleDay>,
 		IRunOnHangfire
 	{
@@ -18,16 +15,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		}
 
 		[UnitOfWork]
-		public virtual void Handle(ProjectionChangedEvent @event)
-		{
-			_personScheduleDayReadModelUpdaterPersister.Execute(@event);
-		}
-
-		[UnitOfWork]
 		public virtual void Handle(ProjectionChangedEventForPersonScheduleDay @event)
 		{
 			_personScheduleDayReadModelUpdaterPersister.Execute(@event);
 		}
 	}
-
 }

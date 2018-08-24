@@ -1,13 +1,10 @@
 ﻿using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection
 {
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpEvents_75415)]
 	public class ScheduleProjectionReadOnlyUpdater :
 		IHandleEvent<ProjectionChangedEventForScheduleProjection>,
-		IHandleEvent<ProjectionChangedEvent>,
 		IRunOnHangfire
 	{
 		private readonly ScheduleProjectionReadOnlyChecker _scheduleProjectionReadOnlyChecker;
@@ -15,12 +12,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		public ScheduleProjectionReadOnlyUpdater(ScheduleProjectionReadOnlyChecker scheduleProjectionReadOnlyChecker)
 		{
 			_scheduleProjectionReadOnlyChecker = scheduleProjectionReadOnlyChecker;
-		}
-
-		[UnitOfWork]
-		public virtual void Handle(ProjectionChangedEvent @event)
-		{
-			_scheduleProjectionReadOnlyChecker.Execute(@event);
 		}
 
 		[UnitOfWork]

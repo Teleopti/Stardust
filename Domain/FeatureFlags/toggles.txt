@@ -105,7 +105,6 @@ ResourcePlanner_HideSkillPrioSliders_41312 = RC #Skill priorities, aka Cascading
 ResourcePlanner_UseErlangAWithInfinitePatience_45845 = true
 ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899 = true
 ResourcePlanner_UseErlangAWithFinitePatience_47738 = true
-ResourcePlanner_SpeedUpEvents_75415 = true #AF: Can be removed
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
 ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
 

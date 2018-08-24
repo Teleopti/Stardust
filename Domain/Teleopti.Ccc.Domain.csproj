@@ -1685,7 +1685,6 @@
     <Compile Include="ApplicationLayer\Absence\AnalyticsAbsenceUpdater.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeForAllReportableScenariosFilter.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeForDefaultScenarioFilter.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedInDefaultScenarioNotification.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\MainShiftReplaceNotificationEvent.cs" />
     <Compile Include="ApplicationLayer\RequestFactory.cs" />
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\UpdateFindPersonDataHandler.cs" />
@@ -2025,7 +2024,6 @@
     <Compile Include="ApplicationLayer\ResourcePlanner\IntradayOptimizationCommand.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\IntradayOptimizationCommandHandler.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\IntradayOptimizationWasOrdered.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangesPublisher.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangeListener.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangeSubscriptions.cs" />
     <Compile Include="Security\SignatureCreator.cs" />
@@ -2068,7 +2066,6 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModel\ScheduleDayReadModelComparer.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModel\ScheduleDayReadModelHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModel\ScheduleDayReadModelsCreator.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModel\ShiftExchangeOfferHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleProjection\ScheduleProjectionReadOnlyUpdater.cs" />
     <Compile Include="ApplicationLayer\Events\ProjectionChangedEvent.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventBase.cs" />
