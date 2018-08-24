@@ -76,7 +76,7 @@
 
 						$scope.menuItems.push(
 							{
-								text: "ETL tool",
+								text: "ETL",
 								link: "#/ETL",
 								toggle: vm.shouldShowEtl
 							}

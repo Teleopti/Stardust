@@ -55,7 +55,7 @@
 				}
 				vm.tenants.unshift({
 					TenantName: '<All>'
-				})
+				});
 				if (!$window.sessionStorage.tenant) {
 					vm.selectedTenant = vm.tenants[0];
 					selectedTenantChanged();
@@ -84,6 +84,7 @@
 			.success(function(data) {
 				vm.businessUnits = data;
 				vm.selectedBu = vm.businessUnits[0];
+				vm.getHistoryForTenant();
 			})
 			.error(function(data) {
 				vm.businessUnits = [];
@@ -104,7 +105,7 @@
 				.get("./Etl/GetjobRunning", tokenHeaderService.getHeaders())
 				.success(function (data) {
 					vm.status = data;
-					if (vm.status != null) {
+					if (vm.status !== null) {
 						vm.status.formatedTime = moment(vm.status.StartTime).local().format('HH:mm');
 					}
 					pollStatus();
@@ -117,7 +118,7 @@
 				.get("./Etl/GetjobRunning", tokenHeaderService.getHeaders())
 				.success(function (data) {
 					vm.status = data;
-					if (vm.status != null) {
+					if (vm.status !== null) {
 						vm.status.formatedTime = moment(vm.status.StartTime).local().format('HH:mm');
 					}
 					pollStatus();
