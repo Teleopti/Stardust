@@ -28,7 +28,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.View
 			DataContext = JobHistoryMapper.Map(startDate, endDate, businessUnit.Id, showOnlyErrors);
 			
 			var container = new IocContainerHolder(App.Container);
-			var tenantNameVisible = container.ToggleManager.IsEnabled(Toggles.Web_ETL_Show_Tenant_In_History_75767);
+			var tenantNameVisible = container.ToggleManager.IsEnabled(Toggles.ETL_Show_Tenant_Name_In_History_75767);
 			if (tenantNameVisible) return;
 
 			var tenantNameColumn = treeListView.Columns.SingleOrDefault(
