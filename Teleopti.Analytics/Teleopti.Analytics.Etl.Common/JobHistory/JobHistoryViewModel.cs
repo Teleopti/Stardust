@@ -13,6 +13,7 @@ namespace Teleopti.Analytics.Etl.Common.JobHistory
 		public TimeSpan Duration { get; set; }
 		public int RowsAffected { get; set; }
 		public string ScheduleName { get; set; }
+		public string TenantName { get; set; }
 		public IList<JobStepHistoryViewModel> JobStepsHistory { get; private set; }
 		public bool Success { get; set; }
 		public string ErrorMessage { get; set; }

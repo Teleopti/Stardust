@@ -12,61 +12,72 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {
 	public class JobHistoryRepository : IJobHistoryRepository
 	{
-		public IList<JobHistoryViewModel> GetEtlJobHistory(DateTime startDate, DateTime endDate, List<Guid> businessUnitIds, bool showOnlyErrors, string connectionString)
+		public IList<JobHistoryViewModel> GetEtlJobHistory(DateTime startDate, DateTime endDate,
+			List<Guid> businessUnitIds, bool showOnlyErrors, string connectionString)
 		{
 			var parameterList = new[]
-									{
-										new SqlParameter("start_date", startDate),
-										new SqlParameter("end_date", endDate),
-										new SqlParameter("business_unit_id", string.Join(",", businessUnitIds)),
-										new SqlParameter("show_only_errors", showOnlyErrors)
-									};
+			{
+				new SqlParameter("start_date", startDate),
+				new SqlParameter("end_date", endDate),
+				new SqlParameter("business_unit_id", string.Join(",", businessUnitIds)),
+				new SqlParameter("show_only_errors", showOnlyErrors)
+			};
 
+			var ds = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure, "mart.etl_job_execution_history",
+				parameterList, connectionString);
 
-			var ds = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure, "mart.etl_job_execution_history", parameterList, connectionString);
-
-			if (ds.Tables.Count==0 || ds.Tables[0] == null)
+			if (ds.Tables.Count == 0 || ds.Tables[0] == null)
 				return null;
 
-			int previousJobExecutionId = -99;
+			var previousJobExecutionId = -99;
 			JobHistoryViewModel jobModel = null;
 
 			var returnList = new List<JobHistoryViewModel>();
 			foreach (DataRow row in ds.Tables[0].Rows)
 			{
-				if ((int)row["job_execution_id"] != previousJobExecutionId)
+				if ((int) row["job_execution_id"] != previousJobExecutionId)
 				{
 					if (jobModel != null)
 						returnList.Add(jobModel);
 
 					jobModel = new JobHistoryViewModel
 					{
-						Name = (string)row["job_name"],
-						BusinessUnitName = (string)row["business_unit_name"],
-						StartTime = (DateTime)row["job_start_time"],
-						EndTime = (DateTime)row["job_end_time"],
-						Duration = new TimeSpan(0, 0, (int)row["job_duration_s"]),
-						RowsAffected = (int)row["job_affected_rows"],
+						Name = (string) row["job_name"],
+						BusinessUnitName = (string) row["business_unit_name"],
+						StartTime = (DateTime) row["job_start_time"],
+						EndTime = (DateTime) row["job_end_time"],
+						Duration = new TimeSpan(0, 0, (int) row["job_duration_s"]),
+						RowsAffected = (int) row["job_affected_rows"],
 						ScheduleName =
-										   (int)row["schedule_id"] == -1
-											   ? "Manual Etl"
-											   : row["schedule_name"] == DBNull.Value
-												? string.Empty
-												: (string)row["schedule_name"],
+							(int) row["schedule_id"] == -1
+								? "Manual Etl"
+								: row["schedule_name"] == DBNull.Value
+									? string.Empty
+									: (string) row["schedule_name"],
+						TenantName = row["tenant_name"] == DBNull.Value
+							? "<Not Available>"
+							: (string) row["tenant_name"],
 						Success = true
 					};
 				}
 
 				var jobStepModel = new JobStepHistoryViewModel
 				{
-					Name = (string)row["jobstep_name"],
-					Duration = new TimeSpan(0, 0, (int)row["jobstep_duration_s"]),
-					RowsAffected = row["jobstep_affected_rows"] == DBNull.Value ? 0 : (int)row["jobstep_affected_rows"],
+					Name = (string) row["jobstep_name"],
+					Duration = new TimeSpan(0, 0, (int) row["jobstep_duration_s"]),
+					RowsAffected =
+						row["jobstep_affected_rows"] == DBNull.Value ? 0 : (int) row["jobstep_affected_rows"],
 					Success = row["exception_msg"] == DBNull.Value,
-					ErrorMessage = row["exception_msg"] == DBNull.Value ? string.Empty : (string)row["exception_msg"],
-					ErrorStackTrace = row["exception_trace"] == DBNull.Value ? string.Empty : (string)row["exception_trace"],
-					InnerErrorMessage = row["inner_exception_msg"] == DBNull.Value ? string.Empty : (string)row["inner_exception_msg"],
-					InnerErrorStackTrace = row["inner_exception_trace"] == DBNull.Value ? string.Empty : (string)row["inner_exception_trace"]
+					ErrorMessage = row["exception_msg"] == DBNull.Value ? string.Empty : (string) row["exception_msg"],
+					ErrorStackTrace = row["exception_trace"] == DBNull.Value
+						? string.Empty
+						: (string) row["exception_trace"],
+					InnerErrorMessage = row["inner_exception_msg"] == DBNull.Value
+						? string.Empty
+						: (string) row["inner_exception_msg"],
+					InnerErrorStackTrace = row["inner_exception_trace"] == DBNull.Value
+						? string.Empty
+						: (string) row["inner_exception_trace"]
 				};
 				if (!string.IsNullOrEmpty(jobStepModel.ErrorMessage))
 				{
@@ -77,9 +88,10 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 					jobModel.Success = false;
 				}
+
 				jobModel.AddJobStepHistory(jobStepModel);
 
-				previousJobExecutionId = (int)row["job_execution_id"];
+				previousJobExecutionId = (int) row["job_execution_id"];
 			}
 
 			if (jobModel != null)
@@ -92,12 +104,12 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			var ds = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure, "mart.sys_business_unit_all_get", null,
 				connectionString);
-			if (ds.Tables.Count==0 || ds.Tables[0] == null)
+			if (ds.Tables.Count == 0 || ds.Tables[0] == null)
 			{
 				return null;
 			}
-			return
-			(from DataRow row in ds.Tables[0].Rows
+
+			return (from DataRow row in ds.Tables[0].Rows
 				select new BusinessUnitItem
 				{
 					Id = (Guid) row["id"],

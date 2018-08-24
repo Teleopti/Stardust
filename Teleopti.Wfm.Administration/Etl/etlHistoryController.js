@@ -29,9 +29,17 @@
 		vm.copy = copy;
 
 		(function init() {
+			checkToggle();
 			getTenants();
 			vm.getStatusRightNow();
 		})();
+
+		function checkToggle() {
+			$http.get("./Etl/ShouldTenantNameBeVisible", tokenHeaderService.getHeaders())
+				.success(function(result) {
+					vm.shouldShowTenantName = result;
+				});
+		}
 
 		function getTenants() {
 			vm.tenants = [];
