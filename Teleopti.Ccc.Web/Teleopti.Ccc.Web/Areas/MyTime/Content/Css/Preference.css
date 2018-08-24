@@ -22,6 +22,20 @@
 	overflow-x: auto;
 }
 
+#Preference-body {
+	margin-bottom: 50px;
+}
+
+#Preference-body-inner .calendarview-week li.date-is-selected .day-header,
+#Preference-body-inner .calendarview-week li.date-is-selected .day-content {
+	background: rgba(90, 205, 249, 0.3);
+}
+
+.navbar-teleopti .navbar-nav .open .dropdown-menu > li > a.add-musthave,
+.navbar-teleopti .navbar-nav .open .dropdown-menu > li > a.remove-musthave {
+	color: black;
+}
+
 @media (max-width: 767px) {
 	.phone-form-preference {
 		margin-bottom: 0 !important;
@@ -251,6 +265,10 @@
 	.phone-navbar .phone-navbar-bottom .preference-split-button .navbar-btn {
 		margin-left: 0 !important;
 		margin-top: 10px;
+	}
+	.phone-navbar.navbar-teleopti .navbar-nav .open .dropdown-menu > li > a.add-musthave,
+	.phone-navbar.navbar-teleopti .navbar-nav .open .dropdown-menu > li > a.remove-musthave {
+		color: white;
 	}
 }
 .warning-indicator {
