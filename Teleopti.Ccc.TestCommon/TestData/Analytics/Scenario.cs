@@ -11,13 +11,23 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 	{
 		private readonly int _scenarioId;
 		private readonly Guid _businessUnitCode;
+		private readonly int _businessUnitId;
 		private readonly bool _defaultScenario;
+		private readonly string _scenarioName;
+		private readonly string _businessUnitName;
 
-		public Scenario(int scenarioId, Guid businessUnitCode, bool defaultScenario)
+		public Scenario(int scenarioId, Guid businessUnitCode, bool defaultScenario): this(scenarioId, businessUnitCode, defaultScenario, 1, string.Empty, string.Empty)
+		{
+		}
+		
+		public Scenario(int scenarioId, Guid businessUnitCode, bool defaultScenario, int businessUnitId, string scenarioName, string businessUnitName)
 		{
 			_scenarioId = scenarioId;
 			_businessUnitCode = businessUnitCode;
 			_defaultScenario = defaultScenario;
+			_businessUnitId = businessUnitId;
+			_scenarioName = scenarioName;
+			_businessUnitName = businessUnitName;
 			ScenarioCode = Guid.NewGuid();
 		}
 
@@ -34,8 +44,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			var dummyDate = DateTime.Now;
 			using (var table = dim_scenario.CreateTable())
 			{
-				table.AddScenario(_scenarioId, ScenarioCode, string.Empty, _defaultScenario, 1, _businessUnitCode, string.Empty, 1, dummyDate,
-					dummyDate, dummyDate, false);
+				table.AddScenario(_scenarioId, ScenarioCode, _scenarioName, _defaultScenario, _businessUnitId, _businessUnitCode, 
+					_businessUnitName, ExistingDatasources.DefaultRaptorDefaultDatasourceId, dummyDate,dummyDate, dummyDate, false);
 
 				Bulk.Insert(connection, table);
 			}

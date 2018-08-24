@@ -94,6 +94,10 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 			step = new DimBusinessUnitJobStep(jobParameters);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			step = new StageScenarioJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			step = new DimScenarioJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
 			jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, person.PermissionInformation.DefaultTimeZone().Id);
 			StepRunner.RunNightly(jobParameters);

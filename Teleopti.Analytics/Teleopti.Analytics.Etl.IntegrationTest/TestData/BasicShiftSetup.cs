@@ -1,9 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using Teleopti.Analytics.Etl.Common.Infrastructure;
+using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Common.Transformer.Job;
+using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
+using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
+using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 {
@@ -31,6 +40,21 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 			Data.Apply(ContractSchedule);
 			Data.Apply(PartTimePercentage);
 			Data.Apply(Scenario);
+
+			var jobParameters = new JobParameters(
+				new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")), 1, "UTC", 15, "",
+				"False",
+				CultureInfo.CurrentCulture,
+				new FakeContainerHolder(), false
+			)
+			{
+				Helper = new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, null, null), null)
+			};
+			var result = new List<IJobResult>();
+			JobStepBase step = new StageScenarioJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			step = new DimScenarioJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 		}
 
 		public static void AddPerson(out IPerson person, string name, string externalLogon, DateTime testDate)
