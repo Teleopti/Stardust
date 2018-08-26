@@ -5079,8 +5079,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_grid.CurrentCellKeyDown += gridCurrentCellKeyDown;
 			_grid.GotFocus += gridGotFocus;
 			_grid.SelectionChanged += gridSelectionChanged;
-			_grid.ScrollControlMouseUp += _grid_ScrollControlMouseUp;
-			_grid.StartAutoScrolling += _grid_StartAutoScrolling;
+			_grid.ScrollControlMouseUp += gridScrollControlMouseUp;
+			_grid.StartAutoScrolling += gridStartAutoScrolling;
 
 			wpfShiftEditor1.ShiftUpdated += wpfShiftEditor1ShiftUpdated;
 			wpfShiftEditor1.CommitChanges += wpfShiftEditor1CommitChanges;
@@ -5109,7 +5109,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_skillWeekGridControl.SelectionChanged += skillGridControlSelectionChanged;
 			_skillMonthGridControl.SelectionChanged += skillGridControlSelectionChanged;
 			_skillFullPeriodGridControl.SelectionChanged += skillGridControlSelectionChanged;
-			_skillResultHighlightGridControl.GoToDate += _skillResultHighlightGridControl_GoToDate;
+			_skillResultHighlightGridControl.GoToDate += skillResultHighlightGridControlGoToDate;
 
 			_gridrowInChartSettingButtons.LineInChartSettingsChanged += gridlinesInChartSettingsLineInChartSettingsChanged;
 			_gridrowInChartSettingButtons.LineInChartEnabledChanged += gridrowInChartSettingLineInChartEnabledChanged;
@@ -5153,18 +5153,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			RunActionWithDelay(updateShiftEditor, 50);
 		}
 
-		private void _skillResultHighlightGridControl_GoToDate(object sender, GoToDateEventArgs e)
+		private void skillResultHighlightGridControlGoToDate(object sender, GoToDateEventArgs e)
 		{
 			_scheduleView.SetSelectedDateLocal(e.Date);
 		}
 
-		private void _grid_StartAutoScrolling(object sender, StartAutoScrollingEventArgs e)
+		private void gridStartAutoScrolling(object sender, StartAutoScrollingEventArgs e)
 		{
 			if (e.Reason == AutoScrollReason.MouseDragging)
 				_grid.SupportsPrepareViewStyleInfo = false;
 		}
 
-		private void _grid_ScrollControlMouseUp(object sender, CancelMouseEventArgs e)
+		private void gridScrollControlMouseUp(object sender, CancelMouseEventArgs e)
 		{
 			_grid.SupportsPrepareViewStyleInfo = true;
 			_grid.Invalidate();
@@ -5277,7 +5277,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			schedulerSplitters1.RestrictionsNotAbleToBeScheduledProgress -= schedulerSplitters1RestrictionsNotAbleToBeScheduledProgress;
 			toolStripButtonRequestBack.Click -= toolStripButtonRequestBackClick;
 			toolStripButtonFilterAgentsRequestView.Click -= toolStripButtonFilterAgentsClick;
-			ToolStripMenuItemViewDetails.Click -= ToolStripMenuItemViewDetails_Click;
+			ToolStripMenuItemViewDetails.Click -= toolStripMenuItemViewDetailsClick;
 			toolStripButtonViewAllowance.Click -= toolStripItemViewAllowanceClick;
 			toolStripButtonViewRequestHistory.Click -= toolStripViewRequestHistoryClick;
 			toolStripButtonApproveRequest.Click -= toolStripButtonApproveRequestClick;
@@ -5433,8 +5433,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				_grid.CurrentCellKeyDown -= gridCurrentCellKeyDown;
 				_grid.GotFocus -= gridGotFocus;
 				_grid.SelectionChanged -= gridSelectionChanged;
-				_grid.StartAutoScrolling -= _grid_StartAutoScrolling;
-				_grid.ScrollControlMouseUp -= _grid_ScrollControlMouseUp;
+				_grid.StartAutoScrolling -= gridStartAutoScrolling;
+				_grid.ScrollControlMouseUp -= gridScrollControlMouseUp;
 			}
 
 			if (wpfShiftEditor1 != null)
@@ -5454,15 +5454,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				wpfShiftEditor1.Undo -= wpfShiftEditorUndo;
 			}
 
-			toolStripMenuItemStartAsc.MouseUp -= ToolStripMenuItemStartAscMouseUp;
-			toolStripMenuItemStartTimeDesc.MouseUp -= ToolStripMenuItemStartTimeDescMouseUp;
-			toolStripMenuItemEndTimeAsc.MouseUp -= ToolStripMenuItemEndTimeAscMouseUp;
-			toolStripMenuItemEndTimeDesc.MouseUp -= ToolStripMenuItemEndTimeDescMouseUp;
+			toolStripMenuItemStartAsc.MouseUp -= toolStripMenuItemStartAscMouseUp;
+			toolStripMenuItemStartTimeDesc.MouseUp -= toolStripMenuItemStartTimeDescMouseUp;
+			toolStripMenuItemEndTimeAsc.MouseUp -= toolStripMenuItemEndTimeAscMouseUp;
+			toolStripMenuItemEndTimeDesc.MouseUp -= toolStripMenuItemEndTimeDescMouseUp;
 			toolStripMenuItemContractTimeAsc.MouseUp -= toolStripMenuItemContractTimeAscMouseUp;
 			toolStripMenuItemContractTimeDesc.MouseUp -= toolStripMenuItemContractTimeDescMouseUp;
 			toolStripMenuItemSeniorityRankAsc.MouseUp -= toolStripMenuItemSeniorityRankAscMouseUp;
 			toolStripMenuItemSeniorityRankDesc.MouseUp -= toolStripMenuItemSeniorityRankDescMouseUp;
-			toolStripMenuItemUnlockSelectionRM.MouseUp -= ToolStripMenuItemUnlockSelectionRmMouseUp;
+			toolStripMenuItemUnlockSelectionRM.MouseUp -= toolStripMenuItemUnlockSelectionRmMouseUp;
 			toolStripMenuItemUnlockAllRM.MouseUp -= toolStripMenuItemUnlockAllRmMouseUp;
 			toolStripMenuItemLockSelectionRM.MouseUp -= toolStripMenuItemLockSelectionRmMouseUp;
 			ToolStripMenuItemAllRM.MouseUp -= toolStripMenuItemLockAllRestrictionsMouseUp;
@@ -5541,7 +5541,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 
 			if (_skillResultHighlightGridControl != null)
-				_skillResultHighlightGridControl.GoToDate -= _skillResultHighlightGridControl_GoToDate;
+				_skillResultHighlightGridControl.GoToDate -= skillResultHighlightGridControlGoToDate;
 
 			if (_skillDayGridControl != null)
 				_skillDayGridControl.GotFocus -= skillGridControlGotFucus;
@@ -6387,7 +6387,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 		}
 
-		private void ToolStripMenuItemViewDetails_Click(object sender, EventArgs e)
+		private void toolStripMenuItemViewDetailsClick(object sender, EventArgs e)
 		{
 			showRequestDetailsView(null);
 		}
@@ -6400,28 +6400,28 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			requestDetailsView.Show(this);
 		}
 
-		private void ToolStripMenuItemStartAscMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemStartAscMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortByStartAscendingCommand(SchedulerState));
 		}
 
-		private void ToolStripMenuItemStartTimeDescMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemStartTimeDescMouseUp(object sender, MouseEventArgs e)
 		{
 
 			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortByStartDescendingCommand(SchedulerState));
 		}
 
-		private void ToolStripMenuItemEndTimeAscMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemEndTimeAscMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortByEndAscendingCommand(SchedulerState));
 		}
 
-		private void ToolStripMenuItemEndTimeDescMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemEndTimeDescMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortByEndDescendingCommand(SchedulerState));
 		}
 
-		private void ToolStripMenuItemUnlockSelectionRmMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemUnlockSelectionRmMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button != MouseButtons.Left) return;
 			GridHelper.GridUnlockSelection(_grid, LockManager);

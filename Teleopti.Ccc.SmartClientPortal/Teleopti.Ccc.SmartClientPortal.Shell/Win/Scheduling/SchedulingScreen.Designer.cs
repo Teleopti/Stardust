@@ -761,7 +761,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.SetShortcut(this.toolStripMenuItemStartAsc, System.Windows.Forms.Keys.None);
 			this.toolStripMenuItemStartAsc.Size = new System.Drawing.Size(198, 22);
 			this.toolStripMenuItemStartAsc.Text = "xxStartTimeAsc";
-			this.toolStripMenuItemStartAsc.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemStartAscMouseUp);
+			this.toolStripMenuItemStartAsc.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemStartAscMouseUp);
 			// 
 			// toolStripMenuItemStartTimeDesc
 			// 
@@ -769,7 +769,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.SetShortcut(this.toolStripMenuItemStartTimeDesc, System.Windows.Forms.Keys.None);
 			this.toolStripMenuItemStartTimeDesc.Size = new System.Drawing.Size(198, 22);
 			this.toolStripMenuItemStartTimeDesc.Text = "xxStartTimeDesc";
-			this.toolStripMenuItemStartTimeDesc.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemStartTimeDescMouseUp);
+			this.toolStripMenuItemStartTimeDesc.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemStartTimeDescMouseUp);
 			// 
 			// toolStripMenuItemEndTimeAsc
 			// 
@@ -777,7 +777,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.SetShortcut(this.toolStripMenuItemEndTimeAsc, System.Windows.Forms.Keys.None);
 			this.toolStripMenuItemEndTimeAsc.Size = new System.Drawing.Size(198, 22);
 			this.toolStripMenuItemEndTimeAsc.Text = "xxEndTimeAsc";
-			this.toolStripMenuItemEndTimeAsc.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemEndTimeAscMouseUp);
+			this.toolStripMenuItemEndTimeAsc.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemEndTimeAscMouseUp);
 			// 
 			// toolStripMenuItemEndTimeDesc
 			// 
@@ -785,7 +785,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.SetShortcut(this.toolStripMenuItemEndTimeDesc, System.Windows.Forms.Keys.None);
 			this.toolStripMenuItemEndTimeDesc.Size = new System.Drawing.Size(198, 22);
 			this.toolStripMenuItemEndTimeDesc.Text = "xxEndTimeDesc";
-			this.toolStripMenuItemEndTimeDesc.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemEndTimeDescMouseUp);
+			this.toolStripMenuItemEndTimeDesc.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemEndTimeDescMouseUp);
 			// 
 			// toolStripMenuItemContractTimeAsc
 			// 
@@ -842,7 +842,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.SetShortcut(this.toolStripMenuItemUnlockSelectionRM, System.Windows.Forms.Keys.None);
 			this.toolStripMenuItemUnlockSelectionRM.Size = new System.Drawing.Size(169, 22);
 			this.toolStripMenuItemUnlockSelectionRM.Text = "xxUnlockSelection";
-			this.toolStripMenuItemUnlockSelectionRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemUnlockSelectionRmMouseUp);
+			this.toolStripMenuItemUnlockSelectionRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemUnlockSelectionRmMouseUp);
 			// 
 			// toolStripMenuItemUnlockAllRM
 			// 
@@ -2042,7 +2042,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.SetShortcut(this.toolStripMenuItemUnlockSelection, System.Windows.Forms.Keys.None);
 			this.toolStripMenuItemUnlockSelection.Size = new System.Drawing.Size(162, 22);
 			this.toolStripMenuItemUnlockSelection.Text = "xxUnlockSelection";
-			this.toolStripMenuItemUnlockSelection.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemUnlockSelectionRmMouseUp);
+			this.toolStripMenuItemUnlockSelection.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemUnlockSelectionRmMouseUp);
 			// 
 			// toolStripSplitButtonLock
 			// 
@@ -2955,7 +2955,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.toolStripButtonViewDetails.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonViewDetails, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonViewDetails, false);
-			this.toolStripButtonViewDetails.Click += new System.EventHandler(this.ToolStripMenuItemViewDetails_Click);
+			this.toolStripButtonViewDetails.Click += new System.EventHandler(this.toolStripMenuItemViewDetailsClick);
 			// 
 			// toolStripButtonViewAllowance
 			// 
@@ -3428,7 +3428,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.SetShortcut(this.ToolStripMenuItemViewDetails, System.Windows.Forms.Keys.None);
 			this.ToolStripMenuItemViewDetails.Size = new System.Drawing.Size(204, 22);
 			this.ToolStripMenuItemViewDetails.Text = "xxViewDetails";
-			this.ToolStripMenuItemViewDetails.Click += new System.EventHandler(this.ToolStripMenuItemViewDetails_Click);
+			this.ToolStripMenuItemViewDetails.Click += new System.EventHandler(this.toolStripMenuItemViewDetailsClick);
 			// 
 			// toolStripMenuItemFindMatching2
 			// 
