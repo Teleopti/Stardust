@@ -3865,7 +3865,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void loadSeniorityWorkingDays(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
 		{
 			var result = new SeniorityWorkDayRanksRepository(uow).LoadAll();
-			var workDayRanks = result.IsEmpty() ? new SeniorityWorkDayRanks() : result.First();
+			var seniorityWorkDayRankses = result as ISeniorityWorkDayRanks[] ?? result.ToArray();
+			var workDayRanks = seniorityWorkDayRankses.IsEmpty() ? new SeniorityWorkDayRanks() : seniorityWorkDayRankses.First();
 			stateHolder.SchedulingResultState.SeniorityWorkDayRanks = workDayRanks;
 		}
 
@@ -6122,8 +6123,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		{
 			var modifiedDataFromConflictResolution = new List<IPersistableScheduleData>(refreshedEntities);
 
-			if (conflicts.Any())
-				showPersistConflictView(modifiedDataFromConflictResolution, conflicts);
+			var persistConflicts = conflicts as PersistConflict[] ?? conflicts.ToArray();
+			if (persistConflicts.Any())
+				showPersistConflictView(modifiedDataFromConflictResolution, persistConflicts);
 
 			_undoRedo.Clear(); //see if this can be removed later... Should undo/redo work after refresh?
 			foreach (var data in modifiedDataFromConflictResolution)
@@ -6504,10 +6506,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private bool tryGetFirstSelectedSchedule(IEnumerable<IScheduleDay> selectedSchedules, out IScheduleDay scheduleDay)
 		{
 			scheduleDay = null;
-			if (!selectedSchedules.Any())
+			var scheduleDays = selectedSchedules as IScheduleDay[] ?? selectedSchedules.ToArray();
+			if (!scheduleDays.Any())
 				return false;
 
-			scheduleDay = selectedSchedules.First();
+			scheduleDay = scheduleDays.First();
 			return true;
 		}
 
