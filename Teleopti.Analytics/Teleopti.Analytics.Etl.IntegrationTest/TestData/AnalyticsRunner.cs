@@ -23,6 +23,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 			analyticsDataFactory.Setup(dates);
 			analyticsDataFactory.Setup(intervals);
 			analyticsDataFactory.Setup(new FillBridgeTimeZoneFromData(dates, intervals, timeZones, dataSource));
+			analyticsDataFactory.Setup(Absence.NotDefinedAbsence(dataSource, 1));
 
 			foreach (var extraSetup in extraSetups)
 			{
