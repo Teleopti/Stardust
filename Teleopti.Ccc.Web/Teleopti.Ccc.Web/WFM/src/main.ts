@@ -6,9 +6,10 @@ import { AddAppPageComponent, ApiAccessTitleBarComponent, ListPageComponent } fr
 import { AppModule } from './app/app.module';
 import { ChangePasswordComponent } from './app/authentication/components/change-password/change-password.component';
 import { AppLogonPageComponent, GrantPageComponent, IdentityLogonPageComponent, RevokePageComponent, SearchPageComponent, TitleBarComponent } from './app/people/components';
+import { FeedbackMessageComponent } from './app/shared/components';
 import { environment } from './environments/environment';
 import { MainController } from './main.controller';
-
+import { BootstrapComponent } from './app/bootstrap/bootstrap.component';
 
 
 export interface IWfmRootScopeService extends IRootScopeService {
@@ -85,8 +86,8 @@ const wfm = angular.module('wfm', [
 
 wfm.controller('MainController', MainController as IControllerConstructor);
 
-const downgradeHelper = (downgradeName: string, component) => {
-	const downgradedComponent = downgradeComponent({ component }) as angular.IDirectiveFactory;
+const downgradeHelper = (downgradeName: string, component, inputs?: string[]) => {
+	const downgradedComponent = downgradeComponent({ component, inputs: inputs }) as angular.IDirectiveFactory;
 	wfm.directive(downgradeName, downgradedComponent);
 };
 
@@ -100,6 +101,8 @@ downgradeHelper('ng2PeopleRevokePage', RevokePageComponent);
 downgradeHelper('ng2PeopleAppLogonPage', AppLogonPageComponent);
 downgradeHelper('ng2PeopleIdentityLogonPage', IdentityLogonPageComponent);
 downgradeHelper('ng2ChangePassword', ChangePasswordComponent);
+downgradeHelper('ng2FeedbackMessage', FeedbackMessageComponent, ['feedbackType', 'translationKey']);
+downgradeHelper('ng2Bootstrap', BootstrapComponent);
 
 wfm.config([
 	'$stateProvider',

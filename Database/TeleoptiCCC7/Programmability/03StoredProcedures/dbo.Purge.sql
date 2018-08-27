@@ -80,6 +80,20 @@ select @KeepUntil = dateadd(month,-1*(select isnull(Value,100) from PurgeSetting
 update Person set Email = '', Note = '', EmploymentNumber = '', FirstName = 'Pseudo', LastName = 'HasLeft'
 where isnull(TerminalDate,'20591231') < @KeepUntil
 
+set @RowCount = 1
+while @RowCount > 0
+begin
+	delete top (1000) readmodel.findperson
+	from readmodel.findperson fp
+	inner join person p on fp.PersonId = p.Id
+	where p.IsDeleted = 1
+	or isnull(p.TerminalDate,'20591231') < @KeepUntil
+
+	select @RowCount = @@rowcount
+	if datediff(second,@start,getdate()) > @timeout 
+		return
+end
+
 --Persons who has left, i.e. with a since long past leaving date
 select @KeepUntil = dateadd(year,-1*(select isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepPersons'),getdate())
 

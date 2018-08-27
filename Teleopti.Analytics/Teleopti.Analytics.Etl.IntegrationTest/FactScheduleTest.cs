@@ -13,14 +13,15 @@ using Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
 using Teleopti.Analytics.Etl.IntegrationTest.TestData;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
+using Person = Teleopti.Ccc.Domain.Common.Person;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
 {
@@ -65,6 +66,11 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Data.Apply(cat);
 			Data.Apply(activityPhone);
 			Data.Apply(activityLunch);
+			var analyticsDataFactory = new AnalyticsDataFactory();
+			analyticsDataFactory.Setup(new ShiftCategory(1, cat.ShiftCategory.Id.Value, cat.Name, cat.ShiftCategory.DisplayColor, ExistingDatasources.DefaultRaptorDefaultDatasourceId, 1));
+			analyticsDataFactory.Setup(new Activity(1, activityPhone.Activity.Id.Value, activityPhone.Name, activityPhone.Activity.DisplayColor, ExistingDatasources.DefaultRaptorDefaultDatasourceId, 1));
+			analyticsDataFactory.Setup(new Activity(2, activityLunch.Activity.Id.Value, activityLunch.Name, activityLunch.Activity.DisplayColor, ExistingDatasources.DefaultRaptorDefaultDatasourceId, 1));
+			analyticsDataFactory.Persist();
 
 			//Add overlapping
 			BasicShiftSetup.AddShift("Ola H", testDate.AddDays(-2), 21, 11, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
@@ -83,6 +89,16 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				Helper = new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, null, null), null),
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
+
+			var result = new List<IJobResult>();
+			JobStepBase step = new StageBusinessUnitJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			step = new DimBusinessUnitJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			step = new StageScenarioJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			step = new DimScenarioJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
 			jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, person.PermissionInformation.DefaultTimeZone().Id);
 			StepRunner.RunNightly(jobParameters);

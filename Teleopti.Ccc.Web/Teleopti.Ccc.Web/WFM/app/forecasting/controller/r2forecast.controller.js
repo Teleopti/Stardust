@@ -7,12 +7,11 @@
 		'ForecastingService',
 		'$state',
 		'$translate',
-		'NoticeService',
 		'skillIconService',
 		'Toggle'
 	];
 
-	function r2ForecastCtrl(forecastingService, $state, $translate, noticeSvc, skillIconService, toggleSvc) {
+	function r2ForecastCtrl(forecastingService, $state, $translate, skillIconService, toggleSvc) {
 		var vm = this;
 
 		vm.skills = [];
@@ -23,17 +22,7 @@
 
 		function init() {
 			vm.showHistory = toggleSvc.WFM_Forecast_Show_History_Data_76432;
-			setReleaseNotification();
 			getAllSkills();
-		}
-
-		function setReleaseNotification() {
-			var message = $translate
-				.instant('WFMReleaseNotificationWithoutOldModuleLink')
-				.replace('{0}', $translate.instant('Forecasts'))
-				.replace('{1}', '<a href="http://www.teleopti.com/wfm/customer-feedback.aspx" target="_blank">')
-				.replace('{2}', '</a>');
-			noticeSvc.info(message, null, true);
 		}
 
 		function getAllSkills() {

@@ -10,6 +10,7 @@ using Teleopti.Analytics.Etl.IntegrationTest.TestData;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
@@ -37,7 +38,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		{
 			DateTime testDate = DateTime.Today.AddDays(-30);
 
-			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(), testDate);
+			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(){new BusinessUnit(TestState.BusinessUnit, ExistingDatasources.DefaultRaptorDefaultDatasourceId)}, testDate);
 
 			IPerson person;
 			BasicShiftSetup.SetupBasicForShifts();
@@ -52,6 +53,11 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Data.Apply(cat);
 			Data.Apply(activityPhone);
 			Data.Apply(activityLunch);
+			var analyticsDataFactory = new AnalyticsDataFactory();
+			analyticsDataFactory.Setup(new ShiftCategory(1, cat.ShiftCategory.Id.Value, cat.Name, cat.ShiftCategory.DisplayColor, ExistingDatasources.DefaultRaptorDefaultDatasourceId, 1));
+			analyticsDataFactory.Setup(new Activity(1, activityPhone.Activity.Id.Value, activityPhone.Name, activityPhone.Activity.DisplayColor, ExistingDatasources.DefaultRaptorDefaultDatasourceId, 1));
+			analyticsDataFactory.Setup(new Activity(2, activityLunch.Activity.Id.Value, activityLunch.Name, activityLunch.Activity.DisplayColor, ExistingDatasources.DefaultRaptorDefaultDatasourceId, 1));
+			analyticsDataFactory.Persist();
 
 			BasicShiftSetup.AddThreeShifts(personName, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity, testDate);
 
@@ -106,7 +112,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		{
 			DateTime testDate = DateTime.Today.AddDays(-30);
 
-			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(), testDate);
+			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(){new BusinessUnit(TestState.BusinessUnit, ExistingDatasources.DefaultRaptorDefaultDatasourceId)}, testDate);
 
 			IPerson person;
 			BasicShiftSetup.SetupBasicForShifts();
@@ -121,6 +127,11 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Data.Apply(cat);
 			Data.Apply(activityPhone);
 			Data.Apply(activityLunch);
+			var analyticsDataFactory = new AnalyticsDataFactory();
+			analyticsDataFactory.Setup(new ShiftCategory(1, cat.ShiftCategory.Id.Value, cat.Name, cat.ShiftCategory.DisplayColor, ExistingDatasources.DefaultRaptorDefaultDatasourceId, 1));
+			analyticsDataFactory.Setup(new Activity(1, activityPhone.Activity.Id.Value, activityPhone.Name, activityPhone.Activity.DisplayColor, ExistingDatasources.DefaultRaptorDefaultDatasourceId, 1));
+			analyticsDataFactory.Setup(new Activity(2, activityLunch.Activity.Id.Value, activityLunch.Name, activityLunch.Activity.DisplayColor, ExistingDatasources.DefaultRaptorDefaultDatasourceId, 1));
+			analyticsDataFactory.Persist();
 
 			BasicShiftSetup.AddThreeShifts(personName, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity, testDate);
 

@@ -297,26 +297,4 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public int Id { get; set; }
 		public int ShiftLength { get; set; }
 	}
-
-	public class CustomDictionaryTransformer : IResultTransformer
-	{
-		public object TransformTuple(object[] tuple, string[] aliases)
-		{
-			int id = 0;
-			var key = new DateOnly();
-			for (int i = 0; i < tuple.Length; i++)
-			{
-				string alias = aliases[i];
-				if (alias == "date_date") key = new DateOnly((DateTime)tuple[i]);
-				else id = (int)tuple[i];
-			}
-
-			return new KeyValuePair<DateOnly, int>(key, id);
-		}
-
-		public IList TransformList(IList collection)
-		{
-			return collection;
-		}
-	}
 }

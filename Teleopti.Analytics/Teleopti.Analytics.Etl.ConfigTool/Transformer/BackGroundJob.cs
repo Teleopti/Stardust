@@ -22,14 +22,14 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 	class BackGroundJob : IDisposable
 	{
 		private readonly BackgroundWorker _backgroundWorker = new BackgroundWorker();
-		readonly ILog _logger = LogManager.GetLogger(typeof(BackGroundJob));
+		private readonly ILog _logger = LogManager.GetLogger(typeof(BackGroundJob));
 		public event EventHandler<AlarmEventArgs> JobStartedRunning;
 		public event EventHandler<AlarmEventArgs> JobStoppedRunning;
 
 		public BackGroundJob()
 		{
 			_backgroundWorker.DoWork += bw_DoWork;
-			_backgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bw_RunWorkerCompleted);
+			_backgroundWorker.RunWorkerCompleted += bw_RunWorkerCompleted;
 		}
 
 		private void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -46,11 +46,10 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 			else
 			{
 				// Job execution ready
-				var jobExecutionState = e.Result as JobExecutionState;
-				if (jobExecutionState != null)
+				if (e.Result is JobExecutionState jobExecutionState)
 				{
 					jobExecutionState.Job.NotifyJobExecutionReady();
-					JobStoppedRunning(sender, new AlarmEventArgs(jobExecutionState.Job));
+					JobStoppedRunning?.Invoke(sender, new AlarmEventArgs(jobExecutionState.Job));
 					NotifyUser(jobExecutionState);
 				}
 			}
@@ -58,46 +57,45 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 
 		private static void NotifyUser(JobExecutionState jobExecutionState)
 		{
-			if (jobExecutionState.IsEtlJobLocked)
-			{
-				var msg = new StringBuilder("Another job is running at the moment. Please try again later.\n\n");
-				msg.Append(string.Format(CultureInfo.InvariantCulture, "Server name: {0}\n", jobExecutionState.EtlRunningInformation.ComputerName));
-				msg.Append(string.Format(CultureInfo.InvariantCulture, "Job Name: {0}\n", jobExecutionState.EtlRunningInformation.JobName));
-				msg.Append(string.Format(CultureInfo.InvariantCulture, "Start Time: {0}\n", jobExecutionState.EtlRunningInformation.StartTime));
-				msg.Append(string.Format(CultureInfo.InvariantCulture, "Run By ETL Service: {0}\n",
-										 jobExecutionState.EtlRunningInformation.IsStartedByService ? "Yes" : "No"));
-				MessageBox.Show(msg.ToString(), "Information", MessageBoxButtons.OK, MessageBoxIcon.Information,
-								MessageBoxDefaultButton.Button1, 0);
-			}
+			if (!jobExecutionState.IsEtlJobLocked) return;
+
+			var msg = new StringBuilder("Another job is running at the moment. Please try again later.\n\n");
+			msg.Append(string.Format(CultureInfo.InvariantCulture, "Server name: {0}\n", jobExecutionState.EtlRunningInformation.ComputerName));
+			msg.Append(string.Format(CultureInfo.InvariantCulture, "Job Name: {0}\n", jobExecutionState.EtlRunningInformation.JobName));
+			msg.Append(string.Format(CultureInfo.InvariantCulture, "Start Time: {0}\n", jobExecutionState.EtlRunningInformation.StartTime));
+			msg.Append(string.Format(CultureInfo.InvariantCulture, "Run By ETL Service: {0}\n",
+				jobExecutionState.EtlRunningInformation.IsStartedByService ? "Yes" : "No"));
+			MessageBox.Show(msg.ToString(), @"Information", MessageBoxButtons.OK, MessageBoxIcon.Information,
+				MessageBoxDefaultButton.Button1, 0);
 		}
 
 		private void bw_DoWork(object sender, DoWorkEventArgs e)
 		{
-			IList<IJobResult> jobResultCollection = new List<IJobResult>();
-			IList<IJobStep> jobStepsNotToRun = new List<IJobStep>();
-			var job = (JobBase)e.Argument;
-			SetCultureOnThread(job);
-			string connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
+			var jobResultCollection = new List<IJobResult>();
+			var jobStepsNotToRun = new List<IJobStep>();
+			var argument = (RunJobArgument)e.Argument;
+			var job = (JobBase)argument.Job;
+			setCultureOnThread(job);
+			var connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
 			var repository = new Repository(connectionString);
-			IEtlRunningInformation etlRunningInformation;
-			IRunController runController = new RunController(repository);
+			var runController = new RunController(repository);
 
-			if (runController.CanIRunAJob(out etlRunningInformation))
+			if (runController.CanIRunAJob(out var etlRunningInformation))
 			{
 				try
 				{
 					using (var etlJobLock = new EtlJobLock(connectionString, job.Name, false))
 					{
-						IJobRunner jobRunner = new JobRunner();
-						IList<IJobResult> jobResults = jobRunner.Run(job, jobResultCollection, jobStepsNotToRun);
+						var jobRunner = new JobRunner();
+						var jobResults = jobRunner.Run(job, jobResultCollection, jobStepsNotToRun);
 						if (jobResults != null && jobResults.Any())
 						{
 							var exception = jobResults.First().JobStepResultCollection.First().JobStepException;
 							if(exception != null && exception.Message.Contains("license"))
-								MessageBox.Show("Please apply a license from the main client before ETL job is run.", "Warning",
+								MessageBox.Show(@"Please apply a license from the main client before ETL job is run.", @"Warning",
 									MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1, 0);
 
-							jobRunner.SaveResult(jobResults, repository, -1);
+							jobRunner.SaveResult(jobResults, repository, -1, argument.TenantName);
 						}
 					}
 				}
@@ -114,18 +112,17 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 			e.Result = new JobExecutionState(etlRunningInformation, job);
 		}
 
-		private static void SetCultureOnThread(JobBase job)
+		private static void setCultureOnThread(JobBase job)
 		{
 			Thread.CurrentThread.CurrentCulture = job.JobParameters.CurrentCulture;
 		}
 
-		public void Run(IJob job)
+		public void Run(IJob job, string tenantName)
 		{
-			if (!_backgroundWorker.IsBusy)
-			{
-				JobStartedRunning(this, new AlarmEventArgs(job));
-				_backgroundWorker.RunWorkerAsync(job);
-			}
+			if (_backgroundWorker.IsBusy) return;
+
+			JobStartedRunning?.Invoke(this, new AlarmEventArgs(job));
+			_backgroundWorker.RunWorkerAsync(new RunJobArgument{Job = job, TenantName = tenantName});
 		}
 
 		public void Dispose()
@@ -149,5 +146,11 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 
 		public IEtlRunningInformation EtlRunningInformation { get; set; }
 		public IJob Job { get; set; }
+	}
+
+	internal class RunJobArgument
+	{
+		public IJob Job { get; set; }
+		public string TenantName { get; set; }
 	}
 }

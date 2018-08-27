@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 										 && overtimeActivities.Any(overtime => (layer.DefinitionSet != null && layer.Period.Intersect(overtime.Period)));
 
 						var matchedShiftLayers = isMainShiftLayer ? _projectionHelper.GetMatchedShiftLayers(scheduleDay, layer, isOvertime) : null;
-
+						var reportLevelDetail = (layer.Payload as IActivity)?.ReportLevelDetail;
 						var projection = new GroupScheduleProjectionViewModel
 						{
 							ParentPersonAbsences = isPayloadAbsence ? _projectionHelper.GetMatchedAbsenceLayers(scheduleDay, layer).ToArray() : null,
@@ -241,7 +241,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 							Start = startDateTimeInUserTimeZone.ToGregorianDateTimeString().Replace("T", " ").Remove(16),
 							End = startDateTimeInUserTimeZone.Add(layer.Period.ElapsedTime()).ToGregorianDateTimeString().Replace("T", " ").Remove(16),
 							Minutes = (int)layer.Period.ElapsedTime().TotalMinutes,
-							IsOvertime = isOvertime
+							IsOvertime = isOvertime,
+							FloatOnTop = reportLevelDetail == ReportLevelDetail.Lunch || reportLevelDetail == ReportLevelDetail.ShortBreak
 						};
 
 						projections.Add(projection);

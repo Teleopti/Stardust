@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			
 			Target.Handle(new TenantMinuteTickEvent());
 
-			Publisher.PublishedEvents.Count().Should().Be.EqualTo(1);
+			Publisher.PublishedEvents.OfType<NewMultiAbsenceRequestsCreatedEvent>().Count().Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			Target.Handle(new TenantMinuteTickEvent());
 
-			Publisher.PublishedEvents.Count().Should().Be.EqualTo(1);
+			Publisher.PublishedEvents.OfType<NewMultiAbsenceRequestsCreatedEvent>().Count().Should().Be.EqualTo(1);
 
 		}
 	}

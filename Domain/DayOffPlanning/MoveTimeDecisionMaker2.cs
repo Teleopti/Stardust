@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning
 {
-    public class MoveTimeDecisionMaker2 : IMoveTimeDecisionMaker
+    public class MoveTimeDecisionMaker2
     {
 	    private readonly IScheduleMatrixLockableBitArrayConverterEx _matrixConverter;
 

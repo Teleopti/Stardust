@@ -3,7 +3,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { SharedModule } from '../shared/shared.module';
 import {
 	AppLogonPageComponent,
-	FeedbackMessageComponent,
 	GrantPageComponent,
 	IdentityLogonPageComponent,
 	RevokePageComponent,
@@ -28,8 +27,7 @@ import {
 		WorkspaceComponent,
 		TitleBarComponent,
 		AppLogonPageComponent,
-		IdentityLogonPageComponent,
-		FeedbackMessageComponent
+		IdentityLogonPageComponent
 	],
 	imports: [SharedModule, TranslateModule.forChild()],
 	providers: [
@@ -48,8 +46,7 @@ import {
 		GrantPageComponent,
 		RevokePageComponent,
 		AppLogonPageComponent,
-		IdentityLogonPageComponent,
-		FeedbackMessageComponent
+		IdentityLogonPageComponent
 	]
 })
 export class PeopleModule {

@@ -315,6 +315,7 @@
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\ScheduleTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\TimelineTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\UserTimeZoneTest.cs" />
+    <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalOverviewViewModelBuilder\BuildTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\OrganizationViewModelBuilderPermissionTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\OrganizationViewModelBuilderTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\PhoneStateViewModelBuilderTest.cs" />
@@ -566,7 +567,6 @@
     <Compile Include="ApplicationLayer\Request\AnalyticsRequestUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Skill\SkillViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeUpdaterTest.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedInDefaultScenarioNotificationTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModelHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModelsCreatorTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ShiftExchangeOfferHandlerTest.cs" />
@@ -1361,7 +1361,6 @@
     <Compile Include="RealTimeAdherence\RtaStateHolderTest.cs" />
     <Compile Include="RealTimeAdherence\RtaStateTest.cs" />
     <Compile Include="Optimization\FullWeekOuterWeekPeriodCreatorTest.cs" />
-    <Compile Include="Optimization\SchedulePartExtractorTest.cs" />
     <Compile Include="Optimization\ScheduleDayProTest.cs" />
     <Compile Include="ResourceCalculation\AffectedPersonSkillServiceTest.cs" />
     <Compile Include="ResourceCalculation\DeviationStatisticsDataTest.cs" />

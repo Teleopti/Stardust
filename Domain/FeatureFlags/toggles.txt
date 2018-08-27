@@ -105,31 +105,15 @@ ResourcePlanner_HideSkillPrioSliders_41312 = RC #Skill priorities, aka Cascading
 ResourcePlanner_UseErlangAWithInfinitePatience_45845 = true
 ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899 = true
 ResourcePlanner_UseErlangAWithFinitePatience_47738 = true
-ResourcePlanner_SpeedUpEvents_75415 = true #AF: Can be removed
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
 ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
 
 # From old Kittens team... #
 # AF 2018-08-22: All of these can be removed now, but very carefully as we do not want any new bugs or issues...#
 ETL_SpeedUpPersonPeriodNightly_38097 = true
-ETL_SpeedUpNightlyReloadDatamart_38131 = true
 ETL_SpeedUpFactScheduleNightly_38019 = true # not to be released until pbi 38304 and 41393 is done 
-ETL_SpeedUpScenarioNightly_38300 = true
-ETL_SpeedUpNightlyActivity_38303 = true
-ETL_SpeedUpNightlySkill_37543 = true
-ETL_SpeedUpNightlyOvertime_38304 = true
-ETL_SpeedUpNightlyAbsence_38301 = true
-ETL_SpeedUpNightlyShiftCategory_38718 = true
 ETL_SpeedUpNightlyPreference_38283 = true #Depending on ETL_SpeedUpFactScheduleNightly_38019
-ETL_SpeedUpNightlyAvailability_38926 = true
-ETL_SpeedUpNightlyRequest_38914 = true
-ETL_SpeedUpGroupPagePersonNightly_37623 = true
-ETL_SpeedUpNightlyWorkload_38928 = true
-ETL_SpeedUpNightlyForecastWorkload_38929 = true
-ETL_SpeedUpNightlyBusinessUnit_38932 = true
-ETL_RemoveTimeZoneAndDateNightly_40870 = true
 ETL_FixScheduleForPersonPeriod_41393 = true
-ETL_SpeedUpNightlyDayOff_38213 = true
 
 # DeBockers #
 WfmIntraday_MonitorActualvsForecasted_35176 = true
@@ -167,6 +151,7 @@ WFM_Forecaster_Preview_74801 = RC
 ETL_Optimize_Memory_Usage_76761 = true
 WFM_Forecast_Show_History_Data_76432 = DEV
 ETL_Show_Web_Based_ETL_Tool_74837 = true
+ETL_Show_Tenant_Name_In_History_75767 = DEV
 
 # Dragonfly #
 WFM_Gamification_Setting_With_External_Quality_Values_45003 = true

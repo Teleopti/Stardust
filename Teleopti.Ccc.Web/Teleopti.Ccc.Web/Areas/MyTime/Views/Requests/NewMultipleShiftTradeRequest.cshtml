@@ -255,108 +255,125 @@
 				<div class="loading"></div>
 			</div>
 			<!--ko foreach: loadedSchedulePairs-->
-			<div class="shift-to-trade-row" data-bind="attr: {id: 'shift-row-' + date.valueOf()}, css:{'shift-to-trade-row-disable':!isEnable}">
+			<div class="shift-to-trade-row" data-bind="attr: {id: 'shift-row-' + date.valueOf()}, css:{'shift-to-trade-row-disable':!isEnable, 'shift-to-trade-row-deskop':!$root.isMobile()}">
 				<div class="shift-date" data-bind="text:$root.formatDate(date)"></div>
-				<div data-bind="css:{'dayoff':mySchedule && mySchedule.isDayOff && !mySchedule.isFullDayAbsence && $root.isMobile() },style:{'background-color':mySchedule && mySchedule.categoryColor && $root.isMobile() ? mySchedule.categoryColor: 'none', 'color':mySchedule && mySchedule.categoryColor && $root.isMobile() ? $root.getTextColor(mySchedule.categoryColor) : 'none'}" class="shift-detail own-shift clear-desktop-color">
-					<!--ko if:!mySchedule-->
-					<div>@Resources.NotScheduled </div>
-					<!--/ko-->
-					<!--ko if:mySchedule-->
-					<!--ko if:mySchedule.isDayOff && !mySchedule.isFullDayAbsence-->
-					<div class="schedule-layer-text-container dayoff-text">
-						<span data-bind="text:mySchedule.dayOffName"></span>
-						<span data-bind="css:{'hiden':!(mySchedule.hasOvertime && !$root.isMobile())}">(@Resources.WithOvertime)</span>
-						<span data-bind="css:{'hiden':!(mySchedule.isIntradayAbsence && !mySchedule.hasOvertime && !$root.isMobile())}">(@Resources.WithAbsence)</span>
-					</div>
-					<!--/ko-->
-					<!--ko if:!mySchedule.isDayOff && !mySchedule.isFullDayAbsence-->
-					<div class="schedule-layer-text-container">
-						<div data-bind="text:mySchedule.categoryName"></div>
-						<div class="shift-start-end-time">
-							<span data-bind="text:mySchedule.scheduleStart + $root.getOvernightFlag(mySchedule.scheduleStartTime(), date)"></span>
-							<span class="spliter">-</span>
-							<span data-bind="text:mySchedule.scheduleEnd + $root.getOvernightFlag(mySchedule.scheduleEndTime(), date)"></span>
+				<div class="shift-detail own-shift ">
+					<div data-bind="css:{'dayoff':mySchedule && mySchedule.isDayOff && !mySchedule.isFullDayAbsence && $root.isMobile() },style:{'background-color':mySchedule && mySchedule.categoryColor && $root.isMobile() ? mySchedule.categoryColor: 'none', 'color':mySchedule && mySchedule.categoryColor && $root.isMobile() ? $root.getTextColor(mySchedule.categoryColor) : 'none'}" class="clear-desktop-color shift-detail-info fullwidth full-height">
+						<!--ko if:!mySchedule-->
+						<div data-bind="css:{'not-shceudled':$root.isMobile()}">@Resources.NotScheduled </div>
+						<!--/ko-->
+						<!--ko if:mySchedule-->
+						<!--ko if:mySchedule.isDayOff && !mySchedule.isFullDayAbsence-->
+						<div class="schedule-layer-text-container dayoff-text">
+							<span data-bind="text:mySchedule.dayOffName"></span>
+							<span data-bind="css:{'hiden':$root.isMobile()}, text:$root.getOvertimeAndIntradayAbsenceText(mySchedule, '@Resources.OvertimeShortName')"></span>
 						</div>
-						<div class="shift-trade-contract"><span data-bind="text:mySchedule.contractTime"></span></div>
-					</div>
-					<!--/ko-->
-					<!--ko if:mySchedule.isFullDayAbsence-->
-					<div class="schedule-layer-text-container dayoff-text">
-						<span data-bind="text:mySchedule.categoryName"></span>
-					</div>
-					<div data-bind="visible:!$root.isMobile()" class="shift-visual-indication-wrapper">
-						<div class="shift-visual-indication">
-							<!-- ko foreach: mySchedule.layers -->
-							<div class="shift-visual-indication-block clear-background-image" data-bind="style: styleJson74947, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
-							<!-- /ko -->
+						<!--/ko-->
+						<!--ko if:!mySchedule.isDayOff && !mySchedule.isFullDayAbsence-->
+						<div class="schedule-layer-text-container">
+							<div>
+								<span data-bind="text:mySchedule.categoryName"></span>
+								<span data-bind="css:{'hiden':$root.isMobile()}, text:$root.getOvertimeAndIntradayAbsenceText(mySchedule, '@Resources.OvertimeShortName')"></span>
+							</div>
+							<div class="shift-start-end-time">
+								<span data-bind="text:mySchedule.scheduleStart + $root.getOvernightFlag(mySchedule.scheduleStartTime(), date)"></span>
+								<span class="spliter">-</span>
+								<span data-bind="text:mySchedule.scheduleEnd + $root.getOvernightFlag(mySchedule.scheduleEndTime(), date)"></span>
+							</div>
+							<div class="shift-trade-contract"><span data-bind="text:mySchedule.contractTime"></span></div>
 						</div>
-					</div>
-					<!--/ko-->
-					<!--ko if: !mySchedule.isFullDayAbsence-->
-					<div data-bind="visible:!$root.isMobile()" class="shift-visual-indication-wrapper">
-						<div class="shift-visual-indication">
-							<!--ko if: mySchedule.isDayOff -->
-								<div class="shift-visual-indication-block dayoff"></div>
-							<!--/ko-->
-							<!--ko if: !mySchedule.isDayOff -->
+						<!--/ko-->
+						<!--ko if:mySchedule.isFullDayAbsence-->
+						<div class="schedule-layer-text-container dayoff-text">
+							<span data-bind="text:mySchedule.categoryName"></span>
+						</div>
+						<div data-bind="visible:!$root.isMobile()" class="shift-visual-indication-wrapper">
+							<div class="shift-visual-indication">
 								<!-- ko foreach: mySchedule.layers -->
-									<div class="shift-visual-indication-block" data-bind="style: styleJson74947, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
+								<div class="shift-visual-indication-block clear-background-image" data-bind="style: styleJson74947, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
 								<!-- /ko -->
-							<!--/ko-->
+							</div>
 						</div>
+						<!--/ko-->
+						<!--ko if: !mySchedule.isFullDayAbsence-->
+						<div data-bind="visible:!$root.isMobile()" class="shift-visual-indication-wrapper">
+							<div class="shift-visual-indication">
+								<!--ko if: mySchedule.isDayOff -->
+								<div class="shift-visual-indication-block dayoff"></div>
+								<!--/ko-->
+								<!--ko if: !mySchedule.isDayOff -->
+								<!-- ko foreach: mySchedule.layers -->
+								<div class="shift-visual-indication-block" data-bind="style: styleJson74947, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
+								<!-- /ko -->
+								<!--/ko-->
+							</div>
+						</div>
+						<!--/ko-->
+						<!--/ko-->
 					</div>
-					<!--/ko-->
+					<!--ko if:mySchedule-->
+						<div class="text-indicator-mobile" data-bind="style:{'background-color':mySchedule.overtimeCategoryColor, 'color': $root.getTextColor(mySchedule.overtimeCategoryColor)}, css:{'hiden':!(mySchedule.hasOvertime && $root.isMobile())}">@Resources.OvertimeShortName</div>
+						<div class="text-indicator-mobile" data-bind="style:{'background-color':mySchedule.absenceColor, 'color': $root.getTextColor(mySchedule.absenceColor)}, text: mySchedule.absenceCategoryShortName, css:{'hiden':!(mySchedule.isIntradayAbsence && $root.isMobile())}"></div>
 					<!--/ko-->
 				</div>
-				<div data-bind="css:{'dayoff':targetSchedule && targetSchedule.isDayOff && !targetSchedule.isFullDayAbsence && $root.isMobile() },style:{'background-color':targetSchedule && targetSchedule.categoryColor && $root.isMobile()? targetSchedule.categoryColor: 'none', 'color':targetSchedule && targetSchedule.categoryColor && $root.isMobile() ? $root.getTextColor(targetSchedule.categoryColor) : 'none'}" class="shift-detail shift-to-trade clear-desktop-color">
-					<!--ko if:!targetSchedule-->
-					<div>@Resources.NotScheduled </div>
-					<!--/ko-->
+				<div class="shift-detail shift-to-trade">
+					<div data-bind="css:{'dayoff':targetSchedule && targetSchedule.isDayOff && !targetSchedule.isFullDayAbsence && $root.isMobile() },style:{'background-color':targetSchedule && targetSchedule.categoryColor && $root.isMobile()? targetSchedule.categoryColor: 'none', 'color':targetSchedule && targetSchedule.categoryColor && $root.isMobile() ? $root.getTextColor(targetSchedule.categoryColor) : 'none'}" class="clear-desktop-color shift-detail-info fullwidth full-height">
+						<!--ko if:!targetSchedule-->
+						<div data-bind="css:{'not-shceudled':$root.isMobile()}">@Resources.NotScheduled </div>
+						<!--/ko-->
+						<!--ko if:targetSchedule-->
+						<!--ko if:targetSchedule.isDayOff && !targetSchedule.isFullDayAbsence-->
+						<div class="schedule-layer-text-container dayoff-text">
+							<span data-bind="text:targetSchedule.dayOffName"></span>
+							<span data-bind="css:{'hiden':$root.isMobile()}, text:$root.getOvertimeAndIntradayAbsenceText(targetSchedule, '@Resources.OvertimeShortName')"></span>
+						</div>
+						<!--/ko-->
+						<!--ko if:!targetSchedule.isDayOff && !targetSchedule.isFullDayAbsence-->
+						<div class="schedule-layer-text-container">
+							<div>
+								<span data-bind="text:targetSchedule.categoryName"></span>
+								<span data-bind="css:{'hiden':$root.isMobile()}, text:$root.getOvertimeAndIntradayAbsenceText(targetSchedule, '@Resources.OvertimeShortName')"></span>
+							</div>
+							<div class="shift-start-end-time">
+								<span data-bind="text:targetSchedule.scheduleStart + $root.getOvernightFlag(targetSchedule.scheduleStartTime(), date)"></span>
+								<span class="spliter">-</span>
+								<span data-bind="text:targetSchedule.scheduleEnd + $root.getOvernightFlag(targetSchedule.scheduleEndTime(), date)"></span>
+							</div>
+							<div class="shift-trade-contract"><span data-bind="text:targetSchedule.contractTime"></span></div>
+						</div>
+						<!--/ko-->
+						<!--ko if: targetSchedule.isFullDayAbsence-->
+						<div class="schedule-layer-text-container dayoff-text">
+							<span data-bind="text:targetSchedule.categoryName"></span>
+						</div>
+						<div data-bind="visible:!$root.isMobile()" class="shift-visual-indication-wrapper">
+							<div class="shift-visual-indication">
+								<!-- ko foreach: targetSchedule.layers -->
+								<div class="shift-visual-indication-block clear-background-image" data-bind="style: styleJson74947, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
+								<!-- /ko -->
+							</div>
+						</div>
+						<!--/ko-->
+						<!--ko if: !targetSchedule.isFullDayAbsence-->
+						<div data-bind="visible:!$root.isMobile()" class="shift-visual-indication-wrapper">
+							<div class="shift-visual-indication">
+								<!-- ko foreach: targetSchedule.layers -->
+								<div class="shift-visual-indication-block" data-bind="style: styleJson74947, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
+								<!-- /ko -->
+								<!--ko if: targetSchedule.isDayOff -->
+								<div class="shift-visual-indication-block dayoff"></div>
+								<!--/ko-->
+							</div>
+						</div>
+						<!--/ko-->
+						<!--/ko-->
+					</div>
 					<!--ko if:targetSchedule-->
-					<!--ko if:targetSchedule.isDayOff && !targetSchedule.isFullDayAbsence-->
-					<div class="schedule-layer-text-container dayoff-text">
-						<span data-bind="text:targetSchedule.dayOffName"></span>
-						<span data-bind="css:{'hiden':!(targetSchedule.hasOvertime && !$root.isMobile())}">(@Resources.WithOvertime)</span>
-						<span data-bind="css:{'hiden':!(targetSchedule.isIntradayAbsence && !targetSchedule.hasOvertime && !$root.isMobile())}">(@Resources.WithAbsence)</span>
-					</div>
-					<!--/ko-->
-					<!--ko if:!targetSchedule.isDayOff && !targetSchedule.isFullDayAbsence-->
-					<div class="schedule-layer-text-container">
-						<div data-bind="text:targetSchedule.categoryName"></div>
-						<div class="shift-start-end-time">
-							<span data-bind="text:targetSchedule.scheduleStart + $root.getOvernightFlag(targetSchedule.scheduleStartTime(), date)"></span>
-							<span class="spliter">-</span>
-							<span data-bind="text:targetSchedule.scheduleEnd + $root.getOvernightFlag(targetSchedule.scheduleEndTime(), date)"></span>
-						</div>
-						<div class="shift-trade-contract"><span data-bind="text:targetSchedule.contractTime"></span></div>
-					</div>
-					<!--/ko-->
-					<!--ko if: targetSchedule.isFullDayAbsence-->
-					<div class="schedule-layer-text-container dayoff-text">
-						<span data-bind="text:targetSchedule.categoryName"></span>
-					</div>
-					<div data-bind="visible:!$root.isMobile()" class="shift-visual-indication-wrapper">
-						<div class="shift-visual-indication">
-							<!-- ko foreach: targetSchedule.layers -->
-							<div class="shift-visual-indication-block clear-background-image" data-bind="style: styleJson74947, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
-							<!-- /ko -->
-						</div>
-					</div>
-					<!--/ko-->
-					<!--ko if: !targetSchedule.isFullDayAbsence-->
-					<div data-bind="visible:!$root.isMobile()" class="shift-visual-indication-wrapper">
-						<div class="shift-visual-indication">
-							<!-- ko foreach: targetSchedule.layers -->
-							<div class="shift-visual-indication-block" data-bind="style: styleJson74947, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
-							<!-- /ko -->
-							<!--ko if: targetSchedule.isDayOff -->
-							<div class="shift-visual-indication-block dayoff"></div>
-							<!--/ko-->
-						</div>
-					</div>
-					<!--/ko-->
+					<div class="text-indicator-mobile" data-bind="style:{'background-color':targetSchedule.overtimeCategoryColor}, css:{'hiden':!(targetSchedule.hasOvertime && $root.isMobile())}">@Resources.OvertimeShortName</div>
+					<div class="text-indicator-mobile" data-bind="style:{'background-color':targetSchedule.absenceColor}, text: targetSchedule.absenceCategoryShortName, css:{'hiden':!(targetSchedule.isIntradayAbsence && $root.isMobile())}"></div>
 					<!--/ko-->
 				</div>
+				
 				<div class="shift-selection">
 					<span class="shift-trade-selection-container" data-bind="tooltip:{title:reason, placement: 'left'}">
 						<input data-bind="enable:isEnable, checked: isSelected, click:$root.select" type="checkbox" />

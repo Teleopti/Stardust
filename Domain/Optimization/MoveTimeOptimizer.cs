@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     {
         private readonly IPeriodValueCalculator _periodValueCalculator;
         private readonly IScheduleResultDataExtractor _personalSkillsDataExtractor;
-        private readonly IMoveTimeDecisionMaker _decisionMaker;
+        private readonly MoveTimeDecisionMaker2 _decisionMaker;
         private readonly IScheduleService _scheduleService;
         private readonly IOptimizationPreferences _optimizerPreferences;
         private readonly ISchedulePartModifyAndRollbackService _rollbackService;
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	    public MoveTimeOptimizer(
             IPeriodValueCalculator periodValueCalculator,
             IScheduleResultDataExtractor personalSkillsDataExtractor,
-            IMoveTimeDecisionMaker decisionMaker,
+			MoveTimeDecisionMaker2 decisionMaker,
             IScheduleService scheduleService,
             IOptimizationPreferences optimizerPreferences,
             ISchedulePartModifyAndRollbackService rollbackService,

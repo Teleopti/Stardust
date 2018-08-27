@@ -128,7 +128,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.AreEqual(_period, _target.SelectedPeriod.DateOnlyPeriod);
             Assert.AreEqual(4, _target.VisibleWeeks);
             Assert.AreEqual(0, _target.ColWeekMap.Count);
-            Assert.AreEqual(0, _target.TimelineHourPositions.Count);
             Assert.AreEqual(0, _target.TimelineSpan.Count);
             Assert.IsNull(_target.LastUnsavedSchedulePart);
             Assert.AreEqual(1, _target.CurrentSortColumn);

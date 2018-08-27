@@ -9,6 +9,7 @@ using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.IntegrationTest.TestData;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
@@ -41,7 +42,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Data.Apply(etlUpdateDate);
 
 
-			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(), testDate);
+			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(){new BusinessUnit(TestState.BusinessUnit, ExistingDatasources.DefaultRaptorDefaultDatasourceId)}, testDate);
 
 			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
 			var activityPhone = new ActivitySpec { Name = "Phone", Color = "LightGreen", InReadyTime = true };
@@ -50,6 +51,11 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Data.Apply(cat);
 			Data.Apply(activityPhone);
 			Data.Apply(activityLunch);
+			var analyticsDataFactory = new AnalyticsDataFactory();
+			analyticsDataFactory.Setup(new ShiftCategory(1, cat.ShiftCategory.Id.Value, cat.Name, cat.ShiftCategory.DisplayColor, ExistingDatasources.DefaultRaptorDefaultDatasourceId, 1));
+			analyticsDataFactory.Setup(new Activity(1, activityPhone.Activity.Id.Value, activityPhone.Name, activityPhone.Activity.DisplayColor, ExistingDatasources.DefaultRaptorDefaultDatasourceId, 1));
+			analyticsDataFactory.Setup(new Activity(2, activityLunch.Activity.Id.Value, activityLunch.Name, activityLunch.Activity.DisplayColor, ExistingDatasources.DefaultRaptorDefaultDatasourceId, 1));
+			analyticsDataFactory.Persist();
 
 			IPerson person;
 			BasicShiftSetup.SetupBasicForShifts();
@@ -105,7 +111,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Data.Apply(etlUpdateDate);
 
 
-			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(), testDate);
+			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(){new BusinessUnit(TestState.BusinessUnit, ExistingDatasources.DefaultRaptorDefaultDatasourceId)}, testDate);
 
 			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
 			var activityPhone = new ActivitySpec { Name = "Phone", Color = "LightGreen", InReadyTime = true };
@@ -114,6 +120,11 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Data.Apply(cat);
 			Data.Apply(activityPhone);
 			Data.Apply(activityLunch);
+			var analyticsDataFactory = new AnalyticsDataFactory();
+			analyticsDataFactory.Setup(new ShiftCategory(1, cat.ShiftCategory.Id.Value, cat.Name, cat.ShiftCategory.DisplayColor, ExistingDatasources.DefaultRaptorDefaultDatasourceId, 1));
+			analyticsDataFactory.Setup(new Activity(1, activityPhone.Activity.Id.Value, activityPhone.Name, activityPhone.Activity.DisplayColor, ExistingDatasources.DefaultRaptorDefaultDatasourceId, 1));
+			analyticsDataFactory.Setup(new Activity(2, activityLunch.Activity.Id.Value, activityLunch.Name, activityLunch.Activity.DisplayColor, ExistingDatasources.DefaultRaptorDefaultDatasourceId, 1));
+			analyticsDataFactory.Persist();
 
 			IPerson person;
 			BasicShiftSetup.SetupBasicForShifts();

@@ -81,6 +81,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TeamCardReader>().As<ITeamCardReader>().SingleInstance();
 			builder.RegisterType<RtaTracerViewModelBuilder>().SingleInstance();
 			builder.RegisterType<HistoricalAdherenceViewModelBuilder>().SingleInstance();
+			builder.RegisterType<HistoricalOverviewViewModelBuilder>().SingleInstance();
 			builder.RegisterType<HistoricalAdherenceDate>().SingleInstance();
 
 			builder.RegisterType<ApprovePeriodAsInAdherenceCommandHandler>().SingleInstance();

@@ -357,7 +357,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ProjectionProvider>().As<IProjectionProvider>().SingleInstance();
 			builder.RegisterType<NightlyRestRule>().As<IAssignmentPeriodRule>().SingleInstance();
 			builder.RegisterType<ScheduleMatrixLockableBitArrayConverterEx>().As<IScheduleMatrixLockableBitArrayConverterEx>().SingleInstance();
-			builder.RegisterType<MoveTimeDecisionMaker2>().As<IMoveTimeDecisionMaker>().SingleInstance();
+			builder.RegisterType<MoveTimeDecisionMaker2>().SingleInstance();
 			builder.RegisterType<MoveTimeOptimizerCreator>().InstancePerLifetimeScope();
 			builder.RegisterType<RestrictionExtractor>().As<IRestrictionExtractor>().SingleInstance();
 			builder.RegisterType<RestrictionCombiner>().As<IRestrictionCombiner>().SingleInstance();
@@ -472,21 +472,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<AnalyticsScheduleChangeForDefaultScenarioFilter>().As<IAnalyticsScheduleChangeUpdaterFilter>().SingleInstance();
 			}
-
-			// Analytics skill updater on person when skills not exists in analytics failure
-			if (_configuration.Toggle(Toggles.ETL_SpeedUpNightlySkill_37543))
-			{
-				builder.RegisterType<ThrowExceptionOnSkillMapError>().As<IAnalyticsPersonPeriodMapNotDefined>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<ReturnNotDefined>().As<IAnalyticsPersonPeriodMapNotDefined>().SingleInstance();
-			}
-
+			builder.RegisterType<ThrowExceptionOnSkillMapError>().As<IAnalyticsPersonPeriodMapNotDefined>().SingleInstance();
 			builder.RegisterType<AssignScheduledLayers>().SingleInstance();
-
 			builder.RegisterType<ShiftProjectionCacheManager>().InstancePerLifetimeScope();
-			builder.RegisterType<TeamScheduling>().As<TeamScheduling>().SingleInstance();
 			
 			registerForJobs(builder);
 			registerValidators(builder);

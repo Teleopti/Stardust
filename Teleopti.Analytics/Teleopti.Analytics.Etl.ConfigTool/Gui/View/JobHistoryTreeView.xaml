@@ -26,6 +26,7 @@
 				<GridViewColumn Header="Duration" DisplayMemberBinding="{Binding Path=Duration}" Width="65" />
 				<GridViewColumn Header="Affected Rows" DisplayMemberBinding="{Binding Path=RowsAffected}" Width="85" />
 				<GridViewColumn Header="Job Schedule name" DisplayMemberBinding="{Binding Path=ScheduleName}" Width="150" />
+				<GridViewColumn Header="Tenant name" DisplayMemberBinding="{Binding Path=TenantName}" Width="150" />
 				<GridViewColumn Header="Error Message" DisplayMemberBinding="{Binding Path=ErrorMessage}" Width="350" />
 			</Controls:TreeListView.Columns>
 			<Controls:TreeListView.ItemContainerStyle>

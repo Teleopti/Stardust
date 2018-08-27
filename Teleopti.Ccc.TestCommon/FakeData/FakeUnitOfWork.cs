@@ -49,10 +49,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public T Merge<T>(T root) where T : class, IAggregateRoot
 		{
-			var item = _storage.Get<T>(root.Id.GetValueOrDefault());
-			_storage.Remove(item);
-			_storage.Add(root);
-			return root;
+			return _storage.Merge(root);
 		}
 
 		public bool Contains(IEntity entity)

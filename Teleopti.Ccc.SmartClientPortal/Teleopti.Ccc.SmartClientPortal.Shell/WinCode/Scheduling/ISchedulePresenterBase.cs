@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
         Dictionary<int, int> ColWeekMap { get; }
 
-        Dictionary<int, TimeSpan> TimelineHourPositions { get; }
         ISchedulerStateHolder SchedulerState { get; }
         SchedulePartFilter SchedulePartFilter { get; }
         DateTime Now { get; set; }

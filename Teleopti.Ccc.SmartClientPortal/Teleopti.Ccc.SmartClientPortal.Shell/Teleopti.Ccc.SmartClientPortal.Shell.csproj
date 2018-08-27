@@ -1430,7 +1430,6 @@
     <Compile Include="Win\Common\Configuration\Columns\SFGridEditableTextColumn.cs" />
     <Compile Include="Win\Common\Configuration\Columns\SFGridHourMinutesColumn.cs" />
     <Compile Include="Win\Common\Configuration\Columns\SFGridHourMinutesOrEmptyColumn.cs" />
-    <Compile Include="Win\Common\Configuration\Columns\SFGridIntegerCellColumn.cs" />
     <Compile Include="Win\Common\Configuration\Columns\SFGridIntegerCellWithIgnoreColumn.cs" />
     <Compile Include="Win\Common\Configuration\Columns\SFGridMultiSelectDropDownColumn.cs" />
     <Compile Include="Win\Common\Configuration\Columns\SFGridNullableIntegerCellColumn.cs" />
@@ -3362,13 +3361,6 @@
     <Compile Include="Win\Scheduling\SchedulingSessionPreferences\SchedulingSessionPreferencesTabPanel.Designer.cs">
       <DependentUpon>SchedulingSessionPreferencesTabPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Win\Scheduling\SingleAgentRestriction\CellComment.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Win\Scheduling\SingleAgentRestriction\CellComment.Designer.cs">
-      <DependentUpon>CellComment.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Win\Scheduling\SingleAgentRestriction\CommentMouseControler.cs" />
     <Compile Include="Win\Scheduling\SingleAgentRestriction\PreferenceCellPainters\AbsenceOnContractDayOffPainter.cs" />
     <Compile Include="Win\Scheduling\SingleAgentRestriction\PreferenceCellPainters\ActivityPreferencePainter.cs" />
     <Compile Include="Win\Scheduling\SingleAgentRestriction\PreferenceCellPainters\DisabledPainter.cs" />

@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			JobStartTimeRepository.CheckAndUpdate(60, bu.Id.Value);
 			Now.Is("2016-03-01 10:00");
 			Target.Handle(new TenantMinuteTickEvent());
-			Publisher.PublishedEvents.Count().Should().Be.EqualTo(0);
+			Publisher.PublishedEvents.OfType<NewMultiAbsenceRequestsCreatedEvent>().Count().Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			s.SetBusinessUnit(bu);
 			BusinessUnitRepository.Add(bu);
 			Target.Handle(new TenantMinuteTickEvent());
-			Publisher.PublishedEvents.Count().Should().Be.EqualTo(1);
+			Publisher.PublishedEvents.OfType<UpdateStaffingLevelReadModelEvent>().Count().Should().Be.EqualTo(1);
 			(Publisher.PublishedEvents.First() as UpdateStaffingLevelReadModelEvent).LogOnBusinessUnitId.Should()
 				.Be.EqualTo(bu.Id.Value);
 		}
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Now.Is("2016-03-01 08:10");
 			JobStartTimeRepository.CheckAndUpdate(60, bu2.Id.Value);
 			Target.Handle(new TenantMinuteTickEvent());
-			Publisher.PublishedEvents.Count().Should().Be.EqualTo(1);
+			Publisher.PublishedEvents.OfType<UpdateStaffingLevelReadModelEvent>().Count().Should().Be.EqualTo(1);
 			(Publisher.PublishedEvents.First() as UpdateStaffingLevelReadModelEvent).LogOnBusinessUnitId.Should()
 				.Be.EqualTo(bu.Id.Value);
 		}
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			BusinessUnitRepository.Add(bu);
 
 			Target.Handle(new TenantMinuteTickEvent());
-			Publisher.PublishedEvents.Count().Should().Be.EqualTo(0);
+			Publisher.PublishedEvents.OfType<NewMultiAbsenceRequestsCreatedEvent>().Count().Should().Be.EqualTo(0);
 		}
 
 

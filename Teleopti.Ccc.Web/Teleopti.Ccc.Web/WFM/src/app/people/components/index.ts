@@ -1,5 +1,4 @@
 export * from './app-logon-page';
-export * from './feedback-message';
 export * from './grant-page';
 export * from './identity-logon-page';
 export * from './revoke-page';

@@ -68,7 +68,7 @@ describe('SkillTypeService Tests ',
 				expect(skillTexts.TaskTime).toEqual('TaskTime');
 				expect(skillTexts.OriginalTasks).toEqual('OriginalEmails');
 				expect(skillTexts.ValidatedTasks).toEqual('ValidatedEmails');
-				expect(skillTexts.CampaignTasksPercentSign).toEqual('CampaignEmailsPercentSign');
+				expect(skillTexts.CampaignTasksPercentSign).toEqual('CampaignEmailsPercent');
 
 			});
 
@@ -96,7 +96,7 @@ describe('SkillTypeService Tests ',
 						expect(skillTexts.TaskTime).toEqual('TaskTime');
 						expect(skillTexts.OriginalTasks).toEqual('OriginalTasks');
 						expect(skillTexts.ValidatedTasks).toEqual('ValidatedTasks');
-						expect(skillTexts.CampaignTasksPercentSign).toEqual('CampaignTasksPercentSign');
+						expect(skillTexts.CampaignTasksPercentSign).toEqual('CampaignTasksPercent');
 
 					});
 			});
