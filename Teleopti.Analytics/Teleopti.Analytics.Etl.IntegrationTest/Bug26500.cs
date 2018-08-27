@@ -61,7 +61,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			BasicShiftSetup.AddPerson(out person, "Ola H", "", testDate);
 			BasicShiftSetup.AddThreeShifts("Ola H", cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity, testDate);
 			IPerson person2;
-			BasicShiftSetup.AddPerson(out person2, "David J", "", testDate);
+			BasicShiftSetup.AddPerson(out person2, "David J", "", testDate, 2);
 			BasicShiftSetup.AddThreeShifts("David J", cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity, testDate);
 			
 			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));

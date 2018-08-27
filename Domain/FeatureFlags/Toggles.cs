@@ -88,7 +88,6 @@
 		Wfm_DisplayOnlineHelp_39402,
 
 		ETL_SpeedUpFactScheduleNightly_38019,
-		ETL_SpeedUpPersonPeriodNightly_38097,
 		ETL_SpeedUpNightlyPreference_38283,
 		ETL_UseBpoResources_75855,
 

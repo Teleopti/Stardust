@@ -22,10 +22,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new DimQualityQuestLoadJobStep(jobParameters));         // BU independent
 			Add(new RaptorQueueSynchronizationStep(jobParameters));
 			Add(new RaptorAgentLogOnSynchronizationStep(jobParameters));
-
-			AddWhenAllDisabled(new StagePersonJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
-			AddWhenAllDisabled(new StageAgentSkillJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
-
 			AddWhenAllDisabled(new StageScheduleJobStep(jobParameters), Toggles.ETL_SpeedUpFactScheduleNightly_38019);
 			AddWhenAllDisabled(new StageScheduleDayOffCountJobStep(jobParameters), Toggles.ETL_SpeedUpFactScheduleNightly_38019);
 
@@ -39,21 +35,12 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new StageKpiTargetTeamJobStep(jobParameters));
 			Add(new SqlServerUpdateStatistics(jobParameters));
 			Add(new DimScorecardJobStep(jobParameters));
-
-			AddWhenAllDisabled(new DimSiteJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
-			AddWhenAllDisabled(new DimTeamJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
-
-			AddWhenAllDisabled(new DimSkillSetJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
-			AddWhenAllDisabled(new DimPersonJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
-			AddWhenAllEnabled(new DimPersonUpdateMaxDateJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
-			AddWhenAllEnabled(new DimPersonWindowsLoginJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
+			Add(new DimPersonUpdateMaxDateJobStep(jobParameters));
+			Add(new DimPersonWindowsLoginJobStep(jobParameters));
 			AddWhenAllDisabled(new DimShiftLengthJobStep(jobParameters), Toggles.ETL_SpeedUpFactScheduleNightly_38019);
 
 			Add(new DimKpiJobStep(jobParameters));
 			Add(new ScorecardKpiJobStep(jobParameters));
-
-			AddWhenAllDisabled(new BridgeSkillSetSkillJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
-			AddWhenAllDisabled(new BridgeAcdLogOnPersonJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
 
 			// FACT TABLES
 			AddWhenAllDisabled(new FactScheduleJobStep(jobParameters), Toggles.ETL_SpeedUpFactScheduleNightly_38019);
@@ -69,8 +56,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new FactQualityLoadJobStep(jobParameters));             // BU independent
 			Add(new FactScheduleDeviationJobStep(jobParameters));
 			Add(new FactKpiTargetTeamJobStep(jobParameters));
-
-			AddWhenAllDisabled(new FactAgentSkillJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
+			
 			// If PM is installed then show PM job steps
 			if (jobParameters.IsPmInstalled)
 			{

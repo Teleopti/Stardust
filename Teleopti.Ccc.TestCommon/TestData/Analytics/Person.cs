@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 	{
 		private readonly int _validToDateIdMaxDate;
 		private readonly Guid? _personCode;
-		private readonly IDatasourceData _datasource;
+		private readonly int _datasourceId;
 		private readonly DateTime _validFrom;
 		private readonly DateTime _validTo;
 		private readonly int _validFromId;
@@ -80,23 +80,37 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 
 		private Person()
 		{
-			
 		}
-
 
 		public static Person NotDefinedPerson(IDatasourceData datasource)
 		{
 			return new Person(-1, null, null, "Not Defined", "Not Defined", new DateTime(1900, 1, 1),
 				new DateTime(2059, 12, 31), -1, -2, -1, null, datasource, false, -1);
 		}
+		
+		public Person(IPerson person, int datasourceId, int personId, DateTime validFrom, DateTime validTo,
+			int validFromId,
+			int validToId, int businessUnitId, Guid businessUnitCode, bool toBeDeleted, int timeZoneId)
+			: this(
+				personId, person.Id.Value, person.PersonPeriodCollection.FirstOrDefault()?.Id, person.Name.FirstName, person.Name.LastName,
+				validFrom, validTo, validFromId, validToId, businessUnitId, businessUnitCode, datasourceId,
+				toBeDeleted, timeZoneId)
+		{ }
 
 		public Person(
 			int personId, Guid? personCode, Guid? personPeriodCode, string firstName, string lastName, DateTime validFrom, DateTime validTo, int validFromId,
-			int validToId, int businessUnitId, Guid? businessUnitCode, IDatasourceData datasource, bool toBeDeleted, int timeZoneId)
+			int validToId, int businessUnitId, Guid? businessUnitCode, IDatasourceData datasource, bool toBeDeleted, int timeZoneId): 
+			this(personId, personCode, personPeriodCode, firstName, lastName, validFrom, validTo, validFromId, validToId, businessUnitId, businessUnitCode, datasource.RaptorDefaultDatasourceId, toBeDeleted, timeZoneId)
+		{
+		}
+		
+		public Person(
+			int personId, Guid? personCode, Guid? personPeriodCode, string firstName, string lastName, DateTime validFrom, DateTime validTo, int validFromId,
+			int validToId, int businessUnitId, Guid? businessUnitCode, int datasourceId, bool toBeDeleted, int timeZoneId)
 		{
 			PersonId = personId;
 			_personCode = personCode;
-			_datasource = datasource;
+			_datasourceId = datasourceId;
 			_validFrom = validFrom;
 			_validTo = validTo;
 			_validFromId = validFromId;
@@ -108,7 +122,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			_personPeriodCode = personPeriodCode;
 			_firstName = firstName;
 			_lastName = lastName;
-
 		}
 
 		public void Apply(SqlConnection connection, CultureInfo userCulture, CultureInfo analyticsDataCulture)
@@ -117,7 +130,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			{
 				table.AddPerson(PersonId, _personCode, _firstName, _lastName, _validFrom, _validTo,
 												_validFromId, 0, _validToId, 0, _businessUnitId, _businessUnitCode, "",
-												_datasource.RaptorDefaultDatasourceId, _toBeDeleted, _timeZoneId, _personPeriodCode, _validToDateIdMaxDate);
+												_datasourceId, _toBeDeleted, _timeZoneId, _personPeriodCode, _validToDateIdMaxDate);
 
 				Bulk.Insert(connection, table);
 
