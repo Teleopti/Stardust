@@ -15,6 +15,7 @@ using Teleopti.Analytics.Etl.Common.JobSchedule;
 using Teleopti.Analytics.Etl.Common.Service;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -75,7 +76,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			isolate.UseTestDouble<FakePmInfoProvider>().For<IPmInfoProvider>();
 			isolate.UseTestDouble<FakeToggleManager>().For<IToggleManager>();
 			isolate.UseTestDouble<FakeGeneralInfrastructure>().For<IGeneralInfrastructure>();
-			isolate.UseTestDouble<MutableNow>().For<INow>();
+			isolate.UseTestDouble<MutableNow>().For<INow, IMutateNow>();
 			isolate.UseTestDouble<FakeJobScheduleRepository>().For<IJobScheduleRepository>();
 			isolate.UseTestDouble<FakeJobHistoryRepository>().For<IJobHistoryRepository>();
 		}

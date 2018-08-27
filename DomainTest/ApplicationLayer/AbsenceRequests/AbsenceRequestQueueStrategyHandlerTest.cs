@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
 	[TestFixture]
-	public class AbsenceRequestQueueStrategyHandlerTest : IIsolateSystem
+	public class AbsenceRequestQueueStrategyHandlerTest : IIsolateSystem, ITestInterceptor
 	{
 		public FakeQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
 		public AbsenceRequestQueueStrategyHandler Target;
@@ -30,12 +30,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<AbsenceRequestStrategyProcessor>().For<IAbsenceRequestStrategyProcessor>();
-			var mutableNow = new MutableNow();
-			mutableNow.Is("2016-03-01 10:00");
-			isolate.UseTestDouble(mutableNow).For<INow>();
-			_now = new DateTime(2016, 03, 01, 10, 0, 0, DateTimeKind.Utc);
+			isolate.UseTestDouble<MutableNow>().For<INow, IMutateNow>();
 		}
 
+		public void OnBefore()
+		{
+			_now = new DateTime(2016, 03, 01, 10, 0, 0, DateTimeKind.Utc);
+			Now.Is("2016-03-01 10:00");
+		}
+		
 		[Test]
 		public void ShouldPublishMultiEvent()
 		{
