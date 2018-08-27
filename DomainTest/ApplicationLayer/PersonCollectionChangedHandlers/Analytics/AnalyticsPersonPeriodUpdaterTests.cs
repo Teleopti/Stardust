@@ -382,7 +382,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		}
 
 		[Test]
-		public void NewPersonPeriodWithSkillNotYetInAnalytics_HandleEvent_ShouldWorkAndPublishEvents()
+		public void NewPersonPeriodWithSkillNotYetInAnalytics_HandleEvent_ShouldThrow()
 		{
 			basicSetup();
 
