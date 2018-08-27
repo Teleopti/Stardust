@@ -119,7 +119,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			result.Content.First(x => x.JobName == "Initial").NeededDatePeriod.Count.Should().Be(1);
 			result.Content.First(x => x.JobName == "Initial").NeededDatePeriod.Should().Contain("Initial");
 			result.Content.First(x => x.JobName == "Intraday").NeededDatePeriod.Count.Should().Be(0);
-			result.Content.First(x => x.JobName == "Nightly").NeededDatePeriod.Count.Should().Be(4);
+			result.Content.First(x => x.JobName == "Nightly").NeededDatePeriod.Count.Should().Be(3);
 			result.Content.First(x => x.JobName == "Nightly").NeededDatePeriod.Should().Not.Contain("Initial");
 			result.Content.First(x => x.JobName == "Workload Queues").NeededDatePeriod.Count.Should().Be(0);
 			result.Content.First(x => x.JobName == "Queue Statistics").NeededDatePeriod.Count.Should().Be(1);
