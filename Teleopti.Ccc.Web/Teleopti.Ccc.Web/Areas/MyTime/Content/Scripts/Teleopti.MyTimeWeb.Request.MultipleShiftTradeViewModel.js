@@ -176,6 +176,25 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 		return '';
 	};
 
+	self.getOvertimeAndIntradayAbsenceText = function (personSchedule, otText) {
+		if (personSchedule.isIntradayAbsence || personSchedule.hasOvertime) {
+			var result = '(';
+			if (personSchedule.hasOvertime) {
+				result += otText;
+			}
+
+			if (personSchedule.isIntradayAbsence) {
+				result += (result === '(' ? personSchedule.absenceCategoryShortName : ', ' + personSchedule.absenceCategoryShortName);
+			}
+
+			result += ')'
+
+			return result;
+		}
+
+		return '';
+	}
+
 	self.scrolled = function(data, event) {
 		var element = event.target;
 		var wholeHeight = element.scrollHeight;
@@ -1187,10 +1206,14 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 				var scheduleStartTime = moment(layers[0].Start);
 				var scheduleEndTime = moment(layers[layers.length - 1].End);
 				var scheduleLength = scheduleEndTime.diff(scheduleStartTime, 'minutes');
-				var hasOvertime =
-					personSchedule.ScheduleLayers.filter(function(l) {
-						return l.IsOvertime;
-					}).length > 0;
+				var overtimelayer = personSchedule.ScheduleLayers.filter(function (l) {
+					return l.IsOvertime;
+				})[0];
+				if (overtimelayer) {
+					var hasOvertime = true;
+					var overtimeCategoryColor = overtimelayer.Color;
+				}
+				
 
 				mappedLayers = ko.utils.arrayMap(personSchedule.ScheduleLayers, function(layer) {
 					var minutesSinceTimeLineStart = moment(layer.Start).diff(self.timeLineStartTime(), 'minutes');
@@ -1229,7 +1252,10 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 				startTimeInString,
 				endTimeInString,
 				hasOvertime,
-				personSchedule.IsIntradayAbsence
+				personSchedule.IsIntradayAbsence,
+				'#80FF80',
+				'PT',
+				overtimeCategoryColor
 			);
 
 			return model;
