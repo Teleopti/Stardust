@@ -40,7 +40,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 
 			AddWhenAnyDisabled(new StageSchedulePreferenceJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyPreference_38283, Toggles.ETL_SpeedUpFactScheduleNightly_38019);
 			AddWhenAllDisabled(new StageAvailabilityJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyAvailability_38926);
-			AddWhenAllDisabled(new StageWorkloadJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyWorkload_38928);
 
 			AddWhenAllDisabled(new StageForecastWorkloadJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyForecastWorkload_38929);
 			Add(new StageKpiJobStep(jobParameters));
@@ -71,14 +70,12 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			AddWhenAllDisabled(new DimAbsenceJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyAbsence_38301);
 			AddWhenAllDisabled(new DimShiftCategoryJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyShiftCategory_38718);
 			AddWhenAllDisabled(new DimShiftLengthJobStep(jobParameters), Toggles.ETL_SpeedUpFactScheduleNightly_38019);
-			AddWhenAllDisabled(new DimWorkloadJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyWorkload_38928);
 
 			Add(new DimKpiJobStep(jobParameters));
 			Add(new ScorecardKpiJobStep(jobParameters));
 
 			AddWhenAllDisabled(new BridgeSkillSetSkillJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
 			AddWhenAllDisabled(new BridgeAcdLogOnPersonJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
-			AddWhenAllDisabled(new BridgeQueueWorkloadJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyWorkload_38928);
 			
 			AddWhenAllDisabled(new DimGroupPageJobStep(jobParameters), Toggles.ETL_SpeedUpGroupPagePersonNightly_37623);
 			AddWhenAllDisabled(new BridgeGroupPagePersonJobStep(jobParameters), Toggles.ETL_SpeedUpGroupPagePersonNightly_37623);
