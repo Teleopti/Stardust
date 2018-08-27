@@ -475,7 +475,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ThrowExceptionOnSkillMapError>().As<IAnalyticsPersonPeriodMapNotDefined>().SingleInstance();
 			builder.RegisterType<AssignScheduledLayers>().SingleInstance();
 			builder.RegisterType<ShiftProjectionCacheManager>().InstancePerLifetimeScope();
-			builder.RegisterType<TeamScheduling>().As<TeamScheduling>().SingleInstance();
 			
 			registerForJobs(builder);
 			registerValidators(builder);
