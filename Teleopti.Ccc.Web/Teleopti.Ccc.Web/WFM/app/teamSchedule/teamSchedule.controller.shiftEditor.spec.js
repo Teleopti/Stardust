@@ -1659,7 +1659,7 @@
 						ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
 						Color: '#ffffff',
 						Description: 'Phone',
-						Start: '2018-08-21 05:30',
+						Start: '2018-08-21 05:00',
 						End: '2018-08-21 06:00',
 						Minutes: 30,
 						IsOvertime: false,
@@ -1670,7 +1670,7 @@
 						Color: '#ffa2a2',
 						Description: 'Email',
 						Start: '2018-08-21 06:00',
-						End: '2018-08-21 06:30',
+						End: '2018-08-21 07:00',
 						Minutes: 30,
 						IsOvertime: false,
 						ActivityId: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'

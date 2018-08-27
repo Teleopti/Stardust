@@ -209,7 +209,8 @@
 
 						$scope.$apply();
 					})
-					.on('resizeend', function (event) {
+				.on('resizeend', function (event) {
+
 						var mergedShiftLayer = vm.getMergedShiftLayer(shiftLayer);
 						var translateX = round5(mergedShiftLayer.TranslateX);
 						var startMinutes = mergedShiftLayer.Left + translateX;
@@ -291,7 +292,7 @@
 								resizeLayer(nextLayer, getDiffMinutes(nextLayer.Current.Start, nextLayer.Start),
 									getDiffMinutes(nextLayer.Current.End, nextLayer.Current.Start));
 							}
-							else if (isSameType && i === 0 && startTimeInTimezone.isSameOrBefore(layerStartInTimezone)) {
+							else if (isSameType && i === 0 && isCoveredCompletely) {
 								updateLayer(layer, startTime, mergedLayer.End);
 								resizeLayer(layer, getDiffMinutes(layer.Current.Start, layer.Start),
 									getDiffMinutes(layer.Current.End, layer.Current.Start));
@@ -303,7 +304,9 @@
 						}
 
 						if (isCoveredCompletely) {
-							vm.scheduleVm.ShiftLayers.splice(i, 1);
+							if (!isSameType || (isSameType && i === 0)) {
+								vm.scheduleVm.ShiftLayers.splice(i, 1);
+							}
 						} else if (!isSameType) {
 							updateLayer(layer, mergedLayer.Start, startTime);
 							resizeLayer(layer, getDiffMinutes(layer.Current.Start, layer.Start),
@@ -400,7 +403,7 @@
 								updateLayer(previousLayer, mergedPreviousLayer.Start, end);
 								resizeLayer(previousLayer, mergedPreviousLayer.TranslateX, getShiftLayerWidth(previousLayer.Current));
 							}
-							else if (isSameType && i === lastIndex && endTimeInTimezone.isSameOrAfter(layerEndInTimezone)) {
+							else if (isSameType && i === lastIndex && isCoveredCompletely) {
 								updateLayer(layer, mergedLayer.Start, endTime);
 								resizeLayer(layer, getDiffMinutes(layer.Current.Start, layer.Start), getDiffMinutes(layer.Current.End, layer.Current.Start));
 								break;
