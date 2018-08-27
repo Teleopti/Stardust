@@ -89,7 +89,6 @@
 
 		ETL_SpeedUpFactScheduleNightly_38019,
 		ETL_SpeedUpPersonPeriodNightly_38097,
-		ETL_SpeedUpNightlyShiftCategory_38718,
 		ETL_SpeedUpNightlyPreference_38283,
 		ETL_SpeedUpNightlyAvailability_38926,
 		ETL_SpeedUpGroupPagePersonNightly_37623,
