@@ -8,7 +8,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 {
 	[AnalyticsDatabaseTest]
-	[Toggle(Toggles.ETL_FixScheduleForPersonPeriod_41393)]
 	public class AnalyticsScheduleMatchingPersonTest
 	{ 
 		public AnalyticsScheduleMatchingPerson Target;

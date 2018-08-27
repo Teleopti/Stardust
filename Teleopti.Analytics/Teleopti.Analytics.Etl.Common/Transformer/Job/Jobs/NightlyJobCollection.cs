@@ -13,7 +13,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new LicenseCheckJobStep(jobParameters));
 			// CLEANUP
 			Add(new DimPersonDeleteJobStep(jobParameters));     // BU independent
-			AddWhenAllDisabled(new DimPersonTrimJobStep(jobParameters), Toggles.ETL_FixScheduleForPersonPeriod_41393);     // BU independent
 			Add(new MaintenanceJobStep(jobParameters));     // BU independent
 
 			// STAGE TABLES
