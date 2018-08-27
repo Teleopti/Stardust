@@ -50,8 +50,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			// DIM AND BRIDGE TABLES AND QUEUE/AGENT SYNC
 			AddWhenAllDisabled(new BridgeTimeZoneJobStep(jobParameters), Toggles.ETL_RemoveTimeZoneAndDateNightly_40870);              // BU independent
 
-			AddWhenAllDisabled(new DimDayOffJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyDayOff_38213);
-
 			Add(new DimScorecardJobStep(jobParameters));
 
 			AddWhenAllDisabled(new DimSiteJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);

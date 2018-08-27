@@ -107,7 +107,6 @@
 		OvertimeRequestStaffingCheckMethod_74949,
 		OvertimeRequestChangeBelongsToDateForOverNightShift_74984,
 		OvertimeRequestUsePrimarySkillOption_75573,
-		ETL_SpeedUpNightlyDayOff_38213,
 		MyTimeWeb_MobileResponsive_43826,
 		WFM_Forecaster_Refact_44480,
 		WFM_Export_Forecast_44716,

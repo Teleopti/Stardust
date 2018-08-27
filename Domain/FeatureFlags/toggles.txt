@@ -116,7 +116,6 @@ ETL_SpeedUpNightlyPreference_38283 = true #Depending on ETL_SpeedUpFactScheduleN
 ETL_SpeedUpGroupPagePersonNightly_37623 = true
 ETL_RemoveTimeZoneAndDateNightly_40870 = true
 ETL_FixScheduleForPersonPeriod_41393 = true
-ETL_SpeedUpNightlyDayOff_38213 = true
 
 # DeBockers #
 WfmIntraday_MonitorActualvsForecasted_35176 = true
