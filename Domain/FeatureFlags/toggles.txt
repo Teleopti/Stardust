@@ -113,7 +113,6 @@ ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
 ETL_SpeedUpPersonPeriodNightly_38097 = true
 ETL_SpeedUpFactScheduleNightly_38019 = true # not to be released until pbi 38304 and 41393 is done 
 ETL_SpeedUpNightlyPreference_38283 = true #Depending on ETL_SpeedUpFactScheduleNightly_38019
-ETL_SpeedUpNightlyAvailability_38926 = true
 ETL_SpeedUpGroupPagePersonNightly_37623 = true
 ETL_RemoveTimeZoneAndDateNightly_40870 = true
 ETL_FixScheduleForPersonPeriod_41393 = true
