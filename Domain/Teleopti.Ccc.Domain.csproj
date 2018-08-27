@@ -194,6 +194,7 @@
     <Compile Include="Budgeting\BudgetGroupHeadCountSpecificationLimited.cs" />
     <Compile Include="Common\DefaultSchedulePeriodProvider.cs" />
     <Compile Include="ApplicationLayer\Commands\MultipleChangeScheduleCommandHandler.cs" />
+    <Compile Include="Common\Time\MutableNowWithEvents.cs" />
     <Compile Include="Forecasting\QueueStatisticsViewModelFactory.cs" />
     <Compile Include="Forecasting\IQueueStatisticsViewModelFactory.cs" />
     <Compile Include="Forecasting\Models\QueueStatisticsModel.cs" />
