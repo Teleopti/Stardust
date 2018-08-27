@@ -93,7 +93,6 @@
 		ETL_SpeedUpNightlyShiftCategory_38718,
 		ETL_SpeedUpNightlyPreference_38283,
 		ETL_SpeedUpNightlyAvailability_38926,
-		ETL_SpeedUpNightlyRequest_38914,
 		ETL_SpeedUpGroupPagePersonNightly_37623,
 		ETL_SpeedUpNightlyForecastWorkload_38929,
 		ETL_UseBpoResources_75855,

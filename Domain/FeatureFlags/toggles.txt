@@ -116,7 +116,6 @@ ETL_SpeedUpNightlyAbsence_38301 = true
 ETL_SpeedUpNightlyShiftCategory_38718 = true
 ETL_SpeedUpNightlyPreference_38283 = true #Depending on ETL_SpeedUpFactScheduleNightly_38019
 ETL_SpeedUpNightlyAvailability_38926 = true
-ETL_SpeedUpNightlyRequest_38914 = true
 ETL_SpeedUpGroupPagePersonNightly_37623 = true
 ETL_SpeedUpNightlyForecastWorkload_38929 = true
 ETL_RemoveTimeZoneAndDateNightly_40870 = true

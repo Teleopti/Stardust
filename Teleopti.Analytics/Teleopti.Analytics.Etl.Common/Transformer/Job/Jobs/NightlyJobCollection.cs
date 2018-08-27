@@ -48,7 +48,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new StageKpiTargetTeamJobStep(jobParameters));
 
 			AddWhenAllDisabled(new StageGroupPagePersonJobStep(jobParameters), Toggles.ETL_SpeedUpGroupPagePersonNightly_37623);
-			AddWhenAllDisabled(new StageRequestJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyRequest_38914);
 
 			Add(new SqlServerUpdateStatistics(jobParameters));
 
@@ -97,8 +96,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new FactScheduleDeviationJobStep(jobParameters));
 			Add(new FactKpiTargetTeamJobStep(jobParameters));
 
-			AddWhenAllDisabled(new FactRequestJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyRequest_38914);
-			AddWhenAllDisabled(new FactRequestedDaysJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyRequest_38914);
 			AddWhenAllDisabled(new FactAgentSkillJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
 			// If PM is installed then show PM job steps
 			if (jobParameters.IsPmInstalled)
