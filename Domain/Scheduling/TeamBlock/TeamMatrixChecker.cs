@@ -4,12 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
-	public interface ITeamMatrixChecker
-	{
-		TeamMatrixCheckerResult CheckTeamList(IEnumerable<ITeamInfo> teamList, DateOnlyPeriod period);
-	}
-
-	public class TeamMatrixChecker : ITeamMatrixChecker
+	public class TeamMatrixChecker
 	{
 		public TeamMatrixCheckerResult CheckTeamList(IEnumerable<ITeamInfo> teamList, DateOnlyPeriod period)
 		{

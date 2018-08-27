@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	public class TeamMatrixCheckerTest
 	{
 		private MockRepository _mocks;
-		private ITeamMatrixChecker _target;
+		private TeamMatrixChecker _target;
 		private IEnumerable<ITeamInfo> _teamInfoList;
 		private DateOnlyPeriod _period;
 		private ITeamInfo _teamInfo1;
