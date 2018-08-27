@@ -22,7 +22,7 @@
 	}));
 
 	var mockToggleService = {
-		Wfm_PeopleWeb_PrepareForRelease_76666: true
+		Wfm_PeopleWeb_PrepareForRelease_74903: true
 	};
 
 	var mockPeopleService = {

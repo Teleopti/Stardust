@@ -13,7 +13,7 @@
 		//////
 		// ReSharper disable InconsistentNaming
 		Forecast_CopySettingsToWorkflow_11112,
-		
+
 		Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850,
 
 		RTA_KillFattyIntradayUntilItDies_74939,
@@ -22,7 +22,7 @@
 		LevelUp_HangfireStatistics_76139_76373,
 		RTA_DurationOfHistoricalEvents_76470,
 		RTA_ReviewHistoricalAdherence_74770,
-		
+
 		MyTimeWeb_SortRequestList_40711,
 		MyTimeWeb_PreferenceForJalaliCalendar_42965,
 		MyTimeWeb_DayScheduleForStartPage_43446,
@@ -68,7 +68,7 @@
 		Wfm_People_MoveImportJobToBackgroundService_43582,
 
 		//Bockemon
-		Wfm_PeopleWeb_PrepareForRelease_47766,
+		Wfm_PeopleWeb_PrepareForRelease_74903,
 		Wfm_Authentication_ChangePasswordMenu_76666,
 
 		People_SpeedUpOpening_76365,
@@ -76,7 +76,7 @@
 		WfmGlobalLayout_personalOptions_37114,
 
 		WFM_Gamification_Permission_76546,
-		
+
 		ResourcePlanner_HideSkillPrioSliders_41312,
 		ResourcePlanner_RunPerfTestAsTeam_43537,
 		ResourcePlanner_UseErlangAWithInfinitePatience_45845,
@@ -115,7 +115,7 @@
 		Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560,
 		Report_Remove_Realtime_Scheduled_Time_vs_Target_45559,
 		Report_Remove_Scheduled_Time_Per_Activity_From_Scheduler_45640,
-		
+
 		WFM_Modify_Skill_Groups_43727,
 		WFM_AuditTrail_44006,
 		Report_Show_Utc_In_Report_Selection_When_In_Use_45079,

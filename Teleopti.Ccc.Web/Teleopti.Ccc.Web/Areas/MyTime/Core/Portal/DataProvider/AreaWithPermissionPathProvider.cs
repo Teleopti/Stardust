@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.PeopleAccess))
 			{
-				return _toggleManager.IsEnabled(Toggles.Wfm_PeopleWeb_PrepareForRelease_47766);
+				return _toggleManager.IsEnabled(Toggles.Wfm_PeopleWeb_PrepareForRelease_74903);
 			}
 
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.Gamification))

@@ -451,7 +451,7 @@ function PeopleStartController(
 	$scope.dataInitialized = true;
 	$scope.searchKeyword();
 
-	if ($state.current.name === 'peopleold.start' && toggleSvc.Wfm_PeopleWeb_PrepareForRelease_76666) {
+	if ($state.current.name === 'peopleold.start' && toggleSvc.Wfm_PeopleWeb_PrepareForRelease_74903) {
 		var message = $translate
 			.instant('WFMReleaseNotificationWithoutOldModuleLink')
 			.replace('{0}', $translate.instant('People'))
