@@ -21,10 +21,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new JobBase(jobParameters, new AgentSkillCollection(jobParameters), "Person Skill", false, false));
 			Add(new JobBase(jobParameters, new KpiJobCollection(jobParameters), "KPI", false, false));
 			Add(new JobBase(jobParameters, new QueueAndAgentLogOnJobCollection(jobParameters), "Queue and Agent login synchronization", false, true));
-			if (jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlyReloadDatamart_38131))
-			{
-				Add(new JobBase(jobParameters, new ReloadDatamartJobCollection(jobParameters), "Reload datamart (old nightly)", true, true));
-			}
+			Add(new JobBase(jobParameters, new ReloadDatamartJobCollection(jobParameters), "Reload datamart (old nightly)", true, true));
 			Add(new JobBase(jobParameters, new CleanupJobCollection(jobParameters), "Cleanup", false, false));
 
 			// If PM is installed then show ETL job for processing cube
