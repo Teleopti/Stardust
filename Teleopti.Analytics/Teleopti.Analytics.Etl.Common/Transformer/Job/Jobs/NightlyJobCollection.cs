@@ -39,7 +39,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			AddWhenAnyDisabled(new StageSchedulePreferenceJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyPreference_38283, Toggles.ETL_SpeedUpFactScheduleNightly_38019);
 			AddWhenAllDisabled(new StageAvailabilityJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyAvailability_38926);
 
-			AddWhenAllDisabled(new StageForecastWorkloadJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyForecastWorkload_38929);
 			Add(new StageKpiJobStep(jobParameters));
 			Add(new StageScorecardJobStep(jobParameters));
 			Add(new StageScorecardKpiJobStep(jobParameters));
@@ -87,7 +86,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new StatisticsUpdateNotificationJobStep(jobParameters));                   // BU independent
 			Add(new FactAgentQueueJobStep(jobParameters));              // BU independent
 			Add(new FactQualityLoadJobStep(jobParameters));             // BU independent
-			AddWhenAllDisabled(new FactForecastWorkloadJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyForecastWorkload_38929);
 			Add(new FactScheduleDeviationJobStep(jobParameters));
 			Add(new FactKpiTargetTeamJobStep(jobParameters));
 

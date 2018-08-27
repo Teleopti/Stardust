@@ -115,7 +115,6 @@ ETL_SpeedUpFactScheduleNightly_38019 = true # not to be released until pbi 38304
 ETL_SpeedUpNightlyPreference_38283 = true #Depending on ETL_SpeedUpFactScheduleNightly_38019
 ETL_SpeedUpNightlyAvailability_38926 = true
 ETL_SpeedUpGroupPagePersonNightly_37623 = true
-ETL_SpeedUpNightlyForecastWorkload_38929 = true
 ETL_RemoveTimeZoneAndDateNightly_40870 = true
 ETL_FixScheduleForPersonPeriod_41393 = true
 ETL_SpeedUpNightlyDayOff_38213 = true
