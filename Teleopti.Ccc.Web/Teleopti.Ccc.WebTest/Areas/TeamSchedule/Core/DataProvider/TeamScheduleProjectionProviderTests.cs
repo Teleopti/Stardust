@@ -238,16 +238,27 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var phoneActivityPeriod = new DateTimePeriod(date.AddHours(8), date.AddHours(16));
 			var lunchActivityPeriod = new DateTimePeriod(date.AddHours(11), date.AddHours(12));
 			var absencePeriod = new DateTimePeriod(date.AddHours(12), date.AddHours(13));
+			var shortBreakActivityPeriod = new DateTimePeriod(date.AddHours(13), date.AddHours(13).AddMinutes(15));
+
 			var phoneActivity = ActivityFactory.CreateActivity("Phone", Color.Blue);
 			var lunchActivity = ActivityFactory.CreateActivity("Lunch", Color.Red);
 			var testAbsence = AbsenceFactory.CreateAbsence("test");
+			var shortBreakActivity = ActivityFactory.CreateActivity("Short break", Color.Red).WithId();
 
 			phoneActivity.InContractTime = true;
+			phoneActivity.InWorkTime = true;
+
 			lunchActivity.InContractTime = true;
 			lunchActivity.InWorkTime = false;
-			phoneActivity.InWorkTime = true;
+			lunchActivity.ReportLevelDetail = ReportLevelDetail.Lunch;
+
+			shortBreakActivity.InContractTime = true;
+			shortBreakActivity.ReportLevelDetail = ReportLevelDetail.ShortBreak;
+			shortBreakActivity.InWorkTime = false;
+
 			assignment1Person1.AddActivity(phoneActivity, phoneActivityPeriod);
 			assignment1Person1.AddActivity(lunchActivity, lunchActivityPeriod);
+			assignment1Person1.AddActivity(shortBreakActivity, shortBreakActivityPeriod);
 			scheduleDayOnePerson1.Add(assignment1Person1);
 
 			var absenceLayer = new AbsenceLayer(testAbsence, absencePeriod);
@@ -258,7 +269,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 
 			vm.DayOff.Should().Be(null);
 			vm.Name.Should().Be("agent1");
-			vm.Projection.Count().Should().Be(4);
+			vm.Projection.Count().Should().Be(5);
 			vm.IsFullDayAbsence.Should().Be(false);
 			vm.Date.Should().Be(date.ToFixedDateFormat());
 
@@ -272,22 +283,24 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 
 			vm.Projection.First().ActivityId.Should().Be.EqualTo(phoneActivity.Id);
 			vm.Projection.First().Description.Should().Be(phoneActivity.Description.Name);
+			vm.Projection.First().FloatOnTop.Should().Be.False();
+
 			vm.Projection.Second().ActivityId.Should().Be.EqualTo(lunchActivity.Id);
 			vm.Projection.Second().Description.Should().Be(lunchActivity.Description.Name);
+			vm.Projection.Second().FloatOnTop.Should().Be.True();
+
 			personAbsenceProjection.Description.Should().Be(testAbsence.Name);
+
+			vm.Projection.ElementAt(3).ActivityId.Should().Be.EqualTo(shortBreakActivity.Id);
+			vm.Projection.ElementAt(3).Description.Should().Be(shortBreakActivity.Description.Name);
+			vm.Projection.ElementAt(3).FloatOnTop.Should().Be.True();
+
+
 			vm.Projection.Last().ActivityId.Should().Be(phoneActivity.Id);
 			vm.Projection.Last().Description.Should().Be(phoneActivity.Description.Name);
 
-			var timeSpanForPhoneActivityPeriod = getTimeSpanInMinutesFromPeriod(phoneActivityPeriod);
-			var timeSpanForAbsencePeriod = getTimeSpanInMinutesFromPeriod(absencePeriod);
-			var timeSpanForLunchActivityPeriod = getTimeSpanInMinutesFromPeriod(lunchActivityPeriod);
-
-			var expectedContactTime = timeSpanForPhoneActivityPeriod - timeSpanForAbsencePeriod;
-			vm.ContractTimeMinutes.Should().Be(expectedContactTime);
-
-			var expectedWorktimeMinutes = timeSpanForPhoneActivityPeriod - timeSpanForLunchActivityPeriod -
-										  timeSpanForAbsencePeriod;
-			vm.WorkTimeMinutes.Should().Be(expectedWorktimeMinutes);
+			vm.ContractTimeMinutes.Should().Be(420);
+			vm.WorkTimeMinutes.Should().Be(345);
 		}
 
 		[Test]
@@ -467,7 +480,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 
 			result.Projection.Second().TopShiftLayerId.Should().Be(null);
 		}
-
 
 		[Test]
 		public void ShouldProjectWithOverTime()
