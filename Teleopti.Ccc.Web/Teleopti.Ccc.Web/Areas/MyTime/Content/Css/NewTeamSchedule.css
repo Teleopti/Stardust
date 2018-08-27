@@ -544,9 +544,6 @@ div.teammates-schedules-column:last-of-type .agent-name {
 	bottom: initial;
 	width: calc(100% - 20px);
 	box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.2);
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
 	background: white;
 	padding: 10px 15px;
 	z-index: 100;
@@ -733,7 +730,8 @@ div.teammates-schedules-column:last-of-type .agent-name {
 .new-teamschedule-view-mobile .new-teamschedule-panel {
 	width: 100%;
 	max-width: 100%;
-	min-height: 300px;
+	max-height: calc(100vh - 50px - 10px);
+	overflow-y: auto;
 	position: fixed;
 	top: initial;
 	bottom: 0;
