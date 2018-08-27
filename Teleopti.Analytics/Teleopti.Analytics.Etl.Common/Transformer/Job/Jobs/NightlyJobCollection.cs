@@ -24,8 +24,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 
 			ChooseJobStepUsingToggle(new StageScheduleForecastSkillJobStepWithBpo(jobParameters), new StageScheduleForecastSkillJobStep(jobParameters), Toggles.ETL_UseBpoResources_75855);
 
-			AddWhenAnyDisabled(new StageSchedulePreferenceJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyPreference_38283);
-
 			Add(new StageKpiJobStep(jobParameters));
 			Add(new StageScorecardJobStep(jobParameters));
 			Add(new StageScorecardKpiJobStep(jobParameters));
@@ -39,7 +37,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new ScorecardKpiJobStep(jobParameters));
 
 			// FACT TABLES
-			AddWhenAnyDisabled(new FactSchedulePreferenceJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyPreference_38283);
 			Add(new FactScheduleForecastSkillJobStep(jobParameters));
 			Add(new FactQueueJobStep(jobParameters));                   // BU independent
 			Add(new FactAgentJobStep(jobParameters));                   // BU independent
