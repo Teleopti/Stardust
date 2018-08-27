@@ -350,8 +350,10 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 			vm.startTimeStart(startTimeStart);
 			vm.showStartTimeStart(true);
 			vm.startTimeEnd(startTimeEnd);
-			$('.start-time-slider-start-label').css({ left: value0 / minutesOfOnePixel });
-			$('.start-time-slider-end-label').css({ left: value1 / minutesOfOnePixel });
+			$('.start-time-slider-start-label').css({
+				left: (value0 / minutesOfOnePixel / containerWidth) * 100 + '%'
+			});
+			$('.start-time-slider-end-label').css({ left: (value1 / minutesOfOnePixel / containerWidth) * 100 + '%' });
 		}
 
 		function setEndSliderTime(ui) {
@@ -386,8 +388,8 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 			vm.endTimeStart(endTimeStart);
 			vm.showEndTimeStart(true);
 			vm.endTimeEnd(endTimeEnd);
-			$('.end-time-slider-start-label').css({ left: value0 / minutesOfOnePixel });
-			$('.end-time-slider-end-label').css({ left: value1 / minutesOfOnePixel });
+			$('.end-time-slider-start-label').css({ left: (value0 / minutesOfOnePixel / containerWidth) * 100 + '%' });
+			$('.end-time-slider-end-label').css({ left: (value1 / minutesOfOnePixel / containerWidth) * 100 + '%' });
 		}
 
 		function getFilteredTime(filteredTimeString) {

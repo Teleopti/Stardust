@@ -791,13 +791,11 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			JobScheduleRepository.GetSchedules(null, DateTime.MinValue).Should().Be.Empty();
 		}
 
-		[TestCase(true, true)]
-		[TestCase(true, false)]
-		[TestCase(false, true)]
-		[TestCase(false, false)]
-		public void ShouldGetJobsForSpecificTenant(bool toggle38131Enabled, bool pmInstalled)
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldGetJobsForSpecificTenant(bool pmInstalled)
 		{
-			var jobs = getJobs(testTenantName, toggle38131Enabled, pmInstalled);
+			var jobs = getJobs(testTenantName, pmInstalled);
 
 			foreach (var job in jobs)
 			{
@@ -808,13 +806,11 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			}
 		}
 
-		[TestCase(true, true)]
-		[TestCase(true, false)]
-		[TestCase(false, true)]
-		[TestCase(false, false)]
-		public void ShouldGetJobsForAllTenant(bool toggle38131Enabled, bool pmInstalled)
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldGetJobsForAllTenant(bool pmInstalled)
 		{
-			var jobs = getJobs(Tenants.NameForOptionAll, toggle38131Enabled, pmInstalled);
+			var jobs = getJobs(Tenants.NameForOptionAll, pmInstalled);
 
 			foreach (var job in jobs)
 			{
@@ -1241,7 +1237,7 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			result.Content.Last().BusinessUnitName.Should().Be(bunit2.Name);
 		}
 
-		private IEnumerable<JobCollectionModel> getJobs(string tenantName, bool toggle38131Enabled, bool pmInstalled)
+		private IEnumerable<JobCollectionModel> getJobs(string tenantName, bool pmInstalled)
 		{
 			ConfigReader.FakeConnectionString("Hangfire", connectionString);
 
@@ -1252,12 +1248,6 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 			var localToday = new DateTime(2017, 12, 11);
 			var utcToday = TimeZoneHelper.ConvertToUtc(localToday, TimeZoneInfo.FindSystemTimeZoneById(timezoneName));
 			Now.Is(utcToday);
-
-			if (toggle38131Enabled)
-			{
-				ToggleManager.Enable(Toggles.ETL_SpeedUpNightlyReloadDatamart_38131);
-			}
-
 			PmInfoProvider.SetPmInstalled(pmInstalled);
 
 			var result = Target.Jobs(tenantName);
@@ -1268,10 +1258,10 @@ namespace Teleopti.Wfm.AdministrationTest.Controllers
 
 			var jobs = jobCollection.Content;
 
-			var expectedJobCount = basicJobCount + (toggle38131Enabled ? 1 : 0) + (pmInstalled ? 1 : 0);
+			var expectedJobCount = basicJobCount + 1 + (pmInstalled ? 1 : 0);
 			jobs.Count.Should().Be(expectedJobCount);
 
-			jobs.Any(j => j.JobName == reloadDatamartJobName).Should().Be.EqualTo(toggle38131Enabled);
+			jobs.Any(j => j.JobName == reloadDatamartJobName).Should().Be.True();
 			jobs.Any(j => j.JobName == processCubeJobName).Should().Be.EqualTo(pmInstalled);
 
 			return jobs;

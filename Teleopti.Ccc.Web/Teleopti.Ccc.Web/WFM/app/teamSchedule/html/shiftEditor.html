@@ -78,11 +78,12 @@
 					 'border-dark': !vm.useLighterBorder(shiftLayer),
 					 'border-light': vm.useLighterBorder(shiftLayer),
 					 'divide-line':  shiftLayer.ShowDividedLine,
-					 'disabled': vm.isNotAllowedToChange(shiftLayer)}"
+					 'disabled': vm.isNotAllowedToChange(shiftLayer),
+					 'float-top': vm.getMergedShiftLayer(shiftLayer).FloatOnTop}"
 					 ng-style="{'width': vm.getMergedShiftLayer(shiftLayer).Width +'px', 
 					 'background-color': vm.getMergedShiftLayer(shiftLayer).Color, 
 					 'left': vm.getMergedShiftLayer(shiftLayer).Left + 'px',
-					 'transform': 'translate('+vm.getMergedShiftLayer(shiftLayer).TranslateX+'px, 0px)'}"
+					 'transform': 'translate('+ (vm.getMergedShiftLayer(shiftLayer).TranslateX || 0)+'px, 0px)'}"
 					 ng-click="vm.toggleSelection(shiftLayer, $event)"
 					 ng-repeat="shiftLayer in vm.scheduleVm.ShiftLayers"></div>
 			</div>

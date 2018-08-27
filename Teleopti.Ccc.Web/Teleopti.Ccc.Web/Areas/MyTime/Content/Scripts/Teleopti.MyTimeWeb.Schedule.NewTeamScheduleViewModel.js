@@ -91,9 +91,9 @@
 	};
 
 	self.showOnlyDayOff.subscribe(function(value) {
-		self.filter.isDayOff = value;
-
 		if (!self.isMobileEnabled) {
+			self.filter.isDayOff = value;
+
 			if (value) {
 				self.paging.skip = 0;
 			}
@@ -120,6 +120,7 @@
 	self.cancelClick = function() {
 		self.searchNameText(self.filter.searchNameText);
 		self.selectedTeam(self.filter.selectedTeamIds[0]);
+		self.showOnlyDayOff(self.filter.isDayOff);
 		self.isPanelVisible(false);
 	};
 
@@ -127,6 +128,7 @@
 		self.paging.skip = 0;
 		self.filter.searchNameText = self.searchNameText();
 		self.filter.selectedTeamIds = self.selectedTeamIds.concat();
+		self.filter.isDayOff = self.showOnlyDayOff();
 
 		if (self.startTimeStart() === defaultFilterTime && self.startTimeEnd() === defaultFilterTime) {
 			self.filter.filteredStartTimes = '';
