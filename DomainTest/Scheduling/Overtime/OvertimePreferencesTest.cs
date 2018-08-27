@@ -43,13 +43,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
         }
 
         [Test]
-        public void VerifyExtendExistingShift()
-        {
-            _target.ExtendExistingShift = true;
-            Assert.IsTrue(_target.ExtendExistingShift);
-        }
-
-        [Test]
         public void VerifyOvertimeToFrom()
         {
             _target.SelectedTimePeriod   = new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(10));

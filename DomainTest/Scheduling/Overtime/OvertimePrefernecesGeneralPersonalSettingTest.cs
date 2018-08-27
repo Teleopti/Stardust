@@ -44,7 +44,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				AllowBreakNightlyRest = true,
 				AllowBreakWeeklyRest = false,
 				AvailableAgentsOnly = true,
-				ExtendExistingShift = true,
 				SelectedTimePeriod = new TimePeriod(TimeSpan.FromHours(10), TimeSpan.FromHours(12)),
 				OvertimeType = _definitionSet,
 				ShiftBagToUse = _ruleSetBag
@@ -62,7 +61,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			Assert.IsTrue(targetOvertimePreferences.AllowBreakMaxWorkPerWeek);
 			Assert.IsTrue(targetOvertimePreferences.AllowBreakNightlyRest);
 			Assert.IsFalse(targetOvertimePreferences.AllowBreakWeeklyRest);
-			Assert.IsTrue(targetOvertimePreferences.ExtendExistingShift);
 			Assert.IsTrue(targetOvertimePreferences.AvailableAgentsOnly);
 			Assert.AreEqual(targetOvertimePreferences.SelectedTimePeriod, new TimePeriod(TimeSpan.FromHours(10), TimeSpan.FromHours(12)));
 			Assert.AreEqual(targetOvertimePreferences.OvertimeType, _definitionSet);
