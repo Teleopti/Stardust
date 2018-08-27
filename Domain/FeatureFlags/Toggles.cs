@@ -93,7 +93,6 @@
 		ETL_UseBpoResources_75855,
 
 		Wfm_SkillPriorityRoutingGUI_39885,
-		ETL_RemoveTimeZoneAndDateNightly_40870,
 		ETL_FixScheduleForPersonPeriod_41393,
 		ETL_Optimize_Memory_Usage_76761,
 		ETL_Show_Tenant_Name_In_History_75767,

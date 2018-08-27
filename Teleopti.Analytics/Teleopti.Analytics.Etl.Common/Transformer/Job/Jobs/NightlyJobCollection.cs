@@ -17,11 +17,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new MaintenanceJobStep(jobParameters));     // BU independent
 
 			// STAGE TABLES
-			AddWhenAllDisabled(new StageDateJobStep(jobParameters), Toggles.ETL_RemoveTimeZoneAndDateNightly_40870);                    // BU independent
-			AddWhenAllDisabled(new DimDateJobStep(jobParameters), Toggles.ETL_RemoveTimeZoneAndDateNightly_40870);                     // BU independent
-			AddWhenAllDisabled(new StageTimeZoneJobStep(jobParameters), Toggles.ETL_RemoveTimeZoneAndDateNightly_40870);               // BU independent
-			AddWhenAllDisabled(new DimTimeZoneJobStep(jobParameters), Toggles.ETL_RemoveTimeZoneAndDateNightly_40870);                 // BU independent
-			AddWhenAllDisabled(new StageTimeZoneBridgeJobStep(jobParameters), Toggles.ETL_RemoveTimeZoneAndDateNightly_40870);         // BU independent
 			Add(new DimQueueJobStep(jobParameters));                    // BU independent
 			Add(new DimAcdLogOnJobStep(jobParameters));                 // BU independent
 			Add(new DimQualityQuestLoadJobStep(jobParameters));         // BU independent
@@ -43,10 +38,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new StageScorecardKpiJobStep(jobParameters));
 			Add(new StageKpiTargetTeamJobStep(jobParameters));
 			Add(new SqlServerUpdateStatistics(jobParameters));
-
-			// DIM AND BRIDGE TABLES AND QUEUE/AGENT SYNC
-			AddWhenAllDisabled(new BridgeTimeZoneJobStep(jobParameters), Toggles.ETL_RemoveTimeZoneAndDateNightly_40870);              // BU independent
-
 			Add(new DimScorecardJobStep(jobParameters));
 
 			AddWhenAllDisabled(new DimSiteJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
