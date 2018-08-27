@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 	[TestFixture]
 	[SetCulture("en-US")]
 	[SetUICulture("en-US")]
-	public partial class OvertimeRequestProcessorTest : IIsolateSystem, ITestInterceptor
+	public partial class OvertimeRequestProcessorTest : IIsolateSystem
 	{
 		public IOvertimeRequestProcessor Target;
 		public UpdatedBy UpdatedBy;
@@ -79,15 +79,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			isolate.UseTestDouble<FakePersonAssignmentWriteSideRepository>().For<IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>>();
 			isolate.UseTestDouble<ScheduleStorage>().For<IScheduleStorage>();
-			isolate.UseTestDouble<MutableNow>().For<INow, IMutateNow>();
+			isolate.UseTestDouble(new MutableNow(new DateTime(2017, 07, 12, 10, 00, 00, DateTimeKind.Utc))).For<INow>();
 			_intervals = createIntervals();
 		}
 
-		public void OnBefore()
-		{
-			Now.Is(new DateTime(2017, 07, 12, 10, 00, 00, DateTimeKind.Utc));
-		}
-		
 		[Test]
 		public void ShouldApproveRequestInLessThan15Minutes()
 		{

@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		public ImportAgentEventHandler EventHandler;
 		public ICurrentTenantUser CurrentTenantUser;
 		public CurrentBusinessUnit CurrentBusinessUnit;
-
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<ImportAgentJobService>().For<IImportAgentJobService>();
@@ -66,14 +65,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		{
 			setCurrentLoggedOnUser();
 			var fallbacks = new ImportAgentDefaults();
-			Publisher.Clear();
 			var job = createValidJob(new ImportAgentDefaults());
 
 			var @event = Publisher.PublishedEvents.Single() as ImportAgentEvent;
 			@event.Should().Not.Be.Null();
 			@event.JobResultId.Should().Be(job.Id);
 			@event.Defaults.Should().Equals(fallbacks);
+
 		}
+
 
 		[Test]
 		public void ShouldGetJobsForCurrentBusinessUnit()

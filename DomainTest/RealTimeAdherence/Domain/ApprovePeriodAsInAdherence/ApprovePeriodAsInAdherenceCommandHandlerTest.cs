@@ -2,10 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.TestCommon;
@@ -21,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.ApprovePeriodAsInAdhe
 		public ApprovePeriodAsInAdherenceCommandHandler Target;
 		public FakeEventPublisher Publisher;
 		public FakeUserTimeZone TimeZone;
-		
+
 		[Test]
 		public void ShouldApprove()
 		{
@@ -86,11 +83,9 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.ApprovePeriodAsInAdhe
 				StartDateTime = "2018-01-29 17:00:00",
 				EndDateTime = "2018-01-29 16:00:00"
 			};
-			Publisher.Clear();
-			
+
 			Assert.Throws<ArgumentOutOfRangeException>(() => Target.Handle(command));
 			Publisher.PublishedEvents.Should().Be.Empty();
 		}
-
 	}
 }

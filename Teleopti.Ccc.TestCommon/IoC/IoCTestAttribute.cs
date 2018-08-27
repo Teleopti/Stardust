@@ -25,8 +25,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		private IoCTestService _service;
 		private object _fixture;
 
-		public MutableNow Now;
-		
 		protected virtual FakeToggleManager Toggles()
 		{
 			return _service.Toggles();
@@ -66,9 +64,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			buildContainer();
 			Startup(_container);
 			_service.InjectFrom(_container);
-			
-			Now.Is("2014-12-18 13:31");
-			
 			BeforeTest();
 			(_fixture as ITestInterceptor)?.OnBefore();
 		}
@@ -121,7 +116,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			QueryAllExtensions<IExtendSystem>()
 				.ForEach(x => x.Extend(extend, configuration));
 
-			isolate.UseTestDouble<MutableNow>().For<INow, IMutateNow>();
+			var now = new MutableNow();
+			now.Is("2014-12-18 13:31");
+			isolate.UseTestDouble(now).For<INow>();
 			isolate.UseTestDouble<FakeTime>().For<ITime>();
 			isolate.UseTestDouble(config).For<IConfigReader>();
 			// we really shouldnt inject this, but if we do, maybe its better its correct...

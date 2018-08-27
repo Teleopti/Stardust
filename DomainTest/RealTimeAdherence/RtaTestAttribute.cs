@@ -22,10 +22,13 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 	public class RtaTestLoggedOnAttribute : DomainTestAttribute
 	{
 		public FakeEventPublisher Publisher;
+		public MutableNow_ExperimentalEventPublishing Now;
 
 		protected override void Isolate(IIsolate isolate)
 		{
 			base.Isolate(isolate);
+
+			isolate.UseTestDouble<MutableNow_ExperimentalEventPublishing>().For<MutableNow, INow>();
 
 			// disable activity change checker triggered by minute tick which is triggered by Now.Is(...)
 			isolate.UseTestDouble<DontCheckForActivityChangesFromScheduleChangeProcessor>().For<IActivityChangeCheckerFromScheduleChangeProcessor>();
@@ -49,6 +52,28 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 
 			Publisher.AddHandler<AgentStateReadModelMaintainer>();
 			Publisher.AddHandler<AgentStateReadModelUpdater>();
+		}
+	}
+
+	public class MutableNow_ExperimentalEventPublishing : MutableNow
+	{
+		private readonly IEventPublisher _publisher;
+
+		public MutableNow_ExperimentalEventPublishing(IEventPublisher publisher)
+		{
+			_publisher = publisher;
+		}
+
+		public override void Is(DateTime? utc)
+		{
+			var time = new TimePassingSimulator(UtcDateTime(), utc.GetValueOrDefault());
+			base.Is(utc);
+
+			//Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} {utc}");
+
+			time.IfDayPassed(() => { _publisher.Publish(new TenantDayTickEvent()); });
+			time.IfHourPassed(() => { _publisher.Publish(new TenantHourTickEvent()); });
+			time.IfMinutePassed(() => { _publisher.Publish(new TenantMinuteTickEvent()); });
 		}
 	}
 }

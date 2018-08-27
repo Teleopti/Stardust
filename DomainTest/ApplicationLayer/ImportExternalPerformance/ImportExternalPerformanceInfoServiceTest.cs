@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportExternalPerformance
 		public void ShouldPublishImportAgentEvent()
 		{
 			setCurrentLoggedOnUser();
-			Publisher.Clear();
 			var job = createValidJob();
 
 			var @event = Publisher.PublishedEvents.Single() as ImportExternalPerformanceInfoEvent;
