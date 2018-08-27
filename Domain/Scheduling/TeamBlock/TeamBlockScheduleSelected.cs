@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 				runSchedulingForAllTeamInfoOnStartDate(schedulingCallback, allPersonMatrixList, selectedPersons, selectedPeriod,
 					schedulePartModifyAndRollbackService,
-					checkedTeams.OkList, datePointer, dateOnlySkipList,
+					checkedTeams, datePointer, dateOnlySkipList,
 					resourceCalculateDelayer, schedulingResultStateHolder, schedulingOption,blockPreferenceProvider);
 			}
 		}

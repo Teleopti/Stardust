@@ -53,10 +53,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				var result = _target.CheckTeamList(_teamInfoList, _period);
-				Assert.Contains(_teamInfo2, result.OkList.ToList());
-				Assert.Contains(_teamInfo1, result.BannedList.ToList());
-				Assert.IsFalse(result.BannedList.ToList().Contains(_teamInfo2));
+				var result = _target.CheckTeamList(_teamInfoList, _period).Single();
+				Assert.AreEqual(_teamInfo2, result);
 			}
 		}
 	}

@@ -6,10 +6,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public class TeamMatrixChecker
 	{
-		public TeamMatrixCheckerResult CheckTeamList(IEnumerable<ITeamInfo> teamList, DateOnlyPeriod period)
+		public IEnumerable<ITeamInfo> CheckTeamList(IEnumerable<ITeamInfo> teamList, DateOnlyPeriod period)
 		{
 			var okList = new List<ITeamInfo>();
-			var bannedList = new List<ITeamInfo>();
 			foreach (var teamInfo in teamList)
 			{
 				bool banned = false;
@@ -17,7 +16,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				{
 					if (!teamInfo.MatrixesForMemberAndPeriod(member, period).Any())
 					{
-						bannedList.Add(teamInfo);
 						banned = true;
 						break;
 					}
@@ -26,29 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					okList.Add(teamInfo);
 			}
 
-			return new TeamMatrixCheckerResult(okList, bannedList);
-		}
-	}
-
-	public class TeamMatrixCheckerResult
-	{
-		private readonly IEnumerable<ITeamInfo> _okList;
-		private readonly IEnumerable<ITeamInfo> _bannedList;
-
-		public TeamMatrixCheckerResult(IEnumerable<ITeamInfo> okList, IEnumerable<ITeamInfo> bannedList)
-		{
-			_okList = okList;
-			_bannedList = bannedList;
-		}
-
-		public IEnumerable<ITeamInfo> OkList
-		{
-			get { return _okList; }
-		}
-
-		public IEnumerable<ITeamInfo> BannedList
-		{
-			get { return _bannedList; }
+			return okList;
 		}
 	}
 }
