@@ -21,12 +21,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new DimQualityQuestLoadJobStep(jobParameters));         // BU independent
 			Add(new RaptorQueueSynchronizationStep(jobParameters));
 			Add(new RaptorAgentLogOnSynchronizationStep(jobParameters));
-			AddWhenAllDisabled(new StageScheduleJobStep(jobParameters), Toggles.ETL_SpeedUpFactScheduleNightly_38019);
-			AddWhenAllDisabled(new StageScheduleDayOffCountJobStep(jobParameters), Toggles.ETL_SpeedUpFactScheduleNightly_38019);
 
 			ChooseJobStepUsingToggle(new StageScheduleForecastSkillJobStepWithBpo(jobParameters), new StageScheduleForecastSkillJobStep(jobParameters), Toggles.ETL_UseBpoResources_75855);
 
-			AddWhenAnyDisabled(new StageSchedulePreferenceJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyPreference_38283, Toggles.ETL_SpeedUpFactScheduleNightly_38019);
+			AddWhenAnyDisabled(new StageSchedulePreferenceJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyPreference_38283);
 
 			Add(new StageKpiJobStep(jobParameters));
 			Add(new StageScorecardJobStep(jobParameters));
@@ -36,17 +34,12 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new DimScorecardJobStep(jobParameters));
 			Add(new DimPersonUpdateMaxDateJobStep(jobParameters));
 			Add(new DimPersonWindowsLoginJobStep(jobParameters));
-			AddWhenAllDisabled(new DimShiftLengthJobStep(jobParameters), Toggles.ETL_SpeedUpFactScheduleNightly_38019);
 
 			Add(new DimKpiJobStep(jobParameters));
 			Add(new ScorecardKpiJobStep(jobParameters));
 
 			// FACT TABLES
-			AddWhenAllDisabled(new FactScheduleJobStep(jobParameters), Toggles.ETL_SpeedUpFactScheduleNightly_38019);
-			AddWhenAllDisabled(new FactScheduleDayCountJobStep(jobParameters), Toggles.ETL_SpeedUpFactScheduleNightly_38019);
-
-			AddWhenAnyDisabled(new FactSchedulePreferenceJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyPreference_38283, Toggles.ETL_SpeedUpFactScheduleNightly_38019);
-
+			AddWhenAnyDisabled(new FactSchedulePreferenceJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyPreference_38283);
 			Add(new FactScheduleForecastSkillJobStep(jobParameters));
 			Add(new FactQueueJobStep(jobParameters));                   // BU independent
 			Add(new FactAgentJobStep(jobParameters));                   // BU independent

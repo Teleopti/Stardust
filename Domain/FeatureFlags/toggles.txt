@@ -109,8 +109,7 @@ ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don'
 ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
 
 # From old Kittens team... #
-# AF 2018-08-22: All of these can be removed now, but very carefully as we do not want any new bugs or issues...#
-ETL_SpeedUpFactScheduleNightly_38019 = true # not to be released until pbi 38304 and 41393 is done 
+# AF 2018-08-22: All of these can be removed now, but very carefully as we do not want any new bugs or issues...# 
 ETL_SpeedUpNightlyPreference_38283 = true #Depending on ETL_SpeedUpFactScheduleNightly_38019
 
 # DeBockers #

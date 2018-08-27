@@ -6,6 +6,7 @@ using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
+using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
 using Teleopti.Analytics.Etl.IntegrationTest.TestData;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
@@ -74,7 +75,13 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				};
 
 			//run nightly
-			StepRunner.RunNightly(jobParameters);
+			var result = new List<Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult>();
+			JobStepBase step = new StageScheduleJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			step = new DimShiftLengthJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			step = new FactScheduleJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 			
 			// now it should have data on all three dates 96 interval
 			var factSchedules = SqlCommands.RowsInFactSchedule();
@@ -99,8 +106,13 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				Helper =
 					new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, null, null), null)
 			};
-
-			StepRunner.RunNightly(jobParameters);
+			result = new List<Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult>();
+			step = new StageScheduleJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			step = new DimShiftLengthJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			step = new FactScheduleJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
 			// still it should have data on all three dates 96 interval
 			factSchedules = SqlCommands.RowsInFactSchedule();
@@ -148,7 +160,13 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			};
 
 			//run nightly
-			StepRunner.RunNightly(jobParameters);
+			var result = new List<Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult>();
+			JobStepBase step = new StageScheduleJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			step = new DimShiftLengthJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			step = new FactScheduleJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
 			// now it should have data on all three dates 96 interval
 			var factSchedules = SqlCommands.RowsInFactSchedule();
@@ -173,8 +191,13 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				Helper =
 					new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, null, null), null)
 			};
-
-			StepRunner.RunNightly(jobParameters);
+			result = new List<Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult>();
+			step = new StageScheduleJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			step = new DimShiftLengthJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			step = new FactScheduleJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
 			// still it should have data on all three dates 96 interval
 			factSchedules = SqlCommands.RowsInFactSchedule();
