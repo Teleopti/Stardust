@@ -498,15 +498,12 @@ div.teammates-schedules-column:last-of-type .agent-name {
 	background-color: #f1f1f1;
 }
 .new-teamschedule-no-result-indicator {
-	position: absolute;
-	top: 200px;
-	left: calc(50% + 130px / 2);
-	transform: translateX(-50%);
-	font-size: 17px;
-	padding: 5px 10px;
-	border-radius: 4px;
-	color: orange;
+	width: calc(100% - 140px);
+	font-size: 14px !important;
+	padding: 10px 5px;
 	font-weight: bold;
+	color: orange;
+	text-align: center;
 }
 .teamschedule-scroll-block-container {
 	width: calc(100% - 30px - 100px);
@@ -695,6 +692,9 @@ div.teammates-schedules-column:last-of-type .agent-name {
 }
 .new-teamschedule-view-mobile .new-teamschedule-agent-name .text-name {
 	white-space: normal;
+}
+.new-teamschedule-view-mobile .new-teamschedule-no-result-indicator {
+	width: calc(100% - 100px);
 }
 .new-teamschedule-view.new-teamschedule-view-mobile .my-schedule-column.relative {
 	width: 70px;

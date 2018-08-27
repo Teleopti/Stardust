@@ -116,6 +116,9 @@
 				</span>
 				<!-- /ko -->
 			</div>
+			<!-- ko if: isAgentScheduleLoaded() && teamSchedules().length == 0 -->
+			<div class="new-teamschedule-no-result-indicator">@Resources.NoResultForCurrentFilter</div>
+			<!-- /ko -->
 		</div>
 
 		<div class="new-teamschedule-table relative container">
@@ -194,9 +197,6 @@
 				</div>
 				<!-- /ko -->
 			</div>
-			<!-- ko if: isAgentScheduleLoaded() && teamSchedules().length == 0 -->
-			<div class="new-teamschedule-no-result-indicator">@Resources.NoResultForCurrentFilter</div>
-			<!-- /ko -->
 			<!-- /ko -->
 		</div>
 
