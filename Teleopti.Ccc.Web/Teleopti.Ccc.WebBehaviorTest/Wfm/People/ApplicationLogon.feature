@@ -1,5 +1,5 @@
 ﻿@People
-@OnlyRunIfEnabled('Wfm_PeopleWeb_PrepareForRelease_74903')
+@OnlyRunIfEnabled('Wfm_PeopleWeb_PrepareForRelease_76666')
 Feature: AppLogon
 	In order to change application logon for a person
 	As a teamleader

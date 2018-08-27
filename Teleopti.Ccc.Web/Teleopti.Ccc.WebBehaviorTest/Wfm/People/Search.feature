@@ -1,5 +1,5 @@
 ﻿@People
-@OnlyRunIfEnabled('Wfm_PeopleWeb_PrepareForRelease_74903')
+@OnlyRunIfEnabled('Wfm_PeopleWeb_PrepareForRelease_76666')
 Feature: Search
 	In order to find a person
 	As a teamleader
