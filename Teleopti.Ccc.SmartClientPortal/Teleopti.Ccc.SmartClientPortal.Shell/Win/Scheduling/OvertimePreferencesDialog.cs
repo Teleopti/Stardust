@@ -284,7 +284,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_overtimePreferences.AllowBreakMaxWorkPerWeek = checkBoxAllowBreakingMaxTimePerWeek.Checked;
 			_overtimePreferences.AllowBreakNightlyRest = checkBoxAllowBreakingNightlyRest.Checked ;
 			_overtimePreferences.AllowBreakWeeklyRest = checkBoxAllowBreakingWeeklyRest.Checked ;
-			_overtimePreferences.ExtendExistingShift = true;
 			_overtimePreferences.OvertimeType = (IMultiplicatorDefinitionSet) comboBoxAdvOvertimeType.SelectedItem;
 			var selectedPeriod =new TimePeriod(fromToTimeDurationPicker1.StartTime.TimeValue(), fromToTimeDurationPicker1.EndTime.TimeValue());
 			_overtimePreferences.SelectedTimePeriod = selectedPeriod;

@@ -9,10 +9,9 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
     [Serializable]
-    public  class OvertimePreferencesGeneralPersonalSetting : SettingValue
+    public class OvertimePreferencesGeneralPersonalSetting : SettingValue
     {
         private Guid? _scheduleTagId;
-        private bool _extendExistingShifts = true;
         private Guid? _skillActivtyId;
         private Guid? _overtimeType;
         private TimePeriod _selectTimePeriod = new TimePeriod(TimeSpan.FromHours(1), TimeSpan.FromHours(1));
@@ -73,7 +72,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 	        }
 
-            overtimePreferences.ExtendExistingShift = _extendExistingShifts;
             overtimePreferences.SelectedTimePeriod = _selectTimePeriod;
             overtimePreferences.AllowBreakMaxWorkPerWeek = _doNotBreakMaxSeatPerWeek;
             overtimePreferences.AllowBreakNightlyRest = _doNotBreakNightlyRest;
@@ -87,7 +85,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             _doNotBreakMaxSeatPerWeek = overtimePreferences.AllowBreakMaxWorkPerWeek;
             _doNotBreakNightlyRest = overtimePreferences.AllowBreakNightlyRest;
             _doNotBreakWeeklyRest = overtimePreferences.AllowBreakWeeklyRest;
-            _extendExistingShifts = overtimePreferences.ExtendExistingShift;
             _availableAgentsOnly = overtimePreferences.AvailableAgentsOnly;
             _selectTimePeriod = overtimePreferences.SelectedTimePeriod;
             if (overtimePreferences.OvertimeType!=null)
