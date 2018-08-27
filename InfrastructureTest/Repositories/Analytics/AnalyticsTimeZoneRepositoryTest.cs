@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 	[Category("BucketB")]
 	[TestFixture]
 	[AnalyticsDatabaseTest]
-	[ToggleOff(Toggles.ETL_EventbasedTimeZone_40870)]
 	public class AnalyticsTimeZoneRepositoryTest
 	{
 		public IAnalyticsTimeZoneRepository Target;
@@ -75,7 +74,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 	[Category("BucketB")]
 	[TestFixture]
 	[AnalyticsDatabaseTest]
-	[ToggleOff(Toggles.ETL_EventbasedTimeZone_40870)]
 	public class AnalyticsTimeZoneRepositoryForBug47311Test
 	{
 		public IAnalyticsTimeZoneRepository Target;

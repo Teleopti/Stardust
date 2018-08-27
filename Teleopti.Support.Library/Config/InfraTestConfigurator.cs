@@ -1,10 +1,8 @@
-﻿using System.IO;
-using Teleopti.Support.Library.Folders;
-
-namespace Teleopti.Support.Library.Config
+﻿namespace Teleopti.Support.Library.Config
 {
 	public class InfraTestConfigCommand
 	{
+		public string Server;
 		public string ApplicationDatabase = "InfraTest_CCC7";
 		public string AnalyticsDatabase = "InfraTest_Analytics";
 		public string ToggleMode = "ALL";
@@ -15,43 +13,15 @@ namespace Teleopti.Support.Library.Config
 	{
 		public void Configure(InfraTestConfigCommand command)
 		{
-			new SettingsLoader().LoadSettingsFile(new LoadSettingsCommand
-			{
-				File = Path.Combine(new RepositoryRootFolder().Path(), @".debug-Setup\config\", "settings.txt")
-			});
-
-			var manager = new SettingsSetter();
-
-			manager.UpdateSettingsFile(
-				new SetSettingCommand
+			new SettingsPreparer()
+				.Prepare(new SettingPrepareCommand
 				{
-					SearchFor = "$(DB_CCC7)",
-					ReplaceWith = command.ApplicationDatabase
-				},
-				new SetSettingCommand
-				{
-					SearchFor = "$(DB_ANALYTICS)",
-					ReplaceWith = command.AnalyticsDatabase
-				},
-				new SetSettingCommand
-				{
-					SearchFor = "$(AS_DATABASE)",
-					ReplaceWith = command.AnalyticsDatabase
-				},
-				new SetSettingCommand
-				{
-					SearchFor = "$(ToggleMode)",
-					ReplaceWith = command.ToggleMode
-				}
-			);
-
-			if (!string.IsNullOrEmpty(command.SqlAuthString))
-				manager.UpdateSettingsFile(
-					new SetSettingCommand
-					{
-						SearchFor = "$(SQL_AUTH_STRING)",
-						ReplaceWith = command.SqlAuthString
-					});
+					Server = command.Server,
+					ApplicationDatabase = command.ApplicationDatabase,
+					AnalyticsDatabase = command.AnalyticsDatabase,
+					ToggleMode = command.ToggleMode,
+					SqlAuthString = command.SqlAuthString
+				});
 
 			new ModeTestRunner()
 				.Run(new ModeTestCommand());

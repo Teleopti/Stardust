@@ -25,8 +25,17 @@
 						 search-callback="vm.onSearchTermChangedCallback"></wfm-multiple-search-input>
 					</div>
 
-					<date-range-picker id="Request-period" class="request-date-range-picker" ng-model="vm.period" translations="vm.translations"
-					 template-type="vm.dateRangeTemplateType" custom-validators="vm.dateRangeCustomValidators" on-pop-up-close=" vm.getTeamOrGroupData()"></date-range-picker>
+					<div class="request-date-range-picker relative unselectable">
+						<div class="cursor-pointer" ng-click="vm.toggleDatePicker($event)">
+							<span><i class="mdi mdi-calendar-range"></i></span>
+							<span>{{'From'| translate}}: {{vm.period.startDate | amDateFormat:"L"}}</span>
+							<span>{{'To'|translate}}: {{vm.period.endDate | amDateFormat:"L"}}</span>
+						</div>
+						<wfm-popup show="vm.isShowingDatePicker" class="absolute">
+							<wfm-calendar-picker ng-if="vm.isShowingDatePicker" ng-model="vm.period" show-week="true" custom-validate="vm.dateRangeCustomValidators()">
+							</wfm-calendar-picker>
+						</wfm-popup>
+					</div>
 
 					<div class="filter-switch inline-block">
 						<md-switch ng-model="vm.filterEnabled" aria-label="Switch">

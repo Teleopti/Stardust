@@ -22,7 +22,7 @@ namespace Teleopti.Develop.Batflow
 
 			return Parser
 				.Default
-				.ParseArguments<FlowArguments, TestArguments>(args)
+				.ParseArguments<FlowArguments, TestInitArguments>(args)
 				.MapResult(
 					(FlowArguments arguments) =>
 					{
@@ -30,6 +30,7 @@ namespace Teleopti.Develop.Batflow
 						fixer.Fix(develop);
 						new FixMyConfigFixer().Fix(new FixMyConfigCommand
 						{
+							Server = arguments.DevelopServer,
 							ApplicationDatabase = develop.ApplicationDatabase(),
 							AnalyticsDatabase = develop.AnalyticsDatabase()
 						});
@@ -38,18 +39,20 @@ namespace Teleopti.Develop.Batflow
 						fixer.Fix(test);
 						new InfraTestConfigurator().Configure(new InfraTestConfigCommand
 						{
+							Server = arguments.TestServer,
 							ApplicationDatabase = test.ApplicationDatabase(),
 							AnalyticsDatabase = test.AnalyticsDatabase()
 						});
 
 						return 0;
 					},
-					(TestArguments arguments) =>
+					(TestInitArguments arguments) =>
 					{
 						var test = new FixDatabasesCommand(arguments.Baseline, arguments.Server, "InfraTest", DatabaseOperation.Init);
 						fixer.Fix(test);
 						new InfraTestConfigurator().Configure(new InfraTestConfigCommand
 						{
+							Server = arguments.Server,
 							ApplicationDatabase = test.ApplicationDatabase(),
 							AnalyticsDatabase = test.AnalyticsDatabase()
 						});
@@ -84,7 +87,7 @@ namespace Teleopti.Develop.Batflow
 		}
 
 		[Verb("test.init", HelpText = "Initializes databases for test projects.")]
-		public class TestArguments
+		public class TestInitArguments
 		{
 			[Option("server",
 				Default = ".",

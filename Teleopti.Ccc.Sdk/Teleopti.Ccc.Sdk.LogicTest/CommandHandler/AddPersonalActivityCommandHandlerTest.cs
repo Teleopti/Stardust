@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
 	[TestFixture]
 	[DomainTest]
-	public class AddPersonalActivityCommandHandlerTest : IExtendSystem
+	public class AddPersonalActivityCommandHandlerTest : IExtendSystem, IIsolateSystem
 	{
 		public FakeActivityRepository ActivityRepository;
 		public IScheduleStorage ScheduleStorage;
@@ -126,6 +127,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			extend.AddService<ScheduleSaveHandler>();
 			extend.AddService<SaveSchedulePartService>();
 			extend.AddModule(new AssemblerModule());
+		}
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FakeDataSourcesFactoryNoEvents>().For<IDataSourcesFactory>();
 		}
 	}
 }

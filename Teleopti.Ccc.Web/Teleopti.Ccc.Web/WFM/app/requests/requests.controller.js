@@ -47,6 +47,7 @@
 		vm.isUsingRequestSubmitterTimeZone = false;
 		vm.Wfm_GroupPages_45057 = toggleService.Wfm_GroupPages_45057;
 		vm.overtimeRequestsLicenseAvailable = false;
+		vm.isShowingDatePicker = false;
 		vm.teamNameMap = {};
 
 		vm.selectedGroups = {
@@ -84,6 +85,7 @@
 		vm.onFavoriteSearchInitDefer = $q.defer();
 
 		var loggedonUsersTeamId = $q.defer();
+		var shiftTradeMaximumDays = 60;
 
 		vm.orgPickerSelectedText = function() {
 			var text = '';
@@ -138,47 +140,19 @@
 			}, loadRequetsDelay);
 		};
 
-		function getSitesAndTeamsAsync() {
-			var params = {};
-			if (toggleService.Wfm_HideUnusedTeamsAndSites_42690) {
-				params.startDate = moment(vm.period.startDate).format('YYYY-MM-DD');
-				params.endDate = moment(vm.period.endDate).format('YYYY-MM-DD');
-			} else {
-				params.date = moment().format('YYYY-MM-DD');
+		vm.toggleDatePicker = function(event) {
+			event && event.stopPropagation();
+			vm.isShowingDatePicker = !vm.isShowingDatePicker;
+		};
+
+		vm.dateRangeCustomValidators = function() {
+			if (
+				vm.isShiftTradeViewActive() &&
+				moment(vm.period.endDate).diff(moment(vm.period.startDate), 'days') > shiftTradeMaximumDays
+			) {
+				return $translate.instant('DateRangeIsAMaximumOfSixtyDays');
 			}
-			return (vm._sitesAndTeamsPromise = $q(function(resolve, reject) {
-				requestsDataService.hierarchy(params).then(function(data) {
-					resolve(data);
-					vm.sitesAndTeams = data.Children;
-					loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
-
-					angular.extend(vm.teamNameMap, extractTeamNames(data.Children));
-				});
-			}));
-		}
-
-		function getGroupPagesAsync() {
-			var startDateStr = moment(vm.period.startDate)
-				.locale('en')
-				.format('YYYY-MM-DD');
-			var endDateStr = moment(vm.period.endDate)
-				.locale('en')
-				.format('YYYY-MM-DD');
-			groupPageService.fetchAvailableGroupPages(startDateStr, endDateStr).then(function(data) {
-				vm.availableGroups = data;
-				loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
-			});
-		}
-
-		vm.dateRangeCustomValidators = [
-			{
-				key: 'max60Days',
-				message: 'DateRangeIsAMaximumOfSixtyDays',
-				validate: function(start, end) {
-					return !vm.isShiftTradeViewActive() || moment(end).diff(moment(start), 'days') <= 60;
-				}
-			}
-		];
+		};
 
 		vm.changeSelectedTeams = function() {
 			vm.agentSearchOptions.focusingSearch = true;
@@ -352,6 +326,38 @@
 			$scope.$broadcast('reload.requests.without.selection');
 		}
 
+		function getSitesAndTeamsAsync() {
+			var params = {};
+			if (toggleService.Wfm_HideUnusedTeamsAndSites_42690) {
+				params.startDate = moment(vm.period.startDate).format('YYYY-MM-DD');
+				params.endDate = moment(vm.period.endDate).format('YYYY-MM-DD');
+			} else {
+				params.date = moment().format('YYYY-MM-DD');
+			}
+			return (vm._sitesAndTeamsPromise = $q(function(resolve, reject) {
+				requestsDataService.hierarchy(params).then(function(data) {
+					resolve(data);
+					vm.sitesAndTeams = data.Children;
+					loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
+
+					angular.extend(vm.teamNameMap, extractTeamNames(data.Children));
+				});
+			}));
+		}
+
+		function getGroupPagesAsync() {
+			var startDateStr = moment(vm.period.startDate)
+				.locale('en')
+				.format('YYYY-MM-DD');
+			var endDateStr = moment(vm.period.endDate)
+				.locale('en')
+				.format('YYYY-MM-DD');
+			groupPageService.fetchAvailableGroupPages(startDateStr, endDateStr).then(function(data) {
+				vm.availableGroups = data;
+				loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
+			});
+		}
+
 		function formatDatePeriod(message) {
 			var userTimeZone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
 			var startDate = moment(message.StartDate.substring(1, message.StartDate.length))
@@ -383,9 +389,6 @@
 					return vm.period;
 				},
 				function(newValue, oldValue) {
-					var newPeriod = newValue || {};
-					var oldPeriod = oldValue || {};
-
 					$scope.$evalAsync(function() {
 						if (vm.isShiftTradeViewActive()) {
 							vm.shiftTradePeriod = newValue;

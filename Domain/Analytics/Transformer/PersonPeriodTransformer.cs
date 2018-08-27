@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 				personPeriod.Team.Description.Name, businessUnitId);
 			var skillsetId = MapSkillsetId(
 				personPeriod.PersonSkillCollection.Select(a => a.Skill.Id.GetValueOrDefault()).ToList(),
-				businessUnitId, _analyticsPersonPeriodMapNotDefined, out analyticsSkills);
+				businessUnitId, out analyticsSkills);
 
 			var analyticsPersonPeriod = new AnalyticsPersonPeriod
 			{
@@ -193,15 +193,13 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			return newSkillSet;
 		}
 
-		public int MapSkillsetId(List<Guid> applicationSkillCodes, int businessUnitId,
-			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined)
+		public int MapSkillsetId(List<Guid> applicationSkillCodes, int businessUnitId)
 		{
-			return MapSkillsetId(applicationSkillCodes, businessUnitId, analyticsPersonPeriodMapNotDefined, out _);
+			return MapSkillsetId(applicationSkillCodes, businessUnitId, out _);
 		}
 
 		// Map skills to skillset. If not exists it will create it.
 		public int MapSkillsetId(List<Guid> applicationSkillCodes, int businessUnitId,
-			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined,
 			out List<AnalyticsSkill> mappedAnalyticsSkills)
 		{
 			mappedAnalyticsSkills = null;
@@ -214,7 +212,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			if (allAnalyticsSkills.Count(a => applicationSkillCodes.Contains(a.SkillCode)) != applicationSkillCodes.Count)
 			{
 				// Skill exists in app but not yet in analytics
-				return analyticsPersonPeriodMapNotDefined.MaybeThrowErrorOrNotDefined(
+				return _analyticsPersonPeriodMapNotDefined.MaybeThrowErrorOrNotDefined(
 					$"Some skill missing in analytics = [{string.Join(", ", applicationSkillCodes.Where(a => allAnalyticsSkills.All(b => a != b.SkillCode)))}]");
 			}
 
@@ -229,7 +227,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			var newSkillSetId = _analyticsSkillRepository.SkillSetId(mappedAnalyticsSkills);
 
 			if (!newSkillSetId.HasValue) // If something got wrong anyways
-				return analyticsPersonPeriodMapNotDefined.MaybeThrowErrorOrNotDefined("Error when creating new skills set");
+				return _analyticsPersonPeriodMapNotDefined.MaybeThrowErrorOrNotDefined("Error when creating new skills set");
 
 			var newBridgeSkillSetSkills = NewBridgeSkillSetSkillsFromSkills(mappedAnalyticsSkills, newSkillSetId.Value);
 			foreach (var bridgeSkillSetSkill in newBridgeSkillSetSkills)

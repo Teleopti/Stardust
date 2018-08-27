@@ -171,22 +171,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AnalyticsPersonPeriodDateFixer>().As<IAnalyticsPersonPeriodDateFixer>().SingleInstance();
 			builder.RegisterType<PersonPeriodFilterForDateCreation>().As<IPersonPeriodFilter>().SingleInstance();
 			builder.CacheByInterfaceProxy<AnalyticsDateRepositoryWithCreation, IAnalyticsDateRepository>();
-
-			if (_config.Toggle(Toggles.ETL_EventbasedTimeZone_40870))
-				builder.RegisterType<AnalyticsTimeZoneRepositoryWithCreation>().As<IAnalyticsTimeZoneRepository>().SingleInstance();
-			else
-				builder.RegisterType<AnalyticsTimeZoneRepository>().As<IAnalyticsTimeZoneRepository>().SingleInstance();
-
-			if (_config.Toggle(Toggles.ResourcePlanner_SpeedUpEvents_75415))
-			{
-				builder.RegisterType<ResourcePlannerSpeedUpEvents75415On>().As<IResourcePlannerSpeedUpEvents75415>();
-			}
-			else
-			{
-				builder.RegisterType<ResourcePlannerSpeedUpEvents75415Off>().As<IResourcePlannerSpeedUpEvents75415>();
-			}
+			builder.RegisterType<AnalyticsTimeZoneRepositoryWithCreation>().As<IAnalyticsTimeZoneRepository>().SingleInstance();
 		}
-
 	}
 
 	public static class EventHandlerTypeExtensions

@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		private readonly string _name;
 		private readonly Guid _code;
 		private readonly Color _displayColor;
-		private readonly IDatasourceData _datasource;
+		private readonly int _datasourceId;
 		private readonly int _businessUnitId;
 
 		public Activity(
@@ -25,13 +25,23 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			string name,
 			Color displayColor,
 			IDatasourceData datasource,
+			int businessUnitId) :this(id, code,name, displayColor, datasource.RaptorDefaultDatasourceId, businessUnitId)
+		{
+		}
+		
+		public Activity(
+			int id,
+			Guid code,
+			string name,
+			Color displayColor,
+			int datasourceId,
 			int businessUnitId)
 		{
 			_id = id;
 			_code = code;
 			_name = name;
 			_displayColor = displayColor;
-			_datasource = datasource;
+			_datasourceId = datasourceId;
 			_businessUnitId = businessUnitId;
 		}
 
@@ -45,7 +55,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			}
 			using (var table = dim_activity.CreateTable())
 			{
-				table.AddActivity(_id, _code, _name, _displayColor.ToArgb(), _businessUnitId, _datasource.RaptorDefaultDatasourceId, false);
+				table.AddActivity(_id, _code, _name, _displayColor.ToArgb(), _businessUnitId, _datasourceId, false);
 
 				Bulk.Insert(connection, table);
 

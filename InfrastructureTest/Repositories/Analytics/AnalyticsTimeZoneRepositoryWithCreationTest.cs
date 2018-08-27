@@ -4,10 +4,8 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
@@ -18,7 +16,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 	[Category("BucketB")]
 	[TestFixture]
 	[AnalyticsDatabaseTest]
-	[Toggle(Toggles.ETL_EventbasedTimeZone_40870)]
 	public class AnalyticsTimeZoneRepositoryWithCreationTest: IIsolateSystem
 	{
 		public IAnalyticsTimeZoneRepository Target;

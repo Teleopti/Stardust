@@ -8,14 +8,17 @@ import { CoreModule } from './core/core.module';
 import { UserPreferences, UserService } from './core/services';
 import { LanguageLoaderFactory, CustomTranslateParser, Zorroi18nService } from './core/translation';
 import { PeopleModule } from './people/people.module';
+import { AuthenticationModule } from './authentication/authentication.module';
+import { BootstrapComponent } from './bootstrap/bootstrap.component';
 
 @NgModule({
-	declarations: [],
+	declarations: [BootstrapComponent],
 	imports: [
 		CoreModule,
 		BrowserModule,
 		UpgradeModule,
 		PeopleModule,
+		AuthenticationModule,
 		ApiAccessModule,
 		HttpClientModule,
 		TranslateModule.forRoot({
@@ -27,7 +30,7 @@ import { PeopleModule } from './people/people.module';
 			parser: { provide: TranslateParser, useClass: CustomTranslateParser }
 		})
 	],
-	entryComponents: [],
+	entryComponents: [BootstrapComponent],
 	providers: [Zorroi18nService]
 })
 export class AppModule {

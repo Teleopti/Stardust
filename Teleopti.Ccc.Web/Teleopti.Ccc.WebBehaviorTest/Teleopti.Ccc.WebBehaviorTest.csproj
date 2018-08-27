@@ -133,6 +133,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ShiftTradeRequestViewShowingMultipleShifts.feature</DependentUpon>
     </Compile>
+    <Compile Include="Wfm\Authentication\AuthenticationStepDefinition.cs" />
+    <Compile Include="Wfm\Authentication\Authentication.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Authentication.feature</DependentUpon>
+    </Compile>
     <Compile Include="Wfm\Intraday\Intraday.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1183,6 +1189,10 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Toggle.feature.cs</LastGenOutput>
     </None>
+    <None Include="Wfm\Authentication\Authentication.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Authentication.feature.cs</LastGenOutput>
+    </None>
     <None Include="Wfm\Global\Global.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Global.feature.cs</LastGenOutput>
@@ -1601,6 +1611,7 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>if not exist "$(ProjectDir)App.config" copy "$(ProjectDir)..\..\BuildArtifacts\Teleopti.Ccc.WebbehaviorTest.config" "$(ProjectDir)App.config"

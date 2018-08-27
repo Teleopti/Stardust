@@ -103,12 +103,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			{
 				_changePersonPassword.Modify(loggedOnUser.Id.Value, model.OldPassword, model.NewPassword);
 				ret.IsSuccessful = true;
+				ret.IsAuthenticationSuccessful = true;
+
 			}
 			catch (HttpException httpException)
 			{
-				if (httpException.GetHttpCode() != 403)
+				if (httpException.GetHttpCode() == 403)
 				{
-					ret.IsAuthenticationSuccessful = true;
+					ret.IsAuthenticationSuccessful = false;
 				}
 			}
 			return Json(ret);

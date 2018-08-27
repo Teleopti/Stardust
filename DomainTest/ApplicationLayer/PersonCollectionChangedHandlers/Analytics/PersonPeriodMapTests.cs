@@ -4,8 +4,6 @@ using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Analytics.Transformer;
-using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -95,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			setupTests();
 
 			var skillsList = new List<Guid>();
-			var skillSet = Target.MapSkillsetId(skillsList, 0, new ReturnNotDefined());
+			var skillSet = Target.MapSkillsetId(skillsList, 0);
 			Assert.AreEqual(-1, skillSet);
 		}
 
@@ -105,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			setupTests();
 
 			var skills = new List<Guid> { fakeSkill1.SkillCode };
-			var skillSet = Target.MapSkillsetId(skills, 0, new ReturnNotDefined());
+			var skillSet = Target.MapSkillsetId(skills, 0);
 			Assert.AreEqual(3, skillSet);
 		}
 
@@ -119,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				fakeSkill1.SkillCode,
 				fakeSkill2.SkillCode
 			};
-			var skillSet = Target.MapSkillsetId(skills, 0, new ReturnNotDefined());
+			var skillSet = Target.MapSkillsetId(skills, 0);
 			Assert.AreEqual(2, skillSet);
 		}
 
@@ -129,18 +127,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			setupTests();
 
 			var skills = new List<Guid> { fakeSkill2.SkillCode };
-			var newSkillSetId = Target.MapSkillsetId(skills, 0, new ReturnNotDefined());
+			var newSkillSetId = Target.MapSkillsetId(skills, 0);
 			Assert.AreEqual(4, newSkillSetId);
 		}
 
 		[Test]
-		public void OneNewSkillNotYetInAnalytics_MapSkillSet_NotDefinedSkillset()
+		public void OneNewSkillNotYetInAnalytics_MapSkillSet_Throws()
 		{
 			setupTests();
 
 			var skills = new List<Guid> { Guid.NewGuid() };
-			var newSkillSetId = Target.MapSkillsetId(skills, 0, new ReturnNotDefined());
-			Assert.AreEqual(-1, newSkillSetId);
+			Assert.Throws<ArgumentException>(() =>
+			{
+				Target.MapSkillsetId(skills, 0);
+			});
 		}
 
 		[Test]
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			var nrOfBridgeRows = AnalyticsSkillRepository.fakeBridgeSkillsetSkills.Count;
 			var skills = new List<Guid> { fakeSkill2.SkillCode };
-			Target.MapSkillsetId(skills, 0, new ReturnNotDefined());
+			Target.MapSkillsetId(skills, 0);
 
 			Assert.AreEqual(nrOfBridgeRows + 1, AnalyticsSkillRepository.fakeBridgeSkillsetSkills.Count);
 		}
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var nrOfSkillSets = AnalyticsSkillRepository.SkillSets().Count;
 
 			var skills = new List<Guid> { fakeSkill1.SkillCode };
-			Target.MapSkillsetId(skills, 0, new ReturnNotDefined());
+			Target.MapSkillsetId(skills, 0);
 
 			Assert.AreEqual(nrOfBridgeRows, AnalyticsSkillRepository.fakeBridgeSkillsetSkills.Count);
 			Assert.AreEqual(nrOfSkillSets, AnalyticsSkillRepository.SkillSets().Count);
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				fakeSkill3.SkillCode
 			};
 
-			Target.MapSkillsetId(skills, 0, new ReturnNotDefined());
+			Target.MapSkillsetId(skills, 0);
 
 			Assert.AreEqual(nrOfBridgeRows + 2, AnalyticsSkillRepository.fakeBridgeSkillsetSkills.Count);
 			Assert.AreEqual(nrOfSkillSets + 1, AnalyticsSkillRepository.SkillSets().Count);

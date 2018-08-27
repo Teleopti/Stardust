@@ -66,7 +66,10 @@
 		Wfm_People_ImportAndCreateAgentFromFile_42528,
 		Wfm_People_SetFallbackValuesForImporting_43289,
 		Wfm_People_MoveImportJobToBackgroundService_43582,
-		Wfm_PeopleWeb_PrepareForRelease_74903,
+
+		//Bockemon
+		Wfm_PeopleWeb_PrepareForRelease_47766,
+		Wfm_Authentication_ChangePasswordMenu_76666,
 
 		People_SpeedUpOpening_76365,
 
@@ -78,7 +81,6 @@
 		ResourcePlanner_RunPerfTestAsTeam_43537,
 		ResourcePlanner_UseErlangAWithInfinitePatience_45845,
 		ResourcePlanner_PrepareToRemoveExportSchedule_46576,
-		ResourcePlanner_SpeedUpEvents_75415,
 		ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899,
 		ResourcePlanner_UseErlangAWithFinitePatience_47738,
 		ResourcePlanner_XXL_76496,
@@ -88,10 +90,6 @@
 		ETL_SpeedUpFactScheduleNightly_38019,
 		ETL_SpeedUpPersonPeriodNightly_38097,
 		ETL_SpeedUpNightlyReloadDatamart_38131,
-		ETL_SpeedUpNightlySkill_37543,
-		ETL_SpeedUpScenarioNightly_38300,
-		ETL_SpeedUpNightlyActivity_38303,
-		ETL_SpeedUpNightlyOvertime_38304,
 		ETL_SpeedUpNightlyAbsence_38301,
 		ETL_SpeedUpNightlyShiftCategory_38718,
 		ETL_SpeedUpNightlyPreference_38283,
@@ -102,12 +100,11 @@
 		ETL_SpeedUpNightlyForecastWorkload_38929,
 		ETL_UseBpoResources_75855,
 
-		ETL_SpeedUpNightlyBusinessUnit_38932,
 		Wfm_SkillPriorityRoutingGUI_39885,
-		ETL_EventbasedTimeZone_40870,
 		ETL_RemoveTimeZoneAndDateNightly_40870,
 		ETL_FixScheduleForPersonPeriod_41393,
 		ETL_Optimize_Memory_Usage_76761,
+		ETL_Show_Tenant_Name_In_History_75767,
 
 		Staffing_Info_Configuration_44687,
 		WfmStaffing_AddOvertime_42524,

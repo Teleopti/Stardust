@@ -2,13 +2,13 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[etl_
 DROP PROCEDURE [mart].[etl_log_get_today]
 GO
 
-
 CREATE PROCEDURE [mart].[etl_log_get_today]
 AS
 BEGIN
 	SET NOCOUNT ON;
 
     SELECT [schedule_id]
+      ,[tenant_name]
       ,max([job_start_time]) as job_start_time
       ,max([job_end_time]) as job_end_time
 	FROM Mart.etl_job_execution
@@ -16,9 +16,7 @@ BEGIN
 		[schedule_id] IS NOT NULL AND
 		[job_start_time] IS NOT NULL AND
 		[job_end_time] IS NOT NULL
-	GROUP BY [schedule_id]
+	GROUP BY [schedule_id], [tenant_name]
 END
 
-
 GO
-

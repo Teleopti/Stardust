@@ -171,7 +171,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 							}
 						}
 
-						jobRunner.SaveResult(jobResults, repository, scheduleJob.ScheduleId);
+						jobRunner.SaveResult(jobResults, repository, scheduleJob.ScheduleId, etlTenantName);
 					}
 
 					if (scheduleJob.ScheduleType == JobScheduleType.Manual)

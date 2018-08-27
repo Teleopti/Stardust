@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public FakePermissionProvider PermissionProvider;
 		public FakeToggleManager ToggleManager;
 		public FakeApplicationFunctionsToggleFilter ApplicationFunctionsToggleFilter;
-		
+
 		public void Extend(IExtend extend, IIocConfiguration configuration)
 		{
 			extend.AddModule(new WebAppModule(configuration));
@@ -149,12 +149,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			areas.Single().Name.Should().Be(Resources.WebStaffing);
 			areas.Single().InternalName.Should().Be("staffingModule");
 		}
-		
+
 		[Test]
 		public void ShouldNotHaveStaffingAreaWhenItIsNotPermitted()
 		{
 			PermissionProvider.Enable();
-			
+
 			var areas = Target.GetWfmAreasWithPermissions();
 
 			areas.Count().Should().Be(0);
@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 			PermissionProvider.Enable();
 			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.PeopleAccess);
-			ToggleManager.Disable(Toggles.Wfm_PeopleWeb_PrepareForRelease_74903);
+			ToggleManager.Disable(Toggles.Wfm_PeopleWeb_PrepareForRelease_47766);
 
 			var areas = Target.GetWfmAreasWithPermissions();
 
@@ -246,7 +246,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 			PermissionProvider.Enable();
 			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.PeopleAccess);
-			ToggleManager.Enable(Toggles.Wfm_PeopleWeb_PrepareForRelease_74903);
+			ToggleManager.Enable(Toggles.Wfm_PeopleWeb_PrepareForRelease_47766);
 
 			var areas = Target.GetWfmAreasWithPermissions();
 

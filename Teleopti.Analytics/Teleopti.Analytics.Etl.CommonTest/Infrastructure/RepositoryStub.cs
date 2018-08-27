@@ -94,6 +94,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Infrastructure
 			var logTable = new DataTable {Locale = Thread.CurrentThread.CurrentCulture};
 
 			logTable.Columns.Add("schedule_id", typeof(int));
+			logTable.Columns.Add("tenant_name", typeof(string));
 			logTable.Columns.Add("job_start_time", typeof(DateTime));
 			logTable.Columns.Add("job_end_time", typeof(DateTime));
 

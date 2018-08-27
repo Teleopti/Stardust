@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		void Remove(IAggregateRoot entity);
 		T Get<T>(Guid id) where T : IAggregateRoot;
 		IEnumerable<T> LoadAll<T>();
+		T Merge<T>(T root) where T : class, IAggregateRoot;
 	}
 
 	public class FakeStorageSimple : IFakeStorage
@@ -37,6 +38,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return _data.OfType<T>().ToArray();
 		}
+
+		public T Merge<T>(T root) where T : class, IAggregateRoot
+		{
+			return root;
+		}
 	}
 
 	public class FakeStorage : IFakeStorage
@@ -45,6 +51,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly List<IAggregateRoot> _legacy = new List<IAggregateRoot>();
 		private readonly List<IAggregateRoot> _added = new List<IAggregateRoot>();
 		private readonly List<IAggregateRoot> _removed = new List<IAggregateRoot>();
+		private readonly List<IAggregateRoot> _modified = new List<IAggregateRoot>();
 		private readonly List<IAggregateRoot> _comitted = new List<IAggregateRoot>();
 
 		private static readonly object transactionLock = new object();
@@ -87,6 +94,26 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			}
 		}
 
+		public T Merge<T>(T root) where T : class, IAggregateRoot
+		{
+			if (!root.Id.HasValue)
+			{
+				// some tests merge entities that are transient.
+				// sounds like bad tests, but dont want to fix now.
+				if (!_legacy.Contains(root))
+					_legacy.Add(root);
+				_modified.Add(root);
+			}
+			else
+			{
+				var item = _legacy.OfType<T>().ToArray().SingleOrDefault(x => x.Id.Equals(root.Id));
+				_legacy.Remove(item);
+				_legacy.Add(root);
+				_modified.Add(root);
+			}
+			return root;
+		}
+
 		public IEnumerable<IRootChangeInfo> Commit()
 		{
 			RootChangeInfo[] updates;
@@ -106,12 +133,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				_removed.ForEach(x => _comitted.Remove(x));
 				_removed.Clear();
 
-				updates = _comitted
+				var dirty = _comitted
 					.OfType<IAggregateRootWithEvents>()
-					.Where(x => x.HasEvents())
+					.Where(x => x.HasEvents());
+				updates = _modified
+					.Union(dirty)
 					.Select(x => new RootChangeInfo(x, DomainUpdateType.Update))
 					.ToArray();
+				_modified.Clear();
 			}
+			
 			return adds
 				.Concat(removals)
 				.Concat(updates)

@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
+using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel;
+using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Gui.View
 {
@@ -23,17 +26,24 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.View
 		{
 			DataContext = null;
 			DataContext = JobHistoryMapper.Map(startDate, endDate, businessUnit.Id, showOnlyErrors);
+			
+			var container = new IocContainerHolder(App.Container);
+			var tenantNameVisible = container.ToggleManager.IsEnabled(Toggles.ETL_Show_Tenant_Name_In_History_75767);
+			if (tenantNameVisible) return;
+
+			var tenantNameColumn = treeListView.Columns.SingleOrDefault(
+				col => col.Header != null && string.Compare(col.Header.ToString(), "Tenant name", StringComparison.CurrentCultureIgnoreCase) == 0);
+			if (tenantNameColumn == null) return;
+			treeListView.Columns.Remove(tenantNameColumn);
 		}
 
 		private void treeListView_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
 		{
-			TreeViewItem treeViewItem = VisualUpwardSearch(e.OriginalSource as DependencyObject);
+			var treeViewItem = VisualUpwardSearch(e.OriginalSource as DependencyObject);
 
-			if (treeViewItem != null)
-			{
-				treeViewItem.IsSelected = true;
-				e.Handled = true;
-			}
+			if (treeViewItem == null) return;
+			treeViewItem.IsSelected = true;
+			e.Handled = true;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
@@ -47,23 +57,16 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.View
 
 		private void treeListView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
 		{
-			var treeView = sender as TreeView;
-			var model = DataContext as JobHistoryTreeViewModel;
-			if (treeView != null && model != null && treeView.SelectedItem != null)
-			{
-				var item = treeView.SelectedItem as IJobHistory;
-				if (item != null)
-				{
-					model.SelectedItem = item;
-					e.Handled = true;
-				}
-			}
+			if (!(sender is TreeView treeView) || !(DataContext is JobHistoryTreeViewModel model) ||
+				treeView.SelectedItem == null || !(treeView.SelectedItem is IJobHistory item)) return;
+
+			model.SelectedItem = item;
+			e.Handled = true;
 		}
 
 		private void ContextMenu_Opened(object sender, RoutedEventArgs e)
 		{
-			var menu = sender as ContextMenu;
-			if (menu != null) menu.DataContext = DataContext;
+			if (sender is ContextMenu menu) menu.DataContext = DataContext;
 		}
 	}
 }

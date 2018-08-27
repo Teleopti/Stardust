@@ -114,7 +114,7 @@ wfm-multiple-search-input {
 		margin: 0 10px;
 
 		md-switch {
-			margin: 10px 0;
+			margin: 5px 0;
 		}
 	}
 
@@ -131,7 +131,19 @@ wfm-multiple-search-input {
 			padding-top: 5px;
 
 			.request-date-range-picker {
-				margin-right: 1em;
+				padding: 8px 10px;
+				& > .cursor-pointer {
+					display: flex;
+					align-items: center;
+					& > span {
+						display: inline-block;
+						margin: 0 5px;
+					}
+				}
+				& > .absolute {
+					top: 3em;
+					z-index: 10;
+				}
 			}
 		}
 

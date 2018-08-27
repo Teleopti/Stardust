@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class MoveTimeOptimizerCreator
 	{
-		private readonly IMoveTimeDecisionMaker _decisionMaker;
+		private readonly MoveTimeDecisionMaker2 _decisionMaker;
 		private readonly IScheduleService _scheduleService;
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 
 		public MoveTimeOptimizerCreator(
-			IMoveTimeDecisionMaker decisionMaker,
+			MoveTimeDecisionMaker2 decisionMaker,
 			IScheduleService scheduleService, 
 			Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
 			IEffectiveRestrictionCreator effectiveRestrictionCreator, 
