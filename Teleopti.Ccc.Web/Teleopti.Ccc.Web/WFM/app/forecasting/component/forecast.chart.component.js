@@ -119,10 +119,10 @@ function ForecastChartCtrl($translate, $filter, $timeout, SkillTypeService) {
 				names: {
 					TotalTasks: dataName.TotalTasks + '←',
 					Tasks: dataName.Tasks + '←',
-					TotalAverageTaskTime: dataName.TotalATW + '→',
+					TotalAverageTaskTime: dataName.TotalTaskTime + '→',
 					AverageAfterTaskTime: dataName.ATW + '→',
-					AverageTaskTime: 'AverageTaskTime' + '→',
-					TotalAverageAfterTaskTime: dataName.TaskTime + '→',
+					AverageTaskTime: dataName.TaskTime + '→',
+					TotalAverageAfterTaskTime: dataName.TotalATW + '→',
 				},
 				hide: ['Tasks', 'AverageTaskTime', 'AverageAfterTaskTime'],
 				selection: {
