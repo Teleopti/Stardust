@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 	public class HangfireEventClientWithRetry : HangfireEventClient
 	{
 		private readonly ILog _log;
-		public const int NumberOfRetries = 10;
+		public const int NumberOfRetries = 3;
 		private const string warningRetryMessage = "Failed to enqueue hangfire job. Retrying! {0} attempt left";
 		
 		public HangfireEventClientWithRetry(Lazy<IBackgroundJobClient> jobClient, 
