@@ -48,8 +48,7 @@ function ForecastChartCtrl($translate, $filter, $timeout, SkillTypeService) {
 			averageTaskTimeSeries: ['AverageTaskTime'],
 			totalAverageTaskTimeSeries: ['TotalAverageTaskTime'],
 			campaignSeries: ['Campaign'],
-			overrideSeries: ['Override'],
-			campaignAndOverrideSeries: ['CampaignAndOverride']
+			overrideSeries: ['Override']
 		};
 
 		for (var i = 0; i < days.length; i++) {
@@ -72,12 +71,6 @@ function ForecastChartCtrl($translate, $filter, $timeout, SkillTypeService) {
 			} else {
 				preparedData.overrideSeries.push(null);
 			}
-
-			if (days[i].HasOverride && days[i].HasCampaign) {
-				preparedData.campaignAndOverrideSeries.push(1);
-			} else {
-				preparedData.campaignAndOverrideSeries.push(null);
-			}
 		}
 
 		chart = c3.generate({
@@ -96,8 +89,7 @@ function ForecastChartCtrl($translate, $filter, $timeout, SkillTypeService) {
 
 					preparedData.dateSeries,
 					preparedData.campaignSeries,
-					preparedData.overrideSeries,
-					preparedData.campaignAndOverrideSeries
+					preparedData.overrideSeries
 				],
 				colors: {
 					TotalTasks: '#0099FF',
@@ -145,10 +137,10 @@ function ForecastChartCtrl($translate, $filter, $timeout, SkillTypeService) {
 						ctrl.onClick(selectedItems);
 					}
 				}
-
-
 			},
-
+			legend: {
+				hide: ['Override', 'Campaign'] 
+			},
 			point: {
 				focus: {
 					expand: {
