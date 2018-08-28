@@ -63,9 +63,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<FutureData>()
 				.SingleInstance()
 				.As<IFutureData>();
-			builder.RegisterType<ForecastCreator>()
-				.SingleInstance()
-				.As<IForecastCreator>();
 			builder.RegisterType<ForecastVolumeApplier>()
 				.SingleInstance()
 				.As<IForecastVolumeApplier>();

@@ -859,11 +859,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				ForecastStart = openDay.Date,
 				ForecastEnd = closedDay.Date,
 				ScenarioId = scenario.Id.Value,
-				Workload = new ForecastWorkloadInput
-				{
-					ForecastMethodId = ForecastMethodType.TeleoptiClassicShortTerm,
-					WorkloadId = workload.Id.Value
-				}
+				WorkloadId = workload.Id.Value
 			};
 			StatisticRepository.Has(workload.QueueSourceCollection.First(), new List<IStatisticTask>
 			{
@@ -908,11 +904,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				ForecastStart = openDay.Date,
 				ForecastEnd = openDay.Date,
 				ScenarioId = scenario.Id.Value,
-				Workload = new ForecastWorkloadInput
-				{
-					ForecastMethodId = ForecastMethodType.TeleoptiClassicShortTerm,
-					WorkloadId = workload.Id.Value
-				}
+				WorkloadId = workload.Id.Value
 			};
 			StatisticRepository.Has(workload.QueueSourceCollection.First(), new List<IStatisticTask>
 			{
@@ -964,11 +956,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				ForecastStart = openDay.Date,
 				ForecastEnd = openDay.Date,
 				ScenarioId = scenario.Id.Value,
-				Workload = new ForecastWorkloadInput
-				{
-					ForecastMethodId = ForecastMethodType.TeleoptiClassicShortTerm,
-					WorkloadId = workload.Id.Value
-				}
+				WorkloadId = workload.Id.Value
 			};
 			StatisticRepository.Has(workload.QueueSourceCollection.First(), new List<IStatisticTask>
 			{
@@ -1026,11 +1014,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				ForecastStart = openDay.Date,
 				ForecastEnd = openDay.Date,
 				ScenarioId = scenario.Id.Value,
-				Workload = new ForecastWorkloadInput
-				{
-					ForecastMethodId = ForecastMethodType.TeleoptiClassicShortTerm,
-					WorkloadId = workload.Id.Value
-				}
+				WorkloadId = workload.Id.Value
 			};
 			StatisticRepository.Has(workload.QueueSourceCollection.First(), new List<IStatisticTask>
 			{
@@ -1598,6 +1582,45 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var result = target.Skills();
 			result.IsPermittedToModifySkill.Should().Be.EqualTo(true);
 		}
-	}
 
+		[Test]
+		public void ShouldForecastTalkTime()
+		{
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
+			var workload = skill.WorkloadCollection.Single();
+			var scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
+			var openDay = new DateOnly(2018, 05, 04);
+
+			SkillRepository.Add(skill);
+			WorkloadRepository.Add(workload);
+			ScenarioRepository.Has(scenario);
+
+			var forecastInput = new ForecastInput
+			{
+				ForecastStart = openDay.Date,
+				ForecastEnd = openDay.Date.AddDays(1),
+				ScenarioId = scenario.Id.Value,
+				WorkloadId = workload.Id.Value
+			};
+			StatisticRepository.Has(workload.QueueSourceCollection.First(), new List<IStatisticTask>
+			{
+				new StatisticTask
+				{
+					Interval = openDay.AddDays(-7).Date.AddHours(10),
+					StatOfferedTasks = 10,
+					StatAverageTaskTimeSeconds = 100
+				},
+				new StatisticTask
+				{
+					Interval = openDay.AddDays(-8).Date.AddHours(10),
+					StatOfferedTasks = 10,
+					StatAverageTaskTimeSeconds = 400
+				}
+			});
+			var result = (OkNegotiatedContentResult<ForecastModel>)Target.Forecast(forecastInput);
+			result.Content.ForecastDays.Count.Should().Be(2);
+			result.Content.ForecastDays.First().TotalAverageTaskTime.Should().Be(100);
+			result.Content.ForecastDays.Last().TotalAverageTaskTime.Should().Be(400);
+		}
+	}
 }

@@ -2219,7 +2219,6 @@
     <Compile Include="Forecasting\Angel\IndexVolumesMediumTermWithDayInMonth.cs" />
     <Compile Include="Forecasting\Angel\IndexVolumesShortTerm.cs" />
     <Compile Include="Forecasting\Angel\IndexVolumesMediumTerm.cs" />
-    <Compile Include="Forecasting\Angel\ForecastWorkloadInput.cs" />
     <Compile Include="Forecasting\Angel\HistoricalPeriodProvider.cs" />
     <Compile Include="Forecasting\Angel\IHistoricalPeriodProvider.cs" />
     <Compile Include="Forecasting\Angel\IntradayForecaster.cs" />
@@ -2253,7 +2252,6 @@
     <Compile Include="Forecasting\Angel\IIndexVolumes.cs" />
     <Compile Include="Forecasting\Angel\IndexVolumesLongTerm.cs" />
     <Compile Include="Forecasting\Angel\IQuickForecaster.cs" />
-    <Compile Include="Forecasting\Angel\IForecastCreator.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\IQuickForecastSkillEvaluator.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\IForecastWorkloadEvaluator.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\DailyStatisticsToTaskOwnerConverterExtension.cs" />
@@ -2268,7 +2266,6 @@
     <Compile Include="Forecasting\Angel\QuickForecaster.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\QuickForecastSkillEvaluator.cs" />
     <Compile Include="Forecasting\Angel\QuickForecasterWorkload.cs" />
-    <Compile Include="Forecasting\Angel\ForecastCreator.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastWorkloadEvaluator.cs" />
     <Compile Include="Forecasting\ForecastingTarget.cs" />
     <Compile Include="Forecasting\Import\ForecastFileDictionary.cs" />

@@ -25,26 +25,22 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			_historicalPeriodProvider = historicalPeriodProvider;
 		}
 
-		public ForecastModel ForecastWorkloadWithinSkill(ISkill skill, ForecastWorkloadInput workloadInput, DateOnlyPeriod futurePeriod, IScenario scenario)
+		public ForecastModel ForecastWorkloadWithinSkill(ISkill skill, IWorkload workload, DateOnlyPeriod futurePeriod,
+			IScenario scenario)
 		{
 			var skillDays = _fetchAndFillSkillDays.FindRange(futurePeriod, skill, scenario);
-			var workload = skill.WorkloadCollection.Single(w => w.Id.Value == workloadInput.WorkloadId);
 
-			var forecastMethodId = workloadInput.ForecastMethodId;
-			if (forecastMethodId == ForecastMethodType.None)
-			{
-				var workloadAccuracy = _forecastWorkloadEvaluator.Evaluate(workload);
-				forecastMethodId = (workloadAccuracy == null || workloadAccuracy.Accuracies.Length == 0)
-					? ForecastMethodType.None
-					: workloadAccuracy.Accuracies.Single(x => x.IsSelected).MethodId;
-			}
+			var workloadAccuracy = _forecastWorkloadEvaluator.Evaluate(workload);
+			var forecastMethodId = (workloadAccuracy == null || workloadAccuracy.Accuracies.Length == 0)
+				? ForecastMethodType.None
+				: workloadAccuracy.Accuracies.Single(x => x.IsSelected).MethodId;
 
 			var availablePeriod = _historicalPeriodProvider.AvailablePeriod(workload);
 			if (!availablePeriod.HasValue)
 			{
 				return new ForecastModel
 				{
-					WorkloadId = workloadInput.WorkloadId,
+					WorkloadId = workload.Id.GetValueOrDefault(),
 					ScenarioId = scenario.Id.Value,
 					ForecastDays = new List<ForecastDayModel>(),
 					WarningMessage = Resources.NoQueueStatisticsAvailable

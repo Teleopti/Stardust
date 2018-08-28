@@ -907,7 +907,6 @@
     <Compile Include="Forecasting\Angel\Historical\HistoricalDataTest.cs" />
     <Compile Include="Forecasting\Angel\MonthlyPatternIndexVolumesTest.cs" />
     <Compile Include="Forecasting\Angel\Outlier\OutlierRemoverTest.cs" />
-    <Compile Include="Forecasting\Angel\QuickForecasterTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecasterWorkloadTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecastSkillWithOneWorkload\ProvideStatisticTasksAndTimesTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecastSkillWithOneWorkload\ProvideStatisticTasksWithQueueAdjustmentTest.cs" />

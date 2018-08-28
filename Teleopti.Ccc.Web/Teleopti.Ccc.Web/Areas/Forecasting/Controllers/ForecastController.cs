@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 	{
 		private const double tolerance = 0.000001d;
 
-		private readonly IForecastCreator _forecastCreator;
+		private readonly IQuickForecaster _quickForecaster;
 		private readonly ISkillRepository _skillRepository;
 		private readonly ForecastProvider _forecastProvider;
 		private readonly IScenarioRepository _scenarioRepository;
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly IQueueStatisticsViewModelFactory _queueStatisticsViewModelFactory;
 
 		public ForecastController(
-			IForecastCreator forecastCreator,
+			IQuickForecaster quickForecaster,
 			ISkillRepository skillRepository,
 			ForecastProvider forecastProvider,
 			IScenarioRepository scenarioRepository,
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			IForecastDayOverrideRepository forecastDayOverrideRepository,
 			IQueueStatisticsViewModelFactory queueStatisticsViewModelFactory)
 		{
-			_forecastCreator = forecastCreator;
+			_quickForecaster = quickForecaster;
 			_skillRepository = skillRepository;
 			_forecastProvider = forecastProvider;
 			_scenarioRepository = scenarioRepository;
@@ -94,7 +94,11 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		{
 			var futurePeriod = new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd));
 			var scenario = _scenarioRepository.Get(input.ScenarioId);
-			var forecast = _forecastCreator.CreateForecastForWorkload(futurePeriod, input.Workload, scenario);
+			var skill = _skillRepository.FindSkillsWithAtLeastOneQueueSource()
+				.SingleOrDefault(s => s.WorkloadCollection.Any(
+					w => w.Id.HasValue && w.Id.Value == input.WorkloadId));
+			var workload = skill.WorkloadCollection.Single(w => w.Id.Value == input.WorkloadId);
+			var forecast = _quickForecaster.ForecastWorkloadWithinSkill(skill, workload, futurePeriod, scenario); 
 			return Ok(forecast);
 		}
 

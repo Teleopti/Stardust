@@ -271,19 +271,13 @@
 		function forecastWorkload() {
 			vm.forecastModal = false;
 			vm.isForecastRunning = true;
-			var temp = {
-				WorkloadId: vm.selectedWorkload.Workload.Id,
-				ForecastMethodId: -1
-			};
-
+			
 			forecastingService.forecast(
 				{
 					ForecastStart: moment(vm.forecastPeriod.startDate).format(),
 					ForecastEnd: moment(vm.forecastPeriod.endDate).format(),
-					Workload: temp,
-					ScenarioId: vm.selectedScenario.Id,
-					BlockToken: vm.blockToken,
-					IsLastWorkload: true
+					WorkloadId: vm.selectedWorkload.Workload.Id,
+					ScenarioId: vm.selectedScenario.Id
 				},
 				function (data, status, headers, config) {
 					vm.isForecastRunning = false;
