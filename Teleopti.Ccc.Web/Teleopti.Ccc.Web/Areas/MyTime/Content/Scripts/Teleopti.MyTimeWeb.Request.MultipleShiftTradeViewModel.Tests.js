@@ -1157,7 +1157,7 @@
 		};
 
 		var result = viewModel.getOvertimeAndIntradayAbsenceText(personSchedule, 'OT');
-		equal(result, '(PTs)');
+		equal(result, '(PT)');
 	});
 
 });
