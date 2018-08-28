@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	[InfrastructureTest]
 	public class FindPersonAssignmentAsyncTest
 	{
-		public FindPersonAssignmentAsync Target;
+		public IFindPersonAssignment Target;
 		public ICurrentUnitOfWorkFactory CurrentUnitOfWorkFactory;
 
 		[Test]
