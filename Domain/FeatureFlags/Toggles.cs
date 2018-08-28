@@ -131,6 +131,7 @@
 		MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306,
 
 		WFM_Intraday_Refactoring_74652,
+		WFM_Intraday_Redesign_77214,
 
 		Tech_Moving_ResilientConnectionLogic_76181,
 		Tenant_PurgeLogonAttempts_75782,
