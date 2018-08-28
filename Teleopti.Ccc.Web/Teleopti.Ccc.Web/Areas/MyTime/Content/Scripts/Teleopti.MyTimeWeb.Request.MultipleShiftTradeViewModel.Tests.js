@@ -850,6 +850,10 @@
 						"ShortName": "AM",
 						"Name": "Early",
 						"DisplayColor": "#80FF80"
+					},
+					"IntradayAbsenceCategory": {
+						"ShortName": null,
+						"Color": null
 					}
 				},
 				PersonToSchedule: {
@@ -876,6 +880,10 @@
 						"ShortName": "AM",
 						"Name": "Early",
 						"DisplayColor": "#80FF80"
+					},
+					"IntradayAbsenceCategory": {
+						"ShortName": null,
+						"Color": null
 					}
 				}
 			}]
@@ -936,6 +944,10 @@
 						"ShortName": "AM",
 						"Name": "Early",
 						"DisplayColor": "#80FF80"
+					},
+					"IntradayAbsenceCategory": {
+						"ShortName": null,
+						"Color": null
 					}
 				},
 				PersonToSchedule: {
@@ -962,6 +974,10 @@
 						"ShortName": "AM",
 						"Name": "Early",
 						"DisplayColor": "#80FF80"
+					},
+					"IntradayAbsenceCategory": {
+						"ShortName": null,
+						"Color": null
 					}
 				}
 			}]
@@ -1022,6 +1038,10 @@
 						"ShortName": "AM",
 						"Name": "Early",
 						"DisplayColor": "#80FF80"
+					},
+					"IntradayAbsenceCategory": {
+						"ShortName": null,
+						"Color": null
 					}
 				},
 				PersonToSchedule: {
@@ -1048,6 +1068,10 @@
 						"ShortName": "AM",
 						"Name": "Early",
 						"DisplayColor": "#80FF80"
+					},
+					"IntradayAbsenceCategory": {
+						"ShortName": null,
+						"Color": null
 					}
 				}
 			}]
@@ -1099,4 +1123,41 @@
 		var ret = viewModel.getOvernightFlag(moment("2018-07-19 23:00:00"), moment("2018-07-20"));
 		equal(ret, "(-1)");
 	});
+
+	test("should get correct overtime and absence text", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel({});
+		var personSchedule = {
+			hasOvertime: true,
+			isIntradayAbsence: true,
+			absenceCategoryShortName: 'PT'
+		};
+
+		var result = viewModel.getOvertimeAndIntradayAbsenceText(personSchedule, 'OT');
+		equal(result, '(OT, PT)');
+	});
+
+	test("should get correct overtime text", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel({});
+		var personSchedule = {
+			hasOvertime: true,
+			isIntradayAbsence: false,
+			absenceCategoryShortName: 'PT'
+		};
+
+		var result = viewModel.getOvertimeAndIntradayAbsenceText(personSchedule, 'OT');
+		equal(result, '(OT)');
+	}); 
+
+	test("should get correct absence text", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel({});
+		var personSchedule = {
+			hasOvertime: false,
+			isIntradayAbsence: true, 
+			absenceCategoryShortName: 'PT'
+		};
+
+		var result = viewModel.getOvertimeAndIntradayAbsenceText(personSchedule, 'OT');
+		equal(result, '(PTs)');
+	});
+
 });
