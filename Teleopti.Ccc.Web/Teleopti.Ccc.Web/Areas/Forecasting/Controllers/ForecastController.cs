@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
@@ -97,8 +98,16 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			var skill = _skillRepository.FindSkillsWithAtLeastOneQueueSource()
 				.SingleOrDefault(s => s.WorkloadCollection.Any(
 					w => w.Id.HasValue && w.Id.Value == input.WorkloadId));
+			if (skill == null)
+			{
+				return  Ok(new ForecastModel()
+				{
+					WarningMessage =  "Not found"
+				});
+			}
 			var workload = skill.WorkloadCollection.Single(w => w.Id.Value == input.WorkloadId);
-			var forecast = _quickForecaster.ForecastWorkloadWithinSkill(skill, workload, futurePeriod, scenario); 
+			var forecast = _quickForecaster.ForecastWorkloadWithinSkill(skill, workload, futurePeriod, scenario);
+			
 			return Ok(forecast);
 		}
 

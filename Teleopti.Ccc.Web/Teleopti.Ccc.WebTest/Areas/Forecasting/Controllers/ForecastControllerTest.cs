@@ -1622,5 +1622,27 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			result.Content.ForecastDays.First().TotalAverageTaskTime.Should().Be(100);
 			result.Content.ForecastDays.Last().TotalAverageTaskTime.Should().Be(400);
 		}
+
+		[Test]
+		public void ShouldNotBeAbleToForecastSkillWithoutQueues ()
+		{
+			var skill = SkillFactory.CreateSkillWithId("SkillWithNoQueues");
+ 			var scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
+			var openDay = new DateOnly(2018, 05, 04);
+
+			SkillRepository.Add(skill);
+ 			ScenarioRepository.Has(scenario);
+
+			var forecastInput = new ForecastInput
+			{
+				ForecastStart = openDay.Date,
+				ForecastEnd = openDay.Date.AddDays(1),
+				ScenarioId = scenario.Id.Value
+ 			};
+			var result = (OkNegotiatedContentResult<ForecastModel>)Target.Forecast(forecastInput);
+			result.Content.WarningMessage.Should().Not.Be.Empty();
+
+		}
+
 	}
 }
