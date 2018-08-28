@@ -170,8 +170,22 @@ namespace Teleopti.Develop.Batflow
 
 			public void ConsoleStart()
 			{
-				Console.WriteLine("Will try to fix databases like this:");
+				if (Operation() == DatabaseOperation.Ensure)
+					Console.WriteLine(@"
+Will ensure databases exists,
+by creating or restoring if it doesnt exist, 
+or recreating or restoring if existing is newer than the version you are at, 
+or upgrade existing.
+");
+				if (Operation() == DatabaseOperation.Init)
+					Console.WriteLine(@"
+Will try to create or restore databases,
+by creating or restoring if it doesnt exist, 
+or recreating or restoring over existing.
+");
 				consoleWrite();
+				Console.WriteLine(@"Here we go...");
+				Console.WriteLine();
 			}
 
 			public void ConsoleEnd()
@@ -188,13 +202,12 @@ namespace Teleopti.Develop.Batflow
           '8o          V          o8'
              `                   `
 ");
-				Console.WriteLine("Did that flow well?");
+				Console.WriteLine(@"Did that flow well?");
 				consoleWrite();
 			}
 
 			private void consoleWrite()
 			{
-				Console.WriteLine($@"Operation: {Operation()}");
 				Console.WriteLine($@"Repository: {RepositoryPath()}  ({RepositoryName()})");
 				Console.WriteLine($@"Database source: {DatabaseSourcePath()}");
 				Console.WriteLine($@"Server: {Server()}");
