@@ -1253,8 +1253,8 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 				endTimeInString,
 				hasOvertime,
 				personSchedule.IsIntradayAbsence,
-				'#80FF80',
-				'PT',
+				personSchedule.IntradayAbsenceCategory.Color,
+				personSchedule.IntradayAbsenceCategory.ShortName,
 				overtimeCategoryColor
 			);
 

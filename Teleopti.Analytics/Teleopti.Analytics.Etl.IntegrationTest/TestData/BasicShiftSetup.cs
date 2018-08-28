@@ -6,10 +6,13 @@ using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
+using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData;
+using Teleopti.Ccc.TestCommon.TestData.Analytics;
+using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
@@ -61,7 +64,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 		}
 
-		public static void AddPerson(out IPerson person, string name, string externalLogon, DateTime testDate)
+		public static void AddPerson(out IPerson person, string name, string externalLogon, DateTime testDate, int idInAnalytics=1)
 		{
 			person = TestState.TestDataFactory.Person(name).Person;
 			var pp = new PersonPeriodConfigurable
@@ -74,8 +77,13 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 				StartDate = testDate.AddDays(-6),
                 ExternalLogon = externalLogon
 			};
-			Data.Person(name).Apply(pp);
 			Data.Person(name).Apply(new StockholmTimeZone());
+			Data.Person(name).Apply(pp);
+			var analyticsDataFactory = new AnalyticsDataFactory();
+			analyticsDataFactory.Setup(new Person(person, ExistingDatasources.DefaultRaptorDefaultDatasourceId,
+				idInAnalytics, testDate.AddDays(-6), AnalyticsDate.Eternity.DateDate, 0, -2, 1,
+				TestState.BusinessUnit.Id.Value, false, 1));
+			analyticsDataFactory.Persist();
 		}
 
 		public static void AddThreeShifts(string onPerson,

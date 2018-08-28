@@ -1471,7 +1471,6 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.NewTeamSchedule.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.NewTeamSchedule.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.NewTeamScheduleViewModel.js" />
-    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.NewTeamScheduleViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ProbabilityModels.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileDayViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ProbabilityBoundary.js" />

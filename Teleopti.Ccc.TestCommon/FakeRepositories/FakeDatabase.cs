@@ -924,6 +924,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return WithPersonAbsence(date, date.Utc().AddHours(24).ToShortTimeString());
 		}
 
+		public FakeDatabase WithPersonAbsence(string start, string end, string shortName, Color color)
+		{
+			ensureExists(_absences, null, () => this.WithAbsence(null, null, null));
+			var period = new DateTimePeriod(start.Utc(), end.Utc());
+			_absence.Description = new Description("FullName", shortName);
+			_absence.DisplayColor = color;
+			_personAbsence = new PersonAbsence(_person, _scenario, new AbsenceLayer(_absence, period));
+			_personAbsence.SetId(Guid.NewGuid());
+			_personAbsences.Has(_personAbsence);
+			return this;
+		}
+
 		[UnitOfWork]
 		public virtual FakeDatabase WithPersonAbsence(string start, string end)
 		{
@@ -1282,6 +1294,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_rtaHistory.StateChanged(_person.Id.Value, time, _stateGroup?.Name, _activity?.Name, _activity?.DisplayColor, _rule?.Description.Name, _rule?.DisplayColor, _rule?.Adherence);
 			return this;
 		}
+		
+		public FakeDatabase WithArrivedLateForWork(string shiftStart, string time)
+		{
+			_rtaHistory.ArrivedLateForWork(_person.Id.Value, shiftStart, time);
+			return this;
+		}
 
 		[UnitOfWork]
 		public virtual FakeDatabase ClearAssignments(Guid? personId)
@@ -1347,5 +1365,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
+		
 	}
 }

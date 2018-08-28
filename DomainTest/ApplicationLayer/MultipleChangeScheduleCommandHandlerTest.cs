@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ShiftEditor;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -32,6 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 		public void Isolate(IIsolate isolate)
 		{
+			isolate.UseTestDouble<MutableNow>().For<INow, IMutateNow>();
 			isolate.UseTestDouble<MultipleChangeScheduleCommandHandler>().For<IHandleCommand<MultipleChangeScheduleCommand>>();
 			isolate.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
 			isolate.UseTestDouble<FakeCurrentDatasource>().For<ICurrentDataSource>();

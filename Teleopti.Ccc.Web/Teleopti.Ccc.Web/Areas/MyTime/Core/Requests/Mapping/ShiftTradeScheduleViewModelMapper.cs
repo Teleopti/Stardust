@@ -250,6 +250,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				displayColor = mapColor(absenceColor.ToArgb());
 				shortName = payload.Description.ShortName;
 			}
+			var isIntradayAbsence = !isFulldayAbsence && scheduleDay.PersonAbsenceCollection().Any();
+			var intradayCategory = new IntradayAbsenceCategoryViewModel();
+			if (isIntradayAbsence)
+			{
+				var payload = scheduleDay.PersonAbsenceCollection().First().Layer.Payload;
+				intradayCategory.ShortName = payload.ConfidentialDescription(person).ShortName;
+				intradayCategory.Color = mapColor(payload.ConfidentialDisplayColor(person).ToArgb());
+			}
 
 			return new ShiftTradeAddPersonScheduleViewModel
 			{
@@ -264,7 +272,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				ScheduleLayers = getScheduleLayers(eventScheduleDay, scheduleDay.PersonAssignment(), person.Id == _loggedOnUser.CurrentUser().Id),
 				ShiftExchangeOfferId = null,
 				ShiftCategory = new ShiftCategoryViewModel { Name = categoryName, ShortName = shortName, DisplayColor = displayColor},
-				IsIntradayAbsence = !isFulldayAbsence && scheduleDay.PersonAbsenceCollection().Any()
+				IsIntradayAbsence = isIntradayAbsence,
+				IntradayAbsenceCategory = intradayCategory
 			};
 		}
 

@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			Data.WithAgent("pierre", "2016-01-14");
 			Now.Is("2016-01-01 00:00");
 			Target.Handle(new TenantHourTickEvent());
-			Publisher.Clear();
 
 			Now.Is("2016-01-15 00:00");
+			Publisher.Clear();
 			Target.Handle(new TenantHourTickEvent());
 
 			Publisher.PublishedEvents.Single().Should().Be.OfType<PersonAssociationChangedEvent>();
@@ -73,9 +73,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			Data.WithAgent("pierre", "2016-01-15");
 			Now.Is("2016-01-01 00:00");
 			Target.Handle(new TenantHourTickEvent());
-			Publisher.Clear();
 
 			Now.Is("2016-01-15 00:00");
+			Publisher.Clear();
 			Target.Handle(new TenantHourTickEvent());
 
 			Publisher.PublishedEvents.Should().Be.Empty();

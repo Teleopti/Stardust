@@ -19,6 +19,7 @@ using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -722,15 +723,29 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				drawSkillGrid();
 				if (TestMode.Micke)
 				{
-					var skillGridMenuItem1 = new ToolStripMenuItem("Analyze primary/shoveled resources...");
-					skillGridMenuItem1.Click += skillGridMenuItemAnalyzeResorceChangesClick;
-					_contextMenuSkillGrid.Items.Add(skillGridMenuItem1);
-					var skillGridMenuItem2 = new ToolStripMenuItem("Analyze shoveling");
-					skillGridMenuItem2.Click += skillGridMenuItemShovelAnalyzerClick;
-					_contextMenuSkillGrid.Items.Add(skillGridMenuItem2);
-					var skillGridMenuItem = new ToolStripMenuItem("Agent Skill Analyzer...");
-					skillGridMenuItem.Click += skillGridMenuItemAgentSkillAnalyserClick;
-					_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
+					bool found = false;
+					foreach (var item in _contextMenuSkillGrid.Items)
+					{
+						if (item is ToolStripMenuItem menuItem && menuItem.Name == "agentSkillAnalyzer")
+							found = true;
+					}
+
+					if (!found)
+					{
+						var skillGridMenuItem1 = new ToolStripMenuItem("Analyze primary/shoveled resources...");
+						skillGridMenuItem1.Click += skillGridMenuItemAnalyzeResorceChangesClick;
+						_contextMenuSkillGrid.Items.Add(skillGridMenuItem1);
+						var skillGridMenuItem2 = new ToolStripMenuItem("Analyze shoveling...");
+						skillGridMenuItem2.Click += skillGridMenuItemShovelAnalyzerClick;
+						_contextMenuSkillGrid.Items.Add(skillGridMenuItem2);
+						var skillGridMenuItem = new ToolStripMenuItem("Agent Skill Analyzer...");
+						skillGridMenuItem.Name = "agentSkillAnalyzer";
+						skillGridMenuItem.Click += skillGridMenuItemAgentSkillAnalyserClick;
+						_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
+						var skillGridMenuItem3 = new ToolStripMenuItem("Find skill changes in period...");
+						skillGridMenuItem3.Click += skillGridMenuItemSkillChangeFinderClick;
+						_contextMenuSkillGrid.Items.Add(skillGridMenuItem3);
+					}
 				}
 			}
 			if (e.KeyCode == Keys.I && e.Shift && e.Alt)
@@ -782,6 +797,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			}
 
 			base.OnKeyDown(e);
+		}
+
+		private void skillGridMenuItemSkillChangeFinderClick(object sender, EventArgs e)
+		{
+			var result = new PersonsThatChangedPersonSkillsDuringPeriodFinder().Find(
+				SchedulerState.RequestedPeriod.DateOnlyPeriod, _scheduleView.AllSelectedPersons(_scheduleView.SelectedSchedules()));
+			using (var analyzer = new PersonsThatChangedPersonSkills(result))
+			{
+				analyzer.ShowDialog(this);
+			}
 		}
 
 		private void redoKeyDown()

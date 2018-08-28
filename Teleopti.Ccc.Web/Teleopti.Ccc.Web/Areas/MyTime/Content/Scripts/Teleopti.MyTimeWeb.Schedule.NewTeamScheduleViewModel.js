@@ -117,10 +117,13 @@
 		}
 	};
 
+	self.isPanelVisible.subscribe(function(value) {
+		self.showOnlyDayOff(self.filter.isDayOff);
+	});
+
 	self.cancelClick = function() {
 		self.searchNameText(self.filter.searchNameText);
 		self.selectedTeam(self.filter.selectedTeamIds[0]);
-		self.showOnlyDayOff(self.filter.isDayOff);
 		self.isPanelVisible(false);
 	};
 

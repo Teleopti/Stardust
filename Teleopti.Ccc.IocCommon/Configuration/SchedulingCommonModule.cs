@@ -462,16 +462,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<SkillPriorityProvider>().As<ISkillPriorityProvider>().SingleInstance();
 			}
-
-			// Analytics fact schedule updates
-			if (_configuration.Toggle(Toggles.ETL_SpeedUpFactScheduleNightly_38019))
-			{
-				builder.RegisterType<AnalyticsScheduleChangeForAllReportableScenariosFilter>().As<IAnalyticsScheduleChangeUpdaterFilter>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<AnalyticsScheduleChangeForDefaultScenarioFilter>().As<IAnalyticsScheduleChangeUpdaterFilter>().SingleInstance();
-			}
+			builder.RegisterType<AnalyticsScheduleChangeForAllReportableScenariosFilter>().As<IAnalyticsScheduleChangeUpdaterFilter>().SingleInstance();
 			builder.RegisterType<ThrowExceptionOnSkillMapError>().As<IAnalyticsPersonPeriodMapNotDefined>().SingleInstance();
 			builder.RegisterType<AssignScheduledLayers>().SingleInstance();
 			builder.RegisterType<ShiftProjectionCacheManager>().InstancePerLifetimeScope();

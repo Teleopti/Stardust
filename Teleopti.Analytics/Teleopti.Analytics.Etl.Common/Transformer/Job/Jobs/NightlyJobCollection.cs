@@ -13,7 +13,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new LicenseCheckJobStep(jobParameters));
 			// CLEANUP
 			Add(new DimPersonDeleteJobStep(jobParameters));     // BU independent
-			AddWhenAllDisabled(new DimPersonTrimJobStep(jobParameters), Toggles.ETL_FixScheduleForPersonPeriod_41393);     // BU independent
 			Add(new MaintenanceJobStep(jobParameters));     // BU independent
 
 			// STAGE TABLES
@@ -23,15 +22,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new RaptorQueueSynchronizationStep(jobParameters));
 			Add(new RaptorAgentLogOnSynchronizationStep(jobParameters));
 
-			AddWhenAllDisabled(new StagePersonJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
-			AddWhenAllDisabled(new StageAgentSkillJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
-
-			AddWhenAllDisabled(new StageScheduleJobStep(jobParameters), Toggles.ETL_SpeedUpFactScheduleNightly_38019);
-			AddWhenAllDisabled(new StageScheduleDayOffCountJobStep(jobParameters), Toggles.ETL_SpeedUpFactScheduleNightly_38019);
-
 			ChooseJobStepUsingToggle(new StageScheduleForecastSkillJobStepWithBpo(jobParameters), new StageScheduleForecastSkillJobStep(jobParameters), Toggles.ETL_UseBpoResources_75855);
-
-			AddWhenAnyDisabled(new StageSchedulePreferenceJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyPreference_38283, Toggles.ETL_SpeedUpFactScheduleNightly_38019);
 
 			Add(new StageKpiJobStep(jobParameters));
 			Add(new StageScorecardJobStep(jobParameters));
@@ -39,28 +30,13 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new StageKpiTargetTeamJobStep(jobParameters));
 			Add(new SqlServerUpdateStatistics(jobParameters));
 			Add(new DimScorecardJobStep(jobParameters));
-
-			AddWhenAllDisabled(new DimSiteJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
-			AddWhenAllDisabled(new DimTeamJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
-
-			AddWhenAllDisabled(new DimSkillSetJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
-			AddWhenAllDisabled(new DimPersonJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
-			AddWhenAllEnabled(new DimPersonUpdateMaxDateJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
-			AddWhenAllEnabled(new DimPersonWindowsLoginJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
-			AddWhenAllDisabled(new DimShiftLengthJobStep(jobParameters), Toggles.ETL_SpeedUpFactScheduleNightly_38019);
+			Add(new DimPersonUpdateMaxDateJobStep(jobParameters));
+			Add(new DimPersonWindowsLoginJobStep(jobParameters));
 
 			Add(new DimKpiJobStep(jobParameters));
 			Add(new ScorecardKpiJobStep(jobParameters));
 
-			AddWhenAllDisabled(new BridgeSkillSetSkillJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
-			AddWhenAllDisabled(new BridgeAcdLogOnPersonJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
-
 			// FACT TABLES
-			AddWhenAllDisabled(new FactScheduleJobStep(jobParameters), Toggles.ETL_SpeedUpFactScheduleNightly_38019);
-			AddWhenAllDisabled(new FactScheduleDayCountJobStep(jobParameters), Toggles.ETL_SpeedUpFactScheduleNightly_38019);
-
-			AddWhenAnyDisabled(new FactSchedulePreferenceJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyPreference_38283, Toggles.ETL_SpeedUpFactScheduleNightly_38019);
-
 			Add(new FactScheduleForecastSkillJobStep(jobParameters));
 			Add(new FactQueueJobStep(jobParameters));                   // BU independent
 			Add(new FactAgentJobStep(jobParameters));                   // BU independent
@@ -69,8 +45,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new FactQualityLoadJobStep(jobParameters));             // BU independent
 			Add(new FactScheduleDeviationJobStep(jobParameters));
 			Add(new FactKpiTargetTeamJobStep(jobParameters));
-
-			AddWhenAllDisabled(new FactAgentSkillJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
+			
 			// If PM is installed then show PM job steps
 			if (jobParameters.IsPmInstalled)
 			{

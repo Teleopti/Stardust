@@ -6,6 +6,7 @@ using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
+using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
 using Teleopti.Analytics.Etl.IntegrationTest.TestData;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
@@ -61,7 +62,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			BasicShiftSetup.AddPerson(out person, "Ola H", "", testDate);
 			BasicShiftSetup.AddThreeShifts("Ola H", cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity, testDate);
 			IPerson person2;
-			BasicShiftSetup.AddPerson(out person2, "David J", "", testDate);
+			BasicShiftSetup.AddPerson(out person2, "David J", "", testDate, 2);
 			BasicShiftSetup.AddThreeShifts("David J", cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity, testDate);
 			
 			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
@@ -76,7 +77,14 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				};
 
 			//transfer site, team contract etc from app to analytics
-			StepRunner.RunNightly(jobParameters);
+			var result = new List<Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult>();
+			JobStepBase step = new StageScheduleJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			step = new DimShiftLengthJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			step = new FactScheduleJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			
 
 			// now it should have data on all three dates on both persons 192 interval
 			var factSchedules = SqlCommands.RowsInFactSchedule();

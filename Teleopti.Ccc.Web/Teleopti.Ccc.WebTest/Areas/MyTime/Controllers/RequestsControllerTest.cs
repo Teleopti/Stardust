@@ -596,6 +596,34 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			data.MultiSchedulesForShiftTrade.First().PersonToSchedule.Should().Not.Be.Null();
 		}
 
+		[Test]
+		public void ShouldGetShortNameForIntradayAbsence()
+		{
+			var expactedShortName = "IA";
+			_now.Is(DateOnly.Today.Date);
+			var startDate = DateOnly.Today.AddDays(2);
+			var form = createDataWithIntradayAbsence(startDate, expactedShortName, Color.Blue);
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+
+			data.MultiSchedulesForShiftTrade.First().MySchedule.IntradayAbsenceCategory.ShortName.Should().Be.EqualTo(expactedShortName);
+		}
+
+		[Test]
+		public void ShouldGetColorForIntradayAbsence()
+		{
+			var expactedColor = ColorTranslator.ToHtml(Color.FromArgb(Color.Blue.ToArgb()));
+			_now.Is(DateOnly.Today.Date);
+			var startDate = DateOnly.Today.AddDays(2);
+			var form = createDataWithIntradayAbsence(startDate, "bla", Color.Blue);
+
+			var result = Target.ShiftTradeMultiDaysSchedule(form);
+			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
+
+			data.MultiSchedulesForShiftTrade.First().MySchedule.IntradayAbsenceCategory.Color.Should().Be.EqualTo(expactedColor);
+		}
+
 		private ShiftTradeMultiSchedulesForm prepareData(DateOnly startDate, DateOnly endDate, DateTime publishedDate, TimeZoneInfo timeZone = null)
 		{
 			var personTo = createPeopleWithAssignment(new DateOnlyPeriod(startDate, endDate), publishedDate, timeZone);
@@ -764,6 +792,31 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			ThreadPrincipalContext.SetCurrentPrincipal(principal);
 			setPermissions(DefinedRaptorApplicationFunctionPaths.ViewSchedules);
 			CurrentScenario.Current().SetId(scenarioId);
+		}
+
+		private ShiftTradeMultiSchedulesForm createDataWithIntradayAbsence(DateOnly date, string shortName, Color color)
+		{
+			var personFromId = Guid.NewGuid();
+			var personToId = Guid.NewGuid();
+			var scenarioId = Guid.NewGuid();
+			Database.WithMultiSchedulesForShiftTradeWorkflow(DateTime.Today.AddDays(10), new Skill("must"))
+				.WithPerson(personFromId)
+				.WithPeriod(DateOnly.MinValue.ToString())
+				.WithTerminalDate(DateOnly.MaxValue.ToString())
+				.WithScenario(scenarioId)
+				.WithSchedule(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString())
+				.WithPersonAbsence(date.Date.AddHours(8).ToString(), date.Date.AddHours(9).ToString(), shortName, color)
+				.WithPerson(personToId)
+				.WithSchedule(date.Date.AddHours(8).ToString(), date.Date.AddHours(17).ToString());
+
+			setPrincipal(personFromId, scenarioId);
+
+			return new ShiftTradeMultiSchedulesForm
+			{
+				StartDate = date,
+				EndDate = date,
+				PersonToId = personToId
+			};
 		}
 
 		private ShiftTradeMultiSchedulesForm createDataWithAbsence(DateOnly startDate, DateOnly endDate,

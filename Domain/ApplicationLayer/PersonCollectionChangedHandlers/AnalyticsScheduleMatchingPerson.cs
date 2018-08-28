@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.DistributedLock;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 
@@ -17,7 +16,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		}
 	}
 
-	[EnabledBy(Toggles.ETL_FixScheduleForPersonPeriod_41393)]
 	public class AnalyticsScheduleMatchingPerson : IHandleEvent<AnalyticsPersonPeriodRangeChangedEvent>, IRunOnHangfire
 	{
 		private readonly IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
