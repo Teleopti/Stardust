@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var outlierRemover = MockRepository.GenerateMock<IOutlierRemover>();
 			var forecastMethodProvider = MockRepository.GenerateMock<IForecastMethodProvider>();
 			var method = MockRepository.GenerateMock<IForecastMethod>();
-			method.Stub(x => x.Forecast(null, new DateOnlyPeriod())).IgnoreArguments().Return(new ForecastMethodResult());
+			method.Stub(x => x.Forecast(null, new DateOnlyPeriod())).IgnoreArguments().Return(new List<IForecastingTarget>());
 			forecastMethodProvider.Stub(x => x.Get(quickForecasterWorkloadParams.ForecastMethodId)).Return(method);
 			var historicalData = MockRepository.GenerateMock<IHistoricalData>();
 			var dateOnly = new DateOnly(2015, 1, 1);

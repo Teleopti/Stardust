@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 			_ahtAndAcwCalculator = ahtAndAcwCalculator;
 		}
 
-		public override ForecastMethodResult Forecast(ITaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod)
+		public override IList<IForecastingTarget> Forecast(ITaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod)
 		{
 			var dateAndTaskList = ForecastNumberOfTasks(historicalData, futurePeriod);
 			var ahtAndAcw = _ahtAndAcwCalculator.Recent3MonthsAverage(historicalData);
@@ -26,10 +27,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 					AverageTaskTime = ahtAndAcw.Aht,
 					AverageAfterTaskTime = ahtAndAcw.Acw
 				}).ToList<IForecastingTarget>();
-			return new ForecastMethodResult
-			{
-				ForecastingTargets = targetForecastingList
-			};
+			return targetForecastingList;
 		}
 	}
 }
