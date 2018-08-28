@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakePersonAssignmentRepository : IPersonAssignmentRepository
+	public class FakePersonAssignmentRepository : IPersonAssignmentRepository, IFindPersonAssignment
 	{
 		private readonly IFakeStorage _storage;
 
@@ -132,6 +134,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			{
 				_storage.Remove(personAssignment);
 			}
+		}
+
+		async Task<IEnumerable<IPersonAssignment>> IFindPersonAssignment.Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
+		{
+			return await Task.FromResult(Find(persons, period, scenario));
 		}
 	}
 }

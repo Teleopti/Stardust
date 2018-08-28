@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakeMultisiteDayRepository>().For<IMultisiteDayRepository>();
 				isolate.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
 				isolate.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
-				isolate.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
+				isolate.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository, IFindPersonAssignment>();
 				isolate.UseTestDouble<FakeSkillDayRepository>().For<ISkillDayRepository>();
 				isolate.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
 				isolate.UseTestDouble<FakeGroupPageRepository>().For<IGroupPageRepository>();
