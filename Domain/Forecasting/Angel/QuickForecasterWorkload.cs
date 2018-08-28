@@ -59,12 +59,12 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 				};
 			}
 			var historicalDataNoOutliers = _outlierRemover.RemoveOutliers(historicalData, forecastMethod);
-			var forecast = forecastMethod.Forecast(historicalDataNoOutliers, quickForecasterWorkloadParams.FuturePeriod);
+			var forecastResult = forecastMethod.Forecast(historicalDataNoOutliers, quickForecasterWorkloadParams.FuturePeriod);
 			var workloadDays = _futureData.Fetch(quickForecasterWorkloadParams.WorkLoad, quickForecasterWorkloadParams.SkillDays,
 				quickForecasterWorkloadParams.FuturePeriod);
 			var overrideDays = _forecastDayOverrideRepository.FindRange(quickForecasterWorkloadParams.FuturePeriod,
 				quickForecasterWorkloadParams.WorkLoad, quickForecasterWorkloadParams.Scenario).ToDictionary(k => k.Date);
-			var forecastDays = createForecastViewModel(forecast, workloadDays, overrideDays);
+			var forecastDays = createForecastViewModel(forecastResult, workloadDays, overrideDays);
 			return new ForecastModel
 			{
 				WorkloadId = quickForecasterWorkloadParams.WorkLoad.Id.Value,
@@ -73,16 +73,16 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			};
 		}
 
-		private List<ForecastDayModel> createForecastViewModel(ForecastMethodResult forecast,
+		private List<ForecastDayModel> createForecastViewModel(IList<IForecastingTarget> forecastTargets,
 			IEnumerable<IWorkloadDayBase> workloadDays, Dictionary<DateOnly, IForecastDayOverride> overrideDays)
 		{
 			var forecastResult = new List<ForecastDayModel>();
-			if (forecast.ForecastingTargets == null)
+			if (forecastTargets == null)
 				return forecastResult;
 			var workloadDayForDate = workloadDays
 				.ToDictionary(w => w.CurrentDate);
 
-			foreach (var target in forecast.ForecastingTargets)
+			foreach (var target in forecastTargets)
 			{
 				overrideDays.TryGetValue(target.CurrentDate, out var overrideDay);
 				var currentWorkLoadDay = workloadDayForDate[target.CurrentDate];

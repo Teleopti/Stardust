@@ -40,8 +40,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Methods
 			var target = new TeleoptiClassicUpdatedBaseFake(indexVolumes, simpleAhtAndAcwCalculator);
 
 			var result = target.Forecast(historicalData, new DateOnlyPeriod(new DateOnly(2014, 1, 1), new DateOnly(2014, 1, 1)));
-			result.ForecastingTargets.Single().AverageAfterTaskTime.Should().Be.EqualTo(acw);
-			result.ForecastingTargets.Single().AverageTaskTime.Should().Be.EqualTo(aht);
+			result.Single().AverageAfterTaskTime.Should().Be.EqualTo(acw);
+			result.Single().AverageTaskTime.Should().Be.EqualTo(aht);
 		}
 	}
 }

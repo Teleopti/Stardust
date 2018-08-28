@@ -53,9 +53,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Authentication
 			if (text.ToLower() == "defaultpassword")
 			{
 				text = DefaultPassword.ThePassword;
-			} 
-			Browser.Interactions.AssertExists("[" +  selector + "]");
-			Browser.Interactions.FillWith("[" +  selector + "]", text);
+			}
+			Browser.Interactions.AssertExists("[" + selector + "]");
+			Browser.Interactions.FillWith("[" + selector + "]", text);
 		}
 
 		[When("I click Ok")]
@@ -69,10 +69,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Authentication
 		public void ThePasswordModalShouldClose()
 		{
 			Browser.Interactions.AssertJavascriptResultContains(@"
-				return document.querySelector('[data-test-change-password-modal]')
-					.getAttribute('ng-reflect-nz-visible')
-				", "false");
+				return document.querySelector('[data-test-change-password-modal] .ant-modal-wrap')
+					.getAttribute('style').includes('display')
+				", "True");
 		}
-		
+
 	}
 }

@@ -10,7 +10,6 @@ Background:
 
 
 @OnlyRunIfEnabled('Wfm_Authentication_ChangePasswordMenu_76666')
-@ignore
 Scenario: Password changes when changing password
 	Given I navigate to change your password
 	And I enter 'defaultPassword' in 'data-test-input-current-password'

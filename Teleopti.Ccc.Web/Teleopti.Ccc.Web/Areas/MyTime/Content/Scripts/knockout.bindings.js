@@ -218,50 +218,84 @@ ko.bindingHandlers.outsideClickCallback = {
 	}
 };
 
-ko.bindingHandlers.adjustTooltipPositionOnMobileTeamSchedule = {
+ko.bindingHandlers.adjustMyActivityTooltipPositionInTeamSchedule = {
 	init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
-		$(element).click(function(event) {
-			var tooltipEle = $(this)
-				.siblings()
-				.filter('.tooltip.in')[0];
+		if (valueAccessor()) {
+			$(element).click(function(event) {
+				var tooltipEle = $(this)
+					.siblings()
+					.filter('.tooltip.in')[0];
 
-			if (!tooltipEle) return;
+				if (!tooltipEle) return;
 
-			$(tooltipEle).css({ 'margin-left': '0px' });
+				$(tooltipEle).css({ 'margin-left': '0px' });
 
-			var offsetLeft = $(tooltipEle).offset().left;
+				var leftSideMarginValue = $(tooltipEle).offset().left - $('.new-teamschedule-table').offset().left;
+				if (leftSideMarginValue < 0) {
+					$(tooltipEle).css({ 'margin-left': Math.abs(leftSideMarginValue) + 'px' });
 
-			var leftSideMarginValue =
-				offsetLeft - ($('.my-schedule-column').offset().left + $('.my-schedule-column').outerWidth());
-			var rightSideMarginValue = tooltipEle.clientWidth + offsetLeft - $(window).width();
+					var arrowMarginValue =
+						Math.abs(leftSideMarginValue) <= tooltipEle.clientWidth / 2 - 5
+							? Math.abs(leftSideMarginValue)
+							: tooltipEle.clientWidth / 2 - 5;
 
-			if (leftSideMarginValue < 0) {
-				$(tooltipEle).css({ 'margin-left': Math.abs(leftSideMarginValue) + 'px' });
+					$(tooltipEle)
+						.find('.tooltip-arrow')
+						.css({
+							left: 'calc(50% - ' + arrowMarginValue + 'px)'
+						});
+				}
+			});
+		}
+	}
+};
 
-				var arrowMarginValue =
-					Math.abs(leftSideMarginValue) <= tooltipEle.clientWidth / 2 - 5
-						? Math.abs(leftSideMarginValue)
-						: tooltipEle.clientWidth / 2 - 5;
+ko.bindingHandlers.adjustAgentActivityTooltipPositionInTeamSchedule = {
+	init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+		if (valueAccessor()) {
+			$(element).click(function(event) {
+				var tooltipEle = $(this)
+					.siblings()
+					.filter('.tooltip.in')[0];
 
-				$(tooltipEle)
-					.find('.tooltip-arrow')
-					.css({
-						left: 'calc(50% - ' + arrowMarginValue + 'px)'
-					});
-			} else if (rightSideMarginValue > 0) {
-				$(tooltipEle).css({ 'margin-left': -rightSideMarginValue + 'px' });
+				if (!tooltipEle) return;
 
-				var arrowMarginValue =
-					rightSideMarginValue <= tooltipEle.clientWidth / 2 - 5
-						? rightSideMarginValue
-						: tooltipEle.clientWidth / 2 - 5;
+				$(tooltipEle).css({ 'margin-left': '0px' });
 
-				$(tooltipEle)
-					.find('.tooltip-arrow')
-					.css({
-						left: 'calc(50% + ' + arrowMarginValue + 'px)'
-					});
-			}
-		});
+				var offsetLeft = $(tooltipEle).offset().left;
+
+				var leftSideMarginValue =
+					offsetLeft - ($('.my-schedule-column').offset().left + $('.my-schedule-column').outerWidth());
+				var rightSideMarginValue = tooltipEle.clientWidth + offsetLeft - $(window).width();
+
+				if (leftSideMarginValue < 0) {
+					$(tooltipEle).css({ 'margin-left': Math.abs(leftSideMarginValue) + 'px' });
+
+					var arrowMarginValue =
+						Math.abs(leftSideMarginValue) <= tooltipEle.clientWidth / 2 - 5
+							? Math.abs(leftSideMarginValue)
+							: tooltipEle.clientWidth / 2 - 5;
+
+					$(tooltipEle)
+						.find('.tooltip-arrow')
+						.css({
+							left: 'calc(50% - ' + arrowMarginValue + 'px)'
+						});
+				} else if (rightSideMarginValue > 0) {
+					$(tooltipEle).css({ 'margin-left': -rightSideMarginValue + 'px' });
+
+					var arrowMarginValue =
+						rightSideMarginValue <= tooltipEle.clientWidth / 2 - 5
+							? rightSideMarginValue
+							: tooltipEle.clientWidth / 2 - 5;
+
+					$(tooltipEle)
+						.find('.tooltip-arrow')
+						.css({
+							left: 'calc(50% + ' + arrowMarginValue + 'px)'
+						});
+				}
+			});
+		}
 	}
 };
