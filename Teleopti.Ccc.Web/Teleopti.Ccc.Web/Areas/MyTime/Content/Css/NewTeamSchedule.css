@@ -639,6 +639,11 @@ div.new-teamschedule-no-result-indicator {
 	font-size: 14px;
 	min-width: 26px;
 }
+.start-time-clear-button,
+.end-time-clear-button {
+	padding: 2px 5px;
+	color: gray;
+}
 .new-teamschedule-view .empty-search-result label {
 	margin: 0;
 	color: #ffa500;
@@ -756,8 +761,6 @@ div.new-teamschedule-no-result-indicator {
 	height: 60px;
 }
 .new-teamschedule-view-mobile .new-teamschedule-time-slider-container > label {
-	display: block;
-	width: 100%;
 	text-align: left;
 }
 .new-teamschedule-view-mobile .new-teamschedule-time-slider-line {

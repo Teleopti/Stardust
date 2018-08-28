@@ -231,20 +231,40 @@
 			<!--/ko-->
 			<div class="new-teamschedule-time-slider-container">
 				<label>@Resources.StartTime:</label>
+				<!-- ko if: isHostAMobile-->
+				<span class="start-time-clear-button cursorpointer">
+					<i class="glyphicon glyphicon-remove"></i>
+				</span>
+				<!--/ko-->
 				<div class="new-teamschedule-time-slider-line relative">
 					<span class="start-time-slider-start-label" data-bind="text: startTimeStart, visible: showStartTimeStart"></span>
 					<span class="start-time-slider-end-label" data-bind="text: startTimeEnd"></span>
 					<div class="start-time-slider"></div>
 				</div>
+				<!-- ko ifnot: isHostAMobile-->
+				<span class="start-time-clear-button cursorpointer">
+					<i class="glyphicon glyphicon-remove"></i>
+				</span>
+				<!--/ko-->
 			</div>
 
 			<div class="new-teamschedule-time-slider-container">
 				<label>@Resources.EndTime:</label>
+				<!-- ko if: isHostAMobile-->
+				<span class="end-time-clear-button cursorpointer">
+					<i class="glyphicon glyphicon-remove"></i>
+				</span>
+				<!--/ko-->
 				<div class="new-teamschedule-time-slider-line relative">
 					<span class="end-time-slider-start-label" data-bind="text: endTimeStart, visible: showEndTimeStart"></span>
 					<span class="end-time-slider-end-label" data-bind="text: endTimeEnd"></span>
 					<div class="end-time-slider"></div>
 				</div>
+				<!-- ko ifnot: isHostAMobile-->
+				<span class="end-time-clear-button cursorpointer">
+					<i class="glyphicon glyphicon-remove"></i>
+				</span>
+				<!--/ko-->
 			</div>
 			<!-- ko if: isHostAMobile-->
 			<div class="new-teamschedule-day-off-toggle">

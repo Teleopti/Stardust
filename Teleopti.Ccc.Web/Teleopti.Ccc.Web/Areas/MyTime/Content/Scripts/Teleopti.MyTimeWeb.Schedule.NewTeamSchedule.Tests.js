@@ -1063,6 +1063,26 @@
 		equal(ajaxOption.ScheduleFilter.filteredStartTimes === '', true);
 	});
 
+	test('should reset start time filter after clicking start time cross icon', function() {
+		$('body').append(agentSchedulesHtml);
+
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+		$('.new-teamschedule-time-filter').click();
+
+		$('.start-time-slider').slider('values', [60, 120]);
+		vm.startTimeStart('01:00');
+		vm.startTimeEnd('02:00');
+		$('.start-time-clear-button').click();
+		$('.new-teamschedule-submit-buttons button.btn-primary').click();
+
+		equal(completeLoadedCount, 2);
+		equal(vm.startTimeStart(), '00:00');
+		equal(vm.startTimeEnd(), '00:00');
+		equal(ajaxOption.ScheduleFilter.filteredStartTimes === '', true);
+	});
+
 	test('should filter agents using end time slider', function() {
 		$('body').append(agentSchedulesHtml);
 
@@ -1099,6 +1119,26 @@
 
 		equal(completeLoadedCount, 2);
 		equal(ajaxOption.ScheduleFilter.filteredStartTimes === '', true);
+	});
+
+	test('should reset end time filter after clicking end time cross icon', function() {
+		$('body').append(agentSchedulesHtml);
+
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+		$('.new-teamschedule-time-filter').click();
+
+		$('.end-time-slider').slider('values', [60, 120]);
+		vm.endTimeStart('01:00');
+		vm.endTimeEnd('02:00');
+		$('.end-time-clear-button').click();
+		$('.new-teamschedule-submit-buttons button.btn-primary').click();
+
+		equal(completeLoadedCount, 2);
+		equal(vm.endTimeStart(), '00:00');
+		equal(vm.endTimeEnd(), '00:00');
+		equal(ajaxOption.ScheduleFilter.filteredEndTimes === '', true);
 	});
 
 	test('should filter agents using both start and end time slider', function() {
@@ -1685,6 +1725,9 @@
 			'				</span>',
 			'				<!-- /ko -->',
 			'			</div>',
+			'			<!-- ko if: isAgentScheduleLoaded() && teamSchedules().length == 0 -->',
+			'			<div class="new-teamschedule-no-result-indicator">@Resources.NoResultForCurrentFilter</div>',
+			'			<!-- /ko -->',
 			'		</div>',
 			'		<div class="new-teamschedule-table relative container">',
 			'			<div class="mobile-timeline" data-bind="style: {height: scheduleContainerHeight() + \'px\'}">',
@@ -1760,9 +1803,6 @@
 			'				</div>',
 			'				<!-- /ko -->',
 			'			</div>',
-			'			<!-- ko if: isAgentScheduleLoaded() && teamSchedules().length == 0 -->',
-			'			<div class="new-teamschedule-no-result-indicator">@Resources.NoResultForCurrentFilter</div>',
-			'			<!-- /ko -->',
 			'			<!-- /ko -->',
 			'		</div>',
 			'		<div class="teamschedule-scroll-block-container" data-bind="style: {border: isScrollbarVisible() ? \'1px dashed rgba(0, 0, 0, 0.1)\' : \'none\'}">',
@@ -1794,20 +1834,40 @@
 			'			</form>',
 			'			<!--/ko-->',
 			'			<div class="new-teamschedule-time-slider-container">',
-			'				<label>@Resources.StartTime</label>',
+			'				<label>@Resources.StartTime:</label>',
+			'				<!-- ko if: isHostAMobile-->',
+			'				<span class="start-time-clear-button cursorpointer">',
+			'					<i class="glyphicon glyphicon-remove"></i>',
+			'				</span>',
+			'				<!--/ko-->',
 			'				<div class="new-teamschedule-time-slider-line relative">',
 			'					<span class="start-time-slider-start-label" data-bind="text: startTimeStart, visible: showStartTimeStart"></span>',
 			'					<span class="start-time-slider-end-label" data-bind="text: startTimeEnd"></span>',
 			'					<div class="start-time-slider"></div>',
 			'				</div>',
+			'				<!-- ko ifnot: isHostAMobile-->',
+			'				<span class="start-time-clear-button cursorpointer">',
+			'					<i class="glyphicon glyphicon-remove"></i>',
+			'				</span>',
+			'				<!--/ko-->',
 			'			</div>',
 			'			<div class="new-teamschedule-time-slider-container">',
-			'				<label>@Resources.EndTime</label>',
+			'				<label>@Resources.EndTime:</label>',
+			'				<!-- ko if: isHostAMobile-->',
+			'				<span class="end-time-clear-button cursorpointer">',
+			'					<i class="glyphicon glyphicon-remove"></i>',
+			'				</span>',
+			'				<!--/ko-->',
 			'				<div class="new-teamschedule-time-slider-line relative">',
 			'					<span class="end-time-slider-start-label" data-bind="text: endTimeStart, visible: showEndTimeStart"></span>',
 			'					<span class="end-time-slider-end-label" data-bind="text: endTimeEnd"></span>',
 			'					<div class="end-time-slider"></div>',
 			'				</div>',
+			'				<!-- ko ifnot: isHostAMobile-->',
+			'				<span class="end-time-clear-button cursorpointer">',
+			'					<i class="glyphicon glyphicon-remove"></i>',
+			'				</span>',
+			'				<!--/ko-->',
 			'			</div>',
 			'			<!-- ko if: isHostAMobile-->',
 			'			<div class="new-teamschedule-day-off-toggle">',
