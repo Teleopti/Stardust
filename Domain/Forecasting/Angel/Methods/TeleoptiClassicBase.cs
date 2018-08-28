@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 			_indexVolumes = indexVolumes;
 		}
 
-		public virtual ForecastMethodResult Forecast(ITaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod)
+		public virtual IList<IForecastingTarget> Forecast(ITaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod)
 		{
 			var averageTasks = historicalData.TaskOwnerDayCollection.Count > 0
 				? historicalData.TotalStatisticCalculatedTasks / historicalData.TaskOwnerDayCollection.Count
@@ -52,10 +52,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 				targetForecastingList.Add(forecastingTarget);
 			}
 
-			return new ForecastMethodResult
-			{
-				ForecastingTargets = targetForecastingList
-			};
+			return targetForecastingList;
 		}
 
 		public abstract ForecastMethodType Id { get; }

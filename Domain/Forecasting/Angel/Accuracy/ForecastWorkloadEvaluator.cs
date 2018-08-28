@@ -51,8 +51,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 
 				methodsEvaluationResult.Add(new MethodAccuracy
 				{
-					MeasureResult = forecastResult.ForecastingTargets.ToArray(),
-					Number = _forecastAccuracyCalculator.Accuracy(forecastResult.ForecastingTargets, secondPeriodData.TaskOwnerDayCollection),
+					MeasureResult = forecastResult.ToArray(),
+					Number = _forecastAccuracyCalculator.Accuracy(forecastResult, secondPeriodData.TaskOwnerDayCollection),
 					MethodId = forecastMethod.Id,
 					PeriodEvaluateOn = twoPeriods.Item2,
 					PeriodUsedToEvaluate = twoPeriods.Item1
