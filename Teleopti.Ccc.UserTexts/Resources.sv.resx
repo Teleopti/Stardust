@@ -15769,12 +15769,6 @@ Applikationen kommer nu att stängas. </value>
   <data name="OriginalEmails" xml:space="preserve">
     <value>Ursprunglig e-post</value>
   </data>
-  <data name="CampaignEmailsPercentSign" xml:space="preserve">
-    <value>E-postkampanj %</value>
-  </data>
-  <data name="CampaignTasksPercentSign" xml:space="preserve">
-    <value>Uppgiftskampanj %</value>
-  </data>
   <data name="BadgeThreshold" xml:space="preserve">
     <value>Tröskelvärde för medaljer</value>
   </data>
@@ -15786,5 +15780,11 @@ Applikationen kommer nu att stängas. </value>
   </data>
   <data name="SilverBadgeThreshold" xml:space="preserve">
     <value>Tröskelvärde för silver</value>
+  </data>
+  <data name="TimeInSecond" xml:space="preserve">
+    <value>Tid (s)</value>
+  </data>
+  <data name="PasswordChangedSuccessfully" xml:space="preserve">
+    <value>Ditt lösenord har ändrats</value>
   </data>
 </root>
