@@ -966,6 +966,29 @@
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
 	});
 
+	test('should restore show only day off toggle state after clicking filter icon on mobile', function() {
+		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
+			return true;
+		};
+		$('body').append(agentSchedulesHtml);
+
+		if (fakeOriginalAgentSchedulesData.length > 0) {
+			fakeOriginalAgentSchedulesData[0].IsDayOff = true;
+		}
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+
+		$('.new-teamschedule-team-filter a').click();
+		$('.new-teamschedule-day-off-toggle input').click();
+		$('.new-teamschedule-team-filter a').click();
+
+		equal(completeLoadedCount, 1);
+		equal(vm.showOnlyDayOff(), false);
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
+	});
+
 	test("should not filter agents' day off immediately after turn on show only day off toggle but widthout clicking search on mobile", function() {
 		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {

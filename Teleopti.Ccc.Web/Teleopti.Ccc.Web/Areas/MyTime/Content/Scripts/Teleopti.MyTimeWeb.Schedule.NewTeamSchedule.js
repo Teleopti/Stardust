@@ -82,8 +82,10 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 				});
 			} else {
 				vm.isPanelVisible(!vm.isPanelVisible());
+
 				setDraggableTimeSlider();
 			}
+
 			e.preventDefault();
 			e.stopPropagation();
 		});
