@@ -3,6 +3,12 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 {
+	public class IntradayAbsenceCategoryViewModel
+	{
+		public string ShortName { get; set; }
+		public string Color { get; set; }
+	}
+
 	public class ShiftTradeAddPersonScheduleViewModel : AgentInTeamScheduleViewModel
 	{
 		public Guid? ShiftExchangeOfferId { get; set; }
@@ -25,5 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		}
 
 		public bool IsIntradayAbsence { get; set; }
+
+		public IntradayAbsenceCategoryViewModel IntradayAbsenceCategory{ get; set; }
 	}
 }
