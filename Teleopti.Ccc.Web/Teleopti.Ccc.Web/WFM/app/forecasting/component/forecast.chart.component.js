@@ -115,6 +115,8 @@ function ForecastChartCtrl($translate, $filter, $timeout, SkillTypeService) {
 					AverageAfterTaskTime: dataName.ATW + '→',
 					AverageTaskTime: dataName.TaskTime + '→',
 					TotalAverageAfterTaskTime: dataName.TotalATW + '→',
+					Override: $translate.instant('Override'),
+					Campaign: $translate.instant('Campaign')
 				},
 				hide: ['Tasks', 'AverageTaskTime', 'AverageAfterTaskTime'],
 				selection: {
@@ -154,6 +156,9 @@ function ForecastChartCtrl($translate, $filter, $timeout, SkillTypeService) {
 			tooltip: {
 				format: {
 					value: d3.format('.1f')
+				},
+				order: function (t1, t2) {
+					return t1.id < t2.id;
 				}
 			},
 			axis: {
