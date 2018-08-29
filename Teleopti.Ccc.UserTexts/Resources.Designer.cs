@@ -4269,7 +4269,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You got a new bronze badge! Your adherence in {1:yyyy-MM-dd} is above {0}..
+        ///   Looks up a localized string similar to You got a new bronze badge! Your ready time adherence in {1:yyyy-MM-dd} is above {0}..
         /// </summary>
         public static string BadgeWithRank_YouGotANewBronzeBadgeForAdherence {
             get {
@@ -4296,7 +4296,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You got a new gold badge! Your adherence in {1:yyyy-MM-dd} is above {0}..
+        ///   Looks up a localized string similar to You got a new gold badge! Your ready time adherence in {1:yyyy-MM-dd} is above {0}..
         /// </summary>
         public static string BadgeWithRank_YouGotANewGoldBadgeForAdherence {
             get {
@@ -4323,7 +4323,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You got a new silver badge! Your adherence in {1:yyyy-MM-dd} is above {0}..
+        ///   Looks up a localized string similar to You got a new silver badge! Your ready time adherence in {1:yyyy-MM-dd} is above {0}..
         /// </summary>
         public static string BadgeWithRank_YouGotANewSilverBadgeForAdherence {
             get {
@@ -39931,7 +39931,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You got a new bronze badge! Your adherence in {1:yyyy-MM-dd} is above {0}..
+        ///   Looks up a localized string similar to You got a new bronze badge! Your ready time adherence in {1:yyyy-MM-dd} is above {0}..
         /// </summary>
         public static string YouGotANewBronzeBadgeForAdherence {
             get {
@@ -39967,7 +39967,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You got a new gold badge! Your adherence is above {0} on {1} different days..
+        ///   Looks up a localized string similar to You got a new gold badge! Your ready time adherence is above {0} on {1} different days..
         /// </summary>
         public static string YouGotANewGoldBadgeForAdherence {
             get {
@@ -40003,7 +40003,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You got a new silver badge! Your adherence is above {0} on {1} different days..
+        ///   Looks up a localized string similar to You got a new silver badge! Your ready time adherence is above {0} on {1} different days..
         /// </summary>
         public static string YouGotANewSilverBadgeForAdherence {
             get {

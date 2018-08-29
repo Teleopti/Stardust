@@ -80,7 +80,7 @@
 					data.AdherenceBadgeEnabled,
 					null,
 					null,
-					'Adherence',
+					'ReadyTimeAdherence',
 					1,
 					true,
 					floatMul(data.AdherenceThreshold.Value),
@@ -347,7 +347,7 @@
 					});
 					break;
 
-				case 'Adherence':
+				case 'ReadyTimeAdherence':
 					promise = dataService.saveData('UseBadgeForAdherence', {
 						GamificationSettingId: ctrl.id,
 						Value: enable
@@ -417,7 +417,7 @@
 
 					break;
 
-				case 'Adherence':
+				case 'ReadyTimeAdherence':
 					dataService.saveData('AdherenceThreshold', {
 						GamificationSettingId: ctrl.id,
 						Value: floatDiv(this.badgeThreshold)
@@ -483,7 +483,7 @@
 					});
 					break;
 
-				case 'Adherence':
+				case 'ReadyTimeAdherence':
 					dataService.saveData('AdherenceBronzeThreshold', {
 						GamificationSettingId: ctrl.id,
 						Value: floatDiv(this.bronzeBadgeThreshold)
@@ -550,7 +550,7 @@
 					});
 					break;
 
-				case 'Adherence':
+				case 'ReadyTimeAdherence':
 					dataService.saveData('AdherenceSilverThreshold', {
 						GamificationSettingId: ctrl.id,
 						Value: floatDiv(this.silverBadgeThreshold)
@@ -617,7 +617,7 @@
 					});
 					break;
 
-				case 'Adherence':
+				case 'ReadyTimeAdherence':
 					dataService.saveData('AdherenceGoldThreshold', {
 						GamificationSettingId: ctrl.id,
 						Value: floatDiv(this.goldBadgeThreshold)
