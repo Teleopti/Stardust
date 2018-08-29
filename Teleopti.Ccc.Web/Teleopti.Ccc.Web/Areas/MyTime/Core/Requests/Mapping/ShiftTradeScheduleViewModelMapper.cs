@@ -2,15 +2,12 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -163,6 +160,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var possibleTradeSchedule = getBulletinSchedules(filteredShiftExchangeOffers, data.Paging);
 
 			return getShiftTradeScheduleViewModel(data.Paging, myScheduleViewModel, possibleTradeSchedule, data.ShiftTradeDate);
+		}
+
+		public ShiftTradeToleranceInfoViewModel GetToleranceInfo(Guid personToId)
+		{
+			return new ShiftTradeToleranceInfoViewModel
+			{
+				IsNeedToCheck = _selectableChecker.IsNeedCheckTolerance(),
+				MyToleranceMinutes = _loggedOnUser.CurrentUser().WorkflowControlSet.ShiftTradeTargetTimeFlexibility.Minutes,
+				PersonToToleranceMInutes = _personRepository.Get(personToId).WorkflowControlSet.ShiftTradeTargetTimeFlexibility.Minutes
+			};
 		}
 
 		public ShiftTradeMultiSchedulesViewModel GetMeAndPersonToSchedules(DateOnlyPeriod period, Guid personToId)

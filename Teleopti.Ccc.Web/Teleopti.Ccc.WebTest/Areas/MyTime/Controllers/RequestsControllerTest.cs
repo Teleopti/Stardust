@@ -24,6 +24,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -622,6 +623,52 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var data = (result as JsonResult)?.Data as ShiftTradeMultiSchedulesViewModel;
 
 			data.MultiSchedulesForShiftTrade.First().MySchedule.IntradayAbsenceCategory.Color.Should().Be.EqualTo(expactedColor);
+		}
+
+		[Test]
+		public void ShouldNotCheckToleranceWhenSettingIsFalse()
+		{
+			setGlobaleSetting(typeof(ShiftTradeTargetTimeSpecification).FullName, false, RequestHandleOption.AutoDeny);
+			_now.Is(DateOnly.Today.Date);
+			var startDate = DateOnly.Today.AddDays(1);
+			var form = createShiftWithDifferentWFC(startDate);
+
+			var result = Target.GetWFCTolerance(form.PersonToId);
+			var data = (result as JsonResult)?.Data as ShiftTradeToleranceInfoViewModel;
+
+			data.IsNeedToCheck.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldNotCheckToleranceWhenSettingIsSendToAdmin()
+		{
+			setGlobaleSetting(typeof(ShiftTradeTargetTimeSpecification).FullName, true, RequestHandleOption.Pending);
+			_now.Is(DateOnly.Today.Date);
+			var startDate = DateOnly.Today.AddDays(1);
+			var form = createShiftWithDifferentWFC(startDate);
+
+			var result = Target.GetWFCTolerance(form.PersonToId);
+			var data = (result as JsonResult)?.Data as ShiftTradeToleranceInfoViewModel;
+
+			data.IsNeedToCheck.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldCheckToleranceWhenSettingIsDeny()
+		{
+			setGlobaleSetting(typeof(ShiftTradeTargetTimeSpecification).FullName, true, RequestHandleOption.AutoDeny);
+			_now.Is(DateOnly.Today.Date);
+			var startDate = DateOnly.Today.AddDays(1);
+			var form = createShiftWithDifferentWFC(startDate);
+			LoggedOnUser.CurrentUser().WorkflowControlSet.ShiftTradeTargetTimeFlexibility = new TimeSpan(0, 20, 0);
+			PersonRepository.Get(form.PersonToId).WorkflowControlSet.ShiftTradeTargetTimeFlexibility = new TimeSpan(0, 30, 0);
+
+			var result = Target.GetWFCTolerance(form.PersonToId);
+			var data = (result as JsonResult)?.Data as ShiftTradeToleranceInfoViewModel;
+
+			data.IsNeedToCheck.Should().Be.True();
+			data.MyToleranceMinutes.Should().Be.EqualTo(20);
+			data.PersonToToleranceMInutes.Should().Be.EqualTo(30);
 		}
 
 		private ShiftTradeMultiSchedulesForm prepareData(DateOnly startDate, DateOnly endDate, DateTime publishedDate, TimeZoneInfo timeZone = null)

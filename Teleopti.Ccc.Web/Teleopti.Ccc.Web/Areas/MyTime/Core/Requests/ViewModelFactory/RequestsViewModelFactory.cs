@@ -159,6 +159,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			return allSchedules;
 		}
 
+		public ShiftTradeToleranceInfoViewModel CreateShiftTradeToleranceViewModel(Guid personToId)
+		{
+			return _shiftTradeScheduleViewModelMapper.GetToleranceInfo(personToId);
+		}
+
 		private DateOnlyPeriod? fixPeriod(DateOnlyPeriod periodInput)
 		{
 			var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();

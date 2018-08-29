@@ -19,6 +19,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public IEnumerable<ShiftTradeMultiScheduleViewModel> MultiSchedulesForShiftTrade { get; set; }
 	}
 
+	public class ShiftTradeToleranceInfoViewModel
+	{
+		public bool IsNeedToCheck { get; set; }
+		public int MyToleranceMinutes { get; set; }
+		public int PersonToToleranceMInutes { get; set; }
+	}
+
 	public class ShiftTradeMultiScheduleViewModel
 	{
 		public DateTime Date { get; set; }
