@@ -116,7 +116,7 @@
 		};
 
 		vm.isNotAllowedToChange = function (shiftLayer) {
-			return !!shiftLayer.IsNew? false : !shiftLayer.ShiftLayerIds || !shiftLayer.ShiftLayerIds.length;
+			return !!shiftLayer.IsNew ? false : !shiftLayer.ShiftLayerIds || !shiftLayer.ShiftLayerIds.length;
 		};
 
 		vm.toggleSelection = function (shiftLayer, $event) {
@@ -209,7 +209,7 @@
 
 						$scope.$apply();
 					})
-				.on('resizeend', function (event) {
+					.on('resizeend', function (event) {
 
 						var mergedShiftLayer = vm.getMergedShiftLayer(shiftLayer);
 						var translateX = round5(mergedShiftLayer.TranslateX);
@@ -217,15 +217,138 @@
 
 						if (shiftLayer.isChangingStart) {
 							var startTime = timeLineTimeRange.Start.clone().add(startMinutes, 'minutes');
-							redrawPreviousLayers(shiftLayer, startTime);
+							redrawLayers(shiftLayer, startTime, true);
 						} else {
 							var width = round5(mergedShiftLayer.Width);
 							var endTime = timeLineTimeRange.Start.clone().add(startMinutes + width, 'minutes');
-							redrawNextLayers(shiftLayer, endTime);
+							redrawLayers(shiftLayer, endTime, false);
 						}
 
 						doNotToggleSelectionAfterResizeEnd = true;
+						$scope.$apply();
 					});
+		}
+
+	
+
+		function redrawLayers(selectedShiftLayer, dateTimeInTimezone, isChangingStart) {
+			var mergedSelectedShiftLayer = vm.getMergedShiftLayer(selectedShiftLayer);
+			var dateTime = serviceDateFormatHelper.getDateTime(dateTimeInTimezone);
+
+			var timeField = isChangingStart ? 'Start' : 'End';
+			var timeReverseField = isChangingStart ? 'End' : 'Start';
+			var coverCompletelyMethod = isChangingStart ? 'isBefore' : 'isAfter';
+			var coverMethod = isChangingStart ? 'isSameOrBefore' : 'isSameOrAfter';
+			var doUpdate = isChangingStart ? updateStart : updateEnd;
+			var doUpdateSelf = isChangingStart ? updateEnd : updateStart;
+
+
+			if (dateTime == mergedSelectedShiftLayer[timeField]) return;
+
+			var index = vm.scheduleVm.ShiftLayers.indexOf(selectedShiftLayer);
+			var endIndex = isChangingStart ? 0 : vm.scheduleVm.ShiftLayers.length - 1;
+			var step = isChangingStart ? -1 : 1;
+			var reverseStep = isChangingStart ? 1 : -1;
+
+			var isLayerShorten = moment.tz(mergedSelectedShiftLayer[timeField], vm.timezone)[coverCompletelyMethod](dateTimeInTimezone);
+			var layersCopy = vm.scheduleVm.ShiftLayers.slice(0);
+			var actualDateTime = dateTime;
+
+			if (index !== endIndex) {
+				if (isLayerShorten) {
+					if (!fillWithLayer(index, mergedSelectedShiftLayer.ActivityId, dateTime, isChangingStart)) {
+						actualDateTime = mergedSelectedShiftLayer[timeField];
+					}
+				} else {
+					var hasGonePassTopActivity = false;
+					var firstTimeGoPassTop = true;
+					var currentIndex = index + step;
+					var newLayerTime = "";
+					while (currentIndex !== endIndex + step) {
+						var i = currentIndex;
+						currentIndex += step;
+
+						var orginalLayer = layersCopy[i];
+						var orginalIndex = vm.scheduleVm.ShiftLayers.indexOf(orginalLayer);
+						var layer = vm.scheduleVm.ShiftLayers[orginalIndex];
+						var mergedLayer = vm.getMergedShiftLayer(layer);
+
+						if (moment.tz(mergedLayer[timeReverseField], vm.timezone)[coverMethod](dateTimeInTimezone))
+							break;
+
+						var layerTimeInTimezone = moment.tz(mergedLayer[timeField], vm.timezone);
+						var isCoveredCompletely = dateTimeInTimezone[coverMethod](layerTimeInTimezone);
+						var isSameType = mergedLayer.ActivityId === mergedSelectedShiftLayer.ActivityId;
+						var deleteIndex = orginalIndex;
+
+						if (layer.FloatOnTop) {
+							hasGonePassTopActivity = dateTimeInTimezone[coverCompletelyMethod](layerTimeInTimezone);
+							if (firstTimeGoPassTop) {
+								firstTimeGoPassTop = false;
+								actualDateTime = mergedLayer[timeReverseField];
+							}
+							newLayerTime = mergedLayer[timeField];
+							continue;
+						}
+						if (hasGonePassTopActivity) {
+							var besideLayer = vm.scheduleVm.ShiftLayers[orginalIndex + reverseStep];
+							var mergedBesideLayer = !!besideLayer && vm.getMergedShiftLayer(besideLayer);
+							var needMerge = !!mergedBesideLayer && mergedBesideLayer.ActivityId === mergedSelectedShiftLayer.ActivityId;
+							var layerActualTime = isCoveredCompletely && i !== endIndex ? mergedLayer[timeField] : dateTime;
+
+							if (needMerge) {
+								doUpdate(besideLayer, layerActualTime);
+							} else if (isSameType && i === endIndex && isCoveredCompletely) {
+								doUpdate(layer, dateTime);
+								break;
+							} else if (!isSameType) {
+								var start = isChangingStart ? layerActualTime : newLayerTime;
+								var end = isChangingStart ? newLayerTime : layerActualTime;
+
+								deleteIndex = isChangingStart ? orginalIndex : orginalIndex + 1;
+								var insertIndex = isChangingStart ? orginalIndex + 1 : orginalIndex;
+								createLayer(mergedSelectedShiftLayer, start, end, insertIndex);
+							}
+						}
+
+						if (isCoveredCompletely) {
+							if (!isSameType || (isSameType && i === endIndex)) {
+								vm.scheduleVm.ShiftLayers.splice(deleteIndex, 1);
+							}
+						} else if (!isSameType) {
+							doUpdateSelf(layer, dateTime);
+							break;
+						}
+					}
+				}
+			}
+
+			doUpdate(selectedShiftLayer, actualDateTime);
+		}
+
+		
+		function fillWithLayer(selectedIndex, selectedActivityId, dateTime, isChangingStart) {
+			var step = isChangingStart ? -1 : 1;
+			var besideLayer = vm.scheduleVm.ShiftLayers[selectedIndex + step];
+			var secondLayer = vm.scheduleVm.ShiftLayers[selectedIndex + step * 2];
+
+			var mergedBesideLayer = vm.getMergedShiftLayer(besideLayer);
+			var doUpdateBeside = isChangingStart ? updateEnd : updateStart;
+
+			if (besideLayer.FloatOnTop) {
+				if (secondLayer && secondLayer.ActivityId !== selectedActivityId) {
+					var startTime = isChangingStart ? mergedBesideLayer.End : dateTime;
+					var endTime = isChangingStart ? dateTime : mergedBesideLayer.Start;
+					var insertIndex = isChangingStart ? selectedIndex : selectedIndex + 1;
+					createLayer(secondLayer, startTime, endTime, insertIndex);
+					return true;
+				}
+			}
+			else if (mergedBesideLayer.ActivityId !== selectedActivityId) {
+				doUpdateBeside(besideLayer, dateTime);
+				return true;
+			}
+			return false;
 		}
 
 		function updateLayer(shiftLayer, startTime, endTime) {
@@ -238,227 +361,6 @@
 				moment.tz(endTime, vm.timezone).format('L LT');
 		}
 
-		function redrawPreviousLayers(selectedShiftLayer, startTimeInTimezone) {
-			var mergedSelectedShiftLayer = vm.getMergedShiftLayer(selectedShiftLayer);
-			var startTime = serviceDateFormatHelper.getDateTime(startTimeInTimezone);
-			var actualStartTime = startTime;
-
-			if (startTime === mergedSelectedShiftLayer.Start) return;
-
-			var index = vm.scheduleVm.ShiftLayers.indexOf(selectedShiftLayer);
-			var layersCopy = vm.scheduleVm.ShiftLayers.slice(0);
-
-			if (index !== 0) {
-				var isShortenLayer = startTimeInTimezone.isAfter(moment.tz(mergedSelectedShiftLayer.Start, vm.timezone));
-				if (isShortenLayer) {
-					var isFilled = fillWithPreviousLayer(index, mergedSelectedShiftLayer.ActivityId, startTime);
-					if (!isFilled) {
-						actualStartTime = mergedSelectedShiftLayer.Start;
-					}
-				} else {
-					var firstTimeGoPassTop = true;
-					var hasGonePassTopActivity = false;
-					var newLayerEndTime;
-
-					for (var i = index - 1; i >= 0; i--) {
-						var layer = layersCopy[i];
-						var mergedLayer = vm.getMergedShiftLayer(layer);
-
-						if (moment.tz(mergedLayer.End, vm.timezone).isSameOrBefore(startTimeInTimezone))
-							break;
-
-						var layerStartInTimezone = moment.tz(mergedLayer.Start, vm.timezone);
-						var isCoveredCompletely = startTimeInTimezone.isSameOrBefore(layerStartInTimezone);
-						var isSameType = mergedLayer.ActivityId === mergedSelectedShiftLayer.ActivityId;
-
-						if (layer.FloatOnTop) {
-							hasGonePassTopActivity = startTimeInTimezone.isBefore(layerStartInTimezone);
-							if (firstTimeGoPassTop) {
-								firstTimeGoPassTop = false;
-								actualStartTime = mergedLayer.End;
-							}
-							newLayerEndTime = mergedLayer.Start;
-							continue;
-						}
-
-						if (hasGonePassTopActivity) {
-							var nextLayer = vm.scheduleVm.ShiftLayers[i + 1];
-							var mergedNextLayer = vm.getMergedShiftLayer(nextLayer);
-							var needMergeNextLayer = mergedNextLayer.ActivityId === mergedSelectedShiftLayer.ActivityId;
-							var newLayerStart = isCoveredCompletely && i !== 0 ? mergedLayer.Start : startTime;
-
-							if (needMergeNextLayer) {
-								updateLayer(nextLayer, newLayerStart, mergedNextLayer.End);
-								resizeLayer(nextLayer, getDiffMinutes(nextLayer.Current.Start, nextLayer.Start),
-									getDiffMinutes(nextLayer.Current.End, nextLayer.Current.Start));
-							}
-							else if (isSameType && i === 0 && isCoveredCompletely) {
-								updateLayer(layer, startTime, mergedLayer.End);
-								resizeLayer(layer, getDiffMinutes(layer.Current.Start, layer.Start),
-									getDiffMinutes(layer.Current.End, layer.Current.Start));
-								break;
-							}
-							else if (!isSameType) {
-								createLayer(mergedSelectedShiftLayer, newLayerStart, newLayerEndTime, i + 1);
-							}
-						}
-
-						if (isCoveredCompletely) {
-							if (!isSameType || (isSameType && i === 0)) {
-								vm.scheduleVm.ShiftLayers.splice(i, 1);
-							}
-						} else if (!isSameType) {
-							updateLayer(layer, mergedLayer.Start, startTime);
-							resizeLayer(layer, getDiffMinutes(layer.Current.Start, layer.Start),
-								getDiffMinutes(layer.Current.End, layer.Current.Start));
-							break;
-						}
-					}
-				}
-			}
-
-			updateLayer(selectedShiftLayer, actualStartTime, mergedSelectedShiftLayer.End);
-			resizeLayer(selectedShiftLayer,
-				getDiffMinutes(selectedShiftLayer.Current.Start, selectedShiftLayer.Start),
-				getDiffMinutes(selectedShiftLayer.Current.End, selectedShiftLayer.Current.Start));
-		}
-
-		function fillWithPreviousLayer(selectedIndex, selectedActivityId, startTime) {
-			var previousIsTop = false;
-			var layerStart = null;
-			var isFilled = false;
-			for (var i = selectedIndex - 1; i >= 0; i--) {
-				var layer = vm.scheduleVm.ShiftLayers[i];
-				var mergedLayer = vm.getMergedShiftLayer(layer);
-				if (layer.FloatOnTop) {
-					previousIsTop = true;
-					layerStart = mergedLayer.End;
-					continue;
-				}
-				if (mergedLayer.ActivityId === selectedActivityId) break;
-				isFilled = true;
-				if (previousIsTop) {
-					createLayer(mergedLayer, layerStart, startTime, selectedIndex);
-				} else {
-					updateLayer(layer, mergedLayer.Start, startTime);
-					resizeLayer(layer, getDiffMinutes(layer.Start, layer.Current.Start), getDiffMinutes(layer.Current.End, layer.Current.Start));
-				}
-				break;
-			}
-			return isFilled;
-		}
-
-
-		function redrawNextLayers(selectedShiftLayer, endTimeInTimezone) {
-			var mergedSelectedShiftLayer = vm.getMergedShiftLayer(selectedShiftLayer);
-
-			var endTime = serviceDateFormatHelper.getDateTime(endTimeInTimezone);
-			if (endTime === mergedSelectedShiftLayer.End) return;
-
-			var actualEndTime = endTime;
-			var isLayerShorten = moment.tz(mergedSelectedShiftLayer.End, vm.timezone).isAfter(endTimeInTimezone);
-
-			var index = vm.scheduleVm.ShiftLayers.indexOf(selectedShiftLayer);
-			var lastIndex = vm.scheduleVm.ShiftLayers.length - 1;
-			var layersCopy = vm.scheduleVm.ShiftLayers.slice(0);
-
-			if (index !== lastIndex) {
-				if (isLayerShorten) {
-					if (!fillWithNextLayer(index, mergedSelectedShiftLayer.ActivityId, endTime)) {
-						actualEndTime = mergedSelectedShiftLayer.End;
-					}
-				} else {
-					var hasGonePassTopActivity = false;
-					var firstTimeGoPassTop = true;
-
-					for (var i = index + 1; i <= lastIndex; i++) {
-						var orginalLayer = layersCopy[i];
-						var actualIndex = vm.scheduleVm.ShiftLayers.indexOf(orginalLayer);
-						var layer = vm.scheduleVm.ShiftLayers[actualIndex];
-						var mergedLayer = vm.getMergedShiftLayer(layer);
-
-						if (moment.tz(mergedLayer.Start, vm.timezone).isSameOrAfter(endTimeInTimezone))
-							break;
-
-						var layerEndInTimezone = moment.tz(mergedLayer.End, vm.timezone);
-						var isCoveredCompletely = endTimeInTimezone.isSameOrAfter(layerEndInTimezone);
-						var isSameType = mergedLayer.ActivityId === mergedSelectedShiftLayer.ActivityId;
-
-						if (layer.FloatOnTop) {
-							hasGonePassTopActivity = endTimeInTimezone.isAfter(layerEndInTimezone);
-							if (firstTimeGoPassTop) {
-								firstTimeGoPassTop = false;
-								actualEndTime = mergedLayer.Start;
-							}
-							continue;
-						}
-						var deleteIndex = actualIndex;
-						if (hasGonePassTopActivity) {
-							var previousLayer = vm.scheduleVm.ShiftLayers[actualIndex - 1];
-							var mergedPreviousLayer = vm.getMergedShiftLayer(previousLayer);
-
-							var needMerge = mergedPreviousLayer.ActivityId === mergedSelectedShiftLayer.ActivityId;
-							if (needMerge) {
-								var end = (i !== lastIndex && isCoveredCompletely) ? mergedLayer.End : endTime;
-								updateLayer(previousLayer, mergedPreviousLayer.Start, end);
-								resizeLayer(previousLayer, mergedPreviousLayer.TranslateX, getShiftLayerWidth(previousLayer.Current));
-							}
-							else if (isSameType && i === lastIndex && isCoveredCompletely) {
-								updateLayer(layer, mergedLayer.Start, endTime);
-								resizeLayer(layer, getDiffMinutes(layer.Current.Start, layer.Start), getDiffMinutes(layer.Current.End, layer.Current.Start));
-								break;
-							}
-							else if (!isSameType) {
-								deleteIndex = actualIndex + 1;
-								createLayer(mergedSelectedShiftLayer, mergedLayer.Start, endTime, actualIndex);
-							}
-						}
-
-						if (isCoveredCompletely) {
-							if (!isSameType || (isSameType && i === lastIndex)) {
-								vm.scheduleVm.ShiftLayers.splice(deleteIndex, 1);
-							}
-						} else if (!isSameType) {
-							updateLayer(layer, endTime, mergedLayer.End);
-							resizeLayer(layer, getDiffMinutes(layer.Current.Start, layer.Start), getDiffMinutes(layer.Current.End, layer.Current.Start));
-							break;
-						}
-					}
-				}
-			}
-
-			updateLayer(selectedShiftLayer, mergedSelectedShiftLayer.Start, actualEndTime);
-			resizeLayer(selectedShiftLayer,
-				getDiffMinutes(selectedShiftLayer.Current.Start, selectedShiftLayer.Start),
-				getDiffMinutes(selectedShiftLayer.Current.End, selectedShiftLayer.Current.Start));
-		}
-
-		function fillWithNextLayer(selectedIndex, selectedActivityId, endTime) {
-			var nextIsTop = false;
-			var layerEnd = null;
-			var isFilled = false;
-			var total = vm.scheduleVm.ShiftLayers.length;
-			for (var i = selectedIndex + 1; i <= total; i++) {
-				var layer = vm.scheduleVm.ShiftLayers[i];
-				var mergedLayer = vm.getMergedShiftLayer(layer);
-				if (layer.FloatOnTop) {
-					nextIsTop = true;
-					layerEnd = mergedLayer.Start;
-					continue;
-				}
-				if (mergedLayer.ActivityId === selectedActivityId) break;
-				isFilled = true;
-				if (nextIsTop) {
-					createLayer(mergedLayer, endTime, layerEnd, selectedIndex + 1);
-				} else {
-					updateLayer(layer, endTime, mergedLayer.End);
-					resizeLayer(layer, getDiffMinutes(layer.Current.Start, layer.Start), getDiffMinutes(layer.Current.End, layer.Current.Start));
-				}
-				break;
-			}
-			return isFilled;
-		}
-
 		function resizeLayer(shiftLayer, x, width, afterResize) {
 			shiftLayer.Current = shiftLayer.Current || {};
 
@@ -467,6 +369,25 @@
 
 			afterResize && afterResize(x, width, shiftLayer.Left);
 		}
+
+		function updateAndResizeLayer(layer, start, end) {
+			updateLayer(layer, start, end);
+			resizeLayer(layer, getDiffMinutes(layer.Current.Start, layer.Start),
+				getDiffMinutes(layer.Current.End, layer.Current.Start));
+		}
+
+		function updateStart(layer, dateTime) {
+			updateLayer(layer, dateTime, vm.getMergedShiftLayer(layer).End);
+			resizeLayer(layer, getDiffMinutes(layer.Current.Start, layer.Start),
+				getDiffMinutes(layer.Current.End, layer.Current.Start));
+		}
+
+		function updateEnd(layer, dateTime) {
+			updateLayer(layer, vm.getMergedShiftLayer(layer).Start, dateTime);
+			resizeLayer(layer, getDiffMinutes(layer.Current.Start, layer.Start),
+				getDiffMinutes(layer.Current.End, layer.Current.Start));
+		}
+
 
 		function createLayer(layer, startTime, endTime, insertIndex) {
 			var newLayer = vm.scheduleVm.SpliceLayer({
