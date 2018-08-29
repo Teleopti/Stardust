@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_XXL_76496)]
+	[RemoveMeWithToggle("Merge this logic with baseclass", Toggles.ResourcePlanner_XXL_76496)]
 	public class TeamSchedulingNoStateMainShiftProjection : TeamScheduling
 	{
 		public TeamSchedulingNoStateMainShiftProjection(AssignScheduledLayers assignScheduledLayers, IDayOffsInPeriodCalculator dayOffsInPeriodCalculator, IResourceCalculation resourceCalculation, ScheduleChangesAffectedDates scheduleChangesAffectedDates) : base(assignScheduledLayers, dayOffsInPeriodCalculator, resourceCalculation, scheduleChangesAffectedDates)
