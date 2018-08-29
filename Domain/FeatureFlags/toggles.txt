@@ -97,7 +97,7 @@ MyTimeWeb_MobileResponsive_43826 = true
 Staffing_Info_Configuration_44687 = true
 
 
-# Kittens, Bugs&Roses and Midke #
+# Kittens, Bugs&Roses and Micke #
 People_SpeedUpOpening_76365 = RC
 Wfm_SkillPriorityRoutingGUI_39885 = RC #Skill priorities, aka Cascading, is not ready for release yet
 Wfm_WebPlan_Pilot_46815 = RC #Switch this on to try out the new web based scheduling in Plans#
