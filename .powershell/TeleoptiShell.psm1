@@ -69,6 +69,7 @@ function wfmrestoretolocal {
     Set-Location ($WFMRepoPath + "\.debug-Setup")
     $env:IFFLOW = "y"
     & '.\Restore to Local.bat'
+    # TODO: Fix clear variable
     Clear-Variable $env:IFFLOW
 }
 function fcheck { # search for fdescribe and fit
