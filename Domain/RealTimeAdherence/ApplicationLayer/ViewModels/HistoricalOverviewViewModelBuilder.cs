@@ -2,41 +2,110 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using NPOI.SS.Formula.Functions;
+using Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 {
 	public class HistoricalOverviewViewModelBuilder
 	{
-		private readonly IAgentStateReadModelReader _reader;
+		private readonly IAgentStateReadModelReader _agentStateReader;
 		private readonly ICommonAgentNameProvider _nameDisplaySetting;
 		private readonly INow _now;
-		private readonly IAgentAdherenceDayLoader _agentAdherenceDayLoader; 
+		private readonly IAgentAdherenceDayLoader _agentAdherenceDayLoader;
+		private readonly IHistoricalOverviewReadModelReader _reader;
+		private readonly IPersonRepository _persons;
+		private readonly ITeamRepository _teams;
 
 		public HistoricalOverviewViewModelBuilder(
-			IAgentStateReadModelReader reader,
+			IAgentStateReadModelReader agentStateReader,
 			ICommonAgentNameProvider nameDisplaySetting,
 			INow now,
-			IAgentAdherenceDayLoader agentAdherenceDayLoader)
+			IAgentAdherenceDayLoader agentAdherenceDayLoader,
+			IHistoricalOverviewReadModelReader reader,
+			IPersonRepository persons, ITeamRepository teams)
 		{
-			_reader = reader;
+			_agentStateReader = agentStateReader;
 			_nameDisplaySetting = nameDisplaySetting;
 			_now = now;
 			_agentAdherenceDayLoader = agentAdherenceDayLoader;
+			_reader = reader;
+			_persons = persons;
+			_teams = teams;
 		}
 
-		public IEnumerable<HistoricalOverviewTeamViewModel> Build(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds) => buildViewModelQuickAndDirty(siteIds, teamIds);
+		//	public IEnumerable<HistoricalOverviewTeamViewModel> Build(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds) => buildViewModelQuickAndDirty(siteIds, teamIds);
+		public IEnumerable<HistoricalOverviewTeamViewModel> Build(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds) => buildViewModel(siteIds, teamIds);
+
+		private IEnumerable<HistoricalOverviewTeamViewModel> buildViewModel(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds)
+		{
+			var teams = siteIds?.SelectMany(x => _teams.FindTeamsForSite(x));
+
+			if (teams != null)
+			{
+				if (teamIds != null)
+					teams = teams.Union(_teams.FindTeams(teamIds));				
+			}
+			else
+				teams = _teams.FindTeams(teamIds);
+
+			
+			var sevenDays = _now.UtcDateTime().Date.AddDays(-7).DateRange(7);
+			var period = new DateOnlyPeriod(new DateOnly(sevenDays.First()), new DateOnly(sevenDays.Last()));
+			
+			var persons = teams.SelectMany(t => _persons.FindPeopleBelongTeam(t, period));
+
+			var dayStuff = from day in sevenDays
+				from person in persons
+				let pp = person.Period(day.ToDateOnly())
+				select new
+				{
+					SiteTeamName = pp.Team.SiteAndTeam,
+					PersonId = person.Id,
+					Name = _nameDisplaySetting.CommonAgentNameSettings.BuildFor(person.Name.FirstName, person.Name.LastName, null),
+					Day = day
+				};
+
+			return from rm in dayStuff
+				group rm by rm.SiteTeamName
+				into teamGroupedAgents
+				select new HistoricalOverviewTeamViewModel
+				{
+					Name = teamGroupedAgents.First().SiteTeamName,
+					Agents = (from agent in teamGroupedAgents
+						group agent by agent.PersonId
+						into agentGrouping
+						select new HistoricalOverviewAgentViewModel
+						{
+							Id = agentGrouping.First().PersonId.Value,
+							Name = agentGrouping.First().Name,
+							Days = (from day in sevenDays
+									select new HistoricalOverviewDayViewModel
+									{
+										Date = day.Date.ToString("yyyyMMdd"),
+										DisplayDate = day.Date.ToString("MM") + "/" + day.Date.ToString("dd"),
+										WasLateForWork = false
+									}
+								),
+							LateForWork = new HistoricalOverviewLateForWorkViewModel { }
+						})
+				};
+		}
+
 
 		private IEnumerable<HistoricalOverviewTeamViewModel> buildViewModelQuickAndDirty(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds)
 		{
 			var filter = new AgentStateFilter() {TeamIds = teamIds, SiteIds = siteIds};
 
-			var agents = from a in _reader.Read(filter)
+			var agents = from a in _agentStateReader.Read(filter)
 				select new
 				{
 					Id = a.PersonId,
@@ -103,13 +172,12 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 		public IEnumerable<HistoricalOverviewDayViewModel> Days { get; set; }
 		public HistoricalOverviewLateForWorkViewModel LateForWork { get; set; }
 		public int IntervalAdherence { get; set; }
-		
 	}
 
 	public class HistoricalOverviewLateForWorkViewModel
 	{
 		public int Count { get; set; }
-		public int TotalMinutes { get; set; }		
+		public int TotalMinutes { get; set; }
 	}
 
 	public class HistoricalOverviewDayViewModel

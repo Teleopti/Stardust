@@ -4,17 +4,25 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeRtaEventStore : IRtaEventStore, IRtaEventStoreReader
 	{
+		private readonly Lazy<IRtaEventStoreSynchronizer> _synchronizer;
+
 		private class storedEvent
 		{
 			public Guid PersonId;
 			public DateTimePeriod Period;
 			public IEvent Event;
+		}
+
+		public FakeRtaEventStore(Lazy<IRtaEventStoreSynchronizer> synchronizer)
+		{
+			_synchronizer = synchronizer;
 		}
 
 		private readonly IList<storedEvent> _events = new List<storedEvent>();
@@ -31,6 +39,8 @@ namespace Teleopti.Ccc.TestCommon
 				Period = new DateTimePeriod(rtaStoredEvent.StartTime.Value, rtaStoredEvent.EndTime.Value),
 				Event = @event
 			});
+
+			_synchronizer.Value.Synchronize(rtaStoredEvent.PersonId.Value, rtaStoredEvent.StartTime.Value);
 		}
 
 		public int Remove(DateTime removeUntil, int maxEventsToRemove) => throw new NotImplementedException();
