@@ -817,13 +817,14 @@ input.use-default-startTime {
 
 .not-shceudled {
  min-height:60px;
- padding-top:19px;
+ padding-top:29px;
 }
 
 .shift-to-trade-row {
 	/*height: 125px;*/
 	display: flex;
 	border-top: 0.8px solid #e3e3e3;
+	min-height:80px;
 }
 
 .shift-to-trade-row + .shift-to-trade-row {
