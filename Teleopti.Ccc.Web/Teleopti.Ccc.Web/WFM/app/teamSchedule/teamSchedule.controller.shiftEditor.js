@@ -84,6 +84,7 @@
 		vm.availableActivities = [];
 		vm.trackId = guidgenerator.newGuid();
 		vm.isSaving = false;
+		vm.selectedShiftLayers = [];
 
 		vm.$onInit = function () {
 			getSchedule();
@@ -125,7 +126,7 @@
 				doNotToggleSelectionAfterResizeEnd = false;
 				return;
 			}
-			vm.selectedShiftLayer = shiftLayer !== vm.selectedShiftLayer ? shiftLayer : null;
+			vm.selectedShiftLayers = vm.selectedShiftLayers.indexOf(shiftLayer) === -1 ? [shiftLayer] : [];
 			vm.selectedActivitiyId = vm.getMergedShiftLayer(shiftLayer).ActivityId;
 
 			bindResizeEvent(shiftLayer, $event.target);
@@ -140,10 +141,13 @@
 			var selectActivity = vm.availableActivities.filter(function (activity) {
 				return vm.selectedActivitiyId == activity.Id;
 			})[0];
-			vm.selectedShiftLayer.Current = vm.selectedShiftLayer.Current || {};
-			vm.selectedShiftLayer.Current.Color = selectActivity.Color;
-			vm.selectedShiftLayer.Current.Description = selectActivity.Name;
-			vm.selectedShiftLayer.Current.ActivityId = selectActivity.Id;
+
+			vm.selectedShiftLayers.forEach(function (layer) {
+				layer.Current = layer.Current || {};
+				layer.Current.Color = selectActivity.Color;
+				layer.Current.Description = selectActivity.Name;
+				layer.Current.ActivityId = selectActivity.Id;
+			});
 		};
 
 		vm.saveChanges = function () {
@@ -175,14 +179,22 @@
 			return !hasChanges() || vm.isSaving || vm.showError;
 		};
 
+		vm.isSelected = function (shiftLayer) {
+			return vm.selectedShiftLayers.indexOf(shiftLayer) !== -1;
+		}
+
 		vm.refreshData = function () {
 			if (vm.scheduleChanged) {
 				getSchedule();
 			}
 		};
 
-		vm.getTimeSpan = function () {
-			return vm.getMergedShiftLayer(vm.selectedShiftLayer).TimeSpan;
+		vm.getSelectionTimeSpan = function () {
+			var lastIndex = vm.selectedShiftLayers.length -1;
+			var startTime = vm.getMergedShiftLayer(vm.selectedShiftLayers[0]).Start;
+			var endTime = vm.getMergedShiftLayer(vm.selectedShiftLayers[lastIndex]).End;
+
+			return getTimeSpan(startTime, endTime);
 		};
 
 		vm.getMergedShiftLayer = function (layer) {
@@ -229,8 +241,6 @@
 					});
 		}
 
-	
-
 		function redrawLayers(selectedShiftLayer, dateTimeInTimezone, isChangingStart) {
 			var mergedSelectedShiftLayer = vm.getMergedShiftLayer(selectedShiftLayer);
 			var dateTime = serviceDateFormatHelper.getDateTime(dateTimeInTimezone);
@@ -241,7 +251,6 @@
 			var coverMethod = isChangingStart ? 'isSameOrBefore' : 'isSameOrAfter';
 			var doUpdate = isChangingStart ? updateStart : updateEnd;
 			var doUpdateSelf = isChangingStart ? updateEnd : updateStart;
-
 
 			if (dateTime == mergedSelectedShiftLayer[timeField]) return;
 
@@ -290,6 +299,7 @@
 							newLayerTime = mergedLayer[timeField];
 							continue;
 						}
+
 						if (hasGonePassTopActivity) {
 							var besideLayer = vm.scheduleVm.ShiftLayers[orginalIndex + reverseStep];
 							var mergedBesideLayer = !!besideLayer && vm.getMergedShiftLayer(besideLayer);
@@ -298,8 +308,10 @@
 
 							if (needMerge) {
 								doUpdate(besideLayer, layerActualTime);
+								vm.selectedShiftLayers.push(besideLayer);
 							} else if (isSameType && i === endIndex && isCoveredCompletely) {
 								doUpdate(layer, dateTime);
+								vm.selectedShiftLayers.push(layer);
 								break;
 							} else if (!isSameType) {
 								var start = isChangingStart ? layerActualTime : newLayerTime;
@@ -308,7 +320,9 @@
 								deleteIndex = isChangingStart ? orginalIndex : orginalIndex + 1;
 								var insertIndex = isChangingStart ? orginalIndex + 1 : orginalIndex;
 								createLayer(mergedSelectedShiftLayer, start, end, insertIndex);
-							}
+							} else if (isSameType) {
+								vm.selectedShiftLayers.push(layer);
+							} 
 						}
 
 						if (isCoveredCompletely) {
@@ -324,9 +338,12 @@
 			}
 
 			doUpdate(selectedShiftLayer, actualDateTime);
+
+			if (isChangingStart) {
+				vm.selectedShiftLayers.reverse();
+			}
 		}
 
-		
 		function fillWithLayer(selectedIndex, selectedActivityId, dateTime, isChangingStart) {
 			var step = isChangingStart ? -1 : 1;
 			var besideLayer = vm.scheduleVm.ShiftLayers[selectedIndex + step];
@@ -355,8 +372,11 @@
 			shiftLayer.Current = shiftLayer.Current || {};
 			shiftLayer.Current.Start = startTime;
 			shiftLayer.Current.End = endTime;
-			shiftLayer.Current.TimeSpan =
-				moment.tz(startTime, vm.timezone).format('L LT') +
+			shiftLayer.Current.TimeSpan = getTimeSpan(startTime, endTime);
+		}
+
+		function getTimeSpan(startTime, endTime) {
+			return moment.tz(startTime, vm.timezone).format('L LT') +
 				' - ' +
 				moment.tz(endTime, vm.timezone).format('L LT');
 		}
@@ -368,12 +388,6 @@
 			shiftLayer.Current.TranslateX = x || 0;
 
 			afterResize && afterResize(x, width, shiftLayer.Left);
-		}
-
-		function updateAndResizeLayer(layer, start, end) {
-			updateLayer(layer, start, end);
-			resizeLayer(layer, getDiffMinutes(layer.Current.Start, layer.Start),
-				getDiffMinutes(layer.Current.End, layer.Current.Start));
 		}
 
 		function updateStart(layer, dateTime) {
@@ -399,7 +413,11 @@
 			resizeLayer(newLayer, 0, getDiffMinutes(newLayer.End, newLayer.Start));
 			newLayer.Left = getShiftLayerLeft(newLayer);
 			newLayer.IsNew = true;
+
+			vm.selectedShiftLayers.push(newLayer);
 		}
+
+
 
 		function round5(number) {
 			var a = number % 5;
@@ -459,7 +477,7 @@
 
 		function initScheduleState() {
 			vm.scheduleChanged = false;
-			vm.selectedShiftLayer = null;
+			vm.selectedShiftLayers = [];
 			vm.selectedActivitiyId = null;
 			vm.showError = false;
 		}

@@ -2298,8 +2298,106 @@
 			expect(shiftLayers[2].style.transform).toEqual('translate(0px, 0px)');
 
 		});
-	});
 
+		it('should show whole activity info after it split by lunch/short break', function () {
+			fakeTeamSchedule.has({
+				PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
+				Name: 'Annika Andersson',
+				Date: '2018-08-28',
+				WorkTimeMinutes: 60,
+				ContractTimeMinutes: 60,
+				Projection: [
+					{
+						ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
+						Color: '#ffffff',
+						Description: 'Phone',
+						Start: '2018-08-28 05:00',
+						End: '2018-08-28 06:00',
+						Minutes: 60,
+						IsOvertime: false,
+						ActivityId: '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+					},
+					{
+						ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
+						Color: '#ff0500',
+						Description: 'Short Break',
+						Start: '2018-08-28 06:00',
+						End: '2018-08-28 07:00',
+						Minutes: 60,
+						IsOvertime: false,
+						FloatOnTop: true,
+						ActivityId: '84db44f4-22a8-44c7-b376-a0a200da613e'
+					},
+					{
+						ShiftLayerIds: ['71678e5a-ac3f-4daa-9577-a83800e49622'],
+						Color: '#ffa2a2',
+						Description: 'Email',
+						Start: '2018-08-28 07:00',
+						End: '2018-08-28 08:00',
+						Minutes: 60,
+						IsOvertime: false,
+						ActivityId: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
+					},
+					{
+						ShiftLayerIds: ['81678e5a-ac3f-4daa-9577-a83800e49622'],
+						Color: '#ffff00',
+						Description: 'Lunch',
+						Start: '2018-08-28 08:00',
+						End: '2018-08-28 09:00',
+						Minutes: 60,
+						IsOvertime: false,
+						ActivityId: '1ffeb898-11bf-43fc-8104-9b5e015ab3c2',
+						FloatOnTop: true
+					},
+					{
+						ShiftLayerIds: ['71678e5a-ac3f-4daa-9577-a83800e49622'],
+						Color: '#ffa2a2',
+						Description: 'Email',
+						Start: '2018-08-28 09:00',
+						End: '2018-08-28 10:00',
+						Minutes: 60,
+						IsOvertime: false,
+						ActivityId: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
+					}
+				],
+				Timezone: { IanaId: 'Europe/Berlin' }
+			});
+
+			var scope = $rootScope.$new();
+			var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-08-28', 'Europe/Berlin', scope);
+			var vm = panel.isolateScope().vm;
+
+			var shiftLayer = panel[0].querySelectorAll('.shift-layer')[4];
+			shiftLayer.click();
+
+			var interact = vm.scheduleVm.ShiftLayers[4].interact;
+			interact.fire({
+				type: 'resizemove',
+				target: shiftLayer,
+				rect: {
+					width: 330
+				},
+				deltaRect: { left: -270 }
+			});
+
+			interact.fire({
+				type: 'resizeend',
+				target: shiftLayer
+			});
+
+			scope.$apply();
+
+			var shiftLayers = panel[0].querySelectorAll('.shift-layer');
+			expect(shiftLayers.length).toEqual(5);
+			expect(shiftLayers[0].className.indexOf('selected') >= 0).toBeTruthy();
+			expect(shiftLayers[1].className.indexOf('selected') >= 0).toBeFalsy();
+			expect(shiftLayers[2].className.indexOf('selected') >= 0).toBeTruthy();
+			expect(shiftLayers[3].className.indexOf('selected') >= 0).toBeFalsy();
+			expect(shiftLayers[4].className.indexOf('selected') >= 0).toBeTruthy();
+			var timespanEl = panel[0].querySelector('.timespan');
+			expect(timespanEl.innerText.trim()).toBe('2018-08-28 04:30 - 2018-08-28 10:00');
+		});
+	});
 
 	describe('# keep the lunch/short break on the top when changing the selected activity end time#', function () {
 
@@ -2385,7 +2483,7 @@
 
 			expect(shiftLayers[3].style.width).toEqual('60px');
 			expect(shiftLayers[3].style.backgroundColor).toEqual('rgb(0, 0, 0)');
-			
+
 
 		});
 
@@ -3033,13 +3131,11 @@
 
 			expect(shiftLayers[4].style.width).toEqual('30px');
 			expect(shiftLayers[4].style.backgroundColor).toEqual('rgb(255, 204, 162)');
-		
+
 			expect(shiftLayers[5].style.width).toEqual('30px');
 			expect(shiftLayers[5].style.backgroundColor).toEqual('rgb(0, 0, 0)');
 		});
 	});
-
-
 
 	it('should save changes with correct data', function () {
 		var date = '2018-06-15';
@@ -3730,15 +3826,17 @@
 					Description: 'E-mail',
 					Start: '2018-06-28 08:00',
 					Minutes: 120,
-					IsOvertime: false
+					IsOvertime: false,
+					ActivityId: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
 				},
 				{
 					ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
 					Color: '#8080c0',
-					Description: 'E-mail',
+					Description: 'Phone',
 					Start: '2018-06-28 10:00',
 					Minutes: 120,
-					IsOvertime: false
+					IsOvertime: false,
+					ActivityId: '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
 				}
 			],
 			Timezone: { IanaId: 'Europe/Berlin' }
@@ -3767,7 +3865,8 @@
 					Description: 'E-mail',
 					Start: '2018-06-28 08:00',
 					Minutes: 120,
-					IsOvertime: false
+					IsOvertime: false,
+					ActivityId: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
 				}
 			],
 			Timezone: { IanaId: 'Europe/Berlin' }
@@ -3787,13 +3886,14 @@
 
 		var saveButton = panel[0].querySelector('.btn-save');
 		saveButton.click();
+		var errorEl = panel[0].querySelector('.text-danger');
+		expect(!!errorEl).toBeTruthy();
 
 		var refreshButton = panel[0].querySelector('.btn-refresh');
 		refreshButton.click();
-
-		var errorEl = panel[0].querySelector('.text-danger');
+		errorEl = panel[0].querySelector('.text-danger');
 		expect(!!errorEl).toBeFalsy();
-
+	
 		saveButton = panel[0].querySelector('.btn-save');
 		expect(saveButton.disabled).toBeTruthy();
 		expect(refreshButton.disabled).toBeTruthy();

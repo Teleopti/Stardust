@@ -36,13 +36,13 @@
 
 <div class="con-row activity-info">
 	<div class="con-flex">
-		<div ng-if="vm.selectedShiftLayer">
-			<span class="timespan">{{ vm.getTimeSpan()  }}</span>
+		<div ng-if="!!vm.selectedShiftLayers.length">
+			<span class="timespan">{{ vm.getSelectionTimeSpan()  }}</span>
 			<span>
 				<md-select class="activity-selector" ng-model="vm.selectedActivitiyId" ng-change="vm.changeActivityType()" required placeholder="{{'SelectAnActivity'|translate}}">
 					<md-option ng-repeat="activity in vm.availableActivities" ng-value="activity.Id">
-						<div class="type-color" ng-style="{'background-color': activity.Color}"></div>
-						<div class="type-name"> {{activity.Name}}</div>
+						<span class="type-color" ng-style="{'background-color': activity.Color}"></span>
+						<span class="type-name"> {{activity.Name}}</span>
 					</md-option>
 				</md-select>
 			</span>
@@ -68,13 +68,13 @@
 				</div>
 			</div>
 
-			<div class="shift" ng-class="{'has-selected': !!vm.selectedShiftLayer}">
+			<div class="shift" ng-class="{'has-selected': !!vm.selectedShiftLayers.length}">
 				<div class="shift-layer"
 					 ng-class="{
 					 'overtime': shiftLayer.IsOvertime,
 					 'overtime-light': vm.useLighterBorder(shiftLayer),
 					 'overtime-dark': !vm.useLighterBorder(shiftLayer),
-					 'selected': shiftLayer === vm.selectedShiftLayer,
+					 'selected': vm.isSelected(shiftLayer),
 					 'border-dark': !vm.useLighterBorder(shiftLayer),
 					 'border-light': vm.useLighterBorder(shiftLayer),
 					 'divide-line':  shiftLayer.ShowDividedLine,
