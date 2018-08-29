@@ -190,7 +190,7 @@
 		};
 
 		vm.getSelectionTimeSpan = function () {
-			var lastIndex = vm.selectedShiftLayers.length -1;
+			var lastIndex = vm.selectedShiftLayers.length - 1;
 			var startTime = vm.getMergedShiftLayer(vm.selectedShiftLayers[0]).Start;
 			var endTime = vm.getMergedShiftLayer(vm.selectedShiftLayers[lastIndex]).End;
 
@@ -238,6 +238,13 @@
 
 						doNotToggleSelectionAfterResizeEnd = true;
 						$scope.$apply();
+
+						if (vm.selectedShiftLayers.length > 1) {
+							var bindingIndex = shiftLayer.isChangingStart ? 0 : vm.selectedShiftLayers.length - 1;
+							var bindingLayer = vm.selectedShiftLayers[bindingIndex];
+							var bindingLayerEl = $element[0].querySelectorAll('.shift-layer')[vm.scheduleVm.ShiftLayers.indexOf(bindingLayer)];
+							bindResizeEvent(bindingLayer, bindingLayerEl);
+						}
 					});
 		}
 
@@ -322,7 +329,7 @@
 								createLayer(mergedSelectedShiftLayer, start, end, insertIndex);
 							} else if (isSameType) {
 								vm.selectedShiftLayers.push(layer);
-							} 
+							}
 						}
 
 						if (isCoveredCompletely) {
@@ -334,14 +341,20 @@
 							break;
 						}
 					}
+
+					if (isChangingStart) {
+						vm.selectedShiftLayers.reverse();
+					}
+
+				
 				}
+
 			}
+
 
 			doUpdate(selectedShiftLayer, actualDateTime);
 
-			if (isChangingStart) {
-				vm.selectedShiftLayers.reverse();
-			}
+
 		}
 
 		function fillWithLayer(selectedIndex, selectedActivityId, dateTime, isChangingStart) {
@@ -402,7 +415,6 @@
 				getDiffMinutes(layer.Current.End, layer.Current.Start));
 		}
 
-
 		function createLayer(layer, startTime, endTime, insertIndex) {
 			var newLayer = vm.scheduleVm.SpliceLayer({
 				ActivityId: layer.ActivityId,
@@ -416,8 +428,6 @@
 
 			vm.selectedShiftLayers.push(newLayer);
 		}
-
-
 
 		function round5(number) {
 			var a = number % 5;
