@@ -2,6 +2,10 @@ import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { NzMessageService } from 'ng-zorro-antd';
+import { Observable } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
+import { UserService } from '../../../core/services';
+import { LogonInfoService } from '../../../shared/services';
 import { PasswordService } from '../../services/password.service';
 
 export class MatchingPasswordValidation {
@@ -41,6 +45,7 @@ export class ChangePasswordComponent {
 	readonly POLICY_ERROR = 'MeetsPolicy';
 	readonly ENSURE_PASSWORD_NEW_ERROR = 'IsNewPassword';
 	readonly MATCHING_PASSWORDS = 'MatchPassword';
+	readonly MISSING_APPLICATION_LOGON = 'MissingApplicationLogon';
 	isVisible = false;
 	changePasswordForm: FormGroup;
 
@@ -48,7 +53,9 @@ export class ChangePasswordComponent {
 		private fb: FormBuilder,
 		private ps: PasswordService,
 		private messageService: NzMessageService,
-		private translateService: TranslateService
+		private translateService: TranslateService,
+		private logonInfoService: LogonInfoService,
+		private userService: UserService
 	) {
 		this.changePasswordForm = this.fb.group(
 			{
@@ -64,6 +71,15 @@ export class ChangePasswordComponent {
 
 	showModal() {
 		this.isVisible = true;
+		this.currentUserHasLogon().subscribe({
+			next: hasAppLogon => {
+				console.log(hasAppLogon);
+				if (!hasAppLogon) {
+					this.changePasswordForm.disable();
+					this.changePasswordForm.setErrors({ [this.MISSING_APPLICATION_LOGON]: true });
+				}
+			}
+		});
 	}
 
 	hasClientError() {
@@ -100,6 +116,18 @@ export class ChangePasswordComponent {
 			this.invalidate(this.newPasswordControl);
 			this.invalidate(this.confirmPasswordControl);
 		}
+	}
+
+	private currentUserHasLogon(): Observable<boolean> {
+		return this.userService.getPreferences().pipe(
+			switchMap(preferences => {
+				return this.logonInfoService.getLogonInfoFromUser(preferences.Id).pipe(
+					map(({ LogonName }) => {
+						return LogonName !== null && LogonName.length > 0;
+					})
+				);
+			})
+		);
 	}
 
 	private successMessage() {

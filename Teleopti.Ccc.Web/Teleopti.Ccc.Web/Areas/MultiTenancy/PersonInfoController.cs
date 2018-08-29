@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -20,13 +21,15 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		private readonly IPersonInfoMapper _mapper;
 		private readonly IDeletePersonInfo _deletePersonInfo;
 		private readonly IFindLogonInfo _findLogonInfo;
+		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
-		private readonly SignatureCreator _signatureCreator; 
+		private readonly SignatureCreator _signatureCreator;
 
 		public PersonInfoController(IPersistPersonInfo persister,
 									IPersonInfoMapper mapper,
 									IDeletePersonInfo deletePersonInfo,
 									IFindLogonInfo findLogonInfo,
+									ILoggedOnUser loggedOnUser,
 									ITenantUnitOfWork tenantUnitOfWork,
 									SignatureCreator signatureCreator)
 		{
@@ -34,6 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 			_mapper = mapper;
 			_deletePersonInfo = deletePersonInfo;
 			_findLogonInfo = findLogonInfo;
+			_loggedOnUser = loggedOnUser;
 			_tenantUnitOfWork = tenantUnitOfWork;
 			_signatureCreator = signatureCreator;
 		}
@@ -44,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 			var ret = new PersistPersonInfoResult();
 			try
 			{
-				PersistInternal(personInfoModel); 
+				PersistInternal(personInfoModel);
 			}
 			catch (PasswordStrengthException)
 			{
@@ -95,7 +99,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 
 			return Ok(resultModel);
 		}
-		
+
 		[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.PeopleAccess)]
 		[TenantUnitOfWork, HttpPost, Route("PersonInfo/PersistIdentities")]
 		public virtual IHttpActionResult PersistIdentities(SignedArgument<PersonIdentitiesInputModel> input)
@@ -156,6 +160,13 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		public virtual IHttpActionResult LogonInfoFromGuids([FromBody]IEnumerable<Guid> personIdsToGet)
 		{
 			return Ok(_findLogonInfo.GetForIds(personIdsToGet));
+		}
+
+		[HttpGet, Route("PersonInfo/LogonInfoFromGuid")]
+		[TenantUnitOfWork]
+		public virtual IHttpActionResult LogonInfoFromGuid(Guid personId)
+		{
+			return Ok(_findLogonInfo.GetForIds(new []{ personId }).FirstOrDefault());
 		}
 
 		[HttpGet, Route("PersonInfo/LogonFromName")]
