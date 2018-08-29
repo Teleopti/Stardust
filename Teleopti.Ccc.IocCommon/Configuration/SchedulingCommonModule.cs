@@ -80,22 +80,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<HandleOneAnalyticsAvailabilityDay>().SingleInstance().ApplyAspects();
 			builder.RegisterType<HandleMultipleAnalyticsAvailabilityDays>().SingleInstance();
 
-			if (_configuration.Toggle(Toggles.ResourcePlanner_XXL_76496))
-			{
-				builder.RegisterType<ScheduleStorage>()
-					.As<IScheduleStorage>()
-					.AsSelf()
-					.SingleInstance();
-				builder.RegisterType<FindSchedulesForPersonsInternallyAsync>().As<IFindSchedulesForPersons>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<ScheduleStorage>()
-					.As<IScheduleStorage>()
-					.As<IFindSchedulesForPersons>()
-					.AsSelf()
-					.SingleInstance();				
-			}
+			builder.RegisterType<ScheduleStorage>()
+				.As<IScheduleStorage>()
+				.As<IFindSchedulesForPersons>()
+				.AsSelf()
+				.SingleInstance();
 
 			builder.RegisterType<AddBpoResourcesToContext>().SingleInstance();
 			builder.RegisterType<SkillCombinationToBpoResourceMapper>().SingleInstance();

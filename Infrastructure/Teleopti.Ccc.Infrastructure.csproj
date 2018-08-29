@@ -368,7 +368,6 @@
     <Compile Include="Repositories\ExtensiveLogRepository.cs" />
     <Compile Include="Repositories\ExternalPerformanceDataRepository.cs" />
     <Compile Include="Repositories\ExternalPerformanceRepository.cs" />
-    <Compile Include="Repositories\FindPersonAssignmentAsync.cs" />
     <Compile Include="Repositories\ForecastDayOverrideRepository.cs" />
     <Compile Include="Repositories\PersonAccessAuditRepository.cs" />
     <Compile Include="Repositories\PersonLoadAllWithAssociation.cs" />
