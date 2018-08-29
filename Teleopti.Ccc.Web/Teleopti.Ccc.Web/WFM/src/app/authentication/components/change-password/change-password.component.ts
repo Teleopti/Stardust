@@ -69,7 +69,8 @@ export class ChangePasswordComponent {
 		);
 	}
 
-	showModal() {
+	showModal($event: Event) {
+		$event.preventDefault();
 		this.isVisible = true;
 		this.currentUserHasLogon().subscribe({
 			next: hasAppLogon => {
