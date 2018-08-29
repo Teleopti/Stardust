@@ -100,14 +100,14 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 					w => w.Id.HasValue && w.Id.Value == input.WorkloadId));
 			if (skill == null)
 			{
-				return  Ok(new ForecastModel()
+				return Ok(new ForecastModel
 				{
-					WarningMessage =  "Not found"
+					WarningMessage = Resources.NoSkillWithQueueFound
 				});
 			}
+
 			var workload = skill.WorkloadCollection.Single(w => w.Id.Value == input.WorkloadId);
 			var forecast = _quickForecaster.ForecastWorkloadWithinSkill(skill, workload, futurePeriod, scenario);
-			
 			return Ok(forecast);
 		}
 

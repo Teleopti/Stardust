@@ -1640,9 +1640,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				ScenarioId = scenario.Id.Value
  			};
 			var result = (OkNegotiatedContentResult<ForecastModel>)Target.Forecast(forecastInput);
-			result.Content.WarningMessage.Should().Not.Be.Empty();
-
+			result.Content.WarningMessage.Should().Be(Resources.NoSkillWithQueueFound);
 		}
-
 	}
 }

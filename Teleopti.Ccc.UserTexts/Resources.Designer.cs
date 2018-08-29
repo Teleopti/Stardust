@@ -22013,6 +22013,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No skill with queue source found.
+        /// </summary>
+        public static string NoSkillWithQueueFound {
+            get {
+                return ResourceManager.GetString("NoSkillWithQueueFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No start date and end date to display.
         /// </summary>
         public static string NoStartAndEndDateToDisplay {

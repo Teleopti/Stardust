@@ -17712,4 +17712,8 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Your password was changed</value>
     <comment>When password is successfully changed</comment>
   </data>
+  <data name="NoSkillWithQueueFound" xml:space="preserve">
+    <value>No skill with queue source found</value>
+    <comment>Error message in web forecast</comment>
+  </data>
 </root>
