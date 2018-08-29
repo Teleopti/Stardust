@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			SetDate(dateOnlyAsDateTimePeriod);
 		}
 
+		[RemoveMeWithToggle("use SetDateNoStateMainShiftProjection instead",Toggles.ResourcePlanner_XXL_76496)]
 		public void SetDate(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
 		{
 			if (_dateOnlyAsPeriod != null && _dateOnlyAsPeriod.Equals(dateOnlyAsDateTimePeriod)) return;
@@ -40,6 +42,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_mainshiftProjection = new Lazy<IVisualLayerCollection>(() => TheMainShift.ProjectionService().CreateProjection());
 		}
 
+		public void SetDateNoStateMainShiftProjection(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
+		{
+			if (_dateOnlyAsPeriod != null && _dateOnlyAsPeriod.Equals(dateOnlyAsDateTimePeriod)) return;
+
+			_dateOnlyAsPeriod = dateOnlyAsDateTimePeriod;
+			_workShiftCalculatableLayers = null;
+			_mainShift = new Lazy<IEditableShift>(() => _workShift.ToEditorShift(_dateOnlyAsPeriod, _dateOnlyAsPeriod.TimeZone()));
+			_mainshiftProjection = null;
+		}
+
 		public IEditableShift TheMainShift => _mainShift.Value;
 
 		public IWorkShift TheWorkShift => _workShift;
@@ -48,7 +60,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public DateTimePeriod WorkShiftProjectionPeriod => _workShift.Projection.Period().Value;
 
-		public IVisualLayerCollection MainShiftProjection => _mainshiftProjection.Value;
+		public IVisualLayerCollection MainShiftProjection => _mainshiftProjection?.Value ?? TheMainShift.ProjectionService().CreateProjection();
 
 		public IEnumerable<IWorkShiftCalculatableLayer> WorkShiftCalculatableLayers => _workShiftCalculatableLayers ??
 																					   (_workShiftCalculatableLayers = new WorkShiftCalculatableVisualLayerCollection(MainShiftProjection));

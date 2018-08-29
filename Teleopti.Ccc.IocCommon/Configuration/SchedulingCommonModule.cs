@@ -465,8 +465,18 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AnalyticsScheduleChangeForAllReportableScenariosFilter>().As<IAnalyticsScheduleChangeUpdaterFilter>().SingleInstance();
 			builder.RegisterType<ThrowExceptionOnSkillMapError>().As<IAnalyticsPersonPeriodMapNotDefined>().SingleInstance();
 			builder.RegisterType<AssignScheduledLayers>().SingleInstance();
-			builder.RegisterType<ShiftProjectionCacheManager>().InstancePerLifetimeScope();
-			
+
+			if (_configuration.Toggle(Toggles.ResourcePlanner_XXL_76496))
+			{
+				builder.RegisterType<ShiftProjectionCacheManagerNoStateMainShiftProjection>().As<IShiftProjectionCacheManager>().InstancePerLifetimeScope();
+				builder.RegisterType<TeamSchedulingNoStateMainShiftProjection>().As<TeamScheduling>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<ShiftProjectionCacheManager>().As<IShiftProjectionCacheManager>().InstancePerLifetimeScope();
+				builder.RegisterType<TeamScheduling>().SingleInstance();
+			}
+
 			registerForJobs(builder);
 			registerValidators(builder);
 		}
