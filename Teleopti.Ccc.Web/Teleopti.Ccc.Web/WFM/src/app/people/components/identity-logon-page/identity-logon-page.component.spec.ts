@@ -6,13 +6,8 @@ import { NzButtonModule, NzFormModule, NzGridModule, NzTableModule, NzToolTipMod
 import { WorkspaceComponent } from '..';
 import { configureTestSuite } from '../../../../configure-test-suit';
 import { MockTranslationModule } from '../../../../mocks/translation';
-import {
-	fakeBackendProvider,
-	LogonInfoService,
-	NavigationService,
-	SearchService,
-	WorkspaceService
-} from '../../services';
+import { LogonInfoService } from '../../../shared/services';
+import { fakeBackendProvider, NavigationService, SearchService, WorkspaceService } from '../../services';
 import { IdentityLogonPageComponent } from './identity-logon-page.component';
 
 describe('IdentityLogonPageComponent', () => {

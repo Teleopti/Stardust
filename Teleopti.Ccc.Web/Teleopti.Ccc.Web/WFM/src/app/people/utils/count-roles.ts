@@ -1,4 +1,4 @@
-import { Person } from '../types';
+import { Person } from '../../shared/types';
 
 export function countUniqueRolesFromPeople(people: Person[]) {
 	return Object.keys(

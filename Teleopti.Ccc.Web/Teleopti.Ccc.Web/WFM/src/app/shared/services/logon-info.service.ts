@@ -92,6 +92,10 @@ export class LogonInfoService {
 		>;
 	}
 
+	getLogonInfoFromCurrentUser() {
+		return this.http.get('../PersonInfo/LogonInfoFromCurrentUser') as Observable<LogonInfo>;
+	}
+
 	appLogonExists(logon: string): Observable<boolean> {
 		const params = new HttpParams().set('LogonName', logon);
 		var response = this.http

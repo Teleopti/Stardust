@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { LogonInfoService, WorkspaceService, LogonInfoFromGuidsResponse, LogonInfo } from '../../services';
-import { map, switchMap, filter, flatMap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { flatMap, map } from 'rxjs/operators';
+import { LogonInfoService } from '../../../shared/services';
+import { WorkspaceService } from '../../services';
 
 interface PersonWithName {
 	Id: string;
