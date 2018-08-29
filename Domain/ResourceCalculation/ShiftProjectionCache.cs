@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -31,7 +30,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			SetDate(dateOnlyAsDateTimePeriod);
 		}
 
-		[RemoveMeWithToggle("use SetDateNoStateMainShiftProjection instead",Toggles.ResourcePlanner_XXL_76496)]
 		public void SetDate(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
 		{
 			if (_dateOnlyAsPeriod != null && _dateOnlyAsPeriod.Equals(dateOnlyAsDateTimePeriod)) return;
