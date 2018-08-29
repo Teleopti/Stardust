@@ -7,11 +7,10 @@ using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Outlier;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Infrastructure.Forecasting.Angel
+namespace Teleopti.Ccc.Domain.Forecasting.Angel.Outlier
 {
-	public class OutlierRemover : IOutlierRemover
+	public class TaskOutlierRemover : IOutlierRemover
 	{
-
 		public ITaskOwnerPeriod RemoveOutliers(ITaskOwnerPeriod historicalData, IForecastMethod forecastMethod)
 		{
 			var seasonalVariationPossiblyWithTrend = forecastMethod.SeasonalVariation(historicalData);
@@ -22,8 +21,8 @@ namespace Teleopti.Ccc.Infrastructure.Forecasting.Angel
 			{
 				foreach (var historicalDay in historicalLookup[day.Date])
 				{
-						if (Math.Abs(historicalDay.TotalStatisticCalculatedTasks) > 0.001d)
-							normalDistribution.Add(day.Date, historicalDay.TotalStatisticCalculatedTasks - day.Tasks);
+					if (Math.Abs(historicalDay.TotalStatisticCalculatedTasks) > 0.001d)
+						normalDistribution.Add(day.Date, historicalDay.TotalStatisticCalculatedTasks - day.Tasks);
 				}
 			}
 			

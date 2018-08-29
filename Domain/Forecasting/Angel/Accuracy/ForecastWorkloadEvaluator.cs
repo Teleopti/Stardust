@@ -11,21 +11,19 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 	public class ForecastWorkloadEvaluator : IForecastWorkloadEvaluator
 	{
 		private readonly IHistoricalData _historicalData;
-		private readonly IForecastAccuracyCalculator _forecastAccuracyCalculator;
 		private readonly IForecastMethodProvider _forecastMethodProvider;
 		private readonly IHistoricalPeriodProvider _historicalPeriodProvider;
-		private readonly IOutlierRemover _outlierRemover;
 
-		public ForecastWorkloadEvaluator(IHistoricalData historicalData, IForecastAccuracyCalculator forecastAccuracyCalculator, IForecastMethodProvider forecastMethodProvider, IHistoricalPeriodProvider historicalPeriodProvider, IOutlierRemover outlierRemover)
+		public ForecastWorkloadEvaluator(IHistoricalData historicalData,
+			IForecastMethodProvider forecastMethodProvider,
+			IHistoricalPeriodProvider historicalPeriodProvider)
 		{
 			_historicalData = historicalData;
-			_forecastAccuracyCalculator = forecastAccuracyCalculator;
 			_forecastMethodProvider = forecastMethodProvider;
 			_historicalPeriodProvider = historicalPeriodProvider;
-			_outlierRemover = outlierRemover;
 		}
 
-		public WorkloadAccuracy Evaluate(IWorkload workload)
+		public WorkloadAccuracy Evaluate(IWorkload workload, IOutlierRemover outlierRemover, IForecastAccuracyCalculator forecastAccuracyCalculator)
 		{
 			var result = new WorkloadAccuracy { Id = workload.Id.Value, Name = workload.Name};
 			var availablePeriod = _historicalPeriodProvider.AvailablePeriod(workload);
@@ -40,19 +38,23 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 					return new WorkloadAccuracy { Id = workload.Id.Value, Name = workload.Name, Accuracies = new MethodAccuracy[] { } };
 
 				var twoPeriods = HistoricalPeriodProvider.DivideIntoTwoPeriods(availablePeriod.Value);
-				var firstPeriodData = new TaskOwnerPeriod(DateOnly.MinValue, historicalData.TaskOwnerDayCollection.Where(x => x.CurrentDate <= twoPeriods.Item1.EndDate), TaskOwnerPeriodType.Other);
-				var secondPeriodData = new TaskOwnerPeriod(DateOnly.MinValue, historicalData.TaskOwnerDayCollection.Where(x => x.CurrentDate > twoPeriods.Item1.EndDate), TaskOwnerPeriodType.Other);
+				var firstPeriodData = new TaskOwnerPeriod(DateOnly.MinValue,
+					historicalData.TaskOwnerDayCollection.Where(x => x.CurrentDate <= twoPeriods.Item1.EndDate),
+					TaskOwnerPeriodType.Other);
+				var secondPeriodData = new TaskOwnerPeriod(DateOnly.MinValue,
+					historicalData.TaskOwnerDayCollection.Where(x => x.CurrentDate > twoPeriods.Item1.EndDate),
+					TaskOwnerPeriodType.Other);
 
 				if (!firstPeriodData.TaskOwnerDayCollection.Any())
 					return new WorkloadAccuracy { Id = workload.Id.Value, Name = workload.Name, Accuracies = new MethodAccuracy[] { } };
 
-				var firstPeriodDataNoOutliers = _outlierRemover.RemoveOutliers(firstPeriodData, forecastMethod);
+				var firstPeriodDataNoOutliers = outlierRemover.RemoveOutliers(firstPeriodData, forecastMethod);
 				var forecastResult = forecastMethod.Forecast(firstPeriodDataNoOutliers, twoPeriods.Item2);
 
 				methodsEvaluationResult.Add(new MethodAccuracy
 				{
 					MeasureResult = forecastResult.ToArray(),
-					Number = _forecastAccuracyCalculator.Accuracy(forecastResult, secondPeriodData.TaskOwnerDayCollection),
+					Number = forecastAccuracyCalculator.Accuracy(forecastResult, secondPeriodData.TaskOwnerDayCollection),
 					MethodId = forecastMethod.Id,
 					PeriodEvaluateOn = twoPeriods.Item2,
 					PeriodUsedToEvaluate = twoPeriods.Item1

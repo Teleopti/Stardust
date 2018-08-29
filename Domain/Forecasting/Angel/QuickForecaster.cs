@@ -3,6 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Outlier;
 using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
@@ -17,7 +18,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 		private readonly IForecastWorkloadEvaluator _forecastWorkloadEvaluator;
 		private readonly IHistoricalPeriodProvider _historicalPeriodProvider;
 
-		public QuickForecaster(IQuickForecasterWorkload quickForecasterWorkload, IFetchAndFillSkillDays fetchAndFillSkillDays, IForecastWorkloadEvaluator forecastWorkloadEvaluator, IHistoricalPeriodProvider historicalPeriodProvider)
+		public QuickForecaster(IQuickForecasterWorkload quickForecasterWorkload, IFetchAndFillSkillDays fetchAndFillSkillDays,
+			IForecastWorkloadEvaluator forecastWorkloadEvaluator, IHistoricalPeriodProvider historicalPeriodProvider)
 		{
 			_quickForecasterWorkload = quickForecasterWorkload;
 			_fetchAndFillSkillDays = fetchAndFillSkillDays;
@@ -25,12 +27,11 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			_historicalPeriodProvider = historicalPeriodProvider;
 		}
 
-		public ForecastModel ForecastWorkloadWithinSkill(ISkill skill, IWorkload workload, DateOnlyPeriod futurePeriod,
-			IScenario scenario)
+		public ForecastModel ForecastWorkload(IWorkload workload, DateOnlyPeriod futurePeriod, IScenario scenario)
 		{
-			var skillDays = _fetchAndFillSkillDays.FindRange(futurePeriod, skill, scenario);
+			var skillDays = _fetchAndFillSkillDays.FindRange(futurePeriod, workload.Skill, scenario);
 
-			var workloadAccuracy = _forecastWorkloadEvaluator.Evaluate(workload);
+			var workloadAccuracy = _forecastWorkloadEvaluator.Evaluate(workload, new TaskOutlierRemover(), new ForecastingWeightedMeanAbsolutePercentageError());
 			var forecastMethodId = (workloadAccuracy == null || workloadAccuracy.Accuracies.Length == 0)
 				? ForecastMethodType.None
 				: workloadAccuracy.Accuracies.Single(x => x.IsSelected).MethodId;

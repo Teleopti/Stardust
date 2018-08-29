@@ -7,6 +7,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 	public class ForecastMethodProvider : IForecastMethodProvider
 	{
 		private readonly ILinearTrendCalculator _linearTrendCalculator;
+		private const int dayCountPerMonth = 30;
+		private const int dayCountPerYear = 365;
 
 		public ForecastMethodProvider(ILinearTrendCalculator linearTrendCalculator)
 		{
@@ -16,14 +18,14 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 		public IForecastMethod[] Calculate(DateOnlyPeriod period)
 		{
 			var length = period.EndDate.Date - period.StartDate.Date;
-			if (length < TimeSpan.FromDays(60))
+			if (length < TimeSpan.FromDays(2*dayCountPerMonth))
 			{
 				return new[]
 				{
 					Get(ForecastMethodType.TeleoptiClassicShortTerm)
 				};
 			}
-			if (length < TimeSpan.FromDays(395))
+			if (length < TimeSpan.FromDays(dayCountPerYear+dayCountPerMonth))
 			{
 				return new[]
 				{
@@ -31,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 					Get(ForecastMethodType.TeleoptiClassicMediumTermWithDayInMonth)
 				};
 			}
-			if (length < TimeSpan.FromDays(730))
+			if (length < TimeSpan.FromDays(2*dayCountPerYear))
 			{
 				return new[]
 				{

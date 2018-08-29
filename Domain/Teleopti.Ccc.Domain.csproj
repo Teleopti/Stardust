@@ -72,6 +72,9 @@
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MathNet.Numerics, Version=3.6.0.0, Culture=neutral, PublicKeyToken=cd8b63ad3d691a37, processorArchitecture=MSIL">
+      <HintPath>..\packages\MathNet.Numerics.Signed.3.6.0\lib\net40\MathNet.Numerics.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -104,6 +107,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
@@ -195,6 +199,8 @@
     <Compile Include="Common\DefaultSchedulePeriodProvider.cs" />
     <Compile Include="ApplicationLayer\Commands\MultipleChangeScheduleCommandHandler.cs" />
     <Compile Include="Common\Time\MutableNowWithEvents.cs" />
+    <Compile Include="Forecasting\Angel\Outlier\TaskOutlierRemover.cs" />
+    <Compile Include="Forecasting\Angel\Trend\LinearRegressionTrendCalculator.cs" />
     <Compile Include="Forecasting\QueueStatisticsViewModelFactory.cs" />
     <Compile Include="Forecasting\IQueueStatisticsViewModelFactory.cs" />
     <Compile Include="Forecasting\Models\QueueStatisticsModel.cs" />
@@ -2252,7 +2258,6 @@
     <Compile Include="Forecasting\Angel\IIndexVolumes.cs" />
     <Compile Include="Forecasting\Angel\IndexVolumesLongTerm.cs" />
     <Compile Include="Forecasting\Angel\IQuickForecaster.cs" />
-    <Compile Include="Forecasting\Angel\Accuracy\IQuickForecastSkillEvaluator.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\IForecastWorkloadEvaluator.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\DailyStatisticsToTaskOwnerConverterExtension.cs" />
     <Compile Include="Forecasting\Angel\Historical\HistoricalData.cs" />
@@ -2264,7 +2269,6 @@
     <Compile Include="Forecasting\Angel\LegacyWrappers\LoadStatistics.cs" />
     <Compile Include="Forecasting\Angel\Future\FetchAndFillSkillDays.cs" />
     <Compile Include="Forecasting\Angel\QuickForecaster.cs" />
-    <Compile Include="Forecasting\Angel\Accuracy\QuickForecastSkillEvaluator.cs" />
     <Compile Include="Forecasting\Angel\QuickForecasterWorkload.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastWorkloadEvaluator.cs" />
     <Compile Include="Forecasting\ForecastingTarget.cs" />

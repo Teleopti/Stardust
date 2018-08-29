@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Forecasting.Angel.Outlier;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Trend;
 using Teleopti.Ccc.Domain.Forecasting.Export.Web;
 using Teleopti.Ccc.Domain.Forecasting.Models;
-using Teleopti.Ccc.Infrastructure.Forecasting.Angel;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -21,9 +20,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ForecastingTargetMerger>()
 				.SingleInstance()
 				.As<IForecastingTargetMerger>();
-			builder.RegisterType<ForecastingWeightedMeanAbsolutePercentageError>()
-				.SingleInstance()
-				.As<IForecastAccuracyCalculator>();
 			builder.RegisterType<ForecastMethodProvider>()
 				.SingleInstance()
 				.As<IForecastMethodProvider>();
@@ -33,12 +29,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntradayForecaster>()
 				.SingleInstance()
 				.As<IIntradayForecaster>();
-			builder.RegisterType<OutlierRemover>()
+			builder.RegisterType<TaskOutlierRemover>()
 				.SingleInstance()
 				.As<IOutlierRemover>();
-			builder.RegisterType<QuickForecastSkillEvaluator>()
-				.SingleInstance()
-				.As<IQuickForecastSkillEvaluator>();
 			builder.RegisterType<ForecastWorkloadEvaluator>()
 				.SingleInstance()
 				.As<IForecastWorkloadEvaluator>();

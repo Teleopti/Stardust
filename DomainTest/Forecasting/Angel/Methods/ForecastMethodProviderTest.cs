@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
-using Teleopti.Ccc.Infrastructure.Forecasting.Angel;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Trend;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Methods

@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
 using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -98,16 +99,10 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			var skill = _skillRepository.FindSkillsWithAtLeastOneQueueSource()
 				.SingleOrDefault(s => s.WorkloadCollection.Any(
 					w => w.Id.HasValue && w.Id.Value == input.WorkloadId));
-			if (skill == null)
-			{
-				return Ok(new ForecastModel
-				{
-					WarningMessage = Resources.NoSkillWithQueueFound
-				});
-			}
 
 			var workload = skill.WorkloadCollection.Single(w => w.Id.Value == input.WorkloadId);
-			var forecast = _quickForecaster.ForecastWorkloadWithinSkill(skill, workload, futurePeriod, scenario);
+			var forecast = _quickForecaster.ForecastWorkload(workload, futurePeriod, scenario);
+
 			return Ok(forecast);
 		}
 

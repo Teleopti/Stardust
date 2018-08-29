@@ -100,9 +100,6 @@
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MathNet.Numerics">
-      <HintPath>..\packages\MathNet.Numerics.Signed.3.6.0\lib\net40\MathNet.Numerics.dll</HintPath>
-    </Reference>
     <Reference Include="MbCache, Version=2.14.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
       <HintPath>..\packages\MbCache.2.14.0\lib\net40\MbCache.dll</HintPath>
       <Private>True</Private>
@@ -231,8 +228,6 @@
     <Compile Include="DistributedLock\DistributedLockAcquirer.cs" />
     <Compile Include="DistributedLock\DistributedLockException.cs" />
     <Compile Include="DistributedLock\SqlMonitor.cs" />
-    <Compile Include="Forecasting\Angel\LinearRegressionTrendCalculator.cs" />
-    <Compile Include="Forecasting\Angel\OutlierRemover.cs" />
     <Compile Include="Foundation\CouldNotCreateTransactionException.cs" />
     <Compile Include="ApplicationLayer\IJsonEventDeserializer.cs" />
     <Compile Include="ApplicationLayer\IJsonEventSerializer.cs" />
@@ -904,6 +899,7 @@
     <None Include="..\Teleopti.Ccc.snk">
       <Link>Teleopti.Ccc.snk</Link>
     </None>
+    <None Include="app.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -958,6 +954,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Forecasting\Angel\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
