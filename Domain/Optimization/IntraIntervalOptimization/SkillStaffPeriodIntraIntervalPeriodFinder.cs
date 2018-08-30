@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		public IList<DateTimePeriod> Find(DateTimePeriod skillStaffPeriod, ShiftProjectionCache shiftProjectionCache, ISkill skill)
 		{
 			var result = new List<DateTimePeriod>();
-			var visualLayers = shiftProjectionCache.MainShiftProjection;
+			var visualLayers = shiftProjectionCache.MainShiftProjection();
 			foreach (var visualLayer in visualLayers)
 			{
 				if (!visualLayer.Period.Intersect(skillStaffPeriod)) continue;

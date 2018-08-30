@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	        IList<ShiftProjectionCache> workShiftsWithActivity =
 		        shiftList.Where(
 			        s => restriction.VisualLayerCollectionSatisfiesActivityRestriction(scheduleDayDateOnly, agentTimeZone,
-				        s.MainShiftProjection.OfType<IActivityRestrictableVisualLayer>())).ToArray();
+				        s.MainShiftProjection().OfType<IActivityRestrictableVisualLayer>())).ToArray();
 
             return workShiftsWithActivity;
         }
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public IList<ShiftProjectionCache> FilterOnLatestStartTime(IList<ShiftProjectionCache> shiftList, DateTime latestStart)
         {
 	        IList<ShiftProjectionCache> workShiftsWithinPeriod =
-		        shiftList.Select(s => new {s, Period = s.MainShiftProjection.Period()})
+		        shiftList.Select(s => new {s, Period = s.MainShiftProjection().Period()})
 			        .Where(s => s.Period.HasValue && s.Period.Value.StartDateTime <= latestStart)
 			        .Select(s => s.s)
 			        .ToArray();
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             IList<ShiftProjectionCache> workShiftsWithinPeriod = shiftList.Select(s => new
 		        {
 			        s,
-			        Period = s.MainShiftProjection.Period()
+			        Period = s.MainShiftProjection().Period()
 		        }).Where(s => s.Period.HasValue && s.Period.Value.EndDateTime >= earliestEnd)
 		        .Select(s => s.s).ToArray();
 

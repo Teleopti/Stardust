@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				{
 					//var shiftProjection = ((IWorkShiftCalculatableProjection)shiftProjectionCache).WorkShiftCalculatableLayers;
 					var resultFromOneCache = _nonBlendWorkShiftCalculator.CalculateShiftValue(person,
-						shiftProjectionCache.MainShiftProjection,
+						shiftProjectionCache.MainShiftProjection(),
 						nonBlendSkillPeriods,
 						schedulingOptions.WorkShiftLengthHintOption,
 						schedulingOptions.UseMinimumStaffing,

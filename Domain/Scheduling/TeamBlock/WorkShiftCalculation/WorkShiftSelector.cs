@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 		protected override double? valueForShift(IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataLocalDictionary, ShiftProjectionCache shiftProjectionCache, PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo)
 		{
 			var activityValueSum = 0d;
-			var mainShiftProjection = shiftProjectionCache.MainShiftProjection;
+			var mainShiftProjection = shiftProjectionCache.MainShiftProjection();
 			foreach (var skillInterval in skillIntervalDataLocalDictionary)
 			{
 				var activityValue =_workShiftValueCalculator.CalculateShiftValue(mainShiftProjection,
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 		[RemoveMeWithToggle(Toggles.ResourcePlanner_XXL_76496)]
 		private double? valueForActivity(IActivity activity, IDictionary<DateTime, ISkillIntervalData> skillIntervalDataDic, ShiftProjectionCache shiftProjectionCache, PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo)
 		{
-			return _workShiftValueCalculator.CalculateShiftValue(shiftProjectionCache.MainShiftProjection,
+			return _workShiftValueCalculator.CalculateShiftValue(shiftProjectionCache.MainShiftProjection(),
 																		  activity, skillIntervalDataDic, parameters, timeZoneInfo);
 		}
 

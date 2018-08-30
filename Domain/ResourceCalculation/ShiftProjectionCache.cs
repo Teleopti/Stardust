@@ -58,10 +58,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public DateTimePeriod WorkShiftProjectionPeriod => _workShift.Projection.Period().Value;
 
-		public IVisualLayerCollection MainShiftProjection => _mainshiftProjection?.Value ?? TheMainShift.ProjectionService().CreateProjection();
+		public IVisualLayerCollection MainShiftProjection() =>
+			_mainshiftProjection?.Value ?? TheMainShift.ProjectionService().CreateProjection();
 
 		public IEnumerable<IWorkShiftCalculatableLayer> WorkShiftCalculatableLayers => _workShiftCalculatableLayers ??
-																					   (_workShiftCalculatableLayers = new WorkShiftCalculatableVisualLayerCollection(MainShiftProjection));
+																					   (_workShiftCalculatableLayers = new WorkShiftCalculatableVisualLayerCollection(MainShiftProjection()));
 
 		public bool PersonalShiftsAndMeetingsAreInWorkTime(IPersonMeeting[] meetings, IPersonAssignment personAssignment)
 		{
