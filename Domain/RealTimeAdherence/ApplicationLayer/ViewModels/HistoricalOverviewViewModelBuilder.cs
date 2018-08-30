@@ -76,11 +76,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 					Day = day
 				};
 
-			var foo = from rm in dayStuff
-				group rm by rm.SiteTeamName
-				into teamGroupedAgents
-				select teamGroupedAgents;
-
 			return from rm in dayStuff
 				group rm by rm.SiteTeamName
 				into teamGroupedAgents
@@ -90,22 +85,34 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 					Agents = (from agent in teamGroupedAgents
 						group agent by agent.PersonId
 						into agentGrouping
+						let agentInGroup = agentGrouping.First()
 						select new HistoricalOverviewAgentViewModel
 						{
-							Id = agentGrouping.First().PersonId.Value,
-							Name = agentGrouping.First().Name,
+							Id = agentInGroup.PersonId.Value,
+							Name = agentInGroup.Name,
 							Days = (from day in sevenDays
 									select new HistoricalOverviewDayViewModel
 									{
 										Date = day.Date.ToString("yyyyMMdd"),
 										DisplayDate = day.Date.ToString("MM") + "/" + day.Date.ToString("dd"),
-										Adherence = getAdherence(readModels, agentGrouping.First().PersonId.Value),
-										WasLateForWork = getWasLateForWork(readModels, agentGrouping.First().PersonId.Value)
+										Adherence = getAdherence(readModels, agentInGroup.PersonId.Value),
+										WasLateForWork = getWasLateForWork(readModels, agentInGroup.PersonId.Value)
 									}
 								),
-							LateForWork = new HistoricalOverviewLateForWorkViewModel { }
+							LateForWork = new HistoricalOverviewLateForWorkViewModel
+							{
+								Count = sevenDays.Count(day => getLateforWorkCount(day, readModels, agentInGroup.PersonId.Value) > 0),
+								TotalMinutes = sevenDays.Sum(day => getLateforWorkCount(day, readModels, agentInGroup.PersonId.Value))
+							}
 						})
 				};
+		}
+
+		private static int getLateforWorkCount(DateTime day, IEnumerable<HistoricalOverviewReadModel> rm, Guid agentId)
+		{
+			if (rm.IsNullOrEmpty())
+				return 0;
+			return rm.SingleOrDefault(r => r.PersonId == agentId && r.Date == day.ToDateOnly())?.MinutesLateForWork ?? 0;
 		}
 
 		private static bool getWasLateForWork(IEnumerable<HistoricalOverviewReadModel> rm, Guid agentId)

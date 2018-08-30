@@ -16,8 +16,6 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 	[DomainTest]
 	[DefaultData]
 	[TestFixture]
-	//[ExtendScope(typeof(PersonAssociationChangedEventPublisher))]
-	//[ExtendScope(typeof(AgentStateReadModelMaintainer))]
 	public class BuildTest
 	{
 		public Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels.HistoricalOverviewViewModelBuilder Target;
@@ -295,21 +293,21 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 			data.Agents.Single().LateForWork.Count.Should().Be(0);
 		}
 
-//		[Test]
-//		public void ShouldDisplayLateForWorkSum()
-//		{
-//			Now.Is("2018-08-27 08:00");
-//			var teamId = Guid.NewGuid();
-//			Database
-//				.WithTeam(teamId)
-//				.WithAgent()
-//				.WithArrivedLateForWork("2018-08-27 10:00", "2018-08-27 11:00");
-//			Now.Is("2018-08-28 08:00");
-//
-//			var data = Target.Build(null, new[] {teamId}).First();
-//
-//			data.Agents.Single().LateForWork.Count.Should().Be(1);
-//		}
+		[Test]
+		public void ShouldDisplayLateForWorkSum()
+		{
+			Now.Is("2018-08-27 08:00");
+			var teamId = Guid.NewGuid();
+			Database
+				.WithTeam(teamId)
+				.WithAgent()
+				.WithArrivedLateForWork("2018-08-27 10:00", "2018-08-27 11:00");
+			Now.Is("2018-08-28 08:00");
+
+			var data = Target.Build(null, new[] {teamId}).First();
+
+			data.Agents.Single().LateForWork.Count.Should().Be(1);
+		}
 
 		[Test]
 		public void ShouldDisplayLateForkWorkSumInMinutes()
@@ -324,22 +322,22 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 
 			data.Agents.Single().LateForWork.TotalMinutes.Should().Be(0);
 		}
-//
-//		[Test]
-//		public void ShouldDisplayLateForkWorkSum60Minutes()
-//		{
-//			Now.Is("2018-08-27 08:00");
-//			var teamId = Guid.NewGuid();
-//			Database
-//				.WithTeam(teamId)
-//				.WithAgent()
-//				.WithArrivedLateForWork("2018-08-27 10:00", "2018-08-27 11:00");
-//			Now.Is("2018-08-28 08:00");
-//
-//			var data = Target.Build(null, new[] {teamId}).First();
-//
-//			data.Agents.Single().LateForWork.TotalMinutes.Should().Be(60);
-//		}
+
+		[Test]
+		public void ShouldDisplayLateForkWorkSum60Minutes()
+		{
+			Now.Is("2018-08-27 08:00");
+			var teamId = Guid.NewGuid();
+			Database
+				.WithTeam(teamId)
+				.WithAgent()
+				.WithArrivedLateForWork("2018-08-27 10:00", "2018-08-27 11:00");
+			Now.Is("2018-08-28 08:00");
+
+			var data = Target.Build(null, new[] {teamId}).First();
+
+			data.Agents.Single().LateForWork.TotalMinutes.Should().Be(60);
+		}
 
 		[Test]
 		public void ShouldDisplayTeamInSite()

@@ -20,5 +20,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels
 		public Guid PersonId;
 		public int? Adherence { get; set; }
 		public bool WasLateForWork { get; set; }
+		public int MinutesLateForWork { get; set; }
 	}
 }

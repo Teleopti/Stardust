@@ -47,12 +47,17 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events
 			queryData.ForEach(q =>
 			{
 				var adherenceDay = _adherenceDayLoader.Load(q.PersonId.Value, q.StartTime.Value.ToDateOnly());
+				var changeLateForWork = adherenceDay.Changes().FirstOrDefault(c => c.LateForWork != null);
+				var lateForWorkText = changeLateForWork != null ? changeLateForWork.LateForWork : "0";
+				var minutesLateForWork = int.Parse(Regex.Replace(lateForWorkText, "[^0-9.]", ""));	
+				
 				_readModels.Upsert(new HistoricalOverviewReadModel
 				{
 					PersonId = q.PersonId.Value,
 					Date = q.StartTime.Value.ToDateOnly(),
 					Adherence = adherenceDay.Percentage(),
-					WasLateForWork = adherenceDay.Changes().Any(x => x.LateForWork != null)
+					WasLateForWork = changeLateForWork != null,
+					MinutesLateForWork = minutesLateForWork
 				});
 			});
 		}
