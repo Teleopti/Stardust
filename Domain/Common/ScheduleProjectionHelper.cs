@@ -42,11 +42,8 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			var matchedLayers = new List<PersonalShiftLayer>();
 			var personAssignment = scheduleDay.PersonAssignment();
-			var shiftLayersList = new List<ShiftLayer>();
-			if (personAssignment != null && personAssignment.ShiftLayers.Any())
-			{
-				shiftLayersList = personAssignment.ShiftLayers.ToList();
-			}
+			var shiftLayersList = personAssignment?.ShiftLayers?.ToList() ?? new List<ShiftLayer>();
+
 			foreach (var shiftLayer in shiftLayersList)
 			{
 				var isPersonalLayer = shiftLayer is PersonalShiftLayer;

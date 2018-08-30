@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 		{
 			Target.Publish(new PersonStateChangedEvent());
 
-			var actal = WithUnitOfWork.Get(() => Events.LoadAll());
+			var actal = WithUnitOfWork.Get(() => Events.LoadAllForTest());
 
 			actal.Should().Not.Be.Empty();
 		}
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 				Adherence = null
 			});
 
-			var result = (PersonStateChangedEvent) WithUnitOfWork.Get(() => Events.LoadAll()).Single();
+			var result = (PersonStateChangedEvent) WithUnitOfWork.Get(() => Events.LoadAllForTest()).Single();
 			result.PersonId.Should().Be(personId);
 			result.BelongsToDate.Should().Be("2018-03-06".Date());
 			result.Timestamp.Should().Be("2018-03-06 08:00".Utc());
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 		{
 			WithUnitOfWork.Do(() => Target.Publish(new PersonStateChangedEvent()));
 
-			WithUnitOfWork.Get(() => Events.LoadAll())
+			WithUnitOfWork.Get(() => Events.LoadAllForTest())
 				.Should().Not.Be.Empty();
 		}
 
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 				});
 			});
 
-			WithUnitOfWork.Get(() => Events.LoadAll())
+			WithUnitOfWork.Get(() => Events.LoadAllForTest())
 				.Should().Not.Be.Empty();
 		}
 
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 				new PersonStateChangedEvent {PersonId = second}
 			);
 
-			WithUnitOfWork.Get(() => Events.LoadAll())
+			WithUnitOfWork.Get(() => Events.LoadAllForTest())
 				.Cast<PersonStateChangedEvent>()
 				.Select(x => x.PersonId)
 				.Should().Have.SameSequenceAs(new[] {first, second});
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 
 			Target.Publish(new TestEvent {Id = id});
 
-			WithUnitOfWork.Get(() => Events.LoadAll())
+			WithUnitOfWork.Get(() => Events.LoadAllForTest())
 				.Cast<TestEvent>()
 				.Single().Id.Should().Be(id);
 		}
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 		{
 			Target.Publish(new PersonRuleChangedEvent());
 
-			WithUnitOfWork.Get(() => Events.LoadAll())
+			WithUnitOfWork.Get(() => Events.LoadAllForTest())
 				.Should().Not.Be.Empty();
 		}
 
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 		{
 			Target.Publish(new PeriodApprovedAsInAdherenceEvent());
 
-			WithUnitOfWork.Get(() => Events.LoadAll())
+			WithUnitOfWork.Get(() => Events.LoadAllForTest())
 				.Should().Not.Be.Empty();
 		}
 
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 		{
 			WithUnitOfWork.Do(() => Target.Publish(new PersonArrivedLateForWorkEvent()));
 
-			WithUnitOfWork.Get(() => Events.LoadAll())
+			WithUnitOfWork.Get(() => Events.LoadAllForTest())
 				.Should().Not.Be.Empty();
 		}
 

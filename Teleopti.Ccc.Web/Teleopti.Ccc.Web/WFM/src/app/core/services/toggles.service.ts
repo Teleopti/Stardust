@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 
 export interface Toggles {
@@ -12,7 +12,7 @@ export class TogglesService {
 	private toggles$ = new ReplaySubject<Toggles>(1);
 
 	constructor(private http: HttpClient) {
-		this.http.get('/TeleoptiWFM/Web/ToggleHandler/AllToggles').subscribe({
+		this.http.get('../ToggleHandler/AllToggles').subscribe({
 			next: (toggles: Toggles) => {
 				this.toggles$.next(toggles);
 			}

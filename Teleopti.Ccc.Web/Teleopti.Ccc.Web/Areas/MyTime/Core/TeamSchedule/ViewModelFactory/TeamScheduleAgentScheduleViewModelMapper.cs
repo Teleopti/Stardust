@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			{
 				var periods = new List<TeamScheduleAgentScheduleLayerViewModel>();
 				var layers = agentInTeamScheduleViewModel.ScheduleLayers;
-				if (layers != null && layers.Any() && !agentInTeamScheduleViewModel.IsDayOff)
+				if (layers != null && layers.Any())
 				{
 					var diff = (decimal)(endTime - startTime).Ticks;
 					foreach (var layer in layers)

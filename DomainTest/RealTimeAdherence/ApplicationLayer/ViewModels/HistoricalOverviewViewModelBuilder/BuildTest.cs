@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
@@ -15,8 +16,6 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 	[DomainTest]
 	[DefaultData]
 	[TestFixture]
-	[ExtendScope(typeof(PersonAssociationChangedEventPublisher))]
-	[ExtendScope(typeof(AgentStateReadModelMaintainer))]	
 	public class BuildTest
 	{
 		public Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels.HistoricalOverviewViewModelBuilder Target;
@@ -34,7 +33,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 		public void ShouldGetEmptyModelForNoAgentsInTeam()
 		{
 			var teamId = Guid.NewGuid();
-			Database.WithSite("Barcelona")
+			Database
+				.WithSite("Barcelona")
 				.WithTeam(teamId, "Blue")
 				.WithHistoricalStateChange("2018-08-23 14:00");
 
@@ -43,11 +43,12 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 		}
 
 		[Test]
-		public void ShouldGetSiteTeamNameBarcelonaBlue()
+		public void ShouldDisplayTeamBarcelonaBlue()
 		{
 			Now.Is("2018-08-23 14:00");
 			var teamId = Guid.NewGuid();
-			Database.WithSite("Barcelona")
+			Database
+				.WithSite("Barcelona")
 				.WithTeam(teamId, "Blue")
 				.WithAgent()
 				.WithHistoricalStateChange("2018-08-23 14:00");
@@ -58,11 +59,12 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 		}
 
 		[Test]
-		public void ShouldGetSiteTeamNameDenverRed()
+		public void ShouldDisplayTeamDenverRed()
 		{
 			Now.Is("2018-08-23 14:00");
 			var teamId = Guid.NewGuid();
-			Database.WithSite("Denver")
+			Database
+				.WithSite("Denver")
 				.WithTeam(teamId, "Red")
 				.WithAgent()
 				.WithHistoricalStateChange("2018-08-23 14:00");
@@ -78,35 +80,39 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 			Now.Is("2018-08-23 14:00");
 			var teamId = Guid.NewGuid();
 			var agentId = Guid.NewGuid();
-			Database.WithTeam(teamId)
+			Database
+				.WithTeam(teamId)
 				.WithAgent(agentId)
 				.WithHistoricalStateChange("2018-08-23 14:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
+
 			data.Agents.Single().Id.Should().Be(agentId);
 		}
 
-		
 		[Test]
-		public void ShouldGetAgentNameBob()
+		public void ShouldDisplayAgentBob()
 		{
 			Now.Is("2018-08-23 14:00");
 			var teamId = Guid.NewGuid();
-			Database.WithTeam(teamId)
+			Database
+				.WithTeam(teamId)
 				.WithAgentNameDisplayedAs("{LastName} {FirstName}")
 				.WithAgent("Bob Anderson")
 				.WithHistoricalStateChange("2018-08-23 14:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
+
 			data.Agents.Single().Name.Should().Be("Anderson Bob");
 		}
 
 		[Test]
-		public void ShouldGetAgentNameLucy()
+		public void ShouldDisplayAgentLucy()
 		{
 			Now.Is("2018-08-23 14:00");
 			var teamId = Guid.NewGuid();
-			Database.WithTeam(teamId)
+			Database
+				.WithTeam(teamId)
 				.WithAgentNameDisplayedAs("{LastName} {FirstName}")
 				.WithAgent("Lucy Stone")
 				.WithHistoricalStateChange("2018-08-23 14:00");
@@ -117,11 +123,12 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 		}
 
 		[Test]
-		public void ShouldGetSevenDaysForAgent()
+		public void ShouldDisplaySevenDays()
 		{
 			Now.Is("2018-08-23 14:00");
 			var teamId = Guid.NewGuid();
-			Database.WithTeam(teamId)
+			Database
+				.WithTeam(teamId)
 				.WithAgent()
 				.WithHistoricalStateChange("2018-08-23 14:00");
 
@@ -135,7 +142,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 		{
 			Now.Is("2018-08-23 14:00");
 			var teamId = Guid.NewGuid();
-			Database.WithTeam(teamId)
+			Database
+				.WithTeam(teamId)
 				.WithAgent()
 				.WithHistoricalStateChange("2018-08-23 14:00");
 
@@ -149,7 +157,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 		{
 			Now.Is("2018-08-23 14:00");
 			var teamId = Guid.NewGuid();
-			Database.WithTeam(teamId)
+			Database
+				.WithTeam(teamId)
 				.WithAgent()
 				.WithHistoricalStateChange("2018-08-23 14:00");
 
@@ -163,7 +172,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 		{
 			Now.Is("2018-08-24 14:00");
 			var teamId = Guid.NewGuid();
-			Database.WithTeam(teamId)
+			Database
+				.WithTeam(teamId)
 				.WithAgent()
 				.WithHistoricalStateChange("2018-08-24 14:00");
 
@@ -173,11 +183,12 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 		}
 
 		[Test]
-		public void ShouldGetDisplayDateForSevenDaysSequentially()
+		public void ShouldDisplayDateForSevenDaysSequentially()
 		{
 			Now.Is("2018-08-24 14:00");
 			var teamId = Guid.NewGuid();
-			Database.WithTeam(teamId)
+			Database
+				.WithTeam(teamId)
 				.WithAgent()
 				.WithHistoricalStateChange("2018-08-24 14:00");
 
@@ -187,137 +198,182 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 		}
 
 		[Test]
-		public void ShouldGetEmptyAdherenceForSevenDaysIfNotBeenWorking()
+		public void ShouldDisplayEmptyAdherenceForSevenDaysIfNotBeenWorking()
 		{
 			Now.Is("2018-08-24 14:00");
 			var teamId = Guid.NewGuid();
-			Database.WithTeam(teamId )
+			Database
+				.WithTeam(teamId)
 				.WithAgent()
 				.WithHistoricalStateChange("2018-08-24 14:00");
 
 			var data = Target.Build(null, new[] {teamId}).First();
-			
+
 			data.Agents.Single().Days.Count(a => a.Adherence == null).Should().Be(7);
 		}
-		
+
 		[Test]
-		public void ShouldGetFullAdherence()
+		public void ShouldDisplayFullAdherence()
 		{
 			Now.Is("2018-08-23 08:00");
 			var teamId = Guid.NewGuid();
-			Database.WithTeam(teamId)
+			Database
+				.WithTeam(teamId)
 				.WithAgent()
 				.WithAssignment("2018-08-23")
 				.WithAssignedActivity("2018-08-23 08:00", "2018-08-23 17:00")
-				.WithHistoricalStateChange("2018-08-23 08:00",Adherence.In);
+				.WithHistoricalStateChange("2018-08-23 08:00", Adherence.In);
 			Now.Is("2018-08-24 08:00");
-			
+
 			var data = Target.Build(null, new[] {teamId}).First();
-			
+
 			data.Agents.Single().Days.Last().Adherence.Should().Be("100");
 		}
-		
+
 		[Test]
-		public void ShouldGetCalculatedAdherence()
+		public void ShouldDisplayCalculatedAdherence()
 		{
 			Now.Is("2018-08-17 08:00");
 			var teamId = Guid.NewGuid();
-			Database.WithTeam(teamId)
+			Database
+				.WithTeam(teamId)
 				.WithAgent()
 				.WithAssignment("2018-08-17")
 				.WithAssignedActivity("2018-08-17 10:00", "2018-08-17 20:00")
-				.WithHistoricalStateChange("2018-08-17 10:00",Adherence.In)
-				.WithHistoricalStateChange("2018-08-17 15:00",Adherence.Out);
+				.WithHistoricalStateChange("2018-08-17 10:00", Adherence.In)
+				.WithHistoricalStateChange("2018-08-17 15:00", Adherence.Out);
 			Now.Is("2018-08-24 08:00");
-			
+
 			var data = Target.Build(null, new[] {teamId}).First();
-			
+
 			data.Agents.Single().Days.First().Adherence.Should().Be("50");
 		}
 
 		[Test]
-		public void ShouldGetWasNotLateForWork()
+		public void ShouldNotDisplayLateForWork()
 		{
 			Now.Is("2018-08-24 08:00");
 			var teamId = Guid.NewGuid();
-			Database.WithTeam(teamId)
+			Database
+				.WithTeam(teamId)
 				.WithAgent();
-			
+
 			var data = Target.Build(null, new[] {teamId}).First();
-			
+
 			data.Agents.Single().Days.First().WasLateForWork.Should().Be(false);
 		}
-		
+
 		[Test]
-		public void ShouldGetWasLateForWork()
+		public void ShouldDisplayLateForWork()
 		{
 			Now.Is("2018-08-27 08:00");
 			var teamId = Guid.NewGuid();
-			Database.WithTeam(teamId)
+			Database
+				.WithTeam(teamId)
 				.WithAgent()
 				.WithArrivedLateForWork("2018-08-27 10:00", "2018-08-27 11:00");
 			Now.Is("2018-08-28 08:00");
-						
+
 			var data = Target.Build(null, new[] {teamId}).First();
-			
+
 			data.Agents.Single().Days.Last().WasLateForWork.Should().Be(true);
 		}
-		
-		
+
 		[Test]
-		public void ShouldNotBeAnyLateForWork()
+		public void ShouldDisplayLateForWorkSumZero()
 		{
 			Now.Is("2018-08-24 08:00");
 			var teamId = Guid.NewGuid();
-			Database.WithTeam(teamId)
+			Database
+				.WithTeam(teamId)
 				.WithAgent();
-			
+
 			var data = Target.Build(null, new[] {teamId}).First();
-			
+
 			data.Agents.Single().LateForWork.Count.Should().Be(0);
 		}
-		
+
 		[Test]
-		public void ShouldGetNumberOfTimesLateForWork()
+		public void ShouldDisplayLateForWorkSum()
 		{
 			Now.Is("2018-08-27 08:00");
 			var teamId = Guid.NewGuid();
-			Database.WithTeam(teamId)
+			Database
+				.WithTeam(teamId)
 				.WithAgent()
 				.WithArrivedLateForWork("2018-08-27 10:00", "2018-08-27 11:00");
 			Now.Is("2018-08-28 08:00");
-			
+
 			var data = Target.Build(null, new[] {teamId}).First();
-			
+
 			data.Agents.Single().LateForWork.Count.Should().Be(1);
 		}
-		
+
 		[Test]
-		public void ShouldGetZeroForTotalLateForWorkMinutes()
+		public void ShouldDisplayLateForkWorkSumInMinutes()
 		{
 			Now.Is("2018-08-24 08:00");
 			var teamId = Guid.NewGuid();
-			Database.WithTeam(teamId)
+			Database
+				.WithTeam(teamId)
 				.WithAgent();
-			
+
 			var data = Target.Build(null, new[] {teamId}).First();
-			
+
 			data.Agents.Single().LateForWork.TotalMinutes.Should().Be(0);
 		}
-		
+
 		[Test]
-		public void ShouldGetTotalLateForWorkMinutes()
+		public void ShouldDisplayLateForkWorkSum60Minutes()
 		{
 			Now.Is("2018-08-27 08:00");
 			var teamId = Guid.NewGuid();
-			Database.WithTeam(teamId)
+			Database
+				.WithTeam(teamId)
 				.WithAgent()
 				.WithArrivedLateForWork("2018-08-27 10:00", "2018-08-27 11:00");
 			Now.Is("2018-08-28 08:00");
-			
+
 			var data = Target.Build(null, new[] {teamId}).First();
-			
+
 			data.Agents.Single().LateForWork.TotalMinutes.Should().Be(60);
-		}		
+		}
+
+		[Test]
+		public void ShouldDisplayTeamInSite()
+		{
+			Now.Is("2018-08-23 14:00");
+			var siteId = Guid.NewGuid();
+
+			Database
+				.WithSite(siteId, "Barcelona")
+				.WithTeam("Blue")
+				.WithAgent();
+
+			var data = Target.Build(new[] {siteId}, null);
+
+			data.Single().Name.Should().Be("Barcelona/Blue");
+		}
+
+		[Test]
+		public void ShouldDisplayTeamAndTeamInSite()
+		{
+			Now.Is("2018-08-23 14:00");
+			var siteId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+
+			Database
+				.WithSite("Denver")
+				.WithTeam(teamId, "Red")
+				.WithAgent()
+				.WithSite(siteId, "Barcelona")
+				.WithTeam("Blue")
+				.WithAgent();
+
+			var data = Target.Build(new[] {siteId}, new[] {teamId});
+
+			data.First().Name.Should().Be("Barcelona/Blue");
+			data.Second().Name.Should().Be("Denver/Red");
+		}
 	}
 }

@@ -451,7 +451,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			});
 			
 			var result = _target.SkillResources(_skill, _period);
-			Math.Round(result.Item1, 1).Should().Be.EqualTo(0.8);
+			Math.Round(result.Item1, 1).Should().Be.EqualTo(0);
 			Math.Round(result.Item2, 1).Should().Be.EqualTo(1);
 		}
 

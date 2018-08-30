@@ -260,6 +260,7 @@
     <Compile Include="MultiTenancy\PersonIdentityModel.cs" />
     <Compile Include="Optimization\TeamBlock\ForecastAndScheduleSumForDay.cs" />
     <Compile Include="Optimization\WasReallyBetterResult.cs" />
+    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\IHistoricalOverviewReadModelPersister.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalOverviewViewModelBuilder.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayLoaderDurationOfEvents.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayLoaderLateForWork.cs" />
@@ -267,14 +268,13 @@
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayWithLateForWork.cs" />
     <Compile Include="RealTimeAdherence\Domain\Events\ISolidProof.cs" />
     <Compile Include="RealTimeAdherence\Domain\Events\PersonArrivedLateForWorkEvent.cs" />
+    <Compile Include="RealTimeAdherence\Domain\Events\RtaEventStoreSynchronizer.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\DeadLockVictim.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\LateForWorkEventPublisher.cs" />
     <Compile Include="RegisterEventHandlerInLifetimeScopeAttribute.cs" />
     <Compile Include="Repositories\IAllSkillForSkillGroupProvider.cs" />
-    <Compile Include="Repositories\IFindPersonAssignment.cs" />
     <Compile Include="Repositories\IForecastDayOverrideRepository.cs" />
     <Compile Include="Repositories\IExtensiveLogRepository.cs" />
-    <Compile Include="Scheduling\FindSchedulesForPersonsInternallyAsync.cs" />
     <Compile Include="Scheduling\WebClearScheduleStardustHandler.cs" />
     <Compile Include="Scheduling\IPredictShiftCategory.cs" />
     <Compile Include="Scheduling\IShiftCategoryPredictionModelLoader.cs" />

@@ -12,17 +12,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 {
 	public class BackToLegalShiftService
 	{
-		//copied from BackToLegalShiftService
-		
 		private readonly IBackToLegalShiftWorker _backToLegalShiftWorker;
-		private readonly IFirstShiftInTeamBlockFinder _firstShiftInTeamBlockFinder;
+		private readonly FirstShiftInTeamBlockFinder _firstShiftInTeamBlockFinder;
 		private readonly ILegalShiftDecider _legalShiftDecider;
 		private readonly IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly CascadingResourceCalculationContextFactory _cascadingResourceCalculationContextFactory;
 
 		public BackToLegalShiftService(IBackToLegalShiftWorker backToLegalShiftWorker,
-			IFirstShiftInTeamBlockFinder firstShiftInTeamBlockFinder, ILegalShiftDecider legalShiftDecider,
+			FirstShiftInTeamBlockFinder firstShiftInTeamBlockFinder, ILegalShiftDecider legalShiftDecider,
 			IDayOffsInPeriodCalculator dayOffsInPeriodCalculator,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
 			CascadingResourceCalculationContextFactory cascadingResourceCalculationContextFactory)

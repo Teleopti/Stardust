@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 			var retList = (from shift in shiftList
 						   let visualLayerPeriodList =
-				shift.MainShiftProjection
+				shift.MainShiftProjection()
 					.Where(c => c.Payload.Id == schedulingOptions.CommonActivity.Id)
 					.Select(c => c.Period)
 					.ToArray()

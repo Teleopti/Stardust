@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			{
 				foreach (var skillStaffPeriod in maxSeatSkillDay.SkillStaffPeriodCollection)
 				{
-					foreach (var layer in shift.MainShiftProjection.Where(x => x.Period.Intersect(skillStaffPeriod.Period)))
+					foreach (var layer in shift.MainShiftProjection().Where(x => x.Period.Intersect(skillStaffPeriod.Period)))
 					{
 						if (hasNonMaxSeatSkills && !_isAnySkillOpen.Check(skillDays, layer, person.PermissionInformation.DefaultTimeZone()))
 						{

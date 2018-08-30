@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 
@@ -31,7 +32,13 @@ namespace Teleopti.Ccc.Web.Core.Data
 		{
 			return
 				_activityRepository.LoadAllSortByName()
-					.Select(a => new ActivityViewModel {Id = a.Id.GetValueOrDefault(), Name = a.Name, Color = a.DisplayColor.ToHtml()})
+					.Select(a => new ActivityViewModel
+					{
+						Id = a.Id.GetValueOrDefault(),
+						Name = a.Name,
+						Color = a.DisplayColor.ToHtml(),
+						FloatOnTop = a.ReportLevelDetail == ReportLevelDetail.Lunch || a.ReportLevelDetail == ReportLevelDetail.ShortBreak
+					})
 					.ToArray();
 		} 
 	}

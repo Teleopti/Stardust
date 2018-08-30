@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 				shiftList.Where(
 					s =>
 						restriction.VisualLayerCollectionSatisfiesActivityRestriction(scheduleDayDateOnly, timeZone,
-							s.MainShiftProjection.OfType<IActivityRestrictableVisualLayer>())).ToList();
+							s.MainShiftProjection().OfType<IActivityRestrictableVisualLayer>())).ToList();
 
 			return workShiftsWithActivity;
 		}

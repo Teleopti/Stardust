@@ -12,7 +12,7 @@ export class UserService {
 	private preferences$ = new ReplaySubject<UserPreferences>(1);
 
 	constructor(private http: HttpClient) {
-		this.http.get('/TeleoptiWFM/Web/api/Global/User/CurrentUser').subscribe({
+		this.http.get('../api/Global/User/CurrentUser').subscribe({
 			next: (preferences: UserPreferences) => {
 				this.preferences$.next(preferences);
 			}

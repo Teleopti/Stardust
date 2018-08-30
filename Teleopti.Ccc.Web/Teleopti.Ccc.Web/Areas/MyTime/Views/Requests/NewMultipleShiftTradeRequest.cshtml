@@ -357,20 +357,22 @@
 						<!--ko if: !targetSchedule.isFullDayAbsence-->
 						<div data-bind="visible:!$root.isMobile()" class="shift-visual-indication-wrapper">
 							<div class="shift-visual-indication">
-								<!-- ko foreach: targetSchedule.layers -->
-								<div class="shift-visual-indication-block" data-bind="style: styleJson74947, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
-								<!-- /ko -->
 								<!--ko if: targetSchedule.isDayOff -->
 								<div class="shift-visual-indication-block dayoff"></div>
 								<!--/ko-->
+								<!--ko if: !targetSchedule.isDayOff -->
+								<!-- ko foreach: targetSchedule.layers -->
+								<div class="shift-visual-indication-block" data-bind="style: styleJson74947, tooltip: { title: tooltipText, html: true }, attr: { 'scheduleinfo': tooltipText() }"></div>
+								<!-- /ko -->
+								<!-- /ko -->
 							</div>
 						</div>
 						<!--/ko-->
 						<!--/ko-->
 					</div>
 					<!--ko if:targetSchedule-->
-					<div class="text-indicator-mobile" data-bind="style:{'background-color':targetSchedule.overtimeCategoryColor}, css:{'hiden':!(targetSchedule.hasOvertime && $root.isMobile())}">@Resources.OvertimeShortName</div>
-					<div class="text-indicator-mobile" data-bind="style:{'background-color':targetSchedule.absenceColor}, text: targetSchedule.absenceCategoryShortName, css:{'hiden':!(targetSchedule.isIntradayAbsence && $root.isMobile())}"></div>
+					<div class="text-indicator-mobile" data-bind="style:{'background-color':targetSchedule.overtimeCategoryColor, 'color': $root.getTextColor(targetSchedule.overtimeCategoryColor)}, css:{'hiden':!(targetSchedule.hasOvertime && $root.isMobile())}">@Resources.OvertimeShortName</div>
+					<div class="text-indicator-mobile" data-bind="style:{'background-color':targetSchedule.absenceColor, 'color': $root.getTextColor(targetSchedule.absenceColor)}, text: targetSchedule.absenceCategoryShortName, css:{'hiden':!(targetSchedule.isIntradayAbsence && $root.isMobile())}"></div>
 					<!--/ko-->
 				</div>
 				
