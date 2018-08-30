@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.ArrivedLateForWork(personId, "2018-05-28 09:00", "2018-05-28 10:00")
 				;
 
-			var data = Target.Load(personId, "2018-05-28".Date());
+			var data = Target.LoadUntilNow(personId, "2018-05-28".Date());
 
 			data.Changes().Single().LateForWork.Should().Be(string.Format(UserTexts.Resources.LateXMinutes, "60"));
 		}
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.ArrivedLateForWork(personId, "2018-05-28 09:00", "2018-05-28 10:00")
 				;
 
-			var data = Target.Load(personId, "2018-05-28".Date());
+			var data = Target.LoadUntilNow(personId, "2018-05-28".Date());
 
 			data.Changes().Single().LateForWork.Should().Be(string.Format(UserTexts.Resources.LateXMinutes, "60"));
 		}
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.ArrivedLateForWork(personId, "2018-05-28 09:00", "2018-05-28 10:00")
 				;
 
-			var data = Target.Load(personId, "2018-05-28".Date());
+			var data = Target.LoadUntilNow(personId, "2018-05-28".Date());
 
 			data.Changes().First().LateForWork.Should().Be.Null();
 			data.Changes().Second().LateForWork.Should().Be(string.Format(UserTexts.Resources.LateXMinutes, "60"));
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.ArrivedLateForWork(personId, "2018-05-28 09:00", "2018-05-28 10:00", "InCall", "Phone", Color.Crimson, "InAdherence", Color.DarkKhaki, Adherence.In)
 				;
 
-			var data = Target.Load(personId, "2018-05-28".Date());
+			var data = Target.LoadUntilNow(personId, "2018-05-28".Date());
 
 			data.Changes().Single().Timestamp.Should().Be("2018-05-28 10:00".Utc());
 			data.Changes().Single().ActivityName.Should().Be("Phone");
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 			History
 				.ArrivedLateForWork(personId, "2018-06-14 09:00", "2018-06-14 10:00:01");
 
-			var data = Target.Load(personId, "2018-06-14".Date());
+			var data = Target.LoadUntilNow(personId, "2018-06-14".Date());
 
 			data.Changes().Single().LateForWork.Should().Be(string.Format(UserTexts.Resources.LateXMinutes, "60"));
 		}
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 			History
 				.ArrivedLateForWork(personId, "2018-06-14 09:00", "2018-06-14 09:04:31");
 
-			var data = Target.Load(personId, "2018-06-14".Date());
+			var data = Target.LoadUntilNow(personId, "2018-06-14".Date());
 
 			data.Changes().Single().LateForWork.Should().Be(string.Format(UserTexts.Resources.LateXMinutes, "5"));
 		}

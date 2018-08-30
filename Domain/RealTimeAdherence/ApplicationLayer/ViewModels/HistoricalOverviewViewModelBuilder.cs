@@ -62,7 +62,8 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 			var period = new DateOnlyPeriod(new DateOnly(sevenDays.First()), new DateOnly(sevenDays.Last()));
 			
 			var persons = teams.SelectMany(t => _persons.FindPeopleBelongTeam(t, period));
-
+			var readModels = _reader.Read(persons.Select(p => p.Id.Value).ToArray());
+			
 			var dayStuff = from day in sevenDays
 				from person in persons
 				let pp = person.Period(day.ToDateOnly())
@@ -92,6 +93,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 									{
 										Date = day.Date.ToString("yyyyMMdd"),
 										DisplayDate = day.Date.ToString("MM") + "/" + day.Date.ToString("dd"),
+										Adherence = readModels.Where(r => r.PersonId == agentGrouping.First().PersonId.Value).Last().Adherence,
 										WasLateForWork = false
 									}
 								),
@@ -125,7 +127,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 					Agents = (from agent in teamGroupedAgents
 						let adherenceDays =
 							from d in sevenDays
-							let loadedDay = _agentAdherenceDayLoader.Load(agent.Id, d.ToDateOnly())
+							let loadedDay = _agentAdherenceDayLoader.LoadUntilNow(agent.Id, d.ToDateOnly())
 							let change = loadedDay.Changes().FirstOrDefault(change => change.LateForWork != null)
 							let lateForWorkText = change != null ? change.LateForWork : "0"
 							let minutesLateForWork = int.Parse(Regex.Replace(lateForWorkText, "[^0-9.]", ""))
