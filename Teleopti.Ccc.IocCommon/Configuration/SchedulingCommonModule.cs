@@ -224,12 +224,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<WorkShiftFinderService>().As<IWorkShiftFinderService>().InstancePerLifetimeScope();
 				builder.RegisterType<ShiftProjectionCacheManagerNoStateMainShiftProjection>().As<ShiftProjectionCacheManager>().InstancePerLifetimeScope();
 				builder.RegisterType<TeamSchedulingNoStateMainShiftProjection>().As<TeamScheduling>().SingleInstance();
+				builder.RegisterType<WorkShiftSelectorDoNotCallMainShiftProjectionTooManyTimes>().As<IWorkShiftSelector>().As<IWorkShiftSelectorForIntraInterval>().SingleInstance();
 			}
 			else
 			{
 				builder.RegisterType<WorkShiftFinderServiceOLD>().As<IWorkShiftFinderService>().InstancePerLifetimeScope();
 				builder.RegisterType<ShiftProjectionCacheManager>().InstancePerLifetimeScope();
 				builder.RegisterType<TeamScheduling>().SingleInstance();
+				builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>().As<IWorkShiftSelectorForIntraInterval>().SingleInstance();
 			}
 			
 			builder.RegisterType<OccupiedSeatCalculator>().As<IOccupiedSeatCalculator>().SingleInstance();
@@ -630,7 +632,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkShiftLengthValueCalculator>().As<IWorkShiftLengthValueCalculator>().SingleInstance();
 			builder.RegisterType<WorkShiftValueCalculator>().SingleInstance();
 			builder.RegisterType<EqualWorkShiftValueDecider>().As<IEqualWorkShiftValueDecider>().SingleInstance();
-			builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>().As<IWorkShiftSelectorForIntraInterval>().SingleInstance();
 			builder.RegisterType<PullTargetValueFromSkillIntervalData>().SingleInstance();
 			builder.RegisterType<WorkShiftSelectorForMaxSeat>().SingleInstance();
 			builder.RegisterType<IsAnySkillOpen>().SingleInstance();
