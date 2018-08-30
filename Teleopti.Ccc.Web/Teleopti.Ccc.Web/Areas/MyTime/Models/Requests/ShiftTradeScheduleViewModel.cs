@@ -23,20 +23,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 
 	public class ContractTimeInfoViewModel
 	{
-		public DateOnly PeriodStart { get; set; }
-		public DateOnly PeriodEnd { get; set; }
+		public DateTime PeriodStart { get; set; }
+		public DateTime PeriodEnd { get; set; }
 		public int ContractTimeMinutes { get; set; }
-		public int ToleranceLackMinutes { get; set; }
-		public int ToleranceOverMinutes { get; set; }
+		public int ToleranceBlanceInMinutes { get; set; }
+		public int ToleranceBalanceOutMinutes { get; set; }
 	}
 
 	public class ShiftTradeToleranceInfoViewModel
 	{
 		public bool IsNeedToCheck { get; set; }
-		private IList<ContractTimeInfoViewModel> MyInfos { get; set; }
-		private IList<ContractTimeInfoViewModel> PersonToInfos { get; set; }
-		public int MyToleranceMinutes { get; set; }
-		public int PersonToToleranceMInutes { get; set; }
+		public IList<ContractTimeInfoViewModel> MyInfos { get; set; }
+		public IList<ContractTimeInfoViewModel> PersonToInfos { get; set; }
 	}
 
 	public class ShiftTradeMultiScheduleViewModel
