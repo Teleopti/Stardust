@@ -147,6 +147,7 @@
 				layer.Current.Color = selectActivity.Color;
 				layer.Current.Description = selectActivity.Name;
 				layer.Current.ActivityId = selectActivity.Id;
+				layer.FloatOnTop = selectActivity.FloatOnTop;
 			});
 		};
 
@@ -205,11 +206,13 @@
 			!shiftLayer.interact &&
 				(shiftLayer.interact = interact(shiftLayerEl))
 					.resizable({
-						allowFrom: '.selected',
 						edges: { left: true, right: true },
 						restrictSize: {
 							min: { width: 5 }
 						}
+					})
+					.pointerEvents({
+						allowFrom: '.selected'
 					})
 					.on('resizemove', function (event) {
 						var left = event.deltaRect.left;
@@ -296,7 +299,6 @@
 						var isCoveredCompletely = dateTimeInTimezone[coverMethod](layerTimeInTimezone);
 						var isSameType = mergedLayer.ActivityId === mergedSelectedShiftLayer.ActivityId;
 						var deleteIndex = orginalIndex;
-
 						if (layer.FloatOnTop) {
 							hasGonePassTopActivity = dateTimeInTimezone[coverCompletelyMethod](layerTimeInTimezone);
 							if (firstTimeGoPassTop) {
@@ -304,6 +306,12 @@
 								actualDateTime = mergedLayer[timeReverseField];
 							}
 							newLayerTime = mergedLayer[timeField];
+							if (hasGonePassTopActivity && i == endIndex) {
+								var start = isChangingStart ? dateTime : newLayerTime;
+								var end = isChangingStart ? newLayerTime : dateTime;
+								var insertIndex = isChangingStart ? orginalIndex : orginalIndex + 1;
+								createLayer(selectedShiftLayer, start, end, insertIndex);
+							}
 							continue;
 						}
 
@@ -321,10 +329,10 @@
 								vm.selectedShiftLayers.push(layer);
 								break;
 							} else if (!isSameType) {
+								deleteIndex = isChangingStart ? orginalIndex : orginalIndex + 1;
+
 								var start = isChangingStart ? layerActualTime : newLayerTime;
 								var end = isChangingStart ? newLayerTime : layerActualTime;
-
-								deleteIndex = isChangingStart ? orginalIndex : orginalIndex + 1;
 								var insertIndex = isChangingStart ? orginalIndex + 1 : orginalIndex;
 								createLayer(mergedSelectedShiftLayer, start, end, insertIndex);
 							} else if (isSameType) {

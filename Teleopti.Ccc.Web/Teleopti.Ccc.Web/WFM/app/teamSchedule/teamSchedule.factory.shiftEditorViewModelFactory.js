@@ -146,6 +146,9 @@
 			this.IsOvertime = layer.IsOvertime;
 			this.ShowDividedLine = false;
 			this.FloatOnTop = !!layer.FloatOnTop;
+			this.IsPersonalActivity = !!layer.IsPersonalActivity;
+			this.IsMeeting = !!layer.IsMeeting;
+
 		}
 
 		ShiftLayerViewModel.prototype.UseLighterBorder = function (color) {
