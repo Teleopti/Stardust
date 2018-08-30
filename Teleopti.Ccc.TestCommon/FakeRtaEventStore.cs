@@ -40,10 +40,12 @@ namespace Teleopti.Ccc.TestCommon
 				Event = @event
 			});
 
-			_synchronizer.Value.Synchronize(rtaStoredEvent.PersonId.Value, rtaStoredEvent.StartTime.Value);
+			_synchronizer.Value.Synchronize();
 		}
 
 		public int Remove(DateTime removeUntil, int maxEventsToRemove) => throw new NotImplementedException();
+
+		public IEnumerable<IEvent> LoadAll() => _events.Select(e=>e.Event);
 
 		public IEnumerable<IEvent> Load(Guid personId, DateTimePeriod period)
 		{

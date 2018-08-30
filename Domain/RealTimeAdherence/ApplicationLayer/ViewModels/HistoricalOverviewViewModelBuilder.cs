@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using NPOI.SS.Formula.Functions;
 using Teleopti.Ccc.Domain.ApplicationLayer.ExportSchedule;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -52,18 +53,18 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 			if (teams != null)
 			{
 				if (teamIds != null)
-					teams = teams.Union(_teams.FindTeams(teamIds));				
+					teams = teams.Union(_teams.FindTeams(teamIds));
 			}
 			else
 				teams = _teams.FindTeams(teamIds);
 
-			
+
 			var sevenDays = _now.UtcDateTime().Date.AddDays(-7).DateRange(7);
 			var period = new DateOnlyPeriod(new DateOnly(sevenDays.First()), new DateOnly(sevenDays.Last()));
-			
+
 			var persons = teams.SelectMany(t => _persons.FindPeopleBelongTeam(t, period));
 			var readModels = _reader.Read(persons.Select(p => p.Id.Value).ToArray());
-			
+
 			var dayStuff = from day in sevenDays
 				from person in persons
 				let pp = person.Period(day.ToDateOnly())
@@ -74,6 +75,11 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 					Name = _nameDisplaySetting.CommonAgentNameSettings.BuildFor(person.Name.FirstName, person.Name.LastName, null),
 					Day = day
 				};
+
+			var foo = from rm in dayStuff
+				group rm by rm.SiteTeamName
+				into teamGroupedAgents
+				select teamGroupedAgents;
 
 			return from rm in dayStuff
 				group rm by rm.SiteTeamName
@@ -93,13 +99,27 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 									{
 										Date = day.Date.ToString("yyyyMMdd"),
 										DisplayDate = day.Date.ToString("MM") + "/" + day.Date.ToString("dd"),
-										Adherence = readModels.Where(r => r.PersonId == agentGrouping.First().PersonId.Value).Last().Adherence,
-										WasLateForWork = false
+										Adherence = getAdherence(readModels, agentGrouping.First().PersonId.Value),
+										WasLateForWork = getWasLateForWork(readModels, agentGrouping.First().PersonId.Value)
 									}
 								),
 							LateForWork = new HistoricalOverviewLateForWorkViewModel { }
 						})
 				};
+		}
+
+		private static bool getWasLateForWork(IEnumerable<HistoricalOverviewReadModel> rm, Guid agentId)
+		{
+			return rm.IsNullOrEmpty()
+				? false
+				: rm.Last(r => r.PersonId == agentId).WasLateForWork;
+		}
+
+		private static int? getAdherence(IEnumerable<HistoricalOverviewReadModel> rm, Guid agentId)
+		{
+			return rm.IsNullOrEmpty()
+				? null
+				: rm.Last(r => r.PersonId == agentId).Adherence;
 		}
 
 

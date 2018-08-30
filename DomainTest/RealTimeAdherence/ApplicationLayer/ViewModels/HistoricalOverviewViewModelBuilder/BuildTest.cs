@@ -214,60 +214,42 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 			data.Agents.Single().Days.Count(a => a.Adherence == null).Should().Be(7);
 		}
 
-//		[Test]
-//		public void ShouldDisplayFullAdherence()
-//		{
-//			Now.Is("2018-08-23 08:00");
-//			var teamId = Guid.NewGuid();
-//			Database
-//				.WithTeam(teamId)
-//				.WithAgent()
-//				.WithAssignment("2018-08-23")
-//				.WithAssignedActivity("2018-08-23 08:00", "2018-08-23 17:00")
-//				.WithHistoricalStateChange("2018-08-23 08:00", Adherence.In);
-//			Now.Is("2018-08-24 08:00");
-//
-//			var data = Target.Build(null, new[] {teamId}).First();
-//
-//			data.Agents.Single().Days.Last().Adherence.Should().Be("100");
-//		}
+		[Test]
+		public void ShouldDisplayFullAdherence()
+		{
+			Now.Is("2018-08-23 08:00");
+			var teamId = Guid.NewGuid();
+			Database
+				.WithTeam(teamId)
+				.WithAgent()
+				.WithAssignment("2018-08-23")
+				.WithAssignedActivity("2018-08-23 08:00", "2018-08-23 17:00")
+				.WithHistoricalStateChange("2018-08-23 08:00", Adherence.In);
+			Now.Is("2018-08-24 08:00");
 
-//		[Test]
-//		public void ShouldDisplayCalculatedAdherence()
-//		{
-//			Now.Is("2018-08-17 08:00");
-//			var teamId = Guid.NewGuid();
-//			Database
-//				.WithTeam(teamId)
-//				.WithAgent()
-//				.WithAssignment("2018-08-17")
-//				.WithAssignedActivity("2018-08-17 10:00", "2018-08-17 20:00")
-//				.WithHistoricalStateChange("2018-08-17 10:00", Adherence.In)
-//				.WithHistoricalStateChange("2018-08-17 15:00", Adherence.Out);
-//			Now.Is("2018-08-24 08:00");
-//
-//			var data = Target.Build(null, new[] {teamId}).First();
-//
-//			data.Agents.Single().Days.First().Adherence.Should().Be("50");
-//		}
-//
-//		[Test]
-//		public void ShouldDisplayCalculatedAdherenceExp()
-//		{
-//			Now.Is("2018-08-18 08:00");
-//			var teamId = Guid.NewGuid();
-//			Database
-//				.WithTeam(teamId)
-//				.WithAgent()
-//				.WithAssignment("2018-08-17")
-//				.WithAssignedActivity("2018-08-17 10:00", "2018-08-17 20:00")
-//				.WithHistoricalStateChange("2018-08-17 10:00", Adherence.In);
-//			Now.Is("2018-08-24 08:00");
-//
-//			var data = Target.Build(null, new[] {teamId}).First();
-//
-//			data.Agents.Single().Days.Last().Adherence.Should().Be("100");
-//		}
+			var data = Target.Build(null, new[] {teamId}).First();
+
+			data.Agents.Single().Days.Last().Adherence.Should().Be("100");
+		}
+
+		[Test]
+		public void ShouldDisplayCalculatedAdherence()
+		{
+			Now.Is("2018-08-17 08:00");
+			var teamId = Guid.NewGuid();
+			Database
+				.WithTeam(teamId)
+				.WithAgent()
+				.WithAssignment("2018-08-17")
+				.WithAssignedActivity("2018-08-17 10:00", "2018-08-17 20:00")
+				.WithHistoricalStateChange("2018-08-17 10:00", Adherence.In)
+				.WithHistoricalStateChange("2018-08-17 15:00", Adherence.Out);
+			Now.Is("2018-08-24 08:00");
+
+			var data = Target.Build(null, new[] {teamId}).First();
+
+			data.Agents.Single().Days.First().Adherence.Should().Be("50");
+		}
 
 		[Test]
 		public void ShouldNotDisplayLateForWork()
@@ -282,23 +264,23 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 
 			data.Agents.Single().Days.First().WasLateForWork.Should().Be(false);
 		}
-//
-//		[Test]
-//		public void ShouldDisplayLateForWork()
-//		{
-//			Now.Is("2018-08-27 08:00");
-//			var teamId = Guid.NewGuid();
-//			Database
-//				.WithTeam(teamId)
-//				.WithAgent()
-//				.WithArrivedLateForWork("2018-08-27 10:00", "2018-08-27 11:00");
-//			Now.Is("2018-08-28 08:00");
-//
-//			var data = Target.Build(null, new[] {teamId}).First();
-//
-//			data.Agents.Single().Days.Last().WasLateForWork.Should().Be(true);
-//		}
-//
+
+		[Test]
+		public void ShouldDisplayLateForWork()
+		{
+			Now.Is("2018-08-27 08:00");
+			var teamId = Guid.NewGuid();
+			Database
+				.WithTeam(teamId)
+				.WithAgent()
+				.WithArrivedLateForWork("2018-08-27 10:00", "2018-08-27 11:00");
+			Now.Is("2018-08-28 08:00");
+
+			var data = Target.Build(null, new[] {teamId}).First();
+
+			data.Agents.Single().Days.Last().WasLateForWork.Should().Be(true);
+		}
+
 		[Test]
 		public void ShouldDisplayLateForWorkSumZero()
 		{
@@ -312,7 +294,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 
 			data.Agents.Single().LateForWork.Count.Should().Be(0);
 		}
-//
+
 //		[Test]
 //		public void ShouldDisplayLateForWorkSum()
 //		{
@@ -328,7 +310,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 //
 //			data.Agents.Single().LateForWork.Count.Should().Be(1);
 //		}
-//
+
 		[Test]
 		public void ShouldDisplayLateForkWorkSumInMinutes()
 		{
@@ -358,7 +340,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 //
 //			data.Agents.Single().LateForWork.TotalMinutes.Should().Be(60);
 //		}
-		
+
 		[Test]
 		public void ShouldDisplayTeamInSite()
 		{
@@ -374,7 +356,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 
 			data.Single().Name.Should().Be("Barcelona/Blue");
 		}
-		
+
 		[Test]
 		public void ShouldDisplayTeamAndTeamInSite()
 		{
@@ -387,7 +369,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 				.WithTeam(teamId, "Red")
 				.WithAgent()
 				.WithSite(siteId, "Barcelona")
-				.WithTeam("Blue")				
+				.WithTeam("Blue")
 				.WithAgent();
 
 			var data = Target.Build(new[] {siteId}, new[] {teamId});
@@ -395,13 +377,5 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 			data.First().Name.Should().Be("Barcelona/Blue");
 			data.Second().Name.Should().Be("Denver/Red");
 		}
-		
-		
 	}
-	
-	
-	
-	
-	
-	
 }
