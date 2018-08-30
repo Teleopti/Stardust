@@ -615,7 +615,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OpenHourForDate>().As<IOpenHourForDate>().SingleInstance();
 			builder.RegisterType<ActivityIntervalDataCreator>().As<IActivityIntervalDataCreator>().SingleInstance();
 			builder.RegisterType<WorkShiftFromEditableShift>().As<IWorkShiftFromEditableShift>().SingleInstance();
-			builder.RegisterType<FirstShiftInTeamBlockFinder>().As<IFirstShiftInTeamBlockFinder>().InstancePerLifetimeScope();
+			builder.RegisterType<FirstShiftInTeamBlockFinder>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockOpenHoursValidator>().As<ITeamBlockOpenHoursValidator>().SingleInstance();
 		}
 

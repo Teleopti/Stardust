@@ -5,12 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
-	public interface IFirstShiftInTeamBlockFinder
-	{
-		ShiftProjectionCache FindFirst(ITeamBlockInfo teamBlockInfo, IPerson person, DateOnly dateForProjection, IScheduleDictionary scheduleDictionary);
-	}
-
-	public class FirstShiftInTeamBlockFinder : IFirstShiftInTeamBlockFinder
+	public class FirstShiftInTeamBlockFinder
 	{
 		private readonly ShiftProjectionCacheManager _shiftProjectionCacheManager;
 
