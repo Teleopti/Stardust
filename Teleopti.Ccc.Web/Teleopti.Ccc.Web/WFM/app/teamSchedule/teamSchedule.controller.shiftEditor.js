@@ -345,16 +345,9 @@
 					if (isChangingStart) {
 						vm.selectedShiftLayers.reverse();
 					}
-
-				
 				}
-
 			}
-
-
 			doUpdate(selectedShiftLayer, actualDateTime);
-
-
 		}
 
 		function fillWithLayer(selectedIndex, selectedActivityId, dateTime, isChangingStart) {
