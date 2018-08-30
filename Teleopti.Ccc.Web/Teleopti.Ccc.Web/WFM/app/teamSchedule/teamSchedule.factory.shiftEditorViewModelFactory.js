@@ -34,15 +34,15 @@
 			this.UnderlyingScheduleSummary = underlyingScheduleSummary;
 		}
 
-		ScheduleViewModel.prototype.SpliceLayer = function (activity, startTime, endTime, index, deleteCount) {
+		ScheduleViewModel.prototype.AddLayer = function (layer, startTime, endTime, index) {
 			this.ShiftLayers = this.ShiftLayers || [];
-			var layer = angular.extend({}, activity, {
-				Start: startTime,
-				End: endTime
-			});
-			var newLayer = new ShiftLayerViewModel(layer, this.Date, this.Timezone, this.Timezone);
+			var copyLayer = Object.assign({}, layer);
+			copyLayer.Start = startTime;
+			copyLayer.End = endTime;
 
-			this.ShiftLayers.splice(index, deleteCount, newLayer);
+			var newLayer = new ShiftLayerViewModel(copyLayer, this.Date, this.Timezone, this.Timezone);
+
+			this.ShiftLayers.splice(index, 0, newLayer);
 
 			return newLayer;
 		}

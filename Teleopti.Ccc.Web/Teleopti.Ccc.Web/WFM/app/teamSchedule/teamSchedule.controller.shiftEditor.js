@@ -416,11 +416,7 @@
 		}
 
 		function createLayer(layer, startTime, endTime, insertIndex) {
-			var newLayer = vm.scheduleVm.SpliceLayer({
-				ActivityId: layer.ActivityId,
-				Description: layer.Description,
-				Color: layer.Color
-			}, startTime, endTime, insertIndex, 0);
+			var newLayer = vm.scheduleVm.AddLayer(vm.getMergedShiftLayer(layer), startTime, endTime, insertIndex);
 
 			resizeLayer(newLayer, 0, getDiffMinutes(newLayer.End, newLayer.Start));
 			newLayer.Left = getShiftLayerLeft(newLayer);

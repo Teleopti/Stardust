@@ -359,52 +359,50 @@
 		expect(viewModel.ShiftLayers[0].TimeSpan).toEqual('2018-03-25 01:00 - 2018-03-25 03:00');
 	});
 
-	it('should splice shift layer', function () {
+	it('should add shift layer', function () {
 		var schedule = {
 			PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
 			Name: 'Annika Andersson',
-			Date: '2018-08-21',
+			Date: '2018-08-30',
 			WorkTimeMinutes: 240,
 			ContractTimeMinutes: 240,
 			Projection: [
 				{
 					ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
-					Color: '#000000',
-					Description: 'E-mail',
-					Start: '2018-08-21 08:00',
-					End: '2018-08-21 09:00',
+					Color: '#ffffff',
+					Description: 'Phone',
+					Start: '2018-08-30 07:00',
+					End: '2018-08-30 08:00',
 					Minutes: 60,
-					IsOvertime: false
+					IsOvertime: true,
+					ActivityId: '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+				},
+				{
+					ShiftLayerIds: ['81678e5a-ac3f-4daa-9577-a83800e49622'],
+					Color: '#ffff00',
+					Description: 'Lunch',
+					Start: '2018-08-30 08:00',
+					End: '2018-08-30 09:00',
+					Minutes: 60,
+					IsOvertime: false,
+					ActivityId: '1ffeb898-11bf-43fc-8104-9b5e015ab3c2',
+					FloatOnTop: true
 				}
 			],
 			Timezone: { IanaId: 'Europe/Berlin' }
 		};
 
-		var viewModel = target.CreateSchedule('2018-08-21', 'Europe/Berlin', schedule);
-		viewModel.SpliceLayer({
-			Color: '#fff000',
-			Description: 'Phone',
-			ActivityId: 'fff78e5a-ac3f-4daa-9577-a83800e49622'
-		}, '2018-08-21 07:00', '2018-08-21 08:00', 0);
+		var viewModel = target.CreateSchedule('2018-08-30', 'Europe/Berlin', schedule);
+		viewModel.AddLayer(viewModel.ShiftLayers[0], '2018-08-30 09:00', '2018-08-30 10:00', 2);
 
-		expect(viewModel.ShiftLayers.length).toEqual(2);
-
-		expect(viewModel.ShiftLayers[0].Start).toEqual('2018-08-21 07:00');
-		expect(viewModel.ShiftLayers[0].End).toEqual('2018-08-21 08:00');
-		expect(viewModel.ShiftLayers[0].TimeSpan).toEqual('2018-08-21 07:00 - 2018-08-21 08:00');
-
-		
-		viewModel.SpliceLayer({
-			Color: '#fff000',
-			Description: 'Invoice',
-			ActivityId: 'ccc78e5a-ac3f-4daa-9577-a83800e49622'
-		}, '2018-08-21 08:00', '2018-08-21 09:00', 1,1);
-
-		expect(viewModel.ShiftLayers.length).toEqual(2);
-		expect(viewModel.ShiftLayers[1].ActivityId).toEqual('ccc78e5a-ac3f-4daa-9577-a83800e49622');
-		expect(viewModel.ShiftLayers[1].Start).toEqual('2018-08-21 08:00');
-		expect(viewModel.ShiftLayers[1].End).toEqual('2018-08-21 09:00');
-		expect(viewModel.ShiftLayers[1].TimeSpan).toEqual('2018-08-21 08:00 - 2018-08-21 09:00');
+		expect(viewModel.ShiftLayers[2].ShiftLayerIds).toEqual(['61678e5a-ac3f-4daa-9577-a83800e49622']);
+		expect(viewModel.ShiftLayers[2].Color).toEqual('#ffffff');
+		expect(viewModel.ShiftLayers[2].Description).toEqual('Phone');
+		expect(viewModel.ShiftLayers[2].Start).toEqual('2018-08-30 09:00');
+		expect(viewModel.ShiftLayers[2].End).toEqual('2018-08-30 10:00');
+		expect(viewModel.ShiftLayers[2].IsOvertime).toEqual(true);
+		expect(viewModel.ShiftLayers[2].ActivityId).toEqual('0ffeb898-11bf-43fc-8104-9b5e015ab3c2');
+		expect(viewModel.ShiftLayers[2].TimeSpan).toEqual('2018-08-30 09:00 - 2018-08-30 10:00');
 	});
 
 	it('should create shift layers with correct time span for overnight shift', function () {
