@@ -212,8 +212,8 @@
 		}
 
 		function bindResizeEvent(shiftLayer, shiftLayerEl) {
-			!vm.isNotResizable(shiftLayer) && 
-			!shiftLayer.interact &&
+			!vm.isNotResizable(shiftLayer) &&
+				!shiftLayer.interact &&
 				(shiftLayer.interact = interact(shiftLayerEl))
 					.resizable({
 						edges: { left: true, right: true },
@@ -242,6 +242,7 @@
 
 						if (shiftLayer.isChangingStart) {
 							var startTime = timeLineTimeRange.Start.clone().add(startMinutes, 'minutes');
+
 							redrawLayers(shiftLayer, startTime, true);
 						} else {
 							var width = round5(mergedShiftLayer.Width);
@@ -261,6 +262,10 @@
 					});
 		}
 
+		function isExceedMaxLength(startTime, endTime) {
+			return getDiffMinutes(endTime, startTime) > 36 * 60;
+		}
+
 		function redrawLayers(selectedShiftLayer, dateTimeInTimezone, isChangingStart) {
 			var mergedSelectedShiftLayer = vm.getMergedShiftLayer(selectedShiftLayer);
 			var dateTime = serviceDateFormatHelper.getDateTime(dateTimeInTimezone);
@@ -275,7 +280,9 @@
 			if (dateTime == mergedSelectedShiftLayer[timeField]) return;
 
 			var index = vm.scheduleVm.ShiftLayers.indexOf(selectedShiftLayer);
-			var endIndex = isChangingStart ? 0 : vm.scheduleVm.ShiftLayers.length - 1;
+			var lastLayerIndex = vm.scheduleVm.ShiftLayers.length - 1;
+			var endIndex = isChangingStart ? 0 : lastLayerIndex;
+
 			var step = isChangingStart ? -1 : 1;
 			var reverseStep = isChangingStart ? 1 : -1;
 
@@ -283,12 +290,20 @@
 			var layersCopy = vm.scheduleVm.ShiftLayers.slice(0);
 			var actualDateTime = dateTime;
 
-			if (index !== endIndex) {
+			var shiftStart = isChangingStart ? dateTime : vm.getMergedShiftLayer(vm.scheduleVm.ShiftLayers[0]).Start;
+			var shiftEnd = isChangingStart ? vm.getMergedShiftLayer(vm.scheduleVm.ShiftLayers[lastLayerIndex]).End : dateTime;
+
+			if ((isChangingStart && serviceDateFormatHelper.getDateOnly(dateTime) !== vm.date)
+				|| (!isLayerShorten && isExceedMaxLength(shiftStart, shiftEnd))) {
+				actualDateTime = mergedSelectedShiftLayer[timeField];
+			}
+			else if (index !== endIndex) {
 				if (isLayerShorten) {
 					if (!fillWithLayer(index, mergedSelectedShiftLayer, dateTime, isChangingStart)) {
 						actualDateTime = mergedSelectedShiftLayer[timeField];
 					}
 				} else {
+
 					var hasGonePassTopActivity = false;
 					var firstTimeGoPassTop = true;
 					var currentIndex = index + step;
@@ -367,6 +382,7 @@
 					}
 				}
 			}
+
 			doUpdate(selectedShiftLayer, actualDateTime);
 		}
 
