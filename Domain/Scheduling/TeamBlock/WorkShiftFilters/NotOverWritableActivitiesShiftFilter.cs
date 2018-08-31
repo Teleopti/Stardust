@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			var filteredList =
 				shiftList.Where(
 					shift =>
-						!shift.MainShiftProjection.Any(
+						!shift.MainShiftProjection().Any(
 							x =>
 								!((VisualLayer) x).HighestPriorityActivity.AllowOverwrite &&
 								isActivityIntersectedWithMeetingOrPersonalShift(personAssignment, meetings, x))).ToList();

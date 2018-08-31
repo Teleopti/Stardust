@@ -93,6 +93,7 @@
 	self.showOnlyDayOff.subscribe(function(value) {
 		if (!self.isMobileEnabled) {
 			self.filter.isDayOff = value;
+			self.filter.searchNameText = self.searchNameText();
 
 			if (value) {
 				self.paging.skip = 0;

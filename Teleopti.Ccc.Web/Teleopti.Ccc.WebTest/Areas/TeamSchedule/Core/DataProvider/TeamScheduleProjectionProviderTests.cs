@@ -10,11 +10,13 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
@@ -36,6 +38,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 		public FakeLoggedOnUser LoggedOnUser;
 		public IScheduleStorage ScheduleStorage;
 		public ISettingsPersisterAndProvider<NameFormatSettings> NameFormatSettingsPersisterAndProvider;
+		public FakeMeetingRepository MeetingRepository;
 
 		public void Isolate(IIsolate isolate)
 		{
@@ -235,15 +238,21 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 
 			var assignment1Person1 = PersonAssignmentFactory.CreatePersonAssignment(person1, scenario, new DateOnly(date));
 			var scheduleDayOnePerson1 = ScheduleDayFactory.Create(new DateOnly(date), person1, scenario);
-			var phoneActivityPeriod = new DateTimePeriod(date.AddHours(8), date.AddHours(16));
+			var phoneActivityPeriod = new DateTimePeriod(date.AddHours(8), date.AddHours(17));
 			var lunchActivityPeriod = new DateTimePeriod(date.AddHours(11), date.AddHours(12));
 			var absencePeriod = new DateTimePeriod(date.AddHours(12), date.AddHours(13));
 			var shortBreakActivityPeriod = new DateTimePeriod(date.AddHours(13), date.AddHours(13).AddMinutes(15));
+			var personalActivityPeriod = new DateTimePeriod(date.AddHours(14), date.AddHours(15));
+			var overtimePeriod = new DateTimePeriod(date.AddHours(15), date.AddHours(16));
+			var meetingPeriod = new DateTimePeriod(date.AddHours(16), date.AddHours(17));
 
 			var phoneActivity = ActivityFactory.CreateActivity("Phone", Color.Blue);
 			var lunchActivity = ActivityFactory.CreateActivity("Lunch", Color.Red);
 			var testAbsence = AbsenceFactory.CreateAbsence("test");
 			var shortBreakActivity = ActivityFactory.CreateActivity("Short break", Color.Red).WithId();
+			var personalActivity = ActivityFactory.CreateActivity("personal activity", Color.Blue);
+			var overtimeActivity = ActivityFactory.CreateActivity("overtime activity", Color.Brown);
+			var meetingActivity = ActivityFactory.CreateActivity("meeting activity", Color.AntiqueWhite);
 
 			phoneActivity.InContractTime = true;
 			phoneActivity.InWorkTime = true;
@@ -256,48 +265,79 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			shortBreakActivity.ReportLevelDetail = ReportLevelDetail.ShortBreak;
 			shortBreakActivity.InWorkTime = false;
 
+			personalActivity.InContractTime = true;
+			personalActivity.InWorkTime = true;
+
+			overtimeActivity.InContractTime = true;
+			overtimeActivity.InWorkTime = true;
+
 			assignment1Person1.AddActivity(phoneActivity, phoneActivityPeriod);
 			assignment1Person1.AddActivity(lunchActivity, lunchActivityPeriod);
 			assignment1Person1.AddActivity(shortBreakActivity, shortBreakActivityPeriod);
+			assignment1Person1.AddPersonalActivity(personalActivity, personalActivityPeriod);
+			assignment1Person1.AddOvertimeActivity(overtimeActivity,
+				overtimePeriod,
+				MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("overtime paid", MultiplicatorType.Overtime));
+
 			scheduleDayOnePerson1.Add(assignment1Person1);
 
 			var absenceLayer = new AbsenceLayer(testAbsence, absencePeriod);
 			var personAbsence = scheduleDayOnePerson1.CreateAndAddAbsence(absenceLayer);
 			personAbsence.SetId(Guid.NewGuid());
 
+			var meeting = new Meeting(person1, new[] { new MeetingPerson(person1, false) }, "subj", "loc",
+				"desc", meetingActivity,scenario);
+			meeting.StartDate = meeting.EndDate = new DateOnly(date);
+			meeting.StartTime = TimeSpan.FromHours(16);
+			meeting.EndTime = TimeSpan.FromHours(17);
+			MeetingRepository.Has(meeting);
+
+			PersonMeeting personMeeting = new PersonMeeting(meeting, new MeetingPerson(person1, false), meetingPeriod);
+
+			scheduleDayOnePerson1.Add(personMeeting);
+
 			var vm = Target.Projection(scheduleDayOnePerson1, true, CommonAgentNameProvider.CommonAgentNameSettings);
 
 			vm.DayOff.Should().Be(null);
 			vm.Name.Should().Be("agent1");
-			vm.Projection.Count().Should().Be(5);
+			vm.Projection.Count().Should().Be(8);
 			vm.IsFullDayAbsence.Should().Be(false);
 			vm.Date.Should().Be(date.ToFixedDateFormat());
 
+			vm.Projection.ElementAt(0).ActivityId.Should().Be.EqualTo(phoneActivity.Id);
+			vm.Projection.ElementAt(0).Description.Should().Be(phoneActivity.Description.Name);
+			vm.Projection.ElementAt(0).FloatOnTop.Should().Be.False();
+
+			vm.Projection.ElementAt(1).ActivityId.Should().Be.EqualTo(lunchActivity.Id);
+			vm.Projection.ElementAt(1).Description.Should().Be(lunchActivity.Description.Name);
+			vm.Projection.ElementAt(1).FloatOnTop.Should().Be.True();
+
 			var personAbsenceProjection = vm.Projection.ElementAt(2);
-
-			vm.Projection.First().ParentPersonAbsences.Should().Be.Null();
-			vm.Projection.Second().ParentPersonAbsences.Should().Be.Null();
 			personAbsenceProjection.ParentPersonAbsences.First().Should().Be(personAbsence.Id);
-			vm.Projection.Last().ParentPersonAbsences.Should().Be.Null();
-
-
-			vm.Projection.First().ActivityId.Should().Be.EqualTo(phoneActivity.Id);
-			vm.Projection.First().Description.Should().Be(phoneActivity.Description.Name);
-			vm.Projection.First().FloatOnTop.Should().Be.False();
-
-			vm.Projection.Second().ActivityId.Should().Be.EqualTo(lunchActivity.Id);
-			vm.Projection.Second().Description.Should().Be(lunchActivity.Description.Name);
-			vm.Projection.Second().FloatOnTop.Should().Be.True();
-
 			personAbsenceProjection.Description.Should().Be(testAbsence.Name);
+			personAbsenceProjection.FloatOnTop.Should().Be(true);
 
 			vm.Projection.ElementAt(3).ActivityId.Should().Be.EqualTo(shortBreakActivity.Id);
 			vm.Projection.ElementAt(3).Description.Should().Be(shortBreakActivity.Description.Name);
 			vm.Projection.ElementAt(3).FloatOnTop.Should().Be.True();
 
+			vm.Projection.ElementAt(4).ActivityId.Should().Be.EqualTo(phoneActivity.Id);
+			vm.Projection.ElementAt(4).Description.Should().Be(phoneActivity.Description.Name);
+			vm.Projection.ElementAt(4).FloatOnTop.Should().Be.False();
 
-			vm.Projection.Last().ActivityId.Should().Be(phoneActivity.Id);
-			vm.Projection.Last().Description.Should().Be(phoneActivity.Description.Name);
+
+			vm.Projection.ElementAt(5).ActivityId.Should().Be.EqualTo(personalActivity.Id);
+			vm.Projection.ElementAt(5).Description.Should().Be(personalActivity.Description.Name);
+			vm.Projection.ElementAt(5).IsPersonalActivity.Should().Be(true);
+			vm.Projection.ElementAt(5).FloatOnTop.Should().Be(true);
+
+			vm.Projection.ElementAt(6).ActivityId.Should().Be(overtimeActivity.Id);
+			vm.Projection.ElementAt(6).Description.Should().Be(overtimeActivity.Description.Name);
+			vm.Projection.ElementAt(6).IsOvertime.Should().Be(true);
+			vm.Projection.ElementAt(6).FloatOnTop.Should().Be(true);
+
+			vm.Projection.ElementAt(7).IsMeeting.Should().Be(true);
+			vm.Projection.ElementAt(7).FloatOnTop.Should().Be(true);
 
 			vm.ContractTimeMinutes.Should().Be(420);
 			vm.WorkTimeMinutes.Should().Be(345);

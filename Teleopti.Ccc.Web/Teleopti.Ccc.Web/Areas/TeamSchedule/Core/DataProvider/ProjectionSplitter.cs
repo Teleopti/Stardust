@@ -52,7 +52,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					End = TimeZoneInfo.ConvertTimeFromUtc(l.Period.EndDateTime, userTimeZone).ToFixedDateTimeFormat(),
 					Minutes = (int)l.Period.ElapsedTime().TotalMinutes,
 					ActivityId = layer.Payload.Id.GetValueOrDefault(),
-					TopShiftLayerId = _projectionHelper.GetTopShiftLayerId(matchShiftLayers, l)
+					TopShiftLayerId = _projectionHelper.GetTopShiftLayerId(matchShiftLayers, l),
+					IsPersonalActivity = true,
+					FloatOnTop = true
 				});
 			});
 			return splittedVisualLayers;

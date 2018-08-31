@@ -72,6 +72,11 @@ WHERE
 				.SetParameter("nRows", maxEventsToRemove)
 				.ExecuteUpdate();
 
+		public IEnumerable<IEvent> LoadAll()
+		{
+			throw new NotImplementedException();
+		}
+
 		public IEnumerable<IEvent> Load(Guid personId, DateTimePeriod period) =>
 			load(
 				_unitOfWork.Current().Session()
@@ -134,7 +139,7 @@ ORDER BY [Id] DESC
 		}
 
 
-		public IEnumerable<IEvent> LoadAll() =>
+		public IEnumerable<IEvent> LoadAllForTest() =>
 			load(_unitOfWork.Current().Session().CreateSQLQuery(@"SELECT [Type], [Event] FROM [rta].[Events]"));
 
 		public IEnumerable<string> LoadAllEventTypes() => _unitOfWork.Current().Session()

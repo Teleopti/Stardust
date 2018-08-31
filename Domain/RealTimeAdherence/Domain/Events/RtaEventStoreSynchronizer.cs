@@ -1,0 +1,65 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
+using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events
+{
+	public interface IRtaEventStoreSynchronizer
+	{
+		void Synchronize();
+	}
+
+
+	public class NoRtaEventStoreSynchronizer : IRtaEventStoreSynchronizer
+	{
+		public void Synchronize()
+		{
+		}
+	}
+
+	public class RtaEventStoreSynchronizer : IRtaEventStoreSynchronizer
+	{
+		private readonly IRtaEventStoreReader _events;
+		private readonly IHistoricalOverviewReadModelPersister _readModels;
+		private readonly IAgentAdherenceDayLoader _adherenceDayLoader;
+
+		public RtaEventStoreSynchronizer(IRtaEventStoreReader events,
+			IHistoricalOverviewReadModelPersister readModels,
+			IAgentAdherenceDayLoader adherenceDayLoader)
+		{
+			_events = events;
+			_readModels = readModels;
+			_adherenceDayLoader = adherenceDayLoader;
+		}
+
+		public void Synchronize()
+		{
+			var events = _events.LoadAll();
+			var queryData = events.Select(e => e as IRtaStoredEvent).Select(x => x.QueryData());
+			queryData.ForEach(q =>
+			{
+				var adherenceDay = _adherenceDayLoader.Load(q.PersonId.Value, q.StartTime.Value.ToDateOnly());
+				var changeLateForWork = adherenceDay.Changes().FirstOrDefault(c => c.LateForWork != null);
+				var lateForWorkText = changeLateForWork != null ? changeLateForWork.LateForWork : "0";
+				var minutesLateForWork = int.Parse(Regex.Replace(lateForWorkText, "[^0-9.]", ""));	
+				
+				_readModels.Upsert(new HistoricalOverviewReadModel
+				{
+					PersonId = q.PersonId.Value,
+					Date = q.StartTime.Value.ToDateOnly(),
+					Adherence = adherenceDay.Percentage(),
+					WasLateForWork = changeLateForWork != null,
+					MinutesLateForWork = minutesLateForWork
+				});
+			});
+		}
+	}
+}

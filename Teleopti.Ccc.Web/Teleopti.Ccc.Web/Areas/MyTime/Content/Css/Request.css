@@ -799,8 +799,34 @@ input.use-default-startTime {
 	transform: scale(1.3);
 	margin: 5px 10px;
 }
+.shift-trade-error {
+ display:flex;
+ flex-direction:column;
+}
+
+.error-detail {
+	display:flex;
+	flex-direction:column;
+}
+
+.error-summary {
+	cursor:pointer;
+	color:red;
+}
+
+.error-message-header {
+	display:flex;
+	font-weight:bold;
+}
+
 
 .shift-trade-request-74947 {
+	display: flex;
+	flex-direction: column;
+}
+
+.multiple-shift-trade-panel {
+	flex:1 0 auto;
 	display: flex;
 	flex-direction: row;
 }
@@ -817,13 +843,14 @@ input.use-default-startTime {
 
 .not-shceudled {
  min-height:60px;
- padding-top:19px;
+ padding-top:29px;
 }
 
 .shift-to-trade-row {
 	/*height: 125px;*/
 	display: flex;
 	border-top: 0.8px solid #e3e3e3;
+	min-height:80px;
 }
 
 .shift-to-trade-row + .shift-to-trade-row {
@@ -1101,7 +1128,3 @@ input.use-default-startTime {
 #Request-add-shift-trade {
 	padding: 2px !important;
 }
-
-	/*.text-indicator + .text-indicator {
-		margin-left: 10px;
-	}*/

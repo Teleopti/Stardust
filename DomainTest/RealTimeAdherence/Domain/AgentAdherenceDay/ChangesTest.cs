@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.RuleChanged(personId, "2017-03-14 18:00", "in")
 				;
 
-			var data = Target.Load(personId, "2017-03-14".Date());
+			var data = Target.LoadUntilNow(personId, "2017-03-14".Date());
 
 			data.Changes().Single().RuleName.Should().Be("in");
 		}
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.RuleChanged(personId, "2017-03-14 18:00", "InCall", "phone", Color.Crimson, null, Color.DarkKhaki, Adherence.In)
 				;
 
-			var data = Target.Load(personId, "2017-03-14".Date());
+			var data = Target.LoadUntilNow(personId, "2017-03-14".Date());
 
 			data.Changes().Single().ActivityName.Should().Be("phone");
 			data.Changes().Single().ActivityColor.Should().Be(Color.Crimson.ToArgb());

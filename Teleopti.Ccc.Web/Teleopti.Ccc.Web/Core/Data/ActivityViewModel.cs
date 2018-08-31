@@ -9,5 +9,7 @@ namespace Teleopti.Ccc.Web.Core.Data
 		public string Name;
 
 		public string Color;
+
+		public bool FloatOnTop { get; set; }
 	}
 }

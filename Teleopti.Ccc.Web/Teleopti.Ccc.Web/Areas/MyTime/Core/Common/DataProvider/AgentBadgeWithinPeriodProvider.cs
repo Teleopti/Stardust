@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				case BadgeType.AnsweredCalls:
 					return Resources.AnsweredCalls;
 				case BadgeType.Adherence:
-					return Resources.Adherence;
+					return Resources.ReadyTimeAdherence;
 				case BadgeType.AverageHandlingTime:
 					return Resources.AverageHandlingTime;
 				default:

@@ -7,6 +7,22 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
+	[RemoveMeWithToggle("Merge logic with base class", Toggles.ResourcePlanner_XXL_76496)]
+	public class ShiftProjectionCacheManagerNoStateMainShiftProjection : ShiftProjectionCacheManager
+	{
+		public ShiftProjectionCacheManagerNoStateMainShiftProjection(IRuleSetDeletedActivityChecker ruleSetDeletedActivityChecker, IRuleSetDeletedShiftCategoryChecker rulesSetDeletedShiftCategoryChecker, IWorkShiftFromEditableShift workShiftFromEditableShift, ShiftProjectionCacheFetcher shiftProjectionCacheFetcher) : base(ruleSetDeletedActivityChecker, rulesSetDeletedShiftCategoryChecker, workShiftFromEditableShift, shiftProjectionCacheFetcher)
+		{
+		}
+
+		protected override void SetDateOnShiftProjectionCaches(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod, IEnumerable<ShiftProjectionCache> shiftProjectionCaches)
+		{
+			foreach (var shiftProjectionCache in shiftProjectionCaches)
+			{
+				shiftProjectionCache.SetDateNoStateMainShiftProjection(dateOnlyAsDateTimePeriod);
+			}
+		}
+	}
+
 	public class ShiftProjectionCacheManager : IDisposable
 	{
         private readonly IDictionary<IWorkShiftRuleSet, List<ShiftProjectionCache>> _ruleSetListDictionary = new Dictionary<IWorkShiftRuleSet, List<ShiftProjectionCache>>();
@@ -49,15 +65,20 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			    return true;
 		    }).SelectMany(getShiftsForRuleSet).ToArray();
 
-		    foreach (var shiftProjectionCache in shiftProjectionCaches)
-		    {
-				shiftProjectionCache.SetDate(dateOnlyAsDateTimePeriod);
-		    }
+		    SetDateOnShiftProjectionCaches(dateOnlyAsDateTimePeriod, shiftProjectionCaches);
 			
 			return shiftProjectionCaches;
 		}
 
-	    public IList<ShiftProjectionCache> ShiftProjectionCachesFromRuleSets(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod, IRuleSetBag bag, bool forRestrictionsOnly, bool checkExcluded)
+		protected virtual void SetDateOnShiftProjectionCaches(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod, IEnumerable<ShiftProjectionCache> shiftProjectionCaches)
+		{
+			foreach (var shiftProjectionCache in shiftProjectionCaches)
+			{
+				shiftProjectionCache.SetDate(dateOnlyAsDateTimePeriod);
+			}
+		}
+
+		public IList<ShiftProjectionCache> ShiftProjectionCachesFromRuleSets(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod, IRuleSetBag bag, bool forRestrictionsOnly, bool checkExcluded)
 	    {
 		    if (bag == null)
 			    return new List<ShiftProjectionCache>();

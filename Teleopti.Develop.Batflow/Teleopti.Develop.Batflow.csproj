@@ -48,6 +48,9 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="DatabaseFixer.cs" />
+    <Compile Include="FixDatabasesCommand.cs" />
+    <Compile Include="Arguments.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>

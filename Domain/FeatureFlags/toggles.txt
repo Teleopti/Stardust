@@ -107,6 +107,7 @@ ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899 = true
 ResourcePlanner_UseErlangAWithFinitePatience_47738 = true
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
 ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
+ResourcePlanner_XXL_76496 = DEV
 
 # DeBockers #
 WfmIntraday_MonitorActualvsForecasted_35176 = true
@@ -155,6 +156,7 @@ MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889 = true
 MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947 = RC
 MyTimeWeb_ShiftTradeRequest_SetNotSelectableShifts_77052 = RC #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947
 MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306 = RC #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947
+MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408 = DEV #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947
 WFM_Gamification_Permission_76546 = true
 
 # Tech #

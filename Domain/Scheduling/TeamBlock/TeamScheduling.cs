@@ -10,6 +10,20 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
+	[RemoveMeWithToggle("Merge this logic with baseclass", Toggles.ResourcePlanner_XXL_76496)]
+	public class TeamSchedulingNoStateMainShiftProjection : TeamScheduling
+	{
+		public TeamSchedulingNoStateMainShiftProjection(AssignScheduledLayers assignScheduledLayers, IDayOffsInPeriodCalculator dayOffsInPeriodCalculator, IResourceCalculation resourceCalculation, ScheduleChangesAffectedDates scheduleChangesAffectedDates) : base(assignScheduledLayers, dayOffsInPeriodCalculator, resourceCalculation, scheduleChangesAffectedDates)
+		{
+		}
+
+		protected override ShiftProjectionCache ForDate(ShiftProjectionCache shiftProjectionCache, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
+		{
+			shiftProjectionCache.SetDateNoStateMainShiftProjection(dateOnlyAsDateTimePeriod);
+			return shiftProjectionCache;
+		}
+	}
+
 	public class TeamScheduling
     {
 	    private readonly AssignScheduledLayers _assignScheduledLayers;
@@ -61,24 +75,33 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			return dayScheduled != null && dayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
 		}
-		
+
+		protected virtual ShiftProjectionCache ForDate(ShiftProjectionCache shiftProjectionCache, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
+		{
+#pragma warning disable 618
+			shiftProjectionCache.SetDate(dateOnlyAsDateTimePeriod);
+#pragma warning restore 618
+			return shiftProjectionCache;
+		}
+
+
 		private void assignShiftProjection(IEnumerable<IPersonAssignment> orginalPersonAssignments, ShiftProjectionCache shiftProjectionCache, IScheduleDay destinationScheduleDay, 
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, INewBusinessRuleCollection businessRules, 
 			SchedulingOptions schedulingOptions, ResourceCalculationData resourceCalculationData)
 		{
-			shiftProjectionCache.SetDate(destinationScheduleDay.DateOnlyAsPeriod);
+			shiftProjectionCache = ForDate(shiftProjectionCache, destinationScheduleDay.DateOnlyAsPeriod);
 
 			var personAssignment = destinationScheduleDay.PersonAssignment();
 	        if (personAssignment != null && personAssignment.PersonalActivities().Any())
 			{
-				var mainShiftPeriod = shiftProjectionCache.MainShiftProjection.Period().GetValueOrDefault();
+				var mainShiftPeriod = shiftProjectionCache.MainShiftProjection().Period().GetValueOrDefault();
 				if (personAssignment.PersonalActivities().Any(personalShiftLayer => !mainShiftPeriod.Contains(personalShiftLayer.Period))) return;
 			}
 
 	        var personMeetingCollection = destinationScheduleDay.PersonMeetingCollection();
 	        if (personMeetingCollection.Any())
 			{
-				var mainShiftPeriod = shiftProjectionCache.MainShiftProjection.Period().GetValueOrDefault();
+				var mainShiftPeriod = shiftProjectionCache.MainShiftProjection().Period().GetValueOrDefault();
 				if (personMeetingCollection.Any(personMeeting => !mainShiftPeriod.Contains(personMeeting.Period))) return;
 			}
 

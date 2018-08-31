@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.DBManager.Library
 						command.UpgradeDatabase = true;
 					}),
 					x => matchSwitchWithAdjacentValue(x, "-RESTORE", v => command.RestoreBackup = v),
-					x => matchSwitchWithAdjacentValue(x, "-DATAFOLDER", v => command.DataFolder = v),
 
 
 					x => matchSwitchWithAdjacentValue(x, "-S", v => command.ServerName = v),
@@ -100,7 +99,6 @@ namespace Teleopti.Ccc.DBManager.Library
 
 
 		public string DbManagerFolderPath { get; set; }
-//		public bool IsAzure => ConfigurationManager.AppSettings["AzurePattern"] != null && ConfigurationManager.AppSettings["AzurePattern"].Split(';').Any(d => ServerName.Contains(d.Trim()));
 
 		public string ServerName { get; set; } = ".";
 		public string DatabaseName { get; set; }
@@ -112,16 +110,15 @@ namespace Teleopti.Ccc.DBManager.Library
 		public bool UseIntegratedSecurity { get; set; }
 		public DatabaseType DatabaseType { get; set; }
 		public string DatabaseTypeName => DatabaseType.GetName();
-		public bool CreatePermissions { get; set; }
-		public bool UpgradeDatabase { get; set; }
-		public string DataFolder { get; set; }
-		
+
 		public bool DropDatabase { get; set; }
 		public bool CreateDatabase { get; set; }
 		public bool RecreateDatabaseIfNotExistsOrNewer { get; set; }
-		
+
 		public string RestoreBackup { get; set; }
 		public string RestoreBackupIfNotExistsOrNewer { get; set; }
-		
+
+		public bool CreatePermissions { get; set; }
+		public bool UpgradeDatabase { get; set; }
 	}
 }

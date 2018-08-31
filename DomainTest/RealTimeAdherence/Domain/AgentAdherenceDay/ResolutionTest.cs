@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithApprovedPeriod("2018-02-20 08:00", "2018-02-20 09:00")
 				;
 
-			var result = Target.Load(person, "2018-02-20".Date());
+			var result = Target.LoadUntilNow(person, "2018-02-20".Date());
 
 			result.OutOfAdherences().Should().Be.Empty();
 		}
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithHistoricalStateChange("2018-02-20 09:00:00.888", Adherence.In)
 				;
 
-			var result = Target.Load(person, "2018-02-20".Date());
+			var result = Target.LoadUntilNow(person, "2018-02-20".Date());
 
 			result.OutOfAdherences().Single().StartTime.Should().Be("2018-02-20 08:00:00".Utc());
 			result.OutOfAdherences().Single().EndTime.Should().Be("2018-02-20 09:00:00".Utc());
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithHistoricalStateChange("2018-02-20 08:00", Adherence.Out)
 				;
 
-			var result = Target.Load(person, "2018-02-20".Date());
+			var result = Target.LoadUntilNow(person, "2018-02-20".Date());
 
 			result.OutOfAdherences().Single().StartTime.Should().Be("2018-02-20 08:00:00".Utc());
 			result.OutOfAdherences().Single().EndTime.Should().Be("2018-02-20 08:12:34".Utc());
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithHistoricalStateChange("2018-02-20 16:59:56.999", Adherence.Out)
 				;
 
-			var result = Target.Load(person, "2018-02-20".Date());
+			var result = Target.LoadUntilNow(person, "2018-02-20".Date());
 
 			result.Percentage().Should().Be(10);
 		}
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithHistoricalStateChange("2018-02-20 16:59:57", Adherence.Out)
 				;
 
-			var result = Target.Load(person, "2018-02-20".Date());
+			var result = Target.LoadUntilNow(person, "2018-02-20".Date());
 
 			result.Percentage().Should().Be(25);
 		}
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithHistoricalStateChange("2018-02-20 09:00:00.888", Adherence.In)
 				;
 
-			var result = Target.Load(person, "2018-02-20".Date());
+			var result = Target.LoadUntilNow(person, "2018-02-20".Date());
 
 			result.RecordedOutOfAdherences().Single().StartTime.Should().Be("2018-02-20 08:00:00".Utc());
 			result.RecordedOutOfAdherences().Single().EndTime.Should().Be("2018-02-20 09:00:00".Utc());
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithHistoricalStateChange("2018-02-20 08:01:00.100", Adherence.In)
 				;
 
-			var result = Target.Load(person, "2018-02-20".Date());
+			var result = Target.LoadUntilNow(person, "2018-02-20".Date());
 
 			result.OutOfAdherences().Should().Be.Empty();
 		}
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithHistoricalStateChange("2018-02-20 08:00:00", Adherence.Out)
 				;
 
-			var result = Target.Load(person, "2018-02-20".Date());
+			var result = Target.LoadUntilNow(person, "2018-02-20".Date());
 
 			result.OutOfAdherences().Should().Be.Empty();
 		}
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithApprovedPeriod(person, "2018-03-26 08:00:00", "2018-03-26 09:00:00")
 				;
 
-			var result = Target.Load(person, "2018-03-26".Date());
+			var result = Target.LoadUntilNow(person, "2018-03-26".Date());
 
 			result.OutOfAdherences().Should().Be.Empty();
 		}
@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithHistoricalStateChange("2018-03-26 09:00:00", Adherence.In)
 				;
 
-			var result = Target.Load(person, "2018-03-26".Date());
+			var result = Target.LoadUntilNow(person, "2018-03-26".Date());
 
 			result.OutOfAdherences().Single().StartTime.Should().Be("2018-03-26 08:00:00".Utc());
 			result.OutOfAdherences().Single().EndTime.Should().Be("2018-03-26 09:00:00".Utc());

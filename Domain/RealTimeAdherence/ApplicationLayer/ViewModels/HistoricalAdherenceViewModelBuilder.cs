@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 			var person = _persons.Load(personId);
 
 			var adherenceDay = _agentAdherenceDayLoader
-				.Load(
+				.LoadUntilNow(
 					personId,
 					date
 				);

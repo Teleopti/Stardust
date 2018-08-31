@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 17:00")
 				.WithHistoricalStateChange("2017-12-08 08:00", Adherence.In);
 
-			var result = Target.Load(person, "2017-12-08".Date());
+			var result = Target.LoadUntilNow(person, "2017-12-08".Date());
 
 			result.Percentage().Should().Be(100);
 		}
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithAssignedActivity("2017-12-08 08:00", "2017-12-08 16:00")
 				.WithHistoricalStateChange("2017-12-08 07:30", Adherence.In);
 
-			var result = Target.Load(person, "2017-12-08".Date());
+			var result = Target.LoadUntilNow(person, "2017-12-08".Date());
 
 			result.Percentage().Should().Be(100);
 		}
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithHistoricalStateChange("2017-12-08 08:30", Adherence.In)
 				.WithHistoricalStateChange("2017-12-08 09:30", Adherence.In);
 
-			var result = Target.Load(person, "2017-12-08".Date());
+			var result = Target.LoadUntilNow(person, "2017-12-08".Date());
 
 			result.Percentage().Should().Be(100);
 		}
@@ -341,7 +341,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 	{
 		public static Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay.IAgentAdherenceDay Load(this IAgentAdherenceDayLoader loader, Guid personId)
 		{
-			return loader.Load(personId, new DateOnly(ServiceLocatorForEntity.Now.UtcDateTime().Date));
+			return loader.LoadUntilNow(personId, new DateOnly(ServiceLocatorForEntity.Now.UtcDateTime().Date));
 		}
 	}
 }
