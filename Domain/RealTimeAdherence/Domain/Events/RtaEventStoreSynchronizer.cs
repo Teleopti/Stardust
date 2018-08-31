@@ -1,13 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.RegularExpressions;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
-using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events
@@ -49,7 +44,9 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events
 				var adherenceDay = _adherenceDayLoader.Load(q.PersonId.Value, q.StartTime.Value.ToDateOnly());
 				var changeLateForWork = adherenceDay.Changes().FirstOrDefault(c => c.LateForWork != null);
 				var lateForWorkText = changeLateForWork != null ? changeLateForWork.LateForWork : "0";
-				var minutesLateForWork = int.Parse(Regex.Replace(lateForWorkText, "[^0-9.]", ""));	
+				var minutesLateForWork = int.Parse(Regex.Replace(lateForWorkText, "[^0-9.]", ""));
+				var shift =  new DateTimePeriod(adherenceDay.Period().StartDateTime.AddHours(1), adherenceDay.Period().EndDateTime.AddHours(-1));
+				var shiftLength = (int) shift.ElapsedTime().TotalMinutes;
 				
 				_readModels.Upsert(new HistoricalOverviewReadModel
 				{
@@ -57,7 +54,8 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events
 					Date = q.StartTime.Value.ToDateOnly(),
 					Adherence = adherenceDay.Percentage(),
 					WasLateForWork = changeLateForWork != null,
-					MinutesLateForWork = minutesLateForWork
+					MinutesLateForWork = minutesLateForWork,
+					ShiftLength = shiftLength					
 				});
 			});
 		}

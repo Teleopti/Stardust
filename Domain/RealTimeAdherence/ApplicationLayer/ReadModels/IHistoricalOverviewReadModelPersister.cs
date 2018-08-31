@@ -21,5 +21,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels
 		public int? Adherence { get; set; }
 		public bool WasLateForWork { get; set; }
 		public int MinutesLateForWork { get; set; }
+		public int? ShiftLength { get; set; }
 	}
 }

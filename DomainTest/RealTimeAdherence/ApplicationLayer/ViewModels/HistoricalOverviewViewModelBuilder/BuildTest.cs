@@ -231,6 +231,24 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 		}
 
 		[Test]
+		public void ShouldNotDisplayAdherenceExceptOnLastDay()
+		{
+			Now.Is("2018-08-23 08:00");
+			var teamId = Guid.NewGuid();
+			Database
+				.WithTeam(teamId)
+				.WithAgent()
+				.WithAssignment("2018-08-23")
+				.WithAssignedActivity("2018-08-23 08:00", "2018-08-23 17:00")
+				.WithHistoricalStateChange("2018-08-23 08:00", Adherence.In);
+			Now.Is("2018-08-24 08:00");
+
+			var data = Target.Build(null, new[] {teamId}).First();
+
+			data.Agents.Single().Days.Count(a => a.Adherence == null).Should().Be(6);
+		}
+
+		[Test]
 		public void ShouldDisplayCalculatedAdherence()
 		{
 			Now.Is("2018-08-17 08:00");
@@ -277,6 +295,22 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 			var data = Target.Build(null, new[] {teamId}).First();
 
 			data.Agents.Single().Days.Last().WasLateForWork.Should().Be(true);
+		}
+
+		[Test]
+		public void ShouldNotDisplayLateForWorkExceptOnLastDay()
+		{
+			Now.Is("2018-08-27 08:00");
+			var teamId = Guid.NewGuid();
+			Database
+				.WithTeam(teamId)
+				.WithAgent()
+				.WithArrivedLateForWork("2018-08-27 10:00", "2018-08-27 11:00");
+			Now.Is("2018-08-28 08:00");
+
+			var data = Target.Build(null, new[] {teamId}).First();
+
+			data.Agents.Single().Days.Count(a => a.WasLateForWork == false).Should().Be(6);
 		}
 
 		[Test]
@@ -375,5 +409,101 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.
 			data.First().Name.Should().Be("Barcelona/Blue");
 			data.Second().Name.Should().Be("Denver/Red");
 		}
+
+		[Test]
+		public void ShouldDisplayEmptyIntervalAdherence()
+		{
+			Now.Is("2018-08-31 08:00");
+			var teamId = Guid.NewGuid();
+			Database
+				.WithTeam(teamId)
+				.WithAgent();
+
+			var data = Target.Build(null, new[] {teamId}).First();
+
+			data.Agents.Single().IntervalAdherence.Should().Be(null);
+		}
+
+		[Test]
+		public void ShouldDisplayIntervalAdherence()
+		{
+			Now.Is("2018-08-31 08:00");
+			var teamId = Guid.NewGuid();
+			Database
+				.WithTeam(teamId)
+				.WithAgent()
+				.WithAssignment("2018-08-31")
+				.WithAssignedActivity("2018-08-31 08:00", "2018-08-31 17:00")
+				.WithHistoricalStateChange("2018-08-31 08:00", Adherence.In);
+			Now.Is("2018-09-01 08:00");
+
+			var data = Target.Build(null, new[] {teamId}).First();
+
+			data.Agents.Single().IntervalAdherence.Should().Be(100);
+		}
+
+		[Test]
+		public void ShouldDisplayCalculatedIntervalAdherence()
+		{
+			Now.Is("2018-08-31 08:00");
+			var teamId = Guid.NewGuid();
+			Database
+				.WithTeam(teamId)
+				.WithAgent()
+				.WithAssignment("2018-08-31")
+				.WithAssignedActivity("2018-08-31 10:00", "2018-08-31 20:00")
+				.WithHistoricalStateChange("2018-08-31 10:00", Adherence.In)
+				.WithAssignment("2018-09-01")
+				.WithAssignedActivity("2018-09-01 10:00", "2018-09-01 20:00")
+				.WithHistoricalStateChange("2018-09-01 10:00", Adherence.In)
+				.WithHistoricalStateChange("2018-09-01 15:00", Adherence.Out);
+			Now.Is("2018-09-02 08:00");
+
+			var data = Target.Build(null, new[] {teamId}).First();
+
+			data.Agents.Single().IntervalAdherence.Should().Be(75);
+		}
+
+		[Test]
+		public void ShouldDisplayFiftyPercentCalculatedIntervalAdherence()
+		{
+			Now.Is("2018-08-31 08:00");
+			var teamId = Guid.NewGuid();
+			Database
+				.WithTeam(teamId)
+				.WithAgent()
+				.WithAssignment("2018-08-31")
+				.WithAssignedActivity("2018-08-31 10:00", "2018-08-31 14:00")
+				.WithHistoricalStateChange("2018-08-31 10:00", Adherence.In)
+				.WithHistoricalStateChange("2018-08-31 11:00", Adherence.Out)
+				.WithAssignment("2018-09-01")
+				.WithAssignedActivity("2018-09-01 10:00", "2018-09-01 20:00")
+				.WithHistoricalStateChange("2018-09-01 10:00", Adherence.In)
+				.WithHistoricalStateChange("2018-09-01 16:00", Adherence.Out);
+			Now.Is("2018-09-02 08:00");
+
+			var data = Target.Build(null, new[] {teamId}).First();
+
+			data.Agents.Single().IntervalAdherence.Should().Be(50);
+		}
+
+		[Test]
+		public void ShouldDisplayCalculatedIntervalAdherenceForShortShift()
+		{
+			Now.Is("2018-08-31 08:00");
+			var teamId = Guid.NewGuid();
+			Database
+				.WithTeam(teamId)
+				.WithAgent()
+				.WithAssignment("2018-08-31")
+				.WithAssignedActivity("2018-08-31 10:00", "2018-08-31 10:30")
+				.WithHistoricalStateChange("2018-08-31 10:00", Adherence.In);
+			Now.Is("2018-09-02 08:00");
+
+			var data = Target.Build(null, new[] {teamId}).First();
+
+			data.Agents.Single().IntervalAdherence.Should().Be(100);
+		}
+		
 	}
 }
