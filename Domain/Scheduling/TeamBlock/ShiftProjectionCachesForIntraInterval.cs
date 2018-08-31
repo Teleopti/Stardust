@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public class ShiftProjectionCachesForIntraInterval
 	{
-		private readonly ITeamBlockRoleModelSelector _roleModelSelector;
+		private readonly TeamBlockRoleModelSelector _roleModelSelector;
 		private readonly IActivityIntervalDataCreator _activityIntervalDataCreator;
 		private readonly IWorkShiftSelectorForIntraInterval _workSelectorForIntraInterval;
 		private readonly IWorkShiftSelector _workShiftSelector;
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly ProposedRestrictionAggregator _proposedRestrictionAggregator;
 		private readonly WorkShiftFilterService _workShiftFilterService;
 
-		public ShiftProjectionCachesForIntraInterval(ITeamBlockRoleModelSelector roleModelSelector,
+		public ShiftProjectionCachesForIntraInterval(TeamBlockRoleModelSelector roleModelSelector,
 			IActivityIntervalDataCreator activityIntervalDataCreator,
 			IWorkShiftSelectorForIntraInterval workSelectorForIntraInterval,
 			IWorkShiftSelector workShiftSelector,
