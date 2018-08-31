@@ -31,10 +31,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		}
 
 
-		public ShiftProjectionCache Select(IScheduleDictionary schedules, IEnumerable<ISkillDay> allSkillDays,
-			IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, DateOnly datePointer, IPerson person,
-			SchedulingOptions schedulingOptions, IEffectiveRestriction additionalEffectiveRestriction,
-			IGroupPersonSkillAggregator groupPersonSkillAggregator)
+		public ShiftProjectionCache Select(IScheduleDictionary schedules,
+																	IEnumerable<ISkillDay> allSkillDays, 
+																	IWorkShiftSelector workShiftSelector, 
+																	ITeamBlockInfo teamBlockInfo, 
+																	DateOnly datePointer, 
+																	IPerson person, 
+																	SchedulingOptions schedulingOptions, 
+																	IEffectiveRestriction additionalEffectiveRestriction,
+																	IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
 			var effectiveRestriction = _teamBlockRestrictionAggregator.Aggregate(schedules, datePointer, person, teamBlockInfo, schedulingOptions);
 			if (effectiveRestriction == null)
@@ -42,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			ShiftProjectionCache foundShiftProjectionCache = _firstShiftInTeamBlockFinder.FindFirst(teamBlockInfo, person, datePointer, schedules);
 			if (foundShiftProjectionCache != null &&
-				!schedulingOptions.NotAllowedShiftCategories.Contains(foundShiftProjectionCache.TheWorkShift.ShiftCategory))
+			    !schedulingOptions.NotAllowedShiftCategories.Contains(foundShiftProjectionCache.TheWorkShift.ShiftCategory))
 				return foundShiftProjectionCache;
 			
 			effectiveRestriction = effectiveRestriction.Combine(additionalEffectiveRestriction);
@@ -52,27 +57,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			//TODO: This check could probably be moved "higher up" for perf reasons/fewer calls
 			var isSameOpenHoursInBlock = _sameOpenHoursInTeamBlock.Check(allSkillDays, teamBlockInfo, groupPersonSkillAggregator);
-
-			ShiftProjectionCache roleModel=null;
-			var shiftsForNonRestrictions = _workShiftFilterService.FilterForRoleModel(groupPersonSkillAggregator, schedules, datePointer, teamBlockInfo, effectiveRestriction,
-				schedulingOptions, isSameOpenHoursInBlock, false, allSkillDays);
-			if (shiftsForNonRestrictions != null)
-			{
-				roleModel= workShiftSelector.SelectShiftProjectionCache(groupPersonSkillAggregator, datePointer, shiftsForNonRestrictions, allSkillDays, teamBlockInfo, schedulingOptions, TimeZoneGuard.Instance.CurrentTimeZone(), true, teamBlockInfo.TeamInfo.GroupMembers.First());
-				shiftsForNonRestrictions.ClearMainShiftProjectionCaches(); //perf/mem reasons... can this be fixed in a more clear way?
-			}
-			else if (effectiveRestriction.IsRestriction)
-			{
-				var shiftsForRestrictions = _workShiftFilterService.FilterForRoleModel(groupPersonSkillAggregator, schedules, datePointer, teamBlockInfo, effectiveRestriction,
-					schedulingOptions, isSameOpenHoursInBlock, true, allSkillDays);
-				if (shiftsForRestrictions != null)
-				{
-					roleModel=workShiftSelector.SelectShiftProjectionCache(groupPersonSkillAggregator, datePointer, shiftsForRestrictions, allSkillDays, teamBlockInfo, schedulingOptions, TimeZoneGuard.Instance.CurrentTimeZone(), true, teamBlockInfo.TeamInfo.GroupMembers.First());
-					shiftsForRestrictions.ClearMainShiftProjectionCaches(); //perf/mem reasons... can this be fixed in a more clear way?
-				}
-			}
+			var roleModel = filterAndSelect(schedules, allSkillDays, workShiftSelector, teamBlockInfo, datePointer, schedulingOptions, effectiveRestriction, false, groupPersonSkillAggregator, isSameOpenHoursInBlock);
+			if(roleModel == null && effectiveRestriction!= null && effectiveRestriction.IsRestriction)
+				roleModel = filterAndSelect(schedules, allSkillDays, workShiftSelector, teamBlockInfo, datePointer, schedulingOptions, effectiveRestriction, true, groupPersonSkillAggregator, isSameOpenHoursInBlock);
 
 			return roleModel;
+		}
+
+		private ShiftProjectionCache filterAndSelect(IScheduleDictionary schedules, IEnumerable<ISkillDay> allSkillDays, IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, DateOnly datePointer, SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, bool useShiftsForRestrictions, IGroupPersonSkillAggregator groupPersonSkillAggregator, bool isSameOpenHoursInBlock)
+		{
+			var shifts = _workShiftFilterService.FilterForRoleModel(groupPersonSkillAggregator, schedules, datePointer, teamBlockInfo, effectiveRestriction,
+				schedulingOptions, isSameOpenHoursInBlock, useShiftsForRestrictions, allSkillDays);
+
+			if (shifts.IsNullOrEmpty())
+				return null;
+
+			var res = workShiftSelector.SelectShiftProjectionCache(groupPersonSkillAggregator, datePointer, shifts, allSkillDays, teamBlockInfo, schedulingOptions, TimeZoneGuard.Instance.CurrentTimeZone(), true, teamBlockInfo.TeamInfo.GroupMembers.First());
+			shifts.ClearMainShiftProjectionCaches();
+			return res;
 		}
 	}
 
