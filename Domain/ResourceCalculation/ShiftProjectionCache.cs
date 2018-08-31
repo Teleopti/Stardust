@@ -39,17 +39,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_mainShift = new Lazy<IEditableShift>(() => _workShift.ToEditorShift(_dateOnlyAsPeriod, _dateOnlyAsPeriod.TimeZone()));
 			_mainshiftProjection = new Lazy<IVisualLayerCollection>(() => TheMainShift.ProjectionService().CreateProjection());
 		}
-
-		public void SetDateNoStateMainShiftProjection(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
-		{
-			if (_dateOnlyAsPeriod != null && _dateOnlyAsPeriod.Equals(dateOnlyAsDateTimePeriod)) return;
-
-			_dateOnlyAsPeriod = dateOnlyAsDateTimePeriod;
-			_workShiftCalculatableLayers = null;
-			_mainShift = new Lazy<IEditableShift>(() => _workShift.ToEditorShift(_dateOnlyAsPeriod, _dateOnlyAsPeriod.TimeZone()));
-			_mainshiftProjection = null;
-		}
-
+		
 		public IEditableShift TheMainShift => _mainShift.Value;
 
 		public IWorkShift TheWorkShift => _workShift;
@@ -85,5 +75,21 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public TimeSpan WorkShiftEndTime => WorkShiftProjectionPeriod.EndDateTime.Subtract(WorkShiftProjectionPeriod.StartDateTime.Date);
 
 		public DateOnly SchedulingDate => _dateOnlyAsPeriod?.DateOnly ?? DateOnly.MinValue;
+
+		public void ClearMainShiftProjectionCache()
+		{
+			_mainshiftProjection = null;
+		}
+	}
+	
+	public static class ShiftProjectionCacheExtensions
+	{
+		public static void ClearMainShiftProjectionCaches(this IEnumerable<ShiftProjectionCache> shiftProjectionCaches)
+		{
+			foreach (var shiftProjectionCache in shiftProjectionCaches)
+			{
+				shiftProjectionCache.ClearMainShiftProjectionCache();
+			}
+		}
 	}
 }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -10,20 +9,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
-	[RemoveMeWithToggle("Merge this logic with baseclass", Toggles.ResourcePlanner_XXL_76496)]
-	public class TeamSchedulingNoStateMainShiftProjection : TeamScheduling
-	{
-		public TeamSchedulingNoStateMainShiftProjection(AssignScheduledLayers assignScheduledLayers, IDayOffsInPeriodCalculator dayOffsInPeriodCalculator, IResourceCalculation resourceCalculation, ScheduleChangesAffectedDates scheduleChangesAffectedDates) : base(assignScheduledLayers, dayOffsInPeriodCalculator, resourceCalculation, scheduleChangesAffectedDates)
-		{
-		}
-
-		protected override ShiftProjectionCache ForDate(ShiftProjectionCache shiftProjectionCache, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
-		{
-			shiftProjectionCache.SetDateNoStateMainShiftProjection(dateOnlyAsDateTimePeriod);
-			return shiftProjectionCache;
-		}
-	}
-
 	public class TeamScheduling
     {
 	    private readonly AssignScheduledLayers _assignScheduledLayers;
