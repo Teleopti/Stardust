@@ -79,6 +79,7 @@
 					 'border-light': vm.useLighterBorder(shiftLayer),
 					 'divide-line':  shiftLayer.ShowDividedLine,
 					 'disabled': vm.isNotAllowedToChange(shiftLayer),
+					 'non-resizable': vm.isNotResizable(shiftLayer),
 					 'float-top': vm.getMergedShiftLayer(shiftLayer).FloatOnTop}"
 					 ng-style="{'width': vm.getMergedShiftLayer(shiftLayer).Width +'px', 
 					 'background-color': vm.getMergedShiftLayer(shiftLayer).Color, 

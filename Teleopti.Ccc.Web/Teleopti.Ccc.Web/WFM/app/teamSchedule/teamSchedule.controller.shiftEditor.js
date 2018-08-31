@@ -204,7 +204,15 @@
 			return angular.extend({}, layer, layer.Current);
 		}
 
+		vm.isNotResizable = function (shiftLayer) {
+			return !!shiftLayer.IsPersonalActivity
+				|| !!shiftLayer.IsMeeting
+				|| !!shiftLayer.IsIntradayAbsence
+				|| !!shiftLayer.IsOvertime;
+		}
+
 		function bindResizeEvent(shiftLayer, shiftLayerEl) {
+			!vm.isNotResizable(shiftLayer) && 
 			!shiftLayer.interact &&
 				(shiftLayer.interact = interact(shiftLayerEl))
 					.resizable({
@@ -345,8 +353,7 @@
 						if (isCoveredCompletely) {
 							if (!isSameTypeWithSelected
 								|| (isSameTypeWithSelected && i === endIndex)
-								|| (isSameTypeWithSelected && needMerge))
-							{
+								|| (isSameTypeWithSelected && needMerge)) {
 								vm.scheduleVm.ShiftLayers.splice(deleteIndex, 1);
 							}
 						} else if (!isSameTypeWithSelected) {

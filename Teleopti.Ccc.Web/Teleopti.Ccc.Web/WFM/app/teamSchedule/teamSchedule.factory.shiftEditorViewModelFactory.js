@@ -148,7 +148,7 @@
 			this.FloatOnTop = !!layer.FloatOnTop;
 			this.IsPersonalActivity = !!layer.IsPersonalActivity;
 			this.IsMeeting = !!layer.IsMeeting;
-
+			this.IsIntradayAbsence = !!layer.ParentPersonAbsences && !!layer.ParentPersonAbsences.length
 		}
 
 		ShiftLayerViewModel.prototype.UseLighterBorder = function (color) {
