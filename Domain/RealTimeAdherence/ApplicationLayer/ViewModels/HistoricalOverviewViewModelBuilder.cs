@@ -90,45 +90,46 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 						{
 							Id = agentInGroup.PersonId.Value,
 							Name = agentInGroup.Name,
-							Days = (from day in sevenDays
-									select new HistoricalOverviewDayViewModel
-									{
-										Date = day.Date.ToString("yyyyMMdd"),
-										DisplayDate = day.Date.ToString("MM") + "/" + day.Date.ToString("dd"),
-										Adherence = getAdherence(readModels, agentInGroup.PersonId.Value),
-										WasLateForWork = getWasLateForWork(readModels, agentInGroup.PersonId.Value)
-									}
-								),
+							Days = from day in sevenDays
+								select new HistoricalOverviewDayViewModel
+								{
+									Date = day.Date.ToString("yyyyMMdd"),
+									DisplayDate = day.Date.ToString("MM") + "/" + day.Date.ToString("dd"),
+									Adherence = getAdherence(readModels, agentInGroup.PersonId.Value),
+									WasLateForWork = wasLateForWork(readModels, agentInGroup.PersonId.Value)
+								},
 							LateForWork = new HistoricalOverviewLateForWorkViewModel
 							{
-								Count = sevenDays.Count(day => getLateforWorkCount(day, readModels, agentInGroup.PersonId.Value) > 0),
-								TotalMinutes = sevenDays.Sum(day => getLateforWorkCount(day, readModels, agentInGroup.PersonId.Value))
+								Count = sevenDays.Count(day => getLateforWork(day, readModels, agentInGroup.PersonId.Value) > 0),
+								TotalMinutes = sevenDays.Sum(day => getLateforWork(day, readModels, agentInGroup.PersonId.Value))
 							}
 						})
 				};
 		}
 
-		private static int getLateforWorkCount(DateTime day, IEnumerable<HistoricalOverviewReadModel> rm, Guid agentId)
+		private static int getLateforWork(DateTime day, IEnumerable<HistoricalOverviewReadModel> rm, Guid agentId)
 		{
 			if (rm.IsNullOrEmpty())
 				return 0;
 			return rm.SingleOrDefault(r => r.PersonId == agentId && r.Date == day.ToDateOnly())?.MinutesLateForWork ?? 0;
 		}
 
-		private static bool getWasLateForWork(IEnumerable<HistoricalOverviewReadModel> rm, Guid agentId)
+		private static bool wasLateForWork(IEnumerable<HistoricalOverviewReadModel> rm, Guid agentId)
 		{
-			return rm.IsNullOrEmpty()
-				? false
-				: rm.Last(r => r.PersonId == agentId).WasLateForWork;
+			return calcHistoricalOverview(rm, agentId) != null && calcHistoricalOverview(rm, agentId).WasLateForWork;
 		}
 
 		private static int? getAdherence(IEnumerable<HistoricalOverviewReadModel> rm, Guid agentId)
 		{
-			return rm.IsNullOrEmpty()
-				? null
-				: rm.Last(r => r.PersonId == agentId).Adherence;
+			return calcHistoricalOverview(rm, agentId)?.Adherence;
 		}
 
+		private static HistoricalOverviewReadModel calcHistoricalOverview(IEnumerable<HistoricalOverviewReadModel> rm, Guid agentId)
+		{
+			return rm.IsNullOrEmpty()
+				? null
+				: rm.Last(r => r.PersonId == agentId);
+		}
 
 		private IEnumerable<HistoricalOverviewTeamViewModel> buildViewModelQuickAndDirty(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds)
 		{
