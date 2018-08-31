@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return null;
 
 			var res = workShiftSelector.SelectShiftProjectionCache(groupPersonSkillAggregator, datePointer, shifts, allSkillDays, teamBlockInfo, schedulingOptions, TimeZoneGuard.Instance.CurrentTimeZone(), true, teamBlockInfo.TeamInfo.GroupMembers.First());
-			shifts.ClearMainShiftProjectionCaches();
+			shifts.ClearMainShiftProjectionCaches(); //just a hack for perf/mem reasons to release resources... can this be made in a better way?
 			return res;
 		}
 	}
