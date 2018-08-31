@@ -23,30 +23,43 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 			_historicalPeriodProvider = historicalPeriodProvider;
 		}
 
-		public WorkloadAccuracy Evaluate(IWorkload workload, IOutlierRemover outlierRemover, IForecastAccuracyCalculator forecastAccuracyCalculator)
+		public WorkloadAccuracy Evaluate(IWorkload workload, IOutlierRemover outlierRemover,
+			IForecastAccuracyCalculator forecastAccuracyCalculator)
 		{
-			var result = new WorkloadAccuracy { Id = workload.Id.Value, Name = workload.Name};
+			var result = new WorkloadAccuracy
+			{
+				Id = workload.Id.Value,
+				Name = workload.Name,
+				Accuracies = new MethodAccuracy[] { }
+			};
+
 			var availablePeriod = _historicalPeriodProvider.AvailablePeriod(workload);
-			if (!availablePeriod.HasValue)
-				return new WorkloadAccuracy { Id = workload.Id.Value, Name = workload.Name, Accuracies = new MethodAccuracy[] { } };
+			if (!availablePeriod.HasValue) return result;
+
+			var historicalData = _historicalData.Fetch(workload, availablePeriod.Value);
+			if (!historicalData.TaskOwnerDayCollection.Any()) return result;
+
+			var twoPeriods = HistoricalPeriodProvider.DivideIntoTwoPeriods(availablePeriod.Value);
+			if (!historicalData.TaskOwnerDayCollection.Any(x => x.CurrentDate <= twoPeriods.Item1.EndDate))
+			{
+				return result;
+			}
+
 			var methods = _forecastMethodProvider.Calculate(availablePeriod.Value);
 			var methodsEvaluationResult = new List<MethodAccuracy>();
 			foreach (var forecastMethod in methods)
 			{
-				var historicalData = _historicalData.Fetch(workload, availablePeriod.Value);
-				if (!historicalData.TaskOwnerDayCollection.Any())
-					return new WorkloadAccuracy { Id = workload.Id.Value, Name = workload.Name, Accuracies = new MethodAccuracy[] { } };
+				var firstPartHistoricalData =
+					historicalData.TaskOwnerDayCollection.Where(x => x.CurrentDate <= twoPeriods.Item1.EndDate);
+				var secondPartHistoricalData =
+					historicalData.TaskOwnerDayCollection.Where(x => x.CurrentDate > twoPeriods.Item1.EndDate);
 
-				var twoPeriods = HistoricalPeriodProvider.DivideIntoTwoPeriods(availablePeriod.Value);
 				var firstPeriodData = new TaskOwnerPeriod(DateOnly.MinValue,
-					historicalData.TaskOwnerDayCollection.Where(x => x.CurrentDate <= twoPeriods.Item1.EndDate),
+					firstPartHistoricalData.Select(taskOwner => cloneTaskOwner(workload, taskOwner)),
 					TaskOwnerPeriodType.Other);
 				var secondPeriodData = new TaskOwnerPeriod(DateOnly.MinValue,
-					historicalData.TaskOwnerDayCollection.Where(x => x.CurrentDate > twoPeriods.Item1.EndDate),
+					secondPartHistoricalData.Select(taskOwner => cloneTaskOwner(workload, taskOwner)),
 					TaskOwnerPeriodType.Other);
-
-				if (!firstPeriodData.TaskOwnerDayCollection.Any())
-					return new WorkloadAccuracy { Id = workload.Id.Value, Name = workload.Name, Accuracies = new MethodAccuracy[] { } };
 
 				var firstPeriodDataNoOutliers = outlierRemover.RemoveOutliers(firstPeriodData, forecastMethod);
 				var forecastResult = forecastMethod.Forecast(firstPeriodDataNoOutliers, twoPeriods.Item2);
@@ -54,17 +67,31 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 				methodsEvaluationResult.Add(new MethodAccuracy
 				{
 					MeasureResult = forecastResult.ToArray(),
-					Number = forecastAccuracyCalculator.Accuracy(forecastResult, secondPeriodData.TaskOwnerDayCollection),
+					Number = forecastAccuracyCalculator.Accuracy(forecastResult,
+						secondPeriodData.TaskOwnerDayCollection),
 					MethodId = forecastMethod.Id,
 					PeriodEvaluateOn = twoPeriods.Item2,
 					PeriodUsedToEvaluate = twoPeriods.Item1
 				});
 			}
+
 			var bestMethod = methodsEvaluationResult.OrderByDescending(x => x.Number).First();
 			bestMethod.IsSelected = true;
 
 			result.Accuracies = methodsEvaluationResult.ToArray();
 			return result;
+		}
+
+		private IValidatedVolumeDay cloneTaskOwner(IWorkload workload, ITaskOwner taskOwner)
+		{
+			var validatedVolumeDay = (IValidatedVolumeDay) taskOwner;
+			return new ValidatedVolumeDay(workload, taskOwner.CurrentDate)
+			{
+				ValidatedTasks = validatedVolumeDay.ValidatedTasks,
+				ValidatedAverageAfterTaskTime = validatedVolumeDay.ValidatedAverageAfterTaskTime,
+				ValidatedAverageTaskTime = validatedVolumeDay.ValidatedAverageTaskTime,
+				TaskOwner = validatedVolumeDay.TaskOwner
+			};
 		}
 	}
 }
