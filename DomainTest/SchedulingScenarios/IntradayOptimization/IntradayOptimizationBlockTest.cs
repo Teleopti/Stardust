@@ -34,8 +34,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakePlanningGroupSettingsRepository PlanningGroupSettingsRepository;
 		public FakePlanningGroupRepository PlanningGroupRepository;
 
-
-
 		[Test]
 		public void ShouldHandleAgentsWithDifferentSameStartTime()
 		{
@@ -45,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var scenario = ScenarioRepository.Has("some name");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(0, 0, 16, 0, 60), new TimePeriodWithSegment(8, 0, 24, 0, 60), shiftCategory));
-			ruleSet.AddLimiter(new ContractTimeLimiter(new TimePeriod(new TimeSpan(8, 0, 0), new TimeSpan(8, 0, 0)), TimeSpan.FromMinutes(15)));
+			ruleSet.AddLimiter(new ContractTimeLimiter(new TimePeriod(new TimeSpan(8, 0, 0), new TimeSpan(8, 0, 0)), TimeSpan.FromHours(1)));
 			SkillDayRepository.Has(
 				skill.CreateSkillDayWithDemandOnInterval(scenario, date.AddDays(1), 1, new Tuple<TimePeriod, double>(new TimePeriod(1, 2), 100)),
 				skill.CreateSkillDayWithDemandOnInterval(scenario, date.AddDays(2), 1, new Tuple<TimePeriod, double>(new TimePeriod(22, 23), 100)),
@@ -55,21 +53,19 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				);
 			var agentWithSameStarttime = PersonRepository.Has(ruleSet, skill);
 			var agentWithNotSameStarttime = PersonRepository.Has(ruleSet, skill);
-			var alreadyScheduledAgent = PersonRepository.Has(ruleSet, skill);
 			PersonAssignmentRepository.Has(new PersonAssignment(agentWithSameStarttime, scenario, date.AddDays(0)).WithDayOff());
 			PersonAssignmentRepository.Has(new PersonAssignment(agentWithNotSameStarttime, scenario, date.AddDays(0)).WithDayOff());
 			Enumerable.Range(1, 5).ForEach(x =>
 			{
 				PersonAssignmentRepository.Has(agentWithSameStarttime, scenario, activity, shiftCategory, date.AddDays(x), new TimePeriod(8, 17));
 				PersonAssignmentRepository.Has(agentWithNotSameStarttime, scenario, activity, shiftCategory, date.AddDays(x), new TimePeriod(8, 17));
-				PersonAssignmentRepository.Has(alreadyScheduledAgent, scenario, activity, shiftCategory, date.AddDays(x), new TimePeriod(0, 24));
 			});
 			PersonAssignmentRepository.Has(new PersonAssignment(agentWithSameStarttime, scenario, date.AddDays(6)).WithDayOff());
 			PersonAssignmentRepository.Has(new PersonAssignment(agentWithNotSameStarttime, scenario, date.AddDays(6)).WithDayOff());
-			var planningGroup = PlanningGroupRepository.Has();
+			var planningGroup = PlanningGroupRepository.Has(); //all agents are optimized
 			var planningPeriod = PlanningPeriodRepository.Has(date, 1, planningGroup);
 			var planningGroupSettings = PlanningGroupSettings.CreateDefault(planningGroup);
-			planningGroupSettings.AddFilter(new TeamFilter(agentWithSameStarttime.MyTeam(date)));
+			planningGroupSettings.AddFilter(new TeamFilter(agentWithSameStarttime.MyTeam(date))); //only agentWithSameStarttime has these settings
 			planningGroupSettings.BlockFinderType = BlockFinderType.BetweenDayOff;
 			planningGroupSettings.BlockSameStartTime = true;
 			PlanningGroupSettingsRepository.Add(planningGroupSettings);
@@ -79,9 +75,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			PersonAssignmentRepository.LoadAll().Where(x => x.Person.Equals(agentWithSameStarttime) && x.DayOff()==null)
 				.Select(x => x.Period.StartDateTime.TimeOfDay).Distinct().Count()
 				.Should().Be.EqualTo(1);
-			PersonAssignmentRepository.LoadAll().Where(x => x.Person.Equals(agentWithNotSameStarttime) && x.DayOff()==null)
-				.Select(x => x.Period.StartDateTime.TimeOfDay).Distinct().Count()
-				.Should().Be.GreaterThan(1);
 		}
 	}
 }
