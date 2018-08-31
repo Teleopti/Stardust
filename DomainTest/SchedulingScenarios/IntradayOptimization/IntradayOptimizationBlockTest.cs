@@ -72,9 +72,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			
 			Target.Execute(planningPeriod.Id.Value);
 
-			PersonAssignmentRepository.LoadAll()
+			var onlyOneStarttime = PersonAssignmentRepository.LoadAll()
 				.Where(x => x.Person.Equals(agentWithSameStarttime) && x.DayOff() == null)
-				.Select(x => x.Period.StartDateTime.TimeOfDay).Distinct().Single().Should().Not.Be
+				.Select(x => x.Period.StartDateTime.TimeOfDay).Distinct().Single();
+			onlyOneStarttime.Should().Not.Be
 				.EqualTo(new TimeSpan(8, 0, 0));
 		}
 	}
