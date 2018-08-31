@@ -923,6 +923,22 @@
 		equal($('.teammates-schedules-container .dayoff').length == 1, true);
 	});
 
+	test('should filter agents using search name after switch show only day off toggle on desktop', function() {
+		$('body').append(agentSchedulesHtml);
+
+		if (fakeOriginalAgentSchedulesData.length > 0) {
+			fakeOriginalAgentSchedulesData[0].IsDayOff = true;
+		}
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+		vm.searchNameText('this is a test search name text');
+		$('.new-teamschedule-day-off-toggle input').click();
+
+		equal(completeLoadedCount, 2);
+		equal(ajaxOption.ScheduleFilter.searchNameText, 'this is a test search name text');
+	});
+
 	test('should reset paging after turn on show only day off toggle', function() {
 		$('body').append(agentSchedulesHtml);
 
