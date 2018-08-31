@@ -45,11 +45,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(0, 0, 16, 0, 60), new TimePeriodWithSegment(8, 0, 24, 0, 60), shiftCategory));
 			ruleSet.AddLimiter(new ContractTimeLimiter(new TimePeriod(new TimeSpan(8, 0, 0), new TimeSpan(8, 0, 0)), TimeSpan.FromHours(1)));
 			SkillDayRepository.Has(
-				skill.CreateSkillDayWithDemandOnInterval(scenario, date.AddDays(1), 1, new Tuple<TimePeriod, double>(new TimePeriod(1, 2), 100)),
-				skill.CreateSkillDayWithDemandOnInterval(scenario, date.AddDays(2), 1, new Tuple<TimePeriod, double>(new TimePeriod(22, 23), 100)),
-				skill.CreateSkillDayWithDemandOnInterval(scenario, date.AddDays(3), 1, new Tuple<TimePeriod, double>(new TimePeriod(1, 2), 100)),
-				skill.CreateSkillDayWithDemandOnInterval(scenario, date.AddDays(4), 1, new Tuple<TimePeriod, double>(new TimePeriod(22, 23), 100)),
-				skill.CreateSkillDayWithDemandOnInterval(scenario, date.AddDays(5), 1, new Tuple<TimePeriod, double>(new TimePeriod(1, 2), 100))
+				skill.CreateSkillDayWithDemandOnInterval(scenario, date.AddDays(1), 0, new Tuple<TimePeriod, double>(new TimePeriod(1, 2), 100)),
+				skill.CreateSkillDayWithDemandOnInterval(scenario, date.AddDays(2), 0, new Tuple<TimePeriod, double>(new TimePeriod(22, 23), 100)),
+				skill.CreateSkillDayWithDemandOnInterval(scenario, date.AddDays(3), 0, new Tuple<TimePeriod, double>(new TimePeriod(1, 2), 100)),
+				skill.CreateSkillDayWithDemandOnInterval(scenario, date.AddDays(4), 0, new Tuple<TimePeriod, double>(new TimePeriod(22, 23), 100)),
+				skill.CreateSkillDayWithDemandOnInterval(scenario, date.AddDays(5), 0, new Tuple<TimePeriod, double>(new TimePeriod(1, 2), 100))
 				);
 			var agentWithSameStarttime = PersonRepository.Has(ruleSet, skill);
 			var agentWithNotSameStarttime = PersonRepository.Has(ruleSet, skill);
@@ -71,10 +71,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			PlanningGroupSettingsRepository.Add(planningGroupSettings);
 			
 			Target.Execute(planningPeriod.Id.Value);
-			
-			PersonAssignmentRepository.LoadAll().Where(x => x.Person.Equals(agentWithSameStarttime) && x.DayOff()==null)
-				.Select(x => x.Period.StartDateTime.TimeOfDay).Distinct().Count()
-				.Should().Be.EqualTo(1);
+
+			PersonAssignmentRepository.LoadAll()
+				.Where(x => x.Person.Equals(agentWithSameStarttime) && x.DayOff() == null)
+				.Select(x => x.Period.StartDateTime.TimeOfDay).Distinct().Single().Should().Not.Be
+				.EqualTo(new TimeSpan(8, 0, 0));
 		}
 	}
 }
