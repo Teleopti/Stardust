@@ -15,13 +15,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	{
 		private readonly ITeamBlockRestrictionAggregator _teamBlockRestrictionAggregator;
 		private readonly WorkShiftFilterService _workShiftFilterService;
-		private readonly ISameOpenHoursInTeamBlock _sameOpenHoursInTeamBlock;
-		private readonly IFirstShiftInTeamBlockFinder _firstShiftInTeamBlockFinder;
+		private readonly SameOpenHoursInTeamBlock _sameOpenHoursInTeamBlock;
+		private readonly FirstShiftInTeamBlockFinder _firstShiftInTeamBlockFinder;
 
 		public TeamBlockRoleModelSelector(ITeamBlockRestrictionAggregator teamBlockRestrictionAggregator,
 			WorkShiftFilterService workShiftFilterService,
-			ISameOpenHoursInTeamBlock sameOpenHoursInTeamBlock,
-			IFirstShiftInTeamBlockFinder firstShiftInTeamBlockFinder)
+			SameOpenHoursInTeamBlock sameOpenHoursInTeamBlock,
+			FirstShiftInTeamBlockFinder firstShiftInTeamBlockFinder)
 		{
 			_teamBlockRestrictionAggregator = teamBlockRestrictionAggregator;
 			_workShiftFilterService = workShiftFilterService;

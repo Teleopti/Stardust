@@ -12345,10 +12345,10 @@ Teleopti R&amp;D</value>
     <value>(多个座位已选定)</value>
   </data>
   <data name="WFMReleaseNotificationWithoutOldModuleLink" xml:space="preserve">
-    <value>{0}已改进! 我们期待您的{1}反馈。{2}</value>
+    <value>{0}已改进! 我们期待您的{1}反馈{2}。</value>
   </data>
   <data name="WFMReleaseNotification" xml:space="preserve">
-    <value>{0}已改进! 我们期待您的{1}反馈。{2} 旧的{3}可在有限时间内访问。</value>
+    <value>{0}已改进! 我们期待您的{1}反馈{2}。旧的{3}可在有限时间内访问。</value>
   </data>
   <data name="UnsupportedSkills" xml:space="preserve">
     <value>{0}未支持的技能</value>
@@ -14809,5 +14809,8 @@ Teleopti R&amp;D</value>
   </data>
   <data name="NoHistoricalDataFoundForThisSkill" xml:space="preserve">
     <value>当前技能没有历史数据。</value>
+  </data>
+  <data name="WFMNewReleaseNotification" xml:space="preserve">
+    <value>{0}已经发布！我们期待您的{1}反馈{2}！</value>
   </data>
 </root>

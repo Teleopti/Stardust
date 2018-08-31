@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithApprovedPeriod("2018-02-08 08:00", "2018-02-08 09:00")
 				;
 
-			var result = Target.Load(person, "2018-02-08".Date());
+			var result = Target.LoadUntilNow(person, "2018-02-08".Date());
 
 			result.Percentage().Should().Be(100);
 		}

@@ -27,7 +27,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<HangfireDashboardStarter>().SingleInstance();
 
 			builder.RegisterType<HangfireEventServer>().SingleInstance();
-			builder.RegisterType<HangfireEventClient>().As<IHangfireEventClient>().SingleInstance();				
+			if (_configuration.Toggle(Toggles.ResourcePlanner_XXL_76496))
+			{
+				builder.RegisterType<HangfireEventClientWithRetry>().As<IHangfireEventClient>().SingleInstance();				
+			}
+			else
+			{
+				builder.RegisterType<HangfireEventClient>().As<IHangfireEventClient>().SingleInstance();								
+			}
 
 			builder.Register(c => JobStorage.Current).SingleInstance();
 			builder.Register(c => new BackgroundJobClient(c.Resolve<JobStorage>()))

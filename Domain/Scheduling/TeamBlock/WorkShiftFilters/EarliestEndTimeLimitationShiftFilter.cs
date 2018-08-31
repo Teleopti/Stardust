@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 	        if (shiftList == null) return null;
 		    if (shiftList.Count == 0) return shiftList;
 	        IList<ShiftProjectionCache> workShiftsWithinPeriod =
-		        shiftList.Select(s => new {Period = s.MainShiftProjection.Period(), s})
+		        shiftList.Select(s => new {Period = s.MainShiftProjection().Period(), s})
 			        .Where(s => s.Period.HasValue && s.Period.Value.EndDateTime >= earliestEnd)
 			        .Select(s => s.s)
 			        .ToList();

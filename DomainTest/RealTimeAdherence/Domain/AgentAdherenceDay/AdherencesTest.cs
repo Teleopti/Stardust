@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithHistoricalStateChange(person, "2016-10-10 08:05", Adherence.Out)
 				.WithHistoricalStateChange(person, "2016-10-10 08:15", Adherence.In);
 
-			var data = Target.Load(person, "2016-10-10".Date());
+			var data = Target.LoadUntilNow(person, "2016-10-10".Date());
 
 			data.OutOfAdherences().Single().StartTime.Should().Be("2016-10-10 08:05:00".Utc());
 			data.OutOfAdherences().Single().EndTime.Should().Be("2016-10-10 08:15:00".Utc());
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithHistoricalStateChange(person, "2016-10-12 08:00", Adherence.Out)
 				.WithHistoricalStateChange(person, "2016-10-12 09:00", Adherence.Out);
 
-			var data = Target.Load(person, "2016-10-12".Date());
+			var data = Target.LoadUntilNow(person, "2016-10-12".Date());
 
 			data.OutOfAdherences().Single().StartTime.Should().Be("2016-10-12 08:00:00".Utc());
 		}
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithHistoricalStateChange(person, "2016-10-11 09:00", Adherence.Out)
 				;
 
-			var data = Target.Load(person, "2016-10-12".Date());
+			var data = Target.LoadUntilNow(person, "2016-10-12".Date());
 
 			data.OutOfAdherences().Single().StartTime.Should().Be("2016-10-11 09:00:00".Utc());
 		}
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithHistoricalStateChange(person, "2016-10-12 11:00", Adherence.In)
 				;
 
-			var data = Target.Load(person, "2016-10-12".Date());
+			var data = Target.LoadUntilNow(person, "2016-10-12".Date());
 
 			data.OutOfAdherences().Single().StartTime.Should().Be("2016-10-11 09:00:00".Utc());
 			data.OutOfAdherences().Single().EndTime.Should().Be("2016-10-12 11:00:00".Utc());
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithHistoricalStateChange(person, "2016-10-12 11:00", Adherence.In)
 				;
 
-			var data = Target.Load(person, "2016-10-12".Date());
+			var data = Target.LoadUntilNow(person, "2016-10-12".Date());
 
 			data.OutOfAdherences().Single().StartTime.Should().Be("2016-10-11 09:00:00".Utc());
 			data.OutOfAdherences().Single().EndTime.Should().Be("2016-10-12 10:00:00".Utc());
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithHistoricalStateChange(person, "2018-02-01 09:00", Adherence.Out)
 				;
 
-			var data = Target.Load(person, "2018-02-01".Date());
+			var data = Target.LoadUntilNow(person, "2018-02-01".Date());
 
 			data.OutOfAdherences().Single().EndTime.Should().Be("2018-02-01 10:00:00".Utc());
 		}

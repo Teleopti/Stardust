@@ -420,7 +420,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				{
 					case DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage:
 						outlookBarSmartPartInfo.Icon = Resources.People_filled_space_32x32;
-						if (_toggleManager.IsEnabled(Toggles.Wfm_PeopleWeb_PrepareForRelease_47766) && PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebPeople))
+						if (_toggleManager.IsEnabled(Toggles.Wfm_PeopleWeb_PrepareForRelease_74903) && PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebPeople))
 						{
 							outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewPeopleModule;
 							outlookBarSmartPartInfo.PreviewUrl = buildWfmUri("WFM/#/people");

@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Schedule
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -51,6 +52,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 {
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_EasilySpotLateForWork_75668)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_DurationOfHistoricalEvents_76470)]
+	[Toggle(Domain.FeatureFlags.Toggles.RTA_ReviewHistoricalAdherence_74770)]
 	public class DomainTestAttribute : IoCTestAttribute
 	{
 		public static string DefaultTenantName = "default";
@@ -70,6 +72,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		protected override void Isolate(IIsolate isolate)
 		{
 			// stuff?
+			isolate.UseTestDouble<MutableNowWithEvents>().For<MutableNow, INow, IMutateNow>();
 			isolate.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
 			isolate.UseTestDouble<PersonRequestAuthorizationCheckerForTest>().For<IPersonRequestCheckAuthorization>();
 			isolate.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
@@ -111,6 +114,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			isolate.UseTestDouble<FakeAgentStatePersister>().For<IAgentStatePersister>();
 
 			isolate.UseTestDouble<FakeAgentStateReadModelPersister>().For<IAgentStateReadModelPersister, IAgentStateReadModelReader>();
+			
+			isolate.UseTestDouble<FakeHistoricalOverviewReadModelPersister>().For<IHistoricalOverviewReadModelPersister, IHistoricalOverviewReadModelReader>();
 
 			isolate.UseTestDouble<FakeAllLicenseActivatorProvider>().For<ILicenseActivatorProvider>();
 			isolate.UseTestDouble<FakeTeamCardReader>().For<ITeamCardReader>();

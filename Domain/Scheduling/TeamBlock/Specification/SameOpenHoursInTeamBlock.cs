@@ -5,12 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification
 {
-	public interface ISameOpenHoursInTeamBlock
-	{
-		bool Check(IEnumerable<ISkillDay> allSkillDays, ITeamBlockInfo skillDays, IGroupPersonSkillAggregator groupPersonSkillAggregator);
-	}
-
-	public class SameOpenHoursInTeamBlock : ISameOpenHoursInTeamBlock
+	public class SameOpenHoursInTeamBlock
 	{
 		private readonly IOpenHourForDate _openHourForDate;
 		private readonly CreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;

@@ -173,12 +173,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertExists(".input-group-btn button:nth-of-type(2)");
 		}
 
-		
-
 		[When(@"I select '(.*)' in the team picker")]
 		public void WhenISelectInTheTeamPicker(string optionText)
 		{
-			Browser.Interactions.AssertExists("#Team-Picker option");
+			Browser.Interactions.AssertAnyContains("#Team-Picker", optionText);
 			IOpenTheTeamPicker();
 			Select2Box.SelectItemByText("Team-Picker", optionText);
 			

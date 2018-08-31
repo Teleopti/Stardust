@@ -242,6 +242,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWork]
 		[HttpGet]
+		public virtual ActionResult GetWFCTolerance(Guid personToId)
+		{
+			return Json(_requestsViewModelFactory.CreateShiftTradeToleranceViewModel(personToId));
+		}
+
+		[UnitOfWork]
+		[HttpGet]
 		public virtual JsonResult ShiftTradeRequestPeriod()
 		{
 			return Json(_requestsViewModelFactory.CreateShiftTradePeriodViewModel(), JsonRequestBehavior.AllowGet);

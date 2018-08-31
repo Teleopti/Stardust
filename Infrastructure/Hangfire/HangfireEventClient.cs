@@ -5,10 +5,48 @@ using System.Linq.Expressions;
 using Hangfire;
 using Hangfire.Common;
 using Hangfire.Storage;
+using log4net;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
+	[RemoveMeWithToggle("Merge with base class", Toggles.ResourcePlanner_XXL_76496)]
+	public class HangfireEventClientWithRetry : HangfireEventClient
+	{
+		private readonly ILog _log;
+		public const int NumberOfRetries = 3;
+		private const string warningRetryMessage = "Failed to enqueue hangfire job. Retrying! {0} attempt left";
+		
+		public HangfireEventClientWithRetry(Lazy<IBackgroundJobClient> jobClient, 
+				Lazy<RecurringJobManager> recurringJob, 
+				Lazy<JobStorage> storage,
+				ILog log) 
+			: base(jobClient, recurringJob, storage)
+		{
+			_log = log;
+		}
+
+		public override void Enqueue(HangfireEventJob job)
+		{
+			var left = NumberOfRetries;
+			while (true)
+			{
+				try
+				{
+					base.Enqueue(job);
+					break;
+				}
+				catch (BackgroundJobClientException)
+				{
+					_log.Warn(string.Format(warningRetryMessage, left));
+					if (--left < 0)
+						throw;
+				}
+			}
+		}
+	}
+	
 	public class HangfireEventClient : IHangfireEventClient
 	{
 		private readonly Lazy<IBackgroundJobClient> _jobClient;
@@ -25,7 +63,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			_storage = storage;
 		}
 		
-		public void Enqueue(HangfireEventJob job)
+		public virtual void Enqueue(HangfireEventJob job)
 		{
 			_jobClient.Value.Enqueue<HangfireEventServer>(x => x.Process(job.DisplayName, job));
 		}

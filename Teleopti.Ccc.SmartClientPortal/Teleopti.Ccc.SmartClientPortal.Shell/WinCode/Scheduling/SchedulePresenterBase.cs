@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
         private readonly Dictionary<int, int> _colWeekMap = new Dictionary<int, int>();
         private readonly DateDateTimePeriodDictionary _timelineSpan = new DateDateTimePeriodDictionary();
-        private readonly Dictionary<int, TimeSpan> _timelineHourPositionDictionary = new Dictionary<int, TimeSpan>();
 
         private readonly IGridlockManager _lockManager;
         private readonly ClipHandler<IScheduleDay> _clipHandlerSchedule;
@@ -74,11 +73,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		public Dictionary<int, int> ColWeekMap
         {
             get { return _colWeekMap; }
-        }
-
-        public Dictionary<int, TimeSpan> TimelineHourPositions
-        {
-            get { return _timelineHourPositionDictionary; }
         }
 
         public ISchedulerStateHolder SchedulerState

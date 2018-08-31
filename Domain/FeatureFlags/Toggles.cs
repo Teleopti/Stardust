@@ -13,7 +13,7 @@
 		//////
 		// ReSharper disable InconsistentNaming
 		Forecast_CopySettingsToWorkflow_11112,
-		
+
 		Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850,
 
 		RTA_KillFattyIntradayUntilItDies_74939,
@@ -22,7 +22,7 @@
 		LevelUp_HangfireStatistics_76139_76373,
 		RTA_DurationOfHistoricalEvents_76470,
 		RTA_ReviewHistoricalAdherence_74770,
-		
+
 		MyTimeWeb_SortRequestList_40711,
 		MyTimeWeb_PreferenceForJalaliCalendar_42965,
 		MyTimeWeb_DayScheduleForStartPage_43446,
@@ -68,7 +68,7 @@
 		Wfm_People_MoveImportJobToBackgroundService_43582,
 
 		//Bockemon
-		Wfm_PeopleWeb_PrepareForRelease_47766,
+		Wfm_PeopleWeb_PrepareForRelease_74903,
 		Wfm_Authentication_ChangePasswordMenu_76666,
 
 		People_SpeedUpOpening_76365,
@@ -76,7 +76,7 @@
 		WfmGlobalLayout_personalOptions_37114,
 
 		WFM_Gamification_Permission_76546,
-		
+
 		ResourcePlanner_HideSkillPrioSliders_41312,
 		ResourcePlanner_RunPerfTestAsTeam_43537,
 		ResourcePlanner_UseErlangAWithInfinitePatience_45845,
@@ -87,18 +87,9 @@
 
 		Wfm_DisplayOnlineHelp_39402,
 
-		ETL_SpeedUpFactScheduleNightly_38019,
-		ETL_SpeedUpPersonPeriodNightly_38097,
-		ETL_SpeedUpNightlyShiftCategory_38718,
-		ETL_SpeedUpNightlyPreference_38283,
-		ETL_SpeedUpNightlyAvailability_38926,
-		ETL_SpeedUpGroupPagePersonNightly_37623,
-		ETL_SpeedUpNightlyForecastWorkload_38929,
 		ETL_UseBpoResources_75855,
 
 		Wfm_SkillPriorityRoutingGUI_39885,
-		ETL_RemoveTimeZoneAndDateNightly_40870,
-		ETL_FixScheduleForPersonPeriod_41393,
 		ETL_Optimize_Memory_Usage_76761,
 		ETL_Show_Tenant_Name_In_History_75767,
 
@@ -110,7 +101,6 @@
 		OvertimeRequestStaffingCheckMethod_74949,
 		OvertimeRequestChangeBelongsToDateForOverNightShift_74984,
 		OvertimeRequestUsePrimarySkillOption_75573,
-		ETL_SpeedUpNightlyDayOff_38213,
 		MyTimeWeb_MobileResponsive_43826,
 		WFM_Forecaster_Refact_44480,
 		WFM_Export_Forecast_44716,
@@ -121,7 +111,7 @@
 		Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560,
 		Report_Remove_Realtime_Scheduled_Time_vs_Target_45559,
 		Report_Remove_Scheduled_Time_Per_Activity_From_Scheduler_45640,
-		
+
 		WFM_Modify_Skill_Groups_43727,
 		WFM_AuditTrail_44006,
 		Report_Show_Utc_In_Report_Selection_When_In_Use_45079,
@@ -139,6 +129,7 @@
 		MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947,
 		MyTimeWeb_ShiftTradeRequest_SetNotSelectableShifts_77052,
 		MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306,
+		MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408,
 
 		WFM_Intraday_Refactoring_74652,
 

@@ -77,6 +77,19 @@ namespace Teleopti.Ccc.DBManager.Library
 				if (command.DropDatabase)
 					dropDatabase(command, context);
 
+				var willTryToCreateDatabase =
+						command.CreateDatabase ||
+						command.RecreateDatabaseIfNotExistsOrNewer ||
+						!string.IsNullOrEmpty(command.RestoreBackup) ||
+						!string.IsNullOrEmpty(command.RestoreBackupIfNotExistsOrNewer)
+					;
+				if (!willTryToCreateDatabase && command.DropDatabase)
+				{
+					// if it will drop and not create, there's nothing to update, and its finished.
+					_log.Write("Finished !");
+					return 0;
+				}
+
 				if (command.CreateDatabase)
 					createDatabase(command, context);
 

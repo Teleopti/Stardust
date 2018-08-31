@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Budgeting;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -22,13 +23,13 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 {
 	[TestFixture, IoCTest]
-	public class AbsenceRequestProbabilityProviderNoMockTest : IIsolateSystem
+	public class AbsenceRequestProbabilityProviderNoMockTest : IIsolateSystem, ITestInterceptor
 	{
 		public IBudgetDayRepository BudgetDayRepository;
 		public ILoggedOnUser LoggedOnUser;
 		public IScenarioRepository ScenarioRepository;
 		public IExtractBudgetGroupPeriods ExtractBudgetGroupPeriods;
-		public INow Now;
+		public MutableNow Now;
 		public FakeScheduleProjectionReadOnlyPersister ScheduleProjectionReadOnlyPersister;
 		public IAbsenceTimeProviderCache AbsenceTimeProviderCache;
 
@@ -44,11 +45,16 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 			isolate.UseTestDouble<ExtractBudgetGroupPeriods>().For<IExtractBudgetGroupPeriods>();
 			isolate.UseTestDouble<FakeScheduleProjectionReadOnlyPersister>().For<IScheduleProjectionReadOnlyPersister>();
 			isolate.UseTestDouble<AbsenceTimeProviderCache>().For<IAbsenceTimeProviderCache>();
-			isolate.UseTestDouble(new MutableNow(_today)).For<INow>();
+			isolate.UseTestDouble<MutableNow>().For<INow, IMutateNow>();
 
 			_absence = AbsenceFactory.CreateAbsence("holiday").WithId();
 		}
 
+		public void OnBefore()
+		{
+			Now.Is(_today);
+		}
+		
 		[Test]
 		public void ShouldOnlySetCssClassInAbsenceRequestProbabilityForBudgetGroupHeadCountAbsencePeriod()
 		{
@@ -165,5 +171,6 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 			absenceRequestProbability.CssClass.Should().Be(cssClass);
 			absenceRequestProbability.Text.Should().Be(text);
 		}
+
 	}
 }

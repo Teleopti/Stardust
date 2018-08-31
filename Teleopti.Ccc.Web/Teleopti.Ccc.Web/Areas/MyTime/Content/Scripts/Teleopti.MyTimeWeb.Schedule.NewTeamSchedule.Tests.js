@@ -863,6 +863,7 @@
 	});
 
 	test('should map dayOff of MySchedule', function() {
+		fakeTeamScheduleData.MySchedule.Periods = [];
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
@@ -870,12 +871,87 @@
 
 		equal(vm.mySchedule().isDayOff, true);
 		equal(vm.mySchedule().dayOffName, 'Day off');
+
 		equal(
 			$('.my-schedule-column .new-teamschedule-layer-container .dayoff')
 				.text()
 				.replace(/(^\s*)|(\s*$)/g, ''),
 			'Day off'
 		);
+	});
+
+	test('should map dayOff of agent schedule', function() {
+		fakeTeamScheduleData.AgentSchedules[0] = {
+			Name: 'Test Day Off agent',
+			Periods: [],
+			IsDayOff: true,
+			DayOffName: 'Day off',
+			IsNotScheduled: false,
+			ShiftCategory: {
+				Id: null,
+				ShortName: 'DO',
+				Name: 'Day off',
+				DisplayColor: '#808080'
+			}
+		};
+		$('body').append(agentSchedulesHtml);
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+
+		vm.searchNameText('Test Day Off agent');
+		$('.new-teamschedule-search-container button[type="submit"]').click();
+
+		equal(
+			$('.teammates-schedules-column .new-teamschedule-layer-container .dayoff')
+				.text()
+				.replace(/(^\s*)|(\s*$)/g, ''),
+			'Day off'
+		);
+	});
+
+	test('should map day off but not show "Day off" text when having overtime on day offs', function() {
+		fakeTeamScheduleData.AgentSchedules[0] = {
+			Name: 'Test Day Off agent',
+			Periods: [
+				{
+					Title: 'E-mail',
+					TimeSpan: '01:00 PM - 02:00 PM',
+					Color: '128,128,255',
+					StartTime: selectedDate + 'T13:00:00',
+					EndTime: selectedDate + 'T14:00:00',
+					IsOvertime: true,
+					StartPositionPercentage: 0.5526,
+					EndPositionPercentage: 0.6579,
+					Meeting: null
+				}
+			],
+			IsDayOff: true,
+			DayOffName: 'Day off',
+			IsNotScheduled: false,
+			ShiftCategory: {
+				Id: null,
+				ShortName: 'DO',
+				Name: 'Day off',
+				DisplayColor: '#808080'
+			}
+		};
+		$('body').append(agentSchedulesHtml);
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+
+		vm.searchNameText('Test Day Off agent');
+		$('.new-teamschedule-search-container button[type="submit"]').click();
+
+		equal(
+			$('.teammates-schedules-column .new-teamschedule-layer-container .dayoff')
+				.text()
+				.replace(/(^\s*)|(\s*$)/g, ''),
+			''
+		);
+
+		equal($('.teammates-schedules-column .new-teamschedule-layer-container .dayoff').length, 1);
 	});
 
 	test('should map notScheduled of MySchedule', function() {
@@ -923,6 +999,22 @@
 		equal($('.teammates-schedules-container .dayoff').length == 1, true);
 	});
 
+	test('should filter agents using search name after switch show only day off toggle on desktop', function() {
+		$('body').append(agentSchedulesHtml);
+
+		if (fakeOriginalAgentSchedulesData.length > 0) {
+			fakeOriginalAgentSchedulesData[0].IsDayOff = true;
+		}
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+		vm.searchNameText('this is a test search name text');
+		$('.new-teamschedule-day-off-toggle input').click();
+
+		equal(completeLoadedCount, 2);
+		equal(ajaxOption.ScheduleFilter.searchNameText, 'this is a test search name text');
+	});
+
 	test('should reset paging after turn on show only day off toggle', function() {
 		$('body').append(agentSchedulesHtml);
 
@@ -960,6 +1052,29 @@
 		$('.new-teamschedule-team-filter a').click();
 		$('.new-teamschedule-day-off-toggle input').click();
 		$('.new-teamschedule-submit-buttons .btn-default').click();
+
+		equal(completeLoadedCount, 1);
+		equal(vm.showOnlyDayOff(), false);
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
+	});
+
+	test('should restore show only day off toggle state after clicking filter icon on mobile', function() {
+		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
+		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
+			return true;
+		};
+		$('body').append(agentSchedulesHtml);
+
+		if (fakeOriginalAgentSchedulesData.length > 0) {
+			fakeOriginalAgentSchedulesData[0].IsDayOff = true;
+		}
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+
+		$('.new-teamschedule-team-filter a').click();
+		$('.new-teamschedule-day-off-toggle input').click();
+		$('.new-teamschedule-team-filter a').click();
 
 		equal(completeLoadedCount, 1);
 		equal(vm.showOnlyDayOff(), false);
@@ -1040,6 +1155,26 @@
 		equal(ajaxOption.ScheduleFilter.filteredStartTimes === '', true);
 	});
 
+	test('should reset start time filter after clicking start time cross icon', function() {
+		$('body').append(agentSchedulesHtml);
+
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+		$('.new-teamschedule-time-filter').click();
+
+		$('.start-time-slider').slider('values', [60, 120]);
+		vm.startTimeStart('01:00');
+		vm.startTimeEnd('02:00');
+		$('.start-time-clear-button').click();
+		$('.new-teamschedule-submit-buttons button.btn-primary').click();
+
+		equal(completeLoadedCount, 2);
+		equal(vm.startTimeStart(), '00:00');
+		equal(vm.startTimeEnd(), '00:00');
+		equal(ajaxOption.ScheduleFilter.filteredStartTimes === '', true);
+	});
+
 	test('should filter agents using end time slider', function() {
 		$('body').append(agentSchedulesHtml);
 
@@ -1076,6 +1211,26 @@
 
 		equal(completeLoadedCount, 2);
 		equal(ajaxOption.ScheduleFilter.filteredStartTimes === '', true);
+	});
+
+	test('should reset end time filter after clicking end time cross icon', function() {
+		$('body').append(agentSchedulesHtml);
+
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+		$('.new-teamschedule-time-filter').click();
+
+		$('.end-time-slider').slider('values', [60, 120]);
+		vm.endTimeStart('01:00');
+		vm.endTimeEnd('02:00');
+		$('.end-time-clear-button').click();
+		$('.new-teamschedule-submit-buttons button.btn-primary').click();
+
+		equal(completeLoadedCount, 2);
+		equal(vm.endTimeStart(), '00:00');
+		equal(vm.endTimeEnd(), '00:00');
+		equal(ajaxOption.ScheduleFilter.filteredEndTimes === '', true);
 	});
 
 	test('should filter agents using both start and end time slider', function() {
@@ -1487,6 +1642,8 @@
 
 			fakeOriginalAgentSchedulesData.push(agentSchedule);
 		}
+
+		fakeTeamScheduleData.AgentSchedules = fakeOriginalAgentSchedulesData;
 	}
 
 	function setupAjax() {
@@ -1656,12 +1813,15 @@
 			'			<!-- /ko -->',
 			'			<div class="teammates-agent-name-row relative">',
 			'				<!-- ko foreach: agentNames -->',
-			'				<span class="new-teamschedule-agent-name" data-bind="tooltip: { title: $data.name, trigger: \'click\', placement: \'bottom\'}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">',
+			'				<span class="new-teamschedule-agent-name" data-bind="tooltip: { title: $data.name, trigger: \'click\', placement: \'bottom\'}, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true">',
 			'					<span class="text-name" data-bind="text: $data.name"></span>',
 			'					<span class="shift-category-cell" data-bind="text: $data.shiftCategory.name, style: {background: $data.shiftCategory.bgColor, color: $data.shiftCategory.color}, css: {\'dayoff\': $data.isDayOff}"></span>',
 			'				</span>',
 			'				<!-- /ko -->',
 			'			</div>',
+			'			<!-- ko if: isAgentScheduleLoaded() && teamSchedules().length == 0 -->',
+			'			<div class="new-teamschedule-no-result-indicator">@Resources.NoResultForCurrentFilter</div>',
+			'			<!-- /ko -->',
 			'		</div>',
 			'		<div class="new-teamschedule-table relative container">',
 			'			<div class="mobile-timeline" data-bind="style: {height: scheduleContainerHeight() + \'px\'}">',
@@ -1674,7 +1834,7 @@
 			'				<!-- ko if: mySchedule -->',
 			'				<div class="new-teamschedule-layer-container relative">',
 			'					<!-- ko foreach: mySchedule().layers -->',
-			"					<div class=\"new-teamschedule-layer cursorpointer absolute\" data-bind=\"tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-layer': isOvertime, 'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle(), 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle(), 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true\">",
+			"					<div class=\"new-teamschedule-layer cursorpointer absolute\" data-bind=\"tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-layer': isOvertime, 'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle(), 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle(), 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustMyActivityTooltipPositionInTeamSchedule: true\">",
 			'						<div class="activity-info" data-bind="visible: showTitle() && !isOvertimeAvailability()">',
 			'							<strong data-bind="text: title()"></strong>',
 			'							<!-- ko if: hasMeeting -->',
@@ -1691,12 +1851,14 @@
 			'						</div>',
 			'					</div>',
 			'					<!-- /ko -->',
-			'					<!--ko if:mySchedule().isDayOff-->',
+			'					<!--ko if: mySchedule().isDayOff-->',
 			'					<div class="dayoff cursorpointer relative" data-bind="tooltip: { title: mySchedule().dayOffName, html: true, trigger: \'click\'}, hideTooltipAfterMouseLeave: true">',
+			'						<!-- ko if: mySchedule().layers && mySchedule().layers.length == 0 -->',
 			'						<span class="dayoff-text" data-bind="text: mySchedule().dayOffName"></span>',
+			'						<!-- /ko -->',
 			'					</div>',
 			'					<!--/ko-->',
-			'					<!-- ko if:mySchedule().isNotScheduled -->',
+			'					<!-- ko if: mySchedule().isNotScheduled -->',
 			'					<div class="not-scheduled-text" data-bind="tooltip: { title: \'@Resources.NotScheduled\', html: true, trigger: \'click\'}, hideTooltipAfterMouseLeave: true">@Resources.NotScheduled</div>',
 			'					<!-- /ko -->',
 			'				</div>',
@@ -1708,7 +1870,7 @@
 			'				<div class="teammates-schedules-column relative">',
 			'					<div class="new-teamschedule-layer-container relative">',
 			'						<!-- ko foreach: layers -->',
-			"						<div class=\"new-teamschedule-layer cursorpointer absolute\" data-bind=\"tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-layer': isOvertime, 'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle(), 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle(), 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true\">",
+			"						<div class=\"new-teamschedule-layer cursorpointer absolute\" data-bind=\"tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-layer': isOvertime, 'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle(), 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle(), 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true\">",
 			'							<div class="activity-info" data-bind="visible: showTitle() && !isOvertimeAvailability()">',
 			'								<strong data-bind="text: title()"></strong>',
 			'								<!-- ko if: hasMeeting -->',
@@ -1726,20 +1888,19 @@
 			'						</div>',
 			'						<!-- /ko -->',
 			'						<!--ko if:isDayOff-->',
-			'						<div class="dayoff cursorpointer relative" data-bind="tooltip: { title: dayOffName, html: true, trigger: \'click\' }, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">',
+			'						<div class="dayoff cursorpointer relative" data-bind="tooltip: { title: dayOffName, html: true, trigger: \'click\' }, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true">',
+			'							<!-- ko if: layers && layers.length == 0 -->',
 			'							<span class="dayoff-text" data-bind="text: dayOffName"></span>',
+			'							<!-- /ko -->',
 			'						</div>',
 			'						<!--/ko-->',
 			'						<!-- ko if:isNotScheduled -->',
-			'						<div class="not-scheduled-text" data-bind="tooltip: { title: \'@Resources.NotScheduled\', html: true, trigger: \'click\'}, hideTooltipAfterMouseLeave: true, adjustTooltipPositionOnMobileTeamSchedule: true">@Resources.NotScheduled</div>',
+			'						<div class="not-scheduled-text" data-bind="tooltip: { title: \'@Resources.NotScheduled\', html: true, trigger: \'click\'}, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true">@Resources.NotScheduled</div>',
 			'						<!-- /ko -->',
 			'					</div>',
 			'				</div>',
 			'				<!-- /ko -->',
 			'			</div>',
-			'			<!-- ko if: isAgentScheduleLoaded() && teamSchedules().length == 0 -->',
-			'			<div class="new-teamschedule-no-result-indicator">@Resources.NoResultForCurrentFilter</div>',
-			'			<!-- /ko -->',
 			'			<!-- /ko -->',
 			'		</div>',
 			'		<div class="teamschedule-scroll-block-container" data-bind="style: {border: isScrollbarVisible() ? \'1px dashed rgba(0, 0, 0, 0.1)\' : \'none\'}">',
@@ -1771,20 +1932,40 @@
 			'			</form>',
 			'			<!--/ko-->',
 			'			<div class="new-teamschedule-time-slider-container">',
-			'				<label>@Resources.StartTime</label>',
+			'				<label>@Resources.StartTime:</label>',
+			'				<!-- ko if: isHostAMobile-->',
+			'				<span class="start-time-clear-button cursorpointer floatright">',
+			'					<i class="glyphicon glyphicon-remove"></i>',
+			'				</span>',
+			'				<!--/ko-->',
 			'				<div class="new-teamschedule-time-slider-line relative">',
 			'					<span class="start-time-slider-start-label" data-bind="text: startTimeStart, visible: showStartTimeStart"></span>',
 			'					<span class="start-time-slider-end-label" data-bind="text: startTimeEnd"></span>',
 			'					<div class="start-time-slider"></div>',
 			'				</div>',
+			'				<!-- ko ifnot: isHostAMobile-->',
+			'				<span class="start-time-clear-button cursorpointer">',
+			'					<i class="glyphicon glyphicon-remove"></i>',
+			'				</span>',
+			'				<!--/ko-->',
 			'			</div>',
 			'			<div class="new-teamschedule-time-slider-container">',
-			'				<label>@Resources.EndTime</label>',
+			'				<label>@Resources.EndTime:</label>',
+			'				<!-- ko if: isHostAMobile-->',
+			'				<span class="end-time-clear-button cursorpointer floatright">',
+			'					<i class="glyphicon glyphicon-remove"></i>',
+			'				</span>',
+			'				<!--/ko-->',
 			'				<div class="new-teamschedule-time-slider-line relative">',
 			'					<span class="end-time-slider-start-label" data-bind="text: endTimeStart, visible: showEndTimeStart"></span>',
 			'					<span class="end-time-slider-end-label" data-bind="text: endTimeEnd"></span>',
 			'					<div class="end-time-slider"></div>',
 			'				</div>',
+			'				<!-- ko ifnot: isHostAMobile-->',
+			'				<span class="end-time-clear-button cursorpointer">',
+			'					<i class="glyphicon glyphicon-remove"></i>',
+			'				</span>',
+			'				<!--/ko-->',
 			'			</div>',
 			'			<!-- ko if: isHostAMobile-->',
 			'			<div class="new-teamschedule-day-off-toggle">',

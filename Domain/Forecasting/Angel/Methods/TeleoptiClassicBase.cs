@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -15,49 +15,44 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 			_indexVolumes = indexVolumes;
 		}
 
-		public virtual ForecastMethodResult Forecast(ITaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod)
+		public virtual IList<IForecastingTarget> Forecast(ITaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod)
 		{
-			var volumes = _indexVolumes.Create(historicalData);
-			var averageStatistics = new AverageStatistics();
-			if (historicalData.TaskOwnerDayCollection.Count > 0)
-				averageStatistics.AverageTasks = historicalData.TotalStatisticCalculatedTasks / historicalData.TaskOwnerDayCollection.Count;
-			else
-				averageStatistics.AverageTasks = 0d;
+			var averageTasks = historicalData.TaskOwnerDayCollection.Count > 0
+				? historicalData.TotalStatisticCalculatedTasks / historicalData.TaskOwnerDayCollection.Count
+				: 0d;
+			var talkTime = historicalData.TotalStatisticAverageTaskTime;
+			var afterTalkTime = historicalData.TotalStatisticAverageAfterTaskTime;
 
-			averageStatistics.TalkTime = historicalData.TotalStatisticAverageTaskTime;
-			averageStatistics.AfterTalkTime = historicalData.TotalStatisticAverageAfterTaskTime;
-
+			var volumes = _indexVolumes.Create(historicalData).ToList();
 			var targetForecastingList = new List<IForecastingTarget>();
-
 			foreach (var day in futurePeriod.DayCollection())
 			{
 				var forecastingTarget = new ForecastingTarget(day, new OpenForWork(true, true));
+				if (!forecastingTarget.OpenForWork.IsOpenForIncomingWork)
+				{
+					targetForecastingList.Add(forecastingTarget);
+					continue;
+				}
 
+				// Calculate pattern
 				double totalTaskIndex = 1;
 				double talkTimeIndex = 1;
 				double afterTalkTimeIndex = 1;
-
 				foreach (var year in volumes)
 				{
-					totalTaskIndex *= year.TaskIndex(forecastingTarget.CurrentDate);
-					talkTimeIndex *= year.TalkTimeIndex(forecastingTarget.CurrentDate);
-					afterTalkTimeIndex *= year.AfterTalkTimeIndex(forecastingTarget.CurrentDate);
+					totalTaskIndex *= year.TaskIndex(day);
+					talkTimeIndex *= year.TalkTimeIndex(day);
+					afterTalkTimeIndex *= year.AfterTalkTimeIndex(day);
 				}
 
-				if (forecastingTarget.OpenForWork.IsOpenForIncomingWork)
-				{
-					forecastingTarget.Tasks = totalTaskIndex * averageStatistics.AverageTasks;
-					forecastingTarget.AverageTaskTime = new TimeSpan((long)(talkTimeIndex * averageStatistics.TalkTime.Ticks));
-					forecastingTarget.AverageAfterTaskTime = new TimeSpan((long)(afterTalkTimeIndex * averageStatistics.AfterTalkTime.Ticks));
-				}
+				forecastingTarget.Tasks = totalTaskIndex * averageTasks;
+				forecastingTarget.AverageTaskTime = new TimeSpan((long) (talkTimeIndex * talkTime.Ticks));
+				forecastingTarget.AverageAfterTaskTime = new TimeSpan((long) (afterTalkTimeIndex * afterTalkTime.Ticks));
 
 				targetForecastingList.Add(forecastingTarget);
 			}
 
-			return new ForecastMethodResult
-			{
-				ForecastingTargets = targetForecastingList
-			};
+			return targetForecastingList;
 		}
 
 		public abstract ForecastMethodType Id { get; }
@@ -70,21 +65,30 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 
 		protected virtual IEnumerable<DateAndTask> ForecastNumberOfTasks(ITaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod)
 		{
-			var volumes = _indexVolumes.Create(historicalData);
-			var averageStatistics = new AverageStatistics();
-			if (historicalData.TaskOwnerDayCollection.Count > 0)
-				averageStatistics.AverageTasks = historicalData.TotalStatisticCalculatedTasks / historicalData.TaskOwnerDayCollection.Count;
-			else
-				averageStatistics.AverageTasks = 0d;
+			var averageTasks = historicalData.TaskOwnerDayCollection.Count > 0
+				? historicalData.TotalStatisticCalculatedTasks / historicalData.TaskOwnerDayCollection.Count
+				: 0d;
 
-			return (from day in futurePeriod.DayCollection()
-					let totalTaskIndex = volumes.Aggregate<IVolumeYear, double>(1, (current, year) => current * year.TaskIndex(day))
-					let tasks = totalTaskIndex * averageStatistics.AverageTasks
-					select new DateAndTask
-					{
-						Date = day,
-						Tasks = tasks
-					}).ToList();
+			var volumes = _indexVolumes.Create(historicalData).ToList();
+			var result = new List<DateAndTask>();
+			foreach (var day in futurePeriod.DayCollection())
+			{
+				double totalTaskIndex = 1;
+				foreach (var volume in volumes)
+				{
+					totalTaskIndex = totalTaskIndex * volume.TaskIndex(day);
+				}
+
+				var tasks = totalTaskIndex * averageTasks;
+
+				result.Add(new DateAndTask
+				{
+					Date = day,
+					Tasks = tasks
+				});
+			}
+
+			return result;
 		}
 	}
 }

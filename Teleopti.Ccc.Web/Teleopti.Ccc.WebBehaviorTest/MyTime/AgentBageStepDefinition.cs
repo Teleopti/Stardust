@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			switch (BadgeType.GetBadgeType(badgeType))
 			{
 				case BadgeType.Adherence:
-					badgeTypeName = Resources.Adherence;
+					badgeTypeName = Resources.ReadyTimeAdherence;
 					break;
 				case BadgeType.AnsweredCalls:
 					badgeTypeName = Resources.AnsweredCalls;

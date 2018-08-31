@@ -800,7 +800,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldViewOvertimeIndicatorOnlyForMySchedule()
+		public void ShouldViewOvertimeIndicatorForMyScheduleAndAgentSchedules()
 		{
 			var scenario = CurrentScenario.Current();
 			var personPublished = PersonFactory.CreatePersonWithGuid("person", "published");
@@ -840,8 +840,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				TeamIdList = new[] {team.Id.GetValueOrDefault()}
 			});
 
-			result.PossibleTradeSchedules.Single().ScheduleLayers.Single().IsOvertime.Should().Be.False();
 			result.MySchedule.ScheduleLayers.Single().IsOvertime.Should().Be.True();
+			result.PossibleTradeSchedules.Single().ScheduleLayers.Single().IsOvertime.Should().Be.True();
 		}
 
 		[Test]

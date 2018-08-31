@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
     public class OvertimePreferences: IOvertimePreferences
     {
         public IScheduleTag ScheduleTag { get; set; }
-        public bool ExtendExistingShift { get; set; }
         public IActivity SkillActivity { get; set; }
         public IMultiplicatorDefinitionSet OvertimeType { get; set; }
         public TimePeriod SelectedTimePeriod { get; set; }=new TimePeriod(1, 1);

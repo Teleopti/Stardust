@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var reference = target.Block(ThrottledAction.Forecasting);
 
 			target.Pause(reference,TimeSpan.Zero);
-			await Task.Delay(TimeSpan.FromMilliseconds(5));
+			await Task.Delay(TimeSpan.FromMilliseconds(10));
 			target.IsBlocked(ThrottledAction.Forecasting).Should().Be.False();
 		}
 

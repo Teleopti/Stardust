@@ -6,6 +6,7 @@ using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
+using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
 using Teleopti.Analytics.Etl.IntegrationTest.TestData;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
@@ -52,6 +53,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Data.Apply(activityPhone);
 			Data.Apply(activityLunch);
 			var analyticsDataFactory = new AnalyticsDataFactory();
+			analyticsDataFactory.Setup(new ShiftCategory(1, cat.ShiftCategory.Id.Value, cat.Name, cat.ShiftCategory.DisplayColor, ExistingDatasources.DefaultRaptorDefaultDatasourceId, 1));
 			analyticsDataFactory.Setup(new Activity(1, activityPhone.Activity.Id.Value, activityPhone.Name, activityPhone.Activity.DisplayColor, ExistingDatasources.DefaultRaptorDefaultDatasourceId, 1));
 			analyticsDataFactory.Setup(new Activity(2, activityLunch.Activity.Id.Value, activityLunch.Name, activityLunch.Activity.DisplayColor, ExistingDatasources.DefaultRaptorDefaultDatasourceId, 1));
 			analyticsDataFactory.Persist();
@@ -74,7 +76,13 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				};
 
 			//transfer site, team contract etc from app to analytics
-			StepRunner.RunNightly(jobParameters);
+			var result = new List<Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult>();
+			JobStepBase step = new StageScheduleJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			step = new DimShiftLengthJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			step = new FactScheduleJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
 
 			var factSchedules = SqlCommands.RowsInFactSchedule();
@@ -120,6 +128,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Data.Apply(activityPhone);
 			Data.Apply(activityLunch);
 			var analyticsDataFactory = new AnalyticsDataFactory();
+			analyticsDataFactory.Setup(new ShiftCategory(1, cat.ShiftCategory.Id.Value, cat.Name, cat.ShiftCategory.DisplayColor, ExistingDatasources.DefaultRaptorDefaultDatasourceId, 1));
 			analyticsDataFactory.Setup(new Activity(1, activityPhone.Activity.Id.Value, activityPhone.Name, activityPhone.Activity.DisplayColor, ExistingDatasources.DefaultRaptorDefaultDatasourceId, 1));
 			analyticsDataFactory.Setup(new Activity(2, activityLunch.Activity.Id.Value, activityLunch.Name, activityLunch.Activity.DisplayColor, ExistingDatasources.DefaultRaptorDefaultDatasourceId, 1));
 			analyticsDataFactory.Persist();
@@ -143,7 +152,13 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 						};
 
 			//transfer site, team contract etc from app to analytics
-			StepRunner.RunNightly(jobParameters);
+			var result = new List<Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult>();
+			JobStepBase step = new StageScheduleJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			step = new DimShiftLengthJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			step = new FactScheduleJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
 			// now it should have data on all three dates on 96 interval
 			var factSchedules = SqlCommands.RowsInFactSchedule();

@@ -123,6 +123,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private RequestPersonAbsenceRemovedEventHandler createHandler()
 		{
 			Now.Is("2016-03-01");
+			Publisher.Clear();
 			return new RequestPersonAbsenceRemovedEventHandler(QueuedAbsenceRequestRepository, WorkflowControlSetRepository, Now);
 		}
 

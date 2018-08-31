@@ -86,8 +86,6 @@
 
 					if (fromScenario == null)
 						validationResult.messages.push($translate.instant('YouNeedToPickAScenarioTo' + vm.ArchiveOrImport + 'FromDot'));
-					else if (!vm.isImportSchedule && !fromScenario.DefaultScenario)
-						validationResult.messages.push($translate.instant('TheScenarioYouArchiveFromMustBeTheDefaultScenarioDot'));
 					else if (vm.isImportSchedule && fromScenario.DefaultScenario)
 						validationResult.messages.push($translate.instant('TheScenarioYouImportFromMustNotBeTheDefaultScenarioDot'));
 					if (toScenario == null)

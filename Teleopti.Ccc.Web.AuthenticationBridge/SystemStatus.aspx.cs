@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web.Mvc;
 using AuthBridge.Configuration;
 using AuthBridge.Model;
@@ -12,6 +13,7 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge
 {
 	public class SystemStatus : ViewPage
 	{
+		private readonly StringBuilder sbTriedVisitByIdentityUrls = new StringBuilder();
 		protected void Page_Load(object sender, EventArgs e)
 		{
 			var results = visitProviderUrls();
@@ -30,7 +32,8 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge
 			var systemTextColor =  allOk ? "green" : "red";
 			var systemText = allOk ? "System is up!" : "Some parts of the system is not working as expected.";
 			Response.Write($"<br><div style='color:{systemTextColor}'>{systemText}</div>");
-			
+
+			Response.Write($"<input type=\"hidden\" value=\"{sbTriedVisitByIdentityUrls}\">");
 			Response.StatusCode =  allOk ? 200: 202;
 		}
 
@@ -49,6 +52,9 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge
 			{
 				var baseUrl = Request.Url.Scheme + "://" + Request.Url.Authority + Request.ApplicationPath.TrimEnd('/') + "/";
 				var authenticateUrl = baseUrl + "authenticate?whr=" + provider.Identifier;
+
+				sbTriedVisitByIdentityUrls.Append($"{authenticateUrl};");
+
 				result.Add(provider.DisplayName, tryVisitUrl(authenticateUrl));
 			}
 			return result;
@@ -56,6 +62,7 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge
 
 		private static bool tryVisitUrl(string url)
 		{
+			
 			try
 			{
 				var httpWebRequest = WebRequest.CreateHttp(url);

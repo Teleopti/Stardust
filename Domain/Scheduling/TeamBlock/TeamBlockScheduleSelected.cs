@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
 		private readonly ValidatedTeamBlockInfoExtractor _validatedTeamBlockExtractor;
-		private readonly ITeamMatrixChecker _teamMatrixChecker;
+		private readonly TeamMatrixChecker _teamMatrixChecker;
 		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 		private readonly BlockPreferencesMapper _blockPreferencesMapper;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
 			IWorkShiftMinMaxCalculator workShiftMinMaxCalculator,
 			ValidatedTeamBlockInfoExtractor validatedTeamBlockExtractor,
-			ITeamMatrixChecker teamMatrixChecker,
+			TeamMatrixChecker teamMatrixChecker,
 			IWorkShiftSelector workShiftSelector,
 			IGroupPersonSkillAggregator groupPersonSkillAggregator,
 			BlockPreferencesMapper blockPreferencesMapper)
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 				runSchedulingForAllTeamInfoOnStartDate(schedulingCallback, allPersonMatrixList, selectedPersons, selectedPeriod,
 					schedulePartModifyAndRollbackService,
-					checkedTeams.OkList, datePointer, dateOnlySkipList,
+					checkedTeams, datePointer, dateOnlySkipList,
 					resourceCalculateDelayer, schedulingResultStateHolder, schedulingOption,blockPreferenceProvider);
 			}
 		}

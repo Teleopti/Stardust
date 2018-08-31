@@ -93,6 +93,7 @@
 	self.showOnlyDayOff.subscribe(function(value) {
 		if (!self.isMobileEnabled) {
 			self.filter.isDayOff = value;
+			self.filter.searchNameText = self.searchNameText();
 
 			if (value) {
 				self.paging.skip = 0;
@@ -117,10 +118,13 @@
 		}
 	};
 
+	self.isPanelVisible.subscribe(function(value) {
+		self.showOnlyDayOff(self.filter.isDayOff);
+	});
+
 	self.cancelClick = function() {
 		self.searchNameText(self.filter.searchNameText);
 		self.selectedTeam(self.filter.selectedTeamIds[0]);
-		self.showOnlyDayOff(self.filter.isDayOff);
 		self.isPanelVisible(false);
 	};
 

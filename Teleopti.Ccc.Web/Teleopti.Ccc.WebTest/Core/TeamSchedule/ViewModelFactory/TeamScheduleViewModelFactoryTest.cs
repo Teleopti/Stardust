@@ -519,10 +519,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			});
 
 			var agentSchedule = result.AgentSchedules.Single(s => s.PersonId == teamate.Id.Value);
-			agentSchedule.ScheduleLayers.First().IsOvertime.Should().Be.EqualTo(false);
 
 			result.MySchedule.ScheduleLayers[0].IsOvertime.Should().Be.True();
 			result.MySchedule.ScheduleLayers[1].IsOvertime.Should().Be.False();
+			agentSchedule.ScheduleLayers.First().IsOvertime.Should().Be.True();
 		}
 
 		[Test]

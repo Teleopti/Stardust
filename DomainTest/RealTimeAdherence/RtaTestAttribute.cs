@@ -1,12 +1,7 @@
-using System;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -19,16 +14,21 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 	}
 
 	[DefaultData]
+	[ExtendScope(typeof(Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleChangedEventPublisher))]
+	//[ExtendScope(typeof(PersonAssociationChangedEventPublisher))]
+	[ExtendScope(typeof(ExternalLogonReadModelUpdater))]
+	[ExtendScope(typeof(MappingReadModelUpdater))]
+	[ExtendScope(typeof(ScheduleChangeProcessor))]
+	[ExtendScope(typeof(AgentStateMaintainer))]
+	[ExtendScope(typeof(AgentStateReadModelMaintainer))]
+	[ExtendScope(typeof(AgentStateReadModelUpdater))]
 	public class RtaTestLoggedOnAttribute : DomainTestAttribute
 	{
 		public FakeEventPublisher Publisher;
-		public MutableNow_ExperimentalEventPublishing Now;
 
 		protected override void Isolate(IIsolate isolate)
 		{
 			base.Isolate(isolate);
-
-			isolate.UseTestDouble<MutableNow_ExperimentalEventPublishing>().For<MutableNow, INow>();
 
 			// disable activity change checker triggered by minute tick which is triggered by Now.Is(...)
 			isolate.UseTestDouble<DontCheckForActivityChangesFromScheduleChangeProcessor>().For<IActivityChangeCheckerFromScheduleChangeProcessor>();
@@ -42,38 +42,8 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 
 			Now.Is("2001-12-18 13:31");
 
-			Publisher.AddHandler<Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleChangedEventPublisher>();
+			// should be an attribute, dont know why it doesnt work right now...
 			Publisher.AddHandler<PersonAssociationChangedEventPublisher>();
-
-			Publisher.AddHandler<ExternalLogonReadModelUpdater>();
-			Publisher.AddHandler<MappingReadModelUpdater>();
-			Publisher.AddHandler<ScheduleChangeProcessor>();
-			Publisher.AddHandler<AgentStateMaintainer>();
-
-			Publisher.AddHandler<AgentStateReadModelMaintainer>();
-			Publisher.AddHandler<AgentStateReadModelUpdater>();
-		}
-	}
-
-	public class MutableNow_ExperimentalEventPublishing : MutableNow
-	{
-		private readonly IEventPublisher _publisher;
-
-		public MutableNow_ExperimentalEventPublishing(IEventPublisher publisher)
-		{
-			_publisher = publisher;
-		}
-
-		public override void Is(DateTime? utc)
-		{
-			var time = new TimePassingSimulator(UtcDateTime(), utc.GetValueOrDefault());
-			base.Is(utc);
-
-			//Console.WriteLine($"{Thread.CurrentThread.ManagedThreadId} {utc}");
-
-			time.IfDayPassed(() => { _publisher.Publish(new TenantDayTickEvent()); });
-			time.IfHourPassed(() => { _publisher.Publish(new TenantHourTickEvent()); });
-			time.IfMinutePassed(() => { _publisher.Publish(new TenantMinuteTickEvent()); });
 		}
 	}
 }

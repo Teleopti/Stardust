@@ -518,7 +518,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		}
 
 		[Test]
-		[Toggle(Toggles.ETL_SpeedUpFactScheduleNightly_38019)]
 		public void ShouldNotBeHandledBecauseFilterWhenNotDefaultScenarioAndNotReportable()
 		{
 			AnalyticsDates.HasDatesBetween(new DateTime(1999, 12, 31), new DateTime(2030, 12, 31));

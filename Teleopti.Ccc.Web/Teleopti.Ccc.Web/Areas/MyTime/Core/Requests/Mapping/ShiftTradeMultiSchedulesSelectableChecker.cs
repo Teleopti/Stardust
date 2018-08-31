@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 	public interface IShiftTradeMultiSchedulesSelectableChecker
 	{
 		bool CheckSelectable(bool hasAbsence, IScheduleDay myScheduleDay, IScheduleDay personToScheduleDay, DateOnly date, IPerson personTo, out string unSelectableReason);
+		bool IsNeedCheckTolerance();
 	}
 
 	public class ShiftTradeMultiSchedulesSelectableChecker : IShiftTradeMultiSchedulesSelectableChecker
@@ -81,6 +82,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			}
 
 			return true;
+		}
+
+		public bool IsNeedCheckTolerance()
+		{
+			return isRuleNeedToCheck(typeof(ShiftTradeTargetTimeSpecification).FullName);
 		}
 
 		private bool isOutOpenPeriod(IPerson personTo, DateOnly date, out Name agentName)

@@ -194,6 +194,7 @@
     <Compile Include="Budgeting\BudgetGroupHeadCountSpecificationLimited.cs" />
     <Compile Include="Common\DefaultSchedulePeriodProvider.cs" />
     <Compile Include="ApplicationLayer\Commands\MultipleChangeScheduleCommandHandler.cs" />
+    <Compile Include="Common\Time\MutableNowWithEvents.cs" />
     <Compile Include="Forecasting\QueueStatisticsViewModelFactory.cs" />
     <Compile Include="Forecasting\IQueueStatisticsViewModelFactory.cs" />
     <Compile Include="Forecasting\Models\QueueStatisticsModel.cs" />
@@ -259,6 +260,7 @@
     <Compile Include="MultiTenancy\PersonIdentityModel.cs" />
     <Compile Include="Optimization\TeamBlock\ForecastAndScheduleSumForDay.cs" />
     <Compile Include="Optimization\WasReallyBetterResult.cs" />
+    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\IHistoricalOverviewReadModelPersister.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalOverviewViewModelBuilder.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayLoaderDurationOfEvents.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayLoaderLateForWork.cs" />
@@ -266,6 +268,7 @@
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayWithLateForWork.cs" />
     <Compile Include="RealTimeAdherence\Domain\Events\ISolidProof.cs" />
     <Compile Include="RealTimeAdherence\Domain\Events\PersonArrivedLateForWorkEvent.cs" />
+    <Compile Include="RealTimeAdherence\Domain\Events\RtaEventStoreSynchronizer.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\DeadLockVictim.cs" />
     <Compile Include="RealTimeAdherence\Domain\Service\LateForWorkEventPublisher.cs" />
     <Compile Include="RegisterEventHandlerInLifetimeScopeAttribute.cs" />
@@ -2214,7 +2217,6 @@
     <Compile Include="Forecasting\Angel\Accuracy\MethodAccuracy.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\SkillAccuracy.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\WorkloadAccuracy.cs" />
-    <Compile Include="Forecasting\Angel\AverageStatistics.cs" />
     <Compile Include="Forecasting\Angel\IIntradayForecaster.cs" />
     <Compile Include="Forecasting\Angel\IndexVolumesMediumTermWithDayInMonth.cs" />
     <Compile Include="Forecasting\Angel\IndexVolumesShortTerm.cs" />
@@ -2227,7 +2229,6 @@
     <Compile Include="Forecasting\Angel\Methods\DateAndTask.cs" />
     <Compile Include="Forecasting\Angel\Methods\ForecastMethodProvider.cs" />
     <Compile Include="Forecasting\Angel\Methods\ForecastMethodType.cs" />
-    <Compile Include="Forecasting\Angel\Methods\ForecastMethodResult.cs" />
     <Compile Include="Forecasting\Angel\Methods\IAhtAndAcwCalculator.cs" />
     <Compile Include="Forecasting\Angel\Methods\IForecastMethod.cs" />
     <Compile Include="Forecasting\Angel\Methods\IForecastMethodProvider.cs" />

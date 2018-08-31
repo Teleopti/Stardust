@@ -78,7 +78,7 @@ Wfm_People_SetFallbackValuesForImporting_43289 = true
 Wfm_People_MoveImportJobToBackgroundService_43582 = true
 
 # Bockemon #
-Wfm_PeopleWeb_PrepareForRelease_47766 = RC
+Wfm_PeopleWeb_PrepareForRelease_74903 = RC
 Wfm_Authentication_ChangePasswordMenu_76666 = RC
 
 # China, can any of these be removed? #
@@ -107,19 +107,7 @@ ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899 = true
 ResourcePlanner_UseErlangAWithFinitePatience_47738 = true
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
 ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
-
-# From old Kittens team... #
-# AF 2018-08-22: All of these can be removed now, but very carefully as we do not want any new bugs or issues...#
-ETL_SpeedUpPersonPeriodNightly_38097 = true
-ETL_SpeedUpFactScheduleNightly_38019 = true # not to be released until pbi 38304 and 41393 is done 
-ETL_SpeedUpNightlyShiftCategory_38718 = true
-ETL_SpeedUpNightlyPreference_38283 = true #Depending on ETL_SpeedUpFactScheduleNightly_38019
-ETL_SpeedUpNightlyAvailability_38926 = true
-ETL_SpeedUpGroupPagePersonNightly_37623 = true
-ETL_SpeedUpNightlyForecastWorkload_38929 = true
-ETL_RemoveTimeZoneAndDateNightly_40870 = true
-ETL_FixScheduleForPersonPeriod_41393 = true
-ETL_SpeedUpNightlyDayOff_38213 = true
+ResourcePlanner_XXL_76496 = DEV
 
 # DeBockers #
 WfmIntraday_MonitorActualvsForecasted_35176 = true
@@ -168,6 +156,7 @@ MyTimeWeb_ShiftTradeRequest_MaximumWorkdayCheck_74889 = true
 MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947 = RC
 MyTimeWeb_ShiftTradeRequest_SetNotSelectableShifts_77052 = RC #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947
 MyTimeWeb_ShiftTradeRequest_SelectShiftsForTrade_76306 = RC #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947
+MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408 = DEV #Depending on MyTimeWeb_ShiftTradeRequest_ShowMultipleShifts_74947
 WFM_Gamification_Permission_76546 = true
 
 # Tech #
