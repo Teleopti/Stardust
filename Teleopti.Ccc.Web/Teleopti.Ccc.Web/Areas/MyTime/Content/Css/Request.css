@@ -799,8 +799,34 @@ input.use-default-startTime {
 	transform: scale(1.3);
 	margin: 5px 10px;
 }
+.shift-trade-error {
+ display:flex;
+ flex-direction:column;
+}
+
+.error-detail {
+	display:flex;
+	flex-direction:column;
+}
+
+.error-summary {
+	cursor:pointer;
+	color:red;
+}
+
+.error-message-header {
+	display:flex;
+	font-weight:bold;
+}
+
 
 .shift-trade-request-74947 {
+	display: flex;
+	flex-direction: column;
+}
+
+.multiple-shift-trade-panel {
+	flex:1 0 auto;
 	display: flex;
 	flex-direction: row;
 }
@@ -1102,7 +1128,3 @@ input.use-default-startTime {
 #Request-add-shift-trade {
 	padding: 2px !important;
 }
-
-	/*.text-indicator + .text-indicator {
-		margin-left: 10px;
-	}*/
