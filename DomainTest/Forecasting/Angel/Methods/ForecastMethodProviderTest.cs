@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Methods
 		}
 
 		[Test]
-		public void ShouldCalculateMethodsWhenBeteen2Months_1YearAnd1Month()
+		public void ShouldCalculateMethodsWhenBetween2Months_1YearAnd1Month()
 		{
 			var target = new ForecastMethodProvider(new LinearRegressionTrendCalculator());
 

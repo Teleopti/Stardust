@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Forecasting.Models;
+﻿using Teleopti.Ccc.Domain.Forecasting.Models;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
