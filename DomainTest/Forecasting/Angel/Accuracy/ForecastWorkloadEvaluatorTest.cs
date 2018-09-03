@@ -78,7 +78,32 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 				historicalPeriodProvider);
 			target.Evaluate(workload, outlierRemover, MockRepository.GenerateMock<IForecastAccuracyCalculator>());
 
-			outlierRemover.AssertWasCalled(x => x.RemoveOutliers(Arg<ITaskOwnerPeriod>.Is.Anything, Arg<IForecastMethod>.Is.Anything), options => options.Repeat.Twice());
+			outlierRemover.AssertWasCalled(x => x.RemoveOutliers(Arg<ITaskOwnerPeriod>.Is.Anything,
+				Arg<IForecastMethod>.Is.Anything), options => options.Repeat.Twice());
+		}
+
+		[Test]
+		public void ShouldLoadHistoricalDataOnlyOnceWithMultipleForecastMethod()
+		{
+			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkillWithId("skill1"));
+			workload.SetId(Guid.NewGuid());
+			var historicalData = new FakeHistoricalDataWithCounter();
+
+			var forecastMethodProvider = MockRepository.GenerateMock<IForecastMethodProvider>();
+			var forecastMethod = MockRepository.GenerateMock<IForecastMethod>();
+			forecastMethod.Stub(x => x.Forecast(null, new DateOnlyPeriod())).IgnoreArguments()
+				.Return(new IForecastingTarget[] { });
+			forecastMethodProvider.Stub(x => x.Calculate(Arg<DateOnlyPeriod>.Is.Anything))
+				.Return(new[] {forecastMethod, forecastMethod});
+			var outlierRemover = MockRepository.GenerateMock<IOutlierRemover>();
+			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
+			historicalPeriodProvider.Stub(x => x.AvailablePeriod(workload))
+				.Return(new DateOnlyPeriod(2013, 1, 1, 2015, 1, 1));
+			var target =
+				new ForecastWorkloadEvaluator(historicalData, forecastMethodProvider, historicalPeriodProvider);
+			target.Evaluate(workload, outlierRemover, MockRepository.GenerateMock<IForecastAccuracyCalculator>());
+
+			historicalData.FetchCount.Should().Be.EqualTo(1);
 		}
 	}
 }

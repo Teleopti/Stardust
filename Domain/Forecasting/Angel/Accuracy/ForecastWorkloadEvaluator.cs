@@ -40,20 +40,20 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 			if (!historicalData.TaskOwnerDayCollection.Any()) return result;
 
 			var twoPeriods = HistoricalPeriodProvider.DivideIntoTwoPeriods(availablePeriod.Value);
-			if (!historicalData.TaskOwnerDayCollection.Any(x => x.CurrentDate <= twoPeriods.Item1.EndDate))
+			var firstPartHistoricalData =
+				historicalData.TaskOwnerDayCollection.Where(x => x.CurrentDate <= twoPeriods.Item1.EndDate).ToList();
+			if (!firstPartHistoricalData.Any())
 			{
 				return result;
 			}
+
+			var secondPartHistoricalData =
+				historicalData.TaskOwnerDayCollection.Where(x => x.CurrentDate > twoPeriods.Item1.EndDate).ToList();
 
 			var methods = _forecastMethodProvider.Calculate(availablePeriod.Value);
 			var methodsEvaluationResult = new List<MethodAccuracy>();
 			foreach (var forecastMethod in methods)
 			{
-				var firstPartHistoricalData =
-					historicalData.TaskOwnerDayCollection.Where(x => x.CurrentDate <= twoPeriods.Item1.EndDate);
-				var secondPartHistoricalData =
-					historicalData.TaskOwnerDayCollection.Where(x => x.CurrentDate > twoPeriods.Item1.EndDate);
-
 				var firstPeriodData = new TaskOwnerPeriod(DateOnly.MinValue,
 					firstPartHistoricalData.Select(taskOwner => cloneTaskOwner(workload, taskOwner)),
 					TaskOwnerPeriodType.Other);
