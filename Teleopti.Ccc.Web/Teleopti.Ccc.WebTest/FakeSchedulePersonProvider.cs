@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DotNetOpenAuth.Messaging;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -14,14 +13,11 @@ namespace Teleopti.Ccc.WebTest
 	{
 		private readonly IList<IPerson> _persons;
 		private readonly IList<IPerson> _personsWithMyTeamSchedulesPermission;
-		private readonly IList<IPerson> _personsWithViewConfidentialPermission;
 
 		public FakeSchedulePersonProvider(IEnumerable<IPerson> persons)
 		{
 			_persons = persons.ToList();
-			_personsWithMyTeamSchedulesPermission = new List<IPerson>();
-			_personsWithMyTeamSchedulesPermission.AddRange(persons);
-			_personsWithViewConfidentialPermission = new List<IPerson>();
+			_personsWithMyTeamSchedulesPermission = persons.ToList();
 		}
 
 		public IEnumerable<IPerson> GetPermittedPersonsForTeam(DateOnly date, Guid id, string function)
@@ -37,7 +33,7 @@ namespace Teleopti.Ccc.WebTest
 			}
 			if (function == DefinedRaptorApplicationFunctionPaths.ViewConfidential)
 			{
-				return _personsWithViewConfidentialPermission;
+				return new IPerson[0];
 			}
 			return _persons;
 		}

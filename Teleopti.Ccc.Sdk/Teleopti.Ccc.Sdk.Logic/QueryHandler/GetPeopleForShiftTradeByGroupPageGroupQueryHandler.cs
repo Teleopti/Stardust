@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 {
 	public class GetPeopleForShiftTradeByGroupPageGroupQueryHandler : IHandleQuery<GetPeopleForShiftTradeByGroupPageGroupQueryDto, ICollection<PersonDto>>
 	{
-		private readonly IAssembler<IPerson, PersonDto> _personAssembler;
+		private readonly PersonCredentialsAppender _personAssembler;
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		public GetPeopleForShiftTradeByGroupPageGroupQueryHandler(
-			IAssembler<IPerson, PersonDto> personAssembler,
+			PersonCredentialsAppender personAssembler,
 			IGroupingReadOnlyRepository groupingReadOnlyRepository,
 			IPersonRepository personRepository,
 			ICurrentUnitOfWorkFactory unitOfWorkFactory,
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				var personFrom = _personRepository.Get(query.PersonId);
 				var people = _personRepository.FindPeople(availableDetails.Select(d => d.PersonId));
 				people.ForEach(p => { if (isAvailableForShiftTrade(new ShiftTradeAvailableCheckItem(queryDate, personFrom, p))) peopleForShiftTrade.Add(p); });
-				return _personAssembler.DomainEntitiesToDtos(peopleForShiftTrade).ToList();
+				return _personAssembler.Convert(peopleForShiftTrade.ToArray()).ToList();
 			}
 		}
 
