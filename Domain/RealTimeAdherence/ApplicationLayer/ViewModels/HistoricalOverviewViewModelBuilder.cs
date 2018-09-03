@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 					Agents = buildAgents(agentOnTeam, sevenDays, readModels)
 				}).ToArray();
 		}
-		
+
 		private IEnumerable<ITeam> getTeams(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds)
 		{
 			var teams = siteIds?.SelectMany(x => _teams.FindTeamsForSite(x));
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 
 			return teams;
 		}
-		
+
 		private IEnumerable<IGrouping<string, agentInfo>> groupAgentsOnTeamForAllDays(IEnumerable<DateTime> days, IPerson[] persons)
 		{
 			var agentsOnDayAndTeam = from day in days
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 		private static IEnumerable<HistoricalOverviewDayViewModel> buildDays(IEnumerable<DateTime> days, IEnumerable<HistoricalOverviewReadModel> readModels, Guid agentId)
 		{
 			return from day in days
-				let readModelForPersonAndDay = getHistoricalOverview(readModels, agentId, day)
+				let readModelForPersonAndDay = getReadModel(readModels, agentId, day)
 				select new HistoricalOverviewDayViewModel
 				{
 					Date = day.Date.ToString("yyyyMMdd"),
@@ -145,27 +145,26 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 		private static IEnumerable<int> calculateLateMinutesForDay(IEnumerable<DateTime> days, IEnumerable<HistoricalOverviewReadModel> readModels, Guid agentId)
 		{
 			return from day in days
-				let lateMinutesForDay = getHistoricalOverview(readModels, agentId, day)?.MinutesLateForWork ?? 0
+				let lateMinutesForDay = getReadModel(readModels, agentId, day)?.MinutesLateForWork ?? 0
 				where lateMinutesForDay > 0
 				select lateMinutesForDay;
 		}
 
 		private static int? calculateIntervalAdherence(IEnumerable<DateTime> days, IEnumerable<HistoricalOverviewReadModel> readModels, Guid personId)
 		{
-			if (days.All(x => getHistoricalOverview(readModels, personId, x)?.Adherence == null))
+			var models = days.Select(d => getReadModel(readModels, personId, d));
+			if (models.All(x => x?.Adherence == null))
 				return null;
 
-			var sumAdherences = days.Sum(d =>
+			var sumAdherences = models.Sum(model =>
 			{
-				var model = getHistoricalOverview(readModels, personId, d);
 				if (model?.ShiftLength == null || model.Adherence == null)
 					return 0;
 				return model.Adherence * model.ShiftLength;
 			});
 
-			var sumPeriods = days.Sum(d =>
+			var sumPeriods = models.Sum(model =>
 			{
-				var model = getHistoricalOverview(readModels, personId, d);
 				if (model == null || model.ShiftLength == null)
 					return 0;
 
@@ -175,11 +174,11 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels
 			return sumAdherences / sumPeriods;
 		}
 
-		private static HistoricalOverviewReadModel getHistoricalOverview(IEnumerable<HistoricalOverviewReadModel> model, Guid agentId, DateTime day)
+		private static HistoricalOverviewReadModel getReadModel(IEnumerable<HistoricalOverviewReadModel> models, Guid agentId, DateTime day)
 		{
-			return model.IsNullOrEmpty()
+			return models.IsNullOrEmpty()
 				? null
-				: model.SingleOrDefault(m => m.PersonId == agentId && m.Date == day.Date.ToDateOnly());
+				: models.SingleOrDefault(m => m.PersonId == agentId && m.Date == day.Date.ToDateOnly());
 		}
 
 		private IEnumerable<HistoricalOverviewTeamViewModel> buildViewModelQuickAndDirty(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds)
