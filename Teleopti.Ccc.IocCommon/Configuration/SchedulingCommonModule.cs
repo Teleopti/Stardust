@@ -219,19 +219,19 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ShiftLengthDecider>().As<IShiftLengthDecider>().SingleInstance();
 			builder.RegisterType<PersonSkillDayCreator>().As<IPersonSkillDayCreator>().SingleInstance();
 
+			builder.RegisterType<ShiftProjectionCacheManager>().InstancePerLifetimeScope();
+			builder.RegisterType<TeamScheduling>().SingleInstance();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_XXL_76496))
 			{
 				builder.RegisterType<WorkShiftFinderService>().As<IWorkShiftFinderService>().InstancePerLifetimeScope();
-				builder.RegisterType<ShiftProjectionCacheManagerNoStateMainShiftProjection>().As<ShiftProjectionCacheManager>().InstancePerLifetimeScope();
-				builder.RegisterType<TeamSchedulingNoStateMainShiftProjection>().As<TeamScheduling>().SingleInstance();
 				builder.RegisterType<WorkShiftSelectorDoNotCallMainShiftProjectionTooManyTimes>().As<IWorkShiftSelector>().As<IWorkShiftSelectorForIntraInterval>().SingleInstance();
+				builder.RegisterType<TeamBlockRoleModelSelectorClearingProjections>().As<TeamBlockRoleModelSelector>().InstancePerLifetimeScope();
 			}
 			else
 			{
 				builder.RegisterType<WorkShiftFinderServiceOLD>().As<IWorkShiftFinderService>().InstancePerLifetimeScope();
-				builder.RegisterType<ShiftProjectionCacheManager>().InstancePerLifetimeScope();
-				builder.RegisterType<TeamScheduling>().SingleInstance();
 				builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>().As<IWorkShiftSelectorForIntraInterval>().SingleInstance();
+				builder.RegisterType<TeamBlockRoleModelSelector>().InstancePerLifetimeScope();
 			}
 			
 			builder.RegisterType<OccupiedSeatCalculator>().As<IOccupiedSeatCalculator>().SingleInstance();
@@ -593,7 +593,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SameShiftBlockSpecification>().As<ISameShiftBlockSpecification>().SingleInstance();
 			builder.RegisterType<ValidSampleDayPickerFromTeamBlock>().As<IValidSampleDayPickerFromTeamBlock>().SingleInstance();
 			builder.RegisterType<TeamBlockSchedulingOptions>().As<ITeamBlockSchedulingOptions>().SingleInstance();
-			builder.RegisterType<TeamBlockRoleModelSelector>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockSchedulingCompletionChecker>().As<ITeamBlockSchedulingCompletionChecker>().SingleInstance();
 			builder.RegisterType<ProposedRestrictionAggregator>().SingleInstance();
 			builder.RegisterType<TeamBlockRestrictionAggregator>().As<ITeamBlockRestrictionAggregator>().SingleInstance();

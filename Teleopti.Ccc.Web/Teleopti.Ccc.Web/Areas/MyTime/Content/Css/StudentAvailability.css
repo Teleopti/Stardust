@@ -91,6 +91,7 @@
 .student-availability-body-container {
 	max-width: 100%;
 	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
 }
 .student-availability-body-container {
 	margin-bottom: 50px;

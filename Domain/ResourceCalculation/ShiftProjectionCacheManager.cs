@@ -1,28 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	[RemoveMeWithToggle("Merge logic with base class", Toggles.ResourcePlanner_XXL_76496)]
-	public class ShiftProjectionCacheManagerNoStateMainShiftProjection : ShiftProjectionCacheManager
-	{
-		public ShiftProjectionCacheManagerNoStateMainShiftProjection(IRuleSetDeletedActivityChecker ruleSetDeletedActivityChecker, IRuleSetDeletedShiftCategoryChecker rulesSetDeletedShiftCategoryChecker, IWorkShiftFromEditableShift workShiftFromEditableShift, ShiftProjectionCacheFetcher shiftProjectionCacheFetcher) : base(ruleSetDeletedActivityChecker, rulesSetDeletedShiftCategoryChecker, workShiftFromEditableShift, shiftProjectionCacheFetcher)
-		{
-		}
-
-		protected override void SetDateOnShiftProjectionCaches(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod, IEnumerable<ShiftProjectionCache> shiftProjectionCaches)
-		{
-			foreach (var shiftProjectionCache in shiftProjectionCaches)
-			{
-				shiftProjectionCache.SetDateNoStateMainShiftProjection(dateOnlyAsDateTimePeriod);
-			}
-		}
-	}
-
 	public class ShiftProjectionCacheManager : IDisposable
 	{
         private readonly IDictionary<IWorkShiftRuleSet, List<ShiftProjectionCache>> _ruleSetListDictionary = new Dictionary<IWorkShiftRuleSet, List<ShiftProjectionCache>>();

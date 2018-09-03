@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -11,6 +12,34 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
+	[RemoveMeWithToggle("Merge with base class", Toggles.ResourcePlanner_XXL_76496)]
+	public class TeamBlockRoleModelSelectorClearingProjections : TeamBlockRoleModelSelector
+	{
+		private readonly WorkShiftFilterService _workShiftFilterService;
+
+		public TeamBlockRoleModelSelectorClearingProjections(ITeamBlockRestrictionAggregator teamBlockRestrictionAggregator, WorkShiftFilterService workShiftFilterService, SameOpenHoursInTeamBlock sameOpenHoursInTeamBlock, FirstShiftInTeamBlockFinder firstShiftInTeamBlockFinder) : base(teamBlockRestrictionAggregator, workShiftFilterService, sameOpenHoursInTeamBlock, firstShiftInTeamBlockFinder)
+		{
+			_workShiftFilterService = workShiftFilterService;
+		}
+
+		protected override ShiftProjectionCache filterAndSelect(IScheduleDictionary schedules,
+			IEnumerable<ISkillDay> allSkillDays, IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo,
+			DateOnly datePointer, SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction,
+			bool useShiftsForRestrictions, IGroupPersonSkillAggregator groupPersonSkillAggregator,
+			bool isSameOpenHoursInBlock)
+		{
+			var shifts = _workShiftFilterService.FilterForRoleModel(groupPersonSkillAggregator, schedules, datePointer, teamBlockInfo, effectiveRestriction,
+				schedulingOptions, isSameOpenHoursInBlock, useShiftsForRestrictions, allSkillDays);
+
+			if (shifts.IsNullOrEmpty())
+				return null;
+
+			var res = workShiftSelector.SelectShiftProjectionCache(groupPersonSkillAggregator, datePointer, shifts, allSkillDays, teamBlockInfo, schedulingOptions, TimeZoneGuard.Instance.CurrentTimeZone(), true, teamBlockInfo.TeamInfo.GroupMembers.First());
+			shifts.ClearMainShiftProjectionCaches(); //just a hack for perf/mem reasons to release resources... can this be made in a better way?
+			return res;
+		}
+	}
+
 	public class TeamBlockRoleModelSelector
 	{
 		private readonly ITeamBlockRestrictionAggregator _teamBlockRestrictionAggregator;
@@ -62,7 +91,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return roleModel;
 		}
 
-		private ShiftProjectionCache filterAndSelect(IScheduleDictionary schedules, IEnumerable<ISkillDay> allSkillDays, IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, DateOnly datePointer, SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, bool useShiftsForRestrictions, IGroupPersonSkillAggregator groupPersonSkillAggregator, bool isSameOpenHoursInBlock)
+		protected virtual ShiftProjectionCache filterAndSelect(IScheduleDictionary schedules, IEnumerable<ISkillDay> allSkillDays, IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, DateOnly datePointer, SchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, bool useShiftsForRestrictions, IGroupPersonSkillAggregator groupPersonSkillAggregator, bool isSameOpenHoursInBlock)
 		{
 			var shifts = _workShiftFilterService.FilterForRoleModel(groupPersonSkillAggregator, schedules, datePointer, teamBlockInfo, effectiveRestriction,
 				schedulingOptions, isSameOpenHoursInBlock, useShiftsForRestrictions, allSkillDays);
