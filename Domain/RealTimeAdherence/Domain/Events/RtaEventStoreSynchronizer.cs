@@ -42,9 +42,10 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events
 			queryData.ForEach(q =>
 			{
 				var adherenceDay = _adherenceDayLoader.Load(q.PersonId.Value, q.StartTime.Value.ToDateOnly());
-				var changeLateForWork = adherenceDay.Changes().FirstOrDefault(c => c.LateForWork != null);
-				var lateForWorkText = changeLateForWork != null ? changeLateForWork.LateForWork : "0";
+				var lateForWork = adherenceDay.Changes().FirstOrDefault(c => c.LateForWork != null);
+				var lateForWorkText = lateForWork != null ? lateForWork.LateForWork : "0";
 				var minutesLateForWork = int.Parse(Regex.Replace(lateForWorkText, "[^0-9.]", ""));
+				//Would probably be better to expose shift instead of calculating shift here 
 				var shift =  new DateTimePeriod(adherenceDay.Period().StartDateTime.AddHours(1), adherenceDay.Period().EndDateTime.AddHours(-1));
 				var shiftLength = (int) shift.ElapsedTime().TotalMinutes;
 				
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events
 					PersonId = q.PersonId.Value,
 					Date = q.StartTime.Value.ToDateOnly(),
 					Adherence = adherenceDay.Percentage(),
-					WasLateForWork = changeLateForWork != null,
+					WasLateForWork = lateForWork != null,
 					MinutesLateForWork = minutesLateForWork,
 					ShiftLength = shiftLength					
 				});
