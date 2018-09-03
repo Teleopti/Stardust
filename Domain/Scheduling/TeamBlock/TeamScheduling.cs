@@ -63,9 +63,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		protected virtual ShiftProjectionCache ForDate(ShiftProjectionCache shiftProjectionCache, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
 		{
-#pragma warning disable 618
 			shiftProjectionCache.SetDate(dateOnlyAsDateTimePeriod);
-#pragma warning restore 618
 			return shiftProjectionCache;
 		}
 
