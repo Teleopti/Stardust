@@ -73,15 +73,10 @@ WHERE
 				.SetParameter("nRows", maxEventsToRemove)
 				.ExecuteUpdate();
 
-		public IEnumerable<IEvent> LoadAll()
-		{
-			throw new NotImplementedException();
-		}
-
 		public IEnumerable<IEvent> Load(Guid personId, DateTimePeriod period) =>
-			load(
-					_unitOfWork.Current().Session()
-						.CreateSQLQuery(@"
+			loadEvents(
+				_unitOfWork.Current().Session()
+					.CreateSQLQuery(@"
 SELECT 
 	[Type],
 	[Event] 
@@ -93,16 +88,14 @@ WHERE
 	EndTime >= :StartTime
 ORDER BY [Id] ASC
 ")
-						.SetParameter("PersonId", personId)
-						.SetParameter("StartTime", period.StartDateTime)
-						.SetParameter("EndTime", period.EndDateTime)
-				)
-				.Select(e => e.DeserializedEvent)
-				.ToArray();
+					.SetParameter("PersonId", personId)
+					.SetParameter("StartTime", period.StartDateTime)
+					.SetParameter("EndTime", period.EndDateTime)
+			);
 
 		public IEvent LoadLastAdherenceEventBefore(Guid personId, DateTime timestamp)
 		{
-			return load(_unitOfWork.Current().Session()
+			return loadEvents(_unitOfWork.Current().Session()
 					.CreateSQLQuery(@"
 SELECT TOP 1 
 	[Type],
@@ -122,8 +115,6 @@ ORDER BY [Id] DESC
 					})
 					.SetParameter("PersonId", personId)
 					.SetParameter("Timestamp", timestamp))
-				.Select(e => e.DeserializedEvent)
-				.ToArray()
 				.SingleOrDefault();
 		}
 
@@ -147,11 +138,19 @@ ORDER BY [Id]
 			};
 		}
 
+
+		private IEnumerable<IEvent> loadEvents(IQuery query) =>
+			load(query).Select(x => x.DeserializedEvent).ToArray();
+
 		private IEnumerable<internalModel> load(IQuery query) =>
 			query
 				.SetResultTransformer(Transformers.AliasToBean<internalModel>())
 				.List<internalModel>()
-				.ForEach(x => x.DeserializedEvent = _deserializer.DeserializeEvent(x.Event, Type.GetType(x.Type)) as IEvent);
+				.Select(x =>
+				{
+					x.DeserializedEvent = _deserializer.DeserializeEvent(x.Event, Type.GetType(x.Type)) as IEvent;
+					return x;
+				});
 
 
 		private class internalModel
@@ -166,9 +165,7 @@ ORDER BY [Id]
 
 
 		public IEnumerable<IEvent> LoadAllForTest() =>
-			load(_unitOfWork.Current().Session().CreateSQLQuery(@"SELECT [Type], [Event] FROM [rta].[Events]"))
-				.Select(e => e.DeserializedEvent)
-				.ToArray();
+			loadEvents(_unitOfWork.Current().Session().CreateSQLQuery(@"SELECT [Type], [Event] FROM [rta].[Events]"));
 
 		public IEnumerable<string> LoadAllEventTypes() => _unitOfWork.Current().Session()
 			.CreateSQLQuery(@"SELECT [Type] FROM [rta].[Events]")
