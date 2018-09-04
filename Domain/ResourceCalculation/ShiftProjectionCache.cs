@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_mainShift = new Lazy<IEditableShift>(() => _workShift.ToEditorShift(_dateOnlyAsPeriod, _dateOnlyAsPeriod.TimeZone()));
 			_mainshiftProjection = new Lazy<IVisualLayerCollection>(() => TheMainShift.ProjectionService().CreateProjection());
 		}
-
+		
 		public IEditableShift TheMainShift => _mainShift.Value;
 
 		public IWorkShift TheWorkShift => _workShift;
@@ -48,10 +48,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public DateTimePeriod WorkShiftProjectionPeriod => _workShift.Projection.Period().Value;
 
-		public IVisualLayerCollection MainShiftProjection => _mainshiftProjection.Value;
+		public IVisualLayerCollection MainShiftProjection() =>
+			_mainshiftProjection?.Value ?? TheMainShift.ProjectionService().CreateProjection();
 
 		public IEnumerable<IWorkShiftCalculatableLayer> WorkShiftCalculatableLayers => _workShiftCalculatableLayers ??
-																					   (_workShiftCalculatableLayers = new WorkShiftCalculatableVisualLayerCollection(MainShiftProjection));
+																					   (_workShiftCalculatableLayers = new WorkShiftCalculatableVisualLayerCollection(MainShiftProjection()));
 
 		public bool PersonalShiftsAndMeetingsAreInWorkTime(IPersonMeeting[] meetings, IPersonAssignment personAssignment)
 		{
@@ -74,5 +75,21 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public TimeSpan WorkShiftEndTime => WorkShiftProjectionPeriod.EndDateTime.Subtract(WorkShiftProjectionPeriod.StartDateTime.Date);
 
 		public DateOnly SchedulingDate => _dateOnlyAsPeriod?.DateOnly ?? DateOnly.MinValue;
+
+		public void ClearMainShiftProjectionCache()
+		{
+			_mainshiftProjection = null;
+		}
+	}
+	
+	public static class ShiftProjectionCacheExtensions
+	{
+		public static void ClearMainShiftProjectionCaches(this IEnumerable<ShiftProjectionCache> shiftProjectionCaches)
+		{
+			foreach (var shiftProjectionCache in shiftProjectionCaches)
+			{
+				shiftProjectionCache.ClearMainShiftProjectionCache();
+			}
+		}
 	}
 }

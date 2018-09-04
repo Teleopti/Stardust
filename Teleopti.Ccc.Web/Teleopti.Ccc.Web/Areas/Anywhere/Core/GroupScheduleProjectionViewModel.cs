@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
@@ -17,6 +18,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public bool IsOvertime { get; set; }
 		public Guid ActivityId { get; set; }
 		public Guid? TopShiftLayerId { get; set; }
-		public bool FloatOnTop { get; internal set; }
+		public bool FloatOnTop { get; set; }
+		public bool IsPersonalActivity { get; set; }
+		public bool IsMeeting { get; set; }
 	}
 }

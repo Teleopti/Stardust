@@ -11,11 +11,11 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 {
 	public class GetPersonByIdQueryHandler : IHandleQuery<GetPersonByIdQueryDto, ICollection<PersonDto>>
     {
-        private readonly IAssembler<IPerson, PersonDto> _assembler;
+        private readonly PersonCredentialsAppender _assembler;
         private readonly IPersonRepository _personRepository;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
-        public GetPersonByIdQueryHandler(IAssembler<IPerson, PersonDto> assembler, IPersonRepository personRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
+        public GetPersonByIdQueryHandler(PersonCredentialsAppender assembler, IPersonRepository personRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
         {
             _assembler = assembler;
             _personRepository = personRepository;
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
                 {
                     var foundPerson = _personRepository.Get(query.PersonId);
                     if (foundPerson == null) return new List<PersonDto>();
-                    return new []{_assembler.DomainEntityToDto(foundPerson)};
+                    return _assembler.Convert(foundPerson);
                 }
             }
         }

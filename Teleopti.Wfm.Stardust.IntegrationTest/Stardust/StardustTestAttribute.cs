@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -126,7 +127,21 @@ namespace Teleopti.Wfm.Stardust.IntegrationTest.Stardust
 			{
 				TestLog.Debug("Problem while teardown :" + e.InnerException.StackTrace );
 			}
-			
+
+			//making sure that the IIS is killed after every test.
+			//May be we could move it to TestSiteConfigurationSetup.TearDown()
+			var path = AppDomain.CurrentDomain.BaseDirectory + "/../../Stardust/" + "killIIS.bat";
+			ProcessStartInfo psi = new ProcessStartInfo("cmd.exe")
+			{
+				UseShellExecute = false,
+				RedirectStandardInput = true,
+				Arguments = "/c " + path
+			};
+			Process proc = new Process() { StartInfo = psi };
+
+			proc.Start();
+			proc.WaitForExit();
+			proc.Close();
 		}
 	}
 }

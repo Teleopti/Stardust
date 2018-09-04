@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ViewModels;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.ApprovePeriodAsInAdherence;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Tool;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Tracer;
@@ -94,6 +95,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IRtaEventStoreReader>()
 				.As<IRtaEventStoreTestReader>()
 				.SingleInstance();
+			if (_config.Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770))
+				builder.RegisterType<RtaEventStoreSynchronizer>().As<IRtaEventStoreSynchronizer>().SingleInstance();
+			else
+			{
+				builder.RegisterType<NoRtaEventStoreSynchronizer>().As<IRtaEventStoreSynchronizer>().SingleInstance();
+			}
+			// register empty implementation please
 
 			if (_config.Toggle(Toggles.RTA_DurationOfHistoricalEvents_76470))
 				builder.RegisterType<AgentAdherenceDayLoaderDurationOfEvents>().As<IAgentAdherenceDayLoader>().SingleInstance();
@@ -147,5 +155,4 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ConfigurationValidator>().SingleInstance();
 		}
 	}
-
 }

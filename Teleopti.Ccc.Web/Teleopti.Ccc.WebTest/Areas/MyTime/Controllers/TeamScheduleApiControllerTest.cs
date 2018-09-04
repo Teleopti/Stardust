@@ -495,6 +495,209 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			teamScheduleViewModel.AgentSchedules.Length.Should().Be(1);
 		}
 
+		[Test] [Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
+		public void ShouldFilterAgentSchedulesUsingStartTimeFilter()
+		{
+			var today = new DateOnly(2014, 12, 15);
+			var team = TeamFactory.CreateSimpleTeam("test team").WithId();
+			TeamRepository.Add(team);
+
+			var person = PersonFactory.CreatePersonWithGuid("test", "agent");
+			PersonRepository.Add(person);
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var assignment = new PersonAssignment(person, Scenario.Current(), today);
+			var period = new DateTimePeriod(2014, 12, 15, 9, 2014, 12, 15, 16);
+			var phoneActivity = new Activity("Phone")
+			{
+				InWorkTime = true,
+				InContractTime = true,
+				DisplayColor = Color.Green
+			};
+			assignment.AddActivity(phoneActivity, period);
+			assignment.SetShiftCategory(new ShiftCategory("sc"));
+			ScheduleData.Add(assignment);
+
+			var person2 = PersonFactory.CreatePersonWithGuid("test", "agent2");
+			person2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			PersonRepository.Add(person2);
+			person2.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var assignment2 = new PersonAssignment(person2, Scenario.Current(), today);
+			var period2 = new DateTimePeriod(2014, 12, 15, 10, 2014, 12, 15, 17);
+			var phoneActivity2 = new Activity("Phone")
+			{
+				InWorkTime = true,
+				InContractTime = true,
+				DisplayColor = Color.Green
+			};
+			assignment2.AddActivity(phoneActivity2, period2);
+			assignment2.SetShiftCategory(new ShiftCategory("sc"));
+			ScheduleData.Add(assignment2);
+
+			var teamScheduleRequest = new TeamScheduleRequest
+			{
+				SelectedDate = today.Date,
+				Paging = new Paging
+				{
+					Take = 10
+				},
+				ScheduleFilter = new Domain.Repositories.ScheduleFilter
+				{
+					TeamIds = team.Id.ToString(),
+					FilteredStartTimes = "10:00-11:00"
+				}
+			};
+			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
+
+			(teamScheduleViewModel != null).Should().Be(true);
+			(teamScheduleViewModel.AgentSchedules != null).Should().Be(true);
+			teamScheduleViewModel.AgentSchedules.Length.Should().Be(1);
+			teamScheduleViewModel.AgentSchedules.First().Name.Should().Be("test agent2");
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
+		public void ShouldFilterAgentSchedulesUsingEndTimeFilter()
+		{
+			var today = new DateOnly(2014, 12, 15);
+			var team = TeamFactory.CreateSimpleTeam("test team").WithId();
+			TeamRepository.Add(team);
+
+			var person = PersonFactory.CreatePersonWithGuid("test", "agent");
+			PersonRepository.Add(person);
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var assignment = new PersonAssignment(person, Scenario.Current(), today);
+			var period = new DateTimePeriod(2014, 12, 15, 9, 2014, 12, 15, 16);
+			var phoneActivity = new Activity("Phone")
+			{
+				InWorkTime = true,
+				InContractTime = true,
+				DisplayColor = Color.Green
+			};
+			assignment.AddActivity(phoneActivity, period);
+			assignment.SetShiftCategory(new ShiftCategory("sc"));
+			ScheduleData.Add(assignment);
+
+			var person2 = PersonFactory.CreatePersonWithGuid("test", "agent2");
+			person2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			PersonRepository.Add(person2);
+			person2.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var assignment2 = new PersonAssignment(person2, Scenario.Current(), today);
+			var period2 = new DateTimePeriod(2014, 12, 15, 10, 2014, 12, 15, 17);
+			var phoneActivity2 = new Activity("Phone")
+			{
+				InWorkTime = true,
+				InContractTime = true,
+				DisplayColor = Color.Green
+			};
+			assignment2.AddActivity(phoneActivity2, period2);
+			assignment2.SetShiftCategory(new ShiftCategory("sc"));
+			ScheduleData.Add(assignment2);
+
+			var teamScheduleRequest = new TeamScheduleRequest
+			{
+				SelectedDate = today.Date,
+				Paging = new Paging
+				{
+					Take = 10
+				},
+				ScheduleFilter = new Domain.Repositories.ScheduleFilter
+				{
+					TeamIds = team.Id.ToString(),
+					FilteredEndTimes = "17:00-18:00"
+				}
+			};
+			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
+
+			(teamScheduleViewModel != null).Should().Be(true);
+			(teamScheduleViewModel.AgentSchedules != null).Should().Be(true);
+			teamScheduleViewModel.AgentSchedules.Length.Should().Be(1);
+			teamScheduleViewModel.AgentSchedules.First().Name.Should().Be("test agent2");
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
+		public void ShouldFilterAgentSchedulesUsingStartTimeAndEndTimeFilter()
+		{
+			var today = new DateOnly(2014, 12, 15);
+			var team = TeamFactory.CreateSimpleTeam("test team").WithId();
+			TeamRepository.Add(team);
+
+			var person = PersonFactory.CreatePersonWithGuid("test", "agent");
+			PersonRepository.Add(person);
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var assignment = new PersonAssignment(person, Scenario.Current(), today);
+			var period = new DateTimePeriod(2014, 12, 15, 9, 2014, 12, 15, 16);
+			var phoneActivity = new Activity("Phone")
+			{
+				InWorkTime = true,
+				InContractTime = true,
+				DisplayColor = Color.Green
+			};
+			assignment.AddActivity(phoneActivity, period);
+			assignment.SetShiftCategory(new ShiftCategory("sc"));
+			ScheduleData.Add(assignment);
+
+			var person2 = PersonFactory.CreatePersonWithGuid("test", "agent2");
+			person2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			PersonRepository.Add(person2);
+			person2.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var assignment2 = new PersonAssignment(person2, Scenario.Current(), today);
+			var period2 = new DateTimePeriod(2014, 12, 15, 10, 2014, 12, 15, 17);
+			var phoneActivity2 = new Activity("Phone")
+			{
+				InWorkTime = true,
+				InContractTime = true,
+				DisplayColor = Color.Green
+			};
+			assignment2.AddActivity(phoneActivity2, period2);
+			assignment2.SetShiftCategory(new ShiftCategory("sc"));
+			ScheduleData.Add(assignment2);
+
+			var person3 = PersonFactory.CreatePersonWithGuid("test", "agent3");
+			person3.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			PersonRepository.Add(person3);
+			person3.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var assignment3 = new PersonAssignment(person3, Scenario.Current(), today);
+			var period3 = new DateTimePeriod(2014, 12, 15, 12, 2014, 12, 15, 15);
+			var phoneActivity3 = new Activity("Phone")
+			{
+				InWorkTime = true,
+				InContractTime = true,
+				DisplayColor = Color.Green
+			};
+			assignment3.AddActivity(phoneActivity3, period3);
+			assignment3.SetShiftCategory(new ShiftCategory("sc"));
+			ScheduleData.Add(assignment3);
+
+			var teamScheduleRequest = new TeamScheduleRequest
+			{
+				SelectedDate = today.Date,
+				Paging = new Paging
+				{
+					Take = 10
+				},
+				ScheduleFilter = new Domain.Repositories.ScheduleFilter
+				{
+					TeamIds = team.Id.ToString(),
+					FilteredStartTimes = "11:00-12:00",
+					FilteredEndTimes = "15:00-17:00"
+				}
+			};
+			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
+
+			(teamScheduleViewModel != null).Should().Be(true);
+			(teamScheduleViewModel.AgentSchedules != null).Should().Be(true);
+			teamScheduleViewModel.AgentSchedules.Length.Should().Be(1);
+			teamScheduleViewModel.AgentSchedules.First().Name.Should().Be("test agent3");
+		}
+
 		[Test]
 		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
 		public void ShouldReturnPeriodsInAgentSchedules()
@@ -583,6 +786,64 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			firstPeriod.StartTime.Should().Be(period.StartDateTime);
 			firstPeriod.EndTime.Should().Be(period.EndDateTime);
 			firstPeriod.TimeSpan.Should().Be(TimeHelper.TimeOfDayFromTimeSpan(TimeSpan.FromHours(9), CultureInfo.CurrentCulture) + " - " + TimeHelper.TimeOfDayFromTimeSpan(TimeSpan.FromHours(16), CultureInfo.CurrentCulture));
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
+		public void ShouldReturnPeriodsForDayOffWhenHavingOvertimeActivity()
+		{
+			var today = new DateOnly(2014, 12, 15);
+			var team = TeamFactory.CreateSimpleTeam("test team").WithId();
+			TeamRepository.Add(team);
+
+			var person = User.CurrentUser();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			PersonRepository.Add(person);
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var assignment = new PersonAssignment(person, Scenario.Current(), today);
+			var period = new DateTimePeriod(2014, 12, 15, 9, 2014, 12, 15, 10);
+			var phoneActivity = new Activity("Phone")
+			{
+				InWorkTime = true,
+				InContractTime = true,
+				DisplayColor = Color.Green
+			};
+			assignment.AddActivity(phoneActivity, period);
+			assignment.SetShiftCategory(new ShiftCategory("sc"));
+			ScheduleData.Add(assignment);
+
+			var person2 = PersonFactory.CreatePersonWithGuid("test", "agent");
+			person2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			PersonRepository.Add(person2);
+			person2.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var dayOffAssignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(person2, Scenario.Current(),
+				today, new DayOffTemplate(new Description("dayoff")));
+			var main = ActivityFactory.CreateActivity("phone").WithId();
+			main.AllowOverwrite = true;
+			main.InWorkTime = true;
+			dayOffAssignment.AddOvertimeActivity(main, period, new MultiplicatorDefinitionSet("ot", MultiplicatorType.Overtime));
+			ScheduleData.Add(dayOffAssignment);
+
+			var teamScheduleRequest = new TeamScheduleRequest
+			{
+				SelectedDate = today.Date,
+				Paging = new Paging
+				{
+					Take = 10
+				},
+				ScheduleFilter = new Domain.Repositories.ScheduleFilter
+				{
+					TeamIds = team.Id.ToString()
+				}
+			};
+			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
+			teamScheduleViewModel.AgentSchedules.Length.Should().Be(1);
+			teamScheduleViewModel.AgentSchedules[0].ShiftCategory.Should().Not.Be(null);
+			teamScheduleViewModel.AgentSchedules[0].ShiftCategory.Name.Should().Be("dayoff");
+			teamScheduleViewModel.AgentSchedules[0].Periods.Count().Should().Be(1);
+			teamScheduleViewModel.AgentSchedules[0].Periods.ElementAt(0).Title.Should().Be("phone");
 		}
 
 		[Test]
@@ -748,6 +1009,161 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 		[Test]
 		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
+		public void ShouldReturnTimeLineHoursCorrectlyWithDayOffFilterWhenHavingOvertimeActivity()
+		{
+			UserTimeZone.IsChina();
+
+			var today = new DateOnly(2014, 12, 15);
+			var team = TeamFactory.CreateSimpleTeam("test team").WithId();
+			TeamRepository.Add(team);
+
+			var timeZone = TimeZoneInfoFactory.ChinaTimeZoneInfo();
+			var person = User.CurrentUser();
+			person.PermissionInformation.SetDefaultTimeZone(timeZone);
+			PersonRepository.Add(person);
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var dayOffAssignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, Scenario.Current(), today, new DayOffTemplate(new Description("dayoff")));
+			ScheduleData.Add(dayOffAssignment);
+
+			var person2 = PersonFactory.CreatePersonWithGuid("test", "agent");
+			person2.PermissionInformation.SetDefaultTimeZone(timeZone);
+			PersonRepository.Add(person2);
+			person2.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var dayOffAssignment2 = PersonAssignmentFactory.CreateAssignmentWithDayOff(person2, Scenario.Current(), today, new DayOffTemplate(new Description("dayoff")));
+			var main = ActivityFactory.CreateActivity("phone").WithId();
+			main.AllowOverwrite = true;
+			main.InWorkTime = true;
+			var period = new DateTimePeriod(2014, 12, 15, 8, 2014, 12, 15, 9);
+			dayOffAssignment2.AddOvertimeActivity(main, period, new MultiplicatorDefinitionSet("ot", MultiplicatorType.Overtime));
+			ScheduleData.Add(dayOffAssignment2);
+
+			var teamScheduleRequest = new TeamScheduleRequest
+			{
+				SelectedDate = today.Date,
+				Paging = new Paging
+				{
+					Take = 10
+				},
+				ScheduleFilter = new Domain.Repositories.ScheduleFilter
+				{
+					TeamIds = team.Id.ToString(),
+					IsDayOff = true
+				}
+			};
+			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
+
+			var firstTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.First();
+			firstTeamScheduleTimeLineViewModel.Time.Should().Be(today.Date.AddHours(8));
+			var lastTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.Last();
+			lastTeamScheduleTimeLineViewModel.Time.Should().Be(today.Date.AddHours(17));
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
+		public void ShouldReturnTimeLineHoursCorrectlyWithDayOffFilterWhenHavingOvertimeActivityStartedLessThan15Minutes()
+		{
+			var today = new DateOnly(2014, 12, 15);
+			var team = TeamFactory.CreateSimpleTeam("test team").WithId();
+			TeamRepository.Add(team);
+
+			var timeZone = TimeZoneInfoFactory.UtcTimeZoneInfo();
+			var person = User.CurrentUser();
+			person.PermissionInformation.SetDefaultTimeZone(timeZone);
+			PersonRepository.Add(person);
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var dayOffAssignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, Scenario.Current(), today, new DayOffTemplate(new Description("dayoff")));
+			ScheduleData.Add(dayOffAssignment);
+
+			var person2 = PersonFactory.CreatePersonWithGuid("test", "agent");
+			person2.PermissionInformation.SetDefaultTimeZone(timeZone);
+			PersonRepository.Add(person2);
+			person2.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var dayOffAssignment2 = PersonAssignmentFactory.CreateAssignmentWithDayOff(person2, Scenario.Current(), today, new DayOffTemplate(new Description("dayoff")));
+			var main = ActivityFactory.CreateActivity("phone").WithId();
+			main.AllowOverwrite = true;
+			main.InWorkTime = true;
+			var period = new DateTimePeriod(2014, 12, 15, 7, 2014, 12, 15, 9).MovePeriod(TimeSpan.FromMinutes(10));
+			dayOffAssignment2.AddOvertimeActivity(main, period, new MultiplicatorDefinitionSet("ot", MultiplicatorType.Overtime));
+			ScheduleData.Add(dayOffAssignment2);
+
+			var teamScheduleRequest = new TeamScheduleRequest
+			{
+				SelectedDate = today.Date,
+				Paging = new Paging
+				{
+					Take = 10
+				},
+				ScheduleFilter = new Domain.Repositories.ScheduleFilter
+				{
+					TeamIds = team.Id.ToString(),
+					IsDayOff = true
+				}
+			};
+			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
+
+			var firstTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.First();
+			firstTeamScheduleTimeLineViewModel.Time.Should().Be(today.Date.AddHours(7));
+			var lastTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.Last();
+			lastTeamScheduleTimeLineViewModel.Time.Should().Be(today.Date.AddHours(17));
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
+		public void ShouldReturnTimeLineHoursCorrectlyWithDayOffFilterWhenHavingOvertimeActivityStarted15Minutes()
+		{
+			var today = new DateOnly(2014, 12, 15);
+			var team = TeamFactory.CreateSimpleTeam("test team").WithId();
+			TeamRepository.Add(team);
+
+			var timeZone = TimeZoneInfoFactory.UtcTimeZoneInfo();
+			var person = User.CurrentUser();
+			person.PermissionInformation.SetDefaultTimeZone(timeZone);
+			PersonRepository.Add(person);
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var dayOffAssignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, Scenario.Current(), today, new DayOffTemplate(new Description("dayoff")));
+			ScheduleData.Add(dayOffAssignment);
+
+			var person2 = PersonFactory.CreatePersonWithGuid("test", "agent");
+			person2.PermissionInformation.SetDefaultTimeZone(timeZone);
+			PersonRepository.Add(person2);
+			person2.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var dayOffAssignment2 = PersonAssignmentFactory.CreateAssignmentWithDayOff(person2, Scenario.Current(), today, new DayOffTemplate(new Description("dayoff")));
+			var main = ActivityFactory.CreateActivity("phone").WithId();
+			main.AllowOverwrite = true;
+			main.InWorkTime = true;
+			var period = new DateTimePeriod(2014, 12, 15, 6, 2014, 12, 15, 9).MovePeriod(TimeSpan.FromMinutes(15));
+			dayOffAssignment2.AddOvertimeActivity(main, period, new MultiplicatorDefinitionSet("ot", MultiplicatorType.Overtime));
+			ScheduleData.Add(dayOffAssignment2);
+
+			var teamScheduleRequest = new TeamScheduleRequest
+			{
+				SelectedDate = today.Date,
+				Paging = new Paging
+				{
+					Take = 10
+				},
+				ScheduleFilter = new Domain.Repositories.ScheduleFilter
+				{
+					TeamIds = team.Id.ToString(),
+					IsDayOff = true
+				}
+			};
+			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
+
+			var firstTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.First();
+			firstTeamScheduleTimeLineViewModel.Time.Should().Be(today.Date.AddHours(6));
+			var lastTeamScheduleTimeLineViewModel = teamScheduleViewModel.TimeLine.Last();
+			lastTeamScheduleTimeLineViewModel.Time.Should().Be(today.Date.AddHours(17));
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
 		public void ShouldReturnShiftCategoryWithDayOffFilter()
 		{
 			var today = new DateOnly(2014, 12, 15);
@@ -802,7 +1218,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 		[Test]
 		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
-		public void ShouldNotReturnPeriodForDayOffs()
+		public void ShouldReturnPeriodForDayOffsWithDayOffFilterWhenHavingOvertimeActivity()
 		{
 			var today = new DateOnly(2014, 12, 15);
 			var team = TeamFactory.CreateSimpleTeam("test team").WithId();
@@ -831,8 +1247,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			person2.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
 
 			var dayOffAssignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(person2, Scenario.Current(), today, new DayOffTemplate(new Description("dayoff")));
+			var main = ActivityFactory.CreateActivity("phone").WithId();
+			main.AllowOverwrite = true;
+			main.InWorkTime = true;
+			dayOffAssignment.AddOvertimeActivity(main, period, new MultiplicatorDefinitionSet("ot", MultiplicatorType.Overtime));
 			ScheduleData.Add(dayOffAssignment);
-
+		
 			var teamScheduleRequest = new TeamScheduleRequest
 			{
 				SelectedDate = today.Date,
@@ -843,16 +1263,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				ScheduleFilter = new Domain.Repositories.ScheduleFilter
 				{
 					TeamIds = team.Id.ToString(),
-					IsDayOff = true,
-					FilteredStartTimes = "00:00-23:59",
-					FilteredEndTimes = "00:00-23:59"
+					IsDayOff = true
 				}
 			};
 			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
 			teamScheduleViewModel.AgentSchedules.Length.Should().Be(1);
 			teamScheduleViewModel.AgentSchedules[0].ShiftCategory.Should().Not.Be(null);
 			teamScheduleViewModel.AgentSchedules[0].ShiftCategory.Name.Should().Be("dayoff");
-			teamScheduleViewModel.AgentSchedules[0].Periods.Should().Be.Empty();
+			teamScheduleViewModel.AgentSchedules[0].Periods.Count().Should().Be(1);
+			teamScheduleViewModel.AgentSchedules[0].Periods.ElementAt(0).Title.Should().Be("phone");
+			teamScheduleViewModel.AgentSchedules[0].Periods.ElementAt(0).IsOvertime.Should().Be(true);
 		}
 
 		[Test]
@@ -1182,7 +1602,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 		[Test]
 		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
-		public void ShouldReturnPositionPercentageInAgentScheulePeriod()
+		public void ShouldReturnPositionPercentageInAgentSchedulePeriod()
 		{
 			var today = new DateOnly(2014, 12, 15);
 			var team = TeamFactory.CreateSimpleTeam("test team").WithId();

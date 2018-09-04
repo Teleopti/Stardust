@@ -157,12 +157,26 @@ namespace SdkTestWinGui
                     cultureName = CultureInfo.GetCultureInfo(agent.Dto.UICultureLanguageId.Value).DisplayName;
                     item.SubItems.Add(new ListViewItem.ListViewSubItem(item, cultureName));
                 }
+                else
+                {
+	                item.SubItems.Add(new ListViewItem.ListViewSubItem(item, "N/A"));
+                }
                 if (agent.Dto.CultureLanguageId.HasValue)
                 {
                     cultureName = CultureInfo.GetCultureInfo(agent.Dto.CultureLanguageId.Value).DisplayName;
                     item.SubItems.Add(new ListViewItem.ListViewSubItem(item, cultureName));
+				}
+				else
+                {
+	                item.SubItems.Add(new ListViewItem.ListViewSubItem(item, "N/A"));
                 }
-                _personListView.Items.Add(item);
+
+
+	            item.SubItems.Add(new ListViewItem.ListViewSubItem(item, agent.Dto.Identity ?? ""));
+	            item.SubItems.Add(new ListViewItem.ListViewSubItem(item, agent.Dto.ApplicationLogOnName ?? ""));
+	            item.SubItems.Add(new ListViewItem.ListViewSubItem(item, agent.Dto.WindowsLogOnName ?? ""));
+
+				_personListView.Items.Add(item);
             }
             foreach (ColumnHeader header in _personListView.Columns)
             {

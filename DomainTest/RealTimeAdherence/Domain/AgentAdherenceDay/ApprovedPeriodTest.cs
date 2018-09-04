@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithApprovedPeriod("2018-02-08 08:00", "2018-02-08 09:00")
 				;
 
-			var result = Target.Load(person, "2018-02-08".Date());
+			var result = Target.LoadUntilNow(person, "2018-02-08".Date());
 
 			result.OutOfAdherences().Should().Be.Empty();
 		}
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithApprovedPeriod("2018-02-08 08:00", "2018-02-08 09:00")
 				;
 
-			var result = Target.Load(person, "2018-02-08".Date());
+			var result = Target.LoadUntilNow(person, "2018-02-08".Date());
 
 			result.OutOfAdherences().Should().Be.Empty();
 			result.RecordedOutOfAdherences().Single().StartTime.Should().Be("2018-02-08 08:00".Utc());
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithApprovedPeriod("2018-02-08 10:00", "2018-02-08 11:00")
 				;
 
-			var result = Target.Load(person, "2018-02-08".Date());
+			var result = Target.LoadUntilNow(person, "2018-02-08".Date());
 
 			result.OutOfAdherences().Single().StartTime.Should().Be("2018-02-08 08:00".Utc());
 			result.OutOfAdherences().Single().EndTime.Should().Be("2018-02-08 09:00".Utc());
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithApprovedPeriod("2018-02-08 08:00", "2018-02-08 08:30")
 				;
 
-			var result = Target.Load(person, "2018-02-08".Date());
+			var result = Target.LoadUntilNow(person, "2018-02-08".Date());
 
 			result.OutOfAdherences().Single().StartTime.Should().Be("2018-02-08 08:30".Utc());
 			result.OutOfAdherences().Single().EndTime.Should().Be("2018-02-08 09:00".Utc());
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithApprovedPeriod("2018-02-08 08:30", "2018-02-08 09:00")
 				;
 
-			var result = Target.Load(person, "2018-02-08".Date());
+			var result = Target.LoadUntilNow(person, "2018-02-08".Date());
 
 			result.OutOfAdherences().Single().StartTime.Should().Be("2018-02-08 08:00".Utc());
 			result.OutOfAdherences().Single().EndTime.Should().Be("2018-02-08 08:30".Utc());
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithApprovedPeriod("2018-02-08 08:45", "2018-02-08 10:00")
 				;
 
-			var result = Target.Load(person, "2018-02-08".Date());
+			var result = Target.LoadUntilNow(person, "2018-02-08".Date());
 
 			Console.WriteLine(JsonConvert.SerializeObject(result.OutOfAdherences()));
 
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithApprovedPeriod("2018-02-08 08:15", "2018-02-08 08:45")
 				;
 
-			var result = Target.Load(person, "2018-02-08".Date());
+			var result = Target.LoadUntilNow(person, "2018-02-08".Date());
 
 			result.OutOfAdherences().First().StartTime.Should().Be("2018-02-08 08:00".Utc());
 			result.OutOfAdherences().First().EndTime.Should().Be("2018-02-08 08:15".Utc());
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithApprovedPeriod("2018-02-08 08:30", "2018-02-08 08:40")
 				;
 
-			var result = Target.Load(person, "2018-02-08".Date());
+			var result = Target.LoadUntilNow(person, "2018-02-08".Date());
 
 			result.OutOfAdherences().First().StartTime.Should().Be("2018-02-08 08:00".Utc());
 			result.OutOfAdherences().First().EndTime.Should().Be("2018-02-08 08:10".Utc());
@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithApprovedPeriod("2018-02-08 07:00", "2018-02-08 10:00")
 				;
 
-			var result = Target.Load(person, "2018-02-08".Date());
+			var result = Target.LoadUntilNow(person, "2018-02-08".Date());
 
 			result.OutOfAdherences().Should().Be.Empty();
 		}
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 				.WithApprovedPeriod("2018-02-08 08:50", "2018-02-08 09:10")
 				;
 
-			var result = Target.Load(person, "2018-02-08".Date());
+			var result = Target.LoadUntilNow(person, "2018-02-08".Date());
 
 			result.OutOfAdherences().First().StartTime.Should().Be("2018-02-08 08:10".Utc());
 			result.OutOfAdherences().First().EndTime.Should().Be("2018-02-08 08:20".Utc());

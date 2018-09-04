@@ -219,14 +219,21 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ShiftLengthDecider>().As<IShiftLengthDecider>().SingleInstance();
 			builder.RegisterType<PersonSkillDayCreator>().As<IPersonSkillDayCreator>().SingleInstance();
 
+			builder.RegisterType<ShiftProjectionCacheManager>().InstancePerLifetimeScope();
+			builder.RegisterType<TeamScheduling>().SingleInstance();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_XXL_76496))
 			{
-				builder.RegisterType<WorkShiftFinderService>().As<IWorkShiftFinderService>().InstancePerLifetimeScope();				
+				builder.RegisterType<WorkShiftFinderService>().As<IWorkShiftFinderService>().InstancePerLifetimeScope();
+				builder.RegisterType<WorkShiftSelectorDoNotCallMainShiftProjectionTooManyTimes>().As<IWorkShiftSelector>().As<IWorkShiftSelectorForIntraInterval>().SingleInstance();
+				builder.RegisterType<TeamBlockRoleModelSelectorClearingProjections>().As<TeamBlockRoleModelSelector>().InstancePerLifetimeScope();
 			}
 			else
 			{
 				builder.RegisterType<WorkShiftFinderServiceOLD>().As<IWorkShiftFinderService>().InstancePerLifetimeScope();
+				builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>().As<IWorkShiftSelectorForIntraInterval>().SingleInstance();
+				builder.RegisterType<TeamBlockRoleModelSelector>().InstancePerLifetimeScope();
 			}
+			
 			builder.RegisterType<OccupiedSeatCalculator>().As<IOccupiedSeatCalculator>().SingleInstance();
 			builder.RegisterType<PersonSkillProvider>().As<IPersonSkillProvider>().SingleInstance();
 			builder.RegisterType<PeriodDistributionService>().As<IPeriodDistributionService>().SingleInstance();
@@ -465,8 +472,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AnalyticsScheduleChangeForAllReportableScenariosFilter>().As<IAnalyticsScheduleChangeUpdaterFilter>().SingleInstance();
 			builder.RegisterType<ThrowExceptionOnSkillMapError>().As<IAnalyticsPersonPeriodMapNotDefined>().SingleInstance();
 			builder.RegisterType<AssignScheduledLayers>().SingleInstance();
-			builder.RegisterType<ShiftProjectionCacheManager>().InstancePerLifetimeScope();
-			
+
 			registerForJobs(builder);
 			registerValidators(builder);
 		}
@@ -587,7 +593,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SameShiftBlockSpecification>().As<ISameShiftBlockSpecification>().SingleInstance();
 			builder.RegisterType<ValidSampleDayPickerFromTeamBlock>().As<IValidSampleDayPickerFromTeamBlock>().SingleInstance();
 			builder.RegisterType<TeamBlockSchedulingOptions>().As<ITeamBlockSchedulingOptions>().SingleInstance();
-			builder.RegisterType<TeamBlockRoleModelSelector>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockSchedulingCompletionChecker>().As<ITeamBlockSchedulingCompletionChecker>().SingleInstance();
 			builder.RegisterType<ProposedRestrictionAggregator>().SingleInstance();
 			builder.RegisterType<TeamBlockRestrictionAggregator>().As<ITeamBlockRestrictionAggregator>().SingleInstance();
@@ -597,7 +602,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<TeamMemberTerminationOnBlockSpecification>().As<ITeamMemberTerminationOnBlockSpecification>().SingleInstance();
 			builder.RegisterType<SplitSchedulePeriodToWeekPeriod>().As<ISplitSchedulePeriodToWeekPeriod>().SingleInstance();
-			builder.RegisterType<TeamScheduling>().SingleInstance();
 			builder.RegisterType<TeamBlockSingleDayScheduler>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockScheduler>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftProjectionCachesForIntraInterval>().InstancePerLifetimeScope();
@@ -612,7 +616,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OpenHourForDate>().As<IOpenHourForDate>().SingleInstance();
 			builder.RegisterType<ActivityIntervalDataCreator>().As<IActivityIntervalDataCreator>().SingleInstance();
 			builder.RegisterType<WorkShiftFromEditableShift>().As<IWorkShiftFromEditableShift>().SingleInstance();
-			builder.RegisterType<FirstShiftInTeamBlockFinder>().As<IFirstShiftInTeamBlockFinder>().InstancePerLifetimeScope();
+			builder.RegisterType<FirstShiftInTeamBlockFinder>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockOpenHoursValidator>().As<ITeamBlockOpenHoursValidator>().SingleInstance();
 		}
 
@@ -627,7 +631,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkShiftLengthValueCalculator>().As<IWorkShiftLengthValueCalculator>().SingleInstance();
 			builder.RegisterType<WorkShiftValueCalculator>().SingleInstance();
 			builder.RegisterType<EqualWorkShiftValueDecider>().As<IEqualWorkShiftValueDecider>().SingleInstance();
-			builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>().As<IWorkShiftSelectorForIntraInterval>().SingleInstance();
 			builder.RegisterType<PullTargetValueFromSkillIntervalData>().SingleInstance();
 			builder.RegisterType<WorkShiftSelectorForMaxSeat>().SingleInstance();
 			builder.RegisterType<IsAnySkillOpen>().SingleInstance();

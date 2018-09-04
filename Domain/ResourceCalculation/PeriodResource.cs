@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				weight = (double) fractionPeriod.Value.ElapsedTime().TotalMinutes / period.ElapsedTime().TotalMinutes;
 			}
 
-			var res = d.Resource - resource * weight;
+			var res = d.Resource - resource;
 			var count = d.Count - heads * weight;
 			if (res < 0 || Math.Round(res, 5) == 0.00000d)
 			{

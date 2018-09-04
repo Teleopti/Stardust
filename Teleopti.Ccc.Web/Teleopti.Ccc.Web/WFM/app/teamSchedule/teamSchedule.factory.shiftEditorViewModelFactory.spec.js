@@ -243,16 +243,64 @@
 					TopShiftLayerId: '11678e5a-ac3f-4daa-9577-a83800e49622'
 				},
 				{
+					ShiftLayerIds: ['31678e5a-ac3f-4daa-9577-a83800e49626'],
+					Color: '#8080c0',
+					Description: 'Sales',
+					Start: '2018-05-28 13:00',
+					End: '2018-05-28 13:30',
+					Minutes: 30,
+					IsOvertime: false,
+					ActivityId: '84db44f4-22a8-44c7-b376-a0a200da613e',
+					FloatOnTop: true,
+					IsPersonalActivity: true
+				},
+				{
+					ShiftLayerIds: ['31678e5a-ac3f-4daa-9577-a83800e49626'],
+					Color: '#FFA2CC',
+					Description: 'Social Media',
+					Start: '2018-05-28 13:30',
+					End: '2018-05-28 14:00',
+					Minutes: 30,
+					IsOvertime: false,
+					ActivityId: '35e33821-862f-461c-92db-9f0800a8d095',
+					FloatOnTop: true,
+					IsMeeting: true
+				},
+				{
 					ShiftLayerIds: ['31678e5a-ac3f-4daa-9577-a83800e49627'],
 					Color: '#8080c0',
 					Description: 'Lunch',
-					Start: '2018-05-28 13:00',
-					End: '2018-05-28 14:00',
+					Start: '2018-05-28 14:00',
+					End: '2018-05-28 15:00',
 					Minutes: 60,
 					IsOvertime: false,
 					ActivityId: '472e02c8-1a84-4064-9a3b-9b5e015ab3c7',
 					FloatOnTop: true
+				},
+				{
+					ShiftLayerIds: ['31678e5a-ac3f-4daa-9577-a83800e49626'],
+					Color: '#FFA2CC',
+					Description: 'Social Media',
+					Start: '2018-05-28 15:00',
+					End: '2018-05-28 15:30',
+					Minutes: 30,
+					IsOvertime: true,
+					ActivityId: '35e33821-862f-461c-92db-9f0800a8d095',
+					FloatOnTop: true
+				},
+				{
+					ShiftLayerIds: ['31678e5a-ac3f-4daa-9577-a83800e49616'],
+					Color: '#8080c0',
+					Description: 'Sales',
+					Start: '2018-05-28 15:30',
+					End: '2018-05-28 16:00',
+					Minutes: 30,
+					IsOvertime: false,
+					ActivityId: '84db44f4-22a8-44c7-b376-a0a200da613e',
+					FloatOnTop: true,
+					ParentPersonAbsences: ['abeeb355-cb4d-4e3f-86c1-a94d0056e29c']
 				}
+				
 			],
 			Timezone: { IanaId: 'Asia/Hong_Kong' },
 			UnderlyingScheduleSummary: underlyingScheduleSummary
@@ -265,13 +313,13 @@
 		expect(schedule.Timezone).toEqual('Asia/Hong_Kong');
 		expect(schedule.HasUnderlyingSchedules).toBe(true);
 		expect(schedule.ProjectionTimeRange.Start).toBe('2018-05-28 08:00');
-		expect(schedule.ProjectionTimeRange.End).toBe('2018-05-28 14:00');
+		expect(schedule.ProjectionTimeRange.End).toBe('2018-05-28 16:00');
 		expect(schedule.UnderlyingScheduleSummary.PersonalActivities[0].TimeSpan).toBe(
 			'2018-05-28 08:00 - 2018-05-28 09:00'
 		);
 		expect(schedule.UnderlyingScheduleSummary.PersonalActivities[0].Description).toBe('Chat');
 
-		expect(shiftLayers.length).toEqual(4);
+		expect(shiftLayers.length).toEqual(8);
 		expect(shiftLayers[0].Description).toEqual('E-mail');
 		expect(shiftLayers[0].Start).toEqual('2018-05-28 08:00');
 		expect(shiftLayers[0].End).toEqual('2018-05-28 10:00');
@@ -281,11 +329,26 @@
 		expect(shiftLayers[0].ShiftLayerIds).toEqual(['61678e5a-ac3f-4daa-9577-a83800e49622']);
 		expect(shiftLayers[0].Color).toEqual('#ffffff');
 		expect(shiftLayers[0].UseLighterBorder()).toEqual(false);
+
 		expect(shiftLayers[1].UseLighterBorder()).toEqual(true);
 		expect(shiftLayers[1].ShowDividedLine).toEqual(true);
+
 		expect(shiftLayers[2].TopShiftLayerId).toEqual('11678e5a-ac3f-4daa-9577-a83800e49622');
 		expect(shiftLayers[2].ShowDividedLine).toEqual(false);
+
 		expect(shiftLayers[3].FloatOnTop).toEqual(true);
+		expect(shiftLayers[3].IsPersonalActivity).toEqual(true);
+
+		expect(shiftLayers[4].FloatOnTop).toEqual(true);
+		expect(shiftLayers[4].IsMeeting).toEqual(true);
+
+		expect(shiftLayers[5].FloatOnTop).toEqual(true);
+
+		expect(shiftLayers[6].FloatOnTop).toEqual(true);
+		expect(shiftLayers[6].IsOvertime).toEqual(true);
+
+		expect(shiftLayers[7].FloatOnTop).toEqual(true);
+		expect(shiftLayers[7].IsIntradayAbsence).toEqual(true);
 	});
 
 	it('should create shift layers and underlying summary schedule timespan based on timezone', function () {
@@ -359,52 +422,50 @@
 		expect(viewModel.ShiftLayers[0].TimeSpan).toEqual('2018-03-25 01:00 - 2018-03-25 03:00');
 	});
 
-	it('should splice shift layer', function () {
+	it('should add shift layer', function () {
 		var schedule = {
 			PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
 			Name: 'Annika Andersson',
-			Date: '2018-08-21',
+			Date: '2018-08-30',
 			WorkTimeMinutes: 240,
 			ContractTimeMinutes: 240,
 			Projection: [
 				{
 					ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
-					Color: '#000000',
-					Description: 'E-mail',
-					Start: '2018-08-21 08:00',
-					End: '2018-08-21 09:00',
+					Color: '#ffffff',
+					Description: 'Phone',
+					Start: '2018-08-30 07:00',
+					End: '2018-08-30 08:00',
 					Minutes: 60,
-					IsOvertime: false
+					IsOvertime: true,
+					ActivityId: '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+				},
+				{
+					ShiftLayerIds: ['81678e5a-ac3f-4daa-9577-a83800e49622'],
+					Color: '#ffff00',
+					Description: 'Lunch',
+					Start: '2018-08-30 08:00',
+					End: '2018-08-30 09:00',
+					Minutes: 60,
+					IsOvertime: false,
+					ActivityId: '1ffeb898-11bf-43fc-8104-9b5e015ab3c2',
+					FloatOnTop: true
 				}
 			],
 			Timezone: { IanaId: 'Europe/Berlin' }
 		};
 
-		var viewModel = target.CreateSchedule('2018-08-21', 'Europe/Berlin', schedule);
-		viewModel.SpliceLayer({
-			Color: '#fff000',
-			Description: 'Phone',
-			ActivityId: 'fff78e5a-ac3f-4daa-9577-a83800e49622'
-		}, '2018-08-21 07:00', '2018-08-21 08:00', 0);
+		var viewModel = target.CreateSchedule('2018-08-30', 'Europe/Berlin', schedule);
+		viewModel.AddLayer(viewModel.ShiftLayers[0], '2018-08-30 09:00', '2018-08-30 10:00', 2);
 
-		expect(viewModel.ShiftLayers.length).toEqual(2);
-
-		expect(viewModel.ShiftLayers[0].Start).toEqual('2018-08-21 07:00');
-		expect(viewModel.ShiftLayers[0].End).toEqual('2018-08-21 08:00');
-		expect(viewModel.ShiftLayers[0].TimeSpan).toEqual('2018-08-21 07:00 - 2018-08-21 08:00');
-
-		
-		viewModel.SpliceLayer({
-			Color: '#fff000',
-			Description: 'Invoice',
-			ActivityId: 'ccc78e5a-ac3f-4daa-9577-a83800e49622'
-		}, '2018-08-21 08:00', '2018-08-21 09:00', 1,1);
-
-		expect(viewModel.ShiftLayers.length).toEqual(2);
-		expect(viewModel.ShiftLayers[1].ActivityId).toEqual('ccc78e5a-ac3f-4daa-9577-a83800e49622');
-		expect(viewModel.ShiftLayers[1].Start).toEqual('2018-08-21 08:00');
-		expect(viewModel.ShiftLayers[1].End).toEqual('2018-08-21 09:00');
-		expect(viewModel.ShiftLayers[1].TimeSpan).toEqual('2018-08-21 08:00 - 2018-08-21 09:00');
+		expect(viewModel.ShiftLayers[2].ShiftLayerIds).toEqual(['61678e5a-ac3f-4daa-9577-a83800e49622']);
+		expect(viewModel.ShiftLayers[2].Color).toEqual('#ffffff');
+		expect(viewModel.ShiftLayers[2].Description).toEqual('Phone');
+		expect(viewModel.ShiftLayers[2].Start).toEqual('2018-08-30 09:00');
+		expect(viewModel.ShiftLayers[2].End).toEqual('2018-08-30 10:00');
+		expect(viewModel.ShiftLayers[2].IsOvertime).toEqual(true);
+		expect(viewModel.ShiftLayers[2].ActivityId).toEqual('0ffeb898-11bf-43fc-8104-9b5e015ab3c2');
+		expect(viewModel.ShiftLayers[2].TimeSpan).toEqual('2018-08-30 09:00 - 2018-08-30 10:00');
 	});
 
 	it('should create shift layers with correct time span for overnight shift', function () {

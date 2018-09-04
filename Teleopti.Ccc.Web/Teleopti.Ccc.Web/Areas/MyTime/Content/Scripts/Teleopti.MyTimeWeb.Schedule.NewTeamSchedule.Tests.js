@@ -863,6 +863,7 @@
 	});
 
 	test('should map dayOff of MySchedule', function() {
+		fakeTeamScheduleData.MySchedule.Periods = [];
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
@@ -870,12 +871,87 @@
 
 		equal(vm.mySchedule().isDayOff, true);
 		equal(vm.mySchedule().dayOffName, 'Day off');
+
 		equal(
 			$('.my-schedule-column .new-teamschedule-layer-container .dayoff')
 				.text()
 				.replace(/(^\s*)|(\s*$)/g, ''),
 			'Day off'
 		);
+	});
+
+	test('should map dayOff of agent schedule', function() {
+		fakeTeamScheduleData.AgentSchedules[0] = {
+			Name: 'Test Day Off agent',
+			Periods: [],
+			IsDayOff: true,
+			DayOffName: 'Day off',
+			IsNotScheduled: false,
+			ShiftCategory: {
+				Id: null,
+				ShortName: 'DO',
+				Name: 'Day off',
+				DisplayColor: '#808080'
+			}
+		};
+		$('body').append(agentSchedulesHtml);
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+
+		vm.searchNameText('Test Day Off agent');
+		$('.new-teamschedule-search-container button[type="submit"]').click();
+
+		equal(
+			$('.teammates-schedules-column .new-teamschedule-layer-container .dayoff')
+				.text()
+				.replace(/(^\s*)|(\s*$)/g, ''),
+			'Day off'
+		);
+	});
+
+	test('should map day off but not show "Day off" text when having overtime on day offs', function() {
+		fakeTeamScheduleData.AgentSchedules[0] = {
+			Name: 'Test Day Off agent',
+			Periods: [
+				{
+					Title: 'E-mail',
+					TimeSpan: '01:00 PM - 02:00 PM',
+					Color: '128,128,255',
+					StartTime: selectedDate + 'T13:00:00',
+					EndTime: selectedDate + 'T14:00:00',
+					IsOvertime: true,
+					StartPositionPercentage: 0.5526,
+					EndPositionPercentage: 0.6579,
+					Meeting: null
+				}
+			],
+			IsDayOff: true,
+			DayOffName: 'Day off',
+			IsNotScheduled: false,
+			ShiftCategory: {
+				Id: null,
+				ShortName: 'DO',
+				Name: 'Day off',
+				DisplayColor: '#808080'
+			}
+		};
+		$('body').append(agentSchedulesHtml);
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+
+		vm.searchNameText('Test Day Off agent');
+		$('.new-teamschedule-search-container button[type="submit"]').click();
+
+		equal(
+			$('.teammates-schedules-column .new-teamschedule-layer-container .dayoff')
+				.text()
+				.replace(/(^\s*)|(\s*$)/g, ''),
+			''
+		);
+
+		equal($('.teammates-schedules-column .new-teamschedule-layer-container .dayoff').length, 1);
 	});
 
 	test('should map notScheduled of MySchedule', function() {
@@ -921,6 +997,22 @@
 
 		equal(completeLoadedCount, 2);
 		equal($('.teammates-schedules-container .dayoff').length == 1, true);
+	});
+
+	test('should filter agents using search name after switch show only day off toggle on desktop', function() {
+		$('body').append(agentSchedulesHtml);
+
+		if (fakeOriginalAgentSchedulesData.length > 0) {
+			fakeOriginalAgentSchedulesData[0].IsDayOff = true;
+		}
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+		vm.searchNameText('this is a test search name text');
+		$('.new-teamschedule-day-off-toggle input').click();
+
+		equal(completeLoadedCount, 2);
+		equal(ajaxOption.ScheduleFilter.searchNameText, 'this is a test search name text');
 	});
 
 	test('should reset paging after turn on show only day off toggle', function() {
@@ -1550,6 +1642,8 @@
 
 			fakeOriginalAgentSchedulesData.push(agentSchedule);
 		}
+
+		fakeTeamScheduleData.AgentSchedules = fakeOriginalAgentSchedulesData;
 	}
 
 	function setupAjax() {
@@ -1757,12 +1851,14 @@
 			'						</div>',
 			'					</div>',
 			'					<!-- /ko -->',
-			'					<!--ko if:mySchedule().isDayOff-->',
+			'					<!--ko if: mySchedule().isDayOff-->',
 			'					<div class="dayoff cursorpointer relative" data-bind="tooltip: { title: mySchedule().dayOffName, html: true, trigger: \'click\'}, hideTooltipAfterMouseLeave: true">',
+			'						<!-- ko if: mySchedule().layers && mySchedule().layers.length == 0 -->',
 			'						<span class="dayoff-text" data-bind="text: mySchedule().dayOffName"></span>',
+			'						<!-- /ko -->',
 			'					</div>',
 			'					<!--/ko-->',
-			'					<!-- ko if:mySchedule().isNotScheduled -->',
+			'					<!-- ko if: mySchedule().isNotScheduled -->',
 			'					<div class="not-scheduled-text" data-bind="tooltip: { title: \'@Resources.NotScheduled\', html: true, trigger: \'click\'}, hideTooltipAfterMouseLeave: true">@Resources.NotScheduled</div>',
 			'					<!-- /ko -->',
 			'				</div>',
@@ -1793,7 +1889,9 @@
 			'						<!-- /ko -->',
 			'						<!--ko if:isDayOff-->',
 			'						<div class="dayoff cursorpointer relative" data-bind="tooltip: { title: dayOffName, html: true, trigger: \'click\' }, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true">',
+			'							<!-- ko if: layers && layers.length == 0 -->',
 			'							<span class="dayoff-text" data-bind="text: dayOffName"></span>',
+			'							<!-- /ko -->',
 			'						</div>',
 			'						<!--/ko-->',
 			'						<!-- ko if:isNotScheduled -->',
@@ -1836,7 +1934,7 @@
 			'			<div class="new-teamschedule-time-slider-container">',
 			'				<label>@Resources.StartTime:</label>',
 			'				<!-- ko if: isHostAMobile-->',
-			'				<span class="start-time-clear-button cursorpointer">',
+			'				<span class="start-time-clear-button cursorpointer floatright">',
 			'					<i class="glyphicon glyphicon-remove"></i>',
 			'				</span>',
 			'				<!--/ko-->',
@@ -1854,7 +1952,7 @@
 			'			<div class="new-teamschedule-time-slider-container">',
 			'				<label>@Resources.EndTime:</label>',
 			'				<!-- ko if: isHostAMobile-->',
-			'				<span class="end-time-clear-button cursorpointer">',
+			'				<span class="end-time-clear-button cursorpointer floatright">',
 			'					<i class="glyphicon glyphicon-remove"></i>',
 			'				</span>',
 			'				<!--/ko-->',

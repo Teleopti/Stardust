@@ -12511,7 +12511,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Message in Portal when user have no email in People</comment>
   </data>
   <data name="YouGotANewBronzeBadgeForAdherence" xml:space="preserve">
-    <value>You got a new bronze badge! Your adherence in {1:yyyy-MM-dd} is above {0}.</value>
+    <value>You got a new bronze badge! Your ready time adherence in {1:yyyy-MM-dd} is above {0}.</value>
     <comment>Agent badge notification content</comment>
   </data>
   <data name="YouGotANewBronzeBadgeForAHT" xml:space="preserve">
@@ -12521,7 +12521,7 @@ Reduce the complexity to use these shifts.</value>
     <value>You got a new bronze badge! You have answered more than {0} calls in {1:yyyy-MM-dd}.</value>
   </data>
   <data name="YouGotANewGoldBadgeForAdherence" xml:space="preserve">
-    <value>You got a new gold badge! Your adherence is above {0} on {1} different days.</value>
+    <value>You got a new gold badge! Your ready time adherence is above {0} on {1} different days.</value>
     <comment>Agent badge notification content</comment>
   </data>
   <data name="YouGotANewGoldBadgeForAHT" xml:space="preserve">
@@ -12531,7 +12531,7 @@ Reduce the complexity to use these shifts.</value>
     <value>You got a new gold badge! You have answered {0} or more calls each day on {1} different days.</value>
   </data>
   <data name="YouGotANewSilverBadgeForAdherence" xml:space="preserve">
-    <value>You got a new silver badge! Your adherence is above {0} on {1} different days.</value>
+    <value>You got a new silver badge! Your ready time adherence is above {0} on {1} different days.</value>
     <comment>Agent badge notification content</comment>
   </data>
   <data name="YouGotANewSilverBadgeForAHT" xml:space="preserve">
@@ -12541,7 +12541,7 @@ Reduce the complexity to use these shifts.</value>
     <value>You got a new silver badge! You have answered {0} or more calls each day on {1} different days.</value>
   </data>
   <data name="BadgeWithRank_YouGotANewBronzeBadgeForAdherence" xml:space="preserve">
-    <value>You got a new bronze badge! Your adherence in {1:yyyy-MM-dd} is above {0}.</value>
+    <value>You got a new bronze badge! Your ready time adherence in {1:yyyy-MM-dd} is above {0}.</value>
     <comment>Agent badge notification content</comment>
   </data>
   <data name="BadgeWithRank_YouGotANewBronzeBadgeForAHT" xml:space="preserve">
@@ -12551,7 +12551,7 @@ Reduce the complexity to use these shifts.</value>
     <value>You got a new bronze badge! You have answered more than {0} calls in {1:yyyy-MM-dd}.</value>
   </data>
   <data name="BadgeWithRank_YouGotANewGoldBadgeForAdherence" xml:space="preserve">
-    <value>You got a new gold badge! Your adherence in {1:yyyy-MM-dd} is above {0}.</value>
+    <value>You got a new gold badge! Your ready time adherence in {1:yyyy-MM-dd} is above {0}.</value>
     <comment>Agent badge notification content</comment>
   </data>
   <data name="BadgeWithRank_YouGotANewGoldBadgeForAHT" xml:space="preserve">
@@ -12561,7 +12561,7 @@ Reduce the complexity to use these shifts.</value>
     <value>You got a new gold badge! You have answered more than {0} calls in {1:yyyy-MM-dd}.</value>
   </data>
   <data name="BadgeWithRank_YouGotANewSilverBadgeForAdherence" xml:space="preserve">
-    <value>You got a new silver badge! Your adherence in {1:yyyy-MM-dd} is above {0}.</value>
+    <value>You got a new silver badge! Your ready time adherence in {1:yyyy-MM-dd} is above {0}.</value>
     <comment>Agent badge notification content</comment>
   </data>
   <data name="BadgeWithRank_YouGotANewSilverBadgeForAHT" xml:space="preserve">
@@ -17711,5 +17711,9 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
   <data name="PasswordChangedSuccessfully" xml:space="preserve">
     <value>Your password was changed</value>
     <comment>When password is successfully changed</comment>
+  </data>
+  <data name="BeforeRunningAForecastYouNeedToCreateASkillDot" xml:space="preserve">
+    <value>Before running a forecast you need to create a skill.</value>
+    <comment>Before running a forecast you need to create a skill.</comment>
   </data>
 </root>

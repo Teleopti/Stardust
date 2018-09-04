@@ -93,6 +93,7 @@
 	self.showOnlyDayOff.subscribe(function(value) {
 		if (!self.isMobileEnabled) {
 			self.filter.isDayOff = value;
+			self.filter.searchNameText = self.searchNameText();
 
 			if (value) {
 				self.paging.skip = 0;
@@ -216,7 +217,6 @@
 		var timelineStart = data.TimeLine[0].Time;
 
 		self.mySchedule(createMySchedule(data.MySchedule, timelineStart));
-
 		self.teamSchedules(createTeamSchedules(data.AgentSchedules, timelineStart));
 
 		setSelectedDateSubscription();

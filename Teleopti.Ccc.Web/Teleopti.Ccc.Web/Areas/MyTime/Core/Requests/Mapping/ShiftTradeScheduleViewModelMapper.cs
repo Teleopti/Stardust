@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -37,6 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly IShiftTradeAddScheduleLayerViewModelMapper _layerMapper;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IShiftTradeMultiSchedulesSelectableChecker _selectableChecker;
+		private readonly INow _now;
 
 		public ShiftTradeScheduleViewModelMapper(IShiftTradeRequestProvider shiftTradeRequestProvider,
 			IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider,
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			IShiftTradeTimeLineHoursViewModelMapper shiftTradeTimeLineHoursViewModelMapper,
 			IPersonRequestRepository personRequestRepository,
 			IScheduleProvider scheduleProvider,
-			ILoggedOnUser loggedOnUser, IShiftTradeSiteOpenHourFilter shiftTradeSiteOpenHourFilter, IProjectionChangedEventBuilder builder, IPersonRepository personRepository, IPersonNameProvider personNameProvider, IShiftTradeAddScheduleLayerViewModelMapper layerMapper, IPermissionProvider permissionProvider, IShiftTradeMultiSchedulesSelectableChecker selectableChecker)
+			ILoggedOnUser loggedOnUser, IShiftTradeSiteOpenHourFilter shiftTradeSiteOpenHourFilter, IProjectionChangedEventBuilder builder, IPersonRepository personRepository, IPersonNameProvider personNameProvider, IShiftTradeAddScheduleLayerViewModelMapper layerMapper, IPermissionProvider permissionProvider, IShiftTradeMultiSchedulesSelectableChecker selectableChecker, INow now)
 		{
 			_shiftTradeRequestProvider = shiftTradeRequestProvider;
 			_possibleShiftTradePersonsProvider = possibleShiftTradePersonsProvider;
@@ -60,6 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			_layerMapper = layerMapper;
 			_permissionProvider = permissionProvider;
 			_selectableChecker = selectableChecker;
+			_now = now;
 		}
 
 		public ShiftTradeScheduleViewModel Map(ShiftTradeScheduleViewModelData data)
@@ -163,6 +164,70 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var possibleTradeSchedule = getBulletinSchedules(filteredShiftExchangeOffers, data.Paging);
 
 			return getShiftTradeScheduleViewModel(data.Paging, myScheduleViewModel, possibleTradeSchedule, data.ShiftTradeDate);
+		}
+
+		private static IEnumerable<IVirtualSchedulePeriod> extractVirtualPeriods(IPerson person, DateOnlyPeriod period)
+		{
+			if (person == null)
+				throw new ArgumentNullException(nameof(person));
+
+			var virtualPeriods = new HashSet<IVirtualSchedulePeriod>();
+			foreach (var dateOnly in period.DayCollection())
+			{
+				virtualPeriods.Add(person.VirtualSchedulePeriod(dateOnly));
+			}
+			return virtualPeriods;
+		}
+
+		private IList<ContractTimeInfoViewModel> getContractInfos(IPerson person, DateOnlyPeriod shiftTradeOpenPeriod)
+		{
+			var shiftTradeTargetTimeFlexibility = person.WorkflowControlSet.ShiftTradeTargetTimeFlexibility.Minutes;
+			var virtualSchedulePeriods = extractVirtualPeriods(person, shiftTradeOpenPeriod);
+
+			return (from schedulePeriod in virtualSchedulePeriods
+				let contractNegativeWorkTimeTolerance = schedulePeriod.Contract.NegativePeriodWorkTimeTolerance.TotalMinutes
+				let contractNegativeDayoffTolerance = schedulePeriod.AverageWorkTimePerDay.TotalMinutes * schedulePeriod.Contract.NegativeDayOffTolerance
+				let contracePositiveWorkTimeTolerance = schedulePeriod.Contract.PositivePeriodWorkTimeTolerance.TotalMinutes
+				let contractPositiveDayoffTolerance = schedulePeriod.AverageWorkTimePerDay.TotalMinutes * schedulePeriod.Contract.PositiveDayOffTolerance
+				select new ContractTimeInfoViewModel
+				{
+					PeriodStart = schedulePeriod.DateOnlyPeriod.StartDate.Date,
+					PeriodEnd = schedulePeriod.DateOnlyPeriod.EndDate.Date,
+					ContractTimeMinutes = getTotalContractTime(schedulePeriod),
+					ToleranceBlanceInMinutes = contractNegativeWorkTimeTolerance + contractNegativeDayoffTolerance + shiftTradeTargetTimeFlexibility,
+					ToleranceBalanceOutMinutes = contracePositiveWorkTimeTolerance + contractPositiveDayoffTolerance + shiftTradeTargetTimeFlexibility
+				}).ToList();
+		}
+
+		private double getTotalContractTime(IVirtualSchedulePeriod schedulePeriod)
+		{
+			var totalWorkDays = schedulePeriod.DateOnlyPeriod.DayCount() - schedulePeriod.DaysOff();
+			var totalContractTime = schedulePeriod.AverageWorkTimePerDay.TotalMinutes * totalWorkDays;
+			totalContractTime = totalContractTime - schedulePeriod.BalanceIn.TotalMinutes;
+			totalContractTime = totalContractTime + schedulePeriod.BalanceOut.TotalMinutes;
+			return totalContractTime;
+		}
+
+		public DateOnlyPeriod GetShiftTradeOpenPeriod(IPerson person)
+		{
+			var timeZone = person.PermissionInformation.DefaultTimeZone();
+			var agentToday = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timeZone));
+			var openPeriodStart = agentToday.AddDays(person.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum);
+			var openPeriodEnd = agentToday.AddDays(person.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Maximum);
+			return new DateOnlyPeriod(openPeriodStart, openPeriodEnd);
+		}
+
+		public ShiftTradeToleranceInfoViewModel GetToleranceInfo(Guid personToId)
+		{
+			var personTo = _personRepository.Get(personToId);
+			var myShiftTradeOpenPeriod = GetShiftTradeOpenPeriod(_loggedOnUser.CurrentUser());
+			var personToShiftTradeOpenPeriod = GetShiftTradeOpenPeriod(personTo);
+			return new ShiftTradeToleranceInfoViewModel
+			{
+				IsNeedToCheck = _selectableChecker.IsNeedCheckTolerance(),
+				MyInfos = getContractInfos(_loggedOnUser.CurrentUser(), myShiftTradeOpenPeriod),
+				PersonToInfos = getContractInfos(personTo, personToShiftTradeOpenPeriod)
+			};
 		}
 
 		public ShiftTradeMultiSchedulesViewModel GetMeAndPersonToSchedules(DateOnlyPeriod period, Guid personToId)

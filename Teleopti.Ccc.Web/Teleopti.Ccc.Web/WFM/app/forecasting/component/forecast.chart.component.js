@@ -48,8 +48,7 @@ function ForecastChartCtrl($translate, $filter, $timeout, SkillTypeService) {
 			averageTaskTimeSeries: ['AverageTaskTime'],
 			totalAverageTaskTimeSeries: ['TotalAverageTaskTime'],
 			campaignSeries: ['Campaign'],
-			overrideSeries: ['Override'],
-			campaignAndOverrideSeries: ['CampaignAndOverride']
+			overrideSeries: ['Override']
 		};
 
 		for (var i = 0; i < days.length; i++) {
@@ -72,12 +71,6 @@ function ForecastChartCtrl($translate, $filter, $timeout, SkillTypeService) {
 			} else {
 				preparedData.overrideSeries.push(null);
 			}
-
-			if (days[i].HasOverride && days[i].HasCampaign) {
-				preparedData.campaignAndOverrideSeries.push(1);
-			} else {
-				preparedData.campaignAndOverrideSeries.push(null);
-			}
 		}
 
 		chart = c3.generate({
@@ -96,8 +89,7 @@ function ForecastChartCtrl($translate, $filter, $timeout, SkillTypeService) {
 
 					preparedData.dateSeries,
 					preparedData.campaignSeries,
-					preparedData.overrideSeries,
-					preparedData.campaignAndOverrideSeries
+					preparedData.overrideSeries
 				],
 				colors: {
 					TotalTasks: '#0099FF',
@@ -119,10 +111,12 @@ function ForecastChartCtrl($translate, $filter, $timeout, SkillTypeService) {
 				names: {
 					TotalTasks: dataName.TotalTasks + '←',
 					Tasks: dataName.Tasks + '←',
-					TotalAverageTaskTime: dataName.TotalATW + '→',
+					TotalAverageTaskTime: dataName.TotalTaskTime + '→',
 					AverageAfterTaskTime: dataName.ATW + '→',
-					AverageTaskTime: 'AverageTaskTime' + '→',
-					TotalAverageAfterTaskTime: dataName.TaskTime + '→',
+					AverageTaskTime: dataName.TaskTime + '→',
+					TotalAverageAfterTaskTime: dataName.TotalATW + '→',
+					Override: $translate.instant('Override'),
+					Campaign: $translate.instant('Campaign')
 				},
 				hide: ['Tasks', 'AverageTaskTime', 'AverageAfterTaskTime'],
 				selection: {
@@ -145,10 +139,10 @@ function ForecastChartCtrl($translate, $filter, $timeout, SkillTypeService) {
 						ctrl.onClick(selectedItems);
 					}
 				}
-
-
 			},
-
+			legend: {
+				hide: ['Override', 'Campaign'] 
+			},
 			point: {
 				focus: {
 					expand: {
@@ -162,6 +156,9 @@ function ForecastChartCtrl($translate, $filter, $timeout, SkillTypeService) {
 			tooltip: {
 				format: {
 					value: d3.format('.1f')
+				},
+				order: function (t1, t2) {
+					return t1.id < t2.id;
 				}
 			},
 			axis: {

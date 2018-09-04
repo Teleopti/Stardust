@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 
@@ -49,15 +48,20 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			    return true;
 		    }).SelectMany(getShiftsForRuleSet).ToArray();
 
-		    foreach (var shiftProjectionCache in shiftProjectionCaches)
-		    {
-				shiftProjectionCache.SetDate(dateOnlyAsDateTimePeriod);
-		    }
+		    SetDateOnShiftProjectionCaches(dateOnlyAsDateTimePeriod, shiftProjectionCaches);
 			
 			return shiftProjectionCaches;
 		}
 
-	    public IList<ShiftProjectionCache> ShiftProjectionCachesFromRuleSets(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod, IRuleSetBag bag, bool forRestrictionsOnly, bool checkExcluded)
+		protected virtual void SetDateOnShiftProjectionCaches(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod, IEnumerable<ShiftProjectionCache> shiftProjectionCaches)
+		{
+			foreach (var shiftProjectionCache in shiftProjectionCaches)
+			{
+				shiftProjectionCache.SetDate(dateOnlyAsDateTimePeriod);
+			}
+		}
+
+		public IList<ShiftProjectionCache> ShiftProjectionCachesFromRuleSets(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod, IRuleSetBag bag, bool forRestrictionsOnly, bool checkExcluded)
 	    {
 		    if (bag == null)
 			    return new List<ShiftProjectionCache>();

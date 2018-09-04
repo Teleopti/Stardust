@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
@@ -31,8 +32,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
 					new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy());
 
+			var dataManager = new FakeTenantLogonDataManager();
+			dataManager.SetLogon(personWithId.Id.Value,"aaa","");
+
 			var unitOfWorkFactory = new FakeCurrentUnitOfWorkFactory(null);
-			var target = new GetPeopleByGroupPageGroupForDateRangeQueryHandler(groupingReadOnlyRepository, personRepository, assembler,
+			var target = new GetPeopleByGroupPageGroupForDateRangeQueryHandler(groupingReadOnlyRepository,
+				personRepository, new PersonCredentialsAppender(assembler, new TenantPeopleLoader(dataManager)),
 				unitOfWorkFactory);
 			var dateOnly = new DateOnly(2012, 4, 30);
 
@@ -43,6 +48,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 					QueryRange = new DateOnlyPeriodDto {StartDate = new DateOnlyDto { DateTime = dateOnly.Date },EndDate = new DateOnlyDto {DateTime = dateOnly.Date } }
 				});
 			result.Count.Should().Be.EqualTo(1);
+			result.First().ApplicationLogOnName.Should().Be.EqualTo("aaa");
 		}
 	}
 }

@@ -150,12 +150,14 @@
 						</div>
 					</div>
 					<!-- /ko -->
-					<!--ko if:mySchedule().isDayOff-->
+					<!--ko if: mySchedule().isDayOff-->
 					<div class="dayoff cursorpointer relative" data-bind="tooltip: { title: mySchedule().dayOffName, html: true, trigger: 'click'}, hideTooltipAfterMouseLeave: true">
+						<!-- ko if: mySchedule().layers && mySchedule().layers.length == 0 -->
 						<span class="dayoff-text" data-bind="text: mySchedule().dayOffName"></span>
+						<!-- /ko -->
 					</div>
 					<!--/ko-->
-					<!-- ko if:mySchedule().isNotScheduled -->
+					<!-- ko if: mySchedule().isNotScheduled -->
 					<div class="not-scheduled-text" data-bind="tooltip: { title: '@Resources.NotScheduled', html: true, trigger: 'click'}, hideTooltipAfterMouseLeave: true">@Resources.NotScheduled</div>
 					<!-- /ko -->
 				</div>
@@ -187,7 +189,9 @@
 						<!-- /ko -->
 						<!--ko if:isDayOff-->
 						<div class="dayoff cursorpointer relative" data-bind="tooltip: { title: dayOffName, html: true, trigger: 'click' }, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true">
+							<!-- ko if: layers && layers.length == 0 -->
 							<span class="dayoff-text" data-bind="text: dayOffName"></span>
+							<!-- /ko -->
 						</div>
 						<!--/ko-->
 						<!-- ko if:isNotScheduled -->
@@ -232,7 +236,7 @@
 			<div class="new-teamschedule-time-slider-container">
 				<label>@Resources.StartTime:</label>
 				<!-- ko if: isHostAMobile-->
-				<span class="start-time-clear-button cursorpointer">
+				<span class="start-time-clear-button cursorpointer floatright">
 					<i class="glyphicon glyphicon-remove"></i>
 				</span>
 				<!--/ko-->
@@ -251,7 +255,7 @@
 			<div class="new-teamschedule-time-slider-container">
 				<label>@Resources.EndTime:</label>
 				<!-- ko if: isHostAMobile-->
-				<span class="end-time-clear-button cursorpointer">
+				<span class="end-time-clear-button cursorpointer floatright">
 					<i class="glyphicon glyphicon-remove"></i>
 				</span>
 				<!--/ko-->

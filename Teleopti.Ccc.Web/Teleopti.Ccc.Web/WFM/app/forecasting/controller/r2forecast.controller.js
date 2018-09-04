@@ -46,6 +46,11 @@
 						}
 					});
 				});
+				//console.log(vm.skills);
+				if (vm.skills.length < 1) {
+					console.log('skills count: ' + vm.skills.length);
+					$state.go('forecast-no-skills');
+				}
 			});
 		}
 

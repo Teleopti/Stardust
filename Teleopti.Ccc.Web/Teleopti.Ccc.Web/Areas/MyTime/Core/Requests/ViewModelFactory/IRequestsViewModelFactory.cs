@@ -27,5 +27,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		AbsenceAccountViewModel GetAbsenceAccountViewModel(Guid absenceId, DateOnly date);
 
 		ShiftTradeMultiSchedulesViewModel CreateShiftTradeMultiSchedulesViewModel(ShiftTradeMultiSchedulesForm input);
+		ShiftTradeToleranceInfoViewModel CreateShiftTradeToleranceViewModel(Guid personToId);
 	}
 }

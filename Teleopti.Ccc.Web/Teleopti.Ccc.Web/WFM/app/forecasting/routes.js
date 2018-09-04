@@ -43,9 +43,13 @@
 			})
 			.state('forecast-create-skill', {
 				url: '/forecast/create',
-				templateUrl: 'app/forecasting/html/skill.create.html',
+				templateUrl: 'app/forecasting/html/skillCreate.html',
 				controller: 'ForecastingSkillCreateController',
 				controllerAs: 'vm'
+			})
+			.state('forecast-no-skills', {
+				url: '/forecast/noskills',
+				templateUrl: 'app/forecasting/html/noSkills.html'
 			});
 	}
 })();

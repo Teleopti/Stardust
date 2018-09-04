@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			var meetings = schedulePart.PersonMeetingCollection();
 			var personalAssignment = schedulePart.PersonAssignment();
 			IList<ShiftProjectionCache> workShiftsWithinPeriod =
-				shiftList.Select(s => new {s, Period = s.MainShiftProjection.Period()})
+				shiftList.Select(s => new {s, Period = s.MainShiftProjection().Period()})
 					.Where(
 						s =>
 							s.Period.HasValue && s.Period.Value.Contains(period.Value) &&

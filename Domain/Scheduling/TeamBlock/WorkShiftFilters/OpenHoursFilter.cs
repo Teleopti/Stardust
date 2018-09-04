@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			return shifts.Select(shiftProjectionCache => new
 			{
 				shiftProjectionCache,
-				isClosed = shiftProjectionCache.MainShiftProjection.Any(
+				isClosed = shiftProjectionCache.MainShiftProjection().Any(
 					visualLayer => !_isAnySkillOpen.Check(skillDays, visualLayer, agentTimeZoneInfo))
 			}).Where(t => !t.isClosed).Select(t => t.shiftProjectionCache).ToList();
 		}
