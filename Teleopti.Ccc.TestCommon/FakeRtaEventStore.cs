@@ -18,8 +18,10 @@ namespace Teleopti.Ccc.TestCommon
 			public Guid PersonId;
 			public DateTimePeriod Period;
 			public IEvent Event;
-			public int Id { get; set; }
+			public int Id;
 		}
+
+		private int _id = 0;
 
 		public FakeRtaEventStore(Lazy<IRtaEventStoreSynchronizer> synchronizer)
 		{
@@ -33,11 +35,10 @@ namespace Teleopti.Ccc.TestCommon
 			var rtaStoredEvent = (@event as IRtaStoredEvent).QueryData();
 			if (rtaStoredEvent == null)
 				return;
-			var lastEventId = _events.Count;
-			
+
 			_events.Add(new storedEvent
 			{
-				Id = ++lastEventId,
+				Id = _id = _id + 1,
 				PersonId = rtaStoredEvent.PersonId.Value,
 				Period = new DateTimePeriod(rtaStoredEvent.StartTime.Value, rtaStoredEvent.EndTime.Value),
 				Event = @event
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public int Remove(DateTime removeUntil, int maxEventsToRemove) => throw new NotImplementedException();
 
-		public IEnumerable<IEvent> LoadAll() => _events.Select(e=>e.Event);
+		public IEnumerable<IEvent> LoadAll() => _events.Select(e => e.Event);
 
 		public IEnumerable<IEvent> Load(Guid personId, DateTimePeriod period)
 		{
@@ -69,11 +70,19 @@ namespace Teleopti.Ccc.TestCommon
 				?.Event;
 		}
 
-		public IEnumerable<IEvent> LoadFrom(int latestSynchronizedEvent)
+		public LoadedEvents LoadFrom(int latestSynchronizedEvent)
 		{
-			return _events
+			var events = _events
 				.Where(e => e.Id > latestSynchronizedEvent)
 				.Select(e => e.Event);
+			
+			var maxId = _events.Max(e => e.Id);
+			
+			return new LoadedEvents
+			{
+				MaxId = maxId,
+				Events = events
+			};
 		}
 	}
 }

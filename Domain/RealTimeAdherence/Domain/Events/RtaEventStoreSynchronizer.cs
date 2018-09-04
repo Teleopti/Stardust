@@ -52,10 +52,9 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events
 						
 			var events = _events.LoadFrom(loadFromEvent);
 
-			var maxEventId = events.Count() + loadFromEvent;
-			_keyValueStore.Update("LatestSynchronizedRTAEvent", maxEventId.ToString());
+			_keyValueStore.Update("LatestSynchronizedRTAEvent",  events.MaxId.ToString());
 			
-			var queryData = events.Select(e => e as IRtaStoredEvent).Select(x => x.QueryData());
+			var queryData = events.Events.Select(e => e as IRtaStoredEvent).Select(x => x.QueryData());
 			queryData.ForEach(q =>
 			{
 				var adherenceDay = _adherenceDayLoader.Load(q.PersonId.Value, q.StartTime.Value.ToDateOnly());

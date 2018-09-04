@@ -122,10 +122,11 @@ ORDER BY [Id] DESC
 				.SingleOrDefault();
 		}
 
-		public IEnumerable<IEvent> LoadFrom(int latestSynchronizedEvent)
+		public LoadedEvents LoadFrom(int fromEventId)
 		{
 			throw new NotImplementedException();
 		}
+
 
 		private IEnumerable<IEvent> load(IQuery query) =>
 			query
