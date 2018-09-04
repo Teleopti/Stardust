@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -11,6 +10,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
+using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.MultiTenancy
@@ -21,25 +21,25 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		private readonly IPersonInfoMapper _mapper;
 		private readonly IDeletePersonInfo _deletePersonInfo;
 		private readonly IFindLogonInfo _findLogonInfo;
-		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 		private readonly SignatureCreator _signatureCreator;
+		private readonly ISessionSpecificWfmCookieProvider _sessionWfmCookieProvider;
 
 		public PersonInfoController(IPersistPersonInfo persister,
 									IPersonInfoMapper mapper,
 									IDeletePersonInfo deletePersonInfo,
 									IFindLogonInfo findLogonInfo,
-									ILoggedOnUser loggedOnUser,
 									ITenantUnitOfWork tenantUnitOfWork,
-									SignatureCreator signatureCreator)
+									SignatureCreator signatureCreator,
+									ISessionSpecificWfmCookieProvider cookieProvider)
 		{
 			_persister = persister;
 			_mapper = mapper;
 			_deletePersonInfo = deletePersonInfo;
 			_findLogonInfo = findLogonInfo;
-			_loggedOnUser = loggedOnUser;
 			_tenantUnitOfWork = tenantUnitOfWork;
 			_signatureCreator = signatureCreator;
+			_sessionWfmCookieProvider = cookieProvider;
 		}
 
 		[HttpPost, Route("PersonInfo/Persist")]
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		[TenantUnitOfWork]
 		public virtual IHttpActionResult LogonInfoFromGuid(Guid personId)
 		{
-			return Ok(_findLogonInfo.GetForIds(new []{ personId }).FirstOrDefault());
+			return Ok(_findLogonInfo.GetForIds(new []{ personId }));
 		}
 
 		[HttpGet, Route("PersonInfo/LogonFromName")]
@@ -188,6 +188,14 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		public virtual IHttpActionResult LogonInfosFromIdentities([FromBody]IEnumerable<string> identities)
 		{
 			return Ok(_findLogonInfo.GetForIdentities(identities));
+		}
+
+		[HttpGet, Route("PersonInfo/IsTeleoptiApplicationLogon")]
+		[TenantUnitOfWork]
+		public virtual IHttpActionResult IsTeleoptiApplicationLogon()
+		{
+			var sessionData = _sessionWfmCookieProvider.GrabFromCookie();
+			return Ok( new { IsTeleoptiApplicationLogon = sessionData.IsTeleoptiApplicationLogon});
 		}
 	}
 }

@@ -1,4 +1,5 @@
 using System;
+using DotNetOpenAuth.Messaging;
 using log4net;
 
 namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
@@ -11,7 +12,8 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 		private const int dataSourcePosition = 1;
 		private const int personPosition = 2;
 		private const int tenantPasswordPosition = 3;
-		private const string stringFormat = "{1}{0}{2}{0}{3}{0}{4}";
+		private const int isTeleoptiApplicationLogonPosition = 4;
+		private const string stringFormat = "{1}{0}{2}{0}{3}{0}{4}{0}{5}";
 
 		public SessionSpecificDataStringSerializer(ILog logger)
 		{
@@ -20,12 +22,13 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 
 		public string Serialize(SessionSpecificData data)
 		{
-			var dataArray = new object[5];
+			var dataArray = new object[6];
 			dataArray[0] = delimiter;
 			dataArray[businessUnitPosition+1] = data.BusinessUnitId;
 			dataArray[dataSourcePosition+1] = data.DataSourceName;
 			dataArray[personPosition+1] = data.PersonId;
 			dataArray[tenantPasswordPosition+1] = data.TenantPassword;
+			dataArray[isTeleoptiApplicationLogonPosition + 1] = data.IsTeleoptiApplicationLogon;
 
 			return string.Format(stringFormat, dataArray);
 		}
@@ -35,12 +38,20 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			if (string.IsNullOrEmpty(stringData))
 				return null; 
 			var split = stringData.Split(delimiter);
+
+			var isTeleoptiApplicationLogon = false;
+			if (split.Length >= isTeleoptiApplicationLogonPosition + 1)
+			{
+				isTeleoptiApplicationLogon = Convert.ToBoolean(split[isTeleoptiApplicationLogonPosition]);
+			}
+
 			try
 			{
 				return new SessionSpecificData(new Guid(split[businessUnitPosition]),
 															split[dataSourcePosition],
-															new Guid(split[personPosition]), split[tenantPasswordPosition]);
-
+															new Guid(split[personPosition]), 
+															split[tenantPasswordPosition],
+															isTeleoptiApplicationLogon);
 			}
 			catch (FormatException)
 			{

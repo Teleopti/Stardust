@@ -93,8 +93,7 @@ export class LogonInfoService {
 	}
 
 	getLogonInfoFromUser(personId: string) {
-		const params = new HttpParams().set('personId', personId);
-		return this.http.get('../PersonInfo/LogonInfoFromGuid', { params }) as Observable<LogonInfo>;
+		return this.http.get('../PersonInfo/IsTeleoptiApplicationLogon') as Observable<LogonInfo>;
 	}
 
 	appLogonExists(logon: string): Observable<boolean> {
