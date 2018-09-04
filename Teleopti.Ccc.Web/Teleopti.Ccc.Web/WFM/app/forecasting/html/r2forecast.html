@@ -6,16 +6,6 @@
 		<ng2-feedback-message [feedback-type]="'newRelease'" [component-name]="'Forecasts' | translate"></ng2-feedback-message>
 	</div>
 </div>
-
-<div class="con-row" ng-if="!vm.hasSkills">
-	<div class="con-flex">
-		<div class="line-center">
-			<i class="mdi mdi-information-outline huge-icon line-center"></i>
-			<h2>{{'HelpCreatePlanningGroup' | translate}}</h2>
-			<button class="wfm-btn wfm-btn-primary" ng-click="vm.goForm()">{{'CreatePlanningGroup' | translate}}</button>
-		</div>
-	</div>
-</div>
 	<div class="con-row">
 		<div class="con-flex">
 			<div class="panel material-depth-1 full-padding align-row-baseline" style="justify-content: space-between;">
