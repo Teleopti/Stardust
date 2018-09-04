@@ -28,9 +28,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 		{
 			var result = new WorkloadAccuracy
 			{
-				Id = workload.Id.Value,
-				Name = workload.Name,
-				Accuracies = new MethodAccuracy[] { }
+				ForecastMethodTypeForTasks = ForecastMethodType.None,
+				ForecastMethodTypeForTaskTime = ForecastMethodType.None,
 			};
 
 			var availablePeriod = _historicalPeriodProvider.AvailablePeriod(workload);
@@ -70,17 +69,14 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 					secondPeriodData.TaskOwnerDayCollection);
 				methodsEvaluationResult.Add(new MethodAccuracy
 				{
-					Number = accuracyModel.TasksPercentageError,
-					MethodId = forecastMethod.Id,
-					PeriodEvaluateOn = twoPeriods.Item2,
-					PeriodUsedToEvaluate = twoPeriods.Item1
+					NumberForTask = accuracyModel.TasksPercentageError,
+					NumberForTaskTime = accuracyModel.TaskTimePercentageError,
+					MethodId = forecastMethod.Id
 				});
 			}
 
-			var bestMethod = methodsEvaluationResult.OrderByDescending(x => x.Number).First();
-			bestMethod.IsSelected = true;
-
-			result.Accuracies = methodsEvaluationResult.ToArray();
+			result.ForecastMethodTypeForTasks = methodsEvaluationResult.OrderByDescending(x => x.NumberForTask).First().MethodId;
+			result.ForecastMethodTypeForTaskTime = methodsEvaluationResult.OrderByDescending(x => x.NumberForTaskTime).First().MethodId;
 			return result;
 		}
 

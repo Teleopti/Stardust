@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 				Scenario = ScenarioFactory.CreateScenarioWithId("default", true),
 				WorkLoad = workload,
 				HistoricalPeriod = new DateOnlyPeriod(2015, 1, 1, 2015, 2, 1),
-				ForecastMethodId = ForecastMethodType.TeleoptiClassicLongTerm,
+				BestForecastMethods = new WorkloadAccuracy(){ForecastMethodTypeForTasks = ForecastMethodType.TeleoptiClassicLongTerm},
 				SkillDays = new List<ISkillDay>(),
 				FuturePeriod = new DateOnlyPeriod(2015, 3, 1, 2015, 3, 1)
 			};
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var forecastMethodProvider = MockRepository.GenerateMock<IForecastMethodProvider>();
 			var method = MockRepository.GenerateMock<IForecastMethod>();
 			method.Stub(x => x.ForecastTasks(null, new DateOnlyPeriod())).IgnoreArguments().Return(new Dictionary<DateOnly, double>());
-			forecastMethodProvider.Stub(x => x.Get(quickForecasterWorkloadParams.ForecastMethodId)).Return(method);
+			forecastMethodProvider.Stub(x => x.Get(quickForecasterWorkloadParams.BestForecastMethods.ForecastMethodTypeForTasks)).Return(method);
 			var historicalData = MockRepository.GenerateMock<IHistoricalData>();
 			var dateOnly = new DateOnly(2015, 1, 1);
 

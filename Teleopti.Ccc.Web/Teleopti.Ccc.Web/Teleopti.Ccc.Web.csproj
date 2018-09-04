@@ -398,7 +398,6 @@
     <Compile Include="Areas\Forecasting\Models\ForecastResultInput.cs" />
     <Compile Include="Areas\Forecasting\Models\ForecastResultViewModel.cs" />
     <Compile Include="Areas\Forecasting\Models\OverrideInput.cs" />
-    <Compile Include="Areas\Forecasting\Models\SkillsViewModel.cs" />
     <Compile Include="Areas\Gamification\Controller\GamificationCalculationController.cs" />
     <Compile Include="Areas\Gamification\Controller\GamificationController.cs" />
     <Compile Include="Areas\Gamification\Core\DataProvider\GamificationSettingPersister.cs" />

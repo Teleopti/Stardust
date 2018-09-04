@@ -4,6 +4,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 {
@@ -18,9 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 
 		protected override void Assert(WorkloadAccuracy measurementResult)
 		{
-			measurementResult.Id.Should().Be.EqualTo(Workload.Id.Value);
-			measurementResult.Accuracies.First().IsSelected.Should().Be.True();
-			measurementResult.Accuracies.Second().IsSelected.Should().Be.False();
+			measurementResult.ForecastMethodTypeForTasks.Should().Not.Be(ForecastMethodType.None);
 		}
 	}
 }

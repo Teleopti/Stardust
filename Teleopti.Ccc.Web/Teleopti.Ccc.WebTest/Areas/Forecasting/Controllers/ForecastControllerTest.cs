@@ -1566,11 +1566,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var target = new ForecastController(null, SkillRepository, null, null, null, FullPermission,
 				null, null, null, null, null);
 
-			var result = target.Skills();
-			result.Skills.Single().Id.Should().Be.EqualTo(skill.Id.Value);
-			result.Skills.Single().Workloads.Single().Id.Should().Be.EqualTo(workload.Id.Value);
-			result.Skills.Single().Workloads.Single().Name.Should().Be.EqualTo(workloadName);
-			result.Skills.Single().SkillType.Should().Be.EqualTo(skill.SkillType.Description.Name);
+			dynamic data = target.Skills();
+			var result = data.Content;
+
+			IEnumerable<dynamic> skills = result.Skills;
+			Assert.AreEqual(skills.Single().Id, skill.Id.Value);
+			Assert.AreEqual(skills.Single().SkillType, skill.SkillType.Description.Name);
+
+			IEnumerable<dynamic> workloads = skills.Single().Workloads;
+			Assert.AreEqual(workloads.Single().Id, workload.Id.Value);
+			Assert.AreEqual(workloads.Single().Name, workloadName);
 		}
 
 		[Test]
@@ -1579,8 +1584,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var target = new ForecastController(null, SkillRepository, null, null, null, FullPermission,
 				null, null, null, null, null);
 
-			var result = target.Skills();
-			result.IsPermittedToModifySkill.Should().Be.EqualTo(true);
+			dynamic data = target.Skills();
+			var result = data.Content;
+			Assert.IsTrue(result.IsPermittedToModifySkill);
 		}
 	}
 }

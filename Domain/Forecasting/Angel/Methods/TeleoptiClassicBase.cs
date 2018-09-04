@@ -19,12 +19,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 		public IDictionary<DateOnly, double> ForecastTasks(ITaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod)
 		{
 			var dateAndTaskList = ForecastNumberOfTasks(historicalData, futurePeriod);
-			var result = new Dictionary<DateOnly, double>();
-			foreach (var dateAndTask in dateAndTaskList)
-			{
-				result.Add(dateAndTask.Date, dateAndTask.Tasks);
-			}
-			return result;
+
+			return dateAndTaskList.ToDictionary(dateAndTask => dateAndTask.Date, dateAndTask => dateAndTask.Tasks);
 		}
 
 		public IDictionary<DateOnly, TimeSpan> ForecastTaskTime(ITaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod)

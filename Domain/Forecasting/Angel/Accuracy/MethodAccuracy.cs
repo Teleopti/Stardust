@@ -6,10 +6,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 {
 	public class MethodAccuracy
 	{
-		public double Number { get; set; }
+		public double NumberForTask { get; set; }
 		public ForecastMethodType MethodId { get; set; }
-		public bool IsSelected { get; set; }
-		public DateOnlyPeriod PeriodEvaluateOn { get; set; }
-		public DateOnlyPeriod PeriodUsedToEvaluate { get; set; }
+		public double NumberForTaskTime { get; set; }
 	}
 }

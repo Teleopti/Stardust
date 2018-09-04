@@ -2,6 +2,7 @@
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 {
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 
 		protected override void Assert(WorkloadAccuracy measurementResult)
 		{
-			measurementResult.Accuracies.Should().Be.Empty();
+			measurementResult.ForecastMethodTypeForTasks.Should().Be(ForecastMethodType.None);
 		}
 	}
 }

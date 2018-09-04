@@ -61,24 +61,25 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		}
 
 		[UnitOfWork, Route("api/Forecasting/Skills"), HttpGet]
-		public virtual SkillsViewModel Skills()
+		public virtual IHttpActionResult Skills()
 		{
 			var skillList = _skillRepository.FindSkillsWithAtLeastOneQueueSource().ToList();
 			var skillTypes = skillList.ToDictionary(x => x.Id, x => x.SkillType.Description.Name);
-			return new SkillsViewModel
+			return Ok(new
 			{
-				IsPermittedToModifySkill = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebModifySkill),
-				Skills = skillList.Select(skill => new SkillAccuracy
+				IsPermittedToModifySkill =
+					_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebModifySkill),
+				Skills = skillList.Select(skill => new
 				{
 					Id = skill.Id.Value,
 					SkillType = skillTypes[skill.Id.Value],
-					Workloads = skill.WorkloadCollection.Select(x => new WorkloadAccuracy
+					Workloads = skill.WorkloadCollection.Select(x => new
 					{
 						Id = x.Id.Value,
 						Name = WorkloadNameBuilder.GetWorkloadName(skill.Name, x.Name)
-					}).OrderBy(w=>w.Name).ToArray()
+					}).OrderBy(w => w.Name).ToArray()
 				})
-			};
+			});
 		}
 
 		[HttpPost, Route("api/Forecasting/LoadForecast"), UnitOfWork]

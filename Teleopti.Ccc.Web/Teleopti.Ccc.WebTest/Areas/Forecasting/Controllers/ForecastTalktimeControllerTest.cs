@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var workload = skill.WorkloadCollection.Single();
 			var scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
 			var openDay = new DateOnly(2018, 05, 04);
+			const int dayInAWeek = 7;
 
 			SkillRepository.Add(skill);
 			ScenarioRepository.Has(scenario);
@@ -50,13 +51,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			{
 				new StatisticTask
 				{
-					Interval = openDay.AddDays(-7).Date.AddHours(10),
+					Interval = openDay.AddDays(-dayInAWeek+1).Date.AddHours(10),
 					StatOfferedTasks = 10,
 					StatAverageTaskTimeSeconds = 100
 				},
 				new StatisticTask
 				{
-					Interval = openDay.AddDays(-8).Date.AddHours(10),
+					Interval = openDay.AddDays(-dayInAWeek).Date.AddHours(10),
 					StatOfferedTasks = 10,
 					StatAverageTaskTimeSeconds = 400
 				}
@@ -70,11 +71,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				WorkloadId = workload.Id.Value
 			};
 			var result = (OkNegotiatedContentResult<ForecastModel>)Target.Forecast(forecastInput);
-			var forecastedDay1 = result.Content.ForecastDays.First();
-			var forecastedDay2 = result.Content.ForecastDays.Last();
-			result.Content.TalkTimeForecastMethodId.Should().Be(ForecastMethodType.TeleoptiClassicShortTerm);
+			var forecastedDay1 = result.Content.ForecastDays.First().TotalAverageTaskTime;
+			var forecastedDay2 = result.Content.ForecastDays.Last().TotalAverageTaskTime;
 			forecastedDay1.Should().Not.Be.EqualTo(forecastedDay2);
-
 		}
 	}
 }

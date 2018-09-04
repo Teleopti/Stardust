@@ -2222,7 +2222,6 @@
     <Compile Include="DistributedLock\IDistributedLockAcquirer.cs" />
     <Compile Include="DummyDataSource.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\MethodAccuracy.cs" />
-    <Compile Include="Forecasting\Angel\Accuracy\SkillAccuracy.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\WorkloadAccuracy.cs" />
     <Compile Include="Forecasting\Angel\IIntradayForecaster.cs" />
     <Compile Include="Forecasting\Angel\IndexVolumesMediumTermWithDayInMonth.cs" />

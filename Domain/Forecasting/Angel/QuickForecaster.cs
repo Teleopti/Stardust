@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
@@ -29,13 +28,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 
 		public ForecastModel ForecastWorkload(IWorkload workload, DateOnlyPeriod futurePeriod, IScenario scenario)
 		{
-			var skillDays = _fetchAndFillSkillDays.FindRange(futurePeriod, workload.Skill, scenario);
-
-			var workloadAccuracy = _forecastWorkloadEvaluator.Evaluate(workload, new TaskOutlierRemover(), new ForecastAccuracyCalculator());
-			var forecastMethodId = (workloadAccuracy == null || workloadAccuracy.Accuracies.Length == 0)
-				? ForecastMethodType.None
-				: workloadAccuracy.Accuracies.Single(x => x.IsSelected).MethodId;
-
 			var availablePeriod = _historicalPeriodProvider.AvailablePeriod(workload);
 			if (!availablePeriod.HasValue)
 			{
@@ -49,6 +41,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			}
 
 			var availableIntradayTemplatePeriod = _historicalPeriodProvider.AvailableIntradayTemplatePeriod(availablePeriod.Value);
+			var skillDays = _fetchAndFillSkillDays.FindRange(futurePeriod, workload.Skill, scenario);
+			var workloadAccuracy = _forecastWorkloadEvaluator.Evaluate(workload, new TaskOutlierRemover(), new ForecastAccuracyCalculator());
 			var quickForecasterWorkloadParams = new QuickForecasterWorkloadParams
 			{
 				Scenario = scenario,
@@ -57,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 				SkillDays = skillDays,
 				HistoricalPeriod = availablePeriod.Value,
 				IntradayTemplatePeriod = availableIntradayTemplatePeriod,
-				ForecastMethodId = forecastMethodId
+				BestForecastMethods = workloadAccuracy
 			};
 			return _quickForecasterWorkload.Execute(quickForecasterWorkloadParams);
 		}
@@ -70,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 		public ICollection<ISkillDay> SkillDays { get; set; }
 		public DateOnlyPeriod HistoricalPeriod { get; set; }
 		public DateOnlyPeriod IntradayTemplatePeriod { get; set; }
-		public ForecastMethodType ForecastMethodId { get; set; }
+		public WorkloadAccuracy BestForecastMethods { get; set; }
 		public IScenario Scenario { get; set; }
 	}
 }
