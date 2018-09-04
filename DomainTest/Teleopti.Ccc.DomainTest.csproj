@@ -270,6 +270,7 @@
     <Compile Include="Helper\CellExtensionTest.cs" />
     <Compile Include="Helper\RowExtensionsTest.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentJobServiceTest.cs" />
+    <Compile Include="Intraday\Domain\IntradayForecastingServiceTest.cs" />
     <Compile Include="Intraday\Domain\IntradayReforecastingServiceTest.cs" />
     <Compile Include="Intraday\IncomingTrafficViewModelCreatorTest.cs" />
     <Compile Include="Intraday\PerformanceViewModelCreatorTest.cs" />

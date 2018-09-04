@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private readonly IScheduledStaffingProvider _scheduledStaffingProvider;
 		private readonly IUserTimeZone _timeZone;
 		private readonly IStaffingCalculatorServiceFacade _staffingCalculatorService;
-		private readonly SkillStaffingIntervalProvider _skillStaffingIntervalProvider;
+		private readonly ISkillStaffingIntervalProvider _skillStaffingIntervalProvider;
 
 		private readonly IForecastedCallsProvider _forecastedCallsProvider;
 		private readonly IForecastedStaffingProvider _forecastedStaffingProvider;
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			IScheduledStaffingProvider scheduledStaffingProvider,
 			IUserTimeZone timeZone,
 			IStaffingCalculatorServiceFacade staffingCalculatorService,
-			SkillStaffingIntervalProvider skillStaffingIntervalProvider,
+			ISkillStaffingIntervalProvider skillStaffingIntervalProvider,
 			IForecastedCallsProvider forecastedCallsProvider,
 			IForecastedStaffingProvider forecastedStaffingProvider,
 			IIntradayForecastingService forecastingService)

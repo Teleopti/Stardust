@@ -76,10 +76,10 @@ namespace Teleopti.Ccc.Domain.Intraday.ApplicationLayer
 
 			var scenario = _scenarioRepository.LoadDefaultScenario();
 
-			var skillDaysBySkills =
-				_skillDayLoadHelper.LoadSchedulerSkillDays(new DateOnlyPeriod(new DateOnly(startOfDayUtc), new DateOnly(startOfDayUtc.AddDays(1))), skills, scenario);
-			var skillDays = skillDaysBySkills.SelectMany(x => x.Value);
-
+			var skillDays = _skillDayLoadHelper.LoadSchedulerSkillDaysFlat(
+				new DateOnlyPeriod(new DateOnly(startOfDayUtc), new DateOnly(startOfDayUtc.AddDays(1))), 
+				skills, 
+				scenario);
 
 			var statisticsSumary = new IntradayIncomingSummary();
 			DateTime? timeOfLastIntervalWithDataUtc = null;

@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 {
-	public class SkillStaffingIntervalProvider
+	public class SkillStaffingIntervalProvider : ISkillStaffingIntervalProvider
 	{
 		private readonly SplitSkillStaffInterval _splitSkillStaffInterval;
 		private readonly ISkillRepository _skillRepository;
@@ -58,10 +58,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 		public List<SkillStaffingInterval> GetSkillStaffIntervalsAllSkills(DateTimePeriod periodUtc, List<SkillCombinationResource> combinationResources, bool useShrinkage)
 		{
 			var skills = _skillRepository.LoadAll().ToList();
-
 			var skillStaffingIntervals = _extractSkillForecastIntervals.GetBySkills(skills, periodUtc, useShrinkage).ToList();
 			skillStaffingIntervals.ForEach(s => s.StaffingLevel = 0);
-
+			
 			var relevantSkillStaffPeriods =
 				skillStaffingIntervals.GroupBy(s => skills.First(a => a.Id.GetValueOrDefault() == s.SkillId))
 					.ToDictionary(k => k.Key,
