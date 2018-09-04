@@ -72,14 +72,14 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             IVolumeYear dayOfWeek = mocks.StrictMock<IVolumeYear>();
 
             Expect.Call(monthOfYear.TaskIndex(date)).IgnoreArguments().Repeat.AtLeastOnce().Return(1d);
-            Expect.Call(monthOfYear.AfterTalkTimeIndex(date)).IgnoreArguments().Repeat.AtLeastOnce().Return(1d);
-            Expect.Call(monthOfYear.TalkTimeIndex(date)).IgnoreArguments().Repeat.AtLeastOnce().Return(1d);
+            Expect.Call(monthOfYear.AfterTaskTimeIndex(date)).IgnoreArguments().Repeat.AtLeastOnce().Return(1d);
+            Expect.Call(monthOfYear.TaskTimeIndex(date)).IgnoreArguments().Repeat.AtLeastOnce().Return(1d);
             Expect.Call(weekOfMonth.TaskIndex(date)).IgnoreArguments().Repeat.AtLeastOnce().Return(1.1d);
-            Expect.Call(weekOfMonth.AfterTalkTimeIndex(date)).IgnoreArguments().Repeat.AtLeastOnce().Return(1.1d);
-            Expect.Call(weekOfMonth.TalkTimeIndex(date)).IgnoreArguments().Repeat.AtLeastOnce().Return(1.1d);
+            Expect.Call(weekOfMonth.AfterTaskTimeIndex(date)).IgnoreArguments().Repeat.AtLeastOnce().Return(1.1d);
+            Expect.Call(weekOfMonth.TaskTimeIndex(date)).IgnoreArguments().Repeat.AtLeastOnce().Return(1.1d);
             Expect.Call(dayOfWeek.TaskIndex(date)).IgnoreArguments().Repeat.AtLeastOnce().Return(1.2d);
-            Expect.Call(dayOfWeek.AfterTalkTimeIndex(date)).IgnoreArguments().Repeat.AtLeastOnce().Return(1.2d);
-            Expect.Call(dayOfWeek.TalkTimeIndex(date)).IgnoreArguments().Repeat.AtLeastOnce().Return(1.2d);
+            Expect.Call(dayOfWeek.AfterTaskTimeIndex(date)).IgnoreArguments().Repeat.AtLeastOnce().Return(1.2d);
+            Expect.Call(dayOfWeek.TaskTimeIndex(date)).IgnoreArguments().Repeat.AtLeastOnce().Return(1.2d);
 
             volumes = new List<IVolumeYear> {monthOfYear, weekOfMonth, dayOfWeek};
 
@@ -416,10 +416,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             DayOfWeeks dayOfWeeks = new DayOfWeeks(new TaskOwnerPeriod(dateLocal, _taskOwnerCollection, TaskOwnerPeriodType.Other), new DaysOfWeekCreator());
             Assert.Less(dayOfWeeks.TaskIndex(dateLocal), 1);
             Assert.Greater(dayOfWeeks.TaskIndex(dateLocal.AddDays(1)), 1);
-            Assert.Less(dayOfWeeks.TalkTimeIndex(dateLocal), 1);
-            Assert.Greater(dayOfWeeks.TalkTimeIndex(dateLocal.AddDays(1)), 1);
-            Assert.Less(dayOfWeeks.AfterTalkTimeIndex(dateLocal), 1);
-            Assert.Greater(dayOfWeeks.AfterTalkTimeIndex(dateLocal.AddDays(1)), 1);
+            Assert.Less(dayOfWeeks.TaskTimeIndex(dateLocal), 1);
+            Assert.Greater(dayOfWeeks.TaskTimeIndex(dateLocal.AddDays(1)), 1);
+            Assert.Less(dayOfWeeks.AfterTaskTimeIndex(dateLocal), 1);
+            Assert.Greater(dayOfWeeks.AfterTaskTimeIndex(dateLocal.AddDays(1)), 1);
         }
 
         [Test]
@@ -453,10 +453,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             WeekOfMonth weekOfMonth = new WeekOfMonth(new TaskOwnerPeriod(dateLocal,  _taskOwnerCollection, TaskOwnerPeriodType.Other), new WeekOfMonthCreator());
             Assert.Less(weekOfMonth.TaskIndex(dateLocal), 1);
             Assert.Greater(weekOfMonth.TaskIndex(dateLocal.AddDays(8)), 1);
-            Assert.Less(weekOfMonth.TalkTimeIndex(dateLocal), 1);
-            Assert.Greater(weekOfMonth.TalkTimeIndex(dateLocal.AddDays(8)), 1);
-            Assert.Less(weekOfMonth.AfterTalkTimeIndex(dateLocal), 1);
-            Assert.Greater(weekOfMonth.AfterTalkTimeIndex(dateLocal.AddDays(8)), 1);
+            Assert.Less(weekOfMonth.TaskTimeIndex(dateLocal), 1);
+            Assert.Greater(weekOfMonth.TaskTimeIndex(dateLocal.AddDays(8)), 1);
+            Assert.Less(weekOfMonth.AfterTaskTimeIndex(dateLocal), 1);
+            Assert.Greater(weekOfMonth.AfterTaskTimeIndex(dateLocal.AddDays(8)), 1);
         }
 
         [Test]
@@ -492,10 +492,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                                 new MonthOfYearCreator());
             Assert.Less(monthOfYear.TaskIndex(dateLocal), 1);
             Assert.Greater(monthOfYear.TaskIndex(dateLocal.AddDays(32)), 1);
-            Assert.Less(monthOfYear.TalkTimeIndex(dateLocal), 1);
-            Assert.Greater(monthOfYear.TalkTimeIndex(dateLocal.AddDays(32)), 1);
-            Assert.Less(monthOfYear.AfterTalkTimeIndex(dateLocal), 1);
-            Assert.Greater(monthOfYear.AfterTalkTimeIndex(dateLocal.AddDays(32)), 1);
+            Assert.Less(monthOfYear.TaskTimeIndex(dateLocal), 1);
+            Assert.Greater(monthOfYear.TaskTimeIndex(dateLocal.AddDays(32)), 1);
+            Assert.Less(monthOfYear.AfterTaskTimeIndex(dateLocal), 1);
+            Assert.Greater(monthOfYear.AfterTaskTimeIndex(dateLocal.AddDays(32)), 1);
         }
     }
 }

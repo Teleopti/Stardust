@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: peterwe
         /// Created date: 2008-03-31
         /// </remarks>
-        double TalkTimeIndex(DateOnly dateTime);
+        double TaskTimeIndex(DateOnly dateTime);
 
         /// <summary>
         /// Gets the index of the aftertalktime.
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: peterwe
         /// Created date: 2008-03-31
         /// </remarks>
-        double AfterTalkTimeIndex(DateOnly dateTime);
+        double AfterTaskTimeIndex(DateOnly dateTime);
     }
 
     /// <summary>
@@ -307,7 +307,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: peterwe
         /// Created date: 2008-03-31
         /// </remarks>
-        public abstract double TalkTimeIndex(DateOnly dateTime);
+        public abstract double TaskTimeIndex(DateOnly dateTime);
 
         /// <summary>
         /// Gets the index of the aftertalktime.
@@ -318,6 +318,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: peterwe
         /// Created date: 2008-03-31
         /// </remarks>
-        public abstract double AfterTalkTimeIndex(DateOnly dateTime);
+        public abstract double AfterTaskTimeIndex(DateOnly dateTime);
     }
 }

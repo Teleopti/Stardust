@@ -1,9 +1,9 @@
 ﻿namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 {
-	public abstract class TeleoptiClassic : TeleoptiClassicUpdatedBase
+	public abstract class TeleoptiClassic : TeleoptiClassicBase
 	{
 		protected TeleoptiClassic(IIndexVolumes indexVolumes)
-			: base(indexVolumes, new SimpleAhtAndAcwCalculator())
+			: base(indexVolumes)
 		{
 		}
 	}

@@ -140,31 +140,31 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		private void SetComparison(IForecastingTarget day, TotalDayItem totalDayItem, double trendFactor)
         {
             double totalTaskIndex = 1;
-            double talkTimeIndex = 1;
-            double afterTalkTimeIndex = 1;
+            double taskTimeIndex = 1;
+            double afterTaskTimeIndex = 1;
 
             //Accumulate the indexes
             foreach (IVolumeYear year in _volumes)
             {
                 totalTaskIndex *= year.TaskIndex(day.CurrentDate);
-                talkTimeIndex *= year.TalkTimeIndex(day.CurrentDate);
-                afterTalkTimeIndex *= year.AfterTalkTimeIndex(day.CurrentDate);
+                taskTimeIndex *= year.TaskTimeIndex(day.CurrentDate);
+                afterTaskTimeIndex *= year.AfterTaskTimeIndex(day.CurrentDate);
             }
 
             double currentTotalTaskIndex = totalDayItem.TaskIndex == 0 ? totalTaskIndex * trendFactor : totalDayItem.TaskIndex;
-            double currentTalkTimeIndex = totalDayItem.TalkTimeIndex == 0 ? talkTimeIndex : totalDayItem.TalkTimeIndex;
+            double currentTalkTimeIndex = totalDayItem.TalkTimeIndex == 0 ? taskTimeIndex : totalDayItem.TalkTimeIndex;
             double currentAfterTalkTimeIndex = totalDayItem.AfterTalkTimeIndex == 0
-                                                   ? afterTalkTimeIndex
+                                                   ? afterTaskTimeIndex
                                                    : totalDayItem.AfterTalkTimeIndex;
 
             if (day.OpenForWork.IsOpenForIncomingWork)
             {
-                    day.AverageTaskTime = new TimeSpan((long) (talkTimeIndex*_talkTime.Ticks));
-                    day.AverageAfterTaskTime = new TimeSpan((long) (afterTalkTimeIndex*_afterTalkTime.Ticks));
+                    day.AverageTaskTime = new TimeSpan((long) (taskTimeIndex*_talkTime.Ticks));
+                    day.AverageAfterTaskTime = new TimeSpan((long) (afterTaskTimeIndex*_afterTalkTime.Ticks));
                     day.Tasks = totalTaskIndex*_averageTasks;
             }
             
-            totalDayItem.SetComparisonValues(day, totalTaskIndex, talkTimeIndex, afterTalkTimeIndex, trendFactor);
+            totalDayItem.SetComparisonValues(day, totalTaskIndex, taskTimeIndex, afterTaskTimeIndex, trendFactor);
             totalDayItem.TaskIndex = currentTotalTaskIndex;
             totalDayItem.TalkTimeIndex = currentTalkTimeIndex;
             totalDayItem.AfterTalkTimeIndex = currentAfterTalkTimeIndex;

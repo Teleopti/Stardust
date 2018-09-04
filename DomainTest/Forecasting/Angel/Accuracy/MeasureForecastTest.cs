@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 
 			var outlierRemover = new TaskOutlierRemover();
 			var target = new ForecastWorkloadEvaluator(new HistoricalData(dailyStatistics), new ForecastMethodProvider(linearTrendMethod), historicalPeriodProvider);
-			var measurementResult = target.Evaluate(Workload, outlierRemover, new ForecastingWeightedMeanAbsolutePercentageError());
+			var measurementResult = target.Evaluate(Workload, outlierRemover, new ForecastAccuracyCalculator());
 
 			Assert(measurementResult);
 		}

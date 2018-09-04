@@ -6,12 +6,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 {
-	public abstract class TeleoptiClassicWithTrend : TeleoptiClassicUpdatedBase
+	public abstract class TeleoptiClassicWithTrend : TeleoptiClassicBase
 	{
 		private readonly ILinearTrendCalculator _linearTrendCalculator;
 
 		protected TeleoptiClassicWithTrend(IIndexVolumes indexVolumes, ILinearTrendCalculator linearTrendCalculator)
-			: base(indexVolumes, new SimpleAhtAndAcwCalculator())
+			: base(indexVolumes)
 		{
 			_linearTrendCalculator = linearTrendCalculator;
 		}

@@ -20,12 +20,12 @@ namespace Teleopti.Ccc.Domain.Forecasting.DayInMonthIndex
             return PeriodTypeCollection[DayInMonthHelper.DayIndex(dateTime)].TaskIndex;
         }
 
-        public override double TalkTimeIndex(DateOnly dateTime)
+        public override double TaskTimeIndex(DateOnly dateTime)
         {
             return PeriodTypeCollection[DayInMonthHelper.DayIndex(dateTime)].TalkTimeIndex;
         }
 
-        public override double AfterTalkTimeIndex(DateOnly dateTime)
+        public override double AfterTaskTimeIndex(DateOnly dateTime)
         {
             return PeriodTypeCollection[DayInMonthHelper.DayIndex(dateTime)].AfterTalkTimeIndex;
         }

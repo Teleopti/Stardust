@@ -128,16 +128,16 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			double talkTimeIndexOctober = monthOfYear.PeriodTypeCollection[10].TalkTimeIndex;
 
 			var dateTime = new DateOnly(2006, 1, 1); //expect UTC 
-			Assert.AreEqual(Math.Round(talkTimeIndexJanuari, 4), Math.Round(monthOfYear.TalkTimeIndex(dateTime), 4));
-			Assert.AreEqual(0.96554809813242659d, monthOfYear.TalkTimeIndex(dateTime));
+			Assert.AreEqual(Math.Round(talkTimeIndexJanuari, 4), Math.Round(monthOfYear.TaskTimeIndex(dateTime), 4));
+			Assert.AreEqual(0.96554809813242659d, monthOfYear.TaskTimeIndex(dateTime));
 
 			var dateTimeJuly = new DateOnly(2006, 6, 1); //expect UTC 
-			Assert.AreEqual(Math.Round(talkTimeIndexJuly, 4), Math.Round(monthOfYear.TalkTimeIndex(dateTimeJuly), 4));
-			Assert.AreEqual(1.0283944225960715d, monthOfYear.TalkTimeIndex(dateTimeJuly));
+			Assert.AreEqual(Math.Round(talkTimeIndexJuly, 4), Math.Round(monthOfYear.TaskTimeIndex(dateTimeJuly), 4));
+			Assert.AreEqual(1.0283944225960715d, monthOfYear.TaskTimeIndex(dateTimeJuly));
 
 			var dateTimeOctober = new DateOnly(2006, 10, 1); //expect UTC 
-			Assert.AreEqual(Math.Round(talkTimeIndexOctober, 4), Math.Round(monthOfYear.TalkTimeIndex(dateTimeOctober), 4));
-			Assert.AreEqual(0.96554809813242659d, monthOfYear.TalkTimeIndex(dateTimeOctober));
+			Assert.AreEqual(Math.Round(talkTimeIndexOctober, 4), Math.Round(monthOfYear.TaskTimeIndex(dateTimeOctober), 4));
+			Assert.AreEqual(0.96554809813242659d, monthOfYear.TaskTimeIndex(dateTimeOctober));
 		}
 
 		[Test]
@@ -152,16 +152,16 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			double afterTalkTimeIndexOctober = monthOfYear.PeriodTypeCollection[10].AfterTalkTimeIndex;
 
 			var dateTime = new DateOnly(2006, 1, 1); //expect UTC 
-			Assert.AreEqual(Math.Round(afterTalkTimeIndexJanuari, 4), Math.Round(monthOfYear.AfterTalkTimeIndex(dateTime), 4));
-			Assert.AreEqual(1.0513333337472268d, monthOfYear.AfterTalkTimeIndex(dateTime));
+			Assert.AreEqual(Math.Round(afterTalkTimeIndexJanuari, 4), Math.Round(monthOfYear.AfterTaskTimeIndex(dateTime), 4));
+			Assert.AreEqual(1.0513333337472268d, monthOfYear.AfterTaskTimeIndex(dateTime));
 
 			var dateTimeJuly = new DateOnly(2006, 6, 1); //expect UTC 
-			Assert.AreEqual(Math.Round(afterTalkTimeIndexJuly, 4), Math.Round(monthOfYear.AfterTalkTimeIndex(dateTimeJuly), 4));
-			Assert.AreEqual(0.957692307041077d, monthOfYear.AfterTalkTimeIndex(dateTimeJuly));
+			Assert.AreEqual(Math.Round(afterTalkTimeIndexJuly, 4), Math.Round(monthOfYear.AfterTaskTimeIndex(dateTimeJuly), 4));
+			Assert.AreEqual(0.957692307041077d, monthOfYear.AfterTaskTimeIndex(dateTimeJuly));
 
 			var dateTimeOctober = new DateOnly(2006, 10, 1); //expect UTC 
-			Assert.AreEqual(Math.Round(afterTalkTimeIndexOctober, 4), Math.Round(monthOfYear.AfterTalkTimeIndex(dateTimeOctober), 4));
-			Assert.AreEqual(1.0513333337472268d, monthOfYear.AfterTalkTimeIndex(dateTimeOctober));
+			Assert.AreEqual(Math.Round(afterTalkTimeIndexOctober, 4), Math.Round(monthOfYear.AfterTaskTimeIndex(dateTimeOctober), 4));
+			Assert.AreEqual(1.0513333337472268d, monthOfYear.AfterTaskTimeIndex(dateTimeOctober));
 		}
 
 		[Test]
@@ -521,16 +521,16 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			double talkTimeIndexWeek5 = weekOfMonth.PeriodTypeCollection[5].TalkTimeIndex;
 
 			var dateTimeWeek1 = new DateOnly(2006, 1, 1); //expect UTC 
-			Assert.AreEqual(Math.Round(talkTimeIndexWeek1, 4), Math.Round(weekOfMonth.TalkTimeIndex(dateTimeWeek1), 4));
-			Assert.AreEqual(1.0517241402883473d, weekOfMonth.TalkTimeIndex(dateTimeWeek1));
+			Assert.AreEqual(Math.Round(talkTimeIndexWeek1, 4), Math.Round(weekOfMonth.TaskTimeIndex(dateTimeWeek1), 4));
+			Assert.AreEqual(1.0517241402883473d, weekOfMonth.TaskTimeIndex(dateTimeWeek1));
 
 			var dateTimeWeek2 = new DateOnly(2006, 6, 9); //expect UTC 
-			Assert.AreEqual(Math.Round(talkTimeIndexWeek2, 4), Math.Round(weekOfMonth.TalkTimeIndex(dateTimeWeek2), 4));
-			Assert.AreEqual(1.0517241402883473d, weekOfMonth.TalkTimeIndex(dateTimeWeek2));
+			Assert.AreEqual(Math.Round(talkTimeIndexWeek2, 4), Math.Round(weekOfMonth.TaskTimeIndex(dateTimeWeek2), 4));
+			Assert.AreEqual(1.0517241402883473d, weekOfMonth.TaskTimeIndex(dateTimeWeek2));
 
 			var dateTimeWeek5 = new DateOnly(2006, 10, 30); //expect UTC 
-			Assert.AreEqual(Math.Round(talkTimeIndexWeek5, 4), Math.Round(weekOfMonth.TalkTimeIndex(dateTimeWeek5), 4));
-			Assert.AreEqual(0.97082228010701543d, weekOfMonth.TalkTimeIndex(dateTimeWeek5));
+			Assert.AreEqual(Math.Round(talkTimeIndexWeek5, 4), Math.Round(weekOfMonth.TaskTimeIndex(dateTimeWeek5), 4));
+			Assert.AreEqual(0.97082228010701543d, weekOfMonth.TaskTimeIndex(dateTimeWeek5));
 		}
 
 		[Test]
@@ -545,16 +545,16 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			double afterTalkTimeIndexWeek5 = weekOfMonth.PeriodTypeCollection[5].AfterTalkTimeIndex;
 
 			var dateTimeWeek1 = new DateOnly(2006, 1, 1); //expect UTC 
-			Assert.AreEqual(Math.Round(afterTalkTimeIndexWeek1, 4), Math.Round(weekOfMonth.AfterTalkTimeIndex(dateTimeWeek1), 4));
-			Assert.AreEqual(0.91044776263443983d, weekOfMonth.AfterTalkTimeIndex(dateTimeWeek1));
+			Assert.AreEqual(Math.Round(afterTalkTimeIndexWeek1, 4), Math.Round(weekOfMonth.AfterTaskTimeIndex(dateTimeWeek1), 4));
+			Assert.AreEqual(0.91044776263443983d, weekOfMonth.AfterTaskTimeIndex(dateTimeWeek1));
 
 			var dateTimeWeek2 = new DateOnly(2006, 6, 9); //expect UTC 
-			Assert.AreEqual(Math.Round(afterTalkTimeIndexWeek2, 4), Math.Round(weekOfMonth.AfterTalkTimeIndex(dateTimeWeek2), 4));
-			Assert.AreEqual(0.91044776263443983d, weekOfMonth.AfterTalkTimeIndex(dateTimeWeek2));
+			Assert.AreEqual(Math.Round(afterTalkTimeIndexWeek2, 4), Math.Round(weekOfMonth.AfterTaskTimeIndex(dateTimeWeek2), 4));
+			Assert.AreEqual(0.91044776263443983d, weekOfMonth.AfterTaskTimeIndex(dateTimeWeek2));
 
 			var dateTimeWeek5 = new DateOnly(2006, 10, 30); //expect UTC 
-			Assert.AreEqual(Math.Round(afterTalkTimeIndexWeek5, 4), Math.Round(weekOfMonth.AfterTalkTimeIndex(dateTimeWeek5), 4));
-			Assert.AreEqual(1.0505166475127576d, weekOfMonth.AfterTalkTimeIndex(dateTimeWeek5));
+			Assert.AreEqual(Math.Round(afterTalkTimeIndexWeek5, 4), Math.Round(weekOfMonth.AfterTaskTimeIndex(dateTimeWeek5), 4));
+			Assert.AreEqual(1.0505166475127576d, weekOfMonth.AfterTaskTimeIndex(dateTimeWeek5));
 		}
 
 		[Test]
@@ -862,16 +862,16 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			double talkTimeIndexSunday = dayOfWeek.PeriodTypeCollection[1].TalkTimeIndex;
 
 			var dateTimeMonday = new DateOnly(2008, 3, 10); //expect UTC 
-			Assert.AreEqual(Math.Round(talkTimeIndexMonday, 4), Math.Round(dayOfWeek.TalkTimeIndex(dateTimeMonday), 4));
-			Assert.AreEqual(1.0128205150279421, dayOfWeek.TalkTimeIndex(dateTimeMonday));
+			Assert.AreEqual(Math.Round(talkTimeIndexMonday, 4), Math.Round(dayOfWeek.TaskTimeIndex(dateTimeMonday), 4));
+			Assert.AreEqual(1.0128205150279421, dayOfWeek.TaskTimeIndex(dateTimeMonday));
 
 			var dateTimeTuesday = new DateOnly(2008, 3, 11); //expect UTC 
-			Assert.AreEqual(Math.Round(talkTimeIndexTuesday, 4), Math.Round(dayOfWeek.TalkTimeIndex(dateTimeTuesday), 4));
-			Assert.AreEqual(1.0128205150279421, dayOfWeek.TalkTimeIndex(dateTimeTuesday));
+			Assert.AreEqual(Math.Round(talkTimeIndexTuesday, 4), Math.Round(dayOfWeek.TaskTimeIndex(dateTimeTuesday), 4));
+			Assert.AreEqual(1.0128205150279421, dayOfWeek.TaskTimeIndex(dateTimeTuesday));
 
 			var dateTimeSunday = new DateOnly(2008, 1, 27); //expect UTC 
-			Assert.AreEqual(Math.Round(talkTimeIndexSunday, 4), Math.Round(dayOfWeek.TalkTimeIndex(dateTimeSunday), 4));
-			Assert.AreEqual(1.0128205150279421, dayOfWeek.TalkTimeIndex(dateTimeSunday));
+			Assert.AreEqual(Math.Round(talkTimeIndexSunday, 4), Math.Round(dayOfWeek.TaskTimeIndex(dateTimeSunday), 4));
+			Assert.AreEqual(1.0128205150279421, dayOfWeek.TaskTimeIndex(dateTimeSunday));
 		}
 
 		[Test]
@@ -886,16 +886,16 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			double afterTalkTimeIndexSunday = dayOfWeek.PeriodTypeCollection[1].AfterTalkTimeIndex;
 
 			var dateTimeMonday = new DateOnly(2008, 3, 10); //expect UTC 
-			Assert.AreEqual(Math.Round(afterTalkTimeIndexMonday, 4), Math.Round(dayOfWeek.AfterTalkTimeIndex(dateTimeMonday), 4));
-			Assert.AreEqual(0.97530864358878222d, dayOfWeek.AfterTalkTimeIndex(dateTimeMonday));
+			Assert.AreEqual(Math.Round(afterTalkTimeIndexMonday, 4), Math.Round(dayOfWeek.AfterTaskTimeIndex(dateTimeMonday), 4));
+			Assert.AreEqual(0.97530864358878222d, dayOfWeek.AfterTaskTimeIndex(dateTimeMonday));
 
 			var dateTimeTuesday = new DateOnly(2008, 3, 11); //expect UTC 
-			Assert.AreEqual(Math.Round(afterTalkTimeIndexTuesday, 4), Math.Round(dayOfWeek.AfterTalkTimeIndex(dateTimeTuesday), 4));
-			Assert.AreEqual(0.97530864358878222d, dayOfWeek.AfterTalkTimeIndex(dateTimeTuesday));
+			Assert.AreEqual(Math.Round(afterTalkTimeIndexTuesday, 4), Math.Round(dayOfWeek.AfterTaskTimeIndex(dateTimeTuesday), 4));
+			Assert.AreEqual(0.97530864358878222d, dayOfWeek.AfterTaskTimeIndex(dateTimeTuesday));
 
 			var dateTimeSunday = new DateOnly(2008, 1, 27); //expect UTC 
-			Assert.AreEqual(Math.Round(afterTalkTimeIndexSunday, 4), Math.Round(dayOfWeek.AfterTalkTimeIndex(dateTimeSunday), 4));
-			Assert.AreEqual(0.97530864358878222d, dayOfWeek.AfterTalkTimeIndex(dateTimeSunday));
+			Assert.AreEqual(Math.Round(afterTalkTimeIndexSunday, 4), Math.Round(dayOfWeek.AfterTaskTimeIndex(dateTimeSunday), 4));
+			Assert.AreEqual(0.97530864358878222d, dayOfWeek.AfterTaskTimeIndex(dateTimeSunday));
 		}
 
 

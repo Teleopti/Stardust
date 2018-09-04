@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created date: 2008-03-31
         /// </remarks>
 
-        public override double TalkTimeIndex(DateOnly dateTime)
+        public override double TaskTimeIndex(DateOnly dateTime)
         {
             int dayNumber = (int)CultureInfo.CurrentCulture.Calendar.GetDayOfWeek(dateTime.Date) + 1;
 
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: peterwe
         /// Created date: 2008-03-31
         /// </remarks>
-        public override double AfterTalkTimeIndex(DateOnly dateTime)
+        public override double AfterTaskTimeIndex(DateOnly dateTime)
         {
             int dayNumber = (int)CultureInfo.CurrentCulture.Calendar.GetDayOfWeek(dateTime.Date) + 1;
 

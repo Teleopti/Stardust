@@ -62,13 +62,15 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 					TaskOwnerPeriodType.Other);
 
 				var firstPeriodDataNoOutliers = outlierRemover.RemoveOutliers(firstPeriodData, forecastMethod);
-				var forecastResult = forecastMethod.Forecast(firstPeriodDataNoOutliers, twoPeriods.Item2);
+				var forecastTasks = forecastMethod.ForecastTasks(firstPeriodDataNoOutliers, twoPeriods.Item2);
 
+				var forecastTaskTime = forecastMethod.ForecastTaskTime(firstPeriodDataNoOutliers, twoPeriods.Item2);
+
+				var accuracyModel = forecastAccuracyCalculator.Accuracy(forecastTasks, forecastTaskTime,
+					secondPeriodData.TaskOwnerDayCollection);
 				methodsEvaluationResult.Add(new MethodAccuracy
 				{
-					MeasureResult = forecastResult.ToArray(),
-					Number = forecastAccuracyCalculator.Accuracy(forecastResult,
-						secondPeriodData.TaskOwnerDayCollection),
+					Number = accuracyModel.TasksPercentageError,
 					MethodId = forecastMethod.Id,
 					PeriodEvaluateOn = twoPeriods.Item2,
 					PeriodUsedToEvaluate = twoPeriods.Item1

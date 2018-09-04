@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 		{
 			var skillDays = _fetchAndFillSkillDays.FindRange(futurePeriod, workload.Skill, scenario);
 
-			var workloadAccuracy = _forecastWorkloadEvaluator.Evaluate(workload, new TaskOutlierRemover(), new ForecastingWeightedMeanAbsolutePercentageError());
+			var workloadAccuracy = _forecastWorkloadEvaluator.Evaluate(workload, new TaskOutlierRemover(), new ForecastAccuracyCalculator());
 			var forecastMethodId = (workloadAccuracy == null || workloadAccuracy.Accuracies.Length == 0)
 				? ForecastMethodType.None
 				: workloadAccuracy.Accuracies.Single(x => x.IsSelected).MethodId;

@@ -45,8 +45,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.DayInMonthIndex
             Assert.That(dayInMonth.TaskIndex(new DateOnly(2012,2,29)),Is.EqualTo(0.31));
             Assert.That(dayInMonth.TaskIndex(new DateOnly(2012,2,1)),Is.EqualTo(0.01));
             Assert.That(dayInMonth.TaskIndex(new DateOnly(2012,2,15)),Is.EqualTo(0.16));
-            Assert.That(dayInMonth.AfterTalkTimeIndex(new DateOnly(2012, 2, 15)), Is.EqualTo(1));
-            Assert.That(dayInMonth.TalkTimeIndex(new DateOnly(2012, 2, 15)), Is.EqualTo(1));
+            Assert.That(dayInMonth.AfterTaskTimeIndex(new DateOnly(2012, 2, 15)), Is.EqualTo(1));
+            Assert.That(dayInMonth.TaskTimeIndex(new DateOnly(2012, 2, 15)), Is.EqualTo(1));
         }
 
         [Test]

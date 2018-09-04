@@ -59,7 +59,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 				};
 			}
 			var historicalDataNoOutliers = _outlierRemover.RemoveOutliers(historicalData, forecastMethod);
-			var forecastResult = forecastMethod.Forecast(historicalDataNoOutliers, quickForecasterWorkloadParams.FuturePeriod);
+			var forecastResult = forecastMethod.ForecastTasks(historicalDataNoOutliers, quickForecasterWorkloadParams.FuturePeriod);
+
 			var workloadDays = _futureData.Fetch(quickForecasterWorkloadParams.WorkLoad, quickForecasterWorkloadParams.SkillDays,
 				quickForecasterWorkloadParams.FuturePeriod);
 			var overrideDays = _forecastDayOverrideRepository.FindRange(quickForecasterWorkloadParams.FuturePeriod,
@@ -73,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			};
 		}
 
-		private List<ForecastDayModel> createForecastViewModel(IList<IForecastingTarget> forecastTargets,
+		private List<ForecastDayModel> createForecastViewModel(IDictionary<DateOnly, double> forecastTargets,
 			IEnumerable<IWorkloadDayBase> workloadDays, Dictionary<DateOnly, IForecastDayOverride> overrideDays)
 		{
 			var forecastResult = new List<ForecastDayModel>();
@@ -84,17 +85,12 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 
 			foreach (var target in forecastTargets)
 			{
-				overrideDays.TryGetValue(target.CurrentDate, out var overrideDay);
-				var currentWorkLoadDay = workloadDayForDate[target.CurrentDate];
+				overrideDays.TryGetValue(target.Key, out var overrideDay);
+				var currentWorkLoadDay = workloadDayForDate[target.Key];
 				var model = new ForecastDayModel
 				{
-					Date = target.CurrentDate,
-					Tasks = target.Tasks,
-					AverageTaskTime = target.AverageTaskTime.TotalSeconds,
-					AverageAfterTaskTime = target.AverageAfterTaskTime.TotalSeconds,
-					TotalTasks = target.Tasks,
-					TotalAverageTaskTime = target.AverageTaskTime.TotalSeconds,
-					TotalAverageAfterTaskTime = target.AverageAfterTaskTime.TotalSeconds,
+					Date = target.Key,
+					Tasks = target.Value,
 					IsOpen = currentWorkLoadDay.OpenForWork.IsOpen,
 					IsInModification = currentWorkLoadDay.OpenForWork.IsOpen
 				};

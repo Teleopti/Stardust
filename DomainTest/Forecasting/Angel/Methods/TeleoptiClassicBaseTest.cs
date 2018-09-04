@@ -39,8 +39,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Methods
 			const double totalIndex = indexMonth * indexWeek * indexDay;
 			var tasks = totalIndex * averageTasks;
 
-			var result = target.Forecast(historicalData, new DateOnlyPeriod(new DateOnly(2014, 1, 1), new DateOnly(2014, 1, 1)));
-			result.Single().Tasks.Should().Be.EqualTo(Math.Round(tasks, 4));
+			var result = target.ForecastTasks(historicalData, new DateOnlyPeriod(new DateOnly(2014, 1, 1), new DateOnly(2014, 1, 1)));
+			result.First().Value.Should().Be.EqualTo(Math.Round(tasks, 4));
 		}
 	}
 }

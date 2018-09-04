@@ -85,8 +85,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                 target.PeriodTypeCollection.Add(monthNumber, monthPeriod);
 
                 Assert.AreEqual(1.2, target.TaskIndex(theDate));
-                Assert.AreEqual(1.3, target.TalkTimeIndex(theDate));
-                Assert.AreEqual(1.4, target.AfterTalkTimeIndex(theDate));
+                Assert.AreEqual(1.3, target.TaskTimeIndex(theDate));
+                Assert.AreEqual(1.4, target.AfterTaskTimeIndex(theDate));
             }
         }
 

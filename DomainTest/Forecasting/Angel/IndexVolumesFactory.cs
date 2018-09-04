@@ -10,8 +10,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 		{
 			var monthOfYear = MockRepository.GenerateMock<IVolumeYear>();
 			monthOfYear.Stub(x => x.TaskIndex(Arg<DateOnly>.Is.Anything)).Return(1d);
-			monthOfYear.Stub(x => x.AfterTalkTimeIndex(Arg<DateOnly>.Is.Anything)).Return(1d);
-			monthOfYear.Stub(x => x.TalkTimeIndex(Arg<DateOnly>.Is.Anything)).Return(1d);
+			monthOfYear.Stub(x => x.AfterTaskTimeIndex(Arg<DateOnly>.Is.Anything)).Return(1d);
+			monthOfYear.Stub(x => x.TaskTimeIndex(Arg<DateOnly>.Is.Anything)).Return(1d);
 			return monthOfYear;
 		}
 
@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 		{
 			var weekOfMonth = MockRepository.GenerateMock<IVolumeYear>();
 			weekOfMonth.Stub(x => x.TaskIndex(Arg<DateOnly>.Is.Anything)).Return(1.1d);
-			weekOfMonth.Stub(x => x.AfterTalkTimeIndex(Arg<DateOnly>.Is.Anything)).Return(1.1d);
-			weekOfMonth.Stub(x => x.TalkTimeIndex(Arg<DateOnly>.Is.Anything)).Return(1.1d);
+			weekOfMonth.Stub(x => x.AfterTaskTimeIndex(Arg<DateOnly>.Is.Anything)).Return(1.1d);
+			weekOfMonth.Stub(x => x.TaskTimeIndex(Arg<DateOnly>.Is.Anything)).Return(1.1d);
 			return weekOfMonth;
 		}
 
@@ -28,8 +28,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 		{
 			var dayOfWeek = MockRepository.GenerateMock<IVolumeYear>();
 			dayOfWeek.Stub(x => x.TaskIndex(Arg<DateOnly>.Is.Anything)).Return(1.2d);
-			dayOfWeek.Stub(x => x.AfterTalkTimeIndex(Arg<DateOnly>.Is.Anything)).Return(1.2d);
-			dayOfWeek.Stub(x => x.TalkTimeIndex(Arg<DateOnly>.Is.Anything)).Return(1.2d);
+			dayOfWeek.Stub(x => x.AfterTaskTimeIndex(Arg<DateOnly>.Is.Anything)).Return(1.2d);
+			dayOfWeek.Stub(x => x.TaskTimeIndex(Arg<DateOnly>.Is.Anything)).Return(1.2d);
 			return dayOfWeek;
 		}
 
