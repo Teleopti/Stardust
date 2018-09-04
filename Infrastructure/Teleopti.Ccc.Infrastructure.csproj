@@ -340,6 +340,7 @@
     <Compile Include="RealTimeAdherence\ApplicationLayer\CurrentScheduleReadModelPersister.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ExternalLogonReadModelPersister.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\HardcodedSkillGroupingPageId.cs" />
+    <Compile Include="RealTimeAdherence\ApplicationLayer\HistoricalOverviewReadModelPersister.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\KeyValueStorePersister.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\MappingReadModelPersister.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\MappingReadModelReader.cs" />

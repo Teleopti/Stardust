@@ -237,6 +237,7 @@
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\AgentStateReadModelForTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\AgentStateReadModelPersisterExtensions.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\AgentStateReadModelPersisterTest.cs" />
+    <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\HistoricalOverviewReadModelPersisterTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\OrganizationReaderBusinessUnitTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\OrganizationReaderSkillsTest.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\AgentState\OrganizationReaderTest.cs" />
