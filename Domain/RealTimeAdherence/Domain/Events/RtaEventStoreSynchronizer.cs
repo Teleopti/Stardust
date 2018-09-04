@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.Dynamic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -32,64 +33,28 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events
 		private readonly IRtaEventStoreReader _events;
 		private readonly IHistoricalOverviewReadModelPersister _readModels;
 		private readonly IAgentAdherenceDayLoader _adherenceDayLoader;
+		private readonly IKeyValueStorePersister _keyValueStore;
 
 		public RtaEventStoreSynchronizer(IRtaEventStoreReader events,
 			IHistoricalOverviewReadModelPersister readModels,
-			IAgentAdherenceDayLoader adherenceDayLoader)
+			IAgentAdherenceDayLoader adherenceDayLoader, IKeyValueStorePersister keyValueStore)
 		{
 			_events = events;
 			_readModels = readModels;
 			_adherenceDayLoader = adherenceDayLoader;
+			_keyValueStore = keyValueStore;
 		}
-
-
-		public void syncfoo()
-		{
-			//truncate all
-			
-			var events = _events.LoadAll();
-			var bigRM = new List<HistoricalOverviewReadModel>();
-
-			var eventsForPerson = from e in events
-				group e by (e as IRtaStoredEvent).QueryData().PersonId
-				into eventsGroupedOnPerson
-				select eventsGroupedOnPerson;
-			
-			eventsForPerson.ForEach(x => bigRM.AddRange(AddAllDaysForPerson(x)));
-
-			//BatchInsert(rm);
-
-
-		}
-
-		private IEnumerable<HistoricalOverviewReadModel> AddAllDaysForPerson(IGrouping<Guid?, IEvent> grouping)
-		{
-			var rmPerPerson = new List<HistoricalOverviewReadModel>();
-
-			
-			grouping.ForEach(g =>
-			{
-				var storedEvent = g as IRtaStoredEvent;
-				var typeOfEvent = g?.GetType().FullName;
-				var lateForWork = typeOfEvent == typeof(PersonArrivedLateForWorkEvent).Assembly.GetName().Name;
-//				var lateForWorkText = lateForWork ? string.Format(UserTexts.Resources.LateXMinutes, Math.Round(new DateTimePeriod(storedEvent.ShiftStart, storedEvent.Timestamp).ElapsedTime().TotalMinutes)) : "0";
-				
-				rmPerPerson.Add(new HistoricalOverviewReadModel()
-				{
-					PersonId = storedEvent.QueryData().PersonId.Value,
-					Date = storedEvent.QueryData().StartTime.Value.ToDateOnly(),
-					WasLateForWork = lateForWork
-				});
-				
-			});
-
-			return rmPerPerson;
-		}
-
 
 		public void Synchronize()
 		{
-			var events = _events.LoadAll();
+			var latestSynchronizedRTAEvent = _keyValueStore.Get("LatestSynchronizedRTAEvent");			
+			var loadFromEvent = latestSynchronizedRTAEvent == null ?  0 : int.Parse(latestSynchronizedRTAEvent);
+						
+			var events = _events.LoadFrom(loadFromEvent);
+
+			var maxEventId = events.Count() + loadFromEvent;
+			_keyValueStore.Update("LatestSynchronizedRTAEvent", maxEventId.ToString());
+			
 			var queryData = events.Select(e => e as IRtaStoredEvent).Select(x => x.QueryData());
 			queryData.ForEach(q =>
 			{
@@ -97,7 +62,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events
 				var lateForWork = adherenceDay.Changes().FirstOrDefault(c => c.LateForWork != null);
 				var lateForWorkText = lateForWork != null ? lateForWork.LateForWork : "0";
 				var minutesLateForWork = int.Parse(Regex.Replace(lateForWorkText, "[^0-9.]", ""));
-				//Would probably be better to expose shift instead of calculating shift here 
 				var shift =  new DateTimePeriod(adherenceDay.Period().StartDateTime.AddHours(1), adherenceDay.Period().EndDateTime.AddHours(-1));
 				var shiftLength = (int) shift.ElapsedTime().TotalMinutes;
 				
@@ -111,6 +75,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events
 					ShiftLength = shiftLength					
 				});
 			});
-		}
+		}		
 	}
 }

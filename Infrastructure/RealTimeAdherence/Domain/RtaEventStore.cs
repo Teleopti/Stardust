@@ -122,6 +122,11 @@ ORDER BY [Id] DESC
 				.SingleOrDefault();
 		}
 
+		public IEnumerable<IEvent> LoadFrom(int latestSynchronizedEvent)
+		{
+			throw new NotImplementedException();
+		}
+
 		private IEnumerable<IEvent> load(IQuery query) =>
 			query
 				.SetResultTransformer(Transformers.AliasToBean<internalModel>())

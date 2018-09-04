@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.TestCommon
 			public Guid PersonId;
 			public DateTimePeriod Period;
 			public IEvent Event;
+			public int Id { get; set; }
 		}
 
 		public FakeRtaEventStore(Lazy<IRtaEventStoreSynchronizer> synchronizer)
@@ -32,9 +33,11 @@ namespace Teleopti.Ccc.TestCommon
 			var rtaStoredEvent = (@event as IRtaStoredEvent).QueryData();
 			if (rtaStoredEvent == null)
 				return;
-
+			var lastEventId = _events.Count;
+			
 			_events.Add(new storedEvent
 			{
+				Id = ++lastEventId,
 				PersonId = rtaStoredEvent.PersonId.Value,
 				Period = new DateTimePeriod(rtaStoredEvent.StartTime.Value, rtaStoredEvent.EndTime.Value),
 				Event = @event
@@ -64,6 +67,13 @@ namespace Teleopti.Ccc.TestCommon
 				.OrderBy(x => x.Period.EndDateTime)
 				.LastOrDefault()
 				?.Event;
+		}
+
+		public IEnumerable<IEvent> LoadFrom(int latestSynchronizedEvent)
+		{
+			return _events
+				.Where(e => e.Id > latestSynchronizedEvent)
+				.Select(e => e.Event);
 		}
 	}
 }
