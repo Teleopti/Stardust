@@ -217,7 +217,6 @@
 		var timelineStart = data.TimeLine[0].Time;
 
 		self.mySchedule(createMySchedule(data.MySchedule, timelineStart));
-
 		self.teamSchedules(createTeamSchedules(data.AgentSchedules, timelineStart));
 
 		setSelectedDateSubscription();

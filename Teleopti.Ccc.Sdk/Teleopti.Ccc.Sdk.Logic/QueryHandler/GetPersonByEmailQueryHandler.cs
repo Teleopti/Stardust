@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -12,11 +11,11 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 {
 	public class GetPersonByEmailQueryHandler : IHandleQuery<GetPersonByEmailQueryDto, ICollection<PersonDto>>
 	{
-		private readonly IAssembler<IPerson, PersonDto> _assembler;
+		private readonly PersonCredentialsAppender _assembler;
 		private readonly IPersonRepository _personRepository;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
-		public GetPersonByEmailQueryHandler(IAssembler<IPerson, PersonDto> assembler, IPersonRepository personRepository, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
+		public GetPersonByEmailQueryHandler(PersonCredentialsAppender assembler, IPersonRepository personRepository, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
 		{
 			_assembler = assembler;
 			_personRepository = personRepository;
@@ -31,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				{
 					var foundPerson =
 						_personRepository.FindPeopleByEmail(query.Email);
-					return _assembler.DomainEntitiesToDtos(foundPerson).ToList();
+					return _assembler.Convert(foundPerson.ToArray()).ToList();
 				}
 			}
 		}

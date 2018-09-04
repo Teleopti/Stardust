@@ -692,17 +692,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			_now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var form = createShiftWithDifferentWFC(startDate);
-			LoggedOnUser.CurrentUser().WorkflowControlSet.ShiftTradeTargetTimeFlexibility = new TimeSpan(0, 20, 0);
-			PersonRepository.Get(form.PersonToId).WorkflowControlSet.ShiftTradeTargetTimeFlexibility = new TimeSpan(0, 30, 0);
-			var expactedMyContractTime = getContractTime(LoggedOnUser.CurrentUser(), new DateOnlyPeriod(startDate, new DateOnly(startDate.Date.AddMonths(1).AddDays(-1))));
-			var expactedPersonToContractTime = getContractTime(PersonRepository.Get(form.PersonToId), new DateOnlyPeriod(startDate, new DateOnly(startDate.Date.AddMonths(1).AddDays(-1))));
+			var schedulePeriod = new DateOnlyPeriod(startDate, new DateOnly(startDate.Date.AddMonths(1).AddDays(-1)));
+			var expactedContractTime = 480 * schedulePeriod.DayCount();
 
 			var result = Target.GetWFCTolerance(form.PersonToId);
 			var data = (result as JsonResult)?.Data as ShiftTradeToleranceInfoViewModel;
 
 			data.IsNeedToCheck.Should().Be.True();
-			data.MyInfos.First().ContractTimeMinutes.Should().Be.EqualTo(expactedMyContractTime);
-			data.PersonToInfos.First().ContractTimeMinutes.Should().Be.EqualTo(expactedPersonToContractTime);
+			data.MyInfos.First().ContractTimeMinutes.Should().Be.EqualTo(expactedContractTime);
+			data.PersonToInfos.First().ContractTimeMinutes.Should().Be.EqualTo(expactedContractTime);
 		}
 
 		[Test]
@@ -712,8 +710,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			_now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var form = createShiftWithDifferentWFC(startDate);
-			LoggedOnUser.CurrentUser().WorkflowControlSet.ShiftTradeTargetTimeFlexibility = new TimeSpan(0, 20, 0);
-			PersonRepository.Get(form.PersonToId).WorkflowControlSet.ShiftTradeTargetTimeFlexibility = new TimeSpan(0, 30, 0);
 
 			var result = Target.GetWFCTolerance(form.PersonToId);
 			var data = (result as JsonResult)?.Data as ShiftTradeToleranceInfoViewModel;
@@ -723,17 +719,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			data.MyInfos.First().PeriodEnd.Should().Be.EqualTo(startDate.Date.AddMonths(1).AddDays(-1));
 			data.PersonToInfos.First().PeriodStart.Should().Be.EqualTo(startDate.Date);
 			data.PersonToInfos.First().PeriodEnd.Should().Be.EqualTo(startDate.Date.AddMonths(1).AddDays(-1));
-		}
-		private int getContractTime(IPerson person, DateOnlyPeriod period)
-		{
-			TimeSpan totalTime = TimeSpan.Zero;
-			foreach (var date in period.DayCollection())
-			{
-				var averageWorkTimeOfDay = person.AverageWorkTimeOfDay(date);
-				if (averageWorkTimeOfDay.IsWorkDay) totalTime = totalTime.Add(averageWorkTimeOfDay.AverageWorkTime.Value);
-			}
-
-			return totalTime.Minutes;
 		}
 
 		private ShiftTradeMultiSchedulesForm prepareData(DateOnly startDate, DateOnly endDate, DateTime publishedDate, TimeZoneInfo timeZone = null)

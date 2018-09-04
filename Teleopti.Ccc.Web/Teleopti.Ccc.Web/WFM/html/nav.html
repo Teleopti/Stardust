@@ -70,13 +70,7 @@
 		</div>
 		<wfm-popup show="showOptions">
 			<ul class="wfm-list">
-				<a href="../Authentication/SignOut" style="width:100%;">
-					<li>
-						<i class="mdi mdi-logout"></i> {{'LogOut'|translate}}
-					</li>
-				</a>
-
-				<div ng-show="vm.personalizeToggle" style="margin-top:-7px">
+				<div ng-show="vm.personalizeToggle">
 					<li ng-click="vm.toggleOverlay()">
 						<a href="javascript:void(0);">
 							<i ng-if="vm.showOverlay" class="mdi mdi-checkbox-marked"></i>
@@ -97,6 +91,11 @@
 						<ng2-change-password></ng2-change-password>
 					</li>
 				</ng-container>
+				<a href="../Authentication/SignOut" style="width:100%; display: inline;">
+					<li>
+						<i class="mdi mdi-logout"></i> {{'LogOut'|translate}}
+					</li>
+				</a>
 			</ul>
 
 		</wfm-popup>

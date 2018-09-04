@@ -7,6 +7,8 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonSc
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
@@ -164,32 +166,46 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			return getShiftTradeScheduleViewModel(data.Paging, myScheduleViewModel, possibleTradeSchedule, data.ShiftTradeDate);
 		}
 
-		private IList<ContractTimeInfoViewModel> getContractInfos(IPerson person, DateOnlyPeriod shiftTradeOpenPeriod)
+		private static IEnumerable<IVirtualSchedulePeriod> extractVirtualPeriods(IPerson person, DateOnlyPeriod period)
 		{
-			var schedulePeriods = person.PersonSchedulePeriods(shiftTradeOpenPeriod);
-			var shiftTradeTargetTimeFlexibility = person.WorkflowControlSet.ShiftTradeTargetTimeFlexibility.Minutes;
+			if (person == null)
+				throw new ArgumentNullException(nameof(person));
 
-			return schedulePeriods.Select(schedulePeriod => new ContractTimeInfoViewModel
-				{
-					PeriodStart = schedulePeriod.DateFrom.Date,
-					PeriodEnd = schedulePeriod.RealDateTo().Date,
-					ContractTimeMinutes = getTotalContractTime(person, new DateOnlyPeriod(schedulePeriod.DateFrom, schedulePeriod.RealDateTo())),
-					ToleranceBlanceInMinutes = schedulePeriod.BalanceIn.Minutes + shiftTradeTargetTimeFlexibility,
-					ToleranceBalanceOutMinutes = schedulePeriod.BalanceOut.Minutes + shiftTradeTargetTimeFlexibility
-				})
-				.ToList();
+			var virtualPeriods = new HashSet<IVirtualSchedulePeriod>();
+			foreach (var dateOnly in period.DayCollection())
+			{
+				virtualPeriods.Add(person.VirtualSchedulePeriod(dateOnly));
+			}
+			return virtualPeriods;
 		}
 
-		private int getTotalContractTime(IPerson person, DateOnlyPeriod period)
+		private IList<ContractTimeInfoViewModel> getContractInfos(IPerson person, DateOnlyPeriod shiftTradeOpenPeriod)
 		{
-			TimeSpan totalTime = TimeSpan.Zero;
-			foreach (var date in period.DayCollection())
-			{
-				var averageWorkTimeOfDay = person.AverageWorkTimeOfDay(date);
-				if (averageWorkTimeOfDay.IsWorkDay) totalTime = totalTime.Add(averageWorkTimeOfDay.AverageWorkTime.Value);
-			}
+			var shiftTradeTargetTimeFlexibility = person.WorkflowControlSet.ShiftTradeTargetTimeFlexibility.Minutes;
+			var virtualSchedulePeriods = extractVirtualPeriods(person, shiftTradeOpenPeriod);
 
-			return totalTime.Minutes;
+			return (from schedulePeriod in virtualSchedulePeriods
+				let contractNegativeWorkTimeTolerance = schedulePeriod.Contract.NegativePeriodWorkTimeTolerance.TotalMinutes
+				let contractNegativeDayoffTolerance = schedulePeriod.AverageWorkTimePerDay.TotalMinutes * schedulePeriod.Contract.NegativeDayOffTolerance
+				let contracePositiveWorkTimeTolerance = schedulePeriod.Contract.PositivePeriodWorkTimeTolerance.TotalMinutes
+				let contractPositiveDayoffTolerance = schedulePeriod.AverageWorkTimePerDay.TotalMinutes * schedulePeriod.Contract.PositiveDayOffTolerance
+				select new ContractTimeInfoViewModel
+				{
+					PeriodStart = schedulePeriod.DateOnlyPeriod.StartDate.Date,
+					PeriodEnd = schedulePeriod.DateOnlyPeriod.EndDate.Date,
+					ContractTimeMinutes = getTotalContractTime(schedulePeriod),
+					ToleranceBlanceInMinutes = contractNegativeWorkTimeTolerance + contractNegativeDayoffTolerance + shiftTradeTargetTimeFlexibility,
+					ToleranceBalanceOutMinutes = contracePositiveWorkTimeTolerance + contractPositiveDayoffTolerance + shiftTradeTargetTimeFlexibility
+				}).ToList();
+		}
+
+		private double getTotalContractTime(IVirtualSchedulePeriod schedulePeriod)
+		{
+			var totalWorkDays = schedulePeriod.DateOnlyPeriod.DayCount() - schedulePeriod.DaysOff();
+			var totalContractTime = schedulePeriod.AverageWorkTimePerDay.TotalMinutes * totalWorkDays;
+			totalContractTime = totalContractTime - schedulePeriod.BalanceIn.TotalMinutes;
+			totalContractTime = totalContractTime + schedulePeriod.BalanceOut.TotalMinutes;
+			return totalContractTime;
 		}
 
 		public DateOnlyPeriod GetShiftTradeOpenPeriod(IPerson person)
@@ -204,11 +220,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		public ShiftTradeToleranceInfoViewModel GetToleranceInfo(Guid personToId)
 		{
 			var personTo = _personRepository.Get(personToId);
+			var myShiftTradeOpenPeriod = GetShiftTradeOpenPeriod(_loggedOnUser.CurrentUser());
+			var personToShiftTradeOpenPeriod = GetShiftTradeOpenPeriod(personTo);
 			return new ShiftTradeToleranceInfoViewModel
 			{
 				IsNeedToCheck = _selectableChecker.IsNeedCheckTolerance(),
-				MyInfos = getContractInfos(_loggedOnUser.CurrentUser(), GetShiftTradeOpenPeriod(_loggedOnUser.CurrentUser())),
-				PersonToInfos = getContractInfos(personTo, GetShiftTradeOpenPeriod(personTo))
+				MyInfos = getContractInfos(_loggedOnUser.CurrentUser(), myShiftTradeOpenPeriod),
+				PersonToInfos = getContractInfos(personTo, personToShiftTradeOpenPeriod)
 			};
 		}
 

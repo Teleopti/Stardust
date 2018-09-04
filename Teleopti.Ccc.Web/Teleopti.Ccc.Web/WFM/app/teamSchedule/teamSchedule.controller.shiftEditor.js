@@ -1,4 +1,5 @@
-﻿(function () {
+﻿
+(function () {
 	'use strict';
 
 	angular.module('wfm.teamSchedule').controller('ShiftEditorViewController', [
@@ -230,9 +231,14 @@
 
 						shiftLayer.isChangingStart = left != 0;
 
-						resizeLayer(shiftLayer, (vm.getMergedShiftLayer(shiftLayer).TranslateX || 0) + left, width);
-
+						var mergedShiftLayer = vm.getMergedShiftLayer(shiftLayer);
+						resizeLayer(shiftLayer, (mergedShiftLayer.TranslateX || 0) + left, width);
 						$scope.$apply();
+
+						scrollToProperPosition(shiftLayer, left, width);
+						$scope.$apply();
+
+
 					})
 					.on('resizeend', function (event) {
 
@@ -677,17 +683,52 @@
 		function initScrollState() {
 			$timeout(function () {
 				var viewportEl = $element[0].querySelector('.viewport');
-				var shiftProjectionTimeRange = vm.scheduleVm.ProjectionTimeRange;
-				var shiftStart = getDiffMinutes(shiftProjectionTimeRange.Start, timeLineTimeRange.Start);
-				var shiftLength = getDiffMinutes(shiftProjectionTimeRange.End, timeLineTimeRange.Start) - shiftStart;
+				var shiftTimeRange = getShiftTimeRangeInMinutes();
+
+				var shiftLength = shiftTimeRange.End - shiftTimeRange.Start;
+
 				var scrollTo =
 					viewportEl.clientWidth <= shiftLength
-						? shiftStart - 120
-						: shiftStart - (viewportEl.clientWidth - shiftLength) / 2;
+						? shiftTimeRange.Start - 120
+						: shiftTimeRange.Start - (viewportEl.clientWidth - shiftLength) / 2;
 				if (scrollTo <= 0) scrollTo = 0;
 				viewportEl.scrollLeft = scrollTo;
 				displayScrollButton();
 			});
+		}
+
+		function getShiftTimeRangeInMinutes() {
+			var allLayers = $element[0].querySelectorAll('.shift-layer');
+			var firstLayer = allLayers[0];
+			var shiftStart = parseInt(firstLayer.style.left) + getTranslateX(firstLayer);
+			var lastLayer = allLayers[allLayers.length - 1];
+			var shiftEnd = parseInt(lastLayer.style.left) + getTranslateX(lastLayer) + parseInt(lastLayer.style.width);
+
+			return {
+				Start: shiftStart,
+				End: shiftEnd
+			};
+		}
+		
+		function scrollToProperPosition(shiftLayer, left, width) {
+			var viewportEl = $element[0].querySelector('.viewport');
+			var mergedShiftLayer = vm.getMergedShiftLayer(shiftLayer);
+			var start = mergedShiftLayer.TranslateX + left + shiftLayer.Left;
+			var end = start + width;
+			var viewingEnd = viewportEl.scrollLeft + viewportEl.clientWidth;
+
+			if (shiftLayer.isChangingStart) {
+				if (viewportEl.scrollLeft > start) vm.scroll(left);
+			} else {
+				if (end > viewingEnd) vm.scroll(end - viewingEnd + 10);
+			}
+		}
+
+		function getTranslateX(el) {
+			var transformRegx = new RegExp(/translate\(\s*(-?[0-9\.\px,\spx)]+)\)/g);
+			return parseInt(el.style.transform.replace(transformRegx, function (a, b, c) {
+				return b;
+			}).split(',')[0]);
 		}
 
 		function displayScrollButton() {

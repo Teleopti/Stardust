@@ -212,6 +212,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 				returnPeriodInUtc = new DateTimePeriod(startDateTime, endDateTime);
 			}
 
+			if (returnPeriodInUtc.StartDateTime.Minute < 15)
+			{
+				returnPeriodInUtc =
+					returnPeriodInUtc.ChangeStartTime(TimeSpan.FromMinutes(returnPeriodInUtc.StartDateTime.Minute));
+			}
+
 			returnPeriodInUtc = returnPeriodInUtc.ChangeStartTime(new TimeSpan(0, -15, 0));
 			returnPeriodInUtc = returnPeriodInUtc.ChangeEndTime(new TimeSpan(0, 15, 0));
 			return returnPeriodInUtc;

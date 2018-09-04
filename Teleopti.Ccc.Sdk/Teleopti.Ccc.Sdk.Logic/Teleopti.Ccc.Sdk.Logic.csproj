@@ -96,6 +96,7 @@
     <Compile Include="Assemblers\ISdkProjectionServiceFactory.cs" />
     <Compile Include="Assemblers\PayrollResultDetailAssembler.cs" />
     <Compile Include="Assemblers\PayrollResultAssembler.cs" />
+    <Compile Include="Assemblers\PersonCredentialsAppender.cs" />
     <Compile Include="Assemblers\ScheduleTagAssembler.cs" />
     <Compile Include="Assemblers\SdkProjectionServiceFactory.cs" />
     <Compile Include="Assemblers\SiteAssembler.cs" />

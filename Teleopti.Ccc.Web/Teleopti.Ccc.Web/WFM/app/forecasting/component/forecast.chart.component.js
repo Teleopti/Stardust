@@ -112,11 +112,11 @@ function ForecastChartCtrl($translate, $filter, $timeout, SkillTypeService) {
 					TotalTasks: dataName.TotalTasks + '←',
 					Tasks: dataName.Tasks + '←',
 					TotalAverageTaskTime: dataName.TotalTaskTime + '→',
+					TotalAverageAfterTaskTime: dataName.TotalATW + '→',
 					AverageAfterTaskTime: dataName.ATW + '→',
 					AverageTaskTime: dataName.TaskTime + '→',
-					TotalAverageAfterTaskTime: dataName.TotalATW + '→',
-					Override: $translate.instant('Override'),
-					Campaign: $translate.instant('Campaign')
+					Campaign: $translate.instant('Campaign'),
+					Override: $translate.instant('Override')
 				},
 				hide: ['Tasks', 'AverageTaskTime', 'AverageAfterTaskTime'],
 				selection: {

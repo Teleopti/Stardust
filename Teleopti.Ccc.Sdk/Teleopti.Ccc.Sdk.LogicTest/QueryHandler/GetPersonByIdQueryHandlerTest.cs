@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
@@ -28,9 +29,30 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var person = PersonFactory.CreatePerson().WithId();
 			personRepository.Add(person);
 
-			var target = new GetPersonByIdQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory(null));
+			var target = new GetPersonByIdQueryHandler(new PersonCredentialsAppender(assembler, new TenantPeopleLoader(new FakeTenantLogonDataManager())), personRepository, new FakeCurrentUnitOfWorkFactory(null));
 			var result = target.Handle(new GetPersonByIdQueryDto {PersonId = person.Id.Value});
 			result.Count.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldIncludeApplicationLogOn()
+		{
+			var personRepository = new FakePersonRepositoryLegacy();
+
+			var assembler = new PersonAssembler(personRepository,
+				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
+					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
+					new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy());
+
+			var person = PersonFactory.CreatePerson().WithId();
+			personRepository.Add(person);
+
+			var logonDataManager = new FakeTenantLogonDataManager();
+			logonDataManager.SetLogon(person.Id.Value,"aaa","d\\c");
+			var target = new GetPersonByIdQueryHandler(new PersonCredentialsAppender(assembler,new TenantPeopleLoader(logonDataManager)), personRepository, new FakeCurrentUnitOfWorkFactory(null));
+			var result = target.Handle(new GetPersonByIdQueryDto { PersonId = person.Id.Value });
+			result.Count.Should().Be.EqualTo(1);
+			result.First().ApplicationLogOnName.Should().Be.EqualTo("aaa");
 		}
 
 		[Test]
@@ -46,7 +68,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var person = PersonFactory.CreatePerson().WithId();
 			personRepository.Add(person);
 
-			var target = new GetPersonByIdQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory(null));
+			var target = new GetPersonByIdQueryHandler(new PersonCredentialsAppender(assembler, new TenantPeopleLoader(new FakeTenantLogonDataManager())), personRepository, new FakeCurrentUnitOfWorkFactory(null));
 			var result = target.Handle(new GetPersonByIdQueryDto { PersonId = Guid.NewGuid() });
 			result.Count.Should().Be.EqualTo(0);
 		}
