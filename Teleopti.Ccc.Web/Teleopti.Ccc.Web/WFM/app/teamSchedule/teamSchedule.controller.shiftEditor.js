@@ -227,7 +227,7 @@
 					.pointerEvents({
 						allowFrom: '.selected'
 					})
-				.on('resizemove', function (event) {
+					.on('resizemove', function (event) {
 						var left = event.deltaRect.left;
 						var width = event.rect.width;
 
@@ -236,9 +236,9 @@
 						var mergedShiftLayer = vm.getMergedShiftLayer(shiftLayer);
 						var lastWidth = mergedShiftLayer.Width;
 						resizeLayer(shiftLayer, (mergedShiftLayer.TranslateX || 0) + left, width);
+						$scope.$apply();
 
 						scrollToProperPosition(shiftLayer, left, width, lastWidth);
-						$scope.$apply();
 					})
 					.on('resizeend', function (event) {
 						var mergedShiftLayer = vm.getMergedShiftLayer(shiftLayer);
