@@ -681,8 +681,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var data = (result as JsonResult)?.Data as ShiftTradeToleranceInfoViewModel;
 
 			data.IsNeedToCheck.Should().Be.True();
-			data.MyInfos.First().ToleranceBlanceInMinutes.Should().Be.EqualTo(20);
-			data.PersonToInfos.First().ToleranceBalanceOutMinutes.Should().Be.EqualTo(30);
+			data.MyInfos.First().NegativeToleranceMinutes.Should().Be.EqualTo(20);
+			data.PersonToInfos.First().PositiveToleranceMinutes.Should().Be.EqualTo(30);
 		}
 
 		[Test]
@@ -720,8 +720,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var data = (result as JsonResult)?.Data as ShiftTradeToleranceInfoViewModel;
 
 			data.IsNeedToCheck.Should().Be.True();
-			data.MyInfos.First().ToleranceBlanceInMinutes.Should().Be.EqualTo(expactedNegativeToleranceMinutes);
-			data.MyInfos.First().ToleranceBalanceOutMinutes.Should().Be.EqualTo(expactedPosigiveToleranceMinutes);
+			data.MyInfos.First().NegativeToleranceMinutes.Should().Be.EqualTo(expactedNegativeToleranceMinutes);
+			data.MyInfos.First().PositiveToleranceMinutes.Should().Be.EqualTo(expactedPosigiveToleranceMinutes);
 		}
 
 		[Test]
@@ -743,8 +743,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var data = (result as JsonResult)?.Data as ShiftTradeToleranceInfoViewModel;
 
 			data.IsNeedToCheck.Should().Be.True();
-			data.PersonToInfos.First().ToleranceBlanceInMinutes.Should().Be.EqualTo(expactedNegativeToleranceMinutes);
-			data.PersonToInfos.First().ToleranceBalanceOutMinutes.Should().Be.EqualTo(expactedPosigiveToleranceMinutes);
+			data.PersonToInfos.First().NegativeToleranceMinutes.Should().Be.EqualTo(expactedNegativeToleranceMinutes);
+			data.PersonToInfos.First().PositiveToleranceMinutes.Should().Be.EqualTo(expactedPosigiveToleranceMinutes);
 		}
 
 		[Test]

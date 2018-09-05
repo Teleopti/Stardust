@@ -972,8 +972,8 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 				//		PeriodStart: moment('2018-08-01'),
 				//		PeriodEnd: moment('2018-09-30'),
 				//		ContractTimeMinutes: 1000,
-				//		ToleranceBlanceInMinutes: 800,
-				//		ToleranceBalanceOutMinutes: 1200
+				//		NegativeToleranceMinutes: 800,
+				//		PositiveToleranceMinutes: 1200
 				//	}],
 
 				//	targetTolorance: [{
@@ -1043,7 +1043,7 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 			}
 		});
 
-		var left = periodToloranceInfo.ContractTimeMinutes - gap - periodToloranceInfo.ToleranceBlanceInMinutes;
+		var left = periodToloranceInfo.ContractTimeMinutes - gap - periodToloranceInfo.NegativeToleranceMinutes;
 
 		if (left < 0) {
 			self.toloranceMessages.push({
@@ -1055,7 +1055,7 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 			});
 		}
 
-		left = periodToloranceInfo.ContractTimeMinutes - gap - periodToloranceInfo.ToleranceBalanceOutMinutes;
+		left = periodToloranceInfo.ContractTimeMinutes - gap - periodToloranceInfo.PositiveToleranceMinutes;
 
 		if (left > 0) {
 			self.toloranceMessages.push({

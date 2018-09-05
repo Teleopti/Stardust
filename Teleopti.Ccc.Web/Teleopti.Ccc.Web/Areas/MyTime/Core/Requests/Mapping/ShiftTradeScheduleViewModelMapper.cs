@@ -192,8 +192,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 					PeriodStart = schedulePeriod.DateOnlyPeriod.StartDate.Date,
 					PeriodEnd = schedulePeriod.DateOnlyPeriod.EndDate.Date,
 					ContractTimeMinutes = getTotalContractTime(schedulePeriod),
-					ToleranceBlanceInMinutes = contractNegativeWorkTimeTolerance + shiftTradeTargetTimeFlexibility,
-					ToleranceBalanceOutMinutes = contracePositiveWorkTimeTolerance + shiftTradeTargetTimeFlexibility
+					NegativeToleranceMinutes = contractNegativeWorkTimeTolerance + shiftTradeTargetTimeFlexibility,
+					PositiveToleranceMinutes = contracePositiveWorkTimeTolerance + shiftTradeTargetTimeFlexibility
 				}).ToList();
 		}
 

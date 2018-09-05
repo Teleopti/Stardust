@@ -26,8 +26,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public DateTime PeriodStart { get; set; }
 		public DateTime PeriodEnd { get; set; }
 		public double ContractTimeMinutes { get; set; }
-		public double ToleranceBlanceInMinutes { get; set; }
-		public double ToleranceBalanceOutMinutes { get; set; }
+		public double NegativeToleranceMinutes { get; set; }
+		public double PositiveToleranceMinutes { get; set; }
 	}
 
 	public class ShiftTradeToleranceInfoViewModel
