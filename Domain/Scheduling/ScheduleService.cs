@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	            schedulePart.AddMainShift(cache.ShiftProjection.TheMainShift);
                 rollbackService.Modify(schedulePart);
 
-            	resourceCalculateDelayer.CalculateIfNeeded(scheduleDateOnly, cache.ShiftProjection.WorkShiftProjectionPeriod, false);
+            	resourceCalculateDelayer.CalculateIfNeeded(scheduleDateOnly, cache.ShiftProjection.WorkShiftProjectionPeriod(), false);
                 return true;
             }
         }

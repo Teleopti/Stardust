@@ -276,6 +276,7 @@
     <Compile Include="Repositories\IAllSkillForSkillGroupProvider.cs" />
     <Compile Include="Repositories\IForecastDayOverrideRepository.cs" />
     <Compile Include="Repositories\IExtensiveLogRepository.cs" />
+    <Compile Include="ResourceCalculation\ShiftProjectionCacheExtensions.cs" />
     <Compile Include="Scheduling\WebClearScheduleStardustHandler.cs" />
     <Compile Include="Scheduling\IPredictShiftCategory.cs" />
     <Compile Include="Scheduling\IShiftCategoryPredictionModelLoader.cs" />
