@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[SetUp]
 		public void Setup()
 		{
-			_personRepository = new FakePersonRepositoryLegacy2();
+			_personRepository = new FakePersonRepository(new FakeStorage());
 			_scheduleProjectionReadOnlyPersister = MockRepository.GenerateMock<IScheduleProjectionReadOnlyPersister>();
 			_scheduleDayReadModelRepository = MockRepository.GenerateMock<IScheduleDayReadModelRepository>();
 			_personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelPersister>();

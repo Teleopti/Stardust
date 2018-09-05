@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		[Test]
 		public void ShouldGetUsers()
 		{
-			var personRepository = new FakePersonRepositoryLegacy2();
+			var personRepository = new FakePersonRepository(new FakeStorage());
 
 			var fakeTenantLogonDataManager = new FakeTenantLogonDataManager();
 			var assembler = new PersonAssembler(personRepository,
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		[Test]
 		public void ShouldNotGetUsersWhenNotPermitted()
 		{
-			var personRepository = new FakePersonRepositoryLegacy2();
+			var personRepository = new FakePersonRepository(new FakeStorage());
 
 			var fakeTenantLogonDataManager = new FakeTenantLogonDataManager();
 			var assembler = new PersonAssembler(personRepository,
