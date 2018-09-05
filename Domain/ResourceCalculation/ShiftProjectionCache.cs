@@ -11,22 +11,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private Lazy<IEditableShift> _mainShift;
 		private readonly IWorkShift _workShift;
 		private Lazy<IVisualLayerCollection> _mainshiftProjection;
-		private readonly IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 		private IDateOnlyAsDateTimePeriod _dateOnlyAsPeriod;
 		private WorkShiftCalculatableVisualLayerCollection _workShiftCalculatableLayers;
 
-		public ShiftProjectionCache(IWorkShift workShift, IPersonalShiftMeetingTimeChecker personalShiftMeetingTimeChecker)
+		public ShiftProjectionCache(IWorkShift workShift)
 		{
 			_workShift = workShift;
-			_personalShiftMeetingTimeChecker = personalShiftMeetingTimeChecker;
 		}
 
 		public ShiftProjectionCache(IWorkShift workShift,
-			IPersonalShiftMeetingTimeChecker personalShiftMeetingTimeChecker,
 			IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
 		{
 			_workShift = workShift;
-			_personalShiftMeetingTimeChecker = personalShiftMeetingTimeChecker;
 			SetDate(dateOnlyAsDateTimePeriod);
 		}
 
@@ -53,22 +49,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public IEnumerable<IWorkShiftCalculatableLayer> WorkShiftCalculatableLayers => _workShiftCalculatableLayers ??
 																					   (_workShiftCalculatableLayers = new WorkShiftCalculatableVisualLayerCollection(MainShiftProjection()));
-
-		public bool PersonalShiftsAndMeetingsAreInWorkTime(IPersonMeeting[] meetings, IPersonAssignment personAssignment)
-		{
-			if (meetings.Length == 0 && personAssignment == null)
-			{
-				return true;
-			}
-
-			if (meetings.Length > 0 && !_personalShiftMeetingTimeChecker.CheckTimeMeeting(TheMainShift, meetings))
-				return false;
-
-			if (personAssignment != null && !_personalShiftMeetingTimeChecker.CheckTimePersonAssignment(TheMainShift, personAssignment))
-				return false;
-
-			return true;
-		}
 
 		public TimeSpan WorkShiftStartTime => WorkShiftProjectionPeriod.StartDateTime.TimeOfDay;
 

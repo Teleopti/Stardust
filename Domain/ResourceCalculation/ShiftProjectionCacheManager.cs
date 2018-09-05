@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     	private readonly IRuleSetDeletedShiftCategoryChecker _rulesSetDeletedShiftCategoryChecker;
 	    private readonly IWorkShiftFromEditableShift _workShiftFromEditableShift;
 		private readonly ShiftProjectionCacheFetcher _shiftProjectionCacheFetcher;
-		private readonly IPersonalShiftMeetingTimeChecker personalShiftMeetingTimeChecker = new PersonalShiftMeetingTimeChecker();
 
 	    public ShiftProjectionCacheManager(IRuleSetDeletedActivityChecker ruleSetDeletedActivityChecker, 
 			IRuleSetDeletedShiftCategoryChecker rulesSetDeletedShiftCategoryChecker,
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    public ShiftProjectionCache ShiftProjectionCacheFromShift(IEditableShift shift, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
 	    {
 		    var workShift = _workShiftFromEditableShift.Convert(shift, dateOnlyAsDateTimePeriod.DateOnly,dateOnlyAsDateTimePeriod.TimeZone());
-		    return new ShiftProjectionCache(workShift, personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
+		    return new ShiftProjectionCache(workShift, dateOnlyAsDateTimePeriod);
 	    }
 
 	    public IList<ShiftProjectionCache> ShiftProjectionCachesFromRuleSets(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod, IEnumerable<IWorkShiftRuleSet> ruleSets, bool checkExcluded)

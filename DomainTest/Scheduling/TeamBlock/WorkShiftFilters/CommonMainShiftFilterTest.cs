@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 	{
 		private CommonMainShiftFilter _target;
 		private MockRepository _mocks;
-		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 		private DateOnly _dateOnly;
 		private static IActivity _activity;
 		private static IShiftCategory _category;
@@ -35,7 +34,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_category = ShiftCategoryFactory.CreateShiftCategory("dv");
 			_category.SetId(Guid.NewGuid());
 			_timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
-			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
 			_scheduleDayEquator = _mocks.StrictMock<IScheduleDayEquator>();
 			_target = new CommonMainShiftFilter(_scheduleDayEquator);
 		}
@@ -110,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(_dateOnly, _timeZoneInfo);
 			foreach (IWorkShift shift in tmpList)
 			{
-				var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
+				var cache = new ShiftProjectionCache(shift, dateOnlyAsDateTimePeriod);
 				retList.Add(cache);
 			}
 			return retList;

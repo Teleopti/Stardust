@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 		{
 			_mocks = new MockRepository();
 			_workShift = new WorkShift(new ShiftCategory("Test"));
-			_shift = new ShiftProjectionCache(_workShift,new PersonalShiftMeetingTimeChecker(), new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
+			_shift = new ShiftProjectionCache(_workShift, new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
 			_teamBlockSchedulingOptions = new TeamBlockSchedulingOptions();
 			_schedulingOptions = new SchedulingOptions();
 			_target = new ResctrictionFromRoleModelRestriction(_shift, _teamBlockSchedulingOptions, _schedulingOptions);
