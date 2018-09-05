@@ -704,6 +704,50 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldGetToleranceTimeBaseOnContractSetting()
+		{
+			setGlobaleSetting(typeof(ShiftTradeTargetTimeSpecification).FullName, true, RequestHandleOption.AutoDeny);
+			_now.Is(DateOnly.Today.Date);
+			var startDate = DateOnly.Today.AddDays(1);
+			var form = createShiftWithDifferentWFC(startDate);
+			var virtualSchedulePeriod = LoggedOnUser.CurrentUser().VirtualSchedulePeriod(startDate);
+			virtualSchedulePeriod.Contract.NegativePeriodWorkTimeTolerance = new TimeSpan(9, 0, 0);
+			virtualSchedulePeriod.Contract.PositivePeriodWorkTimeTolerance = new TimeSpan(10, 0, 0);
+			var expactedNegativeToleranceMinutes = 540;
+			var expactedPosigiveToleranceMinutes = 600;
+
+			var result = Target.GetWFCTolerance(form.PersonToId);
+			var data = (result as JsonResult)?.Data as ShiftTradeToleranceInfoViewModel;
+
+			data.IsNeedToCheck.Should().Be.True();
+			data.MyInfos.First().ToleranceBlanceInMinutes.Should().Be.EqualTo(expactedNegativeToleranceMinutes);
+			data.MyInfos.First().ToleranceBalanceOutMinutes.Should().Be.EqualTo(expactedPosigiveToleranceMinutes);
+		}
+
+		[Test]
+		public void ShouldGetToleranceTimeBaseOnAllFacts()
+		{
+			setGlobaleSetting(typeof(ShiftTradeTargetTimeSpecification).FullName, true, RequestHandleOption.AutoDeny);
+			_now.Is(DateOnly.Today.Date);
+			var startDate = DateOnly.Today.AddDays(1);
+			var form = createShiftWithDifferentWFC(startDate);
+			var personTo = PersonRepository.Get(form.PersonToId);
+			var virtualSchedulePeriod = personTo.VirtualSchedulePeriod(startDate);
+			virtualSchedulePeriod.Contract.NegativePeriodWorkTimeTolerance = new TimeSpan(9, 0, 0);
+			virtualSchedulePeriod.Contract.PositivePeriodWorkTimeTolerance = new TimeSpan(10, 0, 0);
+			personTo.WorkflowControlSet.ShiftTradeTargetTimeFlexibility = new TimeSpan(0, 20, 0);
+			var expactedNegativeToleranceMinutes = 560;
+			var expactedPosigiveToleranceMinutes = 620;
+
+			var result = Target.GetWFCTolerance(form.PersonToId);
+			var data = (result as JsonResult)?.Data as ShiftTradeToleranceInfoViewModel;
+
+			data.IsNeedToCheck.Should().Be.True();
+			data.PersonToInfos.First().ToleranceBlanceInMinutes.Should().Be.EqualTo(expactedNegativeToleranceMinutes);
+			data.PersonToInfos.First().ToleranceBalanceOutMinutes.Should().Be.EqualTo(expactedPosigiveToleranceMinutes);
+		}
+
+		[Test]
 		public void ShouldGetPeriodAccordingToSchedulePeriodSetting()
 		{
 			setGlobaleSetting(typeof(ShiftTradeTargetTimeSpecification).FullName, true, RequestHandleOption.AutoDeny);
