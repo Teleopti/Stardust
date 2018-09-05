@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		}
 	}
 
-
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_XXL_76496)]
 	public class ShiftProjectionCacheFactoryOld : IShiftProjectionCacheFactory
 	{
 		public ShiftProjectionCache Create(IWorkShift workShift, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod = null)
