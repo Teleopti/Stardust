@@ -439,7 +439,7 @@
 			var mergedBesideLayer = vm.getMergedShiftLayer(besideLayer);
 
 			return mergedLayer.ActivityId == mergedBesideLayer.ActivityId
-				&& mergedLayer.isOvertime == mergedBesideLayer.isOvertime
+				&& mergedLayer.IsOvertime == mergedBesideLayer.IsOvertime
 				&& mergedLayer.IsPersonalActivity == mergedBesideLayer.IsPersonalActivity
 				&& mergedLayer.IsMeeting == mergedBesideLayer.IsMeeting;
 		}
