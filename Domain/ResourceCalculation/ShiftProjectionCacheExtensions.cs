@@ -20,5 +20,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			shiftProjectionCache.WorkShiftProjectionPeriod().StartDateTime.TimeOfDay;
 		public static TimeSpan WorkShiftEndTime(this ShiftProjectionCache shiftProjectionCache) => 
 			shiftProjectionCache.WorkShiftProjectionPeriod().EndDateTime.Subtract(shiftProjectionCache.WorkShiftProjectionPeriod().StartDateTime.Date);
+		public static TimeSpan WorkShiftProjectionContractTime(this ShiftProjectionCache shiftProjectionCache) => 
+			shiftProjectionCache.TheWorkShift.Projection.ContractTime();
 	}
 }

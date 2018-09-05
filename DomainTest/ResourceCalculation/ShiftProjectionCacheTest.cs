@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Assert.IsNotNull(target.TheWorkShift);
 			Assert.IsNotNull(target.MainShiftProjection());
 			Assert.IsNotNull(target.WorkShiftProjectionPeriod());
-			Assert.IsNotNull(target.WorkShiftProjectionContractTime);
+			Assert.IsNotNull(target.WorkShiftProjectionContractTime());
 		}
 
 		[Test]

@@ -24,7 +24,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			TheWorkShift = workShift;
 			SetDate(dateOnlyAsDateTimePeriod);
 		}
-
+		
+		public IEditableShift TheMainShift => _mainShift.Value;
+		public IWorkShift TheWorkShift { get; }
+		public IVisualLayerCollection MainShiftProjection() =>
+			_mainshiftProjection?.Value ?? TheMainShift.ProjectionService().CreateProjection();
+		public IEnumerable<IWorkShiftCalculatableLayer> WorkShiftCalculatableLayers => _workShiftCalculatableLayers ??
+																					   (_workShiftCalculatableLayers = new WorkShiftCalculatableVisualLayerCollection(MainShiftProjection()));
+		public DateOnly SchedulingDate => _dateOnlyAsPeriod?.DateOnly ?? DateOnly.MinValue;
+		
 		public void SetDate(IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
 		{
 			if (_dateOnlyAsPeriod != null && _dateOnlyAsPeriod.Equals(dateOnlyAsDateTimePeriod)) return;
@@ -35,20 +43,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_mainshiftProjection = new Lazy<IVisualLayerCollection>(() => TheMainShift.ProjectionService().CreateProjection());
 		}
 		
-		public IEditableShift TheMainShift => _mainShift.Value;
-
-		public IWorkShift TheWorkShift { get; }
-
-		public TimeSpan WorkShiftProjectionContractTime => TheWorkShift.Projection.ContractTime();
-
-		public IVisualLayerCollection MainShiftProjection() =>
-			_mainshiftProjection?.Value ?? TheMainShift.ProjectionService().CreateProjection();
-
-		public IEnumerable<IWorkShiftCalculatableLayer> WorkShiftCalculatableLayers => _workShiftCalculatableLayers ??
-																					   (_workShiftCalculatableLayers = new WorkShiftCalculatableVisualLayerCollection(MainShiftProjection()));
-
-		public DateOnly SchedulingDate => _dateOnlyAsPeriod?.DateOnly ?? DateOnly.MinValue;
-
 		public void ClearMainShiftProjectionCache()
 		{
 			_mainshiftProjection = null;

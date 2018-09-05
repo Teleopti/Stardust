@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 return shiftList;
 
 	        IList<ShiftProjectionCache> workShiftsWithinMinMax =
-		        shiftList.Where(s => validMinMax.Contains(s.WorkShiftProjectionContractTime)).ToArray();
+		        shiftList.Where(s => validMinMax.Contains(s.WorkShiftProjectionContractTime())).ToArray();
 
             return workShiftsWithinMinMax;
 
@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				var workShiftsWithinMinMax =
 					shiftList.Where(
 							s =>
-								restriction.WorkTimeLimitation.IsCorrespondingToWorkTimeLimitation(s.WorkShiftProjectionContractTime))
+								restriction.WorkTimeLimitation.IsCorrespondingToWorkTimeLimitation(s.WorkShiftProjectionContractTime()))
 						.ToArray();
 
 				return workShiftsWithinMinMax;
