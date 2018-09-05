@@ -185,8 +185,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var virtualSchedulePeriods = extractVirtualPeriods(person, shiftTradeOpenPeriod);
 
 			return (from schedulePeriod in virtualSchedulePeriods
-				let contractNegativeWorkTimeTolerance = schedulePeriod.Contract.NegativePeriodWorkTimeTolerance.TotalMinutes
-				let contracePositiveWorkTimeTolerance = schedulePeriod.Contract.PositivePeriodWorkTimeTolerance.TotalMinutes
+				let contractNegativeWorkTimeTolerance = schedulePeriod.Contract?.NegativePeriodWorkTimeTolerance.TotalMinutes??0
+				let contracePositiveWorkTimeTolerance = schedulePeriod.Contract?.PositivePeriodWorkTimeTolerance.TotalMinutes??0
 				select new ContractTimeInfoViewModel
 				{
 					PeriodStart = schedulePeriod.DateOnlyPeriod.StartDate.Date,
