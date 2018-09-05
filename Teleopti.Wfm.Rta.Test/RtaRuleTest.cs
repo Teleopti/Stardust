@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration;
 using Teleopti.Ccc.TestCommon;
 
-namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
+namespace Teleopti.Wfm.Rta.Test
 {
 	[TestFixture]
 	public class RtaRuleTest

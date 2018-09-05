@@ -12,7 +12,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
+namespace Teleopti.Wfm.Rta.Test.Domain.AgentAdherenceDay
 {
 	[DomainTest]
 	[DefaultData]

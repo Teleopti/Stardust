@@ -1,12 +1,10 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Configuration
+namespace Teleopti.Wfm.Rta.Test.Domain.Configuration
 {
 	[RtaTest]
 	public class LoggedOutStateGroupMissingInRtaServiceTest
@@ -24,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Configuration
 
 			var result = Target.Validate();
 
-			var expected = nameof(UserTexts.Resources.LoggedOutStateGroupMissingInRtaService);
+			var expected = nameof(Ccc.UserTexts.Resources.LoggedOutStateGroupMissingInRtaService);
 			result.Single(x => x.Resource == expected)
 				.Should().Not.Be.Null();
 		}
@@ -40,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Configuration
 
 			var result = Target.Validate();
 
-			var expected = nameof(UserTexts.Resources.LoggedOutStateGroupMissingInRtaService);
+			var expected = nameof(Ccc.UserTexts.Resources.LoggedOutStateGroupMissingInRtaService);
 			result.Select(x => x.Resource)
 				.Should().Not.Contain(expected);
 		}

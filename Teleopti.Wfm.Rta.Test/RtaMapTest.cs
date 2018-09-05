@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
 
-namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
+namespace Teleopti.Wfm.Rta.Test
 {
     [TestFixture]
     public class RtaMapTest

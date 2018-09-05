@@ -11,7 +11,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ReadModels.Mappings
+namespace Teleopti.Wfm.Rta.Test.ApplicationLayer.ReadModels.Mappings
 {
 	[TestFixture]
 	[DomainTest]

@@ -7,12 +7,11 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
-namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service
+namespace Teleopti.Wfm.Rta.Test.Domain.Service
 {
 	[TestFixture]
 	[RtaTest]
@@ -21,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service
 		public FakeDatabase Database;
 		public FakeEventPublisher Publisher;
 		public MutableNow Now;
-		public Rta Target;
+		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
 
 		[Test]
 		public void ShouldPublish()

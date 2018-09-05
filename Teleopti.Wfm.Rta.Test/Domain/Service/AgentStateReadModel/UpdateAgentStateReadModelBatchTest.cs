@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
-namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateReadModel
+namespace Teleopti.Wfm.Rta.Test.Domain.Service.AgentStateReadModel
 {
 	[RtaTest]
 	[TestFixture]
@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service.AgentStateRea
 		public FakeDatabase Database;
 		public FakeAgentStateReadModelPersister ReadModels;
 		public MutableNow Now;
-		public Rta Target;
+		public Ccc.Domain.RealTimeAdherence.Domain.Service.Rta Target;
 
 		[Test]
 		public void ShouldUpdateState()

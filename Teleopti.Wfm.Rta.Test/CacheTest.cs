@@ -1,5 +1,4 @@
 using System;
-using System.Reflection;
 using Autofac;
 using MbCache.Core;
 using NUnit.Framework;
@@ -13,7 +12,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Module = Autofac.Module;
 
-namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
+namespace Teleopti.Wfm.Rta.Test
 {
 	[DomainTest]
 	[TestFixture]

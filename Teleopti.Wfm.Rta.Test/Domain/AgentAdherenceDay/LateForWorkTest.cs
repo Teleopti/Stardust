@@ -8,13 +8,11 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.TestCommon.TestData;
 
-namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
+namespace Teleopti.Wfm.Rta.Test.Domain.AgentAdherenceDay
 {
 	[DomainTest]
 	[DefaultData]
@@ -36,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 
 			var data = Target.LoadUntilNow(personId, "2018-05-28".Date());
 
-			data.Changes().Single().LateForWork.Should().Be(string.Format(UserTexts.Resources.LateXMinutes, "60"));
+			data.Changes().Single().LateForWork.Should().Be(string.Format(Ccc.UserTexts.Resources.LateXMinutes, "60"));
 		}
 
 		[Test]
@@ -51,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 
 			var data = Target.LoadUntilNow(personId, "2018-05-28".Date());
 
-			data.Changes().Single().LateForWork.Should().Be(string.Format(UserTexts.Resources.LateXMinutes, "60"));
+			data.Changes().Single().LateForWork.Should().Be(string.Format(Ccc.UserTexts.Resources.LateXMinutes, "60"));
 		}
 
 		[Test]
@@ -68,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 			var data = Target.LoadUntilNow(personId, "2018-05-28".Date());
 
 			data.Changes().First().LateForWork.Should().Be.Null();
-			data.Changes().Second().LateForWork.Should().Be(string.Format(UserTexts.Resources.LateXMinutes, "60"));
+			data.Changes().Second().LateForWork.Should().Be(string.Format(Ccc.UserTexts.Resources.LateXMinutes, "60"));
 		}
 
 		[Test]
@@ -102,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 
 			var data = Target.LoadUntilNow(personId, "2018-06-14".Date());
 
-			data.Changes().Single().LateForWork.Should().Be(string.Format(UserTexts.Resources.LateXMinutes, "60"));
+			data.Changes().Single().LateForWork.Should().Be(string.Format(Ccc.UserTexts.Resources.LateXMinutes, "60"));
 		}
 		
 		[Test]
@@ -115,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.AgentAdherenceDay
 
 			var data = Target.LoadUntilNow(personId, "2018-06-14".Date());
 
-			data.Changes().Single().LateForWork.Should().Be(string.Format(UserTexts.Resources.LateXMinutes, "5"));
+			data.Changes().Single().LateForWork.Should().Be(string.Format(Ccc.UserTexts.Resources.LateXMinutes, "5"));
 		}
 	}
 }

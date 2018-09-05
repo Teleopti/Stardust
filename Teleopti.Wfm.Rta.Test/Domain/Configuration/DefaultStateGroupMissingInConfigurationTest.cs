@@ -1,12 +1,11 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Configuration
+namespace Teleopti.Wfm.Rta.Test.Domain.Configuration
 {
 	[DomainTest]
 	public class DefaultStateGroupMissingInConfigurationTest
@@ -23,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Configuration
 			var result = Target.Validate();
 
 			result.Select(x => x.Resource)
-				.Should().Contain(nameof(UserTexts.Resources.DefaultStateGroupMissingInConfiguration));
+				.Should().Contain(nameof(Ccc.UserTexts.Resources.DefaultStateGroupMissingInConfiguration));
 		}
 
 		[Test]
@@ -36,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Configuration
 			var result = Target.Validate();
 
 			result.Select(x => x.Resource)
-				.Should().Not.Contain(nameof(UserTexts.Resources.DefaultStateGroupMissingInConfiguration));
+				.Should().Not.Contain(nameof(Ccc.UserTexts.Resources.DefaultStateGroupMissingInConfiguration));
 		}
 
 		[Test]
@@ -49,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Configuration
 			var result = Target.Validate();
 
 			result.Select(x => x.Resource)
-				.Should().Contain(nameof(UserTexts.Resources.DefaultStateGroupMissingInConfiguration));
+				.Should().Contain(nameof(Ccc.UserTexts.Resources.DefaultStateGroupMissingInConfiguration));
 		}
 
 		[Test]
@@ -65,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Configuration
 
 			var result = Target.Validate();
 
-			var resource = nameof(UserTexts.Resources.DefaultStateGroupMissingInConfiguration);
+			var resource = nameof(Ccc.UserTexts.Resources.DefaultStateGroupMissingInConfiguration);
 			result.FirstOrDefault(x => x.Resource == resource && x.Data.Single() == "invalid business unit 1")
 				.Should().Not.Be.Null();
 			result.FirstOrDefault(x => x.Resource == resource && x.Data.Single() == "invalid business unit 2")

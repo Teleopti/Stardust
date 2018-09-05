@@ -11,7 +11,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
-namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
+namespace Teleopti.Wfm.Rta.Test
 {
     [TestFixture]
     public class RtaStateHolderTest

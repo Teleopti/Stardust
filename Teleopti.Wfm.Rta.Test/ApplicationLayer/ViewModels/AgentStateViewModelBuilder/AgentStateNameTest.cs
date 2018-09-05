@@ -12,7 +12,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.AgentStateViewModelBuilder
+namespace Teleopti.Wfm.Rta.Test.ApplicationLayer.ViewModels.AgentStateViewModelBuilder
 {
 	[DomainTest]
 	[DefaultData]

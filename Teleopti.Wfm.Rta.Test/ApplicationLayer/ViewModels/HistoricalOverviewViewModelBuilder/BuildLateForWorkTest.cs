@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.ApplicationLayer.ViewModels.HistoricalOverviewViewModelBuilder
+namespace Teleopti.Wfm.Rta.Test.ApplicationLayer.ViewModels.HistoricalOverviewViewModelBuilder
 {
 	[DomainTest]
 	[DefaultData]

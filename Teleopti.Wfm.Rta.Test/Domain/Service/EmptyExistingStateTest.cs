@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 
-namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Domain.Service
+namespace Teleopti.Wfm.Rta.Test.Domain.Service
 {
 	[RtaTest]
 	[TestFixture]

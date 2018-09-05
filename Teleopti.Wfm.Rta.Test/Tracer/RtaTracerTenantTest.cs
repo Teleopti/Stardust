@@ -8,7 +8,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.RealTimeAdherence.Tracer
+namespace Teleopti.Wfm.Rta.Test.Tracer
 {
 	[RtaTest]
 	[Setting("UseSafeRtaTracer", false)]
