@@ -86,6 +86,7 @@
 		vm.trackId = guidgenerator.newGuid();
 		vm.isSaving = false;
 		vm.selectedShiftLayers = [];
+		vm.isResizing = false;
 
 		vm.$onInit = function () {
 			getSchedule();
@@ -127,18 +128,12 @@
 				doNotToggleSelectionAfterResizeEnd = false;
 				return;
 			}
-			disableContainerOverflow();
-
 			vm.selectedShiftLayers = vm.selectedShiftLayers.indexOf(shiftLayer) === -1 ? [shiftLayer] : [];
 			vm.selectedActivitiyId = vm.getMergedShiftLayer(shiftLayer).ActivityId;
+			vm.isResizing = !!vm.selectedShiftLayers.length ? true : false;
 
 			bindResizeEvent(shiftLayer, $event.target);
 		};
-
-		function disableContainerOverflow() {
-			var viewportEl = $element[0].querySelector('.viewport');
-			viewportEl.style.overflow = 'hidden';
-		}
 
 		vm.useLighterBorder = function (shiftLayer) {
 			var sl = vm.getMergedShiftLayer(shiftLayer);
@@ -232,27 +227,26 @@
 					.pointerEvents({
 						allowFrom: '.selected'
 					})
-					.on('resizemove', function (event) {
+				.on('resizemove', function (event) {
 						var left = event.deltaRect.left;
 						var width = event.rect.width;
 
 						shiftLayer.isChangingStart = left != 0;
 
 						var mergedShiftLayer = vm.getMergedShiftLayer(shiftLayer);
+						var lastWidth = mergedShiftLayer.Width;
 						resizeLayer(shiftLayer, (mergedShiftLayer.TranslateX || 0) + left, width);
 
-						scrollToProperPosition(shiftLayer, left, width);
+						scrollToProperPosition(shiftLayer, left, width, lastWidth);
 						$scope.$apply();
 					})
 					.on('resizeend', function (event) {
-
 						var mergedShiftLayer = vm.getMergedShiftLayer(shiftLayer);
 						var translateX = round5(mergedShiftLayer.TranslateX);
 						var startMinutes = mergedShiftLayer.Left + translateX;
 
 						if (shiftLayer.isChangingStart) {
 							var startTime = timeLineTimeRange.Start.clone().add(startMinutes, 'minutes');
-
 							redrawLayers(shiftLayer, startTime, true);
 						} else {
 							var width = round5(mergedShiftLayer.Width);
@@ -688,7 +682,6 @@
 			$timeout(function () {
 				var viewportEl = $element[0].querySelector('.viewport');
 				var shiftTimeRange = getShiftTimeRangeInMinutes();
-
 				var shiftLength = shiftTimeRange.End - shiftTimeRange.Start;
 
 				var scrollTo =
@@ -713,18 +706,30 @@
 				End: shiftEnd
 			};
 		}
-		
-		function scrollToProperPosition(shiftLayer, left, width) {
+
+		function scrollToProperPosition(shiftLayer, left, width, lastWidth) {
 			var viewportEl = $element[0].querySelector('.viewport');
 			var mergedShiftLayer = vm.getMergedShiftLayer(shiftLayer);
 			var start = mergedShiftLayer.TranslateX + left + shiftLayer.Left;
 			var end = start + width;
 			var viewingEnd = viewportEl.scrollLeft + viewportEl.clientWidth;
 
+			var isExtending = width > lastWidth;
+			var changingWidth = width - lastWidth;
+
+			var shiftTimeRange = getShiftTimeRangeInMinutes();
+
 			if (shiftLayer.isChangingStart) {
-				if (viewportEl.scrollLeft > start) vm.scroll(left);
+				if ((isExtending && viewportEl.scrollLeft > start)
+					|| (!isExtending && shiftTimeRange.End > viewingEnd)) {
+					vm.scroll(-changingWidth);
+				}
 			} else {
-				if (end > viewingEnd) vm.scroll(end - viewingEnd + 20);
+				if ((isExtending && end > viewingEnd)
+					|| (!isExtending && viewportEl.scrollLeft > shiftTimeRange.Start)) {
+					var scrollTo = isExtending ? changingWidth + 20 : changingWidth;
+					vm.scroll(scrollTo);
+				}
 			}
 		}
 

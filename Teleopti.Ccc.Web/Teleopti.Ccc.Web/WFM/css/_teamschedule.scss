@@ -1279,9 +1279,13 @@ teams-time-picker.ng-invalid-dst {
 
 			.viewport {
 				height: 530px;
-				overflow: hidden;
-				touch-action: none;
+				overflow: auto;
 				transition: width 1s ease-in-out;
+
+				&.overflow {
+					overflow: hidden;
+					touch-action: none;
+				}
 			}
 		}
 
