@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			SetDateExtra();
 		}
 
-		[RemoveMeWithToggle("make sealed", Toggles.ResourcePlanner_XXL_76496)]
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_XXL_76496)]
 		public virtual void SetDateExtra(){}
 	}
 }
