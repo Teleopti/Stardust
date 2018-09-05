@@ -10,10 +10,10 @@ delete from Request where StartDateTime between  @start  and @end and Id not in 
 delete from PersonRequest where id not in(select parent from Request )
 
 -- truncate data from other test runs
-truncate table [PerfA].[ReadModel].[SkillCombinationResource]
-truncate table [PerfA].[ReadModel].[SkillCombination]
-truncate table [PerfA].[ReadModel].[SkillCombinationResourceDelta]
-truncate table [PerfA].[dbo].[JobStartTime]
+truncate table [ReadModel].[SkillCombinationResource]
+truncate table [ReadModel].[SkillCombination]
+truncate table [ReadModel].[SkillCombinationResourceDelta]
+truncate table [dbo].[JobStartTime]
 
 -- delete existing OvertimeRequestOpenPeriod
 DELETE FROM OvertimeRequestOpenPeriod WHERE Parent = 'E97BC114-8939-4A70-AE37-A338010FFF19'
@@ -63,7 +63,7 @@ insert into PersonRequest select @PersonRequestId, 1, '3F0886AB-7B25-4E95-856A-0
 select @RequestId = newid()
 INSERT INTO Request SELECT @RequestId, @PersonRequestId, @startRequest, @endRequest
 
-INSERT INTO OvertimeRequest SELECT @RequestId, 'E0D49526-3CCB-4A17-B7D2-A142010BBDB4' -- Övertid Betald
+INSERT INTO OvertimeRequest SELECT @RequestId, 'E0D49526-3CCB-4A17-B7D2-A142010BBDB4' -- ï¿½vertid Betald
 
     FETCH NEXT FROM request_cursor   
     INTO @person_id 

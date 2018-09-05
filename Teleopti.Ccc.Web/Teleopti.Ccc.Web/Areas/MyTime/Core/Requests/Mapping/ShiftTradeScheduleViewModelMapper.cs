@@ -185,17 +185,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var virtualSchedulePeriods = extractVirtualPeriods(person, shiftTradeOpenPeriod);
 
 			return (from schedulePeriod in virtualSchedulePeriods
-				let contractNegativeWorkTimeTolerance = schedulePeriod.Contract.NegativePeriodWorkTimeTolerance.TotalMinutes
-				let contractNegativeDayoffTolerance = schedulePeriod.AverageWorkTimePerDay.TotalMinutes * schedulePeriod.Contract.NegativeDayOffTolerance
-				let contracePositiveWorkTimeTolerance = schedulePeriod.Contract.PositivePeriodWorkTimeTolerance.TotalMinutes
-				let contractPositiveDayoffTolerance = schedulePeriod.AverageWorkTimePerDay.TotalMinutes * schedulePeriod.Contract.PositiveDayOffTolerance
+				let contractNegativeWorkTimeTolerance = schedulePeriod.Contract?.NegativePeriodWorkTimeTolerance.TotalMinutes??0
+				let contracePositiveWorkTimeTolerance = schedulePeriod.Contract?.PositivePeriodWorkTimeTolerance.TotalMinutes??0
 				select new ContractTimeInfoViewModel
 				{
 					PeriodStart = schedulePeriod.DateOnlyPeriod.StartDate.Date,
 					PeriodEnd = schedulePeriod.DateOnlyPeriod.EndDate.Date,
 					ContractTimeMinutes = getTotalContractTime(schedulePeriod),
-					ToleranceBlanceInMinutes = contractNegativeWorkTimeTolerance + contractNegativeDayoffTolerance + shiftTradeTargetTimeFlexibility,
-					ToleranceBalanceOutMinutes = contracePositiveWorkTimeTolerance + contractPositiveDayoffTolerance + shiftTradeTargetTimeFlexibility
+					NegativeToleranceMinutes = contractNegativeWorkTimeTolerance + shiftTradeTargetTimeFlexibility,
+					PositiveToleranceMinutes = contracePositiveWorkTimeTolerance + shiftTradeTargetTimeFlexibility
 				}).ToList();
 		}
 

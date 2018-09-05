@@ -47,33 +47,32 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events
 
 		public void Synchronize()
 		{
-			var latestSynchronizedRTAEvent = _keyValueStore.Get("LatestSynchronizedRTAEvent");			
-			var loadFromEvent = latestSynchronizedRTAEvent == null ?  0 : int.Parse(latestSynchronizedRTAEvent);
-						
-			var events = _events.LoadFrom(loadFromEvent);
+			var events = _events.LoadFrom(_keyValueStore.Get("LatestSynchronizedRTAEvent", 0));
 
-			_keyValueStore.Update("LatestSynchronizedRTAEvent",  events.MaxId.ToString());
-			
-			var queryData = events.Events.Select(e => e as IRtaStoredEvent).Select(x => x.QueryData());
-			queryData.ForEach(q =>
-			{
-				var adherenceDay = _adherenceDayLoader.Load(q.PersonId.Value, q.StartTime.Value.ToDateOnly());
-				var lateForWork = adherenceDay.Changes().FirstOrDefault(c => c.LateForWork != null);
-				var lateForWorkText = lateForWork != null ? lateForWork.LateForWork : "0";
-				var minutesLateForWork = int.Parse(Regex.Replace(lateForWorkText, "[^0-9.]", ""));
-				var shift =  new DateTimePeriod(adherenceDay.Period().StartDateTime.AddHours(1), adherenceDay.Period().EndDateTime.AddHours(-1));
-				var shiftLength = (int) shift.ElapsedTime().TotalMinutes;
-				
-				_readModels.Upsert(new HistoricalOverviewReadModel
+			_keyValueStore.Update("LatestSynchronizedRTAEvent", events.MaxId.ToString());
+
+			events.Events
+				.Cast<IRtaStoredEvent>()
+				.Select(x => x.QueryData())
+				.ForEach(q =>
 				{
-					PersonId = q.PersonId.Value,
-					Date = q.StartTime.Value.ToDateOnly(),
-					Adherence = adherenceDay.Percentage(),
-					WasLateForWork = lateForWork != null,
-					MinutesLateForWork = minutesLateForWork,
-					ShiftLength = shiftLength					
+					var adherenceDay = _adherenceDayLoader.Load(q.PersonId.Value, q.StartTime.Value.ToDateOnly());
+					var lateForWork = adherenceDay.Changes().FirstOrDefault(c => c.LateForWork != null);
+					var lateForWorkText = lateForWork != null ? lateForWork.LateForWork : "0";
+					var minutesLateForWork = int.Parse(Regex.Replace(lateForWorkText, "[^0-9.]", ""));
+					var shift = new DateTimePeriod(adherenceDay.Period().StartDateTime.AddHours(1), adherenceDay.Period().EndDateTime.AddHours(-1));
+					var shiftLength = (int) shift.ElapsedTime().TotalMinutes;
+
+					_readModels.Upsert(new HistoricalOverviewReadModel
+					{
+						PersonId = q.PersonId.Value,
+						Date = q.StartTime.Value.ToDateOnly(),
+						Adherence = adherenceDay.Percentage(),
+						WasLateForWork = lateForWork != null,
+						MinutesLateForWork = minutesLateForWork,
+						ShiftLength = shiftLength
+					});
 				});
-			});
-		}		
+		}
 	}
 }

@@ -49,8 +49,6 @@ namespace Teleopti.Ccc.TestCommon
 
 		public int Remove(DateTime removeUntil, int maxEventsToRemove) => throw new NotImplementedException();
 
-		public IEnumerable<IEvent> LoadAll() => _events.Select(e => e.Event);
-
 		public IEnumerable<IEvent> Load(Guid personId, DateTimePeriod period)
 		{
 			return _events
