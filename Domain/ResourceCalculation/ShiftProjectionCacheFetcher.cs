@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return _ruleSetProjectionEntityService.ProjectionCollection(ruleSet, null)
 				.Select(s => s.WorkShift)
 				.SelectMany(shift => _shiftFromMasterActivityService.ExpandWorkShiftsWithMasterActivity(shift, baseIsMasterActivity))
-				.Select(workShift => new ShiftProjectionCache(workShift))
+				.Select(workShift => new ShiftProjectionCache(workShift, null))
 				.ToArray();
 		}
 	}

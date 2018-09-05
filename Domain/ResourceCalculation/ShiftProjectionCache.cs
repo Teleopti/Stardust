@@ -13,16 +13,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private IDateOnlyAsDateTimePeriod _dateOnlyAsPeriod;
 		private WorkShiftCalculatableVisualLayerCollection _workShiftCalculatableLayers;
 
-		public ShiftProjectionCache(IWorkShift workShift)
+		public ShiftProjectionCache(IWorkShift workShift, IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
 		{
 			TheWorkShift = workShift;
-		}
-
-		public ShiftProjectionCache(IWorkShift workShift,
-			IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod)
-		{
-			TheWorkShift = workShift;
-			SetDate(dateOnlyAsDateTimePeriod);
+			if (dateOnlyAsDateTimePeriod != null)
+			{
+				SetDate(dateOnlyAsDateTimePeriod);	
+			}
 		}
 		
 		public IEditableShift TheMainShift => _mainShift.Value;
