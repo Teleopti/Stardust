@@ -1,19 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http.Results;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Forecasting.Angel.Methods;
 using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
 using Teleopti.Ccc.Web.Areas.Forecasting.Models;
 using Teleopti.Interfaces.Domain;
@@ -35,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		}
 
 		[Test]
-		public void ShouldUseTeleoptiClassicShortTermMethodToForecast()
+		public void ShouldForecastDaysWithDifferentTaskTime()
 		{
 			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
 			var workload = skill.WorkloadCollection.Single();
@@ -74,6 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var forecastedDay1 = result.Content.ForecastDays.First().TotalAverageTaskTime;
 			var forecastedDay2 = result.Content.ForecastDays.Last().TotalAverageTaskTime;
 			forecastedDay1.Should().Not.Be.EqualTo(forecastedDay2);
+			Assert.AreNotEqual(Math.Round(forecastedDay1, 6), Math.Round(forecastedDay2, 6));
 		}
 	}
 }
