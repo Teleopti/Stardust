@@ -16,7 +16,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Outlier
 {
 	[TestFixture]
-	public class TaskOutlierRemoverTest
+	public class OutlierRemoverTest
 	{
 		[Test]
 		public void ShouldRemoveOutliersAndUse3SigmaInstead()
@@ -38,17 +38,18 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Outlier
 			var volumes = IndexVolumesFactory.CreateDayWeekMonthIndexVolumes();
 			indexVolumes.Stub(x => x.Create(historicalData)).Return(volumes);
 
-			var target = new TaskOutlierRemover();
-
 			historicalData.TaskOwnerDayCollection.Count.Should().Be.EqualTo(25);
-			historicalData.TaskOwnerDayCollection.Single(x => x.CurrentDate == new DateOnly(date))
-				.TotalStatisticCalculatedTasks.Should().Be.EqualTo(1000);
+			var taskOwner = historicalData.TaskOwnerDayCollection.Single(x => x.CurrentDate == new DateOnly(date));
+			taskOwner.TotalStatisticCalculatedTasks.Should().Be.EqualTo(1000);
+			((int)taskOwner.TotalStatisticAverageTaskTime.TotalSeconds).Should().Be.EqualTo(1000);
 
+			var target = new OutlierRemover();
 			var result = target.RemoveOutliers(historicalData, new FakeTeleoptiClassic(indexVolumes));
 
 			result.TaskOwnerDayCollection.Count.Should().Be.EqualTo(25);
-			Math.Round(result.TaskOwnerDayCollection.Single(x => x.CurrentDate == new DateOnly(date))
-				.TotalStatisticCalculatedTasks, 3).Should().Be.EqualTo(677.999);
+			var taskOwnerWithoutOutlier = result.TaskOwnerDayCollection.Single(x => x.CurrentDate == new DateOnly(date));
+			Math.Round(taskOwnerWithoutOutlier.TotalStatisticCalculatedTasks, 3).Should().Be.EqualTo(677.999);
+			Math.Round(taskOwnerWithoutOutlier.TotalStatisticAverageTaskTime.TotalSeconds, 3).Should().Be.EqualTo(677.999);
 		}
 
 		[Test]
@@ -71,17 +72,18 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Outlier
 			var volumes = IndexVolumesFactory.CreateDayWeekMonthIndexVolumes();
 			indexVolumes.Stub(x => x.Create(historicalData)).Return(volumes);
 
-			var target = new TaskOutlierRemover();
+			var target = new OutlierRemover();
 
 			historicalData.TaskOwnerDayCollection.Count.Should().Be.EqualTo(25);
-			historicalData.TaskOwnerDayCollection.Single(x => x.CurrentDate == new DateOnly(date))
-				.TotalStatisticCalculatedTasks.Should().Be.EqualTo(1000);
+			var taskOwner = historicalData.TaskOwnerDayCollection.Single(x => x.CurrentDate == new DateOnly(date));
+			taskOwner.TotalStatisticCalculatedTasks.Should().Be.EqualTo(1000);
 
 			var result = target.RemoveOutliers(historicalData, new FakeTeleoptiClassicWithTrend(indexVolumes, new LinearRegressionTrendCalculator()));
 
 			result.TaskOwnerDayCollection.Count.Should().Be.EqualTo(25);
-			Math.Round(result.TaskOwnerDayCollection.Single(x => x.CurrentDate == new DateOnly(date))
-				.TotalStatisticCalculatedTasks, 3).Should().Be.EqualTo(713.136);
+			var taskOwnerWithoutOutlier =
+				result.TaskOwnerDayCollection.Single(x => x.CurrentDate == new DateOnly(date));
+			Math.Round(taskOwnerWithoutOutlier.TotalStatisticCalculatedTasks, 3).Should().Be.EqualTo(713.136);
 		}
 
 		private static TaskOwnerHelper generateMockedStatisticsWithOutliers(DateOnly historicalDate, IWorkload workload, DateTime date)
@@ -93,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Outlier
 			var validatedVolumeDay = new ValidatedVolumeDay(workload, new DateOnly(date))
 			{
 				ValidatedAverageAfterTaskTime = TimeSpan.FromSeconds(3),
-				ValidatedAverageTaskTime = TimeSpan.FromSeconds(2),
+				ValidatedAverageTaskTime = TimeSpan.FromSeconds(1000),
 				TaskOwner = workloadDay,
 				ValidatedTasks = 1000
 			};
@@ -128,5 +130,4 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Outlier
 			get { return ForecastMethodType.TeleoptiClassicLongTermWithTrend; }
 		}
 	}
-
 }

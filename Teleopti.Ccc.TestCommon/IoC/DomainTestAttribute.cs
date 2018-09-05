@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Outlier;
 using Teleopti.Ccc.Domain.Forecasting.Models;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -139,6 +140,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			isolate.UseTestDouble<ForecastProvider>().For<ForecastProvider>();
 			isolate.UseTestDouble<ForecastDayModelMapper>().For<ForecastDayModelMapper>();
 			isolate.UseTestDouble<FetchAndFillSkillDays>().For<IFetchAndFillSkillDays>();
+			isolate.UseTestDouble<FakeTaskOutlierRemoverWithCounter>().For<IOutlierRemover>();
 
 			// AppInsights
 			isolate.UseTestDouble<FakeApplicationInsights>().For<IApplicationInsights>();

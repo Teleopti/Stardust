@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
@@ -35,20 +33,31 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 				{
 					taskTimeIndex *= volume.TaskTimeIndex(day);
 				}
-
-				taskTime = new TimeSpan((long)(taskTimeIndex * taskTime.Ticks));
-
-				result.Add(day, taskTime);
+				
+				result.Add(day, new TimeSpan((long)(taskTimeIndex * taskTime.Ticks)));
 			}
+
 			return result;
 		}
 
 		public abstract ForecastMethodType Id { get; }
 
-		public IEnumerable<DateAndTask> SeasonalVariation(ITaskOwnerPeriod historicalData)
+		public Dictionary<DateOnly, LightForecastModel> SeasonalVariation(ITaskOwnerPeriod historicalData)
 		{
 			var futurePeriod = new DateOnlyPeriod(historicalData.StartDate, historicalData.EndDate);
-			return ForecastNumberOfTasks(historicalData, futurePeriod);
+			var taskNumbers = ForecastNumberOfTasks(historicalData, futurePeriod);
+			var taskTimeNumbers = ForecastTaskTime(historicalData, futurePeriod);
+			var result = new Dictionary<DateOnly, LightForecastModel>();
+			foreach (var task in taskNumbers)
+			{
+ 				result.Add(task.Date, new LightForecastModel
+				{
+					Tasks = task.Tasks,
+					TaskTime = taskTimeNumbers[task.Date].TotalSeconds
+				});
+			}
+
+			return result;
 		}
 
 		protected virtual IEnumerable<DateAndTask> ForecastNumberOfTasks(ITaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod)
@@ -68,7 +77,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 				}
 
 				var tasks = totalTaskIndex * averageTasks;
-
 				result.Add(new DateAndTask
 				{
 					Date = day,

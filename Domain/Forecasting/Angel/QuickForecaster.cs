@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 
 			var availableIntradayTemplatePeriod = _historicalPeriodProvider.AvailableIntradayTemplatePeriod(availablePeriod.Value);
 			var skillDays = _fetchAndFillSkillDays.FindRange(futurePeriod, workload.Skill, scenario);
-			var workloadAccuracy = _forecastWorkloadEvaluator.Evaluate(workload, new TaskOutlierRemover(), new ForecastAccuracyCalculator());
+			var workloadAccuracy = _forecastWorkloadEvaluator.Evaluate(workload, new OutlierRemover(), new ForecastAccuracyCalculator());
 			var quickForecasterWorkloadParams = new QuickForecasterWorkloadParams
 			{
 				Scenario = scenario,

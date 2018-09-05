@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		{
 			var workload = _workloadRepository.Get(workloadId);
 			var availablePeriod = _historicalPeriodProvider.AvailablePeriod(workload);
-			var workloadAccuracy = _forecastWorkloadEvaluator.Evaluate(workload, new TaskOutlierRemover(), new ForecastAccuracyCalculator());
+			var workloadAccuracy = _forecastWorkloadEvaluator.Evaluate(workload, new OutlierRemover(), new ForecastAccuracyCalculator());
 			var forecastMethodId = workloadAccuracy.ForecastMethodTypeForTasks;
 			return new WorkloadQueueStatisticsViewModel
 			{

@@ -10,6 +10,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 		IDictionary<DateOnly, double> ForecastTasks(ITaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod);
 		IDictionary<DateOnly, TimeSpan> ForecastTaskTime(ITaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod);
 		ForecastMethodType Id { get; }
-		IEnumerable<DateAndTask> SeasonalVariation(ITaskOwnerPeriod historicalData);
+		Dictionary<DateOnly, LightForecastModel> SeasonalVariation(ITaskOwnerPeriod historicalData);
 	}
 }
