@@ -127,11 +127,18 @@
 				doNotToggleSelectionAfterResizeEnd = false;
 				return;
 			}
+			disableContainerOverflow();
+
 			vm.selectedShiftLayers = vm.selectedShiftLayers.indexOf(shiftLayer) === -1 ? [shiftLayer] : [];
 			vm.selectedActivitiyId = vm.getMergedShiftLayer(shiftLayer).ActivityId;
 
 			bindResizeEvent(shiftLayer, $event.target);
 		};
+
+		function disableContainerOverflow() {
+			var viewportEl = $element[0].querySelector('.viewport');
+			viewportEl.style.overflow = 'hidden';
+		}
 
 		vm.useLighterBorder = function (shiftLayer) {
 			var sl = vm.getMergedShiftLayer(shiftLayer);
@@ -233,12 +240,9 @@
 
 						var mergedShiftLayer = vm.getMergedShiftLayer(shiftLayer);
 						resizeLayer(shiftLayer, (mergedShiftLayer.TranslateX || 0) + left, width);
-						$scope.$apply();
 
 						scrollToProperPosition(shiftLayer, left, width);
 						$scope.$apply();
-
-
 					})
 					.on('resizeend', function (event) {
 
@@ -720,7 +724,7 @@
 			if (shiftLayer.isChangingStart) {
 				if (viewportEl.scrollLeft > start) vm.scroll(left);
 			} else {
-				if (end > viewingEnd) vm.scroll(end - viewingEnd + 10);
+				if (end > viewingEnd) vm.scroll(end - viewingEnd + 20);
 			}
 		}
 

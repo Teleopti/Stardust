@@ -1214,6 +1214,10 @@ teams-time-picker.ng-invalid-dst {
 }
 
 .shift-editor {
+	-webkit-user-select: none;
+	-moz-user-select: -moz-none;
+	-ms-user-select: none;
+	user-select: none;
 	position: relative;
 
 	.progress-linear-container {
@@ -1265,6 +1269,7 @@ teams-time-picker.ng-invalid-dst {
 	}
 
 	.shift-container {
+
 		.viewport-clip {
 			width: 100%;
 			max-width: 100%;
@@ -1274,8 +1279,9 @@ teams-time-picker.ng-invalid-dst {
 
 			.viewport {
 				height: 530px;
-				overflow-x: auto;
-				overflow-y: hidden;
+				overflow: hidden;
+				touch-action: none;
+				transition: width 1s ease-in-out;
 			}
 		}
 
