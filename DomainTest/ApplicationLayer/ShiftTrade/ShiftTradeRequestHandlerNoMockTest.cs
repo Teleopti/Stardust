@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 	[TestWithStaticDependenciesDONOTUSE]
 	public class ShiftTradeRequestHandlerNoMockTest
 	{
-		private ICurrentScenario _currentScenario;
+		private FakeScenarioRepository _currentScenario;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private IPersonRepository _personRepository;
 		private IScheduleStorage _scheduleStorage;
@@ -38,14 +38,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		[SetUp]
 		public void Setup()
 		{
-			_currentScenario = new FakeCurrentScenario_DoNotUse();
+			_currentScenario = new FakeScenarioRepository();
+			_currentScenario.Has("Default");
+
 			_schedulingResultStateHolder = new SchedulingResultStateHolder();
 			_personRepository = new FakePersonRepository(new FakeStorage());
 			_scheduleStorage = new FakeScheduleStorage_DoNotUse();
 			_businessRuleProvider = new FakeBusinessRuleProvider();
 			_businessRuleCollection = new FakeNewBusinessRuleCollection();
 			_shiftTradeTestHelper = new ShiftTradeTestHelper(_schedulingResultStateHolder, _scheduleStorage, _personRepository,
-				_businessRuleProvider, _currentScenario, new FakeScheduleProjectionReadOnlyActivityProvider());
+				_businessRuleProvider, new DefaultScenarioFromRepository(_currentScenario), new FakeScheduleProjectionReadOnlyActivityProvider());
 		}
 
 		[Test]
@@ -320,7 +322,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_shiftTradeTestHelper.AddPersonAssignment(personFrom, dateTimePeriod, activityPersonFrom);
 
 			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] {personTo, personFrom},
-				null, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), _currentScenario.Current());
+				null, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), _currentScenario.LoadDefaultScenario());
 
 			personTo.WorkflowControlSet = workflowControlSet;
 			personFrom.WorkflowControlSet = workflowControlSet;
@@ -379,25 +381,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			personTo.PersonPeriodCollection.First().PersonContract.Contract = contract;
 			personFrom.PersonPeriodCollection.First().PersonContract.Contract = contract;
 
+			var scenario = _currentScenario.LoadDefaultScenario();
 			var assPersonFrom = PersonAssignmentFactory
-				.CreateAssignmentWithMainShift(personFrom, _currentScenario.Current(), new Activity("Shift_PersonFrom"), todayOvernightPeriod, new ShiftCategory("LT")).WithId();
+				.CreateAssignmentWithMainShift(personFrom, scenario, new Activity("Shift_PersonFrom"), todayOvernightPeriod, new ShiftCategory("LT")).WithId();
 			_scheduleStorage.Add(assPersonFrom);
 
 			var yesterdayOvernightPeriod = new DateTimePeriod(new DateTime(2018, 07, 18, 21, 0, 0, DateTimeKind.Utc), new DateTime(2018, 07, 19, 6, 0, 0, DateTimeKind.Utc));
 			var ass2PersonFrom = PersonAssignmentFactory
-				.CreateAssignmentWithMainShift(personFrom, _currentScenario.Current(), new Activity("Shift_PersonFrom_Yesterday"), yesterdayOvernightPeriod, new ShiftCategory("LT")).WithId();
+				.CreateAssignmentWithMainShift(personFrom, scenario, new Activity("Shift_PersonFrom_Yesterday"), yesterdayOvernightPeriod, new ShiftCategory("LT")).WithId();
 			_scheduleStorage.Add(ass2PersonFrom);
 
-			var fullDayAbsence = PersonAbsenceFactory.CreatePersonAbsence(personFrom, _currentScenario.Current(),
+			var fullDayAbsence = PersonAbsenceFactory.CreatePersonAbsence(personFrom, scenario,
 				yesterdayOvernightPeriod, AbsenceFactory.CreateAbsence("fromPersonFullDayAbsence")).WithId();
 			_scheduleStorage.Add(fullDayAbsence);
 
-			var assPersonTo = PersonAssignmentFactory.CreateAssignmentWithDayOff(personTo, _currentScenario.Current(), new DateOnly(2018, 07, 19),
+			var assPersonTo = PersonAssignmentFactory.CreateAssignmentWithDayOff(personTo, scenario, new DateOnly(2018, 07, 19),
 				new DayOffTemplate(new Description("DayOff_PersonTo")));
 			_scheduleStorage.Add(assPersonTo);
 
 			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom },
-				null, new DateOnlyPeriod(new DateOnly(2018, 07, 18), new DateOnly(2018, 07, 20)), _currentScenario.Current());
+				null, new DateOnlyPeriod(new DateOnly(2018, 07, 18), new DateOnly(2018, 07, 20)), scenario);
 
 			var shiftTradeRequest = _shiftTradeTestHelper.PrepareAndGetPersonRequest(personFrom, personTo, new DateOnly(2018, 07, 19));
 			shiftTradeRequest.ForcePending();
@@ -448,25 +451,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			personTo.PersonPeriodCollection.First().PersonContract.Contract = contract;
 			personFrom.PersonPeriodCollection.First().PersonContract.Contract = contract;
 
+			var scenario = _currentScenario.LoadDefaultScenario();
 			var assPersonFrom = PersonAssignmentFactory
-				.CreateAssignmentWithMainShift(personFrom, _currentScenario.Current(), new Activity("Shift_PersonFrom"), todayOvernightPeriod, new ShiftCategory("LT")).WithId();
+				.CreateAssignmentWithMainShift(personFrom, scenario, new Activity("Shift_PersonFrom"), todayOvernightPeriod, new ShiftCategory("LT")).WithId();
 			_scheduleStorage.Add(assPersonFrom);
 
 			var yesterdayOvernightPeriod = new DateTimePeriod(new DateTime(2018, 07, 19, 1, 0, 0, DateTimeKind.Utc), new DateTime(2018, 07, 19, 10, 0, 0, DateTimeKind.Utc));
 			var ass2PersonFrom = PersonAssignmentFactory
-				.CreateAssignmentWithMainShift(personFrom, _currentScenario.Current(), new Activity("Shift_PersonFrom_Yesterday"), yesterdayOvernightPeriod, new ShiftCategory("LT")).WithId();
+				.CreateAssignmentWithMainShift(personFrom, scenario, new Activity("Shift_PersonFrom_Yesterday"), yesterdayOvernightPeriod, new ShiftCategory("LT")).WithId();
 			_scheduleStorage.Add(ass2PersonFrom);
 
-			var fullDayAbsence = PersonAbsenceFactory.CreatePersonAbsence(personFrom, _currentScenario.Current(),
+			var fullDayAbsence = PersonAbsenceFactory.CreatePersonAbsence(personFrom, scenario,
 				yesterdayOvernightPeriod, AbsenceFactory.CreateAbsence("fromPersonFullDayAbsence")).WithId();
 			_scheduleStorage.Add(fullDayAbsence);
 
-			var assPersonTo = PersonAssignmentFactory.CreateAssignmentWithDayOff(personTo, _currentScenario.Current(), new DateOnly(2018, 07, 19),
+			var assPersonTo = PersonAssignmentFactory.CreateAssignmentWithDayOff(personTo, scenario, new DateOnly(2018, 07, 19),
 				new DayOffTemplate(new Description("DayOff_PersonTo")));
 			_scheduleStorage.Add(assPersonTo);
 
 			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom },
-				null, new DateOnlyPeriod(new DateOnly(2018, 07, 18), new DateOnly(2018, 07, 20)), _currentScenario.Current());
+				null, new DateOnlyPeriod(new DateOnly(2018, 07, 18), new DateOnly(2018, 07, 20)), scenario);
 
 			var shiftTradeRequest = _shiftTradeTestHelper.PrepareAndGetPersonRequest(personFrom, personTo, new DateOnly(2018, 07, 19));
 			shiftTradeRequest.ForcePending();
@@ -491,7 +495,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 		private IScheduleDay createScheduleDay(DateOnly date, DateTimePeriod period, IPerson agent, IActivity activity)
 		{
-			var scheduleDay = ScheduleDayFactory.Create(date, agent, _currentScenario.Current());
+			var scheduleDay = ScheduleDayFactory.Create(date, agent, _currentScenario.LoadDefaultScenario());
 			scheduleDay.AddMainShift(EditableShiftFactory.CreateEditorShift(activity,
 				period,
 				ShiftCategoryFactory.CreateShiftCategory("Early")));
@@ -525,7 +529,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_shiftTradeTestHelper.AddPersonAssignment(personTo, dateTimePeriod, activityPersonTo);
 			_shiftTradeTestHelper.AddPersonAssignment(personFrom, dateTimePeriod, activityPersonFrom);
 
-			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom }, null, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), _currentScenario.Current());
+			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom }, null, DateOnly.Today.ToDateOnlyPeriod(), _currentScenario.LoadDefaultScenario());
 
 			personTo.WorkflowControlSet = workflowControlSet;
 			personFrom.WorkflowControlSet = workflowControlSet;
@@ -623,7 +627,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_schedulingResultStateHolder.UseMaximumWorkday = useMaximumWorkday;
 
 			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom }, null,
-				new DateOnlyPeriod(new DateOnly(scheduleDate), new DateOnly(scheduleDate.AddDays(7))), _currentScenario.Current());
+				new DateOnlyPeriod(new DateOnly(scheduleDate), new DateOnly(scheduleDate.AddDays(7))), _currentScenario.LoadDefaultScenario());
 			_shiftTradeTestHelper.SetScheduleDictionary(scheduleDictionary);
 
 			_shiftTradeTestHelper.HandleRequest(@event, businessRuleProvider);

@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -11,32 +10,32 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakePublicNoteRepository : IPublicNoteRepository, IEnumerable<IPublicNote>
 	{
-		private readonly IList<IPublicNote> _notes = new List<IPublicNote>();
+		private readonly IFakeStorage _storage;
 		
-		public FakePublicNoteRepository(params IPublicNote[] publicNotes)
+		public FakePublicNoteRepository(IFakeStorage storage)
 		{
-			publicNotes.ForEach (Add);
+			_storage = storage;
 		}
 
 		public void Add (IPublicNote entity)
 		{
 			entity.SetId (Guid.NewGuid());
-			_notes.Add (entity);
+			_storage.Add (entity);
 		}
 
 		public void Remove (IPublicNote entity)
 		{
-			_notes.Remove (entity);
+			_storage.Remove (entity);
 		}
 
 		public IPublicNote Get (Guid id)
 		{
-			return _notes.FirstOrDefault (note => note.Id == id);
+			return _storage.Get<IPublicNote>(id);
 		}
 
 		public IEnumerable<IPublicNote> LoadAll()
 		{
-			return _notes;
+			return _storage.LoadAll<IPublicNote>();
 		}
 
 		public IPublicNote Load (Guid id)
@@ -51,7 +50,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPublicNote LoadAggregate (Guid id)
 		{
-			return _notes.First(x => x.Id == id);
+			return _storage.Get<IPublicNote>(id);
 		}
 
 		public IList<IPublicNote> Find (DateTimePeriod period, IScenario scenario)
@@ -61,17 +60,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPublicNote> Find (DateOnlyPeriod dateOnlyPeriod, IEnumerable<IPerson> personCollection, IScenario scenario)
 		{
-			return _notes.Where(x => x.Scenario == scenario && x.BelongsToPeriod(dateOnlyPeriod) && personCollection.Contains(x.Person)).ToList();
+			return _storage.LoadAll<IPublicNote>().Where(x => x.Scenario == scenario && x.BelongsToPeriod(dateOnlyPeriod) && personCollection.Contains(x.Person)).ToList();
 		}
 
 		public IPublicNote Find (DateOnly dateOnly, IPerson person, IScenario scenario)
 		{
-			return _notes.SingleOrDefault (note => note.NoteDate == dateOnly && note.Person == person && note.Scenario == scenario);
+			return _storage.LoadAll<IPublicNote>().SingleOrDefault (note => note.NoteDate == dateOnly && note.Person == person && note.Scenario == scenario);
 		}
 
 		public IEnumerator<IPublicNote> GetEnumerator()
 		{
-			return _notes.GetEnumerator();
+			return _storage.LoadAll<IPublicNote>().GetEnumerator();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()

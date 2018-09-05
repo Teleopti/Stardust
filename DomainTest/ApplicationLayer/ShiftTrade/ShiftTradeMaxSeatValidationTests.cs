@@ -50,7 +50,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			_scheduleProjectionReadOnlyActivityProvider = new FakeScheduleProjectionReadOnlyActivityProvider();
 
-			_currentScenario = new FakeCurrentScenario_DoNotUse();
+			var scenarioRepository = new FakeScenarioRepository();
+			scenarioRepository.Has("Default");
+			_currentScenario = new DefaultScenarioFromRepository(scenarioRepository);
 			_shiftTradeTestHelper = new ShiftTradeTestHelper(_schedulingResultStateHolder, _scheduleStorage, _personRepository, new FakeBusinessRuleProvider(), _currentScenario, _scheduleProjectionReadOnlyActivityProvider);
 
 			_shiftTradeTestHelper.UseMaxSeatReadModelValidator();

@@ -1,53 +1,36 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
-using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
-	[TestFixture]
-	[TestWithStaticDependenciesDONOTUSE]
-	public class ModifyPersonAbsenceCommandHandlerTest
+	[DomainTest]
+	public class ModifyPersonAbsenceCommandHandlerTest : IExtendSystem, IIsolateSystem
 	{
-
-		private SaveSchedulePartService _saveSchedulePartService;
-		private FakeScheduleStorage_DoNotUse _scheduleStorage;
-		private BusinessRulesForPersonalAccountUpdate _businessRulesForAccountUpdate;
-		
-		[SetUp]
-		public void Setup()
-		{
-			var personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
-			_businessRulesForAccountUpdate = new BusinessRulesForPersonalAccountUpdate(personAbsenceAccountRepository, new SchedulingResultStateHolder());
-			_scheduleStorage = new FakeScheduleStorage_DoNotUse();
-			var scheduleDifferenceSaver = new ScheduleDifferenceSaver(_scheduleStorage, CurrentUnitOfWork.Make(), new EmptyScheduleDayDifferenceSaver());
-			_saveSchedulePartService = new SaveSchedulePartService(scheduleDifferenceSaver, personAbsenceAccountRepository,
-				new DoNothingScheduleDayChangeCallBack());
-		}
+		public ModifyPersonAbsenceCommandHandler Target;
+		public FakePersonAbsenceRepository PersonAbsenceRepository;
+		public FakeScenarioRepository ScenarioRepository;
 
 		[Test]
 		public void ShowThrowExceptionIfPersonAbsenceDoesNotExist()
 		{
-			var currentScenario = new FakeCurrentScenario_DoNotUse();
-			var personAbsence = new PersonAbsence(PersonFactory.CreatePersonWithId(), currentScenario.Current(), MockRepository.GenerateMock<IAbsenceLayer>());
-			var personAbsenceRepository = new FakePersonAbsenceWriteSideRepository() { personAbsence } ;
-			var target = new ModifyPersonAbsenceCommandHandler(personAbsenceRepository, new UtcTimeZone(), _scheduleStorage, _businessRulesForAccountUpdate, _saveSchedulePartService);
-
+			var currentScenario = ScenarioRepository.Has("Default");
+			var personAbsence = new PersonAbsence(PersonFactory.CreatePersonWithId(), currentScenario,
+				new AbsenceLayer(new Absence(), new DateTimePeriod(2013, 11, 27, 8, 2013, 11, 27, 16))).WithId();
+			PersonAbsenceRepository.Add(personAbsence);
+			
 			var command = new ModifyPersonAbsenceCommand
 			{
 				PersonAbsenceId = Guid.NewGuid(),
@@ -59,29 +42,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 					OperatedPersonId = Guid.NewGuid()
 				}
 			};
-			var ex = Assert.Throws<InvalidOperationException>(() => target.Handle(command)).ToString();
+			var ex = Assert.Throws<InvalidOperationException>(() => Target.Handle(command)).ToString();
 			ex.Should().Contain(command.PersonAbsenceId.ToString());
 			ex.Should().Contain(command.StartTime.ToString());
 			ex.Should().Contain(command.EndTime.ToString());
-			
 		}
-
-
+		
 		[Test]
 		public void ShouldRaiseModifyPersonAbsenceEvent()
 		{
-			var currentScenario = new FakeCurrentScenario_DoNotUse();
+			var currentScenario = ScenarioRepository.Has("Default");
 			var originalDateTimePeriod = new DateTimePeriod (2013, 11, 27, 8, 2013, 11, 27, 16);
-			var personAbsenceRepository = new FakePersonAbsenceWriteSideRepository()
-				{
-					PersonAbsenceFactory.CreatePersonAbsence (PersonFactory.CreatePersonWithId(), currentScenario.Current(),
-						originalDateTimePeriod)
-				};
-
-			var target = new ModifyPersonAbsenceCommandHandler(personAbsenceRepository, new UtcTimeZone(), _scheduleStorage, _businessRulesForAccountUpdate, _saveSchedulePartService);
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(PersonFactory.CreatePersonWithId(),
+				currentScenario, originalDateTimePeriod).WithId();
+			PersonAbsenceRepository.Add(personAbsence);
+			
 			var command = new ModifyPersonAbsenceCommand
 			{
-				PersonAbsenceId = personAbsenceRepository.Single().Id.Value,
+				PersonAbsenceId = personAbsence.Id.Value,
 				PersonId = Guid.NewGuid(),
 				StartTime = new DateTime(2013, 11, 27, 8, 00, 00, DateTimeKind.Utc),
 				EndTime = new DateTime(2013, 11, 27, 15, 00, 00, DateTimeKind.Utc),
@@ -92,12 +70,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				}
 			};
 
-			target.Handle(command);
+			Target.Handle(command);
 
-			var @event = personAbsenceRepository.Single().PopAllEvents().Single() as PersonAbsenceModifiedEvent;
-			@event.AbsenceId.Should().Be(personAbsenceRepository.Single().Id.Value);
-			@event.PersonId.Should().Be(personAbsenceRepository.Single().Person.Id.Value);
-			@event.ScenarioId.Should().Be(currentScenario.Current().Id.Value);
+			var @event = personAbsence.PopAllEvents().Single() as PersonAbsenceModifiedEvent;
+			@event.AbsenceId.Should().Be(personAbsence.Id.Value);
+			@event.PersonId.Should().Be(personAbsence.Person.Id.Value);
+			@event.ScenarioId.Should().Be(currentScenario.Id.Value);
 			@event.StartDateTime.Should().Be(command.StartTime);
 			@event.EndDateTime.Should().Be(originalDateTimePeriod.EndDateTime);
 		}
@@ -105,17 +83,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldReduceEndTimeWhenBackToWork()
 		{
-
-			var currentScenario = new FakeCurrentScenario_DoNotUse();
-			var personAbsenceRepository = new FakePersonAbsenceWriteSideRepository()
-				{
-					PersonAbsenceFactory.CreatePersonAbsence (PersonFactory.CreatePersonWithId(), currentScenario.Current(),
-						new DateTimePeriod(2013, 11, 27, 11, 2013, 11, 27, 16))
-				};var target = new ModifyPersonAbsenceCommandHandler(personAbsenceRepository, new UtcTimeZone(), _scheduleStorage, _businessRulesForAccountUpdate, _saveSchedulePartService);
+			var currentScenario = ScenarioRepository.Has("Default");
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(PersonFactory.CreatePersonWithId(),
+				currentScenario, new DateTimePeriod(2013, 11, 27, 11, 2013, 11, 27, 16)).WithId();
+			PersonAbsenceRepository.Has(personAbsence);
 
 			var command = new ModifyPersonAbsenceCommand
 			{
-				PersonAbsenceId = personAbsenceRepository.Single().Id.Value,
+				PersonAbsenceId = personAbsence.Id.Value,
 				StartTime = new DateTime(2013, 11, 27, 11, 00, 00, DateTimeKind.Utc),
 				EndTime = new DateTime(2013, 11, 27, 15, 00, 00, DateTimeKind.Utc),
 				TrackedCommandInfo = new TrackedCommandInfo
@@ -124,13 +99,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				}
 			};
 
-			target.Handle(command);
+			Target.Handle(command);
+			
+			personAbsence.Layer.Period.StartDateTime.Should().Be(command.StartTime);
+			personAbsence.Layer.Period.EndDateTime.Should().Be(command.EndTime);
 
-			var absence = personAbsenceRepository.Single();
+		}
 
-			absence.Layer.Period.StartDateTime.Should().Be(command.StartTime);
-			absence.Layer.Period.EndDateTime.Should().Be(command.EndTime);
+		public void Extend(IExtend extend, IIocConfiguration configuration)
+		{
+			extend.AddService<ModifyPersonAbsenceCommandHandler>();
+			extend.AddService<SaveSchedulePartService>();
+		}
 
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FakePersonAbsenceRepository>().For<IWriteSideRepositoryTypedId<IPersonAbsence,Guid>>();
 		}
 	}
 }

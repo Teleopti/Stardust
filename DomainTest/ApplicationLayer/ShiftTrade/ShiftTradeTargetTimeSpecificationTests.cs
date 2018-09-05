@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 	[TestWithStaticDependenciesDONOTUSE]
 	public class ShiftTradeTargetTimeSpecificationTests
 	{
-		private ICurrentScenario _currentScenario;
+		private FakeScenarioRepository _currentScenario;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private IPersonRepository _personRepository;
 		private IScheduleStorage _scheduleStorage;
@@ -39,13 +39,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		[SetUp]
 		public void Setup()
 		{
-			_currentScenario = new FakeCurrentScenario_DoNotUse();
+			_currentScenario = new FakeScenarioRepository();
+			_currentScenario.Has("Default");
+
 			_schedulingResultStateHolder = new SchedulingResultStateHolder();
 			_personRepository = new FakePersonRepository(new FakeStorage());
 			_scheduleStorage = new FakeScheduleStorage_DoNotUse();
 			_businessRuleProvider = new FakeBusinessRuleProvider();
 			_shiftTradeTestHelper = new ShiftTradeTestHelper(_schedulingResultStateHolder, _scheduleStorage, _personRepository,
-				_businessRuleProvider,  _currentScenario, new FakeScheduleProjectionReadOnlyActivityProvider());
+				_businessRuleProvider,  new DefaultScenarioFromRepository(_currentScenario), new FakeScheduleProjectionReadOnlyActivityProvider());
 			_globalSettingDataRepository = new FakeGlobalSettingDataRepository();
 		}
 
@@ -274,7 +276,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			@event.UseSiteOpenHoursRule = enableSiteOpenHoursRule;
 
 			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom }, null,
-				new DateOnlyPeriod(new DateOnly(scheduleDate), new DateOnly(scheduleDate.AddDays(7))), _currentScenario.Current());
+				new DateOnlyPeriod(new DateOnly(scheduleDate), new DateOnly(scheduleDate.AddDays(7))), _currentScenario.LoadDefaultScenario());
 			var businessRuleProvider = new ConfigurableBusinessRuleProvider(_globalSettingDataRepository);
 			_shiftTradeTestHelper.SetScheduleDictionary(scheduleDictionary);
 

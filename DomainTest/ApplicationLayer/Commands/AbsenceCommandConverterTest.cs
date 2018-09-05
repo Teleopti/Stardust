@@ -3,8 +3,8 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Commands
 	{
 		private FakeWriteSideRepository<IPerson> _personRepository;
 		private FakeWriteSideRepository<IAbsence> _absenceRepository;
-		private FakeCurrentScenario_DoNotUse _currentScenario;
+		private FakeScenarioRepository _currentScenario;
 		private FakeScheduleStorage_DoNotUse _scheduleStorage;
 
 		[SetUp]
@@ -25,14 +25,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Commands
 		{
 			_personRepository = new FakeWriteSideRepository<IPerson>(null) { PersonFactory.CreatePersonWithId() };
 			_absenceRepository = new FakeWriteSideRepository<IAbsence>(null) { AbsenceFactory.CreateAbsenceWithId() };
-			_currentScenario = new FakeCurrentScenario_DoNotUse();
+			_currentScenario = new FakeScenarioRepository();
 			_scheduleStorage = new FakeScheduleStorage_DoNotUse();
 		}
 
 		[Test]
 		public void ShouldConvertAbsenceForFullDay()
 		{
-			var target = new AbsenceCommandConverter(_currentScenario,_personRepository, _absenceRepository, _scheduleStorage, null);
+			_currentScenario.Has("Default");
+			var target = new AbsenceCommandConverter(new DefaultScenarioFromRepository(_currentScenario),_personRepository, _absenceRepository, _scheduleStorage, null);
 
 			var operatedPersonId = Guid.NewGuid();
 			var trackId = Guid.NewGuid();
@@ -57,13 +58,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Commands
 		public void ShouldConvertAbsenceForFullDayWhenPreviousDaysEndIsLaterThanSelectedDaysStart()
 		{
 			var person = _personRepository.Single();
-			var scenario = _currentScenario.Current();
+			var scenario = _currentScenario.Has("Default");
 			var previousDay = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndOvertimeShift(person, scenario, new DateTimePeriod(2016, 6, 6, 23, 2016, 6, 7, 11));
 			_scheduleStorage.Add(previousDay);
 			var selectedDay = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
 				scenario, new DateTimePeriod(2016, 6, 7, 9, 2016, 6, 7, 10));
 			_scheduleStorage.Add(selectedDay);
-			var target = new AbsenceCommandConverter(_currentScenario, _personRepository, _absenceRepository, _scheduleStorage, null);
+			var target = new AbsenceCommandConverter(new DefaultScenarioFromRepository(_currentScenario), _personRepository, _absenceRepository, _scheduleStorage, null);
 
 			var operatedPersonId = Guid.NewGuid();
 			var trackId = Guid.NewGuid();
@@ -88,13 +89,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Commands
 		public void ShouldConvertAbsenceForFullDayWhenSelectedDaysEndIsLaterThanNextDaysEnd()
 		{
 			var person = _personRepository.Single();
-			var scenario = _currentScenario.Current();
+			var scenario = _currentScenario.Has("Default");
 			var selectedDay = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndOvertimeShift(person, scenario, new DateTimePeriod(2016, 6, 6, 23, 2016, 6, 7, 11));
 			_scheduleStorage.Add(selectedDay);
 			var nextDay = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
 				scenario, new DateTimePeriod(2016, 6, 7, 9, 2016, 6, 7, 10));
 			_scheduleStorage.Add(nextDay);
-			var target = new AbsenceCommandConverter(_currentScenario, _personRepository, _absenceRepository, _scheduleStorage, null);
+			var target = new AbsenceCommandConverter(new DefaultScenarioFromRepository(_currentScenario), _personRepository, _absenceRepository, _scheduleStorage, null);
 
 			var operatedPersonId = Guid.NewGuid();
 			var trackId = Guid.NewGuid();
@@ -119,7 +120,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Commands
 		[Test]
 		public void ShouldConvertPersonForFullDay()
 		{
-			var target = new AbsenceCommandConverter(_currentScenario,_personRepository, _absenceRepository, _scheduleStorage, null);
+			_currentScenario.Has("Default");
+			var target = new AbsenceCommandConverter(new DefaultScenarioFromRepository(_currentScenario),_personRepository, _absenceRepository, _scheduleStorage, null);
 
 			var operatedPersonId = Guid.NewGuid();
 			var trackId = Guid.NewGuid();
@@ -143,7 +145,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Commands
 		[Test]
 		public void ShouldConvertTrackedCommandInfoForFullDay()
 		{
-			var target = new AbsenceCommandConverter(_currentScenario,_personRepository, _absenceRepository, _scheduleStorage, null);
+			_currentScenario.Has("Default");
+			var target = new AbsenceCommandConverter(new DefaultScenarioFromRepository(_currentScenario),_personRepository, _absenceRepository, _scheduleStorage, null);
 
 			var operatedPersonId = Guid.NewGuid();
 			var trackId = Guid.NewGuid();

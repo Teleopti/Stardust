@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -11,32 +10,32 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeNoteRepository : INoteRepository, IEnumerable<INote>
 	{
-		private readonly IList<INote> _notes = new List<INote>();
+		private readonly IFakeStorage _storage;
 
-		public FakeNoteRepository(params INote[] notes)
+		public FakeNoteRepository(IFakeStorage storage)
 		{
-			notes.ForEach(Add);
+			_storage = storage;
 		}
 
 		public void Add(INote entity)
 		{
 			entity.SetId(Guid.NewGuid());
-			_notes.Add(entity);
+			_storage.Add(entity);
 		}
 
 		public void Remove(INote entity)
 		{
-			_notes.Remove(entity);
+			_storage.Remove(entity);
 		}
 
 		public INote Get(Guid id)
 		{
-			return _notes.FirstOrDefault(note => note.Id == id);
+			return _storage.Get<INote>(id);
 		}
 
 		public IEnumerable<INote> LoadAll()
 		{
-			return _notes;
+			return _storage.LoadAll<INote>();
 		}
 
 		public INote Load(Guid id)
@@ -51,7 +50,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public INote LoadAggregate(Guid id)
 		{
-			return _notes.First(x => x.Id == id);
+			return _storage.Get<INote>(id);
 		}
 
 		public IList<INote> Find(DateTimePeriod period, IScenario scenario)
@@ -61,12 +60,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<INote> Find(DateOnlyPeriod dateOnlyPeriod, IEnumerable<IPerson> personCollection, IScenario scenario)
 		{
-			return _notes.Where(x => x.Scenario == scenario && x.BelongsToPeriod(dateOnlyPeriod) && personCollection.Contains(x.Person)).ToList();
+			return _storage.LoadAll<INote>().Where(x => x.Scenario == scenario && x.BelongsToPeriod(dateOnlyPeriod) && personCollection.Contains(x.Person)).ToList();
 		}
 
 		public IEnumerator<INote> GetEnumerator()
 		{
-			return _notes.GetEnumerator();
+			return _storage.LoadAll<INote>().GetEnumerator();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
