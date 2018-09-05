@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			TimeSpan result;
 
-			result = target.WorkShiftEndTime;
+			result = target.WorkShiftEndTime();
 
 			Assert.AreEqual(new TimeSpan(1, 8, 0, 0), result);
 		}	

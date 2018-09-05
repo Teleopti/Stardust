@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 				new List<ISkillDay> {skillDay}, teamBlockInfo, new SchedulingOptions(), TimeZoneGuard.Instance.TimeZone, true,
 				agent1);
 
-			result.WorkShiftStartTime.Hours.Should().Be.EqualTo(9);
+			result.WorkShiftStartTime().Hours.Should().Be.EqualTo(9);
 		}
 	}
 }

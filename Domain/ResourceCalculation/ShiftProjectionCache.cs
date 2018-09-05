@@ -47,10 +47,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public IEnumerable<IWorkShiftCalculatableLayer> WorkShiftCalculatableLayers => _workShiftCalculatableLayers ??
 																					   (_workShiftCalculatableLayers = new WorkShiftCalculatableVisualLayerCollection(MainShiftProjection()));
 
-		public TimeSpan WorkShiftStartTime => this.WorkShiftProjectionPeriod().StartDateTime.TimeOfDay;
-
-		public TimeSpan WorkShiftEndTime => this.WorkShiftProjectionPeriod().EndDateTime.Subtract(this.WorkShiftProjectionPeriod().StartDateTime.Date);
-
 		public DateOnly SchedulingDate => _dateOnlyAsPeriod?.DateOnly ?? DateOnly.MinValue;
 
 		public void ClearMainShiftProjectionCache()
