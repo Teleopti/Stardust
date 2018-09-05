@@ -1385,7 +1385,7 @@ teams-time-picker.ng-invalid-dst {
 				display: inline-block;
 				height: 25px;
 				background-color: gainsboro;
-				z-index: 999;
+				z-index: 900;
 				cursor: pointer;
 
 				&:first-of-type {
@@ -1424,7 +1424,7 @@ teams-time-picker.ng-invalid-dst {
 				&.selected {
 					opacity: 1;
 					border: 1px dashed;
-					z-index: 1000;
+					z-index: 990;
 
 					&.border-light {
 						border-color: #00ffff;
@@ -1440,7 +1440,7 @@ teams-time-picker.ng-invalid-dst {
 				}
 
 				&.float-top {
-					z-index: 1001;
+					z-index: 999;
 				}
 			}
 		}
