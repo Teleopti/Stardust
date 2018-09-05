@@ -258,8 +258,10 @@
     <Compile Include="Domain\Service\SnapshotTests.cs" />
     <Compile Include="Domain\Service\TraceTest.cs" />
     <Compile Include="Domain\Service\UnrecognizedStateTest.cs" />
+    <Compile Include="RtaMapTest.cs" />
     <Compile Include="RtaRuleTest.cs" />
     <Compile Include="RtaStateGroupTest.cs" />
+    <Compile Include="RtaStateHolderTest.cs" />
     <Compile Include="RtaStateTest.cs" />
     <Compile Include="RtaTestAttribute.cs" />
     <Compile Include="Tracer\RtaTracerActivityCheckTraceTest.cs" />
