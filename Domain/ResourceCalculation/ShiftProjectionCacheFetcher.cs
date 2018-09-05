@@ -8,12 +8,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	{
 		private readonly IShiftFromMasterActivityService _shiftFromMasterActivityService;
 		private readonly IRuleSetProjectionEntityService _ruleSetProjectionEntityService;
+		private readonly IShiftProjectionCacheFactory _shiftProjectionCacheFactory;
 
 		public ShiftProjectionCacheFetcher(IShiftFromMasterActivityService shiftFromMasterActivityService,
-			IRuleSetProjectionEntityService ruleSetProjectionEntityService)
+			IRuleSetProjectionEntityService ruleSetProjectionEntityService,
+			IShiftProjectionCacheFactory shiftProjectionCacheFactory)
 		{
 			_shiftFromMasterActivityService = shiftFromMasterActivityService;
 			_ruleSetProjectionEntityService = ruleSetProjectionEntityService;
+			_shiftProjectionCacheFactory = shiftProjectionCacheFactory;
 		}
 
 		public IEnumerable<ShiftProjectionCache> Execute(IWorkShiftRuleSet ruleSet)
@@ -22,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return _ruleSetProjectionEntityService.ProjectionCollection(ruleSet, null)
 				.Select(s => s.WorkShift)
 				.SelectMany(shift => _shiftFromMasterActivityService.ExpandWorkShiftsWithMasterActivity(shift, baseIsMasterActivity))
-				.Select(workShift => new ShiftProjectionCache(workShift, null))
+				.Select(workShift => _shiftProjectionCacheFactory.Create(workShift))
 				.ToArray();
 		}
 	}
