@@ -77,19 +77,27 @@
 	};
 
 	self.today = function() {
+		if (moment().isSame(self.selectedDate(), 'day')) return;
+
 		self.paging.skip = 0;
 		self.filterChangedCallback(moment());
+		self.loadedAgentIndex = 0;
+		self.lastAgentIndexInDom = 0;
 		self.isLoadingMoreAgentSchedules = false;
 	};
 
 	self.previousDay = function() {
 		self.paging.skip = 0;
+		self.loadedAgentIndex = 0;
+		self.lastAgentIndexInDom = 0;
 		self.filterChangedCallback(moment(self.selectedDate()).add(-1, 'days'));
 		self.isLoadingMoreAgentSchedules = false;
 	};
 
 	self.nextDay = function() {
 		self.paging.skip = 0;
+		self.loadedAgentIndex = 0;
+		self.lastAgentIndexInDom = 0;
 		self.filterChangedCallback(moment(self.selectedDate()).add(1, 'days'));
 		self.isLoadingMoreAgentSchedules = false;
 	};
@@ -102,6 +110,8 @@
 			if (value) {
 				self.paging.skip = 0;
 			}
+			self.loadedAgentIndex = 0;
+			self.lastAgentIndexInDom = 0;
 			self.filterChangedCallback(self.selectedDate());
 		}
 	});
@@ -297,10 +307,10 @@
 	function setSelectedDateSubscription() {
 		self.selectedDateSubscription = self.selectedDate.subscribe(function(value) {
 			self.displayDate(value.format(dateOnlyFormat));
-			if (self.filterChangedCallback) {
-				self.paging.skip = 0;
-				self.filterChangedCallback(moment(value));
-			}
+			self.paging.skip = 0;
+			self.loadedAgentIndex = 0;
+			self.lastAgentIndexInDom = 0;
+			self.filterChangedCallback && self.filterChangedCallback(moment(value));
 		});
 	}
 
@@ -317,6 +327,8 @@
 				self.selectedTeamIds.push(value);
 			}
 			if (self.isTeamsAndGroupsLoaded() && self.isDesktopEnabled) {
+				self.loadedAgentIndex = 0;
+				self.lastAgentIndexInDom = 0;
 				self.submitSearchForm();
 			}
 		});
