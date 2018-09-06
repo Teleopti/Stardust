@@ -31,7 +31,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 				HistoricalPeriod = new DateOnlyPeriod(2015, 1, 1, 2015, 2, 1),
 				BestForecastMethods = new WorkloadAccuracy
 				{
-					ForecastMethodTypeForTasks = ForecastMethodType.TeleoptiClassicLongTerm
+					ForecastMethodTypeForTasks = ForecastMethodType.TeleoptiClassicLongTerm,
+					ForecastMethodTypeForTaskTime = ForecastMethodType.TeleoptiClassicLongTermWithDayInMonth,
+					ForecastMethodTypeForAfterTaskTime = ForecastMethodType.TeleoptiClassicLongTermWithTrend
 				},
 				SkillDays = new List<ISkillDay>(),
 				FuturePeriod = new DateOnlyPeriod(2015, 3, 1, 2015, 3, 1)
