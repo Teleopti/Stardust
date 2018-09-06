@@ -426,17 +426,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
         }
 
         /// <summary>
-        /// Called when [campaign average times changed].
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-03-04
-        /// </remarks>
-        public virtual void OnCampaignAverageTimesChanged()
-        {
-        }
-
-        /// <summary>
         /// Called when [campaign tasks changed].
         /// </summary>
         /// <remarks>
