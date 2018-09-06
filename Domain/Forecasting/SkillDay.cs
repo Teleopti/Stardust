@@ -838,11 +838,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         #region ITaskOwner Members	   
 
-		public virtual void SetOverrideTasks(double? task, IEnumerable<ITaskOwner> intradayPattern)
-	    {
-		    throw new NotImplementedException();
-	    }
-
 	    /// <summary>
         /// Gets the total average after task time.
         /// </summary>
