@@ -17709,7 +17709,7 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <comment>Silver badge threshold</comment>
   </data>
   <data name="PasswordChangedSuccessfully" xml:space="preserve">
-    <value>Your password was changed</value>
+    <value>Your password has been changed.</value>
     <comment>When password is successfully changed</comment>
   </data>
   <data name="BeforeRunningAForecastYouNeedToCreateASkillDot" xml:space="preserve">
