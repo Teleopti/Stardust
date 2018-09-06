@@ -426,18 +426,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
         }
 
         /// <summary>
-        /// Called when [tasks changed].
-        /// </summary>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 10.12.2007
-        /// </remarks>
-        public virtual void OnTasksChanged()
-        {
-            onTasksChanged();
-        }
-
-        /// <summary>
         /// Occurs when [staff recalculated].
         /// </summary>
         /// <remarks>
