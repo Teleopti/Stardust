@@ -674,15 +674,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			_now.Is(DateOnly.Today.Date);
 			var startDate = DateOnly.Today.AddDays(1);
 			var form = createShiftWithDifferentWFC(startDate);
-			LoggedOnUser.CurrentUser().WorkflowControlSet.ShiftTradeTargetTimeFlexibility = new TimeSpan(0, 20, 0);
-			PersonRepository.Get(form.PersonToId).WorkflowControlSet.ShiftTradeTargetTimeFlexibility = new TimeSpan(0, 30, 0);
+			LoggedOnUser.CurrentUser().WorkflowControlSet.ShiftTradeTargetTimeFlexibility = new TimeSpan(1, 20, 0);
+			PersonRepository.Get(form.PersonToId).WorkflowControlSet.ShiftTradeTargetTimeFlexibility = new TimeSpan(1, 30, 0);
 
 			var result = Target.GetWFCTolerance(form.PersonToId);
 			var data = (result as JsonResult)?.Data as ShiftTradeToleranceInfoViewModel;
 
 			data.IsNeedToCheck.Should().Be.True();
-			data.MyInfos.First().NegativeToleranceMinutes.Should().Be.EqualTo(20);
-			data.PersonToInfos.First().PositiveToleranceMinutes.Should().Be.EqualTo(30);
+			data.MyInfos.First().NegativeToleranceMinutes.Should().Be.EqualTo(80);
+			data.PersonToInfos.First().PositiveToleranceMinutes.Should().Be.EqualTo(90);
 		}
 
 		[Test]

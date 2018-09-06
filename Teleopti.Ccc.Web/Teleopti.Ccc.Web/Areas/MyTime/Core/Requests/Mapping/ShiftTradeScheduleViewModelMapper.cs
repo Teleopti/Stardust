@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		private IList<ContractTimeInfoViewModel> getContractInfos(IPerson person, DateOnlyPeriod shiftTradeOpenPeriod)
 		{
-			var shiftTradeTargetTimeFlexibility = person.WorkflowControlSet.ShiftTradeTargetTimeFlexibility.Minutes;
+			var shiftTradeTargetTimeFlexibility = person.WorkflowControlSet.ShiftTradeTargetTimeFlexibility.TotalMinutes;
 			var virtualSchedulePeriods = extractVirtualPeriods(person, shiftTradeOpenPeriod);
 
 			return (from schedulePeriod in virtualSchedulePeriods
