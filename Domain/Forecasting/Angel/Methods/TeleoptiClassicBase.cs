@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 			var result = new Dictionary<DateOnly, LightForecastModel>();
 			foreach (var task in taskNumbers)
 			{
- 				result.Add(task.Date, new LightForecastModel
+				result.Add(task.Date, new LightForecastModel
 				{
 					Tasks = task.Tasks,
 					TaskTime = taskTimeNumbers[task.Date].TotalSeconds
