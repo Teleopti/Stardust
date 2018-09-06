@@ -800,25 +800,24 @@ input.use-default-startTime {
 	margin: 5px 10px;
 }
 .shift-trade-error {
- display:flex;
- flex-direction:column;
+	display: flex;
+	flex-direction: column;
 }
 
 .error-detail {
-	display:flex;
-	flex-direction:column;
+	display: flex;
+	flex-direction: column;
 }
 
 .error-summary {
-	cursor:pointer;
-	color:red;
+	cursor: pointer;
+	color: red;
 }
 
 .error-message-header {
-	display:flex;
-	font-weight:bold;
+	display: flex;
+	font-weight: bold;
 }
-
 
 .shift-trade-request-74947 {
 	display: flex;
@@ -826,7 +825,7 @@ input.use-default-startTime {
 }
 
 .multiple-shift-trade-panel {
-	flex:1 0 auto;
+	flex: 1 0 auto;
 	display: flex;
 	flex-direction: row;
 }
@@ -838,19 +837,19 @@ input.use-default-startTime {
 
 .shift-to-trade-row-deskop {
 	height: 100px;
-	align-items:center;
+	align-items: center;
 }
 
 .not-shceudled {
- min-height:60px;
- padding-top:29px;
+	min-height: 60px;
+	padding-top: 29px;
 }
 
 .shift-to-trade-row {
 	/*height: 125px;*/
 	display: flex;
 	border-top: 0.8px solid #e3e3e3;
-	min-height:80px;
+	min-height: 80px;
 }
 
 .shift-to-trade-row + .shift-to-trade-row {
@@ -869,9 +868,8 @@ input.use-default-startTime {
 }
 
 .shift-detail-info {
-	flex:1 0 auto;
+	flex: 1 0 auto;
 }
-
 
 .shift-date {
 	flex: 1 0 80px !important;
@@ -904,15 +902,15 @@ input.use-default-startTime {
 	opacity: 0.5;
 }
 
-	.shift-to-trade-row-disable .text-indicator-mobile {
-		opacity: 0.5;
-	}
-	.schedules-side-by-side {
-		flex: 1 1 70%;
-		overflow: hidden;
-		background-color: white;
-		border: 0.8px solid #e3e3e3;
-	}
+.shift-to-trade-row-disable .text-indicator-mobile {
+	opacity: 0.5;
+}
+.schedules-side-by-side {
+	flex: 1 1 70%;
+	overflow: hidden;
+	background-color: white;
+	border: 0.8px solid #e3e3e3;
+}
 
 .shift-trade-cart {
 	flex: 1 1 30%;
@@ -1028,9 +1026,9 @@ input.use-default-startTime {
 	flex: 1 0 50%;
 	display: flex;
 	flex-direction: column;
-	justify-content:  flex-start;
+	justify-content: flex-start;
 	align-items: center;
-	padding-top:4px;
+	padding-top: 4px;
 }
 
 .cart-schedule + .cart-schedule {
@@ -1093,7 +1091,7 @@ input.use-default-startTime {
 }
 
 .cart-text-time {
-	font-size:12px;
+	font-size: 12px;
 }
 
 .cart-menu {
@@ -1122,7 +1120,7 @@ input.use-default-startTime {
 }
 .text-indicator-mobile {
 	width: 100%;
-	margin-bottom:0px;
+	margin-bottom: 0px;
 }
 
 #Request-add-shift-trade {

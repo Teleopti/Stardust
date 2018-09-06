@@ -1,24 +1,24 @@
-﻿@using Teleopti.Ccc.UserTexts
-@{
-    Layout = null;
-}
+﻿@using Teleopti.Ccc.UserTexts @{ Layout = null; }
 
 <div id="shift-trade-request-detail-view">
 	<!-- ko if: !isAnonymousTrading()-->
 	<!-- ko if: IsEditMessageEnabled -->
-	<textarea id="Request-detailed-shift-trade-message-input" class="form-control input-block-level" data-bind="visible: !IsTradeCreatedByMe() && IsPending() && CanApproveAndDeny, value: UpdatedMessage, valueUpdate: 'afterkeydown'" rows="4" placeholder="@Resources.Message" />
+	<textarea id="Request-detailed-shift-trade-message-input" class="form-control input-block-level" data-bind="visible: !IsTradeCreatedByMe() && IsPending() && CanApproveAndDeny, value: UpdatedMessage, valueUpdate: 'afterkeydown'"
+	 rows="4" placeholder="@Resources.Message" />
 	<!-- /ko -->
-	
+
 	<div>
 		<div id="sender-info">
-			<span class="request-caption">@Resources.From: </span><span class="shift-trade-swap-detail-agent-name request-data-type" id="Request-shift-trade-sender" data-bind="text: personFrom" ></span>
+			<span class="request-caption">@Resources.From: </span><span class="shift-trade-swap-detail-agent-name request-data-type"
+			 id="Request-shift-trade-sender" data-bind="text: personFrom"></span>
 		</div>
 		<div id="reciever-info">
-			<span class="request-caption">@Resources.To: </span><span class="shift-trade-swap-detail-agent-name request-data-type" id="Request-shift-trade-reciever" data-bind="text: personTo" ></span>
+			<span class="request-caption">@Resources.To: </span><span class="shift-trade-swap-detail-agent-name request-data-type"
+			 id="Request-shift-trade-reciever" data-bind="text: personTo"></span>
 		</div>
 	</div>
 	<!-- /ko -->
-	
+
 	<!-- todo, Henke remove all these br ifs!!!! but everything is hardcoded px-->
 	<br />
 	<div id="Request-shift-trade-detail-info" class="alert alert-info" data-bind="visible: showInfo">@Resources.CannotDisplayScheduleWhenShiftTradeStatusIsNew</div>
@@ -49,26 +49,26 @@
 			</div>
 		</div>
 		<div class="shift-trade-request-my-schedule" data-bind="visible: otherSchedule().isMySchedule">
-		<span style="color: gray">&#10149;</span>
-		@Resources.MySchedule</div>
+			<span style="color: gray">&#10149;</span>
+			@Resources.MySchedule</div>
 	</div>
 	<!-- /ko -->
 	<!-- /ko -->
 </div>
 
-<br  data-bind="visible: !IsTradeCreatedByMe()"/>
+<br data-bind="visible: !IsTradeCreatedByMe()" />
 
-<div  class="floatright" data-bind="visible: !IsTradeCreatedByMe() && !isReferred()" >
+<div class="floatright" data-bind="visible: !IsTradeCreatedByMe() && !isReferred()">
 	<button id="Deny-shift-trade" data-bind="click: Deny, enable: CanApproveAndDeny, visible: IsPending" class="btn btn-danger">@Resources.Deny</button>
 	<button id="Approve-shift-trade" data-bind="click: Approve, enable: CanApproveAndDeny, visible: IsPending" class="btn btn-primary">@Resources.Approve</button>
 </div>
 
-<div class="shift-trade-swap-detail-send-again"  data-bind="if: isReferred">
+<div class="shift-trade-swap-detail-send-again" data-bind="if: isReferred">
 	<button class="btn btn-danger cancel-shift-trade" data-bind="click: cancelReferred, clickBubble: false">@Resources.Cancel</button>
 	<button class="btn btn-primary resend-shift-trade" data-bind="click: reSend, clickBubble: false">@Resources.SendAgain</button>
 </div>
 
-<br  data-bind="visible: !IsTradeCreatedByMe()"/>
-<br  data-bind="visible: !IsTradeCreatedByMe()"/>
-<br  data-bind="visible: isReferred()"/>
-<br  data-bind="visible: isReferred()"/>
+<br data-bind="visible: !IsTradeCreatedByMe()" />
+<br data-bind="visible: !IsTradeCreatedByMe()" />
+<br data-bind="visible: isReferred()" />
+<br data-bind="visible: isReferred()" />

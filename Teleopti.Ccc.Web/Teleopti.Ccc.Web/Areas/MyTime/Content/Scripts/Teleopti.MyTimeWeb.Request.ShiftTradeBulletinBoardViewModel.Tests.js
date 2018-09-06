@@ -1,12 +1,11 @@
-﻿$(document).ready(function () {
+﻿$(document).ready(function() {
+	module('Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel');
 
-	module("Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel");
-
-	test("should clean data when prepare load", function () {
+	test('should clean data when prepare load', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel();
-		viewModel.isDetailVisible = function () {
+		viewModel.isDetailVisible = function() {
 			return false;
-		}
+		};
 
 		viewModel.prepareLoad();
 
@@ -18,8 +17,10 @@
 		equal(viewModel.chooseAgent(), null);
 	});
 
-	test("should get date with format", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { return true; };
+	test('should get date with format', function() {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			return true;
+		};
 		Teleopti.MyTimeWeb.Common.SetupCalendar({
 			UseJalaaliCalendar: false,
 			DateFormat: 'YYYY-MM-DD',
@@ -29,56 +30,57 @@
 		});
 
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel();
-		viewModel.requestedDateInternal(moment("Dec 25, 1995"));
+		viewModel.requestedDateInternal(moment('Dec 25, 1995'));
 
 		var result = viewModel.getFormattedDateForDisplay();
 
-		equal(result, "1995-12-25");
+		equal(result, '1995-12-25');
 	});
 
-	test("should get correct contract time", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { return true; };
+	test('should get correct contract time', function() {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			return true;
+		};
 
 		var schedules = {
-			"MySchedule":
-			{
-				"ScheduleLayers": [{}],
-				"ContractTimeInMinute": 480
+			MySchedule: {
+				ScheduleLayers: [{}],
+				ContractTimeInMinute: 480
 			},
-			"PossibleTradeSchedules": [
+			PossibleTradeSchedules: [
 				{
-					"ScheduleLayers": [{}],
-					"ContractTimeInMinute": 425
+					ScheduleLayers: [{}],
+					ContractTimeInMinute: 425
 				}
 			],
-			"TimeLineHours": [
+			TimeLineHours: [
 				{
-					"HourText": "",
-					"StartTime": "2017-01-01 00:00:00"
+					HourText: '',
+					StartTime: '2017-01-01 00:00:00'
 				},
 				{
-					"HourText": "07:00",
-					"StartTime": "2017-01-01 07:00:00"
+					HourText: '07:00',
+					StartTime: '2017-01-01 07:00:00'
 				}
 			]
 		};
 
 		var ajax = {
-			Ajax: function (options) {
-				if (options.url === "RequestsShiftTradeBulletinBoard/BulletinSchedules") {
+			Ajax: function(options) {
+				if (options.url === 'RequestsShiftTradeBulletinBoard/BulletinSchedules') {
 					options.success(schedules);
 				}
 			}
 		};
 
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel(ajax);
-		viewModel.loadBulletinSchedule("2017-01-01", ["TeamId"]);
+		viewModel.loadBulletinSchedule('2017-01-01', ['TeamId']);
 
-		equal(viewModel.mySchedule().contractTime, "8:00");
-		equal(viewModel.possibleTradeSchedules()[0].contractTime, "7:05");
+		equal(viewModel.mySchedule().contractTime, '8:00');
+		equal(viewModel.possibleTradeSchedules()[0].contractTime, '7:05');
 	});
 
-	test("should hide page view when no data", function () {
+	test('should hide page view when no data', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel();
 
 		viewModel.setPagingInfo(0);
@@ -86,7 +88,7 @@
 		equal(viewModel.isPageVisible(), false);
 	});
 
-	test("should show page view when there is data", function () {
+	test('should show page view when there is data', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel();
 
 		viewModel.setPagingInfo(1);
@@ -94,7 +96,7 @@
 		equal(viewModel.isPageVisible(), true);
 	});
 
-	test("should not init selectable pages when it has data", function () {
+	test('should not init selectable pages when it has data', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel();
 		viewModel.selectablePages.push(new Teleopti.MyTimeWeb.Request.PageView(1));
 
@@ -103,7 +105,7 @@
 		equal(viewModel.selectablePages().length, 1);
 	});
 
-	test("should set page count when set paging infos", function () {
+	test('should set page count when set paging infos', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel();
 
 		viewModel.setPagingInfo(2);
@@ -111,7 +113,7 @@
 		equal(viewModel.pageCount(), 2);
 	});
 
-	test("should set paging info", function () {
+	test('should set paging info', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel();
 		viewModel.selectedPageIndex(1);
 
@@ -123,7 +125,7 @@
 		equal(viewModel.selectablePages()[1].isSelected(), true);
 	});
 
-	test("should can select page", function () {
+	test('should can select page', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel();
 		viewModel.selectedPageIndex(1);
 		var page = new Teleopti.MyTimeWeb.Request.PageView(2);
@@ -133,7 +135,7 @@
 		equal(viewModel.selectedPageIndex(), 2);
 	});
 
-	test("should set select page", function () {
+	test('should set select page', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel();
 		viewModel.selectedPageIndex(1);
 
@@ -142,7 +144,7 @@
 		equal(viewModel.selectedPageIndex(), 2);
 	});
 
-	test("should go to next pages", function () {
+	test('should go to next pages', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel();
 		var pageCount = 8;
 		viewModel.pageCount(pageCount);
@@ -156,7 +158,7 @@
 		equal(viewModel.selectablePages().length, pageCount - 5);
 	});
 
-	test("should go to previous pages", function () {
+	test('should go to previous pages', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel();
 		var pageCount = 8;
 		viewModel.pageCount(pageCount);
@@ -171,7 +173,7 @@
 		equal(viewModel.selectablePages().length, 5);
 	});
 
-	test("should go to last page without previous more", function () {
+	test('should go to last page without previous more', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel();
 		viewModel.pageCount(3);
 
@@ -182,7 +184,7 @@
 		equal(viewModel.isMore(), false);
 	});
 
-	test("should go to last page with previous more", function () {
+	test('should go to last page with previous more', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel();
 		viewModel.pageCount(6);
 		viewModel.goToLastPage();
@@ -193,7 +195,7 @@
 		equal(viewModel.selectablePages().length, 1);
 	});
 
-	test("should go to first page without more", function () {
+	test('should go to first page without more', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel();
 		viewModel.selectedPageIndex(3);
 
@@ -204,7 +206,7 @@
 		equal(viewModel.isMore(), false);
 	});
 
-	test("should go to first page with more", function () {
+	test('should go to first page with more', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel();
 		viewModel.pageCount(6);
 		viewModel.goToFirstPage();
@@ -215,57 +217,53 @@
 		equal(viewModel.selectablePages().length, 5);
 	});
 
-	test("should set date picker range", function() {
+	test('should set date picker range', function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel();
-		var now = moment("Dec 25, 1995");
+		var now = moment('Dec 25, 1995');
 
 		viewModel.setDatePickerRange(now, 1, 2);
 
-		equal(viewModel.openPeriodStartDate().format("YYYY-MM-DD"), "1995-12-26");
-		equal(viewModel.openPeriodEndDate().format("YYYY-MM-DD"), "1995-12-27");
+		equal(viewModel.openPeriodStartDate().format('YYYY-MM-DD'), '1995-12-26');
+		equal(viewModel.openPeriodEndDate().format('YYYY-MM-DD'), '1995-12-27');
 	});
-	
-	test("should go to next date", function () {
+
+	test('should go to next date', function() {
 		var ajax = {
-			Ajax: function (options) {
-				if (options.url == "Team/TeamsForShiftTrade") {
-					options.success(
-						""
-					);
+			Ajax: function(options) {
+				if (options.url == 'Team/TeamsForShiftTrade') {
+					options.success('');
 				}
 			}
 		};
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel(ajax);
-		var date = moment("12-25-1995", "MM-DD-YYYY");
+		var date = moment('12-25-1995', 'MM-DD-YYYY');
 		viewModel.requestedDate(date);
-		viewModel.isRequestedDateValid = function (date) {
+		viewModel.isRequestedDateValid = function(date) {
 			return true;
 		};
 
 		viewModel.nextDate();
 
-		equal(viewModel.requestedDateInternal().format("MM-DD-YYYY"), "12-26-1995");
+		equal(viewModel.requestedDateInternal().format('MM-DD-YYYY'), '12-26-1995');
 	});
 
-	test("should go to previous date", function () {
+	test('should go to previous date', function() {
 		var ajax = {
-			Ajax: function (options) {
-				if (options.url == "Team/TeamsForShiftTrade") {
-					options.success(
-						""
-					);
+			Ajax: function(options) {
+				if (options.url == 'Team/TeamsForShiftTrade') {
+					options.success('');
 				}
 			}
 		};
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel(ajax);
-		var date = moment("12-25-1995", "MM-DD-YYYY");
+		var date = moment('12-25-1995', 'MM-DD-YYYY');
 		viewModel.requestedDate(date);
-		viewModel.isRequestedDateValid = function (date) {
+		viewModel.isRequestedDateValid = function(date) {
 			return true;
 		};
 
 		viewModel.previousDate();
 
-		equal(viewModel.requestedDateInternal().format("MM-DD-YYYY"), "12-24-1995");
+		equal(viewModel.requestedDateInternal().format('MM-DD-YYYY'), '12-24-1995');
 	});
 });
