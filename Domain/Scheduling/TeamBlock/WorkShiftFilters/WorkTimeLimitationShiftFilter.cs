@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 			var workShiftsWithinMinMax =
 				shiftList.Where(
-					s => restriction.WorkTimeLimitation.IsCorrespondingToWorkTimeLimitation(s.WorkShiftProjectionContractTime)).ToList();
+					s => restriction.WorkTimeLimitation.IsCorrespondingToWorkTimeLimitation(s.WorkShiftProjectionContractTime())).ToList();
 			return workShiftsWithinMinMax;
 		}
 	}

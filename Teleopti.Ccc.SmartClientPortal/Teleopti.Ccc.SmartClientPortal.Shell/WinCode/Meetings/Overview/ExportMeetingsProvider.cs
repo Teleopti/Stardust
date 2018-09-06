@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Overview
@@ -28,31 +31,23 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Overview
             _model = model;
             _userTimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
         }
-
-
+		
         public IList<IMeeting> GetMeetings(DateOnlyPeriod dateOnlyPeriod)
         {
-            var lst = new HashSet<IMeeting>();
             using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                var meetingsToExport = _meetingRepository.Find(dateOnlyPeriod.ToDateTimePeriod(_userTimeZone),
-                                                               _model.CurrentScenario);
-                foreach (var meeting in meetingsToExport)
-                {
-                    _meetingRepository.LoadAggregate(meeting.Id.GetValueOrDefault());
-                    var dates = meeting.GetRecurringDates();
-                    foreach (var dateOnly in dates)
-                    {
-                        if (dateOnlyPeriod.Contains(dateOnly))
-                        {
-                            lst.Add(meeting);
-                            break;
-                        }
-                    }
-                }
-            }
-            return new List<IMeeting>(lst);
+                var meetings = _meetingRepository.Find(dateOnlyPeriod.ToDateTimePeriod(_userTimeZone),
+                                                               _model.CurrentScenario).Distinct().ToArray();
+				var people = meetings.SelectMany(m => m.MeetingPersons.Select(p => p.Person)).Distinct();
+				people.ForEach(p =>
+				{
+					if (!LazyLoadingManager.IsInitialized(p))
+					{
+						LazyLoadingManager.Initialize(p);
+					}
+				});
+				return meetings;
+			}
         }
     }
-
 }

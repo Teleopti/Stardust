@@ -1658,6 +1658,58 @@
 		expect(shiftLayers[0].style.backgroundColor).toEqual('rgb(255, 255, 255)');
 	});
 
+	it('should not merge with the next layer after changing its activity to the activity of the next layer, but next layer is overtime', function () {
+		fakeTeamSchedule.has({
+			PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
+			Name: 'Annika Andersson',
+			Date: '2018-09-05',
+			WorkTimeMinutes: 60,
+			ContractTimeMinutes: 60,
+			Projection: [
+				{
+					ShiftLayerIds: ['61678e5a-ac3f-4daa-9577-a83800e49622'],
+					Color: '#FFCCA2',
+					Description: 'Sales',
+					Start: '2018-09-05 06:00',
+					End: '2018-09-05 07:00',
+					Minutes: 60,
+					IsOvertime: false,
+					ActivityId: '84db44f4-22a8-44c7-b376-a0a200da613e'
+				},
+				{
+					ShiftLayerIds: ['71678e5a-ac3f-4daa-9577-a83800e49622'],
+					Color: '#ffffff',
+					Description: 'Phone',
+					Start: '2018-09-05 07:00',
+					End: '2018-09-05 08:00',
+					Minutes: 60,
+					IsOvertime: true,
+					ActivityId: '0ffeb898-11bf-43fc-8104-9b5e015ab3c2'
+				}
+			],
+			Timezone: { IanaId: 'Europe/Berlin' }
+		});
+
+		var scope = $rootScope.$new();
+		var panel = setUp('e0e171ad-8f81-44ac-b82e-9c0f00aa6f22', '2018-09-05', 'Europe/Berlin', scope);
+		var vm = panel.isolateScope().vm;
+		scope.$apply();
+
+		var salesLayer = panel[0].querySelectorAll('.shift-layer')[0];
+		salesLayer.click();
+
+		var typeEls = panel[0].querySelectorAll('.activity-selector md-option');
+		typeEls[2].click();
+
+		var shiftLayers = panel[0].querySelectorAll('.shift-layer');
+		expect(shiftLayers.length).toEqual(2);
+		expect(shiftLayers[0].style.width).toEqual('60px');
+		expect(shiftLayers[0].style.backgroundColor).toEqual('rgb(255, 255, 255)');
+
+		expect(shiftLayers[1].style.width).toEqual('60px');
+		expect(shiftLayers[1].style.backgroundColor).toEqual('rgb(255, 255, 255)');
+	});
+
 	it('should merge with the beside layers after changing its activity to the activity of the beside layers', function () {
 		fakeTeamSchedule.has({
 			PersonId: 'e0e171ad-8f81-44ac-b82e-9c0f00aa6f22',
@@ -1719,6 +1771,8 @@
 		var timespanEl = panel[0].querySelector('.timespan');
 		expect(timespanEl.innerText.trim()).toBe('2018-08-31 06:00 - 2018-08-31 09:00');
 	});
+
+
 
 	it('should reject if extending an activity from the end time exceed 36 hours', function () {
 		fakeTeamSchedule.has({

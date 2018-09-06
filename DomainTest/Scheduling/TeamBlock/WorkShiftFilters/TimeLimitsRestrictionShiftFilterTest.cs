@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		private IActivity _activity;
 		private ShiftCategory _category;
 		private TimeZoneInfo _timeZoneInfo;
-		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 		private ValidDateTimePeriodShiftFilter _validDateTimePeriodShiftFilter;
 		private ILatestStartTimeLimitationShiftFilter _latestStartTimeLimitationShiftFilter;
 		private IEarliestEndTimeLimitationShiftFilter _earliestEndTimeLimitationShiftFilter;
@@ -40,7 +39,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_category.SetId(Guid.NewGuid());
 			_timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 			_person = PersonFactory.CreatePerson("bill");
-			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
 			_validDateTimePeriodShiftFilter = new ValidDateTimePeriodShiftFilter();
 			_latestStartTimeLimitationShiftFilter = _mocks.StrictMock<ILatestStartTimeLimitationShiftFilter>();
 			_earliestEndTimeLimitationShiftFilter = _mocks.StrictMock<IEarliestEndTimeLimitationShiftFilter>();
@@ -90,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(_dateOnly, _timeZoneInfo);
 			foreach (IWorkShift shift in tmpList)
 			{
-				var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
+				var cache = new ShiftProjectionCache(shift, dateOnlyAsDateTimePeriod);
 				retList.Add(cache);
 			}
 			return retList;

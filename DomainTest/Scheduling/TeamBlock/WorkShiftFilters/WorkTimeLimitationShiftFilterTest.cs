@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		private IActivity _activity;
 		private ShiftCategory _category;
 		private TimeZoneInfo _timeZoneInfo;
-		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 		private EffectiveRestriction _effectiveRestriction;
 		private WorkTimeLimitationShiftFilter _target;
 		private IWorkShift _workShift1;
@@ -37,7 +36,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_category = ShiftCategoryFactory.CreateShiftCategory("dv");
 			_category.SetId(Guid.NewGuid());
 			_timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
-			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
 			_effectiveRestriction = new EffectiveRestriction(
 				new StartTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(10, 0, 0)),
 				new EndTimeLimitation(new TimeSpan(15, 0, 0), new TimeSpan(18, 0, 0)),
@@ -91,9 +89,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			using (_mocks.Playback())
 			{
 				var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 1, 1), _timeZoneInfo);
-				c1 = new ShiftProjectionCache(_workShift1, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
+				c1 = new ShiftProjectionCache(_workShift1, dateOnlyAsDateTimePeriod);
 				shifts.Add(c1);
-				c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
+				c2 = new ShiftProjectionCache(_workShift2, dateOnlyAsDateTimePeriod);
 				shifts.Add(c2);
 				retShifts = _target.Filter(shifts, _effectiveRestriction);
 
@@ -119,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(_dateOnly, _timeZoneInfo);
 			foreach (IWorkShift shift in tmpList)
 			{
-				var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
+				var cache = new ShiftProjectionCache(shift, dateOnlyAsDateTimePeriod);
 				retList.Add(cache);
 			}
 			return retList;

@@ -4,14 +4,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakePersonRepositoryLegacy2 : FakePersonRepository
-	{
-		public FakePersonRepositoryLegacy2() : base(null)
-		{
-		}
-
-	}
-
 	public class FakePersonRepositoryLegacy : FakePersonRepository
 	{
 		public FakePersonRepositoryLegacy() : base(null)

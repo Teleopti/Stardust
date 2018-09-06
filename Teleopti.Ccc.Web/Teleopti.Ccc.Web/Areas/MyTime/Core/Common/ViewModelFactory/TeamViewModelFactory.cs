@@ -35,16 +35,42 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 		public IEnumerable<SelectBase> CreateTeamOrGroupOptionsViewModel(DateOnly date)
 		{
 			return _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages) ?
-					   createGroupPagesOptions(date) : CreateTeamOptionsViewModel(date, DefinedRaptorApplicationFunctionPaths.TeamSchedule);
+					   createGroupPagesOptions(date) : createNotEmptyTeamOptionsViewModel(date, DefinedRaptorApplicationFunctionPaths.TeamSchedule);
+		}
+
+		private IEnumerable<SelectBase> createNotEmptyTeamOptionsViewModel(DateOnly date, string applicationFunctionPath)
+		{
+			var options = new List<SelectOptionItem>();
+
+			var teams = _teamProvider.GetPermittedNotEmptyTeams(date, applicationFunctionPath);
+			if (teams == null) return options;
+			var sites = teams.ToList().GroupBy(t => t.Site)
+				.OrderBy(s => s.Key.Description.Name);
+
+			sites.ForEach(s =>
+			{
+				var teamOptions = from t in s
+					select new SelectOptionItem
+					{
+						id = t.Id.ToString(),
+						text = s.Key.Description.Name + "/" + t.Description.Name
+					};
+				options.AddRange(teamOptions);
+			});
+
+			return options;
 		}
 
 		public IEnumerable<SelectOptionItem> CreateTeamOptionsViewModel(DateOnly date, string applicationFunctionPath)
 		{
-			var teams = _teamProvider.GetPermittedTeams(date, applicationFunctionPath).ToList();
-			var sites = teams.GroupBy(t => t.Site)
+			var options = new List<SelectOptionItem>();
+
+			var teams = _teamProvider.GetPermittedTeams(date, applicationFunctionPath);
+			if (teams == null) return options;
+
+			var sites = teams.ToList().GroupBy(t => t.Site)
 				.OrderBy(s => s.Key.Description.Name);
 
-			var options = new List<SelectOptionItem>();
 			sites.ForEach(s =>
 			{
 				var teamOptions = from t in s

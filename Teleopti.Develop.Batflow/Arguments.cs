@@ -15,11 +15,6 @@ namespace Teleopti.Develop.Batflow
 			HelpText = "Development database server.")]
 		public string DevelopServer { get; set; }
 
-		[Option("test.baseline",
-			Default = null,
-			HelpText = "Test database baseline to restore. Builds databases if specified.")]
-		public string TestBaseline { get; set; }
-
 		[Option("test.server",
 			Default = ".",
 			HelpText = "Test database server.")]
@@ -33,11 +28,11 @@ namespace Teleopti.Develop.Batflow
 			Default = ".",
 			HelpText = "Database server.")]
 		public string Server { get; set; }
-
-		[Option("baseline",
-			Default = null,
-			HelpText = "Database baseline to restore. Builds databases if specified.")]
-		public string Baseline { get; set; }
+		
+		[Option("togglemode",
+			Default = "ALL",
+			HelpText = "Toggle mode to configure.")]
+		public string ToggleMode { get; set; }
 	}
 
 	[Verb("test.drop", HelpText = "Drops databases initialized for test projects.")]

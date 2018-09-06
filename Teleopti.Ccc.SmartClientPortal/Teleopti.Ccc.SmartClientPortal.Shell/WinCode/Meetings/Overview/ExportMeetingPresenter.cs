@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Infrastructure;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Events;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Interfaces;

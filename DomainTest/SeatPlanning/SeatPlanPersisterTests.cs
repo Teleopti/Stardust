@@ -4,7 +4,6 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.SeatPlanning;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
@@ -19,7 +18,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		[SetUp]
 		public void SetUp()
 		{
-			new FakeCurrentScenario_DoNotUse();
 			_seatBookingRepository = new FakeSeatBookingRepository();
 			_seatPlanRepository = new FakeSeatPlanRepository();
 		}
@@ -83,9 +81,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			removeSeatBooking(seatBookingId);
 
 			Assert.IsFalse(_seatPlanRepository.Any());
-
 		}
-
-		
 	}
 }

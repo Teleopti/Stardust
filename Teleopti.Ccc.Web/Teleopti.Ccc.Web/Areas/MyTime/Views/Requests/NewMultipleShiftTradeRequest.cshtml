@@ -9,12 +9,9 @@
 						<i class="glyphicon glyphicon-chevron-left"></i>
 					</button>
 				</span>
-				<![if (!IE)|(gt IE 8)]>
+
 				<input type="text" class="col-lg-2 form-control add-shifttrade-datepicker text-center date-input-style" data-bind="datepicker: requestedDate, datepickerOptions: { format: DatePickerFormat(), startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()" />
-				<![endif]>
-				<!--[if lte IE 8]>
-					<input type="text" class="col-lg-2 form-control add-shifttrade-datepicker" data-bind="value: requestedDate().format(DatePickerFormat())" readonly="readonly" />
-				<![endif]-->
+
 				<span class="input-group-btn">
 					<button class="btn" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
 						<i class="glyphicon glyphicon-calendar"></i>
@@ -221,7 +218,8 @@
 		</table>
 		<div class="pull-right" data-bind="visible: !isDetailVisible() && isPageVisible()">
 			<ul class="pagination pagination-sm">
-				<li><a data-bind="click: goToFirstPage,css:{'disabled':selectedPageIndex()===1,'hidden':selectablePages().length===0}"><i class="glyphicon glyphicon-fast-backward"></i></a></li>
+				<li><a data-bind="click: goToFirstPage,css:{'disabled':selectedPageIndex()===1,'hidden':selectablePages().length===0}"><i
+						 class="glyphicon glyphicon-fast-backward"></i></a></li>
 				<li>
 					<a data-bind="click: goPreviousPages, visible: isPreviousMore()">...</a>
 				</li>
@@ -234,7 +232,8 @@
 					<a data-bind="click: goNextPages, visible: isMore()">...</a>
 				</li>
 				<li>
-					<a data-bind="click: goToLastPage,css:{'disabled':pageCount()===selectedPageIndex(),'hidden':selectablePages().length===0}"><i class="glyphicon glyphicon-fast-forward"></i></a>
+					<a data-bind="click: goToLastPage,css:{'disabled':pageCount()===selectedPageIndex(),'hidden':selectablePages().length===0}"><i
+						 class="glyphicon glyphicon-fast-forward"></i></a>
 				</li>
 			</ul>
 		</div>
@@ -244,30 +243,25 @@
 
 <div class="shift-trade-request-74947" data-bind="visible: isDetailVisible">
 	<div data-bind="visible: showToloranceMessage" class="shift-trade-error">
-	<div data-bind="click:toloranceMessageClicked" class="error-summary"><i class="glyphicon glyphicon-warning-sign"> </i> <span>Contract time violation.</span> </div>
-	<div data-bind="visible:showToloranceMessageDetail" class="error-detail">
-		<div>Please ensure that your time recording for August is completed today.</div>
-		<!--ko foreach: toloranceMessages-->
-		<!--ko if: isMyself-->
-		<!--ko if: isExceed-->
-		<span class="error">You exceeded <span data-bind="text:contractTimeGap"></span> total contract time during period <span data-bind="text:$root.formatDate(periodStart)"></span> - <span data-bind="text:$root.formatDate(periodEnd)"></span>.</span>
-		<!--/ko-->
-		<!--ko if: !isExceed-->
-		<span class="error">You has less <span data-bind="text:contractTimeGap"></span> than total contract time during period <span data-bind="text:$root.formatDate(periodStart)"></span> - <span data-bind="text:$root.formatDate(periodEnd)"></span>.</span>
-		<!--/ko-->
-		<!--/ko-->
-		<!--ko if: !isMyself-->
-		<!--ko if: isExceed-->
-		<span class="error">target exceeded <span data-bind="text:contractTimeGap"></span> total contract time during period <span data-bind="text:$root.formatDate(periodStart)"></span> - <span data-bind="text:$root.formatDate(periodEnd)"></span>.</span>
-		<!--/ko-->
-		<!--ko if: !isExceed-->
-		<span class="error">target has less <span data-bind="text:contractTimeGap"></span> than total contract time during period <span data-bind="text:$root.formatDate(periodStart)"></span> - <span data-bind="text:$root.formatDate(periodEnd)"></span>.</span>
-		<!--/ko-->
-		<!--/ko-->
-		<!--/ko-->
-	</div>
+		<div data-bind="click:toloranceMessageClicked" class="error-summary"><i class="glyphicon glyphicon-warning-sign"> </i>
+			<span>Contract time violation.</span> </div>
+		<div data-bind="visible:showToloranceMessageDetail" class="error-detail">
+			<div>@Resources.Period @Resources.Deviation</div>
+			<div>@Resources.MySchedule
+				<!--ko foreach: myToleranceMessages-->
+				<span class="error">[<span data-bind="text:$root.formatDate(periodStart)"></span> - <span data-bind="text:$root.formatDate(periodEnd)"></span>]<span
+					 data-bind="text:contractTimeGap"></span> </span>
+				<!--/ko-->
+			</div>
+			<div data-bind="text:agentChoosed() ? agentChoosed().agentName : ''">
+				<!--ko foreach: targetToleranceMessages-->
+				<span class="error">[<span data-bind="text:$root.formatDate(periodStart)"></span> - <span data-bind="text:$root.formatDate(periodEnd)"></span>]<span
+					 data-bind="text:contractTimeGap"></span> </span>
+				<!--/ko-->
+			</div>
+		</div>
 
-</div>
+	</div>
 	<div class="multiple-shift-trade-panel">
 		<div data-bind="css:{'hiden-on-mobile': hideMobileCart}" class="schedules-side-by-side">
 			<div class="side-by-side-header">
@@ -284,9 +278,10 @@
 				<div class="shift-to-trade-row" data-bind="attr: {id: 'shift-row-' + date.valueOf()}, css:{'shift-to-trade-row-disable':!isEnable, 'shift-to-trade-row-deskop':!$root.isMobile()}">
 					<div class="shift-date" data-bind="text:$root.formatDate(date)"></div>
 					<div class="shift-detail own-shift ">
-						<div data-bind="css:{'dayoff':mySchedule && mySchedule.isDayOff && !mySchedule.isFullDayAbsence && $root.isMobile() },style:{'background-color':mySchedule && mySchedule.categoryColor && $root.isMobile() ? mySchedule.categoryColor: 'none', 'color':mySchedule && mySchedule.categoryColor && $root.isMobile() ? $root.getTextColor(mySchedule.categoryColor) : 'none'}" class="clear-desktop-color shift-detail-info fullwidth full-height">
+						<div data-bind="css:{'dayoff':mySchedule && mySchedule.isDayOff && !mySchedule.isFullDayAbsence && $root.isMobile() },style:{'background-color':mySchedule && mySchedule.categoryColor && $root.isMobile() ? mySchedule.categoryColor: 'none', 'color':mySchedule && mySchedule.categoryColor && $root.isMobile() ? $root.getTextColor(mySchedule.categoryColor) : 'none'}"
+						 class="clear-desktop-color shift-detail-info fullwidth full-height">
 							<!--ko if:!mySchedule-->
-							<div data-bind="css:{'not-shceudled':$root.isMobile()}">@Resources.NotScheduled </div>
+							<div data-bind="css:{'not-scheduled':$root.isMobile()}">@Resources.NotScheduled </div>
 							<!--/ko-->
 							<!--ko if:mySchedule-->
 							<!--ko if:mySchedule.isDayOff && !mySchedule.isFullDayAbsence-->
@@ -343,9 +338,10 @@
 						<!--/ko-->
 					</div>
 					<div class="shift-detail shift-to-trade">
-						<div data-bind="css:{'dayoff':targetSchedule && targetSchedule.isDayOff && !targetSchedule.isFullDayAbsence && $root.isMobile() },style:{'background-color':targetSchedule && targetSchedule.categoryColor && $root.isMobile()? targetSchedule.categoryColor: 'none', 'color':targetSchedule && targetSchedule.categoryColor && $root.isMobile() ? $root.getTextColor(targetSchedule.categoryColor) : 'none'}" class="clear-desktop-color shift-detail-info fullwidth full-height">
+						<div data-bind="css:{'dayoff':targetSchedule && targetSchedule.isDayOff && !targetSchedule.isFullDayAbsence && $root.isMobile() },style:{'background-color':targetSchedule && targetSchedule.categoryColor && $root.isMobile()? targetSchedule.categoryColor: 'none', 'color':targetSchedule && targetSchedule.categoryColor && $root.isMobile() ? $root.getTextColor(targetSchedule.categoryColor) : 'none'}"
+						 class="clear-desktop-color shift-detail-info fullwidth full-height">
 							<!--ko if:!targetSchedule-->
-							<div data-bind="css:{'not-shceudled':$root.isMobile()}">@Resources.NotScheduled </div>
+							<div data-bind="css:{'not-scheduled':$root.isMobile()}">@Resources.NotScheduled </div>
 							<!--/ko-->
 							<!--ko if:targetSchedule-->
 							<!--ko if:targetSchedule.isDayOff && !targetSchedule.isFullDayAbsence-->
@@ -415,75 +411,78 @@
 			</div>
 		</div>
 
-		@*<div data-bind="css:{'hiden': $root.isMobile()}" class="shift-trade-cart">*@
-		<div data-bind="css:{'hiden-cart-on-mobile': showMobileCart}" class="shift-trade-cart">
-			<div class="shift-trade-cart-wrapper" data-bind="visible:$root.showCart()">
-				<div class="shift-trade-cart-container">
-					<!--ko foreach: selectedSchedulePairs-->
-					<div class="shift-cart-row">
-						<div class="shift-cart-detail">
-							<div class="shift-cart-date" data-bind="text:$root.formatDate(date)"></div>
-							<div class="shift-cart-detail-info">
-								<div class="cart-schedule my-cart">
-									<!--ko if:!mySchedule-->
-									<span class="cart-text">@Resources.NotScheduled</span>
-									<!--/ko-->
-									<!--ko if:mySchedule && mySchedule.isDayOff-->
-									<span class="dayoff cart-schedule-category cart-text" data-bind="text:mySchedule.dayOffName"></span>
-									<!--/ko-->
-									<!--ko if:mySchedule && !mySchedule.isDayOff-->
-									<span class="cart-schedule-category cart-text" data-bind="text:mySchedule.categoryName,style:{'background-color': mySchedule.categoryColor ? mySchedule.categoryColor: 'none', 'color': mySchedule.categoryColor ? $root.getTextColor(mySchedule.categoryColor) : 'none'}"></span>
-									<span class="cart-text cart-text-time" data-bind="text:mySchedule.scheduleStart + $root.getOvernightFlag(mySchedule.scheduleStartTime(), date) + '-' + mySchedule.scheduleEnd + $root.getOvernightFlag(mySchedule.scheduleEndTime(), date)"></span>
-									<span class="shift-trade-contract cart-text" data-bind="text:mySchedule.contractTime"></span>
-									<!--/ko-->
-								</div>
-								<div class="cart-schedule tartget-cart">
-									<!--ko if:!targetSchedule-->
-									<span class="cart-text">@Resources.NotScheduled</span>
-									<!--/ko-->
-									<!--ko if:targetSchedule && targetSchedule.isDayOff-->
-									<span class="cart-schedule-category dayoff cart-text" data-bind="text:targetSchedule.dayOffName"></span>
-									<!--/ko-->
-									<!--ko if:targetSchedule && !targetSchedule.isDayOff-->
-									<span class="cart-schedule-category cart-text" data-bind="text:targetSchedule.categoryName,style:{'background-color': targetSchedule.categoryColor ? targetSchedule.categoryColor: 'none', 'color': targetSchedule.categoryColor ? $root.getTextColor(targetSchedule.categoryColor) : 'none'}"></span>
-									<span class="cart-text cart-text-time" data-bind="text:targetSchedule.scheduleStart + $root.getOvernightFlag(targetSchedule.scheduleStartTime(), date) + '-' + targetSchedule.scheduleEnd + $root.getOvernightFlag(targetSchedule.scheduleEndTime(), date)"></span>
-									<span class="shift-trade-contract cart-text" data-bind="text:targetSchedule.contractTime"></span>
-									<!--/ko-->
+		@*
+		<div data-bind="css:{'hiden': $root.isMobile()}" class="shift-trade-cart">*@
+			<div data-bind="css:{'hiden-cart-on-mobile': showMobileCart}" class="shift-trade-cart">
+				<div class="shift-trade-cart-wrapper" data-bind="visible:$root.showCart()">
+					<div class="shift-trade-cart-container">
+						<!--ko foreach: selectedSchedulePairs-->
+						<div class="shift-cart-row">
+							<div class="shift-cart-detail">
+								<div class="shift-cart-date" data-bind="text:$root.formatDate(date)"></div>
+								<div class="shift-cart-detail-info">
+									<div class="cart-schedule my-cart">
+										<!--ko if:!mySchedule-->
+										<span class="cart-text">@Resources.NotScheduled</span>
+										<!--/ko-->
+										<!--ko if:mySchedule && mySchedule.isDayOff-->
+										<span class="dayoff cart-schedule-category cart-text" data-bind="text:mySchedule.dayOffName"></span>
+										<!--/ko-->
+										<!--ko if:mySchedule && !mySchedule.isDayOff-->
+										<span class="cart-schedule-category cart-text" data-bind="text:mySchedule.categoryName,style:{'background-color': mySchedule.categoryColor ? mySchedule.categoryColor: 'none', 'color': mySchedule.categoryColor ? $root.getTextColor(mySchedule.categoryColor) : 'none'}"></span>
+										<span class="cart-text cart-text-time" data-bind="text:mySchedule.scheduleStart + $root.getOvernightFlag(mySchedule.scheduleStartTime(), date) + '-' + mySchedule.scheduleEnd + $root.getOvernightFlag(mySchedule.scheduleEndTime(), date)"></span>
+										<span class="shift-trade-contract cart-text" data-bind="text:mySchedule.contractTime"></span>
+										<!--/ko-->
+									</div>
+									<div class="cart-schedule tartget-cart">
+										<!--ko if:!targetSchedule-->
+										<span class="cart-text">@Resources.NotScheduled</span>
+										<!--/ko-->
+										<!--ko if:targetSchedule && targetSchedule.isDayOff-->
+										<span class="cart-schedule-category dayoff cart-text" data-bind="text:targetSchedule.dayOffName"></span>
+										<!--/ko-->
+										<!--ko if:targetSchedule && !targetSchedule.isDayOff-->
+										<span class="cart-schedule-category cart-text" data-bind="text:targetSchedule.categoryName,style:{'background-color': targetSchedule.categoryColor ? targetSchedule.categoryColor: 'none', 'color': targetSchedule.categoryColor ? $root.getTextColor(targetSchedule.categoryColor) : 'none'}"></span>
+										<span class="cart-text cart-text-time" data-bind="text:targetSchedule.scheduleStart + $root.getOvernightFlag(targetSchedule.scheduleStartTime(), date) + '-' + targetSchedule.scheduleEnd + $root.getOvernightFlag(targetSchedule.scheduleEndTime(), date)"></span>
+										<span class="shift-trade-contract cart-text" data-bind="text:targetSchedule.contractTime"></span>
+										<!--/ko-->
+									</div>
 								</div>
 							</div>
+							<div class="shift-cart-selection">
+								<button data-bind="click:$root.removeSelect" type="button" class="btn-remove">
+									<i class="glyphicon glyphicon-remove"></i>
+								</button>
+							</div>
 						</div>
-						<div class="shift-cart-selection">
-							<button data-bind="click:$root.removeSelect" type="button" class="btn-remove">
-								<i class="glyphicon glyphicon-remove"></i>
-							</button>
+						<!--/ko-->
+					</div>
+					<div data-bind="css:{'not-visible': $root.showMobileCart}" class="shift-trade-request-container">
+						<div class="form-group">
+							<input id="Request-add-shift-trade-subject-input" class="form-control input-block-level" type="text" data-bind="value: subject"
+							 placeholder="@Resources.Subject" maxlength="80" />
 						</div>
-					</div>
-					<!--/ko-->
-				</div>
-				<div data-bind="css:{'not-visible': $root.showMobileCart}" class="shift-trade-request-container">
-					<div class="form-group">
-						<input id="Request-add-shift-trade-subject-input" class="form-control input-block-level" type="text" data-bind="value: subject" placeholder="@Resources.Subject" maxlength="80" />
-					</div>
-					<div class="form-group">
-						<textarea id="Request-add-shift-trade-message-input" class="form-control input-block-level" data-bind="value: message, valueUpdate: 'afterkeydown', event:{change : checkMessageLength}" rows="4" placeholder="@Resources.Message" />
-					</div>
-					<div class="pull-right">
-						<button class="btn cart-cancel-button" data-bind="click: cancelRequest">@Resources.Cancel</button>
-						<button class="btn btn-primary send-button" data-bind="enable: isSendEnabled, click: sendRequest">@Resources.Send</button>
-					</div>
-					<div class="error" data-bind="html: errorMessage"></div>
+						<div class="form-group">
+							<textarea id="Request-add-shift-trade-message-input" class="form-control input-block-level" data-bind="value: message, valueUpdate: 'afterkeydown', event:{change : checkMessageLength}"
+							 rows="4" placeholder="@Resources.Message" />
+							</div>
+						<div class="pull-right">
+							<button class="btn cart-cancel-button" data-bind="click: cancelRequest">@Resources.Cancel</button>
+							<button class="btn btn-primary send-button" data-bind="enable: isSendEnabled, click: sendRequest">@Resources.Send</button>
+						</div>
+						<div class="error" data-bind="html: errorMessage"></div>
 
+					</div>
 				</div>
 			</div>
+
+			<button data-bind="click:$root.cartMeunClick, css:{'hiden': !showCartToggle()}" class="cart-menu">
+				<span data-bind="text:selectedCount, css:{'hiden': hideMobileCart}"></span>
+				<i data-bind="css:{'hiden':showMobileCart}" class="glyphicon glyphicon-arrow-left"></i>
+			</button>
 		</div>
-
-		<button data-bind="click:$root.cartMeunClick, css:{'hiden': !showCartToggle()}" class="cart-menu">
-			<span data-bind="text:selectedCount, css:{'hiden': hideMobileCart}"></span>
-			<i data-bind="css:{'hiden':showMobileCart}" class="glyphicon glyphicon-arrow-left"></i>
-		</button>
 	</div>
-</div>
 
-<div class="shift-trade-no-possible-trades alert alert-info" data-bind="visible: noPossibleShiftTrades()">
-	@Resources.NoAgentsAvailableForShiftTrade
-</div>
+	<div class="shift-trade-no-possible-trades alert alert-info" data-bind="visible: noPossibleShiftTrades()">
+		@Resources.NoAgentsAvailableForShiftTrade
+	</div>

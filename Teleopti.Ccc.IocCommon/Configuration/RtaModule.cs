@@ -63,6 +63,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AgentStateReadModelReader>().As<IAgentStateReadModelReader>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStateReadModelQueryBuilderConfiguration>().SingleInstance();
 
+			builder.RegisterType<HistoricalOverviewReadModelPersister>()
+				.As<IHistoricalOverviewReadModelReader>()
+				.As<IHistoricalOverviewReadModelPersister>()
+				.SingleInstance().ApplyAspects();
+			
 			builder.RegisterType<KeyValueStorePersister>().As<IKeyValueStorePersister>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStatePersister>().As<IAgentStatePersister>().SingleInstance().ApplyAspects();
 			builder.RegisterType<MappingReadModelPersister>().As<IMappingReadModelPersister>().SingleInstance().ApplyAspects();

@@ -12,8 +12,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Kpi;
 using Teleopti.Ccc.Domain.Payroll;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
@@ -84,7 +82,6 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Client
 			var aggregateRoots = new Dictionary<Type, IList<Type>>
 			{
 				{ typeof(IStatisticTask), new List<Type> { typeof(IStatisticTask) } },
-				{ typeof(AgentStateReadModel), new List<Type> { typeof(AgentStateReadModel) } },
 				{ typeof(IJobResultProgress), new List<Type> { typeof(IJobResultProgress) } },
 				{ typeof(IMeetingChangedEntity), new List<Type> { typeof(IMeetingChangedEntity) } },
 				{ typeof(MeetingChangedEntity), new List<Type> { typeof(IMeetingChangedEntity) } },
@@ -132,9 +129,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Client
 				{ typeof(ShiftCategory), new List<Type> { typeof(IShiftCategory) } },
 				{ typeof(Meeting), new List<Type> { typeof(IMeeting) } },
 				{ typeof(PersonRequest), new List<Type> { typeof(IPersonRequest) } },
-				{ typeof(RtaStateGroup), new List<Type> { typeof(IRtaStateGroup) } },
 				{ typeof(Activity), new List<Type> { typeof(IActivity) } },
-				{ typeof(RtaRule), new List<Type> { typeof(IRtaRule) } },
 				{ typeof(Team), new List<Type> { typeof(ITeam) } },
 				{ typeof(Site), new List<Type> { typeof(ISite) } },
 				{ typeof(Scorecard), new List<Type> { typeof(IScorecard) } },

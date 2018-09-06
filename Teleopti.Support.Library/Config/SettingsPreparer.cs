@@ -8,7 +8,7 @@ namespace Teleopti.Support.Library.Config
 		public string Server;
 		public string ApplicationDatabase;
 		public string AnalyticsDatabase;
-		public string ToggleMode;
+		public string ToggleMode = "ALL";
 		public string SqlAuthString;
 		public string MachineKeyValidationKey;
 		public string MachineKeyDecryptionKey;

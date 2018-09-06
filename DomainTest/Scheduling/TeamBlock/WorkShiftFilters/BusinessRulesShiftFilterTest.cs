@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		private ValidDateTimePeriodShiftFilter _validDateTimePeriodShiftFilter;
 		private ILongestPeriodForAssignmentCalculator _longestPeriodForAssignmentCalculator;
 		private BusinessRulesShiftFilter _target;
-		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 		private DateOnly _dateOnly;
 		private readonly TimeZoneInfo _timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 
@@ -30,7 +29,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_validDateTimePeriodShiftFilter = new ValidDateTimePeriodShiftFilter();
 			_longestPeriodForAssignmentCalculator = _mocks.StrictMock<ILongestPeriodForAssignmentCalculator>();
 
-			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
 			_target = new BusinessRulesShiftFilter(_validDateTimePeriodShiftFilter,
 			                                       _longestPeriodForAssignmentCalculator);
 		}
@@ -42,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(_dateOnly, _timeZoneInfo);
 			foreach (IWorkShift shift in tmpList)
 			{
-				var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
+				var cache = new ShiftProjectionCache(shift, dateOnlyAsDateTimePeriod);
 				retList.Add(cache);
 			}
 			return retList;

@@ -33,7 +33,7 @@ namespace Teleopti.Develop.Batflow
 				AnalyticsDatabase = develop.AnalyticsDatabase()
 			});
 
-			var test = new FixDatabasesCommand(verb.TestBaseline, verb.TestServer, "InfraTest", DatabaseOperation.Skip);
+			var test = new FixDatabasesCommand(null, verb.TestServer, "InfraTest", DatabaseOperation.Skip);
 			fixer.Fix(test);
 			new InfraTestConfigurator().Configure(new InfraTestConfigCommand
 			{
@@ -47,13 +47,14 @@ namespace Teleopti.Develop.Batflow
 
 		private static int testInit(TestInitVerb verb, DatabaseFixer fixer)
 		{
-			var test = new FixDatabasesCommand(verb.Baseline, verb.Server, "InfraTest", DatabaseOperation.Init);
+			var test = new FixDatabasesCommand(null, verb.Server, "InfraTest", DatabaseOperation.Init);
 			fixer.Fix(test);
 			new InfraTestConfigurator().Configure(new InfraTestConfigCommand
 			{
 				Server = verb.Server,
 				ApplicationDatabase = test.ApplicationDatabase(),
-				AnalyticsDatabase = test.AnalyticsDatabase()
+				AnalyticsDatabase = test.AnalyticsDatabase(),
+				ToggleMode = verb.ToggleMode
 			});
 
 			return 0;

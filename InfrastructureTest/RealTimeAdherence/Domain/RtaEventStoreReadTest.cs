@@ -269,5 +269,64 @@ namespace Teleopti.Ccc.InfrastructureTest.RealTimeAdherence.Domain
 				.Select(x => x.StartTime)
 				.Should().Have.SameSequenceAs(firstIsLast);
 		}
+		
+		[Test]
+		public void ShouldLoadFirstTimeWithZero()
+		{
+			var events = WithUnitOfWork.Get(() => Events.LoadFrom(0));
+
+			events.MaxId.Should().Be.EqualTo(0);			
+		}
+		
+		[Test]
+		public void ShouldLoadEventFrom()
+		{
+			var personId = Guid.NewGuid();
+			Publisher.Publish(new PersonStateChangedEvent
+			{
+				PersonId = personId,
+				Timestamp = "2018-03-06 08:00".Utc()
+			});
+
+			var events = WithUnitOfWork.Get(() => Events.LoadFrom(0));
+
+			events.MaxId.Should().Be.GreaterThan(0);			
+		}
+		
+		[Test]
+		public void ShouldLoadEventFrom2()
+		{
+			Publisher.Publish(new PersonStateChangedEvent
+			{
+				PersonId = Guid.NewGuid(),
+				Timestamp = "2018-03-06 08:00".Utc()
+			});
+			
+			Publisher.Publish(new PersonStateChangedEvent
+			{
+				PersonId = Guid.NewGuid(),
+				Timestamp = "2018-03-06 08:00".Utc()
+			});
+
+			var events = WithUnitOfWork.Get(() => Events.LoadFrom(0));
+
+			events.MaxId.Should().Be.GreaterThan(1);			
+		}		
+		
+		[Test]
+		public void ShouldLoadPersonStateChangedEvent()
+		{
+			var personId = Guid.NewGuid();
+			Publisher.Publish(new PersonStateChangedEvent
+			{
+				PersonId = personId,
+				Timestamp = "2018-03-06 08:00".Utc()
+			});
+
+			var events = WithUnitOfWork.Get(() => Events.LoadFrom(0)).Events;
+			
+			events.Cast<PersonStateChangedEvent>().Single().PersonId.Should().Be(personId);			
+		}
+		
 	}
 }

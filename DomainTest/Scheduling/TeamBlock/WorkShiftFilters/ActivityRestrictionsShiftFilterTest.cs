@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 	{
 		private ActivityRestrictionsShiftFilter _target;
 		private MockRepository _mocks;
-		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 		private IPerson _person;
 		private DateOnly _dateOnly;
 
@@ -29,7 +28,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_mocks = new MockRepository();
 			_dateOnly = new DateOnly(2009, 2, 2);
 			_person = PersonFactory.CreatePerson("bill");
-			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
 			_target = new ActivityRestrictionsShiftFilter();
 		}
 
@@ -52,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(_dateOnly, timeZoneInfo);
 			foreach (IWorkShift shift in listOfWorkShifts)
 			{
-				var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
+				var cache = new ShiftProjectionCache(shift, dateOnlyAsDateTimePeriod);
 				casheList.Add(cache);
 			}
 

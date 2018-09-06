@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		public void Setup()
 		{
 			_schedulingResultStateHolder = new SchedulingResultStateHolder();
-			_personRepository = new FakePersonRepositoryLegacy2();
+			_personRepository = new FakePersonRepository(new FakeStorage());
 			_scheduleStorage = new FakeScheduleStorage_DoNotUse();
 
 			_requiresSeatActivity = ActivityFactory.CreateActivity("Shift_RequiresSeat");
@@ -50,7 +50,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			_scheduleProjectionReadOnlyActivityProvider = new FakeScheduleProjectionReadOnlyActivityProvider();
 
-			_currentScenario = new FakeCurrentScenario_DoNotUse();
+			var scenarioRepository = new FakeScenarioRepository();
+			scenarioRepository.Has("Default");
+			_currentScenario = new DefaultScenarioFromRepository(scenarioRepository);
 			_shiftTradeTestHelper = new ShiftTradeTestHelper(_schedulingResultStateHolder, _scheduleStorage, _personRepository, new FakeBusinessRuleProvider(), _currentScenario, _scheduleProjectionReadOnlyActivityProvider);
 
 			_shiftTradeTestHelper.UseMaxSeatReadModelValidator();

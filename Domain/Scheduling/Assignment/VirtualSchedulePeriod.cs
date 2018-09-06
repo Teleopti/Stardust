@@ -244,13 +244,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		    return Math.Round(currentWorkDays / originalWorkDays, 2);
 		}
 
-	    public virtual TimeSpan BalanceIn => TimeSpan.FromMinutes(_schedulePeriod.BalanceIn.TotalMinutes * percentOfOrginalPeriod());
+		public virtual TimeSpan BalanceIn => TimeSpan.FromMinutes(_schedulePeriod?.BalanceIn.TotalMinutes ?? 0 * percentOfOrginalPeriod());
 
-	    public virtual TimeSpan Extra => TimeSpan.FromMinutes(_schedulePeriod.Extra.TotalMinutes * percentOfOrginalPeriod());
+		public virtual TimeSpan Extra => TimeSpan.FromMinutes(_schedulePeriod?.Extra.TotalMinutes ?? 0 * percentOfOrginalPeriod());
 
 		public virtual Percent Seasonality => _schedulePeriod.Seasonality;
 
-	    public virtual TimeSpan BalanceOut => TimeSpan.FromMinutes(_schedulePeriod.BalanceOut.TotalMinutes * percentOfOrginalPeriod());
+		public virtual TimeSpan BalanceOut => TimeSpan.FromMinutes(_schedulePeriod?.BalanceOut.TotalMinutes ?? 0 * percentOfOrginalPeriod());
 
 		public override bool Equals(object obj)
         {

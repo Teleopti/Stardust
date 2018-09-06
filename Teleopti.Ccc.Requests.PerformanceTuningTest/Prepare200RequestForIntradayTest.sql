@@ -1,4 +1,4 @@
--- ta bort alla PersonAbsence där vi vill leka då blir det lättare att få godkänt
+-- ta bort alla PersonAbsence dï¿½r vi vill leka dï¿½ blir det lï¿½ttare att fï¿½ godkï¿½nt
 declare @start datetime = '2016-03-13 00:00:00' 
 declare @end datetime = '2016-03-18 00:00:00' 
 declare @startRequest datetime = '2016-03-16 8:00:00' 
@@ -11,16 +11,16 @@ DELETE FROM AbsenceRequest WHERE Request IN (SELECT Id from Request where StartD
 delete from Request where StartDateTime between  @start  and @end and Id not in (select Request from ShiftTradeRequest)
 delete from PersonRequest where id not in(select parent from Request )
 
--- trunka för att få bort skräp
+-- trunka fï¿½r att fï¿½ bort skrï¿½p
 
-truncate table [PerfA].[ReadModel].[SkillCombinationResource]
-truncate table [PerfA].[ReadModel].[SkillCombination]
-truncate table [PerfA].[ReadModel].[SkillCombinationResourceDelta]
-truncate table [PerfA].[dbo].[JobStartTime]
+truncate table [ReadModel].[SkillCombinationResource]
+truncate table [ReadModel].[SkillCombination]
+truncate table [ReadModel].[SkillCombinationResourceDelta]
+truncate table [dbo].[JobStartTime]
 
--- ladda 200 (lite random ) personer på ett bu - '1FA1F97C-EBFF-4379-B5F9-A11C00F0F02B'
+-- ladda 200 (lite random ) personer pï¿½ ett bu - '1FA1F97C-EBFF-4379-B5F9-A11C00F0F02B'
 -- ska ha person period och helst schema under perioden
--- skapa person request på dom
+-- skapa person request pï¿½ dom
 
 select distinct top 200 p.* into #tempPerson 
 from person p

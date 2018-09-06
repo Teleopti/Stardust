@@ -12,11 +12,11 @@ namespace Teleopti.Ccc.Domain.Staffing
 	{
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
-		private readonly SkillStaffingIntervalProvider _skillStaffingIntervalProvider;
+		private readonly ISkillStaffingIntervalProvider _skillStaffingIntervalProvider;
 
 		public ScheduledStaffingProvider(INow now,
 										 IUserTimeZone timeZone,
-										 SkillStaffingIntervalProvider skillStaffingIntervalProvider)
+										 ISkillStaffingIntervalProvider skillStaffingIntervalProvider)
 		{
 			_now = now;
 			_timeZone = timeZone;

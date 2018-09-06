@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		private IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
 		private ContractTimeShiftFilter _target;
 		private TimeZoneInfo _timeZoneInfo;
-		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 		private IScheduleMatrixPro _matrix1;
 		private List<IScheduleMatrixPro> _allMatrixes;
 		private SchedulingOptions _scheduleOptions;
@@ -34,7 +33,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_mocks = new MockRepository();
 			_timeZoneInfo = TimeZoneInfo.Utc;
 			_workShiftMinMaxCalculator = _mocks.StrictMock<IWorkShiftMinMaxCalculator>();
-			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
 			_matrix1 = _mocks.StrictMock<IScheduleMatrixPro>();
 			_matrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
 			_allMatrixes = new List<IScheduleMatrixPro> {_matrix1, _matrix2};
@@ -65,9 +63,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			}
 
 			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 1, 1), _timeZoneInfo);
-			var c1 = new ShiftProjectionCache(_workShift1, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
+			var c1 = new ShiftProjectionCache(_workShift1, dateOnlyAsDateTimePeriod);
 			shifts.Add(c1);
-			var c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
+			var c2 = new ShiftProjectionCache(_workShift2, dateOnlyAsDateTimePeriod);
 			shifts.Add(c2);
 
 			using (_mocks.Playback())
@@ -101,9 +99,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			}
 
 			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 1, 1), _timeZoneInfo);
-			var c1 = new ShiftProjectionCache(_workShift1, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
+			var c1 = new ShiftProjectionCache(_workShift1, dateOnlyAsDateTimePeriod);
 			shifts.Add(c1);
-			var c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
+			var c2 = new ShiftProjectionCache(_workShift2, dateOnlyAsDateTimePeriod);
 			shifts.Add(c2);
 
 			using (_mocks.Playback())
@@ -135,9 +133,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			}
 
 			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 1, 1), _timeZoneInfo);
-			var c1 = new ShiftProjectionCache(_workShift1, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
+			var c1 = new ShiftProjectionCache(_workShift1, dateOnlyAsDateTimePeriod);
 			shifts.Add(c1);
-			var c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
+			var c2 = new ShiftProjectionCache(_workShift2, dateOnlyAsDateTimePeriod);
 			shifts.Add(c2);
 
 			using (_mocks.Playback())
@@ -178,9 +176,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			}
 
 			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 1, 1), _timeZoneInfo);
-			var c1 = new ShiftProjectionCache(_workShift1, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
+			var c1 = new ShiftProjectionCache(_workShift1, dateOnlyAsDateTimePeriod);
 			shifts.Add(c1);
-			var c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
+			var c2 = new ShiftProjectionCache(_workShift2, dateOnlyAsDateTimePeriod);
 			shifts.Add(c2);
 
 			using (_mocks.Playback())
@@ -207,9 +205,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			}
 
 			var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2009, 1, 1), _timeZoneInfo);
-			var c1 = new ShiftProjectionCache(_workShift1, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
+			var c1 = new ShiftProjectionCache(_workShift1, dateOnlyAsDateTimePeriod);
 			shifts.Add(c1);
-			var c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker, dateOnlyAsDateTimePeriod);
+			var c2 = new ShiftProjectionCache(_workShift2, dateOnlyAsDateTimePeriod);
 			shifts.Add(c2);
 
 			using (_mocks.Playback())

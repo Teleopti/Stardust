@@ -1,0 +1,313 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{906CD885-44E7-46B8-BECA-83FD20829532}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Teleopti.Wfm.Rta.Test</RootNamespace>
+    <AssemblyName>Teleopti.Wfm.Rta.Test</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da">
+      <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="LinFu.DynamicProxy, Version=1.0.4.16035, Culture=neutral, PublicKeyToken=62a6874124340d6e">
+      <HintPath>..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MbCache, Version=2.14.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
+      <HintPath>..\packages\MbCache.2.14.0\lib\net40\MbCache.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.14.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400">
+      <HintPath>..\packages\MbCache.2.14.0\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Win32.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\Microsoft.Win32.Primitives.4.0.1\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="mscorlib" />
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.framework, Version=3.6.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb">
+      <HintPath>..\packages\NUnit.3.6.1\lib\net45\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SharpTestsEx, Version=1.1.1.0, Culture=neutral, PublicKeyToken=8c60d8070630b1c1">
+      <HintPath>..\packages\SharpTestsEx.1.1.1\lib\SharpTestsEx.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SharpTestsEx.Mvc, Version=1.1.1.0, Culture=neutral, PublicKeyToken=8c60d8070630b1c1">
+      <HintPath>..\packages\SharpTestsEx.1.1.1\lib\SharpTestsEx.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\System.AppContext.4.1.0\lib\net46\System.AppContext.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Console, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\System.Console.4.0.0\lib\net46\System.Console.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.0.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Globalization.Calendars, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\System.Globalization.Calendars.4.0.1\lib\net46\System.Globalization.Calendars.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.Compression, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <HintPath>..\packages\System.IO.Compression.4.1.0\lib\net46\System.IO.Compression.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.IO.Compression.ZipFile, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <HintPath>..\packages\System.IO.Compression.ZipFile.4.0.1\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.FileSystem, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\System.IO.FileSystem.4.0.1\lib\net46\System.IO.FileSystem.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\System.IO.FileSystem.Primitives.4.0.1\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\System.Net.Http.4.1.0\lib\net46\System.Net.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Sockets, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\System.Net.Sockets.4.1.0\lib\net46\System.Net.Sockets.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.0.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Loader, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\System.Runtime.Loader.4.0.0\lib\netstandard1.5\System.Runtime.Loader.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.2.0\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\System.Security.Cryptography.Encoding.4.0.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\System.Security.Cryptography.Primitives.4.0.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.1.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="ApplicationLayer\ReadModels\AgentState\DeleteTest.cs" />
+    <Compile Include="ApplicationLayer\ReadModels\AgentState\PersonAssociationChangedTest.cs" />
+    <Compile Include="ApplicationLayer\ReadModels\AgentState\PersonEmploymentNumberChangedTest.cs" />
+    <Compile Include="ApplicationLayer\ReadModels\AgentState\PersonNameChangedTest.cs" />
+    <Compile Include="ApplicationLayer\ReadModels\AgentState\SiteNameChangedTest.cs" />
+    <Compile Include="ApplicationLayer\ReadModels\AgentState\TeamNameChangedTest.cs" />
+    <Compile Include="ApplicationLayer\ReadModels\AgentState\UnorderedEventsTest.cs" />
+    <Compile Include="ApplicationLayer\ReadModels\ExternalLogons\ExternalLogonReadModelUpdaterTest.cs" />
+    <Compile Include="ApplicationLayer\ReadModels\Mappings\MappingsTest.cs" />
+    <Compile Include="ApplicationLayer\ReadModels\Schedules\CurrentScheduleReadModelUpdaterTest.cs" />
+    <Compile Include="ApplicationLayer\ReadModels\TestCaseExtensions.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\AgentStateViewModelBuilder\AgentStateNameTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\AgentStateViewModelBuilder\AgentStateValuesTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\AgentStateViewModelBuilder\ExcludePhoneStateTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\AgentStateViewModelBuilder\ForEntireBuTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\AgentStateViewModelBuilder\InAlarmTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\AgentStateViewModelBuilder\PermissionTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\AgentStateViewModelBuilder\ViewModelBuilderTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\AgentStateViewModelBuilder\ViewModelBuilderTest2.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\HistoricalAdherenceDate\DateTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\AdherencesTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\ApprovedPeriodsTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\BuildTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\ChangesTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\DateTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\DurationOfEventsTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\HistoricalAdherenceViewModelBuilderEx.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\LateForWorkTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\NavigationTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\PercentageTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\RecordedAdherencesTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\ScheduleTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\TimelineTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\HistoricalAdherenceViewModelBuilder\UserTimeZoneTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\HistoricalOverviewViewModelBuilder\BuildAdherenceTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\HistoricalOverviewViewModelBuilder\BuildAgentDaysTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\HistoricalOverviewViewModelBuilder\BuildAgentTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\HistoricalOverviewViewModelBuilder\BuildIntervalAdherenceTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\HistoricalOverviewViewModelBuilder\BuildLateForWorkTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\HistoricalOverviewViewModelBuilder\BuildTeamTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\OrganizationViewModelBuilderPermissionTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\OrganizationViewModelBuilderTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\PhoneStateViewModelBuilderTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\SiteCardViewModelBuilderPermissionTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\SiteCardViewModelBuilderTeamsTest.cs" />
+    <Compile Include="ApplicationLayer\ViewModels\SiteCardViewModelBuilderTest.cs" />
+    <Compile Include="CacheTest.cs" />
+    <Compile Include="Domain\AgentAdherenceDay\AdherencesTest.cs" />
+    <Compile Include="Domain\AgentAdherenceDay\ApprovedPeriodPercentageTest.cs" />
+    <Compile Include="Domain\AgentAdherenceDay\ApprovedPeriodTest.cs" />
+    <Compile Include="Domain\AgentAdherenceDay\ChangesTest.cs" />
+    <Compile Include="Domain\AgentAdherenceDay\DurationOfEventsTest.cs" />
+    <Compile Include="Domain\AgentAdherenceDay\LateForWorkTest.cs" />
+    <Compile Include="Domain\AgentAdherenceDay\PercentageTest.cs" />
+    <Compile Include="Domain\AgentAdherenceDay\RecordedAdherenceTest.cs" />
+    <Compile Include="Domain\AgentAdherenceDay\ResolutionTest.cs" />
+    <Compile Include="Domain\ApprovePeriodAsInAdherence\ApprovedPeriodTest.cs" />
+    <Compile Include="Domain\ApprovePeriodAsInAdherence\ApprovePeriodAsInAdherenceCommandHandlerTest.cs" />
+    <Compile Include="Domain\ApprovePeriodAsInAdherence\RemoveApprovedPeriodTest.cs" />
+    <Compile Include="Domain\ApprovePeriodAsInAdherence\RemovePeriodAsInAdherenceCommandHandlerTest.cs" />
+    <Compile Include="Domain\Configuration\DefaultStateGroupMissingInConfigurationTest.cs" />
+    <Compile Include="Domain\Configuration\LoggedOutStateGroupMissingInConfigurationTest.cs" />
+    <Compile Include="Domain\Configuration\LoggedOutStateGroupMissingInRtaServiceTest.cs" />
+    <Compile Include="Domain\Service\AgentStateMaintainerTest.cs" />
+    <Compile Include="Domain\Service\AgentStateReadModel\CheckForActivityChangesTest.cs" />
+    <Compile Include="Domain\Service\AgentStateReadModel\StartTime\AlarmStartTimeTest.cs" />
+    <Compile Include="Domain\Service\AgentStateReadModel\StartTime\IsAlarmTest.cs" />
+    <Compile Include="Domain\Service\AgentStateReadModel\StartTime\OutOfAdherenceStartTimeTest.cs" />
+    <Compile Include="Domain\Service\AgentStateReadModel\StartTime\ProperAlarmStartTimeTest.cs" />
+    <Compile Include="Domain\Service\AgentStateReadModel\StartTime\RuleStartTimeTest.cs" />
+    <Compile Include="Domain\Service\AgentStateReadModel\StartTime\StateStartTimeTest.cs" />
+    <Compile Include="Domain\Service\AgentStateReadModel\UnrecognizedStateTest.cs" />
+    <Compile Include="Domain\Service\AgentStateReadModel\UpdateAgentStateReadModelActivityTest.cs" />
+    <Compile Include="Domain\Service\AgentStateReadModel\UpdateAgentStateReadModelBatchTest.cs" />
+    <Compile Include="Domain\Service\AgentStateReadModel\UpdateAgentStateReadModelOutOfAdherencesTest.cs" />
+    <Compile Include="Domain\Service\AgentStateReadModel\UpdateAgentStateReadModelShiftAbsenceTest.cs" />
+    <Compile Include="Domain\Service\AgentStateReadModel\UpdateAgentStateReadModelShiftMeetingTest.cs" />
+    <Compile Include="Domain\Service\AgentStateReadModel\UpdateAgentStateReadModelShiftTest.cs" />
+    <Compile Include="Domain\Service\AgentStateReadModel\UpdateAgentStateReadModelSnapshotTests.cs" />
+    <Compile Include="Domain\Service\AgentStateReadModel\UpdateAgentStateReadModelTest.cs" />
+    <Compile Include="Domain\Service\AgentStateReadModel\UpdateAgentStateTest.cs" />
+    <Compile Include="Domain\Service\AuthenticationKeyTenantTest.cs" />
+    <Compile Include="Domain\Service\BelongsToDateTest.cs" />
+    <Compile Include="Domain\Service\CaseInsensitiveTest.cs" />
+    <Compile Include="Domain\Service\CheckForActivityChangesTest.cs" />
+    <Compile Include="Domain\Service\EmptyExistingStateTest.cs" />
+    <Compile Include="Domain\Service\EventsOrderTest.cs" />
+    <Compile Include="Domain\Service\EventsStreamTest.cs" />
+    <Compile Include="Domain\Service\ExceptionTest.cs" />
+    <Compile Include="Domain\Service\ExecuteBatchesInParallelTest.cs" />
+    <Compile Include="Domain\Service\ExternalLogonPersonMappingTest.cs" />
+    <Compile Include="Domain\Service\IncorrectOutOfAdherenceCount35829.cs" />
+    <Compile Include="Domain\Service\LateForWorkEventTest.cs" />
+    <Compile Include="Domain\Service\MeetingTest.cs" />
+    <Compile Include="Domain\Service\PersonActivityActualStartEventTest.cs" />
+    <Compile Include="Domain\Service\PersonActivityStartEventTest.cs" />
+    <Compile Include="Domain\Service\PersonAdherenceEventsTest.cs" />
+    <Compile Include="Domain\Service\PersonAdherenceScheduleRemovedTest.cs" />
+    <Compile Include="Domain\Service\PersonInAdherenceEventTest.cs" />
+    <Compile Include="Domain\Service\PersonNeutralAdherenceEventTest.cs" />
+    <Compile Include="Domain\Service\PersonOutOfAdherenceEventTest.cs" />
+    <Compile Include="Domain\Service\PersonRuleChangedEventTest.cs" />
+    <Compile Include="Domain\Service\PersonShiftEndEventTest.cs" />
+    <Compile Include="Domain\Service\PersonShiftStartEventTest.cs" />
+    <Compile Include="Domain\Service\PersonStateChangedEventTest.cs" />
+    <Compile Include="Domain\Service\QueueTest.cs" />
+    <Compile Include="Domain\Service\RuleMappingTest.cs" />
+    <Compile Include="Domain\Service\SnapshotTests.cs" />
+    <Compile Include="Domain\Service\TraceTest.cs" />
+    <Compile Include="Domain\Service\UnrecognizedStateTest.cs" />
+    <Compile Include="RtaMapTest.cs" />
+    <Compile Include="RtaRuleTest.cs" />
+    <Compile Include="RtaStateGroupTest.cs" />
+    <Compile Include="RtaStateHolderTest.cs" />
+    <Compile Include="RtaStateTest.cs" />
+    <Compile Include="RtaTestAttribute.cs" />
+    <Compile Include="Tracer\RtaTracerActivityCheckTraceTest.cs" />
+    <Compile Include="Tracer\RtaTracerCloseSnapshotTraceTest.cs" />
+    <Compile Include="Tracer\RtaTracerNullTest.cs" />
+    <Compile Include="Tracer\RtaTracerProcessTraceTest.cs" />
+    <Compile Include="Tracer\RtaTracerStateTraceTest.cs" />
+    <Compile Include="Tracer\RtaTracerTenantTest.cs" />
+    <Compile Include="Tracer\RtaTracerViewModelBuilderTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">
+      <Project>{add1bcdc-cfbb-4632-8fb5-4ff3bd04f666}</Project>
+      <Name>Teleopti.Ccc.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
+      <Project>{aa4a5374-77af-44f0-85c1-6cabc6701352}</Project>
+      <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
+      <Project>{db42d973-9889-4d51-9fc5-be66aa7f117c}</Project>
+      <Name>Teleopti.Ccc.IocCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
+      <Project>{68a028b6-864c-4969-8830-9c3c6bd56a98}</Project>
+      <Name>Teleopti.Ccc.TestCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.UserTexts\Teleopti.Ccc.UserTexts.csproj">
+      <Project>{98105bfe-6c3b-4c57-9141-6bd065c7e966}</Project>
+      <Name>Teleopti.Ccc.UserTexts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
+      <Project>{8d2565f2-7c44-45b7-96ad-2cd900e033a1}</Project>
+      <Name>Teleopti.Interfaces</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+</Project>

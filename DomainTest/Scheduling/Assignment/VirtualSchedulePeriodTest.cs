@@ -420,5 +420,29 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             var result = _target.IsOriginalPeriod();
             Assert.That(result, Is.False);
         }
-    }
+
+		[Test]
+		public void CanGetZeroTimeSpanForBalanceInWhenSchedulePeriodIsNull()
+		{
+			ISchedulePeriod schedulePeriod = null;
+			_target = new VirtualSchedulePeriod(_person, _dateOnly.AddDays(50), _personPeriod, schedulePeriod, _splitChecker);
+			Assert.AreEqual(TimeSpan.FromMinutes(0), _target.BalanceIn);
+		}
+
+		[Test]
+		public void CanGetZeroTimeSpanForBalanceOutWhenSchedulePeriodIsNull()
+		{
+			ISchedulePeriod schedulePeriod = null;
+			_target = new VirtualSchedulePeriod(_person, _dateOnly.AddDays(50), _personPeriod, schedulePeriod, _splitChecker);
+			Assert.AreEqual(TimeSpan.FromMinutes(0), _target.BalanceOut);
+		}
+
+		[Test]
+		public void CanGetZeroTimeSpanForExtraWhenSchedulePeriodIsNull()
+		{
+			ISchedulePeriod schedulePeriod = null;
+			_target = new VirtualSchedulePeriod(_person, _dateOnly.AddDays(50), _personPeriod, schedulePeriod, _splitChecker);
+			Assert.AreEqual(TimeSpan.FromMinutes(0), _target.Extra);
+		}
+	}
 }

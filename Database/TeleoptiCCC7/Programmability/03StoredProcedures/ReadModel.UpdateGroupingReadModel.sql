@@ -171,7 +171,7 @@ END
 	
 	--Insert people from skill
 	INSERT INTO ReadModel.groupingreadonly (personid,startdate,teamid,siteid,businessunitid,groupid,groupname,firstname,lastname,pageid,pagename,employmentnumber,enddate,leavingdate) 
-	select
+	select distinct
 		p.id,
 		isnull(pp.startdate,'1900-01-01') as startdate,
 		t.id teamid,

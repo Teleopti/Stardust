@@ -225,15 +225,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<WorkShiftFinderService>().As<IWorkShiftFinderService>().InstancePerLifetimeScope();
 				builder.RegisterType<WorkShiftSelectorDoNotCallMainShiftProjectionTooManyTimes>().As<IWorkShiftSelector>().As<IWorkShiftSelectorForIntraInterval>().SingleInstance();
-				builder.RegisterType<TeamBlockRoleModelSelectorClearingProjections>().As<TeamBlockRoleModelSelector>().InstancePerLifetimeScope();
+				builder.RegisterType<ShiftProjectionCacheFactory>().As<IShiftProjectionCacheFactory>().SingleInstance();
 			}
 			else
 			{
 				builder.RegisterType<WorkShiftFinderServiceOLD>().As<IWorkShiftFinderService>().InstancePerLifetimeScope();
 				builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>().As<IWorkShiftSelectorForIntraInterval>().SingleInstance();
-				builder.RegisterType<TeamBlockRoleModelSelector>().InstancePerLifetimeScope();
+				builder.RegisterType<ShiftProjectionCacheFactoryOld>().As<IShiftProjectionCacheFactory>().SingleInstance();
 			}
-			
+			builder.RegisterType<TeamBlockRoleModelSelector>().InstancePerLifetimeScope();			
 			builder.RegisterType<OccupiedSeatCalculator>().As<IOccupiedSeatCalculator>().SingleInstance();
 			builder.RegisterType<PersonSkillProvider>().As<IPersonSkillProvider>().SingleInstance();
 			builder.RegisterType<PeriodDistributionService>().As<IPeriodDistributionService>().SingleInstance();

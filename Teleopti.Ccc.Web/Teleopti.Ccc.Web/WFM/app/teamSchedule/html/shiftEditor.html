@@ -52,7 +52,7 @@
 
 <div class="shift-container con-row">
 	<div class="viewport-clip con-flex">
-		<div class="viewport">
+		<div class="viewport" ng-class="{'overflow': vm.isResizing}">
 			<div class="timeline">
 				<div class="scroll-toolbar">
 					<span class="left-scroll" ng-show="vm.showScrollLeftButton" ng-click="vm.scroll(-60)"><i class="mdi mdi-chevron-left"></i></span>

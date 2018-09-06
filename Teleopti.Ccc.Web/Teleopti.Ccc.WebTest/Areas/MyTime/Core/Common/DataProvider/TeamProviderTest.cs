@@ -1,46 +1,136 @@
+using System.IdentityModel.Claims;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
+using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 {
+	[MyTimeWebTest]
 	[TestFixture]
-	public class TeamProviderTest
+	public class TeamProviderTest : IIsolateSystem
 	{
+		public ITeamProvider Target;
+		public FakeSiteRepository SiteRepository;
+		public FakeTeamRepository TeamRepository;
+		public FakePersonRepository PersonRepository;
+		public FakeThreadPrincipalContext ThreadPrincipalContext;
+		public FakePersonFinderReadOnlyRepository PersonFinderReadOnlyRepository;
+
+		public void Isolate(IIsolate isolate)
+		{
+			isolate.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
+			isolate.UseTestDouble<PermissionProvider>().For<IPermissionProvider>();
+			isolate.UseTestDouble<PrincipalAuthorization>().For<IAuthorization>();
+			isolate.UseTestDouble<FakeThreadPrincipalContext>().For<IThreadPrincipalContext>();
+			isolate.UseTestDouble<FakePersonFinderReadOnlyRepository>().For<IPersonFinderReadOnlyRepository>();
+		}
+
 		[Test]
 		public void ShouldQueryAllTeams()
 		{
-			var repository = MockRepository.GenerateMock<ITeamRepository>();
-			var target = new TeamProvider(repository, MockRepository.GenerateMock<IPermissionProvider>());
+			var site1 = new Site("site1").WithId();
+			SiteRepository.Add(site1);
+			var team1 = new Team { Site = site1 }.WithDescription(new Description("team1")).WithId();
+			TeamRepository.Add(team1);
+			var person1 = ((IUnsafePerson)ThreadPrincipalContext.Current()).Person;
+			PersonRepository.Add(person1);
+			addTeamAndSiteToPerson(person1, team1);
 
-			target.GetPermittedTeams(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.TeamSchedule);
+			((OrganisationMembership)ThreadPrincipalContext.Current().Organisation).AddFromPerson(person1);
 
-			repository.AssertWasCalled(x => x.FindAllTeamByDescription());
+			setPermissions(DefinedRaptorApplicationFunctionPaths.TeamSchedule);
+
+			var teams = Target.GetPermittedTeams(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.TeamSchedule);
+
+			teams.Count().Should().Be(1);
+			teams.ElementAt(0).Description.Name.Should().Be("team1");
 		}
 
 		[Test]
 		public void ShouldFilterPermittedTeamsWhenQueryingAll()
 		{
-			var repository = MockRepository.GenerateMock<ITeamRepository>();
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			var teams = new ITeam[] { new Domain.AgentInfo.Team(), new Domain.AgentInfo.Team() };
+			var site1 = new Site("site1").WithId();
+			SiteRepository.Add(site1);
+			var team1 = new Team { Site = site1 }.WithDescription(new Description("team1")).WithId();
+			TeamRepository.Add(team1);
 
-			repository.Stub(x => x.FindAllTeamByDescription()).Return(teams);
-			permissionProvider.Stub(x => x.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule, DateOnly.Today, teams.ElementAt(0))).Return(false);
-			permissionProvider.Stub(x => x.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule, DateOnly.Today, teams.ElementAt(1))).Return(true);
+			var person1 = ((IUnsafePerson)ThreadPrincipalContext.Current()).Person;
+			PersonRepository.Add(person1);
+			addTeamAndSiteToPerson(person1, team1);
+			((OrganisationMembership)ThreadPrincipalContext.Current().Organisation).AddFromPerson(person1);
 
-			var target = new TeamProvider(repository, permissionProvider);
+			var site2 = new Site("site2").WithId();
+			SiteRepository.Add(site2);
+			var team2 = new Team { Site = site2 }.WithDescription(new Description("team2")).WithId();
+			TeamRepository.Add(team2);
 
-			var result = target.GetPermittedTeams(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.TeamSchedule);
+			var person2 = PersonFactory.CreatePerson("person2").WithId();
+			PersonRepository.Add(person2);
+			addTeamAndSiteToPerson(person2, team2);
 
-			result.Single().Should().Be(teams.ElementAt(1));
+			setPermissions(DefinedRaptorApplicationFunctionPaths.TeamSchedule);
+
+			var teams = Target.GetPermittedTeams(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.TeamSchedule);
+
+			teams.Count().Should().Be(1);
+			teams.ElementAt(0).Description.Name.Should().Be("team1");
 		}
 
+		[Test]
+		public void ShouldFilterEmptyTeamsWhenQueryingAll()
+		{
+			var site1 = new Site("site1").WithId();
+			SiteRepository.Add(site1);
+			var team1 = new Team { Site = site1 }.WithDescription(new Description("team1")).WithId();
+			TeamRepository.Add(team1);
+
+			var person1 = ((IUnsafePerson)ThreadPrincipalContext.Current()).Person;
+			PersonRepository.Add(person1);
+			PersonFinderReadOnlyRepository.Has(person1);
+			addTeamAndSiteToPerson(person1, team1);
+			((OrganisationMembership)ThreadPrincipalContext.Current().Organisation).AddFromPerson(person1);
+			
+			var team2 = new Team { Site = site1 }.WithDescription(new Description("team2")).WithId();
+			TeamRepository.Add(team2);
+
+			setPermissions(DefinedRaptorApplicationFunctionPaths.TeamSchedule);
+
+			var teams = Target.GetPermittedNotEmptyTeams(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.TeamSchedule);
+
+			teams.Count().Should().Be(1);
+			teams.ElementAt(0).Description.Name.Should().Be("team1");
+		}
+
+		private void addTeamAndSiteToPerson(IPerson person,ITeam team)
+		{
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today, team));
+		}
+
+		private void setPermissions(params string[] functionPaths)
+		{
+			var teleoptiPrincipal = ThreadPrincipalContext.Current();
+			var claims = functionPaths.Select(functionPath => new Claim(string.Concat(
+					TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace
+					, "/", functionPath)
+				, new AuthorizeMySite(), Rights.PossessProperty)).ToList();
+			claims.Add(new Claim(
+				string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace,
+					"/AvailableData"), new AuthorizeMySite(), Rights.PossessProperty));
+			teleoptiPrincipal.AddClaimSet(new DefaultClaimSet(ClaimSet.System, claims));
+		}
 	}
 }

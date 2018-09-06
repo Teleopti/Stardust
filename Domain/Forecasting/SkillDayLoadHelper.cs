@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		/// </remarks>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		IDictionary<ISkill, IEnumerable<ISkillDay>> LoadSchedulerSkillDays(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario);
+		IEnumerable<ISkillDay> LoadSchedulerSkillDaysFlat(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario);
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         IDictionary<ISkill, IEnumerable<ISkillDay>> LoadBudgetSkillDays(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario);
@@ -62,13 +63,18 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-05-08
         /// </remarks>
-        public IDictionary<ISkill, IEnumerable<ISkillDay>> LoadSchedulerSkillDays(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario)
-        {
-            if (skills == null || scenario==null) return new Dictionary<ISkill, IEnumerable<ISkillDay>>();
+		public IDictionary<ISkill, IEnumerable<ISkillDay>> LoadSchedulerSkillDays(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario)
+		{
+			if (skills == null || scenario==null) return new Dictionary<ISkill, IEnumerable<ISkillDay>>();
             
 			var skillsToLoad = skills.Where(skill => !skill.IsChildSkill).ToArray();
-		    return calculateSkillSkillDayDictionary(period, scenario, skillsToLoad);
-        }
+			return calculateSkillSkillDayDictionary(period, scenario, skillsToLoad);
+		}
+
+		public IEnumerable<ISkillDay> LoadSchedulerSkillDaysFlat(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario)
+		{
+			return this.LoadSchedulerSkillDays(period, skills, scenario).SelectMany(x => x.Value);
+		}
 
         public IDictionary<ISkill, IEnumerable<ISkillDay>> LoadBudgetSkillDays(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario)
         {
@@ -93,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	    {
 	        IList<SkillDayCalculator> calculators = new List<SkillDayCalculator>();
 	        // now we don't know the timezone stretch the period one day more in start and end
-	        var periodToLoad = new DateOnlyPeriod(period.StartDate.AddDays(-8), period.EndDate.AddDays(2));
+			var periodToLoad = new DateOnlyPeriod(period.StartDate.AddDays(-8), period.EndDate.AddDays(2));
 	        var testSkillDays = _skillDayRepository.FindReadOnlyRange(periodToLoad, skillsToLoad, scenario).ToLookup(k => k.Skill);
 
 			periodToLoad = SkillDayCalculator.GetPeriodToLoad(period);

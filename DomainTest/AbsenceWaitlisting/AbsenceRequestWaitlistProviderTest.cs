@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 
 		public void Isolate(IIsolate isolate)
 		{
-			isolate.UseTestDouble<FakePersonRepositoryLegacy2>().For<IPersonRepository>();
+			isolate.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 
 			_absence = AbsenceFactory.CreateAbsence("Holiday");
 

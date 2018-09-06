@@ -385,6 +385,11 @@
 	background: #f9f9f9;
 	z-index: 15;
 }
+.left-filling-block {
+	display: inline-block;
+	width: 0;
+	height: 0;
+}
 .teammates-schedules-container.relative {
 	width: 1000px;
 	left: 0;
@@ -408,7 +413,7 @@
 	display: inline-block;
 }
 .teammates-agent-name-row > span:nth-of-type(2n),
-.new-teamschedule-view .teammates-schedules-column:nth-child(2n) {
+.new-teamschedule-view .teammates-schedules-column:nth-child(2n + 1) {
 	background: rgba(200, 200, 200, 0.05);
 }
 

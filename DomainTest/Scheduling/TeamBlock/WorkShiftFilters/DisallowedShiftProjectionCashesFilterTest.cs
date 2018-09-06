@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		public void SetUp()
 		{
 			_target = new DisallowedShiftProjectionCachesFilter();
-			_shiftProjectionCache1 = new ShiftProjectionCache(new WorkShift(new ShiftCategory("Late")), new PersonalShiftMeetingTimeChecker(), new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
+			_shiftProjectionCache1 = new ShiftProjectionCache(new WorkShift(new ShiftCategory("Late")), new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
 		}
 
 		[Test]
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			}
 
 			public shiftProjectionCasheForTestReturn1() 
-				: base(null, null, null)
+				: base(null, null)
 			{
 			}
 		}
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			}
 
 			public shiftProjectionCasheForTestReturn2() 
-				: base(null, null, null)
+				: base(null, null)
 			{
 			}
 		}
