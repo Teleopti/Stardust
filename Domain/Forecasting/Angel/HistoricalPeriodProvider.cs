@@ -26,15 +26,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			return threeYearsBack > availableHistoricalPeriod.Value.StartDate.Date ? new DateOnlyPeriod(new DateOnly(threeYearsBack), endDate) : availableHistoricalPeriod.Value;
 		}
 
-		public DateOnlyPeriod? AvailableIntradayTemplatePeriod(IWorkload workload)
-		{
-			var statisticRepository = _repositoryFactory.CreateStatisticRepository();
-			var availableHistoricalPeriod = statisticRepository.QueueStatisticsUpUntilDate(workload.QueueSourceCollection);
-			if (!availableHistoricalPeriod.HasValue)
-				return null;
-			return AvailableIntradayTemplatePeriod(availableHistoricalPeriod.Value);
-		}
-
 		public DateOnlyPeriod AvailableIntradayTemplatePeriod(DateOnlyPeriod availablePeriod)
 		{
 			var endDate = availablePeriod.EndDate;
