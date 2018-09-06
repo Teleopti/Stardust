@@ -263,10 +263,13 @@
     <Compile Include="Optimization\WasReallyBetterResult.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ReadModels\IHistoricalOverviewReadModelPersister.cs" />
     <Compile Include="RealTimeAdherence\ApplicationLayer\ViewModels\HistoricalOverviewViewModelBuilder.cs" />
+    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayHistoricalOverview.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayLoaderDurationOfEvents.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayLoaderLateForWork.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayWithDurationOfEvents.cs" />
     <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\AgentAdherenceDayWithLateForWork.cs" />
+    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\IScheduleLoader.cs" />
+    <Compile Include="RealTimeAdherence\Domain\AgentAdherenceDay\ScheduleLoaderHistoricalOverview.cs" />
     <Compile Include="RealTimeAdherence\Domain\Events\ISolidProof.cs" />
     <Compile Include="RealTimeAdherence\Domain\Events\PersonArrivedLateForWorkEvent.cs" />
     <Compile Include="RealTimeAdherence\Domain\Events\RtaEventStoreSynchronizer.cs" />
