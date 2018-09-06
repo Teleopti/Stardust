@@ -426,17 +426,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
         }
 
         /// <summary>
-        /// Called when [campaign tasks changed].
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-03-04
-        /// </remarks>
-        public virtual void OnCampaignTasksChanged()
-        {
-        }
-
-        /// <summary>
         /// Called when [tasks changed].
         /// </summary>
         /// <remarks>
