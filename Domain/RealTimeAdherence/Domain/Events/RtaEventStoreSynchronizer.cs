@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Dynamic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.RegularExpressions;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.RealTimeAdherence.ApplicationLayer.ReadModels;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
-using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events
@@ -44,8 +38,9 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events
 			_adherenceDayLoader = adherenceDayLoader;
 			_keyValueStore = keyValueStore;
 		}
-
-		public void Synchronize()
+		
+		[UnitOfWork, ReadModelUnitOfWork]
+		public virtual void Synchronize()
 		{
 			var events = _events.LoadFrom(_keyValueStore.Get("LatestSynchronizedRTAEvent", 0));
 

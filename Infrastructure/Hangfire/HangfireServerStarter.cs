@@ -3,6 +3,7 @@ using Hangfire;
 using Owin;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
+using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Infrastructure.RealTimeAdherence.Tracer;
 
@@ -14,17 +15,20 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		private readonly IConfigReader _config;
 		private readonly StateQueueWorker _stateQueueWorker;
 		private readonly RtaTracerRefresher _rtaTracerRefresher;
+		private readonly RtaEventStoreSynchronizerProcess _eventStoreSynchronizerProcess;
 
 		public HangfireServerStarter(
 			HangfireStarter starter,
 			IConfigReader config,
 			StateQueueWorker stateQueueWorker,
-			RtaTracerRefresher rtaTracerRefresher)
+			RtaTracerRefresher rtaTracerRefresher, 
+			RtaEventStoreSynchronizerProcess eventStoreSynchronizerProcess)
 		{
 			_starter = starter;
 			_config = config;
 			_stateQueueWorker = stateQueueWorker;
 			_rtaTracerRefresher = rtaTracerRefresher;
+			_eventStoreSynchronizerProcess = eventStoreSynchronizerProcess;
 		}
 
 		public void Start(IAppBuilder app)
@@ -36,7 +40,8 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 					Queues = Queues.OrderOfPriority().ToArray()
 				},
 				_stateQueueWorker,
-				_rtaTracerRefresher
+				_rtaTracerRefresher,
+				_eventStoreSynchronizerProcess
 			);
 		}
 	}
