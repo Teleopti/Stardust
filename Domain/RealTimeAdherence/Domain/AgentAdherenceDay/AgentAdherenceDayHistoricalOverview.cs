@@ -12,14 +12,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 {
-	public class AgentAdherenceDayLoaderDurationOfEvents : IAgentAdherenceDayLoader
+	public class AgentAdherenceDayLoaderHistoricalOverview : IAgentAdherenceDayLoader
 	{
 		private readonly INow _now;
 		private readonly IRtaEventStoreReader _eventStore;
 		private readonly IScheduleLoader _scheduleLoader;
 		private readonly IPersonRepository _persons;
 
-		public AgentAdherenceDayLoaderDurationOfEvents(
+		public AgentAdherenceDayLoaderHistoricalOverview(
 			INow now,
 			IScheduleLoader scheduleLoader,
 			IPersonRepository persons,

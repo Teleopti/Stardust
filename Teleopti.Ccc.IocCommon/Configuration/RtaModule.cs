@@ -107,14 +107,19 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<NoRtaEventStoreSynchronizer>().As<IRtaEventStoreSynchronizer>().SingleInstance();
 			builder.RegisterType<RtaEventStoreSynchronizerProcess>().SingleInstance().ApplyAspects();
 
-			if (_config.Toggle(Toggles.RTA_DurationOfHistoricalEvents_76470))
+			if (_config.Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770))
+				builder.RegisterType<AgentAdherenceDayLoaderHistoricalOverview>().As<IAgentAdherenceDayLoader>().SingleInstance();
+			else if (_config.Toggle(Toggles.RTA_DurationOfHistoricalEvents_76470))
 				builder.RegisterType<AgentAdherenceDayLoaderDurationOfEvents>().As<IAgentAdherenceDayLoader>().SingleInstance();
 			else if (_config.Toggle(Toggles.RTA_EasilySpotLateForWork_75668))
 				builder.RegisterType<AgentAdherenceDayLoaderLateForWork>().As<IAgentAdherenceDayLoader>().SingleInstance();
 			else
 				builder.RegisterType<AgentAdherenceDayLoaderFromEventStore>().As<IAgentAdherenceDayLoader>().SingleInstance();
 
-			builder.RegisterType<ScheduleLoader>().SingleInstance();
+			if (_config.Toggle(Toggles.RTA_ReviewHistoricalAdherence_74770))
+				builder.RegisterType<ScheduleLoaderHistoricalOverview>().As<IScheduleLoader>().SingleInstance();
+			else if (_config.Toggle(Toggles.RTA_DurationOfHistoricalEvents_76470))
+				builder.RegisterType<ScheduleLoader>().As<IScheduleLoader>().SingleInstance();
 			builder.RegisterType<AdherencePercentageCalculator>().SingleInstance();
 
 			builder.RegisterType<ShiftEventPublisher>().SingleInstance();
