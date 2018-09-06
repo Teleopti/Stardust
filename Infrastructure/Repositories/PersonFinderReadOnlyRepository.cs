@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			foreach (var teamIdsBatch in teamIds.Batch(100))
 			{
 				var teamIdsString = string.Join(",", teamIdsBatch.Select(x => x.ToString()));
-				if (searchCriteria.Any())
+				if (searchCriteria!=null && searchCriteria.Any())
 				{
 					var searchString = createSearchString(searchCriteria);
 					var batchResult = _currentUnitOfWork.Session().CreateSQLQuery(

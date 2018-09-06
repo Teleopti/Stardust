@@ -13,6 +13,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Interfaces.Domain;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.PeopleSearch;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security;
@@ -59,14 +60,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var teamRepository = new FakeTeamRepository();
 			var site = new Domain.Common.Site("mysite");
-			var team = new Team {Site = site }.WithDescription(new Description("myteam"));
+			var team = new Team {Site = site }.WithDescription(new Description("myteam")).WithId();
 			teamRepository.Add(team);
 
-			var person = PersonFactory.CreatePerson();
+			var person = PersonFactory.CreatePerson().WithId();
 			var identity = new TeleoptiIdentity("test", null, null, null, null);
 
 			var mockAuthorize = MockRepository.GenerateMock<IAuthorizeAvailableData>();
 			mockAuthorize.Stub(m => m.Check(new OrganisationMembership(), DateOnly.Today, team)).IgnoreArguments().Return(true);
+
+			var searchProvider = MockRepository.GenerateMock<IPeopleSearchProvider>();
+			searchProvider.Stub(m => m.FindPersonIds(DateOnly.Today,new Guid[]{}, null)).IgnoreArguments()
+				.Return(new List<Guid> {person.Id.Value});
 
 			var claimSet =
 				new DefaultClaimSet(
@@ -82,10 +87,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var authorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(teleoptiPrincipal));
 			var permissionProvider = new PermissionProvider(authorization);
 
-			var teamProvider = new TeamProvider(teamRepository, permissionProvider);
+			var teamProvider = new TeamProvider(teamRepository, permissionProvider, searchProvider);
 
 			var viewModelFactory = new TeamViewModelFactory(teamProvider, null, null, null, null);
 			var target = new TeamController(viewModelFactory, new Now(), null);
+
 
 			var result = target.TeamsForShiftTradeBoard(DateOnly.Today);
 			var data = result.Data as IEnumerable<SelectOptionItem>;
