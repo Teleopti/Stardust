@@ -10,7 +10,6 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
-using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.MultiTenancy
@@ -23,15 +22,13 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		private readonly IFindLogonInfo _findLogonInfo;
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 		private readonly SignatureCreator _signatureCreator;
-		private readonly ISessionSpecificWfmCookieProvider _sessionWfmCookieProvider;
 
 		public PersonInfoController(IPersistPersonInfo persister,
 									IPersonInfoMapper mapper,
 									IDeletePersonInfo deletePersonInfo,
 									IFindLogonInfo findLogonInfo,
 									ITenantUnitOfWork tenantUnitOfWork,
-									SignatureCreator signatureCreator,
-									ISessionSpecificWfmCookieProvider cookieProvider)
+									SignatureCreator signatureCreator)
 		{
 			_persister = persister;
 			_mapper = mapper;
@@ -39,7 +36,6 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 			_findLogonInfo = findLogonInfo;
 			_tenantUnitOfWork = tenantUnitOfWork;
 			_signatureCreator = signatureCreator;
-			_sessionWfmCookieProvider = cookieProvider;
 		}
 
 		[HttpPost, Route("PersonInfo/Persist")]
@@ -162,13 +158,6 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 			return Ok(_findLogonInfo.GetForIds(personIdsToGet));
 		}
 
-		[HttpGet, Route("PersonInfo/LogonInfoFromGuid")]
-		[TenantUnitOfWork]
-		public virtual IHttpActionResult LogonInfoFromGuid(Guid personId)
-		{
-			return Ok(_findLogonInfo.GetForIds(new []{ personId }));
-		}
-
 		[HttpGet, Route("PersonInfo/LogonFromName")]
 		[TenantUnitOfWork]
 		public virtual IHttpActionResult LogonInfoFromLogonName(string logonName)
@@ -188,14 +177,6 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		public virtual IHttpActionResult LogonInfosFromIdentities([FromBody]IEnumerable<string> identities)
 		{
 			return Ok(_findLogonInfo.GetForIdentities(identities));
-		}
-
-		[HttpGet, Route("PersonInfo/IsTeleoptiApplicationLogon")]
-		[TenantUnitOfWork]
-		public virtual IHttpActionResult IsTeleoptiApplicationLogon()
-		{
-			var sessionData = _sessionWfmCookieProvider.GrabFromCookie();
-			return Ok( new { IsTeleoptiApplicationLogon = sessionData.IsTeleoptiApplicationLogon});
 		}
 	}
 }

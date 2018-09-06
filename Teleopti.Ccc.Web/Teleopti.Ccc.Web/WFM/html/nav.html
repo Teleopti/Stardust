@@ -93,7 +93,7 @@
 					</li>
 				</div>
 				<ng-container ng-controller="AuthenticationController as vm">
-					<li ng-if="vm.isToggleActive()">
+					<li ng-if="vm.isPasswordToggleActive() && vm.isTeleoptiApplicationLogonUser()">
 						<ng2-change-password></ng2-change-password>
 					</li>
 				</ng-container>
