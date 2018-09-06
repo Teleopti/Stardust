@@ -24345,7 +24345,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your password was changed.
+        ///   Looks up a localized string similar to Your password has been changed..
         /// </summary>
         public static string PasswordChangedSuccessfully {
             get {
