@@ -32,7 +32,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			var forecastTaskTime = new Dictionary<DateOnly, TimeSpan>();
 			forecastTaskTime.Add(date1, TimeSpan.FromSeconds(2));
 			forecastTaskTime.Add(date2, TimeSpan.FromSeconds(3));
-			var result = new ForecastAccuracyCalculator().Accuracy(forecastTask, forecastTaskTime,
+			var forecastAfterTaskTime = new Dictionary<DateOnly, TimeSpan>();
+			forecastAfterTaskTime.Add(date1, TimeSpan.FromSeconds(2));
+			forecastAfterTaskTime.Add(date2, TimeSpan.FromSeconds(3));
+			var result = new ForecastAccuracyCalculator().Accuracy(forecastTask, forecastTaskTime, forecastAfterTaskTime,
 				new TaskOwnerPeriod(DateOnly.MinValue, new List<WorkloadDay>
 				{
 					workloadDay1,
@@ -55,7 +58,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			forecastTask.Add(date1, 4d);
 			var forecastTaskTime = new Dictionary<DateOnly, TimeSpan>();
 			forecastTaskTime.Add(date1, TimeSpan.FromSeconds(2));
-			var result = new ForecastAccuracyCalculator().Accuracy(forecastTask, forecastTaskTime,
+			var forecastAfterTaskTime = new Dictionary<DateOnly, TimeSpan>();
+			forecastAfterTaskTime.Add(date1, TimeSpan.FromSeconds(2));
+			var result = new ForecastAccuracyCalculator().Accuracy(forecastTask, forecastTaskTime, forecastAfterTaskTime,
 				new TaskOwnerPeriod(DateOnly.MinValue, new List<WorkloadDay>
 				{
 					workloadDay1
@@ -77,7 +82,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			forecastTasks.Add(date1, 4d);
 			var forecastTaskTime = new Dictionary<DateOnly, TimeSpan>();
 			forecastTaskTime.Add(date1, TimeSpan.FromSeconds(2));
-			var result = new ForecastAccuracyCalculator().Accuracy(forecastTasks, forecastTaskTime,
+			var forecastAfterTaskTime = new Dictionary<DateOnly, TimeSpan>();
+			forecastAfterTaskTime.Add(date1, TimeSpan.FromSeconds(2));
+			var result = new ForecastAccuracyCalculator().Accuracy(forecastTasks, forecastTaskTime, forecastAfterTaskTime,
 				new TaskOwnerPeriod(DateOnly.MinValue, new List<WorkloadDay>
 				{
 					workloadDay1
@@ -99,7 +106,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			forecastTask.Add(date1, 0d);
 			var forecastTaskTime = new Dictionary<DateOnly, TimeSpan>();
 			forecastTaskTime.Add(date1, TimeSpan.FromSeconds(2));
-			var result = new ForecastAccuracyCalculator().Accuracy(forecastTask, forecastTaskTime,
+			var forecastAfterTaskTime = new Dictionary<DateOnly, TimeSpan>();
+			forecastAfterTaskTime.Add(date1, TimeSpan.FromSeconds(2));
+			var result = new ForecastAccuracyCalculator().Accuracy(forecastTask, forecastTaskTime, forecastAfterTaskTime,
 				new TaskOwnerPeriod(DateOnly.MinValue, new List<WorkloadDay>
 				{
 					workloadDay1

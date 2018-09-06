@@ -74,5 +74,50 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			forecastedDay1.Should().Not.Be.EqualTo(forecastedDay2);
 			Assert.AreNotEqual(Math.Round(forecastedDay1, 3), Math.Round(forecastedDay2, 3));
 		}
+
+		[Test]
+		public void ShouldForecastDaysWithDifferentAfterTaskTime()
+		{
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
+			var workload = skill.WorkloadCollection.Single();
+			var scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
+			var openDay = new DateOnly(2018, 05, 04);
+			const int dayInAWeek = 7;
+
+			SkillRepository.Add(skill);
+			ScenarioRepository.Has(scenario);
+			WorkloadRepository.Add(workload);
+
+			StatisticRepository.Has(workload.QueueSourceCollection.First(), new List<IStatisticTask>
+			{
+				new StatisticTask
+				{
+					Interval = openDay.AddDays(-dayInAWeek+1).Date.AddHours(10),
+					StatOfferedTasks = 10,
+					StatAverageTaskTimeSeconds = 100,
+					StatAverageAfterTaskTimeSeconds = 100,
+				},
+				new StatisticTask
+				{
+					Interval = openDay.AddDays(-dayInAWeek).Date.AddHours(10),
+					StatOfferedTasks = 10,
+					StatAverageTaskTimeSeconds = 400,
+					StatAverageAfterTaskTimeSeconds = 400
+				}
+			});
+
+			var forecastInput = new ForecastInput
+			{
+				ForecastStart = openDay.Date,
+				ForecastEnd = openDay.Date.AddDays(1),
+				ScenarioId = scenario.Id.Value,
+				WorkloadId = workload.Id.Value
+			};
+			var result = (OkNegotiatedContentResult<ForecastModel>)Target.Forecast(forecastInput);
+			var forecastedDay1 = result.Content.ForecastDays.First().TotalAverageAfterTaskTime;
+			var forecastedDay2 = result.Content.ForecastDays.Last().TotalAverageAfterTaskTime;
+			forecastedDay1.Should().Not.Be.EqualTo(forecastedDay2);
+			Assert.AreNotEqual(Math.Round(forecastedDay1, 3), Math.Round(forecastedDay2, 3));
+		}
 	}
 }

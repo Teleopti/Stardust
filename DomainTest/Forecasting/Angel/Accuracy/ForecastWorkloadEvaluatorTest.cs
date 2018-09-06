@@ -31,14 +31,14 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			var historicalPeriodProvider = MockRepository.GenerateMock<IHistoricalPeriodProvider>();
 			historicalPeriodProvider.Stub(x => x.AvailablePeriod(workload)).Return(new DateOnlyPeriod(2013, 1, 1, 2015, 1, 1));
 			var forecastAccuracyCalculator = MockRepository.GenerateMock<IForecastAccuracyCalculator>();
-			forecastAccuracyCalculator.Stub(x => x.Accuracy(null, null, null)).IgnoreArguments()
+			forecastAccuracyCalculator.Stub(x => x.Accuracy(null, null, null, null)).IgnoreArguments()
 				.Return(new AccuracyModel { TasksPercentageError = 1d, TaskTimePercentageError = 1d });
 			var target = new ForecastWorkloadEvaluator(historicalData, forecastMethodProvider, 
 				historicalPeriodProvider);
 			target.Evaluate(workload, outlierRemover, forecastAccuracyCalculator);
 
-			outlierRemover.AssertWasCalled(x => x.RemoveOutliers(Arg<ITaskOwnerPeriod>.Is.Anything,
-				Arg<IForecastMethod>.Is.Anything, Arg<IForecastMethod>.Is.Anything), options => options.Repeat.Twice());
+			outlierRemover.AssertWasCalled(x => x.RemoveOutliers(Arg<ITaskOwnerPeriod>.Is.Anything,Arg<IForecastMethod>.Is.Anything,
+					Arg<IForecastMethod>.Is.Anything, Arg<IForecastMethod>.Is.Anything), options => options.Repeat.Twice());
 		}
 
 		[Test]

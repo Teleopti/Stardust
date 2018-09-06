@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 			{
 				ForecastMethodTypeForTasks = ForecastMethodType.None,
 				ForecastMethodTypeForTaskTime = ForecastMethodType.None,
+				ForecastMethodTypeForAfterTaskTime = ForecastMethodType.None,
 			};
 
 			var availablePeriod = _historicalPeriodProvider.AvailablePeriod(workload);
@@ -60,23 +61,26 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 					secondPartHistoricalData.Select(taskOwner => cloneTaskOwner(workload, taskOwner)),
 					TaskOwnerPeriodType.Other);
 
-				var firstPeriodDataNoOutliers = outlierRemover.RemoveOutliers(firstPeriodData, forecastMethod, forecastMethod);
+				var firstPeriodDataNoOutliers = outlierRemover.RemoveOutliers(firstPeriodData, forecastMethod, forecastMethod, forecastMethod);
 				var forecastTasks = forecastMethod.ForecastTasks(firstPeriodDataNoOutliers, twoPeriods.Item2);
 
 				var forecastTaskTime = forecastMethod.ForecastTaskTime(firstPeriodDataNoOutliers, twoPeriods.Item2);
+				var forecastAfterTaskTime = forecastMethod.ForecastAfterTaskTime(firstPeriodDataNoOutliers, twoPeriods.Item2);
 
-				var accuracyModel = forecastAccuracyCalculator.Accuracy(forecastTasks, forecastTaskTime,
+				var accuracyModel = forecastAccuracyCalculator.Accuracy(forecastTasks, forecastTaskTime, forecastAfterTaskTime,
 					secondPeriodData.TaskOwnerDayCollection);
 				methodsEvaluationResult.Add(new MethodAccuracy
 				{
 					NumberForTask = accuracyModel.TasksPercentageError,
 					NumberForTaskTime = accuracyModel.TaskTimePercentageError,
+					NumberForAfterTaskTime = accuracyModel.AfterTaskTimePercentageError,
 					MethodId = forecastMethod.Id
 				});
 			}
 
 			result.ForecastMethodTypeForTasks = methodsEvaluationResult.OrderByDescending(x => x.NumberForTask).First().MethodId;
 			result.ForecastMethodTypeForTaskTime = methodsEvaluationResult.OrderByDescending(x => x.NumberForTaskTime).First().MethodId;
+			result.ForecastMethodTypeForAfterTaskTime = methodsEvaluationResult.OrderByDescending(x => x.NumberForAfterTaskTime).First().MethodId;
 			return result;
 		}
 

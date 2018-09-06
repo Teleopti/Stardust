@@ -40,6 +40,25 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 			return result;
 		}
 
+		public IDictionary<DateOnly, TimeSpan> ForecastAfterTaskTime(ITaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod)
+		{
+			var afterTaskTime = historicalData.TotalStatisticAverageAfterTaskTime;
+			var volumes = _indexVolumes.Create(historicalData).ToList();
+			var result = new Dictionary<DateOnly, TimeSpan>();
+			foreach (var day in futurePeriod.DayCollection())
+			{
+				double afterTaskTimeIndex = 1;
+				foreach (var volume in volumes)
+				{
+					afterTaskTimeIndex *= volume.AfterTaskTimeIndex(day);
+				}
+
+				result.Add(day, new TimeSpan((long)(afterTaskTimeIndex * afterTaskTime.Ticks)));
+			}
+
+			return result;
+		}
+
 		public abstract ForecastMethodType Id { get; }
 
 		public Dictionary<DateOnly, double> SeasonalVariationTasks(ITaskOwnerPeriod historicalData)
@@ -48,11 +67,19 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 			var taskNumbers = ForecastNumberOfTasks(historicalData, futurePeriod);
 			return taskNumbers.ToDictionary(task => task.Date, task => task.Tasks);
 		}
+
 		public Dictionary<DateOnly, double> SeasonalVariationTaskTime(ITaskOwnerPeriod historicalData)
 		{
 			var futurePeriod = new DateOnlyPeriod(historicalData.StartDate, historicalData.EndDate);
 			var taskTimeNumbers = ForecastTaskTime(historicalData, futurePeriod);
 			return taskTimeNumbers.ToDictionary(task => task.Key, task => taskTimeNumbers[task.Key].TotalSeconds);
+		}
+
+		public Dictionary<DateOnly, double> SeasonalVariationAfterTaskTime(ITaskOwnerPeriod historicalData)
+		{
+			var futurePeriod = new DateOnlyPeriod(historicalData.StartDate, historicalData.EndDate);
+			var afterTaskTimeNumbers = ForecastAfterTaskTime(historicalData, futurePeriod);
+			return afterTaskTimeNumbers.ToDictionary(task => task.Key, task => afterTaskTimeNumbers[task.Key].TotalSeconds);
 		}
 
 		protected virtual IEnumerable<DateAndTask> ForecastNumberOfTasks(ITaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod)

@@ -45,21 +45,25 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			var workloadAccuracy = _forecastWorkloadEvaluator.Evaluate(workload, new OutlierRemover(), new ForecastAccuracyCalculator());
 			var forecastMethodIdForTasks = workloadAccuracy.ForecastMethodTypeForTasks;
 			var forecastMethodIdForTaskTime = workloadAccuracy.ForecastMethodTypeForTaskTime;
+			var forecastMethodIdForAfterTaskTime = workloadAccuracy.ForecastMethodTypeForAfterTaskTime;
 			return new WorkloadQueueStatisticsViewModel
 			{
 				WorkloadId = workload.Id.Value,
 				QueueStatisticsDays = availablePeriod.HasValue
-					? createQueueStatisticsDayViewModels(workload, forecastMethodIdForTasks, forecastMethodIdForTaskTime, availablePeriod.Value)
+					? createQueueStatisticsDayViewModels(workload, forecastMethodIdForTasks, forecastMethodIdForTaskTime,
+						forecastMethodIdForAfterTaskTime, availablePeriod.Value)
 					: new List<QueueStatisticsModel>()
 			};
 		}
 
 		private List<QueueStatisticsModel> createQueueStatisticsDayViewModels(IWorkload workload,
-			ForecastMethodType methodForTasks, ForecastMethodType methodForTaskTime, DateOnlyPeriod period)
+			ForecastMethodType methodForTasks, ForecastMethodType methodForTaskTime,
+			ForecastMethodType methodForAfterTaskTime, DateOnlyPeriod period)
 		{
 			var historicalData = _historicalData.Fetch(workload, period);
 			var forecastMethodForTasks = _forecastMethodProvider.Get(methodForTasks);
 			var forecastMethodForTaskTime = _forecastMethodProvider.Get(methodForTaskTime);
+			var forecastMethodForAfterTaskTime = _forecastMethodProvider.Get(methodForAfterTaskTime);
 			var statistics = new List<QueueStatisticsModel>();
 			foreach (var taskOwner in historicalData.TaskOwnerDayCollection)
 			{
@@ -71,7 +75,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				statistics.Add(dayStats);
 			}
 
-			var historicalDataNoOutliers = _outlierRemover.RemoveOutliers(historicalData, forecastMethodForTasks, forecastMethodForTaskTime);
+			var historicalDataNoOutliers = _outlierRemover.RemoveOutliers(historicalData, forecastMethodForTasks,
+				forecastMethodForTaskTime, forecastMethodForAfterTaskTime);
 			foreach (var day in historicalDataNoOutliers.TaskOwnerDayCollection)
 			{
 				statistics.Single(x => x.Date == day.CurrentDate).ValidatedTasks =

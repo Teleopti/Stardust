@@ -10,15 +10,17 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Outlier
 	public class OutlierRemover : IOutlierRemover
 	{
 		public ITaskOwnerPeriod RemoveOutliers(ITaskOwnerPeriod historicalData, IForecastMethod forecastMethodForTasks,
-			IForecastMethod forecastMethodForTaskTime)
+			IForecastMethod forecastMethodForTaskTime, IForecastMethod forecastMethodForAfterTaskTime)
 		{
 			var seasonalVariationPossiblyWithTrendForTasks = forecastMethodForTasks.SeasonalVariationTasks(historicalData);
 			var seasonalVariationPossiblyWithTrendForTaskTime = forecastMethodForTaskTime.SeasonalVariationTaskTime(historicalData);
+			var seasonalVariationPossiblyWithTrendForAfterTaskTime = forecastMethodForAfterTaskTime.SeasonalVariationAfterTaskTime(historicalData);
 
 			var historicalLookup = historicalData.TaskOwnerDayCollection.ToLookup(k => k.CurrentDate);
 
 			var tasksToRemoveOutlier = new List<outlierModel>();
 			var taskTimesToRemoveOutlier = new List<outlierModel>();
+			var afterTaskTimesToRemoveOutlier = new List<outlierModel>();
 			foreach (var day in seasonalVariationPossiblyWithTrendForTasks)
 			{
 				foreach (var historicalDay in historicalLookup[day.Key])
@@ -31,6 +33,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Outlier
 					});
 				}
 			}
+
 			foreach (var day in seasonalVariationPossiblyWithTrendForTaskTime)
 			{
 				foreach (var historicalDay in historicalLookup[day.Key])
@@ -44,15 +47,42 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Outlier
 				}
 			}
 
+			foreach (var day in seasonalVariationPossiblyWithTrendForAfterTaskTime)
+			{
+				foreach (var historicalDay in historicalLookup[day.Key])
+				{
+					afterTaskTimesToRemoveOutlier.Add(new outlierModel
+					{
+						Date = day.Key,
+						HistoricalValue = historicalDay.TotalStatisticAverageAfterTaskTime.TotalSeconds,
+						VariationValue = day.Value
+					});
+				}
+			}
+
 			var historicalDataForTasksWithoutOutliers = removeOutliers(tasksToRemoveOutlier);
 			var historicalDataForTaskTimeWithoutOutliers = removeOutliers(taskTimesToRemoveOutlier);
+			var historicalDataForAfterTaskTimeWithoutOutliers = removeOutliers(afterTaskTimesToRemoveOutlier);
 
 			foreach (var taskOwner in historicalData.TaskOwnerDayCollection)
 			{
-				if(historicalDataForTasksWithoutOutliers.ContainsKey(taskOwner.CurrentDate))
-					((ValidatedVolumeDay)taskOwner).ValidatedTasks = historicalDataForTasksWithoutOutliers[taskOwner.CurrentDate];
+				if (historicalDataForTasksWithoutOutliers.ContainsKey(taskOwner.CurrentDate))
+				{
+					((ValidatedVolumeDay) taskOwner).ValidatedTasks =
+						historicalDataForTasksWithoutOutliers[taskOwner.CurrentDate];
+				}
+
 				if (historicalDataForTaskTimeWithoutOutliers.ContainsKey(taskOwner.CurrentDate))
-					((ValidatedVolumeDay)taskOwner).ValidatedAverageTaskTime = TimeSpan.FromSeconds(historicalDataForTaskTimeWithoutOutliers[taskOwner.CurrentDate]);
+				{
+					((ValidatedVolumeDay) taskOwner).ValidatedAverageTaskTime =
+						TimeSpan.FromSeconds(historicalDataForTaskTimeWithoutOutliers[taskOwner.CurrentDate]);
+				}
+
+				if (historicalDataForAfterTaskTimeWithoutOutliers.ContainsKey(taskOwner.CurrentDate))
+				{
+					((ValidatedVolumeDay) taskOwner).ValidatedAverageAfterTaskTime =
+						TimeSpan.FromSeconds(historicalDataForAfterTaskTimeWithoutOutliers[taskOwner.CurrentDate]);
+				}
 			}
 
 			return historicalData;

@@ -46,10 +46,16 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 				.ForecastMethodTypeForTasks)).Return(forecastMethodForTasks);
 
 			var forecastMethodForTaskTime = MockRepository.GenerateMock<IForecastMethod>();
-			forecastMethodForTaskTime.Stub(x => x.ForecastTasks(null, new DateOnlyPeriod()))
-				.IgnoreArguments().Return(new Dictionary<DateOnly, double>());
+			forecastMethodForTaskTime.Stub(x => x.ForecastTaskTime(null, new DateOnlyPeriod()))
+				.IgnoreArguments().Return(new Dictionary<DateOnly, TimeSpan>());
 			forecastMethodProvider.Stub(x => x.Get(quickForecasterWorkloadParams.BestForecastMethods
 				.ForecastMethodTypeForTaskTime)).Return(forecastMethodForTaskTime);
+
+			var forecastMethodForAfterTaskTime = MockRepository.GenerateMock<IForecastMethod>();
+			forecastMethodForAfterTaskTime.Stub(x => x.ForecastAfterTaskTime(null, new DateOnlyPeriod()))
+				.IgnoreArguments().Return(new Dictionary<DateOnly, TimeSpan>());
+			forecastMethodProvider.Stub(x => x.Get(quickForecasterWorkloadParams.BestForecastMethods
+				.ForecastMethodTypeForAfterTaskTime)).Return(forecastMethodForAfterTaskTime);
 
 			var historicalData = MockRepository.GenerateMock<IHistoricalData>();
 			var dateOnly = new DateOnly(2015, 1, 1);
@@ -80,7 +86,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 				new ForecastDayModelMapper(), new FakeForecastDayOverrideRepository(new FakeStorage()));
 
 			target.Execute(quickForecasterWorkloadParams);
-			outlierRemover.AssertWasCalled(x => x.RemoveOutliers(taskOwnerPeriod, forecastMethodForTasks, forecastMethodForTaskTime));
+			outlierRemover.AssertWasCalled(x => x.RemoveOutliers(taskOwnerPeriod, forecastMethodForTasks,
+				forecastMethodForTaskTime, forecastMethodForAfterTaskTime));
 		}
 	}
 }

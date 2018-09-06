@@ -9,5 +9,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 		public double NumberForTask { get; set; }
 		public ForecastMethodType MethodId { get; set; }
 		public double NumberForTaskTime { get; set; }
+		public double NumberForAfterTaskTime { get; set; }
 	}
 }

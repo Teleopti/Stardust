@@ -223,12 +223,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 				var workloadDay = new WorkloadDay();
 				workloadDay.Create(new DateOnly(date), workload, new List<TimePeriod> { new TimePeriod(8, 0, 8, 15) });
 
+				var value = i > 6 ? 110 : 80;
 				var validatedVolumeDay = new ValidatedVolumeDay(workload, new DateOnly(date))
 				{
-					ValidatedAverageAfterTaskTime = TimeSpan.FromSeconds(3),
-					ValidatedAverageTaskTime = TimeSpan.FromSeconds(i > 6 ? 110 : 80),
+					ValidatedAverageAfterTaskTime = TimeSpan.FromSeconds(value),
+					ValidatedAverageTaskTime = TimeSpan.FromSeconds(value),
 					TaskOwner = workloadDay,
-					ValidatedTasks = i > 6 ? 110 : 80
+					ValidatedTasks = value
 				};
 
 				validatedVolumeDays.Add(validatedVolumeDay);

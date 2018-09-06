@@ -7,5 +7,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 	{
 		public ForecastMethodType ForecastMethodTypeForTasks { get; set; }
 		public ForecastMethodType ForecastMethodTypeForTaskTime { get; set; }
+		public ForecastMethodType ForecastMethodTypeForAfterTaskTime { get; set; }
 	}
 }

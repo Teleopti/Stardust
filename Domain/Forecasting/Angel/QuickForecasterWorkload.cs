@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 
 			var forecastMethodForTasks = _forecastMethodProvider.Get(quickForecasterWorkloadParams.BestForecastMethods.ForecastMethodTypeForTasks);
 			var forecastMethodForTaskTime = _forecastMethodProvider.Get(quickForecasterWorkloadParams.BestForecastMethods.ForecastMethodTypeForTaskTime);
+			var forecastMethodForAfterTaskTime = _forecastMethodProvider.Get(quickForecasterWorkloadParams.BestForecastMethods.ForecastMethodTypeForAfterTaskTime);
 			if (forecastMethodForTasks == null)
 			{
 				return new ForecastModel
@@ -60,16 +61,16 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 					WarningMessage = Resources.NoQueueStatisticsAvailable
 				};
 			}
-			var historicalDataNoOutliers = _outlierRemover.RemoveOutliers(historicalData, forecastMethodForTasks, forecastMethodForTaskTime);
+			var historicalDataNoOutliers = _outlierRemover.RemoveOutliers(historicalData, forecastMethodForTasks, forecastMethodForTaskTime, forecastMethodForAfterTaskTime);
 			var forecastedTasks = forecastMethodForTasks.ForecastTasks(historicalDataNoOutliers, quickForecasterWorkloadParams.FuturePeriod);
-
 			var forecastedTaskTime = forecastMethodForTaskTime.ForecastTaskTime(historicalData, quickForecasterWorkloadParams.FuturePeriod);
+			var forecastedAfterTaskTime = forecastMethodForAfterTaskTime.ForecastAfterTaskTime(historicalData, quickForecasterWorkloadParams.FuturePeriod);
 
 			var workloadDays = _futureData.Fetch(quickForecasterWorkloadParams.WorkLoad, quickForecasterWorkloadParams.SkillDays,
 				quickForecasterWorkloadParams.FuturePeriod);
 			var overrideDays = _forecastDayOverrideRepository.FindRange(quickForecasterWorkloadParams.FuturePeriod,
 				quickForecasterWorkloadParams.WorkLoad, quickForecasterWorkloadParams.Scenario).ToDictionary(k => k.Date);
-			var forecastDays = createForecastViewModel(forecastedTasks, forecastedTaskTime, workloadDays, overrideDays);
+			var forecastDays = createForecastViewModel(forecastedTasks, forecastedTaskTime, forecastedAfterTaskTime, workloadDays, overrideDays);
 			return new ForecastModel
 			{
 				WorkloadId = quickForecasterWorkloadParams.WorkLoad.Id.Value,
@@ -79,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 		}
 
 		private List<ForecastDayModel> createForecastViewModel(IDictionary<DateOnly, double> forecastTargets,
-			IDictionary<DateOnly, TimeSpan> forecastedTaskTime,
+			IDictionary<DateOnly, TimeSpan> forecastedTaskTime, IDictionary<DateOnly, TimeSpan> forecastedAfterTaskTime,
 			IEnumerable<IWorkloadDayBase> workloadDays, Dictionary<DateOnly, IForecastDayOverride> overrideDays)
 		{
 			var forecastResult = new List<ForecastDayModel>();
@@ -98,6 +99,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 					Tasks = target.Value,
 					AverageTaskTime = forecastedTaskTime[target.Key].TotalSeconds,
 					TotalAverageTaskTime = forecastedTaskTime[target.Key].TotalSeconds,
+					AverageAfterTaskTime = forecastedAfterTaskTime[target.Key].TotalSeconds,
+					TotalAverageAfterTaskTime = forecastedAfterTaskTime[target.Key].TotalSeconds,
 					IsOpen = currentWorkLoadDay.OpenForWork.IsOpen,
 					IsInModification = currentWorkLoadDay.OpenForWork.IsOpen
 				};

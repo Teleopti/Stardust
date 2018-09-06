@@ -43,13 +43,15 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Outlier
 			taskOwner.TotalStatisticCalculatedTasks.Should().Be.EqualTo(1000);
 			((int)taskOwner.TotalStatisticAverageTaskTime.TotalSeconds).Should().Be.EqualTo(1000);
 
+			var forecastMethod = new FakeTeleoptiClassic(indexVolumes);
 			var target = new OutlierRemover();
-			var result = target.RemoveOutliers(historicalData, new FakeTeleoptiClassic(indexVolumes), new FakeTeleoptiClassic(indexVolumes));
+			var result = target.RemoveOutliers(historicalData, forecastMethod, forecastMethod, forecastMethod);
 
 			result.TaskOwnerDayCollection.Count.Should().Be.EqualTo(25);
 			var taskOwnerWithoutOutlier = result.TaskOwnerDayCollection.Single(x => x.CurrentDate == new DateOnly(date));
 			Math.Round(taskOwnerWithoutOutlier.TotalStatisticCalculatedTasks, 3).Should().Be.EqualTo(677.999);
 			Math.Round(taskOwnerWithoutOutlier.TotalStatisticAverageTaskTime.TotalSeconds, 3).Should().Be.EqualTo(677.999);
+			Math.Round(taskOwnerWithoutOutlier.TotalStatisticAverageAfterTaskTime.TotalSeconds, 3).Should().Be.EqualTo(677.999);
 		}
 
 		[Test]
@@ -79,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Outlier
 			taskOwner.TotalStatisticCalculatedTasks.Should().Be.EqualTo(1000);
 
 			var forecastMethod = new FakeTeleoptiClassicWithTrend(indexVolumes, new LinearRegressionTrendCalculator());
-			var result = target.RemoveOutliers(historicalData, forecastMethod, forecastMethod);
+			var result = target.RemoveOutliers(historicalData, forecastMethod, forecastMethod, forecastMethod);
 
 			result.TaskOwnerDayCollection.Count.Should().Be.EqualTo(25);
 			var taskOwnerWithoutOutlier =
@@ -95,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Outlier
 
 			var validatedVolumeDay = new ValidatedVolumeDay(workload, new DateOnly(date))
 			{
-				ValidatedAverageAfterTaskTime = TimeSpan.FromSeconds(3),
+				ValidatedAverageAfterTaskTime = TimeSpan.FromSeconds(1000),
 				ValidatedAverageTaskTime = TimeSpan.FromSeconds(1000),
 				TaskOwner = workloadDay,
 				ValidatedTasks = 1000

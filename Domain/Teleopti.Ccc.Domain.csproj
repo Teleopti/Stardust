@@ -201,7 +201,6 @@
     <Compile Include="ApplicationLayer\Commands\MultipleChangeScheduleCommandHandler.cs" />
     <Compile Include="Common\Time\MutableNowWithEvents.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\AccuracyModel.cs" />
-    <Compile Include="Forecasting\Angel\Methods\LightForecastModel.cs" />
     <Compile Include="Forecasting\Angel\Outlier\OutlierRemover.cs" />
     <Compile Include="Forecasting\Angel\Trend\LinearRegressionTrendCalculator.cs" />
     <Compile Include="Forecasting\QueueStatisticsViewModelFactory.cs" />
