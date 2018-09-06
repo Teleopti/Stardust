@@ -9965,6 +9965,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Deviation.
+        /// </summary>
+        public static string Deviation {
+            get {
+                return ResourceManager.GetString("Deviation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deviation ACW:.
         /// </summary>
         public static string DeviationACWColon {

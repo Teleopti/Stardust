@@ -1253,7 +1253,63 @@
 		viewModel.redrawLayers = function () { };
 
 		viewModel.chooseAgent(agent);
-		equal(viewModel.toloranceMessages()[0].periodStart, "2018-06-30");
+		equal(viewModel.myToleranceMessages()[0].periodStart, "2018-06-30");
+		equal(viewModel.myToleranceMessages()[0].periodEnd, "2018-07-29");
+	});
+
+	test("should not show error message when not break tolerance", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggleName) {
+			if (toggleName === "MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408") return true;
+			return false;
+		}
+
+		var agentId = "123";
+		var toleranceInfo = {
+			IsNeedToCheck: true,
+			MyInfos: [{
+				PeriodStart: moment('2018-06-30'),
+				PeriodEnd: moment('2018-07-29'),
+				ContractTimeMinutes: 1000,
+				NegativeToleranceMinutes: 800,
+				PositiveToleranceMinutes: 90
+			}],
+
+			PersonToInfos: [{
+				PeriodStart: moment('2018-06-30'),
+				PeriodEnd: moment('2018-07-29'),
+				ContractTimeMinutes: 1000,
+				NegativeToleranceMinutes: 89,
+				PositiveToleranceMinutes: 1189
+			}]
+		}
+
+		var schedules = {
+			MultiSchedulesForShiftTrade: [{
+				Date: "\/Date(1531916600000)\/",
+				IsSelectable: true,
+				MySchedule: null,
+				PersonToSchedule: null
+			}]
+		};
+
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url === 'Requests/GetWFCTolerance?personToId=' + agentId) {
+					options.success(toleranceInfo);
+				}
+				if (options.url === "Requests/ShiftTradeMultiDaysSchedule") {
+					options.success(schedules);
+				}
+			}
+		};
+		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
+		viewModel.requestedDateInternal(moment("2018-07-18"));
+		viewModel.openPeriodEndDate(moment("2018-07-19"));
+		var agent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(null, null, null, "Ashley", agentId, false);
+		viewModel.redrawLayers = function () { };
+
+		viewModel.chooseAgent(agent);
+		equal(viewModel.showToloranceMessage(), false);
 	});
 
 	test("should get correct overtime text", function () {

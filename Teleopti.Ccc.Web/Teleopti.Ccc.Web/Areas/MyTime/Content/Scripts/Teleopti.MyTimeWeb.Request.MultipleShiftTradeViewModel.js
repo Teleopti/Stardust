@@ -87,12 +87,13 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 
 	self.selectedSchedulePairs = ko.observableArray();
 
-	self.toloranceMessages = ko.observableArray();
+	self.myToleranceMessages = ko.observableArray();
+	self.targetToleranceMessages = ko.observableArray();
 
 	self.showToloranceMessageDetail = ko.observable(false);
 
 	self.showToloranceMessage = ko.computed(function () {
-		return self.toloranceMessages().length > 0;
+		return self.myToleranceMessages().length > 0 || self.targetToleranceMessages.length > 0;
 	});
 
 	self.selectedCount = ko.computed(function() {
@@ -978,8 +979,8 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 	}
 
 	function validateTolorance() {
-
-		self.toloranceMessages([]);
+		self.myToleranceMessages([]);
+		self.targetToleranceMessages([]);
 		if (!self.checkTolorance) {
 			return;
 		}
@@ -1034,13 +1035,19 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 		if (gap < 0) left = periodToloranceInfo.PositiveToleranceMinutes + gap;
 
 		if (left < 0) {
-			self.toloranceMessages.push({
-				isMyself: isCheckSelf,
-				periodStart: Teleopti.MyTimeWeb.Common.FormatDate(periodToloranceInfo.PeriodStart),
-				periodEnd: Teleopti.MyTimeWeb.Common.FormatDate(periodToloranceInfo.PeriodEnd),
-				isExceed: true,
-				contractTimeGap: Teleopti.MyTimeWeb.Common.FormatTimeSpan(-left) 
-			});
+			if (isCheckSelf) {
+				self.myToleranceMessages.push({
+					periodStart: Teleopti.MyTimeWeb.Common.FormatDate(periodToloranceInfo.PeriodStart),
+					periodEnd: Teleopti.MyTimeWeb.Common.FormatDate(periodToloranceInfo.PeriodEnd),
+					contractTimeGap: Teleopti.MyTimeWeb.Common.FormatTimeSpan(-left)
+				});
+			} else {
+				self.targetToleranceMessages.push({
+					periodStart: Teleopti.MyTimeWeb.Common.FormatDate(periodToloranceInfo.PeriodStart),
+					periodEnd: Teleopti.MyTimeWeb.Common.FormatDate(periodToloranceInfo.PeriodEnd),
+					contractTimeGap: Teleopti.MyTimeWeb.Common.FormatTimeSpan(-left)
+				});
+			};
 		}
 	}
 

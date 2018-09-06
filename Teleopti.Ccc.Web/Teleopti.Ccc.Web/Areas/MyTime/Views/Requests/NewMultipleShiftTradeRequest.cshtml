@@ -246,25 +246,17 @@
 	<div data-bind="visible: showToloranceMessage" class="shift-trade-error">
 	<div data-bind="click:toloranceMessageClicked" class="error-summary"><i class="glyphicon glyphicon-warning-sign"> </i> <span>Contract time violation.</span> </div>
 	<div data-bind="visible:showToloranceMessageDetail" class="error-detail">
-		<div>Please ensure that your time recording for August is completed today.</div>
-		<!--ko foreach: toloranceMessages-->
-		<!--ko if: isMyself-->
-		<!--ko if: isExceed-->
-		<span class="error">You exceeded <span data-bind="text:contractTimeGap"></span> total contract time during period <span data-bind="text:$root.formatDate(periodStart)"></span> - <span data-bind="text:$root.formatDate(periodEnd)"></span>.</span>
-		<!--/ko-->
-		<!--ko if: !isExceed-->
-		<span class="error">You has less <span data-bind="text:contractTimeGap"></span> than total contract time during period <span data-bind="text:$root.formatDate(periodStart)"></span> - <span data-bind="text:$root.formatDate(periodEnd)"></span>.</span>
-		<!--/ko-->
-		<!--/ko-->
-		<!--ko if: !isMyself-->
-		<!--ko if: isExceed-->
-		<span class="error">target exceeded <span data-bind="text:contractTimeGap"></span> total contract time during period <span data-bind="text:$root.formatDate(periodStart)"></span> - <span data-bind="text:$root.formatDate(periodEnd)"></span>.</span>
-		<!--/ko-->
-		<!--ko if: !isExceed-->
-		<span class="error">target has less <span data-bind="text:contractTimeGap"></span> than total contract time during period <span data-bind="text:$root.formatDate(periodStart)"></span> - <span data-bind="text:$root.formatDate(periodEnd)"></span>.</span>
-		<!--/ko-->
-		<!--/ko-->
-		<!--/ko-->
+		<div>@Resources.Period    @Resources.Deviation</div>
+		<div>@Resources.MySchedule
+		<!--ko foreach: myToleranceMessages-->
+		<span class="error">[<span data-bind="text:$root.formatDate(periodStart)"></span> - <span data-bind="text:$root.formatDate(periodEnd)"></span>]<span data-bind="text:contractTimeGap"></span> </span>
+			<!--/ko-->
+		</div>
+		<div data-bind="text:agentChoosed() ? agentChoosed().agentName : ''">
+			<!--ko foreach: targetToleranceMessages-->
+			<span class="error">[<span data-bind="text:$root.formatDate(periodStart)"></span> - <span data-bind="text:$root.formatDate(periodEnd)"></span>]<span data-bind="text:contractTimeGap"></span> </span>
+			<!--/ko-->
+		</div>
 	</div>
 
 </div>
