@@ -2486,6 +2486,7 @@
     <Content Include="Areas\MyTime\Content\Css\AsmMessage.css" />
     <Content Include="Areas\MyTime\Content\Css\TooltipCustom.css" />
     <Content Include="Areas\MyTime\Content\Css\Request.css" />
+    <Content Include="Areas\MyTime\Content\Css\ShiftTrade.css" />
     <Content Include="Areas\MyTime\Content\Css\Settings.css" />
     <Content Include="Areas\MyTime\Content\Images\header_bg_2x.png" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.SelectionViewModel.js" />

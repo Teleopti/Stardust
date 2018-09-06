@@ -9,13 +9,7 @@
 						<i class="glyphicon glyphicon-chevron-left"></i>
 					</button>
 				</span>
-				<![if (!IE)|(gt IE 8)]>
-				<input type="text" class="col-lg-2 form-control add-shifttrade-datepicker text-center date-input-style" data-bind="datepicker: requestedDate, datepickerOptions: { format: DatePickerFormat(), startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()"
-				/>
-				<![endif]>
-				<!--[if lte IE 8]>
-					<input type="text" class="col-lg-2 form-control add-shifttrade-datepicker" data-bind="value: requestedDate().format(DatePickerFormat())" readonly="readonly" />
-				<![endif]-->
+				<input type="text" class="col-lg-2 form-control add-shifttrade-datepicker text-center date-input-style" data-bind="datepicker: requestedDate, datepickerOptions: { format: DatePickerFormat(), startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()" />
 				<span class="input-group-btn">
 					<button class="btn" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
 						<i class="glyphicon glyphicon-calendar"></i>
@@ -109,8 +103,7 @@
 
 	<div class="col-sm-5 col-md-6 col-lg-2">
 		<div class="input-group name-search schedule-filter-component">
-			<input type="search" class="form-control" placeholder='@Resources.SearchHintForName' data-bind="value: searchNameText, disable: IsLoading, event: { change: changeInSearchBox} "
-			/>
+			<input type="search" class="form-control" placeholder='@Resources.SearchHintForName' data-bind="value: searchNameText, disable: IsLoading, event: { change: changeInSearchBox} " />
 			<span class="input-group-addon input-group-addon-narrow">
 				<!-- ko if: IsLoading -->
 				<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
@@ -358,7 +351,7 @@
 			<div class="form-group">
 				<textarea id="Request-add-shift-trade-message-input" class="form-control input-block-level" data-bind="value: message, valueUpdate: 'afterkeydown', event:{change : checkMessageLength}"
 				 rows="4" placeholder="@Resources.Message" />
-			</div>
+				</div>
 			<div class="pull-right">
 				<button class="btn cancel-button" data-bind="click: cancelRequest">@Resources.Cancel</button>
 				<button class="btn btn-primary send-button" data-bind="enable: isSendEnabled, click: sendRequest">@Resources.Send</button>
