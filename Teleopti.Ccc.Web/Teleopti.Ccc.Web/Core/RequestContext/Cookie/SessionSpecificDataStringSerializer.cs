@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			}
 			catch (FormatException)
 			{
-				_logger.Warn("Cannot create deserialize string [" + stringData + "] to a [" + typeof(SessionSpecificData).Name + "] object.");
+				 _logger.Warn("Cannot create deserialize string [" + stringData + "] to a [" + typeof(SessionSpecificData).Name + "] object.");
 				return null;
 			}
 		}
