@@ -1776,7 +1776,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 		[Test]
 		[Toggle(Toggles.MyTimeWeb_NewTeamScheduleView_75989)]
-		public void ShouldReturnTotalAgentCount()
+		public void ShouldReturnMatchedTotalAgentCount()
 		{
 			var today = new DateOnly(2014, 12, 15);
 			var team = TeamFactory.CreateSimpleTeam("test team").WithId();
@@ -1798,6 +1798,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			assignment.SetShiftCategory(new ShiftCategory("sc"));
 			ScheduleData.Add(assignment);
 
+			var person2 = PersonFactory.CreatePersonWithGuid("test", "agent");
+			person2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			PersonRepository.Add(person2);
+			person2.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today, team));
+
+			var dayOffAssignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(person2, Scenario.Current(), today, new DayOffTemplate(new Description("dayoff")));
+			ScheduleData.Add(dayOffAssignment);
+
 			var teamScheduleRequest = new TeamScheduleRequest
 			{
 				SelectedDate = today.Date,
@@ -1807,7 +1815,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				},
 				ScheduleFilter = new Domain.Repositories.ScheduleFilter
 				{
-					TeamIds = team.Id.ToString()
+					TeamIds = team.Id.ToString(),
+					IsDayOff = true
 				}
 			};
 			var teamScheduleViewModel = Target.TeamSchedule(teamScheduleRequest);
