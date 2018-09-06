@@ -140,7 +140,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			isolate.UseTestDouble<ForecastProvider>().For<ForecastProvider>();
 			isolate.UseTestDouble<ForecastDayModelMapper>().For<ForecastDayModelMapper>();
 			isolate.UseTestDouble<FetchAndFillSkillDays>().For<IFetchAndFillSkillDays>();
-			isolate.UseTestDouble<FakeTaskOutlierRemoverWithCounter>().For<IOutlierRemover>();
 
 			// AppInsights
 			isolate.UseTestDouble<FakeApplicationInsights>().For<IApplicationInsights>();

@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 					WarningMessage = Resources.NoQueueStatisticsAvailable
 				};
 			}
-			var historicalDataNoOutliers = _outlierRemover.RemoveOutliers(historicalData, forecastMethodForTasks);
+			var historicalDataNoOutliers = _outlierRemover.RemoveOutliers(historicalData, forecastMethodForTasks, forecastMethodForTaskTime);
 			var forecastedTasks = forecastMethodForTasks.ForecastTasks(historicalDataNoOutliers, quickForecasterWorkloadParams.FuturePeriod);
 
 			var forecastedTaskTime = forecastMethodForTaskTime.ForecastTaskTime(historicalData, quickForecasterWorkloadParams.FuturePeriod);

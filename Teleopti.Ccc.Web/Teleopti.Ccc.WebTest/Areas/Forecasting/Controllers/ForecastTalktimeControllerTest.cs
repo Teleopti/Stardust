@@ -74,40 +74,5 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			forecastedDay1.Should().Not.Be.EqualTo(forecastedDay2);
 			Assert.AreNotEqual(Math.Round(forecastedDay1, 3), Math.Round(forecastedDay2, 3));
 		}
-
-		[Test]
-		public void ShouldRemoveOutliersToForecast()
-		{
-			var skill = SkillFactory.CreateSkillWithWorkloadAndSources().WithId();
-			var workload = skill.WorkloadCollection.Single();
-			var scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
-			var openDay = new DateOnly(2018, 05, 04);
-			const int dayInAWeek = 7;
-
-			SkillRepository.Add(skill);
-			ScenarioRepository.Has(scenario);
-			WorkloadRepository.Add(workload);
-
-			StatisticRepository.Has(workload.QueueSourceCollection.First(), new List<IStatisticTask>
-			{
-				new StatisticTask
-				{
-					Interval = openDay.AddDays(-dayInAWeek).Date.AddHours(10),
-					StatOfferedTasks = 10,
-					StatAverageTaskTimeSeconds = 400d
-				}
-			});
-
-			var forecastInput = new ForecastInput
-			{
-				ForecastStart = openDay.Date,
-				ForecastEnd = openDay.Date,
-				ScenarioId = scenario.Id.Value,
-				WorkloadId = workload.Id.Value
-			};
-			var result = (OkNegotiatedContentResult<ForecastModel>)Target.Forecast(forecastInput);
-			var forecastedTalkTime = result.Content.ForecastDays.First().TotalAverageTaskTime;
-			forecastedTalkTime.Should().Be.LessThanOrEqualTo(100);
-		}
 	}
 }

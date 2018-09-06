@@ -4,6 +4,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Outlier
 {
 	public interface IOutlierRemover
 	{
-		ITaskOwnerPeriod RemoveOutliers(ITaskOwnerPeriod historicalData, IForecastMethod forecastMethod);
+		ITaskOwnerPeriod RemoveOutliers(ITaskOwnerPeriod historicalData, IForecastMethod forecastMethodForTasks,
+			IForecastMethod forecastMethodForTaskTime);
 	}
 }

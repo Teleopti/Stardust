@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 					secondPartHistoricalData.Select(taskOwner => cloneTaskOwner(workload, taskOwner)),
 					TaskOwnerPeriodType.Other);
 
-				var firstPeriodDataNoOutliers = outlierRemover.RemoveOutliers(firstPeriodData, forecastMethod);
+				var firstPeriodDataNoOutliers = outlierRemover.RemoveOutliers(firstPeriodData, forecastMethod, forecastMethod);
 				var forecastTasks = forecastMethod.ForecastTasks(firstPeriodDataNoOutliers, twoPeriods.Item2);
 
 				var forecastTaskTime = forecastMethod.ForecastTaskTime(firstPeriodDataNoOutliers, twoPeriods.Item2);

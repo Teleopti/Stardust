@@ -43,21 +43,23 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			var workload = _workloadRepository.Get(workloadId);
 			var availablePeriod = _historicalPeriodProvider.AvailablePeriod(workload);
 			var workloadAccuracy = _forecastWorkloadEvaluator.Evaluate(workload, new OutlierRemover(), new ForecastAccuracyCalculator());
-			var forecastMethodId = workloadAccuracy.ForecastMethodTypeForTasks;
+			var forecastMethodIdForTasks = workloadAccuracy.ForecastMethodTypeForTasks;
+			var forecastMethodIdForTaskTime = workloadAccuracy.ForecastMethodTypeForTaskTime;
 			return new WorkloadQueueStatisticsViewModel
 			{
 				WorkloadId = workload.Id.Value,
 				QueueStatisticsDays = availablePeriod.HasValue
-					? createQueueStatisticsDayViewModels(workload, forecastMethodId, availablePeriod.Value)
+					? createQueueStatisticsDayViewModels(workload, forecastMethodIdForTasks, forecastMethodIdForTaskTime, availablePeriod.Value)
 					: new List<QueueStatisticsModel>()
 			};
 		}
 
 		private List<QueueStatisticsModel> createQueueStatisticsDayViewModels(IWorkload workload,
-			ForecastMethodType method, DateOnlyPeriod period)
+			ForecastMethodType methodForTasks, ForecastMethodType methodForTaskTime, DateOnlyPeriod period)
 		{
 			var historicalData = _historicalData.Fetch(workload, period);
-			var forecastMethod = _forecastMethodProvider.Get(method);
+			var forecastMethodForTasks = _forecastMethodProvider.Get(methodForTasks);
+			var forecastMethodForTaskTime = _forecastMethodProvider.Get(methodForTaskTime);
 			var statistics = new List<QueueStatisticsModel>();
 			foreach (var taskOwner in historicalData.TaskOwnerDayCollection)
 			{
@@ -69,7 +71,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 				statistics.Add(dayStats);
 			}
 
-			var historicalDataNoOutliers = _outlierRemover.RemoveOutliers(historicalData, forecastMethod);
+			var historicalDataNoOutliers = _outlierRemover.RemoveOutliers(historicalData, forecastMethodForTasks, forecastMethodForTaskTime);
 			foreach (var day in historicalDataNoOutliers.TaskOwnerDayCollection)
 			{
 				statistics.Single(x => x.Date == day.CurrentDate).ValidatedTasks =

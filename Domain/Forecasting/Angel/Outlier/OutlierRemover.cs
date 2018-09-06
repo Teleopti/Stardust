@@ -9,14 +9,17 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Outlier
 {
 	public class OutlierRemover : IOutlierRemover
 	{
-		public ITaskOwnerPeriod RemoveOutliers(ITaskOwnerPeriod historicalData, IForecastMethod forecastMethod)
+		public ITaskOwnerPeriod RemoveOutliers(ITaskOwnerPeriod historicalData, IForecastMethod forecastMethodForTasks,
+			IForecastMethod forecastMethodForTaskTime)
 		{
-			var seasonalVariationPossiblyWithTrend = forecastMethod.SeasonalVariation(historicalData);
+			var seasonalVariationPossiblyWithTrendForTasks = forecastMethodForTasks.SeasonalVariationTasks(historicalData);
+			var seasonalVariationPossiblyWithTrendForTaskTime = forecastMethodForTaskTime.SeasonalVariationTaskTime(historicalData);
+
 			var historicalLookup = historicalData.TaskOwnerDayCollection.ToLookup(k => k.CurrentDate);
 
 			var tasksToRemoveOutlier = new List<outlierModel>();
 			var taskTimesToRemoveOutlier = new List<outlierModel>();
-			foreach (var day in seasonalVariationPossiblyWithTrend)
+			foreach (var day in seasonalVariationPossiblyWithTrendForTasks)
 			{
 				foreach (var historicalDay in historicalLookup[day.Key])
 				{
@@ -24,13 +27,19 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Outlier
 					{
 						Date = day.Key,
 						HistoricalValue = historicalDay.TotalStatisticCalculatedTasks,
-						VariationValue = day.Value.Tasks
+						VariationValue = day.Value
 					});
+				}
+			}
+			foreach (var day in seasonalVariationPossiblyWithTrendForTaskTime)
+			{
+				foreach (var historicalDay in historicalLookup[day.Key])
+				{
 					taskTimesToRemoveOutlier.Add(new outlierModel
 					{
 						Date = day.Key,
 						HistoricalValue = historicalDay.TotalStatisticAverageTaskTime.TotalSeconds,
-						VariationValue = day.Value.TaskTime
+						VariationValue = day.Value
 					});
 				}
 			}

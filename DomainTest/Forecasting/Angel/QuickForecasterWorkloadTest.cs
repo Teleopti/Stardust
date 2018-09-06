@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 				new ForecastDayModelMapper(), new FakeForecastDayOverrideRepository(new FakeStorage()));
 
 			target.Execute(quickForecasterWorkloadParams);
-			outlierRemover.AssertWasCalled(x => x.RemoveOutliers(taskOwnerPeriod, forecastMethodForTasks));
+			outlierRemover.AssertWasCalled(x => x.RemoveOutliers(taskOwnerPeriod, forecastMethodForTasks, forecastMethodForTaskTime));
 		}
 	}
 }

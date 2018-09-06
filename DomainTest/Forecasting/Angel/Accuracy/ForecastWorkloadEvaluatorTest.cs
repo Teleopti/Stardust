@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			target.Evaluate(workload, outlierRemover, forecastAccuracyCalculator);
 
 			outlierRemover.AssertWasCalled(x => x.RemoveOutliers(Arg<ITaskOwnerPeriod>.Is.Anything,
-				Arg<IForecastMethod>.Is.Anything), options => options.Repeat.Twice());
+				Arg<IForecastMethod>.Is.Anything, Arg<IForecastMethod>.Is.Anything), options => options.Repeat.Twice());
 		}
 
 		[Test]

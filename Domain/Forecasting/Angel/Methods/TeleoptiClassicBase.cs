@@ -42,22 +42,17 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Methods
 
 		public abstract ForecastMethodType Id { get; }
 
-		public Dictionary<DateOnly, LightForecastModel> SeasonalVariation(ITaskOwnerPeriod historicalData)
+		public Dictionary<DateOnly, double> SeasonalVariationTasks(ITaskOwnerPeriod historicalData)
 		{
 			var futurePeriod = new DateOnlyPeriod(historicalData.StartDate, historicalData.EndDate);
 			var taskNumbers = ForecastNumberOfTasks(historicalData, futurePeriod);
+			return taskNumbers.ToDictionary(task => task.Date, task => task.Tasks);
+		}
+		public Dictionary<DateOnly, double> SeasonalVariationTaskTime(ITaskOwnerPeriod historicalData)
+		{
+			var futurePeriod = new DateOnlyPeriod(historicalData.StartDate, historicalData.EndDate);
 			var taskTimeNumbers = ForecastTaskTime(historicalData, futurePeriod);
-			var result = new Dictionary<DateOnly, LightForecastModel>();
-			foreach (var task in taskNumbers)
-			{
-				result.Add(task.Date, new LightForecastModel
-				{
-					Tasks = task.Tasks,
-					TaskTime = taskTimeNumbers[task.Date].TotalSeconds
-				});
-			}
-
-			return result;
+			return taskTimeNumbers.ToDictionary(task => task.Key, task => taskTimeNumbers[task.Key].TotalSeconds);
 		}
 
 		protected virtual IEnumerable<DateAndTask> ForecastNumberOfTasks(ITaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod)
