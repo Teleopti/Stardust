@@ -6,9 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -23,20 +21,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	{
 		public EditScheduleNoteCommandHandler Target;
 		public FakeWriteSideRepository<IPerson> PersonRepo;
-		public FakeScheduleStorage_DoNotUse ScheduleStorage;
-		public FakeCurrentScenario_DoNotUse CurrentScenario;
+		public IScheduleStorage ScheduleStorage;
+		public FakeScenarioRepository CurrentScenario;
+		public FakeNoteRepository NoteRepository;
+		public FakePublicNoteRepository PublicNoteRepository;
+
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<EditScheduleNoteCommandHandler>().For<IHandleCommand<EditScheduleNoteCommand>>();
 			isolate.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
-			isolate.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
-			isolate.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
-			isolate.UseTestDouble<FakeScheduleDifferenceSaver_DoNotUse>().For<IScheduleDifferenceSaver>();
 		}
 
 		[Test]
 		public void ShouldAddNewInternalNote()
 		{
+			var scenario = CurrentScenario.Has("Default");
 			var person = PersonFactory.CreatePerson().WithId();
 			PersonRepo.Add(person);
 			var date = new DateOnly(2016, 9, 29);
@@ -50,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			Target.Handle(command);
 			var schedule = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
-				person, new ScheduleDictionaryLoadOptions(true, true), new DateOnlyPeriod(date, date), CurrentScenario.Current())[person].ScheduledDayCollection(new DateOnlyPeriod(date, date)).Single();
+				person, new ScheduleDictionaryLoadOptions(true, true), date.ToDateOnlyPeriod(), scenario)[person].ScheduledDayCollection(date.ToDateOnlyPeriod()).Single();
 			var note = schedule.NoteCollection().FirstOrDefault();
 			note.GetScheduleNote(new NoFormatting()).Should().Be("new note");
 
@@ -62,10 +61,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var person = PersonFactory.CreatePerson().WithId();
 			PersonRepo.Add(person);
 			var date = new DateOnly(2016, 9, 29);
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 
 			var note = new Note(person, date, scenario, "existing note").WithId();
-			ScheduleStorage.Add(note);
+			NoteRepository.Add(note);
 
 			var command = new EditScheduleNoteCommand
 			{
@@ -76,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			Target.Handle(command);
 			var schedule = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
-				person, new ScheduleDictionaryLoadOptions(true, true), new DateOnlyPeriod(date, date), CurrentScenario.Current())[person].ScheduledDayCollection(new DateOnlyPeriod(date, date)).Single();
+				person, new ScheduleDictionaryLoadOptions(true, true), date.ToDateOnlyPeriod(), scenario)[person].ScheduledDayCollection(date.ToDateOnlyPeriod()).Single();
 			var updatedNote = schedule.NoteCollection().FirstOrDefault();
 			updatedNote.GetScheduleNote(new NoFormatting()).Should().Be("new note");
 		}
@@ -84,11 +83,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldNotUpdatePublicNoteWhenInputIsNull()
 		{
+			var scenario = CurrentScenario.Has("Default");
 			var person = PersonFactory.CreatePerson().WithId();
 			PersonRepo.Add(person);
 			var date = new DateOnly(2016, 9, 29);
-			var existingNote = new PublicNote(person, date, CurrentScenario.Current(), "existing note").WithId();
-			ScheduleStorage.Add(existingNote);
+			var existingNote = new PublicNote(person, date, scenario, "existing note").WithId();
+			PublicNoteRepository.Add(existingNote);
 
 			var command = new EditScheduleNoteCommand
 			{
@@ -98,13 +98,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			Target.Handle(command);
 			var schedule = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
-				person, new ScheduleDictionaryLoadOptions(true, true), new DateOnlyPeriod(date, date), CurrentScenario.Current())[person].ScheduledDayCollection(new DateOnlyPeriod(date, date)).Single();
+				person, new ScheduleDictionaryLoadOptions(true, true), date.ToDateOnlyPeriod(), scenario)[person].ScheduledDayCollection(date.ToDateOnlyPeriod()).Single();
 			var note = schedule.PublicNoteCollection().FirstOrDefault();
 			note.GetScheduleNote(new NoFormatting()).Should().Be("existing note");
 		}
 		[Test]
 		public void ShouldAddNewPublicNote()
 		{
+			var scenario = CurrentScenario.Has("Default");
 			var person = PersonFactory.CreatePerson().WithId();
 			PersonRepo.Add(person);
 			var date = new DateOnly(2016, 9, 29);
@@ -118,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			Target.Handle(command);
 			var schedule = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
-				person, new ScheduleDictionaryLoadOptions(true, true), new DateOnlyPeriod(date, date), CurrentScenario.Current())[person].ScheduledDayCollection(new DateOnlyPeriod(date, date)).Single();
+				person, new ScheduleDictionaryLoadOptions(true, true), date.ToDateOnlyPeriod(), scenario)[person].ScheduledDayCollection(date.ToDateOnlyPeriod()).Single();
 			var note = schedule.PublicNoteCollection().FirstOrDefault();
 			note.GetScheduleNote(new NoFormatting()).Should().Be("new note");
 		}
@@ -126,11 +127,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldClearPublicNote()
 		{
+			var scenario = CurrentScenario.Has("Default");
 			var person = PersonFactory.CreatePerson().WithId();
 			PersonRepo.Add(person);
+
 			var date = new DateOnly(2016, 9, 29);
-			var existingNote = new PublicNote(person, date, CurrentScenario.Current(), "existing note").WithId();
-			ScheduleStorage.Add(existingNote);
+			var existingNote = new PublicNote(person, date, scenario, "existing note").WithId();
+			PublicNoteRepository.Add(existingNote);
 
 			var command = new EditScheduleNoteCommand
 			{
@@ -142,7 +145,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			Target.Handle(command);
 
 			var schedule = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
-				person, new ScheduleDictionaryLoadOptions(true, true), new DateOnlyPeriod(date, date), CurrentScenario.Current())[person].ScheduledDayCollection(new DateOnlyPeriod(date, date)).Single();
+				person, new ScheduleDictionaryLoadOptions(true, true), date.ToDateOnlyPeriod(), scenario)[person].ScheduledDayCollection(date.ToDateOnlyPeriod()).Single();
 			var note = schedule.PublicNoteCollection().SingleOrDefault();
 			note.Should().Be.Null();
 		}
@@ -150,12 +153,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldUpdatePublicNote()
 		{
+			var scenario = CurrentScenario.Has("Default");
 			var person = PersonFactory.CreatePerson().WithId();
 			PersonRepo.Add(person);
 			var date = new DateOnly(2016, 9, 29);
-			var existingNote = new PublicNote(person, date, CurrentScenario.Current(), "existing note");
-			existingNote.WithId();
-			ScheduleStorage.Add(existingNote);
+			var existingNote = new PublicNote(person, date, scenario, "existing note").WithId();
+			PublicNoteRepository.Add(existingNote);
 
 			var command = new EditScheduleNoteCommand
 			{
@@ -167,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			Target.Handle(command);
 
 			var schedule = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
-				person, new ScheduleDictionaryLoadOptions(true, true), new DateOnlyPeriod(date, date), CurrentScenario.Current())[person].ScheduledDayCollection(new DateOnlyPeriod(date, date)).Single();
+				person, new ScheduleDictionaryLoadOptions(true, true), date.ToDateOnlyPeriod(), scenario)[person].ScheduledDayCollection(date.ToDateOnlyPeriod()).Single();
 			var note = schedule.PublicNoteCollection().SingleOrDefault();
 			note.Should().Not.Be.Null();
 			note.Id.Should().Be.EqualTo(existingNote.Id);

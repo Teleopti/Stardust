@@ -87,6 +87,20 @@
 		equal($('.new-teamschedule-view .mobile-datepicker a.formatted-date-text').text(), expectDateStr);
 	});
 
+	test('should reset loaded agent index after changing selected date', function() {
+		$('body').append(agentSchedulesHtml);
+		initVm();
+
+		var today = moment();
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+
+		vm.loadedAgentIndex = 100;
+
+		vm.selectedDate(today.add(9, 'days'));
+
+		equal(vm.loadedAgentIndex, 19);
+	});
+
 	test('should render sites and teams on mobile', function() {
 		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {
@@ -599,7 +613,9 @@
 		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
 
 		equal(
-			$('.teammates-agent-name-row .new-teamschedule-agent-name:nth-child(1) .text-name').text(),
+			$($('.teammates-agent-name-row .new-teamschedule-agent-name')[0])
+				.find('.text-name')
+				.text(),
 			'Jon Kleinsmith1'
 		);
 		equal($('.new-teamschedule-view .teammates-schedules-column .new-teamschedule-layer').length, 20);
@@ -698,9 +714,11 @@
 		$('.new-teamschedule-view input.form-control').change();
 		$('.new-teamschedule-submit-buttons button.btn-primary').click();
 
-		equal(vm.currentPageNum(), 1);
+		equal(vm.currentPageNum, 1);
 		equal(
-			$('.teammates-agent-name-row .new-teamschedule-agent-name:nth-child(1) .text-name').text(),
+			$($('.teammates-agent-name-row .new-teamschedule-agent-name')[0])
+				.find('.text-name')
+				.text(),
 			'Jon Kleinsmith5'
 		);
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = tempFn;
@@ -713,11 +731,15 @@
 		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
 
 		equal(
-			$('.teammates-agent-name-row .new-teamschedule-agent-name:nth-child(1) .text-name').text(),
+			$($('.teammates-agent-name-row .new-teamschedule-agent-name')[0])
+				.find('.text-name')
+				.text(),
 			'Jon Kleinsmith1'
 		);
 		equal(
-			$('.teammates-agent-name-row .new-teamschedule-agent-name:nth-child(10) .text-name').text(),
+			$($('.teammates-agent-name-row .new-teamschedule-agent-name')[9])
+				.find('.text-name')
+				.text(),
 			'Jon Kleinsmith10'
 		);
 	});
@@ -759,19 +781,27 @@
 		});
 
 		equal(
-			$('.teammates-agent-name-row .new-teamschedule-agent-name:nth-child(1) .text-name').text(),
+			$($('.teammates-agent-name-row .new-teamschedule-agent-name')[0])
+				.find('.text-name')
+				.text(),
 			'Jon Kleinsmith1'
 		);
 		equal(
-			$('.teammates-agent-name-row .new-teamschedule-agent-name:nth-child(10) .text-name').text(),
+			$($('.teammates-agent-name-row .new-teamschedule-agent-name')[9])
+				.find('.text-name')
+				.text(),
 			'Jon Kleinsmith10'
 		);
 		equal(
-			$('.teammates-agent-name-row .new-teamschedule-agent-name:nth-child(11) .text-name').text(),
+			$($('.teammates-agent-name-row .new-teamschedule-agent-name')[10])
+				.find('.text-name')
+				.text(),
 			'Jon Kleinsmith11'
 		);
 		equal(
-			$('.teammates-agent-name-row .new-teamschedule-agent-name:nth-child(20) .text-name').text(),
+			$($('.teammates-agent-name-row .new-teamschedule-agent-name')[19])
+				.find('.text-name')
+				.text(),
 			'Jon Kleinsmith20'
 		);
 	});
@@ -863,6 +893,7 @@
 	});
 
 	test('should map dayOff of MySchedule', function() {
+		fakeTeamScheduleData.MySchedule.Periods = [];
 		$('body').append(agentSchedulesHtml);
 		initVm();
 
@@ -870,12 +901,87 @@
 
 		equal(vm.mySchedule().isDayOff, true);
 		equal(vm.mySchedule().dayOffName, 'Day off');
+
 		equal(
 			$('.my-schedule-column .new-teamschedule-layer-container .dayoff')
 				.text()
 				.replace(/(^\s*)|(\s*$)/g, ''),
 			'Day off'
 		);
+	});
+
+	test('should map dayOff of agent schedule', function() {
+		fakeTeamScheduleData.AgentSchedules[0] = {
+			Name: 'Test Day Off agent',
+			Periods: [],
+			IsDayOff: true,
+			DayOffName: 'Day off',
+			IsNotScheduled: false,
+			ShiftCategory: {
+				Id: null,
+				ShortName: 'DO',
+				Name: 'Day off',
+				DisplayColor: '#808080'
+			}
+		};
+		$('body').append(agentSchedulesHtml);
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+
+		vm.searchNameText('Test Day Off agent');
+		$('.new-teamschedule-search-container button[type="submit"]').click();
+
+		equal(
+			$('.teammates-schedules-column .new-teamschedule-layer-container .dayoff')
+				.text()
+				.replace(/(^\s*)|(\s*$)/g, ''),
+			'Day off'
+		);
+	});
+
+	test('should map day off but not show "Day off" text when having overtime on day offs', function() {
+		fakeTeamScheduleData.AgentSchedules[0] = {
+			Name: 'Test Day Off agent',
+			Periods: [
+				{
+					Title: 'E-mail',
+					TimeSpan: '01:00 PM - 02:00 PM',
+					Color: '128,128,255',
+					StartTime: selectedDate + 'T13:00:00',
+					EndTime: selectedDate + 'T14:00:00',
+					IsOvertime: true,
+					StartPositionPercentage: 0.5526,
+					EndPositionPercentage: 0.6579,
+					Meeting: null
+				}
+			],
+			IsDayOff: true,
+			DayOffName: 'Day off',
+			IsNotScheduled: false,
+			ShiftCategory: {
+				Id: null,
+				ShortName: 'DO',
+				Name: 'Day off',
+				DisplayColor: '#808080'
+			}
+		};
+		$('body').append(agentSchedulesHtml);
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+
+		vm.searchNameText('Test Day Off agent');
+		$('.new-teamschedule-search-container button[type="submit"]').click();
+
+		equal(
+			$('.teammates-schedules-column .new-teamschedule-layer-container .dayoff')
+				.text()
+				.replace(/(^\s*)|(\s*$)/g, ''),
+			''
+		);
+
+		equal($('.teammates-schedules-column .new-teamschedule-layer-container .dayoff').length, 1);
 	});
 
 	test('should map notScheduled of MySchedule', function() {
@@ -921,6 +1027,22 @@
 
 		equal(completeLoadedCount, 2);
 		equal($('.teammates-schedules-container .dayoff').length == 1, true);
+	});
+
+	test('should filter agents using search name after switch show only day off toggle on desktop', function() {
+		$('body').append(agentSchedulesHtml);
+
+		if (fakeOriginalAgentSchedulesData.length > 0) {
+			fakeOriginalAgentSchedulesData[0].IsDayOff = true;
+		}
+		initVm();
+
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+		vm.searchNameText('this is a test search name text');
+		$('.new-teamschedule-day-off-toggle input').click();
+
+		equal(completeLoadedCount, 2);
+		equal(ajaxOption.ScheduleFilter.searchNameText, 'this is a test search name text');
 	});
 
 	test('should reset paging after turn on show only day off toggle', function() {
@@ -1024,7 +1146,9 @@
 		equal(completeLoadedCount, 2);
 		equal($('.teammates-schedules-container .dayoff').length == 1, true);
 		equal(
-			$('.teammates-agent-name-row .new-teamschedule-agent-name:nth-child(1) .text-name').text(),
+			$($('.teammates-agent-name-row .new-teamschedule-agent-name')[0])
+				.find('.text-name')
+				.text(),
 			'Jon Kleinsmith50'
 		);
 	});
@@ -1043,7 +1167,7 @@
 		$('.new-teamschedule-submit-buttons button.btn-primary').click();
 
 		equal(completeLoadedCount, 2);
-		equal($('.teammates-agent-name-row .new-teamschedule-agent-name:nth-child(1) .text-name').length, 0);
+		equal($($('.teammates-agent-name-row .new-teamschedule-agent-name')[0]).find('.text-name').length, 0);
 	});
 
 	test('should not filter agents using start time slider if both start time start and start time end are zero', function() {
@@ -1097,9 +1221,11 @@
 		$('.new-teamschedule-submit-buttons button.btn-primary').click();
 
 		equal(completeLoadedCount, 2);
-		equal($('.teammates-agent-name-row .new-teamschedule-agent-name:nth-child(1) .text-name').length, 1);
+		equal($($('.teammates-agent-name-row .new-teamschedule-agent-name')[0]).find('.text-name').length, 1);
 		equal(
-			$('.teammates-agent-name-row .new-teamschedule-agent-name:nth-child(1) .text-name').text(),
+			$($('.teammates-agent-name-row .new-teamschedule-agent-name')[0])
+				.find('.text-name')
+				.text(),
 			'Jon Kleinsmith1'
 		);
 	});
@@ -1160,7 +1286,9 @@
 		equal(completeLoadedCount, 2);
 		equal($('.teammates-agent-name-row .new-teamschedule-agent-name .text-name').length, 20);
 		equal(
-			$('.teammates-agent-name-row .new-teamschedule-agent-name:nth-child(1) .text-name').text(),
+			$($('.teammates-agent-name-row .new-teamschedule-agent-name')[0])
+				.find('.text-name')
+				.text(),
 			'Jon Kleinsmith1'
 		);
 	});
@@ -1550,6 +1678,8 @@
 
 			fakeOriginalAgentSchedulesData.push(agentSchedule);
 		}
+
+		fakeTeamScheduleData.AgentSchedules = fakeOriginalAgentSchedulesData;
 	}
 
 	function setupAjax() {
@@ -1684,7 +1814,7 @@
 			'					</a>',
 			'				</li>',
 			"				<li class=\"new-teamschedule-day-off-toggle\" data-bind=\"tooltip: { title: '@Resources.ShowOnlyDayOff', html: true, trigger: 'hover', placement: 'bottom'}\">",
-			'					<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff"/>',
+			'					<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff" />',
 			'					<label for="show-only-day-off-switch">Day off switch</label>',
 			'				</li>',
 			'				<li class="new-teamschedule-filter-component relative">',
@@ -1718,8 +1848,9 @@
 			'			</div>',
 			'			<!-- /ko -->',
 			'			<div class="teammates-agent-name-row relative">',
+			'				<div class="left-filling-block"></div>',
 			'				<!-- ko foreach: agentNames -->',
-			'				<span class="new-teamschedule-agent-name" data-bind="tooltip: { title: $data.name, trigger: \'click\', placement: \'bottom\'}, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true">',
+			"				<span class=\"new-teamschedule-agent-name\" data-bind=\"tooltip: { title: $data.name, trigger: 'click', placement: 'bottom'}, attr: {'index': index}, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true\">",
 			'					<span class="text-name" data-bind="text: $data.name"></span>',
 			'					<span class="shift-category-cell" data-bind="text: $data.shiftCategory.name, style: {background: $data.shiftCategory.bgColor, color: $data.shiftCategory.color}, css: {\'dayoff\': $data.isDayOff}"></span>',
 			'				</span>',
@@ -1757,12 +1888,14 @@
 			'						</div>',
 			'					</div>',
 			'					<!-- /ko -->',
-			'					<!--ko if:mySchedule().isDayOff-->',
+			'					<!--ko if: mySchedule().isDayOff-->',
 			'					<div class="dayoff cursorpointer relative" data-bind="tooltip: { title: mySchedule().dayOffName, html: true, trigger: \'click\'}, hideTooltipAfterMouseLeave: true">',
+			'						<!-- ko if: mySchedule().layers && mySchedule().layers.length == 0 -->',
 			'						<span class="dayoff-text" data-bind="text: mySchedule().dayOffName"></span>',
+			'						<!-- /ko -->',
 			'					</div>',
 			'					<!--/ko-->',
-			'					<!-- ko if:mySchedule().isNotScheduled -->',
+			'					<!-- ko if: mySchedule().isNotScheduled -->',
 			'					<div class="not-scheduled-text" data-bind="tooltip: { title: \'@Resources.NotScheduled\', html: true, trigger: \'click\'}, hideTooltipAfterMouseLeave: true">@Resources.NotScheduled</div>',
 			'					<!-- /ko -->',
 			'				</div>',
@@ -1770,8 +1903,9 @@
 			'			</div>',
 			'			<!-- ko if: teamSchedules -->',
 			'			<div class="teammates-schedules-container relative" data-bind="style: {height: scheduleContainerHeight() + \'px\'}">',
+			'				<div class="left-filling-block"></div>',
 			'				<!-- ko foreach: teamSchedules -->',
-			'				<div class="teammates-schedules-column relative">',
+			'				<div class="teammates-schedules-column relative" data-bind="attr: {\'index\': index}">',
 			'					<div class="new-teamschedule-layer-container relative">',
 			'						<!-- ko foreach: layers -->',
 			"						<div class=\"new-teamschedule-layer cursorpointer absolute\" data-bind=\"tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-layer': isOvertime, 'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle(), 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle(), 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true\">",
@@ -1793,7 +1927,9 @@
 			'						<!-- /ko -->',
 			'						<!--ko if:isDayOff-->',
 			'						<div class="dayoff cursorpointer relative" data-bind="tooltip: { title: dayOffName, html: true, trigger: \'click\' }, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true">',
+			'							<!-- ko if: layers && layers.length == 0 -->',
 			'							<span class="dayoff-text" data-bind="text: dayOffName"></span>',
+			'							<!-- /ko -->',
 			'						</div>',
 			'						<!--/ko-->',
 			'						<!-- ko if:isNotScheduled -->',
@@ -1830,13 +1966,13 @@
 			'					@Resources.AgentName:',
 			'				</label>',
 			'				<input type="search" class="form-control" placeholder=\'@Resources.SearchHintForName\' data-bind="value: searchNameText" />',
-			'				<input type="submit" style="display: none"/>',
+			'				<input type="submit" style="display: none" />',
 			'			</form>',
 			'			<!--/ko-->',
 			'			<div class="new-teamschedule-time-slider-container">',
 			'				<label>@Resources.StartTime:</label>',
 			'				<!-- ko if: isHostAMobile-->',
-			'				<span class="start-time-clear-button cursorpointer">',
+			'				<span class="start-time-clear-button cursorpointer floatright">',
 			'					<i class="glyphicon glyphicon-remove"></i>',
 			'				</span>',
 			'				<!--/ko-->',
@@ -1854,7 +1990,7 @@
 			'			<div class="new-teamschedule-time-slider-container">',
 			'				<label>@Resources.EndTime:</label>',
 			'				<!-- ko if: isHostAMobile-->',
-			'				<span class="end-time-clear-button cursorpointer">',
+			'				<span class="end-time-clear-button cursorpointer floatright">',
 			'					<i class="glyphicon glyphicon-remove"></i>',
 			'				</span>',
 			'				<!--/ko-->',
@@ -1871,7 +2007,7 @@
 			'			</div>',
 			'			<!-- ko if: isHostAMobile-->',
 			'			<div class="new-teamschedule-day-off-toggle">',
-			'				<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff"/>',
+			'				<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff" />',
 			'				<label for="show-only-day-off-switch">Day off switch</label>',
 			'				<span>@Resources.ShowOnlyDayOff</span>',
 			'			</div>',

@@ -1,21 +1,26 @@
-@using Teleopti.Ccc.UserTexts 
-@{
-	Layout = null;
-}
+@using Teleopti.Ccc.UserTexts @{ Layout = null; }
 <style>
-	html, body, section#page, article#body, #body-inner{
+	html,
+	body,
+	section#page,
+	article#body,
+	#body-inner {
 		height: 100%;
 		overflow-x: hidden;
 	}
-	html, body {
+
+	html,
+	body {
 		overflow: hidden;
 	}
+
 	#loading {
 		width: 100%;
 		text-align: center;
 		top: 40vh;
 		background: transparent;
 	}
+
 	.select2-drop-active {
 		border: none;
 		box-shadow: 0 2px 2px 1px rgba(0, 0, 0, 0.1);
@@ -23,13 +28,18 @@
 </style>
 <!-- ko if: isHostAniPad || isHostAMobile -->
 <style>
-	html, body, section#page, article#body, #body-inner {
+	html,
+	body,
+	section#page,
+	article#body,
+	#body-inner {
 		cursor: pointer;
 	}
+
 	.select2-focusser,
 	.select2-search,
 	.select2-search input {
-		display: none!important;
+		display: none !important;
 	}
 </style>
 <!-- /ko -->
@@ -73,7 +83,7 @@
 					</a>
 				</li>
 				<li class="new-teamschedule-day-off-toggle" data-bind="tooltip: { title: '@Resources.ShowOnlyDayOff', html: true, trigger: 'hover', placement: 'bottom'}">
-					<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff"/>
+					<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff" />
 					<label for="show-only-day-off-switch">Day off switch</label>
 				</li>
 				<li class="new-teamschedule-filter-component relative">
@@ -109,8 +119,9 @@
 			<!-- /ko -->
 
 			<div class="teammates-agent-name-row relative">
+				<div class="left-filling-block"></div>
 				<!-- ko foreach: agentNames -->
-				<span class="new-teamschedule-agent-name" data-bind="tooltip: { title: $data.name, trigger: 'click', placement: 'bottom'}, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true">
+				<span class="new-teamschedule-agent-name" data-bind="tooltip: { title: $data.name, trigger: 'click', placement: 'bottom'}, attr: {'index': index}, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true">
 					<span class="text-name" data-bind="text: $data.name"></span>
 					<span class="shift-category-cell" data-bind="text: $data.shiftCategory.name, style: {background: $data.shiftCategory.bgColor, color: $data.shiftCategory.color}, css: {'dayoff': $data.isDayOff}"></span>
 				</span>
@@ -150,12 +161,14 @@
 						</div>
 					</div>
 					<!-- /ko -->
-					<!--ko if:mySchedule().isDayOff-->
+					<!--ko if: mySchedule().isDayOff-->
 					<div class="dayoff cursorpointer relative" data-bind="tooltip: { title: mySchedule().dayOffName, html: true, trigger: 'click'}, hideTooltipAfterMouseLeave: true">
+						<!-- ko if: mySchedule().layers && mySchedule().layers.length == 0 -->
 						<span class="dayoff-text" data-bind="text: mySchedule().dayOffName"></span>
+						<!-- /ko -->
 					</div>
 					<!--/ko-->
-					<!-- ko if:mySchedule().isNotScheduled -->
+					<!-- ko if: mySchedule().isNotScheduled -->
 					<div class="not-scheduled-text" data-bind="tooltip: { title: '@Resources.NotScheduled', html: true, trigger: 'click'}, hideTooltipAfterMouseLeave: true">@Resources.NotScheduled</div>
 					<!-- /ko -->
 				</div>
@@ -164,8 +177,9 @@
 
 			<!-- ko if: teamSchedules -->
 			<div class="teammates-schedules-container relative" data-bind="style: {height: scheduleContainerHeight() + 'px'}">
+				<div class="left-filling-block"></div>
 				<!-- ko foreach: teamSchedules -->
-				<div class="teammates-schedules-column relative">
+				<div class="teammates-schedules-column relative" data-bind="attr: {'index': index}">
 					<div class="new-teamschedule-layer-container relative">
 						<!-- ko foreach: layers -->
 						<div class="new-teamschedule-layer cursorpointer absolute" data-bind="tooltip: { title: tooltipText, html: true, trigger: 'click' }, style: styleJson, css:{'overtime-layer': isOvertime, 'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle(), 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle(), 'last-layer': isLastLayer}, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true">
@@ -187,7 +201,9 @@
 						<!-- /ko -->
 						<!--ko if:isDayOff-->
 						<div class="dayoff cursorpointer relative" data-bind="tooltip: { title: dayOffName, html: true, trigger: 'click' }, hideTooltipAfterMouseLeave: true, adjustAgentActivityTooltipPositionInTeamSchedule: true">
+							<!-- ko if: layers && layers.length == 0 -->
 							<span class="dayoff-text" data-bind="text: dayOffName"></span>
+							<!-- /ko -->
 						</div>
 						<!--/ko-->
 						<!-- ko if:isNotScheduled -->
@@ -226,7 +242,7 @@
 					@Resources.AgentName:
 				</label>
 				<input type="search" class="form-control" placeholder='@Resources.SearchHintForName' data-bind="value: searchNameText" />
-				<input type="submit" style="display: none"/>
+				<input type="submit" style="display: none" />
 			</form>
 			<!--/ko-->
 			<div class="new-teamschedule-time-slider-container">
@@ -268,7 +284,7 @@
 			</div>
 			<!-- ko if: isHostAMobile-->
 			<div class="new-teamschedule-day-off-toggle">
-				<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff"/>
+				<input type="checkbox" id="show-only-day-off-switch" data-bind="checked: showOnlyDayOff" />
 				<label for="show-only-day-off-switch">Day off switch</label>
 				<span>@Resources.ShowOnlyDayOff</span>
 			</div>

@@ -52,7 +52,7 @@
 
 <div class="shift-container con-row">
 	<div class="viewport-clip con-flex">
-		<div class="viewport">
+		<div class="viewport" ng-class="{'overflow': vm.isResizing}">
 			<div class="timeline">
 				<div class="scroll-toolbar">
 					<span class="left-scroll" ng-show="vm.showScrollLeftButton" ng-click="vm.scroll(-60)"><i class="mdi mdi-chevron-left"></i></span>
@@ -79,6 +79,7 @@
 					 'border-light': vm.useLighterBorder(shiftLayer),
 					 'divide-line':  shiftLayer.ShowDividedLine,
 					 'disabled': vm.isNotAllowedToChange(shiftLayer),
+					 'non-resizable': vm.isNotResizable(shiftLayer),
 					 'float-top': vm.getMergedShiftLayer(shiftLayer).FloatOnTop}"
 					 ng-style="{'width': vm.getMergedShiftLayer(shiftLayer).Width +'px', 
 					 'background-color': vm.getMergedShiftLayer(shiftLayer).Color, 

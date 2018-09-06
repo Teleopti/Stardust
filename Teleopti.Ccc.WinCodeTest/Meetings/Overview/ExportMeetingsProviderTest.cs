@@ -51,15 +51,13 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
             Expect.Call(_model.CurrentScenario).Return(fromScenario);
             Expect.Call(_meetingRepository.Find(dateTimePeriod, fromScenario)).Return(meetings);
-            Expect.Call(meeting.GetRecurringDates()).Return(new List<DateOnly>{start});
             Expect.Call(meeting.Id).Return(meetingId).Repeat.Any();
-            Expect.Call(_meetingRepository.LoadAggregate(meetingId)).Return(
-                meeting);
-            Expect.Call(meeting.MeetingPersons).Return(new List<IMeetingPerson>
-                                                           {
-                                                               new MeetingPerson(
-                                                                   PersonFactory.CreatePersonWithGuid("FN", "LN"), true)
-                                                           });
+			var meetingPersons = new List<IMeetingPerson>
+			{
+				new MeetingPerson(
+					PersonFactory.CreatePersonWithGuid("FN", "LN"), true)
+			};
+			Expect.Call(meeting.MeetingPersons).Return(meetingPersons).Repeat.AtLeastOnce();
             Expect.Call(() => _unitOfWork.Dispose());
             _mocks.ReplayAll();
              var ret = _target.GetMeetings(dateOnlyPeriod);
@@ -83,17 +81,18 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
             Expect.Call(_model.CurrentScenario).Return(fromScenario);
             Expect.Call(_meetingRepository.Find(dateTimePeriod, fromScenario)).Return(meetings);
-            Expect.Call(meeting.GetRecurringDates()).Return(new List<DateOnly> { start.AddDays(-1), end.AddDays(1) });
             Expect.Call(meeting.Id).Return(meetingId).Repeat.Any();
-            Expect.Call(_meetingRepository.LoadAggregate(meetingId)).Return(
-                meeting);
-            Expect.Call(() => _unitOfWork.Dispose());
+			var meetingPersons = new List<IMeetingPerson>
+			{
+				new MeetingPerson(
+					PersonFactory.CreatePersonWithGuid("FN", "LN"), true)
+			};
+			Expect.Call(meeting.MeetingPersons).Return(meetingPersons).Repeat.AtLeastOnce();
+			Expect.Call(() => _unitOfWork.Dispose());
             _mocks.ReplayAll();
             var ret = _target.GetMeetings(dateOnlyPeriod);
-            Assert.That(ret.Count, Is.EqualTo(0));
+            Assert.That(ret.Count, Is.EqualTo(1));
             _mocks.VerifyAll();
         }
     }
-
-    
 }

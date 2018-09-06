@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.SingleInstance();
 			
 			builder.RegisterType<EmailBacklogProvider>().As<IEmailBacklogProvider>().SingleInstance();
-			builder.RegisterType<SkillStaffingIntervalProvider>().SingleInstance();
+			builder.RegisterType<SkillStaffingIntervalProvider>().As<ISkillStaffingIntervalProvider>().SingleInstance();
 			builder.RegisterType<IntradaySkillProvider>().As<IIntradaySkillProvider>().SingleInstance();
 
 			// Intraday - application layer

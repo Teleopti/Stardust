@@ -5,8 +5,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
-using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
-using Teleopti.Ccc.Sdk.LogicTest.QueryHandler;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -25,10 +23,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
 		    var publicNoteDomain =
 			    new PublicNote(personDomain, date, new Scenario("Default scenario"), "Work harder!").WithId();
-		    
-		    var repository = new FakePublicNoteRepository();
 
-		    var personRepository = new FakePersonRepositoryLegacy();
+			var storage = new FakeStorage();
+			var repository = new FakePublicNoteRepository(storage);
+
+		    var personRepository = new FakePersonRepository(storage);
 		    var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
 		    var shiftCategoryRepository = new FakeShiftCategoryRepository();
 		    var shiftCategoryAssembler = new ShiftCategoryAssembler(shiftCategoryRepository);
@@ -59,12 +58,15 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
 		    var publicNoteDomain =
 			    new PublicNote(personDomain, date, new Scenario("Default scenario"), "Work harder!").WithId();
-			var repository = new FakePublicNoteRepository();
-			repository.Add(publicNoteDomain);
-			var publicNoteDto = new PublicNoteDto {Id = publicNoteDomain.Id};
 			
-		    var personRepository = new FakePersonRepositoryLegacy();
-		    var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
+			var storage = new FakeStorage();
+			var repository = new FakePublicNoteRepository(storage);
+			repository.Add(publicNoteDomain);
+
+			var publicNoteDto = new PublicNoteDto { Id = publicNoteDomain.Id };
+
+			var personRepository = new FakePersonRepository(storage);
+			var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
 		    var shiftCategoryRepository = new FakeShiftCategoryRepository();
 		    var shiftCategoryAssembler = new ShiftCategoryAssembler(shiftCategoryRepository);
 		    var activityRepository = new FakeActivityRepository();

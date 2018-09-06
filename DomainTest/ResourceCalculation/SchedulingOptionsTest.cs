@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void Setup()
         {
             _target = new SchedulingOptions();
-	        _shiftProjectionCache = new ShiftProjectionCache(new WorkShift(new ShiftCategory("Test")), new PersonalShiftMeetingTimeChecker(), new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
+	        _shiftProjectionCache = new ShiftProjectionCache(new WorkShift(new ShiftCategory("Test")), new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
         }
 
         [Test]

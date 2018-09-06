@@ -71,6 +71,8 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 	self.earliestScheduleDate = null;
 	self.lastScheduleDate = null;
 
+	self.toloranceInvalid = ko.observable(false);	
+
 	self.shiftPageSize = 7;
 	self.isLoadingSchedules = ko.observable(false);
 	self.isLoadingSchedulesOnTop = ko.observable(false);
@@ -84,6 +86,15 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 	self.loadedSchedulePairsRaw = [];
 
 	self.selectedSchedulePairs = ko.observableArray();
+
+	self.myToleranceMessages = ko.observableArray();
+	self.targetToleranceMessages = ko.observableArray();
+
+	self.showToloranceMessageDetail = ko.observable(false);
+
+	self.showToloranceMessage = ko.computed(function () {
+		return self.myToleranceMessages().length > 0 || self.targetToleranceMessages.length > 0;
+	});
 
 	self.selectedCount = ko.computed(function() {
 		return self.selectedSchedulePairs().length;
@@ -149,6 +160,9 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 					return 1;
 				}
 			});
+			if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408')) {
+				validateTolorance();
+			}
 		}
 
 		return true;
@@ -164,6 +178,10 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 			self.selectedSchedulePairs.remove(function(d) {
 				return d.date.isSame(data.date, 'day');
 			});
+
+			if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408')) {
+				validateTolorance();
+			}
 		}
 	};
 
@@ -345,6 +363,11 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 		}
 		var agentId = agent.personId;
 		clearSchedulePairs();
+
+		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408')) {
+			loadToleranceInfo(agentId);
+		}
+
 		loadPeriodSchedule(startDate, endDate, agentId, false, function () {
 			var element = document.querySelector('.shift-trade-list-panel');
 			if (element) {
@@ -856,6 +879,10 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 		);
 	});
 
+	self.toloranceMessageClicked = function () {
+		self.showToloranceMessageDetail(!self.showToloranceMessageDetail());
+	}
+
 	function changeRequestedDate(movement) {
 		var date = moment(self.requestedDateInternal()).add('days', movement);
 		if (self.isRequestedDateValid(date)) {
@@ -924,6 +951,104 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 			.map(function(team) {
 				return team.id;
 			});
+	}
+
+	function loadToleranceInfo(agentId) {
+		if (!agentId) return;
+
+		ajax.Ajax({
+			url: 'Requests/GetWFCTolerance?personToId=' + agentId,
+			dataType:'json',
+			type: 'GET',
+			success: function (data) {
+				self.checkTolorance = data.IsNeedToCheck;
+				self.toloranceInfo = {
+					myTolorance: data.MyInfos,
+					targetTolorance: data.PersonToInfos
+				};
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				if (jqXHR.status === 400) {
+					var data = $.parseJSON(jqXHR.responseText);
+					self.errorMessage(data.Errors.join('</br>'));
+					return;
+				}
+				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+			}
+		});
+	}
+
+	function validateTolorance() {
+		self.myToleranceMessages([]);
+		self.targetToleranceMessages([]);
+		if (!self.checkTolorance) {
+			return;
+		}
+
+		var selectedSchedulesPairs = self.selectedSchedulePairs().filter(function (p) {
+			return p.isSelected;
+		});
+
+		if (!self.toloranceInfo || selectedSchedulesPairs.length === 0) {
+			return;
+		}
+
+		if (self.toloranceInfo.myTolorance && self.toloranceInfo.myTolorance.length > 0) {
+			self.toloranceInfo.myTolorance.forEach(function (periodToloranceInfo) {
+				validatePeriodTolorance(periodToloranceInfo, selectedSchedulesPairs, true);
+			});
+		}
+
+		if (self.toloranceInfo.targetTolorance && self.toloranceInfo.targetTolorance.length > 0) {
+			self.toloranceInfo.targetTolorance.forEach(function (periodToloranceInfo) {
+				validatePeriodTolorance(periodToloranceInfo, selectedSchedulesPairs, false);
+			});
+		}
+	}
+
+	function validatePeriodTolorance(periodToloranceInfo, personSchedules, isCheckSelf) {
+		var schedulesInPeriod = personSchedules.filter(function (p) {
+			return p.date.isBefore(periodToloranceInfo.PeriodEnd, 'day') && p.date.isAfter(periodToloranceInfo.PeriodStart, 'day');
+		});
+
+		if (schedulesInPeriod.length === 0) {
+			return;
+		}
+
+		var gap = 0;
+		schedulesInPeriod.forEach(function (p) {
+			if (isCheckSelf) {
+				if (p.mySchedule == null && p.targetSchedule != null) gap += 0 - p.targetSchedule.contractMinutes;
+				if (p.mySchedule == null && p.targetSchedule == null) gap += 0;
+				if (p.mySchedule != null && p.targetSchedule == null) gap += p.mySchedule.contractMinutes;
+				if (p.mySchedule != null && p.targetSchedule != null) gap += p.mySchedule.contractMinutes - p.targetSchedule.contractMinutes;
+			} else {
+				if (p.mySchedule == null && p.targetSchedule != null) gap += 0 - p.mySchedule.contractMinutes;
+				if (p.mySchedule == null && p.targetSchedule == null) gap += 0;
+				if (p.mySchedule != null && p.targetSchedule == null) gap += p.targetSchedule.contractMinutes;
+				if (p.mySchedule != null && p.targetSchedule != null) gap += p.targetSchedule.contractMinutes - p.mySchedule.contractMinutes;
+			}
+		});
+
+		var left = 0;
+		if (gap > 0) left = periodToloranceInfo.NegativeToleranceMinutes - gap;
+		if (gap < 0) left = periodToloranceInfo.PositiveToleranceMinutes + gap;
+
+		if (left < 0) {
+			if (isCheckSelf) {
+				self.myToleranceMessages.push({
+					periodStart: Teleopti.MyTimeWeb.Common.FormatDate(periodToloranceInfo.PeriodStart),
+					periodEnd: Teleopti.MyTimeWeb.Common.FormatDate(periodToloranceInfo.PeriodEnd),
+					contractTimeGap: Teleopti.MyTimeWeb.Common.FormatTimeSpan(-left)
+				});
+			} else {
+				self.targetToleranceMessages.push({
+					periodStart: Teleopti.MyTimeWeb.Common.FormatDate(periodToloranceInfo.PeriodStart),
+					periodEnd: Teleopti.MyTimeWeb.Common.FormatDate(periodToloranceInfo.PeriodEnd),
+					contractTimeGap: Teleopti.MyTimeWeb.Common.FormatTimeSpan(-left)
+				});
+			};
+		}
 	}
 
 	function loadPeriodSchedule(startDate, endDate, agentId, prepend, callback) {
@@ -1255,7 +1380,8 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 				personSchedule.IsIntradayAbsence,
 				personSchedule.IntradayAbsenceCategory.Color,
 				personSchedule.IntradayAbsenceCategory.ShortName,
-				overtimeCategoryColor
+				overtimeCategoryColor,
+				personSchedule.ContractTimeInMinute
 			);
 
 			return model;

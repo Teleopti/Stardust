@@ -1,14 +1,4 @@
-﻿if (typeof Teleopti === 'undefined') {
-	Teleopti = {};
-}
-if (typeof Teleopti.MyTimeWeb === 'undefined') {
-	Teleopti.MyTimeWeb = {};
-}
-if (typeof Teleopti.MyTimeWeb.Schedule === 'undefined') {
-	Teleopti.MyTimeWeb.Schedule = {};
-}
-
-Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
+﻿Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 	var vm,
 		completelyLoaded,
 		currentPage = 'Teleopti.MyTimeWeb.Schedule.NewTeamSchedule',
@@ -18,37 +8,60 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 		ajax,
 		onMobile = Teleopti.MyTimeWeb.Common.IsHostAMobile(),
 		oniPad = Teleopti.MyTimeWeb.Common.IsHostAniPad(),
-		agentScheduleColumnWidth = onMobile ? 50 : 80,
-		minScrollBlockWidth = 60,
+		agentScheduleColumnWidth = onMobile ? 50 : 80;
+
+	var MIN_SCROLL_BLOCK_WIDTH = 60,
 		startTimeStartInMinute = 0,
 		startTimeEndInMinute = 0,
 		endTimeStartInMinute = 0,
-		endTimeEndInMinute = 0;
+		endTimeEndInMinute = 0,
+		scrollIntervalsInPixelsRepresentingAPageOfAgents = 0,
+		agentListTotalWidth = 0,
+		toBeScrolledAgentsWidth = 0,
+		scrollBlockWidth = 0,
+		scrollContainerWidth = 0,
+		scrollRangeWidthInPixels = 0,
+		evenVisibleAgentsPagesNumberInDom = 10,
+		visibleAgentsIndexRange = {
+			start: 0,
+			end: 0
+		};
+
+	function initViewModel() {
+		vm = new Teleopti.MyTimeWeb.Schedule.NewTeamScheduleViewModel(
+			filterChangedCallback,
+			loadGroupAndTeams,
+			setDraggableScrollBlockOnDesktop
+		);
+		applyBindings();
+	}
+
+	function applyBindings() {
+		ko.applyBindings(vm, $('#page')[0]);
+	}
 
 	function cleanBinding() {
 		ko.cleanNode($('#page')[0]);
 		Teleopti.MyTimeWeb.MessageBroker.RemoveListeners(currentPage);
 	}
 
-	function subscribeForChanges() {
-		Teleopti.MyTimeWeb.Common.SubscribeToMessageBroker(
-			{
-				successCallback: Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule.ReloadScheduleListener,
-				domainType: 'IScheduleChangedInDefaultScenario',
-				page: currentPage
-			},
-			ajax
-		);
+	function loadGroupAndTeams(callback) {
+		dataService.loadGroupAndTeams(function(teams) {
+			vm.readTeamsData(teams);
 
-		Teleopti.MyTimeWeb.Common.SubscribeToMessageBroker(
-			{
-				successCallback: Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule.ReloadScheduleListener,
-				domainType: 'IPushMessageDialogue',
-				page: currentPage
-			},
-			ajax
-		);
-		subscribed = true;
+			$('#teams-and-groups-selector')
+				.select2('data', { id: vm.selectedTeam(), text: vm.selectedTeamName() })
+				.trigger('change');
+
+			callback && callback();
+		});
+	}
+
+	function loadDefaultTeam(callback) {
+		dataService.loadDefaultTeam(function(defaultTeam) {
+			vm.readDefaultTeamData(defaultTeam);
+			callback && callback();
+		});
 	}
 
 	function registerUserInfoLoadedCallback(initialMomentDate) {
@@ -68,7 +81,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 		});
 	}
 
-	function setupFilterClickFn() {
+	function setupFilterClickBindingFns() {
 		$('.new-teamschedule-time-filter').click(function(e) {
 			vm.isPanelVisible(!vm.isPanelVisible());
 			if (vm.isPanelVisible()) setDraggableTimeSlider();
@@ -90,49 +103,88 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 			e.stopPropagation();
 		});
 
-		$('.teamschedule-filter-component').on('mousedown', function(e) {
+		$('.teamschedule-filter-component').on('mousedown click', function(e) {
 			e.preventDefault();
 			e.stopPropagation();
 		});
 
-		$('body')
-			.on('mousedown', function(event) {
-				var excludedClassList = [
-					'new-teamschedule-time-filter',
-					'new-teamschedule-team-filter',
-					'new-teamschedule-panel'
-				];
+		$('body').on('mousedown', function(event) {
+			var excludedClassList = [
+				'new-teamschedule-time-filter',
+				'new-teamschedule-team-filter',
+				'new-teamschedule-panel'
+			];
 
-				if (
-					excludedClassList.indexOf($(event.target)[0].className) == -1 &&
-					excludedClassList.every(function(c) {
-						return $(event.target).parents('.' + c).length == 0;
-					})
-				) {
-					vm.isPanelVisible(false);
-				}
-			})
-			.on('touchmove', function(event) {
-				var tooltip = $('.tooltip');
-				if (tooltip.length > 0) {
-					tooltip.hide();
-				}
-			});
+			if (
+				excludedClassList.indexOf($(event.target)[0].className) == -1 &&
+				excludedClassList.every(function(c) {
+					return $(event.target).parents('.' + c).length == 0;
+				})
+			) {
+				vm.isPanelVisible(false);
+			}
+		});
+
+		document.addEventListener(
+			'touchstart',
+			function() {
+				$('.tooltip').hide();
+			},
+			true
+		);
 	}
 
 	function registerSwipeEventOnMobileAndiPad() {
 		if (!onMobile && !oniPad) return;
 
+		var container = $('.teammates-schedules-container');
 		$('.new-teamschedule-table').swipe({
 			swipeLeft: function() {
-				var ele = $('.teammates-schedules-container');
-				if (
-					(vm.paging.skip + vm.paging.take) * agentScheduleColumnWidth - (ele.scrollLeft() + ele.width()) <=
-						agentScheduleColumnWidth - 10 &&
-					vm.currentPageNum() < vm.totalPageNum()
-				) {
-					showLoadingGif();
-					loadMoreSchedules();
+				var scrollLeft = container.scrollLeft();
+				var currentScrollPage = Math.ceil(scrollLeft / (vm.paging.take * agentScheduleColumnWidth));
+
+				var take = vm.paging.take;
+				var newStart = (currentScrollPage - evenVisibleAgentsPagesNumberInDom / 2) * take;
+				var newEnd = (currentScrollPage + evenVisibleAgentsPagesNumberInDom / 2) * take;
+				if (newStart < 0) newStart = 0;
+
+				if (newEnd != visibleAgentsIndexRange.end) {
+					visibleAgentsIndexRange.start = newStart;
+					visibleAgentsIndexRange.end = newEnd;
+
+					if (vm.loadedAgentIndex + 1 < vm.totalAgentCount && newEnd > vm.loadedAgentIndex + 1) {
+						if (vm.isLoadingMoreAgentSchedules) return;
+
+						vm.isLoadingMoreAgentSchedules = true;
+						loadMoreSchedules(
+							{
+								skip: vm.loadedAgentIndex + 1,
+								take: (evenVisibleAgentsPagesNumberInDom / 2) * take
+							},
+							function() {
+								vm.isLoadingMoreAgentSchedules = false;
+								setVisibleAgents(currentScrollPage, visibleAgentsIndexRange);
+							}
+						);
+					} else {
+						setVisibleAgents(currentScrollPage, visibleAgentsIndexRange);
+					}
+				}
+			},
+			swipeRight: function() {
+				var scrollLeft = container.scrollLeft();
+				var currentScrollPage = Math.ceil(scrollLeft / (vm.paging.take * agentScheduleColumnWidth));
+
+				var take = vm.paging.take;
+				var newStart = (currentScrollPage - evenVisibleAgentsPagesNumberInDom / 2) * take;
+				var newEnd = (currentScrollPage + evenVisibleAgentsPagesNumberInDom / 2) * take;
+				if (newStart < 0) newStart = 0;
+
+				if (newEnd != visibleAgentsIndexRange.end) {
+					visibleAgentsIndexRange.start = newStart;
+					visibleAgentsIndexRange.end = newEnd;
+
+					setVisibleAgents(currentScrollPage, visibleAgentsIndexRange);
 				}
 			},
 			preventDefaultEvents: false,
@@ -151,9 +203,6 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 			if (oniPad || onMobile) return;
 			if ((e.keyCode !== 37 && e.keyCode !== 39) || scrollIntervalsInPixelsRepresentingAPageOfAgents <= 0) return;
 
-			var scrollIntervalOfPixelsFRepresentingOneAgent =
-				scrollIntervalsInPixelsRepresentingAPageOfAgents / vm.paging.take;
-
 			var orginalLeft = parseInt(
 				$('.teamschedule-scroll-block')
 					.css('left')
@@ -162,22 +211,20 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 
 			var newLeft = 0;
 			if (e.keyCode == 37) {
-				newLeft = orginalLeft - scrollIntervalOfPixelsFRepresentingOneAgent;
-				if (newLeft < scrollIntervalOfPixelsFRepresentingOneAgent) newLeft = 0;
+				newLeft = orginalLeft - 1;
+				if (newLeft < 0) newLeft = 0;
 			}
 
 			if (e.keyCode == 39) {
-				newLeft = orginalLeft + scrollIntervalOfPixelsFRepresentingOneAgent;
-				var containerWidth = $('.teamschedule-scroll-block-container').width();
-				var scrollBlockWidth = $('.teamschedule-scroll-block').width();
-				if (containerWidth - scrollBlockWidth - newLeft < scrollIntervalOfPixelsFRepresentingOneAgent) {
-					newLeft = containerWidth - scrollBlockWidth;
+				newLeft = orginalLeft + 1;
+				if (scrollContainerWidth - scrollBlockWidth - newLeft < 0) {
+					newLeft = scrollContainerWidth - scrollBlockWidth;
 				}
-
-				loadSchedulesBasedOnPageDiffAndUpdateCurrentPageNum(newLeft);
 			}
 
-			setScrollPositionForNameAndSchedule(-newLeft * pixelsRatioOfHorizontalScrolling - (oniPad ? -1 : 1));
+			setScrollPositionForNameAndSchedule(-toBeScrolledAgentsWidth * (newLeft / scrollRangeWidthInPixels));
+			loadMoreSchedulesBasedOnScrollPositionAndUpdateCurrentPageNum(newLeft);
+
 			$('.teamschedule-scroll-block').css({
 				left: newLeft
 			});
@@ -186,86 +233,140 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 
 	function setDraggableScrollBlockOnDesktop() {
 		if (!vm) throw 'Call this function after initializing vm';
-
 		if (onMobile || oniPad) return;
 
-		setTimeout(function() {
+		calculateTheScrollingRatio();
+
+		$('.teamschedule-scroll-block').draggable({
+			axis: 'x',
+			containment: 'parent',
+			scrollSpeed: 1,
+			drag: function(event, ui) {
+				var leftDistance = ui.position.left;
+
+				setScrollPositionForNameAndSchedule(
+					-toBeScrolledAgentsWidth * (leftDistance / scrollRangeWidthInPixels)
+				);
+				loadMoreSchedulesBasedOnScrollPositionAndUpdateCurrentPageNum(leftDistance);
+			},
+			stop: function(event, ui) {
+				var interval = setInterval(function() {
+					if (!vm.isLoadingMoreAgentSchedules) {
+						var left = ui.position.left;
+						loadMoreSchedulesBasedOnScrollPositionAndUpdateCurrentPageNum(left, true, function() {
+							if (left + 2 == scrollRangeWidthInPixels) {
+								setScrollPositionForNameAndSchedule(-toBeScrolledAgentsWidth);
+							}
+						});
+						clearInterval(interval);
+					}
+				});
+			}
+		});
+		$(window).on('resize', function() {
 			calculateTheScrollingRatio();
-
-			$('.teamschedule-scroll-block').draggable({
-				axis: 'x',
-				containment: 'parent',
-				scrollSpeed: 1,
-				start: function(event, ui) {},
-				drag: function(event, ui) {
-					var leftDistance = ui.position.left;
-
-					if (scrollIntervalsInPixelsRepresentingAPageOfAgents <= 0) return;
-					setScrollPositionForNameAndSchedule(
-						-leftDistance * pixelsRatioOfHorizontalScrolling - (oniPad ? -1 : 1)
-					);
-
-					loadSchedulesBasedOnPageDiffAndUpdateCurrentPageNum(leftDistance);
-				},
-				stop: function(event, ui) {
-					var interval = setInterval(function() {
-						if (!vm.isLoadingMoreAgentSchedules) {
-							loadSchedulesBasedOnPageDiffAndUpdateCurrentPageNum(ui.position.left);
-							clearInterval(interval);
-						}
-					});
-				}
-			});
-			$(window).on('resize', function() {
-				calculateTheScrollingRatio();
-			});
-		}, 0);
+		});
 	}
 
-	function loadSchedulesBasedOnPageDiffAndUpdateCurrentPageNum(left) {
-		var currentScrollPage = Math.ceil(left / scrollIntervalsInPixelsRepresentingAPageOfAgents) + 1;
-		var pageDiff = currentScrollPage - vm.currentPageNum();
+	function loadMoreSchedulesBasedOnScrollPositionAndUpdateCurrentPageNum(left, dragStopped, dragStopCallback) {
+		var currentScrollPage = Math.ceil(left / scrollIntervalsInPixelsRepresentingAPageOfAgents);
+		var pageDiff = currentScrollPage + 1 - vm.currentPageNum;
 
-		if (!vm.isLoadingMoreAgentSchedules && pageDiff > 0) {
-			loadMoreSchedules(
-				{
-					skip: vm.paging.take * vm.currentPageNum(),
-					take: vm.paging.take * pageDiff
-				},
-				function() {
-					vm.currentPageNum(currentScrollPage);
-					vm.isLoadingMoreAgentSchedules = false;
+		var take = vm.paging.take;
+		var newStart = (currentScrollPage - evenVisibleAgentsPagesNumberInDom / 2) * take;
+		var newEnd = (currentScrollPage + evenVisibleAgentsPagesNumberInDom / 2) * take;
+		if (newStart < 0) newStart = 0;
+
+		if (newEnd != visibleAgentsIndexRange.end || dragStopped) {
+			visibleAgentsIndexRange.start = newStart;
+			visibleAgentsIndexRange.end = newEnd;
+
+			if (pageDiff < 0) {
+				setVisibleAgents(currentScrollPage, visibleAgentsIndexRange);
+			}
+			if (pageDiff > 0) {
+				if (pageDiff < evenVisibleAgentsPagesNumberInDom / 2) pageDiff = evenVisibleAgentsPagesNumberInDom / 2;
+
+				if (vm.loadedAgentIndex + 1 < vm.totalAgentCount && newEnd > vm.loadedAgentIndex) {
+					if (vm.isLoadingMoreAgentSchedules) return;
+					loadMoreSchedules(
+						{
+							skip: vm.loadedAgentIndex + 1,
+							take: take * pageDiff
+						},
+						function() {
+							vm.isLoadingMoreAgentSchedules = false;
+							setVisibleAgents(currentScrollPage, visibleAgentsIndexRange);
+							dragStopCallback && dragStopCallback();
+						}
+					);
+				} else {
+					setVisibleAgents(currentScrollPage, visibleAgentsIndexRange);
 				}
-			);
+			}
+
+			dragStopCallback && dragStopCallback();
+		}
+
+		if (left + 2 == scrollRangeWidthInPixels) {
+			setScrollPositionForNameAndSchedule(-toBeScrolledAgentsWidth);
 		}
 	}
 
-	function calculateTheScrollingRatio() {
-		if (vm.totalPageNum() == 0) return;
+	function setVisibleAgents(currentScrollPage, visibleAgentsIndexRange) {
+		vm.currentPageNum = currentScrollPage;
 
-		var agentListTotalWidth = vm.totalAgentCount() * agentScheduleColumnWidth;
-		var scrollContainerWidth = $('.teamschedule-scroll-block-container').width();
-		var scrollBlockWidth = 0;
+		var visibleAgents = vm.allTeamSchedules.slice(visibleAgentsIndexRange.start, visibleAgentsIndexRange.end);
+
+		vm.lastAgentIndexInDom = visibleAgentsIndexRange.start + visibleAgents.length - 1;
+		vm.teamSchedules(visibleAgents);
+
+		var visibleAgentNames = vm.allAgentNames.slice(visibleAgentsIndexRange.start, visibleAgentsIndexRange.end);
+		vm.agentNames(visibleAgentNames);
+
+		$('.left-filling-block').width(visibleAgentsIndexRange.start * agentScheduleColumnWidth);
+	}
+
+	function loadMoreSchedules(paging, callback) {
+		showLoadingGif();
+		vm.isLoadingMoreAgentSchedules = true;
+
+		dataService.loadScheduleData(vm.selectedDate().format('YYYY/MM/DD'), paging || vm.paging, vm.filter, function(
+			schedules
+		) {
+			vm.readMoreTeamScheduleData(schedules, callback);
+
+			if (onMobile || oniPad) adjustScrollOnMobileAndiPad();
+
+			fetchDataSuccessCallback();
+		});
+	}
+
+	function calculateTheScrollingRatio() {
+		if (vm.totalPageNum == 0) return;
+
+		agentListTotalWidth = vm.totalAgentCount * agentScheduleColumnWidth;
+		scrollContainerWidth = $('.teamschedule-scroll-block-container').width();
 
 		vm.isScrollbarVisible(agentListTotalWidth > scrollContainerWidth);
 
 		$('.teammates-schedules-container.relative').width(agentListTotalWidth);
 		setScrollPositionForNameAndSchedule(0);
 
-		if (vm.totalPageNum() > 1 || agentListTotalWidth >= scrollContainerWidth) {
+		if (vm.totalPageNum > 1 || agentListTotalWidth >= scrollContainerWidth) {
 			scrollBlockWidth = scrollContainerWidth * (scrollContainerWidth / agentListTotalWidth);
 
-			if (scrollBlockWidth < minScrollBlockWidth) {
-				scrollBlockWidth = minScrollBlockWidth;
+			if (scrollBlockWidth < MIN_SCROLL_BLOCK_WIDTH) {
+				scrollBlockWidth = MIN_SCROLL_BLOCK_WIDTH;
 			}
 
-			var scrollRangeWidthInPixels = scrollContainerWidth - scrollBlockWidth;
-			var toBeScrolledAgentsWidth = agentListTotalWidth + agentScheduleColumnWidth * 2 - scrollContainerWidth;
+			scrollRangeWidthInPixels = scrollContainerWidth - scrollBlockWidth;
+			toBeScrolledAgentsWidth = agentListTotalWidth + agentScheduleColumnWidth * 2 - scrollContainerWidth;
 
-			scrollIntervalsInPixelsRepresentingAPageOfAgents = scrollContainerWidth / vm.totalPageNum();
-			pixelsRatioOfHorizontalScrolling = toBeScrolledAgentsWidth / scrollRangeWidthInPixels;
+			scrollIntervalsInPixelsRepresentingAPageOfAgents =
+				(scrollContainerWidth - MIN_SCROLL_BLOCK_WIDTH) / vm.totalPageNum;
 		} else {
-			scrollIntervalsInPixelsRepresentingAPageOfAgents = pixelsRatioOfHorizontalScrolling = 0;
+			scrollIntervalsInPixelsRepresentingAPageOfAgents = 0;
 			scrollBlockWidth = scrollContainerWidth;
 		}
 
@@ -446,67 +547,15 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 		);
 	}
 
-	function loadMoreSchedules(paging, callback) {
-		if (vm.paging.skip + vm.paging.take < vm.paging.take * vm.totalPageNum()) {
-			vm.paging.skip += vm.paging.take;
-
-			showLoadingGif();
-			vm.isLoadingMoreAgentSchedules = true;
-
-			dataService.loadScheduleData(
-				vm.selectedDate().format('YYYY/MM/DD'),
-				paging || vm.paging,
-				vm.filter,
-				function(schedules) {
-					vm.readMoreTeamScheduleData(schedules, callback);
-
-					if (onMobile || oniPad) adjustScrollOnMobileAndiPad();
-
-					fetchDataSuccessCallback();
-				}
-			);
-		}
-	}
-
-	function initViewModel() {
-		vm = new Teleopti.MyTimeWeb.Schedule.NewTeamScheduleViewModel(
-			filterChangedCallback,
-			loadGroupAndTeams,
-			function() {
-				setDraggableScrollBlockOnDesktop();
-			}
-		);
-		applyBindings();
-	}
-
-	function applyBindings() {
-		ko.applyBindings(vm, $('#page')[0]);
-	}
-
-	function loadGroupAndTeams(callback) {
-		dataService.loadGroupAndTeams(function(teams) {
-			vm.readTeamsData(teams);
-
-			$('#teams-and-groups-selector')
-				.select2('data', { id: vm.selectedTeam(), text: vm.selectedTeamName() })
-				.trigger('change');
-
-			callback && callback();
-		});
-	}
-
-	function loadDefaultTeam(callback) {
-		dataService.loadDefaultTeam(function(defaultTeam) {
-			vm.readDefaultTeamData(defaultTeam);
-			callback && callback();
-		});
-	}
-
 	function filterChangedCallback(momentDate) {
 		showLoadingGif();
 		vm.isAgentScheduleLoaded(false);
 
-		var dateStr = getDateStr(momentDate);
+		var dateStr =
+			(momentDate && momentDate.format('YYYY/MM/DD')) ||
+			Teleopti.MyTimeWeb.Portal.ParseHash().dateHash ||
+			vm.selectedDate().format('YYYY/MM/DD');
+
 		dataService.loadScheduleData(dateStr, vm.paging, vm.filter, function(schedules) {
 			vm.readScheduleData(schedules, dateStr);
 
@@ -538,13 +587,25 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 		if (!subscribed) subscribeForChanges();
 	}
 
-	function getDateStr(momentDate) {
-		var dateStr =
-			(momentDate && momentDate.format('YYYY/MM/DD')) ||
-			Teleopti.MyTimeWeb.Portal.ParseHash().dateHash ||
-			vm.selectedDate().format('YYYY/MM/DD');
+	function subscribeForChanges() {
+		Teleopti.MyTimeWeb.Common.SubscribeToMessageBroker(
+			{
+				successCallback: Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule.ReloadScheduleListener,
+				domainType: 'IScheduleChangedInDefaultScenario',
+				page: currentPage
+			},
+			ajax
+		);
 
-		return dateStr;
+		Teleopti.MyTimeWeb.Common.SubscribeToMessageBroker(
+			{
+				successCallback: Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule.ReloadScheduleListener,
+				domainType: 'IPushMessageDialogue',
+				page: currentPage
+			},
+			ajax
+		);
+		subscribed = true;
 	}
 
 	return {
@@ -568,7 +629,7 @@ Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule = (function($) {
 			dataService = new Teleopti.MyTimeWeb.Schedule.MobileTeamSchedule.DataService(ajax);
 			completelyLoaded = completelyLoadedCallback;
 			registerUserInfoLoadedCallback(initialMomentDate);
-			setupFilterClickFn();
+			setupFilterClickBindingFns();
 			registerSwipeEventOnMobileAndiPad();
 			registerScrollEvent();
 			readyForInteractionCallback();

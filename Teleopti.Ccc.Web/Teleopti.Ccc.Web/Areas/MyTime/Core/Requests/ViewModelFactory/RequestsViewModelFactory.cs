@@ -163,19 +163,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		{
 			return _shiftTradeScheduleViewModelMapper.GetToleranceInfo(personToId);
 		}
-
+		
 		private DateOnlyPeriod? fixPeriod(DateOnlyPeriod periodInput)
 		{
-			var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
-			var agentToday = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timeZone));
-			var openPeriodStart = agentToday.AddDays(_loggedOnUser.CurrentUser().WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum);
-			var openPeriodEnd = agentToday.AddDays(_loggedOnUser.CurrentUser().WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Maximum);
+			var openPeriod = _shiftTradeScheduleViewModelMapper.GetShiftTradeOpenPeriod(_loggedOnUser.CurrentUser());
 			var realStart = periodInput.StartDate;
 			var realEnd = periodInput.EndDate;
 
-			if (periodInput.EndDate < openPeriodStart || periodInput.StartDate > openPeriodEnd) return null;
-			if (periodInput.Contains(openPeriodStart)) realStart = openPeriodStart;
-			if (periodInput.Contains(openPeriodEnd)) realEnd = openPeriodEnd;
+			if (periodInput.EndDate < openPeriod.StartDate || periodInput.StartDate > openPeriod.EndDate) return null;
+			if (periodInput.Contains(openPeriod.StartDate)) realStart = openPeriod.StartDate;
+			if (periodInput.Contains(openPeriod.EndDate)) realEnd = openPeriod.EndDate;
 
 			return new DateOnlyPeriod(realStart, realEnd);
 		}

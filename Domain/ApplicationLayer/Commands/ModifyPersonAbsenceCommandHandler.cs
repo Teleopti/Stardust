@@ -11,13 +11,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
 	public class ModifyPersonAbsenceCommandHandler : IHandleCommand<ModifyPersonAbsenceCommand>
 	{
-		private readonly IWriteSideRepositoryTypedId<IPersonAbsence, Guid> _personAbsenceRepository;
+		private readonly IPersonAbsenceRepository _personAbsenceRepository;
 		private readonly IUserTimeZone _timeZone;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 		private readonly ISaveSchedulePartService _saveSchedulePartService;
 
-		public ModifyPersonAbsenceCommandHandler(IWriteSideRepositoryTypedId<IPersonAbsence, Guid> personAbsenceRepository,
+		public ModifyPersonAbsenceCommandHandler(IPersonAbsenceRepository personAbsenceRepository,
 			IUserTimeZone timeZone,
 			IScheduleStorage scheduleStorage,
 			IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate,
@@ -33,9 +33,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public void Handle(ModifyPersonAbsenceCommand command)
 		{
 			
-			var personAbsence = (PersonAbsence)_personAbsenceRepository.LoadAggregate(command.PersonAbsenceId);
+			var personAbsence = (PersonAbsence)_personAbsenceRepository.Get(command.PersonAbsenceId);
 			if (personAbsence == null)
-				throw new InvalidOperationException(string.Format("Person Absence is not found. StartTime: {0} EndTime: {1} PersonId: {2} AbsenceId: {3}  ", command.StartTime, command.EndTime, command.PersonId, command.PersonAbsenceId));
+				throw new InvalidOperationException(
+					$"Person Absence is not found. StartTime: {command.StartTime} EndTime: {command.EndTime} PersonId: {command.PersonId} AbsenceId: {command.PersonAbsenceId}  ");
 
 			var person = personAbsence.Person;
 			var absenceTimePeriod = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(command.StartTime, _timeZone.TimeZone()),

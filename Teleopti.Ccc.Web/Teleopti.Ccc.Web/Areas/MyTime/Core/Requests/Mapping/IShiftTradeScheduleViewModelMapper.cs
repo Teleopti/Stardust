@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
 
@@ -11,5 +11,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		ShiftTradeScheduleViewModel MapForBulletin(ShiftTradeScheduleViewModelData data);
 		ShiftTradeMultiSchedulesViewModel GetMeAndPersonToSchedules(DateOnlyPeriod period, Guid personToId);
 		ShiftTradeToleranceInfoViewModel GetToleranceInfo(Guid personToId);
+		DateOnlyPeriod GetShiftTradeOpenPeriod(IPerson person);
 	}
 }

@@ -44,8 +44,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 
 			_workShiftCalculationResultHolder1 = new WorkShiftCalculationResult();
 			_workShiftCalculationResultHolder2 = new WorkShiftCalculationResult();
-			_shiftProjectionCache1 = new ShiftProjectionCache(new WorkShiftTest.workShiftInTest(null),new PersonalShiftMeetingTimeChecker(), new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
-			_shiftProjectionCache2 = new ShiftProjectionCache(new WorkShiftTest.workShiftInTest(null), new PersonalShiftMeetingTimeChecker(), new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
+			_shiftProjectionCache1 = new ShiftProjectionCache(new WorkShiftTest.workShiftInTest(null), new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
+			_shiftProjectionCache2 = new ShiftProjectionCache(new WorkShiftTest.workShiftInTest(null), new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
 
 			_workShiftCalculationResultHolder1.ShiftProjection = _shiftProjectionCache1;
 			_workShiftCalculationResultHolder2.ShiftProjection = _shiftProjectionCache2;

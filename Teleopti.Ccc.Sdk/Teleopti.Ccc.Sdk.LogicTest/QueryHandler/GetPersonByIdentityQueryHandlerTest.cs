@@ -30,7 +30,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			personRepository.Add(person);
 			fakeTenantLogonDataManager.SetLogon(person.Id.Value,"","my@identi.ty");
 
-			var target = new GetPersonByIdentityQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory(null), fakeTenantLogonDataManager);
+			var target = new GetPersonByIdentityQueryHandler(
+				new PersonCredentialsAppender(assembler, new TenantPeopleLoader(fakeTenantLogonDataManager)),
+				personRepository, new FakeCurrentUnitOfWorkFactory(null), fakeTenantLogonDataManager);
 
 			var result = target.Handle(new GetPersonByIdentityQueryDto
 			{
@@ -39,6 +41,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 
 			result.Count.Should().Be.EqualTo(1);
 			result.First().Name.Should().Be.EqualTo(person.Name.ToString());
+			result.First().Identity.Should().Be.EqualTo("my@identi.ty");
 		}
 	}
 }

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 			return shiftList.Select(
 					shiftProjectionCache =>
-							new {shiftProjectionCache, currentPeriod = shiftProjectionCache.MainShiftProjection.Period()})
+							new {shiftProjectionCache, currentPeriod = shiftProjectionCache.MainShiftProjection().Period()})
 				.Where(t => t.currentPeriod.HasValue && t.currentPeriod.Value.TimePeriod(TimeZoneInfo.Utc).Contains(period.Value))
 				.Select(t => new {t, movedShift = t.shiftProjectionCache.TheMainShift.MoveTo(t.shiftProjectionCache.SchedulingDate, dateOnly)})
 				.Where(t => _personalShiftMeetingTimeChecker.CheckTimeMeeting(t.movedShift, meetings) && (personalAssignment == null || _personalShiftMeetingTimeChecker.CheckTimePersonAssignment(t.movedShift, personalAssignment)))

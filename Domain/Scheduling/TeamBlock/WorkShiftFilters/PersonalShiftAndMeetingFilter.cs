@@ -13,6 +13,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 	public class PersonalShiftAndMeetingFilter : IPersonalShiftAndMeetingFilter
 	{
+		private readonly IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
+
+		public PersonalShiftAndMeetingFilter(IPersonalShiftMeetingTimeChecker personalShiftMeetingTimeChecker)
+		{
+			_personalShiftMeetingTimeChecker = personalShiftMeetingTimeChecker;
+		}
+		
 		public IList<ShiftProjectionCache> Filter(IList<ShiftProjectionCache> shiftList, IScheduleDay schedulePart)
 		{
 			if (shiftList.Count == 0)
@@ -24,11 +31,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			var meetings = schedulePart.PersonMeetingCollection();
 			var personalAssignment = schedulePart.PersonAssignment();
 			IList<ShiftProjectionCache> workShiftsWithinPeriod =
-				shiftList.Select(s => new {s, Period = s.MainShiftProjection.Period()})
+				shiftList.Select(s => new {s, Period = s.MainShiftProjection().Period()})
 					.Where(
 						s =>
 							s.Period.HasValue && s.Period.Value.Contains(period.Value) &&
-							s.s.PersonalShiftsAndMeetingsAreInWorkTime(meetings, personalAssignment))
+							personalShiftsAndMeetingsAreInWorkTime(s.s.TheMainShift, meetings, personalAssignment))
 					.Select(s => s.s)
 					.ToList();
 
@@ -64,6 +71,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 				}
 			}
 			return period;
+		}
+		
+		private bool personalShiftsAndMeetingsAreInWorkTime(IEditableShift mainShift, IPersonMeeting[] meetings, IPersonAssignment personAssignment)
+		{
+			if (meetings.Length == 0 && personAssignment == null)
+			{
+				return true;
+			}
+
+			if (meetings.Length > 0 && !_personalShiftMeetingTimeChecker.CheckTimeMeeting(mainShift, meetings))
+				return false;
+
+			if (personAssignment != null && !_personalShiftMeetingTimeChecker.CheckTimePersonAssignment(mainShift, personAssignment))
+				return false;
+
+			return true;
 		}
 	}
 }

@@ -8,7 +8,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Data;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 {
@@ -18,26 +17,25 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 		private readonly IPersonNameProvider _personNameProvider;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IScheduleProvider _scheduleProvider;
+		private readonly IProjectionProvider _projectionProvider;
 
 		public AgentScheduleViewModelMapper(ILayerViewModelMapper layerMapper,
 			IPersonNameProvider personNameProvider,
 			IPermissionProvider permissionProvider,
-			IScheduleProvider scheduleProvider)
+			IScheduleProvider scheduleProvider,
+			IProjectionProvider projectionProvider)
 		{
 			_layerMapper = layerMapper;
 			_personNameProvider = personNameProvider;
 			_permissionProvider = permissionProvider;
 			_scheduleProvider = scheduleProvider;
+			_projectionProvider = projectionProvider;
 		}
 
 		public AgentInTeamScheduleViewModel Map(PersonSchedule personSchedule)
 		{
 			if (personSchedule == null)
 				return null;
-			var canSeeUnpublishedSchedule =
-				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
-			var isSchedulePublished = _permissionProvider.IsPersonSchedulePublished(personSchedule.Date,
-				personSchedule.Person, ScheduleVisibleReasons.Any);
 
 			var ret = new AgentInTeamScheduleViewModel
 			{
@@ -47,21 +45,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 				Name = _personNameProvider.BuildNameFromSetting(personSchedule.Schedule.FirstName, personSchedule.Schedule.LastName),
 			};
 
-
 			if (personSchedule.Schedule == null)
 			{
 				ret.IsNotScheduled = true;
 				return ret;
 			}
 
+			var canSeeUnpublishedSchedule =
+				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
+			var isSchedulePublished = _permissionProvider.IsPersonSchedulePublished(personSchedule.Date,
+				personSchedule.Person, ScheduleVisibleReasons.Any);
+
 			var teamScheduleReadModel = personSchedule.Schedule.Model != null
 				? JsonConvert.DeserializeObject<Model>(personSchedule.Schedule.Model)
 				: null;
 
-
 			if (teamScheduleReadModel != null && (canSeeUnpublishedSchedule || isSchedulePublished))
 			{
-				if (teamScheduleReadModel.Shift != null && (teamScheduleReadModel.Shift.Projection.Count > 0))
+				if (teamScheduleReadModel.Shift != null && teamScheduleReadModel.Shift.Projection.Count > 0)
 				{
 					ret.IsFullDayAbsence = teamScheduleReadModel.Shift.IsFullDayAbsence;
 					if (personSchedule.Schedule.Start != null)
@@ -69,27 +70,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 					ret.MinStart = personSchedule.Schedule.MinStart;
 					ret.ScheduleLayers = _layerMapper.Map(teamScheduleReadModel.Shift.Projection);
 				}
-				ret.IsDayOff = teamScheduleReadModel.DayOff != null;
-				ret.DayOffName = ret.IsDayOff ? teamScheduleReadModel.DayOff.Title : "";
-				if (teamScheduleReadModel.DayOff != null && teamScheduleReadModel.Shift != null && !teamScheduleReadModel.Shift.IsFullDayAbsence)
-				{
-					var dayOffProjection = new List<SimpleLayer>();
-					var sl = new SimpleLayer
-					{
-						Start = teamScheduleReadModel.DayOff.Start,
-						End = teamScheduleReadModel.DayOff.End,
-						Description = teamScheduleReadModel.DayOff.Title,
-						Minutes = (int)(teamScheduleReadModel.DayOff.End - teamScheduleReadModel.DayOff.Start).TotalMinutes
-					};
 
-					dayOffProjection.Add(sl);
+				mapDayOff(personSchedule, ret, teamScheduleReadModel);
 
-					if (personSchedule.Schedule.Start != null)
-						ret.StartTimeUtc = personSchedule.Schedule.Start.Value;
-					ret.MinStart = personSchedule.Schedule.MinStart;
-					ret.ScheduleLayers = _layerMapper.Map(dayOffProjection);
-					ret.ShiftCategory = getDayOffShiftCategoryDescription(personSchedule);
-				}
 				if (!teamScheduleReadModel.Shift.Projection.Any() && !ret.IsDayOff)
 				{
 					ret.IsNotScheduled = true;
@@ -98,11 +81,67 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 			return ret;
 		}
 
-		private ShiftCategoryViewModel getDayOffShiftCategoryDescription(PersonSchedule personSchedule)
+		private void mapDayOff(PersonSchedule personSchedule, AgentInTeamScheduleViewModel ret, Model teamScheduleReadModel)
 		{
-			var scheduleDay = _scheduleProvider.GetScheduleForPersons(personSchedule.Date, new[] { personSchedule.Person }).SingleOrDefault();
-			if (scheduleDay == null) return null;
+			ret.IsDayOff = teamScheduleReadModel.DayOff != null;
+			ret.DayOffName = ret.IsDayOff ? teamScheduleReadModel.DayOff.Title : "";
+			if (teamScheduleReadModel.DayOff != null && teamScheduleReadModel.Shift != null &&
+				!teamScheduleReadModel.Shift.IsFullDayAbsence)
+			{
+				var dayOffProjection = new List<SimpleLayer>();
 
+				var scheduleDay = _scheduleProvider.GetScheduleForPersons(personSchedule.Date, new[] {personSchedule.Person})
+					.SingleOrDefault();
+				if (scheduleDay != null)
+				{
+					var projection = _projectionProvider.Projection(scheduleDay);
+					if (projection.HasLayers)
+					{
+						foreach (var layer in projection)
+						{
+							var isPayloadAbsence = layer.Payload is IAbsence;
+							var isAbsenceConfidential = isPayloadAbsence && ((IAbsence) layer.Payload).Confidential;
+							var description = isPayloadAbsence
+								? ((IAbsence) layer.Payload).Description
+								: layer.Payload.ConfidentialDescription(personSchedule.Person);
+							var sl = new SimpleLayer
+							{
+								Description = description.Name,
+								Color = isPayloadAbsence
+									? ((IAbsence) layer.Payload).DisplayColor.ToCSV()
+									: layer.Payload.ConfidentialDisplayColor(scheduleDay.Person).ToCSV(),
+								Start = layer.Period.StartDateTime,
+								End = layer.Period.EndDateTime,
+								IsAbsenceConfidential = isAbsenceConfidential
+							};
+
+							dayOffProjection.Add(sl);
+						}
+					}
+					else
+					{
+						var sl = new SimpleLayer
+						{
+							Start = teamScheduleReadModel.DayOff.Start,
+							End = teamScheduleReadModel.DayOff.End,
+							Description = teamScheduleReadModel.DayOff.Title,
+							Minutes = (int) (teamScheduleReadModel.DayOff.End - teamScheduleReadModel.DayOff.Start).TotalMinutes
+						};
+
+						dayOffProjection.Add(sl);
+					}
+
+					if (personSchedule.Schedule.Start != null)
+						ret.StartTimeUtc = personSchedule.Schedule.Start.Value;
+					ret.MinStart = personSchedule.Schedule.MinStart;
+					ret.ScheduleLayers = _layerMapper.Map(dayOffProjection);
+					ret.ShiftCategory = getDayOffShiftCategoryDescription(scheduleDay);
+				}
+			}
+		}
+
+		private ShiftCategoryViewModel getDayOffShiftCategoryDescription(IScheduleDay scheduleDay)
+		{
 			var dayOffInfo = scheduleDay.PersonAssignment().DayOff();
 			return new ShiftCategoryViewModel
 			{

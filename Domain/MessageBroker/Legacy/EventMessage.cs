@@ -49,15 +49,11 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Legacy
         public string ChangedBy { get; set; }
         public DateTime ChangedDateTime { get; set; }
 
-		public Type DomainObjectTypeCache
-		{
-			get { return _domainObjectTypeCache ?? (_domainObjectTypeCache = Type.GetType(DomainObjectType)); }
-		}
+		public Type DomainObjectTypeCache => _domainObjectTypeCache ?? (_domainObjectTypeCache = Type.GetType(DomainObjectType));
 
-        public int CompareTo(object obj)
+		public int CompareTo(object obj)
         {
-            IEventMessage eventMessage = obj as IEventMessage;
-            if(eventMessage != null)
+			if(obj is IEventMessage eventMessage)
             {
                 if (ChangedDateTime < eventMessage.ChangedDateTime)
                 {

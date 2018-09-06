@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 	[DomainTest]
 	[TestFixture(true)]
 	[TestFixture(false)]
-	
+
 	public class StaffingViewModelCreatorTest : IIsolateSystem, IConfigureToggleManager
 	{
 		private readonly bool _useErlangA;
@@ -53,11 +53,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			_useErlangA = useErlangA;
 		}
 
-		public StaffingViewModelCreatorTestHelper ViewModelCreatorTestHelper
-		{
-			get
-			{
-				if(_staffingViewModelCreatorTestHelper == null)
+		public StaffingViewModelCreatorTestHelper ViewModelCreatorTestHelper {
+			get {
+				if (_staffingViewModelCreatorTestHelper == null)
 					_staffingViewModelCreatorTestHelper = new StaffingViewModelCreatorTestHelper(StaffingCalculatorServiceFacade);
 
 				return _staffingViewModelCreatorTestHelper;
@@ -359,7 +357,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var vm = Target.Load_old(new[] { skill.Id.Value });
 
-//			vm.DataSeries.Should().Be.EqualTo(null);
+			//			vm.DataSeries.Should().Be.EqualTo(null);
 
 			vm.DataSeries.ForecastedStaffing.Should().Be.Empty();
 			vm.DataSeries.UpdatedForecastedStaffing.Should().Be.Empty();
@@ -779,14 +777,14 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var expectedUpdatedStaffing =
 				Math.Round(skillDayWithoutReforecast.SkillStaffPeriodCollection.Last().FStaff +
 						   skillDayWithReforecast1.SkillStaffPeriodCollection.Last().FStaff * deviationWithReforecast1 +
-						   skillDayWithReforecast2.SkillStaffPeriodCollection.Last().FStaff * deviationWithReforecast2, 3);
+						   skillDayWithReforecast2.SkillStaffPeriodCollection.Last().FStaff * deviationWithReforecast2, 2);
 
 			var vm = Target.Load_old(new[] { skillWithReforecast1.Id.Value, skillWithReforecast2.Id.Value, skillWithoutReforecast.Id.Value });
 
 			vm.DataSeries.UpdatedForecastedStaffing.Length.Should().Be.EqualTo(5);
 			vm.DataSeries.UpdatedForecastedStaffing.First().Should().Be.EqualTo(null);
-			Math.Round((double)vm.DataSeries.UpdatedForecastedStaffing.Last(), 3).Should().Be.EqualTo(expectedUpdatedStaffing);
-			expectedUpdatedStaffing.Should().Be.EqualTo(Math.Round((double)vm.DataSeries.ForecastedStaffing.Last() * finalDeviationFactor, 3));
+			Math.Round((double)vm.DataSeries.UpdatedForecastedStaffing.Last(), 2).Should().Be.EqualTo(expectedUpdatedStaffing);
+			expectedUpdatedStaffing.Should().Be.EqualTo(Math.Round((double)vm.DataSeries.ForecastedStaffing.Last() * finalDeviationFactor, 2));
 		}
 
 		[Test]
@@ -1336,7 +1334,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
 
 			var scenario = SkillSetupHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository);
-	
+
 			var skillChild1 = multiSkill.ChildSkills.First();
 			var skillChild2 = multiSkill.ChildSkills.Last();
 
@@ -1347,7 +1345,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillDay = ViewModelCreatorTestHelper.CreateSkillDay(multiSkill, scenario, userNow, new TimePeriod(8, 0, 8, 15), false, ServiceAgreement.DefaultValues());
 			var skillDayChild1 = ViewModelCreatorTestHelper.CreateSkillDay(skillChild1, scenario, userNow, new TimePeriod(8, 00, 8, 15), false, ServiceAgreement.DefaultValues());
 			var skillDayChild2 = ViewModelCreatorTestHelper.CreateSkillDay(skillChild2, scenario, userNow, new TimePeriod(8, 00, 8, 15), false, ServiceAgreement.DefaultValues());
-			
+
 			//Set CalculatedStaffCollection
 			ISkillStaffPeriod skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(
 				new DateTimePeriod(userNow, userNow.AddMinutes(minutesPerInterval)),
@@ -1357,10 +1355,10 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var newSkillStaffPeriods = new NewSkillStaffPeriodValues(new List<ISkillStaffPeriod> { skillStaffPeriod });
 			skillDayChild1.SetCalculatedStaffCollection(newSkillStaffPeriods);
 			skillDayChild2.SetCalculatedStaffCollection(newSkillStaffPeriods);
-			
+
 			//Add to SkillDayRepository
 			SkillDayRepository.Has(skillDay, skillDayChild1, skillDayChild2);
-			
+
 			//Create SkillResources 
 			var skillCombinationResources = new List<SkillCombinationResource>();
 
@@ -1401,7 +1399,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			TimeZone.IsNewYork();
 			var userNow = new DateTime(2016, 8, 26, 22, 0, 0, DateTimeKind.Utc);
 			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
-			
+
 			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
 
 			var act = ActivityRepository.Has("act");
@@ -1421,8 +1419,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.ForecastedStaffing.First().Should().Be.GreaterThan(0d);
 			vm.DataSeries.ForecastedStaffing.Last().Should().Be.GreaterThan(0d);
 			vm.StaffingHasData.Should().Be.EqualTo(true);
-		} 
-		
+		}
+
 		private ISkill createChatSkill(int intervalLength, string skillName, TimePeriod openHours, bool isClosedOnWeekends, int midnigthBreakOffset)
 		{
 			var skill =

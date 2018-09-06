@@ -27,10 +27,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public void Handle(EditScheduleNoteCommand command)
 		{
 			var person = _personForId.Load(command.PersonId);
-			var scheduleDay = _scheduleDayProvider.GetScheduleDay(command.Date, person,
-				new ScheduleDictionaryLoadOptions(true, true));
 			var scheduleDic = _scheduleDayProvider.GetScheduleDictionary(command.Date, person,
 				new ScheduleDictionaryLoadOptions(true, true));
+			var scheduleDay = scheduleDic[person].ScheduledDay(command.Date);
 
 			updateInternalNote(command.InternalNote, scheduleDay);
 			updatePublicNote(command.PublicNote, scheduleDay);

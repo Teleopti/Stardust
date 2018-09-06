@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -25,14 +24,13 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 	public class ReadModelValidatorTest : IIsolateSystem
 	{
 		public FakePersonRepository PersonRepository;
-		public FakePersonAssignmentWriteSideRepository PersonAssignmentRepo;
-		public FakeCurrentScenario_DoNotUse CurrentScenario;
+		public FakeScenarioRepository CurrentScenario;
 		public Domain.ApplicationLayer.ReadModelValidator.ReadModelValidator Target;
 		public IScheduleProjectionReadOnlyPersister Persister;
-		public IPersonScheduleDayReadModelFinder PersonScheduleDayReadModelFinder;
+		public FakePersonScheduleDayReadModelFinder PersonScheduleDayReadModelFinder;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeScheduleDayReadModelRepository ScheduleDayReadModelRepository;
-		public FakeScheduleStorage_DoNotUse ScheduleStorage;
+		public IScheduleStorage ScheduleStorage;
 		public ReadModelScheduleDayValidator ReadModelScheduleDayValidator;
 		public FakeReadModelValidationResultPersistor ReadModelValidationResultPersistor;
 
@@ -43,11 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			isolate.UseTestDouble<ReadModelScheduleProjectionReadOnlyValidator>()
 				.For<IReadModelScheduleProjectionReadOnlyValidator>();
 			isolate.UseTestDouble<ReadModelScheduleDayValidator>().For<IReadModelScheduleDayValidator>();
-
-			isolate.UseTestDouble<FakePersonAssignmentWriteSideRepository>()
-				.For<IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>>();
-			isolate.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
-			isolate.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
+			
 			isolate.UseTestDouble<FakePersonScheduleDayReadModelFinder>().For<IPersonScheduleDayReadModelFinder>();
 			isolate.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
 			isolate.UseTestDouble<FakeScheduleDayReadModelRepository>().For<IScheduleDayReadModelRepository>();
@@ -57,12 +51,12 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 		[Test]
 		public void ShouldFindErrorInScheduleProjectionReadOnlyWithEmptyProjectionLayer()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			var person = PersonFactory.CreatePersonWithGuid("Peter", "peter");
 			PersonRepository.Has(person);
 			var dateTimePeriod = new DateTimePeriod(2016, 1, 1, 8, 2016, 1, 1,  17);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, dateTimePeriod);
-			ScheduleStorage.Add(personAssignment);
+			PersonAssignmentRepository.Add(personAssignment);
 						
 			Target.Validate(ValidateReadModelType.ScheduleProjectionReadOnly,new DateTime(2016, 1, 1), new DateTime(2016, 1, 1));
 			var result = ReadModelValidationResultPersistor.LoadAllInvalidScheduleProjectionReadOnly().ToList();
@@ -75,12 +69,12 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 		[Test]
 		public void ShouldFindErrorInScheduleProjectionReadOnlyWithWrongProjectionLayer()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			var person = PersonFactory.CreatePersonWithGuid("Peter", "peter");
 			PersonRepository.Has(person);
 			var dateTimePeriod = new DateTimePeriod(2016, 1, 1, 8, 2016, 1, 1,  17);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, dateTimePeriod);
-			ScheduleStorage.Add(personAssignment);
+			PersonAssignmentRepository.Add(personAssignment);
 			personAssignment.ShiftLayers.Single().Payload.WithId();
 			Persister.AddActivity(
 				new ScheduleProjectionReadOnlyModel
@@ -107,14 +101,14 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 		[Test]
 		public void ShouldFindNoRecordWhenProjectionLayerMatchWithScheduleData()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			var person = PersonFactory.CreatePersonWithGuid("Peter", "peter");
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 			PersonRepository.Has(person);
 			var dateTimePeriod = new DateTimePeriod(new DateTime(2016, 01, 01, 8, 0, 0, DateTimeKind.Utc),
 				new DateTime(2016, 01, 01, 17, 0, 0, DateTimeKind.Utc));
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, dateTimePeriod);
-			ScheduleStorage.Add(personAssignment);
+			PersonAssignmentRepository.Add(personAssignment);
 			personAssignment.ShiftLayers.Single().Payload.WithId();
 			Persister.AddActivity(
 				new ScheduleProjectionReadOnlyModel
@@ -138,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 		[Test]
 		public void ShouldFindErrorInPersonScheduleDayReadModel()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			var site = SiteFactory.CreateSimpleSite("s");
 			site.WithId();
 			var team = TeamFactory.CreateTeamWithId("t");
@@ -152,7 +146,8 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			PersonRepository.Has(person);
 			var dateTimePeriod = new DateTimePeriod(2016, 1, 1, 8, 2016, 1, 1, 17);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, dateTimePeriod);
-			ScheduleStorage.Add(personAssignment);
+			PersonAssignmentRepository.Add(personAssignment);
+			PersonScheduleDayReadModelFinder.Exclude(personAssignment);
 						
 			Target.Validate(ValidateReadModelType.PersonScheduleDay, new DateTime(2016, 1, 1), new DateTime(2016, 1, 1));
 			var result = ReadModelValidationResultPersistor.LoadAllInvalidPersonScheduleDay().ToList();
@@ -165,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 		[Test]
 		public void ShouldFindNoErrorInNormalPersonScheduleDayReadModel()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			var site = SiteFactory.CreateSimpleSite("s");
 			site.WithId();
 			var team = TeamFactory.CreateTeamWithId("t");
@@ -179,7 +174,6 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			PersonRepository.Has(person);
 			var dateTimePeriod = new DateTimePeriod(2016, 1, 1, 8, 2016, 1, 1, 17);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, dateTimePeriod);
-			ScheduleStorage.Add(personAssignment);
 			PersonAssignmentRepository.Add(personAssignment);
 				
 			Target.Validate(ValidateReadModelType.PersonScheduleDay,new DateTime(2016, 1, 1), new DateTime(2016, 1, 1));
@@ -190,7 +184,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 		[Test]
 		public void ShouldFindNoErrorWithNonScheduledDayAndEmptyPersonScheduleDayReadModel()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			var site = SiteFactory.CreateSimpleSite("s");
 			site.WithId();
 			var team = TeamFactory.CreateTeamWithId("t");
@@ -205,7 +199,6 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			PersonRepository.Has(person);
 			var dateTimePeriod = new DateTimePeriod(2016, 1, 1, 8, 2016, 1, 1, 17);
 			var personAssignment = PersonAssignmentFactory.CreateEmptyAssignment(person, scenario, dateTimePeriod);
-			ScheduleStorage.Add(personAssignment);
 			PersonAssignmentRepository.Add(personAssignment);
 				
 			Target.Validate(ValidateReadModelType.PersonScheduleDay,new DateTime(2016, 1, 1), new DateTime(2016, 1, 1));
@@ -215,7 +208,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 		[Test]
 		public void ShouldFindNoErrorWithNonScheduledDayAndNoPersonScheduleDayReadModelRecord()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			var site = SiteFactory.CreateSimpleSite("s");
 			site.WithId();
 			var team = TeamFactory.CreateTeamWithId("t");
@@ -230,7 +223,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			PersonRepository.Has(person);
 			var dateTimePeriod = new DateTimePeriod(2016, 1, 1, 8, 2016, 1, 1, 17);
 			var personAssignment = PersonAssignmentFactory.CreateEmptyAssignment(person, scenario, dateTimePeriod);
-			ScheduleStorage.Add(personAssignment);
+			PersonAssignmentRepository.Add(personAssignment);
 				
 			Target.Validate(ValidateReadModelType.PersonScheduleDay,new DateTime(2016, 1, 1), new DateTime(2016, 1, 1));
 			var result = ReadModelValidationResultPersistor.LoadAllInvalidPersonScheduleDay().ToList();
@@ -240,7 +233,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 		[Test]
 		public void ShouldFindErrorInScheduleDayReadModel()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			var site = SiteFactory.CreateSimpleSite("s");
 			site.WithId();
 			var team = TeamFactory.CreateTeamWithId("t");
@@ -254,9 +247,8 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			PersonRepository.Has(person);
 			var dateTimePeriod = new DateTimePeriod(2016,1,1,8,2016,1,1,17);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,scenario, dateTimePeriod);
-			ScheduleStorage.Add(personAssignment);
-
-		
+			PersonAssignmentRepository.Add(personAssignment);
+			
 			Target.Validate(ValidateReadModelType.ScheduleDay,new DateTime(2016,1,1),new DateTime(2016,1,1));
 			var result = ReadModelValidationResultPersistor.LoadAllInvalidScheduleDay().ToList();
 			result.Count.Should().Be.EqualTo(1);
@@ -268,7 +260,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 		[Test]
 		public void ShouldFindNoErrorInNormalScheduleDayReadModel()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			var site = SiteFactory.CreateSimpleSite("s");
 			site.WithId();
 			var team = TeamFactory.CreateTeamWithId("t");
@@ -282,7 +274,6 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			PersonRepository.Has(person);
 			var dateTimePeriod = new DateTimePeriod(2016,1,1,8,2016,1,1,17);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,scenario, dateTimePeriod);
-			ScheduleStorage.Add(personAssignment);
 			PersonAssignmentRepository.Add(personAssignment);
 
 			ScheduleDayReadModelRepository.SaveReadModel(new ScheduleDayReadModel
@@ -304,7 +295,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 		[Test]
 		public void ShouldFindNoErrorForNonScheduledDayAndEmptyScheduleDayReadModel()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			var site = SiteFactory.CreateSimpleSite("s");
 			site.WithId();
 			var team = TeamFactory.CreateTeamWithId("t");
@@ -318,7 +309,6 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			PersonRepository.Has(person);
 			var dateTimePeriod = new DateTimePeriod(2016,1,1,8,2016,1,1,17);
 			var personAssignment = PersonAssignmentFactory.CreateEmptyAssignment(person, scenario, dateTimePeriod);
-			ScheduleStorage.Add(personAssignment);
 			PersonAssignmentRepository.Add(personAssignment);
 
 			ScheduleDayReadModelRepository.SaveReadModel(new ScheduleDayReadModel
@@ -337,7 +327,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 		[Test]
 		public void ShouldFindNoErrorForNonScheduledDayAndNoRecordInScheduleDayReadModel()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			var site = SiteFactory.CreateSimpleSite("s");
 			site.WithId();
 			var team = TeamFactory.CreateTeamWithId("t");
@@ -351,7 +341,6 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			PersonRepository.Has(person);
 			var dateTimePeriod = new DateTimePeriod(2016, 1, 1, 8, 2016, 1, 1, 17);
 			var personAssignment = PersonAssignmentFactory.CreateEmptyAssignment(person, scenario, dateTimePeriod);
-			ScheduleStorage.Add(personAssignment);
 			PersonAssignmentRepository.Add(personAssignment);
 
 			Target.Validate(ValidateReadModelType.ScheduleDay,new DateTime(2016,1,1),new DateTime(2016,1,1));
@@ -363,7 +352,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 		[Test]
 		public void ShouldNotFindErrorWhenThereIsNoPersonPeriodAndNoReadModelSaved()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			var site = SiteFactory.CreateSimpleSite("s");
 			site.WithId();
 			var team = TeamFactory.CreateTeamWithId("t");
@@ -374,7 +363,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			PersonRepository.Has(person);
 			var dateTimePeriod = new DateTimePeriod(2016,1,1,8,2016,1,1,17);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,scenario, dateTimePeriod);
-			ScheduleStorage.Add(personAssignment);
+			PersonAssignmentRepository.Add(personAssignment);
 			
 			Target.Validate(ValidateReadModelType.ScheduleDay,new DateTime(2016,1,1),new DateTime(2016,1,1));
 			var result = ReadModelValidationResultPersistor.LoadAllInvalidScheduleDay().ToList();
@@ -384,7 +373,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 		[Test]
 		public void ShouldFindErrorWhenThereIsNoPersonPeriodButHasReadModelSaved()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			var site = SiteFactory.CreateSimpleSite("s");
 			site.WithId();
 			var team = TeamFactory.CreateTeamWithId("t");
@@ -395,7 +384,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			PersonRepository.Has(person);
 			var dateTimePeriod = new DateTimePeriod(2016,1,1,8,2016,1,1,17);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,scenario, dateTimePeriod);
-			ScheduleStorage.Add(personAssignment);
+			PersonAssignmentRepository.Add(personAssignment);
 
 			ScheduleDayReadModelRepository.SaveReadModel(new ScheduleDayReadModel
 			{
@@ -417,7 +406,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 		[Test]
 		public void ShouldBuildScheduleDayReadModelRegardlessOfUserTimezone()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			var site = SiteFactory.CreateSimpleSite("s");
 			site.WithId();
 			var team = TeamFactory.CreateTeamWithId("t");
@@ -433,7 +422,6 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			PersonRepository.Has(person);
 			var dateTimePeriod = new DateTimePeriod(2015, 12, 31, 22, 2016, 1, 1, 4);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, dateTimePeriod);
-			ScheduleStorage.Add(personAssignment);
 			PersonAssignmentRepository.Add(personAssignment);
 
 			var expecteReadModel = new ScheduleDayReadModel
@@ -458,7 +446,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 		[Test]
 		public void ValidateAndFixReadModelShouldCorrectlyFixReadModel()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			var site = SiteFactory.CreateSimpleSite("s");
 			site.WithId();
 			var team = TeamFactory.CreateTeamWithId("t");
@@ -472,10 +460,8 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			PersonRepository.Has(person);
 			var dateTimePeriod = new DateTimePeriod(2016,1,1,8,2016,1,1,17);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,scenario, dateTimePeriod);
-			ScheduleStorage.Add(personAssignment);
 			PersonAssignmentRepository.Add(personAssignment);
 			
-
 			Target.Validate(ValidateReadModelType.ScheduleDay,new DateTime(2016,1,1),new DateTime(2016,1,1),ReadModelValidationMode.ValidateAndFix);
 		
 			var checkResult = ReadModelValidationResultPersistor.LoadAllInvalidScheduleDay().ToList();
@@ -488,7 +474,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 		[Test]
 		public void ReinitilizeReadModelShouldWorkWithoutWritingToCheckResult()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			var site = SiteFactory.CreateSimpleSite("s");
 			site.WithId();
 			var team = TeamFactory.CreateTeamWithId("t");
@@ -502,7 +488,6 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			PersonRepository.Has(person);
 			var dateTimePeriod = new DateTimePeriod(2016,1,1,8,2016,1,1,17);
 			var personAssignment = PersonAssignmentFactory.CreateEmptyAssignment(person,scenario, dateTimePeriod);
-			ScheduleStorage.Add(personAssignment);
 			PersonAssignmentRepository.Add(personAssignment);
 
 			Target.Validate(ValidateReadModelType.ScheduleDay,new DateTime(2016,1,1),new DateTime(2016,1,1), ReadModelValidationMode.Reinitialize);
@@ -516,7 +501,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 		[Test]
 		public void ShouldThrowWhenReinitializeReadModelWithResidualReadmodels()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			var site = SiteFactory.CreateSimpleSite("s");
 			site.WithId();
 			var team = TeamFactory.CreateTeamWithId("t");
@@ -527,7 +512,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			PersonRepository.Has(person);
 			var dateTimePeriod = new DateTimePeriod(2016,1,1,8,2016,1,1,17);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,scenario, dateTimePeriod);
-			ScheduleStorage.Add(personAssignment);
+			PersonAssignmentRepository.Add(personAssignment);
 
 			ScheduleDayReadModelRepository.SaveReadModel(new ScheduleDayReadModel
 			{

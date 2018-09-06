@@ -25,11 +25,16 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
 					new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy());
 
-			var person = PersonFactory.CreatePerson();
+			var person = PersonFactory.CreatePerson().WithId();
 			person.SetEmploymentNumber("1234");
 			personRepository.Add(person);
 
-			var target = new GetPersonByEmploymentNumberQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory(null));
+			var dataManager = new FakeTenantLogonDataManager();
+			dataManager.SetLogon(person.Id.Value,"aaa","");
+
+			var target = new GetPersonByEmploymentNumberQueryHandler(
+				new PersonCredentialsAppender(assembler, new TenantPeopleLoader(dataManager)), personRepository,
+				new FakeCurrentUnitOfWorkFactory(null));
 
 			var result = target.Handle(new GetPersonByEmploymentNumberQueryDto
 			{
@@ -38,6 +43,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 
 			result.Count.Should().Be.EqualTo(1);
 			result.First().Name.Should().Be.EqualTo(person.Name.ToString());
+			result.First().ApplicationLogOnName.Should().Be.EqualTo("aaa");
 		}
 	}
 }

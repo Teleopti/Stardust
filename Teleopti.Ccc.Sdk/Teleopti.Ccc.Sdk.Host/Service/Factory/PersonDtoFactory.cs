@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
-using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
@@ -15,14 +14,13 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
 	{
 		private readonly IPersonRepository _personRepository;
 		private readonly IAssembler<IPerson, PersonDto> _personAssembler;
-		private readonly ITenantPeopleLoader _tenantPeopleLoader;
+		private readonly PersonCredentialsAppender _credentialsAppender;
 
-		public PersonDtoFactory(IPersonRepository personRepository, IAssembler<IPerson, PersonDto> personAssembler,
-			ITenantPeopleLoader tenantPeopleLoader)
+		public PersonDtoFactory(IPersonRepository personRepository, IAssembler<IPerson, PersonDto> personAssembler, PersonCredentialsAppender credentialsAppender)
 		{
 			_personRepository = personRepository;
 			_personAssembler = personAssembler;
-			_tenantPeopleLoader = tenantPeopleLoader;
+			_credentialsAppender = credentialsAppender;
 		}
 
 		public ICollection<PersonDto> GetPersons(bool excludeLoggedOnPerson)
@@ -35,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
 				memberList.Remove(TeleoptiPrincipal.CurrentPrincipal.GetPerson(_personRepository));
 			}
 
-			return fixPersons(memberList);
+			return _credentialsAppender.Convert(memberList.ToArray());
 		}
 
 		public ICollection<PersonDto> GetPersonTeamMembers(PersonDto person, DateTime utcDate)
@@ -49,8 +47,8 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
 
 			if (personPeriodForGivenDate != null)
 			{
-				ICollection<IPerson> personCollection = _personRepository.FindPeopleBelongTeam(personPeriodForGivenDate.Team, personPeriodForGivenDate.Period);
-				dtos = fixPersons(personCollection);
+				var personCollection = _personRepository.FindPeopleBelongTeam(personPeriodForGivenDate.Team, personPeriodForGivenDate.Period);
+				dtos = _credentialsAppender.Convert(personCollection.ToArray());
 			}
 			else
 			{
@@ -74,21 +72,15 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
 				}
 			}
 
-			return fixPersons(persons);
+			return _credentialsAppender.Convert(persons.ToArray());
 		}
 
 		public PersonDto GetLoggedOnPerson()
 		{
 			IPerson currentPerson = TeleoptiPrincipal.CurrentPrincipal.GetPerson(_personRepository);
-			return fixPersons(new List<IPerson>{currentPerson}).FirstOrDefault();
+			return _credentialsAppender.Convert(currentPerson).FirstOrDefault();
 		}
-		private ICollection<PersonDto> fixPersons(ICollection<IPerson> persons)
-		{
-			var personCollection = _personAssembler.DomainEntitiesToDtos(persons).ToList();
-			_tenantPeopleLoader.FillDtosWithLogonInfo(personCollection);
-
-			return personCollection;
-		}
+		
 
 		private static DateTime getPersonLocalTime(DateTime utcTime, IPerson person)
 		{

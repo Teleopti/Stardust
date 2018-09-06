@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly IPersonAbsenceRepository _personAbsenceRepository;
 		private readonly IAbsenceRepository _absenceRepository;
 		private readonly ICurrentScenario _scenario;
+		private IPersonAssignment _excludedAssignment;
 
 		public FakePersonScheduleDayReadModelFinder(IPersonAssignmentRepository personAssignmentRepository,
 			IPersonRepository personRepository, IPersonRequestRepository personRequestRepository, IPersonAbsenceRepository personAbsenceRepository, IAbsenceRepository absenceRepository, ICurrentScenario scenario)
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public PersonScheduleDayReadModel ForPerson(DateOnly date, Guid personId)
 		{
 			var assignment = _personAssignmentRepository.LoadAll().SingleOrDefault(a => personId == a.Person.Id.Value && date == a.Date);
-			if (assignment == null)
+			if (assignment == null || assignment.Equals(_excludedAssignment))
 				return null;
 			var persons = _personRepository.LoadAll();
 
@@ -74,6 +75,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			}
 			
 			return readModel;
+		}
+
+		public void Exclude(IPersonAssignment assignment)
+		{
+			_excludedAssignment = assignment;
 		}
 
 		public bool IsInitialized()
@@ -181,11 +187,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				return PersonScheduleDayReadModelFactory.CreatePersonScheduleDayReadModelWithSimpleShift(assignment.Person, date,
 					simpleLayers, isFullDayAbsence);
 			});
-		}
-
-		public IEnumerable<PersonScheduleDayReadModel> ForTeamSchedules(DateOnly date, IEnumerable<Guid> personIdList, Paging paging, TimeFilterInfo filterInfo)
-		{
-			return ForPersons(date, personIdList, paging, filterInfo);
 		}
 
 		public IEnumerable<PersonScheduleDayReadModel> ForPeople(DateTimePeriod period, IEnumerable<PersonInfoForShiftTradeFilter> personInfos)

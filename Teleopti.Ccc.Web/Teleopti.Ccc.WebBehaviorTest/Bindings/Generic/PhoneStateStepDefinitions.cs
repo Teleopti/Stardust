@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				.WaitAndRetry(50, attempt => TimeSpan.FromMilliseconds(100))
 				.Execute(() =>
 				{
-					var matchingEvents = from e in _events.LoadAll()
+					var matchingEvents = from e in _events.LoadAllForTest()
 						let stateChanged = e as PersonStateChangedEvent
 						where stateChanged != null &&
 							  stateChanged.PersonId == personId &&

@@ -52,6 +52,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 {
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_EasilySpotLateForWork_75668)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_DurationOfHistoricalEvents_76470)]
+	[Toggle(Domain.FeatureFlags.Toggles.RTA_ReviewHistoricalAdherence_74770)]
 	public class DomainTestAttribute : IoCTestAttribute
 	{
 		public static string DefaultTenantName = "default";
@@ -113,6 +114,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			isolate.UseTestDouble<FakeAgentStatePersister>().For<IAgentStatePersister>();
 
 			isolate.UseTestDouble<FakeAgentStateReadModelPersister>().For<IAgentStateReadModelPersister, IAgentStateReadModelReader>();
+			
+			isolate.UseTestDouble<FakeHistoricalOverviewReadModelPersister>().For<IHistoricalOverviewReadModelPersister, IHistoricalOverviewReadModelReader>();
 
 			isolate.UseTestDouble<FakeAllLicenseActivatorProvider>().For<ILicenseActivatorProvider>();
 			isolate.UseTestDouble<FakeTeamCardReader>().For<ITeamCardReader>();
@@ -157,7 +160,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				isolate.UseTestDouble<FakeMultisiteDayRepository>().For<IMultisiteDayRepository>();
 				isolate.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
 				isolate.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
-				isolate.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository, IFindPersonAssignment>();
+				isolate.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
 				isolate.UseTestDouble<FakeSkillDayRepository>().For<ISkillDayRepository>();
 				isolate.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
 				isolate.UseTestDouble<FakeGroupPageRepository>().For<IGroupPageRepository>();

@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_target = new ShiftTradeScheduleViewModelMapper(_shiftTradeRequestProvider, _possibleShiftTradePersonsProvider,
 				_shiftTradePersonScheduleViewModelMapper, _shiftTradeTimeLineHoursViewModelMapper, _personRequestRepository,
 				_scheduleProvider, _loggedOnUser,
-				new ShiftTradeSiteOpenHourFilter(_loggedOnUser, new SiteOpenHoursSpecification(), _projectionProvider), null, null, null, null, null, null);
+				new ShiftTradeSiteOpenHourFilter(_loggedOnUser, new SiteOpenHoursSpecification(), _projectionProvider), null, null, null, null, null, null, null);
 		}
 
 		[Test]
@@ -340,7 +340,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			_target = new ShiftTradeScheduleViewModelMapper(_shiftTradeRequestProvider, _possibleShiftTradePersonsProvider,
 				_shiftTradePersonScheduleViewModelMapper, _shiftTradeTimeLineHoursViewModelMapper, _personRequestRepository,
-				_scheduleProvider, _loggedOnUser, shiftTradeSiteOpenHourFilter, null, null, null, null, null, null);
+				_scheduleProvider, _loggedOnUser, shiftTradeSiteOpenHourFilter, null, null, null, null, null, null, null);
 
 			var teamId = Guid.NewGuid();
 			var data = new ShiftTradeScheduleViewModelData

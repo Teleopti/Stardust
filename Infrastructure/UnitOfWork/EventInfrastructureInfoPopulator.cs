@@ -37,17 +37,15 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public void PopulateEventContext(params object[] events)
 		{
+			var businessUnitFetcher = new Lazy<IBusinessUnit>(()=> _businessUnit?.Current());
 			foreach (var @event in events)
 			{
-				var timestamped = @event as ITimestamped;
-				if (timestamped != null)
+				if (@event is ITimestamped timestamped)
 					setTimestamp(timestamped);
-				var initiatorInfo = @event as IInitiatorContext;
-				if (initiatorInfo != null)
+				if (@event is IInitiatorContext initiatorInfo)
 					setInitiator(initiatorInfo);
-				var logOnInfo = @event as ILogOnContext;
-				if (logOnInfo != null)
-					setLogOnInfo(logOnInfo);
+				if (@event is ILogOnContext logOnInfo)
+					setLogOnInfo(logOnInfo, businessUnitFetcher);
 			}
 		}
 
@@ -66,20 +64,17 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				@event.InitiatorId = initiatorIdentifier.InitiatorId;
 		}
 
-		private void setLogOnInfo(ILogOnContext @event)
+		private void setLogOnInfo(ILogOnContext @event, Lazy<IBusinessUnit> businessUnitFetcher)
 		{
 			if (!string.IsNullOrEmpty(@event.LogOnDatasource))
 				return;
 
 			if (@event.LogOnBusinessUnitId.Equals(Guid.Empty))
 			{
-				if (_businessUnit != null)
+				var businessUnit = businessUnitFetcher.Value;
+				if (businessUnit != null)
 				{
-					var businessUnit = _businessUnit.Current();
-					if (businessUnit != null)
-					{
-						@event.LogOnBusinessUnitId = businessUnit.Id.Value;
-					}
+					@event.LogOnBusinessUnitId = businessUnit.Id.Value;
 				}
 			}
 

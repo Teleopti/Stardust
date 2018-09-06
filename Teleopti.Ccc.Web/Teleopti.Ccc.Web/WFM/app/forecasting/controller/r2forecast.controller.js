@@ -46,6 +46,9 @@
 						}
 					});
 				});
+				if (vm.skills.length < 1) {
+					$state.go('forecast-no-skills');
+				}
 			});
 		}
 

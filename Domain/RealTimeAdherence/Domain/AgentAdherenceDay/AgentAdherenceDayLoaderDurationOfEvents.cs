@@ -12,16 +12,16 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 {
-	public class AgentAdherenceDayLoaderDurationOfEvents  : IAgentAdherenceDayLoader
+	public class AgentAdherenceDayLoaderDurationOfEvents : IAgentAdherenceDayLoader
 	{
 		private readonly INow _now;
 		private readonly IRtaEventStoreReader _eventStore;
-		private readonly ScheduleLoader _scheduleLoader;
+		private readonly IScheduleLoader _scheduleLoader;
 		private readonly IPersonRepository _persons;
 
 		public AgentAdherenceDayLoaderDurationOfEvents(
 			INow now,
-			ScheduleLoader scheduleLoader,
+			IScheduleLoader scheduleLoader,
 			IPersonRepository persons,
 			IRtaEventStoreReader eventStore)
 		{
@@ -31,12 +31,12 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 			_eventStore = eventStore;
 		}
 
-		public IAgentAdherenceDay Load(
-			Guid personId,
-			DateOnly date)
-		{
-			var now = _now.UtcDateTime();
+		public IAgentAdherenceDay Load(Guid personId, DateOnly date) => load(personId, date, DateTime.MaxValue.Utc());
 
+		public IAgentAdherenceDay LoadUntilNow(Guid personId, DateOnly date) => load(personId, date, _now.UtcDateTime());
+
+		private IAgentAdherenceDay load(Guid personId, DateOnly date, DateTime until)
+		{
 			var person = _persons.Load(personId);
 
 			var time = TimeZoneInfo.ConvertTimeToUtc(date.Date, person?.PermissionInformation.DefaultTimeZone() ?? TimeZoneInfo.Utc);
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 					.Where(x => x != null)
 					.ToArray();
 
-			var obj = new AgentAdherenceDayWithDurationOfEvents(personId, period, shift, now);
+			var obj = new AgentAdherenceDayWithDurationOfEvents(personId, period, shift, until);
 			events.ForEach(x => obj.Apply((dynamic) x));
 			obj.ApplyDone();
 

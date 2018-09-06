@@ -80,12 +80,13 @@ function ForecastChartCtrl($translate, $filter, $timeout, SkillTypeService) {
 				columns: [
 					preparedData.totalTasksSeries,
 					preparedData.tasksSeries,
+					preparedData.totalAverageTaskTimeSeries,
+					preparedData.averageTaskTimeSeries,
 
 					preparedData.totalAverageAfterTaskTimeSeries,
 					preparedData.averageAfterTaskTimeSeries,
 
-					preparedData.totalAverageTaskTimeSeries,
-					preparedData.averageTaskTimeSeries,
+					
 
 					preparedData.dateSeries,
 					preparedData.campaignSeries,
@@ -111,12 +112,15 @@ function ForecastChartCtrl($translate, $filter, $timeout, SkillTypeService) {
 				names: {
 					TotalTasks: dataName.TotalTasks + '←',
 					Tasks: dataName.Tasks + '←',
-					TotalAverageTaskTime: dataName.TotalTaskTime + '→',
+
 					AverageAfterTaskTime: dataName.ATW + '→',
+					
+					
+					TotalAverageTaskTime: dataName.TotalTaskTime + '→',
 					AverageTaskTime: dataName.TaskTime + '→',
 					TotalAverageAfterTaskTime: dataName.TotalATW + '→',
-					Override: $translate.instant('Override'),
-					Campaign: $translate.instant('Campaign')
+					Campaign: $translate.instant('Campaign'),
+					Override: $translate.instant('Override')
 				},
 				hide: ['Tasks', 'AverageTaskTime', 'AverageAfterTaskTime'],
 				selection: {

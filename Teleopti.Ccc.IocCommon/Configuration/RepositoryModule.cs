@@ -102,8 +102,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PurgeSettingRepository>().As<IPurgeSettingRepository>().SingleInstance();
 
 			builder.Register(c => new StardustRepository(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)).As<IStardustRepository>().SingleInstance();
-
-			builder.RegisterType<FindPersonAssignmentAsync>().As<IFindPersonAssignment>().SingleInstance();
 		}
 
 		private bool hasCorrectCtor(Type repositoryType)

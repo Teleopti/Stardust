@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public virtual ActionResult GetWFCTolerance(Guid personToId)
 		{
-			return Json(_requestsViewModelFactory.CreateShiftTradeToleranceViewModel(personToId));
+			return Json(_requestsViewModelFactory.CreateShiftTradeToleranceViewModel(personToId), JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWork]

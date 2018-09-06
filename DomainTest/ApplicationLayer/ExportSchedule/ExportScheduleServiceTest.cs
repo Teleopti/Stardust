@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 	[TestFixture, DomainTest]
 	public class ExportScheduleServiceTest : IIsolateSystem, IExtendSystem
 	{
-		public FakeCurrentScenario_DoNotUse CurrentScenario;
 		public ExportScheduleService Target;
 		public FakeScheduleStorage_DoNotUse ScheduleStorage;
 		public FakeScenarioRepository ScenarioRepository;
@@ -42,7 +41,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 		
 		public void Isolate(IIsolate isolate)
 		{
-			isolate.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
 			isolate.UseTestDouble<PeopleSearchProvider>().For<IPeopleSearchProvider>();
 			isolate.UseTestDouble<UserTextTranslator>().For<IUserTextTranslator>();
 			isolate.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
@@ -60,7 +58,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
 			ScenarioRepository.Has(scenario);
 			var team = TeamFactory.CreateSimpleTeam("myTeam").WithId();
 			team.Site = SiteFactory.CreateSimpleSite("mySite").WithId();
@@ -110,7 +107,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
 			ScenarioRepository.Has(scenario);
 			var team = TeamFactory.CreateSimpleTeam("myTeam").WithId();
 			team.Site = SiteFactory.CreateSimpleSite("mySite").WithId();
@@ -151,7 +147,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
 			ScenarioRepository.Has(scenario);
 			var team = TeamFactory.CreateSimpleTeam("myTeam").WithId();
 			team.Site = SiteFactory.CreateSimpleSite("mySite").WithId();
@@ -197,7 +192,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
 			ScenarioRepository.Has(scenario);
 			var team = TeamFactory.CreateSimpleTeam("myTeam").WithId();
 			team.Site = SiteFactory.CreateSimpleSite("mySite").WithId();
@@ -244,7 +238,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
-			CurrentScenario.FakeScenario(scenario);
 			ScenarioRepository.Has(scenario);
 			var team = TeamFactory.CreateSimpleTeam("myTeam").WithId();
 			team.Site = SiteFactory.CreateSimpleSite("mySite").WithId();
@@ -304,7 +297,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
 			ScenarioRepository.Has(scenario);
 			var team = TeamFactory.CreateSimpleTeam("myTeam").WithId();
 			team.Site = SiteFactory.CreateSimpleSite("mySite").WithId();
@@ -356,7 +348,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
 			ScenarioRepository.Has(scenario);
 			var team = TeamFactory.CreateSimpleTeam("myTeam").WithId();
 			team.Site = SiteFactory.CreateSimpleSite("mySite").WithId();
@@ -394,7 +385,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
 			ScenarioRepository.Has(scenario);
 			var team = TeamFactory.CreateSimpleTeam("myTeam").WithId();
 			team.Site = SiteFactory.CreateSimpleSite("mySite").WithId();
@@ -436,7 +426,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
 			ScenarioRepository.Has(scenario);
 			var team = TeamFactory.CreateSimpleTeam("myTeam").WithId();
 			team.Site = SiteFactory.CreateSimpleSite("mySite").WithId();
@@ -468,7 +457,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
 			ScenarioRepository.Has(scenario);
 			var team = TeamFactory.CreateSimpleTeam("myTeam").WithId();
 			team.Site = SiteFactory.CreateSimpleSite("mySite").WithId();
@@ -511,7 +499,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
 			ScenarioRepository.Has(scenario);
 			var team = TeamFactory.CreateSimpleTeam("myTeam").WithId();
 			team.Site = SiteFactory.CreateSimpleSite("mySite").WithId();
@@ -554,7 +541,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
 			ScenarioRepository.Has(scenario);
 			var team = TeamFactory.CreateSimpleTeam("myTeam").WithId();
 			team.Site = SiteFactory.CreateSimpleSite("mySite").WithId();
@@ -593,7 +579,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ExportSchedule
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
 			ScenarioRepository.Has(scenario);
 			
 			var optionalCol1 = new OptionalColumn("opt1").WithId();

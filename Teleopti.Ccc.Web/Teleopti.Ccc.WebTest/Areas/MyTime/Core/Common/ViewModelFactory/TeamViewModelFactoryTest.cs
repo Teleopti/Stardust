@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 			teams[0].SetDescription(new Description("team"));
 			teams[0].Site = new Site("site");
 			var teamProvider = MockRepository.GenerateMock<ITeamProvider>();
-			teamProvider.Stub(x => x.GetPermittedTeams(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.TeamSchedule))
+			teamProvider.Stub(x => x.GetPermittedNotEmptyTeams(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.TeamSchedule))
 				.Return(teams);
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			permissionProvider.Stub(

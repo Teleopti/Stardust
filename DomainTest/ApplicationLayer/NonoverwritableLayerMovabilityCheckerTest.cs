@@ -4,8 +4,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -15,15 +13,15 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[DomainTest]
-	public class NonoverwritableLayerMovabilityCheckerTest : IIsolateSystem
+	public class NonOverwritableLayerMovabilityCheckerTest : IIsolateSystem
 	{
 		public FakePersonRepository PersonRepository;
-		public FakeCurrentScenario_DoNotUse CurrentScenario;
-		public FakeScheduleStorage_DoNotUse ScheduleStorage;
+		public FakeScenarioRepository CurrentScenario;
+		public IScheduleStorage ScheduleStorage;
 		public NonoverwritableLayerMovabilityChecker Target;
 
 		[Test]
-		public void ShouldDetectThereIsNonoverwritableLayerInGivenPeriod()
+		public void ShouldDetectThereIsNonOverwritableLayerInGivenPeriod()
 		{
 			var person = PersonFactory.CreatePersonWithGuid("John", "Watson");
 			PersonRepository.Has(person);
@@ -37,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			lunchActivity.AllowOverwrite = false;
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16), shiftCategory);
 
@@ -54,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
-		public void ShouldDetectThereIsNoNonoverwritableLayerInGivenPeriod()
+		public void ShouldDetectThereIsNoNonOverwritableLayerInGivenPeriod()
 		{
 			var person = PersonFactory.CreatePersonWithGuid("John", "Watson");
 			PersonRepository.Has(person);
@@ -68,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			lunchActivity.AllowOverwrite = false;
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16), shiftCategory);
 
@@ -85,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
-		public void ShiftWithConflictingProjectedActivityFromMultipleNonoverwritableShiftLayersShouldNotBeFixable()
+		public void ShiftWithConflictingProjectedActivityFromMultipleNonOverwritableShiftLayersShouldNotBeFixable()
 		{
 			var person = PersonFactory.CreatePersonWithGuid("John", "Watson");
 			PersonRepository.Has(person);
@@ -97,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			lunchActivity.AllowOverwrite = false;
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16), shiftCategory);
 
@@ -116,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
-		public void ShiftWithConflictingProjectedActivityFromSingleVisualNonoverwritableLayerShouldBeFixable()
+		public void ShiftWithConflictingProjectedActivityFromSingleVisualNonOverwritableLayerShouldBeFixable()
 		{
 			var person = PersonFactory.CreatePersonWithGuid("John", "Watson");
 			PersonRepository.Has(person);
@@ -128,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			lunchActivity.AllowOverwrite = false;
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16), shiftCategory);
 
@@ -146,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
-		public void ShiftWithConflictingProjectedActivityFromMultipleNonoverwritableVisualLayersShouldNotBeFixable()
+		public void ShiftWithConflictingProjectedActivityFromMultipleNonOverwritableVisualLayersShouldNotBeFixable()
 		{
 			var person = PersonFactory.CreatePersonWithGuid("John", "Watson");
 			PersonRepository.Has(person);
@@ -158,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			lunchActivity.AllowOverwrite = false;
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16), shiftCategory);
 
@@ -177,7 +175,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
-		public void ShiftWithConflictingProjectedActivityFromMultipleNonoverwritableVisualLayersButSingleShiftLayerShouldNotBeFixable()
+		public void ShiftWithConflictingProjectedActivityFromMultipleNonOverwritableVisualLayersButSingleShiftLayerShouldNotBeFixable()
 		{
 			var person = PersonFactory.CreatePersonWithGuid("John", "Watson");
 			PersonRepository.Has(person);
@@ -189,7 +187,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			lunchActivity.AllowOverwrite = false;
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16), shiftCategory);
 
@@ -208,7 +206,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
-		public void ShiftWithSingleConflictProjectedActivityButWithIlegitimateScheduleInTheNewLayerPeriodShouldNotBeFixable()
+		public void ShiftWithSingleConflictProjectedActivityButWithIllegitimateScheduleInTheNewLayerPeriodShouldNotBeFixable()
 		{
 			var person = PersonFactory.CreatePersonWithGuid("John", "Watson");
 			PersonRepository.Has(person);
@@ -220,7 +218,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			lunchActivity.AllowOverwrite = false;
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16), shiftCategory);
 
@@ -239,7 +237,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
-		public void ShiftWithNoConflictProjectedActivityButWithIlegitimateScheduleOutSideOfTheNewLayerPeriodShouldNotBeFixable()
+		public void ShiftWithNoConflictProjectedActivityButWithIllegitimateScheduleOutSideOfTheNewLayerPeriodShouldNotBeFixable()
 		{
 			var person = PersonFactory.CreatePersonWithGuid("John", "Watson");
 			PersonRepository.Has(person);
@@ -251,7 +249,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			lunchActivity.AllowOverwrite = false;
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16), shiftCategory);
 
@@ -277,7 +275,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var schedules = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 				new ScheduleDictionaryLoadOptions(false, false),
 				period,
-				CurrentScenario.Current());
+				CurrentScenario.LoadDefaultScenario());
 			return schedules;
 		}
 
@@ -289,9 +287,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 		public void Isolate(IIsolate isolate)
 		{
-			isolate.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
-			isolate.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
-			isolate.UseTestDouble<FakeScheduleStorage_DoNotUse>().For<IScheduleStorage>();
 			isolate.UseTestDouble<NonoverwritableLayerMovabilityChecker>().For<INonoverwritableLayerMovabilityChecker>();
 		}
 	}

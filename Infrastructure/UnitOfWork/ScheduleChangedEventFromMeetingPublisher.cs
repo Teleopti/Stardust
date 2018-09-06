@@ -38,25 +38,18 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				};
 			});
 
-			foreach (var changedMeeting in changedMeetings)
-			{
-				foreach (var changedRoot in changedMeeting.CustomChanges)
+			var messages = changedMeetings
+				.SelectMany(c =>
+					c.CustomChanges.Select(cc => cc.Root).OfType<ICustomChangedEntity>().Select(cc => new {cc, m = c}))
+				.Select(c => new ScheduleChangedEvent
 				{
-					var customChange = changedRoot.Root as ICustomChangedEntity;
-					if (customChange == null) return;
-
-					var message = new ScheduleChangedEvent
-					              	{
-					              		ScenarioId =
-					              			((IMeeting) changedMeeting.Meeting.ProvideCustomChangeInfo).
-					              			Scenario.Id.GetValueOrDefault(),
-					              		StartDateTime = customChange.Period.StartDateTime,
-					              		EndDateTime = customChange.Period.EndDateTime,
-					              		PersonId = customChange.MainRoot.Id.GetValueOrDefault()
-					              	};
-					_eventPublisher.Publish(message);
-				}
-			}
+					ScenarioId =
+						((IMeeting) c.m.Meeting.ProvideCustomChangeInfo).Scenario.Id.GetValueOrDefault(),
+					StartDateTime = c.cc.Period.StartDateTime,
+					EndDateTime = c.cc.Period.EndDateTime,
+					PersonId = c.cc.MainRoot.Id.GetValueOrDefault()
+				}).ToArray();
+			_eventPublisher.Publish(messages);
 		}
 	}
 }

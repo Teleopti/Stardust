@@ -13,12 +13,12 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 {
 	public class GetPersonByIdentityQueryHandler : IHandleQuery<GetPersonByIdentityQueryDto, ICollection<PersonDto>>
 	{
-		private readonly IAssembler<IPerson, PersonDto> _assembler;
+		private readonly PersonCredentialsAppender _assembler;
 		private readonly IPersonRepository _personRepository;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly ITenantLogonDataManager _tenantLogonDataManager;
 
-		public GetPersonByIdentityQueryHandler(IAssembler<IPerson, PersonDto> assembler, IPersonRepository personRepository, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, ITenantLogonDataManager tenantLogonDataManager)
+		public GetPersonByIdentityQueryHandler(PersonCredentialsAppender assembler, IPersonRepository personRepository, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, ITenantLogonDataManager tenantLogonDataManager)
 		{
 			_assembler = assembler;
 			_personRepository = personRepository;
@@ -32,13 +32,11 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			{
 				using (unitOfWork.DisableFilter(QueryFilter.Deleted))
 				{
-					var memberList = new List<IPerson>();
 					var logonInfo = _tenantLogonDataManager.GetLogonInfoForIdentity(query.Identity);
 					if (logonInfo == null)
 						return new PersonDto[] { };
-					var foundPersons = _personRepository.FindPeople(new[] { logonInfo.PersonId });
-					memberList.AddRange(foundPersons);
-					return _assembler.DomainEntitiesToDtos(memberList).ToList();
+					var foundPersons = _personRepository.FindPeople(new[] { logonInfo.PersonId }).ToArray();
+					return _assembler.Convert(foundPersons).ToList();
 				}
 			}
 		}

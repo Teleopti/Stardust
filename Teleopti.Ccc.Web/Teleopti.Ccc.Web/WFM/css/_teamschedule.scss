@@ -1214,6 +1214,10 @@ teams-time-picker.ng-invalid-dst {
 }
 
 .shift-editor {
+	-webkit-user-select: none;
+	-moz-user-select: -moz-none;
+	-ms-user-select: none;
+	user-select: none;
 	position: relative;
 
 	.progress-linear-container {
@@ -1265,6 +1269,7 @@ teams-time-picker.ng-invalid-dst {
 	}
 
 	.shift-container {
+
 		.viewport-clip {
 			width: 100%;
 			max-width: 100%;
@@ -1274,8 +1279,13 @@ teams-time-picker.ng-invalid-dst {
 
 			.viewport {
 				height: 530px;
-				overflow-x: auto;
-				overflow-y: hidden;
+				overflow: auto;
+				transition: width 1s ease-in-out;
+
+				&.overflow {
+					overflow: hidden;
+					touch-action: none;
+				}
 			}
 		}
 
@@ -1375,8 +1385,9 @@ teams-time-picker.ng-invalid-dst {
 				display: inline-block;
 				height: 25px;
 				background-color: gainsboro;
-				z-index: 999;
+				z-index: 900;
 				cursor: pointer;
+
 				&:first-of-type {
 					border-radius: 4px 0 0 4px;
 				}
@@ -1407,13 +1418,13 @@ teams-time-picker.ng-invalid-dst {
 				}
 
 				&.disabled {
-					cursor: not-allowed;
+					cursor: not-allowed !important;
 				}
 
 				&.selected {
 					opacity: 1;
 					border: 1px dashed;
-					z-index: 1000;
+					z-index: 990;
 
 					&.border-light {
 						border-color: #00ffff;
@@ -1422,11 +1433,14 @@ teams-time-picker.ng-invalid-dst {
 					&.border-dark {
 						border-color: #795548;
 					}
-					cursor: ew-resize;
+
+					&:not(.non-resizable) {
+						cursor: ew-resize;
+					}
 				}
 
 				&.float-top {
-					z-index: 1001;
+					z-index: 999;
 				}
 			}
 		}

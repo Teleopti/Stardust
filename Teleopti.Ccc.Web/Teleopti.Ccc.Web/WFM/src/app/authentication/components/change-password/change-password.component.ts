@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { NzMessageService } from 'ng-zorro-antd';
@@ -49,6 +49,9 @@ export class ChangePasswordComponent {
 	isVisible = false;
 	changePasswordForm: FormGroup;
 
+	@ViewChild('passwordField')
+	passwordFieldRef: ElementRef;
+
 	constructor(
 		private fb: FormBuilder,
 		private ps: PasswordService,
@@ -81,6 +84,10 @@ export class ChangePasswordComponent {
 				}
 			}
 		});
+	}
+
+	focusInput() {
+		this.passwordFieldRef.nativeElement.focus();
 	}
 
 	hasClientError() {

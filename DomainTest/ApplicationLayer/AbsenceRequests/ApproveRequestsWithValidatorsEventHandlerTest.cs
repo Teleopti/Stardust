@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		private void prepareTestData(bool scheduleIsProtected, bool requestIsPending)
 		{
-			_personRepository = new FakePersonRepositoryLegacy2();
+			_personRepository = new FakePersonRepository(new FakeStorage());
 			_writeProtectedScheduleCommandValidator = MockRepository.GenerateMock<IWriteProtectedScheduleCommandValidator>();
 			_writeProtectedScheduleCommandValidator.Stub(x => x.ValidateCommand(new DateTime(),
 				new Person(), new ApproveBatchRequestsCommand())).IgnoreArguments().Return(scheduleIsProtected);

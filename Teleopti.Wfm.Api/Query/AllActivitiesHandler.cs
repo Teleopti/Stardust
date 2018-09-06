@@ -22,6 +22,7 @@ namespace Teleopti.Wfm.Api.Query
 				Successful = true,
 				Result = activites.Select(x => new ActivityDto
 				{
+					Id = x.Id.GetValueOrDefault(),
 					Name = x.Name,
 					AllowOverwrite = x.AllowOverwrite,
 					InPaidTime = x.InPaidTime,

@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
+using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
@@ -19,50 +21,44 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 	[TestFixture]
 	public class GetPeopleForShiftTradeByGroupPageGroupQueryHandlerTest
 	{
-		private MockRepository mocks;
-		private IGroupingReadOnlyRepository groupingReadOnlyRepository;
-		private GetPeopleForShiftTradeByGroupPageGroupQueryHandler target;
-		private IAssembler<IPerson, PersonDto> assembler;
-		private IPersonRepository personRepository;
-		private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-
-		[SetUp]
-		public void Setup()
-		{
-			mocks = new MockRepository();
-			groupingReadOnlyRepository = mocks.DynamicMock<IGroupingReadOnlyRepository>();
-			assembler = mocks.StrictMock<IAssembler<IPerson, PersonDto>>();
-			personRepository = mocks.StrictMock<IPersonRepository>();
-			_unitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
-			var shiftTradeValidationList = new List<IShiftTradeLightSpecification>();
-			var shiftTradeLightValidator = new ShiftTradeLightValidator(shiftTradeValidationList);
-			target = new GetPeopleForShiftTradeByGroupPageGroupQueryHandler(assembler, groupingReadOnlyRepository, personRepository, _unitOfWorkFactory, shiftTradeLightValidator);
-		}
-
 		[Test]
 		public void ShouldGetPeopleByGroupInGroupPage()
 		{
+			var groupingReadOnlyRepository = new FakeGroupingReadOnlyRepository();
+			var personRepository = new FakePersonRepository(new FakeStorage());
+			var assembler = new PersonAssembler(personRepository,
+				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
+					new DayOffAssembler(new FakeDayOffTemplateRepository()),
+					new ActivityAssembler(new FakeActivityRepository()),
+					new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy());
+
+			var unitOfWorkFactory = new FakeCurrentUnitOfWorkFactory(new FakeStorage());
+			var shiftTradeValidationList = new List<IShiftTradeLightSpecification>();
+			var shiftTradeLightValidator = new ShiftTradeLightValidator(shiftTradeValidationList);
+			var dataManager = new FakeTenantLogonDataManager();
+			var target = new GetPeopleForShiftTradeByGroupPageGroupQueryHandler(
+				new PersonCredentialsAppender(assembler, new TenantPeopleLoader(dataManager)),
+				groupingReadOnlyRepository, personRepository, unitOfWorkFactory, shiftTradeLightValidator);
+			
 			var groupPageGroupId = Guid.NewGuid();
 			var dateOnly = new DateOnly(2012,4,30);
-			var personId = Guid.NewGuid();
-			var queryPersonId = Guid.NewGuid();
-			var queryPerson = PersonFactory.CreatePerson();
-			var detailList = new List<ReadOnlyGroupDetail> {new ReadOnlyGroupDetail {PersonId = personId}};
-			var personList = new List<IPerson> {PersonFactory.CreatePerson()};
-			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			using (mocks.Record())
+			var queryPerson = PersonFactory.CreatePerson().WithId();
+			var person = PersonFactory.CreatePerson().WithId();
+
+			dataManager.SetLogon(person.Id.Value,"aaa","");
+
+			personRepository.Add(queryPerson);
+			personRepository.Add(person);
+
+			groupingReadOnlyRepository.Has(new ReadOnlyGroupDetail {PersonId = person.Id.Value, GroupId = groupPageGroupId});
+
+			var result = target.Handle(new GetPeopleForShiftTradeByGroupPageGroupQueryDto
 			{
-				Expect.Call(groupingReadOnlyRepository.DetailsForGroup(groupPageGroupId, dateOnly)).Return(detailList);
-				Expect.Call(_unitOfWorkFactory.Current()).Return(unitOfWorkFactory);
-				Expect.Call(personRepository.FindPeople((IEnumerable<Guid>)null)).Constraints(Rhino.Mocks.Constraints.List.Equal(new List<Guid> { personId })).Return(personList);
-				Expect.Call(personRepository.Get(queryPersonId)).Return(queryPerson);
-				Expect.Call(assembler.DomainEntitiesToDtos(personList)).Return(new[] {new PersonDto()});
-			}
-			using (mocks.Playback())
-			{
-				var result = target.Handle(new GetPeopleForShiftTradeByGroupPageGroupQueryDto{ GroupPageGroupId = groupPageGroupId, QueryDate = new DateOnlyDto { DateTime = dateOnly.Date }, PersonId = queryPersonId});
-				result.Count.Should().Be.EqualTo(1);
-			}
+				GroupPageGroupId = groupPageGroupId, QueryDate = new DateOnlyDto {DateTime = dateOnly.Date},
+				PersonId = queryPerson.Id.Value
+			});
+			result.Count.Should().Be.EqualTo(1);
+			result.First().ApplicationLogOnName.Should().Be.EqualTo("aaa");
 		}
 	}
 }

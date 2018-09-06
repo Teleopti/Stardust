@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
@@ -73,7 +74,7 @@ WHERE
 				.ExecuteUpdate();
 
 		public IEnumerable<IEvent> Load(Guid personId, DateTimePeriod period) =>
-			load(
+			loadEvents(
 				_unitOfWork.Current().Session()
 					.CreateSQLQuery(@"
 SELECT 
@@ -94,7 +95,7 @@ ORDER BY [Id] ASC
 
 		public IEvent LoadLastAdherenceEventBefore(Guid personId, DateTime timestamp)
 		{
-			return load(_unitOfWork.Current().Session()
+			return loadEvents(_unitOfWork.Current().Session()
 					.CreateSQLQuery(@"
 SELECT TOP 1 
 	[Type],
@@ -117,25 +118,54 @@ ORDER BY [Id] DESC
 				.SingleOrDefault();
 		}
 
-		private IEnumerable<IEvent> load(IQuery query) =>
+		public LoadedEvents LoadFrom(int fromEventId)
+		{
+			var events = load(
+				_unitOfWork.Current().Session()
+					.CreateSQLQuery(@"
+SELECT
+	[Id], 
+	[Type],
+	[Event] 
+FROM 
+	[rta].[Events]
+ORDER BY [Id]
+"));
+			return new LoadedEvents
+			{
+				MaxId = events.IsNullOrEmpty() ? 0 : events.Last().Id,
+				Events = events.Select(e => e.DeserializedEvent).ToArray()
+			};
+		}
+
+
+		private IEnumerable<IEvent> loadEvents(IQuery query) =>
+			load(query).Select(x => x.DeserializedEvent).ToArray();
+
+		private IEnumerable<internalModel> load(IQuery query) =>
 			query
 				.SetResultTransformer(Transformers.AliasToBean<internalModel>())
 				.List<internalModel>()
-				.Select(x => _deserializer.DeserializeEvent(x.Event, Type.GetType(x.Type)))
-				.Cast<IEvent>()
-				.ToArray();
+				.Select(x =>
+				{
+					x.DeserializedEvent = _deserializer.DeserializeEvent(x.Event, Type.GetType(x.Type)) as IEvent;
+					return x;
+				});
+
 
 		private class internalModel
 		{
 #pragma warning disable 649
+			public int Id;
 			public string Type;
 			public string Event;
+			public IEvent DeserializedEvent;
 #pragma warning restore 649
 		}
 
 
-		public IEnumerable<IEvent> LoadAll() =>
-			load(_unitOfWork.Current().Session().CreateSQLQuery(@"SELECT [Type], [Event] FROM [rta].[Events]"));
+		public IEnumerable<IEvent> LoadAllForTest() =>
+			loadEvents(_unitOfWork.Current().Session().CreateSQLQuery(@"SELECT [Type], [Event] FROM [rta].[Events]"));
 
 		public IEnumerable<string> LoadAllEventTypes() => _unitOfWork.Current().Session()
 			.CreateSQLQuery(@"SELECT [Type] FROM [rta].[Events]")

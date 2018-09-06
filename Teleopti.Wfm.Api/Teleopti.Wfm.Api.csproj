@@ -54,8 +54,11 @@
     </Compile>
     <Compile Include="ApiModule.cs" />
     <Compile Include="CommandDtoProvider.cs" />
+    <Compile Include="Command\ActivityLayerDto.cs" />
     <Compile Include="Command\ScheduleChangesListenerDto.cs" />
     <Compile Include="Command\AddScheduleChangesListenerHandler.cs" />
+    <Compile Include="Command\SetMainShiftDto.cs" />
+    <Compile Include="Command\SetMainShiftHandler.cs" />
     <Compile Include="Controllers\WfmCommandController.cs" />
     <Compile Include="Controllers\WfmQueryController.cs" />
     <Compile Include="DtoProvider.cs" />

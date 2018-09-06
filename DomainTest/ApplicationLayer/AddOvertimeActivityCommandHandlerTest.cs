@@ -5,11 +5,8 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -26,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public AddOvertimeActivityCommandHandler Target;
 		public FakePersonRepository PersonRepository;
 		public FakeActivityRepository ActivityRepository;
-		public FakeCurrentScenario_DoNotUse CurrentScenario;
+		public FakeScenarioRepository CurrentScenario;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeWriteSideRepository<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSetRepository;
 		public FakeLoggedOnUser LoggedOnUser;
@@ -34,8 +31,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void Isolate(IIsolate isolate)
 		{
 			isolate.UseTestDouble<FakePersonAssignmentWriteSideRepository>().For<IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>>();
-			isolate.UseTestDouble<FakeCurrentScenario_DoNotUse>().For<ICurrentScenario>();
-			isolate.UseTestDouble<FakeScheduleDifferenceSaver_DoNotUse>().For<IScheduleDifferenceSaver>();
 			isolate.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
 			isolate.UseTestDouble<AddOvertimeActivityCommandHandler>().For<IHandleCommand<AddOvertimeActivityCommand>>();
 			isolate.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
@@ -45,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldAddOvertimeActivityToEmptyDay()
 		{
-
+			CurrentScenario.Has("Default");
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
 			var activity = ActivityFactory.CreateActivity("Phone");
@@ -79,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldRaiseAddOvertimeActivityEvent()
 		{
-			var scenario = CurrentScenario.Current();
+			var scenario = CurrentScenario.Has("Default");
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
 			var activity = ActivityFactory.CreateActivity("Phone").WithId();
@@ -87,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ActivityRepository.Add(activity);
 			ActivityRepository.Add(mainActivity);
 
-			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, CurrentScenario.Current(), new DateOnly(2013, 11, 14));
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(2013, 11, 14));
 			personAssignment.AddActivity(mainActivity, new DateTimePeriod(2013, 11, 14, 6, 2013, 11, 14, 9));
 			PersonAssignmentRepository.Add(personAssignment);
 
@@ -128,6 +123,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldNotAddOvertimeActivityWhenActivityPeriodStartDateAndScheduleDateDontMatch()
 		{
+			var scenario = CurrentScenario.Has("Default");
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
 			var activity = ActivityFactory.CreateActivity("Phone").WithId();
@@ -135,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ActivityRepository.Add(activity);
 			ActivityRepository.Add(mainActivity);
 
-			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, CurrentScenario.Current(), new DateOnly(2013, 11, 14));
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(2013, 11, 14));
 			personAssignment.AddActivity(mainActivity, new DateTimePeriod(2013, 11, 14, 6, 2013, 11, 14, 9));
 			PersonAssignmentRepository.Add(personAssignment);
 
@@ -165,6 +161,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldNotThrowPermissionCheckExceptionWhenAddOvertimeActivityToAgentWithoutSchedulePeriod()
 		{
+			var scenario = CurrentScenario.Has("Default");
 			var person = PersonFactory.CreatePersonWithId();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.MountainTimeZoneInfo());
 			PersonRepository.Add(person);
@@ -172,8 +169,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
 			ActivityRepository.Add(activity);
 			ActivityRepository.Add(mainActivity);
-
-
+			
 			var mds = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("double pay", MultiplicatorType.Overtime);
 			mds.WithId();
 			MultiplicatorDefinitionSetRepository.Add(mds);
@@ -206,6 +202,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldNotAddOvertimeActivityWhenActivityPeriodStartDateBeforeScheduleDateAndIntersectedWithAssPeriod()
 		{
+			var scenario = CurrentScenario.Has("Default");
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
 			var activity = ActivityFactory.CreateActivity("Phone").WithId();
@@ -213,7 +210,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ActivityRepository.Add(activity);
 			ActivityRepository.Add(mainActivity);
 
-			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, CurrentScenario.Current(), new DateOnly(2013, 11, 14));
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(2013, 11, 14));
 			personAssignment.AddActivity(mainActivity, new DateTimePeriod(2013, 11, 14, 6, 2013, 11, 14, 9));
 			PersonAssignmentRepository.Add(personAssignment);
 
@@ -242,6 +239,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldAddOvertimeActivityWhenActivityPeriodStartDateAfterScheduleDateAndIntersectedWithAssPeriod()
 		{
+			var scenario = CurrentScenario.Has("Default");
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
 			var activity = ActivityFactory.CreateActivity("Phone").WithId();
@@ -249,7 +247,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ActivityRepository.Add(activity);
 			ActivityRepository.Add(mainActivity);
 
-			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, CurrentScenario.Current(), new DateOnly(2013, 11, 14));
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(2013, 11, 14));
 			personAssignment.AddActivity(mainActivity, new DateTimePeriod(2013, 11, 14, 6, 2013, 11, 15, 2));
 			PersonAssignmentRepository.Add(personAssignment);
 
@@ -285,6 +283,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldAddOvertimeActivityWhenActivityPeriodStartOnScheduleDateInAgentTimezone()
 		{
+			var scenario = CurrentScenario.Has("Default");
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
 			var activity = ActivityFactory.CreateActivity("Phone").WithId();
@@ -292,7 +291,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ActivityRepository.Add(activity);
 			ActivityRepository.Add(mainActivity);
 
-			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, CurrentScenario.Current(), new DateOnly(2013, 11, 14));
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(2013, 11, 14));
 			personAssignment.AddActivity(mainActivity, new DateTimePeriod(2013, 11, 14, 6, 2013, 11, 14, 9));
 			PersonAssignmentRepository.Add(personAssignment);
 
@@ -328,6 +327,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldAllowToAddDisconnectedOvertimeActivityToADayWithShift()
 		{
+			var scenario = CurrentScenario.Has("Default");
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
 
@@ -336,7 +336,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ActivityRepository.Add(activity);
 			ActivityRepository.Add(mainActivity);
 
-			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, CurrentScenario.Current(), new DateOnly(2013, 11, 14));
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(2013, 11, 14));
 			personAssignment.AddActivity(mainActivity, new DateTimePeriod(2013, 11, 14, 18, 2013, 11, 15, 1));
 			PersonAssignmentRepository.Add(personAssignment);
 

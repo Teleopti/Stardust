@@ -43,10 +43,8 @@ namespace Teleopti.Ccc.Domain.Aop
 		{
 			if (argument == null)
 				return "null";
-			if (argument is Array)
-				return "Count = " + ((Array)argument).Length;
-			if (argument is IList)
-				return "Count = " + ((IList)argument).Count;
+			if (argument is ICollection collection)
+				return "Count = " + collection.Count;
 			return argument;
 		}
 	}

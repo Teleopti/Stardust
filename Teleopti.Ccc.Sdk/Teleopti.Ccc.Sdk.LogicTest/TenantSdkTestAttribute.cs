@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 			isolate.UseTestDouble<TenantDataManager>().For<ITenantDataManager>();
 			isolate.UseTestDouble<TenantPeopleLoader>().For<ITenantPeopleLoader>();
 			isolate.UseTestDouble<PersonDtoFactory>().For<PersonDtoFactory>();
+			isolate.UseTestDouble<PersonCredentialsAppender>().For<PersonCredentialsAppender>();
 			isolate.UseTestDouble<PersonAssembler>().For<IAssembler<IPerson, PersonDto>>();
 			isolate.UseTestDouble<FakeWorkflowControlsetAssembler>().For<IAssembler<IWorkflowControlSet, WorkflowControlSetDto>>();
 			

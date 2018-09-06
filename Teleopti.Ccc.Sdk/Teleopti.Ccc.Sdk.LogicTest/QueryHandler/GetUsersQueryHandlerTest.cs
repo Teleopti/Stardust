@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		[Test]
 		public void ShouldGetUsers()
 		{
-			var personRepository = new FakePersonRepositoryLegacy2();
+			var personRepository = new FakePersonRepository(new FakeStorage());
 
 			var fakeTenantLogonDataManager = new FakeTenantLogonDataManager();
 			var assembler = new PersonAssembler(personRepository,
@@ -29,18 +29,22 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 
 			var person = PersonFactory.CreatePerson().WithId();
 			personRepository.Add(person);
+			fakeTenantLogonDataManager.SetLogon(person.Id.Value,"aaa","");
 
-			var target = new GetUsersQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory(null), new FullPermission());
+			var target = new GetUsersQueryHandler(
+				new PersonCredentialsAppender(assembler, new TenantPeopleLoader(fakeTenantLogonDataManager)),
+				personRepository, new FakeCurrentUnitOfWorkFactory(null), new FullPermission());
 			var result = target.Handle(new GetUsersQueryDto { LoadDeleted = false});
 
 			result.Count.Should().Be.EqualTo(1);
 			result.First().Name.Should().Be.EqualTo(person.Name.ToString());
+			result.First().ApplicationLogOnName.Should().Be.EqualTo("aaa");
 		}
 
 		[Test]
 		public void ShouldNotGetUsersWhenNotPermitted()
 		{
-			var personRepository = new FakePersonRepositoryLegacy2();
+			var personRepository = new FakePersonRepository(new FakeStorage());
 
 			var fakeTenantLogonDataManager = new FakeTenantLogonDataManager();
 			var assembler = new PersonAssembler(personRepository,
@@ -50,8 +54,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 
 			var person = PersonFactory.CreatePerson().WithId();
 			personRepository.Add(person);
+			fakeTenantLogonDataManager.SetLogon(person.Id.Value,"aaa","");
 
-			var target = new GetUsersQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory(null), new NoPermission());
+			var target = new GetUsersQueryHandler(
+				new PersonCredentialsAppender(assembler, new TenantPeopleLoader(fakeTenantLogonDataManager)),
+				personRepository, new FakeCurrentUnitOfWorkFactory(null), new NoPermission());
 			Assert.Throws<FaultException>(()=> target.Handle(new GetUsersQueryDto { LoadDeleted = false }));
 		}
 	}

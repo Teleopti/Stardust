@@ -1,7 +1,10 @@
-﻿namespace Teleopti.Wfm.Api.Query
+﻿using System;
+
+namespace Teleopti.Wfm.Api.Query
 {
 	public class ActivityDto
 	{
+		public Guid Id { get; set; }
 		public string Name { get; set; }
 		public bool InReadyTime { get; set; }
 		public bool RequiresSkill { get; set; }

@@ -67,7 +67,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			if (isPublished || canViewUnpublished)
 			{
 				vm = Projection(scheduleDay, canViewConfidential, agentNameSetting);
-				if (isScheduleDate) {
+				if (isScheduleDate)
+				{
 					vm.UnderlyingScheduleSummary = getUnderlyingScheduleSummary(scheduleDay, previousScheduleDay, canViewConfidential);
 				}
 			}
@@ -80,7 +81,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				var publicNote = scheduleDay.PublicNoteCollection().FirstOrDefault();
 				vm.PublicNotes = publicNote?.GetScheduleNote(new NormalizeText()) ?? String.Empty;
 			}
-			
+
 			var pa = scheduleDay.PersonAssignment();
 			vm.IsProtected = pa?.Person.PersonWriteProtection.IsWriteProtected(date) ?? false;
 			return vm;
@@ -206,6 +207,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				{
 					var isPayloadAbsence = layer.Payload is IAbsence;
 					var isMainShiftLayer = layer.Payload is IActivity;
+					var isMeeting = layer.Payload is MeetingPayload;
 					var isAbsenceConfidential = isPayloadAbsence && (layer.Payload as IAbsence).Confidential;
 					var startDateTimeInUserTimeZone = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, userTimeZone);
 					var description = isPayloadAbsence
@@ -213,11 +215,15 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 							? ConfidentialPayloadValues.Description
 							: ((IAbsence)layer.Payload).Description)
 						: layer.Payload.ConfidentialDescription(person);
+
 					var matchedPersonalLayers = _projectionHelper.GetMatchedPersonalShiftLayers(scheduleDay, layer);
-					if (_projectionHelper.GetMatchedShiftLayerIds(scheduleDay, layer).Count > 1
-						&& matchedPersonalLayers.Count > 0)
+					var needSplitPersonalLayers = _projectionHelper.GetMatchedShiftLayerIds(scheduleDay, layer).Count > 1
+						&& matchedPersonalLayers.Any();
+
+					if (needSplitPersonalLayers)
 					{
 						projections.AddRange(_projectionSplitter.SplitMergedPersonalLayers(scheduleDay, layer, matchedPersonalLayers.ToArray(), userTimeZone));
+
 					}
 					else
 					{
@@ -226,6 +232,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 						var matchedShiftLayers = isMainShiftLayer ? _projectionHelper.GetMatchedShiftLayers(scheduleDay, layer, isOvertime) : null;
 						var reportLevelDetail = (layer.Payload as IActivity)?.ReportLevelDetail;
+						
 						var projection = new GroupScheduleProjectionViewModel
 						{
 							ParentPersonAbsences = isPayloadAbsence ? _projectionHelper.GetMatchedAbsenceLayers(scheduleDay, layer).ToArray() : null,
@@ -242,7 +249,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 							End = startDateTimeInUserTimeZone.Add(layer.Period.ElapsedTime()).ToGregorianDateTimeString().Replace("T", " ").Remove(16),
 							Minutes = (int)layer.Period.ElapsedTime().TotalMinutes,
 							IsOvertime = isOvertime,
-							FloatOnTop = reportLevelDetail == ReportLevelDetail.Lunch || reportLevelDetail == ReportLevelDetail.ShortBreak
+							FloatOnTop = reportLevelDetail == ReportLevelDetail.Lunch
+										|| reportLevelDetail == ReportLevelDetail.ShortBreak
+										|| isOvertime 
+										|| matchedPersonalLayers.Any() 
+										|| isPayloadAbsence
+										|| isMeeting,
+							IsPersonalActivity = matchedPersonalLayers.Any(),
+							IsMeeting = isMeeting
 						};
 
 						projections.Add(projection);
@@ -255,6 +269,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			scheduleVm.Projection = projections;
 			return scheduleVm;
 		}
+
 
 
 		public AgentInTeamScheduleViewModel MakeScheduleReadModel(IPerson person, IScheduleDay scheduleDay, bool isPermittedToViewConfidential)
@@ -301,8 +316,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				foreach (var layer in projection)
 				{
 					var isPayloadAbsence = layer.Payload is IAbsence;
-					var isOvertime = person.Id == _loggedOnUser.CurrentUser().Id &&
-									 (layer.DefinitionSet != null && layer.DefinitionSet.MultiplicatorType == MultiplicatorType.Overtime);
+					var isOvertime = layer.DefinitionSet != null && layer.DefinitionSet.MultiplicatorType == MultiplicatorType.Overtime;
 					var isAbsenceConfidential = isPayloadAbsence && ((IAbsence)layer.Payload).Confidential;
 					var startDateTimeInUserTimeZone = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, userTimeZone);
 					var endDateTimeInUserTimeZone = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, userTimeZone);

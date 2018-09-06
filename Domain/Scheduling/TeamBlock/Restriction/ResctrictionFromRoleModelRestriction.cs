@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 			    _teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions) ||
 			    _teamBlockSchedulingOptions.IsTeamSameStartTimeInTeamBlock(_schedulingOptions))
 			{
-				TimeSpan startTime = _shift.WorkShiftStartTime;
+				TimeSpan startTime = _shift.WorkShiftStartTime();
 				startTimeLimitation = new StartTimeLimitation(startTime, startTime);
 			}
 
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 			    _teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(_schedulingOptions) ||
 				_teamBlockSchedulingOptions.IsBlockSchedulingWithSameEndTime(_schedulingOptions))
 			{
-				TimeSpan endTime = _shift.WorkShiftEndTime;
+				TimeSpan endTime = _shift.WorkShiftEndTime();
 				endTimeLimitation = new EndTimeLimitation(endTime, endTime);
 			}
 

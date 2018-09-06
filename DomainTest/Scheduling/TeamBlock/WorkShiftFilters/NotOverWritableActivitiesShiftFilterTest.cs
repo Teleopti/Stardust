@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var workShift = new WorkShift(new ShiftCategory("Day"));
 			workShift.LayerCollection.Add(getLunchLayer(lunch));
 
-			var shiftProjectionCache = new ShiftProjectionCache(workShift, new PersonalShiftMeetingTimeChecker(), new DateOnlyAsDateTimePeriod(_dateOnly,TimeZoneInfo.Utc));
+			var shiftProjectionCache = new ShiftProjectionCache(workShift, new DateOnlyAsDateTimePeriod(_dateOnly,TimeZoneInfo.Utc));
 			var shifts = new[] { shiftProjectionCache };
 			var schedules = _mocks.StrictMock<IScheduleDictionary>();
 			Expect.Call(schedules[_person].ScheduledDay(_dateOnly)).Return(_part);
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var workShift = new WorkShift(new ShiftCategory("Day"));
 			workShift.LayerCollection.Add(getLunchLayer(lunch));
 
-			var shiftProjectionCache = new ShiftProjectionCache(workShift,new PersonalShiftMeetingTimeChecker(), new DateOnlyAsDateTimePeriod(_dateOnly, TimeZoneInfo.Utc));
+			var shiftProjectionCache = new ShiftProjectionCache(workShift, new DateOnlyAsDateTimePeriod(_dateOnly, TimeZoneInfo.Utc));
 			var shifts = new []{shiftProjectionCache};
 
 			var schedules = _mocks.StrictMock<IScheduleDictionary>();

@@ -16,12 +16,12 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 	{
 		private readonly INow _now;
 		private readonly IRtaEventStoreReader _eventStore;
-		private readonly ScheduleLoader _scheduleLoader;
+		private readonly IScheduleLoader _scheduleLoader;
 		private readonly IPersonRepository _persons;
 
 		public AgentAdherenceDayLoaderLateForWork(
 			INow now,
-			ScheduleLoader scheduleLoader,
+			IScheduleLoader scheduleLoader,
 			IPersonRepository persons,
 			IRtaEventStoreReader eventStore)
 		{
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 			_eventStore = eventStore;
 		}
 
-		public IAgentAdherenceDay Load(
+		public IAgentAdherenceDay LoadUntilNow(
 			Guid personId,
 			DateOnly date)
 		{
@@ -62,6 +62,11 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 			obj.ApplyDone();
 
 			return obj;
+		}
+
+		public IAgentAdherenceDay Load(Guid personId, DateOnly date)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

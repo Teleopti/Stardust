@@ -70,13 +70,7 @@
 		</div>
 		<wfm-popup show="showOptions">
 			<ul class="wfm-list">
-				<a href="../Authentication/SignOut" style="width:100%;">
-					<li>
-						<i class="mdi mdi-logout"></i> {{'LogOut'|translate}}
-					</li>
-				</a>
-
-				<div ng-show="vm.personalizeToggle" style="margin-top:-7px">
+				<div ng-show="vm.personalizeToggle">
 					<li ng-click="vm.toggleOverlay()">
 						<a href="javascript:void(0);">
 							<i ng-if="vm.showOverlay" class="mdi mdi-checkbox-marked"></i>
@@ -93,14 +87,17 @@
 					</li>
 				</div>
 				<ng-container ng-controller="AuthenticationController as vm">
-					<li ng-if="vm.isPasswordToggleActive() && vm.isTeleoptiApplicationLogonUser()">
-						<ng2-change-password></ng2-change-password>
-					</li>
+						<ng2-change-password ng-if="vm.isPasswordToggleActive() && vm.isTeleoptiApplicationLogonUser()"></ng2-change-password>
 				</ng-container>
+				<a href="../Authentication/SignOut " style="display: inline; ">
+					<li>
+						<i class="mdi mdi-logout "></i> {{'LogOut'|translate}}
+					</li>
+				</a>
 			</ul>
 
 		</wfm-popup>
-		<span ng-show="vm.showOverlay" class="animate-show warm-overlay"></span>
+		<span ng-show="vm.showOverlay " class="animate-show warm-overlay "></span>
 </div>
 
 </div>
