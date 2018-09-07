@@ -30,7 +30,10 @@ namespace Teleopti.Messaging.Client.SignalR
 				_closedHandler = delegate
 				{
 					Logger.Warn("Connection closed. Flagging for restart.");
-					_restartAt = _time.UtcDateTime().Add(_restartDelay);
+					if (_time != null)
+					{
+						_restartAt = _time.UtcDateTime().Add(_restartDelay);
+					}
 					_connectionToRestart = c;
 				};
 				c.Closed += _closedHandler;
@@ -71,7 +74,7 @@ namespace Teleopti.Messaging.Client.SignalR
 
 		public void OnClose(IStateAccessor stateAccessor)
 		{
-			_timer.Dispose();
+			_timer?.Dispose();
 			stateAccessor.WithConnection(c =>
 			{
 				c.Closed -= _closedHandler;
