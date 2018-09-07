@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 			var sessionData = _sessionWfmCookieProvider.GrabFromCookie();
 
 			var regionnal = principalCacheable != null ? principalCacheable.Regional : principal.Regional;
+			var fegionnal = principalCacheable?.Regional ?? principal.Regional;
 
 			return new
 			{
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 				DateFormatLocale = regionnal.Culture.Name,
 				CultureInfo.CurrentCulture.NumberFormat,
 				FirstDayOfWeek = (int)regionnal.Culture.DateTimeFormat.FirstDayOfWeek,
-				sessionData.IsTeleoptiApplicationLogon
+				IsTeleoptiApplicationLogon = sessionData?.IsTeleoptiApplicationLogon ?? false
 			};
 		}
 	}
