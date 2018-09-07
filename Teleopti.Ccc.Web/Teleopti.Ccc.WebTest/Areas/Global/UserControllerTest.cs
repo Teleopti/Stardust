@@ -2,7 +2,7 @@
 using Rhino.Mocks;
 using System;
 using System.Web;
-using Common.Logging;
+using log4net;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
