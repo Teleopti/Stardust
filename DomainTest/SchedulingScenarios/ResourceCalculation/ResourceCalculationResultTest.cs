@@ -195,5 +195,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.Payload.CalculatedUsedSeats
 				.Should().Be.EqualTo(1);
 		}
+		[TestCase("Newfoundland Standard Time", 15)]    //-03:30
+		[TestCase("Newfoundland Standard Time", 60)]    //-03:30
+		[Toggle(Domain.FeatureFlags.Toggles.ResourcePlanner_HalfHourSkillTimeZone_75509)]
+			skillDay.SkillStaffPeriodCollection.First().AbsoluteDifference.Should().Be.EqualTo(-1);
 	}
 }
