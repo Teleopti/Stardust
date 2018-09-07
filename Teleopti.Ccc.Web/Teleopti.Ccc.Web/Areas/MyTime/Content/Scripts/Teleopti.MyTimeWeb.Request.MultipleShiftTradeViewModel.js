@@ -101,7 +101,7 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 	});
 
 	self.isSendEnabled = ko.computed(function() {
-		return self.selectedSchedulePairs().length > 0;
+		return self.selectedSchedulePairs().length > 0 && !self.showToloranceMessage();
 	});
 	
 	self.isDetailVisible = ko.computed(function() {
