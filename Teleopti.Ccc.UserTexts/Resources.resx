@@ -17720,4 +17720,8 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <value>Deviation</value>
     <comment>use in MyTime ShiftTradeRequest the error message colume title when agent break contract tolerance</comment>
   </data>
+  <data name="ContractTimeViolation" xml:space="preserve">
+    <value>Contract time violation.</value>
+    <comment>Use in MyTime ShiftTradeRequest. Error message title when break contract tolerance.</comment>
+  </data>
 </root>

@@ -42,9 +42,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Authentication
 		public void INavigateToChangeYourPassword()
 		{
 			Browser.Interactions.AssertExists("[data-test-nav-item-settings]");
-			Browser.Interactions.PressEnter("[data-test-nav-item-settings]");
+			Browser.Interactions.Click("[data-test-nav-item-settings]");
 			Browser.Interactions.AssertExists("[data-test-change-password-button]");
-			Browser.Interactions.PressEnter("[data-test-change-password-button]");
+			Browser.Interactions.Click("[data-test-change-password-button]");
 		}
 
 		[Given("I enter '(.*)' in '(.*)'")]

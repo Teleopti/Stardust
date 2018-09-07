@@ -51,8 +51,7 @@ namespace Teleopti.Messaging.Client.SignalR
 			_hubProxy.Subscribe("OnEventMessage").Received += obj =>
 			{
 				var d = obj[0].ToObject<Message>();
-				if (_onNotification != null)
-					_onNotification(d);
+				_onNotification?.Invoke(d);
 			};
 
 			_afterConnectionCreated();

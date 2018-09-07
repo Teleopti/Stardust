@@ -10,7 +10,15 @@ import {
 	TitleBarComponent,
 	WorkspaceComponent
 } from './components';
-import { NavigationService, RolesService, SearchOverridesService, SearchService, WorkspaceService } from './services';
+import { SettingsMenuComponent } from './components/settings-menu';
+import {
+	LogonInfoService,
+	NavigationService,
+	RolesService,
+	SearchOverridesService,
+	SearchService,
+	WorkspaceService
+} from './services';
 
 @NgModule({
 	declarations: [
@@ -20,7 +28,8 @@ import { NavigationService, RolesService, SearchOverridesService, SearchService,
 		WorkspaceComponent,
 		TitleBarComponent,
 		AppLogonPageComponent,
-		IdentityLogonPageComponent
+		IdentityLogonPageComponent,
+		SettingsMenuComponent
 	],
 	imports: [SharedModule, TranslateModule.forChild()],
 	providers: [
@@ -38,7 +47,8 @@ import { NavigationService, RolesService, SearchOverridesService, SearchService,
 		GrantPageComponent,
 		RevokePageComponent,
 		AppLogonPageComponent,
-		IdentityLogonPageComponent
+		IdentityLogonPageComponent,
+		SettingsMenuComponent
 	]
 })
 export class PeopleModule {

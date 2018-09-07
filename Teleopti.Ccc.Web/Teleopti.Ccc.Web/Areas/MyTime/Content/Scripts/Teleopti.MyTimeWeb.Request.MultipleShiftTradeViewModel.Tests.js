@@ -1257,6 +1257,127 @@
 		equal(viewModel.myToleranceMessages()[0].periodEnd, "2018-07-29");
 	});
 
+	test("should show correct tolerance exceed", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggleName) {
+			if (toggleName === "MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408") return true;
+			return false;
+		}
+		Teleopti.MyTimeWeb.Common.SetupCalendar({
+			UseJalaaliCalendar: false,
+			DateFormat: 'YYYY-MM-DD',
+			TimeFormat: 'HH:mm tt',
+			AMDesignator: 'AM',
+			PMDesignator: 'PM'
+		});
+
+		var agentId = "123";
+		var toleranceInfo = {
+			IsNeedToCheck: true,
+			MyInfos: [{
+				PeriodStart: moment('2018-06-30'),
+				PeriodEnd: moment('2018-07-29'),
+				ContractTimeMinutes: 1000,
+				NegativeToleranceMinutes: 800,
+				PositiveToleranceMinutes: 90
+			}],
+
+			PersonToInfos: [{
+				PeriodStart: moment('2018-06-30'),
+				PeriodEnd: moment('2018-07-29'),
+				ContractTimeMinutes: 1000,
+				NegativeToleranceMinutes: 89,
+				PositiveToleranceMinutes: 1189
+			}]
+		}
+
+		var schedules = {
+			MultiSchedulesForShiftTrade: [{
+				Date: "\/Date(1531916600000)\/",
+				IsSelectable: true,
+				MySchedule: {
+					"ScheduleLayers": [{
+						"Start": "\/Date(1531956600000)\/",
+						"End": "\/Date(1531964700000)\/",
+						"LengthInMinutes": 135,
+						"Color": "#80FF80",
+						"TitleHeader": "Phone",
+						"IsAbsenceConfidential": false,
+						"IsOvertime": false,
+						"TitleTime": "07:30 - 09:45",
+						"Meeting": null
+					}],
+					"StartTimeUtc": "\/Date(1531978200000)\/",
+					"IsDayOff": false,
+					"IsFullDayAbsence": false,
+					"Total": 0,
+					"DayOffName": null,
+					"ContractTimeInMinute": 480,
+					"IsNotScheduled": false,
+					"ShiftCategory": {
+						"Id": null,
+						"ShortName": "AM",
+						"Name": "Early",
+						"DisplayColor": "#80FF80"
+					},
+					"IntradayAbsenceCategory": {
+						"ShortName": null,
+						"Color": null
+					}
+				},
+				PersonToSchedule: {
+					"ScheduleLayers": [{
+						"Start": "\/Date(1531956600000)\/",
+						"End": "\/Date(1531964700000)\/",
+						"LengthInMinutes": 135,
+						"Color": "#80FF80",
+						"TitleHeader": "Phone",
+						"IsAbsenceConfidential": false,
+						"IsOvertime": false,
+						"TitleTime": "07:30 - 09:45",
+						"Meeting": null
+					}],
+					"StartTimeUtc": "\/Date(1531978200000)\/",
+					"IsDayOff": false,
+					"IsFullDayAbsence": false,
+					"Total": 0,
+					"DayOffName": null,
+					"ContractTimeInMinute": 580,
+					"IsNotScheduled": false,
+					"ShiftCategory": {
+						"Id": null,
+						"ShortName": "AM",
+						"Name": "Early",
+						"DisplayColor": "#80FF80"
+					},
+					"IntradayAbsenceCategory": {
+						"ShortName": null,
+						"Color": null
+					}
+				}
+			}]
+		};
+
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url === 'Requests/GetWFCTolerance?personToId=' + agentId) {
+					options.success(toleranceInfo);
+				}
+				if (options.url === "Requests/ShiftTradeMultiDaysSchedule") {
+					options.success(schedules);
+				}
+			}
+		};
+		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
+		viewModel.requestedDateInternal(moment("2018-07-18"));
+		viewModel.openPeriodEndDate(moment("2018-07-19"));
+		var agent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(null, null, null, "Ashley", agentId, false);
+		viewModel.redrawLayers = function () { };
+
+		viewModel.chooseAgent(agent);
+		equal(viewModel.myToleranceMessages()[0].contractTimeGap, "0:10");
+		equal(viewModel.targetToleranceMessages()[0].contractTimeGap, "-0:11");
+	});
+
 	test("should not show error message when not break tolerance", function () {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggleName) {
 			if (toggleName === "MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408") return true;
@@ -1310,6 +1431,181 @@
 
 		viewModel.chooseAgent(agent);
 		equal(viewModel.showToloranceMessage(), false);
+	});
+
+	test("should enable send button when not break tolerance", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggleName) {
+			if (toggleName === "MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408") return true;
+			return false;
+		}
+
+		var agentId = "123";
+		var toleranceInfo = {
+			IsNeedToCheck: true,
+			MyInfos: [{
+				PeriodStart: moment('2018-06-30'),
+				PeriodEnd: moment('2018-07-29'),
+				ContractTimeMinutes: 1000,
+				NegativeToleranceMinutes: 800,
+				PositiveToleranceMinutes: 90
+			}],
+
+			PersonToInfos: [{
+				PeriodStart: moment('2018-06-30'),
+				PeriodEnd: moment('2018-07-29'),
+				ContractTimeMinutes: 1000,
+				NegativeToleranceMinutes: 89,
+				PositiveToleranceMinutes: 1189
+			}]
+		}
+
+		var schedules = {
+			MultiSchedulesForShiftTrade: [{
+				Date: "\/Date(1531916600000)\/",
+				IsSelectable: true,
+				MySchedule: null,
+				PersonToSchedule: null
+			}]
+		};
+
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url === 'Requests/GetWFCTolerance?personToId=' + agentId) {
+					options.success(toleranceInfo);
+				}
+				if (options.url === "Requests/ShiftTradeMultiDaysSchedule") {
+					options.success(schedules);
+				}
+			}
+		};
+		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
+		viewModel.requestedDateInternal(moment("2018-07-18"));
+		viewModel.openPeriodEndDate(moment("2018-07-19"));
+		var agent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(null, null, null, "Ashley", agentId, false);
+		viewModel.redrawLayers = function () { };
+
+		viewModel.chooseAgent(agent);
+		equal(viewModel.isSendEnabled(), true);
+	});
+
+	test("should not enable send button when has tolerance error message", function() {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (toggleName) {
+			if (toggleName === "MyTimeWeb_ShiftTradeRequest_BalanceToleranceTime_77408") return true;
+			return false;
+		}
+		Teleopti.MyTimeWeb.Common.SetupCalendar({
+			UseJalaaliCalendar: false,
+			DateFormat: 'YYYY-MM-DD',
+			TimeFormat: 'HH:mm tt',
+			AMDesignator: 'AM',
+			PMDesignator: 'PM'
+		});
+
+		var agentId = "123";
+		var toleranceInfo = {
+			IsNeedToCheck: true,
+			MyInfos: [{
+				PeriodStart: moment('2018-06-30'),
+				PeriodEnd: moment('2018-07-29'),
+				ContractTimeMinutes: 1000,
+				NegativeToleranceMinutes: 800,
+				PositiveToleranceMinutes: 90
+			}],
+
+			PersonToInfos: [{
+				PeriodStart: moment('2018-06-30'),
+				PeriodEnd: moment('2018-07-29'),
+				ContractTimeMinutes: 1000,
+				NegativeToleranceMinutes: 89,
+				PositiveToleranceMinutes: 1189
+			}]
+		}
+
+		var schedules = {
+			MultiSchedulesForShiftTrade: [{
+				Date: "\/Date(1531916600000)\/",
+				IsSelectable: true,
+				MySchedule: {
+					"ScheduleLayers": [{
+						"Start": "\/Date(1531956600000)\/",
+						"End": "\/Date(1531964700000)\/",
+						"LengthInMinutes": 135,
+						"Color": "#80FF80",
+						"TitleHeader": "Phone",
+						"IsAbsenceConfidential": false,
+						"IsOvertime": false,
+						"TitleTime": "07:30 - 09:45",
+						"Meeting": null
+					}],
+					"StartTimeUtc": "\/Date(1531978200000)\/",
+					"IsDayOff": false,
+					"IsFullDayAbsence": false,
+					"Total": 0,
+					"DayOffName": null,
+					"ContractTimeInMinute": 480,
+					"IsNotScheduled": false,
+					"ShiftCategory": {
+						"Id": null,
+						"ShortName": "AM",
+						"Name": "Early",
+						"DisplayColor": "#80FF80"
+					},
+					"IntradayAbsenceCategory": {
+						"ShortName": null,
+						"Color": null
+					}
+				},
+				PersonToSchedule: {
+					"ScheduleLayers": [{
+						"Start": "\/Date(1531956600000)\/",
+						"End": "\/Date(1531964700000)\/",
+						"LengthInMinutes": 135,
+						"Color": "#80FF80",
+						"TitleHeader": "Phone",
+						"IsAbsenceConfidential": false,
+						"IsOvertime": false,
+						"TitleTime": "07:30 - 09:45",
+						"Meeting": null
+					}],
+					"StartTimeUtc": "\/Date(1531978200000)\/",
+					"IsDayOff": false,
+					"IsFullDayAbsence": false,
+					"Total": 0,
+					"DayOffName": null,
+					"ContractTimeInMinute": 580,
+					"IsNotScheduled": false,
+					"ShiftCategory": {
+						"Id": null,
+						"ShortName": "AM",
+						"Name": "Early",
+						"DisplayColor": "#80FF80"
+					},
+					"IntradayAbsenceCategory": {
+						"ShortName": null,
+						"Color": null
+					}
+				}
+			}]
+		};
+
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url === 'Requests/GetWFCTolerance?personToId=' + agentId) {
+					options.success(toleranceInfo);
+				}
+				if (options.url === "Requests/ShiftTradeMultiDaysSchedule") {
+					options.success(schedules);
+				}
+			}
+		};
+		var viewModel = new Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel(ajax);
+		viewModel.requestedDateInternal(moment("2018-07-18"));
+		viewModel.openPeriodEndDate(moment("2018-07-19"));
+		var agent = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(null, null, null, "Ashley", agentId, false);
+		viewModel.redrawLayers = function () { };
+
+		viewModel.chooseAgent(agent);
+		equal(viewModel.isSendEnabled(), false);
 	});
 
 	test("should get correct overtime text", function () {

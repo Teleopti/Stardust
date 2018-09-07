@@ -244,19 +244,21 @@
 <div class="shift-trade-request-74947" data-bind="visible: isDetailVisible">
 	<div data-bind="visible: showToloranceMessage" class="shift-trade-error">
 		<div data-bind="click:toloranceMessageClicked" class="error-summary"><i class="glyphicon glyphicon-warning-sign"> </i>
-			<span>Contract time violation.</span> </div>
+			<span>@Resources.ContractTimeViolation</span> </div>
 		<div data-bind="visible:showToloranceMessageDetail" class="error-detail">
 			<div>@Resources.Period @Resources.Deviation</div>
-			<div>@Resources.MySchedule
+			<div data-bind="visible: myToleranceMessages().length > 0">@Resources.MySchedule
 				<!--ko foreach: myToleranceMessages-->
 				<span class="error">[<span data-bind="text:$root.formatDate(periodStart)"></span> - <span data-bind="text:$root.formatDate(periodEnd)"></span>]<span
 					 data-bind="text:contractTimeGap"></span> </span>
 				<!--/ko-->
 			</div>
-			<div data-bind="text:agentChoosed() ? agentChoosed().agentName : ''">
+			<div data-bind="visible: targetToleranceMessages().length > 0">
+				<div data-bind="text:agentChoosed() ? agentChoosed().agentName : ''"></div>
 				<!--ko foreach: targetToleranceMessages-->
-				<span class="error">[<span data-bind="text:$root.formatDate(periodStart)"></span> - <span data-bind="text:$root.formatDate(periodEnd)"></span>]<span
-					 data-bind="text:contractTimeGap"></span> </span>
+				<span class="error">[<span data-bind="text:$root.formatDate(periodStart)"></span> - <span data-bind="text:$root.formatDate(periodEnd)"></span>]
+					<span
+						data-bind="text:contractTimeGap"></span> </span>
 				<!--/ko-->
 			</div>
 		</div>

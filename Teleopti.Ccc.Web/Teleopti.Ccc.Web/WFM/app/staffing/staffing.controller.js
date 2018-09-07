@@ -55,6 +55,7 @@
 		vm.showOverstaffSettings = false;
 		vm.openImportData = false;
 		vm.useShrinkage = false;
+		initializeShrinkageCheckBoxFromSession();
 		vm.staffingDataAvailable = false;
 		vm.hasSuggestionData = false;
 		vm.showBpoInterface = false;
@@ -485,6 +486,13 @@
 			if ($window.sessionStorage.staffingUseShrinkage) {
 				vm.useShrinkage = angular.fromJson($window.sessionStorage.staffingUseShrinkage);
 				vm.useShrinkageForStaffing();
+			}
+		}
+
+		function initializeShrinkageCheckBoxFromSession()
+		{
+			if ($window.sessionStorage.staffingUseShrinkage) {
+				vm.useShrinkage = angular.fromJson($window.sessionStorage.staffingUseShrinkage);
 			}
 		}
 
