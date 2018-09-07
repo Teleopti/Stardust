@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 
 namespace Teleopti.Ccc.DomainTest.MessageBroker.ImplementationDetailTests
 {
@@ -72,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker.ImplementationDetailTests
 		[Test]
 		public void ShouldIgnoreBusinessUnitIdAndDataSourceForBatchEnd()
 		{
-			target.DomainType = "AgentStateReadModel";
+			target.DomainType = typeof(AgentStateReadModel).Name;
 			target.DomainId = Subscription.IdToString(Guid.Empty);
 			target.Route().Should().Be.EqualTo("/"+Subscription.IdToString(Guid.Empty)+ "/" + target.DomainType + "/id/" + target.DomainId);
 		}
@@ -80,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.MessageBroker.ImplementationDetailTests
 		[Test]
 		public void ShouldIncludeBusinessUnitIdAndDataSourceForExternalAgentState()
 		{
-			target.DomainType = "AgentStateReadModel";
+			target.DomainType = typeof (AgentStateReadModel).Name;
 			target.Route().Should().Be.EqualTo("/" + target.BusinessUnitId + "/" + target.DomainType + "/id/" +
 			                                   domainId);
 		}

@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MultiTenancy;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -99,7 +100,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			isolate.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
 			var tenants = new FakeTenants();
 			var DefaultTenantName = "default";
-			tenants.Has(DefaultTenantName, "a key");
+			tenants.Has(DefaultTenantName, LegacyAuthenticationKey.TheKey);
 			isolate.UseTestDouble(tenants)
 				.For<IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants, IFindTenantByName, IAllTenantNames>();
 

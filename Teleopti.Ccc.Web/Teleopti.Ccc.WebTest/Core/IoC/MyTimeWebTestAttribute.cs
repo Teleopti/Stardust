@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MultiTenancy;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -115,7 +116,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 
 			// Tenant (and datasource) stuff
 			var tenants = new FakeTenants();
-			tenants.Has(DefaultTenantName, "a key");
+			tenants.Has(DefaultTenantName, LegacyAuthenticationKey.TheKey);
 			isolate.UseTestDouble(tenants).For<IFindTenantNameByRtaKey, ICountTenants, ILoadAllTenants, IFindTenantByName, IAllTenantNames>();
 			isolate.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
 			isolate.UseTestDouble<TenantUnitOfWorkFake>().For<ITenantUnitOfWork>();

@@ -3,6 +3,7 @@ using Autofac;
 using Microsoft.Owin.Testing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MultiTenancy;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -94,7 +95,7 @@ namespace Teleopti.Wfm.Api.Test
 			userUnauthorized.Has(person);
 
 			var tenants = new FakeTenants();
-			tenants.Has(DomainTestAttribute.DefaultTenantName, "some key");
+			tenants.Has(DomainTestAttribute.DefaultTenantName, LegacyAuthenticationKey.TheKey);
 			isolate.UseTestDouble(tenants).For<IFindTenantNameByRtaKey>();
 			isolate.UseTestDouble(tenants).For<ICountTenants>();
 			isolate.UseTestDouble(tenants).For<ILoadAllTenants>();

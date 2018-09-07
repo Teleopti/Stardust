@@ -4,21 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CSharp.RuntimeBinder;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 
 namespace Teleopti.Ccc.Domain.Logon.Aspects
 {
-	public interface ITenantFinder
-	{
-		string Find(object argument);
-	}
-
 	public class TenantFromArguments
 	{
-		private readonly IEnumerable<ITenantFinder> _finders;
+		private readonly TenantLoader _tenants;
 
-		public TenantFromArguments(IEnumerable<ITenantFinder> finders)
+		public TenantFromArguments(TenantLoader tenants)
 		{
-			_finders = finders;
+			_tenants = tenants;
 		}
 
 		public string Resolve(IEnumerable<object> arguments)
@@ -33,16 +29,12 @@ namespace Teleopti.Ccc.Domain.Logon.Aspects
 			if (argument is ILogOnContext)
 				return (argument as ILogOnContext).LogOnDatasource;
 
-			// make all above n below ITenantFinder implementations?
-			var tenant = _finders
-				.Select(x => x.Find(argument))
-				.FirstOrDefault(x => x != null);
-
-			if (tenant != null)
-				return tenant;
-			
 			dynamic dynamic = argument;
+			var key = tryGet(() => dynamic.AuthenticationKey);
+			if (key != null)
+				return _tenants.TenantNameByKey(LegacyAuthenticationKey.MakeEncodingSafe(key));
 			return tryGet(() => dynamic.Tenant);
+
 		}
 
 		private static string tryGet(Func<string> input)

@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Xml;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
+using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Service;
 
 namespace Teleopti.Ccc.Domain.MessageBroker
 {
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker
 		// DO NOT USE THIS, PLEASE MAKE SURE THE SUBSCRIPTION DOES NOT CONTAIN THE DATASOURCE INSTEAD!
 		private static readonly StringCollection TypesWithDatasourceException = new StringCollection
 		{
-			"AgentStateReadModel",
+			typeof (AgentStateReadModel).Name,
 			"SiteAdherenceMessage",
 			"TeamAdherenceMessage",
 			"AgentsAdherenceMessage"

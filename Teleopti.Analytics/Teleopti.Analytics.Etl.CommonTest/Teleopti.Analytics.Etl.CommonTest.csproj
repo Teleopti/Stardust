@@ -118,6 +118,7 @@
     <Compile Include="Transformer\FakeData\ScorecardFactory.cs" />
     <Compile Include="Transformer\FakeData\ShiftCategoryFactory.cs" />
     <Compile Include="Transformer\FakeData\SkillFactory.cs" />
+    <Compile Include="Transformer\FakeData\StateGroupFactory.cs" />
     <Compile Include="Transformer\FakeData\WorkloadFactory.cs" />
     <Compile Include="Transformer\FakeData\WorkloadQueueFactory.cs" />
     <Compile Include="Transformer\ForecastWorkloadTransformerTest.cs" />

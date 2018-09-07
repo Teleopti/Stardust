@@ -495,10 +495,6 @@
       <Project>{930F7DED-B1F3-48A1-A966-B0156B3BF2AE}</Project>
       <Name>Teleopti.Support.Security.Library</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Wfm.Rta\Teleopti.Wfm.Rta.csproj">
-      <Project>{2dd2e616-8405-49df-a07d-546a8c160117}</Project>
-      <Name>Teleopti.Wfm.Rta</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
