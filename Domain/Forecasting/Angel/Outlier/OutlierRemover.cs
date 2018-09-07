@@ -12,15 +12,19 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Outlier
 		public ITaskOwnerPeriod RemoveOutliers(ITaskOwnerPeriod historicalData, IForecastMethod forecastMethodForTasks,
 			IForecastMethod forecastMethodForTaskTime, IForecastMethod forecastMethodForAfterTaskTime)
 		{
-			var seasonalVariationPossiblyWithTrendForTasks = forecastMethodForTasks.SeasonalVariationTasks(historicalData);
-			var seasonalVariationPossiblyWithTrendForTaskTime = forecastMethodForTaskTime.SeasonalVariationTaskTime(historicalData);
-			var seasonalVariationPossiblyWithTrendForAfterTaskTime = forecastMethodForAfterTaskTime.SeasonalVariationAfterTaskTime(historicalData);
+			var seasonalVariationPossiblyWithTrendForTasks =
+				forecastMethodForTasks.SeasonalVariationTasks(historicalData);
+			var seasonalVariationPossiblyWithTrendForTaskTime =
+				forecastMethodForTaskTime.SeasonalVariationTaskTime(historicalData);
+			var seasonalVariationPossiblyWithTrendForAfterTaskTime =
+				forecastMethodForAfterTaskTime.SeasonalVariationAfterTaskTime(historicalData);
 
 			var historicalLookup = historicalData.TaskOwnerDayCollection.ToLookup(k => k.CurrentDate);
 
 			var tasksToRemoveOutlier = new List<outlierModel>();
 			var taskTimesToRemoveOutlier = new List<outlierModel>();
 			var afterTaskTimesToRemoveOutlier = new List<outlierModel>();
+
 			foreach (var day in seasonalVariationPossiblyWithTrendForTasks)
 			{
 				foreach (var historicalDay in historicalLookup[day.Key])
@@ -88,16 +92,11 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Outlier
 			return historicalData;
 		}
 
-		private Dictionary<DateOnly, double> removeOutliers(List<outlierModel> valuesToRemoveOutlier)
+		private Dictionary<DateOnly, double> removeOutliers(IReadOnlyCollection<outlierModel> valuesToRemoveOutlier)
 		{
-			var normalDistribution = new Dictionary<DateOnly, double>();
-			foreach (var values in valuesToRemoveOutlier)
-			{
-				if (Math.Abs(values.HistoricalValue) > 0.001d)
-				{
-					normalDistribution.Add(values.Date, values.HistoricalValue - values.VariationValue);
-				}
-			}
+			var normalDistribution = valuesToRemoveOutlier
+				.Where(values => Math.Abs(values.HistoricalValue) > 0.001d)
+				.ToDictionary(values => values.Date, values => values.HistoricalValue - values.VariationValue);
 
 			var descriptiveStatistics = new DescriptiveStatistics(normalDistribution.Values);
 			var mean = descriptiveStatistics.Mean;
@@ -110,9 +109,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Outlier
 			{
 				if (day.Value > upper)
 				{
-					result[day.Key] = upper + valuesToRemoveOutlier.Single(x=>x.Date == day.Key).VariationValue;
+					result[day.Key] = upper + valuesToRemoveOutlier.Single(x => x.Date == day.Key).VariationValue;
 				}
-				else if(day.Value < lower)
+				else if (day.Value < lower)
 				{
 					result[day.Key] = lower + valuesToRemoveOutlier.Single(x => x.Date == day.Key).VariationValue;
 				}
