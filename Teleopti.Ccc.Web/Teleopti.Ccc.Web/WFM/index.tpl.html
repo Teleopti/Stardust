@@ -9,49 +9,11 @@
 	<link href="vendor/open-sans/font.css" rel="stylesheet">
 	<meta name="theme-color" content="#0099FF" />
 	<link rel="manifest" href="manifest.webmanifest.json">
-	<style>
-		.loader {
-			width: 75px;
-			height: 75px;
-			margin: 5% auto 0;
-			border: 6px solid transparent;
-			border-top: 6px solid #09f;
-			animation-name: spin;
-			animation-duration: 1s;
-			animation-iteration-count: infinite;
-			border-radius: 50%;
-			transform: rotate(0);
-			overflow: hidden
-		}
-
-		@keyframes spin {
-			from {
-				transform: rotate(0)
-			}
-
-			to {
-				transform: rotate(360deg)
-			}
-		}
-
-		.backdrop {
-			position: fixed;
-			z-index: 999999;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			top: 0;
-			background: #fff
-		}
-	</style>
 	<script type="text/javascript" src="appInsights.js"></script>
 </head>
 
-<body ng-app="wfm" ng-show="isAuthenticated" ng-cloak ng-controller="MainController as main">
-	<div class="backdrop" ng-if="!main.styleIsFullyLoaded">
-		<div class="loader"></div>
-	</div>
-	<div id="nav" ng-include="'html/nav.html'" class="material-depth-1 navbar navbar-default navbar-static-top " role="navigation"></div>
+<body ng-app="wfm" ng-show="isAuthenticated" ng-controller="MainController as main">
+	<div id="nav" ng-include="'html/nav.html'" class="material-depth-1 navbar navbar-default navbar-static-top" role="navigation"></div>
 	<div class="layout-container">
 
 		<div class="main-menu" ng-controller="AreasController as vm">

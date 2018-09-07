@@ -68,7 +68,6 @@ const wfm = angular.module('wfm', [
 	'wfm.teamSchedule',
 	'wfm.intraday',
 	'wfm.requests',
-	'wfm.themes',
 	'wfm.reports',
 	'wfm.signalR',
 	'wfm.culturalDatepicker',
@@ -223,7 +222,7 @@ wfm.config([
 
 		$rootScope._ = (<any>window)._;
 
-		function initializeUserInfo() {
+		function initializeUserInfo() {			
 			return currentUserInfo.initContext().then(function(data) {
 				$rootScope.isAuthenticated = true;
 				return $translate.use(data.Language);

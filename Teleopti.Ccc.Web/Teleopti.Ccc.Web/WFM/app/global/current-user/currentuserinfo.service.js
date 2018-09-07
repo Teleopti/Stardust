@@ -26,7 +26,6 @@
 		var language;
 		var dateFormatLocale;
 		var timeout;
-		var theme;
 		var firstDayOfWeek;
 		var isTeleoptiApplicationLogon;
 		this.SetCurrentUserInfo = SetCurrentUserInfo;
@@ -43,7 +42,6 @@
 			defaultTimeZoneName = data.DefaultTimeZoneName;
 			language = data.Language;
 			dateFormatLocale = data.DateFormatLocale;
-			theme = data.Theme;
 			firstDayOfWeek = data.FirstDayOfWeek;
 			isTeleoptiApplicationLogon = data.IsTeleoptiApplicationLogon;
 		}
@@ -55,7 +53,6 @@
 				DefaultTimeZoneName: defaultTimeZoneName,
 				Language: language,
 				DateFormatLocale: dateFormatLocale,
-				Theme: theme,
 				FirstDayOfWeek: firstDayOfWeek,
 				IsTeleoptiApplicationLogon: isTeleoptiApplicationLogon
 			};
@@ -75,6 +72,7 @@
 				SetCurrentUserInfo(data);
 				BusinessUnitsService.initBusinessUnit();
 				Settings.init();
+				deferred.resolve(data);
 			});
 			return deferred.promise;
 		}

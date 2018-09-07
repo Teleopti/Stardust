@@ -45,7 +45,6 @@ var wfm = angular
 		'wfm.intraday',
 		'wfm.requests',
 		'wfm.reports',
-		'wfm.themes',
 		'wfm.culturalDatepicker',
 		'wfm.utilities',
 		'wfm.dataProtection',

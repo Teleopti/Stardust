@@ -12,7 +12,6 @@ import {
 } from './components';
 import { SettingsMenuComponent } from './components/settings-menu';
 import {
-	LogonInfoService,
 	NavigationService,
 	RolesService,
 	SearchOverridesService,
