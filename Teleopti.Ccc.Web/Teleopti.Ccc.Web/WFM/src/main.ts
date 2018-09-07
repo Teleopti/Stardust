@@ -5,12 +5,19 @@ import { IControllerConstructor, IRootScopeService } from 'angular';
 import { AddAppPageComponent, ApiAccessTitleBarComponent, ListPageComponent } from './app/api-access/components';
 import { AppModule } from './app/app.module';
 import { ChangePasswordComponent } from './app/authentication/components/change-password/change-password.component';
-import { AppLogonPageComponent, GrantPageComponent, IdentityLogonPageComponent, RevokePageComponent, SearchPageComponent, TitleBarComponent } from './app/people/components';
+import { BootstrapComponent } from './app/bootstrap/bootstrap.component';
+import {
+	AppLogonPageComponent,
+	GrantPageComponent,
+	IdentityLogonPageComponent,
+	RevokePageComponent,
+	SearchPageComponent,
+	SettingsMenuComponent,
+	TitleBarComponent
+} from './app/people/components';
 import { FeedbackMessageComponent } from './app/shared/components';
 import { environment } from './environments/environment';
 import { MainController } from './main.controller';
-import { BootstrapComponent } from './app/bootstrap/bootstrap.component';
-
 
 export interface IWfmRootScopeService extends IRootScopeService {
 	_: any;
@@ -103,6 +110,7 @@ downgradeHelper('ng2PeopleIdentityLogonPage', IdentityLogonPageComponent);
 downgradeHelper('ng2ChangePassword', ChangePasswordComponent);
 downgradeHelper('ng2FeedbackMessage', FeedbackMessageComponent, ['feedbackType', 'translationKey']);
 downgradeHelper('ng2Bootstrap', BootstrapComponent);
+downgradeHelper('ng2SettingsMenu', SettingsMenuComponent);
 
 wfm.config([
 	'$stateProvider',

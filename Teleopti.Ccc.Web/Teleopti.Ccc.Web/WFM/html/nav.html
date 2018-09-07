@@ -63,12 +63,13 @@
 			</div>
 		</a>
 
-		<div tabindex="0" class="context-menu card-context even-icon" ng-click="showOptions = !showOptions" ng-class="{'nav-item-inactive':!showOptions, 'nav-item-active':showOptions}"
+		<ng2-settings-menu></ng2-settings-menu>
+		<!-- <div tabindex="0" class="context-menu card-context even-icon" ng-click="showOptions = !showOptions" ng-class="{'nav-item-inactive':!showOptions, 'nav-item-active':showOptions}"
 		 data-test-nav-item-settings>
 			<i class="mdi mdi-account-settings-variant text-color-white" ng-class="{'mdi-account-outline':toggle}"></i>
 			<md-tooltip>{{'UserSettings'|translate}}</md-tooltip>
-		</div>
-		<wfm-popup show="showOptions">
+		</div> -->
+		<!-- <wfm-popup show="showOptions">
 			<ul class="wfm-list">
 				<div ng-show="vm.personalizeToggle">
 					<li ng-click="vm.toggleOverlay()">
@@ -96,8 +97,7 @@
 				</a>
 			</ul>
 
-		</wfm-popup>
-		<span ng-show="vm.showOverlay" class="animate-show warm-overlay"></span>
+		</wfm-popup> -->
 </div>
 
 </div>
