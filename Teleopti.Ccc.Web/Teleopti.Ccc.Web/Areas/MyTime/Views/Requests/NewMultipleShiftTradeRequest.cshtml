@@ -247,16 +247,18 @@
 			<span>@Resources.ContractTimeViolation</span> </div>
 		<div data-bind="visible:showToloranceMessageDetail" class="error-detail">
 			<div>@Resources.Period @Resources.Deviation</div>
-			<div data-bind="visible: myToleranceMessages.length > 0">@Resources.MySchedule
+			<div data-bind="visible: myToleranceMessages().length > 0">@Resources.MySchedule
 				<!--ko foreach: myToleranceMessages-->
 				<span class="error">[<span data-bind="text:$root.formatDate(periodStart)"></span> - <span data-bind="text:$root.formatDate(periodEnd)"></span>]<span
 					 data-bind="text:contractTimeGap"></span> </span>
 				<!--/ko-->
 			</div>
-			<div data-bind="visible: targetToleranceMessages.length > 0, text:agentChoosed() ? agentChoosed().agentName : ''">
+			<div data-bind="visible: targetToleranceMessages().length > 0">
+				<div data-bind="text:agentChoosed() ? agentChoosed().agentName : ''"></div>
 				<!--ko foreach: targetToleranceMessages-->
-				<span class="error">[<span data-bind="text:$root.formatDate(periodStart)"></span> - <span data-bind="text:$root.formatDate(periodEnd)"></span>]<span
-					 data-bind="text:contractTimeGap"></span> </span>
+				<span class="error">[<span data-bind="text:$root.formatDate(periodStart)"></span> - <span data-bind="text:$root.formatDate(periodEnd)"></span>]
+					<span
+						data-bind="text:contractTimeGap"></span> </span>
 				<!--/ko-->
 			</div>
 		</div>
