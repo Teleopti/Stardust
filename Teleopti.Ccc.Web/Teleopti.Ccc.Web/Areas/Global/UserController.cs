@@ -33,9 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 				: principal.Regional.TimeZone;
 
 			var sessionData = _sessionWfmCookieProvider.GrabFromCookie();
-
 			var regionnal = principalCacheable != null ? principalCacheable.Regional : principal.Regional;
-			var fegionnal = principalCacheable?.Regional ?? principal.Regional;
 
 			return new
 			{
