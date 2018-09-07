@@ -87,6 +87,20 @@
 		equal($('.new-teamschedule-view .mobile-datepicker a.formatted-date-text').text(), expectDateStr);
 	});
 
+	test('should reset loaded agent index after changing selected date', function() {
+		$('body').append(agentSchedulesHtml);
+		initVm();
+
+		var today = moment();
+		ko.applyBindings(vm, $('.new-teamschedule-view')[0]);
+
+		vm.loadedAgentIndex = 100;
+
+		vm.selectedDate(today.add(9, 'days'));
+
+		equal(vm.loadedAgentIndex, 19);
+	});
+
 	test('should render sites and teams on mobile', function() {
 		var tempFn = Teleopti.MyTimeWeb.Common.IsHostAMobile;
 		Teleopti.MyTimeWeb.Common.IsHostAMobile = function() {

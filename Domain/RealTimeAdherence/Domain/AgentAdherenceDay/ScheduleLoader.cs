@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay
 {
-	public class ScheduleLoader
+	public class ScheduleLoader : IScheduleLoader
 	{
 		private readonly IPersonRepository _persons;
 		private readonly ICurrentScenario _scenario;

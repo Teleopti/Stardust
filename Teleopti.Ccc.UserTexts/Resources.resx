@@ -17709,7 +17709,7 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
     <comment>Silver badge threshold</comment>
   </data>
   <data name="PasswordChangedSuccessfully" xml:space="preserve">
-    <value>Your password was changed</value>
+    <value>Your password has been changed.</value>
     <comment>When password is successfully changed</comment>
   </data>
   <data name="BeforeRunningAForecastYouNeedToCreateASkillDot" xml:space="preserve">
@@ -17719,5 +17719,9 @@ Use in MyTime ShiftTrade for Multi schedules, one of the reasons that schedule c
   <data name="Deviation" xml:space="preserve">
     <value>Deviation</value>
     <comment>use in MyTime ShiftTradeRequest the error message colume title when agent break contract tolerance</comment>
+  </data>
+  <data name="ContractTimeViolation" xml:space="preserve">
+    <value>Contract time violation.</value>
+    <comment>Use in MyTime ShiftTradeRequest. Error message title when break contract tolerance.</comment>
   </data>
 </root>

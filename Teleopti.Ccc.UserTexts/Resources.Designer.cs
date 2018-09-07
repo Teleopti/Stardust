@@ -7480,6 +7480,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Contract time violation..
+        /// </summary>
+        public static string ContractTimeViolation {
+            get {
+                return ResourceManager.GetString("ContractTimeViolation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Contract work rule validation.
         /// </summary>
         public static string ContractWorkRuleValidation {
@@ -24345,7 +24354,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your password was changed.
+        ///   Looks up a localized string similar to Your password has been changed..
         /// </summary>
         public static string PasswordChangedSuccessfully {
             get {
