@@ -45,7 +45,6 @@ export class ChangePasswordComponent {
 	readonly POLICY_ERROR = 'MeetsPolicy';
 	readonly ENSURE_PASSWORD_NEW_ERROR = 'IsNewPassword';
 	readonly MATCHING_PASSWORDS = 'MatchPassword';
-	readonly MISSING_APPLICATION_LOGON = 'MissingApplicationLogon';
 	isVisible = false;
 	changePasswordForm: FormGroup;
 
@@ -75,15 +74,6 @@ export class ChangePasswordComponent {
 	showModal($event: Event) {
 		$event.preventDefault();
 		this.isVisible = true;
-		this.currentUserHasLogon().subscribe({
-			next: hasAppLogon => {
-				console.log(hasAppLogon);
-				if (!hasAppLogon) {
-					this.changePasswordForm.disable();
-					this.changePasswordForm.setErrors({ [this.MISSING_APPLICATION_LOGON]: true });
-				}
-			}
-		});
 	}
 
 	focusInput() {
@@ -124,18 +114,6 @@ export class ChangePasswordComponent {
 			this.invalidate(this.newPasswordControl);
 			this.invalidate(this.confirmPasswordControl);
 		}
-	}
-
-	private currentUserHasLogon(): Observable<boolean> {
-		return this.userService.getPreferences().pipe(
-			switchMap(preferences => {
-				return this.logonInfoService.getLogonInfoFromUser(preferences.Id).pipe(
-					map(({ LogonName }) => {
-						return LogonName !== null && LogonName.length > 0;
-					})
-				);
-			})
-		);
 	}
 
 	private successMessage() {
