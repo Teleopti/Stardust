@@ -10,6 +10,7 @@ import {
 	TitleBarComponent,
 	WorkspaceComponent
 } from './components';
+import { SettingsMenuComponent } from './components/settings-menu';
 import {
 	LogonInfoService,
 	NavigationService,
@@ -27,7 +28,8 @@ import {
 		WorkspaceComponent,
 		TitleBarComponent,
 		AppLogonPageComponent,
-		IdentityLogonPageComponent
+		IdentityLogonPageComponent,
+		SettingsMenuComponent
 	],
 	imports: [SharedModule, TranslateModule.forChild()],
 	providers: [
@@ -46,7 +48,8 @@ import {
 		GrantPageComponent,
 		RevokePageComponent,
 		AppLogonPageComponent,
-		IdentityLogonPageComponent
+		IdentityLogonPageComponent,
+		SettingsMenuComponent
 	]
 })
 export class PeopleModule {

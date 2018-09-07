@@ -1,0 +1,18 @@
+<nz-dropdown [nzTrigger]="'click'" [nzPlacement]="'bottomRight'" [nzClickHide]="false" [(nzVisible)]="visible"
+  (nzVisibleChange)="toggleVisible($event)">
+  <div tabindex="0" class="context-menu card-context even-icon" nz-dropdown data-test-nav-item-settings>
+    <i class="mdi mdi-account-settings-variant text-color-white"></i>
+    <!-- <md-tooltip>{{'UserSettings'|translate}}</md-tooltip> -->
+  </div>
+  <!-- <a nz-dropdown>
+        Click me <i class="anticon anticon-down"></i>
+      </a> -->
+  <ul nz-menu>
+    <li nz-menu-item><label nz-checkbox [(ngModel)]="lowLightFilter" (ngModelChange)="toggleLightFilter($event)">{{'ToggleLowLightFilter'|translate}}</label></li>
+    <li nz-menu-item><label nz-checkbox [(ngModel)]="darkTheme" (ngModelChange)="toggleDarkTheme($event)">{{'ToggleDarkTheme'|translate}}</label></li>
+    <li nz-menu-item (click)="showChangePasswordDialog()">Change pass example</li>
+    <li nz-menu-item><i class="mdi mdi-logout"></i> {{'LogOut'|translate}}</li>
+  </ul>
+</nz-dropdown>
+
+<span *ngIf="lowLightFilter" class="animate-show warm-overlay"></span>
