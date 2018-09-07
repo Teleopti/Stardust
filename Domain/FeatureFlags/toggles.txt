@@ -98,7 +98,7 @@ Staffing_Info_Configuration_44687 = true
 
 
 # Kittens, Bugs&Roses and Micke #
-People_SpeedUpOpening_76365 = RC
+People_SpeedUpOpening_76365 = true
 Wfm_SkillPriorityRoutingGUI_39885 = RC #Skill priorities, aka Cascading, is not ready for release yet
 Wfm_WebPlan_Pilot_46815 = RC #Switch this on to try out the new web based scheduling in Plans#
 ResourcePlanner_HideSkillPrioSliders_41312 = RC #Skill priorities, aka Cascading, is not ready for release yet
@@ -107,7 +107,7 @@ ResourcePlanner_UseErlangAWithInfinitePatienceEsl_74899 = true
 ResourcePlanner_UseErlangAWithFinitePatience_47738 = true
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
 ResourcePlanner_PrepareToRemoveExportSchedule_46576 = true
-ResourcePlanner_XXL_76496 = DEV
+ResourcePlanner_XXL_76496 = true
 
 # DeBockers #
 WfmIntraday_MonitorActualvsForecasted_35176 = true
@@ -145,7 +145,7 @@ WFM_Forecaster_Preview_74801 = RC
 ETL_Optimize_Memory_Usage_76761 = true
 WFM_Forecast_Show_History_Data_76432 = DEV
 ETL_Show_Web_Based_ETL_Tool_74837 = true
-ETL_Show_Tenant_Name_In_History_75767 = RC
+ETL_Show_Tenant_Name_In_History_75767 = DEV
 
 # Dragonfly #
 WFM_Gamification_Setting_With_External_Quality_Values_45003 = true

@@ -176,42 +176,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         void MergeSkillDataPeriods(IList<ISkillDataPeriod> list);
 
         /// <summary>
-        /// Called when [average task time changed].
-        /// </summary>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 10.12.2007
-        /// </remarks>
-        void OnAverageTaskTimeChanged();
-
-        /// <summary>
-        /// Called when [campaign average times changed].
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-03-04
-        /// </remarks>
-        void OnCampaignAverageTimesChanged();
-
-        /// <summary>
-        /// Called when [campaign tasks changed].
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-03-04
-        /// </remarks>
-        void OnCampaignTasksChanged();
-
-        /// <summary>
-        /// Called when [tasks changed].
-        /// </summary>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 10.12.2007
-        /// </remarks>
-        void OnTasksChanged();
-
-        /// <summary>
         /// Occurs when [staff recalculated].
         /// </summary>
         /// <remarks>
