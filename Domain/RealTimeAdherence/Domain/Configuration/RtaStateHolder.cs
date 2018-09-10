@@ -55,9 +55,8 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Configuration
 			        }
 			        return agentStateReadModel;
 		        });
-	        var handler = AgentstateUpdated;
-			if (handler != null && shouldUpdateUI)
-				handler.Invoke(this, new CustomEventArgs<AgentStateReadModel>(agentStateReadModel));
+			if (shouldUpdateUI)
+				AgentstateUpdated?.Invoke(this, new CustomEventArgs<AgentStateReadModel>(agentStateReadModel));
         }
 
         public void SetFilteredPersons(IEnumerable<IPerson> filteredPersons)
