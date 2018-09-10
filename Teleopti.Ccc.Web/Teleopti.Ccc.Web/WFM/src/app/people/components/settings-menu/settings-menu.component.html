@@ -10,8 +10,8 @@
   <ul nz-menu>
     <li nz-menu-item><label nz-checkbox [(ngModel)]="lowLightFilter" (ngModelChange)="toggleLightFilter($event)">{{'ToggleLowLightFilter'|translate}}</label></li>
     <li nz-menu-item><label nz-checkbox [(ngModel)]="darkTheme" (ngModelChange)="toggleDarkTheme($event)">{{'ToggleDarkTheme'|translate}}</label></li>
-    <li nz-menu-item (click)="showChangePasswordDialog()">Change pass example</li>
-    <li nz-menu-item><i class="mdi mdi-logout"></i> {{'LogOut'|translate}}</li>
+    <li nz-menu-item (click)="showChangePasswordDialog()">{{'ChangeYourPassword'|translate}}</li>
+    <li nz-menu-item (click)="logOut()"><i class="mdi mdi-logout"></i> {{'LogOut'|translate}}</li>
   </ul>
 </nz-dropdown>
 

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Component, Inject, OnInit } from '@angular/core';
 import { ThemeService } from '../../../core/services';
 
 @Component({
@@ -11,7 +12,7 @@ export class SettingsMenuComponent implements OnInit {
 	darkTheme: boolean = false;
 	visible: boolean;
 
-	constructor(private themeService: ThemeService) {
+	constructor(private themeService: ThemeService, @Inject(DOCUMENT) private document: Document) {
 		this.themeService.getTheme().subscribe({
 			next: theme => {
 				this.lowLightFilter = theme.Overlay;
@@ -47,6 +48,10 @@ export class SettingsMenuComponent implements OnInit {
 	showChangePasswordDialog() {
 		console.log('Show password dialog');
 		this.hide();
+	}
+
+	logOut() {
+		this.document.location.assign('../Authentication/SignOut');
 	}
 
 	toggleVisible(v) {
