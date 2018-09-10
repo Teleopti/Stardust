@@ -1008,7 +1008,8 @@ Teleopti.MyTimeWeb.Request.MultipleShiftTradeViewModel = function(ajax) {
 
 	function validatePeriodTolorance(periodToloranceInfo, personSchedules, isCheckSelf) {
 		var schedulesInPeriod = personSchedules.filter(function (p) {
-			return p.date.isBefore(periodToloranceInfo.PeriodEnd, 'day') && p.date.isAfter(periodToloranceInfo.PeriodStart, 'day');
+			return (p.date.isBefore(periodToloranceInfo.PeriodEnd, 'day') || p.date.isSame(periodToloranceInfo.PeriodEnd, 'day'))
+				&& (p.date.isAfter(periodToloranceInfo.PeriodStart, 'day') || p.date.isSame(periodToloranceInfo.PeriodStart, 'day'));
 		});
 
 		if (schedulesInPeriod.length === 0) {

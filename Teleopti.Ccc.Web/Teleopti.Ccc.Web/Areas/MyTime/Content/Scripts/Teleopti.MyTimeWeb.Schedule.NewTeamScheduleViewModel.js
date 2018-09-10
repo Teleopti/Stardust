@@ -73,7 +73,7 @@
 
 	self.paging = {
 		skip: 0,
-		take: 20
+		take: 50
 	};
 
 	self.today = function() {
@@ -170,6 +170,9 @@
 				self.endTimeStart() != defaultFilterTime ||
 				self.endTimeEnd() != defaultFilterTime
 		);
+
+		self.loadedAgentIndex = 0;
+		self.lastAgentIndexInDom = 0;
 		self.filterChangedCallback(self.selectedDate());
 	};
 
@@ -221,6 +224,7 @@
 		self.allTeamSchedules = createTeamSchedules(data.AgentSchedules, timelineStart, self.loadedAgentIndex);
 
 		self.loadedAgentIndex = data.AgentSchedules.length - 1;
+		self.lastAgentIndexInDom = data.AgentSchedules.length - 1;
 
 		setSelectedDateSubscription();
 
@@ -263,7 +267,9 @@
 			self.allTeamSchedules.push(agentSchedule);
 		});
 
-		self.loadedAgentIndex = self.loadedAgentIndex + data.AgentSchedules.length;
+		self.loadedAgentIndex += data.AgentSchedules.length;
+		self.lastAgentIndexInDom += data.AgentSchedules.length;
+
 		callback && callback();
 	};
 
