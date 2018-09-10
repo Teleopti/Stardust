@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		public virtual ViewResult NonExistingDatasourceCookie()
 		{
 			var dataSourceName = "datasource";
-			var data = new SessionSpecificData(Guid.NewGuid(), dataSourceName, Guid.NewGuid(), "tenantpassword");
+			var data = new SessionSpecificData(Guid.NewGuid(), dataSourceName, Guid.NewGuid(), "tenantpassword", false);
 			_sessionSpecificWfmCookieProvider.StoreInCookie(data, false, true, dataSourceName);
 
 			return View("Message", new TestMessageViewModel

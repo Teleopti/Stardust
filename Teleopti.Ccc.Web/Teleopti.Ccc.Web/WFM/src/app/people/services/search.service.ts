@@ -1,9 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Person, Role } from '../types';
-import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { SearchOverridesService, PeopleOverride } from './search-overrides.service';
-import { tap } from 'rxjs/operators';
+import { Person } from '../../shared/types';
 
 export interface PeopleSearchResult {
 	People: Array<Person>;

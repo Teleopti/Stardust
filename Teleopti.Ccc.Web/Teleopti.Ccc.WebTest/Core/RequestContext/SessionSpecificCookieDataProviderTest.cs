@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 
 		private static SessionSpecificData generateSessionSpecificData()
 		{
-			return new SessionSpecificData(Guid.NewGuid(), _datasourcename,  Guid.NewGuid(), RandomName.Make());
+			return new SessionSpecificData(Guid.NewGuid(), _datasourcename,  Guid.NewGuid(), RandomName.Make(), false);
 		}
 
 		[SetUp]

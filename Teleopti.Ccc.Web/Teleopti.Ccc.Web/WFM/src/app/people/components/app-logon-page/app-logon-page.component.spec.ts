@@ -8,14 +8,8 @@ import { NzButtonModule, NzFormModule, NzGridModule, NzTableModule, NzToolTipMod
 import { WorkspaceComponent } from '..';
 import { configureTestSuite } from '../../../../configure-test-suit';
 import { MockTranslationModule } from '../../../../mocks/translation';
-import {
-	adina,
-	fakeBackendProvider,
-	LogonInfoService,
-	NavigationService,
-	SearchService,
-	WorkspaceService
-} from '../../services';
+import { LogonInfoService } from '../../../shared/services';
+import { adina, fakeBackendProvider, NavigationService, SearchService, WorkspaceService } from '../../services';
 import { adinaLogon } from '../../services/fake-backend/logons';
 import { AppLogonPageComponent } from './app-logon-page.component';
 

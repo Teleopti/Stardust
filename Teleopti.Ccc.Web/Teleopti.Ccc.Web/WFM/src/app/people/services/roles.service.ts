@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Role } from '../types';
+import { Role } from '../../shared/types';
 
 @Injectable()
 export class RolesService {

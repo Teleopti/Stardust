@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
+import { Person, Role } from '../../../shared/types';
 import { RolesService, SearchOverridesService, WorkspaceService } from '../../services';
-import { Person, Role } from '../../types';
-
 @Injectable()
 export class GrantPageService {
 	constructor(

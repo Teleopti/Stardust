@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Person } from '../types';
+import { Person } from '../../shared/types';
 import { SearchService } from './search.service';
 
 @Injectable()

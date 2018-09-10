@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		[Test]
 		public void ShouldSerialize()
 		{
-			var original = new SessionSpecificData(Guid.NewGuid(), "data source", Guid.NewGuid(), RandomName.Make());
+			var original = new SessionSpecificData(Guid.NewGuid(), "data source", Guid.NewGuid(), RandomName.Make(), false);
 			var serialized = target.Serialize(original);
 			var deserialized = target.Deserialize(serialized);
 			deserialized.PersonId.Should().Be.EqualTo(original.PersonId);
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			//just to make sure we don't make serialization bigger in the future
 			//however - if we need to add stuff to the cookie for some reason, this limit needs to be increased.
 			const int bytesLimit = 224;
-			var testData = new SessionSpecificData(Guid.NewGuid(), "data sourceasdfasdfa", Guid.NewGuid(), "tenantPassword");
+			var testData = new SessionSpecificData(Guid.NewGuid(), "data source", Guid.NewGuid(), "tenantPassword", false);
 			(target.Serialize(testData).ToCharArray().Length * 2)
 				.Should().Be.LessThanOrEqualTo(bytesLimit);
 		}
