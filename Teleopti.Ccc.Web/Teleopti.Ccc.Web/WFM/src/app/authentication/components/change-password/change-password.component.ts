@@ -2,8 +2,6 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { NzMessageService } from 'ng-zorro-antd';
-import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
 import { UserService } from '../../../core/services';
 import { LogonInfoService } from '../../../shared/services';
 import { PasswordService } from '../../services/password.service';
@@ -71,8 +69,7 @@ export class ChangePasswordComponent {
 		);
 	}
 
-	showModal($event: Event) {
-		$event.preventDefault();
+	showModal() {
 		this.isVisible = true;
 	}
 

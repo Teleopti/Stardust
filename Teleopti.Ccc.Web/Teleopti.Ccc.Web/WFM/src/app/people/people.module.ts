@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
+import { AuthenticationModule } from '../authentication/authentication.module';
 import { SharedModule } from '../shared/shared.module';
 import {
 	AppLogonPageComponent,
@@ -11,13 +12,7 @@ import {
 	WorkspaceComponent
 } from './components';
 import { SettingsMenuComponent } from './components/settings-menu';
-import {
-	NavigationService,
-	RolesService,
-	SearchOverridesService,
-	SearchService,
-	WorkspaceService
-} from './services';
+import { NavigationService, RolesService, SearchOverridesService, SearchService, WorkspaceService } from './services';
 
 @NgModule({
 	declarations: [
@@ -30,7 +25,7 @@ import {
 		IdentityLogonPageComponent,
 		SettingsMenuComponent
 	],
-	imports: [SharedModule, TranslateModule.forChild()],
+	imports: [SharedModule, TranslateModule.forChild(), AuthenticationModule],
 	providers: [
 		WorkspaceService,
 		RolesService,

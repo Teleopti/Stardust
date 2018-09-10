@@ -1,5 +1,6 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { ChangePasswordComponent } from '../../../authentication/components/change-password/change-password.component';
 import { ThemeService } from '../../../core/services';
 
 @Component({
@@ -11,6 +12,8 @@ export class SettingsMenuComponent implements OnInit {
 	lowLightFilter: boolean = false;
 	darkTheme: boolean = false;
 	visible: boolean;
+	@ViewChild('passwordModal')
+	passwordModal: ChangePasswordComponent;
 
 	constructor(private themeService: ThemeService, @Inject(DOCUMENT) private document: Document) {
 		this.themeService.getTheme().subscribe({
@@ -46,7 +49,7 @@ export class SettingsMenuComponent implements OnInit {
 	}
 
 	showChangePasswordDialog() {
-		console.log('Show password dialog');
+		this.passwordModal.showModal();
 		this.hide();
 	}
 
