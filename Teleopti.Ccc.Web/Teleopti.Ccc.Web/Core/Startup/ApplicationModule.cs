@@ -1,15 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.IdentityModel.Services;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web;
-using System.Web.Mvc;
 using Autofac;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Teleopti.Ccc.Domain;
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Web.Auth;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Ccc.Web.Core.Startup;
@@ -55,6 +53,15 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			{
 				if (_isDisposed) return;
 				setupPrincipal();
+			};
+			application.Error += (s, e) =>
+			{
+				var error = HttpContext.Current.Server.GetLastError();
+				if (error is CryptographicException)
+				{
+					FederatedAuthentication.WSFederationAuthenticationModule.SignOut();
+					HttpContext.Current.Server.ClearError();
+				}
 			};
 		}
 
