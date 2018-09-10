@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Islands
@@ -26,6 +27,8 @@ namespace Teleopti.Ccc.Domain.Islands
 				var skillSetsOnIslandAndNumberOfAgents = island.Select(x => new { SkillSet = x, NumberOfAgentsOnSkillSet = x.Agents.Count() }).OrderByDescending(x => x.NumberOfAgentsOnSkillSet);
 				foreach (var skillSetAndNumberOfAgents in skillSetsOnIslandAndNumberOfAgents)
 				{
+					if(!skillSetAndNumberOfAgents.SkillSet.Skills.HasSameOpenHours())
+						continue;
 					foreach (var skillSetSkill in skillSetAndNumberOfAgents.SkillSet.Skills.ToArray())
 					{
 						if (skillSetAndNumberOfAgents.NumberOfAgentsOnSkillSet * _reduceIslandsLimits.MinimumFactorOfAgentsInOtherSkillSet(numberOfAgentsInIsland) >= noAgentsKnowingSkill[skillSetSkill])
