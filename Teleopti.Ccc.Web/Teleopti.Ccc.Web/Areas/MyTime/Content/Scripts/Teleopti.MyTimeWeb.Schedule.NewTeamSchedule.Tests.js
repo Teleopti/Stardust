@@ -5,7 +5,7 @@
 		fakeOriginalAgentSchedulesData,
 		fakeDefaultTeamData,
 		fakeAvailableTeamsData,
-		agentCount = 50,
+		agentCount = 200,
 		ajax,
 		fetchTeamScheduleDataRequestCount,
 		constants = Teleopti.MyTimeWeb.Common.Constants,
@@ -98,7 +98,7 @@
 
 		vm.selectedDate(today.add(9, 'days'));
 
-		equal(vm.loadedAgentIndex, 19);
+		equal(vm.loadedAgentIndex, 49);
 	});
 
 	test('should render sites and teams on mobile', function() {
@@ -618,7 +618,7 @@
 				.text(),
 			'Jon Kleinsmith1'
 		);
-		equal($('.new-teamschedule-view .teammates-schedules-column .new-teamschedule-layer').length, 20);
+		equal($('.new-teamschedule-view .teammates-schedules-column .new-teamschedule-layer').length, 50);
 		equal($('.new-teamschedule-view .teammates-schedules-column .new-teamschedule-layer strong:visible').length, 0);
 	});
 
@@ -1149,7 +1149,7 @@
 			$($('.teammates-agent-name-row .new-teamschedule-agent-name')[0])
 				.find('.text-name')
 				.text(),
-			'Jon Kleinsmith50'
+			'Jon Kleinsmith200'
 		);
 	});
 
@@ -1284,7 +1284,7 @@
 		$('.new-teamschedule-submit-buttons button.btn-primary').click();
 
 		equal(completeLoadedCount, 2);
-		equal($('.teammates-agent-name-row .new-teamschedule-agent-name .text-name').length, 20);
+		equal($('.teammates-agent-name-row .new-teamschedule-agent-name .text-name').length, 50);
 		equal(
 			$($('.teammates-agent-name-row .new-teamschedule-agent-name')[0])
 				.find('.text-name')
