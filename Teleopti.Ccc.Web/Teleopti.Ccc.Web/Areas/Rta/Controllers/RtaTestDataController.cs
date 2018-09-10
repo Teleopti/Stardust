@@ -16,11 +16,14 @@ using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.AgentAdherenceDay;
 using Teleopti.Ccc.Domain.RealTimeAdherence.Domain.Events;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {
-	public class HackController : ApiController
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.All)]
+	public class RtaTestDataController : ApiController
 	{
 		private readonly IPersonRepository _persons;
 		private readonly IScheduleStorage _schedules;
@@ -30,7 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
 		private readonly IRtaEventStore _events;
 
-		public HackController(
+		public RtaTestDataController(
 			IPersonRepository persons,
 			IScheduleStorage schedules,
 			ICurrentScenario scenario,
@@ -48,7 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			_events = events;
 		}
 
-		[UnitOfWork, HttpGet, Route("api/Hack/MakeStuff")]
+		[UnitOfWork, HttpGet, Route("api/RtaTestData/MakeStuff")]
 		public virtual HttpResponseMessage MakeStuff()
 		{
 			var log = new StringBuilder();
